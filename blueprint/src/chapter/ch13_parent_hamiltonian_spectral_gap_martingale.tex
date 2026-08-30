@@ -1050,6 +1050,60 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     positive. Positivity is preserved by finite sums.
 \end{proof}
 
+\begin{definition}[Compatible suffix Hamiltonian]
+    \label{def:open_suffix_parent_hamiltonian_es}
+    \lean{MPSTensor.openSuffixParentHamiltonianES}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es}
+    For $l,n,N\in\N$, the Hamiltonian on the last $l$ sites of the prefix
+    $[0,n)$, regarded as an operator on the $N$-site chain, is
+    \begin{align}
+        H^{\mathrm{suffix}}_{N,L;l,n}(A)
+         & =\sum_{\substack{i\in I_{L,N}\\ n-l\leq i,\ i+L\leq n}}
+            h_{i,\mathrm{ES}}(A,L).
+        \label{eq:open_suffix_parent_hamiltonian_es}
+    \end{align}
+    Its local windows lie in the nonwrapping interval $[n-l,n)$.
+\end{definition}
+
+\begin{theorem}[Finite-overlap condition C1 for the compatible open chain]
+    \label{thm:open_parent_hamiltonian_es_c1}
+    \lean{MPSTensor.openParentHamiltonianES_C1}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es,
+        def:open_suffix_parent_hamiltonian_es,
+        lem:open_parent_hamiltonian_es_positive}
+    If $L\leq l$, then
+    \begin{align}
+        0
+        \leq \sum_{n=l}^{N}H^{\mathrm{suffix}}_{N,L;l,n}(A)
+        \leq (l-L+1)H^{\mathrm{open}}_{N,L}(A).
+        \label{eq:open_parent_hamiltonian_es_c1}
+    \end{align}
+    Thus condition C1 of
+    \cite{Nachtergaele1996Spectral} holds with $d_l=l-L+1$.
+    This is the source value $pl-r+1$ in the present convention $p=1$ and
+    interaction range $r=L$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:transported_es_positive}
+    Fix a starting site $i\in I_{L,N}$. The suffix Hamiltonian indexed by $n$
+    contains its local term exactly when
+    \begin{align}
+        i+L\leq n\leq i+l.
+    \end{align}
+    This interval contains at most $l-L+1$ integers. Reversing the two finite
+    sums therefore writes the left-hand side as
+    \begin{align}
+        \sum_{i\in I_{L,N}}c_i h_{i,\mathrm{ES}}(A,L),
+    \end{align}
+    where $0\leq c_i\leq l-L+1$. Each local term is positive, so comparison of
+    these coefficients gives the
+    upper bound. Their sum is positive as well, which gives the lower bound.
+\end{proof}
+
 \begin{theorem}[Zero energy forces every compatible local constraint]
     \label{thm:open_parent_hamiltonian_zero_local_terms}
     \lean{MPSTensor.localTermES_eq_zero_of_openParentHamiltonianES_eq_zero}
