@@ -920,15 +920,8 @@ theorem evalWord_reductionResidual_eq_zero_of_bondDim_le_length
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
     (w : List (Fin d)) (hlen : D_B ≤ w.length) :
     Kraus.evalWord (reductionResidual B A V W) w = 0 := by
-  rw [← w.take_append_drop D_B, Kraus.evalWord_append]
-  have htake : Kraus.evalWord (reductionResidual B A V W) (w.take D_B) = 0 := by
-    rw [evalWord_eq_prod_map]
-    apply h.reductionResidualAlgebra_list_prod_eq_zero hSame
-    · intro X hX
-      obtain ⟨i, hi, rfl⟩ := List.mem_map.mp hX
-      exact reductionResidual_mem_reductionResidualAlgebra B A V W i
-    · simp [List.length_take, Nat.min_eq_left hlen]
-  rw [htake, Matrix.zero_mul]
+  exact evalWord_reductionResidual_eq_zero_of_bound_le_length
+    (h.bondDim_isReductionResidualNilpotencyBound hSame) w hlen
 
 end IsReduction
 
