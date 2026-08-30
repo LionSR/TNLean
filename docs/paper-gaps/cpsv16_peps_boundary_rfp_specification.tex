@@ -33,9 +33,9 @@ Thus the paper-facing conclusion is that the boundary MPO is a
 renormalization fixed point: there should be trace-preserving completely
 positive maps $\mathcal S$ and $\mathcal T$ such that
 \begin{align}
-    \mathcal S[M_2(X)] &= M_1(X),
+    \mathcal S[M_2(X)] & = M_1(X),
     \label{eq:cpsv16_peps_boundary_rfp_specification_coarse_graining} \\
-    \mathcal T[M_1(X)] &= M_2(X)
+    \mathcal T[M_1(X)] & = M_2(X)
     \label{eq:cpsv16_peps_boundary_rfp_specification_refinement}
 \end{align}
 for every virtual operator $X$. The existence and channel properties of these
@@ -51,17 +51,17 @@ up, and down. Choosing the down leg as the inward leg, the physical leg $s$
 and inward virtual leg $b$ are contracted between the ket and bra copies:
 \begin{align}
     (E_A)^{u,u'}_{(l,l'),(r,r')}
-        &=
+     & =
     \sum_{s=0}^{d-1}\sum_{b=0}^{D_{\mathrm v}-1}
     A^s_{l,r,u,b}\,
     \overline{A^s_{l',r',u',b}}.
     \label{eq:cpsv16_peps_boundary_rfp_specification_local_tensor}
 \end{align}
 Consequently, $E_A$ has boundary physical dimension $D_{\mathrm v}$ and MPO
-bond dimension $D_{\mathrm h}^2$. Here the bra legs are labelled after
-reflecting the bra copy into the ket coordinate frame. This is why the
-contracted leg is the down coordinate $b$ in both component functions; in the
-unreflected stacked picture it is the ket-down leg joined to the bra-up leg.
+bond dimension $D_{\mathrm h}^2$. The source diagram does not label the virtual
+directions, and directional names are local to each copy. After choosing
+matching inward legs in the ket and bra copies, we denote their common
+contracted coordinate by $b$ in both component functions.
 
 This local formula is formalized without a fixed-point or channel
 hypothesis.

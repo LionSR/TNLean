@@ -16,9 +16,10 @@ in FigureDavid1 is obtained by contracting both the physical leg and the inward
 the two physical indices of the boundary MPO, while its left and right bond
 indices each group the corresponding ket and bra indices.
 
-The bra copy is labelled after reflection into the ket coordinate frame. Thus
-the contracted inward leg is called `down` in both component functions. In the
-unreflected stacked picture, this is the ket-down leg joined to the bra-up leg.
+The source diagram does not label the virtual directions. The names `up` and
+`down` are local to each copy: after choosing the matching inward legs, the
+project represents their common contracted coordinate by the fourth (`down`)
+argument in both component functions.
 
 This is an unconditional local contraction only. It is not a selected transfer
 fixed point or a complete boundary theory.
@@ -63,9 +64,10 @@ the MPO physical coordinates are `u` and `u'`, and its bonds are `(l,l')` and
 `(r,r')`. This is the component form of FigureDavid1 in arXiv:1606.00608,
 lines 721--724.
 
-The bra copy is labelled after reflection into the ket coordinate frame, so its
-inward leg is also the fourth argument of `A`. Without this reflected coordinate
-convention, the displayed contraction joins the ket-down leg to the bra-up leg.
+The source diagram does not label the virtual directions. The names `up` and
+`down` are local to each copy, and choosing the fourth argument of both
+component functions for the matching inward leg is the project's coordinate
+convention.
 
 Allowing `Dh` and `Dv` to differ is a project generalization permitted by the
 diagram. The definition does not assert a fixed-point relation, a distinguished
@@ -100,8 +102,7 @@ are the two uncontracted vertical legs of FigureDavid1.
 
 The ket-times-conjugate-bra contraction is FigureDavid1 in arXiv:1606.00608,
 lines 721--724. The order of each packed pair and the left, right, up, down order
-of the rank-five function, including reflection of the bra coordinates into the
-ket frame, are project coordinate conventions. -/
+of the rank-five function are project coordinate conventions. -/
 @[simp]
 theorem localBoundaryMPOTensor_finProdFinEquiv_apply
     (A : Fin Dh → Fin Dh → Fin Dv → Fin Dv → Fin d → ℂ)
