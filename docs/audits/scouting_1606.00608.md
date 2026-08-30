@@ -84,8 +84,8 @@ This is the paper's main novel contribution. The tables preserve the original sc
 
 | Item | Description | Formalizability | Our Status |
 |------|-------------|-----------------|------------|
-| **PEPS definition** | Tensor network on 2D lattice | Partial | Graph-level PEPS infrastructure exists. The homogeneous rank-five component function is used directly as the input to `TNLean.PEPS.doubledLocalTransferMPOTensor` and Blueprint `def:peps_doubled_local_transfer_tensor`; no duplicative public local-tensor wrapper is introduced. Distinct horizontal and vertical virtual dimensions are a project generalization permitted by the diagram. |
-| **Bulk-boundary correspondence** | PEPS RFP ↦ boundary MPDO RFP via transfer operator fixed points | Hard | The project convention for the local ket-bra doubled transfer tensor suggested by FigureDavid1 and its component formula are complete in `TNLean.PEPS.doubledLocalTransferMPOTensor` and Blueprint `def:peps_doubled_local_transfer_tensor`. The selected transfer fixed point, algebraic `PEPS-RFP` typing, fixed-point normalization, ancillary factor, globally trace-preserving channels $\mathcal S$ and $\mathcal T$, and implication to `MPOTensor.IsRFPViaTS` remain explicit not-ready nodes. |
+| **PEPS definition** | Tensor network on 2D lattice | Partial | Graph-level PEPS infrastructure exists. The homogeneous rank-five component function is used directly as the input to `TNLean.PEPS.localBoundaryMPOTensor` and Blueprint `def:peps_local_boundary_tensor`; no duplicative public local-tensor wrapper is introduced. Distinct horizontal and vertical virtual dimensions are a project generalization permitted by the diagram. |
+| **Bulk-boundary correspondence** | PEPS RFP ↦ boundary MPDO RFP via transfer operator fixed points | Hard | The source-faithful local boundary tensor and its component formula are complete in `TNLean.PEPS.localBoundaryMPOTensor` and Blueprint `def:peps_local_boundary_tensor`: both the PEPS physical leg and inward virtual leg are contracted, leaving boundary physical dimension $D_{\mathrm v}$. The selected transfer fixed point, algebraic PEPS blocking relation, refinement factor, channels $\mathcal S$ and $\mathcal T$ on the full boundary algebras, and implication to `MPOTensor.IsRFPViaTS` remain explicit not-ready nodes. This is a missing-statement classification, not a proof hole; `docs/paper-gaps/cpsv16_peps_boundary_rfp_specification.tex` records the absent algebraic data. |
 | **Holographic motivation** | RFP MPDO as boundary theory of 2D topological state | Conceptual | Retained as motivation; no holographic correspondence theorem is claimed. |
 
 ### §4.3 Zero Correlation Length for MPDO (Def 4.2, Def 4.3, Thm 4.4)
@@ -220,7 +220,7 @@ This is a **dimension-independent** result (not restricted to 1D/MPS). Could be 
 
 1. **Thm 4.14 (general MPDO RFP ⟺ algebra)** — Paper's headline theorem. ~800+ LOC. Needs all of Tier 3 plus C*-algebra isomorphism theory.
 2. **Fusion categories / Levin-Wen connection** — Abstract algebra far beyond current scope.
-3. **PEPS / boundary theory correspondence:** The homogeneous component-function input and doubled local transfer MPO are complete. Transfer fixed points, the algebraic PEPS fixed-point relation, and the induced boundary channels remain open.
+3. **PEPS / boundary theory correspondence:** The homogeneous component-function input and source-faithful double-contraction boundary MPO are complete. The transfer fixed-point choice, algebraic PEPS fixed-point relation, and induced boundary channels remain a statement-level open problem because the source diagrams omit the spaces and normalization data needed to define them.
 
 ---
 
