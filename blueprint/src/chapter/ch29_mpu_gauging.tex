@@ -341,6 +341,103 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     give $\ell=d$.
 \end{proof}
 
+For a complex matrix $A$, write
+$A^*=(\overline{A_{ij}})_{i,j}$ for its entrywise complex conjugate. This is
+not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
+
+\begin{theorem}[Scalar phase from a unitary relation]
+    \label{thm:mpug_unitary_entrywise_scalar_phase}
+    \lean{Matrix.scalar_mul_star_eq_one_of_mul_map_star_eq_smul_one}
+    \leanok
+    Let $I$ be a nonempty finite set, let $T,S\in\operatorname{Mat}_I(\C)$ be
+    unitary, and let $\sigma\in\C$. If
+    \begin{align}
+        TS^* & =\sigma\mathbf 1,
+        \label{eq:mpug_unitary_entrywise_scalar_relation}
+    \end{align}
+    then
+    \begin{align}
+        \sigma\overline\sigma & =1.
+        \label{eq:mpug_unitary_entrywise_scalar_phase}
+    \end{align}
+    This is the scalar phase conclusion following
+    \cite[lines~1557--1562]{FrancoRubio2025MPUGauging} once the matrix relation
+    has been supplied.
+\end{theorem}
+
+\begin{proof}\leanok
+    The matrix $S^*$ is unitary, so $TS^*=\sigma\mathbf 1$ is unitary. Hence
+    \begin{align}
+        (\sigma\mathbf 1)(\sigma\mathbf 1)^\dagger
+         & =\sigma\overline\sigma\,\mathbf 1=\mathbf 1.
+    \end{align}
+    Evaluating a diagonal entry gives
+    (\ref{eq:mpug_unitary_entrywise_scalar_phase}).
+\end{proof}
+
+\begin{theorem}[Reciprocal scalars in the paired relations]
+    \label{thm:mpug_unitary_entrywise_paired_scalars}
+    \lean{Matrix.paired_scalars_mul_eq_one_of_mul_map_star_eq_smul_one}
+    \leanok
+    Let $I$ be a nonempty finite set, let $T,S\in\operatorname{Mat}_I(\C)$ be
+    unitary, and let $\sigma,\tau\in\C$. If
+    \begin{align}
+        TS^* & =\sigma\mathbf 1, \\
+        ST^* & =\tau\mathbf 1,
+        \label{eq:mpug_unitary_entrywise_paired_relations}
+    \end{align}
+    then
+    \begin{align}
+        \sigma\tau & =1.
+        \label{eq:mpug_unitary_entrywise_paired_scalars}
+    \end{align}
+    This is the conditional matrix-algebra content of
+    $\sigma_g\sigma_{g^{-1}}=1$ in
+    \cite[lines~1559--1563]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_unitary_entrywise_scalar_phase}
+    Multiplying the first relation by $T^{-1}$ on the left and by $T$ on the
+    right gives $S^*T=\sigma\mathbf 1$. Entrywise conjugation of the second
+    relation gives $S^*T=\overline\tau\,\mathbf 1$. A diagonal entry therefore
+    gives $\sigma=\overline\tau$. Applying
+    Theorem~\ref{thm:mpug_unitary_entrywise_scalar_phase} to the second relation
+    yields $\tau\overline\tau=1$, and hence $\sigma\tau=1$.
+\end{proof}
+
+\begin{theorem}[Sign dichotomy in the self relation]
+    \label{thm:mpug_unitary_entrywise_self_sign}
+    \lean{Matrix.scalar_eq_one_or_neg_one_of_mul_map_star_self_eq_smul_one}
+    \leanok
+    Let $I$ be a nonempty finite set, let $T\in\operatorname{Mat}_I(\C)$ be
+    unitary, and let $\sigma\in\C$. If
+    \begin{align}
+        TT^* & =\sigma\mathbf 1,
+        \label{eq:mpug_unitary_entrywise_self_relation}
+    \end{align}
+    then
+    \begin{align}
+        \sigma & \in\{1,-1\}.
+        \label{eq:mpug_unitary_entrywise_self_sign}
+    \end{align}
+    This is the involution conclusion in
+    \cite[lines~1563--1567]{FrancoRubio2025MPUGauging}, conditional on the
+    self relation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_unitary_entrywise_paired_scalars}
+    Apply Theorem~\ref{thm:mpug_unitary_entrywise_paired_scalars} with $S=T$
+    and $\tau=\sigma$. Then $\sigma^2=1$, so
+    $\sigma=1$ or $\sigma=-1$.
+\end{proof}
+
+These three results assume the unitary matrices and their scalar relations.
+They do not construct the representation-level matrices $T_g$ or scalars
+$\sigma_g$, nor do they prove $T_gT_{g^{-1}}^*=\sigma_g\mathbf 1$ for an MPU
+representation. The dagger--inverse construction therefore remains separate.
+
 \section{Scalar three-cocycles and fusion-tensor gauge freedom}
 \label{sec:mpug_scalar_gauge}
 
