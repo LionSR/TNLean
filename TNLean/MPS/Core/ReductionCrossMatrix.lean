@@ -26,6 +26,12 @@ load-bearing.  No conjugate transpose or same-bond Fundamental Theorem is used.
 
 Source: arXiv:1706.07329v2, proof of Proposition 20,
 `cornerproblem.tex` lines 3815--3866 and 3866--3936.
+
+**Scope restriction (equality-only local fix):** The trace-power and source
+open-boundary results below assume `SameMPV₂Pos`, so they treat the `λ = 1`
+specialization of the proportional premise printed in Proposition 20.  The
+unscaled conclusion is false for unrestricted `λ ≠ 1`; see
+`docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`.
 -/
 
 open scoped Matrix Kronecker BigOperators
@@ -39,7 +45,7 @@ Its upper virtual indices are ordered so that
 `coefficientDualInverse A hA i a' a` is the coefficient of `A i` in the
 chosen expansion of the matrix unit `|a⟩⟨a'|`.
 
-Source: the left inverse `Ã⁻¹` in arXiv:1706.07329v2,
+Source: the left inverse \(\widetilde A^{-1}\) in arXiv:1706.07329v2,
 `cornerproblem.tex` lines 3817--3823. -/
 noncomputable def coefficientDualInverse (A : MPSTensor d D_A)
     (hA : Kraus.IsInjective A) : MPSTensor d D_A :=

@@ -611,13 +611,14 @@ boundary conditions (PBC).
     $C^i_{a'a}$ is the coefficient of $\widetilde A^i$ in the chosen
     expansion of the matrix unit $\lvert a\rangle\!\langle a'\rvert$.
     For a tensor $\widetilde B$ of bond dimension $D_B$, define the
-    mixed-bond matrix on
-    $\C^{D_B}\otimes\C^{D_A}$ by
-    \[
-        K(\widetilde B,C)=\sum_i \widetilde B^i\otimes(C^i)^T.
-    \]
+    mixed-bond matrix on $\C^{D_B}\otimes\C^{D_A}$ by
+    \begin{align}
+        K(\widetilde B,C)
+         & =\sum_i \widetilde B^i\otimes(C^i)^T.
+        \notag
+    \end{align}
     The superscript $T$ is the ordinary transpose, not the conjugate
-    transpose.  This is exactly the matrix drawn in
+    transpose.  This is the matrix drawn in
     \cite[proof of Proposition~20]{Molnar2018SemiInjective},
     \texttt{cornerproblem.tex} lines 3817--3838.
 \end{definition}
@@ -632,17 +633,19 @@ boundary conditions (PBC).
     \leanok
     \uses{def:mps_reduction_cross_matrix}
     The coefficient dual obeys the exact matrix-unit identity
-    \[
+    \begin{align}
         \sum_i \widetilde A^i_{xy}C^i_{a'a}
-        =\delta_{x,a}\delta_{y,a'}.
-    \]
+         & =\delta_{x,a}\delta_{y,a'}.
+        \notag
+    \end{align}
     Consequently,
-    \[
+    \begin{align}
         (K(\widetilde B,C)^n)_{(b,a),(b',a')}
-        =\sum_{i_1,\ldots,i_n}
+         & =\sum_{i_1,\ldots,i_n}
         (\widetilde B^{i_1}\cdots\widetilde B^{i_n})_{bb'}
         (C^{i_n}\cdots C^{i_1})_{a'a}.
-    \]
+        \notag
+    \end{align}
     In particular, pairing $\widetilde A$ with its own dual gives the
     rank-one matrix whose entry is
     $\delta_{x,a}\delta_{y,a'}$.  The reversed order
@@ -678,34 +681,67 @@ boundary conditions (PBC).
     \uses{def:same_mpv2_pos, def:injective,
         def:mps_reduction_cross_matrix, thm:same_mpv2_pos_block_tensor}
     Suppose $\widetilde A$ and $\widetilde B$ have equal positive-length
-    MPV coefficients and $\widetilde A$ is injective.  Positive blocking
-    preserves this equality, and equality transports the trace of every
-    nonempty word.  For every $n>0$,
-    \[
-        \tr K(\widetilde B,C)^n=D_A^n.
-    \]
-    More generally, let $\widetilde A$ and $\widetilde B$ be the tensors
-    obtained by blocking $p>0$ original sites.  For every unblocked lower tail
-    word $w$ and upper boundary indices $(a',a)$,
-    \[
-        \sum_{i_1,\ldots,i_n}
-        \tr\!\left(
-        \widetilde B^{i_1}\cdots\widetilde B^{i_n} B^w
-        \right)
-        (C^{i_n}\cdots C^{i_1})_{a'a}
-        =D_A^{n-1}(A^w)_{a'a}.
-    \]
-    These are respectively the closed contraction at
-    \texttt{cornerproblem.tex} lines 3839--3865 and the open padded
-    contraction at lines 3866--3887.  The subsequent rank-one rewrite and
-    comparison leading to
-    $VB^{i_1}\cdots B^{i_m}W=A^{i_1}\cdots A^{i_m}$ occur at lines
-    3888--3938 and are deliberately not asserted here.
+    MPV coefficients and $\widetilde A$ is injective.  This equality hypothesis
+    is the $\lambda=1$ specialization of the proportional premise printed in
+    Proposition~20; the unrestricted unscaled conclusion is false
+    \cite{gap:mgsc18_reduction_proportionality_scalar}.  Equality transports
+    the trace of every nonempty word.  For every $n>0$,
+    \begin{align}
+        \tr K(\widetilde B,C)^n
+         & =D_A^n.
+        \notag
+    \end{align}
+
+    For arbitrary tensors $B_0,C_0$, every $n\geq0$, and every boundary matrix
+    $X$, define
+    \begin{align}
+        \mathcal O_n(B_0,C_0;X)_{a'a}
+         & =\sum_{i_1,\ldots,i_n}
+        \tr\!\left(B_0^{i_1}\cdots B_0^{i_n}X\right)
+        (C_0^{i_n}\cdots C_0^{i_1})_{a'a}.
+        \notag
+    \end{align}
+    If $B_0$ has bond dimension $D_B$ and $C_0$ has bond dimension $D_A$,
+    its exact cross-sum expansion is
+    \begin{align}
+        \mathcal O_n(B_0,C_0;X)_{a'a}
+         & =\sum_{x,y}K(B_0,C_0)^n_{(x,a),(y,a')}X_{yx}.
+        \notag
+    \end{align}
+    For $n>0$, if $B_0=\widetilde A$, $C_0=C$, and
+    $X\in\C^{D_A\times D_A}$, then
+    \begin{align}
+        \mathcal O_n(\widetilde A,C;X)_{a'a}
+         & =D_A^{n-1}X_{a'a}.
+        \notag
+    \end{align}
+    The same-alphabet open-boundary contraction is the specialization
+    $X=B_0^w$.  Thus $X=\widetilde A^w$ gives the target self-evaluation, while
+    equality of the positive-length MPV coefficients gives
+    \begin{align}
+        \mathcal O_n(\widetilde B,C;\widetilde B^w)_{a'a}
+         & =D_A^{n-1}(\widetilde A^w)_{a'a}.
+        \notag
+    \end{align}
+
+    Positive blocking preserves MPV equality.  If $\widetilde A$ and
+    $\widetilde B$ are obtained by blocking $p>0$ original sites, then for
+    every unblocked lower tail word $w$,
+    \begin{align}
+        \mathcal O_n(\widetilde B,C;B^w)_{a'a}
+         & =D_A^{n-1}(A^w)_{a'a}.
+        \notag
+    \end{align}
+    The trace-power identity is the closed contraction at
+    \texttt{cornerproblem.tex} lines 3839--3865, and the open-boundary identity
+    is the padded contraction at lines 3866--3887.  The source next uses a
+    rank-one rewrite and comparison to derive
+    $VB^{i_1}\cdots B^{i_m}W=A^{i_1}\cdots A^{i_m}$ at lines 3888--3938.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:mps_reduction_cross_matrix_power, lem:mpv_block}
+    \uses{lem:mps_reduction_cross_matrix_power, lem:eval_word_block}
     Expand $K^n$ by Lemma~\ref{lem:mps_reduction_cross_matrix_power} and use
     the trace formula for a Kronecker product.  Positive-length MPV equality
     replaces the trace of each nonempty $\widetilde B$ word by the
@@ -713,17 +749,16 @@ boundary conditions (PBC).
     identifies the resulting cross matrix with its rank-one target
     specialization, whose $n$th trace is $D_A^n$.
 
-    For the open contraction, expanding the lower trace into matrix entries
-    gives the exact cross sum
-    \[
-        \sum_{x,y}
-        K(\widetilde B,C)^n_{(x,a),(y,a')}X_{yx}.
-    \]
-    After positive blocking, MPV equality applies to the concatenation of the
-    nonempty blocked word and the unblocked tail.  Replacing this closed
-    $\widetilde B$ word by the corresponding $\widetilde A$ word reduces to
-    the same rank-one target calculation and yields
-    $D_A^{n-1}(A^w)_{a'a}$.
+    Expanding the lower trace into matrix entries gives the cross-sum formula
+    for arbitrary $X$.  For the target tensor, the rank-one form of
+    $K(\widetilde A,C)$ evaluates this sum as $D_A^{n-1}X_{a'a}$.
+    Specializing $X$ to a word evaluation gives the self-evaluation formula.
+
+    For blocked tensors, Lemma~\ref{lem:eval_word_block} identifies each
+    blocked word with the evaluation of its flattened word.  Since $n,p>0$,
+    this flattened word is nonempty.  Append the unblocked tail $w$, apply
+    positive-length MPV equality to the resulting original-site word, and use
+    the target self-evaluation with $X=A^w$.
 \end{proof}
 
 The inverse-tensor characterization of injectivity says that $A$ is
