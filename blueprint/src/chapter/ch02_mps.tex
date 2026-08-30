@@ -1040,7 +1040,7 @@ $A^{-1}A=\Id$. This is the identity used in
     \begin{align}
         \mathcal I(i\mathbf w)
          & =WA^iV\bigl(N^{\mathbf w}+\mathcal I(\mathbf w)\bigr),
-        \label{eq:mps_reduction_initial_window_recursion} \\
+        \label{eq:mps_reduction_initial_window_recursion}         \\
         \mathcal W(i\mathbf w)
          & =\mathcal I(i\mathbf w)+N^i\mathcal W(\mathbf w).
         \label{eq:mps_reduction_strict_window_recursion}
@@ -1049,9 +1049,9 @@ $A^{-1}A=\Id$. This is the identity used in
     \begin{align}
         \mathcal W(\mathbf i)
          & =\sum_{0\leq r<s\leq n}
-          N^{i_1}\cdots N^{i_r}
-          W A^{i_{r+1}}\cdots A^{i_s}V
-          N^{i_{s+1}}\cdots N^{i_n}.
+        N^{i_1}\cdots N^{i_r}
+        W A^{i_{r+1}}\cdots A^{i_s}V
+        N^{i_{s+1}}\cdots N^{i_n}.
         \label{eq:mps_reduction_strict_window_sum}
     \end{align}
     The strict inequality $r<s$ makes the central $A$-word nonempty, and
@@ -1069,10 +1069,10 @@ $A^{-1}A=\Id$. This is the identity used in
     \begin{align}
         B^{i_1}\cdots B^{i_n}
          & =N^{i_1}\cdots N^{i_n}
-          +\sum_{0\leq r<s\leq n}
-          N^{i_1}\cdots N^{i_r}
-          W A^{i_{r+1}}\cdots A^{i_s}V
-          N^{i_{s+1}}\cdots N^{i_n}.
+        +\sum_{0\leq r<s\leq n}
+        N^{i_1}\cdots N^{i_r}
+        W A^{i_{r+1}}\cdots A^{i_s}V
+        N^{i_{s+1}}\cdots N^{i_n}.
         \label{eq:mps_reduction_residual_expansion}
     \end{align}
     This statement requires only the reduction.  The weak range $r\leq s$
@@ -1174,13 +1174,13 @@ $A^{-1}A=\Id$. This is the identity used in
     \begin{align}
         VB^{i_1}\cdots B^{i_n}
          & =\sum_{s=0}^{n}
-          A^{i_1}\cdots A^{i_s}V
-          N^{i_{s+1}}\cdots N^{i_n},
+        A^{i_1}\cdots A^{i_s}V
+        N^{i_{s+1}}\cdots N^{i_n},
         \label{eq:mps_reduction_left_all_cut} \\
         B^{i_1}\cdots B^{i_n}W
          & =\sum_{r=0}^{n}
-          N^{i_1}\cdots N^{i_r}W
-          A^{i_{r+1}}\cdots A^{i_n}.
+        N^{i_1}\cdots N^{i_r}W
+        A^{i_{r+1}}\cdots A^{i_n}.
         \label{eq:mps_reduction_right_all_cut}
     \end{align}
     These identities require only the reduction.  They are precursors to the
@@ -1215,13 +1215,13 @@ $A^{-1}A=\Id$. This is the identity used in
     \begin{align}
         VB^{i_1}\cdots B^{i_n}
          & =\sum_{n-L\leq s\leq n}
-          A^{i_1}\cdots A^{i_s}V
-          N^{i_{s+1}}\cdots N^{i_n},
+        A^{i_1}\cdots A^{i_s}V
+        N^{i_{s+1}}\cdots N^{i_n},
         \label{eq:mps_reduction_left_contracted_expansion} \\
         B^{i_1}\cdots B^{i_n}W
          & =\sum_{0\leq r\leq\min(L,n)}
-          N^{i_1}\cdots N^{i_r}W
-          A^{i_{r+1}}\cdots A^{i_n}.
+        N^{i_1}\cdots N^{i_r}W
+        A^{i_{r+1}}\cdots A^{i_n}.
         \label{eq:mps_reduction_right_contracted_expansion}
     \end{align}
     Here $n-L$ denotes truncated subtraction, equivalently
@@ -1254,7 +1254,7 @@ $A^{-1}A=\Id$. This is the identity used in
     satisfy
     \begin{align}
         L & \leq |\mathbf p|+1,
-        &L & \leq |\mathbf q|+1,
+          & L                   & \leq |\mathbf q|+1,
         \label{eq:mps_reduction_exterior_buffer_bounds}
     \end{align}
     then
