@@ -25,13 +25,11 @@ namespace Matrix
 With columns as source coordinates and rows as target coordinates, `swapMatrix d` sends the
 source coordinate `(i, j)` to the target coordinate `(j, i)`. This is the exchange matrix
 used in the shift-MPU source factors of arXiv:1703.09188, equations `eq:SF_u1_u3`,
-`eq:uv2_U2`, and `eq:uv2_U3` (lines 2009--2034). -/
+`eq:uv2_U2`, and `eq:uv2_U3` (lines 2009--2034), and as the endpoint of the
+unitary interpolation at lines 2148--2150. -/
 theorem swapMatrix_isUnitaryBetween (d : ℕ) :
     (swapMatrix d).IsUnitaryBetween := by
-  constructor
-  · rw [IsIsometry, swapMatrix_conjTranspose]
-    exact swapMatrix_mul_self
-  · rw [IsCoisometry, swapMatrix_conjTranspose]
-    exact swapMatrix_mul_self
+  rw [IsUnitaryBetween, IsIsometry, IsCoisometry, swapMatrix_conjTranspose]
+  exact ⟨swapMatrix_mul_self, swapMatrix_mul_self⟩
 
 end Matrix
