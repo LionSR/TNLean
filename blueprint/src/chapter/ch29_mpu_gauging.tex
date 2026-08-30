@@ -240,11 +240,7 @@ left-canonical.  This is the canonical-form hypothesis used in
         MPOTensor.GroupFamily.IsRepresentation.physicalAdjointTensor_eq_daggerInverseGauge}
     \leanok
     \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
-        def:left_canonical_tensor, thm:mpug_physical_adjoint_inverse_mpv,
-        thm:mps_equality_reduction_exists,
-        thm:mps_rectangular_reduction_identities, thm:ft_single,
-        lem:left_canonical_irreducible_same_phase_unitary_gauge,
-        thm:mpu_physical_adjoint_normalized_flattening}
+        def:left_canonical_tensor, def:mpdo_physical_adjoint}
     Let $G$ be a group, and let
     $\{\mathcal U_g\}_{g\in G}$ be a representation by simple injective MPU
     tensors whose normalized flattenings are left-canonical.  Then
@@ -300,11 +296,7 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
         MPOTensor.GroupFamily.IsRepresentation.daggerInverseScalar_mul_inverse_eq_one,
         MPOTensor.GroupFamily.IsRepresentation.daggerInverseScalar_eq_one_or_neg_one_of_inv_eq}
     \leanok
-    \uses{thm:mpug_dagger_inverse_gauge,
-        lem:gauge_unique_up_to_scalar,
-        thm:mpug_unitary_entrywise_scalar_phase,
-        thm:mpug_unitary_entrywise_paired_scalars,
-        thm:mpug_unitary_entrywise_self_sign}
+    \uses{thm:mpug_dagger_inverse_gauge}
     The gauges in Theorem~\ref{thm:mpug_dagger_inverse_gauge} may be chosen
     together with scalars $\sigma_g\in\C$ satisfying
     \begin{align}
