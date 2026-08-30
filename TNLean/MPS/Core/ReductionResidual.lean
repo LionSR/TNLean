@@ -286,11 +286,18 @@ theorem evalWord_mul_eq_reductionRightContractedSum
       simp only [Matrix.mul_assoc]
       ac_rfl
 
+end IsReduction
+
+variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+  {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
+
 /-- The recursive left-contracted sum agrees with the explicit sum over all
 cuts of the word.
 
-Source: the untruncated precursor of arXiv:1706.07329v2, Lemma
-`lem:B_expand`, displayed formula at `cornerproblem.tex` line 3997. -/
+**Derived equivalence:** the explicit sum is motivated by the first contracted
+formula of arXiv:1706.07329v2, Lemma `lem:B_expand`, at `cornerproblem.tex`
+line 3997.  Its equality with the recursive definition is not stated in the
+source. -/
 theorem reductionLeftContractedSum_eq_allCutSum
     (w : List (Fin d)) :
     reductionLeftContractedSum B A V W w =
@@ -322,8 +329,10 @@ theorem reductionLeftContractedSum_eq_allCutSum
 /-- The recursive right-contracted sum agrees with the explicit sum over all
 cuts of the word.
 
-Source: the untruncated precursor of arXiv:1706.07329v2, Lemma
-`lem:B_expand`, displayed formula at `cornerproblem.tex` line 3998. -/
+**Derived equivalence:** the explicit sum is motivated by the second contracted
+formula of arXiv:1706.07329v2, Lemma `lem:B_expand`, at `cornerproblem.tex`
+line 3998.  Its equality with the recursive definition is not stated in the
+source. -/
 theorem reductionRightContractedSum_eq_allCutSum
     (w : List (Fin d)) :
     reductionRightContractedSum B A V W w =
@@ -353,6 +362,11 @@ theorem reductionRightContractedSum_eq_allCutSum
         simpa only [Matrix.mul_assoc] using hsum
       rw [hsum']
 
+namespace IsReduction
+
+variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+  {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
+
 /-- The explicit sum of terms beginning with the first letter agrees with its
 recursive form.
 
@@ -371,7 +385,7 @@ private theorem reductionInitialWindowRangeSum_eq_reductionInitialWindowSum
       rw [reductionLeftContractedAllCutSum, Matrix.mul_sum]
       simp only [Matrix.mul_assoc]
     _ = W * A i * reductionLeftContractedSum B A V W w := by
-      rw [reductionLeftContractedSum_eq_allCutSum]
+      rw [MPSTensor.reductionLeftContractedSum_eq_allCutSum]
     _ = W * A i * (V * Kraus.evalWord B w) := by
       rw [← h.mul_evalWord_eq_reductionLeftContractedSum]
     _ = reductionInitialWindowSum B A V W (i :: w) := by
@@ -687,7 +701,7 @@ theorem mul_evalWord_eq_reductionLeftContractedRangeSum
     (w : List (Fin d)) :
     V * Kraus.evalWord B w = reductionLeftContractedRangeSum B A V W N w := by
   rw [h.mul_evalWord_eq_reductionLeftContractedSum,
-    reductionLeftContractedSum_eq_allCutSum,
+    MPSTensor.reductionLeftContractedSum_eq_allCutSum,
     reductionLeftContractedAllCutSum, reductionLeftContractedRangeSum]
   let term : ℕ → Matrix (Fin D_A) (Fin D_B) ℂ := fun s ↦
     Kraus.evalWord A (w.take s) * V *
@@ -731,7 +745,7 @@ theorem evalWord_mul_eq_reductionRightContractedRangeSum
     (w : List (Fin d)) :
     Kraus.evalWord B w * W = reductionRightContractedRangeSum B A V W N w := by
   rw [h.evalWord_mul_eq_reductionRightContractedSum,
-    reductionRightContractedSum_eq_allCutSum,
+    MPSTensor.reductionRightContractedSum_eq_allCutSum,
     reductionRightContractedAllCutSum, reductionRightContractedRangeSum]
   let term : ℕ → Matrix (Fin D_B) (Fin D_A) ℂ := fun r ↦
     Kraus.evalWord (reductionResidual B A V W) (w.take r) * W *
