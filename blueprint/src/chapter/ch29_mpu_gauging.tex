@@ -1581,3 +1581,124 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     The last identity at $g$, $h$, and $gh$ supplies
     (\ref{eq:mpug_sigma_inverse}) in the three required places.
 \end{proof}
+
+Write $\Z_2=\{e,s\}$, where $s^2=e$. The following statements concern only
+the scalar data and their gauge classes.
+
+\begin{theorem}[Normalized $L$-symbol ratio]
+    \label{thm:mpug_sigma_l_ratio}
+    \lean{TNLean.Algebra.LSymbol.sigma_eq_div}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_normalized,
+        def:mpug_inversion_cochains}
+    Let $G$ act on a set $\mathsf X$. Suppose that a normalized $L$-symbol
+    $L$ is compatible with a scalar $3$-cochain $\omega$. Then, for every
+    $x\in\mathsf X$ and $g\in G$,
+    \begin{align}
+        \sigma(g)
+         & =\frac{L^x_{g^{-1},g}}{L^{g x}_{g,g^{-1}}}.
+        \label{eq:mpug_sigma_l_ratio}
+    \end{align}
+    This is the scalar identity in
+    \cite[lines~5327--5329]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, lines 5327--5329.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_normalized,
+        def:mpug_inversion_cochains}
+    Apply the compatibility relation
+    (\ref{eq:mpug_l_compatibility}) to $(g,g^{-1},g)$. The two factors with an
+    identity argument are $1$ by normalization, leaving
+    (\ref{eq:mpug_sigma_l_ratio}).
+\end{proof}
+
+\begin{theorem}[Trivial scalar gauge class for $\Z_2$]
+    \label{thm:mpug_z2_trivial_scalar_class}
+    \lean{TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_sigma_generator_eq_one}
+    \leanok
+    \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge,
+        def:mpug_trivial_gauge_class, def:mpug_inversion_cochains}
+    Let $\omega$ be a normalized scalar $3$-cochain on $\Z_2$. Its gauge
+    class is trivial if and only if
+    \begin{align}
+        \sigma(s) & =1.
+        \label{eq:mpug_z2_trivial_sigma}
+    \end{align}
+    This strengthens the scalar step in
+    \cite[lines~5339--5341]{FrancoRubio2025MPUGauging}: only normalization,
+    rather than the cocycle identity, is needed for this equivalence.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_fusion_gauge,
+        thm:mpug_gauge_preserves_normalization,
+        thm:mpug_cohomologous_to_equivalence}
+    Suppose first that $\omega=d\beta$ for an arbitrary scalar $2$-cochain
+    $\beta$. Although $\beta$ need not be normalized, the normalization of
+    $d\beta$ implies that there is a constant $c\in\C^\times$ such that
+    $\beta(e,h)=\beta(h,e)=c$ for every $h\in\Z_2$. Since $s^2=e$,
+    \begin{align}
+        (d\beta)(s,s,s)
+         & =\frac{\beta(s,e)\beta(s,s)}
+        {\beta(s,s)\beta(e,s)}=\frac{c}{c}=1.
+        \label{eq:mpug_z2_coboundary_generator}
+    \end{align}
+    Thus every scalar $2$-cochain whose coboundary is normalized contributes
+    the factor $1$ at $(s,s,s)$. In particular, an arbitrary gauge between
+    normalized scalar $3$-cochains cannot change this value, and
+    $\sigma(s)=1$. Conversely, normalization determines every
+    value of $\omega$ except $\omega(s,s,s)=\sigma(s)$. Hence
+    (\ref{eq:mpug_z2_trivial_sigma}) makes $\omega$ the constant cochain $1$.
+\end{proof}
+
+\begin{theorem}[Sign dichotomy for the $\Z_2$ inversion scalar]
+    \label{thm:mpug_z2_sigma_sign}
+    \lean{TNLean.Algebra.ScalarThreeCochain.sigma_generator_eq_one_or_eq_neg_one}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_inversion_cochains}
+    Let $\omega$ be a normalized scalar $3$-cocycle on $\Z_2$. Then
+    \begin{align}
+        \sigma(s) & \in\{1,-1\}.
+        \label{eq:mpug_z2_sigma_sign}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_inversion_cochain_formulas}
+    Since $s^{-1}=s$, formula (\ref{eq:mpug_sigma_inverse}) gives
+    $\sigma(s)=\sigma(s)^{-1}$. Hence $\sigma(s)^2=1$, whose two solutions in
+    $\C^\times$ are $1$ and $-1$.
+\end{proof}
+
+\begin{theorem}[Nontrivial scalar gauge class for $\Z_2$]
+    \label{thm:mpug_z2_nontrivial_scalar_class}
+    \lean{TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_trivial_gauge_class,
+        def:mpug_inversion_cochains}
+    Let $\omega$ be a normalized scalar $3$-cocycle on $\Z_2$. Its gauge
+    class is nontrivial if and only if
+    \begin{align}
+        \sigma(s) & =-1.
+        \label{eq:mpug_z2_nontrivial_sigma}
+    \end{align}
+    This is the scalar cohomology classification used in the proof at
+    \cite[lines~5339--5341]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, lines 5339--5341.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_z2_trivial_scalar_class, thm:mpug_z2_sigma_sign}
+    By Theorem~\ref{thm:mpug_z2_trivial_scalar_class}, a nontrivial class has
+    $\sigma(s)\neq1$. The dichotomy
+    (\ref{eq:mpug_z2_sigma_sign}) then forces $\sigma(s)=-1$, and the converse
+    follows from the same two statements.
+\end{proof}
+
+These results classify only the normalized scalar $3$-cocycle by $\sigma(s)$.
+They do not establish the tensor identity
+$T_sT_s^*=\sigma(s)\mathbf 1$, nor the proposition identifying the MPU anomaly
+with the nontrivial time-reversal SPT class. Both statements require the tensor
+argument in \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}, beyond the
+scalar calculation above.
