@@ -20,6 +20,7 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalTraceDecomposition
 import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalChainGroundSpace
+import TNLean.MPS.ParentHamiltonian.BlockDiagonalOneSiteSpan
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionBoundaryDecomposition
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.ParentHamiltonian.BlockStrip

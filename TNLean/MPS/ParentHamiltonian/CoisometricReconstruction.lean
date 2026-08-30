@@ -12,17 +12,20 @@ import TNLean.MPS.ParentHamiltonian.BlockSumGroundSpace
 
 A positive-length local MPS space is unchanged when a tensor is reconstructed
 inside a larger bond space through a rectangular coisometry.  The two boundary
-maps are $X \mapsto UXU^*$ and $Y \mapsto U^*YU$.
+maps are \(X \mapsto UXU^*\) and \(Y \mapsto U^*YU\).
 
 ## Main result
 
 * `MPSTensor.groundSpace_eq_of_coisometry_reconstruction`: exact equality of
   positive-length local ground spaces.
 
-## References
+## Reference context
 
-* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, equation
-  `II_CF1`, lines 237--244.
+Equation `II_CF1` of Cirac--Perez-Garcia--Schuch--Verstraete,
+arXiv:1606.00608, lines 237--244, states the literal direct-sum canonical form
+\(A^i=\bigoplus_k\mu_kA_k^i\). It does not state the general rectangular
+coisometry-invariance theorem below. That theorem is a derived trace-cyclicity
+result for any exact coisometric reconstruction.
 -/
 
 open scoped Matrix
@@ -34,10 +37,12 @@ variable {s d n : ℕ}
 /-- A positive-length local MPS space is invariant under an exact rectangular
 coisometric reconstruction.
 
-If $A_i=U^*C_iU$ and $UU^*=1$, cyclicity of trace identifies the boundary
-parametrizations through $X \mapsto UXU^*$ and $Y \mapsto U^*YU$.
+If \(A_i=U^*C_iU\) and \(UU^*=1\), cyclicity of trace identifies the boundary
+parametrizations through \(X \mapsto UXU^*\) and \(Y \mapsto U^*YU\).
 
-Source: arXiv:1606.00608, equation `II_CF1`, lines 237--244. -/
+This is a derived transport lemma, not a theorem stated in
+arXiv:1606.00608. Its hypotheses abstract the exact reconstruction used by
+the canonical-form data. -/
 theorem groundSpace_eq_of_coisometry_reconstruction
     {A : MPSTensor s d} {C : MPSTensor s n}
     (U : Matrix (Fin n) (Fin d) ℂ)
@@ -100,8 +105,9 @@ the sum of the local spaces of its blocked distinct BNT representatives.
 Repeated gauge-phase copies and the rectangular ambient coisometry do not
 change this sum.
 
-Source: arXiv:1606.00608, equation `II_CF1`, lines 237--244, and the BNT
-regrouping at lines 265--301. -/
+This is derived from the literal direct-sum canonical form at
+arXiv:1606.00608, equation `II_CF1`, lines 237--244, and the phase-gauge BNT
+regrouping in equations `eq:II_ABasicTensors` and `decBSV`, lines 265--301. -/
 theorem CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_representatives
     {A : MPSTensor s d} (data : CPSVCanonicalFormData A)
     (ref : data.BNTRefinement) {p L : ℕ} (hp : 0 < p) (hL : 0 < L) :

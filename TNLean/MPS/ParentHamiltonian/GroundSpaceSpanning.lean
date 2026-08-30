@@ -164,6 +164,31 @@ theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_i
     _ = ⨆ j : Fin r, mpvSubmodule (A j) N := by
       simp [hBlock N hN]
 
+/-- The parent-Hamiltonian ground-space spanning equation depends only on the
+local MPS space at the interaction length.
+
+If \(G_L(B)=G_L(C)\), then their translated local constraints, periodic chain
+spaces, and parent-Hamiltonian kernels agree on every chain of length at least
+\(L\). Hence any fixed family of matrix product vectors spanning the kernels
+for \(C\) also spans those for \(B\). -/
+theorem HasParentHamiltonianGroundSpaceSpanning.of_groundSpace_eq
+    {D₁ D₂ r : ℕ} {dim : Fin r → ℕ}
+    {B : MPSTensor d D₁} {C : MPSTensor d D₂}
+    {L : ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    (hSpan : HasParentHamiltonianGroundSpaceSpanning C L A)
+    (hGround : groundSpace B L = groundSpace C L) :
+    HasParentHamiltonianGroundSpaceSpanning B L A := by
+  intro N hN
+  have hNpos : 0 < N := lt_of_le_of_lt (Nat.zero_le L) hN
+  have hLN : L ≤ N := le_of_lt hN
+  calc
+    LinearMap.ker (parentHamiltonian B L N) = chainGroundSpace B L N :=
+      ker_parentHamiltonian_eq_chainGroundSpace B hNpos hLN
+    _ = chainGroundSpace C L N := chainGroundSpace_eq_of_groundSpace_eq hGround
+    _ = LinearMap.ker (parentHamiltonian C L N) :=
+      (ker_parentHamiltonian_eq_chainGroundSpace C hNpos hLN).symm
+    _ = bntMPSVectorSpan A N := hSpan N hN
+
 /-- For block-diagonal nearest-neighbor parent Hamiltonians, the all-chain
 source condition is equivalent to all-chain translated parent-term commutation
 together with the reverse ground-space inclusion.
