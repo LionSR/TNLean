@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Algebra.ListProduct
 import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.Blocking
-import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.TracePairing
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
@@ -51,7 +50,9 @@ noncomputable def coefficientDualInverse (A : MPSTensor d D_A)
 \[
   \sum_i A^i_{xy} C^i_{a'a}=\delta_{x,a}\delta_{y,a'}.
 \]
-The reversed pair `(a',a)` is the upper-leg convention in the source diagram. -/
+The reversed pair `(a',a)` is the upper-leg convention in the source diagram.
+
+Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3817--3823. -/
 theorem coefficientDualInverse_sum_entry (A : MPSTensor d D_A)
     (hA : Kraus.IsInjective A) (x y a a' : Fin D_A) :
     ∑ i : Fin d, A i x y * coefficientDualInverse A hA i a' a =
@@ -73,14 +74,18 @@ theorem coefficientDualInverse_sum_entry (A : MPSTensor d D_A)
 
 /-- The source reduction cross matrix
 `K = ∑ i, B i ⊗ (C i)ᵀ`, on the genuinely mixed bond index
-`Fin D_B × Fin D_A`. -/
+`Fin D_B × Fin D_A`.
+
+Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3824--3838. -/
 noncomputable def reductionCrossMatrix (B : MPSTensor d D_B)
     (C : MPSTensor d D_A) :
     Matrix (Fin D_B × Fin D_A) (Fin D_B × Fin D_A) ℂ :=
   ∑ i : Fin d, B i ⊗ₖ (C i)ᵀ
 
 /-- Exact entry formula for the reduction cross matrix.  In particular, the
-upper inverse-tensor entry is `C i a' a`, not a conjugated entry. -/
+upper inverse-tensor entry is `C i a' a`, not a conjugated entry.
+
+Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3824--3838. -/
 @[simp] theorem reductionCrossMatrix_apply (B : MPSTensor d D_B)
     (C : MPSTensor d D_A) (b b' : Fin D_B) (a a' : Fin D_A) :
     reductionCrossMatrix B C (b, a) (b', a') =
@@ -115,7 +120,9 @@ private theorem sum_family_pow_eq_sum_listProd
 
 /-- Power expansion of the mixed-bond cross matrix.  The theorem freezes the
 source orientation explicitly: the lower `B` word is in site order while the
-upper `C` word is reversed before taking its ordinary transpose. -/
+upper `C` word is reversed before taking its ordinary transpose.
+
+Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3839--3865. -/
 theorem reductionCrossMatrix_pow_eq_sum (B : MPSTensor d D_B)
     (C : MPSTensor d D_A) (n : ℕ) :
     reductionCrossMatrix B C ^ n =
@@ -129,7 +136,9 @@ theorem reductionCrossMatrix_pow_eq_sum (B : MPSTensor d D_B)
     listProd_kronecker_transpose B C (List.ofFn σ)
 
 /-- Entrywise power formula, with the source's reversed upper-leg order
-visible in the statement. -/
+visible in the statement.
+
+Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3839--3865. -/
 theorem reductionCrossMatrix_pow_apply (B : MPSTensor d D_B)
     (C : MPSTensor d D_A) (n : ℕ)
     (b b' : Fin D_B) (a a' : Fin D_A) :
@@ -154,7 +163,9 @@ private theorem diagonalBondVector_dotProduct (D : ℕ) :
   simp [diagonalBondVector]
 
 /-- Pairing an injective tensor with its coefficient dual gives the rank-one
-matrix supported on equal lower/upper bond indices. -/
+matrix supported on equal lower/upper bond indices.
+
+Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3817--3838. -/
 theorem reductionCrossMatrix_coefficientDualInverse
     (A : MPSTensor d D_A) (hA : Kraus.IsInjective A) :
     reductionCrossMatrix A (coefficientDualInverse A hA) =
