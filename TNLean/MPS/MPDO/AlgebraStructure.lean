@@ -3,10 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Algebra.Algebra.Bilinear
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.LinearAlgebra.Basis.VectorSpace
-import Mathlib.LinearAlgebra.FiniteDimensional.Defs
 import QICLean.Channel.FixedPoint.Algebra
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.MPDO.FusionIsometries
