@@ -87,6 +87,51 @@ private theorem IsRepresentation.sameMPV_physicalAdjointTensor_inverseFlattening
       rw [inverseFlattening, MPSTensor.reindex_mpv]
       exact hF.sameMPV₂Pos_physicalAdjointTensor_inv F g (N + 1) (by omega) ρ
 
+private theorem leftCanonical_reindex {D₁ D₂ : ℕ} (h : D₁ = D₂)
+    (A : MPSTensor (d * d) D₁) (hA : MPSTensor.IsLeftCanonical A) :
+    MPSTensor.IsLeftCanonical (MPSTensor.reindex h A) := by
+  subst h
+  simpa using hA
+
+private theorem reindex_smul {D₁ D₂ : ℕ} (h : D₁ = D₂) (c : ℂ)
+    (A : MPSTensor (d * d) D₁) :
+    MPSTensor.reindex h (fun i ↦ c • A i) =
+      fun i ↦ c • MPSTensor.reindex h A i := by
+  subst h
+  rfl
+
+private theorem reindex_dependent_eq {ι : Type*} (D : ι → ℕ)
+    (A : (x : ι) → MPSTensor (d * d) (D x)) {x y : ι} {E : ℕ}
+    (hxy : x = y) (h₁ : D x = E) (h₂ : D y = E) :
+    MPSTensor.reindex h₁ (A x) = MPSTensor.reindex h₂ (A y) := by
+  subst hxy
+  have hh : h₁ = h₂ := Subsingleton.elim _ _
+  subst hh
+  rfl
+
+private noncomputable def unitaryReindex {D₁ D₂ : ℕ} (h : D₁ = D₂)
+    (U : Matrix.unitaryGroup (Fin D₁) ℂ) :
+    Matrix.unitaryGroup (Fin D₂) ℂ :=
+  ⟨Matrix.reindex (finCongr h) (finCongr h) U,
+    Matrix.reindex_mem_unitaryGroup (finCongr h) U U.property⟩
+
+private theorem unitaryReindex_dependent_eq {ι : Type*} (D : ι → ℕ)
+    (U : (x : ι) → Matrix.unitaryGroup (Fin (D x)) ℂ) {x y : ι} {E : ℕ}
+    (hxy : x = y) (h₁ : D x = E) (h₂ : D y = E) :
+    unitaryReindex h₁ (U x) = unitaryReindex h₂ (U y) := by
+  subst hxy
+  have hh : h₁ = h₂ := Subsingleton.elim _ _
+  subst hh
+  rfl
+
+@[simp] private theorem unitaryReindex_self {D : ℕ} (h : D = D)
+    (U : Matrix.unitaryGroup (Fin D) ℂ) :
+    unitaryReindex h U = U := by
+  have hh : h = rfl := Subsingleton.elim _ _
+  subst hh
+  ext i j
+  rfl
+
 /-- A nonzero common scalar normalization does not affect the unitary gauge
 between two injective tensors.  This supplies the canonical-form unitarity in
 equation `eq:defT` of arXiv:2502.20257, lines 1554--1557. -/
@@ -110,7 +155,7 @@ private theorem exists_unitaryConj_of_gaugeEquiv_of_smul_leftCanonical
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
       (Kraus.injective_implies_irreducibleCP _ hBc)
   have hcGauge : ∀ i,
-      c • B i = 1 • ((X : Matrix (Fin D) (Fin D) ℂ) * (c • A i) *
+      c • B i = (1 : ℂ) • ((X : Matrix (Fin D) (Fin D) ℂ) * (c • A i) *
         ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
     intro i
     simpa only [one_smul, mul_smul_comm, smul_mul_assoc] using
@@ -154,18 +199,22 @@ theorem IsRepresentation.exists_daggerInverseGauge [Group G]
   have hGauge : MPSTensor.GaugeEquiv A B :=
     MPSTensor.fundamentalTheorem_singleBlock hA hSame
   have hd : d ≠ 0 := by
-    letI : NeZero (d * d) := Kraus.neZero_d_of_isInjective _ (hF.isInjective g)
+    let hdd : NeZero (d * d) := Kraus.neZero_d_of_isInjective (hF.isInjective g)
     intro hd
-    exact NeZero.ne (d * d) (by simp [hd])
+    exact hdd.out (Nat.mul_eq_zero.mpr (Or.inl hd))
   have hsqrt : (Real.sqrt d : ℂ) ≠ 0 := by
     apply Complex.ofReal_ne_zero.mpr
     exact (Real.sqrt_pos.2 (by exact_mod_cast Nat.pos_of_ne_zero hd)).ne'
   have hc : ((Real.sqrt d : ℂ)⁻¹) ≠ 0 := inv_ne_zero hsqrt
   have hAleft : MPSTensor.IsLeftCanonical
       (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) • A i) := by
-    let hD := hF.bondDim_inv F g
-    cases hD
-    simpa [A, inverseFlattening, MPOTensor.normalizedFlattening] using hcanonical g⁻¹
+    change MPSTensor.IsLeftCanonical
+      (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) •
+        MPSTensor.reindex (hF.bondDim_inv F g).symm
+          (F.tensor g⁻¹).toMPSTensor i)
+    rw [← reindex_smul]
+    exact leftCanonical_reindex (hF.bondDim_inv F g).symm
+      (F.tensor g⁻¹).normalizedFlattening (hcanonical g⁻¹)
   have hBcanonical : MPSTensor.IsLeftCanonical
       (MPOTensor.physicalAdjointTensor (F.tensor g)).normalizedFlattening := by
     rw [MPOTensor.normalizedFlattening_physicalAdjointTensor]
@@ -173,7 +222,9 @@ theorem IsRepresentation.exists_daggerInverseGauge [Group G]
       (MPOTensor.physicalPairSwapEquiv d) _).2 ((hcanonical g).mapStar)
   have hBleft : MPSTensor.IsLeftCanonical
       (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) • B i) := by
-    simpa [B, MPOTensor.normalizedFlattening] using hBcanonical
+    change MPSTensor.IsLeftCanonical
+      (MPOTensor.physicalAdjointTensor (F.tensor g)).normalizedFlattening
+    exact hBcanonical
   obtain ⟨U, hU⟩ :=
     exists_unitaryConj_of_gaugeEquiv_of_smul_leftCanonical
       hc hA hGauge hAleft hBleft
@@ -213,8 +264,8 @@ noncomputable def IsRepresentation.inverseDaggerInverseGauge [Group G]
     (hcanonical : ∀ g : G,
       MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) : Matrix.unitaryGroup (Fin (F.bondDim g)) ℂ :=
-  cast (congrArg (fun D ↦ Matrix.unitaryGroup (Fin D) ℂ)
-    (hF.bondDim_inv F g).symm) (hF.daggerInverseGauge F hcanonical g⁻¹)
+  unitaryReindex (hF.bondDim_inv F g).symm
+    (hF.daggerInverseGauge F hcanonical g⁻¹)
 
 /-- The physical adjoint on a flattened tensor: exchange the two physical
 coordinates and conjugate every virtual matrix entry.
@@ -262,7 +313,7 @@ private theorem flattenedPhysicalAdjoint_gauge_symm {D : ℕ}
     ∀ i,
       flattenedPhysicalAdjoint (d := d) A i =
         (Matrix.UnitaryGroup.map_star S : Matrix (Fin D) (Fin D) ℂ) * B i *
-          ((Matrix.UnitaryGroup.map_star S)⁻¹ :
+          (((Matrix.UnitaryGroup.map_star S)⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) :
             Matrix (Fin D) (Fin D) ℂ) := by
   classical
   intro i
@@ -307,22 +358,46 @@ private theorem flattenedPhysicalAdjoint_gauge_symm {D : ℕ}
           A (MPOTensor.physicalPairSwapEquiv d i) *
           (S : Matrix (Fin D) (Fin D) ℂ))).map (starRingEnd ℂ) := hMap
       _ = _ := hRight
-  change flattenedPhysicalAdjoint (d := d) A i =
-    (Sstar : Matrix (Fin D) (Fin D) ℂ) * B i *
-      ((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  calc
-    flattenedPhysicalAdjoint (d := d) A i =
-        (Sstar : Matrix (Fin D) (Fin D) ℂ) *
-          (((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) :
-              Matrix (Fin D) (Fin D) ℂ) *
-            flattenedPhysicalAdjoint (d := d) A i *
-            (Sstar : Matrix (Fin D) (Fin D) ℂ)) *
-          ((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) :
-            Matrix (Fin D) (Fin D) ℂ) := by
-            simp [Matrix.mul_assoc]
-    _ = (Sstar : Matrix (Fin D) (Fin D) ℂ) * B i *
-          ((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) :
-            Matrix (Fin D) (Fin D) ℂ) := by rw [hBi]
+  have hInv : (Sstar : Matrix (Fin D) (Fin D) ℂ) *
+      ((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = 1 := by
+    simp
+  have hResult : flattenedPhysicalAdjoint (d := d) A i =
+      (Sstar : Matrix (Fin D) (Fin D) ℂ) * B i *
+        ((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+    calc
+      flattenedPhysicalAdjoint (d := d) A i =
+          1 * flattenedPhysicalAdjoint (d := d) A i * 1 := by simp
+      _ = ((Sstar : Matrix (Fin D) (Fin D) ℂ) *
+            ((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) *
+          flattenedPhysicalAdjoint (d := d) A i *
+            ((Sstar : Matrix (Fin D) (Fin D) ℂ) *
+              ((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) :
+                Matrix (Fin D) (Fin D) ℂ)) := by rw [hInv]
+      _ = (Sstar : Matrix (Fin D) (Fin D) ℂ) *
+            (((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) :
+                Matrix (Fin D) (Fin D) ℂ) *
+              flattenedPhysicalAdjoint (d := d) A i *
+              (Sstar : Matrix (Fin D) (Fin D) ℂ)) *
+            ((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) :
+              Matrix (Fin D) (Fin D) ℂ) := by simp only [Matrix.mul_assoc]
+      _ = (Sstar : Matrix (Fin D) (Fin D) ℂ) * B i *
+            ((Sstar⁻¹ : Matrix.unitaryGroup (Fin D) ℂ) :
+              Matrix (Fin D) (Fin D) ℂ) := by rw [hBi]
+  simpa only [Sstar] using hResult
+
+private theorem flattenedPhysicalAdjoint_reindex_gauge {D₁ D₂ : ℕ}
+    (h : D₁ = D₂) (A : MPSTensor (d * d) D₁) (B : MPSTensor (d * d) D₂)
+    (T : Matrix.unitaryGroup (Fin D₂) ℂ)
+    (hT : ∀ i,
+      flattenedPhysicalAdjoint (d := d) B i =
+        (T : Matrix (Fin D₂) (Fin D₂) ℂ)ᴴ * MPSTensor.reindex h A i *
+          (T : Matrix (Fin D₂) (Fin D₂) ℂ)) :
+    ∀ i,
+      flattenedPhysicalAdjoint (d := d) (MPSTensor.reindex h.symm B) i =
+        (unitaryReindex h.symm T : Matrix (Fin D₁) (Fin D₁) ℂ)ᴴ * A i *
+          (unitaryReindex h.symm T : Matrix (Fin D₁) (Fin D₁) ℂ) := by
+  subst h
+  simpa using hT
 
 /-- The equation `eq:defT` at \(g^{-1}\), transported to the bond coordinates
 of \(g\) and physically adjointed as in arXiv:2502.20257, lines 1557--1562. -/
@@ -339,10 +414,19 @@ private theorem IsRepresentation.flattenedPhysicalAdjoint_inverseFlattening
           Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ) := by
   classical
   let hD := hF.bondDim_inv F g
-  cases hD
-  simpa [inverseFlattening, inverseDaggerInverseGauge, inv_inv,
-    flattenedPhysicalAdjoint_toMPSTensor] using
-      hF.physicalAdjointTensor_eq_daggerInverseGauge F hcanonical g⁻¹ i
+  apply flattenedPhysicalAdjoint_reindex_gauge hD
+      (F.tensor g).toMPSTensor (F.tensor g⁻¹).toMPSTensor
+      (hF.daggerInverseGauge F hcanonical g⁻¹) _ i
+  intro j
+  have hinverse : inverseFlattening F hF g⁻¹ =
+      MPSTensor.reindex hD (F.tensor g).toMPSTensor := by
+    exact reindex_dependent_eq (fun x ↦ F.bondDim x)
+      (fun x ↦ (F.tensor x).toMPSTensor) (inv_inv g)
+      (hF.bondDim_inv F g⁻¹).symm hD
+  have hbase :=
+    hF.physicalAdjointTensor_eq_daggerInverseGauge F hcanonical g⁻¹ j
+  rw [hinverse] at hbase
+  simpa [flattenedPhysicalAdjoint_toMPSTensor] using hbase
 
 /-- There is a scalar \(\sigma_g\) such that
 \(T_gT_{g^{-1}}^*=\sigma_g\mathbf 1\), where the star is entrywise complex
@@ -392,7 +476,8 @@ theorem IsRepresentation.exists_daggerInverseScalar [Group G]
         ((Y⁻¹ : GL (Fin (F.bondDim g)) ℂ) :
           Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ) := by
     intro i
-    rw [B, ← flattenedPhysicalAdjoint_toMPSTensor]
+    change (MPOTensor.physicalAdjointTensor (F.tensor g)).toMPSTensor i = _
+    rw [← flattenedPhysicalAdjoint_toMPSTensor]
     simpa [Y] using hY' i
   obtain ⟨u, hu⟩ := MPSTensor.gauge_unique_up_to_scalar hA hX hY
   refine ⟨(u : ℂ), ?_⟩
@@ -413,7 +498,7 @@ theorem IsRepresentation.exists_daggerInverseScalar [Group G]
               Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ)) := by
               rw [← hu']
               rfl
-    _ = (u : ℂ) • 1 := by simp [mul_smul_comm]
+    _ = (u : ℂ) • 1 := by simp
 
 /-- The scalar \(\sigma_g\) in equation `eq:intro_sigma` of
 arXiv:2502.20257, lines 1557--1562. -/
@@ -439,6 +524,19 @@ theorem IsRepresentation.daggerInverseGauge_mul_mapStar_inverse_eq_smul_one
         hF.daggerInverseScalar F hcanonical g • 1 :=
   Classical.choose_spec (hF.exists_daggerInverseScalar F hcanonical g)
 
+private theorem unitaryReindex_mul_mapStar_of_mul_mapStar_reindex
+    {D₁ D₂ : ℕ} (h : D₁ = D₂)
+    (T : Matrix.unitaryGroup (Fin D₂) ℂ)
+    (S : Matrix.unitaryGroup (Fin D₁) ℂ) (σ : ℂ)
+    (hscalar :
+      (T : Matrix (Fin D₂) (Fin D₂) ℂ) *
+        (unitaryReindex h S : Matrix (Fin D₂) (Fin D₂) ℂ).map
+          (starRingEnd ℂ) = σ • 1) :
+    (unitaryReindex h.symm T : Matrix (Fin D₁) (Fin D₁) ℂ) *
+      (S : Matrix (Fin D₁) (Fin D₁) ℂ).map (starRingEnd ℂ) = σ • 1 := by
+  subst h
+  simpa using hscalar
+
 /-- Equation `eq:intro_sigma` at \(g^{-1}\), transported to the bond coordinates
 of \(g\), as in arXiv:2502.20257, lines 1559--1563. -/
 private theorem IsRepresentation.inverseDaggerInverseGauge_mul_mapStar_eq_smul_one
@@ -454,9 +552,19 @@ private theorem IsRepresentation.inverseDaggerInverseGauge_mul_mapStar_eq_smul_o
         hF.daggerInverseScalar F hcanonical g⁻¹ • 1 := by
   classical
   let hD := hF.bondDim_inv F g
-  cases hD
-  simpa [inverseDaggerInverseGauge, inv_inv] using
+  apply unitaryReindex_mul_mapStar_of_mul_mapStar_reindex hD
+      (hF.daggerInverseGauge F hcanonical g⁻¹)
+      (hF.daggerInverseGauge F hcanonical g)
+      (hF.daggerInverseScalar F hcanonical g⁻¹)
+  have hinverse : hF.inverseDaggerInverseGauge F hcanonical g⁻¹ =
+      unitaryReindex hD (hF.daggerInverseGauge F hcanonical g) := by
+    exact unitaryReindex_dependent_eq (fun x ↦ F.bondDim x)
+      (fun x ↦ hF.daggerInverseGauge F hcanonical x) (inv_inv g)
+      (hF.bondDim_inv F g⁻¹).symm hD
+  have hbase :=
     hF.daggerInverseGauge_mul_mapStar_inverse_eq_smul_one F hcanonical g⁻¹
+  rw [hinverse] at hbase
+  exact hbase
 
 /-- The scalar \(\sigma_g\) has unit modulus, written as
 \(\sigma_g\overline{\sigma_g}=1\).
@@ -485,10 +593,13 @@ theorem IsRepresentation.norm_daggerInverseScalar [Group G]
     (hcanonical : ∀ g : G,
       MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) : ‖hF.daggerInverseScalar F hcanonical g‖ = 1 := by
+  let σ := hF.daggerInverseScalar F hcanonical g
   have h := hF.daggerInverseScalar_mul_star_eq_one F hcanonical g
-  have hnorm := congrArg norm h
-  simp only [norm_mul, norm_star, norm_one] at hnorm
-  nlinarith [norm_nonneg (hF.daggerInverseScalar F hcanonical g)]
+  change σ * starRingEnd ℂ σ = 1 at h
+  rw [Complex.mul_conj] at h
+  have hnormSq : Complex.normSq σ = 1 := by exact_mod_cast h
+  change ‖σ‖ = 1
+  nlinarith [Complex.sq_norm σ, norm_nonneg σ]
 
 /-- The scalars for inverse group elements satisfy
 \(\sigma_g\sigma_{g^{-1}}=1\).
@@ -521,12 +632,9 @@ theorem IsRepresentation.daggerInverseScalar_eq_one_or_neg_one_of_inv_eq
     (g : G) (hg : g⁻¹ = g) :
     hF.daggerInverseScalar F hcanonical g = 1 ∨
       hF.daggerInverseScalar F hcanonical g = -1 := by
-  have hGauge : hF.inverseDaggerInverseGauge F hcanonical g =
-      hF.daggerInverseGauge F hcanonical g := by
-    simp [inverseDaggerInverseGauge, hg]
-  apply Matrix.scalar_eq_one_or_neg_one_of_mul_map_star_self_eq_smul_one
-    (hF.daggerInverseGauge F hcanonical g)
-  simpa [hGauge] using
-    hF.daggerInverseGauge_mul_mapStar_inverse_eq_smul_one F hcanonical g
+  apply sq_eq_one_iff.mp
+  rw [pow_two]
+  simpa only [hg] using
+    hF.daggerInverseScalar_mul_inverse_eq_one F hcanonical g
 
 end MPOTensor.GroupFamily
