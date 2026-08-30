@@ -37,16 +37,6 @@ namespace MPSTensor
 
 variable {d D₁ D₂ L N : ℕ}
 
-/-- Equal local image spaces impose the same periodic-chain constraints. -/
-theorem chainGroundSpace_eq_of_groundSpace_eq
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hG : groundSpace A L = groundSpace B L) :
-    chainGroundSpace A L N = chainGroundSpace B L N := by
-  rw [chainGroundSpace, chainGroundSpace]
-  by_cases h : 0 < N ∧ L ≤ N
-  · simp [h, hG]
-  · simp [h]
-
 /-- Non-proportional MPV states have distinct MPV lines. -/
 theorem mpvSubmodule_ne_of_not_exists_mpv_eq_smul
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}

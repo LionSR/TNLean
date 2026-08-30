@@ -190,7 +190,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_three_bondDim_pow_
       ∃ B : (j : Fin g) → MPSTensor d (dim j),
         IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) ∧
         ∃ L : ℕ, 0 < L ∧ L ≤ 3 * D ^ 5 ∧
-          WordTupleSpanTop (fun j => blockTensor (B j) L) 1 := by
+          WordTupleSpanTop (fun j => MPSTensor.blockTensor (B j) L) 1 := by
   let data := Classical.choice hA
   let ref := data.bntRefinement
   let dim : Fin data.phaseClasses.g → ℕ := fun j =>

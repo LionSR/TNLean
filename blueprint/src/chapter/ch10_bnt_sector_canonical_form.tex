@@ -591,6 +591,29 @@ single family.
     unit modulus after taking its $p$-th power.
 \end{proof}
 
+\begin{theorem}[Positive blocking preserves a basis of normal tensors]
+    \label{thm:cpsv_bnt_positive_blocking}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blockTensor}
+    \leanok
+    \uses{def:bnt_cpsv, def:blocked_tensor, thm:cpsv_normal_tensor_positive_blocking}
+    If $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$ and $p\geq1$,
+    then $(A_j^{[p]})_{j=1}^{g}$ is a basis of normal tensors for $A^{[p]}$.
+    This transport statement is derived from the definitions; it is not a
+    separately stated theorem of CPSV16.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_normal_tensor_positive_blocking}
+    Positive blocking preserves normality of each representative. At every
+    blocked length $N$, concatenation identifies the coefficients of
+    $V^{(N)}(A^{[p]})$ and $V^{(N)}(A_j^{[p]})$ with those of
+    $V^{(Np)}(A)$ and $V^{(Np)}(A_j)$, respectively. The spanning
+    coefficients at length $Np$ therefore give those at blocked length $N$,
+    and the same configuration-space identification preserves eventual
+    linear independence.
+\end{proof}
+
 \begin{theorem}[Common exact quantum-Wielandt length for BNT representatives]
     \label{thm:bnt_representatives_exact_total_dimension_pow_four}
     \lean{MPSTensor.IsBNTCanonicalForm.basis_isNBlkInjective_totalDim_pow_four}
