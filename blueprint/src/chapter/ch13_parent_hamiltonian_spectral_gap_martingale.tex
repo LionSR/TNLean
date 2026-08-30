@@ -1351,6 +1351,102 @@ coercivity.
     other, so antisymmetry gives the equality.
 \end{proof}
 
+% Source: References/cond-mat_9410110/main.tex, equation En, lines 1060--1073.
+\begin{definition}[Physical open-chain martingale difference]
+    \label{def:open_chain_martingale_difference_es}
+    \lean{MPSTensor.openChainMartingaleDifferenceES}
+    \leanok
+    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es}
+    Fix $K,l\in\N$, set $n=K+l$ and $n_l=l$, and work in the Hilbert space
+    on $\Lambda_{n+1}$.  The physical open-chain martingale difference is
+    \begin{align}
+        E_n
+         &:=G_{\Lambda_n}-G_{\Lambda_{n+1}} \\
+         &=P_{\mathcal U_{K+l}(A)}
+           -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}.
+        \label{eq:open_chain_martingale_difference_es}
+    \end{align}
+    The first projector imposes the ground condition on the left $n$ sites
+    while acting on all $n+1$ sites.  Hence both terms in the difference have
+    the same ambient Hilbert space.
+\end{definition}
+
+\begin{lemma}[Whole ground space lies in the C3 tail space]
+    \label{lem:whole_ground_space_le_c3_tail_space}
+    \lean{MPSTensor.groundSpaceES_le_openChainTailGroundSpaceES}
+    \leanok
+    \uses{thm:open_chain_left_tail_ground_intersection}
+    Assume $D\geq1$, $l>0$, and that $A$ is $l$-block injective.  For
+    $n=K+l$ and $n_l=l$,
+    \begin{align}
+        \mathcal G_{n+1}^{\mathrm{ES}}(A)
+         &\subseteq \mathcal V_{K,l+1}(A).
+        \label{eq:whole_ground_space_le_c3_tail_space}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_chain_left_tail_ground_intersection}
+    The open-chain intersection theorem gives
+    \begin{align}
+        \mathcal U_{K+l}(A)\cap\mathcal V_{K,l+1}(A)
+         &=\mathcal G_{K+l+1}^{\mathrm{ES}}(A).
+    \end{align}
+    The intersection is contained in its second factor.
+\end{proof}
+
+\begin{lemma}[Reverse C3 projector composition]
+    \label{lem:reverse_c3_projector_composition}
+    \lean{MPSTensor.openChainTailGroundProjection_comp_groundSpaceProjection}
+    \leanok
+    \uses{lem:whole_ground_space_le_c3_tail_space}
+    Under the same hypotheses, the tail projector fixes the whole-ground
+    projector:
+    \begin{align}
+        G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_{n+1}}
+         &=G_{\Lambda_{n+1}}.
+        \label{eq:reverse_c3_projector_composition}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:whole_ground_space_le_c3_tail_space}
+    The inner projection has range in
+    $\mathcal G_{n+1}^{\mathrm{ES}}(A)$, which lies in the tail ground space by
+    Lemma~\ref{lem:whole_ground_space_le_c3_tail_space}.  Orthogonal projection
+    onto that tail space therefore leaves every vector in the inner range
+    unchanged.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
+% identity following C3, lines 1178--1188.
+\begin{theorem}[Exact C3 martingale-difference identity]
+    \label{thm:exact_c3_martingale_difference_identity}
+    \lean{MPSTensor.openChainTailGroundProjection_comp_martingaleDifference}
+    \leanok
+    \uses{def:open_chain_martingale_difference_es, lem:reverse_c3_projector_composition}
+    Assume $D\geq1$, $l>0$, and that $A$ is $l$-block injective.  With
+    $n=K+l$ and $n_l=l$, Nachtergaele's identity following condition C3 is
+    \begin{align}
+        G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
+         &=G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
+           -G_{\Lambda_{n+1}}.
+        \label{eq:exact_c3_martingale_difference_identity}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:open_chain_martingale_difference_es, lem:reverse_c3_projector_composition}
+    Distribute the tail projector over
+    $E_n=G_{\Lambda_n}-G_{\Lambda_{n+1}}$.  The second product is
+    $G_{\Lambda_{n+1}}$ by
+    Lemma~\ref{lem:reverse_c3_projector_composition}, which gives the displayed
+    identity.
+\end{proof}
+
 \begin{theorem}[Nachtergaele open-chain projector defect]
     \label{thm:nachtergaele_open_chain_projector_defect}
     \lean{MPSTensor.re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect}
@@ -2639,6 +2735,49 @@ coercivity.
     gives the uniform defect bound with
     $\varepsilon_l=(1-cr^l)^{-1}Cr^l$.  The open-chain projector-defect theorem
     gives the anticommutator statement.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094.
+\begin{theorem}[Literal open-chain martingale condition C3]
+    \label{thm:literal_open_chain_martingale_c3}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold}
+    \leanok
+    \uses{thm:nachtergaele_c3_blocked_length, thm:exact_c3_martingale_difference_identity}
+    Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
+    positive-definite fixed point.  There are $l>1$ and
+    $\varepsilon_l\geq0$, with $A$ $l$-block injective, such that for every
+    $K\in\N$, after setting $n=K+l$ and $n_l=l$,
+    \begin{align}
+        \left\lVert
+        G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
+        \right\rVert
+         &\leq\varepsilon_l.
+        \label{eq:literal_open_chain_martingale_c3}
+    \end{align}
+    The coefficient satisfies
+    \begin{align}
+        \varepsilon_l
+         &<\frac{1}{\sqrt{l+1}}.
+        \label{eq:literal_open_chain_martingale_c3_threshold}
+    \end{align}
+    The length $l$ and coefficient $\varepsilon_l$ are exactly those chosen
+    by Theorem~\ref{thm:nachtergaele_c3_blocked_length}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:nachtergaele_c3_blocked_length, thm:exact_c3_martingale_difference_identity}
+    The uniform threshold theorem gives
+    \begin{align}
+        \left\lVert
+        G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
+        -G_{\Lambda_{n+1}}
+        \right\rVert
+         &\leq\varepsilon_l
+    \end{align}
+    for every $K$.  Rewrite its norm by
+    Theorem~\ref{thm:exact_c3_martingale_difference_identity}; the existing
+    strict threshold on $\varepsilon_l$ is unchanged.
 \end{proof}
 
 \begin{lemma}[Blocked three-site projector and adjacent-pair transport]
