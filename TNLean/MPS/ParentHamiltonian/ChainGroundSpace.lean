@@ -75,7 +75,11 @@ noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
       (groundSpace A L).comap (cyclicRestrictₗ hN.1 L i τ)
   else ⊤
 
-/-- Equal local MPS spaces impose the same periodic-chain constraints. -/
+/-- Equal local MPS spaces impose the same periodic-chain constraints.
+
+This is a derived congruence for the local-space construction used in
+arXiv:1606.00608, Definition 3.9, lines 511--525; it is not separately stated
+in the paper. -/
 theorem chainGroundSpace_eq_of_groundSpace_eq
     {D₁ D₂ L N : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hG : groundSpace A L = groundSpace B L) :
