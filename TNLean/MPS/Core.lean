@@ -23,6 +23,7 @@ import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.Core.ProjectionTriangularTrace
 import TNLean.MPS.Core.Reduction
 import TNLean.MPS.Core.ReductionCrossMatrix
+import TNLean.MPS.Core.ReductionExistence
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Core.TensorProduct
