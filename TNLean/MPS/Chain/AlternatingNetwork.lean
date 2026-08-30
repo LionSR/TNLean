@@ -45,6 +45,8 @@ are recorded in
 
 open scoped BigOperators TensorProduct
 
+open Module
+
 namespace MPSTensor
 
 /-- The connected open chain \(A_1B_1A_2B_2\cdots A_nB_n\).
@@ -72,12 +74,13 @@ noncomputable def openAlternatingNetwork
 
 private theorem piTensorProduct_eq_of_forall_matrix_entry_prod_eq
     {n : ℕ} {row col : Fin n → Type*}
-    [∀ i : Fin n, Fintype (row i)] [∀ i : Fin n, Fintype (col i)]
+    [∀ i : Fin n, Finite (row i)] [∀ i : Fin n, Finite (col i)]
     (B B' : (i : Fin n) → Matrix (row i) (col i) ℂ)
     (h : ∀ (r : (i : Fin n) → row i) (c : (i : Fin n) → col i),
       (∏ i : Fin n, B i (r i) (c i)) = ∏ i : Fin n, B' i (r i) (c i)) :
     (⨂ₜ[ℂ] i : Fin n, B i) = ⨂ₜ[ℂ] i : Fin n, B' i := by
   classical
+  let _ : ∀ i : Fin n, Fintype (row i) := fun i ↦ Fintype.ofFinite _
   let b : (i : Fin n) →
       Basis (row i × col i) ℂ (Matrix (row i) (col i) ℂ) :=
     fun i ↦ Matrix.stdBasis ℂ (row i) (col i)
@@ -134,14 +137,14 @@ private theorem matrixUnit_prod_eq_zero_of_path_ne
     (q y : (i : Fin n) → Fin (D i.castSucc))
     (hxlast : x (Fin.last n) = z (Fin.last n)) (hx : x ≠ z) :
     (∏ i : Fin n,
-      Matrix.single (z i.castSucc) (q i) 1 (x i.castSucc) (y i)) = 0 := by
+      Matrix.single (z i.castSucc) (q i) (1 : ℂ) (x i.castSucc) (y i)) = 0 := by
   classical
   have hcast : ∃ i : Fin n, x i.castSucc ≠ z i.castSucc := by
     by_contra h
     apply hx
     funext j
     exact Fin.lastCases hxlast
-      (fun i ↦ not_ne.mp (not_exists.mp h i)) j
+      (fun i ↦ not_not.mp (not_exists.mp h i)) j
   obtain ⟨i, hi⟩ := hcast
   apply Finset.prod_eq_zero (Finset.mem_univ i)
   exact Matrix.single_apply_of_row_ne hi.symm _ _ _
@@ -151,13 +154,13 @@ private theorem matrixUnit_prod_eq_zero_of_middle_ne
     (z x : (j : Fin (n + 1)) → Fin (D j))
     (q y : (i : Fin n) → Fin (D i.castSucc)) (hy : y ≠ q) :
     (∏ i : Fin n,
-      Matrix.single (z i.castSucc) (q i) 1 (x i.castSucc) (y i)) = 0 := by
+      Matrix.single (z i.castSucc) (q i) (1 : ℂ) (x i.castSucc) (y i)) = 0 := by
   classical
   have hmiddle : ∃ i : Fin n, y i ≠ q i := by
     by_contra h
     apply hy
     funext i
-    exact not_ne.mp (not_exists.mp h i)
+    exact not_not.mp (not_exists.mp h i)
   obtain ⟨i, hi⟩ := hmiddle
   apply Finset.prod_eq_zero (Finset.mem_univ i)
   exact Matrix.single_apply_of_col_ne _ _ hi.symm _
@@ -191,14 +194,14 @@ theorem inverseContraction_openAlternatingNetwork
               ∏ i : Fin n, B i (τ i, y i) (x i.succ)
           else 0 := by
       simp only [openAlternatingNetwork, Finset.mul_sum]
-      rw [Fintype.sum_comm]
+      rw [Finset.sum_comm]
       apply Finset.sum_congr rfl
       intro x _
-      rw [Fintype.sum_comm]
+      rw [Finset.sum_comm]
       apply Finset.sum_congr rfl
       intro y _
       by_cases hxy : x 0 = z 0 ∧ x (Fin.last n) = z (Fin.last n)
-      · simp only [hxy, if_true]
+      · simp only [ite_eq_left hxy]
         simp_rw [Finset.prod_mul_distrib, ← mul_assoc]
         rw [← Finset.sum_mul, inverseCoefficient_sum A hA z x q y]
       · simp [hxy]
@@ -207,13 +210,16 @@ theorem inverseContraction_openAlternatingNetwork
       · rw [Fintype.sum_eq_single q]
         · simp
         · intro y hy
-          simp [matrixUnit_prod_eq_zero_of_middle_ne z z q y hy]
+          rw [ite_eq_left ⟨rfl, rfl⟩]
+          exact mul_eq_zero_of_left
+            (matrixUnit_prod_eq_zero_of_middle_ne z z q y hy) _
       · intro x hx
         by_cases hboundary : x 0 = z 0 ∧ x (Fin.last n) = z (Fin.last n)
-        · simp only [hboundary, if_true]
-          apply Finset.sum_eq_zero
+        · apply Finset.sum_eq_zero
           intro y _
-          rw [matrixUnit_prod_eq_zero_of_path_ne z x q y hboundary.2 hx, zero_mul]
+          rw [ite_eq_left hboundary]
+          exact mul_eq_zero_of_left
+            (matrixUnit_prod_eq_zero_of_path_ne z x q y hboundary.2 hx) _
         · simp [hboundary]
 
 private theorem exists_matrix_entry_ne_zero
@@ -252,7 +258,7 @@ theorem exists_scalars_of_openAlternatingNetwork_eq
     refine ⟨fun i ↦ Fin.elim0 i, by simp, ?_⟩
     intro i
     exact Fin.elim0 i
-  haveI : NeZero n := ⟨hn⟩
+  have : NeZero n := ⟨hn⟩
   have hentries :
       ∀ (r : (i : Fin n) → p i × Fin (D i.castSucc))
         (c : (i : Fin n) → Fin (D i.succ)),
