@@ -281,11 +281,10 @@ nonzero complex numbers. The fusion tensors have the scalar gauge freedom
 \end{align}
 % Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
 This is the fusion-tensor gauge freedom of~\cite{FrancoRubio2025MPUGauging}.
-Apart from the preliminary matrix-factor result below, the results in this
-section formalize only the scalar functions $\beta$, $\omega$, $\gamma$, and
-$L$; they construct neither fusion tensors nor action tensors. The
-representation-level data were specified in
-Definition~\ref{def:mpug_group_representation}.
+Apart from the matrix results below, the results in this section formalize
+only the scalar functions $\beta$, $\omega$, $\gamma$, and $L$; they construct
+neither fusion tensors nor action tensors. The representation-level data were
+specified in Definition~\ref{def:mpug_group_representation}.
 
 \begin{theorem}[Scalar factors of an identity Kronecker product]
     \label{thm:mpug_kronecker_identity_factors}
@@ -345,6 +344,90 @@ Definition~\ref{def:mpug_group_representation}.
     are $W_1$ and $W_2$ in
     (\ref{eq:mpug_unitary_kronecker_factors}).
 \end{proof}
+
+\begin{theorem}[Comparison of factorizations from one-sided inverses]
+    \label{thm:mpug_factorization_comparison}
+    \lean{Matrix.factorization_comparison_of_one_sided_inverses}
+    \leanok
+    Let $A,B,C$ be finite index sets and let $\mathbb S$ be a semiring. Suppose
+    that
+    \begin{align}
+        X,\widetilde X&\in\operatorname{Mat}_{A\times B}(\mathbb S), &
+        Y,\widetilde Y&\in\operatorname{Mat}_{B\times C}(\mathbb S),
+    \end{align}
+    and $XY=\widetilde X\widetilde Y$. If
+    $L\in\operatorname{Mat}_{B\times A}(\mathbb S)$ and
+    $R\in\operatorname{Mat}_{C\times B}(\mathbb S)$ satisfy
+    $L\widetilde X=\mathbf 1$ and $YR=\mathbf 1$, then the comparison matrix
+    $K=LX$ obeys
+    \begin{align}
+        K&=\widetilde YR, & X&=\widetilde XK, & \widetilde Y&=KY.
+        \label{eq:mpug_factorization_comparison}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, Lemma lem:deco, lines 1061--1065.
+    These are the one-sided-inverse identities used in the proof of
+    \cite[Lemma at lines~1052--1066]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Associativity and the two inverse identities give
+    \begin{align}
+        LX
+        &=(LX)(YR)
+         =L(XY)R
+         =L(\widetilde X\widetilde Y)R
+         =\widetilde YR.
+    \end{align}
+    Multiplying $XY=\widetilde X\widetilde Y$ on the right by $R$ gives
+    $X=\widetilde XK$. Multiplying it on the left by $L$ gives
+    $\widetilde Y=KY$.
+\end{proof}
+
+\begin{theorem}[Reciprocal unitary gauges from a Kronecker comparison]
+    \label{thm:mpug_reciprocal_unitary_gauges}
+    \lean{Matrix.exists_reciprocal_unitary_gauges_of_comparison}
+    \leanok
+    \uses{thm:mpug_unitary_kronecker_factors}
+    For $i=1,2$, suppose that two compatible matrix factorizations are related
+    by square comparison matrices $K_i$ through
+    \begin{align}
+        X_i&=\widetilde X_iK_i, & \widetilde Y_i&=K_iY_i.
+        \label{eq:mpug_comparison_matrices}
+    \end{align}
+    If $K_2\otimes K_1$ is unitary, then there are a positive real number
+    $\delta$ and unitary matrices $W_1,W_2$ such that
+    \begin{align}
+        \widetilde X_1&=\delta^{-1}X_1W_1, &
+        \widetilde Y_1&=\delta W_1^\dagger Y_1, \\
+        \widetilde X_2&=\delta X_2W_2, &
+        \widetilde Y_2&=\delta^{-1}W_2^\dagger Y_2.
+        \label{eq:mpug_reciprocal_unitary_gauges}
+    \end{align}
+    Thus the positive scalar factors in the orientation of
+    \cite[Lemma at lines~1052--1066]{FrancoRubio2025MPUGauging} are
+    $\delta_1=\delta^{-1}$ and $\delta_2=\delta$, and hence
+    $\delta_1\delta_2=1$.
+    % Source anchor: arXiv:2502.20257, Lemma lem:deco, lines 1052--1066.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_unitary_kronecker_factors}
+    Apply Theorem~\ref{thm:mpug_unitary_kronecker_factors} to
+    $K_2\otimes K_1$. It gives $r>0$ and unitary matrices $U_2,U_1$ with
+    $K_2=rU_2$ and $K_1=r^{-1}U_1$. Set $\delta=r^{-1}$ and
+    $W_i=U_i^\dagger$. Substitution into
+    (\ref{eq:mpug_comparison_matrices}) gives
+    (\ref{eq:mpug_reciprocal_unitary_gauges}); positivity of $\delta$ gives
+    $\delta^{-1}\delta=1$.
+\end{proof}
+
+The full decomposition theorem also requires the comparison matrices obtained
+from the MPU source-gate identities to have unitary Kronecker product. Once
+this tensor-specific statement is established,
+Theorems~\ref{thm:mpug_factorization_comparison} and
+\ref{thm:mpug_reciprocal_unitary_gauges} yield the claimed gauges.
+% Formalization boundary: the MPU-specific source-gate transport and the final
+% lem:deco wrapper remain outside this slice and depend on issue #7313.
 
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
