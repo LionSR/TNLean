@@ -1394,6 +1394,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         (R_g^\phi v)(hg^{-1})
          & =\phi(h,g^{-1})^{-1}v(h).
     \end{align}
+    % Source anchor: arXiv:2502.20257, lines 412--418.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1417,11 +1418,13 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
          & =\phi(h^{-1},g^{-1})^{-1}R_{gh}^\phi.
         \label{eq:mpug_twisted_regular_multiplication}
     \end{align}
+    % Source anchor: arXiv:2502.20257, lines 406--418; the laws follow from
+    % the displayed twisted regular matrices and the cocycle equation.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpug_twisted_regular_action,
-        thm:mpug_circle_complex_units_h2}
+        lem:mpug_circle_phase_cocycle}
     Apply both sides to a basis vector.  The two scalar identities are the
     cocycle equation at $(g,h,k)$ and $(k,h^{-1},g^{-1})$, respectively.
 \end{proof}
@@ -1431,18 +1434,20 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_commute}
     \leanok
     \uses{thm:mpug_twisted_regular_action,
-        thm:mpug_circle_complex_units_h2}
+        lem:mpug_circle_phase_cocycle}
     If $\omega$ is a cocycle, then
     \begin{align}
         L_g^\phi R_h^\phi
          & =R_h^\phi L_g^\phi.
         \label{eq:mpug_twisted_regular_commutation}
     \end{align}
+    % Source anchor: arXiv:2502.20257, lines 406--418; commutation is the
+    % compatibility of the two gauge-leg actions in the local representation.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpug_twisted_regular_action,
-        thm:mpug_circle_complex_units_h2}
+        lem:mpug_circle_phase_cocycle}
     Apply both sides to a basis vector and use the cocycle equation at
     $(g,k,h^{-1})$.
 \end{proof}
@@ -1469,7 +1474,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \label{thm:mpug_onsite_gauss_phase}
     \lean{TNLean.Algebra.ScalarCocycle.onsiteGauss_phase_div}
     \leanok
-    \uses{def:mpug_twisted_regular_matrices, def:is_cocycle}
+    \uses{def:mpug_twisted_regular_matrices,
+        lem:mpug_circle_phase_cocycle}
     Suppose that $\omega$ is a cocycle and impose the additional normalization
     \begin{align}
         \phi(t^{-1},t) & =1
@@ -1487,7 +1493,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_twisted_regular_multiplication}
+    \uses{lem:mpug_circle_phase_cocycle}
     Use the cocycle equation first at $(a,g^{-1},gb)$ and then at
     $(g^{-1},g,b)$.  The normalization at $t=e$ also gives
     $\phi(e,b)=1$.
