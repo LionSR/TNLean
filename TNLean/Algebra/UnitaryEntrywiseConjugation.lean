@@ -10,7 +10,7 @@ import Mathlib.LinearAlgebra.UnitaryGroup
 # Scalar relations from entrywise conjugates of unitary matrices
 
 This file proves the generic unitary-matrix algebra used for the virtual-gauge signs in
-FBC25, equations `eq:defT` and `eq:intro_sigma` (arXiv:2502.20257, lines 1557--1564).
+FBC25, equations `eq:defT` and `eq:intro_sigma` (arXiv:2502.20257, lines 1557--1567).
 The operation on the second matrix is entrywise complex conjugation
 `Matrix.map (starRingEnd ℂ)`, not conjugate transpose.
 
@@ -60,16 +60,11 @@ theorem paired_scalars_mul_eq_one_of_mul_map_star_eq_smul_one
   have hcomm : (Sstar : Matrix n n ℂ) * (T : Matrix n n ℂ) = σ • 1 := by
     calc
       (Sstar : Matrix n n ℂ) * (T : Matrix n n ℂ) =
-          (1 : Matrix n n ℂ) * ((Sstar : Matrix n n ℂ) * (T : Matrix n n ℂ)) := by simp
-      _ = (((T⁻¹ : Matrix.unitaryGroup n ℂ) : Matrix n n ℂ) * (T : Matrix n n ℂ)) *
-          ((Sstar : Matrix n n ℂ) * (T : Matrix n n ℂ)) := by simp
-      _ = ((T⁻¹ : Matrix.unitaryGroup n ℂ) : Matrix n n ℂ) *
-          (((T : Matrix n n ℂ) * (Sstar : Matrix n n ℂ)) * (T : Matrix n n ℂ)) := by
-            simp only [mul_assoc]
-      _ = ((T⁻¹ : Matrix.unitaryGroup n ℂ) : Matrix n n ℂ) *
-          ((σ • 1 : Matrix n n ℂ) * (T : Matrix n n ℂ)) := by
-            rw [show (T : Matrix n n ℂ) * (Sstar : Matrix n n ℂ) = σ • 1 by
-              simpa [Sstar] using hσ]
+          ((((T⁻¹ : Matrix.unitaryGroup n ℂ) : Matrix n n ℂ) * T) * Sstar) * T := by simp
+      _ = ((T⁻¹ : Matrix.unitaryGroup n ℂ) : Matrix n n ℂ) * (T * Sstar) * T := by
+        simp only [mul_assoc]
+      _ = ((T⁻¹ : Matrix.unitaryGroup n ℂ) : Matrix n n ℂ) * (σ • 1) * T := by
+        rw [show (T : Matrix n n ℂ) * Sstar = σ • 1 by simpa [Sstar] using hσ]
       _ = σ • 1 := by simp
   have hτstar : (Sstar : Matrix n n ℂ) * (T : Matrix n n ℂ) = starRingEnd ℂ τ • 1 := by
     have h := congrArg (fun M : Matrix n n ℂ ↦ M.map (starRingEnd ℂ)) hτ
@@ -89,7 +84,7 @@ theorem paired_scalars_mul_eq_one_of_mul_map_star_eq_smul_one
 
 /-- In the self relation, the scalar multiplying the identity is `1` or `-1`. This is the
 involution conclusion after FBC25, equation `eq:intro_sigma`
-(arXiv:2502.20257, lines 1563--1564). -/
+(arXiv:2502.20257, lines 1563--1567). -/
 theorem scalar_eq_one_or_neg_one_of_mul_map_star_self_eq_smul_one
     (T : Matrix.unitaryGroup n ℂ) (σ : ℂ)
     (hσ : (T : Matrix n n ℂ) * (T : Matrix n n ℂ).map (starRingEnd ℂ) = σ • 1) :
