@@ -11,7 +11,7 @@ import TNLean.Algebra.ScalarThreeCocycleInversion
 # Scalar three-cocycles for Z₂
 
 This file proves the scalar part of the Z₂ anomaly calculation in
-arXiv:2502.20257, Appendix `app:Z2`, lines 5207--5341. It identifies the
+arXiv:2502.20257, Appendix `app:Z2`, lines 5326--5341. It identifies the
 inversion scalar with a ratio of normalized L-symbols and classifies normalized
 scalar three-cocycles on `Multiplicative (ZMod 2)` by their value at the
 nonidentity generator.
@@ -31,7 +31,7 @@ namespace LSymbol
 `σ(g) = Lˣ_{g⁻¹,g} / L^{g • x}_{g,g⁻¹}`.
 
 This is the scalar calculation after `eq:sigmadiag` in arXiv:2502.20257,
-Appendix `app:Z2`, lines 5291--5295. -/
+Appendix `app:Z2`, lines 5326--5329. -/
 theorem sigma_eq_div {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (hLn : IsNormalized L) (x : X) (g : G) :
     ScalarThreeCochain.sigma ω g = L x g⁻¹ g / L (g • x) g g⁻¹ := by
@@ -50,10 +50,10 @@ private lemma z2_cases (g : Multiplicative (ZMod 2)) : g = 1 ∨ g = s₂ := by
   revert g
   decide
 
-private lemma z2Generator_inv : s₂⁻¹ = s₂ := by
+private lemma z2_generator_inv : s₂⁻¹ = s₂ := by
   decide
 
-private lemma z2Generator_mul_self : s₂ * s₂ = 1 := by
+private lemma z2_generator_mul_self : s₂ * s₂ = 1 := by
   decide
 
 /-- A normalized scalar three-cochain on Z₂ has trivial gauge class exactly
@@ -63,26 +63,24 @@ For the forward implication, the gauge two-cochain need not be normalized.
 Normalization of its coboundary instead forces both identity-axis restrictions
 to equal one common constant, by `isNormalized_coboundary_iff`; at the triple
 of nonidentity elements this constant and the remaining self-pair factor
-cancel. This is the direct two-element calculation underlying
-arXiv:2502.20257, Appendix `app:Z2`, lines 5327--5341. -/
+cancel. This formalizes the normalized-cochain classification used in
+arXiv:2502.20257, Appendix `app:Z2`, lines 5331--5341. -/
 theorem isTrivialGaugeClass_iff_sigma_generator_eq_one
     {ω : ScalarThreeCochain (Multiplicative (ZMod 2))} (hωn : IsNormalized ω) :
     IsTrivialGaugeClass ω ↔ sigma ω s₂ = 1 := by
   constructor
   · rintro ⟨β, hβ⟩
-    have hcob : IsNormalized (coboundary β) := by
-      rw [show coboundary β = ω by
-        rw [← hβ]
-        funext g h k
-        simp only [fusionGauge, mul_one]]
-      exact hωn
+    have hcob_eq : coboundary β = ω := by
+      funext g h k
+      simpa only [fusionGauge, mul_one] using congrFun (congrFun (congrFun hβ g) h) k
+    have hcob : IsNormalized (coboundary β) := hcob_eq ▸ hωn
     obtain ⟨c, hleft, hright⟩ := (isNormalized_coboundary_iff β).1 hcob
     have hvalue := congrFun (congrFun (congrFun hβ s₂) s₂) s₂
-    simp only [fusionGauge, coboundary, z2Generator_mul_self, hleft, hright,
+    simp only [fusionGauge, coboundary, z2_generator_mul_self, hleft, hright,
       mul_one] at hvalue
-    simp only [sigma, z2Generator_inv, ← hvalue]
+    simp only [sigma, z2_generator_inv, ← hvalue]
     rw [mul_comm c]
-    simp
+    exact div_self' _
   · intro hsigma
     have hω : ω = fun _ _ _ => 1 := by
       funext g h k
@@ -91,38 +89,28 @@ theorem isTrivialGaugeClass_iff_sigma_generator_eq_one
           rcases z2_cases k with rfl | rfl
       all_goals first
         | simp only [hωn.1, hωn.2.1, hωn.2.2]
-        | simpa only [sigma, z2Generator_inv] using hsigma
+        | simpa only [sigma, z2_generator_inv] using hsigma
     rw [hω]
     exact CohomologousTo.refl _
 
 /-- The inversion scalar of a normalized scalar three-cocycle on Z₂ is either
-one or minus one. This is the scalar sign dichotomy used in
-arXiv:2502.20257, Appendix `app:Z2`, lines 5297--5319. -/
+one or minus one. This is the scalar counterpart of the sign discussion in
+arXiv:2502.20257, Appendix `app:Z2`, lines 5331--5341. It does not use the
+tensor identity in that discussion. -/
 theorem sigma_generator_eq_one_or_eq_neg_one
     {ω : ScalarThreeCochain (Multiplicative (ZMod 2))} (hω : IsCocycle ω)
     (hωn : IsNormalized ω) :
     sigma ω s₂ = 1 ∨ sigma ω s₂ = -1 := by
   have hinv := sigma_inv ω hω hωn s₂
-  rw [z2Generator_inv] at hinv
-  have hmul : sigma ω s₂ * sigma ω s₂ = 1 := by
-    calc
-      sigma ω s₂ * sigma ω s₂ = (sigma ω s₂)⁻¹ * sigma ω s₂ :=
-        congrArg (fun z => z * sigma ω s₂) hinv
-      _ = 1 := inv_mul_cancel _
-  have hmulVal : (sigma ω s₂ : ℂ) * (sigma ω s₂ : ℂ) = 1 := by
-    simpa only [Units.val_mul, Units.val_one] using congrArg Units.val hmul
-  rcases mul_self_eq_one_iff.mp hmulVal with hone | hneg
-  · left
-    exact Units.ext hone
-  · right
-    exact Units.ext hneg
+  rw [z2_generator_inv] at hinv
+  exact (Units.inv_eq_self_iff _).mp hinv.symm
 
 /-- A normalized scalar three-cocycle on Z₂ has nontrivial gauge class exactly
 when its inversion scalar at the nonidentity generator is minus one.
 
-This is the scalar cohomology classification in the first proposition of
-arXiv:2502.20257, Appendix `app:Z2`, lines 5320--5341. It does not include the
-pending tensor-level identification with the involutive dagger-gauge sign. -/
+This is the scalar cohomology classification in arXiv:2502.20257,
+Appendix `app:Z2`, lines 5331--5341. It does not include the tensor-level
+identification with the involutive dagger-gauge sign. -/
 theorem not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one
     {ω : ScalarThreeCochain (Multiplicative (ZMod 2))} (hω : IsCocycle ω)
     (hωn : IsNormalized ω) :
