@@ -196,10 +196,12 @@ construction; they are not attributed to a source theorem.
 \begin{proof}
     \leanok
     \uses{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
-    Every translated local constraint is the inverse image of the same
-    subspace $G_L(B)=G_L(C)$. Their intersections are therefore equal for every
-    $N$, which gives
-    (\ref{eq:parent_spanning_local_space_chain_congruence}). When $N>L$,
+    When $N=0$ or $L>N$, both chain spaces are $\top$ by definition. Otherwise
+    $0<N$ and $L\leq N$. Every translated local constraint is then the inverse
+    image of the same subspace $G_L(B)=G_L(C)$, so their intersections are
+    equal. This gives
+    (\ref{eq:parent_spanning_local_space_chain_congruence}) for every $N$.
+    When $N>L$,
     Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} identifies
     those intersections with the two parent-Hamiltonian kernels and gives
     (\ref{eq:parent_spanning_local_space_kernel_congruence}).
