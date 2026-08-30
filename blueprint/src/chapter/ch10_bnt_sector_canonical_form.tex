@@ -605,12 +605,28 @@ single family.
 \begin{proof}
     \leanok
     \uses{thm:cpsv_normal_tensor_positive_blocking}
-    Positive blocking preserves normality of each representative. At every
-    blocked length $N$, concatenation identifies the coefficients of
-    $V^{(N)}(A^{[p]})$ and $V^{(N)}(A_j^{[p]})$ with those of
-    $V^{(Np)}(A)$ and $V^{(Np)}(A_j)$, respectively. The spanning
-    coefficients at length $Np$ therefore give those at blocked length $N$,
-    and the same configuration-space identification preserves eventual
+    Positive blocking preserves normality of each representative. Fix a
+    blocked length $N$. If the $m$-th blocked letter is
+    $J_m=(i_{m,1},\ldots,i_{m,p})$, define the configuration reindexing
+    $\tau_p$ by concatenation:
+    \begin{align}
+        \tau_p(J_1,\ldots,J_N)
+         & :=(i_{1,1},\ldots,i_{1,p},\ldots,
+             i_{N,1},\ldots,i_{N,p}).
+        \label{eq:cpsv_bnt_blocked_configuration_reindexing}
+    \end{align}
+    For every blocked configuration $\sigma$ and every representative $A_j$,
+    the coefficient identities are
+    \begin{align}
+        \braket{\sigma}{V^{(N)}(A^{[p]})}
+         & =\braket{\tau_p(\sigma)}{V^{(Np)}(A)},
+        \label{eq:cpsv_bnt_blocked_tensor_coefficient}\\
+        \braket{\sigma}{V^{(N)}(A_j^{[p]})}
+         & =\braket{\tau_p(\sigma)}{V^{(Np)}(A_j)}.
+        \label{eq:cpsv_bnt_blocked_representative_coefficient}
+    \end{align}
+    The spanning coefficients at length $Np$ therefore give those at blocked
+    length $N$, and the same configuration reindexing preserves eventual
     linear independence.
 \end{proof}
 

@@ -169,8 +169,8 @@ theorem CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_representatives
       let k : Fin data.r := data.classCopyEquiv ⟨j, q⟩
       have hkClass : (data.classCopy k).1 = j := by
         simpa [k] using congrArg Sigma.fst (data.classCopy_classCopyEquiv j q)
-      have hkRep : k = data.representativeIndex j := by
-        rfl
+      have hkRep : k = data.representativeIndex j :=
+        mpvPhaseClassData_enum_zero_eq_repr data.blocks j
       rw [← hkRep, hCopy k, hkClass]
       exact le_iSup (fun k : Fin data.r ↦
         groundSpace (MPSTensor.blockTensor (data.blocks k) p) L) k

@@ -177,18 +177,32 @@ construction; they are not attributed to a source theorem.
     \uses{def:parent_hamiltonian_ground_space_spanning,
         thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     Let $B$ and $C$ have the same physical alphabet and satisfy $G_L(B)=G_L(C)$.
-    Then their periodic chain spaces and their parent-Hamiltonian kernels agree
-    for every $N\geq L$. Consequently, any fixed BNT-vector family satisfying
-    the parent-Hamiltonian spanning equation for $C$ also satisfies it for $B$.
+    Their periodic chain spaces agree for every $N$:
+    \begin{align}
+        \mathcal G_{N,L}(B)
+         & =\mathcal G_{N,L}(C).
+        \label{eq:parent_spanning_local_space_chain_congruence}
+    \end{align}
+    Their parent-Hamiltonian kernels agree for every $N>L$:
+    \begin{align}
+        \ker H_L^{(N)}(B)
+         & =\ker H_L^{(N)}(C).
+        \label{eq:parent_spanning_local_space_kernel_congruence}
+    \end{align}
+    Consequently, any fixed BNT-vector family satisfying the parent-Hamiltonian
+    spanning equation for $C$ also satisfies it for $B$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     Every translated local constraint is the inverse image of the same
-    subspace $G_L(B)=G_L(C)$. Their intersections are therefore equal, and
+    subspace $G_L(B)=G_L(C)$. Their intersections are therefore equal for every
+    $N$, which gives
+    (\ref{eq:parent_spanning_local_space_chain_congruence}). When $N>L$,
     Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} identifies
-    those intersections with the two parent-Hamiltonian kernels.
+    those intersections with the two parent-Hamiltonian kernels and gives
+    (\ref{eq:parent_spanning_local_space_kernel_congruence}).
 \end{proof}
 
 \begin{theorem}[Sharp blocking gives a nearest-neighbor parent Hamiltonian]

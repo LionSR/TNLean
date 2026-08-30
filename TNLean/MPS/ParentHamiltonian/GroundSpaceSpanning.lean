@@ -168,9 +168,10 @@ theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_i
 local MPS space at the interaction length.
 
 If \(G_L(B)=G_L(C)\), then their translated local constraints, periodic chain
-spaces, and parent-Hamiltonian kernels agree on every chain of length at least
-\(L\). Hence any fixed family of matrix product vectors spanning the kernels
-for \(C\) also spans those for \(B\).
+spaces agree at every chain length, and their parent-Hamiltonian kernels agree
+in the strict regime \(N>L\) of the spanning predicate. Hence any fixed family
+of matrix product vectors spanning the kernels for \(C\) also spans those for
+\(B\).
 
 This is a derived congruence for the parent-Hamiltonian ground-space condition
 in arXiv:1606.00608, Definition 3.9, lines 511--525; it is not separately
