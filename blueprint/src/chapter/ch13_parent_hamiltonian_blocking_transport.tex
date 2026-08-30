@@ -76,7 +76,7 @@ construction; they are not attributed to a source theorem.
     selected from literal canonical-form data for $A$, then, for $p,L\geq1$,
     \begin{align}
         G_L\!\left(A^{[p]}\right)
-          & =\bigvee_{j=1}^{g}G_L\!\left(A_j^{[p]}\right).
+         & =\bigvee_{j=1}^{g}G_L\!\left(A_j^{[p]}\right).
         \label{eq:cpsv_blocked_representative_local_space}
     \end{align}
     The first equality is a derived trace identity for an exact coisometric
@@ -91,10 +91,10 @@ construction; they are not attributed to a source theorem.
     $A^w=U^\dagger C^wU$. Cyclicity of the trace gives
     \begin{align}
         \Gamma_L^A(X)
-          & =\Gamma_L^C(UXU^\dagger),
-        \notag\\
+         & =\Gamma_L^C(UXU^\dagger),
+        \notag                        \\
         \Gamma_L^C(Y)
-          & =\Gamma_L^A(U^\dagger YU),
+         & =\Gamma_L^A(U^\dagger YU),
         \notag
     \end{align}
     where the second equality uses $UU^\dagger=I_n$. This proves
@@ -135,16 +135,16 @@ construction; they are not attributed to a source theorem.
     evaluations span the product algebra:
     \begin{align}
         \spn_{\C}\left\{(A_1^i,\ldots,A_g^i):0\leq i<d\right\}
-          & =\prod_{j=1}^{g}\MN{D_j}.
+         & =\prod_{j=1}^{g}\MN{D_j}.
         \label{eq:block_diagonal_one_site_span}
     \end{align}
     Then, for every $N>2$,
     \begin{align}
         \mathcal G_{N,2}(B)
-          & =\bigvee_{j=1}^{g}\mathcal G_{N,2}(A_j),
-        \notag\\
+         & =\bigvee_{j=1}^{g}\mathcal G_{N,2}(A_j),
+        \notag                                                   \\
         \ker H_2^{(N)}(B)
-          & =\spn\left\{V^{(N)}(A_j):1\leq j\leq g\right\}.
+         & =\spn\left\{\ket{V^{(N)}(A_j)}:1\leq j\leq g\right\}.
         \label{eq:block_diagonal_one_site_span_parent_spanning}
     \end{align}
 \end{theorem}
@@ -162,7 +162,8 @@ construction; they are not attributed to a source theorem.
     \cite{gap:pgvwc07_common_identity_coefficients}. The same span makes every
     $A_j$ injective, so
     Theorem~\ref{thm:chain_ground_space_eq_mpv_blk} identifies its periodic
-    chain space with $\spn\{V^{(N)}(A_j)\}$. The block-diagonal comparison of
+    chain space with $\spn\{\ket{V^{(N)}(A_j)}\}$. The block-diagonal
+    comparison of
     Lemma~\ref{lem:block_diagonal_chain_space_comparison_parent_spanning}
     then gives (\ref{eq:block_diagonal_one_site_span_parent_spanning}).
 \end{proof}
@@ -204,7 +205,7 @@ construction; they are not attributed to a source theorem.
     normal tensors for $A^{[p]}$ and, for every $N>2$,
     \begin{align}
         \ker H_2^{(N)}\!\left(A^{[p]}\right)
-         & =\spn\left\{V^{(N)}\!\left(A_j^{[p]}\right):
+         & =\spn\left\{\ket{V^{(N)}\!\left(A_j^{[p]}\right)}:
         1\leq j\leq g\right\}.
         \label{eq:cpsv_blocked_nearest_neighbor_parent_hamiltonian}
     \end{align}
@@ -221,6 +222,7 @@ construction; they are not attributed to a source theorem.
         thm:cpsv_bnt_blocked_simultaneous_span,
         thm:cpsv_bnt_positive_blocking,
         lem:coisometric_reconstruction_local_space,
+        lem:block_sum_local_ground_space,
         thm:block_diagonal_one_site_span_parent_spanning,
         lem:parent_spanning_of_local_space_eq}
     Choose $p$ so that the simultaneous one-letter evaluations of the blocked
@@ -231,15 +233,14 @@ construction; they are not attributed to a source theorem.
     every $N>2$,
     \begin{align}
         \ker H_2^{(N)}(C)
-          & =\spn\left\{V^{(N)}(A_j^{[p]}):1\leq j\leq g\right\}.
+         & =\spn\left\{\ket{V^{(N)}(A_j^{[p]})}:1\leq j\leq g\right\}.
         \label{eq:cpsv_blocked_representative_parent_spanning}
     \end{align}
     After the repeated phase-gauge copies and the ambient coisometry are
     removed, Lemma~\ref{lem:coisometric_reconstruction_local_space} gives
     \begin{align}
         G_2(A^{[p]})
-          & =\bigvee_{j=1}^{g}G_2(A_j^{[p]})
-           =G_2(C).
+         & =\bigvee_{j=1}^{g}G_2(A_j^{[p]})=G_2(C).
         \label{eq:cpsv_actual_direct_sum_local_space}
     \end{align}
     Lemma~\ref{lem:parent_spanning_of_local_space_eq} identifies the two

@@ -303,6 +303,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
 - `pgvwc07_common_identity_coefficients.tex` distinguishes the right-canonical
   normalization used in the proof of PGVWC07 Theorem 12 from the local variant
   that assumes a common one-letter expansion of every block identity.
+- `cpsv16_parent_hamiltonian_range_short_ring.tex` separates the
+  nearest-neighbor parent Hamiltonian for the blocked tensor from the sharper
+  original-lattice range claim and its quantification over all sufficiently
+  long periodic chains.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison: the finite-row cyclic-window reduction is formalized, while the
   remaining source comparison is the overlapping-window anticommutator estimate;
