@@ -287,21 +287,15 @@ private theorem mpo_four_eq_purification :
       Matrix.vecMulVec
         (fun σ => Matrix.trace ((List.ofFn fun l => purifier (σ l) (κ l)).prod))
         (star (fun σ => Matrix.trace ((List.ofFn fun l => purifier (σ l) (κ l)).prod))) := by
+  rw [mpo_eq_purificationDensity (M := M) purifier pairEquiv
+    (fun _ _ => rfl) 4]
   ext σ τ
-  simp only [mpo_apply, mpoMatrixEntry, MPOTensor.evalWord_ofFn]
-  have hM : ∀ i j : Fin 4, M i j = (∑ k : Fin 2,
-      purifier i k ⊗ₖ (purifier j k).map (starRingEnd ℂ)).submatrix
-        (↑pairEquiv) (↑pairEquiv) := fun _ _ => rfl
-  rw [MPOTensor.lpdo_prod_decomp purifier pairEquiv hM σ τ]
-  have trace_sub : ∀ (X : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) ℂ),
-      Matrix.trace (X.submatrix (↑pairEquiv) (↑pairEquiv)) = Matrix.trace X := by
-    intro X
-    simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
-    exact pairEquiv.sum_comp (fun p => X p p)
-  rw [trace_sub, Matrix.trace_sum]
-  simp_rw [Matrix.trace_kronecker]
-  simp_rw [← AddMonoidHom.map_trace (starRingEnd ℂ)]
-  simp only [Matrix.sum_apply, Matrix.vecMulVec_apply, Pi.star_apply, starRingEnd_apply]
+  simp only [purificationDensity, Matrix.of_apply, Matrix.sum_apply,
+    Matrix.vecMulVec_apply, Pi.star_apply]
+  simp_rw [MPSTensor.mpv_eq, MPSTensor.coeff_eq,
+    MPSTensor.evalWord_ofFn_eq_prod]
+  simp only [purificationTensor, MPSTensor.finProdFinEquiv_divNat,
+    MPSTensor.finProdFinEquiv_modNat]
 
 
 private theorem mpo_four_eq_bellDiagonal :
