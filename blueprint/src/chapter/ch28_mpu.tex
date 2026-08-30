@@ -8727,6 +8727,39 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 2158--2200.
 \end{proposition}
 
+\begin{lemma}[Finite three-swap ancilla endpoint]
+    \label{lem:mpu_shift_ancilla_three_swap_endpoint}
+    \lean{MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂_apply,
+        MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂,
+        MPOTensor.permMatrix_shiftAncillaThreeSwap_endpoint}
+    \leanok
+    \uses{threeMPU2}
+    Let $R$ cyclically rotate configurations on a periodic chain of length $N$.
+    On triples $((\sigma_1,\sigma_2),a)$ of two physical configurations and one
+    $d$-dimensional ancilla configuration, let $C$ apply, in order, the swaps
+    $S^{2,a}_{n,n}$, $S^{1,2}_{n,n}$, and $S^{1,a}_{n,n+1}$ from the
+    source figure. Then
+    \begin{align}
+        C^{-1}S^{1,2}C((\sigma_1,\sigma_2),a)
+            &=((R\sigma_2,R^{-1}\sigma_1),a).
+    \end{align}
+    Hence the corresponding permutation matrices are equal. This is only the
+    finite endpoint identity; it asserts neither a continuous path nor a
+    symmetry action on the full ancilla-enlarged operator algebra.
+    % Source lines: paper_v2.tex 2203--2230.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each of the three swap layers is an involution. Evaluating them successively
+    before and after $S^{1,2}$ gives
+    \begin{align}
+        ((\sigma_1,\sigma_2),a)
+        &\longmapsto ((R\sigma_2,R^{-1}\sigma_1),a).
+    \end{align}
+    Extensionality proves the permutation equality, and applying the
+    permutation-matrix construction proves its matrix form.
+\end{proof}
+
 \begin{proposition}[Ancilla equivalence of $U_1$ and $U_2$]
     \label{prop:U1-U2-equiv-ancillatrick}
     \notready
