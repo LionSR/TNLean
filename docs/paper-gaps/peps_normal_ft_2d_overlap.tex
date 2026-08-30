@@ -617,14 +617,15 @@ isomorphism into conjugation by an invertible edge matrix $Z$. The Theorem~3
 engine inverts the \emph{host} $\mathrm{univ} \setminus \mathrm{red}$ (its
 hypothesis \path{hCB}), which the corollary's minimal size does not provide; the
 overlapping-window replacement plays the second end window $W_{L+K-1}$ in the
-host's role, inverting only the two injective windows. Reaching $X$ from the
-end-pair equality \path{staircasePair_insert_eq_open} therefore needs the
-$\text{\path{extendInsert}}\,(W_0 \subseteq S)$-to-single-bond-$e$ peeling: reading the
-corner extension on $S$ as a $\text{\path{regionInsertedCoeff}}$-style contraction of
-$C_0$ against the genuine $W_{L+K-1}$ block across $e$. That peeling is the
-host-boundary-edge embedding and the $Q$-weight span lemma recorded as the
-unbuilt residual at the close of the previous section; the single-crossing
-geometry above is the prerequisite it consumes, and is now in place.
+host's role, inverting only the two injective windows.  The required
+$\text{\path{extendInsert}}\,(W_0 \subseteq S)$-to-single-bond-$e$ peeling is now
+landed: the end-window boundary equivalences separate the index on $e$ from
+the open external legs, the normalized blue coupling is the genuine opposite
+window block on the compatible fibre and vanishes off it, and
+\path{existsUnique_virtualOperation_of_horizontalStaircaseEndPair} extracts
+the unique matrix $X$.  The residual is the composition argument for the maps
+$O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$, followed by the cross-tensor
+transfer and back-half assembly.
 
 \subsection{Step 5: the rest of the proof}
 
@@ -1104,8 +1105,8 @@ identity reads: the open legs of $S$ split into the left-window external legs an
 the right-window external legs, and the matrix on $e$ is the only datum the two
 windows share. These facts are in \path{TNLean/PEPS/TorusWindowPeeling/BoundaryGeometry.lean}.
 
-The finite-dimensional ``compare the two ends'' argument of Lemma~5 is also
-landed, independently of the remaining torus reindexing.  The theorem
+The finite-dimensional ``compare the two ends'' argument of Lemma~5 and the
+torus boundary reindexing needed to apply it are now landed.  The theorem
 $\text{\path{existsUnique\_virtualOperation\_of\_endPair}}$ starts from the exact
 operator-Schmidt identity
 \begin{align}

@@ -97,11 +97,23 @@
     boundary edge of $S$.
 \end{proof}
 
-\begin{theorem}[Boundary configurations of the staircase end windows]
-    \label{thm:peps_horizontal_staircase_end_window_boundary_config}
+\begin{definition}[Boundary configurations of the staircase end windows]
+    \label{def:peps_horizontal_staircase_end_window_boundary_config}
     \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv}
     \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv}
     \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv_fst}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv_snd}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv_fst}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv_snd}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_fst}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_snd}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv_symm_referenceEdge}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv_symm_external}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv_symm_referenceEdge}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv_symm_external}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_symm_left}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_symm_right}
     \leanok
     \uses{thm:peps_horizontal_staircase_end_pair_boundary, thm:peps_horizontal_staircase_reference_edge_crossing}
     Under the same geometric bounds, write
@@ -128,15 +140,10 @@
     the reference edge is the only contracted virtual index shared by the
     two highlighted end windows; every other virtual index remains on the
     corresponding open boundary of $S$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Split each end-window configuration at the reference edge.  A remaining
-    boundary edge of either window is a boundary edge of $S$, and conversely
-    every boundary edge of $S$ belongs to exactly one end window.  Reindexing
-    the dependent products along these edge identifications gives the three
-    displayed equivalences.
-\end{proof}
+    The constructions split each end-window configuration at the reference
+    edge and reindex the remaining dependent products along the corresponding
+    boundary-edge identifications.
+\end{definition}
 
 \begin{lemma}[Complement split for an end window]
     \label{lem:peps_horizontal_staircase_end_window_complement_split}
@@ -229,6 +236,8 @@
 
 \begin{theorem}[Lemma 5 comparison of the two end blocks]
     \label{thm:peps_existsUnique_virtualOperation_of_endPair}
+    \lean{TNLean.PEPS.gauge_eq1}
+    \lean{TNLean.PEPS.gauge_eq2}
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_endPair}
     \leanok
     Let $K$ be the basis of the virtual space on the bond between two
@@ -273,10 +282,20 @@
     \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_isExternalCrossingEdge_iff}
     \lean{TNLean.PEPS.horizontalStaircaseRightWindow_isExternalCrossingEdge_iff}
     \lean{TNLean.PEPS.horizontalStaircaseEndWindows_externalCrossingBondProd_eq}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.regionBoundaryLabel_blue_eq_of_host_eq_of_complement_eq}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq_regionBlockedWeight}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueCoeff_eq_inv_smul_regionBlockedWeight}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueCoeff_eq_zero_of_no_compatible_boundary}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_threeBlockBlueCoeff_factorization}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindow_threeBlockBlueCoeff_factorization}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_threeBlockBlueCoeff_eq_zero_of_external_ne}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindow_threeBlockBlueCoeff_eq_zero_of_external_ne}
     \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_normalized_threeBlockBlueCoeff_factorization}
     \lean{TNLean.PEPS.horizontalStaircaseRightWindow_normalized_threeBlockBlueCoeff_factorization}
     \leanok
-    \uses{thm:peps_horizontal_staircase_end_window_boundary_config, lem:peps_horizontal_staircase_end_window_complement_split}
+    \uses{def:peps_horizontal_staircase_end_window_boundary_config, lem:peps_horizontal_staircase_end_window_complement_split}
     Write the boundary coordinates of the two end windows and their union as
     \begin{align}
         \mu_{\mathrm L} & =(k,\eta_{\mathrm L}),
@@ -359,7 +378,7 @@
     \label{thm:peps_existsUnique_virtualOperation_of_horizontal_staircase_end_pair}
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPair}
     \leanok
-    \uses{thm:peps_existsUnique_virtualOperation_of_endPair, thm:peps_horizontal_staircase_end_pair_single_bond_contraction, thm:peps_staircase_pair_insert_eq_open}
+    \uses{thm:peps_existsUnique_virtualOperation_of_endPair, thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
     Suppose the tensor is translation invariant, all bond dimensions are
     positive, and the two genuine highlighted end-window blocked tensors are
     injective.  If arbitrary inserts $C_{\mathrm L}$ and $C_{\mathrm R}$ on

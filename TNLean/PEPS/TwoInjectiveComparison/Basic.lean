@@ -22,6 +22,11 @@ Molnár--Schuch--Verstraete--Cirac, arXiv:1804.04964, Section 3, lines
 injective tensors agree after inserting an arbitrary matrix on each shared
 virtual bond, then the corresponding tensors differ by reciprocal nonzero
 scalars.
+
+The module also gives the operator-Schmidt comparison used in Lemma 5,
+lines 2213--2252 of the same source: equality of the two end contractions and
+linear independence of the two genuine families determine one unique matrix
+on their common bond.
 -/
 
 open scoped BigOperators Matrix
