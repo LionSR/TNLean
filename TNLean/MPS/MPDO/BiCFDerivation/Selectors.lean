@@ -748,8 +748,8 @@ theorem horizontalCFData_of_propBlockInjective
 ## Why the remaining `HorizontalCFData` fields are still insufficient
 
 The strengthened hypotheses used above are strictly extra data. A simple
-obstruction shows that one cannot derive `biCF` from blockwise injectivity,
-left-canonicality, and nonzero (even pairwise distinct) weights alone.
+obstruction shows that one cannot derive finite-word trace separation from blockwise
+injectivity, left-canonicality, and nonzero (even pairwise distinct) weights alone.
 
 Take `r = 2`, `d = 1`, `dim k = 1`, and let both blocks be the same scalar tensor
 `A_k(0) = 1`, while the weights are `μ 0 = 1` and `μ 1 = 2`. Then each block is
