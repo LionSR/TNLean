@@ -245,10 +245,9 @@ left-canonical.  This is the canonical-form hypothesis used in
         thm:mps_rectangular_reduction_identities, thm:ft_single,
         lem:left_canonical_irreducible_same_phase_unitary_gauge,
         thm:mpu_physical_adjoint_normalized_flattening}
-    Let $G$ be a finite group, and let
-    $\{\mathcal U_g\}_{g\in G}$ be a commonly blocked representation by
-    simple injective MPU tensors whose normalized flattenings are
-    left-canonical.  Then
+    Let $G$ be a group, and let
+    $\{\mathcal U_g\}_{g\in G}$ be a representation by simple injective MPU
+    tensors whose normalized flattenings are left-canonical.  Then
     \begin{align}
         D_g & =D_{g^{-1}}.
         \label{eq:mpug_dagger_inverse_bond_dimension}
@@ -269,6 +268,7 @@ left-canonical.  This is the canonical-form hypothesis used in
     \uses{thm:mpug_physical_adjoint_inverse_mpv,
         thm:mps_equality_reduction_exists,
         thm:mps_rectangular_reduction_identities, thm:ft_single,
+        thm:injective_irreducible,
         lem:left_canonical_irreducible_same_phase_unitary_gauge,
         thm:mpu_physical_adjoint_normalized_flattening}
     Apply the equality-case reduction theorem first to
@@ -323,6 +323,7 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
 
 \begin{proof}\leanok
     \uses{thm:mpug_dagger_inverse_gauge,
+        thm:mpu_physical_adjoint_identities,
         lem:gauge_unique_up_to_scalar,
         thm:mpug_unitary_entrywise_scalar_phase,
         thm:mpug_unitary_entrywise_paired_scalars,
