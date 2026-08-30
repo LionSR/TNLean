@@ -115,10 +115,12 @@ realizing a fixed virtual operation $X$ by a physical operator $O_j(X)$ on
 every staircase window --- is now complete: the open-boundary identity
 $O_j(X)T_{B,W_j}(\mu)=C_j(X)(\mu)$ is proved for every virtual boundary
 configuration~$\mu$.  The two-end comparison that recovers the unique matrix
-$X$ is also complete.  What remains is to prove by composition that the
-assignments from $O_1$ and $O_3^{\mathsf T}$ to $X$ are algebra
-homomorphisms, use them for the cross-tensor transfer, and assemble the back
-half of the argument.
+$X$ is also complete.  The end-factor relations are now proved unique and
+closed under composition in the source's two orientations: $O_1P_1$ realizes
+$XY$, while the underlying product $P_3O_3$ realizes $XY$ in the
+$O_3^{\mathsf T}$ orientation.  What remains is to use these relations to
+construct the cross-tensor transfer and assemble the back half of the
+argument.
 
 Ref.~\cite{Molnar2018NormalPEPS} supplies this converse by the reduction ``we only need to prove a
 statement similar to Lemma~5''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321}.}
@@ -180,10 +182,11 @@ simultaneously.
 \noindent\textbf{Formalization verdict.} The published argument is explicitly
 a sketch.  The consecutive-window comparison, corner completion, forward
 open-boundary physical realization, and two-end recovery of the unique matrix
-$X$ are now formalized.  What remains is the composition argument for
-Lemma~5's maps $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$, the cross-tensor
-transfer, and the back-half assembly.  The failed single-window span above is an
-invented auxiliary route, not a statement made or required by the paper.
+$X$ are now formalized, as are the uniqueness and direct composition laws for
+Lemma~5's $O_1$ and $O_3^{\mathsf T}$ end-factor relations.  What remains is
+the cross-tensor transfer and the back-half assembly.  The failed
+single-window span above is an invented auxiliary route, not a statement made
+or required by the paper.
 
 \section{Consolidated account}
 
@@ -250,25 +253,29 @@ host-decomposable at $n \geq 2L+1$, $m \geq 2K+1$. The development is
 minimal-size-ready through the single-tensor virtual-operation family and the
 unique end-pair extraction
 \leanid{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPair}.
-The remaining gates are the $O_1\mapsto X$ and
-$O_3^{\mathsf T}\mapsto X$ composition laws, the cross-tensor transfer, and
-the back-half assembly that re-anchors the torus Theorem~3 layers to the
+The direct $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$ composition laws are
+also complete.  The remaining gates are the cross-tensor transfer and the
+back-half assembly that re-anchors the torus Theorem~3 layers to the
 $(L+1) \times (K+1)$ comparison pair.
 
-\paragraph{3. The remaining composition and cross-tensor extraction.}
+\paragraph{3. The remaining cross-tensor extraction.}
 The same-tensor operation family is no longer missing.  For a fixed matrix
 $X$ on $e$, the first window carries $X^{\mathsf T}$, the windows
 $W_1,\ldots,W_{L-1}$ carry the interior-bond insert of $X$, and the remaining
 windows carry the boundary insert of $X$.  Window injectivity defines
 $O_j(X)$ and proves $O_j(X)T_{B,W_j}(\mu)=C_j(X)(\mu)$ before complementary
 contraction; all these inserts also have common closed state
-$P_B(W_0)E_B(e,\cdot,X)$.  The outstanding inputs are the composition laws
-for the maps from $O_1$ and $O_3^{\mathsf T}$, the resulting cross-tensor
-coefficient transfer between $A$ and $B$, and its multiplicativity
-\path{hmul}.  The back-half assembly follows only after this transfer is
-available.  Existing single-window and coarse-three-site attempts do not
-derive these inputs at the minimal size; a source-faithful extraction must use
-the actual overlapping-window comparison rather than assume a matrix span.
+$P_B(W_0)E_B(e,\cdot,X)$.  The relations
+\leanid{TNLean.PEPS.IsO1VirtualOperation} and
+\leanid{TNLean.PEPS.IsO3TransposeVirtualOperation} are single-valued on the
+genuine end families, and their multiplication theorems give exactly the two
+composition orders printed in Lemma~5.  The outstanding input is the
+cross-tensor coefficient transfer between $A$ and $B$, including its
+multiplicativity field \path{hmul}.  The back-half assembly follows only after
+this transfer is available.  Existing single-window and coarse-three-site
+attempts do not derive that cross-tensor input at the minimal size; a
+source-faithful extraction must use the actual overlapping-window comparison
+rather than assume a matrix span.
 
 \paragraph{4. Auxiliary closing routes ruled out at the minimal size.}
 The following findings rule out particular substitutes for the paper's
@@ -328,16 +335,16 @@ Ref.~\cite{Molnar2018NormalPEPS} keeps one highlighted edge fixed and compares p
 on overlapping regions; it does not introduce a chain of different bonds or
 a single-window square-matrix span.  The forward correspondence, its
 open-boundary physical operators, its transpose convention, and the unique
-end-pair operation now follow this description literally.  The remaining
-formal work is the composition argument for Lemma~5's $O_1$ and
-$O_3^{\mathsf T}$ maps, the cross-tensor transfer, and the back-half assembly.
+end-pair operation now follow this description literally.  So do the direct
+composition laws for Lemma~5's $O_1$ and $O_3^{\mathsf T}$ orientations.  The
+remaining formal work is the cross-tensor transfer and the back-half assembly.
 
 \paragraph{6. Status.}
 The corollary remains \emph{unformalized}: no blueprint entry claims it, it
 carries the \texttt{notready} marker, and no \texttt{leanok} marks it.  The
-same-tensor family and unique end-pair extraction are complete; the remaining
-work is the two composition maps, the cross-tensor transfer, and the back-half
-assembly tracked separately.
+same-tensor family, unique end-pair extraction, and direct end-composition
+laws are complete; the remaining work is the cross-tensor transfer and the
+back-half assembly tracked separately.
 
 \section{The filled-in derivation}
 
@@ -631,9 +638,10 @@ landed: the end-window boundary equivalences separate the index on $e$ from
 the open external legs, the normalized blue coupling is the genuine opposite
 window block on the compatible fibre and vanishes off it, and
 \path{existsUnique_virtualOperation_of_horizontalStaircaseEndPair} extracts
-the unique matrix $X$.  The residual is the composition argument for the maps
-$O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$, followed by the cross-tensor
-transfer and back-half assembly.
+the unique matrix $X$.  Specializing the end inserts to the physical actions
+$O_1$ and $O_3$ gives the source's two factor relations, whose direct
+composition laws are now formalized.  The residual is their use in the
+cross-tensor transfer and the back-half assembly.
 
 \subsection{Step 5: the rest of the proof}
 
@@ -761,12 +769,13 @@ unions, all of which decompose at $(2L+1)\times(2K+1)$.
 \section{Formalization plan}
 
 The geometry, state-equality, forward fixed-edge-operation, and unique
-end-pair-operation layers of the derivation above are complete. The remaining
-source steps following
+end-pair-operation layers of the derivation above are complete, including the
+direct composition laws in the two source orientations. The remaining source
+steps following
 \path{Papers/1804.04964/paper_normal.tex:2368--2444} of
-Ref.~\cite{Molnar2018NormalPEPS} are the composition laws for the Lemma~5 maps
-from $O_1$ and $O_3^{\mathsf T}$, the cross-tensor transfer, and the back-half
-assembly.  The layer list below records the campaign around these steps:
+Ref.~\cite{Molnar2018NormalPEPS} are the cross-tensor transfer and the
+back-half assembly.  The layer list below records the campaign around these
+steps:
 
 \begin{enumerate}
   \item \emph{Window geometry} (no tensors): the one-orientation
@@ -787,8 +796,8 @@ assembly.  The layer list below records the campaign around these steps:
   \item \emph{The Lemma~5 converse on the staircase}: compare the first and
     last physical operations after adjoining the genuine corner tensors,
     invert the resulting regions, and recover the unique virtual operation
-    $X$ (complete); then prove the $O_1\mapsto X$ and
-    $O_3^{\mathsf T}\mapsto X$ homomorphisms by composition (remaining).
+    $X$, with the $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$ uniqueness and
+    direct composition laws (complete).
   \item \emph{The per-edge witness}: the landed insertion-correspondence and
     Skolem--Noether interface at one reference edge per orientation; the
     remaining cross-tensor transfer must supply the coefficient identity this
@@ -802,9 +811,9 @@ assembly.  The layer list below records the campaign around these steps:
     state.
 \end{enumerate}
 
-Layers 1--3, the unique-$X$ part of layer~4, and the interface of layer~5 are
-complete.  The composition part of layer~4, the cross-tensor transfer that
-feeds layer~5, and the re-anchoring in layer~6 remain. Until the capstone lands,
+Layers 1--4 and the interface of layer~5 are complete.  The cross-tensor
+transfer that feeds layer~5 and the re-anchoring in layer~6 remain. Until the
+capstone lands,
 the corollary of Ref.~\cite{Molnar2018NormalPEPS} at
 \path{Papers/1804.04964/paper_normal.tex:2297--2318} remains
 unformalized, and no blueprint entry should claim it.
@@ -1149,9 +1158,9 @@ The boundary-label and normalized-coupling arguments are in
 contraction and unique-operation extraction are in
 \path{TNLean/PEPS/TorusWindowPeeling/EndOperation.lean}.
 
-The remaining Step~4 work is the composition argument for the maps
-$O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$, followed by their use in the
-cross-tensor assembly and the back half of the proof.
+The Step~4 end relations and their direct composition laws are complete.  The
+remaining work is to use them in the cross-tensor assembly and then complete
+the back half of the proof.
 
 \subsection{The back-half geometry supports a window witness region}
 
@@ -1313,9 +1322,9 @@ end-window identity are
 $\text{\path{staircaseVirtualOperationInsert}}$ and
 $\text{\path{regionInsertedCoeff\_endWindows\_eq\_staircaseVirtualOperation}}$.
 
-The local residual is the composition argument and resulting cross-tensor
-multiplicative transfer: the homomorphism the rectangle route reads from the
-physical realization of the inserted operator.  The region-level recovery
+The local residual is the cross-tensor multiplicative transfer: one must
+identify the physical end operations across the two tensor families and feed
+the landed end-composition laws into the transfer.  The region-level recovery
 $\text{\path{regionInsertionTransfer\_of\_realizes}}$ derives all three transfer fields ---
 $\text{\path{htransferAB}}$, $\text{\path{htransferBA}}$, and $\text{\path{hmul}}$ --- from one region
 physical-to-virtual realization $\text{\path{RegionTransferRealizes}}$ in each direction, with
@@ -1323,19 +1332,21 @@ no further hypothesis; so the window route's residual collapses to producing tha
 realization on the window from the staircase, in place of the edge-middle injectivity
 ($\mathrm{univ}\setminus\{u,v\}$ injective) the rectangle route uses, which fails at the
 minimal size --- the same obstruction, at the edge, that $\mathrm{univ}\setminus S$
-exhibits at the end pair.  A coefficient transfer alone does not yield $\text{\path{hmul}}$: the
-multiplicativity is the homomorphism of the physical insertion operator, which the
-single-bond geometry localizes to one edge but does not on its own make multiplicative.
-After this transfer is available, the back-half assembly remains.
+exhibits at the end pair.  A coefficient transfer alone does not yield
+$\text{\path{hmul}}$: the missing bridge is the cross-tensor identification
+that lets the already-proved $O_1$ and $O_3^{\mathsf T}$ composition laws act
+on that transfer.  After this transfer is available, the back-half assembly
+remains.
 
-\section{The multiplicativity verdict: it is the coarse three-site
-super-bond, not a single-window span}
+\section{The multiplicativity route: compose the two end relations, not a
+single-window span or a coarse frame}
 
-This section records the definitive resolution of one local residual question the
-overlapping-window corollary reduces to: whether the forward-transfer
-multiplicativity $\text{\path{hmul}}$ at the left end window is obtainable from window and
-host injectivity at the corollary's minimal size, or genuinely needs a block-level
-construction the landed single-window machinery does not provide.
+This section separates three statements that had previously been conflated:
+the unavailable single-window square-matrix span, an auxiliary coarse-frame
+theorem whose hypotheses fail at the minimal size, and the source's direct
+composition of the two end-factor relations.  The last of these is now
+formalized.  Its use in the cross-tensor transfer field
+$\text{\path{hmul}}$ remains the local open step.
 
 \subsection{The single-window span does not exist, and is not the mechanism}
 
@@ -1358,13 +1369,11 @@ injectivity), but its projection onto the $e$-leg at fixed external legs is not 
 square-matrix span. So the one-dimensional template port has no two-dimensional
 single-window analogue, and the homomorphism cannot be read from one window's block.
 
-\subsection{The faithful mechanism is the coarse super-bond, available without
-single-vertex injectivity, but obstructed for the single-window red block at the
-minimal size}
+\subsection{The coarse super-bond is an auxiliary theorem, but is unavailable
+for the single-window red block at the minimal size}
 
-Ref.~\cite{Molnar2018NormalPEPS} supplies $\text{\path{hmul}}$ not from a single window but from the homomorphism
-of the physical insertion operator, which the formalization realizes through the
-\emph{coarse three-site} route already landed for the rectangle blocking: three
+The rectangle formalization has a reusable \emph{coarse three-site} route to
+$\text{\path{hmul}}$: three
 blocked regions (a red block, a blue block meeting it only at $e$, and the
 complement) are assembled into a coarse tensor on a three-vertex graph, whose three
 super-sites are injective directly from the three blocked-region injectivities, with
@@ -1377,7 +1386,9 @@ transfer with the concrete one ($\text{\path{coeffTransferMap\_eq\_regionEdgeTra
 $\text{\path{regionInsertedCoeff\_injective}}$) it is exactly $\text{\path{hmul}}$ for the chosen
 transfer over the red block. The super-vertex injectivity stands in for the
 single-vertex spanning the vertex-injective route would use; this is why the route
-needs only blocked-region injectivity of the three regions.
+needs only blocked-region injectivity of the three regions.  This theorem is a
+valid auxiliary result, but it is not the overlapping-window composition used
+by Ref.~\cite{Molnar2018NormalPEPS}.
 
 This mechanism applies to the window route iff the left end window $W$ can play the
 coarse red block, which requires a blue block making $e$ the single red-to-blue
@@ -1405,22 +1416,23 @@ different mechanism, below.
 
 The verdict is \textbf{(b)}: the $e$-bond multiplicativity at the minimal size is
 \emph{not} derivable from window and host injectivity of the single left end window.
-It is the coarse three-site super-bond multiplicativity, which needs a third injective
-block --- the complement of the red-blue pair --- and at the minimal size, with the
-red block a single window and the single-crossing partner forced to be the opposite
-window, that complement is $\mathrm{univ}\setminus S$, non-injective. The read-off
-side ($\text{\path{htransferAB}}$, $\text{\path{htransferBA}}$, and the whole region-level gauge
-algebra) \emph{is} powered by window and single-window-complement injectivity, both
-available at the minimal size; only the homomorphism is not.
+The coarse three-site multiplicativity theorem needs a third injective block
+--- the complement of the red-blue pair --- and at the minimal size, with the
+red block a single window and the single-crossing partner forced to be the
+opposite window, that complement is $\mathrm{univ}\setminus S$, non-injective.
+It is therefore not the source-faithful route here.  The landed end-factor
+relations instead make multiplicativity a direct calculation: compose the two
+left physical operations, compose the underlying right operations in reverse
+order, and use uniqueness of $X$.  No third block or larger frame enters.
 
 The overlapping-window realization sketched in Ref.~\cite{Molnar2018NormalPEPS} keeps the same virtual operation
 $M$ on $e$ while representing it on every staircase window.  That common-state family
 is now built below.  It closes the single-operation part of this discussion but not the
 cross-tensor homomorphism: the remaining task is to compare the two tensor families and
 show that the resulting coefficient transfer respects products, following Lemma~5's
-composition of the maps from $O_1$ and $O_3^{\mathsf T}$ rather than a single-window
-span or an assumed coarse frame.  The back-half assembly follows only after this
-transfer is supplied.
+now-formalized composition of the $O_1$ and $O_3^{\mathsf T}$ end relations
+rather than a single-window span or an assumed coarse frame.  The back-half
+assembly follows only after this transfer is supplied.
 
 \subsection{The foundation that lands}
 
@@ -1438,8 +1450,9 @@ this theorem with $\mathrm{red}=W$, and the unmet hypothesis is exactly the fram
 $\text{\path{complement\_injective}}$ at $\mathrm{univ}\setminus S$, the documented
 obstruction.  This theorem remains available for any future coherent frame, but the
 fixed-edge common-state family below does not require such a frame.  The remaining local
-work is the two-map composition and cross-tensor multiplicativity argument; the
-back-half assembly is the subsequent step.
+work is the cross-tensor identification that feeds the direct end-composition
+laws into the coefficient transfer; the back-half assembly is the subsequent
+step.
 
 \subsection{The common-state family is complete}
 
@@ -1481,8 +1494,8 @@ $M^{\mathsf T}$ and the last-window insertion of $M$.  This closes the common-st
 residual.  This end-window coefficient identity follows directly from the two region-to-edge
 identities and translation invariance; it needs neither complement inversion nor a peeling
 hypothesis.  It does not by itself construct the cross-tensor transfer from $A$ to $B$ or
-prove that transfer multiplicative; those are the remaining Lemma~5-style composition
-and cross-tensor steps, after which the back-half assembly remains.
+prove that transfer multiplicative; that cross-tensor feed is the remaining
+Lemma~5-style step, after which the back-half assembly remains.
 
 \section{Normality and discarded stronger routes}
 
@@ -1542,10 +1555,9 @@ in \path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.}
 These observations rule out two auxiliary shortcuts; they do not challenge
 the paper's fixed-edge comparison.  The comparison through adjoining the
 corner regions and recovering the unique virtual operation $X$ is now landed.
-The remaining source work is to prove the maps $O_1\mapsto X$ and
-$O_3^{\mathsf T}\mapsto X$ multiplicative by the composition argument of
-Lemma~5, use them for the cross-tensor transfer, and complete the back-half
-assembly.
+The two source orientations and their direct multiplication laws are also
+landed.  The remaining source work is to use them for the cross-tensor
+transfer and complete the back-half assembly.
 
 \bibliographystyle{alpha}
 \bibliography{references}
