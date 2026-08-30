@@ -344,20 +344,24 @@ boundary conditions (PBC).
     \lean{MPSTensor.IsReduction.mul_eq_one,
         MPSTensor.IsReduction.evalWord,
         MPSTensor.IsReduction.evalWord_nil,
+        MPSTensor.IsReduction.bondDim_le,
         MPSTensor.IsReduction.iff_forall_evalWord}
     \leanok
     \uses{def:mps_rectangular_reduction}
     A rectangular reduction satisfies the retraction identity
     (\ref{eq:mps_rectangular_reduction_retraction}) and the word identity
     (\ref{eq:mps_rectangular_reduction_word}).  Conversely, the all-word
-    identity alone implies $VW=1_{D_A}$ by taking the empty word.
+    identity alone implies $VW=1_{D_A}$ by taking the empty word.  Moreover,
+    the target bond dimension cannot exceed the source bond dimension:
+    $D_A\leq D_B$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     The forward statements are the two defining clauses.  For the converse,
     $A^{\varnothing}=1_{D_A}$ and $B^{\varnothing}=1_{D_B}$, so the empty-word
-    instance reads $V1_{D_B}W=1_{D_A}$.
+    instance reads $V1_{D_B}W=1_{D_A}$.  Since $V$ has a right inverse, it is
+    surjective, and finite-dimensional linear algebra gives $D_A\leq D_B$.
 \end{proof}
 
 \begin{remark}\leanok

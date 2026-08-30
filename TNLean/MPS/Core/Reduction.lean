@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.LinearAlgebra.Matrix.InvariantBasisNumber
 import TNLean.MPS.Defs
 
 /-!
@@ -47,6 +48,12 @@ theorem evalWord (h : IsReduction B A V W) (w : List (Fin d)) :
 /-- The empty-word instance of the intertwining equation. -/
 theorem evalWord_nil (h : IsReduction B A V W) :
     V * Kraus.evalWord B [] * W = Kraus.evalWord A [] := h.2 []
+
+/-- A rectangular reduction cannot increase the bond dimension: the target
+bond dimension is at most the source bond dimension. -/
+theorem bondDim_le (h : IsReduction B A V W) : D₁ ≤ D₂ :=
+  (rankCondition_iff_matrix.mp (inferInstance : RankCondition ℂ))
+    D₂ D₁ W V h.mul_eq_one
 
 /-- It is enough to state the all-word intertwining equation: its empty-word
 case recovers $VW=1$. -/
