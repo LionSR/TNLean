@@ -1425,7 +1425,8 @@ nonzero spectrum as a set.
 
 \begin{theorem}[Semisimple rank-one Jordan--Chevalley reduction]
     \label{thm:mpu_semisimple_scaled_trace_rank_one}
-    \lean{Module.End.finrank_range_eq_one_of_isSemisimple_of_scaled_trace_pow_eq_one,
+    \lean{Module.End.IsNilpotent.trace_add_pow_eq_trace_pow_of_commute,
+        Module.End.finrank_range_eq_one_of_isSemisimple_of_scaled_trace_pow_eq_one,
         Module.End.IsNilpotent.mul_eq_zero_and_mul_eq_zero_of_commute_of_finrank_range_eq_one,
         Module.End.IsNilpotent.exists_add_pow_eq_right_of_mul_eq_zero,
         Module.End.IsNilpotent.products_eq_zero_and_eventual_add_pow_eq_of_scaled_trace}
@@ -1439,9 +1440,11 @@ nonzero spectrum as a set.
     \begin{align}
         \dim\operatorname{range}(S) & =1.
     \end{align}
-    If $N$ is nilpotent and commutes with $S$, then
+    If $N$ is nilpotent and commutes with $S$, then, for every positive integer
+    $k$,
     \begin{align}
-        NS & =SN=0.
+        \tr\bigl((N+S)^k\bigr) & =\tr(S^k), \\
+        NS                     & =SN=0.
     \end{align}
     Moreover, there is an integer $J>0$ such that, for every $k\geq J$,
     \begin{align}
@@ -1467,6 +1470,16 @@ nonzero spectrum as a set.
     \end{align}
     Rank--nullity and $c\ne0$ therefore give
     $\dim\operatorname{range}(S)=1$.
+
+    For $k>0$, commutation gives the binomial expansion
+    \begin{align}
+        (N+S)^k & =\sum_{m=0}^k \binom{k}{m}N^mS^{k-m}.
+    \end{align}
+    If $m>0$, write $N^m=N N^{m-1}$. The first factor commutes with the
+    remaining factors, so nilpotence of $N$ makes the entire summand
+    nilpotent and its trace vanishes. Only the term $m=0$ remains, giving
+    $\tr((N+S)^k)=\tr(S^k)$. This is the trace reduction used in
+    arXiv:1706.07329v2, Proposition~20, line 3865.
 
     Commutation makes $\operatorname{range}(S)$ invariant under $N$. The
     restriction of $N$ to this one-dimensional space is both nilpotent and a

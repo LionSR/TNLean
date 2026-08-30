@@ -40,6 +40,30 @@ namespace Module.End
 
 variable {V : Type*} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
 
+omit [FiniteDimensional ℂ V] in
+/-- A commuting nilpotent summand does not change trace powers.
+
+The commuting binomial expansion has one term without the nilpotent summand.
+Every other term is nilpotent and therefore has zero trace. This is the trace
+reduction used in arXiv:1706.07329v2, Proposition 20, line 3865. -/
+theorem IsNilpotent.trace_add_pow_eq_trace_pow_of_commute
+    {N : Module.End ℂ V} (hN : IsNilpotent N) (S : Module.End ℂ V)
+    (hcomm : Commute N S) (k : ℕ) :
+    LinearMap.trace ℂ V ((N + S) ^ k) = LinearMap.trace ℂ V (S ^ k) := by
+  rw [hcomm.add_pow k, map_sum]
+  rw [Finset.sum_eq_single 0]
+  · simp
+  · intro m _ hm
+    obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hm
+    apply IsNilpotent.eq_zero
+    apply LinearMap.isNilpotent_trace_of_isNilpotent
+    rw [pow_succ']
+    simp only [mul_assoc]
+    apply Commute.isNilpotent_mul_right _ hN
+    exact ((Commute.refl N).pow_right n).mul_right
+      ((hcomm.pow_right (k - (n + 1))).mul_right (Nat.commute_cast N (k.choose (n + 1))))
+  · simp
+
 /-- A semisimple complex endomorphism has one-dimensional range if a nonzero
 scalar multiple has trace one at every power above one.
 
