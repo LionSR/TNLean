@@ -2098,6 +2098,10 @@ the scalar data and their gauge classes.
     $\C^\times$ are $1$ and $-1$.
 \end{proof}
 
+For an element $g$ of order two, the source condition
+$\xi_g(x)\xi_{g^{-1}}(g\mathbin{\cdot}x)=-1$ reduces to
+$\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
+
 \begin{definition}[Anomalous sign for an involution]
     \label{def:mpug_anomalous_involution_sign}
     \lean{TNLean.Algebra.IsComplexUnitSign,
@@ -2129,12 +2133,12 @@ the scalar data and their gauge classes.
     \leanok
     \uses{def:mpug_anomalous_involution_sign}
     Let $f\colon\mathsf X\to\mathsf X$ be an involution. An anomalous sign
-    exists if and only if $f$ has no fixed point. In particular, if a group
-    element $g$ satisfies $g^2=e$, then the action $x\mapsto gx$ admits such a
-    sign if and only if $gx\neq x$ for every $x\in\mathsf X$.
-    This isolates the choice of $\xi_g$ in
-    \cite[Proposition~\texttt{prop:def\_tens\_anomalous},
-    lines~2979--2981]{FrancoRubio2025MPUGauging}.
+    exists if and only if $f$ has no fixed point. In particular, let a group
+    act on $\mathsf X$ from the left, and suppose that $g^2=e$. The action
+    $x\mapsto g\mathbin{\cdot}x$ admits an anomalous sign if and only if
+    $g\mathbin{\cdot}x\neq x$ for every $x\in\mathsf X$.
+    This is the sign condition used for anomalous defect tensors in
+    \cite[lines~2979--2981]{FrancoRubio2025MPUGauging}.
     % Source anchor: arXiv:2502.20257, prop:def_tens_anomalous,
     % eq:defects_Z2b, lines 2979--2981.
 \end{theorem}
@@ -2145,8 +2149,8 @@ the scalar data and their gauge classes.
     $\{x,f(x)\}$, assign $1$ to the smaller element and $-1$ to the larger.
     Involutivity exchanges the two elements, so their signs multiply to
     $-1$. Conversely, at a fixed point the product is the square of either
-    $1$ or $-1$, hence equals $1$ rather than $-1$. The group-action statement
-    follows from $g(gx)=g^2x=x$.
+    $1$ or $-1$, hence equals $1$ rather than $-1$. For the action statement,
+    $g\mathbin{\cdot}(g\mathbin{\cdot}x)=(g^2)\mathbin{\cdot}x=x$.
 \end{proof}
 
 \begin{theorem}[Nontrivial scalar gauge class for $\Z_2$]
