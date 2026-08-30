@@ -32,8 +32,8 @@ variable {d D_A D_B : ℕ}
 
 /-- The reduction-specific residual letter $N^i=B^i-WA^iV$.
 
-Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Definition 8,
-`cornerproblem.tex` lines 3147--3152. -/
+Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Proposition 21,
+`cornerproblem.tex` lines 3142--3144. -/
 noncomputable def reductionResidual (B : MPSTensor d D_B) (A : MPSTensor d D_A)
     (V : Matrix (Fin D_A) (Fin D_B) ℂ) (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
     MPSTensor d D_B :=
@@ -55,15 +55,22 @@ noncomputable def reductionResidualAlgebra (B : MPSTensor d D_B)
     NonUnitalSubalgebra ℂ (Matrix (Fin D_B) (Fin D_B) ℂ) :=
   NonUnitalAlgebra.adjoin ℂ (reductionResidualGeneratorSet B A V W)
 
-/-- A uniform mixed-word bound for the selected-reduction residual algebra. -/
+/-- A residual-word nilpotency bound for a selected reduction: every word of
+exactly this length in the residual letters vanishes.
+
+Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
+3147--3152. -/
 def IsReductionResidualNilpotencyBound (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) : Prop :=
-  ∀ l : List (Matrix (Fin D_B) (Fin D_B) ℂ),
-    (∀ X ∈ l, X ∈ reductionResidualAlgebra B A V W) → l.length = N → l.prod = 0
+  ∀ w : List (Fin d), w.length = N →
+    Kraus.evalWord (reductionResidual B A V W) w = 0
 
-/-- The least uniform mixed-word bound for the selected-reduction residual
-algebra, called the nilpotency length in MGSC18. -/
+/-- The least residual-word bound, called the nilpotency length of the selected
+reduction in MGSC18.
+
+Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
+3147--3152. -/
 noncomputable def reductionResidualNilpotencyLength (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) : ℕ :=
@@ -608,15 +615,19 @@ theorem reductionResidualAlgebra_list_prod_eq_zero
     (h.isNilpotent_of_mem_reductionResidualAlgebra hSame) l hl
   simpa using hlen
 
-/-- The bond dimension `D_B` is a uniform mixed-word bound for the
-selected-reduction residual algebra. -/
+/-- The bond dimension `D_B` is a residual-word nilpotency bound. -/
 theorem bondDim_isReductionResidualNilpotencyBound
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A) :
     IsReductionResidualNilpotencyBound B A V W D_B := by
-  intro l hl hlen
-  exact h.reductionResidualAlgebra_list_prod_eq_zero hSame l hl hlen
+  intro w hlen
+  rw [evalWord_eq_prod_map]
+  apply h.reductionResidualAlgebra_list_prod_eq_zero hSame
+  · intro X hX
+    obtain ⟨i, hi, rfl⟩ := List.mem_map.mp hX
+    exact reductionResidual_mem_reductionResidualAlgebra B A V W i
+  · simpa using hlen
 
-/-- The MGSC18 nilpotency length exists and is itself a mixed-word bound. -/
+/-- The MGSC18 nilpotency length exists and is itself a residual-word bound. -/
 theorem reductionResidualNilpotencyLength_isBound
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A) :
     IsReductionResidualNilpotencyBound B A V W
@@ -632,31 +643,15 @@ theorem reductionResidualNilpotencyLength_le_bondDim
     reductionResidualNilpotencyLength B A V W ≤ D_B :=
   Nat.sInf_le (h.bondDim_isReductionResidualNilpotencyBound hSame)
 
-/-- A mixed product at least as long as any uniform residual bound vanishes. -/
-theorem reductionResidualAlgebra_list_prod_eq_zero_of_bound_le_length
-    {N : ℕ} (hBound : IsReductionResidualNilpotencyBound B A V W N)
-    (l : List (Matrix (Fin D_B) (Fin D_B) ℂ))
-    (hl : ∀ X ∈ l, X ∈ reductionResidualAlgebra B A V W)
-    (hlen : N ≤ l.length) : l.prod = 0 := by
-  rw [← l.take_append_drop N, List.prod_append]
-  have htake : (l.take N).prod = 0 := by
-    apply hBound (l.take N)
-    · intro X hX
-      exact hl X (List.mem_of_mem_take hX)
-    · simp [List.length_take, Nat.min_eq_left hlen]
-  rw [htake, zero_mul]
-
-/-- Every residual word at least as long as any uniform residual bound vanishes. -/
+/-- Every residual word at least as long as a residual-word bound vanishes. -/
 theorem evalWord_reductionResidual_eq_zero_of_bound_le_length
     {N : ℕ} (hBound : IsReductionResidualNilpotencyBound B A V W N)
     (w : List (Fin d)) (hlen : N ≤ w.length) :
     Kraus.evalWord (reductionResidual B A V W) w = 0 := by
-  rw [evalWord_eq_prod_map]
-  apply reductionResidualAlgebra_list_prod_eq_zero_of_bound_le_length hBound
-  · intro X hX
-    obtain ⟨i, hi, rfl⟩ := List.mem_map.mp hX
-    exact reductionResidual_mem_reductionResidualAlgebra B A V W i
-  · simpa
+  rw [← w.take_append_drop N, Kraus.evalWord_append]
+  have htake := hBound (w.take N)
+    (by simp [List.length_take, Nat.min_eq_left hlen])
+  rw [htake, Matrix.zero_mul]
 
 /-- Left-contracted MGSC18 expansion with the printed range
 $|w|-N\leq s\leq |w|$.  The endpoint `s = |w| - N`, when present, has a

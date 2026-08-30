@@ -977,20 +977,12 @@ $A^{-1}A=\Id$. This is the identity used in
         MPSTensor.reductionResidualNilpotencyLength}
     \leanok
     \uses{def:mps_reduction_residual_algebra}
-    A natural number $L$ is a \emph{mixed-word nilpotency bound} for
-    $\mathcal R(B,A;V,W)$ if every product of exactly $L$ elements of this
-    algebra is zero.  The residual nilpotency length
+    A natural number $L$ is a \emph{residual-word nilpotency bound} if
+    every word $N^{i_1}\cdots N^{i_L}$ of exactly $L$ residual letters is
+    zero.  The residual nilpotency length
     $\ell(B,A;V,W)$ is the infimum of the set of such bounds.  When a
     bound exists, this is its least value.
-
-    Definition~8 of \cite{Molnar2018SemiInjective} instead takes the least
-    $L$ for which every residual-letter word $N^{i_1}\cdots N^{i_L}$ is
-    zero.  The two formulations are equivalent.  A mixed-product bound
-    applies to the residual generators.  Conversely, each algebra element is
-    a linear combination of positive residual words, so a product of $L$
-    algebra elements is a linear combination of residual words of length at
-    least $L$; each such word vanishes after factoring off its first $L$
-    letters.
+    This is Definition~8 of \cite{Molnar2018SemiInjective}.
 \end{definition}
 
 \begin{theorem}[Positive residual words vanish under the reduction]
@@ -1112,8 +1104,8 @@ $A^{-1}A=\Id$. This is the identity used in
     $\mc{V}^+(B)=\mc{V}^+(A)$.  Then every nonempty residual word has trace
     zero, every element of $\mathcal R(B,A;V,W)$ has trace zero, and every
     element of this algebra is nilpotent.  Every mixed product of $D_B$
-    algebra elements is zero.  Consequently $D_B$ is a mixed-word
-    nilpotency bound, the least bound $\ell(B,A;V,W)$ is itself a bound, and
+    algebra elements is zero, so $D_B$ is a residual-word nilpotency bound.
+    Consequently the least bound $\ell(B,A;V,W)$ is itself a bound, and
     \begin{align}
         \ell(B,A;V,W) & \leq D_B.
         \label{eq:mps_reduction_residual_nilpotency_length_bound}
@@ -1141,12 +1133,10 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{theorem}[Consequences of an arbitrary residual bound]
     \label{thm:mps_reduction_residual_bound_consequences}
-    \lean{MPSTensor.IsReduction.reductionResidualAlgebra_list_prod_eq_zero_of_bound_le_length,
-        MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bound_le_length}
+    \lean{MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bound_le_length}
     \leanok
     \uses{def:mps_reduction_residual_nilpotency_length}
-    If $L$ is a mixed-word nilpotency bound, then every product of at least
-    $L$ elements of $\mathcal R(B,A;V,W)$ vanishes.  In particular,
+    If $L$ is a residual-word nilpotency bound, then
     \begin{align}
         N^{\mathbf i} & =0
         \qquad\text{whenever } |\mathbf i|\geq L.
@@ -1158,9 +1148,8 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}
     \leanok
-    Split a product after its first $L$ factors.  The prefix is zero by the
-    bound, so the full product is zero.  Apply this to the list of residual
-    letters in a word.
+    Split the residual word after its first $L$ letters.  The prefix is zero
+    by the bound, so the full word is zero.
 \end{proof}
 
 \begin{theorem}[All-cut contracted residual identities]
@@ -1212,8 +1201,8 @@ $A^{-1}A=\Id$. This is the identity used in
     \leanok
     \uses{def:mps_rectangular_reduction,
         def:mps_reduction_residual_nilpotency_length}
-    Let $(V,W)$ be a reduction from $B$ to $A$, let $L$ be any mixed-word
-    nilpotency bound for its residual algebra, and write
+    Let $(V,W)$ be a reduction from $B$ to $A$, let $L$ be any residual-word
+    nilpotency bound, and write
     $\mathbf i=(i_1,\ldots,i_n)$.  Then
     \begin{align}
         VB^{i_1}\cdots B^{i_n}
@@ -1252,7 +1241,7 @@ $A^{-1}A=\Id$. This is the identity used in
     \uses{def:mps_rectangular_reduction,
         def:mps_reduction_residual_nilpotency_length}
     Let $(V,W)$ be a reduction from $B$ to $A$, and let $L$ be any
-    mixed-word nilpotency bound for its residual algebra.  If the central word
+    residual-word nilpotency bound.  If the central word
     $\mathbf c$ is nonempty and the exterior words $\mathbf p,\mathbf q$
     satisfy
     \begin{align}
