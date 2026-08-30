@@ -7,8 +7,9 @@ import QICLean.Algebra.FrobeniusHilbert
 import QICLean.Algebra.RectangularChoi
 import QICLean.Analysis.InjectiveRangeProjector
 import QICLean.Kraus.MapIterate
-import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.Defs
+import TNLean.MPS.ParentHamiltonian.IntersectionProperty
+import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import QICLean.Kraus.MixedMap
 import QICLean.Kraus.Transfer
 

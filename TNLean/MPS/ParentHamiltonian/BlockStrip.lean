@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.WordFactor
-import TNLean.MPS.ParentHamiltonian.IntersectionProperty
+import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import Mathlib.Data.Fin.Tuple.Basic
 import Mathlib.Data.List.OfFn
 
@@ -123,7 +123,7 @@ theorem exists_right_factor_of_block_word_compatibility
           obtain ⟨Yτ, hYτ⟩ := hCompat (Fin.cons i τ)
           refine ⟨Yτ, ?_⟩
           intro σ
-          simpa [Zi, evalWord_ofFn_cons, Matrix.mul_assoc] using hYτ σ
+          simpa [Zi, List.ofFn_cons, Kraus.evalWord, Matrix.mul_assoc] using hYτ σ
         obtain ⟨Xi, hXi⟩ := ih hCompatZi
         exact ⟨Xi, hXi⟩
       exact exists_right_factor_of_block_letter_compatibility hInj hL₀ hCompat1
