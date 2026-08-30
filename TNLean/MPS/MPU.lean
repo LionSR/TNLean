@@ -14,6 +14,7 @@ import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.DaggerInverse
+import TNLean.MPS.MPU.DaggerInverseGauge
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.Equivalence
 import TNLean.MPS.MPU.Examples

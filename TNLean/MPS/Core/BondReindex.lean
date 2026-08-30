@@ -79,6 +79,12 @@ theorem reindex_mpv (h : D₁ = D₂) (A : MPSTensor d D₁)
   unfold mpv coeff
   rw [reindex_evalWord, Matrix.trace_reindex]
 
+/-- Bond-dimension reindexing preserves algebraic injectivity. -/
+@[simp] theorem isInjective_reindex (h : D₁ = D₂) (A : MPSTensor d D₁) :
+    Kraus.IsInjective (reindex h A) ↔ Kraus.IsInjective A := by
+  subst h
+  simp
+
 /-- Reindexing the left tensor preserves equality of matrix product vector
 families. -/
 @[simp] theorem sameMPV₂_reindex_left (h : D₁ = D₂)

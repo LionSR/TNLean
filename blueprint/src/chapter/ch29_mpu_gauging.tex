@@ -227,13 +227,116 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     coefficient in (\ref{eq:mpug_physical_adjoint_inverse_mpv}).
 \end{proof}
 
-These results concern only periodic operators and positive-length matrix
-product vectors. They do not construct the virtual gauges $T_g$, analyze the
-entrywise conjugate $T_{g^{-1}}^*$, or define the representation-level signs
-$\sigma_g$. The remaining dagger--inverse gauge assertions in
-\cite[lines~1553--1567]{FrancoRubio2025MPUGauging} are outside the present
-scope. Here $T_{g^{-1}}^*$ denotes entrywise complex conjugation, not the
-physical adjoint or conjugate transpose.
+Suppose now that the normalized flattening of every $\mathcal U_g$ is
+left-canonical.  This is the canonical-form hypothesis used in
+\cite[lines~1552--1557]{FrancoRubio2025MPUGauging}.
+
+\begin{theorem}[Unitary gauges for the dagger and the group inverse]
+    \label{thm:mpug_dagger_inverse_gauge}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.bondDim_inv,
+        MPOTensor.GroupFamily.inverseFlattening,
+        MPOTensor.GroupFamily.IsRepresentation.exists_daggerInverseGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseGauge,
+        MPOTensor.GroupFamily.IsRepresentation.physicalAdjointTensor_eq_daggerInverseGauge}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
+        def:left_canonical_tensor, thm:mpug_physical_adjoint_inverse_mpv,
+        thm:mps_equality_reduction_exists,
+        thm:mps_rectangular_reduction_identities, thm:ft_single,
+        lem:left_canonical_irreducible_same_phase_unitary_gauge,
+        thm:mpu_physical_adjoint_normalized_flattening}
+    Let $G$ be a finite group, and let
+    $\{\mathcal U_g\}_{g\in G}$ be a commonly blocked representation by
+    simple injective MPU tensors whose normalized flattenings are
+    left-canonical.  Then
+    \begin{align}
+        D_g & =D_{g^{-1}}.
+        \label{eq:mpug_dagger_inverse_bond_dimension}
+    \end{align}
+    After identifying these bond spaces, for every $g\in G$ there is a
+    unitary matrix $T_g\in\operatorname{Mat}_{D_g}(\C)$ such that
+    \begin{align}
+        \mathcal U_g^\dagger
+          & =T_g^\dagger\,\mathcal U_{g^{-1}}T_g.
+        \label{eq:mpug_dagger_inverse_gauge}
+    \end{align}
+    Here $\mathcal U_g^\dagger$ is the physical-adjoint tensor.  This is
+    equation~\textup{\texttt{eq:defT}} in
+    \cite[lines~1552--1557]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_physical_adjoint_inverse_mpv,
+        thm:mps_equality_reduction_exists,
+        thm:mps_rectangular_reduction_identities, thm:ft_single,
+        lem:left_canonical_irreducible_same_phase_unitary_gauge,
+        thm:mpu_physical_adjoint_normalized_flattening}
+    Apply the equality-case reduction theorem first to
+    $\mathcal U_g^\dagger$ and $\mathcal U_{g^{-1}}$, and then with $g$ and
+    $g^{-1}$ exchanged.  The two reductions give
+    $D_{g^{-1}}\leq D_g$ and $D_g\leq D_{g^{-1}}$, proving
+    (\ref{eq:mpug_dagger_inverse_bond_dimension}).  Their positive-length
+    matrix product vectors agree; at length zero they agree because the bond
+    dimensions have just been identified.  The single-block Fundamental
+    Theorem therefore gives an invertible gauge.  The normalized flattenings
+    of both tensors are left-canonical, while injectivity implies
+    irreducibility, so the canonical-form unitary-gauge theorem replaces this
+    gauge by a unitary one.  Reversing its orientation gives
+    (\ref{eq:mpug_dagger_inverse_gauge}).
+\end{proof}
+
+For a complex matrix $A$, write
+$A^*=(\overline{A_{ij}})_{i,j}$ for its entrywise complex conjugate.  This is
+not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
+
+\begin{theorem}[Scalar relation for the dagger--inverse gauges]
+    \label{thm:mpug_dagger_inverse_scalar}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.inverseDaggerInverseGauge,
+        MPOTensor.GroupFamily.IsRepresentation.exists_daggerInverseScalar,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseScalar,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseGauge_mul_mapStar_inverse_eq_smul_one,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseScalar_mul_star_eq_one,
+        MPOTensor.GroupFamily.IsRepresentation.norm_daggerInverseScalar,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseScalar_mul_inverse_eq_one,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseScalar_eq_one_or_neg_one_of_inv_eq}
+    \leanok
+    \uses{thm:mpug_dagger_inverse_gauge,
+        lem:gauge_unique_up_to_scalar,
+        thm:mpug_unitary_entrywise_scalar_phase,
+        thm:mpug_unitary_entrywise_paired_scalars,
+        thm:mpug_unitary_entrywise_self_sign}
+    The gauges in Theorem~\ref{thm:mpug_dagger_inverse_gauge} may be chosen
+    together with scalars $\sigma_g\in\C$ satisfying
+    \begin{align}
+        T_gT_{g^{-1}}^* & =\sigma_g\mathbf 1.
+        \label{eq:mpug_dagger_inverse_scalar}
+    \end{align}
+    Every such scalar lies in $U(1)$, and
+    \begin{align}
+        |\sigma_g|&=1, &
+        \sigma_g\sigma_{g^{-1}}&=1.
+    \end{align}
+    If $g^{-1}=g$, then $\sigma_g\in\{1,-1\}$.  These are
+    equation~\textup{\texttt{eq:intro_sigma}} and its immediate consequences
+    in \cite[lines~1557--1567]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_dagger_inverse_gauge,
+        lem:gauge_unique_up_to_scalar,
+        thm:mpug_unitary_entrywise_scalar_phase,
+        thm:mpug_unitary_entrywise_paired_scalars,
+        thm:mpug_unitary_entrywise_self_sign}
+    Apply physical adjunction to
+    (\ref{eq:mpug_dagger_inverse_gauge}) for $g^{-1}$.  Its involutivity and
+    unitarity give a second gauge from $\mathcal U_{g^{-1}}$ to
+    $\mathcal U_g^\dagger$, whose matrix is $T_{g^{-1}}^*$.  Injective gauge
+    uniqueness says that $T_{g^{-1}}^*$ is a nonzero scalar multiple of
+    $T_g^\dagger$.  Multiplication on the left by $T_g$ gives
+    (\ref{eq:mpug_dagger_inverse_scalar}) with the displayed orientation.
+    The unit-modulus, inverse-pair, and self-inverse conclusions now follow
+    from the three unitary matrix identities below.
+\end{proof}
 
 \begin{definition}[Common positive physical blocking]
     \label{def:mpug_common_blocking}
@@ -394,10 +497,6 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     give $\ell=d$.
 \end{proof}
 
-For a complex matrix $A$, write
-$A^*=(\overline{A_{ij}})_{i,j}$ for its entrywise complex conjugate. This is
-not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
-
 \begin{theorem}[Scalar phase from a unitary relation]
     \label{thm:mpug_unitary_entrywise_scalar_phase}
     \lean{Matrix.scalar_mul_star_eq_one_of_mul_map_star_eq_smul_one}
@@ -486,10 +585,9 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
     $\sigma=1$ or $\sigma=-1$.
 \end{proof}
 
-These three results assume the unitary matrices and their scalar relations.
-They do not construct the representation-level matrices $T_g$ or scalars
-$\sigma_g$, nor do they prove $T_gT_{g^{-1}}^*=\sigma_g\mathbf 1$ for an MPU
-representation. The dagger--inverse construction therefore remains separate.
+These three matrix identities supply the final algebraic steps in
+Theorem~\ref{thm:mpug_dagger_inverse_scalar} after the representation-level
+gauges and scalar relation have been constructed.
 
 \section{Scalar three-cocycles and fusion-tensor gauge freedom}
 \label{sec:mpug_scalar_gauge}
