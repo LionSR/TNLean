@@ -7945,51 +7945,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     both identities.
 \end{proof}
 
-\begin{definition}[Trace-normalized shift weight]
-    \label{def:mpu_shift_trace_weight}
-    \lean{MPOTensor.shiftPaperWeight,
-        MPOTensor.shiftPaperWeightSquared}
-    \leanok
-    For a virtual space of dimension $d$, set
-    \begin{align}
-        W_d & = d^{-1}\Id_d.
-    \end{align}
-    On the product virtual space of the tensor-product shift examples, the
-    corresponding weight is $W_{d^2}=(d^2)^{-1}\Id_{d^2}$. These weights are
-    reserved for the paper-facing source-factor calculations and are distinct
-    from the identity weights used by the supplied mixed-kernel formulas below.
-\end{definition}
-
-\begin{theorem}[Positivity and normalization of the shift weight]
-    \label{thm:mpu_shift_trace_weight_normalized}
-    \lean{MPOTensor.shiftPaperWeight_posSemidef,
-        MPOTensor.shiftPaperWeight_posDef,
-        MPOTensor.shiftPaperWeight_trace,
-        MPOTensor.shiftPaperWeightSquared_eq,
-        MPOTensor.shiftPaperWeightSquared_posSemidef,
-        MPOTensor.shiftPaperWeightSquared_posDef,
-        MPOTensor.shiftPaperWeightSquared_trace}
-    \leanok
-    \uses{def:mpu_shift_trace_weight}
-    For every $d\geq0$, the matrix $W_d$ is positive semidefinite. If $d>0$,
-    then $W_d$ is positive definite and
-    \begin{align}
-        \tr(W_d) & =1.
-    \end{align}
-    The same statements hold for $W_{d^2}$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:mpu_shift_trace_weight}
-    The scalar $d^{-1}$ is nonnegative, and it is strictly positive when
-    $d>0$. Hence the claims follow from positivity of the identity matrix.
-    For positive $d$,
-    \begin{align}
-        \tr(W_d) & =d^{-1}\tr(\Id_d)=d^{-1}d=1.
-    \end{align}
-    Replacing $d$ by $d^2$ proves the product-space statements.
-\end{proof}
-
 \begin{definition}[Three topological-insulator shift MPUs]
     \label{threeMPU}
     \lean{MPOTensor.identityMPUTensor}
@@ -8006,6 +7961,68 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source lines: paper_v2.tex 1988--1995.
 \end{definition}
+
+\begin{definition}[Trace-normalized shift weight]
+    \label{def:mpu_shift_trace_weight}
+    \lean{MPOTensor.shiftPaperWeight,
+        MPOTensor.shiftPaperWeightSquared}
+    \leanok
+    \uses{def:mpu_source_weight, def:mpu_shift_tensors, threeMPU}
+    Canonical form II requires the positive right fixed point $\rho$ to have
+    trace one. For the scalar identity choice on the bond space of a single
+    shift, this fixes
+    \begin{align}
+        \rho_{\mathrm{paper}}=W_d & =d^{-1}\Id_d
+    \end{align}
+    whenever $d>0$. The same formula is defined at $d=0$, although it then has
+    trace zero. The tensors $U_2$ and $U_3$ have bond dimension $d^2$, so their
+    corresponding scalar identity weight is
+    \begin{align}
+        W_{d^2} & =(d^2)^{-1}\Id_{d^2}.
+    \end{align}
+    This is the scalar trace-one specialization of the source weight used in
+    \cite[equation labelled~\texttt{Y1Y1X1X1}]{Cirac2017MPU}.
+
+    The supplied auxiliary mixed-kernel witnesses below instead use
+    $\rho_{\mathrm{aux}}=\Id_d$ for each constituent shift and
+    $\rho_{\mathrm{aux}}=\Id_{d^2}$ after tensoring. They compute the
+    $Y_1$--$X_2$ and $X_1$--$Y_2$ contractions, not the paper gates. For
+    $d>1$, these identity weights differ from $W_d$ and $W_{d^2}$.
+    % Source normalization: paper_v2.tex 269--280.
+    % Source-factor weight: paper_v2.tex 487--495.
+    % Shift and tensor-product dimensions: paper_v2.tex 1980--1994.
+\end{definition}
+
+\begin{theorem}[Positivity and normalization of the shift weight]
+    \label{thm:mpu_shift_trace_weight_normalized}
+    \lean{MPOTensor.shiftPaperWeight_posSemidef,
+        MPOTensor.shiftPaperWeight_posDef,
+        MPOTensor.shiftPaperWeight_trace,
+        MPOTensor.shiftPaperWeightSquared_eq,
+        MPOTensor.shiftPaperWeightSquared_posSemidef,
+        MPOTensor.shiftPaperWeightSquared_posDef,
+        MPOTensor.shiftPaperWeightSquared_trace}
+    \leanok
+    \uses{def:mpu_shift_trace_weight}
+    For every $d\in\mathbb N$, the matrix $W_d$ is positive semidefinite. If
+    $d>0$, then $W_d$ is positive definite and
+    \begin{align}
+        \tr(W_d) & =1.
+    \end{align}
+    Under the same hypothesis, $W_{d^2}$ is positive definite with trace one;
+    it is positive semidefinite for every $d$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_shift_trace_weight}
+    The scalar $d^{-1}$ is nonnegative, and it is strictly positive when
+    $d>0$. Hence the claims follow from positivity of the identity matrix.
+    For positive $d$,
+    \begin{align}
+        \tr(W_d) & =d^{-1}\tr(\Id_d)=d^{-1}d=1.
+    \end{align}
+    Replacing $d$ by $d^2$ proves the product-space statements.
+\end{proof}
 
 \begin{theorem}[Local physical-species swap for the shift MPUs]
     \label{thm:threeMPU_local_physical_swap}

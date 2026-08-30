@@ -3,29 +3,38 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.SourceFactors
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.Tactic.Positivity
 
 /-!
 # Trace-normalized weights for paper-facing shift source factors
 
-This module defines the scalar identity weight
+CPSV17 fixes the Canonical Form II right fixed point $\rho$ to be positive
+and trace one in arXiv:1703.09188, `Erightleft` (lines 269--281). For the
+corrected supplied cyclic-shift witnesses, this fixed point is
 \[
-W_d = d^{-1} I_d
+W_d = d^{-1} I_d.
 \]
-used by the corrected paper-facing source-factor calculations for the cyclic
-shift examples.  It is independent of the supplied identity-weight mixed
-kernels in `ShiftSourceFactors` and does not identify those kernels with the
-paper gates.
+This module packages that specialization and its elementary matrix properties.
+It is independent of the identity-weight mixed kernels in
+`ShiftSourceFactors` and does not identify those kernels with the paper gates
+of `uuvv` (lines 532--543).
 
-The squared-dimension abbreviation records the weight on the product bond
-space of the tensor-product shift examples.
+A tensor product of two shifts has product bond dimension $d^2$, so its fixed
+weight is $W_{d^2} = (d^2)^{-1} I_{d^2}$.
 -/
 
 open scoped ComplexOrder
 
 namespace MPOTensor
 
-/-- The trace-normalized scalar identity matrix on a `d`-dimensional space. -/
+/-- The scalar identity weight on the shift bond space, normalized to trace
+one when `d` is nonzero.
+
+This is the scalar specialization of the CFII right fixed point in
+arXiv:1703.09188, `Erightleft` (lines 269--280), as used by the source metric in
+`Y1Y1X1X1` (lines 487--495). -/
 noncomputable def shiftPaperWeight (d : ℕ) : Matrix (Fin d) (Fin d) ℂ :=
   (d : ℂ)⁻¹ • (1 : Matrix (Fin d) (Fin d) ℂ)
 
@@ -49,8 +58,9 @@ theorem shiftPaperWeight_posDef (d : ℕ) [NeZero d] :
   rw [shiftPaperWeight, Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin]
   exact inv_mul_cancel₀ (Nat.cast_ne_zero.mpr (NeZero.ne d))
 
-/-- The trace-normalized identity weight on the `d²`-dimensional product bond
-space used by the tensor-product shift examples. -/
+/-- The scalar trace-one identity weight on the `d²`-dimensional product bond
+space used by the tensor-product shift examples of arXiv:1703.09188,
+`threeMPU` (lines 1988--1994), when `d` is nonzero. -/
 noncomputable abbrev shiftPaperWeightSquared (d : ℕ) :
     Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
   shiftPaperWeight (d * d)
@@ -59,7 +69,7 @@ noncomputable abbrev shiftPaperWeightSquared (d : ℕ) :
 theorem shiftPaperWeightSquared_eq (d : ℕ) :
     shiftPaperWeightSquared d =
       (d * d : ℂ)⁻¹ • (1 : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) := by
-  simp [shiftPaperWeightSquared, shiftPaperWeight, Nat.cast_mul]
+  rw [shiftPaperWeightSquared, shiftPaperWeight, Nat.cast_mul]
 
 /-- The `d²` weight is positive semidefinite in every dimension. -/
 theorem shiftPaperWeightSquared_posSemidef (d : ℕ) :
