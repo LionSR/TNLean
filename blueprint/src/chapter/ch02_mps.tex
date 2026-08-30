@@ -338,8 +338,8 @@ boundary conditions (PBC).
     \cite[Proposition~20 and the following definition]{Molnar2018SemiInjective}.
 \end{definition}
 
-\begin{lemma}[Basic rectangular reduction identities]
-    \label{lem:mps_rectangular_reduction_identities}
+\begin{theorem}[Basic rectangular reduction identities]
+    \label{thm:mps_rectangular_reduction_identities}
     \lean{MPSTensor.IsReduction.mul_eq_one,
         MPSTensor.IsReduction.evalWord,
         MPSTensor.IsReduction.evalWord_nil,
@@ -347,9 +347,9 @@ boundary conditions (PBC).
     \leanok
     \uses{def:mps_rectangular_reduction}
     A rectangular reduction satisfies both identities in
-    Eq.~\eqref{eq:mps_rectangular_reduction}.  Conversely, the all-word
-    identity alone implies $VW=1_{D_A}$ by taking the empty word.
-\end{lemma}
+    (\ref{eq:mps_rectangular_reduction}).  Conversely, the all-word identity
+    alone implies $VW=1_{D_A}$ by taking the empty word.
+\end{theorem}
 
 \begin{proof}
     \leanok
