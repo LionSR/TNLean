@@ -333,7 +333,7 @@ private theorem reductionInitialWindowSum_cons
 
 /-- Left-contracted corrected expansion.
 
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3999--4002. -/
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3997--4005. -/
 theorem mul_evalWord_eq_reductionLeftContractedSum
     (h : IsReduction B A V W) (w : List (Fin d)) :
     V * Kraus.evalWord B w = reductionLeftContractedSum B A V W w := by
@@ -381,7 +381,7 @@ theorem mul_evalWord_eq_reductionLeftContractedSum
 
 /-- Right-contracted corrected expansion.
 
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 4003--4005. -/
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3997--4005. -/
 theorem evalWord_mul_eq_reductionRightContractedSum
     (h : IsReduction B A V W) (w : List (Fin d)) :
     Kraus.evalWord B w * W = reductionRightContractedSum B A V W w := by
@@ -660,7 +660,7 @@ residual suffix of length exactly `N` and is retained as a zero term.
 This theorem needs only an arbitrary residual nilpotency bound, not
 `SameMPV₂Pos`.
 
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3999--4002. -/
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3997--4005. -/
 theorem mul_evalWord_eq_reductionLeftContractedRangeSum
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
@@ -703,7 +703,7 @@ prefix of length exactly `N` and is retained as a zero term.
 This theorem needs only an arbitrary residual nilpotency bound, not
 `SameMPV₂Pos`.
 
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 4003--4005. -/
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3997--4005. -/
 theorem evalWord_mul_eq_reductionRightContractedRangeSum
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
