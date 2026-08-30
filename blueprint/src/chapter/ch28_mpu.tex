@@ -7916,28 +7916,31 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     calculation.
 \end{proof}
 
-\begin{theorem}[Unitarity of the factor exchange]
+\begin{theorem}[Unitarity of the swap operator]
     \label{thm:mpu_swap_matrix_unitary}
     \lean{Matrix.swapMatrix_isUnitaryBetween}
     \leanok
-    Let $\mathbb S$ be the exchange matrix from
-    \cite[Section~VII]{Cirac2017MPU}, with source coordinates $(k,l)$ and target
-    coordinates $(i,j)$:
+    Let $d\in\N$. On $\C^d\otimes\C^d$, let $\mathbb S$ be the swap operator
+    used in \cite[Section~VII]{Cirac2017MPU}, defined on the standard basis by
+    $\mathbb S(e_k\otimes e_\ell)=e_\ell\otimes e_k$. With columns indexed by
+    source coordinates $(k,\ell)$ and rows indexed by target coordinates
+    $(i,j)$, its entries are
     \begin{align}
-        \mathbb S_{(i,j),(k,l)} & =\delta_{i,l}\delta_{j,k}.
+        \mathbb S_{(i,j),(k,\ell)} & =\delta_{i,\ell}\delta_{j,k}.
     \end{align}
     Then $\mathbb S$ is unitary between the two product-coordinate orders:
     \begin{align}
         \mathbb S^\dagger\mathbb S & =\Id, \\
         \mathbb S\mathbb S^\dagger & =\Id.
     \end{align}
-    % Source use: paper_v2.tex lines 2009--2034, equations eq:SF_u1_u3,
+    % Operator characterization: paper_v2.tex lines 1316--1320.
+    % Section VII uses: lines 1999--2034, equations eq:SF_u1_u3,
     % eq:uv2_U2, and eq:uv2_U3; the unitary interpolation has endpoint
     % S at lines 2148--2150.
 \end{theorem}
 
 \begin{proof}\leanok
-    The exchange matrix is self-adjoint and involutive, so
+    The swap operator is self-adjoint and involutive, so
     $\mathbb S^\dagger=\mathbb S$ and $\mathbb S^2=\Id$. Substitution gives
     both identities.
 \end{proof}
