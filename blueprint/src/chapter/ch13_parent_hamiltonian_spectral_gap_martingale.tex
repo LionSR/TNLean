@@ -1114,6 +1114,106 @@ coercivity.
     Its local windows lie in the nonwrapping interval $[n-l,n)$.
 \end{definition}
 
+% Source anchors: References/cond-mat_9410110/main.tex, condition C2,
+% lines 1043--1058; Theorem 2.1(i), lines 1119--1130; and the one-window
+% argument in the printed proof, lines 1240--1248.
+\begin{theorem}[Embedded fixed-window condition C2]
+    \label{thm:open_suffix_parent_hamiltonian_es_c2}
+    \lean{MPSTensor.openSuffixParentHamiltonianES_eq_localTermES,
+        MPSTensor.openSuffixParentHamiltonianES_isSymmetricProjection,
+        MPSTensor.openSuffixParentHamiltonianES_eq_orthogonal_starProjection_ker,
+        MPSTensor.openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker,
+        MPSTensor.openSuffixParentHamiltonianES_C2,
+        MPSTensor.openSuffixParentHamiltonianES_C2_quadratic_form,
+        MPSTensor.openSuffixParentHamiltonianES_norm_eq_of_mem_orthogonal_ker,
+        MPSTensor.openSuffixParentHamiltonianES_unit_gap}
+    \leanok
+    \uses{def:open_suffix_parent_hamiltonian_es,
+        lem:transported_es_local_projections}
+    Let $L>0$ and $L\leq m\leq N$. The suffix of length $L$ ending at $m$
+    contains one interaction:
+    \begin{align}
+        H^{\mathrm{suffix}}_{N,L;L,m}(A)
+         & =h_{m-L,\mathrm{ES}}(A,L).
+        \label{eq:open_suffix_parent_hamiltonian_unique_term}
+    \end{align}
+    Write $G^{\ker}_{N,L;m}$ for the orthogonal projection onto the kernel of
+    this suffix Hamiltonian. Then
+    \begin{align}
+        H^{\mathrm{suffix}}_{N,L;L,m}(A)
+         &=\operatorname{Proj}_{(\ker H^{\mathrm{suffix}}_{N,L;L,m}(A))^\perp}
+          =I-G^{\ker}_{N,L;m}.
+        \label{eq:open_suffix_parent_hamiltonian_id_sub_kernel}
+    \end{align}
+    Consequently condition C2 holds in Loewner order with $\gamma_L=1$:
+    \begin{align}
+        H^{\mathrm{suffix}}_{N,L;L,m}(A)
+         &\geq I-G^{\ker}_{N,L;m}.
+        \label{eq:open_suffix_parent_hamiltonian_c2}
+    \end{align}
+    Equivalently, for every $v$,
+    \begin{align}
+        \re\left\langle (I-G^{\ker}_{N,L;m})v,v\right\rangle
+         &\leq
+        \re\left\langle H^{\mathrm{suffix}}_{N,L;L,m}(A)v,v\right\rangle.
+        \label{eq:open_suffix_parent_hamiltonian_c2_form}
+    \end{align}
+    If $v\in(\ker H^{\mathrm{suffix}}_{N,L;L,m}(A))^\perp$, then
+    \begin{align}
+        \left\lVert H^{\mathrm{suffix}}_{N,L;L,m}(A)v\right\rVert
+         &=\lVert v\rVert.
+        \label{eq:open_suffix_parent_hamiltonian_norm}
+    \end{align}
+    In particular,
+    \begin{align}
+        \lVert v\rVert
+         &\leq\left\lVert H^{\mathrm{suffix}}_{N,L;L,m}(A)v\right\rVert.
+        \label{eq:open_suffix_parent_hamiltonian_unit_gap}
+    \end{align}
+    In the notation of \cite{Nachtergaele1996Spectral}, set $L=l+1$ and
+    $m=n+1$. The interval is then
+    $\Lambda_{n+1}\setminus\Lambda_{n-l}=[n-l,n+1)$, so
+    \begin{align}
+        d_{l+1}&=1.
+    \end{align}
+    Condition C2 has the constant
+    \begin{align}
+        \gamma_{l+1}&=1.
+    \end{align}
+    The later condition C3 uses the distinct overlap parameter
+    $\varepsilon_l$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:open_suffix_parent_hamiltonian_es,
+        lem:transported_es_local_projections}
+    % Source anchor: References/cond-mat_9410110/main.tex, lines 1240--1248.
+    An admissible start $i$ satisfies
+    \begin{align}
+        m-L&\leq i.
+    \end{align}
+    It also satisfies
+    \begin{align}
+        i+L&\leq m.
+    \end{align}
+    Hence $i=m-L$, which proves
+    Equation~\eqref{eq:open_suffix_parent_hamiltonian_unique_term}. The sole
+    local term is an orthogonal projection. For any orthogonal projection $H$,
+    \begin{align}
+        \operatorname{ran}H&=(\ker H)^\perp.
+    \end{align}
+    Therefore
+    \begin{align}
+        H&=\operatorname{Proj}_{(\ker H)^\perp}
+          =I-\operatorname{Proj}_{\ker H}.
+    \end{align}
+    This gives Equation~\eqref{eq:open_suffix_parent_hamiltonian_id_sub_kernel}.
+    The Loewner and quadratic-form inequalities are equalities. On
+    $(\ker H)^\perp=\operatorname{ran}H$, idempotence gives $Hv=v$, and hence
+    exact norm preservation and the unit lower bound.
+\end{proof}
+
 \begin{theorem}[Finite-overlap condition C1 for the compatible open chain]
     \label{thm:open_parent_hamiltonian_es_c1}
     \lean{MPSTensor.openParentHamiltonianES_C1}
