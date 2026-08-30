@@ -7962,6 +7962,51 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     unitarity, so all three tensors are matrix product unitaries.
 \end{proof}
 
+\begin{theorem}[Specified-tensor source-index values of the shifts]
+    \label{thm:mpu_shift_specified_source_index_values}
+    \lean{MPOTensor.sourceIndexValue_rightShiftTensor,
+        MPOTensor.sourceIndexValue_leftShiftTensor,
+        MPOTensor.sourceIndexValue_identityMPUTensor,
+        MPOTensor.sourceIndexValue_shiftExampleU₁,
+        MPOTensor.sourceIndexValue_shiftExampleU₂,
+        MPOTensor.sourceIndexValue_shiftExampleU₃}
+    \leanok
+    \uses{def:mpu_specified_source_index_value,
+        thm:mpu_shift_source_cuts_ranks,
+        thm:mpu_tensor_product_source_ranks, threeMPU}
+    Assume $d>0$. For the displayed right- and left-shift tensors $T$ and
+    $T^\sharp$, the specified-tensor values are
+    \begin{align}
+        \operatorname{ind}_{\mathrm{src}}(T) & =\log_2 d.
+    \end{align}
+    Likewise,
+    \begin{align}
+        \operatorname{ind}_{\mathrm{src}}(T^\sharp) & =-\log_2 d.
+    \end{align}
+    The bond-one identity tensor and the three tensors $U_1,U_2,U_3$ satisfy
+    \begin{align}
+        \operatorname{ind}_{\mathrm{src}}(\Id)
+        =\operatorname{ind}_{\mathrm{src}}(U_1)
+        =\operatorname{ind}_{\mathrm{src}}(U_2)
+        =\operatorname{ind}_{\mathrm{src}}(U_3) & =0.
+    \end{align}
+    These are values of the specified tensors; no blocking-independent index is
+    asserted.
+    % Source: paper_v2.tex lines 2037--2041.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_specified_source_index_value,
+        thm:mpu_shift_source_cuts_ranks,
+        thm:mpu_tensor_product_source_ranks, threeMPU}
+    The right shift has source ranks $(d^2,1)$, while the left shift has
+    $(1,d^2)$. Substitution into the source-index expression gives the first
+    two formulas. The identity tensor has equal source ranks $(d,d)$. Source
+    ranks multiply under the independent tensor product, so each of
+    $U_1,U_2,U_3$ has equal right and left rank $d^2$. Their logarithmic
+    differences therefore vanish.
+\end{proof}
+
 \begin{definition}[Supplied source factors for the three shift MPUs]
     \label{def:threeMPU_supplied_source_factors}
     \lean{MPOTensor.identitySourceFactors,
