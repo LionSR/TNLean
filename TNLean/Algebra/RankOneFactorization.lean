@@ -14,7 +14,7 @@ This file packages the basis-free factorization of a linear map with one-dimensi
 its matrix form, and the product-index reshape used for rectangular tensor-network factors.
 
 The product-index orientation follows the factorization step in arXiv:1706.07329v2,
-Proposition 20: a row index `(a, b)` contributes `W b a`, while a column index `(a', b')`
+Proposition 20: a row index `(b, a)` contributes `W b a`, while a column index `(b', a')`
 contributes `V a' b'`.
 -/
 
