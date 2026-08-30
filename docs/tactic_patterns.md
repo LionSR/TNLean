@@ -1434,6 +1434,25 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### scalar identity matrix positivity and trace — candidate
+- **Pattern:** prove positivity or positive-definiteness of
+  `c • (1 : Matrix n n ℂ)` from the corresponding order hypothesis on `c` via
+  `Matrix.PosSemidef.one.smul` or `Matrix.PosDef.one.smul`, and compute its
+  trace by rewriting with `Matrix.trace_smul` and `Matrix.trace_one`.
+- **Seen:** four files as of 2026-08-31:
+  `TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean`,
+  `TNLean/MPS/Examples/AKLTStringOrder.lean`,
+  `TNLean/MPS/Examples/Cluster.lean`, and
+  `TNLean/MPS/MPU/Examples/ShiftPaperSourceFactors.lean`.
+- **Abstraction (proposed):** add generic matrix lemmas for scalar identities,
+  with separate nonnegative, positive, and trace statements under the weakest
+  scalar and index assumptions; place them in Mathlib or QICLean's matrix
+  layer, then rewrite the four call sites.
+- **Notes:** the current complex proofs use `ComplexOrder`, while the existing
+  `Matrix.PosSemidef.smul`, `Matrix.PosDef.smul`, and trace lemmas are more
+  general. Promotion should preserve that generality rather than introduce a
+  TNLean-specific wrapper.
+
 ### supplied mixed-kernel indicator entries — candidate
 - **Pattern:** case-split the two or four physical-index equalities in an
   explicit mixed-kernel entry, simplify the resulting indicator functions and
