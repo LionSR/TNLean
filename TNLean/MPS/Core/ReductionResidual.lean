@@ -40,7 +40,7 @@ variable {d D_A D_B : ℕ}
 MGSC18 Lemma `lem:B_expand` is obtained by deleting nilpotent suffixes.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` line 3997. -/
-private noncomputable def reductionLeftContractedAllCutSum (B : MPSTensor d D_B)
+noncomputable def reductionLeftContractedAllCutSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
     Matrix (Fin D_A) (Fin D_B) ℂ :=
@@ -52,7 +52,7 @@ private noncomputable def reductionLeftContractedAllCutSum (B : MPSTensor d D_B)
 MGSC18 Lemma `lem:B_expand` is obtained by deleting nilpotent prefixes.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` line 3998. -/
-private noncomputable def reductionRightContractedAllCutSum (B : MPSTensor d D_B)
+noncomputable def reductionRightContractedAllCutSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
     Matrix (Fin D_B) (Fin D_A) ℂ :=
@@ -286,7 +286,12 @@ theorem evalWord_mul_eq_reductionRightContractedSum
       simp only [Matrix.mul_assoc]
       ac_rfl
 
-private theorem reductionLeftContractedSum_eq_allCutSum
+/-- The recursive left-contracted sum agrees with the explicit sum over all
+cuts of the word.
+
+Source: the untruncated precursor of arXiv:1706.07329v2, Lemma
+`lem:B_expand`, displayed formula at `cornerproblem.tex` line 3997. -/
+theorem reductionLeftContractedSum_eq_allCutSum
     (w : List (Fin d)) :
     reductionLeftContractedSum B A V W w =
       reductionLeftContractedAllCutSum B A V W w := by
@@ -314,7 +319,12 @@ private theorem reductionLeftContractedSum_eq_allCutSum
         simpa only [Matrix.mul_assoc] using hsum
       rw [hsum']
 
-private theorem reductionRightContractedSum_eq_allCutSum
+/-- The recursive right-contracted sum agrees with the explicit sum over all
+cuts of the word.
+
+Source: the untruncated precursor of arXiv:1706.07329v2, Lemma
+`lem:B_expand`, displayed formula at `cornerproblem.tex` line 3998. -/
+theorem reductionRightContractedSum_eq_allCutSum
     (w : List (Fin d)) :
     reductionRightContractedSum B A V W w =
       reductionRightContractedAllCutSum B A V W w := by
