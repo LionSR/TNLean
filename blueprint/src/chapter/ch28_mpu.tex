@@ -7999,6 +7999,36 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     decomposition is asserted.
 \end{definition}
 
+\begin{theorem}[Unitarity of the four-spin shift matrices]
+    \label{thm:threeMPU_four_spin_matrix_unitarity}
+    \lean{MPOTensor.identitySwapIdentityMatrix_isUnitaryBetween,
+        MPOTensor.swapTensorSwapMatrix_isUnitaryBetween,
+        MPOTensor.swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_isUnitaryBetween,
+        MPOTensor.identitySwapIdentityMatrix_mul_swapTensorSwapMatrix_isUnitaryBetween}
+    \leanok
+    \uses{def:threeMPU_supplied_source_factors}
+    Let $\mathbb S$ exchange two $d$-dimensional spins. The four matrices
+    displayed in the blocked forms of $U_2$ and $U_3$ are unitary:
+    \[
+    \begin{gathered}
+        \Id\otimes\mathbb S\otimes\Id, \quad
+        \mathbb S\otimes\mathbb S, \\
+        (\mathbb S\otimes\mathbb S)
+            (\Id\otimes\mathbb S\otimes\Id), \quad
+        (\Id\otimes\mathbb S\otimes\Id)
+            (\mathbb S\otimes\mathbb S).
+    \end{gathered}
+    \]
+    % Source lines: paper_v2.tex 2018--2034.
+\end{theorem}
+
+\begin{proof}\leanok
+    The swap satisfies $\mathbb S^\dagger=\mathbb S$ and
+    $\mathbb S^2=\Id$. Kronecker products preserve isometries, and a square
+    isometry is unitary. Thus both factors are unitary. Closure of the unitary
+    matrices under multiplication gives the two ordered products.
+\end{proof}
+
 \begin{theorem}[One-site supplied mixed kernels for $U_1$ and $U_3$]
     \label{thm:threeMPU_supplied_mixed_kernels_one}
     \lean{MPOTensor.shiftExampleU₁SourceY₁X₂RowEquiv,
