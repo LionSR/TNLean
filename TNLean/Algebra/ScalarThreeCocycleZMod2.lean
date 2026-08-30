@@ -11,7 +11,7 @@ import TNLean.Algebra.ScalarThreeCocycleInversion
 # Scalar three-cocycles for Z₂
 
 This file proves the scalar part of the Z₂ anomaly calculation in
-arXiv:2502.20257, Appendix `app:Z2`, lines 5326--5341. It identifies the
+arXiv:2502.20257, Appendix `app:Z2`, lines 5327--5341. It identifies the
 inversion scalar with a ratio of normalized L-symbols and classifies normalized
 scalar three-cocycles on `Multiplicative (ZMod 2)` by their value at the
 nonidentity generator.
@@ -31,7 +31,7 @@ namespace LSymbol
 `σ(g) = Lˣ_{g⁻¹,g} / L^{g • x}_{g,g⁻¹}`.
 
 This is the scalar calculation after `eq:sigmadiag` in arXiv:2502.20257,
-Appendix `app:Z2`, lines 5326--5329. -/
+Appendix `app:Z2`, lines 5327--5329. -/
 theorem sigma_eq_div {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (hLn : IsNormalized L) (x : X) (g : G) :
     ScalarThreeCochain.sigma ω g = L x g⁻¹ g / L (g • x) g g⁻¹ := by
@@ -64,7 +64,7 @@ Normalization of its coboundary instead forces both identity-axis restrictions
 to equal one common constant, by `isNormalized_coboundary_iff`; at the triple
 of nonidentity elements this constant and the remaining self-pair factor
 cancel. This formalizes the normalized-cochain classification used in
-arXiv:2502.20257, Appendix `app:Z2`, lines 5331--5341. -/
+arXiv:2502.20257, Appendix `app:Z2`, lines 5340--5341. -/
 theorem isTrivialGaugeClass_iff_sigma_generator_eq_one
     {ω : ScalarThreeCochain (Multiplicative (ZMod 2))} (hωn : IsNormalized ω) :
     IsTrivialGaugeClass ω ↔ sigma ω s₂ = 1 := by
@@ -94,9 +94,9 @@ theorem isTrivialGaugeClass_iff_sigma_generator_eq_one
     exact CohomologousTo.refl _
 
 /-- The inversion scalar of a normalized scalar three-cocycle on Z₂ is either
-one or minus one. This is the scalar counterpart of the sign discussion in
-arXiv:2502.20257, Appendix `app:Z2`, lines 5331--5341. It does not use the
-tensor identity in that discussion. -/
+one or minus one. This is the scalar counterpart of the two signs stated in
+arXiv:2502.20257, Appendix `app:Z2`, lines 5335 and 5340. It does not use the
+tensor identity preceding that statement. -/
 theorem sigma_generator_eq_one_or_eq_neg_one
     {ω : ScalarThreeCochain (Multiplicative (ZMod 2))} (hω : IsCocycle ω)
     (hωn : IsNormalized ω) :
@@ -108,9 +108,9 @@ theorem sigma_generator_eq_one_or_eq_neg_one
 /-- A normalized scalar three-cocycle on Z₂ has nontrivial gauge class exactly
 when its inversion scalar at the nonidentity generator is minus one.
 
-This is the scalar cohomology classification in arXiv:2502.20257,
-Appendix `app:Z2`, lines 5331--5341. It does not include the tensor-level
-identification with the involutive dagger-gauge sign. -/
+This is the scalar cohomology step in the proof at arXiv:2502.20257,
+Appendix `app:Z2`, lines 5340--5341. It does not include the tensor-level
+identification with the involutive dagger-gauge sign stated at lines 5331--5337. -/
 theorem not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one
     {ω : ScalarThreeCochain (Multiplicative (ZMod 2))} (hω : IsCocycle ω)
     (hωn : IsNormalized ω) :
