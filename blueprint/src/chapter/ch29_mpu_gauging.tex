@@ -110,6 +110,78 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     (\ref{eq:mpug_rep_multiplication}).
 \end{proof}
 
+\begin{theorem}[The physical adjoint represents the inverse]
+    \label{thm:mpug_physical_adjoint_inverse}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.mpo_physicalAdjointTensor_eq_inv}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpdo_physical_adjoint}
+    For every $g\in G$ and every $N\geq1$, the physical adjoint of
+    $\mathcal U_g$ generates the operator representing $g^{-1}$:
+    \begin{align}
+        O_N(\mathcal U_g^\sharp)
+         & =U_{g^{-1}}^{(N)}=\bigl(U_g^{(N)}\bigr)^\dagger.
+        \label{eq:mpug_physical_adjoint_inverse}
+    \end{align}
+    This is the first assertion in
+    \cite[line~1552]{FrancoRubio2025MPUGauging}. It requires no finiteness
+    assumption on $G$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_group_representation, def:mpdo_physical_adjoint}
+    The representation law and unitarity give
+    \begin{align}
+        U_{g^{-1}}^{(N)}U_g^{(N)}              & =U_e^{(N)}=\Id, \\
+        U_g^{(N)}\bigl(U_g^{(N)}\bigr)^\dagger & =\Id.
+    \end{align}
+    Hence
+    \begin{align}
+        U_{g^{-1}}^{(N)}
+         & =U_{g^{-1}}^{(N)}
+        \bigl(U_g^{(N)}\bigl(U_g^{(N)}\bigr)^\dagger\bigr)
+        =\bigl(U_{g^{-1}}^{(N)}U_g^{(N)}\bigr)
+        \bigl(U_g^{(N)}\bigr)^\dagger
+        =\bigl(U_g^{(N)}\bigr)^\dagger.
+    \end{align}
+    Closing the physical-adjoint tensor gives the conjugate transpose, which
+    proves (\ref{eq:mpug_physical_adjoint_inverse}).
+\end{proof}
+
+\begin{theorem}[Positive-length matrix product vector consequence]
+    \label{thm:mpug_physical_adjoint_inverse_mpv}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_physicalAdjointTensor_inv}
+    \leanok
+    \uses{thm:mpug_physical_adjoint_inverse, def:mpo_to_mps,
+        def:same_mpv2_pos}
+    View $\mathcal U_g^\sharp$ and $\mathcal U_{g^{-1}}$ as MPS tensors by
+    pairing their two physical indices. They generate the same matrix product
+    vectors at every positive length:
+    \begin{align}
+        \mc{V}^+\bigl((\mathcal U_g^\sharp)^{\mathrm{MPS}}\bigr)
+         & =\mc{V}^+\bigl(\mathcal U_{g^{-1}}^{\mathrm{MPS}}\bigr).
+        \label{eq:mpug_physical_adjoint_inverse_mpv}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_physical_adjoint_inverse,
+        lem:mpdo_three_first_site_contraction_coefficients}
+    For a doubled physical configuration $\rho$, decode each site as a pair of
+    ket and bra indices $(\sigma_n,\tau_n)$. The corresponding matrix product
+    vector coefficient is the $(\sigma,\tau)$ matrix entry of the periodic
+    operator. Equality
+    (\ref{eq:mpug_physical_adjoint_inverse}) therefore gives equality of every
+    coefficient in (\ref{eq:mpug_physical_adjoint_inverse_mpv}).
+\end{proof}
+
+These results concern only periodic operators and positive-length matrix
+product vectors. They do not construct the virtual gauges $T_g$, analyze the
+entrywise conjugate $T_{g^{-1}}^*$, or define the representation-level signs
+$\sigma_g$. The remaining dagger--inverse gauge assertions in
+\cite[lines~1553--1567]{FrancoRubio2025MPUGauging} are outside the present
+scope. Here $T_{g^{-1}}^*$ denotes entrywise complex conjugation, not the
+physical adjoint or conjugate transpose.
+
 \begin{definition}[Common positive physical blocking]
     \label{def:mpug_common_blocking}
     \lean{MPOTensor.GroupFamily.block}
