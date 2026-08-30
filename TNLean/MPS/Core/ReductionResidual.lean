@@ -119,6 +119,44 @@ noncomputable def reductionRightContractedSum (B : MPSTensor d D_B)
   | i :: w => W * A i * Kraus.evalWord A w +
       reductionResidual B A V W i * reductionRightContractedSum B A V W w
 
+/-- The printed left-contracted range
+$|w|-N\leq s\leq |w|$.  The endpoint with residual suffix of length exactly
+`N` is retained; it vanishes when `N` is a residual nilpotency bound. -/
+noncomputable def reductionLeftContractedRangeSum (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) (w : List (Fin d)) :
+    Matrix (Fin D_A) (Fin D_B) ℂ :=
+  ∑ s ∈ Finset.Icc (w.length - N) w.length,
+    Kraus.evalWord A (w.take s) * V *
+      Kraus.evalWord (reductionResidual B A V W) (w.drop s)
+
+/-- The printed right-contracted range
+$0\leq r\leq \min(N,|w|)$.  The endpoint with residual prefix of length
+exactly `N` is retained; it vanishes when `N` is a residual nilpotency bound. -/
+noncomputable def reductionRightContractedRangeSum (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) (w : List (Fin d)) :
+    Matrix (Fin D_B) (Fin D_A) ℂ :=
+  ∑ r ∈ Finset.Icc 0 (min N w.length),
+    Kraus.evalWord (reductionResidual B A V W) (w.take r) * W *
+      Kraus.evalWord A (w.drop r)
+
+private noncomputable def reductionLeftContractedAllCutSum (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
+    Matrix (Fin D_A) (Fin D_B) ℂ :=
+  ∑ s : Fin (w.length + 1),
+    Kraus.evalWord A (w.take s) * V *
+      Kraus.evalWord (reductionResidual B A V W) (w.drop s)
+
+private noncomputable def reductionRightContractedAllCutSum (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
+    Matrix (Fin D_B) (Fin D_A) ℂ :=
+  ∑ r : Fin (w.length + 1),
+    Kraus.evalWord (reductionResidual B A V W) (w.take r) * W *
+      Kraus.evalWord A (w.drop r)
+
 /-- Every selected-reduction residual letter belongs to its generated algebra. -/
 theorem reductionResidual_mem_reductionResidualAlgebra
     (B : MPSTensor d D_B) (A : MPSTensor d D_A)
@@ -357,6 +395,63 @@ theorem evalWord_mul_eq_reductionRightContractedSum
       simp only [Matrix.mul_assoc]
       ac_rfl
 
+private theorem reductionLeftContractedSum_eq_allCutSum
+    (w : List (Fin d)) :
+    reductionLeftContractedSum B A V W w =
+      reductionLeftContractedAllCutSum B A V W w := by
+  induction w with
+  | nil => simp [reductionLeftContractedSum, reductionLeftContractedAllCutSum]
+  | cons i w ih =>
+      rw [reductionLeftContractedSum, reductionLeftContractedAllCutSum,
+        Fin.sum_univ_succ]
+      simp only [List.length_cons, Fin.val_zero, List.take_zero, List.drop_zero,
+        Kraus.evalWord_nil, Matrix.one_mul, Fin.val_succ, List.take_succ_cons,
+        List.drop_succ_cons, Kraus.evalWord_cons, Matrix.mul_assoc]
+      rw [ih]
+      simp only [reductionLeftContractedAllCutSum, Matrix.mul_assoc]
+      have hsum := Matrix.mul_sum Finset.univ
+        (fun x : Fin (w.length + 1) ↦
+          Kraus.evalWord A (w.take x) * V *
+            Kraus.evalWord (reductionResidual B A V W) (w.drop x)) (A i)
+      have hsum' :
+          A i * ∑ x : Fin (w.length + 1),
+              Kraus.evalWord A (w.take x) *
+                (V * Kraus.evalWord (reductionResidual B A V W) (w.drop x)) =
+            ∑ x : Fin (w.length + 1),
+              A i * (Kraus.evalWord A (w.take x) *
+                (V * Kraus.evalWord (reductionResidual B A V W) (w.drop x))) := by
+        simpa only [Matrix.mul_assoc] using hsum
+      rw [hsum']
+
+private theorem reductionRightContractedSum_eq_allCutSum
+    (w : List (Fin d)) :
+    reductionRightContractedSum B A V W w =
+      reductionRightContractedAllCutSum B A V W w := by
+  induction w with
+  | nil => simp [reductionRightContractedSum, reductionRightContractedAllCutSum]
+  | cons i w ih =>
+      rw [reductionRightContractedSum, reductionRightContractedAllCutSum,
+        Fin.sum_univ_succ]
+      simp only [List.length_cons, Fin.val_zero, List.take_zero, List.drop_zero,
+        Kraus.evalWord_nil, Matrix.one_mul, Fin.val_succ, List.take_succ_cons,
+        List.drop_succ_cons, Kraus.evalWord_cons, Matrix.mul_assoc]
+      rw [ih]
+      simp only [reductionRightContractedAllCutSum, Matrix.mul_assoc]
+      have hsum := Matrix.mul_sum Finset.univ
+        (fun x : Fin (w.length + 1) ↦
+          Kraus.evalWord (reductionResidual B A V W) (w.take x) * W *
+            Kraus.evalWord A (w.drop x)) (reductionResidual B A V W i)
+      have hsum' :
+          reductionResidual B A V W i * ∑ x : Fin (w.length + 1),
+              Kraus.evalWord (reductionResidual B A V W) (w.take x) *
+                (W * Kraus.evalWord A (w.drop x)) =
+            ∑ x : Fin (w.length + 1),
+              reductionResidual B A V W i *
+                (Kraus.evalWord (reductionResidual B A V W) (w.take x) *
+                  (W * Kraus.evalWord A (w.drop x))) := by
+        simpa only [Matrix.mul_assoc] using hsum
+      rw [hsum']
+
 /-- Every nonempty residual word has zero trace when `B` and `A` have the
 same positive-length closed chains.  This is the trace input to the residual
 nilpotency argument.
@@ -576,6 +671,92 @@ theorem evalWord_reductionResidual_eq_zero_of_bound_le_length
     obtain ⟨i, hi, rfl⟩ := List.mem_map.mp hX
     exact reductionResidual_mem_reductionResidualAlgebra B A V W i
   · simpa
+
+/-- Left-contracted MGSC18 expansion with the printed range
+$|w|-N\leq s\leq |w|$.  The endpoint `s = |w| - N`, when present, has a
+residual suffix of length exactly `N` and is retained as a zero term.
+
+This theorem needs only an arbitrary residual nilpotency bound, not
+`SameMPV₂Pos`.
+
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3999--4002. -/
+theorem mul_evalWord_eq_reductionLeftContractedRangeSum
+    (h : IsReduction B A V W) {N : ℕ}
+    (hBound : IsReductionResidualNilpotencyBound B A V W N)
+    (w : List (Fin d)) :
+    V * Kraus.evalWord B w = reductionLeftContractedRangeSum B A V W N w := by
+  rw [h.mul_evalWord_eq_reductionLeftContractedSum,
+    reductionLeftContractedSum_eq_allCutSum,
+    reductionLeftContractedAllCutSum, reductionLeftContractedRangeSum]
+  let term : ℕ → Matrix (Fin D_A) (Fin D_B) ℂ := fun s ↦
+    Kraus.evalWord A (w.take s) * V *
+      Kraus.evalWord (reductionResidual B A V W) (w.drop s)
+  change (∑ s : Fin (w.length + 1), term s.val) =
+    ∑ s ∈ Finset.Icc (w.length - N) w.length, term s
+  rw [Fin.sum_univ_eq_sum_range term (w.length + 1)]
+  symm
+  apply Finset.sum_subset
+  · intro s hs
+    simp only [Finset.mem_Icc] at hs
+    simp only [Finset.mem_range]
+    omega
+  · intro s hsRange hsOutside
+    simp only [Finset.mem_range] at hsRange
+    have hsle : s ≤ w.length := by omega
+    have hslt : s < w.length - N := by
+      by_contra hs
+      apply hsOutside
+      simp only [Finset.mem_Icc]
+      exact ⟨by omega, hsle⟩
+    have hdrop : N ≤ (w.drop s).length := by
+      rw [List.length_drop]
+      omega
+    dsimp [term]
+    rw [evalWord_reductionResidual_eq_zero_of_bound_le_length hBound _ hdrop]
+    simp
+
+/-- Right-contracted MGSC18 expansion with the printed range
+$0\leq r\leq \min(N,|w|)$.  The endpoint `r = N`, when present, has a residual
+prefix of length exactly `N` and is retained as a zero term.
+
+This theorem needs only an arbitrary residual nilpotency bound, not
+`SameMPV₂Pos`.
+
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 4003--4005. -/
+theorem evalWord_mul_eq_reductionRightContractedRangeSum
+    (h : IsReduction B A V W) {N : ℕ}
+    (hBound : IsReductionResidualNilpotencyBound B A V W N)
+    (w : List (Fin d)) :
+    Kraus.evalWord B w * W = reductionRightContractedRangeSum B A V W N w := by
+  rw [h.evalWord_mul_eq_reductionRightContractedSum,
+    reductionRightContractedSum_eq_allCutSum,
+    reductionRightContractedAllCutSum, reductionRightContractedRangeSum]
+  let term : ℕ → Matrix (Fin D_B) (Fin D_A) ℂ := fun r ↦
+    Kraus.evalWord (reductionResidual B A V W) (w.take r) * W *
+      Kraus.evalWord A (w.drop r)
+  change (∑ r : Fin (w.length + 1), term r.val) =
+    ∑ r ∈ Finset.Icc 0 (min N w.length), term r
+  rw [Fin.sum_univ_eq_sum_range term (w.length + 1)]
+  symm
+  apply Finset.sum_subset
+  · intro r hr
+    simp only [Finset.mem_Icc] at hr
+    simp only [Finset.mem_range]
+    omega
+  · intro r hrRange hrOutside
+    simp only [Finset.mem_range] at hrRange
+    have hrle : r ≤ w.length := by omega
+    have hNle : N ≤ r := by
+      by_contra hr
+      apply hrOutside
+      simp only [Finset.mem_Icc]
+      exact ⟨by omega, by omega⟩
+    have htake : N ≤ (w.take r).length := by
+      rw [List.length_take, Nat.min_eq_left hrle]
+      exact hNle
+    dsimp [term]
+    rw [evalWord_reductionResidual_eq_zero_of_bound_le_length hBound _ htake]
+    simp
 
 private theorem mul_evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
     (h : IsReduction B A V W) {N : ℕ}
