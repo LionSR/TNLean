@@ -1257,8 +1257,6 @@ $A^{-1}A=\Id$. This is the identity used in
         MPSTensor.IsReduction.reductionResidualNilpotencyLength_le_bondDim,
         MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bondDim_le_length}
     \leanok
-    \uses{thm:mps_reduction_residual_algebra_nilpotent,
-        thm:mpu_nil_matrices}
     Under the hypotheses of the preceding theorem, every mixed product of
     $D_B$ elements of $\mathcal R(B,A;V,W)$ vanishes.  Consequently $D_B$ is
     a residual-word nilpotency bound.  The least bound exists, is itself a
@@ -1276,7 +1274,9 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_residual_bound_consequences}
+    \uses{thm:mps_reduction_residual_algebra_nilpotent,
+        thm:mps_reduction_residual_bound_consequences,
+        thm:mpu_nil_matrices}
     Apply the finite-dimensional nil-matrix theorem to the residual algebra.
     Its dimension-sharp matrix form makes every product of $D_B$ algebra
     elements zero.  Residual letters lie in this algebra, so $D_B$ is a bound.
