@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.Examples.Shift
 import QICLean.Channel.MaximallyEntangled
+import TNLean.MPS.MPU.Examples.Shift
 
 /-!
 # Physical-species swap for the shift examples
 
-The local form of the observation in arXiv:1703.09188, lines 1999--2001 and
-2238--2245, that exchanging the two spins at every site swaps the shift examples
+A local refinement of the finite-chain observations in arXiv:1703.09188,
+lines 1999--2001 and 2240--2245: exchanging the two spins at every site swaps
 $U_2$ and $U_3$.
 -/
 
@@ -24,7 +24,8 @@ private theorem swapMatrix_mul_mul_swapMatrix_apply
     (Matrix.swapMatrix d * M * Matrix.swapMatrix d) (α₁, α₂) (β₁, β₂) =
       M (α₂, α₁) (β₂, β₁) := by
   have swap_mul_apply (γ₁ γ₂ : Fin d) :
-      (Matrix.swapMatrix d * M) (α₁, α₂) (γ₁, γ₂) = M (α₂, α₁) (γ₁, γ₂) := by
+      (Matrix.swapMatrix d * M) (α₁, α₂) (γ₁, γ₂) =
+        M (α₂, α₁) (γ₁, γ₂) := by
     rw [Matrix.mul_apply]
     simp only [Fintype.sum_prod_type, Matrix.swapMatrix_apply]
     rw [Finset.sum_eq_single α₂]
@@ -55,10 +56,11 @@ private theorem swapMatrix_mul_mul_swapMatrix_apply
 /-- Swapping the two physical species exchanges the local tensors $U_2$ and
 $U_3$, up to the corresponding swap of their two virtual factors.
 
-The physical bra and ket coordinates are ordered as `(i₁, i₂)` and `(j₁, j₂)`.
-After their exchange, the $U_3$ entry at `(i₂, i₁)` and `(j₂, j₁)` is the
-$U_2$ virtual matrix conjugated by the SWAP operator. This is the local tensor
-identity underlying arXiv:1703.09188, lines 1999--2001 and 2238--2245. -/
+The physical output and input coordinates are ordered as `(i₁, i₂)` and
+`(j₁, j₂)`. After their exchange, the $U_3$ entry at `(i₂, i₁)` and
+`(j₂, j₁)` is the $U_2$ virtual matrix conjugated by the SWAP operator. This
+locally refines the finite-chain statements in arXiv:1703.09188, lines
+1999--2001 and 2240--2245. -/
 theorem shiftExampleU₃_physicalSwap_eq_swapMatrix_mul_shiftExampleU₂_mul_swapMatrix
     (d : ℕ) (i₁ i₂ j₁ j₂ : Fin d) :
     Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
