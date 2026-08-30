@@ -632,9 +632,23 @@ theorem IsRepresentation.daggerInverseScalar_eq_one_or_neg_one_of_inv_eq
     (g : G) (hg : g⁻¹ = g) :
     hF.daggerInverseScalar F hcanonical g = 1 ∨
       hF.daggerInverseScalar F hcanonical g = -1 := by
-  apply sq_eq_one_iff.mp
-  rw [pow_two]
-  simpa only [hg] using
-    hF.daggerInverseScalar_mul_inverse_eq_one F hcanonical g
+  have hGauge : hF.inverseDaggerInverseGauge F hcanonical g =
+      hF.daggerInverseGauge F hcanonical g := by
+    change unitaryReindex (hF.bondDim_inv F g).symm
+      (hF.daggerInverseGauge F hcanonical g⁻¹) =
+        hF.daggerInverseGauge F hcanonical g
+    calc
+      unitaryReindex (hF.bondDim_inv F g).symm
+          (hF.daggerInverseGauge F hcanonical g⁻¹) =
+          unitaryReindex (rfl : F.bondDim g = F.bondDim g)
+            (hF.daggerInverseGauge F hcanonical g) :=
+        unitaryReindex_dependent_eq (fun x ↦ F.bondDim x)
+          (fun x ↦ hF.daggerInverseGauge F hcanonical x) hg
+          (hF.bondDim_inv F g).symm rfl
+      _ = hF.daggerInverseGauge F hcanonical g := unitaryReindex_self _ _
+  apply Matrix.scalar_eq_one_or_neg_one_of_mul_map_star_self_eq_smul_one
+    (hF.daggerInverseGauge F hcanonical g)
+  simpa [hGauge] using
+    hF.daggerInverseGauge_mul_mapStar_inverse_eq_smul_one F hcanonical g
 
 end MPOTensor.GroupFamily
