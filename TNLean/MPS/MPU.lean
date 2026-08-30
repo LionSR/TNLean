@@ -18,6 +18,13 @@ import TNLean.MPS.MPU.DaggerInverseGauge
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.Equivalence
 import TNLean.MPS.MPU.Examples
+import TNLean.MPS.MPU.Examples.Shift
+import TNLean.MPS.MPU.Examples.ShiftSourceBlockedFormulas
+import TNLean.MPS.MPU.Examples.ShiftSourceFactors
+import TNLean.MPS.MPU.Examples.ShiftSourceFormulas
+import TNLean.MPS.MPU.Examples.ShiftSourceRanks
+import TNLean.MPS.MPU.Examples.ShiftSwap
+import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.GroupRepresentation

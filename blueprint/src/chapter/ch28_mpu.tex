@@ -7933,6 +7933,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1988--1995.
 \end{definition}
 
+\begin{theorem}[Local physical-species swap for the shift MPUs]
+    \label{thm:threeMPU_local_physical_swap}
+    \lean{MPOTensor.shiftExampleU₃_physicalSwap_eq_swapMatrix_mul_shiftExampleU₂_mul_swapMatrix}
+    \leanok
+    \uses{threeMPU}
+    Write $[U_a]^{(i_1,i_2),(j_1,j_2)}$ for the virtual matrix of the
+    one-site tensor $U_a$ with physical bra coordinate $(i_1,i_2)$ and ket
+    coordinate $(j_1,j_2)$. If $\mathbb S(\alpha_1,\alpha_2)
+        =(\alpha_2,\alpha_1)$ is the SWAP matrix on the two virtual factors,
+    then
+    \begin{align}
+        [U_3]^{(i_2,i_1),(j_2,j_1)}
+          =\mathbb S[U_2]^{(i_1,i_2),(j_1,j_2)}\mathbb S.
+    \end{align}
+    Thus exchanging the two physical species exchanges the local tensors
+    $U_2$ and $U_3$, with the same exchange on their virtual factors.
+    % Source lines: paper_v2.tex 1999--2001 and 2238--2245.
+\end{theorem}
+
+\begin{proof}\leanok
+    In virtual coordinates $(\alpha_1,\alpha_2)$ and
+    $(\beta_1,\beta_2)$, multiplication by $\mathbb S$ on both sides selects
+    the entry with row $(\alpha_2,\alpha_1)$ and column
+    $(\beta_2,\beta_1)$. The left-hand side is therefore the right-shift
+    entry for the second physical species times the left-shift entry for the
+    first. The corresponding $U_2$ entry contains the same two scalar factors
+    in the opposite order, so the equality follows from commutativity.
+\end{proof}
+
 \begin{theorem}[Finite-chain formulas for the three shift MPUs]
     \label{thm:threeMPU_chain_formulas}
     \lean{MPOTensor.mpo_identityMPUTensor}
