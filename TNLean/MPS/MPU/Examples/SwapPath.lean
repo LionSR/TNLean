@@ -3,22 +3,24 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Channel.MaximallyEntangled
 import Mathlib.Algebra.Star.StarProjection
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.LinearAlgebra.UnitaryGroup
 import Mathlib.Topology.Instances.Matrix
+import QICLean.Channel.MaximallyEntangled
 
 /-!
 # A continuous unitary path to the factor swap
 
-The path used in arXiv:1703.09188, Proposition `prop:U2-U3-trivial-tr-transpose`,
+arXiv:1703.09188 requires a continuous unitary interpolation from the identity
+matrix to the factor swap in Proposition `prop:U2-U3-trivial-tr-transpose`,
 lines 2143--2155, and Proposition `prop:U1-U2-equiv-ancillatrick`, lines
 2226--2235.
 
-The factor swap acts by `Matrix.swapMatrix d`. We decompose the tensor-square
-space into its symmetric and antisymmetric subspaces and rotate only the
-antisymmetric subspace by the phase `exp (π x I)`.
+The factor swap acts by `Matrix.swapMatrix d`. We give a concrete interpolation
+by decomposing the tensor-square space into its symmetric and antisymmetric
+subspaces and rotating only the antisymmetric subspace by the phase
+`exp (π x I)`.
 -/
 
 open scoped ComplexConjugate Matrix
@@ -59,7 +61,7 @@ noncomputable def swapPhase (x : ℝ) : ℂ :=
   Complex.exp ((Real.pi * x : ℝ) * Complex.I)
 
 /-- The swap phase times its complex conjugate is one. -/
-@[simp] theorem swapPhase_mul_star (x : ℝ) :
+theorem swapPhase_mul_star (x : ℝ) :
     swapPhase x * star (swapPhase x) = 1 := by
   change Complex.exp ((Real.pi * x : ℝ) * Complex.I) *
     conj (Complex.exp ((Real.pi * x : ℝ) * Complex.I)) = 1
@@ -67,11 +69,11 @@ noncomputable def swapPhase (x : ℝ) : ℂ :=
     Complex.norm_exp_ofReal_mul_I]
   norm_num
 
-/-- The explicit path from the identity to the factor swap.
+/-- A concrete path from the identity to the factor swap.
 
 It acts as the identity on the symmetric subspace and by `exp (π x I)` on the
-antisymmetric subspace. Source: arXiv:1703.09188, lines 2148--2151 and
-2229--2234. -/
+antisymmetric subspace. This realizes the interpolation required in
+arXiv:1703.09188, lines 2148--2151 and 2229--2234. -/
 noncomputable def swapPath (x : ℝ) :
     Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
   swapSymmetricProjection d + swapPhase x • swapAntisymmetricProjection d
@@ -95,7 +97,7 @@ private theorem projection_add_phase_complement_mem_unitaryGroup
     Matrix.mul_smul, add_mul, hp.mul_one_sub_self,
     Matrix.smul_mul, hq.isIdempotentElem.eq, zero_add,
     smul_smul, mul_comm (star c) c, hc, one_smul]
-  simp
+  module
 
 /-- Every matrix on the swap path is unitary. -/
 theorem swapPath_mem_unitaryGroup (x : ℝ) :
@@ -125,9 +127,9 @@ theorem continuous_swapPath : Continuous (swapPath d) := by
 
 /-- There is a continuous unitary path from the identity to the factor swap.
 
-This is the operator $\mathbb S(x)$ chosen in arXiv:1703.09188, Proposition
-`prop:U2-U3-trivial-tr-transpose`, lines 2148--2151, and reused in Proposition
-`prop:U1-U2-equiv-ancillatrick`, lines 2229--2234. -/
+This supplies the operator $\mathbb S(x)$ required in arXiv:1703.09188,
+Proposition `prop:U2-U3-trivial-tr-transpose`, lines 2148--2151, and reused in
+Proposition `prop:U1-U2-equiv-ancillatrick`, lines 2229--2234. -/
 theorem exists_continuous_unitary_swapPath :
     ∃ S : ℝ → Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ,
       Continuous S ∧ S 0 = 1 ∧ S 1 = swapMatrix d ∧

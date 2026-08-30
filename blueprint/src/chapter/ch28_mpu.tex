@@ -8361,7 +8361,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Continuous unitary path to the factor swap]
     \label{lem:mpu-continuous-unitary-swap-path}
-    \lean{Matrix.exists_continuous_unitary_swapPath}
+    \lean{Matrix.swapSymmetricProjection,
+        Matrix.swapAntisymmetricProjection,
+        Matrix.swapPath,
+        Matrix.exists_continuous_unitary_swapPath}
     \leanok
     Let $\mathbb S$ denote the swap operator on
     $\mathbb C^d\otimes\mathbb C^d$. There is a continuous map
@@ -8369,7 +8372,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \bigl(S(0),S(1)\bigr) & = \bigl(\Id,\mathbb S\bigr).
     \end{align}
-    It is given explicitly by
+    One concrete choice is
     \begin{align}
         S(x) & = P_{\mathrm{sym}} + e^{\mathrm{i}\pi x}P_{\mathrm{anti}},
     \end{align}
@@ -8478,7 +8481,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     After adding one ancilla of dimension $d$ per site,
     $\widetilde U_1^{(N)}$ and $\widetilde U_2^{(N)}$ are strictly equivalent
     under both time reversal and transposition.
-    % Source lines: paper_v2.tex 2203--2230.
+    % Source lines: paper_v2.tex 2203--2235.
 \end{proposition}
 
 \begin{proposition}[Admissible ancilla equivalence of $U_1$ and $U_2$]
@@ -8507,7 +8510,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     tensors is asserted, because the equal ancilla dimensions used here need not
     satisfy the coprimality condition in
     Definition~\ref{def:mpu_admissible_symmetry_equivalence}.
-    % Source lines: paper_v2.tex 2203--2230.
+    % Source lines: paper_v2.tex 2203--2235.
 \end{proposition}
 
 \section{Finite-region observable algebras}
