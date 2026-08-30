@@ -360,8 +360,6 @@ boundary conditions (PBC).
     instance reads $V1_{D_B}W=1_{D_A}$.
 \end{proof}
 
-
-
 \begin{remark}\leanok
     Definition~\ref{def:same_mpv} is the same-bond-dimension
     specialization of Definition~\ref{def:same_mpv2}.
@@ -668,7 +666,6 @@ boundary conditions (PBC).
 \begin{theorem}[Cross trace powers and source open-boundary contraction]
     \label{thm:mps_reduction_cross_trace_open}
     \lean{MPSTensor.SameMPV₂Pos.trace_evalWord,
-        MPSTensor.sameMPV₂Pos_blockTensor,
         MPSTensor.trace_reductionCrossMatrix_pow_of_sameMPV₂Pos,
         MPSTensor.reductionOpenBoundaryMatrixContraction,
         MPSTensor.reductionOpenBoundaryContraction,
@@ -678,7 +675,7 @@ boundary conditions (PBC).
         MPSTensor.reductionOpenBoundaryMatrixContraction_blockTensor_of_sameMPV₂Pos}
     \leanok
     \uses{def:same_mpv2_pos, def:injective,
-        def:mps_reduction_cross_matrix}
+        def:mps_reduction_cross_matrix, thm:same_mpv2_pos_block_tensor}
     Suppose $\widetilde A$ and $\widetilde B$ have equal positive-length
     MPV coefficients and $\widetilde A$ is injective.  Positive blocking
     preserves this equality, and equality transports the trace of every
