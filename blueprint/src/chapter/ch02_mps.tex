@@ -987,12 +987,41 @@ $A^{-1}A=\Id$. This is the identity used in
     least value and equals the nilpotency length of Definition~8.
 \end{definition}
 
+\begin{theorem}[Exterior-word strengthening of the residual sandwich]
+    \label{thm:mps_reduction_residual_exterior_sandwich}
+    \lean{MPSTensor.IsReduction.evalWord_mul_reductionResidual_mul_evalWord_eq_zero}
+    \leanok
+    \uses{thm:mps_rectangular_reduction_identities}
+    Under the same reduction hypothesis, for arbitrary exterior words
+    $\mathbf p,\mathbf q$ and every nonempty word $\mathbf u$,
+    \begin{align}
+        VB^{\mathbf p}N^{\mathbf u}B^{\mathbf q}W & =0.
+        \label{eq:mps_reduction_residual_exterior_sandwich}
+    \end{align}
+    This buffered statement is a derived TNLean strengthening; it is not the
+    statement of Lemma~\texttt{VNW=0}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply $VB^{\mathbf w}W=A^{\mathbf w}$ to $\mathbf p$, $\mathbf q$, and
+    $\mathbf p\,i\,\mathbf q$.  The two expressions for
+    $A^{\mathbf p}A^iA^{\mathbf q}$ give
+    \begin{align}
+        VB^{\mathbf p}N^iB^{\mathbf q}W & =0.
+        \notag
+    \end{align}
+    Induction on the nonempty residual word $\mathbf u$ proves
+    (\ref{eq:mps_reduction_residual_exterior_sandwich}).
+\end{proof}
+
 \begin{theorem}[Positive residual words vanish under the reduction]
     \label{thm:mps_reduction_residual_sandwich}
     \lean{MPSTensor.IsReduction.evalWord_reductionResidual_sandwich_eq_zero}
     \leanok
     \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
+        def:mps_reduction_residual_algebra,
+        thm:mps_reduction_residual_exterior_sandwich}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For every nonempty word
     $\mathbf u$,
     \begin{align}
@@ -1008,42 +1037,17 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_rectangular_reduction_identities}
-    Expand the first residual letter as $N^i=B^i-WA^iV$.
-    The two resulting terms have the same reduction after using $VW=1$.
-    Inductively replace the residual letters before the final letter by the
-    corresponding $B$ letters.  Expanding the final residual letter leaves
-    two copies of the reduction identity, hence gives
-    (\ref{eq:mps_reduction_residual_sandwich}).
-\end{proof}
-
-\begin{theorem}[Exterior-word strengthening of the residual sandwich]
-    \label{thm:mps_reduction_residual_exterior_sandwich}
-    \lean{MPSTensor.IsReduction.evalWord_mul_reductionResidual_mul_evalWord_eq_zero}
-    \leanok
-    \uses{thm:mps_reduction_residual_sandwich,
-        thm:mps_rectangular_reduction_identities}
-    Under the same reduction hypothesis, for arbitrary exterior words
-    $\mathbf p,\mathbf q$ and every nonempty word $\mathbf u$,
-    \begin{align}
-        VB^{\mathbf p}N^{\mathbf u}B^{\mathbf q}W & =0.
-        \label{eq:mps_reduction_residual_exterior_sandwich}
-    \end{align}
-    This buffered statement is a derived TNLean strengthening; it is not the
-    statement of Lemma~\texttt{VNW=0}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Peel the residual letters successively, retaining the two exterior words.
-    The reduction identity identifies the two terms created at the last
-    residual letter.
+    \uses{thm:mps_reduction_residual_exterior_sandwich}
+    Take both exterior words empty in
+    (\ref{eq:mps_reduction_residual_exterior_sandwich}).
 \end{proof}
 
 \begin{definition}[Strict residual-window sums]
     \label{def:mps_reduction_strict_window_sums}
     \lean{MPSTensor.reductionInitialWindowSum,
-        MPSTensor.reductionStrictWindowSum}
+        MPSTensor.reductionStrictWindowSum,
+        MPSTensor.reductionInitialWindowRangeSum,
+        MPSTensor.reductionStrictWindowRangeSum}
     \leanok
     \uses{def:mps_rectangular_reduction,
         def:mps_reduction_residual_algebra, def:eval_word}
@@ -1058,25 +1062,52 @@ $A^{-1}A=\Id$. This is the identity used in
          & =\mathcal I(i\mathbf w)+N^i\mathcal W(\mathbf w).
         \label{eq:mps_reduction_strict_window_recursion}
     \end{align}
-    Since $VW=1$, for $\mathbf i=(i_1,\ldots,i_n)$ these recursions give
+    For $\mathbf i=(i_1,\ldots,i_n)$, also set
     \begin{align}
-        \mathcal W(\mathbf i)
-         & =\sum_{0\leq r<s\leq n}
+        \widehat{\mathcal I}(\mathbf i)
+         & =\sum_{m=1}^{n}
+        W A^{i_1}\cdots A^{i_m}V
+        N^{i_{m+1}}\cdots N^{i_n},                                      \\
+        \widehat{\mathcal W}(\mathbf i)
+         & =\sum_{r=0}^{n-1}\sum_{m=1}^{n-r}
         N^{i_1}\cdots N^{i_r}
-        W A^{i_{r+1}}\cdots A^{i_s}V
-        N^{i_{s+1}}\cdots N^{i_n}.
+        W A^{i_{r+1}}\cdots A^{i_{r+m}}V
+        N^{i_{r+m+1}}\cdots N^{i_n}.
         \label{eq:mps_reduction_strict_window_sum}
     \end{align}
-    The strict inequality $r<s$ makes the central $A$-word nonempty, and
-    $\mathcal I$ is the part with $r=0$.
+    The substitution $s=r+m$ identifies the second indexing set with
+    $0\leq r<s\leq n$.  Thus the central $A$-word is nonempty, and
+    $\widehat{\mathcal I}$ is the part with $r=0$.
 \end{definition}
+
+\begin{theorem}[Recursive and explicit strict-window sums]
+    \label{thm:mps_reduction_strict_window_range}
+    \lean{MPSTensor.IsReduction.reductionStrictWindowSum_eq_reductionStrictWindowRangeSum}
+    \leanok
+    \uses{def:mps_reduction_strict_window_sums,
+        thm:mps_rectangular_reduction_identities}
+    Under the reduction hypothesis, for every word $\mathbf i$,
+    \begin{align}
+        \mathcal W(\mathbf i)=\widehat{\mathcal W}(\mathbf i).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the length of the word.  The summands with $r=0$ constitute
+    $\widehat{\mathcal I}$, while deleting the first letter identifies the
+    summands with $r>0$ with $N^{i_1}\widehat{\mathcal W}(i_2,\ldots,i_n)$.
+    The identity $VW=1$ identifies $\widehat{\mathcal I}$ with
+    $\mathcal I$.
+\end{proof}
 
 \begin{theorem}[Corrected strict-window residual expansion]
     \label{thm:mps_reduction_residual_expansion}
-    \lean{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowSum}
+    \lean{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowRangeSum}
     \leanok
     \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_strict_window_sums}
+        def:mps_reduction_strict_window_sums,
+        thm:mps_reduction_strict_window_range}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For every word
     $\mathbf i=(i_1,\ldots,i_n)$,
     \begin{align}
@@ -1098,14 +1129,16 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_residual_sandwich}
+    \uses{thm:mps_reduction_residual_sandwich,
+        thm:mps_reduction_strict_window_range}
     Proceed by induction on the word and split its first letter as
     $B^i=N^i+WA^iV$.  The induction hypothesis supplies the strict windows
     in the remaining word.  A positive residual word between two selected
     $WA^iV$ blocks vanishes by
     Theorem~\ref{thm:mps_reduction_residual_sandwich}.  The remaining terms
-    are the pure residual word and the windows in
-    (\ref{eq:mps_reduction_residual_expansion}).
+    are the pure residual word and the recursively defined windows.  Theorem
+    \ref{thm:mps_reduction_strict_window_range} identifies the latter with
+    the explicit sum in (\ref{eq:mps_reduction_residual_expansion}).
 \end{proof}
 
 \begin{theorem}[Residual trace vanishing and nilpotence]

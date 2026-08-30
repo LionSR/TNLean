@@ -27,7 +27,7 @@ residual term and a strict nonempty central window, as documented in
 formalized for equality of the positive-length closed chains.  The source's
 preceding reduction theorem is stated for proportional chains and silently
 drops the proportionality scalar in this argument.  The proportional case is
-tracked separately in issue #7376; see
+not formalized here; see
 `docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`.
 -/
 
@@ -87,7 +87,11 @@ noncomputable def reductionResidualNilpotencyLength (B : MPSTensor d D_B)
 
 /-- The strict-window terms whose central $A$-word starts at the first
 letter of the input word.  The recursion enumerates every nonempty initial
-central word exactly once. -/
+central word exactly once.
+
+Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
+`cornerproblem.tex` lines 3993--4005.  The correction is documented in
+`docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
 noncomputable def reductionInitialWindowSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
@@ -97,10 +101,15 @@ noncomputable def reductionInitialWindowSum (B : MPSTensor d D_B)
       (Kraus.evalWord (reductionResidual B A V W) w +
         reductionInitialWindowSum B A V W w)
 
-/-- The sum over all strict windows $0\leq r<s\leq |w|$.  Its summand is
+/-- The recursive form of the sum over all strict windows
+$0\leq r<s\leq |w|$.  Its summand is
 $N^{w_{<r}} W A^{w_{[r,s)}} V N^{w_{\geq s}}$.  The first recursive term
 collects windows with `r = 0`; the second shifts every window in the tail and
-therefore collects `0 < r < s`. -/
+therefore collects `0 < r < s`.
+
+Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
+`cornerproblem.tex` lines 3993--4005.  The correction is documented in
+`docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
 noncomputable def reductionStrictWindowSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
@@ -109,11 +118,47 @@ noncomputable def reductionStrictWindowSum (B : MPSTensor d D_B)
   | i :: w => reductionInitialWindowSum B A V W (i :: w) +
       reductionResidual B A V W i * reductionStrictWindowSum B A V W w
 
+/-- The explicit sum over the strict windows that start at the first letter.
+The index `k : Fin w.length` gives the nonempty central length `k + 1`.
+
+Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
+`cornerproblem.tex` lines 3993--4005.  The correction is documented in
+`docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
+noncomputable def reductionInitialWindowRangeSum (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
+    Matrix (Fin D_B) (Fin D_B) ℂ :=
+  ∑ k : Fin w.length,
+    W * Kraus.evalWord A (w.take (k.1 + 1)) * V *
+      Kraus.evalWord (reductionResidual B A V W) (w.drop (k.1 + 1))
+
+/-- The explicit corrected strict-window sum.  Its indices are a start
+`r : Fin w.length` and a positive central length `k + 1` within `w.drop r`.
+Thus `s = r + k + 1` runs bijectively over $0\leq r<s\leq |w|$, and the
+summand is
+$N^{w_{<r}} W A^{w_{[r,s)}} V N^{w_{\geq s}}$.
+
+Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
+`cornerproblem.tex` lines 3993--4005.  The correction is documented in
+`docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
+noncomputable def reductionStrictWindowRangeSum (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
+    Matrix (Fin D_B) (Fin D_B) ℂ :=
+  ∑ r : Fin w.length, ∑ k : Fin (w.drop r.1).length,
+    Kraus.evalWord (reductionResidual B A V W) (w.take r.1) * W *
+      Kraus.evalWord A ((w.drop r.1).take (k.1 + 1)) * V *
+        Kraus.evalWord (reductionResidual B A V W)
+          ((w.drop r.1).drop (k.1 + 1))
+
 /-- The all-cut left-contracted sum
 $\sum_{s=0}^{|w|} A^{w_{<s}}V N^{w_{\geq s}}$.
 When a nilpotency bound is available, terms with residual suffix at least that
 long vanish, giving the truncated left contraction printed in MGSC18,
-Lemma `B_expand`. -/
+Lemma `B_expand`.
+
+Source: derived all-cut precursor to the first contracted formula in
+arXiv:1706.07329v2, `cornerproblem.tex` line 3997. -/
 noncomputable def reductionLeftContractedSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
@@ -127,7 +172,10 @@ noncomputable def reductionLeftContractedSum (B : MPSTensor d D_B)
 $\sum_{r=0}^{|w|}N^{w_{<r}}W A^{w_{\geq r}}$.
 When a nilpotency bound is available, terms with residual prefix at least that
 long vanish, giving the truncated right contraction printed in MGSC18,
-Lemma `B_expand`. -/
+Lemma `B_expand`.
+
+Source: derived all-cut precursor to the second contracted formula in
+arXiv:1706.07329v2, `cornerproblem.tex` line 3998. -/
 noncomputable def reductionRightContractedSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
@@ -138,7 +186,10 @@ noncomputable def reductionRightContractedSum (B : MPSTensor d D_B)
 
 /-- The printed left-contracted range
 $|w|-N\leq s\leq |w|$.  The endpoint with residual suffix of length exactly
-`N` is retained; it vanishes when `N` is a residual nilpotency bound. -/
+`N` is retained; it vanishes when `N` is a residual nilpotency bound.
+
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, the first contracted formula
+in `cornerproblem.tex` line 3997. -/
 noncomputable def reductionLeftContractedRangeSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) (w : List (Fin d)) :
@@ -149,7 +200,10 @@ noncomputable def reductionLeftContractedRangeSum (B : MPSTensor d D_B)
 
 /-- The printed right-contracted range
 $0\leq r\leq \min(N,|w|)$.  The endpoint with residual prefix of length
-exactly `N` is retained; it vanishes when `N` is a residual nilpotency bound. -/
+exactly `N` is retained; it vanishes when `N` is a residual nilpotency bound.
+
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, the second contracted formula
+in `cornerproblem.tex` line 3998. -/
 noncomputable def reductionRightContractedRangeSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) (w : List (Fin d)) :
@@ -158,6 +212,10 @@ noncomputable def reductionRightContractedRangeSum (B : MPSTensor d D_B)
     Kraus.evalWord (reductionResidual B A V W) (w.take r) * W *
       Kraus.evalWord A (w.drop r)
 
+/-- The explicit all-cut left-contracted sum from which the first range in
+MGSC18 Lemma `lem:B_expand` is obtained by deleting nilpotent suffixes.
+
+Source: arXiv:1706.07329v2, `cornerproblem.tex` line 3997. -/
 private noncomputable def reductionLeftContractedAllCutSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
@@ -166,6 +224,10 @@ private noncomputable def reductionLeftContractedAllCutSum (B : MPSTensor d D_B)
     Kraus.evalWord A (w.take s) * V *
       Kraus.evalWord (reductionResidual B A V W) (w.drop s)
 
+/-- The explicit all-cut right-contracted sum from which the second range in
+MGSC18 Lemma `lem:B_expand` is obtained by deleting nilpotent prefixes.
+
+Source: arXiv:1706.07329v2, `cornerproblem.tex` line 3998. -/
 private noncomputable def reductionRightContractedAllCutSum (B : MPSTensor d D_B)
     (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
@@ -299,12 +361,13 @@ private theorem mul_strictWindowSum_eq_mul_initialWindowSum
       have hzero := h.evalWord_reductionResidual_mul_strictWindowSum_eq_zero [i] w (by simp)
       simpa [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_assoc] using hzero
 
-/-- Corrected full residual expansion.  The first term is the pure residual
-word.  `reductionStrictWindowSum` is the sum over the strict range
-$0\leq r<s\leq |w|$, so every central $A$-word is nonempty.
+/-- Recursive precursor of the corrected residual expansion.  The theorem
+`evalWord_eq_reductionResidual_add_strictWindowRangeSum` below identifies its
+recursive window term with the explicit strict range.
 
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3993--4005.
-The corrected range is documented in
+**Derived recursive form:** this recursion packages the corrected expansion
+of arXiv:1706.07329v2, Lemma `lem:B_expand`, `cornerproblem.tex` lines
+3993--4005; it is not itself a formula printed in the source.  See
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
 theorem evalWord_eq_reductionResidual_add_strictWindowSum
     (h : IsReduction B A V W) (w : List (Fin d)) :
@@ -465,6 +528,89 @@ private theorem reductionRightContractedSum_eq_allCutSum
         simpa only [Matrix.mul_assoc] using hsum
       rw [hsum']
 
+/-- The explicit sum of terms beginning with the first letter agrees with its
+recursive form.
+
+Source: the corrected expansion of arXiv:1706.07329v2, Lemma
+`lem:B_expand`, `cornerproblem.tex` lines 3993--4005; see
+`docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
+private theorem reductionInitialWindowRangeSum_eq_reductionInitialWindowSum
+    (h : IsReduction B A V W) (i : Fin d) (w : List (Fin d)) :
+    reductionInitialWindowRangeSum B A V W (i :: w) =
+      reductionInitialWindowSum B A V W (i :: w) := by
+  rw [reductionInitialWindowRangeSum]
+  simp only [List.length_cons, List.take_succ_cons, List.drop_succ_cons,
+    Kraus.evalWord_cons, Matrix.mul_assoc]
+  calc
+    _ = W * A i * reductionLeftContractedAllCutSum B A V W w := by
+      rw [reductionLeftContractedAllCutSum, Matrix.mul_sum]
+      simp only [Matrix.mul_assoc]
+    _ = W * A i * reductionLeftContractedSum B A V W w := by
+      rw [reductionLeftContractedSum_eq_allCutSum]
+    _ = W * A i * (V * Kraus.evalWord B w) := by
+      rw [← h.mul_evalWord_eq_reductionLeftContractedSum]
+    _ = reductionInitialWindowSum B A V W (i :: w) := by
+      rw [h.reductionInitialWindowSum_cons]
+      simp only [Matrix.mul_assoc]
+
+/-- Separating the initial position in the explicit strict-window sum gives
+the recursion used in the corrected residual expansion.
+
+Source: the corrected expansion of arXiv:1706.07329v2, Lemma
+`lem:B_expand`, `cornerproblem.tex` lines 3993--4005; see
+`docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
+private theorem reductionStrictWindowRangeSum_cons
+    (i : Fin d) (w : List (Fin d)) :
+    reductionStrictWindowRangeSum B A V W (i :: w) =
+      reductionInitialWindowRangeSum B A V W (i :: w) +
+        reductionResidual B A V W i * reductionStrictWindowRangeSum B A V W w := by
+  rw [reductionStrictWindowRangeSum]
+  simp only [List.length_cons]
+  rw [Fin.sum_univ_succ]
+  rw [reductionInitialWindowRangeSum]
+  simp only [Fin.val_zero, List.take_zero, List.drop_zero, Kraus.evalWord_nil,
+    Matrix.one_mul]
+  congr 1
+  rw [reductionStrictWindowRangeSum, Matrix.mul_sum]
+  apply Finset.sum_congr rfl
+  intro r _
+  rw [Matrix.mul_sum]
+  apply Finset.sum_congr rfl
+  intro k _
+  simp only [Fin.val_succ, List.take_succ_cons, List.drop_succ_cons,
+    Kraus.evalWord_cons, Matrix.mul_assoc]
+
+/-- The recursive strict-window sum equals the explicit finite sum indexed by
+$0\leq r<s\leq |w|$.
+
+Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
+`cornerproblem.tex` lines 3993--4005.  The correction is documented in
+`docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
+theorem reductionStrictWindowSum_eq_reductionStrictWindowRangeSum
+    (h : IsReduction B A V W) (w : List (Fin d)) :
+    reductionStrictWindowSum B A V W w =
+      reductionStrictWindowRangeSum B A V W w := by
+  induction w with
+  | nil => simp [reductionStrictWindowSum, reductionStrictWindowRangeSum]
+  | cons i w ih =>
+      rw [reductionStrictWindowSum,
+        ← h.reductionInitialWindowRangeSum_eq_reductionInitialWindowSum, ih]
+      exact (reductionStrictWindowRangeSum_cons i w).symm
+
+/-- Corrected full residual expansion through the explicit strict-window sum.
+The first term is the pure residual word, and the finite sum ranges over
+$0\leq r<s\leq |w|$, so every central $A$-word is nonempty.
+
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3993--4005.
+The corrected range is documented in
+`docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
+theorem evalWord_eq_reductionResidual_add_strictWindowRangeSum
+    (h : IsReduction B A V W) (w : List (Fin d)) :
+    Kraus.evalWord B w = Kraus.evalWord (reductionResidual B A V W) w +
+      reductionStrictWindowRangeSum B A V W w := by
+  rw [← h.reductionStrictWindowSum_eq_reductionStrictWindowRangeSum]
+  exact h.evalWord_eq_reductionResidual_add_strictWindowSum w
+
 private theorem trace_evalWord_reductionResidual_mul_strictWindowSum_eq_zero
     (h : IsReduction B A V W) (u w : List (Fin d)) (hu : u ≠ []) :
     Matrix.trace (Kraus.evalWord (reductionResidual B A V W) u *
@@ -537,7 +683,8 @@ theorem trace_evalWord_eq_trace_evalWord_add_trace_reductionResidual
     Matrix.trace (Kraus.evalWord B w) =
       Matrix.trace (Kraus.evalWord A w) +
         Matrix.trace (Kraus.evalWord (reductionResidual B A V W) w) := by
-  rw [h.evalWord_eq_reductionResidual_add_strictWindowSum,
+  rw [h.evalWord_eq_reductionResidual_add_strictWindowRangeSum,
+    ← h.reductionStrictWindowSum_eq_reductionStrictWindowRangeSum,
     Matrix.trace_add, h.trace_reductionStrictWindowSum_eq_trace_evalWord w hw]
   ac_rfl
 
