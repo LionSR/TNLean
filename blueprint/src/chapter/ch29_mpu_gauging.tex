@@ -638,6 +638,132 @@ These three matrix identities supply the final algebraic steps in
 Theorem~\ref{thm:mpug_dagger_inverse_scalar} after the representation-level
 gauges and scalar relation have been constructed.
 
+\section{A nondegenerate alternating-network comparison}
+\label{sec:mpug_alternating_network}
+
+\begin{definition}[Connected open alternating network]
+    \label{def:mpug_open_alternating_network}
+    \lean{MPSTensor.openAlternatingNetwork}
+    \leanok
+    Let $n\geq 0$, and let $D_1,\ldots,D_{n+1}$ be horizontal bond dimensions.  At each
+    $1\leq i\leq n$, let $A_i$ have square bond dimension $D_i$, and let
+    $B_i$ have left and right bond dimensions $D_i$ and $D_{i+1}$.  For fixed
+    physical indices $\sigma=(\sigma_i)_i$ and $\tau=(\tau_i)_i$, define the
+    connected network with its horizontal ends open by
+    \begin{align}
+        \mathcal N_{A,B}(\sigma,\tau)_{a,b}
+            &:=\sum_{\substack{x_1,\ldots,x_{n+1}\\
+                    x_1=a,\,x_{n+1}=b}}
+                \ \sum_{y_1,\ldots,y_n}
+                \prod_{i=1}^{n}
+                (A_i^{\sigma_i})_{x_i,y_i}
+                (B_i^{\tau_i})_{y_i,x_{i+1}}.
+        \notag
+    \end{align}
+    The indices $y_i$ join $A_i$ to $B_i$, while $x_{i+1}$ joins $B_i$ to
+    $A_{i+1}$ when $i<n$; $x_1$ and $x_{n+1}$ are the two open end indices.
+    This is the coordinate form of the connected open diagram in
+    \cite[lines~2299--2361, equation~\texttt{eq:lemma\_equality}]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{lemma}[One-sided-inverse contraction of an alternating network]
+    \label{lem:mpug_inverse_contraction_open_alternating_network}
+    \lean{MPSTensor.inverseContraction_openAlternatingNetwork}
+    \leanok
+    \uses{def:injective, def:decomposition_map,
+        def:mpug_open_alternating_network}
+    Suppose that every $A_i$ is injective.  For the matrix unit $E_{z_i,q_i}$,
+    let $c_i^{\sigma_i}(z_i,q_i)$ be its coefficients under a one-sided
+    inverse of $A_i$, so that
+    \begin{align}
+        \sum_{\sigma_i}c_i^{\sigma_i}(z_i,q_i)A_i^{\sigma_i}
+            &=E_{z_i,q_i}.
+        \notag
+    \end{align}
+    Then, for every horizontal path $z=(z_i)_{i=1}^{n+1}$, every intermediate
+    path $q=(q_i)_{i=1}^{n}$, and every $\tau$, one has
+    \begin{align}
+        \sum_{\sigma_1,\ldots,\sigma_n}
+            \left(\prod_{i=1}^{n}c_i^{\sigma_i}(z_i,q_i)\right)
+            \mathcal N_{A,B}(\sigma,\tau)_{z_1,z_{n+1}}
+            &=\prod_{i=1}^{n}(B_i^{\tau_i})_{q_i,z_{i+1}}.
+        \notag
+    \end{align}
+    This is the simultaneous inverse-tensor contraction in
+    \cite[lines~2365--2392]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the connected network and interchange the finite sums.  At site
+    $i$, the sum over $\sigma_i$ is the $(x_i,y_i)$ entry of
+    $E_{z_i,q_i}$.  Its two Kronecker deltas force $x_i=z_i$ and $y_i=q_i$.
+    Thus every internal sum collapses, leaving precisely the displayed product
+    of entries of the $B_i$.
+\end{proof}
+
+\begin{theorem}[Nondegenerate corrected alternating-network proportionality]
+    \label{thm:mpug_alternating_network_nondegenerate}
+    \lean{MPSTensor.exists_scalars_of_openAlternatingNetwork_eq}
+    \leanok
+    \uses{def:injective, def:decomposition_map,
+        def:mpug_open_alternating_network,
+        lem:mpug_inverse_contraction_open_alternating_network,
+        thm:periodic_product_tensor_phase_extraction}
+    Let $n\geq 0$, and let $D_1,\ldots,D_{n+1}$ be horizontal bond dimensions.
+    For each $1\leq i\leq n$, let $A_i$ be an injective MPS tensor with square
+    bond dimension $D_i$, and let $B_i,B'_i$ be tensors whose left and right
+    horizontal bond dimensions are $D_i$ and $D_{i+1}$.  Suppose that every
+    $B_i$ is nonzero and that the connected open networks agree:
+    \begin{align}
+        A_1B_1A_2B_2\cdots A_nB_n
+            &=A_1B'_1A_2B'_2\cdots A_nB'_n.
+        \label{eq:mpug_alternating_network_equality}
+    \end{align}
+    Here the equality retains the two horizontal end legs and all physical
+    legs.  Then there are scalars $\beta_i\in\C$ such that
+    \begin{align}
+        B_i&=\beta_iB'_i,
+        \label{eq:mpug_alternating_network_proportionality}\\
+        \prod_{i=1}^{n}\beta_i&=1.
+        \label{eq:mpug_alternating_network_scalar_product}
+    \end{align}
+
+    This is the nondegenerate corrected form of Lemma~\texttt{lemma:1} in
+    \cite[lines~2296--2395]{FrancoRubio2025MPUGauging}.  The printed wording
+    omits nonvanishing.  The paper's truncated symmetry $U^L_g$ is unitary at
+    line~2099;
+    lines~2444--2466 identify the side used at line~2567 with
+    $(U^L_{g^{-1}})^\dagger$, while lines~3033--3053 identify the side used at
+    line~3157 with $\sigma_g(U^L_{g^{-1}})^\dagger$ for
+    $\sigma_g\in\{1,-1\}$.  Both displayed networks are therefore nonzero.  A
+    vanishing intervening factor would make its entire network zero, so taking
+    the factors on these sides as the $B_i$ supplies $B_i\ne 0$ at both
+    applications.  The zero-factor degeneration and this local correction are
+    recorded in
+    \cite{gap:fbc25_alternating_network_nondegeneracy}.  The unrestricted
+    printed statement is not asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:mpug_inverse_contraction_open_alternating_network} to
+    both sides of (\ref{eq:mpug_alternating_network_equality}), choosing the
+    matrix units to prescribe arbitrary entries of all $B_i$.  The resulting
+    connected horizontal contractions retain precisely those entries.  Since
+    the entries were arbitrary, this gives the pure-tensor identity
+    \begin{align}
+        \bigotimes_{i=1}^{n}B_i
+            &=\bigotimes_{i=1}^{n}B'_i.
+        \label{eq:mpug_alternating_network_pure_tensor_equality}
+    \end{align}
+    Apply Theorem~\ref{thm:periodic_product_tensor_phase_extraction} to
+    (\ref{eq:mpug_alternating_network_pure_tensor_equality}), with global
+    scalar $1$ and the nonzero reference entries of the $B_i$.  It
+    gives the factorwise proportionalities and
+    (\ref{eq:mpug_alternating_network_scalar_product}); reversing the
+    resulting nonzero scalars gives the orientation
+    (\ref{eq:mpug_alternating_network_proportionality}).
+\end{proof}
+
 \section{Scalar three-cocycles and fusion-tensor gauge freedom}
 \label{sec:mpug_scalar_gauge}
 

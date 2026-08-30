@@ -1,0 +1,100 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Nondegeneracy in the Alternating-Network Proportionality Lemma}
+\author{}
+\date{2026-08-30}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed statement}
+
+Lemma~\texttt{lemma:1} of
+Ref.~\cite[lines~2296--2395]{FrancoRubio2025MPUGauging} considers a connected
+open chain
+\begin{align}
+    A_1B_1A_2B_2\cdots A_nB_n
+        &=A_1B'_1A_2B'_2\cdots A_nB'_n,
+    \label{eq:fbc25_alternating_network_nondegeneracy_source_equality}
+\end{align}
+where every $A_i$ is injective.  It concludes that there are scalars
+$\beta_i$ such that
+\begin{align}
+    B_i&=\beta_iB'_i,
+    \label{eq:fbc25_alternating_network_nondegeneracy_source_proportionality}\\
+    \prod_{i=1}^n\beta_i&=1.
+    \label{eq:fbc25_alternating_network_nondegeneracy_source_product}
+\end{align}
+The statement does not exclude a zero factor.  For $n=2$, take
+$B_1=B'_1=0$ and choose $B_2,B'_2$ which are not proportional.  Then
+(\ref{eq:fbc25_alternating_network_nondegeneracy_source_equality}) holds,
+but
+(\ref{eq:fbc25_alternating_network_nondegeneracy_source_proportionality})
+does not.  This is the degenerate zero-factor reading of the printed lemma.
+
+\section{Nondegenerate correction}
+
+The corrected statement assumes
+\begin{align}
+    B_i&\ne0\qquad (1\leq i\leq n).
+    \label{eq:fbc25_alternating_network_nondegeneracy_nonzero_factors}
+\end{align}
+Contracting the physical leg of each $A_i$ against an inverse tensor, exactly
+as in the source proof, separates the intervening tensors and gives
+\begin{align}
+    \bigotimes_{i=1}^n B_i
+        &=\bigotimes_{i=1}^n B'_i.
+    \label{eq:fbc25_alternating_network_nondegeneracy_pure_tensor_equality}
+\end{align}
+Condition
+(\ref{eq:fbc25_alternating_network_nondegeneracy_nonzero_factors}) makes the
+left-hand side of
+(\ref{eq:fbc25_alternating_network_nondegeneracy_pure_tensor_equality})
+nonzero.  Proportionality of the factors of two equal nonzero pure tensors
+then gives
+(\ref{eq:fbc25_alternating_network_nondegeneracy_source_proportionality})--%
+(\ref{eq:fbc25_alternating_network_nondegeneracy_source_product}).  A
+one-sided nonvanishing assumption is sufficient: the pure-tensor equality
+forces every $B'_i$ to be nonzero as well.
+
+The two uses in Ref.~\cite{FrancoRubio2025MPUGauging} already lie in this
+nondegenerate regime.  The truncated symmetry $U^L_g$ is unitary by the
+statement at line~2099.  For the application at line~2567, lines~2444--2466
+identify one side of the top boundary network with
+$(U^L_{g^{-1}})^\dagger$.  This network is nonzero; hence none of its
+constituent intervening factors can vanish.  One may take these factors as the
+single-sided family $B_i$ in
+(\ref{eq:fbc25_alternating_network_nondegeneracy_nonzero_factors}).  For the
+application at line~3157, lines~3033--3053 identify the corresponding network
+with $\sigma_g(U^L_{g^{-1}})^\dagger$, where
+$\sigma_g\in\{1,-1\}$.  It is again nonzero for the same reason.  Neither use
+requires a stronger invertibility assumption on every $B_i$.
+
+\section{Formal treatment}
+
+The formal theorem models the connected open chain with its horizontal ends
+uncontracted.  Matrix units supplied to the one-sided inverses of the
+injective $A_i$ retain both virtual indices, so their contraction proves
+(\ref{eq:fbc25_alternating_network_nondegeneracy_pure_tensor_equality}) rather
+than merely an equality of matrix products.  The final factorwise conclusion
+uses the existing pure-tensor proportionality theorem.\footnote{Formal
+declaration:
+\leanid{MPSTensor.exists\_scalars\_of\_openAlternatingNetwork\_eq} in
+\doclink{TNLean/MPS/Chain/AlternatingNetwork}.}
+
+\textbf{Verdict: resolved local fix.}
+The zero-factor degeneration is excluded by the intended nondegenerate
+convention, which is present at both applications in the article.  The
+unrestricted printed wording is not used as a formal theorem.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
