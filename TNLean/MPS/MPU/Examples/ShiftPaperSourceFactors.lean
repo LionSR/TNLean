@@ -10,31 +10,36 @@ import Mathlib.Tactic.Positivity
 /-!
 # Trace-normalized weights for paper-facing shift source factors
 
-CPSV17 fixes the Canonical Form II right fixed point $\rho$ to be positive
-and trace one in arXiv:1703.09188, `Erightleft` (lines 269--281). For the
-corrected supplied cyclic-shift witnesses, this fixed point is
+CPSV17 requires a Canonical Form II right fixed point $\rho$ to be positive
+and trace one in arXiv:1703.09188, `Erightleft` (lines 269--281), and uses
+$\rho$ in the source metric `Y1Y1X1X1` (lines 487--495). If the virtual weight
+is chosen to be a scalar identity on a $d$-dimensional bond space, trace
+normalization forces
 \[
 W_d = d^{-1} I_d.
 \]
-This module packages that specialization and its elementary matrix properties.
-It is independent of the identity-weight mixed kernels in
-`ShiftSourceFactors` and does not identify those kernels with the paper gates
-of `uuvv` (lines 532--543).
+This module packages that matrix and its elementary properties. It does not
+prove a transfer-map fixed-point equation; that belongs to the later supplied
+shift witnesses. It is also independent of the identity-weight mixed kernels
+in `ShiftSourceFactors` and does not identify those kernels with the paper
+gates of `uuvv` (lines 532--543).
 
-A tensor product of two shifts has product bond dimension $d^2$, so its fixed
-weight is $W_{d^2} = (d^2)^{-1} I_{d^2}$.
+A tensor product of two shifts has product bond dimension $d^2$, so the
+corresponding scalar trace-one matrix is
+$W_{d^2} = (d^2)^{-1} I_{d^2}$.
 -/
 
 open scoped ComplexOrder
 
 namespace MPOTensor
 
-/-- The scalar identity weight on the shift bond space, normalized to trace
+/-- The scalar identity matrix on the shift bond space, normalized to trace
 one when `d` is nonzero.
 
-This is the scalar specialization of the CFII right fixed point in
-arXiv:1703.09188, `Erightleft` (lines 269--280), as used by the source metric in
-`Y1Y1X1X1` (lines 487--495). -/
+The CFII condition in arXiv:1703.09188, `Erightleft` (lines 269--280), requires
+trace one, while `Y1Y1X1X1` (lines 487--495) uses the resulting virtual weight
+in the source metric. This definition records the scalar identity choice; it
+does not assert that the matrix is a transfer-map fixed point. -/
 noncomputable def shiftPaperWeight (d : ℕ) : Matrix (Fin d) (Fin d) ℂ :=
   (d : ℂ)⁻¹ • (1 : Matrix (Fin d) (Fin d) ℂ)
 

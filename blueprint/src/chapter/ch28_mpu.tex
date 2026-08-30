@@ -7969,19 +7969,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:mpu_source_weight, def:mpu_shift_tensors, threeMPU}
     Canonical form II requires the positive right fixed point $\rho$ to have
-    trace one. For the scalar identity choice on the bond space of a single
-    shift, this fixes
+    trace one. If the virtual weight on the bond space of a single shift is
+    chosen to be a scalar identity, this normalization forces
     \begin{align}
-        \rho_{\mathrm{paper}}=W_d & =d^{-1}\Id_d
+        W_d & =d^{-1}\Id_d
     \end{align}
     whenever $d>0$. The same formula is defined at $d=0$, although it then has
-    trace zero. The tensors $U_2$ and $U_3$ have bond dimension $d^2$, so their
-    corresponding scalar identity weight is
+    trace zero. The tensors $U_2$ and $U_3$ have bond dimension $d^2$, so the
+    corresponding scalar trace-one matrix is
     \begin{align}
         W_{d^2} & =(d^2)^{-1}\Id_{d^2}.
     \end{align}
-    This is the scalar trace-one specialization of the source weight used in
-    \cite[equation labelled~\texttt{Y1Y1X1X1}]{Cirac2017MPU}.
+    These are the scalar identity choices compatible with the source weight in
+    \cite[equation labelled~\texttt{Y1Y1X1X1}]{Cirac2017MPU}. No transfer-map
+    fixed-point equation is asserted here.
 
     The supplied auxiliary mixed-kernel witnesses below instead use
     $\rho_{\mathrm{aux}}=\Id_d$ for each constituent shift and
