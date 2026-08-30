@@ -150,12 +150,15 @@ mathematical obstruction.
 - Obstruction: the sole local matrix is $K^{00}=\operatorname{diag}(1,1/2)$.
   Definition 4.1 for $K^{[2]}$ would make its physical-trace transfer
   idempotent, hence would give $1+2^{-4}=1+2^{-2}$ after taking traces.
-- Scope: this does not refute `prop2to5`, whose hypothesis is condition (ii).
-  The separate ambient counterexample satisfies condition (ii) and refutes the
-  representativewise factorization used by the printed proof of that
-  proposition. It does not rule out different blocking channels. The
-  projector-controlled channel assembly remains valid conditionally for
-  supplied representative factorizations, so `prop2to5` remains conditional.
+- Scope: this does not refute Proposition C.15 (`prop2to5`), whose hypothesis
+  is condition (ii). The separate ambient counterexample satisfies condition
+  (ii) and refutes the Case-II representativewise conclusion of Proposition
+  C.12 (`prop2to3`) used by the printed proof of Proposition C.15. It does not
+  rule out different blocking channels. The projector-controlled channel
+  assembly remains a conditional helper for supplied representative
+  factorizations, not a source-facing Lean formalization of Proposition C.15.
+  The source-facing Lean statement is missing, and its bare channel conclusion
+  is neither proved nor refuted.
 
 ### Horizontal periodic equality does not determine vertical BNT coefficients
 
