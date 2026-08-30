@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ListProduct
 import TNLean.MPS.MPU.ResidualAlgebra
 
 /-!
@@ -253,23 +254,6 @@ end ThreeFormSubmodules
 
 section ResidualThreeForms
 
-private theorem exists_nonempty_residual_word_of_mem_closure
-    {U : MPOTensor d D}
-    {x : Matrix (Fin (D * D)) (Fin (D * D)) ℂ}
-    (hx : x ∈ Subsemigroup.closure (residualGeneratorSet U)) :
-    ∃ l : List (Matrix (Fin (D * D)) (Fin (D * D)) ℂ),
-      l ≠ [] ∧ (∀ a ∈ l, a ∈ residualGeneratorSet U) ∧ l.prod = x := by
-  induction hx using Subsemigroup.closure_induction with
-  | mem x hx => exact ⟨[x], by simp, by simpa, by simp⟩
-  | mul x y _ _ hx hy =>
-      obtain ⟨lx, hlx, hlxs, hxl⟩ := hx
-      obtain ⟨ly, hly, hlys, hyl⟩ := hy
-      refine ⟨lx ++ ly, ?_, ?_, ?_⟩
-      · simp [hlx]
-      · intro a ha
-        exact List.mem_append.mp ha |>.elim (hlxs a) (hlys a)
-      · rw [List.prod_append, hxl, hyl]
-
 /-- The rank-one normalized diagonal annihilates every element of the residual
 algebra when placed on both sides.
 
@@ -293,7 +277,8 @@ theorem IsMPU.normalizedDiagonal_mul_mem_residualAlgebra_mul_normalizedDiagonal_
     intro x hx
     induction hx using Submodule.span_induction with
     | mem x hx =>
-        obtain ⟨l, hne, hl, rfl⟩ := exists_nonempty_residual_word_of_mem_closure hx
+        obtain ⟨l, hne, hl, rfl⟩ :=
+          Subsemigroup.exists_nonempty_list_prod_of_mem_closure hx
         have hX : ∀ a ∈ l, ∃ X, a = residualSlice (doubleLayerTensor U) X := by
           intro a ha
           obtain ⟨X, hX⟩ := hl a ha

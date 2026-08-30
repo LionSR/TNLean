@@ -1126,7 +1126,10 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_residual_sandwich}
+    \uses{thm:mps_reduction_residual_sandwich,
+        thm:mps_reduction_cross_trace_open,
+        thm:mpu_shifted_zero_trace_power_nilpotent,
+        thm:mpu_nil_matrices}
     Closed-chain equality and cyclicity of trace show that each nonempty
     residual word has trace zero.  Linearity extends this identity to the
     generated nonunital algebra.  The vanishing traces of positive powers

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.NilMatrixSubalgebra
 import QICLean.Algebra.ShiftedZeroTraceNilpotent
+import TNLean.Algebra.ListProduct
 import TNLean.MPS.Core.Reduction
 import TNLean.MPS.Core.TracePairing
 
@@ -538,21 +539,6 @@ private theorem exists_reductionResiduals_eq_list_of_mem_generatorSet
       funext k
       exact hletters k
 
-private theorem Subsemigroup.exists_nonempty_list_prod_of_mem_closure_reductionResidual
-    {M : Type*} [Monoid M] {s : Set M} {x : M}
-    (hx : x ∈ Subsemigroup.closure s) :
-    ∃ l : List M, l ≠ [] ∧ (∀ a ∈ l, a ∈ s) ∧ l.prod = x := by
-  induction hx using Subsemigroup.closure_induction with
-  | mem x hx => exact ⟨[x], by simp, by simpa, by simp⟩
-  | mul x y _ _ hx hy =>
-      obtain ⟨lx, hlx, hlxs, hxl⟩ := hx
-      obtain ⟨ly, hly, hlys, hyl⟩ := hy
-      refine ⟨lx ++ ly, ?_, ?_, ?_⟩
-      · simp [hlx]
-      · intro a ha
-        exact List.mem_append.mp ha |>.elim (hlxs a) (hlys a)
-      · rw [List.prod_append, hxl, hyl]
-
 private theorem pow_mem_nonUnitalSubalgebra_of_pos_reductionResidual
     {R M : Type*} [CommSemiring R] [Semiring M] [Module R M]
     [IsScalarTower R M M] [SMulCommClass R M M]
@@ -582,7 +568,7 @@ theorem trace_eq_zero_of_mem_reductionResidualAlgebra
   induction hX using Submodule.span_induction with
   | mem X hX =>
       obtain ⟨l, hne, hl, rfl⟩ :=
-        Subsemigroup.exists_nonempty_list_prod_of_mem_closure_reductionResidual hX
+        Subsemigroup.exists_nonempty_list_prod_of_mem_closure hX
       obtain ⟨letters, hl_eq⟩ :=
         exists_reductionResiduals_eq_list_of_mem_generatorSet B A V W l hl
       rw [hl_eq]
