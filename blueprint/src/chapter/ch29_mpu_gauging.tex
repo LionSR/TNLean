@@ -741,6 +741,63 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 % Formalization boundary: the MPU-specific source-gate transport and the final
 % lem:deco wrapper remain outside this slice and depend on issue #7313.
 
+\begin{definition}[Unitary factorization comparison]
+    \label{def:mpug_unitary_factorization_comparison}
+    \lean{Matrix.unitaryFactorizationComparison}
+    \leanok
+    Let $I$ be a set and let $R_{a,b}$ be a family of unitary matrices indexed
+    by $(a,b)\in I^2$. The comparison from $(a,b)$ to the reference pair
+    $(c,d)$ is
+    \begin{align}
+        \lambda_{a,b}^{c,d}
+         & =(R_{c,d})^{-1}R_{a,b}
+         =R_{c,d}^\dagger R_{a,b}.
+        \label{eq:mpug_unitary_factorization_comparison}
+    \end{align}
+    This is the orientation in the corollary following Proposition~3 of
+    \cite[lines~2782--2821]{FrancoRubio2025MPUGauging}. In that corollary,
+    $I=G$ and comparisons are used when $ab=cd$; this equality selects the
+    factorizations and is not needed in the unitary calculation.
+\end{definition}
+
+\begin{theorem}[Identity, composition, and right-reference laws]
+    \label{thm:mpug_unitary_factorization_comparison_laws}
+    \lean{Matrix.unitaryFactorizationComparison_self,
+        Matrix.unitaryFactorizationComparison_trans,
+        Matrix.unitaryFactorizationComparison_of_reference_eq_one,
+        Matrix.unitaryFactorizationComparison_right_reference}
+    \leanok
+    \uses{def:mpug_unitary_factorization_comparison}
+    For all indices $a,b,c,d,f,g\in I$,
+    \begin{align}
+        \lambda_{a,b}^{a,b} & =\mathbf 1, \\
+        \lambda_{a,b}^{f,g}
+         & =\lambda_{c,d}^{f,g}\lambda_{a,b}^{c,d}.
+        \label{eq:mpug_unitary_factorization_comparison_laws}
+    \end{align}
+    If $R_{c,d}=\mathbf 1$, then
+    $\lambda_{a,b}^{c,d}=R_{a,b}$. In particular, for a group $G$, the
+    normalization $R_{e,x}=\mathbf 1$ gives
+    \begin{align}
+        \lambda_{g,h}^{e,gh} & =R_{g,h}.
+        \label{eq:mpug_unitary_factorization_right_reference}
+    \end{align}
+    The last identity is the right-reference specialization
+    $\lambda^R_{g,h}=\lambda_{g,h}^{e,gh}$ in the cited corollary.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_unitary_factorization_comparison}
+    The identity and right-reference formulas follow from
+    $R_{a,b}^{-1}R_{a,b}=\mathbf 1$ and
+    $\mathbf 1^{-1}R_{a,b}=R_{a,b}$. For composition, insert the identity at
+    the intermediate pair:
+    \begin{align}
+        (R_{f,g})^{-1}R_{a,b}
+         & =(R_{f,g})^{-1}R_{c,d}(R_{c,d})^{-1}R_{a,b}.
+    \end{align}
+\end{proof}
+
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
     \lean{TNLean.Algebra.ScalarThreeCochain,
