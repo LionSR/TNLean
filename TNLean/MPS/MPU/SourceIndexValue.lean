@@ -10,8 +10,14 @@ import Mathlib.Analysis.SpecialFunctions.Log.Base
 # Source-index value of a specified MPU tensor
 
 This module defines the numerical source-index expression of a specified tensor
-from its positive right and left source-cut ranks. It does not choose a simple
-blocking and therefore does not define the choice-independent index of an MPU.
+from its positive right and left source-cut ranks.
+
+**Scope restriction (specified tensors):** arXiv:1703.09188, Definition IV.1 and
+Proposition IV.2, define the public MPU index by choosing a simple blocking and
+proving independence of that choice. This module proves only specified-tensor
+identities and conditional blocking invariance. The restriction and its
+elimination plan are recorded in
+`docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex`.
 
 For a tensor with positive right rank $r$ and left rank $\ell$, the value is
 $$
