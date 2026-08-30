@@ -30,7 +30,8 @@ def IsComplexUnitSign (z : Units ℂ) : Prop :=
 complex-unit signs whose values on each orbit multiply to `-1`.
 
 This is the `{±1}`-valued condition on `ξ_g` in arXiv:2502.20257,
-`eq:defects_Z2b`, lines 2979--2981, specialized to an order-two action. -/
+`eq:defects_Z2b`, lines 2979--2981, specialized to an action by an element whose square
+is the identity. -/
 def HasAnomalousInvolutionSign {X : Type*} (f : X → X) : Prop :=
   ∃ ξ : X → Units ℂ,
     (∀ x, IsComplexUnitSign (ξ x)) ∧ ∀ x, ξ x * ξ (f x) = -1
