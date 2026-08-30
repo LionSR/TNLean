@@ -176,8 +176,9 @@ theorem openParentHamiltonianES_C1 (A : MPSTensor d D) {L l N : ℕ}
     simp only [windows, Finset.sum_const, Nat.cast_smul_eq_nsmul]
   constructor
   · rw [LinearMap.nonneg_iff_isPositive]
-    exact LinearMap.isPositive_sum _ fun n _ =>
-      LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1
+    refine LinearMap.isPositive_sum _ fun n _ => ?_
+    rw [openSuffixParentHamiltonianES]
+    exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1
   · rw [hsum, openParentHamiltonianES, Finset.smul_sum]
     apply Finset.sum_le_sum
     intro i _
