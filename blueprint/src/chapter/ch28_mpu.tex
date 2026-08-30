@@ -8324,18 +8324,62 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Transformation with swaps]
     \label{threeMPU2}
-    \notready
-    \discussion{5715}
+    \lean{MPOTensor.shiftPhysicalSwap}
+    \lean{MPOTensor.shiftPhysicalSwap_apply}
+    \lean{MPOTensor.shiftExampleTildeU₁}
+    \lean{MPOTensor.shiftExampleTildeU₂}
+    \lean{MPOTensor.shiftExampleTildeU₃}
+    \leanok
     \uses{threeMPU}
-    Define
+    Let $\mathbb S$ exchange the two $d$-dimensional spins at one site.  The
+    transformed local tensors are obtained by applying $\mathbb S$ to the
+    output physical index of each of the three shift tensors.
+    % Source lines: paper_v2.tex 2045--2062.
+\end{definition}
+
+\begin{theorem}[Finite-chain formulas for the swap-transformed shifts]
+    \label{thm:threeMPU2_chain_formulas}
+    \lean{MPOTensor.mpo_ketLeftMul}
+    \lean{MPOTensor.IsMPU.ketLeftMul}
+    \lean{MPOTensor.shiftPhysicalSwap_mem_unitaryGroup}
+    \lean{MPOTensor.mpo_shiftExampleTildeU₁}
+    \lean{MPOTensor.mpo_shiftExampleTildeU₂}
+    \lean{MPOTensor.mpo_shiftExampleTildeU₃}
+    \lean{MPOTensor.shiftExampleTildeU₁_isMPU}
+    \lean{MPOTensor.shiftExampleTildeU₂_isMPU}
+    \lean{MPOTensor.shiftExampleTildeU₃_isMPU}
+    \leanok
+    \uses{threeMPU, threeMPU2, thm:threeMPU_chain_formulas, def:mpu}
+    On every nonempty chain,
     \begin{align}
         \widetilde U_1^{(N)} & =\mathbb S^{\otimes N}, \\
         \widetilde U_2^{(N)} & =\mathbb S^{\otimes N}
         (T^{(N)\dagger}\otimes T^{(N)}),               \\
         \widetilde U_3^{(N)} & =\mathbb S^{\otimes N}
-        (T^{(N)}\otimes T^{(N)\dagger})
-        =\mathbb S^{\otimes N}\widetilde U_2^{(N)}\mathbb S^{\otimes N}.
+        (T^{(N)}\otimes T^{(N)\dagger}).
     \end{align}
+    Each transformed tensor is a matrix product unitary.
+    % Source lines: paper_v2.tex 2052--2062.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{threeMPU2, thm:threeMPU_chain_formulas, def:mpu}
+    Applying a one-site matrix to every output physical index left-multiplies
+    the closed operator by its sitewise tensor power.  The swap is a
+    permutation matrix and hence unitary.  The formulas now follow from the
+    three shift formulas, and the product of two unitary operators is unitary.
+\end{proof}
+
+\begin{proposition}[Remaining swap-transformation identities]
+    \label{prop:threeMPU2_remaining_formulas}
+    \notready
+    \discussion{5715}
+    \uses{threeMPU2}
+    The third transformed family also satisfies
+    \begin{equation}
+        \widetilde U_3^{(N)}
+        =\mathbb S^{\otimes N}\widetilde U_2^{(N)}\mathbb S^{\otimes N}.
+    \end{equation}
     The first two standard forms are
     \begin{align}
         \widetilde u_1 & =\mathbb S,     &
@@ -8343,8 +8387,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \widetilde u_2 & =\Id\otimes\Id, &
         \widetilde v_2 & =\mathbb S.
     \end{align}
-    % Source lines: paper_v2.tex 2045--2099.
-\end{definition}
+    % Source lines: paper_v2.tex 2059--2099.
+\end{proposition}
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
     \label{lemma:sym-trafo-swap}
