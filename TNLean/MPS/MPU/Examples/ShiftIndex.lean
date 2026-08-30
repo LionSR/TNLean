@@ -31,13 +31,58 @@ private theorem sourceIndexValue_eq_zero_of_rightRank_eq_leftRank
     sourceIndexValue U hr hℓ = 0 := by
   simp only [sourceIndexValue, h, sub_self, mul_zero]
 
+/-- The source ranks of the specified right-shift tensor are positive. -/
+lemma sourceRanks_pos_rightShiftTensor (d : ℕ) [NeZero d] :
+    0 < r[rightShiftTensor d] ∧ 0 < ℓ[rightShiftTensor d] := by
+  rw [rightRank_rightShiftTensor, leftRank_rightShiftTensor]
+  exact ⟨Nat.mul_pos (NeZero.pos d) (NeZero.pos d), Nat.zero_lt_one⟩
+
+/-- The source ranks of the specified left-shift tensor are positive. -/
+lemma sourceRanks_pos_leftShiftTensor (d : ℕ) [NeZero d] :
+    0 < r[leftShiftTensor d] ∧ 0 < ℓ[leftShiftTensor d] := by
+  rw [rightRank_leftShiftTensor, leftRank_leftShiftTensor]
+  exact ⟨Nat.zero_lt_one, Nat.mul_pos (NeZero.pos d) (NeZero.pos d)⟩
+
+/-- The source ranks of the specified bond-one identity tensor are positive. -/
+lemma sourceRanks_pos_identityMPUTensor (d : ℕ) [NeZero d] :
+    0 < r[identityMPUTensor d] ∧ 0 < ℓ[identityMPUTensor d] := by
+  rw [rightRank_identityMPUTensor, leftRank_identityMPUTensor]
+  exact ⟨NeZero.pos d, NeZero.pos d⟩
+
+/-- The source ranks of the specified tensor for $U_1$ are positive. -/
+lemma sourceRanks_pos_shiftExampleU₁ (d : ℕ) [NeZero d] :
+    0 < r[shiftExampleU₁ d] ∧ 0 < ℓ[shiftExampleU₁ d] := by
+  simp only [shiftExampleU₁, rightRank_tensorProduct, leftRank_tensorProduct,
+    rightRank_identityMPUTensor, leftRank_identityMPUTensor]
+  exact ⟨Nat.mul_pos (NeZero.pos d) (NeZero.pos d),
+    Nat.mul_pos (NeZero.pos d) (NeZero.pos d)⟩
+
+/-- The source ranks of the specified tensor for $U_2$ are positive. -/
+lemma sourceRanks_pos_shiftExampleU₂ (d : ℕ) [NeZero d] :
+    0 < r[shiftExampleU₂ d] ∧ 0 < ℓ[shiftExampleU₂ d] := by
+  simp only [shiftExampleU₂, rightRank_tensorProduct, leftRank_tensorProduct,
+    rightRank_leftShiftTensor, rightRank_rightShiftTensor,
+    leftRank_leftShiftTensor, leftRank_rightShiftTensor, one_mul, mul_one]
+  exact ⟨Nat.mul_pos (NeZero.pos d) (NeZero.pos d),
+    Nat.mul_pos (NeZero.pos d) (NeZero.pos d)⟩
+
+/-- The source ranks of the specified tensor for $U_3$ are positive. -/
+lemma sourceRanks_pos_shiftExampleU₃ (d : ℕ) [NeZero d] :
+    0 < r[shiftExampleU₃ d] ∧ 0 < ℓ[shiftExampleU₃ d] := by
+  simp only [shiftExampleU₃, rightRank_tensorProduct, leftRank_tensorProduct,
+    rightRank_rightShiftTensor, rightRank_leftShiftTensor,
+    leftRank_rightShiftTensor, leftRank_leftShiftTensor, one_mul, mul_one]
+  exact ⟨Nat.mul_pos (NeZero.pos d) (NeZero.pos d),
+    Nat.mul_pos (NeZero.pos d) (NeZero.pos d)⟩
+
 /-- The specified right-shift tensor has source-index value $\log_2 d$.
 
 Source: arXiv:1703.09188, lines 2039--2041. This is a value for the displayed
 tensor, not the blocking-independent MPU index. -/
-theorem sourceIndexValue_rightShiftTensor (d : ℕ) [NeZero d]
-    (hr : 0 < r[rightShiftTensor d]) (hℓ : 0 < ℓ[rightShiftTensor d]) :
-    sourceIndexValue (rightShiftTensor d) hr hℓ = Real.logb 2 d := by
+theorem sourceIndexValue_rightShiftTensor (d : ℕ) [NeZero d] :
+    sourceIndexValue (rightShiftTensor d)
+      (sourceRanks_pos_rightShiftTensor d).1 (sourceRanks_pos_rightShiftTensor d).2 =
+        Real.logb 2 d := by
   have hd : (d : ℝ) ≠ 0 := by exact_mod_cast NeZero.ne d
   rw [sourceIndexValue, rightRank_rightShiftTensor, leftRank_rightShiftTensor,
     Nat.cast_mul, Real.logb_mul hd hd]
@@ -48,9 +93,10 @@ theorem sourceIndexValue_rightShiftTensor (d : ℕ) [NeZero d]
 
 Source: arXiv:1703.09188, lines 2039--2041. This is a value for the displayed
 tensor, not the blocking-independent MPU index. -/
-theorem sourceIndexValue_leftShiftTensor (d : ℕ) [NeZero d]
-    (hr : 0 < r[leftShiftTensor d]) (hℓ : 0 < ℓ[leftShiftTensor d]) :
-    sourceIndexValue (leftShiftTensor d) hr hℓ = -Real.logb 2 d := by
+theorem sourceIndexValue_leftShiftTensor (d : ℕ) [NeZero d] :
+    sourceIndexValue (leftShiftTensor d)
+      (sourceRanks_pos_leftShiftTensor d).1 (sourceRanks_pos_leftShiftTensor d).2 =
+        -Real.logb 2 d := by
   have hd : (d : ℝ) ≠ 0 := by exact_mod_cast NeZero.ne d
   rw [sourceIndexValue, rightRank_leftShiftTensor, leftRank_leftShiftTensor,
     Nat.cast_mul, Real.logb_mul hd hd]
@@ -60,18 +106,18 @@ theorem sourceIndexValue_leftShiftTensor (d : ℕ) [NeZero d]
 /-- The specified bond-one identity tensor has source-index value zero.
 
 Source: arXiv:1703.09188, lines 2037--2039. -/
-theorem sourceIndexValue_identityMPUTensor (d : ℕ) [NeZero d]
-    (hr : 0 < r[identityMPUTensor d]) (hℓ : 0 < ℓ[identityMPUTensor d]) :
-    sourceIndexValue (identityMPUTensor d) hr hℓ = 0 := by
+theorem sourceIndexValue_identityMPUTensor (d : ℕ) [NeZero d] :
+    sourceIndexValue (identityMPUTensor d)
+      (sourceRanks_pos_identityMPUTensor d).1 (sourceRanks_pos_identityMPUTensor d).2 = 0 := by
   apply sourceIndexValue_eq_zero_of_rightRank_eq_leftRank
   rw [rightRank_identityMPUTensor, leftRank_identityMPUTensor]
 
 /-- The specified tensor for the identity family $U_1$ has source-index value zero.
 
 Source: arXiv:1703.09188, lines 2037--2039. -/
-theorem sourceIndexValue_shiftExampleU₁ (d : ℕ) [NeZero d]
-    (hr : 0 < r[shiftExampleU₁ d]) (hℓ : 0 < ℓ[shiftExampleU₁ d]) :
-    sourceIndexValue (shiftExampleU₁ d) hr hℓ = 0 := by
+theorem sourceIndexValue_shiftExampleU₁ (d : ℕ) [NeZero d] :
+    sourceIndexValue (shiftExampleU₁ d)
+      (sourceRanks_pos_shiftExampleU₁ d).1 (sourceRanks_pos_shiftExampleU₁ d).2 = 0 := by
   apply sourceIndexValue_eq_zero_of_rightRank_eq_leftRank
   simp only [shiftExampleU₁, rightRank_tensorProduct, leftRank_tensorProduct,
     rightRank_identityMPUTensor, leftRank_identityMPUTensor]
@@ -79,9 +125,9 @@ theorem sourceIndexValue_shiftExampleU₁ (d : ℕ) [NeZero d]
 /-- The specified tensor for the balanced shift family $U_2$ has source-index value zero.
 
 Source: arXiv:1703.09188, lines 2037--2039. -/
-theorem sourceIndexValue_shiftExampleU₂ (d : ℕ) [NeZero d]
-    (hr : 0 < r[shiftExampleU₂ d]) (hℓ : 0 < ℓ[shiftExampleU₂ d]) :
-    sourceIndexValue (shiftExampleU₂ d) hr hℓ = 0 := by
+theorem sourceIndexValue_shiftExampleU₂ (d : ℕ) [NeZero d] :
+    sourceIndexValue (shiftExampleU₂ d)
+      (sourceRanks_pos_shiftExampleU₂ d).1 (sourceRanks_pos_shiftExampleU₂ d).2 = 0 := by
   apply sourceIndexValue_eq_zero_of_rightRank_eq_leftRank
   simp only [shiftExampleU₂, rightRank_tensorProduct, leftRank_tensorProduct,
     rightRank_leftShiftTensor, rightRank_rightShiftTensor,
@@ -90,9 +136,9 @@ theorem sourceIndexValue_shiftExampleU₂ (d : ℕ) [NeZero d]
 /-- The specified tensor for the balanced shift family $U_3$ has source-index value zero.
 
 Source: arXiv:1703.09188, lines 2037--2039. -/
-theorem sourceIndexValue_shiftExampleU₃ (d : ℕ) [NeZero d]
-    (hr : 0 < r[shiftExampleU₃ d]) (hℓ : 0 < ℓ[shiftExampleU₃ d]) :
-    sourceIndexValue (shiftExampleU₃ d) hr hℓ = 0 := by
+theorem sourceIndexValue_shiftExampleU₃ (d : ℕ) [NeZero d] :
+    sourceIndexValue (shiftExampleU₃ d)
+      (sourceRanks_pos_shiftExampleU₃ d).1 (sourceRanks_pos_shiftExampleU₃ d).2 = 0 := by
   apply sourceIndexValue_eq_zero_of_rightRank_eq_leftRank
   simp only [shiftExampleU₃, rightRank_tensorProduct, leftRank_tensorProduct,
     rightRank_rightShiftTensor, rightRank_leftShiftTensor,
