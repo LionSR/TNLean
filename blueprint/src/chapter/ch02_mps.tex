@@ -360,6 +360,98 @@ boundary conditions (PBC).
     instance reads $V1_{D_B}W=1_{D_A}$.
 \end{proof}
 
+\begin{definition}[Coefficient-dual inverse and reduction cross matrix]
+    \label{def:mps_reduction_cross_matrix}
+    \lean{MPSTensor.coefficientDualInverse,
+        MPSTensor.reductionCrossMatrix}
+    \leanok
+    \uses{def:same_mpv2_pos}
+    Let $\widetilde A=(\widetilde A^i)_i$ be injective, with bond dimension
+    $D_A$, and choose the coefficient dual $C=(C^i)_i$ from a right inverse
+    to the linear-combination map of $\widetilde A$.  Thus
+    $C^i_{a'a}$ is the coefficient of $\widetilde A^i$ in the chosen
+    expansion of the matrix unit $\lvert a\rangle\!\langle a'\rvert$.
+    For a tensor $\widetilde B$ of bond dimension $D_B$, define the
+    mixed-bond matrix on
+    $\C^{D_B}\otimes\C^{D_A}$ by
+    \[
+        K(\widetilde B,C)=\sum_i \widetilde B^i\otimes(C^i)^T.
+    \]
+    The superscript $T$ is the ordinary transpose, not the conjugate
+    transpose.  This is exactly the matrix drawn in
+    \cite[proof of Proposition~20]{Molnar2018SemiInjective},
+    \texttt{cornerproblem.tex} lines 3817--3838.
+\end{definition}
+
+\begin{lemma}[Coefficient dual and reversed-word power formulas]
+    \label{lem:mps_reduction_cross_matrix_power}
+    \lean{MPSTensor.coefficientDualInverse_sum_entry,
+        MPSTensor.reductionCrossMatrix_apply,
+        MPSTensor.reductionCrossMatrix_pow_eq_sum,
+        MPSTensor.reductionCrossMatrix_pow_apply,
+        MPSTensor.reductionCrossMatrix_coefficientDualInverse}
+    \leanok
+    \uses{def:mps_reduction_cross_matrix}
+    The coefficient dual obeys the exact matrix-unit identity
+    \[
+        \sum_i \widetilde A^i_{xy}C^i_{a'a}
+          =\delta_{x,a}\delta_{y,a'}.
+    \]
+    Consequently,
+    \[
+      (K(\widetilde B,C)^n)_{(b,a),(b',a')}
+       =\sum_{i_1,\ldots,i_n}
+          (\widetilde B^{i_1}\cdots\widetilde B^{i_n})_{bb'}
+          (C^{i_n}\cdots C^{i_1})_{a'a}.
+    \]
+    In particular, pairing $\widetilde A$ with its own dual gives the
+    rank-one matrix whose entry is
+    $\delta_{x,a}\delta_{y,a'}$.  The reversed order
+    $C^{i_n}\cdots C^{i_1}$ is forced by the transpose and records the
+    upper-leg orientation in
+    \texttt{cornerproblem.tex} lines 3817--3865.
+\end{lemma}
+
+\begin{theorem}[Cross trace powers and source open-boundary contraction]
+    \label{thm:mps_reduction_cross_trace_open}
+    \lean{MPSTensor.SameMPV₂Pos.trace_evalWord,
+        MPSTensor.sameMPV₂Pos_blockTensor,
+        MPSTensor.trace_reductionCrossMatrix_pow_of_sameMPV₂Pos,
+        MPSTensor.reductionOpenBoundaryMatrixContraction,
+        MPSTensor.reductionOpenBoundaryContraction,
+        MPSTensor.reductionOpenBoundaryMatrixContraction_self,
+        MPSTensor.reductionOpenBoundaryContraction_self,
+        MPSTensor.reductionOpenBoundaryContraction_of_sameMPV₂Pos,
+        MPSTensor.reductionOpenBoundaryMatrixContraction_blockTensor_of_sameMPV₂Pos}
+    \leanok
+    \uses{def:same_mpv2_pos, def:mps_reduction_cross_matrix,
+        lem:mps_reduction_cross_matrix_power}
+    Suppose $\widetilde A$ and $\widetilde B$ have equal positive-length
+    MPV coefficients and $\widetilde A$ is injective.  Positive blocking
+    preserves this equality, and equality transports the trace of every
+    nonempty word.  For every $n>0$,
+    \[
+        \tr K(\widetilde B,C)^n=D_A^n.
+    \]
+    More generally, let $\widetilde A$ and $\widetilde B$ be the tensors
+    obtained by blocking $p>0$ original sites.  For every unblocked lower tail
+    word $w$ and upper boundary indices $(a',a)$,
+    \[
+      \sum_{i_1,\ldots,i_n}
+        \tr\!\left(
+          \widetilde B^{i_1}\cdots\widetilde B^{i_n} B^w
+        \right)
+        (C^{i_n}\cdots C^{i_1})_{a'a}
+      =D_A^{n-1}(A^w)_{a'a}.
+    \]
+    These are respectively the closed contraction at
+    \texttt{cornerproblem.tex} lines 3839--3865 and the open padded
+    contraction at lines 3866--3887.  The subsequent rank-one rewrite and
+    comparison leading to
+    $VB^{i_1}\cdots B^{i_m}W=A^{i_1}\cdots A^{i_m}$ occur at lines
+    3888--3938 and are deliberately not asserted here.
+\end{theorem}
+
 \begin{remark}\leanok
     Definition~\ref{def:same_mpv} is the same-bond-dimension
     specialization of Definition~\ref{def:same_mpv2}.

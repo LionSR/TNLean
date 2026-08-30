@@ -18,6 +18,7 @@ trace pairing on square matrices.
   two-sided products through a nonzero matrix span the full matrix algebra
 * `MPSTensor.traceMulRightPi` — the linear map `M ↦ (i ↦ trace (M * A i))`
 * `MPSTensor.SameMPV.trace_evalWord` — `SameMPV` implies trace agreement on all words
+* `MPSTensor.SameMPV₂Pos.trace_evalWord` — positive-length, mixed-bond trace transport
 * `MPSTensor.sameMPV_trace_word2` — auxiliary length-2 specialisation
   used in linear-extension proofs
 * `MPSTensor.traceMulRightPi_ker_eq_bot` — injectivity of `traceMulRightPi`
@@ -116,6 +117,14 @@ lemma SameMPV.trace_evalWord {A B : MPSTensor d D} (h : SameMPV A B) (w : List (
     Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) := by
   -- Use the `SameMPV` equality on the configuration `σ := w.get`.
   simpa [mpv, coeff, List.ofFn_get] using h w.length w.get
+
+/-- Positive-length MPV equality transports the trace of every nonempty word,
+even when the two tensors have different bond dimensions. -/
+lemma SameMPV₂Pos.trace_evalWord {D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : SameMPV₂Pos A B) (w : List (Fin d)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) := by
+  simpa [mpv, coeff, List.ofFn_get] using h w.length (List.length_pos_of_ne_nil hw) w.get
 
 /-- The linear map `M ↦ (i ↦ trace (M * A i))`. -/
 noncomputable def traceMulRightPi (A : MPSTensor d D) :
