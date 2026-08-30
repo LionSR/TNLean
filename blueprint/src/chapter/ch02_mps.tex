@@ -319,6 +319,26 @@ boundary conditions (PBC).
     $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every $N > 0$.
 \end{definition}
 
+\begin{definition}[Rectangular MPS reduction]
+    \label{def:mps_rectangular_reduction}
+    \lean{MPSTensor.IsReduction}
+    \leanok
+    Let $A$ and $B$ have the same physical alphabet and respective bond
+    dimensions $D_A$ and $D_B$.  A reduction from $B$ to $A$ is a pair
+    \begin{align}
+        V&\in\mathbb C^{D_A\times D_B}, &
+        W&\in\mathbb C^{D_B\times D_A}
+    \end{align}
+    such that
+    \begin{align}
+        VW&=1_{D_A}, &
+        VB^{\mathbf a}W&=A^{\mathbf a}
+    \end{align}
+    for every word $\mathbf a$, including the empty word.
+    This is the reduction of
+    \cite[Proposition~20 and the following definition]{Molnar2018SemiInjective}.
+\end{definition}
+
 \begin{remark}\leanok
     Definition~\ref{def:same_mpv} is the same-bond-dimension
     specialization of Definition~\ref{def:same_mpv2}.
