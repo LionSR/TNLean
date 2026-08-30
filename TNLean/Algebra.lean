@@ -34,5 +34,6 @@ import TNLean.Algebra.ScalarThreeCocycle
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.SemisimpleTracePowers
+import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryKronecker
 import TNLean.Algebra.UnitaryKroneckerComparison
