@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TwoInjectiveComparison.Basic
+import TNLean.PEPS.TwoInjectiveComparison.EndOperationComposition
 
 /-!
 # Two-injective-tensor comparison for PEPS
