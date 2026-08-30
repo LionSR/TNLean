@@ -572,6 +572,18 @@ so the boundary $\partial S$ is the disjoint union of the two windows' external
 legs with $e$ the only shared interior bond. This is the geometric data the
 bond-operator extraction consumes.
 
+The boundary-configuration form of this geometry is also formalized.  The
+equivalences
+\path{horizontalStaircaseLeftWindowBoundaryConfigEquiv} and
+\path{horizontalStaircaseRightWindowBoundaryConfigEquiv} split the boundary
+configuration of either end window into its index on $e$ and its external
+portion of $\partial S$, while
+\path{horizontalStaircaseEndPairBoundaryConfigEquiv} splits a configuration
+on $\partial S$ into its left and right external portions.  Their evaluation
+rules preserve each underlying lattice-edge label in both directions.  Thus
+the dependent index spaces required for the single-bond sum are in place; no
+cardinality replacement of a window boundary by a square matrix space is used.
+
 \medskip
 \noindent\textbf{The matrix-intertwining route does not apply per window in
 two dimensions.} The footnoted matrix-level form
@@ -1106,11 +1118,18 @@ $C_{1,\nu}=\sum_\mu A_{1,\mu}X_{\mu\nu}$ and
 $C_{2,\mu}=\sum_\nu X_{\mu\nu}A_{2,\nu}$.  No injectivity of the modified
 families $C_1,C_2$ is used.  Thus the algebraic inversion step in
 \cite[Lemma~5]{Molnar2018NormalPEPS} no longer requires a separate PEPS
-argument.  The remaining Step~4 work is to expand
-(\ref{eq:peps_normal_ft_2d_overlap_formal_end_pair_insert_equality}), using the
-boundary partition above, into precisely this single-bond contraction identity,
-and then to formalize the composition argument for the maps
-$O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$.
+argument.  The three boundary-configuration equivalences above now provide
+the exact reindexing for the open legs.  The remaining Step~4 work is to expand
+(\ref{eq:peps_normal_ft_2d_overlap_formal_end_pair_insert_equality}) into the
+single-bond contraction identity.  Concretely, the present definition of
+\path{extendInsert} is expressed through
+\path{ThreeBlockGeometry.threeBlockBlueCoeff} and the
+$\mathrm{univ}\setminus S$ interior-bond multiplicity.  The missing lemma must
+identify that normalized blue coupling, for the two-window geometry, with the
+genuine opposite-window block indexed by the same $e$-coordinate and the
+opposite external configuration.  This is a coefficient factorization, not an
+additional injectivity hypothesis.  After it, one must formalize the composition
+argument for the maps $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$.
 
 \subsection{The back half transfers with a window as witness region}
 

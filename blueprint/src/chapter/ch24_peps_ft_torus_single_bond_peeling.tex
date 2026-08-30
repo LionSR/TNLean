@@ -97,6 +97,47 @@
     boundary edge of $S$.
 \end{proof}
 
+\begin{theorem}[Boundary configurations of the staircase end windows]
+    \label{thm:peps_horizontal_staircase_end_window_boundary_config}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv}
+    \leanok
+    \uses{thm:peps_horizontal_staircase_end_pair_boundary, thm:peps_horizontal_staircase_reference_edge_crossing}
+    Under the same geometric bounds, write
+    $\partial_{\mathrm{left}}S$ and $\partial_{\mathrm{right}}S$
+    for the boundary edges of $S$ which lie on the corresponding end-window
+    boundary.  Then the boundary-configuration spaces have canonical
+    factorizations
+    \begin{align}
+        \operatorname{Conf}(\partial W_{\mathrm{left}})
+          &\cong \operatorname{Conf}(e)
+            \times\operatorname{Conf}(\partial_{\mathrm{left}}S),
+        \notag \\
+        \operatorname{Conf}(\partial W_{\mathrm{right}})
+          &\cong \operatorname{Conf}(e)
+            \times\operatorname{Conf}(\partial_{\mathrm{right}}S),
+        \notag \\
+        \operatorname{Conf}(\partial S)
+          &\cong
+            \operatorname{Conf}(\partial_{\mathrm{left}}S)
+              \times\operatorname{Conf}(\partial_{\mathrm{right}}S).
+        \notag
+    \end{align}
+    These equivalences preserve every underlying lattice-edge label.  Thus
+    the reference edge is the only contracted virtual index shared by the
+    two highlighted end windows; every other virtual index remains on the
+    corresponding open boundary of $S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Split each end-window configuration at the reference edge.  A remaining
+    boundary edge of either window is a boundary edge of $S$, and conversely
+    every boundary edge of $S$ belongs to exactly one end window.  Reindexing
+    the dependent products along these edge identifications gives the three
+    displayed equivalences.
+\end{proof}
+
 \begin{lemma}[Complement split for an end window]
     \label{lem:peps_horizontal_staircase_end_window_complement_split}
     \lean{TNLean.PEPS.horizontalStaircaseEndPair_sdiff_leftWindow}
