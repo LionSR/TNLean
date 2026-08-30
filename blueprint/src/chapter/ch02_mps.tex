@@ -1080,12 +1080,78 @@ $A^{-1}A=\Id$. This is the identity used in
     $\widehat{\mathcal I}$ is the part with $r=0$.
 \end{definition}
 
+\begin{theorem}[Recursive residual expansion]
+    \label{thm:mps_reduction_recursive_residual_expansion}
+    \lean{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowSum}
+    \leanok
+    \uses{def:mps_reduction_strict_window_sums,
+        thm:mps_reduction_residual_sandwich,
+        thm:mps_rectangular_reduction_identities}
+    Under the reduction hypothesis, every word satisfies
+    \begin{align}
+        B^{\mathbf i}=N^{\mathbf i}+\mathcal W(\mathbf i).
+        \label{eq:mps_reduction_recursive_residual_expansion}
+    \end{align}
+    This recursive identity is a precursor to the explicit corrected form of
+    Lemma~\texttt{B\_expand}; it is not itself a formula printed in the source.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the word and split the first letter as $B^i=N^i+WA^iV$.
+    The induction hypothesis supplies the recursive windows in the remaining
+    word.  A positive residual word between two selected $WA^iV$ blocks
+    vanishes, while adjacent selected blocks combine by $VW=1$.
+\end{proof}
+
+\begin{theorem}[All-cut contracted residual identities]
+    \label{thm:mps_reduction_all_cut_contracted}
+    \lean{MPSTensor.reductionLeftContractedSum,
+        MPSTensor.reductionRightContractedSum,
+        MPSTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedSum,
+        MPSTensor.IsReduction.evalWord_mul_eq_reductionRightContractedSum}
+    \leanok
+    \uses{def:mps_rectangular_reduction,
+        def:mps_reduction_residual_algebra,
+        thm:mps_reduction_recursive_residual_expansion}
+    Let $(V,W)$ be a reduction from $B$ to $A$, and write
+    $\mathbf i=(i_1,\ldots,i_n)$.  Then
+    \begin{align}
+        VB^{i_1}\cdots B^{i_n}
+         & =\sum_{s=0}^{n}
+        A^{i_1}\cdots A^{i_s}V
+        N^{i_{s+1}}\cdots N^{i_n},
+        \label{eq:mps_reduction_left_all_cut} \\
+        B^{i_1}\cdots B^{i_n}W
+         & =\sum_{r=0}^{n}
+        N^{i_1}\cdots N^{i_r}W
+        A^{i_{r+1}}\cdots A^{i_n}.
+        \label{eq:mps_reduction_right_all_cut}
+    \end{align}
+    These identities require only the reduction.  They are precursors to the
+    bound-truncated formulas in
+    Theorem~\ref{thm:mps_reduction_contracted_expansions}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mps_rectangular_reduction_identities,
+        thm:mps_reduction_residual_sandwich,
+        thm:mps_reduction_recursive_residual_expansion}
+    Prove both identities by induction on the word.  For the left contraction,
+    decompose the first letter and apply
+    (\ref{eq:mps_reduction_recursive_residual_expansion}) to the tail; the
+    sandwiched residual terms vanish and $VW=1$.  For the right contraction,
+    decompose the first letter and apply the reduction identity to the tail.
+\end{proof}
+
 \begin{theorem}[Recursive and explicit strict-window sums]
     \label{thm:mps_reduction_strict_window_range}
     \lean{MPSTensor.IsReduction.reductionStrictWindowSum_eq_reductionStrictWindowRangeSum}
     \leanok
     \uses{def:mps_reduction_strict_window_sums,
-        thm:mps_rectangular_reduction_identities}
+        thm:mps_reduction_all_cut_contracted,
+        thm:mps_reduction_recursive_residual_expansion}
     Under the reduction hypothesis, for every word $\mathbf i$,
     \begin{align}
         \mathcal W(\mathbf i)=\widehat{\mathcal W}(\mathbf i).
@@ -1095,10 +1161,15 @@ $A^{-1}A=\Id$. This is the identity used in
 \begin{proof}
     \leanok
     Induct on the length of the word.  The summands with $r=0$ constitute
-    $\widehat{\mathcal I}$, while deleting the first letter identifies the
-    summands with $r>0$ with $N^{i_1}\widehat{\mathcal W}(i_2,\ldots,i_n)$.
-    The identity $VW=1$ identifies $\widehat{\mathcal I}$ with
-    $\mathcal I$.
+    $\widehat{\mathcal I}$.  By the left all-cut identity,
+    \begin{align}
+        \widehat{\mathcal I}(i_1,\ldots,i_n)
+        =WA^{i_1}VB^{i_2}\cdots B^{i_n}
+        =\mathcal I(i_1,\ldots,i_n),
+    \end{align}
+    where the last equality is the initial-window case of the recursive
+    expansion.  Deleting the first letter identifies the summands with $r>0$
+    with $N^{i_1}\widehat{\mathcal W}(i_2,\ldots,i_n)$.
 \end{proof}
 
 \begin{theorem}[Corrected strict-window residual expansion]
@@ -1107,6 +1178,7 @@ $A^{-1}A=\Id$. This is the identity used in
     \leanok
     \uses{def:mps_rectangular_reduction,
         def:mps_reduction_strict_window_sums,
+        thm:mps_reduction_recursive_residual_expansion,
         thm:mps_reduction_strict_window_range}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For every word
     $\mathbf i=(i_1,\ldots,i_n)$,
@@ -1129,16 +1201,12 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_residual_sandwich,
+    \uses{thm:mps_reduction_recursive_residual_expansion,
         thm:mps_reduction_strict_window_range}
-    Proceed by induction on the word and split its first letter as
-    $B^i=N^i+WA^iV$.  The induction hypothesis supplies the strict windows
-    in the remaining word.  A positive residual word between two selected
-    $WA^iV$ blocks vanishes by
-    Theorem~\ref{thm:mps_reduction_residual_sandwich}.  The remaining terms
-    are the pure residual word and the recursively defined windows.  Theorem
-    \ref{thm:mps_reduction_strict_window_range} identifies the latter with
-    the explicit sum in (\ref{eq:mps_reduction_residual_expansion}).
+    Substitute
+    $\mathcal W(\mathbf i)=\widehat{\mathcal W}(\mathbf i)$ into
+    (\ref{eq:mps_reduction_recursive_residual_expansion}), and then reindex
+    the positive central length by $s=r+m$.
 \end{proof}
 
 \begin{theorem}[Residual trace vanishing and nilpotence]
@@ -1240,46 +1308,6 @@ $A^{-1}A=\Id$. This is the identity used in
     \leanok
     Split the residual word after its first $L$ letters.  The prefix is zero
     by the bound, so the full word is zero.
-\end{proof}
-
-\begin{theorem}[All-cut contracted residual identities]
-    \label{thm:mps_reduction_all_cut_contracted}
-    \lean{MPSTensor.reductionLeftContractedSum,
-        MPSTensor.reductionRightContractedSum,
-        MPSTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedSum,
-        MPSTensor.IsReduction.evalWord_mul_eq_reductionRightContractedSum}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
-    Let $(V,W)$ be a reduction from $B$ to $A$, and write
-    $\mathbf i=(i_1,\ldots,i_n)$.  Then
-    \begin{align}
-        VB^{i_1}\cdots B^{i_n}
-         & =\sum_{s=0}^{n}
-        A^{i_1}\cdots A^{i_s}V
-        N^{i_{s+1}}\cdots N^{i_n},
-        \label{eq:mps_reduction_left_all_cut} \\
-        B^{i_1}\cdots B^{i_n}W
-         & =\sum_{r=0}^{n}
-        N^{i_1}\cdots N^{i_r}W
-        A^{i_{r+1}}\cdots A^{i_n}.
-        \label{eq:mps_reduction_right_all_cut}
-    \end{align}
-    These identities require only the reduction.  They are precursors to the
-    bound-truncated formulas in
-    Theorem~\ref{thm:mps_reduction_contracted_expansions}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_rectangular_reduction_identities,
-        thm:mps_reduction_residual_sandwich,
-        thm:mps_reduction_residual_expansion}
-    Prove both identities by induction on the word.  For the left contraction,
-    decompose the first letter and apply the corrected expansion to the tail;
-    the sandwiched residual terms vanish and $VW=1$.  For the right
-    contraction, decompose the first letter and apply the reduction identity
-    to the tail.
 \end{proof}
 
 \begin{theorem}[Bound-truncated contracted residual expansions]
