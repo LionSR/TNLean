@@ -22,6 +22,13 @@ exterior-buffer identity used in blocking arguments.
 printed weak-range expansion is false.  The statements below use a pure
 residual term and a strict nonempty central window, as documented in
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`.
+
+**Scope restriction ($\lambda=1$):** the residual nilpotency argument is
+formalized for equality of the positive-length closed chains.  The source's
+preceding reduction theorem is stated for proportional chains and silently
+drops the proportionality scalar in this argument.  The proportional case is
+tracked separately in issue #7376; see
+`docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -190,11 +197,9 @@ private lemma evalWord_eq_prod_map (K : MPSTensor d D_B) (w : List (Fin d)) :
 /-- A nonempty residual block vanishes when it is placed between arbitrary
 `B`-words and then compressed by the reduction matrices.
 
-The case of empty exterior words is the source identity
-$V N^{a_1}\cdots N^{a_m}W=0$.
-
-Source: arXiv:1706.07329v2, Lemma `lem:VNW=0`,
-`cornerproblem.tex` lines 3946--3970. -/
+**Derived strengthening:** MGSC18 Lemma `lem:VNW=0` has empty exterior
+words.  The exterior words in this statement are a TNLean consequence of the
+same reduction identities and are not part of the cited lemma. -/
 theorem evalWord_mul_reductionResidual_mul_evalWord_eq_zero
     (h : IsReduction B A V W) (p u q : List (Fin d)) (hu : u ≠ []) :
     V * Kraus.evalWord B p * Kraus.evalWord (reductionResidual B A V W) u *
@@ -246,7 +251,7 @@ theorem evalWord_mul_reductionResidual_mul_evalWord_eq_zero
         simp
 
 /-- Every positive selected-reduction residual word vanishes after sandwiching
-by the reduction matrices.
+by the reduction matrices: $V N^{i_1}\cdots N^{i_m}W=0$.
 
 Source: arXiv:1706.07329v2, Lemma `lem:VNW=0`,
 `cornerproblem.tex` lines 3946--3970. -/
@@ -333,9 +338,8 @@ private theorem reductionInitialWindowSum_cons
   simp only [Matrix.mul_add]
   noncomm_ring [hmerge']
 
-/-- Left-contracted corrected expansion.
-
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3997--4005. -/
+/-- Derived all-cut left-contracted expansion.  This is the untruncated
+precursor of the formula printed in MGSC18 Lemma `lem:B_expand`. -/
 theorem mul_evalWord_eq_reductionLeftContractedSum
     (h : IsReduction B A V W) (w : List (Fin d)) :
     V * Kraus.evalWord B w = reductionLeftContractedSum B A V W w := by
@@ -381,9 +385,8 @@ theorem mul_evalWord_eq_reductionLeftContractedSum
       simp only [zero_add, Matrix.mul_assoc]
       ac_rfl
 
-/-- Right-contracted corrected expansion.
-
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3997--4005. -/
+/-- Derived all-cut right-contracted expansion.  This is the untruncated
+precursor of the formula printed in MGSC18 Lemma `lem:B_expand`. -/
 theorem evalWord_mul_eq_reductionRightContractedSum
     (h : IsReduction B A V W) (w : List (Fin d)) :
     Kraus.evalWord B w * W = reductionRightContractedSum B A V W w := by
@@ -462,67 +465,95 @@ private theorem reductionRightContractedSum_eq_allCutSum
         simpa only [Matrix.mul_assoc] using hsum
       rw [hsum']
 
+private theorem trace_evalWord_reductionResidual_mul_strictWindowSum_eq_zero
+    (h : IsReduction B A V W) (u w : List (Fin d)) (hu : u ≠ []) :
+    Matrix.trace (Kraus.evalWord (reductionResidual B A V W) u *
+      reductionStrictWindowSum B A V W w) = 0 := by
+  induction w generalizing u with
+  | nil => simp [reductionStrictWindowSum]
+  | cons i w ih =>
+      rw [reductionStrictWindowSum, Matrix.mul_add, Matrix.trace_add]
+      have hsandwich := h.evalWord_mul_reductionResidual_mul_evalWord_eq_zero
+        w u [] hu
+      have hsandwich' :
+          V * Kraus.evalWord B w *
+            Kraus.evalWord (reductionResidual B A V W) u * W = 0 := by
+        simpa only [Kraus.evalWord_nil, Matrix.mul_one, Matrix.mul_assoc] using hsandwich
+      have hinitial :
+          Matrix.trace (Kraus.evalWord (reductionResidual B A V W) u *
+            reductionInitialWindowSum B A V W (i :: w)) = 0 := by
+        rw [h.reductionInitialWindowSum_cons]
+        calc
+          _ = Matrix.trace
+                ((V * Kraus.evalWord B w *
+                    Kraus.evalWord (reductionResidual B A V W) u * W) * A i) := by
+              simpa only [Matrix.mul_assoc] using
+                Matrix.trace_mul_cycle
+                  (Kraus.evalWord (reductionResidual B A V W) u * W)
+                  (A i) (V * Kraus.evalWord B w)
+          _ = 0 := by rw [hsandwich', Matrix.zero_mul, Matrix.trace_zero]
+      have hshift := ih (u ++ [i]) (by simp [hu])
+      have hshift' :
+          Matrix.trace (Kraus.evalWord (reductionResidual B A V W) u *
+            (reductionResidual B A V W i *
+              reductionStrictWindowSum B A V W w)) = 0 := by
+        simpa only [Kraus.evalWord_append, Kraus.evalWord_cons,
+          Kraus.evalWord_nil, Matrix.mul_one, Matrix.mul_assoc] using hshift
+      rw [hinitial, hshift', add_zero]
+
+private theorem trace_reductionInitialWindowSum_cons_eq_trace_evalWord
+    (h : IsReduction B A V W) (i : Fin d) (w : List (Fin d)) :
+    Matrix.trace (reductionInitialWindowSum B A V W (i :: w)) =
+      Matrix.trace (Kraus.evalWord A (i :: w)) := by
+  rw [h.reductionInitialWindowSum_cons]
+  have hword := h.evalWord w
+  calc
+    _ = Matrix.trace ((V * Kraus.evalWord B w * W) * A i) := by
+      simpa only [Matrix.mul_assoc] using
+        Matrix.trace_mul_cycle W (A i) (V * Kraus.evalWord B w)
+    _ = Matrix.trace (Kraus.evalWord A w * A i) := by rw [hword]
+    _ = Matrix.trace (A i * Kraus.evalWord A w) := Matrix.trace_mul_comm _ _
+    _ = _ := by rw [Kraus.evalWord_cons]
+
+private theorem trace_reductionStrictWindowSum_eq_trace_evalWord
+    (h : IsReduction B A V W) (w : List (Fin d)) (hw : w ≠ []) :
+    Matrix.trace (reductionStrictWindowSum B A V W w) =
+      Matrix.trace (Kraus.evalWord A w) := by
+  obtain ⟨i, w, rfl⟩ := List.exists_cons_of_ne_nil hw
+  have hzero :=
+    h.trace_evalWord_reductionResidual_mul_strictWindowSum_eq_zero [i] w (by simp)
+  simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one] at hzero
+  rw [reductionStrictWindowSum, Matrix.trace_add,
+    h.trace_reductionInitialWindowSum_cons_eq_trace_evalWord, hzero, add_zero]
+
+/-- The trace decomposition obtained by expanding
+$B^i=WA^iV+N^i$: for a nonempty word, all cyclic mixed terms vanish and only
+the pure $A$-word and pure residual word remain.
+
+Source: arXiv:1706.07329v2, Proposition 21 proof,
+`cornerproblem.tex` lines 3973--3979. -/
+theorem trace_evalWord_eq_trace_evalWord_add_trace_reductionResidual
+    (h : IsReduction B A V W) (w : List (Fin d)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord B w) =
+      Matrix.trace (Kraus.evalWord A w) +
+        Matrix.trace (Kraus.evalWord (reductionResidual B A V W) w) := by
+  rw [h.evalWord_eq_reductionResidual_add_strictWindowSum,
+    Matrix.trace_add, h.trace_reductionStrictWindowSum_eq_trace_evalWord w hw]
+  ac_rfl
+
 /-- Every nonempty residual word has zero trace when `B` and `A` have the
 same positive-length closed chains.  This is the trace input to the residual
 nilpotency argument.
 
 Source: arXiv:1706.07329v2, Proposition 21 proof,
-`cornerproblem.tex` lines 3972--3986. -/
+`cornerproblem.tex` lines 3973--3981. -/
 theorem trace_evalWord_reductionResidual_eq_zero
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
     (u : List (Fin d)) (hu : u ≠ []) :
     Matrix.trace (Kraus.evalWord (reductionResidual B A V W) u) = 0 := by
-  have haux : ∀ (p u : List (Fin d)), u ≠ [] →
-      Matrix.trace (Kraus.evalWord B p *
-        Kraus.evalWord (reductionResidual B A V W) u) = 0 := by
-    intro p u hu
-    induction u generalizing p with
-    | nil => exact (hu rfl).elim
-    | cons i u ih =>
-        rw [Kraus.evalWord_cons, reductionResidual, Matrix.sub_mul,
-          Matrix.mul_sub, Matrix.trace_sub]
-        by_cases hu' : u = []
-        · subst u
-          simp only [Kraus.evalWord_nil, Matrix.mul_one]
-          have htrace := hSame.trace_evalWord (p ++ [i]) (by simp)
-          have hp := h.evalWord p
-          have hcompressed :
-              Matrix.trace (Kraus.evalWord B p * (W * A i * V)) =
-                Matrix.trace (Kraus.evalWord A p * A i) := by
-            calc
-              _ = Matrix.trace (V * Kraus.evalWord B p * W * A i) := by
-                simpa only [Matrix.mul_assoc] using
-                  Matrix.trace_mul_cycle (Kraus.evalWord B p * W) (A i) V
-              _ = _ := by rw [hp]
-          rw [hcompressed]
-          apply sub_eq_zero.mpr
-          simpa [Kraus.evalWord_append, Matrix.mul_assoc] using htrace
-        · have hfirst := ih (p ++ [i]) hu'
-          have hsandwich := h.evalWord_mul_reductionResidual_mul_evalWord_eq_zero
-            [] u p hu'
-          have hsecond :
-              Matrix.trace (Kraus.evalWord B p *
-                (W * A i * V * Kraus.evalWord (reductionResidual B A V W) u)) = 0 := by
-            calc
-              _ = Matrix.trace
-                    (V * Kraus.evalWord (reductionResidual B A V W) u *
-                      Kraus.evalWord B p * W * A i) := by
-                  simpa only [Matrix.mul_assoc] using
-                    Matrix.trace_mul_cycle (Kraus.evalWord B p * W) (A i)
-                      (V * Kraus.evalWord (reductionResidual B A V W) u)
-              _ = 0 := by
-                have hsandwich' :
-                    V * Kraus.evalWord (reductionResidual B A V W) u *
-                      Kraus.evalWord B p * W = 0 := by
-                  simpa only [Kraus.evalWord_nil, Matrix.one_mul, Matrix.mul_assoc] using hsandwich
-                rw [hsandwich', Matrix.zero_mul, Matrix.trace_zero]
-          have hfirst' :
-              Matrix.trace (Kraus.evalWord B p *
-                (B i * Kraus.evalWord (reductionResidual B A V W) u)) = 0 := by
-            simpa [Kraus.evalWord_append, Matrix.mul_assoc] using hfirst
-          rw [hfirst', hsecond]
-          simp
-  simpa using haux [] u hu
+  have hdecomp := h.trace_evalWord_eq_trace_evalWord_add_trace_reductionResidual u hu
+  rw [hSame.trace_evalWord u hu] at hdecomp
+  exact add_left_cancel (by simpa only [add_zero] using hdecomp.symm)
 
 end IsReduction
 
@@ -566,7 +597,10 @@ namespace IsReduction
 variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
 
-/-- Every element of the selected-reduction residual algebra has zero trace. -/
+/-- Every element of the selected-reduction residual algebra has zero trace.
+
+Source: arXiv:1706.07329v2, Proposition 21 proof,
+`cornerproblem.tex` lines 3979--3981. -/
 theorem trace_eq_zero_of_mem_reductionResidualAlgebra
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
     {X : Matrix (Fin D_B) (Fin D_B) ℂ}
@@ -595,7 +629,10 @@ theorem trace_eq_zero_of_mem_reductionResidualAlgebra
   | add X Y _ _ hX hY => simp [Matrix.trace_add, hX, hY]
   | smul c X _ hX => simp [Matrix.trace_smul, hX]
 
-/-- Every element of the selected-reduction residual algebra is nilpotent. -/
+/-- Every element of the selected-reduction residual algebra is nilpotent.
+
+Source: arXiv:1706.07329v2, Proposition 21 proof,
+`cornerproblem.tex` lines 3981--3985. -/
 theorem isNilpotent_of_mem_reductionResidualAlgebra
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
     (X : reductionResidualAlgebra B A V W) :
@@ -607,7 +644,11 @@ theorem isNilpotent_of_mem_reductionResidualAlgebra
     (reductionResidualAlgebra B A V W) X.property (by omega)
 
 /-- Every mixed product of exactly the bond dimension `D_B` elements of the
-selected-reduction residual algebra vanishes. -/
+selected-reduction residual algebra vanishes.
+
+**Derived dimension bound:** Proposition 21 asserts nilpotence but does not
+state the numerical bound `D_B`.  This conclusion uses QICLean's
+finite-dimensional nil-matrix theorem. -/
 theorem reductionResidualAlgebra_list_prod_eq_zero
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
     (l : List (Matrix (Fin D_B) (Fin D_B) ℂ))
@@ -617,7 +658,8 @@ theorem reductionResidualAlgebra_list_prod_eq_zero
     (h.isNilpotent_of_mem_reductionResidualAlgebra hSame) l hl
   simpa using hlen
 
-/-- The bond dimension `D_B` is a residual-word nilpotency bound. -/
+/-- The bond dimension `D_B` is a residual-word nilpotency bound, as a derived
+consequence of the finite-dimensional nil-matrix theorem. -/
 theorem bondDim_isReductionResidualNilpotencyBound
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A) :
     IsReductionResidualNilpotencyBound B A V W D_B := by
@@ -629,7 +671,8 @@ theorem bondDim_isReductionResidualNilpotencyBound
     exact reductionResidual_mem_reductionResidualAlgebra B A V W i
   · simpa using hlen
 
-/-- The MGSC18 nilpotency length exists and is itself a residual-word bound. -/
+/-- The MGSC18 nilpotency length exists and is itself a residual-word bound.
+Its existence here follows from the derived bond-dimension bound. -/
 theorem reductionResidualNilpotencyLength_isBound
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A) :
     IsReductionResidualNilpotencyBound B A V W
@@ -639,7 +682,9 @@ theorem reductionResidualNilpotencyLength_isBound
   rw [reductionResidualNilpotencyLength]
   exact Nat.sInf_mem ⟨D_B, h.bondDim_isReductionResidualNilpotencyBound hSame⟩
 
-/-- The least MGSC18 nilpotency length is at most the bond dimension `D_B`. -/
+/-- The least MGSC18 nilpotency length is at most the bond dimension `D_B`.
+This numerical estimate is a TNLean/QICLean consequence and is not stated in
+MGSC18 Proposition 21. -/
 theorem reductionResidualNilpotencyLength_le_bondDim
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A) :
     reductionResidualNilpotencyLength B A V W ≤ D_B :=
@@ -662,7 +707,8 @@ residual suffix of length exactly `N` and is retained as a zero term.
 This theorem needs only an arbitrary residual nilpotency bound, not
 `SameMPV₂Pos`.
 
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3997--4005. -/
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, displayed formula at
+`cornerproblem.tex` line 3997. -/
 theorem mul_evalWord_eq_reductionLeftContractedRangeSum
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
@@ -705,7 +751,8 @@ prefix of length exactly `N` and is retained as a zero term.
 This theorem needs only an arbitrary residual nilpotency bound, not
 `SameMPV₂Pos`.
 
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3997--4005. -/
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, displayed formula at
+`cornerproblem.tex` line 3998. -/
 theorem evalWord_mul_eq_reductionRightContractedRangeSum
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
@@ -870,8 +917,10 @@ adjacent central letter, reach a uniform residual nilpotency bound.
 This theorem uses only the reduction and an arbitrary supplied bound; it does
 not assume `SameMPV₂Pos`.
 
-Source: arXiv:1706.07329v2, Lemma `lem:B_expand` and its use after lines
-3993--4005. -/
+**Derived blocking lemma:** this exterior-buffer statement is not stated in
+MGSC18 Lemma `lem:B_expand` or in its later applications.  It is a TNLean
+consequence of the corrected residual expansion and a supplied nilpotency
+bound. -/
 theorem evalWord_mul_reduced_exterior_eq_evalWord_append
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
@@ -903,7 +952,8 @@ theorem evalWord_mul_reduced_exterior_eq_evalWord_append
   simpa only [Matrix.mul_assoc] using hcorrection.symm
 
 /-- Every residual word whose length is at least `D_B` vanishes.  The bound is
-the bond dimension, not its square. -/
+the bond dimension, not its square.  This is the derived numerical consequence
+of the finite-dimensional nil-matrix theorem. -/
 theorem evalWord_reductionResidual_eq_zero_of_bondDim_le_length
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
     (w : List (Fin d)) (hlen : D_B ≤ w.length) :
