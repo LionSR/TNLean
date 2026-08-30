@@ -761,6 +761,13 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Nonempty products in generated subsemigroups
+- **Pattern:** induct over subsemigroup closure to express each element as a
+  nonempty list product of generators.
+- **Reuse:** `Subsemigroup.exists_nonempty_list_prod_of_mem_closure` in
+  `TNLean/Algebra/ListProduct.lean` replaces the three local proofs in the MPU
+  residual algebra, MPU three-form span, and MPS reduction-residual modules.
+
 ### Four-site composition sum normalization
 - **Pattern:** expand a four-site product cut into eight finite indices, permute
   those indices once, and compare only the resulting scalar summands modulo

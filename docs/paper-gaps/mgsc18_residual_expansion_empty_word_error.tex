@@ -12,7 +12,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The printed expansion}
 
@@ -163,9 +163,17 @@ gives the pure-residual and strict-range formula
 (\ref{eq:mgsc18_residual_expansion_corrected_sum}).  The two contracted
 equalities remain correct with their zero endpoints understood as above.
 
-The eventual formal residual-expansion theorem is tracked by
-\href{https://github.com/LionSR/TNLean/issues/7322}{TNLean issue 7322}; no
-parallel tensor or cohomology interface is introduced here.
+The corrected strict-range identity and both contracted formulas are proved in
+the formal development under the hypotheses stated above.\footnote{Formal
+declarations:
+\leanid{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowRangeSum},
+\leanid{MPSTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedRangeSum},
+and
+\leanid{MPSTensor.IsReduction.evalWord_mul_eq_reductionRightContractedRangeSum}.
+The corresponding blueprint entries are
+\path{thm:mps_reduction_residual_expansion} and
+\path{thm:mps_reduction_contracted_expansions} in
+\path{blueprint/src/chapter/ch02_mps.tex}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}
