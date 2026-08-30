@@ -157,6 +157,17 @@ lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
       congr 1
       exact ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
 
+/-- If every off-diagonal physical entry of an MPO tensor vanishes, then its
+evaluation on two distinct physical configurations is zero. -/
+theorem evalWord_ofFn_eq_zero_of_ne (M : MPOTensor d D)
+    (hM : ∀ i j, i ≠ j → M i j = 0) {N : ℕ} {σ τ : Fin N → Fin d}
+    (hστ : σ ≠ τ) :
+    evalWord M (List.ofFn σ) (List.ofFn τ) = 0 := by
+  rw [evalWord_ofFn]
+  obtain ⟨k, hk⟩ := Function.ne_iff.mp hστ
+  apply List.prod_eq_zero
+  exact List.mem_ofFn.mpr ⟨k, hM (σ k) (τ k) hk⟩
+
 /-- Evaluating the doubled-index MPS view on paired physical letters is the
 same as evaluating the ket and bra words separately. -/
 theorem evalWord_toMPSTensor_ofFn (M : MPOTensor d D) (N : ℕ)

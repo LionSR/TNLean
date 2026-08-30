@@ -118,13 +118,6 @@ private lemma prod_tensor_diagonal :
       fin_cases a <;> fin_cases b <;>
         simp [configurationSign, Fin.prod_univ_succ, pow_succ] <;> ring
 
-private lemma prod_tensor_off_diagonal {N : ℕ} {σ τ : Fin N → Fin 2}
-    (hστ : σ ≠ τ) :
-    (List.ofFn fun k => tensor (σ k) (τ k)).prod = 0 := by
-  obtain ⟨k, hk⟩ := Function.ne_iff.mp hστ
-  apply List.prod_eq_zero
-  exact List.mem_ofFn.mpr ⟨k, by simp [tensor, hk]⟩
-
 /-- The exact closed MPO at every length is diagonal.  Its entry at a physical
 configuration $\sigma$ is
 $2^{-N}+4^{-N}\prod_k z_{\sigma_k}$, where $z_0=1$ and $z_1=-1$.
@@ -143,7 +136,7 @@ theorem mpo_tensor_eq_diagonal (N : ℕ) :
       prod_tensor_diagonal, Matrix.trace_diagonal]
     simp [Fin.sum_univ_two]
   · rw [Matrix.diagonal_apply_ne _ hστ, mpo_apply, mpoMatrixEntry,
-      evalWord_ofFn, prod_tensor_off_diagonal hστ, Matrix.trace_zero]
+      evalWord_ofFn_eq_zero_of_ne tensor (by simp [tensor]) hστ, Matrix.trace_zero]
 
 /-- Kato's $p=1/2$ tensor generates a positive semidefinite operator at every
 positive chain length.

@@ -373,15 +373,10 @@ lemma retainedBlock_isInjective : Kraus.IsInjective retainedBlock := by
   refine R_toMPSTensor_isInjective.smul (inv_ne_zero ?_)
   exact_mod_cast weight_ne
 
-/-- Algebraic normality (eventual block injectivity) follows from `1`-block
-injectivity. -/
-lemma retainedBlock_isNormal : Kraus.IsNormal retainedBlock :=
-  retainedBlock_isInjective.isNormal
-
 /-- **`retainedBlock` is a CPSV normal tensor.** -/
 lemma retainedBlock_isNormalTensor : MPSTensor.IsNormalTensor retainedBlock :=
   MPSTensor.isNormalTensor_of_isNormal_isTransferIdempotent retainedBlock
-    retainedBlock_isNormal retainedBlock_isTransferIdempotent
+    retainedBlock_isInjective.isNormal retainedBlock_isTransferIdempotent
 
 /-! ### Packaging the literal CPSV canonical form -/
 
