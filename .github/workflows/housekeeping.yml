@@ -51,7 +51,7 @@ jobs:
       CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Enough history for the 24-72 hour activity window; the full
           # history is not needed.
@@ -63,7 +63,7 @@ jobs:
 
       - name: Gather recent activity
         id: activity
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             // On Monday (day 1), look back 72 hours to capture weekend activity.
@@ -231,7 +231,7 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Lean toolchain and cache
         uses: texra-ai/lean-env-action@v1
@@ -255,7 +255,7 @@ jobs:
 
       - name: Set up Python for warning summary
         if: always()
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -306,10 +306,10 @@ jobs:
       issues: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 

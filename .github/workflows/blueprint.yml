@@ -51,7 +51,7 @@ jobs:
     name: Build blueprint site components
     steps:
       - name: Checkout project
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install system dependencies
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
