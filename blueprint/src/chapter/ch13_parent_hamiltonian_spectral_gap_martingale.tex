@@ -854,6 +854,51 @@ norm estimate is derived here.
 
 \subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
 
+\begin{lemma}[Weighted inner-product estimate]
+    \label{lem:nachtergaele_weighted_inner_product}
+    \lean{FrustrationFree.re_inner_le_weighted_norm_sq}
+    \leanok
+    Let $x$ and $y$ belong to a complex Hilbert space. For every $c>0$,
+    \begin{align}
+        \re\langle x,y\rangle
+         & \leq \frac{1}{2c}\lVert x\rVert^2
+        +\frac{c}{2}\lVert y\rVert^2.
+        \label{eq:nachtergaele_weighted_inner_product}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Cauchy--Schwarz bounds the left-hand side by
+    $\lVert x\rVert\lVert y\rVert$. Apply the weighted arithmetic--geometric
+    mean inequality to $\lVert y\rVert$ and $\lVert x\rVert$.
+\end{proof}
+
+\begin{lemma}[C3 projection-composition estimate]
+    \label{lem:nachtergaele_c3_projection_composition}
+    \lean{FrustrationFree.norm_sq_apply_projection_le_of_norm_comp_le}
+    \leanok
+    Let $P$ be an orthogonal projection on a complex Hilbert space, and let
+    $Q$ be a bounded linear operator from that space to another. If
+    \begin{align}
+        \lVert QP\rVert & \leq \epsilon,
+    \end{align}
+    then, for every $v$,
+    \begin{align}
+        \lVert QPv\rVert^2
+         & \leq \epsilon^2\lVert Pv\rVert^2.
+        \label{eq:nachtergaele_c3_projection_composition}
+    \end{align}
+    This includes $\epsilon=0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Idempotency gives $QPv=QP(Pv)$. Apply the operator-norm estimate for
+    $QP$ to $Pv$ and square the resulting nonnegative inequality. The
+    hypothesis itself implies $\epsilon\geq0$.
+\end{proof}
+
 \begin{theorem}[Moving-window double counting]
     \label{thm:moving_window_sum_le}
     \lean{FrustrationFree.movingWindow_sum_le}
