@@ -834,12 +834,13 @@ are in \path{TNLean/PEPS/TorusDeformedWindow.lean}. The engine is
 specialized to the consecutive-window unions there as
 \path{horizontalUnion_insert_eq_of_deformedState_eq} and its vertical
 counterpart, the union complement injectivity supplied by layer~1. The
-remaining content of
-(\ref{eq:peps_normal_ft_2d_overlap_consecutive_window_open_equality}) ---
-writing each single-window deformed
-state as the union deformed state of the corner-extended insert
-$C_j \sqcup T_{W_{j+1} \setminus W_j}$ --- is the contraction-extension of
-the chaining layer (item~3 of the plan).
+contraction-extension content of
+(\ref{eq:peps_normal_ft_2d_overlap_consecutive_window_open_equality}) is also
+complete: \path{horizontalConsecutiveWindow_extend_eq} writes each
+single-window deformed state as the union deformed state of the
+corner-extended insert $C_j \sqcup T_{W_{j+1} \setminus W_j}$ and applies the
+consecutive-window engine; its vertical counterpart supplies the same step
+for the descending arm of the staircase.
 
 The geometry of the chaining and corner-stripping layer is in place. The
 staircase patch $P$, its two end windows, the corner block, and the
@@ -913,12 +914,12 @@ consumes $\mathrm{univ} \setminus S$ injectivity and never the completed
 corner's. The shared-corner cancellation of Step~3 is an open-boundary
 operation, cancelling the injective completed rectangle
 \path{horizontalStaircaseCompletedCorner} from an equality of inserts on the
-completed region as tensors. The remaining work is therefore to re-derive the
-patch chaining of Step~2 at the open-boundary level --- chaining the
-consecutive-window open-boundary equalities
-\path{horizontalConsecutiveWindow_extend_eq} across the patch by contraction
-and transitivity, rather than collapsing to the patch closed state --- after
-which the completed corner cancels locally by its injectivity alone.
+completed region as tensors. This route is now implemented by
+\path{staircasePair_insert_eq_open}: it chains the consecutive-window
+open-boundary equalities across the patch by contraction and transitivity,
+then cancels the completed corner locally by its injectivity alone. It never
+collapses the comparison to the patch closed state or assumes injectivity of
+$\mathrm{univ} \setminus S$.
 
 The open-boundary route factors into two engines, neither of which inverts
 $\mathrm{univ} \setminus S$. They are stated here with the machinery each needs.
