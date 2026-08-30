@@ -724,9 +724,10 @@ boundary conditions (PBC).
         \notag
     \end{align}
 
-    Positive blocking preserves MPV equality.  If $\widetilde A$ and
-    $\widetilde B$ are obtained by blocking $p>0$ original sites, then for
-    every unblocked lower tail word $w$,
+    For the padded blocked contraction, suppose additionally that the original
+    tensors $A$ and $B$ have equal positive-length MPV coefficients.  If
+    $\widetilde A$ and $\widetilde B$ are obtained by blocking $p>0$ original
+    sites, then for every unblocked lower tail word $w$,
     \begin{align}
         \mathcal O_n(\widetilde B,C;B^w)_{a'a}
          & =D_A^{n-1}(A^w)_{a'a}.
@@ -745,9 +746,10 @@ boundary conditions (PBC).
     Expand $K^n$ by Lemma~\ref{lem:mps_reduction_cross_matrix_power} and use
     the trace formula for a Kronecker product.  Positive-length MPV equality
     replaces the trace of each nonempty $\widetilde B$ word by the
-    corresponding $\widetilde A$ trace.  The coefficient-dual identity then
-    identifies the resulting cross matrix with its rank-one target
-    specialization, whose $n$th trace is $D_A^n$.
+    corresponding $\widetilde A$ trace.  The resulting scalar sum is therefore
+    the trace of the target cross matrix power.  The coefficient-dual identity
+    gives that target cross matrix its rank-one form, whose $n$th trace is
+    $D_A^n$.
 
     Expanding the lower trace into matrix entries gives the cross-sum formula
     for arbitrary $X$.  For the target tensor, the rank-one form of

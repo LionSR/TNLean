@@ -305,7 +305,10 @@ theorem reductionOpenBoundaryMatrixContraction_eq_cross_sum
   intro σ _
   ring
 
-/-- Exact target evaluation with an arbitrary lower tail matrix. -/
+/-- Exact target evaluation with an arbitrary lower tail matrix.
+
+Source: arXiv:1706.07329v2, proof of Proposition 20,
+`cornerproblem.tex` lines 3866--3887. -/
 theorem reductionOpenBoundaryMatrixContraction_self
     (A : MPSTensor d D_A) (hA : Kraus.IsInjective A)
     (n : ℕ) (hn : 0 < n) (X : Matrix (Fin D_A) (Fin D_A) ℂ)
@@ -318,7 +321,10 @@ theorem reductionOpenBoundaryMatrixContraction_self
   simp [reductionCrossMatrix_coefficientDualInverse,
     Matrix.vecMulVec_apply, diagonalBondVector]
 
-/-- Exact same-alphabet target evaluation of the open-boundary contraction. -/
+/-- Exact same-alphabet target evaluation of the open-boundary contraction.
+
+Source: arXiv:1706.07329v2, proof of Proposition 20,
+`cornerproblem.tex` lines 3866--3887. -/
 theorem reductionOpenBoundaryContraction_self
     (A : MPSTensor d D_A) (hA : Kraus.IsInjective A)
     (n : ℕ) (hn : 0 < n) (w : List (Fin d)) (a' a : Fin D_A) :
