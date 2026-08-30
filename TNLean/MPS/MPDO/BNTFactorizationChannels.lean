@@ -77,9 +77,13 @@ twice-applied channel observation at lines 1821--1825.
 
 **Scope restriction (supplied per-representative factorizations):** the
 neighboring trace factorizations of the absorbed representatives are assumed
-here, while Proposition `prop2to5` derives them from saturation of the area law and
-zero correlation length through the printed factorization assertion of
-Proposition `prop2to3`.  That derivation remains open; it is documented in
+here. The printed route to Proposition `prop2to5` obtains them from saturation
+of the area law and zero correlation length through Proposition `prop2to3`,
+but that representativewise assertion is false under the complete standing
+hypotheses. Thus this theorem proves the conditional channel construction but
+does not prove Proposition `prop2to5`. The counterexample does not exclude
+different channel maps, so the bare conclusion of `prop2to5` is neither proved
+nor refuted. See
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines
@@ -122,8 +126,12 @@ active-spanning tensor realizes exactly this situation after merging its
 four selected sectors.
 
 **Scope restriction (supplied per-representative factorizations):** the
-single-sector factorizations are assumed here rather than derived from the
-saturation of the area law and zero correlation length; the derivation is documented in
+single-sector factorizations are assumed here. They do not follow in general
+from saturation of the area law and zero correlation length, because the
+printed representative-factorization assertion is false under the complete
+standing hypotheses. This theorem proves the conditional channel construction
+but does not decide whether different channels establish the bare source
+conclusion. See
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines

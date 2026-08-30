@@ -448,9 +448,12 @@
     but not its raw repeated-copy weights, and that implication is refuted by
     Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample}. After condition
     (ii) has forced equal copy weights and their common values have been
-    absorbed, these one-factorization channels become inputs to the
-    projector-controlled assembly used by the viable implication
-    (ii)$\Rightarrow$(v).
+    absorbed, these one-factorization channels can be inputs to the
+    projector-controlled assembly when one factorization is supplied for each
+    representative. The printed route obtains those factorizations from the
+    false Proposition~C.12, so this conditional theorem does not prove the
+    bare implication (ii)$\Rightarrow$(v). It also does not exclude different
+    channel maps; see \cite{gap:cpgsv17_pf_rank_one}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -722,9 +725,9 @@
     construction of the active sums, to the representative equations.
 \end{proof}
 
-% This theorem assumes the per-representative trace factorizations rather
-% than deriving them from saturation of the area law and zero correlation length;
-% the derivation is the still-open printed factorization assertion. See
+% This conditional theorem assumes the per-representative trace
+% factorizations. Proposition C.12's claim that SAL and ZCL supply them is
+% false under the complete standing hypotheses; see
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Blocking channels from representative trace factorizations]
     \label{thm:mpdo_absorbed_factorization_blocking_channels}
@@ -755,10 +758,13 @@
     every representative carries a single-sector factorization whose sole
     neighboring operator is positive semidefinite of unit trace, since the
     coefficient families may then be taken identically one. The
-    factorizations are assumed here; deriving them from saturation of the area law
-    and zero correlation length is the remaining step of the source
-    implication and stays open in
-    Theorem~\ref{thm:mpdo_sal_zcl_blocking_channels}.
+    factorizations are assumed here. They cannot in general be derived from
+    saturation of the area law and zero correlation length:
+    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} refutes that
+    representativewise assertion under the complete standing hypotheses; see
+    \cite{gap:cpgsv17_pf_rank_one}. Thus this conditional result neither proves
+    Theorem~\ref{thm:mpdo_sal_zcl_blocking_channels} nor excludes a different
+    construction of its two channel maps.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -779,7 +785,7 @@
     required rank-one normalization with unit coefficient families.
 \end{proof}
 
-\begin{theorem}[Blocking channels after common-weight absorption]
+\begin{theorem}[Two-site blocking from SAL and zero correlation length]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
     \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf, def:is_sal, def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:mpdo_two_site_blocking}
@@ -800,18 +806,22 @@
     imposed at lines~849--850 and restated at line~1628 of the same source.
     The source first uses zero correlation length at lines~1646--1665 to make
     repeated-copy weights independent of the copy label and absorbs their
-    common value into each representative. The proof at lines~1815--1816 then
-    projects onto the mutually orthogonal outer physical sectors and invokes
-    the one-representative channel construction. Thus a faithful proof must
-    supply one blocked channel pair for every absorbed representative. Their
+    common value into each representative. The printed proof at
+    lines~1815--1816 then projects onto the mutually orthogonal outer physical
+    sectors and invokes the one-representative channel construction. Their
     combination through the outer physical projections, including the
     trace-preserving completion outside their sum, is
     Theorem~\ref{thm:mpdo_absorbed_bnt_channel_support_completion}. Given one
     neighboring trace factorization for every absorbed representative, the
     complete composition down to the blocked channel pair for $M$ is
     Theorem~\ref{thm:mpdo_absorbed_factorization_blocking_channels}. The
-    remaining step is therefore the existence of these per-representative
-    factorizations under saturation of the area law and zero correlation length.
+    source obtains these factorizations from Proposition~C.12, but
+    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} refutes that
+    intermediate assertion under the complete standing hypotheses; see
+    \cite{gap:cpgsv17_pf_rank_one}. Hence the factorization is not a remaining
+    proof obligation: the printed route fails. The counterexample does not
+    exclude the existence of different channel maps, so the conclusion above
+    is at present neither proved nor refuted.
 \end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three

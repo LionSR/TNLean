@@ -9,8 +9,8 @@
     \label{rem:mpdo_sal_zcl_rank_one_normalization_boundary}
     Lemma~C.5 of
     \cite[Appendix~C.2, lines~1484--1499]{Cirac2016MPDO_arXiv} claims that an
-    injective matrix product density operator tensor satisfying the strong area
-    law and zero correlation length has real families $(a_k)_k,(b_k)_k$ with
+    injective matrix product density operator tensor saturating the area law
+    and having zero correlation length has real families $(a_k)_k,(b_k)_k$ with
     \begin{align}
         T_{k,h}=\tr(\eta_{k,h}) & =a_kb_h, \notag \\
         \sum_k a_kb_k           & =1. \notag
@@ -1321,7 +1321,6 @@ This is the calculation in
 \end{proof}
 
 % CPSV16 Theorem 4.9 (`thm:main-simple`), lines 851--893 and Appendix C.2.
-% Gap: docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{remark}[Printed simple-MPDO implication chain]
     \label{thm:cpsv_theorem49_printed_status}
     For a simple tensor $K$ in block-injective canonical form with a basis of
@@ -1335,11 +1334,14 @@ This is the calculation in
     representativewise assertion used in (ii)$\Rightarrow$(iv). Its ambient
     tensor has a two-representative BNT presentation in biCF. Independently,
     Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample} refutes the literal
-    implication (iv)$\Rightarrow$(v). Proposition~C.15 remains conditional:
-    the representative-channel and outer-sector constructions are proved for
-    supplied absorbed-sector factorizations, but the printed route obtains
-    those factorizations from the false representativewise assertion. No
-    counterexample to different blocking channels is claimed.
+    implication (iv)$\Rightarrow$(v). The representative-channel and
+    outer-sector constructions relevant to Proposition~C.15 are proved
+    conditionally for supplied absorbed-sector factorizations, but the printed
+    route obtains those factorizations from the false representativewise
+    assertion. Proposition~C.15 itself therefore remains a missing statement:
+    its bare channel conclusion is neither proved nor refuted. These
+    false-source and proof-path dispositions are documented in
+    \cite{gap:cpgsv17_pf_rank_one}.
 \end{remark}
 
 % CPSV16 Examples 4.10--4.12, lines 897--942.
@@ -2559,10 +2561,10 @@ This is the calculation in
     \uses{lem:mpdo_sal_phys_trace_transfer_nonzero}
     Use one physical sector, with the full physical space as its left factor
     and a one-dimensional right factor. Its neighboring operator is the
-    one-site periodic operator, so positivity follows from the strong area
-    law. The physical-trace transfer is a nonzero scalar. Literal idempotence
-    therefore makes it equal to one, and the neighboring trace is normalized
-    by $a_0=b_0=1$.
+    one-site periodic operator, so positivity follows from the MPDO condition
+    included in SAL. The physical-trace transfer is a nonzero scalar. Literal
+    idempotence therefore makes it equal to one, and the neighboring trace is
+    normalized by $a_0=b_0=1$.
 \end{proof}
 
 \begin{theorem}[Counterexample to the low-level absorbed-sector implication]
@@ -2575,8 +2577,7 @@ This is the calculation in
     \uses{def:is_sal, def:mpo_physical_trace_transfer, def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization}
     There are tensors $K,A$ of physical dimension four and virtual dimension
     two, and a scalar $\mu$ with $0<|\mu|<1$, such that $K=\mu A$, the tensor
-    $A$ is normal, and $K$ is injective, satisfies the strong area
-    law, and obeys
+    $A$ is normal, and $K$ is injective, saturates the area law, and obeys
     \begin{align}
         \mathcal T_K^2 & =\mathcal T_K.
         \notag
@@ -2692,8 +2693,8 @@ This is the calculation in
     Thus the presentation is in biCF. The tensor $K$ is the exact weighted
     direct sum $\mu A_0\oplus A_1$ with the identity global virtual gauge. It
     is simple, generates positive semidefinite periodic operators with
-    strictly positive trace at every positive length, satisfies the strong
-    area law, and has literal zero correlation length,
+    strictly positive trace at every positive length, saturates the area law,
+    and has literal zero correlation length,
     \begin{align}
         \mathcal T_K^2 & =\mathcal T_K.
         \notag
@@ -2708,7 +2709,9 @@ This is the calculation in
 
 \begin{proof}\leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_prepared_two_block_bnt,
-        thm:mpdo_local_orthogonal_sum_sal}
+        thm:mpdo_local_orthogonal_sum_sal,
+        lem:mpdo_sal_phys_trace_transfer_nonzero,
+        thm:mpdo_source_zcl_strict_positive_length_normalization}
     Use the prepared obstruction and terminal blocks. The obstruction slices
     span $M_2(\mathbb C)$ and vanish on the terminal coordinate, whereas the
     terminal block equals one on that coordinate. Hence the pairs of one-site
@@ -2722,9 +2725,11 @@ This is the calculation in
     sectors to $K$. The physical-trace transfer is block diagonal. Its two
     diagonal blocks are idempotent, hence so is the ambient transfer. The
     exact weighted direct sum and nonnilpotency of both representatives give
-    the asserted simple canonical presentation. Positivity and literal zero
-    correlation length imply strict positivity of every nonempty periodic
-    trace.
+    the asserted simple canonical presentation. SAL makes the physical-trace
+    transfer nonzero; together with literal idempotence this gives source zero
+    correlation length, hence every nonempty periodic trace is nonzero. The
+    MPDO positivity condition then upgrades each such trace to strict
+    positivity.
 \end{proof}
 
 \begin{theorem}[Universal obstruction for the absorbed representative]
@@ -2800,7 +2805,8 @@ This is the calculation in
     Hence Proposition~C.12 and the representativewise assertion used in
     implication (ii)$\Rightarrow$(iv) of
     \cite[Theorem~4.9 and Appendix~C.2, lines~1628--1782]
-    {Cirac2016MPDO_arXiv} are false under the stated hypotheses.
+    {Cirac2016MPDO_arXiv} are false under the stated hypotheses. This
+    false-source result is documented in \cite{gap:cpgsv17_pf_rank_one}.
 \end{theorem}
 
 \begin{proof}\leanok

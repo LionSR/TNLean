@@ -16,11 +16,16 @@ import TNLean.MPS.MPDO.RFPViaTS
 /-!
 # Composition of blocked renormalization channels across BNT sectors
 
-This file proves the conditional channel-composition theorem in the viable
+This file proves the conditional channel-composition theorem used in the
 zero-correlation-length route to the all-BNT part of the fundamental theorem
 for matrix product density operators. The construction measures the outer BNT
 sector on the first original physical site and then applies that sector's
-renormalization channel.
+renormalization channel. The construction is valid when one channel pair is
+supplied for every absorbed representative. The printed derivation of the
+representative factorizations that were meant to supply those pairs is false;
+the conditional construction therefore neither proves nor refutes the bare
+SAL-and-ZCL channel-existence conclusion. See
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 ## References
 

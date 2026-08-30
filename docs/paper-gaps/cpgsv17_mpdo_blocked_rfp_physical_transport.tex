@@ -34,14 +34,17 @@ transport theorem is a conditional auxiliary result. Combining outer physical
 supports cannot extend it to the literal implication
 (iv)$\Rightarrow$(v), which is refuted.
 
-The outer-support construction still applies to the viable source proposition
-\texttt{prop2to5}, which begins with condition~(ii) of
+The outer-support construction remains a valid conditional assembly relevant
+to Proposition~\texttt{prop2to5}, which begins with condition~(ii) of
 Ref.~\cite{Cirac2016MPDO_arXiv}. In the preceding Case-II derivation, zero
 correlation length (ZCL) makes the repeated-copy weights independent of the
 copy label, after which their common value is absorbed into the normalization.
-Only after this normalization can the channel pairs from
-Proposition~\texttt{3to5} be combined over mutually orthogonal outer physical
-supports.
+The printed route then invokes Proposition~\texttt{prop2to3} to supply a
+factorization for each representative, but that assertion is false under the
+complete standing hypotheses. Thus the channel pairs from
+Proposition~\texttt{3to5} can be combined over mutually orthogonal outer
+physical supports when those factorizations are supplied; this does not prove
+or refute the bare conclusion of Proposition~\texttt{prop2to5}.
 
 Let $\mathcal K$ denote the original tensor, let $\widehat{\mathcal K}$ denote
 the same tensor in the sector coordinates selected by the physical isometry,
@@ -113,11 +116,13 @@ Ref.~\cite{Cirac2016MPDO_arXiv}, which is false.
 
 For the source implication (ii)$\Rightarrow$(v), after absorption of the
 common weight derived from ZCL, the theorem supplies the channel pair for each
-factorization. The projector-controlled assembly over all BNT representatives
-is formalized in \ghissue{6632}. The remaining source obligation is the
-factorization for each representative, documented in
-\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex} and tracked in
-\ghissue{6775}.
+given factorization. The projector-controlled assembly over all BNT
+representatives is formalized in \ghissue{6632}. The source's claimed
+factorizations are not a remaining obligation: Proposition~\texttt{prop2to3}
+is refuted. No counterexample to different blocking channels is known, so the
+bare conclusion of Proposition~\texttt{prop2to5} is neither proved nor
+refuted. The complete status is documented in the canonical note at
+\url{https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
