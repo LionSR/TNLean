@@ -743,19 +743,22 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 
 \begin{definition}[Unitary factorization comparison]
     \label{def:mpug_unitary_factorization_comparison}
-    \lean{Matrix.unitaryFactorizationComparison}
+    \lean{Matrix.unitaryFactorizationComparison,
+        Matrix.unitaryFactorizationComparison_coe}
     \leanok
-    Let $I$ be a set and let $R_{a,b}$ be a family of unitary matrices indexed
-    by $(a,b)\in I^2$. The comparison from $(a,b)$ to the reference pair
-    $(c,d)$ is
+    Let $I$ be a set and let $R_{a,b}$ be a family of unitary matrices of a
+    fixed size, indexed by $(a,b)\in I^2$. The unitary comparison from $(a,b)$
+    to the reference pair $(c,d)$ is
     \begin{align}
         \lambda_{a,b}^{c,d}
          & =(R_{c,d})^{-1}R_{a,b}
          =R_{c,d}^\dagger R_{a,b}.
         \label{eq:mpug_unitary_factorization_comparison}
     \end{align}
-    This is the orientation in the corollary following Proposition~3 of
-    \cite[lines~2782--2821]{FrancoRubio2025MPUGauging}. In that corollary,
+    % Source anchor: arXiv:2502.20257, Corollary after Proposition 3,
+    % lines 2782--2821, especially the defining formula at line 2820.
+    This is the orientation in the corollary after Proposition~3
+    of~\cite[lines~2782--2821]{FrancoRubio2025MPUGauging}. In that corollary,
     $I=G$ and comparisons are used when $ab=cd$; this equality selects the
     factorizations and is not needed in the unitary calculation.
 \end{definition}
@@ -776,12 +779,14 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         \label{eq:mpug_unitary_factorization_comparison_laws}
     \end{align}
     If $R_{c,d}=\mathbf 1$, then
-    $\lambda_{a,b}^{c,d}=R_{a,b}$. In particular, for a group $G$, the
+    $\lambda_{a,b}^{c,d}=R_{a,b}$. In particular, if $I=G$ is a group, the
     normalization $R_{e,x}=\mathbf 1$ gives
     \begin{align}
-        \lambda_{g,h}^{e,gh} & =R_{g,h}.
+        R_{g,h} & =\lambda_{g,h}^{e,gh}.
         \label{eq:mpug_unitary_factorization_right_reference}
     \end{align}
+    % Source anchor: arXiv:2502.20257, Corollary after Proposition 3,
+    % line 2817 (right reference and composition).
     The last identity is the right-reference specialization
     $\lambda^R_{g,h}=\lambda_{g,h}^{e,gh}$ in the cited corollary.
 \end{theorem}

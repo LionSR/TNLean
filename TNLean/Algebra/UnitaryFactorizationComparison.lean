@@ -52,7 +52,7 @@ theorem unitaryFactorizationComparison_coe
 theorem unitaryFactorizationComparison_self
     (R : ι → ι → Matrix.unitaryGroup n 𝕜) (a b : ι) :
     unitaryFactorizationComparison R a b a b = 1 := by
-  simp [unitaryFactorizationComparison]
+  simp only [unitaryFactorizationComparison, inv_mul_cancel]
 
 /-- Unitary factorization comparisons compose through an intermediate pair in
 the source orientation.  This is the composition law in the corollary
@@ -63,27 +63,26 @@ theorem unitaryFactorizationComparison_trans
     unitaryFactorizationComparison R a b f g =
       unitaryFactorizationComparison R c d f g *
         unitaryFactorizationComparison R a b c d := by
-  simp [unitaryFactorizationComparison, mul_assoc]
+  simp only [unitaryFactorizationComparison, mul_assoc, mul_inv_cancel_left]
 
 /-- If the reference operator is the identity, comparison against it recovers
 the source operator. -/
-@[simp]
 theorem unitaryFactorizationComparison_of_reference_eq_one
     (R : ι → ι → Matrix.unitaryGroup n 𝕜) (a b c d : ι)
     (href : R c d = 1) :
     unitaryFactorizationComparison R a b c d = R a b := by
-  simp [unitaryFactorizationComparison, href]
+  simp only [unitaryFactorizationComparison, href, inv_one, one_mul]
 
-/-- If the identity-prefixed operators are normalized to one, comparison with
-`(1, g * h)` recovers the right-fusion operator indexed by `(g, h)`.
+/-- If the identity-prefixed operators are normalized to one, the right-fusion operator
+indexed by `(g, h)` equals its comparison with `(1, g * h)`.
 
 This is $\lambda^R_{g,h} = \lambda_{g,h}^{e,gh}$ in the corollary following
 FBC25, Proposition `prop:3` (arXiv:2502.20257, lines 2782--2821). -/
-@[simp]
 theorem unitaryFactorizationComparison_right_reference
     {G : Type*} [Group G] (R : G → G → Matrix.unitaryGroup n 𝕜)
     (hR : ∀ x, R 1 x = 1) (g h : G) :
-    unitaryFactorizationComparison R g h 1 (g * h) = R g h := by
-  exact unitaryFactorizationComparison_of_reference_eq_one R g h 1 (g * h) (hR (g * h))
+    R g h = unitaryFactorizationComparison R g h 1 (g * h) := by
+  exact
+    (unitaryFactorizationComparison_of_reference_eq_one R g h 1 (g * h) (hR (g * h))).symm
 
 end Matrix
