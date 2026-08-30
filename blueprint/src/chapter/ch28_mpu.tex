@@ -7990,8 +7990,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         =\operatorname{ind}_{\mathrm{src}}(U_2)
         =\operatorname{ind}_{\mathrm{src}}(U_3) & =0.
     \end{align}
-    These are values of the specified tensors; no blocking-independent index is
-    asserted.
+    Here $\operatorname{ind}_{\mathrm{src}}$ is the specified-tensor quantity
+    from Definition~\ref{def:mpu_specified_source_index_value}, evaluated on the
+    displayed unblocked tensors. It is not the public MPU index
+    $\operatorname{ind}$ of Definition~\ref{def:index}, whose definition uses a
+    simple blocking and requires independence of that choice.
+    % **Scope restriction (specified tensors):** the source states the public
+    % blocking-independent MPU index, while this theorem computes only the raw
+    % value of each displayed tensor. Documented in
+    % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex; elimination is
+    % tracked by issues #7011 and #5856.
     % Source: paper_v2.tex lines 2037--2041.
 \end{theorem}
 
