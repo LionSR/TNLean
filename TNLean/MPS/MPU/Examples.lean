@@ -13,8 +13,5 @@ import TNLean.MPS.MPU.Examples.ShiftSourceBlockedFormulas
 import TNLean.MPS.MPU.Examples.ShiftSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftSourceFormulas
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
-<<<<<<< HEAD
-import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
-=======
 import TNLean.MPS.MPU.Examples.ShiftSwap
->>>>>>> 5f3e51353 (feat(MPS/MPU): prove local U2-U3 species swap)
+import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
