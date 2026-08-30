@@ -64,10 +64,10 @@ theorem factorization_comparison_of_one_sided_inverses
 variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
   [Nonempty m] [Nonempty n]
 
-/-- Two comparison matrices whose Kronecker product is unitary determine
-unitary gauges with reciprocal positive scalars.  If the returned scalar is
-`δ`, the source-oriented scalars are `δ⁻¹` for the first factor and `δ` for the
-second, so their product is one.
+/-- Two comparison matrices whose Kronecker product `K₁ ⊗ₖ K₂` is unitary
+determine unitary gauges with reciprocal positive scalars.  If the returned
+scalar is `δ`, the source-oriented scalars are `δ⁻¹` for the first factor and
+`δ` for the second, so their product is one.
 
 The unitary matrices in the conclusion are the inverses, equivalently the
 adjoints, of the unitary factors of the comparison matrices.  This is the
@@ -78,7 +78,7 @@ theorem exists_reciprocal_unitary_gauges_of_comparison
     {X₁ Xt₁ : Matrix α₁ m ℂ} {Y₁ Yt₁ : Matrix m β₁ ℂ}
     {X₂ Xt₂ : Matrix α₂ n ℂ} {Y₂ Yt₂ : Matrix n β₂ ℂ}
     {K₁ : Matrix m m ℂ} {K₂ : Matrix n n ℂ}
-    (hK : K₂ ⊗ₖ K₁ ∈ Matrix.unitaryGroup (n × m) ℂ)
+    (hK : K₁ ⊗ₖ K₂ ∈ Matrix.unitaryGroup (m × n) ℂ)
     (hX₁ : X₁ = Xt₁ * K₁) (hY₁ : Yt₁ = K₁ * Y₁)
     (hX₂ : X₂ = Xt₂ * K₂) (hY₂ : Yt₂ = K₂ * Y₂) :
     ∃ (δ : ℝ) (_ : 0 < δ) (W₁ : Matrix.unitaryGroup m ℂ)
@@ -89,11 +89,9 @@ theorem exists_reciprocal_unitary_gauges_of_comparison
       Yt₂ = (δ : ℂ)⁻¹ • (star (W₂ : Matrix n n ℂ) * Y₂) ∧
       (δ : ℂ)⁻¹ * (δ : ℂ) = 1 := by
   classical
-  obtain ⟨r, hr, U₂, U₁, hK₂, hK₁⟩ :=
+  obtain ⟨δ, hδ, U₁, U₂, hK₁, hK₂⟩ :=
     exists_pos_real_smul_unitary_factors_of_kronecker_mem_unitaryGroup hK
-  let δ : ℝ := r⁻¹
-  have hrℂ : (r : ℂ) ≠ 0 := by exact_mod_cast hr.ne'
-  have hδ : 0 < δ := inv_pos.mpr hr
+  have hδℂ : (δ : ℂ) ≠ 0 := by exact_mod_cast hδ.ne'
   let W₁ : Matrix.unitaryGroup m ℂ := U₁⁻¹
   let W₂ : Matrix.unitaryGroup n ℂ := U₂⁻¹
   have hU₁W₁ : (U₁ : Matrix m m ℂ) * (W₁ : Matrix m m ℂ) = 1 := by
@@ -110,18 +108,13 @@ theorem exists_reciprocal_unitary_gauges_of_comparison
   · rw [hX₁, hK₁, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_assoc, hU₁W₁,
       Matrix.mul_one]
     ext i j
-    simp [δ, smul_apply, hrℂ]
+    simp [smul_apply, hδℂ]
   · rw [hY₁, hK₁, Matrix.smul_mul, hstarW₁]
-    ext i j
-    simp [δ, smul_apply]
   · rw [hX₂, hK₂, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_assoc, hU₂W₂,
       Matrix.mul_one]
     ext i j
-    simp [δ, smul_apply, hrℂ]
+    simp [smul_apply, hδℂ]
   · rw [hY₂, hK₂, Matrix.smul_mul, hstarW₂]
-    ext i j
-    simp [δ, smul_apply]
-  · change (((r⁻¹ : ℝ) : ℂ)⁻¹ * ((r⁻¹ : ℝ) : ℂ)) = 1
-    exact inv_mul_cancel₀ (by exact_mod_cast (inv_ne_zero hr.ne'))
+  · exact inv_mul_cancel₀ hδℂ
 
 end Matrix
