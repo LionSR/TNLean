@@ -30,8 +30,11 @@ desired $T$ and $S$'' of Definition~\cpsvref{RFPMixedTS}
     \path{Papers/1606.00608/MPDO-22-12-17-2.tex}:694--729.}
 
 Thus the paper-facing conclusion is that the boundary MPO is a
-renormalization fixed point: there should be trace-preserving completely
-positive maps $\mathcal S$ and $\mathcal T$ such that
+renormalization fixed point. For a virtual operator $X$, let $M_1(X)$ and
+$M_2(X)$ denote the one-site and two-site physical matrices obtained by closing
+the boundary MPO with $X$. There should be trace-preserving completely positive
+maps $\mathcal S$, from the two-site physical algebra to the one-site algebra,
+and $\mathcal T$, in the reverse direction, such that
 \begin{align}
     \mathcal S[M_2(X)] & = M_1(X),
     \label{eq:cpsv16_peps_boundary_rfp_specification_coarse_graining} \\
@@ -45,10 +48,13 @@ hypotheses.
 \section{The local boundary tensor}
 
 The local boundary tensor in the diagram at source lines~721--724 has two
-ket--bra contractions. To make this explicit, write
-$A^s_{l,r,u,b}$ for a PEPS tensor whose virtual legs are ordered left, right,
-up, and down. Choosing the down leg as the inward leg, the physical leg $s$
-and inward virtual leg $b$ are contracted between the ket and bra copies:
+ket--bra contractions. Let $d$ be the PEPS physical dimension, and let
+$D_{\mathrm h}$ and $D_{\mathrm v}$ be its horizontal and vertical virtual
+dimensions. Write $A^s_{l,r,u,b}$ for a PEPS tensor with
+$0\leq s<d$, $0\leq l,r<D_{\mathrm h}$, and
+$0\leq u,b<D_{\mathrm v}$, whose virtual legs are ordered left, right, up, and
+down. Choosing the down leg as the inward leg, the physical leg $s$ and inward
+virtual leg $b$ are contracted between the ket and bra copies:
 \begin{align}
     (E_A)^{u,u'}_{(l,l'),(r,r')}
      & =
