@@ -11904,6 +11904,177 @@ left/right order below agrees with the adjacent-pair convention in
     $\widehat{\mathcal R}_{2x+1}$ in $\mathcal A_{P_x}$.
 \end{proof}
 
+\begin{definition}[Tripartite finite-region coordinates]
+    \label{def:qca_tripartite_local_coordinates}
+    \lean{SpinChain.Config.disjointTripleEquiv,
+        SpinChain.tripartiteLocalAlgebraEquiv}
+    \leanok
+    \uses{def:qca_bipartite_local_algebra_coordinates}
+    For pairwise disjoint finite regions $\Lambda,\Gamma,\Delta$, successive
+    restriction in left--middle--right order gives
+    \begin{align}
+        \mathcal C_{(\Lambda\cup\Gamma)\cup\Delta}
+         & \cong(\mathcal C_\Lambda\times\mathcal C_\Gamma)
+        \times\mathcal C_\Delta,                                \\
+        \mathcal A_{(\Lambda\cup\Gamma)\cup\Delta}
+         & \cong M_{(\mathcal C_\Lambda\times\mathcal C_\Gamma)
+                \times\mathcal C_\Delta}(\mathbb C).
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Geometry of consecutive pair images]
+    \label{lem:qca_consecutive_pair_geometry}
+    \lean{SpinChain.disjoint_leftPair_rightPair,
+        SpinChain.disjoint_leftPair_union_rightPair_rightPair_add_one,
+        SpinChain.leftPair_union_rightPair_union_rightPair_add_one}
+    \leanok
+    \uses{def:qca_nearest_neighbor_pair_regions}
+    Let $T_x=(L_x\cup P_x)\cup P_{x+1}$. The three regions
+    $L_x,P_x,P_{x+1}$ are pairwise disjoint, and
+    \begin{align}
+        T_x & =\{2x-1,2x,2x+1,2x+2,2x+3,2x+4\}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:qca_nearest_neighbor_pair_regions}
+    Substitute the three pair definitions and compare their six sites.
+\end{proof}
+
+\begin{theorem}[Canonical inclusions in tripartite coordinates]
+    \label{thm:qca_consecutive_pair_tripartite_coordinates}
+    \lean{SpinChain.tripartiteLocalAlgebraEquiv_localInclusion_left,
+        SpinChain.tripartiteLocalAlgebraEquiv_localInclusion_right}
+    \leanok
+    \uses{def:qca_tripartite_local_coordinates,
+        def:qca_local_inclusion}
+    In the coordinates of Definition~\ref{def:qca_tripartite_local_coordinates},
+    the canonical inclusion from $\Lambda\cup\Gamma$ is
+    $X\mapsto X\otimes\mathbf 1$, and the canonical inclusion from
+    $\Gamma\cup\Delta$ is $Y\mapsto\mathbf 1\otimes Y$, with the ordered
+    factors $\Lambda,\Gamma,\Delta$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:qca_tripartite_local_coordinates,
+        def:qca_bipartite_local_algebra_coordinates,
+        def:qca_local_inclusion}
+    Restrict each reconstructed configuration to the retained region and its
+    complement.  In the first inclusion the complementary coordinates are
+    equal precisely on $\Delta$; in the second they are equal precisely on
+    $\Lambda$.  The two matrix entries are therefore the left and right
+    overlapping lifts, respectively.
+\end{proof}
+
+\begin{theorem}[Commutation across the common physical pair]
+    \label{thm:qca_consecutive_support_algebras_commute}
+    \lean{
+        SpinChain.PropagatesWithin.embeddedOddSupport_commute_embeddedEvenSupport_add_one}
+    \leanok
+    \uses{def:qca_site_indexed_support_algebras}
+    For every $x\in\mathbb Z$, the canonically embedded support algebras
+    $\widehat{\mathcal R}_{2x+1}$ and
+    $\widehat{\mathcal R}_{2x+2}$ commute elementwise.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:qca_consecutive_pair_geometry,
+        thm:qca_consecutive_pair_tripartite_coordinates,
+        thm:qca_finite_region_restriction_embedding,
+        thm:qca_disjoint_quasi_local_commute,
+        thm:qca_overlapping_support_algebras_commute}
+    The source regions $E_x$ and $E_{x+1}$ are disjoint, so their canonical
+    quasi-local observables commute.  Multiplicativity of $\omega$ preserves
+    this equality.  Embed the two finite images into $\mathcal A_{T_x}$ and
+    use the tripartite coordinates above to obtain
+    \begin{align}
+        (X\otimes\mathbf 1)(\mathbf 1\otimes Y)
+         & =(\mathbf 1\otimes Y)(X\otimes\mathbf 1).
+    \end{align}
+    The overlapping-support theorem, in the order
+    $\operatorname{Spp}_{\mathrm R}(S_x)$ followed by
+    $\operatorname{Spp}_{\mathrm L}(S_{x+1})$, gives the claim.
+\end{proof}
+
+\begin{definition}[Physical region of a site-indexed support algebra]
+    \label{def:qca_support_algebra_region}
+    \lean{SpinChain.supportRegion,
+        SpinChain.supportRegion_even,
+        SpinChain.supportRegion_odd}
+    \leanok
+    \uses{def:qca_nearest_neighbor_pair_regions}
+    Define $Q_{2x}=L_x$ and $Q_{2x+1}=P_x$.
+\end{definition}
+
+\begin{theorem}[Unified physical localization]
+    \label{thm:qca_unified_support_algebra_region}
+    \lean{SpinChain.PropagatesWithin.embeddedSupportAlgebra_supportedIn}
+    \leanok
+    \uses{def:qca_support_algebra_region,
+        def:qca_site_indexed_support_algebras}
+    Every element of $\widehat{\mathcal R}_y$ is supported in $Q_y$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:qca_support_algebra_region,
+        thm:qca_site_indexed_support_regions}
+    Split according to the parity of $y$ and apply the corresponding
+    localization of $\widehat{\mathcal R}_{2x}$ or
+    $\widehat{\mathcal R}_{2x+1}$.
+\end{proof}
+
+\begin{theorem}[Classification of overlapping support regions]
+    \label{thm:qca_support_region_overlap_classification}
+    \lean{SpinChain.PropagatesWithin.supportRegion_disjoint_or_consecutive}
+    \leanok
+    \uses{def:qca_support_algebra_region}
+    If $y\ne z$, then $Q_y$ and $Q_z$ are disjoint unless
+    \begin{align}
+        (y,z) & =(2x+1,2x+2)
+    \end{align}
+    for some $x$, or unless this ordered pair is reversed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:qca_support_algebra_region}
+    Write each index in its even or odd form.  Two regions of equal parity
+    are disjoint.  In the mixed-parity cases, the defining two-site sets
+    intersect exactly for the displayed consecutive odd--even pair.
+\end{proof}
+
+\begin{theorem}[Pairwise commutation of distinct support algebras]
+    \label{thm:qca_site_indexed_support_algebras_commute}
+    \lean{SpinChain.PropagatesWithin.embeddedSupportAlgebra_pairwise_commute}
+    \leanok
+    \uses{def:qca_site_indexed_support_algebras}
+    Distinct members of the canonically embedded family commute elementwise:
+    \begin{align}
+        [X,Y] & =0,
+              & X\in\widehat{\mathcal R}_y,\quad
+        Y\in\widehat{\mathcal R}_z,\quad y\ne z.
+    \end{align}
+    This is the homogeneous fixed-$d$ specialization of the
+    consecutive/disjoint argument in
+    \cite[lines~1270--1274]{Gross2012IndexTheory}, using Lemma
+    \texttt{sppcomm} from lines~1221--1246; compare
+    \cite[lines~1174--1194]{SchumacherWerner2004QCA}.  Cirac et al. provide the
+    homogeneous four-site localization at
+    \cite[lines~2313--2329]{Cirac2017MPU}, but do not state this commutation
+    result.  The site-dependent GNVW statement is not claimed; see
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_support_region_overlap_classification,
+        thm:qca_unified_support_algebra_region,
+        thm:qca_consecutive_support_algebras_commute,
+        thm:qca_disjoint_quasi_local_commute}
+    In the exceptional odd--even order apply
+    Theorem~\ref{thm:qca_consecutive_support_algebras_commute}; the reversed
+    order follows by symmetry.  Every remaining ordered pair has disjoint
+    physical supports, so disjoint quasi-locality applies.
+\end{proof}
+
 Equation~(A1) in lines~2300--2306 of \cite{Cirac2017MPU} defines the
 local action associated with an MPU by eventual finite-chain conjugation.  In
 lines~2300--2306, eventual constancy is used to obtain a norm-preserving
