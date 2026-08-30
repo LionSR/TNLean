@@ -763,29 +763,52 @@ boundary conditions (PBC).
     the target self-evaluation with $X=A^w$.
 \end{proof}
 
-\begin{lemma}[Rectangular factorization of a rank-one matrix]
-    \label{lem:rank_one_rectangular_factorization}
+\begin{theorem}[Rank-one factorizations]
+    \label{thm:rank_one_factorizations}
     \lean{LinearMap.exists_smulRight_of_finrank_range_eq_one,
         Matrix.exists_eq_vecMulVec_of_rank_eq_one,
         Matrix.exists_rectangular_factors_of_rank_eq_one}
     \leanok
-    Let $M$ be a matrix on the product index $D_B\times D_A$.  If
-    $\rank M=1$, then there are nonzero rectangular matrices
-    $W\in\C^{D_B\times D_A}$ and $V\in\C^{D_A\times D_B}$ such that
+    Let $f\colon X\to Y$ be a linear map over a division ring $K$ whose range
+    has dimension one.  Then there are a nonzero linear functional
+    $\varphi\colon X\to K$, a nonzero vector $y\in Y$, and a vector $x\in X$
+    such that
+    \begin{align}
+        \varphi(x) & =1, & f(x) & =y, & f(z) & =\varphi(z)y
+        \quad\text{for every }z\in X.
+        \notag
+    \end{align}
+    Consequently, if $I$ and $J$ are finite index sets, then every rank-one
+    matrix $M\in K^{I\times J}$ over a field is an outer product of two
+    nonzero vectors: there are $w\in K^I$ and $v\in K^J$ such that
+    \begin{align}
+        M_{ij} & =w_i v_j.
+        \notag
+    \end{align}
+    In particular, if both indices of $M$ are the product
+    $D_B\times D_A$, then there are nonzero rectangular matrices
+    $W\in K^{D_B\times D_A}$ and $V\in K^{D_A\times D_B}$ such that
     \begin{align}
         M_{(b,a),(b',a')}
          & =W_{ba}V_{a'b'}.
         \notag
     \end{align}
-\end{lemma}
+    This is the rank-one factorization used in
+    \cite[proof of Proposition~20]{Molnar2018SemiInjective},
+    \texttt{cornerproblem.tex} lines 3866--3936.
+\end{theorem}
 
 \begin{proof}
     \leanok
-    A linear map with one-dimensional range is the product of a scalar
-    functional and a nonzero range vector.  In the standard bases this is an
-    outer product.  Reshape its left vector as a $D_B\times D_A$ matrix and
-    its right vector as a $D_A\times D_B$ matrix, preserving the displayed
-    product-index order.
+    Choose an isomorphism from the scalar division ring to the one-dimensional
+    range of $f$.  Composing its inverse with $f$ gives $\varphi$, while the
+    image of $1$ gives $y$.  Choose a preimage $x$ of $y$; the construction gives
+    $\varphi(x)=1$, $f(x)=y$, and the stated factorization of $f$.
+
+    In standard bases this factorization is an outer product of two nonzero
+    coordinate vectors.  For the product-index specialization, reshape the
+    left vector as a $D_B\times D_A$ matrix and the right vector as a
+    $D_A\times D_B$ matrix, preserving the displayed index order.
 \end{proof}
 
 The inverse-tensor characterization of injectivity says that $A$ is
@@ -860,7 +883,8 @@ $A^{-1}A=\Id$. This is the identity used in
     reduction from $B$ to $A$.  The same conclusion holds when $A$ is normal.
 
     This is the $\lambda=1$ equality case of
-    \cite[Proposition~20]{Molnar2018SemiInjective}.  The unrestricted
+    \cite[Proposition~20]{Molnar2018SemiInjective}; see
+    \texttt{cornerproblem.tex} lines 3815--3938.  The unrestricted
     proportional premise does not imply the unscaled conclusion
     \cite{gap:mgsc18_reduction_proportionality_scalar}.
 \end{theorem}
@@ -868,10 +892,11 @@ $A^{-1}A=\Id$. This is the identity used in
 \begin{proof}
     \leanok
     \uses{lem:one_block_injective_of_injective,
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
         thm:same_mpv2_pos_block_tensor,
         thm:mps_reduction_cross_trace_open,
         thm:mpu_semisimple_scaled_trace_rank_one,
-        lem:rank_one_rectangular_factorization}
+        thm:rank_one_factorizations}
     First suppose that $A$ is injective; equivalently, use blocking length one.
     More generally, choose any positive blocking length $p$ for which the
     blocked target $\widetilde A=A^{[p]}$ is injective, and put
@@ -893,6 +918,7 @@ $A^{-1}A=\Id$. This is the identity used in
     \begin{align}
         K^J
          & =S^J
+        \notag
     \end{align}
     for some $J>0$.
 
@@ -900,17 +926,20 @@ $A^{-1}A=\Id$. This is the identity used in
     \begin{align}
         S_{(b,a),(b',a')}
          & =W_{ba}V_{a'b'}.
+        \notag
     \end{align}
     Its first trace is $D_A$, so multiplication of outer products gives
     \begin{align}
         S^J
          & =D_A^{J-1}S.
+        \notag
     \end{align}
     Apply the padded open-boundary identity with an arbitrary original-scale
     word $w$.  Rewriting its cross sum with the preceding factorization yields
     \begin{align}
         D_A^{J-1}(VB^wW)_{a'a}
          & =D_A^{J-1}(A^w)_{a'a}.
+        \notag
     \end{align}
     Since $D_A>0$, cancel the nonzero scalar and conclude
     $VB^wW=A^w$ for every word $w$.  The empty word gives $VW=1_{D_A}$.
