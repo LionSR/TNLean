@@ -185,6 +185,54 @@ private theorem embedLocalOperator_one
   by_cases hfst : x.1 = y.1 <;> by_cases hsnd : x.2 = y.2 <;>
     simp_all [Prod.ext_iff]
 
+/-- Embedding into a cyclic window commutes with conjugate transpose. -/
+@[simp]
+theorem embedLocalOperator_conjTranspose
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+    (A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    embedLocalOperator (d := d) L N hLN i Aᴴ =
+      (embedLocalOperator L N hLN i A)ᴴ := by
+  let e := windowComplementEquiv (d := d) L N hLN i
+  apply (Matrix.reindex e e).injective
+  rw [reindex_embedLocalOperator_windowComplement,
+    ← Matrix.conjTranspose_reindex,
+    reindex_embedLocalOperator_windowComplement,
+    Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one]
+
+/-- Embedding into a cyclic window preserves Hermitian matrices. -/
+theorem embedLocalOperator_isHermitian
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+    {A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ} (hA : A.IsHermitian) :
+    (embedLocalOperator (d := d) L N hLN i A).IsHermitian := by
+  rw [Matrix.IsHermitian, ← embedLocalOperator_conjTranspose, hA.eq]
+
+/-- Embedding into a cyclic window preserves unitary matrices. -/
+theorem embedLocalOperator_mem_unitaryGroup
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+    {A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ}
+    (hA : A ∈ Matrix.unitaryGroup (Fin L → Fin d) ℂ) :
+    embedLocalOperator (d := d) L N hLN i A ∈
+      Matrix.unitaryGroup (Fin N → Fin d) ℂ := by
+  rw [Matrix.mem_unitaryGroup_iff'] at hA ⊢
+  have hA' : Aᴴ * A = 1 := by
+    simpa [Matrix.star_eq_conjTranspose] using hA
+  rw [Matrix.star_eq_conjTranspose, ← embedLocalOperator_conjTranspose,
+    ← embedLocalOperator_mul, hA', embedLocalOperator_one]
+
+/-- Embedding into a cyclic window preserves orthogonal projections, expressed
+by the type-generic star-projection predicate. -/
+theorem embedLocalOperator_isStarProjection
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+    {A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ}
+    (hA : IsStarProjection A) :
+    IsStarProjection (embedLocalOperator (d := d) L N hLN i A) := by
+  rw [isStarProjection_iff'] at hA ⊢
+  constructor
+  · rw [← embedLocalOperator_mul, hA.1]
+  · have hA' : Aᴴ = A := by
+      simpa [Matrix.star_eq_conjTranspose] using hA.2
+    rw [Matrix.star_eq_conjTranspose, ← embedLocalOperator_conjTranspose, hA']
+
 /-- Embedding into a fixed cyclic window is a complex algebra homomorphism. -/
 def embedLocalOperatorAlgHom
     (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :

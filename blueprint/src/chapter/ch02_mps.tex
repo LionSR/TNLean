@@ -953,6 +953,78 @@ $A^{-1}A=\Id$. This is the identity used in
     scale.
 \end{proof}
 
+\begin{lemma}[Scalar covariance of rectangular reductions]
+    \label{lem:mps_reduction_scalar_covariance}
+    \lean{MPSTensor.IsReduction.smul,
+        MPSTensor.IsReduction.evalWord_smul_target}
+    \leanok
+    \uses{def:mps_rectangular_reduction}
+    If $V,W$ form a reduction from $B$ to $A$, then they also form a reduction
+    from $cB$ to $cA$ for every $c\in\C$.  If instead they form a reduction
+    from $B$ to $cA$, then
+    \begin{align}
+        VW & =1_{D_A},
+           & VB^wW     & =c^{|w|}A^w
+        \qquad\text{for every word }w.
+        \label{eq:mps_reduction_scalar_covariance}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:eval_word_smul}
+    Scaling both tensors multiplies each length-$|w|$ word by the same factor
+    $c^{|w|}$, so the reduction identities are preserved.  For a reduction to
+    $cA$, expand $(cA)^w=c^{|w|}A^w$ in the defining word identity.  The
+    retraction $VW=1_{D_A}$ is unchanged.
+\end{proof}
+
+\begin{theorem}[Nonzero proportional existence of rectangular reductions]
+    \label{thm:mps_proportional_reduction_exists}
+    \lean{MPSTensor.exists_isReduction_smul_of_isInjective_of_mpv_eq_pow_mul,
+        MPSTensor.exists_isReduction_smul_of_isNormal_of_mpv_eq_pow_mul}
+    \leanok
+    \uses{def:mpv, def:injective, def:normal,
+        def:mps_rectangular_reduction}
+    Let $A$ and $B$ have the same physical alphabet and positive target bond
+    dimension $D_A>0$.  Let $c\in\C$ be nonzero, and suppose that
+    \begin{align}
+        V^{(N)}(B)_\sigma
+         & =c^N V^{(N)}(A)_\sigma
+        \qquad\text{for every }N>0\text{ and every configuration }\sigma.
+        \label{eq:mps_proportional_reduction_hypothesis}
+    \end{align}
+    If $A$ is injective, then there exist
+    $V\in\C^{D_A\times D_B}$ and $W\in\C^{D_B\times D_A}$ such that
+    \begin{align}
+        VW & =1_{D_A},
+           & VB^wW     & =c^{|w|}A^w
+        \qquad\text{for every word }w.
+        \label{eq:mps_proportional_reduction_word_relation}
+    \end{align}
+    The same conclusion holds when $A$ is normal.
+
+    This is the corrected nonzero-scalar form of
+    \cite[Proposition~20]{Molnar2018SemiInjective}.  The unscaled conclusion
+    printed there is false for unrestricted $c\ne1$, and the case $c=0$ does
+    not admit this rescaling argument
+    \cite{gap:mgsc18_reduction_proportionality_scalar}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:eval_word_smul, thm:mps_equality_reduction_exists,
+        lem:mps_reduction_scalar_covariance}
+    Set $\widetilde B=c^{-1}B$.  Expand its word evaluations with
+    Lemma~\ref{lem:eval_word_smul}, take the trace, and use
+    Eq.~\ref{eq:mps_proportional_reduction_hypothesis}.  The positive-length MPV
+    families of $\widetilde B$ and $A$ are equal.  Apply
+    Theorem~\ref{thm:mps_equality_reduction_exists} to obtain a reduction from
+    $\widetilde B$ to $A$.  Scale both tensors by $c$ to obtain a reduction
+    from $B$ to $cA$, and then apply
+    Lemma~\ref{lem:mps_reduction_scalar_covariance} to get
+    Eq.~\ref{eq:mps_proportional_reduction_word_relation}.
+\end{proof}
 
 \begin{lemma}[Nonempty products in a generated subsemigroup]
     \label{lem:subsemigroup_closure_nonempty_product}
