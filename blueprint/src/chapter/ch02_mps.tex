@@ -669,6 +669,7 @@ boundary conditions (PBC).
         MPSTensor.trace_reductionCrossMatrix_pow_of_sameMPV₂Pos,
         MPSTensor.reductionOpenBoundaryMatrixContraction,
         MPSTensor.reductionOpenBoundaryContraction,
+        MPSTensor.reductionOpenBoundaryMatrixContraction_eq_cross_sum,
         MPSTensor.reductionOpenBoundaryMatrixContraction_self,
         MPSTensor.reductionOpenBoundaryContraction_self,
         MPSTensor.reductionOpenBoundaryContraction_of_sameMPV₂Pos,
@@ -712,12 +713,17 @@ boundary conditions (PBC).
     identifies the resulting cross matrix with its rank-one target
     specialization, whose $n$th trace is $D_A^n$.
 
-    For the open contraction, expand the lower trace into matrix entries and
-    identify the inverse-site sum with an entry of $K^n$.  After positive
-    blocking, MPV equality applies to the concatenation of the nonempty blocked
-    word and the unblocked tail.  Replacing this closed $\widetilde B$ word by
-    the corresponding $\widetilde A$ word reduces to the same rank-one target
-    calculation and yields $D_A^{n-1}(A^w)_{a'a}$.
+    For the open contraction, expanding the lower trace into matrix entries
+    gives the exact cross sum
+    \[
+        \sum_{x,y}
+        K(\widetilde B,C)^n_{(x,a),(y,a')}X_{yx}.
+    \]
+    After positive blocking, MPV equality applies to the concatenation of the
+    nonempty blocked word and the unblocked tail.  Replacing this closed
+    $\widetilde B$ word by the corresponding $\widetilde A$ word reduces to
+    the same rank-one target calculation and yields
+    $D_A^{n-1}(A^w)_{a'a}$.
 \end{proof}
 
 The inverse-tensor characterization of injectivity says that $A$ is

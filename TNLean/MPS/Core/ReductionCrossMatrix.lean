@@ -253,7 +253,13 @@ private theorem trace_mul_eq_sum_entries {D : ℕ}
   rw [Matrix.trace]
   simp only [Matrix.diag, Matrix.mul_apply]
 
-private theorem reductionOpenBoundaryMatrixContraction_eq_cross_sum
+/-- The open-boundary matrix contraction is the pairing of the boundary matrix
+`X` with the corresponding entries of the cross-matrix power.  This is the
+exact cross-sum expansion used before the rank-one reduction in the source's
+open padded contraction.
+
+Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3866--3887. -/
+theorem reductionOpenBoundaryMatrixContraction_eq_cross_sum
     (B : MPSTensor d D_B) (C : MPSTensor d D_A)
     (n : ℕ) (X : Matrix (Fin D_B) (Fin D_B) ℂ) (a' a : Fin D_A) :
     reductionOpenBoundaryMatrixContraction B C n X a' a =
