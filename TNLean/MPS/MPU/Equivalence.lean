@@ -12,8 +12,8 @@ import TNLean.MPS.MPU.PhysicalAncilla
 
 This file formalizes strict equivalence and equivalence after attaching physical
 identity ancillas and then blocking, following arXiv:1703.09188, lines 706--724.
-It also formalizes strict and stabilized equivalence under symmetry from
-lines 1340--1366.
+It also formalizes strict equivalence under symmetry and the fixed-bond,
+coherent-family variant of stabilized equivalence from lines 1340--1366.
 
 The virtual bond dimension is fixed along every path. The source does not specify
 a stabilization that compares tensors of different virtual bond dimensions, so
