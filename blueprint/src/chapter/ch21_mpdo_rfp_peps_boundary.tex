@@ -111,9 +111,9 @@ makes sense with separate horizontal and vertical dimensions.
     \label{thm:peps_rfp_implies_boundary_rfp}
     \notready
     \discussion{7371}
-    \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
-        def:peps_boundary_coarse_graining, def:peps_boundary_refinement,
-        def:is_rfp_via_ts}
+    \uses{def:peps_local_boundary_tensor, def:peps_transfer_fixed_point,
+        def:peps_rfp_relation, def:peps_boundary_coarse_graining,
+        def:peps_boundary_refinement, def:is_rfp_via_ts}
     Suppose a homogeneous PEPS satisfies the neighboring blocking relation at
     source lines~716--720 of \cite{Cirac2016MPDO_arXiv}, and let its transfer
     fixed points determine the boundary MPO displayed at source lines~721--724.
@@ -124,8 +124,9 @@ makes sense with separate horizontal and vertical dimensions.
 
 \begin{proof}
     \notready
-    \uses{def:peps_boundary_coarse_graining,
-        def:peps_boundary_refinement, def:is_rfp_via_ts}
+    \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
+        def:peps_boundary_coarse_graining, def:peps_boundary_refinement,
+        def:is_rfp_via_ts}
     The source diagrams do not specify the domain and codomain of the physical
     isometry, the virtual-space identifications, the choice and normalization of
     the transfer fixed points, or the inserted factor in the refinement map.
