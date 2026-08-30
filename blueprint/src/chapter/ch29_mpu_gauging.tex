@@ -7,25 +7,34 @@
     \label{def:mpug_finite_group_unitary_average}
     \lean{TNLean.Algebra.finiteGroupUnitaryAverage}
     \leanok
+    \discussion{7458}
     Let $G$ be a finite group and let $\rho\colon G\to\mathrm U(n)$ be a
     unitary representation. Define
     \begin{align}
         P_\rho & = \frac{1}{|G|}\sum_{g\in G}\rho(g).
     \end{align}
-    This is the local gauge average in
+    For a fixed lattice site $j$, the specialization
+    $\rho(g)=\mathcal G_g^j$ gives the local Gauss-law average $P_j$ in
     \cite[lines~459--461]{FrancoRubio2025MPUGauging}.
 \end{definition}
 
 \begin{theorem}[Finite-group unitary average is an orthogonal projection]
     \label{thm:mpug_finite_group_unitary_average_projection}
-    \lean{TNLean.Algebra.finiteGroupUnitaryAverage_isOrthogonalProjection}
+    \lean{TNLean.Algebra.isOrthogonalProjection_finiteGroupUnitaryAverage}
     \leanok
+    \discussion{7458}
     \uses{def:mpug_finite_group_unitary_average}
     For every finite-dimensional unitary representation $\rho$ of a finite
-    group, $P_\rho$ is an orthogonal projection.
+    group,
+    \begin{align}
+        P_\rho^\dagger & =P_\rho, \\
+        P_\rho^2 & =P_\rho.
+    \end{align}
+    Hence $P_\rho$ is an orthogonal projection.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:mpug_finite_group_unitary_average}
     The standard averaging operator on a representation is the projection onto
     its invariant subspace, so $P_\rho^2=P_\rho$. Unitarity gives
     $\rho(g)^\dagger=\rho(g^{-1})$. Since inversion permutes $G$,

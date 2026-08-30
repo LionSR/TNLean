@@ -12,7 +12,7 @@ import QICLean.Algebra.OrthogonalProjection
 The normalized average of a finite-group unitary representation is the
 orthogonal projection onto its invariant subspace. This is the matrix-level
 averaging fact used for the local gauge constraints in arXiv:2502.20257,
-lines 459--461 and Eq. `eq:projection`.
+lines 457--461.
 -/
 
 open scoped BigOperators Matrix
@@ -32,19 +32,16 @@ noncomputable def unitaryMatrixRepresentation
 /-- The normalized finite-group average
 $|G|^{-1}\sum_{g \in G}\rho(g)$ of a unitary matrix representation.
 
-This is the local gauge projector of arXiv:2502.20257, lines 459--461. -/
+This is the matrix-level form of the local gauge average in arXiv:2502.20257,
+lines 459--461. -/
 noncomputable def finiteGroupUnitaryAverage
     (ρ : G →* Matrix.unitaryGroup (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ :=
   (Fintype.card G : ℂ)⁻¹ • ∑ g : G, (ρ g : Matrix (Fin n) (Fin n) ℂ)
 
 /-- The normalized average of a finite-group unitary matrix representation is
-an orthogonal projection.
-
-This is the single-site projection assertion underlying arXiv:2502.20257,
-lines 459--461 and Eq. `eq:projection`. Idempotence is inherited from the
-standard averaging projection onto representation invariants; self-adjointness
-uses unitarity and reindexes the group sum by inversion. -/
-theorem finiteGroupUnitaryAverage_isOrthogonalProjection
+an orthogonal projection, as asserted for the local gauge operators in
+arXiv:2502.20257, lines 457--461. -/
+theorem isOrthogonalProjection_finiteGroupUnitaryAverage
     (ρ : G →* Matrix.unitaryGroup (Fin n) ℂ) :
     IsOrthogonalProjection (finiteGroupUnitaryAverage ρ) := by
   classical
@@ -65,7 +62,7 @@ theorem finiteGroupUnitaryAverage_isOrthogonalProjection
     simp only [finiteGroupUnitaryAverage, Matrix.conjTranspose_smul,
       Matrix.conjTranspose_sum]
     congr 1
-    · simp
+    · simp only [star_inv₀, star_natCast]
     · calc
         ∑ g : G, (ρ g : Matrix (Fin n) (Fin n) ℂ)ᴴ =
             ∑ g : G, (ρ g⁻¹ : Matrix (Fin n) (Fin n) ℂ) := by
