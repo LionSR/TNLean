@@ -237,6 +237,38 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     representation proves the assertion for every further positive blocking.
 \end{proof}
 
+\begin{theorem}[Zero specified source-index value determines the source ranks]
+    \label{thm:mpug_zero_specified_source_index_ranks}
+    \lean{MPOTensor.sourceRanks_eq_physDim_of_sourceIndexValue_eq_zero}
+    \leanok
+    \uses{def:mpu_specified_source_index_value,
+        def:mpu_right_rank, def:mpu_left_rank}
+    Let $\mathcal U$ be a specified MPO tensor of positive physical dimension
+    $d$, with positive right and left source-cut ranks $r$ and $\ell$. If
+    \begin{align}
+        r\ell & =d^2
+    \end{align}
+    and $\operatorname{ind}_{\mathrm{src}}(\mathcal U)=0$, then
+    \begin{align}
+        r    & =d, \\
+        \ell & =d.
+    \end{align}
+    This is the arithmetic conclusion in
+    \cite[line~1547]{FrancoRubio2025MPUGauging}, under the displayed
+    hypotheses.
+    % Scope: this entry does not assert finite-order vanishing, the rank-product
+    % theorem, blocking independence, or the public MPU index.
+    % Source anchor: Papers/2502.20257/main.tex, line 1547.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_specified_source_index_identities}
+    The source-index identity gives
+    $0=\log_2(r/d)$. Since $r/d>0$, this implies $r/d=1$, hence $r=d$.
+    Substitution into $r\ell=d^2$ and cancellation of the positive factor $d$
+    give $\ell=d$.
+\end{proof}
+
 \section{Scalar three-cocycles and fusion-tensor gauge freedom}
 \label{sec:mpug_scalar_gauge}
 

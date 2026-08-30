@@ -42,6 +42,8 @@ of the chosen simple blocking, is not asserted here.
   under a supplied rank-product equality.
 * `MPOTensor.sourceIndexValue_eq_neg_logb_leftRank_div`: the left-rank formula
   under a supplied rank-product equality.
+* `MPOTensor.sourceRanks_eq_physDim_of_sourceIndexValue_eq_zero`: vanishing of the
+  source-index value forces both source ranks to equal the physical dimension.
 -/
 
 namespace MPOTensor
@@ -193,5 +195,31 @@ theorem sourceIndexValue_eq_neg_logb_leftRank_div (U : MPOTensor d D)
   rw [Real.logb_mul hrReal hℓReal, Real.logb_mul hdReal hdReal] at hlog
   rw [sourceIndexValue, Real.logb_div hℓReal hdReal]
   linarith
+
+/-- If the positive source ranks satisfy $r[U]\ell[U]=d^2$ and the specified
+source-index value vanishes, then both source ranks equal the physical dimension:
+$$
+r[U]=d, \qquad \ell[U]=d.
+$$
+
+This is the final arithmetic implication in arXiv:2502.20257, line 1547. The
+rank-product identity and vanishing of the source-index value are explicit
+hypotheses; no finite-order or blocking-independent index statement is asserted. -/
+theorem sourceRanks_eq_physDim_of_sourceIndexValue_eq_zero
+    (U : MPOTensor d D) (hr : 0 < r[U]) (hℓ : 0 < ℓ[U]) (hd : 0 < d)
+    (hprod : r[U] * ℓ[U] = d ^ 2) (hindex : sourceIndexValue U hr hℓ = 0) :
+    r[U] = d ∧ ℓ[U] = d := by
+  have hlog : Real.logb 2 ((r[U] : ℝ) / d) = 0 := by
+    rw [← sourceIndexValue_eq_logb_rightRank_div U hr hℓ hd hprod]
+    exact hindex
+  have hrReal : 0 < (r[U] : ℝ) := by exact_mod_cast hr
+  have hdReal : 0 < (d : ℝ) := by exact_mod_cast hd
+  have hratio := Real.eq_one_of_pos_of_logb_eq_zero (by norm_num : (1 : ℝ) < 2)
+    (div_pos hrReal hdReal) hlog
+  have hrEq : r[U] = d := by
+    exact_mod_cast eq_of_div_eq_one hratio
+  refine ⟨hrEq, ?_⟩
+  rw [hrEq, pow_two] at hprod
+  exact Nat.mul_left_cancel hd hprod
 
 end MPOTensor
