@@ -28,8 +28,9 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- A positive finite-dimensional operator with an energy lower bound on the
 orthogonal complement of its kernel satisfies the corresponding norm lower
-bound. The proof converts the energy estimate into \(H^2 \geq \gamma H\) in an
-eigenbasis, then applies `spectralGap_of_martingale_of_finiteDimensional`. -/
+bound. Orthogonally removing the kernel component converts the energy estimate
+into \(H^2 \geq \gamma H\) by Cauchy--Schwarz; the final norm bound then follows
+from `spectralGap_of_martingale_of_finiteDimensional`. -/
 theorem spectralGap_of_energy_lower_bound_of_finiteDimensional
     [FiniteDimensional ℂ E] {γ : ℝ} (hγ : 0 < γ) {H : E →ₗ[ℂ] E}
     (hH : H.IsPositive)
@@ -37,77 +38,49 @@ theorem spectralGap_of_energy_lower_bound_of_finiteDimensional
       γ * ‖v‖ ^ 2 ≤ (⟪H v, v⟫_ℂ).re) :
     ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
   classical
-  let hSym := hH.isSymmetric
-  set n := Module.finrank ℂ E with hn_def
-  have hn : Module.finrank ℂ E = n := hn_def.symm
-  set b := hSym.eigenvectorBasis hn with hb_def
-  set μ : Fin n → ℝ := hSym.eigenvalues hn with hμ_def
-  have hHb : ∀ i, H (b i) = ((μ i : ℂ)) • b i := fun i ↦
-    hSym.apply_eigenvectorBasis hn i
-  have hbb : ∀ i j : Fin n, ⟪b i, b j⟫_ℂ = if i = j then (1 : ℂ) else 0 :=
-    orthonormal_iff_ite.mp b.orthonormal
-  have hb_norm : ∀ i, ‖b i‖ = 1 := b.orthonormal.1
-  have hb_mem (i : Fin n) (hμi : μ i ≠ 0) : b i ∈ (LinearMap.ker H)ᗮ := by
-    rw [Submodule.mem_orthogonal]
-    intro x hx
-    have hxzero : H x = 0 := LinearMap.mem_ker.mp hx
-    have hinner : ⟪x, ((μ i : ℂ)) • b i⟫_ℂ = 0 := by
-      rw [← hHb i, ← hSym x (b i), hxzero, inner_zero_left]
-    rw [inner_smul_right] at hinner
-    exact (mul_eq_zero.mp hinner).resolve_left (by simpa using hμi)
-  have hμ_gap : ∀ i, μ i = 0 ∨ γ ≤ μ i := by
-    intro i
-    by_cases hμi : μ i = 0
-    · exact Or.inl hμi
-    · right
-      have hi := hEnergy (b i) (hb_mem i hμi)
-      rw [hHb i, inner_smul_left, hbb i i, ite_eq_left rfl, mul_one,
-        Complex.conj_ofReal, Complex.ofReal_re, hb_norm i, one_pow] at hi
-      simpa using hi
-  have hOpIneq : ∀ v,
-      γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re := by
-    intro v
-    have hEnergyCoords : (⟪H v, v⟫_ℂ).re =
-        ∑ i, μ i * ‖(b.repr v) i‖ ^ 2 := by
-      calc
-        (⟪H v, v⟫_ℂ).re = (⟪b.repr (H v), b.repr v⟫_ℂ).re := by
-          rw [b.repr.inner_map_map]
-        _ = ∑ i, (⟪(b.repr (H v)) i, (b.repr v) i⟫_ℂ).re := by
-          rw [PiLp.inner_apply]
-          simp
-        _ = ∑ i, μ i * ‖(b.repr v) i‖ ^ 2 := by
-          refine Finset.sum_congr rfl fun i _ ↦ ?_
-          rw [hSym.eigenvectorBasis_apply_self_apply hn]
-          change (((b.repr v) i) *
-            (starRingEnd ℂ) ((μ i : ℂ) * (b.repr v) i)).re =
-              μ i * ‖(b.repr v) i‖ ^ 2
-          rw [map_mul, Complex.conj_ofReal]
-          rw [← mul_assoc, mul_comm ((b.repr v) i) (μ i : ℂ), mul_assoc,
-            Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero]
-          rw [← RCLike.inner_apply]
-          congr 1
-          exact inner_self_eq_norm_sq (𝕜 := ℂ) ((b.repr v) i)
-    have hNormCoords : (⟪H v, H v⟫_ℂ).re =
-        ∑ i, μ i ^ 2 * ‖(b.repr v) i‖ ^ 2 := by
-      calc
-        (⟪H v, H v⟫_ℂ).re = ‖H v‖ ^ 2 :=
-          inner_self_eq_norm_sq (𝕜 := ℂ) (H v)
-        _ = ∑ i, μ i ^ 2 * ‖(b.repr v) i‖ ^ 2 := by
-          rw [← b.repr.norm_map, EuclideanSpace.norm_sq_eq]
-          refine Finset.sum_congr rfl fun i _ ↦ ?_
-          rw [hSym.eigenvectorBasis_apply_self_apply hn, norm_mul, mul_pow,
-            RCLike.norm_ofReal, sq_abs]
-    rw [hEnergyCoords, hNormCoords, Finset.mul_sum]
-    refine Finset.sum_le_sum fun i _ ↦ ?_
-    rcases hμ_gap i with hμi | hμi
-    · simp [hμi]
-    · calc
-        γ * (μ i * ‖(b.repr v) i‖ ^ 2) =
-            (γ * μ i) * ‖(b.repr v) i‖ ^ 2 := by ring
-        _ ≤ μ i ^ 2 * ‖(b.repr v) i‖ ^ 2 :=
-          mul_le_mul_of_nonneg_right
-            (by nlinarith [hH.nonneg_eigenvalues hn i]) (sq_nonneg _)
-  exact spectralGap_of_martingale_of_finiteDimensional hγ hH hOpIneq
+  apply spectralGap_of_martingale_of_finiteDimensional hγ hH
+  intro v
+  let p := (LinearMap.ker H).starProjection v
+  let w := v - p
+  have hp_mem : p ∈ LinearMap.ker H :=
+    Submodule.starProjection_apply_mem (LinearMap.ker H) v
+  have hHp : H p = 0 := LinearMap.mem_ker.mp hp_mem
+  have hw : w ∈ (LinearMap.ker H)ᗮ :=
+    Submodule.sub_starProjection_mem_orthogonal v
+  have hv_eq : v = w + p := by
+    dsimp only [w]
+    abel
+  have hHw : H w = H v := by
+    simp only [w, map_sub, hHp, sub_zero]
+  have hcross : ⟪H v, p⟫_ℂ = 0 := by
+    rw [hH.isSymmetric v p, hHp, inner_zero_right]
+  have hform : (⟪H v, v⟫_ℂ).re = (⟪H w, w⟫_ℂ).re := by
+    calc
+      (⟪H v, v⟫_ℂ).re = (⟪H v, w + p⟫_ℂ).re := by rw [← hv_eq]
+      _ = (⟪H v, w⟫_ℂ + ⟪H v, p⟫_ℂ).re := by rw [inner_add_right]
+      _ = (⟪H v, w⟫_ℂ).re := by rw [hcross, add_zero]
+      _ = (⟪H w, w⟫_ℂ).re := by rw [hHw]
+  have henergy := hEnergy w hw
+  have hcauchy : (⟪H v, v⟫_ℂ).re ≤ ‖H v‖ * ‖w‖ := by
+    rw [hform]
+    calc
+      (⟪H w, w⟫_ℂ).re ≤ ‖H w‖ * ‖w‖ :=
+        re_inner_le_norm (𝕜 := ℂ) (H w) w
+      _ = ‖H v‖ * ‖w‖ := by rw [hHw]
+  rw [← hform] at henergy
+  by_cases hwzero : ‖w‖ = 0
+  · have hw' : w = 0 := norm_eq_zero.mp hwzero
+    rw [hform, hw', map_zero, inner_zero_left, Complex.zero_re, mul_zero]
+    exact inner_self_nonneg (𝕜 := ℂ) (x := H v)
+  · have hwpos : 0 < ‖w‖ := lt_of_le_of_ne (norm_nonneg w) (Ne.symm hwzero)
+    have hgapnorm : γ * ‖w‖ ≤ ‖H v‖ := by
+      nlinarith
+    have hquad : γ * (⟪H v, v⟫_ℂ).re ≤ ‖H v‖ ^ 2 := by
+      nlinarith [norm_nonneg (H v)]
+    calc
+      γ * (⟪H v, v⟫_ℂ).re ≤ ‖H v‖ ^ 2 := hquad
+      _ = (⟪H v, H v⟫_ℂ).re :=
+        (inner_self_eq_norm_sq (𝕜 := ℂ) (H v)).symm
 
 namespace NestedGroundProjections
 

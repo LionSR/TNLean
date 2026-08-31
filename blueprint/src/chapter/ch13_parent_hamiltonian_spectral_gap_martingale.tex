@@ -1193,13 +1193,25 @@ norm estimate is derived here.
     \leanok
     \uses{thm:nachtergaele_c1_c3_energy_estimate,
         lem:quadratic_form_to_norm_bound}
-    Diagonalize the positive operator $H$. Applying
-    Theorem~\ref{thm:nachtergaele_c1_c3_energy_estimate} to every eigenvector
-    with nonzero eigenvalue shows that its eigenvalue is at least the
-    coefficient in Equation~\eqref{eq:nachtergaele_c1_c3_norm_gap}. Hence
-    $H^2\geq\gamma H$ with this coefficient. The finite-dimensional
-    quadratic-form criterion gives the stated norm lower bound on
-    $(\ker H)^\perp$.
+    Denote the coefficient in
+    Equation~\eqref{eq:nachtergaele_c1_c3_norm_gap} by $\kappa$. For an
+    arbitrary $x$, remove its orthogonal projection onto $\ker H$ and write
+    the remainder as $w\in(\ker H)^\perp$. Symmetry gives
+    $Hx=Hw$ and $\re\langle Hx,x\rangle=\re\langle Hw,w\rangle$. The energy
+    estimate and Cauchy--Schwarz give
+    \begin{align}
+        \kappa\lVert w\rVert^2
+         & \leq\re\langle Hx,x\rangle
+        \leq\lVert Hx\rVert\lVert w\rVert.
+    \end{align}
+    If $w=0$, the desired quadratic-form inequality is immediate. Otherwise,
+    cancellation of $\lVert w\rVert$ and a second use of the upper bound give
+    \begin{align}
+        \kappa\,\re\langle Hx,x\rangle
+         & \leq\lVert Hx\rVert^2.
+    \end{align}
+    Thus $H^2\geq\kappa H$ globally. The finite-dimensional quadratic-form
+    criterion gives the stated norm lower bound on $(\ker H)^\perp$.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for a finite family of projections]
