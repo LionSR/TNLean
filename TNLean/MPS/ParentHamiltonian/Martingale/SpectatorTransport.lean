@@ -22,7 +22,7 @@ remaining next-prefix and martingale-product comparison is recorded in
 * Nachtergaele, arXiv:cond-mat/9410110, proof of Theorem 2.1(i), lines 1178--1259.
 -/
 
-open scoped BigOperators
+open scoped BigOperators ComplexOrder
 
 namespace MPSTensor
 
@@ -1123,5 +1123,115 @@ theorem fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometr
     (ContinuousLinearMap.rightFiberwiseMap_sub
       (S := Cfg d r) (openChainLeftGroundProjectionES A (K + l))
         (groundSpaceES A (K + l + 1)).starProjection).symm
+
+/-- Conjugating the fixed C3 product gives the fiberwise extension of the
+physical open-chain C3 product. -/
+theorem openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator
+    {A : MPSTensor d D} [NeZero D] {K l r : ℕ}
+    (hInj : Kraus.IsNBlkInjective A l) (hl : 0 < l) (hK : 0 < K) :
+    (rightSpectatorConfigLinearIsometryEquiv d (K + (l + 1)) r).toLinearEquiv.toLinearMap.comp
+        (((openIntervalGroundProjectionES A (l + 1) l
+          ((K + (l + 1)) + r) (K + l)).comp
+          ((fixedAmbientNestedGroundProjectionsES A (l + 1)
+            ((K + (l + 1)) + r)).martingaleDifference (K + l))).comp
+          (rightSpectatorConfigLinearIsometryEquiv d
+            (K + (l + 1)) r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (openChainTailGroundProjectionES A K (l + 1) ∘L
+          openChainMartingaleDifferenceES A K l hInj hl hK)).toLinearMap := by
+  let U := rightSpectatorConfigLinearIsometryEquiv d (K + (l + 1)) r
+  let Q := openIntervalGroundProjectionES A (l + 1) l
+    ((K + (l + 1)) + r) (K + l)
+  let E := (fixedAmbientNestedGroundProjectionsES A (l + 1)
+    ((K + (l + 1)) + r)).martingaleDifference (K + l)
+  let q := openChainTailGroundProjectionES A K (l + 1)
+  let e := openChainMartingaleDifferenceES A K l hInj hl hK
+  have hQ :=
+    openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
+      A (K := K) (l := l) (r := r)
+  have hE :=
+    fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometryEquiv
+      (r := r) hInj hl hK
+  apply LinearMap.ext
+  intro x
+  change U (Q (E (U.symm x))) =
+    ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) (q.comp e) x
+  have hQx := LinearMap.congr_fun hQ (U (E (U.symm x)))
+  change U (Q (U.symm (U (E (U.symm x))))) =
+    ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) q (U (E (U.symm x))) at hQx
+  rw [LinearIsometryEquiv.symm_apply_apply] at hQx
+  have hEx := LinearMap.congr_fun hE x
+  change U (E (U.symm x)) =
+    ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) e x at hEx
+  rw [hEx] at hQx
+  exact hQx
+
+/-- The fixed-volume C3 product has norm at most that of its physical
+open-chain representative.  This inequality also covers an empty spectator
+configuration type. -/
+theorem norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain
+    {A : MPSTensor d D} [NeZero D] {K l r : ℕ}
+    (hInj : Kraus.IsNBlkInjective A l) (hl : 0 < l) (hK : 0 < K) :
+    ‖LinearMap.toContinuousLinearMap
+        ((openIntervalGroundProjectionES A (l + 1) l
+          ((K + (l + 1)) + r) (K + l)).comp
+          ((fixedAmbientNestedGroundProjectionsES A (l + 1)
+            ((K + (l + 1)) + r)).martingaleDifference (K + l)))‖ ≤
+      ‖openChainTailGroundProjectionES A K (l + 1) ∘L
+        openChainMartingaleDifferenceES A K l hInj hl hK‖ := by
+  let U := rightSpectatorConfigLinearIsometryEquiv d (K + (l + 1)) r
+  let T := LinearMap.toContinuousLinearMap
+    ((openIntervalGroundProjectionES A (l + 1) l
+      ((K + (l + 1)) + r) (K + l)).comp
+      ((fixedAmbientNestedGroundProjectionsES A (l + 1)
+        ((K + (l + 1)) + r)).martingaleDifference (K + l)))
+  let t := openChainTailGroundProjectionES A K (l + 1) ∘L
+    openChainMartingaleDifferenceES A K l hInj hl hK
+  have hconj :=
+    openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator
+      (r := r) hInj hl hK
+  have hconjCLM :
+      U.toLinearIsometry.toContinuousLinearMap.comp
+          (T.comp U.symm.toLinearIsometry.toContinuousLinearMap) =
+        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) t := by
+    apply ContinuousLinearMap.ext
+    intro x
+    exact LinearMap.congr_fun hconj x
+  calc
+    ‖T‖ = ‖U.toLinearIsometry.toContinuousLinearMap.comp
+        (T.comp U.symm.toLinearIsometry.toContinuousLinearMap)‖ :=
+      (ContinuousLinearMap.norm_conj_linearIsometryEquiv U T).symm
+    _ = ‖ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) t‖ :=
+      congrArg norm hconjCLM
+    _ ≤ ‖t‖ := ContinuousLinearMap.norm_rightFiberwiseMap_le t
+
+/-- A primitive MPS satisfies Nachtergaele's C3 bound on every active index of
+the fixed final-volume filtration.  The same overlap length and coefficient as
+in the physical open-chain estimate are used. -/
+theorem IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    ∃ l : ℕ, ∃ ε : ℝ, ∃ _hl : 1 < l, ∃ _hInj : Kraus.IsNBlkInjective A l,
+      0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
+      ∀ (N n : ℕ), n < N →
+        ‖LinearMap.toContinuousLinearMap
+          ((openIntervalGroundProjectionES A (l + 1) l N n).comp
+            ((fixedAmbientNestedGroundProjectionsES A (l + 1) N).martingaleDifference n))‖ ≤
+          ε := by
+  obtain ⟨l, ε, hl, hInj, hε, hε_lt, hOpen⟩ :=
+    hP.exists_openChain_martingaleDifference_norm_lt_c3_threshold hρ
+  refine ⟨l, ε, hl, hInj, hε, hε_lt, fun N n hnN ↦ ?_⟩
+  rcases lt_trichotomy n l with hnl | rfl | hln
+  · rw [fixedAmbient_martingaleDifference_eq_zero_of_lt A hnl,
+      LinearMap.comp_zero]
+    simpa using hε
+  · rw [openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
+      A hl.le (by omega)]
+    simpa using hε
+  · obtain ⟨K, rfl⟩ : ∃ K, n = K + l := ⟨n - l, by omega⟩
+    obtain ⟨r, rfl⟩ : ∃ r, N = (K + (l + 1)) + r :=
+      ⟨N - (K + (l + 1)), by omega⟩
+    exact (norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain
+      (r := r) hInj hl.le (by omega)).trans (hOpen K (by omega))
 
 end MPSTensor
