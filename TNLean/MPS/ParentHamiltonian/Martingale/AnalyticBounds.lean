@@ -23,7 +23,7 @@ open scoped InnerProductSpace
 namespace FrustrationFree
 
 variable {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+  [NormedAddCommGroup F] [NormedSpace ℂ F]
 
 /-- The real-part form of the weighted inner-product estimate used twice in
 Nachtergaele's display `Enpsi2` (cond-mat/9410110, lines 1223--1239). -/
@@ -38,10 +38,10 @@ theorem re_inner_le_weighted_norm_sq (x y : E) {c : ℝ} (hc : 0 < c) :
       field_simp [hc.ne']
       ring
 
-/-- If `P` is an orthogonal projection and the literal composition `Q.comp P`
-has operator norm at most `ε`, then its value on the range of `P` has the C3
+/-- If \(P\) is an orthogonal projection and the literal composition \(QP\)
+has operator norm at most \(\varepsilon\), then its value on the range of \(P\) has the C3
 norm-square bound used in cond-mat/9410110, lines 1240--1249, from condition C3
-at lines 1083--1094. No strict positivity of `ε` is required; the operator-norm
+at lines 1083--1094. No strict positivity of \(\varepsilon\) is required; the operator-norm
 hypothesis already implies its nonnegativity. -/
 theorem norm_sq_apply_projection_le_of_norm_comp_le
     (Q : E →L[ℂ] F) (P : E →L[ℂ] E)
