@@ -15,7 +15,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
-import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleC1C3
+import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleFullRangeEstimate
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
@@ -74,7 +74,7 @@ The nineteen components are:
   original-site periodic chains of length divisible by the block length;
 * `Martingale.MovingWindowCount` — reversal and counting of the finite moving-window
   sums in Nachtergaele's martingale estimate;
-* `Martingale.NachtergaeleC1C3` — the source's printed martingale-difference
+* `Martingale.NachtergaeleFullRangeEstimate` — the source's printed martingale-difference
   summation with the exact C1--C3 energy coefficient and its norm-gap form;
 * `Martingale.OverlapReduction` — reduction from overlapping-window commutation
   to all-pairs commutation using locality for disjoint windows;
