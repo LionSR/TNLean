@@ -10,14 +10,26 @@ import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
 
 /-!
-# Nachtergaele's C1--C3 energy estimate
+# Full-range form of Nachtergaele's C1--C3 energy estimate
 
-This file follows the proof of Theorem 2.1(i) in Nachtergaele,
-arXiv:cond-mat/9410110, lines 1195--1259. The finite-filtration statement sums
-all martingale differences (E_0,\ldots,E_{N-1}) and assumes C1--C3 on that
-full range. This avoids imposing any unsupported padding convention at the
-lower endpoint; a later physical specialization may verify the early indices
-separately.
+This file follows the summation in the proof of Theorem 2.1(i) in Nachtergaele,
+arXiv:cond-mat/9410110, lines 1195--1259.
+
+**Scope restriction (full finite range):** Conditions C2 and C3 in the source
+are assumed only beyond their lower threshold \(n_l\), while C1 starts at the
+corresponding window length; the printed proof nevertheless estimates every
+martingale difference \(E_0,\ldots,E_{N-1}\). The theorem below instead assumes
+the three estimates on the entire finite range. This extra hypothesis and the
+required lower-endpoint repair are recorded in
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. Thus the result is a
+full-range checkpoint with the source coefficient, not a formalization of the
+unrestricted source theorem.
+
+**Local fix (zero C3 constant):** The source chooses
+\(c_2=\epsilon_l/\sqrt{l+1}\) after requiring \(c_2>0\). When
+\(\epsilon_l=0\), the proof below instead uses \(Q_nE_n=0\) and omits the
+second weighted estimate. This endpoint repair is recorded in the same
+paper-gap note.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -282,19 +294,20 @@ private theorem enpsi_of_c2_c3_zero
         mul_le_mul_of_nonneg_left hC2 (by positivity)
   linarith
 
-/-- Nachtergaele's Theorem 2.1(i), in the finite-filtration notation of its
-proof.  Conditions C1 and C2 are stated as their quadratic-form inequalities,
-and C3 is the source's literal operator-norm bound
+/-- Full-range form of the summation in Nachtergaele's Theorem 2.1(i), in the
+finite-filtration notation of its proof (arXiv:cond-mat/9410110, lines
+1195--1259). Conditions C1 and C2 are stated as their quadratic-form
+inequalities, and C3 is the source's literal operator-norm bound
 \(\lVert Q_nE_n\rVert\leq\epsilon_l\).  The coefficient is exactly
 \(\frac{\gamma_{l+1}}{d_{l+1}}
   (1-\epsilon_l\sqrt{l+1})^2\).
 
 The finite sum runs over every index \(n=0,\ldots,N-1\), with only
 \(G_0=\mathbf 1\) needed for the martingale resolution. Thus C1, C2, and C3
-are assumed on that full finite range. The case \(\epsilon_l=0\) is treated
-separately, since the printed choice \(c_2=\epsilon_l/\sqrt{l+1}\) is then not
-positive. -/
-theorem energy_lower_bound_of_nachtergaele_c1_c3
+are assumed on that full finite range, which is stronger than the source's
+lower-threshold hypotheses. The case \(\epsilon_l=0\) is treated separately,
+since the printed choice \(c_2=\epsilon_l/\sqrt{l+1}\) is then not positive. -/
+theorem energy_lower_bound_of_nachtergaele_c1_c3_full_range
     [FiniteDimensional ℂ E]
     (G : NestedGroundProjections (E := E)) (Q : ℕ → E →ₗ[ℂ] E)
     (localHamiltonian : ℕ → E →ₗ[ℂ] E) (H : E →ₗ[ℂ] E)
@@ -467,12 +480,12 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3
       _ = (⟪H v, v⟫_ℂ).re := by
         field_simp [hδ.ne', hγ.ne', hd.ne']
 
-/-- Norm-gap form of Nachtergaele's Theorem 2.1(i). The ground-space identity
-identifies the last filtration range with the kernel of the positive
+/-- Norm-gap form of the full-range C1--C3 estimate above. The ground-space
+identity identifies the last filtration range with the kernel of the positive
 Hamiltonian. The energy estimate and Cauchy--Schwarz supply the global
 quadratic-form hypothesis used by
 `spectralGap_of_martingale_of_finiteDimensional`. -/
-theorem norm_lower_bound_of_nachtergaele_c1_c3
+theorem norm_lower_bound_of_nachtergaele_c1_c3_full_range
     [FiniteDimensional ℂ E]
     (G : NestedGroundProjections (E := E)) (Q : ℕ → E →ₗ[ℂ] E)
     (localHamiltonian : ℕ → E →ₗ[ℂ] E) (H : E →ₗ[ℂ] E)
@@ -514,7 +527,7 @@ theorem norm_lower_bound_of_nachtergaele_c1_c3
   apply spectralGap_of_martingale_of_finiteDimensional hgap hH
   apply operator_inequality_of_energy_lower_bound hgap hH
   intro v hv
-  apply energy_lower_bound_of_nachtergaele_c1_c3 G Q localHamiltonian H
+  apply energy_lower_bound_of_nachtergaele_c1_c3_full_range G Q localHamiltonian H
     N l v hzero
   · rwa [hground]
   · exact hγ

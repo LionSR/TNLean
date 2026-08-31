@@ -1079,11 +1079,13 @@ norm estimate is derived here.
     \cite[Proof of Theorem~2.1(i)]{Nachtergaele1996Spectral}.
 \end{proof}
 
-% Source: References/cond-mat_9410110/main.tex, Theorem 2.1(i),
-% statement lines 1119--1130 and proof lines 1195--1259.
-\begin{theorem}[Nachtergaele's C1--C3 energy estimate]
-    \label{thm:nachtergaele_c1_c3_energy_estimate}
-    \lean{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3}
+% Source: References/cond-mat_9410110/main.tex, conditions C1--C3 at
+% lines 1030--1094, Theorem 2.1(i) at lines 1119--1130, and its proof at
+% lines 1195--1259. The lower-endpoint restriction is documented in
+% docs/paper-gaps/cpgsv21_martingale_overlap.tex.
+\begin{theorem}[Full-range C1--C3 energy estimate]
+    \label{thm:nachtergaele_c1_c3_full_range_energy_estimate}
+    \lean{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_full_range}
     \leanok
     \uses{thm:truncated-martingale-difference-reconstruction,
         thm:martingale-difference-pythagorean-identity,
@@ -1121,13 +1123,19 @@ norm estimate is derived here.
          & \geq
         \frac{\gamma_{l+1}}{d_{l+1}}
         \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert^2.
-        \label{eq:nachtergaele_c1_c3_energy_estimate}
+        \label{eq:nachtergaele_c1_c3_full_range_energy_estimate}
     \end{align}
-    This full finite-range form resolves the lower-index ambiguity in the
-    printed proof by requiring C1--C3 also for $n<l$; the later physical
-    specialization verifies those indices separately. Its coefficient is the
-    one in Theorem~2.1(i) of \cite{Nachtergaele1996Spectral}, with exactly
-    $\gamma_{l+1}$, $d_{l+1}$, and $\epsilon_l$.
+    \textbf{Scope restriction (full finite range):}
+    the source's C1 sum starts only at the corresponding window length, and
+    C2 and C3 are required only beyond their printed lower thresholds. Its
+    proof nevertheless applies them to every $E_n$ in the displayed
+    resolution. Here all three estimates are assumed for $0\leq n<N$.
+    This extra hypothesis is documented in
+    \cite{gap:cpgsv21_martingale_overlap}; no lower-endpoint discharge is
+    presently claimed. The coefficient is exactly the one printed in
+    Theorem~2.1(i) of \cite{Nachtergaele1996Spectral}, namely
+    $\gamma_{l+1}/d_{l+1}$ times
+    $(1-\epsilon_l\sqrt{l+1})^2$.
 \end{theorem}
 
 \begin{proof}
@@ -1164,11 +1172,13 @@ norm estimate is derived here.
          & =\frac{\epsilon_l}{\sqrt{l+1}}.
     \end{align}
     These values reduce the preceding inequality to
-    Equation~\eqref{eq:nachtergaele_c1_c3_energy_estimate}. If
+    Equation~\eqref{eq:nachtergaele_c1_c3_full_range_energy_estimate}. If
     $\epsilon_l=0$, then $c_2=0$ is not an admissible weighted parameter.
-    Instead, C3 gives $Q_nE_n=0$, so the second inner product in
+    \textbf{Local fix (zero C3 constant):} instead, C3 gives $Q_nE_n=0$, so
+    the second inner product in
     \textup{Enpsi} vanishes; applying only the first weighted estimate with
-    $c_1=1$ yields the same formula.
+    $c_1=1$ yields the same formula. This repair is documented in
+    \cite{gap:cpgsv21_martingale_overlap}.
 \end{proof}
 
 \begin{lemma}[Energy form to norm bound]
@@ -1195,33 +1205,35 @@ norm estimate is derived here.
     The claim is immediate for $v=0$; otherwise cancel $\lVert v\rVert$.
 \end{proof}
 
-\begin{corollary}[Norm gap from the C1--C3 estimate]
-    \label{cor:nachtergaele_c1_c3_norm_gap}
+\begin{corollary}[Norm gap from the full-range C1--C3 estimate]
+    \label{cor:nachtergaele_c1_c3_full_range_norm_gap}
     \lean{FrustrationFree.spectralGap_of_martingale_of_finiteDimensional}
-    \lean{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3}
+    \lean{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range}
     \leanok
-    \uses{thm:nachtergaele_c1_c3_energy_estimate,
+    \uses{thm:nachtergaele_c1_c3_full_range_energy_estimate,
         lem:energy_form_to_norm_bound,
         lem:quadratic_form_to_norm_bound}
     In the setting of
-    Theorem~\ref{thm:nachtergaele_c1_c3_energy_estimate}, suppose that $H$ is
+    Theorem~\ref{thm:nachtergaele_c1_c3_full_range_energy_estimate}, suppose
+    that $H$ is
     positive and $\operatorname{ran}(G_N)=\ker H$. Then every
     $v\in(\ker H)^\perp$ satisfies
     \begin{align}
         \frac{\gamma_{l+1}}{d_{l+1}}
         \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
          & \leq\lVert Hv\rVert.
-        \label{eq:nachtergaele_c1_c3_norm_gap}
+        \label{eq:nachtergaele_c1_c3_full_range_norm_gap}
     \end{align}
 \end{corollary}
 
 \begin{proof}
     \leanok
-    \uses{thm:nachtergaele_c1_c3_energy_estimate,
+    \uses{thm:nachtergaele_c1_c3_full_range_energy_estimate,
         lem:energy_form_to_norm_bound,
         lem:quadratic_form_to_norm_bound}
     Denote the coefficient in
-    Equation~\eqref{eq:nachtergaele_c1_c3_norm_gap} by $\kappa$. For an
+    Equation~\eqref{eq:nachtergaele_c1_c3_full_range_norm_gap} by $\kappa$.
+    For an
     arbitrary $x$, remove its orthogonal projection onto $\ker H$ and call the
     remainder $w$. Then $Hx=Hw$ and
     $\re\langle Hx,x\rangle=\re\langle Hw,w\rangle$. The energy estimate and
@@ -1331,9 +1343,12 @@ source obtains a gap from its three stated hypotheses. Every compatible
 Hamiltonian below is positive because it is a sum of orthogonal projections.
 In addition to the compatible Hamiltonian and its zero-energy space, the
 statements below verify condition C1 and the unit norm lower bound at the
-full-window volume $N=L$. Together with fixed-ambient instances of C2 and C3,
-Theorem~\ref{thm:nachtergaele_c1_c3_energy_estimate} gives the gap for $N>L$.
-The statements in this subsection do not assume periodic coercivity.
+full-window volume $N=L$. The fixed-ambient C2 and C3 estimates apply beyond
+their source thresholds. To invoke
+Theorem~\ref{thm:nachtergaele_c1_c3_full_range_energy_estimate}, one must
+still supply its stronger lower-index hypotheses; this is precisely the open
+boundary recorded in \cite{gap:cpgsv21_martingale_overlap}. The statements in
+this subsection do not assume periodic coercivity.
 
 \begin{definition}[Compatible open-chain parent Hamiltonian]
     \label{def:open_parent_hamiltonian_es}
