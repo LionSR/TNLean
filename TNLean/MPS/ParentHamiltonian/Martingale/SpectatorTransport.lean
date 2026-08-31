@@ -149,6 +149,16 @@ theorem rightFiberwiseMap_sub
   ext x p
   rfl
 
+/-- Right-spectator extension preserves finite sums. -/
+theorem rightFiberwiseMap_sum {ι : Type*} (s : Finset ι)
+    (G : ι → EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I) :
+    rightFiberwiseMap (S := S) (∑ i ∈ s, G i) =
+      ∑ i ∈ s, rightFiberwiseMap (S := S) (G i) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp
+  | @insert i s hi ih => simp [hi, rightFiberwiseMap_add, ih]
+
 /-- A vector lies in the kernel of a fiberwise operator exactly when every
 right-spectator fiber lies in the kernel of the base operator. -/
 theorem mem_ker_rightFiberwiseMap_iff
@@ -424,6 +434,147 @@ theorem localTermES_conj_rightSpectatorConfigLinearIsometryEquiv
       σ ⟨(i.val + j.val) % n, Nat.mod_lt _ (Fin.pos i)⟩
     rw [hbig, Fin.append_left, hsmall]
   rw [hrestrict, hextract]
+
+private def openPrefixStartRightSpectatorEquiv {L n r p : ℕ}
+    (hL : 0 < L) (hp : p ≤ n) :
+    OpenPrefixStart L (n + r) p ≃ OpenPrefixStart L n p where
+  toFun i := by
+    have hip := i.2
+    have hin : i.1.1.val < n := by omega
+    exact ⟨⟨⟨i.1.1.val, hin⟩, by
+      change i.1.1.val + L ≤ n
+      omega⟩, hip⟩
+  invFun i := by
+    refine ⟨⟨Fin.castAdd r i.1.1, ?_⟩, ?_⟩
+    · change i.1.1.val + L ≤ n + r
+      have hin := i.1.2
+      omega
+    · change i.1.1.val + L ≤ p
+      exact i.2
+  left_inv i := by
+    apply Subtype.ext
+    apply Subtype.ext
+    apply Fin.ext
+    rfl
+  right_inv i := by
+    apply Subtype.ext
+    apply Subtype.ext
+    apply Fin.ext
+    rfl
+
+/-- Conjugating a fixed-ambient prefix Hamiltonian by the canonical
+right-spectator isometry gives the fiberwise extension of the same prefix
+Hamiltonian in the smaller ambient volume. -/
+theorem openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
+    (A : MPSTensor d D) {L n r p : ℕ} (hL : 0 < L) (hp : p ≤ n) :
+    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+        ((openPrefixParentHamiltonianES A L (n + r) p).comp
+          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (LinearMap.toContinuousLinearMap
+          (openPrefixParentHamiltonianES A L n p))).toLinearMap := by
+  classical
+  apply LinearMap.ext
+  intro x
+  simp only [openPrefixParentHamiltonianES, LinearMap.comp_apply,
+    LinearMap.sum_apply, map_sum]
+  rw [ContinuousLinearMap.rightFiberwiseMap_sum]
+  calc
+    (∑ i : OpenPrefixStart L (n + r) p,
+        (rightSpectatorConfigLinearIsometryEquiv d n r)
+          (localTermES A L i.1.1
+            ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x))) =
+      ∑ i : OpenPrefixStart L n p,
+        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.toContinuousLinearMap (localTermES A L i.1.1)) x := by
+        apply Fintype.sum_equiv (openPrefixStartRightSpectatorEquiv hL hp)
+        intro i
+        exact LinearMap.congr_fun
+          (localTermES_conj_rightSpectatorConfigLinearIsometryEquiv A
+            (openPrefixStartRightSpectatorEquiv hL hp i).1.1
+            (openPrefixStartRightSpectatorEquiv hL hp i).1.2) x
+    _ = (∑ i : OpenPrefixStart L n p,
+        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.toContinuousLinearMap (localTermES A L i.1.1))) x := by
+      apply PiLp.ext
+      intro q
+      simp
+
+private abbrev OpenSuffixStart (L l N p : ℕ) :=
+  {i : NonwrappingStart L N // p - l ≤ i.1.val ∧ i.1.val + L ≤ p}
+
+private def openSuffixStartRightSpectatorEquiv {L l n r p : ℕ}
+    (hL : 0 < L) (hp : p ≤ n) :
+    OpenSuffixStart L l (n + r) p ≃ OpenSuffixStart L l n p where
+  toFun i := by
+    have hip := i.2.2
+    have hin : i.1.1.val < n := by omega
+    exact ⟨⟨⟨i.1.1.val, hin⟩, by
+      change i.1.1.val + L ≤ n
+      omega⟩, i.2⟩
+  invFun i := by
+    refine ⟨⟨Fin.castAdd r i.1.1, ?_⟩, ?_⟩
+    · change i.1.1.val + L ≤ n + r
+      have hin := i.1.2
+      omega
+    · change p - l ≤ i.1.1.val ∧ i.1.1.val + L ≤ p
+      exact i.2
+  left_inv i := by
+    apply Subtype.ext
+    apply Subtype.ext
+    apply Fin.ext
+    rfl
+  right_inv i := by
+    apply Subtype.ext
+    apply Subtype.ext
+    apply Fin.ext
+    rfl
+
+/-- Conjugating a fixed-ambient suffix-interval Hamiltonian by the canonical
+right-spectator isometry gives the fiberwise extension of the same interval
+Hamiltonian in the smaller ambient volume. -/
+theorem openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
+    (A : MPSTensor d D) {L l n r p : ℕ} (hL : 0 < L) (hp : p ≤ n) :
+    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+        ((openSuffixParentHamiltonianES A L l (n + r) p).comp
+          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (LinearMap.toContinuousLinearMap
+          (openSuffixParentHamiltonianES A L l n p))).toLinearMap := by
+  classical
+  have hsumBig : openSuffixParentHamiltonianES A L l (n + r) p =
+      ∑ i : OpenSuffixStart L l (n + r) p, localTermES A L i.1.1 := by
+    rw [openSuffixParentHamiltonianES]
+    exact Finset.sum_subtype _ (fun i => by simp) _
+  have hsumSmall : openSuffixParentHamiltonianES A L l n p =
+      ∑ i : OpenSuffixStart L l n p, localTermES A L i.1.1 := by
+    rw [openSuffixParentHamiltonianES]
+    exact Finset.sum_subtype _ (fun i => by simp) _
+  rw [hsumBig, hsumSmall]
+  apply LinearMap.ext
+  intro x
+  simp only [LinearMap.comp_apply, LinearMap.sum_apply, map_sum]
+  rw [ContinuousLinearMap.rightFiberwiseMap_sum]
+  calc
+    (∑ i : OpenSuffixStart L l (n + r) p,
+        (rightSpectatorConfigLinearIsometryEquiv d n r)
+          (localTermES A L i.1.1
+            ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x))) =
+      ∑ i : OpenSuffixStart L l n p,
+        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.toContinuousLinearMap (localTermES A L i.1.1)) x := by
+        apply Fintype.sum_equiv (openSuffixStartRightSpectatorEquiv hL hp)
+        intro i
+        exact LinearMap.congr_fun
+          (localTermES_conj_rightSpectatorConfigLinearIsometryEquiv A
+            (openSuffixStartRightSpectatorEquiv hL hp i).1.1
+            (openSuffixStartRightSpectatorEquiv hL hp i).1.2) x
+    _ = (∑ i : OpenSuffixStart L l n p,
+        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.toContinuousLinearMap (localTermES A L i.1.1))) x := by
+      apply PiLp.ext
+      intro q
+      simp
 
 /-- Before the first full interaction window fits, the fixed-ambient prefix
 Hamiltonian vanishes. -/
