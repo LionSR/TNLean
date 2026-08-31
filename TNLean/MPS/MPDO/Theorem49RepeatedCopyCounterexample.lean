@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.Matrix.ScalarIdentity
 import TNLean.MPS.MPDO.BondOnePhysicalSectorFactorization
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalBlocking
@@ -162,7 +163,7 @@ theorem repeatedCopyTensor_isMPDO : IsMPDO repeatedCopyTensor := by
     rw [repeatedCopyTensor_mpo]
     simp
   rw [hMpo]
-  exact Matrix.PosSemidef.one.smul (by positivity)
+  exact Matrix.PosSemidef.smul_one (by positivity)
 
 /-- The scalar BNT representative generates positive operators at every
 positive length, as required explicitly in condition (iv) of

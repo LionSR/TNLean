@@ -3,9 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.Positivity
+import TNLean.Algebra.Matrix.ScalarIdentity
 
 /-!
 # Trace-normalized weights for paper-facing shift source factors
@@ -47,7 +46,7 @@ noncomputable def shiftPaperWeight (d : ℕ) : Matrix (Fin d) (Fin d) ℂ :=
 dimension, including dimension zero. -/
 theorem shiftPaperWeight_posSemidef (d : ℕ) :
     (shiftPaperWeight d).PosSemidef := by
-  exact Matrix.PosSemidef.one.smul (by positivity)
+  exact Matrix.PosSemidef.smul_one (by positivity)
 
 /-- In positive dimension, the trace-normalized identity weight is positive
 definite. -/
@@ -55,12 +54,12 @@ theorem shiftPaperWeight_posDef (d : ℕ) [NeZero d] :
     (shiftPaperWeight d).PosDef := by
   have hd : (0 : ℂ) < (d : ℂ) := by
     exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
-  exact Matrix.PosDef.one.smul (inv_pos.mpr hd)
+  exact Matrix.PosDef.smul_one (inv_pos.mpr hd)
 
 /-- In positive dimension, the trace-normalized identity weight has trace one. -/
 @[simp] theorem shiftPaperWeight_trace (d : ℕ) [NeZero d] :
     Matrix.trace (shiftPaperWeight d) = 1 := by
-  rw [shiftPaperWeight, Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin]
+  rw [shiftPaperWeight, Matrix.trace_smul_one, Fintype.card_fin]
   exact inv_mul_cancel₀ (Nat.cast_ne_zero.mpr (NeZero.ne d))
 
 /-- The scalar trace-one identity weight on the `d²`-dimensional product bond
