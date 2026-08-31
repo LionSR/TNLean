@@ -763,8 +763,9 @@
     Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} refutes that
     representativewise assertion under the complete standing hypotheses; see
     \cite{gap:cpgsv17_pf_rank_one}. Thus this conditional result neither proves
-    Theorem~\ref{thm:mpdo_sal_zcl_blocking_channels} nor excludes a different
-    construction of its two channel maps.
+    Theorem~\ref{thm:mpdo_sal_zcl_blocking_channels} nor itself excludes a
+    different construction of its two channel maps. The independent
+    trace-norm argument in that theorem refutes the source conclusion.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -785,45 +786,69 @@
     required rank-one normalization with unit coefficient families.
 \end{proof}
 
-\begin{theorem}[Two-site blocking from SAL and zero correlation length]
+% **False source result:** CPSV16 Proposition C.15 asserts the two blocking
+% channels under the complete Case-II standing hypotheses.  The trace-norm
+% witness below refutes the refinement direction itself; it is not merely a
+% failure of the printed representativewise factorization route.  Documented
+% in docs/paper-gaps/cpsv16_prop_c15_blocking_channel_false.tex.
+\begin{theorem}[The SAL--ZCL blocking-channel conclusion is false]
     \label{thm:mpdo_sal_zcl_blocking_channels}
-    \notready
+    \lean{MPOTensor.CPSVBlockingChannelCounterexample.%
+        printed_propositionC15_and_theorem49_ii_to_v_are_false}
+    \leanok
     \discussion{7479}
-    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf, def:is_sal, def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:mpdo_two_site_blocking}
-    Let $K$ be a simple tensor in block-injective canonical form (biCF),
-    equipped with a basis-of-normal-tensors decomposition and satisfying the
-    saturation of the area law and literal zero correlation length,
+    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf, def:is_sal,
+        def:mpo_physical_trace_transfer, def:is_rfp_via_ts,
+        def:mpdo_two_site_blocking,
+        thm:mpdo_neighboring_trace_obstruction_ambient_properties}
+    There is a five-letter MPO tensor $K$ of virtual bond dimension three
+    which generates matrix product density operators and is simple and in
+    block-injective canonical form. Its two normal representatives occur once
+    with coefficients $\mu$ and $1$, where $0<|\mu|<1$, so the paper's global
+    normalization convention holds. The tensor saturates the area law and has
+    literal zero correlation length,
     \begin{align}
         \mathcal T_K^2 & =\mathcal T_K.
         \notag
     \end{align}
-    Let $M=K^{[2]}$ be its two-site blocking. Then
-    there are trace-preserving completely positive maps in both directions
-    between the one-site and two-site closures of $M$. Equivalently, $M$ is a
-    renormalization fixed point via these two maps. This is implication
-    (ii)$\Rightarrow$(v) of
-    \cite[Theorem~4.9 and Appendix~C.2, lines~1810--1825]
-    {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
-    imposed at lines~849--850 and restated at line~1628 of the same source.
-    The source first uses zero correlation length at lines~1646--1665 to make
-    repeated-copy weights independent of the copy label and absorbs their
-    common value into each representative. The printed proof at
-    lines~1815--1816 then projects onto the mutually orthogonal outer physical
-    sectors and invokes the one-representative channel construction. Their
-    combination through the outer physical projections, including the
-    trace-preserving completion outside their sum, is
-    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_support_completion}. Given one
-    neighboring trace factorization for every absorbed representative, the
-    complete composition down to the blocked channel pair for $M$ is
-    Theorem~\ref{thm:mpdo_absorbed_factorization_blocking_channels}. The
-    source obtains these factorizations from Proposition~C.12, but
-    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} refutes that
-    intermediate assertion under the complete standing hypotheses; see
-    \cite{gap:cpgsv17_pf_rank_one}. Hence the factorization is not a remaining
-    proof obligation: the printed route fails. The counterexample does not
-    exclude the existence of different channel maps, so the conclusion above
-    is at present neither proved nor refuted.
+    Nevertheless, no trace-preserving completely positive map sends every
+    two-site closure of $K$ to the corresponding three-site closure with the
+    same virtual boundary. Nor does such a map exist from two sites to four
+    sites. Consequently the two-site blocking $K^{[2]}$ is not a
+    renormalization fixed point in the sense of Definition~4.1. Thus
+    Proposition~C.15 and its twice-applied contribution to the condition-(ii)
+    route to Theorem~4.9(v) are false as printed
+    \cite{gap:cpsv16_prop_c15_blocking_channel_false}.
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_neighboring_trace_obstruction_ambient_properties}
+    For the four-letter rank-one tensor underlying the ambient construction,
+    choose the virtual boundary displayed in the paper-gap note. The resulting
+    physical closures are real diagonal Hermitian matrices, and direct finite
+    summation gives
+    \begin{align}
+        \lVert\mathcal K_2(X)\rVert_1
+            &=\frac{337}{250},
+        &\lVert\mathcal K_3(X)\rVert_1
+            &=\lVert\mathcal K_4(X)\rVert_1=\frac{27}{20}.
+        \notag
+    \end{align}
+    A trace-preserving positive map contracts the trace norm on Hermitian
+    matrices, but the latter value exceeds the former by $1/500$. Hence the
+    two-to-three and two-to-four refinement maps do not exist for this tensor.
+
+    Embed its four physical letters isometrically into the first four letters
+    of the ambient tensor. Conjugation by the sitewise adjoint, completed on
+    the orthogonal complement by preparing a faithful state, gives a
+    trace-preserving completely positive recovery. On the virtual side, one
+    boundary supported on the obstruction block isolates the embedded closure
+    for every chain length; the terminal block contributes zero. Therefore a
+    refinement map for the ambient tensor would descend to one of the two
+    forbidden maps above. Finally, the refinement map of an RFP structure for
+    $K^{[2]}$, transported from blocked coordinates, would give the forbidden
+    two-to-four map for $K$.
+\end{proof}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
 % channel MPDO_TSKKK.png after explicitly suppressing U, but it does not draw

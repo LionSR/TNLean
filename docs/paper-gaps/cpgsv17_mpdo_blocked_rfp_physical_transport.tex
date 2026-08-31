@@ -44,7 +44,8 @@ factorization for each representative, but that assertion is false under the
 complete standing hypotheses. Thus the channel pairs from
 Proposition~C.7 can be combined over mutually orthogonal outer
 physical supports when those factorizations are supplied; this does not prove
-or refute the bare conclusion of Proposition~C.15.
+the bare conclusion of Proposition~C.15. The independent trace-norm
+counterexample recorded below refutes that conclusion.
 
 Let $\mathcal K$ denote the original tensor, let $\widehat{\mathcal K}$ denote
 the same tensor in the sector coordinates selected by the physical isometry,
@@ -119,10 +120,12 @@ common weight derived from ZCL, the theorem supplies the channel pair for each
 given factorization. The projector-controlled assembly over all BNT
 representatives is formalized in \ghissue{6632}. The source's claimed
 factorizations are not a remaining obligation: Proposition~\texttt{prop2to3}
-is refuted. No counterexample to different blocking channels is known, so the
-bare conclusion of Proposition~\texttt{prop2to5} is neither proved nor
-refuted. The complete status is documented in the canonical note at
-\url{https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf}.
+is refuted. More strongly, the trace-norm obstruction in
+\path{docs/paper-gaps/cpsv16_prop_c15_blocking_channel_false.tex} excludes every
+two-to-three refinement channel for an ambient tensor satisfying the complete
+standing hypotheses. Thus the bare conclusion of
+Proposition~\texttt{prop2to5} is false. The conditional transport theorem in
+this note remains valid for supplied factorizations.
 
 \bibliographystyle{alpha}
 \bibliography{references}
