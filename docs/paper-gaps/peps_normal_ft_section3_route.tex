@@ -2506,7 +2506,7 @@ of states nor the root-of-unity conditions enter.
 
 \section*{The Applications translation-invariant description corollary}
 
-The Applications section contains a different translation-invariance
+The Applications section contains a different translational-invariance
 corollary (lines 1801--1890 of
 \path{Papers/1804.04964/paper_normal.tex}, Ref.~\cite{Molnar2018NormalPEPS}),
 whose full per-bond form is tracked by \ghissue{3371}. Its
@@ -2599,26 +2599,31 @@ the positive-bond, at-least-three-site form of
 Blueprint records this proved restriction as
 \path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos}.
 
-\emph{Verdict: the explicit reindexing and repeated-tensor construction are
-complete under the positive-bond and at-least-three-site restrictions; the
-unrestricted source entry remains not ready.} The Blueprint entry
-\path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
-records the printed corollary separately and carries no Lean declaration. The
-positive-bond hypothesis is currently external because
-\leanid{TNLean.PEPS.Tensor} stores bond dimensions in $\mathbb{N}$ and admits
-empty virtual spaces; it must be made intrinsic to the source-facing domain or
-eliminated before the printed statement can be marked complete. The source
-corollary also omits a system-size hypothesis, although its proof invokes the
-at-least-three-particle Fundamental Theorem. The source section explicitly
-sets this scope at line~145. Thus $n\ge3$ is the intended source context, and
-its omission from the displayed corollary is a source-scope defect. Indeed,
-the literal two-site statement is false for nondegenerate rectangular bond
-dimensions; it is not a short-chain extension left to the present argument.
-The proved restricted theorem follows the source route:
-equality of the bond dimensions, explicit identification of the equal virtual
-spaces, and the already formalized $L_i,R_i$ telescoping and seam closure. It
-introduces neither a collected gauge factorization nor an alternative proof
-route.
+\emph{Verdict: the corrected positive-bond, at-least-three-site theorem is
+complete.} It follows the proof at source lines 1807--1890: equality of the
+bond dimensions, explicit identification of the equal virtual spaces, and the
+$L_i,R_i$ telescoping and repeated-tensor construction. It introduces neither
+a collected gauge factorization nor an alternative proof route. The Blueprint
+therefore records the completed theorem only at
+\path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos};
+it does not retain a separate unqualified node marked not ready.
+
+The source section places the injective MPS Fundamental Theorem in the regime
+of at least three sites at line~145, and the theorem invoked at line~1828 has
+this hypothesis at lines 688--725. The displayed corollary at lines 1803--1805
+omits the restriction. Its literal two-site reading is false even for positive
+virtual dimensions: with $D_1=1$, $D_2=2$,
+$A_1^i=e_i^{\mathsf T}$, and $A_2^i=e_i$, both local tensor maps are injective
+and
+\begin{align}
+    \tr(A_1^iA_2^j)=\delta_{ij}=\tr(A_2^iA_1^j),
+\end{align}
+but $D_1\ne D_2$. The kernel-checked negation is
+\leanid{TNLean.PEPS.CycleMPSTwoSiteCounterexample.twoSiteBondUniformityStatement_false},
+and the false-source disposition is recorded in
+\doclink{docs/paper-gaps/peps_cyclic_mps_two_site_bond_uniformity}. Positive
+virtual dimensions are the intended nonempty-space convention; the genuine
+source defect is the omitted at-least-three-site scope.
 
 \subsection*{The 2D analogue}
 

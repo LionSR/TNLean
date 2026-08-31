@@ -7,11 +7,14 @@ of this section formalize the site-dependent setting itself. A closed
 chain carries one tensor per site, windows are arcs of consecutive sites,
 and the closed-chain corollary delivers one gauge per bond. Most of the
 matrix-chain statements below take one physical dimension $d$ and one bond
-dimension $D$. For the Applications-section cyclic-shift corollary, the
-cycle-graph formulation instead retains one dimension $D_e$ per bond and
-derives their equality from the injective Fundamental Theorem. The remaining
-uniform-dimension restriction on the repeated-tensor construction is recorded
-in the route note (\cite{gap:peps_normal_ft_section3_route}).
+dimension $D$. For the Applications-section translational-invariance
+corollary, the cycle-graph formulation instead retains one dimension $D_e$ per
+bond, derives their equality from the injective Fundamental Theorem, and then
+identifies the virtual spaces to construct the repeated tensor in the source's
+standing regime of at least three sites. The literal two-site reading of the
+printed corollary is false; this is recorded by
+Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
+\cite{gap:peps_cyclic_mps_two_site_bond_uniformity}.
 
 \begin{definition}[Arc products and window injectivity of a site-dependent
         chain]%
@@ -364,6 +367,38 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
     then proves equality on all bonds.
 \end{proof}
 
+\begin{theorem}[Two-site obstruction to cyclic MPS bond uniformity]%
+    \label{thm:peps_cycle_two_site_bond_uniformity_counterexample}
+    \lean{TNLean.PEPS.CycleMPSTwoSiteCounterexample.twoSiteBondUniformityStatement_false}
+    \leanok
+    \discussion{3371}
+    The bond-uniformity implication is false for two sites. More precisely,
+    there are injective tensors
+    \begin{align}
+        A_1^i & \in\operatorname{Mat}_{1\times2}(\mathbb C),
+              & A_2^i                                        & \in\operatorname{Mat}_{2\times1}(\mathbb C)
+        \qquad (i=0,1).
+        \label{eq:peps_cycle_two_site_rectangular_tensors}
+    \end{align}
+    whose closed-chain coefficients are invariant under the cyclic shift,
+    but whose positive virtual dimensions are unequal. Consequently the condition
+    $n\ge3$ in Corollary~\ref{cor:peps_cycle_shift_bond_uniform} cannot be
+    removed. This corrects the unqualified printed corollary in
+    \cite[lines~1803--1805]{Molnar2018NormalPEPS}; see
+    \cite{gap:peps_cyclic_mps_two_site_bond_uniformity}.
+\end{theorem}
+\begin{proof}\leanok
+    Let $e_0,e_1$ be the standard basis of $\mathbb C^2$ and take
+    $A_1^i=e_i^{\mathsf T}$ and $A_2^i=e_i$. Each local tensor map sends a
+    virtual basis to $e_0,e_1$, hence is injective. Moreover
+    \begin{align}
+        \tr(A_1^iA_2^j)=\delta_{ij}=\tr(A_2^iA_1^j).
+        \label{eq:peps_cycle_two_site_shift_invariance}
+    \end{align}
+    so the state is cyclically invariant, whereas the adjacent dimensions
+    are $1$ and $2$.
+\end{proof}
+
 \begin{corollary}[Gauge comparison with the cyclic shift]%
     \label{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_cyclicShift}
@@ -475,13 +510,15 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
     \lean{TNLean.PEPS.Tensor.isCyclicShiftInvariantState_reindexMPSChain}
     \lean{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
     \leanok
+    \discussion{3371}
     \uses{cor:peps_cycle_shift_bond_uniform, cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     Let $A_0,\ldots,A_{n-1}$ be a site-dependent injective closed MPS on
     $n\ge3$ sites, with positive dimensions $D_e$ on its individual bonds.
-    If the closed-chain state is invariant under the cyclic shift
-    $A_v\mapsto A_{v+1}$, then there are a positive integer $D$ and an
-    injective tensor $B$ of $D\times D$ matrices such that $D_e=D$ for every
-    bond $e$ and
+    If the closed-chain state is translationally invariant, in the finite
+    closed-chain sense that it is invariant under the cyclic shift
+    $A_v\mapsto A_{v+1}$ of \cite[lines~1807--1827]{Molnar2018NormalPEPS},
+    then there are a positive integer $D$ and an injective tensor $B$ of
+    $D\times D$ matrices such that $D_e=D$ for every bond $e$ and
     \begin{align}
         \Coeff_A(\sigma)
          & =
@@ -490,11 +527,17 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
     \end{align}
     for every physical configuration $\sigma$.
 
-    This is the positive-bond, at-least-three-site form corresponding to
+    This completes the positive-bond, at-least-three-site form of the
+    translational-invariance corollary and its proof in
     \cite[lines~1803--1890]{Molnar2018NormalPEPS}. The equality $D_e=D$ is
     Corollary~\ref{cor:peps_cycle_shift_bond_uniform}. Identifying each
     virtual space with $\C^D$ gives a uniform closed-chain representation,
-    to which the already proved $L_i,R_i$ telescoping and seam closure apply.
+    to which the source's $L_i,R_i$ telescoping and repeated-tensor
+    construction apply. The source section places its injective Fundamental
+    Theorem in the regime of at least three sites; the omitted two-site case
+    is false by
+    Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample}, as
+    recorded in \cite{gap:peps_cyclic_mps_two_site_bond_uniformity}.
 \end{corollary}
 \begin{proof}\leanok
     By Corollary~\ref{cor:peps_cycle_shift_bond_uniform}, every bond has the
@@ -528,45 +571,11 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
     the required repeated injective tensor $B$.
 \end{proof}
 
-\begin{corollary}[Translation-invariant description of an injective closed MPS chain,
-        source statement]%
-    \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
-    \notready
-    \uses{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos}
-    Let $A_0,\ldots,A_{n-1}$ be a site-dependent injective closed MPS, with
-    dimension $D_e$ on each individual bond. If the closed-chain state is
-    invariant under the cyclic shift $A_v\mapsto A_{v+1}$, then all bond
-    dimensions are equal to one dimension $D$, and there is an injective
-    tensor $B$ of $D\times D$ matrices such that
-    \begin{align}
-        \Coeff_A(\sigma)
-         & =
-        \tr\!\left(B^{\sigma_0}\cdots B^{\sigma_{n-1}}\right)
-        \notag
-    \end{align}
-    for every physical configuration $\sigma$.
-
-    This is the corollary stated in
-    \cite[lines~1803--1890]{Molnar2018NormalPEPS}, without adding the positive
-    bond-dimension or $n\ge3$ hypotheses that do not appear in its statement.
-\end{corollary}
-\begin{proof}
-    For positive bond dimensions in the intended $n\ge3$ source context, this
-    is the preceding corollary. The source states at line~145 that its
-    injective MPS Fundamental Theorem concerns at least three sites and invokes
-    precisely that theorem here. Thus omission of $n\ge3$ from the displayed
-    corollary is a source-scope defect: the literal two-site statement is false
-    for nondegenerate rectangular bond dimensions. It is not a short-chain
-    extension left to this proof. The positive-dimension condition must be
-    built into the domain of bond dimensions or removed mathematically before
-    the printed statement can be marked complete.
-\end{proof}
-
 \begin{corollary}[Translation-invariant description of an injective 2D PEPS,
         uniform bond dimension]%
     \label{cor:exists_constant_injectivePEPS_of_translationInvariantState}
     \notready
-    \uses{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState, thm:fundamentalTheorem_PEPS, def:peps_torus_translation_invariant, def:peps_torus_uniform_bond_dim, thm:peps_stateCoeff_translationInvariant}
+    \uses{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos, thm:fundamentalTheorem_PEPS, def:peps_torus_translation_invariant, def:peps_torus_uniform_bond_dim, thm:peps_stateCoeff_translationInvariant}
     Let $A$ be an injective PEPS on the discrete torus with orientation-uniform
     bond dimensions, horizontal dimension $D_h$ and vertical dimension $D_v$,
     and positive bond dimensions. If the generated state is invariant under all
