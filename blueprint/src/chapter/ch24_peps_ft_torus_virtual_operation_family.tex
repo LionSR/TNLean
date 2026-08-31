@@ -354,9 +354,10 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{thm:peps_staircase_virtual_operation_physical_realization}
     For $X\in\MN{D_A(e)}$, define $O_3^A(X)=O_0^A(X)$ after identifying
-    the first staircase window with the right end window. The second virtual
-    relation below has the paper's transposed $O_3^{\mathsf T}$ orientation;
-    no transpose is chosen on the abstract physical endomorphism space.
+    the first staircase window with the right end window.
+    Equation~\eqref{eq:peps_staircase_o3_cross_tensor_relation} has the
+    paper's transposed $O_3^{\mathsf T}$ orientation; no transpose is chosen
+    on the abstract physical endomorphism space.
 \end{definition}
 
 \begin{theorem}[Cross-tensor virtual operation on the staircase edge]%
@@ -385,12 +386,13 @@ correspondence in the proof sketch of the two-dimensional corollary
     \begin{align}
         O_1^A(X)\bigl(T_{B,W_{\mathrm L}}(k,\eta_{\mathrm L})\bigr)
          & =\sum_jY_{jk}T_{B,W_{\mathrm L}}(j,\eta_{\mathrm L}),
-        \notag                                                   \\
+        \label{eq:peps_staircase_o1_cross_tensor_relation}       \\
         O_3^A(X)\bigl(T_{B,W_{\mathrm R}}(k,\eta_{\mathrm R})\bigr)
          & =\sum_jY_{kj}T_{B,W_{\mathrm R}}(j,\eta_{\mathrm R}).
-        \notag
+        \label{eq:peps_staircase_o3_cross_tensor_relation}
     \end{align}
-    Thus the second relation has the paper's $O_3^{\mathsf T}$ orientation.
+    Thus Equation~\eqref{eq:peps_staircase_o3_cross_tensor_relation} has the
+    paper's $O_3^{\mathsf T}$ orientation.
     No equality between $D_A(e)$ and $D_B(e)$ is assumed or concluded, and
     this statement contains no multiplication or gauge assertion.
 \end{theorem}
