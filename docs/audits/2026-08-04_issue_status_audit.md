@@ -13,7 +13,7 @@ Theorem 3. The source instead uses periodic translationally invariant geometry:
 all graph edges are contracted (`paper_normal.tex:961--979`), the square-lattice
 specialization excludes loops and double edges by requiring both lengths to be
 at least three (`paper_normal.tex:1207--1212`), and translation carries one
-blocking to every horizontal and vertical edge (`paper_normal.tex:1449--1500`).
+blocking to every horizontal and vertical edge (`paper_normal.tex:1449--1498`).
 The source theorem is realized by
 `fundamentalTheorem_normalTorusPEPS_unconditional`. Boundary coverage for the
 open rectangle is a possible project extension, not a paper obligation. Apart
