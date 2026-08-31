@@ -232,20 +232,6 @@ theorem of_peripheral_primitive
       (A := A k) (MPSTensor.irreducibleTensor_of_injective (A k) (hInj k))
       (hLeft k) (hPrim k)
 
-/-- The canonical-form conditions imply blockwise injectivity data. -/
-theorem toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A :=
-  HasInjectiveBlocks.ofForall hCF.block_injective
-
-/-- The canonical-form conditions imply left-canonical block-family normalization. -/
-theorem toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
-    IsLeftCanonicalBlockFamily (d := d) A :=
-  IsLeftCanonicalBlockFamily.ofForall hCF.leftCanonical
-
-/-- The canonical-form conditions imply self-overlap normalization data. -/
-theorem toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
-    HasNormalizedSelfOverlap (d := d) A :=
-  HasNormalizedSelfOverlap.ofForall hCF.overlap_tendsto_one
-
 end IsCanonicalForm
 
 /-! ### Normal canonical form conditions -/
@@ -296,11 +282,6 @@ theorem toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   IsLeftCanonicalBlockFamily.ofForall hNCF.leftCanonical
 
-/-- The normal-canonical-form conditions imply blockwise peripheral primitivity data. -/
-theorem toHasPrimitiveBlocks (hNCF : IsNormalCanonicalForm μ A) :
-    HasPrimitiveBlocks (d := d) A :=
-  HasPrimitiveBlocks.ofForall hNCF.block_primitive
-
 /-- The additive split conditions imply `IsNormalCanonicalForm` with non-strict ordering. -/
 theorem ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
@@ -331,13 +312,6 @@ theorem overlap_tendsto_one
       (hIrr := hNCF.block_irreducible k)
       (hNorm := hNCF.leftCanonical k)
       (hPrim := hNCF.block_primitive k)
-
-/-- Project normal-canonical-form data to the overlap-normalization interface used by the
-existing separated FT statements. -/
-theorem toHasNormalizedSelfOverlap
-    (hNCF : IsNormalCanonicalForm μ A) :
-    HasNormalizedSelfOverlap (d := d) A :=
-  HasNormalizedSelfOverlap.ofForall hNCF.overlap_tendsto_one
 
 end IsNormalCanonicalForm
 

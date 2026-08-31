@@ -44,12 +44,8 @@ the nonzero tensor `B`, merging them into one constant.
 
 The graph-level presentation of the same corollary is still reachable from
 here: the per-edge matrices of the cycle-graph gauge equivalence convert to
-per-bond gauges through the stored-edge orientation — away from the seam the
-gauge of the bond entering site `v` is the transpose of the edge matrix,
-while on the seam edge, stored with its endpoints in the opposite order, it
-is the inverse (`cycleGaugeOfEdgeGauge`, inverted by
-`edgeGaugeOfCycleGauge`) — and the per-vertex component identity of the
-graph-level gauge equivalence is equivalent to the matrix identity
+per-bond gauges through `cycleGaugeOfEdgeGauge`, and the per-vertex component
+identity of the graph-level gauge equivalence is equivalent to the matrix identity
 `B = Z_v⁻¹ A Z_{v+1}` (`cycleGauge_component_iff_matrix`).
 
 The matrix-level hypotheses match the source corollary: `0 < L` (implicit in
@@ -338,14 +334,6 @@ theorem cycleGauge_component_iff_matrix (hn : 3 ≤ n) (A B : MPSTensor d D)
   rw [cycleGauge_component_iff hn A B X v]
   refine forall_congr' fun i => ?_
   rw [cycleLeftGauge_eq hn A X v, cycleRightGauge_transpose_eq hn A X v]
-
-/-- The per-edge gauge family of a per-bond gauge family, inverting
-`cycleGaugeOfEdgeGauge`: the edge from a site to its cyclic successor carries
-the transpose of the gauge of that bond, except the seam edge — stored with
-its endpoints in the opposite cyclic order — which carries the inverse. -/
-noncomputable def edgeGaugeOfCycleGauge (Z : Fin n → GL (Fin D) ℂ)
-    (e : Edge (SimpleGraph.cycleGraph n)) : GL (Fin D) ℂ :=
-  if e.1.1 + 1 = e.1.2 then glTranspose (Z e.1.2) else (Z e.1.1)⁻¹
 
 end GaugeConversion
 
