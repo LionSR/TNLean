@@ -23,6 +23,8 @@ blocked-chain filtration step.
   specializes the uniform estimate to three equal original-site blocks.
 * `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold`
   chooses a block-injective overlap length and one uniform C3 defect coefficient.
+* `MPSTensor.IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold`
+  states the same bound as Nachtergaele's literal C3 operator norm.
 * `MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold`
   gives the corresponding open-chain excitation-projection anticommutator estimate.
 
@@ -190,6 +192,31 @@ theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold
   refine ⟨l, ε, hl, hInj, hε, hε_lt, ?_⟩
   intro K
   exact hDefect K l (by omega) hl_small
+
+/-- A primitive MPS with faithful fixed point satisfies Nachtergaele's condition C3
+in its literal martingale-difference form
+\[
+  \lVert G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n\rVert
+    \leq \varepsilon_l < \frac{1}{\sqrt{l+1}}.
+\]
+The indices are \(n=K+l\) and \(n_l=l+1\), so \(0<K\), and the same \(l\)
+and \(\varepsilon_l\) are supplied by
+`exists_openChain_groundProjection_defect_lt_c3_threshold`. This is only the
+exact projector identification following condition C3 in Nachtergaele,
+arXiv:cond-mat/9410110, equation (2.4); no new decay estimate enters. -/
+theorem IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    ∃ l : ℕ, ∃ ε : ℝ, ∃ hl : 1 < l, ∃ hInj : Kraus.IsNBlkInjective A l,
+      0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
+      ∀ (K : ℕ) (hK : 0 < K),
+        ‖openChainTailGroundProjectionES A K (l + 1) ∘L
+            openChainMartingaleDifferenceES A K l hInj hl.le hK‖ ≤ ε := by
+  obtain ⟨l, ε, hl, hInj, hε, hε_lt, hDefect⟩ :=
+    hP.exists_openChain_groundProjection_defect_lt_c3_threshold hρ
+  refine ⟨l, ε, hl, hInj, hε, hε_lt, fun K hK ↦ ?_⟩
+  rw [openChainTailGroundProjection_comp_martingaleDifference hInj hl.le hK]
+  exact hDefect K
 
 /-- The C3 threshold yields the uniform open-chain anticommutator estimate for
 the complementary excitation projections. Nachtergaele's identity following condition
