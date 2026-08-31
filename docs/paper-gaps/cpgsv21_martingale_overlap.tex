@@ -147,7 +147,7 @@ In the proof of part~(i), the local term indexed by $n$ is
 $H_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$. Thus applying C1 with
 $q=l+1$ controls the terms with $n\geq l$, not the terms with $0\leq n<l$.
 Condition C2, at source lines~1043--1058, gives the corresponding local gap
-only beyond its threshold $n_{l+1}$, while C3, at source lines~1083--1094,
+only when $n+1\geq n_{l+1}$, while C3, at source lines~1083--1094,
 assumes
 \begin{align}
     \lVert G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n\rVert
@@ -172,7 +172,7 @@ at the omitted lower indices. The convention $G_{\Lambda_0}=I$ does not make
 the early differences $E_n$ vanish, and no padding convention for the early
 local Hamiltonians is stated.
 
-The formal checkpoint
+The stronger full-range theorem
 \leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_full_range}
 therefore assumes the C1 sum and the C2--C3 estimates on every index
 $0\leq n<N$. Under this stronger hypothesis it proves the printed coefficient
@@ -181,9 +181,9 @@ $0\leq n<N$. Under this stronger hypothesis it proves the printed coefficient
     \left(1-\epsilon_l\sqrt{l+1}\right)^2.
     \label{eq:cpgsv21_martingale_overlap_nachtergaele_full_range_coefficient}
 \end{align}
-The corollary
+The associated norm theorem
 \leanid{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range}
-reuses the existing finite-dimensional spectral endpoint. These declarations
+reuses the existing finite-dimensional spectral theorem. These declarations
 are not identified with the unrestricted source theorem.
 
 Eliminating the restriction requires one of two source-faithful repairs: prove
@@ -193,8 +193,8 @@ initial-volume convention under which those components vanish. For the MPS
 application, simply having uniform C2 and C3 estimates beyond their source
 thresholds does not discharge this obligation.
 
-There is also a local endpoint in the scalar optimization. The printed proof
-chooses
+The scalar optimization also has a separate zero-constant case. The printed
+proof chooses
 \begin{align}
     c_2
         &=\frac{\epsilon_l}{\sqrt{l+1}}

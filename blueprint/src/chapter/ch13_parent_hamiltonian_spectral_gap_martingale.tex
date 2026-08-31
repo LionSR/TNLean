@@ -1087,12 +1087,6 @@ norm estimate is derived here.
     \label{thm:nachtergaele_c1_c3_full_range_energy_estimate}
     \lean{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_full_range}
     \leanok
-    \uses{thm:truncated-martingale-difference-reconstruction,
-        thm:martingale-difference-pythagorean-identity,
-        thm:outside-window-martingale-cancellation,
-        lem:nachtergaele_weighted_inner_product,
-        lem:nachtergaele_c3_projection_composition,
-        thm:moving_window_sum_le}
     Let $(G_n)_{n\geq0}$ be nested orthogonal projections on a
     finite-dimensional complex Hilbert space, put $E_n=G_n-G_{n+1}$, and
     assume $G_0=I$. Fix $l,N\in\N$, and let $Q_n$ be orthogonal projections
@@ -1125,8 +1119,8 @@ norm estimate is derived here.
         \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert^2.
         \label{eq:nachtergaele_c1_c3_full_range_energy_estimate}
     \end{align}
-    \textbf{Scope restriction (full finite range):}
-    the source's C1 sum starts only at the corresponding window length, and
+    This statement is stronger than the source hypotheses: the source's C1
+    sum starts only at the corresponding window length, and
     C2 and C3 are required only beyond their printed lower thresholds. Its
     proof nevertheless applies them to every $E_n$ in the displayed
     resolution. Here all three estimates are assumed for $0\leq n<N$.
@@ -1172,17 +1166,16 @@ norm estimate is derived here.
          & =\frac{\epsilon_l}{\sqrt{l+1}}.
     \end{align}
     These values reduce the preceding inequality to
-    Equation~\eqref{eq:nachtergaele_c1_c3_full_range_energy_estimate}. If
+    (\ref{eq:nachtergaele_c1_c3_full_range_energy_estimate}). If
     $\epsilon_l=0$, then $c_2=0$ is not an admissible weighted parameter.
-    \textbf{Local fix (zero C3 constant):} instead, C3 gives $Q_nE_n=0$, so
-    the second inner product in
+    In that case C3 instead gives $Q_nE_n=0$, so the second inner product in
     \textup{Enpsi} vanishes; applying only the first weighted estimate with
     $c_1=1$ yields the same formula. This repair is documented in
     \cite{gap:cpgsv21_martingale_overlap}.
 \end{proof}
 
-\begin{lemma}[Energy form to norm bound]
-    \label{lem:energy_form_to_norm_bound}
+\begin{theorem}[Energy form to norm bound]
+    \label{thm:energy_form_to_norm_bound}
     \lean{FrustrationFree.norm_lower_bound_of_energy_lower_bound}
     \leanok
     Let $H$ be a linear operator on a complex Hilbert space. If
@@ -1192,7 +1185,7 @@ norm estimate is derived here.
     \end{align}
     for every $v\in(\ker H)^\perp$, then
     $\kappa\lVert v\rVert\leq\lVert Hv\rVert$ on the same subspace.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -1205,14 +1198,10 @@ norm estimate is derived here.
     The claim is immediate for $v=0$; otherwise cancel $\lVert v\rVert$.
 \end{proof}
 
-\begin{corollary}[Norm gap from the full-range C1--C3 estimate]
-    \label{cor:nachtergaele_c1_c3_full_range_norm_gap}
-    \lean{FrustrationFree.spectralGap_of_martingale_of_finiteDimensional}
+\begin{theorem}[Norm gap from the full-range C1--C3 estimate]
+    \label{thm:nachtergaele_c1_c3_full_range_norm_gap}
     \lean{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range}
     \leanok
-    \uses{thm:nachtergaele_c1_c3_full_range_energy_estimate,
-        lem:energy_form_to_norm_bound,
-        lem:quadratic_form_to_norm_bound}
     In the setting of
     Theorem~\ref{thm:nachtergaele_c1_c3_full_range_energy_estimate}, suppose
     that $H$ is
@@ -1224,20 +1213,20 @@ norm estimate is derived here.
          & \leq\lVert Hv\rVert.
         \label{eq:nachtergaele_c1_c3_full_range_norm_gap}
     \end{align}
-\end{corollary}
+\end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:nachtergaele_c1_c3_full_range_energy_estimate,
-        lem:energy_form_to_norm_bound,
+        thm:energy_form_to_norm_bound,
         lem:quadratic_form_to_norm_bound}
     Denote the coefficient in
-    Equation~\eqref{eq:nachtergaele_c1_c3_full_range_norm_gap} by $\kappa$.
+    (\ref{eq:nachtergaele_c1_c3_full_range_norm_gap}) by $\kappa$.
     For an
     arbitrary $x$, remove its orthogonal projection onto $\ker H$ and call the
     remainder $w$. Then $Hx=Hw$ and
     $\re\langle Hx,x\rangle=\re\langle Hw,w\rangle$. The energy estimate and
-    Lemma~\ref{lem:energy_form_to_norm_bound} give
+    Theorem~\ref{thm:energy_form_to_norm_bound} give
     $\kappa\lVert w\rVert\leq\lVert Hx\rVert$. Hence Cauchy--Schwarz gives
     \begin{align}
         \kappa\,\re\langle Hx,x\rangle
@@ -1245,8 +1234,9 @@ norm estimate is derived here.
         \leq \lVert Hx\rVert^2.
     \end{align}
     Thus the hypothesis of
-    Lemma~\ref{lem:quadratic_form_to_norm_bound} holds globally. That lemma is
-    the finite-dimensional spectral endpoint and yields the stated norm bound.
+    Lemma~\ref{lem:quadratic_form_to_norm_bound} holds globally. The
+    finite-dimensional quadratic-form criterion then yields the stated norm
+    bound.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for a finite family of projections]

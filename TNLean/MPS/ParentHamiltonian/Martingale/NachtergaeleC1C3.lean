@@ -22,13 +22,13 @@ martingale difference \(E_0,\ldots,E_{N-1}\). The theorem below instead assumes
 the three estimates on the entire finite range. This extra hypothesis and the
 required lower-endpoint repair are recorded in
 `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. Thus the result is a
-full-range checkpoint with the source coefficient, not a formalization of the
+full-range version with the source coefficient, not a formalization of the
 unrestricted source theorem.
 
 **Local fix (zero C3 constant):** The source chooses
 \(c_2=\epsilon_l/\sqrt{l+1}\) after requiring \(c_2>0\). When
 \(\epsilon_l=0\), the proof below instead uses \(Q_nE_n=0\) and omits the
-second weighted estimate. This endpoint repair is recorded in the same
+second weighted estimate. This zero-constant repair is recorded in the same
 paper-gap note.
 -/
 
