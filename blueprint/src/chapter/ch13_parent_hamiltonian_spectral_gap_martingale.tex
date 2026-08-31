@@ -1331,15 +1331,13 @@ norm estimate is derived here.
         \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert^2.
         \label{eq:nachtergaele_c1_c3_full_range_energy_estimate}
     \end{align}
-    This statement is stronger than the source hypotheses: the source's C1
-    sum starts only at the corresponding window length, and
-    C2 and C3 are required only beyond their printed lower thresholds. Its
-    proof nevertheless applies them to every $E_n$ in the displayed
-    resolution. Here all three estimates are assumed for $0\leq n<N$.
-    This extra hypothesis is documented in
-    \cite{gap:cpgsv21_martingale_overlap}; no lower-endpoint discharge is
-    presently claimed. The coefficient is exactly the one printed in
-    Theorem~2.1(i) of \cite{Nachtergaele1996Spectral}, namely
+    This full-range statement is stronger than the unrestricted source
+    theorem in general. It assumes C1, C2, and C3 for every $0\leq n<N$,
+    whereas the source imposes lower thresholds on these conditions. Without
+    separate control of the initial volumes, the source hypotheses do not
+    imply the assumptions above; see
+    \cite{gap:cpgsv21_martingale_overlap}. The coefficient is exactly the one
+    in Theorem~2.1(i) of \cite{Nachtergaele1996Spectral}:
     $\gamma_{l+1}/d_{l+1}$ times
     $(1-\epsilon_l\sqrt{l+1})^2$.
 \end{theorem}
@@ -1544,14 +1542,12 @@ continue with comparison of compatible interactions, approximate commutation
 of ground-state projectors, and a uniform gap. Theorem~2.1(i) of the same
 source obtains a gap from its three stated hypotheses. Every compatible
 Hamiltonian below is positive because it is a sum of orthogonal projections.
-In addition to the compatible Hamiltonian and its zero-energy space, the
-statements below verify condition C1 and the unit norm lower bound at the
-full-window volume $N=L$. The fixed-ambient C2 and C3 estimates apply beyond
-their source thresholds. To invoke
-Theorem~\ref{thm:nachtergaele_c1_c3_full_range_energy_estimate}, one must
-still supply its stronger lower-index hypotheses; this is precisely the open
-boundary recorded in \cite{gap:cpgsv21_martingale_overlap}. The statements in
-this subsection do not assume periodic coercivity.
+The statements below verify C1 and C2 on the full martingale range.  Before
+one complete interaction window fits, the suffix Hamiltonian vanishes.  At the
+remaining indices it is the orthogonal projection onto the local excited
+space.  Together with the fixed-volume form of C3, these identities specialize
+Theorem~\ref{thm:nachtergaele_c1_c3_full_range_norm_gap} with
+$d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 
 \begin{definition}[Compatible open-chain parent Hamiltonian]
     \label{def:open_parent_hamiltonian_es}
@@ -1689,6 +1685,54 @@ this subsection do not assume periodic coercivity.
     Its local windows lie in the nonwrapping interval $[n-l,n)$.
 \end{definition}
 
+% Source: References/cond-mat_9410110/main.tex, condition C1,
+% lines 1030--1041.  The vanishing terms supply the indices below the
+% source lower endpoint when L=l+1.
+\begin{theorem}[Vanishing suffix before a complete window]
+    \label{thm:open_suffix_parent_hamiltonian_zero_before_window}
+    \lean{MPSTensor.openSuffixParentHamiltonianES_eq_zero_of_lt}
+    \leanok
+    \uses{def:open_suffix_parent_hamiltonian_es}
+    If $n<L$, then
+    \begin{align}
+        H^{\mathrm{suffix}}_{N,L;L,n}(A) & =0.
+        \label{eq:open_suffix_parent_hamiltonian_zero_before_window}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:open_suffix_parent_hamiltonian_es}
+    A summand would require a starting site $i$ satisfying both $n-L\leq i$
+    and $i+L\leq n$.  The latter inequality is impossible when $n<L$ and
+    $i\geq0$, so the defining sum is empty.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, condition C1,
+% lines 1030--1041.
+\begin{theorem}[Shifted full-range suffix sum]
+    \label{thm:open_suffix_parent_hamiltonian_range_shift}
+    \lean{MPSTensor.sum_range_openSuffixParentHamiltonianES_succ_eq_Icc}
+    \leanok
+    \uses{def:open_suffix_parent_hamiltonian_es,
+        thm:open_suffix_parent_hamiltonian_zero_before_window}
+    If $L>0$, then
+    \begin{align}
+        \sum_{n=0}^{N-1}H^{\mathrm{suffix}}_{N,L;L,n+1}(A)
+         & =\sum_{n=L}^{N}H^{\mathrm{suffix}}_{N,L;L,n}(A).
+        \label{eq:open_suffix_parent_hamiltonian_range_shift}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_suffix_parent_hamiltonian_zero_before_window}
+    The substitution $m=n+1$ identifies the left-hand side with the sum over
+    $1\leq m\leq N$.  Every term with $m<L$ vanishes by
+    Theorem~\ref{thm:open_suffix_parent_hamiltonian_zero_before_window}, leaving
+    precisely the stated interval.
+\end{proof}
+
 \begin{theorem}[Finite-overlap condition C1 for the compatible open chain]
     \label{thm:open_parent_hamiltonian_es_c1}
     \lean{MPSTensor.openParentHamiltonianES_C1}
@@ -1724,6 +1768,38 @@ this subsection do not assume periodic coercivity.
     where $0\leq c_i\leq l-L+1$. Positivity of each local term turns the
     coefficient bound into the upper operator inequality. Positivity of their
     sum gives the lower inequality.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, condition C1,
+% lines 1030--1041; proof of Theorem 2.1(i), lines 1250--1255.
+\begin{theorem}[Full-range compatible open-chain counting bound]
+    \label{thm:open_parent_hamiltonian_c1_full_range}
+    \lean{MPSTensor.openParentHamiltonianES_C1_full_range_quadratic_form}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_es_c1,
+        thm:open_suffix_parent_hamiltonian_range_shift}
+    Set $L=l+1$.  For every vector $v$ on the $N$-site chain,
+    \begin{align}
+        0
+         & \leq \sum_{n=0}^{N-1}
+        \re\left\langle H^{\mathrm{suffix}}_{N,L;L,n+1}(A)v,v\right\rangle
+        \leq
+        \re\left\langle H^{\mathrm{open}}_{N,L}(A)v,v\right\rangle.
+        \label{eq:open_parent_hamiltonian_c1_full_range}
+    \end{align}
+    Thus the full martingale range satisfies C1 with $d_{l+1}=1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_es_c1,
+        thm:open_suffix_parent_hamiltonian_range_shift,
+        lem:fixed-volume-hamiltonians-positive}
+    Equation~(\ref{eq:open_suffix_parent_hamiltonian_range_shift}) changes the
+    sum to the interval $L\leq n\leq N$.  Apply
+    Theorem~\ref{thm:open_parent_hamiltonian_es_c1} with suffix length $L$.
+    Each interaction then occurs once, since $L-L+1=1$.  Positivity of the
+    suffix Hamiltonians gives the lower bound.
 \end{proof}
 
 % Source anchors: References/cond-mat_9410110/main.tex, condition C2,
@@ -1796,7 +1872,7 @@ this subsection do not assume periodic coercivity.
          & =1.
     \end{align}
     The later condition C3 uses the distinct overlap parameter
-    $\varepsilon_l$.
+    $\epsilon_l$.
 \end{theorem}
 
 \begin{proof}
@@ -1835,6 +1911,41 @@ this subsection do not assume periodic coercivity.
     exact norm preservation and the unit lower bound. Condition C1 at suffix
     length $L$ gives $d_L=L-L+1=1$. With $L=l+1$, the two constants are therefore
     $d_{l+1}=1$ and $\gamma_{l+1}=1$.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, condition C2,
+% lines 1043--1058; proof of Theorem 2.1(i), lines 1240--1248.
+\begin{theorem}[Full-range fixed-window local gap]
+    \label{thm:open_suffix_parent_hamiltonian_c2_full_range}
+    \lean{MPSTensor.openSuffixParentHamiltonianES_C2_full_range_norm_sq}
+    \leanok
+    \uses{thm:open_suffix_parent_hamiltonian_zero_before_window,
+        thm:open_suffix_parent_hamiltonian_es_c2}
+    Set $L=l+1$, let $0\leq n<N$, and let $Q_n$ be the orthogonal projection
+    onto the kernel of
+    $H^{\mathrm{suffix}}_{N,L;L,n+1}(A)$.  Then every vector $v$ satisfies
+    \begin{align}
+        \lVert (I-Q_n)v\rVert^2
+         & \leq
+        \re\left\langle H^{\mathrm{suffix}}_{N,L;L,n+1}(A)v,v\right\rangle.
+        \label{eq:open_suffix_parent_hamiltonian_c2_full_range}
+    \end{align}
+    Hence C2 holds on the full martingale range with $\gamma_{l+1}=1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_suffix_parent_hamiltonian_zero_before_window,
+        thm:open_suffix_parent_hamiltonian_es_c2}
+    If $n<l$, the suffix Hamiltonian is zero and $Q_n=I$, so both sides of
+    (\ref{eq:open_suffix_parent_hamiltonian_c2_full_range}) vanish.  If
+    $n\geq l$, the suffix contains the single length-$(l+1)$ interaction and
+    equals $I-Q_n$ by Theorem~\ref{thm:open_suffix_parent_hamiltonian_es_c2}.
+    Since $I-Q_n$ is an orthogonal projection,
+    \begin{align}
+        \lVert(I-Q_n)v\rVert^2
+         & =\re\langle (I-Q_n)v,v\rangle.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Zero energy forces every compatible local constraint]
@@ -3346,11 +3457,11 @@ this subsection do not assume periodic coercivity.
     \uses{def:primitive_mps, def:l_blk_injective, def:open_chain_ground_subspaces_es, def:ground_space_es}
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
     positive-definite fixed point.  There are an overlap length $l>1$, measured
-    in sites of $A$, and a number $\varepsilon_l\geq0$ such that $A$ is
+    in sites of $A$, and a number $\epsilon_l\geq0$ such that $A$ is
     $l$-block injective, the projector defect is bounded
-    uniformly in the left length $K$ by $\varepsilon_l$, and
+    uniformly in the left length $K$ by $\epsilon_l$, and
     \begin{align}
-        \varepsilon_l & <\frac{1}{\sqrt{l+1}}.
+        \epsilon_l & <\frac{1}{\sqrt{l+1}}.
         \notag
     \end{align}
     Nachtergaele's projector-defect identity following condition C3
@@ -3374,7 +3485,7 @@ this subsection do not assume periodic coercivity.
     that length and above $1$ so that $cr^l<1$ and the last display is less
     than $1$.  Block injectivity propagates to $l$, and the geometric estimate
     gives the uniform defect bound with
-    $\varepsilon_l=(1-cr^l)^{-1}Cr^l$.  The open-chain projector-defect theorem
+    $\epsilon_l=(1-cr^l)^{-1}Cr^l$.  The open-chain projector-defect theorem
     gives the anticommutator statement.
 \end{proof}
 
@@ -3386,22 +3497,22 @@ this subsection do not assume periodic coercivity.
     \uses{thm:nachtergaele_c3_blocked_length, thm:exact_c3_martingale_difference_identity}
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
     positive-definite fixed point.  There are $l>1$ and
-    $\varepsilon_l\geq0$, with $A$ $l$-block injective, such that for every
+    $\epsilon_l\geq0$, with $A$ $l$-block injective, such that for every
     $K>0$, after setting $n=K+l$ and $n_l=l+1$,
     \begin{align}
         \left\lVert
         G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
         \right\rVert
-         & \leq\varepsilon_l.
+         & \leq\epsilon_l.
         \label{eq:literal_open_chain_martingale_c3}
     \end{align}
     The coefficient satisfies
     \begin{align}
-        \varepsilon_l
+        \epsilon_l
          & <\frac{1}{\sqrt{l+1}}.
         \label{eq:literal_open_chain_martingale_c3_threshold}
     \end{align}
-    The length $l$ and coefficient $\varepsilon_l$ are exactly those chosen
+    The length $l$ and coefficient $\epsilon_l$ are exactly those chosen
     by Theorem~\ref{thm:nachtergaele_c3_blocked_length}.
 \end{theorem}
 
@@ -3414,11 +3525,11 @@ this subsection do not assume periodic coercivity.
         G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
         -G_{\Lambda_{n+1}}
         \right\rVert
-         & \leq\varepsilon_l
+         & \leq\epsilon_l
     \end{align}
     for every $K>0$.  Rewrite its norm by
     Theorem~\ref{thm:exact_c3_martingale_difference_identity}; the existing
-    strict threshold on $\varepsilon_l$ is unchanged.
+    strict threshold on $\epsilon_l$ is unchanged.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
@@ -3436,15 +3547,15 @@ this subsection do not assume periodic coercivity.
         thm:literal_open_chain_martingale_c3}
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
     positive-definite fixed point.  There are $l>1$ and
-    $\varepsilon_l\geq0$, with $A$ $l$-block injective, such that for every
+    $\epsilon_l\geq0$, with $A$ $l$-block injective, such that for every
     final volume $N$ and every $n<N$,
     \begin{align}
         \left\lVert
         G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}^{(N)}E_n^{(N)}
         \right\rVert
-         & \leq\varepsilon_l,
+         & \leq\epsilon_l,
         \label{eq:literal_fixed_volume_martingale_c3} \\
-        \varepsilon_l
+        \epsilon_l
          & <\frac{1}{\sqrt{l+1}}.
         \label{eq:literal_fixed_volume_martingale_c3_threshold}
     \end{align}
@@ -3460,7 +3571,7 @@ this subsection do not assume periodic coercivity.
         thm:literal_open_chain_martingale_c3}
     If $n<l$, then $E_n^{(N)}=0$.  If $n=l$, the endpoint identity gives
     $G_{\Lambda_{l+1}}^{(N)}E_l^{(N)}=0$.  These cases use only
-    $\varepsilon_l\geq0$.
+    $\epsilon_l\geq0$.
 
     Suppose that $n>l$, and set $K=n-l>0$ and $r=N-(n+1)$.  The prefix and
     whole-prefix conjugacies identify $E_n^{(N)}$ with the direct sum of the
@@ -3471,6 +3582,116 @@ this subsection do not assume periodic coercivity.
     open-chain counterpart.  Isometric conjugacy preserves operator norm, and
     the fiberwise extension does not increase it.  The bound therefore follows
     from Theorem~\ref{thm:literal_open_chain_martingale_c3}.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, conditions C1--C3,
+% lines 1030--1094; Theorem 2.1(i), lines 1119--1130; proof lines 1195--1259.
+\begin{theorem}[Compatible open-chain gap from fixed-volume overlap]
+    \label{thm:open_parent_hamiltonian_fixed_c3_gap}
+    \lean{MPSTensor.openParentHamiltonianES_norm_gap_of_fixedAmbient_c3}
+    \leanok
+    \uses{thm:nachtergaele_c1_c3_full_range_norm_gap,
+        thm:physical-outside-window-martingale-cancellation,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:fixed-volume-c3-projector-conjugacy,
+        thm:open_parent_hamiltonian_c1_full_range,
+        thm:open_suffix_parent_hamiltonian_c2_full_range,
+        lem:open_parent_hamiltonian_es_positive,
+        thm:open_parent_hamiltonian_kernel_ground_space}
+    Let $D\geq1$, let $l>0$, suppose that $A$ is $l$-block injective, and let
+    $N\geq l+1$.  Assume $0\leq\epsilon_l<1/\sqrt{l+1}$ and, for every
+    $0\leq n<N$,
+    \begin{align}
+        \left\lVert Q_nE_n^{(N)}\right\rVert & \leq\epsilon_l,
+        \label{eq:open_parent_hamiltonian_fixed_c3}
+    \end{align}
+    where $Q_n$ is the ground-space projection of the interval
+    $[n-l,n+1)$ and $E_n^{(N)}$ is the fixed-volume martingale difference.
+    Then every $v\in(G_N^{\mathrm{ES}}(A))^\perp$ satisfies
+    \begin{align}
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
+         & \leq
+        \left\lVert H^{\mathrm{open}}_{N,l+1}(A)v\right\rVert.
+        \label{eq:open_parent_hamiltonian_fixed_c3_gap}
+    \end{align}
+    This intermediate MPS specialization assumes C3 on the full range
+    $0\leq n<N$, rather than only above the lower threshold in the source
+    statement. It applies the full-range estimate with
+    $d_{l+1}=\gamma_{l+1}=1$ and retains the coefficient of Theorem~2.1(i) in
+    \cite{Nachtergaele1996Spectral}. It is not a formulation of the
+    unrestricted source theorem. The primitive existential theorem below
+    supplies the full-range C3 hypothesis from the physical open-chain
+    estimates.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:nachtergaele_c1_c3_full_range_norm_gap,
+        thm:physical-outside-window-martingale-cancellation,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:fixed-volume-c3-projector-conjugacy,
+        thm:open_parent_hamiltonian_c1_full_range,
+        thm:open_suffix_parent_hamiltonian_c2_full_range,
+        lem:open_parent_hamiltonian_es_positive,
+        thm:open_parent_hamiltonian_kernel_ground_space}
+    Use the fixed-volume prefix ground-space projections and their differences
+    $E_n^{(N)}$. Theorem~\ref{thm:fixed-volume-c3-boundary-indices} gives
+    $G_0^{(N)}=I$, while
+    Theorem~\ref{thm:fixed-volume-c3-projector-conjugacy} identifies
+    $\operatorname{ran}G_N^{(N)}$ with the kernel of the open Hamiltonian.
+    The outside-window commutation theorem gives the locality hypothesis in
+    the martingale estimate. Theorems
+    \ref{thm:open_parent_hamiltonian_c1_full_range} and
+    \ref{thm:open_suffix_parent_hamiltonian_c2_full_range} give C1 and C2 with
+    $d_{l+1}=\gamma_{l+1}=1$, while
+    (\ref{eq:open_parent_hamiltonian_fixed_c3}) is C3.  Positivity of the open
+    Hamiltonian and
+    $\ker H^{\mathrm{open}}_{N,l+1}(A)=G_N^{\mathrm{ES}}(A)$ identify the
+    final orthogonal complement.  Substitution into
+    (\ref{eq:nachtergaele_c1_c3_full_range_norm_gap}) yields
+    (\ref{eq:open_parent_hamiltonian_fixed_c3_gap}).
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, condition C3,
+% lines 1083--1094; Theorem 2.1(i), lines 1119--1130; proof lines 1195--1259.
+\begin{theorem}[Uniform gap for primitive compatible open chains]
+    \label{thm:primitive_open_parent_hamiltonian_gap}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_openParentHamiltonianES_gap}
+    \leanok
+    \uses{thm:literal_fixed_volume_martingale_c3,
+        thm:open_parent_hamiltonian_fixed_c3_gap}
+    Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
+    positive-definite fixed point.  There exist $l>1$ and $\epsilon_l\geq0$
+    such that $A$ is $l$-block injective,
+    \begin{align}
+        \epsilon_l & <\frac{1}{\sqrt{l+1}},
+        \label{eq:primitive_open_parent_hamiltonian_threshold}
+    \end{align}
+    and, for every $N\geq l+1$ and every
+    $v\in(G_N^{\mathrm{ES}}(A))^\perp$,
+    \begin{align}
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
+         & \leq
+        \left\lVert H^{\mathrm{open}}_{N,l+1}(A)v\right\rVert.
+        \label{eq:primitive_open_parent_hamiltonian_gap}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:literal_fixed_volume_martingale_c3,
+        thm:open_parent_hamiltonian_fixed_c3_gap}
+    Theorem~\ref{thm:literal_fixed_volume_martingale_c3} supplies $l>1$,
+    $\epsilon_l$, $l$-block injectivity, and the C3 estimate for every final
+    volume $N$ and every $n<N$.  Apply
+    Theorem~\ref{thm:open_parent_hamiltonian_fixed_c3_gap} for each
+    $N\geq l+1$.  The value of $\epsilon_l$ is unchanged, so the coefficient
+    is exactly the specialization
+    \begin{align}
+        \frac{\gamma_{l+1}}{d_{l+1}}
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2
+         & =\left(1-\epsilon_l\sqrt{l+1}\right)^2.
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Blocked three-site projector and adjacent-pair transport]
