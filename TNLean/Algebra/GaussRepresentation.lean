@@ -106,7 +106,7 @@ theorem gaussOperator_mul
   rw [Fintype.sum_eq_single (gaussLegAction h y.2)]
   · have hcomp : gaussLegAction g (gaussLegAction h y.2) =
         gaussLegAction (g * h) y.2 := by
-      simp [gaussLegAction, mul_assoc]
+      simpa using congrArg (fun T : G × G ≃ G × G ↦ T y.2) (gaussLegAction_mul g h)
     by_cases hxy : x.2 = gaussLegAction (g * h) y.2
     · have hx : x.2 = gaussLegAction g (gaussLegAction h y.2) :=
         hxy.trans hcomp.symm
