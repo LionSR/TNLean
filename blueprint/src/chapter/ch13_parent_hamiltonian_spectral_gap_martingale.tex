@@ -379,13 +379,13 @@
     For $n,r\in\N$, restriction to the first $n$ sites and the final $r$ sites
     gives a canonical equivalence
     \begin{align}
-        [d]^{n+r} &\simeq [d]^n\times[d]^r
+        [d]^{n+r} & \simeq [d]^n\times[d]^r
     \end{align}
     and the corresponding Euclidean linear isometry.  A vector belongs to
     $\ker(T^{\oplus S})$ exactly when each spectator fiber belongs to $\ker T$.
     If $P_{\ker T}$ is the orthogonal projection onto $\ker T$, then
     \begin{align}
-        P_{\ker(T^{\oplus S})} &=(P_{\ker T})^{\oplus S}.
+        P_{\ker(T^{\oplus S})} & =(P_{\ker T})^{\oplus S}.
     \end{align}
 \end{lemma}
 
@@ -396,6 +396,31 @@
     extension preserves symmetry and idempotence, and its range consists
     exactly of the vectors whose fibers lie in $\ker T$.  Equality of the two
     symmetric projections follows from equality of their ranges.
+\end{proof}
+
+\begin{theorem}[Nonwrapping interactions with right spectators]
+    \label{thm:local-term-right-spectator-conjugacy}
+    \lean{MPSTensor.localTermES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \leanok
+    \uses{lem:right-spectator-extension, lem:right-spectator-kernel-projection}
+    Let $i+L\leq n$.  Under the canonical identification
+    \begin{align}
+        \ell^2([d]^{n+r}) & \simeq
+        \ell^2([d]^n\times[d]^r),
+    \end{align}
+    the nonwrapping length-$L$ interaction beginning at $i$ is
+    \begin{align}
+        h^{(n+r)}_{i,L} & =(h^{(n)}_{i,L})^{\oplus[d]^r}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The nonwrapping hypothesis identifies cyclic restriction with contiguous
+    restriction on both chain lengths.  Concatenation leaves the first $n$
+    coordinates unchanged and fixes the final $r$ spectator coordinates.
+    Hence window extraction and restriction agree on every spectator fiber,
+    and applying the same local parent interaction gives the identity.
 \end{proof}
 
 \begin{theorem}[C3 boundary indices in the fixed final volume]

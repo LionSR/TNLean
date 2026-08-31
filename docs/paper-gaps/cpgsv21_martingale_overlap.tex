@@ -331,18 +331,24 @@ increase operator norm; when the spectator set is nonempty, its norm is exactly
 the original norm.
 
 The remaining comparison is an exact intertwining statement for the concrete
-operators.  One must prove that the fixed-volume prefix kernel projection and
-local-interval kernel projection are the right-spectator sums of the
-corresponding $(n+1)$-site open-chain projectors.  This does not follow by
-definitional equality: the fixed-volume operators are kernels of sums of
-\leanid{MPSTensor.localTermES}, while the local theorem uses the MPS subspaces
-\leanid{MPSTensor.openChainLeftGroundSpaceES} and
-\leanid{MPSTensor.openChainTailGroundSpaceES}.  The existing cyclic-window
-configuration decomposition in
-\path{TNLean/MPS/ParentHamiltonian/LocalSupportTransport.lean} is private and
-specialized to a three-site window, so it cannot establish this arbitrary
-prefix identity.  Until an arbitrary-window configuration equivalence and its
-local-term intertwining theorem are proved, the fixed-final-volume estimate
+projectors.  The canonical splitting of an $(n+r)$-site configuration into its
+first $n$ sites and final $r$ sites is
+\leanid{MPSTensor.rightSpectatorConfigEquiv}; its Euclidean realization is
+\leanid{MPSTensor.rightSpectatorConfigLinearIsometryEquiv}.  For every
+nonwrapping interaction, the theorem
+\leanid{MPSTensor.localTermES_conj_rightSpectatorConfigLinearIsometryEquiv}
+proves that the larger-volume local term is the direct sum of the $n$-site
+local term over right-spectator configurations.  Moreover,
+\leanid{ContinuousLinearMap.ker_starProjection_rightFiberwiseMap} identifies
+the kernel projection of a fiberwise operator with the fiberwise extension of
+the base kernel projection.
+
+It remains to apply these identities to the finite prefix and local-interval
+Hamiltonian sums and then identify their smaller-volume kernels with the MPS
+subspaces \leanid{MPSTensor.openChainLeftGroundSpaceES} and
+\leanid{MPSTensor.openChainTailGroundSpaceES}.  This does not follow by
+definitional equality.  Until those sum and range identifications are proved,
+the fixed-final-volume estimate
 $\lVert Q_nE_n\rVert\leq\varepsilon_l$ for $n>l$ remains open.  No periodic
 coercivity statement can replace this missing operator identification.
 

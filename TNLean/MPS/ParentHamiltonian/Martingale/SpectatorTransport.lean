@@ -26,8 +26,8 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-/-- Split a configuration on `n + r` sites into its first `n` active sites and
-its final `r` right-spectator sites. -/
+/-- Split a configuration on \(n+r\) sites into its first \(n\) active sites and
+its final \(r\) right-spectator sites. -/
 def rightSpectatorConfigEquiv (d n r : ℕ) :
     Cfg d (n + r) ≃ Cfg d n × Cfg d r :=
   (Fin.appendEquiv n r).symm
@@ -47,7 +47,7 @@ def rightSpectatorConfigEquiv (d n r : ℕ) :
     (rightSpectatorConfigEquiv d n r σ).2 j = σ (Fin.natAdd n j) :=
   rfl
 
-/-- The Euclidean-space reindexing that displays the last `r` sites as a
+/-- The Euclidean-space reindexing that displays the last \(r\) sites as a
 finite right-spectator coordinate. -/
 noncomputable def rightSpectatorConfigLinearIsometryEquiv (d n r : ℕ) :
     EuclideanSpace ℂ (Cfg d (n + r)) ≃ₗᵢ[ℂ]
@@ -340,6 +340,91 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- A nonwrapping local interaction on the first \(n\) sites acts independently
+on every configuration of the final \(r\) right-spectator sites. -/
+theorem localTermES_conj_rightSpectatorConfigLinearIsometryEquiv
+    (A : MPSTensor d D) {n r L : ℕ} (i : Fin n) (hi : i.val + L ≤ n) :
+    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+        ((localTermES A L (Fin.castAdd r i)).comp
+          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (LinearMap.toContinuousLinearMap (localTermES A L i))).toLinearMap := by
+  apply LinearMap.ext
+  intro x
+  apply PiLp.ext
+  rintro ⟨σ, s⟩
+  simp only [LinearMap.comp_apply]
+  change localTermES A L (Fin.castAdd r i)
+      ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)
+        (Fin.appendEquiv n r (σ, s)) =
+    localTermES A L i (ContinuousLinearMap.rightFiber x s) σ
+  rw [localTermES_apply A L (Fin.castAdd r i) (by omega),
+    localTermES_apply A L i (by omega)]
+  have hcfg (ω : Cfg d L) :
+      rightSpectatorConfigEquiv d n r
+          (cyclicCfg (Fin.pos (Fin.castAdd r i)) L (Fin.castAdd r i) ω
+            (Fin.appendEquiv n r (σ, s))) =
+        (cyclicCfg (Fin.pos i) L i ω σ, s) := by
+    have hival : (Fin.castAdd r i).val = i.val := rfl
+    rw [cyclicCfg_eq_contiguousCfg (Fin.pos (Fin.castAdd r i)) (by omega) (by omega),
+      cyclicCfg_eq_contiguousCfg (Fin.pos i) (by omega) hi]
+    apply Prod.ext
+    · funext k
+      simp only [rightSpectatorConfigEquiv]
+      simp [contiguousCfg, Fin.appendEquiv]
+    · funext k
+      simp only [rightSpectatorConfigEquiv]
+      change contiguousCfg (Fin.castAdd r i).val L ω (Fin.append σ s)
+          (Fin.natAdd n k) = s k
+      simp only [contiguousCfg]
+      split
+      · rename_i hwindow
+        have hkval : (Fin.natAdd n k).val = n + k.val := rfl
+        exfalso
+        omega
+      · exact Fin.append_right σ s k
+  have hrestrict :
+      cyclicRestrictES (d := d) (Fin.pos (Fin.castAdd r i)) L (Fin.castAdd r i)
+          (Fin.appendEquiv n r (σ, s))
+          ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x) =
+        cyclicRestrictES (d := d) (Fin.pos i) L i σ
+          (ContinuousLinearMap.rightFiber x s) := by
+    apply PiLp.ext
+    intro ω
+    simp only [cyclicRestrictES, LinearMap.coe_withLpMap]
+    change ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)
+        (cyclicCfg (Fin.pos (Fin.castAdd r i)) L (Fin.castAdd r i) ω
+          (Fin.appendEquiv n r (σ, s))) =
+      ContinuousLinearMap.rightFiber x s (cyclicCfg (Fin.pos i) L i ω σ)
+    rw [rightSpectatorConfigLinearIsometryEquiv_symm_apply_apply]
+    exact congrArg x (hcfg ω)
+  have hextract :
+      extractWindow L (Fin.castAdd r i) (Fin.appendEquiv n r (σ, s)) =
+        extractWindow L i σ := by
+    funext j
+    have hival : (Fin.castAdd r i).val = i.val := rfl
+    have hjL := j.isLt
+    have hltSmall : i.val + j.val < n := by omega
+    have hltBig : (Fin.castAdd r i).val + j.val < n + r := by omega
+    have hbig :
+        (⟨((Fin.castAdd r i).val + j.val) % (n + r),
+          Nat.mod_lt _ (by omega)⟩ : Fin (n + r)) =
+          Fin.castAdd r (⟨i.val + j.val, hltSmall⟩ : Fin n) := by
+      apply Fin.ext
+      change ((Fin.castAdd r i).val + j.val) % (n + r) = i.val + j.val
+      rw [Nat.mod_eq_of_lt hltBig, hival]
+    have hsmall :
+        (⟨(i.val + j.val) % n, Nat.mod_lt _ (Fin.pos i)⟩ : Fin n) =
+          ⟨i.val + j.val, hltSmall⟩ := by
+      apply Fin.ext
+      change (i.val + j.val) % n = i.val + j.val
+      rw [Nat.mod_eq_of_lt hltSmall]
+    change Fin.append σ s
+        ⟨((Fin.castAdd r i).val + j.val) % (n + r), Nat.mod_lt _ (by omega)⟩ =
+      σ ⟨(i.val + j.val) % n, Nat.mod_lt _ (Fin.pos i)⟩
+    rw [hbig, Fin.append_left, hsmall]
+  rw [hrestrict, hextract]
+
 /-- Before the first full interaction window fits, the fixed-ambient prefix
 Hamiltonian vanishes. -/
 theorem openPrefixParentHamiltonianES_eq_zero_of_lt
@@ -417,7 +502,7 @@ theorem openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoi
     rw [openSuffixParentHamiltonianES, hfilter, Finset.sum_singleton]
   exact hprefix.trans hsuffix.symm
 
-/-- At the endpoint `n = l`, the local ground projection is the next prefix
+/-- At the endpoint \(n=l\), the local ground projection is the next prefix
 ground projection. -/
 theorem openIntervalGroundProjectionES_at_endpoint
     (A : MPSTensor d D) {l N : ℕ} (hl : 0 < l) (hlN : l + 1 ≤ N) :
@@ -434,8 +519,8 @@ theorem openIntervalGroundProjectionES_at_endpoint
   exact congrArg (fun U : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) =>
     U.starProjection.toLinearMap) hker
 
-/-- Nachtergaele's C3 product vanishes at the endpoint `n = l`:
-`Q_l E_l = G_[0,l+1) (1 - G_[0,l+1)) = 0`. -/
+/-- Nachtergaele's C3 product vanishes at the endpoint \(n=l\):
+\(Q_l E_l = G_{[0,l+1)} (1 - G_{[0,l+1)}) = 0\). -/
 theorem openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
     (A : MPSTensor d D) {l N : ℕ} (hl : 0 < l) (hlN : l + 1 ≤ N) :
     (openIntervalGroundProjectionES A (l + 1) l N l).comp
