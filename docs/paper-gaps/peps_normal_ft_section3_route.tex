@@ -319,6 +319,34 @@ rectangles. It is not an omitted case of Theorem~\path{3}: the source uses the
 periodic translation action, and the corresponding every-edge construction is
 the torus construction described below.
 
+The abstract region-injectivity hypotheses also show why the open-boundary
+extension cannot be obtained from rectangular injectivity and union closure
+alone. On the open $7\times7$ rectangle, fix the left-boundary horizontal edge
+$u=(0,2)$, $v=(1,2)$ and define
+\[
+    \operatorname{inj}_{\partial}(R)
+    \quad\Longleftrightarrow\quad
+    u\in R\Longrightarrow v\in R.
+\]
+This relation is closed under unions, and every contiguous $2\times3$ and
+$3\times2$ rectangle satisfies it: any such rectangle containing $u$ also
+contains $v$. A red/blue/complement blocking around $u$--$v$ is nevertheless
+impossible, because injectivity of the red region and $u\in R_{\mathrm{red}}$
+force $v\in R_{\mathrm{red}}$, while the blocking requires
+$v\in R_{\mathrm{blue}}$ and disjointness of the red and blue regions.
+Thus the abstract hypotheses used by the interior tiling do not imply
+open-boundary blocking data; any such extension needs additional tensor-level
+or boundary injectivity input. This countermodel of the abstract region
+relation is not claimed to arise from a PEPS tensor and does not concern the
+periodic Theorem~\path{3}.
+\footnote{Formal declarations:
+    \leanid{TNLean.PEPS.leftBoundaryRightEdgeInjectivityCountermodelSeven},
+    \leanid{TNLean.PEPS.leftBoundaryRightEdgeInjectivityCountermodelSeven_unionClosure},
+    \leanid{TNLean.PEPS.leftBoundaryRightEdgeInjectivityCountermodelSeven_rectangular},
+    \leanid{TNLean.PEPS.not_leftBoundaryRightEdge_blockingData_countermodelSeven},
+    and
+    \leanid{TNLean.PEPS.exists_rectangularInjectivity_not_boundaryBlockingData}.}
+
 Verdict: this note records an open gap with a scope restriction. The earlier
 vocabulary gap for contiguous rectangular blocks is closed. The earlier
 coordinate rectangular-injectivity structure is also present, and the
@@ -340,15 +368,19 @@ whose corner is forced. The every-edge blocking construction is cover-free at
 interior edges and assembles the normal edge-blocking hypotheses there. The
 tensor-level union theorem is proved for positive bond dimensions, including the
 overlapping case (the overlap re-insertion). Edges near the boundary of the open
-rectangular model still lie outside this construction, but this is the scope of
-a possible open-boundary strengthening rather than a gap in the cited theorem.
+rectangular model still lie outside this construction. The countermodel above
+shows that rectangular injectivity and union closure do not supply the missing
+blocking under the abstract region-injectivity assumptions, so a possible
+open-boundary strengthening requires additional hypotheses. This is not a gap
+in the cited theorem.
 For the periodic translationally invariant lattice, every edge is obtained from
 a reference edge by translation and the construction is complete. Injectivity
 of $R$ and $S$ is already derived from union closure and rectangular injectivity.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
-\ghissue{1252}.
+\ghissue{1252}. The separate open-rectangle boundary extension and its
+abstract obstruction are tracked by \ghissue{7531}.
 
 \section{Remaining mathematical obligations}
 

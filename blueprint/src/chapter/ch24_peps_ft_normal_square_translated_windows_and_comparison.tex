@@ -398,6 +398,89 @@
     \end{tenkzequation}
 \end{definition}
 
+\begin{definition}[Left-boundary injectivity countermodel]%
+    \label{def:peps_leftBoundaryRightEdgeInjectivityCountermodel}
+    \lean{TNLean.PEPS.leftBoundaryRightEdgeInjectivityCountermodelSeven}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    In the open $7\times7$ rectangle, let $u=(0,2)$ and $v=(1,2)$ be
+    the endpoints of a left-boundary horizontal edge. Define a region
+    relation by
+    \[
+        \inj_{\partial}(R)\quad\Longleftrightarrow\quad
+        u\in R\Longrightarrow v\in R.
+    \]
+\end{definition}
+
+\begin{theorem}[Union closure of the boundary countermodel]%
+    \label{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_unionClosure}
+    \lean{TNLean.PEPS.%
+        leftBoundaryRightEdgeInjectivityCountermodelSeven_unionClosure}
+    \leanok
+    \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel}
+    The relation $\inj_{\partial}$ is closed under unions.
+\end{theorem}
+\begin{proof}\leanok
+    If $u\in A\cup B$, then $u$ belongs to one of the two regions. The
+    defining implication for that region places $v$ in the same region, hence
+    in $A\cup B$.
+\end{proof}
+
+\begin{theorem}[Rectangular conditions for the boundary countermodel]%
+    \label{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_rectangular}
+    \lean{TNLean.PEPS.%
+        leftBoundaryRightEdgeInjectivityCountermodelSeven_rectangular}
+    \leanok
+    \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel,
+        def:peps_normalRectangleInjectivityHypotheses}
+    Every contiguous $2\times3$ and $3\times2$ rectangle satisfies
+    $\inj_{\partial}$. Indeed, a rectangle of either shape that contains $u$
+    necessarily contains its right neighbor $v$.
+\end{theorem}
+\begin{proof}\leanok
+    This follows directly from the horizontal coordinates of the two
+    endpoints.
+\end{proof}
+
+\begin{theorem}[No boundary blocking for the countermodel]%
+    \label{thm:peps_leftBoundaryRightEdge_not_boundaryBlockingData}
+    \lean{TNLean.PEPS.not_leftBoundaryRightEdge_blockingData_countermodelSeven}
+    \leanok
+    \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel,
+        def:peps_normalEdgeBlockingHypotheses}
+    The relation $\inj_{\partial}$ admits no three-partite injective MPS
+    blocking around the edge $u$--$v$.
+\end{theorem}
+\begin{proof}\leanok
+    The red region must contain $u$, so its injectivity places $v$ in the red
+    region. The blocking requires $v$ to lie in the disjoint blue region,
+    which is impossible.
+\end{proof}
+
+\begin{theorem}[Rectangular injectivity does not force an open-boundary
+        blocking]%
+    \label{thm:peps_rectangularInjectivity_not_boundaryBlockingData}
+    \lean{TNLean.PEPS.exists_rectangularInjectivity_not_boundaryBlockingData}
+    \leanok
+    \uses{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_unionClosure,
+        thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_rectangular,
+        thm:peps_leftBoundaryRightEdge_not_boundaryBlockingData}
+    There is a union-closed region relation on the open $7\times7$ rectangle
+    that satisfies all contiguous $2\times3$ and $3\times2$ rectangle
+    conditions, but admits no three-partite injective MPS blocking around the
+    edge $u$--$v$.
+
+    This counterexample for abstract region relations shows only that the
+    rectangular and union hypotheses do not entail a boundary blocking on an
+    open rectangle. It neither gives a PEPS tensor nor concerns the periodic
+    translationally invariant statement of~\cite[Theorem~3]{Molnar2018NormalPEPS}.
+    The later general theorem in the source takes the every-edge three-partite
+    injective MPS blocking as a hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    Use the relation $\inj_{\partial}$ and the three preceding theorems.
+\end{proof}
+
 \begin{theorem}[Injectivity supplied by normal edge blocking]%
     \label{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}
     \lean{TNLean.PEPS.NormalEdgeBlockingData.injective_chain}
