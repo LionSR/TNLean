@@ -106,9 +106,17 @@ makes sense with separate horizontal and vertical dimensions.
     right boundary operator invariant under the corresponding transfer action.
     The transfer-operator diagram at source lines~709--712 of
     \cite{Cirac2016MPDO_arXiv} depicts the operator from which the fixed point is
-    selected; it does not depict the fixed point itself. An algebraic definition
-    must specify the transfer space, orientation, and the choice of left and
-    right fixed points.
+    selected; it does not depict the fixed point itself. On a finite cylinder,
+    \cite[Section~II.2, Equations~(10)--(13)]{Cirac2011Entanglement} defines the
+    positive boundary operators $\sigma_L,\sigma_R$ and the support isometry
+    $U$, with
+    $\rho_\ell=U\sqrt{\sigma_L^T}\sigma_R\sqrt{\sigma_L^T}U^\dagger$.
+    For a long cylinder, \cite[Equation~(1) and the following paragraph]
+    {Schuch2013Topological} identifies $\sigma_L,\sigma_R$ with eigenvectors for
+    the largest eigenvalue of the transfer operator and notes that topological
+    degeneracy can make the fixed point non-unique. These constructions specify
+    the boundary operators in their respective cylinder settings, but not their
+    algebraic passage to the local boundary tensor and channels below.
 \end{definition}
 
 \begin{definition}[Algebraic PEPS renormalization fixed-point relation]
@@ -171,9 +179,11 @@ makes sense with separate horizontal and vertical dimensions.
         def:peps_boundary_coarse_graining, def:peps_boundary_refinement,
         def:is_rfp_via_ts}
     The source diagrams do not specify the domain and codomain of the physical
-    isometry, the virtual-space identifications, the choice and normalization of
-    the transfer fixed points, or the inserted factor in the refinement map.
-    Consequently, complete positivity, trace preservation, and the identities
+    isometry, the virtual-space identifications, the passage from the
+    finite-cylinder operators $\sigma_L,\sigma_R$ to the displayed local tensor,
+    a fixed-point selection in the degenerate case, or the inserted factor in
+    the refinement map. Consequently, complete positivity, trace preservation,
+    and the identities
     $\mathcal S[M_2(X)]=M_1(X)$ and
     $\mathcal T[M_1(X)]=M_2(X)$ cannot yet be checked algebraically. This
     missing specification is recorded in
