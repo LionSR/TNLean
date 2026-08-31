@@ -13,9 +13,8 @@ import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
 This file realizes the projections in Nachtergaele's martingale argument on one
 fixed \(N\)-site Hilbert space. The prefix Hamiltonian at level \(n\) contains the
 nonwrapping local interactions whose support lies in \([0,n)\). Its kernel
-projection is therefore a decreasing family on
-`EuclideanSpace ℂ (Cfg d N)`, rather than a family whose ambient type changes
-with \(n\).
+projection is therefore a decreasing family on this fixed ambient Hilbert
+space, rather than a family whose ambient type changes with \(n\).
 
 For the local interval \([n-l,n+1)\), the ground projection is the kernel
 projection of the sum over starts \(n-l\leq i\) and \(i+L\leq n+1\). We prove the
@@ -249,9 +248,8 @@ theorem openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES
     (cyclicWindowsDisjoint_of_nonwrapping_ordered j.2 (by omega)) v
 
 /-- Prefix and local-interval ground projections commute when their supporting
-Hamiltonians are disjoint.  The passage from Hamiltonian commutation to kernel-
-projection commutation uses the invariant-subspace theorem
-`LinearMap.IsSymmetric.kernelProjection_commute_of_commute`. -/
+Hamiltonians are disjoint.  Hamiltonian commutation makes both kernels and their
+orthogonal complements invariant, which yields projection commutation. -/
 theorem openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
     (A : MPSTensor d D) {L l N m n : ℕ} (hLN : L ≤ N)
     (hsep : m ≤ n - l) :
