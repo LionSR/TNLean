@@ -19,7 +19,7 @@ identities.  None of the statements below identifies the supplied witnesses
 with factors chosen by compact singular-value decomposition.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPOTensor
 
@@ -404,8 +404,12 @@ noncomputable def rightShiftTraceOneSourceWeight (d : ℕ) :
 Source: CPSV17 equation `Erightleft` (lines 269--280). -/
 theorem rightShiftTraceOneSourceWeight_posDef (d : ℕ) [NeZero d] :
     (rightShiftTraceOneSourceWeight d).PosDef := by
-  unfold rightShiftTraceOneSourceWeight
-  exact Matrix.PosDef.one.smul (by positivity)
+  rw [show rightShiftTraceOneSourceWeight d =
+      (d : ℝ)⁻¹ • (1 : Matrix (Fin d) (Fin d) ℂ) by
+    ext i j
+    simp [rightShiftTraceOneSourceWeight, Matrix.one_apply]]
+  exact Matrix.PosDef.one.smul <| inv_pos.mpr <| by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
 
 /-- The right-shift canonical-form-II weight has trace one.
 
@@ -433,12 +437,18 @@ noncomputable def rightShiftTraceOneSourceFactors (d : ℕ) [NeZero d] :
   let X₁ := s • S.X₁
   let Y₁ := s⁻¹ • S.Y₁
   let Z₁ := s • S.Z₁
+  have hs_mul_inv : s * s⁻¹ = 1 := by
+    simpa only [s] using sourceSqrt_mul_inv d
+  have hs_inv_mul : s⁻¹ * s = 1 := by
+    simpa only [s] using sourceSqrt_inv_mul d
+  have hs_weight : s * ((d : ℂ)⁻¹ * s) = 1 := by
+    simpa only [s, mul_assoc] using sourceSqrt_mul_nat_inv_mul_sourceSqrt d
   have hcut₁ : sourceCutM₁ (rightShiftTensor d) = X₁ * Y₁ := by
     calc
       sourceCutM₁ (rightShiftTensor d) = S.X₁ * S.Y₁ := S.sourceCutM₁_eq
       _ = X₁ * Y₁ := by
         simp only [X₁, Y₁, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-        rw [sourceSqrt_mul_inv]
+        rw [hs_inv_mul]
         simp
   have hweighted : X₁ᴴ * sourceWeight (d := d)
       (rightShiftTraceOneSourceWeight d) * X₁ = 1 := by
@@ -447,12 +457,12 @@ noncomputable def rightShiftTraceOneSourceFactors (d : ℕ) [NeZero d] :
     simp only [X₁, rightShiftTraceOneSourceWeight, sourceWeight,
       Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
       Matrix.smul_kronecker, Matrix.one_kronecker_one]
-    rw [show star s = s by simp [s, sourceSqrt], hS,
-      sourceSqrt_mul_nat_inv_mul_sourceSqrt]
+    rw [show star s = s by simp [s, sourceSqrt], Matrix.mul_one, hS,
+      hs_weight]
     simp
   have hY₁Z₁ : Y₁ * Z₁ = 1 := by
     simp only [Y₁, Z₁, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    rw [sourceSqrt_inv_mul, S.Y₁_mul_Z₁]
+    rw [hs_mul_inv, S.Y₁_mul_Z₁]
     simp
   exact
     { X₁ := X₁
@@ -480,12 +490,14 @@ theorem sourceU_rightShiftTraceOneSourceFactors_apply (d : ℕ) [NeZero d]
         (rightShiftTraceOneSourceFactors d)
         (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) (i₁, i₂) =
       if a = i₂ ∧ b = i₁ then 1 else 0 := by
+  have hscale : (d : ℂ) *
+      ((Real.sqrt d : ℂ)⁻¹ * (Real.sqrt d : ℂ)⁻¹) = 1 := by
+    simpa only [sourceSqrt] using nat_mul_sourceSqrt_inv_mul_inv d
   by_cases ha : a = i₂ <;> by_cases hb : b = i₁ <;>
     simp [SourceFactors.sourceU_apply, rightShiftTraceOneSourceFactors,
       rightShiftSourceFactors, normalizedIdentityColumn, normalizedIdentityVec,
-      Matrix.reindex_apply, Matrix.one_apply, sourceSqrt, ha, hb, NeZero.ne d,
-      shiftSourceScale_cancel, mul_comm, mul_left_comm]
-  all_goals grind
+      Matrix.reindex_apply, Matrix.one_apply, sourceSqrt, ha, hb,
+      hscale, mul_comm, mul_left_comm]
 
 /-- The trace-one right-shift source gate has the expected input-oriented
 Gram matrix.  This is the normalization and orientation regression for the
@@ -500,12 +512,22 @@ theorem sourceU_rightShiftTraceOneSourceFactors_gram (d : ℕ) [NeZero d]
       if p = q then 1 else 0 := by
   classical
   let e := (rightShiftLeftRankEquiv d).prodCongr (rightShiftRightRankEquiv d)
-  rw [← e.sum_comp, Fintype.sum_prod_type]
-  simp only [e, sourceU_rightShiftTraceOneSourceFactors_apply]
   rcases p with ⟨p₁, p₂⟩
   rcases q with ⟨q₁, q₂⟩
-  simp only [Prod.mk.injEq]
-  by_cases h₁ : p₁ = q₁ <;> by_cases h₂ : p₂ = q₂ <;> simp [h₁, h₂]
+  have happly (x : Fin 1 × (Fin d × Fin d)) (i₁ i₂ : Fin d) :
+      SourceFactors.sourceU (rightShiftTensor d)
+          (rightShiftTraceOneSourceFactors d) (e x) (i₁, i₂) =
+        if x.2.1 = i₂ ∧ x.2.2 = i₁ then 1 else 0 := by
+    rcases x with ⟨x₀, ⟨a, b⟩⟩
+    have hx₀ : x₀ = 0 := Subsingleton.elim _ _
+    subst x₀
+    simpa [e] using sourceU_rightShiftTraceOneSourceFactors_apply
+      d a b i₁ i₂
+  rw [← e.sum_comp]
+  simp_rw [happly]
+  simp only [Fintype.sum_prod_type, Prod.mk.injEq]
+  by_cases h₁ : p₁ = q₁ <;> by_cases h₂ : p₂ = q₂ <;>
+    simp [ite_and, h₁, h₂, ne_comm]
 
 /-- The paper source gate of the right shift is an isometry when its first
 source cut uses the trace-one canonical-form-II weight.
@@ -518,7 +540,7 @@ theorem sourceU_rightShiftTraceOneSourceFactors_isIsometry (d : ℕ) [NeZero d] 
   rw [Matrix.IsIsometry]
   ext p q
   simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-    eq_comm] using sourceU_rightShiftTraceOneSourceFactors_gram d p q
+    mul_comm] using sourceU_rightShiftTraceOneSourceFactors_gram d p q
 
 /-- Explicit supplied source factors for the left-shift tensor.
 

@@ -71,7 +71,7 @@ theorem sourceU_eq_diagonal_sourceYTensor
       ∑ β : Fin D, sourceYTensor U S (r, l) ((i₂, β), (i₁, β)) := by
   apply Finset.sum_congr rfl
   intro β _
-  simp only [sourceU_apply, sourceYTensor_apply]
+  simp only [sourceYTensor_apply]
   ring
 
 private theorem Y₁_gram_eq_weighted_sourceCutM₁_gram
@@ -116,8 +116,8 @@ private theorem Y₂_gram_eq_rotated_sourceCutM₂_gram
         simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
       _ = _ := by rw [← S.sourceCutM₂_eq]
   have hentry := congrArg (fun M ↦ M (p, a) (q, b)) hgram
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, sourceCutM₂_apply]
-    at hentry
+  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
+    Fintype.sum_prod_type, sourceCutM₂_apply] at hentry
   exact hentry
 
 /-- Complete expansion of the supplied \(Y_1\otimes Y_2\) Gram entry into
@@ -177,17 +177,19 @@ theorem sourceU_gram_eq_staggered_four_u
         star (U p.2 j₁ α β) * ρ α α' * U q.2 j₁ α' β' *
           (star (U j₂ p.1 γ β) * U j₂ q.1 γ β') := by
   classical
+  rcases p with ⟨p₁, p₂⟩
+  rcases q with ⟨q₁, q₂⟩
   rw [Fintype.sum_prod_type]
   simp_rw [sourceU_eq_diagonal_sourceYTensor, star_sum]
   simp_rw [Finset.sum_mul_sum]
   let f := fun (l : Fin ℓ[U]) (r : Fin r[U]) (β β' : Fin D) ↦
-    sourceYTensor U S (r, l) ((q.2, β), (q.1, β)) *
-      star (sourceYTensor U S (r, l) ((p.2, β'), (p.1, β')))
+    sourceYTensor U S (r, l) ((q₂, β), (q₁, β)) *
+      star (sourceYTensor U S (r, l) ((p₂, β'), (p₁, β')))
   change (∑ l, ∑ r, ∑ β, ∑ β', f l r β β') = _
   calc
     _ = ∑ β, ∑ β', ∑ r, ∑ l,
-        star (sourceYTensor U S (r, l) ((p.2, β'), (p.1, β'))) *
-          sourceYTensor U S (r, l) ((q.2, β), (q.1, β)) := by
+        star (sourceYTensor U S (r, l) ((p₂, β'), (p₁, β'))) *
+          sourceYTensor U S (r, l) ((q₂, β), (q₁, β)) := by
       rw [sum_rotate_four]
       apply Finset.sum_congr rfl
       intro β _
@@ -200,14 +202,15 @@ theorem sourceU_gram_eq_staggered_four_u
       simp only [f]
       ring
     _ = ∑ β, ∑ β', ∑ α, ∑ α', ∑ γ, ∑ j₁, ∑ j₂,
-        star (U p.2 j₁ α β') * ρ α α' * U q.2 j₁ α' β *
-          (star (U j₂ p.1 γ β') * U j₂ q.1 γ β) := by
+        star (U p₂ j₁ α β') * ρ α α' * U q₂ j₁ α' β *
+          (star (U j₂ p₁ γ β') * U j₂ q₁ γ β) := by
       apply Finset.sum_congr rfl
       intro β _
       apply Finset.sum_congr rfl
       intro β' _
-      simpa using sourceYTensor_gram_eq_four_u_weighted U S
-        (p.2, p.1) (q.2, q.1) (β', β') (β, β)
+      rw [← sourceYTensor_gram_eq_four_u_weighted U S
+        (p₂, p₁) (q₂, q₁) (β', β') (β, β),
+        Fintype.sum_prod_type]
     _ = _ := by
       rw [Finset.sum_comm]
 
