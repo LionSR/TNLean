@@ -19,11 +19,8 @@ has the block from `(a,b)` to `T_g(a,b)` equal to
 `(R (T_g(a,b)))⁻¹ * R a b`.
 
 This is the representation part of FBC25, Proposition `prop:gausslaws` and
-Equation `eq:mcG` (arXiv:2502.20257, lines 3380--3387). The same telescoping
-calculation is Lemma `lem:p4-gauss-representation` in
-`Notes/OpenProblemsTN/problems/p4_gauge_invariant_subspace_growth.tex`, lines
-115--218. Gauged-tensor invariance and placement on a chain are not treated
-here.
+Equation `eq:mcG` (arXiv:2502.20257, lines 3380--3387). Gauged-tensor
+invariance and placement on a chain are not treated here.
 -/
 
 noncomputable section
