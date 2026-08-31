@@ -1547,6 +1547,91 @@ $A^{-1}A=\Id$. This is the identity used in
     (\ref{eq:mps_reduction_exterior_buffer}).
 \end{proof}
 
+\begin{theorem}[Boundary-dressed uniqueness of rectangular reductions]
+    \label{thm:mps_reduction_boundary_dressed_uniqueness}
+    \lean{MPSTensor.IsReduction.exists_boundary_dressed_proportional,
+        MPSTensor.IsReduction.exists_boundary_dressed_proportional_of_nilpotencyLength_le}
+    \leanok
+    \discussion{7395}
+    \uses{def:same_mpv2_pos, def:mps_rectangular_reduction,
+        def:mps_reduction_residual_nilpotency_length, def:normal}
+    Let $A$ be normal, let $B$ have the same positive-length closed-chain
+    coefficients as $A$, and let $(V,W)$ and
+    $(\widetilde V,\widetilde W)$ be two reductions from $B$ to $A$.  Suppose
+    that, for some $N_0\in\mathbb N$,
+    \begin{align}
+        \ell(B,A;V,W) & \leq N_0,
+          & \ell(B,A;\widetilde V,\widetilde W) & \leq N_0.
+        \label{eq:mps_reduction_boundary_dressed_bounds}
+    \end{align}
+    Then there exists a single scalar $\lambda\in\C$ with $\lambda\ne0$ such
+    that, for every word $\mathbf a$ satisfying
+    \begin{align}
+        |\mathbf a| & > 2N_0,
+        \label{eq:mps_reduction_boundary_dressed_length}
+    \end{align}
+    one has
+    \begin{align}
+        VB^{\mathbf a}
+         & =\lambda\,\widetilde V B^{\mathbf a},
+        \label{eq:mps_reduction_boundary_dressed_left}\\
+        B^{\mathbf a}W
+         & =\lambda^{-1}B^{\mathbf a}\widetilde W.
+        \label{eq:mps_reduction_boundary_dressed_right}
+    \end{align}
+    These are boundary-dressed identities: they do not assert the bare matrix
+    equalities $V=\lambda\widetilde V$ or
+    $W=\lambda^{-1}\widetilde W$.
+
+    This is Theorem~22 of \cite{Molnar2018SemiInjective}, stated in
+    \texttt{cornerproblem.tex} lines 3156--3162 and proved at lines 4007--4035.
+    We retain the printed strict inequality $|\mathbf a|>2N_0$; the non-strict
+    endpoint appearing later in the source proof is not claimed here.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mps_rectangular_reduction_identities,
+        thm:mps_reduction_residual_dimension_bound,
+        thm:mps_reduction_residual_bound_consequences,
+        thm:mps_reduction_exterior_buffer, def:l_blk_injective}
+    First replace the two least-length inequalities by common residual-word
+    bounds at $N_0$: the least lengths are actual bounds under the
+    positive-length closed-chain equality, and prefix factorization propagates
+    vanishing to every larger length.
+
+    Choose $L>0$ such that $A$ is $L$-block injective.  For exterior words
+    $\mathbf p,\mathbf q$ satisfying the $N_0$ buffer inequalities, compare the
+    two exterior-buffer expansions of the mixed contraction
+    $VB^{\mathbf p}\widetilde W$.  Inserting a nonempty central $A$-word gives
+    \begin{align}
+        (VB^{\mathbf p}\widetilde W)A^{\mathbf c}A^{\mathbf q}
+         =A^{\mathbf p}A^{\mathbf c}(VB^{\mathbf q}\widetilde W).
+        \notag
+    \end{align}
+    Since the length-$L$ words span the full target matrix algebra, linearity
+    replaces $A^{\mathbf c}$ by an arbitrary matrix.  Insert matrix units and
+    choose a nonzero target word at a positive multiple of $L$.  Entrywise
+    cancellation then yields one scalar $\lambda$ with
+    $VB^{\mathbf p}\widetilde W=\lambda A^{\mathbf p}$ for every sufficiently
+    buffered $\mathbf p$.  Reversing the two reductions gives a scalar $\mu$
+    for the opposite mixed boundary.
+
+    Choose a longer nonzero target word, split it into two buffered exterior
+    pieces and a nonempty injective central block, and apply the exterior-buffer
+    identity once more.  The two mixed-boundary formulas give
+    $(\lambda\mu)A^{\mathbf a}=A^{\mathbf a}$; nonvanishing of the chosen word
+    implies $\lambda\mu=1$, so in particular $\lambda\ne0$.
+
+    Finally, if $|\mathbf a|>2N_0$, split $\mathbf a$ into exterior words of
+    length $N_0$ and a nonempty center.  Substitution of the two mixed-boundary
+    formulas into the corresponding exterior-buffer identities gives
+    (\ref{eq:mps_reduction_boundary_dressed_left}) and first gives
+    $B^{\mathbf a}\widetilde W=\lambda B^{\mathbf a}W$ on the right.
+    Multiplication by $\lambda^{-1}$ yields
+    (\ref{eq:mps_reduction_boundary_dressed_right}).
+\end{proof}
+
 \begin{lemma}[Gauge invariance of block injectivity]
     \label{lem:gauge_invariance_block_injective}
     \lean{MPSTensor.isNBlkInjective_of_gaugeEquiv}
