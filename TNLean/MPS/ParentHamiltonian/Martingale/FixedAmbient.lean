@@ -81,8 +81,12 @@ theorem IsSymmetric.kernelProjection_commute_of_commute {S T : E →ₗ[ℂ] E}
       And.intro hkerT hkerTperp
   simpa only [PS, PT, Module.End.mul_eq_comp] using hPTPS.eq.symm
 
+end LinearMap
+
 /-- Orthogonal projections onto nested submodules commute. -/
-theorem _root_.Submodule.starProjection_commute_of_le {U V : Submodule ℂ E}
+theorem Submodule.starProjection_commute_of_le {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
+    {U V : Submodule ℂ E}
     (hUV : U ≤ V) :
     U.starProjection.toLinearMap.comp V.starProjection.toLinearMap =
       V.starProjection.toLinearMap.comp U.starProjection.toLinearMap := by
@@ -109,8 +113,6 @@ theorem _root_.Submodule.starProjection_commute_of_le {U V : Submodule ℂ E}
           Submodule.starProjection_comp_starProjection_of_le hUV]
       _ = ⟪y, U.starProjection x⟫_ℂ := U.starProjection_isSymmetric y x
   exact hleft.trans hright.symm
-
-end LinearMap
 
 namespace MPSTensor
 

@@ -185,6 +185,10 @@
     \lean{MPSTensor.openPrefixParentHamiltonianES,
         MPSTensor.openPrefixGroundProjectionES,
         MPSTensor.openIntervalGroundProjectionES,
+        MPSTensor.localTermES_eq_zero_of_openPrefixParentHamiltonianES_eq_zero,
+        MPSTensor.ker_openPrefixParentHamiltonianES_antitone,
+        MPSTensor.openPrefixParentHamiltonianES_isPositive,
+        MPSTensor.openSuffixParentHamiltonianES_isPositive,
         MPSTensor.fixedAmbientNestedGroundProjectionsES}
     \leanok
     Fix an $N$-site Hilbert space and let $h_i$ denote the nonwrapping
@@ -209,6 +213,12 @@
 \begin{theorem}[Physical outside-window commutation and cancellation]%
     \label{thm:physical-outside-window-martingale-cancellation}
     \lean{LinearMap.IsSymmetric.kernelProjection_commute_of_commute,
+        Submodule.starProjection_commute_of_le,
+        MPSTensor.cyclicWindowsDisjoint_of_nonwrapping_ordered,
+        MPSTensor.openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES,
+        MPSTensor.openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le,
+        MPSTensor.ker_openPrefixParentHamiltonianES_le_ker_openSuffixParentHamiltonianES,
+        MPSTensor.openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt,
         MPSTensor.fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES,
         MPSTensor.inner_sum_fixedAmbient_martingaleDifference_openIntervalGroundProjectionES_eq_Icc}
     \leanok
