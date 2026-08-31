@@ -277,6 +277,65 @@
     coefficient matrix unique.
 \end{proof}
 
+\begin{definition}[End operations realizing a virtual matrix]
+    \label{def:peps_end_operations_realizing_virtual_matrix}
+    \lean{TNLean.PEPS.IsO1VirtualOperation}
+    \lean{TNLean.PEPS.IsO3TransposeVirtualOperation}
+    \leanok
+    Let $\{A_{1,\mu}\}_{\mu\in K}$ and
+    $\{A_{3,\mu}\}_{\mu\in K}$ be two end families.  The left physical
+    operation $O_1$ realizes a virtual matrix $X$ when
+    \begin{align}
+        O_1(A_{1,\nu})
+        =\sum_{\mu\in K}X_{\mu\nu}A_{1,\mu}.
+        \notag
+    \end{align}
+    The right physical operation $O_3$, read in the transposed orientation
+    $O_3^{\mathsf T}$ of Lemma~5, realizes the same matrix when
+    \begin{align}
+        O_3(A_{3,\mu})
+        =\sum_{\nu\in K}X_{\mu\nu}A_{3,\nu}.
+        \notag
+    \end{align}
+    This convention records the orientation of the displayed tensor
+    relation; it does not choose a transpose on the abstract space of
+    physical operations.
+\end{definition}
+
+\begin{theorem}[Multiplication of the end operations in Lemma 5]
+    \label{thm:peps_lemma5_end_operation_multiplication}
+    \lean{TNLean.PEPS.IsO1VirtualOperation.virtualOperation_eq}
+    \lean{TNLean.PEPS.IsO3TransposeVirtualOperation.virtualOperation_eq}
+    \lean{TNLean.PEPS.IsO1VirtualOperation.mul}
+    \lean{TNLean.PEPS.IsO3TransposeVirtualOperation.mul}
+    \lean{TNLean.PEPS.IsO1VirtualOperation.eq_mul_of_mul}
+    \lean{TNLean.PEPS.IsO3TransposeVirtualOperation.eq_mul_of_mul}
+    \lean{TNLean.PEPS.existsUnique_virtualOperation_of_O1_O3Transpose}
+    \leanok
+    \uses{def:peps_end_operations_realizing_virtual_matrix, thm:peps_existsUnique_virtualOperation_of_endPair}
+    Suppose that the two genuine end families are linearly independent and
+    that the open contraction identity for $O_1$ and $O_3$ holds.  Then there
+    is a unique matrix $X$ simultaneously realized by $O_1$ and by
+    $O_3^{\mathsf T}$.
+
+    If $O_1$ and $P_1$ realize $X$ and $Y$, respectively, then
+    $O_1\circ P_1$ realizes $XY$.  If $O_3^{\mathsf T}$ and
+    $P_3^{\mathsf T}$ realize $X$ and $Y$, then their product realizes
+    $XY$; in terms of the underlying right operations this product is
+    $P_3\circ O_3$.  Uniqueness identifies the virtual matrix of either
+    composite with $XY$.  This is precisely the composition step in the
+    final sentence of Lemma~5 of \cite{Molnar2018NormalPEPS}; it does not by
+    itself identify operations belonging to two different PEPS tensors.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The two-end comparison gives existence and uniqueness of $X$.  Applying
+    the first operation to the expansion furnished by the second and
+    interchanging the two finite sums gives matrix multiplication.  On the
+    right, transposition reverses the order of the underlying physical
+    operations.
+\end{proof}
+
 \begin{theorem}[Normalized coupling of the highlighted end windows]
     \label{thm:peps_horizontal_staircase_normalized_blue_coupling}
     \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_isExternalCrossingEdge_iff}
@@ -377,6 +436,7 @@
 \begin{theorem}[Lemma 5 operation on the staircase reference edge]
     \label{thm:peps_existsUnique_virtualOperation_of_horizontal_staircase_end_pair}
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPair}
+    \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPhysicalOperations}
     \leanok
     \uses{thm:peps_existsUnique_virtualOperation_of_endPair, thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
     Suppose the tensor is translation invariant, all bond dimensions are
@@ -394,6 +454,9 @@
     \end{align}
     No injectivity is assumed for either modified insert, a single vertex,
     the end pair, or its complement.
+    In particular, when the two inserts are obtained by applying the physical
+    end operations $O_1$ and $O_3$, these relations say that $O_1$ and
+    $O_3^{\mathsf T}$ realize the same unique matrix $X$.
 \end{theorem}
 \begin{proof}
     \leanok
