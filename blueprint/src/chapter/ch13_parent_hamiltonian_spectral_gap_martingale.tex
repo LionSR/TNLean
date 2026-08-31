@@ -4128,9 +4128,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     Let $W\leq N$ and fix a site $i$.  Splitting the cyclically ordered sites
     into the first $W$ sites and their complement gives
     \begin{align}
-        [d]^N & \simeq [d]^W\times[d]^{N-W},                              \\
+        [d]^N & \simeq [d]^W\times[d]^{N-W},                 \\
         U_i\colon\ell^2([d]^N)
-          & \longrightarrow\ell^2([d]^W\times[d]^{N-W}).
+              & \longrightarrow\ell^2([d]^W\times[d]^{N-W}).
         \label{eq:cyclic_active_block_isometry}
     \end{align}
     If $(\sigma,\tau)$ is an active configuration and a complementary
@@ -4217,12 +4217,11 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
         lem:right_spectator_quadratic_form_gap,
         thm:finite_range_cyclic_knabe, lem:quadratic_form_to_norm_bound}
     Let $1\leq R\leq m$, put $W=m+R-1$, and suppose that
-    $H^{\mathrm{open}}_{W,R}(A)$ has norm gap $\gamma$:
+    $H^{\mathrm{open}}_{W,R}(A)$ has norm gap $\gamma$.  Thus, for every
+    $u\in(\ker H^{\mathrm{open}}_{W,R}(A))^\perp$,
     \begin{align}
         \gamma\lVert u\rVert
-         & \leq\left\lVert H^{\mathrm{open}}_{W,R}(A)u\right\rVert
-        &&\text{for every }u\in
-        \left(\ker H^{\mathrm{open}}_{W,R}(A)\right)^\perp.
+         & \leq\left\lVert H^{\mathrm{open}}_{W,R}(A)u\right\rVert.
         \label{eq:open_knabe_block_norm_gap}
     \end{align}
     If $(R-1)^2<m\gamma$, define
@@ -4291,8 +4290,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     \end{align}
     Set
     \begin{align}
-        R & =l+1,                                                            \\
-        W & =m+R-1=m+l,                                                      \\
+        R & =l+1,                                   \\
+        W & =m+R-1=m+l,                             \\
         \gamma_{\mathrm{open}}
           & =\left(1-\epsilon_l\sqrt{l+1}\right)^2.
         \label{eq:primitive_finite_range_knabe_parameters}
