@@ -498,12 +498,29 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
 \end{corollary}
 \begin{proof}\leanok
     By Corollary~\ref{cor:peps_cycle_shift_bond_uniform}, every bond has the
-    dimension $D$ of a fixed reference bond. Reindex each bond configuration
-    along these equalities and, at every site, read the entering and leaving
-    indices as the row and column of a $D\times D$ matrix. Reindexing the
-    finite contraction preserves every state coefficient; the corresponding
-    reindexing of the two incident virtual indices preserves injectivity.
-    Moreover, cyclically shifting the matrix chain amounts to precomposing the
+    dimension $D$ of a fixed reference bond. Write $e_v$ for the bond from
+    $v$ to $v+1$, transport every bond index to $\{0,\ldots,D-1\}$, and let
+    \begin{align}
+        \iota_v(\xi)&=\bigl(\xi(e_{v-1}),\xi(e_v)\bigr),
+        & C_v^i(a,b)&=A_v^{\prime\,i}\!\left(\iota_v^{-1}(a,b)\right),
+        \notag
+    \end{align}
+    where $A'_v$ is the transported local tensor. If $g(v)=\eta(e_v)$, the
+    two corresponding changes of finite summation variables give
+    \begin{align}
+        \Coeff_A(\sigma)
+        &=\sum_{\eta}\prod_{v=0}^{n-1}
+          A_v^{\prime\,\sigma_v}\!\left(\eta|_v\right)
+          \notag\\
+        &=\sum_{g:\{0,\ldots,n-1\}\to\{0,\ldots,D-1\}}
+          \prod_{v=0}^{n-1}
+          C_v^{\sigma_v}\!\left(g(v-1),g(v)\right)
+         =\Coeff_C(\sigma).
+        \notag
+    \end{align}
+    Each $\iota_v$ is a bijection, so the same coordinate change preserves
+    injectivity of every local tensor. Cyclically shifting the matrix chain
+    amounts to precomposing the
     physical configuration by the inverse cyclic rotation, so cyclic-shift
     invariance is preserved. Apply
     Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
