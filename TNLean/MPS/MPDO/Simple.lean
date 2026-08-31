@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BNTRefinement
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Blocking
 import TNLean.MPS.MPDO.SimpleTensor
 
 /-!
@@ -21,6 +22,8 @@ a defining clause.
 ## Main results
 
 * `MPOTensor.IsSimple`: Definition 4.7 read over the canonical blocks.
+* `MPOTensor.IsSimpleCanonicalForm.isSimple`: the fixed-representative canonical
+  package implies source-facing simplicity.
 * `MPOTensor.IsSimple.exists_mpo_ne_zero`: simplicity supplies a nonzero closed
   MPO at some positive chain length.
 
@@ -98,6 +101,77 @@ def IsSimple (M : MPOTensor d D) : Prop :=
             (blockTensor M L).toMPSTensor P ∧
           ∀ j, ¬ IsNilpotent
             (doubledPhysTraceTransfer (MPSTensor.blockPhysDim d L) (P.basis j))
+
+/-- A simple canonical-form tensor is simple in the source-facing sense of
+Definition 4.7.
+
+Take blocking length $L=1$ and relabel the displayed BNT by the canonical
+identification between the one-site blocked ket-bra alphabet and the original
+doubled alphabet. The global block gauge preserves every closed
+matrix-product coefficient, while this relabeling preserves normality and the
+physical-trace transfer of each representative. Hence the displayed
+nonnilpotency certificates give the required BNT presentation after blocking.
+
+The implication forgets the line-246 unit-weight normalization built into
+`IsSimpleCanonicalForm`; that normalization is not part of `IsSimple`.
+
+Source: arXiv:1606.00608, canonical form at lines 217--246 and Definition 4.7
+at lines 815--822. -/
+theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
+    (hM : IsSimpleCanonicalForm M) : IsSimple M := by
+  obtain ⟨hMPDO, S, hCF, hNonNil, hTotal, X, hEq⟩ := hM
+  subst D
+  let e : Fin (MPSTensor.blockPhysDim d 1 * MPSTensor.blockPhysDim d 1) ≃ Fin (d * d) :=
+    finProdFinEquiv.symm |>.trans
+      (Equiv.prodCongr (MPSTensor.singleBlockEquiv d) (MPSTensor.singleBlockEquiv d)) |>.trans
+        finProdFinEquiv
+  let P := S.reindexPhysical e
+  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+    refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
+    intro i
+    simpa using hEq i
+  have hSame : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+    MPSTensor.SameMPV₂.toSameMPV₂Pos (fun N σ => (hGauge.sameMPV N σ).symm)
+  have hBlock : (blockTensor M 1).toMPSTensor =
+      Kraus.reindexPhysical e M.toMPSTensor := by
+    funext ij
+    change
+      M (MPSTensor.singleBlockEquiv d ij.divNat)
+          (MPSTensor.singleBlockEquiv d ij.modNat) * 1 =
+        M (e ij).divNat (e ij).modNat
+    simp [e]
+  refine ⟨hMPDO, 1, Nat.one_pos, P, ?_, ?_⟩
+  · have hCF' :=
+      MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical hCF e
+    refine ⟨?_, ?_, ?_, hCF'.bnt_data⟩
+    · obtain ⟨j, _q, _hj⟩ := hCF.weight_unit_exists
+      exact Fin.pos_iff_nonempty.mpr ⟨j⟩
+    · intro N hN σ
+      rw [hBlock]
+      change MPSTensor.mpv (Kraus.reindexPhysical e M.toMPSTensor) σ =
+        MPSTensor.mpv (Kraus.reindexPhysical e S.toTensor) σ
+      simp only [MPSTensor.mpv_reindexPhysical]
+      exact hSame N hN (fun n => e (σ n))
+    · let _ : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+        fun j => ⟨(hCF'.basis_dim_pos j).ne'⟩
+      intro j
+      exact MPSTensor.isNormalTensor_of_isNormal_leftCanonical (P.basis j)
+        (hCF'.basis_isNormal j) (hCF'.basis_left_canonical j)
+  · intro j
+    change ¬ IsNilpotent (doubledPhysTraceTransfer (MPSTensor.blockPhysDim d 1)
+      (Kraus.reindexPhysical e (S.basis j)))
+    have hTransfer :
+        doubledPhysTraceTransfer (MPSTensor.blockPhysDim d 1)
+            (Kraus.reindexPhysical e (S.basis j)) =
+          doubledPhysTraceTransfer d (S.basis j) := by
+      rw [doubledPhysTraceTransfer, doubledPhysTraceTransfer]
+      change (∑ i : Fin (MPSTensor.blockPhysDim d 1),
+          S.basis j (e (finProdFinEquiv (i, i)))) =
+        ∑ i : Fin d, S.basis j (finProdFinEquiv (i, i))
+      simpa [e] using (MPSTensor.singleBlockEquiv d).sum_comp
+        (fun i : Fin d => S.basis j (finProdFinEquiv (i, i)))
+    rw [hTransfer]
+    exact hNonNil j
 
 /-- Simplicity supplies a nonzero closed MPO at some positive length.
 

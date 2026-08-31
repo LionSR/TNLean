@@ -2668,6 +2668,27 @@ This is the calculation in
     representatives.
 \end{proof}
 
+\begin{lemma}[The ambient neighboring-trace obstruction is simple]
+    \label{lem:mpdo_neighboring_trace_obstruction_ambient_simple}
+    \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
+        ambient_isSimple}
+    \leanok
+    \uses{def:mpdo_simple_tensor, def:sector_bnt_cf}
+    Let $\mu\ne0$ and let $B$ be a five-letter tensor such that the embedded
+    obstruction is virtually gauge equivalent to $\mu B$. If the associated
+    obstruction--terminal sector decomposition is in normalized BNT canonical
+    form, then its ambient weighted direct sum is simple in the sense of
+    Definition~4.7.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_simple_cf_is_simple}
+    The displayed block-diagonal gauge and the nonnilpotent physical-trace
+    transfers of the two representatives give a normalized simple canonical
+    form. Theorem~\ref{thm:mpdo_simple_cf_is_simple} then gives simplicity in
+    the sense of Definition~4.7.
+\end{proof}
+
 % The displayed conjunction matches the hypotheses used in CPSV16
 % Appendix C.2, lines 1628--1782. The simultaneous one-letter span and the
 % local orthogonal-sum entropy calculation are proved directly in TNLean.
@@ -2676,8 +2697,8 @@ This is the calculation in
     \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
         exists_ambient_simpleBiCF_neighboringTraceObstruction}
     \leanok
-    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf, def:is_sal,
-        def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_simple_cf_tensor, def:mpdo_simple_tensor,
+        def:sector_bnt_cf, def:is_sal, def:mpo_physical_trace_transfer}
     There is a five-letter MPO tensor $K$ of virtual bond dimension three
     with a two-representative horizontal canonical presentation. The
     representatives $A_0,A_1$ are normal and left-canonical, have bond
@@ -2695,9 +2716,11 @@ This is the calculation in
     \end{align}
     Thus the presentation is in biCF. The tensor $K$ is the exact weighted
     direct sum $\mu A_0\oplus A_1$ with the identity global virtual gauge. It
-    is simple, generates positive semidefinite periodic operators with
-    strictly positive trace at every positive length, saturates the area law,
-    and has literal zero correlation length,
+    has normalized simple canonical form and is simple in the sense of
+    Definition~4.7. It generates positive
+    semidefinite periodic operators with strictly positive trace at every
+    positive length, saturates the area law, and has literal zero correlation
+    length,
     \begin{align}
         \mathcal T_K^2 & =\mathcal T_K.
         \notag
@@ -2712,6 +2735,7 @@ This is the calculation in
 
 \begin{proof}\leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_prepared_two_block_bnt,
+        lem:mpdo_neighboring_trace_obstruction_ambient_simple,
         thm:mpdo_local_orthogonal_sum_sal,
         lem:mpdo_sal_phys_trace_transfer_nonzero,
         thm:mpdo_source_zcl_strict_positive_length_normalization}
@@ -2728,7 +2752,9 @@ This is the calculation in
     sectors to $K$. The physical-trace transfer is block diagonal. Its two
     diagonal blocks are idempotent, hence so is the ambient transfer. The
     exact weighted direct sum and nonnilpotency of both representatives give
-    the asserted simple canonical presentation. SAL makes the physical-trace
+    the asserted normalized simple canonical presentation.
+    Lemma~\ref{lem:mpdo_neighboring_trace_obstruction_ambient_simple} gives
+    simplicity in the sense of Definition~4.7. SAL makes the physical-trace
     transfer nonzero; together with literal idempotence this gives source zero
     correlation length, hence every nonempty periodic trace is nonzero. The
     MPDO positivity condition then upgrades each such trace to strict
@@ -2770,8 +2796,8 @@ This is the calculation in
 \end{proof}
 
 % **False source result:** Proposition C.12 is contradicted under the complete
-% simultaneous-one-letter-span, simple-canonical, MPDO, SAL, literal-ZCL, and
-% line-246 normalization hypotheses. Documented in
+% simultaneous-one-letter-span, simple, normalized-simple-canonical, MPDO,
+% SAL, literal-ZCL, and line-246 normalization hypotheses. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[The printed absorbed-representative structure assertion is false]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
@@ -2780,6 +2806,7 @@ This is the calculation in
     \leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_ambient_properties,
         thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization,
+        def:mpdo_simple_cf_tensor, def:mpdo_simple_tensor,
         def:mpdo_physical_sector_factorization,
         def:mpdo_neighboring_trace_factorization}
     There is a five-letter MPO tensor $K$ of virtual bond dimension three
@@ -2789,9 +2816,10 @@ This is the calculation in
     obstruction is virtually gauge equivalent to $\mu A_0$. Each
     representative occurs once, with coefficients $\mu$ and $1$, where
     $0<|\mu|<1$; hence every coefficient has modulus at most one and the second
-    has modulus one. The tensor has simple canonical form, generates positive
-    semidefinite periodic operators with strictly positive trace at every
-    positive length, satisfies
+    has modulus one. The tensor has normalized simple canonical form, is
+    simple in the sense of Definition~4.7, and is in biCF. It generates
+    positive semidefinite periodic operators with
+    strictly positive trace at every positive length, satisfies
     saturation of the area law, and obeys
     \begin{align}
         \mathcal T_K^2 & =\mathcal T_K.

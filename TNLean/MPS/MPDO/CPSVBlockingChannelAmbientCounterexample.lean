@@ -134,6 +134,7 @@ theorem printed_propositionC15_and_theorem49_ii_to_v_are_false :
         (∀ N, 0 < N → 0 < Matrix.trace (mpo K N)) ∧
         IsSAL K ∧
         IsSimpleCanonicalForm K ∧
+        IsSimple K ∧
         MPSTensor.IsBNTCanonicalForm S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
         (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧

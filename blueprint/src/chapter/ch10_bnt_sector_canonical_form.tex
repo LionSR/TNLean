@@ -452,6 +452,28 @@ single family.
     not derivable from the per-block normality hypotheses alone.
 \end{definition}
 
+\begin{theorem}[Physical relabeling preserves BNT canonical form]
+    \label{thm:sector_bnt_cf_reindex_physical}
+    \lean{MPSTensor.SectorDecomposition.reindexPhysical,
+        MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical}
+    \leanok
+    \uses{def:sector_bnt_cf}
+    Let $P$ be a BNT canonical form and let $e$ be a bijection of its physical
+    alphabet with another finite alphabet. Relabel every basis tensor of $P$
+    by $e$, leaving the representative and copy labels, bond dimensions, and
+    weights unchanged. The resulting sector decomposition is again a BNT
+    canonical form.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_physical_reindexing}
+    Physical relabeling preserves irreducibility, left-canonical
+    normalization, normalized self-overlaps, eventual linear independence,
+    and gauge-phase separation of the representatives. Since the weights and
+    all sector data are unchanged, the canonical-form normalization is also
+    preserved.
+\end{proof}
+
 \begin{definition}[Single-sector decomposition]
     \label{def:single_sector_decomposition}
     \lean{MPSTensor.singleSectorDecomposition}

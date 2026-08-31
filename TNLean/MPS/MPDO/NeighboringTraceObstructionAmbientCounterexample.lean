@@ -11,6 +11,7 @@ import TNLean.MPS.MPDO.NeighboringTraceObstructionAmbientBlocks
 import TNLean.MPS.MPDO.PhysicalIsometricEmbeddingNeighboringTrace
 import TNLean.MPS.MPDO.PhysicalSectorGaugeTransport
 import TNLean.MPS.MPDO.SALTraceTransfer
+import TNLean.MPS.MPDO.Simple
 
 /-!
 # An ambient neighboring-trace obstruction in simple biCF form
@@ -738,6 +739,19 @@ theorem ambient_isSimpleCanonicalForm
   simp only [hGlobal, Units.val_one, inv_one, one_mul, mul_one]
   exact (cast_eq _ _).symm
 
+/-- The ambient tensor is simple in the sense of CPSV16, Definition 4.7.
+This follows from its displayed normalized simple canonical form; the
+conclusion forgets the global unit-weight normalization at line 246.
+
+Source: CPSV16, Definition 4.7, lines 815--822, under the standing Appendix
+C.2 hypothesis at line 1628. -/
+theorem ambient_isSimple
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (hBNT : MPSTensor.IsBNTCanonicalForm (sectors mu B hmu)) :
+    IsSimple (ambient mu B hmu) :=
+  (ambient_isSimpleCanonicalForm mu B hmu hGauge hBNT).isSimple
+
 /-- Every positive-length ambient periodic operator has strictly positive
 normalization.  This is the normalization clause used in the Appendix C.2
 standing MPDO and SAL hypotheses.
@@ -817,6 +831,7 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
       (∀ N, 0 < N → 0 < Matrix.trace (mpo K N)) ∧
       IsSAL K ∧
       IsSimpleCanonicalForm K ∧
+      IsSimple K ∧
       MPSTensor.IsBNTCanonicalForm S ∧
       MPSTensor.WordTupleSpanTop S.basis 1 ∧
       (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
@@ -851,6 +866,7 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
     fun N hN ↦ trace_mpo_ambient_pos mu B hmu hGauge hN,
     ambient_isSAL mu B hmu hGauge,
     ambient_isSimpleCanonicalForm mu B hmu hGauge hBNT,
+    ambient_isSimple mu B hmu hGauge hBNT,
     hBNT, sectors_wordTupleSpanTop_one mu B hmu hBInj hBSupport,
     sectors_basis_isNormalTensor mu B hmu hBNormal,
     ambient_toMPSTensor_eq_sectors_toTensor mu B hmu,
@@ -894,6 +910,7 @@ theorem printed_theorem49_ii_to_iv_is_false :
         (∀ N, 0 < N → 0 < Matrix.trace (mpo K N)) ∧
         IsSAL K ∧
         IsSimpleCanonicalForm K ∧
+        IsSimple K ∧
         MPSTensor.IsBNTCanonicalForm S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
         (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧

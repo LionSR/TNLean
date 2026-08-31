@@ -81,10 +81,12 @@ here. The printed route to Proposition `prop2to5` obtains them from saturation
 of the area law and zero correlation length through Proposition `prop2to3`,
 but that representativewise assertion is false under the complete standing
 hypotheses. Thus this theorem proves the conditional channel construction but
-does not prove Proposition `prop2to5`. The counterexample does not exclude
-different channel maps, so the bare conclusion of `prop2to5` is neither proved
-nor refuted. See
-<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
+does not prove Proposition `prop2to5`. Independently, the trace-norm
+counterexample excludes every asserted two-to-three channel under the complete
+standing hypotheses and therefore refutes the unrestricted conclusion of
+`prop2to5`. See
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf> and
+<https://sirui-lu.com/TNLean/paper-gaps/cpsv16_prop_c15_blocking_channel_false.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines
 1810--1817; the closing proof at lines 1821--1825; and the weight
@@ -129,10 +131,12 @@ four selected sectors.
 single-sector factorizations are assumed here. They do not follow in general
 from saturation of the area law and zero correlation length, because the
 printed representative-factorization assertion is false under the complete
-standing hypotheses. This theorem proves the conditional channel construction
-but does not decide whether different channels establish the bare source
-conclusion. See
-<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
+standing hypotheses. This theorem proves only the conditional channel
+construction; the separate trace-norm counterexample excludes every asserted
+two-to-three channel under the complete standing hypotheses and refutes the
+unrestricted source conclusion. See
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf> and
+<https://sirui-lu.com/TNLean/paper-gaps/cpsv16_prop_c15_blocking_channel_false.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines
 1810--1817, and lines 1389--1403. -/

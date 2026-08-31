@@ -510,10 +510,12 @@ model different levels of data and different sources.
   `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
 - `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
   the normalized fixed-representative predicate of Appendix C.2: it adds the
-  MPDO and nonnilpotent-sector conditions to horizontal canonical form, and its
-  sanctioned one-way bridge is
-  `MPOTensor.IsSimpleCanonicalForm.isHorizontalCF`. It is not a quotient by
-  nonzero scalar rescaling; see
+  MPDO and nonnilpotent-sector conditions to horizontal canonical form. Its
+  sanctioned one-way bridges are
+  `MPOTensor.IsSimpleCanonicalForm.isHorizontalCF` and
+  `MPOTensor.IsSimpleCanonicalForm.isSimple`; the latter forgets the line-246
+  normalization and supplies the one-site BNT presentation required by
+  Definition 4.7. It is not a quotient by nonzero scalar rescaling; see
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
 - `MPOTensor.IsSimple` in `TNLean/MPS/MPDO/Simple.lean` is the sole
   simplicity predicate: Definition 4.7 of arXiv:1606.00608 at lines 815--822
