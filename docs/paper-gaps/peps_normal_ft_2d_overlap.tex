@@ -118,9 +118,10 @@ configuration~$\mu$.  The partial-state identity now also proves that the
 same operators $O_j^A(X)$, applied to the genuine $B$-blocks of a tensor with
 the same closed state, produce one common $B$-state.  The same-tensor two-end
 extraction and the $O_1P_1$ and underlying $P_3O_3$ composition laws are
-complete.  What remains is to apply the two-end extraction to the cross-tensor
-common family, organize the resulting matrix assignments, prove their
-multiplicativity from these laws, and assemble the back half of the argument.
+complete.  Applying that extraction to the cross-tensor common family now
+gives the unique bond matrix pointwise.  What remains is to organize the
+resulting matrix assignments, prove their multiplicativity from these laws,
+obtain the coefficient transfer, and assemble the back half of the argument.
 
 Ref.~\cite{Molnar2018NormalPEPS} supplies this converse by the reduction ``we only need to prove a
 statement similar to Lemma~5''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321}.}
@@ -184,7 +185,8 @@ a sketch.  The consecutive-window comparison, corner completion, forward
 open-boundary physical realization, and two-end recovery of the unique matrix
 $X$ are now formalized, as are the uniqueness and direct composition laws for
 Lemma~5's $O_1$ and $O_3^{\mathsf T}$ end-factor relations.  What remains is
-the cross-tensor transfer and the back-half assembly.  The failed
+the cross-tensor coefficient transfer, its multiplicativity, and the
+back-half assembly.  The failed
 single-window span above is an invented auxiliary route, not a statement made
 or required by the paper.
 
@@ -253,18 +255,24 @@ with the same closed state without identifying the two virtual boundary
 spaces
 (\path{TNLean/PEPS/RegionBlock/PhysicalOperation.lean},
 \path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean}, and
-\path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}). Every
+\path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}); and the
+pointwise cross-tensor end extraction
+\leanid{TNLean.PEPS.existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp\_sameState},
+which recovers the unique $B$-bond matrix with the source's $O_1$ and
+$O_3^{\mathsf T}$ orientations
+(\path{TNLean/PEPS/TorusWindowCrossTensorEndOperation.lean}). Every
 inverted region is a union of one-orientation $L \times K$ window translates,
 host-decomposable at $n \geq 2L+1$, $m \geq 2K+1$. The development is
 minimal-size-ready through the single-tensor virtual-operation family and the
-unique end-pair extraction
-\leanid{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPair}.
+unique end-pair and pointwise cross-tensor extraction.
 The direct $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$ composition laws are
-also complete.  The remaining gates are the cross-tensor transfer and the
-back-half assembly that re-anchors the torus Theorem~3 layers to the
-$(L+1) \times (K+1)$ comparison pair.
+also complete.  The remaining gates are to organize the two pointwise
+cross-tensor assignments, prove the forward assignment multiplicative,
+obtain the coefficient transfer, and complete the back-half assembly that
+re-anchors the torus Theorem~3 layers to the $(L+1) \times (K+1)$
+comparison pair.
 
-\paragraph{3. The remaining cross-tensor extraction.}
+\paragraph{3. The pointwise cross-tensor extraction.}
 The same-tensor operation family is no longer missing.  For a fixed matrix
 $X$ on $e$, the first window carries $X^{\mathsf T}$, the windows
 $W_1,\ldots,W_{L-1}$ carry the interior-bond insert of $X$, and the remaining
@@ -276,14 +284,16 @@ $P_B(W_0)E_B(e,\cdot,X)$.  The relations
 \leanid{TNLean.PEPS.IsO3TransposeVirtualOperation} are single-valued on the
 genuine end families, and their multiplication theorems give exactly the two
 composition orders printed in Lemma~5.  The new common-state theorem applies
-the operators $O_j^A(X)$ to the genuine $B$-blocks.  It remains to apply the
-end extraction to this family in both directions and prove that the forward
-matrix assignment respects products; these are the
-\path{htransferAB}/\path{htransferBA}/\path{hmul} data consumed downstream.
-Existing single-window and coarse-three-site
-attempts do not derive that cross-tensor input at the minimal size; a
-source-faithful extraction must use the actual overlapping-window comparison
-rather than assume a matrix span.
+the operators $O_j^A(X)$ to the genuine $B$-blocks.  Feeding this family
+through the open end-pair equality and the two-end comparison now gives the
+unique $B$-bond matrix in
+\leanid{TNLean.PEPS.existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp\_sameState}.
+Swapping the two tensors gives the reverse pointwise statement.  What
+remains is to organize these unique matrices into the forward and reverse
+coefficient transfers and prove that the forward assignment respects
+products; these are the \path{htransferAB}/\path{htransferBA}/\path{hmul}
+data consumed downstream.  This route uses the actual overlapping-window
+comparison and assumes no single-window matrix span.
 
 \paragraph{4. Auxiliary closing routes ruled out at the minimal size.}
 The following findings rule out particular substitutes for the paper's
@@ -345,14 +355,17 @@ a single-window square-matrix span.  The forward correspondence, its
 open-boundary physical operators, its transpose convention, and the unique
 end-pair operation now follow this description literally.  So do the direct
 composition laws for Lemma~5's $O_1$ and $O_3^{\mathsf T}$ orientations.  The
-remaining formal work is the cross-tensor transfer and the back-half assembly.
+pointwise cross-tensor end extraction is also complete.  The remaining formal
+work is the cross-tensor coefficient transfer, its multiplicativity, and the
+back-half assembly.
 
 \paragraph{6. Status.}
 The corollary remains \emph{unformalized}: no blueprint entry claims it, it
 carries the \texttt{notready} marker, and no \texttt{leanok} marks it.  The
-same-tensor family, unique end-pair extraction, and direct end-composition
-laws are complete; the remaining work is the cross-tensor transfer and the
-back-half assembly tracked separately.
+same-tensor family, pointwise cross-tensor end extraction, and direct
+end-composition laws are complete; the remaining work is the bidirectional
+coefficient transfer, its multiplicativity, and the back-half assembly tracked
+separately.
 
 \section{The filled-in derivation}
 
@@ -648,10 +661,11 @@ window block on the compatible fibre and vanishes off it, and
 the unique matrix $X$.  Specializing the end inserts to the physical actions
 $O_1$ and $O_3$ gives the source's two factor relations, whose direct
 composition laws are now formalized.  The same-state partial-state identity
-also supplies the cross-tensor common family for these physical operations.
-The residual is to extract and organize the resulting matrix assignment, use
-the end-composition laws to prove its multiplicativity, and complete the
-back-half assembly.
+also supplies the cross-tensor common family for these physical operations,
+and the end-pair theorem now extracts its unique bond matrix.  The residual
+is to organize the two pointwise assignments, use the end-composition laws
+to prove multiplicativity, obtain the coefficient transfer, and complete
+the back-half assembly.
 
 \subsection{Step 5: the rest of the proof}
 
@@ -783,9 +797,9 @@ end-pair-operation layers of the derivation above are complete, including the
 direct composition laws in the two source orientations. The remaining source
 steps following
 \path{Papers/1804.04964/paper_normal.tex:2368--2444} of
-Ref.~\cite{Molnar2018NormalPEPS} are the cross-tensor transfer and the
-back-half assembly.  The layer list below records the campaign around these
-steps:
+Ref.~\cite{Molnar2018NormalPEPS} are the cross-tensor coefficient transfer,
+its multiplicativity, and the back-half assembly.  The layer list below
+records the campaign around these steps:
 
 \begin{enumerate}
     \item \emph{Window geometry} (no tensors): the one-orientation
@@ -807,7 +821,8 @@ steps:
           last physical operations after adjoining the genuine corner tensors,
           invert the resulting regions, and recover the unique virtual operation
           $X$, with the $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$ uniqueness and
-          direct composition laws (complete).
+          direct composition laws, including the pointwise cross-tensor end
+          extraction (complete).
     \item \emph{The per-edge witness}: the landed insertion-correspondence and
           Skolem--Noether interface at one reference edge per orientation; the
           remaining cross-tensor transfer must supply the coefficient identity this
@@ -1169,8 +1184,9 @@ contraction and unique-operation extraction are in
 \path{TNLean/PEPS/TorusWindowPeeling/EndOperation.lean}.
 
 The Step~4 end relations and their direct composition laws are complete.  The
-remaining work is to use them in the cross-tensor assembly and then complete
-the back half of the proof.
+remaining work is to organize the pointwise operations into the cross-tensor
+coefficient transfer, prove its multiplicativity, and then complete the back
+half of the proof.
 
 \subsection{The back-half geometry supports a window witness region}
 
@@ -1338,19 +1354,24 @@ $\text{\path{deformedRegionStateAssembled\_staircasePhysicalOp\_sameState}}$.
 This statement uses neither an identification of the two virtual boundary
 spaces nor a multiplicativity hypothesis.
 
-The local residual is now the cross-tensor matrix assignment and its
-multiplicativity.  One must feed this common family through
-$\text{\path{staircasePair\_insert\_eq\_open}}$ and the landed unique end
-extraction in both directions, then use the end-composition laws to prove that
-the forward assignment respects products.  The region-level recovery
+The pointwise cross-tensor matrix extraction is now
+$\text{\path{existsUnique\_crossTensorVirtualOperation\_of\_staircasePhysicalOp\_sameState}}$.
+It feeds the common family through
+$\text{\path{staircasePair\_insert\_eq\_open}}$ and the genuine two-end
+injectivity argument, giving the unique $B$-matrix with the paper's $O_1$ and
+$O_3^{\mathsf T}$ orientations; swapping $A$ and $B$ gives the reverse
+pointwise extraction.  The local residual is to organize these unique
+matrices into the two coefficient transfers and use the end-composition laws
+to prove that the forward assignment respects products.  The region-level recovery
 $\text{\path{regionInsertionTransfer\_of\_realizes}}$ derives all three transfer fields ---
 $\text{\path{htransferAB}}$, $\text{\path{htransferBA}}$, and $\text{\path{hmul}}$ --- from one region
 physical-to-virtual realization $\text{\path{RegionTransferRealizes}}$ in each direction, with
-no further hypothesis; so the window route's residual collapses to producing that
-realization on the window from the staircase, in place of the edge-middle injectivity
+no further hypothesis; so the window route's residual is to produce that
+realization on the window from the pointwise staircase extraction, in place of
+the edge-middle injectivity
 ($\mathrm{univ}\setminus\{u,v\}$ injective) the rectangle route uses, which fails at the
 minimal size --- the same obstruction, at the edge, that $\mathrm{univ}\setminus S$
-exhibits at the end pair.  The common-state theorem alone does not yield
+exhibits at the end pair.  The pointwise existence theorem alone does not yield
 $\text{\path{hmul}}$: the missing bridge is the comparison of the canonical
 physical operations under composition, in the order $O_1P_1$ on the left and
 the underlying order $P_3O_3$ for the $O_3^{\mathsf T}$ orientation on the
@@ -1520,10 +1541,12 @@ $M^{\mathsf T}$ and the last-window insertion of $M$.  This end-window
 coefficient identity follows directly from the two region-to-edge identities
 and translation invariance; it needs neither complement inversion nor a
 peeling hypothesis.  Together with the partial-state argument above, this
-closes both common-state-family residuals.  It does not yet extract the
-cross-tensor matrix assignment or prove that assignment multiplicative;
-those are the remaining Lemma~5-style steps, after which the back-half
-assembly remains.
+closes both common-state-family residuals.  The subsequent end-pair comparison
+now extracts the unique cross-tensor matrix pointwise in
+\leanid{TNLean.PEPS.existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp\_sameState}.
+Packaging the forward and reverse coefficient transfers and proving the
+forward assignment multiplicative are the remaining Lemma~5-style steps,
+after which the back-half assembly remains.
 
 \section{Normality and discarded stronger routes}
 
@@ -1582,10 +1605,11 @@ region of a coherent frame.\footnote{Formal geometry:
 
 These observations rule out two auxiliary shortcuts; they do not challenge
 the paper's fixed-edge comparison.  The comparison through adjoining the
-corner regions and recovering the unique virtual operation $X$ is now landed.
-The two source orientations and their direct multiplication laws are also
-landed.  The remaining source work is to use them for the cross-tensor
-transfer and complete the back-half assembly.
+corner regions and recovering the unique cross-tensor virtual operation is now
+landed.  The two source orientations and their direct multiplication laws are
+also landed.  The remaining source work is to organize the bidirectional
+coefficient transfer, prove its multiplicativity, and complete the back-half
+assembly.
 
 \bibliographystyle{alpha}
 \bibliography{references}
