@@ -37,25 +37,26 @@ def shiftAncillaSwap₂a (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) where
   left_inv := by rintro ⟨⟨σ₁, σ₂⟩, a⟩; rfl
   right_inv := by rintro ⟨⟨σ₁, σ₂⟩, a⟩; rfl
 
-/-- The crossed swap of species $1$ at site $n$ with the ancilla at site $n+1$.
-The first output is shifted by `rotateConfig`; the returned first species is
-shifted oppositely into the ancilla coordinate. -/
+/-- The crossed swap of species $1$ with the neighboring ancilla in Figure
+`fig:TR-ancilla`. The ancilla entering the first output is shifted by
+`rotateConfig` inverse, while the first species entering the ancilla output is
+shifted by `rotateConfig`. -/
 def shiftAncillaSwap₁aNext (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) where
   toFun σ :=
-    (((rotateConfig N d) σ.2, σ.1.2), (rotateConfig N d).symm σ.1.1)
+    (((rotateConfig N d).symm σ.2, σ.1.2), (rotateConfig N d) σ.1.1)
   invFun σ :=
-    (((rotateConfig N d) σ.2, σ.1.2), (rotateConfig N d).symm σ.1.1)
+    (((rotateConfig N d).symm σ.2, σ.1.2), (rotateConfig N d) σ.1.1)
   left_inv := by
     rintro ⟨⟨σ₁, σ₂⟩, a⟩
     change
-      ((((rotateConfig N d) ((rotateConfig N d).symm σ₁), σ₂),
-        (rotateConfig N d).symm ((rotateConfig N d) a))) = ((σ₁, σ₂), a)
+      ((((rotateConfig N d).symm ((rotateConfig N d) σ₁), σ₂),
+        (rotateConfig N d) ((rotateConfig N d).symm a))) = ((σ₁, σ₂), a)
     simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
   right_inv := by
     rintro ⟨⟨σ₁, σ₂⟩, a⟩
     change
-      ((((rotateConfig N d) ((rotateConfig N d).symm σ₁), σ₂),
-        (rotateConfig N d).symm ((rotateConfig N d) a))) = ((σ₁, σ₂), a)
+      ((((rotateConfig N d).symm ((rotateConfig N d) σ₁), σ₂),
+        (rotateConfig N d) ((rotateConfig N d).symm a))) = ((σ₁, σ₂), a)
     simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
 
 /-- The three swap layers shown below the $\tilde U_1$ endpoint in Figure
@@ -69,25 +70,25 @@ def shiftAncillaThreeSwap (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
 in opposite directions and the identity ancilla is fixed. -/
 def shiftAncillaCounterShift (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) where
   toFun σ :=
-    ((((rotateConfig N d) σ.1.2), (rotateConfig N d).symm σ.1.1), σ.2)
+    ((((rotateConfig N d).symm σ.1.2), (rotateConfig N d) σ.1.1), σ.2)
   invFun σ :=
-    ((((rotateConfig N d) σ.1.2), (rotateConfig N d).symm σ.1.1), σ.2)
+    ((((rotateConfig N d).symm σ.1.2), (rotateConfig N d) σ.1.1), σ.2)
   left_inv := by
     rintro ⟨⟨σ₁, σ₂⟩, a⟩
     change
-      ((((rotateConfig N d) ((rotateConfig N d).symm σ₁),
-        (rotateConfig N d).symm ((rotateConfig N d) σ₂)), a)) = ((σ₁, σ₂), a)
+      ((((rotateConfig N d).symm ((rotateConfig N d) σ₁),
+        (rotateConfig N d) ((rotateConfig N d).symm σ₂)), a)) = ((σ₁, σ₂), a)
     simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
   right_inv := by
     rintro ⟨⟨σ₁, σ₂⟩, a⟩
     change
-      ((((rotateConfig N d) ((rotateConfig N d).symm σ₁),
-        (rotateConfig N d).symm ((rotateConfig N d) σ₂)), a)) = ((σ₁, σ₂), a)
+      ((((rotateConfig N d).symm ((rotateConfig N d) σ₁),
+        (rotateConfig N d) ((rotateConfig N d).symm σ₂)), a)) = ((σ₁, σ₂), a)
     simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
 
 /-- Exact coordinate identity behind the three-swap ancilla construction.
 Conjugating the sitewise physical swap by the three displayed swap layers sends
-$((σ_1,σ_2),a)$ to $((Rσ_2,R^{-1}σ_1),a)$, where $R$ is the cyclic rotation.
+$((σ_1,σ_2),a)$ to $((R^{-1}σ_2,Rσ_1),a)$, where $R$ is the cyclic rotation.
 
 Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
 `fig:TR-ancilla` (lines 2217--2229). -/
@@ -95,11 +96,11 @@ Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
     (σ₁ σ₂ a : Fin N → Fin d) :
     (((shiftAncillaThreeSwap N d).trans (shiftAncillaSwap₁₂ N d)).trans
         (shiftAncillaThreeSwap N d).symm) ((σ₁, σ₂), a) =
-      ((((rotateConfig N d) σ₂), (rotateConfig N d).symm σ₁), a) := by
+      ((((rotateConfig N d).symm σ₂), (rotateConfig N d) σ₁), a) := by
   have rotate_symm_comp (σ : Fin N → Fin d) :
-      (rotateConfig N d).symm σ ∘ finRotate N = σ := by
-    change (rotateConfig N d) ((rotateConfig N d).symm σ) = σ
-    exact (rotateConfig N d).apply_symm_apply σ
+      (rotateConfig N d).symm (σ ∘ finRotate N) = σ := by
+    change (rotateConfig N d).symm ((rotateConfig N d) σ) = σ
+    exact (rotateConfig N d).symm_apply_apply σ
   simp [shiftAncillaThreeSwap, shiftAncillaSwap₂a, shiftAncillaSwap₁₂,
     shiftAncillaSwap₁aNext, rotate_symm_comp]
 
