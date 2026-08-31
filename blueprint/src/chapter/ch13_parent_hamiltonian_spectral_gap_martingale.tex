@@ -1114,9 +1114,46 @@ coercivity.
     Its local windows lie in the nonwrapping interval $[n-l,n)$.
 \end{definition}
 
+\begin{theorem}[Finite-overlap condition C1 for the compatible open chain]
+    \label{thm:open_parent_hamiltonian_es_c1}
+    \lean{MPSTensor.openParentHamiltonianES_C1}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es,
+        def:open_suffix_parent_hamiltonian_es}
+    If $L\leq l$, then
+    \begin{align}
+        0
+        \leq \sum_{n=l}^{N}H^{\mathrm{suffix}}_{N,L;l,n}(A)
+        \leq (l-L+1)H^{\mathrm{open}}_{N,L}(A).
+        \label{eq:open_parent_hamiltonian_es_c1}
+    \end{align}
+    Thus condition C1 of
+    \cite{Nachtergaele1996Spectral} holds with $d_l=l-L+1$.
+    This is the source value $pl-r+1$ in the present convention $p=1$ and
+    interaction range $r=L$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:transported_es_positive}
+    Fix a starting site $i\in I_{L,N}$. The suffix Hamiltonian indexed by $n$
+    contains its local term exactly when
+    \begin{align}
+        i+L\leq n\leq i+l.
+    \end{align}
+    This interval contains at most $l-L+1$ integers. Reversing the two finite
+    sums therefore writes the left-hand side as
+    \begin{align}
+        \sum_{i\in I_{L,N}}c_i h_{i,\mathrm{ES}}(A,L),
+    \end{align}
+    where $0\leq c_i\leq l-L+1$. Positivity of each local term turns the
+    coefficient bound into the upper operator inequality. Positivity of their
+    sum gives the lower inequality.
+\end{proof}
+
 % Source anchors: References/cond-mat_9410110/main.tex, condition C2,
-% lines 1043--1058; Theorem 2.1(i), lines 1119--1130; and the one-window
-% argument in the printed proof, lines 1240--1248.
+% lines 1043--1058; Theorem 2.1(i), lines 1119--1130; and the use of C2 with
+% gamma_{l+1} in the printed proof, lines 1240--1248.
 \begin{theorem}[Embedded fixed-window condition C2]
     \label{thm:open_suffix_parent_hamiltonian_es_c2}
     \lean{MPSTensor.openSuffixParentHamiltonianES_eq_localTermES,
@@ -1129,6 +1166,7 @@ coercivity.
         MPSTensor.openSuffixParentHamiltonianES_unit_gap}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es,
+        thm:open_parent_hamiltonian_es_c1,
         lem:transported_es_local_projections}
     Let $L>0$ and $L\leq m\leq N$. The suffix of length $L$ ending at $m$
     contains one interaction:
@@ -1189,8 +1227,10 @@ coercivity.
 \begin{proof}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es,
+        thm:open_parent_hamiltonian_es_c1,
         lem:transported_es_local_projections}
-    % Source anchor: References/cond-mat_9410110/main.tex, lines 1240--1248.
+    % The interval calculation specializes the compatible open-chain sum to
+    % L=l+1. Source lines 1240--1248 then use C2 with gamma_{l+1}.
     An admissible start $i$ satisfies
     \begin{align}
         m-L
@@ -1217,44 +1257,9 @@ coercivity.
     This gives Equation~\eqref{eq:open_suffix_parent_hamiltonian_id_sub_kernel}.
     The Loewner and quadratic-form inequalities are equalities. On
     $(\ker H)^\perp=\operatorname{ran}H$, idempotence gives $Hv=v$, and hence
-    exact norm preservation and the unit lower bound.
-\end{proof}
-
-\begin{theorem}[Finite-overlap condition C1 for the compatible open chain]
-    \label{thm:open_parent_hamiltonian_es_c1}
-    \lean{MPSTensor.openParentHamiltonianES_C1}
-    \leanok
-    \uses{def:open_parent_hamiltonian_es,
-        def:open_suffix_parent_hamiltonian_es}
-    If $L\leq l$, then
-    \begin{align}
-        0
-        \leq \sum_{n=l}^{N}H^{\mathrm{suffix}}_{N,L;l,n}(A)
-        \leq (l-L+1)H^{\mathrm{open}}_{N,L}(A).
-        \label{eq:open_parent_hamiltonian_es_c1}
-    \end{align}
-    Thus condition C1 of
-    \cite{Nachtergaele1996Spectral} holds with $d_l=l-L+1$.
-    This is the source value $pl-r+1$ in the present convention $p=1$ and
-    interaction range $r=L$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{lem:transported_es_positive}
-    Fix a starting site $i\in I_{L,N}$. The suffix Hamiltonian indexed by $n$
-    contains its local term exactly when
-    \begin{align}
-        i+L\leq n\leq i+l.
-    \end{align}
-    This interval contains at most $l-L+1$ integers. Reversing the two finite
-    sums therefore writes the left-hand side as
-    \begin{align}
-        \sum_{i\in I_{L,N}}c_i h_{i,\mathrm{ES}}(A,L),
-    \end{align}
-    where $0\leq c_i\leq l-L+1$. Positivity of each local term turns the
-    coefficient bound into the upper operator inequality. Positivity of their
-    sum gives the lower inequality.
+    exact norm preservation and the unit lower bound. Condition C1 at suffix
+    length $L$ gives $d_L=L-L+1=1$. With $L=l+1$, the two constants are therefore
+    $d_{l+1}=1$ and $\gamma_{l+1}=1$.
 \end{proof}
 
 \begin{theorem}[Zero energy forces every compatible local constraint]
