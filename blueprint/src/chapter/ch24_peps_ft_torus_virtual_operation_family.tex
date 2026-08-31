@@ -4,6 +4,65 @@ The construction below formalizes the forward virtual/physical-operation
 correspondence in the proof sketch of the two-dimensional corollary
 \cite[corollary after Lemma~5, lines~2297--2444]{Molnar2018NormalPEPS}.
 
+\begin{definition}[Partial state across a region cut]%
+    \label{def:peps_region_partial_state}
+    \lean{TNLean.PEPS.regionPartialState}
+    \leanok
+    For a region $R$ and a physical configuration $\tau$ on its complement,
+    define the partial state $\psi^\tau_{A,R}$ on the physical space of $R$
+    by
+    \begin{align}
+        \psi^\tau_{A,R}(\sigma)
+         & =c_A(\omega_{R,\sigma,\tau}).
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Partial states of equal closed states]%
+    \label{thm:peps_region_partial_state_same_state}
+    \lean{TNLean.PEPS.regionPartialState_sameState}
+    \leanok
+    \uses{def:peps_region_partial_state}
+    If $A$ and $B$ generate the same closed state, then, for every region
+    $R$ and every complement configuration $\tau$,
+    $\psi^\tau_{A,R}=\psi^\tau_{B,R}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Evaluate both functions at a physical configuration $\sigma$ on $R$ and
+    apply the equality of the two closed-state coefficients at
+    $\omega_{R,\sigma,\tau}$.
+\end{proof}
+
+\begin{theorem}[Blocked-tensor expansion of a partial state]%
+    \label{thm:peps_region_partial_state_blocked_expansion}
+    \lean{TNLean.PEPS.regionInteriorBondProd_smul_regionPartialState}
+    \leanok
+    \uses{def:peps_region_partial_state,
+        def:peps_regionComplementBoundaryConfig}
+    Let $P_A(R)$ be the product of the dimensions of the bonds internal to
+    $R$. For every complement configuration $\tau$,
+    \begin{align}
+        P_A(R)\psi^\tau_{A,R}
+         & =\sum_{\mu\in\partial R}
+        T_{A,V\setminus R}(\bar\mu)(\tau)T_{A,R}(\mu).
+        \label{eq:peps_partial_state_blocked_expansion}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Split the closed contraction across $R$. If $\mu$ and $\nu$ are boundary
+    labels on $R$, the complement-boundary identification satisfies
+    \begin{align}
+        \bar\mu=\bar\nu
+         & \quad\Longleftrightarrow\quad \mu=\nu.
+        \notag
+    \end{align}
+    Hence the double boundary sum collapses to its diagonal, which gives the
+    sum in~(\ref{eq:peps_partial_state_blocked_expansion}); each bond internal
+    to $R$ contributes its dimension to the factor $P_A(R)$.
+\end{proof}
+
 \begin{definition}[Physical operator of a region insert]%
     \label{def:peps_physical_operator_of_region_insert}
     \lean{TNLean.PEPS.physicalOpOfRegionInsert}
@@ -38,6 +97,61 @@ correspondence in the proof sketch of the two-dimensional corollary
     The left inverse sends $T_{A,R}(\mu)$ to the standard basis vector
     indexed by $\mu$, and the displayed linear combination sends that basis
     vector to $C(\mu)$.
+\end{proof}
+
+\begin{definition}[Region insert of a physical operator]%
+    \label{def:peps_region_insert_of_physical_operator}
+    \lean{TNLean.PEPS.regionInsertOfPhysicalOp}
+    \leanok
+    Let $O$ be a physical operator on the physical space of a region $R$.
+    Its action on the genuine open-boundary blocks defines the insert
+    \begin{align}
+        C^O_{A,R}(\mu) & =O\bigl(T_{A,R}(\mu)\bigr).
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Closed state of a physical operator]%
+    \label{thm:peps_closed_state_of_physical_operator}
+    \lean{TNLean.PEPS.deformedRegionState_regionInsertOfPhysicalOp}
+    \leanok
+    \uses{def:peps_region_insert_of_physical_operator,
+        thm:peps_region_partial_state_blocked_expansion}
+    For a complement physical configuration $\tau$, let
+    $\psi^\tau_{A,R}$ be the partial state across the cut. Then
+    \begin{align}
+        \Psi_{A,R,C^O_{A,R}}(\sigma,\tau)
+         & =\bigl[O\bigl(P_A(R)\psi^\tau_{A,R}\bigr)\bigr](\sigma).
+        \label{eq:peps_physical_op_partial_state}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Apply $O$ to~(\ref{eq:peps_partial_state_blocked_expansion}) and evaluate
+    at $\sigma$. This proves
+    (\ref{eq:peps_physical_op_partial_state}).
+\end{proof}
+
+\begin{theorem}[Physical operator transferred between equal closed states]%
+    \label{thm:peps_physical_operator_same_state_transfer}
+    \lean{TNLean.PEPS.deformedRegionState_regionInsertOfPhysicalOp_sameState}
+    \leanok
+    \uses{thm:peps_closed_state_of_physical_operator,
+        thm:peps_region_partial_state_same_state}
+    If $A$ and $B$ generate the same closed state, then
+    \begin{align}
+        P_B(R)\Psi_{A,R,C^O_{A,R}}(\sigma,\tau)
+         & =P_A(R)\Psi_{B,R,C^O_{B,R}}(\sigma,\tau).
+        \label{eq:peps_physical_op_same_state}
+    \end{align}
+    The two virtual boundary spaces need not be identified.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Equality of the closed states gives
+    $\psi^\tau_{A,R}=\psi^\tau_{B,R}$. Apply
+    (\ref{eq:peps_physical_op_partial_state}) to both tensors and
+    cross-multiply the two interior-bond products.
 \end{proof}
 
 \begin{definition}[Interior-bond region insert]%
@@ -173,6 +287,55 @@ correspondence in the proof sketch of the two-dimensional corollary
     boundary orientation fixes $X$.  Each case gives
     $P_B(W_j)E_B(e,\omega,X)$.  Translation invariance identifies
     $P_B(W_j)$ with $P_B(W_0)$.
+\end{proof}
+
+\begin{theorem}[Common staircase state transferred between tensors]%
+    \label{thm:peps_staircase_physical_operation_same_state}
+    \lean{TNLean.PEPS.deformedRegionStateAssembled_staircasePhysicalOp_sameState}
+    \leanok
+    \uses{thm:peps_physical_operator_same_state_transfer,
+        thm:peps_staircase_virtual_operation_physical_realization,
+        thm:peps_staircase_virtual_operation_common_state,
+        thm:peps_regionInteriorBondProd_staircaseWindow_eq}
+    Let $L,K>0$, and choose staircase coordinates $(a,b)$ with
+    $a+2L\leq\mathrm{width}$ and $2K\leq\mathrm{height}$. Let $A$ and $B$
+    be translation invariant tensors with the same physical dimension and the
+    same closed state. Suppose every cyclic $L\times K$ window of $A$ is
+    injective and $D_A(g)>0$ for every edge $g$. For
+    $X\in\MN{D_A(e)}$, let $O_j^A(X)$ be the physical operators obtained from
+    the staircase insert family of $A$, and define inserts on the windows of
+    $B$ by
+    \begin{align}
+        C_j^{A\to B}(X)(\mu)
+         & =O_j^A(X)\bigl(T_{B,W_j}(\mu)\bigr).
+        \notag
+    \end{align}
+    Then, for all $j,j'\in\mathbb{N}$,
+    \begin{align}
+        \Psi^{\mathrm{as}}_{B,W_j,C_j^{A\to B}(X)}
+         & =\Psi^{\mathrm{as}}_{B,W_{j'},C_{j'}^{A\to B}(X)}.
+        \notag
+    \end{align}
+    The source family has $0\leq j<L+K$. In the definition used here the
+    truncated offsets stabilize at $W_{L+K-1}$ for $j\geq L+K-1$; the indices
+    are not read modulo $L+K$. No equality between the edge-dependent bond
+    dimensions of $A$ and $B$, and no positivity assumption on those of $B$,
+    is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For each $j$, (\ref{eq:peps_physical_op_same_state}) and the
+    open-boundary realization of $O_j^A(X)$ give
+    \begin{align}
+        P_B(W_j)\Psi^{\mathrm{as}}_{A,W_j,C_j^A(X)}
+         & =P_A(W_j)\Psi^{\mathrm{as}}_{B,W_j,C_j^{A\to B}(X)}.
+        \notag
+    \end{align}
+    The staircase family of $A$ has one common deformed state. Translation
+    invariance gives $P_A(W_j)=P_A(W_0)$ and
+    $P_B(W_j)=P_B(W_0)$. Hence the right-hand side is independent of $j$.
+    Positivity of the bond dimensions makes $P_A(W_0)$ nonzero, so it may be
+    cancelled.
 \end{proof}
 
 \begin{theorem}[End-window identity for one virtual operation]%

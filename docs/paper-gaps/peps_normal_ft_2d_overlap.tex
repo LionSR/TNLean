@@ -114,13 +114,13 @@ the two directions of this correspondence.  The forward direction ---
 realizing a fixed virtual operation $X$ by a physical operator $O_j(X)$ on
 every staircase window --- is now complete: the open-boundary identity
 $O_j(X)T_{B,W_j}(\mu)=C_j(X)(\mu)$ is proved for every virtual boundary
-configuration~$\mu$.  The two-end comparison that recovers the unique matrix
-$X$ is also complete.  The end-factor relations are now proved unique and
-closed under composition in the source's two orientations: $O_1P_1$ realizes
-$XY$, while the underlying product $P_3O_3$ realizes $XY$ in the
-$O_3^{\mathsf T}$ orientation.  What remains is to use these relations to
-construct the cross-tensor transfer and assemble the back half of the
-argument.
+configuration~$\mu$.  The partial-state identity now also proves that the
+same operators $O_j^A(X)$, applied to the genuine $B$-blocks of a tensor with
+the same closed state, produce one common $B$-state.  The same-tensor two-end
+extraction and the $O_1P_1$ and underlying $P_3O_3$ composition laws are
+complete.  What remains is to apply the two-end extraction to the cross-tensor
+common family, organize the resulting matrix assignments, prove their
+multiplicativity from these laws, and assemble the back half of the argument.
 
 Ref.~\cite{Molnar2018NormalPEPS} supplies this converse by the reduction ``we only need to prove a
 statement similar to Lemma~5''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321}.}
@@ -246,7 +246,13 @@ open-boundary physical operators
 \leanid{TNLean.PEPS.staircaseVirtualOperationPhysicalOp\_realizes}), and its
 end-window coefficient identity
 \leanid{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation}
-(\path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean} and
+as well as the cross-tensor common-state identity
+\leanid{TNLean.PEPS.deformedRegionStateAssembled_staircasePhysicalOp\_sameState},
+which applies the same physical operators to the genuine blocks of a tensor
+with the same closed state without identifying the two virtual boundary
+spaces
+(\path{TNLean/PEPS/RegionBlock/PhysicalOperation.lean},
+\path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean}, and
 \path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}). Every
 inverted region is a union of one-orientation $L \times K$ window translates,
 host-decomposable at $n \geq 2L+1$, $m \geq 2K+1$. The development is
@@ -269,10 +275,12 @@ $P_B(W_0)E_B(e,\cdot,X)$.  The relations
 \leanid{TNLean.PEPS.IsO1VirtualOperation} and
 \leanid{TNLean.PEPS.IsO3TransposeVirtualOperation} are single-valued on the
 genuine end families, and their multiplication theorems give exactly the two
-composition orders printed in Lemma~5.  The outstanding input is the
-cross-tensor coefficient transfer between $A$ and $B$, including its
-multiplicativity field \path{hmul}.  The back-half assembly follows only after
-this transfer is available.  Existing single-window and coarse-three-site
+composition orders printed in Lemma~5.  The new common-state theorem applies
+the operators $O_j^A(X)$ to the genuine $B$-blocks.  It remains to apply the
+end extraction to this family in both directions and prove that the forward
+matrix assignment respects products; these are the
+\path{htransferAB}/\path{htransferBA}/\path{hmul} data consumed downstream.
+Existing single-window and coarse-three-site
 attempts do not derive that cross-tensor input at the minimal size; a
 source-faithful extraction must use the actual overlapping-window comparison
 rather than assume a matrix span.
@@ -390,6 +398,15 @@ and the remaining windows carry the boundary insert of $X$.  Translation
 invariance identifies the non-boundary bond products, so all these inserts
 produce the common state $P_A(W_0)E_A(e,\cdot,X)$.  This is formalized in
 \path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}.
+
+If $A$ and $B$ generate the same closed state, apply these same physical
+operators $O_j^A(X)$ to the genuine $B$-blocks.  The partial states of $A$ and
+$B$ coincide.  Closing a physical operation against either complement is the
+operation applied to this partial state, multiplied by the corresponding
+interior-bond product.  Translation invariance makes these products uniform
+over the staircase, so the resulting $B$-deformations again have one common
+state.  This cross-tensor common-state identity is
+\leanid{TNLean.PEPS.deformedRegionStateAssembled_staircasePhysicalOp\_sameState}.
 
 The two-dimensional analogue of Lemma~5 also has a converse. Suppose each
 window $W_j$ carries a deformed tensor $C_j$ (an arbitrary tensor with
@@ -621,18 +638,8 @@ $\prod_{\text{external legs}} \mathrm{bondDim} = \mathrm{bondDim}\,e$, false in
 general. So \path{exists_bondOperator_of_intertwine_span} cannot be fed from
 per-window blocks.
 
-The faithful two-dimensional extraction is the single-crossing
-algebra-isomorphism route the torus Theorem~3 development already uses
-(\path{exists_regionEdgeGauge_of_blockingData} of
-\path{TNLean/PEPS/CoherentFrameInstance2.lean}): the region-inserted
-coefficient \path{regionInsertedCoeff} inserts a matrix on the single boundary
-edge $e$ and contracts the red block against the host, and Skolem--Noether
-(\path{edgeGaugeFromInsertionAlgebraIsomorphism}) turns the resulting algebra
-isomorphism into conjugation by an invertible edge matrix $Z$. The Theorem~3
-engine inverts the \emph{host} $\mathrm{univ} \setminus \mathrm{red}$ (its
-hypothesis \path{hCB}), which the corollary's minimal size does not provide; the
-overlapping-window replacement plays the second end window $W_{L+K-1}$ in the
-host's role, inverting only the two injective windows.  The required
+The faithful two-dimensional extraction instead compares the two genuine end
+windows simultaneously, as in Lemma~5.  The required
 $\text{\path{extendInsert}}\,(W_0 \subseteq S)$-to-single-bond-$e$ peeling is now
 landed: the end-window boundary equivalences separate the index on $e$ from
 the open external legs, the normalized blue coupling is the genuine opposite
@@ -640,8 +647,11 @@ window block on the compatible fibre and vanishes off it, and
 \path{existsUnique_virtualOperation_of_horizontalStaircaseEndPair} extracts
 the unique matrix $X$.  Specializing the end inserts to the physical actions
 $O_1$ and $O_3$ gives the source's two factor relations, whose direct
-composition laws are now formalized.  The residual is their use in the
-cross-tensor transfer and the back-half assembly.
+composition laws are now formalized.  The same-state partial-state identity
+also supplies the cross-tensor common family for these physical operations.
+The residual is to extract and organize the resulting matrix assignment, use
+the end-composition laws to prove its multiplicativity, and complete the
+back-half assembly.
 
 \subsection{Step 5: the rest of the proof}
 
@@ -1321,10 +1331,18 @@ non-boundary-bond factor supplied by translation invariance.  The construction a
 end-window identity are
 $\text{\path{staircaseVirtualOperationInsert}}$ and
 $\text{\path{regionInsertedCoeff\_endWindows\_eq\_staircaseVirtualOperation}}$.
+The partial-state contraction identity now transfers the same physical
+operators to the genuine $B$-blocks: the resulting inserts have one common
+$B$-state by
+$\text{\path{deformedRegionStateAssembled\_staircasePhysicalOp\_sameState}}$.
+This statement uses neither an identification of the two virtual boundary
+spaces nor a multiplicativity hypothesis.
 
-The local residual is the cross-tensor multiplicative transfer: one must
-identify the physical end operations across the two tensor families and feed
-the landed end-composition laws into the transfer.  The region-level recovery
+The local residual is now the cross-tensor matrix assignment and its
+multiplicativity.  One must feed this common family through
+$\text{\path{staircasePair\_insert\_eq\_open}}$ and the landed unique end
+extraction in both directions, then use the end-composition laws to prove that
+the forward assignment respects products.  The region-level recovery
 $\text{\path{regionInsertionTransfer\_of\_realizes}}$ derives all three transfer fields ---
 $\text{\path{htransferAB}}$, $\text{\path{htransferBA}}$, and $\text{\path{hmul}}$ --- from one region
 physical-to-virtual realization $\text{\path{RegionTransferRealizes}}$ in each direction, with
@@ -1332,11 +1350,11 @@ no further hypothesis; so the window route's residual collapses to producing tha
 realization on the window from the staircase, in place of the edge-middle injectivity
 ($\mathrm{univ}\setminus\{u,v\}$ injective) the rectangle route uses, which fails at the
 minimal size --- the same obstruction, at the edge, that $\mathrm{univ}\setminus S$
-exhibits at the end pair.  A coefficient transfer alone does not yield
-$\text{\path{hmul}}$: the missing bridge is the cross-tensor identification
-that lets the already-proved $O_1$ and $O_3^{\mathsf T}$ composition laws act
-on that transfer.  After this transfer is available, the back-half assembly
-remains.
+exhibits at the end pair.  The common-state theorem alone does not yield
+$\text{\path{hmul}}$: the missing bridge is the comparison of the canonical
+physical operations under composition, in the order $O_1P_1$ on the left and
+the underlying order $P_3O_3$ for the $O_3^{\mathsf T}$ orientation on the
+right.  After this transfer is available, the back-half assembly remains.
 
 \section{The multiplicativity route: compose the two end relations, not a
   single-window span or a coarse frame}
@@ -1425,14 +1443,12 @@ relations instead make multiplicativity a direct calculation: compose the two
 left physical operations, compose the underlying right operations in reverse
 order, and use uniqueness of $X$.  No third block or larger frame enters.
 
-The overlapping-window realization sketched in Ref.~\cite{Molnar2018NormalPEPS} keeps the same virtual operation
-$M$ on $e$ while representing it on every staircase window.  That common-state family
-is now built below.  It closes the single-operation part of this discussion but not the
-cross-tensor homomorphism: the remaining task is to compare the two tensor families and
-show that the resulting coefficient transfer respects products, following Lemma~5's
-now-formalized composition of the $O_1$ and $O_3^{\mathsf T}$ end relations
-rather than a single-window span or an assumed coarse frame.  The back-half
-assembly follows only after this transfer is supplied.
+The overlapping-window realization sketched in Ref.~\cite{Molnar2018NormalPEPS} keeps the same
+virtual operation $M$ on $e$ while representing it on every staircase window.
+That common-state family, including its transfer across equal closed states,
+is now built below.  The remaining cross-tensor homomorphism must be obtained
+from Lemma~5's composition of the $O_1$ and $O_3^{\mathsf T}$ end relations,
+not from a single-window span or an assumed coarse frame.
 
 \subsection{The foundation that lands}
 
@@ -1454,7 +1470,7 @@ work is the cross-tensor identification that feeds the direct end-composition
 laws into the coefficient transfer; the back-half assembly is the subsequent
 step.
 
-\subsection{The common-state family is complete}
+\subsection{The same-tensor and cross-tensor common-state families are complete}
 
 The earlier analysis incorrectly claimed that the intermediate staircase windows contain
 neither endpoint of the reference edge and therefore require transport across different
@@ -1487,15 +1503,27 @@ $\mathrm{edgeInsertedCoeff}(e,M)$.  Translation
 invariance makes that product uniform over the staircase, proving one common deformed
 state for all $L+K$ inserts.
 
+For tensors $A$ and $B$ with the same closed state, the identity
+\leanid{TNLean.PEPS.deformedRegionState_regionInsertOfPhysicalOp\_sameState}
+compares the closed action of one physical operator on their genuine region
+blocks after cross-multiplication by the two interior-bond products.  Applied
+to $O_j^A(M)$, the translation-invariant products are independent of $j$ and
+the positive $A$-factor cancels.  Thus
+\leanid{TNLean.PEPS.deformedRegionStateAssembled_staircasePhysicalOp\_sameState}
+proves that these same physical operators applied to the $B$-blocks also have
+one common state.  No virtual-boundary identification or product law is used.
+
 Consequently
 \leanid{TNLean.PEPS.regionInsertedCoeff\_endWindows\_eq\_staircaseVirtualOperation}
 supplies the source-faithful single-tensor identity between the first-window insertion of
-$M^{\mathsf T}$ and the last-window insertion of $M$.  This closes the common-state-family
-residual.  This end-window coefficient identity follows directly from the two region-to-edge
-identities and translation invariance; it needs neither complement inversion nor a peeling
-hypothesis.  It does not by itself construct the cross-tensor transfer from $A$ to $B$ or
-prove that transfer multiplicative; that cross-tensor feed is the remaining
-Lemma~5-style step, after which the back-half assembly remains.
+$M^{\mathsf T}$ and the last-window insertion of $M$.  This end-window
+coefficient identity follows directly from the two region-to-edge identities
+and translation invariance; it needs neither complement inversion nor a
+peeling hypothesis.  Together with the partial-state argument above, this
+closes both common-state-family residuals.  It does not yet extract the
+cross-tensor matrix assignment or prove that assignment multiplicative;
+those are the remaining Lemma~5-style steps, after which the back-half
+assembly remains.
 
 \section{Normality and discarded stronger routes}
 
