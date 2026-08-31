@@ -11,15 +11,16 @@ import TNLean.MPS.MPDO.AreaLaw
 
 The proof of arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick`
 (lines 2217--2229), conjugates the swap endpoint by three layers of swaps after
-adjoining one identity ancilla of dimension $d$. With the finite-chain shift
-convention used here, the literal labels in Figure `fig:TR-ancilla` produce the
-$\tilde U_3$ coordinate endpoint, not $\tilde U_2$.
+adjoining one identity ancilla of dimension $d$. The literal labels in Figure
+`fig:TR-ancilla` produce the coordinate map
+$((σ_1,σ_2),a)\mapsto((Rσ_2,R^{-1}σ_1),a)$.
 
-**Local fix.** Reversing the crossed species--ancilla swap gives the intended
-$\tilde U_2$ endpoint. The printed-orientation error and correction are recorded
-in `docs/paper-gaps/mpu_ancilla_three_swap_orientation.tex`. This module keeps
-the literal labels and records only their finite permutation identity. It does
-not construct a path or an action on the full enlarged operator algebra.
+**Local fix.** The relation between this map and the paper's named MPU endpoints,
+together with the reversed crossed swap, is recorded in
+`docs/paper-gaps/mpu_ancilla_three_swap_orientation.tex`. This module proves only
+the finite permutation identity. It does not identify the permutation matrix
+with an ancilla-enlarged MPO, construct a path, or define an action on the full
+enlarged operator algebra.
 -/
 
 namespace MPOTensor
@@ -71,9 +72,8 @@ def shiftAncillaThreeSwap (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
   ((shiftAncillaSwap₁aNext N d).trans (shiftAncillaSwap₁₂ N d)).trans
     (shiftAncillaSwap₂a N d)
 
-/-- The ancilla-enlarged $\tilde U_3$ endpoint produced by the literal figure
-labels: the two physical species shift in opposite directions and the identity
-ancilla is fixed. -/
+/-- The counter-shift permutation produced by the literal figure labels: the
+two physical species shift in opposite directions and the ancilla is fixed. -/
 def shiftAncillaCounterShift (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
   Function.Involutive.toPerm
     (fun σ =>
@@ -88,9 +88,8 @@ def shiftAncillaCounterShift (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :
 /-- Exact coordinate identity for the three literal swap labels in Figure
 `fig:TR-ancilla`. Conjugating the sitewise physical swap sends
 $((σ_1,σ_2),a)$ to $((Rσ_2,R^{-1}σ_1),a)$, where $R$ is the cyclic rotation.
-Under the finite-chain conventions of `mpo_shiftExampleU₂` and
-`mpo_shiftExampleU₃`, this is the $\tilde U_3$ endpoint rather than the
-$\tilde U_2$ endpoint named in the figure.
+The relation between this coordinate permutation and the named MPU endpoints
+requires a separate reindexing theorem and is not asserted here.
 
 Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
 `fig:TR-ancilla` (lines 2217--2229). -/
@@ -106,9 +105,9 @@ Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
   simp [shiftAncillaThreeSwap, shiftAncillaSwap₂a, shiftAncillaSwap₁₂,
     shiftAncillaSwap₁aNext, Function.Involutive.toPerm, rotate_symm_comp]
 
-/-- The three-swap conjugation is exactly the ancilla-enlarged $\tilde U_3$
-counter-shift permutation produced by the literal labels in Figure
-`fig:TR-ancilla`, without path or symmetry-action packaging.
+/-- The three-swap conjugation is exactly the counter-shift permutation
+produced by the literal labels in Figure `fig:TR-ancilla`, without MPU,
+path, or symmetry-action packaging.
 
 Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
 `fig:TR-ancilla` (lines 2217--2229). -/

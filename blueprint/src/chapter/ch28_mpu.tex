@@ -8727,7 +8727,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 2158--2200.
 \end{proposition}
 
-\begin{lemma}[Literal three-swap coordinate endpoint]
+\begin{lemma}[Literal three-swap permutation identity]
     \label{lem:mpu_shift_ancilla_three_swap_endpoint}
     \lean{MPOTensor.shiftAncillaSwap₁₂,
         MPOTensor.shiftAncillaSwap₂a,
@@ -8757,15 +8757,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         P_C P_{S^{1,2}} P_{C^{-1}}
          & =P_K.
     \end{align}
-    With the shift convention in the finite-chain formulas, $K$ is the
-    configuration permutation for $\widetilde U_3$, whereas the permutation for
-    $\widetilde U_2$ is
-    $((\sigma_1,\sigma_2),a)\mapsto
-        ((R^{-1}\sigma_2,R\sigma_1),a)$. Thus the literal labels in the source
-    figure do not prove the stated
-    $\widetilde U_1$--$\widetilde U_2$ endpoint in these conventions. This
-    finite identity asserts neither a continuous path nor a symmetry action on
-    the full ancilla-enlarged operator algebra.
+    This finite permutation identity does not identify $P_K$ with an
+    ancilla-enlarged MPU. It also asserts neither a continuous path nor a
+    symmetry action on the full ancilla-enlarged operator algebra.
     % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
 \end{lemma}
 
