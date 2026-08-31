@@ -77,6 +77,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleFullRangeEstimate
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
