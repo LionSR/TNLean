@@ -22,13 +22,16 @@ coefficient is exactly
   (1-\epsilon_l\sqrt{l+1})^2.
 \]
 
-The abstract full-range theorem assumes C1--C3 at every index
-\(n=0,\ldots,N-1\), which is stronger than the lower-threshold hypotheses in
-the source.  Here the extra early indices are harmless: before a complete
-length-\(l+1\) interaction fits, the suffix Hamiltonian vanishes, its kernel
-projection is the identity, and the fixed-ambient martingale difference
-vanishes.  At the first complete window, the fixed-volume C3 product vanishes
-by the endpoint projector identity.
+**Scope restriction (full-range martingale hypotheses):** The abstract
+full-range theorem assumes C1--C3 at every index \(n=0,\ldots,N-1\), which is
+stronger than the lower-threshold hypotheses in the source.  Here the extra
+early indices are harmless: before a complete length-\(l+1\) interaction fits,
+the suffix Hamiltonian vanishes, its kernel projection is the identity, and
+the fixed-ambient martingale difference vanishes.  At the first complete
+window, the fixed-volume C3 product vanishes by the endpoint projector
+identity.  The distinction between the abstract restriction and this physical
+discharge is recorded in
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 
 ## References
 
