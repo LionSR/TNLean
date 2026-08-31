@@ -186,12 +186,26 @@ The associated norm theorem
 reuses the existing finite-dimensional spectral theorem. These declarations
 are not identified with the unrestricted source theorem.
 
-Eliminating the restriction requires one of two source-faithful repairs: prove
-that the missing lower-index components are controlled by the stated C1--C3
-data without changing the coefficient, or supply and verify an explicit
-initial-volume convention under which those components vanish. For the MPS
-application, simply having uniform C2 and C3 estimates beyond their source
-thresholds does not discharge this obligation.
+The abstract limitation remains: the source-threshold hypotheses alone do not
+justify the full-range summation without additional control of the initial
+volumes. The nonwrapping open MPS specialization supplies this control and
+therefore satisfies the stronger full-range assumptions. The early local
+terms in C1 vanish. The early C2 expressions also vanish because the suffix
+Hamiltonian is zero and the complementary projection $\Id-Q_n$ is zero. For
+C3, $E_n^{(N)}=0$ when $n<l$, and at $n=l$ the endpoint identity
+\begin{align}
+    Q_lE_l^{(N)}
+    &=G_{l+1}^{(N)}\bigl(\Id-G_{l+1}^{(N)}\bigr)=0
+    \label{eq:cpgsv21_martingale_overlap_lower_endpoint_open_discharge}
+\end{align}
+supplies the remaining initial index. The physical estimate controls all
+$n>l$. Hence
+\leanid{MPSTensor.IsPrimitiveMPS.exists_openParentHamiltonianES_gap}
+applies the full-range theorem with $d_{l+1}=\gamma_{l+1}=1$ and preserves the
+coefficient in
+Equation~\eqref{eq:cpgsv21_martingale_overlap_nachtergaele_full_range_coefficient}.
+This does not identify the abstract full-range theorem with the unrestricted
+source statement.
 
 The scalar optimization also has a separate zero-constant case. The printed
 proof chooses
