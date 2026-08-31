@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### permutation-matrix unitarity — promoted
+- **Pattern:** unfold unitary-group membership, rewrite the conjugate transpose
+  of a permutation matrix as the inverse permutation matrix, and reduce their
+  product to the identity permutation.
+- **Seen:** three occurrences before promotion (2026-08-30):
+  `TNLean/MPS/MPU/Examples/Shift.lean` (`rightShiftTensor_isMPU`),
+  `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean`
+  (`permGL_mem_unitaryGroup`), and
+  `TNLean/MPS/MPU/Examples/ShiftTilde.lean`
+  (`shiftPhysicalSwap_mem_unitaryGroup`).
+- **Abstraction:** `Equiv.Perm.permMatrix_mem_unitaryGroup` in
+  `TNLean/Algebra/PermutationMatrixUnitary.lean`.
+- **Notes:** all three call sites now use the common theorem; the
+  fundamental-theorem consumer simplifies the coercion of `permGL` to its
+  underlying permutation matrix.
+
 ### non-injectivity from an annihilating linear functional — promoted
 - **Pattern:** exhibit a matrix outside the span of a finite Kraus family by
   running `Submodule.span_induction` over an entrywise linear condition
