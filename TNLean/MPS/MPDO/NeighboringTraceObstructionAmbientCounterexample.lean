@@ -347,8 +347,8 @@ private theorem representativeBoundary_obstructionSectorBoundary_zero
     (X : Matrix (Fin 2) (Fin 2) ℂ) :
     representativeBoundary (sectors mu B hmu)
         (obstructionSectorBoundary mu B hmu X) 0 = X := by
-  simp [representativeBoundary, obstructionSectorBoundaryBlock, sectors,
-    obstructionTerminalDecomposition]
+  rw [representativeBoundary, Fin.sum_univ_one,
+    finSigmaDiagonalBlock_obstructionSectorBoundary]
   apply eq_of_heq
   exact cast_heq _ _
 
@@ -359,8 +359,13 @@ private theorem representativeBoundary_obstructionSectorBoundary_one
     representativeBoundary (sectors mu B hmu)
         (obstructionSectorBoundary mu B hmu X)
         (Fin.succ 0) = 0 := by
-  simp [representativeBoundary, obstructionSectorBoundaryBlock, sectors,
-    obstructionTerminalDecomposition]
+  rw [representativeBoundary, Fin.sum_univ_one,
+    finSigmaDiagonalBlock_obstructionSectorBoundary]
+  have hBlock : obstructionSectorBoundaryBlock mu B hmu X
+      ((sectors mu B hmu).flatIndexEquiv ⟨Fin.succ 0, 0⟩) = 0 := by
+    simp [obstructionSectorBoundaryBlock, sectors,
+      obstructionTerminalDecomposition]
+  rw [hBlock]
   apply eq_of_heq
   exact cast_heq _ _
 
