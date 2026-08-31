@@ -10,8 +10,11 @@ import TNLean.MPS.ParentHamiltonian.Martingale.BlockedGap
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
+import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
+import TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap
+import TNLean.MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbientMartingaleBound
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
@@ -22,6 +25,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
+import TNLean.MPS.ParentHamiltonian.Martingale.QuadraticFormGap
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
@@ -43,11 +47,17 @@ all-vector norm-compression estimates for the excitation projections are also
 recorded as conditional sufficient hypotheses; they are not the source
 principal-angle estimate for the local ground spaces.
 
-The twenty-two components are:
+The twenty-five components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale_of_finiteDimensional`
   (quadratic form implies norm bound);
+* `Martingale.QuadraticFormGap` — a positive operator's norm gap implies the
+  global quadratic-form inequality needed for a finite-range Knabe estimate;
+* `Martingale.FiberwiseQuadraticFormGap` — the same inequality persists when
+  the operator acts independently over a finite spectator coordinate;
+* `Martingale.FiniteRangeKnabeGap` — the open-window gap implies a uniform
+  periodic parent-Hamiltonian gap with the finite-range Knabe coefficient;
 * `Martingale.AnalyticBounds` — the weighted inner-product and C3
   projection-composition inequalities from Nachtergaele's summation;
 * `Martingale.DifferenceProjections` — Nachtergaele's mutually orthogonal
@@ -69,6 +79,8 @@ The twenty-two components are:
   and the projector-defect reduction to an anticommutator estimate;
 * `Martingale.OpenHamiltonian` — the nonwrapping finite-volume Hamiltonian and its
   kernel identification with the open MPS boundary-condition space;
+* `Martingale.CyclicWindowOpenHamiltonian` — cyclic-site coordinates, finite-range
+  disjointness, and the identification of Knabe blocks with fiberwise open Hamiltonians;
 * `Martingale.EmbeddedC2` — the unique fixed-window suffix interaction and
   condition C2 with constant one;
 * `Martingale.C3Threshold` — a uniform input-site overlap length satisfying the

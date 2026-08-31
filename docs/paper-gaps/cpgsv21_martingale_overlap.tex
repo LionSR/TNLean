@@ -1699,6 +1699,99 @@ Ref.~\cite{Fannes1992Finitely}. The reconstructed constant is not identified
 with a source dimension-dependent value; the available unweighted conversion
 retains the proved $D^{3/2}$ norm factor inside $g$.
 
+\subsection{Open-to-periodic finite-range conclusion}
+
+The compatible open-chain estimate now gives a periodic gap without a
+restriction to block-divisible lengths.  Let $A$ be primitive with nonzero
+bond dimension and positive-definite fixed point.  The theorem
+\leanid{MPSTensor.IsPrimitiveMPS.exists_openParentHamiltonianES_gap}
+provides $l>1$, $\epsilon_l\geq0$, and the exact open coefficient
+\begin{align}
+    \gamma_{\mathrm{open}}
+    &=\left(1-\epsilon_l\sqrt{l+1}\right)^2,
+    \label{eq:cpgsv21_martingale_overlap_open_knabe_coefficient}\\
+    \epsilon_l
+    &<\frac{1}{\sqrt{l+1}}.
+    \label{eq:cpgsv21_martingale_overlap_open_knabe_threshold}
+\end{align}
+This is the specialization of
+(\ref{eq:cpgsv21_martingale_overlap_nachtergaele_full_range_coefficient})
+with $d_{l+1}=\gamma_{l+1}=1$.  The lower-endpoint argument above is part of
+this MPS specialization.  It does not remove the stronger full-range
+hypothesis from the abstract theorem.
+
+Set
+\begin{align}
+    R&=l+1,
+    \label{eq:cpgsv21_martingale_overlap_open_knabe_range}\\
+    W&=m+R-1=m+l.
+    \label{eq:cpgsv21_martingale_overlap_open_knabe_volume}
+\end{align}
+The cyclic local interactions are indexed by $\mathbb Z/N\mathbb Z$, and
+\leanid{MPSTensor.sum_zmodLocalTermES_eq_parentHamiltonianES} identifies their
+sum with the periodic parent Hamiltonian.  If $R\leq e$ and $e+R\leq N$, then
+\leanid{MPSTensor.zmodLocalTermES_commute_of_oriented_separation} gives
+commutation of the interactions whose initial sites have oriented separation
+$e$.
+
+For every cyclic initial site $s$, the $m$ consecutive interactions beginning
+at $s$ occupy exactly $W$ sites.  The isometry associated with the cyclic
+active block gives
+\begin{align}
+    U_s\left(\sum_{q=0}^{m-1}h_{s+q}^{(N,R)}\right)U_s^{-1}
+    &=\left(H^{\mathrm{open}}_{W,R}(A)\right)^{\oplus[d]^{N-W}}.
+    \label{eq:cpgsv21_martingale_overlap_cyclic_open_block}
+\end{align}
+This is
+\leanid{MPSTensor.cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock}.
+The norm gap in
+(\ref{eq:cpgsv21_martingale_overlap_open_knabe_coefficient}) implies the
+quadratic-form inequality
+\begin{align}
+    \gamma_{\mathrm{open}}
+    \operatorname{Re}\langle H^{\mathrm{open}}_{W,R}u,u\rangle
+    &\leq
+    \operatorname{Re}\langle H^{\mathrm{open}}_{W,R}u,
+        H^{\mathrm{open}}_{W,R}u\rangle.
+    \label{eq:cpgsv21_martingale_overlap_open_knabe_quadratic}
+\end{align}
+The declarations
+\leanid{LinearMap.IsPositive.quadraticForm_sq_ge_of_norm_gap} and
+\leanid{LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_norm_gap}
+prove this implication and preserve it under the spectator sum in
+(\ref{eq:cpgsv21_martingale_overlap_cyclic_open_block}).
+
+Since $\gamma_{\mathrm{open}}>0$, choose $m\geq l+1$ such that
+\begin{align}
+    l^2
+    &<m\gamma_{\mathrm{open}}.
+    \label{eq:cpgsv21_martingale_overlap_open_knabe_positive_numerator}
+\end{align}
+The finite-range cyclic inequality then gives
+\begin{align}
+    \delta
+    &=\frac{m\gamma_{\mathrm{open}}-l^2}{m-l}>0,
+    \label{eq:cpgsv21_martingale_overlap_open_knabe_delta}\\
+    \delta\lVert v\rVert
+    &\leq\left\lVert H_{N,l+1}^{\mathrm{ES}}(A)v\right\rVert.
+    \label{eq:cpgsv21_martingale_overlap_open_knabe_periodic_gap}
+\end{align}
+for every $N\geq2m$ and every
+$v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$.  The first general statement is
+\leanid{MPSTensor.parentHamiltonianES_gap_of_openParentHamiltonianES_gap}; the
+primitive-MPS conclusion is
+\leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe}.
+
+The gap definition and the MPS gap assertion occur at lines~1460--1500 of the
+local source for Ref.~\cite{PerezGarcia2007Matrix} and at lines~2184--2188 of
+the local source for Ref.~\cite{Cirac2021Matrix}.  The nearest-neighbor Knabe
+principle occurs at lines~1483--1489 of the first source and
+lines~2194--2197 of the second.  These passages do not state
+(\ref{eq:cpgsv21_martingale_overlap_open_knabe_delta}).  The arbitrary
+finite-range coefficient is the TNLean derivation in
+\path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}.  It is not
+attributed to those papers or to Nachtergaele's martingale theorem.
+
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The exact whole-increment algebra, the
@@ -1709,38 +1802,30 @@ of the input tensor; the final chain length counts blocked sites. These bounds
 come from the formal inverse-Gram reconstruction and are not attributed to
 FNW. The optimized FNW numerator and its source constants remain open.
 
-The blocked-to-original comparison is proved for periodic lengths divisible by
-the chosen block length. Under the canonical configuration isometry, each
-blocked range-two term equals the original range-$2p$ term beginning at a block
-boundary. The conjugated blocked Hamiltonian is therefore the sparse sum over
-aligned starts. The omitted original local projections form a non-negative
-quadratic-form remainder. Block injectivity identifies the blocked and original
-kernels with the same periodic MPS line under this isometry. Hence
-\leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul}
-proves
+The earlier blocked-to-original comparison remains valid for periodic lengths
+divisible by the chosen block length.  It gives
+\leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul} and
+the explicit lower bound
 \begin{align}
     \operatorname{gap}(H_{Np,2p}(A))
     &\geq\frac{1}{8}
     \qquad(N\geq4).
     \label{eq:cpgsv21_martingale_overlap_original_aligned_length_gap}
 \end{align}
+That sparse aligned-sum theorem is no longer needed to obtain an all-length
+periodic gap.  The compatible open-chain estimate, cyclic active-block
+identity, and finite-range inequality give
+(\ref{eq:cpgsv21_martingale_overlap_open_knabe_periodic_gap}) for every
+$N\geq2m$.  No periodic boundary coercivity, comparison of unequal kernels,
+periodic uniqueness argument, divisibility substitution, or replacement by a
+different cyclic tensor is used.
 
-This finite cyclic sparse-sum comparison is a TNLean reconstruction.
-Nachtergaele formulates compatible open intervals in
-Equations~(3.12)--(3.16), and the proof of Theorem~2.1(ii) uses the rescaled
-sequence $\widetilde\Lambda_n=\Lambda_{ln}$
-\cite{Nachtergaele1996Spectral}. That source does not state the finite periodic
-operator comparison used here. The remaining case for the unrestricted normal
-MPS theorem consists of chain lengths
-\begin{align}
-    Np+r,
-    \qquad
-    0&<r<p.
-    \label{eq:cpgsv21_martingale_overlap_remainder_lengths}
-\end{align}
-It requires a boundary or remainder comparison that preserves the common
-ground-space complement and a uniform positive constant. No all-length claim
-is made.
+The abstract caveat remains unchanged.  The printed hypotheses of
+\cite[Theorem~2.1(i)]{Nachtergaele1996Spectral} do not control the initial
+indices in the full martingale sum.  The primitive MPS theorem applies because
+the compatible open-chain Hamiltonians make the early C1 and C2 terms vanish
+and the boundary C3 product is zero.  Thus the MPS specialization is complete,
+while the unrestricted abstract full-range identification is not asserted.
 
 \bibliographystyle{alpha}
 \bibliography{references}
