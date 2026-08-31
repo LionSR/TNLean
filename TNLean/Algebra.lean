@@ -28,6 +28,7 @@ import TNLean.Algebra.ListProduct
 import TNLean.Algebra.Matrix
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NegMulLog
+import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
