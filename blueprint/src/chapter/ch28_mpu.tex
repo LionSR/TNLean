@@ -8576,16 +8576,34 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Thus the sitewise left action preserves the MPU property.
 \end{proof}
 
-\begin{theorem}[Remaining swap-transformation identities]
-    \label{thm:threeMPU2_remaining_formulas}
-    \notready
-    \discussion{5715}
-    \uses{threeMPU2, thm:threeMPU2_chain_formulas, def:mpu_source_uv}
-    The third transformed family also satisfies
+\begin{theorem}[Conjugacy of the third swap-transformed shift]
+    \label{tildeU3}
+    \lean{MPOTensor.mpo_shiftExampleTildeU₃_eq_swap_mul_tildeU₂_mul_swap}
+    \leanok
+    \uses{threeMPU2, thm:threeMPU2_chain_formulas}
+    On every nonempty chain,
     \begin{align}
         \widetilde U_3^{(N)}
         =\mathbb S^{\otimes N}\widetilde U_2^{(N)}\mathbb S^{\otimes N}.
     \end{align}
+    % Source lines: paper_v2.tex 2059--2062, label tildeU3.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:threeMPU2_chain_formulas}
+    Split each physical configuration into its two spin configurations.  The
+    three operators are permutation matrices.  In these coordinates,
+    $\mathbb S^{\otimes N}$ exchanges the two configurations,
+    $U_2^{(N)}$ acts by $(T^{(N)\dagger},T^{(N)})$, and $U_3^{(N)}$ acts by
+    $(T^{(N)},T^{(N)\dagger})$.  Exchanging the two factors on both sides of
+    the second action gives the third, which proves the identity.
+\end{proof}
+
+\begin{theorem}[Standard forms of the swap-transformed shifts]
+    \label{thm:threeMPU2_remaining_formulas}
+    \notready
+    \discussion{5715}
+    \uses{threeMPU2, def:mpu_source_uv}
     The first two standard forms are
     \begin{align}
         \widetilde u_1 & =\mathbb S,     &
@@ -8593,7 +8611,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \widetilde u_2 & =\Id\otimes\Id, &
         \widetilde v_2 & =\mathbb S.
     \end{align}
-    % Source lines: paper_v2.tex 2059--2099.
+    % Source lines: paper_v2.tex 2087--2099.
 \end{theorem}
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
