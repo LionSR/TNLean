@@ -11,6 +11,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
+import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
@@ -57,6 +58,8 @@ The sixteen components are:
   and the projector-defect reduction to an anticommutator estimate;
 * `Martingale.OpenHamiltonian` — the nonwrapping finite-volume Hamiltonian and its
   kernel identification with the open MPS boundary-condition space;
+* `Martingale.EmbeddedC2` — the unique fixed-window suffix interaction and
+  condition C2 with constant one;
 * `Martingale.C3Threshold` — a uniform input-site overlap length satisfying the
   open-chain C3 defect threshold and its anticommutator consequence;
 * `Martingale.BlockedGap` — transport of that threshold to three blocked sites
