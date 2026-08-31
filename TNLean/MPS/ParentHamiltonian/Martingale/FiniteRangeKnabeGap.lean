@@ -10,15 +10,15 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
 /-!
 # Finite-range Knabe gap for MPS parent Hamiltonians
 
-An open-chain norm gap on the `m + R - 1` sites occupied by `m` consecutive
-range-`R` interactions supplies the local quadratic-form input in the cyclic
+An open-chain norm gap on the \(m + R - 1\) sites occupied by \(m\) consecutive
+range-\(R\) interactions supplies the local quadratic-form input in the cyclic
 finite-range Knabe inequality.  The resulting periodic gap is
 
-`δ = (m * γ - (R - 1) ^ 2) / (m - R + 1)`.
+\(\delta = (m\gamma - (R - 1)^2)/(m - R + 1)\).
 
 For a primitive MPS, the open-chain martingale estimate provides
-`γ = (1 - εₗ * sqrt (l + 1)) ^ 2` at range `R = l + 1`.  Choosing `m` so that
-`l ^ 2 < m * γ` gives a positive periodic gap uniformly for `N ≥ 2 * m`.
+\(\gamma = (1 - \varepsilon_l\sqrt{l + 1})^2\) at range \(R = l + 1\).  Choosing \(m\) so that
+\(l^2 < m\gamma\) gives a positive periodic gap uniformly for \(N \geq 2m\).
 
 ## References
 
@@ -40,8 +40,8 @@ variable {d D : ℕ}
 /-- A uniform norm gap for the open Hamiltonian on the active sites of a
 Knabe window gives the finite-range periodic parent-Hamiltonian gap.
 
-Here `m` counts local terms, so the active open volume is exactly
-`W = m + R - 1`.  The hypotheses `R ≤ m` and `2 * m ≤ N` imply `W ≤ N`.
+Here \(m\) counts local terms, so the active open volume is exactly
+\(W = m + R - 1\).  The hypotheses \(R \leq m\) and \(2m \leq N\) imply \(W \leq N\).
 The coefficient is the finite-range cyclic Knabe coefficient derived in
 `docs/paper-gaps/knabe88_finite_range_coefficient.tex`. -/
 theorem parentHamiltonianES_gap_of_openParentHamiltonianES_gap
@@ -118,11 +118,11 @@ theorem parentHamiltonianES_gap_of_openParentHamiltonianES_gap
       rwa [sum_zmodLocalTermES_eq_parentHamiltonianES] at hx) v hv
 
 /-- A primitive MPS has a positive finite-range Knabe gap for its canonical
-range-`l + 1` parent Hamiltonian on every periodic chain with `N ≥ 2 * m`.
+range-\(l + 1\) parent Hamiltonian on every periodic chain with \(N \geq 2m\).
 
 The open coefficient is
-`γ = (1 - ε * sqrt (l + 1)) ^ 2`, the active Knabe volume is `m + l`, and
-`m` is chosen so that `l ^ 2 < m * γ`. -/
+\(\gamma = (1 - \varepsilon\sqrt{l + 1})^2\), the active Knabe volume is \(m + l\), and
+\(m\) is chosen so that \(l^2 < m\gamma\). -/
 theorem IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :

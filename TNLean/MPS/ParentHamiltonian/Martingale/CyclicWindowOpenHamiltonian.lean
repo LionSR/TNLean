@@ -13,8 +13,8 @@ import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
 
 This file identifies a finite cyclic block of periodic parent-Hamiltonian terms
 with the corresponding open-chain Hamiltonian on its active sites.  If the
-periodic interaction range is `R` and the block contains `m` local terms, the
-active interval has exactly `W = m + R - 1` sites.
+periodic interaction range is \(R\) and the block contains \(m\) local terms, the
+active interval has exactly \(W = m + R - 1\) sites.
 
 The construction is the geometric input needed to apply the finite-range Knabe
 inequality after the open-chain gap estimate.  It does not compare periodic and
@@ -39,7 +39,7 @@ noncomputable def zmodLocalTermES {N : ℕ} [NeZero N]
     ZMod N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   fun s ↦ localTermES A R ((ZMod.finEquiv N).symm s)
 
-/-- Reindexing periodic local terms by `ZMod N` preserves their total sum. -/
+/-- Reindexing periodic local terms by \(\mathbb Z/N\mathbb Z\) preserves their total sum. -/
 theorem sum_zmodLocalTermES_eq_parentHamiltonianES {N : ℕ} [NeZero N]
     (A : MPSTensor d D) (R : ℕ) :
     (∑ s : ZMod N, zmodLocalTermES A R s) = parentHamiltonianES A R N := by
@@ -51,7 +51,8 @@ theorem sum_zmodLocalTermES_eq_parentHamiltonianES {N : ℕ} [NeZero N]
     _ = ∑ i : Fin N, localTermES A R i := by
       simp [zmodLocalTermES]
 
-/-- Addition in `ZMod N` is cyclic forward motion on the corresponding finite site. -/
+/-- Addition in \(\mathbb Z/N\mathbb Z\) is cyclic forward motion on the
+corresponding finite site. -/
 theorem finEquiv_symm_add_eq_cyclicForwardSite {N : ℕ} [NeZero N]
     (s : ZMod N) (q : ℕ) :
     (ZMod.finEquiv N).symm (s + q) =
@@ -64,8 +65,8 @@ theorem finEquiv_symm_add_eq_cyclicForwardSite {N : ℕ} [NeZero N]
         (s.val + q) % (N + 1)
       rw [ZMod.val_natCast, Nat.add_mod_mod]
 
-/-- Two range-`R` cyclic windows are disjoint when their oriented start
-separation `e` satisfies `R ≤ e` and `e + R ≤ N`. -/
+/-- Two range-\(R\) cyclic windows are disjoint when their oriented start
+separation \(e\) satisfies \(R \leq e\) and \(e + R \leq N\). -/
 theorem cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation
     {N R e : ℕ} (hR : R ≤ e) (he : e + R ≤ N) (i : Fin N) :
     CyclicWindowsDisjoint R i (cyclicForwardSite i e) := by
@@ -109,7 +110,7 @@ theorem zmodLocalTermES_commute_of_oriented_separation {N R e : ℕ} [NeZero N]
   exact localTermES_commute_of_cyclic_windows_disjoint A (by omega)
     (cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation hR he _) v
 
-/-- Split a periodic configuration into a cyclic active block of length `W` and
+/-- Split a periodic configuration into a cyclic active block of length \(W\) and
 its ordered complement. -/
 def cyclicActiveBlockConfigEquiv {N : ℕ} (d W : ℕ) (hWN : W ≤ N) (s : Fin N) :
     Cfg d N ≃ Cfg d W × Cfg d (N - W) :=
@@ -325,7 +326,7 @@ private theorem extractWindow_join_cyclicActiveBlock {N W R : ℕ}
   apply Fin.ext
   simp [Nat.mod_eq_of_lt hqrW]
 
-/-- A periodic range-`R` local term inside a cyclic active block becomes the
+/-- A periodic range-\(R\) local term inside a cyclic active block becomes the
 corresponding nonwrapping local term on the active sites, independently on each
 spectator configuration. -/
 theorem localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv
@@ -386,11 +387,11 @@ private def cyclicBlockStartEquiv {R m : ℕ} (hR : 1 ≤ R) :
     apply Fin.ext
     rfl
 
-/-- A Knabe block of `m` consecutive range-`R` periodic terms is the
-fiberwise open parent Hamiltonian on exactly `m + R - 1` active sites.
+/-- A Knabe block of \(m\) consecutive range-\(R\) periodic terms is the
+fiberwise open parent Hamiltonian on exactly \(m + R - 1\) active sites.
 
-The assumptions `1 ≤ R`, `R ≤ m`, and `2 * m ≤ N` ensure that the active
-interval fits inside the periodic chain and contains every one of the `m`
+The assumptions \(1 \leq R\), \(R \leq m\), and \(2m \leq N\) ensure that the active
+interval fits inside the periodic chain and contains every one of the \(m\)
 nonwrapping interaction windows. -/
 theorem cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock
     {N R m : ℕ} [NeZero N] (A : MPSTensor d D)
