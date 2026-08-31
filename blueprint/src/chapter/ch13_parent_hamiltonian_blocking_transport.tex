@@ -217,8 +217,14 @@ construction; they are not attributed to a source theorem.
     Let $A$ be in literal CPSV canonical form with positive ambient bond
     dimension $D$, and suppose that the physical dimension satisfies $1<d$.
     There are a basis of normal tensors $(A_j)_{j=1}^{g}$ and a positive
-    integer $L$ such that $D^2<d^L$ and $L\leq3D^5$, and, for every
-    original periodic chain of length $N>L$,
+    integer $L$ such that
+    \begin{align}
+        D^2<d^L,
+        \qquad
+        L\leq3D^5,
+        \label{eq:cpsv_original_lattice_parent_hamiltonian_dimension_range}
+    \end{align}
+    and, for every original periodic chain of length $N>L$,
     \begin{align}
         \ker H_L^{(N)}(A)
          & =\spn\left\{\ket{V^{(N)}(A_j)}:1\leq j\leq g\right\}.
@@ -248,25 +254,19 @@ construction; they are not attributed to a source theorem.
     Choose one normal representative from each BNT phase class and put each
     representative in a Perron gauge for which
     \begin{align}
-        \sum_a A^j_a A^{j\,\dagger}_a & =\Id.
+        \sum_a A^j_a A^{j\,\dagger}_a          & =\Id,
+                                               &
+        \sum_a A^{j\,\dagger}_a\Lambda_j A^j_a & =\Lambda_j
         \notag
     \end{align}
-    The positive definite matrix $\Lambda_j$ satisfies
-    \begin{align}
-        \sum_a A^{j\,\dagger}_a\Lambda_j A^j_a & =\Lambda_j.
-        \notag
-    \end{align}
-    Their dimensions satisfy
+    with $\Lambda_j$ positive definite. Their dimensions satisfy
     $\sum_jD_j\leq D$, so $g\leq D$, and quantum Wielandt makes every
     representative block-injective at the common length $L_0=D^4$.
 
     Suppose first that $g\geq2$. Put
     \begin{align}
-        R & =3(g-1)(L_0+1)+1.
-        \notag
-    \end{align}
-    Set the auxiliary range to
-    \begin{align}
+        R                & =3(g-1)(L_0+1)+1,
+                         &
         L_{\mathrm{aux}} & =3(g-1)(L_0+1)+L_0.
         \notag
     \end{align}
