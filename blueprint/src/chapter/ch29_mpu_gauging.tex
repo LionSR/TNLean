@@ -817,9 +817,10 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     factorizations and is not needed in the unitary calculation.
 \end{definition}
 
-\begin{theorem}[Identity, composition, and right-reference laws]
+\begin{theorem}[Identity, inverse, composition, and right-reference laws]
     \label{thm:mpug_unitary_factorization_comparison_laws}
     \lean{Matrix.unitaryFactorizationComparison_self,
+        Matrix.unitaryFactorizationComparison_inv,
         Matrix.unitaryFactorizationComparison_trans,
         Matrix.unitaryFactorizationComparison_of_reference_eq_one,
         Matrix.unitaryFactorizationComparison_right_reference}
@@ -827,9 +828,17 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \uses{def:mpug_unitary_factorization_comparison}
     For all indices $a,b,c,d,f,g\in I$,
     \begin{align}
-        \lambda_{a,b}^{a,b} & =\mathbf 1,                              \\
+        \lambda_{a,b}^{a,b} & =\mathbf 1.
+    \end{align}
+    Reversing the comparison gives
+    \begin{align}
+        \left(\lambda_{a,b}^{c,d}\right)^{-1}
+        & =\lambda_{c,d}^{a,b}.
+    \end{align}
+    Comparisons compose as
+    \begin{align}
         \lambda_{a,b}^{f,g}
-                            & =\lambda_{c,d}^{f,g}\lambda_{a,b}^{c,d}.
+        & =\lambda_{c,d}^{f,g}\lambda_{a,b}^{c,d}.
         \label{eq:mpug_unitary_factorization_comparison_laws}
     \end{align}
     If $R_{c,d}=\mathbf 1$, then
@@ -847,8 +856,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 
 \begin{proof}\leanok
     \uses{def:mpug_unitary_factorization_comparison}
-    The identity and right-reference formulas follow from
-    $R_{a,b}^{-1}R_{a,b}=\mathbf 1$ and
+    The identity, inverse, and right-reference formulas follow from
+    $R_{a,b}^{-1}R_{a,b}=\mathbf 1$, inversion of a product, and
     $\mathbf 1^{-1}R_{a,b}=R_{a,b}$. For composition, insert the identity at
     the intermediate pair:
     \begin{align}
