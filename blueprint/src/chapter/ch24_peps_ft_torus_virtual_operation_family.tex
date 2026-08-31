@@ -417,9 +417,11 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.staircaseO3PhysicalOp_mul}
     \leanok
     \uses{def:peps_staircase_O1_physical_operation,
-        def:peps_staircase_O3_physical_operation,
-        thm:peps_lemma5_end_operation_multiplication}
-    For matrices $X,Y\in\MN{D_A(e)}$, the canonical end operations satisfy
+        def:peps_staircase_O3_physical_operation}
+    Let $L,K>0$, and choose staircase coordinates $(a,b)$ with
+    $a+2L\leq\mathrm{width}$ and $2K\leq\mathrm{height}$. Suppose every
+    cyclic $L\times K$ window of $A$ is injective. For matrices
+    $X,Y\in\MN{D_A(e)}$, the canonical end operations satisfy
     \begin{align}
         O_1^A(XY) & =O_1^A(X)O_1^A(Y),
         \notag                         \\
@@ -431,6 +433,7 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_lemma5_end_operation_multiplication}
     Split the virtual boundary of either end window into the reference-edge
     coordinate and the remaining external coordinates.  On every fixed
     external fibre, the boundary insertion is ordinary matrix action.  The
@@ -467,10 +470,10 @@ correspondence in the proof sketch of the two-dimensional corollary
     \label{thm:peps_staircase_cross_tensor_virtual_operation_multiplication}
     \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_mul}
     \leanok
-    \uses{def:peps_staircase_cross_tensor_virtual_operation,
-        thm:peps_staircase_end_physical_operation_multiplication,
-        thm:peps_lemma5_end_operation_multiplication}
-    For all $X_1,X_2\in\MN{D_A(e)}$,
+    \uses{def:peps_staircase_cross_tensor_virtual_operation}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase}, for all
+    $X_1,X_2\in\MN{D_A(e)}$,
     \begin{align}
         Y_{A\to B}(X_1X_2)
          & =Y_{A\to B}(X_1)Y_{A\to B}(X_2).
@@ -479,6 +482,8 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_staircase_end_physical_operation_multiplication,
+        thm:peps_lemma5_end_operation_multiplication}
     For every left external boundary configuration, compose the two $O_1$
     relations in ordinary order.  For every right external boundary
     configuration, compose the underlying $O_3$ relations in reverse order,
