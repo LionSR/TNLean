@@ -20,6 +20,7 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupUnitaryAverage
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.FixedPointFreeInvolutionSign
+import TNLean.Algebra.GaussRepresentation
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.LSymbol
