@@ -31,9 +31,9 @@ dimension of $A_j$,
     1\leq p\leq 3D^5,
     \qquad
     \operatorname{span}\left\{
-    \bigl((A_1^{[p]})^i,\ldots,(A_g^{[p]})^i\bigr):i
+        \bigl((A_1^{[p]})^i,\ldots,(A_g^{[p]})^i\bigr):i
     \right\}
-     & =\bigoplus_{j=1}^{g}M_{D_j}(\mathbb C).
+      &=\bigoplus_{j=1}^{g}M_{D_j}(\mathbb C).
     \label{eq:cpsv16_parent_hamiltonian_range_block_span}
 \end{align}
 The discussion following Definition~3.9 then states both that $A$ has a
@@ -45,30 +45,30 @@ The second statement has a direct meaning on the blocked lattice. For every
 blocked-chain length $N>2$, it asserts
 \begin{align}
     \ker H_2^{(N)}\!\left(A^{[p]}\right)
-     & =\operatorname{span}\left\{
-    V^{(N)}\!\left(A_j^{[p]}\right):1\leq j\leq g
-    \right\}.
+      &=\operatorname{span}\left\{
+          V^{(N)}\!\left(A_j^{[p]}\right):1\leq j\leq g
+        \right\}.
     \label{eq:cpsv16_parent_hamiltonian_range_blocked_statement}
 \end{align}
 This is the statement proved in the formal development.
 \footnote{Formal declaration:
-    \leanid{MPSTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltonian}
-    in \doclink{TNLean/MPS/ParentHamiltonian/CPSVBlockedNearestNeighbor}.}
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltonian}
+in \doclink{TNLean/MPS/ParentHamiltonian/CPSVBlockedNearestNeighbor}.}
 
 The first statement concerns every sufficiently long chain on the original
 lattice. It asserts that there are BNT representatives $A_1,\ldots,A_g$ and a
 positive integer $L\leq3D^5$ such that
 \begin{align}
     \ker H_L^{(N)}(A)
-     & =\operatorname{span}\left\{V^{(N)}(A_j):1\leq j\leq g\right\}.
+      &=\operatorname{span}\left\{V^{(N)}(A_j):1\leq j\leq g\right\}.
     \label{eq:cpsv16_parent_hamiltonian_range_original_statement}
 \end{align}
 For $1<d$, the formal development proves this all-chain spanning clause
 simultaneously with $D^2<d^L$. Thus it also verifies that the local
 orthogonal-complement interaction is nonzero.
 \footnote{Formal declaration:
-    \leanid{MPSTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning}
-    in \doclink{TNLean/MPS/ParentHamiltonian/CPSVOriginalRange}.}
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning}
+in \doclink{TNLean/MPS/ParentHamiltonian/CPSVOriginalRange}.}
 
 \section{Why the blocked theorem alone is insufficient}
 
@@ -76,7 +76,7 @@ A two-site interaction on the blocked lattice acts on $2p$ consecutive sites
 of the original lattice. Consequently,
 \begin{align}
     \text{nearest-neighbour range for }A^{[p]}
-     & \Longrightarrow \text{range }2p\text{ for the induced interaction on }A,
+      &\Longrightarrow \text{range }2p\text{ for the induced interaction on }A,
     \label{eq:cpsv16_parent_hamiltonian_range_naive_transport}
 \end{align}
 not range $p$. Moreover, the quantifier $N>2$ in
@@ -94,16 +94,16 @@ the first sentence of line~527.
 Choose one normal representative from each BNT phase class and put each
 representative in a Perron gauge such that
 \begin{align}
-    \sum_a A^j_a A^{j\,\dagger}_a          & =I,
-                                           &
-    \sum_a A^{j\,\dagger}_a\Lambda_j A^j_a & =\Lambda_j,
+    \sum_a A^j_a A^{j\,\dagger}_a          &=I,
+    &
+    \sum_a A^{j\,\dagger}_a\Lambda_j A^j_a&=\Lambda_j,
     \label{eq:cpsv16_parent_hamiltonian_range_perron_gauge}
 \end{align}
 where $\Lambda_j$ is positive definite. The representative dimensions obey
 $\sum_jD_j\leq D$, hence $g\leq D$. Quantum Wielandt gives the common
 block-injectivity length
 \begin{align}
-    L_0 & =D^4.
+    L_0&=D^4.
     \label{eq:cpsv16_parent_hamiltonian_range_wielandt_length}
 \end{align}
 
@@ -111,12 +111,12 @@ For $g\geq2$, the proof of
 \cite[Theorem~12]{PerezGarcia2007Matrix} gives the BNT kernel equality at
 range
 \begin{align}
-    R & =3(g-1)(L_0+1)+1
+    R&=3(g-1)(L_0+1)+1
     \label{eq:cpsv16_parent_hamiltonian_range_pgvwc_range}
 \end{align}
 whenever $N\geq R+L_0$. Define instead
 \begin{align}
-    L & =3(g-1)(L_0+1)+L_0=R+L_0-1.
+    L&=3(g-1)(L_0+1)+L_0=R+L_0-1.
     \label{eq:cpsv16_parent_hamiltonian_range_absorbed}
 \end{align}
 Then $N>L$ implies $N\geq R+L_0$. Since $R\leq L$, antitonicity of the
@@ -124,9 +124,9 @@ cyclic local-constraint spaces and the usual frustration-free inclusion give
 the sandwich
 \begin{align}
     \ker H_L^{(N)}
-    \subseteq \ker H_R^{(N)}
-    =\operatorname{span}\{V^{(N)}(A_j):1\leq j\leq g\}
-    \subseteq \ker H_L^{(N)}.
+      \subseteq \ker H_R^{(N)}
+      =\operatorname{span}\{V^{(N)}(A_j):1\leq j\leq g\}
+      \subseteq \ker H_L^{(N)}.
     \label{eq:cpsv16_parent_hamiltonian_range_sandwich}
 \end{align}
 The exact coisometric reconstruction of literal CPSV canonical form preserves
@@ -134,8 +134,8 @@ the positive-length local space, so this equality transfers from the direct
 sum of representatives to $A$. Finally,
 \begin{align}
     L
-     & \leq3(D-1)(D^4+1)+D^4
-    \leq3D^5.
+      &\leq3(D-1)(D^4+1)+D^4
+       \leq3D^5.
     \label{eq:cpsv16_parent_hamiltonian_range_bound}
 \end{align}
 For one representative, one may take $L_{\mathrm{aux}}=D^4+1$. The
@@ -148,7 +148,7 @@ CPSV16 or PGVWC07.
 To obtain one witness that also satisfies the nontriviality condition, enlarge
 each auxiliary range to
 \begin{align}
-    L & =3D^5.
+    L&=3D^5.
     \label{eq:cpsv16_parent_hamiltonian_range_uniform}
 \end{align}
 Cyclic-range antitonicity preserves the upper inclusion at the enlarged
