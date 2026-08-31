@@ -8330,10 +8330,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.shiftExampleTildeU₂}
     \lean{MPOTensor.shiftExampleTildeU₃}
     \leanok
-    \uses{threeMPU}
-    Let $\mathbb S$ exchange the two $d$-dimensional spins at one site.  The
-    transformed local tensors are obtained by applying $\mathbb S$ to the
-    output physical index of each of the three shift tensors.
+    \uses{threeMPU, def:mpu_physical_pair_swap}
+    Let $\mathbb S$ exchange the two $d$-dimensional spins at one site, with
+    matrix entries
+    \begin{align}
+        \mathbb S_{(p,q),(r,s)}=\delta_{p,s}\delta_{q,r}.
+    \end{align}
+    With the row index as the output physical index and the column index as the
+    input physical index, define
+    \begin{align}
+        \widetilde{\mathcal U}_a^{\,IJ}
+        =\sum_K\mathbb S_{IK}\mathcal U_a^{\,KJ},
+        \qquad a\in\{1,2,3\}.
+    \end{align}
+    Thus the swap acts on the output leg, and the corresponding closed operator
+    is left-multiplied by $\mathbb S^{\otimes N}$.
     % Source lines: paper_v2.tex 2045--2062.
 \end{definition}
 
@@ -8349,7 +8360,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.shiftExampleTildeU₂_isMPU}
     \lean{MPOTensor.shiftExampleTildeU₃_isMPU}
     \leanok
-    \uses{threeMPU, threeMPU2, thm:threeMPU_chain_formulas, def:mpu}
+    \uses{threeMPU2, thm:threeMPU_chain_formulas,
+        def:mpdo_sitewise_physical_matrix, def:mpu}
     On every nonempty chain,
     \begin{align}
         \widetilde U_1^{(N)} & =\mathbb S^{\otimes N}, \\
@@ -8363,7 +8375,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{threeMPU2, thm:threeMPU_chain_formulas, def:mpu}
+    \uses{threeMPU2, thm:threeMPU_chain_formulas,
+        def:mpdo_sitewise_physical_matrix, def:mpu}
     Applying a one-site matrix to every output physical index left-multiplies
     the closed operator by its sitewise tensor power.  The swap is a
     permutation matrix and hence unitary.  The formulas now follow from the
@@ -8374,7 +8387,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{prop:threeMPU2_remaining_formulas}
     \notready
     \discussion{5715}
-    \uses{threeMPU2}
+    \uses{threeMPU2, thm:threeMPU2_chain_formulas, def:mpu_source_uv}
     The third transformed family also satisfies
     \begin{equation}
         \widetilde U_3^{(N)}

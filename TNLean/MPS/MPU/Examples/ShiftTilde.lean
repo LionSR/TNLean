@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.Examples.Shift
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
+import TNLean.MPS.MPU.Examples.Shift
 
 /-!
 # Swap-transformed shift matrix product unitaries
@@ -97,18 +97,18 @@ theorem shiftPhysicalSwap_mem_unitaryGroup (d : ℕ) :
   rw [← Matrix.permMatrix_mul]
   simp
 
-/-- The paper's transformed tensor $\widetilde{\mathcal U}_1=\mathcal U_1\mathbb S$,
-implemented by the exact local physical left action. -/
+/-- The transformed tensor generating
+$\widetilde U_1^{(N)} = \mathbb S^{\otimes N} U_1^{(N)}$. -/
 noncomputable def shiftExampleTildeU₁ (d : ℕ) : MPOTensor (d * d) 1 :=
   (shiftExampleU₁ d).ketLeftMul (shiftPhysicalSwap d)
 
-/-- The paper's transformed tensor $\widetilde{\mathcal U}_2=\mathcal U_2\mathbb S$,
-implemented by the exact local physical left action. -/
+/-- The transformed tensor generating
+$\widetilde U_2^{(N)} = \mathbb S^{\otimes N} U_2^{(N)}$. -/
 noncomputable def shiftExampleTildeU₂ (d : ℕ) : MPOTensor (d * d) (d * d) :=
   (shiftExampleU₂ d).ketLeftMul (shiftPhysicalSwap d)
 
-/-- The paper's transformed tensor $\widetilde{\mathcal U}_3=\mathcal U_3\mathbb S$,
-implemented by the exact local physical left action. -/
+/-- The transformed tensor generating
+$\widetilde U_3^{(N)} = \mathbb S^{\otimes N} U_3^{(N)}$. -/
 noncomputable def shiftExampleTildeU₃ (d : ℕ) : MPOTensor (d * d) (d * d) :=
   (shiftExampleU₃ d).ketLeftMul (shiftPhysicalSwap d)
 
