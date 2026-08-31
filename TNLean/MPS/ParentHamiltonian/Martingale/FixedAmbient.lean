@@ -25,7 +25,8 @@ proof of Theorem 2.1(i).
 ## References
 
 * Nachtergaele, arXiv:cond-mat/9410110, equation (En), lines 1060--1073.
-* Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(i), lines 1195--1220.
+* Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(i), equations \(Enpsi\)
+  and \(Enpsi2\), lines 1206--1220.
 -/
 
 open scoped BigOperators InnerProductSpace
