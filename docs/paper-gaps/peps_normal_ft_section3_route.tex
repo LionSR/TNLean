@@ -63,6 +63,20 @@ $S$ regions gives $A\propto \widetilde B$.
 \footnote{The proof of Theorem \path{3} is
     \path{Papers/1804.04964/paper_normal.tex:1449--1572}, Ref.~\cite{Molnar2018NormalPEPS}.}
 
+Here ``every edge'' belongs to the periodic translationally invariant
+square lattice, not to a finite open rectangle with geometrically distinct
+boundary sites. The source first defines a PEPS by contracting all edges of
+its defining graph, and its $N\times M$ square-lattice specialization requires
+$N,M\geq3$ in order to avoid loops and double edges. In the proof of
+Theorem~\path{3}, one blocking is carried to all horizontal and vertical edges
+by translations. These are precisely the periodic features represented by
+the discrete torus. The cited passage supplies no separate blocking at the
+boundary of an open rectangle.
+\footnote{See
+    \path{Papers/1804.04964/paper_normal.tex:961--979},
+    \path{Papers/1804.04964/paper_normal.tex:1207--1212}, and
+    \path{Papers/1804.04964/paper_normal.tex:1449--1500}.}
+
 The general theorem \path{normal} of Ref.~\cite{Molnar2018NormalPEPS}
 removes the square-lattice specialization.
 It assumes precisely the blockings needed above: every edge can be blocked into
@@ -299,10 +313,11 @@ enough left and right margin; a coordinate upward edge must have enough bottom
 and top margin. Hence the cover-free interior construction supplies data only on
 the interior edges of the open $7\times7$ graph; the earlier translated-window
 and oriented margin-and-cover criteria have the same interior restriction.
-Explicit boundary obstructions are recorded on all four sides. The remaining
-every-edge construction must therefore include the boundary geometry: the
-interior $A_3$ injectivity removes the local and rotated $T$-cover obligation for
-interior edges, leaving the boundary edges of the open rectangular model.
+Explicit boundary obstructions are recorded on all four sides. Extending this
+construction to the boundary edges would be an additional theorem about open
+rectangles. It is not an omitted case of Theorem~\path{3}: the source uses the
+periodic translation action, and the corresponding every-edge construction is
+the torus construction described below.
 
 Verdict: this note records an open gap with a scope restriction. The earlier
 vocabulary gap for contiguous rectangular blocks is closed. The earlier
@@ -324,12 +339,12 @@ since the source object is $A_3$ and the local window is a fixed small frame
 whose corner is forced. The every-edge blocking construction is cover-free at
 interior edges and assembles the normal edge-blocking hypotheses there. The
 tensor-level union theorem is proved for positive bond dimensions, including the
-overlapping case (the overlap re-insertion). The remaining open gap is the
-boundary geometry of the open rectangular model: edges near the lattice
-boundary lack interior margins, so the cover-free construction does not yet
-reach them; on a translation-invariant lattice every edge is interior and the
-construction is complete. Injectivity of $R$ and $S$ is already derived from
-union closure and rectangular injectivity.
+overlapping case (the overlap re-insertion). Edges near the boundary of the open
+rectangular model still lie outside this construction, but this is the scope of
+a possible open-boundary strengthening rather than a gap in the cited theorem.
+For the periodic translationally invariant lattice, every edge is obtained from
+a reference edge by translation and the construction is complete. Injectivity
+of $R$ and $S$ is already derived from union closure and rectangular injectivity.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -612,10 +627,12 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.verticalSquareLatticeEdge_blockingDatum_interior},
           \leanid{TNLean.PEPS.NormalSquareInteriorEdgeDatum}, and
           \leanid{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_interiorData}.}
-          The remaining task is the boundary geometry of the open rectangular
-          model, where some edges lack interior margins; on a translation-invariant
-          (periodic) lattice every edge is interior and the construction is
-          complete.
+          Boundary edges of the open rectangular model lack these margins. A
+          construction there would be a separate open-boundary strengthening:
+          the source does not derive it from the $2\times3$ and $3\times2$
+          hypotheses. On the periodic translationally invariant lattice of
+          Theorem~\path{3}, translations carry the reference construction to
+          every edge, and the torus construction below is complete.
     \item Reuse the injective-chain insertion route after this blocking:
           \ghissue{1367}, \ghissue{1368}, \ghissue{1363}, \ghissue{1364},
           \ghissue{1361}, and \ghissue{1360}. The formal material for this route
@@ -2222,10 +2239,11 @@ multilinear in the site tensors, so the relation $A_v = \lambda\cdot(\text{gauge
 action of }B)_v$ with $\lambda^{nm}=1$ already implies the bare-edge absorbed
 equality at every edge (\path{edgeAbsorbed_of_perVertex}).
 
-What remains against the source statement of Theorem~3: the source's square-lattice
-region form of the theorem is covered separately by the conditional square-lattice
-statement recorded earlier in this note. The torus sizes match the source: the
-theorem and its uniqueness clauses hold for $n,m\geq 7$ (see the next section).
+There is no residual boundary-edge obligation in the source statement of
+Theorem~3. Its periodic square-lattice form and its uniqueness clauses hold for
+$n,m\geq 7$ (see the next section). The open-rectangle interior theorem is a
+separate extension and makes no claim at geometrically distinguished boundary
+edges.
 
 \section*{The torus sizes: from $n,m\geq 9$ to the source's $n,m\geq 7$}
 
@@ -2292,10 +2310,13 @@ feeders (\path{tiAbsorb}, \path{TINormalGaugeAbsorptionData},
 \path{absorbEdgeGauges_eq_of_matrixScalar}, and
 \path{TNLean/PEPS/NormalSquareTIAbsorption.lean}). The vertex-injective product identity
 \path{prod_perVertexScalar_eq_one} itself remains: it serves the injective theorem
-(Theorem~2), where single-site injectivity is the source hypothesis. A
-source-exact translationally invariant square-lattice statement awaits a
-translation-invariance predicate on the open lattice, as the earlier sections
-record.
+(Theorem~2), where single-site injectivity is the source hypothesis. No
+translation-invariance predicate on the open rectangle is required for the
+source theorem: its translationally invariant geometry is the discrete torus,
+and that theorem is
+\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}. Extending
+the open-rectangle theorem to its boundary vertices would be additional
+mathematics, not completion of Theorem~\path{3}.
 
 \section*{The closed-chain MPS corollary}
 
