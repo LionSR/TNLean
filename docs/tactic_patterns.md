@@ -2016,6 +2016,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/Channel/Determinant/HeisenbergDual.lean:103`; a follow-up sweep can retire this
   candidate once those are also converted to `norm_star`.
 
+### ground-space invariance under nonzero tensor rescaling — candidate
+- **Pattern:** identify the local MPS spaces of `ζ • A` and `A` for `ζ ≠ 0`
+  by rewriting `groundSpaceMap (ζ • A) L X` as
+  `groundSpaceMap A L ((ζ ^ L) • X)`, then use multiplication by
+  `ζ ^ L` and its inverse for the two range inclusions.
+- **Seen:** two nearly identical private lemmas:
+  `groundSpace_smul_eq` in
+  `TNLean/MPS/ParentHamiltonian/CoisometricReconstruction.lean` and
+  `groundSpace_smul_eq_of_ne_zero` in
+  `TNLean/MPS/ParentHamiltonian/CPSVOriginalRange.lean` (2026-08-31).
+- **Abstraction (proposed):** if a third consumer appears, promote one public
+  theorem beside the ground-space definitions and replace both private proofs.
+- **Notes:** the two current callers concern different reconstruction arguments,
+  and the earlier theorem is private, so neither can reuse the other without an
+  API change. This remains below the rule-of-three promotion threshold.
+
 ---
 
 ## Rejected
