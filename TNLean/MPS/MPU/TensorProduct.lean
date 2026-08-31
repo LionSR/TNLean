@@ -190,11 +190,11 @@ preserved without a swap.
 Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
 theorem sourceCutM₁_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) :
     sourceCutM₁ (tensorProduct U V) =
-      Matrix.reindex (tensorProductCutShuffle D d E e)
-        (tensorProductCutShuffle d D e E) (sourceCutM₁ U ⊗ₖ sourceCutM₁ V) := by
+      Matrix.reindex (tensorProductCutShuffle d D e E)
+        (tensorProductCutShuffle D d E e) (sourceCutM₁ U ⊗ₖ sourceCutM₁ V) := by
   ext row col
-  rcases row with ⟨αγ, jl⟩
-  rcases col with ⟨ik, βδ⟩
+  rcases row with ⟨ik, βδ⟩
+  rcases col with ⟨αγ, jl⟩
   simp [sourceCutM₁, tensorProduct, tensorProductCutShuffle, Matrix.reindex_apply]
 
 /-- The second source cut of an independent tensor product is the reindexed

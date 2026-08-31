@@ -72,7 +72,7 @@ definition `defnrl` and lines 697–704 of the paper.
   Section III, definition `defnrl`, lines 450–477 and 697–704.
 -/
 
-open scoped ComplexOrder
+open scoped ComplexOrder Matrix
 
 namespace MPOTensor
 

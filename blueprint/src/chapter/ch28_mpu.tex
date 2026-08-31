@@ -2694,21 +2694,24 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     These kernels are not the paper gates $u$ and $v$.
 \end{definition}
 
-\begin{theorem}[Auxiliary mixed-kernel two-site factorization]
+\begin{theorem}[Paper-gate two-site factorization]
     \label{thm:mpu_mixed_kernels_two_site_factorization}
-    \lean{MPOTensor.trace_mul_eq_sourceY₁X₂_mul_sourceX₁Y₂_swap,
-        MPOTensor.mpo_two_pair_entry_eq_sourceY₁X₂_mul_sourceX₁Y₂_swap,
-        MPOTensor.mpo_two_reindex_eq_sourceY₁X₂_transpose_mul_sourceX₁Y₂_swap_transpose}
+    \lean{MPOTensor.trace_mul_eq_sourceV_mul_sourceU_swap,
+        MPOTensor.mpo_two_pair_entry_eq_sourceV_mul_sourceU_swap,
+        MPOTensor.mpo_two_reindex_eq_sourceV_mul_sourceU_swap}
     \leanok
-    \uses{def:mpu_mixed_source_kernels, def:mpo_family}
+    \uses{def:mpu_source_uv, def:mpo_family}
     Identify a two-site physical configuration with an ordered pair in
     $\Fin d\times\Fin d$. Then
     \begin{align}
         \operatorname{reindex}(U^{(2)})
-         & =a^{\mathsf T}\bigl(\operatorname{swap}_{r,\ell}b\bigr)^{\mathsf T}.
+         & =v\,\operatorname{swap}_{r,\ell}(u),
     \end{align}
-    This is an auxiliary algebraic factorization; it is not the staggered
-    source-gate circuit of CPSV17 or FBC25.
+    where $\operatorname{swap}_{r,\ell}$ reorders the source index of $u$ from
+    $\ell\times r$ to the $r\times\ell$ order carried by the columns of $v$ and
+    reverses the two physical output coordinates. This is the exact two-site
+    factorization through the paper gates $u$ and $v$ of CPSV17
+    \texttt{SVDforms2}--\texttt{uuvv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2716,10 +2719,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Expand the periodic trace through $M_1=X_1Y_1$ and $M_2=X_2Y_2$.
     Reordering the four scalar finite sums gives
     \begin{align}
-        \sum_{l,r}a_{(l,r),(i_1,i_2)}b_{(j_1,j_2),(r,l)}.
+        \sum_{l,r}v_{(i_1,i_2),(r,l)}\,u_{(l,r),(j_2,j_1)}.
     \end{align}
-    Reindexing both physical configuration spaces and explicitly swapping
-    $(r,l)$ to $(l,r)$ gives the matrix identity.
+    Reindexing both physical configuration spaces and swapping $(l,r)$ to
+    $(r,l)$ gives the matrix identity.
 \end{proof}
 
 \begin{theorem}[Open two-site source factorization]

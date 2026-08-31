@@ -268,8 +268,7 @@ theorem trace_mul_eq_sourceV_mul_sourceU_swap
         sourceV U ρ hρ (i₁, i₂) (lr.2, lr.1) *
           sourceU U ρ hρ lr (j₂, j₁) := by
   classical
-  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, sourceV, sourceU,
-    Finset.mul_sum, Finset.sum_mul]
+  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
   have h₁ (α β : Fin D) :
       U i₁ j₁ α β = ∑ r, sourceX₁ U ρ hρ (i₁, β) r *
         sourceY₁ U ρ hρ r (α, j₁) := by
@@ -304,12 +303,10 @@ theorem trace_mul_eq_sourceV_mul_sourceU_swap
     _ = ∑ lr : Fin ℓ[U] × Fin r[U], ∑ α, ∑ β, f α β lr.1 lr.2 := by
       rw [Fintype.sum_prod_type]
     _ = _ := by
-      apply Finset.sum_congr rfl
-      intro lr _
-      apply Finset.sum_congr rfl
-      intro α _
-      apply Finset.sum_congr rfl
-      intro β _
+      refine Finset.sum_congr rfl fun lr _ => ?_
+      obtain ⟨l, r⟩ := lr
+      rw [sourceV_apply, sourceU_apply, Finset.sum_mul_sum, Finset.sum_comm]
+      refine Finset.sum_congr rfl fun α _ => Finset.sum_congr rfl fun β _ => ?_
       simp only [f]
       ring
 
@@ -351,8 +348,6 @@ theorem mpo_two_reindex_eq_sourceV_mul_sourceU_swap
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.mul_apply,
     Equiv.prodComm_symm, Equiv.prodComm_apply, finTwoArrowEquiv_symm_apply]
   rw [mpo_two_pair_entry_eq_sourceV_mul_sourceU_swap U ρ hρ i₁ i₂ j₁ j₂]
-  apply Finset.sum_congr rfl
-  rintro ⟨l, r⟩ _
-  rfl
+  exact Fintype.sum_equiv (Equiv.prodComm (Fin ℓ[U]) (Fin r[U])) _ _ fun lr => rfl
 
 end MPOTensor
