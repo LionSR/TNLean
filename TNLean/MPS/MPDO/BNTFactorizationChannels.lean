@@ -86,7 +86,7 @@ counterexample excludes every asserted two-to-three channel under the complete
 standing hypotheses and therefore refutes the unrestricted conclusion of
 `prop2to5`. See
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf> and
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_prop_c15_blocking_channel_false.pdf>.
+<https://sirui-lu.com/TNLean/paper-gaps/cpsv16_prop_c15_blocking_channel_false.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines
 1810--1817; the closing proof at lines 1821--1825; and the weight
@@ -136,7 +136,7 @@ construction; the separate trace-norm counterexample excludes every asserted
 two-to-three channel under the complete standing hypotheses and refutes the
 unrestricted source conclusion. See
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf> and
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_prop_c15_blocking_channel_false.pdf>.
+<https://sirui-lu.com/TNLean/paper-gaps/cpsv16_prop_c15_blocking_channel_false.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines
 1810--1817, and lines 1389--1403. -/
