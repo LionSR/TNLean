@@ -50,7 +50,8 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.translateIncidentEdge}
     \lean{TNLean.PEPS.torusEdge_horizontal_or_vertical}
     \leanok
-    The discrete $n\times m$ torus has vertex set $\Z/n\Z\times\Z/m\Z$.
+    For $n,m>1$, the discrete $n\times m$ torus has vertex set
+    $\Z/n\Z\times\Z/m\Z$.
     Its graph joins $(x,y)$ to $(x+1,y)$ and to $(x,y+1)$, with the
     coordinates read cyclically; every edge is of one of these two forms,
     so every edge is horizontal or vertical. Translation by $(a,b)$ is the
@@ -149,6 +150,62 @@ site-independent tensor and produces the global phase of
     invariance.
 \end{proof}
 
+\begin{definition}[Translation-invariant torus state]%
+    \label{def:peps_torus_state_translation_invariant}
+    \lean{TNLean.PEPS.IsTorusTranslationInvariantState}
+    \leanok
+    \uses{def:peps_stateCoeff, def:peps_torus_geometry_translation}
+    A PEPS tensor $A$ on the discrete torus represents a
+    translation-invariant state if
+    \begin{align}
+        \Coeff_A(\sigma\circ\tau_{a,b})
+         & =\Coeff_A(\sigma)
+        \notag
+    \end{align}
+    for every lattice translation $\tau_{a,b}$ and every physical
+    configuration $\sigma$. This condition concerns the contracted state;
+    the local tensor family itself may depend on the lattice site.
+\end{definition}
+
+\begin{theorem}[Tensor translation invariance implies state translation invariance]%
+    \label{thm:peps_tensor_translation_invariant_state}
+    \lean{TNLean.PEPS.IsTorusTranslationInvariant.%
+        isTorusTranslationInvariantState}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        def:peps_torus_state_translation_invariant}
+    A translation-invariant torus tensor represents a translation-invariant
+    state.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_stateCoeff_translationInvariant}
+    This is Theorem~\ref{thm:peps_stateCoeff_translationInvariant} for every
+    translation and physical configuration.
+\end{proof}
+
+\begin{theorem}[State equality with every translated tensor]%
+    \label{thm:peps_sameState_translate_of_state_translation_invariant}
+    \lean{TNLean.PEPS.%
+        sameState_transport_of_isTorusTranslationInvariantState}
+    \leanok
+    \uses{def:peps_torus_state_translation_invariant,
+        def:peps_tensor_transport, def:peps_same_state}
+    If $A$ represents a translation-invariant state, then
+    $A$ and $A^{\tau_{a,b}}$ represent the same state for every translation:
+    \begin{align}
+        \Coeff_A(\sigma)
+         & =\Coeff_{A^{\tau_{a,b}}}(\sigma).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_stateCoeff_transport}
+    Transport gives
+    $\Coeff_{A^{\tau_{a,b}}}(\sigma)
+        =\Coeff_A(\sigma\circ\tau_{a,b})$, and state translation invariance
+    identifies the right-hand side with $\Coeff_A(\sigma)$.
+\end{proof}
+
 \begin{definition}[Orientation-uniform bond dimensions on the torus]%
     \label{def:peps_torus_uniform_bond_dim}
     \lean{TNLean.PEPS.torusRightEdge}
@@ -172,8 +229,11 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.isVerticalTorusEdge_eq_upEdge}
     \lean{TNLean.PEPS.translateEdge_torusRightEdge}
     \lean{TNLean.PEPS.translateEdge_torusUpEdge}
+    \lean{TNLean.PEPS.bondDim_torusRightEdge_const_of_translate}
+    \lean{TNLean.PEPS.bondDim_torusUpEdge_const_of_translate}
     \lean{TNLean.PEPS.bondDim_torusRightEdge_const}
     \lean{TNLean.PEPS.bondDim_torusUpEdge_const}
+    \lean{TNLean.PEPS.torusUniformBondDim_of_translate}
     \lean{TNLean.PEPS.torusUniformBondDim_of_translationInvariant}
     \leanok
     \uses{def:peps_torus_translation_invariant, def:peps_torus_uniform_bond_dim}

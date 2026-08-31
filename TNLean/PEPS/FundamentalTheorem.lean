@@ -19,6 +19,12 @@ This root-only capstone records the full statement of the PEPS Fundamental
 Theorem (arXiv:1804.04964, Section 3, Theorem 2), with the forward
 bond-dimension obligation and converse gaps documented in the paper-gap notes
 cited below. The separate root-only audit is tracked by issue #1512.
+
+**Local fix (positive virtual spaces):** The paper's virtual bond spaces have
+positive dimension, whereas `Tensor.bondDim` can take the value zero.  Results
+using the three-site insertion comparison therefore state positivity
+explicitly.  The convention and the zero-dimensional obstruction are
+documented in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 -/
 
 open scoped BigOperators Matrix
@@ -586,6 +592,31 @@ theorem bondDim_eq_of_matrixAlgEquiv {m n : ℕ}
   simp only [Fintype.card_fin, Module.finrank_self, mul_one] at hfr
   exact Nat.mul_self_inj.mp hfr
 
+/-- Vertex-injective PEPS tensors with the same state and positive virtual
+spaces have the same bond dimension on every edge.
+
+This is the bond-dimension consequence of the virtual-operation algebra
+isomorphism in the proof of the injective PEPS Fundamental Theorem and does not
+require the graph to be connected.  At each edge, the edge-blocked three-site
+comparison gives an algebra equivalence between the two full matrix algebras on
+that bond; equality of their dimensions forces equality of the matrix sizes.
+
+Source: arXiv:1804.04964, the virtual-operation algebra isomorphism at lines
+279--282 and 571--582, and Theorem 2 at lines 1207--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem bondDim_eq_of_isVertexInjective_sameState (A B : Tensor G d)
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
+    A.bondDim = B.bondDim := by
+  funext e
+  exact bondDim_eq_of_matrixAlgEquiv
+    (edgeTransferAlgEquiv A B e
+      (hA.edgeBlockedThreeSiteInjective hposA e)
+      (hB.edgeBlockedThreeSiteInjective hposB e)
+      hAB hposA hposB)
+
 /-- **Fundamental Theorem for injective PEPS** (arXiv:1804.04964, Theorem 2).
 
 For PEPS tensors on a finite simple graph, if `A` and `B` are vertex-injective
@@ -629,18 +660,7 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hposB : ∀ e : Edge G, 0 < B.bondDim e)
     (hconn : G.Connected) :
     GaugeEquiv A B := by
-  -- Bond-dimension equality follows edgewise from the edge-blocked insertion
-  -- algebra isomorphism: blocking around an edge gives two injective three-site
-  -- chains generating the same state, and the matched matrix insertions on that
-  -- bond form an algebra equivalence between the two full bond matrix algebras.
-  -- Such an equivalence forces equal matrix sizes.
-  have hDim : A.bondDim = B.bondDim := by
-    funext e
-    exact bondDim_eq_of_matrixAlgEquiv
-      (edgeTransferAlgEquiv A B e
-        (hA.edgeBlockedThreeSiteInjective hposA e)
-        (hB.edgeBlockedThreeSiteInjective hposB e)
-        hAB hposA hposB)
+  have hDim := bondDim_eq_of_isVertexInjective_sameState A B hA hB hAB hposA hposB
   -- With matching bond dimensions, gauge consistency supplies the global gauges.
   exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hposA hconn
 
