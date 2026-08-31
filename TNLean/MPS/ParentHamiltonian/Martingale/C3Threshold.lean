@@ -207,16 +207,15 @@ arXiv:cond-mat/9410110, equation (2.4); no new decay estimate enters. -/
 theorem IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
-    ∃ l : ℕ, ∃ ε : ℝ,
-      1 < l ∧ Kraus.IsNBlkInjective A l ∧ 0 ≤ ε ∧
-      ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
+    ∃ l : ℕ, ∃ ε : ℝ, ∃ hl : 1 < l, ∃ hInj : Kraus.IsNBlkInjective A l,
+      0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
       ∀ (K : ℕ) (hK : 0 < K),
         ‖openChainTailGroundProjectionES A K (l + 1) ∘L
-            openChainMartingaleDifferenceES A K l hK‖ ≤ ε := by
+            openChainMartingaleDifferenceES A K l hInj hl.le hK‖ ≤ ε := by
   obtain ⟨l, ε, hl, hInj, hε, hε_lt, hDefect⟩ :=
     hP.exists_openChain_groundProjection_defect_lt_c3_threshold hρ
   refine ⟨l, ε, hl, hInj, hε, hε_lt, fun K hK ↦ ?_⟩
-  rw [openChainTailGroundProjection_comp_martingaleDifference hK]
+  rw [openChainTailGroundProjection_comp_martingaleDifference hInj hl.le hK]
   exact hDefect K
 
 /-- The C3 threshold yields the uniform open-chain anticommutator estimate for

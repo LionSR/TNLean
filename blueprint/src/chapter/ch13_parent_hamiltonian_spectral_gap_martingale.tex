@@ -1352,13 +1352,14 @@ coercivity.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, equation En, lines 1060--1073.
-\begin{definition}[Physical open-chain martingale difference]
+\begin{definition}[Block-injective MPS realization of the open-chain martingale difference]
     \label{def:open_chain_martingale_difference_es}
     \lean{MPSTensor.openChainMartingaleDifferenceES}
     \leanok
-    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es}
-    Fix $K,l\in\N$ with $K>0$, set $n=K+l$ and $n_l=l+1$, and work in the
-    Hilbert space on $\Lambda_{n+1}$.  The physical open-chain martingale difference is
+    \uses{def:open_chain_ground_subspaces_es, thm:open_parent_hamiltonian_kernel_ground_space}
+    Assume $D\geq1$, $l>0$, and that $A$ is $l$-block-injective.  Fix
+    $K>0$, set $n=K+l$ and $n_l=l+1$, and work in the Hilbert space on
+    $\Lambda_{n+1}$.  The physical open-chain martingale difference is
     \begin{align}
         E_n
          & :=G_{\Lambda_n}-G_{\Lambda_{n+1}} \\
@@ -1367,10 +1368,11 @@ coercivity.
         \label{eq:open_chain_martingale_difference_es}
     \end{align}
     The first projector imposes the ground condition on the left $n$ sites
-    while acting on all $n+1$ sites.  Hence both terms in the difference have
-    the same ambient Hilbert space.  The condition $K>0$ excludes the
-    undersized volume, where an interaction of length $l+1$ has no
-    nonwrapping window and its physical ground projector is the identity.
+    while acting on all $n+1$ sites.  Block injectivity identifies these MPS
+    spaces with the corresponding open-parent Hamiltonian kernels.  The
+    condition $K>0$ excludes the undersized volume, where an interaction of
+    length $l+1$ has no nonwrapping window and its physical ground projector is
+    the identity.
 \end{definition}
 
 \begin{lemma}[Whole ground space lies in the C3 tail space]
@@ -1419,13 +1421,14 @@ coercivity.
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
 % identity following C3, lines 1178--1188.
-\begin{theorem}[Exact C3 martingale-difference identity]
+\begin{theorem}[Block-injective MPS instance of the exact C3 identity]
     \label{thm:exact_c3_martingale_difference_identity}
     \lean{MPSTensor.openChainTailGroundProjection_comp_martingaleDifference}
     \leanok
     \uses{def:open_chain_martingale_difference_es, lem:reverse_c3_projector_composition}
-    Fix $K,l\in\N$ with $K>0$.  With $n=K+l$ and $n_l=l+1$,
-    Nachtergaele's identity following condition C3 is
+    Assume $D\geq1$, $l>0$, and that $A$ is $l$-block-injective.  Fix $K>0$.
+    With $n=K+l$ and $n_l=l+1$, the MPS parent chain satisfies Nachtergaele's
+    identity following condition C3:
     \begin{align}
         G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
          & =G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}

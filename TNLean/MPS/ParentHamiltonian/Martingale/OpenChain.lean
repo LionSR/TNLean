@@ -90,17 +90,16 @@ noncomputable def openChainTailGroundProjectionES (A : MPSTensor d D) (K L : ℕ
 
 /-- Nachtergaele's physical open-chain martingale difference
 \(E_n=G_{\Lambda_n}-G_{\Lambda_{n+1}}\), represented in the Hilbert space on
-\(\Lambda_{n+1}\).
+\(\Lambda_{n+1}\), for the MPS parent interaction of length \(l+1\).
 
-The indices are \(n=K+l\) and \(n_l=l+1\), so \(0<K\). Thus the first term is
-the projector onto the left ground condition on \(\Lambda_n\), extended across
-the last site, and the second is the whole-chain ground projector on
-\(\Lambda_{n+1}\). The strict inequality excludes the undersized volume where
-the interaction of length \(l+1\) has no nonwrapping window. See
+The indices are \(n=K+l\) and \(n_l=l+1\). Block injectivity identifies the MPS
+ground spaces below with the corresponding open-parent Hamiltonian kernels,
+and \(0<K\) excludes the undersized volume with no nonwrapping window. See
 arXiv:cond-mat/9410110, equation `(En)` and the identity following condition C3
 in equation (2.4). -/
-noncomputable def openChainMartingaleDifferenceES
-    (A : MPSTensor d D) (K l : ℕ) (_hK : 0 < K) :
+noncomputable def openChainMartingaleDifferenceES [NeZero D]
+    (A : MPSTensor d D) (K l : ℕ) (_hInj : Kraus.IsNBlkInjective A l)
+    (_hl : 0 < l) (_hK : 0 < K) :
     EuclideanSpace ℂ (Cfg d (K + l + 1)) →L[ℂ]
       EuclideanSpace ℂ (Cfg d (K + l + 1)) :=
   openChainLeftGroundProjectionES A (K + l) -
@@ -183,11 +182,15 @@ G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
   -G_{\Lambda_{n+1}}.
 \]
 Here \(n=K+l\), \(n_l=l+1\), and \(0<K\), so every operator acts on the
-physical open chain in the Hilbert space of \(\Lambda_{n+1}\). -/
-theorem openChainTailGroundProjection_comp_martingaleDifference
-    {A : MPSTensor d D} {K l : ℕ} (hK : 0 < K) :
+physical open chain in the Hilbert space of \(\Lambda_{n+1}\). The projector
+composition used in the proof is independent of block injectivity; the latter
+is needed only to identify the MPS spaces in `openChainMartingaleDifferenceES`
+with the physical open-parent ground spaces. -/
+theorem openChainTailGroundProjection_comp_martingaleDifference [NeZero D]
+    {A : MPSTensor d D} {K l : ℕ} (hInj : Kraus.IsNBlkInjective A l)
+    (hl : 0 < l) (hK : 0 < K) :
     openChainTailGroundProjectionES A K (l + 1) ∘L
-        openChainMartingaleDifferenceES A K l hK =
+        openChainMartingaleDifferenceES A K l hInj hl hK =
       openChainTailGroundProjectionES A K (l + 1) ∘L
           openChainLeftGroundProjectionES A (K + l) -
         (groundSpaceES A (K + l + 1)).starProjection := by
