@@ -17,6 +17,7 @@ import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FiniteCycleCoboundary
+import TNLean.Algebra.FiniteGroupUnitaryAverage
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.GeneralizedCocycle
@@ -26,6 +27,7 @@ import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NegMulLog
+import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle

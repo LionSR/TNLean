@@ -6,14 +6,16 @@ Authors: TNLean contributors
 import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Channel.SingleKrausPositivity
 import TNLean.Algebra.ListProduct
+import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 
 /-!
 # Sitewise physical matrices on periodic MPOs
 
-A one-site matrix `V` acts on a chain by its sitewise tensor power.  Acting on
-both physical legs of a periodic MPO is the same as changing the physical
-basis of every local MPO matrix before closing the virtual trace.
+A one-site matrix `V` acts on a chain by its sitewise tensor power. Acting on
+the ket leg at every site left-multiplies the closed MPO by this tensor power.
+Acting on both physical legs is the same as changing the physical basis of
+every local MPO matrix before closing the virtual trace.
 
 This is finite-dimensional tensor-product algebra.  The construction is used
 below with the BNT physical-sector projections of arXiv:1606.00608,
@@ -53,6 +55,43 @@ noncomputable def sitewisePhysicalMatrix
     (V : Matrix (Fin e) (Fin d) ℂ) (N : ℕ) :
     Matrix (Fin N → Fin e) (Fin N → Fin d) ℂ :=
   fun s t ↦ ∏ n : Fin N, V (s n) (t n)
+
+private theorem trace_mul_evalWord_ketLeftMul_ofFn
+    (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
+    (X : Matrix (Fin D) (Fin D) ℂ) (σ τ : Fin N → Fin d) :
+    Matrix.trace (X * evalWord (M.ketLeftMul P) (List.ofFn σ) (List.ofFn τ)) =
+      ∑ ρ : Fin N → Fin d, (∏ n : Fin N, P (σ n) (ρ n)) *
+        Matrix.trace (X * evalWord M (List.ofFn ρ) (List.ofFn τ)) := by
+  induction N generalizing X with
+  | zero => simp
+  | succ n ih =>
+      simp only [List.ofFn_succ, evalWord_cons, ketLeftMul]
+      rw [← Matrix.mul_assoc, Matrix.mul_sum, Finset.sum_mul, Matrix.trace_sum]
+      simp_rw [Matrix.mul_smul, Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
+      have reindex : ∀ F : (Fin (n + 1) → Fin d) → ℂ,
+          ∑ ρ, F ρ = ∑ k : Fin d, ∑ ρ' : Fin n → Fin d, F (Fin.cons k ρ') :=
+        fun F => by
+          rw [← Fintype.sum_prod_type']
+          exact ((Fin.consEquiv fun _ : Fin (n + 1) ↦ Fin d).sum_comp F).symm
+      rw [reindex]
+      simp only [Fin.cons_zero, Fin.cons_succ, Fin.prod_univ_succ]
+      apply Finset.sum_congr rfl
+      intro k _
+      rw [ih, Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro ρ _
+      rw [Matrix.mul_assoc]
+      ring
+
+/-- Applying a matrix to the ket leg at every site left-multiplies the closed
+MPO by its sitewise tensor power. -/
+theorem mpo_ketLeftMul (M : MPOTensor d D)
+    (P : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
+    mpo (M.ketLeftMul P) N = sitewisePhysicalMatrix P N * mpo M N := by
+  ext σ τ
+  simp only [Matrix.mul_apply, mpo_apply, mpoMatrixEntry, sitewisePhysicalMatrix]
+  simpa only [Matrix.one_mul] using
+    trace_mul_evalWord_ketLeftMul_ofFn M P (1 : Matrix (Fin D) (Fin D) ℂ) σ τ
 
 /-- Sitewise tensor powers preserve rectangular matrix multiplication. -/
 theorem sitewisePhysicalMatrix_mul
