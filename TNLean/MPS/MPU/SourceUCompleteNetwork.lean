@@ -48,13 +48,13 @@ namespace SourceFactors
 paper's dotted/solid source-bond order `(r,l)`.
 
 Source: CPSV17 equations `uu` and `uUnitary` (lines 532--557). -/
-noncomputable def sourceYTensor {ρ : Matrix (Fin D) (Fin D) ℂ}
+private noncomputable def sourceYTensor {ρ : Matrix (Fin D) (Fin D) ℂ}
     (S : SourceFactors U ρ) :
     Matrix (Fin r[U] × Fin ℓ[U])
       ((Fin d × Fin D) × (Fin d × Fin D)) ℂ :=
   S.Y₁ ⊗ₖ S.Y₂
 
-@[simp] theorem sourceYTensor_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
+@[simp] private theorem sourceYTensor_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
     (S : SourceFactors U ρ) (r : Fin r[U]) (l : Fin ℓ[U])
     (x₁ x₂ : Fin d × Fin D) :
     sourceYTensor U S (r, l) (x₁, x₂) = S.Y₁ r x₁ * S.Y₂ l x₂ := rfl
@@ -64,7 +64,7 @@ contraction of `sourceYTensor`, with the physical and source-bond orders
 displayed explicitly.
 
 Source: CPSV17 equation `uu` and Figure `II_umatrix.png` (lines 532--543). -/
-theorem sourceU_eq_diagonal_sourceYTensor
+private theorem sourceU_eq_diagonal_sourceYTensor
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (l : Fin ℓ[U]) (r : Fin r[U]) (i₁ i₂ : Fin d) :
     sourceU U S (l, r) (i₁, i₂) =
@@ -125,7 +125,7 @@ four local tensor entries.  The first cut retains the source weight, and the
 second cut uses only the column-isometry normalization of \(X_2\).
 
 Source: CPSV17 equations `X1X2b` and `uUnitary` (lines 487--557). -/
-theorem sourceYTensor_gram_eq_four_u_weighted
+private theorem sourceYTensor_gram_eq_four_u_weighted
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (p q : Fin d × Fin d) (a b : Fin D × Fin D) :
     (∑ t : Fin r[U] × Fin ℓ[U],
