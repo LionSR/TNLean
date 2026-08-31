@@ -18,15 +18,16 @@ This module constructs the six source factors $X_1,Y_1,Z_1,X_2,Y_2,Z_2$ from the
 singular-value decompositions of an `MPOTensor`, following arXiv:1703.09188, equations
 `eq:sf-svd`--`YZ=1` (lines 479--506).
 
-The first source cut has row order (left virtual, down physical), while the second has row order
-(left virtual, up physical). Both use the product type `(Fin D × Fin d)`. Consequently the paper's
-graphically written weight $I_d\otimes\rho$ is represented literally in
-Lean as $\rho\otimes I_d$. The first factorization is normalized for this weight; the second is
-normalized for the ordinary inner product.
+The first source cut has row order (up physical, right virtual), matching the
+external legs of the paper's $X_1$, while the second has row order (left
+virtual, up physical), matching the external legs of $X_2$.  Thus the first
+source weight is literally $I_d\otimes\rho$. The first factorization is
+normalized for this weight; the second is normalized for the ordinary inner
+product.
 
 ## Main definitions
 
-* `MPOTensor.sourceWeight`: the product-index matrix $\rho\otimes I_d$.
+* `MPOTensor.sourceWeight`: the product-index matrix $I_d\otimes\rho$.
 * `MPOTensor.SourceCutSVD`, `MPOTensor.sourceSVD₁`, `MPOTensor.sourceSVD₂`: the two
   product-index compact singular-value decompositions.
 * `MPOTensor.SourceFactors`: the six factors together with their source-cut factorizations,
@@ -67,19 +68,20 @@ variable {d D : ℕ} (U : MPOTensor d D)
 
 /-- The first source-cut weight in product-index order.
 
-The paper writes this matrix as $I_d\otimes\rho$ according to its graphical leg order. Since
-`sourceCutM₁` orders its row index as (left virtual, down physical), the literal Lean Kronecker
-product is $\rho\otimes I_d$. This is arXiv:1703.09188, `Y1Y1X1X1` (lines 487--494). -/
+The row of `sourceCutM₁` is (up physical, right virtual), which is precisely
+the external-leg order of the paper's $X_1$.  Hence the graphical weight is
+represented literally as $I_d\otimes\rho$. This is arXiv:1703.09188,
+`Y1Y1X1X1` and Figure `II_X2bX1b.png` (lines 487--524). -/
 noncomputable def sourceWeight (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ :=
-  ρ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)
+    Matrix (Fin d × Fin D) (Fin d × Fin D) ℂ :=
+  (1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ ρ
 
 /-- A positive-definite virtual weight gives a positive-definite product-index source weight.
 This supplies the square root and inverse square root used in arXiv:1703.09188,
 `Y1Y1X1X1` and `Z1Z2` (lines 487--502). -/
 theorem sourceWeight_posDef {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) :
     (sourceWeight (d := d) ρ).PosDef :=
-  hρ.kronecker Matrix.PosDef.one
+  Matrix.PosDef.one.kronecker hρ
 
 /-- A compact SVD transported to a product-index source cut and its paper rank.
 This is the coordinate form of arXiv:1703.09188, `eq:sf-svd` (lines 479--486). -/
@@ -175,8 +177,8 @@ This is arXiv:1703.09188, `eq:sf-svd` for $\mathcal M_1$ (lines 479--486). -/
 noncomputable def sourceSVD₁ :
     SourceCutSVD (sourceCutM₁ U) r[U] :=
   productCompactSVD (sourceCutM₁ U) (sourceCutM₁Fin U)
-    (finProdFinEquiv (m := D) (n := d)).symm
     (finProdFinEquiv (m := d) (n := D)).symm
+    (finProdFinEquiv (m := D) (n := d)).symm
     (by simp [sourceCutM₁Fin, Matrix.reindex_apply])
     (sourceCutM₁_rank_eq_sourceCutM₁Fin_rank U).symm
 
@@ -205,7 +207,7 @@ private theorem sourceSVD₁_V_vecMul_injective :
       Matrix.vecMul_vecMul _ _ _
     _ = y := by rw [(sourceSVD₁ U).V_coisometry, Matrix.vecMul_one]
 
-/-- The positive normalization matrix $A=V_1(\rho\otimes I_d)V_1^*$ from
+/-- The positive normalization matrix $A=V_1(I_d\otimes\rho)V_1^*$ from
 arXiv:1703.09188, `Y1Y1X1X1` (lines 487--494). -/
 noncomputable def sourceGram₁ (ρ : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin r[U]) (Fin r[U]) ℂ :=
@@ -221,20 +223,20 @@ theorem sourceGram₁_posDef {ρ : Matrix (Fin D) (Fin D) ℂ}
 /-- The weighted factor $X_1=V_1^*A^{-1/2}$ from arXiv:1703.09188,
 `Y1Y1X1X1` (lines 487--494). -/
 noncomputable def sourceX₁ (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    Matrix (Fin D × Fin d) (Fin r[U]) ℂ :=
+    Matrix (Fin d × Fin D) (Fin r[U]) ℂ :=
   (sourceSVD₁ U).Vᴴ * (sourceGram₁_posDef U hρ).posSemidef.supportInvSqrt
 
 /-- The weighted factor $Y_1=A^{1/2}D_1U_1$ determined by
 $\mathcal M_1=X_1Y_1$, arXiv:1703.09188, `eq:sf-svd`--`Y1Y1X1X1` (lines 479--494). -/
 noncomputable def sourceY₁ (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    Matrix (Fin r[U]) (Fin d × Fin D) ℂ :=
+    Matrix (Fin r[U]) (Fin D × Fin d) ℂ :=
   (sourceGram₁_posDef U hρ).isHermitian.cfc Real.sqrt *
     (sourceSVD₁ U).diagonal * (sourceSVD₁ U).U
 
 /-- The factor $Z_1=U_1^*D_1^{-1}A^{-1/2}$ from arXiv:1703.09188,
 `Z1Z2` (lines 495--502). -/
 noncomputable def sourceZ₁ (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    Matrix (Fin d × Fin D) (Fin r[U]) ℂ :=
+    Matrix (Fin D × Fin d) (Fin r[U]) ℂ :=
   (sourceSVD₁ U).Uᴴ * (sourceSVD₁ U).inverseDiagonal *
     (sourceGram₁_posDef U hρ).posSemidef.supportInvSqrt
 
@@ -257,7 +259,7 @@ noncomputable def sourceZ₂ : Matrix (Fin d × Fin D) (Fin ℓ[U]) ℂ :=
 `Y1Y1X1X1` (lines 487--494). -/
 @[simp]
 theorem sourceX₁_apply (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (a : Fin D × Fin d) (q : Fin r[U]) :
+    (a : Fin d × Fin D) (q : Fin r[U]) :
     sourceX₁ U ρ hρ a q = ∑ k,
       star ((sourceSVD₁ U).V k a) *
         (sourceGram₁_posDef U hρ).posSemidef.supportInvSqrt k q := by
@@ -267,7 +269,7 @@ theorem sourceX₁_apply (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
 `eq:sf-svd`--`Y1Y1X1X1` (lines 479--494). -/
 @[simp]
 theorem sourceY₁_apply (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (q : Fin r[U]) (b : Fin d × Fin D) :
+    (q : Fin r[U]) (b : Fin D × Fin d) :
     sourceY₁ U ρ hρ q b = ∑ k,
       (∑ l, (sourceGram₁_posDef U hρ).isHermitian.cfc Real.sqrt q l *
         (sourceSVD₁ U).diagonal l k) * (sourceSVD₁ U).U k b := by
@@ -277,7 +279,7 @@ theorem sourceY₁_apply (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
 `Z1Z2` (lines 495--502). -/
 @[simp]
 theorem sourceZ₁_apply (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (b : Fin d × Fin D) (q : Fin r[U]) :
+    (b : Fin D × Fin d) (q : Fin r[U]) :
     sourceZ₁ U ρ hρ b q = ∑ k,
       (∑ l, star ((sourceSVD₁ U).U l b) * (sourceSVD₁ U).inverseDiagonal l k) *
         (sourceGram₁_posDef U hρ).posSemidef.supportInvSqrt k q := by
@@ -311,11 +313,11 @@ Here `X₁` has the paper's weighted normalization for $I_d\otimes\rho$ (represe
 `sourceWeight ρ`), while `X₂` has the ordinary isometry normalization. -/
 structure SourceFactors (ρ : Matrix (Fin D) (Fin D) ℂ) where
   /-- The weighted left factor of the first source cut. -/
-  X₁ : Matrix (Fin D × Fin d) (Fin r[U]) ℂ
+  X₁ : Matrix (Fin d × Fin D) (Fin r[U]) ℂ
   /-- The right factor of the first source cut. -/
-  Y₁ : Matrix (Fin r[U]) (Fin d × Fin D) ℂ
+  Y₁ : Matrix (Fin r[U]) (Fin D × Fin d) ℂ
   /-- The right inverse of `Y₁` defined by arXiv:1703.09188, `Z1Z2`. -/
-  Z₁ : Matrix (Fin d × Fin D) (Fin r[U]) ℂ
+  Z₁ : Matrix (Fin D × Fin d) (Fin r[U]) ℂ
   /-- The isometric left factor of the second source cut. -/
   X₂ : Matrix (Fin D × Fin d) (Fin ℓ[U]) ℂ
   /-- The right factor of the second source cut. -/
@@ -339,7 +341,7 @@ structure SourceFactors (ρ : Matrix (Fin D) (Fin D) ℂ) where
 /-- Construct the paper's source factors from compact SVD and a positive-definite virtual weight.
 
 For the first cut, if $V_1^*D_1U_1$ is the compact SVD and
-$A=V_1(\rho\otimes I_d)V_1^*$, then
+$A=V_1(I_d\otimes\rho)V_1^*$, then
 $X_1=V_1^*A^{-1/2}$, $Y_1=A^{1/2}D_1U_1$, and
 $Z_1=U_1^*D_1^{-1}A^{-1/2}$. The second cut uses
 $X_2=V_2^*$, $Y_2=D_2U_2$, and $Z_2=U_2^*D_2^{-1}$.
@@ -431,8 +433,8 @@ theorem sourceCutM₂_eq_sourceX₂_mul_sourceY₂ :
 @[simp]
 theorem sourceX₁_mul_sourceY₁_apply
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (α : Fin D) (j : Fin d) (i : Fin d) (β : Fin D) :
-    (sourceX₁ U ρ hρ * sourceY₁ U ρ hρ) (α, j) (i, β) = U i j α β := by
+    (i : Fin d) (β : Fin D) (α : Fin D) (j : Fin d) :
+    (sourceX₁ U ρ hρ * sourceY₁ U ρ hρ) (i, β) (α, j) = U i j α β := by
   rw [← sourceCutM₁_eq_sourceX₁_mul_sourceY₁ U ρ hρ]
   rfl
 
