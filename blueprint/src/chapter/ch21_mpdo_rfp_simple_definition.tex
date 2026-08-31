@@ -400,3 +400,25 @@
     block-diagonal gauge---give a horizontal canonical form. Positivity and
     non-nilpotency are not needed for this conclusion.
 \end{proof}
+
+\begin{theorem}[Normalized simple canonical forms are simple]
+    \label{thm:mpdo_simple_cf_is_simple}
+    \lean{MPOTensor.IsSimpleCanonicalForm.isSimple}
+    \leanok
+    \uses{def:mpdo_simple_cf_tensor, def:mpdo_simple_tensor}
+    Every tensor satisfying normalized simplicity in the chosen blocked
+    canonical-form setting is simple in the sense of
+    Definition~\ref{def:mpdo_simple_tensor}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take the blocking length to be one. The canonical bijection between the
+    one-site blocked ket--bra alphabet and the original doubled alphabet
+    relabels the displayed sector decomposition into a BNT presentation of the
+    blocked tensor. Normality and eventual linear independence are preserved
+    by this relabeling, and the global block gauge gives equality of all
+    positive-length closed matrix-product coefficients. Finally, reindexing
+    the diagonal physical-trace sum by the same bijection leaves each
+    representative's transfer matrix unchanged. The assumed non-nilpotency
+    certificates therefore prove simplicity.
+\end{proof}
