@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
+import TNLean.MPS.MPDO.BNTBoundaryDecomposition
 import TNLean.MPS.MPDO.BNTProjectorSelection
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.NeighboringTraceObstructionAmbientBlocks
@@ -287,6 +288,147 @@ private theorem secondAbsorbedSector_toMPSTensor
   change (fun i ↦ (1 : ℂ) • terminalBlock.toMPSTensor i) =
     terminalBlock.toMPSTensor
   simp
+
+/-- Taking a diagonal block after flattening a dependent block-diagonal matrix
+recovers the selected block. -/
+private theorem finSigmaDiagonalBlock_reindex_blockDiagonal
+    {r : ℕ} {dim : Fin r → ℕ}
+    (C : (s : Fin r) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ)
+    (s : Fin r) :
+    Matrix.finSigmaDiagonalBlock
+        (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
+          (Matrix.blockDiagonal' C)) s = C s := by
+  ext a b
+  simp [Matrix.finSigmaDiagonalBlock]
+
+/-- The family of virtual boundary blocks that carries `X` on the obstruction
+copy and zero on every other copy. -/
+private def obstructionSectorBoundaryBlock
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (X : Matrix (Fin 2) (Fin 2) ℂ)
+    (s : Fin (sectors mu B hmu).totalCopies) :
+    Matrix (Fin ((sectors mu B hmu).flatDim s))
+      (Fin ((sectors mu B hmu).flatDim s)) ℂ :=
+  let S := sectors mu B hmu
+  let firstCopy : Fin S.totalCopies := S.flatIndexEquiv ⟨0, 0⟩
+  if hs : s = firstCopy then
+    cast (congrArg (fun n ↦ Matrix (Fin n) (Fin n) ℂ) (by
+      have hdim : S.flatDim firstCopy = 2 := by
+        unfold firstCopy
+        exact (S.flatDim_flatIndexEquiv ⟨(0 : Fin S.basisCount), 0⟩).trans (by rfl)
+      exact hdim.symm.trans (congrArg S.flatDim hs.symm))) X
+  else 0
+
+/-- Embed a boundary matrix into the obstruction block of the ambient virtual
+space, with zero boundary on the terminal block. This is the two-sector
+coordinate form of the arbitrary-boundary BNT assembly in CPSV16, Appendix
+C.2, lines 1646--1665. -/
+private def obstructionSectorBoundary
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    Matrix (Fin (sectors mu B hmu).totalDim)
+      (Fin (sectors mu B hmu).totalDim) ℂ :=
+  Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
+    (Matrix.blockDiagonal' (obstructionSectorBoundaryBlock mu B hmu X))
+
+/-- Each flattened diagonal block of the ambient obstruction boundary is its
+defining boundary block. -/
+@[simp] private theorem finSigmaDiagonalBlock_obstructionSectorBoundary
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (X : Matrix (Fin 2) (Fin 2) ℂ)
+    (s : Fin (sectors mu B hmu).totalCopies) :
+    Matrix.finSigmaDiagonalBlock (obstructionSectorBoundary mu B hmu X) s =
+      obstructionSectorBoundaryBlock mu B hmu X s :=
+  finSigmaDiagonalBlock_reindex_blockDiagonal _ _
+
+/-- The obstruction representative sees precisely the embedded boundary. -/
+private theorem representativeBoundary_obstructionSectorBoundary_zero
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    representativeBoundary (sectors mu B hmu)
+        (obstructionSectorBoundary mu B hmu X) 0 = X := by
+  simp [representativeBoundary, obstructionSectorBoundaryBlock, sectors,
+    obstructionTerminalDecomposition]
+  apply eq_of_heq
+  exact cast_heq _ _
+
+/-- The terminal representative sees the zero boundary. -/
+private theorem representativeBoundary_obstructionSectorBoundary_one
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    representativeBoundary (sectors mu B hmu)
+        (obstructionSectorBoundary mu B hmu X)
+        (Fin.succ 0) = 0 := by
+  simp [representativeBoundary, obstructionSectorBoundaryBlock, sectors,
+    obstructionTerminalDecomposition]
+  apply eq_of_heq
+  exact cast_heq _ _
+
+/-- Conjugating a virtual boundary transports a gauge-equivalent physical
+closure back to the original tensor. -/
+private theorem physCloseN_gauge_obstructionSector
+    {K L : MPOTensor 5 2} (G : GL (Fin 2) ℂ)
+    (hG : ∀ i, L.toMPSTensor i =
+      (G : Matrix (Fin 2) (Fin 2) ℂ) * K.toMPSTensor i *
+        (↑(G⁻¹) : Matrix (Fin 2) (Fin 2) ℂ))
+    (N : ℕ) (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    physCloseN L N
+        ((G : Matrix (Fin 2) (Fin 2) ℂ) * X *
+          (↑(G⁻¹) : Matrix (Fin 2) (Fin 2) ℂ)) =
+      physCloseN K N X := by
+  ext σ τ
+  rw [physCloseN_apply, physCloseN_apply,
+    ← evalWord_toMPSTensor_pairConfig, ← evalWord_toMPSTensor_pairConfig]
+  simpa [Matrix.mul_assoc] using MPSTensor.trace_evalWord_gauge_mul G hG
+    (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))
+    ((G : Matrix (Fin 2) (Fin 2) ℂ) * X *
+      (↑(G⁻¹) : Matrix (Fin 2) (Fin 2) ℂ))
+
+/-- A single ambient virtual boundary isolates the embedded obstruction sector
+at every chain length.
+
+The same boundary is used for all lengths, as required when the two channel
+equations in CPSV16 Proposition C.15 are compared. This is the arbitrary-
+boundary specialization of the BNT assembly in CPSV16, Appendix C.2, lines
+1646--1665 and 1810--1825. -/
+theorem exists_ambient_boundary_physCloseN_eq_embeddedObstruction
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    ∃ Y : Matrix (Fin 3) (Fin 3) ℂ, ∀ N : ℕ,
+      physCloseN (ambient mu B hmu) N Y = physCloseN embeddedObstruction N X := by
+  let S := sectors mu B hmu
+  change ∃ Y : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ, ∀ N : ℕ,
+    physCloseN (verticalBNTMPO S.toTensor) N Y = physCloseN embeddedObstruction N X
+  obtain ⟨G, hG⟩ := hGauge
+  let XG := (G : Matrix (Fin 2) (Fin 2) ℂ) * X *
+    (↑(G⁻¹) : Matrix (Fin 2) (Fin 2) ℂ)
+  refine ⟨obstructionSectorBoundary mu B hmu XG, fun N ↦ ?_⟩
+  have hAmbient : ∀ i, (verticalBNTMPO S.toTensor).toMPSTensor i =
+      (1 : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
+        (↑((1 : GL (Fin S.totalDim) ℂ)⁻¹) :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
+    intro i
+    rw [verticalBNTMPO_toMPSTensor]
+    simp
+  rw [physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor
+    S (sectors_weight_copy_independent mu B hmu)
+    (verticalBNTMPO S.toTensor) (1 : GL (Fin S.totalDim) ℂ) hAmbient N
+    (obstructionSectorBoundary mu B hmu XG)]
+  simp only [inv_one, Units.val_one, Matrix.one_mul, Matrix.mul_one]
+  dsimp only [S]
+  rw [Fin.sum_univ_two,
+    representativeBoundary_obstructionSectorBoundary_zero]
+  have hTerminalBoundary : representativeBoundary (sectors mu B hmu)
+      (obstructionSectorBoundary mu B hmu XG) (1 : Fin 2) = 0 := by
+    simpa using representativeBoundary_obstructionSectorBoundary_one mu B hmu XG
+  rw [hTerminalBoundary]
+  simp only [map_zero, add_zero]
+  apply physCloseN_gauge_obstructionSector G (N := N) (X := X)
+  intro i
+  apply eq_of_heq
+  exact (heq_of_eq (congrFun (firstAbsorbedSector_toMPSTensor mu B hmu) i)).trans
+    (heq_of_eq (hG i))
 
 /-- The identity presentation gives equality of the positive-length MPV
 families of the ambient tensor and its BNT assembly. -/
