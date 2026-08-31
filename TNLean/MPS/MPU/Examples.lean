@@ -16,4 +16,5 @@ import TNLean.MPS.MPU.Examples.ShiftSourceFormulas
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
 import TNLean.MPS.MPU.Examples.ShiftSwap
 import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
+import TNLean.MPS.MPU.Examples.ShiftTilde
 import TNLean.MPS.MPU.Examples.SwapPath

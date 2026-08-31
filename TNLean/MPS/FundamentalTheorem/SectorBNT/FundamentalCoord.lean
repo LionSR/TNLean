@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.Core.BondReindex
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Unitary
 
@@ -358,21 +359,6 @@ theorem permGL_val {n : Type*} [DecidableEq n] [Fintype n] (σ : Equiv.Perm n) :
 theorem permGL_inv_val {n : Type*} [DecidableEq n] [Fintype n] (σ : Equiv.Perm n) :
     (((permGL σ)⁻¹ : GL n ℂ) : Matrix n n ℂ) = Equiv.Perm.permMatrix ℂ σ.symm := rfl
 
-/-- The general linear group element associated with a permutation is unitary. -/
-private theorem permGL_mem_unitaryGroup {n : Type*} [DecidableEq n] [Fintype n]
-    (σ : Equiv.Perm n) :
-    (permGL σ : Matrix n n ℂ) ∈ Matrix.unitaryGroup n ℂ := by
-  rw [Matrix.mem_unitaryGroup_iff, Matrix.star_eq_conjTranspose,
-    permGL_val, Matrix.conjTranspose_permMatrix]
-  change Equiv.Perm.permMatrix ℂ σ * Equiv.Perm.permMatrix ℂ σ.symm = 1
-  have hmul : Equiv.Perm.permMatrix ℂ σ * Equiv.Perm.permMatrix ℂ σ.symm =
-      Equiv.Perm.permMatrix ℂ (σ.symm * σ) :=
-    (Matrix.permMatrix_mul (σ := σ.symm) (τ := σ)).symm
-  rw [hmul]
-  change Equiv.Perm.permMatrix ℂ (σ⁻¹ * σ) = 1
-  rw [inv_mul_cancel]
-  exact Matrix.permMatrix_one
-
 /-- Conjugating a square matrix by a permutation matrix gives a `submatrix` of
 the original by the permutation index map. -/
 lemma permMatrix_conj_eq_submatrix {n : Type*}
@@ -550,8 +536,8 @@ private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal
   have hYunitary :
       (X' * permGL ρ : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) ∈
         Matrix.unitaryGroup (Fin Q.totalDim) ℂ :=
-    (Matrix.unitaryGroup (Fin Q.totalDim) ℂ).mul_mem
-      hX'unitary (permGL_mem_unitaryGroup ρ)
+    (Matrix.unitaryGroup (Fin Q.totalDim) ℂ).mul_mem hX'unitary (by
+      simpa only [permGL_val] using Equiv.Perm.permMatrix_mem_unitaryGroup ρ)
   refine ⟨X' * permGL ρ, hYunitary, ?_⟩
   intro i
   have hsubm := matched_toTensor_eq_submatrix (P := P) (Q := Q) β hDim τ i
