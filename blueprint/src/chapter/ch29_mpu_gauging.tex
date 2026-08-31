@@ -1342,7 +1342,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         TNLean.Algebra.ScalarCocycle.twistedRightRegular}
     \leanok
     \uses{def:scalar_cocycle, thm:mpug_circle_complex_units_h2}
-    Let $G$ be finite and let $\omega$ be a $\C^\times$-valued scalar
+    Let $G$ be a group and let $\omega$ be a $\C^\times$-valued scalar
     cochain.  Write
     \begin{align}
         \phi(g,h) & =\frac{\omega(g,h)}{|\omega(g,h)|}\in U(1).
@@ -1386,7 +1386,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         TNLean.Algebra.ScalarCocycle.twistedRightRegular_mulVec_apply}
     \leanok
     \uses{def:mpug_twisted_regular_matrices}
-    For $v\in\C^G$ and $g,h\in G$,
+    If $G$ is finite, then for $v\in\C^G$ and $g,h\in G$,
     \begin{align}
         (L_g^\phi v)(gh)
          & =\phi(g,h)^{-1}v(h),
@@ -1410,7 +1410,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \leanok
     \uses{def:mpug_twisted_regular_matrices,
         lem:mpug_circle_phase_cocycle}
-    If $\omega$ is a cocycle, then
+    If $G$ is finite and $\omega$ is a cocycle, then
     \begin{align}
         L_g^\phi L_h^\phi
          & =\phi(g,h)^{-1}L_{gh}^\phi,           \\
@@ -1423,9 +1423,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_twisted_regular_action,
-        lem:mpug_circle_phase_cocycle}
-    Apply both sides to a basis vector.  The two scalar identities are the
+    \uses{lem:mpug_circle_phase_cocycle}
+    Expand the matrix products entrywise.  The two scalar identities are the
     cocycle equation at $(g,h,k)$ and $(k,h^{-1},g^{-1})$, respectively.
 \end{proof}
 
@@ -1433,22 +1432,21 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \label{thm:mpug_twisted_regular_commutation}
     \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_commute}
     \leanok
-    \uses{thm:mpug_twisted_regular_action,
-        lem:mpug_circle_phase_cocycle}
-    If $\omega$ is a cocycle, then
+    \uses{def:mpug_twisted_regular_matrices}
+    If $G$ is finite and $\omega$ is a cocycle, then
     \begin{align}
         L_g^\phi R_h^\phi
          & =R_h^\phi L_g^\phi.
         \label{eq:mpug_twisted_regular_commutation}
     \end{align}
-    % Source anchor: arXiv:2502.20257, lines 406--418; commutation is the
-    % compatibility of the two gauge-leg actions in the local representation.
+    % Source anchor: arXiv:2502.20257, lines 406--418 and 457; the latter
+    % explicitly attributes commuting local symmetries to commutativity of the
+    % left and right group actions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_twisted_regular_action,
-        lem:mpug_circle_phase_cocycle}
-    Apply both sides to a basis vector and use the cocycle equation at
+    \uses{lem:mpug_circle_phase_cocycle}
+    Expand both matrix products entrywise and use the cocycle equation at
     $(g,k,h^{-1})$.
 \end{proof}
 
@@ -1458,7 +1456,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         TNLean.Algebra.ScalarCocycle.twistedRightRegular_mem_unitaryGroup}
     \leanok
     \uses{def:mpug_twisted_regular_matrices}
-    The matrices $L_g^\phi$ and $R_g^\phi$ are unitary for every $g\in G$.
+    If $G$ is finite, the matrices $L_g^\phi$ and $R_g^\phi$ are unitary for
+    every $g\in G$.
     % Source anchor: arXiv:2502.20257, lines 406--418, where these matrices
     % form the two gauge legs of the local unitary representation.
 \end{theorem}

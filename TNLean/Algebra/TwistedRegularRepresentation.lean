@@ -51,18 +51,16 @@ theorem phase_isCocycle {ω : ScalarCocycle G} (hω : ω.IsCocycle) (g h k : G) 
 omit [Group G] in
 /-- Every coefficient of the canonical circle-valued representative has norm
 one. -/
+@[simp]
 lemma norm_phase (ω : ScalarCocycle G) (g h : G) : ‖ω.phase g h‖ = 1 :=
   Circle.norm_coe _
-
-attribute [simp] norm_phase
 
 omit [Group G] in
 /-- Every coefficient of the canonical circle-valued representative is
 nonzero. -/
+@[simp]
 lemma phase_ne_zero (ω : ScalarCocycle G) (g h : G) : ω.phase g h ≠ 0 := by
   exact norm_ne_zero_iff.mp (by simp)
-
-attribute [simp] phase_ne_zero
 
 /-- The cocycle-twisted left regular matrix
 
