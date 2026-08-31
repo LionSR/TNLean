@@ -35,12 +35,16 @@
 
 \begin{proof}\leanok
     \uses{def:mpug_finite_group_unitary_average}
-    Regard each matrix $\rho(g)$ as the corresponding linear map. The
-    finite-group representation-averaging theorem states that its normalized
-    average is idempotent. Transporting that identity back to matrices gives
+    Regard each matrix $\rho(g)$ as the corresponding linear map and let
+    $e_G=|G|^{-1}\sum_{g\in G}g$ be the normalized group-algebra average. The
+    finite-group representation-averaging theorem used here is the projection
+    identity whose concrete group-algebra calculation is
     \begin{align}
-        P_\rho^2 & =P_\rho.
+        h e_G & =e_G \quad (h\in G),                  &
+        e_G^2 & =\frac{1}{|G|}\sum_{h\in G}h e_G=e_G.
     \end{align}
+    Applying the linear representation and transporting back to matrices gives
+    $P_\rho^2=P_\rho$.
     Unitarity gives $\rho(g)^\dagger=\rho(g^{-1})$. Since inversion permutes
     $G$,
     \begin{align}
