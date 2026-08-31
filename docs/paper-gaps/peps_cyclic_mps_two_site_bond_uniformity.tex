@@ -18,16 +18,19 @@
 
 The Applications section of Ref.~\cite{Molnar2018NormalPEPS} considers a
 closed matrix product state whose local matrices have sizes
-$D_k\times D_{k+1}$.  Its translation-invariance corollary asserts that
-cyclic invariance of the state and injectivity of the local tensors imply
-equality of all virtual dimensions and the existence of one repeated tensor.
+$D_k\times D_{k+1}$.  Its translational-invariance corollary asserts that
+translational invariance of the state and injectivity of the local tensors
+imply equality of all virtual dimensions and the existence of one repeated
+tensor.  For this finite closed chain, the source writes translational
+invariance as equality with the one-site cyclic shift.
 Thus its bond-dimension conclusion is
 \begin{align}
     D_1=D_2=\cdots=D_n.
     \label{eq:peps_cyclic_mps_two_site_bond_uniformity_printed_conclusion}
 \end{align}
 The corollary itself does not state a lower bound on $n$.\footnote{Local source:
-\path{Papers/1804.04964/paper_normal.tex:1801--1804}.}
+\path{Papers/1804.04964/paper_normal.tex:1803--1805}; the cyclic-shift equality
+is displayed at lines 1807--1827.}
 
 The surrounding MPS section of Ref.~\cite{Molnar2018NormalPEPS} says that its
 Fundamental Theorem concerns chains with at least three sites, and the theorem
@@ -82,10 +85,11 @@ in \doclink{TNLean/PEPS/CycleMPSTwoSiteCounterexample}.}
 \section{Corrected scope}
 
 The source proof compares the site-dependent chain with its cyclic shift by
-the injective MPS Fundamental Theorem and then telescopes the resulting bond
-isomorphisms.  That argument is available in the source's stated regime
-$n\geq3$ and does not apply to the example above.  The source-faithful
-correction is therefore to retain the standing three-site hypothesis:
+the injective MPS Fundamental Theorem, writes every $A_i$ in terms of $A_1$
+and the matrices $L_i,R_i$, and then telescopes these matrices to construct a
+repeated tensor $B$.  That argument is available in the source's stated regime
+$n\geq3$ and does not apply to the example above.  The corrected statement
+therefore retains the standing three-site hypothesis:
 \begin{align}
     n\geq3
     \quad\Longrightarrow\quad
@@ -96,9 +100,15 @@ together with the positive-dimensional convention for the virtual spaces.
 This is precisely the regime in which the graph-theoretic cycle has one edge
 for each bond and the cited Fundamental Theorem comparison is valid.
 
+The complete corrected conclusion, including equality of all bond dimensions
+and the repeated injective tensor $B$, is formalized by
+\leanid{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}.
+It is recorded as complete in the Blueprint node
+\path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos}.
+
 \section{Verdict}
 
-The translation-invariance corollary of Ref.~\cite{Molnar2018NormalPEPS} is
+The translational-invariance corollary of Ref.~\cite{Molnar2018NormalPEPS} is
 false as printed if it is read at two sites.  The example
 (\ref{eq:peps_cyclic_mps_two_site_bond_uniformity_tensors}) satisfies the
 nondegenerate source hypotheses and has a cyclically invariant state, but its
@@ -106,7 +116,8 @@ two virtual dimensions are unequal.  The corrected statement is the
 at-least-three-site result
 (\ref{eq:peps_cyclic_mps_two_site_bond_uniformity_corrected_scope}), in
 accordance with the standing scope and the Fundamental Theorem used by the
-source proof.
+source proof.  The impossible unqualified reading is therefore a resolved
+false-source statement, not a separate open proof obligation.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -102,7 +102,8 @@ Theorem:
   standard row and column tensors with virtual dimensions (1) and (2) are
   locally injective and generate the cyclically invariant coefficient
   δᵢⱼ, but their bond dimensions are unequal. The corrected theorem retains
-  the source section's standing assumption of at least three sites.
+  the source section's standing assumption of at least three sites and is
+  complete for positive bond dimensions.
 
 For MPDO renormalization fixed points:
 
