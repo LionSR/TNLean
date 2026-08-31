@@ -31,7 +31,7 @@ The arbitrary finite-range coefficient is the TNLean derivation recorded in
 `docs/paper-gaps/knabe88_finite_range_coefficient.tex`.
 -/
 
-open scoped BigOperators InnerProductSpace
+open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
@@ -46,12 +46,12 @@ The coefficient is the finite-range cyclic Knabe coefficient derived in
 `docs/paper-gaps/knabe88_finite_range_coefficient.tex`. -/
 theorem parentHamiltonianES_gap_of_openParentHamiltonianES_gap
     (A : MPSTensor d D) {R m : ℕ} (hR : 1 ≤ R) (hmR : R ≤ m)
-    {γ : ℝ} (hnum : ((R - 1 : ℕ) : ℝ) ^ 2 < (m : ℝ) * γ)
+    {γ : ℝ} (hnum : ((R : ℝ) - 1) ^ 2 < (m : ℝ) * γ)
     (hOpenGap : ∀ u ∈
       (LinearMap.ker (openParentHamiltonianES A R (m + R - 1)))ᗮ,
       γ * ‖u‖ ≤ ‖openParentHamiltonianES A R (m + R - 1) u‖) :
-    let δ := ((m : ℝ) * γ - ((R - 1 : ℕ) : ℝ) ^ 2) /
-      ((m - R + 1 : ℕ) : ℝ)
+    let δ := ((m : ℝ) * γ - ((R : ℝ) - 1) ^ 2) /
+      ((m : ℝ) - (R : ℝ) + 1)
     0 < δ ∧ ∀ N : ℕ, 2 * m ≤ N → ∀ v ∈
       (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
       δ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
@@ -59,17 +59,17 @@ theorem parentHamiltonianES_gap_of_openParentHamiltonianES_gap
   dsimp only
   have hm : 0 < m := by omega
   have hγ : 0 < γ := by
-    have hsq : 0 ≤ ((R - 1 : ℕ) : ℝ) ^ 2 := sq_nonneg _
+    have hsq : 0 ≤ ((R : ℝ) - 1) ^ 2 := sq_nonneg _
     have hm' : 0 < (m : ℝ) := by exact_mod_cast hm
     nlinarith
-  have hden : 0 < ((m - R + 1 : ℕ) : ℝ) := by positivity
-  have hδ : 0 < ((m : ℝ) * γ - ((R - 1 : ℕ) : ℝ) ^ 2) /
-      ((m - R + 1 : ℕ) : ℝ) := div_pos (sub_pos.mpr hnum) hden
+  have hden : 0 < (m : ℝ) - (R : ℝ) + 1 := by exact_mod_cast (by omega : 0 < m - R + 1)
+  have hδ : 0 < ((m : ℝ) * γ - ((R : ℝ) - 1) ^ 2) /
+      ((m : ℝ) - (R : ℝ) + 1) := div_pos (sub_pos.mpr hnum) hden
   refine ⟨hδ, ?_⟩
   intro N hN v hv
-  let δ := ((m : ℝ) * γ - ((R - 1 : ℕ) : ℝ) ^ 2) /
-    ((m - R + 1 : ℕ) : ℝ)
-  haveI : NeZero N := ⟨by omega⟩
+  let δ := ((m : ℝ) * γ - ((R : ℝ) - 1) ^ 2) /
+    ((m : ℝ) - (R : ℝ) + 1)
+  let _ : NeZero N := ⟨by omega⟩
   have hProj : ∀ s : ZMod N,
       (zmodLocalTermES A R s).IsSymmetricProjection := by
     intro s
@@ -108,12 +108,6 @@ theorem parentHamiltonianES_gap_of_openParentHamiltonianES_gap
       rw [hApply]
     rw [hLeft, hRight]
     exact hFiber (U x)
-  have hQuad := ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe
-    (zmodLocalTermES A R) hProj hN hR hmR
-    (fun e heR heN s x ↦ zmodLocalTermES_commute_of_oriented_separation
-      A heR heN s x)
-    (γ := γ) (δ := δ) rfl hnum hWindowGap v
-  rw [sum_zmodLocalTermES_eq_parentHamiltonianES] at hQuad
   exact FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hδ
     (parentHamiltonianES_isPositive A R N) (fun x ↦ by
       have hx := ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe
@@ -131,13 +125,13 @@ The open coefficient is
 `m` is chosen so that `l ^ 2 < m * γ`. -/
 theorem IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ m : ℕ, ∃ δ : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧
       0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
       l + 1 ≤ m ∧
       δ = ((m : ℝ) * (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 -
-          (l : ℝ) ^ 2) / ((m - l : ℕ) : ℝ) ∧
+          (l : ℝ) ^ 2) / ((m : ℝ) - (l : ℝ)) ∧
       0 < δ ∧
       ∀ N : ℕ, 2 * m ≤ N → ∀ v ∈
         (LinearMap.ker (parentHamiltonianES A (l + 1) N))ᗮ,
@@ -152,15 +146,17 @@ theorem IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe
   have hγ : 0 < γ := by
     dsimp only [γ]
     positivity
-  obtain ⟨n, hn⟩ := exists_lt_nsmul hγ (l : ℝ) ^ 2
+  obtain ⟨n, hn⟩ := exists_lt_nsmul hγ ((l : ℝ) ^ 2)
   let m := n + l + 1
   have hm : l + 1 ≤ m := by omega
+  have hnm : (n : ℝ) ≤ (m : ℝ) := by exact_mod_cast (by omega : n ≤ m)
   have hnum : (l : ℝ) ^ 2 < (m : ℝ) * γ := by
     calc
       (l : ℝ) ^ 2 < n • γ := hn
-      _ ≤ m • γ := nsmul_le_nsmul_right hγ.le (by omega)
-      _ = (m : ℝ) * γ := by simp [nsmul_eq_mul]
-  let δ := ((m : ℝ) * γ - (l : ℝ) ^ 2) / ((m - l : ℕ) : ℝ)
+      _ = (n : ℝ) * γ := by simp [nsmul_eq_mul]
+      _ ≤ (m : ℝ) * γ := mul_le_mul_of_nonneg_right hnm hγ.le
+  let δ := ((m : ℝ) * γ - (l : ℝ) ^ 2) /
+    ((m : ℝ) - ((l + 1 : ℕ) : ℝ) + 1)
   have hOpenGap' : ∀ u ∈
       (LinearMap.ker (openParentHamiltonianES A (l + 1) (m + l)))ᗮ,
       γ * ‖u‖ ≤ ‖openParentHamiltonianES A (l + 1) (m + l) u‖ := by
@@ -172,7 +168,11 @@ theorem IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe
   have hPeriodic := parentHamiltonianES_gap_of_openParentHamiltonianES_gap
     A (R := l + 1) (m := m) (by omega) hm (γ := γ) (by simpa using hnum)
     (by simpa [γ] using hOpenGap')
-  refine ⟨l, ε, m, δ, hl, hInj, hε, hεlt, hm, rfl, ?_⟩
-  simpa [δ, γ] using hPeriodic
+  refine ⟨l, ε, m, δ, hl, hInj, hε, hεlt, hm, ?_, ?_⟩
+  · dsimp only [δ, γ]
+    congr 1
+    push_cast
+    ring
+  · simpa [δ, γ] using hPeriodic
 
 end MPSTensor
