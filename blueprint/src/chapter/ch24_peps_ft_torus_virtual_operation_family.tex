@@ -338,6 +338,77 @@ correspondence in the proof sketch of the two-dimensional corollary
     cancelled.
 \end{proof}
 
+\begin{definition}[The left staircase end operation $O_1^A(X)$]%
+    \label{def:peps_staircase_O1_physical_operation}
+    \lean{TNLean.PEPS.staircaseO1PhysicalOp}
+    \leanok
+    \uses{thm:peps_staircase_virtual_operation_physical_realization}
+    For $X\in\MN{D_A(e)}$, define
+    $O_1^A(X)=O_{L+K-1}^A(X)$ after identifying the last staircase
+    window with the left end window.
+\end{definition}
+
+\begin{definition}[The underlying right staircase end operation $O_3^A(X)$]%
+    \label{def:peps_staircase_O3_physical_operation}
+    \lean{TNLean.PEPS.staircaseO3PhysicalOp}
+    \leanok
+    \uses{thm:peps_staircase_virtual_operation_physical_realization}
+    For $X\in\MN{D_A(e)}$, define $O_3^A(X)=O_0^A(X)$ after identifying
+    the first staircase window with the right end window. The second virtual
+    relation below has the paper's transposed $O_3^{\mathsf T}$ orientation;
+    no transpose is chosen on the abstract physical endomorphism space.
+\end{definition}
+
+\begin{theorem}[Cross-tensor virtual operation on the staircase edge]%
+    \label{thm:peps_cross_tensor_virtual_operation_of_staircase}
+    \lean{TNLean.PEPS.existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp_sameState}
+    \leanok
+    \uses{def:peps_staircase_O1_physical_operation,
+        def:peps_staircase_O3_physical_operation}
+    Let $L,K\geq2$, and choose the displayed non-wrapping horizontal
+    staircase coordinates $(a,b)$ with
+    \begin{align}
+        1    & \leq a,
+             & a+2L                 & \leq \mathrm{width},
+             & b+2K-1               & \leq \mathrm{height},
+        \notag                                              \\
+        2L+1 & \leq \mathrm{width},
+             & 2K+1                 & \leq \mathrm{height}.
+        \notag
+    \end{align}
+    Suppose that $A$ and $B$ are translation invariant, generate the same
+    closed state, every cyclic $L\times K$ window of either tensor is
+    injective, and every bond dimension of either tensor is positive. For
+    $X\in\MN{D_A(e)}$, there is a unique $Y\in\MN{D_B(e)}$ such that, for
+    every external boundary configuration $\eta_{\mathrm L}$ and
+    $\eta_{\mathrm R}$,
+    \begin{align}
+        O_1^A(X)\bigl(T_{B,W_{\mathrm L}}(k,\eta_{\mathrm L})\bigr)
+         & =\sum_jY_{jk}T_{B,W_{\mathrm L}}(j,\eta_{\mathrm L}),
+        \notag                                                   \\
+        O_3^A(X)\bigl(T_{B,W_{\mathrm R}}(k,\eta_{\mathrm R})\bigr)
+         & =\sum_jY_{kj}T_{B,W_{\mathrm R}}(j,\eta_{\mathrm R}).
+        \notag
+    \end{align}
+    Thus the second relation has the paper's $O_3^{\mathsf T}$ orientation.
+    No equality between $D_A(e)$ and $D_B(e)$ is assumed or concluded, and
+    this statement contains no multiplication or gauge assertion.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_staircase_physical_operation_same_state,
+        thm:peps_staircase_pair_insert_eq_open,
+        thm:peps_existsUnique_virtualOperation_of_horizontal_staircase_end_pair,
+        thm:peps_regionInjectivityUnionClosure_of_overlap}
+    The transferred physical inserts form one common $B$-state. The
+    overlapping-union lemma supplies the union closure needed to compare
+    consecutive staircase windows, and corner completion gives equality of
+    the two end inserts with open boundary. At the two ends these inserts are
+    precisely the actions of $O_3^A(X)$ and $O_1^A(X)$ on the genuine
+    $B$-window tensors. Injectivity of those two windows and the two-end
+    comparison give the displayed relations and the uniqueness of $Y$.
+\end{proof}
+
 \begin{theorem}[End-window identity for one virtual operation]%
     \label{thm:peps_end_window_identity_staircase_virtual_operation}
     \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation}

@@ -118,6 +118,7 @@ import TNLean.PEPS.TorusWindowChain4
 import TNLean.PEPS.TorusWindowChain5
 import TNLean.PEPS.TorusWindowChain6
 import TNLean.PEPS.TorusWindowComplement
+import TNLean.PEPS.TorusWindowCrossTensorEndOperation
 import TNLean.PEPS.TorusWindowExtraction
 import TNLean.PEPS.TorusWindowFamily
 import TNLean.PEPS.TorusWindowFamilyCrossing
