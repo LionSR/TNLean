@@ -11,6 +11,7 @@ import TNLean.MPS.MPDO.NeighboringTraceObstructionAmbientBlocks
 import TNLean.MPS.MPDO.PhysicalIsometricEmbeddingNeighboringTrace
 import TNLean.MPS.MPDO.PhysicalSectorGaugeTransport
 import TNLean.MPS.MPDO.SALTraceTransfer
+import TNLean.MPS.MPDO.Simple
 
 /-!
 # An ambient neighboring-trace obstruction in simple biCF form
@@ -817,6 +818,7 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
       (∀ N, 0 < N → 0 < Matrix.trace (mpo K N)) ∧
       IsSAL K ∧
       IsSimpleCanonicalForm K ∧
+      IsSimple K ∧
       MPSTensor.IsBNTCanonicalForm S ∧
       MPSTensor.WordTupleSpanTop S.basis 1 ∧
       (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
@@ -851,6 +853,7 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
     fun N hN ↦ trace_mpo_ambient_pos mu B hmu hGauge hN,
     ambient_isSAL mu B hmu hGauge,
     ambient_isSimpleCanonicalForm mu B hmu hGauge hBNT,
+    (ambient_isSimpleCanonicalForm mu B hmu hGauge hBNT).isSimple,
     hBNT, sectors_wordTupleSpanTop_one mu B hmu hBInj hBSupport,
     sectors_basis_isNormalTensor mu B hmu hBNormal,
     ambient_toMPSTensor_eq_sectors_toTensor mu B hmu,
@@ -894,6 +897,7 @@ theorem printed_theorem49_ii_to_iv_is_false :
         (∀ N, 0 < N → 0 < Matrix.trace (mpo K N)) ∧
         IsSAL K ∧
         IsSimpleCanonicalForm K ∧
+        IsSimple K ∧
         MPSTensor.IsBNTCanonicalForm S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
         (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
