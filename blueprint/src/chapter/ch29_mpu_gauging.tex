@@ -883,7 +883,11 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \uses{def:mpug_gauss_leg_action}
     For all $g,h\in G$,
     \begin{align}
-        T_e & =\id, & T_g\circ T_h & =T_{gh}.
+        T_e & =\id.
+    \end{align}
+    Moreover,
+    \begin{align}
+        T_g\circ T_h & =T_{gh}.
         \label{eq:mpug_gauss_leg_action_mul}
     \end{align}
 \end{theorem}
@@ -937,10 +941,16 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         def:mpug_gauss_operator}
     The local Gauss operators satisfy
     \begin{align}
-        \mathcal G_e & =\id,                                      \\
-        \mathcal G_g\mathcal G_h & =\mathcal G_{gh},              \\
-        \mathcal G_g^\dagger & =\mathcal G_{g^{-1}}.
+        \mathcal G_e & =\id.
+    \end{align}
+    Their product law is
+    \begin{align}
+        \mathcal G_g\mathcal G_h & =\mathcal G_{gh}.
         \label{eq:mpug_gauss_representation}
+    \end{align}
+    Finally,
+    \begin{align}
+        \mathcal G_g^\dagger & =\mathcal G_{g^{-1}}.
     \end{align}
     Hence $g\mapsto\mathcal G_g$ is a unitary representation. This is the
     representation part of Proposition~\texttt{prop:gausslaws} in
@@ -960,8 +970,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
          & =\lambda_{a,b}^{T_{gh}(a,b)},
     \end{align}
     by the comparison composition law and
-    $T_gT_h=T_{gh}$. This proves the product formula; the identity formula is
-    its specialization at $e$. Reversing a comparison gives
+    $T_gT_h=T_{gh}$. At $e$, every surviving comparison is the identity.
+    Reversing a comparison gives
     $(\lambda_{a,b}^{c,d})^\dagger=\lambda_{c,d}^{a,b}$, so taking the adjoint
     gives $\mathcal G_g^\dagger=\mathcal G_{g^{-1}}$. The product with this
     adjoint is $\mathcal G_e=\id$, which proves unitarity.

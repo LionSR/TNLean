@@ -54,6 +54,15 @@ theorem unitaryFactorizationComparison_self
     unitaryFactorizationComparison R a b a b = 1 := by
   simp only [unitaryFactorizationComparison, inv_mul_cancel]
 
+/-- The inverse of a unitary factorization comparison is the comparison in the
+opposite direction. -/
+@[simp]
+theorem unitaryFactorizationComparison_inv
+    (R : ι → ι → Matrix.unitaryGroup n 𝕜) (a b c d : ι) :
+    (unitaryFactorizationComparison R a b c d)⁻¹ =
+      unitaryFactorizationComparison R c d a b := by
+  simp only [unitaryFactorizationComparison, _root_.mul_inv_rev, inv_inv]
+
 /-- Unitary factorization comparisons compose through an intermediate pair in
 the source orientation.  This is the composition law in the corollary
 following FBC25, Proposition `prop:3`

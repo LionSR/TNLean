@@ -56,7 +56,7 @@ theorem gaussLegAction_mul (g h : G) :
     gaussLegAction g * gaussLegAction h = gaussLegAction (g * h) := by
   ext p <;> simp [gaussLegAction, mul_assoc]
 
-variable [Fintype G] [DecidableEq G] [Fintype n] [DecidableEq n]
+variable [Fintype n] [DecidableEq n]
 
 /-- The local Gauss operator whose unique nonzero gauge block in column
 `(a,b)` lies in row `T_g(a,b)` and equals
@@ -75,7 +75,6 @@ def gaussOperator (R : G → G → Matrix.unitaryGroup n ℂ) (g : G) :
         Matrix n n ℂ) x.1 y.1
     else 0
 
-omit [Fintype G] in
 /-- The nonzero block of the Gauss operator is the factorization comparison
 specified in FBC25, Equation `eq:mcG`. -/
 @[simp]
@@ -87,7 +86,6 @@ theorem gaussOperator_apply_target
   classical
   simp [gaussOperator]
 
-omit [Fintype G] in
 /-- Every other gauge block in a fixed column of the Gauss operator vanishes. -/
 @[simp]
 theorem gaussOperator_apply_of_ne
@@ -97,15 +95,7 @@ theorem gaussOperator_apply_of_ne
   classical
   simp [gaussOperator, hxy]
 
-omit [Group G] [Fintype G] [DecidableEq G] in
-/-- The inverse of a factorization comparison is the comparison in the
-opposite direction. -/
-@[simp]
-theorem unitaryFactorizationComparison_inv
-    (R : G → G → Matrix.unitaryGroup n ℂ) (a b c d : G) :
-    (Matrix.unitaryFactorizationComparison R a b c d)⁻¹ =
-      Matrix.unitaryFactorizationComparison R c d a b := by
-  simp [Matrix.unitaryFactorizationComparison]
+variable [Fintype G]
 
 /-- Local Gauss operators multiply according to the group law. This is the
 first conclusion of FBC25, Proposition `prop:gausslaws`
@@ -117,11 +107,11 @@ theorem gaussOperator_mul
   ext x y
   rw [Matrix.mul_apply, Fintype.sum_prod_type, Finset.sum_comm]
   rw [Fintype.sum_eq_single (gaussLegAction h y.2)]
-  · by_cases hxy : x.2 = gaussLegAction (g * h) y.2
-    · have hcomp : gaussLegAction g (gaussLegAction h y.2) =
-          gaussLegAction (g * h) y.2 := by
-        simp [gaussLegAction, mul_assoc]
-      have hx : x.2 = gaussLegAction g (gaussLegAction h y.2) :=
+  · have hcomp : gaussLegAction g (gaussLegAction h y.2) =
+        gaussLegAction (g * h) y.2 := by
+      simp [gaussLegAction, mul_assoc]
+    by_cases hxy : x.2 = gaussLegAction (g * h) y.2
+    · have hx : x.2 = gaussLegAction g (gaussLegAction h y.2) :=
         hxy.trans hcomp.symm
       simp only [gaussOperator, hx, hcomp, ite_true]
       rw [← Matrix.mul_apply]
@@ -129,14 +119,13 @@ theorem gaussOperator_mul
         (Matrix.unitaryFactorizationComparison_trans R y.2.1 y.2.2
           (gaussLegAction h y.2).1 (gaussLegAction h y.2).2
           (gaussLegAction (g * h) y.2).1 (gaussLegAction (g * h) y.2).2)) x.1 y.1).symm
-    · have hcomp : gaussLegAction g (gaussLegAction h y.2) =
-          gaussLegAction (g * h) y.2 := by
-        simp [gaussLegAction, mul_assoc]
-      have hx : x.2 ≠ gaussLegAction g (gaussLegAction h y.2) := fun heq ↦
+    · have hx : x.2 ≠ gaussLegAction g (gaussLegAction h y.2) := fun heq ↦
         hxy (heq.trans hcomp)
       simp [gaussOperator, hx, hxy]
   · intro q hq
     simp [gaussOperator, hq]
+
+variable [DecidableEq G]
 
 omit [Fintype G] in
 /-- The Gauss operator of the identity group element is the identity matrix. -/
@@ -155,7 +144,7 @@ theorem gaussOperator_one (R : G → G → Matrix.unitaryGroup n ℂ) :
   · have hfull : x ≠ y := fun h ↦ hxy (congrArg Prod.snd h)
     simp [gaussOperator, hxy, hfull]
 
-omit [Fintype G] in
+omit [Fintype G] [DecidableEq G] in
 /-- The adjoint of a local Gauss operator is the operator for the inverse group
 element. -/
 theorem star_gaussOperator
@@ -174,7 +163,7 @@ theorem star_gaussOperator
     rw [← Matrix.star_apply]
     change ((Matrix.unitaryFactorizationComparison R x.2.1 x.2.2
       y.2.1 y.2.2)⁻¹ : Matrix.unitaryGroup n ℂ) x.1 y.1 = _
-    rw [unitaryFactorizationComparison_inv]
+    rw [Matrix.unitaryFactorizationComparison_inv]
   · have hyx : x.2 ≠ gaussLegAction g⁻¹ y.2 := by
       intro heq
       apply hxy
