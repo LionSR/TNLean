@@ -12,6 +12,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
+import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
@@ -38,7 +39,7 @@ all-vector norm-compression estimates for the excitation projections are also
 recorded as conditional sufficient hypotheses; they are not the source
 principal-angle estimate for the local ground spaces.
 
-The sixteen components are:
+The seventeen components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale_of_finiteDimensional`
@@ -49,6 +50,8 @@ The sixteen components are:
   martingale differences, telescoping resolution, and norm-square decomposition;
 * `Martingale.ProjectionCancellation` — outside-window cancellation and the
   finite interval reduction between equations \(Enpsi\) and \(Enpsi2\);
+* `Martingale.FixedAmbient` — fixed-volume prefix and interval ground projections,
+  physical outside-window commutation, and the resulting interval reduction;
 * `Martingale.Transport` — Euclidean local projectors, ground-space and
   Hamiltonian transport, positivity, commutation, and kernel identification;
 * `Martingale.AdjacentLocalTerms` — individual three-site kernels and the

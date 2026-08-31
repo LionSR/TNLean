@@ -17,8 +17,8 @@ projection is therefore a decreasing family on
 `EuclideanSpace ℂ (Cfg d N)`, rather than a family whose ambient type changes
 with `n`.
 
-For the local interval `[n-l, n+1)`, the ground projection is the kernel
-projection of `openSuffixParentHamiltonianES A L (l+1) N (n+1)`.  We prove the
+For the local interval \([n-l,n+1)\), the ground projection is the kernel
+projection of the sum over starts \(n-l\leq i\) and \(i+L\leq n+1\). We prove the
 outside-window commutation used between equations `Enpsi` and `Enpsi2` in the
 proof of Theorem 2.1(i).
 
@@ -29,6 +29,7 @@ proof of Theorem 2.1(i).
 -/
 
 open scoped BigOperators InnerProductSpace
+open FrustrationFree.NestedGroundProjections
 
 namespace LinearMap
 
@@ -81,7 +82,7 @@ theorem IsSymmetric.kernelProjection_commute_of_commute {S T : E →ₗ[ℂ] E}
   simpa only [PS, PT, Module.End.mul_eq_comp] using hPTPS.eq.symm
 
 /-- Orthogonal projections onto nested submodules commute. -/
-theorem Submodule.starProjection_commute_of_le {U V : Submodule ℂ E}
+theorem _root_.Submodule.starProjection_commute_of_le {U V : Submodule ℂ E}
     (hUV : U ≤ V) :
     U.starProjection.toLinearMap.comp V.starProjection.toLinearMap =
       V.starProjection.toLinearMap.comp U.starProjection.toLinearMap := by
@@ -154,9 +155,8 @@ noncomputable def openPrefixGroundProjectionES (A : MPSTensor d D)
 
 /-- The fixed-ambient local ground projection on `[n-l, n+1)`.
 
-Its Hamiltonian is
-`openSuffixParentHamiltonianES A L (l+1) N (n+1)`, whose starts satisfy
-`n-l ≤ i` and `i+L ≤ n+1`. -/
+Its Hamiltonian sums exactly the starts satisfying \(n-l\leq i\) and
+\(i+L\leq n+1\). -/
 noncomputable def openIntervalGroundProjectionES (A : MPSTensor d D)
     (L l N n : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
@@ -218,7 +218,7 @@ that interval Hamiltonian.  The proof expands both finite sums and uses
 site-disjoint commutation for every pair of local interactions. -/
 theorem openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES
     (A : MPSTensor d D) {L l N m n : ℕ} (hLN : L ≤ N)
-    (hsep : m < n - l) :
+    (hsep : m ≤ n - l) :
     (openPrefixParentHamiltonianES A L N m).comp
         (openSuffixParentHamiltonianES A L l N n) =
       (openSuffixParentHamiltonianES A L l N n).comp
@@ -243,5 +243,98 @@ theorem openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES
   intro i _
   exact localTermES_commute_of_cyclic_windows_disjoint A hLN
     (cyclicWindowsDisjoint_of_nonwrapping_ordered j.2 (by omega)) v
+
+/-- Prefix and local-interval ground projections commute when their supporting
+Hamiltonians are disjoint.  The passage from Hamiltonian commutation to kernel-
+projection commutation uses the invariant-subspace theorem
+`LinearMap.IsSymmetric.kernelProjection_commute_of_commute`. -/
+theorem openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
+    (A : MPSTensor d D) {L l N m n : ℕ} (hLN : L ≤ N)
+    (hsep : m ≤ n - l) :
+    (openPrefixGroundProjectionES A L N m).comp
+        (openIntervalGroundProjectionES A L l N n) =
+      (openIntervalGroundProjectionES A L l N n).comp
+        (openPrefixGroundProjectionES A L N m) := by
+  apply LinearMap.IsSymmetric.kernelProjection_commute_of_commute
+    (openPrefixParentHamiltonianES_isPositive A L N m).isSymmetric
+    (openSuffixParentHamiltonianES_isPositive A L (l + 1) N (n + 1)).isSymmetric
+  exact openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES A hLN
+    (by omega)
+
+/-- Once a prefix extends past `n`, its ground space is contained in the local
+ground space on `[n-l, n+1)`. -/
+theorem ker_openPrefixParentHamiltonianES_le_ker_openSuffixParentHamiltonianES
+    (A : MPSTensor d D) {L l N m n : ℕ} (hnm : n < m) :
+    LinearMap.ker (openPrefixParentHamiltonianES A L N m) ≤
+      LinearMap.ker (openSuffixParentHamiltonianES A L (l + 1) N (n + 1)) := by
+  intro v hv
+  rw [LinearMap.mem_ker] at hv ⊢
+  rw [openSuffixParentHamiltonianES, LinearMap.sum_apply]
+  apply Finset.sum_eq_zero
+  intro i hi
+  rw [Finset.mem_filter] at hi
+  exact localTermES_eq_zero_of_openPrefixParentHamiltonianES_eq_zero A L N m hv
+    ⟨i, by omega⟩
+
+/-- Prefix and local-interval ground projections commute when the local ground
+space contains the prefix ground space. -/
+theorem openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt
+    (A : MPSTensor d D) {L l N m n : ℕ} (hnm : n < m) :
+    (openPrefixGroundProjectionES A L N m).comp
+        (openIntervalGroundProjectionES A L l N n) =
+      (openIntervalGroundProjectionES A L l N n).comp
+        (openPrefixGroundProjectionES A L N m) := by
+  exact Submodule.starProjection_commute_of_le
+    (ker_openPrefixParentHamiltonianES_le_ker_openSuffixParentHamiltonianES
+      A hnm)
+
+/-- The physical fixed-ambient martingale difference commutes with the local
+ground projection outside the active interval `[n-l, n]`.
+
+For `m < n-l`, both prefix projections in `E_m=G_m-G_{m+1}` are supported to
+the left of `[n-l,n+1)`.  For `n < m`, both prefix kernels are contained in the
+local interval kernel. -/
+theorem fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES
+    (A : MPSTensor d D) {L l N m n : ℕ} (hLN : L ≤ N)
+    (hout : m < n - l ∨ n < m) :
+    ((fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference m).comp
+        (openIntervalGroundProjectionES A L l N n) =
+      (openIntervalGroundProjectionES A L l N n).comp
+        ((fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference m) := by
+  simp only [FrustrationFree.NestedGroundProjections.martingaleDifference,
+    fixedAmbientNestedGroundProjectionsES, LinearMap.sub_comp, LinearMap.comp_sub]
+  rcases hout with hleft | hright
+  · rw [openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
+        A hLN (by omega),
+      openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
+        A hLN (by omega)]
+  · rw [openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt
+        A hright,
+      openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt
+        A (by omega)]
+
+/-- Physical fixed-ambient form of the `Icc` cancellation identity in
+Nachtergaele's proof of Theorem 2.1(i).
+
+Here `G_m` is the kernel projection of the prefix Hamiltonian on `[0,m)`,
+`E_m=G_m-G_{m+1}`, and `Q_n` is the kernel projection of the local Hamiltonian
+on `[n-l,n+1)`. -/
+theorem inner_sum_fixedAmbient_martingaleDifference_openIntervalGroundProjectionES_eq_Icc
+    (A : MPSTensor d D) {L N n l : ℕ} (hLN : L ≤ N) (hn : n < N)
+    (v : EuclideanSpace ℂ (Cfg d N)) :
+    inner ℂ v (∑ m ∈ Finset.range N,
+        (fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference m
+          (openIntervalGroundProjectionES A L l N n
+            ((fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference n v))) =
+      inner ℂ (∑ m ∈ Finset.Icc (n - l) n,
+        (fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference m v)
+        (openIntervalGroundProjectionES A L l N n
+          ((fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference n v)) := by
+  apply inner_sum_martingaleDifference_localProjection_eq_inner_sum_Icc
+    (fixedAmbientNestedGroundProjectionsES A L N)
+    (openIntervalGroundProjectionES A L l N n) N n l hn
+  intro m hout
+  exact fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES
+    A hLN hout
 
 end MPSTensor

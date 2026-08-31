@@ -176,6 +176,84 @@
     and summing over the active interval proves the displayed identity.
 \end{proof}
 
+% Source: References/cond-mat_9410110/main.tex:1060--1073, equation En.
+% Source: References/cond-mat_9410110/main.tex:1206--1220,
+% Theorem 2.1(i), equations Enpsi and Enpsi2.
+
+\begin{definition}[Fixed-volume prefix and interval ground projections]%
+    \label{def:fixed-volume-prefix-ground-projections}
+    \lean{MPSTensor.openPrefixParentHamiltonianES,
+        MPSTensor.openPrefixGroundProjectionES,
+        MPSTensor.openIntervalGroundProjectionES,
+        MPSTensor.fixedAmbientNestedGroundProjectionsES}
+    \leanok
+    Fix an $N$-site Hilbert space and let $h_i$ denote the nonwrapping
+    interaction of length $L$ starting at $i$.  For every $m\geq0$, set
+    \begin{align}
+        H_m^{(N)} & =\sum_{i+L\leq m}h_i,
+                  & G_m^{(N)}             & =P_{\ker H_m^{(N)}}.
+    \end{align}
+    All operators act on the same $N$-site space.  The local interval ground
+    projection in the proof of Theorem~2.1(i) is
+    \begin{align}
+        Q_n & =P_{\ker H_{[n-l,n+1)}},
+            & H_{[n-l,n+1)}            & =\sum_{n-l\leq i,\ i+L\leq n+1}h_i.
+    \end{align}
+    Since enlarging the prefix adds positive local interactions,
+    \begin{align}
+        \ker H_{m+1}^{(N)} & \subseteq\ker H_m^{(N)},
+    \end{align}
+    so $(G_m^{(N)})_{m\geq0}$ is a nested ground-projection family.
+\end{definition}
+
+\begin{theorem}[Physical outside-window commutation and cancellation]%
+    \label{thm:physical-outside-window-martingale-cancellation}
+    \lean{LinearMap.IsSymmetric.kernelProjection_commute_of_commute,
+        MPSTensor.fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES,
+        MPSTensor.inner_sum_fixedAmbient_martingaleDifference_openIntervalGroundProjectionES_eq_Icc}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections,
+        thm:outside-window-martingale-cancellation}
+    Let $E_m=G_m^{(N)}-G_{m+1}^{(N)}$.  Then
+    \begin{align}
+        E_mQ_n & =Q_nE_m
+               &         & \text{if }m<n-l\text{ or }n<m.
+    \end{align}
+    Consequently, for $n<N$ and every vector $v$,
+    \begin{align}
+        \left\langle v,
+        \sum_{m=0}^{N-1}E_mQ_nE_nv\right\rangle
+         & =\left\langle\sum_{m=n-l}^{n}E_mv,Q_nE_nv\right\rangle.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections,
+        thm:outside-window-martingale-cancellation}
+    If $m<n-l$, the supports of every summand of $H_m^{(N)}$ and every
+    summand of $H_{[n-l,n+1)}$ are disjoint.  Their local interactions commute,
+    hence the two symmetric Hamiltonians commute.  If symmetric operators $S$
+    and $T$ commute, then $\ker S$ and $(\ker S)^\perp$ are invariant under
+    $T$.  Thus $P_{\ker S}$ commutes with $T$; applying the same argument to
+    $\ker T$ shows
+    \begin{align}
+        P_{\ker S}P_{\ker T} & =P_{\ker T}P_{\ker S}.
+    \end{align}
+    This proves the first range of indices for both $G_m^{(N)}$ and
+    $G_{m+1}^{(N)}$.
+
+    If $n<m$, every local interaction in $H_{[n-l,n+1)}$ also occurs in
+    $H_m^{(N)}$.  Therefore
+    \begin{align}
+        \ker H_m^{(N)} & \subseteq\ker H_{[n-l,n+1)},
+    \end{align}
+    and the corresponding nested orthogonal projections commute.  Subtracting
+    the two prefix identities gives $E_mQ_n=Q_nE_m$ in both index ranges.  The
+    abstract outside-window cancellation theorem now restricts the full sum to
+    $m\in[n-l,n]$.
+\end{proof}
+
 \subsection{Spectator-indexed boundary maps}\label{subsec:spectator_boundary_maps}
 
 The tail and left boundary maps embed virtual-space data into a common
