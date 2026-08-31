@@ -1055,22 +1055,22 @@ norm estimate is derived here.
 \begin{theorem}[Moving-window double counting]
     \label{thm:moving_window_sum_le}
     \lean{FrustrationFree.movingWindow_sum_le}
+    \lean{FrustrationFree.movingWindow_sum_range_le}
     \leanok
     Let $(a_m)_{m\geq0}$ be a nonnegative real sequence. For all $l,N\in\N$,
     \begin{align}
-        \sum_{n=l}^{N-1}\sum_{m=n-l}^{n}a_m
+        \sum_{n=0}^{N-1}\sum_{m=\max\{0,n-l\}}^{n}a_m
          & \leq (l+1)\sum_{m=0}^{N-1}a_m.
         \label{eq:moving_window_sum_le}
     \end{align}
-    When $l\geq N$, the sum on the left is empty.
+    The same bound holds after omitting the terms with $n<l$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Write $m=n-l+k$, where $0\leq k\leq l$, and reverse the order of
-    summation. For each fixed $k$, the map $n\mapsto n-l+k$ is injective on
-    $\{l,\ldots,N-1\}$ and has image in $\{0,\ldots,N-1\}$. Nonnegativity
-    therefore bounds the corresponding inner sum by
+    Write $k=n-m$. Each pair in the double sum has $0\leq k\leq l$.
+    For fixed $k$, the map $n\mapsto n-k$ is injective and has image in
+    $\{0,\ldots,N-1\}$. Nonnegativity bounds its contribution by
     $\sum_{m=0}^{N-1}a_m$. Summing over the $l+1$ values of $k$ proves
     (\ref{eq:moving_window_sum_le}). This is the counting step in the proof of
     Nachtergaele's Theorem~2.1(i), between Equation~(Enpsi2) and the following
@@ -1092,15 +1092,14 @@ norm estimate is derived here.
         lem:nachtergaele_c3_projection_composition,
         thm:moving_window_sum_le}
     Let $(G_n)_{n\geq0}$ be nested orthogonal projections on a
-    finite-dimensional complex Hilbert space, and put
-    $E_n=G_n-G_{n+1}$. Fix $l\leq N$, use the padded endpoint convention
-    $G_0=G_l=I$, and let $Q_n$ be orthogonal projections for
-    $l\leq n<N$. Suppose $E_mQ_n=Q_nE_m$ whenever $m<n-l$ or $n<m$.
+    finite-dimensional complex Hilbert space, put $E_n=G_n-G_{n+1}$, and
+    assume $G_0=I$. Fix $l,N\in\N$, and let $Q_n$ be orthogonal projections
+    for $0\leq n<N$. Suppose $E_mQ_n=Q_nE_m$ whenever $m<n-l$ or $n<m$.
     Let $H_n$ be the local Hamiltonians and $H$ the full Hamiltonian.
-    Assume the quadratic-form versions of C1 and C2,
+    Assume the quadratic-form versions of C1 and C2 on the full finite range,
     \begin{align}
         0
-         & \leq\sum_{n=l}^{N-1}\re\langle H_nv,v\rangle
+         & \leq\sum_{n=0}^{N-1}\re\langle H_nv,v\rangle
         \leq d_{l+1}\re\langle Hv,v\rangle,
         \label{eq:nachtergaele_c1_form}                 \\
         \gamma_{l+1}\lVert(I-Q_n)v\rVert^2
@@ -1124,8 +1123,10 @@ norm estimate is derived here.
         \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert^2.
         \label{eq:nachtergaele_c1_c3_energy_estimate}
     \end{align}
-    This is Theorem~2.1(i) of
-    \cite{Nachtergaele1996Spectral}. The indices are exactly
+    This full finite-range form resolves the lower-index ambiguity in the
+    printed proof by requiring C1--C3 also for $n<l$; the later physical
+    specialization verifies those indices separately. Its coefficient is the
+    one in Theorem~2.1(i) of \cite{Nachtergaele1996Spectral}, with exactly
     $\gamma_{l+1}$, $d_{l+1}$, and $\epsilon_l$.
 \end{theorem}
 
@@ -1140,9 +1141,9 @@ norm estimate is derived here.
     The martingale resolution gives
     \begin{align}
         v
-         & =\sum_{n=l}^{N-1}E_nv,
+         & =\sum_{n=0}^{N-1}E_nv,
          & \lVert v\rVert^2
-         & =\sum_{n=l}^{N-1}\lVert E_nv\rVert^2.
+         & =\sum_{n=0}^{N-1}\lVert E_nv\rVert^2.
     \end{align}
     Outside-window cancellation reduces the second term in the identity
     labelled \textup{Enpsi} to $m\in[n-l,n]$. Apply the weighted
@@ -1170,12 +1171,37 @@ norm estimate is derived here.
     $c_1=1$ yields the same formula.
 \end{proof}
 
+\begin{lemma}[Energy form to norm bound]
+    \label{lem:energy_form_to_norm_bound}
+    \lean{FrustrationFree.norm_lower_bound_of_energy_lower_bound}
+    \leanok
+    Let $H$ be a linear operator on a complex Hilbert space. If
+    \begin{align}
+        \kappa\lVert v\rVert^2
+         & \leq\re\langle Hv,v\rangle
+    \end{align}
+    for every $v\in(\ker H)^\perp$, then
+    $\kappa\lVert v\rVert\leq\lVert Hv\rVert$ on the same subspace.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Cauchy--Schwarz gives
+    \begin{align}
+        \kappa\lVert v\rVert^2
+         & \leq\re\langle Hv,v\rangle
+        \leq\lVert Hv\rVert\lVert v\rVert.
+    \end{align}
+    The claim is immediate for $v=0$; otherwise cancel $\lVert v\rVert$.
+\end{proof}
+
 \begin{corollary}[Norm gap from the C1--C3 estimate]
     \label{cor:nachtergaele_c1_c3_norm_gap}
-    \lean{FrustrationFree.spectralGap_of_energy_lower_bound_of_finiteDimensional}
+    \lean{FrustrationFree.spectralGap_of_martingale_of_finiteDimensional}
     \lean{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3}
     \leanok
     \uses{thm:nachtergaele_c1_c3_energy_estimate,
+        lem:energy_form_to_norm_bound,
         lem:quadratic_form_to_norm_bound}
     In the setting of
     Theorem~\ref{thm:nachtergaele_c1_c3_energy_estimate}, suppose that $H$ is
@@ -1192,26 +1218,13 @@ norm estimate is derived here.
 \begin{proof}
     \leanok
     \uses{thm:nachtergaele_c1_c3_energy_estimate,
-        lem:quadratic_form_to_norm_bound}
+        lem:energy_form_to_norm_bound}
     Denote the coefficient in
-    Equation~\eqref{eq:nachtergaele_c1_c3_norm_gap} by $\kappa$. For an
-    arbitrary $x$, remove its orthogonal projection onto $\ker H$ and write
-    the remainder as $w\in(\ker H)^\perp$. Symmetry gives
-    $Hx=Hw$ and $\re\langle Hx,x\rangle=\re\langle Hw,w\rangle$. The energy
-    estimate and Cauchy--Schwarz give
-    \begin{align}
-        \kappa\lVert w\rVert^2
-         & \leq\re\langle Hx,x\rangle
-        \leq\lVert Hx\rVert\lVert w\rVert.
-    \end{align}
-    If $w=0$, the desired quadratic-form inequality is immediate. Otherwise,
-    cancellation of $\lVert w\rVert$ and a second use of the upper bound give
-    \begin{align}
-        \kappa\,\re\langle Hx,x\rangle
-         & \leq\lVert Hx\rVert^2.
-    \end{align}
-    Thus $H^2\geq\kappa H$ globally. The finite-dimensional quadratic-form
-    criterion gives the stated norm lower bound on $(\ker H)^\perp$.
+    Equation~\eqref{eq:nachtergaele_c1_c3_norm_gap} by $\kappa$. The
+    ground-space identity turns $v\in(\ker H)^\perp$ into
+    $v\perp\operatorname{ran}(G_N)$, so the energy estimate gives
+    $\kappa\lVert v\rVert^2\leq\re\langle Hv,v\rangle$. Apply
+    Lemma~\ref{lem:energy_form_to_norm_bound}.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for a finite family of projections]

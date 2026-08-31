@@ -13,11 +13,11 @@ import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
 # Nachtergaele's C1--C3 energy estimate
 
 This file follows the proof of Theorem 2.1(i) in Nachtergaele,
-arXiv:cond-mat/9410110, lines 1195--1259.  The filtration is indexed so that
-the active martingale differences are (E_l,\ldots,E_{N-1}); accordingly the
-source convention that the preceding volumes are empty is stated explicitly as
-(G_l=\mathbf 1).  This prevents the early martingale differences from being
-discarded implicitly when the C1 sum starts at (l).
+arXiv:cond-mat/9410110, lines 1195--1259. The finite-filtration statement sums
+all martingale differences (E_0,\ldots,E_{N-1}) and assumes C1--C3 on that
+full range. This avoids imposing any unsupported padding convention at the
+lower endpoint; a later physical specialization may verify the early indices
+separately.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -26,19 +26,30 @@ namespace FrustrationFree
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
-/-- A positive finite-dimensional operator with an energy lower bound on the
-orthogonal complement of its kernel satisfies the corresponding norm lower
-bound. Orthogonally removing the kernel component converts the energy estimate
-into \(H^2 \geq \gamma H\) by Cauchy--Schwarz; the final norm bound then follows
-from `spectralGap_of_martingale_of_finiteDimensional`. -/
-theorem spectralGap_of_energy_lower_bound_of_finiteDimensional
+/-- An energy lower bound on a subspace implies the corresponding norm
+lower bound there. This is the direct Cauchy--Schwarz conversion and requires
+neither finite dimensionality nor positivity of the operator. -/
+theorem norm_lower_bound_of_energy_lower_bound
+    {γ : ℝ} {H : E →ₗ[ℂ] E}
+    (hEnergy : ∀ v ∈ (LinearMap.ker H)ᗮ,
+      γ * ‖v‖ ^ 2 ≤ (⟪H v, v⟫_ℂ).re) :
+    ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
+  intro v hv
+  have henergy := hEnergy v hv
+  have hcauchy : (⟪H v, v⟫_ℂ).re ≤ ‖H v‖ * ‖v‖ :=
+    re_inner_le_norm (𝕜 := ℂ) (H v) v
+  by_cases hvzero : ‖v‖ = 0
+  · simp [hvzero]
+  · have hvpos : 0 < ‖v‖ := lt_of_le_of_ne (norm_nonneg v) (Ne.symm hvzero)
+    nlinarith
+
+private theorem operator_inequality_of_energy_lower_bound
     [FiniteDimensional ℂ E] {γ : ℝ} (hγ : 0 < γ) {H : E →ₗ[ℂ] E}
     (hH : H.IsPositive)
     (hEnergy : ∀ v ∈ (LinearMap.ker H)ᗮ,
       γ * ‖v‖ ^ 2 ≤ (⟪H v, v⟫_ℂ).re) :
-    ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
+    ∀ v, γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re := by
   classical
-  apply spectralGap_of_martingale_of_finiteDimensional hγ hH
   intro v
   let p := (LinearMap.ker H).starProjection v
   let w := v - p
@@ -60,27 +71,23 @@ theorem spectralGap_of_energy_lower_bound_of_finiteDimensional
       _ = (⟪H v, w⟫_ℂ + ⟪H v, p⟫_ℂ).re := by rw [inner_add_right]
       _ = (⟪H v, w⟫_ℂ).re := by rw [hcross, add_zero]
       _ = (⟪H w, w⟫_ℂ).re := by rw [hHw]
-  have henergy := hEnergy w hw
+  have hgapnorm := norm_lower_bound_of_energy_lower_bound hEnergy w hw
+  rw [hHw] at hgapnorm
   have hcauchy : (⟪H v, v⟫_ℂ).re ≤ ‖H v‖ * ‖w‖ := by
     rw [hform]
     calc
       (⟪H w, w⟫_ℂ).re ≤ ‖H w‖ * ‖w‖ :=
         re_inner_le_norm (𝕜 := ℂ) (H w) w
       _ = ‖H v‖ * ‖w‖ := by rw [hHw]
-  rw [← hform] at henergy
-  by_cases hwzero : ‖w‖ = 0
-  · have hw' : w = 0 := norm_eq_zero.mp hwzero
-    rw [hform, hw', map_zero, inner_zero_left, Complex.zero_re, mul_zero]
-    exact inner_self_nonneg (𝕜 := ℂ) (x := H v)
-  · have hwpos : 0 < ‖w‖ := lt_of_le_of_ne (norm_nonneg w) (Ne.symm hwzero)
-    have hgapnorm : γ * ‖w‖ ≤ ‖H v‖ := by
-      nlinarith
-    have hquad : γ * (⟪H v, v⟫_ℂ).re ≤ ‖H v‖ ^ 2 := by
-      nlinarith [norm_nonneg (H v)]
-    calc
-      γ * (⟪H v, v⟫_ℂ).re ≤ ‖H v‖ ^ 2 := hquad
-      _ = (⟪H v, H v⟫_ℂ).re :=
-        (inner_self_eq_norm_sq (𝕜 := ℂ) (H v)).symm
+  calc
+    γ * (⟪H v, v⟫_ℂ).re ≤ γ * (‖H v‖ * ‖w‖) :=
+      mul_le_mul_of_nonneg_left hcauchy hγ.le
+    _ = (γ * ‖w‖) * ‖H v‖ := by ring
+    _ ≤ ‖H v‖ * ‖H v‖ :=
+      mul_le_mul_of_nonneg_right hgapnorm (norm_nonneg (H v))
+    _ = ‖H v‖ ^ 2 := by ring
+    _ = (⟪H v, H v⟫_ℂ).re :=
+      (inner_self_eq_norm_sq (𝕜 := ℂ) (H v)).symm
 
 namespace NestedGroundProjections
 
@@ -282,71 +289,50 @@ and C3 is the source's literal operator-norm bound
 \(\frac{\gamma_{l+1}}{d_{l+1}}
   (1-\epsilon_l\sqrt{l+1})^2\).
 
-The hypothesis \(G_l=\mathbf 1\) makes explicit the padded-filtration
-convention needed when the source sums only the active indices
-\(n=l,\ldots,N-1\).  The case \(\epsilon_l=0\) is treated separately, since
-the printed choice \(c_2=\epsilon_l/\sqrt{l+1}\) is then not positive. -/
+The finite sum runs over every index \(n=0,\ldots,N-1\), with only
+\(G_0=\mathbf 1\) needed for the martingale resolution. Thus C1, C2, and C3
+are assumed on that full finite range. The case \(\epsilon_l=0\) is treated
+separately, since the printed choice \(c_2=\epsilon_l/\sqrt{l+1}\) is then not
+positive. -/
 theorem energy_lower_bound_of_nachtergaele_c1_c3
     [FiniteDimensional ℂ E]
     (G : NestedGroundProjections (E := E)) (Q : ℕ → E →ₗ[ℂ] E)
     (localHamiltonian : ℕ → E →ₗ[ℂ] E) (H : E →ₗ[ℂ] E)
-    (N l : ℕ) (hlN : l ≤ N) (v : E)
+    (N l : ℕ) (v : E)
     (hzero : G.projection 0 = LinearMap.id)
-    (hl : G.projection l = LinearMap.id)
     (hv : v ∈ (LinearMap.range (G.projection N))ᗮ)
     {γ d ε : ℝ} (hγ : 0 < γ) (hd : 0 < d) (hε : 0 ≤ ε)
     (hεlt : ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ))
-    (hQ : ∀ n ∈ Finset.Ico l N, (Q n).IsSymmetricProjection)
-    (hcomm : ∀ n ∈ Finset.Ico l N, ∀ m,
+    (hQ : ∀ n ∈ Finset.range N, (Q n).IsSymmetricProjection)
+    (hcomm : ∀ n ∈ Finset.range N, ∀ m,
       m < n - l ∨ n < m →
         (G.martingaleDifference m).comp (Q n) =
           (Q n).comp (G.martingaleDifference m))
     (hC1 : ∀ x,
-      0 ≤ ∑ n ∈ Finset.Ico l N,
+      0 ≤ ∑ n ∈ Finset.range N,
           (⟪localHamiltonian n x, x⟫_ℂ).re ∧
-      (∑ n ∈ Finset.Ico l N,
+      (∑ n ∈ Finset.range N,
           (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
         d * (⟪H x, x⟫_ℂ).re)
-    (hC2 : ∀ n ∈ Finset.Ico l N, ∀ x,
+    (hC2 : ∀ n ∈ Finset.range N, ∀ x,
       γ * ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) x‖ ^ 2 ≤
         (⟪localHamiltonian n x, x⟫_ℂ).re)
-    (hC3 : ∀ n ∈ Finset.Ico l N,
+    (hC3 : ∀ n ∈ Finset.range N,
       ‖(Q n).toContinuousLinearMap.comp
           (G.martingaleDifference n).toContinuousLinearMap‖ ≤ ε) :
     (γ / d) * (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 * ‖v‖ ^ 2 ≤
       (⟪H v, v⟫_ℂ).re := by
-  have hvKer : v ∈ LinearMap.ker (G.projection N) := by
-    rw [(G.isSymmetricProjection N).isSymmetric.orthogonal_range] at hv
-    exact hv
-  have hGNv : G.projection N v = 0 := LinearMap.mem_ker.mp hvKer
-  have hsumMap :
-      ∑ n ∈ Finset.Ico l N, G.martingaleDifference n =
-        G.projection l - G.projection N := by
-    rw [Finset.sum_Ico_eq_sub _ hlN, G.sum_martingaleDifference,
-      G.sum_martingaleDifference]
-    abel
-  have hactiveApply :
-      ∑ n ∈ Finset.Ico l N, G.martingaleDifference n v = v := by
-    calc
-      ∑ n ∈ Finset.Ico l N, G.martingaleDifference n v =
-          (∑ n ∈ Finset.Ico l N, G.martingaleDifference n) v := by simp
-      _ = (G.projection l - G.projection N) v := by rw [hsumMap]
-      _ = v := by simp [hl, hGNv]
   have hactiveNorm :
-      ∑ n ∈ Finset.Ico l N, ‖G.martingaleDifference n v‖ ^ 2 = ‖v‖ ^ 2 := by
-    rw [← G.norm_sq_sum_martingaleDifference_finset (Finset.Ico l N) v,
-      hactiveApply]
-  have hfullNorm :
       ∑ n ∈ Finset.range N, ‖G.martingaleDifference n v‖ ^ 2 = ‖v‖ ^ 2 := by
     rw [← G.norm_sq_eq_sum_martingaleDifference_of_mem_orthogonal N v hzero hv]
   have hwindow :
-      ∑ n ∈ Finset.Ico l N,
+      ∑ n ∈ Finset.range N,
           ‖∑ m ∈ Finset.Icc (n - l) n, G.martingaleDifference m v‖ ^ 2 ≤
         (l + 1) * ‖v‖ ^ 2 := by
     calc
-      ∑ n ∈ Finset.Ico l N,
+      ∑ n ∈ Finset.range N,
           ‖∑ m ∈ Finset.Icc (n - l) n, G.martingaleDifference m v‖ ^ 2 =
-          ∑ n ∈ Finset.Ico l N, ∑ m ∈ Finset.Icc (n - l) n,
+          ∑ n ∈ Finset.range N, ∑ m ∈ Finset.Icc (n - l) n,
             ‖G.martingaleDifference m v‖ ^ 2 := by
               apply Finset.sum_congr rfl
               intro n _
@@ -354,10 +340,10 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3
                 (Finset.Icc (n - l) n) v
       _ ≤ (l + 1) *
           ∑ m ∈ Finset.range N, ‖G.martingaleDifference m v‖ ^ 2 :=
-        movingWindow_sum_le
+        movingWindow_sum_range_le
           (fun m ↦ ‖G.martingaleDifference m v‖ ^ 2) l N
           (fun m ↦ sq_nonneg ‖G.martingaleDifference m v‖)
-      _ = (l + 1) * ‖v‖ ^ 2 := by rw [hfullNorm]
+      _ = (l + 1) * ‖v‖ ^ 2 := by rw [hactiveNorm]
   let s := Real.sqrt ((l + 1 : ℕ) : ℝ)
   have hs : 0 < s := Real.sqrt_pos.2 (by positivity)
   have hsquare : s ^ 2 = ((l + 1 : ℕ) : ℝ) := by
@@ -366,7 +352,7 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3
     rw [lt_div_iff₀ hs] at hεlt
     exact hεlt
   have hδ : 0 < 1 - ε * s := sub_pos.mpr hεs
-  have hC3point : ∀ n ∈ Finset.Ico l N, ∀ x,
+  have hC3point : ∀ n ∈ Finset.range N, ∀ x,
       ‖Q n (G.martingaleDifference n x)‖ ^ 2 ≤
         ε ^ 2 * ‖G.martingaleDifference n x‖ ^ 2 := by
     intro n hn x
@@ -376,7 +362,7 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3
       (G.martingaleDifference_isSymmetricProjection n) (hC3 n hn) x
   rcases hε.eq_or_lt with hεzero | hεpos
   · subst ε
-    have hpoint : ∀ n ∈ Finset.Ico l N,
+    have hpoint : ∀ n ∈ Finset.range N,
         ‖G.martingaleDifference n v‖ ^ 2 ≤
           (1 / (2 * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re +
             (1 / 2) * ‖G.martingaleDifference n v‖ ^ 2 := by
@@ -389,18 +375,18 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3
         rw [← norm_eq_zero]
         nlinarith [sq_nonneg ‖Q n (G.martingaleDifference n v)‖]
       simpa using enpsi_of_c2_c3_zero G Q localHamiltonian N n l
-        (Finset.mem_Ico.mp hn).2 v
+        (Finset.mem_range.mp hn) v
         hzero hv (hQ n hn) (hcomm n hn) hγ (by norm_num : (0 : ℝ) < 1)
         (hC2 n hn v) hqzero
     have hsumPoint := Finset.sum_le_sum fun n hn ↦ hpoint n hn
     have hsumPoint' : ‖v‖ ^ 2 ≤
         (1 / (2 * γ)) *
-            (∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n v, v⟫_ℂ).re) +
+            (∑ n ∈ Finset.range N, (⟪localHamiltonian n v, v⟫_ℂ).re) +
           (1 / 2) * ‖v‖ ^ 2 := by
       simpa only [Finset.sum_add_distrib, ← Finset.mul_sum, hactiveNorm] using hsumPoint
     have henergy :
         (1 / (2 * γ)) *
-            (∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n v, v⟫_ℂ).re) ≤
+            (∑ n ∈ Finset.range N, (⟪localHamiltonian n v, v⟫_ℂ).re) ≤
           (1 / (2 * γ)) * (d * (⟪H v, v⟫_ℂ).re) :=
       mul_le_mul_of_nonneg_left (hC1 v).2 (by positivity)
     have hhalf : (1 / 2 : ℝ) * ‖v‖ ^ 2 ≤
@@ -425,7 +411,7 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3
       dsimp only [c₂]
       rw [← hsquare]
       field_simp [hs.ne']
-    have hpoint : ∀ n ∈ Finset.Ico l N,
+    have hpoint : ∀ n ∈ Finset.range N,
         ‖G.martingaleDifference n v‖ ^ 2 ≤
           (1 / (2 * c₁ * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re +
           (c₁ / 2 + ε * s / 2) * ‖G.martingaleDifference n v‖ ^ 2 +
@@ -435,26 +421,26 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3
       intro n hn
       simpa only [hεc₂] using
         enpsi2_of_c2_c3 G Q localHamiltonian N n l
-          (Finset.mem_Ico.mp hn).2 v hzero hv
+          (Finset.mem_range.mp hn) v hzero hv
           (hQ n hn) (hcomm n hn) hγ hc₁ hc₂ (hC2 n hn v) (hC3point n hn v)
     have hsumPoint := Finset.sum_le_sum fun n hn ↦ hpoint n hn
     have hsumPoint' : ‖v‖ ^ 2 ≤
         (1 / (2 * c₁ * γ)) *
-            (∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n v, v⟫_ℂ).re) +
+            (∑ n ∈ Finset.range N, (⟪localHamiltonian n v, v⟫_ℂ).re) +
         (c₁ / 2 + ε * s / 2) * ‖v‖ ^ 2 +
         (c₂ / 2) *
-          (∑ n ∈ Finset.Ico l N,
+          (∑ n ∈ Finset.range N,
             ‖∑ m ∈ Finset.Icc (n - l) n,
               G.martingaleDifference m v‖ ^ 2) := by
       simpa only [Finset.sum_add_distrib, ← Finset.mul_sum, hactiveNorm] using hsumPoint
     have henergy :
         (1 / (2 * c₁ * γ)) *
-            (∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n v, v⟫_ℂ).re) ≤
+            (∑ n ∈ Finset.range N, (⟪localHamiltonian n v, v⟫_ℂ).re) ≤
           (1 / (2 * c₁ * γ)) * (d * (⟪H v, v⟫_ℂ).re) :=
       mul_le_mul_of_nonneg_left (hC1 v).2 (by positivity)
     have hwindow' :
         (c₂ / 2) *
-            (∑ n ∈ Finset.Ico l N,
+            (∑ n ∈ Finset.range N,
               ‖∑ m ∈ Finset.Icc (n - l) n,
                 G.martingaleDifference m v‖ ^ 2) ≤
           (ε * s / 2) * ‖v‖ ^ 2 := by
@@ -483,34 +469,32 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3
 
 /-- Norm-gap form of Nachtergaele's Theorem 2.1(i). The ground-space identity
 identifies the last filtration range with the kernel of the positive
-Hamiltonian. The energy estimate above gives the exact coefficient
-\(\frac{\gamma}{d}(1-\epsilon\sqrt{l+1})^2\); the final conversion reuses
-`spectralGap_of_martingale_of_finiteDimensional` through
-`spectralGap_of_energy_lower_bound_of_finiteDimensional`. -/
+Hamiltonian. The energy estimate and Cauchy--Schwarz supply the global
+quadratic-form hypothesis used by
+`spectralGap_of_martingale_of_finiteDimensional`. -/
 theorem norm_lower_bound_of_nachtergaele_c1_c3
     [FiniteDimensional ℂ E]
     (G : NestedGroundProjections (E := E)) (Q : ℕ → E →ₗ[ℂ] E)
     (localHamiltonian : ℕ → E →ₗ[ℂ] E) (H : E →ₗ[ℂ] E)
-    (N l : ℕ) (hlN : l ≤ N)
+    (N l : ℕ)
     (hzero : G.projection 0 = LinearMap.id)
-    (hl : G.projection l = LinearMap.id)
     {γ d ε : ℝ} (hγ : 0 < γ) (hd : 0 < d) (hε : 0 ≤ ε)
     (hεlt : ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ))
-    (hQ : ∀ n ∈ Finset.Ico l N, (Q n).IsSymmetricProjection)
-    (hcomm : ∀ n ∈ Finset.Ico l N, ∀ m,
+    (hQ : ∀ n ∈ Finset.range N, (Q n).IsSymmetricProjection)
+    (hcomm : ∀ n ∈ Finset.range N, ∀ m,
       m < n - l ∨ n < m →
         (G.martingaleDifference m).comp (Q n) =
           (Q n).comp (G.martingaleDifference m))
     (hC1 : ∀ x,
-      0 ≤ ∑ n ∈ Finset.Ico l N,
+      0 ≤ ∑ n ∈ Finset.range N,
           (⟪localHamiltonian n x, x⟫_ℂ).re ∧
-      (∑ n ∈ Finset.Ico l N,
+      (∑ n ∈ Finset.range N,
           (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
         d * (⟪H x, x⟫_ℂ).re)
-    (hC2 : ∀ n ∈ Finset.Ico l N, ∀ x,
+    (hC2 : ∀ n ∈ Finset.range N, ∀ x,
       γ * ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) x‖ ^ 2 ≤
         (⟪localHamiltonian n x, x⟫_ℂ).re)
-    (hC3 : ∀ n ∈ Finset.Ico l N,
+    (hC3 : ∀ n ∈ Finset.range N,
       ‖(Q n).toContinuousLinearMap.comp
           (G.martingaleDifference n).toContinuousLinearMap‖ ≤ ε)
     (hH : H.IsPositive)
@@ -527,13 +511,11 @@ theorem norm_lower_bound_of_nachtergaele_c1_c3
   have hgap : 0 < gap := by
     dsimp only [gap]
     positivity
-  apply spectralGap_of_energy_lower_bound_of_finiteDimensional hgap hH
+  apply spectralGap_of_martingale_of_finiteDimensional hgap hH
+  apply operator_inequality_of_energy_lower_bound hgap hH
   intro v hv
-  change (γ / d) *
-      (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 * ‖v‖ ^ 2 ≤
-    (⟪H v, v⟫_ℂ).re
   apply energy_lower_bound_of_nachtergaele_c1_c3 G Q localHamiltonian H
-    N l hlN v hzero hl
+    N l v hzero
   · rwa [hground]
   · exact hγ
   · exact hd

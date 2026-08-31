@@ -78,4 +78,70 @@ theorem movingWindow_sum_le (a : ℕ → ℝ) (l N : ℕ) (ha : ∀ m, 0 ≤ a m
           Finset.sum_le_sum_of_subset_of_nonneg hg_sub fun m _ _ ↦ ha m
     _ = (l + 1) * ∑ m ∈ Finset.range N, a m := by simp
 
+/-- For nonnegative coefficients, the same moving-window estimate holds when
+all indices in `[0, N)` are active. The truncated windows at indices below
+`l` still count each coefficient at most `l + 1` times. -/
+theorem movingWindow_sum_range_le (a : ℕ → ℝ) (l N : ℕ) (ha : ∀ m, 0 ≤ a m) :
+    ∑ n ∈ Finset.range N, ∑ m ∈ Finset.Icc (n - l) n, a m ≤
+      (l + 1) * ∑ m ∈ Finset.range N, a m := by
+  have hwindow (n : ℕ) :
+      ∑ m ∈ Finset.Icc (n - l) n, a m =
+        ∑ k ∈ (Finset.range (l + 1)).filter (fun k ↦ k ≤ n), a (n - k) := by
+    refine Finset.sum_bij (fun m _ ↦ n - m) ?_ ?_ ?_ ?_
+    · intro m hm
+      simp only [Finset.mem_filter, Finset.mem_range]
+      have hm' := Finset.mem_Icc.mp hm
+      constructor <;> omega
+    · intro m₁ hm₁ m₂ hm₂ hEq
+      have hm₁' := Finset.mem_Icc.mp hm₁
+      have hm₂' := Finset.mem_Icc.mp hm₂
+      omega
+    · intro k hk
+      simp only [Finset.mem_filter, Finset.mem_range] at hk
+      refine ⟨n - k, ?_, ?_⟩
+      · simp only [Finset.mem_Icc]
+        omega
+      · omega
+    · intro m hm
+      have hm' := Finset.mem_Icc.mp hm
+      congr 1
+      omega
+  calc
+    ∑ n ∈ Finset.range N, ∑ m ∈ Finset.Icc (n - l) n, a m =
+        ∑ n ∈ Finset.range N,
+          ∑ k ∈ (Finset.range (l + 1)).filter (fun k ↦ k ≤ n), a (n - k) := by
+            refine Finset.sum_congr rfl fun n _ ↦ hwindow n
+    _ = ∑ n ∈ Finset.range N, ∑ k ∈ Finset.range (l + 1),
+          if k ≤ n then a (n - k) else 0 := by
+            refine Finset.sum_congr rfl fun n _ ↦ ?_
+            rw [Finset.sum_filter]
+    _ = ∑ k ∈ Finset.range (l + 1), ∑ n ∈ Finset.range N,
+          if k ≤ n then a (n - k) else 0 := Finset.sum_comm
+    _ ≤ ∑ k ∈ Finset.range (l + 1), ∑ m ∈ Finset.range N, a m := by
+      refine Finset.sum_le_sum fun k _ ↦ ?_
+      rw [← Finset.sum_filter]
+      let g : ℕ → ℕ := fun n ↦ n - k
+      have hg_inj : Set.InjOn g ((Finset.range N).filter (fun n ↦ k ≤ n)) := by
+        intro n hn n' hn' hEq
+        have hkn := (Finset.mem_filter.mp hn).2
+        have hkn' := (Finset.mem_filter.mp hn').2
+        simp only [g] at hEq
+        omega
+      have hg_sub :
+          Finset.image g ((Finset.range N).filter (fun n ↦ k ≤ n)) ⊆
+            Finset.range N := by
+        intro m hm
+        rcases Finset.mem_image.mp hm with ⟨n, hn, rfl⟩
+        simp only [Finset.mem_filter, Finset.mem_range, g] at hn ⊢
+        omega
+      calc
+        ∑ n ∈ (Finset.range N).filter (fun n ↦ k ≤ n), a (n - k) =
+            ∑ m ∈ Finset.image g ((Finset.range N).filter (fun n ↦ k ≤ n)),
+              a m := by
+                symm
+                exact Finset.sum_image hg_inj
+        _ ≤ ∑ m ∈ Finset.range N, a m :=
+          Finset.sum_le_sum_of_subset_of_nonneg hg_sub fun m _ _ ↦ ha m
+    _ = (l + 1) * ∑ m ∈ Finset.range N, a m := by simp
+
 end FrustrationFree
