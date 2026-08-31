@@ -3,11 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.LinearAlgebra.Matrix.Permutation
+import TNLean.Algebra.PermutationMatrixUnitary
+import TNLean.MPS.MPDO.AreaLaw
+import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.TensorProduct
-import TNLean.MPS.MPDO.StackedLayers
-import TNLean.MPS.MPDO.AreaLaw
-import Mathlib.LinearAlgebra.Matrix.Permutation
 
 /-!
 # Shift matrix product unitaries
@@ -108,10 +109,7 @@ theorem rightShiftTensor_isMPU (d : ℕ) : IsMPU (rightShiftTensor d) := by
   intro N hN
   let : NeZero N := ⟨Nat.ne_of_gt (lt_trans Nat.zero_lt_one hN)⟩
   rw [mpo_rightShiftTensor]
-  rw [Matrix.mem_unitaryGroup_iff]
-  simp only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_permMatrix]
-  rw [← Matrix.permMatrix_mul]
-  simp
+  exact Equiv.Perm.permMatrix_mem_unitaryGroup (rotateConfig N d)
 
 /-- The adjoint tensor generates the left shift. -/
 def leftShiftTensor (d : ℕ) : MPOTensor d d :=

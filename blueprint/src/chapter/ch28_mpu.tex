@@ -8365,16 +8365,86 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Transformation with swaps]
     \label{threeMPU2}
-    \notready
-    \discussion{5715}
-    \uses{threeMPU}
-    Define
+    \lean{MPOTensor.shiftPhysicalSwap}
+    \lean{MPOTensor.shiftPhysicalSwap_apply}
+    \lean{MPOTensor.shiftExampleTildeU₁}
+    \lean{MPOTensor.shiftExampleTildeU₂}
+    \lean{MPOTensor.shiftExampleTildeU₃}
+    \leanok
+    \uses{threeMPU, def:mpu_physical_pair_swap}
+    Let $\mathbb S$ exchange the two $d$-dimensional spins at one site, with
+    matrix entries
+    \begin{align}
+        \mathbb S_{(p,q),(r,s)}=\delta_{p,s}\delta_{q,r}.
+    \end{align}
+    With the row index as the output physical index and the column index as the
+    input physical index, define
+    \begin{align}
+        \widetilde{\mathcal U}_a^{\,IJ}
+        =\sum_K\mathbb S_{IK}\mathcal U_a^{\,KJ},
+        \qquad a\in\{1,2,3\}.
+    \end{align}
+    Thus the swap acts on the output leg, and the corresponding closed operator
+    is left-multiplied by $\mathbb S^{\otimes N}$.
+    % Source lines: paper_v2.tex 2045--2062.
+\end{definition}
+
+\begin{theorem}[Finite-chain formulas for the swap-transformed shifts]
+    \label{thm:threeMPU2_chain_formulas}
+    \lean{MPOTensor.mpo_ketLeftMul}
+    \lean{MPOTensor.IsMPU.ketLeftMul}
+    \lean{MPOTensor.shiftPhysicalSwap_mem_unitaryGroup}
+    \lean{MPOTensor.mpo_shiftExampleTildeU₁}
+    \lean{MPOTensor.mpo_shiftExampleTildeU₂}
+    \lean{MPOTensor.mpo_shiftExampleTildeU₃}
+    \lean{MPOTensor.shiftExampleTildeU₁_isMPU}
+    \lean{MPOTensor.shiftExampleTildeU₂_isMPU}
+    \lean{MPOTensor.shiftExampleTildeU₃_isMPU}
+    \leanok
+    \uses{threeMPU2, thm:threeMPU_chain_formulas,
+        def:mpdo_sitewise_physical_matrix, def:mpu}
+    On every nonempty chain,
     \begin{align}
         \widetilde U_1^{(N)} & =\mathbb S^{\otimes N}, \\
         \widetilde U_2^{(N)} & =\mathbb S^{\otimes N}
         (T^{(N)\dagger}\otimes T^{(N)}),               \\
         \widetilde U_3^{(N)} & =\mathbb S^{\otimes N}
-        (T^{(N)}\otimes T^{(N)\dagger})
+        (T^{(N)}\otimes T^{(N)\dagger}).
+    \end{align}
+    Each transformed tensor is a matrix product unitary.
+    % Source lines: paper_v2.tex 2052--2062.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{threeMPU2, thm:threeMPU_chain_formulas,
+        def:mpdo_sitewise_physical_matrix, def:mpu}
+    Acting by a one-site matrix $P$ on every output physical index gives
+    \begin{align}
+        \operatorname{MPO}_N(P\mathcal M)
+        =P^{\otimes N}\operatorname{MPO}_N(\mathcal M).
+    \end{align}
+    Substituting $P=\mathbb S$ and the three shift formulas gives the stated
+    identities. The swap is a permutation matrix and hence unitary. If
+    $\mathcal M$ is an MPU, then
+    \begin{align}
+        \bigl(P^{\otimes N}\operatorname{MPO}_N(\mathcal M)\bigr)^\dagger
+        \bigl(P^{\otimes N}\operatorname{MPO}_N(\mathcal M)\bigr)
+         & =\operatorname{MPO}_N(\mathcal M)^\dagger
+        (P^{\otimes N})^\dagger P^{\otimes N}
+        \operatorname{MPO}_N(\mathcal M)             \\
+         & =\Id.
+    \end{align}
+    Thus the sitewise left action preserves the MPU property.
+\end{proof}
+
+\begin{theorem}[Remaining swap-transformation identities]
+    \label{thm:threeMPU2_remaining_formulas}
+    \notready
+    \discussion{5715}
+    \uses{threeMPU2, thm:threeMPU2_chain_formulas, def:mpu_source_uv}
+    The third transformed family also satisfies
+    \begin{align}
+        \widetilde U_3^{(N)}
         =\mathbb S^{\otimes N}\widetilde U_2^{(N)}\mathbb S^{\otimes N}.
     \end{align}
     The first two standard forms are
@@ -8384,8 +8454,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \widetilde u_2 & =\Id\otimes\Id, &
         \widetilde v_2 & =\mathbb S.
     \end{align}
-    % Source lines: paper_v2.tex 2045--2099.
-\end{definition}
+    % Source lines: paper_v2.tex 2059--2099.
+\end{theorem}
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
     \label{lemma:sym-trafo-swap}
