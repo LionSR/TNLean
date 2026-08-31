@@ -8727,56 +8727,119 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 2158--2200.
 \end{proposition}
 
-\begin{lemma}[Literal three-swap permutation identity]
-    \label{lem:mpu_shift_ancilla_three_swap_endpoint}
-    \lean{MPOTensor.shiftAncillaSwap₁₂,
-        MPOTensor.shiftAncillaSwap₂a,
-        MPOTensor.shiftAncillaSwap₁aNext,
-        MPOTensor.shiftAncillaSwap₁aNext_apply,
-        MPOTensor.shiftAncillaThreeSwap,
-        MPOTensor.shiftAncillaCounterShift,
+\begin{definition}[Two-species ancilla configurations]
+    \label{def:mpu_shift_ancilla_config}
+    \lean{MPOTensor.ShiftAncillaConfig}
+    \leanok
+    \discussion{7470}
+    For a periodic chain of length $N$, the configuration space consists of
+    triples $((\sigma_1,\sigma_2),a)$ of two physical configurations and one
+    $d$-dimensional ancilla configuration.
+\end{definition}
+
+\begin{definition}[Sitewise physical swap]
+    \label{def:mpu_shift_ancilla_swap_12}
+    \lean{MPOTensor.shiftAncillaSwap₁₂}
+    \leanok
+    \discussion{7470}
+    \uses{def:mpu_shift_ancilla_config}
+    The sitewise physical swap is
+    \begin{align}
+        S^{1,2}((\sigma_1,\sigma_2),a)
+         & =((\sigma_2,\sigma_1),a).
+    \end{align}
+    % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
+\end{definition}
+
+\begin{definition}[Sitewise second-species--ancilla swap]
+    \label{def:mpu_shift_ancilla_swap_2a}
+    \lean{MPOTensor.shiftAncillaSwap₂a}
+    \leanok
+    \discussion{7470}
+    \uses{def:mpu_shift_ancilla_config}
+    The sitewise swap of the second species with the ancilla is
+    \begin{align}
+        S^{2,a}((\sigma_1,\sigma_2),a)
+         & =((\sigma_1,a),\sigma_2).
+    \end{align}
+    % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
+\end{definition}
+
+\begin{definition}[Crossed first-species--ancilla swap]
+    \label{def:mpu_shift_ancilla_swap_1a_next}
+    \lean{MPOTensor.shiftAncillaSwap₁aNext,
+        MPOTensor.shiftAncillaSwap₁aNext_apply}
+    \leanok
+    \discussion{7470}
+    \uses{def:mpu_shift_ancilla_config, def:mpo_rotate_config}
+    Let $R$ cyclically rotate configurations on the chain. The crossed swap is
+    \begin{align}
+        S^{1,a}_{+}((\sigma_1,\sigma_2),a)
+         & =((Ra,\sigma_2),R^{-1}\sigma_1).
+    \end{align}
+    % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
+\end{definition}
+
+\begin{definition}[Literal three-swap circuit]
+    \label{def:mpu_shift_ancilla_three_swap}
+    \lean{MPOTensor.shiftAncillaThreeSwap}
+    \leanok
+    \discussion{7470}
+    \uses{def:mpu_shift_ancilla_swap_12,
+        def:mpu_shift_ancilla_swap_2a,
+        def:mpu_shift_ancilla_swap_1a_next}
+    Let $C$ be the permutation obtained by applying $S^{1,a}_{+}$ first, then
+    $S^{1,2}$, and finally $S^{2,a}$.
+    % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
+\end{definition}
+
+\begin{definition}[Counter-shift permutation]
+    \label{def:mpu_shift_ancilla_counter_shift}
+    \lean{MPOTensor.shiftAncillaCounterShift}
+    \leanok
+    \discussion{7470}
+    \uses{def:mpu_shift_ancilla_config, def:mpo_rotate_config}
+    Define
+    \begin{align}
+        K((\sigma_1,\sigma_2),a)
+         & =((R\sigma_2,R^{-1}\sigma_1),a).
+    \end{align}
+    % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
+\end{definition}
+
+\begin{theorem}[Literal three-swap permutation identity]
+    \label{thm:mpu_shift_ancilla_three_swap_endpoint}
+    \lean{MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂,
         MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂_apply,
-        MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂,
         MPOTensor.permMatrix_shiftAncillaThreeSwap_endpoint,
         MPOTensor.permMatrix_shiftAncillaThreeSwap_conj_swap₁₂}
     \leanok
     \discussion{7470}
-    \uses{threeMPU2}
-    Let $R$ cyclically rotate configurations on a periodic chain of length $N$.
-    On triples $((\sigma_1,\sigma_2),a)$ of two physical configurations and one
-    $d$-dimensional ancilla configuration, let $C$ apply the swaps above
-    $\widetilde U_1$ from the endpoint outwards: $S^{1,a}_{n,n+1}$,
-    $S^{1,2}_{n,n}$, and $S^{2,a}_{n,n}$. Then
+    \uses{def:mpu_shift_ancilla_swap_12,
+        def:mpu_shift_ancilla_three_swap,
+        def:mpu_shift_ancilla_counter_shift}
+    The literal three-swap circuit satisfies
+    \begin{align}
+        C^{-1}S^{1,2}C & =K.
+    \end{align}
+    Writing $P_f$ for the permutation matrix of $f$, one also has
+    \begin{align}
+        P_C P_{S^{1,2}} P_{C^{-1}} & =P_K.
+    \end{align}
+    % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_shift_ancilla_swap_12,
+        def:mpu_shift_ancilla_three_swap,
+        def:mpu_shift_ancilla_counter_shift}
+    Evaluating the three swaps gives
     \begin{align}
         C^{-1}S^{1,2}C((\sigma_1,\sigma_2),a)
          & =((R\sigma_2,R^{-1}\sigma_1),a).
     \end{align}
-    Let $K((\sigma_1,\sigma_2),a)=((R\sigma_2,R^{-1}\sigma_1),a)$.
-    Writing $P_f$ for the permutation matrix of $f$, the matrix endpoint is
-    \begin{align}
-        P_C P_{S^{1,2}} P_{C^{-1}}
-         & =P_K.
-    \end{align}
-    At the coordinate level, $K$ is the configuration map of
-    $\widetilde U_3$, whereas $\widetilde U_2$ has configuration map
-    $((\sigma_1,\sigma_2),a)\mapsto
-        ((R^{-1}\sigma_2,R\sigma_1),a)$. Thus the literal source labels do not
-    produce the claimed $\widetilde U_2$ endpoint on a nondegenerate periodic
-    chain. This finite permutation identity does not identify $P_K$ with an
-    ancilla-enlarged MPU. It also asserts neither a continuous path nor a
-    symmetry action on the full ancilla-enlarged operator algebra.
-    % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
-\end{lemma}
-
-\begin{proof}\leanok
-    Each of the three swap layers is an involution. Evaluating them successively
-    before and after $S^{1,2}$ gives
-    \begin{align}
-        ((\sigma_1,\sigma_2),a)
-         & \longmapsto ((R\sigma_2,R^{-1}\sigma_1),a).
-    \end{align}
-    Extensionality proves the permutation equality, and applying the
-    permutation-matrix construction proves its matrix form.
+    Extensionality gives the permutation equality. The permutation-matrix
+    identity follows by functoriality.
 \end{proof}
 
 \begin{proposition}[Ancilla equivalence of $U_1$ and $U_2$]

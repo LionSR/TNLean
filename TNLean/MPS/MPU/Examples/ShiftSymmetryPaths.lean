@@ -88,7 +88,10 @@ def shiftAncillaThreeSwap (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
     (shiftAncillaSwap₂a N d)
 
 /-- The counter-shift permutation produced by the literal figure labels: the
-two physical species shift in opposite directions and the ancilla is fixed. -/
+two physical species shift in opposite directions and the ancilla is fixed.
+
+Source: arXiv:1703.09188, Figure `fig:TR-ancilla` and Proposition
+`prop:U1-U2-equiv-ancillatrick` (lines 2217--2229). -/
 def shiftAncillaCounterShift (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
   Function.Involutive.toPerm
     (fun σ =>
@@ -134,7 +137,10 @@ theorem shiftAncillaThreeSwap_conj_swap₁₂ (N d : ℕ) :
   rintro ⟨⟨σ₁, σ₂⟩, a⟩
   exact shiftAncillaThreeSwap_conj_swap₁₂_apply N d σ₁ σ₂ a
 
-/-- Permutation-matrix form of the exact finite three-swap endpoint identity. -/
+/-- Permutation-matrix form of the exact finite three-swap endpoint identity.
+
+Source: arXiv:1703.09188, Figure `fig:TR-ancilla` and Proposition
+`prop:U1-U2-equiv-ancillatrick` (lines 2217--2229). -/
 theorem permMatrix_shiftAncillaThreeSwap_endpoint (N d : ℕ) :
     Equiv.Perm.permMatrix ℂ
         (((shiftAncillaThreeSwap N d).trans (shiftAncillaSwap₁₂ N d)).trans
