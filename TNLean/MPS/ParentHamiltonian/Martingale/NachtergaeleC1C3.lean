@@ -28,7 +28,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- A positive finite-dimensional operator with an energy lower bound on the
 orthogonal complement of its kernel satisfies the corresponding norm lower
-bound. The proof converts the energy estimate into `H² ≥ γ H` in an
+bound. The proof converts the energy estimate into \(H^2 \geq \gamma H\) in an
 eigenbasis, then applies `spectralGap_of_martingale_of_finiteDimensional`. -/
 theorem spectralGap_of_energy_lower_bound_of_finiteDimensional
     [FiniteDimensional ℂ E] {γ : ℝ} (hγ : 0 < γ) {H : E →ₗ[ℂ] E}
@@ -309,7 +309,7 @@ and C3 is the source's literal operator-norm bound
 \(\frac{\gamma_{l+1}}{d_{l+1}}
   (1-\epsilon_l\sqrt{l+1})^2\).
 
-The hypothesis `projection l = id` makes explicit the padded-filtration
+The hypothesis \(G_l=\mathbf 1\) makes explicit the padded-filtration
 convention needed when the source sums only the active indices
 \(n=l,\ldots,N-1\).  The case \(\epsilon_l=0\) is treated separately, since
 the printed choice \(c_2=\epsilon_l/\sqrt{l+1}\) is then not positive. -/
@@ -511,7 +511,7 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3
 /-- Norm-gap form of Nachtergaele's Theorem 2.1(i). The ground-space identity
 identifies the last filtration range with the kernel of the positive
 Hamiltonian. The energy estimate above gives the exact coefficient
-`γ / d * (1 - ε * sqrt (l + 1))²`; the final conversion reuses
+\(\frac{\gamma}{d}(1-\epsilon\sqrt{l+1})^2\); the final conversion reuses
 `spectralGap_of_martingale_of_finiteDimensional` through
 `spectralGap_of_energy_lower_bound_of_finiteDimensional`. -/
 theorem norm_lower_bound_of_nachtergaele_c1_c3
