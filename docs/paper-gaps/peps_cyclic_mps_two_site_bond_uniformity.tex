@@ -1,0 +1,114 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{./command}
+
+\title{A Two-Site Counterexample to Cyclic MPS Bond Uniformity}
+\author{}
+\date{2026-08-31}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The printed corollary}
+
+The Applications section of Ref.~\cite{Molnar2018NormalPEPS} considers a
+closed matrix product state whose local matrices have sizes
+$D_k\times D_{k+1}$.  Its translation-invariance corollary asserts that
+cyclic invariance of the state and injectivity of the local tensors imply
+equality of all virtual dimensions and the existence of one repeated tensor.
+Thus its bond-dimension conclusion is
+\begin{align}
+    D_1=D_2=\cdots=D_n.
+    \label{eq:peps_cyclic_mps_two_site_bond_uniformity_printed_conclusion}
+\end{align}
+The corollary itself does not state a lower bound on $n$.\footnote{Local source:
+\path{Papers/1804.04964/paper_normal.tex:1801--1804}.}
+
+The surrounding MPS section of Ref.~\cite{Molnar2018NormalPEPS} says that its
+Fundamental Theorem concerns chains with at least three sites, and the theorem
+invoked in the corollary is stated under that condition.\footnote{Local source:
+\path{Papers/1804.04964/paper_normal.tex:145} and
+\path{Papers/1804.04964/paper_normal.tex:688--725}.}  The omission in the
+corollary is therefore consequential rather than a harmless simplification:
+the literal two-site specialization is false.
+
+\section{A positive-dimensional two-site example}
+
+Let the physical space be $\mathbb C^2$, with standard basis $e_0,e_1$, and
+take
+\begin{align}
+    D_1&=1,
+    &D_2&=2,
+    \label{eq:peps_cyclic_mps_two_site_bond_uniformity_dimensions}\\
+    A_1^i&=e_i^{\mathsf T}\in\operatorname{Mat}_{1\times2}(\mathbb C),
+    &A_2^i&=e_i\in\operatorname{Mat}_{2\times1}(\mathbb C)
+    \qquad (i=0,1).
+    \label{eq:peps_cyclic_mps_two_site_bond_uniformity_tensors}
+\end{align}
+The first local tensor sends the two virtual basis vectors of
+$\mathbb C^1\otimes\mathbb C^2$ to $e_0,e_1$; the second does the same from
+$\mathbb C^2\otimes\mathbb C^1$.  Both local tensor maps are therefore
+isomorphisms, in particular injective.
+
+For physical indices $i,j\in\{0,1\}$, the coefficient before and after the
+cyclic shift is
+\begin{align}
+    \tr(A_1^iA_2^j)
+        &=e_i^{\mathsf T}e_j
+         =\delta_{ij},
+    \label{eq:peps_cyclic_mps_two_site_bond_uniformity_original_coefficient}\\
+    \tr(A_2^iA_1^j)
+        &=\tr(e_i e_j^{\mathsf T})
+         =\delta_{ij}.
+    \label{eq:peps_cyclic_mps_two_site_bond_uniformity_shifted_coefficient}
+\end{align}
+Equations~(\ref{eq:peps_cyclic_mps_two_site_bond_uniformity_original_coefficient})
+and~(\ref{eq:peps_cyclic_mps_two_site_bond_uniformity_shifted_coefficient})
+show that the two-site state is cyclically invariant.  Every virtual space is
+nonzero and both local tensors are injective, while
+(\ref{eq:peps_cyclic_mps_two_site_bond_uniformity_dimensions}) contradicts
+(\ref{eq:peps_cyclic_mps_two_site_bond_uniformity_printed_conclusion}).
+
+The construction and the negation of the literal two-site statement have
+kernel-checked proofs.\footnote{Formal declaration:
+\leanid{TNLean.PEPS.CycleMPSTwoSiteCounterexample.twoSiteBondUniformityStatement_false}
+in \doclink{TNLean/PEPS/CycleMPSTwoSiteCounterexample}.}
+
+\section{Corrected scope}
+
+The source proof compares the site-dependent chain with its cyclic shift by
+the injective MPS Fundamental Theorem and then telescopes the resulting bond
+isomorphisms.  That argument is available in the source's stated regime
+$n\geq3$ and does not apply to the example above.  The source-faithful
+correction is therefore to retain the standing three-site hypothesis:
+\begin{align}
+    n\geq3
+    \quad\Longrightarrow\quad
+    D_1=D_2=\cdots=D_n,
+    \label{eq:peps_cyclic_mps_two_site_bond_uniformity_corrected_scope}
+\end{align}
+together with the positive-dimensional convention for the virtual spaces.
+This is precisely the regime in which the graph-theoretic cycle has one edge
+for each bond and the cited Fundamental Theorem comparison is valid.
+
+\section{Verdict}
+
+The translation-invariance corollary of Ref.~\cite{Molnar2018NormalPEPS} is
+false as printed if it is read at two sites.  The example
+(\ref{eq:peps_cyclic_mps_two_site_bond_uniformity_tensors}) satisfies the
+nondegenerate source hypotheses and has a cyclically invariant state, but its
+two virtual dimensions are unequal.  The corrected statement is the
+at-least-three-site result
+(\ref{eq:peps_cyclic_mps_two_site_bond_uniformity_corrected_scope}), in
+accordance with the standing scope and the Fundamental Theorem used by the
+source proof.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

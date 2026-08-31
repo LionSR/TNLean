@@ -25,6 +25,7 @@ import TNLean.PEPS.CycleMPSInjectivity
 import TNLean.PEPS.CycleMPSOverlapCapstone
 import TNLean.PEPS.CycleMPSTensor
 import TNLean.PEPS.CycleMPSTranslationInvariant
+import TNLean.PEPS.CycleMPSTwoSiteCounterexample
 import TNLean.PEPS.CycleMPSWordTransport
 import TNLean.PEPS.CycleShiftBondUniformity
 import TNLean.PEPS.Defs

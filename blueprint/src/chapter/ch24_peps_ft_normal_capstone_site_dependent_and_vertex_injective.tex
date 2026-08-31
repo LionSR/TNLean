@@ -364,6 +364,37 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
     then proves equality on all bonds.
 \end{proof}
 
+\begin{theorem}[Two-site obstruction to cyclic MPS bond uniformity]%
+    \label{thm:peps_cycle_two_site_bond_uniformity_counterexample}
+    \lean{TNLean.PEPS.CycleMPSTwoSiteCounterexample.twoSiteBondUniformityStatement_false}
+    \leanok
+    The bond-uniformity implication is false for two sites. More precisely,
+    there are injective tensors
+    \begin{align}
+        A_1^i&\in\operatorname{Mat}_{1\times2}(\mathbb C),
+        &A_2^i&\in\operatorname{Mat}_{2\times1}(\mathbb C)
+        \qquad (i=0,1).
+        \label{eq:peps_cycle_two_site_rectangular_tensors}
+    \end{align}
+    whose closed-chain coefficients are invariant under the cyclic shift,
+    but whose positive virtual dimensions are unequal. Consequently the condition
+    $n\ge3$ in Corollary~\ref{cor:peps_cycle_shift_bond_uniform} cannot be
+    removed. This corrects the unqualified printed corollary in
+    \cite[lines~1801--1804]{Molnar2018NormalPEPS}; see
+    \cite{gap:peps_cyclic_mps_two_site_bond_uniformity}.
+\end{theorem}
+\begin{proof}\leanok
+    Let $e_0,e_1$ be the standard basis of $\mathbb C^2$ and take
+    $A_1^i=e_i^{\mathsf T}$ and $A_2^i=e_i$. Each local tensor map sends a
+    virtual basis to $e_0,e_1$, hence is injective. Moreover
+    \begin{align}
+        \tr(A_1^iA_2^j)=\delta_{ij}=\tr(A_2^iA_1^j).
+        \label{eq:peps_cycle_two_site_shift_invariance}
+    \end{align}
+    so the state is cyclically invariant, whereas the adjacent dimensions
+    are $1$ and $2$.
+\end{proof}
+
 \begin{corollary}[Gauge comparison with the cyclic shift]%
     \label{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_cyclicShift}

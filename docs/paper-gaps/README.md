@@ -94,6 +94,16 @@ obligation. The unreferenced strict-modulus removal record was deleted because
 its useful content is already preserved in the non-dominant projection and
 two-layer refinement notes.
 
+For the translation-invariant MPS application of the normal-PEPS Fundamental
+Theorem:
+
+- `peps_cyclic_mps_two_site_bond_uniformity.tex` is the resolved false-source
+  record for the unqualified cyclic-shift corollary of arXiv:1804.04964. The
+  standard row and column tensors with virtual dimensions (1) and (2) are
+  locally injective and generate the cyclically invariant coefficient
+  δᵢⱼ, but their bond dimensions are unequal. The corrected theorem retains
+  the source section's standing assumption of at least three sites.
+
 For MPDO renormalization fixed points:
 
 - `cpsv16_peps_boundary_rfp_specification.tex` records the source-faithful
