@@ -1331,15 +1331,13 @@ norm estimate is derived here.
         \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert^2.
         \label{eq:nachtergaele_c1_c3_full_range_energy_estimate}
     \end{align}
-    This statement assumes C1--C3 for every $0\leq n<N$, whereas the
-    source imposes lower thresholds on the three conditions.  For the
-    compatible open-chain parent Hamiltonian, the terms below those thresholds
-    vanish.  Theorems~\ref{thm:open_parent_hamiltonian_c1_full_range} and
-    \ref{thm:open_suffix_parent_hamiltonian_c2_full_range} verify the resulting
-    full-range C1 and C2 estimates, while
-    Theorem~\ref{thm:literal_fixed_volume_martingale_c3} gives the full-range
-    C3 estimate with the same $\epsilon_l$.  The coefficient is exactly the
-    one in Theorem~2.1(i) of \cite{Nachtergaele1996Spectral}:
+    This full-range statement is stronger than the unrestricted source
+    theorem in general. It assumes C1, C2, and C3 for every $0\leq n<N$,
+    whereas the source imposes lower thresholds on these conditions. Without
+    separate control of the initial volumes, the source hypotheses do not
+    imply the assumptions above; see
+    \cite{gap:cpgsv21_martingale_overlap}. The coefficient is exactly the one
+    in Theorem~2.1(i) of \cite{Nachtergaele1996Spectral}:
     $\gamma_{l+1}/d_{l+1}$ times
     $(1-\epsilon_l\sqrt{l+1})^2$.
 \end{theorem}
@@ -3594,6 +3592,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     \leanok
     \uses{thm:nachtergaele_c1_c3_full_range_norm_gap,
         thm:physical-outside-window-martingale-cancellation,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:fixed-volume-c3-projector-conjugacy,
         thm:open_parent_hamiltonian_c1_full_range,
         thm:open_suffix_parent_hamiltonian_c2_full_range,
         lem:open_parent_hamiltonian_es_positive,
@@ -3614,12 +3614,13 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
         \left\lVert H^{\mathrm{open}}_{N,l+1}(A)v\right\rVert.
         \label{eq:open_parent_hamiltonian_fixed_c3_gap}
     \end{align}
-    This intermediate theorem assumes C3 on the full range $0\leq n<N$,
-    rather than only above the lower threshold in the source statement. Under
-    this stronger hypothesis, it specializes Theorem~2.1(i) of
-    \cite{Nachtergaele1996Spectral} with $d_{l+1}=\gamma_{l+1}=1$ and the same
-    coefficient $\epsilon_l$ as in C3. The primitive existential theorem
-    below supplies the full-range C3 hypothesis from the physical open-chain
+    This intermediate MPS specialization assumes C3 on the full range
+    $0\leq n<N$, rather than only above the lower threshold in the source
+    statement. It applies the full-range estimate with
+    $d_{l+1}=\gamma_{l+1}=1$ and retains the coefficient of Theorem~2.1(i) in
+    \cite{Nachtergaele1996Spectral}. It is not a formulation of the
+    unrestricted source theorem. The primitive existential theorem below
+    supplies the full-range C3 hypothesis from the physical open-chain
     estimates.
 \end{theorem}
 
@@ -3627,13 +3628,18 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     \leanok
     \uses{thm:nachtergaele_c1_c3_full_range_norm_gap,
         thm:physical-outside-window-martingale-cancellation,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:fixed-volume-c3-projector-conjugacy,
         thm:open_parent_hamiltonian_c1_full_range,
         thm:open_suffix_parent_hamiltonian_c2_full_range,
         lem:open_parent_hamiltonian_es_positive,
         thm:open_parent_hamiltonian_kernel_ground_space}
     Use the fixed-volume prefix ground-space projections and their differences
-    $E_n^{(N)}$.  The outside-window commutation theorem gives the locality
-    hypothesis in the martingale estimate.  Theorems
+    $E_n^{(N)}$. Theorems~\ref{thm:fixed-volume-c3-boundary-indices} and
+    \ref{thm:fixed-volume-c3-projector-conjugacy} identify the boundary terms
+    and the fixed-volume projectors entering C3. The outside-window
+    commutation theorem gives the locality hypothesis in the martingale
+    estimate. Theorems
     \ref{thm:open_parent_hamiltonian_c1_full_range} and
     \ref{thm:open_suffix_parent_hamiltonian_c2_full_range} give C1 and C2 with
     $d_{l+1}=\gamma_{l+1}=1$, while
