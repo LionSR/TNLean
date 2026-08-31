@@ -782,6 +782,145 @@ theorem ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES
         rw [mem_groundSpaceES_iff, cyclicRestrictES_tail_window hL]
         exact hv (fun k : Fin K => τ (Fin.castAdd L k))
 
+/-- Conjugating an operator by a linear isometry equivalence conjugates its
+kernel projection to the kernel projection of the conjugated operator. -/
+theorem ker_starProjection_conj_linearIsometryEquiv
+    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    [FiniteDimensional ℂ E] [FiniteDimensional ℂ F]
+    (U : E ≃ₗᵢ[ℂ] F) (G : E →ₗ[ℂ] E) (H : F →ₗ[ℂ] F)
+    (hconj : U.toLinearEquiv.toLinearMap.comp
+      (G.comp U.symm.toLinearEquiv.toLinearMap) = H) :
+    U.toLinearEquiv.toLinearMap.comp
+        ((LinearMap.ker G).starProjection.toLinearMap.comp
+          U.symm.toLinearEquiv.toLinearMap) =
+      (LinearMap.ker H).starProjection.toLinearMap := by
+  let P := U.toLinearEquiv.toLinearMap.comp
+    ((LinearMap.ker G).starProjection.toLinearMap.comp
+      U.symm.toLinearEquiv.toLinearMap)
+  have hkerG := Submodule.isSymmetricProjection_starProjection (LinearMap.ker G)
+  have hP : P.IsSymmetricProjection := by
+    constructor
+    · apply LinearMap.ext
+      intro x
+      change U ((LinearMap.ker G).starProjection
+        (U.symm (U ((LinearMap.ker G).starProjection (U.symm x))))) =
+          U ((LinearMap.ker G).starProjection (U.symm x))
+      rw [LinearIsometryEquiv.symm_apply_apply]
+      exact congrArg U (LinearMap.congr_fun hkerG.isIdempotentElem.eq (U.symm x))
+    · intro x y
+      dsimp only [P, LinearMap.comp_apply]
+      change inner ℂ (U ((LinearMap.ker G).starProjection (U.symm x))) y =
+        inner ℂ x (U ((LinearMap.ker G).starProjection (U.symm y)))
+      calc
+        inner ℂ (U ((LinearMap.ker G).starProjection (U.symm x))) y = inner ℂ
+            (U ((LinearMap.ker G).starProjection (U.symm x)))
+            (U (U.symm y)) := by rw [LinearIsometryEquiv.apply_symm_apply]
+        _ = inner ℂ ((LinearMap.ker G).starProjection (U.symm x)) (U.symm y) :=
+          U.inner_map_map _ _
+        _ = inner ℂ (U.symm x) ((LinearMap.ker G).starProjection (U.symm y)) :=
+          hkerG.isSymmetric _ _
+        _ = inner ℂ (U (U.symm x))
+            (U ((LinearMap.ker G).starProjection (U.symm y))) :=
+          (U.inner_map_map _ _).symm
+        _ = inner ℂ x
+            (U ((LinearMap.ker G).starProjection (U.symm y))) := by
+          rw [LinearIsometryEquiv.apply_symm_apply]
+  apply LinearMap.IsSymmetricProjection.ext hP
+    (Submodule.isSymmetricProjection_starProjection (LinearMap.ker H))
+  rw [Submodule.range_starProjection]
+  ext z
+  constructor
+  · rintro ⟨x, rfl⟩
+    rw [LinearMap.mem_ker]
+    have hconjApply := LinearMap.congr_fun hconj
+      (U ((LinearMap.ker G).starProjection (U.symm x)))
+    change U (G (U.symm
+        (U ((LinearMap.ker G).starProjection (U.symm x))))) =
+      H (U ((LinearMap.ker G).starProjection (U.symm x))) at hconjApply
+    rw [LinearIsometryEquiv.symm_apply_apply] at hconjApply
+    rw [show G ((LinearMap.ker G).starProjection (U.symm x)) = 0 by
+      exact LinearMap.mem_ker.mp (Submodule.starProjection_apply_mem _ _), map_zero] at hconjApply
+    exact hconjApply.symm
+  · intro hz
+    rw [LinearMap.mem_ker] at hz
+    have hconjApply := LinearMap.congr_fun hconj z
+    change U (G (U.symm z)) = H z at hconjApply
+    have hG : G (U.symm z) = 0 := by
+      apply U.injective
+      rw [hconjApply, hz, map_zero]
+    refine ⟨z, ?_⟩
+    change U ((LinearMap.ker G).starProjection (U.symm z)) = z
+    rw [(LinearMap.ker G).starProjection_eq_self_iff.mpr
+      (LinearMap.mem_ker.mpr hG), LinearIsometryEquiv.apply_symm_apply]
+
+/-- In a fixed larger volume, the prefix ground projection is the fiberwise
+extension of the left open-chain ground projection in the active volume. -/
+theorem openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
+    {A : MPSTensor d D} [NeZero D] {L₀ n r : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀n : L₀ + 1 ≤ n) :
+    (rightSpectatorConfigLinearIsometryEquiv d (n + 1) r).toLinearEquiv.toLinearMap.comp
+        ((openPrefixGroundProjectionES A (L₀ + 1) ((n + 1) + r) n).comp
+          (rightSpectatorConfigLinearIsometryEquiv d (n + 1) r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (openChainLeftGroundProjectionES A n)).toLinearMap := by
+  let U := rightSpectatorConfigLinearIsometryEquiv d (n + 1) r
+  let G := openPrefixParentHamiltonianES A (L₀ + 1) ((n + 1) + r) n
+  let H := openPrefixParentHamiltonianES A (L₀ + 1) (n + 1) n
+  have hHamiltonian :=
+    openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
+      A (L := L₀ + 1) (n := n + 1) (r := r) (p := n) (by omega) (by omega)
+  have hproj := ker_starProjection_conj_linearIsometryEquiv U G
+    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (LinearMap.toContinuousLinearMap H)).toLinearMap hHamiltonian
+  rw [ContinuousLinearMap.ker_starProjection_rightFiberwiseMap] at hproj
+  change U.toLinearEquiv.toLinearMap.comp
+      ((LinearMap.ker G).starProjection.toLinearMap.comp
+        U.symm.toLinearEquiv.toLinearMap) =
+    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (LinearMap.ker H).starProjection).toLinearMap at hproj
+  rw [ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES
+    hInj hL₀ hL₀n] at hproj
+  exact hproj
+
+/-- In a fixed larger volume, a full suffix-window ground projection is the
+fiberwise extension of the tail open-chain ground projection in the active
+volume. -/
+theorem openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
+    (A : MPSTensor d D) {K l r : ℕ} :
+    (rightSpectatorConfigLinearIsometryEquiv d (K + (l + 1)) r).toLinearEquiv.toLinearMap.comp
+        ((openIntervalGroundProjectionES A (l + 1) l
+          ((K + (l + 1)) + r) (K + l)).comp
+          (rightSpectatorConfigLinearIsometryEquiv d
+            (K + (l + 1)) r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (openChainTailGroundProjectionES A K (l + 1))).toLinearMap := by
+  have hKl : K + l + 1 = K + (l + 1) := by omega
+  let U := rightSpectatorConfigLinearIsometryEquiv d (K + (l + 1)) r
+  let G := openSuffixParentHamiltonianES A (l + 1) (l + 1)
+    ((K + (l + 1)) + r) (K + l + 1)
+  let H := openSuffixParentHamiltonianES A (l + 1) (l + 1)
+    (K + (l + 1)) (K + l + 1)
+  have hHamiltonian :=
+    openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
+      A (L := l + 1) (l := l + 1) (n := K + (l + 1)) (r := r)
+        (p := K + l + 1) (by omega) (by omega)
+  have hproj := ker_starProjection_conj_linearIsometryEquiv U G
+    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (LinearMap.toContinuousLinearMap H)).toLinearMap hHamiltonian
+  rw [ContinuousLinearMap.ker_starProjection_rightFiberwiseMap] at hproj
+  change U.toLinearEquiv.toLinearMap.comp
+      ((LinearMap.ker G).starProjection.toLinearMap.comp
+        U.symm.toLinearEquiv.toLinearMap) =
+    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (LinearMap.ker H).starProjection).toLinearMap at hproj
+  rw [show LinearMap.ker H = openChainTailGroundSpaceES A K (l + 1) by
+    simpa only [H, Nat.add_assoc] using
+      (ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES
+        A (K := K) (L := l + 1) (by omega))] at hproj
+  simpa only [openIntervalGroundProjectionES, openChainTailGroundProjectionES,
+    G, hKl] using hproj
+
 /-- Before the first full interaction window fits, the fixed-ambient prefix
 Hamiltonian vanishes. -/
 theorem openPrefixParentHamiltonianES_eq_zero_of_lt
