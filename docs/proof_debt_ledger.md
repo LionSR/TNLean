@@ -91,22 +91,22 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   parent record by `rfl` with nothing reading the pin; see
   `docs/audits/2026-08-26_canonical_form_retirements.md`.
 - **Evidence update (2026-08-30)**: three successive thirty-area surveys found
-  seven unused declarations with no production Lean consumer or Blueprint tag.
-  Five canonical-form forwarding theorems in
-  `PiAlgebra/CanonicalFormSepAux.lean` were deleted in favour of their direct
-  structure-field constructors, with their glossary listings migrated
-  (−26 Lean lines). The second pass also discharged the deferred
+  eight unused declarations with no production Lean consumer or Blueprint tag.
+  Five canonical-form forwarding theorems and the constructor orphaned by
+  their removal in `PiAlgebra/CanonicalFormSepAux.lean` were deleted, with
+  their glossary listings migrated (−37 Lean lines). The second pass also
+  discharged the deferred
   `PEPS.edgeGaugeOfCycleGauge` construction from
   `PEPS/CycleMPSFundamentalTheorem.lean`; its round-trip theorem had already
   been removed, and the inverse construction had no remaining consumer
   (−12 net Lean lines including the shorter module description). The two
-  batches remove 38 net Lean lines. The third pass removed the
+  batches remove 49 net Lean lines. The third pass removed the
   attribute-carrying projection wrapper
   `MPOTensor.BNTFusionTensorClause.retainedMultiplicityWeightEntry_verticalCopyCoordinateEquiv_symm`
   from `MPS/MPDO/TopologicalMultiplicityEnergy.lean` (−14 Lean lines). Its
   linter-bearing target build passed, confirming that its `@[simp]` attribute
   was not used implicitly within the module. The three batches therefore
-  remove 52 net Lean lines. See
+  remove 63 net Lean lines. See
   `docs/audits/2026-08-30_thirty_area_simplification_survey.md`.
 
 ### S5. Preserve the ch23 algebraic-FT chapter — retirement cancelled

@@ -59,17 +59,6 @@ structure HasInjectiveBlocks {r : ℕ} {dim : Fin r → ℕ}
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
   block_injective : ∀ k, Kraus.IsInjective (A k)
 
-namespace HasInjectiveBlocks
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- Build `HasInjectiveBlocks` from pointwise injectivity. -/
-theorem ofForall (hA : ∀ k, Kraus.IsInjective (A k)) : HasInjectiveBlocks (d := d) A where
-  block_injective := hA
-
-end HasInjectiveBlocks
-
 /-- Each block in the family is irreducible in the invariant-projection sense. -/
 structure HasIrreducibleBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where

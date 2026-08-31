@@ -414,9 +414,10 @@ model different levels of data and different sources.
   stronger separated form used after blocking. Compare arXiv:2011.12127,
   `Papers/2011.12127/TN-Review-main.tex:1831-1836`.
 - **Sanctioned bridges:** `MPSTensor.IsCanonicalForm.of_peripheral_primitive`
-  constructs the form; its fields feed `HasInjectiveBlocks.ofForall`,
-  `IsLeftCanonicalBlockFamily.ofForall`, and
-  `HasNormalizedSelfOverlap.ofForall` directly.
+  constructs the form. Its `block_injective` field supplies pointwise
+  injectivity directly; its remaining fields feed
+  `IsLeftCanonicalBlockFamily.ofForall` and
+  `HasNormalizedSelfOverlap.ofForall`.
 - **Caveat:** this is not the paper's bare direct-sum CF predicate: it assumes
   one-site injectivity, left-canonical normalization, positive dimensions, and
   normalized self-overlap. The already-separated family also does not retain

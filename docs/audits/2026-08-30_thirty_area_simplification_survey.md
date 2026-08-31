@@ -10,8 +10,8 @@ issues, the glossary and paper-gap records, and the newest relevant dated
 audits.
 
 The three passes found three bounded deletion batches and one stale ledger
-status. The batches remove seven declarations and 52 net Lean lines. Five
-forwarding theorems in `PiAlgebra` account for 26 lines, while one deferred
+status. The batches remove eight declarations and 63 net Lean lines. Six
+zero-reference declarations in `PiAlgebra` account for 37 lines, while one deferred
 inverse gauge construction in `PEPS` accounts for 12 net lines after its module description
 is shortened, and one attribute-carrying MPDO projection accounts for 14 lines.
 No new proof-debt issue is needed: all three batches are further
@@ -23,8 +23,9 @@ Five forwarding theorems in
 `TNLean/PiAlgebra/CanonicalFormSepAux.lean` had no production Lean consumer
 and no Blueprint tag:
 
-- `MPSTensor.IsCanonicalForm.toHasInjectiveBlocks` (line 236), whose direct
-  replacement is `HasInjectiveBlocks.ofForall hCF.block_injective`;
+- `MPSTensor.IsCanonicalForm.toHasInjectiveBlocks` (line 236); no production
+  proof requires this conversion, and pointwise injectivity is already the
+  `block_injective` field of the canonical-form hypothesis;
 - `MPSTensor.IsCanonicalForm.toIsLeftCanonicalBlockFamily` (line 240), whose
   direct replacement is
   `IsLeftCanonicalBlockFamily.ofForall hCF.leftCanonical`;
@@ -44,9 +45,14 @@ fields. The similarly named normal-form
 projections to irreducibility and left-canonical data remain live through
 `TNLean/MPS/BNT/Construction.lean` and are not candidates.
 
+Deleting `MPSTensor.IsCanonicalForm.toHasInjectiveBlocks` removed the sole
+consumer of `HasInjectiveBlocks.ofForall`. That constructor had no Blueprint
+tag and no independent mathematical role, so it is deleted in the same batch
+rather than retained as an orphaned interface.
+
 This batch is an instance of the existing zero-reference debt S2 and issue
-#4564, not a new debt. Its implementation deletes exactly 26 Lean lines and
-rewrites six glossary lines in place, so the glossary migration is line-neutral.
+#4564, not a new debt. Its implementation deletes exactly 37 Lean lines and
+rewrites the glossary in place.
 
 ## Second-pass evidence for S2 and issue #4564
 
