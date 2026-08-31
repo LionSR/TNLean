@@ -25,6 +25,7 @@ import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NegMulLog
+import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
