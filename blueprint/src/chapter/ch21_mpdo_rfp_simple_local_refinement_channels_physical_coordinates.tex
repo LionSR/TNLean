@@ -786,16 +786,16 @@
     required rank-one normalization with unit coefficient families.
 \end{proof}
 
-\begin{definition}[Sitewise recovery from a physical isometry]
+\begin{definition}[Sitewise support completion of an adjoint map]
     \label{def:mpdo_sitewise_physical_recovery}
     \lean{MPOTensor.sitewisePhysicalRecovery}
     \leanok
     \uses{def:mpdo_sitewise_physical_matrix,
         thm:matrix_support_completion_cptp}
-    Let $d>0$, let $V:\C^d\to\C^e$ be an isometry, put
+    Let $d>0$, let $V:\C^d\to\C^e$ be a linear map, put
     $W_N=V^{\otimes N}$ and $P_N=W_NW_N^\dagger$, and let
     $\tau_N=d^{-N}I\in\MN{d^N}$ be the uniform faithful density matrix. The
-    sitewise recovery map is
+    sitewise support-completion map is
     \begin{align}
         \mathcal R_N(Y)
          & =W_N^\dagger YW_N
@@ -811,8 +811,9 @@
     \lean{MPOTensor.sitewisePhysicalRecovery_physCloseN}
     \leanok
     \uses{def:mpdo_sitewise_physical_recovery}
-    The map $\mathcal R_N:\MN{e^N}\to\MN{d^N}$ is trace-preserving and
-    completely positive. It is a left inverse to the physical embedding:
+    If $V$ is an isometry, then
+    $\mathcal R_N:\MN{e^N}\to\MN{d^N}$ is trace-preserving and completely
+    positive. It is a left inverse to the physical embedding:
     \begin{align}
         \mathcal R_N(W_NZW_N^\dagger) & =Z.
         \label{eq:mpdo_sitewise_physical_recovery_inverse}
