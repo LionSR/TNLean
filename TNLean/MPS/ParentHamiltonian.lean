@@ -72,6 +72,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap
+import TNLean.MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbientMartingaleBound
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
