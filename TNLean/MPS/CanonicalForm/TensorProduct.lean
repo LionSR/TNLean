@@ -202,8 +202,9 @@ private theorem tensorProductRetainedEquiv_apply
         ⟨finProdFinEquiv (a, b),
           finCongr (by simp [tensorProductDim]) (finProdFinEquiv (α, β))⟩ := by
   apply finSigmaFinEquiv.symm.injective
-  simp [tensorProductRetainedEquiv, sigmaProdFiberEquiv, tensorProductDim,
-    Equiv.sigmaCongr]
+  simp only [tensorProductRetainedEquiv, Equiv.sigmaCongr, Equiv.trans_apply,
+    Equiv.prodCongr_apply, Equiv.symm_apply_apply, Equiv.sigmaCongrRight_apply,
+    Equiv.sigmaCongrLeft_apply, sigmaProdFiberEquiv, Equiv.coe_fn_mk]
 
 /-- The weighted direct sum of the product blocks is the retained-coordinate
 reindexing of the Kronecker product of the two weighted direct sums. -/
@@ -231,21 +232,16 @@ private theorem toTensorFromBlocks_tensorProduct
   simp only [Equiv.symm_apply_apply]
   rw [tensorProductRetainedEquiv_apply, tensorProductRetainedEquiv_apply]
   simp only [finSigmaFinEquiv.symm_apply_apply]
-  have hi : (finProdFinEquiv (i, k) : Fin (d * e)).divNat = i :=
-    congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (i, k))
-  have hk : (finProdFinEquiv (i, k) : Fin (d * e)).modNat = k :=
-    congrArg Prod.snd (finProdFinEquiv.symm_apply_apply (i, k))
   by_cases hac : a = c
   · subst c
     by_cases hbf : b = f
     · subst f
       rw [Matrix.blockDiagonal'_apply_eq, Matrix.blockDiagonal'_apply_eq,
         Matrix.blockDiagonal'_apply_eq]
-      have ha := congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (a, b))
-      have hb := congrArg Prod.snd (finProdFinEquiv.symm_apply_apply (a, b))
-      simp [tensorProductWeight, tensorProductBlock, tensorProductDim, hi, hk,
-        ha, hb, Matrix.smul_apply, Matrix.reindex_apply]
-      ring_nf
+      simp only [tensorProductWeight, tensorProductBlock, tensorProductDim,
+        Equiv.symm_apply_apply, Matrix.smul_apply, finCongr_apply, Fin.cast_eq_self,
+        MPSTensor.tensorProduct_apply, smul_eq_mul]
+      ring
     · have hab : finProdFinEquiv (a, b) ≠ finProdFinEquiv (a, f) := by
         exact fun h ↦ hbf (congrArg Prod.snd (finProdFinEquiv.injective h))
       rw [Matrix.blockDiagonal'_apply_ne _ _ _ hab,
