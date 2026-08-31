@@ -343,8 +343,8 @@
         ContinuousLinearMap.norm_rightFiberwiseMap_le,
         ContinuousLinearMap.norm_rightFiberwiseMap}
     \leanok
-    Let $T$ be an operator on a finite-dimensional active Hilbert space and let
-    $S$ be a finite set of right-spectator configurations.  The operator
+    Let $T$ and $U$ be operators on a finite-dimensional active Hilbert space,
+    and let $S$ be a finite set of right-spectator configurations.  The operator
     $T^{\oplus S}$, defined by applying $T$ independently at every $s\in S$,
     satisfies
     \begin{align}
@@ -405,7 +405,7 @@
     \label{thm:local-term-right-spectator-conjugacy}
     \lean{MPSTensor.localTermES_conj_rightSpectatorConfigLinearIsometryEquiv}
     \leanok
-    \uses{lem:right-spectator-extension, lem:right-spectator-kernel-projection}
+    \uses{lem:right-spectator-extension}
     Let $i+L\leq n$.  Under the canonical identification
     \begin{align}
         \ell^2([d]^{n+r}) & \simeq
@@ -472,9 +472,9 @@
     their orthogonal projections satisfy
     \begin{align}
         U G_{[0,n)}^{(n+1+r)}U^{-1}
-         & =(G_{[0,n)}^{(n+1)})^{\oplus[d]^r},       \\
+         & =(G_{[0,n)}^{(n+1)})^{\oplus{[d]}^r},       \\
         U G_{[K,K+l+1)}^{(K+l+1+r)}U^{-1}
-         & =(G_{[K,K+l+1)}^{(K+l+1)})^{\oplus[d]^r}.
+         & =(G_{[K,K+l+1)}^{(K+l+1)})^{\oplus{[d]}^r}.
     \end{align}
 \end{theorem}
 
@@ -527,7 +527,7 @@
 \begin{proof}
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections}
-    If $n<l$, neither prefix $[0,n)$ nor $[0,n+1)$ contains a full
+    If $n<l$, neither the $n$-site prefix nor the $(n+1)$-site prefix contains a full
     length-$(l+1)$ interaction, so both ground projections are the identity.
     At $n=l$, the next prefix and the interval $[0,l+1)$ contain exactly the
     same single interaction.  Idempotence of its kernel projection proves the

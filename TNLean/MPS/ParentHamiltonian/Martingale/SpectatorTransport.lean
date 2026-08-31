@@ -194,8 +194,7 @@ theorem rightFiberwiseMap_comp
     (G H : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I) :
     (rightFiberwiseMap (S := S) G).comp (rightFiberwiseMap (S := S) H) =
       rightFiberwiseMap (S := S) (G.comp H) := by
-  apply ContinuousLinearMap.coe_injective
-  apply DFunLike.ext _ _
+  apply ContinuousLinearMap.ext
   intro x
   apply PiLp.ext
   rintro ⟨i, s⟩
