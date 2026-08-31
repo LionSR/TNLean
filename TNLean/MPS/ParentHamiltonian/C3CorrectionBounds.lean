@@ -48,8 +48,7 @@ theorem boundaryFiberwiseMap_sub (S : Type*) [Fintype S]
       EuclideanSpace ℂ (Fin D × Fin D)) :
     boundaryFiberwiseMap (D := D) S (G - H) =
       boundaryFiberwiseMap (D := D) S G - boundaryFiberwiseMap (D := D) S H := by
-  apply ContinuousLinearMap.coe_injective
-  apply DFunLike.ext _ _
+  apply ContinuousLinearMap.ext
   intro x
   rfl
 

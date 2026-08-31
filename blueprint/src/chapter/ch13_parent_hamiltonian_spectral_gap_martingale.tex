@@ -329,6 +329,213 @@
     $m\in[n-l,n]$.
 \end{proof}
 
+% Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
+% proof of Theorem 2.1(i), lines 1178--1259.
+\begin{lemma}[Right-spectator extension]
+    \label{lem:right-spectator-extension}
+    \lean{ContinuousLinearMap.rightFiber,
+        ContinuousLinearMap.rightFiberwiseMap,
+        ContinuousLinearMap.rightFiberwiseMap_add,
+        ContinuousLinearMap.rightFiberwiseMap_sub,
+        ContinuousLinearMap.rightFiberwiseMap_sum,
+        ContinuousLinearMap.rightFiberwiseMap_comp,
+        ContinuousLinearMap.norm_conj_linearIsometryEquiv,
+        ContinuousLinearMap.norm_rightFiberwiseMap_le,
+        ContinuousLinearMap.norm_rightFiberwiseMap}
+    \leanok
+    Let $T$ and $U$ be operators on a finite-dimensional active Hilbert space,
+    and let $S$ be a finite set of right-spectator configurations.  The operator
+    $T^{\oplus S}$, defined by applying $T$ independently at every $s\in S$,
+    satisfies
+    \begin{align}
+        (T^{\oplus S})(U^{\oplus S}) & =(TU)^{\oplus S}.
+    \end{align}
+    It also satisfies
+    \begin{align}
+        \lVert T^{\oplus S}\rVert & \leq\lVert T\rVert.
+    \end{align}
+    If $S$ is nonempty, then the second relation is an equality.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The squared norm splits as a sum over spectator fibers:
+    \begin{align}
+        \lVert T^{\oplus S}v\rVert^2
+         & =\sum_{s\in S}\lVert Tv_s\rVert^2
+        \leq\lVert T\rVert^2\sum_{s\in S}\lVert v_s\rVert^2.
+    \end{align}
+    For nonempty $S$, a vector supported on one spectator fiber gives the
+    reverse inequality between the two operator norms.  Addition, subtraction,
+    and composition are checked independently on each fiber.
+\end{proof}
+
+\begin{lemma}[Right-spectator coordinates and kernel projections]
+    \label{lem:right-spectator-kernel-projection}
+    \lean{MPSTensor.rightSpectatorConfigEquiv,
+        MPSTensor.rightSpectatorConfigLinearIsometryEquiv,
+        ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff,
+        ContinuousLinearMap.isSymmetricProjection_rightFiberwiseMap,
+        ContinuousLinearMap.ker_starProjection_rightFiberwiseMap,
+        MPSTensor.ker_starProjection_conj_linearIsometryEquiv}
+    \leanok
+    For $n,r\in\N$, restriction to the first $n$ sites and the final $r$ sites
+    gives a canonical equivalence
+    \begin{align}
+        [d]^{n+r} & \simeq [d]^n\times[d]^r
+    \end{align}
+    and the corresponding Euclidean linear isometry.  A vector belongs to
+    $\ker(T^{\oplus S})$ exactly when each spectator fiber belongs to $\ker T$.
+    If $P_{\ker T}$ is the orthogonal projection onto $\ker T$, then
+    \begin{align}
+        P_{\ker(T^{\oplus S})} & =(P_{\ker T})^{\oplus S}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The configuration equivalence is the inverse of concatenation.  The kernel
+    characterization follows by evaluating each coordinate.  Fiberwise
+    extension preserves symmetry and idempotence, and its range consists
+    exactly of the vectors whose fibers lie in $\ker T$.  Equality of the two
+    symmetric projections follows from equality of their ranges.
+\end{proof}
+
+\begin{theorem}[Nonwrapping interactions with right spectators]
+    \label{thm:local-term-right-spectator-conjugacy}
+    \lean{MPSTensor.localTermES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \leanok
+    \uses{lem:right-spectator-extension}
+    Let $i+L\leq n$.  Under the canonical identification
+    \begin{align}
+        \ell^2([d]^{n+r}) & \simeq
+        \ell^2([d]^n\times[d]^r),
+    \end{align}
+    the nonwrapping length-$L$ interaction beginning at $i$ is
+    \begin{align}
+        h^{(n+r)}_{i,L} & =(h^{(n)}_{i,L})^{\oplus[d]^r}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The nonwrapping hypothesis identifies cyclic restriction with contiguous
+    restriction on both chain lengths.  Concatenation leaves the first $n$
+    coordinates unchanged and fixes the final $r$ spectator coordinates.
+    Hence window extraction and restriction agree on every spectator fiber,
+    and applying the same local parent interaction gives the identity.
+\end{proof}
+
+\begin{theorem}[Open Hamiltonian sums with right spectators]
+    \label{thm:open-hamiltonian-right-spectator-conjugacy}
+    \lean{MPSTensor.openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \leanok
+    \uses{thm:local-term-right-spectator-conjugacy}
+    Let $L>0$ and $p\leq n$.  Under the canonical identification
+    \begin{align}
+        \ell^2([d]^{n+r}) & \simeq
+        \ell^2([d]^n\times[d]^r),
+    \end{align}
+    both the prefix Hamiltonian on $[0,p)$ and every suffix-interval
+    Hamiltonian ending at $p$ are direct sums over the right-spectator
+    configurations of their operators in the $n$-site volume.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The condition $L>0$ makes the active starts in the two finite sums exactly
+    the starts before $p$.  Concatenation gives a bijection between the
+    corresponding start sets in the two volumes.  Apply
+    Theorem~\ref{thm:local-term-right-spectator-conjugacy} to each summand and
+    then sum over this bijection.
+\end{proof}
+
+\begin{theorem}[Fixed-volume C3 ground projections with right spectators]
+    \label{thm:fixed-volume-c3-projector-conjugacy}
+    \lean{MPSTensor.openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES,
+        MPSTensor.ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES,
+        MPSTensor.openSuffixParentHamiltonianES_full_window_eq_localTermES,
+        MPSTensor.ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES,
+        MPSTensor.openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \leanok
+    \uses{lem:right-spectator-kernel-projection,
+        thm:open-hamiltonian-right-spectator-conjugacy}
+    Let $K,l,n,r\in\mathbb{N}$.  Suppose that $A$ has nonzero bond dimension,
+    is block injective at length $L_0>0$, and satisfies $L_0+1\leq n$.  The
+    kernel of the range-$(L_0+1)$ prefix Hamiltonian on the first $n$ sites of
+    the $(n+1)$-site volume is the left open-chain ground space.  Independently,
+    the kernel of the full final length-$(l+1)$ suffix window beginning at $K$
+    is the tail open-chain ground space.  Let $U_{\mathrm{pre}}$ and
+    $U_{\mathrm{tail}}$ be the canonical right-spectator isometries for the
+    active-volume decompositions $(n+1+r)=(n+1)+r$ and
+    $(K+l+1+r)=(K+l+1)+r$, respectively.  Their orthogonal projections satisfy
+    \begin{align}
+        U_{\mathrm{pre}} G_{\lbrack 0,n)}^{(n+1+r)}U_{\mathrm{pre}}^{-1}
+         & =(G_{\lbrack 0,n)}^{(n+1)})^{\oplus{[d]}^r},       \\
+        U_{\mathrm{tail}} G_{\lbrack K,K+l+1)}^{(K+l+1+r)}U_{\mathrm{tail}}^{-1}
+         & =(G_{\lbrack K,K+l+1)}^{(K+l+1)})^{\oplus{[d]}^r}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The prefix kernel is read fiberwise.  Block injectivity identifies every
+    fiber kernel with the $n$-site MPS ground space, which is precisely the
+    left-window membership condition after fixing the last physical index.
+    When the active prefix fills its smaller volume, the same argument
+    identifies its kernel projection with the whole open-chain ground
+    projection.  The full suffix interval contains one interaction; its cyclic
+    restriction
+    is the ordinary restriction obtained by fixing the $K$-site prefix, giving
+    the tail-window membership condition.  Orthogonal kernel projections are
+    preserved by the canonical isometry, and the fiberwise kernel-projection
+    identity gives the two displayed formulas.
+\end{proof}
+
+\begin{theorem}[C3 boundary indices in the fixed final volume]
+    \label{thm:fixed-volume-c3-boundary-indices}
+    \lean{MPSTensor.openPrefixParentHamiltonianES_eq_zero_of_lt,
+        MPSTensor.openPrefixGroundProjectionES_eq_one_of_lt,
+        MPSTensor.fixedAmbient_martingaleDifference_eq_zero_of_lt,
+        MPSTensor.openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint,
+        MPSTensor.openIntervalGroundProjectionES_at_endpoint,
+        MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections}
+    Suppose that $0<l$ and $l+1\leq N$.  Take interaction length $L=l+1$ and
+    define $E_n=G_n^{(N)}-G_{n+1}^{(N)}$.  Then the two boundary ranges in the
+    fixed $N$-site space are explicit:
+    \begin{align}
+        n<l & \Longrightarrow E_n=0.
+    \end{align}
+    At the remaining boundary index,
+    \begin{align}
+        Q_lE_l & =0.
+    \end{align}
+    At $n=l$, both $Q_l$ and $G_{l+1}^{(N)}$ are the kernel projection of the
+    unique interaction on $[0,l+1)$.  Thus
+    \begin{align}
+        E_l & =\Id-G_{l+1}^{(N)}.
+    \end{align}
+    Hence
+    \begin{align}
+        Q_lE_l & =G_{l+1}^{(N)}(\Id-G_{l+1}^{(N)})=0.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections}
+    If $n<l$, neither the $n$-site prefix nor the $(n+1)$-site prefix contains a full
+    length-$(l+1)$ interaction, so both ground projections are the identity.
+    At $n=l$, the next prefix and the interval $[0,l+1)$ contain exactly the
+    same single interaction.  Idempotence of its kernel projection proves the
+    second identity.
+\end{proof}
+
 \subsection{Spectator-indexed boundary maps}\label{subsec:spectator_boundary_maps}
 
 The tail and left boundary maps embed virtual-space data into a common
@@ -3212,6 +3419,58 @@ this subsection do not assume periodic coercivity.
     for every $K>0$.  Rewrite its norm by
     Theorem~\ref{thm:exact_c3_martingale_difference_identity}; the existing
     strict threshold on $\varepsilon_l$ is unchanged.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
+% proof of Theorem 2.1(i), lines 1178--1259.
+\begin{theorem}[Literal fixed-final-volume martingale condition C3]
+    \label{thm:literal_fixed_volume_martingale_c3}
+    \lean{MPSTensor.fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator,
+        MPSTensor.norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain,
+        MPSTensor.IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold}
+    \leanok
+    \uses{lem:right-spectator-extension,
+        thm:fixed-volume-c3-projector-conjugacy,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:literal_open_chain_martingale_c3}
+    Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
+    positive-definite fixed point.  There are $l>1$ and
+    $\varepsilon_l\geq0$, with $A$ $l$-block injective, such that for every
+    final volume $N$ and every $n<N$,
+    \begin{align}
+        \left\lVert
+        G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}^{(N)}E_n^{(N)}
+        \right\rVert
+         & \leq\varepsilon_l,
+        \label{eq:literal_fixed_volume_martingale_c3} \\
+        \varepsilon_l
+         & <\frac{1}{\sqrt{l+1}}.
+        \label{eq:literal_fixed_volume_martingale_c3_threshold}
+    \end{align}
+    This is the same overlap length and the same coefficient as in
+    Theorem~\ref{thm:literal_open_chain_martingale_c3}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:right-spectator-extension,
+        thm:fixed-volume-c3-projector-conjugacy,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:literal_open_chain_martingale_c3}
+    If $n<l$, then $E_n^{(N)}=0$.  If $n=l$, the endpoint identity gives
+    $G_{\Lambda_{l+1}}^{(N)}E_l^{(N)}=0$.  These cases use only
+    $\varepsilon_l\geq0$.
+
+    Suppose that $n>l$, and set $K=n-l>0$ and $r=N-(n+1)$.  The prefix and
+    whole-prefix conjugacies identify $E_n^{(N)}$ with the direct sum of the
+    $(n+1)$-site martingale difference over the $r$ right spectators.  The
+    interval-projector conjugacy and fiberwise composition then identify the
+    product in
+    (\ref{eq:literal_fixed_volume_martingale_c3}) with the direct sum of its
+    open-chain counterpart.  Isometric conjugacy preserves operator norm, and
+    the fiberwise extension does not increase it.  The bound therefore follows
+    from Theorem~\ref{thm:literal_open_chain_martingale_c3}.
 \end{proof}
 
 \begin{lemma}[Blocked three-site projector and adjacent-pair transport]

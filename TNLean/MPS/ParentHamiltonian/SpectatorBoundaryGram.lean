@@ -320,8 +320,7 @@ theorem tailBoundaryMapES_comp_tailVirtualMapES
     (A : MPSTensor d D) (K L : ℕ) :
     (tailBoundaryMapES A K L).comp (tailVirtualMapES A K) =
       groundSpaceMapES A (K + L) := by
-  apply ContinuousLinearMap.coe_injective
-  apply DFunLike.ext _ _
+  apply ContinuousLinearMap.ext
   intro x
   obtain ⟨X, rfl⟩ :=
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
@@ -348,8 +347,7 @@ theorem leftBoundaryMapES_comp_leftVirtualMapES
     (A : MPSTensor d D) (K L : ℕ) :
     (leftBoundaryMapES A K L).comp (leftVirtualMapES A L) =
       groundSpaceMapES A (K + L) := by
-  apply ContinuousLinearMap.coe_injective
-  apply DFunLike.ext _ _
+  apply ContinuousLinearMap.ext
   intro x
   obtain ⟨X, rfl⟩ :=
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
@@ -453,8 +451,7 @@ theorem physicalReassocES_comp_groundSpaceMapES
     (physicalReassocES (d := d) K L Q).toContinuousLinearMap.comp
         (groundSpaceMapES A (K + (L + Q))) =
       groundSpaceMapES A (K + L + Q) := by
-  apply ContinuousLinearMap.coe_injective
-  apply DFunLike.ext _ _
+  apply ContinuousLinearMap.ext
   intro x
   apply PiLp.ext
   intro σ
@@ -672,8 +669,7 @@ theorem boundaryFiberwiseMap_comp (S : Type*) [Fintype S]
       EuclideanSpace ℂ (Fin D × Fin D)) :
     (boundaryFiberwiseMap (D := D) S G).comp (boundaryFiberwiseMap (D := D) S H) =
       boundaryFiberwiseMap (D := D) S (G.comp H) := by
-  apply ContinuousLinearMap.coe_injective
-  apply DFunLike.ext _ _
+  apply ContinuousLinearMap.ext
   intro x
   apply PiLp.ext
   rintro ⟨s, p⟩
@@ -683,8 +679,7 @@ theorem boundaryFiberwiseMap_comp (S : Type*) [Fintype S]
 theorem boundaryFiberwiseMap_id (S : Type*) [Fintype S] :
     boundaryFiberwiseMap (D := D) S (ContinuousLinearMap.id ℂ _) =
       ContinuousLinearMap.id ℂ (BoundaryFamilySpace (D := D) S) := by
-  apply ContinuousLinearMap.coe_injective
-  apply DFunLike.ext _ _
+  apply ContinuousLinearMap.ext
   intro x
   apply PiLp.ext
   rintro ⟨s, p⟩
@@ -804,8 +799,7 @@ theorem tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram
     (A : MPSTensor d D) (K L : ℕ) :
     (tailBoundaryMapES A K L).adjoint.comp (tailBoundaryMapES A K L) =
       boundaryFiberwiseMap (D := D) (Cfg d K) (groundSpaceGram A L) := by
-  apply ContinuousLinearMap.coe_injective
-  apply DFunLike.ext _ _
+  apply ContinuousLinearMap.ext
   intro x
   apply ext_inner_left ℂ
   intro y
@@ -839,8 +833,7 @@ theorem leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram
     (A : MPSTensor d D) (K L : ℕ) :
     (leftBoundaryMapES A K L).adjoint.comp (leftBoundaryMapES A K L) =
       boundaryFiberwiseMap (D := D) (Cfg d L) (groundSpaceGram A K) := by
-  apply ContinuousLinearMap.coe_injective
-  apply DFunLike.ext _ _
+  apply ContinuousLinearMap.ext
   intro x
   apply ext_inner_left ℂ
   intro y

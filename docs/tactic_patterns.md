@@ -777,6 +777,16 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Continuous-linear-map extensionality via Mathlib
+- **Pattern:** nine call sites used `ContinuousLinearMap.coe_injective`,
+  `DFunLike.ext`, and `intro` to prove equality of continuous linear maps.
+- **Refactor:** use Mathlib's `ContinuousLinearMap.ext`, followed by `intro`.
+- **Scope:** one site in `C3CorrectionBounds.lean`, one in
+  `Martingale/SpectatorTransport.lean`, and seven in
+  `SpectatorBoundaryGram.lean`.
+- **Result:** the scanner no longer reports this pattern; no project-specific
+  tactic was introduced.
+
 ### Nonempty products in generated subsemigroups
 - **Pattern:** induct over subsemigroup closure to express each element as a
   nonempty list product of generators.
