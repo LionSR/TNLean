@@ -3925,6 +3925,82 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[Section~III, equation~(13)]{Cirac2017MPU}.
 \end{definition}
 
+\begin{definition}[Doubled product-coordinate equivalence]
+    \label{def:mpu_doubled_product_coordinate_equiv}
+    \lean{finDoubledProdEquiv, finDoubledProdEquiv_apply,
+        finDoubledProdEquiv_symm_apply}
+    \leanok
+    Write
+    $\pi_{m,n}:\Fin m\times\Fin n\to\Fin{mn}$ for the standard product
+    coordinate bijection.  For natural numbers $d,e$, the canonical doubled
+    product-coordinate equivalence
+    $s_{d,e}:\Fin{(de)^2}\to\Fin{d^2e^2}$ and its inverse satisfy
+    \begin{align}
+        s_{d,e}\!\left(\pi_{de,de}
+        \bigl(\pi_{d,e}(i,k),\pi_{d,e}(j,\ell)\bigr)\right)
+         & =\pi_{d^2,e^2}
+        \bigl(\pi_{d,d}(i,j),\pi_{e,e}(k,\ell)\bigr), \notag \\
+        s_{d,e}^{-1}\!\left(\pi_{d^2,e^2}
+        \bigl(\pi_{d,d}(i,j),\pi_{e,e}(k,\ell)\bigr)\right)
+         & =\pi_{de,de}
+        \bigl(\pi_{d,e}(i,k),\pi_{d,e}(j,\ell)\bigr).
+        \label{eq:mpu_tensor_flattening_shuffle}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Normalized flattening of an independent tensor product]
+    \label{thm:mpu_normalized_flattening_tensor_product}
+    \lean{MPOTensor.normalizedFlattening_tensorProduct}
+    \leanok
+    \uses{def:mpu_doubled_product_coordinate_equiv,
+        def:mpu_normalized_flattening,
+        def:mpu_independent_tensor_product,
+        def:mps_independent_tensor_product}
+    Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d,e$ and
+    auxiliary dimensions $D,E$, respectively.  With the coordinate
+    equivalence $s_{d,e}$ of
+    Definition~\ref{def:mpu_doubled_product_coordinate_equiv}, normalized
+    flattening obeys
+    \begin{align}
+        \widetilde{\mathcal U\boxtimes\mathcal V}
+         & =s_{d,e}^{*}
+        \bigl(\widetilde{\mathcal U}\boxtimes
+        \widetilde{\mathcal V}\bigr), \notag            \\
+        \left(\widetilde{\mathcal U\boxtimes\mathcal V}\right)^{
+                \pi_{d,e}(i,k),\pi_{d,e}(j,\ell)}_{
+                \pi_{D,E}(\alpha,\gamma),\pi_{D,E}(\beta,\delta)}
+         & =\widetilde{\mathcal U}^{i,j}_{\alpha,\beta}
+        \widetilde{\mathcal V}^{k,\ell}_{\gamma,\delta}.
+        \label{eq:mpu_tensor_normalized_flattening}
+    \end{align}
+    For positive physical dimensions this uses the normalization of
+    \cite[Section~III, equation~(13)]{Cirac2017MPU}.  With the totalized
+    inverse convention $0^{-1}=0$, the algebraic identity also holds when
+    $d=0$ or $e=0$.  This identity makes explicit the normalized-flattening
+    compatibility corresponding to the tensoring clause in
+    \cite[Theorem~IV.6(ii), lines~824--845]{Cirac2017MPU}; the paper does not
+    state it separately.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_doubled_product_coordinate_equiv,
+        def:mpu_normalized_flattening,
+        def:mpu_independent_tensor_product,
+        def:mps_independent_tensor_product}
+    Apply the two product-coordinate entry formulas after the regrouping in
+    (\ref{eq:mpu_tensor_flattening_shuffle}).  The scalar normalizations agree
+    because
+    \begin{align}
+        \bigl(\sqrt{de}\bigr)^{-1}
+         & =\bigl(\sqrt d\sqrt e\bigr)^{-1}
+        =\bigl(\sqrt d\bigr)^{-1}\bigl(\sqrt e\bigr)^{-1}.
+    \end{align}
+    Multiplying this identity by
+    $\mathcal U^{i,j}_{\alpha,\beta}
+        \mathcal V^{k,\ell}_{\gamma,\delta}$ gives
+    (\ref{eq:mpu_tensor_normalized_flattening}).
+\end{proof}
+
 \begin{lemma}[Normalized flattening of a composition tensor]
     \label{lem:mpu_normalized_flattening_composition}
     \lean{MPOTensor.normalizedFlattening_mulTensor_apply}

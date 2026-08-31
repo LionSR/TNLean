@@ -19,6 +19,7 @@ arbitrary remaining length.
 ## Main definitions
 
 * `finTupleProdEquiv`: splits a tuple of encoded product indices pointwise.
+* `finDoubledProdEquiv`: regroups two encoded product indices by their two factors.
 * `finThreeArrowEquiv`: identifies a function on `Fin 3` with a right-associated triple.
 * `finFourArrowEquiv`: identifies a function on `Fin 4` with a right-associated quadruple.
 * `finSuccArrowEquiv`: separates the first coordinate from a finite tuple.
@@ -27,6 +28,8 @@ arbitrary remaining length.
 ## Main statements
 
 * `finTupleProdEquiv_apply`: gives the two pointwise component tuples.
+* `finDoubledProdEquiv_apply`: gives the regrouped doubled-product coordinate.
+* `finDoubledProdEquiv_symm_apply`: gives the inverse coordinate regrouping.
 * `finSuccArrowEquiv_apply`: gives the first coordinate and the remaining tuple.
 * `finSuccArrowEquiv_symm_apply`: reconstructs a tuple from its first coordinate and tail.
 * `finAddTwoArrowEquiv_apply`: gives the first two coordinates and the remaining tuple.
@@ -63,6 +66,33 @@ at every coordinate. -/
     finTupleProdEquiv N d e σ =
       (fun n ↦ (σ n).divNat, fun n ↦ (σ n).modNat) := by
   rfl
+
+/-- Regroup two encoded product indices by their factors:
+`((i, k), (j, l)) ↦ ((i, j), (k, l))`.
+
+All four pairs use the standard finite-product encoding `finProdFinEquiv`. -/
+def finDoubledProdEquiv (d e : ℕ) :
+    Fin ((d * e) * (d * e)) ≃ Fin ((d * d) * (e * e)) :=
+  finProdFinEquiv.symm |>.trans <|
+    (Equiv.prodCongr finProdFinEquiv.symm finProdFinEquiv.symm).trans <|
+      (Equiv.prodProdProdComm (Fin d) (Fin e) (Fin d) (Fin e)).trans <|
+        (Equiv.prodCongr finProdFinEquiv finProdFinEquiv).trans finProdFinEquiv
+
+/-- Forward coordinate formula for `finDoubledProdEquiv`. -/
+@[simp] theorem finDoubledProdEquiv_apply {d e : ℕ}
+    (i j : Fin d) (k l : Fin e) :
+    finDoubledProdEquiv d e
+        (finProdFinEquiv (finProdFinEquiv (i, k), finProdFinEquiv (j, l))) =
+      finProdFinEquiv (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) := by
+  simp [finDoubledProdEquiv]
+
+/-- Inverse coordinate formula for `finDoubledProdEquiv`. -/
+@[simp] theorem finDoubledProdEquiv_symm_apply {d e : ℕ}
+    (i j : Fin d) (k l : Fin e) :
+    (finDoubledProdEquiv d e).symm
+        (finProdFinEquiv (finProdFinEquiv (i, j), finProdFinEquiv (k, l))) =
+      finProdFinEquiv (finProdFinEquiv (i, k), finProdFinEquiv (j, l)) := by
+  simp [finDoubledProdEquiv]
 
 /-- The canonical right-associated identification of a three-coordinate
 function with a triple. -/
