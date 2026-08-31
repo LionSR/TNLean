@@ -70,6 +70,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
+import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain

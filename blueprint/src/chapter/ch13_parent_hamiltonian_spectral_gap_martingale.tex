@@ -176,6 +176,153 @@
     and summing over the active interval proves the displayed identity.
 \end{proof}
 
+% Source: References/cond-mat_9410110/main.tex:1060--1073, equation En.
+% Source: References/cond-mat_9410110/main.tex:1206--1220,
+% Theorem 2.1(i), equations Enpsi and Enpsi2.
+
+\begin{definition}[Fixed-volume prefix and interval ground projections]%
+    \label{def:fixed-volume-prefix-ground-projections}
+    \lean{MPSTensor.openPrefixParentHamiltonianES,
+        MPSTensor.openPrefixGroundProjectionES,
+        MPSTensor.openIntervalGroundProjectionES}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients}
+    Fix an $N$-site Hilbert space and let $h_i$ denote the nonwrapping
+    interaction of length $L$ starting at $i$.  For every $m\geq0$, set
+    \begin{align}
+        H_m^{(N)} & =\sum_{i+L\leq m}h_i,
+                  & G_m^{(N)}             & =P_{\ker H_m^{(N)}}.
+    \end{align}
+    All operators act on the same $N$-site space.  The local interval ground
+    projection in the proof of Theorem~2.1(i) is
+    \begin{align}
+        Q_n & =P_{\ker H_{[n-l,n+1)}},
+            & H_{[n-l,n+1)}            & =\sum_{n-l\leq i,\ i+L\leq n+1}h_i.
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Positivity of the fixed-volume Hamiltonians]%
+    \label{lem:fixed-volume-hamiltonians-positive}
+    \lean{MPSTensor.openPrefixParentHamiltonianES_isPositive,
+        MPSTensor.openSuffixParentHamiltonianES_isPositive}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections,
+        lem:transported_es_positive}
+    The prefix and interval Hamiltonians are positive and symmetric:
+    \begin{align}
+        H_m^{(N)}
+         & =\sum_{i+L\leq m}h_i\geq0,
+         & \bigl(H_m^{(N)}\bigr)^\dagger
+         & =H_m^{(N)},                              \\
+        H_{[n-l,n+1)}
+         & =\sum_{n-l\leq i,\ i+L\leq n+1}h_i\geq0,
+         & H_{[n-l,n+1)}^\dagger
+         & =H_{[n-l,n+1)}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections,
+        lem:transported_es_positive}
+    Each $h_i$ is an orthogonal projection and is therefore positive.  Finite
+    sums of positive operators are positive, and every positive operator is
+    symmetric.
+\end{proof}
+
+\begin{theorem}[Nested fixed-volume prefix ground projections]%
+    \label{thm:fixed-volume-prefix-ground-projections-nested}
+    \lean{MPSTensor.localTermES_eq_zero_of_openPrefixParentHamiltonianES_eq_zero,
+        MPSTensor.ker_openPrefixParentHamiltonianES_antitone,
+        MPSTensor.fixedAmbientNestedGroundProjectionsES}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections,
+        def:nested-ground-projection-differences}
+    If $m\leq n$, then
+    \begin{align}
+        \ker H_n^{(N)} & \subseteq\ker H_m^{(N)},
+                       & \operatorname{ran}G_n^{(N)}
+                       & \subseteq\operatorname{ran}G_m^{(N)}.
+    \end{align}
+    Hence $(G_m^{(N)})_{m\geq0}$ is a nested ground-projection family.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections,
+        lem:fixed-volume-hamiltonians-positive}
+    If $H_n^{(N)}v=0$, then orthogonality of the local projections gives
+    \begin{align}
+        0=\langle v,H_n^{(N)}v\rangle
+         & =\sum_{i+L\leq n}\lVert h_iv\rVert^2.
+    \end{align}
+    Every summand is nonnegative, so $h_iv=0$ whenever $i+L\leq n$.
+    When $m\leq n$, every summand of $H_m^{(N)}$ occurs in $H_n^{(N)}$,
+    and hence $H_m^{(N)}v=0$.  This proves the kernel inclusion, and the
+    range inclusion follows from
+    $\operatorname{ran}G_m^{(N)}=\ker H_m^{(N)}$.
+\end{proof}
+
+\begin{theorem}[Physical outside-window commutation and cancellation]%
+    \label{thm:physical-outside-window-martingale-cancellation}
+    \lean{LinearMap.IsSymmetric.kernelProjection_commute_of_commute,
+        Submodule.starProjection_commute_of_le,
+        MPSTensor.cyclicWindowsDisjoint_of_nonwrapping_ordered,
+        MPSTensor.openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES,
+        MPSTensor.openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le,
+        MPSTensor.ker_openPrefixParentHamiltonianES_le_ker_openSuffixParentHamiltonianES,
+        MPSTensor.openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt,
+        MPSTensor.fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES,
+        MPSTensor.inner_sum_fixedAmbient_martingaleDifference_openIntervalGroundProjectionES_eq_Icc}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections,
+        lem:fixed-volume-hamiltonians-positive,
+        thm:fixed-volume-prefix-ground-projections-nested,
+        thm:outside-window-martingale-cancellation}
+    Assume $L\leq N$ and let $E_m=G_m^{(N)}-G_{m+1}^{(N)}$.  Then
+    \begin{align}
+        E_mQ_n & =Q_nE_m
+               &         & \text{if }m<n-l\text{ or }n<m.
+    \end{align}
+    Consequently, for $n<N$ and every vector $v$,
+    \begin{align}
+        \left\langle v,
+        \sum_{m=0}^{N-1}E_mQ_nE_nv\right\rangle
+         & =\left\langle\sum_{m=n-l}^{n}E_mv,Q_nE_nv\right\rangle.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections,
+        lem:fixed-volume-hamiltonians-positive,
+        thm:fixed-volume-prefix-ground-projections-nested,
+        thm:outside-window-martingale-cancellation}
+    If $m<n-l$, the supports of every summand of $H_m^{(N)}$ and every
+    summand of $H_{[n-l,n+1)}$ are disjoint.  Their local interactions commute,
+    hence the two symmetric Hamiltonians commute.  More generally, suppose
+    that $T$ is symmetric and that an arbitrary linear operator $S$ commutes
+    with $T$.  Then $\ker S$ is invariant under $T$, and symmetry of $T$ makes
+    $(\ker S)^\perp$ invariant as well.  Thus $P_{\ker S}$ commutes with $T$.
+    Since $P_{\ker S}$ is symmetric, applying the same argument to $\ker T$
+    shows
+    \begin{align}
+        P_{\ker S}P_{\ker T} & =P_{\ker T}P_{\ker S}.
+    \end{align}
+    This proves the first range of indices for both $G_m^{(N)}$ and
+    $G_{m+1}^{(N)}$.
+
+    If $n<m$, every local interaction in $H_{[n-l,n+1)}$ also occurs in
+    $H_m^{(N)}$.  Therefore
+    \begin{align}
+        \ker H_m^{(N)} & \subseteq\ker H_{[n-l,n+1)},
+    \end{align}
+    and the corresponding nested orthogonal projections commute.  Subtracting
+    the two prefix identities gives $E_mQ_n=Q_nE_m$ in both index ranges.  The
+    abstract outside-window cancellation theorem now restricts the full sum to
+    $m\in[n-l,n]$.
+\end{proof}
+
 \subsection{Spectator-indexed boundary maps}\label{subsec:spectator_boundary_maps}
 
 The tail and left boundary maps embed virtual-space data into a common
