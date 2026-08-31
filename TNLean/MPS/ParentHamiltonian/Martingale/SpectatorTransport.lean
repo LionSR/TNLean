@@ -31,16 +31,20 @@ def rightSpectatorConfigEquiv (d n r : ℕ) :
     Cfg d (n + r) ≃ Cfg d n × Cfg d r :=
   (Fin.appendEquiv n r).symm
 
+/-- Joining active and spectator configurations is the inverse spectator split. -/
 @[simp] theorem rightSpectatorConfigEquiv_symm_apply
     (d n r : ℕ) (p : Cfg d n × Cfg d r) :
     (rightSpectatorConfigEquiv d n r).symm p = Fin.appendEquiv n r p :=
   rfl
 
+/-- The active component of the spectator split is the initial coordinate
+restriction. -/
 @[simp] theorem rightSpectatorConfigEquiv_apply_fst
     (d n r : ℕ) (σ : Cfg d (n + r)) (i : Fin n) :
     (rightSpectatorConfigEquiv d n r σ).1 i = σ (Fin.castAdd r i) :=
   rfl
 
+/-- The spectator component of the split is the final coordinate restriction. -/
 @[simp] theorem rightSpectatorConfigEquiv_apply_snd
     (d n r : ℕ) (σ : Cfg d (n + r)) (j : Fin r) :
     (rightSpectatorConfigEquiv d n r σ).2 j = σ (Fin.natAdd n j) :=
@@ -53,6 +57,8 @@ noncomputable def rightSpectatorConfigLinearIsometryEquiv (d n r : ℕ) :
       EuclideanSpace ℂ (Cfg d n × Cfg d r) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (rightSpectatorConfigEquiv d n r)
 
+/-- The spectator-splitting isometry evaluates by joining the two
+configurations. -/
 @[simp] theorem rightSpectatorConfigLinearIsometryEquiv_apply_apply
     (d n r : ℕ) (v : EuclideanSpace ℂ (Cfg d (n + r)))
     (p : Cfg d n × Cfg d r) :
@@ -62,6 +68,8 @@ noncomputable def rightSpectatorConfigLinearIsometryEquiv (d n r : ℕ) :
     LinearIsometryEquiv.piLpCongrLeft_apply]
   rfl
 
+/-- The inverse spectator isometry evaluates through the canonical
+configuration split. -/
 @[simp] theorem rightSpectatorConfigLinearIsometryEquiv_symm_apply_apply
     (d n r : ℕ) (v : EuclideanSpace ℂ (Cfg d n × Cfg d r))
     (σ : Cfg d (n + r)) :
@@ -111,11 +119,13 @@ noncomputable def rightFiberwiseMap
           rfl, map_smul]
         rfl }
 
+/-- Fiberwise extension applies the base operator on the selected fiber. -/
 @[simp] theorem rightFiberwiseMap_apply_apply
     (G : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I)
     (x : EuclideanSpace ℂ (I × S)) (i : I) (s : S) :
     rightFiberwiseMap (S := S) G x (i, s) = G (rightFiber x s) i := rfl
 
+/-- Taking a fiber after extension recovers the base operator on that fiber. -/
 @[simp] theorem rightFiber_rightFiberwiseMap
     (G : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I)
     (x : EuclideanSpace ℂ (I × S)) (s : S) :
@@ -142,6 +152,7 @@ theorem rightFiberwiseMap_sub
   ext x p
   rfl
 
+/-- The right-spectator extension of the zero operator is zero. -/
 @[simp] theorem rightFiberwiseMap_zero :
     rightFiberwiseMap (I := I) (S := S) 0 = 0 := by
   apply ContinuousLinearMap.coe_injective

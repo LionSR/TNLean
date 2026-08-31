@@ -463,8 +463,9 @@
     \leanok
     \uses{lem:right-spectator-kernel-projection,
         thm:open-hamiltonian-right-spectator-conjugacy}
-    Suppose that $A$ is block injective at length $L_0>0$ and
-    $L_0+1\leq n$.  The kernel of the range-$(L_0+1)$ prefix Hamiltonian on
+    Suppose that $A$ has nonzero bond dimension, is block injective at length
+    $L_0>0$, and satisfies $L_0+1\leq n$.  The kernel of the range-$(L_0+1)$
+    prefix Hamiltonian on
     the first $n$ sites of the $(n+1)$-site volume is the left open-chain
     ground space.  The kernel of the full final length-$L$ suffix window is
     the tail open-chain ground space.  After adjoining $r$ right spectators,
@@ -502,8 +503,8 @@
         MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint}
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections}
-    Take interaction length $L=l+1$ and define
-    $E_n=G_n^{(N)}-G_{n+1}^{(N)}$.  Then the two boundary ranges in the
+    Suppose that $0<l$ and $l+1\leq N$.  Take interaction length $L=l+1$ and
+    define $E_n=G_n^{(N)}-G_{n+1}^{(N)}$.  Then the two boundary ranges in the
     fixed $N$-site space are explicit:
     \begin{align}
         n<l & \Longrightarrow E_n=0.
