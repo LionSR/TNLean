@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BNTRefinement
-import TNLean.MPS.CanonicalForm.CPSVPhysicalReindex
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Blocking
 import TNLean.MPS.MPDO.SimpleTensor
 
 /-!
@@ -125,12 +125,7 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
     finProdFinEquiv.symm |>.trans
       (Equiv.prodCongr (MPSTensor.singleBlockEquiv d) (MPSTensor.singleBlockEquiv d)) |>.trans
         finProdFinEquiv
-  let P : MPSTensor.SectorDecomposition
-      (MPSTensor.blockPhysDim d 1 * MPSTensor.blockPhysDim d 1) := {
-    basisCount := S.basisCount
-    basisDim := S.basisDim
-    basis := fun j ↦ Kraus.reindexPhysical e (S.basis j)
-    sectors := S.sectors }
+  let P := S.reindexPhysical e
   have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
     refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
     intro i
@@ -146,7 +141,9 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
         M (e ij).divNat (e ij).modNat
     simp [e]
   refine ⟨hMPDO, 1, Nat.one_pos, P, ?_, ?_⟩
-  · refine ⟨?_, ?_, ?_, ?_⟩
+  · have hCF' :=
+      MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical hCF e
+    refine ⟨?_, ?_, ?_, hCF'.bnt_data⟩
     · obtain ⟨j, _q, _hj⟩ := hCF.weight_unit_exists
       exact Fin.pos_iff_nonempty.mpr ⟨j⟩
     · intro N hN σ
@@ -155,14 +152,11 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
         MPSTensor.mpv (Kraus.reindexPhysical e S.toTensor) σ
       simp only [MPSTensor.mpv_reindexPhysical]
       exact hSame N hN (fun n => e (σ n))
-    · let _ : ∀ j : Fin S.basisCount, NeZero (S.basisDim j) :=
-        fun j => ⟨(hCF.basis_dim_pos j).ne'⟩
+    · let _ : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+        fun j => ⟨(hCF'.basis_dim_pos j).ne'⟩
       intro j
-      exact (MPSTensor.isNormalTensor_of_isNormal_leftCanonical (S.basis j)
-        (hCF.basis_isNormal j) (hCF.basis_left_canonical j)).reindexPhysical e
-    · obtain ⟨N₀, hLI⟩ := hCF.bnt_data
-      refine ⟨N₀, fun N hN ↦ ?_⟩
-      exact MPSTensor.linearIndependent_mpvState_reindexPhysical_equiv e S.basis (hLI N hN)
+      exact MPSTensor.isNormalTensor_of_isNormal_leftCanonical (P.basis j)
+        (hCF'.basis_isNormal j) (hCF'.basis_left_canonical j)
   · intro j
     change ¬ IsNilpotent (doubledPhysTraceTransfer (MPSTensor.blockPhysDim d 1)
       (Kraus.reindexPhysical e (S.basis j)))
