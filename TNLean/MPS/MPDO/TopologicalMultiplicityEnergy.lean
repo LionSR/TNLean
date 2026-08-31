@@ -63,20 +63,6 @@ def retainedMultiplicityWeightEntry (H : BNTFusionTensorClause M)
   let px := verticalCopyCoordinateEquiv H.bondDim H.multiplicity u
   H.weight px.1.1 px.1.2
 
-/-- In retained copy coordinates, the one-site entry is the corresponding
-diagonal entry of the multiplicity matrix.
-
-Source: CPSV16, local source lines 999–1002. -/
-@[simp]
-theorem retainedMultiplicityWeightEntry_verticalCopyCoordinateEquiv_symm
-    (H : BNTFusionTensorClause M) (p : H.VerticalCopy)
-    (x : Fin (H.bondDim p.1)) :
-    H.retainedMultiplicityWeightEntry
-        ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩) =
-      H.weight p.1 p.2 := by
-  unfold retainedMultiplicityWeightEntry
-  rw [Equiv.apply_symm_apply]
-
 /-- Every retained one-site multiplicity weight is strictly positive.
 
 Source: CPSV16, Proposition 4.13 (local source lines 943–951). -/

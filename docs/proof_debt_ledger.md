@@ -90,6 +90,24 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   the regrouped carrier already states, and the third pinned a field to the
   parent record by `rfl` with nothing reading the pin; see
   `docs/audits/2026-08-26_canonical_form_retirements.md`.
+- **Evidence update (2026-08-30)**: three successive thirty-area surveys found
+  eight unused declarations with no production Lean consumer or Blueprint tag.
+  Five canonical-form forwarding theorems and the constructor orphaned by
+  their removal in `PiAlgebra/CanonicalFormSepAux.lean` were deleted, with
+  their glossary listings migrated (−37 Lean lines). The second pass also
+  discharged the deferred
+  `PEPS.edgeGaugeOfCycleGauge` construction from
+  `PEPS/CycleMPSFundamentalTheorem.lean`; its round-trip theorem had already
+  been removed, and the inverse construction had no remaining consumer
+  (−12 net Lean lines including the shorter module description). The two
+  batches remove 49 net Lean lines. The third pass removed the
+  attribute-carrying projection wrapper
+  `MPOTensor.BNTFusionTensorClause.retainedMultiplicityWeightEntry_verticalCopyCoordinateEquiv_symm`
+  from `MPS/MPDO/TopologicalMultiplicityEnergy.lean` (−14 Lean lines). Its
+  linter-bearing target build passed, confirming that its `@[simp]` attribute
+  was not used implicitly within the module. The three batches therefore
+  remove 63 net Lean lines. See
+  `docs/audits/2026-08-30_thirty_area_simplification_survey.md`.
 
 ### S5. Preserve the ch23 algebraic-FT chapter — retirement cancelled
 - **Status**: cancelled (#4565; owner decision on #7220)
@@ -106,7 +124,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   future CycleMPS simplification requires a separate, freshly verified issue.
 
 ### S12. Collapse duplicated spectral-split proofs onto `ProjectionSpectralSplit`/corner-compression API — net 520 lines, risk 5/10
-- **Status**: open (#4566)
+- **Status**: burned down (#7218, follow-ups #7224 and #7237)
 - **What**: `MPS/Structure/InvariantSubspaceDecomp.lean`'s strict-case
   theorem re-proves its base theorem's 129-line body near-verbatim
   (728 → ~380 ln after fix); `MPS/CanonicalForm/CyclicSectors/Compression.lean`
@@ -120,6 +138,13 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 - **First PR**: `InvariantSubspaceDecomp.lean` alone — extract the shared
   spectral-split body, derive both public theorems as corollaries. Net
   ~-300 to -350 lines, proof-only.
+- **Outcome (2026-08-27)**: commit `f3ae05159` factors the two-block
+  decomposition through the shared private theorem
+  `exists_twoBlock_decomp_of_lowerZero_aux` and reduces
+  `MPS/CanonicalForm/CyclicSectors/Compression.lean` to the support-isometry
+  route. Follow-ups #7224 and #7237 close the remaining review items. The
+  present files are approximately 399 and 160 lines, respectively, rather
+  than the 728- and 433-line versions measured by the original audit.
 
 ### S7. Delete the confirmed-dead half of the UnionInjectivityOverlap chain — completed
 - **Status**: burned down (#4567, #4625, follow-up #7232)

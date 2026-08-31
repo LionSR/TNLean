@@ -413,10 +413,11 @@ model different levels of data and different sources.
   injectivity, normalization, positivity, and overlap hypotheses implement the
   stronger separated form used after blocking. Compare arXiv:2011.12127,
   `Papers/2011.12127/TN-Review-main.tex:1831-1836`.
-- **Sanctioned bridges:** `MPSTensor.IsCanonicalForm.of_peripheral_primitive`,
-  `MPSTensor.IsCanonicalForm.toHasInjectiveBlocks`,
-  `MPSTensor.IsCanonicalForm.toIsLeftCanonicalBlockFamily`, and
-  `MPSTensor.IsCanonicalForm.toHasNormalizedSelfOverlap`.
+- **Sanctioned bridges:** `MPSTensor.IsCanonicalForm.of_peripheral_primitive`
+  constructs the form. Its `block_injective` field supplies pointwise
+  injectivity directly; its remaining fields feed
+  `IsLeftCanonicalBlockFamily.ofForall` and
+  `HasNormalizedSelfOverlap.ofForall`.
 - **Caveat:** this is not the paper's bare direct-sum CF predicate: it assumes
   one-site injectivity, left-canonical normalization, positive dimensions, and
   normalized self-overlap. The already-separated family also does not retain
@@ -436,8 +437,8 @@ model different levels of data and different sources.
 - **Sanctioned bridges:**
   `MPSTensor.IsNormalCanonicalForm.toHasIrreducibleBlocks`,
   `MPSTensor.IsNormalCanonicalForm.toIsLeftCanonicalBlockFamily`,
-  `MPSTensor.IsNormalCanonicalForm.toHasPrimitiveBlocks`, and
-  `MPSTensor.IsNormalCanonicalForm.ofSeparatedData`.
+  `MPSTensor.IsNormalCanonicalForm.ofSeparatedData`, and the direct constructor
+  `HasPrimitiveBlocks.ofForall` applied to the `block_primitive` field.
 - **Caveat:** this does not encode the source's modulus-bound and unit-witness
   normalization for copy weights. No public theorem identifies this predicate
   with `MPSTensor.IsCanonicalForm`; the block hypotheses differ. The positive
