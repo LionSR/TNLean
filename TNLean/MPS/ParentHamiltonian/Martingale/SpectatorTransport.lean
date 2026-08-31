@@ -11,8 +11,10 @@ import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 
 This file develops the right-spectator map needed to compare the local-volume
 operators in Nachtergaele's condition C3 with the fixed-final-volume filtration.
-The comparison is by an explicit configuration-space equivalence, never by
-definitional equality between operators on different Hilbert spaces.
+The norm comparison uses an explicit finite fiber decomposition, never
+definitional equality between operators on different Hilbert spaces. The exact
+intertwining with the concrete fixed-volume projectors is recorded as the
+remaining obstruction in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 
 ## References
 
@@ -229,10 +231,9 @@ theorem openIntervalGroundProjectionES_at_endpoint
     (A : MPSTensor d D) {l N : ℕ} (hl : 0 < l) (hlN : l + 1 ≤ N) :
     openIntervalGroundProjectionES A (l + 1) l N l =
       openPrefixGroundProjectionES A (l + 1) N (l + 1) := by
-  rw [openIntervalGroundProjectionES, openPrefixGroundProjectionES]
-  congr 2
-  exact (openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint
-    A (by omega) hlN).symm
+  rw [openIntervalGroundProjectionES, openPrefixGroundProjectionES,
+    ← openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint
+      A (by omega) hlN]
 
 /-- Nachtergaele's C3 product vanishes at the endpoint `n = l`:
 `Q_l E_l = G_[0,l+1) (1 - G_[0,l+1)) = 0`. -/
