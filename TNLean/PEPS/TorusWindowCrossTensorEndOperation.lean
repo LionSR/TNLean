@@ -21,10 +21,12 @@ This file formalizes exactly that extraction.  It does not compare the two virtu
 a multiplication law for their assignment, identify the bond dimensions of `A` and `B`, or
 construct a gauge.
 
-**Scope restriction (displayed horizontal staircase):** The result is stated for the
+**Scope restriction (displayed horizontal staircase, `L, K ≥ 2`):** The result is stated for the
 non-wrapping horizontal staircase coordinates supported by the present boundary-geometry API.
-The rotation/translation assembly needed for the full two-dimensional corollary is recorded in
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
+It assumes `L, K ≥ 2`, so the displayed windows straddle the highlighted edge; the paper treats
+`L = K = 2` in its sketch and leaves the cases `L = 1` or `K = 1` unaddressed.  This clarification
+and the rotation/translation assembly needed for the full two-dimensional corollary are recorded
+in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
 ## References
 
