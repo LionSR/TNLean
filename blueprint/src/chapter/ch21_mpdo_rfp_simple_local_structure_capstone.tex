@@ -2676,8 +2676,8 @@ This is the calculation in
     \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
         exists_ambient_simpleBiCF_neighboringTraceObstruction}
     \leanok
-    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf, def:is_sal,
-        def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_simple_cf_tensor, def:mpdo_simple_tensor,
+        def:sector_bnt_cf, def:is_sal, def:mpo_physical_trace_transfer}
     There is a five-letter MPO tensor $K$ of virtual bond dimension three
     with a two-representative horizontal canonical presentation. The
     representatives $A_0,A_1$ are normal and left-canonical, have bond
@@ -2712,6 +2712,7 @@ This is the calculation in
 
 \begin{proof}\leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_prepared_two_block_bnt,
+        thm:mpdo_simple_cf_is_simple,
         thm:mpdo_local_orthogonal_sum_sal,
         lem:mpdo_sal_phys_trace_transfer_nonzero,
         thm:mpdo_source_zcl_strict_positive_length_normalization}
@@ -2728,7 +2729,8 @@ This is the calculation in
     sectors to $K$. The physical-trace transfer is block diagonal. Its two
     diagonal blocks are idempotent, hence so is the ambient transfer. The
     exact weighted direct sum and nonnilpotency of both representatives give
-    the asserted simple canonical presentation. SAL makes the physical-trace
+    the asserted simple canonical presentation, which is simple by
+    Theorem~\ref{thm:mpdo_simple_cf_is_simple}. SAL makes the physical-trace
     transfer nonzero; together with literal idempotence this gives source zero
     correlation length, hence every nonempty periodic trace is nonzero. The
     MPDO positivity condition then upgrades each such trace to strict
@@ -2780,7 +2782,7 @@ This is the calculation in
     \leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_ambient_properties,
         thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization,
-        def:mpdo_physical_sector_factorization,
+        def:mpdo_simple_tensor, def:mpdo_physical_sector_factorization,
         def:mpdo_neighboring_trace_factorization}
     There is a five-letter MPO tensor $K$ of virtual bond dimension three
     with two normal left-canonical representatives $A_0,A_1$ whose one-site
@@ -2789,9 +2791,9 @@ This is the calculation in
     obstruction is virtually gauge equivalent to $\mu A_0$. Each
     representative occurs once, with coefficients $\mu$ and $1$, where
     $0<|\mu|<1$; hence every coefficient has modulus at most one and the second
-    has modulus one. The tensor has simple canonical form, generates positive
-    semidefinite periodic operators with strictly positive trace at every
-    positive length, satisfies
+    has modulus one. The tensor has simple canonical form and is simple. It
+    generates positive semidefinite periodic operators with strictly positive
+    trace at every positive length, satisfies
     saturation of the area law, and obeys
     \begin{align}
         \mathcal T_K^2 & =\mathcal T_K.
@@ -2814,10 +2816,13 @@ This is the calculation in
 
 \begin{proof}\leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_ambient_properties,
-        thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization}
+        thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization,
+        thm:mpdo_simple_cf_is_simple}
     Choose the tensor and its two representatives from
     Theorem~\ref{thm:mpdo_neighboring_trace_obstruction_ambient_properties}.
-    The first representative satisfies the gauge relation required by
+    Its normalized simple canonical form gives literal simplicity by
+    Theorem~\ref{thm:mpdo_simple_cf_is_simple}. The first representative
+    satisfies the gauge relation required by
     Theorem~\ref{thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization},
     which excludes every normalized rank-one neighboring-trace factorization
     of its absorbed tensor. All remaining hypotheses are the properties listed
