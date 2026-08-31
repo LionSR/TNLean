@@ -136,11 +136,11 @@ theorem sum_martingaleDifference_eq_id (N : ℕ)
     ∑ n ∈ Finset.range (N + 1), G.martingaleDifference n = LinearMap.id := by
   rw [G.sum_martingaleDifference, hzero, hfinal, sub_zero]
 
-/-- The squared norm of a finite martingale-difference sum is the sum of the
-squared norms of its terms. -/
-theorem norm_sq_sum_martingaleDifference (N : ℕ) (v : E) :
-    ‖∑ n ∈ Finset.range N, G.martingaleDifference n v‖ ^ 2 =
-      ∑ n ∈ Finset.range N, ‖G.martingaleDifference n v‖ ^ 2 := by
+/-- The squared norm of a martingale-difference sum over any finite index set
+is the sum of the squared norms of its terms. -/
+theorem norm_sq_sum_martingaleDifference_finset (s : Finset ℕ) (v : E) :
+    ‖∑ n ∈ s, G.martingaleDifference n v‖ ^ 2 =
+      ∑ n ∈ s, ‖G.martingaleDifference n v‖ ^ 2 := by
   let V : (n : ℕ) →
       LinearMap.range (G.martingaleDifference n) →ₗᵢ[ℂ] E :=
     fun n ↦ (LinearMap.range (G.martingaleDifference n)).subtypeₗᵢ
@@ -153,7 +153,14 @@ theorem norm_sq_sum_martingaleDifference (N : ℕ) (v : E) :
     rw [← hx, ← hy]
     exact G.inner_martingaleDifference_eq_zero hmn x' y'
   simpa [V] using hV.norm_sum
-    (fun n ↦ ⟨G.martingaleDifference n v, ⟨v, rfl⟩⟩) (Finset.range N)
+    (fun n ↦ ⟨G.martingaleDifference n v, ⟨v, rfl⟩⟩) s
+
+/-- The squared norm of an initial martingale-difference sum is the sum of the
+squared norms of its terms. -/
+theorem norm_sq_sum_martingaleDifference (N : ℕ) (v : E) :
+    ‖∑ n ∈ Finset.range N, G.martingaleDifference n v‖ ^ 2 =
+      ∑ n ∈ Finset.range N, ‖G.martingaleDifference n v‖ ^ 2 :=
+  G.norm_sq_sum_martingaleDifference_finset (Finset.range N) v
 
 /-- A vector orthogonal to the final ground space is reconstructed by the
 truncated martingale-difference sum. This is `resolutionpsi` in the proof of
