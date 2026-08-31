@@ -78,10 +78,12 @@ the two swap-transformed shifts act by
 Comparison of (\ref{eq:mpu_ancilla_orientation_literal_endpoint}) with
 (\ref{eq:mpu_ancilla_orientation_tilde_u2})--
 (\ref{eq:mpu_ancilla_orientation_tilde_u3}) shows that the literal circuit
-labels produce $\widetilde U_3$, not $\widetilde U_2$. This is a genuine
-nondegenerate distinction: for $N\geq3$ and $d\geq2$, one may choose a
-configuration whose values at the preceding and following sites differ, so
-$R\sigma\neq R^{-1}\sigma$.
+labels always agree with $\widetilde U_3$. For $N\geq3$ and $d\geq2$, they do
+not in general agree with $\widetilde U_2$: one may choose a configuration
+whose values at the preceding and following sites differ, so
+$R\sigma\neq R^{-1}\sigma$. By contrast, $R=R^{-1}$ when $N\leq2$, and the
+configuration space has at most one element when $d\leq1$. The two endpoint
+permutations therefore coincide in these degenerate cases.
 
 \section{Local correction and formal record}
 
@@ -106,9 +108,10 @@ of the crossed labels is a local correction of the diagram; it does not alter
 the proposition's intended endpoint.
 
 The formal coordinate calculation keeps the literal printed labels and proves
-(\ref{eq:mpu_ancilla_orientation_literal_endpoint}). It therefore records the
-result as the $\widetilde U_3$ endpoint and does not use it as a dependency of
-the $\widetilde U_1$--$\widetilde U_2$ path proposition.
+(\ref{eq:mpu_ancilla_orientation_literal_endpoint}). It asserts only this
+permutation identity and does not identify its permutation matrix with either
+ancilla-enlarged MPO or use it as a dependency of the
+$\widetilde U_1$--$\widetilde U_2$ path proposition.
 \footnote{Formal declarations:
     \leanid{MPOTensor.shiftAncillaCounterShift} and
     \leanid{MPOTensor.permMatrix_shiftAncillaThreeSwap_endpoint} in
@@ -116,9 +119,10 @@ the $\widetilde U_1$--$\widetilde U_2$ path proposition.
 
 \section{Verdict}
 
-The three swap labels in Figure~\texttt{fig:TR-ancilla} produce
-$\widetilde U_3$ under the shift convention stated in the same paper. The
-figure's claimed $\widetilde U_2$ endpoint is false as printed on
+The three swap labels in Figure~\texttt{fig:TR-ancilla} agree with
+$\widetilde U_3$ under the shift convention stated in the same paper. They
+also agree with $\widetilde U_2$ in the degenerate cases $N\leq2$ or $d\leq1$,
+but the figure's claimed $\widetilde U_2$ endpoint is false as printed on
 nondegenerate periodic chains. Reversing the orientation of the crossed
 species--ancilla swaps gives the intended endpoint, so the discrepancy has a
 resolved local correction.
