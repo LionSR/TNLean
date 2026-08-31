@@ -191,6 +191,7 @@
         MPSTensor.openSuffixParentHamiltonianES_isPositive,
         MPSTensor.fixedAmbientNestedGroundProjectionsES}
     \leanok
+    \uses{def:nested-ground-projection-differences}
     Fix an $N$-site Hilbert space and let $h_i$ denote the nonwrapping
     interaction of length $L$ starting at $i$.  For every $m\geq0$, set
     \begin{align}
@@ -237,7 +238,7 @@
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections,
         thm:outside-window-martingale-cancellation}
-    Let $E_m=G_m^{(N)}-G_{m+1}^{(N)}$.  Then
+    Assume $L\leq N$ and let $E_m=G_m^{(N)}-G_{m+1}^{(N)}$.  Then
     \begin{align}
         E_mQ_n & =Q_nE_m
                &         & \text{if }m<n-l\text{ or }n<m.
