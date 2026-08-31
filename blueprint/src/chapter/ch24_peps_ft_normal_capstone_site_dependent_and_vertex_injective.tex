@@ -349,8 +349,8 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
     $v+1$ to $v+2$ have the same dimension. Iterating around the cycle gives
     $D_e=D_f$ for every pair of bonds $e,f$.
 
-    This is the ``all bond dimensions are the same'' clause of the
-    Applications-section corollary in
+    This is the positive-bond, at-least-three-site form of the ``all bond
+    dimensions are the same'' clause of the Applications-section corollary in
     \cite[lines~1803--1842]{Molnar2018NormalPEPS}. Positivity excludes empty
     virtual spaces, the same counterexample-backed correction as in the
     injective Fundamental Theorem.
@@ -466,9 +466,15 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
 \end{proof}
 
 \begin{corollary}[Translation-invariant description of an injective closed MPS chain,
-        per-bond form]%
-    \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
-    \notready
+        positive-bond form on at least three sites]%
+    \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos}
+    \lean{TNLean.PEPS.Tensor.reindexMPSChain}
+    \lean{TNLean.PEPS.Tensor.stateCoeff_reindexMPSChain}
+    \lean{TNLean.PEPS.Tensor.isInjective_reindexMPSChain}
+    \lean{MPSChainTensor.coeff_cyclicShift}
+    \lean{TNLean.PEPS.Tensor.isCyclicShiftInvariantState_reindexMPSChain}
+    \lean{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
+    \leanok
     \uses{cor:peps_cycle_shift_bond_uniform, cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     Let $A_0,\ldots,A_{n-1}$ be a site-dependent injective closed MPS on
     $n\ge3$ sites, with positive dimensions $D_e$ on its individual bonds.
@@ -484,21 +490,76 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
     \end{align}
     for every physical configuration $\sigma$.
 
-    This is the full per-bond statement of
+    This is the positive-bond, at-least-three-site form corresponding to
     \cite[lines~1803--1890]{Molnar2018NormalPEPS}. The equality $D_e=D$ is
-    Corollary~\ref{cor:peps_cycle_shift_bond_uniform}; what remains is to
-    transport the now-equal virtual spaces into the uniform closed-chain
-    representation and apply the already proved $L_i,R_i$ telescoping and
-    seam closure.
+    Corollary~\ref{cor:peps_cycle_shift_bond_uniform}. Identifying each
+    virtual space with $\C^D$ gives a uniform closed-chain representation,
+    to which the already proved $L_i,R_i$ telescoping and seam closure apply.
+\end{corollary}
+\begin{proof}\leanok
+    By Corollary~\ref{cor:peps_cycle_shift_bond_uniform}, every bond has the
+    dimension $D$ of a fixed reference bond. Write $e_v$ for the bond from
+    $v$ to $v+1$, transport every bond index to $\{0,\ldots,D-1\}$, and let
+    \begin{align}
+        \iota_v(\xi) & =\bigl(\xi(e_{v-1}),\xi(e_v)\bigr),
+                     & C_v^i(a,b)                          & =A_v^{\prime\,i}\!\left(\iota_v^{-1}(a,b)\right),
+        \notag
+    \end{align}
+    where $A'_v$ is the transported local tensor. If $g(v)=\eta(e_v)$, the
+    two corresponding changes of finite summation variables give
+    \begin{align}
+        \Coeff_A(\sigma)
+         & =\sum_{\eta}\prod_{v=0}^{n-1}
+        A_v^{\prime\,\sigma_v}\!\left(\eta|_v\right)
+        \notag                                           \\
+         & =\sum_{g:\{0,\ldots,n-1\}\to\{0,\ldots,D-1\}}
+        \prod_{v=0}^{n-1}
+        C_v^{\sigma_v}\!\left(g(v-1),g(v)\right)
+        =\Coeff_C(\sigma).
+        \notag
+    \end{align}
+    Each $\iota_v$ is a bijection, so the same coordinate change preserves
+    injectivity of every local tensor. If $r(v)=v+1$ is the cyclic rotation,
+    then
+    $\Coeff_{\mathrm{shift}(C)}(\sigma)=\Coeff_C(\sigma\circ r^{-1})$;
+    hence cyclic-shift invariance is preserved. Apply
+    Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
+    to this uniform chain. Its $L_i,R_i$ telescoping and seam closure produce
+    the required repeated injective tensor $B$.
+\end{proof}
+
+\begin{corollary}[Translation-invariant description of an injective closed MPS chain,
+        source statement]%
+    \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
+    \notready
+    \uses{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos}
+    Let $A_0,\ldots,A_{n-1}$ be a site-dependent injective closed MPS, with
+    dimension $D_e$ on each individual bond. If the closed-chain state is
+    invariant under the cyclic shift $A_v\mapsto A_{v+1}$, then all bond
+    dimensions are equal to one dimension $D$, and there is an injective
+    tensor $B$ of $D\times D$ matrices such that
+    \begin{align}
+        \Coeff_A(\sigma)
+         & =
+        \tr\!\left(B^{\sigma_0}\cdots B^{\sigma_{n-1}}\right)
+        \notag
+    \end{align}
+    for every physical configuration $\sigma$.
+
+    This is the corollary stated in
+    \cite[lines~1803--1890]{Molnar2018NormalPEPS}, without adding the positive
+    bond-dimension or $n\ge3$ hypotheses that do not appear in its statement.
 \end{corollary}
 \begin{proof}
-    The source first compares the family with its cyclic shift, obtaining
-    adjacent bond isomorphisms and hence one common dimension $D$. After
-    identifying every bond with $\C^D$, its products $L_i$ and $R_i$ express
-    every $A_i$ through $A_0$; the common residual operation is absorbed into
-    one repeated tensor $B$. The bond-uniformity step is complete. The explicit
-    reindexing to the uniform closed-chain representation remains to be
-    supplied.
+    For positive bond dimensions in the intended $n\ge3$ source context, this
+    is the preceding corollary. The source states at line~145 that its
+    injective MPS Fundamental Theorem concerns at least three sites and invokes
+    precisely that theorem here. Thus omission of $n\ge3$ from the displayed
+    corollary is a source-scope defect: the literal two-site statement is false
+    for nondegenerate rectangular bond dimensions. It is not a short-chain
+    extension left to this proof. The positive-dimension condition must be
+    built into the domain of bond dimensions or removed mathematically before
+    the printed statement can be marked complete.
 \end{proof}
 
 \begin{corollary}[Translation-invariant description of an injective 2D PEPS,

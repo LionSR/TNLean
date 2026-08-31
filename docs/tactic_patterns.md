@@ -1462,6 +1462,28 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### cycle-edge virtual-configuration sum reindexing — candidate
+- **Pattern:** identify assignments on the edges of a cycle with assignments
+  indexed by its sites using `cycleEdgeEquiv`, then, when a cyclic product is
+  required, rotate the site-indexed assignment by one step so that the two
+  incident virtual indices become `g v` and `g (v + 1)`.
+- **Seen:** the site-to-edge reindexing occurs in
+  `Tensor.stateCoeff_reindexMPSChain` in
+  `TNLean/PEPS/CycleMPSConstantDescription.lean`,
+  `stateCoeff_cycleTensorOfMPS` in `TNLean/PEPS/CycleMPSTensor.lean`, and the
+  blocked-region calculation in `TNLean/PEPS/CycleMPSInjectivity.lean`
+  (2026-08-31). The subsequent one-step rotation occurs in the first two of
+  these proofs.
+- **Abstraction (proposed):** if a third proof needs the full two-stage
+  reindexing, extract a cycle-graph sum lemma parameterized by the local
+  factor. Keep the factor-specific incident-edge and blocked-arc identities
+  at their call sites.
+- **Notes:** `Fintype.sum_equiv` already owns the common first stage; its three
+  remaining congruence obligations have different mathematical content. The
+  exact two-stage proof occurs twice, so it remains below the promotion
+  threshold rather than introducing a wrapper around the existing finite-sum
+  equivalence.
+
 ### one-site blocking by canonical physical reindexing — candidate
 - **Pattern:** identify the doubled physical alphabet after one-site blocking
   with the original doubled alphabet, prove that blocking is the resulting
