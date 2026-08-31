@@ -3,20 +3,21 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.LinearAlgebra.JordanChevalley
 import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.Reduction
 import TNLean.MPS.Core.ReductionCrossMatrix
-import Mathlib.LinearAlgebra.JordanChevalley
 
 /-!
-# Equality-case rectangular reductions
+# Equality-case and corrected proportional rectangular reductions
 
-This file proves the equality specialization of Proposition 20 of
-Molnár--Ge--Schuch--Cirac.  The target tensor is first made injective by a
-positive physical blocking.  Its coefficient-dual inverse and the source
-tensor define the mixed-bond cross matrix on `Fin D_B × Fin D_A`.
+This file proves the equality specialization and corrected nonzero proportional
+version of Proposition 20 of Molnár--Ge--Schuch--Cirac.  In the equality proof,
+the target tensor is first made injective by a positive physical blocking.  Its
+coefficient-dual inverse and the source tensor define the mixed-bond cross
+matrix on `Fin D_B × Fin D_A`.
 Jordan--Chevalley decomposition separates this cross endomorphism into
 commuting nilpotent and semisimple parts.  The source trace-power identities
 force the semisimple part to have rank one; its rectangular factorization is
@@ -30,11 +31,11 @@ trace-preserving normalization enters the argument.
 Source: arXiv:1706.07329v2, Proposition 20, `cornerproblem.tex` lines
 3815--3938.
 
-**Scope restriction (equality-only local fix):** The results assume
-`SameMPV₂Pos`, and hence prove the `λ = 1` specialization of the proportional
-premise printed in Proposition 20.  The unscaled conclusion is false for
-unrestricted `λ ≠ 1`; see
-`docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`.
+**Local fix (proportionality scalar):** The equality-case core assumes
+`SameMPV₂Pos`, while the corrected nonzero proportional theorems retain the
+factor `λ ^ |w|` by reducing to that core after rescaling the arbitrary source.
+The unscaled conclusion printed in Proposition 20 is false for unrestricted
+`λ ≠ 1`; see `docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -216,5 +217,69 @@ theorem exists_isReduction_of_isNormal_of_sameMPV₂Pos [NeZero D_A]
   obtain ⟨p, hp, hAp⟩ := hA
   apply exists_isReduction_of_blockTensor_isInjective_of_sameMPV₂Pos A B hSame p hp
   exact (isNBlkInjective_iff_blockTensor_isInjective A p).mp hAp
+
+/-- Rescaling a proportionally equal source by the inverse scalar gives exact
+positive-length MPV equality. -/
+private theorem sameMPV₂Pos_inv_smul_of_mpv_eq_pow_mul
+    (A : MPSTensor d D_A) (B : MPSTensor d D_B) (c : ℂ) (hc : c ≠ 0)
+    (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+      mpv B σ = c ^ N * mpv A σ) :
+    SameMPV₂Pos (fun i => c⁻¹ • B i) A := by
+  intro N hN σ
+  calc
+    mpv (fun i => c⁻¹ • B i) σ = c⁻¹ ^ N * mpv B σ := by
+      simp only [mpv, coeff, Kraus.evalWord_smul, List.length_ofFn,
+        Matrix.trace_smul, smul_eq_mul]
+    _ = c⁻¹ ^ N * (c ^ N * mpv A σ) := by rw [hmpv N hN σ]
+    _ = mpv A σ := by rw [← mul_assoc, ← mul_pow]; simp [hc]
+
+/-- An injective target and a source whose positive-length MPVs are `c ^ N`
+times the target MPVs admit a reduction to the target scaled by nonzero `c`.
+Only the arbitrary source is first rescaled by `c⁻¹`; the equality-case theorem
+is then applied before both sides are scaled back by `c`.
+
+This is the injective-target form of the corrected MGSC18 Proposition 20
+relation `eq:mgsc18_reduction_proportionality_corrected_word_relation`, derived
+from `cornerproblem.tex` lines 3124--3133 and 3815--3938.  The correction is
+recorded in `docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`,
+lines 96--120. -/
+theorem exists_isReduction_smul_of_isInjective_of_mpv_eq_pow_mul [NeZero D_A]
+    (A : MPSTensor d D_A) (B : MPSTensor d D_B) (c : ℂ)
+    (hA : Kraus.IsInjective A) (hc : c ≠ 0)
+    (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+      mpv B σ = c ^ N * mpv A σ) :
+    ∃ (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+      (W : Matrix (Fin D_B) (Fin D_A) ℂ),
+        IsReduction B (fun i => c • A i) V W := by
+  have hSame := sameMPV₂Pos_inv_smul_of_mpv_eq_pow_mul A B c hc hmpv
+  obtain ⟨V, W, hReduction⟩ :=
+    exists_isReduction_of_isInjective_of_sameMPV₂Pos
+      A (fun i => c⁻¹ • B i) hA hSame
+  refine ⟨V, W, ?_⟩
+  simpa [smul_smul, hc] using hReduction.smul c
+
+/-- A normal target and a source whose positive-length MPVs are `c ^ N` times
+the target MPVs admit a reduction to the target scaled by nonzero `c`.
+Consequently, `IsReduction.evalWord_smul_target` gives exactly
+`V * evalWord B w * W = (c ^ w.length) • evalWord A w`.
+
+This is the corrected nonzero-scalar form of MGSC18 Proposition 20,
+`eq:mgsc18_reduction_proportionality_corrected_word_relation`; see
+`cornerproblem.tex` lines 3124--3133 and 3815--3938 and
+`docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`, lines 96--120. -/
+theorem exists_isReduction_smul_of_isNormal_of_mpv_eq_pow_mul [NeZero D_A]
+    (A : MPSTensor d D_A) (B : MPSTensor d D_B) (c : ℂ)
+    (hA : Kraus.IsNormal A) (hc : c ≠ 0)
+    (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+      mpv B σ = c ^ N * mpv A σ) :
+    ∃ (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+      (W : Matrix (Fin D_B) (Fin D_A) ℂ),
+        IsReduction B (fun i => c • A i) V W := by
+  have hSame := sameMPV₂Pos_inv_smul_of_mpv_eq_pow_mul A B c hc hmpv
+  obtain ⟨V, W, hReduction⟩ :=
+    exists_isReduction_of_isNormal_of_sameMPV₂Pos
+      A (fun i => c⁻¹ • B i) hA hSame
+  refine ⟨V, W, ?_⟩
+  simpa [smul_smul, hc] using hReduction.smul c
 
 end MPSTensor

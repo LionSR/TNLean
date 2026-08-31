@@ -109,14 +109,6 @@ theorem evenParity_not_isInjective : ¬ Kraus.IsInjective evenParityTensor :=
 
 /-! ### Z₂ on-site symmetry via σz -/
 
-/-- The Pauli Z matrix `σz = !![1, 0; 0, -1]`. -/
-private def pauliZ : Matrix (Fin 2) (Fin 2) ℂ :=
-  Matrix.of fun i j => if i = j then (if i = 0 then 1 else -1) else 0
-
-private lemma pauliZ_sq : pauliZ * pauliZ = 1 := by
-  ext i j; fin_cases i <;> fin_cases j <;>
-    simp [pauliZ, Matrix.of_apply, Matrix.mul_apply]
-
 /-- The Z₂ on-site representation via Pauli Z. We use `Multiplicative (ZMod 2)` as the
 group: the identity corresponds to `ofAdd 0` and the generator to `ofAdd 1`.
 `U(0) = 1` (identity), `U(1) = σz` (Pauli Z). -/
@@ -144,9 +136,11 @@ private lemma pauliZGL_inv_val :
 
 /-- σz conjugation flips the sign of σx: `σz σx σz = -σx`. -/
 private lemma pauliZ_pauliX_pauliZ : pauliZ * pauliX * pauliZ = -pauliX := by
+  have hX : pauliX = !![(0 : ℂ), 1; 1, 0] := by
+    ext i j; fin_cases i <;> fin_cases j <;> simp [pauliX, Matrix.of_apply]
+  rw [hX]
   ext i j; fin_cases i <;> fin_cases j <;>
-    simp [pauliZ, pauliX, Matrix.of_apply, Matrix.mul_apply, Fin.sum_univ_two,
-      Matrix.neg_apply]
+    simp [pauliZ, Matrix.mul_apply, Fin.sum_univ_two, Matrix.neg_apply]
 
 /-- The Z₂ twist at the generator maps `A⁰ ↦ A⁰` and `A¹ ↦ -A¹`. -/
 private lemma evenParity_twisted_generator_eq (i : Fin 2) :

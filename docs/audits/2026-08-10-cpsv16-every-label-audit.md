@@ -90,28 +90,46 @@ of Appendix C, and the decorrelation results are in Appendix D.
 
 ## Boundary-theory labels
 
-The Section 4.2 boundary interlude now has a dedicated Chapter 21 section. Its
-label classifications remain unchanged. The smallest faithful local slice is
-complete, while the fixed-point implication remains planned:
+The Section 4.2 boundary interlude has a dedicated Chapter 21 section. The
+smallest faithful local slice is complete, while the fixed-point implication
+remains a missing statement:
 
 | Source label | Source line | Disposition |
 |---|---:|---|
-| `Section:Boundary` | 694 | Partially represented by the Chapter 21 PEPS-boundary section |
-| `PEPS-single tensor` | 697 | The homogeneous rank-five component function is the input to `TNLean.PEPS.doubledLocalTransferMPOTensor` and Blueprint `def:peps_doubled_local_transfer_tensor`; no separate public local-tensor wrapper is introduced, and distinct horizontal and vertical dimensions are a project generalization |
+| `Section:Boundary` | 694 | Partially represented by the Chapter 21 PEPS-boundary section; the local contraction is complete and the bulk-to-boundary implication is a missing statement |
+| `PEPS-single tensor` | 697 | The homogeneous rank-five component function is the input to `TNLean.PEPS.localBoundaryMPOTensor` and Blueprint `def:peps_local_boundary_tensor`; no separate public local-tensor wrapper is introduced, and distinct horizontal and vertical dimensions are a project generalization |
 | `PEPS-square-lattice` | 701 | Homogeneous repetition is represented by using one component function at every site; the full finite two-dimensional contraction is outside this local slice |
-| `PEPS-transfer-operator` | 710 | Blueprint `def:peps_transfer_fixed_point` is `\notready`; the completed local ket-bra doubled transfer tensor is not claimed to be a selected transfer fixed point |
-| `PEPS-RFP` | 717 | Blueprint `def:peps_rfp_relation`, the coarse-graining and refinement channel nodes, and `thm:peps_rfp_implies_boundary_rfp` are `\notready` and carry no `\lean{}` tags; the neighboring blocking type, fixed-point normalization, ancillary factor, and global channel extensions remain unspecified |
+| `PEPS-transfer-operator` | 710 | Blueprint `def:peps_transfer_fixed_point` is an unlinked statement marked `\notready`; the completed local boundary tensor is not identified with a selected transfer fixed point |
+| `PEPS-RFP` | 717 | Blueprint `def:peps_rfp_relation`, the coarse-graining and refinement channel nodes, and `thm:peps_rfp_implies_boundary_rfp` are missing statements marked `\notready` with no `\lean{}` tags; the physical isometry spaces, external virtual identifications, fixed-point choice, and refinement factor are absent from the source diagrams |
 
-The project convention for the local ket-bra doubled transfer tensor suggested
-by the unlabelled FigureDavid1 display at source lines 721--724 is formalized by
-`TNLean.PEPS.doubledLocalTransferMPOTensor` and its packed-coordinate formula.
-Its first physical coordinate groups the up and down ket indices, its second
-groups the up and down bra indices, and its bonds group the corresponding left
-and right ket-bra pairs. The tensor has physical dimension
-$D_{\mathrm v}^2$ and bond dimension $D_{\mathrm h}^2$. Leg ordering and
-product-index packing are project coordinate conventions. No statement
-identifies FigureDavid1 with a selected transfer fixed point or complete
-boundary theory, and issue #7371 is not classified as complete.
+The local ket-bra boundary tensor in the unlabelled display at source lines
+721--724 is formalized by `TNLean.PEPS.localBoundaryMPOTensor` and its
+packed-coordinate formula. Both the PEPS physical leg and the inward virtual
+leg are contracted between ket and bra. The remaining ket and bra vertical
+legs are the MPO physical coordinates, and the bonds group the corresponding
+left and right ket-bra pairs. The tensor therefore has physical dimension
+$D_{\mathrm v}$ and bond dimension $D_{\mathrm h}^2$. Leg ordering and
+product-index packing are project coordinate conventions. Taking the
+contracted pair $(s,b)$ as an ancillary coordinate gives an explicit local
+purification with bond dimension $D_{\mathrm h}$. Consequently,
+`TNLean.PEPS.localBoundaryMPOTensor_isLPDO` and
+`TNLean.PEPS.localBoundaryMPOTensor_isMPDO` prove local purification and
+positive semidefiniteness on every nonempty chain without fixed-point or
+channel assumptions.
+
+The earlier one-contraction formula, named
+`TNLean.PEPS.doubledLocalTransferMPOTensor`, left both vertical legs open and
+assigned physical dimension $D_{\mathrm v}^2$. It was definition drift from
+FigureDavid1 and has been removed without an alias. The local boundary-tensor
+declaration is now a faithful, proved statement. By contrast, the
+FigureDavid0-to-FigureDavid2 implication is
+not a proof hole behind a well-specified theorem: the source does not supply
+enough algebraic data to state the construction and prove that the displayed
+maps are trace-preserving and completely positive on the full boundary
+algebras. Treating those channel properties as hypotheses would produce only a
+conditional helper. The missing specification is recorded in
+`docs/paper-gaps/cpsv16_peps_boundary_rfp_specification.tex`, and issue #7371
+remains open.
 
 ## Literal mixed-state ZCL definition
 

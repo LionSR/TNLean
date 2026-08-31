@@ -403,6 +403,7 @@ follow-up, not against the temporary `sorry` count.
 
 | Name | Kind | Use when | Defined in |
 |---|---|---|---|
+| `Equiv.Perm.permMatrix_mem_unitaryGroup` | helper theorem | Showing that a complex permutation matrix is unitary | `TNLean/Algebra/PermutationMatrixUnitary.lean` |
 | `List.ofFn_reverse` | helper theorem | Reversing a `List.ofFn`-indexed finite word by precomposition with `Fin.rev` | `QICLean/Kraus/Word.lean` (QICLean dependency) |
 | `verticalAssembledTensor_apply_copy_same` | helper theorem | Evaluating an assembled vertical tensor at two coordinates in the same retained multiplicity copy | `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean` |
 | `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary` | helper theorem | Closing block-diagonal boundaries from an open-boundary representation and a simultaneous span across the complementary global cut | `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalBoundaryClosing.lean` |
@@ -414,6 +415,7 @@ follow-up, not against the temporary `sorry` count.
 | `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` | helper theorem | Concluding that a matrix is zero from vanishing trace pairings against every one-site matrix of an injective tensor | `TNLean/MPS/Core/TracePairing.lean` |
 | `MPOTensor.IsSAL.physTraceTransfer_ne_zero` | helper theorem | Deriving nonvanishing of the one-site physical-trace transfer from the positive-length normalization clause in saturation of the area law | `TNLean/MPS/MPDO/SALTraceTransfer.lean` |
 | `Finset.sum_eq_sum_subtype_ne_zero` | helper theorem | Restricting a finite sum to the subtype where a weight is nonzero when the remaining summands vanish | `TNLean/Algebra/FinsetSubtypeSum.lean` |
+| `Subsemigroup.exists_nonempty_list_prod_of_mem_closure` | helper theorem | Representing an element of a generated subsemigroup as a nonempty list product of generators | `TNLean/Algebra/ListProduct.lean` |
 | `Complex.ofReal_sqrt_sq` | helper theorem | Squaring the complex coercion of a nonnegative real square root | `TNLean/Algebra/ComplexSqrt.lean` |
 | `Matrix.IsIsometry.kronecker` | helper theorem | Preserving matrix isometries under the Kronecker product | `QICLean/Algebra/MatrixIsometryKronecker.lean` (QICLean dependency) |
 | `Matrix.reindexLinearEquiv_mul` | helper theorem | Multiplying matrices transported along compatible row, middle, and column equivalences; instantiate all three equivalences explicitly | `Mathlib/LinearAlgebra/Matrix/Reindex.lean` |

@@ -102,24 +102,12 @@ theorem weight_append [Monoid G] (κ : V → V → G) {a b c : V}
   | .nil _ => 0
   | .cons _ w => edgeCount w + 1
 
-@[simp] theorem edgeCount_nil (a : V) : edgeCount r (.nil a) = 0 := rfl
-
-@[simp] theorem edgeCount_cons {a b c : V} (hab : r a b) (w : DirectedWalk r b c) :
-    edgeCount r (.cons hab w) = edgeCount r w + 1 := rfl
-
 /-- The vertex at a position of a directed walk, including both endpoints. -/
 def vertexAt {a b : V} (w : DirectedWalk r a b) :
     Fin (edgeCount r w + 1) → V :=
   match w with
   | .nil a => fun _ => a
   | .cons (a := a) _ w => Fin.cases a (fun i => vertexAt w i)
-
-@[simp] theorem vertexAt_nil (a : V) (i : Fin 1) :
-    vertexAt r (.nil a) i = a := rfl
-
-@[simp] theorem vertexAt_cons_zero {a b c : V} (hab : r a b)
-    (w : DirectedWalk r b c) :
-    vertexAt r (.cons hab w) 0 = a := rfl
 
 @[simp] theorem vertexAt_cons_succ {a b c : V} (hab : r a b)
     (w : DirectedWalk r b c) (i : Fin (edgeCount r w + 1)) :

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.NilMatrixSubalgebra
+import TNLean.Algebra.ListProduct
 import TNLean.MPS.MPU.DoubleLayerContraction
 
 /-!
@@ -91,21 +92,6 @@ theorem IsMPU.trace_list_prod_eq_zero_of_mem_residualGeneratorSet
       simpa [isResidual, mixedResidualFactor] using
         hU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero_of_pos
           hpos isResidual X hmixed
-
-private theorem Subsemigroup.exists_nonempty_list_prod_of_mem_closure
-    {M : Type*} [Monoid M] {s : Set M} {x : M}
-    (hx : x ∈ Subsemigroup.closure s) :
-    ∃ l : List M, l ≠ [] ∧ (∀ a ∈ l, a ∈ s) ∧ l.prod = x := by
-  induction hx using Subsemigroup.closure_induction with
-  | mem x hx => exact ⟨[x], by simp, by simpa, by simp⟩
-  | mul x y _ _ hx hy =>
-      obtain ⟨lx, hlx, hlxs, hxl⟩ := hx
-      obtain ⟨ly, hly, hlys, hyl⟩ := hy
-      refine ⟨lx ++ ly, ?_, ?_, ?_⟩
-      · simp [hlx]
-      · intro a ha
-        exact List.mem_append.mp ha |>.elim (hlxs a) (hlys a)
-      · rw [List.prod_append, hxl, hyl]
 
 /-- Every element of the residual nonunital algebra has zero trace.
 

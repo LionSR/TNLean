@@ -32,7 +32,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private abbrev Mat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
+abbrev Mat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
 
 /-- One-site expectation value in terms of a chosen right fixed point `ρR`.
 

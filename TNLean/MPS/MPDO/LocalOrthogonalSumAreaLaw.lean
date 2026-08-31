@@ -130,7 +130,7 @@ state.  This is the common local step in the BNT-sector entropy decomposition
 and the orthogonal-sector ambient assembly.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1733--1770. -/
-theorem firstSiteMatrix_mul_normalizedMPO_of_ketLeftMul_eq
+private theorem firstSiteMatrix_mul_normalizedMPO_of_ketLeftMul_eq
     (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
     (hPM : M.ketLeftMul P = M) (N : ℕ) :
     firstSiteMatrix P N * normalizedMPO M (N + 1) = normalizedMPO M (N + 1) := by

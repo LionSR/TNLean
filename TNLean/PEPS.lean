@@ -83,8 +83,9 @@ import TNLean.PEPS.RegionTransport
 import TNLean.PEPS.RegionTransportData
 import TNLean.PEPS.RegionTransportInsertion
 import TNLean.PEPS.SingletonRegion
+import TNLean.PEPS.SquareLatticeBoundaryMPO
+import TNLean.PEPS.SquareLatticeBoundaryPositivity
 import TNLean.PEPS.SquareLatticeCoordinateSwap
-import TNLean.PEPS.SquareLatticeDoubledTransferMPO
 import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.TensorFactorScalar
 import TNLean.PEPS.TorusAbsorbedCovariance
