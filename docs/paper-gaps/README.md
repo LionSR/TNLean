@@ -17,6 +17,10 @@ For the MPU index of arXiv:1703.09188:
   formulas are values of the displayed tensors, while the source states the
   public blocking-independent MPU index. The remaining public construction is
   tracked by issues #7011 and #5856.
+- `mpu_ancilla_three_swap_orientation.tex` records that the literal crossed
+  swap labels in Figure `fig:TR-ancilla` agree with $\widetilde U_3$ and differ
+  from the claimed $\widetilde U_2$ endpoint when $N\geq3$ and $d\geq2$, and
+  that reversing those crossed swaps gives the intended local correction.
 
 For the MPU symmetry-defect gauging paper:
 
