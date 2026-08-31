@@ -7916,6 +7916,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     calculation.
 \end{proof}
 
+\begin{theorem}[Unitarity of the swap operator]
+    \label{thm:mpu_swap_matrix_unitary}
+    \lean{Matrix.swapMatrix_isUnitaryBetween}
+    \leanok
+    Let $d\in\N$. On $\C^d\otimes\C^d$, let $\mathbb S$ be the swap operator
+    used in \cite[Section~VII]{Cirac2017MPU}, defined on the standard basis by
+    $\mathbb S(e_k\otimes e_\ell)=e_\ell\otimes e_k$. With columns indexed by
+    source coordinates $(k,\ell)$ and rows indexed by target coordinates
+    $(i,j)$, its entries are
+    \begin{align}
+        \mathbb S_{(i,j),(k,\ell)} & =\delta_{i,\ell}\delta_{j,k}.
+    \end{align}
+    Then $\mathbb S$ is unitary between the two product-coordinate orders:
+    \begin{align}
+        \mathbb S^\dagger\mathbb S & =\Id, \\
+        \mathbb S\mathbb S^\dagger & =\Id.
+    \end{align}
+    % Operator characterization: paper_v2.tex lines 1316--1320.
+    % Section VII uses: lines 1999--2034, equations eq:SF_u1_u3,
+    % eq:uv2_U2, and eq:uv2_U3; the unitary interpolation has endpoint
+    % S at lines 2148--2150.
+\end{theorem}
+
+\begin{proof}\leanok
+    The swap operator is self-adjoint and involutive, so
+    $\mathbb S^\dagger=\mathbb S$ and $\mathbb S^2=\Id$. Substitution gives
+    both identities.
+\end{proof}
+
 \begin{definition}[Three topological-insulator shift MPUs]
     \label{threeMPU}
     \lean{MPOTensor.identityMPUTensor}
@@ -7998,6 +8027,32 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     witnesses; no identification with an arbitrary compact singular-value
     decomposition is asserted.
 \end{definition}
+
+\begin{theorem}[Unitarity of the four-spin shift matrices]
+    \label{thm:threeMPU_four_spin_matrix_unitarity}
+    \lean{MPOTensor.identitySwapIdentityMatrix_isUnitaryBetween,
+        MPOTensor.swapTensorSwapMatrix_isUnitaryBetween,
+        MPOTensor.swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_isUnitaryBetween,
+        MPOTensor.identitySwapIdentityMatrix_mul_swapTensorSwapMatrix_isUnitaryBetween}
+    \leanok
+    Let $\mathbb S$ exchange two $d$-dimensional spins. The two swap factors
+    appearing in the blocked forms of $U_2$ and $U_3$, and both ordered
+    products, are unitary:
+    \begin{align}
+        \Id\otimes\mathbb S\otimes\Id,\quad
+        \mathbb S\otimes\mathbb S,\quad
+        (\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes\Id),\quad
+        (\Id\otimes\mathbb S\otimes\Id)(\mathbb S\otimes\mathbb S).
+    \end{align}
+    % Source lines: paper_v2.tex 2018--2034.
+\end{theorem}
+
+\begin{proof}\leanok
+    The swap satisfies $\mathbb S^\dagger=\mathbb S$ and
+    $\mathbb S^2=\Id$. Kronecker products preserve isometries, and a square
+    isometry is unitary. Thus both factors are unitary. Closure of the unitary
+    matrices under multiplication gives the two ordered products.
+\end{proof}
 
 \begin{theorem}[One-site supplied mixed kernels for $U_1$ and $U_3$]
     \label{thm:threeMPU_supplied_mixed_kernels_one}

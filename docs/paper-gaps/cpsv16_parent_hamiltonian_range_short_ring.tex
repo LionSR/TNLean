@@ -1,0 +1,93 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Blocking and the Parent-Hamiltonian Range Claim in CPSV16}
+\author{}
+\date{2026-08-30}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The two lattice statements}
+
+Let $A$ be a matrix product state tensor of bond dimension $D$ in the
+canonical form of Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete. Their sharp
+block-injectivity proposition supplies a basis of normal tensors
+$A_1,\ldots,A_g$ and an integer $p$ such that
+\begin{align}
+    1\leq p\leq 3D^5,
+    \qquad
+    \operatorname{span}\left\{
+        \bigl((A_1^{[p]})^i,\ldots,(A_g^{[p]})^i\bigr):i
+    \right\}
+      &=\bigoplus_{j=1}^{g}M_{D_j}(\mathbb C).
+    \label{eq:cpsv16_parent_hamiltonian_range_block_span}
+\end{align}
+The discussion following Definition~3.9 then states both that $A$ has a
+parent Hamiltonian of range at most $3D^5$ and that, after blocking, the
+nearest-neighbour parent Hamiltonian has the expected ground space
+\cite[lines~511--527]{Cirac2016MPDO_arXiv}.
+
+The second statement has a direct meaning on the blocked lattice. For every
+blocked-chain length $N>2$, it asserts
+\begin{align}
+    \ker H_2^{(N)}\!\left(A^{[p]}\right)
+      &=\operatorname{span}\left\{
+          V^{(N)}\!\left(A_j^{[p]}\right):1\leq j\leq g
+        \right\}.
+    \label{eq:cpsv16_parent_hamiltonian_range_blocked_statement}
+\end{align}
+This is the statement proved in the formal development.
+\footnote{Formal declaration:
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltonian}
+in \doclink{TNLean/MPS/ParentHamiltonian/CPSVBlockedNearestNeighbor}.}
+
+\section{The unresolved implication}
+
+A two-site interaction on the blocked lattice acts on $2p$ consecutive sites
+of the original lattice. Consequently,
+\begin{align}
+    \text{nearest-neighbour range for }A^{[p]}
+      &\Longrightarrow \text{range }2p\text{ for the induced interaction on }A,
+    \label{eq:cpsv16_parent_hamiltonian_range_naive_transport}
+\end{align}
+not range $p$. Moreover, the quantifier $N>2$ in
+(\ref{eq:cpsv16_parent_hamiltonian_range_blocked_statement}) concerns original
+chain lengths divisible by $p$ and greater than $2p$. Definition~3.9 instead
+requires the original-lattice ground-space identity for every chain length
+strictly larger than the chosen interaction range. Thus the blocked statement
+alone does not establish
+\begin{align}
+    \exists L\leq 3D^5\ \forall n>L,
+    \qquad
+    \ker H_L^{(n)}(A)
+      &=\operatorname{span}\left\{V^{(n)}(A_j):1\leq j\leq g\right\}.
+    \label{eq:cpsv16_parent_hamiltonian_range_original_statement}
+\end{align}
+
+\section{Conclusion}
+
+The blocked-lattice assertion
+(\ref{eq:cpsv16_parent_hamiltonian_range_blocked_statement}) is valid and is
+formalized with the sharp bound $p\leq3D^5$. The original-lattice assertion
+(\ref{eq:cpsv16_parent_hamiltonian_range_original_statement}) requires an
+additional argument controlling the interaction range and the short periodic
+rings. Until such an argument is supplied, the two assertions must remain
+distinct.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

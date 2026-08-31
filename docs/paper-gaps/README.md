@@ -85,6 +85,13 @@ two-layer refinement notes.
 
 For MPDO renormalization fixed points:
 
+- `cpsv16_peps_boundary_rfp_specification.tex` records the source-faithful
+  double contraction defining the local PEPS boundary MPO tensor and the
+  missing algebraic data in the subsequent bulk-to-boundary RFP implication.
+  The local tensor is complete. The PEPS blocking spaces, transfer fixed-point
+  choice, refinement factor, and full trace-preserving completely positive
+  maps are not specified by the source diagrams, so the implication remains a
+  missing statement rather than a proof hole.
 - `cpsv16_mpdo_zcl_correlation_length_boundary.tex` records the mixed-state
   observable insertion $\mathbb E_O=\sum_{i,j}O_{ji}M^{ij}$ and the
   unnormalized periodic two-point formula. Literal physical-trace
@@ -140,8 +147,9 @@ For MPDO renormalization fixed points:
 - `cpgsv17_mpdo_theorem_4_9_implication_label.tex` records the cyclic mismatch
   among the Appendix C proposition labels, the hidden use of the ZCL lemma
   `lemmus` in the printed proof of `prop3to4`, and the distinction between the
-  refuted literal (iv)$\Rightarrow$(v) statement and the viable source
-  (ii)$\Rightarrow$(v) route.
+  refuted literal (iv)$\Rightarrow$(v) statement and the bare source
+  (ii)$\Rightarrow$(v) conclusion, which is neither proved nor refuted because
+  its printed representative-factorization route fails.
 - [cpgsv17_pf_rank_one.tex](https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf) records the completed normal Case-I rank-one
   theorem, the false absorbed-normality route in Case II, the exact
   repeated-copy counterexample to (iv)$\Rightarrow$(v), the nonminimality of
@@ -150,9 +158,10 @@ For MPDO renormalization fixed points:
   witness has a two-representative BNT presentation in biCF and satisfies the
   MPDO, SAL, literal-ZCL, simple-canonical, and line-246 normalization
   hypotheses. Its first absorbed representative has no normalized rank-one
-  neighboring-trace factorization. Proposition~C.15 remains conditional: its
-  channel construction is proved for supplied representative factorizations,
-  but no counterexample to other blocking channels is claimed.
+  neighboring-trace factorization. The conditional channel construction is
+  proved for supplied representative factorizations, but Proposition~C.15 is
+  still a missing statement: its printed route is refuted, while its bare
+  channel conclusion is neither proved nor refuted.
 - `cpsv16_gsnnch_sector_decomposition.tex` records that
   `MPOTensor.GSNNCHData` retains the source orthogonal sectors and natural
   multiplicities. Positive commuting products on supplied orthogonal sectors
@@ -303,6 +312,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
 - `pgvwc07_common_identity_coefficients.tex` distinguishes the right-canonical
   normalization used in the proof of PGVWC07 Theorem 12 from the local variant
   that assumes a common one-letter expansion of every block identity.
+- `cpsv16_parent_hamiltonian_range_short_ring.tex` separates the
+  nearest-neighbor parent Hamiltonian for the blocked tensor from the sharper
+  original-lattice range claim and its quantification over all sufficiently
+  long periodic chains.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison: the finite-row cyclic-window reduction is formalized, while the
   remaining source comparison is the overlapping-window anticommutator estimate;

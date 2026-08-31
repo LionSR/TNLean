@@ -741,6 +741,68 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 % Formalization boundary: the MPU-specific source-gate transport and the final
 % lem:deco wrapper remain outside this slice and depend on issue #7313.
 
+\begin{definition}[Unitary factorization comparison]
+    \label{def:mpug_unitary_factorization_comparison}
+    \lean{Matrix.unitaryFactorizationComparison,
+        Matrix.unitaryFactorizationComparison_coe}
+    \leanok
+    Let $I$ be a set and let $R_{a,b}$ be a family of unitary matrices of a
+    fixed size, indexed by $(a,b)\in I^2$. The unitary comparison from $(a,b)$
+    to the reference pair $(c,d)$ is
+    \begin{align}
+        \lambda_{a,b}^{c,d}
+         & =(R_{c,d})^{-1}R_{a,b}
+        =R_{c,d}^\dagger R_{a,b}.
+        \label{eq:mpug_unitary_factorization_comparison}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, Corollary after Proposition 3,
+    % lines 2782--2821, especially the defining formula at line 2820.
+    This is the orientation in the corollary after Proposition~3
+    of~\cite[lines~2782--2821]{FrancoRubio2025MPUGauging}. In that corollary,
+    $I=G$ and comparisons are used when $ab=cd$; this equality selects the
+    factorizations and is not needed in the unitary calculation.
+\end{definition}
+
+\begin{theorem}[Identity, composition, and right-reference laws]
+    \label{thm:mpug_unitary_factorization_comparison_laws}
+    \lean{Matrix.unitaryFactorizationComparison_self,
+        Matrix.unitaryFactorizationComparison_trans,
+        Matrix.unitaryFactorizationComparison_of_reference_eq_one,
+        Matrix.unitaryFactorizationComparison_right_reference}
+    \leanok
+    \uses{def:mpug_unitary_factorization_comparison}
+    For all indices $a,b,c,d,f,g\in I$,
+    \begin{align}
+        \lambda_{a,b}^{a,b} & =\mathbf 1,                              \\
+        \lambda_{a,b}^{f,g}
+                            & =\lambda_{c,d}^{f,g}\lambda_{a,b}^{c,d}.
+        \label{eq:mpug_unitary_factorization_comparison_laws}
+    \end{align}
+    If $R_{c,d}=\mathbf 1$, then
+    $\lambda_{a,b}^{c,d}=R_{a,b}$. In particular, if $I=G$ is a group, the
+    normalization $R_{e,x}=\mathbf 1$ gives
+    \begin{align}
+        R_{g,h} & =\lambda_{g,h}^{e,gh}.
+        \label{eq:mpug_unitary_factorization_right_reference}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, Corollary after Proposition 3,
+    % line 2817 (right reference and composition).
+    The last identity is the right-reference specialization
+    $\lambda^R_{g,h}=\lambda_{g,h}^{e,gh}$ in the cited corollary.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_unitary_factorization_comparison}
+    The identity and right-reference formulas follow from
+    $R_{a,b}^{-1}R_{a,b}=\mathbf 1$ and
+    $\mathbf 1^{-1}R_{a,b}=R_{a,b}$. For composition, insert the identity at
+    the intermediate pair:
+    \begin{align}
+        (R_{f,g})^{-1}R_{a,b}
+         & =(R_{f,g})^{-1}R_{c,d}(R_{c,d})^{-1}R_{a,b}.
+    \end{align}
+\end{proof}
+
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
     \lean{TNLean.Algebra.ScalarThreeCochain,
@@ -2096,6 +2158,61 @@ the scalar data and their gauge classes.
     Since $s^{-1}=s$, formula (\ref{eq:mpug_sigma_inverse}) gives
     $\sigma(s)=\sigma(s)^{-1}$. Hence $\sigma(s)^2=1$, whose two solutions in
     $\C^\times$ are $1$ and $-1$.
+\end{proof}
+
+For an element $g$ whose square is the identity, the source condition
+$\xi_g(x)\xi_{g^{-1}}(g\mathbin{\cdot}x)=-1$ reduces to
+$\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
+
+\begin{definition}[Anomalous sign for an involution]
+    \label{def:mpug_anomalous_involution_sign}
+    \lean{TNLean.Algebra.IsComplexUnitSign,
+        TNLean.Algebra.HasAnomalousInvolutionSign}
+    \leanok
+    Let $f\colon\mathsf X\to\mathsf X$. An anomalous sign for $f$ is a
+    function $\xi\colon\mathsf X\to\C^\times$ such that
+    \begin{align}
+        \xi(x) & \in\{1,-1\},
+        \label{eq:mpug_anomalous_sign_range}
+    \end{align}
+    and
+    \begin{align}
+        \xi(x)\xi(f(x)) & =-1
+        \label{eq:mpug_anomalous_sign_pairing}
+    \end{align}
+    for every $x\in\mathsf X$.
+    % Source anchor: arXiv:2502.20257, prop:def_tens_anomalous,
+    % eq:defects_Z2b, lines 2979--2981.
+\end{definition}
+
+\begin{theorem}[Anomalous signs and fixed points]
+    \label{thm:mpug_anomalous_involution_sign_iff}
+    \lean{TNLean.Algebra.hasAnomalousInvolutionSign_of_fixedPointFree,
+        TNLean.Algebra.not_hasAnomalousInvolutionSign_of_fixedPoint,
+        TNLean.Algebra.hasAnomalousInvolutionSign_iff_fixedPointFree,
+        TNLean.Algebra.involutive_smul_of_mul_self_eq_one,
+        TNLean.Algebra.hasAnomalousInvolutionSign_smul_iff}
+    \leanok
+    \uses{def:mpug_anomalous_involution_sign}
+    Let $f\colon\mathsf X\to\mathsf X$ be an involution. An anomalous sign
+    exists if and only if $f$ has no fixed point. In particular, let a group
+    act on $\mathsf X$ from the left, and suppose that $g^2=e$. The action
+    $x\mapsto g\mathbin{\cdot}x$ admits an anomalous sign if and only if
+    $g\mathbin{\cdot}x\neq x$ for every $x\in\mathsf X$.
+    This is the sign condition used for anomalous defect tensors in
+    \cite[lines~2979--2981]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, prop:def_tens_anomalous,
+    % eq:defects_Z2b, lines 2979--2981.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_anomalous_involution_sign}
+    Choose a well-order on $\mathsf X$. In each two-element orbit
+    $\{x,f(x)\}$, assign $1$ to the smaller element and $-1$ to the larger.
+    Involutivity exchanges the two elements, so their signs multiply to
+    $-1$. Conversely, at a fixed point the product is the square of either
+    $1$ or $-1$, hence equals $1$ rather than $-1$. For the action statement,
+    $g\mathbin{\cdot}(g\mathbin{\cdot}x)=(g^2)\mathbin{\cdot}x=x$.
 \end{proof}
 
 \begin{theorem}[Nontrivial scalar gauge class for $\Z_2$]

@@ -131,7 +131,9 @@ neighboring-trace factorization. This refutes Proposition~\texttt{prop2to3}
 and the printed route through it. The projector-controlled assembly formalized
 in \ghissue{6632} remains valid conditionally for supplied representative
 factorizations. The ambient witness does not rule out different blocking
-channels, so Proposition~\texttt{prop2to5} itself remains conditional.
+channels. The source-facing Lean statement for
+Proposition~\texttt{prop2to5} is therefore still missing, and its bare
+conclusion is neither proved nor refuted.
 
 \section{Formal treatment}
 
@@ -149,12 +151,13 @@ Files that rely on the concluding paragraph carry a \emph{Local fix (cyclic
 implication labels)} marker and cite this note. The marker records the printed
 proof-path drift, including the hidden use of ZCL in \texttt{prop3to4}. The
 restriction to one supplied factorization is recorded separately in
-\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. The projector-controlled
+\url{https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf}. The projector-controlled
 assembly used in the source proof of \texttt{prop2to5}, after common-weight
 absorption derived from ZCL, is formalized in \ghissue{6632}. It is a
 conditional construction. Since the printed route obtains its premise from the
-false Proposition~\texttt{prop2to3}, it does not prove \texttt{prop2to5}; no
-counterexample to \texttt{prop2to5} itself is claimed.
+false Proposition~\texttt{prop2to3}, it does not prove \texttt{prop2to5}. The
+source proposition therefore still has no source-facing Lean formalization,
+and no counterexample to its bare channel conclusion is claimed.
 
 \bibliographystyle{alpha}
 \bibliography{references}

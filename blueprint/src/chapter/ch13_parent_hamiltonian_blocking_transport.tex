@@ -57,6 +57,198 @@ construction; they are not attributed to a source theorem.
     (\ref{eq:blocked_boundary_map_transport}).
 \end{proof}
 
+\begin{lemma}[Local spaces under coisometric reconstruction]
+    \label{lem:coisometric_reconstruction_local_space}
+    \lean{MPSTensor.groundSpace_eq_of_coisometry_reconstruction}
+    \lean{MPSTensor.CPSVCanonicalFormData.%
+        groundSpace_blockTensor_eq_iSup_representatives}
+    \leanok
+    \uses{def:ground_space_parent, lem:block_sum_local_ground_space}
+    Let $A=(A^i)$ and $C=(C^i)$ have the same physical alphabet, and suppose
+    there is a coisometry $U:\C^D\to\C^n$ such that
+    $UU^\dagger=I_n$ and $A^i=U^\dagger C^iU$ for every $i$. Then, for every
+    $L\geq1$,
+    \begin{align}
+        G_L(A) & =G_L(C).
+        \label{eq:coisometric_reconstruction_local_space}
+    \end{align}
+    In particular, if $(A_j)_{j=1}^g$ are the distinct BNT representatives
+    selected from literal canonical-form data for $A$, then, for $p,L\geq1$,
+    \begin{align}
+        G_L\!\left(A^{[p]}\right)
+         & =\bigvee_{j=1}^{g}G_L\!\left(A_j^{[p]}\right).
+        \label{eq:cpsv_blocked_representative_local_space}
+    \end{align}
+    The first equality is a derived trace identity for an exact coisometric
+    reconstruction. It is not the literal direct-sum canonical-form equation
+    of CPSV16.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_sum_local_ground_space}
+    For every word $w$ of positive length,
+    $A^w=U^\dagger C^wU$. Cyclicity of the trace gives
+    \begin{align}
+        \Gamma_L^A(X)
+         & =\Gamma_L^C(UXU^\dagger),
+        \notag                        \\
+        \Gamma_L^C(Y)
+         & =\Gamma_L^A(U^\dagger YU),
+        \notag
+    \end{align}
+    where the second equality uses $UU^\dagger=I_n$. This proves
+    (\ref{eq:coisometric_reconstruction_local_space}). For literal
+    canonical-form data, apply this equality to the retained direct sum.
+    Lemma~\ref{lem:block_sum_local_ground_space} gives the sum over all
+    displayed normal blocks. Blocks in one BNT phase class differ by a
+    nonzero phase and an invertible gauge, so their local spaces agree; the
+    sum therefore reduces to the distinct representatives, which proves
+    (\ref{eq:cpsv_blocked_representative_local_space}).
+\end{proof}
+
+\begin{theorem}[A simultaneous one-letter span gives nearest-neighbor ground spaces]
+    \label{thm:block_diagonal_one_site_span_parent_spanning}
+    \lean{MPSTensor.WordTupleSpanTop.of_one_of_pos}
+    \lean{MPSTensor.WordTupleSpanTop.exists_one_letter_identity_coefficients}
+    \lean{MPSTensor.%
+        pgvwc07_mem_iSup_groundSpace_of_trace_decomposition_of_identity_coefficients}
+    \lean{MPSTensor.%
+        pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions_of_identity_coefficients}
+    \lean{MPSTensor.%
+        pgvwc07_iSup_groundSpace_eq_restriction_intersection_of_identity_coefficients}
+    \lean{MPSTensor.%
+        chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_wordTupleSpanTop_one}
+    \lean{MPSTensor.%
+        exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_one}
+    \lean{MPSTensor.%
+        exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one}
+    \lean{MPSTensor.%
+        chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTupleSpanTop_one}
+    \lean{MPSTensor.%
+        hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_wordTupleSpanTop_one}
+    \leanok
+    \uses{lem:block_diagonal_chain_space_comparison_parent_spanning,
+        thm:chain_ground_space_eq_mpv_blk}
+    Let $B=\bigoplus_{j=1}^{g}\mu_jA_j$, where every $\mu_j$ is nonzero and
+    every bond dimension is positive. Suppose that the simultaneous one-letter
+    evaluations span the product algebra:
+    \begin{align}
+        \spn_{\C}\left\{(A_1^i,\ldots,A_g^i):0\leq i<d\right\}
+         & =\prod_{j=1}^{g}\MN{D_j}.
+        \label{eq:block_diagonal_one_site_span}
+    \end{align}
+    Then, for every $N>2$,
+    \begin{align}
+        \mathcal G_{N,2}(B)
+         & =\bigvee_{j=1}^{g}\mathcal G_{N,2}(A_j),
+        \notag                                                   \\
+        \ker H_2^{(N)}(B)
+         & =\spn\left\{\ket{V^{(N)}(A_j)}:1\leq j\leq g\right\}.
+        \label{eq:block_diagonal_one_site_span_parent_spanning}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_chain_space_comparison_parent_spanning,
+        thm:chain_ground_space_eq_mpv_blk}
+    Equation~(\ref{eq:block_diagonal_one_site_span}) supplies common
+    coefficients $c_i$ satisfying $\sum_i c_iA_j^i=I_{D_j}$ for every $j$.
+    In the restriction-intersection argument of the proof of
+    \cite[Theorem~12]{PerezGarcia2007Matrix}, these coefficients replace the
+    right-canonical identity and yield the first equality. This conditional
+    variant and its relation to the source proof are documented in
+    \cite{gap:pgvwc07_common_identity_coefficients}. The same span makes every
+    $A_j$ injective, so
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_blk} identifies its periodic
+    chain space with $\spn\{\ket{V^{(N)}(A_j)}\}$. The block-diagonal
+    comparison of
+    Lemma~\ref{lem:block_diagonal_chain_space_comparison_parent_spanning}
+    then gives (\ref{eq:block_diagonal_one_site_span_parent_spanning}).
+\end{proof}
+
+\begin{lemma}[The spanning equation depends only on the local space]
+    \label{lem:parent_spanning_of_local_space_eq}
+    \lean{MPSTensor.chainGroundSpace_eq_of_groundSpace_eq}
+    \lean{MPSTensor.HasParentHamiltonianGroundSpaceSpanning.%
+        of_groundSpace_eq}
+    \leanok
+    \uses{def:parent_hamiltonian_ground_space_spanning,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    Let $B$ and $C$ have the same physical alphabet and satisfy $G_L(B)=G_L(C)$.
+    Then their periodic chain spaces and their parent-Hamiltonian kernels agree
+    for every $N\geq L$. Consequently, any fixed BNT-vector family satisfying
+    the parent-Hamiltonian spanning equation for $C$ also satisfies it for $B$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    Every translated local constraint is the inverse image of the same
+    subspace $G_L(B)=G_L(C)$. Their intersections are therefore equal, and
+    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} identifies
+    those intersections with the two parent-Hamiltonian kernels.
+\end{proof}
+
+\begin{theorem}[Sharp blocking gives a nearest-neighbor parent Hamiltonian]
+    \label{thm:cpsv_blocked_nearest_neighbor_parent_hamiltonian}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_bnt_blocked_hasNearestNeighborParentHamiltonian}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:blocked_tensor,
+        def:parent_hamiltonian_ground_space_spanning}
+    Let $A$ be in literal CPSV canonical form with positive ambient bond
+    dimension $D$. There are a basis of normal tensors
+    $(A_j)_{j=1}^{g}$ and an integer $p$ satisfying
+    $1\leq p\leq 3D^5$ such that $(A_j^{[p]})_{j=1}^{g}$ is a basis of
+    normal tensors for $A^{[p]}$ and, for every $N>2$,
+    \begin{align}
+        \ker H_2^{(N)}\!\left(A^{[p]}\right)
+         & =\spn\left\{\ket{V^{(N)}\!\left(A_j^{[p]}\right)}:
+        1\leq j\leq g\right\}.
+        \label{eq:cpsv_blocked_nearest_neighbor_parent_hamiltonian}
+    \end{align}
+    Thus the actual blocked tensor has a nearest-neighbor parent Hamiltonian
+    on the blocked lattice. This does not identify an interaction of range
+    at most $3D^5$ on every original lattice; that distinction is recorded in
+    \cite{gap:cpsv16_parent_hamiltonian_range_short_ring}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_canonical_form_bnt_refinement,
+        thm:cpsv_bnt_dimension_bound, thm:cpsv_bnt_sharp_span_ambient_cap,
+        thm:cpsv_bnt_blocked_simultaneous_span,
+        thm:cpsv_bnt_positive_blocking,
+        lem:coisometric_reconstruction_local_space,
+        lem:block_sum_local_ground_space,
+        thm:block_diagonal_one_site_span_parent_spanning,
+        lem:parent_spanning_of_local_space_eq}
+    Choose $p$ so that the simultaneous one-letter evaluations of the blocked
+    normal representatives span the product of their full matrix algebras.
+    Positive blocking preserves the BNT property. Set
+    $C^i=\bigoplus_{j=1}^{g}(A_j^{[p]})^i$. Then
+    Theorem~\ref{thm:block_diagonal_one_site_span_parent_spanning} gives, for
+    every $N>2$,
+    \begin{align}
+        \ker H_2^{(N)}(C)
+         & =\spn\left\{\ket{V^{(N)}(A_j^{[p]})}:1\leq j\leq g\right\}.
+        \label{eq:cpsv_blocked_representative_parent_spanning}
+    \end{align}
+    After the repeated phase-gauge copies and the ambient coisometry are
+    removed, Lemma~\ref{lem:coisometric_reconstruction_local_space} gives
+    \begin{align}
+        G_2(A^{[p]})
+         & =\bigvee_{j=1}^{g}G_2(A_j^{[p]})=G_2(C).
+        \label{eq:cpsv_actual_direct_sum_local_space}
+    \end{align}
+    Lemma~\ref{lem:parent_spanning_of_local_space_eq} identifies the two
+    parent-Hamiltonian kernels, so
+    (\ref{eq:cpsv_blocked_representative_parent_spanning}) becomes
+    (\ref{eq:cpsv_blocked_nearest_neighbor_parent_hamiltonian}).
+\end{proof}
+
 \begin{theorem}[Local ground-space transport under blocking]
     \label{thm:blocked_local_ground_space_transport}
     \lean{MPSTensor.groundSpaceES_blockTensor_map}
