@@ -5,7 +5,19 @@
 fundamental theorem. That is false: the datum reached no such consumer, and
 the module defining it has since been deleted. See
 `2026-08-26_peps_torus_singleton_blocking_deletion.md`, section "Correction to
-an earlier audit". The rest of this note stands as a dated snapshot.
+an earlier audit".
+
+**Further correction 2026-08-31.** The #2606 row below treated boundary edges
+of the open rectangular graph as a missing case of arXiv:1804.04964,
+Theorem 3. The source instead uses periodic translationally invariant geometry:
+all graph edges are contracted (`paper_normal.tex:961--979`), the square-lattice
+specialization excludes loops and double edges by requiring both lengths to be
+at least three (`paper_normal.tex:1207--1212`), and translation carries one
+blocking to every horizontal and vertical edge (`paper_normal.tex:1449--1498`).
+The source theorem is realized by
+`fundamentalTheorem_normalTorusPEPS_unconditional`. Boundary coverage for the
+open rectangle is a possible project extension, not a paper obligation. Apart
+from these two corrections, this note stands as a dated snapshot.
 
 Scope: all 145 open GitHub issues. Method: per-issue dossiers (body +
 stale-citation findings from `scripts/audit_stale_issues.py` against current
@@ -229,7 +241,7 @@ CLOSED by audit (14): #631, #2318, #2470, #2616, #3965, #4065, #5086, #5422,
 | #2320 | tracker, updated | |
 | #2449 | PARTIAL | |
 | #2450 | PARTIAL | |
-| #2606 | ACTIVE | |
+| #2606 | SOURCE-SUPERSEDED; optional open-boundary extension | Theorem 3 is periodic and is covered by `fundamentalTheorem_normalTorusPEPS_unconditional`; the source does not provide boundary blockings for the open rectangular graph. |
 | #2660 | PARTIAL, cross-linked with #4872 | defs landed PR #2978 |
 | #2661 | tracker, up-to-date | |
 | #2691 | ACTIVE | |
