@@ -199,8 +199,8 @@ in its literal martingale-difference form
   \lVert G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n\rVert
     \leq \varepsilon_l < \frac{1}{\sqrt{l+1}}.
 \]
-The indices are \(n=K+l\) and \(n_l=l\), and the same \(l\) and
-\(\varepsilon_l\) are supplied by
+The indices are \(n=K+l\) and \(n_l=l+1\), so \(0<K\), and the same \(l\)
+and \(\varepsilon_l\) are supplied by
 `exists_openChain_groundProjection_defect_lt_c3_threshold`. This is only the
 exact projector identification following condition C3 in Nachtergaele,
 arXiv:cond-mat/9410110, equation (2.4); no new decay estimate enters. -/
@@ -210,13 +210,13 @@ theorem IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshol
     ∃ l : ℕ, ∃ ε : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧ 0 ≤ ε ∧
       ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
-      ∀ K : ℕ,
+      ∀ (K : ℕ) (hK : 0 < K),
         ‖openChainTailGroundProjectionES A K (l + 1) ∘L
-            openChainMartingaleDifferenceES A K l‖ ≤ ε := by
+            openChainMartingaleDifferenceES A K l hK‖ ≤ ε := by
   obtain ⟨l, ε, hl, hInj, hε, hε_lt, hDefect⟩ :=
     hP.exists_openChain_groundProjection_defect_lt_c3_threshold hρ
-  refine ⟨l, ε, hl, hInj, hε, hε_lt, fun K ↦ ?_⟩
-  rw [openChainTailGroundProjection_comp_martingaleDifference hInj hl.le]
+  refine ⟨l, ε, hl, hInj, hε, hε_lt, fun K hK ↦ ?_⟩
+  rw [openChainTailGroundProjection_comp_martingaleDifference hK]
   exact hDefect K
 
 /-- The C3 threshold yields the uniform open-chain anticommutator estimate for

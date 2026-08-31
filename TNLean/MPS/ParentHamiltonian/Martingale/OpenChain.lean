@@ -92,12 +92,15 @@ noncomputable def openChainTailGroundProjectionES (A : MPSTensor d D) (K L : ℕ
 \(E_n=G_{\Lambda_n}-G_{\Lambda_{n+1}}\), represented in the Hilbert space on
 \(\Lambda_{n+1}\).
 
-The indices are \(n=K+l\) and \(n_l=l\). Thus the first term is the projector
-onto the left ground condition on \(\Lambda_n\), extended across the last site,
-and the second is the whole-chain ground projector on \(\Lambda_{n+1}\).
-See arXiv:cond-mat/9410110, equation `(En)` and the identity following
-condition C3 in equation (2.4). -/
-noncomputable def openChainMartingaleDifferenceES (A : MPSTensor d D) (K l : ℕ) :
+The indices are \(n=K+l\) and \(n_l=l+1\), so \(0<K\). Thus the first term is
+the projector onto the left ground condition on \(\Lambda_n\), extended across
+the last site, and the second is the whole-chain ground projector on
+\(\Lambda_{n+1}\). The strict inequality excludes the undersized volume where
+the interaction of length \(l+1\) has no nonwrapping window. See
+arXiv:cond-mat/9410110, equation `(En)` and the identity following condition C3
+in equation (2.4). -/
+noncomputable def openChainMartingaleDifferenceES
+    (A : MPSTensor d D) (K l : ℕ) (_hK : 0 < K) :
     EuclideanSpace ℂ (Cfg d (K + l + 1)) →L[ℂ]
       EuclideanSpace ℂ (Cfg d (K + l + 1)) :=
   openChainLeftGroundProjectionES A (K + l) -
@@ -146,22 +149,21 @@ theorem openChainLeft_inf_tailGroundSpaceES [NeZero D]
       groundSpace_inTailGround A K (L₀ + 1) hv⟩
 
 /-- The whole ground space on \(\Lambda_{n+1}\) lies in the tail ground space
-\(G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\), where \(n=K+l\) and
-\(n_l=l\). -/
-theorem groundSpaceES_le_openChainTailGroundSpaceES [NeZero D]
-    {A : MPSTensor d D} {K l : ℕ} (hInj : Kraus.IsNBlkInjective A l)
-    (hl : 0 < l) :
+\(G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\), where \(n=K+l\). -/
+theorem groundSpaceES_le_openChainTailGroundSpaceES
+    {A : MPSTensor d D} {K l : ℕ} :
     groundSpaceES A (K + l + 1) ≤ openChainTailGroundSpaceES A K (l + 1) := by
-  rw [← openChainLeft_inf_tailGroundSpaceES hInj hl]
-  exact inf_le_right
+  intro v hv
+  rw [mem_groundSpaceES_iff] at hv
+  rw [mem_openChainTailGroundSpaceES_iff]
+  exact groundSpace_inTailGround A K (l + 1) hv
 
 /-- Projecting first onto the whole ground space and then onto the tail ground
 space leaves the whole-ground projection unchanged. This is the reverse
 projector composition required in the identity following Nachtergaele's
 condition C3. -/
-theorem openChainTailGroundProjection_comp_groundSpaceProjection [NeZero D]
-    {A : MPSTensor d D} {K l : ℕ} (hInj : Kraus.IsNBlkInjective A l)
-    (hl : 0 < l) :
+theorem openChainTailGroundProjection_comp_groundSpaceProjection
+    {A : MPSTensor d D} {K l : ℕ} :
     openChainTailGroundProjectionES A K (l + 1) ∘L
         (groundSpaceES A (K + l + 1)).starProjection =
       (groundSpaceES A (K + l + 1)).starProjection := by
@@ -171,7 +173,7 @@ theorem openChainTailGroundProjection_comp_groundSpaceProjection [NeZero D]
       ((groundSpaceES A (K + l + 1)).starProjection v) =
     (groundSpaceES A (K + l + 1)).starProjection v
   apply Submodule.starProjection_eq_self_iff.mpr
-  exact groundSpaceES_le_openChainTailGroundSpaceES hInj hl
+  exact groundSpaceES_le_openChainTailGroundSpaceES
     (Submodule.starProjection_apply_mem _ _)
 
 /-- The exact projector identity following Nachtergaele's condition C3:
@@ -180,18 +182,17 @@ G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
  =G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
   -G_{\Lambda_{n+1}}.
 \]
-Here \(n=K+l\) and \(n_l=l\), so every operator acts on the Hilbert space of
-\(\Lambda_{n+1}\). -/
-theorem openChainTailGroundProjection_comp_martingaleDifference [NeZero D]
-    {A : MPSTensor d D} {K l : ℕ} (hInj : Kraus.IsNBlkInjective A l)
-    (hl : 0 < l) :
+Here \(n=K+l\), \(n_l=l+1\), and \(0<K\), so every operator acts on the
+physical open chain in the Hilbert space of \(\Lambda_{n+1}\). -/
+theorem openChainTailGroundProjection_comp_martingaleDifference
+    {A : MPSTensor d D} {K l : ℕ} (hK : 0 < K) :
     openChainTailGroundProjectionES A K (l + 1) ∘L
-        openChainMartingaleDifferenceES A K l =
+        openChainMartingaleDifferenceES A K l hK =
       openChainTailGroundProjectionES A K (l + 1) ∘L
           openChainLeftGroundProjectionES A (K + l) -
         (groundSpaceES A (K + l + 1)).starProjection := by
   rw [openChainMartingaleDifferenceES, ContinuousLinearMap.comp_sub,
-    openChainTailGroundProjection_comp_groundSpaceProjection hInj hl]
+    openChainTailGroundProjection_comp_groundSpaceProjection]
 
 set_option maxHeartbeats 800000 in
 -- The expanded finite-dimensional projector statement requires extra elaboration budget.

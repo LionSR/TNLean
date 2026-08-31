@@ -1357,8 +1357,8 @@ coercivity.
     \lean{MPSTensor.openChainMartingaleDifferenceES}
     \leanok
     \uses{def:open_chain_ground_subspaces_es, def:ground_space_es}
-    Fix $K,l\in\N$, set $n=K+l$ and $n_l=l$, and work in the Hilbert space
-    on $\Lambda_{n+1}$.  The physical open-chain martingale difference is
+    Fix $K,l\in\N$ with $K>0$, set $n=K+l$ and $n_l=l+1$, and work in the
+    Hilbert space on $\Lambda_{n+1}$.  The physical open-chain martingale difference is
     \begin{align}
         E_n
          & :=G_{\Lambda_n}-G_{\Lambda_{n+1}} \\
@@ -1368,16 +1368,17 @@ coercivity.
     \end{align}
     The first projector imposes the ground condition on the left $n$ sites
     while acting on all $n+1$ sites.  Hence both terms in the difference have
-    the same ambient Hilbert space.
+    the same ambient Hilbert space.  The condition $K>0$ excludes the
+    undersized volume, where an interaction of length $l+1$ has no
+    nonwrapping window and its physical ground projector is the identity.
 \end{definition}
 
 \begin{lemma}[Whole ground space lies in the C3 tail space]
     \label{lem:whole_ground_space_le_c3_tail_space}
     \lean{MPSTensor.groundSpaceES_le_openChainTailGroundSpaceES}
     \leanok
-    \uses{thm:open_chain_left_tail_ground_intersection}
-    Assume $D\geq1$, $l>0$, and that $A$ is $l$-block injective.  For
-    $n=K+l$ and $n_l=l$,
+    \uses{lem:ground_space_in_tail_ground}
+    For every $K,l\in\N$, set $n=K+l$.  Then
     \begin{align}
         \mathcal G_{n+1}^{\mathrm{ES}}(A)
          & \subseteq \mathcal V_{K,l+1}(A).
@@ -1387,13 +1388,10 @@ coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_chain_left_tail_ground_intersection}
-    The open-chain intersection theorem gives
-    \begin{align}
-        \mathcal U_{K+l}(A)\cap\mathcal V_{K,l+1}(A)
-         & =\mathcal G_{K+l+1}^{\mathrm{ES}}(A).
-    \end{align}
-    The intersection is contained in its second factor.
+    \uses{lem:ground_space_in_tail_ground}
+    Every fixed-prefix suffix restriction of a whole-chain ground-space vector
+    is a ground-space vector on the suffix.  This is exactly membership in
+    $\mathcal V_{K,l+1}(A)$.
 \end{proof}
 
 \begin{lemma}[Reverse C3 projector composition]
@@ -1401,8 +1399,7 @@ coercivity.
     \lean{MPSTensor.openChainTailGroundProjection_comp_groundSpaceProjection}
     \leanok
     \uses{lem:whole_ground_space_le_c3_tail_space}
-    Under the same hypotheses, the tail projector fixes the whole-ground
-    projector:
+    For every $K,l\in\N$, the tail projector fixes the whole-ground projector:
     \begin{align}
         G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_{n+1}}
          & =G_{\Lambda_{n+1}}.
@@ -1427,8 +1424,8 @@ coercivity.
     \lean{MPSTensor.openChainTailGroundProjection_comp_martingaleDifference}
     \leanok
     \uses{def:open_chain_martingale_difference_es, lem:reverse_c3_projector_composition}
-    Assume $D\geq1$, $l>0$, and that $A$ is $l$-block injective.  With
-    $n=K+l$ and $n_l=l$, Nachtergaele's identity following condition C3 is
+    Fix $K,l\in\N$ with $K>0$.  With $n=K+l$ and $n_l=l+1$,
+    Nachtergaele's identity following condition C3 is
     \begin{align}
         G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
          & =G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
@@ -2746,7 +2743,7 @@ coercivity.
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
     positive-definite fixed point.  There are $l>1$ and
     $\varepsilon_l\geq0$, with $A$ $l$-block injective, such that for every
-    $K\in\N$, after setting $n=K+l$ and $n_l=l$,
+    $K>0$, after setting $n=K+l$ and $n_l=l+1$,
     \begin{align}
         \left\lVert
         G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
@@ -2775,7 +2772,7 @@ coercivity.
         \right\rVert
          & \leq\varepsilon_l
     \end{align}
-    for every $K$.  Rewrite its norm by
+    for every $K>0$.  Rewrite its norm by
     Theorem~\ref{thm:exact_c3_martingale_difference_identity}; the existing
     strict threshold on $\varepsilon_l$ is unchanged.
 \end{proof}
