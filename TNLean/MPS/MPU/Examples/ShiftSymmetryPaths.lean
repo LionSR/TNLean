@@ -30,13 +30,19 @@ ancilla on a periodic chain of length $N$. -/
 abbrev ShiftAncillaConfig (N d : ℕ) :=
   ((Fin N → Fin d) × (Fin N → Fin d)) × (Fin N → Fin d)
 
-/-- The sitewise swap of the first and second physical species. -/
+/-- The sitewise swap of the first and second physical species.
+
+Source: arXiv:1703.09188, Figure `fig:TR-ancilla` and Proposition
+`prop:U1-U2-equiv-ancillatrick` (lines 2217--2229). -/
 def shiftAncillaSwap₁₂ (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
   Function.Involutive.toPerm (fun σ => ((σ.1.2, σ.1.1), σ.2)) (by
     rintro ⟨⟨σ₁, σ₂⟩, a⟩
     rfl)
 
-/-- The sitewise swap of the second physical species with the ancilla. -/
+/-- The sitewise swap of the second physical species with the ancilla.
+
+Source: arXiv:1703.09188, Figure `fig:TR-ancilla` and Proposition
+`prop:U1-U2-equiv-ancillatrick` (lines 2217--2229). -/
 def shiftAncillaSwap₂a (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
   Function.Involutive.toPerm (fun σ => ((σ.1.1, σ.2), σ.1.2)) (by
     rintro ⟨⟨σ₁, σ₂⟩, a⟩
@@ -45,7 +51,10 @@ def shiftAncillaSwap₂a (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
 /-- The crossed swap $S^{1,a}_{n,n+1}$ in Figure `fig:TR-ancilla`.
 Since `rotateConfig N d σ` evaluates to `σ` at the next site, the first output
 receives the next-site ancilla and the ancilla output receives the previous-site
-first species. -/
+first species.
+
+Source: arXiv:1703.09188, Figure `fig:TR-ancilla` and Proposition
+`prop:U1-U2-equiv-ancillatrick` (lines 2217--2229). -/
 def shiftAncillaSwap₁aNext (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
   Function.Involutive.toPerm
     (fun σ =>
@@ -58,7 +67,10 @@ def shiftAncillaSwap₁aNext (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :
       simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply])
 
 /-- Coordinate action of the source gate $S^{1,a}_{n,n+1}$ in Figure
-`fig:TR-ancilla`. -/
+`fig:TR-ancilla`.
+
+Source: arXiv:1703.09188, Figure `fig:TR-ancilla` and Proposition
+`prop:U1-U2-equiv-ancillatrick` (lines 2217--2229). -/
 @[simp] theorem shiftAncillaSwap₁aNext_apply (N d : ℕ)
     (σ₁ σ₂ a : Fin N → Fin d) :
     shiftAncillaSwap₁aNext N d ((σ₁, σ₂), a) =
@@ -67,7 +79,10 @@ def shiftAncillaSwap₁aNext (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :
 
 /-- The three swap layers shown above the $\tilde U_1$ endpoint in Figure
 `fig:TR-ancilla`, read from the endpoint outwards: first $S^{1,a}_{n,n+1}$,
-then $S^{1,2}_{n,n}$, and finally $S^{2,a}_{n,n}$. -/
+then $S^{1,2}_{n,n}$, and finally $S^{2,a}_{n,n}$.
+
+Source: arXiv:1703.09188, Figure `fig:TR-ancilla` and Proposition
+`prop:U1-U2-equiv-ancillatrick` (lines 2217--2229). -/
 def shiftAncillaThreeSwap (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
   ((shiftAncillaSwap₁aNext N d).trans (shiftAncillaSwap₁₂ N d)).trans
     (shiftAncillaSwap₂a N d)
