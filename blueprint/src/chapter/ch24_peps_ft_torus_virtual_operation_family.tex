@@ -4,6 +4,58 @@ The construction below formalizes the forward virtual/physical-operation
 correspondence in the proof sketch of the two-dimensional corollary
 \cite[corollary after Lemma~5, lines~2297--2444]{Molnar2018NormalPEPS}.
 
+\begin{definition}[Partial state across a region cut]%
+    \label{def:peps_region_partial_state}
+    \lean{TNLean.PEPS.regionPartialState}
+    \leanok
+    For a region $R$ and a physical configuration $\tau$ on its complement,
+    define the partial state $\psi^\tau_{A,R}$ on the physical space of $R$
+    by
+    \begin{align}
+        \psi^\tau_{A,R}(\sigma)
+         & =\Psi_A(\sigma\cup\tau).
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Partial states of equal closed states]%
+    \label{thm:peps_region_partial_state_same_state}
+    \lean{TNLean.PEPS.regionPartialState_sameState}
+    \leanok
+    \uses{def:peps_region_partial_state}
+    If $A$ and $B$ generate the same closed state, then, for every region
+    $R$ and every complement configuration $\tau$,
+    $\psi^\tau_{A,R}=\psi^\tau_{B,R}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Evaluate both functions at a physical configuration $\sigma$ on $R$ and
+    apply the equality of the two closed-state coefficients at
+    $\sigma\cup\tau$.
+\end{proof}
+
+\begin{theorem}[Blocked-tensor expansion of a partial state]%
+    \label{thm:peps_region_partial_state_blocked_expansion}
+    \lean{TNLean.PEPS.regionInteriorBondProd_smul_regionPartialState}
+    \leanok
+    \uses{def:peps_region_partial_state,
+        def:peps_regionComplementBoundaryConfig}
+    Let $P_A(R)$ be the product of the dimensions of the bonds internal to
+    $R$. For every complement configuration $\tau$,
+    \begin{align}
+        P_A(R)\psi^\tau_{A,R}
+         & =\sum_{\mu\in\partial R}
+        T_{A,V\setminus R}(\bar\mu)(\tau)T_{A,R}(\mu).
+        \label{eq:peps_partial_state_blocked_expansion}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Split the closed contraction across $R$. The virtual labels on the two
+    sides agree through the complement-boundary identification, while each
+    bond internal to $R$ contributes its dimension.
+\end{proof}
+
 \begin{definition}[Physical operator of a region insert]%
     \label{def:peps_physical_operator_of_region_insert}
     \lean{TNLean.PEPS.physicalOpOfRegionInsert}
@@ -56,10 +108,10 @@ correspondence in the proof sketch of the two-dimensional corollary
     \label{thm:peps_closed_state_of_physical_operator}
     \lean{TNLean.PEPS.deformedRegionState_regionInsertOfPhysicalOp}
     \leanok
-    \uses{def:peps_region_insert_of_physical_operator}
-    For a complement physical configuration $\tau$, define the partial state
-    $\psi^\tau_{A,R}$ by
-    $\psi^\tau_{A,R}(\sigma)=\Psi_A(\sigma\cup\tau)$. Then
+    \uses{def:peps_region_insert_of_physical_operator,
+        thm:peps_region_partial_state_blocked_expansion}
+    For a complement physical configuration $\tau$, let
+    $\psi^\tau_{A,R}$ be the partial state across the cut. Then
     \begin{align}
         \Psi_{A,R,C^O_{A,R}}(\sigma,\tau)
          & =\bigl[O\bigl(P_A(R)\psi^\tau_{A,R}\bigr)\bigr](\sigma).
@@ -68,14 +120,8 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Splitting the closed contraction across $R$ gives
-    \begin{align}
-        P_A(R)\psi^\tau_{A,R}
-         & =\sum_{\mu}
-        T_{A,V\setminus R}(\bar\mu)(\tau)\,T_{A,R}(\mu).
-        \notag
-    \end{align}
-    Applying $O$ and evaluating at $\sigma$ proves
+    Apply $O$ to~(\ref{eq:peps_partial_state_blocked_expansion}) and evaluate
+    at $\sigma$. This proves
     (\ref{eq:peps_physical_op_partial_state}).
 \end{proof}
 
@@ -83,7 +129,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \label{thm:peps_physical_operator_same_state_transfer}
     \lean{TNLean.PEPS.deformedRegionState_regionInsertOfPhysicalOp_sameState}
     \leanok
-    \uses{thm:peps_closed_state_of_physical_operator}
+    \uses{thm:peps_closed_state_of_physical_operator,
+        thm:peps_region_partial_state_same_state}
     If $A$ and $B$ generate the same closed state, then
     \begin{align}
         P_B(R)\Psi_{A,R,C^O_{A,R}}(\sigma,\tau)
