@@ -10,7 +10,7 @@
 
 \title{The Missing Algebraic Specification of the PEPS Boundary-RFP Diagrams}
 \author{}
-\date{2026-08-30}
+\date{2026-08-31}
 
 \begin{document}
 \maketitle
@@ -44,6 +44,48 @@ and $\mathcal T$, in the reverse direction, such that
 for every virtual operator $X$. The existence and channel properties of these
 maps are conclusions of the PEPS renormalization relation, not additional
 hypotheses.
+
+\section{Boundary data supplied by the cited constructions}
+
+The boundary construction cited by the source is algebraic at the level of a
+finite cylinder. For a cylinder of circumference $N_{\mathrm v}$ and bond
+dimension $D$, the virtual boundary space has dimension $D^{N_{\mathrm v}}$.
+After blocking the left and right parts of the cylinder,
+Ref.~\cite[Equation~(10)]
+{Cirac2011Entanglement} defines the positive operators
+\begin{align}
+    \sigma_L
+      &= \sum_{I_a}|\widehat L^{I_a})(\widehat L^{I_a}|,
+    &
+    \sigma_R
+      &= \sum_{I_b}|\widehat R^{I_b})(\widehat R^{I_b}|.
+    \label{eq:cpsv16_peps_boundary_rfp_specification_sigma_lr}
+\end{align}
+Equations~(11)--(13) of the same reference choose an orthonormal basis of the
+range of $\sigma_L$, define the corresponding support isometry $U$, and obtain
+\begin{align}
+    \rho_\ell
+      &= U\sqrt{\sigma_L^T}\,\sigma_R\sqrt{\sigma_L^T}\,U^\dagger.
+    \label{eq:cpsv16_peps_boundary_rfp_specification_boundary_density}
+\end{align}
+Thus these equations specify the finite-cylinder transfer space, its two
+positive boundary operators, and their relation to the reduced density
+operator.
+
+For a long cylinder, Ref.~\cite[Equation~(1) and the following paragraph]
+{Schuch2013Topological} writes the boundary state as
+\begin{align}
+    \sigma
+      &\mathrel{\propto}
+      \sqrt{\sigma_L^*}\,\sigma_R\sqrt{\sigma_L^*},
+    \label{eq:cpsv16_peps_boundary_rfp_specification_long_cylinder}
+\end{align}
+and identifies $\sigma_L$ and $\sigma_R$ with eigenvectors of the transfer
+operator for its largest eigenvalue. The same passage emphasizes that symmetry
+and topological order can make this fixed point non-unique. These results
+specify the transfer operators and boundary density operators. They do not
+define the PEPS blocking isometry in Figure~\cpsvref{PEPS-RFP} or the two maps
+in the final renormalization diagram.
 
 \section{The local boundary tensor}
 
@@ -86,9 +128,13 @@ at every nonzero length, again without a fixed-point or channel hypothesis.
 The source passage does not give an algebraic form of the PEPS blocking
 relation. In particular, it does not specify the domain and codomain of the
 physical isometry or the identifications between the external virtual spaces
-before and after blocking. It also does not specify the spaces, orientation,
-choice, or normalization of the left and right transfer fixed points used to
-form the boundary state.
+before and after blocking. The cited boundary constructions do specify
+Eqs.~\eqref{eq:cpsv16_peps_boundary_rfp_specification_sigma_lr}--
+\eqref{eq:cpsv16_peps_boundary_rfp_specification_long_cylinder}, but they do
+not select a normalized pair independently of cylinder boundary conditions
+when the leading transfer eigenspace is degenerate. Nor do they identify such
+a selection algebraically with the local tensor $E_A$ in
+Eq.~\eqref{eq:cpsv16_peps_boundary_rfp_specification_local_tensor}.
 
 The refinement part of the final diagram inserts an unlabelled local factor.
 Its space and normalization are not stated. The coarse-graining and refinement
@@ -108,11 +154,15 @@ would not formalize the implication asserted by the paper.
 
 The source-faithful local contraction
 \eqref{eq:cpsv16_peps_boundary_rfp_specification_local_tensor} is complete.
-The implication from the PEPS renormalization diagram to the boundary MPO
-renormalization equations remains an open statement-level problem. A faithful
-completion must first choose an algebraic PEPS blocking relation and boundary
-fixed-point construction that determine the two channels, and must then derive
-their channel properties and
+The transfer operators and finite-cylinder boundary density are specified by
+Eqs.~\eqref{eq:cpsv16_peps_boundary_rfp_specification_sigma_lr}--
+\eqref{eq:cpsv16_peps_boundary_rfp_specification_long_cylinder}, but their
+passage to the local tensor used by the renormalization diagram is not. The
+implication from the PEPS renormalization diagram to the boundary MPO
+renormalization equations therefore remains an open statement-level problem.
+A faithful completion must first give an algebraic PEPS blocking relation and
+a boundary fixed-point construction that determine the two channels, and must
+then derive their channel properties and
 Eqs.~\eqref{eq:cpsv16_peps_boundary_rfp_specification_coarse_graining}--
 \eqref{eq:cpsv16_peps_boundary_rfp_specification_refinement}. No additional
 complete-positivity, trace-preservation, fixed-point normalization, or
