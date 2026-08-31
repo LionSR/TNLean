@@ -115,11 +115,11 @@ theorem openParentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
   rw [openParentHamiltonianES]
   exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1
 
-/-- The parent Hamiltonian on the last `l` sites of the prefix of length `n`,
-embedded in an `N`-site open chain.
+/-- The parent Hamiltonian on the last \(l\) sites of the prefix of length \(n\),
+embedded in an \(N\)-site open chain.
 
-Its summands have starts `i` satisfying `n - l ≤ i` and `i + L ≤ n`. Thus their
-length-`L` windows lie in the nonwrapping interval `[n - l, n)`. This is
+Its summands have starts \(i\) satisfying \(n-l≤i\) and \(i+L≤n\). Thus their
+length-\(L\) windows lie in the nonwrapping interval \([n-l,n)\). This is
 \(H_{\Lambda_n\setminus\Lambda_{n-l}}\) for \(\Lambda_n=[0,n)\) in
 Nachtergaele, arXiv:cond-mat/9410110, condition C1 (lines 1030--1041). -/
 noncomputable def openSuffixParentHamiltonianES (A : MPSTensor d D)
