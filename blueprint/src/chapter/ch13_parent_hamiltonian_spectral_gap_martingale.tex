@@ -1088,18 +1088,23 @@ norm estimate is derived here.
     \lean{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_full_range}
     \leanok
     Let $(G_n)_{n\geq0}$ be nested orthogonal projections on a
-    finite-dimensional complex Hilbert space, put $E_n=G_n-G_{n+1}$, and
-    assume $G_0=I$. Fix $l,N\in\N$, and let $Q_n$ be orthogonal projections
+    finite-dimensional complex Hilbert space $\mathcal H$, put
+    $E_n=G_n-G_{n+1}$, and assume $G_0=\mathbf 1$. Fix $l,N\in\N$, and let
+    $Q_n$ be orthogonal projections
     for $0\leq n<N$. Suppose $E_mQ_n=Q_nE_m$ whenever $m<n-l$ or $n<m$.
     Let $H_n$ be the local Hamiltonians and $H$ the full Hamiltonian.
-    Assume the quadratic-form versions of C1 and C2 on the full finite range,
+    Assume the quadratic-form version of C1 for every $x\in\mathcal H$,
     \begin{align}
         0
-         & \leq\sum_{n=0}^{N-1}\re\langle H_nv,v\rangle
-        \leq d_{l+1}\re\langle Hv,v\rangle,
-        \label{eq:nachtergaele_c1_form}                 \\
-        \gamma_{l+1}\lVert(I-Q_n)v\rVert^2
-         & \leq\re\langle H_nv,v\rangle,
+         & \leq\sum_{n=0}^{N-1}\re\langle H_nx,x\rangle
+        \leq d_{l+1}\re\langle Hx,x\rangle,
+        \label{eq:nachtergaele_c1_form}
+    \end{align}
+    and the quadratic-form version of C2 for every $x\in\mathcal H$ and
+    $0\leq n<N$,
+    \begin{align}
+        \gamma_{l+1}\lVert(\mathbf 1-Q_n)x\rVert^2
+         & \leq\re\langle H_nx,x\rangle,
         \label{eq:nachtergaele_c2_form}
     \end{align}
     and the literal condition C3,
@@ -1136,6 +1141,7 @@ norm estimate is derived here.
     \leanok
     \uses{thm:truncated-martingale-difference-reconstruction,
         thm:martingale-difference-pythagorean-identity,
+        thm:martingale-difference-final-complement-norm-decomposition,
         thm:outside-window-martingale-cancellation,
         lem:nachtergaele_weighted_inner_product,
         lem:nachtergaele_c3_projection_composition,

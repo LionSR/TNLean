@@ -306,7 +306,9 @@ The finite sum runs over every index \(n=0,\ldots,N-1\), with only
 \(G_0=\mathbf 1\) needed for the martingale resolution. Thus C1, C2, and C3
 are assumed on that full finite range, which is stronger than the source's
 lower-threshold hypotheses. The case \(\epsilon_l=0\) is treated separately,
-since the printed choice \(c_2=\epsilon_l/\sqrt{l+1}\) is then not positive. -/
+since the printed choice \(c_2=\epsilon_l/\sqrt{l+1}\) is then not positive.
+The proof uses the upper inequality in C1; its nonnegativity clause is retained
+because it is part of the source's condition C1. -/
 theorem energy_lower_bound_of_nachtergaele_c1_c3_full_range
     [FiniteDimensional ℂ E]
     (G : NestedGroundProjections (E := E)) (Q : ℕ → E →ₗ[ℂ] E)
