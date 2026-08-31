@@ -79,8 +79,8 @@ theorem movingWindow_sum_le (a : ℕ → ℝ) (l N : ℕ) (ha : ∀ m, 0 ≤ a m
     _ = (l + 1) * ∑ m ∈ Finset.range N, a m := by simp
 
 /-- For nonnegative coefficients, the same moving-window estimate holds when
-all indices in `[0, N)` are active. The truncated windows at indices below
-`l` still count each coefficient at most `l + 1` times. -/
+all indices in \([0,N)\) are active. The truncated windows at indices below
+\(l\) still count each coefficient at most \(l+1\) times. -/
 theorem movingWindow_sum_range_le (a : ℕ → ℝ) (l N : ℕ) (ha : ∀ m, 0 ≤ a m) :
     ∑ n ∈ Finset.range N, ∑ m ∈ Finset.Icc (n - l) n, a m ≤
       (l + 1) * ∑ m ∈ Finset.range N, a m := by
