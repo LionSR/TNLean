@@ -1443,6 +1443,18 @@ abstracted — record why, so it is not re-proposed).
   and spectrum proofs, together with the two older AKLT helpers, now reuse the
   same lemma.
 
+### Scalar identity matrix positivity and trace
+- **Pattern:** proofs repeatedly derived positivity or positive-definiteness of
+  `c • (1 : Matrix n n R)` from the corresponding scalar order hypothesis and
+  computed its trace by rewriting `Matrix.trace_smul` and `Matrix.trace_one`.
+- **Reuse:** the generic lemmas `Matrix.PosSemidef.smul_one`,
+  `Matrix.PosDef.smul_one`, and `Matrix.trace_smul_one` in
+  `TNLean/Algebra/Matrix/ScalarIdentity.lean` own these arguments under the
+  weakest assumptions used by the underlying Mathlib results.
+- **Result:** the repeated proofs in `Theorem49RepeatedCopyCounterexample.lean`,
+  `AKLTStringOrder.lean`, `Cluster.lean`, and
+  `ShiftPaperSourceFactors.lean` now use the shared matrix API.
+
 ---
 
 ## Candidates

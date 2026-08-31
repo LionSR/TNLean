@@ -9,6 +9,7 @@ import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.ZMod2
 import TNLean.Algebra.CocycleCohomology
+import TNLean.Algebra.Matrix.ScalarIdentity
 
 /-!
 # Cluster state as a Matrix Product State
@@ -575,18 +576,14 @@ private theorem clusterBlocked_adjoint_fixes_maximallyMixed :
 /-- The maximally mixed boundary state `Λ = (1/2) · 1` on the bond space is
 positive definite. -/
 private theorem maximallyMixed_posDef :
-    ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)).PosDef := by
-  have h : (1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ) =
-      (1 / 2 : ℝ) • (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
-    ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
-  rw [h]
-  exact Matrix.PosDef.one.smul (by norm_num)
+    ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)).PosDef :=
+  Matrix.PosDef.smul_one (by norm_num)
 
 /-- The maximally mixed boundary state `Λ = (1/2) · 1` on the bond space has
 trace `1`. -/
 private theorem maximallyMixed_trace :
     Matrix.trace ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)) = 1 := by
-  rw [Matrix.trace_smul, Matrix.trace_one]
+  rw [Matrix.trace_smul_one]
   norm_num
 
 /-- The `Z₂ × Z₂` on-site representation is unitary on every group element: the

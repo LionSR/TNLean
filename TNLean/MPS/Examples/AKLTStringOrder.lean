@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.Matrix.ScalarIdentity
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Symmetry.Defs
@@ -176,12 +177,8 @@ theorem aklt_hasStringOrder (g : Multiplicative (ZMod 2 × ZMod 2)) :
   hasStringOrder_of_symmetric_injective akltBlocked akltBlocked_isInjective
     akltBlockedZ2Z2Action aklt_blocked_isOnSiteSymmetric_Z2Z2 akltBlockedZ2Z2Action_unitary g
     ((1 / 2 : ℂ) • 1)
-    (by
-      have h : (1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ) =
-          (1 / 2 : ℝ) • (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
-        ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
-      rw [h]; exact Matrix.PosDef.one.smul (by norm_num))
-    (by rw [Matrix.trace_smul, Matrix.trace_one]; norm_num)
+    (Matrix.PosDef.smul_one (by norm_num))
+    (by rw [Matrix.trace_smul_one]; norm_num)
     akltBlocked_adjoint_fixes_maximallyMixed akltBlocked_transferMap_one
 
 end AKLT
