@@ -23,10 +23,8 @@ comparison with the reverse relation gives the identity matrix.
   sides by the same gauge matrix.
 * `gauge_inv`: the forward gauge followed by the reverse gauge is the identity.
 
-The declarations retain their existing `TNLean.PEPS` names because they are
-used by the PEPS comparison, although their statements do not involve a PEPS
-tensor. The source-facing end-block formulation remains with the proof of
-Lemma 5 in `TNLean.PEPS.TwoInjectiveComparison.Basic`.
+The source-facing end-block formulation of Lemma 5 is proved in
+`TNLean.PEPS.TwoInjectiveComparison.Basic`.
 
 ## References
 
