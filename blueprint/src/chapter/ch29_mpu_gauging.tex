@@ -833,12 +833,12 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     Reversing the comparison gives
     \begin{align}
         \left(\lambda_{a,b}^{c,d}\right)^{-1}
-        & =\lambda_{c,d}^{a,b}.
+         & =\lambda_{c,d}^{a,b}.
     \end{align}
     Comparisons compose as
     \begin{align}
         \lambda_{a,b}^{f,g}
-        & =\lambda_{c,d}^{f,g}\lambda_{a,b}^{c,d}.
+         & =\lambda_{c,d}^{f,g}\lambda_{a,b}^{c,d}.
         \label{eq:mpug_unitary_factorization_comparison_laws}
     \end{align}
     If $R_{c,d}=\mathbf 1$, then
@@ -906,7 +906,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \begin{align}
         T_g(T_h(a,b))
          & =\left(ah^{-1}g^{-1},ghb\right)
-          =\left(a(gh)^{-1},(gh)b\right).
+        =\left(a(gh)^{-1},(gh)b\right).
     \end{align}
 \end{proof}
 
@@ -924,8 +924,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \begin{align}
         \mathcal G_g
          & =\sum_{a,b\in G}
-            \lambda_{a,b}^{ag^{-1},gb}
-            \otimes\ket{ag^{-1},gb}\!\bra{a,b}.
+        \lambda_{a,b}^{ag^{-1},gb}
+        \otimes\ket{ag^{-1},gb}\!\bra{a,b}.
         \label{eq:mpug_gauss_operator}
     \end{align}
     Equivalently, the block from $(a,b)$ to $T_g(a,b)$ is
@@ -940,12 +940,11 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         TNLean.Algebra.gaussOperator_mul,
         TNLean.Algebra.star_gaussOperator,
         TNLean.Algebra.gaussOperator_mem_unitaryGroup,
-        TNLean.Algebra.gaussRepresentation}
+        TNLean.Algebra.gaussRepresentation,
+        TNLean.Algebra.gaussRepresentation_coe}
     \leanok
     \discussion{7503}
-    \uses{thm:mpug_unitary_factorization_comparison_laws,
-        thm:mpug_gauss_leg_action_mul,
-        def:mpug_gauss_operator}
+    \uses{def:mpug_gauss_operator}
     The local Gauss operators satisfy
     \begin{align}
         \mathcal G_e & =\id.
