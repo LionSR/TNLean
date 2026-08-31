@@ -1555,16 +1555,12 @@ $A^{-1}A=\Id$. This is the identity used in
     \discussion{7395}
     \uses{def:same_mpv2_pos, def:mps_rectangular_reduction,
         def:mps_reduction_residual_nilpotency_length, def:normal}
-    Let $A$ be normal, let $B$ have the same positive-length closed-chain
-    coefficients as $A$, and let $(V,W)$ and
-    $(\widetilde V,\widetilde W)$ be two reductions from $B$ to $A$.  Suppose
-    that, for some $N_0\in\mathbb N$,
-    \begin{align}
-        \ell(B,A;V,W) & \leq N_0,
-          & \ell(B,A;\widetilde V,\widetilde W) & \leq N_0.
-        \label{eq:mps_reduction_boundary_dressed_bounds}
-    \end{align}
-    Then there exists a single scalar $\lambda\in\C$ with $\lambda\ne0$ such
+    Let $A$ be normal, let $B$ have the same physical alphabet, and let
+    $(V,W)$ and $(\widetilde V,\widetilde W)$ be two reductions from $B$ to
+    $A$.  Suppose that $N_0\in\mathbb N$ is a residual-word nilpotency bound
+    for both reductions: every word of length $N_0$ in either residual tensor
+    vanishes.  Then there exists a single scalar $\lambda\in\C$ with
+    $\lambda\ne0$ such
     that, for every word $\mathbf a$ satisfying
     \begin{align}
         |\mathbf a| & > 2N_0,
@@ -1579,9 +1575,10 @@ $A^{-1}A=\Id$. This is the identity used in
          & =\lambda^{-1}B^{\mathbf a}\widetilde W.
         \label{eq:mps_reduction_boundary_dressed_right}
     \end{align}
-    More generally, the same conclusion holds when $N_0$ is directly assumed
-    to be a residual-word nilpotency bound for both reductions; that bound-form
-    statement requires no equality of closed-chain coefficients.
+    If $A$ and $B$ have the same positive-length closed-chain coefficients and
+    the two least residual nilpotency lengths are at most $N_0$, then $N_0$ is
+    such a common bound and the same conclusion follows.  The direct-bound
+    statement itself requires no equality of closed-chain coefficients.
 
     These are boundary-dressed identities: they do not assert the bare matrix
     equalities $V=\lambda\widetilde V$ or
@@ -1602,11 +1599,6 @@ $A^{-1}A=\Id$. This is the identity used in
     If the target bond dimension is zero, both dressed identities hold
     entrywise for $\lambda=1$ because the relevant target row or column index is
     empty.  Hence assume that the target bond dimension is positive.
-
-    First replace the two least-length inequalities by common residual-word
-    bounds at $N_0$: the least lengths are actual bounds under the
-    positive-length closed-chain equality, and prefix factorization propagates
-    vanishing to every larger length.
 
     Choose $L>0$ such that $A$ is $L$-block injective.  For exterior words
     $\mathbf p,\mathbf q$ satisfying the $N_0$ buffer inequalities, compare the
@@ -1638,6 +1630,11 @@ $A^{-1}A=\Id$. This is the identity used in
     $B^{\mathbf a}\widetilde W=\lambda B^{\mathbf a}W$ on the right.
     Multiplication by $\lambda^{-1}$ yields
     (\ref{eq:mps_reduction_boundary_dressed_right}).
+
+    For the least-length corollary, positive-length closed-chain equality makes
+    each least residual nilpotency length an actual bound.  Prefix
+    factorization propagates vanishing from that least length to $N_0$, so the
+    direct-bound theorem applies.
 \end{proof}
 
 \begin{lemma}[Gauge invariance of block injectivity]
