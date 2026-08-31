@@ -68,6 +68,12 @@ theorem mem_groundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
   exact Submodule.mem_map_equiv (p := groundSpace A L)
     (e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm) (x := v)
 
+/-- The finite-dimensional local ground space \(G_L(A)\) admits an orthogonal projection. -/
+theorem groundSpaceES_hasOrthogonalProjection
+    (A : MPSTensor d D) (L : ℕ) : (groundSpaceES A L).HasOrthogonalProjection := by
+  let : CompleteSpace (groundSpaceES A L) := FiniteDimensional.complete ℂ _
+  exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
+
 /-! ### Parent interaction -/
 
 /-- Canonical parent interaction on \(L\) consecutive sites: the orthogonal

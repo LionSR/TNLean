@@ -49,12 +49,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private theorem groundSpaceES_hasOrthogonalProjection_openChain
-    (A : MPSTensor d D) (N : ℕ) : (groundSpaceES A N).HasOrthogonalProjection := by
-  let : CompleteSpace (groundSpaceES A N) := FiniteDimensional.complete ℂ _
-  exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
-
-attribute [local instance] groundSpaceES_hasOrthogonalProjection_openChain
+attribute [local instance] groundSpaceES_hasOrthogonalProjection
 
 /-- The open-chain left-window ground subspace on \(L + 1\) sites.
 
