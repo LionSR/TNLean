@@ -90,10 +90,16 @@
 
 \begin{theorem}[Pythagorean identity for martingale differences]%
     \label{thm:martingale-difference-pythagorean-identity}
+    \lean{FrustrationFree.NestedGroundProjections.norm_sq_sum_martingaleDifference_finset}
     \lean{FrustrationFree.NestedGroundProjections.norm_sq_sum_martingaleDifference}
     \leanok
     \uses{thm:orthogonal-martingale-difference-resolution}
-    For every $v\in\mathcal H$ and $N\in\N$,
+    For every $v\in\mathcal H$ and finite $S\subset\N$,
+    \begin{align}
+        \left\lVert\sum_{n\in S}E_nv\right\rVert^2
+         & =\sum_{n\in S}\lVert E_nv\rVert^2.
+    \end{align}
+    In particular, for $S=\{0,\ldots,N-1\}$,
     \begin{align}
         \left\lVert\sum_{n=0}^{N-1}E_nv\right\rVert^2
          & =\sum_{n=0}^{N-1}\lVert E_nv\rVert^2.
@@ -1073,6 +1079,129 @@ norm estimate is derived here.
     \cite[Proof of Theorem~2.1(i)]{Nachtergaele1996Spectral}.
 \end{proof}
 
+% Source: References/cond-mat_9410110/main.tex, Theorem 2.1(i),
+% statement lines 1119--1130 and proof lines 1195--1259.
+\begin{theorem}[Nachtergaele's C1--C3 energy estimate]
+    \label{thm:nachtergaele_c1_c3_energy_estimate}
+    \lean{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3}
+    \leanok
+    \uses{thm:truncated-martingale-difference-reconstruction,
+        thm:martingale-difference-pythagorean-identity,
+        thm:outside-window-martingale-cancellation,
+        lem:nachtergaele_weighted_inner_product,
+        lem:nachtergaele_c3_projection_composition,
+        thm:moving_window_sum_le}
+    Let $(G_n)_{n\geq0}$ be nested orthogonal projections on a
+    finite-dimensional complex Hilbert space, and put
+    $E_n=G_n-G_{n+1}$. Fix $l\leq N$, use the padded endpoint convention
+    $G_0=G_l=I$, and let $Q_n$ be orthogonal projections for
+    $l\leq n<N$. Suppose $E_mQ_n=Q_nE_m$ whenever $m<n-l$ or $n<m$.
+    Let $H_n$ be the local Hamiltonians and $H$ the full Hamiltonian.
+    Assume the quadratic-form versions of C1 and C2,
+    \begin{align}
+        0
+         & \leq\sum_{n=l}^{N-1}\re\langle H_nv,v\rangle
+        \leq d_{l+1}\re\langle Hv,v\rangle,
+        \label{eq:nachtergaele_c1_form}\\
+        \gamma_{l+1}\lVert(I-Q_n)v\rVert^2
+         & \leq\re\langle H_nv,v\rangle,
+        \label{eq:nachtergaele_c2_form}
+    \end{align}
+    and the literal condition C3,
+    \begin{align}
+        \lVert Q_nE_n\rVert
+         & \leq\epsilon_l,
+        & 0\leq\epsilon_l
+         & <\frac{1}{\sqrt{l+1}}.
+        \label{eq:nachtergaele_c3_form}
+    \end{align}
+    If $\gamma_{l+1}>0$, $d_{l+1}>0$, and
+    $v\perp\operatorname{ran}(G_N)$, then
+    \begin{align}
+        \re\langle Hv,v\rangle
+         & \geq
+        \frac{\gamma_{l+1}}{d_{l+1}}
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert^2.
+        \label{eq:nachtergaele_c1_c3_energy_estimate}
+    \end{align}
+    This is Theorem~2.1(i) of
+    \cite{Nachtergaele1996Spectral}. The indices are exactly
+    $\gamma_{l+1}$, $d_{l+1}$, and $\epsilon_l$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:truncated-martingale-difference-reconstruction,
+        thm:martingale-difference-pythagorean-identity,
+        thm:outside-window-martingale-cancellation,
+        lem:nachtergaele_weighted_inner_product,
+        lem:nachtergaele_c3_projection_composition,
+        thm:moving_window_sum_le}
+    The martingale resolution gives
+    \begin{align}
+        v
+         & =\sum_{n=l}^{N-1}E_nv,
+        & \lVert v\rVert^2
+         & =\sum_{n=l}^{N-1}\lVert E_nv\rVert^2.
+    \end{align}
+    Outside-window cancellation reduces the second term in the identity
+    labelled \textup{Enpsi} to $m\in[n-l,n]$. Apply the weighted
+    inner-product estimate with positive parameters $c_1,c_2$ and then use
+    C2 and C3. Summing over $n$ and applying the moving-window count gives
+    \begin{align}
+        \left(2-c_1-\frac{\epsilon_l^2}{c_2}-(l+1)c_2\right)
+        \lVert v\rVert^2
+         & \leq
+        \frac{d_{l+1}}{c_1\gamma_{l+1}}
+        \re\langle Hv,v\rangle.
+    \end{align}
+    For $\epsilon_l>0$, take
+    \begin{align}
+        c_1
+         & =1-\epsilon_l\sqrt{l+1},
+        & c_2
+         & =\frac{\epsilon_l}{\sqrt{l+1}}.
+    \end{align}
+    These values reduce the preceding inequality to
+    Equation~\eqref{eq:nachtergaele_c1_c3_energy_estimate}. If
+    $\epsilon_l=0$, then $c_2=0$ is not an admissible weighted parameter.
+    Instead, C3 gives $Q_nE_n=0$, so the second inner product in
+    \textup{Enpsi} vanishes; applying only the first weighted estimate with
+    $c_1=1$ yields the same formula.
+\end{proof}
+
+\begin{corollary}[Norm gap from the C1--C3 estimate]
+    \label{cor:nachtergaele_c1_c3_norm_gap}
+    \lean{FrustrationFree.spectralGap_of_energy_lower_bound_of_finiteDimensional}
+    \lean{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3}
+    \leanok
+    \uses{thm:nachtergaele_c1_c3_energy_estimate,
+        lem:quadratic_form_to_norm_bound}
+    In the setting of
+    Theorem~\ref{thm:nachtergaele_c1_c3_energy_estimate}, suppose that $H$ is
+    positive and $\operatorname{ran}(G_N)=\ker H$. Then every
+    $v\in(\ker H)^\perp$ satisfies
+    \begin{align}
+        \frac{\gamma_{l+1}}{d_{l+1}}
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
+         & \leq\lVert Hv\rVert.
+        \label{eq:nachtergaele_c1_c3_norm_gap}
+    \end{align}
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:nachtergaele_c1_c3_energy_estimate,
+        lem:quadratic_form_to_norm_bound}
+    Diagonalize the positive operator $H$. Applying
+    Theorem~\ref{thm:nachtergaele_c1_c3_energy_estimate} to every eigenvector
+    with nonzero eigenvalue shows that its eigenvalue is at least the
+    coefficient in Equation~\eqref{eq:nachtergaele_c1_c3_norm_gap}. Hence
+    $H^2\geq\gamma H$ with this coefficient. The finite-dimensional
+    quadratic-form criterion gives the stated norm lower bound on
+    $(\ker H)^\perp$.
+\end{proof}
+
 \begin{theorem}[Martingale criterion for a finite family of projections]
     \label{thm:martingale_criterion}
     \lean{MPSTensor.spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional}
@@ -1167,8 +1296,9 @@ source obtains a gap from its three stated hypotheses. Every compatible
 Hamiltonian below is positive because it is a sum of orthogonal projections.
 In addition to the compatible Hamiltonian and its zero-energy space, the
 statements below verify condition C1 and the unit norm lower bound at the
-full-window volume $N=L$. They give no gap estimate for $N>L$ and no periodic
-coercivity.
+full-window volume $N=L$. Together with fixed-ambient instances of C2 and C3,
+Theorem~\ref{thm:nachtergaele_c1_c3_energy_estimate} gives the gap for $N>L$.
+The statements in this subsection do not assume periodic coercivity.
 
 \begin{definition}[Compatible open-chain parent Hamiltonian]
     \label{def:open_parent_hamiltonian_es}
