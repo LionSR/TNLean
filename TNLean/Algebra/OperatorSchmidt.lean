@@ -13,7 +13,7 @@ This module contains the finite-dimensional linear algebra used when the inverse
 of an injective tensor is applied to two equal contractions. A dual coordinate
 functional isolates one member of a linearly independent family. Applying these
 functionals gives a single gauge matrix on both exposed parts of the contraction;
-comparison with the reverse relation proves that this matrix is invertible.
+comparison with the reverse relation gives the identity matrix.
 
 ## Main results
 
@@ -21,7 +21,7 @@ comparison with the reverse relation proves that this matrix is invertible.
   linearly independent family.
 * `gauge_eq1` and `gauge_eq2`: equal bipartite contractions are related on both
   sides by the same gauge matrix.
-* `gauge_inv`: the forward and reverse gauge matrices are mutually inverse.
+* `gauge_inv`: the forward gauge followed by the reverse gauge is the identity.
 
 The declarations retain their existing `TNLean.PEPS` names because they are
 used by the PEPS comparison, although their statements do not involve a PEPS
@@ -152,8 +152,8 @@ theorem gauge_eq2
   rw [happ]
 
 /-- Invertibility of the gauge. If `a = g·b` and `b = g'·a` with the family `a`
-linearly independent, then the gauge matrices are mutually inverse: as matrices
-indexed by the common index, `∑_ν g μ ν * g' ν κ = δ_{μκ}`.
+linearly independent, then the forward gauge followed by the reverse gauge is
+the identity: `∑_ν g μ ν * g' ν κ = δ_{μκ}`.
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines
 1157--1204 of `Papers/1804.04964/paper_normal.tex`. -/
