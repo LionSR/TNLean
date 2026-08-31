@@ -329,6 +329,84 @@
     $m\in[n-l,n]$.
 \end{proof}
 
+% Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
+% proof of Theorem 2.1(i), lines 1178--1259.
+\begin{lemma}[Right-spectator extension]
+    \label{lem:right-spectator-extension}
+    \lean{ContinuousLinearMap.rightFiber,
+        ContinuousLinearMap.rightFiberwiseMap,
+        ContinuousLinearMap.rightFiberwiseMap_comp,
+        ContinuousLinearMap.norm_rightFiberwiseMap_le,
+        ContinuousLinearMap.norm_rightFiberwiseMap}
+    \leanok
+    Let $T$ be an operator on a finite-dimensional active Hilbert space and let
+    $S$ be a finite set of right-spectator configurations.  The operator
+    $T^{\oplus S}$, defined by applying $T$ independently at every $s\in S$,
+    satisfies
+    \begin{align}
+        (T^{\oplus S})(U^{\oplus S}) & =(TU)^{\oplus S}.
+    \end{align}
+    Moreover,
+    \begin{align}
+        \lVert T^{\oplus S}\rVert & \leq\lVert T\rVert.
+    \end{align}
+    If $S$ is nonempty, then the second relation is an equality.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The squared norm splits as a sum over spectator fibers:
+    \begin{align}
+        \lVert T^{\oplus S}v\rVert^2
+         & =\sum_{s\in S}\lVert Tv_s\rVert^2
+        \leq\lVert T\rVert^2\sum_{s\in S}\lVert v_s\rVert^2.
+    \end{align}
+    For nonempty $S$, a vector supported on one spectator fiber gives the
+    reverse inequality between the two operator norms.  Composition is checked
+    independently on each fiber.
+\end{proof}
+
+\begin{theorem}[C3 boundary indices in the fixed final volume]
+    \label{thm:fixed-volume-c3-boundary-indices}
+    \lean{MPSTensor.openPrefixParentHamiltonianES_eq_zero_of_lt,
+        MPSTensor.openPrefixGroundProjectionES_eq_one_of_lt,
+        MPSTensor.fixedAmbient_martingaleDifference_eq_zero_of_lt,
+        MPSTensor.openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint,
+        MPSTensor.openIntervalGroundProjectionES_at_endpoint,
+        MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections}
+    Take interaction length $L=l+1$ and define
+    $E_n=G_n^{(N)}-G_{n+1}^{(N)}$.  Then the two boundary ranges in the
+    fixed $N$-site space are explicit:
+    \begin{align}
+        n<l & \Longrightarrow E_n=0.
+    \end{align}
+    At the remaining boundary index,
+    \begin{align}
+        Q_lE_l & =0.
+    \end{align}
+    At $n=l$, both $Q_l$ and $G_{l+1}^{(N)}$ are the kernel projection of the
+    unique interaction on $[0,l+1)$.  Thus
+    \begin{align}
+        E_l & =\Id-G_{l+1}^{(N)}.
+    \end{align}
+    Hence
+    \begin{align}
+        Q_lE_l & =G_{l+1}^{(N)}(\Id-G_{l+1}^{(N)})=0.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fixed-volume-prefix-ground-projections}
+    If $n<l$, neither prefix $[0,n)$ nor $[0,n+1)$ contains a full
+    length-$(l+1)$ interaction, so both ground projections are the identity.
+    At $n=l$, the next prefix and the interval $[0,l+1)$ contain exactly the
+    same single interaction.  Idempotence of its kernel projection proves the
+    second identity.
+\end{proof}
+
 \subsection{Spectator-indexed boundary maps}\label{subsec:spectator_boundary_maps}
 
 The tail and left boundary maps embed virtual-space data into a common

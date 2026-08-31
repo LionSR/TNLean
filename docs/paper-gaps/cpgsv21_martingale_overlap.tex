@@ -305,6 +305,47 @@ length. Exact blocked three-site identities then connect the three-block defect
 to the local terms of the blocked tensor. No excitation-compression estimate
 is used.
 
+\subsection{Fixed-final-volume C3 comparison}
+
+Nachtergaele's proof of Theorem~2.1(i) sums all martingale differences in one
+fixed final-volume Hilbert space.  For interaction length $l+1$, the formal
+prefix filtration now gives the two boundary cases exactly.  If $n<l$, both
+adjacent prefixes contain no local interaction and hence $E_n=0$.  At $n=l$,
+the local interval and the next prefix contain the same single interaction, so
+egin{align}
+    Q_lE_l
+    &=G_{l+1}(\Id-G_{l+1})=0.
+    \label{eq:cpgsv21_martingale_overlap_fixed_volume_endpoint}
+\end{align}
+The formal anchors are
+\leanid{MPSTensor.fixedAmbient_martingaleDifference_eq_zero_of_lt} and
+\leanid{MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint}.
+No assumption $0<\varepsilon_l$ is needed for these identities.
+
+For $n>l$, put $K=n-l$.  The local C3 theorem acts on the $(n+1)$-site space,
+whereas the prefix and interval projectors in the martingale sum act on the
+fixed $N$-site space.  The general direct-sum map
+\leanid{ContinuousLinearMap.rightFiberwiseMap} applies an operator independently
+at every right-spectator configuration.  It preserves composition and does not
+increase operator norm; when the spectator set is nonempty, its norm is exactly
+the original norm.
+
+The remaining comparison is an exact intertwining statement for the concrete
+operators.  One must prove that the fixed-volume prefix kernel projection and
+local-interval kernel projection are the right-spectator sums of the
+corresponding $(n+1)$-site open-chain projectors.  This does not follow by
+definitional equality: the fixed-volume operators are kernels of sums of
+\leanid{MPSTensor.localTermES}, while the local theorem uses the MPS subspaces
+\leanid{MPSTensor.openChainLeftGroundSpaceES} and
+\leanid{MPSTensor.openChainTailGroundSpaceES}.  The existing cyclic-window
+configuration decomposition in
+\path{TNLean/MPS/ParentHamiltonian/LocalSupportTransport.lean} is private and
+specialized to a three-site window, so it cannot establish this arbitrary
+prefix identity.  Until an arbitrary-window configuration equivalence and its
+local-term intertwining theorem are proved, the fixed-final-volume estimate
+$\lVert Q_nE_n\rVert\leq\varepsilon_l$ for $n>l$ remains open.  No periodic
+coercivity statement can replace this missing operator identification.
+
 \subsection{Three-site to cyclic transport}
 
 Let $h_0,h_1$ be adjacent two-site terms on a three-site Hilbert space. Assume
