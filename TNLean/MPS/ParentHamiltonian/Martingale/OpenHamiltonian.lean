@@ -115,6 +115,80 @@ theorem openParentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
   rw [openParentHamiltonianES]
   exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1
 
+/-- The parent Hamiltonian on the last \(l\) sites of the prefix of length \(n\),
+embedded in an \(N\)-site open chain.
+
+Its summands have starts \(i\) satisfying \(n-l≤i\) and \(i+L≤n\). Thus their
+length-\(L\) windows lie in the nonwrapping interval \([n-l,n)\). This is
+\(H_{\Lambda_n\setminus\Lambda_{n-l}}\) for \(\Lambda_n=[0,n)\) in
+Nachtergaele, arXiv:cond-mat/9410110, condition C1 (lines 1030--1041). -/
+noncomputable def openSuffixParentHamiltonianES (A : MPSTensor d D)
+    (L l N n : ℕ) :
+    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+  ∑ i ∈ Finset.univ.filter fun i : NonwrappingStart L N =>
+    n - l ≤ i.1.val ∧ i.1.val + L ≤ n,
+    localTermES A L i.1
+
+/-- Nachtergaele's condition C1 for the compatible nonwrapping open parent
+Hamiltonian.
+
+For the prefixes \(\Lambda_n=[0,n)\), each range-\(L\) local term belongs to at
+most \(l-L+1\) of the suffix intervals
+\(\Lambda_n\setminus\Lambda_{n-l}\), \(l≤n≤N\). Therefore
+\[
+0\leq\sum_{n=l}^N H_{\Lambda_n\setminus\Lambda_{n-l}}
+  \leq (l-L+1)H_{\Lambda_N}.
+\]
+The source gives \(d_l=pl-r+1\) for \(\Lambda_n=[1,pn]\). The indexing of
+`openParentHamiltonianES` has \(p=1\) and \(r=L\), so its actual counting
+constant is \(d_l=l-L+1\).
+
+This is condition C1 in Nachtergaele, arXiv:cond-mat/9410110, lines 1030--1041. -/
+theorem openParentHamiltonianES_C1 (A : MPSTensor d D) {L l N : ℕ}
+    (hLl : L ≤ l) :
+    0 ≤ ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ∧
+      ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ≤
+        ((l - L + 1 : ℕ) : ℂ) • openParentHamiltonianES A L N := by
+  let windows := fun i : NonwrappingStart L N =>
+    (Finset.Icc l N).filter fun n => n - l ≤ i.1.val ∧ i.1.val + L ≤ n
+  have hwindows_card (i : NonwrappingStart L N) :
+      (windows i).card ≤ l - L + 1 := by
+    calc
+      (windows i).card ≤ (Finset.Icc (i.1.val + L) (i.1.val + l)).card := by
+        apply Finset.card_le_card
+        intro n hn
+        simp only [windows, Finset.mem_filter, Finset.mem_Icc] at hn
+        simp only [Finset.mem_Icc]
+        omega
+      _ = l - L + 1 := by
+        rw [Nat.card_Icc]
+        omega
+  have hsum :
+      ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n =
+        ∑ i : NonwrappingStart L N,
+          ((windows i).card : ℂ) • localTermES A L i.1 := by
+    simp_rw [openSuffixParentHamiltonianES]
+    rw [Finset.sum_comm'
+      (s := Finset.Icc l N)
+      (t := fun n => Finset.univ.filter fun i : NonwrappingStart L N =>
+        n - l ≤ i.1.val ∧ i.1.val + L ≤ n)
+      (t' := Finset.univ) (s' := windows) (fun n i => by simp [windows])]
+    apply Finset.sum_congr rfl
+    intro i _
+    simp only [windows, Finset.sum_const, Nat.cast_smul_eq_nsmul]
+  constructor
+  · rw [LinearMap.nonneg_iff_isPositive]
+    refine LinearMap.isPositive_sum _ fun n _ => ?_
+    rw [openSuffixParentHamiltonianES]
+    exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1
+  · rw [hsum, openParentHamiltonianES, Finset.smul_sum]
+    apply Finset.sum_le_sum
+    intro i _
+    simp only [Nat.cast_smul_eq_nsmul]
+    apply nsmul_le_nsmul_left
+    · exact (LinearMap.nonneg_iff_isPositive _).mpr (localTermES_isPositive A L i.1)
+    · exact hwindows_card i
+
 /-- If the open-chain Hamiltonian annihilates a vector, then every individual
 nonwrapping local term annihilates it.
 
