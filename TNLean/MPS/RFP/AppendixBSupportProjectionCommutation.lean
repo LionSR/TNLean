@@ -435,31 +435,6 @@ theorem AppendixBStructuralData.twoSiteBasicSupportProjection_commute_lifts
   rw [← hStruct.transportedTwoSiteBondProjection_eq_support]
   exact hStruct.transportedTwoSiteBondProjection_commute_lifts
 
-/-- Commutation of the two lifted basic-support projectors implies the
-overlapping two-site commutation condition for their complementary Appendix B
-parent interactions.
-
-Source: arXiv:1606.00608, parent construction, lines 511--524, equations
-(3.17)--(3.18), lines 564--578, and Definition D.2, lines 2205--2218. -/
-theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_support_commute
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    (hcomm :
-      leftPairLift hStruct.twoSiteBasicSupportProjection *
-          rightPairLift hStruct.twoSiteBasicSupportProjection =
-        rightPairLift hStruct.twoSiteBasicSupportProjection *
-          leftPairLift hStruct.twoSiteBasicSupportProjection) :
-    HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
-      hStruct.appendixBQXBOnCoeffSpace := by
-  let hSupport : HasOverlappingTwoSiteCommutation (d := d)
-      hStruct.twoSiteBasicSupportProjection hStruct.twoSiteBasicSupportProjection :=
-    { left_idempotent := hStruct.twoSiteBasicSupportProjection_idempotent
-      right_idempotent := hStruct.twoSiteBasicSupportProjection_idempotent
-      commute_lifts := hcomm }
-  have hComplement := hSupport.complement
-  simpa [hStruct.twoSiteBasicSupportProjection_eq_complement,
-    AppendixBStructuralData.appendixBQAXOnCoeffSpace,
-    AppendixBStructuralData.appendixBQXBOnCoeffSpace] using hComplement
-
 /-- The two overlapping Appendix B parent interactions commute on three sites.
 
 Source: arXiv:1606.00608, parent-space construction, lines 511--524,
@@ -468,9 +443,16 @@ equations (3.16)--(3.18), lines 543--578, and Definition D.2, lines
 theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
-      hStruct.appendixBQXBOnCoeffSpace :=
-  hStruct.hasOverlappingTwoSiteCommutation_of_support_commute
-    hStruct.twoSiteBasicSupportProjection_commute_lifts
+      hStruct.appendixBQXBOnCoeffSpace := by
+  let hSupport : HasOverlappingTwoSiteCommutation (d := d)
+      hStruct.twoSiteBasicSupportProjection hStruct.twoSiteBasicSupportProjection :=
+    { left_idempotent := hStruct.twoSiteBasicSupportProjection_idempotent
+      right_idempotent := hStruct.twoSiteBasicSupportProjection_idempotent
+      commute_lifts := hStruct.twoSiteBasicSupportProjection_commute_lifts }
+  have hComplement := hSupport.complement
+  simpa [hStruct.twoSiteBasicSupportProjection_eq_complement,
+    AppendixBStructuralData.appendixBQAXOnCoeffSpace,
+    AppendixBStructuralData.appendixBQXBOnCoeffSpace] using hComplement
 
 
 end MPSTensor
