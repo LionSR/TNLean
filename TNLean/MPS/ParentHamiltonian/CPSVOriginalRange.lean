@@ -13,28 +13,42 @@ import TNLean.MPS.SharedInfra.CoisometryGauge
 /-!
 # Original-lattice parent-Hamiltonian range for CPSV canonical form
 
-A tensor in the literal canonical form of
-Cirac--Pérez-García--Schuch--Verstraete has an original-lattice parent
-Hamiltonian whose interaction range is at most \(3D^5\).  The ground space on
-every periodic chain longer than that range is spanned by the matrix product
-vectors of a basis of normal tensors.
+For a tensor in the literal canonical form of
+Cirac--Pérez-García--Schuch--Verstraete over a nontrivial physical alphabet,
+there is an original-lattice parent Hamiltonian of interaction range at most
+\(3D^5\).  Its local interaction is nonzero, and on every longer periodic
+chain its kernel is spanned by the matrix product vectors of a basis of normal
+tensors.
 
 The proof uses the construction of Pérez-García--Verstraete--Wolf--Cirac,
 Theorem 12.  Its printed global-cut argument proves the kernel identity at a
 range \(R\) when \(N\geq R+L_0\).  We absorb this finite-size window into the
-interaction range by taking
+preliminary interaction range by taking
 \[
-  L=3(g-1)(D^4+1)+D^4.
+  L_{\mathrm{aux}}=3(g-1)(D^4+1)+D^4.
 \]
-For \(N>L\), the theorem applies at
+For \(N>L_{\mathrm{aux}}\), the theorem applies at
 \(R=3(g-1)(D^4+1)+1\), and antitonicity of the cyclic chain space transports
-the upper inclusion from range \(R\) to range \(L\).  The usual
-frustration-free inclusion supplies the reverse containment.
+the upper inclusion from range \(R\) to range \(L_{\mathrm{aux}}\).  The usual
+frustration-free inclusion supplies the reverse containment.  Enlarging once
+more to the uniform range \(L=3D^5\) preserves the equality and gives
+\(D^2<d^L\).  For one BNT representative, the proof uses the normal-tensor
+intersection and closure property reviewed in arXiv:2011.12127, Section IV.C.
+The case of no BNT representatives is a formal boundary extension of these
+source arguments.
 
 The predicate `HasParentHamiltonianGroundSpaceSpanning` records only the
 ground-space spanning clause of arXiv:1606.00608, Definition 3.9, lines
-522--524.  The preceding condition \(d^L>D^2\), which makes the local
-orthogonal complement nontrivial, is a separate boundary of that predicate.
+522--524.  The theorem separately proves the preceding condition
+\(d^L>D^2\), which makes the local orthogonal complement nontrivial, under the
+necessary physical-spin boundary \(1<d\).
+
+**Local fix (physical-dimension boundary):** The parent-Hamiltonian claim in
+arXiv:1606.00608, line 527, leaves implicit the feasibility condition already
+imposed at line 515.  When \(D>0\), the inequality \(D^2<d^L\) is possible for
+some positive \(L\) exactly when \(1<d\).  The main theorem states this
+boundary explicitly and proves the inequality for its witness.  See
+`docs/paper-gaps/cpsv16_parent_hamiltonian_range_short_ring.tex`.
 
 ## Main result
 
@@ -44,6 +58,7 @@ orthogonal complement nontrivial, is a separate boundary of that predicate.
 
 * arXiv:1606.00608, Definition 3.9 and line 527, source lines 511--527.
 * arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
+* arXiv:2011.12127, Section IV.C, source lines 2078--2090.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -162,6 +177,35 @@ private theorem groundSpace_cast_bond_dim
     groundSpace (cast (congr_arg (MPSTensor s) h) A) L = groundSpace A L := by
   subst D₂
   rfl
+
+/-- Enlarging the interaction range preserves the ground-space spanning
+equation for a block-diagonal tensor with nonzero weights.
+
+This is a derived monotonicity consequence of the parent-Hamiltonian
+construction in arXiv:1606.00608, Definition 3.9, lines 511--525; it is not a
+separate assertion of the paper. -/
+private theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
+    {s r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (C : (j : Fin r) → MPSTensor s (dim j))
+    (hμ : ∀ j, μ j ≠ 0) {L L' : ℕ}
+    (hSpan : HasParentHamiltonianGroundSpaceSpanning
+      (toTensorFromBlocks (d := s) μ C) L C)
+    (hLL' : L ≤ L') :
+    HasParentHamiltonianGroundSpaceSpanning
+      (toTensorFromBlocks (d := s) μ C) L' C := by
+  rw [hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan
+    μ C hμ] at hSpan ⊢
+  intro N hN ψ hψ
+  have hNpos : 0 < N := by omega
+  have hL'N : L' ≤ N := by omega
+  have hLN : L ≤ N := hLL'.trans hL'N
+  apply hSpan N (lt_of_le_of_lt hLL' hN)
+  rw [ker_parentHamiltonian_eq_chainGroundSpace
+    (toTensorFromBlocks (d := s) μ C) hNpos hLN]
+  rw [ker_parentHamiltonian_eq_chainGroundSpace
+    (toTensorFromBlocks (d := s) μ C) hNpos hL'N] at hψ
+  exact chainGroundSpace_le_chainGroundSpace_of_le
+    (toTensorFromBlocks (d := s) μ C) hNpos hLL' hL'N hψ
 
 /-- The positive-length local MPS space of literal CPSV canonical-form data is
 the sum of the local spaces of its distinct normal representatives.
@@ -314,30 +358,52 @@ private theorem pow_four_add_one_le_three_mul_pow_five
     _ ≤ (3 * K) * K ^ 4 := Nat.mul_le_mul_right (K ^ 4) (by omega)
     _ = 3 * K ^ 5 := by ring
 
+/-- A nontrivial physical alphabet has enough words at the uniform CPSV16
+range to leave a nonzero local orthogonal complement. -/
+private theorem sq_lt_pow_three_mul_pow_five
+    {s K : ℕ} (hs : 1 < s) (hK : 0 < K) :
+    K ^ 2 < s ^ (3 * K ^ 5) := by
+  have hBinary : K ^ 2 < 2 ^ (2 * K) := by
+    have hStrict : K ^ 2 < 2 * K ^ 2 + 1 := by omega
+    exact hStrict.trans_le (Nat.two_mul_sq_add_one_le_two_pow_two_mul K)
+  have hBase : 2 ^ (2 * K) ≤ s ^ (2 * K) :=
+    pow_le_pow_left' hs.le (2 * K)
+  have hKlePow : K ≤ K ^ 5 := by
+    simpa using pow_le_pow_right' (a := K) hK (by omega : 1 ≤ 5)
+  have hExp : 2 * K ≤ 3 * K ^ 5 := by omega
+  have hExponent : s ^ (2 * K) ≤ s ^ (3 * K ^ 5) :=
+    pow_le_pow_right' (a := s) (by omega) hExp
+  exact hBinary.trans_le (hBase.trans hExponent)
+
 /-- **CPSV16 original-lattice parent-Hamiltonian range bound.**
 
-For a tensor in literal CPSV canonical form, there are a basis of normal
-tensors and a positive interaction range \(L\leq 3D^5\) such that, on every
-original periodic chain of length \(N>L\), the parent-Hamiltonian kernel is
-exactly the span of the BNT matrix product vectors.
+For a tensor in literal CPSV canonical form over a nontrivial physical
+alphabet, there are a basis of normal tensors and a positive interaction
+range \(L\leq 3D^5\) with \(D^2<d^L\) such that, on every original periodic
+chain of length \(N>L\), the parent-Hamiltonian kernel is exactly the span of
+the BNT matrix product vectors.
 
 Source: arXiv:1606.00608, Definition 3.9 and the first sentence of line 527,
-source lines 511--527.  The short-ring completion uses the theorem cited there,
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
+source lines 511--527.  For at least two BNT representatives, the short-ring
+completion uses the theorem cited there, arXiv:quant-ph/0608197, Theorem 12,
+proof lines 1424--1456.  For one representative, it uses the normal-tensor
+intersection and closure property reviewed in arXiv:2011.12127, Section IV.C,
+source lines 2078--2090.  The no-representative case is a formal boundary
+extension of these source arguments.
 
 `HasParentHamiltonianGroundSpaceSpanning` unfolds precisely to Definition
-3.9's spanning clause: the kernel/BNT-span equality for every \(N>L\).  It
-does not include the preceding construction condition \(d^L>D^2\), and hence
-does not by itself assert that the local orthogonal-complement projector is
-nonzero.  That condition is a separate formal boundary, not an additional
-hypothesis of the spanning theorem.  The typeclass `[NeZero D]` records the
-corresponding nonzero bond-dimension boundary. -/
+3.9's spanning clause: the kernel/BNT-span equality for every \(N>L\).  The
+separate conclusion \(D^2<d^L\) supplies the preceding construction condition
+from source line 515 and therefore makes the local orthogonal-complement
+projector nonzero.  The hypotheses `[NeZero D]` and `1 < d` record the
+positive bond-dimension and nontrivial physical-spin boundaries; Perron-gauge
+and short-ring data are derived internally. -/
 theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
-    {A : MPSTensor d D} [NeZero D] (hA : IsCPSVCanonicalForm A) :
+    {A : MPSTensor d D} [NeZero D] (hd : 1 < d) (hA : IsCPSVCanonicalForm A) :
     ∃ g : ℕ, ∃ dim : Fin g → ℕ,
       ∃ B : (j : Fin g) → MPSTensor d (dim j), ∃ L : ℕ,
         IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) ∧
-        0 < L ∧ L ≤ 3 * D ^ 5 ∧
+        0 < L ∧ D ^ 2 < d ^ L ∧ L ≤ 3 * D ^ 5 ∧
         HasParentHamiltonianGroundSpaceSpanning A L B := by
   classical
   let data := Classical.choice hA
@@ -350,182 +416,187 @@ theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
     simpa [dim, B] using ref.representativesBNT
   have hDimSum : ∑ j, dim j ≤ D := by
     simpa [dim] using data.sum_representative_dim_le
-  by_cases hd : d = 0
-  · subst d
-    refine ⟨data.phaseClasses.g, dim, B, 1, hBNT, by omega, ?_, ?_⟩
-    · have hD5 : 0 < D ^ 5 := Nat.pow_pos (NeZero.pos D)
-      omega
-    · intro N hN
-      ext ψ
-      have hψ : ψ = 0 := by
-        funext σ
-        exact Fin.elim0 (σ ⟨0, by omega⟩)
-      subst ψ
-      simp
-  · let : NeZero d := ⟨hd⟩
-    let : ∀ j : Fin data.phaseClasses.g, NeZero (dim j) := fun j =>
-      ⟨(hBNT.blocks_dim_pos j).ne'⟩
-    choose C Λ hGauge hΛ hUnital hDualFixed using fun j =>
-      (hBNT.blocks_normal j).exists_pgvwc07_unital_dualFixedPoint_gauge
-    have hCBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, C j⟩) :=
-      hBNT.of_family_gaugeEquiv hGauge
-    have hDimLe : ∀ j, dim j ≤ D := by
-      intro j
-      exact (Finset.single_le_sum (fun k _ => Nat.zero_le (dim k))
-        (Finset.mem_univ j)).trans hDimSum
-    have hCountLe : data.phaseClasses.g ≤ D := by
-      calc
-        data.phaseClasses.g = ∑ _j : Fin data.phaseClasses.g, 1 := by simp
-        _ ≤ ∑ j : Fin data.phaseClasses.g, dim j :=
-          Finset.sum_le_sum fun j _ => hBNT.blocks_dim_pos j
-        _ ≤ D := hDimSum
-    have hNormal : ∀ j, IsNormalTensor (C j) := hCBNT.blocks_normal
-    have hIrr : HasIrreducibleBlocks (d := d) C :=
-      HasIrreducibleBlocks.ofForall fun j => (hNormal j).no_invariant_proj
-    have hBlocks : BlocksNotGaugePhaseEquiv (d := d) C :=
-      hCBNT.blocks_not_gaugePhaseEquiv
-    have hBlk : ∀ j, Kraus.IsNBlkInjective (C j) (D ^ 4) := fun j =>
-      (hNormal j).isNBlkInjective_cap_pow_four (hDimLe j)
-    by_cases hCountZero : data.phaseClasses.g = 0
-    · have hOne : WordTupleSpanTop C 1 := by
-        letI : IsEmpty (Fin data.phaseClasses.g) := by
-          rw [hCountZero]
-          infer_instance
-        unfold WordTupleSpanTop
-        apply top_unique
-        intro X _
-        have hX : X = 0 := by
-          funext j
-          exact isEmptyElim j
-        rw [hX]
-        exact Submodule.zero_mem _
-      have hDirect :
-          HasParentHamiltonianGroundSpaceSpanning
-            (toTensorFromBlocks (d := d) (fun _ => 1) C) 2 C :=
-        hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_wordTupleSpanTop_one
-          (fun _ => 1) C (by simp) hOne
-      have hLocal :
-          groundSpace A 2 =
-            groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) 2 := by
-        simpa [B, dim] using
-          data.groundSpace_eq_representativeGaugeSum ref hGauge (by omega : 0 < 2)
+  let Lmax := 3 * D ^ 5
+  have hLmaxPos : 0 < Lmax := by
+    dsimp [Lmax]
+    exact Nat.mul_pos (by omega) (Nat.pow_pos (NeZero.pos D))
+  have hLmaxDim : D ^ 2 < d ^ Lmax := by
+    simpa [Lmax] using
+      sq_lt_pow_three_mul_pow_five hd (NeZero.pos D)
+  let : NeZero d := ⟨by omega⟩
+  let : ∀ j : Fin data.phaseClasses.g, NeZero (dim j) := fun j =>
+    ⟨(hBNT.blocks_dim_pos j).ne'⟩
+  choose C Λ hGauge hΛ hUnital hDualFixed using fun j =>
+    (hBNT.blocks_normal j).exists_pgvwc07_unital_dualFixedPoint_gauge
+  have hCBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, C j⟩) :=
+    hBNT.of_family_gaugeEquiv hGauge
+  have hDimLe : ∀ j, dim j ≤ D := by
+    intro j
+    exact (Finset.single_le_sum (fun k _ => Nat.zero_le (dim k))
+      (Finset.mem_univ j)).trans hDimSum
+  have hCountLe : data.phaseClasses.g ≤ D := by
+    calc
+      data.phaseClasses.g = ∑ _j : Fin data.phaseClasses.g, 1 := by simp
+      _ ≤ ∑ j : Fin data.phaseClasses.g, dim j :=
+        Finset.sum_le_sum fun j _ => hBNT.blocks_dim_pos j
+      _ ≤ D := hDimSum
+  have hNormal : ∀ j, IsNormalTensor (C j) := hCBNT.blocks_normal
+  have hIrr : HasIrreducibleBlocks (d := d) C :=
+    HasIrreducibleBlocks.ofForall fun j => (hNormal j).no_invariant_proj
+  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) C :=
+    hCBNT.blocks_not_gaugePhaseEquiv
+  have hBlk : ∀ j, Kraus.IsNBlkInjective (C j) (D ^ 4) := fun j =>
+    (hNormal j).isNBlkInjective_cap_pow_four (hDimLe j)
+  by_cases hCountZero : data.phaseClasses.g = 0
+  · have hOne : WordTupleSpanTop C 1 := by
+      letI : IsEmpty (Fin data.phaseClasses.g) := by
+        rw [hCountZero]
+        infer_instance
+      unfold WordTupleSpanTop
+      apply top_unique
+      intro X _
+      have hX : X = 0 := by
+        funext j
+        exact isEmptyElim j
+      rw [hX]
+      exact Submodule.zero_mem _
+    have hDirectSmall :
+        HasParentHamiltonianGroundSpaceSpanning
+          (toTensorFromBlocks (d := d) (fun _ => 1) C) 2 C :=
+      hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_wordTupleSpanTop_one
+        (fun _ => 1) C (by simp) hOne
+    have hTwoLe : 2 ≤ Lmax := by
+      dsimp [Lmax]
       have hD5 : 0 < D ^ 5 := Nat.pow_pos (NeZero.pos D)
-      exact ⟨data.phaseClasses.g, dim, C, 2, hCBNT, by omega, by omega,
-        hDirect.of_groundSpace_eq hLocal⟩
-    by_cases hCountOne : data.phaseClasses.g = 1
-    · let L₀ := D ^ 4
-      let L := L₀ + 1
-      let j₀ : Fin data.phaseClasses.g := ⟨0, by omega⟩
-      have hIndex (j : Fin data.phaseClasses.g) : j = j₀ := by
-        apply Fin.ext
-        omega
-      have hGroundSup (M : ℕ) :
-          (⨆ j : Fin data.phaseClasses.g, groundSpace (C j) M) =
-            groundSpace (C j₀) M := by
-        apply le_antisymm
-        · refine iSup_le fun j => ?_
-          rw [hIndex j]
-        · exact le_iSup (fun j : Fin data.phaseClasses.g => groundSpace (C j) M) j₀
-      have hChainSup (M : ℕ) :
-          (⨆ j : Fin data.phaseClasses.g, chainGroundSpace (C j) L M) =
-            chainGroundSpace (C j₀) L M := by
-        apply le_antisymm
-        · refine iSup_le fun j => ?_
-          rw [hIndex j]
-        · exact le_iSup
-            (fun j : Fin data.phaseClasses.g => chainGroundSpace (C j) L M) j₀
-      have hL₀ : 0 < L₀ := Nat.pow_pos (NeZero.pos D)
-      have hDirectLocal :
-          groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) L =
-            ⨆ j : Fin data.phaseClasses.g, groundSpace (C j) L :=
-        groundSpace_toTensorFromBlocks_eq_iSup (fun _ => 1) C (by simp) L
-      have hDirect :
-          HasParentHamiltonianGroundSpaceSpanning
-            (toTensorFromBlocks (d := d) (fun _ => 1) C) L C := by
-        apply
-          hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_chain
-            (fun _ => 1) C (by simp)
-        · intro N hN
-          have hLocalSingle :
-              groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) L =
-                groundSpace (C j₀) L :=
-            hDirectLocal.trans (hGroundSup L)
-          calc
-            chainGroundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) L N =
-                chainGroundSpace (C j₀) L N :=
-              chainGroundSpace_eq_of_groundSpace_eq hLocalSingle
-            _ = ⨆ j : Fin data.phaseClasses.g, chainGroundSpace (C j) L N := by
-              exact (hChainSup N).symm
-        · intro N hN j
-          exact chainGroundSpace_eq_mpvSubmodule_normal
-            (hNormal j).isNormal (hBlk j) hL₀ (by omega) (by omega) (by omega) (by omega)
-      have hLocal :
-          groundSpace A L =
-            groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) L := by
-        simpa [B, dim] using
-          data.groundSpace_eq_representativeGaugeSum ref hGauge (by omega : 0 < L)
-      exact ⟨data.phaseClasses.g, dim, C, L, hCBNT, by omega,
-        pow_four_add_one_le_three_mul_pow_five (NeZero.pos D),
-        hDirect.of_groundSpace_eq hLocal⟩
-    · have hCountTwo : 2 ≤ data.phaseClasses.g := by omega
-      let L₀ := D ^ 4
-      let base := (data.phaseClasses.g - 1) *
-        ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
-      let R := base + 1
-      let L := base + L₀
-      have hL₀ : 0 < L₀ := Nat.pow_pos (NeZero.pos D)
-      have hRleL : R ≤ L := by
+      omega
+    have hDirect :=
+      hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
+        (fun _ => 1) C (by simp) hDirectSmall hTwoLe
+    have hLocal :
+        groundSpace A Lmax =
+          groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) Lmax := by
+      simpa [B, dim] using
+        data.groundSpace_eq_representativeGaugeSum ref hGauge hLmaxPos
+    exact ⟨data.phaseClasses.g, dim, C, Lmax, hCBNT, hLmaxPos, hLmaxDim,
+      le_rfl, hDirect.of_groundSpace_eq hLocal⟩
+  by_cases hCountOne : data.phaseClasses.g = 1
+  · let L₀ := D ^ 4
+    let L := L₀ + 1
+    let j₀ : Fin data.phaseClasses.g := ⟨0, by omega⟩
+    have hIndex (j : Fin data.phaseClasses.g) : j = j₀ := by
+      apply Fin.ext
+      omega
+    have hGroundSup (M : ℕ) :
+        (⨆ j : Fin data.phaseClasses.g, groundSpace (C j) M) =
+          groundSpace (C j₀) M := by
+      apply le_antisymm
+      · refine iSup_le fun j => ?_
+        rw [hIndex j]
+      · exact le_iSup (fun j : Fin data.phaseClasses.g => groundSpace (C j) M) j₀
+    have hChainSup (M : ℕ) :
+        (⨆ j : Fin data.phaseClasses.g, chainGroundSpace (C j) L M) =
+          chainGroundSpace (C j₀) L M := by
+      apply le_antisymm
+      · refine iSup_le fun j => ?_
+        rw [hIndex j]
+      · exact le_iSup
+          (fun j : Fin data.phaseClasses.g => chainGroundSpace (C j) L M) j₀
+    have hL₀ : 0 < L₀ := Nat.pow_pos (NeZero.pos D)
+    have hDirectLocal :
+        groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) L =
+          ⨆ j : Fin data.phaseClasses.g, groundSpace (C j) L :=
+      groundSpace_toTensorFromBlocks_eq_iSup (fun _ => 1) C (by simp) L
+    have hDirect :
+        HasParentHamiltonianGroundSpaceSpanning
+          (toTensorFromBlocks (d := d) (fun _ => 1) C) L C := by
+      apply
+        hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_chain
+          (fun _ => 1) C (by simp)
+      · intro N hN
+        have hLocalSingle :
+            groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) L =
+              groundSpace (C j₀) L :=
+          hDirectLocal.trans (hGroundSup L)
+        calc
+          chainGroundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) L N =
+              chainGroundSpace (C j₀) L N :=
+            chainGroundSpace_eq_of_groundSpace_eq hLocalSingle
+          _ = ⨆ j : Fin data.phaseClasses.g, chainGroundSpace (C j) L N := by
+            exact (hChainSup N).symm
+      · intro N hN j
+        exact chainGroundSpace_eq_mpvSubmodule_normal
+          (hNormal j).isNormal (hBlk j) hL₀ (by omega) (by omega) (by omega) (by omega)
+    have hLBound : L ≤ Lmax := by
+      simpa [L, L₀, Lmax] using
+        pow_four_add_one_le_three_mul_pow_five (NeZero.pos D)
+    have hDirectMax :=
+      hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
+        (fun _ => 1) C (by simp) hDirect hLBound
+    have hLocal :
+        groundSpace A Lmax =
+          groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) Lmax := by
+      simpa [B, dim] using
+        data.groundSpace_eq_representativeGaugeSum ref hGauge hLmaxPos
+    exact ⟨data.phaseClasses.g, dim, C, Lmax, hCBNT, hLmaxPos, hLmaxDim,
+      le_rfl, hDirectMax.of_groundSpace_eq hLocal⟩
+  · have hCountTwo : 2 ≤ data.phaseClasses.g := by omega
+    let L₀ := D ^ 4
+    let base := (data.phaseClasses.g - 1) *
+      ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
+    let R := base + 1
+    let L := base + L₀
+    have hL₀ : 0 < L₀ := Nat.pow_pos (NeZero.pos D)
+    have hRleL : R ≤ L := by
+      dsimp [R, L]
+      omega
+    have hDirect :
+        HasParentHamiltonianGroundSpaceSpanning
+          (toTensorFromBlocks (d := d) (fun _ => 1) C) L C := by
+      rw [hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan
+        (fun _ => 1) C (by simp)]
+      intro N hN
+      have hNpos : 0 < N := by omega
+      have hLN : L ≤ N := by omega
+      have hRN : R ≤ N := hRleL.trans hLN
+      have hNlarge : R + L₀ ≤ N := by
         dsimp [R, L]
         omega
-      have hDirect :
-          HasParentHamiltonianGroundSpaceSpanning
-            (toTensorFromBlocks (d := d) (fun _ => 1) C) L C := by
-        rw [hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan
-          (fun _ => 1) C (by simp)]
-        intro N hN
-        have hNpos : 0 < N := by omega
-        have hLN : L ≤ N := by omega
-        have hRN : R ≤ N := hRleL.trans hLN
-        have hNlarge : R + L₀ ≤ N := by
-          dsimp [R, L]
-          omega
-        have hSmall :=
-          ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint
-            (fun _ => 1) C (by simp) hCountTwo hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀
-              hUnital (by simp [R, base]) hNlarge
-        intro ψ hψ
-        rw [← hSmall]
-        rw [ker_parentHamiltonian_eq_chainGroundSpace
-          (toTensorFromBlocks (d := d) (fun _ => 1) C) hNpos hLN] at hψ
-        rw [ker_parentHamiltonian_eq_chainGroundSpace
-          (toTensorFromBlocks (d := d) (fun _ => 1) C) hNpos hRN]
-        exact chainGroundSpace_le_chainGroundSpace_of_le
-          (toTensorFromBlocks (d := d) (fun _ => 1) C) hNpos hRleL hLN hψ
-      have hPredLe : data.phaseClasses.g - 1 ≤ D - 1 :=
-        Nat.sub_le_sub_right hCountLe 1
-      have hBaseLe : base ≤
-          (D - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) :=
-        Nat.mul_le_mul_right _ hPredLe
-      have hLBound : L ≤ 3 * D ^ 5 := by
-        calc
-          L ≤ (D - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + L₀ :=
-            Nat.add_le_add_right hBaseLe L₀
-          _ = 3 * ((D - 1) * (D ^ 4 + 1)) + D ^ 4 := by
-            simp only [L₀]
-            ring
-          _ ≤ 3 * D ^ 5 :=
-            three_mul_pred_mul_pow_four_add_one_add_pow_four_le_three_mul_pow_five
-              (NeZero.pos D)
-      have hLocal :
-          groundSpace A L =
-            groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) L := by
-        simpa [B, dim] using
-          data.groundSpace_eq_representativeGaugeSum ref hGauge (by
-            dsimp [L, base]
-            omega)
-      exact ⟨data.phaseClasses.g, dim, C, L, hCBNT, by
-          dsimp [L, base]
-          omega,
-        hLBound, hDirect.of_groundSpace_eq hLocal⟩
+      have hSmall :=
+        ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint
+          (fun _ => 1) C (by simp) hCountTwo hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀
+            hUnital (by simp [R, base]) hNlarge
+      intro ψ hψ
+      rw [← hSmall]
+      rw [ker_parentHamiltonian_eq_chainGroundSpace
+        (toTensorFromBlocks (d := d) (fun _ => 1) C) hNpos hLN] at hψ
+      rw [ker_parentHamiltonian_eq_chainGroundSpace
+        (toTensorFromBlocks (d := d) (fun _ => 1) C) hNpos hRN]
+      exact chainGroundSpace_le_chainGroundSpace_of_le
+        (toTensorFromBlocks (d := d) (fun _ => 1) C) hNpos hRleL hLN hψ
+    have hPredLe : data.phaseClasses.g - 1 ≤ D - 1 :=
+      Nat.sub_le_sub_right hCountLe 1
+    have hBaseLe : base ≤
+        (D - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) :=
+      Nat.mul_le_mul_right _ hPredLe
+    have hLBound : L ≤ 3 * D ^ 5 := by
+      calc
+        L ≤ (D - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + L₀ :=
+          Nat.add_le_add_right hBaseLe L₀
+        _ = 3 * ((D - 1) * (D ^ 4 + 1)) + D ^ 4 := by
+          simp only [L₀]
+          ring
+        _ ≤ 3 * D ^ 5 :=
+          three_mul_pred_mul_pow_four_add_one_add_pow_four_le_three_mul_pow_five
+            (NeZero.pos D)
+    have hDirectMax :=
+      hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
+        (fun _ => 1) C (by simp) hDirect (by simpa [Lmax] using hLBound)
+    have hLocal :
+        groundSpace A Lmax =
+          groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) Lmax := by
+      simpa [B, dim] using
+        data.groundSpace_eq_representativeGaugeSum ref hGauge hLmaxPos
+    exact ⟨data.phaseClasses.g, dim, C, Lmax, hCBNT, hLmaxPos, hLmaxDim,
+      le_rfl, hDirectMax.of_groundSpace_eq hLocal⟩
 
 end MPSTensor

@@ -12,13 +12,13 @@
 \providecommand{\gapnote}[2]{%
     \par\noindent\textbf{Verdict:} #1 (#2).\par}
 
-\title{Blocking and the Parent-Hamiltonian Range Claim in CPSV16}
+\title{Blocking and the Parent-Hamiltonian Range in CPSV16}
 \author{}
 \date{2026-08-31}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{original-lattice parent-Hamiltonian construction}{resolved for $1<d$}
 
 \section{The two lattice statements}
 
@@ -63,7 +63,9 @@ positive integer $L\leq3D^5$ such that
       &=\operatorname{span}\left\{V^{(N)}(A_j):1\leq j\leq g\right\}.
     \label{eq:cpsv16_parent_hamiltonian_range_original_statement}
 \end{align}
-This statement is also proved in the formal development.
+For $1<d$, the formal development proves this all-chain spanning clause
+simultaneously with $D^2<d^L$. Thus it also verifies that the local
+orthogonal-complement interaction is nonzero.
 \footnote{Formal declaration:
 \leanid{MPSTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning}
 in \doclink{TNLean/MPS/ParentHamiltonian/CPSVOriginalRange}.}
@@ -136,31 +138,53 @@ sum of representatives to $A$. Finally,
        \leq3D^5.
     \label{eq:cpsv16_parent_hamiltonian_range_bound}
 \end{align}
-For one representative, one may take $L=D^4+1$; for no representatives, one
-may take $L=2$. If the physical alphabet is empty, take $L=1$. These cases
-satisfy the same bound and remove every short-ring exception.
+For one representative, one may take $L_{\mathrm{aux}}=D^4+1$. The
+required periodic intersection and closure property for a normal tensor is
+the result reviewed in \cite[Section~IV.C]{Cirac2021Matrix}. If there are no
+representatives, one may take $L_{\mathrm{aux}}=2$; this is a formal boundary
+extension of the source argument, not an additional claim extracted from
+CPSV16 or PGVWC07.
 
-\section{The nontrivial-local-term boundary}
+To obtain one witness that also satisfies the nontriviality condition, enlarge
+each auxiliary range to
+\begin{align}
+    L&=3D^5.
+    \label{eq:cpsv16_parent_hamiltonian_range_uniform}
+\end{align}
+Cyclic-range antitonicity preserves the upper inclusion at the enlarged
+range, and the usual frustration-free inclusion supplies the reverse one.
+Therefore the spanning equality still holds for every $N>L$. If $D>0$ and
+$1<d$, then
+\begin{align}
+    D^2<2^{2D}\leq d^{2D}\leq d^{3D^5}=d^L.
+    \label{eq:cpsv16_parent_hamiltonian_range_nontriviality}
+\end{align}
+The same witness now satisfies $0<L$, $D^2<d^L$, and $L\leq3D^5$.
 
-The formal predicate used in
-(\ref{eq:cpsv16_parent_hamiltonian_range_original_statement}) is precisely
-the spanning clause of Definition~3.9: it quantifies the kernel equality over
-all $N>L$. It does not contain the preceding construction assumption
-$d^L>D^2$ from lines~511--515. Consequently, the formal theorem does not by
-itself assert that the orthogonal-complement projector $P_L^\perp$ is nonzero.
-This is a separate boundary of the construction, not an additional hypothesis
-of the spanning theorem. The positive ambient bond-dimension hypothesis
-$D>0$ is the legitimate boundary needed for the $3D^5$ estimate.
+\section{The physical-dimension boundary}
+
+The source first imposes $d^L>D^2$ and then defines the local interaction as
+the orthogonal complement of the local MPS space. For $D>0$, this condition is
+possible for some positive $L$ exactly when $1<d$: if $d\leq1$, then
+$d^L\leq1\leq D^2$, whereas the estimate
+(\ref{eq:cpsv16_parent_hamiltonian_range_nontriviality}) proves sufficiency
+when $1<d$. The source-faithful formal theorem therefore states this exact
+feasibility boundary explicitly and includes $D^2<d^L$ in its existential
+conclusion. This is a boundary of the construction, not an extra premise used
+to prove the ground-space equality. Positive ambient bond dimension is
+likewise explicit through $D>0$.
 
 \section{Conclusion}
 
 The blocked-lattice assertion
-(\ref{eq:cpsv16_parent_hamiltonian_range_blocked_statement}) is valid and is
-formalized with the sharp bound $p\leq3D^5$. The original-lattice assertion
-(\ref{eq:cpsv16_parent_hamiltonian_range_original_statement}) is now proved by
-absorbing the finite-size window of the source theorem into the interaction
-range and then applying the cyclic-range sandwich. The two assertions remain
-mathematically distinct even though both are complete: one concerns a
+(\ref{eq:cpsv16_parent_hamiltonian_range_blocked_statement}) is formalized
+with the sharp bound $p\leq3D^5$. For $1<d$, the original-lattice assertion
+(\ref{eq:cpsv16_parent_hamiltonian_range_original_statement}) is now proved
+with $0<L$, $D^2<d^L$, and $L\leq3D^5$. The proof absorbs the finite-size
+window of the source theorem into an auxiliary interaction range, applies the
+cyclic-range sandwich, and enlarges uniformly to $L=3D^5$. This resolves the
+full source construction under its necessary nontrivial physical boundary.
+The blocked and original-lattice assertions remain distinct: one concerns a
 nearest-neighbour interaction for the actual blocked tensor, while the other
 concerns a bounded-range interaction on every sufficiently long original
 periodic chain.
