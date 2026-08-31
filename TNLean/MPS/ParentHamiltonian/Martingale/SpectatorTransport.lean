@@ -152,7 +152,20 @@ theorem norm_rightFiberwiseMap [Nonempty S]
       rw [Finset.sum_eq_single s]
       · simp [singleRightFiber, rightFiber]
       · intro t _ hts
-        simp [singleRightFiber, rightFiber, hts]
+        have hfiber : rightFiber (singleRightFiber s x) t = 0 := by
+          apply PiLp.ext
+          intro i
+          change (if t = s then x i else 0) = 0
+          simp [hts]
+        have hpoint : ∀ i : I,
+            rightFiberwiseMap (S := S) G (singleRightFiber s x) (i, t) = 0 := by
+          intro i
+          rw [rightFiberwiseMap_apply_apply, hfiber, map_zero]
+          rfl
+        apply Finset.sum_eq_zero
+        intro i _
+        rw [hpoint i]
+        norm_num
       · simp
     _ ≤ ‖rightFiberwiseMap (S := S) G‖ * ‖singleRightFiber s x‖ :=
       (rightFiberwiseMap (S := S) G).le_opNorm _
@@ -183,13 +196,9 @@ theorem openPrefixGroundProjectionES_eq_one_of_lt
     (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
     openPrefixGroundProjectionES A L N n = 1 := by
   have hzero := openPrefixParentHamiltonianES_eq_zero_of_lt A (N := N) hnL
-  have hker : LinearMap.ker (openPrefixParentHamiltonianES A L N n) = ⊤ := by
-    ext v
-    simp only [LinearMap.mem_ker, Submodule.mem_top, iff_true]
-    rw [hzero]
-    rfl
-  simp only [openPrefixGroundProjectionES]
-  simpa [hker]
+  simp only [openPrefixGroundProjectionES, hzero, LinearMap.ker_zero,
+    Submodule.starProjection_top']
+  rfl
 
 /-- For indices strictly below the C3 endpoint, the fixed-ambient martingale
 difference vanishes because both adjacent prefix Hamiltonians are zero. -/
@@ -218,7 +227,7 @@ theorem openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoi
     let i' : OpenPrefixStart L N L := ⟨i, by
       change 0 + L ≤ L
       omega⟩
-    letI : Subsingleton (OpenPrefixStart L N L) :=
+    let _ : Subsingleton (OpenPrefixStart L N L) :=
       ⟨fun j k => by
         apply Subtype.ext
         apply Subtype.ext
@@ -238,11 +247,11 @@ theorem openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoi
       · intro hj
         apply Subtype.ext
         apply Fin.ext
-        have hjN := j.1.isLt
-        simp only [i]
+        change j.1.val = 0
         omega
-      · rintro rfl
-        simp [i]
+      · intro hji
+        subst j
+        simp [i, iFin]
     rw [openSuffixParentHamiltonianES, hfilter, Finset.sum_singleton]
   exact hprefix.trans hsuffix.symm
 
@@ -278,8 +287,10 @@ theorem openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
     LinearMap.comp_sub]
   let P := openPrefixGroundProjectionES A (l + 1) N (l + 1)
   change P * 1 - P * P = 0
-  rw [mul_one,
+  rw [mul_one]
+  apply sub_eq_zero.mpr
+  simpa only [P, fixedAmbientNestedGroundProjectionsES] using
     ((fixedAmbientNestedGroundProjectionsES A (l + 1) N).isSymmetricProjection (l + 1)
-      |>.isIdempotentElem.eq), sub_self]
+      |>.isIdempotentElem.eq).symm
 
 end MPSTensor
