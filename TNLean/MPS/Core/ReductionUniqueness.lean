@@ -24,6 +24,18 @@ namespace MPSTensor
 
 variable {d D_A D_B : ℕ}
 
+private theorem mul_single_mul_apply {D : ℕ}
+    (P Q : Matrix (Fin D) (Fin D) ℂ) (i j a b : Fin D) :
+    (P * Matrix.single j a (1 : ℂ) * Q) i b = P i j * Q a b := by
+  rw [Matrix.mul_apply, Finset.sum_eq_single a]
+  · rw [Matrix.mul_single_apply_same]
+    simp
+  · intro k _ hka
+    rw [Matrix.mul_single_apply_of_ne (c := (1 : ℂ)) (i := j) (j := a)
+      (a := i) (b := k) hka]
+    simp
+  · simp
+
 private theorem exists_evalWord_ne_zero_of_isNBlkInjective
     {A : MPSTensor d D_A} {L : ℕ} (hD : D_A ≠ 0)
     (hA : Kraus.IsNBlkInjective A L) :
@@ -146,31 +158,9 @@ private theorem exists_cross_scalar
       (Matrix.single j a (1 : ℂ))) i) b
   let X := V * Kraus.evalWord B u * W'
   let Y := V * Kraus.evalWord B q * W'
-  have hleftEntry :
-      (X * Matrix.single j a (1 : ℂ) * Kraus.evalWord A q) i b =
-        X i j * Kraus.evalWord A q a b := by
-    rw [Matrix.mul_apply, Finset.sum_eq_single a]
-    · rw [Matrix.mul_single_apply_same]
-      simp
-    · intro k _ hka
-      rw [Matrix.mul_single_apply_of_ne (c := (1 : ℂ)) (i := j) (j := a)
-        (a := i) (b := k) hka]
-      simp
-    · simp
-  have hrightEntry :
-      (Kraus.evalWord A u * Matrix.single j a (1 : ℂ) * Y) i b =
-        Kraus.evalWord A u i j * Y a b := by
-    rw [Matrix.mul_apply, Finset.sum_eq_single a]
-    · rw [Matrix.mul_single_apply_same]
-      simp
-    · intro k _ hka
-      rw [Matrix.mul_single_apply_of_ne (c := (1 : ℂ)) (i := j) (j := a)
-        (a := i) (b := k) hka]
-      simp
-    · simp
   change (X * Matrix.single j a (1 : ℂ) * Kraus.evalWord A q) i b =
     (Kraus.evalWord A u * Matrix.single j a (1 : ℂ) * Y) i b at hsingle
-  rw [hleftEntry, hrightEntry] at hsingle
+  simp only [mul_single_mul_apply] at hsingle
   change X i j = z * Kraus.evalWord A u i j
   have hden : Kraus.evalWord A q a b ≠ 0 := by simpa [q] using hab
   dsimp [z]
