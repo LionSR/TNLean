@@ -207,6 +207,89 @@ construction; they are not attributed to a source theorem.
     (\ref{eq:parent_spanning_local_space_kernel_congruence}).
 \end{proof}
 
+\begin{theorem}[Original-lattice parent-Hamiltonian range]
+    \label{thm:cpsv_original_lattice_parent_hamiltonian_range}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_bnt_hasParentHamiltonianGroundSpaceSpanning}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:bnt_cpsv,
+        def:parent_hamiltonian_ground_space_spanning,
+        thm:cpsv_canonical_form_bnt_refinement,
+        thm:cpsv_bnt_dimension_bound,
+        thm:gs_eq_bnt_span_source_normalization,
+        lem:cyclic_window_range_antitonicity,
+        lem:bnt_span_le_parent_hamiltonian_kernel,
+        lem:coisometric_reconstruction_local_space,
+        lem:parent_spanning_of_local_space_eq}
+    Let $A$ be in literal CPSV canonical form with positive ambient bond
+    dimension $D$. There are a basis of normal tensors
+    $(A_j)_{j=1}^{g}$ and a positive integer $L\leq3D^5$ such that, for
+    every original periodic chain of length $N>L$,
+    \begin{align}
+        \ker H_L^{(N)}(A)
+         & =\spn\left\{\ket{V^{(N)}(A_j)}:1\leq j\leq g\right\}.
+        \label{eq:cpsv_original_lattice_parent_hamiltonian_range}
+    \end{align}
+    This is the parent-Hamiltonian spanning clause of
+    \cite[Definition~3.9 and line~527]{Cirac2016MPDO_arXiv}. The spanning
+    condition records precisely the equality above for all $N>L$. It does
+    not include the preceding construction condition $d^L>D^2$, and hence
+    does not by itself assert that the local orthogonal-complement projector
+    is nonzero. That nontriviality condition is a separate boundary, not an
+    additional hypothesis of this theorem.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_canonical_form_bnt_refinement,
+        thm:cpsv_bnt_dimension_bound,
+        thm:gs_eq_bnt_span_source_normalization,
+        lem:cyclic_window_range_antitonicity,
+        lem:bnt_span_le_parent_hamiltonian_kernel,
+        lem:coisometric_reconstruction_local_space,
+        lem:parent_spanning_of_local_space_eq}
+    Choose one normal representative from each BNT phase class and put each
+    representative in a Perron gauge for which
+    \begin{align}
+        \sum_a A^j_a A^{j\,\dagger}_a          & =\Id,
+        &
+        \sum_a A^{j\,\dagger}_a\Lambda_j A^j_a & =\Lambda_j
+        \notag
+    \end{align}
+    with $\Lambda_j$ positive definite. Their dimensions satisfy
+    $\sum_jD_j\leq D$, so $g\leq D$, and quantum Wielandt makes every
+    representative block-injective at the common length $L_0=D^4$.
+
+    Suppose first that $g\geq2$. Put
+    \begin{align}
+        R & =3(g-1)(L_0+1)+1,
+        &
+        L & =3(g-1)(L_0+1)+L_0.
+        \notag
+    \end{align}
+    If $N>L$, then $N\geq R+L_0$. The source-normalized form of
+    \cite[Theorem~12]{PerezGarcia2007Matrix} therefore identifies the
+    range-$R$ parent-Hamiltonian kernel with the BNT span. Since $R\leq L$,
+    cyclic-window antitonicity places the range-$L$ kernel inside the
+    range-$R$ kernel. Every BNT vector satisfies the range-$L$ local
+    constraints, which gives the reverse inclusion. Thus the range-$L$
+    kernel is exactly the BNT span for every $N>L$. Finally,
+    \begin{align}
+        L
+        & \leq 3(D-1)(D^4+1)+D^4
+          \leq 3D^5.
+        \notag
+    \end{align}
+    Exact coisometric reconstruction identifies the local space of the
+    representative direct sum with $G_L(A)$, so the spanning equation
+    transfers to the original tensor.
+
+    If $g=1$, take $L=D^4+1$ and apply the single normal-block periodic
+    intersection theorem. If $g=0$, take $L=2$. When the physical alphabet is
+    empty, take $L=1$. These boundary cases satisfy the same bound and the
+    same all-$N>L$ conclusion.
+\end{proof}
+
 \begin{theorem}[Sharp blocking gives a nearest-neighbor parent Hamiltonian]
     \label{thm:cpsv_blocked_nearest_neighbor_parent_hamiltonian}
     \lean{MPSTensor.IsCPSVCanonicalForm.%
@@ -226,8 +309,11 @@ construction; they are not attributed to a source theorem.
         \label{eq:cpsv_blocked_nearest_neighbor_parent_hamiltonian}
     \end{align}
     Thus the actual blocked tensor has a nearest-neighbor parent Hamiltonian
-    on the blocked lattice. This does not identify an interaction of range
-    at most $3D^5$ on every original lattice; that distinction is recorded in
+    on the blocked lattice. This is distinct from
+    Theorem~\ref{thm:cpsv_original_lattice_parent_hamiltonian_range}, which
+    supplies an interaction of range at most $3D^5$ on every sufficiently
+    long original chain. The two conclusions and the argument closing the
+    short-ring window are recorded in
     \cite{gap:cpsv16_parent_hamiltonian_range_short_ring}.
 \end{theorem}
 

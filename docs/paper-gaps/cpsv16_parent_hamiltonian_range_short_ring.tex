@@ -14,11 +14,11 @@
 
 \title{Blocking and the Parent-Hamiltonian Range Claim in CPSV16}
 \author{}
-\date{2026-08-30}
+\date{2026-08-31}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The two lattice statements}
 
@@ -55,7 +55,20 @@ This is the statement proved in the formal development.
 \leanid{MPSTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltonian}
 in \doclink{TNLean/MPS/ParentHamiltonian/CPSVBlockedNearestNeighbor}.}
 
-\section{The unresolved implication}
+The first statement concerns every sufficiently long chain on the original
+lattice. It asserts that there are BNT representatives $A_1,\ldots,A_g$ and a
+positive integer $L\leq3D^5$ such that
+\begin{align}
+    \ker H_L^{(N)}(A)
+      &=\operatorname{span}\left\{V^{(N)}(A_j):1\leq j\leq g\right\}.
+    \label{eq:cpsv16_parent_hamiltonian_range_original_statement}
+\end{align}
+This statement is also proved in the formal development.
+\footnote{Formal declaration:
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning}
+in \doclink{TNLean/MPS/ParentHamiltonian/CPSVOriginalRange}.}
+
+\section{Why the blocked theorem alone is insufficient}
 
 A two-site interaction on the blocked lattice acts on $2p$ consecutive sites
 of the original lattice. Consequently,
@@ -70,23 +83,87 @@ chain lengths divisible by $p$ and greater than $2p$. Definition~3.9 instead
 requires the original-lattice ground-space identity for every chain length
 strictly larger than the chosen interaction range. Thus the blocked statement
 alone does not establish
+(\ref{eq:cpsv16_parent_hamiltonian_range_original_statement}). In
+particular, transporting the two-site blocked interaction is not the proof of
+the first sentence of line~527.
+
+\section{Resolution on the original lattice}
+
+Choose one normal representative from each BNT phase class and put each
+representative in a Perron gauge such that
 \begin{align}
-    \exists L\leq 3D^5\ \forall n>L,
-    \qquad
-    \ker H_L^{(n)}(A)
-      &=\operatorname{span}\left\{V^{(n)}(A_j):1\leq j\leq g\right\}.
-    \label{eq:cpsv16_parent_hamiltonian_range_original_statement}
+    \sum_a A^j_a A^{j\,\dagger}_a          &=I,
+    &
+    \sum_a A^{j\,\dagger}_a\Lambda_j A^j_a&=\Lambda_j,
+    \label{eq:cpsv16_parent_hamiltonian_range_perron_gauge}
 \end{align}
+where $\Lambda_j$ is positive definite. The representative dimensions obey
+$\sum_jD_j\leq D$, hence $g\leq D$. Quantum Wielandt gives the common
+block-injectivity length
+\begin{align}
+    L_0&=D^4.
+    \label{eq:cpsv16_parent_hamiltonian_range_wielandt_length}
+\end{align}
+
+For $g\geq2$, the proof of
+\cite[Theorem~12]{PerezGarcia2007Matrix} gives the BNT kernel equality at
+range
+\begin{align}
+    R&=3(g-1)(L_0+1)+1
+    \label{eq:cpsv16_parent_hamiltonian_range_pgvwc_range}
+\end{align}
+whenever $N\geq R+L_0$. Define instead
+\begin{align}
+    L&=3(g-1)(L_0+1)+L_0=R+L_0-1.
+    \label{eq:cpsv16_parent_hamiltonian_range_absorbed}
+\end{align}
+Then $N>L$ implies $N\geq R+L_0$. Since $R\leq L$, antitonicity of the
+cyclic local-constraint spaces and the usual frustration-free inclusion give
+the sandwich
+\begin{align}
+    \ker H_L^{(N)}
+      \subseteq \ker H_R^{(N)}
+      =\operatorname{span}\{V^{(N)}(A_j):1\leq j\leq g\}
+      \subseteq \ker H_L^{(N)}.
+    \label{eq:cpsv16_parent_hamiltonian_range_sandwich}
+\end{align}
+The exact coisometric reconstruction of literal CPSV canonical form preserves
+the positive-length local space, so this equality transfers from the direct
+sum of representatives to $A$. Finally,
+\begin{align}
+    L
+      &\leq3(D-1)(D^4+1)+D^4
+       \leq3D^5.
+    \label{eq:cpsv16_parent_hamiltonian_range_bound}
+\end{align}
+For one representative, one may take $L=D^4+1$; for no representatives, one
+may take $L=2$. If the physical alphabet is empty, take $L=1$. These cases
+satisfy the same bound and remove every short-ring exception.
+
+\section{The nontrivial-local-term boundary}
+
+The formal predicate used in
+(\ref{eq:cpsv16_parent_hamiltonian_range_original_statement}) is precisely
+the spanning clause of Definition~3.9: it quantifies the kernel equality over
+all $N>L$. It does not contain the preceding construction assumption
+$d^L>D^2$ from lines~511--515. Consequently, the formal theorem does not by
+itself assert that the orthogonal-complement projector $P_L^\perp$ is nonzero.
+This is a separate boundary of the construction, not an additional hypothesis
+of the spanning theorem. The positive ambient bond-dimension hypothesis
+$D>0$ is the legitimate boundary needed for the $3D^5$ estimate.
 
 \section{Conclusion}
 
 The blocked-lattice assertion
 (\ref{eq:cpsv16_parent_hamiltonian_range_blocked_statement}) is valid and is
 formalized with the sharp bound $p\leq3D^5$. The original-lattice assertion
-(\ref{eq:cpsv16_parent_hamiltonian_range_original_statement}) requires an
-additional argument controlling the interaction range and the short periodic
-rings. Until such an argument is supplied, the two assertions must remain
-distinct.
+(\ref{eq:cpsv16_parent_hamiltonian_range_original_statement}) is now proved by
+absorbing the finite-size window of the source theorem into the interaction
+range and then applying the cyclic-range sandwich. The two assertions remain
+mathematically distinct even though both are complete: one concerns a
+nearest-neighbour interaction for the actual blocked tensor, while the other
+concerns a bounded-range interaction on every sufficiently long original
+periodic chain.
 
 \bibliographystyle{alpha}
 \bibliography{references}
