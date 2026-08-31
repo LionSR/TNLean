@@ -39,11 +39,10 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 /-- The kernel projection of a linear map commutes with the kernel projection
 of a commuting symmetric operator.
 
-The point is not merely that the operators commute. Commutation makes
-\(\ker S\) invariant under \(T\); symmetry of \(T\) makes its orthogonal complement
-invariant as well. Hence the orthogonal projection onto \(\ker S\) commutes with
-\(T\), and the same invariant-subspace argument applied to \(\ker T\) gives
-commutation of the two kernel projections. -/
+Commutation makes \(\ker S\) invariant under \(T\); symmetry of \(T\) makes its
+orthogonal complement invariant as well. Hence the orthogonal projection onto
+\(\ker S\) commutes with \(T\), and the same invariant-subspace argument applied
+to \(\ker T\) gives commutation of the two kernel projections. -/
 theorem IsSymmetric.kernelProjection_commute_of_commute {S T : E →ₗ[ℂ] E}
     (hT : T.IsSymmetric)
     (hcomm : S.comp T = T.comp S) :
