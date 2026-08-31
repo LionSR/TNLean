@@ -24,8 +24,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private abbrev Mat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
-
 /-- The traceless part of `X` relative to a fixed point `ρ` with `tr ρ = 1`:
 `Z = X * ρ − (tr(X * ρ)) • ρ`.  This satisfies `tr Z = 0`. -/
 noncomputable def tracelessPart (ρ X : Mat D) : Mat D :=

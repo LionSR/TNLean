@@ -54,6 +54,49 @@ makes sense with separate horizontal and vertical dimensions.
     (\ref{eq:peps_local_boundary_tensor_component}).
 \end{proof}
 
+\begin{theorem}[The local PEPS boundary tensor is an LPDO]
+    \label{thm:peps_local_boundary_tensor_is_lpdo}
+    \lean{TNLean.PEPS.localBoundaryMPOTensor_isLPDO}
+    \leanok
+    \uses{def:peps_local_boundary_tensor, def:lpdo}
+    The local boundary tensor $E_A$ is a locally purifiable density operator.
+    One may take ancillary dimension $dD_{\mathrm v}$ with coordinate $(s,b)$,
+    purifying bond dimension $D_{\mathrm h}$, and purifying matrices
+    \begin{align}
+        B^{(u;(s,b))}_{l,r}
+         & = A^s_{l,r,u,b}.
+        \notag
+    \end{align}
+    Thus the local contraction in FigureDavid1 of
+    \cite[lines~721--724]{Cirac2016MPDO_arXiv} has an LPDO presentation
+    without any transfer-fixed-point or renormalization-channel hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_local_boundary_tensor_formula, def:lpdo}
+    Identify each MPO bond coordinate with a pair of horizontal PEPS virtual
+    coordinates. Substituting the displayed purifying matrices into the LPDO
+    contraction and summing over the ancillary pair $(s,b)$ gives exactly
+    (\ref{eq:peps_local_boundary_tensor_component}).
+\end{proof}
+
+\begin{corollary}[The local PEPS boundary tensor is an MPDO]
+    \label{cor:peps_local_boundary_tensor_is_mpdo}
+    \lean{TNLean.PEPS.localBoundaryMPOTensor_isMPDO}
+    \leanok
+    \uses{def:peps_local_boundary_tensor, def:mpdo}
+    For every nonempty periodic chain, the matrix product operator generated
+    by $E_A$ is positive semidefinite.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_local_boundary_tensor_is_lpdo, thm:lpdo_is_mpdo}
+    Apply the general implication from local purification to matrix product
+    density operators.
+\end{proof}
+
 \begin{definition}[Boundary fixed point]
     \label{def:peps_transfer_fixed_point}
     \notready

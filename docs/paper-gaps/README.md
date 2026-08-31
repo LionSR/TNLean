@@ -11,6 +11,13 @@ the current formal boundary.
   and the remaining reduction from a full-rank fixed point to an explicitly
   chosen positive-definite invariant weight.
 
+For the MPU index of arXiv:1703.09188:
+
+- `mpu_shift_specified_tensor_index_scope.tex` records that the computed shift
+  formulas are values of the displayed tensors, while the source states the
+  public blocking-independent MPU index. The remaining public construction is
+  tracked by issues #7011 and #5856.
+
 For the MPU symmetry-defect gauging paper:
 
 - `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
@@ -88,10 +95,11 @@ For MPDO renormalization fixed points:
 - `cpsv16_peps_boundary_rfp_specification.tex` records the source-faithful
   double contraction defining the local PEPS boundary MPO tensor and the
   missing algebraic data in the subsequent bulk-to-boundary RFP implication.
-  The local tensor is complete. The PEPS blocking spaces, transfer fixed-point
-  choice, refinement factor, and full trace-preserving completely positive
-  maps are not specified by the source diagrams, so the implication remains a
-  missing statement rather than a proof hole.
+  The local tensor and its LPDO/MPDO positivity consequences are complete. The
+  PEPS blocking spaces, transfer fixed-point choice, refinement factor, and
+  full trace-preserving completely positive maps are not specified by the
+  source diagrams, so the implication remains a missing statement rather than
+  a proof hole.
 - `cpsv16_mpdo_zcl_correlation_length_boundary.tex` records the mixed-state
   observable insertion $\mathbb E_O=\sum_{i,j}O_{ji}M^{ij}$ and the
   unnormalized periodic two-point formula. Literal physical-trace
