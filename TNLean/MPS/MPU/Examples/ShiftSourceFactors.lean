@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
 import Mathlib.LinearAlgebra.Matrix.Reindex
+import TNLean.MPS.MPU.Examples.ShiftPaperSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
 import TNLean.MPS.MPU.SourceUV
 
@@ -391,34 +392,6 @@ noncomputable def rightShiftSourceFactors (d : ℕ) [NeZero d] :
   exact ⟨P, Pᴴ, P, C, R, Z, hcut₁, hcut₂, hweighted, hC,
     hP.1, hRZ⟩
 
-/-- The trace-one canonical-form-II weight for the right shift.
-
-The factor (d^{-1}) is required by the normalization
-\(\operatorname{tr}(\rho)=1\) used in CPSV17 equation `Erightleft`. -/
-noncomputable def rightShiftTraceOneSourceWeight (d : ℕ) :
-    Matrix (Fin d) (Fin d) ℂ :=
-  (d : ℂ)⁻¹ • 1
-
-/-- The right-shift canonical-form-II weight is positive definite.
-
-Source: CPSV17 equation `Erightleft` (lines 269--280). -/
-theorem rightShiftTraceOneSourceWeight_posDef (d : ℕ) [NeZero d] :
-    (rightShiftTraceOneSourceWeight d).PosDef := by
-  rw [show rightShiftTraceOneSourceWeight d =
-      (d : ℝ)⁻¹ • (1 : Matrix (Fin d) (Fin d) ℂ) by
-    ext i j
-    simp [rightShiftTraceOneSourceWeight, Matrix.one_apply]]
-  exact Matrix.PosDef.one.smul <| inv_pos.mpr <| by
-    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
-
-/-- The right-shift canonical-form-II weight has trace one.
-
-Source: CPSV17 equation `Erightleft` (lines 269--280). -/
-theorem trace_rightShiftTraceOneSourceWeight (d : ℕ) [NeZero d] :
-    Matrix.trace (rightShiftTraceOneSourceWeight d) = 1 := by
-  rw [rightShiftTraceOneSourceWeight, Matrix.trace_smul, Matrix.trace_one]
-  simp [NeZero.ne d]
-
 /-- Supplied source factors for the right shift with the trace-one
 canonical-form-II weight \(\rho=d^{-1}I\).
 
@@ -430,8 +403,8 @@ normalization used in CPSV17 equation `X1X2b`.
 
 Source: CPSV17 equations `Erightleft`, `X1X2b`, and `YZ=1` (lines 269--280
 and 487--506). -/
-noncomputable def rightShiftTraceOneSourceFactors (d : ℕ) [NeZero d] :
-    SourceFactors (rightShiftTensor d) (rightShiftTraceOneSourceWeight d) := by
+noncomputable def rightShiftPaperSourceFactors (d : ℕ) [NeZero d] :
+    SourceFactors (rightShiftTensor d) (shiftPaperWeight d) := by
   let S := rightShiftSourceFactors d
   let s := sourceSqrt d
   let X₁ := s • S.X₁
@@ -451,10 +424,10 @@ noncomputable def rightShiftTraceOneSourceFactors (d : ℕ) [NeZero d] :
         rw [hs_inv_mul]
         simp
   have hweighted : X₁ᴴ * sourceWeight (d := d)
-      (rightShiftTraceOneSourceWeight d) * X₁ = 1 := by
+      (shiftPaperWeight d) * X₁ = 1 := by
     have hS : S.X₁ᴴ * S.X₁ = 1 := by
       simpa [sourceWeight] using S.X₁_weighted_isometry
-    simp only [X₁, rightShiftTraceOneSourceWeight, sourceWeight,
+    simp only [X₁, shiftPaperWeight, sourceWeight,
       Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
       Matrix.smul_kronecker, Matrix.one_kronecker_one]
     rw [show star s = s by simp [s, sourceSqrt], Matrix.mul_one, hS,
@@ -484,17 +457,17 @@ noncomputable def rightShiftTraceOneSourceFactors (d : ℕ) [NeZero d] :
 The source coordinate `(a,b)` is sent to the physical coordinate `(b,a)`,
 fixing both the triangle order and the normalization in CPSV17 equation `uu`.
 -/
-theorem sourceU_rightShiftTraceOneSourceFactors_apply (d : ℕ) [NeZero d]
+theorem sourceU_rightShiftPaperSourceFactors_apply (d : ℕ) [NeZero d]
     (a b i₁ i₂ : Fin d) :
     SourceFactors.sourceU (rightShiftTensor d)
-        (rightShiftTraceOneSourceFactors d)
+        (rightShiftPaperSourceFactors d)
         (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) (i₁, i₂) =
       if a = i₂ ∧ b = i₁ then 1 else 0 := by
   have hscale : (d : ℂ) *
       ((Real.sqrt d : ℂ)⁻¹ * (Real.sqrt d : ℂ)⁻¹) = 1 := by
     simpa only [sourceSqrt] using nat_mul_sourceSqrt_inv_mul_inv d
   by_cases ha : a = i₂ <;> by_cases hb : b = i₁ <;>
-    simp [SourceFactors.sourceU_apply, rightShiftTraceOneSourceFactors,
+    simp [SourceFactors.sourceU_apply, rightShiftPaperSourceFactors,
       rightShiftSourceFactors, normalizedIdentityColumn, normalizedIdentityVec,
       Matrix.reindex_apply, Matrix.one_apply, sourceSqrt, ha, hb,
       hscale, mul_comm, mul_left_comm]
@@ -503,12 +476,12 @@ theorem sourceU_rightShiftTraceOneSourceFactors_apply (d : ℕ) [NeZero d]
 Gram matrix.  This is the normalization and orientation regression for the
 complete-network theorem corresponding to CPSV17 equation `uUnitary`.
 -/
-theorem sourceU_rightShiftTraceOneSourceFactors_gram (d : ℕ) [NeZero d]
+theorem sourceU_rightShiftPaperSourceFactors_gram (d : ℕ) [NeZero d]
     (p q : Fin d × Fin d) :
     (∑ lr, SourceFactors.sourceU (rightShiftTensor d)
-        (rightShiftTraceOneSourceFactors d) lr q *
+        (rightShiftPaperSourceFactors d) lr q *
       star (SourceFactors.sourceU (rightShiftTensor d)
-        (rightShiftTraceOneSourceFactors d) lr p)) =
+        (rightShiftPaperSourceFactors d) lr p)) =
       if p = q then 1 else 0 := by
   classical
   let e := (rightShiftLeftRankEquiv d).prodCongr (rightShiftRightRankEquiv d)
@@ -516,12 +489,12 @@ theorem sourceU_rightShiftTraceOneSourceFactors_gram (d : ℕ) [NeZero d]
   rcases q with ⟨q₁, q₂⟩
   have happly (x : Fin 1 × (Fin d × Fin d)) (i₁ i₂ : Fin d) :
       SourceFactors.sourceU (rightShiftTensor d)
-          (rightShiftTraceOneSourceFactors d) (e x) (i₁, i₂) =
+          (rightShiftPaperSourceFactors d) (e x) (i₁, i₂) =
         if x.2.1 = i₂ ∧ x.2.2 = i₁ then 1 else 0 := by
     rcases x with ⟨x₀, ⟨a, b⟩⟩
     have hx₀ : x₀ = 0 := Subsingleton.elim _ _
     subst x₀
-    simpa [e] using sourceU_rightShiftTraceOneSourceFactors_apply
+    simpa [e] using sourceU_rightShiftPaperSourceFactors_apply
       d a b i₁ i₂
   rw [← e.sum_comp]
   simp_rw [happly]
@@ -534,13 +507,13 @@ source cut uses the trace-one canonical-form-II weight.
 
 Source: CPSV17 Lemma `lemuisometry` and equation `uUnitary` (lines 545--557).
 -/
-theorem sourceU_rightShiftTraceOneSourceFactors_isIsometry (d : ℕ) [NeZero d] :
+theorem sourceU_rightShiftPaperSourceFactors_isIsometry (d : ℕ) [NeZero d] :
     (SourceFactors.sourceU (rightShiftTensor d)
-      (rightShiftTraceOneSourceFactors d)).IsIsometry := by
+      (rightShiftPaperSourceFactors d)).IsIsometry := by
   rw [Matrix.IsIsometry]
   ext p q
   simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-    mul_comm] using sourceU_rightShiftTraceOneSourceFactors_gram d p q
+    mul_comm] using sourceU_rightShiftPaperSourceFactors_gram d p q
 
 /-- Explicit supplied source factors for the left-shift tensor.
 
