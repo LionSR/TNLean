@@ -8577,7 +8577,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proof}
 
 \begin{theorem}[Conjugacy of the third swap-transformed shift]
-    \label{tildeU3}
+    \label{thm:tildeU3}
     \lean{MPOTensor.mpo_shiftExampleTildeU₃_eq_swap_mul_tildeU₂_mul_swap}
     \leanok
     \uses{threeMPU2, thm:threeMPU2_chain_formulas}
@@ -8586,7 +8586,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \widetilde U_3^{(N)}
         =\mathbb S^{\otimes N}\widetilde U_2^{(N)}\mathbb S^{\otimes N}.
     \end{align}
-    % Source lines: paper_v2.tex 2059--2062, label tildeU3.
+    This is the conjugacy identity in
+    \cite[lines~2059--2062]{Cirac2017MPU}.
+    % Source label: tildeU3.
 \end{theorem}
 
 \begin{proof}\leanok
