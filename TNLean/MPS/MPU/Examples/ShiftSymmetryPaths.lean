@@ -13,9 +13,13 @@ The proof of arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick`
 (lines 2217--2229), conjugates the swap endpoint by three layers of swaps after
 adjoining one identity ancilla of dimension $d$. With the finite-chain shift
 convention used here, the literal labels in Figure `fig:TR-ancilla` produce the
-$\tilde U_3$ coordinate endpoint, not $\tilde U_2$. This module records only
-that finite permutation identity. It does not construct a path or an action on
-the full enlarged operator algebra.
+$\tilde U_3$ coordinate endpoint, not $\tilde U_2$.
+
+**Local fix.** Reversing the crossed species--ancilla swap gives the intended
+$\tilde U_2$ endpoint. The printed-orientation error and correction are recorded
+in `docs/paper-gaps/mpu_ancilla_three_swap_orientation.tex`. This module keeps
+the literal labels and records only their finite permutation identity. It does
+not construct a path or an action on the full enlarged operator algebra.
 -/
 
 namespace MPOTensor
@@ -26,40 +30,31 @@ abbrev ShiftAncillaConfig (N d : ℕ) :=
   ((Fin N → Fin d) × (Fin N → Fin d)) × (Fin N → Fin d)
 
 /-- The sitewise swap of the first and second physical species. -/
-def shiftAncillaSwap₁₂ (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) where
-  toFun σ := ((σ.1.2, σ.1.1), σ.2)
-  invFun σ := ((σ.1.2, σ.1.1), σ.2)
-  left_inv := by rintro ⟨⟨σ₁, σ₂⟩, a⟩; rfl
-  right_inv := by rintro ⟨⟨σ₁, σ₂⟩, a⟩; rfl
+def shiftAncillaSwap₁₂ (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
+  Function.Involutive.toPerm (fun σ => ((σ.1.2, σ.1.1), σ.2)) (by
+    rintro ⟨⟨σ₁, σ₂⟩, a⟩
+    rfl)
 
 /-- The sitewise swap of the second physical species with the ancilla. -/
-def shiftAncillaSwap₂a (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) where
-  toFun σ := ((σ.1.1, σ.2), σ.1.2)
-  invFun σ := ((σ.1.1, σ.2), σ.1.2)
-  left_inv := by rintro ⟨⟨σ₁, σ₂⟩, a⟩; rfl
-  right_inv := by rintro ⟨⟨σ₁, σ₂⟩, a⟩; rfl
+def shiftAncillaSwap₂a (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
+  Function.Involutive.toPerm (fun σ => ((σ.1.1, σ.2), σ.1.2)) (by
+    rintro ⟨⟨σ₁, σ₂⟩, a⟩
+    rfl)
 
 /-- The crossed swap $S^{1,a}_{n,n+1}$ in Figure `fig:TR-ancilla`.
 Since `rotateConfig N d σ` evaluates to `σ` at the next site, the first output
 receives the next-site ancilla and the ancilla output receives the previous-site
 first species. -/
-def shiftAncillaSwap₁aNext (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) where
-  toFun σ :=
-    (((rotateConfig N d) σ.2, σ.1.2), (rotateConfig N d).symm σ.1.1)
-  invFun σ :=
-    (((rotateConfig N d) σ.2, σ.1.2), (rotateConfig N d).symm σ.1.1)
-  left_inv := by
-    rintro ⟨⟨σ₁, σ₂⟩, a⟩
-    change
-      ((((rotateConfig N d) ((rotateConfig N d).symm σ₁), σ₂),
-        (rotateConfig N d).symm ((rotateConfig N d) a))) = ((σ₁, σ₂), a)
-    simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
-  right_inv := by
-    rintro ⟨⟨σ₁, σ₂⟩, a⟩
-    change
-      ((((rotateConfig N d) ((rotateConfig N d).symm σ₁), σ₂),
-        (rotateConfig N d).symm ((rotateConfig N d) a))) = ((σ₁, σ₂), a)
-    simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
+def shiftAncillaSwap₁aNext (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
+  Function.Involutive.toPerm
+    (fun σ =>
+      (((rotateConfig N d) σ.2, σ.1.2), (rotateConfig N d).symm σ.1.1))
+    (by
+      rintro ⟨⟨σ₁, σ₂⟩, a⟩
+      change
+        ((((rotateConfig N d) ((rotateConfig N d).symm σ₁), σ₂),
+          (rotateConfig N d).symm ((rotateConfig N d) a))) = ((σ₁, σ₂), a)
+      simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply])
 
 /-- Coordinate action of the source gate $S^{1,a}_{n,n+1}$ in Figure
 `fig:TR-ancilla`. -/
@@ -79,23 +74,16 @@ def shiftAncillaThreeSwap (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
 /-- The ancilla-enlarged $\tilde U_3$ endpoint produced by the literal figure
 labels: the two physical species shift in opposite directions and the identity
 ancilla is fixed. -/
-def shiftAncillaCounterShift (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) where
-  toFun σ :=
-    ((((rotateConfig N d) σ.1.2), (rotateConfig N d).symm σ.1.1), σ.2)
-  invFun σ :=
-    ((((rotateConfig N d) σ.1.2), (rotateConfig N d).symm σ.1.1), σ.2)
-  left_inv := by
-    rintro ⟨⟨σ₁, σ₂⟩, a⟩
-    change
-      ((((rotateConfig N d) ((rotateConfig N d).symm σ₁),
-        (rotateConfig N d).symm ((rotateConfig N d) σ₂)), a)) = ((σ₁, σ₂), a)
-    simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
-  right_inv := by
-    rintro ⟨⟨σ₁, σ₂⟩, a⟩
-    change
-      ((((rotateConfig N d) ((rotateConfig N d).symm σ₁),
-        (rotateConfig N d).symm ((rotateConfig N d) σ₂)), a)) = ((σ₁, σ₂), a)
-    simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
+def shiftAncillaCounterShift (N d : ℕ) : Equiv.Perm (ShiftAncillaConfig N d) :=
+  Function.Involutive.toPerm
+    (fun σ =>
+      ((((rotateConfig N d) σ.1.2), (rotateConfig N d).symm σ.1.1), σ.2))
+    (by
+      rintro ⟨⟨σ₁, σ₂⟩, a⟩
+      change
+        ((((rotateConfig N d) ((rotateConfig N d).symm σ₁),
+          (rotateConfig N d).symm ((rotateConfig N d) σ₂)), a)) = ((σ₁, σ₂), a)
+      simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply])
 
 /-- Exact coordinate identity for the three literal swap labels in Figure
 `fig:TR-ancilla`. Conjugating the sitewise physical swap sends
@@ -116,7 +104,7 @@ Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
     change (rotateConfig N d).symm ((rotateConfig N d) σ) = σ
     exact (rotateConfig N d).symm_apply_apply σ
   simp [shiftAncillaThreeSwap, shiftAncillaSwap₂a, shiftAncillaSwap₁₂,
-    shiftAncillaSwap₁aNext, rotate_symm_comp]
+    shiftAncillaSwap₁aNext, Function.Involutive.toPerm, rotate_symm_comp]
 
 /-- The three-swap conjugation is exactly the ancilla-enlarged $\tilde U_3$
 counter-shift permutation produced by the literal labels in Figure

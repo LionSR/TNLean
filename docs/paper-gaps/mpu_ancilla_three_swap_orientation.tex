@@ -1,0 +1,129 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Orientation of the Three-Swap Ancilla Circuit}
+\author{}
+\date{2026-08-31}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The printed circuit}
+
+Proposition \texttt{prop:U1-U2-equiv-ancillatrick} of
+Ref.~\cite{Cirac2017MPU} claims that, after adjoining one identity ancilla per
+site, conjugating $\widetilde U_1$ by the three swap layers in
+Figure~\texttt{fig:TR-ancilla} gives $\widetilde U_2$. The layers above
+$\widetilde U_1$, read from the endpoint outwards, are labelled
+$S^{1,a}_{n,n+1}$, $S^{1,2}_{n,n}$, and $S^{2,a}_{n,n}$.
+
+Let $R$ denote cyclic rotation of configurations, with
+$(R\sigma)(n)=\sigma(n+1)$. On triples $(x,y,a)$ of the first species, second
+species, and ancilla configurations, the three literal swap labels act as
+\begin{align}
+    A(x,y,a)
+     & =(Ra,y,R^{-1}x),
+    \label{eq:mpu_ancilla_orientation_crossed_swap}  \\
+    B(x,y,a)
+     & =(y,x,a),
+    \label{eq:mpu_ancilla_orientation_physical_swap} \\
+    D(x,y,a)
+     & =(x,a,y).
+    \label{eq:mpu_ancilla_orientation_ancilla_swap}
+\end{align}
+Here $A$ is the global product of the swaps between species $1$ at site $n$
+and the ancilla at site $n+1$. The first output therefore receives the
+next-site ancilla, while the ancilla output receives the previous-site first
+species.
+
+\section{The orientation mismatch}
+
+Let $C=D\circ B\circ A$ be the stack above $\widetilde U_1$. Direct
+substitution into (\ref{eq:mpu_ancilla_orientation_crossed_swap})--
+(\ref{eq:mpu_ancilla_orientation_ancilla_swap}) gives
+\begin{align}
+    C(x,y,a)
+     & =(y,R^{-1}x,Ra),
+    \label{eq:mpu_ancilla_orientation_stack} \\
+    C^{-1}(x,y,a)
+     & =(Ry,x,R^{-1}a).
+    \label{eq:mpu_ancilla_orientation_stack_inverse}
+\end{align}
+Consequently, conjugating the physical swap gives
+\begin{align}
+    C^{-1}BC(x,y,a)
+     & =(Ry,R^{-1}x,a).
+    \label{eq:mpu_ancilla_orientation_literal_endpoint}
+\end{align}
+
+The paper defines $T$ by
+$T\lvert n_1,\ldots,n_N\rangle
+    =\lvert n_N,n_1,\ldots,n_{N-1}\rangle$. Thus $T$ sends a ket configuration
+$	au$ to $R^{-1}\tau$, and $T^\dagger$ sends it to $R\tau$. It follows that
+the two swap-transformed shifts act by
+\begin{align}
+    \widetilde U_2(x,y,a)
+     & =(R^{-1}y,Rx,a),
+    \label{eq:mpu_ancilla_orientation_tilde_u2} \\
+    \widetilde U_3(x,y,a)
+     & =(Ry,R^{-1}x,a).
+    \label{eq:mpu_ancilla_orientation_tilde_u3}
+\end{align}
+Comparison of (\ref{eq:mpu_ancilla_orientation_literal_endpoint}) with
+(\ref{eq:mpu_ancilla_orientation_tilde_u2})--
+(\ref{eq:mpu_ancilla_orientation_tilde_u3}) shows that the literal circuit
+labels produce $\widetilde U_3$, not $\widetilde U_2$. This is a genuine
+nondegenerate distinction: for $N\geq3$ and $d\geq2$, one may choose a
+configuration whose values at the preceding and following sites differ, so
+$R\sigma\neq R^{-1}\sigma$.
+
+\section{Local correction and formal record}
+
+Reversing the crossed swap replaces $A$ by
+\begin{align}
+    A_{\mathrm{rev}}(x,y,a)
+     & =(R^{-1}a,y,Rx).
+    \label{eq:mpu_ancilla_orientation_reversed_crossed_swap}
+\end{align}
+This is the swap between species $1$ at site $n+1$ and the ancilla at site
+$n$, rather than the literal $S^{1,a}_{n,n+1}$ label. Using
+$A_{\mathrm{rev}}$ in the same three-layer stack changes
+(\ref{eq:mpu_ancilla_orientation_literal_endpoint}) to
+\begin{align}
+    (x,y,a)
+     & \longmapsto(R^{-1}y,Rx,a),
+    \label{eq:mpu_ancilla_orientation_corrected_endpoint}
+\end{align}
+which is the $\widetilde U_2$ endpoint in
+(\ref{eq:mpu_ancilla_orientation_tilde_u2}). Thus reversing the orientation
+of the crossed labels is a local correction of the diagram; it does not alter
+the proposition's intended endpoint.
+
+The formal coordinate calculation keeps the literal printed labels and proves
+(\ref{eq:mpu_ancilla_orientation_literal_endpoint}). It therefore records the
+result as the $\widetilde U_3$ endpoint and does not use it as a dependency of
+the $\widetilde U_1$--$\widetilde U_2$ path proposition.
+\footnote{Formal declarations:
+    \leanid{MPOTensor.shiftAncillaCounterShift} and
+    \leanid{MPOTensor.permMatrix_shiftAncillaThreeSwap_endpoint} in
+    \doclink{TNLean/MPS/MPU/Examples/ShiftSymmetryPaths}.}
+
+\section{Verdict}
+
+The three swap labels in Figure~\texttt{fig:TR-ancilla} produce
+$\widetilde U_3$ under the shift convention stated in the same paper. The
+figure's claimed $\widetilde U_2$ endpoint is false as printed on
+nondegenerate periodic chains. Reversing the orientation of the crossed
+species--ancilla swaps gives the intended endpoint, so the discrepancy has a
+resolved local correction.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
