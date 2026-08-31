@@ -35,20 +35,12 @@
 
 \begin{proof}\leanok
     \uses{def:mpug_finite_group_unitary_average}
-    Left multiplication by any $h\in G$ permutes the group, and hence
+    Regard each matrix $\rho(g)$ as the corresponding linear map. The
+    finite-group representation-averaging theorem states that its normalized
+    average is idempotent. Transporting that identity back to matrices gives
     \begin{align}
-        \rho(h)P_\rho
-         & =\frac{1}{|G|}\sum_{g\in G}\rho(hg)
-        =P_\rho.
+        P_\rho^2 & =P_\rho.
     \end{align}
-    Averaging this identity over $h$ gives
-    \begin{align}
-        P_\rho^2
-         & =\frac{1}{|G|}\sum_{h\in G}\rho(h)P_\rho
-        =\frac{1}{|G|}\sum_{h\in G}P_\rho
-        =P_\rho.
-    \end{align}
-    This is the standard averaging projection onto the invariant subspace.
     Unitarity gives $\rho(g)^\dagger=\rho(g^{-1})$. Since inversion permutes
     $G$,
     \begin{align}
