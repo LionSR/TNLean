@@ -3785,6 +3785,60 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     rearranging it proves the claim.
 \end{proof}
 
+\begin{lemma}[Norm gap implies the squared quadratic-form bound]
+    \label{lem:norm_gap_to_squared_quadratic_form}
+    \lean{LinearMap.IsPositive.quadraticForm_sq_ge_of_norm_gap}
+    \leanok
+    Let $H$ be a positive operator on a finite-dimensional complex Hilbert
+    space and let $\gamma\geq0$. If
+    \begin{align}
+        \gamma\lVert u\rVert & \leq \lVert Hu\rVert
+        \qquad\text{for every }u\in(\ker H)^\perp,
+    \end{align}
+    then every vector $v$ satisfies
+    \begin{align}
+        \gamma\operatorname{Re}\langle Hv,v\rangle
+         & \leq \operatorname{Re}\langle Hv,Hv\rangle.
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Put $w=v-P_{\ker H}v$. Then $w\perp\ker H$, $Hw=Hv$, and symmetry gives
+    $\langle Hv,v\rangle=\langle Hv,w\rangle$. Hence
+    \begin{align}
+        \gamma\operatorname{Re}\langle Hv,v\rangle
+         & \leq \gamma\lVert Hv\rVert\lVert w\rVert
+        \leq \lVert Hv\rVert\lVert Hw\rVert
+        =\operatorname{Re}\langle Hv,Hv\rangle.
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Right-spectator quadratic-form bound]
+    \label{lem:right_spectator_quadratic_form_gap}
+    \lean{ContinuousLinearMap.quadraticForm_sq_ge_rightFiberwiseMap,
+        LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_norm_gap}
+    \leanok
+    \uses{lem:norm_gap_to_squared_quadratic_form, lem:right-spectator-extension}
+    Let $G$ act on a finite active configuration space. If
+    $G^2\geq\gamma G$ as a quadratic form, the same inequality holds when $G$
+    acts independently over any finite right spectator coordinate. In
+    particular, positivity and a norm gap $\gamma$ for $G$ imply this
+    fiberwise quadratic-form inequality.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $v_s$ for the active vector at spectator value $s$. Both quadratic
+    forms split into finite sums over $s$, and the active inequality gives
+    \begin{align}
+        \gamma\sum_s\operatorname{Re}\langle Gv_s,v_s\rangle
+         & \leq \sum_s\operatorname{Re}\langle Gv_s,Gv_s\rangle.
+    \end{align}
+    The final statement follows from
+    Lemma~\ref{lem:norm_gap_to_squared_quadratic_form}.
+\end{proof}
+
 \begin{theorem}[Cyclic window double counting]
     \label{thm:cyclic_knabe_double_counting}
     \lean{ProjectionGeometry.cyclicWindowSum,
