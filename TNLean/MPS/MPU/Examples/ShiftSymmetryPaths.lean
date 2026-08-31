@@ -127,8 +127,9 @@ Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
     shiftAncillaSwap₁aNext, Function.Involutive.toPerm, rotate_symm_comp]
 
 /-- The three-swap conjugation is exactly the counter-shift permutation
-produced by the literal labels in Figure `fig:TR-ancilla`, without MPU,
-path, or symmetry-action packaging.
+produced by the literal labels in Figure `fig:TR-ancilla`, without asserting an
+identification with an MPU, a continuous path, or a symmetry action on the
+operator algebra.
 
 Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
 `fig:TR-ancilla` (lines 2217--2229). -/
