@@ -24,6 +24,57 @@ remaining obstruction in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 
 open scoped BigOperators
 
+namespace MPSTensor
+
+/-- Split a configuration on `n + r` sites into its first `n` active sites and
+its final `r` right-spectator sites. -/
+def rightSpectatorConfigEquiv (d n r : ℕ) :
+    Cfg d (n + r) ≃ Cfg d n × Cfg d r :=
+  (Fin.appendEquiv n r).symm
+
+@[simp] theorem rightSpectatorConfigEquiv_symm_apply
+    (d n r : ℕ) (p : Cfg d n × Cfg d r) :
+    (rightSpectatorConfigEquiv d n r).symm p = Fin.appendEquiv n r p :=
+  rfl
+
+@[simp] theorem rightSpectatorConfigEquiv_apply_fst
+    (d n r : ℕ) (σ : Cfg d (n + r)) (i : Fin n) :
+    (rightSpectatorConfigEquiv d n r σ).1 i = σ (Fin.castAdd r i) :=
+  rfl
+
+@[simp] theorem rightSpectatorConfigEquiv_apply_snd
+    (d n r : ℕ) (σ : Cfg d (n + r)) (j : Fin r) :
+    (rightSpectatorConfigEquiv d n r σ).2 j = σ (Fin.natAdd n j) :=
+  rfl
+
+/-- The Euclidean-space reindexing that displays the last `r` sites as a
+finite right-spectator coordinate. -/
+noncomputable def rightSpectatorConfigLinearIsometryEquiv (d n r : ℕ) :
+    EuclideanSpace ℂ (Cfg d (n + r)) ≃ₗᵢ[ℂ]
+      EuclideanSpace ℂ (Cfg d n × Cfg d r) :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (rightSpectatorConfigEquiv d n r)
+
+@[simp] theorem rightSpectatorConfigLinearIsometryEquiv_apply_apply
+    (d n r : ℕ) (v : EuclideanSpace ℂ (Cfg d (n + r)))
+    (p : Cfg d n × Cfg d r) :
+    rightSpectatorConfigLinearIsometryEquiv d n r v p =
+      v (Fin.appendEquiv n r p) := by
+  rw [rightSpectatorConfigLinearIsometryEquiv,
+    LinearIsometryEquiv.piLpCongrLeft_apply]
+  rfl
+
+@[simp] theorem rightSpectatorConfigLinearIsometryEquiv_symm_apply_apply
+    (d n r : ℕ) (v : EuclideanSpace ℂ (Cfg d n × Cfg d r))
+    (σ : Cfg d (n + r)) :
+    (rightSpectatorConfigLinearIsometryEquiv d n r).symm v σ =
+      v (rightSpectatorConfigEquiv d n r σ) := by
+  rw [rightSpectatorConfigLinearIsometryEquiv,
+    LinearIsometryEquiv.piLpCongrLeft_symm,
+    LinearIsometryEquiv.piLpCongrLeft_apply]
+  rfl
+
+end MPSTensor
+
 namespace ContinuousLinearMap
 
 variable {I S : Type*} [Fintype I] [Fintype S]
@@ -74,6 +125,50 @@ noncomputable def rightFiberwiseMap
   intro i
   rfl
 
+/-- Right-spectator extension preserves addition. -/
+theorem rightFiberwiseMap_add
+    (G H : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I) :
+    rightFiberwiseMap (S := S) (G + H) =
+      rightFiberwiseMap (S := S) G + rightFiberwiseMap (S := S) H := by
+  apply ContinuousLinearMap.coe_injective
+  ext x p
+  rfl
+
+/-- Right-spectator extension preserves subtraction. -/
+theorem rightFiberwiseMap_sub
+    (G H : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I) :
+    rightFiberwiseMap (S := S) (G - H) =
+      rightFiberwiseMap (S := S) G - rightFiberwiseMap (S := S) H := by
+  apply ContinuousLinearMap.coe_injective
+  ext x p
+  rfl
+
+@[simp] theorem rightFiberwiseMap_zero :
+    rightFiberwiseMap (I := I) (S := S) 0 = 0 := by
+  apply ContinuousLinearMap.coe_injective
+  ext x p
+  rfl
+
+/-- A vector lies in the kernel of a fiberwise operator exactly when every
+right-spectator fiber lies in the kernel of the base operator. -/
+theorem mem_ker_rightFiberwiseMap_iff
+    (G : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I)
+    (x : EuclideanSpace ℂ (I × S)) :
+    x ∈ LinearMap.ker (rightFiberwiseMap (S := S) G).toLinearMap ↔
+      ∀ s, rightFiber x s ∈ LinearMap.ker G.toLinearMap := by
+  simp only [LinearMap.mem_ker]
+  constructor
+  · intro hx s
+    apply PiLp.ext
+    intro i
+    have hi := congrArg (fun y : EuclideanSpace ℂ (I × S) => y (i, s)) hx
+    exact hi
+  · intro hx
+    apply PiLp.ext
+    rintro ⟨i, s⟩
+    change G (rightFiber x s) i = 0
+    exact congrArg (fun y : EuclideanSpace ℂ I => y i) (hx s)
+
 /-- Right-spectator extension preserves composition. -/
 theorem rightFiberwiseMap_comp
     (G H : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I) :
@@ -85,6 +180,73 @@ theorem rightFiberwiseMap_comp
   apply PiLp.ext
   rintro ⟨i, s⟩
   rfl
+
+/-- Fiberwise extension preserves symmetry. -/
+theorem isSymmetric_rightFiberwiseMap
+    (G : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I)
+    (hG : G.toLinearMap.IsSymmetric) :
+    (rightFiberwiseMap (S := S) G).toLinearMap.IsSymmetric := by
+  intro x y
+  rw [PiLp.inner_apply, PiLp.inner_apply, Fintype.sum_prod_type,
+    Fintype.sum_prod_type]
+  calc
+    ∑ i, ∑ s, inner ℂ (rightFiberwiseMap (S := S) G x (i, s)) (y (i, s)) =
+        ∑ s, ∑ i, inner ℂ (G (rightFiber x s) i) (rightFiber y s i) := by
+      rw [Finset.sum_comm]
+      rfl
+    _ = ∑ s, ∑ i, inner ℂ (rightFiber x s i) (G (rightFiber y s) i) := by
+      apply Finset.sum_congr rfl
+      intro s _
+      rw [← PiLp.inner_apply, ← PiLp.inner_apply]
+      exact hG (rightFiber x s) (rightFiber y s)
+    _ = ∑ i, ∑ s, inner ℂ (x (i, s))
+        (rightFiberwiseMap (S := S) G y (i, s)) := by
+      rw [Finset.sum_comm]
+      rfl
+
+/-- Fiberwise extension preserves orthogonal projections. -/
+theorem isSymmetricProjection_rightFiberwiseMap
+    (G : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I)
+    (hG : G.toLinearMap.IsSymmetricProjection) :
+    (rightFiberwiseMap (S := S) G).toLinearMap.IsSymmetricProjection := by
+  refine ⟨?_, isSymmetric_rightFiberwiseMap G hG.isSymmetric⟩
+  apply LinearMap.ext
+  intro x
+  apply PiLp.ext
+  rintro ⟨i, s⟩
+  change G (G (rightFiber x s)) i = G (rightFiber x s) i
+  have hs := LinearMap.congr_fun hG.isIdempotentElem.eq (rightFiber x s)
+  exact congrArg (fun y : EuclideanSpace ℂ I => y i) hs
+
+/-- The kernel projection of a fiberwise operator is the fiberwise extension
+of the base kernel projection. -/
+theorem ker_starProjection_rightFiberwiseMap
+    (G : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I) :
+    (LinearMap.ker (rightFiberwiseMap (S := S) G).toLinearMap).starProjection.toLinearMap =
+      (rightFiberwiseMap (S := S)
+        (LinearMap.ker G.toLinearMap).starProjection).toLinearMap := by
+  let U := LinearMap.ker G.toLinearMap
+  apply LinearMap.IsSymmetricProjection.ext
+    (Submodule.isSymmetricProjection_starProjection _)
+    (isSymmetricProjection_rightFiberwiseMap _
+      (Submodule.isSymmetricProjection_starProjection U))
+  ext x
+  constructor
+  · intro hx
+    rw [Submodule.range_starProjection] at hx
+    refine ⟨x, ?_⟩
+    apply PiLp.ext
+    rintro ⟨i, s⟩
+    change U.starProjection (rightFiber x s) i = x (i, s)
+    have hs := (mem_ker_rightFiberwiseMap_iff G x).mp hx s
+    exact congrArg (fun y : EuclideanSpace ℂ I => y i)
+      (U.starProjection_eq_self_iff.mpr hs)
+  · rintro ⟨y, rfl⟩
+    rw [Submodule.range_starProjection]
+    apply (mem_ker_rightFiberwiseMap_iff G _).mpr
+    intro s
+    change U.starProjection (rightFiber y s) ∈ U
+    exact Submodule.starProjection_apply_mem U _
 
 /-- Right-spectator extension does not increase the operator norm. The statement
 also covers an empty spectator type. -/

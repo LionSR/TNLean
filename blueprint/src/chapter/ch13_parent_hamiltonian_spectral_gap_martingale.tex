@@ -335,6 +335,8 @@
     \label{lem:right-spectator-extension}
     \lean{ContinuousLinearMap.rightFiber,
         ContinuousLinearMap.rightFiberwiseMap,
+        ContinuousLinearMap.rightFiberwiseMap_add,
+        ContinuousLinearMap.rightFiberwiseMap_sub,
         ContinuousLinearMap.rightFiberwiseMap_comp,
         ContinuousLinearMap.norm_rightFiberwiseMap_le,
         ContinuousLinearMap.norm_rightFiberwiseMap}
@@ -362,8 +364,38 @@
         \leq\lVert T\rVert^2\sum_{s\in S}\lVert v_s\rVert^2.
     \end{align}
     For nonempty $S$, a vector supported on one spectator fiber gives the
-    reverse inequality between the two operator norms.  Composition is checked
-    independently on each fiber.
+    reverse inequality between the two operator norms.  Addition, subtraction,
+    and composition are checked independently on each fiber.
+\end{proof}
+
+\begin{lemma}[Right-spectator coordinates and kernel projections]
+    \label{lem:right-spectator-kernel-projection}
+    \lean{MPSTensor.rightSpectatorConfigEquiv,
+        MPSTensor.rightSpectatorConfigLinearIsometryEquiv,
+        ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff,
+        ContinuousLinearMap.isSymmetricProjection_rightFiberwiseMap,
+        ContinuousLinearMap.ker_starProjection_rightFiberwiseMap}
+    \leanok
+    For $n,r\in\N$, restriction to the first $n$ sites and the final $r$ sites
+    gives a canonical equivalence
+    \begin{align}
+        [d]^{n+r} &\simeq [d]^n\times[d]^r
+    \end{align}
+    and the corresponding Euclidean linear isometry.  A vector belongs to
+    $\ker(T^{\oplus S})$ exactly when each spectator fiber belongs to $\ker T$.
+    If $P_{\ker T}$ is the orthogonal projection onto $\ker T$, then
+    \begin{align}
+        P_{\ker(T^{\oplus S})} &=(P_{\ker T})^{\oplus S}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The configuration equivalence is the inverse of concatenation.  The kernel
+    characterization follows by evaluating each coordinate.  Fiberwise
+    extension preserves symmetry and idempotence, and its range consists
+    exactly of the vectors whose fibers lie in $\ker T$.  Equality of the two
+    symmetric projections follows from equality of their ranges.
 \end{proof}
 
 \begin{theorem}[C3 boundary indices in the fixed final volume]
