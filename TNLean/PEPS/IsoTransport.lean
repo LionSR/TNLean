@@ -127,11 +127,33 @@ def IncidentEdge.toSymm (φ : G ≃g G') (w : W) (ie : IncidentEdge G (φ.symm w
     have h := Edge.map_incident φ ie.2
     rwa [φ.apply_symm_apply] at h⟩
 
+/-- The inverse of `IncidentEdge.toSymm`: carry an edge incident to `w` back
+through `φ.symm`, obtaining an edge incident to `φ.symm w`. -/
+def IncidentEdge.fromSymm (φ : G ≃g G') (w : W) (ie' : IncidentEdge G' w) :
+    IncidentEdge G (φ.symm w) :=
+  ⟨Edge.map φ.symm ie'.1, Edge.map_incident φ.symm ie'.2⟩
+
 omit [Fintype V] [Fintype W] in
 @[simp] theorem IncidentEdge.toSymm_coe (φ : G ≃g G') (w : W)
     (ie : IncidentEdge G (φ.symm w)) :
     (IncidentEdge.toSymm φ w ie).1 = Edge.map φ ie.1 :=
   rfl
+
+omit [Fintype V] [Fintype W] in
+@[simp] theorem IncidentEdge.fromSymm_coe (φ : G ≃g G') (w : W)
+    (ie' : IncidentEdge G' w) :
+    (IncidentEdge.fromSymm φ w ie').1 = Edge.map φ.symm ie'.1 :=
+  rfl
+
+omit [Fintype V] [Fintype W] in
+/-- Every edge incident to `w` comes from an edge incident to `φ.symm w`. -/
+theorem IncidentEdge.toSymm_surjective (φ : G ≃g G') (w : W) :
+    Function.Surjective (IncidentEdge.toSymm φ w) := by
+  intro ie'
+  refine ⟨IncidentEdge.fromSymm φ w ie', ?_⟩
+  apply Subtype.ext
+  simp only [IncidentEdge.toSymm_coe, IncidentEdge.fromSymm_coe,
+    Edge.map_map_symm]
 
 /-! ### Transport of a tensor along a graph isomorphism -/
 
@@ -160,6 +182,61 @@ omit [Fintype V] [Fintype W] in
 @[simp] theorem Tensor.transport_bondDim (A : Tensor G d) (φ : G ≃g G') (e' : Edge G') :
     (A.transport φ).bondDim e' = A.bondDim (Edge.map φ.symm e') :=
   rfl
+
+omit [Fintype V] [Fintype W] in
+/-- Pull a virtual configuration incident to `w` back to the incident edges at
+`φ.symm w`.  This is the reindexing appearing in `Tensor.transport`. -/
+noncomputable def localVirtualConfigPullback (A : Tensor G d) (φ : G ≃g G') (w : W)
+    (η' : (ie' : IncidentEdge G' w) → Fin ((A.transport φ).bondDim ie'.1))
+    (ie : IncidentEdge G (φ.symm w)) : Fin (A.bondDim ie.1) :=
+  finCongr
+    (show A.bondDim (Edge.map φ.symm (IncidentEdge.toSymm φ w ie).1) =
+        A.bondDim ie.1 by
+      simp only [IncidentEdge.toSymm_coe, Edge.map_symm_map])
+    (η' (IncidentEdge.toSymm φ w ie))
+
+omit [Fintype V] [Fintype W] in
+/-- Pullback of local virtual configurations through a graph isomorphism is
+injective: every target incident edge has a unique source incident edge. -/
+theorem localVirtualConfigPullback_injective (A : Tensor G d) (φ : G ≃g G') (w : W) :
+    Function.Injective (localVirtualConfigPullback A φ w) := by
+  intro η' ξ' h
+  funext ie'
+  obtain ⟨ie, rfl⟩ := IncidentEdge.toSymm_surjective φ w ie'
+  have hval := congrArg Fin.val (congrFun h ie)
+  change (η' (IncidentEdge.toSymm φ w ie)).val =
+    (ξ' (IncidentEdge.toSymm φ w ie)).val at hval
+  exact Fin.ext hval
+
+omit [Fintype V] [Fintype W] in
+/-- Transporting a tensor reindexes, but does not change, each local family of
+physical vectors. -/
+theorem Tensor.transport_component_localVirtualConfigPullback
+    (A : Tensor G d) (φ : G ≃g G') (w : W)
+    (η' : (ie' : IncidentEdge G' w) → Fin ((A.transport φ).bondDim ie'.1)) :
+    (A.transport φ).component w η' =
+      A.component (φ.symm w) (localVirtualConfigPullback A φ w η') := by
+  rfl
+
+omit [Fintype V] [Fintype W] in
+/-- Vertex injectivity is invariant under transport along a graph isomorphism.
+The local virtual configurations are only reindexed by the induced bijection on
+incident edges.
+
+Source: arXiv:1804.04964, Applications section, lines 1807--1842 of
+`Papers/1804.04964/paper_normal.tex`, where the injective MPS is compared with
+its one-site cyclic translate through the injective Fundamental Theorem. -/
+theorem IsVertexInjective.transport {A : Tensor G d} (hA : IsVertexInjective A)
+    (φ : G ≃g G') : IsVertexInjective (A.transport φ) := by
+  intro w
+  have h := (hA (φ.symm w)).comp (localVirtualConfigPullback A φ w)
+    (localVirtualConfigPullback_injective A φ w)
+  have heq : A.component (φ.symm w) ∘ localVirtualConfigPullback A φ w =
+      (A.transport φ).component w := by
+    funext η'
+    exact (Tensor.transport_component_localVirtualConfigPullback A φ w η').symm
+  rw [heq] at h
+  exact h
 
 /-- The virtual configurations of `A.transport φ` correspond to those of `A` by the
 edge action of `φ`: a configuration on the edges of `G'` is the same data as a

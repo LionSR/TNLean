@@ -2508,7 +2508,8 @@ of states nor the root-of-unity conditions enter.
 
 The Applications section contains a different translation-invariance
 corollary (lines 1801--1890 of
-\path{Papers/1804.04964/paper_normal.tex}, Ref.~\cite{Molnar2018NormalPEPS}), tracked by \ghissue{2920}. Its
+\path{Papers/1804.04964/paper_normal.tex}, Ref.~\cite{Molnar2018NormalPEPS}),
+whose full per-bond form is tracked by \ghissue{3371}. Its
 input is a single site-dependent injective MPS whose resulting closed-chain
 state is invariant under the cyclic shift. Its conclusion is not a gauge
 between two given tensor families: the proof applies the non-translation
@@ -2531,21 +2532,30 @@ After telescoping the gauges obtained by comparing the family with its cyclic
 shift, the source chooses $B=A_1Z_1^{-1}$ in
 (\ref{eq:peps_normal_ft_section3_route_cyclic_shift_repeated_tensor}).
 
-This corollary is not covered by the two-tensor results above. The already
-formalized statements compare two supplied tensors, or two supplied repeated
-tensors, with the same closed-chain state. They do not start from one
-site-dependent family and a cyclic-shift invariance hypothesis on its state,
-and they do not construct the comparison tensor internally. A uniform
-matrix-tensor version would be faithful to the existence of the repeated
-description, but would make the source's ``all bond dimensions are the same''
-conclusion vacuous: the type already fixes one bond dimension \(D\). The fully
-faithful statement therefore requires a per-bond, rectangular matrix model in
-which the adjacent invertible gauges first imply equality of the bond
-dimensions. Until that vocabulary exists, the intended first theorem is the
-uniform-\(D\) existence statement, carrying this scope restriction explicitly;
-the per-bond-dimension theorem remains a separate follow-up. Under a prior
-uniform bond-dimension hypothesis on the family $A_i$, the initial restricted
-statement is
+The equal-bond-dimension implication in
+(\ref{eq:peps_normal_ft_section3_route_cyclic_shift_equal_bond_dimensions})
+is now formalized without introducing a second rectangular matrix-chain type.
+A site-dependent chain with one dimension per bond is represented by
+\leanid{TNLean.PEPS.Tensor} on the cycle graph. The automorphism
+\leanid{TNLean.PEPS.cycleRotate} is the cyclic successor $v\mapsto v+1$, and
+\leanid{TNLean.PEPS.Tensor.cycleShift} transports along its inverse, so that
+the tensor at site $v$ is $A_{v+1}$, exactly the family displayed at source
+lines 1819--1826. Vertex injectivity is preserved by graph transport
+(\leanid{TNLean.PEPS.IsVertexInjective.transport}). Hence the injective PEPS
+Fundamental Theorem applies to the original tensor and its shifted transport:
+\leanid{TNLean.PEPS.gaugeEquiv_cycleShift_of_isCycleShiftInvariantState}
+delivers the source's bond gauges. Reading its bond-dimension equality through
+the rotation of successor edges gives
+\leanid{TNLean.PEPS.bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState},
+and cyclic induction gives equality on every pair of cycle edges in
+\leanid{TNLean.PEPS.bondDim_eq_of_isCycleShiftInvariantState}. These results
+carry the explicit positivity assumption inherited from the corrected
+injective Fundamental Theorem; it excludes empty virtual spaces.
+
+The repeated-tensor implication in
+(\ref{eq:peps_normal_ft_section3_route_cyclic_shift_repeated_tensor}) still has
+two complementary pieces rather than one end-to-end theorem. Under a prior
+uniform bond-dimension hypothesis on the family $A_i$, the proved statement is
 \begin{align}
     T\Psi(A_1,\ldots,A_n)=\Psi(A_1,\ldots,A_n)
         &\Longrightarrow
@@ -2556,7 +2566,7 @@ statement is
 Thus (\ref{eq:peps_normal_ft_section3_route_uniform_bond_repeated_tensor})
 omits the equal-bond-dimension conclusion in
 (\ref{eq:peps_normal_ft_section3_route_cyclic_shift_equal_bond_dimensions})
-because the formal type assumes it.
+because its matrix-chain type assumes it.
 The blueprint records this restricted target as
 \path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}, now
 formalized as
@@ -2571,12 +2581,18 @@ scalar, but not necessarily the identity, so an \(n\)-th root (available since
 \(\mathbb{C}\) is algebraically closed) is needed to fold the residual phase
 into the repeated tensor.
 
-\emph{Verdict: scope restriction.} The uniform-\(D\) theorem records the
-existence of the repeated injective tensor \(B\), but it cannot express the
-source's equal-bond-dimension conclusion as a theorem with mathematical
-content: the type \path{MPSChainTensor d D n} already fixes one bond dimension.
-The per-bond rectangular version, in which adjacent invertible gauges first
-imply equality of the bond dimensions, remains the follow-up.
+\emph{Verdict: the bond-dimension clause is complete; the end-to-end
+corollary remains a scope restriction.} The missing step is now an explicit
+reindexing theorem. Starting from the proved equality of all cycle-edge
+dimensions, it must identify the two incident virtual indices at every site
+with one common pair $\operatorname{Fin}(D)\times\operatorname{Fin}(D)$,
+convert the cycle-graph tensor into a uniform
+\path{MPSChainTensor d D n}, and preserve vertex injectivity, the closed-state
+coefficients, and cyclic-shift invariance. The existing uniform theorem then
+constructs $B$. The Blueprint records the full source statement separately as
+\path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
+and keeps it not ready until this reindexing is supplied. No collected gauge
+factorization or alternative proof route is required.
 
 \subsection*{The 2D analogue}
 

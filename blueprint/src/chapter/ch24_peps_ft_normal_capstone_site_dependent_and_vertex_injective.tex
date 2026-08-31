@@ -5,12 +5,13 @@ carrying tensors $A_1, \ldots, A_5$ whose two-site windows are injective.
 The entries above specialize to one repeated tensor; the remaining entries
 of this section formalize the site-dependent setting itself. A closed
 chain carries one tensor per site, windows are arcs of consecutive sites,
-and the closed-chain corollary delivers one gauge per bond. Throughout,
-all sites share one physical dimension $d$ and all bonds one bond
-dimension $D$; the source poses no restriction on the local dimensions of
-the site-dependent tensors, and the uniform-dimension restriction is
-recorded in the route note
-(\cite{gap:peps_normal_ft_section3_route}).
+and the closed-chain corollary delivers one gauge per bond. Most of the
+matrix-chain statements below take one physical dimension $d$ and one bond
+dimension $D$. For the Applications-section cyclic-shift corollary, the
+cycle-graph formulation instead retains one dimension $D_e$ per bond and
+derives their equality from the injective Fundamental Theorem. The remaining
+uniform-dimension restriction on the repeated-tensor construction is recorded
+in the route note (\cite{gap:peps_normal_ft_section3_route}).
 
 \begin{definition}[Arc products and window injectivity of a site-dependent
         chain]%
@@ -315,6 +316,54 @@ recorded in the route note
     $A_1,\ldots,A_{n-1},A_0$.
 \end{definition}
 
+\begin{definition}[Cyclic shift of a cycle-graph tensor]%
+    \label{def:peps_cycle_tensor_cyclic_shift}
+    \lean{TNLean.PEPS.cycleRotate}
+    \lean{TNLean.PEPS.Tensor.cycleShift}
+    \lean{TNLean.PEPS.IsCycleShiftInvariantState}
+    \leanok
+    \uses{def:peps_tensor, def:peps_same_state}
+    On the cycle graph with $n\ge3$ sites, let $r(v)=v+1$ be the one-site
+    rotation. The cyclic shift of a site-dependent tensor family
+    $A_0,\ldots,A_{n-1}$ is the transport along $r^{-1}$, so its tensor at
+    site $v$ is $A_{v+1}$. Thus the shifted family is
+    $A_1,\ldots,A_{n-1},A_0$, exactly as in
+    \cite[lines~1807--1827]{Molnar2018NormalPEPS}. The generated state is
+    cyclic-shift invariant when the original and shifted families generate
+    the same closed-chain state.
+\end{definition}
+
+\begin{corollary}[Bond dimensions of a cyclic-shift-invariant injective MPS]%
+    \label{cor:peps_cycle_shift_bond_uniform}
+    \lean{TNLean.PEPS.gaugeEquiv_cycleShift_of_isCycleShiftInvariantState}
+    \lean{TNLean.PEPS.bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState}
+    \lean{TNLean.PEPS.bondDim_eq_of_isCycleShiftInvariantState}
+    \leanok
+    \uses{def:peps_cycle_tensor_cyclic_shift, thm:fundamentalTheorem_PEPS, def:cycleTensorOfMPS}
+    Let $A_0,\ldots,A_{n-1}$ be a site-dependent injective closed MPS on
+    $n\ge3$ sites, with one positive dimension $D_e$ for each bond $e$.
+    If its generated state is invariant under the cyclic shift
+    $A_v\mapsto A_{v+1}$, then the injective Fundamental Theorem compares
+    the family with its shift by invertible matrices on the corresponding
+    bonds. Consequently the bond from $v$ to $v+1$ and the bond from
+    $v+1$ to $v+2$ have the same dimension. Iterating around the cycle gives
+    $D_e=D_f$ for every pair of bonds $e,f$.
+
+    This is the ``all bond dimensions are the same'' clause of the
+    Applications-section corollary in
+    \cite[lines~1803--1842]{Molnar2018NormalPEPS}. Positivity excludes empty
+    virtual spaces, the same counterexample-backed correction as in the
+    injective Fundamental Theorem.
+\end{corollary}
+\begin{proof}\leanok
+    Transport along the inverse rotation preserves injectivity and replaces
+    the bond-dimension function $D_e$ by $D_{r(e)}$. Apply the injective
+    Fundamental Theorem to the original and shifted families. Equality of
+    their bond-dimension functions gives $D_e=D_{r(e)}$; rotation sends the
+    successor bond at $v$ to the successor bond at $v+1$. Cyclic induction
+    then proves equality on all bonds.
+\end{proof}
+
 \begin{corollary}[Gauge comparison with the cyclic shift]%
     \label{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_cyclicShift}
@@ -414,6 +463,42 @@ recorded in the route note
     $\lambda\ne0$. Since $\C$ is algebraically closed, there is an
     $n$-th root $c^n=\lambda^{-1}$; the rescaled tensor $cB$ is still
     injective and its constant chain generates the same closed state.
+\end{proof}
+
+\begin{corollary}[Translation-invariant description of an injective closed MPS chain,
+        per-bond form]%
+    \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
+    \notready
+    \uses{cor:peps_cycle_shift_bond_uniform, cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
+    Let $A_0,\ldots,A_{n-1}$ be a site-dependent injective closed MPS on
+    $n\ge3$ sites, with positive dimensions $D_e$ on its individual bonds.
+    If the closed-chain state is invariant under the cyclic shift
+    $A_v\mapsto A_{v+1}$, then there are a positive integer $D$ and an
+    injective tensor $B$ of $D\times D$ matrices such that $D_e=D$ for every
+    bond $e$ and
+    \begin{align}
+        \Coeff_A(\sigma)
+         & =
+        \tr\!\left(B^{\sigma_0}\cdots B^{\sigma_{n-1}}\right).
+        \notag
+    \end{align}
+    for every physical configuration $\sigma$.
+
+    This is the full per-bond statement of
+    \cite[lines~1803--1890]{Molnar2018NormalPEPS}. The equality $D_e=D$ is
+    Corollary~\ref{cor:peps_cycle_shift_bond_uniform}; what remains is to
+    transport the now-equal virtual spaces into the uniform closed-chain
+    representation and apply the already proved $L_i,R_i$ telescoping and
+    seam closure.
+\end{corollary}
+\begin{proof}
+    The source first compares the family with its cyclic shift, obtaining
+    adjacent bond isomorphisms and hence one common dimension $D$. After
+    identifying every bond with $\C^D$, its products $L_i$ and $R_i$ express
+    every $A_i$ through $A_0$; the common residual operation is absorbed into
+    one repeated tensor $B$. The bond-uniformity step is complete. The explicit
+    reindexing to the uniform closed-chain representation remains to be
+    supplied.
 \end{proof}
 
 \begin{corollary}[Translation-invariant description of an injective 2D PEPS,
