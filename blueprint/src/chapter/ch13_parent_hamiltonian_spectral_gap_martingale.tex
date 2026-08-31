@@ -129,6 +129,53 @@
     $v=\sum_{n=0}^{N-1}E_nv$ into the Pythagorean identity.
 \end{proof}
 
+% Source: References/cond-mat_9410110/main.tex:1206--1220,
+% Theorem 2.1(i), equations Enpsi and Enpsi2.
+
+\begin{theorem}[Outside-window martingale cancellation]%
+    \label{thm:outside-window-martingale-cancellation}
+    \lean{FrustrationFree.NestedGroundProjections.martingaleDifference_comp_localProjection_comp_eq_zero}
+    \lean{FrustrationFree.NestedGroundProjections.inner_sum_martingaleDifference_localProjection_eq_inner_sum_Icc}
+    \leanok
+    \uses{thm:orthogonal-martingale-difference-resolution}
+    Let $Q_n$ be a local ground projection and suppose that
+    \begin{align}
+        E_mQ_n & =Q_nE_m
+               &         & \text{whenever }m<n-l\text{ or }n<m.
+    \end{align}
+    Then every index outside $[n-l,n]$ cancels:
+    \begin{align}
+        E_mQ_nE_n & =0
+                  &    & \text{whenever }m<n-l\text{ or }n<m.
+    \end{align}
+    If $n<N$, the complete resolution term therefore reduces to
+    \begin{align}
+        \left\langle v,
+        \sum_{m=0}^{N-1}E_mQ_nE_nv\right\rangle
+         & =\left\langle
+        \sum_{m=n-l}^{n}E_mv,Q_nE_nv\right\rangle.
+    \end{align}
+    This is the reduction from \textup{Enpsi} to the first line of
+    \textup{Enpsi2} in \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:orthogonal-martingale-difference-resolution}
+    For an outside index, commutation and orthogonality give
+    \begin{align}
+        E_mQ_nE_n & =Q_nE_mE_n=0,
+    \end{align}
+    since either inequality implies $m\ne n$.  Hence only
+    $n-l\leq m\leq n$ remains in the finite sum.  Finally, symmetry of each
+    $E_m$ gives
+    \begin{align}
+        \langle v,E_mQ_nE_nv\rangle
+         & =\langle E_mv,Q_nE_nv\rangle,
+    \end{align}
+    and summing over the active interval proves the displayed identity.
+\end{proof}
+
 \subsection{Spectator-indexed boundary maps}\label{subsec:spectator_boundary_maps}
 
 The tail and left boundary maps embed virtual-space data into a common
