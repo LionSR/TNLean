@@ -15,7 +15,7 @@ $\rho$ in the source metric `Y1Y1X1X1` (lines 487--495). If the virtual weight
 is chosen to be a scalar identity on a $d$-dimensional bond space, trace
 normalization forces
 \[
-W_d = d^{-1} I_d.
+\rho_d = d^{-1} I_d.
 \]
 This module packages that matrix and its elementary properties. It does not
 prove a transfer-map fixed-point equation; that belongs to the later supplied
@@ -25,7 +25,7 @@ gates of `uuvv` (lines 532--543).
 
 A tensor product of two shifts has product bond dimension $d^2$, so the
 corresponding scalar trace-one matrix is
-$W_{d^2} = (d^2)^{-1} I_{d^2}$.
+$\rho_{d^2} = (d^2)^{-1} I_{d^2}$.
 -/
 
 open scoped ComplexOrder

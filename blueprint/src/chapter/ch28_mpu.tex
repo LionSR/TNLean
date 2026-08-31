@@ -7972,13 +7972,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     trace one. If the virtual weight on the bond space of a single shift is
     chosen to be a scalar identity, this normalization forces
     \begin{align}
-        W_d & =d^{-1}\Id_d
+        \rho_d & =d^{-1}\Id_d
     \end{align}
     whenever $d>0$. The same formula is defined at $d=0$, although it then has
     trace zero. The tensors $U_2$ and $U_3$ have bond dimension $d^2$, so the
     corresponding scalar trace-one matrix is
     \begin{align}
-        W_{d^2} & =(d^2)^{-1}\Id_{d^2}.
+        \rho_{d^2} & =(d^2)^{-1}\Id_{d^2}.
     \end{align}
     These are the scalar identity choices compatible with the source weight in
     \cite[equation labelled~\texttt{Y1Y1X1X1}]{Cirac2017MPU}. No transfer-map
@@ -7988,7 +7988,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\rho_{\mathrm{aux}}=\Id_d$ for each constituent shift and
     $\rho_{\mathrm{aux}}=\Id_{d^2}$ after tensoring. They compute the
     $Y_1$--$X_2$ and $X_1$--$Y_2$ contractions, not the paper gates. For
-    $d>1$, these identity weights differ from $W_d$ and $W_{d^2}$.
+    $d>1$, these identity weights differ from $\rho_d$ and $\rho_{d^2}$.
     % Source normalization: paper_v2.tex 269--280.
     % Source-factor weight: paper_v2.tex 487--495.
     % Shift and tensor-product dimensions: paper_v2.tex 1980--1994.
@@ -8005,12 +8005,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftPaperWeightSquared_trace}
     \leanok
     \uses{def:mpu_shift_trace_weight}
-    For every $d\in\mathbb N$, the matrix $W_d$ is positive semidefinite. If
-    $d>0$, then $W_d$ is positive definite and
+    For every $d\in\mathbb N$, the matrix $\rho_d$ is positive semidefinite. If
+    $d>0$, then $\rho_d$ is positive definite and
     \begin{align}
-        \tr(W_d) & =1.
+        \tr(\rho_d) & =1.
     \end{align}
-    Under the same hypothesis, $W_{d^2}$ is positive definite with trace one;
+    Under the same hypothesis, $\rho_{d^2}$ is positive definite with trace one;
     it is positive semidefinite for every $d$.
 \end{theorem}
 
@@ -8020,7 +8020,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $d>0$. Hence the claims follow from positivity of the identity matrix.
     For positive $d$,
     \begin{align}
-        \tr(W_d) & =d^{-1}\tr(\Id_d)=d^{-1}d=1.
+        \tr(\rho_d) & =d^{-1}\tr(\Id_d)=d^{-1}d=1.
     \end{align}
     Replacing $d$ by $d^2$ proves the product-space statements.
 \end{proof}
