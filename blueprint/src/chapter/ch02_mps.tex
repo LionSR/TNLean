@@ -1579,6 +1579,10 @@ $A^{-1}A=\Id$. This is the identity used in
          & =\lambda^{-1}B^{\mathbf a}\widetilde W.
         \label{eq:mps_reduction_boundary_dressed_right}
     \end{align}
+    More generally, the same conclusion holds when $N_0$ is directly assumed
+    to be a residual-word nilpotency bound for both reductions; that bound-form
+    statement requires no equality of closed-chain coefficients.
+
     These are boundary-dressed identities: they do not assert the bare matrix
     equalities $V=\lambda\widetilde V$ or
     $W=\lambda^{-1}\widetilde W$.
@@ -1595,6 +1599,10 @@ $A^{-1}A=\Id$. This is the identity used in
         thm:mps_reduction_residual_dimension_bound,
         thm:mps_reduction_residual_bound_consequences,
         thm:mps_reduction_exterior_buffer, def:l_blk_injective}
+    If the target bond dimension is zero, both dressed identities hold
+    entrywise for $\lambda=1$ because the relevant target row or column index is
+    empty.  Hence assume that the target bond dimension is positive.
+
     First replace the two least-length inequalities by common residual-word
     bounds at $N_0$: the least lengths are actual bounds under the
     positive-length closed-chain equality, and prefix factorization propagates
