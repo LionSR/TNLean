@@ -40,6 +40,7 @@ import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SwapMatrix
+import TNLean.Algebra.TwistedRegularRepresentation
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
 import TNLean.Algebra.UnitaryKronecker

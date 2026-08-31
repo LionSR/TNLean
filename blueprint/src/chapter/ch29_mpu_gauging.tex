@@ -1335,6 +1335,169 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     inverse induced by $q$ proves injectivity.
 \end{proof}
 
+\begin{definition}[Cocycle-twisted regular matrices]
+    \label{def:mpug_twisted_regular_matrices}
+    \lean{TNLean.Algebra.ScalarCocycle.phase,
+        TNLean.Algebra.ScalarCocycle.twistedLeftRegular,
+        TNLean.Algebra.ScalarCocycle.twistedRightRegular}
+    \leanok
+    \uses{def:scalar_cocycle, thm:mpug_circle_complex_units_h2}
+    Let $G$ be a group and let $\omega$ be a $\C^\times$-valued scalar
+    cochain.  Write
+    \begin{align}
+        \phi(g,h) & =\frac{\omega(g,h)}{|\omega(g,h)|}\in U(1).
+    \end{align}
+    On the standard basis of $\C^G$, define
+    \begin{align}
+        L_g^\phi
+         & =\sum_{h\in G}\phi(g,h)^{-1}|gh\rangle\langle h|,
+         &
+        R_g^\phi
+         & =\sum_{h\in G}\phi(h,g^{-1})^{-1}|hg^{-1}\rangle\langle h|.
+        \label{eq:mpug_twisted_regular_matrices}
+    \end{align}
+    The source uses a $U(1)$-valued cocycle $\Omega$; taking $\Omega=\phi$
+    gives exactly the leg and inverse conventions in
+    \cite[lines~412--418]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{lemma}[Cocycle equation for the circle phase]
+    \label{lem:mpug_circle_phase_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle.phase_isCocycle}
+    \leanok
+    \uses{def:is_cocycle, thm:mpug_circle_complex_units_h2}
+    If $\omega$ is a cocycle, then its circle phase satisfies
+    \begin{align}
+        \phi(g,h)\phi(gh,k)
+         & =\phi(g,hk)\phi(h,k)
+    \end{align}
+    for all $g,h,k\in G$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_circle_complex_units_h2}
+    The pointwise phase map $z\mapsto z/|z|$ is multiplicative, so it preserves
+    the cocycle equation.
+\end{proof}
+
+\begin{theorem}[Action of the twisted regular matrices]
+    \label{thm:mpug_twisted_regular_action}
+    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mulVec_apply,
+        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mulVec_apply}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    If $G$ is finite, then for $v\in\C^G$ and $g,h\in G$,
+    \begin{align}
+        (L_g^\phi v)(gh)
+         & =\phi(g,h)^{-1}v(h),
+         &
+        (R_g^\phi v)(hg^{-1})
+         & =\phi(h,g^{-1})^{-1}v(h).
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 412--418.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    In each matrix-vector product, exactly one summand is nonzero: the column
+    indexed by $h$.
+\end{proof}
+
+\begin{theorem}[Multiplication laws for twisted regular matrices]
+    \label{thm:mpug_twisted_regular_multiplication}
+    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mul,
+        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mul}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices,
+        lem:mpug_circle_phase_cocycle}
+    If $G$ is finite and $\omega$ is a cocycle, then
+    \begin{align}
+        L_g^\phi L_h^\phi
+         & =\phi(g,h)^{-1}L_{gh}^\phi,           \\
+        R_g^\phi R_h^\phi
+         & =\phi(h^{-1},g^{-1})^{-1}R_{gh}^\phi.
+        \label{eq:mpug_twisted_regular_multiplication}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 406--418; the laws follow from
+    % the displayed twisted regular matrices and the cocycle equation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_circle_phase_cocycle}
+    Expand the matrix products entrywise.  The two scalar identities are the
+    cocycle equation at $(g,h,k)$ and $(k,h^{-1},g^{-1})$, respectively.
+\end{proof}
+
+\begin{theorem}[Commutation of twisted left and right actions]
+    \label{thm:mpug_twisted_regular_commutation}
+    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_commute}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    If $G$ is finite and $\omega$ is a cocycle, then
+    \begin{align}
+        L_g^\phi R_h^\phi
+         & =R_h^\phi L_g^\phi.
+        \label{eq:mpug_twisted_regular_commutation}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 406--418 and 457; the latter
+    % explicitly attributes commuting local symmetries to commutativity of the
+    % left and right group actions.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_circle_phase_cocycle}
+    Expand both matrix products entrywise and use the cocycle equation at
+    $(g,k,h^{-1})$.
+\end{proof}
+
+\begin{theorem}[Unitarity of twisted regular matrices]
+    \label{thm:mpug_twisted_regular_unitary}
+    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mem_unitaryGroup,
+        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mem_unitaryGroup}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    If $G$ is finite, the matrices $L_g^\phi$ and $R_g^\phi$ are unitary for
+    every $g\in G$.
+    % Source anchor: arXiv:2502.20257, lines 406--418, where these matrices
+    % form the two gauge legs of the local unitary representation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    Each matrix is a permutation matrix whose nonzero entries have modulus
+    one.  Distinct columns therefore have disjoint support, while every column
+    has squared norm one.
+\end{proof}
+
+\begin{theorem}[Onsite Gauss coefficient identity]
+    \label{thm:mpug_onsite_gauss_phase}
+    \lean{TNLean.Algebra.ScalarCocycle.onsiteGauss_phase_div}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices,
+        lem:mpug_circle_phase_cocycle}
+    Suppose that $\omega$ is a cocycle and impose the additional normalization
+    \begin{align}
+        \phi(t^{-1},t) & =1
+    \end{align}
+    for every $t\in G$.  Then
+    \begin{align}
+        \frac{\phi(ag^{-1},gb)}{\phi(a,b)}
+         & =\frac{1}{\phi(a,g^{-1})\phi(g,b)}.
+        \label{eq:mpug_onsite_gauss_phase}
+    \end{align}
+    The scalar convention $S_{t^{-1}}=S_t^{-1}$ appears in
+    \cite[line~238]{FrancoRubio2025MPUGauging}, and the coefficient rewrite is
+    at lines 3763--3766. The displayed normalization remains an explicit
+    assumption here; it is not a consequence of cocyclicity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_circle_phase_cocycle}
+    Use the cocycle equation first at $(a,g^{-1},gb)$ and then at
+    $(g^{-1},g,b)$.  The normalization at $t=e$ also gives
+    $\phi(e,b)=1$.
+\end{proof}
+
 \begin{definition}[Block scalar and block independence]
     \label{def:mpug_block_independence_factor}
     \lean{TNLean.Algebra.LSymbol.ell,
