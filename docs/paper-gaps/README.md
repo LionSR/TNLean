@@ -11,6 +11,13 @@ the current formal boundary.
   and the remaining reduction from a full-rank fixed point to an explicitly
   chosen positive-definite invariant weight.
 
+For the MPU index of arXiv:1703.09188:
+
+- `mpu_shift_specified_tensor_index_scope.tex` records that the computed shift
+  formulas are values of the displayed tensors, while the source states the
+  public blocking-independent MPU index. The remaining public construction is
+  tracked by issues #7011 and #5856.
+
 For the MPU symmetry-defect gauging paper:
 
 - `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
