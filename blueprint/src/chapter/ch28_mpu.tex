@@ -8732,6 +8732,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.shiftAncillaSwap₁₂,
         MPOTensor.shiftAncillaSwap₂a,
         MPOTensor.shiftAncillaSwap₁aNext,
+        MPOTensor.shiftAncillaSwap₁aNext_apply,
         MPOTensor.shiftAncillaThreeSwap,
         MPOTensor.shiftAncillaCounterShift,
         MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂_apply,
@@ -8743,14 +8744,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{threeMPU2}
     Let $R$ cyclically rotate configurations on a periodic chain of length $N$.
     On triples $((\sigma_1,\sigma_2),a)$ of two physical configurations and one
-    $d$-dimensional ancilla configuration, let $C$ apply, in order, the swaps
-    $S^{2,a}_{n,n}$, $S^{1,2}_{n,n}$, and $S^{1,a}_{n,n+1}$ from the
-    source figure. Then
+    $d$-dimensional ancilla configuration, let $C$ apply the swaps above
+    $\widetilde U_1$ from the endpoint outwards: $S^{1,a}_{n,n+1}$,
+    $S^{1,2}_{n,n}$, and $S^{2,a}_{n,n}$. Then
     \begin{align}
         C^{-1}S^{1,2}C((\sigma_1,\sigma_2),a)
-         & =((R^{-1}\sigma_2,R\sigma_1),a).
+         & =((R\sigma_2,R^{-1}\sigma_1),a).
     \end{align}
-    Let $K((\sigma_1,\sigma_2),a)=((R^{-1}\sigma_2,R\sigma_1),a)$.
+    Let $K((\sigma_1,\sigma_2),a)=((R\sigma_2,R^{-1}\sigma_1),a)$.
     Writing $P_f$ for the permutation matrix of $f$, the matrix endpoint is
     \begin{align}
         P_C P_{S^{1,2}} P_{C^{-1}}
@@ -8766,7 +8767,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     before and after $S^{1,2}$ gives
     \begin{align}
         ((\sigma_1,\sigma_2),a)
-         & \longmapsto ((R^{-1}\sigma_2,R\sigma_1),a).
+         & \longmapsto ((R\sigma_2,R^{-1}\sigma_1),a).
     \end{align}
     Extensionality proves the permutation equality, and applying the
     permutation-matrix construction proves its matrix form.
