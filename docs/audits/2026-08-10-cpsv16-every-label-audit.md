@@ -109,7 +109,13 @@ leg are contracted between ket and bra. The remaining ket and bra vertical
 legs are the MPO physical coordinates, and the bonds group the corresponding
 left and right ket-bra pairs. The tensor therefore has physical dimension
 $D_{\mathrm v}$ and bond dimension $D_{\mathrm h}^2$. Leg ordering and
-product-index packing are project coordinate conventions.
+product-index packing are project coordinate conventions. Taking the
+contracted pair $(s,b)$ as an ancillary coordinate gives an explicit local
+purification with bond dimension $D_{\mathrm h}$. Consequently,
+`TNLean.PEPS.localBoundaryMPOTensor_isLPDO` and
+`TNLean.PEPS.localBoundaryMPOTensor_isMPDO` prove local purification and
+positive semidefiniteness on every nonempty chain without fixed-point or
+channel assumptions.
 
 The earlier one-contraction formula, named
 `TNLean.PEPS.doubledLocalTransferMPOTensor`, left both vertical legs open and

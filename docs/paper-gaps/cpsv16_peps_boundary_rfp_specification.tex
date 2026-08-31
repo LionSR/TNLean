@@ -73,6 +73,13 @@ This local formula is formalized without a fixed-point or channel
 hypothesis.
 \footnote{Formal declaration:
     \leanid{TNLean.PEPS.localBoundaryMPOTensor}.}
+Moreover, grouping the contracted pair $(s,b)$ into one ancillary coordinate
+gives a local purification with purifying bond dimension $D_{\mathrm h}$.
+Thus $E_A$ is an LPDO and generates positive semidefinite periodic operators
+at every nonzero length, again without a fixed-point or channel hypothesis.
+\footnote{Formal declarations:
+    \leanid{TNLean.PEPS.localBoundaryMPOTensor_isLPDO} and
+    \leanid{TNLean.PEPS.localBoundaryMPOTensor_isMPDO}.}
 
 \section{Data absent from the diagrams}
 
