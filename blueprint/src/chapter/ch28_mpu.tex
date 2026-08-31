@@ -8727,7 +8727,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 2158--2200.
 \end{proposition}
 
-\begin{lemma}[Finite three-swap ancilla endpoint]
+\begin{lemma}[Literal three-swap coordinate endpoint]
     \label{lem:mpu_shift_ancilla_three_swap_endpoint}
     \lean{MPOTensor.shiftAncillaSwap₁₂,
         MPOTensor.shiftAncillaSwap₂a,
@@ -8757,8 +8757,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         P_C P_{S^{1,2}} P_{C^{-1}}
          & =P_K.
     \end{align}
-    This is only the finite endpoint identity; it asserts neither a continuous
-    path nor a symmetry action on the full ancilla-enlarged operator algebra.
+    With the shift convention in the finite-chain formulas, $K$ is the
+    configuration permutation for $\widetilde U_3$, whereas the permutation for
+    $\widetilde U_2$ is
+    $((\sigma_1,\sigma_2),a)\mapsto
+        ((R^{-1}\sigma_2,R\sigma_1),a)$. Thus the literal labels in
+    Figure~\ref{fig:TR-ancilla} do not prove the stated
+    $\widetilde U_1$--$\widetilde U_2$ endpoint in these conventions. This
+    finite identity asserts neither a continuous path nor a symmetry action on
+    the full ancilla-enlarged operator algebra.
     % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
 \end{lemma}
 
@@ -8777,7 +8784,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{prop:U1-U2-equiv-ancillatrick}
     \notready
     \discussion{5715}
-    \uses{threeMPU2, lem:mpu_shift_ancilla_three_swap_endpoint, lemma:sym-trafo-swap, thm:mpu-continuous-unitary-swap-path, def:strictly-equivalent-symmetry}
+    \uses{threeMPU2,
+        lemma:sym-trafo-swap,
+        thm:mpu-continuous-unitary-swap-path,
+        def:strictly-equivalent-symmetry}
     After adding one ancilla of dimension $d$ per site,
     $\widetilde U_1^{(N)}$ and $\widetilde U_2^{(N)}$ are strictly equivalent
     under both time reversal and transposition.
@@ -8792,7 +8802,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % ancilla-enlarged tensors carry source data and the comparison path is
     % admissible. No preservation under adjoining ancillas is asserted.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU2, lem:mpu_shift_ancilla_three_swap_endpoint, lem:mpu_admissible_swap_symmetry_equivalence, def:mpu_admissible_strict_symmetry_equivalence, def:mpu_admissible_symmetry_equivalence, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{threeMPU2,
+        lem:mpu_admissible_swap_symmetry_equivalence,
+        def:mpu_admissible_strict_symmetry_equivalence,
+        def:mpu_admissible_symmetry_equivalence,
+        def:mpu_reduced_full_support_source_datum,
+        def:mpu_admissible_equivalence_datum}
     After adding one ancilla of dimension $d$ per site and performing the source
     blocking, denote the actual enlarged blocked endpoints by
     $\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$. For either time
