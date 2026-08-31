@@ -155,9 +155,17 @@ For MPDO renormalization fixed points:
 - `cpgsv17_mpdo_theorem_4_9_implication_label.tex` records the cyclic mismatch
   among the Appendix C proposition labels, the hidden use of the ZCL lemma
   `lemmus` in the printed proof of `prop3to4`, and the distinction between the
-  refuted literal (iv)$\Rightarrow$(v) statement and the bare source
-  (ii)$\Rightarrow$(v) conclusion, which is neither proved nor refuted because
-  its printed representative-factorization route fails.
+  literal (iv)$\Rightarrow$(v) statement and the source
+  (ii)$\Rightarrow$(v) route. The latter is now refuted independently by the
+  blocking-channel counterexample below.
+- `cpsv16_prop_c15_blocking_channel_false.tex` is the resolved false-source
+  record for Proposition C.15 (`prop2to5`). A Hermitian virtual-boundary
+  closure of the four-letter obstruction has trace norm $337/250$ at length
+  two and $27/20$ at lengths three and four. Trace-norm contractivity excludes
+  both refinement maps. A sitewise physical recovery and one length-independent
+  ambient boundary lift this obstruction to the five-letter simple-biCF MPDO
+  satisfying SAL, literal ZCL, and the paper's global normalization. Hence its
+  two-site blocking does not satisfy Definition 4.1.
 - [cpgsv17_pf_rank_one.tex](https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf) records the completed normal Case-I rank-one
   theorem, the false absorbed-normality route in Case II, the exact
   repeated-copy counterexample to (iv)$\Rightarrow$(v), the nonminimality of
@@ -167,9 +175,10 @@ For MPDO renormalization fixed points:
   MPDO, SAL, literal-ZCL, simple-canonical, and line-246 normalization
   hypotheses. Its first absorbed representative has no normalized rank-one
   neighboring-trace factorization. The conditional channel construction is
-  proved for supplied representative factorizations, but Proposition~C.15 is
-  still a missing statement: its printed route is refuted, while its bare
-  channel conclusion is neither proved nor refuted.
+  proved for supplied representative factorizations. The rank-one note's
+  earlier open status for Proposition~C.15 is superseded by
+  `cpsv16_prop_c15_blocking_channel_false.tex`, which refutes the bare channel
+  conclusion itself.
 - `cpsv16_gsnnch_sector_decomposition.tex` records that
   `MPOTensor.GSNNCHData` retains the source orthogonal sectors and natural
   multiplicities. Positive commuting products on supplied orthogonal sectors

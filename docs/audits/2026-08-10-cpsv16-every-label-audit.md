@@ -230,10 +230,12 @@ Proposition 4.13 is already represented by a theorem with the literal CPSV
 canonical-form hypotheses and the correct rectangular coisometry orientation;
 a second source-status node would duplicate it.  The Case-II structure node
 `thm:mpdo_sal_zcl_bnt_sector_structure` is now a proved false-source result.
-The distinct blocked-channel node `thm:mpdo_sal_zcl_blocking_channels` remains
-`\notready`: its representative-channel and outer-sector conclusions are
-conditional on supplied absorbed-sector factorizations, and no counterexample to
-Proposition~C.15 itself is claimed.
+The blocked-channel node `thm:mpdo_sal_zcl_blocking_channels` is distinct from
+the conditional representative-channel and outer-sector constructions. It is
+now a proved false-source result: the complete ambient
+witness has a two-site Hermitian closure of trace norm $337/250$ and
+three- and four-site closures of trace norm $27/20$, so trace-norm
+contractivity refutes Proposition~C.15 itself.
 
 ## Semantic boundaries retained
 
@@ -280,7 +282,11 @@ Proposition~C.15 itself is claimed.
   isometric physical descent reduce a hypothetical factorization to the
   four-letter obstruction. Proposition C.7 and the projector-controlled
   outer-sector construction remain valid conditionally for a supplied
-  factorization, but this does not refute Proposition~C.15 itself. The direct sector-mixing
+  factorization. Independently, a length-independent ambient virtual boundary
+  and a trace-preserving physical recovery carry the four-letter trace-norm
+  obstruction to the same complete ambient witness. This refutes every
+  two-to-three blocking channel asserted by Proposition~C.15 and the
+  twice-applied two-to-four refinement map. The direct sector-mixing
   alternative formerly tracked in #6793 is not a separate source statement.
   The
   printed proof of `prop3to4` has separate proof-path drift because it invokes

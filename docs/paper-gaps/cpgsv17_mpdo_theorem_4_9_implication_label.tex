@@ -120,9 +120,9 @@ projector-controlled outer-BNT assembly as its sole missing step would instead
 be \emph{proof-path drift}. No channel-assembly argument can establish the
 assertion with unrestricted raw copy weights.
 
-This counterexample alone does not refute the source proposition
+This repeated-copy counterexample alone does not refute the source proposition
 \texttt{prop2to5}, because that proposition starts from condition~(ii), not
-condition~(iv). The separate five-letter ambient counterexample
+condition~(iv). The five-letter ambient counterexample
 \leanid{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
 printed_theorem49_ii_to_iv_is_false} has a two-representative BNT presentation
 in biCF. It satisfies the complete condition-(ii) and line-246 normalization
@@ -130,10 +130,18 @@ hypotheses, but its first absorbed representative has no normalized rank-one
 neighboring-trace factorization. This refutes Proposition~\texttt{prop2to3}
 and the printed route through it. The projector-controlled assembly formalized
 in \ghissue{6632} remains valid conditionally for supplied representative
-factorizations. The ambient witness does not rule out different blocking
-channels. The source-facing Lean statement for
-Proposition~\texttt{prop2to5} is therefore still missing, and its bare
-conclusion is neither proved nor refuted.
+factorizations.
+
+A separate trace-norm calculation on the same ambient witness now rules out
+different blocking channels as well. One Hermitian virtual-boundary closure
+has trace norm $337/250$ at length two and $27/20$ at lengths three and four.
+A trace-preserving positive map is contractive on Hermitian matrices, so
+neither the two-to-three nor the twice-applied two-to-four refinement map can
+exist. The same virtual boundary isolates the obstruction sector at every
+length. Hence Proposition~\texttt{prop2to5} is false under its complete
+standing hypotheses, and the two-site blocking is not a renormalization fixed
+point. The resolved record is
+\path{docs/paper-gaps/cpsv16_prop_c15_blocking_channel_false.tex}.
 
 \section{Formal treatment}
 
@@ -156,8 +164,8 @@ assembly used in the source proof of \texttt{prop2to5}, after common-weight
 absorption derived from ZCL, is formalized in \ghissue{6632}. It is a
 conditional construction. Since the printed route obtains its premise from the
 false Proposition~\texttt{prop2to3}, it does not prove \texttt{prop2to5}. The
-source proposition therefore still has no source-facing Lean formalization,
-and no counterexample to its bare channel conclusion is claimed.
+independent trace-norm obstruction described above now gives a source-facing
+Lean refutation of the bare channel conclusion.
 
 \bibliographystyle{alpha}
 \bibliography{references}

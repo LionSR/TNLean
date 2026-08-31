@@ -132,6 +132,41 @@ mathematical obstruction.
   the earlier active-spanning example do not give the general construction
   used by the source.
 
+### SAL and ZCL do not imply the Proposition C.15 blocking channels
+
+- Locations: `TNLean/MPS/MPDO/CPSVBlockingChannelCounterexample.lean`,
+  `TNLean/MPS/MPDO/CPSVBlockingChannelEmbeddedCounterexample.lean`, and
+  `TNLean/MPS/MPDO/CPSVBlockingChannelAmbientCounterexample.lean`
+- Main declaration:
+  `MPOTensor.CPSVBlockingChannelCounterexample.printed_propositionC15_and_theorem49_ii_to_v_are_false`
+- Statement refuted: under the standing simple, biCF, MPDO, saturation-of-the-
+  area-law, literal-zero-correlation-length, and global-normalization
+  hypotheses of CPSV16 Appendix C.2, Proposition `prop2to5` asserts a
+  trace-preserving completely positive map from the two-site closures to the
+  corresponding three-site closures for every virtual boundary. Applying
+  that map twice is the refinement direction used for the two-site-blocked
+  RFP conclusion in Theorem 4.9.
+- Obstruction: for the four-letter rank-one tensor used in the preceding
+  ambient construction, one Hermitian virtual-boundary closure has trace
+  norms
+  \[
+  \lVert\mathcal K_2(X)\rVert_1=\frac{337}{250},\qquad
+  \lVert\mathcal K_3(X)\rVert_1
+   =\lVert\mathcal K_4(X)\rVert_1=\frac{27}{20}.
+  \]
+  Positivity and trace preservation contract the trace norm on Hermitian
+  matrices, whereas the target norm exceeds the source norm by $1/500$.
+  Hence neither the two-to-three nor the two-to-four map exists.
+- Ambient closure: the physical isometry has a trace-preserving completely
+  positive recovery, and a single virtual boundary supported on the first
+  ambient block isolates the embedded obstruction at every chain length.
+  Therefore the same five-letter tensor that satisfies all standing source
+  hypotheses refutes the bare channel conclusion itself, not merely the
+  representativewise proof route. Its two-site blocking is not an RFP in the
+  sense of Definition 4.1.
+- Source note:
+  `docs/paper-gaps/cpsv16_prop_c15_blocking_channel_false.tex`.
+
 ### Unequal raw copies refute Theorem 4.9(iv)$\Rightarrow$(v)
 
 - Location: `TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean`
@@ -150,15 +185,12 @@ mathematical obstruction.
 - Obstruction: the sole local matrix is $K^{00}=\operatorname{diag}(1,1/2)$.
   Definition 4.1 for $K^{[2]}$ would make its physical-trace transfer
   idempotent, hence would give $1+2^{-4}=1+2^{-2}$ after taking traces.
-- Scope: this does not refute Proposition C.15 (`prop2to5`), whose hypothesis
-  is condition (ii). The separate ambient counterexample satisfies condition
-  (ii) and refutes the Case-II representativewise conclusion of Proposition
-  C.12 (`prop2to3`) used by the printed proof of Proposition C.15. It does not
-  rule out different blocking channels. The projector-controlled channel
-  assembly remains a conditional helper for supplied representative
-  factorizations, not a source-facing Lean formalization of Proposition C.15.
-  The source-facing Lean statement is missing, and its bare channel conclusion
-  is neither proved nor refuted.
+- Scope: this repeated-copy witness does not refute Proposition C.15
+  (`prop2to5`), whose hypothesis is condition (ii). The separate ambient
+  trace-norm obstruction above does refute its bare blocking-channel
+  conclusion under the complete condition-(ii) standing hypotheses. The
+  projector-controlled channel assembly remains valid conditionally for
+  supplied representative factorizations.
 
 ### Horizontal periodic equality does not determine vertical BNT coefficients
 

@@ -74,6 +74,9 @@ import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
 import TNLean.MPS.MPDO.CPSVBNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
+import TNLean.MPS.MPDO.CPSVBlockingChannelAmbientCounterexample
+import TNLean.MPS.MPDO.CPSVBlockingChannelCounterexample
+import TNLean.MPS.MPDO.CPSVBlockingChannelEmbeddedCounterexample
 import TNLean.MPS.MPDO.CPSVExample410CorrelatedFlip
 import TNLean.MPS.MPDO.CPSVExample410Entropy
 import TNLean.MPS.MPDO.CPSVExample410Operator
@@ -305,6 +308,7 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.SimpleScaling
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
+import TNLean.MPS.MPDO.SitewisePhysicalRecovery
 import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.MPDO.SourceZCLMarginal
 import TNLean.MPS.MPDO.StackedLayers

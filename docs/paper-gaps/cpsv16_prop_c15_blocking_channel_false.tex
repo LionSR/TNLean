@@ -1,0 +1,264 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The SAL--ZCL Blocking-Channel Conclusion of CPSV16 Proposition C.15 Is False}
+\author{}
+\date{2026-08-31}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{Source claim}
+
+In Appendix~C.2 of Ref.~\cite{Cirac2016MPDO_arXiv}, a tensor $K$ is fixed
+which generates matrix product density operators and is both simple and in
+block-injective canonical form. Its basis of normal tensors is written
+$(\mathcal K_j)_j$. Zero correlation length first makes the repeated-copy
+weights independent of the copy label, after which their common values are
+absorbed into the representatives $\mathcal K_j$. These are the standing
+hypotheses at source lines~1628--1665.
+
+For an MPO tensor $A$ of virtual bond dimension $D$ and a virtual boundary
+$X\in M_D(\mathbb C)$, write $\mathcal K_N^A(X)$ for the $N$-site physical
+matrix obtained by multiplying the local matrices around the chain and
+closing the virtual indices against $X$. Proposition~\cpsvref{prop2to5}
+claims that saturation of the area law and zero correlation length imply the
+existence of two trace-preserving completely positive maps satisfying the
+diagram \cpsvref{3to5tcpm}. In particular, one of these maps must obey
+\begin{align}
+    \mathcal T\bigl(\mathcal K_2^K(X)\bigr)
+        &= \mathcal K_3^K(X)
+        \qquad\text{for every }X\in M_D(\mathbb C).
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_two_to_three}
+\end{align}
+The closing proof of Theorem~4.9 applies this map twice. Its final sentence
+labels this step $(iii)\Rightarrow(v)$, whereas the theorem's displayed chain
+and the hypothesis of Proposition~\cpsvref{prop2to5} place it in the logical
+$(ii)\Rightarrow(v)$ route. This separate cyclic-label discrepancy is recorded
+in \path{docs/paper-gaps/cpgsv17_mpdo_theorem_4_9_implication_label.tex}.
+In either reading, the argument requires a trace-preserving completely
+positive map satisfying
+\begin{align}
+    \mathcal T^{(2)}\bigl(\mathcal K_2^K(X)\bigr)
+        &= \mathcal K_4^K(X)
+        \qquad\text{for every }X\in M_D(\mathbb C).
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_two_to_four}
+\end{align}
+The source asserts these conclusions at lines~1810--1825 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+\section{A four-letter trace-norm obstruction}
+
+Let $l_i\in\mathbb C^2$ and $r_i\in(\mathbb C^2)^*$, for
+$0\leq i<4$, be the columns and rows of
+\begin{align}
+    L
+        &:= \begin{pmatrix}
+            1&1&1&1\\
+            1&2&-7&4
+        \end{pmatrix},
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_left_pairing}\\
+    R
+        &:= \begin{pmatrix}
+            1/4&-3/100\\
+            1/4&-1/100\\
+            1/4& 1/100\\
+            1/4& 3/100
+        \end{pmatrix}.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_right_pairing}
+\end{align}
+Define $A_i=|l_i)(r_i|$ and let $A$ be the four-letter diagonal MPO tensor
+whose only nonzero physical slices are the matrices $A_i$. The two
+rectangular products satisfy
+\begin{align}
+    LR
+        &= \begin{pmatrix}1&0\\0&0\end{pmatrix},
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_lr_product}\\
+    T:=RL
+        &= \begin{pmatrix}
+            11/50&19/100&23/50&13/100\\
+            6/25&23/100&8/25&21/100\\
+            13/50&27/100&9/50&29/100\\
+            7/25&31/100&1/25&37/100
+        \end{pmatrix}.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_trace_matrix}
+\end{align}
+Every entry of $T$ is strictly positive, and direct multiplication gives
+\begin{align}
+    T^2
+        &= \frac14 J_4,
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_trace_square}\\
+    T^3
+        &= T^2,
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_trace_cube}
+\end{align}
+where $J_4$ is the four-by-four all-ones matrix.
+
+Choose the virtual boundary
+\begin{align}
+    X
+        &:= \begin{pmatrix}-1&2/5\\-5&0\end{pmatrix}.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_boundary}
+\end{align}
+Its endpoint pairing matrix is
+\begin{align}
+    D:=(RXL)^{\mathsf T}
+        &= \begin{pmatrix}
+            0&-1/10&-1/5&-3/10\\
+            1/10&0&-1/10&-1/5\\
+            -4/5&-9/10&-1&-11/10\\
+            3/10&1/5&1/10&0
+        \end{pmatrix}.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_endpoint_pairing}
+\end{align}
+Since $A_iA_j=T_{ij}|l_i)(r_j|$, every closure
+$\mathcal K_N^A(X)$ is diagonal. Its diagonal entry at
+$(i_1,\ldots,i_N)$ is
+\begin{align}
+    \bigl(\mathcal K_N^A(X)\bigr)_{(i_1,\ldots,i_N),(i_1,\ldots,i_N)}
+        &= D_{i_1,i_N}\prod_{q=1}^{N-1}T_{i_q,i_{q+1}}.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_diagonal_closure}
+\end{align}
+Consequently its trace norm is the sum of the absolute values of these real
+diagonal entries. Using
+Eqs.~\ref{eq:cpsv16_prop_c15_blocking_channel_false_trace_square} and
+\ref{eq:cpsv16_prop_c15_blocking_channel_false_trace_cube}, the three
+relevant values are
+\begin{align}
+    \left\|\mathcal K_2^A(X)\right\|_1
+        &= \frac{337}{250},
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_two_site_norm}\\
+    \left\|\mathcal K_3^A(X)\right\|_1
+        &= \frac{27}{20},
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_three_site_norm}\\
+    \left\|\mathcal K_4^A(X)\right\|_1
+        &= \frac{27}{20}.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_four_site_norm}
+\end{align}
+
+A trace-preserving positive map contracts the trace norm on Hermitian
+matrices. The matrix $\mathcal K_2^A(X)$ is Hermitian. Thus any channel
+satisfying either the two-to-three or two-to-four closure identity would give
+\begin{align}
+    \frac{27}{20}
+        &\leq \frac{337}{250},
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_contractivity_contradiction}
+\end{align}
+which is impossible because
+\begin{align}
+    \frac{27}{20}-\frac{337}{250}
+        &= \frac1{500}>0.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_norm_gap}
+\end{align}
+
+\section{The ambient simple tensor}
+
+It remains to place this obstruction inside the precise standing hypotheses
+of Proposition~\cpsvref{prop2to5}. Let
+$V:\mathbb C^4\longrightarrow\mathbb C^5$ be the coordinate isometry onto the
+first four physical letters, and let $\widetilde A$ be the physical embedding
+of $A$ by $V$. There are a nonzero scalar $\mu$, a normal left-canonical
+bond-two tensor $B$, and an invertible bond matrix $G$ such that
+\begin{align}
+    0<|\mu|&<1,
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_weight_bound}\\
+    \mu B_i
+        &=G\widetilde A_iG^{-1}
+        \qquad\text{for every physical pair }i.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_virtual_gauge}
+\end{align}
+Adjoin a normal bond-one terminal tensor $C$, supported on the fifth physical
+letter, and form the exact weighted direct sum
+\begin{align}
+    K
+        &:=(\mu B)\oplus C.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_ambient_tensor}
+\end{align}
+The two representatives $B,C$ occur once, with coefficients $\mu,1$. Their
+one-site tuples span $M_2(\mathbb C)\times\mathbb C$, so this presentation is
+in block-injective canonical form. Both representatives are normal, the
+coefficient $1$ supplies the source normalization, and $K$ is simple. The
+periodic operators generated by $K$ are positive semidefinite with strictly
+positive trace at every positive length. Moreover, $K$ saturates the area law
+and its physical-trace transfer is literally idempotent:
+\begin{align}
+    \mathcal E_K^2
+        &=\mathcal E_K.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_ambient_zcl}
+\end{align}
+Thus $K$ satisfies the complete standing simple, biCF, MPDO, SAL, ZCL, and
+normalization conditions of source lines~1628--1665.
+
+For the boundary $X$ in
+Eq.~\ref{eq:cpsv16_prop_c15_blocking_channel_false_boundary}, choose the
+ambient virtual boundary
+\begin{align}
+    Y_X
+        &:=(GXG^{-1})\oplus0.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_ambient_boundary}
+\end{align}
+The same boundary $Y_X$ is used at every length. Moving the virtual gauge to
+the boundary and observing that the terminal diagonal block is zero gives
+\begin{align}
+    \mathcal K_N^K(Y_X)
+        &=\mathcal K_N^{\widetilde A}(X)
+        \qquad\text{for every }N.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_boundary_isolation}
+\end{align}
+The physical embedding also gives
+\begin{align}
+    \mathcal K_N^{\widetilde A}(X)
+        &=V^{\otimes N}\mathcal K_N^A(X)(V^{\otimes N})^\dagger.
+    \label{eq:cpsv16_prop_c15_blocking_channel_false_physical_embedding}
+\end{align}
+Conjugation by $(V^{\otimes N})^\dagger$ recovers every matrix on this range.
+On the orthogonal complement it can be completed by tracing and preparing a
+fixed faithful density matrix. This gives a trace-preserving completely
+positive recovery map on the entire five-letter matrix algebra.
+
+Suppose now that the ambient tensor $K$ admitted the map asserted in
+Eq.~\ref{eq:cpsv16_prop_c15_blocking_channel_false_two_to_three}. Apply that
+map to the boundaries $Y_X$, compose on the input with the physical embedding
+at length two, and compose on the output with the recovery at length three.
+Equations~\ref{eq:cpsv16_prop_c15_blocking_channel_false_boundary_isolation}
+and~\ref{eq:cpsv16_prop_c15_blocking_channel_false_physical_embedding} would
+produce a channel from $\mathcal K_2^A(X)$ to $\mathcal K_3^A(X)$ for every
+$X$. This contradicts
+Eq.~\ref{eq:cpsv16_prop_c15_blocking_channel_false_contractivity_contradiction}.
+The identical argument at length four rules out the twice-applied conclusion
+in Eq.~\ref{eq:cpsv16_prop_c15_blocking_channel_false_two_to_four}.
+
+The finite calculations, physical recovery, and complete standing-hypothesis
+witness are formalized in the accompanying development.\footnote{The
+source-facing conclusion is
+\leanid{MPOTensor.CPSVBlockingChannelCounterexample.printed_propositionC15_and_theorem49_ii_to_v_are_false};
+its ambient standing-hypothesis witness is
+\leanid{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.exists_ambient_simpleBiCF_neighboringTraceObstruction}.}
+
+\section{Verdict}
+
+Proposition~\cpsvref{prop2to5} is false as printed. The counterexample
+satisfies every standing hypothesis used in Appendix~C.2, including the
+simple biCF presentation, the MPDO condition, saturation of the area law,
+literal zero correlation length, common-weight absorption, and the global
+unit-weight normalization. Nevertheless, no trace-preserving completely
+positive map can satisfy its two-to-three-site closure equation for every
+virtual boundary.
+
+The same witness also rules out the twice-applied two-to-four-site map used in
+the logical implication (ii)$\Rightarrow$(v) of Theorem~4.9, printed with the
+cyclic label (iii)$\Rightarrow$(v) in its closing proof. Conditional
+channel constructions from supplied neighboring-trace factorizations remain
+valid, but those extra factorizations are not consequences of SAL and ZCL.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

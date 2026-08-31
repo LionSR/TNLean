@@ -199,59 +199,67 @@ theorem evalWord_changePhysicalBasis_ofFn
   intro x _
   rw [List.prod_ofFn_smul, evalWord_ofFn]
 
-/-- Acting on every site by `V` sends the MPO of `M` to the MPO obtained by
-changing every local physical matrix by `V`.
+/-- Acting on every site by `V` sends an arbitrary virtual-boundary closure
+of `M` to the corresponding closure after changing the physical basis.
 
 This is the configuration-index form of
-\((V^{\otimes N})\rho^{(N)}(M)(V^{\otimes N})^\dagger\).
--/
-theorem singleKrausMap_sitewisePhysicalMatrix_mpo
-    (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ) :
-    singleKrausMap (sitewisePhysicalMatrix V N) (mpo M N) =
-      mpo (changePhysicalBasis V M) N := by
+\((V^{\otimes N})\rho_X^{(N)}(M)(V^{\otimes N})^\dagger\), with the same
+virtual boundary matrix \(X\) on both sides. -/
+theorem singleKrausMap_sitewisePhysicalMatrix_physCloseN
+    (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    singleKrausMap (sitewisePhysicalMatrix V N) (physCloseN M N X) =
+      physCloseN (changePhysicalBasis V M) N X := by
   ext s t
   simp only [singleKrausMap_apply, Matrix.mul_apply,
-    Matrix.conjTranspose_apply, sitewisePhysicalMatrix, mpo_apply,
-    mpoMatrixEntry, evalWord_changePhysicalBasis_ofFn, Matrix.trace_sum,
-    Matrix.trace_smul, smul_eq_mul, star_prod]
+    Matrix.conjTranspose_apply, sitewisePhysicalMatrix, physCloseN_apply,
+    evalWord_changePhysicalBasis_ofFn, Matrix.sum_mul, Matrix.smul_mul,
+    Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul, star_prod]
   have hexpand :
       (∑ q : Fin N → Fin d,
         (∑ p : Fin N → Fin d,
           (∏ i : Fin N, V (s i) (p i)) *
-            Matrix.trace (evalWord M (List.ofFn p) (List.ofFn q))) *
+            Matrix.trace
+              (evalWord M (List.ofFn p) (List.ofFn q) * X)) *
           (∏ i : Fin N, star (V (t i) (q i)))) =
         ∑ q : Fin N → Fin d, ∑ p : Fin N → Fin d,
           ((∏ i : Fin N, V (s i) (p i)) *
-            Matrix.trace (evalWord M (List.ofFn p) (List.ofFn q))) *
+            Matrix.trace
+              (evalWord M (List.ofFn p) (List.ofFn q) * X)) *
           (∏ i : Fin N, star (V (t i) (q i))) := by
     apply Finset.sum_congr rfl
     intro q _
     simpa only using Finset.sum_mul Finset.univ
       (fun p : Fin N → Fin d ↦
         (∏ i : Fin N, V (s i) (p i)) *
-          Matrix.trace (evalWord M (List.ofFn p) (List.ofFn q)))
+          Matrix.trace
+            (evalWord M (List.ofFn p) (List.ofFn q) * X))
       (∏ i : Fin N, star (V (t i) (q i)))
   rw [hexpand]
   have h := Fintype.sum_equiv
     (braKetFunctionsEquiv (i := Fin N) (a := Fin d) (b := Fin d))
     (fun p : (Fin N → Fin d) × (Fin N → Fin d) ↦
       (∏ i : Fin N, V (s i) (p.2 i)) *
-        Matrix.trace (evalWord M (List.ofFn p.2) (List.ofFn p.1)) *
+        Matrix.trace
+          (evalWord M (List.ofFn p.2) (List.ofFn p.1) * X) *
         (∏ i : Fin N, star (V (t i) (p.1 i))))
     (fun x : Fin N → Fin d × Fin d ↦
       (∏ i : Fin N, V (s i) (x i).1 * star (V (t i) (x i).2)) *
-        Matrix.trace (evalWord M
-          (List.ofFn fun i : Fin N ↦ (x i).1)
-          (List.ofFn fun i : Fin N ↦ (x i).2)))
+        Matrix.trace
+          (evalWord M
+            (List.ofFn fun i : Fin N ↦ (x i).1)
+            (List.ofFn fun i : Fin N ↦ (x i).2) * X))
     (fun p ↦ by
       dsimp
       change
         (∏ i : Fin N, V (s i) (p.2 i)) *
-              Matrix.trace (evalWord M (List.ofFn p.2) (List.ofFn p.1)) *
+              Matrix.trace
+                (evalWord M (List.ofFn p.2) (List.ofFn p.1) * X) *
             (∏ i : Fin N, star (V (t i) (p.1 i))) =
           (∏ i : Fin N,
             V (s i) (p.2 i) * star (V (t i) (p.1 i))) *
-            Matrix.trace (evalWord M (List.ofFn p.2) (List.ofFn p.1))
+            Matrix.trace
+              (evalWord M (List.ofFn p.2) (List.ofFn p.1) * X)
       have hprod :
           (∏ i : Fin N,
             V (s i) (p.2 i) * star (V (t i) (p.1 i))) =
@@ -262,6 +270,20 @@ theorem singleKrausMap_sitewisePhysicalMatrix_mpo
       ring)
   rw [Fintype.sum_prod_type] at h
   exact h
+
+/-- Acting on every site by `V` sends the MPO of `M` to the MPO obtained by
+changing every local physical matrix by `V`.
+
+This is the configuration-index form of
+\((V^{\otimes N})\rho^{(N)}(M)(V^{\otimes N})^\dagger\).
+-/
+theorem singleKrausMap_sitewisePhysicalMatrix_mpo
+    (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ) :
+    singleKrausMap (sitewisePhysicalMatrix V N) (mpo M N) =
+      mpo (changePhysicalBasis V M) N := by
+  simpa only [physCloseN_identity_eq_mpo] using
+    singleKrausMap_sitewisePhysicalMatrix_physCloseN V M N
+      (1 : Matrix (Fin D) (Fin D) ℂ)
 
 /-- If an MPO is positive after an isometric physical inclusion, then it was
 already positive before inclusion. -/
