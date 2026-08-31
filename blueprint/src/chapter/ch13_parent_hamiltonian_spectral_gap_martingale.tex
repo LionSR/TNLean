@@ -463,17 +463,19 @@
     \leanok
     \uses{lem:right-spectator-kernel-projection,
         thm:open-hamiltonian-right-spectator-conjugacy}
-    Suppose that $A$ has nonzero bond dimension, is block injective at length
-    $L_0>0$, and satisfies $L_0+1\leq n$.  The kernel of the range-$(L_0+1)$
-    prefix Hamiltonian on
-    the first $n$ sites of the $(n+1)$-site volume is the left open-chain
-    ground space.  The kernel of the full final length-$L$ suffix window is
-    the tail open-chain ground space.  After adjoining $r$ right spectators,
-    their orthogonal projections satisfy
+    Let $K,l,n,r\in\mathbb{N}$.  Suppose that $A$ has nonzero bond dimension,
+    is block injective at length $L_0>0$, and satisfies $L_0+1\leq n$.  The
+    kernel of the range-$(L_0+1)$ prefix Hamiltonian on the first $n$ sites of
+    the $(n+1)$-site volume is the left open-chain ground space.  Independently,
+    the kernel of the full final length-$(l+1)$ suffix window beginning at $K$
+    is the tail open-chain ground space.  Let $U_{\mathrm{pre}}$ and
+    $U_{\mathrm{tail}}$ be the canonical right-spectator isometries for the
+    active-volume decompositions $(n+1+r)=(n+1)+r$ and
+    $(K+l+1+r)=(K+l+1)+r$, respectively.  Their orthogonal projections satisfy
     \begin{align}
-        U G_{\lbrack 0,n)}^{(n+1+r)}U^{-1}
+        U_{\mathrm{pre}} G_{\lbrack 0,n)}^{(n+1+r)}U_{\mathrm{pre}}^{-1}
          & =(G_{\lbrack 0,n)}^{(n+1)})^{\oplus{[d]}^r},       \\
-        U G_{\lbrack K,K+l+1)}^{(K+l+1+r)}U^{-1}
+        U_{\mathrm{tail}} G_{\lbrack K,K+l+1)}^{(K+l+1+r)}U_{\mathrm{tail}}^{-1}
          & =(G_{\lbrack K,K+l+1)}^{(K+l+1)})^{\oplus{[d]}^r}.
     \end{align}
 \end{theorem}
