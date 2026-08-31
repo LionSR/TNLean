@@ -344,6 +344,31 @@ theorem norm_rightFiberwiseMap [Nonempty S]
     _ = ‖rightFiberwiseMap (S := S) G‖ * ‖x‖ := by
       rw [norm_singleRightFiber]
 
+/-- Conjugation by a surjective linear isometry preserves the operator norm. -/
+theorem norm_conj_linearIsometryEquiv
+    {E F : Type*} [NormedAddCommGroup E] [NormedAddCommGroup F]
+    [InnerProductSpace ℂ E] [InnerProductSpace ℂ F]
+    (U : E ≃ₗᵢ[ℂ] F) (G : E →L[ℂ] E) :
+    ‖U.toLinearIsometry.toContinuousLinearMap.comp
+        (G.comp U.symm.toLinearIsometry.toContinuousLinearMap)‖ = ‖G‖ := by
+  apply le_antisymm
+  · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg G) fun x ↦ ?_
+    calc
+      ‖U (G (U.symm x))‖ = ‖G (U.symm x)‖ := U.norm_map _
+      _ ≤ ‖G‖ * ‖U.symm x‖ := G.le_opNorm _
+      _ = ‖G‖ * ‖x‖ := by rw [U.symm.norm_map]
+  · let C := U.toLinearIsometry.toContinuousLinearMap.comp
+        (G.comp U.symm.toLinearIsometry.toContinuousLinearMap)
+    refine ContinuousLinearMap.opNorm_le_bound G (norm_nonneg C) fun x ↦ ?_
+    calc
+      ‖G x‖ = ‖U (G x)‖ := (U.norm_map _).symm
+      _ = ‖C (U x)‖ := by
+        dsimp only [C, ContinuousLinearMap.comp_apply]
+        change ‖U (G x)‖ = ‖U (G (U.symm (U x)))‖
+        rw [LinearIsometryEquiv.symm_apply_apply]
+      _ ≤ ‖C‖ * ‖U x‖ := C.le_opNorm _
+      _ = ‖C‖ * ‖x‖ := by rw [U.norm_map]
+
 end ContinuousLinearMap
 
 namespace MPSTensor
@@ -883,6 +908,38 @@ theorem openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEqui
     hInj hL₀ hL₀n] at hproj
   exact hproj
 
+/-- In a fixed larger volume, the ground projection of the whole active prefix
+is the fiberwise extension of the whole open-chain ground projection. -/
+theorem openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
+    {A : MPSTensor d D} [NeZero D] {L₀ n r : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀n : L₀ + 1 ≤ n) :
+    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+        ((openPrefixGroundProjectionES A (L₀ + 1) (n + r) n).comp
+          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (groundSpaceES A n).starProjection).toLinearMap := by
+  let U := rightSpectatorConfigLinearIsometryEquiv d n r
+  let G := openPrefixParentHamiltonianES A (L₀ + 1) (n + r) n
+  let H := openPrefixParentHamiltonianES A (L₀ + 1) n n
+  have hHamiltonian :=
+    openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
+      A (L := L₀ + 1) (n := n) (r := r) (p := n) (by omega) le_rfl
+  have hproj := ker_starProjection_conj_linearIsometryEquiv U G
+    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (LinearMap.toContinuousLinearMap H)).toLinearMap hHamiltonian
+  rw [ContinuousLinearMap.ker_starProjection_rightFiberwiseMap] at hproj
+  change U.toLinearEquiv.toLinearMap.comp
+      ((LinearMap.ker G).starProjection.toLinearMap.comp
+        U.symm.toLinearEquiv.toLinearMap) =
+    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (LinearMap.ker H).starProjection).toLinearMap at hproj
+  rw [show LinearMap.ker H = groundSpaceES A n by
+    change LinearMap.ker (openPrefixParentHamiltonianES A (L₀ + 1) n n) = _
+    rw [openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES,
+      ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
+        hInj hL₀ hL₀n]] at hproj
+  exact hproj
+
 /-- In a fixed larger volume, a full suffix-window ground projection is the
 fiberwise extension of the tail open-chain ground projection in the active
 volume. -/
@@ -1035,5 +1092,36 @@ theorem openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
   simpa only [P, fixedAmbientNestedGroundProjectionsES] using
     ((fixedAmbientNestedGroundProjectionsES A (l + 1) N).isSymmetricProjection (l + 1)
       |>.isIdempotentElem.eq).symm
+
+/-- After splitting off the right spectators, the fixed-ambient martingale
+component is the fiberwise extension of the physical open-chain component. -/
+theorem fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometryEquiv
+    {A : MPSTensor d D} [NeZero D] {K l r : ℕ}
+    (hInj : Kraus.IsNBlkInjective A l) (hl : 0 < l) (hK : 0 < K) :
+    (rightSpectatorConfigLinearIsometryEquiv d (K + l + 1) r).toLinearEquiv.toLinearMap.comp
+        (((fixedAmbientNestedGroundProjectionsES A (l + 1)
+          ((K + l + 1) + r)).martingaleDifference (K + l)).comp
+          (rightSpectatorConfigLinearIsometryEquiv d
+            (K + l + 1) r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (openChainMartingaleDifferenceES A K l hInj hl hK)).toLinearMap := by
+  have hleft :=
+    openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
+      (r := r) hInj hl (show l + 1 ≤ K + l by omega)
+  have hwhole :=
+    openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
+      (r := r) hInj hl (show l + 1 ≤ K + l + 1 by omega)
+  rw [FrustrationFree.NestedGroundProjections.martingaleDifference]
+  change (rightSpectatorConfigLinearIsometryEquiv d (K + l + 1) r).toLinearEquiv.toLinearMap.comp
+      ((openPrefixGroundProjectionES A (l + 1) ((K + l + 1) + r) (K + l) -
+        openPrefixGroundProjectionES A (l + 1) ((K + l + 1) + r) (K + l + 1)).comp
+        (rightSpectatorConfigLinearIsometryEquiv d
+          (K + l + 1) r).symm.toLinearEquiv.toLinearMap) = _
+  rw [LinearMap.sub_comp, LinearMap.comp_sub]
+  rw [hleft, hwhole]
+  exact congrArg ContinuousLinearMap.toLinearMap
+    (ContinuousLinearMap.rightFiberwiseMap_sub
+      (S := Cfg d r) (openChainLeftGroundProjectionES A (K + l))
+        (groundSpaceES A (K + l + 1)).starProjection).symm
 
 end MPSTensor
