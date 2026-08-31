@@ -519,10 +519,10 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
         \notag
     \end{align}
     Each $\iota_v$ is a bijection, so the same coordinate change preserves
-    injectivity of every local tensor. Cyclically shifting the matrix chain
-    amounts to precomposing the
-    physical configuration by the inverse cyclic rotation, so cyclic-shift
-    invariance is preserved. Apply
+    injectivity of every local tensor. If $r(v)=v+1$ is the cyclic rotation,
+    then
+    $\Coeff_{\mathrm{shift}(C)}(\sigma)=\Coeff_C(\sigma\circ r^{-1})$;
+    hence cyclic-shift invariance is preserved. Apply
     Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     to this uniform chain. Its $L_i,R_i$ telescoping and seam closure produce
     the required repeated injective tensor $B$.
