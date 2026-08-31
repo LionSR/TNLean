@@ -117,8 +117,9 @@ theorem norm_rightFiberwiseMap_le
 
 /-- A vector supported at one right-spectator coordinate. -/
 noncomputable def singleRightFiber (s : S) (x : EuclideanSpace ℂ I) :
-    EuclideanSpace ℂ (I × S) :=
-  WithLp.toLp 2 fun p => if p.2 = s then x p.1 else 0
+    EuclideanSpace ℂ (I × S) := by
+  classical
+  exact WithLp.toLp 2 fun p => if p.2 = s then x p.1 else 0
 
 /-- A vector supported on one spectator fiber has the norm of that fiber. -/
 theorem norm_singleRightFiber (s : S) (x : EuclideanSpace ℂ I) :
@@ -127,7 +128,11 @@ theorem norm_singleRightFiber (s : S) (x : EuclideanSpace ℂ I) :
     EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq,
     Fintype.sum_prod_type, Finset.sum_comm]
   classical
-  simp [singleRightFiber]
+  rw [Finset.sum_eq_single s]
+  · simp [singleRightFiber]
+  · intro t _ hts
+    simp [singleRightFiber, hts]
+  · simp
 
 /-- On a nonempty spectator space, right-spectator extension preserves the
 operator norm exactly. -/
@@ -143,7 +148,12 @@ theorem norm_rightFiberwiseMap [Nonempty S]
         EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq,
         Fintype.sum_prod_type, Finset.sum_comm]
       classical
-      simp [singleRightFiber, rightFiber]
+      symm
+      rw [Finset.sum_eq_single s]
+      · simp [singleRightFiber, rightFiber]
+      · intro t _ hts
+        simp [singleRightFiber, rightFiber, hts]
+      · simp
     _ ≤ ‖rightFiberwiseMap (S := S) G‖ * ‖singleRightFiber s x‖ :=
       (rightFiberwiseMap (S := S) G).le_opNorm _
     _ = ‖rightFiberwiseMap (S := S) G‖ * ‖x‖ := by
@@ -164,16 +174,22 @@ theorem openPrefixParentHamiltonianES_eq_zero_of_lt
   apply Finset.sum_eq_zero
   intro i _
   exfalso
-  exact (not_le_of_gt hnL) i.2
+  have hi := i.2
+  omega
 
 /-- Before the first full interaction window fits, the fixed-ambient ground
 projection is the identity. -/
 theorem openPrefixGroundProjectionES_eq_one_of_lt
     (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
     openPrefixGroundProjectionES A L N n = 1 := by
-  rw [openPrefixGroundProjectionES,
-    openPrefixParentHamiltonianES_eq_zero_of_lt A hnL]
-  simp
+  have hzero := openPrefixParentHamiltonianES_eq_zero_of_lt A (N := N) hnL
+  have hker : LinearMap.ker (openPrefixParentHamiltonianES A L N n) = ⊤ := by
+    ext v
+    simp only [LinearMap.mem_ker, Submodule.mem_top, iff_true]
+    rw [hzero]
+    rfl
+  simp only [openPrefixGroundProjectionES]
+  simpa [hker]
 
 /-- For indices strictly below the C3 endpoint, the fixed-ambient martingale
 difference vanishes because both adjacent prefix Hamiltonians are zero. -/
@@ -193,9 +209,15 @@ theorem openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoi
     openPrefixParentHamiltonianES A L N L =
       openSuffixParentHamiltonianES A L L N L := by
   classical
-  let i : NonwrappingStart L N := ⟨⟨0, by omega⟩, by omega⟩
+  have hN : 0 < N := lt_of_lt_of_le hL hLN
+  let iFin : Fin N := ⟨0, hN⟩
+  let i : NonwrappingStart L N := ⟨iFin, by
+    change 0 + L ≤ N
+    omega⟩
   have hprefix : openPrefixParentHamiltonianES A L N L = localTermES A L i.1 := by
-    let i' : OpenPrefixStart L N L := ⟨i, by simp [i]⟩
+    let i' : OpenPrefixStart L N L := ⟨i, by
+      change 0 + L ≤ L
+      omega⟩
     letI : Subsingleton (OpenPrefixStart L N L) :=
       ⟨fun j k => by
         apply Subtype.ext
@@ -205,7 +227,6 @@ theorem openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoi
         have hk := k.2
         omega⟩
     rw [openPrefixParentHamiltonianES, Fintype.sum_subsingleton _ i']
-    rfl
   have hsuffix : openSuffixParentHamiltonianES A L L N L = localTermES A L i.1 := by
     have hfilter :
         Finset.univ.filter (fun j : NonwrappingStart L N =>
@@ -218,7 +239,7 @@ theorem openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoi
         apply Subtype.ext
         apply Fin.ext
         have hjN := j.1.isLt
-        simp only [i, Fin.val_zero]
+        simp only [i]
         omega
       · rintro rfl
         simp [i]
@@ -231,9 +252,16 @@ theorem openIntervalGroundProjectionES_at_endpoint
     (A : MPSTensor d D) {l N : ℕ} (hl : 0 < l) (hlN : l + 1 ≤ N) :
     openIntervalGroundProjectionES A (l + 1) l N l =
       openPrefixGroundProjectionES A (l + 1) N (l + 1) := by
-  rw [openIntervalGroundProjectionES, openPrefixGroundProjectionES,
-    ← openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint
-      A (by omega) hlN]
+  have hHamiltonian :=
+    openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint
+      A (L := l + 1) (N := N) (by omega) hlN
+  have hker :
+      LinearMap.ker (openSuffixParentHamiltonianES A (l + 1) (l + 1) N (l + 1)) =
+        LinearMap.ker (openPrefixParentHamiltonianES A (l + 1) N (l + 1)) :=
+    congrArg LinearMap.ker hHamiltonian.symm
+  simp only [openIntervalGroundProjectionES, openPrefixGroundProjectionES]
+  exact congrArg (fun U : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) =>
+    U.starProjection.toLinearMap) hker
 
 /-- Nachtergaele's C3 product vanishes at the endpoint `n = l`:
 `Q_l E_l = G_[0,l+1) (1 - G_[0,l+1)) = 0`. -/
@@ -247,9 +275,11 @@ theorem openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
         openPrefixGroundProjectionES A (l + 1) N (l + 1)) = 0
   rw [openPrefixGroundProjectionES_eq_one_of_lt A (by omega),
     openIntervalGroundProjectionES_at_endpoint A hl hlN,
-    LinearMap.comp_sub, LinearMap.comp_one]
-  exact sub_eq_zero.mpr
+    LinearMap.comp_sub]
+  let P := openPrefixGroundProjectionES A (l + 1) N (l + 1)
+  change P * 1 - P * P = 0
+  rw [mul_one,
     ((fixedAmbientNestedGroundProjectionsES A (l + 1) N).isSymmetricProjection (l + 1)
-      |>.isIdempotentElem.eq.symm)
+      |>.isIdempotentElem.eq), sub_self]
 
 end MPSTensor
