@@ -13,7 +13,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     by
     \begin{align}
         \psi^\tau_{A,R}(\sigma)
-         & =\Psi_A(\sigma\cup\tau).
+         & =c_A(\omega_{R,\sigma,\tau}).
         \notag
     \end{align}
 \end{definition}
@@ -31,7 +31,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     Evaluate both functions at a physical configuration $\sigma$ on $R$ and
     apply the equality of the two closed-state coefficients at
-    $\sigma\cup\tau$.
+    $\omega_{R,\sigma,\tau}$.
 \end{proof}
 
 \begin{theorem}[Blocked-tensor expansion of a partial state]%
@@ -51,9 +51,16 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Split the closed contraction across $R$. The virtual labels on the two
-    sides agree through the complement-boundary identification, while each
-    bond internal to $R$ contributes its dimension.
+    Split the closed contraction across $R$. If $\mu$ and $\nu$ are boundary
+    labels on $R$, the complement-boundary identification satisfies
+    \begin{align}
+        \bar\mu=\bar\nu
+         & \quad\Longleftrightarrow\quad \mu=\nu.
+        \notag
+    \end{align}
+    Hence the double boundary sum collapses to its diagonal, which gives the
+    sum in~(\ref{eq:peps_partial_state_blocked_expansion}); each bond internal
+    to $R$ contributes its dimension to the factor $P_A(R)$.
 \end{proof}
 
 \begin{definition}[Physical operator of a region insert]%
