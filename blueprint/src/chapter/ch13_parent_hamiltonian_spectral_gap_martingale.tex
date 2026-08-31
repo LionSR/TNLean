@@ -337,6 +337,7 @@
         ContinuousLinearMap.rightFiberwiseMap,
         ContinuousLinearMap.rightFiberwiseMap_add,
         ContinuousLinearMap.rightFiberwiseMap_sub,
+        ContinuousLinearMap.rightFiberwiseMap_sum,
         ContinuousLinearMap.rightFiberwiseMap_comp,
         ContinuousLinearMap.norm_rightFiberwiseMap_le,
         ContinuousLinearMap.norm_rightFiberwiseMap}
@@ -374,7 +375,8 @@
         MPSTensor.rightSpectatorConfigLinearIsometryEquiv,
         ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff,
         ContinuousLinearMap.isSymmetricProjection_rightFiberwiseMap,
-        ContinuousLinearMap.ker_starProjection_rightFiberwiseMap}
+        ContinuousLinearMap.ker_starProjection_rightFiberwiseMap,
+        MPSTensor.ker_starProjection_conj_linearIsometryEquiv}
     \leanok
     For $n,r\in\N$, restriction to the first $n$ sites and the final $r$ sites
     gives a canonical equivalence
@@ -421,6 +423,68 @@
     coordinates unchanged and fixes the final $r$ spectator coordinates.
     Hence window extraction and restriction agree on every spectator fiber,
     and applying the same local parent interaction gives the identity.
+\end{proof}
+
+\begin{theorem}[Open Hamiltonian sums with right spectators]
+    \label{thm:open-hamiltonian-right-spectator-conjugacy}
+    \lean{MPSTensor.openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \leanok
+    \uses{thm:local-term-right-spectator-conjugacy}
+    Let $L>0$ and $p\leq n$.  Under the canonical identification
+    \begin{align}
+        \ell^2([d]^{n+r}) & \simeq
+        \ell^2([d]^n\times[d]^r),
+    \end{align}
+    both the prefix Hamiltonian on $[0,p)$ and every suffix-interval
+    Hamiltonian ending at $p$ are direct sums over the right-spectator
+    configurations of their operators in the $n$-site volume.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The condition $L>0$ makes the active starts in the two finite sums exactly
+    the starts before $p$.  Concatenation gives a bijection between the
+    corresponding start sets in the two volumes.  Apply
+    Theorem~\ref{thm:local-term-right-spectator-conjugacy} to each summand and
+    then sum over this bijection.
+\end{proof}
+
+\begin{theorem}[Fixed-volume C3 ground projections with right spectators]
+    \label{thm:fixed-volume-c3-projector-conjugacy}
+    \lean{MPSTensor.openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES,
+        MPSTensor.ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES,
+        MPSTensor.openSuffixParentHamiltonianES_full_window_eq_localTermES,
+        MPSTensor.ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES,
+        MPSTensor.openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \leanok
+    \uses{lem:right-spectator-kernel-projection,
+        thm:open-hamiltonian-right-spectator-conjugacy}
+    Suppose that $A$ is block injective at length $L_0>0$ and
+    $L_0+1\leq n$.  The kernel of the range-$(L_0+1)$ prefix Hamiltonian on
+    the first $n$ sites of the $(n+1)$-site volume is the left open-chain
+    ground space.  The kernel of the full final length-$L$ suffix window is
+    the tail open-chain ground space.  After adjoining $r$ right spectators,
+    their orthogonal projections satisfy
+    \begin{align}
+        U G_{[0,n)}^{(n+1+r)}U^{-1}
+         & =(G_{[0,n)}^{(n+1)})^{\oplus[d]^r},       \\
+        U G_{[K,K+l+1)}^{(K+l+1+r)}U^{-1}
+         & =(G_{[K,K+l+1)}^{(K+l+1)})^{\oplus[d]^r}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The prefix kernel is read fiberwise.  Block injectivity identifies every
+    fiber kernel with the $n$-site MPS ground space, which is precisely the
+    left-window membership condition after fixing the last physical index.
+    The full suffix interval contains one interaction; its cyclic restriction
+    is the ordinary restriction obtained by fixing the $K$-site prefix, giving
+    the tail-window membership condition.  Orthogonal kernel projections are
+    preserved by the canonical isometry, and the fiberwise kernel-projection
+    identity gives the two displayed formulas.
 \end{proof}
 
 \begin{theorem}[C3 boundary indices in the fixed final volume]

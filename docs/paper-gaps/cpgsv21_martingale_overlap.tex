@@ -330,27 +330,44 @@ at every right-spectator configuration.  It preserves composition and does not
 increase operator norm; when the spectator set is nonempty, its norm is exactly
 the original norm.
 
-The remaining comparison is an exact intertwining statement for the concrete
-projectors.  The canonical splitting of an $(n+r)$-site configuration into its
-first $n$ sites and final $r$ sites is
+The canonical splitting of an $(n+r)$-site configuration into its first $n$
+sites and final $r$ sites is
 \leanid{MPSTensor.rightSpectatorConfigEquiv}; its Euclidean realization is
 \leanid{MPSTensor.rightSpectatorConfigLinearIsometryEquiv}.  For every
 nonwrapping interaction, the theorem
 \leanid{MPSTensor.localTermES_conj_rightSpectatorConfigLinearIsometryEquiv}
 proves that the larger-volume local term is the direct sum of the $n$-site
-local term over right-spectator configurations.  Moreover,
-\leanid{ContinuousLinearMap.ker_starProjection_rightFiberwiseMap} identifies
-the kernel projection of a fiberwise operator with the fiberwise extension of
-the base kernel projection.
+local term over right-spectator configurations.  The theorems
+\leanid{MPSTensor.openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
+and
+\leanid{MPSTensor.openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
+sum this identity over the exact prefix and local-interval start sets.
 
-It remains to apply these identities to the finite prefix and local-interval
-Hamiltonian sums and then identify their smaller-volume kernels with the MPS
-subspaces \leanid{MPSTensor.openChainLeftGroundSpaceES} and
-\leanid{MPSTensor.openChainTailGroundSpaceES}.  This does not follow by
-definitional equality.  Until those sum and range identifications are proved,
-the fixed-final-volume estimate
-$\lVert Q_nE_n\rVert\leq\varepsilon_l$ for $n>l$ remains open.  No periodic
-coercivity statement can replace this missing operator identification.
+The smaller-volume kernels are now explicit.  Under block injectivity,
+\leanid{MPSTensor.ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES}
+identifies the prefix kernel with
+\leanid{MPSTensor.openChainLeftGroundSpaceES}.  The full suffix window contains
+one local interaction, and
+\leanid{MPSTensor.ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES}
+identifies its kernel with
+\leanid{MPSTensor.openChainTailGroundSpaceES}.  Combining these statements with
+\leanid{ContinuousLinearMap.ker_starProjection_rightFiberwiseMap} gives the
+fixed-volume projector identities
+\leanid{MPSTensor.openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}
+and
+\leanid{MPSTensor.openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}.
+None of these comparisons uses definitional equality between ambient volumes.
+
+It remains to identify the next-prefix projector $G_{n+1}^{(N)}$ with the
+right-spectator extension of the whole-ground projector in the $(n+1)$-site
+volume.  Subtracting that identity from the completed left-prefix identity
+will compare the fixed-volume martingale difference $E_n$ with its
+$(n+1)$-site counterpart.  Composition with the completed interval-projector
+identity and exact preservation of the fiberwise operator norm will then
+reduce $\lVert Q_nE_n\rVert\leq\varepsilon_l$ to the existing variable-volume
+C3 estimate.  Until this final next-prefix identification and product
+calculation are proved, the fixed-final-volume estimate for $n>l$ remains
+open.  No periodic coercivity statement can replace it.
 
 \subsection{Three-site to cyclic transport}
 
