@@ -82,6 +82,10 @@ private theorem IsNormalTensor.exists_pgvwc07_unital_dualFixedPoint_gauge
       (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
       Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) Λ = Λ := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.linftyOpNormedAddCommGroup
+  let : NormedSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.linftyOpNormedSpace
   have hIrr : Kraus.IsIrreducibleFamily A := hA.no_invariant_proj
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
     exists_posDef_transferMap_eigenvector_of_irreducible
@@ -120,7 +124,7 @@ private theorem IsNormalTensor.exists_pgvwc07_unital_dualFixedPoint_gauge
       (↑U : Matrix (Fin D) (Fin D) ℂ)
   have hGaugeCB : GaugeEquiv C B := by
     refine ⟨(unitaryGL U)⁻¹, fun i => ?_⟩
-    simp [B]
+    simp [B, unitaryGL]
   exact ⟨B, Λ, hGaugeAC.trans hGaugeCB, hΛ, hBUnital, hDualFixed⟩
 
 /-- Blockwise pure gauges preserve a CPSV basis of normal tensors. -/
@@ -236,6 +240,7 @@ private theorem CPSVCanonicalFormData.groundSpace_eq_iSup_representatives
             cast (congr_arg (MPSTensor s) (ref.copyDimEq k))
               (data.blocks (data.representativeIndex (data.classCopy k).1))) L := by
         rw [ref.regroupedBlocksEq]
+        rfl
       _ = groundSpace
           (cast (congr_arg (MPSTensor s) (ref.copyDimEq k))
             (data.blocks (data.representativeIndex (data.classCopy k).1))) L :=
@@ -367,7 +372,7 @@ private theorem sq_lt_pow_three_mul_pow_five
     have hStrict : K ^ 2 < 2 * K ^ 2 + 1 := by omega
     exact hStrict.trans_le (Nat.two_mul_sq_add_one_le_two_pow_two_mul K)
   have hBase : 2 ^ (2 * K) ≤ s ^ (2 * K) :=
-    pow_le_pow_left' hs.le (2 * K)
+    Nat.pow_le_pow_left (by omega) (2 * K)
   have hKlePow : K ≤ K ^ 5 := by
     simpa using pow_le_pow_right' (a := K) hK (by omega : 1 ≤ 5)
   have hExp : 2 * K ≤ 3 * K ^ 5 := by omega
@@ -395,9 +400,9 @@ extension of these source arguments.
 3.9's spanning clause: the kernel/BNT-span equality for every \(N>L\).  The
 separate conclusion \(D^2<d^L\) supplies the preceding construction condition
 from source line 515 and therefore makes the local orthogonal-complement
-projector nonzero.  The hypotheses `[NeZero D]` and `1 < d` record the
-positive bond-dimension and nontrivial physical-spin boundaries; Perron-gauge
-and short-ring data are derived internally. -/
+projector nonzero.  The conditions \(D>0\) and \(1<d\) record the positive
+bond-dimension and nontrivial physical-spin boundaries; Perron-gauge and
+short-ring data are derived internally. -/
 theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
     {A : MPSTensor d D} [NeZero D] (hd : 1 < d) (hA : IsCPSVCanonicalForm A) :
     ∃ g : ℕ, ∃ dim : Fin g → ℕ,
@@ -449,7 +454,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
     (hNormal j).isNBlkInjective_cap_pow_four (hDimLe j)
   by_cases hCountZero : data.phaseClasses.g = 0
   · have hOne : WordTupleSpanTop C 1 := by
-      letI : IsEmpty (Fin data.phaseClasses.g) := by
+      let : IsEmpty (Fin data.phaseClasses.g) := by
         rw [hCountZero]
         infer_instance
       unfold WordTupleSpanTop
@@ -564,7 +569,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
       have hSmall :=
         ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint
           (fun _ => 1) C (by simp) hCountTwo hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀
-            hUnital (by simp [R, base]) hNlarge
+            hUnital (by simp [R, base, L₀]) hNlarge
       intro ψ hψ
       rw [← hSmall]
       rw [ker_parentHamiltonian_eq_chainGroundSpace
