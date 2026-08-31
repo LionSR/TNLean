@@ -554,14 +554,6 @@ noncomputable def liftedEtaLocalStructureData
       (sitewisePhysicalMatrix F.inclusion N)).map_smul]
     rw [F.singleKrausMap_bondProduct_eq_liftedBondProduct data.bondData hN]
 
-/-- The lifted eta-local structure has the isometrically included restricted
-bond as its local bond. -/
-@[simp] theorem liftedEtaLocalStructureData_bond
-    (F : PhysicalSupportRestrictionData P K)
-    (data : EtaLocalStructureData
-      (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K)) :
-    (F.liftedEtaLocalStructureData data).bondData.bond =
-      F.liftedBond data.bondData.bond := rfl
 
 /-- A positive physical-sector factorization on the restricted physical space
 gives a positive commuting bond for the ambient tensor supported on the tensor

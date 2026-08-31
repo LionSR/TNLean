@@ -529,24 +529,5 @@ noncomputable def R_oneLabelBNTAlgebraTensorClause : BNTAlgebraTensorClause R wh
   coeffs := oneLabelCoeffs
   algebraClause := R_oneLabelAlgebraClause
 
-/-- The explicit BNT algebra tensor clause for `R` has one label. -/
-@[simp] theorem R_oneLabelBNTAlgebraTensorClause_labelCount :
-    R_oneLabelBNTAlgebraTensorClause.labelCount = 1 := rfl
-
-/-- The tensor in the unique BNT label is the normalized vertical component. -/
-@[simp] theorem R_oneLabelBNTAlgebraTensorClause_tensor (α : Fin 1) :
-    R_oneLabelBNTAlgebraTensorClause.tensor α = verticalComponent := rfl
-
-/-- The unique vertical multiplicity weight is `25/32`. -/
-@[simp] theorem R_oneLabelBNTAlgebraTensorClause_weight (α : Fin 1) (q : Fin 1) :
-    R_oneLabelBNTAlgebraTensorClause.weight α q = 25 / 32 := rfl
-
-/-- The explicit clause uses the coefficient family `oneLabelCoeffs`. -/
-@[simp] theorem R_oneLabelBNTAlgebraTensorClause_coeffs :
-    R_oneLabelBNTAlgebraTensorClause.coeffs = oneLabelCoeffs := rfl
-
-/-- The positive trace-power family in the explicit clause is `oneLabelChi`. -/
-@[simp] theorem R_oneLabelBNTAlgebraTensorClause_chi :
-    R_oneLabelBNTAlgebraTensorClause.algebraClause.positiveChi.chi = oneLabelChi := rfl
 
 end MPOTensor.RescalingStableLengthDependentRFP

@@ -335,25 +335,14 @@ private lemma blockLetterAmplitude_sq : blockLetterAmplitude ^ 2 = (1 / 2 : ℂ)
       norm_num [Complex.ofReal_sqrt_sq 2 (by norm_num : (0 : ℝ) ≤ 2)]
     _ = (1 / 2 : ℂ) := by norm_num
 
-private noncomputable def block0Weight : ℂ := (1 : ℂ) / Real.sqrt 2
 private noncomputable def block1Weight : ℂ := (1 : ℂ) / (2 * Real.sqrt 2)
 private noncomputable def katoCFWeights : Fin 2 → ℂ :=
-  fun k => match k with | 0 => block0Weight | 1 => block1Weight
+  fun k => match k with | 0 => blockLetterAmplitude | 1 => block1Weight
 
 private lemma katoCFWeights_ne_zero (k : Fin 2) : katoCFWeights k ≠ 0 := by
   have hs : (Real.sqrt 2 : ℂ) ≠ 0 := by
     exact_mod_cast (Real.sqrt_pos.mpr (show (0 : ℝ) < 2 by norm_num)).ne'
-  fin_cases k <;> simp [katoCFWeights, block0Weight, block1Weight, hs]
-
-private lemma block0Weight_times_amplitude :
-    block0Weight * blockLetterAmplitude = (1 / 2 : ℂ) := by
-  calc
-    block0Weight * blockLetterAmplitude =
-        ((1 : ℂ) / Real.sqrt 2) * ((1 : ℂ) / Real.sqrt 2) := rfl
-    _ = 1 / ((Real.sqrt 2 : ℂ) ^ 2) := by ring
-    _ = 1 / (2 : ℂ) := by
-      norm_num [Complex.ofReal_sqrt_sq 2 (by norm_num : (0 : ℝ) ≤ 2)]
-    _ = (1 / 2 : ℂ) := by norm_num
+  fin_cases k <;> simp [katoCFWeights, blockLetterAmplitude, block1Weight, hs]
 
 private lemma block1Weight_times_amplitude :
     block1Weight * blockLetterAmplitude = (1 / 4 : ℂ) := by
@@ -488,12 +477,12 @@ private theorem toMPSTensor_eq_toTensorFromBlocks :
       rcases hp_val with rfl | rfl
       · fin_cases x
         · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
-            katoCFBlock0, block0Weight_times_amplitude]
+            katoCFBlock0, ← pow_two, blockLetterAmplitude_sq]
         · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
             katoCFBlock1, block1Weight_times_amplitude]
       · fin_cases x
         · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
-            katoCFBlock0, block0Weight_times_amplitude]
+            katoCFBlock0, ← pow_two, blockLetterAmplitude_sq]
         · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
             katoCFBlock1, block1Weight_times_amplitude]
     · -- p.divNat ≠ p.modNat means p is 1 or 2; tensor = 0 and blocks = 0

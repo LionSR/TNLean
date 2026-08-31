@@ -150,9 +150,6 @@ def formAt (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
     CommutingFormData d N :=
   data.bondData.toCommutingFormData (N := N) hN
 
-@[simp] theorem formAt_bond (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
-    (data.formAt N hN).bond = data.bondData.bond := rfl
-
 /-- The chain-level commuting-form witness obtained from `EtaLocalStructureData`
 realizes the MPO operator at that chain length. -/
 theorem formAt_realizes (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :

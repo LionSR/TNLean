@@ -194,12 +194,5 @@ noncomputable def liftedTranslationInvariantBondData
       neighboring_comm := fun _ ↦ F.liftedBond_zero_one_comm data hN }
     simpa [G, GSNNCHData.bondAt] using G.bondAt_comm (0 : Fin 1) i j
 
-/-- The local bond of the lifted translation-invariant data is the isometric
-conjugate of the restricted bond. -/
-@[simp] theorem liftedTranslationInvariantBondData_bond
-    (F : PhysicalSupportRestrictionData P K)
-    (data : TranslationInvariantBondData F.supportDim) :
-    (F.liftedTranslationInvariantBondData data).bond =
-      F.liftedBond data.bond := rfl
 
 end MPOTensor.PhysicalSupportRestrictionData
