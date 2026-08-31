@@ -6,23 +6,28 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.Defs
 
 /-!
-# Boundary MPO tensor from a square-lattice PEPS tensor
+# Local contraction pattern for a square-lattice PEPS boundary tensor
 
-This module records the local boundary tensor in the boundary-theory construction
-of Cirac--Perez-Garcia--Schuch--Verstraete. A rank-five component function gives
-one physical leg and four virtual legs in left, right, up, down order. The tensor
-in FigureDavid1 is obtained by contracting both the physical leg and the inward
-(down) virtual leg between the ket and bra copies. The remaining up indices are
-the two physical indices of the boundary MPO, while its left and right bond
-indices each group the corresponding ket and bra indices.
+Under the PEPS RFP hypothesis, arXiv:1606.00608, lines 716--724, identifies the
+contraction in FigureDavid1 with the tensor of the boundary theory. This module
+records only that algebraic contraction pattern for an arbitrary rank-five
+component function; without the RFP hypothesis, it is not asserted to be a
+boundary-theory tensor.
+
+The component function has one physical leg and four virtual legs in left,
+right, up, down order. The FigureDavid1 contraction contracts both the physical
+leg and the inward (down) virtual leg between the ket and bra copies. The
+remaining up indices are the two physical indices of the resulting MPO tensor,
+while its left and right bond indices each group the corresponding ket and bra
+indices.
 
 The source diagram does not label the virtual directions. The names `up` and
 `down` are local to each copy: after choosing the matching inward legs, the
 project represents their common contracted coordinate by the fourth (`down`)
 argument in both component functions.
 
-This is an unconditional local contraction only. It is not a selected transfer
-fixed point or a complete boundary theory.
+The contraction is defined unconditionally. It is not a selected transfer fixed
+point or, without the source's RFP hypothesis, a complete boundary theory.
 
 The source diagram does not require the horizontal and vertical virtual spaces
 to have the same dimension. This module therefore allows dimensions `Dh` and
@@ -48,7 +53,7 @@ namespace PEPS
 
 variable {d Dh Dv : ℕ}
 
-/-- The boundary MPO tensor associated with a translationally invariant
+/-- The FigureDavid1 contraction pattern of a translationally invariant
 square-lattice PEPS component function.
 
 The arguments of `A` are the left and right indices in `Fin Dh`, the up and down
@@ -62,7 +67,9 @@ component formula is
 Thus the common physical index `s` and inward virtual index `b` are contracted,
 the MPO physical coordinates are `u` and `u'`, and its bonds are `(l,l')` and
 `(r,r')`. This is the component form of FigureDavid1 in arXiv:1606.00608,
-lines 721--724.
+lines 721--724. The source identifies it with the boundary-theory tensor under
+the PEPS RFP hypothesis introduced at lines 716--720; for arbitrary `A`, this
+definition records only the algebraic contraction pattern.
 
 The source diagram does not label the virtual directions. The names `up` and
 `down` are local to each copy, and choosing the fourth argument of both

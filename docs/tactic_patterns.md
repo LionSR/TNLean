@@ -1462,6 +1462,24 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### one-site blocking by canonical physical reindexing — candidate
+- **Pattern:** identify the doubled physical alphabet after one-site blocking
+  with the original doubled alphabet, prove that blocking is the resulting
+  physical relabeling, and reindex the diagonal physical-trace sum to preserve
+  each representative's transfer matrix.
+- **Seen:** 2 occurrences: the general implication
+  `MPOTensor.IsSimpleCanonicalForm.isSimple` in
+  `TNLean/MPS/MPDO/Simple.lean` and the four-letter specialization
+  `MPOTensor.RescalingStableLengthDependentRFP.R_isSimple` in
+  `TNLean/MPS/MPDO/RescalingStableSimple.lean` (post-merge review of PR #7533,
+  2026-08-31).
+- **Abstraction (proposed):** if a third occurrence appears, extract the
+  dimension-parametric one-site doubled equivalence together with lemmas for
+  the blocked-tensor relabeling and invariance of the doubled physical-trace
+  transfer. Specialize the existing proofs to those lemmas.
+- **Notes:** below the rule-of-three promotion threshold. Do not add a one-use
+  wrapper or duplicate predicate surface merely to merge these two proofs.
+
 ### supplied mixed-kernel indicator entries — candidate
 - **Pattern:** case-split the two or four physical-index equalities in an
   explicit mixed-kernel entry, simplify the resulting indicator functions and

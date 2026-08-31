@@ -421,8 +421,18 @@
     relabels the displayed sector decomposition into a BNT presentation of the
     blocked tensor. Normality and eventual linear independence are preserved
     by this relabeling, and the global block gauge gives equality of all
-    positive-length closed matrix-product coefficients. Finally, reindexing
-    the diagonal physical-trace sum by the same bijection leaves each
-    representative's transfer matrix unchanged. The assumed non-nilpotency
-    certificates therefore prove simplicity.
+    positive-length closed matrix-product coefficients. Write $e_1$ for the
+    one-site physical bijection, $\widehat e=e_1\times e_1$ for its induced
+    bijection of ket--bra pairs, and $\widehat e^{\,*}A_j$ for the corresponding
+    relabeling of the $j$-th representative. Since
+    $\widehat e(i,i)=(e_1(i),e_1(i))$, reindexing the diagonal sum gives
+    \begin{align}
+        \mathcal T_{\widehat e^{\,*}A_j}
+         & =\sum_i(\widehat e^{\,*}A_j)^{ii}
+        =\sum_iA_j^{e_1(i),e_1(i)}
+        =\sum_kA_j^{kk}
+        =\mathcal T_{A_j}.
+        \notag
+    \end{align}
+    The assumed non-nilpotency certificates therefore prove simplicity.
 \end{proof}
