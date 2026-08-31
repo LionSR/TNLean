@@ -1071,13 +1071,23 @@ norm estimate is derived here.
 \begin{proof}
     \leanok
     \uses{thm:nachtergaele_c1_c3_energy_estimate,
-        lem:energy_form_to_norm_bound}
+        lem:energy_form_to_norm_bound,
+        lem:quadratic_form_to_norm_bound}
     Denote the coefficient in
-    Equation~\eqref{eq:nachtergaele_c1_c3_norm_gap} by $\kappa$. The
-    ground-space identity turns $v\in(\ker H)^\perp$ into
-    $v\perp\operatorname{ran}(G_N)$, so the energy estimate gives
-    $\kappa\lVert v\rVert^2\leq\re\langle Hv,v\rangle$. Apply
-    Lemma~\ref{lem:energy_form_to_norm_bound}.
+    Equation~\eqref{eq:nachtergaele_c1_c3_norm_gap} by $\kappa$. For an
+    arbitrary $x$, remove its orthogonal projection onto $\ker H$ and call the
+    remainder $w$. Then $Hx=Hw$ and
+    $\re\langle Hx,x\rangle=\re\langle Hw,w\rangle$. The energy estimate and
+    Lemma~\ref{lem:energy_form_to_norm_bound} give
+    $\kappa\lVert w\rVert\leq\lVert Hx\rVert$. Hence Cauchy--Schwarz gives
+    \begin{align}
+        \kappa\,\re\langle Hx,x\rangle
+         & \leq \kappa\lVert Hx\rVert\lVert w\rVert
+        \leq \lVert Hx\rVert^2.
+    \end{align}
+    Thus the hypothesis of
+    Lemma~\ref{lem:quadratic_form_to_norm_bound} holds globally. That lemma is
+    the finite-dimensional spectral endpoint and yields the stated norm bound.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for a finite family of projections]
