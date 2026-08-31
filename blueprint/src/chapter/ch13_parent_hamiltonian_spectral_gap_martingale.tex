@@ -4043,6 +4043,305 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     Theorem~\ref{thm:finite_range_cyclic_knabe}.
 \end{proof}
 
+% Source scope: Papers/quant-ph_0608197/MPSarchive.tex:1460--1500 gives
+% the gap definition, the MPS gap assertion, and the nearest-neighbor Knabe
+% threshold. Papers/2011.12127/TN-Review-main.tex:2184--2188,2194--2197 gives
+% the MPS gap assertion and the nearest-neighbor Knabe principle. The arbitrary
+% finite-range coefficient below is the TNLean derivation documented in
+% docs/paper-gaps/knabe88_finite_range_coefficient.tex.
+
+\begin{definition}[Cyclic coordinates for periodic local interactions]
+    \label{def:cyclic_parent_local_coordinates}
+    \lean{MPSTensor.zmodLocalTermES}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients}
+    For an $N$-site periodic chain with $N>0$, index the range-$R$
+    local interactions by $\mathbb Z/N\mathbb Z$.  If
+    $s\in\mathbb Z/N\mathbb Z$ and $i\in\{0,\ldots,N-1\}$ is its standard
+    representative, write
+    \begin{align}
+        h_s^{(N,R)} & =h_{i,\mathrm{ES}}(A,R).
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Total sum in cyclic coordinates]
+    \label{thm:cyclic_parent_local_sum}
+    \lean{MPSTensor.sum_zmodLocalTermES_eq_parentHamiltonianES}
+    \leanok
+    \uses{def:cyclic_parent_local_coordinates, def:parent_hamiltonian_es}
+    The sum over the cyclic coordinates is the periodic parent Hamiltonian:
+    \begin{align}
+        \sum_{s\in\mathbb Z/N\mathbb Z}h_s^{(N,R)}
+         & =H_{N,R}^{\mathrm{ES}}(A).
+        \label{eq:cyclic_parent_local_sum}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cyclic_parent_local_coordinates, def:parent_hamiltonian_es}
+    Reindex the standard sum over $\{0,\ldots,N-1\}$ by its canonical
+    bijection with $\mathbb Z/N\mathbb Z$.  Each summand is unchanged.
+\end{proof}
+
+\begin{theorem}[Oriented separation of cyclic interactions]
+    \label{thm:cyclic_parent_oriented_separation}
+    \lean{MPSTensor.finEquiv_symm_add_eq_cyclicForwardSite,
+        MPSTensor.cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation,
+        MPSTensor.zmodLocalTermES_commute_of_oriented_separation}
+    \leanok
+    \uses{def:cyclic_parent_local_coordinates, rem:cyclic_window_operators,
+        lem:cyclic_window_nonoverlap_positive}
+    Let $R\leq e$ and $e+R\leq N$.  Addition by $e$ in
+    $\mathbb Z/N\mathbb Z$ moves the standard representative forward by $e$
+    sites.  The two length-$R$ cyclic windows beginning at $s$ and $s+e$ are
+    disjoint.  Consequently,
+    \begin{align}
+        h_s^{(N,R)}h_{s+e}^{(N,R)}
+         & =h_{s+e}^{(N,R)}h_s^{(N,R)}.
+        \label{eq:cyclic_parent_oriented_commutation}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cyclic_parent_local_coordinates, rem:cyclic_window_operators,
+        lem:cyclic_window_nonoverlap_positive}
+    Measure every site from the first window's initial site in the forward
+    cyclic order.  Membership in both windows would give an offset smaller
+    than $R$ and also an offset of the form $e+b$ with $b<R$.  The inequalities
+    $R\leq e$ and $e+R\leq N$ exclude this possibility.  Local interactions on
+    disjoint cyclic windows commute, which gives
+    (\ref{eq:cyclic_parent_oriented_commutation}).
+\end{proof}
+
+\begin{definition}[Cyclic active-block coordinates]
+    \label{def:cyclic_active_block_coordinates}
+    \lean{MPSTensor.cyclicActiveBlockConfigEquiv,
+        MPSTensor.cyclicActiveBlockConfigLinearIsometryEquiv,
+        MPSTensor.cyclicActiveBlockConfigEquiv_symm_apply_window,
+        MPSTensor.cyclicActiveBlockConfigLinearIsometryEquiv_apply_apply,
+        MPSTensor.cyclicActiveBlockConfigLinearIsometryEquiv_symm_apply_apply,
+        MPSTensor.cyclicActiveBlockConfigEquiv_symm_apply_spectator}
+    \leanok
+    \uses{def:cyclic_window_complement_indexing}
+    Let $W\leq N$ and fix a site $i$.  Splitting the cyclically ordered sites
+    into the first $W$ sites and their complement gives
+    \begin{align}
+        [d]^N & \simeq [d]^W\times[d]^{N-W},                              \\
+        U_i\colon\ell^2([d]^N)
+          & \longrightarrow\ell^2([d]^W\times[d]^{N-W}).
+        \label{eq:cyclic_active_block_isometry}
+    \end{align}
+    If $(\sigma,\tau)$ is an active configuration and a complementary
+    configuration, then their inverse image has value $\sigma_r$ at the site
+    $i+r$ for $0\leq r<W$, and value $\tau_r$ at the site $i+W+r$ for
+    $0\leq r<N-W$.  The isometry and its inverse act by composition with this
+    configuration bijection.
+\end{definition}
+
+\begin{theorem}[A local interaction inside a cyclic active block]
+    \label{thm:cyclic_active_block_local_conjugacy}
+    \lean{MPSTensor.localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv}
+    \leanok
+    \uses{def:cyclic_active_block_coordinates,
+        rem:euclidean_local_projector_ingredients, lem:right-spectator-extension}
+    Suppose that $W\leq N$ and $q+R\leq W$.  Under the isometry $U_i$ in
+    (\ref{eq:cyclic_active_block_isometry}), the range-$R$ interaction
+    beginning at the cyclic site $i+q$ becomes the corresponding nonwrapping
+    interaction on the active $W$-site interval, acting independently on the
+    complementary configuration:
+    \begin{align}
+        U_i h_{i+q}^{(N,R)}U_i^{-1}
+         & =\bigl(h_q^{(W,R)}\bigr)^{\oplus[d]^{N-W}}.
+        \label{eq:cyclic_active_block_local_conjugacy}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cyclic_active_block_coordinates,
+        rem:euclidean_local_projector_ingredients, lem:right-spectator-extension}
+    The condition $q+R\leq W$ places the whole interaction window inside the
+    active block.  Joining an active configuration to a complementary one
+    therefore preserves both the extracted length-$R$ word and every
+    configuration obtained by replacing that word.  The local projector acts
+    only on the active coordinates, which proves
+    (\ref{eq:cyclic_active_block_local_conjugacy}) on each complementary
+    configuration.
+\end{proof}
+
+\begin{theorem}[A cyclic Knabe block is an open parent Hamiltonian]
+    \label{thm:cyclic_knabe_block_open_parent_hamiltonian}
+    \lean{MPSTensor.cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock}
+    \leanok
+    \uses{def:cyclic_parent_local_coordinates,
+        def:cyclic_active_block_coordinates,
+        thm:cyclic_active_block_local_conjugacy,
+        def:open_parent_hamiltonian_es}
+    Let $1\leq R\leq m$ and $2m\leq N$, and put
+    \begin{align}
+        W & =m+R-1.
+        \label{eq:cyclic_knabe_active_volume}
+    \end{align}
+    For every $s\in\mathbb Z/N\mathbb Z$, let
+    $A_s=\sum_{q=0}^{m-1}h_{s+q}^{(N,R)}$.  The $m$ interaction windows
+    occupy exactly the $W$ cyclic sites beginning at $s$.  Under the active
+    block isometry $U_s$,
+    \begin{align}
+        U_sA_sU_s^{-1}
+         & =\left(H^{\mathrm{open}}_{W,R}(A)\right)^{\oplus[d]^{N-W}}.
+        \label{eq:cyclic_knabe_block_open_hamiltonian}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cyclic_active_block_local_conjugacy,
+        def:open_parent_hamiltonian_es}
+    The starts $q=0,\ldots,m-1$ are precisely the nonwrapping range-$R$
+    starts in an interval of length $W=m+R-1$.  Apply
+    Theorem~\ref{thm:cyclic_active_block_local_conjugacy} to every summand and
+    reindex the sum by these nonwrapping starts.  Fiberwise extension commutes
+    with finite sums, giving
+    (\ref{eq:cyclic_knabe_block_open_hamiltonian}).
+\end{proof}
+
+\begin{theorem}[Periodic finite-range gap from one open active volume]
+    \label{thm:parent_hamiltonian_gap_from_open_knabe_block}
+    \lean{MPSTensor.parentHamiltonianES_gap_of_openParentHamiltonianES_gap}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, def:parent_hamiltonian_es,
+        thm:cyclic_parent_local_sum, thm:cyclic_parent_oriented_separation,
+        thm:cyclic_knabe_block_open_parent_hamiltonian,
+        lem:right_spectator_quadratic_form_gap,
+        thm:finite_range_cyclic_knabe, lem:quadratic_form_to_norm_bound}
+    Let $1\leq R\leq m$, put $W=m+R-1$, and suppose that
+    $H^{\mathrm{open}}_{W,R}(A)$ has norm gap $\gamma$:
+    \begin{align}
+        \gamma\lVert u\rVert
+         & \leq\left\lVert H^{\mathrm{open}}_{W,R}(A)u\right\rVert
+        &&\text{for every }u\in
+        \left(\ker H^{\mathrm{open}}_{W,R}(A)\right)^\perp.
+        \label{eq:open_knabe_block_norm_gap}
+    \end{align}
+    If $(R-1)^2<m\gamma$, define
+    \begin{align}
+        \delta
+         & =\frac{m\gamma-(R-1)^2}{m-R+1}.
+        \label{eq:parent_hamiltonian_finite_range_knabe_delta}
+    \end{align}
+    Then $\delta>0$, and for every $N\geq2m$ and every
+    $v\in(\ker H_{N,R}^{\mathrm{ES}}(A))^\perp$,
+    \begin{align}
+        \delta\lVert v\rVert
+         & \leq\left\lVert H_{N,R}^{\mathrm{ES}}(A)v\right\rVert.
+        \label{eq:parent_hamiltonian_finite_range_knabe_gap}
+    \end{align}
+    The coefficient in
+    (\ref{eq:parent_hamiltonian_finite_range_knabe_delta}) is the TNLean
+    finite-range derivation documented in
+    \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}.  It is not a
+    theorem of the
+    MPS sources cited for the gap definition and the nearest-neighbor Knabe
+    principle.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cyclic_parent_local_sum,
+        thm:cyclic_parent_oriented_separation,
+        thm:cyclic_knabe_block_open_parent_hamiltonian,
+        lem:right_spectator_quadratic_form_gap,
+        thm:finite_range_cyclic_knabe, lem:quadratic_form_to_norm_bound}
+    The norm gap (\ref{eq:open_knabe_block_norm_gap}) and positivity give
+    $(H^{\mathrm{open}}_{W,R})^2\geq\gamma H^{\mathrm{open}}_{W,R}$ as a
+    quadratic form.  Lemma~\ref{lem:right_spectator_quadratic_form_gap} gives
+    the same inequality after adjoining the $N-W$ complementary sites, and
+    Theorem~\ref{thm:cyclic_knabe_block_open_parent_hamiltonian} gives it for
+    every cyclic sum $A_s$.  The oriented-separation theorem verifies the
+    commutation hypothesis in
+    Theorem~\ref{thm:finite_range_cyclic_knabe}.  That theorem gives
+    \begin{align}
+        \delta H_{N,R}^{\mathrm{ES}}(A)
+         & \leq\left(H_{N,R}^{\mathrm{ES}}(A)\right)^2
+    \end{align}
+    as a quadratic form, using the total-sum identity
+    (\ref{eq:cyclic_parent_local_sum}).  The inequality
+    $(R-1)^2<m\gamma$ makes $\delta$ positive, and the finite-dimensional
+    spectral criterion yields
+    (\ref{eq:parent_hamiltonian_finite_range_knabe_gap}).
+\end{proof}
+
+\begin{theorem}[Uniform finite-range gap for primitive MPS parent Hamiltonians]
+    \label{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe}
+    \leanok
+    \uses{thm:primitive_open_parent_hamiltonian_gap,
+        thm:open_parent_hamiltonian_kernel_ground_space,
+        thm:parent_hamiltonian_gap_from_open_knabe_block}
+    Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
+    positive-definite fixed point.  There exist $l>1$, $\epsilon_l\geq0$, an
+    integer $m\geq l+1$, and $\delta>0$ such that $A$ is $l$-block injective
+    and
+    \begin{align}
+        \epsilon_l
+         & <\frac{1}{\sqrt{l+1}}.
+        \label{eq:primitive_finite_range_knabe_threshold}
+    \end{align}
+    Set
+    \begin{align}
+        R & =l+1,                                                            \\
+        W & =m+R-1=m+l,                                                      \\
+        \gamma_{\mathrm{open}}
+          & =\left(1-\epsilon_l\sqrt{l+1}\right)^2.
+        \label{eq:primitive_finite_range_knabe_parameters}
+    \end{align}
+    The integer $m$ may be chosen so that
+    \begin{align}
+        l^2 & <m\gamma_{\mathrm{open}},
+        \label{eq:primitive_finite_range_knabe_numerator}
+    \end{align}
+    and
+    \begin{align}
+        \delta
+         & =\frac{m\gamma_{\mathrm{open}}-l^2}{m-l}.
+        \label{eq:primitive_finite_range_knabe_delta}
+    \end{align}
+    For every $N\geq2m$ and every
+    $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
+    \begin{align}
+        \delta\lVert v\rVert
+         & \leq\left\lVert H_{N,l+1}^{\mathrm{ES}}(A)v\right\rVert.
+        \label{eq:primitive_finite_range_knabe_gap}
+    \end{align}
+    The existence of a uniform MPS parent-Hamiltonian gap and the
+    nearest-neighbor Knabe principle are stated in
+    \cite[lines~1460--1500]{PerezGarcia2007Matrix} and
+    \cite[lines~2184--2188,2194--2197]{Cirac2021Matrix}.  Those passages do
+    not state the arbitrary finite-range coefficient
+    (\ref{eq:primitive_finite_range_knabe_delta}).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_open_parent_hamiltonian_gap,
+        thm:open_parent_hamiltonian_kernel_ground_space,
+        thm:parent_hamiltonian_gap_from_open_knabe_block}
+    Theorem~\ref{thm:primitive_open_parent_hamiltonian_gap} gives $l$,
+    $\epsilon_l$, and the norm gap $\gamma_{\mathrm{open}}$ on every open
+    volume at least $l+1$.  Since $\gamma_{\mathrm{open}}>0$, choose
+    $m\geq l+1$ with $l^2<m\gamma_{\mathrm{open}}$.  At the active volume
+    $W=m+l$, block injectivity identifies the open ground space with the kernel
+    of the open Hamiltonian, so
+    (\ref{eq:primitive_open_parent_hamiltonian_gap}) is exactly the hypothesis
+    (\ref{eq:open_knabe_block_norm_gap}) with $R=l+1$.  Apply
+    Theorem~\ref{thm:parent_hamiltonian_gap_from_open_knabe_block}.  Substituting
+    $R-1=l$ and $m-R+1=m-l$ gives
+    (\ref{eq:primitive_finite_range_knabe_delta}) and
+    (\ref{eq:primitive_finite_range_knabe_gap}).
+\end{proof}
+
 \begin{lemma}[Positive gap transfer under Loewner domination]
     \label{lem:positive_gap_transfer_loewner}
     \lean{LinearMap.IsPositive.re_inner_ge_of_norm_gap,
