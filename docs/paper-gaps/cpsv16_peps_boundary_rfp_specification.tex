@@ -89,8 +89,11 @@ in the final renormalization diagram.
 
 \section{The local boundary tensor}
 
-The local boundary tensor in the diagram at source lines~721--724 has two
-ket--bra contractions. Let $d$ be the PEPS physical dimension, and let
+Under the PEPS renormalization hypothesis introduced at source
+lines~716--720, the paper identifies the diagram at lines~721--724 with the
+tensor of the boundary theory. Independently of that identification, the same
+diagram defines an algebraic ket--bra contraction for every rank-five tensor.
+Let $d$ be the PEPS physical dimension, and let
 $D_{\mathrm h}$ and $D_{\mathrm v}$ be its horizontal and vertical virtual
 dimensions. Write $A^s_{l,r,u,b}$ for a PEPS tensor with
 $0\leq s<d$, $0\leq l,r<D_{\mathrm h}$, and
@@ -111,14 +114,18 @@ directions, and directional names are local to each copy. After choosing
 matching inward legs in the ket and bra copies, we denote their common
 contracted coordinate by $b$ in both component functions.
 
-This local formula is formalized without a fixed-point or channel
-hypothesis.
+The formal definition records this algebraic contraction for an arbitrary
+tensor. It does not formalize the source's RFP-dependent identification of the
+contraction with a boundary-theory tensor.
 \footnote{Formal declaration:
     \leanid{TNLean.PEPS.localBoundaryMPOTensor}.}
 Moreover, grouping the contracted pair $(s,b)$ into one ancillary coordinate
 gives a local purification with purifying bond dimension $D_{\mathrm h}$.
-Thus $E_A$ is an LPDO and generates positive semidefinite periodic operators
-at every nonzero length, again without a fixed-point or channel hypothesis.
+Thus the contraction $E_A$ is an LPDO and generates positive semidefinite
+periodic operators at every nonzero length for every $A$. This is a stronger
+algebraic positivity statement than the source needs: the paper invokes RFP to
+identify $E_A$ with the boundary theory, whereas positivity of the displayed
+Gram contraction itself needs neither a fixed point nor a channel.
 \footnote{Formal declarations:
     \leanid{TNLean.PEPS.localBoundaryMPOTensor_isLPDO} and
     \leanid{TNLean.PEPS.localBoundaryMPOTensor_isMPDO}.}

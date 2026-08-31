@@ -786,6 +786,62 @@
     required rank-one normalization with unit coefficient families.
 \end{proof}
 
+\begin{definition}[Sitewise support completion of an adjoint map]
+    \label{def:mpdo_sitewise_physical_recovery}
+    \lean{MPOTensor.sitewisePhysicalRecovery}
+    \leanok
+    \uses{def:mpdo_sitewise_physical_matrix,
+        thm:matrix_support_completion_cptp}
+    Let $d>0$, let $V:\C^d\to\C^e$ be a linear map, put
+    $W_N=V^{\otimes N}$ and $P_N=W_NW_N^\dagger$, and let
+    $\tau_N=d^{-N}I\in\MN{d^N}$ be the uniform faithful density matrix. The
+    sitewise support-completion map is
+    \begin{align}
+        \mathcal R_N(Y)
+         & =W_N^\dagger YW_N
+        +\tr\bigl((I-P_N)Y(I-P_N)\bigr)\tau_N.
+        \label{eq:mpdo_sitewise_physical_recovery}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[The sitewise recovery is a channel]
+    \label{lem:mpdo_sitewise_physical_recovery}
+    \lean{MPOTensor.sitewisePhysicalRecovery_isKrausCPTP}
+    \lean{MPOTensor.sitewisePhysicalRecovery_apply_singleKrausMap}
+    \lean{MPOTensor.sitewisePhysicalRecovery_physCloseN}
+    \leanok
+    \uses{def:mpdo_sitewise_physical_recovery}
+    If $V$ is an isometry, then
+    $\mathcal R_N:\MN{e^N}\to\MN{d^N}$ is trace-preserving and completely
+    positive. It is a left inverse to the physical embedding:
+    \begin{align}
+        \mathcal R_N(W_NZW_N^\dagger) & =Z.
+        \label{eq:mpdo_sitewise_physical_recovery_inverse}
+    \end{align}
+    In particular, if $\widetilde A$ is obtained from an MPO tensor $A$ by the
+    one-site physical isometry $V$, then
+    \begin{align}
+        \mathcal R_N\bigl(\mathcal K_N^{\widetilde A}(X)\bigr)
+         & =\mathcal K_N^A(X)
+        \notag
+    \end{align}
+    for every virtual boundary $X$. This is a general conditional transport
+    construction: it applies after an isometric physical embedding has been
+    supplied. It neither constructs nor implies the refinement channel asserted
+    in Proposition~C.15.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $W_N^\dagger W_N=I$, the first term of
+    (\ref{eq:mpdo_sitewise_physical_recovery}) has trace
+    $\tr(P_NY)$. The second is completely positive and has trace
+    $\tr((I-P_N)Y)$. Their sum is therefore a channel. On matrices supported by
+    $P_N$, the second term vanishes and conjugation by $W_N^\dagger$ proves
+    (\ref{eq:mpdo_sitewise_physical_recovery_inverse}). The closure identity
+    follows because a sitewise physical change sends every $N$-site closure to
+    $W_N\mathcal K_N^A(X)W_N^\dagger$.
+\end{proof}
+
 % **False source result:** CPSV16 Proposition C.15 asserts the two blocking
 % channels under the complete Case-II standing hypotheses.  The trace-norm
 % witness below refutes the refinement direction itself; it is not merely a
@@ -823,32 +879,43 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_neighboring_trace_obstruction_ambient_properties}
-    For the four-letter rank-one tensor underlying the ambient construction,
-    choose the virtual boundary displayed in the paper-gap note. The resulting
-    physical closures are real diagonal Hermitian matrices, and direct finite
-    summation gives
+    \uses{lem:mpdo_sitewise_physical_recovery,
+        thm:mpdo_neighboring_trace_obstruction_ambient_properties}
+    Let $A$ be the four-letter rank-one tensor underlying the ambient
+    construction, and choose the virtual boundary $X$ displayed in the
+    paper-gap note \cite{gap:cpsv16_prop_c15_blocking_channel_false}. The
+    resulting physical closures are real diagonal Hermitian matrices, and
+    direct finite summation gives
     \begin{align}
-        \lVert\mathcal K_2(X)\rVert_1
+        \lVert\mathcal K_2^A(X)\rVert_1
          & =\frac{337}{250},
-         & \lVert\mathcal K_3(X)\rVert_1
-         & =\lVert\mathcal K_4(X)\rVert_1=\frac{27}{20}.
+         & \lVert\mathcal K_3^A(X)\rVert_1
+         & =\lVert\mathcal K_4^A(X)\rVert_1=\frac{27}{20}.
         \notag
     \end{align}
     A trace-preserving positive map contracts the trace norm on Hermitian
     matrices, but the latter value exceeds the former by $1/500$. Hence the
     two-to-three and two-to-four refinement maps do not exist for this tensor.
 
-    Embed its four physical letters isometrically into the first four letters
-    of the ambient tensor. Conjugation by the sitewise adjoint, completed on
-    the orthogonal complement by preparing a faithful state, gives a
-    trace-preserving completely positive recovery. On the virtual side, one
-    boundary supported on the obstruction block isolates the embedded closure
-    for every chain length; the terminal block contributes zero. Therefore a
-    refinement map for the ambient tensor would descend to one of the two
-    forbidden maps above. Finally, the refinement map of an RFP structure for
-    $K^{[2]}$, transported from blocked coordinates, would give the forbidden
-    two-to-four map for $K$.
+    Let $V$ embed its four physical letters into the first four letters of the
+    ambient tensor, let $\widetilde A$ be the resulting embedded tensor, and let
+    $Y_X$ be the ambient virtual boundary supported on its obstruction block.
+    Moving the virtual gauge to the boundary, discarding the zero terminal
+    block, and applying the physical embedding give, for every $N$,
+    \begin{align}
+        \mathcal K_N^K(Y_X)
+         & =\mathcal K_N^{\widetilde A}(X),
+         &
+        \mathcal K_N^{\widetilde A}(X)
+         & =V^{\otimes N}\mathcal K_N^A(X)(V^{\otimes N})^\dagger.
+        \notag
+    \end{align}
+    Lemma~\ref{lem:mpdo_sitewise_physical_recovery} supplies a
+    trace-preserving completely positive left inverse to the second equality.
+    Therefore a refinement map for the ambient tensor would descend to one of
+    the two forbidden maps above. Finally, the refinement map of an RFP
+    structure for $K^{[2]}$, transported from blocked coordinates, would give
+    the forbidden two-to-four map for $K$.
 \end{proof}
 
 % Correct equation, not a figure: the cited source draws the two-to-three

@@ -273,11 +273,17 @@ construction; they are not attributed to a source theorem.
     If $N>L_{\mathrm{aux}}$, then $N\geq R+L_0$. The source-normalized
     form of \cite[Theorem~12]{PerezGarcia2007Matrix} therefore identifies
     the range-$R$ parent-Hamiltonian kernel with the BNT span. Since
-    $R\leq L_{\mathrm{aux}}$, cyclic-window antitonicity places the
-    range-$L_{\mathrm{aux}}$ kernel inside the range-$R$ kernel. Every BNT
-    vector satisfies the range-$L_{\mathrm{aux}}$ local constraints, which
-    gives the reverse inclusion. Thus the range-$L_{\mathrm{aux}}$ kernel
-    is exactly the BNT span for every $N>L_{\mathrm{aux}}$, and
+    $R\leq L_{\mathrm{aux}}$, cyclic-window antitonicity and the usual
+    frustration-free inclusion give
+    \begin{align}
+        \ker H_{L_{\mathrm{aux}}}^{(N)}
+         & \subseteq \ker H_R^{(N)}
+        =\spn\{\ket{V^{(N)}(A_j)}:1\leq j\leq g\}
+        \subseteq \ker H_{L_{\mathrm{aux}}}^{(N)}.
+        \notag
+    \end{align}
+    Thus the range-$L_{\mathrm{aux}}$ kernel is exactly the BNT span for
+    every $N>L_{\mathrm{aux}}$, and
     \begin{align}
         L_{\mathrm{aux}}
          & \leq 3(D-1)(D^4+1)+D^4
@@ -292,9 +298,17 @@ construction; they are not attributed to a source theorem.
     argument.
 
     In every case enlarge the interaction range to the common value
-    $L=3D^5$. Range antitonicity gives the upper inclusion at $L$, while the
-    usual frustration-free inclusion gives the reverse one, so the
-    all-$N>L$ spanning equation is preserved. Since $D>0$ and $d\geq2$,
+    $L=3D^5$. For every $N>L$, range antitonicity and the
+    frustration-free inclusion give the second kernel sandwich
+    \begin{align}
+        \ker H_L^{(N)}
+         & \subseteq \ker H_{L_{\mathrm{aux}}}^{(N)}
+        =\spn\{\ket{V^{(N)}(A_j)}:1\leq j\leq g\}
+        \subseteq \ker H_L^{(N)}.
+        \notag
+    \end{align}
+    Hence the all-$N>L$ spanning equation is preserved. Since $D>0$ and
+    $d\geq2$,
     \begin{align}
         D^2<2^{2D}\leq d^{2D}\leq d^{3D^5}=d^L.
         \notag
