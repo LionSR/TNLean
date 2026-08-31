@@ -26,7 +26,10 @@ enlarged operator algebra.
 namespace MPOTensor
 
 /-- Configurations of two physical species and one $d$-dimensional identity
-ancilla on a periodic chain of length $N$. -/
+ancilla on a periodic chain of length $N$.
+
+Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick`
+(lines 2210--2215) and Figure `fig:TR-ancilla` (lines 2217--2229). -/
 abbrev ShiftAncillaConfig (N d : ℕ) :=
   ((Fin N → Fin d) × (Fin N → Fin d)) × (Fin N → Fin d)
 
