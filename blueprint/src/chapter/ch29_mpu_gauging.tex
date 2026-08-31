@@ -817,9 +817,10 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     factorizations and is not needed in the unitary calculation.
 \end{definition}
 
-\begin{theorem}[Identity, composition, and right-reference laws]
+\begin{theorem}[Identity, inverse, composition, and right-reference laws]
     \label{thm:mpug_unitary_factorization_comparison_laws}
     \lean{Matrix.unitaryFactorizationComparison_self,
+        Matrix.unitaryFactorizationComparison_inv,
         Matrix.unitaryFactorizationComparison_trans,
         Matrix.unitaryFactorizationComparison_of_reference_eq_one,
         Matrix.unitaryFactorizationComparison_right_reference}
@@ -827,9 +828,17 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \uses{def:mpug_unitary_factorization_comparison}
     For all indices $a,b,c,d,f,g\in I$,
     \begin{align}
-        \lambda_{a,b}^{a,b} & =\mathbf 1,                              \\
+        \lambda_{a,b}^{a,b} & =\mathbf 1.
+    \end{align}
+    Reversing the comparison gives
+    \begin{align}
+        \left(\lambda_{a,b}^{c,d}\right)^{-1}
+         & =\lambda_{c,d}^{a,b}.
+    \end{align}
+    Comparisons compose as
+    \begin{align}
         \lambda_{a,b}^{f,g}
-                            & =\lambda_{c,d}^{f,g}\lambda_{a,b}^{c,d}.
+         & =\lambda_{c,d}^{f,g}\lambda_{a,b}^{c,d}.
         \label{eq:mpug_unitary_factorization_comparison_laws}
     \end{align}
     If $R_{c,d}=\mathbf 1$, then
@@ -847,14 +856,131 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 
 \begin{proof}\leanok
     \uses{def:mpug_unitary_factorization_comparison}
-    The identity and right-reference formulas follow from
-    $R_{a,b}^{-1}R_{a,b}=\mathbf 1$ and
+    The identity, inverse, and right-reference formulas follow from
+    $R_{a,b}^{-1}R_{a,b}=\mathbf 1$, inversion of a product, and
     $\mathbf 1^{-1}R_{a,b}=R_{a,b}$. For composition, insert the identity at
     the intermediate pair:
     \begin{align}
         (R_{f,g})^{-1}R_{a,b}
          & =(R_{f,g})^{-1}R_{c,d}(R_{c,d})^{-1}R_{a,b}.
     \end{align}
+\end{proof}
+
+\begin{definition}[Gauss action on the gauge legs]
+    \label{def:mpug_gauss_leg_action}
+    \lean{TNLean.Algebra.gaussLegAction,
+        TNLean.Algebra.gaussLegAction_apply}
+    \leanok
+    \discussion{7503}
+    Let $G$ be a group. For $g\in G$, define the permutation
+    $T_g\colon G^2\to G^2$ by
+    \begin{align}
+        T_g(a,b) & =\left(ag^{-1},gb\right).
+        \label{eq:mpug_gauss_leg_action}
+    \end{align}
+    These are the two gauge-leg labels in the local Gauss operator of
+    \cite[lines~3380--3387]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Composition of the Gauss leg action]
+    \label{thm:mpug_gauss_leg_action_mul}
+    \lean{TNLean.Algebra.gaussLegAction_one,
+        TNLean.Algebra.gaussLegAction_mul}
+    \leanok
+    \discussion{7503}
+    \uses{def:mpug_gauss_leg_action}
+    For all $g,h\in G$,
+    \begin{align}
+        T_e & =\id.
+    \end{align}
+    Moreover,
+    \begin{align}
+        T_g\circ T_h & =T_{gh}.
+        \label{eq:mpug_gauss_leg_action_mul}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_gauss_leg_action}
+    The two coordinates give
+    \begin{align}
+        T_g(T_h(a,b))
+         & =\left(ah^{-1}g^{-1},ghb\right)
+        =\left(a(gh)^{-1},(gh)b\right).
+    \end{align}
+\end{proof}
+
+\begin{definition}[Local Gauss operator]
+    \label{def:mpug_gauss_operator}
+    \lean{TNLean.Algebra.gaussOperator,
+        TNLean.Algebra.gaussOperator_apply_target,
+        TNLean.Algebra.gaussOperator_apply_of_ne}
+    \leanok
+    \discussion{7503}
+    \uses{def:mpug_unitary_factorization_comparison,
+        def:mpug_gauss_leg_action}
+    Let $G$ be finite, let $R_{a,b}\in\mathrm U(n)$ for $a,b\in G$, and use
+    the basis $\ket{i,a,b}$ of $\C^n\otimes\C[G]^{\otimes2}$. Define
+    \begin{align}
+        \mathcal G_g
+         & =\sum_{a,b\in G}
+        \lambda_{a,b}^{ag^{-1},gb}
+        \otimes\ket{ag^{-1},gb}\!\bra{a,b}.
+        \label{eq:mpug_gauss_operator}
+    \end{align}
+    Equivalently, the block from $(a,b)$ to $T_g(a,b)$ is
+    $(R_{T_g(a,b)})^{-1}R_{a,b}$ and every other block in that column
+    vanishes. This is the local Gauss operator in
+    \cite[lines~3380--3387]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Gauss operators form a unitary representation]
+    \label{thm:mpug_gauss_representation}
+    \lean{TNLean.Algebra.gaussOperator_one,
+        TNLean.Algebra.gaussOperator_mul,
+        TNLean.Algebra.star_gaussOperator,
+        TNLean.Algebra.gaussOperator_mem_unitaryGroup,
+        TNLean.Algebra.gaussRepresentation,
+        TNLean.Algebra.gaussRepresentation_coe}
+    \leanok
+    \discussion{7503}
+    \uses{def:mpug_gauss_operator}
+    The local Gauss operators satisfy
+    \begin{align}
+        \mathcal G_e & =\id.
+    \end{align}
+    Their product law is
+    \begin{align}
+        \mathcal G_g\mathcal G_h & =\mathcal G_{gh}.
+        \label{eq:mpug_gauss_representation}
+    \end{align}
+    Finally,
+    \begin{align}
+        \mathcal G_g^\dagger & =\mathcal G_{g^{-1}}.
+    \end{align}
+    Hence $g\mapsto\mathcal G_g$ is a unitary representation. This is the
+    representation part of the local Gauss-law proposition in
+    \cite[lines~3380--3387]{FrancoRubio2025MPUGauging}; invariance of the
+    gauged tensor is a separate assertion and is not included here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_unitary_factorization_comparison_laws,
+        thm:mpug_gauss_leg_action_mul,
+        def:mpug_gauss_operator}
+    In a column labelled by $(a,b)$, multiplication has only the intermediate
+    gauge label $T_h(a,b)$. The surviving matter block is
+    \begin{align}
+        \lambda_{T_h(a,b)}^{T_g(T_h(a,b))}
+        \lambda_{a,b}^{T_h(a,b)}
+         & =\lambda_{a,b}^{T_{gh}(a,b)},
+    \end{align}
+    by the comparison composition law and
+    $T_gT_h=T_{gh}$. At $e$, every surviving comparison is the identity.
+    Reversing a comparison gives
+    $(\lambda_{a,b}^{c,d})^\dagger=\lambda_{c,d}^{a,b}$, so taking the adjoint
+    gives $\mathcal G_g^\dagger=\mathcal G_{g^{-1}}$. The product with this
+    adjoint is $\mathcal G_e=\id$, which proves unitarity.
 \end{proof}
 
 \begin{definition}[Scalar cochains and normalization]
