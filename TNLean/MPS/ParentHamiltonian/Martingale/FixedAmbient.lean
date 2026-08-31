@@ -19,7 +19,7 @@ with \(n\).
 
 For the local interval \([n-l,n+1)\), the ground projection is the kernel
 projection of the sum over starts \(n-l\leq i\) and \(i+L\leq n+1\). We prove the
-outside-window commutation used between equations `Enpsi` and `Enpsi2` in the
+outside-window commutation used between equations \(Enpsi\) and \(Enpsi2\) in the
 proof of Theorem 2.1(i).
 
 ## References
@@ -36,15 +36,16 @@ namespace LinearMap
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E]
 
-/-- Kernel projections of commuting symmetric operators commute.
+/-- The kernel projection of a linear map commutes with the kernel projection
+of a commuting symmetric operator.
 
 The point is not merely that the operators commute. Commutation makes
-\(\ker S\) invariant under \(T\); symmetry makes its orthogonal complement invariant
-as well. Hence the orthogonal projection onto \(\ker S\) commutes with \(T\), and
-the same invariant-subspace argument applied to \(\ker T\) gives commutation of
-the two kernel projections. -/
+\(\ker S\) invariant under \(T\); symmetry of \(T\) makes its orthogonal complement
+invariant as well. Hence the orthogonal projection onto \(\ker S\) commutes with
+\(T\), and the same invariant-subspace argument applied to \(\ker T\) gives
+commutation of the two kernel projections. -/
 theorem IsSymmetric.kernelProjection_commute_of_commute {S T : E →ₗ[ℂ] E}
-    (_hS : S.IsSymmetric) (hT : T.IsSymmetric)
+    (hT : T.IsSymmetric)
     (hcomm : S.comp T = T.comp S) :
     (LinearMap.ker S).starProjection.toLinearMap.comp
         (LinearMap.ker T).starProjection.toLinearMap =
@@ -258,7 +259,6 @@ theorem openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_l
       (openIntervalGroundProjectionES A L l N n).comp
         (openPrefixGroundProjectionES A L N m) := by
   apply LinearMap.IsSymmetric.kernelProjection_commute_of_commute
-    (openPrefixParentHamiltonianES_isPositive A L N m).isSymmetric
     (openSuffixParentHamiltonianES_isPositive A L (l + 1) N (n + 1)).isSymmetric
   exact openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES A hLN
     (by omega)
