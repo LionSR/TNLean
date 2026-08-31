@@ -17,7 +17,7 @@ normalization forces
 \[
 \rho_d = d^{-1} I_d.
 \]
-This module packages that matrix and its elementary properties. It does not
+This module records that matrix and its elementary properties. It does not
 prove a transfer-map fixed-point equation; that belongs to the later supplied
 shift witnesses. It is also independent of the identity-weight mixed kernels
 in `ShiftSourceFactors` and does not identify those kernels with the paper
