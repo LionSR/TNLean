@@ -6,7 +6,9 @@ Authors: TNLean contributors
 import QICLean.Channel.KrausGauge
 import TNLean.MPS.BNT.Bridge
 import TNLean.MPS.BNT.DirectSumSelectors
+import TNLean.MPS.CanonicalForm.CPSVBlocking
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
+import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 
 /-!
@@ -25,16 +27,68 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- Positive physical blocking preserves a basis of normal tensors.
+
+If \((A_j)_{j=1}^g\) is a basis of normal tensors for \(A\) and \(p>0\),
+then \((A_j^{[p]})_{j=1}^g\) is a basis of normal tensors for \(A^{[p]}\).
+The closed-chain coefficients at blocked length \(N\) are the original
+coefficients at length \(Np\), and the same configuration equivalence carries
+eventual linear independence to the blocked alphabet.
+
+This is a derived transport lemma. Its source context is the blocking
+construction at arXiv:1606.00608, lines 227--231, and the basis-of-normal-
+tensors definition at lines 271--274. -/
+theorem IsCPSVBasisOfNormalTensors.blockTensor
+    {g : ℕ} {dim : Fin g → ℕ}
+    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    (hBNT : IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩))
+    {p : ℕ} (hp : 0 < p) :
+    IsCPSVBasisOfNormalTensors (MPSTensor.blockTensor A p)
+      (fun j ↦ ⟨dim j, MPSTensor.blockTensor (B j) p⟩) := by
+  classical
+  have hBlock {D' : ℕ} (T : MPSTensor d D') {N : ℕ}
+      (σ : Fin N → Fin (blockPhysDim d p)) :
+      mpv (MPSTensor.blockTensor T p) σ =
+        mpv T (blockedConfigEquiv d N p σ) := by
+    simp only [mpv, coeff, evalWord_blockTensor]
+    rw [ofFn_blockedConfigEquiv]
+  refine
+    { blocks_normal := fun j ↦ (hBNT.blocks_normal j).blockTensor p hp
+      spans_mpv := ?_
+      eventually_li := ?_ }
+  · intro N hN
+    obtain ⟨c, hc⟩ := hBNT.spans_mpv (N * p) (Nat.mul_pos hN hp)
+    refine ⟨c, fun σ ↦ ?_⟩
+    calc
+      mpv (MPSTensor.blockTensor A p) σ =
+          mpv A (blockedConfigEquiv d N p σ) := hBlock A σ
+      _ = ∑ j : Fin g, c j * mpv (B j) (blockedConfigEquiv d N p σ) :=
+        hc (blockedConfigEquiv d N p σ)
+      _ = ∑ j : Fin g, c j * mpv (MPSTensor.blockTensor (B j) p) σ := by
+        apply Finset.sum_congr rfl
+        intro j _
+        rw [hBlock (B j) σ]
+  · obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
+    refine ⟨N₀, fun N hN ↦ ?_⟩
+    let e := blockedConfigEquiv d N p
+    apply linearIndependent_mpvState_of_configEquiv e
+      (fun j ↦ MPSTensor.blockTensor (B j) p) B
+    · intro j σ
+      simpa [e] using hBlock (B j) (e.symm σ)
+    · have hNp : N₀ < N * p :=
+        lt_of_lt_of_le hN (Nat.le_mul_of_pos_right N hp)
+      exact hLI (N * p) hNp
+
 /-- A simultaneous length-`L` word span becomes a simultaneous one-letter
 span after blocking `L` physical sites. -/
 theorem wordTupleSpanTop_blockTensor_one
     {g : ℕ} {dim : Fin g → ℕ}
     (B : (j : Fin g) → MPSTensor d (dim j)) {L : ℕ}
     (hSpan : WordTupleSpanTop B L) :
-    WordTupleSpanTop (fun j => blockTensor (B j) L) 1 := by
+    WordTupleSpanTop (fun j => MPSTensor.blockTensor (B j) L) 1 := by
   unfold WordTupleSpanTop at hSpan ⊢
   have hRange :
-      Set.range (wordTuple (fun j => blockTensor (B j) L) 1) =
+      Set.range (wordTuple (fun j => MPSTensor.blockTensor (B j) L) 1) =
         Set.range (wordTuple B L) := by
     ext M
     constructor
@@ -44,7 +98,7 @@ theorem wordTupleSpanTop_blockTensor_one
       refine ⟨τ, ?_⟩
       funext j
       change Kraus.evalWord (B j) (List.ofFn τ) =
-        Kraus.evalWord (blockTensor (B j) L) (List.ofFn σ)
+        Kraus.evalWord (MPSTensor.blockTensor (B j) L) (List.ofFn σ)
       rw [evalWord_blockTensor]
       have hτ : List.ofFn τ = flattenBlockedWord d L (List.ofFn σ) := by
         calc
@@ -61,7 +115,7 @@ theorem wordTupleSpanTop_blockTensor_one
         (blockedConfigEquiv d 1 L).symm τ'
       refine ⟨σ, ?_⟩
       funext j
-      change Kraus.evalWord (blockTensor (B j) L) (List.ofFn σ) =
+      change Kraus.evalWord (MPSTensor.blockTensor (B j) L) (List.ofFn σ) =
         Kraus.evalWord (B j) (List.ofFn τ)
       rw [evalWord_blockTensor]
       have hcfg : blockedConfigEquiv d 1 L σ = τ' := by
@@ -249,7 +303,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_blocked_wordTupleSpanTop_one
     {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
     ∃ L : ℕ, 0 < L ∧
-      WordTupleSpanTop (fun j => blockTensor (B j) L) 1 := by
+      WordTupleSpanTop (fun j => MPSTensor.blockTensor (B j) L) 1 := by
   obtain ⟨L, hL, hSpan⟩ := hBNT.exists_positive_wordTupleSpanTop
   exact ⟨L, hL, wordTupleSpanTop_blockTensor_one B hSpan⟩
 

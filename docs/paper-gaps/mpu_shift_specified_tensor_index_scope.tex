@@ -1,0 +1,93 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Specified-Tensor Shift Values and the Public MPU Index}
+\author{}
+\date{2026-08-30}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source statement}
+
+For a simple matrix product unitary tensor with positive right and left
+source-cut ranks $r$ and $\ell$, Definition~IV.1 of
+Ref.~\cite{Cirac2017MPU} uses
+\begin{align}
+    \frac12(\log_2 r-\log_2\ell).
+    \label{eq:mpu_shift_specified_tensor_index_scope_expression}
+\end{align}
+Proposition~IV.2 proves that this value is independent of the chosen simple
+blocking. The resulting blocking-independent quantity is the public MPU
+index.
+% Source: paper_v2.tex lines 681--704, labels def:index and
+% index-well-defined.
+
+For the topological-insulator examples, the paper states that the right shift
+$T^{(N)}$ has index $\log_2 d$, its adjoint left shift $T^{(N)\dagger}$ has
+index $-\log_2 d$, and the three displayed families
+\begin{align}
+    U_1^{(N)} &= (\Id\otimes\Id)^{\otimes N}, \\
+    U_2^{(N)} &= T^{(N)\dagger}\otimes T^{(N)}, \\
+    U_3^{(N)} &= T^{(N)}\otimes T^{(N)\dagger}
+\end{align}
+have index zero.
+% Source: paper_v2.tex lines 1980--2001 and 2037--2041, label threeMPU.
+
+\section{Formal boundary}
+
+The definition \leanid{MPOTensor.sourceIndexValue} evaluates
+Eq.~\ref{eq:mpu_shift_specified_tensor_index_scope_expression} for one named
+tensor and supplied positivity proofs. It does not choose a simple blocking or
+prove independence of that choice.
+
+The shift calculations use the exact source-rank pairs
+\begin{align}
+    (r[T],\ell[T])
+        &=(d^2,1), \\
+    (r[T^\dagger],\ell[T^\dagger])
+        &=(1,d^2).
+\end{align}
+The bond-one identity has equal ranks $(d,d)$. Source ranks multiply under the
+independent tensor product, so each specified tensor for $U_1,U_2,U_3$ has
+equal right and left rank $d^2$. Therefore the formal declarations
+\leanid{MPOTensor.sourceIndexValue_rightShiftTensor},
+\leanid{MPOTensor.sourceIndexValue_leftShiftTensor}, and the four corresponding
+zero-value theorems prove the exact formulas for these named tensors.
+
+These calculations verify the numerical expression and its signs. They do not
+yet identify those values with the public blocking-independent MPU index
+asserted by the source.
+
+\section{Elimination plan}
+
+The public index construction is tracked by \ghissue{7011}. It must choose a
+simple blocking and prove that
+Eq.~\ref{eq:mpu_shift_specified_tensor_index_scope_expression} is independent
+of every such choice. Its remaining source-faithful input is the four-way
+source theorem tracked by \ghissue{5856}, which supplies the rank-product
+identity needed by the blocking argument without adding it as a hypothesis.
+
+After that construction, the shift results can be stated for the public index
+by evaluating it at the displayed simple representatives and applying
+blocking independence. Until then, the Lean declarations and their Blueprint
+entry remain explicitly restricted to specified tensors.
+
+\section{Verdict}
+
+The specified-tensor formulas agree exactly with the source-rank calculations,
+including the positive sign for the right shift and the negative sign for the
+left shift. The open gap is only the passage from these named-tensor values to
+the public blocking-independent MPU index of Definition~IV.1 and
+Proposition~IV.2 of Ref.~\cite{Cirac2017MPU}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -9,8 +9,8 @@ import TNLean.MPS.MPDO.BNTThreeSiteReducedClosure
 /-!
 # BNT sector projectors for the four-site SAL marginal
 
-The normalized three-site marginal of a four-site tensor satisfying the strong
-area law has two descriptions.  Its horizontal basis-of-normal-tensors
+The normalized three-site marginal of a four-site tensor saturating the area
+law has two descriptions.  Its horizontal basis-of-normal-tensors
 representation gives a family closure with nonzero closing matrices, while
 equality in strong subadditivity gives a Hayashi--Markov decomposition.  A
 simultaneous inverse for the normal tensors compares these descriptions and

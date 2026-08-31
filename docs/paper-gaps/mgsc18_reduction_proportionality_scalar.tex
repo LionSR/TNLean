@@ -8,11 +8,11 @@
 
 \title{The Proportionality Scalar in the MPS Reduction Theorem}
 \author{}
-\date{2026-08-29}
+\date{2026-08-30}
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The printed statement}
 
@@ -133,13 +133,18 @@ Proposition~20.
 
 The formal predicate \leanid{MPSTensor.IsReduction} records the rectangular
 pair, the retraction $VW=1$, and the word equation including the empty word.
-The reusable existence theorem must first be proved for equal positive-length
-matrix product state families.  A later proportional version may be derived
-by the rescaling above, with the power $\lambda^m$ retained explicitly.  The
-equality-case existence proof is tracked by
-\href{https://github.com/LionSR/TNLean/issues/7393}{TNLean issue 7393}; its
-selected-reduction residual algebra is tracked under
-\href{https://github.com/LionSR/TNLean/issues/7322}{TNLean issue 7322}.
+Scalar covariance is proved by \leanid{MPSTensor.IsReduction.smul}, and
+\leanid{MPSTensor.IsReduction.evalWord_smul_target} gives the corrected formula
+$VB^wW=\lambda^{|w|}A^w$ for a reduction from $B$ to $\lambda A$.  For
+$\lambda\ne0$, the injective-target and normal-target existence results are
+\leanid{MPSTensor.exists_isReduction_smul_of_isInjective_of_mpv_eq_pow_mul}
+and
+\leanid{MPSTensor.exists_isReduction_smul_of_isNormal_of_mpv_eq_pow_mul}.
+They rescale the arbitrary source to $\lambda^{-1}B$, apply the equality-case
+existence theorem, and scale back.  The corresponding Blueprint entries are
+\path{lem:mps_reduction_scalar_covariance} and
+\path{thm:mps_proportional_reduction_exists} in
+\path{blueprint/src/chapter/ch02_mps.tex}.
 
 \section{Verdict}
 
