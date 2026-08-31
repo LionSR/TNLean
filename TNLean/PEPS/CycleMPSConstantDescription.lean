@@ -157,7 +157,7 @@ theorem Tensor.isInjective_reindexMPSChain
   intro v
   let q := cycleIncidentPairEquiv (D := D) hn v
   let f : Fin D × Fin D → Fin d → ℂ :=
-    (reindexTensor A hDim).component v ∘ q.symm
+    A'.component v ∘ q.symm
   have hLI : LinearIndependent ℂ f := (hA' v).comp q.symm q.symm.injective
   let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] ((Fin D × Fin D) → ℂ) :=
     (LinearEquiv.curry ℂ ℂ (Fin D) (Fin D)).symm
@@ -169,30 +169,6 @@ theorem Tensor.isInjective_reindexMPSChain
   rw [Kraus.IsInjective, ← Submodule.map_eq_top_iff (e := e),
     Submodule.map_span, ← Set.range_comp, hcomp]
   exact span_flip_eq_top_iff_linearIndependent.mpr hLI
-
-/-- Cyclically shifting the tensors in a square closed chain is equivalent,
-at the level of coefficients, to shifting the physical configuration in the
-opposite direction.
-
-Source: arXiv:1804.04964, Applications section, lines 1807--1827 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem MPSChainTensor.coeff_cyclicShift
-    {n d D : ℕ} [NeZero n] (A : MPSChainTensor d D n)
-    (sigma : Fin n → Fin d) :
-    coeff (cyclicShift A) sigma = coeff A (fun v => sigma ((finRotate n).symm v)) := by
-  rw [MPSChainTensor.coeff_eq_sum_cyclic, MPSChainTensor.coeff_eq_sum_cyclic]
-  let e : (Fin n → Fin D) ≃ (Fin n → Fin D) :=
-    Equiv.arrowCongr (finRotate n) (Equiv.refl (Fin D))
-  refine Fintype.sum_equiv e _ _ fun g => ?_
-  let F : Fin n → ℂ := fun m =>
-    A m (sigma ((finRotate n).symm m)) ((e g) m) ((e g) (m + 1))
-  calc
-    (∏ v : Fin n, (cyclicShift A) v (sigma v) (g v) (g (v + 1))) =
-        ∏ v : Fin n, F (finRotate n v) := by
-          apply Finset.prod_congr rfl
-          intro v _
-          simp [F, e, cyclicShift, cyclicSucc, finRotate_apply]
-    _ = ∏ m : Fin n, F m := Equiv.prod_comp (finRotate n) F
 
 /-- The common-bond reindexing preserves cyclic-shift invariance of the
 closed-chain state.

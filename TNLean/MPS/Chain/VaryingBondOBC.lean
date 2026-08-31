@@ -115,6 +115,29 @@ theorem coeff_eq_sum_cyclic (A : MPSChainTensor d D N)
   simp only [B, τ, Equiv.symm_apply_apply] at h
   simpa [MPSChainTensor.coeff, MPSChainTensor.eval, List.ofFn_eq_map] using h
 
+/-- Cyclically shifting the tensors in a square closed chain is equivalent,
+at the level of coefficients, to shifting the physical configuration in the
+opposite direction.
+
+Source: arXiv:1804.04964, Applications section, lines 1807--1827 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem coeff_cyclicShift (A : MPSChainTensor d D N) [NeZero N]
+    (σ : Fin N → Fin d) :
+    coeff (cyclicShift A) σ = coeff A (fun v => σ ((finRotate N).symm v)) := by
+  rw [coeff_eq_sum_cyclic, coeff_eq_sum_cyclic]
+  let e : (Fin N → Fin D) ≃ (Fin N → Fin D) :=
+    Equiv.arrowCongr (finRotate N) (Equiv.refl (Fin D))
+  refine Fintype.sum_equiv e _ _ fun g => ?_
+  let F : Fin N → ℂ := fun m =>
+    A m (σ ((finRotate N).symm m)) ((e g) m) ((e g) (m + 1))
+  calc
+    (∏ v : Fin N, (cyclicShift A) v (σ v) (g v) (g (v + 1))) =
+        ∏ v : Fin N, F (finRotate N v) := by
+          apply Finset.prod_congr rfl
+          intro v _
+          simp [F, e, cyclicShift, cyclicSucc, finRotate_apply]
+    _ = ∏ m : Fin N, F m := Equiv.prod_comp (finRotate N) F
+
 end MPSChainTensor
 
 namespace OBCChainTensor
