@@ -233,7 +233,7 @@ the direct sum of any pure gauges of its distinct representatives. -/
 private theorem CPSVCanonicalFormData.groundSpace_eq_representativeGaugeSum
     {s d : ℕ} {A : MPSTensor s d} (data : CPSVCanonicalFormData A)
     (ref : data.BNTRefinement)
-    {C : (j : Fin data.phaseClasses.g) =>
+    {C : (j : Fin data.phaseClasses.g) →
       MPSTensor s (data.dim (data.representativeIndex j))}
     (hGauge : ∀ j,
       GaugeEquiv (data.blocks (data.representativeIndex j)) (C j))
@@ -262,8 +262,8 @@ private theorem CPSVCanonicalFormData.groundSpace_eq_representativeGaugeSum
       (groundSpace_toTensorFromBlocks_eq_iSup
         (fun _ => 1) C (by simp) L).symm
 
-/-- A normal tensor of bond dimension at most `K` is block injective at
-length `K ^ 4`. -/
+/-- A normal tensor of bond dimension at most \(K\) is block injective at
+length \(K^4\). -/
 private theorem IsNormalTensor.isNBlkInjective_cap_pow_four
     {s n K : ℕ} {A : MPSTensor s n} (hA : IsNormalTensor A)
     (hnK : n ≤ K) : Kraus.IsNBlkInjective A (K ^ 4) := by
@@ -323,7 +323,15 @@ exactly the span of the BNT matrix product vectors.
 
 Source: arXiv:1606.00608, Definition 3.9 and the first sentence of line 527,
 source lines 511--527.  The short-ring completion uses the theorem cited there,
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456. -/
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
+
+`HasParentHamiltonianGroundSpaceSpanning` unfolds precisely to Definition
+3.9's spanning clause: the kernel/BNT-span equality for every \(N>L\).  It
+does not include the preceding construction condition \(d^L>D^2\), and hence
+does not by itself assert that the local orthogonal-complement projector is
+nonzero.  That condition is a separate formal boundary, not an additional
+hypothesis of the spanning theorem.  The typeclass `[NeZero D]` records the
+corresponding nonzero bond-dimension boundary. -/
 theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
     {A : MPSTensor d D} [NeZero D] (hA : IsCPSVCanonicalForm A) :
     ∃ g : ℕ, ∃ dim : Fin g → ℕ,
