@@ -35,9 +35,11 @@ state.
 **Scope restriction (uniform bond dimension):** the source corollary also
 concludes that all per-bond dimensions of the original site-dependent
 representation are equal; in the uniform `MPSChainTensor d D n` setting that
-clause is built into the type and carries no content.  The per-edge
-bond-dimension form, which makes the equal-dimension conclusion non-vacuous,
-remains the follow-up recorded in
+clause is built into the type and carries no content.  For a cycle-graph tensor
+with one dimension per edge, `bondDim_eq_of_isCycleShiftInvariantState` now
+proves the source's equal-dimension conclusion.  The remaining follow-up is the
+explicit reindexing from those propositionally equal edge spaces to the uniform
+closed-chain representation used by this theorem; it is recorded in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 ## References
