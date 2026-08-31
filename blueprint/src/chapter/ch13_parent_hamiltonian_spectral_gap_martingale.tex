@@ -11,15 +11,15 @@
     \lean{FrustrationFree.NestedGroundProjections.martingaleDifference}
     \leanok
     Let $\mathcal H$ be a complex Hilbert space.  A \emph{nested ground-projection
-    family} is a sequence $(G_n)_{n\geq0}$ of orthogonal projections such that
+        family} is a sequence $(G_n)_{n\geq0}$ of orthogonal projections such that
     \begin{align}
         m\leq n
-        \quad&\Longrightarrow\quad
+        \quad & \Longrightarrow\quad
         \operatorname{ran}(G_n)\subseteq\operatorname{ran}(G_m).
     \end{align}
     Its $n$th martingale difference is
     \begin{align}
-        E_n&=G_n-G_{n+1}.
+        E_n & =G_n-G_{n+1}.
     \end{align}
 \end{definition}
 
@@ -32,12 +32,12 @@
     \uses{def:nested-ground-projection-differences}
     Each $E_n$ is an orthogonal projection, and
     \begin{align}
-        E_mE_n&=\delta_{m,n}E_m.
+        E_mE_n & =\delta_{m,n}E_m.
     \end{align}
     With Nachtergaele's endpoint conventions
     $G_0=\mathbf 1$ and $G_{N+1}=0$, the differences form a complete family:
     \begin{align}
-        \sum_{n=0}^{N}E_n&=\mathbf 1.
+        \sum_{n=0}^{N}E_n & =\mathbf 1.
     \end{align}
     These are the assertions following the display labelled $E_n$ in
     \cite{Nachtergaele1996Spectral}.
@@ -50,17 +50,17 @@
     $G_mG_n=G_nG_m=G_n$.  Consequently,
     \begin{align}
         E_n^2
-        &=(G_n-G_{n+1})^2
-          =G_n-G_{n+1}=E_n,\\
-        E_mE_n&=0\qquad(m\ne n).
+               & =(G_n-G_{n+1})^2
+        =G_n-G_{n+1}=E_n,          \\
+        E_mE_n & =0\qquad(m\ne n).
     \end{align}
     Self-adjointness follows from
     $E_n^\dagger=G_n^\dagger-G_{n+1}^\dagger=E_n$.
     The complete sum telescopes with both endpoints visible:
     \begin{align}
         \sum_{n=0}^{N}E_n
-        &=\sum_{n=0}^{N}(G_n-G_{n+1})
-          =G_0-G_{N+1}=\mathbf 1.
+         & =\sum_{n=0}^{N}(G_n-G_{n+1})
+        =G_0-G_{N+1}=\mathbf 1.
     \end{align}
 \end{proof}
 
@@ -71,7 +71,7 @@
     \uses{thm:orthogonal-martingale-difference-resolution}
     Suppose $G_0=\mathbf 1$.  For every $v\perp\operatorname{ran}(G_N)$,
     \begin{align}
-        v&=\sum_{n=0}^{N-1}E_nv.
+        v & =\sum_{n=0}^{N-1}E_nv.
     \end{align}
     This is the identity \textup{resolutionpsi} in the proof of
     \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}.
@@ -84,7 +84,7 @@
     $v\perp\operatorname{ran}(G_N)$ implies $G_Nv=0$.  Hence
     \begin{align}
         \sum_{n=0}^{N-1}E_nv
-        &=(G_0-G_N)v=v.
+         & =(G_0-G_N)v=v.
     \end{align}
 \end{proof}
 
@@ -96,7 +96,7 @@
     For every $v\in\mathcal H$ and $N\in\N$,
     \begin{align}
         \left\lVert\sum_{n=0}^{N-1}E_nv\right\rVert^2
-        &=\sum_{n=0}^{N-1}\lVert E_nv\rVert^2.
+         & =\sum_{n=0}^{N-1}\lVert E_nv\rVert^2.
     \end{align}
 \end{theorem}
 
@@ -116,7 +116,7 @@
     Suppose $G_0=\mathbf 1$.  For every $v\perp\operatorname{ran}(G_N)$,
     \begin{align}
         \lVert v\rVert^2
-        &=\sum_{n=0}^{N-1}\lVert E_nv\rVert^2.
+         & =\sum_{n=0}^{N-1}\lVert E_nv\rVert^2.
     \end{align}
     This is the identity \textup{resolutionnormpsi} in the proof of
     \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}.
