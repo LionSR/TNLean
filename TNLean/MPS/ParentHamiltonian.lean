@@ -70,6 +70,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
+import TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbientMartingaleBound
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
@@ -80,6 +81,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
+import TNLean.MPS.ParentHamiltonian.Martingale.QuadraticFormGap
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
