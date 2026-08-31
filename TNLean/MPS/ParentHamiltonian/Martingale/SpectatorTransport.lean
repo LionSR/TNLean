@@ -576,6 +576,212 @@ theorem openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEqu
       intro q
       simp
 
+private def openPrefixStartSelfEquiv (L n : ℕ) :
+    OpenPrefixStart L n n ≃ NonwrappingStart L n where
+  toFun i := i.1
+  invFun i := ⟨i, i.2⟩
+  left_inv _i := rfl
+  right_inv _i := rfl
+
+/-- When the prefix is the entire ambient volume, the fixed-ambient prefix
+Hamiltonian is the ordinary nonwrapping open parent Hamiltonian. -/
+theorem openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES
+    (A : MPSTensor d D) (L n : ℕ) :
+    openPrefixParentHamiltonianES A L n n = openParentHamiltonianES A L n := by
+  classical
+  rw [openPrefixParentHamiltonianES, openParentHamiltonianES]
+  apply Fintype.sum_equiv (openPrefixStartSelfEquiv L n)
+  intro i
+  rfl
+
+/-- Under the one-site right-spectator splitting, a fiber is restriction to a
+fixed final physical index. -/
+theorem rightFiber_rightSpectatorConfigLinearIsometryEquiv_one
+    (v : EuclideanSpace ℂ (Cfg d (n + 1))) (s : Cfg d 1) :
+    WithLp.linearEquiv 2 ℂ (NSiteSpace d n)
+        (ContinuousLinearMap.rightFiber
+          (rightSpectatorConfigLinearIsometryEquiv d n 1 v) s) =
+      restrictLastₗ (s 0)
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 1)) v) := by
+  funext σ
+  change v (Fin.append σ s) = v (Fin.snoc σ (s 0))
+  rw [Fin.append_right_eq_snoc]
+
+/-- For a block-injective tensor, the kernel of the prefix Hamiltonian in the
+one-site-larger volume is the left open-chain ground space. -/
+theorem ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES
+    {A : MPSTensor d D} [NeZero D] {L₀ n : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀n : L₀ + 1 ≤ n) :
+    LinearMap.ker (openPrefixParentHamiltonianES A (L₀ + 1) (n + 1) n) =
+      openChainLeftGroundSpaceES A n := by
+  classical
+  ext v
+  rw [mem_openChainLeftGroundSpaceES_iff]
+  have hconj :=
+    openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
+      A (L := L₀ + 1) (n := n) (r := 1) (p := n) (by omega) le_rfl
+  have happly := LinearMap.congr_fun hconj
+    (rightSpectatorConfigLinearIsometryEquiv d n 1 v)
+  change rightSpectatorConfigLinearIsometryEquiv d n 1
+      (openPrefixParentHamiltonianES A (L₀ + 1) (n + 1) n
+        ((rightSpectatorConfigLinearIsometryEquiv d n 1).symm
+          (rightSpectatorConfigLinearIsometryEquiv d n 1 v))) = _ at happly
+  rw [LinearIsometryEquiv.symm_apply_apply] at happly
+  rw [LinearMap.mem_ker]
+  have hzero :
+      openPrefixParentHamiltonianES A (L₀ + 1) (n + 1) n v = 0 ↔
+        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d 1)
+          (LinearMap.toContinuousLinearMap
+            (openPrefixParentHamiltonianES A (L₀ + 1) n n))
+          (rightSpectatorConfigLinearIsometryEquiv d n 1 v) = 0 := by
+    constructor
+    · intro hv
+      calc
+        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d 1)
+            (LinearMap.toContinuousLinearMap
+              (openPrefixParentHamiltonianES A (L₀ + 1) n n))
+            (rightSpectatorConfigLinearIsometryEquiv d n 1 v) =
+          rightSpectatorConfigLinearIsometryEquiv d n 1
+            (openPrefixParentHamiltonianES A (L₀ + 1) (n + 1) n v) := happly.symm
+        _ = rightSpectatorConfigLinearIsometryEquiv d n 1 0 :=
+          congrArg (rightSpectatorConfigLinearIsometryEquiv d n 1) hv
+        _ = 0 := map_zero _
+    · intro hv
+      apply (rightSpectatorConfigLinearIsometryEquiv d n 1).injective
+      rw [map_zero]
+      exact happly.trans hv
+  rw [hzero]
+  change rightSpectatorConfigLinearIsometryEquiv d n 1 v ∈
+      LinearMap.ker
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d 1)
+          (LinearMap.toContinuousLinearMap
+            (openPrefixParentHamiltonianES A (L₀ + 1) n n))).toLinearMap ↔ _
+  rw [ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff]
+  rw [openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES]
+  change (∀ s : Cfg d 1,
+      ContinuousLinearMap.rightFiber
+          (rightSpectatorConfigLinearIsometryEquiv d n 1 v) s ∈
+        LinearMap.ker (openParentHamiltonianES A (L₀ + 1) n)) ↔ _
+  rw [ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
+    hInj hL₀ hL₀n]
+  constructor
+  · intro hv j
+    have hs := hv (fun _ => j)
+    rw [mem_groundSpaceES_iff] at hs
+    change WithLp.linearEquiv 2 ℂ (NSiteSpace d n)
+        (ContinuousLinearMap.rightFiber
+          (rightSpectatorConfigLinearIsometryEquiv d n 1 v) (fun _ => j)) ∈
+      groundSpace A n at hs
+    rw [rightFiber_rightSpectatorConfigLinearIsometryEquiv_one] at hs
+    exact hs
+  · intro hv s
+    rw [mem_groundSpaceES_iff,
+      rightFiber_rightSpectatorConfigLinearIsometryEquiv_one]
+    exact hv (s 0)
+
+/-- The suffix interval equal to the full final window contains one local
+interaction, beginning after the prefix of length \(K\). -/
+theorem openSuffixParentHamiltonianES_full_window_eq_localTermES
+    (A : MPSTensor d D) {K L : ℕ} (hL : 0 < L) :
+    openSuffixParentHamiltonianES A L L (K + L) (K + L) =
+      localTermES A L (⟨K, by omega⟩ : Fin (K + L)) := by
+  classical
+  let i : NonwrappingStart L (K + L) :=
+    ⟨⟨K, by omega⟩, by simp⟩
+  have hfilter :
+      Finset.univ.filter (fun j : NonwrappingStart L (K + L) =>
+        K + L - L ≤ j.1.val ∧ j.1.val + L ≤ K + L) = {i} := by
+    ext j
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+      Finset.mem_singleton]
+    constructor
+    · intro hj
+      apply Subtype.ext
+      apply Fin.ext
+      change j.1.val = K
+      omega
+    · intro hji
+      subst j
+      simp [i]
+  rw [openSuffixParentHamiltonianES, hfilter, Finset.sum_singleton]
+
+private theorem cyclicCfg_tail_window
+    {d K L : ℕ} (hL : 0 < L) (τ : Cfg d (K + L)) (ω : Cfg d L) :
+    cyclicCfg (by omega : 0 < K + L) L
+        (⟨K, by omega⟩ : Fin (K + L)) ω τ =
+      Fin.append (fun k : Fin K => τ (Fin.castAdd L k)) ω := by
+  rw [cyclicCfg_eq_contiguousCfg (by omega) (by omega) (by
+    change K + L ≤ K + L
+    exact le_rfl)]
+  funext q
+  by_cases hq : K ≤ q.val
+  · have hsub : q.val - K < L := by omega
+    let k : Fin L := ⟨q.val - K, hsub⟩
+    have hqeq : q = Fin.natAdd K k := by
+      apply Fin.ext
+      change q.val = K + (q.val - K)
+      omega
+    simp only [contiguousCfg, hq, q.isLt, and_self, ↓reduceDIte]
+    exact (Fin.append_right (fun k : Fin K => τ (Fin.castAdd L k)) ω k).symm.trans
+      (congrArg (Fin.append (fun k : Fin K => τ (Fin.castAdd L k)) ω) hqeq.symm)
+  · have hqK : q.val < K := by omega
+    let k : Fin K := ⟨q.val, hqK⟩
+    have hqeq : q = Fin.castAdd L k := by
+      apply Fin.ext
+      rfl
+    simp only [contiguousCfg, hq, q.isLt]
+    exact (congrArg τ hqeq).trans
+      ((Fin.append_left (fun k : Fin K => τ (Fin.castAdd L k)) ω k).symm.trans
+        (congrArg (Fin.append (fun k : Fin K => τ (Fin.castAdd L k)) ω) hqeq.symm))
+
+private theorem cyclicRestrictES_tail_window
+    {d K L : ℕ} (hL : 0 < L) (τ : Cfg d (K + L))
+    (v : EuclideanSpace ℂ (Cfg d (K + L))) :
+    WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
+        (cyclicRestrictES (d := d) (by omega) L
+          (⟨K, by omega⟩ : Fin (K + L)) τ v) =
+      tailRestrictₗ (fun k : Fin K => τ (Fin.castAdd L k))
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L)) v) := by
+  funext ω
+  change v (cyclicCfg (by omega) L (⟨K, by omega⟩ : Fin (K + L)) ω τ) =
+    v (Fin.append (fun k : Fin K => τ (Fin.castAdd L k)) ω)
+  rw [cyclicCfg_tail_window hL]
+
+/-- The kernel of a full suffix-window Hamiltonian is the corresponding tail
+open-chain ground space. -/
+theorem ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES
+    (A : MPSTensor d D) {K L : ℕ} (hL : 0 < L) :
+    LinearMap.ker (openSuffixParentHamiltonianES A L L (K + L) (K + L)) =
+      openChainTailGroundSpaceES A K L := by
+  classical
+  rw [openSuffixParentHamiltonianES_full_window_eq_localTermES A hL]
+  ext v
+  cases isEmpty_or_nonempty (Fin d) with
+  | inl hd =>
+      let _ : IsEmpty (Fin d) := hd
+      let _ : IsEmpty (Cfg d (K + L)) :=
+        ⟨fun σ => isEmptyElim (σ ⟨0, by omega⟩)⟩
+      have hv : v = 0 := Subsingleton.elim _ _
+      subst v
+      simp
+  | inr hd =>
+      let _ : Nonempty (Fin d) := hd
+      rw [LinearMap.mem_ker, mem_openChainTailGroundSpaceES_iff,
+        localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES
+          A (show L ≤ K + L by omega) (⟨K, by omega⟩ : Fin (K + L)) v]
+      constructor
+      · intro hv u
+        let τ : Cfg d (K + L) := Fin.append u (fun _ => Classical.choice hd)
+        have hτ := hv τ
+        rw [mem_groundSpaceES_iff] at hτ
+        have hpref : (fun k : Fin K => τ (Fin.castAdd L k)) = u := by
+          funext k
+          exact Fin.append_left u (fun _ => Classical.choice hd) k
+        simpa only [cyclicRestrictES_tail_window hL, hpref] using hτ
+      · intro hv τ
+        rw [mem_groundSpaceES_iff, cyclicRestrictES_tail_window hL]
+        exact hv (fun k : Fin K => τ (Fin.castAdd L k))
+
 /-- Before the first full interaction window fits, the fixed-ambient prefix
 Hamiltonian vanishes. -/
 theorem openPrefixParentHamiltonianES_eq_zero_of_lt
