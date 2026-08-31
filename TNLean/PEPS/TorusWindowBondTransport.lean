@@ -53,11 +53,11 @@ intermediate bond index, which in one dimension comes from the length-`L` window
 the full bond algebra (the `LinearMap.ext_on_range` step of `MPSChainTensor.exists_insertionHom`).
 A two-dimensional `L × K` window touches `e` with one endpoint, so its `e`-restricted family is a
 family of vectors on `Fin (bondDim e)`, never a square-matrix span; the transport this file builds
-carries a *single* operation and provides no such splitting.  The verdict that the multiplicativity
-is the coarse three-site super-bond multiplicativity, whose third injective block is the obstructed
-`univ \ S` at the minimal size, is recorded in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, the
-section on the multiplicativity verdict.  The per-step transport is the foundation; the homomorphism
-is not a consequence of it.
+carries a *single* operation and provides no such splitting.  The source-faithful multiplicativity
+route instead composes the two end relations `O₁` and `O₃ᵀ` and invokes uniqueness of their common
+virtual operation `X`, as in arXiv:1804.04964, Lemma 5, lines 2213--2252 of
+`Papers/1804.04964/paper_normal.tex`.  The transport proved here supplies one input to that
+comparison; by itself it does not prove `hmul`.
 
 ## References
 

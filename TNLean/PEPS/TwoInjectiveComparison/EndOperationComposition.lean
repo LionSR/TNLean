@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Algebra.Module.BigOperators
 import TNLean.PEPS.TwoInjectiveComparison.Basic
 
 /-!
@@ -66,16 +67,8 @@ private theorem coefficientFamily_eq_of_sum_smul_eq
     (c d : J → K → ℂ)
     (h : ∀ j : J, (∑ k : K, c j k • A k) = ∑ k : K, d j k • A k) :
     c = d := by
-  classical
-  letI := Module.addCommMonoidToAddCommGroup ℂ (M := W)
   funext j k
-  have hzero : (∑ i : K, (c j i - d j i) • A i) = 0 := by
-    rw [show (∑ i : K, (c j i - d j i) • A i) =
-        (∑ i : K, c j i • A i) - ∑ i : K, d j i • A i by
-      rw [← Finset.sum_sub_distrib]
-      exact Finset.sum_congr rfl fun i _ ↦ sub_smul (c j i) (d j i) (A i)]
-    rw [h j, sub_self]
-  exact sub_eq_zero.mp ((Fintype.linearIndependent_iff.mp hA) _ hzero k)
+  exact Fintype.linearIndependent_iffₛ.mp hA (c j) (d j) (h j) k
 
 /-- The virtual operation in an `O₁` realization is unique.
 
@@ -125,8 +118,12 @@ theorem IsO1VirtualOperation.mul
     IsO1VirtualOperation A₁ (O₁ * P₁) (X * Y) := by
   classical
   intro ν
-  rw [Module.End.mul_apply, hY ν, map_sum]
-  simp_rw [map_smul, hX, Finset.smul_sum, smul_smul, Matrix.mul_apply]
+  change O₁ (P₁ (A₁ ν)) = ∑ μ, (∑ κ, X μ κ * Y κ ν) • A₁ μ
+  rw [hY ν, map_sum]
+  simp only [map_smul]
+  rw [Finset.sum_congr rfl fun κ _ ↦
+    congrArg (fun w ↦ Y κ ν • w) (hX κ)]
+  simp only [Finset.smul_sum, smul_smul]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun μ _ ↦ ?_
   rw [Finset.sum_smul]
@@ -148,10 +145,14 @@ theorem IsO3TransposeVirtualOperation.mul
     IsO3TransposeVirtualOperation A₃ (P₃ * O₃) (X * Y) := by
   classical
   intro μ
-  rw [Module.End.mul_apply, hX μ, map_sum]
-  simp_rw [map_smul, hY, Finset.smul_sum, smul_smul, Matrix.mul_apply]
+  change P₃ (O₃ (A₃ μ)) = ∑ ν, (∑ κ, X μ κ * Y κ ν) • A₃ ν
+  rw [hX μ, map_sum]
+  simp only [map_smul]
+  rw [Finset.sum_congr rfl fun κ _ ↦
+    congrArg (fun w ↦ X μ κ • w) (hY κ)]
+  simp only [Finset.smul_sum, smul_smul]
   rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun κ _ ↦ ?_
+  refine Finset.sum_congr rfl fun ν _ ↦ ?_
   rw [Finset.sum_smul]
 
 /-- Uniqueness turns composition of the `O₁` operations into multiplication of their extracted
