@@ -79,6 +79,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
+import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 import TNLean.MPS.ParentHamiltonian.MixedGram
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
