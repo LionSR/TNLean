@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.FiniteRangeKnabe
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
-import QICLean.Analysis.FiniteRangeKnabe
 
 /-!
 # Cyclic windows as open parent Hamiltonians
