@@ -14,8 +14,11 @@ present open rectangular square-lattice model.
 
 The boundary nonexistence statements below concern this open-rectangle model.
 They do not contradict the every-edge blocking sentence in arXiv:1804.04964.
-The comparison with the paper, the boundary obstruction, and the remaining
-finite-geometry obligations are recorded in
+The final section also gives an abstract region-injectivity countermodel: the
+source rectangular hypotheses and union closure alone do not imply a
+red/blue/complement blocking at a boundary edge. Thus an open-boundary
+extension requires additional tensor-level or boundary injectivity input.
+The comparison with the paper and the boundary obstruction are recorded in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
 mathematical obligations".
 
@@ -439,6 +442,110 @@ theorem not_forall_normalSquareEdgeMarginCover_seven :
   exact not_leftBoundaryRightEdge_marginCover_seven
     ⟨data (squareLatticeRightEdge (width := 7) (height := 7) 0 2
       (by decide) (by decide))⟩
+
+/-! ### Rectangular injectivity does not force an open-boundary blocking -/
+
+/-- An abstract region-injectivity predicate used to test the left boundary
+edge of the open \(7\times7\) rectangle.
+
+A region is declared injective only if containing the left endpoint of the
+chosen boundary edge forces it to contain the right endpoint. This predicate
+is not asserted to arise from a PEPS tensor. It is a countermodel internal to
+the abstract `RegionInjectivityData` interface.
+
+Source comparison: arXiv:1804.04964, Theorem `normal`, lines 1574--1585,
+assumes an injective three-part blocking around every edge; it does not derive
+that hypothesis from rectangular injectivity on an open rectangle. -/
+def leftBoundaryRightEdgeInjectivityCountermodelSeven :
+    RegionInjectivityData (SquareLatticeVertex 7 7) where
+  IsInjective R :=
+    (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+      (by decide) (by decide)).1.1 ∈ R →
+      (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+        (by decide) (by decide)).1.2 ∈ R
+
+/-- The boundary-edge countermodel is closed under unions of injective
+regions, as required by the union lemma of the source.
+
+Source comparison: arXiv:1804.04964, Lemma `injective_union`, lines
+1322--1404. -/
+theorem leftBoundaryRightEdgeInjectivityCountermodelSeven_unionClosure :
+    RegionInjectivityUnionClosure leftBoundaryRightEdgeInjectivityCountermodelSeven := by
+  constructor
+  intro A B hA hB hLeft
+  rw [Finset.mem_union] at hLeft ⊢
+  exact hLeft.elim (fun h => Or.inl (hA h)) (fun h => Or.inr (hB h))
+
+/-- Every contiguous \(2\times3\) and \(3\times2\) rectangle in the open
+\(7\times7\) lattice is injective for the boundary-edge countermodel.
+
+Indeed, any such rectangle containing the left endpoint at horizontal
+coordinate zero also contains its right neighbor.
+
+Source comparison: arXiv:1804.04964, Theorem 3, lines 1407--1452. -/
+theorem leftBoundaryRightEdgeInjectivityCountermodelSeven_rectangular :
+    NormalSquareLatticeRectangleInjectivityHypotheses
+      leftBoundaryRightEdgeInjectivityCountermodelSeven := by
+  constructor
+  · intro R hR
+    obtain ⟨xStart, yStart, _hx, _hy, rfl⟩ := hR
+    intro hLeft
+    rw [mem_squareLatticeContiguousRectangle] at hLeft ⊢
+    simp only [squareLatticeRightEdge] at hLeft ⊢
+    omega
+  · intro R hR
+    obtain ⟨xStart, yStart, _hx, _hy, rfl⟩ := hR
+    intro hLeft
+    rw [mem_squareLatticeContiguousRectangle] at hLeft ⊢
+    simp only [squareLatticeRightEdge] at hLeft ⊢
+    omega
+
+/-- The countermodel admits no red/blue/complement blocking datum at the
+chosen left-boundary edge.
+
+The red block contains the left endpoint. Its countermodel injectivity then
+places the right endpoint in the red block, contradicting its required
+membership in the disjoint blue block.
+
+This is an obstruction only to deriving the open-boundary blocking from the
+abstract rectangular-injectivity and union-closure hypotheses. It does not
+concern the periodic translationally invariant statement of arXiv:1804.04964,
+Theorem 3.
+
+Source comparison: arXiv:1804.04964, Theorem `normal`, lines 1574--1585. -/
+theorem not_leftBoundaryRightEdge_blockingData_countermodelSeven :
+    ¬ Nonempty
+      (NormalEdgeBlockingData leftBoundaryRightEdgeInjectivityCountermodelSeven
+        (squareLatticeGraph 7 7)
+        (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+          (by decide) (by decide))) := by
+  rintro ⟨d⟩
+  have hRightRed := d.red_injective d.left_mem_red
+  exact Finset.disjoint_left.mp d.red_disjoint_blue hRightRed d.right_mem_blue
+
+/-- Rectangular injectivity and union closure alone do not imply an
+open-boundary blocking datum in the abstract region-injectivity interface.
+
+The witness is the left-boundary countermodel on the open \(7\times7\)
+rectangle. Thus a theorem constructing boundary-near
+`NormalEdgeBlockingData` requires additional tensor-level or boundary
+injectivity input; it cannot follow from the two abstract hypotheses used by
+the interior tiling argument alone.
+
+Source comparison: arXiv:1804.04964, Theorem `normal`, lines 1574--1585,
+takes the every-edge injective blocking as a hypothesis. -/
+theorem exists_rectangularInjectivity_not_boundaryBlockingData :
+    ∃ κ : RegionInjectivityData (SquareLatticeVertex 7 7),
+      NormalSquareLatticeRectangleInjectivityHypotheses κ ∧
+        RegionInjectivityUnionClosure κ ∧
+          ¬ Nonempty
+            (NormalEdgeBlockingData κ (squareLatticeGraph 7 7)
+              (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+                (by decide) (by decide))) :=
+  ⟨leftBoundaryRightEdgeInjectivityCountermodelSeven,
+    leftBoundaryRightEdgeInjectivityCountermodelSeven_rectangular,
+    leftBoundaryRightEdgeInjectivityCountermodelSeven_unionClosure,
+    not_leftBoundaryRightEdge_blockingData_countermodelSeven⟩
 
 end PEPS
 end TNLean

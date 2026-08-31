@@ -398,6 +398,57 @@
     \end{tenkzequation}
 \end{definition}
 
+\begin{definition}[Left-boundary injectivity countermodel]%
+    \label{def:peps_leftBoundaryRightEdgeInjectivityCountermodel}
+    \lean{TNLean.PEPS.leftBoundaryRightEdgeInjectivityCountermodelSeven}
+    \lean{TNLean.PEPS.%
+        leftBoundaryRightEdgeInjectivityCountermodelSeven_unionClosure}
+    \lean{TNLean.PEPS.%
+        leftBoundaryRightEdgeInjectivityCountermodelSeven_rectangular}
+    \leanok
+    \uses{def:peps_regionInjectivityData,
+        def:peps_normalRectangleInjectivityHypotheses}
+    In the open $7\times7$ rectangle, let $u=(0,2)$ and $v=(1,2)$ be
+    the endpoints of a left-boundary horizontal edge. Define a region
+    relation by
+    \[
+        \inj_{\partial}(R)\quad\Longleftrightarrow\quad
+        u\in R\Longrightarrow v\in R.
+    \]
+    This relation is closed under unions. It also holds for every contiguous
+    $2\times3$ and $3\times2$ rectangle: a rectangle of either shape that
+    contains $u$ necessarily contains its right neighbor $v$.
+\end{definition}
+
+\begin{lemma}[Rectangular injectivity does not force an open-boundary
+        blocking]%
+    \label{lem:peps_rectangularInjectivity_not_boundaryBlockingData}
+    \lean{TNLean.PEPS.not_leftBoundaryRightEdge_blockingData_countermodelSeven}
+    \lean{TNLean.PEPS.exists_rectangularInjectivity_not_boundaryBlockingData}
+    \leanok
+    \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel,
+        def:peps_normalEdgeBlockingHypotheses}
+    There is a union-closed region relation on the open $7\times7$ rectangle
+    that satisfies all contiguous $2\times3$ and $3\times2$ rectangle
+    conditions, but admits no three-partite injective MPS blocking around the
+    edge $u$--$v$. Indeed, the red region must contain $u$, so its injectivity
+    places $v$ in the red region, while the blocking requires $v$ to lie in
+    the disjoint blue region.
+
+    This counterexample for abstract region relations shows only that the
+    rectangular and union hypotheses do not entail a boundary blocking on an
+    open rectangle. It neither gives a PEPS tensor nor concerns the periodic
+    translationally invariant statement of~\cite[Theorem~3]{Molnar2018NormalPEPS}.
+    The later general theorem in the source takes the every-edge three-partite
+    injective MPS blocking as a hypothesis.
+\end{lemma}
+\begin{proof}\leanok
+    Use the relation $\inj_{\partial}$ above. Union closure and the two
+    rectangle conditions follow directly from the horizontal coordinates.
+    Disjointness of the red and blue regions contradicts their forced common
+    vertex $v$.
+\end{proof}
+
 \begin{theorem}[Injectivity supplied by normal edge blocking]%
     \label{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}
     \lean{TNLean.PEPS.NormalEdgeBlockingData.injective_chain}
