@@ -438,7 +438,9 @@
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPair}
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPhysicalOperations}
     \leanok
-    \uses{thm:peps_existsUnique_virtualOperation_of_endPair, thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
+    \uses{def:peps_end_operations_realizing_virtual_matrix,
+        thm:peps_existsUnique_virtualOperation_of_endPair,
+        thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
     Suppose the tensor is translation invariant, all bond dimensions are
     positive, and the two genuine highlighted end-window blocked tensors are
     injective.  If arbitrary inserts $C_{\mathrm L}$ and $C_{\mathrm R}$ on
