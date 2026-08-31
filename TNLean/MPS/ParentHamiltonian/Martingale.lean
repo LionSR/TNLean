@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.AdjacentLocalTerms
+import TNLean.MPS.ParentHamiltonian.Martingale.AnalyticBounds
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedGap
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
@@ -36,11 +37,13 @@ all-vector norm-compression estimates for the excitation projections are also
 recorded as conditional sufficient hypotheses; they are not the source
 principal-angle estimate for the local ground spaces.
 
-The fourteen components are:
+The sixteen components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale_of_finiteDimensional`
   (quadratic form implies norm bound);
+* `Martingale.AnalyticBounds` — the weighted inner-product and C3
+  projection-composition inequalities from Nachtergaele's summation;
 * `Martingale.DifferenceProjections` — Nachtergaele's mutually orthogonal
   martingale differences, telescoping resolution, and norm-square decomposition;
 * `Martingale.ProjectionCancellation` — outside-window cancellation and the
