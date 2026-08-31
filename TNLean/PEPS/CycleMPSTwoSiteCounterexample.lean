@@ -57,7 +57,7 @@ def IsRectangularInjective {d Dₗ Dᵣ : ℕ}
 /-- The coefficient equality expressing invariance of a two-site closed MPS
 under the cyclic shift of its two local tensors.
 
-Source: arXiv:1804.04964, lines 1803--1808. -/
+Source: arXiv:1804.04964, lines 1807--1827. -/
 def IsTwoSiteCyclicShiftInvariantState {d D₁ D₂ : ℕ}
     (A₁ : Fin d → Matrix (Fin D₁) (Fin D₂) ℂ)
     (A₂ : Fin d → Matrix (Fin D₂) (Fin D₁) ℂ) : Prop :=
