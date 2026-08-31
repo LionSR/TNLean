@@ -3,20 +3,25 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Chain.VaryingBondOBC
 import TNLean.PEPS.CycleMPSChainOverlapCapstone
+import TNLean.PEPS.CycleShiftBondUniformity
 
 import Mathlib.FieldTheory.IsAlgClosed.Basic
+import Mathlib.LinearAlgebra.Dual.Lemmas
 
 /-!
 # Translation-invariant description of an injective closed MPS chain
 
 This file delivers the Applications-section corollary of arXiv:1804.04964
 (`Papers/1804.04964/paper_normal.tex`, the corollary at line 1804, proof lines
-1807--1890) in the uniform physical- and bond-dimension setting: an injective
-site-dependent closed chain whose generated state is invariant under the cyclic
-shift of the local tensors admits a translation-invariant description by a
-single repeated injective tensor `B` of the same bond dimension
-(`exists_constant_injectiveMPS_of_cyclicShiftInvariantState`).
+1807--1890).  For a cycle-graph tensor with one virtual dimension per bond,
+cyclic-shift invariance first makes all bond dimensions equal.  The dependent
+spaces `Fin (D_e)` are then reindexed to one common `Fin D`, producing the
+uniform closed chain to which the already proved `L_i,R_i` telescoping and seam
+closure apply.  The result is a single repeated injective tensor `B` of the
+same bond dimension
+(`exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond`).
 
 The argument follows the source.  Comparing the chain with its cyclic shift
 through the injective MPS Fundamental Theorem
@@ -32,15 +37,18 @@ by `B`, hence is a scalar `λ ≠ 0`.  An `n`-th root `c^n = λ⁻¹`, available
 tensor `B' = c · B`, which is still injective and generates the same closed
 state.
 
-**Scope restriction (uniform bond dimension):** the source corollary also
-concludes that all per-bond dimensions of the original site-dependent
-representation are equal; in the uniform `MPSChainTensor d D n` setting that
-clause is built into the type and carries no content.  For a cycle-graph tensor
-with one dimension per edge, `bondDim_eq_of_isCycleShiftInvariantState` now
-proves the source's equal-dimension conclusion.  The remaining follow-up is the
-explicit reindexing from those propositionally equal edge spaces to the uniform
-closed-chain representation used by this theorem; it is recorded in
+**Local fix (cyclic seam scalar):** At source lines 1860--1889, the paper
+sets the closing products `R_{n+1}` and `L_{n+1}` equal to the identity.  The
+closed-chain argument only forces their residual product to be a nonzero
+scalar.  The proof below absorbs an inverse `n`-th root of that scalar into the
+repeated tensor.  This correction is documented in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
+The uniform-chain theorem
+`exists_constant_injectiveMPS_of_cyclicShiftInvariantState` remains the
+source's telescoping calculation.  The graph-to-chain bridge below only makes
+the source's implicit identification of the now-equal virtual spaces explicit;
+it does not introduce a second varying-bond chain model.
 
 ## References
 
@@ -57,6 +65,142 @@ namespace TNLean
 namespace PEPS
 
 open MPSChainTensor
+
+/-! ### Reindexing equal cycle bonds to one matrix chain -/
+
+/-- Reindex a cycle-graph tensor whose bond dimensions are all equal to `D`
+as a site-dependent chain of `D × D` matrices.  The row index is read from
+the bond entering the site and the column index from the bond leaving it.
+
+This is the explicit dependent-index identification used after the
+equal-bond-dimension step in arXiv:1804.04964, Applications section, proof
+lines 1843--1890 of `Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def Tensor.reindexMPSChain
+    {n d D : ℕ} [NeZero n] (hn : 3 ≤ n)
+    (A : Tensor (SimpleGraph.cycleGraph n) d)
+    (hDim : (fun _ : Edge (SimpleGraph.cycleGraph n) => D) = A.bondDim) :
+    MPSChainTensor d D n :=
+  let A' := reindexTensor A hDim
+  fun v i a b =>
+    A'.component v ((cycleIncidentPairEquiv (D := D) hn v).symm (a, b)) i
+
+/-- Reindexing all cycle bonds to one common `Fin D` preserves every
+closed-chain coefficient.
+
+Source: arXiv:1804.04964, Applications section, lines 1843--1889 of
+`Papers/1804.04964/paper_normal.tex`, where the equal virtual spaces are read
+as square matrices before the `L_i,R_i` telescoping. -/
+theorem Tensor.stateCoeff_reindexMPSChain
+    {n d D : ℕ} [NeZero n] (hn : 3 ≤ n)
+    (A : Tensor (SimpleGraph.cycleGraph n) d)
+    (hDim : (fun _ : Edge (SimpleGraph.cycleGraph n) => D) = A.bondDim)
+    (sigma : Fin n → Fin d) :
+    stateCoeff A sigma = MPSChainTensor.coeff (A.reindexMPSChain hn hDim) sigma := by
+  rw [← stateCoeff_reindexTensor A hDim sigma,
+    MPSChainTensor.coeff_eq_sum_cyclic]
+  unfold stateCoeff
+  refine (Fintype.sum_equiv
+    (Equiv.arrowCongr (cycleEdgeEquiv hn).symm (Equiv.refl (Fin D)))
+    (fun eta : VirtualConfig (reindexTensor A hDim) =>
+      ∏ v : Fin n, (reindexTensor A hDim).component v (fun ie => eta ie.1) (sigma v))
+    (fun g : Fin n → Fin D =>
+      ∏ v : Fin n, (A.reindexMPSChain hn hDim) v (sigma v) (g (v - 1)) (g v))
+    (fun eta => Finset.prod_congr rfl fun v _ => by
+      have hedge (w : Fin n) :
+          ((Equiv.arrowCongr (cycleEdgeEquiv hn).symm (Equiv.refl (Fin D))) eta) w =
+            eta (cycleSuccEdge hn w) := rfl
+      rw [hedge (v - 1), hedge v]
+      change (reindexTensor A hDim).component v (fun ie => eta ie.1) (sigma v) =
+        (reindexTensor A hDim).component v
+          ((cycleIncidentPairEquiv (D := D) hn v).symm
+            (eta (cycleSuccEdge hn (v - 1)), eta (cycleSuccEdge hn v))) (sigma v)
+      congr 1
+      exact ((cycleIncidentPairEquiv (D := D) hn v).symm_apply_apply
+        (fun ie => eta ie.1)).symm)).trans
+    (Fintype.sum_equiv
+      (Equiv.arrowCongr (Equiv.subRight (1 : Fin n)).symm (Equiv.refl (Fin D)))
+      (fun g : Fin n → Fin D =>
+        ∏ v : Fin n, (A.reindexMPSChain hn hDim) v (sigma v) (g (v - 1)) (g v))
+      (fun g : Fin n → Fin D =>
+        ∏ v : Fin n, (A.reindexMPSChain hn hDim) v (sigma v) (g v) (g (v + 1)))
+      (fun g => Finset.prod_congr rfl fun v _ => by
+        simp only [Equiv.arrowCongr_apply, Equiv.symm_symm, Equiv.coe_refl,
+          Function.comp_apply, Equiv.subRight_apply, id_eq]
+        rw [add_sub_cancel_right]))
+
+/-- Reindexing all cycle bonds to one common `Fin D` carries vertex
+injectivity to sitewise matrix injectivity.
+
+Source: arXiv:1804.04964, Applications section, lines 1843--1890 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem Tensor.isInjective_reindexMPSChain
+    {n d D : ℕ} [NeZero n] (hn : 3 ≤ n)
+    (A : Tensor (SimpleGraph.cycleGraph n) d)
+    (hDim : (fun _ : Edge (SimpleGraph.cycleGraph n) => D) = A.bondDim)
+    (hA : IsVertexInjective A) :
+    MPSChainTensor.IsInjective (A.reindexMPSChain hn hDim) := by
+  let A' := reindexTensor A hDim
+  have hA' : IsVertexInjective A' := isVertexInjective_reindexTensor A hDim hA
+  intro v
+  let q := cycleIncidentPairEquiv (D := D) hn v
+  let f : Fin D × Fin D → Fin d → ℂ :=
+    (reindexTensor A hDim).component v ∘ q.symm
+  have hLI : LinearIndependent ℂ f := (hA' v).comp q.symm q.symm.injective
+  let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] ((Fin D × Fin D) → ℂ) :=
+    (LinearEquiv.curry ℂ ℂ (Fin D) (Fin D)).symm
+  have hcomp :
+      (⇑(e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ((Fin D × Fin D) → ℂ))) ∘
+        (A.reindexMPSChain hn hDim v) = flip f := by
+    funext i p
+    rfl
+  rw [Kraus.IsInjective, ← Submodule.map_eq_top_iff (e := e),
+    Submodule.map_span, ← Set.range_comp, hcomp]
+  exact span_flip_eq_top_iff_linearIndependent.mpr hLI
+
+/-- Cyclically shifting the tensors in a square closed chain is equivalent,
+at the level of coefficients, to shifting the physical configuration in the
+opposite direction.
+
+Source: arXiv:1804.04964, Applications section, lines 1807--1827 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem MPSChainTensor.coeff_cyclicShift
+    {n d D : ℕ} [NeZero n] (A : MPSChainTensor d D n)
+    (sigma : Fin n → Fin d) :
+    coeff (cyclicShift A) sigma = coeff A (fun v => sigma ((finRotate n).symm v)) := by
+  rw [MPSChainTensor.coeff_eq_sum_cyclic, MPSChainTensor.coeff_eq_sum_cyclic]
+  let e : (Fin n → Fin D) ≃ (Fin n → Fin D) :=
+    Equiv.arrowCongr (finRotate n) (Equiv.refl (Fin D))
+  refine Fintype.sum_equiv e _ _ fun g => ?_
+  let F : Fin n → ℂ := fun m =>
+    A m (sigma ((finRotate n).symm m)) ((e g) m) ((e g) (m + 1))
+  calc
+    (∏ v : Fin n, (cyclicShift A) v (sigma v) (g v) (g (v + 1))) =
+        ∏ v : Fin n, F (finRotate n v) := by
+          apply Finset.prod_congr rfl
+          intro v _
+          simp [F, e, cyclicShift, cyclicSucc, finRotate_apply]
+    _ = ∏ m : Fin n, F m := Equiv.prod_comp (finRotate n) F
+
+/-- The common-bond reindexing preserves cyclic-shift invariance of the
+closed-chain state.
+
+Source: arXiv:1804.04964, Applications section, lines 1807--1890 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem Tensor.isCyclicShiftInvariantState_reindexMPSChain
+    {n d D : ℕ} [NeZero n] (hn : 3 ≤ n)
+    (A : Tensor (SimpleGraph.cycleGraph n) d)
+    (hDim : (fun _ : Edge (SimpleGraph.cycleGraph n) => D) = A.bondDim)
+    (hTI : IsCycleShiftInvariantState A hn) :
+    MPSChainTensor.IsCyclicShiftInvariantState (A.reindexMPSChain hn hDim) := by
+  intro sigma
+  rw [MPSChainTensor.coeff_cyclicShift,
+    ← A.stateCoeff_reindexMPSChain hn hDim sigma,
+    ← A.stateCoeff_reindexMPSChain hn hDim (fun v => sigma ((finRotate n).symm v))]
+  have h := hTI sigma
+  rw [Tensor.cycleShift, stateCoeff_transport] at h
+  have hrotate (v : Fin n) :
+      (cycleRotate hn).symm v = (finRotate n).symm v := rfl
+  simpa only [hrotate] using h
 
 /-- The running product `Z_{m-1} ⋯ Z_0` of the first `m` cyclic-shift gauges.
 This is the uniform-bond-dimension form of the products denoted `L_i`, `R_i` in
@@ -86,7 +230,8 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState
     {n d D : ℕ} [NeZero n] (hn : 3 ≤ n) (hD : 0 < D)
     (A : MPSChainTensor d D n)
     (hA : IsInjective A) (hTI : IsCyclicShiftInvariantState A) :
-    ∃ B : MPSTensor d D, Kraus.IsInjective B ∧ SameState A (fun _ : Fin n => B) := by
+    ∃ B : MPSTensor d D, Kraus.IsInjective B ∧
+      MPSChainTensor.SameState A (fun _ : Fin n => B) := by
   have hn0 : 0 < n := by omega
   have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   -- The cyclic-shift comparison: one invertible gauge per bond.
@@ -285,6 +430,54 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState
     rw [hcoeffA σ, coeff_eq_trace_arcEval (fun _ : Fin n => fun i => c • B i) σ,
       arcEval_const, Kraus.evalWord_smul, List.length_ofFn, Matrix.trace_smul,
       smul_eq_mul, hc]
+
+/-- **Translation-invariant description of an injective closed MPS chain with
+one dimension per bond** (arXiv:1804.04964, Applications section, corollary
+line 1804 and proof lines 1807--1890).
+
+Let a site-dependent injective MPS on the cycle graph have positive virtual
+dimension on every bond, and suppose that its closed-chain state is invariant
+under the cyclic shift `Aᵥ ↦ Aᵥ₊₁`.  Then all bond dimensions equal one
+positive integer `D`, and the state is generated by one repeated injective
+`D × D` matrix tensor `B`.
+
+The first step is `bondDim_eq_of_isCycleShiftInvariantState`, corresponding to
+source lines 1807--1842.  The tensor is then explicitly reindexed to the
+uniform chain `Tensor.reindexMPSChain`.  The existing uniform theorem above
+supplies the source's `L_i,R_i` telescoping, seam closure, and repeated tensor
+from lines 1843--1889. -/
+theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond
+    {n d : ℕ} [NeZero n] (hn : 3 ≤ n)
+    (A : Tensor (SimpleGraph.cycleGraph n) d)
+    (hA : IsVertexInjective A) (hTI : IsCycleShiftInvariantState A hn)
+    (hpos : ∀ e : Edge (SimpleGraph.cycleGraph n), 0 < A.bondDim e) :
+    ∃ D : ℕ, 0 < D ∧ (∀ e, A.bondDim e = D) ∧
+      ∃ B : MPSTensor d D, Kraus.IsInjective B ∧
+        ∀ sigma : Fin n → Fin d, stateCoeff A sigma = MPSTensor.mpv B sigma := by
+  let e₀ := cycleSuccEdge hn (0 : Fin n)
+  let D := A.bondDim e₀
+  have hD : 0 < D := hpos e₀
+  have hDim : ∀ e : Edge (SimpleGraph.cycleGraph n), A.bondDim e = D := fun e =>
+    bondDim_eq_of_isCycleShiftInvariantState hn A hA hTI hpos e e₀
+  have hDim' : (fun _ : Edge (SimpleGraph.cycleGraph n) => D) = A.bondDim := by
+    funext e
+    exact (hDim e).symm
+  let C := A.reindexMPSChain hn hDim'
+  have hCInjective : MPSChainTensor.IsInjective C :=
+    A.isInjective_reindexMPSChain hn hDim' hA
+  have hCShift : MPSChainTensor.IsCyclicShiftInvariantState C :=
+    A.isCyclicShiftInvariantState_reindexMPSChain hn hDim' hTI
+  obtain ⟨B, hBInjective, hBC⟩ :=
+    exists_constant_injectiveMPS_of_cyclicShiftInvariantState hn hD C hCInjective hCShift
+  refine ⟨D, hD, hDim, B, hBInjective, ?_⟩
+  intro sigma
+  calc
+    stateCoeff A sigma = MPSChainTensor.coeff C sigma :=
+      A.stateCoeff_reindexMPSChain hn hDim' sigma
+    _ = MPSChainTensor.coeff (fun _ : Fin n => B) sigma := hBC sigma
+    _ = MPSTensor.mpv B sigma := by
+      rw [MPSChainTensor.coeff_eq_trace_arcEval, MPSChainTensor.arcEval_const,
+        MPSTensor.mpv_eq, MPSTensor.coeff_eq]
 
 end PEPS
 end TNLean

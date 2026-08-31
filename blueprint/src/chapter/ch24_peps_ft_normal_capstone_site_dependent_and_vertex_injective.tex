@@ -468,7 +468,13 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
 \begin{corollary}[Translation-invariant description of an injective closed MPS chain,
         per-bond form]%
     \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
-    \notready
+    \lean{TNLean.PEPS.Tensor.reindexMPSChain}
+    \lean{TNLean.PEPS.Tensor.stateCoeff_reindexMPSChain}
+    \lean{TNLean.PEPS.Tensor.isInjective_reindexMPSChain}
+    \lean{TNLean.PEPS.MPSChainTensor.coeff_cyclicShift}
+    \lean{TNLean.PEPS.Tensor.isCyclicShiftInvariantState_reindexMPSChain}
+    \lean{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
+    \leanok
     \uses{cor:peps_cycle_shift_bond_uniform, cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     Let $A_0,\ldots,A_{n-1}$ be a site-dependent injective closed MPS on
     $n\ge3$ sites, with positive dimensions $D_e$ on its individual bonds.
@@ -486,19 +492,23 @@ in the route note (\cite{gap:peps_normal_ft_section3_route}).
 
     This is the full per-bond statement of
     \cite[lines~1803--1890]{Molnar2018NormalPEPS}. The equality $D_e=D$ is
-    Corollary~\ref{cor:peps_cycle_shift_bond_uniform}; what remains is to
-    transport the now-equal virtual spaces into the uniform closed-chain
-    representation and apply the already proved $L_i,R_i$ telescoping and
-    seam closure.
+    Corollary~\ref{cor:peps_cycle_shift_bond_uniform}. Identifying each
+    virtual space with $\C^D$ gives a uniform closed-chain representation,
+    to which the already proved $L_i,R_i$ telescoping and seam closure apply.
 \end{corollary}
-\begin{proof}
-    The source first compares the family with its cyclic shift, obtaining
-    adjacent bond isomorphisms and hence one common dimension $D$. After
-    identifying every bond with $\C^D$, its products $L_i$ and $R_i$ express
-    every $A_i$ through $A_0$; the common residual operation is absorbed into
-    one repeated tensor $B$. The bond-uniformity step is complete. The explicit
-    reindexing to the uniform closed-chain representation remains to be
-    supplied.
+\begin{proof}\leanok
+    By Corollary~\ref{cor:peps_cycle_shift_bond_uniform}, every bond has the
+    dimension $D$ of a fixed reference bond. Reindex each bond configuration
+    along these equalities and, at every site, read the entering and leaving
+    indices as the row and column of a $D\times D$ matrix. Reindexing the
+    finite contraction preserves every state coefficient; the corresponding
+    reindexing of the two incident virtual indices preserves injectivity.
+    Moreover, cyclically shifting the matrix chain amounts to precomposing the
+    physical configuration by the inverse cyclic rotation, so cyclic-shift
+    invariance is preserved. Apply
+    Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
+    to this uniform chain. Its $L_i,R_i$ telescoping and seam closure produce
+    the required repeated injective tensor $B$.
 \end{proof}
 
 \begin{corollary}[Translation-invariant description of an injective 2D PEPS,
