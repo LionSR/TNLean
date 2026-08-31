@@ -411,6 +411,84 @@ correspondence in the proof sketch of the two-dimensional corollary
     comparison give the displayed relations and the uniqueness of $Y$.
 \end{proof}
 
+\begin{theorem}[Composition of the canonical staircase end operations]%
+    \label{thm:peps_staircase_end_physical_operation_multiplication}
+    \lean{TNLean.PEPS.staircaseO1PhysicalOp_mul}
+    \lean{TNLean.PEPS.staircaseO3PhysicalOp_mul}
+    \leanok
+    \uses{def:peps_staircase_O1_physical_operation,
+        def:peps_staircase_O3_physical_operation,
+        thm:peps_lemma5_end_operation_multiplication}
+    For matrices $X,Y\in\MN{D_A(e)}$, the canonical end operations satisfy
+    \begin{align}
+        O_1^A(XY) & =O_1^A(X)O_1^A(Y),
+        \notag                         \\
+        O_3^A(XY) & =O_3^A(Y)O_3^A(X).
+        \notag
+    \end{align}
+    Thus the right relation preserves multiplication in ordinary order after
+    passing to the orientation $(O_3^A)^{\mathsf T}$ used in Lemma~5.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Split the virtual boundary of either end window into the reference-edge
+    coordinate and the remaining external coordinates.  On every fixed
+    external fibre, the boundary insertion is ordinary matrix action.  The
+    chosen left inverse of the injective blocked tensor is a left inverse on
+    the whole boundary-coordinate space, so composition gives matrix
+    multiplication.  The first window carries $X^{\mathsf T}$; hence
+    $(XY)^{\mathsf T}=Y^{\mathsf T}X^{\mathsf T}$ reverses the order of the
+    underlying right operations.
+\end{proof}
+
+\begin{definition}[Canonical cross-tensor matrix assignment]%
+    \label{def:peps_staircase_cross_tensor_virtual_operation}
+    \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation}
+    \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_spec}
+    \leanok
+    \uses{thm:peps_cross_tensor_virtual_operation_of_staircase}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase}, define
+    In the paper's notation the input and uniquely recovered matrices are
+    called $X$ and $Y$.  Writing $Y_{A\to B}(X)$ only to distinguish the two
+    tensor families, define
+    \begin{align}
+        Y_{A\to B}(X) & \in\MN{D_B(e)}
+        \notag
+    \end{align}
+    to be the unique matrix satisfying
+    (\ref{eq:peps_staircase_o1_cross_tensor_relation}) and
+    (\ref{eq:peps_staircase_o3_cross_tensor_relation}) for every left and
+    right external boundary configuration.  This definition makes no choice
+    of an external boundary configuration.
+\end{definition}
+
+\begin{theorem}[Multiplicativity of the cross-tensor assignment]%
+    \label{thm:peps_staircase_cross_tensor_virtual_operation_multiplication}
+    \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_mul}
+    \leanok
+    \uses{def:peps_staircase_cross_tensor_virtual_operation,
+        thm:peps_staircase_end_physical_operation_multiplication,
+        thm:peps_lemma5_end_operation_multiplication}
+    For all $X_1,X_2\in\MN{D_A(e)}$,
+    \begin{align}
+        Y_{A\to B}(X_1X_2)
+         & =Y_{A\to B}(X_1)Y_{A\to B}(X_2).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    For every left external boundary configuration, compose the two $O_1$
+    relations in ordinary order.  For every right external boundary
+    configuration, compose the underlying $O_3$ relations in reverse order,
+    which is ordinary multiplication in the $O_3^{\mathsf T}$ orientation.
+    The preceding theorem identifies these composites with the canonical
+    operations for $XY$.  Both end relations therefore realize
+    $Y_{A\to B}(X_1)Y_{A\to B}(X_2)$, and global uniqueness identifies this
+    product with $Y_{A\to B}(X_1X_2)$.
+\end{proof}
+
 \begin{theorem}[End-window identity for one virtual operation]%
     \label{thm:peps_end_window_identity_staircase_virtual_operation}
     \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation}

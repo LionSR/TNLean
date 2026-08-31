@@ -17,9 +17,13 @@ operations give one common family on the genuine `B` window tensors.  The paper 
 two end windows with open boundaries and uses their injectivity to extract one unique virtual
 matrix on the highlighted bond of `B`.
 
-This file formalizes exactly that extraction.  It does not compare the two virtual matrices, prove
-a multiplication law for their assignment, identify the bond dimensions of `A` and `B`, or
-construct a gauge.
+This file formalizes that extraction and the paper's ensuing composition argument.  The canonical
+left end operations satisfy `O₁ᴬ(XY) = O₁ᴬ(X) O₁ᴬ(Y)`.  The canonical right end
+operations satisfy `O₃ᴬ(XY) = O₃ᴬ(Y) O₃ᴬ(X)` in the underlying orientation, equivalently
+ordinary multiplication after passing to `O₃ᵀ`.  Choosing the globally unique matrix on the
+`B`-bond therefore gives a multiplicative cross-tensor assignment.  No external boundary
+configuration is selected in this argument, and no bond-dimension identification or gauge is
+constructed.
 
 **Scope restriction (displayed horizontal staircase, `L, K ≥ 2`):** The result is stated for the
 non-wrapping horizontal staircase coordinates supported by the present boundary-geometry API.
@@ -39,6 +43,138 @@ in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 namespace TNLean
 namespace PEPS
 
+section RegionPhysicalOperation
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
+
+private noncomputable def regionBoundaryConfigSplitAt
+    (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    RegionBoundaryConfig (G := G) A R ≃
+      Fin (A.bondDim f.1) ×
+        ((g : {g : {g : Edge G // IsRegionBoundaryEdge (G := G) R g} // g ≠ f}) →
+          Fin (A.bondDim g.1.1)) :=
+  Equiv.piSplitAt f (fun g ↦ Fin (A.bondDim g.1))
+
+omit [Fintype V] in
+private theorem sameAwayFromBond_iff_splitAt_snd_eq
+    (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (mu nu : RegionBoundaryConfig (G := G) A R) :
+    SameAwayFromBond f mu nu ↔
+      (regionBoundaryConfigSplitAt (G := G) A R f mu).2 =
+        (regionBoundaryConfigSplitAt (G := G) A R f nu).2 := by
+  constructor
+  · intro h
+    funext g
+    exact h g.1 g.2
+  · intro h g hg
+    exact congrFun h ⟨g, hg⟩
+
+private theorem bondInsertedRegionInsert_splitAt
+    (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (j : Fin (A.bondDim f.1))
+    (eta : (g : {g : {g : Edge G // IsRegionBoundaryEdge (G := G) R g} // g ≠ f}) →
+      Fin (A.bondDim g.1.1)) :
+    let E := regionBoundaryConfigSplitAt (G := G) A R f
+    bondInsertedRegionInsert (G := G) A R f M (E.symm (j, eta)) =
+      ∑ i : Fin (A.bondDim f.1), M i j •
+        regionBlockedWeight (G := G) A R (E.symm (i, eta)) := by
+  classical
+  dsimp only
+  let E := regionBoundaryConfigSplitAt (G := G) A R f
+  funext sigma
+  rw [bondInsertedRegionInsert]
+  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+  rw [← Equiv.sum_comp E.symm, Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl (fun i _ ↦ ?_)
+  rw [Finset.sum_eq_single eta]
+  · have hsame : SameAwayFromBond f (E.symm (i, eta)) (E.symm (j, eta)) := by
+      rw [sameAwayFromBond_iff_splitAt_snd_eq A R f]
+      simp only [E, Equiv.apply_symm_apply]
+    have hif : (E.symm (i, eta)) f = i := by
+      simp [E, regionBoundaryConfigSplitAt, Equiv.piSplitAt_symm_apply]
+    have hjf : (E.symm (j, eta)) f = j := by
+      simp [E, regionBoundaryConfigSplitAt, Equiv.piSplitAt_symm_apply]
+    rw [ite_eq_left hsame, hif, hjf]
+  · intro eta' _ heta'
+    have hnot : ¬ SameAwayFromBond f (E.symm (i, eta')) (E.symm (j, eta)) := by
+      intro hsame
+      apply heta'
+      rw [sameAwayFromBond_iff_splitAt_snd_eq A R f] at hsame
+      simpa only [E, Equiv.apply_symm_apply] using hsame
+    rw [ite_eq_right hnot, zero_mul]
+  · intro heta
+    exact absurd (Finset.mem_univ eta) heta
+
+private theorem physicalOpOfRegionInsert_mul_of_apply
+    (A : Tensor G d) (R : Finset V)
+    (hR : RegionBlockedTensorInjective (G := G) A R)
+    (C D E : RegionInsert (G := G) (d := d) A R)
+    (h : ∀ mu, physicalOpOfRegionInsert (G := G) A R hR C (D mu) = E mu) :
+    physicalOpOfRegionInsert (G := G) A R hR C *
+        physicalOpOfRegionInsert (G := G) A R hR D =
+      physicalOpOfRegionInsert (G := G) A R hR E := by
+  classical
+  apply LinearMap.ext
+  intro v
+  rw [Module.End.mul_apply]
+  change physicalOpOfRegionInsert (G := G) A R hR C
+      ((Fintype.linearCombination ℂ D)
+        (regionBlockedLeftInverse (G := G) A R hR v)) =
+    (Fintype.linearCombination ℂ E)
+      (regionBlockedLeftInverse (G := G) A R hR v)
+  simp only [Fintype.linearCombination_apply, map_sum, map_smul]
+  refine Finset.sum_congr rfl (fun mu _ ↦ ?_)
+  rw [h mu]
+
+private theorem physicalOpOfBondInsertedRegionInsert_isO1
+    (A : Tensor G d) (R : Finset V)
+    (hR : RegionBlockedTensorInjective (G := G) A R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (eta : (g : {g : {g : Edge G // IsRegionBoundaryEdge (G := G) R g} // g ≠ f}) →
+      Fin (A.bondDim g.1.1)) :
+    let E := regionBoundaryConfigSplitAt (G := G) A R f
+    IsO1VirtualOperation
+      (fun i : Fin (A.bondDim f.1) ↦
+        regionBlockedWeight (G := G) A R (E.symm (i, eta)))
+      (physicalOpOfRegionInsert (G := G) A R hR
+        (bondInsertedRegionInsert (G := G) A R f M)) M := by
+  dsimp only
+  intro j
+  rw [physicalOpOfRegionInsert_realizes, bondInsertedRegionInsert_splitAt]
+
+private theorem physicalOpOfBondInsertedRegionInsert_mul
+    (A : Tensor G d) (R : Finset V)
+    (hR : RegionBlockedTensorInjective (G := G) A R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M N : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    physicalOpOfRegionInsert (G := G) A R hR
+        (bondInsertedRegionInsert (G := G) A R f (M * N)) =
+      physicalOpOfRegionInsert (G := G) A R hR
+          (bondInsertedRegionInsert (G := G) A R f M) *
+        physicalOpOfRegionInsert (G := G) A R hR
+          (bondInsertedRegionInsert (G := G) A R f N) := by
+  classical
+  symm
+  apply physicalOpOfRegionInsert_mul_of_apply A R hR
+  intro nu
+  rw [← physicalOpOfRegionInsert_realizes A R hR
+      (bondInsertedRegionInsert (G := G) A R f N) nu,
+    ← physicalOpOfRegionInsert_realizes A R hR
+      (bondInsertedRegionInsert (G := G) A R f (M * N)) nu]
+  let E := regionBoundaryConfigSplitAt (G := G) A R f
+  rw [← E.symm_apply_apply nu, ← Module.End.mul_apply]
+  rw [(physicalOpOfBondInsertedRegionInsert_isO1 A R hR f M (E nu).2).mul
+      (physicalOpOfBondInsertedRegionInsert_isO1 A R hR f N (E nu).2) (E nu).1,
+    physicalOpOfBondInsertedRegionInsert_isO1 A R hR f (M * N) (E nu).2 (E nu).1]
+
+end RegionPhysicalOperation
+
 section Torus
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -53,6 +189,16 @@ private noncomputable def regionPhysicalOperationCongr
       (RegionPhysicalConfig (V := TorusVertex width height) (d := d) S → ℂ) := by
   subst S
   exact O
+
+omit [NeZero width] [NeZero height] [Fact (1 < width)] [Fact (1 < height)] in
+private theorem regionPhysicalOperationCongr_mul
+    {R S : Finset (TorusVertex width height)} (h : R = S)
+    (O P : Module.End ℂ
+      (RegionPhysicalConfig (V := TorusVertex width height) (d := d) R → ℂ)) :
+    regionPhysicalOperationCongr h (O * P) =
+      regionPhysicalOperationCongr h O * regionPhysicalOperationCongr h P := by
+  subst S
+  rfl
 
 private noncomputable def regionInsertCongr
     (B : Tensor (torusGraph width height) d)
@@ -132,6 +278,73 @@ noncomputable def staircaseO3PhysicalOp (A : Tensor (torusGraph width height) d)
   regionPhysicalOperationCongr
     (staircaseWindow_zero ((a : ZMod width), (b : ZMod height)) L K)
     (staircaseVirtualOperationPhysicalOp (B := A) hA hL hK haw hyh X 0)
+
+/-- The canonical left staircase operations preserve multiplication in the paper's ordinary
+`O₁` order:
+\[
+  O₁ᴬ(XY)=O₁ᴬ(X)O₁ᴬ(Y).
+\]
+
+The proof uses the chosen left inverse only through its defining identity on the genuine blocked
+window.  It therefore requires no spanning of the ambient physical space and no auxiliary
+injectivity hypothesis.
+
+Source: arXiv:1804.04964, the statement `X \mapsto O_1` at line 2044 and the phrase "by
+composition" in Lemma 5 at line 2252 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem staircaseO1PhysicalOp_mul (A : Tensor (torusGraph width height) d) {a b : ℕ}
+    (hA : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hL : 0 < L) (hK : 0 < K) (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height)
+    (X Y : Matrix
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K)))
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K))) ℂ) :
+    staircaseO1PhysicalOp A hA hL hK haw hyh (X * Y) =
+      staircaseO1PhysicalOp A hA hL hK haw hyh X *
+        staircaseO1PhysicalOp A hA hL hK haw hyh Y := by
+  unfold staircaseO1PhysicalOp
+  rw [← regionPhysicalOperationCongr_mul]
+  apply congrArg (regionPhysicalOperationCongr
+    (staircaseWindow_last ((a : ZMod width), (b : ZMod height)) hL hK))
+  unfold staircaseVirtualOperationPhysicalOp
+  rw [staircaseVirtualOperationInsert_last, staircaseVirtualOperationInsert_last,
+    staircaseVirtualOperationInsert_last]
+  apply physicalOpOfBondInsertedRegionInsert_mul
+
+/-- The underlying canonical right staircase operations preserve multiplication in the reversed
+`O₃` order:
+\[
+  O₃ᴬ(XY)=O₃ᴬ(Y)O₃ᴬ(X).
+\]
+Equivalently, after reading the relation in the paper's transposed orientation,
+`X \mapsto (O₃ᴬ(X))ᵀ` preserves multiplication in the ordinary order.  The reversal comes
+exactly from `(XY)ᵀ=YᵀXᵀ`; no transpose is chosen on the abstract physical endomorphism
+space.
+
+Source: arXiv:1804.04964, the statement `X \mapsto O_3^T` at line 2044, the assignments
+`O_3^T \mapsto X` and `O_3 \mapsto X^T` at lines 2129 and 2252, and the phrase "by composition"
+at line 2252 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem staircaseO3PhysicalOp_mul (A : Tensor (torusGraph width height) d) {a b : ℕ}
+    (hA : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hL : 0 < L) (hK : 0 < K) (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height)
+    (X Y : Matrix
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K)))
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K))) ℂ) :
+    staircaseO3PhysicalOp A hA hL hK haw hyh (X * Y) =
+      staircaseO3PhysicalOp A hA hL hK haw hyh Y *
+        staircaseO3PhysicalOp A hA hL hK haw hyh X := by
+  unfold staircaseO3PhysicalOp
+  rw [← regionPhysicalOperationCongr_mul]
+  apply congrArg (regionPhysicalOperationCongr
+    (staircaseWindow_zero ((a : ZMod width), (b : ZMod height)) L K))
+  unfold staircaseVirtualOperationPhysicalOp
+  rw [staircaseVirtualOperationInsert_zero, staircaseVirtualOperationInsert_zero,
+    staircaseVirtualOperationInsert_zero, Matrix.transpose_mul]
+  apply physicalOpOfBondInsertedRegionInsert_mul
 
 /-- **The virtual operation on `B` extracted from the staircase operations of `A`.**
 
@@ -276,6 +489,163 @@ theorem existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp_sameStat
   simpa only [s, O₁, O₃] using
     existsUnique_virtualOperation_of_horizontalStaircaseEndPhysicalOperations
       B hBTI (by omega) (by omega) ha0 haw hbh hposB hleftInjective hrightInjective O₁ O₃ heq
+
+/-- The canonical cross-tensor matrix assignment on the highlighted staircase edge.
+
+For `X` on the `A`-bond, this is the unique matrix on the `B`-bond simultaneously determined by
+the `O₁ᴬ(X)` relation at every left external boundary configuration and the `O₃ᴬ(X)` relation,
+read in the paper's `O₃ᵀ` orientation, at every right external boundary configuration.  The
+definition chooses the witness of the globally quantified uniqueness theorem; it does not choose
+an external boundary configuration.
+
+Source: arXiv:1804.04964, the cross-tensor assignment `X \mapsto Y` at lines 563--582,
+the uniquely defined assignments `O_1 \mapsto X` and `O_3^T \mapsto X` in Lemma 5 at lines
+2129 and 2252, and the two-dimensional staircase comparison at lines 2320--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def staircaseCrossTensorVirtualOperation
+    (A B : Tensor (torusGraph width height) d) {a b : ℕ}
+    (hA : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hB : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvariant B)
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
+    (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (X : Matrix
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K)))
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K))) ℂ) :
+    Matrix
+      (Fin (B.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K)))
+      (Fin (B.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K))) ℂ :=
+  Classical.choose
+    (existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp_sameState
+      A B hA hB hATI hBTI hAB hposA hposB hL hK ha0 haw hbh hxw hyh X).exists
+
+/-- The canonical cross-tensor matrix satisfies both end relations for every external boundary
+configuration.
+
+The left relation is the source assignment `O₁ ↦ X`; the right relation is the source
+assignment `O₃ᵀ ↦ X`, equivalently `O₃ ↦ Xᵀ`.
+
+Source: arXiv:1804.04964, Lemma 5 at lines 2213--2252 and the two-dimensional end-window
+comparison at lines 2415--2444 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem staircaseCrossTensorVirtualOperation_spec
+    (A B : Tensor (torusGraph width height) d) {a b : ℕ}
+    (hA : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hB : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvariant B)
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
+    (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (X : Matrix
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K)))
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K))) ℂ) :
+    let s : TorusVertex width height := ((a : ZMod width), (b : ZMod height))
+    let Wleft := horizontalStaircaseLeftWindow s L K
+    let Wright := horizontalStaircaseRightWindow s L K
+    let Eleft := horizontalStaircaseLeftWindowBoundaryConfigEquiv B
+      (by omega) (by omega) ha0 haw hbh
+    let Eright := horizontalStaircaseRightWindowBoundaryConfigEquiv B
+      (by omega) (by omega) ha0 haw hbh
+    (∀ etaLeft : HorizontalStaircaseLeftExternalBoundaryConfig B (L := L) (K := K) s,
+        IsO1VirtualOperation
+          (fun k : Fin (B.bondDim (horizontalStaircaseReferenceEdge s L K)) ↦
+            regionBlockedWeight (G := torusGraph width height) B Wleft
+              (Eleft.symm (k, etaLeft)))
+          (staircaseO1PhysicalOp A hA (by omega) (by omega) haw (by omega) X)
+          (staircaseCrossTensorVirtualOperation A B hA hB hATI hBTI hAB hposA hposB
+            hL hK ha0 haw hbh hxw hyh X)) ∧
+      ∀ etaRight : HorizontalStaircaseRightExternalBoundaryConfig B (L := L) (K := K) s,
+        IsO3TransposeVirtualOperation
+          (fun k : Fin (B.bondDim (horizontalStaircaseReferenceEdge s L K)) ↦
+            regionBlockedWeight (G := torusGraph width height) B Wright
+              (Eright.symm (k, etaRight)))
+          (staircaseO3PhysicalOp A hA (by omega) (by omega) haw (by omega) X)
+          (staircaseCrossTensorVirtualOperation A B hA hB hATI hBTI hAB hposA hposB
+            hL hK ha0 haw hbh hxw hyh X) := by
+  simpa only [staircaseCrossTensorVirtualOperation] using
+    Classical.choose_spec
+      (existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp_sameState
+        A B hA hB hATI hBTI hAB hposA hposB hL hK ha0 haw hbh hxw hyh X).exists
+
+/-- The canonical cross-tensor matrix assignment preserves multiplication:
+\[
+  Y_{A\to B}(X_1X_2)=Y_{A\to B}(X_1)Y_{A\to B}(X_2).
+\]
+
+Here `Y_{A\to B}(X)` only disambiguates the paper's input matrix `X` and uniquely recovered
+output matrix `Y`; the source calls the assignment `X \mapsto Y`.
+
+Both end relations remain globally quantified throughout the proof.  On the left,
+`O₁ᴬ(XY)=O₁ᴬ(X)O₁ᴬ(Y)` and `IsO1VirtualOperation.mul` give the product in ordinary
+order.  On the right, the underlying operations satisfy
+`O₃ᴬ(XY)=O₃ᴬ(Y)O₃ᴬ(X)`; `IsO3TransposeVirtualOperation.mul` reads this as ordinary
+multiplication in the `O₃ᵀ` orientation.  The globally unique `B`-bond matrix then gives the
+displayed equality.
+
+This theorem records the multiplicative part of the source's algebra-homomorphism assertion.
+Additivity, scalar compatibility, and the unit law are not packaged here.
+
+Source: arXiv:1804.04964, the cross-tensor algebra-homomorphism statement `X \mapsto Y` at
+line 582, the end-operation statements in Lemma 5 at lines 2129 and 2252, and the
+two-dimensional reduction to Lemma 5 at lines 2320--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem staircaseCrossTensorVirtualOperation_mul
+    (A B : Tensor (torusGraph width height) d) {a b : ℕ}
+    (hA : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hB : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvariant B)
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
+    (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (X Y : Matrix
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K)))
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K))) ℂ) :
+    staircaseCrossTensorVirtualOperation A B hA hB hATI hBTI hAB hposA hposB
+        hL hK ha0 haw hbh hxw hyh (X * Y) =
+      staircaseCrossTensorVirtualOperation A B hA hB hATI hBTI hAB hposA hposB
+          hL hK ha0 haw hbh hxw hyh X *
+        staircaseCrossTensorVirtualOperation A B hA hB hATI hBTI hAB hposA hposB
+          hL hK ha0 haw hbh hxw hyh Y := by
+  have hspecXY := staircaseCrossTensorVirtualOperation_spec A B hA hB hATI hBTI hAB
+    hposA hposB hL hK ha0 haw hbh hxw hyh (X * Y)
+  have hspecX := staircaseCrossTensorVirtualOperation_spec A B hA hB hATI hBTI hAB
+    hposA hposB hL hK ha0 haw hbh hxw hyh X
+  have hspecY := staircaseCrossTensorVirtualOperation_spec A B hA hB hATI hBTI hAB
+    hposA hposB hL hK ha0 haw hbh hxw hyh Y
+  have hex := existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp_sameState
+    A B hA hB hATI hBTI hAB hposA hposB hL hK ha0 haw hbh hxw hyh (X * Y)
+  dsimp only at hspecXY hspecX hspecY hex
+  apply hex.unique hspecXY
+  constructor
+  · intro etaLeft
+    simpa only [staircaseO1PhysicalOp_mul] using
+      (hspecX.1 etaLeft).mul (hspecY.1 etaLeft)
+  · intro etaRight
+    simpa only [staircaseO3PhysicalOp_mul] using
+      (hspecX.2 etaRight).mul (hspecY.2 etaRight)
 
 end Torus
 

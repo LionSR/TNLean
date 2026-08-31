@@ -118,10 +118,14 @@ configuration~$\mu$.  The partial-state identity now also proves that the
 same operators $O_j^A(X)$, applied to the genuine $B$-blocks of a tensor with
 the same closed state, produce one common $B$-state.  The same-tensor two-end
 extraction and the $O_1P_1$ and underlying $P_3O_3$ composition laws are
-complete.  Applying that extraction to the cross-tensor common family now
-gives the unique bond matrix pointwise.  What remains is to organize the
-resulting matrix assignments, prove their multiplicativity from these laws,
-obtain the coefficient transfer, and assemble the back half of the argument.
+complete.  Applying that extraction to the cross-tensor common family gives
+the globally unique bond matrix, now organized as
+\leanid{TNLean.PEPS.staircaseCrossTensorVirtualOperation}.  The canonical end
+operations compose in the two source orders, and global uniqueness proves
+\leanid{TNLean.PEPS.staircaseCrossTensorVirtualOperation\_mul}.  This is the
+multiplicative part of the source's algebra-homomorphism assertion.  The
+additive, scalar, and unit laws for the full algebra-homomorphism package, the
+two coefficient-transfer identities, and the back-half assembly remain.
 
 Ref.~\cite{Molnar2018NormalPEPS} supplies this converse by the reduction ``we only need to prove a
 statement similar to Lemma~5''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321}.}
@@ -184,9 +188,11 @@ simultaneously.
 a sketch.  The consecutive-window comparison, corner completion, forward
 open-boundary physical realization, and two-end recovery of the unique matrix
 $X$ are now formalized, as are the uniqueness and direct composition laws for
-Lemma~5's $O_1$ and $O_3^{\mathsf T}$ end-factor relations.  What remains is
-the cross-tensor coefficient transfer, its multiplicativity, and the
-back-half assembly.  The failed
+Lemma~5's $O_1$ and $O_3^{\mathsf T}$ end-factor relations.  The globally
+quantified cross-tensor matrix assignment and its multiplicativity are also
+formalized.  This does not yet package either map as an algebra homomorphism:
+the additive, scalar, and unit laws remain, together with the bidirectional
+cross-tensor coefficient transfer and the back-half assembly.  The failed
 single-window span above is an invented auxiliary route, not a statement made
 or required by the paper.
 
@@ -263,12 +269,12 @@ $O_3^{\mathsf T}$ orientations
 (\path{TNLean/PEPS/TorusWindowCrossTensorEndOperation.lean}). Every
 inverted region is a union of one-orientation $L \times K$ window translates,
 host-decomposable at $n \geq 2L+1$, $m \geq 2K+1$. The development is
-minimal-size-ready through the single-tensor virtual-operation family and the
-unique end-pair and pointwise cross-tensor extraction.
+minimal-size-ready through the single-tensor virtual-operation family, the
+unique end-pair extraction, and the multiplicative cross-tensor assignment.
 The direct $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$ composition laws are
-also complete.  The remaining gates are to organize the two pointwise
-cross-tensor assignments, prove the forward assignment multiplicative,
-obtain the coefficient transfer, and complete the back-half assembly that
+also complete.  The remaining gates are the additive, scalar, and unit laws
+for the full algebra-homomorphism statement, the two coefficient-transfer
+identities, and the back-half assembly that
 re-anchors the torus Theorem~3 layers to the $(L+1) \times (K+1)$
 comparison pair.
 
@@ -288,11 +294,15 @@ the operators $O_j^A(X)$ to the genuine $B$-blocks.  Feeding this family
 through the open end-pair equality and the two-end comparison now gives the
 unique $B$-bond matrix in
 \leanid{TNLean.PEPS.existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp\_sameState}.
-Swapping the two tensors gives the reverse pointwise statement.  What
-remains is to organize these unique matrices into the forward and reverse
-coefficient transfers and prove that the forward assignment respects
-products; these are the \path{htransferAB}/\path{htransferBA}/\path{hmul}
-data consumed downstream.  This route uses the actual overlapping-window
+Swapping the two tensors gives the reverse pointwise statement.  The forward
+matrix is organized as
+\leanid{TNLean.PEPS.staircaseCrossTensorVirtualOperation}, and
+\leanid{TNLean.PEPS.staircaseCrossTensorVirtualOperation\_mul} proves that it
+respects products directly from the two end relations.  What remains is to
+identify these matrices with the forward and reverse region-inserted
+coefficients; these are the \path{htransferAB}/\path{htransferBA} data consumed
+downstream.  The multiplication field \path{hmul} is then supplied by the
+landed theorem.  This route uses the actual overlapping-window
 comparison and assumes no single-window matrix span.
 
 \paragraph{4. Auxiliary closing routes ruled out at the minimal size.}
@@ -355,17 +365,19 @@ a single-window square-matrix span.  The forward correspondence, its
 open-boundary physical operators, its transpose convention, and the unique
 end-pair operation now follow this description literally.  So do the direct
 composition laws for Lemma~5's $O_1$ and $O_3^{\mathsf T}$ orientations.  The
-pointwise cross-tensor end extraction is also complete.  The remaining formal
-work is the cross-tensor coefficient transfer, its multiplicativity, and the
-back-half assembly.
+globally quantified cross-tensor assignment and its multiplicativity are also
+complete.  The remaining formal work is to prove and package the additive,
+scalar, and unit laws, establish the bidirectional cross-tensor coefficient
+transfer, and complete the back-half assembly.
 
 \paragraph{6. Status.}
 The corollary remains \emph{unformalized}: no blueprint entry claims it, it
 carries the \texttt{notready} marker, and no \texttt{leanok} marks it.  The
-same-tensor family, pointwise cross-tensor end extraction, and direct
-end-composition laws are complete; the remaining work is the bidirectional
-coefficient transfer, its multiplicativity, and the back-half assembly tracked
-separately.
+same-tensor family, global cross-tensor assignment, and its direct
+end-composition proof of multiplicativity are complete.  The additive,
+scalar, and unit laws needed for the two full algebra-homomorphism statements,
+the bidirectional coefficient transfer, and the back-half assembly remain
+tracked separately.
 
 \section{The filled-in derivation}
 
@@ -662,10 +674,11 @@ the unique matrix $X$.  Specializing the end inserts to the physical actions
 $O_1$ and $O_3$ gives the source's two factor relations, whose direct
 composition laws are now formalized.  The same-state partial-state identity
 also supplies the cross-tensor common family for these physical operations,
-and the end-pair theorem now extracts its unique bond matrix.  The residual
-is to organize the two pointwise assignments, use the end-composition laws
-to prove multiplicativity, obtain the coefficient transfer, and complete
-the back-half assembly.
+and the end-pair theorem now extracts its unique bond matrix.  The globally
+quantified assignment and its multiplicativity by the two end-composition laws
+are now formalized.  The residual is to prove the additive, scalar, and unit
+laws needed for the full algebra-homomorphism statement, obtain the two
+coefficient-transfer identities, and complete the back-half assembly.
 
 \subsection{Step 5: the rest of the proof}
 
@@ -792,13 +805,15 @@ unions, all of which decompose at $(2L+1)\times(2K+1)$.
 
 \section{Formalization plan}
 
-The geometry, state-equality, forward fixed-edge-operation, and unique
-end-pair-operation layers of the derivation above are complete, including the
-direct composition laws in the two source orientations. The remaining source
+The geometry, state-equality, forward fixed-edge-operation, unique
+end-pair-operation, and multiplicative cross-tensor-assignment layers of the
+derivation above are complete, including the direct composition laws in the
+two source orientations. The remaining source
 steps following
 \path{Papers/1804.04964/paper_normal.tex:2368--2444} of
-Ref.~\cite{Molnar2018NormalPEPS} are the cross-tensor coefficient transfer,
-its multiplicativity, and the back-half assembly.  The layer list below
+Ref.~\cite{Molnar2018NormalPEPS} are the additive, scalar, and unit laws for
+the full algebra-homomorphism package, the bidirectional cross-tensor
+coefficient transfer, and the back-half assembly.  The layer list below
 records the campaign around these steps:
 
 \begin{enumerate}
@@ -821,8 +836,10 @@ records the campaign around these steps:
           last physical operations after adjoining the genuine corner tensors,
           invert the resulting regions, and recover the unique virtual operation
           $X$, with the $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$ uniqueness and
-          direct composition laws, including the pointwise cross-tensor end
-          extraction (complete).
+          direct composition laws, including the globally quantified
+          cross-tensor assignment and its multiplicativity (complete); the
+          additive, scalar, and unit laws needed to package the source's full
+          algebra homomorphisms remain.
     \item \emph{The per-edge witness}: the landed insertion-correspondence and
           Skolem--Noether interface at one reference edge per orientation; the
           remaining cross-tensor transfer must supply the coefficient identity this
@@ -1183,10 +1200,11 @@ The boundary-label and normalized-coupling arguments are in
 contraction and unique-operation extraction are in
 \path{TNLean/PEPS/TorusWindowPeeling/EndOperation.lean}.
 
-The Step~4 end relations and their direct composition laws are complete.  The
-remaining work is to organize the pointwise operations into the cross-tensor
-coefficient transfer, prove its multiplicativity, and then complete the back
-half of the proof.
+The Step~4 end relations, their direct composition laws, and the resulting
+multiplicative cross-tensor assignment are complete.  The remaining work is to
+prove the additive, scalar, and unit laws for the full algebra-homomorphism
+package, prove the two coefficient-transfer identities, and then complete the
+back half of the proof.
 
 \subsection{The back-half geometry supports a window witness region}
 
@@ -1335,10 +1353,12 @@ conjugation field assumed.
 
 The remaining input at this stage is therefore the staircase
 \emph{coefficient transfer} on the window: for each inserted matrix $M$ on
-$A$'s edge $e$ a matching matrix $N$ on $B$ with
-equal window coefficient
-($\text{\path{htransferAB}}$), its reverse ($\text{\path{htransferBA}}$), and the multiplicativity of
-the chosen forward transfer ($\text{\path{hmul}}$).  The same-tensor family that feeds the
+$A$'s edge $e$ a matching matrix $N$ on $B$ with equal window coefficient
+($\text{\path{htransferAB}}$), and its reverse ($\text{\path{htransferBA}}$).
+The canonical forward matrix assignment is already multiplicative by
+\leanid{TNLean.PEPS.staircaseCrossTensorVirtualOperation\_mul}, so this theorem
+supplies $\text{\path{hmul}}$ once the coefficient identities identify the
+transfer with that assignment.  The same-tensor family that feeds the
 single-bond peeling is now complete.  The first window carries the boundary insert of
 $M^{\mathsf T}$, the windows $W_1,\ldots,W_{L-1}$ carry the interior-bond insert of $M$,
 and the remaining windows carry the boundary insert of $M$.  Their common state is the
@@ -1360,9 +1380,10 @@ It feeds the common family through
 $\text{\path{staircasePair\_insert\_eq\_open}}$ and the genuine two-end
 injectivity argument, giving the unique $B$-matrix with the paper's $O_1$ and
 $O_3^{\mathsf T}$ orientations; swapping $A$ and $B$ gives the reverse
-pointwise extraction.  The local residual is to organize these unique
-matrices into the two coefficient transfers and use the end-composition laws
-to prove that the forward assignment respects products.  The region-level recovery
+pointwise extraction.  These matrices are now organized by
+$\text{\path{staircaseCrossTensorVirtualOperation}}$, and the end-composition
+laws prove that the forward assignment respects products.  The local residual
+is to establish the two coefficient identities.  The region-level recovery
 $\text{\path{regionInsertionTransfer\_of\_realizes}}$ derives all three transfer fields ---
 $\text{\path{htransferAB}}$, $\text{\path{htransferBA}}$, and $\text{\path{hmul}}$ --- from one region
 physical-to-virtual realization $\text{\path{RegionTransferRealizes}}$ in each direction, with
@@ -1371,11 +1392,13 @@ realization on the window from the pointwise staircase extraction, in place of
 the edge-middle injectivity
 ($\mathrm{univ}\setminus\{u,v\}$ injective) the rectangle route uses, which fails at the
 minimal size --- the same obstruction, at the edge, that $\mathrm{univ}\setminus S$
-exhibits at the end pair.  The pointwise existence theorem alone does not yield
-$\text{\path{hmul}}$: the missing bridge is the comparison of the canonical
-physical operations under composition, in the order $O_1P_1$ on the left and
-the underlying order $P_3O_3$ for the $O_3^{\mathsf T}$ orientation on the
-right.  After this transfer is available, the back-half assembly remains.
+exhibits at the end pair.  The comparison of the canonical physical operations
+under composition is now
+$\text{\path{staircaseO1PhysicalOp\_mul}}$ and
+$\text{\path{staircaseO3PhysicalOp\_mul}}$, in the order $O_1P_1$ on the left
+and the underlying order $P_3O_3$ for the $O_3^{\mathsf T}$ orientation on the
+right.  After the coefficient transfer is available, the back-half assembly
+remains.
 
 \section{The multiplicativity route: compose the two end relations, not a
   single-window span or a coarse frame}
@@ -1384,8 +1407,8 @@ This section separates three statements that had previously been conflated:
 the unavailable single-window square-matrix span, an auxiliary coarse-frame
 theorem whose hypotheses fail at the minimal size, and the source's direct
 composition of the two end-factor relations.  The last of these is now
-formalized.  Its use in the cross-tensor transfer field
-$\text{\path{hmul}}$ remains the local open step.
+formalized and gives the cross-tensor multiplication field
+$\text{\path{hmul}}$ without either auxiliary route.
 
 \subsection{The single-window span does not exist, and is not the mechanism}
 
@@ -1467,9 +1490,9 @@ order, and use uniqueness of $X$.  No third block or larger frame enters.
 The overlapping-window realization sketched in Ref.~\cite{Molnar2018NormalPEPS} keeps the same
 virtual operation $M$ on $e$ while representing it on every staircase window.
 That common-state family, including its transfer across equal closed states,
-is now built below.  The remaining cross-tensor homomorphism must be obtained
-from Lemma~5's composition of the $O_1$ and $O_3^{\mathsf T}$ end relations,
-not from a single-window span or an assumed coarse frame.
+is now built below.  The cross-tensor multiplication law is obtained from
+Lemma~5's composition of the $O_1$ and $O_3^{\mathsf T}$ end relations, not
+from a single-window span or an assumed coarse frame.
 
 \subsection{The foundation that lands}
 
@@ -1544,9 +1567,10 @@ peeling hypothesis.  Together with the partial-state argument above, this
 closes both common-state-family residuals.  The subsequent end-pair comparison
 now extracts the unique cross-tensor matrix pointwise in
 \leanid{TNLean.PEPS.existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp\_sameState}.
-Packaging the forward and reverse coefficient transfers and proving the
-forward assignment multiplicative are the remaining Lemma~5-style steps,
-after which the back-half assembly remains.
+The canonical forward assignment and its multiplicativity are now packaged.
+Proving its additive, scalar, and unit laws and the forward and reverse
+coefficient identities are the remaining Lemma~5-style steps, after which the
+back-half assembly remains.
 
 \section{Normality and discarded stronger routes}
 
@@ -1606,9 +1630,10 @@ region of a coherent frame.\footnote{Formal geometry:
 These observations rule out two auxiliary shortcuts; they do not challenge
 the paper's fixed-edge comparison.  The comparison through adjoining the
 corner regions and recovering the unique cross-tensor virtual operation is now
-landed.  The two source orientations and their direct multiplication laws are
-also landed.  The remaining source work is to organize the bidirectional
-coefficient transfer, prove its multiplicativity, and complete the back-half
+landed.  The two source orientations, their canonical physical-operation laws,
+and the resulting cross-tensor multiplicativity are also landed.  The remaining
+source work is to prove the additive, scalar, and unit laws, prove the
+bidirectional coefficient-transfer identities, and complete the back-half
 assembly.
 
 \bibliographystyle{alpha}
