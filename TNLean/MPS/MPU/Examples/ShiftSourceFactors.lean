@@ -392,8 +392,8 @@ noncomputable def rightShiftSourceFactors (d : ℕ) [NeZero d] :
   exact ⟨P, Pᴴ, P, C, R, Z, hcut₁, hcut₂, hweighted, hC,
     hP.1, hRZ⟩
 
-/-- Supplied source factors for the right shift with the trace-one
-canonical-form-II weight \(\rho=d^{-1}I\).
+/-- Supplied source factors for the right shift with the trace-normalized
+scalar weight \(\rho=d^{-1}I\) prescribed by canonical form II.
 
 Relative to `rightShiftSourceFactors`, the first-cut factors are rescaled as
 \(X_1'=\sqrt d\,X_1\), \(Y_1'=d^{-1/2}Y_1\), and
@@ -451,7 +451,7 @@ noncomputable def rightShiftPaperSourceFactors (d : ℕ) [NeZero d] :
       Y₁_mul_Z₁ := hY₁Z₁
       Y₂_mul_Z₂ := S.Y₂_mul_Z₂ }
 
-/-- With the trace-one canonical-form-II weight, the paper gate
+/-- With the trace-normalized scalar weight, the paper gate
 \(u=Y_2\mathbin{-}Y_1\) of the right shift is a literal permutation matrix.
 
 The source coordinate `(a,b)` is sent to the physical coordinate `(b,a)`,
@@ -503,7 +503,7 @@ theorem sourceU_rightShiftPaperSourceFactors_gram (d : ℕ) [NeZero d]
     simp [ite_and, h₁, h₂, ne_comm]
 
 /-- The paper source gate of the right shift is an isometry when its first
-source cut uses the trace-one canonical-form-II weight.
+source cut uses the trace-normalized scalar weight.
 
 Source: CPSV17 Lemma `lemuisometry` and equation `uUnitary` (lines 545--557).
 -/
