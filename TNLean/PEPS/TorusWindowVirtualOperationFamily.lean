@@ -31,6 +31,12 @@ explicit physical operator `Oⱼ(X)` whose action on every open-boundary genuine
 and the last-window coefficient with `X`.  This transpose agrees with the ordered-endpoint
 convention of Lemma 5, where the right-end physical operation occurs in the map from `O₃ᵀ` to `X`.
 
+If a second tensor has the same closed state, the same physical operators `Oⱼ(X)` may be applied
+to its genuine window blocks even though its virtual boundary spaces need not agree with those of
+the first tensor.  The partial-state identity transfers the common-state property across the two
+tensors after the honest interior-bond factors are accounted for.  Thus the physical operations
+give the common family required by the converse before any multiplication law is considered.
+
 The construction follows the paper's actual operation: it keeps the distinguished bond `e`
 fixed and adjoins genuine tensors to a window.  No auxiliary matrix-span or different-bond
 transport is introduced.
@@ -245,6 +251,101 @@ theorem deformedRegionStateAssembled_staircaseVirtualOperationInsert {a b j : �
       rw [deformedRegionStateAssembled_interiorBondInserted_eq_smul_edgeInsertedCoeff
         (hpos := hpos)]
       rw [regionInteriorBondProd_staircaseWindow_eq hTI _ L K j 0]
+
+/-- The physical operations `Oⱼ(X)` constructed from one tensor `A`, when applied to the
+corresponding genuine staircase-window blocks of a tensor `B` with the same closed state, all
+produce one common deformed state of `B`.
+
+For each window, `deformedRegionState_regionInsertOfPhysicalOp_sameState` transfers the closed
+action of `Oⱼ(X)` from `A` to `B`, without identifying their virtual boundary spaces.  On `A`, the
+operation realizes the insert family `Cⱼ(X)`, whose deformed states agree.  Translation invariance
+identifies the interior-bond products for the windows of each tensor, and positivity of the bond
+dimensions of `A` cancels its one common nonzero factor.
+
+This is exactly the common-state premise for comparing consecutive physical operations in the
+two-dimensional converse.  It assumes neither a multiplication law for the operations nor an
+auxiliary single-vertex or coarse-block injectivity condition.
+
+The source family has indices `0 ≤ k < L + K`.  The truncated offsets in `staircaseWindow`
+stabilize at the last window for `L + K - 1 ≤ k`, so the statement below holds for arbitrary
+natural indices; this is stabilization, not a cyclic convention.  No equality between the
+edge-dependent bond dimensions of `A` and `B` is assumed.
+
+Source: arXiv:1804.04964, the virtual-to-physical staircase construction at lines 2320--2368 and
+the common-state comparison of the four physical operations at lines 2368--2415 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem deformedRegionStateAssembled_staircasePhysicalOp_sameState
+    {A B : Tensor (torusGraph width height) d} {a b j j' : ℕ}
+    (hA : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvariant B)
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
+    (hL : 0 < L) (hK : 0 < K) (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height)
+    (X : Matrix
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K)))
+      (Fin (A.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K))) ℂ) :
+    deformedRegionStateAssembled (G := torusGraph width height) B
+        (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j)
+        (regionInsertOfPhysicalOp (G := torusGraph width height) B
+          (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j)
+          (staircaseVirtualOperationPhysicalOp (B := A) hA hL hK haw hyh X j)) =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j')
+        (regionInsertOfPhysicalOp (G := torusGraph width height) B
+          (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j')
+          (staircaseVirtualOperationPhysicalOp (B := A) hA hL hK haw hyh X j')) := by
+  classical
+  funext cfg
+  have hrealizes (k : ℕ) :
+      regionInsertOfPhysicalOp (G := torusGraph width height) A
+          (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K k)
+          (staircaseVirtualOperationPhysicalOp (B := A) hA hL hK haw hyh X k) =
+        staircaseVirtualOperationInsert (B := A) hL hK haw hyh X k := by
+    funext μ
+    exact staircaseVirtualOperationPhysicalOp_realizes hA hL hK haw hyh X k μ
+  have hcross (k : ℕ) :
+      (regionInteriorBondProd (G := torusGraph width height) B
+        (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K k) : ℂ) •
+        deformedRegionStateAssembled (G := torusGraph width height) A
+          (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K k)
+          (regionInsertOfPhysicalOp (G := torusGraph width height) A
+            (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K k)
+            (staircaseVirtualOperationPhysicalOp (B := A) hA hL hK haw hyh X k)) cfg =
+      (regionInteriorBondProd (G := torusGraph width height) A
+        (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K k) : ℂ) •
+        deformedRegionStateAssembled (G := torusGraph width height) B
+          (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K k)
+          (regionInsertOfPhysicalOp (G := torusGraph width height) B
+            (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K k)
+            (staircaseVirtualOperationPhysicalOp (B := A) hA hL hK haw hyh X k)) cfg := by
+    exact deformedRegionState_regionInsertOfPhysicalOp_sameState
+      (G := torusGraph width height) A B hAB
+      (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K k)
+      (staircaseVirtualOperationPhysicalOp (B := A) hA hL hK haw hyh X k)
+      (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg)
+      (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg)
+  have hcross_j := hcross j
+  have hcross_j' := hcross j'
+  rw [hrealizes j,
+    deformedRegionStateAssembled_staircaseVirtualOperationInsert hATI hposA hL hK haw hyh X cfg,
+    regionInteriorBondProd_staircaseWindow_eq (A := B) hBTI _ L K j 0,
+    regionInteriorBondProd_staircaseWindow_eq (A := A) hATI _ L K j 0] at hcross_j
+  rw [hrealizes j',
+    deformedRegionStateAssembled_staircaseVirtualOperationInsert hATI hposA hL hK haw hyh X cfg,
+    regionInteriorBondProd_staircaseWindow_eq (A := B) hBTI _ L K j' 0,
+    regionInteriorBondProd_staircaseWindow_eq (A := A) hATI _ L K j' 0] at hcross_j'
+  simp only [nsmul_eq_mul, smul_eq_mul] at hcross_j hcross_j'
+  have hpA :
+      (regionInteriorBondProd (G := torusGraph width height) A
+        (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K 0) : ℂ) ≠ 0 := by
+    have hpos : 0 < regionInteriorBondProd (G := torusGraph width height) A
+        (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K 0) :=
+      Finset.prod_pos (fun e _ => hposA e)
+    exact_mod_cast hpos.ne'
+  exact mul_left_cancel₀ hpA (hcross_j.symm.trans hcross_j')
 
 /-- The coefficient on the first window with `Xᵀ` inserted equals the coefficient on the last
 window with `X` inserted.
