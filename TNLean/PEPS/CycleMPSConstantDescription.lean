@@ -13,7 +13,8 @@ import Mathlib.LinearAlgebra.Dual.Lemmas
 /-!
 # Translation-invariant description of an injective closed MPS chain
 
-This file delivers the Applications-section corollary of arXiv:1804.04964
+This file delivers the positive-bond, at-least-three-site form of the
+Applications-section corollary of arXiv:1804.04964
 (`Papers/1804.04964/paper_normal.tex`, the corollary at line 1804, proof lines
 1807--1890).  For a cycle-graph tensor with one virtual dimension per bond,
 cyclic-shift invariance first makes all bond dimensions equal.  The dependent
@@ -37,11 +38,23 @@ by `B`, hence is a scalar `λ ≠ 0`.  An `n`-th root `c^n = λ⁻¹`, available
 tensor `B' = c · B`, which is still injective and generates the same closed
 state.
 
-**Local fix (cyclic seam scalar):** At source lines 1860--1889, the paper
-sets the closing products `R_{n+1}` and `L_{n+1}` equal to the identity.  The
-closed-chain argument only forces their residual product to be a nonzero
-scalar.  The proof below absorbs an inverse `n`-th root of that scalar into the
-repeated tensor.  This correction is documented in
+**Local fix (cyclic seam scalar):** At source line 1876, the paper sets the
+closing products `R_{n+1}` and `L_{n+1}` equal to the identity.  The
+closed-chain argument only forces the closing loop product to be a nonzero
+scalar.  The proof below absorbs an inverse `n`-th root of that scalar into
+the repeated tensor.  This correction is documented in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
+**Scope restriction (positive bonds and at least three sites):** The final
+theorem below assumes positive virtual dimensions and `3 ≤ n`.  Positivity is
+not intrinsic to the current `Tensor` type, and the source corollary at line
+1804 does not state either hypothesis.  However, the source section explicitly
+works with at least three sites at line 145, and the corollary's proof invokes
+the corresponding Fundamental Theorem at lines 688--725.  Thus `3 ≤ n` records
+the intended source context rather than a missing short-chain extension.  The
+literal two-site statement is false for nondegenerate rectangular bond data,
+so omission of this qualifier from the printed corollary is a source-scope
+defect.  The remaining source-facing gap is recorded in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 The uniform-chain theorem
@@ -431,9 +444,10 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState
       arcEval_const, Kraus.evalWord_smul, List.length_ofFn, Matrix.trace_smul,
       smul_eq_mul, hc]
 
-/-- **Translation-invariant description of an injective closed MPS chain with
-one dimension per bond** (arXiv:1804.04964, Applications section, corollary
-line 1804 and proof lines 1807--1890).
+/-- **Positive-bond, at-least-three-site translation-invariant description of
+an injective closed MPS chain with one dimension per bond**
+(arXiv:1804.04964, Applications section, corollary line 1804 and proof lines
+1807--1890).
 
 Let a site-dependent injective MPS on the cycle graph have positive virtual
 dimension on every bond, and suppose that its closed-chain state is invariant
@@ -445,7 +459,9 @@ The first step is `bondDim_eq_of_isCycleShiftInvariantState`, corresponding to
 source lines 1807--1842.  The tensor is then explicitly reindexed to the
 uniform chain `Tensor.reindexMPSChain`.  The existing uniform theorem above
 supplies the source's `L_i,R_i` telescoping, seam closure, and repeated tensor
-from lines 1843--1889. -/
+from lines 1843--1889.  The explicit positive-bond and `3 ≤ n` hypotheses are
+the scope restriction documented in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
 theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond
     {n d : ℕ} [NeZero n] (hn : 3 ≤ n)
     (A : Tensor (SimpleGraph.cycleGraph n) d)

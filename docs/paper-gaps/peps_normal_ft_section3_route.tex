@@ -2550,12 +2550,15 @@ the rotation of successor edges gives
 and cyclic induction gives equality on every pair of cycle edges in
 \leanid{TNLean.PEPS.bondDim_eq_of_isCycleShiftInvariantState}. These results
 carry the explicit positivity assumption inherited from the corrected
-injective Fundamental Theorem; it excludes empty virtual spaces.
+injective Fundamental Theorem; it excludes empty virtual spaces. They also
+assume at least three sites, the hypothesis of the injective MPS Fundamental
+Theorem at source lines 688--725 that the proof invokes at line 1828.
 
 The repeated-tensor implication in
 (\ref{eq:peps_normal_ft_section3_route_cyclic_shift_repeated_tensor}) is now
-formalized end to end. Its gauge calculation is first proved for a family
-$A_i$ with one common bond dimension:
+formalized end to end for positive bond dimensions on at least three sites.
+Its gauge calculation is first proved for a family $A_i$ with one common bond
+dimension:
 \begin{align}
     T\Psi(A_1,\ldots,A_n)=\Psi(A_1,\ldots,A_n)
         &\Longrightarrow
@@ -2591,12 +2594,27 @@ lemmas \leanid{TNLean.PEPS.Tensor.stateCoeff_reindexMPSChain},
 that this identification preserves the closed-state coefficients,
 injectivity, and cyclic-shift invariance. Applying the uniform theorem gives
 \leanid{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond},
-the full implication
-(\ref{eq:peps_normal_ft_section3_route_cyclic_shift_repeated_tensor}).
+the positive-bond, at-least-three-site form of
+(\ref{eq:peps_normal_ft_section3_route_cyclic_shift_repeated_tensor}). The
+Blueprint records this proved restriction as
+\path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos}.
 
-\emph{Verdict: complete.} The Blueprint entry
+\emph{Verdict: the explicit reindexing and repeated-tensor construction are
+complete under the positive-bond and at-least-three-site restrictions; the
+unrestricted source entry remains not ready.} The Blueprint entry
 \path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
-now records the full source statement. The proof follows the source route:
+records the printed corollary separately and carries no Lean declaration. The
+positive-bond hypothesis is currently external because
+\leanid{TNLean.PEPS.Tensor} stores bond dimensions in $\mathbb{N}$ and admits
+empty virtual spaces; it must be made intrinsic to the source-facing domain or
+eliminated before the printed statement can be marked complete. The source
+corollary also omits a system-size hypothesis, although its proof invokes the
+at-least-three-particle Fundamental Theorem. The source section explicitly
+sets this scope at line~145. Thus $n\ge3$ is the intended source context, and
+its omission from the displayed corollary is a source-scope defect. Indeed,
+the literal two-site statement is false for nondegenerate rectangular bond
+dimensions; it is not a short-chain extension left to the present argument.
+The proved restricted theorem follows the source route:
 equality of the bond dimensions, explicit identification of the equal virtual
 spaces, and the already formalized $L_i,R_i$ telescoping and seam closure. It
 introduces neither a collected gauge factorization nor an alternative proof
@@ -2626,7 +2644,8 @@ The load-bearing dependency, the injective PEPS Fundamental Theorem
 (\leanid{TNLean.PEPS.fundamentalTheorem_PEPS}, blueprint
 \path{thm:fundamentalTheorem_PEPS}), is formalized. The one-dimensional
 repeated-tensor construction discussed above is also formalized as
-\leanid{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}.
+\leanid{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
+under the positive-bond and at-least-three-site restrictions just stated.
 The remaining work is the PEPS-specific two-directional closure: the horizontal
 and vertical gauge telescopings must be compatible around plaquettes and
 periodic seams, and their residual virtual operations must be absorbed into one
