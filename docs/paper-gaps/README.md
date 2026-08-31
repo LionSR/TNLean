@@ -338,8 +338,12 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   original-lattice range claim and its quantification over all sufficiently
   long periodic chains.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
-  comparison: the finite-row cyclic-window reduction is formalized, while the
-  remaining source comparison is the overlapping-window anticommutator estimate;
+  comparison, including the lower-endpoint mismatch in the printed proof of
+  Nachtergaele's Theorem 2.1(i). The exact coefficient is formalized under
+  full-range C1--C3 hypotheses, while the source starts the C1 sum at the
+  window length and assumes C2 and C3 only beyond their thresholds. The same
+  note records the finite-row cyclic-window
+  reduction and the remaining overlapping-window anticommutator comparison;
   the local norm-compression statements are sufficient stronger substitutes
   tracked by issue #952.
 - `cpsv16_nncph_ground_state_scope.tex` records the separation between the

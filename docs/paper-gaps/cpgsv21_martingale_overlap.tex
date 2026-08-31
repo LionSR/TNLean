@@ -130,6 +130,83 @@ Ref.~\cite{Fannes1992Finitely}. The formal development instead proves a
 sufficient range-two estimate after physical blocking. The optimized FNW
 numerator and the identification of its source constants remain open.
 
+\subsection{Lower-endpoint scope in Theorem 2.1(i)}
+
+There is a separate lower-endpoint mismatch between the hypotheses and the
+printed proof of Theorem~2.1(i) in
+Ref.~\cite{Nachtergaele1996Spectral}. Condition C1, at source
+lines~1030--1041, states for a window parameter $q$ that
+\begin{align}
+    0
+        &\leq
+          \sum_{k=q}^{N}H_{\Lambda_k\setminus\Lambda_{k-q}}
+          \leq d_q H_{\Lambda_N}.
+    \label{eq:cpgsv21_martingale_overlap_nachtergaele_c1_lower_endpoint}
+\end{align}
+In the proof of part~(i), the local term indexed by $n$ is
+$H_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$. Thus applying C1 with
+$q=l+1$ controls the terms with $n\geq l$, not the terms with $0\leq n<l$.
+Condition C2, at source lines~1043--1058, gives the corresponding local gap
+only when $n+1\geq n_{l+1}$, while C3, at source lines~1083--1094,
+assumes
+\begin{align}
+    \lVert G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n\rVert
+        &\leq\epsilon_l
+        &&\text{only for }n\geq n_l.
+    \label{eq:cpgsv21_martingale_overlap_nachtergaele_c3_lower_endpoint}
+\end{align}
+
+The proof at source lines~1195--1259 first resolves an arbitrary
+$\psi\perp\operatorname{ran}G_{\Lambda_N}$ as
+\begin{align}
+    \psi
+        &=\sum_{n=0}^{N-1}E_n\psi,
+    &
+    \lVert\psi\rVert^2
+        &=\sum_{n=0}^{N-1}\lVert E_n\psi\rVert^2,
+    \label{eq:cpgsv21_martingale_overlap_nachtergaele_full_resolution}
+\end{align}
+and then applies C2 and C3 to the estimate for each $E_n\psi$ before summing
+over the same full range. The stated hypotheses do not supply these estimates
+at the omitted lower indices. The convention $G_{\Lambda_0}=I$ does not make
+the early differences $E_n$ vanish, and no padding convention for the early
+local Hamiltonians is stated.
+
+The stronger full-range theorem
+\leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_full_range}
+therefore assumes the C1 sum and the C2--C3 estimates on every index
+$0\leq n<N$. Under this stronger hypothesis it proves the printed coefficient
+\begin{align}
+    \frac{\gamma_{l+1}}{d_{l+1}}
+    \left(1-\epsilon_l\sqrt{l+1}\right)^2.
+    \label{eq:cpgsv21_martingale_overlap_nachtergaele_full_range_coefficient}
+\end{align}
+The associated norm theorem
+\leanid{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range}
+reuses the existing finite-dimensional spectral theorem. These declarations
+are not identified with the unrestricted source theorem.
+
+Eliminating the restriction requires one of two source-faithful repairs: prove
+that the missing lower-index components are controlled by the stated C1--C3
+data without changing the coefficient, or supply and verify an explicit
+initial-volume convention under which those components vanish. For the MPS
+application, simply having uniform C2 and C3 estimates beyond their source
+thresholds does not discharge this obligation.
+
+The scalar optimization also has a separate zero-constant case. The printed
+proof chooses
+\begin{align}
+    c_2
+        &=\frac{\epsilon_l}{\sqrt{l+1}}
+    \label{eq:cpgsv21_martingale_overlap_nachtergaele_c2_weight}
+\end{align}
+after requiring $c_2>0$. When $\epsilon_l=0$, this choice is inadmissible.
+The formal proof treats this case separately: C3 gives
+$G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n=0$, so the second mixed inner
+product in the display labelled \path{Enpsi} vanishes, and the first weighted
+estimate with $c_1=1$ gives the same coefficient. This is a local repair of
+the printed proof and adds no hypothesis.
+
 \subsection{Unit bound at the full-window volume}
 
 Fix an MPS tensor $A$ and an interaction length $L>0$. Let
