@@ -339,6 +339,7 @@
         ContinuousLinearMap.rightFiberwiseMap_sub,
         ContinuousLinearMap.rightFiberwiseMap_sum,
         ContinuousLinearMap.rightFiberwiseMap_comp,
+        ContinuousLinearMap.norm_conj_linearIsometryEquiv,
         ContinuousLinearMap.norm_rightFiberwiseMap_le,
         ContinuousLinearMap.norm_rightFiberwiseMap}
     \leanok
@@ -457,6 +458,7 @@
         MPSTensor.openSuffixParentHamiltonianES_full_window_eq_localTermES,
         MPSTensor.ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES,
         MPSTensor.openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}
     \leanok
     \uses{lem:right-spectator-kernel-projection,
@@ -480,7 +482,10 @@
     The prefix kernel is read fiberwise.  Block injectivity identifies every
     fiber kernel with the $n$-site MPS ground space, which is precisely the
     left-window membership condition after fixing the last physical index.
-    The full suffix interval contains one interaction; its cyclic restriction
+    When the active prefix fills its smaller volume, the same argument
+    identifies its kernel projection with the whole open-chain ground
+    projection.  The full suffix interval contains one interaction; its cyclic
+    restriction
     is the ordinary restriction obtained by fixing the $K$-site prefix, giving
     the tail-window membership condition.  Orthogonal kernel projections are
     preserved by the canonical isometry, and the fiberwise kernel-projection
@@ -3411,6 +3416,58 @@ this subsection do not assume periodic coercivity.
     for every $K>0$.  Rewrite its norm by
     Theorem~\ref{thm:exact_c3_martingale_difference_identity}; the existing
     strict threshold on $\varepsilon_l$ is unchanged.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
+% proof of Theorem 2.1(i), lines 1178--1259.
+\begin{theorem}[Literal fixed-final-volume martingale condition C3]
+    \label{thm:literal_fixed_volume_martingale_c3}
+    \lean{MPSTensor.fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator,
+        MPSTensor.norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain,
+        MPSTensor.IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold}
+    \leanok
+    \uses{lem:right-spectator-extension,
+        thm:fixed-volume-c3-projector-conjugacy,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:literal_open_chain_martingale_c3}
+    Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
+    positive-definite fixed point.  There are $l>1$ and
+    $\varepsilon_l\geq0$, with $A$ $l$-block injective, such that for every
+    final volume $N$ and every $n<N$,
+    \begin{align}
+        \left\lVert
+        G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}^{(N)}E_n^{(N)}
+        \right\rVert
+         & \leq\varepsilon_l,
+        \label{eq:literal_fixed_volume_martingale_c3} \\
+        \varepsilon_l
+         & <\frac{1}{\sqrt{l+1}}.
+        \label{eq:literal_fixed_volume_martingale_c3_threshold}
+    \end{align}
+    This is the same overlap length and the same coefficient as in
+    Theorem~\ref{thm:literal_open_chain_martingale_c3}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:right-spectator-extension,
+        thm:fixed-volume-c3-projector-conjugacy,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:literal_open_chain_martingale_c3}
+    If $n<l$, then $E_n^{(N)}=0$.  If $n=l$, the endpoint identity gives
+    $G_{\Lambda_{l+1}}^{(N)}E_l^{(N)}=0$.  These cases use only
+    $\varepsilon_l\geq0$.
+
+    Suppose that $n>l$, and set $K=n-l>0$ and $r=N-(n+1)$.  The prefix and
+    whole-prefix conjugacies identify $E_n^{(N)}$ with the direct sum of the
+    $(n+1)$-site martingale difference over the $r$ right spectators.  The
+    interval-projector conjugacy and fiberwise composition then identify the
+    product in
+    (\ref{eq:literal_fixed_volume_martingale_c3}) with the direct sum of its
+    open-chain counterpart.  Isometric conjugacy preserves operator norm, and
+    the fiberwise extension does not increase it.  The bound therefore follows
+    from Theorem~\ref{thm:literal_open_chain_martingale_c3}.
 \end{proof}
 
 \begin{lemma}[Blocked three-site projector and adjacent-pair transport]

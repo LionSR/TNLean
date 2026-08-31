@@ -358,16 +358,36 @@ and
 \leanid{MPSTensor.openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}.
 None of these comparisons uses definitional equality between ambient volumes.
 
-It remains to identify the next-prefix projector $G_{n+1}^{(N)}$ with the
-right-spectator extension of the whole-ground projector in the $(n+1)$-site
-volume.  Subtracting that identity from the completed left-prefix identity
-will compare the fixed-volume martingale difference $E_n$ with its
-$(n+1)$-site counterpart.  Composition with the completed interval-projector
-identity and exact preservation of the fiberwise operator norm will then
-reduce $\lVert Q_nE_n\rVert\leq\varepsilon_l$ to the existing variable-volume
-C3 estimate.  Until this final next-prefix identification and product
-calculation are proved, the fixed-final-volume estimate for $n>l$ remains
-open.  No periodic coercivity statement can replace it.
+The next-prefix comparison is also complete.
+The theorem
+\leanid{MPSTensor.openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}
+identifies $G_{n+1}^{(N)}$ with the right-spectator extension of the whole-ground
+projector in the $(n+1)$-site volume.  Subtracting this identity from the left
+prefix identity gives
+\leanid{MPSTensor.fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometryEquiv}.
+Fiberwise composition with the interval projector gives
+\leanid{MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator}.
+Isometric conjugacy preserves operator norm, while the right-fiberwise
+extension does not increase it.  Hence
+\leanid{MPSTensor.norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain}
+reduces the fixed-volume norm to the open-chain norm.
+
+Combining this comparison with the two boundary cases proves
+\leanid{MPSTensor.IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold}.
+For the same block-injective $l>1$ and the same $\varepsilon_l\geq0$ chosen by
+the open-chain theorem, every $N$ and every $n<N$ satisfy
+\begin{align}
+    \lVert G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}^{(N)}E_n^{(N)}\rVert
+    &\leq\varepsilon_l,
+    &
+    \varepsilon_l
+    &<\frac{1}{\sqrt{l+1}}.
+    \label{eq:cpgsv21_martingale_overlap_fixed_volume_c3}
+\end{align}
+The proof treats $n<l$, $n=l$, and $n>l$ separately.  Positivity of
+$\varepsilon_l$ is not assumed, and $K=n-l>0$ is used only in the third case.
+The comparison uses neither definitional equality between ambient volumes nor
+periodic coercivity.
 
 \subsection{Three-site to cyclic transport}
 
