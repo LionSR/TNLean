@@ -61,6 +61,8 @@ theorem rhoWeighted_inner {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ)
       (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
     letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
       Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
     inner ℂ X Y = Matrix.trace (ρ * Xᴴ * Y) := by
   let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup ρ hρ
@@ -68,6 +70,8 @@ theorem rhoWeighted_inner {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ)
     (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   change Matrix.trace (Y * ρ * Xᴴ) = Matrix.trace (ρ * Xᴴ * Y)
   exact (Matrix.trace_mul_cycle ρ Xᴴ Y).symm
 
@@ -80,6 +84,8 @@ theorem rhoWeighted_norm_sq {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ)
       (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
     letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
       Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
     ‖X‖ ^ 2 = (Matrix.trace (ρ * Xᴴ * X)).re := by
   let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup ρ hρ
@@ -87,6 +93,8 @@ theorem rhoWeighted_norm_sq {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ)
     (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   calc
     ‖X‖ ^ 2 = (inner ℂ X X).re := (inner_self_eq_norm_sq (𝕜 := ℂ) X).symm
     _ = (Matrix.trace (ρ * Xᴴ * X)).re :=
@@ -101,6 +109,8 @@ private theorem inner_rightMul_cfcSqrt
       (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
     letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
       Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
     inner ℂ (frobeniusLinearEquiv D (X * CFC.sqrt ρ))
         (frobeniusLinearEquiv D (Y * CFC.sqrt ρ)) = inner ℂ X Y := by
   let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
@@ -109,6 +119,8 @@ private theorem inner_rightMul_cfcSqrt
     (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   rw [inner_frobeniusLinearEquiv, rhoWeighted_inner ρ hρ]
   rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_cfc_sqrt]
   calc
@@ -132,6 +144,8 @@ noncomputable def rhoWeightedEquivEuclidean
       (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
     letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
       Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
     Matrix (Fin D) (Fin D) ℂ ≃ₗᵢ[ℂ] EuclideanSpace ℂ (Fin D × Fin D) := by
   let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup ρ hρ
@@ -139,6 +153,8 @@ noncomputable def rhoWeightedEquivEuclidean
     (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   exact {
     toFun X := frobeniusLinearEquiv D (X * CFC.sqrt ρ)
     invFun x := (frobeniusLinearEquiv D).symm x * (CFC.sqrt ρ)⁻¹
@@ -184,6 +200,8 @@ theorem rhoWeightedEquivEuclidean_apply
       (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
     letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
       Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
     rhoWeightedEquivEuclidean ρ hρ X =
       WithLp.toLp 2 (X * CFC.sqrt ρ).vec := by
   let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
@@ -192,6 +210,8 @@ theorem rhoWeightedEquivEuclidean_apply
     (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   rfl
 
 /-- The inverse weighted Euclidean equivalence applies inverse Frobenius
@@ -206,6 +226,8 @@ theorem rhoWeightedEquivEuclidean_symm_apply
       (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
     letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
       Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
     (rhoWeightedEquivEuclidean ρ hρ).symm x =
       Matrix.of (fun i j => WithLp.ofLp x (j, i)) * (CFC.sqrt ρ)⁻¹ := by
   let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
@@ -214,6 +236,8 @@ theorem rhoWeightedEquivEuclidean_symm_apply
     (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   rfl
 
 end
