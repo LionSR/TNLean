@@ -147,7 +147,8 @@ theorem weighted_sum_mul_weighted_sum
     (u v : ι → ℂ) :
     (∑ a, u a • Q a) * (∑ a, v a • Q a) = ∑ a, (u a * v a) • Q a := by
   simp only [Finset.sum_mul, Finset.mul_sum, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-  simp [hQmul]
+  simp only [hQmul, smul_ite, smul_zero, Finset.sum_ite_eq', Finset.mem_univ,
+    ↓reduceIte]
   apply Finset.sum_congr rfl
   intro a ha
   rw [mul_comm]
