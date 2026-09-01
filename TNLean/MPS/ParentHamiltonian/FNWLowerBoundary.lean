@@ -213,6 +213,22 @@ theorem fnwBoundaryGram_isSymmetric
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
   exact (fnwBoundaryMapCLM ρ hρ A N).toLinearMap.isSymmetric_adjoint_comp_self
 
+/-- The weighted Gram operator is positive. -/
+theorem fnwBoundaryGram_isPositive
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    (fnwBoundaryGram ρ hρ A N).IsPositive := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  exact (fnwBoundaryMapCLM ρ hρ A N).toLinearMap.isPositive_adjoint_comp_self
+
 /-- FNW's identity \(a_-(N)=\inf\operatorname{spec}(F_N^*F_N)\), packaged
 without ordering the complex spectrum: \(a_-(N)\), coerced to \(ℂ\), belongs to
 the spectrum of the weighted Gram operator. -/
