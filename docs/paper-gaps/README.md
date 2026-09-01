@@ -30,6 +30,12 @@ For the MPU symmetry-defect gauging paper:
   distinction between a trivial anomaly class and a pointwise trivial gauge,
   and the stable finite-periodic-chain support boundary. It is a prerequisite
   audit, not a formalization of Proposition `prop:comm_proj`.
+- `fbc25_alternating_network_nondegeneracy.tex` records the zero-factor
+  counterexample to the unrestricted alternating-network proportionality
+  lemma and the corrected one-sided nonvanishing hypothesis. Both applications
+  in the source satisfy this hypothesis because their displayed boundary
+  networks are nonzero scalar multiples of adjoints of truncated unitaries.
+  The local correction is resolved by the formal nondegenerate theorem.
 
 For GNVW support algebras, the source corrections and the remaining scope
 restriction are recorded separately.
