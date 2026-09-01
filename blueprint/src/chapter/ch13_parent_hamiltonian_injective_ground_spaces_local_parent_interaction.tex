@@ -488,6 +488,63 @@ orthogonal projector is the canonical representative used here.
     matrix norm.
 \end{proof}
 
+\begin{theorem}[Geometric power bound at a prescribed rate]
+    \label{thm:geometric_bound_of_spectral_radius_lt}
+    \lean{geometric_bound_of_spectralRadius_lt}
+    \leanok
+    Let $A$ be a complex Banach algebra, let $a\in A$, and let
+    $\lambda\geq0$.  If $\rho_{\mathrm{spec}}(a)<\lambda$, then there is a
+    constant $C_\lambda>0$ such that
+    \begin{align}
+        \lVert a^n\rVert & \leq C_\lambda\lambda^n
+        \label{eq:geometric_bound_of_spectral_radius_lt}
+    \end{align}
+    for every $n\in\N$.  The same prescribed $\lambda$ appears in the bound;
+    the additional condition $\lambda<1$ is needed only when geometric decay
+    is deduced downstream.  After the nonunit transfer operator has been
+    isolated, this is the prescribed-rate spectral step used in
+    \cite[Lemma~5.2]{Fannes1992Finitely}, but it does not establish the full
+    estimate of that lemma.  The constant may depend on $\lambda$; no
+    dimension-only value, in particular $C_\lambda=k^2$, is asserted.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Gelfand's formula gives $N\in\N$ such that
+    $\lVert a^n\rVert\leq\lambda^n$ for every $n\geq N$.  Since $\lambda>0$,
+    set
+    \begin{align}
+        C_\lambda
+         & =1+\sum_{j=0}^{N-1}\frac{\lVert a^j\rVert}{\lambda^j}.
+    \end{align}
+    The eventual estimate proves the claim for $n\geq N$, while the
+    corresponding summand in $C_\lambda$ proves it for $n<N$.
+\end{proof}
+
+\begin{theorem}[Pointwise geometric power bound at a prescribed rate]
+    \label{thm:geometric_apply_bound_of_spectral_radius_lt}
+    \lean{geometric_apply_bound_of_spectralRadius_lt}
+    \leanok
+    Let $V$ be a complex Banach space, let $T\colon V\to V$ be a bounded
+    linear operator, and let $\lambda\geq0$.  If
+    $\rho_{\mathrm{spec}}(T)<\lambda$, then there is a constant
+    $C_\lambda>0$ such that
+    \begin{align}
+        \lVert T^n x\rVert
+         & \leq C_\lambda\lambda^n\lVert x\rVert
+        \label{eq:geometric_apply_bound_of_spectral_radius_lt}
+    \end{align}
+    for every $n\in\N$ and $x\in V$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:geometric_bound_of_spectral_radius_lt}
+    Apply Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt} in the Banach
+    algebra of bounded endomorphisms of $V$, then use
+    $\lVert T^n x\rVert\leq\lVert T^n\rVert\lVert x\rVert$.
+\end{proof}
+
 \begin{theorem}[Geometric power bound below unit spectral radius]
     \label{thm:geometric_bound_of_spectral_radius_lt_one}
     \lean{geometric_bound_of_spectralRadius_lt_one}
@@ -504,9 +561,10 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    Choose $r$ strictly between the spectral radius and one.  Gelfand's formula
-    gives $\lVert T^n\rVert<r^n$ for all sufficiently large $n$; enlarging the
-    constant $C$ absorbs the finitely many remaining powers.
+    \uses{thm:geometric_bound_of_spectral_radius_lt}
+    Choose $r$ strictly between the spectral radius and one, then apply
+    Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt} with
+    $\lambda=r$.
 \end{proof}
 
 \begin{theorem}[Pointwise geometric power bound below unit spectral radius]
