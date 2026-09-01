@@ -5,7 +5,8 @@
 
 \begin{definition}[Finite-group unitary average]
     \label{def:mpug_finite_group_unitary_average}
-    \lean{TNLean.Algebra.finiteGroupUnitaryAverage}
+    \lean{TNLean.Algebra.finiteGroupUnitaryAverage,
+        TNLean.Algebra.unitaryMatrixRepresentation}
     \leanok
     \discussion{7458}
     Let $G$ be a finite group and let $\rho\colon G\to\mathrm U(n)$ be a
@@ -20,7 +21,8 @@
 
 \begin{theorem}[Finite-group unitary average is an orthogonal projection]
     \label{thm:mpug_finite_group_unitary_average_projection}
-    \lean{TNLean.Algebra.isOrthogonalProjection_finiteGroupUnitaryAverage}
+    \lean{TNLean.Algebra.isStarProjection_finiteGroupUnitaryAverage,
+        TNLean.Algebra.isOrthogonalProjection_finiteGroupUnitaryAverage}
     \leanok
     \discussion{7458}
     \uses{def:mpug_finite_group_unitary_average}
@@ -985,10 +987,12 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 
 \begin{definition}[Unplaced local Gauss projector kernel]
     \label{def:mpug_gauss_projector}
-    \lean{TNLean.Algebra.gaussProjector}
+    \lean{TNLean.Algebra.gaussProjector,
+        TNLean.Algebra.gaussProjector_eq_average}
     \leanok
     \discussion{7578}
-    \uses{thm:mpug_gauss_representation}
+    \uses{def:mpug_finite_group_unitary_average,
+        thm:mpug_gauss_representation}
     Let $G$ be finite and let $\mathcal G_g$ act on
     $\mathcal H=\C^n\otimes\C[G]^{\otimes2}$. Define the unplaced local
     projector kernel
@@ -998,14 +1002,13 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \end{align}
     This is the local average introduced in
     \cite[lines~3494--3499]{FrancoRubio2025MPUGauging}, before a position on
-    the chain is chosen. Finite-chain placement on $(j,j+1)$ and invariance of
-    the gauged matrix product state under the placed operator remain pending.
+    the chain is chosen. This definition neither places the kernel on
+    $(j,j+1)$ nor asserts invariance of the gauged matrix product state.
 \end{definition}
 
 \begin{theorem}[The local Gauss average is a projection]
     \label{thm:mpug_gauss_projector_projection}
-    \lean{TNLean.Algebra.gaussProjector_eq_average,
-        TNLean.Algebra.isStarProjection_gaussProjector}
+    \lean{TNLean.Algebra.isStarProjection_gaussProjector}
     \leanok
     \discussion{7578}
     \uses{def:mpug_gauss_projector}
@@ -1017,7 +1020,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_gauss_representation}
+    \uses{thm:mpug_finite_group_unitary_average_projection,
+        thm:mpug_gauss_representation}
     Identify the matrix average with the averaging operator of the unitary
     representation $g\mapsto\mathcal G_g$. The invariant-space averaging
     theorem makes this operator idempotent. For self-adjointness, use
