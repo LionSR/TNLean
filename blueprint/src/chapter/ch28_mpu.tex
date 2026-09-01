@@ -1608,16 +1608,17 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceCutM₁_rank_eq_sourceCutM₁Fin_rank}
     \leanok
     \uses{def:mpo_tensor, def:mps_independent_tensor_product}
-    The matrix $M_1$ is obtained by combining the left auxiliary index with the
-    lower physical index, and the upper physical index with the right auxiliary
+    % Source-orientation audit: docs/paper-gaps/mpu_source_cut_orientation.tex.
+    The matrix $M_1$ is obtained by combining the upper physical index with the
+    right auxiliary index, and the left auxiliary index with the lower physical
     index. Thus
     \begin{align}
-        (M_1)_{(\alpha,j),(i,\beta)}
+        (M_1)_{(i,\beta),(\alpha,j)}
          & = \mathcal U^i_{j,\alpha,\beta}.
     \end{align}
     Transporting the row and column indices along the standard product
     enumerations gives a matrix $\widetilde M_1$ indexed by
-    $\{0,\ldots,Dd-1\}\times\{0,\ldots,dD-1\}$. Its entries are obtained by
+    $\{0,\ldots,dD-1\}\times\{0,\ldots,Dd-1\}$. Its entries are obtained by
     applying $M_1$ to the inverse images of the enumerated indices, and
     \begin{align}
         \operatorname{rank}(\widetilde M_1)
@@ -1680,19 +1681,19 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceCutM₂_physicalAdjointTensor}
     \leanok
     \uses{def:mpdo_physical_adjoint, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
-    Physical adjunction exchanges the two source cuts and conjugates every
-    entry:
+    Physical adjunction exchanges the two source cuts and takes their adjoints:
     \begin{align}
-        M_1(\mathcal U^\sharp) & =\overline{M_2(\mathcal U)}, \\
-        M_2(\mathcal U^\sharp) & =\overline{M_1(\mathcal U)}.
+        M_1(\mathcal U^\sharp) & =M_2(\mathcal U)^\dagger, \\
+        M_2(\mathcal U^\sharp) & =M_1(\mathcal U)^\dagger.
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpdo_physical_adjoint, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
-    The physical adjoint exchanges the upper and lower physical indices while
-    leaving both auxiliary indices fixed. Thus the first regrouping becomes
-    the entrywise conjugate of the second, and conversely.
+    Physical adjunction exchanges the upper and lower physical indices and
+    complex conjugates every entry. Under the source-cut regroupings, it also
+    exchanges rows and columns. Hence the first cut becomes the conjugate
+    transpose of the second, and conversely.
 \end{proof}
 
 \begin{definition}[Physical-pair swap]
@@ -1824,7 +1825,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}\leanok
     \uses{thm:mpu_physical_adjoint_source_cuts, def:mpu_right_rank, def:mpu_left_rank}
     Apply Theorem~\ref{thm:mpu_physical_adjoint_source_cuts} and use invariance
-    of matrix rank under entrywise conjugation.
+    of matrix rank under conjugate transpose.
 \end{proof}
 
 \begin{theorem}[Source cuts under physical reindexing]
@@ -1844,10 +1845,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}\leanok
     \uses{def:mpu_physical_reindexing, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
-    Evaluate each cut after relabeling. In $M_1$, the lower physical index lies
-    in the row and the upper physical index lies in the column; in $M_2$ these
-    roles are exchanged. Applying $e$ to both entries gives the two displayed
-    row-and-column equivalences.
+    Evaluate each cut after relabeling. In both cuts the upper physical index
+    lies in the row and the lower physical index lies in the column, with the
+    virtual index occupying the other product coordinate. Applying $e$ to both
+    physical coordinates gives the two displayed row-and-column equivalences.
 \end{proof}
 
 \begin{theorem}[Source ranks under physical reindexing]
@@ -2181,12 +2182,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{def:mpu_tensor_product_cut_shuffle}
     \lean{MPOTensor.tensorProductCutShuffle}
     \leanok
-    The source-cut shuffle sends
+    For four finite index sets, the source-cut shuffle sends
     \begin{align}
-        ((\alpha,j),(\alpha',j'))
-         & \longmapsto ((\alpha,\alpha'),(j,j')).
+        ((x,y),(x',y'))
+         & \longmapsto ((x,x'),(y,y')).
     \end{align}
-    The analogous map applies to column indices.
+    It is applied to the row and column products with the orders appropriate to
+    $M_1$ and $M_2$.
 \end{definition}
 
 \begin{theorem}[Source cuts of an independent tensor product]
@@ -2363,21 +2365,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.sourceWeight}
     \leanok
     \uses{def:mpu_source_matrix_one}
-    For $\rho\in\MN{D}$, let
+    The row space of $M_1$ has product order
+    $(\text{upper physical},\text{right auxiliary})$. For
+    $\rho\in\MN{D}$, define
     \begin{align}
-        \chi\colon\mathbb C^D\otimes\mathbb C^d
-                                  & \longrightarrow\mathbb C^d\otimes\mathbb C^D, &
-        \chi(e_\alpha\otimes e_j) & =e_j\otimes e_\alpha.
+        W_\rho & =\Id_d\otimes\rho.
     \end{align}
-    In the virtual--physical row order $(\alpha,j)$ of $M_1$, define
-    \begin{align}
-        W_\rho & =\rho\otimes\Id_d
-        =\chi^\dagger(\Id_d\otimes\rho)\chi.
-    \end{align}
-    Thus the source expression $\Id_d\otimes\rho$ is first written in the
-    physical--virtual order $(j,\alpha)$ and then reindexed by $\chi$ to the
-    virtual--physical order $(\alpha,j)$. The two Kronecker products are not
-    identified without this reindexing. This is the source weight in
+    This is the source weight in
     \cite[equation labelled~\texttt{Y1Y1X1X1}]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 479--487.
 \end{definition}
@@ -2393,8 +2387,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}
     \leanok
     \uses{def:mpu_source_weight}
-    The Kronecker product of the positive-definite matrices $\rho$ and
-    $\Id_d$ is positive definite.
+    The Kronecker product of the positive-definite matrices $\Id_d$ and
+    $\rho$ is positive definite.
 \end{proof}
 
 \begin{definition}[Source singular-value data and compressed source metric]
@@ -2519,7 +2513,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \uses{thm:mpu_source_factorizations, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
     The entries of the two products satisfy
     \begin{align}
-        (X_1Y_1)_{(\alpha,j),(i,\beta)}
+        (X_1Y_1)_{(i,\beta),(\alpha,j)}
          & =\mathcal U^i_{j,\alpha,\beta}, \\
         (X_2Y_2)_{(\alpha,i),(j,\beta)}
          & =\mathcal U^i_{j,\alpha,\beta}.
@@ -2532,7 +2526,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \leanok
     \uses{thm:mpu_source_factorizations, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
     Evaluate the two matrix factorizations at
-    $((\alpha,j),(i,\beta))$ and $((\alpha,i),(j,\beta))$, respectively.
+    $((i,\beta),(\alpha,j))$ and $((\alpha,i),(j,\beta))$, respectively.
 \end{proof}
 
 \begin{theorem}[Source-factor normalizations]
@@ -2606,8 +2600,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         Y_1 & =X_1^\dagger W_\rho M_1,
             & Y_2                      & =X_2^\dagger M_2.
     \end{align}
-    Here $W_\rho=\rho\otimes I_d$ in the product-index order
-    $(\text{left virtual},\text{physical})$.
+    Here $W_\rho=I_d\otimes\rho$ in the product-index order
+    $(\text{upper physical},\text{right auxiliary})$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2657,12 +2651,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceV_conjTranspose_apply}
     \leanok
     \uses{def:mpu_weighted_source_factors}
+    % Leg-order audit: docs/paper-gaps/mpu_source_cut_orientation.tex.
     Given source-cut decompositions $M_1=X_1Y_1$ and $M_2=X_2Y_2$, define
     \begin{align}
         u_{(l,r),(i_1,i_2)}
-         & =\sum_\beta (Y_2)_{l,(i_1,\beta)}(Y_1)_{r,(i_2,\beta)},    \\
+         & =\sum_\beta (Y_2)_{l,(i_1,\beta)}(Y_1)_{r,(\beta,i_2)},    \\
         v_{(j_1,j_2),(r,l)}
-         & =\sum_\alpha (X_1)_{(\alpha,j_1),r}(X_2)_{(\alpha,j_2),l}.
+         & =\sum_\alpha (X_1)_{(j_1,\alpha),r}(X_2)_{(\alpha,j_2),l}.
     \end{align}
     Thus $u:\C^{d^2}\to\C^{\ell r}$ has source order $\ell\times r$,
     while $v:\C^{r\ell}\to\C^{d^2}$ has source order $r\times\ell$.
@@ -2687,9 +2682,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Define the auxiliary mixed contractions
     \begin{align}
         a_{(l,r),(i_1,i_2)}
-         & =\sum_\beta (Y_1)_{r,(i_1,\beta)}(X_2)_{(\beta,i_2),l},    \\
+         & =\sum_\beta (Y_1)_{r,(\beta,i_1)}(X_2)_{(\beta,i_2),l},    \\
         b_{(j_1,j_2),(r,l)}
-         & =\sum_\alpha (X_1)_{(\alpha,j_1),r}(Y_2)_{l,(j_2,\alpha)}.
+         & =\sum_\alpha (X_1)_{(j_1,\alpha),r}(Y_2)_{l,(j_2,\alpha)}.
     \end{align}
     These kernels are not the paper gates $u$ and $v$.
 \end{definition}
@@ -2709,7 +2704,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     where $\operatorname{swap}_{r,\ell}$ reorders the source index of $u$ from
     $\ell\times r$ to the $r\times\ell$ order carried by the columns of $v$ and
-    reverses the two physical output coordinates. This is the exact two-site
+    reverses the two physical input coordinates. This is the exact two-site
     factorization through the paper gates $u$ and $v$ of CPSV17
     \texttt{SVDforms2}--\texttt{uuvv}.
 \end{theorem}
@@ -2725,89 +2720,72 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $(r,l)$ gives the matrix identity.
 \end{proof}
 
-\begin{theorem}[Open two-site source factorization]
+\begin{theorem}[Open two-site factorization through $v$]
     \label{thm:mpu_mixed_y1_x2_open_two_site}
-    \lean{MPOTensor.SourceFactors.mul_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂,
-        MPOTensor.SourceFactors.blockTwo_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂,
-        MPOTensor.sum_sourceX₁_mul_sourceY₁X₂,
-        MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceY₁X₂_mul_sourceY₂,
-        MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceY₁X₂_mul_sourceY₂_pair,
-        MPOTensor.blockTwo_apply_eq_sum_sourceX₁_mul_sourceY₁X₂_mul_sourceY₂}
+    \lean{MPOTensor.SourceFactors.sum_sourceV_mul_Y₁,
+        MPOTensor.SourceFactors.mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂,
+        MPOTensor.SourceFactors.blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂,
+        MPOTensor.sum_sourceV_mul_sourceY₁,
+        MPOTensor.mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂,
+        MPOTensor.mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂_pair,
+        MPOTensor.blockTwo_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂}
     \leanok
-    \uses{def:mpu_mixed_source_kernels, def:mpdo_two_site_blocking,
+    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
         thm:mpu_source_factorization_entries}
     For $q=(q_1,q_2)$ and $j=(j_1,j_2)$, the untraced two-site product is
     \begin{align}
         (\mathcal U^{q_1j_1}\mathcal U^{q_2j_2})_{\alpha,\gamma}
-        =\sum_{r,l}(X_1)_{(\alpha,j_1),r}
-        a_{(l,r),q}(Y_2)_{l,(j_2,\gamma)}.
+         & =\sum_{r,l}v_{q,(r,l)}(Y_1)_{r,(\alpha,j_1)}
+        (Y_2)_{l,(j_2,\gamma)}.
     \end{align}
-    The intermediate partial contraction is
+    The intermediate contraction is
     \begin{align}
-        \sum_r (X_1)_{(\alpha,j_1),r}a_{(l,r),(q_1,q_2)}
-        =\sum_\beta \mathcal U^{q_1}_{j_1,\alpha,\beta}
+        \sum_r v_{(q_1,q_2),(r,l)}(Y_1)_{r,(\alpha,j_1)}
+         & =\sum_\beta \mathcal U^{q_1}_{j_1,\alpha,\beta}
         (X_2)_{(\beta,q_2),l}.
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_mixed_source_kernels, thm:mpu_source_factorization_entries}
-    Use the three identities
-    \begin{align}
-        a_{(l,r),q}
-         & =\sum_\beta (Y_1)_{r,(q_1,\beta)}
-        (X_2)_{(\beta,q_2),l},                   \\
-        (X_1Y_1)_{(\alpha,j_1),(q_1,\beta)}
-         & =\mathcal U^{q_1}_{j_1,\alpha,\beta}, \\
-        (X_2Y_2)_{(\beta,q_2),(j_2,\gamma)}
-         & =\mathcal U^{q_2}_{j_2,\beta,\gamma}.
-    \end{align}
-    Substitution and reordering of the scalar finite sums give the displayed
-    partial contraction and the untraced two-site identity, with the virtual
-    indices $\alpha$ and $\gamma$ left open. Encoding both physical pairs by
-    the standard equivalence $\Fin d\times\Fin d\simeq\Fin(d^2)$ gives the
-    corresponding formula for the concrete two-site block.
+    \uses{def:mpu_source_uv, thm:mpu_source_factorization_entries}
+    Expand $v$ as the contraction of $X_1$ with $X_2$. Contracting $X_1$
+    with $Y_1$ gives the first tensor letter, while contracting $X_2$ with
+    $Y_2$ gives the second. Reordering the finite sums proves the open product
+    identity. The concrete blocked formula follows by encoding both physical
+    pairs through $\Fin d\times\Fin d\simeq\Fin(d^2)$.
 \end{proof}
 
-\begin{theorem}[Reflected open two-site source factorization]
+\begin{theorem}[Open two-site factorization through $u$]
     \label{thm:mpu_mixed_x1y2_open_two_site}
-    \lean{MPOTensor.SourceFactors.mul_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁,
-        MPOTensor.SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁,
-        MPOTensor.mul_apply_eq_sum_sourceX₂_mul_sourceX₁Y₂_reflected_mul_sourceY₁,
-        MPOTensor.blockTwo_apply_eq_sum_sourceX₂_mul_sourceX₁Y₂_reflected_mul_sourceY₁}
+    \lean{MPOTensor.SourceFactors.mul_apply_eq_sum_X₂_mul_sourceU_mul_X₁,
+        MPOTensor.SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁,
+        MPOTensor.blockTwo_apply_eq_sum_sourceX₂_mul_sourceU_mul_sourceX₁}
     \leanok
-    \uses{def:mpu_mixed_source_kernels, def:mpdo_two_site_blocking,
+    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
         thm:mpu_source_factorization_entries}
-    The reflected factorization of the same untraced two-site product is
+    The same untraced two-site product also satisfies
     \begin{align}
         (\mathcal U^{i_1j_1}\mathcal U^{i_2j_2})_{\alpha,\gamma}
-        =\sum_{l,r}(X_2)_{(\alpha,i_1),l}
-        b_{(j_2,j_1),(r,l)}(Y_1)_{r,(i_2,\gamma)}.
+         & =\sum_{l,r}(X_2)_{(\alpha,i_1),l}
+        u_{(l,r),(j_1,j_2)}(X_1)_{(i_2,\gamma),r}.
     \end{align}
-    Thus the physical row of $b$ is $(j_2,j_1)$, while its kernel column is
-    $(r,l)$. Both orders remain explicit in the formula for the concrete
-    two-site block under $\Fin d\times\Fin d\simeq\Fin(d^2)$.
+    The product indices of $u$ are $(l,r)$ on the source side and
+    $(j_1,j_2)$ on the physical side.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_mixed_source_kernels, thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv, thm:mpu_source_factorization_entries}
     Expand the first tensor letter through $M_2=X_2Y_2$ and the second through
-    $M_1=X_1Y_1$. Then
-    \begin{align}
-        \sum_\beta
-        (X_2)_{(\alpha,i_1),l}(Y_2)_{l,(j_1,\beta)}
-        (X_1)_{(\beta,j_2),r}(Y_1)_{r,(i_2,\gamma)}
-        = (X_2)_{(\alpha,i_1),l}
-        b_{(j_2,j_1),(r,l)}(Y_1)_{r,(i_2,\gamma)}.
-    \end{align}
-    Summing over $l$ and $r$ gives the result. The two-site block statement
-    follows by decoding its ket and bra indices into ordered pairs.
+    $M_1=X_1Y_1$. The common auxiliary index contracts $Y_2$ with $Y_1$ to
+    give $u$. Summing the two remaining source indices gives the formula. The
+    concrete blocked identity follows by decoding its physical indices into
+    ordered pairs.
 \end{proof}
 
 \begin{theorem}[Open periodic-tail source expansion]
     \label{thm:mpu_mixed_y1_x2_open_periodic_tail}
-    \lean{MPOTensor.mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceY₂_evalWord,
-        MPOTensor.mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceX₂_openTail}
+    \lean{MPOTensor.mpo_finAddTwo_eq_sum_sourceV_sourceY₁_sourceY₂_evalWord,
+        MPOTensor.mpo_finAddTwo_eq_sum_sourceV_sourceY₁_sourceX₂_openTail}
     \leanok
     \uses{def:mpo_family, thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_source_factor_recovery}
     Separate the first two physical sites of a length-$(K+2)$ configuration.
@@ -2816,16 +2794,16 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \begin{align}
         U^{(K+2)}_{(q,\tau),(j,\zeta)}
         =\sum_{\alpha,\gamma,r,l}
-         & (X_1)_{(\alpha,j_1),r}a_{(l,r),q}
+         & v_{q,(r,l)}(Y_1)_{r,(\alpha,j_1)}
         (Y_2)_{l,(j_2,\gamma)}
         (T_{\tau,\zeta})_{\gamma,\alpha},
     \end{align}
-    where $T_{\tau,\zeta}$ is the open $K$-site virtual word.  Reconstructing
+    where $T_{\tau,\zeta}$ is the open $K$-site virtual word. Reconstructing
     $Y_2$ gives
     \begin{align}
         U^{(K+2)}_{(q,\tau),(j,\zeta)}
         =\sum_{\alpha,r,l,\beta,i}
-         & (X_1)_{(\alpha,j_1),r}a_{(l,r),q}
+         & v_{q,(r,l)}(Y_1)_{r,(\alpha,j_1)}
         \overline{(X_2)_{(\beta,i),l}}
         (\mathcal U^{ij_2}T_{\tau,\zeta})_{\beta,\alpha}.
     \end{align}
@@ -2855,7 +2833,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     expansion.
 \end{proof}
 
-\begin{definition}[Auxiliary mixed-kernel open-tail coefficient]
+\begin{definition}[Auxiliary source-$v$ open-tail coefficient]
     \label{def:mpu_mixed_y1_x2_open_tail_coefficient}
     \lean{MPOTensor.sourceY₁X₂OpenTailCoefficient}
     \leanok
@@ -2870,19 +2848,19 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         C^{(K)}_{lr,l'r'}=d^{-K}
         \sum_{\substack{\tau,\zeta,j_1,j_2,\alpha,\alpha', \\
                 \beta,\beta',i,i'}}
-         & (X_1)_{(\alpha,j_1),r}
-        \overline{(X_1)_{(\alpha',j_1),r'}}
+         & (X_1)_{(j_1,\alpha),r}
+        \overline{(X_1)_{(j_1,\alpha'),r'}}
         \overline{(X_2)_{(\beta,i),l}}
         (X_2)_{(\beta',i'),l'}                             \\
          & \mathrel{\phantom{=}}\cdot
         (A^{\tau,\zeta}_{i,j_2})_{\beta,\alpha}
         \overline{(A^{\tau,\zeta}_{i',j_2})_{\beta',\alpha'}}.
     \end{align}
-    This coefficient comes from the auxiliary $Y_1$--$X_2$ open-tail
-    expansion above. The external factor $a_{(l,r),q}$ is unstarred, while
-    $a_{(l',r'),p}$ is starred, so the display contains the unique
-    normalization factor $d^{-K}$. It is not the coefficient of the paper gate
-    $u=Y_2\mathbin{-}Y_1$ in \cite[Section~III]{Cirac2017MPU}.
+    This coefficient occurs after the external source-$v$ entries have been
+    separated from the open-tail expansion above. The entry $v_{q,(r,l)}$ is
+    unstarred, while $v_{p,(r',l')}$ is starred, and the display contains the
+    unique normalization factor $d^{-K}$. The coefficient is not itself a
+    source gate.
 \end{definition}
 
 \begin{definition}[Auxiliary forward mixed-kernel network]
@@ -2955,7 +2933,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     On the range of the first source cut,
     \begin{align}
         X_1X_1^\dagger W_\rho M_1=M_1,
-        \qquad W_\rho=\rho\otimes 1_d.
+        \qquad W_\rho=1_d\otimes\rho.
     \end{align}
 \end{theorem}
 
@@ -2982,25 +2960,23 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Substitute $X_2^\dagger M_2=Y_2$ and then use $M_2=X_2Y_2$.
 \end{proof}
 
-\begin{theorem}[Expanded normalized source-$a$ metric]
+\begin{theorem}[Expanded normalized source-$v$ metric]
     \label{thm:mpu_mixed_y1_x2_expanded_metric}
-    \lean{MPOTensor.IsMPU.normalized_sourceY₁X₂_openTail_metric}
+    \lean{MPOTensor.IsMPU.normalized_sourceV_openTail_metric}
     \leanok
     \uses{thm:mpu_mixed_y1_x2_open_periodic_tail, thm:mpu_normalized_output_tail_coisometry}
     Assume $d>0$, let $\mathcal U$ be an MPU, and let $\rho$ be positive
-    definite.  Expanding both $(K+2)$-site periodic entries through
-    $X_1,a,X_2$ and the open tail gives
+    definite. Expanding both $(K+2)$-site periodic entries through
+    $v,Y_1,X_2$ and the open tail gives
     \begin{align}
         d^{-K}\sum_{\tau,j,\zeta}
         \mathcal A_{q;\tau,j,\zeta}
         \overline{\mathcal A_{p;\tau,j,\zeta}}
-        =\delta_{p,q},
+         & =\delta_{p,q},
     \end{align}
-    where $\mathcal A_{q;\tau,j,\zeta}$ is the full source-$a$ expansion with
-    the $q$ entry unstarred.  This theorem evaluates the displayed expansion
-    directly.  It neither regroups the sum through
-    $C^{(K)}_{lr,l'r'}$ nor identifies it with the ordinary Gram matrix
-    $a^\dagger a$.
+    where $\mathcal A_{q;\tau,j,\zeta}$ is the full source-$v$ expansion with
+    the $q$ entry unstarred. This theorem evaluates the displayed expansion
+    directly and does not identify it with the Gram matrix of $u$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3010,36 +2986,32 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     apply normalized output-first MPU coisometry.
 \end{proof}
 
-\begin{theorem}[Auxiliary closed output-letter formula for mixed-kernel Gram entries]
+\begin{theorem}[Closed source-cut formula for an auxiliary mixed-kernel Gram]
     \label{thm:mpu_mixed_y1_x2_gram_closed_output_letter}
-    \lean{MPOTensor.sourceY₁X₂_gram_apply_eq_closed_output_letter}
+    \lean{MPOTensor.sourceY₁X₂_gram_apply_eq_closed_source_cuts}
     \leanok
-    \uses{def:mpu_mixed_source_kernels, def:mpu_double_layer, def:mpu_weighted_source_factors}
+    \uses{def:mpu_mixed_source_kernels, def:mpu_source_weight,
+        def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPO tensor, let $\rho$ be positive definite, and
-    let $p,q\in\Fin d\times\Fin d$.  Write $W_{\mathrm{out}}$ for the
-    output-first double layer of $\mathcal U$.  Then
+    let $p,q\in\Fin d\times\Fin d$. Then
     \begin{align}
         \sum_{l,r}a_{(l,r),q}\overline{a_{(l,r),p}}
-        =\sum_{\beta,\delta,\gamma,\alpha}
-         & \rho_{\alpha,\gamma}
-        (W_{\mathrm{out}}^{q_1p_1})_{(\gamma,\alpha),(\beta,\delta)} \\
-         & \qquad\cdot
+         & =\sum_{\beta,\delta}
+        (M_1^\dagger W_\rho M_1)_{(\delta,p_1),(\beta,q_1)}
         (X_2X_2^\dagger)_{(\beta,q_2),(\delta,p_2)}.
     \end{align}
-    Thus $q$ is the unstarred ket index, $p$ is the starred bra index, and
-    each doubled bond is ordered as $(\text{ket},\text{bra})$. This is an
-    auxiliary mixed-cut identity, not the source-$u$ network in
+    Thus $q$ labels the unstarred entry and $p$ labels the starred entry. This
+    is an auxiliary mixed-cut identity, not the source-$u$ network in
     \cite[Eq.~\texttt{uUnitary}]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_source_matrix_one, thm:mpu_source_weight_posdef, thm:mpu_source_factor_recovery, thm:mpu_source_x1_range_projection, thm:mpu_output_first_double_layer_entry}
+    \uses{def:mpu_source_matrix_one, thm:mpu_source_factor_recovery,
+        thm:mpu_source_x1_range_projection}
     Expand both source-$a$ entries and contract their common source indices.
-    Weighted recovery of $Y_1$, followed by the first source-cut range
-    identity, replaces $Y_1^\dagger Y_1$ by
-    $M_1^\dagger W_\rho M_1$.  Expanding $M_1$ and the output-first double
-    layer gives the displayed $\rho$-weighted letter, while the remaining
-    $X_2$ factors form the stated range projector.
+    Weighted recovery of $Y_1$ replaces $Y_1^\dagger Y_1$ by
+    $M_1^\dagger W_\rho M_1$, while the remaining $X_2$ factors form the
+    range projector $X_2X_2^\dagger$.
 \end{proof}
 
 \begin{theorem}[Closed double-layer trace for the normalized output tail]
@@ -3338,8 +3310,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     then the remaining boundary sum is
     \begin{align}
         \sum_{\substack{j,\alpha,\alpha',\beta,i}}
-         & (X_1)_{(\alpha,j),r}
-        \overline{(X_1)_{(\alpha',j),r'}}
+         & (X_1)_{(j,\alpha),r}
+        \overline{(X_1)_{(j,\alpha'),r'}}
         \overline{(X_2)_{(\beta,i),l}}
         (X_2)_{(\beta,i),l'}\rho_{\alpha',\alpha}
         =\delta_{l,l'}\delta_{r,r'}.
@@ -3386,7 +3358,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
           & Z                & =Z_1\otimes Z_2,
     \end{align}
     with source-bond order $r\times\ell$. Thus $Y$ maps
-    $(\C^d\otimes\C^D)^{\otimes 2}$ to
+    $(\C^D\otimes\C^d)\otimes(\C^d\otimes\C^D)$ to
     $\C^r\otimes\C^\ell$, and $Z$ maps in the opposite direction. The
     regrouping of the open indices is
     \begin{align}
@@ -3414,7 +3386,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $q=(q_1,q_2)$ the unstarred pair, and let $a=(a_1,a_2)$ and
     $b=(b_1,b_2)$ be virtual paths. The weighted first-cut contraction is
     \begin{align}
-        \sum_r \overline{(Y_1)_{r,(p_1,a_1)}}(Y_1)_{r,(q_1,b_1)}
+        \sum_r \overline{(Y_1)_{r,(a_1,p_1)}}(Y_1)_{r,(b_1,q_1)}
          & =\sum_{\alpha,\alpha',j_1}
         \overline{U^{p_1j_1}_{\alpha a_1}}
         \rho_{\alpha\alpha'}U^{q_1j_1}_{\alpha'b_1}.
@@ -3457,7 +3429,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \uses{def:mpu_source_v_dressing, def:mpu_double_layer, thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations, thm:mpu_source_y_two_rotated_gram}
     Expand the ordinary and rank-one-inserted matrix products entrywise.
     For the tensorized Gram entry, use
-    $X_1^\dagger(\rho\otimes\Id_d)X_1=\Id_r$ on the first cut and
+    $X_1^\dagger(\Id_d\otimes\rho)X_1=\Id_r$ on the first cut and
     $X_2^\dagger X_2=\Id_\ell$ on the second cut, then reorder the finite
     sums. No ambient identity $X_2X_2^\dagger=\Id$ is used.
 \end{proof}
@@ -4926,6 +4898,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notready
     \discussion{5982}
     \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_source_uv, def:mpo_family}
+    % Revalidation boundary: docs/paper-gaps/mpu_source_cut_orientation.tex.
     Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$ and bond
     dimension $D>0$. Let $\rho>0$ satisfy $\tr(\rho)=1$, put
     $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that for
@@ -5115,7 +5088,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_supplied_projector_simple2,
         thm:mpu_supplied_witness_overlapping_reblocking,
         thm:mpu_source_v_complete_reduced_contraction,
-        thm:mpu_source_v_dressed_gram_cancel}
+        thm:mpu_source_v_dressed_gram_cancel,
+        thm:mpu_mixed_kernels_two_site_factorization}
     Lemma~\ref{lem:mpu_admissible_source_u_isometry} gives
     $u^\dagger u=\Id$ before any of the four
     conditions is assumed. Thus $u$ is a standing isometry and
@@ -5135,12 +5109,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     source-$u$ isometry, this gives $r\ell=d^2$.
 
     If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
-    The implication from unitary $u$ to unitary $v$ still requires the exact
-    staggered CPSV17 factorization of $U^{(2)}$ through the paper gates
-    $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$. That source-facing
-    factorization is not yet formalized. The checked factorization through the
-    auxiliary kernels $a=Y_1\mathbin{-}X_2$ and $b=X_1\mathbin{-}Y_2$ is a
-    different identity and is not used here.
+    Theorem~\ref{thm:mpu_mixed_kernels_two_site_factorization} gives the exact
+    CPSV17 two-site factorization through
+    $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$. Since the two-site MPU
+    operator and the swapped gate $u$ are unitary, cancellation makes $v$
+    unitary. This step uses the corrected source-cut orientation recorded in
+    \texttt{docs/paper-gaps/mpu\_source\_cut\_orientation.tex}.
 
     Finally, suppose that $v$ is unitary. Unitarity gives the dressed Gram
     identity, and
@@ -8507,194 +8481,105 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     matrices under multiplication gives the two ordered products.
 \end{proof}
 
-\begin{theorem}[One-site supplied mixed kernels for $U_1$ and $U_3$]
+\begin{theorem}[Supplied paper gates for $U_1$ and $U_3$]
     \label{thm:threeMPU_supplied_mixed_kernels_one}
-    \lean{MPOTensor.shiftExampleU₁SourceY₁X₂RowEquiv,
-        MPOTensor.shiftExampleU₁SourceX₁Y₂ColumnEquiv,
-        MPOTensor.shiftExampleU₃SourceY₁X₂SwapShuffle,
-        MPOTensor.shiftExampleU₃SwapSourceY₁X₂RowEquiv,
-        MPOTensor.shiftExampleU₃SwapSourceX₁Y₂ColumnEquiv,
-        MPOTensor.shiftExampleU₃SwapSourceY₁X₂RowEquiv_apply,
-        MPOTensor.shiftExampleU₃SwapSourceX₁Y₂ColumnEquiv_apply,
-        MPOTensor.shiftExampleU₁_sourceY₁X₂_apply,
-        MPOTensor.shiftExampleU₁_sourceX₁Y₂_apply,
-        MPOTensor.shiftExampleU₁_sourceY₁X₂_sourceX₁Y₂_eq_identityTensorIdentity,
-        MPOTensor.shiftExampleU₃_sourceY₁X₂_eq_swap_apply,
-        MPOTensor.shiftExampleU₃_sourceX₁Y₂_eq_swap_apply,
-        MPOTensor.shiftExampleU₃_sourceY₁X₂_sourceX₁Y₂_eq_swap}
+    \lean{MPOTensor.shiftExampleU₁SourceURowEquiv,
+        MPOTensor.shiftExampleU₁SourceVColumnEquiv,
+        MPOTensor.shiftExampleU₃SourceURowEquiv,
+        MPOTensor.shiftExampleU₃SourceVColumnEquiv,
+        MPOTensor.shiftExampleU₁_sourceU_fourSpin_apply,
+        MPOTensor.shiftExampleU₁_sourceV_fourSpin_apply,
+        MPOTensor.shiftExampleU₃_sourceU_fourSpin_apply,
+        MPOTensor.shiftExampleU₃_sourceV_fourSpin_apply}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels}
-    Assume $d>0$. In the source coordinates of the supplied factorizations,
-    the auxiliary kernels satisfy
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
+    Assume $d>0$. In the four-spin coordinates of the supplied source
+    factorizations,
     \begin{align}
-        a_1 & =\Id\otimes\Id, & b_1 & =\Id\otimes\Id, \\
-        a_3 & =\mathbb S,     & b_3 & =\mathbb S.
+        u_1 & =\Id\otimes\Id,                     & v_1                             & =\Id\otimes\Id, \\
+        u_3 & =d\,(\Id\otimes\mathbb S\otimes\Id)
+        (\mathbb S\otimes\mathbb S),
+            & d\,v_3                              & =\Id\otimes\mathbb S\otimes\Id.
     \end{align}
-    These are auxiliary computations near
-    \cite[lines~2009--2016]{Cirac2017MPU}; they do not identify $a,b$ with the
-    paper gates $u,v$. The $U_3$ equalities use the source-coordinate
-    presentation and are distinct from the blocked four-spin presentation
-    below.
+    The scalar factors record the unbalanced identity-weight normalization of
+    the supplied witnesses. They can be transferred between the two gates
+    without changing the represented tensor.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
         thm:mpu_shift_source_cuts_ranks}
-    Write the source and physical indices as
-    $((a,b),(c,e))$ and $((i,j),(k,l))$, respectively, and set
-    $s=d^{-1/2}$.  The identity factors give
-    \begin{align}
-        [a_1]_{((a,b),(c,e)),((i,j),(k,l))}
-         & =[b_1]_{((i,j),(k,l)),((a,b),(c,e))}                  \\
-         & =(\delta_{a,i}\delta_{c,k})(\delta_{b,j}\delta_{e,l}) \\
-         & =\delta_{a,i}\delta_{b,j}\delta_{c,k}\delta_{e,l}.
-    \end{align}
-    For $U_3$, the right-shift and left-shift factors instead give
-    \begin{align}
-        [a_3]_{((a,b),(c,e)),((i,j),(k,l))}
-         & =(s\delta_{c,i}\delta_{a,k})
-        (d\,s\delta_{e,j}\delta_{b,l})                        \\
-         & =\delta_{a,k}\delta_{b,l}\delta_{c,i}\delta_{e,j}, \\
-        [b_3]_{((i,j),(k,l)),((a,b),(c,e))}
-         & =(d\,s\delta_{a,k}\delta_{c,i})
-        (s\delta_{b,l}\delta_{e,j})                           \\
-         & =\delta_{a,k}\delta_{b,l}\delta_{c,i}\delta_{e,j},
-    \end{align}
-    where $d\,s^2=1$.  The first display is the identity matrix, while the
-    second interchanges the two composite indices and is therefore
-    $\mathbb S$ in both orientations.
+    The tensor-product formulas for $u=Y_2\mathbin{-}Y_1$ and
+    $v=X_1\mathbin{-}X_2$ reduce each entry to the product of two primitive
+    shift entries. The identity factors give the two identity matrices. For
+    $U_3$, the Kronecker deltas give the two displayed swap products, and the
+    normalization constants combine using $d(d^{-1/2})^2=1$.
 \end{proof}
 
-\begin{theorem}[Auxiliary mixed kernels in the two-site factorizations of $U_2$]
+\begin{theorem}[Paper gates in the two-site factorizations of $U_2$]
     \label{thm:threeMPU_U2_supplied_mixed_kernels_two}
-    \lean{MPOTensor.shiftExampleU₂SourceY₁X₂RowEquiv,
-        MPOTensor.shiftExampleU₂SourceX₁Y₂ColumnEquiv,
-        MPOTensor.shiftExampleU₂_sourceY₁X₂_fourSpin_apply,
-        MPOTensor.shiftExampleU₂_sourceY₁X₂_reindex_eq_identitySwapIdentity,
-        MPOTensor.shiftExampleU₂_sourceX₁Y₂_fourSpin_apply,
-        MPOTensor.shiftExampleU₂_sourceX₁Y₂_reindex_eq_swapSwap_mul_identitySwapIdentity,
-        MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂,
-        MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁}
+    \lean{MPOTensor.shiftExampleU₂SourceURowEquiv,
+        MPOTensor.shiftExampleU₂SourceVColumnEquiv,
+        MPOTensor.shiftExampleU₂_sourceU_fourSpin_apply,
+        MPOTensor.shiftExampleU₂_sourceV_fourSpin_apply,
+        MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁,
+        MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
         thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
-    Assume $d>0$. The two auxiliary open-leg factorizations of the blocked
-    tensor have, as their respective mixed kernels,
+    Assume $d>0$. In the four-spin coordinates of the paper, the supplied
+    source gates satisfy
     \begin{align}
-        a_2^{(2)} & =\Id\otimes\mathbb S\otimes\Id, \\
-        b_2^{(2)} & =(\mathbb S\otimes\mathbb S)
+        u_2^{(2)}    & =d\,(\Id\otimes\mathbb S\otimes\Id), \\
+        d\,v_2^{(2)} & =(\mathbb S\otimes\mathbb S)
         (\Id\otimes\mathbb S\otimes\Id).
     \end{align}
-    Here the two physical sites are decoded into the four-spin order of the
-    paper, and the factors $X_1,Y_2$ and $X_2,Y_1$ remain as the two open
-    boundaries of the respective factorizations.
-    These are auxiliary computations near
-    \cite[lines~2018--2026]{Cirac2017MPU}, not identifications of the paper
-    gates $u$ and $v$.
+    The blocked tensor factors through $X_2,u_2^{(2)},X_1$ and, equivalently,
+    through $v_2^{(2)},Y_1,Y_2$. The scalar factors record the normalization of
+    the supplied source-factor witnesses.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
         thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
-    Write $B_2=\mathcal U_{2,2}$ for the actual two-site block and decode
-    $I=(I_1,I_2)$ and $J=(J_1,J_2)$.  If $\pi$ is the four-spin physical
-    identification and $\iota_a,\iota_b$ are the two source-rank
-    identifications, the asserted open-leg equalities are
-    \begin{align}
-        (B_2)_{I,J;\alpha,\gamma}
-         & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
-        [\Id\otimes\mathbb S\otimes\Id]_
-        {\iota_a^{-1}(l,r),\pi^{-1}(I_1,I_2)}
-        (Y_2)_{l,(J_2,\gamma)},              \\
-        (B_2)_{I,J;\alpha,\gamma}
-         & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
-        [(\mathbb S\otimes\mathbb S)
-            (\Id\otimes\mathbb S\otimes\Id)]_
-        {\pi^{-1}(J_2,J_1),\iota_b^{-1}(r,l)}
-        (Y_1)_{r,(I_2,\gamma)}.
-    \end{align}
-    Write $s=d^{-1/2}$, so that $d\,s^2=1$.  In the product-rank coordinates,
-    the entries of the two mixed kernels are
-    \begin{align}
-        [a_2^{(2)}]_{((a,b),(c,e)),((i,j),(k,l))}
-         & =(d\,s\delta_{a,i}\delta_{b,k})
-        (s\delta_{c,j}\delta_{e,l})                           \\
-         & =\delta_{a,i}\delta_{b,k}\delta_{c,j}\delta_{e,l}, \\
-        [b_2^{(2)}]_{((i,j),(k,l)),((a,b),(c,e))}
-         & =(s\delta_{e,k}\delta_{c,i})
-        (d\,s\delta_{b,l}\delta_{a,j})                        \\
-         & =\delta_{a,j}\delta_{b,l}\delta_{c,i}\delta_{e,k}.
-    \end{align}
-    These are respectively the entries of
-    $\Id\otimes\mathbb S\otimes\Id$ and
-    $(\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes\Id)$;
-    substituting them into the exact open two-site factorizations gives the
-    asserted equalities.
+    The tensor-product formulas for the paper gates reduce their entries to
+    products of the left- and right-shift source gates. The Kronecker deltas
+    give the two displayed swap matrices, with the factors $d$ and $d^{-1}$
+    fixed by the identity-weight normalization. Substitute these evaluations
+    into the two exact open source-gate factorizations.
 \end{proof}
 
-\begin{theorem}[Auxiliary mixed kernels in the two-site factorizations of $U_3$]
+\begin{theorem}[Paper gates in the two-site factorizations of $U_3$]
     \label{thm:threeMPU_U3_supplied_mixed_kernels_two}
-    \lean{MPOTensor.shiftExampleU₃SourceY₁X₂RowEquiv,
-        MPOTensor.shiftExampleU₃SourceX₁Y₂ColumnEquiv,
-        MPOTensor.shiftExampleU₃_sourceY₁X₂_fourSpin_apply,
-        MPOTensor.shiftExampleU₃_sourceY₁X₂_reindex_eq_identitySwapIdentity_mul_swapSwap,
-        MPOTensor.shiftExampleU₃_sourceX₁Y₂_fourSpin_apply,
-        MPOTensor.shiftExampleU₃_sourceX₁Y₂_reindex_eq_identitySwapIdentity,
-        MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂,
-        MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁}
+    \lean{MPOTensor.shiftExampleU₃SourceURowEquiv,
+        MPOTensor.shiftExampleU₃SourceVColumnEquiv,
+        MPOTensor.shiftExampleU₃_sourceU_fourSpin_apply,
+        MPOTensor.shiftExampleU₃_sourceV_fourSpin_apply,
+        MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁,
+        MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
         thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
-    Assume $d>0$. The two auxiliary open-leg factorizations of the blocked
-    tensor have, as their respective mixed kernels,
+    Assume $d>0$. In the four-spin coordinates of the paper, the supplied
+    source gates satisfy
     \begin{align}
-        a_3^{(2)} & =(\Id\otimes\mathbb S\otimes\Id)
-        (\mathbb S\otimes\mathbb S),                 \\
-        b_3^{(2)} & =\Id\otimes\mathbb S\otimes\Id.
+        u_3^{(2)}    & =d\,(\Id\otimes\mathbb S\otimes\Id)
+        (\mathbb S\otimes\mathbb S),                       \\
+        d\,v_3^{(2)} & =\Id\otimes\mathbb S\otimes\Id.
     \end{align}
-    Again the four-spin order is the one displayed in the paper, and the
-    source factors at the two open boundaries are retained explicitly.
-    These are auxiliary computations near
-    \cite[lines~2028--2034]{Cirac2017MPU}, not identifications of the paper
-    gates $u$ and $v$.
+    The blocked tensor factors through $X_2,u_3^{(2)},X_1$ and, equivalently,
+    through $v_3^{(2)},Y_1,Y_2$. The scalar factors record the normalization of
+    the supplied source-factor witnesses.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
         thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
-    With $B_3=\mathcal U_{3,2}$ for the actual two-site block and the
-    corresponding identifications $\pi,\iota_a,\iota_b$, the exact equalities
-    are
-    \begin{align}
-        (B_3)_{I,J;\alpha,\gamma}
-         & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
-        [(\Id\otimes\mathbb S\otimes\Id)
-            (\mathbb S\otimes\mathbb S)]_
-        {\iota_a^{-1}(l,r),\pi^{-1}(I_1,I_2)}
-        (Y_2)_{l,(J_2,\gamma)},              \\
-        (B_3)_{I,J;\alpha,\gamma}
-         & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
-        [\Id\otimes\mathbb S\otimes\Id]_
-        {\pi^{-1}(J_2,J_1),\iota_b^{-1}(r,l)}
-        (Y_1)_{r,(I_2,\gamma)}.
-    \end{align}
-    Again write $s=d^{-1/2}$, so that $d\,s^2=1$.  Reversing the two supplied
-    factors gives the entry identities
-    \begin{align}
-        [a_3^{(2)}]_{((a,b),(c,e)),((i,j),(k,l))}
-         & =(s\delta_{c,i}\delta_{e,k})
-        (d\,s\delta_{a,j}\delta_{b,l})                        \\
-         & =\delta_{a,j}\delta_{b,l}\delta_{c,i}\delta_{e,k}, \\
-        [b_3^{(2)}]_{((i,j),(k,l)),((a,b),(c,e))}
-         & =(d\,s\delta_{b,k}\delta_{a,i})
-        (s\delta_{e,l}\delta_{c,j})                           \\
-         & =\delta_{a,i}\delta_{b,k}\delta_{c,j}\delta_{e,l}.
-    \end{align}
-    The first is the entry of
-    $(\Id\otimes\mathbb S\otimes\Id)(\mathbb S\otimes\mathbb S)$,
-    and the second is the entry of $\Id\otimes\mathbb S\otimes\Id$.
-    Substitution into the two exact open two-site factorizations proves the
-    claim.
+    Reverse the two primitive shift factors in the tensor-product formulas for
+    $u$ and $v$. Their Kronecker deltas give the displayed ordered swap products,
+    with the factors $d$ and $d^{-1}$ fixed by the identity-weight normalization.
+    Substitute these evaluations into the two exact open source-gate
+    factorizations.
 \end{proof}
 
 \begin{proposition}[Standard forms of the three shift MPUs]
