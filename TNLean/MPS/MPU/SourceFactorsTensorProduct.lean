@@ -210,4 +210,70 @@ theorem SourceFactors.sourceX₁Y₂_independentTensorProductOfIdentityWeight_ap
     tensorProductCutShuffle_symm_apply d D e E (j₂, α) (k₂, γ)]
   ring
 
+/-- The paper gate $u=Y_2\mathbin{-}Y_1$ is multiplicative for independent
+identity-weight source factors in product-rank coordinates.
+
+Formalization infrastructure for the tensoring clause of arXiv:1703.09188,
+Theorem `IndexTh` (ii), lines 824--847. -/
+theorem SourceFactors.sourceU_independentTensorProductOfIdentityWeight_apply
+    {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
+    (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
+    (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
+    (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) (rᵤ : Fin r[U]) (rᵥ : Fin r[V])
+    (i₁ i₂ : Fin d) (j₁ j₂ : Fin e) :
+    SourceFactors.sourceU (tensorProduct U V)
+        (SourceFactors.independentTensorProductOfIdentityWeight S T)
+        (tensorProductLeftRankEquiv U V (lᵤ, lᵥ),
+          tensorProductRightRankEquiv U V (rᵤ, rᵥ))
+        (finProdFinEquiv (i₁, j₁), finProdFinEquiv (i₂, j₂)) =
+      SourceFactors.sourceU U S (lᵤ, rᵤ) (i₁, i₂) *
+        SourceFactors.sourceU V T (lᵥ, rᵥ) (j₁, j₂) := by
+  simp only [SourceFactors.sourceU,
+    SourceFactors.independentTensorProductOfIdentityWeight]
+  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro β _
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro γ _
+  rw [tensorProductCutShuffle_symm_apply d D e E (i₁, β) (j₁, γ),
+    tensorProductCutShuffle_symm_apply D d E e (β, i₂) (γ, j₂)]
+  ring
+
+/-- The paper gate $v=X_1\mathbin{-}X_2$ is multiplicative for independent
+identity-weight source factors in product-rank coordinates.
+
+Formalization infrastructure for the tensoring clause of arXiv:1703.09188,
+Theorem `IndexTh` (ii), lines 824--847. -/
+theorem SourceFactors.sourceV_independentTensorProductOfIdentityWeight_apply
+    {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
+    (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
+    (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
+    (j₁ j₂ : Fin d) (k₁ k₂ : Fin e)
+    (rᵤ : Fin r[U]) (rᵥ : Fin r[V]) (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) :
+    SourceFactors.sourceV (tensorProduct U V)
+        (SourceFactors.independentTensorProductOfIdentityWeight S T)
+        (finProdFinEquiv (j₁, k₁), finProdFinEquiv (j₂, k₂))
+        (tensorProductRightRankEquiv U V (rᵤ, rᵥ),
+          tensorProductLeftRankEquiv U V (lᵤ, lᵥ)) =
+      SourceFactors.sourceV U S (j₁, j₂) (rᵤ, lᵤ) *
+        SourceFactors.sourceV V T (k₁, k₂) (rᵥ, lᵥ) := by
+  simp only [SourceFactors.sourceV,
+    SourceFactors.independentTensorProductOfIdentityWeight]
+  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro α _
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro γ _
+  rw [tensorProductCutShuffle_symm_apply d D e E (j₁, α) (k₁, γ),
+    tensorProductCutShuffle_symm_apply D d E e (α, j₂) (γ, k₂)]
+  ring
+
 end MPOTensor

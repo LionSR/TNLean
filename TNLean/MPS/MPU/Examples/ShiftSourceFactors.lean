@@ -504,7 +504,7 @@ theorem sourceX₁Y₂_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
   by_cases ha : a = j₁ <;> by_cases hb : b = j₂ <;>
     simp [SourceFactors.sourceX₁Y₂_apply, rightShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
-      Matrix.one_apply, sourceSqrt, ha, hb, NeZero.ne d,
+      Matrix.one_apply, sourceSqrt, ha, hb,
       mul_comm, mul_left_comm]
   all_goals grind
 
@@ -538,5 +538,87 @@ theorem sourceX₁Y₂_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
     simp [SourceFactors.sourceX₁Y₂_apply, leftShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
       Matrix.one_apply, sourceSqrt, ha, hb]
+
+/-! ### Paper-gate entries of the primitive factors -/
+
+/-- Entry formula for the paper gate $u=Y_2\mathbin{-}Y_1$ of the identity tensor.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+theorem sourceU_identitySourceFactors_apply (d : ℕ) (l r i₁ i₂ : Fin d) :
+    SourceFactors.sourceU (identityMPUTensor d) (identitySourceFactors d)
+        (identityLeftRankEquiv d l, identityRightRankEquiv d r) (i₁, i₂) =
+      if l = i₁ ∧ r = i₂ then 1 else 0 := by
+  by_cases hl : l = i₁ <;> by_cases hr : r = i₂ <;>
+    simp [SourceFactors.sourceU_apply, identitySourceFactors,
+      Matrix.reindex_apply, Matrix.one_apply, hl, hr]
+
+/-- Entry formula for the paper gate $v=X_1\mathbin{-}X_2$ of the identity tensor.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+theorem sourceV_identitySourceFactors_apply (d : ℕ) (j₁ j₂ r l : Fin d) :
+    SourceFactors.sourceV (identityMPUTensor d) (identitySourceFactors d)
+        (j₁, j₂) (identityRightRankEquiv d r, identityLeftRankEquiv d l) =
+      if r = j₁ ∧ l = j₂ then 1 else 0 := by
+  by_cases hr : j₁ = r <;> by_cases hl : j₂ = l <;>
+    simp [SourceFactors.sourceV_apply, identitySourceFactors,
+      Matrix.reindex_apply, Matrix.one_apply, hr, hl, eq_comm]
+
+/-- Entry formula for the paper gate $u=Y_2\mathbin{-}Y_1$ of the right shift.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
+`eq:uv2_U3` (lines 2009--2034). -/
+theorem sourceU_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
+    (a b i₁ i₂ : Fin d) :
+    SourceFactors.sourceU (rightShiftTensor d) (rightShiftSourceFactors d)
+        (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) (i₁, i₂) =
+      if a = i₁ ∧ b = i₂ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : a = i₁ <;> by_cases hb : b = i₂ <;>
+    simp [SourceFactors.sourceU_apply, rightShiftSourceFactors,
+      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
+      Matrix.one_apply, sourceSqrt, ha, hb,
+      mul_comm, mul_left_comm]
+
+/-- Entry formula for the paper gate $v=X_1\mathbin{-}X_2$ of the right shift.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
+`eq:uv2_U3` (lines 2009--2034). -/
+theorem sourceV_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
+    (j₁ j₂ a b : Fin d) :
+    SourceFactors.sourceV (rightShiftTensor d) (rightShiftSourceFactors d)
+        (j₁, j₂) (rightShiftRightRankEquiv d (a, b), rightShiftLeftRankEquiv d 0) =
+      if a = j₁ ∧ b = j₂ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : j₁ = a <;> by_cases hb : j₂ = b <;>
+    simp [SourceFactors.sourceV_apply, rightShiftSourceFactors,
+      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
+      Matrix.one_apply, sourceSqrt, ha, hb, eq_comm]
+
+/-- Entry formula for the paper gate $u=Y_2\mathbin{-}Y_1$ of the left shift.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
+`eq:uv2_U3` (lines 2009--2034). -/
+theorem sourceU_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
+    (a b i₁ i₂ : Fin d) :
+    SourceFactors.sourceU (leftShiftTensor d) (leftShiftSourceFactors d)
+        (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0) (i₁, i₂) =
+      if a = i₁ ∧ b = i₂ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : a = i₁ <;> by_cases hb : b = i₂ <;>
+    simp [SourceFactors.sourceU_apply, leftShiftSourceFactors,
+      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
+      Matrix.one_apply, sourceSqrt, ha, hb,
+      mul_comm, mul_left_comm]
+
+/-- Entry formula for the paper gate $v=X_1\mathbin{-}X_2$ of the left shift.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
+`eq:uv2_U3` (lines 2009--2034). -/
+theorem sourceV_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
+    (j₁ j₂ a b : Fin d) :
+    SourceFactors.sourceV (leftShiftTensor d) (leftShiftSourceFactors d)
+        (j₁, j₂) (leftShiftRightRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)) =
+      if a = j₁ ∧ b = j₂ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : j₁ = a <;> by_cases hb : j₂ = b <;>
+    simp [SourceFactors.sourceV_apply, leftShiftSourceFactors,
+      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
+      Matrix.one_apply, sourceSqrt, ha, hb, eq_comm]
 
 end MPOTensor

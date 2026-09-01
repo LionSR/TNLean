@@ -12,9 +12,13 @@ import QICLean.Channel.MaximallyEntangled
 # Supplied source formulas for the cyclic-shift examples
 
 This module evaluates the explicit supplied source factors from
-`ShiftSourceFactors` for the three shift families of arXiv:1703.09188.  The
+`ShiftSourceFactors` for the three shift families of arXiv:1703.09188. The
 coordinate identifications retain the paper's tensor-factor order in equations
-`eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009--2034).
+`eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009--2034). Auxiliary mixed
+kernels remain explicitly separate from the gates $u=Y_2Y_1$ and $v=X_1X_2$.
+For the identity-weight tensor-product witnesses, the latter gates differ from
+the paper-normalized permutation matrices by reciprocal factors $d$ and
+$d^{-1}$; the entry theorems below state and balance those factors explicitly.
 -/
 
 open scoped Matrix Kronecker BigOperators
@@ -309,8 +313,10 @@ Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U2`
 noncomputable def shiftExampleU₂SourceY₁X₂RowEquiv (d : ℕ) [NeZero d] :
     ((Fin d × Fin d) × (Fin d × Fin d)) ≃
       (Fin ℓ[shiftExampleU₂ d] × Fin r[shiftExampleU₂ d]) :=
-  Equiv.prodCongr (shiftExampleU₂LeftRankEquiv d)
-    (shiftExampleU₂RightRankEquiv d)
+  (Equiv.prodCongr (Equiv.refl (Fin d × Fin d))
+      (Equiv.prodComm (Fin d) (Fin d))).trans
+    (Equiv.prodCongr (shiftExampleU₂LeftRankEquiv d)
+      (shiftExampleU₂RightRankEquiv d))
 
 /-- Four-spin coordinates for the column of the $X_1$--$Y_2$ mixed kernel of $U_2$.
 
@@ -323,7 +329,7 @@ the resulting matrix, not this intermediate equivalence. -/
 noncomputable def shiftExampleU₂SourceX₁Y₂ColumnEquiv (d : ℕ) [NeZero d] :
     ((Fin d × Fin d) × (Fin d × Fin d)) ≃
       (Fin r[shiftExampleU₂ d] × Fin ℓ[shiftExampleU₂ d]) :=
-  (Equiv.prodCongr (Equiv.prodComm (Fin d) (Fin d))
+  (Equiv.prodCongr (Equiv.refl (Fin d × Fin d))
       (Equiv.prodComm (Fin d) (Fin d))).trans
     (Equiv.prodCongr (shiftExampleU₂RightRankEquiv d)
       (shiftExampleU₂LeftRankEquiv d))
@@ -335,8 +341,10 @@ Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U3`
 noncomputable def shiftExampleU₃SourceY₁X₂RowEquiv (d : ℕ) [NeZero d] :
     ((Fin d × Fin d) × (Fin d × Fin d)) ≃
       (Fin ℓ[shiftExampleU₃ d] × Fin r[shiftExampleU₃ d]) :=
-  Equiv.prodCongr (shiftExampleU₃LeftRankEquiv d)
-    (shiftExampleU₃RightRankEquiv d)
+  (Equiv.prodCongr (Equiv.refl (Fin d × Fin d))
+      (Equiv.prodComm (Fin d) (Fin d))).trans
+    (Equiv.prodCongr (shiftExampleU₃LeftRankEquiv d)
+      (shiftExampleU₃RightRankEquiv d))
 
 /-- Four-spin coordinates for the column of the $X_1$--$Y_2$ mixed kernel of $U_3$.
 
@@ -349,7 +357,7 @@ the resulting matrix, not this intermediate equivalence. -/
 noncomputable def shiftExampleU₃SourceX₁Y₂ColumnEquiv (d : ℕ) [NeZero d] :
     ((Fin d × Fin d) × (Fin d × Fin d)) ≃
       (Fin r[shiftExampleU₃ d] × Fin ℓ[shiftExampleU₃ d]) :=
-  (Equiv.prodCongr (Equiv.prodComm (Fin d) (Fin d))
+  (Equiv.prodCongr (Equiv.refl (Fin d × Fin d))
       (Equiv.prodComm (Fin d) (Fin d))).trans
     (Equiv.prodCongr (shiftExampleU₃RightRankEquiv d)
       (shiftExampleU₃LeftRankEquiv d))
@@ -359,15 +367,15 @@ coordinates exhibit one swap.
 
 After expanding the product ranks in the outer $(\ell,r)$ order fixed by the
 $Y_1$--$X_2$ mixed contraction (which is not CPSV17 equation `uu`), this
-map sends $((a,b),(c,e))$ to $((e,b),(c,a))$.  It thereby gives the two
+map sends $((a,b),(c,e))$ to $((e,b),(a,c))$.  It thereby gives the two
 composite indices in which equation `eq:SF_u1_u3` prints $u_3=\mathbb S$
 (lines 2009--2016).  This shuffle is formalization infrastructure; the paper
 states the final swap, not the intermediate reindexing. -/
 def shiftExampleU₃SourceY₁X₂SwapShuffle (d : ℕ) :
     ((Fin d × Fin d) × (Fin d × Fin d)) ≃
       ((Fin d × Fin d) × (Fin d × Fin d)) where
-  toFun x := ((x.2.2, x.1.2), (x.2.1, x.1.1))
-  invFun x := ((x.2.2, x.1.2), (x.2.1, x.1.1))
+  toFun x := ((x.2.2, x.1.2), (x.1.1, x.2.1))
+  invFun x := ((x.2.1, x.1.2), (x.2.2, x.1.1))
   left_inv x := by rcases x with ⟨⟨_, _⟩, ⟨_, _⟩⟩; rfl
   right_inv x := by rcases x with ⟨⟨_, _⟩, ⟨_, _⟩⟩; rfl
 
@@ -384,6 +392,20 @@ noncomputable def shiftExampleU₃SwapSourceY₁X₂RowEquiv (d : ℕ) [NeZero d
       (Equiv.prodCongr (shiftExampleU₃LeftRankEquiv d)
         (shiftExampleU₃RightRankEquiv d))
 
+/-- Reorder two pairs for the column coordinates of the third auxiliary
+$X_1$--$Y_2$ kernel.
+
+The map sends $((a,b),(c,e))$ to $((c,a),(b,e))$. This is an auxiliary
+coordinate choice near arXiv:1703.09188, equation `eq:SF_u1_u3`
+(lines 2009--2016), not a paper-gate identification. -/
+def shiftExampleU₃SourceX₁Y₂SwapShuffle (d : ℕ) :
+    ((Fin d × Fin d) × (Fin d × Fin d)) ≃
+      ((Fin d × Fin d) × (Fin d × Fin d)) where
+  toFun x := ((x.2.1, x.1.1), (x.1.2, x.2.2))
+  invFun x := ((x.1.2, x.2.1), (x.1.1, x.2.2))
+  left_inv x := by rcases x with ⟨⟨_, _⟩, ⟨_, _⟩⟩; rfl
+  right_inv x := by rcases x with ⟨⟨_, _⟩, ⟨_, _⟩⟩; rfl
+
 /-- Composite-site coordinates for the column of the auxiliary
 $X_1$--$Y_2$ kernel for the third shift.
 
@@ -393,7 +415,7 @@ noncomputable def shiftExampleU₃SwapSourceX₁Y₂ColumnEquiv (d : ℕ) [NeZer
     (Fin (d * d) × Fin (d * d)) ≃
       (Fin r[shiftExampleU₃ d] × Fin ℓ[shiftExampleU₃ d]) :=
   ((Equiv.prodCongr finProdFinEquiv.symm finProdFinEquiv.symm).trans
-    (Equiv.prodProdProdComm (Fin d) (Fin d) (Fin d) (Fin d))).trans
+    (shiftExampleU₃SourceX₁Y₂SwapShuffle d)).trans
       (Equiv.prodCongr (shiftExampleU₃RightRankEquiv d)
         (shiftExampleU₃LeftRankEquiv d))
 
@@ -405,7 +427,7 @@ CPSV17 gate $u_3$. -/
     shiftExampleU₃SwapSourceY₁X₂RowEquiv d
         (finProdFinEquiv (a, b), finProdFinEquiv (c, e)) =
       (shiftExampleU₃LeftRankEquiv d (e, b),
-        shiftExampleU₃RightRankEquiv d (c, a)) := by
+        shiftExampleU₃RightRankEquiv d (a, c)) := by
   simp [shiftExampleU₃SwapSourceY₁X₂RowEquiv,
     shiftExampleU₃SourceY₁X₂SwapShuffle]
 
@@ -416,9 +438,10 @@ CPSV17 gate $v_3$. -/
     (a b c e : Fin d) :
     shiftExampleU₃SwapSourceX₁Y₂ColumnEquiv d
         (finProdFinEquiv (a, b), finProdFinEquiv (c, e)) =
-      (shiftExampleU₃RightRankEquiv d (a, c),
+      (shiftExampleU₃RightRankEquiv d (c, a),
         shiftExampleU₃LeftRankEquiv d (b, e)) := by
-  simp [shiftExampleU₃SwapSourceX₁Y₂ColumnEquiv]
+  simp [shiftExampleU₃SwapSourceX₁Y₂ColumnEquiv,
+    shiftExampleU₃SourceX₁Y₂SwapShuffle]
 
 /-- Entry formula for the supplied auxiliary $Y_1$--$X_2$ kernel of $U_2$ in
 explicit four-spin coordinates.
@@ -435,20 +458,20 @@ theorem shiftExampleU₂_sourceY₁X₂_fourSpin_apply (d : ℕ) [NeZero d]
       (tensorProductLeftRankEquiv (leftShiftTensor d) (rightShiftTensor d)
           (leftShiftLeftRankEquiv d (a, b), rightShiftLeftRankEquiv d 0),
         tensorProductRightRankEquiv (leftShiftTensor d) (rightShiftTensor d)
-          (leftShiftRightRankEquiv d 0, rightShiftRightRankEquiv d (c, e))) by rfl,
+          (leftShiftRightRankEquiv d 0, rightShiftRightRankEquiv d (e, c))) by rfl,
     show shiftTwoSitePhysicalEquiv d ((i, j), (k, l)) =
       (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl]
   calc
     _ = SourceFactors.sourceY₁X₂ (leftShiftTensor d) (leftShiftSourceFactors d)
           (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0) (i, k) *
         SourceFactors.sourceY₁X₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (c, e))
+          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (e, c))
             (j, l) := by
       simpa only [shiftExampleU₂, shiftExampleU₂SourceFactors] using
         SourceFactors.sourceY₁X₂_independentTensorProductOfIdentityWeight_apply
           (leftShiftSourceFactors d) (rightShiftSourceFactors d)
           (leftShiftLeftRankEquiv d (a, b)) (rightShiftLeftRankEquiv d 0)
-          (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (c, e)) i k j l
+          (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (e, c)) i k j l
     _ = _ := by
       rw [sourceY₁X₂_leftShiftSourceFactors_apply,
         sourceY₁X₂_rightShiftSourceFactors_apply]
@@ -496,19 +519,19 @@ theorem shiftExampleU₂_sourceX₁Y₂_fourSpin_apply (d : ℕ) [NeZero d]
       (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl,
     show shiftExampleU₂SourceX₁Y₂ColumnEquiv d ((a, b), (c, e)) =
       (tensorProductRightRankEquiv (leftShiftTensor d) (rightShiftTensor d)
-          (leftShiftRightRankEquiv d 0, rightShiftRightRankEquiv d (b, a)),
+          (leftShiftRightRankEquiv d 0, rightShiftRightRankEquiv d (a, b)),
         tensorProductLeftRankEquiv (leftShiftTensor d) (rightShiftTensor d)
           (leftShiftLeftRankEquiv d (e, c), rightShiftLeftRankEquiv d 0)) by rfl]
   calc
     _ = SourceFactors.sourceX₁Y₂ (leftShiftTensor d) (leftShiftSourceFactors d)
           (i, k) (leftShiftRightRankEquiv d 0, leftShiftLeftRankEquiv d (e, c)) *
         SourceFactors.sourceX₁Y₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-          (j, l) (rightShiftRightRankEquiv d (b, a),
+          (j, l) (rightShiftRightRankEquiv d (a, b),
             rightShiftLeftRankEquiv d 0) := by
       simpa only [shiftExampleU₂, shiftExampleU₂SourceFactors] using
         SourceFactors.sourceX₁Y₂_independentTensorProductOfIdentityWeight_apply
           (leftShiftSourceFactors d) (rightShiftSourceFactors d) i k j l
-          (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (b, a))
+          (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (a, b))
           (leftShiftLeftRankEquiv d (e, c)) (rightShiftLeftRankEquiv d 0)
     _ = _ := by
       rw [sourceX₁Y₂_leftShiftSourceFactors_apply,
@@ -547,17 +570,17 @@ private theorem shiftExampleU₃_sourceY₁X₂_product_apply (d : ℕ) [NeZero 
         (tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)
             (rightShiftLeftRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)),
           tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)
-            (rightShiftRightRankEquiv d (c, e), leftShiftRightRankEquiv d 0))
+            (rightShiftRightRankEquiv d (e, c), leftShiftRightRankEquiv d 0))
         (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) =
       SourceFactors.sourceY₁X₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (c, e)) (i, k) *
+          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (e, c)) (i, k) *
         SourceFactors.sourceY₁X₂ (leftShiftTensor d) (leftShiftSourceFactors d)
           (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0) (j, l) := by
   simpa only [shiftExampleU₃, shiftExampleU₃SourceFactors] using
     SourceFactors.sourceY₁X₂_independentTensorProductOfIdentityWeight_apply
       (rightShiftSourceFactors d) (leftShiftSourceFactors d)
       (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (a, b))
-      (rightShiftRightRankEquiv d (c, e)) (leftShiftRightRankEquiv d 0) i k j l
+      (rightShiftRightRankEquiv d (e, c)) (leftShiftRightRankEquiv d 0) i k j l
 
 /-- Entry formula for the supplied auxiliary $Y_1$--$X_2$ kernel of $U_3$ in
 explicit four-spin coordinates.
@@ -575,12 +598,12 @@ theorem shiftExampleU₃_sourceY₁X₂_fourSpin_apply (d : ℕ) [NeZero d]
       (tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)
           (rightShiftLeftRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)),
         tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)
-          (rightShiftRightRankEquiv d (c, e), leftShiftRightRankEquiv d 0)) by rfl,
+          (rightShiftRightRankEquiv d (e, c), leftShiftRightRankEquiv d 0)) by rfl,
     show shiftTwoSitePhysicalEquiv d ((i, j), (k, l)) =
       (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl]
   calc
     _ = SourceFactors.sourceY₁X₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (c, e)) (i, k) *
+          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (e, c)) (i, k) *
         SourceFactors.sourceY₁X₂ (leftShiftTensor d) (leftShiftSourceFactors d)
           (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0)
             (j, l) := shiftExampleU₃_sourceY₁X₂_product_apply d a b c e i j k l
@@ -620,11 +643,11 @@ private theorem shiftExampleU₃_sourceX₁Y₂_product_apply (d : ℕ) [NeZero 
     SourceFactors.sourceX₁Y₂ (shiftExampleU₃ d) (shiftExampleU₃SourceFactors d)
         (finProdFinEquiv (i, j), finProdFinEquiv (k, l))
         (tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)
-            (rightShiftRightRankEquiv d (b, a), leftShiftRightRankEquiv d 0),
+            (rightShiftRightRankEquiv d (a, b), leftShiftRightRankEquiv d 0),
           tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)
             (rightShiftLeftRankEquiv d 0, leftShiftLeftRankEquiv d (e, c))) =
       SourceFactors.sourceX₁Y₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-          (i, k) (rightShiftRightRankEquiv d (b, a),
+          (i, k) (rightShiftRightRankEquiv d (a, b),
             rightShiftLeftRankEquiv d 0) *
         SourceFactors.sourceX₁Y₂ (leftShiftTensor d) (leftShiftSourceFactors d)
           (j, l) (leftShiftRightRankEquiv d 0,
@@ -632,7 +655,7 @@ private theorem shiftExampleU₃_sourceX₁Y₂_product_apply (d : ℕ) [NeZero 
   simpa only [shiftExampleU₃, shiftExampleU₃SourceFactors] using
     SourceFactors.sourceX₁Y₂_independentTensorProductOfIdentityWeight_apply
       (rightShiftSourceFactors d) (leftShiftSourceFactors d) i k j l
-      (rightShiftRightRankEquiv d (b, a)) (leftShiftRightRankEquiv d 0)
+      (rightShiftRightRankEquiv d (a, b)) (leftShiftRightRankEquiv d 0)
       (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (e, c))
 
 /-- Entry formula for the supplied auxiliary $X_1$--$Y_2$ kernel of $U_3$ in
@@ -650,12 +673,12 @@ theorem shiftExampleU₃_sourceX₁Y₂_fourSpin_apply (d : ℕ) [NeZero d]
       (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl,
     show shiftExampleU₃SourceX₁Y₂ColumnEquiv d ((a, b), (c, e)) =
       (tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)
-          (rightShiftRightRankEquiv d (b, a), leftShiftRightRankEquiv d 0),
+          (rightShiftRightRankEquiv d (a, b), leftShiftRightRankEquiv d 0),
         tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)
           (rightShiftLeftRankEquiv d 0, leftShiftLeftRankEquiv d (e, c))) by rfl]
   calc
     _ = SourceFactors.sourceX₁Y₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-          (i, k) (rightShiftRightRankEquiv d (b, a),
+          (i, k) (rightShiftRightRankEquiv d (a, b),
             rightShiftLeftRankEquiv d 0) *
         SourceFactors.sourceX₁Y₂ (leftShiftTensor d) (leftShiftSourceFactors d)
           (j, l) (leftShiftRightRankEquiv d 0,
@@ -811,7 +834,7 @@ theorem shiftExampleU₃_sourceY₁X₂_eq_swap_apply (d : ℕ) [NeZero d]
     shiftExampleU₃RightRankEquiv_apply]
   calc
     _ = SourceFactors.sourceY₁X₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (c, a)) (i, k) *
+          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, c)) (i, k) *
         SourceFactors.sourceY₁X₂ (leftShiftTensor d) (leftShiftSourceFactors d)
           (leftShiftLeftRankEquiv d (e, b), leftShiftRightRankEquiv d 0)
             (j, l) := shiftExampleU₃_sourceY₁X₂_product_apply d e b c a i j k l
@@ -840,7 +863,7 @@ theorem shiftExampleU₃_sourceX₁Y₂_eq_swap_apply (d : ℕ) [NeZero d]
     shiftExampleU₃LeftRankEquiv_apply]
   calc
     _ = SourceFactors.sourceX₁Y₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-          (i, k) (rightShiftRightRankEquiv d (a, c),
+          (i, k) (rightShiftRightRankEquiv d (c, a),
             rightShiftLeftRankEquiv d 0) *
         SourceFactors.sourceX₁Y₂ (leftShiftTensor d) (leftShiftSourceFactors d)
           (j, l) (leftShiftRightRankEquiv d 0,
@@ -889,5 +912,288 @@ theorem shiftExampleU₃_sourceY₁X₂_sourceX₁Y₂_eq_swap (d : ℕ) [NeZero
     simpa only [Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
       shiftTwoSitePhysicalEquiv, Equiv.prodCongr_apply, Prod.map_apply'] using
       shiftExampleU₃_sourceX₁Y₂_eq_swap_apply d i j k l a b c e
+
+/-! ### Paper source gates -/
+
+/-- Four-spin row coordinates for the paper gate $u_2=Y_2\mathbin{-}Y_1$.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
+noncomputable def shiftExampleU₂SourceURowEquiv (d : ℕ) [NeZero d] :
+    ((Fin d × Fin d) × (Fin d × Fin d)) ≃
+      (Fin ℓ[shiftExampleU₂ d] × Fin r[shiftExampleU₂ d]) :=
+  Equiv.prodCongr (shiftExampleU₂LeftRankEquiv d)
+    (shiftExampleU₂RightRankEquiv d)
+
+/-- Four-spin column coordinates for the paper gate $v_2=X_1\mathbin{-}X_2$.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
+noncomputable def shiftExampleU₂SourceVColumnEquiv (d : ℕ) [NeZero d] :
+    ((Fin d × Fin d) × (Fin d × Fin d)) ≃
+      (Fin r[shiftExampleU₂ d] × Fin ℓ[shiftExampleU₂ d]) :=
+  Equiv.prodCongr (shiftExampleU₂RightRankEquiv d)
+    (shiftExampleU₂LeftRankEquiv d)
+
+/-- Entry formula for the unbalanced supplied $u_2$ gate. Dividing by $d$
+gives the paper matrix $\Id\otimes\mathbb S\otimes\Id$.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
+theorem shiftExampleU₂_sourceU_fourSpin_apply (d : ℕ) [NeZero d]
+    (a b c e i j k l : Fin d) :
+    SourceFactors.sourceU (shiftExampleU₂ d) (shiftExampleU₂SourceFactors d)
+        (shiftExampleU₂SourceURowEquiv d ((a, b), (c, e)))
+        (shiftTwoSitePhysicalEquiv d ((i, j), (k, l))) =
+      (d : ℂ) • identitySwapIdentityMatrix d ((a, b), (c, e)) ((i, j), (k, l)) := by
+  rw [show shiftExampleU₂SourceURowEquiv d ((a, b), (c, e)) =
+      (tensorProductLeftRankEquiv (leftShiftTensor d) (rightShiftTensor d)
+          (leftShiftLeftRankEquiv d (a, b), rightShiftLeftRankEquiv d 0),
+        tensorProductRightRankEquiv (leftShiftTensor d) (rightShiftTensor d)
+          (leftShiftRightRankEquiv d 0, rightShiftRightRankEquiv d (c, e))) by rfl,
+    show shiftTwoSitePhysicalEquiv d ((i, j), (k, l)) =
+      (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl]
+  calc
+    _ = SourceFactors.sourceU (leftShiftTensor d) (leftShiftSourceFactors d)
+          (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0) (i, k) *
+        SourceFactors.sourceU (rightShiftTensor d) (rightShiftSourceFactors d)
+          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (c, e)) (j, l) := by
+      simpa only [shiftExampleU₂, shiftExampleU₂SourceFactors] using
+        SourceFactors.sourceU_independentTensorProductOfIdentityWeight_apply
+          (leftShiftSourceFactors d) (rightShiftSourceFactors d)
+          (leftShiftLeftRankEquiv d (a, b)) (rightShiftLeftRankEquiv d 0)
+          (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (c, e)) i k j l
+    _ = _ := by
+      rw [sourceU_leftShiftSourceFactors_apply,
+        sourceU_rightShiftSourceFactors_apply]
+      by_cases ha : a = i <;> by_cases hb : b = k <;>
+        by_cases hc : c = j <;> by_cases he : e = l <;>
+        simp [identitySwapIdentityMatrix, ha, hb, hc, he]
+      all_goals
+        linear_combination (d : ℂ) * shiftSourceScale_cancel d
+
+/-- Entry formula for the balanced paper gate
+$v_2^{(2)}=(\mathbb S\otimes\mathbb S)
+(\Id\otimes\mathbb S\otimes\Id)$.
+
+The scalar $d$ balances the explicit tensor-product factor witness.
+Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
+theorem shiftExampleU₂_sourceV_fourSpin_apply (d : ℕ) [NeZero d]
+    (i j k l a b c e : Fin d) :
+    (d : ℂ) * SourceFactors.sourceV (shiftExampleU₂ d)
+        (shiftExampleU₂SourceFactors d)
+        (shiftTwoSitePhysicalEquiv d ((i, j), (k, l)))
+        (shiftExampleU₂SourceVColumnEquiv d ((a, b), (c, e))) =
+      (swapTensorSwapMatrix d * identitySwapIdentityMatrix d)
+        ((i, j), (k, l)) ((a, b), (c, e)) := by
+  rw [show shiftTwoSitePhysicalEquiv d ((i, j), (k, l)) =
+      (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl,
+    show shiftExampleU₂SourceVColumnEquiv d ((a, b), (c, e)) =
+      (tensorProductRightRankEquiv (leftShiftTensor d) (rightShiftTensor d)
+          (leftShiftRightRankEquiv d 0, rightShiftRightRankEquiv d (a, b)),
+        tensorProductLeftRankEquiv (leftShiftTensor d) (rightShiftTensor d)
+          (leftShiftLeftRankEquiv d (c, e), rightShiftLeftRankEquiv d 0)) by rfl]
+  calc
+    _ = (d : ℂ) *
+        (SourceFactors.sourceV (leftShiftTensor d) (leftShiftSourceFactors d)
+          (i, k) (leftShiftRightRankEquiv d 0, leftShiftLeftRankEquiv d (c, e)) *
+        SourceFactors.sourceV (rightShiftTensor d) (rightShiftSourceFactors d)
+          (j, l) (rightShiftRightRankEquiv d (a, b), rightShiftLeftRankEquiv d 0)) := by
+      congr 1
+      simpa only [shiftExampleU₂, shiftExampleU₂SourceFactors] using
+        SourceFactors.sourceV_independentTensorProductOfIdentityWeight_apply
+          (leftShiftSourceFactors d) (rightShiftSourceFactors d) i k j l
+          (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (a, b))
+          (leftShiftLeftRankEquiv d (c, e)) (rightShiftLeftRankEquiv d 0)
+    _ = _ := by
+      rw [sourceV_leftShiftSourceFactors_apply,
+        sourceV_rightShiftSourceFactors_apply]
+      by_cases ha : a = j <;> by_cases hb : b = l <;>
+        by_cases hc : c = i <;> by_cases he : e = k <;>
+        simp_all only [mul_ite, ite_mul, zero_mul, mul_zero,
+          swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_apply]
+      all_goals try grind
+      all_goals
+        simpa [mul_assoc] using shiftSourceScale_cancel d
+
+/-- Four-spin row coordinates for the paper gate $u_3=Y_2\mathbin{-}Y_1$.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
+noncomputable def shiftExampleU₃SourceURowEquiv (d : ℕ) [NeZero d] :
+    ((Fin d × Fin d) × (Fin d × Fin d)) ≃
+      (Fin ℓ[shiftExampleU₃ d] × Fin r[shiftExampleU₃ d]) :=
+  Equiv.prodCongr (shiftExampleU₃LeftRankEquiv d)
+    (shiftExampleU₃RightRankEquiv d)
+
+/-- Four-spin column coordinates for the paper gate $v_3=X_1\mathbin{-}X_2$.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
+noncomputable def shiftExampleU₃SourceVColumnEquiv (d : ℕ) [NeZero d] :
+    ((Fin d × Fin d) × (Fin d × Fin d)) ≃
+      (Fin r[shiftExampleU₃ d] × Fin ℓ[shiftExampleU₃ d]) :=
+  Equiv.prodCongr (shiftExampleU₃RightRankEquiv d)
+    (shiftExampleU₃LeftRankEquiv d)
+
+/-- Entry formula for the unbalanced supplied $u_3$ gate. Dividing by $d$
+gives the paper matrix
+$(\Id\otimes\mathbb S\otimes\Id)(\mathbb S\otimes\mathbb S)$.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
+theorem shiftExampleU₃_sourceU_fourSpin_apply (d : ℕ) [NeZero d]
+    (a b c e i j k l : Fin d) :
+    SourceFactors.sourceU (shiftExampleU₃ d) (shiftExampleU₃SourceFactors d)
+        (shiftExampleU₃SourceURowEquiv d ((a, b), (c, e)))
+        (shiftTwoSitePhysicalEquiv d ((i, j), (k, l))) =
+      (d : ℂ) • (identitySwapIdentityMatrix d * swapTensorSwapMatrix d)
+        ((a, b), (c, e)) ((i, j), (k, l)) := by
+  rw [show shiftExampleU₃SourceURowEquiv d ((a, b), (c, e)) =
+      (tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)
+          (rightShiftLeftRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)),
+        tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)
+          (rightShiftRightRankEquiv d (c, e), leftShiftRightRankEquiv d 0)) by rfl,
+    show shiftTwoSitePhysicalEquiv d ((i, j), (k, l)) =
+      (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl]
+  calc
+    _ = SourceFactors.sourceU (rightShiftTensor d) (rightShiftSourceFactors d)
+          (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (c, e)) (i, k) *
+        SourceFactors.sourceU (leftShiftTensor d) (leftShiftSourceFactors d)
+          (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0) (j, l) := by
+      simpa only [shiftExampleU₃, shiftExampleU₃SourceFactors] using
+        SourceFactors.sourceU_independentTensorProductOfIdentityWeight_apply
+          (rightShiftSourceFactors d) (leftShiftSourceFactors d)
+          (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (a, b))
+          (rightShiftRightRankEquiv d (c, e)) (leftShiftRightRankEquiv d 0) i k j l
+    _ = _ := by
+      rw [sourceU_rightShiftSourceFactors_apply,
+        sourceU_leftShiftSourceFactors_apply]
+      by_cases ha : a = j <;> by_cases hb : b = l <;>
+        by_cases hc : c = i <;> by_cases he : e = k <;>
+        simp [ha, hb, hc, he]
+      all_goals
+        linear_combination (d : ℂ) * shiftSourceScale_cancel d
+
+/-- Entry formula for the balanced paper gate
+$v_3^{(2)}=\Id\otimes\mathbb S\otimes\Id$.
+
+The scalar $d$ balances the explicit tensor-product factor witness.
+Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
+theorem shiftExampleU₃_sourceV_fourSpin_apply (d : ℕ) [NeZero d]
+    (i j k l a b c e : Fin d) :
+    (d : ℂ) * SourceFactors.sourceV (shiftExampleU₃ d)
+        (shiftExampleU₃SourceFactors d)
+        (shiftTwoSitePhysicalEquiv d ((i, j), (k, l)))
+        (shiftExampleU₃SourceVColumnEquiv d ((a, b), (c, e))) =
+      identitySwapIdentityMatrix d ((i, j), (k, l)) ((a, b), (c, e)) := by
+  rw [show shiftTwoSitePhysicalEquiv d ((i, j), (k, l)) =
+      (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl,
+    show shiftExampleU₃SourceVColumnEquiv d ((a, b), (c, e)) =
+      (tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)
+          (rightShiftRightRankEquiv d (a, b), leftShiftRightRankEquiv d 0),
+        tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)
+          (rightShiftLeftRankEquiv d 0, leftShiftLeftRankEquiv d (c, e))) by rfl]
+  calc
+    _ = (d : ℂ) *
+        (SourceFactors.sourceV (rightShiftTensor d) (rightShiftSourceFactors d)
+          (i, k) (rightShiftRightRankEquiv d (a, b), rightShiftLeftRankEquiv d 0) *
+        SourceFactors.sourceV (leftShiftTensor d) (leftShiftSourceFactors d)
+          (j, l) (leftShiftRightRankEquiv d 0, leftShiftLeftRankEquiv d (c, e))) := by
+      congr 1
+      simpa only [shiftExampleU₃, shiftExampleU₃SourceFactors] using
+        SourceFactors.sourceV_independentTensorProductOfIdentityWeight_apply
+          (rightShiftSourceFactors d) (leftShiftSourceFactors d) i k j l
+          (rightShiftRightRankEquiv d (a, b)) (leftShiftRightRankEquiv d 0)
+          (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (c, e))
+    _ = _ := by
+      rw [sourceV_rightShiftSourceFactors_apply,
+        sourceV_leftShiftSourceFactors_apply]
+      by_cases ha : a = i <;> by_cases hb : b = k <;>
+        by_cases hc : c = j <;> by_cases he : e = l <;>
+        simp_all only [mul_ite, ite_mul, zero_mul, mul_zero,
+          identitySwapIdentityMatrix_apply]
+      all_goals try grind
+      all_goals
+        simpa [mul_assoc] using shiftSourceScale_cancel d
+
+/-- Four-spin row coordinates for the paper gate $u_1=Y_2\mathbin{-}Y_1$.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+noncomputable def shiftExampleU₁SourceURowEquiv (d : ℕ) :
+    ((Fin d × Fin d) × (Fin d × Fin d)) ≃
+      (Fin ℓ[shiftExampleU₁ d] × Fin r[shiftExampleU₁ d]) :=
+  Equiv.prodCongr (shiftExampleU₁LeftRankEquiv d)
+    (shiftExampleU₁RightRankEquiv d)
+
+/-- Four-spin column coordinates for the paper gate $v_1=X_1\mathbin{-}X_2$.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+noncomputable def shiftExampleU₁SourceVColumnEquiv (d : ℕ) :
+    ((Fin d × Fin d) × (Fin d × Fin d)) ≃
+      (Fin r[shiftExampleU₁ d] × Fin ℓ[shiftExampleU₁ d]) :=
+  Equiv.prodCongr (shiftExampleU₁RightRankEquiv d)
+    (shiftExampleU₁LeftRankEquiv d)
+
+/-- Entry formula for $u_1=\Id\otimes\Id$.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+theorem shiftExampleU₁_sourceU_fourSpin_apply (d : ℕ)
+    (a b c e i j k l : Fin d) :
+    SourceFactors.sourceU (shiftExampleU₁ d) (shiftExampleU₁SourceFactors d)
+        (shiftExampleU₁SourceURowEquiv d ((a, b), (c, e)))
+        (shiftTwoSitePhysicalEquiv d ((i, j), (k, l))) =
+      identityTensorIdentityMatrix d ((a, b), (c, e)) ((i, j), (k, l)) := by
+  rw [show shiftExampleU₁SourceURowEquiv d ((a, b), (c, e)) =
+      (tensorProductLeftRankEquiv (identityMPUTensor d) (identityMPUTensor d)
+          (identityLeftRankEquiv d a, identityLeftRankEquiv d b),
+        tensorProductRightRankEquiv (identityMPUTensor d) (identityMPUTensor d)
+          (identityRightRankEquiv d c, identityRightRankEquiv d e)) by rfl,
+    show shiftTwoSitePhysicalEquiv d ((i, j), (k, l)) =
+      (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl]
+  calc
+    _ = SourceFactors.sourceU (identityMPUTensor d) (identitySourceFactors d)
+          (identityLeftRankEquiv d a, identityRightRankEquiv d c) (i, k) *
+        SourceFactors.sourceU (identityMPUTensor d) (identitySourceFactors d)
+          (identityLeftRankEquiv d b, identityRightRankEquiv d e) (j, l) := by
+      simpa only [shiftExampleU₁, shiftExampleU₁SourceFactors] using
+        SourceFactors.sourceU_independentTensorProductOfIdentityWeight_apply
+          (identitySourceFactors d) (identitySourceFactors d)
+          (identityLeftRankEquiv d a) (identityLeftRankEquiv d b)
+          (identityRightRankEquiv d c) (identityRightRankEquiv d e) i k j l
+    _ = _ := by
+      rw [sourceU_identitySourceFactors_apply,
+        sourceU_identitySourceFactors_apply]
+      by_cases ha : a = i <;> by_cases hb : b = j <;>
+        by_cases hc : c = k <;> by_cases he : e = l <;>
+        simp [identityTensorIdentityMatrix_apply, ha, hb, hc, he]
+
+/-- Entry formula for $v_1=\Id\otimes\Id$.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+theorem shiftExampleU₁_sourceV_fourSpin_apply (d : ℕ)
+    (i j k l a b c e : Fin d) :
+    SourceFactors.sourceV (shiftExampleU₁ d) (shiftExampleU₁SourceFactors d)
+        (shiftTwoSitePhysicalEquiv d ((i, j), (k, l)))
+        (shiftExampleU₁SourceVColumnEquiv d ((a, b), (c, e))) =
+      identityTensorIdentityMatrix d ((i, j), (k, l)) ((a, b), (c, e)) := by
+  rw [show shiftTwoSitePhysicalEquiv d ((i, j), (k, l)) =
+      (finProdFinEquiv (i, j), finProdFinEquiv (k, l)) by rfl,
+    show shiftExampleU₁SourceVColumnEquiv d ((a, b), (c, e)) =
+      (tensorProductRightRankEquiv (identityMPUTensor d) (identityMPUTensor d)
+          (identityRightRankEquiv d a, identityRightRankEquiv d b),
+        tensorProductLeftRankEquiv (identityMPUTensor d) (identityMPUTensor d)
+          (identityLeftRankEquiv d c, identityLeftRankEquiv d e)) by rfl]
+  calc
+    _ = SourceFactors.sourceV (identityMPUTensor d) (identitySourceFactors d)
+          (i, k) (identityRightRankEquiv d a, identityLeftRankEquiv d c) *
+        SourceFactors.sourceV (identityMPUTensor d) (identitySourceFactors d)
+          (j, l) (identityRightRankEquiv d b, identityLeftRankEquiv d e) := by
+      simpa only [shiftExampleU₁, shiftExampleU₁SourceFactors] using
+        SourceFactors.sourceV_independentTensorProductOfIdentityWeight_apply
+          (identitySourceFactors d) (identitySourceFactors d) i k j l
+          (identityRightRankEquiv d a) (identityRightRankEquiv d b)
+          (identityLeftRankEquiv d c) (identityLeftRankEquiv d e)
+    _ = _ := by
+      rw [sourceV_identitySourceFactors_apply,
+        sourceV_identitySourceFactors_apply]
+      by_cases ha : a = i <;> by_cases hb : b = j <;>
+        by_cases hc : c = k <;> by_cases he : e = l <;>
+        simp [identityTensorIdentityMatrix_apply, ha, hb, hc, he]
+      all_goals grind
 
 end MPOTensor
