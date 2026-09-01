@@ -33,7 +33,7 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-- The normalized rank-one limiting map associated with a matrix `ρ` of
+/-- The normalized rank-one limiting map associated with a matrix \(\rho\) of
 nonzero trace. For the trace-one stationary density used by FNW after equation
 (5.5), this is exactly \(E_\infty(B)=\operatorname{Tr}(\rho B)\,1\). -/
 def fnwLimitMap (ρ : Mat) (_htr : Matrix.trace ρ ≠ 0) : Mat →ₗ[ℂ] Mat where
@@ -96,10 +96,10 @@ theorem fnwTransferMap_mul_fnwLimitMap (A : MPSTensor d D) (ρ : Mat)
   ext B
   simp [Module.End.mul_apply, fnwLimitMap, fnwTransferMap_one A hA]
 
-/-- If `ρ` is stationary for TNLean's transfer map, then the FNW limiting map
+/-- If \(\rho\) is stationary for TNLean's transfer map, then the FNW limiting map
 absorbs the FNW transfer map on the left:
 \(E_\infty E=E_\infty\). Under the convention bridge of equations
-(5.1)--(5.3), this is exactly stationarity of `ρ`. -/
+(5.1)--(5.3), this is exactly stationarity of \(\rho\). -/
 theorem fnwLimitMap_mul_fnwTransferMap (A : MPSTensor d D) (ρ : Mat)
     (htr : Matrix.trace ρ ≠ 0)
     (hρ : Kraus.transferMap A ρ = ρ) :

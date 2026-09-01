@@ -637,8 +637,8 @@ constant $C_\lambda=k^2$.
 
 \begin{proof}
     \leanok
-    \uses{def:fnw_limit_map, def:left_canonical_tensor}
-    Left canonicity gives
+    \uses{def:fnw_limit_map, def:left_canonical_tensor, thm:fnw_transfer_map_one}
+    Apply Theorem~\ref{thm:fnw_transfer_map_one} to obtain
     $E_{\mathrm{FNW},A}(I_D)=\sum_\mu(A^\mu)^\dagger A^\mu=I_D$.
     Hence
     \begin{align}
@@ -663,8 +663,8 @@ constant $C_\lambda=k^2$.
 
 \begin{proof}
     \leanok
-    \uses{def:fnw_limit_map}
-    The trace-pairing identity and stationarity give
+    \uses{def:fnw_limit_map, thm:trace_mul_fnw_transfer_map}
+    Apply Theorem~\ref{thm:trace_mul_fnw_transfer_map} and stationarity to get
     \begin{align}
         \tr\!\left(\rho E_{\mathrm{FNW},A}(B)\right)
          & =\tr\!\left(\E_A(\rho)B\right)=\tr(\rho B).
