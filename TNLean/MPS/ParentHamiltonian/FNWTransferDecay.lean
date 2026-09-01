@@ -151,6 +151,53 @@ noncomputable def fnwMixingQuantity {D : ℕ}
   fnwTraceInverseFactor ρ * fnwWeightedOperatorNorm ρ hρ
     (fnwTransferMap A ^ n - fnwLimitMap ρ (by simp [htr]))
 
+/-- Prescribed-rate form of FNW 1992, Lemma 5.2 and equations (5.9)--(5.10).
+For every nonnegative rate strictly above the rho-weighted spectral radius of
+the FNW remainder, there is a positive, rate-dependent prefactor bounding
+\(a(n)\) for every positive power. No hypothesis that the prescribed rate is
+below one is needed for this generic power estimate, and no dimension-only
+value of the prefactor is asserted. -/
+theorem IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric [NeZero D]
+    {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
+    (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1) (rate : ℝ≥0)
+    (hrate : fnwWeightedRemainderSpectralRadius ρ hρ A hP.trace_ne_zero <
+      (rate : ℝ≥0∞)) :
+    ∃ C : ℝ, 0 < C ∧ ∀ n : ℕ, 1 ≤ n →
+      fnwMixingQuantity ρ hρ A htr n ≤ C * (rate : ℝ) ^ n := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  let hComplete : CompleteSpace Mat := FiniteDimensional.complete ℂ Mat
+  let : CompleteSpace Mat := hComplete
+  let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) Mat
+  let R := fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero
+  have hrate' : spectralRadius ℂ (Φ R) < (rate : ℝ≥0∞) := by
+    simpa only [fnwWeightedRemainderSpectralRadius] using hrate
+  obtain ⟨C₀, hC₀, hbound⟩ :=
+    geometric_bound_of_spectralRadius_lt (Φ R) rate hrate'
+  refine ⟨fnwTraceInverseFactor ρ * C₀,
+    mul_pos (fnwTraceInverseFactor_pos hρ) hC₀, ?_⟩
+  intro n hn
+  have hlinear :
+      fnwTransferMap A ^ n - fnwLimitMap ρ (by simp [htr]) = R ^ n := by
+    simpa only [R] using
+      (hP.fnwTransferMap_sub_fnwLimitMap_pow hn).symm
+  have hnorm :
+      fnwWeightedOperatorNorm ρ hρ
+          (fnwTransferMap A ^ n - fnwLimitMap ρ (by simp [htr])) =
+        ‖(Φ R) ^ n‖ := by
+    simp only [fnwWeightedOperatorNorm]
+    rw [hlinear, map_pow]
+  rw [fnwMixingQuantity, hnorm]
+  calc
+    fnwTraceInverseFactor ρ * ‖(Φ R) ^ n‖ ≤
+        fnwTraceInverseFactor ρ * (C₀ * (rate : ℝ) ^ n) :=
+      mul_le_mul_of_nonneg_left (hbound n) (fnwTraceInverseFactor_pos hρ).le
+    _ = (fnwTraceInverseFactor ρ * C₀) * (rate : ℝ) ^ n := by ring
+
 end
 
 end MPSTensor
