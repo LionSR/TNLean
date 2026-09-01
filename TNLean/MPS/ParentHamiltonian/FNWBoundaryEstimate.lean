@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.WeightedSupertrace
 import QICLean.Kraus.TracePairing
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryConvention
 import TNLean.MPS.ParentHamiltonian.FNWTransferDecay
@@ -17,8 +18,8 @@ faithful stationary density to the ordinary physical Euclidean space.  In
 TNLean coordinates, the source matrices satisfy \(A^\mu=v(\mu)^\dagger\).
 
 The exact boundary recursion and scalar-product formula are equation (5.8).
-Their transfer-remainder form is the algebraic identity underlying the
-near-isometry estimate (5.9). Physical-site reversal remains explicit through
+Their transfer-remainder form and rho-weighted near-isometry estimate give
+(5.9). Physical-site reversal remains explicit through
 `FNWBoundaryConvention`.
 -/
 
@@ -365,6 +366,37 @@ theorem inner_fnwBoundaryMapCLM_sub_rhoWeighted
     Matrix.rhoWeighted_inner ρ hρ B C,
     ← sum_fnwLimitMap_rankOne ρ htr B C]
   simp only [LinearMap.sub_apply, Matrix.sub_apply, Finset.sum_sub_distrib]
+
+/-- The rho-weighted near-isometry estimate from FNW 1992, equation (5.9).
+The exact loss is the real trace of the inverse density times the weighted
+operator norm of the transfer remainder; no dimension factor occurs. -/
+theorem norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le
+    (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
+    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    ‖inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
+        (fnwBoundaryMapCLM ρ hρ A N C) - inner ℂ B C‖ ≤
+      (Matrix.trace ρ⁻¹).re *
+        fnwWeightedOperatorNorm ρ hρ
+          (fnwTransferMap A ^ N - fnwLimitMap ρ (by simp [htr])) *
+        ‖B‖ * ‖C‖ := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  rw [inner_fnwBoundaryMapCLM_sub_rhoWeighted ρ hρ htr A N B C]
+  have hbound := Matrix.norm_trace_comp_two_sided_mul_le_weighted ρ hρ
+    (fnwTransferMap A ^ N - fnwLimitMap ρ (by simp [htr])) B C
+  rw [Matrix.linearMap_trace_eq_sum_apply_single] at hbound
+  simpa only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
+    LinearMap.mulRight_apply, Matrix.mul_assoc, fnwWeightedOperatorNorm] using hbound
 
 private theorem fnwBoundaryMap_snoc
     (A : MPSTensor d D) (N : ℕ) (B : Mat) (μ : Fin d) (σ : Cfg d N) :
