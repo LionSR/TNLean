@@ -139,7 +139,7 @@ namespace Matrix
 variable {ι κ m : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ]
   [Fintype m]
 
-/-- Multiplication of sums weighted by a complete orthogonal family of idempotents reduces
+/-- Multiplication of sums weighted by a family of orthogonal idempotents reduces
 pointwise to multiplication of their weights. -/
 theorem weighted_sum_mul_weighted_sum
     (Q : ι → Matrix m m ℂ)
@@ -216,6 +216,11 @@ theorem exists_skew_unitary_congruence_of_paired_projectors
   let l : Sum κ κ → ℂ := Sum.elim (fun _ ↦ Complex.I) (fun _ ↦ -Complex.I)
   let S : Matrix m m ℂ := ∑ a, s a • Q a
   let Λ : Matrix m m ℂ := ∑ a, l a • Q a
+  have hPmap (k : κ) : (P k).map (starRingEnd ℂ) = (P k).transpose := by
+    calc
+      (P k).map (starRingEnd ℂ) = (P k)ᴴ.transpose :=
+        (Matrix.conjTranspose_transpose (P k)).symm
+      _ = (P k).transpose := congrArg Matrix.transpose (hPstar k)
   have hQstar : ∀ a, (Q a)ᴴ = Q a := by
     intro a
     cases a with
@@ -259,14 +264,8 @@ theorem exists_skew_unitary_congruence_of_paired_projectors
     simp
   have hS_unitary : S ∈ Matrix.unitaryGroup m ℂ := by
     exact weighted_sum_mem_unitaryGroup Q hQstar hPmul hPsum s hs_norm
-  have hPmap (k : κ) : (P k).map (starRingEnd ℂ) = (P k).transpose := by
-    ext i j
-    have h := congrArg (fun M : Matrix m m ℂ ↦ M j i) (hPstar k)
-    simpa [Matrix.conjTranspose_apply, Matrix.transpose_apply] using h
   have hPtransposeMap (k : κ) : (P k).transpose.map (starRingEnd ℂ) = P k := by
-    ext i j
-    have h := congrArg (fun M : Matrix m m ℂ ↦ M i j) (hPstar k)
-    simpa [Matrix.conjTranspose_apply, Matrix.transpose_apply] using h
+    rw [Matrix.transpose_map, hPmap, Matrix.transpose_transpose]
   have hmap_sub (k : κ) :
       (P k - (P k).transpose).map (starRingEnd ℂ) = (P k).transpose - P k := by
     rw [Matrix.map_sub (starRingEnd ℂ) (starRingEnd ℂ).map_sub, hPmap, hPtransposeMap]
