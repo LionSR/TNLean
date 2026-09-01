@@ -14,7 +14,7 @@
 \maketitle
 \gapnote{local-correction}{resolved}
 
-\section{The printed statement}
+\section{Local nondegeneracy convention}
 
 Lemma~\texttt{lemma:1} of
 Ref.~\cite[lines~2296--2395]{FrancoRubio2025MPUGauging} considers a connected
@@ -32,12 +32,9 @@ $\beta_i$ such that
     \prod_{i=1}^n\beta_i&=1.
     \label{eq:fbc25_alternating_network_nondegeneracy_source_product}
 \end{align}
-The statement does not exclude a zero factor.  For $n=2$, take
-$B_1=B'_1=0$ and choose $B_2,B'_2$ which are not proportional.  Then
-(\ref{eq:fbc25_alternating_network_nondegeneracy_source_equality}) holds,
-but
-(\ref{eq:fbc25_alternating_network_nondegeneracy_source_proportionality})
-does not.  This is the degenerate zero-factor reading of the printed lemma.
+The formal treatment adopts the intended nondegenerate convention that every
+intervening tensor $B_i$ is nonzero.  This convention is present at both
+applications of the lemma in the article.
 
 \section{Nondegenerate correction}
 
@@ -90,9 +87,8 @@ declaration:
 \doclink{TNLean/MPS/Chain/AlternatingNetwork}.}
 
 \textbf{Verdict: resolved local fix.}
-The zero-factor degeneration is excluded by the intended nondegenerate
-convention, which is present at both applications in the article.  The
-unrestricted printed wording is not used as a formal theorem.
+The intended nondegeneracy convention is present at both applications in the
+article.  The unrestricted printed wording is not used as a formal theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}

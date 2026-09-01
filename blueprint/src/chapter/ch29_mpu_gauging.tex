@@ -705,10 +705,7 @@ gauges and scalar relation have been constructed.
     \label{thm:mpug_alternating_network_nondegenerate}
     \lean{MPSTensor.exists_scalars_of_openAlternatingNetwork_eq}
     \leanok
-    \uses{def:injective, def:decomposition_map,
-        def:mpug_open_alternating_network,
-        lem:mpug_inverse_contraction_open_alternating_network,
-        thm:periodic_product_tensor_phase_extraction}
+    \uses{def:injective, def:mpug_open_alternating_network}
     Let $n\geq 0$, and let $D_1,\ldots,D_{n+1}$ be horizontal bond dimensions.
     For each $1\leq i\leq n$, let $A_i$ be an injective MPS tensor with square
     bond dimension $D_i$, and let $B_i,B'_i$ be tensors whose left and right
@@ -738,13 +735,15 @@ gauges and scalar relation have been constructed.
     $\sigma_g\in\{1,-1\}$.  Both displayed networks are therefore nonzero.  A
     vanishing intervening factor would make its entire network zero, so taking
     the factors on these sides as the $B_i$ supplies $B_i\ne 0$ at both
-    applications.  The zero-factor degeneration and this local correction are
-    recorded in
+    applications.  This local nondegeneracy convention is recorded in
     \cite{gap:fbc25_alternating_network_nondegeneracy}.  The unrestricted
     printed statement is not asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:decomposition_map,
+        lem:mpug_inverse_contraction_open_alternating_network,
+        thm:periodic_product_tensor_phase_extraction}
     Apply Lemma~\ref{lem:mpug_inverse_contraction_open_alternating_network} to
     both sides of (\ref{eq:mpug_alternating_network_equality}), choosing the
     matrix units to prescribe arbitrary entries of all $B_i$.  The resulting
