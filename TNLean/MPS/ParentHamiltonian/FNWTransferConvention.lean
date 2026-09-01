@@ -13,8 +13,8 @@ import TNLean.MPS.Core.CanonicalNormalization
 Fannes--Nachtergaele--Werner, *Communications in Mathematical Physics* 144
 (1992), 443--490, equations (5.1)--(5.3), use
 \(E(B)=\sum_\mu v_\mu Bv_\mu^*\). TNLean uses the Schrödinger convention
-\(\mathcal T_A(X)=\sum_\mu A_\mu X A_\mu^*\). Under
-\(A_\mu=v_\mu^*\), the FNW map is the bilinear trace-pairing adjoint of
+\(\E_A(X)=\sum_\mu A^\mu X (A^\mu)^\dagger\). Under
+\(A^\mu=v(\mu)^\dagger\), the FNW map is the bilinear trace-pairing adjoint of
 TNLean's transfer map.
 
 Here "adjoint" refers only to the bilinear pairing
@@ -34,11 +34,11 @@ variable {d D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- The FNW 1992 transfer map from equations (5.1)--(5.3), in TNLean coordinates
-\(A_\mu=v_\mu^*\). -/
+\(A^\mu=v(\mu)^\dagger\). -/
 def fnwTransferMap (A : MPSTensor d D) : Mat →ₗ[ℂ] Mat :=
   Kraus.transferMap fun μ => (A μ)ᴴ
 
-/-- Under \(A_\mu=v_\mu^*\), the FNW map in equations (5.1)--(5.3) is the
+/-- Under \(A^\mu=v(\mu)^\dagger\), the FNW map in equations (5.1)--(5.3) is the
 bilinear trace-pairing adjoint of TNLean's transfer map. This is not a
 `ContinuousLinearMap` adjoint or a rho-weighted Hilbert adjoint. -/
 theorem fnwTransferMap_eq_traceAdjointMap (A : MPSTensor d D) :
@@ -55,8 +55,8 @@ theorem fnwTransferMap_one (A : MPSTensor d D) (hA : IsLeftCanonical A) :
     (Kraus.isTracePreservingMap_mapLM_of_isTP A hA)
 
 /-- The explicit convention bridge for FNW 1992, equations (5.1)--(5.3):
-pairing a density `ρ` against the FNW map equals pairing TNLean's transfer of
-`ρ` against the observable `X`. The pairing is the bilinear matrix trace, not a
+pairing a density \(\rho\) against the FNW map equals pairing TNLean's transfer of
+\(\rho\) against the observable \(X\). The pairing is the bilinear matrix trace, not a
 `ContinuousLinearMap` or rho-weighted Hilbert adjoint pairing. -/
 theorem trace_mul_fnwTransferMap (A : MPSTensor d D) (ρ X : Mat) :
     Matrix.trace (ρ * fnwTransferMap A X) =
