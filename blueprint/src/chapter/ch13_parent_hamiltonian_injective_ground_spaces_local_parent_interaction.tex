@@ -511,8 +511,9 @@ orthogonal projector is the canonical representative used here.
 \begin{proof}
     \leanok
     Gelfand's formula gives $N\in\N$ such that
-    $\lVert a^n\rVert\leq\lambda^n$ for every $n\geq N$.  Since $\lambda>0$,
-    set
+    $\lVert a^n\rVert\leq\lambda^n$ for every $n\geq N$.  Since the spectral
+    radius is nonnegative and strictly smaller than $\lambda$, one has
+    $\lambda>0$.  Set
     \begin{align}
         C_\lambda
          & =1+\sum_{j=0}^{N-1}\frac{\lVert a^j\rVert}{\lambda^j}.
