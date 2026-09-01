@@ -6705,11 +6705,58 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $x^T=x$ implies $S^T=q(x^T)=q(x)=S$. Therefore $x=S^2=S^T S$.
 \end{proof}
 
+\begin{lemma}[Skew congruence from paired spectral projectors]
+    \label{lem:mpu_skew_unitary_paired_projectors}
+    \lean{Matrix.exists_skew_unitary_congruence_of_paired_projectors}
+    \leanok
+    Let $K$ and $I$ be finite sets, let $E_k\in\mathbb R$ for $k\in K$, and
+    let $P_k$ be Hermitian projectors on $\mathbb C^I$. Suppose that the family
+    $\{P_k,P_k^T\}_{k\in K}$ consists of mutually orthogonal projectors and
+    sums to the identity. Define
+    \begin{align}
+        x & = \sum_{k\in K} e^{-iE_k}(P_k-P_k^T).
+    \end{align}
+    Then the matrices
+    \begin{align}
+        S & = e^{-i\pi/4}\sum_{k\in K} e^{-iE_k/2}(P_k+P_k^T),
+    \end{align}
+    and
+    \begin{align}
+        \widetilde\Lambda & = i\sum_{k\in K}(P_k-P_k^T)
+    \end{align}
+    are unitary, $S^T=S$, $\overline{\widetilde\Lambda}=\widetilde\Lambda$,
+    $\widetilde\Lambda^T=-\widetilde\Lambda$, and
+    \begin{align}
+        x & = S^T\widetilde\Lambda S.
+    \end{align}
+    This is the paired-projector construction in the skew branch of
+    \cite[Lemma~\texttt{lemma:conjclass-normalform-continuous}]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1066--1082.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write the two projectors in each pair as separate members of one complete
+    orthogonal family. A weighted sum of this family is unitary whenever every
+    weight has modulus one. This applies to $S$, whose two weights at $k$
+    both equal $e^{-i\pi/4}e^{-iE_k/2}$, and to
+    $\widetilde\Lambda$, whose weights are $i$ and $-i$.
+    Transposition exchanges the two members of each pair, proving the symmetry
+    of $S$ and the skew symmetry of $\widetilde\Lambda$. Hermiticity gives
+    $\overline{P_k}=P_k^T$, hence
+    $\overline{\widetilde\Lambda}=\widetilde\Lambda$. Finally, orthogonality
+    reduces the product to its weights, and
+    \begin{align}
+        \left(e^{-i\pi/4}e^{-iE_k/2}\right)^2 i & = e^{-iE_k}.
+    \end{align}
+    The transposed member has the negative weight, which gives
+    $x=S^T\widetilde\Lambda S$.
+\end{proof}
+
 \begin{lemma}[Normal form of symmetric and skew-symmetric unitaries]
     \label{lemma:conjclass-normalform-continuous}
     \notready
     \discussion{5713}
-    \uses{lem:mpu_symmetric_unitary_congruence}
+    \uses{lem:mpu_symmetric_unitary_congruence, lem:mpu_skew_unitary_paired_projectors}
     Let $x$ be unitary and satisfy $x=x^T$ or $x=-x^T$. There are a symmetric
     unitary $S$ and a matrix $\widetilde\Lambda$ such that
     \begin{align}
