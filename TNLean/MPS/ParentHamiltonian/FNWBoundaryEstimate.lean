@@ -168,6 +168,64 @@ private theorem sum_tracePairing_evalWord
   rw [← Matrix.trace_conjTranspose (Cᴴ * Kraus.evalWord K (List.ofFn σ))]
   simp [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
 
+private theorem sum_tracePairing_evalWord_source
+    (K : Fin d → Mat) (N : ℕ) (B C : Mat) :
+    ∑ σ : Cfg d N,
+        Matrix.trace (Bᴴ * Kraus.evalWord K (List.ofFn σ)) *
+          star (Matrix.trace (Cᴴ * Kraus.evalWord K (List.ofFn σ))) =
+      ∑ i : Fin D, ∑ k : Fin D,
+        ((Kraus.mapLM K ^ N)
+          (Bᴴ * Matrix.single i k (1 : ℂ) * C)) i k := by
+  simp only [Kraus.mapLM_pow_apply]
+  have hpush : ∀ (i k : Fin D),
+      (∑ σ : Cfg d N, Kraus.evalWord K (List.ofFn σ) *
+          (Bᴴ * Matrix.single i k (1 : ℂ) * C) *
+            (Kraus.evalWord K (List.ofFn σ))ᴴ) i k =
+        ∑ σ : Cfg d N,
+          (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i *
+            (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k := by
+    intro i k
+    rw [Matrix.sum_apply]
+    apply Finset.sum_congr rfl
+    intro σ _
+    let V : Mat := Kraus.evalWord K (List.ofFn σ)
+    change (V * (Bᴴ * Matrix.single i k (1 : ℂ) * C) * Vᴴ) i k =
+      (V * Bᴴ) i i * (C * Vᴴ) k k
+    have hmul : V * (Bᴴ * Matrix.single i k 1 * C) * Vᴴ =
+        (V * Bᴴ) * Matrix.single i k 1 * (C * Vᴴ) := by
+      simp only [Matrix.mul_assoc]
+    rw [hmul]
+    exact Matrix.entry_mul_single_mul (V * Bᴴ) (C * Vᴴ) i k
+  simp_rw [hpush]
+  rw [show (∑ i : Fin D, ∑ k : Fin D, ∑ σ : Cfg d N,
+        (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i *
+          (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k) =
+      ∑ σ : Cfg d N, ∑ i : Fin D, ∑ k : Fin D,
+        (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i *
+          (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k from by
+    simpa using Finset.sum_comm_cycle
+      (s := (Finset.univ : Finset (Fin D)))
+      (t := (Finset.univ : Finset (Fin D)))
+      (u := (Finset.univ : Finset (Cfg d N)))
+      (f := fun i k σ =>
+        (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i *
+          (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k)]
+  congr 1
+  ext σ
+  rw [show (∑ i : Fin D, ∑ k : Fin D,
+        (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i *
+          (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k) =
+      Matrix.trace (Kraus.evalWord K (List.ofFn σ) * Bᴴ) *
+        Matrix.trace (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) from by
+    simpa [Matrix.trace] using (Fintype.sum_mul_sum
+      (f := fun i : Fin D => (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i)
+      (g := fun k : Fin D => (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k)).symm]
+  rw [Matrix.trace_mul_comm (Kraus.evalWord K (List.ofFn σ)) Bᴴ]
+  congr 1
+  rw [← Matrix.trace_conjTranspose (Cᴴ * Kraus.evalWord K (List.ofFn σ))]
+  simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+  exact Matrix.trace_mul_comm (Kraus.evalWord K (List.ofFn σ))ᴴ C
+
 private theorem boundary_scalarProduct_formula
     (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
     ∑ σ : Cfg d N,
@@ -191,8 +249,32 @@ private theorem boundary_scalarProduct_formula
     exact Matrix.trace_mul_comm C Vᴴ
   exact congrArg₂ (· * ·) hB hC
 
+private theorem boundary_scalarProduct_formula_source
+    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    ∑ σ : Cfg d N,
+        star (fnwBoundaryMap (fun μ => (A μ)ᴴ) N B σ) *
+          fnwBoundaryMap (fun μ => (A μ)ᴴ) N C σ =
+      ∑ i : Fin D, ∑ k : Fin D,
+        ((fnwTransferMap A ^ N)
+          (Bᴴ * Matrix.single i k (1 : ℂ) * C)) i k := by
+  rw [show fnwTransferMap A = Kraus.mapLM (fun μ => (A μ)ᴴ) by rfl]
+  rw [← sum_tracePairing_evalWord_source (fun μ => (A μ)ᴴ) N B C]
+  congr 1
+  ext σ
+  rw [fnwBoundaryMap_apply, fnwBoundaryMap_apply]
+  let V := Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn σ)
+  have hB : star (Matrix.trace (B * Vᴴ)) = Matrix.trace (Bᴴ * V) := by
+    rw [← Matrix.trace_conjTranspose]
+    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+    exact Matrix.trace_mul_comm V Bᴴ
+  have hC : Matrix.trace (C * Vᴴ) = star (Matrix.trace (Cᴴ * V)) := by
+    rw [← Matrix.trace_conjTranspose]
+    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+    exact Matrix.trace_mul_comm C Vᴴ
+  exact congrArg₂ (· * ·) hB hC
+
 /-- Exact scalar-product formula from FNW 1992, equation (5.8), in TNLean
-coordinates \(A^\mu=v(\mu)^\dagger\). -/
+coordinates \(A^\mu=v(\mu)^\dagger\), in Choi-reshuffled form. -/
 theorem inner_fnwBoundaryMapCLM
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
@@ -214,6 +296,74 @@ theorem inner_fnwBoundaryMapCLM
   rw [PiLp.inner_apply]
   simpa only [RCLike.inner_apply, starRingEnd_apply, fnwBoundaryMapCLM_apply,
     mul_comm] using boundary_scalarProduct_formula A N B C
+
+/-- The source form of FNW 1992, equation (5.8).  The transfer power acts on
+the rank-one boundary operator \(B^*|i\rangle\langle k|C\), after which the
+\((i,k)\)-entry is summed. -/
+theorem inner_fnwBoundaryMapCLM_eq_sum_fnwTransferMap
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
+        (fnwBoundaryMapCLM ρ hρ A N C) =
+      ∑ i : Fin D, ∑ k : Fin D,
+        ((fnwTransferMap A ^ N)
+          (Bᴴ * Matrix.single i k (1 : ℂ) * C)) i k := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  rw [PiLp.inner_apply]
+  simpa only [RCLike.inner_apply, starRingEnd_apply, fnwBoundaryMapCLM_apply,
+    mul_comm] using boundary_scalarProduct_formula_source A N B C
+
+private theorem sum_fnwLimitMap_rankOne
+    (ρ : Mat) (htr : Matrix.trace ρ = 1) (B C : Mat) :
+    ∑ i : Fin D, ∑ k : Fin D,
+        (fnwLimitMap ρ (by simp [htr])
+          (Bᴴ * Matrix.single i k (1 : ℂ) * C)) i k =
+      Matrix.trace (ρ * Bᴴ * C) := by
+  simp_rw [fnwLimitMap_apply_of_trace_eq_one ρ _ htr]
+  simp only [Matrix.smul_apply, Matrix.one_apply, smul_eq_mul, mul_ite,
+    mul_one, mul_zero, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
+  rw [← Matrix.trace_sum Finset.univ]
+  congr 1
+  simp only [← Matrix.mul_assoc]
+  rw [← Finset.sum_mul, ← Matrix.mul_sum, Matrix.sum_single_one,
+    Matrix.mul_one]
+
+/-- Exact defect form of the FNW boundary scalar product. The deviation from
+its rho-weighted limit is the Choi reshuffling of the transfer remainder. -/
+theorem inner_fnwBoundaryMapCLM_sub_rhoWeighted
+    (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
+    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
+        (fnwBoundaryMapCLM ρ hρ A N C) - inner ℂ B C =
+      ∑ i : Fin D, ∑ k : Fin D,
+        ((fnwTransferMap A ^ N - fnwLimitMap ρ (by simp [htr]))
+          (Bᴴ * Matrix.single i k (1 : ℂ) * C)) i k := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  rw [inner_fnwBoundaryMapCLM_eq_sum_fnwTransferMap,
+    Matrix.rhoWeighted_inner ρ hρ B C,
+    ← sum_fnwLimitMap_rankOne ρ htr B C]
+  simp only [LinearMap.sub_apply, Matrix.sub_apply, Finset.sum_sub_distrib]
 
 private theorem fnwBoundaryMap_snoc
     (A : MPSTensor d D) (N : ℕ) (B : Mat) (μ : Fin d) (σ : Cfg d N) :
