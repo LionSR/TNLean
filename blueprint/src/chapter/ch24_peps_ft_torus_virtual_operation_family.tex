@@ -436,11 +436,17 @@ correspondence in the proof sketch of the two-dimensional corollary
     \uses{lem:peps_staircase_virtual_operation_end_inserts,
         thm:peps_lemma5_end_operation_multiplication}
     Split the virtual boundary of either end window into the reference-edge
-    coordinate and the remaining external coordinates.  On every fixed
-    external fibre, the boundary insertion is ordinary matrix action.  The
-    chosen left inverse of the injective blocked tensor is a left inverse on
-    the whole boundary-coordinate space, so composition gives matrix
-    multiplication.  The first window carries $X^{\mathsf T}$; hence
+    coordinate and the remaining external coordinates.  Let $E$ be this
+    splitting map, and write $C_M$ for insertion of $M$ on the reference edge.
+    On every fixed external fibre,
+    \begin{align}
+        C_M\bigl(E^{-1}(j,\eta)\bigr)
+         & =\sum_i M_{ij}\,T_{A,W}\bigl(E^{-1}(i,\eta)\bigr).
+        \notag
+    \end{align}
+    The chosen left inverse of the injective blocked tensor is a left inverse
+    on the whole boundary-coordinate space, so this identity gives
+    $O_W(M)O_W(N)=O_W(MN)$.  The first window carries $X^{\mathsf T}$; hence
     $(XY)^{\mathsf T}=Y^{\mathsf T}X^{\mathsf T}$ reverses the order of the
     underlying right operations.
 \end{proof}
@@ -485,14 +491,28 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{thm:peps_staircase_end_physical_operation_multiplication,
         thm:peps_lemma5_end_operation_multiplication}
-    For every left external boundary configuration, compose the two $O_1$
-    relations in ordinary order.  For every right external boundary
-    configuration, compose the underlying $O_3$ relations in reverse order,
-    which is ordinary multiplication in the $O_3^{\mathsf T}$ orientation.
-    The preceding theorem identifies these composites with the canonical
-    operations for $XY$.  Both end relations therefore realize
-    $Y_{A\to B}(X_1)Y_{A\to B}(X_2)$, and global uniqueness identifies this
-    product with $Y_{A\to B}(X_1X_2)$.
+    Set $Y_r=Y_{A\to B}(X_r)$ for $r=1,2$.  For every left external
+    boundary configuration, the two $O_1$ relations compose in ordinary order:
+    \begin{align}
+        O_1^A(X_1)\Bigl(O_1^A(X_2)
+        \bigl(T_{B,W_{\mathrm L}}(k,\eta_{\mathrm L})\bigr)\Bigr)
+         & =\sum_i (Y_1Y_2)_{ik}\,
+        T_{B,W_{\mathrm L}}(i,\eta_{\mathrm L}).
+        \notag
+    \end{align}
+    For every right external boundary configuration, the underlying $O_3$
+    operations compose in reverse order:
+    \begin{align}
+        O_3^A(X_2)\Bigl(O_3^A(X_1)
+        \bigl(T_{B,W_{\mathrm R}}(k,\eta_{\mathrm R})\bigr)\Bigr)
+         & =\sum_j (Y_1Y_2)_{kj}\,
+        T_{B,W_{\mathrm R}}(j,\eta_{\mathrm R}).
+        \notag
+    \end{align}
+    This is ordinary multiplication in the $O_3^{\mathsf T}$ orientation.  The
+    preceding theorem identifies the left sides with the canonical operations
+    for $X_1X_2$.  Both end relations therefore realize $Y_1Y_2$, and global
+    uniqueness identifies this product with $Y_{A\to B}(X_1X_2)$.
 \end{proof}
 
 \begin{theorem}[End-window identity for one virtual operation]%
