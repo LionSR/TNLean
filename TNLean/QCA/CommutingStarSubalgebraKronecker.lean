@@ -97,7 +97,7 @@ theorem leftKroneckerEmbed_sup_rightKroneckerEmbed_toSubmodule
       subst X
       simp
   | inr hm =>
-      letI : Nonempty m := hm
+      let _ : Nonempty m := hm
       cases isEmpty_or_nonempty n with
       | inl _ =>
           apply Submodule.ext
@@ -106,7 +106,7 @@ theorem leftKroneckerEmbed_sup_rightKroneckerEmbed_toSubmodule
           subst X
           simp
       | inr hn =>
-          letI : Nonempty n := hn
+          let _ : Nonempty n := hn
           rw [StarSubalgebra.sup_toSubmodule_eq_mul _ _ (left_right_kronecker_commute S T)]
           exact left_right_kronecker_mul_toSubmodule S T
 
