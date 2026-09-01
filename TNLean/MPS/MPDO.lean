@@ -160,6 +160,7 @@ import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.FourCycle
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.GSNNCHSectorRescaling
 import TNLean.MPS.MPDO.GSNNCHSectorSum
+import TNLean.MPS.MPDO.GaussProjectorPlacement
 import TNLean.MPS.MPDO.GroupedFigure8
 import TNLean.MPS.MPDO.GroupedGramNormalization
 import TNLean.MPS.MPDO.GroupedReferenceCorner
