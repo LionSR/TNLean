@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.FNWBoundaryConvention
 import TNLean.MPS.ParentHamiltonian.FNWTransferDecay
 
 /-!
-# FNW boundary near-isometry
+# FNW boundary scalar-product identities
 
 This module realizes the boundary map of Fannes--Nachtergaele--Werner,
 *Communications in Mathematical Physics* 144 (1992), 443--490, equation (5.5),
@@ -16,9 +16,10 @@ as a continuous linear map from the matrix Hilbert space weighted by the
 faithful stationary density to the ordinary physical Euclidean space.  In
 TNLean coordinates, the source matrices satisfy \(A^\mu=v(\mu)^\dagger\).
 
-The exact boundary recursion and scalar-product formula are equations (5.8),
-and the resulting near-isometry estimate is equation (5.9).  Physical-site
-reversal remains explicit through `FNWBoundaryConvention`.
+The exact boundary recursion and scalar-product formula are equation (5.8).
+Their transfer-remainder form is the algebraic identity underlying the
+near-isometry estimate (5.9). Physical-site reversal remains explicit through
+`FNWBoundaryConvention`.
 -/
 
 open scoped BigOperators ComplexConjugate ComplexOrder Matrix
