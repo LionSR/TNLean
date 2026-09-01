@@ -17,10 +17,11 @@ Fannes--Nachtergaele--Werner, *Communications in Mathematical Physics* 144
 \(A^\mu=v(\mu)^\dagger\), the FNW map is the bilinear trace-pairing adjoint of
 TNLean's transfer map.
 
-Here "adjoint" refers only to the bilinear pairing
-\(\operatorname{Tr}(XY)\). It is neither a `ContinuousLinearMap` adjoint nor
-the Hilbert-space adjoint for the rho-weighted inner product of FNW equation
-(5.6).
+The theorem below is phrased using only the bilinear pairing
+\(\operatorname{Tr}(XY)\). For the unweighted Frobenius inner product, the
+same map also agrees with the Hilbert-space adjoint of TNLean's transfer map.
+It is generally different from the Hilbert-space adjoint for the rho-weighted
+inner product of FNW equation (5.6).
 -/
 
 open scoped Matrix
@@ -39,8 +40,9 @@ def fnwTransferMap (A : MPSTensor d D) : Mat →ₗ[ℂ] Mat :=
   Kraus.transferMap fun μ => (A μ)ᴴ
 
 /-- Under \(A^\mu=v(\mu)^\dagger\), the FNW map in equations (5.1)--(5.3) is the
-bilinear trace-pairing adjoint of TNLean's transfer map. This is not a
-`ContinuousLinearMap` adjoint or a rho-weighted Hilbert adjoint. -/
+bilinear trace-pairing adjoint of TNLean's transfer map. It also agrees with
+the Hilbert-space adjoint for the unweighted Frobenius inner product, but is
+generally different from the rho-weighted adjoint of equation (5.6). -/
 theorem fnwTransferMap_eq_traceAdjointMap (A : MPSTensor d D) :
     fnwTransferMap A = Matrix.traceAdjointMap (Kraus.transferMap A) := by
   simpa only [fnwTransferMap] using
@@ -55,9 +57,9 @@ theorem fnwTransferMap_one (A : MPSTensor d D) (hA : IsLeftCanonical A) :
     (Kraus.isTracePreservingMap_mapLM_of_isTP A hA)
 
 /-- The explicit convention bridge for FNW 1992, equations (5.1)--(5.3):
-pairing a density \(\rho\) against the FNW map equals pairing TNLean's transfer of
-\(\rho\) against the observable \(X\). The pairing is the bilinear matrix trace, not a
-`ContinuousLinearMap` or rho-weighted Hilbert adjoint pairing. -/
+pairing a density \(\rho\) against the FNW map equals pairing TNLean's transfer
+of \(\rho\) against the observable \(X\). The displayed identity uses the
+bilinear matrix trace rather than the rho-weighted Hilbert pairing. -/
 theorem trace_mul_fnwTransferMap (A : MPSTensor d D) (ρ X : Mat) :
     Matrix.trace (ρ * fnwTransferMap A X) =
       Matrix.trace (Kraus.transferMap A ρ * X) := by

@@ -262,7 +262,7 @@ orthogonal projector is the canonical representative used here.
 
 The FNW convention starts from an isometry
 $V\colon\C^D\to\C^d\otimes\C^D$ written as
-$V\xi=\sum_\mu\ket{\mu}\otimes v(\mu)\xi$ in
+$V\xi=\sum_\mu\ket{\mu}\otimes v(\mu)^\dagger\xi$ in
 \cite[Equation~(5.2)]{Fannes1992Finitely}. Equations~(5.3b) and~(5.3d)
 of that paper give
 $\sum_\mu v(\mu)v(\mu)^\dagger=I_D$ and
@@ -300,9 +300,11 @@ used in the convention identities below.
          & =\tr\!\left(X\E_A^\sharp(Y)\right).
         \label{eq:fnw_transfer_map_trace_adjoint}
     \end{align}
-    Then $E_{\mathrm{FNW},A}=\E_A^\sharp$. Here $\sharp$ denotes only the
-    adjoint for $(X,Y)\mapsto\tr(XY)$. It is neither the Hilbert adjoint on the
-    unweighted Frobenius space nor the Hilbert adjoint for the
+    Then $E_{\mathrm{FNW},A}=\E_A^\sharp$. Here $\sharp$ denotes the adjoint
+    for $(X,Y)\mapsto\tr(XY)$, so the theorem is phrased as a bilinear
+    trace-adjoint identity. For the unweighted Frobenius inner product, the
+    same map also agrees with the Hilbert-space adjoint of $\E_A$. This
+    Frobenius adjoint is generally different from the adjoint for the
     $\rho$-weighted inner product in
     \cite[Equation~(5.6)]{Fannes1992Finitely}.
 \end{theorem}
