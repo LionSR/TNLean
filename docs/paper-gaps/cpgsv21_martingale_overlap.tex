@@ -1685,6 +1685,14 @@ then gives the open-chain anticommutator estimate through two-projection
 geometry. The length $l$ is measured in sites of the input tensor; if that
 tensor is already blocked, one such site is one blocked-chain filtration step.
 
+The weighted virtual-space foundation is now formalized.  For every
+positive-definite $\rho$, matrices carry the inner product
+$\langle X,Y\rangle_\rho=\operatorname{Tr}(\rho X^\dagger Y)$ from
+Equation~(5.6) of Ref.~\cite{Fannes1992Finitely}, and right multiplication by
+$\sqrt\rho$ followed by vectorization identifies this space isometrically with
+$\C^{D^2}$.  This completes only the Hilbert-space package.  Lemmas~5.2, 5.3,
+and 6.2, including the optimized numerator, remain open.
+
 The reconstructed coefficient is not the optimized FNW expression
 \begin{align}
     c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},

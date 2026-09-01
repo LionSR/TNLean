@@ -17,7 +17,7 @@ inner product
 This module activates Mathlib's weighted matrix norm and inner product locally
 and identifies the resulting Hilbert space isometrically with the Euclidean
 space of matrix entries. The isometry sends `X` to the Frobenius vectorization
-of `X * CFC.sqrt ρ`; its inverse multiplies on the right by `(CFC.sqrt ρ)⁻¹`.
+of \(X\sqrt{\rho}\); its inverse multiplies on the right by \((\sqrt{\rho})^{-1}\).
 
 The weighted inner product is equation (5.6) of Fannes--Nachtergaele--Werner,
 *Communications in Mathematical Physics* 144 (1992), 443--490,
@@ -52,7 +52,7 @@ private theorem inner_frobeniusLinearEquiv
 -- norm hierarchy coherent while overriding the ambient Frobenius instances.
 
 /-- Mathlib's weighted matrix inner product agrees, by cyclicity of the trace,
-with the convention `Tr(ρ Xᴴ Y)` in FNW 1992, equation (5.6). -/
+with the convention \(\operatorname{Tr}(\rho X^\dagger Y)\) in FNW 1992, equation (5.6). -/
 theorem rhoWeighted_inner {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ : ρ.PosDef) (X Y : Matrix (Fin D) (Fin D) ℂ) :
     letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
@@ -75,7 +75,7 @@ theorem rhoWeighted_inner {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ)
   change Matrix.trace (Y * ρ * Xᴴ) = Matrix.trace (ρ * Xᴴ * Y)
   exact (Matrix.trace_mul_cycle ρ Xᴴ Y).symm
 
-/-- The squared weighted norm is the real part of `Tr(ρ Xᴴ X)`. -/
+/-- The squared weighted norm is the real part of \(\operatorname{Tr}(\rho X^\dagger X)\). -/
 theorem rhoWeighted_norm_sq {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ : ρ.PosDef) (X : Matrix (Fin D) (Fin D) ℂ) :
     letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
@@ -189,7 +189,7 @@ noncomputable def rhoWeightedEquivEuclidean
   }
 
 /-- The weighted Euclidean equivalence sends `X` to the Frobenius vectorization
-of `X * sqrt ρ`. -/
+of \(X\sqrt{\rho}\). -/
 @[simp]
 theorem rhoWeightedEquivEuclidean_apply
     {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
@@ -215,7 +215,7 @@ theorem rhoWeightedEquivEuclidean_apply
   rfl
 
 /-- The inverse weighted Euclidean equivalence applies inverse Frobenius
-vectorization and then multiplies on the right by `(sqrt ρ)⁻¹`. -/
+vectorization and then multiplies on the right by \((\sqrt{\rho})^{-1}\). -/
 @[simp]
 theorem rhoWeightedEquivEuclidean_symm_apply
     {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
