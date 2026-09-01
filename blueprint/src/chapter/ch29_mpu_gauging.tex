@@ -1079,11 +1079,57 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_gauss_projector_projection}
-    Simultaneous relabelling of rows and columns preserves multiplication and
-    adjoints, so $\widetilde P_G(R)$ remains idempotent and self-adjoint.
-    Embedding into the two-site periodic window also preserves multiplication
-    and adjoints, which gives both identities for $P_j(R)$.
+    \uses{thm:mpug_gauss_projector_projection,
+        thm:mpdo_cyclic_local_embedding_reindex}
+    Let $U_\kappa$ be the permutation unitary determined by the coordinate
+    bijection in Definition~\ref{def:mpug_placed_gauss_projector}, with the
+    orientation
+    \begin{align}
+        U_\kappa\ket{((i_0,i_1),(a,b))}
+         & =\ket{\kappa((i_0,i_1),(a,b))}.
+        \notag
+    \end{align}
+    Simultaneous row and column reindexing is therefore the conjugation
+    \begin{align}
+        \widetilde P_G(R)
+         & =U_\kappa P_G(R)U_\kappa^{-1}.
+        \label{eq:mpug_gauss_reindex_conjugation}
+    \end{align}
+    Since $U_\kappa^{-1}=U_\kappa^\dagger$, Theorem~\ref{thm:mpug_gauss_projector_projection}
+    and~(\ref{eq:mpug_gauss_reindex_conjugation}) give
+    \begin{align}
+        \widetilde P_G(R)^2
+         & =U_\kappa P_G(R)^2U_\kappa^{-1}
+        =\widetilde P_G(R),
+        \label{eq:mpug_gauss_reindexed_idempotent} \\
+        \widetilde P_G(R)^\dagger
+         & =U_\kappa P_G(R)^\dagger U_\kappa^{-1}
+        =\widetilde P_G(R).
+        \label{eq:mpug_gauss_reindexed_adjoint}
+    \end{align}
+    Let $V_j$ be the permutation unitary that sends a chain configuration to
+    its restriction to the cyclic window $(j,j+1)$ followed by its restriction
+    to the complement. By Theorem~\ref{thm:mpdo_cyclic_local_embedding_reindex},
+    \begin{align}
+        V_jP_j(R)V_j^{-1}
+         & =\widetilde P_G(R)\otimes\Id_{\mathrm{comp}}.
+        \label{eq:mpug_gauss_window_tensor_identity}
+    \end{align}
+    Using $V_j^{-1}=V_j^\dagger$ and
+    (\ref{eq:mpug_gauss_reindexed_idempotent})--(\ref{eq:mpug_gauss_reindexed_adjoint})
+    in~(\ref{eq:mpug_gauss_window_tensor_identity}), we obtain
+    \begin{align}
+        V_jP_j(R)^2V_j^{-1}
+         & =\bigl(\widetilde P_G(R)\otimes\Id_{\mathrm{comp}}\bigr)^2
+        =\widetilde P_G(R)^2\otimes\Id_{\mathrm{comp}}
+        =V_jP_j(R)V_j^{-1},                                                 \\
+        V_jP_j(R)^\dagger V_j^{-1}
+         & =\bigl(\widetilde P_G(R)\otimes\Id_{\mathrm{comp}}\bigr)^\dagger
+        =\widetilde P_G(R)^\dagger\otimes\Id_{\mathrm{comp}}
+        =V_jP_j(R)V_j^{-1}.
+    \end{align}
+    Conjugating by $V_j^{-1}$ gives $P_j(R)^2=P_j(R)$ and
+    $P_j(R)^\dagger=P_j(R)$.
 \end{proof}
 
 \begin{definition}[Scalar cochains and normalization]
