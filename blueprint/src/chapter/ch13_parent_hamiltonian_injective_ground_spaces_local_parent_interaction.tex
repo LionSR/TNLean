@@ -55,6 +55,165 @@ $\tr(XA^\sigma)$ for the local space $\mathcal G_L^A$.
     one has $\Gamma_L(X)(\sigma)=\tr(A^\sigma X)$.
 \end{lemma}
 
+\subsection{The FNW boundary convention}\label{subsec:fnw_boundary_convention}
+
+Fannes, Nachtergaele, and Werner fix the product convention
+$v(\mu_1,\ldots,\mu_N)=v(\mu_1)\cdots v(\mu_N)$ in
+\cite[Equation~(5.4)]{Fannes1992Finitely} and define their boundary map in
+\cite[Equation~(5.5)]{Fannes1992Finitely}.  The exact identification with the
+map in Definition~\ref{def:ground_space_map} uses
+$A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
+
+\begin{definition}[Reversal of physical configurations]
+    \label{def:physical_site_reverse_config_equiv}
+    \lean{MPSTensor.physicalSiteReverseConfigEquiv}
+    \leanok
+    For a length-$N$ configuration $\sigma$, define
+    \begin{align}
+        r_N(\sigma)(j)
+         & =\sigma(N-1-j),
+        \label{eq:fnw_config_reverse}
+    \end{align}
+    where $0\leq j<N$.  This is an involutive permutation of
+    $\{0,\ldots,d-1\}^{N}$.
+\end{definition}
+
+\begin{definition}[Physical-site reversal]
+    \label{def:physical_site_reverse}
+    \lean{MPSTensor.physicalSiteReverse}
+    \leanok
+    \uses{def:physical_site_reverse_config_equiv}
+    Precomposition with $r_N$ defines a complex-linear isomorphism
+    \begin{align}
+        R_N\colon(\Fin{d}^{N}\to\C)
+         & \longrightarrow(\Fin{d}^{N}\to\C).
+        \label{eq:fnw_site_reverse_map}
+    \end{align}
+    This is a linear map of coefficient spaces and does not require an inner
+    product.
+\end{definition}
+
+\begin{theorem}[Evaluation under physical-site reversal]
+    \label{thm:physical_site_reverse_apply}
+    \lean{MPSTensor.physicalSiteReverse_apply}
+    \leanok
+    \uses{def:physical_site_reverse}
+    For every coefficient function $\psi$ and every configuration $\sigma$,
+    \begin{align}
+        (R_N\psi)(\sigma)
+         & =\psi(r_N(\sigma)).
+        \label{eq:fnw_site_reverse_apply}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:physical_site_reverse, def:physical_site_reverse_config_equiv}
+    This is the definition of precomposition by the permutation $r_N$.
+\end{proof}
+
+\begin{definition}[FNW boundary map]\label{def:fnw_boundary_map}
+    \lean{MPSTensor.fnwBoundaryMap}
+    \leanok
+    \uses{def:eval_word}
+    For $v=\{v(\mu)\}_{\mu=0}^{d-1}$, write
+    $v^\sigma=v(\sigma(0))\cdots v(\sigma(N-1))$, with the empty word equal
+    to $I_D$.  Define the complex-linear map
+    $F_N^v\colon\MN{D}\to(\Fin{d}^{N}\to\C)$ by
+    \begin{align}
+        F_N^v(B)(\sigma)
+         & =\tr\!\left(B(v^\sigma)^\dagger\right).
+        \label{eq:fnw_boundary_map}
+    \end{align}
+    This is the boundary map of
+    \cite[Equation~(5.5)]{Fannes1992Finitely}, with the word order fixed by
+    \cite[Equation~(5.4)]{Fannes1992Finitely}.
+\end{definition}
+
+\begin{theorem}[FNW boundary-map evaluation]
+    \label{thm:fnw_boundary_map_apply}
+    \lean{MPSTensor.fnwBoundaryMap_apply}
+    \leanok
+    \uses{def:fnw_boundary_map}
+    For every $B\in\MN{D}$ and every length-$N$ configuration $\sigma$,
+    \begin{align}
+        F_N^v(B)(\sigma)
+         & =\tr\!\left(B(v^\sigma)^\dagger\right).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_boundary_map}
+    Evaluate the defining linear map at $B$ and then at $\sigma$.
+\end{proof}
+
+\begin{theorem}[Reversed adjoint word]
+    \label{thm:fnw_boundary_map_apply_eq_trace_reverse}
+    \lean{MPSTensor.fnwBoundaryMap_apply_eq_trace_reverse}
+    \leanok
+    \uses{thm:fnw_boundary_map_apply}
+    Set $A_\mu=v(\mu)^\dagger$.  Then
+    \begin{align}
+        F_N^v(B)(\sigma)
+         & =\tr\!\left(B A^{r_N(\sigma)}\right).
+        \label{eq:fnw_boundary_reverse_word}
+    \end{align}
+    For $N>0$, the word on the right is
+    $A_{\sigma(N-1)}\cdots A_{\sigma(0)}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_boundary_map_apply}
+    Conjugate transposition reverses the product:
+    \begin{align}
+        (v^\sigma)^\dagger
+         & =A^{r_N(\sigma)}.
+    \end{align}
+    Thus the site order in (\ref{eq:fnw_boundary_reverse_word}) comes from the
+    adjointed word itself.
+\end{proof}
+
+\begin{theorem}[FNW boundary map in the ground-space convention]
+    \label{thm:fnw_boundary_map_eq_physical_site_reverse_comp_ground_space_map}
+    \lean{MPSTensor.fnwBoundaryMap_eq_physicalSiteReverse_comp_groundSpaceMap}
+    \leanok
+    \uses{def:fnw_boundary_map, def:physical_site_reverse,
+        def:ground_space_map}
+    With the exact convention $A_\mu=v(\mu)^\dagger$, one has
+    \begin{align}
+        F_N^v
+         & =R_N\circ\Gamma_N^A.
+        \label{eq:fnw_boundary_ground_space_map}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_boundary_map_apply_eq_trace_reverse,
+        thm:physical_site_reverse_apply, lem:ground_space_map_apply}
+    For every $B\in\MN{D}$ and every configuration $\sigma$,
+    \begin{align}
+        (R_N\Gamma_N^A(B))(\sigma)
+         & =\Gamma_N^A(B)(r_N(\sigma))          \\
+         & =\tr\!\left(A^{r_N(\sigma)}B\right)  \\
+         & =\tr\!\left(B A^{r_N(\sigma)}\right) \\
+         & =F_N^v(B)(\sigma).
+    \end{align}
+    The ordered list associated with $r_N(\sigma)$ is the reverse of the list
+    associated with $\sigma$, as in (\ref{eq:fnw_config_reverse}).  Together
+    with the adjointed word in
+    Theorem~\ref{thm:fnw_boundary_map_apply_eq_trace_reverse}, this gives the
+    physical-site reversal.  Trace cyclicity is used only in the third
+    equality, where it moves the boundary matrix $B$ across the word.
+\end{proof}
+
+The maps in this subsection are raw algebraic maps on matrices and coefficient
+functions.  The $\rho$-weighted Hilbert-space structure of
+\cite[Equation~(5.6)]{Fannes1992Finitely} is a separate construction; no
+choice of $\rho$ enters (\ref{eq:fnw_boundary_ground_space_map}).
+
 \begin{definition}[Local ground space]\label{def:ground_space_parent}
     \lean{MPSTensor.groundSpace}
     \leanok
