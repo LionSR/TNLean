@@ -127,8 +127,11 @@ Ref.~\cite{Nachtergaele1996Spectral}; Theorem~3 of the same reference gives
 the corresponding gap lower bounds. Section~6 verifies C3$'$ for GVBS/MPS
 Hamiltonians using projection estimates inherited from
 Ref.~\cite{Fannes1992Finitely}. The formal development instead proves a
-sufficient range-two estimate after physical blocking. The optimized FNW
-numerator and the identification of its source constants remain open.
+sufficient range-two estimate after physical blocking. The source lower
+boundary constant and the conclusions of FNW Lemma~5.3 are now identified by
+\leanid{MPSTensor.fnwLowerBoundaryConstant} and
+\leanid{MPSTensor.fnwLowerBoundaryConstant_mono}. The optimized numerator
+from Lemma~6.2 remains open.
 
 \subsection{Lower-endpoint scope in Theorem 2.1(i)}
 
@@ -1735,15 +1738,16 @@ The reconstructed coefficient is not the optimized FNW expression
     \label{eq:cpgsv21_martingale_overlap_optimized_fnw_expression}
 \end{align}
 quoted as \path{boundAm} in Section~6 of
-Ref.~\cite{Nachtergaele1996Spectral}. Recovering its numerator still requires
-the lower-boundary and projector estimates in Lemmas~5.3 and~6.2 of
-Ref.~\cite{Fannes1992Finitely}. The present argument makes no unweighted
-finite-Gram substitution and uses no periodic coercivity, unequal-kernel
-transfer, cyclic substitute, dimension prefactor, or projector-defect claim
-$a/a_-+a^2/a_-$. It does not identify $k$ with $D$ or assert
-$C_\lambda=k^2$. The reconstructed constant is not identified with a source
-dimension-dependent value; the available unweighted conversion retains the
-proved $D^{3/2}$ norm factor inside $g$.
+Ref.~\cite{Nachtergaele1996Spectral}. The source constant $a_-(N)$, its lower
+bound $a_-(N)\geq1-a(N)$, and its monotonicity are formalized from
+Lemma~5.3 of Ref.~\cite{Fannes1992Finitely}. Recovering the optimized numerator
+still requires the projector estimates in Lemma~6.2. The present argument makes
+no unweighted finite-Gram substitution and uses no periodic coercivity,
+unequal-kernel transfer, cyclic substitute, dimension prefactor, or
+projector-defect claim $a/a_-+a^2/a_-$. It does not identify $k$ with $D$ or
+assert $C_\lambda=k^2$. The reconstructed constant is not identified with a
+source dimension-dependent value; the available unweighted conversion retains
+the proved $D^{3/2}$ norm factor inside $g$.
 
 \subsection{Open-to-periodic finite-range conclusion}
 
@@ -1846,7 +1850,8 @@ coefficient $7/16$, and the resulting cyclic range-two gap $1/8$ are proved
 for a suitable blocked tensor. Before blocking, lengths are measured in sites
 of the input tensor; the final chain length counts blocked sites. These bounds
 come from the formal inverse-Gram reconstruction and are not attributed to
-FNW. The optimized FNW numerator and its source constants remain open.
+FNW. The source lower boundary constant and Lemma~5.3 are formalized, but
+the optimized Lemma~6.2 numerator remains open.
 
 The earlier blocked-to-original comparison remains valid for periodic lengths
 divisible by the chosen block length.  It gives
