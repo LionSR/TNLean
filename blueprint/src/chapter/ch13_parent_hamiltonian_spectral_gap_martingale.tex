@@ -1,3 +1,65 @@
+\subsection{The weighted virtual matrix space}%
+\label{subsec:weighted-virtual-matrix-space}
+
+\begin{theorem}[Weighted virtual inner product]%
+    \label{thm:weighted-virtual-inner-product}
+    \lean{Matrix.rhoWeighted_inner}
+    \leanok
+    Let $\rho\in M_D(\C)$ be positive definite.  The $\rho$-weighted inner
+    product on $M_D(\C)$ is
+    \begin{align}
+        \langle X,Y\rangle_\rho
+         & =\tr\!\left(\rho X^\dagger Y\right).
+    \end{align}
+    This is the auxiliary inner product in
+    \cite[Equation~(5.6)]{Fannes1992Finitely}.
+\end{theorem}
+
+\begin{theorem}[Weighted norm formula]%
+    \label{thm:weighted-virtual-norm-formula}
+    \lean{Matrix.rhoWeighted_norm_sq}
+    \leanok
+    \uses{thm:weighted-virtual-inner-product}
+    For every $X\in M_D(\C)$,
+    \begin{align}
+        \lVert X\rVert_\rho^2
+         & =\operatorname{Re}\tr\!\left(\rho X^\dagger X\right).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:weighted-virtual-inner-product}
+    By Theorem~\ref{thm:weighted-virtual-inner-product} with $Y=X$,
+    \begin{align}
+        \lVert X\rVert_\rho^2
+         & =\operatorname{Re}\langle X,X\rangle_\rho             \\
+         & =\operatorname{Re}\tr\!\left(\rho X^\dagger X\right).
+    \end{align}
+\end{proof}
+
+\begin{definition}[Euclidean realization of the weighted matrix space]%
+    \label{def:weighted-virtual-euclidean-realization}
+    \lean{Matrix.rhoWeightedEquivEuclidean}
+    \lean{Matrix.rhoWeightedEquivEuclidean_apply}
+    \lean{Matrix.rhoWeightedEquivEuclidean_symm_apply}
+    \leanok
+    \uses{thm:weighted-virtual-inner-product}
+    The map
+    \begin{align}
+        \Phi_\rho\colon M_D(\C) & \longrightarrow\C^{D^2},
+                                &
+        \Phi_\rho(X)            & =\operatorname{vec}\!\left(X\sqrt\rho\right)
+    \end{align}
+    is a complex linear isometric isomorphism.  Its inverse is
+    \begin{align}
+        \Phi_\rho^{-1}(z)
+         & =\operatorname{unvec}(z)\,(\sqrt\rho)^{-1}.
+    \end{align}
+    Thus the weighted matrix space has complex Hilbert dimension $D^2$.
+    This Euclidean realization is not asserted as a result of Fannes,
+    Nachtergaele, and Werner.
+\end{definition}
+
 \subsection{Nested ground projections and martingale differences}%
 \label{subsec:nested-ground-projection-differences}
 
