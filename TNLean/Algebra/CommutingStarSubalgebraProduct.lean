@@ -41,11 +41,14 @@ simplicity. Consequently, the join is itself a full matrix algebra of the produc
 
 * B. Schumacher and R. F. Werner, *Reversible quantum cellular automata*,
   quant-ph/0405174, Proposition `Cscom`, lines 2119--2138.
-* D. Gross, V. Nesme, H. Vogts, and R. F. Werner, *Index theory of one dimensional quantum walks
+* D. Gross, V. Nesme, H. Vogts, and R. F. Werner, *Index theory of one-dimensional quantum walks
   and cellular automata*, arXiv:0910.3675v2, lines 1270--1314.
 
-The full-matrix theorem below is only the unital single-block specialization of `Cscom`. It does
-not assert the direct-sum multiplicity theorem or that the join fills the ambient algebra.
+**Scope restriction (full matrix, single block):** The full-matrix theorem below is only the
+unital single-block specialization of `Cscom`. It does not assert the direct-sum block-pair theorem,
+the multiplicity equation, or that the join fills the ambient algebra. This restriction and its
+elimination plan are documented in
+`docs/paper-gaps/gnvw12_cscom_single_block_scope.tex`.
 -/
 
 open scoped TensorProduct

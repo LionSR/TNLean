@@ -9886,7 +9886,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
         StarSubalgebra.nonempty_equiv_sup_matrix,
         StarSubalgebra.finrank_sup_of_equiv_matrix}
     \leanok
-    \uses{thm:qca_commuting_factor_product}
+    \uses{def:qca_commuting_factor_multiplication}
     Suppose that $\mathcal C=M_I(\mathbb C)$ for a finite nonempty set
     $I$, that $p,q>0$, and that
     \begin{align}
@@ -9901,13 +9901,16 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
          & =(pq)^2.
         \label{eq:qca_commuting_full_matrix_product}
     \end{align}
+    \textbf{Scope restriction (full matrix, single block):}
     This is the unital single-block specialization of Schumacher--Werner
     Proposition~\texttt{Cscom}
     \cite[lines~2119--2138]{SchumacherWerner2004QCA}, used for the adjacent
     support algebras in
     \cite[lines~1270--1308]{Gross2012IndexTheory}.  It does not assert the
-    direct-sum multiplicity statement of Proposition~\texttt{Cscom}, nor
-    that the displayed matrix algebra fills the ambient algebra.
+    direct-sum block-pair theorem or the multiplicity equation of
+    Proposition~\texttt{Cscom}, nor that the displayed matrix algebra fills
+    the ambient algebra.  The omitted statement and its elimination plan are
+    recorded in \cite{gap:gnvw12_cscom_single_block_scope}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -9930,7 +9933,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     \label{thm:qca_commuting_factor_kronecker_coordinates}
     \lean{Matrix.leftKroneckerEmbed_sup_rightKroneckerEmbed_toSubmodule}
     \leanok
-    \uses{thm:qca_commuting_factor_product, def:qca_kronecker_submodule}
+    \uses{def:qca_kronecker_submodule}
     Let $I,J$ be finite sets, and let
     $\mathcal S\subseteq M_I(\mathbb C)$ and
     $\mathcal T\subseteq M_J(\mathbb C)$ be unital star-subalgebras.  In
@@ -9947,7 +9950,9 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
 
 \begin{proof}\leanok
     \uses{thm:qca_commuting_factor_product}
-    The two canonical factors commute, and their products satisfy
+    If $I$ or $J$ is empty, the ambient matrix space is zero, so both
+    subspaces in the claimed equality are zero.  Assume that both sets are
+    nonempty.  The two canonical factors commute, and their products satisfy
     \begin{align}
         (S\otimes\mathbf 1_J)(\mathbf 1_I\otimes T)
          & =S\otimes T.

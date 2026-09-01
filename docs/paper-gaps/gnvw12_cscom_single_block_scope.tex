@@ -1,0 +1,133 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Single-Block Scope for the Schumacher--Werner Commuting-Algebra Proposition}
+\author{}
+\date{2026-09-01}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source proposition}
+
+Let $\mathcal H$ be a finite-dimensional complex Hilbert space. Suppose that
+$\mathcal A$ and $\mathcal B$ are commuting finite-dimensional subalgebras of
+$\mathcal B(\mathcal H)$ with decompositions
+\begin{align}
+    \mathcal A
+     & \cong\bigoplus_{\mu}M_{n(\mu)}(\mathbb C),
+    \label{eq:gnvw12_cscom_single_block_scope_left_decomposition} \\
+    \mathcal B
+     & \cong\bigoplus_{\nu}M_{m(\nu)}(\mathbb C).
+    \label{eq:gnvw12_cscom_single_block_scope_right_decomposition}
+\end{align}
+Proposition~\texttt{Cscom} of Schumacher and Werner states that the product
+algebra $\mathcal A\mathcal B$ decomposes into the block-pair products. The
+representation on $\mathcal H$ assigns a nonnegative integer multiplicity
+$r_{\mu\nu}$ to each pair and satisfies
+\begin{align}
+    \sum_{\mu,\nu}r_{\mu\nu}n(\mu)m(\nu)
+     & =\dim\mathcal H.
+    \label{eq:gnvw12_cscom_single_block_scope_multiplicity}
+\end{align}
+This is Proposition~\texttt{Cscom} and Equation~\texttt{multip} at lines
+2119--2138 of Ref.~\cite{SchumacherWerner2004QCA}. For a fixed pair of
+blocks, multiplication gives a representation
+\begin{align}
+    M_{n(\mu)}(\mathbb C)\otimes M_{m(\nu)}(\mathbb C)
+     & \longrightarrow\mathcal B(\mathcal H),
+    \label{eq:gnvw12_cscom_single_block_scope_block_representation} \\
+    A_{\mu}\otimes B_{\nu}
+     & \longmapsto A_{\mu}B_{\nu}.
+    \label{eq:gnvw12_cscom_single_block_scope_block_multiplication}
+\end{align}
+The source allows this block-pair representation to vanish because a block
+identity need not equal the identity on $\mathcal H$
+\cite{SchumacherWerner2004QCA}.
+
+\section{The formal specialization}
+
+The formal result takes one unital block in each factor. Let $I$ be a finite
+nonempty set, let
+$\mathcal A,\mathcal B\subseteq M_I(\mathbb C)$ be unital star-subalgebras,
+and assume
+\begin{align}
+    \mathcal A
+     & \cong M_p(\mathbb C),
+    \label{eq:gnvw12_cscom_single_block_scope_left_matrix} \\
+    \mathcal B
+     & \cong M_q(\mathbb C),
+    \label{eq:gnvw12_cscom_single_block_scope_right_matrix}
+\end{align}
+where $p,q>0$. Since the two subalgebras share the ambient identity, their
+multiplication representation is unital and therefore nonzero. Simplicity of
+$M_{pq}(\mathbb C)$ makes it injective. Consequently,
+\begin{align}
+    \mathcal A\vee\mathcal B
+     & \cong M_{pq}(\mathbb C),
+    \label{eq:gnvw12_cscom_single_block_scope_join} \\
+    \dim_{\mathbb C}(\mathcal A\vee\mathcal B)
+     & =(pq)^2.
+    \label{eq:gnvw12_cscom_single_block_scope_join_dimension}
+\end{align}
+The formal declarations establish
+(\ref{eq:gnvw12_cscom_single_block_scope_join}) and
+(\ref{eq:gnvw12_cscom_single_block_scope_join_dimension}).\footnote{Formal
+    declarations:
+    \leanid{StarSubalgebra.commutingMulMap_injective_of_equiv_matrix},
+    \leanid{StarSubalgebra.commutingSupEquivMatrix}, and
+    \leanid{StarSubalgebra.finrank_sup_of_equiv_matrix} in
+    \doclink{TNLean/Algebra/CommutingStarSubalgebraProduct}.}
+
+This specialization does not formalize the direct sums in
+(\ref{eq:gnvw12_cscom_single_block_scope_left_decomposition}) and
+(\ref{eq:gnvw12_cscom_single_block_scope_right_decomposition}), the possibility
+of zero block-pair representations, or the multiplicity identity
+(\ref{eq:gnvw12_cscom_single_block_scope_multiplicity}). Even in the
+single-block case, it does not prove the corresponding ambient representation
+multiplicity $r$ or the equation
+\begin{align}
+    r p q
+     & =|I|.
+    \label{eq:gnvw12_cscom_single_block_scope_single_multiplicity}
+\end{align}
+Thus the matrix size $pq$ describes the product algebra, not necessarily the
+whole ambient matrix algebra.
+
+\section{Why the specialization is useful}
+
+In the adjacent-support-algebra argument, the immediate use of
+Proposition~\texttt{Cscom} is that two commuting full matrix factors span a
+copy of $M_{pq}(\mathbb C)$; see lines 1270--1308 of
+Ref.~\cite{Gross2012IndexTheory}. Showing that this copy fills the adjacent
+physical algebra is a separate surjectivity argument. The specialization
+(\ref{eq:gnvw12_cscom_single_block_scope_join}) supplies the first statement
+without claiming the second.
+
+\section{Elimination plan}
+
+Removing the restriction requires a finite direct-sum form of the
+multiplication representation. For every pair $(\mu,\nu)$, restrict
+multiplication to
+$M_{n(\mu)}(\mathbb C)\otimes M_{m(\nu)}(\mathbb C)$, distinguish the zero and
+nonzero representations, and identify each nonzero image with
+$M_{n(\mu)m(\nu)}(\mathbb C)$. Decompose $\mathcal H$ into the corresponding
+isotypic representation spaces. Their multiplicities then give
+$r_{\mu\nu}$, and summing their dimensions proves
+(\ref{eq:gnvw12_cscom_single_block_scope_multiplicity}).
+
+Until that construction is formalized, source-labelled statements must mark
+the full-matrix, single-block restriction and must not claim the multiplicity
+equation.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

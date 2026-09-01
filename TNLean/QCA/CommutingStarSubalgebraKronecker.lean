@@ -26,7 +26,7 @@ coordinates.
 
 * B. Schumacher and R. F. Werner, *Reversible quantum cellular automata*,
   quant-ph/0405174, Proposition `Cscom`, lines 2119--2138.
-* D. Gross, V. Nesme, H. Vogts, and R. F. Werner, *Index theory of one dimensional quantum walks
+* D. Gross, V. Nesme, H. Vogts, and R. F. Werner, *Index theory of one-dimensional quantum walks
   and cellular automata*, arXiv:0910.3675v2, lines 1270--1308.
 -/
 
