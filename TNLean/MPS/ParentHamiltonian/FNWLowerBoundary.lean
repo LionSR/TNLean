@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.InnerProductSpace.Rayleigh
+import Mathlib.Analysis.InnerProductSpace.SingularValues
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryEstimate
 
 /-!
@@ -120,6 +122,48 @@ noncomputable def fnwBoundaryNormRatio
     (B : {B : Mat // B ≠ 0}) : ℝ := by
   let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
   exact ‖fnwBoundaryMapCLM ρ hρ A N B.1‖ ^ 2 / ‖B.1‖ ^ 2
+
+/-- The weighted Gram operator \(F_N^*F_N\) on the virtual matrix Hilbert space. -/
+noncomputable def fnwBoundaryGram
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    Mat →ₗ[ℂ] Mat := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  exact LinearMap.adjoint (fnwBoundaryMapCLM ρ hρ A N).toLinearMap ∘ₗ
+    (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
+
+/-- The boundary norm-square ratio is exactly the Rayleigh quotient of the
+weighted Gram operator \(F_N^*F_N\). -/
+theorem fnwBoundaryNormRatio_eq_gram_rayleighQuotient
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
+    (B : Mat) (hB : B ≠ 0) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    fnwBoundaryNormRatio ρ hρ A N ⟨B, hB⟩ =
+      RCLike.re (inner ℂ (fnwBoundaryGram ρ hρ A N B) B) / ‖B‖ ^ 2 := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  rw [fnwBoundaryGram]
+  simp only [LinearMap.coe_comp, Function.comp_apply]
+  rw [LinearMap.adjoint_inner_left]
+  simp only [inner_self_eq_norm_sq]
+  rfl
 
 /-- The lower boundary constant \(a_-(N)\) from FNW 1992, Lemma 5.3. It is the
 infimum of the boundary norm-square ratio over nonzero virtual matrices. -/
