@@ -1016,6 +1016,163 @@ include the later conclusions of Lemmas~5.3 and~6.2 of that paper.
     $\lVert T^n x\rVert\leq\lVert T^n\rVert\lVert x\rVert$.
 \end{proof}
 
+\begin{theorem}[FNW remainder eigenvalue gap]
+    \label{thm:fnw_remainder_eigenvalue_gap}
+    \lean{MPSTensor.IsPrimitiveMPS.fnwRemainder_eigenvalue_norm_lt_one}
+    \leanok
+    \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
+    Let $A$ be a primitive MPS tensor of nonzero bond dimension with fixed-point
+    witness $\rho$, and set
+    $R_A^\rho=E_{\mathrm{FNW},A}-E_\infty^\rho$.  If $\nu$ is an eigenvalue of
+    $R_A^\rho$, then
+    \begin{align}
+        |\nu| & <1.
+        \label{eq:fnw_remainder_eigenvalue_gap}
+    \end{align}
+    This is the norm-independent spectral step in
+    \cite[Lemma~5.2]{Fannes1992Finitely}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_transfer_map_trace_adjoint, thm:fnw_limit_map_trace_adjoint}
+    The remainder $R_A^\rho$ is the bilinear trace adjoint of
+    $\E_A-P_\rho$.  A linear map and its trace adjoint have the same
+    characteristic polynomial, hence the same eigenvalues.  Primitivity places
+    every eigenvalue of $\E_A-P_\rho$ strictly inside the unit disk.
+\end{proof}
+
+\begin{definition}[Trace-inverse factor]
+    \label{def:fnw_trace_inverse_factor}
+    \lean{MPSTensor.fnwTraceInverseFactor}
+    \leanok
+    Let $\rho\in\MN{D}$.  Define
+    \begin{align}
+        c_\rho
+         & :=\operatorname{Re}\tr(\rho^{-1}).
+        \label{eq:fnw_trace_inverse_factor}
+    \end{align}
+    This is the factor multiplying the weighted remainder norm in
+    \cite[Equations~(5.9)--(5.10)]{Fannes1992Finitely}.
+\end{definition}
+
+\begin{theorem}[Positivity of the trace-inverse factor]
+    \label{thm:fnw_trace_inverse_factor_pos}
+    \lean{MPSTensor.fnwTraceInverseFactor_pos}
+    \leanok
+    \uses{def:fnw_trace_inverse_factor}
+    If $\rho\in\MN{D}$ is positive definite and $D>0$, then $c_\rho>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_trace_inverse_factor}
+    The inverse $\rho^{-1}$ is positive definite, so its trace has strictly
+    positive real part.
+\end{proof}
+
+\begin{definition}[Weighted FNW remainder data]
+    \label{def:fnw_weighted_remainder_data}
+    \lean{MPSTensor.fnwWeightedRemainderSpectralRadius}
+    \lean{MPSTensor.fnwWeightedOperatorNorm}
+    \leanok
+    \uses{def:fnw_transfer_map, def:fnw_limit_map, thm:weighted-virtual-inner-product}
+    Let $\rho\in\MN{D}$ be positive definite and let $\tr(\rho)\neq0$.
+    Equip $\MN{D}$ with
+    $\langle X,Y\rangle_\rho=\tr(\rho X^\dagger Y)$.  For a linear map
+    $F\colon\MN{D}\to\MN{D}$, write
+    \begin{align}
+        \lVert F\rVert_{\mathrm{op},\rho}
+         & :=\sup_{X\neq0}\frac{\lVert F(X)\rVert_\rho}{\lVert X\rVert_\rho}.
+        \label{eq:fnw_weighted_operator_norm}
+    \end{align}
+    The weighted remainder spectral radius is
+    \begin{align}
+        r_\rho(A)
+         & :=\rho_{\mathrm{spec}}\!\left(
+        E_{\mathrm{FNW},A}-E_\infty^\rho\right),
+        \label{eq:fnw_weighted_remainder_spectral_radius}
+    \end{align}
+    where the remainder is viewed as a bounded operator on this weighted
+    Hilbert space.
+\end{definition}
+
+\begin{theorem}[Weighted FNW remainder spectral gap]
+    \label{thm:fnw_weighted_remainder_spectral_radius_lt_one}
+    \lean{MPSTensor.IsPrimitiveMPS.fnwWeightedRemainder_spectralRadius_lt_one}
+    \leanok
+    \uses{def:primitive_mps, def:fnw_weighted_remainder_data}
+    Let $A$ be primitive with nonzero bond dimension and positive-definite
+    fixed-point witness $\rho$.  Then
+    \begin{align}
+        r_\rho(A) & <1.
+        \label{eq:fnw_weighted_remainder_spectral_radius_lt_one}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_remainder_eigenvalue_gap}
+    In finite dimension the spectral radius is determined by the eigenvalues.
+    Apply Theorem~\ref{thm:fnw_remainder_eigenvalue_gap} in the weighted norm.
+\end{proof}
+
+\begin{definition}[FNW mixing quantity]
+    \label{def:fnw_mixing_quantity}
+    \lean{MPSTensor.fnwMixingQuantity}
+    \leanok
+    \uses{def:fnw_trace_inverse_factor, def:fnw_weighted_remainder_data}
+    Suppose that $\rho$ is positive definite and $\tr(\rho)=1$.  For
+    $n\in\N$, define
+    \begin{align}
+        a(n)
+         & :=c_\rho\,
+        \bigl\lVert E_{\mathrm{FNW},A}^n-E_\infty^\rho
+        \bigr\rVert_{\mathrm{op},\rho}.
+        \label{eq:fnw_mixing_quantity}
+    \end{align}
+    This is the trace-one transfer-remainder quantity formed from the factor
+    and weighted norm in
+    \cite[Equations~(5.9)--(5.10)]{Fannes1992Finitely}.
+\end{definition}
+
+\begin{theorem}[Prescribed-rate bound for the FNW mixing quantity]
+    \label{thm:fnw_mixing_quantity_geometric}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric}
+    \leanok
+    \uses{def:primitive_mps, def:fnw_mixing_quantity, def:fnw_weighted_remainder_data}
+    Let $A$ be primitive with nonzero bond dimension and positive-definite
+    trace-one fixed point $\rho$.  Let $\lambda\geq0$ satisfy
+    $r_\rho(A)<\lambda$.  There is a constant $C_\lambda>0$ such that, for
+    every integer $n\geq1$,
+    \begin{align}
+        a(n) & \leq C_\lambda\lambda^n.
+        \label{eq:fnw_mixing_quantity_geometric}
+    \end{align}
+    This proves the prescribed-rate transfer-remainder estimate in
+    \cite[Lemma~5.2]{Fannes1992Finitely}.  The condition $\lambda<1$ is needed
+    only when one subsequently deduces decay to zero.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:geometric_bound_of_spectral_radius_lt, thm:primitive_fnw_remainder_power, thm:fnw_trace_inverse_factor_pos}
+    Apply Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt} to the
+    weighted remainder $R_A^\rho$.  This gives $C_0>0$ with
+    $\lVert(R_A^\rho)^n\rVert_{\mathrm{op},\rho}
+        \leq C_0\lambda^n$.  When $n\geq1$,
+    Theorem~\ref{thm:primitive_fnw_remainder_power} identifies
+    $(R_A^\rho)^n$ with
+    $E_{\mathrm{FNW},A}^n-E_\infty^\rho$.  Multiply by $c_\rho>0$ and take
+    $C_\lambda=c_\rho C_0$.
+\end{proof}
+
+The theorem does not identify $C_\lambda$ with $k^2$ or identify the FNW
+auxiliary dimension $k$ with the chosen bond dimension $D$.  It introduces no
+dimension prefactor.  It does not prove the boundary-map estimate in
+\cite[Equation~(5.9)]{Fannes1992Finitely}, Lemma~5.3, Lemma~6.2, or a
+replacement of the weighted argument by a finite Gram operator.
+
 \begin{theorem}[Geometric power bound below unit spectral radius]
     \label{thm:geometric_bound_of_spectral_radius_lt_one}
     \lean{geometric_bound_of_spectralRadius_lt_one}

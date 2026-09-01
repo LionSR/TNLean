@@ -1,0 +1,204 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import QICLean.Algebra.MatrixTracePairing
+import QICLean.Analysis.SpectralRadiusPowerDecay
+import TNLean.MPS.ParentHamiltonian.FNWLimitMap
+import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
+
+/-!
+# FNW transfer-remainder decay
+
+Fannes--Nachtergaele--Werner, *Communications in Mathematical Physics* 144
+(1992), 443--490, Lemma 5.2 and equations (5.9)--(5.10), bound the positive
+powers of the transfer remainder in the Hilbert-space norm weighted by the
+faithful stationary density. The source quantity is
+\(a(n)=\operatorname{Re}\operatorname{Tr}(\rho^{-1})
+\lVert E^n-E_\infty\rVert_{\mathrm{op},\rho}\).
+
+This module first transfers the complementary eigenvalue gap from TNLean's
+Schrödinger map to the FNW observable map through the bilinear trace adjoint.
+It then activates the rho-weighted norm from equation (5.6), derives the
+corresponding spectral-radius gap, and proves prescribed-rate geometric decay
+with an existential rate-dependent prefactor.
+
+No dimension-only value of the prefactor is asserted.
+-/
+
+open scoped ComplexOrder ENNReal Matrix NNReal
+
+namespace MPSTensor
+
+noncomputable section
+
+variable {d D : ℕ}
+
+local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+/-- The FNW transfer remainder has the same eigenvalues as TNLean's
+Schrödinger remainder. Hence primitivity bounds every eigenvalue in modulus by
+one strictly. This norm-independent bridge is the spectral step in FNW 1992,
+Lemma 5.2, before the weighted norm in equations (5.9)--(5.10) is chosen. -/
+theorem IsPrimitiveMPS.fnwRemainder_eigenvalue_norm_lt_one [NeZero D]
+    {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ) (ν : ℂ)
+    (hν : Module.End.HasEigenvalue
+      (fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero) ν) :
+    ‖ν‖ < 1 := by
+  have hremainder :
+      fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero =
+        Matrix.traceAdjointMap
+          (Kraus.transferMap A - fixedPointProj ρ hP.trace_ne_zero) := by
+    rw [Matrix.traceAdjointMap_sub, ← fnwTransferMap_eq_traceAdjointMap,
+      ← fnwLimitMap_eq_traceAdjointMap_fixedPointProj]
+  rw [hremainder, Matrix.traceAdjointMap_hasEigenvalue_iff] at hν
+  exact hP.complement_eigenvalue_norm_lt_one ν hν
+
+/-- The source factor multiplying the weighted remainder norm in FNW 1992,
+equations (5.9)--(5.10): the real value of
+\(\operatorname{Tr}(\rho^{-1})\). -/
+def fnwTraceInverseFactor (ρ : Mat) : ℝ :=
+  (Matrix.trace ρ⁻¹).re
+
+/-- A faithful density matrix gives a strictly positive source factor
+\(\operatorname{Re}\operatorname{Tr}(\rho^{-1})\). This is the positivity
+used when the factor is absorbed into the prefactor in FNW Lemma 5.2. -/
+theorem fnwTraceInverseFactor_pos [NeZero D] {ρ : Mat} (hρ : ρ.PosDef) :
+    0 < fnwTraceInverseFactor ρ := by
+  have hinv : ρ⁻¹.PosDef := hρ.inv
+  exact (Complex.lt_def.mp hinv.trace_pos).1
+
+/-- The spectral radius of the FNW remainder continuous endomorphism for
+the local rho-weighted matrix norm of equation (5.6). This definition keeps
+the norm choice explicit without comparing it to TNLean's ambient matrix norm. -/
+noncomputable def fnwWeightedRemainderSpectralRadius {D : ℕ}
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    {d : ℕ} (A : MPSTensor d D) (htr : Matrix.trace ρ ≠ 0) : ℝ≥0∞ := by
+  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ)
+    (Matrix (Fin D) (Fin D) ℂ)
+  exact spectralRadius ℂ (Φ (fnwTransferMap A - fnwLimitMap ρ htr))
+
+/-- The operator norm induced by the rho-weighted matrix norm of FNW 1992,
+equation (5.6). -/
+noncomputable def fnwWeightedOperatorNorm {D : ℕ}
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) : ℝ := by
+  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ)
+    (Matrix (Fin D) (Fin D) ℂ)
+  exact ‖Φ F‖
+
+private theorem rhoWeighted_spectralRadius_lt_one_of_eigenvalues_lt_one
+    {D : ℕ} [NeZero D] (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
+    (hF : ∀ ν : ℂ, Module.End.HasEigenvalue F ν → ‖ν‖ < 1) :
+    letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+      Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) F) < 1 := by
+  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  exact spectralRadius_lt_one_of_eigenvalues_lt_one F hF
+
+/-- In the rho-weighted matrix norm, the continuous FNW remainder has spectral
+radius strictly below one. The proof uses only finite dimensionality and the
+norm-independent eigenvalue bridge, rather than comparing spectral radii
+across different matrix norm instances. -/
+theorem IsPrimitiveMPS.fnwWeightedRemainder_spectralRadius_lt_one [NeZero D]
+    {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
+    (hρ : ρ.PosDef) :
+    fnwWeightedRemainderSpectralRadius ρ hρ A hP.trace_ne_zero < 1 := by
+  simpa only [fnwWeightedRemainderSpectralRadius] using
+    rhoWeighted_spectralRadius_lt_one_of_eigenvalues_lt_one ρ hρ
+      (fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero)
+      hP.fnwRemainder_eigenvalue_norm_lt_one
+
+/-- The source mixing quantity from FNW 1992, equations (5.9)--(5.10), with
+trace-one normalization explicit:
+\(a(n)=\operatorname{Re}\operatorname{Tr}(\rho^{-1})
+\lVert E^n-E_\infty\rVert_{\mathrm{op},\rho}\).
+The norm is the local rho-weighted continuous-operator norm. -/
+noncomputable def fnwMixingQuantity {D : ℕ}
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    {d : ℕ} (A : MPSTensor d D) (htr : Matrix.trace ρ = 1) (n : ℕ) : ℝ :=
+  fnwTraceInverseFactor ρ * fnwWeightedOperatorNorm ρ hρ
+    (fnwTransferMap A ^ n - fnwLimitMap ρ (by simp [htr]))
+
+/-- Prescribed-rate form of FNW 1992, Lemma 5.2 and equations (5.9)--(5.10).
+For every nonnegative rate strictly above the rho-weighted spectral radius of
+the FNW remainder, there is a positive, rate-dependent prefactor bounding
+\(a(n)\) for every positive power. No hypothesis that the prescribed rate is
+below one is needed for this generic power estimate, and no dimension-only
+value of the prefactor is asserted. -/
+theorem IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric [NeZero D]
+    {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
+    (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1) (rate : ℝ≥0)
+    (hrate : fnwWeightedRemainderSpectralRadius ρ hρ A hP.trace_ne_zero <
+      (rate : ℝ≥0∞)) :
+    ∃ C : ℝ, 0 < C ∧ ∀ n : ℕ, 1 ≤ n →
+      fnwMixingQuantity ρ hρ A htr n ≤ C * (rate : ℝ) ^ n := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  let hComplete : CompleteSpace Mat := FiniteDimensional.complete ℂ Mat
+  let : CompleteSpace Mat := hComplete
+  let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) Mat
+  let R := fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero
+  have hrate' : spectralRadius ℂ (Φ R) < (rate : ℝ≥0∞) := by
+    simpa only [fnwWeightedRemainderSpectralRadius] using hrate
+  obtain ⟨C₀, hC₀, hbound⟩ :=
+    geometric_bound_of_spectralRadius_lt (Φ R) rate hrate'
+  refine ⟨fnwTraceInverseFactor ρ * C₀,
+    mul_pos (fnwTraceInverseFactor_pos hρ) hC₀, ?_⟩
+  intro n hn
+  have hlinear :
+      fnwTransferMap A ^ n - fnwLimitMap ρ (by simp [htr]) = R ^ n := by
+    simpa only [R] using
+      (hP.fnwTransferMap_sub_fnwLimitMap_pow hn).symm
+  have hnorm :
+      fnwWeightedOperatorNorm ρ hρ
+          (fnwTransferMap A ^ n - fnwLimitMap ρ (by simp [htr])) =
+        ‖(Φ R) ^ n‖ := by
+    simp only [fnwWeightedOperatorNorm]
+    rw [hlinear, map_pow]
+  rw [fnwMixingQuantity, hnorm]
+  calc
+    fnwTraceInverseFactor ρ * ‖(Φ R) ^ n‖ ≤
+        fnwTraceInverseFactor ρ * (C₀ * (rate : ℝ) ^ n) :=
+      mul_le_mul_of_nonneg_left (hbound n) (fnwTraceInverseFactor_pos hρ).le
+    _ = (fnwTraceInverseFactor ρ * C₀) * (rate : ℝ) ^ n := by ring
+
+end
+
+end MPSTensor
