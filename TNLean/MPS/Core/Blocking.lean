@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.WordAdjoint
 import TNLean.MPS.Defs
 import QICLean.Kraus.Blocking
 
@@ -238,16 +239,6 @@ lemma ofFn_blockedConfigEquiv (d N L : ℕ)
   simp only [hsymm]
   rfl
 
-private theorem evalWord_pointwise_conjTranspose_reverse (A : Fin d → Matrix (Fin D) (Fin D) ℂ) :
-    ∀ w : List (Fin d), (Kraus.evalWord (fun i => (A i)ᴴ) w)ᴴ = Kraus.evalWord A w.reverse := by
-  intro w
-  induction w with
-  | nil =>
-      simp [Kraus.evalWord]
-  | cons i w ih =>
-      simp [Kraus.evalWord, Matrix.conjTranspose_mul, ih, Kraus.evalWord_append,
-        List.reverse_cons, Matrix.conjTranspose_conjTranspose]
-
 /-- Left-canonical normalization propagates from one site to words of every fixed length. -/
 theorem sum_evalWord_conjTranspose_mul_evalWord
     (A : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -374,7 +365,8 @@ theorem sum_evalWord_mul_conjTranspose_evalWord
                 (Kraus.evalWord Aadj (List.ofFn (revEquiv ρ)))ᴴ =
                   Kraus.evalWord A (List.ofFn ρ) := by
               simpa [Aadj, hword] using
-                evalWord_pointwise_conjTranspose_reverse (A := A) (List.ofFn (revEquiv ρ))
+                Kraus.evalWord_conjTranspose (A := fun i => (A i)ᴴ)
+                  (List.ofFn (revEquiv ρ))
             have hEvalAdj :
                 Kraus.evalWord Aadj (List.ofFn (revEquiv ρ)) =
                   (Kraus.evalWord A (List.ofFn ρ))ᴴ := by
