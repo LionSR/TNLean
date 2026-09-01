@@ -10,7 +10,7 @@ import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 import Mathlib.LinearAlgebra.Lagrange
 
 /-!
-# Congruence factorization of symmetric unitary matrices
+# Congruence factorizations of symmetric and skew-symmetric unitary matrices
 
 The two branches of the finite spectral-projector construction in CPSV17, Lemma
 `lemma:conjclass-normalform-continuous`, give congruence factorizations of symmetric and
