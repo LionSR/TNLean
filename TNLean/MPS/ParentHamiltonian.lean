@@ -51,6 +51,7 @@ import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.FNWContraction
+import TNLean.MPS.ParentHamiltonian.FNWTransferConvention
 import TNLean.MPS.ParentHamiltonian.GramConvergence
 import TNLean.MPS.ParentHamiltonian.GramInverseConvergence
 import TNLean.MPS.ParentHamiltonian.GroundSpace
