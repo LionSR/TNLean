@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### torus-translation bond uniformity — promoted
+- **Pattern:** use a translation carrying one right (respectively up) edge to
+  another to prove constancy of a bond-dimension function, then reduce an
+  arbitrary horizontal or vertical edge to the corresponding reference edge.
+- **Seen:** six occurrences across two files before promotion (2026-08-31):
+  the right-edge, up-edge, and orientation-uniformity proofs in
+  `TNLean/PEPS/TorusTranslationInvariant.lean` and
+  `TNLean/PEPS/TorusStateTranslationInvariant.lean`.
+- **Abstraction:** `bondDim_torusRightEdge_const_of_translate`,
+  `bondDim_torusUpEdge_const_of_translate`, and
+  `torusUniformBondDim_of_translate` in
+  `TNLean/PEPS/TorusTranslationInvariant.lean`.
+- **Notes:** the helpers assume only invariance of the bond-dimension function
+  under every torus translation.  Both the tensor-level and state-level
+  wrappers now supply their respective translated-edge equality theorem.
+
 ### permutation-matrix unitarity — promoted
 - **Pattern:** unfold unitary-group membership, rewrite the conjugate transpose
   of a permutation matrix as the inverse permutation matrix, and reduce their

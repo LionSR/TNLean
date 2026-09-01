@@ -379,6 +379,36 @@
     equivalence packages them with the identified bond dimensions.
 \end{proof}
 
+\begin{theorem}[Equal bond dimensions for injective PEPS]%
+    \label{thm:peps_injective_sameState_bondDim_eq}
+    \lean{TNLean.PEPS.bondDim_eq_of_matrixAlgEquiv}
+    \lean{TNLean.PEPS.bondDim_eq_of_isVertexInjective_sameState}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_same_state}
+    Let $A$ and $B$ be vertex-injective PEPS tensors on the same finite simple
+    graph, with positive virtual bond dimensions, and suppose that they
+    represent the same state. Then
+    \begin{align}
+        D_A(e)
+         & =D_B(e)
+        \notag
+    \end{align}
+    for every edge $e$. This conclusion does not require the graph to be
+    connected. It is the bond-dimension consequence of the virtual-operation
+    algebra isomorphism in
+    \cite[lines~279--282 and 571--582]{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_edgeBlockedThreeSiteInjective,
+        thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    Fix an edge. Blocking around it gives two injective three-site chains.
+    Their matched insertions on the distinguished bond form an algebra
+    equivalence between
+    $\MN{D_A(e)}$ and $\MN{D_B(e)}$. Equality of the linear dimensions of
+    these full matrix algebras gives $D_A(e)^2=D_B(e)^2$, hence
+    $D_A(e)=D_B(e)$.
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem for injective PEPS]%
     \label{thm:fundamentalTheorem_PEPS}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
@@ -398,9 +428,8 @@
     incident to $v$.
 \end{theorem}
 \begin{proof}\leanok
-    The bond dimensions agree edgewise, because blocking around an edge gives
-    two injective three-site chains whose matched matrix insertions on that bond
-    form an algebra equivalence between the two bond matrix algebras, forcing
-    equal sizes. With the bond dimensions identified, the conditional form of
-    the theorem applies.
+    \uses{thm:peps_injective_sameState_bondDim_eq}
+    By Theorem~\ref{thm:peps_injective_sameState_bondDim_eq}, the bond
+    dimensions agree edgewise. With the bond dimensions identified, the
+    conditional form of the theorem applies.
 \end{proof}

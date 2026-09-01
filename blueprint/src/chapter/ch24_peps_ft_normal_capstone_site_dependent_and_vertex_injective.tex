@@ -571,134 +571,82 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     the required repeated injective tensor $B$.
 \end{proof}
 
-\begin{corollary}[Translation-invariant description of an injective 2D PEPS,
-        uniform bond dimension]%
+\begin{corollary}[Bond uniformity from translation invariance of an injective
+        PEPS state]%
+    \label{cor:peps_state_translation_bond_uniform}
+    \lean{TNLean.PEPS.%
+        bondDim_translateEdge_of_isTorusTranslationInvariantState}
+    \lean{TNLean.PEPS.%
+        bondDim_torusRightEdge_const_of_isTorusTranslationInvariantState}
+    \lean{TNLean.PEPS.%
+        bondDim_torusUpEdge_const_of_isTorusTranslationInvariantState}
+    \lean{TNLean.PEPS.%
+        torusUniformBondDim_of_isTorusTranslationInvariantState}
+    \leanok
+    \uses{def:IsVertexInjective,
+        def:peps_torus_state_translation_invariant,
+        def:peps_torus_uniform_bond_dim}
+    Let $A$ be a vertex-injective PEPS on a discrete $n\times m$ torus with
+    $n,m>1$ and positive bond dimensions. If its represented state is
+    translation invariant, then its bond dimensions are orientation-uniform.
+    Explicitly, with
+    \begin{align}
+        D_h
+         & =D_A(e_h),
+         &
+        D_v
+         & =D_A(e_v),
+        \notag
+    \end{align}
+    at the reference right and up edges, every horizontal edge has dimension
+    $D_h$ and every vertical edge has dimension $D_v$.
+
+    This is the first conclusion of the two-dimensional Applications-section
+    corollary in \cite[lines~1891--1894]{Molnar2018NormalPEPS}.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:peps_sameState_translate_of_state_translation_invariant,
+        thm:peps_injective_sameState_bondDim_eq,
+        thm:peps_torusUniformBondDim_of_translationInvariant}
+    State translation invariance identifies $A$ with
+    $A^{\tau_{a,b}}$ at every translation. Transport preserves vertex
+    injectivity and positivity of the virtual spaces, so
+    Theorem~\ref{thm:peps_injective_sameState_bondDim_eq} gives
+    \begin{align}
+        D_A(\tau_{a,b}(e))
+         & =D_A(e).
+        \notag
+    \end{align}
+    Translations act transitively on the horizontal edges and separately on
+    the vertical edges. Applying the displayed equality to the reference
+    right and up edges gives the two claimed constants.
+\end{proof}
+
+\begin{corollary}[Translation-invariant description of an injective 2D PEPS]%
     \label{cor:exists_constant_injectivePEPS_of_translationInvariantState}
     \notready
-    \uses{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos, thm:fundamentalTheorem_PEPS, def:peps_torus_translation_invariant, def:peps_torus_uniform_bond_dim, thm:peps_stateCoeff_translationInvariant}
-    Let $A$ be an injective PEPS on the discrete torus with orientation-uniform
-    bond dimensions, horizontal dimension $D_h$ and vertical dimension $D_v$,
-    and positive bond dimensions. If the generated state is invariant under all
-    lattice translations $\tau_{a,b}$, that is,
+    \uses{def:IsVertexInjective, def:peps_torus_translation_invariant,
+        def:peps_torus_state_translation_invariant,
+        def:peps_torus_uniform_bond_dim, def:peps_same_state}
+    Let $A$ be a vertex-injective PEPS on a discrete $n\times m$ torus with
+    $n,m>1$ and positive bond dimensions. If the generated state is invariant
+    under all lattice translations $\tau_{a,b}$, that is,
     $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for every translation
-    and every physical configuration $\sigma$, then there is an injective
-    torus tensor $B$, with the same orientation-uniform bond dimensions $D_h$
-    and $D_v$, whose constant (site-independent) family generates the same
-    state: $\Coeff_A(\sigma)=\Coeff_B(\sigma)$ for every physical
-    configuration $\sigma$.
+    and every physical configuration $\sigma$, then there are positive
+    dimensions $D_h,D_v$ such that the bond dimensions of $A$ are
+    orientation-uniform with these values, and there is a vertex-injective
+    translation-invariant torus tensor $B$ with the same bond-dimension
+    function and the same represented state as $A$.
 
-    This is the uniform-bond-dimension target corresponding to the
-    Applications-section 2D corollary of
-    \cite[lines~1892--1894]{Molnar2018NormalPEPS}. The source additionally
-    concludes that all vertical bond dimensions agree and all horizontal bond
-    dimensions agree; in the present orientation-uniform setting those two
-    clauses have already been built into the bond-dimension type, so they carry
-    no content here.
+    This is the full two-dimensional Applications-section corollary of
+    \cite[lines~1891--1894]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}
-    The source states this corollary without proof, remarking only that the
-    one-dimensional argument extends; the route below is that intended
-    extension. Write $A^{(j,k)}$ for the site tensor at lattice position
-    $(j,k)$, with horizontal virtual legs of dimension $D_h$ and vertical
-    virtual legs of dimension $D_v$. Comparing the state with its
-    $\tau_{1,0}$-translate through the injective PEPS Fundamental Theorem
-    (Theorem~\ref{thm:fundamentalTheorem_PEPS}) produces, on each horizontal
-    edge, invertible $D_h\times D_h$ gauges $X_h^{(j,k)}$ with
-    \begin{align}
-        A^{(j+1,k)}
-         & =
-        (X_h^{(j,k)})^{-1}
-        A^{(j,k)}X_h^{(j+1,k)},
-        \notag
-    \end{align}
-    acting on the two horizontal virtual legs, and comparing with the
-    $\tau_{0,1}$-translate produces, on each vertical edge, invertible
-    $D_v\times D_v$ gauges $X_v^{(j,k)}$ with
-    \begin{align}
-        A^{(j,k+1)}
-         & =
-        (X_v^{(j,k)})^{-1}
-        A^{(j,k)}X_v^{(j,k+1)}.
-        \notag
-    \end{align}
-    Telescoping the horizontal gauges along a row reduces each site to the
-    leftmost one:
-    \begin{align}
-        A^{(j,k)}
-         & =
-        (L_h^{(j,k)})^{-1}
-        A^{(0,k)}R_h^{(j,k)},
-        \notag \\
-        L_h^{(j,k)}
-         & =
-        X_h^{(0,k)}\cdots X_h^{(j-1,k)},
-        \notag \\
-        R_h^{(j,k)}
-         & =
-        X_h^{(1,k)}\cdots X_h^{(j,k)},
-        \notag
-    \end{align}
-    and the periodic boundary condition closes the row product into a single
-    residual virtual operation, the 2D analog of the one-dimensional
-    identity $R_vL_{v+1}^{-1}=Z_0^{-1}$:
-    \begin{align}
-        R_h^{(j,k)}
-        (L_h^{(j+1,k)})^{-1}
-         & =
-        (X_h^{(0,k)})^{-1}.
-        \notag
-    \end{align}
-    The same telescoping closes each column, yielding one residual vertical
-    operation. Absorbing the two residual gauges into the corner site gives
-    a single repeated tensor
-    \begin{align}
-        B
-         & =
-        (X_v^{(0,0)})^{-1}
-        (X_h^{(0,0)})^{-1}
-        A^{(0,0)},
-        \notag
-    \end{align}
-    whose constant family generates the same state. The one-dimensional
-    telescoping closure is stated as
-    Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}.
-    What remains is the two-directional PEPS assembly. Define the residual
-    horizontal and vertical operations by
-    \begin{align}
-        H_{j,k}
-         & =
-        R_h^{(j,k)}
-        (L_h^{(j+1,k)})^{-1},
-        \notag \\
-        V_{j,k}
-         & =
-        R_v^{(j,k)}
-        (L_v^{(j,k+1)})^{-1}.
-        \notag
-    \end{align}
-    The horizontal residual acts on $\C^{D_h}$ and the vertical residual acts
-    on $\C^{D_v}$. The missing plaquette flatness identity must therefore
-    be stated after placing them on the corner space
-    $\C^{D_h}\otimes\C^{D_v}$. Equivalently, after the row and column
-    telescopings make $H_{j,k}=H_k$ and $V_{j,k}=V_j$, one must prove, for
-    nonzero scalars $\lambda_{j,k}$,
-    \begin{align}
-        (H_k\otimes\Id_{D_v})(\Id_{D_h}\otimes V_{j+1})
-         & =
-        \lambda_{j,k}
-        (\Id_{D_h}\otimes V_j)(H_{k+1}\otimes\Id_{D_v}).
-        \notag
-    \end{align}
-    The scalar phases must also close around the two periodic seams:
-    \begin{align}
-        \prod_{k\in\Z/N_v\Z}\lambda_{j,k}
-         & =1,
-        \notag \\
-        \prod_{j\in\Z/N_h\Z}\lambda_{j,k}
-         & =1.
-        \notag
-    \end{align}
-    These identities are then absorbed into this single repeated 2D tensor.
+    \uses{cor:peps_state_translation_bond_uniform}
+    The bond-dimension assertion is
+    Corollary~\ref{cor:peps_state_translation_bond_uniform}.
+    The construction of the site-independent injective tensor $B$ is the
+    remaining part of the corollary.
 \end{proof}
 
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%

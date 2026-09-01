@@ -2638,78 +2638,45 @@ of the same horizontal and vertical bond dimensions. The source states this
 corollary without proof (lines 1892--1894); it gives a proof only for the
 one-dimensional case (lines 1807--1890) and remarks at line 1801 that ``below we
 provide the proof for injective MPS, but the proof can easily be extended to the
-other cases as well.'' The intended extension applies the one-dimensional
-argument separately along the horizontal and the vertical lattice translations:
-comparing the tensor with each translate through the injective PEPS Fundamental
-Theorem would produce per-edge gauges, which telescope around each row and each
-column and close under the periodic boundary condition. This route is the
-expected one, not a proof the source carries out.
+other cases as well.'' It does not print a plaquette identity, a
+two-directional compatibility package, or a formula for the final tensor.
 
-The load-bearing dependency, the injective PEPS Fundamental Theorem
-(\leanid{TNLean.PEPS.fundamentalTheorem_PEPS}, blueprint
-\path{thm:fundamentalTheorem_PEPS}), is formalized. The one-dimensional
-repeated-tensor construction discussed above is also formalized as
-\leanid{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
-under the positive-bond and at-least-three-site restrictions just stated.
-The remaining work is the PEPS-specific two-directional closure: the horizontal
-and vertical gauge telescopings must be compatible around plaquettes and
-periodic seams, and their residual virtual operations must be absorbed into one
-site-independent 2D tensor. Let $L_h^{(j,k)}$ and $R_h^{(j,k)}$ denote the
-left and right horizontal gauges at site $(j,k)$, and let $L_v^{(j,k)}$ and
-$R_v^{(j,k)}$ denote the corresponding vertical gauges. Define the residual
-horizontal and vertical gauges by
-\begin{align}
-    H_{j,k}
-        &:= R^{(j,k)}_h\bigl(L^{(j+1,k)}_h\bigr)^{-1},
-    \label{eq:peps_normal_ft_section3_route_horizontal_residual_gauge}\\
-    V_{j,k}
-        &:= R^{(j,k)}_v\bigl(L^{(j,k+1)}_v\bigr)^{-1}.
-    \label{eq:peps_normal_ft_section3_route_vertical_residual_gauge}
-\end{align}
-The residual gauge in
-(\ref{eq:peps_normal_ft_section3_route_horizontal_residual_gauge}) acts on the
-horizontal virtual leg $\mathbb C^{D_h}$, whereas the residual gauge in
-(\ref{eq:peps_normal_ft_section3_route_vertical_residual_gauge}) acts on the
-vertical virtual leg $\mathbb C^{D_v}$. Thus the plaquette condition is not an
-ordinary product of a $D_h\times D_h$ matrix with a $D_v\times D_v$ matrix. It
-must be stated on the corner virtual space
-$\mathbb C^{D_h}\otimes\mathbb C^{D_v}$. After the row and column telescopings
-make $H_{j,k}=H_k$ and $V_{j,k}=V_j$, the missing scalar plaquette flatness
-relation is
-\begin{align}
-    (H_k\otimes I_{D_v})(I_{D_h}\otimes V_{j+1})
-        &= \lambda_{j,k}\,(I_{D_h}\otimes V_j)
-           (H_{k+1}\otimes I_{D_v}),
-    \qquad \lambda_{j,k}\ne 0.
-    \label{eq:peps_normal_ft_section3_route_plaquette_flatness}
-\end{align}
-The scalars in (\ref{eq:peps_normal_ft_section3_route_plaquette_flatness}) must
-also satisfy the periodic seam conditions
-\begin{align}
-    \prod_{k\in\mathbb Z/N_v\mathbb Z}\lambda_{j,k}
-        &= 1,
-    \label{eq:peps_normal_ft_section3_route_vertical_seam_closure}\\
-    \prod_{j\in\mathbb Z/N_h\mathbb Z}\lambda_{j,k}
-        &= 1.
-    \label{eq:peps_normal_ft_section3_route_horizontal_seam_closure}
-\end{align}
-Conditions
-(\ref{eq:peps_normal_ft_section3_route_vertical_seam_closure}) and
-(\ref{eq:peps_normal_ft_section3_route_horizontal_seam_closure}) close the
-vertical and horizontal periodic seams, respectively. The blueprint records
-the restricted target as
-\path{cor:exists_constant_injectivePEPS_of_translationInvariantState}, marked
-not ready.
+The first conclusion is formalized on the existing edge-dependent torus tensor.
+Translation invariance of the represented state is
+\leanid{TNLean.PEPS.IsTorusTranslationInvariantState}. It gives equality of
+the state with every transported tensor through
+\leanid{TNLean.PEPS.sameState_transport_of_isTorusTranslationInvariantState}.
+Transport preserves vertex injectivity, and the virtual-operation algebra
+isomorphism from the proof of the injective Fundamental Theorem,
+\leanid{TNLean.PEPS.bondDim_eq_of_isVertexInjective_sameState}, then shows
+that the bond dimension at an edge agrees with the dimension at every
+translate. Since translations act transitively on each orientation class,
+\leanid{TNLean.PEPS.torusUniformBondDim_of_isTorusTranslationInvariantState}
+proves that all horizontal bond dimensions agree and all vertical bond
+dimensions agree. The corresponding blueprint entry is
+\path{cor:peps_state_translation_bond_uniform}.
 
-\emph{Verdict: scope restriction.} As in the one-dimensional case, the
-orientation-uniform torus bond-dimension type fixes the horizontal dimension
-\(D_h\) and the vertical dimension \(D_v\) in advance, so the source's
-``all vertical (resp. horizontal) bond dimensions are equal'' clauses are
-vacuous in the uniform-dimension statement. A fully faithful version requires a
-per-edge, rectangular bond model in which the adjacent invertible gauges along
-each orientation first force equality of the bond dimensions; that variant
-inherits the same uniform-dimension restriction recorded for the
-one-dimensional corollary and remains a separate follow-up.
+The full source corollary is recorded separately as
+\path{cor:exists_constant_injectivePEPS_of_translationInvariantState} and
+remains not ready. Its open conclusion is the existence of a vertex-injective
+translation-invariant tensor \(B\), with the same bond-dimension function and
+the same represented state. Since the source gives no two-dimensional proof,
+the formalization must derive this construction from the translation
+comparisons and the Fundamental Theorem; it must not introduce an unproved
+plaquette relation, seam condition, or compatibility datum as if it were part
+of the cited statement.
+
+\emph{Verdict: partial formalization.} The source's orientation-wise bond-
+dimension equalities are complete for a vertex-injective PEPS on a discrete
+torus of width and height greater than one, under the
+explicit positive-bond convention documented in
+\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}. Crucially, the
+input remains site-dependent and only its represented state is assumed
+translation invariant. The translation-invariant description by a single
+tensor \(B\) remains open. The earlier proposed plaquette-flatness and
+residual-gauge formulae were project-invented proof data not present in
+Ref.~\cite{Molnar2018NormalPEPS}; they have therefore been removed rather than
+retained as an unsupported proof route.
 
 \section*{The strengthening to $n \ge 2L+1$ via overlapping windows}
 

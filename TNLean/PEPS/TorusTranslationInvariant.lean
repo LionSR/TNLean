@@ -205,18 +205,63 @@ theorem translateEdge_torusUpEdge (a : ZMod width) (b : ZMod height)
   · exact Or.inr ⟨by rw [o1]; apply Prod.ext <;> simp [translate_apply]; ring,
       by rw [o2]; apply Prod.ext <;> simp [translate_apply]⟩
 
-/-- A translation-invariant tensor has the same bond dimension on every horizontal
-edge: the bond dimension of any right edge is independent of its left endpoint.
+/-- A bond-dimension function invariant under torus translations is constant
+on the horizontal edges.
+
+This is the geometric transitivity argument shared by tensor-level and
+state-level translation invariance.
+
+Source: arXiv:1804.04964, the horizontal bond-dimension conclusion at lines
+1891--1894 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem bondDim_torusRightEdge_const_of_translate
+    (bondDim : Edge (torusGraph width height) → ℕ)
+    (htranslate : ∀ (a : ZMod width) (b : ZMod height) e,
+      bondDim (translateEdge a b e) = bondDim e)
+    (p p' : TorusVertex width height) :
+    bondDim (torusRightEdge p') = bondDim (torusRightEdge p) := by
+  have key :
+      translateEdge (p'.1 - p.1) (p'.2 - p.2) (torusRightEdge p) =
+        torusRightEdge p' := by
+    rw [translateEdge_torusRightEdge]
+    congr 1
+    apply Prod.ext <;> simp
+  rw [← key]
+  exact htranslate _ _ (torusRightEdge p)
+
+/-- A bond-dimension function invariant under torus translations is constant
+on the vertical edges.
+
+This is the geometric transitivity argument shared by tensor-level and
+state-level translation invariance.
+
+Source: arXiv:1804.04964, the vertical bond-dimension conclusion at lines
+1891--1894 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem bondDim_torusUpEdge_const_of_translate
+    (bondDim : Edge (torusGraph width height) → ℕ)
+    (htranslate : ∀ (a : ZMod width) (b : ZMod height) e,
+      bondDim (translateEdge a b e) = bondDim e)
+    (p p' : TorusVertex width height) :
+    bondDim (torusUpEdge p') = bondDim (torusUpEdge p) := by
+  have key :
+      translateEdge (p'.1 - p.1) (p'.2 - p.2) (torusUpEdge p) =
+        torusUpEdge p' := by
+    rw [translateEdge_torusUpEdge]
+    congr 1
+    apply Prod.ext <;> simp
+  rw [← key]
+  exact htranslate _ _ (torusUpEdge p)
+
+/-- A translation-invariant tensor has the same bond dimension on every
+horizontal edge: the bond dimension of any right edge is independent of its
+left endpoint.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1498 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem bondDim_torusRightEdge_const {A : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (p p' : TorusVertex width height) :
-    A.bondDim (torusRightEdge p') = A.bondDim (torusRightEdge p) := by
-  have key : translateEdge (p'.1 - p.1) (p'.2 - p.2) (torusRightEdge p) = torusRightEdge p' := by
-    rw [translateEdge_torusRightEdge]; congr 1; apply Prod.ext <;> simp
-  rw [← key]
-  exact bondDim_translateEdge_of_translationInvariant hA _ _ (torusRightEdge p)
+    A.bondDim (torusRightEdge p') = A.bondDim (torusRightEdge p) :=
+  bondDim_torusRightEdge_const_of_translate A.bondDim
+    (bondDim_translateEdge_of_translationInvariant hA) p p'
 
 /-- A translation-invariant tensor has the same bond dimension on every vertical
 edge: the bond dimension of any up edge is independent of its lower endpoint.
@@ -225,11 +270,9 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1498 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem bondDim_torusUpEdge_const {A : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (p p' : TorusVertex width height) :
-    A.bondDim (torusUpEdge p') = A.bondDim (torusUpEdge p) := by
-  have key : translateEdge (p'.1 - p.1) (p'.2 - p.2) (torusUpEdge p) = torusUpEdge p' := by
-    rw [translateEdge_torusUpEdge]; congr 1; apply Prod.ext <;> simp
-  rw [← key]
-  exact bondDim_translateEdge_of_translationInvariant hA _ _ (torusUpEdge p)
+    A.bondDim (torusUpEdge p') = A.bondDim (torusUpEdge p) :=
+  bondDim_torusUpEdge_const_of_translate A.bondDim
+    (bondDim_translateEdge_of_translationInvariant hA) p p'
 
 /-! ### Constant bond dimension on each orientation class
 
@@ -249,6 +292,23 @@ def TorusUniformBondDim (bondDim : Edge (torusGraph width height) → ℕ) (Dh D
   (∀ e : Edge (torusGraph width height), IsHorizontalTorusEdge e → bondDim e = Dh) ∧
     (∀ e : Edge (torusGraph width height), IsVerticalTorusEdge e → bondDim e = Dv)
 
+/-- A bond-dimension function invariant under torus translations is uniform
+on each orientation class.
+
+Source: arXiv:1804.04964, the orientation-wise bond-dimension conclusion at
+lines 1891--1894 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem torusUniformBondDim_of_translate
+    (bondDim : Edge (torusGraph width height) → ℕ)
+    (htranslate : ∀ (a : ZMod width) (b : ZMod height) e,
+      bondDim (translateEdge a b e) = bondDim e) :
+    TorusUniformBondDim bondDim
+      (bondDim (torusRightEdge 0)) (bondDim (torusUpEdge 0)) := by
+  refine ⟨fun e he ↦ ?_, fun e he ↦ ?_⟩
+  · obtain ⟨p, rfl⟩ := isHorizontalTorusEdge_eq_rightEdge he
+    exact bondDim_torusRightEdge_const_of_translate bondDim htranslate 0 p
+  · obtain ⟨p, rfl⟩ := isVerticalTorusEdge_eq_upEdge he
+    exact bondDim_torusUpEdge_const_of_translate bondDim htranslate 0 p
+
 /-- **A translation-invariant tensor has orientation-uniform bond dimensions.**
 
 Reading off the horizontal dimension `Dh` at the right edge of the origin and the
@@ -263,12 +323,9 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1498 of
 theorem torusUniformBondDim_of_translationInvariant {A : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) :
     TorusUniformBondDim A.bondDim
-      (A.bondDim (torusRightEdge 0)) (A.bondDim (torusUpEdge 0)) := by
-  refine ⟨fun e he => ?_, fun e he => ?_⟩
-  · obtain ⟨p, rfl⟩ := isHorizontalTorusEdge_eq_rightEdge he
-    exact bondDim_torusRightEdge_const hA 0 p
-  · obtain ⟨p, rfl⟩ := isVerticalTorusEdge_eq_upEdge he
-    exact bondDim_torusUpEdge_const hA 0 p
+      (A.bondDim (torusRightEdge 0)) (A.bondDim (torusUpEdge 0)) :=
+  torusUniformBondDim_of_translate A.bondDim
+    (bondDim_translateEdge_of_translationInvariant hA)
 
 end PEPS
 end TNLean

@@ -109,6 +109,7 @@ import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleRegion
 import TNLean.PEPS.TorusRowColumnReductionObstruction
+import TNLean.PEPS.TorusStateTranslationInvariant
 import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusWindowBondLocal
