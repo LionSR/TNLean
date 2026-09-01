@@ -53,12 +53,6 @@ noncomputable def fnwBoundaryMapCLM
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     Mat →L[ℂ] EuclideanSpace ℂ (Cfg d N) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   exact LinearMap.toContinuousLinearMap <|
     (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap.comp
       (fnwBoundaryMap (fun μ => (A μ)ᴴ) N)
@@ -72,12 +66,6 @@ theorem fnwBoundaryMapCLM_apply
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     fnwBoundaryMapCLM ρ hρ A N B σ =
       fnwBoundaryMap (fun μ => (A μ)ᴴ) N B σ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   rfl
 
 /-- The continuous FNW boundary map is the ordinary TNLean boundary map
@@ -90,12 +78,6 @@ theorem fnwBoundaryMapCLM_eq_physicalSiteReverseES_comp
         (LinearMap.toContinuousLinearMap <|
           (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap.comp
             (groundSpaceMap A N)) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   apply ContinuousLinearMap.ext
   intro B
   ext σ
@@ -290,12 +272,6 @@ theorem inner_fnwBoundaryMapCLM
         (fnwBoundaryMapCLM ρ hρ A N C) =
       ∑ i : Fin D, ∑ k : Fin D,
         (Bᴴ * (fnwTransferMap A ^ N) (Matrix.single i k 1) * C) i k := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   rw [PiLp.inner_apply]
   simpa only [RCLike.inner_apply, starRingEnd_apply, fnwBoundaryMapCLM_apply,
     mul_comm] using boundary_scalarProduct_formula A N B C
@@ -316,12 +292,6 @@ theorem inner_fnwBoundaryMapCLM_eq_sum_fnwTransferMap
       ∑ i : Fin D, ∑ k : Fin D,
         ((fnwTransferMap A ^ N)
           (Bᴴ * Matrix.single i k (1 : ℂ) * C)) i k := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   rw [PiLp.inner_apply]
   simpa only [RCLike.inner_apply, starRingEnd_apply, fnwBoundaryMapCLM_apply,
     mul_comm] using boundary_scalarProduct_formula_source A N B C
@@ -357,12 +327,6 @@ theorem inner_fnwBoundaryMapCLM_sub_rhoWeighted
       ∑ i : Fin D, ∑ k : Fin D,
         ((fnwTransferMap A ^ N - fnwLimitMap ρ (by simp [htr]))
           (Bᴴ * Matrix.single i k (1 : ℂ) * C)) i k := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   rw [inner_fnwBoundaryMapCLM_eq_sum_fnwTransferMap,
     Matrix.rhoWeighted_inner ρ hρ B C,
     ← sum_fnwLimitMap_rankOne ρ htr B C]
@@ -386,12 +350,6 @@ theorem norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le
         fnwWeightedOperatorNorm ρ hρ
           (fnwTransferMap A ^ N - fnwLimitMap ρ (by simp [htr])) *
         ‖B‖ * ‖C‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
   rw [inner_fnwBoundaryMapCLM_sub_rhoWeighted ρ hρ htr A N B C]
   have hbound := Matrix.norm_trace_comp_two_sided_mul_le_weighted ρ hρ
     (fnwTransferMap A ^ N - fnwLimitMap ρ (by simp [htr])) B C
@@ -418,7 +376,6 @@ theorem fnwBoundaryMapCLM_norm_sq_succ
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     ‖fnwBoundaryMapCLM ρ hρ A (N + 1) B‖ ^ 2 =
       ∑ μ : Fin d, ‖fnwBoundaryMapCLM ρ hρ A N (B * A μ)‖ ^ 2 := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
   rw [PiLp.norm_sq_eq_of_L2]
   simp_rw [PiLp.norm_sq_eq_of_L2]
   rw [← Equiv.sum_comp (Fin.snocEquiv (fun _ : Fin (N + 1) => Fin d))]
