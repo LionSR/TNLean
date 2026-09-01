@@ -14,12 +14,12 @@ Fannes, Nachtergaele, and Werner use the length-\(N\) boundary map
   F_N(B)(\mu_1,\ldots,\mu_N)
     = \operatorname{Tr}\!\left(Bv(\mu_N)^*\cdots v(\mu_1)^*\right)
 \]
-in equation (5.5) of Comm. Math. Phys. 144, 443--490 (1992).  TNLean's
-`groundSpaceMap` evaluates matrix words from the first physical site to the
-last.  The two maps therefore agree after reversing the physical sites and
-setting \(A_\mu=v(\mu)^*\).  Trace cyclicity moves the boundary matrix across
-the word; the word reversal comes instead from conjugate transposition and
-`List.ofFn_reverse`.
+in equation (5.5) of Comm. Math. Phys. 144, 443--490 (1992),
+DOI 10.1007/BF02099178.  TNLean's ground-space map evaluates matrix words from
+the first physical site to the last.  The two maps therefore agree after
+reversing the physical sites and setting \(A_\mu=v(\mu)^*\).  Trace cyclicity
+moves the boundary matrix across the word; conjugate transposition and reversal
+of the finite index list reverse the word.
 -/
 
 open scoped Matrix
@@ -44,7 +44,7 @@ configuration. -/
     physicalSiteReverse d N ψ σ = ψ (σ ∘ Fin.rev) := by
   rfl
 
-/-- The FNW boundary map of equation (5.5).  The matrix family `v` follows the
+/-- The FNW boundary map of equation (5.5).  The matrix family \(v\) follows the
 source convention, before the identification \(A_\mu=v(\mu)^*\). -/
 noncomputable def fnwBoundaryMap (v : MPSTensor d D) (N : ℕ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace d N :=
