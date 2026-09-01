@@ -75,11 +75,17 @@ theorem fnwLimitMap_eq_traceAdjointMap_fixedPointProj (ρ : Mat)
   rw [Matrix.trace_mul_comm ρ B, Matrix.trace_mul_comm B ρ]
   field_simp
 
-/-- The normalized FNW limiting map is idempotent. -/
+/-- The normalized FNW limiting map is idempotent on every observable. -/
+theorem fnwLimitMap_idempotent (ρ B : Mat) (htr : Matrix.trace ρ ≠ 0) :
+    fnwLimitMap ρ htr (fnwLimitMap ρ htr B) = fnwLimitMap ρ htr B := by
+  simp [fnwLimitMap, htr]
+
+/-- The normalized FNW limiting map is an idempotent endomorphism. -/
 theorem fnwLimitMap_mul_self (ρ : Mat) (htr : Matrix.trace ρ ≠ 0) :
     fnwLimitMap ρ htr * fnwLimitMap ρ htr = fnwLimitMap ρ htr := by
-  ext B
-  simp [Module.End.mul_apply, fnwLimitMap, htr]
+  apply LinearMap.ext
+  intro B
+  simpa [Module.End.mul_apply] using fnwLimitMap_idempotent ρ B htr
 
 /-- Under left-canonical normalization, the FNW transfer map absorbs its
 limiting rank-one map on the left: \(E E_\infty=E_\infty\). This is the
@@ -118,13 +124,9 @@ theorem fnwTransferMap_sub_fnwLimitMap_pow (A : MPSTensor d D) (ρ : Mat)
   have hPP : P * P = P := fnwLimitMap_mul_self ρ htr
   have hpowP : ∀ k : ℕ, E ^ k * P = P := by
     intro k
-    cases k with
+    induction k with
     | zero => simp
-    | succ k =>
-        rw [pow_succ, mul_assoc, hEP]
-        induction k with
-        | zero => simp
-        | succ k ih => simpa [pow_succ, mul_assoc, hEP] using ih
+    | succ k ih => rw [pow_succ, mul_assoc, hEP, ih]
   change (E - P) ^ n = E ^ n - P
   cases n with
   | zero => omega
