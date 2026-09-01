@@ -184,7 +184,7 @@ def tensorProductCutShuffle (a b c f : ℕ) :
 
 /-- The first source cut of an independent tensor product is the reindexed
 Kronecker product of the first source cuts. Its row shuffle is
-`((α,j),(α',j')) ↦ ((α,α'),(j,j'))`, so the paper's right orientation is
+`((i,β),(i',β')) ↦ ((i,i'),(β,β'))`, so the paper's right orientation is
 preserved without a swap.
 
 Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/

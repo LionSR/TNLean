@@ -37,7 +37,7 @@ the ambient coisometry relation $X_2X_2^\dagger=1$.
 
 Let $M_1$ and $M_2$ denote the source-cut factors, let $X_1$ and $X_2$ denote
 the corresponding source isometries, and define
-$W_\rho=\rho\otimes 1_d$. The valid interpretation retains the external
+$W_\rho=1_d\otimes\rho$. The valid interpretation retains the external
 $Y_1$--$X_2$ mixed kernels and closes the complete tensor network before
 moving the cut. The two projection identities used in this closed network are
 \begin{align}
@@ -79,10 +79,10 @@ Eqs.~\ref{eq:mpu_mixed_kernel_range_restriction_first_range_identity} and
 \ref{eq:mpu_mixed_kernel_range_restriction_second_range_identity} are formalized by
 \leanid{MPOTensor.sourceX₁_mul_conjTranspose_mul_weight_mul_sourceCutM₁} and
 \leanid{MPOTensor.sourceX₂_mul_conjTranspose_mul_sourceCutM₂}, respectively.
-The fully expanded normalized metric is formalized by
-\leanid{MPOTensor.IsMPU.normalized_sourceY₁X₂_openTail_metric}. This theorem does
-not identify the normalized metric with the ordinary $Y_1$--$X_2$ mixed-kernel
-Gram matrix, and no such equality is claimed as part of the paper-gate proof.
+The fully expanded normalized source-$v$ metric is formalized by
+\leanid{MPOTensor.IsMPU.normalized_sourceV_openTail_metric}. This theorem does
+not identify that metric with the ordinary $Y_1$--$X_2$ mixed-kernel Gram
+matrix, and no such equality is claimed as part of the paper-gate proof.
 
 \bibliographystyle{alpha}
 \bibliography{references}

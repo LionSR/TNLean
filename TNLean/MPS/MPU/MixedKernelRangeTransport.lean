@@ -175,8 +175,8 @@ $p$ is starred. The theorem evaluates the displayed expansion directly; it
 does not fold the sum through the separately defined open-tail coefficient
 or identify the Gram matrix of the paper gate `sourceU`.
 
-Auxiliary mixed-cut identity; not CPSV17 equation `uUnitary` or Lemma
-`lemuisometry`. -/
+Source-$v$ open-tail identity; it does not prove CPSV17 equation `uUnitary` or
+Lemma `lemuisometry`, which concern the source gate $u$. -/
 theorem IsMPU.normalized_sourceV_openTail_metric [NeZero d]
     {U : MPOTensor d D} (hU : IsMPU U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (K : ℕ)

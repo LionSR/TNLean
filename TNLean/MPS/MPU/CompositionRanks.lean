@@ -10,10 +10,10 @@ import TNLean.MPS.MPU.SimpleBlocking
 # Source-rank bounds for composition
 
 This file proves the four-site source-rank bounds used in the composition part
-of the Matrix Product Unitary index theorem.  The argument is algebraic: the
-two-site factorizations through the auxiliary mixed kernels of the two factors
-give a factorization of each source cut of the four-site product tensor through
-the legs crossed by the paper's diagonal cut.
+of the Matrix Product Unitary index theorem. The argument is algebraic: the
+two-site factorizations through the paper gates of the two factors give a
+factorization of each source cut of the four-site product tensor through the
+legs crossed by the paper's diagonal cut.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
