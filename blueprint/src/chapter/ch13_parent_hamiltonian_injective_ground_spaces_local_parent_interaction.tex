@@ -260,6 +260,119 @@ orthogonal projector is the canonical representative used here.
     \end{align}
 \end{definition}
 
+The FNW convention starts from an isometry
+$V\colon\C^D\to\C^d\otimes\C^D$ written as
+$V\xi=\sum_\mu\ket{\mu}\otimes v(\mu)\xi$ in
+\cite[Equation~(5.2)]{Fannes1992Finitely}. Equations~(5.3b) and~(5.3d)
+of that paper give
+$\sum_\mu v(\mu)v(\mu)^\dagger=I_D$ and
+$E(B)=\sum_\mu v(\mu)Bv(\mu)^\dagger$. Under the identification
+$A^\mu=v(\mu)^\dagger$, this map uses the adjoint tensor letters. The
+asymptotic identity
+$E^n(B)\to\tr(\rho B)I_D$ in
+\cite[Equation~(5.1)]{Fannes1992Finitely} is a separate assertion and is not
+used in the convention identities below.
+
+\begin{definition}[FNW transfer map]
+    \label{def:fnw_transfer_map}
+    \lean{MPSTensor.fnwTransferMap}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A$ be an MPS tensor, with $A^\mu=v(\mu)^\dagger$ in the notation of
+    \cite[Equations~(5.2)--(5.3)]{Fannes1992Finitely}. Its FNW transfer map is
+    \begin{align}
+        E_{\mathrm{FNW},A}(X)
+         & :=\sum_{\mu=0}^{d-1}(A^\mu)^\dagger X A^\mu
+        =\sum_{\mu=0}^{d-1}v(\mu)Xv(\mu)^\dagger.
+        \label{eq:fnw_transfer_map}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[FNW map as the trace-pairing adjoint]
+    \label{thm:fnw_transfer_map_trace_adjoint}
+    \lean{MPSTensor.fnwTransferMap_eq_traceAdjointMap}
+    \leanok
+    \uses{def:fnw_transfer_map, def:transfer_map}
+    Write $\E_A^\sharp$ for the adjoint of $\E_A$ with respect to the
+    bilinear trace pairing, characterized by
+    \begin{align}
+        \tr\!\left(\E_A(X)Y\right)
+         & =\tr\!\left(X\E_A^\sharp(Y)\right).
+        \label{eq:fnw_transfer_map_trace_adjoint}
+    \end{align}
+    Then $E_{\mathrm{FNW},A}=\E_A^\sharp$. Here $\sharp$ denotes only the
+    adjoint for $(X,Y)\mapsto\tr(XY)$. It is neither the Hilbert adjoint on the
+    unweighted Frobenius space nor the Hilbert adjoint for the
+    $\rho$-weighted inner product in
+    \cite[Equation~(5.6)]{Fannes1992Finitely}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_transfer_map, def:transfer_map}
+    Expanding both maps and using cyclicity of trace gives
+    \begin{align}
+        \tr\!\left(\E_A(X)Y\right)
+         & =\sum_\mu\tr\!\left(A^\mu X(A^\mu)^\dagger Y\right)
+        =\sum_\mu\tr\!\left(X(A^\mu)^\dagger YA^\mu\right).
+    \end{align}
+    The final sum is $\tr(XE_{\mathrm{FNW},A}(Y))$.
+\end{proof}
+
+\begin{theorem}[Unitality of the FNW transfer map]
+    \label{thm:fnw_transfer_map_one}
+    \lean{MPSTensor.fnwTransferMap_one}
+    \leanok
+    \uses{def:fnw_transfer_map, def:left_canonical_tensor}
+    If $A$ is left canonical, then
+    \begin{align}
+        E_{\mathrm{FNW},A}(I_D) & =I_D.
+        \label{eq:fnw_transfer_map_one}
+    \end{align}
+    Under $A^\mu=v(\mu)^\dagger$, this is the normalization
+    $\sum_\mu v(\mu)v(\mu)^\dagger=I_D$ from
+    \cite[Equation~(5.3b)]{Fannes1992Finitely}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_transfer_map_trace_adjoint, lem:trace_transfer_map_left_canonical}
+    Left canonicity makes $\E_A$ trace-preserving. Therefore, for every $X$,
+    \begin{align}
+        \tr\!\left(XE_{\mathrm{FNW},A}(I_D)\right)
+         & =\tr\!\left(\E_A(X)\right)=\tr(X).
+    \end{align}
+    Nondegeneracy of the trace pairing gives
+    $E_{\mathrm{FNW},A}(I_D)=I_D$.
+\end{proof}
+
+\begin{theorem}[FNW transfer pairing identity]
+    \label{thm:trace_mul_fnw_transfer_map}
+    \lean{MPSTensor.trace_mul_fnwTransferMap}
+    \leanok
+    \uses{def:fnw_transfer_map, def:transfer_map}
+    For all $\rho,X\in\MN{D}$,
+    \begin{align}
+        \tr\!\left(\rho E_{\mathrm{FNW},A}(X)\right)
+         & =\tr\!\left(\E_A(\rho)X\right).
+        \label{eq:trace_mul_fnw_transfer_map}
+    \end{align}
+    This is the explicit trace-pairing form of the convention
+    $A^\mu=v(\mu)^\dagger$ for the map in
+    \cite[Equations~(5.2)--(5.3)]{Fannes1992Finitely}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_transfer_map_trace_adjoint}
+    Substitute the trace-pairing adjoint identity and use cyclicity of trace.
+\end{proof}
+
+These identities only compare the two transfer-map conventions. They do not
+include the weighted decay estimate of
+\cite[Lemma~5.2]{Fannes1992Finitely}, and they make no assertion of a
+constant $C_\lambda=k^2$.
+
 \begin{definition}[Operator-level Gram reshuffling]
     \label{def:gram_reshuffle}
     \lean{Matrix.gramReshuffle}
