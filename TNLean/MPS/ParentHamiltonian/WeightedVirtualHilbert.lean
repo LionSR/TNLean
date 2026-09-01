@@ -9,14 +9,14 @@ import QICLean.Analysis.MatrixSqrt
 /-!
 # Weighted virtual matrix Hilbert space
 
-A positive-definite matrix `ρ` equips the virtual matrix algebra with the
+A positive-definite matrix \(\rho\) equips the virtual matrix algebra with the
 inner product
 
-`⟪X, Y⟫_ρ = Matrix.trace (ρ * Xᴴ * Y)`.
+\(\langle X,Y\rangle_\rho = \operatorname{Tr}(\rho X^\dagger Y)\).
 
 This module activates Mathlib's weighted matrix norm and inner product locally
 and identifies the resulting Hilbert space isometrically with the Euclidean
-space of matrix entries. The isometry sends `X` to the Frobenius vectorization
+space of matrix entries. The isometry sends \(X\) to the Frobenius vectorization
 of \(X\sqrt{\rho}\); its inverse multiplies on the right by \((\sqrt{\rho})^{-1}\).
 
 The weighted inner product is equation (5.6) of Fannes--Nachtergaele--Werner,
@@ -133,8 +133,8 @@ private theorem inner_rightMul_cfcSqrt
       rw [CFC.sqrt_mul_sqrt_self ρ hρ.posSemidef.nonneg]
       simp only [Matrix.mul_assoc]
 
-/-- Right multiplication by `sqrt ρ`, followed by Frobenius vectorization,
-is a complex linear isometric equivalence from the `ρ`-weighted matrix space
+/-- Right multiplication by \(\sqrt{\rho}\), followed by Frobenius vectorization,
+is a complex linear isometric equivalence from the \(\rho\)-weighted matrix space
 to the Euclidean space of its entries. -/
 noncomputable def rhoWeightedEquivEuclidean
     {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
@@ -188,7 +188,7 @@ noncomputable def rhoWeightedEquivEuclidean
       nlinarith [norm_nonneg (frobeniusLinearEquiv D (X * CFC.sqrt ρ)), norm_nonneg X]
   }
 
-/-- The weighted Euclidean equivalence sends `X` to the Frobenius vectorization
+/-- The weighted Euclidean equivalence sends \(X\) to the Frobenius vectorization
 of \(X\sqrt{\rho}\). -/
 @[simp]
 theorem rhoWeightedEquivEuclidean_apply
