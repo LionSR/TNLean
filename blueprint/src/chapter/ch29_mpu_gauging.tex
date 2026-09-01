@@ -645,23 +645,23 @@ gauges and scalar relation have been constructed.
     \label{def:mpug_open_alternating_network}
     \lean{MPSTensor.openAlternatingNetwork}
     \leanok
-    Let $n\geq 0$, and let $D_1,\ldots,D_{n+1}$ be horizontal bond dimensions.  At each
-    $1\leq i\leq n$, let $A_i$ have square bond dimension $D_i$, and let
-    $B_i$ have left and right bond dimensions $D_i$ and $D_{i+1}$.  For fixed
+    Let $n\geq 0$, and let $D_0,\ldots,D_n$ be horizontal bond dimensions.  At each
+    $0\leq i<n$, let $A_i$ have square bond dimension $D_i$, and let $B_i$ have
+    left and right bond dimensions $D_i$ and $D_{i+1}$.  For fixed
     physical indices $\sigma=(\sigma_i)_i$ and $\tau=(\tau_i)_i$, define the
     connected network with its horizontal ends open by
     \begin{align}
         \mathcal N_{A,B}(\sigma,\tau)_{a,b}
-         & :=\sum_{\substack{x_1,\ldots,x_{n+1} \\
-                x_1=a,\,x_{n+1}=b}}
-        \ \sum_{y_1,\ldots,y_n}
-        \prod_{i=1}^{n}
+         & :=\sum_{\substack{x_0,\ldots,x_n \\
+                x_0=a,\,x_n=b}}
+        \ \sum_{y_0,\ldots,y_{n-1}}
+        \prod_{i=0}^{n-1}
         (A_i^{\sigma_i})_{x_i,y_i}
         (B_i^{\tau_i})_{y_i,x_{i+1}}.
         \notag
     \end{align}
     The indices $y_i$ join $A_i$ to $B_i$, while $x_{i+1}$ joins $B_i$ to
-    $A_{i+1}$ when $i<n$; $x_1$ and $x_{n+1}$ are the two open end indices.
+    $A_{i+1}$ when $i+1<n$; $x_0$ and $x_n$ are the two open end indices.
     This is the coordinate form of the connected open diagram in
     \cite[lines~2299--2361]{FrancoRubio2025MPUGauging}.
 \end{definition}
@@ -680,13 +680,13 @@ gauges and scalar relation have been constructed.
          & =E_{z_i,q_i}.
         \notag
     \end{align}
-    Then, for every horizontal path $z=(z_i)_{i=1}^{n+1}$, every intermediate
-    path $q=(q_i)_{i=1}^{n}$, and every $\tau$, one has
+    Then, for every horizontal path $z=(z_i)_{i=0}^{n}$, every intermediate
+    path $q=(q_i)_{i=0}^{n-1}$, and every $\tau$, one has
     \begin{align}
-        \sum_{\sigma_1,\ldots,\sigma_n}
-        \left(\prod_{i=1}^{n}c_i^{\sigma_i}(z_i,q_i)\right)
-        \mathcal N_{A,B}(\sigma,\tau)_{z_1,z_{n+1}}
-         & =\prod_{i=1}^{n}(B_i^{\tau_i})_{q_i,z_{i+1}}.
+        \sum_{\sigma_0,\ldots,\sigma_{n-1}}
+        \left(\prod_{i=0}^{n-1}c_i^{\sigma_i}(z_i,q_i)\right)
+        \mathcal N_{A,B}(\sigma,\tau)_{z_0,z_n}
+         & =\prod_{i=0}^{n-1}(B_i^{\tau_i})_{q_i,z_{i+1}}.
         \notag
     \end{align}
     This is the simultaneous inverse-tensor contraction in
@@ -706,22 +706,22 @@ gauges and scalar relation have been constructed.
     \lean{MPSTensor.exists_scalars_of_openAlternatingNetwork_eq}
     \leanok
     \uses{def:injective, def:mpug_open_alternating_network}
-    Let $n\geq 0$, and let $D_1,\ldots,D_{n+1}$ be horizontal bond dimensions.
-    For each $1\leq i\leq n$, let $A_i$ be an injective MPS tensor with square
-    bond dimension $D_i$, and let $B_i,B'_i$ be tensors whose left and right
+    Let $n\geq 0$, and let $D_0,\ldots,D_n$ be horizontal bond dimensions.
+    For each $0\leq i<n$, let $A_i$ be an injective MPS tensor with square bond
+    dimension $D_i$, and let $B_i,B'_i$ be tensors whose left and right
     horizontal bond dimensions are $D_i$ and $D_{i+1}$.  Suppose that every
     $B_i$ is nonzero and that the connected open networks agree:
     \begin{align}
-        A_1B_1A_2B_2\cdots A_nB_n
-         & =A_1B'_1A_2B'_2\cdots A_nB'_n.
+        A_0B_0A_1B_1\cdots A_{n-1}B_{n-1}
+         & =A_0B'_0A_1B'_1\cdots A_{n-1}B'_{n-1}.
         \label{eq:mpug_alternating_network_equality}
     \end{align}
     Here the equality retains the two horizontal end legs and all physical
-    legs.  Then there are scalars $\beta_i\in\C$ such that
+    legs.  Then there are scalars $\beta_i\in\C$, for $0\leq i<n$, such that
     \begin{align}
-        B_i                    & =\beta_iB'_i,
+        B_i                      & =\beta_iB'_i,
         \label{eq:mpug_alternating_network_proportionality} \\
-        \prod_{i=1}^{n}\beta_i & =1.
+        \prod_{i=0}^{n-1}\beta_i & =1.
         \label{eq:mpug_alternating_network_scalar_product}
     \end{align}
 
@@ -750,8 +750,8 @@ gauges and scalar relation have been constructed.
     connected horizontal contractions retain precisely those entries.  Since
     the entries were arbitrary, this gives the pure-tensor identity
     \begin{align}
-        \bigotimes_{i=1}^{n}B_i
-         & =\bigotimes_{i=1}^{n}B'_i.
+        \bigotimes_{i=0}^{n-1}B_i
+         & =\bigotimes_{i=0}^{n-1}B'_i.
         \label{eq:mpug_alternating_network_pure_tensor_equality}
     \end{align}
     Apply Theorem~\ref{thm:periodic_product_tensor_phase_extraction} to
