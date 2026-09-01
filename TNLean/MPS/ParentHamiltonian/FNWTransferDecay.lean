@@ -15,7 +15,8 @@ Fannes--Nachtergaele--Werner, *Communications in Mathematical Physics* 144
 (1992), 443--490, Lemma 5.2 and equations (5.9)--(5.10), bound the positive
 powers of the transfer remainder in the Hilbert-space norm weighted by the
 faithful stationary density. The source quantity is
-\(a(n)=\operatorname{Tr}(\rho^{-1})\lVert E^n-E_\infty\rVert_\rho\).
+\(a(n)=\operatorname{Re}\operatorname{Tr}(\rho^{-1})
+\lVert E^n-E_\infty\rVert_{\mathrm{op},\rho}\).
 
 This module first transfers the complementary eigenvalue gap from TNLean's
 Schrödinger map to the FNW observable map through the bilinear trace adjoint.
