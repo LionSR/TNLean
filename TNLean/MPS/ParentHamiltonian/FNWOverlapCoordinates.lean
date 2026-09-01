@@ -504,6 +504,51 @@ theorem sum_norm_sq_mul_conjTranspose_evalWord
     _ = (Matrix.trace (ρ * Bᴴ * B)).re := by
       simpa only [Matrix.mul_assoc] using congrArg Complex.re htrace
 
+/-- Word unitality identifies the squared norm of the left middle-boundary
+family with the squared norm of its rho-weighted spectator family. -/
+theorem sum_norm_sq_fnwLeftMiddleBoundary
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (ℓ r : ℕ) (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r)) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    ∑ p : Cfg d ℓ × Cfg d r, ‖fnwLeftMiddleBoundary A Φ p‖ ^ 2 = ‖Φ‖ ^ 2 := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  rw [Fintype.sum_prod_type, Finset.sum_comm]
+  calc
+    ∑ μr : Cfg d r, ∑ μℓ : Cfg d ℓ,
+        ‖fnwLeftMiddleBoundary A Φ (μℓ, μr)‖ ^ 2 =
+        ∑ μr : Cfg d r, ‖Φ.ofLp μr‖ ^ 2 := by
+      apply Finset.sum_congr rfl
+      intro μr _
+      exact sum_norm_sq_conjTranspose_evalWord_mul ρ hρ A hA ℓ (Φ.ofLp μr)
+    _ = ‖Φ‖ ^ 2 := (PiLp.norm_sq_eq_of_L2 _ Φ).symm
+
+/-- Stationarity identifies the squared norm of the right middle-boundary
+family with the squared norm of its rho-weighted spectator family. -/
+theorem sum_norm_sq_fnwRightMiddleBoundary
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (hρfix : Kraus.transferMap A ρ = ρ) (ℓ r : ℕ)
+    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    ∑ p : Cfg d ℓ × Cfg d r, ‖fnwRightMiddleBoundary A Ψ p‖ ^ 2 = ‖Ψ‖ ^ 2 := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  rw [Fintype.sum_prod_type]
+  calc
+    ∑ μℓ : Cfg d ℓ, ∑ μr : Cfg d r,
+        ‖fnwRightMiddleBoundary A Ψ (μℓ, μr)‖ ^ 2 =
+        ∑ μℓ : Cfg d ℓ, ‖Ψ.ofLp μℓ‖ ^ 2 := by
+      apply Finset.sum_congr rfl
+      intro μℓ _
+      exact sum_norm_sq_mul_conjTranspose_evalWord ρ hρ A hρfix r (Ψ.ofLp μℓ)
+    _ = ‖Ψ‖ ^ 2 := (PiLp.norm_sq_eq_of_L2 _ Ψ).symm
+
 /-- Equation (5.9), applied to every pair of spectator configurations and
 combined by finite Cauchy--Schwarz. This is the analytic numerator in FNW
 1992, equation (6.5), before the lower-boundary estimate is used. -/
@@ -580,6 +625,38 @@ theorem norm_inner_overlap_sub_inner_aggregates_le [NeZero D]
           (fun p => ‖fnwLeftMiddleBoundary A Φ p‖)
           (fun p => ‖fnwRightMiddleBoundary A Ψ p‖)
       · exact mul_nonneg (fnwTraceInverseFactor_pos hρ).le (norm_nonneg _)
+
+/-- The linear numerator estimate after the two spectator-family norm
+identities are inserted. The two factors remain the genuine rho-weighted
+`PiLp 2` family norms. -/
+theorem norm_inner_overlap_sub_inner_aggregates_le_familyNorms [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
+    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
+    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    ‖inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
+          (fnwRightOverlapMap ρ hρ A ℓ m r Ψ) -
+        inner ℂ (fnwLeftOverlapAggregate ρ A r Φ)
+          (fnwRightOverlapAggregate A ℓ Ψ)‖ ≤
+      fnwMixingQuantity ρ hρ A htr m * ‖Φ‖ * ‖Ψ‖ := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  have h := norm_inner_overlap_sub_inner_aggregates_le ρ hρ htr A ℓ m r Φ Ψ
+  rw [sum_norm_sq_fnwLeftMiddleBoundary ρ hρ A hA ℓ r Φ,
+    sum_norm_sq_fnwRightMiddleBoundary ρ hρ A hρfix ℓ r Ψ,
+    Real.sqrt_sq (norm_nonneg Φ), Real.sqrt_sq (norm_nonneg Ψ)] at h
+  simpa only [mul_assoc] using h
 
 end
 
