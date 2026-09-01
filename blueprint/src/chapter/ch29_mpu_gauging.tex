@@ -983,6 +983,48 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     adjoint is $\mathcal G_e=\id$, which proves unitarity.
 \end{proof}
 
+\begin{definition}[Unplaced local Gauss projector kernel]
+    \label{def:mpug_gauss_projector}
+    \lean{TNLean.Algebra.gaussProjector}
+    \leanok
+    \discussion{7578}
+    \uses{thm:mpug_gauss_representation}
+    Let $G$ be finite and let $\mathcal G_g$ act on
+    $\mathcal H=\C^n\otimes\C[G]^{\otimes2}$. Define the unplaced local
+    projector kernel
+    \begin{align}
+        P_G(R) & =\frac{1}{|G|}\sum_{g\in G}\mathcal G_g.
+        \label{eq:mpug_gauss_projector}
+    \end{align}
+    This is the local average introduced in
+    \cite[lines~3494--3499]{FrancoRubio2025MPUGauging}, before a position on
+    the chain is chosen. Finite-chain placement on $(j,j+1)$ and invariance of
+    the gauged matrix product state under the placed operator remain pending.
+\end{definition}
+
+\begin{theorem}[The local Gauss average is a projection]
+    \label{thm:mpug_gauss_projector_projection}
+    \lean{TNLean.Algebra.gaussProjector_eq_average,
+        TNLean.Algebra.isStarProjection_gaussProjector}
+    \leanok
+    \discussion{7578}
+    \uses{def:mpug_gauss_projector}
+    The kernel in~(\ref{eq:mpug_gauss_projector}) satisfies
+    \begin{align}
+        P_G(R)^2 & =P_G(R), \\
+        P_G(R)^\dagger & =P_G(R).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauss_representation}
+    Identify the matrix average with the averaging operator of the unitary
+    representation $g\mapsto\mathcal G_g$. The invariant-space averaging
+    theorem makes this operator idempotent. For self-adjointness, use
+    $\mathcal G_g^\dagger=\mathcal G_{g^{-1}}$ and reindex the finite sum by
+    the bijection $g\mapsto g^{-1}$.
+\end{proof}
+
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
     \lean{TNLean.Algebra.ScalarThreeCochain,
