@@ -6676,10 +6676,40 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1008--1039.
 \end{proposition}
 
+\begin{lemma}[Symmetric branch of the unitary congruence normal form]
+    \label{lem:mpu_symmetric_unitary_congruence}
+    \lean{Matrix.exists_symmetric_unitary_squareRoot}
+    \leanok
+    Let $x$ be a symmetric unitary matrix. There is a symmetric unitary matrix
+    $S$ such that
+    \begin{align}
+        x & = S^T S.
+    \end{align}
+    This is the symmetric branch of
+    \cite[Lemma~\texttt{lemma:conjclass-normalform-continuous}]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1054--1064.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write the finite spectral decomposition of $x$ as
+    \begin{align}
+        x & = \sum_{\lambda\in\sigma(x)} \lambda P_\lambda
+    \end{align}
+    and set
+    \begin{align}
+        S & = \sum_{\lambda\in\sigma(x)} \sqrt{\lambda}\,P_\lambda.
+    \end{align}
+    Each spectral value has modulus one, so its square root has modulus one,
+    and hence $S$ is unitary and $S^2=x$. On the finite spectrum, interpolate
+    the square-root function by a polynomial $q$. Then $S=q(x)$, and
+    $x^T=x$ implies $S^T=q(x^T)=q(x)=S$. Therefore $x=S^2=S^T S$.
+\end{proof}
+
 \begin{lemma}[Normal form of symmetric and skew-symmetric unitaries]
     \label{lemma:conjclass-normalform-continuous}
     \notready
     \discussion{5713}
+    \uses{lem:mpu_symmetric_unitary_congruence}
     Let $x$ be unitary and satisfy $x=x^T$ or $x=-x^T$. There are a symmetric
     unitary $S$ and a matrix $\widetilde\Lambda$ such that
     \begin{align}
