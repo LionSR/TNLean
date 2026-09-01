@@ -101,6 +101,7 @@ import TNLean.MPS.ParentHamiltonian.SuffixWindow
 import TNLean.MPS.ParentHamiltonian.TailVirtualGram
 import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
+import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
 import TNLean.MPS.ParentHamiltonian.WholeIncrementCorrectionBounds
 import TNLean.MPS.ParentHamiltonian.WholeIncrementProjectorDefect
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
