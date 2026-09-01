@@ -4001,6 +4001,101 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     (\ref{eq:mpu_tensor_normalized_flattening}).
 \end{proof}
 
+\begin{theorem}[Canonical-form-II data under independent tensor products]
+    \label{thm:mpu_tensor_product_cfii_data}
+    \lean{MPSTensor.transferMap_tensorProduct_kronecker,
+        MPSTensor.CPSVCanonicalFormIIData.tensorProduct,
+        MPSTensor.CPSVCanonicalFormIIData.hasFullSupport_tensorProduct,
+        MPOTensor.tensorProductCFIIData,
+        MPOTensor.hasFullSupport_tensorProductCFIIData}
+    \leanok
+    \uses{def:cpsv_cfii, def:mpu_full_support,
+        thm:mps_normal_block_tensor_product,
+        thm:mpu_normalized_flattening_tensor_product,
+        thm:cpsv_physical_reindexing}
+    Let $A$ and $B$ have chosen canonical-form-II data with retained blocks
+    $A_a$ and $B_b$, dimensions $D_a$ and $E_b$, weights $\mu_a$ and $\nu_b$,
+    and diagonal positive-definite fixed points $\Lambda_a$ and $\Gamma_b$.
+    Their independent tensor product has chosen retained data
+    \begin{align}
+        D_{(a,b)} & =D_aE_b,
+    \end{align}
+    \begin{align}
+        \omega_{(a,b)} & =\mu_a\nu_b,
+    \end{align}
+    \begin{align}
+        C_{(a,b)} & =A_a\boxtimes B_b,
+    \end{align}
+    and
+    \begin{align}
+        \Lambda_{(a,b)}
+         & =\operatorname{reind}(\Lambda_a\otimes\Gamma_b).
+    \end{align}
+    The weighted direct sum of these blocks reconstructs $A\boxtimes B$.
+    For MPO tensors $\mathcal U$ and $\mathcal V$, the doubled physical
+    equivalence of
+    Theorem~\ref{thm:mpu_normalized_flattening_tensor_product} identifies these
+    data with canonical-form-II data for
+    $\widetilde{\mathcal U\boxtimes\mathcal V}$.
+
+    Full support is a supplied reduced-representative restriction. If the two
+    chosen input data satisfy
+    \begin{align}
+        \sum_a D_a & =D,
+    \end{align}
+    and
+    \begin{align}
+        \sum_b E_b & =E,
+    \end{align}
+    then the chosen product data satisfy
+    \begin{align}
+        \sum_{a,b}D_aE_b
+         & =\left(\sum_aD_a\right)\left(\sum_bE_b\right)
+          =DE.
+    \end{align}
+    This full-support assertion is not stated by the tensoring sentence in
+    \cite[Theorem~IV.6(ii)]{Cirac2017MPU}; it is the supplied restriction
+    documented in \cite{gap:mpu_canonical_form_full_support}.
+
+    The data considered here do not include the separate weight-normalization
+    condition $|\mu_a|\leq1$ together with the existence of a unit-modulus
+    weight. Preservation of that additional condition is not asserted.
+    Independently, the already formalized raw source-rank formulas are recorded
+    in Theorem~\ref{thm:mpu_tensor_product_source_ranks}; they are not reproved
+    here. This result is project infrastructure and does not prove the MPU
+    Index Theorem or tensor-product additivity of the index.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mps_normal_block_tensor_product,
+        thm:mpu_normalized_flattening_tensor_product,
+        thm:cpsv_physical_reindexing}
+    Regroup retained coordinates by
+    \begin{align}
+        ((a,\alpha),(b,\beta))
+         & \longmapsto((a,b),(\alpha,\beta)).
+    \end{align}
+    Under this equivalence, the Kronecker product of the two weighted block
+    diagonals is the block diagonal with weights $\mu_a\nu_b$ and blocks
+    $A_a\boxtimes B_b$. The Kronecker product of the two ambient coisometries
+    is again coisometric. Left-canonicality and normality follow from
+    Theorem~\ref{thm:mps_normal_block_tensor_product}.
+
+    For arbitrary matrices $X$ and $Y$, direct expansion of the finite Kraus
+    sums gives
+    \begin{align}
+        \mathcal E_{A\boxtimes B}
+        \bigl(\operatorname{reind}(X\otimes Y)\bigr)
+         & =\operatorname{reind}
+        \bigl(\mathcal E_A(X)\otimes\mathcal E_B(Y)\bigr).
+    \end{align}
+    Taking $X=\Lambda_a$ and $Y=\Gamma_b$ proves the fixed-point equation;
+    Kronecker products and bijective reindexing preserve positive definiteness
+    and diagonality. The finite double-sum identity proves the supplied
+    full-support conclusion. Finally apply the normalized-flattening identity
+    and physical relabeling to obtain the MPO statement.
+\end{proof}
+
 \begin{lemma}[Normalized flattening of a composition tensor]
     \label{lem:mpu_normalized_flattening_composition}
     \lean{MPOTensor.normalizedFlattening_mulTensor_apply}
