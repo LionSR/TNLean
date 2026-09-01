@@ -284,6 +284,11 @@ theorem inner_fnwLeftOverlapMap_fnwRightOverlapMap
       fnwBoundaryMapCLM_append_eq_leftWord,
       fnwBoundaryMapCLM_append_eq_rightWord]
 
+private theorem fnwPosDef_nonsingInverse_mul (ρ : Mat) (hρ : ρ.PosDef) :
+    ρ * ρ⁻¹ = 1 ∧ ρ⁻¹ * ρ = 1 := by
+  have hdet : IsUnit ρ.det := (Matrix.isUnit_iff_isUnit_det ρ).mp hρ.isUnit
+  exact ⟨Matrix.mul_nonsing_inv ρ hdet, Matrix.nonsing_inv_mul ρ hdet⟩
+
 /-- The weighted source pairing after extracting left and right words is
 exactly the pairing of the corresponding aggregate summands. -/
 theorem inner_conjTranspose_mul_mul_conjTranspose_eq_aggregateSummands
@@ -305,8 +310,7 @@ theorem inner_conjTranspose_mul_mul_conjTranspose_eq_aggregateSummands
     Matrix.conjTranspose_nonsing_inv, hρ.isHermitian.eq]
   rw [show ρ * (ρ⁻¹ * (Vᴴ * (ρ * Xᴴ))) * (U * Y) =
       (ρ * ρ⁻¹) * Vᴴ * ρ * Xᴴ * U * Y by simp only [Matrix.mul_assoc]]
-  rw [Matrix.mul_nonsing_inv ρ
-    ((Matrix.isUnit_iff_isUnit_det ρ).mp hρ.isUnit), Matrix.one_mul]
+  rw [(fnwPosDef_nonsingInverse_mul ρ hρ).1, Matrix.one_mul]
   simpa only [Matrix.mul_assoc] using
     Matrix.trace_mul_cycle ρ (Xᴴ * U * Y) Vᴴ
 
