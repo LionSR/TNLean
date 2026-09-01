@@ -144,7 +144,7 @@ theorem IsPrimitiveMPS.fnwWeightedRemainder_spectralRadius_lt_one [NeZero D]
 /-- The source mixing quantity from FNW 1992, equations (5.9)--(5.10), with
 trace-one normalization explicit:
 \(a(n)=\operatorname{Re}\operatorname{Tr}(\rho^{-1})
-\lVert E^n-E_\infty\rVert_\rho\).
+\lVert E^n-E_\infty\rVert_{\mathrm{op},\rho}\).
 The norm is the local rho-weighted continuous-operator norm. -/
 noncomputable def fnwMixingQuantity {D : ℕ}
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
