@@ -34,4 +34,5 @@ import TNLean.MPS.Core.TensorProductSpan
 import TNLean.MPS.Core.TracePairing
 import TNLean.MPS.Core.TransferMatrix
 import TNLean.MPS.Core.TransferPeripheral
+import TNLean.MPS.Core.WordAdjoint
 import TNLean.MPS.Core.WordFactor
