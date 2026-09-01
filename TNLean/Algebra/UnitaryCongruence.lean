@@ -188,7 +188,7 @@ complete orthogonal family of Hermitian projectors. The witnesses are exactly
 `S = exp (-iπ/4) ∑_E exp (-iE/2) (P_E + P_Eᵀ)` and
 `Λ = i ∑_E (P_E - P_Eᵀ)` from the paper. -/
 theorem exists_skew_unitary_congruence_of_paired_projectors
-    (P : κ → Matrix (Sum κ κ) (Sum κ κ) ℂ)
+    (P : κ → Matrix m m ℂ)
     (E : κ → ℝ)
     (hPstar : ∀ k, (P k)ᴴ = P k)
     (hPmul : ∀ a b : Sum κ κ,
@@ -197,32 +197,32 @@ theorem exists_skew_unitary_congruence_of_paired_projectors
         if a = b then Sum.elim P (fun k ↦ (P k).transpose) a else 0)
     (hPsum : ∑ a : Sum κ κ, Sum.elim P (fun k ↦ (P k).transpose) a = 1) :
     let x := ∑ k, Complex.exp (-(E k : ℂ) * Complex.I) • (P k - (P k).transpose)
-    ∃ S Λ : Matrix (Sum κ κ) (Sum κ κ) ℂ,
+    ∃ S Λ : Matrix m m ℂ,
       S = Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) •
           ∑ k, Complex.exp (-((E k : ℂ) / 2) * Complex.I) •
             (P k + (P k).transpose) ∧
       Λ = Complex.I • ∑ k, (P k - (P k).transpose) ∧
       S.transpose = S ∧
-      S ∈ Matrix.unitaryGroup (Sum κ κ) ℂ ∧
+      S ∈ Matrix.unitaryGroup m ℂ ∧
       Λ.map (starRingEnd ℂ) = Λ ∧
       Λ.transpose = -Λ ∧
-      Λ ∈ Matrix.unitaryGroup (Sum κ κ) ℂ ∧
+      Λ ∈ Matrix.unitaryGroup m ℂ ∧
       x = S.transpose * Λ * S := by
-  let Q : Sum κ κ → Matrix (Sum κ κ) (Sum κ κ) ℂ :=
+  let Q : Sum κ κ → Matrix m m ℂ :=
     Sum.elim P (fun k ↦ (P k).transpose)
   let s : Sum κ κ → ℂ := fun a ↦
     Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
       Complex.exp (-((E (Sum.elim id id a) : ℂ) / 2) * Complex.I)
   let l : Sum κ κ → ℂ := Sum.elim (fun _ ↦ Complex.I) (fun _ ↦ -Complex.I)
-  let S : Matrix (Sum κ κ) (Sum κ κ) ℂ := ∑ a, s a • Q a
-  let Λ : Matrix (Sum κ κ) (Sum κ κ) ℂ := ∑ a, l a • Q a
+  let S : Matrix m m ℂ := ∑ a, s a • Q a
+  let Λ : Matrix m m ℂ := ∑ a, l a • Q a
   have hQstar : ∀ a, (Q a)ᴴ = Q a := by
     intro a
     cases a with
     | inl k => exact hPstar k
     | inr k =>
         ext i j
-        have h := congrArg (fun M : Matrix (Sum κ κ) (Sum κ κ) ℂ ↦ M j i) (hPstar k)
+        have h := congrArg (fun M : Matrix m m ℂ ↦ M j i) (hPstar k)
         simpa [Q, Matrix.conjTranspose_apply, Matrix.transpose_apply] using h
   have hs_formula :
       S = Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) •
@@ -257,15 +257,15 @@ theorem exists_skew_unitary_congruence_of_paired_projectors
     simp only [s, norm_mul]
     rw [Complex.norm_exp, Complex.norm_exp]
     simp
-  have hS_unitary : S ∈ Matrix.unitaryGroup (Sum κ κ) ℂ := by
+  have hS_unitary : S ∈ Matrix.unitaryGroup m ℂ := by
     exact weighted_sum_mem_unitaryGroup Q hQstar hPmul hPsum s hs_norm
   have hPmap (k : κ) : (P k).map (starRingEnd ℂ) = (P k).transpose := by
     ext i j
-    have h := congrArg (fun M : Matrix (Sum κ κ) (Sum κ κ) ℂ ↦ M j i) (hPstar k)
+    have h := congrArg (fun M : Matrix m m ℂ ↦ M j i) (hPstar k)
     simpa [Matrix.conjTranspose_apply, Matrix.transpose_apply] using h
   have hPtransposeMap (k : κ) : (P k).transpose.map (starRingEnd ℂ) = P k := by
     ext i j
-    have h := congrArg (fun M : Matrix (Sum κ κ) (Sum κ κ) ℂ ↦ M i j) (hPstar k)
+    have h := congrArg (fun M : Matrix m m ℂ ↦ M i j) (hPstar k)
     simpa [Matrix.conjTranspose_apply, Matrix.transpose_apply] using h
   have hmap_sub (k : κ) :
       (P k - (P k).transpose).map (starRingEnd ℂ) = (P k).transpose - P k := by
@@ -309,7 +309,7 @@ theorem exists_skew_unitary_congruence_of_paired_projectors
     module
   have hl_norm (a : Sum κ κ) : ‖l a‖ = 1 := by
     cases a <;> simp [l]
-  have hΛ_unitary : Λ ∈ Matrix.unitaryGroup (Sum κ κ) ℂ := by
+  have hΛ_unitary : Λ ∈ Matrix.unitaryGroup m ℂ := by
     exact weighted_sum_mem_unitaryGroup Q hQstar hPmul hPsum l hl_norm
   have hphase (r : ℝ) :
       Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
