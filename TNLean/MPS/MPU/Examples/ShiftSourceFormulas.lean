@@ -483,9 +483,8 @@ theorem shiftExampleU₂_sourceY₁X₂_fourSpin_apply (d : ℕ) [NeZero d]
 /-- In the four-spin coordinates used by the two-site standard form, the
 supplied auxiliary $Y_1$--$X_2$ kernel of $U_2$ is $\Id\otimes\mathbb S\otimes\Id$.
 
-Its occurrence as the central mixed kernel in the auxiliary open-leg
-factorization is the content of
-`shiftExampleU₂_blockTwo_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂`.
+This auxiliary matrix is not used as the paper gate in a two-site source
+factorization.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U2`
 (lines 2018--2026); not a paper-gate identification. -/
@@ -544,9 +543,8 @@ theorem shiftExampleU₂_sourceX₁Y₂_fourSpin_apply (d : ℕ) [NeZero d]
 the supplied auxiliary $X_1$--$Y_2$ kernel of $U_2$ is
 $(\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes\Id)$.
 
-Its occurrence as the central mixed kernel in the auxiliary reflected
-open-leg factorization is the content of
-`shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁`.
+This auxiliary matrix is not used as the paper gate in a reflected two-site
+source factorization.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U2`
 (lines 2018--2026); not a paper-gate identification. -/
@@ -618,9 +616,8 @@ theorem shiftExampleU₃_sourceY₁X₂_fourSpin_apply (d : ℕ) [NeZero d]
 supplied auxiliary $Y_1$--$X_2$ kernel of $U_3$ is
 $(\Id\otimes\mathbb S\otimes\Id)(\mathbb S\otimes\mathbb S)$.
 
-Its occurrence as the central mixed kernel in the auxiliary open-leg
-factorization is the content of
-`shiftExampleU₃_blockTwo_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂`.
+This auxiliary matrix is not used as the paper gate in a two-site source
+factorization.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U3`
 (lines 2028--2034); not a paper-gate identification. -/
@@ -695,9 +692,8 @@ theorem shiftExampleU₃_sourceX₁Y₂_fourSpin_apply (d : ℕ) [NeZero d]
 /-- In the four-spin coordinates used by the reflected two-site standard form,
 the supplied auxiliary $X_1$--$Y_2$ kernel of $U_3$ is $\Id\otimes\mathbb S\otimes\Id$.
 
-Its occurrence as the central mixed kernel in the auxiliary reflected
-open-leg factorization is the content of
-`shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁`.
+This auxiliary matrix is not used as the paper gate in a reflected two-site
+source factorization.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U3`
 (lines 2028--2034); not a paper-gate identification. -/
