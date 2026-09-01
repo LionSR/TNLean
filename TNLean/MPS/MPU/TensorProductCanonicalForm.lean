@@ -120,9 +120,17 @@ lines 824--845, not a theorem separately stated there. -/
 noncomputable def tensorProductCFIIData (U : MPOTensor d D) (V : MPOTensor e E)
     (dataU : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
     (dataV : MPSTensor.CPSVCanonicalFormIIData V.normalizedFlattening) :
-    MPSTensor.CPSVCanonicalFormIIData (tensorProduct U V).normalizedFlattening := by
-  rw [normalizedFlattening_tensorProduct]
-  exact (dataU.tensorProduct dataV).reindexPhysical (finDoubledProdEquiv d e)
+    MPSTensor.CPSVCanonicalFormIIData (tensorProduct U V).normalizedFlattening :=
+  (normalizedFlattening_tensorProduct U V).symm ▸
+    (dataU.tensorProduct dataV).reindexPhysical (finDoubledProdEquiv d e)
+
+private theorem hasFullSupport_castCFIIData
+    {d D : ℕ} {A B : MPSTensor d D} (h : A = B)
+    (data : MPSTensor.CPSVCanonicalFormIIData B)
+    (hfull : data.toCPSVCanonicalFormData.HasFullSupport) :
+    (h.symm ▸ data).toCPSVCanonicalFormData.HasFullSupport := by
+  subst h
+  exact hfull
 
 /-- The product canonical-form-II data have full support when both supplied
 input data have full support.
@@ -142,6 +150,8 @@ theorem hasFullSupport_tensorProductCFIIData (U : MPOTensor d D)
     MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
       (dataU.tensorProduct dataV).toCPSVCanonicalFormData hprod
       (finDoubledProdEquiv d e)
-  simpa [tensorProductCFIIData] using hreindex
+  exact hasFullSupport_castCFIIData
+    (normalizedFlattening_tensorProduct U V)
+    ((dataU.tensorProduct dataV).reindexPhysical (finDoubledProdEquiv d e)) hreindex
 
 end MPOTensor

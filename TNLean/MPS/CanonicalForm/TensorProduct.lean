@@ -146,6 +146,13 @@ namespace CPSVCanonicalFormIIData
 
 variable {A : MPSTensor d D} {B : MPSTensor e E}
 
+/-- Combine heterogeneous equalities coordinatewise. -/
+private theorem prod_heq {α β γ δ : Type} {a : α} {b : β} {c : γ} {d : δ}
+    (hac : a ≍ c) (hbd : b ≍ d) : (a, b) ≍ (c, d) := by
+  cases hac
+  cases hbd
+  rfl
+
 /-- Regroup a pair of dependent coordinates as one dependent coordinate over
 the product label. -/
 private def sigmaProdFiberEquiv {α β : Type*} (γ : α → Type*) (δ : β → Type*) :
@@ -174,6 +181,14 @@ private def tensorProductBlock (dataA : CPSVCanonicalFormIIData A)
     (dataA.blocks (finProdFinEquiv.symm ab).1)
     (dataB.blocks (finProdFinEquiv.symm ab).2)
 
+/-- Product-coordinate equivalence for the fiber over the retained label `(a,b)`. -/
+private noncomputable def tensorProductFiberEquiv
+    (dataA : CPSVCanonicalFormIIData A) (dataB : CPSVCanonicalFormIIData B)
+    (a : Fin dataA.r) (b : Fin dataB.r) :
+    (Fin (dataA.dim a) × Fin (dataB.dim b)) ≃
+      Fin (tensorProductDim dataA dataB (finProdFinEquiv (a, b))) :=
+  finProdFinEquiv |>.trans (finCongr (by simp [tensorProductDim]))
+
 /-- Canonical retained-coordinate regrouping
 `((a, α), (b, β)) ↦ ((a, b), (α, β))` for the product block family. -/
 private noncomputable def tensorProductRetainedEquiv
@@ -186,9 +201,8 @@ private noncomputable def tensorProductRetainedEquiv
       (finSigmaFinEquiv (m := dataB.r) (n := dataB.dim)).symm) |>.trans
     (sigmaProdFiberEquiv (fun a ↦ Fin (dataA.dim a))
       (fun b ↦ Fin (dataB.dim b))) |>.trans
-    (Equiv.sigmaCongrRight fun _ ↦ finProdFinEquiv) |>.trans
-    (Equiv.sigmaCongr finProdFinEquiv fun ab ↦ finCongr (by
-      simp [tensorProductDim])) |>.trans
+    (Equiv.sigmaCongr finProdFinEquiv fun ab ↦
+      tensorProductFiberEquiv dataA dataB ab.1 ab.2) |>.trans
     finSigmaFinEquiv
 
 @[simp]
@@ -199,12 +213,54 @@ private theorem tensorProductRetainedEquiv_apply
     tensorProductRetainedEquiv dataA dataB
         (finSigmaFinEquiv ⟨a, α⟩, finSigmaFinEquiv ⟨b, β⟩) =
       finSigmaFinEquiv
-        ⟨finProdFinEquiv (a, b),
-          finCongr (by simp [tensorProductDim]) (finProdFinEquiv (α, β))⟩ := by
+        ⟨finProdFinEquiv (a, b), tensorProductFiberEquiv dataA dataB a b (α, β)⟩ := by
   apply finSigmaFinEquiv.symm.injective
   simp only [tensorProductRetainedEquiv, Equiv.sigmaCongr, Equiv.trans_apply,
-    Equiv.prodCongr_apply, Equiv.symm_apply_apply, Equiv.sigmaCongrRight_apply,
-    Equiv.sigmaCongrLeft_apply, sigmaProdFiberEquiv, Equiv.coe_fn_mk]
+    Equiv.prodCongr_apply, Prod.map_apply, Equiv.symm_apply_apply,
+    Equiv.sigmaCongrRight_apply, Equiv.sigmaCongrLeft_apply, sigmaProdFiberEquiv,
+    Equiv.coe_fn_mk]
+
+@[simp]
+private theorem tensorProductBlock_apply
+    (dataA : CPSVCanonicalFormIIData A) (dataB : CPSVCanonicalFormIIData B)
+    (a : Fin dataA.r) (b : Fin dataB.r) (i : Fin d) (k : Fin e)
+    (α γ : Fin (dataA.dim a)) (β δ : Fin (dataB.dim b)) :
+    tensorProductBlock dataA dataB (finProdFinEquiv (a, b))
+        (finProdFinEquiv (i, k)) (tensorProductFiberEquiv dataA dataB a b (α, β))
+        (tensorProductFiberEquiv dataA dataB a b (γ, δ)) =
+      dataA.blocks a i α γ * dataB.blocks b k β δ := by
+  let coord (p : Fin dataA.r × Fin dataB.r) :=
+    Fin (dataA.dim p.1 * dataB.dim p.2)
+  let entry (z : Σ p, coord p × coord p) : ℂ :=
+    MPSTensor.tensorProduct (dataA.blocks z.1.1) (dataB.blocks z.1.2)
+      (finProdFinEquiv (i, k)) z.2.1 z.2.2
+  have hz :
+      (⟨finProdFinEquiv.symm (finProdFinEquiv (a, b)),
+          (tensorProductFiberEquiv dataA dataB a b (α, β),
+            tensorProductFiberEquiv dataA dataB a b (γ, δ))⟩ :
+        Σ p, coord p × coord p) =
+      ⟨(a, b), (finProdFinEquiv (α, β), finProdFinEquiv (γ, δ))⟩ := by
+    apply Sigma.ext (finProdFinEquiv.symm_apply_apply (a, b))
+    have hαβ :
+        tensorProductFiberEquiv dataA dataB a b (α, β) ≍ finProdFinEquiv (α, β) := by
+      simp only [tensorProductFiberEquiv, Equiv.trans_apply, finCongr_apply]
+      rw [Fin.cast_eq_cast]
+      exact cast_heq _ _
+    have hγδ :
+        tensorProductFiberEquiv dataA dataB a b (γ, δ) ≍ finProdFinEquiv (γ, δ) := by
+      simp only [tensorProductFiberEquiv, Equiv.trans_apply, finCongr_apply]
+      rw [Fin.cast_eq_cast]
+      exact cast_heq _ _
+    exact prod_heq hαβ hγδ
+  calc
+    _ = entry
+        ⟨finProdFinEquiv.symm (finProdFinEquiv (a, b)),
+          (tensorProductFiberEquiv dataA dataB a b (α, β),
+            tensorProductFiberEquiv dataA dataB a b (γ, δ))⟩ := rfl
+    _ = entry ⟨(a, b), (finProdFinEquiv (α, β), finProdFinEquiv (γ, δ))⟩ :=
+      congrArg entry hz
+    _ = _ := MPSTensor.tensorProduct_apply (dataA.blocks a) (dataB.blocks b)
+      i k α γ β δ
 
 /-- The weighted direct sum of the product blocks is the retained-coordinate
 reindexing of the Kronecker product of the two weighted direct sums. -/
@@ -238,9 +294,8 @@ private theorem toTensorFromBlocks_tensorProduct
     · subst f
       rw [Matrix.blockDiagonal'_apply_eq, Matrix.blockDiagonal'_apply_eq,
         Matrix.blockDiagonal'_apply_eq]
-      simp only [tensorProductWeight, tensorProductBlock, tensorProductDim,
-        Equiv.symm_apply_apply, Matrix.smul_apply, finCongr_apply, Fin.cast_eq_self,
-        MPSTensor.tensorProduct_apply, smul_eq_mul]
+      simp only [tensorProductWeight, Equiv.symm_apply_apply, Matrix.smul_apply,
+        tensorProductBlock_apply, smul_eq_mul]
       ring
     · have hab : finProdFinEquiv (a, b) ≠ finProdFinEquiv (a, f) := by
         exact fun h ↦ hbf (congrArg Prod.snd (finProdFinEquiv.injective h))
