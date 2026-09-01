@@ -534,6 +534,200 @@ include the weighted decay estimate of
 \cite[Lemma~5.2]{Fannes1992Finitely}, and they make no assertion of a
 constant $C_\lambda=k^2$.
 
+\begin{definition}[Normalized limiting FNW observable map]
+    \label{def:fnw_limit_map}
+    \lean{MPSTensor.fnwLimitMap}
+    \lean{MPSTensor.fnwLimitMap_apply}
+    \lean{MPSTensor.fnwLimitMap_apply_of_trace_eq_one}
+    \leanok
+    Let $\rho\in\MN{D}$ satisfy $\tr(\rho)\neq0$. The normalized rank-one map
+    associated with $\rho$ is
+    \begin{align}
+        E_\infty^\rho(B)
+         & :=\frac{\tr(\!\rho B)}{\tr(\rho)}I_D.
+        \label{eq:fnw_limit_map}
+    \end{align}
+    If $\tr(\rho)=1$, this becomes
+    $E_\infty^\rho(B)=\tr(\rho B)I_D$, which is the limiting map in
+    \cite[Equation~(5.1)]{Fannes1992Finitely}.
+\end{definition}
+
+\begin{theorem}[Limiting map as a trace-pairing adjoint]
+    \label{thm:fnw_limit_map_trace_adjoint}
+    \lean{MPSTensor.fnwLimitMap_eq_traceAdjointMap_fixedPointProj}
+    \leanok
+    \uses{def:fnw_limit_map}
+    Define the fixed-point projection
+    \begin{align}
+        P_\rho(X)
+         & :=\frac{\tr(X)}{\tr(\rho)}\rho.
+        \label{eq:fnw_fixed_point_projection}
+    \end{align}
+    Then $E_\infty^\rho=P_\rho^\sharp$, where $\sharp$ denotes the adjoint for
+    the bilinear trace pairing. This is not the Hilbert adjoint for the
+    unweighted Frobenius inner product or for the $\rho$-weighted inner product
+    of \cite[Equation~(5.6)]{Fannes1992Finitely}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_limit_map}
+    For all $X,B\in\MN{D}$,
+    \begin{align}
+        \tr(P_\rho(X)B)
+         & =\frac{\tr(X)\tr(\rho B)}{\tr(\rho)}
+        =\tr\!\left(XE_\infty^\rho(B)\right).
+    \end{align}
+    Nondegeneracy of the trace pairing proves the equality of maps.
+\end{proof}
+
+\begin{theorem}[Pointwise idempotence of the limiting map]
+    \label{thm:fnw_limit_map_idempotent}
+    \lean{MPSTensor.fnwLimitMap_idempotent}
+    \leanok
+    \uses{def:fnw_limit_map}
+    For every $B\in\MN{D}$,
+    \begin{align}
+        E_\infty^\rho\!\left(E_\infty^\rho(B)\right)
+         & =E_\infty^\rho(B).
+        \label{eq:fnw_limit_map_idempotent}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_limit_map}
+    Substitute~(\ref{eq:fnw_limit_map}) and use
+    $\tr(\rho I_D)=\tr(\rho)$. The nonzero trace cancels the normalizing
+    denominator.
+\end{proof}
+
+\begin{theorem}[The limiting map is a projection]
+    \label{thm:fnw_limit_map_projection}
+    \lean{MPSTensor.fnwLimitMap_mul_self}
+    \leanok
+    \uses{def:fnw_limit_map}
+    As an endomorphism of $\MN{D}$, the limiting map satisfies
+    \begin{align}
+        (E_\infty^\rho)^2 & =E_\infty^\rho.
+        \label{eq:fnw_limit_map_projection}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_limit_map_idempotent}
+    Apply Theorem~\ref{thm:fnw_limit_map_idempotent} to every matrix $B$.
+\end{proof}
+
+\begin{theorem}[Unital absorption of the limiting map]
+    \label{thm:fnw_transfer_absorbs_limit}
+    \lean{MPSTensor.fnwTransferMap_mul_fnwLimitMap}
+    \leanok
+    \uses{def:fnw_limit_map, def:transfer_map, def:left_canonical_tensor}
+    If $A$ is left canonical, then the FNW observable map in
+    (\ref{eq:fnw_transfer_map}) satisfies
+    \begin{align}
+        E_{\mathrm{FNW},A}E_\infty^\rho & =E_\infty^\rho.
+        \label{eq:fnw_transfer_absorbs_limit}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_limit_map, def:left_canonical_tensor}
+    Left canonicity gives
+    $E_{\mathrm{FNW},A}(I_D)=\sum_\mu(A^\mu)^\dagger A^\mu=I_D$.
+    Hence
+    \begin{align}
+        E_{\mathrm{FNW},A}\!\left(E_\infty^\rho(B)\right)
+         & =\frac{\tr(\rho B)}{\tr(\rho)}E_{\mathrm{FNW},A}(I_D)
+        =E_\infty^\rho(B).
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Stationary absorption by the limiting map]
+    \label{thm:fnw_limit_absorbs_transfer}
+    \lean{MPSTensor.fnwLimitMap_mul_fnwTransferMap}
+    \leanok
+    \uses{def:fnw_limit_map, def:transfer_map}
+    Suppose that $\rho$ is stationary for the Schrödinger transfer map,
+    $\E_A(\rho)=\rho$. Then
+    \begin{align}
+        E_\infty^\rho E_{\mathrm{FNW},A} & =E_\infty^\rho.
+        \label{eq:fnw_limit_absorbs_transfer}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_limit_map}
+    The trace-pairing identity and stationarity give
+    \begin{align}
+        \tr\!\left(\rho E_{\mathrm{FNW},A}(B)\right)
+         & =\tr\!\left(\E_A(\rho)B\right)=\tr(\rho B).
+    \end{align}
+    Substitute this equality into~(\ref{eq:fnw_limit_map}).
+\end{proof}
+
+\begin{theorem}[Positive powers of the FNW remainder]
+    \label{thm:fnw_remainder_power}
+    \lean{MPSTensor.fnwTransferMap_sub_fnwLimitMap_pow}
+    \leanok
+    \uses{def:fnw_limit_map, def:transfer_map, def:left_canonical_tensor}
+    Suppose that $A$ is left canonical and that
+    $\E_A(\rho)=\rho$. For every integer $n\geq1$,
+    \begin{align}
+        (E_{\mathrm{FNW},A}-E_\infty^\rho)^n
+         & =E_{\mathrm{FNW},A}^n-E_\infty^\rho.
+        \label{eq:fnw_remainder_power}
+    \end{align}
+    The restriction $n\geq1$ is essential. At $n=0$, the two sides would be
+    $I$ and $I-E_\infty^\rho$, respectively, and
+    $E_\infty^\rho(I_D)=I_D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_limit_map_projection, thm:fnw_transfer_absorbs_limit, thm:fnw_limit_absorbs_transfer}
+    Write $E=E_{\mathrm{FNW},A}$ and $P=E_\infty^\rho$. The three preceding
+    identities give
+    $EP=PE=P^2=P$, and hence $E^mP=P$ for every $m\geq0$. The case $n=1$ is
+    immediate. If $(E-P)^n=E^n-P$, then
+    \begin{align}
+        (E-P)^{n+1}
+         & =(E^n-P)(E-P)
+        =E^{n+1}-E^nP-PE+P^2
+        =E^{n+1}-P.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Primitive-MPS remainder identity]
+    \label{thm:primitive_fnw_remainder_power}
+    \lean{MPSTensor.IsPrimitiveMPS.fnwTransferMap_sub_fnwLimitMap_pow}
+    \leanok
+    \uses{def:primitive_mps, def:fnw_limit_map}
+    Let $A$ be a primitive MPS tensor of nonzero bond dimension with fixed-point
+    witness $\rho$. Then, for every integer $n\geq1$,
+    \begin{align}
+        (E_{\mathrm{FNW},A}-E_\infty^\rho)^n
+         & =E_{\mathrm{FNW},A}^n-E_\infty^\rho.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_remainder_power}
+    Primitivity supplies $\tr(\rho)\neq0$, left canonicity, and the stationary
+    equation $\E_A(\rho)=\rho$. Apply
+    Theorem~\ref{thm:fnw_remainder_power}.
+\end{proof}
+
+These projection and absorption identities precede the weighted Hilbert-space
+estimate in \cite[Lemma~5.2]{Fannes1992Finitely}. They do not assert a
+$\rho$-weighted norm bound or any quantitative decay constant, and they do not
+include the later conclusions of Lemmas~5.3 and~6.2 of that paper.
+
 \begin{definition}[Operator-level Gram reshuffling]
     \label{def:gram_reshuffle}
     \lean{Matrix.gramReshuffle}
