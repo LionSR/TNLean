@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Reindex
-import TNLean.MPS.MPU.Examples.ShiftSourceFormulas
+import TNLean.MPS.MPU.Examples.ShiftSourceGateFormulas
 import TNLean.MPS.MPU.StandardForm
 
 /-!
