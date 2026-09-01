@@ -18,9 +18,11 @@ For the boundary map \(F_N\), the source constant is
   a_-(N)=\inf_{B\ne 0}\frac{\lVert F_N(B)\rVert^2}{\lVert B\rVert_\rho^2}.
 \]
 
-Equation (5.9) gives \(1-a(N)\le a_-(N)\). Stationarity of the faithful density
-and the exact boundary recursion show that \(a_-(N)\) is nondecreasing.
-No finite-Gram, singular-value, or periodic-chain estimate is used here.
+Equation (5.9) gives \(1-a(N)\le a_-(N)\). The same source infimum is the
+least eigenvalue of the weighted Gram operator \(F_N^*F_N\), equivalently the
+least squared singular value indexed by the finite virtual domain. Stationarity
+of the faithful density and the exact boundary recursion show that \(a_-(N)\)
+is nondecreasing. No coordinate Gram or periodic-chain estimate is used here.
 -/
 
 open scoped BigOperators ComplexOrder Matrix
@@ -289,6 +291,57 @@ theorem fnwLowerBoundaryConstant_le_re_of_mem_spectrum_fnwBoundaryGram [NeZero D
   rw [Complex.mul_re]
   norm_cast
   ring
+
+/-- The lower boundary constant is the least squared singular value of the
+boundary map, indexed only over the finite-dimensional weighted virtual domain.
+The first clause gives an attaining domain index; the second gives minimality
+among all domain-indexed singular values. -/
+theorem fnwLowerBoundaryConstant_eq_least_sq_singularValue [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    let T := (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
+    (∃ i : Fin (Module.finrank ℂ Mat),
+      T.singularValues i ^ 2 = fnwLowerBoundaryConstant ρ hρ A N) ∧
+    ∀ i : Fin (Module.finrank ℂ Mat),
+      fnwLowerBoundaryConstant ρ hρ A N ≤ T.singularValues i ^ 2 := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let T := (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
+  have hsym : (LinearMap.adjoint T ∘ₗ T).IsSymmetric :=
+    T.isSymmetric_adjoint_comp_self
+  have hminSpec : (fnwLowerBoundaryConstant ρ hρ A N : ℂ) ∈
+      spectrum ℂ (LinearMap.adjoint T ∘ₗ T) := by
+    simpa only [T, fnwBoundaryGram] using
+      fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram ρ hρ A N
+  have hminEig : Module.End.HasEigenvalue (LinearMap.adjoint T ∘ₗ T)
+      (fnwLowerBoundaryConstant ρ hρ A N : ℂ) :=
+    Module.End.hasEigenvalue_iff_mem_spectrum.mpr hminSpec
+  obtain ⟨i, hi⟩ := hsym.exists_eigenvalues_eq rfl hminEig
+  have hiReal : hsym.eigenvalues rfl i = fnwLowerBoundaryConstant ρ hρ A N :=
+    Complex.ofReal_injective hi
+  constructor
+  · refine ⟨i, ?_⟩
+    rw [T.sq_singularValues_fin rfl]
+    exact hiReal
+  · intro j
+    rw [T.sq_singularValues_fin rfl]
+    let eigenvalue := hsym.eigenvalues rfl j
+    have heig : Module.End.HasEigenvalue (LinearMap.adjoint T ∘ₗ T)
+        (eigenvalue : ℂ) := hsym.hasEigenvalue_eigenvalues rfl j
+    have hspec : (eigenvalue : ℂ) ∈
+        spectrum ℂ (fnwBoundaryGram ρ hρ A N) := by
+      rw [← Module.End.hasEigenvalue_iff_mem_spectrum]
+      simpa only [T, fnwBoundaryGram] using heig
+    have hle := fnwLowerBoundaryConstant_le_re_of_mem_spectrum_fnwBoundaryGram
+      ρ hρ A N eigenvalue hspec
+    simpa only [eigenvalue, Complex.ofReal_re] using hle
 
 /-- The source constant gives its universal quadratic lower bound, including at
 the zero matrix. -/
