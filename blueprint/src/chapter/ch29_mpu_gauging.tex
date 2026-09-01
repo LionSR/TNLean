@@ -1043,19 +1043,19 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     local kernel has row and column coordinates
     \begin{align}
         \bigl((i_0,i_1),(a,b)\bigr)
-        &\in (\{0,\ldots,d-1\}^{\{0,1\}})\times G^2.
+         & \in (\{0,\ldots,d-1\}^{\{0,1\}})\times G^2.
     \end{align}
     Identify these with two site coordinates by the bijection
     \begin{align}
         \kappa\bigl((i_0,i_1),(a,b)\bigr)
-        &=\bigl((i_0,a),(i_1,b)\bigr),
+         & =\bigl((i_0,a),(i_1,b)\bigr),
     \end{align}
     followed at each site by a fixed enumeration of
     $\{0,\ldots,d-1\}\times G$.  If $\widetilde P_G(R)$ denotes the matrix
     obtained from $P_G(R)$ by this simultaneous row and column relabelling,
     define its placement on a periodic chain of length $N\geq2$ by
     \begin{align}
-        P_j(R)&=\operatorname{Embed}_{j,j+1}\bigl(\widetilde P_G(R)\bigr).
+        P_j(R) & =\operatorname{Embed}_{j,j+1}\bigl(\widetilde P_G(R)\bigr).
         \label{eq:mpug_placed_gauss_projector}
     \end{align}
     Here the second site is $j+1$ modulo $N$.  This is the position-dependent
@@ -1063,7 +1063,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     % Source anchor: arXiv:2502.20257, eq:gauge_projs.
 \end{definition}
 
-\begin{theorem}[The placed Gauss operator is a projection]
+\begin{theorem}[The placed Gauss projector is a projection]
     \label{thm:mpug_placed_gauss_projector_projection}
     \lean{TNLean.Algebra.isStarProjection_gaussWindowProjector,
         TNLean.Algebra.isStarProjection_placedGaussProjector}
@@ -1074,8 +1074,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     For every $N\geq2$ and every position $j$, the operator
     in~(\ref{eq:mpug_placed_gauss_projector}) satisfies
     \begin{align}
-        P_j(R)^2       &=P_j(R),\\
-        P_j(R)^\dagger &=P_j(R).
+        P_j(R)^2       & =P_j(R), \\
+        P_j(R)^\dagger & =P_j(R).
     \end{align}
 \end{theorem}
 
