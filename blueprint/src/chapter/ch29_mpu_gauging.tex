@@ -1029,6 +1029,63 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     the bijection $g\mapsto g^{-1}$.
 \end{proof}
 
+\begin{definition}[Gauss projector on a periodic chain]
+    \label{def:mpug_placed_gauss_projector}
+    \lean{MPOTensor.gaussLocalCoordinateEquiv,
+        MPOTensor.gaussLocalCoordinateEquiv_apply_zero,
+        MPOTensor.gaussLocalCoordinateEquiv_apply_one,
+        MPOTensor.gaussWindowProjector,
+        MPOTensor.placedGaussProjector}
+    \leanok
+    \discussion{7605}
+    \uses{def:mpug_gauss_projector}
+    Let the matter degree of freedom at one site have dimension $d$.  The
+    local kernel has row and column coordinates
+    \begin{align}
+        \bigl((i_0,i_1),(a,b)\bigr)
+         & \in (\{0,\ldots,d-1\}^{\{0,1\}})\times G^2.
+    \end{align}
+    Identify these with two site coordinates by the bijection
+    \begin{align}
+        \kappa\bigl((i_0,i_1),(a,b)\bigr)
+         & =\bigl((i_0,a),(i_1,b)\bigr),
+    \end{align}
+    followed at each site by a fixed enumeration of
+    $\{0,\ldots,d-1\}\times G$.  If $\widetilde P_G(R)$ denotes the matrix
+    obtained from $P_G(R)$ by this simultaneous row and column relabelling,
+    define its placement on a periodic chain of length $N\geq2$ by
+    \begin{align}
+        P_j(R) & =\operatorname{Embed}_{j,j+1}\bigl(\widetilde P_G(R)\bigr).
+        \label{eq:mpug_placed_gauss_projector}
+    \end{align}
+    Here the second site is $j+1$ modulo $N$.  This is the position-dependent
+    projector $P_j$ in~\cite[lines~3494--3499]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, eq:gauge_projs.
+\end{definition}
+
+\begin{theorem}[The placed Gauss projector is a projection]
+    \label{thm:mpug_placed_gauss_projector_projection}
+    \lean{MPOTensor.isStarProjection_gaussWindowProjector,
+        MPOTensor.isStarProjection_placedGaussProjector}
+    \leanok
+    \discussion{7605}
+    \uses{def:mpug_placed_gauss_projector}
+    For every $N\geq2$ and every position $j$, the operator
+    in~(\ref{eq:mpug_placed_gauss_projector}) satisfies
+    \begin{align}
+        P_j(R)^2       & =P_j(R), \\
+        P_j(R)^\dagger & =P_j(R).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauss_projector_projection}
+    Simultaneous relabelling of rows and columns preserves multiplication and
+    adjoints, so $\widetilde P_G(R)$ remains idempotent and self-adjoint.
+    Embedding into the two-site periodic window also preserves multiplication
+    and adjoints, which gives both identities for $P_j(R)$.
+\end{proof}
+
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
     \lean{TNLean.Algebra.ScalarThreeCochain,
