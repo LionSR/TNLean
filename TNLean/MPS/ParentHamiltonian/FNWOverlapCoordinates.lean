@@ -216,6 +216,23 @@ theorem fnwBoundaryMapCLM_append_eq_rightWord
     List.ofFn_fin_append, Kraus.evalWord_append, Matrix.conjTranspose_mul,
     Matrix.mul_assoc]
 
+/-- The virtual boundary entering the middle block from the left overlap
+family. -/
+def fnwLeftMiddleBoundary
+    (A : MPSTensor d D) {ℓ r : ℕ}
+    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (p : Cfg d ℓ × Cfg d r) : Mat :=
+  (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn p.1))ᴴ * Φ.ofLp p.2
+
+/-- The virtual boundary entering the middle block from the right overlap
+family. -/
+def fnwRightMiddleBoundary
+    (A : MPSTensor d D) {ℓ r : ℕ}
+    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (p : Cfg d ℓ × Cfg d r) : Mat :=
+  Ψ.ofLp p.1 *
+    (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn p.2))ᴴ
+
 /-- The physical inner product of the two overlap families decomposes into
 length-\(m\) FNW boundary inner products, one for each pair of spectator
 configurations. -/
@@ -344,6 +361,225 @@ theorem sum_inner_overlapFibers_eq_inner_aggregates
     (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))
     (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))
     (Φ.ofLp μr) (Ψ.ofLp μℓ)
+
+/-- Subtracting the aggregate pairing leaves the sum of the middle-block
+boundary defects to which equation (5.9) applies termwise. -/
+theorem inner_overlap_sub_inner_aggregates
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
+    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
+        (fnwRightOverlapMap ρ hρ A ℓ m r Ψ) -
+      inner ℂ (fnwLeftOverlapAggregate ρ A r Φ)
+        (fnwRightOverlapAggregate A ℓ Ψ) =
+      ∑ p : Cfg d ℓ × Cfg d r,
+        (inner ℂ
+            (fnwBoundaryMapCLM ρ hρ A m (fnwLeftMiddleBoundary A Φ p))
+            (fnwBoundaryMapCLM ρ hρ A m (fnwRightMiddleBoundary A Ψ p)) -
+          inner ℂ (fnwLeftMiddleBoundary A Φ p)
+            (fnwRightMiddleBoundary A Ψ p)) := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  rw [inner_fnwLeftOverlapMap_fnwRightOverlapMap,
+    ← sum_inner_overlapFibers_eq_inner_aggregates]
+  simp only [fnwLeftMiddleBoundary, fnwRightMiddleBoundary,
+    Fintype.sum_prod_type, Finset.sum_sub_distrib]
+
+/-- The FNW transfer map remains unital under every word length. -/
+theorem fnwTransferMap_pow_one
+    (A : MPSTensor d D) (hA : IsLeftCanonical A) (N : ℕ) :
+    (fnwTransferMap A ^ N) (1 : Mat) = 1 := by
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      rw [pow_succ, Module.End.mul_apply, fnwTransferMap_one A hA, ih]
+
+/-- The trace-pairing adjoint relation between the TNLean and FNW transfer maps
+persists under every power. -/
+theorem trace_mul_fnwTransferMap_pow
+    (A : MPSTensor d D) (ρ X : Mat) (N : ℕ) :
+    Matrix.trace (ρ * (fnwTransferMap A ^ N) X) =
+      Matrix.trace ((Kraus.transferMap A ^ N) ρ * X) := by
+  induction N generalizing X with
+  | zero => simp
+  | succ N ih =>
+      rw [pow_succ, Module.End.mul_apply]
+      calc
+        Matrix.trace (ρ * (fnwTransferMap A ^ N) (fnwTransferMap A X)) =
+            Matrix.trace ((Kraus.transferMap A ^ N) ρ * fnwTransferMap A X) :=
+          ih (fnwTransferMap A X)
+        _ = Matrix.trace
+            (Kraus.transferMap A ((Kraus.transferMap A ^ N) ρ) * X) :=
+          trace_mul_fnwTransferMap A ((Kraus.transferMap A ^ N) ρ) X
+        _ = Matrix.trace ((Kraus.transferMap A ^ (N + 1)) ρ * X) := by
+          rw [pow_succ', Module.End.mul_apply]
+
+/-- Word unitality gives the first spectator-family squared-norm identity in
+FNW Lemma 6.2. -/
+theorem sum_norm_sq_conjTranspose_evalWord_mul
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (N : ℕ) (B : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    ∑ u : Cfg d N,
+      ‖(Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ * B‖ ^ 2 =
+        ‖B‖ ^ 2 := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  simp_rw [Matrix.rhoWeighted_norm_sq ρ hρ]
+  have hword :
+      ∑ u : Cfg d N,
+        Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u) *
+          (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ = 1 := by
+    have hpow := fnwTransferMap_pow_one A hA N
+    rw [fnwTransferMap, Kraus.mapLM_pow_apply] at hpow
+    simpa only [Matrix.mul_one] using hpow
+  calc
+    ∑ u : Cfg d N,
+        (Matrix.trace (ρ *
+          ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ * B)ᴴ *
+          ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ * B))).re =
+        (∑ u : Cfg d N, Matrix.trace (ρ *
+          ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ * B)ᴴ *
+          ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ * B))).re :=
+      (map_sum Complex.reCLM (fun u : Cfg d N => Matrix.trace (ρ *
+        ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ * B)ᴴ *
+        ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ * B)))
+        Finset.univ).symm
+    _ = (Matrix.trace (ρ * Bᴴ * (∑ u : Cfg d N,
+          Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u) *
+            (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ) * B)).re := by
+      congr 1
+      rw [← Matrix.trace_sum Finset.univ]
+      congr 1
+      simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
+        Matrix.mul_assoc, Matrix.mul_sum, Finset.sum_mul]
+    _ = (Matrix.trace (ρ * Bᴴ * B)).re := by rw [hword, Matrix.mul_one]
+
+/-- Stationarity gives the second spectator-family squared-norm identity in
+FNW Lemma 6.2. -/
+theorem sum_norm_sq_mul_conjTranspose_evalWord
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (hρfix : Kraus.transferMap A ρ = ρ) (N : ℕ) (B : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    ∑ u : Cfg d N,
+      ‖B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ‖ ^ 2 =
+        ‖B‖ ^ 2 := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  simp_rw [Matrix.rhoWeighted_norm_sq ρ hρ]
+  have hpow : (Kraus.transferMap A ^ N) ρ = ρ := by
+    induction N with
+    | zero => simp
+    | succ N ih =>
+        rw [pow_succ, Module.End.mul_apply, hρfix, ih]
+  have htrace := trace_mul_fnwTransferMap_pow A ρ (Bᴴ * B) N
+  rw [hpow] at htrace
+  rw [fnwTransferMap, Kraus.mapLM_pow_apply] at htrace
+  calc
+    ∑ u : Cfg d N,
+        (Matrix.trace (ρ *
+          (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ)ᴴ *
+          (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ))).re =
+        (∑ u : Cfg d N, Matrix.trace (ρ *
+          (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ)ᴴ *
+          (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ))).re :=
+      (map_sum Complex.reCLM (fun u : Cfg d N => Matrix.trace (ρ *
+        (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ)ᴴ *
+        (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ)))
+        Finset.univ).symm
+    _ = (Matrix.trace (ρ * (∑ u : Cfg d N,
+          Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u) * (Bᴴ * B) *
+            (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ))).re := by
+      congr 1
+      rw [Matrix.mul_sum, Matrix.trace_sum]
+      congr 1
+      simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
+        Matrix.mul_assoc]
+    _ = (Matrix.trace (ρ * Bᴴ * B)).re := by
+      simpa only [Matrix.mul_assoc] using congrArg Complex.re htrace
+
+/-- Equation (5.9), applied to every pair of spectator configurations and
+combined by finite Cauchy--Schwarz. This is the analytic numerator in FNW
+1992, equation (6.5), before the lower-boundary estimate is used. -/
+theorem norm_inner_overlap_sub_inner_aggregates_le [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
+    (A : MPSTensor d D) (ℓ m r : ℕ)
+    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    ‖inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
+          (fnwRightOverlapMap ρ hρ A ℓ m r Ψ) -
+        inner ℂ (fnwLeftOverlapAggregate ρ A r Φ)
+          (fnwRightOverlapAggregate A ℓ Ψ)‖ ≤
+      fnwMixingQuantity ρ hρ A htr m *
+        (Real.sqrt (∑ p : Cfg d ℓ × Cfg d r,
+          ‖fnwLeftMiddleBoundary A Φ p‖ ^ 2) *
+        Real.sqrt (∑ p : Cfg d ℓ × Cfg d r,
+          ‖fnwRightMiddleBoundary A Ψ p‖ ^ 2)) := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  rw [inner_overlap_sub_inner_aggregates]
+  calc
+    ‖∑ p : Cfg d ℓ × Cfg d r,
+        (inner ℂ
+            (fnwBoundaryMapCLM ρ hρ A m (fnwLeftMiddleBoundary A Φ p))
+            (fnwBoundaryMapCLM ρ hρ A m (fnwRightMiddleBoundary A Ψ p)) -
+          inner ℂ (fnwLeftMiddleBoundary A Φ p)
+            (fnwRightMiddleBoundary A Ψ p))‖
+        ≤ ∑ p : Cfg d ℓ × Cfg d r,
+          ‖inner ℂ
+              (fnwBoundaryMapCLM ρ hρ A m (fnwLeftMiddleBoundary A Φ p))
+              (fnwBoundaryMapCLM ρ hρ A m (fnwRightMiddleBoundary A Ψ p)) -
+            inner ℂ (fnwLeftMiddleBoundary A Φ p)
+              (fnwRightMiddleBoundary A Ψ p)‖ := by
+          simpa using norm_sum_le (Finset.univ : Finset (Cfg d ℓ × Cfg d r))
+            (fun p =>
+              inner ℂ
+                  (fnwBoundaryMapCLM ρ hρ A m (fnwLeftMiddleBoundary A Φ p))
+                  (fnwBoundaryMapCLM ρ hρ A m (fnwRightMiddleBoundary A Ψ p)) -
+                inner ℂ (fnwLeftMiddleBoundary A Φ p)
+                  (fnwRightMiddleBoundary A Ψ p))
+    _ ≤ ∑ p : Cfg d ℓ × Cfg d r,
+        fnwMixingQuantity ρ hρ A htr m *
+          ‖fnwLeftMiddleBoundary A Φ p‖ * ‖fnwRightMiddleBoundary A Ψ p‖ :=
+      Finset.sum_le_sum fun p _ =>
+        norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity
+          ρ hρ htr A m (fnwLeftMiddleBoundary A Φ p)
+            (fnwRightMiddleBoundary A Ψ p)
+    _ = fnwMixingQuantity ρ hρ A htr m *
+        ∑ p : Cfg d ℓ × Cfg d r,
+          ‖fnwLeftMiddleBoundary A Φ p‖ * ‖fnwRightMiddleBoundary A Ψ p‖ := by
+      simpa only [mul_assoc] using
+        (Finset.mul_sum (s := (Finset.univ : Finset (Cfg d ℓ × Cfg d r)))
+          (f := fun p =>
+            ‖fnwLeftMiddleBoundary A Φ p‖ * ‖fnwRightMiddleBoundary A Ψ p‖)
+          (a := fnwMixingQuantity ρ hρ A htr m)).symm
+    _ ≤ fnwMixingQuantity ρ hρ A htr m *
+        (Real.sqrt (∑ p : Cfg d ℓ × Cfg d r,
+          ‖fnwLeftMiddleBoundary A Φ p‖ ^ 2) *
+        Real.sqrt (∑ p : Cfg d ℓ × Cfg d r,
+          ‖fnwRightMiddleBoundary A Ψ p‖ ^ 2)) := by
+      apply mul_le_mul_of_nonneg_left
+      · simpa using Real.sum_mul_le_sqrt_mul_sqrt
+          (Finset.univ : Finset (Cfg d ℓ × Cfg d r))
+          (fun p => ‖fnwLeftMiddleBoundary A Φ p‖)
+          (fun p => ‖fnwRightMiddleBoundary A Ψ p‖)
+      · exact mul_nonneg (fnwTraceInverseFactor_pos hρ).le (norm_nonneg _)
 
 end
 
