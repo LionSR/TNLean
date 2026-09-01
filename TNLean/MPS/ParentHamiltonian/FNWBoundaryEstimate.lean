@@ -39,6 +39,7 @@ noncomputable def physicalSiteReverseES (d N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (physicalSiteReverseConfigEquiv d N)
 
+/-- Physical-site reversal evaluates a Euclidean vector on the reversed configuration. -/
 @[simp]
 theorem physicalSiteReverseES_apply
     (ψ : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
