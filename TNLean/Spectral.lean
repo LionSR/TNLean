@@ -11,7 +11,6 @@ Authors: TNLean contributors
 import TNLean.Spectral.CrossCorrelation
 import TNLean.Spectral.MPVOverlapDecayRect
 import TNLean.Spectral.MPVOverlapTrace
-import TNLean.Spectral.PrescribedRatePowerDecay
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.QuantitativeGap
 import TNLean.Spectral.TransferOperatorGapInjective
