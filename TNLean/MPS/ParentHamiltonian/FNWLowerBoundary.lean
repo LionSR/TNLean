@@ -251,7 +251,7 @@ theorem fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram [NeZero D]
   rw [fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf]
   exact (fnwBoundaryGram_isSymmetric ρ hρ A N).hasEigenvalue_iInf_of_finiteDimensional
 
-private theorem fnwBoundaryNormRatio_bddBelow [NeZero D]
+private theorem fnwBoundaryNormRatio_bddBelow
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
     BddBelow (Set.range (fnwBoundaryNormRatio ρ hρ A N)) := by
   refine ⟨0, ?_⟩
