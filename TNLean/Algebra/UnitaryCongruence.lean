@@ -12,9 +12,9 @@ import Mathlib.LinearAlgebra.Lagrange
 /-!
 # Congruence factorization of symmetric unitary matrices
 
-A complex symmetric unitary matrix has a symmetric unitary square root. The square root is the
-finite spectral-projector square root from CPSV17, Lemma `lemma:conjclass-normalform-continuous`
-(arXiv:1703.09188, lines 1054--1064).
+The two branches of the finite spectral-projector construction in CPSV17, Lemma
+`lemma:conjclass-normalform-continuous`, give congruence factorizations of symmetric and
+skew-symmetric unitary matrices (arXiv:1703.09188, lines 1054--1082).
 -/
 
 open scoped Polynomial
@@ -131,5 +131,249 @@ theorem exists_symmetric_unitary_squareRoot
     change ((Polynomial.aeval x) q).transpose = (Polynomial.aeval x) q
     rw [transpose_aeval, hsym]
   exact ⟨S, hS_symm, hS_unitary, by simpa [hS_symm] using hS_sq.symm⟩
+
+end Matrix
+
+namespace Matrix
+
+variable {ι κ m : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ]
+  [Fintype m]
+
+/-- Multiplication of sums weighted by a complete orthogonal family of idempotents reduces
+pointwise to multiplication of their weights. -/
+theorem weighted_sum_mul_weighted_sum
+    (Q : ι → Matrix m m ℂ)
+    (hQmul : ∀ a b, Q a * Q b = if a = b then Q a else 0)
+    (u v : ι → ℂ) :
+    (∑ a, u a • Q a) * (∑ a, v a • Q a) = ∑ a, (u a * v a) • Q a := by
+  simp only [Finset.sum_mul, Finset.mul_sum, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+  simp [hQmul]
+  apply Finset.sum_congr rfl
+  intro a ha
+  rw [mul_comm]
+
+variable [DecidableEq m]
+
+/-- A sum of mutually orthogonal Hermitian idempotents with unit-modulus weights is unitary
+when the idempotents sum to the identity. -/
+theorem weighted_sum_mem_unitaryGroup
+    (Q : ι → Matrix m m ℂ)
+    (hQstar : ∀ a, (Q a)ᴴ = Q a)
+    (hQmul : ∀ a b, Q a * Q b = if a = b then Q a else 0)
+    (hQsum : ∑ a, Q a = 1)
+    (u : ι → ℂ)
+    (hu : ∀ a, ‖u a‖ = 1) :
+    (∑ a, u a • Q a) ∈ Matrix.unitaryGroup m ℂ := by
+  rw [Matrix.mem_unitaryGroup_iff']
+  change (∑ a, u a • Q a)ᴴ * (∑ a, u a • Q a) = 1
+  rw [Matrix.conjTranspose_sum]
+  simp_rw [Matrix.conjTranspose_smul, hQstar]
+  rw [weighted_sum_mul_weighted_sum Q hQmul]
+  convert hQsum using 1
+  apply Finset.sum_congr rfl
+  intro a ha
+  have hua : star (u a) * u a = 1 := by
+    change (starRingEnd ℂ) (u a) * u a = 1
+    rw [← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq, hu]
+    norm_num
+  rw [hua, one_smul]
+
+/-- Assemble the skew-symmetric branch of the unitary congruence normal form from the paired
+spectral projectors in CPSV17, Lemma `lemma:conjclass-normalform-continuous`
+(arXiv:1703.09188, lines 1066--1082).
+
+The two summands of `Sum κ κ` index `P_E` and `P_Eᵀ`. The hypotheses say that these form a
+complete orthogonal family of Hermitian projectors. The witnesses are exactly
+`S = exp (-iπ/4) ∑_E exp (-iE/2) (P_E + P_Eᵀ)` and
+`Λ = i ∑_E (P_E - P_Eᵀ)` from the paper. -/
+theorem exists_skew_unitary_congruence_of_paired_projectors
+    (P : κ → Matrix (Sum κ κ) (Sum κ κ) ℂ)
+    (E : κ → ℝ)
+    (hPstar : ∀ k, (P k)ᴴ = P k)
+    (hPmul : ∀ a b : Sum κ κ,
+      Sum.elim P (fun k ↦ (P k).transpose) a *
+          Sum.elim P (fun k ↦ (P k).transpose) b =
+        if a = b then Sum.elim P (fun k ↦ (P k).transpose) a else 0)
+    (hPsum : ∑ a : Sum κ κ, Sum.elim P (fun k ↦ (P k).transpose) a = 1) :
+    let x := ∑ k, Complex.exp (-(E k : ℂ) * Complex.I) • (P k - (P k).transpose)
+    ∃ S Λ : Matrix (Sum κ κ) (Sum κ κ) ℂ,
+      S = Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) •
+          ∑ k, Complex.exp (-((E k : ℂ) / 2) * Complex.I) •
+            (P k + (P k).transpose) ∧
+      Λ = Complex.I • ∑ k, (P k - (P k).transpose) ∧
+      S.transpose = S ∧
+      S ∈ Matrix.unitaryGroup (Sum κ κ) ℂ ∧
+      Λ.map (starRingEnd ℂ) = Λ ∧
+      Λ.transpose = -Λ ∧
+      Λ ∈ Matrix.unitaryGroup (Sum κ κ) ℂ ∧
+      x = S.transpose * Λ * S := by
+  let Q : Sum κ κ → Matrix (Sum κ κ) (Sum κ κ) ℂ :=
+    Sum.elim P (fun k ↦ (P k).transpose)
+  let s : Sum κ κ → ℂ := fun a ↦
+    Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+      Complex.exp (-((E (Sum.elim id id a) : ℂ) / 2) * Complex.I)
+  let l : Sum κ κ → ℂ := Sum.elim (fun _ ↦ Complex.I) (fun _ ↦ -Complex.I)
+  let S : Matrix (Sum κ κ) (Sum κ κ) ℂ := ∑ a, s a • Q a
+  let Λ : Matrix (Sum κ κ) (Sum κ κ) ℂ := ∑ a, l a • Q a
+  have hQstar : ∀ a, (Q a)ᴴ = Q a := by
+    intro a
+    cases a with
+    | inl k => exact hPstar k
+    | inr k =>
+        ext i j
+        have h := congrArg (fun M : Matrix (Sum κ κ) (Sum κ κ) ℂ ↦ M j i) (hPstar k)
+        simpa [Q, Matrix.conjTranspose_apply, Matrix.transpose_apply] using h
+  have hs_formula :
+      S = Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) •
+          ∑ k, Complex.exp (-((E k : ℂ) / 2) * Complex.I) •
+            (P k + (P k).transpose) := by
+    dsimp only [S]
+    rw [Fintype.sum_sum_type]
+    simp only [s, Q, Sum.elim_inl, Sum.elim_inr, id_eq]
+    rw [Finset.smul_sum]
+    simp_rw [smul_add, smul_smul]
+    rw [Finset.sum_add_distrib]
+  have hl_formula : Λ = Complex.I • ∑ k, (P k - (P k).transpose) := by
+    dsimp only [Λ]
+    rw [Fintype.sum_sum_type]
+    simp only [l, Q, Sum.elim_inl, Sum.elim_inr]
+    rw [Finset.smul_sum]
+    simp_rw [smul_sub]
+    rw [Finset.sum_sub_distrib]
+    simp only [neg_smul]
+    rw [sub_eq_add_neg]
+    congr 1
+    exact Finset.sum_neg_distrib (fun x : κ ↦ Complex.I • (P x).transpose)
+  have hS_transpose : S.transpose = S := by
+    rw [hs_formula]
+    simp only [Matrix.transpose_smul, Matrix.transpose_sum, Matrix.transpose_add,
+      Matrix.transpose_transpose]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro k hk
+    rw [add_comm]
+  have hs_norm (a : Sum κ κ) : ‖s a‖ = 1 := by
+    simp only [s, norm_mul]
+    rw [Complex.norm_exp, Complex.norm_exp]
+    simp
+  have hS_unitary : S ∈ Matrix.unitaryGroup (Sum κ κ) ℂ := by
+    exact weighted_sum_mem_unitaryGroup Q hQstar hPmul hPsum s hs_norm
+  have hPmap (k : κ) : (P k).map (starRingEnd ℂ) = (P k).transpose := by
+    ext i j
+    have h := congrArg (fun M : Matrix (Sum κ κ) (Sum κ κ) ℂ ↦ M j i) (hPstar k)
+    simpa [Matrix.conjTranspose_apply, Matrix.transpose_apply] using h
+  have hPtransposeMap (k : κ) : (P k).transpose.map (starRingEnd ℂ) = P k := by
+    ext i j
+    have h := congrArg (fun M : Matrix (Sum κ κ) (Sum κ κ) ℂ ↦ M i j) (hPstar k)
+    simpa [Matrix.conjTranspose_apply, Matrix.transpose_apply] using h
+  have hmap_sub (k : κ) :
+      (P k - (P k).transpose).map (starRingEnd ℂ) = (P k).transpose - P k := by
+    rw [Matrix.map_sub (starRingEnd ℂ) (starRingEnd ℂ).map_sub, hPmap, hPtransposeMap]
+  have hmap_sum_finset (t : Finset κ) :
+      (∑ k ∈ t, (P k - (P k).transpose)).map (starRingEnd ℂ) =
+        ∑ k ∈ t, (P k - (P k).transpose).map (starRingEnd ℂ) := by
+    induction t using Finset.induction_on with
+    | empty => simp
+    | @insert a t ha ih =>
+        rw [Finset.sum_insert ha, Finset.sum_insert ha,
+          Matrix.map_add (starRingEnd ℂ) (starRingEnd ℂ).map_add, ih]
+  have hmap_sum :
+      (∑ k, (P k - (P k).transpose)).map (starRingEnd ℂ) =
+        ∑ k, (P k - (P k).transpose).map (starRingEnd ℂ) := by
+    simpa using hmap_sum_finset Finset.univ
+  have hsum_map :
+      (∑ k, (P k - (P k).transpose)).map (starRingEnd ℂ) =
+        -(∑ k, (P k - (P k).transpose)) := by
+    rw [hmap_sum]
+    simp_rw [hmap_sub]
+    rw [← Finset.sum_neg_distrib]
+    apply Finset.sum_congr rfl
+    intro k hk
+    module
+  have hΛ_real : Λ.map (starRingEnd ℂ) = Λ := by
+    rw [hl_formula, Matrix.map_smul' (starRingEnd ℂ) Complex.I _
+      (starRingEnd ℂ).map_mul, hsum_map, Complex.conj_I]
+    module
+  have hΛ_transpose : Λ.transpose = -Λ := by
+    rw [hl_formula]
+    simp only [Matrix.transpose_smul, Matrix.transpose_sum, Matrix.transpose_sub,
+      Matrix.transpose_transpose]
+    have hneg : (∑ k, ((P k).transpose - P k)) =
+        -(∑ k, (P k - (P k).transpose)) := by
+      rw [← Finset.sum_neg_distrib]
+      apply Finset.sum_congr rfl
+      intro k hk
+      module
+    rw [hneg]
+    module
+  have hl_norm (a : Sum κ κ) : ‖l a‖ = 1 := by
+    cases a <;> simp [l]
+  have hΛ_unitary : Λ ∈ Matrix.unitaryGroup (Sum κ κ) ℂ := by
+    exact weighted_sum_mem_unitaryGroup Q hQstar hPmul hPsum l hl_norm
+  have hphase (r : ℝ) :
+      Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+          (Complex.exp (-((r : ℂ) / 2) * Complex.I) *
+            (Complex.I * (Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+              Complex.exp (-((r : ℂ) / 2) * Complex.I)))) =
+        Complex.exp (-(r : ℂ) * Complex.I) := by
+    have hquarter :
+        Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+            Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) = -Complex.I := by
+      rw [← Complex.exp_add]
+      convert (Complex.exp_neg ((Real.pi : ℂ) / 2 * Complex.I)).trans
+        (congrArg Inv.inv Complex.exp_pi_div_two_mul_I) using 1 <;> ring_nf
+      simp
+    have hhalf :
+        Complex.exp (-((r : ℂ) / 2) * Complex.I) *
+            Complex.exp (-((r : ℂ) / 2) * Complex.I) =
+          Complex.exp (-(r : ℂ) * Complex.I) := by
+      rw [← Complex.exp_add]
+      congr 1
+      ring
+    rw [show Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+        (Complex.exp (-((r : ℂ) / 2) * Complex.I) *
+          (Complex.I * (Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+            Complex.exp (-((r : ℂ) / 2) * Complex.I)))) =
+        (Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+          Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I)) *
+        (Complex.exp (-((r : ℂ) / 2) * Complex.I) *
+          Complex.exp (-((r : ℂ) / 2) * Complex.I)) * Complex.I by ring]
+    rw [hquarter, hhalf]
+    calc
+      (-Complex.I * Complex.exp (-(r : ℂ) * Complex.I)) * Complex.I =
+          -(Complex.I * Complex.I) * Complex.exp (-(r : ℂ) * Complex.I) := by ring
+      _ = Complex.exp (-(r : ℂ) * Complex.I) := by rw [Complex.I_mul_I]; ring
+  have hphase_neg (r : ℝ) :
+      Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+          (Complex.exp (-((r : ℂ) / 2) * Complex.I) *
+            (-Complex.I * (Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+              Complex.exp (-((r : ℂ) / 2) * Complex.I)))) =
+        -Complex.exp (-(r : ℂ) * Complex.I) := by
+    rw [show Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+        (Complex.exp (-((r : ℂ) / 2) * Complex.I) *
+          (-Complex.I * (Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+            Complex.exp (-((r : ℂ) / 2) * Complex.I)))) =
+      -(Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+        (Complex.exp (-((r : ℂ) / 2) * Complex.I) *
+          (Complex.I * (Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
+            Complex.exp (-((r : ℂ) / 2) * Complex.I))))) by ring, hphase]
+  have hfactor :
+      (∑ k, Complex.exp (-(E k : ℂ) * Complex.I) • (P k - (P k).transpose)) =
+        S.transpose * Λ * S := by
+    rw [hS_transpose]
+    dsimp only [S, Λ]
+    rw [weighted_sum_mul_weighted_sum Q hPmul,
+      weighted_sum_mul_weighted_sum Q hPmul]
+    rw [Fintype.sum_sum_type]
+    simp only [s, l, Q, Sum.elim_inl, Sum.elim_inr, id_eq, mul_assoc]
+    simp_rw [hphase, hphase_neg, smul_sub]
+    rw [Finset.sum_sub_distrib, sub_eq_add_neg]
+    congr 1
+    rw [← Finset.sum_neg_distrib]
+    apply Finset.sum_congr rfl
+    intro k hk
+    rw [neg_smul]
+  exact ⟨S, Λ, hs_formula, hl_formula, hS_transpose, hS_unitary, hΛ_real,
+    hΛ_transpose, hΛ_unitary, hfactor⟩
 
 end Matrix
