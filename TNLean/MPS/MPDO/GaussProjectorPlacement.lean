@@ -41,6 +41,7 @@ def gaussLocalCoordinateEquiv :
         (Equiv.arrowCongr (Equiv.refl (Fin 2))
           (Fintype.equivFin (Fin d × G))))
 
+omit [Group G] in
 @[simp]
 theorem gaussLocalCoordinateEquiv_apply_zero
     (x : (Fin 2 → Fin d) × (G × G)) :
@@ -48,6 +49,7 @@ theorem gaussLocalCoordinateEquiv_apply_zero
       Fintype.equivFin (Fin d × G) (x.1 0, x.2.1) :=
   rfl
 
+omit [Group G] in
 @[simp]
 theorem gaussLocalCoordinateEquiv_apply_one
     (x : (Fin 2 → Fin d) × (G × G)) :
@@ -71,15 +73,20 @@ preserves its star-projection property. -/
 theorem isStarProjection_gaussWindowProjector
     (R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ) :
     IsStarProjection (gaussWindowProjector d G R) := by
-  rw [isStarProjection_iff'] at *
-  obtain ⟨hidempotent, hselfAdjoint⟩ := isStarProjection_gaussProjector R
+  rw [isStarProjection_iff']
+  have h := (isStarProjection_iff').mp (isStarProjection_gaussProjector R)
   constructor
-  · rw [gaussWindowProjector, ← map_mul, hidempotent]
-  · rw [gaussWindowProjector, Matrix.star_eq_conjTranspose,
-      Matrix.conjTranspose_reindex]
+  · rw [gaussWindowProjector, ← map_mul, h.1]
+  · change
+      (Matrix.reindex (gaussLocalCoordinateEquiv d G)
+        (gaussLocalCoordinateEquiv d G)
+        (gaussProjector R)).conjTranspose =
+      Matrix.reindex (gaussLocalCoordinateEquiv d G)
+        (gaussLocalCoordinateEquiv d G) (gaussProjector R)
+    rw [Matrix.conjTranspose_reindex]
     simpa [Matrix.star_eq_conjTranspose] using congrArg
       (Matrix.reindex (gaussLocalCoordinateEquiv d G)
-        (gaussLocalCoordinateEquiv d G)) hselfAdjoint
+        (gaussLocalCoordinateEquiv d G)) h.2
 
 /-- The local Gauss projector placed on the periodic two-site window beginning
 at `j`, as in FBC25, Equation `eq:gauge_projs` (arXiv:2502.20257,
