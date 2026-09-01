@@ -14,9 +14,11 @@ This module studies the pointwise transformation
 $$
   U^{ij} \longmapsto A U^{ij} B
 $$
-of an MPO tensor. Both raw source cuts are multiplied on the left by
-$A \otimes I_d$ and on the right by $I_d \otimes B$. Consequently, invertible
-$A$ and $B$ preserve both source-cut ranks.
+of an MPO tensor. The first source cut is multiplied on the left by
+$I_d \otimes B^{\mathsf T}$ and on the right by $A^{\mathsf T} \otimes I_d$;
+the second is multiplied on the left by $A \otimes I_d$ and on the right by
+$I_d \otimes B$. Consequently, invertible $A$ and $B$ preserve both source-cut
+ranks.
 
 This is the rank-preservation step in
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, arXiv:1703.09188],
@@ -72,17 +74,37 @@ theorem transferMap_virtualSandwich
     Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
 
 /-- The first raw source cut of a virtual sandwich is
-$(A\otimes I_d)M_1(U)(I_d\otimes B)$, with no transpose or conjugation.
+$(I_d\otimes B^{\mathsf T})M_1(U)(A^{\mathsf T}\otimes I_d)$.
 
 Source: arXiv:1703.09188, Proposition IV.5, lines 786--804. -/
 theorem sourceCutM₁_virtualSandwich (A : Matrix (Fin D) (Fin D) ℂ)
     (U : MPOTensor d D) (B : Matrix (Fin D) (Fin D) ℂ) :
     sourceCutM₁ (virtualSandwich A U B) =
-      (A ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) * sourceCutM₁ U *
-        ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ B) := by
-  ext ⟨α, j⟩ ⟨i, β⟩
-  simp [virtualSandwich, sourceCutM₁, Matrix.mul_apply, Matrix.one_apply,
-    Fintype.sum_prod_type]
+      ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ B.transpose) * sourceCutM₁ U *
+        (A.transpose ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) := by
+  ext ⟨i, β⟩ ⟨α, j⟩
+  have h :
+      (∑ δ, (∑ γ, A α γ * U i j γ δ) * B δ β) =
+        ∑ γ, (∑ δ, B δ β * U i j γ δ) * A α γ := by
+    calc
+      _ = ∑ δ, ∑ γ, (A α γ * U i j γ δ) * B δ β := by
+        apply Finset.sum_congr rfl
+        intro δ _
+        exact Finset.sum_mul Finset.univ (fun γ ↦ A α γ * U i j γ δ) (B δ β)
+      _ = ∑ γ, ∑ δ, (A α γ * U i j γ δ) * B δ β :=
+        Finset.sum_comm (s := Finset.univ) (t := Finset.univ)
+      _ = ∑ γ, ∑ δ, (B δ β * U i j γ δ) * A α γ := by
+        apply Finset.sum_congr rfl
+        intro γ _
+        apply Finset.sum_congr rfl
+        intro δ _
+        ring
+      _ = _ := by
+        apply Finset.sum_congr rfl
+        intro γ _
+        exact (Finset.sum_mul Finset.univ (fun δ ↦ B δ β * U i j γ δ) (A α γ)).symm
+  simpa [virtualSandwich, sourceCutM₁, Matrix.mul_apply, Matrix.one_apply,
+    Fintype.sum_prod_type] using h
 
 /-- The second raw source cut of a virtual sandwich is
 $(A\otimes I_d)M_2(U)(I_d\otimes B)$, with no transpose or conjugation.
@@ -117,8 +139,10 @@ theorem rightRank_virtualSandwich (A : Matrix (Fin D) (Fin D) ℂ)
     (hA : IsUnit A) (hB : IsUnit B) :
     r[virtualSandwich A U B] = r[U] := by
   rw [rightRank, sourceCutM₁_virtualSandwich]
-  rw [Matrix.rank_mul_eq_left_of_isUnit_det _ _ (isUnit_det_one_kronecker B hB)]
-  exact Matrix.rank_mul_eq_right_of_isUnit_det _ _ (isUnit_det_kronecker_one A hA)
+  rw [Matrix.rank_mul_eq_left_of_isUnit_det _ _
+    (isUnit_det_kronecker_one A.transpose ((Matrix.isUnit_transpose A).mpr hA))]
+  exact Matrix.rank_mul_eq_right_of_isUnit_det _ _
+    (isUnit_det_one_kronecker B.transpose ((Matrix.isUnit_transpose B).mpr hB))
 
 /-- Invertible virtual matrices preserve the left source rank.
 
