@@ -171,6 +171,68 @@ noncomputable def fnwLowerBoundaryConstant [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) : ℝ :=
   ⨅ B : {B : Mat // B ≠ 0}, fnwBoundaryNormRatio ρ hρ A N B
 
+/-- The source infimum is the infimum of the Rayleigh quotient of the weighted
+Gram operator. -/
+theorem fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    fnwLowerBoundaryConstant ρ hρ A N =
+      ⨅ B : {B : Mat // B ≠ 0},
+        RCLike.re (inner ℂ (fnwBoundaryGram ρ hρ A N B.1) B.1) / ‖B.1‖ ^ 2 := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  rw [fnwLowerBoundaryConstant]
+  apply iInf_congr
+  intro B
+  exact fnwBoundaryNormRatio_eq_gram_rayleighQuotient ρ hρ A N B B.2
+
+/-- The weighted Gram operator is symmetric. -/
+theorem fnwBoundaryGram_isSymmetric
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    (fnwBoundaryGram ρ hρ A N).IsSymmetric := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  exact (fnwBoundaryMapCLM ρ hρ A N).toLinearMap.isSymmetric_adjoint_comp_self
+
+/-- FNW's identity \(a_-(N)=\inf\operatorname{spec}(F_N^*F_N)\), packaged
+without ordering the complex spectrum: \(a_-(N)\), coerced to \(ℂ\), belongs to
+the spectrum of the weighted Gram operator. -/
+theorem fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    (fnwLowerBoundaryConstant ρ hρ A N : ℂ) ∈
+      spectrum ℂ (fnwBoundaryGram ρ hρ A N) := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  rw [← Module.End.hasEigenvalue_iff_mem_spectrum]
+  rw [fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf]
+  exact (fnwBoundaryGram_isSymmetric ρ hρ A N).hasEigenvalue_iInf_of_finiteDimensional
+
 private theorem fnwBoundaryNormRatio_bddBelow [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
     BddBelow (Set.range (fnwBoundaryNormRatio ρ hρ A N)) := by
@@ -186,6 +248,47 @@ theorem fnwLowerBoundaryConstant_le_ratio [NeZero D]
     fnwLowerBoundaryConstant ρ hρ A N ≤
       fnwBoundaryNormRatio ρ hρ A N ⟨B, hB⟩ := by
   exact ciInf_le (fnwBoundaryNormRatio_bddBelow ρ hρ A N) ⟨B, hB⟩
+
+/-- Every spectral value of the weighted Gram operator has real part at least
+\(a_-(N)\). Together with
+`fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram`, this is the ordered
+meaning of \(a_-(N)=\inf\operatorname{spec}(F_N^*F_N)\). -/
+theorem fnwLowerBoundaryConstant_le_re_of_mem_spectrum_fnwBoundaryGram [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
+    (z : ℂ) (hz : z ∈ spectrum ℂ (fnwBoundaryGram ρ hρ A N)) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    fnwLowerBoundaryConstant ρ hρ A N ≤ z.re := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  have heig : Module.End.HasEigenvalue (fnwBoundaryGram ρ hρ A N) z :=
+    Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz
+  have hzreal : (z.re : ℂ) = z :=
+    RCLike.conj_eq_iff_re.mp
+      ((fnwBoundaryGram_isSymmetric ρ hρ A N).conj_eigenvalue_eq_self heig)
+  rw [← hzreal] at heig
+  obtain ⟨B, hB⟩ := heig.exists_hasEigenvector
+  have hle := fnwLowerBoundaryConstant_le_ratio ρ hρ A N B hB.2
+  rw [fnwBoundaryNormRatio_eq_gram_rayleighQuotient ρ hρ A N B hB.2] at hle
+  rw [hB.apply_eq_smul] at hle
+  simp only [inner_smul_left, inner_self_eq_norm_sq_to_K,
+    Complex.conj_ofReal] at hle
+  convert hle using 1
+  field_simp [norm_ne_zero_iff.mpr hB.2]
+  norm_cast
+  change z.re * ‖B‖ ^ 2 =
+    ((z.re : ℂ) * ((‖B‖ ^ 2 : ℝ) : ℂ)).re
+  rw [Complex.mul_re]
+  norm_cast
+  ring
 
 /-- The source constant gives its universal quadratic lower bound, including at
 the zero matrix. -/
