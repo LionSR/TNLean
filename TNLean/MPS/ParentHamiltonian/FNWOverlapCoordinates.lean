@@ -169,6 +169,130 @@ theorem fnwRightOverlapMap_apply_append
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
   simp [fnwRightOverlapMap]
 
+/-- Splitting an FNW boundary configuration after a left block moves the
+adjoint left word to the left of the boundary matrix. -/
+theorem fnwBoundaryMapCLM_append_eq_leftWord
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (K L : ℕ)
+    (B : Mat) (u : Cfg d K) (τ : Cfg d L) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    fnwBoundaryMapCLM ρ hρ A (K + L) B (Fin.append u τ) =
+      fnwBoundaryMapCLM ρ hρ A L
+        ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ * B) τ := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  simp only [fnwBoundaryMapCLM_apply, fnwBoundaryMap_apply,
+    List.ofFn_fin_append, Kraus.evalWord_append, Matrix.conjTranspose_mul,
+    Matrix.mul_assoc]
+  exact Matrix.trace_mul_cycle' B
+    (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn τ))ᴴ
+    (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ
+
+/-- Splitting an FNW boundary configuration before a right block moves the
+adjoint right word to the right of the boundary matrix. -/
+theorem fnwBoundaryMapCLM_append_eq_rightWord
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (K L : ℕ)
+    (B : Mat) (u : Cfg d K) (τ : Cfg d L) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    fnwBoundaryMapCLM ρ hρ A (K + L) B (Fin.append u τ) =
+      fnwBoundaryMapCLM ρ hρ A K
+        (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn τ))ᴴ) u := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  simp only [fnwBoundaryMapCLM_apply, fnwBoundaryMap_apply,
+    List.ofFn_fin_append, Kraus.evalWord_append, Matrix.conjTranspose_mul,
+    Matrix.mul_assoc]
+
+/-- The physical inner product of the two overlap families decomposes into
+length-\(m\) FNW boundary inner products, one for each pair of spectator
+configurations. -/
+theorem inner_fnwLeftOverlapMap_fnwRightOverlapMap
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
+    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
+        (fnwRightOverlapMap ρ hρ A ℓ m r Ψ) =
+      ∑ μℓ : Cfg d ℓ, ∑ μr : Cfg d r,
+        inner ℂ
+          (fnwBoundaryMapCLM ρ hρ A m
+            ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))ᴴ * Φ.ofLp μr))
+          (fnwBoundaryMapCLM ρ hρ A m
+            (Ψ.ofLp μℓ *
+              (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ)) := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  rw [PiLp.inner_apply]
+  trans ∑ p : (Cfg d ℓ × Cfg d m) × Cfg d r,
+      inner ℂ
+        (fnwLeftOverlapMap ρ hρ A ℓ m r Φ
+          (fnwThreeBlockConfigEquiv d ℓ m r p))
+        (fnwRightOverlapMap ρ hρ A ℓ m r Ψ
+          (fnwThreeBlockConfigEquiv d ℓ m r p))
+  · symm
+    apply Fintype.sum_equiv (fnwThreeBlockConfigEquiv d ℓ m r)
+    intro p
+    rfl
+  · simp only [Fintype.sum_prod_type]
+    apply Finset.sum_congr rfl
+    intro μℓ _
+    rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro μr _
+    rw [PiLp.inner_apply]
+    apply Finset.sum_congr rfl
+    intro μm _
+    simp only [fnwThreeBlockConfigEquiv_apply]
+    rw [fnwLeftOverlapMap_apply_append, fnwRightOverlapMap_apply_append,
+      fnwBoundaryMapCLM_append_eq_leftWord,
+      fnwBoundaryMapCLM_append_eq_rightWord]
+
+/-- The weighted source pairing after extracting left and right words is
+exactly the pairing of the corresponding aggregate summands. -/
+theorem inner_conjTranspose_mul_mul_conjTranspose_eq_aggregateSummands
+    (ρ : Mat) (hρ : ρ.PosDef) (U V X Y : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    inner ℂ (Uᴴ * X) (Y * Vᴴ) =
+      inner ℂ (X * ρ * V * ρ⁻¹) (U * Y) := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  rw [Matrix.rhoWeighted_inner ρ hρ, Matrix.rhoWeighted_inner ρ hρ]
+  simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
+    Matrix.conjTranspose_nonsing_inv, hρ.isHermitian.eq]
+  rw [show ρ * (ρ⁻¹ * (Vᴴ * (ρ * Xᴴ))) * (U * Y) =
+      (ρ * ρ⁻¹) * Vᴴ * ρ * Xᴴ * U * Y by simp only [Matrix.mul_assoc]]
+  rw [Matrix.mul_nonsing_inv ρ
+    ((Matrix.isUnit_iff_isUnit_det ρ).mp hρ.isUnit), Matrix.one_mul]
+  simpa only [Matrix.mul_assoc] using
+    Matrix.trace_mul_cycle ρ (Xᴴ * U * Y) Vᴴ
+
 /-- The aggregate matrix \(A_\varphi\) in FNW Lemma 6.2, with source order
 \(\Phi(\mu^r)\rho v(\mu^r)\rho^{-1}\). -/
 noncomputable def fnwLeftOverlapAggregate
@@ -184,6 +308,42 @@ noncomputable def fnwRightOverlapAggregate
     (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) : Mat :=
   ∑ μℓ : Cfg d ℓ,
     Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ) * Ψ.ofLp μℓ
+
+/-- The leading weighted term in the middle-block decomposition is the
+rho-weighted inner product of the two FNW aggregate matrices. -/
+theorem sum_inner_overlapFibers_eq_inner_aggregates
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ r : ℕ)
+    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    ∑ μℓ : Cfg d ℓ, ∑ μr : Cfg d r,
+        inner ℂ
+          ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))ᴴ * Φ.ofLp μr)
+          (Ψ.ofLp μℓ *
+            (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ) =
+      inner ℂ (fnwLeftOverlapAggregate ρ A r Φ)
+        (fnwRightOverlapAggregate A ℓ Ψ) := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  rw [fnwLeftOverlapAggregate, fnwRightOverlapAggregate, sum_inner]
+  simp_rw [inner_sum]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro μr _
+  apply Finset.sum_congr rfl
+  intro μℓ _
+  exact inner_conjTranspose_mul_mul_conjTranspose_eq_aggregateSummands
+    ρ hρ
+    (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))
+    (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))
+    (Φ.ofLp μr) (Ψ.ofLp μℓ)
 
 end
 
