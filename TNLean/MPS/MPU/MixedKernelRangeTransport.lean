@@ -167,9 +167,8 @@ theorem sourceX₂_mul_conjTranspose_mul_sourceCutM₂ :
   rw [Matrix.mul_assoc, ← sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂]
   exact (sourceCutM₂_eq_sourceX₂_mul_sourceY₂ U).symm
 
-/-- Expanding both periodic MPO entries through $X_1$, the auxiliary
-$Y_1$--$X_2$ kernel, $X_2$, and the forward open tail gives a normalized
-mixed-kernel metric. MPU
+/-- Expanding both periodic MPO entries through the paper gate $v$, $Y_1$,
+$X_2$, and the forward open tail gives a normalized source-gate metric. MPU
 output coisometry evaluates this complete expression to the retained physical
 Kronecker delta. The entry indexed by $q$ is unstarred and the entry indexed by
 $p$ is starred. The theorem evaluates the displayed expansion directly; it
@@ -178,7 +177,7 @@ or identify the Gram matrix of the paper gate `sourceU`.
 
 Auxiliary mixed-cut identity; not CPSV17 equation `uUnitary` or Lemma
 `lemuisometry`. -/
-theorem IsMPU.normalized_sourceY₁X₂_openTail_metric [NeZero d]
+theorem IsMPU.normalized_sourceV_openTail_metric [NeZero d]
     {U : MPOTensor d D} (hU : IsMPU U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (K : ℕ)
     (p q : Fin d × Fin d) :
@@ -186,18 +185,18 @@ theorem IsMPU.normalized_sourceY₁X₂_openTail_metric [NeZero d]
         ∑ τ : Fin K → Fin d, ∑ j : Fin d × Fin d, ∑ ζ : Fin K → Fin d,
           (∑ α : Fin D, ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
             ∑ β : Fin D, ∑ i : Fin d,
-              sourceX₁ U ρ hρ (α, j.1) r * sourceY₁X₂ U ρ hρ (l, r) q *
+              sourceV U ρ hρ q (r, l) * sourceY₁ U ρ hρ r (α, j.1) *
                 star (sourceX₂ U (β, i) l) *
                   (U i j.2 * evalWord U (List.ofFn τ) (List.ofFn ζ)) β α) *
           star (∑ α' : Fin D, ∑ r' : Fin r[U], ∑ l' : Fin ℓ[U],
             ∑ β' : Fin D, ∑ i' : Fin d,
-              sourceX₁ U ρ hρ (α', j.1) r' * sourceY₁X₂ U ρ hρ (l', r') p *
+              sourceV U ρ hρ p (r', l') * sourceY₁ U ρ hρ r' (α', j.1) *
                 star (sourceX₂ U (β', i') l') *
                   (U i' j.2 * evalWord U (List.ofFn τ) (List.ofFn ζ)) β' α') =
       if p = q then 1 else 0 := by
   classical
-  simp_rw [← mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceX₂_openTail
-    U ρ hρ K q, ← mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceX₂_openTail
+  simp_rw [← mpo_finAddTwo_eq_sum_sourceV_sourceY₁_sourceX₂_openTail
+    U ρ hρ K q, ← mpo_finAddTwo_eq_sum_sourceV_sourceY₁_sourceX₂_openTail
     U ρ hρ K p]
   have hreindex (τ : Fin K → Fin d) :
       (∑ j : Fin d × Fin d, ∑ ζ : Fin K → Fin d,

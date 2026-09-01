@@ -49,8 +49,8 @@ noncomputable def sourceY₁X₂OpenTailCoefficient
     ∑ α : Fin D, ∑ α' : Fin D,
     ∑ β : Fin D, ∑ β' : Fin D,
     ∑ i : Fin d, ∑ i' : Fin d,
-      sourceX₁ U ρ hρ (α, j₁) r *
-        star (sourceX₁ U ρ hρ (α', j₁) r') *
+      sourceX₁ U ρ hρ (j₁, α) r *
+        star (sourceX₁ U ρ hρ (j₁, α') r') *
         star (sourceX₂ U (β, i) l) * sourceX₂ U (β', i') l' *
         (U i j₂ * evalWord U (List.ofFn τ) (List.ofFn ζ)) β α *
         star ((U i' j₂ * evalWord U (List.ofFn τ) (List.ofFn ζ)) β' α')
@@ -69,27 +69,30 @@ theorem sourceY₁X₂_boundary_sandwich
     (l : Fin ℓ[U]) (r : Fin r[U]) (l' : Fin ℓ[U]) (r' : Fin r[U]) :
     (∑ j : Fin d, ∑ α : Fin D, ∑ α' : Fin D,
       ∑ β : Fin D, ∑ i : Fin d,
-        sourceX₁ U ρ hρ (α, j) r *
-          star (sourceX₁ U ρ hρ (α', j) r') *
+        sourceX₁ U ρ hρ (j, α) r *
+          star (sourceX₁ U ρ hρ (j, α') r') *
           star (sourceX₂ U (β, i) l) * sourceX₂ U (β, i) l' * ρ α' α) =
       (if l = l' then 1 else 0) * (if r = r' then 1 else 0) := by
   classical
   have h₁ := sourceX₁_weighted_isometry_apply U ρ hρ r' r
-  simp only [sourceWeight, Matrix.kronecker_apply, Matrix.one_apply, mul_ite,
-    mul_one, mul_zero, ite_mul, zero_mul, Finset.sum_ite_eq',
-    Finset.mem_univ, ite_true, Fintype.sum_prod_type] at h₁
-  rw [Finset.sum_comm] at h₁
+  have hw (j j' : Fin d) (α α' : Fin D) :
+      sourceWeight (d := d) ρ (j, α) (j', α') =
+        if j = j' then ρ α α' else 0 := by
+    simp [sourceWeight, Matrix.one_apply]
+  simp_rw [Fintype.sum_prod_type, hw] at h₁
+  simp only [mul_ite, ite_mul, mul_zero, zero_mul, Finset.sum_ite_irrel,
+    Finset.sum_const_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true] at h₁
   have h₁' :
       (∑ j : Fin d, ∑ α : Fin D,
-        (∑ α' : Fin D, star (sourceX₁ U ρ hρ (α', j) r') * ρ α' α) *
-          sourceX₁ U ρ hρ (α, j) r) = if r' = r then 1 else 0 := by
+        (∑ α' : Fin D, star (sourceX₁ U ρ hρ (j, α') r') * ρ α' α) *
+          sourceX₁ U ρ hρ (j, α) r) = if r' = r then 1 else 0 := by
     simpa only [Finset.sum_mul] using h₁
   have h₂ := sourceX₂_isometry_apply U l l'
   have hreorder (j : Fin d) (α α' β : Fin D) (i : Fin d) :
-      sourceX₁ U ρ hρ (α, j) r * star (sourceX₁ U ρ hρ (α', j) r') *
+      sourceX₁ U ρ hρ (j, α) r * star (sourceX₁ U ρ hρ (j, α') r') *
           star (sourceX₂ U (β, i) l) * sourceX₂ U (β, i) l' * ρ α' α =
-        (star (sourceX₁ U ρ hρ (α', j) r') * ρ α' α *
-          sourceX₁ U ρ hρ (α, j) r) *
+        (star (sourceX₁ U ρ hρ (j, α') r') * ρ α' α *
+          sourceX₁ U ρ hρ (j, α) r) *
         (star (sourceX₂ U (β, i) l) * sourceX₂ U (β, i) l') := by
     ring
   simp_rw [hreorder]
