@@ -21,7 +21,7 @@ completeness are not treated here.
 
 noncomputable section
 
-namespace TNLean.Algebra
+namespace MPOTensor
 
 variable (d : ℕ) (G : Type*) [Group G] [Fintype G]
 
@@ -66,7 +66,7 @@ def gaussWindowProjector
     Matrix (Fin 2 → Fin (Fintype.card (Fin d × G)))
       (Fin 2 → Fin (Fintype.card (Fin d × G))) ℂ :=
   Matrix.reindexAlgEquiv ℂ ℂ (gaussLocalCoordinateEquiv d G)
-    (gaussProjector R)
+    (TNLean.Algebra.gaussProjector R)
 
 /-- Reindexing the local Gauss projector into chain-window coordinates
 preserves its star-projection property. -/
@@ -74,15 +74,16 @@ theorem isStarProjection_gaussWindowProjector
     (R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ) :
     IsStarProjection (gaussWindowProjector d G R) := by
   rw [isStarProjection_iff']
-  have h := (isStarProjection_iff').mp (isStarProjection_gaussProjector R)
+  have h := (isStarProjection_iff').mp
+    (TNLean.Algebra.isStarProjection_gaussProjector R)
   constructor
   · rw [gaussWindowProjector, ← map_mul, h.1]
   · change
       (Matrix.reindex (gaussLocalCoordinateEquiv d G)
         (gaussLocalCoordinateEquiv d G)
-        (gaussProjector R)).conjTranspose =
+        (TNLean.Algebra.gaussProjector R)).conjTranspose =
       Matrix.reindex (gaussLocalCoordinateEquiv d G)
-        (gaussLocalCoordinateEquiv d G) (gaussProjector R)
+        (gaussLocalCoordinateEquiv d G) (TNLean.Algebra.gaussProjector R)
     rw [Matrix.conjTranspose_reindex]
     simpa [Matrix.star_eq_conjTranspose] using congrArg
       (Matrix.reindex (gaussLocalCoordinateEquiv d G)
@@ -106,4 +107,4 @@ theorem isStarProjection_placedGaussProjector
   MPOTensor.embedLocalOperator_isStarProjection 2 N hN j
     (isStarProjection_gaussWindowProjector d G R)
 
-end TNLean.Algebra
+end MPOTensor

@@ -1031,11 +1031,11 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 
 \begin{definition}[Gauss projector on a periodic chain]
     \label{def:mpug_placed_gauss_projector}
-    \lean{TNLean.Algebra.gaussLocalCoordinateEquiv,
-        TNLean.Algebra.gaussLocalCoordinateEquiv_apply_zero,
-        TNLean.Algebra.gaussLocalCoordinateEquiv_apply_one,
-        TNLean.Algebra.gaussWindowProjector,
-        TNLean.Algebra.placedGaussProjector}
+    \lean{MPOTensor.gaussLocalCoordinateEquiv,
+        MPOTensor.gaussLocalCoordinateEquiv_apply_zero,
+        MPOTensor.gaussLocalCoordinateEquiv_apply_one,
+        MPOTensor.gaussWindowProjector,
+        MPOTensor.placedGaussProjector}
     \leanok
     \discussion{7605}
     \uses{def:mpug_gauss_projector}
@@ -1065,8 +1065,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 
 \begin{theorem}[The placed Gauss projector is a projection]
     \label{thm:mpug_placed_gauss_projector_projection}
-    \lean{TNLean.Algebra.isStarProjection_gaussWindowProjector,
-        TNLean.Algebra.isStarProjection_placedGaussProjector}
+    \lean{MPOTensor.isStarProjection_gaussWindowProjector,
+        MPOTensor.isStarProjection_placedGaussProjector}
     \leanok
     \discussion{7605}
     \uses{def:mpug_placed_gauss_projector}
