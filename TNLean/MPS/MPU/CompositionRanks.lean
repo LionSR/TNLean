@@ -24,7 +24,10 @@ namespace MPOTensor
 variable {d D₁ D₂ : ℕ}
 
 /-- The left local factor in the $v$--$Y_1$--$Y_2$ factorization of the
-first two-site source cut. -/
+first two-site source cut.
+
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `vdagger`, lines 525--543,
+as used in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private noncomputable def rightBlockLeft (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin (d * d) × Fin D₁) (Fin d × Fin r[U]) ℂ :=
@@ -32,7 +35,10 @@ private noncomputable def rightBlockLeft (U : MPOTensor d D₁)
     SourceFactors.sourceV U S (finProdFinEquiv.symm I) (r, l) * S.Y₂ l (j₂, b)
 
 /-- The right local factor in the $v$--$Y_1$--$Y_2$ factorization of the
-first two-site source cut. -/
+first two-site source cut.
+
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `vdagger`, lines 525--543,
+as used in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private noncomputable def rightBlockRight (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin d × Fin r[U]) (Fin D₁ × Fin (d * d)) ℂ :=
@@ -41,7 +47,10 @@ private noncomputable def rightBlockRight (U : MPOTensor d D₁)
       S.Y₁ r (a, (finProdFinEquiv.symm J).1) else 0
 
 /-- The two-site first source cut factors through a space of dimension $d r[U]$.
-This is the coordinate factorization obtained from the paper gate $v$. -/
+This is the coordinate factorization obtained from the paper gate $v$.
+
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `vdagger`, lines 525--543,
+as used in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private theorem sourceCutM₁_blockTwo_factorization (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     sourceCutM₁ (blockTwo U) = rightBlockLeft U S * rightBlockRight U S := by
@@ -61,7 +70,10 @@ private theorem sourceCutM₁_blockTwo_factorization (U : MPOTensor d D₁)
   · simp
 
 /-- The left local factor in the $X_2$--$u$--$X_1$ factorization of the
-second two-site source cut. -/
+second two-site source cut.
+
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `uu`, lines 525--543, as used
+in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private noncomputable def leftBlockLeft (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin D₁ × Fin (d * d)) (Fin d × Fin ℓ[U]) ℂ :=
@@ -70,7 +82,10 @@ private noncomputable def leftBlockLeft (U : MPOTensor d D₁)
       S.X₂ (a, (finProdFinEquiv.symm I).1) l else 0
 
 /-- The right local factor in the $X_2$--$u$--$X_1$ factorization of the
-second two-site source cut. -/
+second two-site source cut.
+
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `uu`, lines 525--543, as used
+in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private noncomputable def leftBlockRight (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin d × Fin ℓ[U]) (Fin (d * d) × Fin D₁) ℂ :=
@@ -78,7 +93,10 @@ private noncomputable def leftBlockRight (U : MPOTensor d D₁)
     SourceFactors.sourceU U S (l, r) (finProdFinEquiv.symm J) * S.X₁ (i₂, b) r
 
 /-- The two-site second source cut factors through a space of dimension $d\ell[U]$.
-This is the coordinate factorization obtained from the paper gate $u$. -/
+This is the coordinate factorization obtained from the paper gate $u$.
+
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `uu`, lines 525--543, as used
+in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private theorem sourceCutM₂_blockTwo_factorization (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     sourceCutM₂ (blockTwo U) = leftBlockLeft U S * leftBlockRight U S := by

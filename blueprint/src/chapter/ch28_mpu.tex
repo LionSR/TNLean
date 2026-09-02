@@ -3361,7 +3361,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $\C^r\otimes\C^\ell$, and $Z$ maps in the opposite direction. The
     regrouping of the open indices is
     \begin{align}
-        R\bigl((i,a),(j,b)\bigr)
+        R\bigl((a,i),(j,b)\bigr)
          & =\bigl((i,j),\operatorname{flat}(a,b)\bigr),
     \end{align}
     where $\operatorname{flat}:\Fin D\times\Fin D\simeq\Fin(D^2)$ is the
@@ -3386,9 +3386,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $b=(b_1,b_2)$ be virtual paths. The weighted first-cut contraction is
     \begin{align}
         \sum_r \overline{(Y_1)_{r,(a_1,p_1)}}(Y_1)_{r,(b_1,q_1)}
-         & =\sum_{\alpha,\alpha',j_1}
-        \overline{U^{p_1j_1}_{\alpha a_1}}
-        \rho_{\alpha\alpha'}U^{q_1j_1}_{\alpha'b_1}.
+         & =\sum_{i_1,\beta,\beta'}
+        \overline{U^{i_1p_1}_{a_1\beta}}
+        \rho_{\beta\beta'}U^{i_1q_1}_{b_1\beta'}.
     \end{align}
     The entry of two ordinary double-layer letters from row $(a_1,b_1)$ to
     column $(a_2,b_2)$ is
@@ -3415,11 +3415,11 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     Finally, the Gram entry of $Y_1\otimes Y_2$ expands as
     \begin{align}
-        \sum_{\alpha,\alpha',\beta,j_1,j_2}
-        \overline{U^{p_1j_1}_{\alpha a_1}}
-        \rho_{\alpha\alpha'}U^{q_1j_1}_{\alpha'b_1}
-        \overline{U^{j_2p_2}_{\beta a_2}}
-        U^{j_2q_2}_{\beta b_2}.
+        \sum_{i_1,\beta,\beta',\delta,i_2}
+        \overline{U^{i_1p_1}_{a_1\beta}}
+        \rho_{\beta\beta'}U^{i_1q_1}_{b_1\beta'}
+        \overline{U^{i_2p_2}_{\delta a_2}}
+        U^{i_2q_2}_{\delta b_2}.
     \end{align}
 \end{theorem}
 
@@ -3444,8 +3444,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Let $\rho>0$. For $z=(z_1,z_2)$, $p=(p_1,p_2)$, and
     $a=(a_1,a_2)$,
     \begin{align}
-        \bigl(v(Y_1\otimes Y_2)\bigr)_{z,((p_1,a_1),(p_2,a_2))}
-        =\sum_\gamma U^{p_1z_1}_{\gamma a_1}U^{z_2p_2}_{\gamma a_2}.
+        \bigl(v(Y_1\otimes Y_2)\bigr)_{z,((a_1,p_1),(p_2,a_2))}
+        =\sum_\gamma U^{z_1p_1}_{a_1\gamma}U^{z_2p_2}_{\gamma a_2}.
     \end{align}
     This is the local open-leg identity for the literal gate
     $v=X_1\mathbin{-}X_2$.
@@ -5461,10 +5461,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_source_ranks_physical_reindexing,
         lem:mpu_iterated_physical_blocking}
     Use the canonical physical reindexing to identify iterated two-site
-    blocking with direct four-site blocking. For the right cut, factor the
-    two-site block of each tensor through the auxiliary mixed kernel
-    $a=Y_1\mathbin{-}X_2$. The diagonal cut through the two blocked factors
-    retains one physical leg and one right source leg from each factor. Thus, for
+    blocking with direct four-site blocking. For the right cut, write each
+    two-site block in the $v$--$Y_1$--$Y_2$ form. Group $v$ with $Y_2$ on one
+    side of the cut and retain $Y_1$ on the other. The cut therefore carries
+    one physical leg and one right source leg from each tensor. Thus, for
     suitable rectangular matrices $A_{1,4}$ and $B_{1,4}$,
     \begin{align}
         M_1((\mathcal U\mathbin{\cdot}\mathcal V)_4) & =A_{1,4}B_{1,4},
@@ -5483,9 +5483,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \leq\dim(\mathcal K_1)
         =d^2r[\mathcal U]r[\mathcal V].
     \end{align}
-    For the left cut, use the reflected auxiliary mixed kernel
-    $b=X_1\mathbin{-}Y_2$, with physical order $(j_2,j_1)$ and
-    kernel-column order $(r,\ell)$. For suitable rectangular matrices $A_{2,4}$ and $B_{2,4}$,
+    For the left cut, write each two-site block in the
+    $X_2$--$u$--$X_1$ form. Retain $X_2$ on one side and group $u$ with $X_1$
+    on the other. The cut carries one physical leg and one left source leg from
+    each tensor. For suitable rectangular matrices $A_{2,4}$ and $B_{2,4}$,
     \begin{align}
         M_2((\mathcal U\mathbin{\cdot}\mathcal V)_4) & =A_{2,4}B_{2,4},
     \end{align}
