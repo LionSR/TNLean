@@ -789,6 +789,26 @@ abstracted — record why, so it is not re-proposed).
   five-line term. Net source delta over the four sites: −69 lines against +37
   for the lemma.
 
+### bit-indexed Kraus support fibre sums — promoted
+- **Pattern:** a Kraus operator supported on the indicator of a condition
+  prescribing some bits of a bit-encoded physical index; a sum against it is
+  rewritten into the indicator of the fibre condition by `ite_eq_left` /
+  `ite_eq_right` under `Finset.sum_congr`, and the fibre sum is then collapsed
+  to the single index (all bits prescribed) or to a sum over the free bits.
+- **Seen:** four occurrences across two files (2026-09-02):
+  `MPS/MPDO/TwistedDimerRefine.lean` (`refineKraus_col_sum`, `refineKraus_row_sum`) and
+  `MPS/MPDO/TwistedDimerViaTS.lean` (`coarseKraus_row_sum`, `coarseKraus_res_term`).
+- **Abstraction:** `MPOTensor.TwistedDimer.one_site_fiber_sum`,
+  `left_fiber_sum`, `right_fiber_sum`, and `pair_fiber_sum` in
+  `TNLean/MPS/MPDO/TwistedDimerRefine.lean`, all stated for an arbitrary
+  summand so that each caller supplies its own Kraus amplitude and contracted
+  vector.
+- **Notes:** the pair version is proved from the two one-index versions rather
+  than by expanding sixty-four terms, which keeps its proof independent of the
+  prescribed bits. The one-index versions are proved by transporting the sum
+  along the bit encoding (`sum_fin_eight`) and deciding the eight resulting
+  cases.
+
 ---
 
 ## Completed refactors
