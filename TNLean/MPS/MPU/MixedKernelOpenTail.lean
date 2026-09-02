@@ -71,7 +71,9 @@ theorem sum_sourceV_mul_sourceY₁
 namespace SourceFactors
 
 /-- Contracting the right source leg of $v=X_1\mathbin{-}X_2$ with $Y_1$
-leaves the open $X_2$ leg for supplied source factors. -/
+leaves the open $X_2$ leg for supplied source factors.
+
+Source: CPSV17 equations `uuvv` and `vdagger`, lines 532--543. -/
 theorem sum_sourceV_mul_Y₁
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (i₁ j₁ i₂ : Fin d) (α : Fin D) (l : Fin ℓ[U]) :
