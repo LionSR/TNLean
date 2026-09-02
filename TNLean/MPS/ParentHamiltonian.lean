@@ -50,11 +50,14 @@ import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.ExtendRight
+import TNLean.MPS.ParentHamiltonian.FNWAggregateOrthogonality
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryConvention
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryEstimate
 import TNLean.MPS.ParentHamiltonian.FNWContraction
 import TNLean.MPS.ParentHamiltonian.FNWLimitMap
 import TNLean.MPS.ParentHamiltonian.FNWLowerBoundary
+import TNLean.MPS.ParentHamiltonian.FNWOverlapCoordinates
+import TNLean.MPS.ParentHamiltonian.FNWOverlapEstimate
 import TNLean.MPS.ParentHamiltonian.FNWTransferConvention
 import TNLean.MPS.ParentHamiltonian.FNWTransferDecay
 import TNLean.MPS.ParentHamiltonian.GramConvergence

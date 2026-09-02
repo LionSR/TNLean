@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryEstimate
+import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 
 /-!
 # FNW lower boundary constant
@@ -359,6 +360,32 @@ theorem fnwLowerBoundaryConstant_eq_least_sq_singularValue [NeZero D]
       ρ hρ A N eigenvalue hspec
     simpa only [eigenvalue, Complex.ofReal_re] using hle
 
+/-- Block injectivity makes the FNW lower boundary constant strictly positive.
+This is the positivity input used in FNW 1992, Lemma 6.2. -/
+theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
+    (hInj : Kraus.IsNBlkInjective A N) :
+    0 < fnwLowerBoundaryConstant ρ hρ A N := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let T := (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
+  have hT : Function.Injective T := by
+    change Function.Injective (fnwBoundaryMapCLM ρ hρ A N)
+    rw [fnwBoundaryMapCLM_eq_physicalSiteReverseES_comp]
+    exact (physicalSiteReverseES d N).injective.comp
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.injective.comp
+        (groundSpaceMap_injective_of_isNBlkInjective hInj))
+  have hSingular : ∀ i < Module.finrank ℂ Mat, 0 < T.singularValues i :=
+    T.injective_iff_forall_lt_finrank_singularValues_pos.mp hT
+  obtain ⟨i, hi⟩ :=
+    (fnwLowerBoundaryConstant_eq_least_sq_singularValue ρ hρ A N).1
+  calc
+    0 < T.singularValues i ^ 2 := sq_pos_of_pos (hSingular i i.isLt)
+    _ = fnwLowerBoundaryConstant ρ hρ A N := hi
+
 /-- The source constant gives its universal quadratic lower bound, including at
 the zero matrix. -/
 theorem fnwLowerBoundaryConstant_mul_norm_sq_le [NeZero D]
@@ -470,6 +497,16 @@ theorem fnwLowerBoundaryConstant_mono [NeZero D]
   | base => exact le_rfl
   | succ M hNM ih =>
       exact ih.trans (fnwLowerBoundaryConstant_le_succ ρ hρ A hρfix M)
+
+/-- Block injectivity at an interaction length gives positivity at every longer
+boundary length, as used in FNW 1992, Lemma 6.2. -/
+theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective_of_le [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (hρfix : Kraus.transferMap A ρ = ρ) {L m : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L) (hLm : L ≤ m) :
+    0 < fnwLowerBoundaryConstant ρ hρ A m :=
+  (fnwLowerBoundaryConstant_pos_of_isNBlkInjective ρ hρ A L hInj).trans_le
+    (fnwLowerBoundaryConstant_mono ρ hρ A hρfix hLm)
 
 /-- Primitive-MPS specialization of lower-boundary monotonicity. -/
 theorem IsPrimitiveMPS.fnwLowerBoundaryConstant_mono [NeZero D]

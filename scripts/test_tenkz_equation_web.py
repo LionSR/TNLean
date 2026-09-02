@@ -16,7 +16,7 @@ import urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
 
-from playwright.sync_api import Page, sync_playwright
+from playwright.sync_api import Page, Route, sync_playwright
 
 
 EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3] + [2, 3, 2, 5, 1, 3, 3]
@@ -171,7 +171,21 @@ class _GeneratedStructureParser(HTMLParser):
             self.paragraph_parts.append(data)
 
 
-def _mathjax_bundle(root: Path) -> tuple[str, bytes]:
+def _cdn_fetch(url: str) -> tuple[bytes, str]:
+    """Fetch a CDN asset and its media type with retries."""
+    request = urllib.request.Request(url, headers={"User-Agent": "TNLean-CI/1"})
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:
+                return response.read(), response.headers.get_content_type()
+        except OSError:
+            if attempt == 2:
+                raise
+            time.sleep(2 ** attempt)
+    raise AssertionError("unreachable")
+
+
+def _mathjax_bundle(root: Path) -> tuple[str, bytes, str]:
     """Fetch once so Chromium does not depend on a cross-origin CDN request."""
     script_sources: set[str] = set()
     script_pattern = re.compile(r'<script\b[^>]*\bsrc=["\']([^"\']+)["\']', re.I)
@@ -183,16 +197,8 @@ def _mathjax_bundle(root: Path) -> tuple[str, bytes]:
         )
     assert len(script_sources) == 1, script_sources
     url = script_sources.pop()
-    request = urllib.request.Request(url, headers={"User-Agent": "TNLean-CI/1"})
-    for attempt in range(3):
-        try:
-            with urllib.request.urlopen(request, timeout=60) as response:
-                return url, response.read()
-        except OSError:
-            if attempt == 2:
-                raise
-            time.sleep(2 ** attempt)
-    raise AssertionError("unreachable")
+    body, content_type = _cdn_fetch(url)
+    return url, body, content_type
 
 
 def _assert_generated_blocks(root: Path) -> None:
@@ -389,18 +395,33 @@ def main() -> int:
         args.screenshot_dir.mkdir(parents=True, exist_ok=True)
     _assert_generated_blocks(root)
 
-    mathjax_url, mathjax_bundle = _mathjax_bundle(root)
+    mathjax_url, mathjax_bundle, mathjax_content_type = _mathjax_bundle(root)
+    # MathJax lazily loads extensions (e.g. boldsymbol) from the same CDN tree
+    # while typesetting. Serve that whole tree from Python so the browser makes
+    # no cross-origin request; a flaky extension fetch must not fail the layout
+    # regression.
+    if "/es5/" in mathjax_url:
+        mathjax_cdn_glob = mathjax_url.split("/es5/", 1)[0] + "/es5/**"
+    else:
+        mathjax_cdn_glob = mathjax_url.rsplit("/", 1)[0] + "/**"
+    mathjax_cache: dict[str, tuple[bytes, str]] = {
+        mathjax_url: (mathjax_bundle, mathjax_content_type)
+    }
+
+    def _fulfill_mathjax(route: Route) -> None:
+        url = route.request.url
+        asset = mathjax_cache.get(url)
+        if asset is None:
+            asset = mathjax_cache[url] = _cdn_fetch(url)
+        body, content_type = asset
+        route.fulfill(body=body, content_type=content_type)
+
     collected: list[dict[str, object]] = []
     mobile: list[dict[str, object]] = []
     with serve(root) as base_url, sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
-        page.route(
-            mathjax_url,
-            lambda route: route.fulfill(
-                body=mathjax_bundle, content_type="application/javascript"
-            ),
-        )
+        page.route(mathjax_cdn_glob, _fulfill_mathjax)
         for filename in PAGES:
             # The MPDO-RFP page is large; do not wait for every unrelated asset.
             # The fixture pictures have their own readiness check below.
