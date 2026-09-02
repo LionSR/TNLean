@@ -2271,16 +2271,18 @@ space.
     \label{thm:primitive_fnw_projector_defect}
     \lean{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw}
     \leanok
-    \uses{thm:fnw_projector_defect_unfactored}
+    \uses{thm:fnw_projector_defect_unfactored,
+        thm:normal_from_primitive_posdef}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and
     $\tr(\rho)=1$. Then there is an injective length $L_0\geq1$ such that
-    Equation~\eqref{eq:fnw_projector_defect_unfactored} holds whenever
+    Equation~(\ref{eq:fnw_projector_defect_unfactored}) holds whenever
     $m\geq L_0$ and $r,\ell\geq1$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:fnw_projector_defect_unfactored}
+    \uses{thm:fnw_projector_defect_unfactored,
+        thm:normal_from_primitive_posdef}
     Choose a positive injective length from primitivity. Left canonicality and
     the fixed-point equation are part of the primitive hypotheses, so
     Theorem~\ref{thm:fnw_projector_defect_unfactored} applies.
