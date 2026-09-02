@@ -51,31 +51,31 @@ private lemma sourceY₁X₂_gram_eq_closed_cut
       sourceY₁X₂ U ρ hρ lr q * star (sourceY₁X₂ U ρ hρ lr p)) =
       ∑ β : Fin D, ∑ δ : Fin D,
         ((sourceCutM₁ U)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U)
-            (p.1, δ) (q.1, β) *
+            (δ, p.1) (β, q.1) *
           (sourceX₂ U * (sourceX₂ U)ᴴ) (β, q.2) (δ, p.2) := by
   classical
   rw [Fintype.sum_prod_type]
   change (∑ l : Fin ℓ[U], ∑ r : Fin r[U],
-    (∑ β : Fin D, sourceY₁ U ρ hρ r (q.1, β) * sourceX₂ U (β, q.2) l) *
+    (∑ β : Fin D, sourceY₁ U ρ hρ r (β, q.1) * sourceX₂ U (β, q.2) l) *
       star (∑ δ : Fin D,
-        sourceY₁ U ρ hρ r (p.1, δ) * sourceX₂ U (δ, p.2) l)) = _
+        sourceY₁ U ρ hρ r (δ, p.1) * sourceX₂ U (δ, p.2) l)) = _
   simp_rw [star_sum, star_mul]
   simp_rw [Finset.sum_mul_sum]
   rw [← sourceY₁_conjTranspose_mul_self U ρ hρ]
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply]
   simp_rw [Finset.sum_mul_sum]
   have hreorder (l : Fin ℓ[U]) (r : Fin r[U]) (β δ : Fin D) :
-      sourceY₁ U ρ hρ r (q.1, β) * sourceX₂ U (β, q.2) l *
+      sourceY₁ U ρ hρ r (β, q.1) * sourceX₂ U (β, q.2) l *
           (star (sourceX₂ U (δ, p.2) l) *
-            star (sourceY₁ U ρ hρ r (p.1, δ))) =
-        star (sourceY₁ U ρ hρ r (p.1, δ)) * sourceY₁ U ρ hρ r (q.1, β) *
+            star (sourceY₁ U ρ hρ r (δ, p.1))) =
+        star (sourceY₁ U ρ hρ r (δ, p.1)) * sourceY₁ U ρ hρ r (β, q.1) *
           (sourceX₂ U (β, q.2) l * star (sourceX₂ U (δ, p.2) l)) := by
     ring
   simp_rw [← hreorder]
   let f := fun (l : Fin ℓ[U]) (r : Fin r[U]) (β δ : Fin D) ↦
-    sourceY₁ U ρ hρ r (q.1, β) * sourceX₂ U (β, q.2) l *
+    sourceY₁ U ρ hρ r (β, q.1) * sourceX₂ U (β, q.2) l *
       (star (sourceX₂ U (δ, p.2) l) *
-        star (sourceY₁ U ρ hρ r (p.1, δ)))
+        star (sourceY₁ U ρ hρ r (δ, p.1)))
   change (∑ l, ∑ r, ∑ β, ∑ δ, f l r β δ) =
     ∑ β, ∑ δ, ∑ r, ∑ l, f l r β δ
   calc
@@ -101,45 +101,21 @@ private lemma sourceY₁X₂_gram_eq_closed_cut
       intro δ _
       exact Finset.sum_comm
 
-/-- The auxiliary $Y_1$--$X_2$ Gram as one output-first double-layer letter
-closed by the weighted left boundary and the range projector of the second
-source cut. The doubled bonds have order $(\text{ket}, \text{bra})$.
+/-- The auxiliary $Y_1$--$X_2$ Gram closes against the weighted first
+source-cut Gram and the range projector of the second source cut.
 
 Algebraic mixed-cut identity; not CPSV17 equation `uUnitary`. -/
-theorem sourceY₁X₂_gram_apply_eq_closed_output_letter
+theorem sourceY₁X₂_gram_apply_eq_closed_source_cuts
     {d D : ℕ} (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (p q : Fin d × Fin d) :
     (∑ lr : Fin ℓ[U] × Fin r[U],
       sourceY₁X₂ U ρ hρ lr q * star (sourceY₁X₂ U ρ hρ lr p)) =
-      ∑ β : Fin D, ∑ δ : Fin D, ∑ γ : Fin D, ∑ α : Fin D,
-        ρ α γ *
-          doubleLayerTensor (physicalAdjointTensor U) q.1 p.1
-            (finProdFinEquiv (γ, α)) (finProdFinEquiv (β, δ)) *
-          (sourceX₂ U * (sourceX₂ U)ᴴ) (β, q.2) (δ, p.2) := by
-  rw [sourceY₁X₂_gram_eq_closed_cut U ρ hρ p q]
-  apply Finset.sum_congr rfl
-  intro β _
-  apply Finset.sum_congr rfl
-  intro δ _
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, sourceWeight,
-    Matrix.kronecker_apply, Matrix.one_apply, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq', Finset.mem_univ, ite_true, Fintype.sum_prod_type,
-    sourceCutM₁_apply,
-    doubleLayerTensor_physicalAdjointTensor_apply]
-  simp_rw [Finset.sum_mul, Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro γ _
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro α _
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro l _
-  rw [Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro j _
-  ring
+      ∑ β : Fin D, ∑ δ : Fin D,
+        ((sourceCutM₁ U)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U)
+            (δ, p.1) (β, q.1) *
+          (sourceX₂ U * (sourceX₂ U)ᴴ) (β, q.2) (δ, p.2) :=
+  sourceY₁X₂_gram_eq_closed_cut U ρ hρ p q
 
 /-- The normalized output-tail contraction is a fully closed output-first
 double-layer trace, with retained letters in $(q,p)$ order.

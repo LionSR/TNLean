@@ -91,9 +91,9 @@ theorem sourceCutM₁_leftShiftTensor (d : ℕ) :
   rw [leftShiftTensor, sourceCutM₁_physicalAdjointTensor,
     sourceCutM₂_rightShiftTensor]
   ext row col
-  simp only [Matrix.map_apply, Matrix.vecMulVec_apply, Matrix.vec]
+  simp only [Matrix.conjTranspose_apply, Matrix.vecMulVec_apply, Matrix.vec]
   by_cases hr : row.2 = row.1 <;> by_cases hc : col.2 = col.1 <;>
-    simp [Matrix.one_apply, hr, hc]
+    simp [Matrix.one_apply, hr, hc, mul_comm]
 
 /-- The second raw source cut of the left-shift tensor is the identity on the
 source-cut $(\text{virtual}, \text{physical})$ product index.
@@ -102,9 +102,7 @@ Source: arXiv:1703.09188, lines 450--477 and 1980--1987. -/
 theorem sourceCutM₂_leftShiftTensor (d : ℕ) :
     sourceCutM₂ (leftShiftTensor d) = 1 := by
   rw [leftShiftTensor, sourceCutM₂_physicalAdjointTensor,
-    sourceCutM₁_rightShiftTensor]
-  ext row col
-  simp [Matrix.one_apply]
+    sourceCutM₁_rightShiftTensor, Matrix.conjTranspose_one]
 
 /-- The right source rank of the left shift is one for positive physical
 dimension. This follows from physical adjunction and the right-shift left-rank

@@ -75,9 +75,9 @@ theorem sourceY₁_gram_eq_weighted_sourceCutM₁_gram
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (p q : Fin d) (a b : Fin D) :
     (∑ r : Fin r[U],
-      star (sourceY₁ U ρ hρ r (p, a)) * sourceY₁ U ρ hρ r (q, b)) =
-      ∑ α : Fin D, ∑ α' : Fin D, ∑ j : Fin d,
-        star (U p j α a) * ρ α α' * U q j α' b := by
+      star (sourceY₁ U ρ hρ r (a, p)) * sourceY₁ U ρ hρ r (b, q)) =
+      ∑ i : Fin d, ∑ β' : Fin D, ∑ β : Fin D,
+        star (U i p a β) * ρ β β' * U i q b β' := by
   have hgram :
       (sourceY₁ U ρ hρ)ᴴ * sourceY₁ U ρ hρ =
         (sourceCutM₁ U)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U := by
@@ -93,14 +93,16 @@ theorem sourceY₁_gram_eq_weighted_sourceCutM₁_gram
             (sourceX₁ U ρ hρ * sourceY₁ U ρ hρ) := by
         simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
       _ = _ := by rw [← sourceCutM₁_eq_sourceX₁_mul_sourceY₁]
-  have hentry := congrArg (fun M ↦ M (p, a) (q, b)) hgram
+  have hentry := congrArg (fun M ↦ M (a, p) (b, q)) hgram
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, sourceWeight,
-    Matrix.kronecker_apply, Matrix.one_apply, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq', Finset.mem_univ, ite_true, sourceCutM₁_apply,
-    Fintype.sum_prod_type] at hentry
-  simp_rw [Finset.sum_mul] at hentry
-  conv_rhs at hentry => arg 2; ext j; rw [Finset.sum_comm]
-  rw [Finset.sum_comm] at hentry
+    Matrix.kronecker_apply, sourceCutM₁_apply, Fintype.sum_prod_type] at hentry
+  conv_rhs at hentry =>
+    simp [Matrix.one_apply]
+    arg 2
+    ext i
+    arg 2
+    ext β'
+    rw [Finset.sum_mul]
   exact hentry
 
 /-- Entry expansion of two ordinary double-layer letters. The physical pair $p$
@@ -187,7 +189,7 @@ Source: arXiv:1703.09188, equation `vUnitary`, lines 577--588. -/
 noncomputable def sourceYTensor
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     Matrix (Fin r[U] × Fin ℓ[U])
-      ((Fin d × Fin D) × (Fin d × Fin D)) ℂ :=
+      ((Fin D × Fin d) × (Fin d × Fin D)) ℂ :=
   sourceY₁ U ρ hρ ⊗ₖ sourceY₂ U
 
 /-- The tensor product $Z_1\otimes Z_2$, the explicit right inverse of
@@ -197,7 +199,7 @@ Source: arXiv:1703.09188, equations `YZ=1` and `vUnitary`, lines 495--506 and
 577--588. -/
 noncomputable def sourceZTensor
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    Matrix ((Fin d × Fin D) × (Fin d × Fin D))
+    Matrix ((Fin D × Fin d) × (Fin d × Fin D))
       (Fin r[U] × Fin ℓ[U]) ℂ :=
   sourceZ₁ U ρ hρ ⊗ₖ sourceZ₂ U
 
@@ -207,7 +209,7 @@ Source: arXiv:1703.09188, equation `vUnitary`, lines 577--588. -/
 @[simp] theorem sourceYTensor_apply
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (r : Fin r[U]) (l : Fin ℓ[U])
-    (x₁ x₂ : Fin d × Fin D) :
+    (x₁ : Fin D × Fin d) (x₂ : Fin d × Fin D) :
     sourceYTensor U ρ hρ (r, l) (x₁, x₂) =
       sourceY₁ U ρ hρ r x₁ * sourceY₂ U l x₂ := rfl
 
@@ -221,18 +223,18 @@ theorem sourceYTensor_gram_eq_four_u_weighted
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (p q : Fin d × Fin d) (a b : Fin D × Fin D) :
     (∑ t : Fin r[U] × Fin ℓ[U],
-      star (sourceYTensor U ρ hρ t ((p.1, a.1), (p.2, a.2))) *
-        sourceYTensor U ρ hρ t ((q.1, b.1), (q.2, b.2))) =
-      ∑ α : Fin D, ∑ α' : Fin D, ∑ β : Fin D,
-      ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-        star (U p.1 j₁ α a.1) * ρ α α' * U q.1 j₁ α' b.1 *
-          (star (U j₂ p.2 β a.2) * U j₂ q.2 β b.2) := by
+      star (sourceYTensor U ρ hρ t ((a.1, p.1), (p.2, a.2))) *
+        sourceYTensor U ρ hρ t ((b.1, q.1), (q.2, b.2))) =
+      ∑ i₁ : Fin d, ∑ β' : Fin D, ∑ β : Fin D,
+      ∑ δ : Fin D, ∑ i₂ : Fin d,
+        star (U i₁ p.1 a.1 β) * ρ β β' * U i₁ q.1 b.1 β' *
+          (star (U i₂ p.2 δ a.2) * U i₂ q.2 δ b.2) := by
   rw [Fintype.sum_prod_type]
   simp only [sourceYTensor_apply, star_mul]
   calc
     _ = (∑ r : Fin r[U],
-          star (sourceY₁ U ρ hρ r (p.1, a.1)) *
-            sourceY₁ U ρ hρ r (q.1, b.1)) *
+          star (sourceY₁ U ρ hρ r (a.1, p.1)) *
+            sourceY₁ U ρ hρ r (b.1, q.1)) *
         (∑ l : Fin ℓ[U],
           star (sourceY₂ U l (p.2, a.2)) * sourceY₂ U l (q.2, b.2)) := by
       simp_rw [Finset.sum_mul_sum]
@@ -241,15 +243,14 @@ theorem sourceYTensor_gram_eq_four_u_weighted
       apply Finset.sum_congr rfl
       intro l _
       ring
-    _ = (∑ α : Fin D, ∑ α' : Fin D, ∑ j₁ : Fin d,
-          star (U p.1 j₁ α a.1) * ρ α α' * U q.1 j₁ α' b.1) *
-        (∑ β : Fin D, ∑ j₂ : Fin d,
-          star (U j₂ p.2 β a.2) * U j₂ q.2 β b.2) := by
+    _ = (∑ i₁ : Fin d, ∑ β' : Fin D, ∑ β : Fin D,
+          star (U i₁ p.1 a.1 β) * ρ β β' * U i₁ q.1 b.1 β') *
+        (∑ δ : Fin D, ∑ i₂ : Fin d,
+          star (U i₂ p.2 δ a.2) * U i₂ q.2 δ b.2) := by
       rw [sourceY₁_gram_eq_weighted_sourceCutM₁_gram,
         sourceY₂_gram_eq_rotated_sourceCutM₂_gram]
     _ = _ := by
       simp_rw [Finset.sum_mul, Finset.mul_sum]
-      conv_lhs => arg 2; ext α; arg 2; ext α'; rw [Finset.sum_comm]
 
 /-- Open-leg identity for the paper gate $v=X_1\mathbin{-}X_2$ after
 contraction with $Y_1\otimes Y_2$. Both source cuts close to local tensor
@@ -261,23 +262,23 @@ theorem sourceV_mul_sourceYTensor_apply
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (z p : Fin d × Fin d) (a : Fin D × Fin D) :
     (sourceV U ρ hρ * sourceYTensor U ρ hρ) z
-        (((p.1, a.1), (p.2, a.2))) =
+        (((a.1, p.1), (p.2, a.2))) =
       ∑ γ : Fin D,
-        U p.1 z.1 γ a.1 * U z.2 p.2 γ a.2 := by
+        U z.1 p.1 a.1 γ * U z.2 p.2 γ a.2 := by
   classical
   simp only [Matrix.mul_apply, sourceV, SourceFactors.sourceV,
     sourceYTensor_apply, Fintype.sum_prod_type, Finset.sum_mul]
   let f := fun (r : Fin r[U]) (l : Fin ℓ[U]) (γ : Fin D) ↦
-    sourceX₁ U ρ hρ (γ, z.1) r * sourceX₂ U (γ, z.2) l *
-      (sourceY₁ U ρ hρ r (p.1, a.1) * sourceY₂ U l (p.2, a.2))
+    sourceX₁ U ρ hρ (z.1, γ) r * sourceX₂ U (γ, z.2) l *
+      (sourceY₁ U ρ hρ r (a.1, p.1) * sourceY₂ U l (p.2, a.2))
   change (∑ r, ∑ l, ∑ γ, f r l γ) = _
   calc
     _ = ∑ r, ∑ γ, ∑ l, f r l γ := by
       exact Finset.sum_congr rfl fun r _ ↦ Finset.sum_comm
     _ = ∑ γ, ∑ r, ∑ l, f r l γ := Finset.sum_comm
     _ = ∑ γ,
-        (∑ r, sourceX₁ U ρ hρ (γ, z.1) r *
-          sourceY₁ U ρ hρ r (p.1, a.1)) *
+        (∑ r, sourceX₁ U ρ hρ (z.1, γ) r *
+          sourceY₁ U ρ hρ r (a.1, p.1)) *
         (∑ l, sourceX₂ U (γ, z.2) l * sourceY₂ U l (p.2, a.2)) := by
       refine Finset.sum_congr rfl fun γ _ ↦ ?_
       simp_rw [Finset.sum_mul_sum]
@@ -288,7 +289,7 @@ theorem sourceV_mul_sourceYTensor_apply
     _ = _ := by
       refine Finset.sum_congr rfl fun γ _ ↦ ?_
       change
-        (sourceX₁ U ρ hρ * sourceY₁ U ρ hρ) (γ, z.1) (p.1, a.1) *
+        (sourceX₁ U ρ hρ * sourceY₁ U ρ hρ) (z.1, γ) (a.1, p.1) *
           (sourceX₂ U * sourceY₂ U) (γ, z.2) (p.2, a.2) = _
       rw [sourceX₁_mul_sourceY₁_apply, sourceX₂_mul_sourceY₂_apply]
 
@@ -298,7 +299,8 @@ Source: arXiv:1703.09188, equations `YZ=1` and `vUnitary`, lines 495--506 and
 577--588. -/
 @[simp] theorem sourceZTensor_apply
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (x₁ x₂ : Fin d × Fin D) (r : Fin r[U]) (l : Fin ℓ[U]) :
+    (x₁ : Fin D × Fin d) (x₂ : Fin d × Fin D)
+    (r : Fin r[U]) (l : Fin ℓ[U]) :
     sourceZTensor U ρ hρ (x₁, x₂) (r, l) =
       sourceZ₁ U ρ hρ x₁ r * sourceZ₂ U x₂ l := rfl
 
@@ -318,13 +320,13 @@ and the canonically flattened pair of virtual indices.
 
 Source: arXiv:1703.09188, equation `vUnitary`, lines 577--588. -/
 def sourceVRegroupEquiv :
-    ((Fin d × Fin D) × (Fin d × Fin D)) ≃
+    ((Fin D × Fin d) × (Fin d × Fin D)) ≃
       ((Fin d × Fin d) × Fin (D * D)) where
-  toFun x := ((x.1.1, x.2.1), finProdFinEquiv (x.1.2, x.2.2))
-  invFun x := ((x.1.1, (finProdFinEquiv.symm x.2).1),
+  toFun x := ((x.1.2, x.2.1), finProdFinEquiv (x.1.1, x.2.2))
+  invFun x := (((finProdFinEquiv.symm x.2).1, x.1.1),
     (x.1.2, (finProdFinEquiv.symm x.2).2))
   left_inv x := by
-    rcases x with ⟨⟨i, a⟩, ⟨j, b⟩⟩
+    rcases x with ⟨⟨a, i⟩, ⟨j, b⟩⟩
     simp
   right_inv x := by
     rcases x with ⟨⟨i, j⟩, a⟩
@@ -336,9 +338,9 @@ flattened virtual pair.
 
 Source: arXiv:1703.09188, equation `vUnitary`, lines 577--588. -/
 @[simp] theorem sourceVRegroupEquiv_apply
-    (x₁ x₂ : Fin d × Fin D) :
+    (x₁ : Fin D × Fin d) (x₂ : Fin d × Fin D) :
     sourceVRegroupEquiv (d := d) (D := D) (x₁, x₂) =
-      ((x₁.1, x₂.1), finProdFinEquiv (x₁.2, x₂.2)) := rfl
+      ((x₁.2, x₂.1), finProdFinEquiv (x₁.1, x₂.2)) := rfl
 
 /-- The inverse regrouping equivalence separates a physical pair and flattened virtual pair
 into two source-cut indices.
@@ -347,7 +349,7 @@ Source: arXiv:1703.09188, equation `vUnitary`, lines 577--588. -/
 @[simp] theorem sourceVRegroupEquiv_symm_apply
     (p : Fin d × Fin d) (a : Fin (D * D)) :
     (sourceVRegroupEquiv (d := d) (D := D)).symm (p, a) =
-      ((p.1, (finProdFinEquiv.symm a).1),
+      (((finProdFinEquiv.symm a).1, p.1),
         (p.2, (finProdFinEquiv.symm a).2)) := rfl
 
 /-- The equation $Y^\dagger(v^\dagger v)Y=Y^\dagger Y$, where

@@ -27,13 +27,22 @@ indices and horizontal lines carry virtual (auxiliary) ones.
 Following lines 458–477 of the paper, we combine indices in two different
 ways to form rectangular matrices:
 
-* ${\cal M}_1$ groups **row = (left, down)** and **column = (up, right)**:
-  $({\cal M}_1)_{(\alpha,j),(i,\beta)} = {\cal U}^{i}_{j,\alpha,\beta}$
-  (using the paper's graphical convention), or equivalently
-  `U i j α β` in `MPOTensor` notation (ket, bra, left-virtual, right-virtual).
+* ${\cal M}_1$ groups **row = (up, right)** and **column = (left, down)**:
+  $({\cal M}_1)_{(i,\beta),(\alpha,j)} = {\cal U}^{i}_{j,\alpha,\beta}$.
+  This orientation is fixed by the paper's factorization
+  ${\cal M}_1=X_1Y_1$: in Figures `II_X1Y1.png` and `II_SVDforms2.png`,
+  $X_1$ carries the up and right legs, whereas $Y_1$ carries the left and
+  down legs.
 
 * ${\cal M}_2$ groups **row = (left, up)** and **column = (down, right)**:
   $({\cal M}_2)_{(\alpha,i),(j,\beta)} = {\cal U}^{i}_{j,\alpha,\beta}$.
+
+**Local fix (first source-cut orientation):** An earlier TNLean definition
+transposed ${\cal M}_1$, placing $(\alpha,j)$ on rows and $(i,\beta)$ on
+columns. The corrected definition follows CPSV17 `II_SVD` and the factors in
+`II_X1Y1.png` and `II_SVDforms2.png`, with $(i,\beta)$ on rows and
+$(\alpha,j)$ on columns. This correction is documented in
+`docs/paper-gaps/mpu_source_cut_orientation.tex`.
 
 ## Ranks $r$ and $\ell$
 
@@ -46,7 +55,7 @@ definition `defnrl` and lines 697–704 of the paper.
 * `MPOTensor.sourceCutM₁`, `MPOTensor.sourceCutM₂`: the two source matrices
   with product-index rows and columns.
 * `MPOTensor.sourceCutM₁Fin`, `MPOTensor.sourceCutM₂Fin`: reindexed versions
-  `Matrix (Fin (D * d)) (Fin (d * D)) ℂ`.
+  of the product-index source matrices.
 * `MPOTensor.rightRank` (`r`), `MPOTensor.leftRank` (`ℓ`): the ranks.
 
 ## Main results
@@ -56,7 +65,7 @@ definition `defnrl` and lines 697–704 of the paper.
 * `sourceCutM₁_reindexPhysical`, `sourceCutM₂_reindexPhysical`: physical reindexing
   formulas for the two cuts.
 * `sourceCutM₁_physicalAdjointTensor`, `sourceCutM₂_physicalAdjointTensor`:
-  physical adjunction exchanges the two cuts and conjugates their entries.
+  physical adjunction exchanges the two cuts by conjugate transpose.
 * `rightRank_physicalAdjointTensor`, `leftRank_physicalAdjointTensor`:
   physical adjunction exchanges the two source ranks.
 * `rightRank_reindexPhysical`, `leftRank_reindexPhysical`: invariance of both ranks
@@ -70,7 +79,7 @@ definition `defnrl` and lines 697–704 of the paper.
   Section III, definition `defnrl`, lines 450–477 and 697–704.
 -/
 
-open scoped ComplexOrder
+open scoped ComplexOrder Matrix
 
 namespace MPOTensor
 
@@ -78,14 +87,14 @@ variable {d D : ℕ} (U : MPOTensor d D)
 
 /-! ### Product-index source matrices (primary definitions) -/
 
-/-- ${\cal M}_1$: group **row = (left, down)** and **column = (up, right)**.
+/-- ${\cal M}_1$: group **row = (up, right)** and **column = (left, down)**.
 
-The entry $({\cal M}_1)_{(\alpha,j),(i,\beta)}$ equals `U i j α β` where
-`i` = up (ket), `j` = down (bra), `α` = left virtual, `β` = right virtual.
-
-This follows arXiv:1703.09188, eq.~(II_SVD). -/
-def sourceCutM₁ : Matrix (Fin D × Fin d) (Fin d × Fin D) ℂ :=
-  fun (α, j) (i, β) => U i j α β
+The entry $({\cal M}_1)_{(i,\beta),(\alpha,j)}$ equals `U i j α β`.  The
+row/column orientation is determined by arXiv:1703.09188, Figures
+`II_X1Y1.png` and `II_SVDforms2.png`: the row factor $X_1$ carries the up
+and right legs, and the column factor $Y_1$ carries the left and down legs. -/
+def sourceCutM₁ : Matrix (Fin d × Fin D) (Fin D × Fin d) ℂ :=
+  fun (i, β) (α, j) => U i j α β
 
 /-- ${\cal M}_2$: group **row = (left, up)** and **column = (down, right)**.
 
@@ -97,54 +106,53 @@ def sourceCutM₂ : Matrix (Fin D × Fin d) (Fin d × Fin D) ℂ :=
 
 /-! ### Entry lemmas — `[simp]` -/
 
-@[simp] lemma sourceCutM₁_apply (α : Fin D) (j : Fin d) (i : Fin d) (β : Fin D) :
-    sourceCutM₁ U (α, j) (i, β) = U i j α β := rfl
+/-- Entry formula for the first source cut in its physical--virtual row orientation.
+
+Source: CPSV17 source cut `II_SVD`, lines 458--477, and the factor diagrams
+`X1Y1` and `SVDforms2`, lines 508--530. -/
+@[simp] lemma sourceCutM₁_apply (i : Fin d) (β : Fin D) (α : Fin D) (j : Fin d) :
+    sourceCutM₁ U (i, β) (α, j) = U i j α β := rfl
 
 @[simp] lemma sourceCutM₂_apply (α : Fin D) (i : Fin d) (j : Fin d) (β : Fin D) :
     sourceCutM₂ U (α, i) (j, β) = U i j α β := rfl
 
-/-- Physical adjunction exchanges the first source cut with the entrywise conjugate of the
-second source cut:
-$$M_1(U^\sharp)=\overline{M_2(U)}.$$
-
-The row and column indices remain `(left virtual, physical)` and `(physical, right virtual)`;
-only the roles of the upper and lower physical indices are exchanged.
+/-- Physical adjunction exchanges the first source cut with the adjoint of the second cut:
+$$M_1(U^\sharp)=M_2(U)^*.$$
 
 The source cuts follow arXiv:1703.09188, lines 450–506. The local physical-adjoint
 operation follows arXiv:1606.00608, Appendix C.2, lines 1634–1689; arXiv:1703.09188,
 lines 1201–1207 use the resulting adjoint family to reverse the index. -/
 theorem sourceCutM₁_physicalAdjointTensor :
-    sourceCutM₁ (physicalAdjointTensor U) = (sourceCutM₂ U).map (starRingEnd ℂ) := by
+    sourceCutM₁ (physicalAdjointTensor U) = (sourceCutM₂ U)ᴴ := by
   ext row col
-  rcases row with ⟨α, j⟩
-  rcases col with ⟨i, β⟩
+  rcases row with ⟨i, β⟩
+  rcases col with ⟨α, j⟩
   rfl
 
-/-- Physical adjunction exchanges the second source cut with the entrywise conjugate of the
-first source cut:
-$$M_2(U^\sharp)=\overline{M_1(U)}.$$
+/-- Physical adjunction exchanges the second source cut with the adjoint of the first cut:
+$$M_2(U^\sharp)=M_1(U)^*.$$
 
 The source cuts follow arXiv:1703.09188, lines 450–506. The local physical-adjoint
 operation follows arXiv:1606.00608, Appendix C.2, lines 1634–1689; arXiv:1703.09188,
 lines 1201–1207 use the resulting adjoint family to reverse the index. -/
 theorem sourceCutM₂_physicalAdjointTensor :
-    sourceCutM₂ (physicalAdjointTensor U) = (sourceCutM₁ U).map (starRingEnd ℂ) := by
+    sourceCutM₂ (physicalAdjointTensor U) = (sourceCutM₁ U)ᴴ := by
   ext row col
   rcases row with ⟨α, i⟩
   rcases col with ⟨j, β⟩
   rfl
 
-/-- Physical reindexing acts on the down leg of each row and the up leg of
+/-- Physical reindexing acts on the up leg of each row and the down leg of
 each column of the first source cut.
 
 Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
 theorem sourceCutM₁_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d) :
     sourceCutM₁ (reindexPhysical e U) =
-      Matrix.reindex (Equiv.prodCongr (Equiv.refl (Fin D)) e.symm)
-        (Equiv.prodCongr e.symm (Equiv.refl (Fin D))) (sourceCutM₁ U) := by
+      Matrix.reindex (Equiv.prodCongr e.symm (Equiv.refl (Fin D)))
+        (Equiv.prodCongr (Equiv.refl (Fin D)) e.symm) (sourceCutM₁ U) := by
   ext row col
-  rcases row with ⟨α, j⟩
-  rcases col with ⟨i, β⟩
+  rcases row with ⟨i, β⟩
+  rcases col with ⟨α, j⟩
   simp [sourceCutM₁, reindexPhysical, Matrix.reindex_apply]
 
 /-- Physical reindexing acts on the up leg of each row and the down leg of
@@ -160,16 +168,16 @@ theorem sourceCutM₂_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d) :
   rcases col with ⟨j, β⟩
   simp [sourceCutM₂, reindexPhysical, Matrix.reindex_apply]
 
-/-! ### Reindexing to `Fin (D * d)` and `Fin (d * D)` (reindexed formulations) -/
+/-! ### Reindexing to finite intervals -/
 
-/-- ${\cal M}_1$ reindexed to `Fin (D * d)` rows and `Fin (d * D)` columns
+/-- ${\cal M}_1$ reindexed to `Fin (d * D)` rows and `Fin (D * d)` columns
 via the standard product encoding `finProdFinEquiv`.
 
 This is a reindexed formulation; the primary definition remains `sourceCutM₁`. -/
-def sourceCutM₁Fin : Matrix (Fin (D * d)) (Fin (d * D)) ℂ :=
+def sourceCutM₁Fin : Matrix (Fin (d * D)) (Fin (D * d)) ℂ :=
   Matrix.reindex
-    (finProdFinEquiv (m := D) (n := d))
     (finProdFinEquiv (m := d) (n := D))
+    (finProdFinEquiv (m := D) (n := d))
     (sourceCutM₁ U)
 
 /-- ${\cal M}_2$ reindexed to `Fin (D * d)` rows and `Fin (d * D)` columns. -/
@@ -181,8 +189,8 @@ def sourceCutM₂Fin : Matrix (Fin (D * d)) (Fin (d * D)) ℂ :=
 
 lemma sourceCutM₁Fin_eq_reindex : sourceCutM₁Fin U =
     Matrix.reindex
-      (finProdFinEquiv (m := D) (n := d))
       (finProdFinEquiv (m := d) (n := D))
+      (finProdFinEquiv (m := D) (n := d))
       (sourceCutM₁ U) := rfl
 
 lemma sourceCutM₂Fin_eq_reindex : sourceCutM₂Fin U =
@@ -191,11 +199,11 @@ lemma sourceCutM₂Fin_eq_reindex : sourceCutM₂Fin U =
       (finProdFinEquiv (m := d) (n := D))
       (sourceCutM₂ U) := rfl
 
-@[simp] lemma sourceCutM₁Fin_apply (r : Fin (D * d)) (c : Fin (d * D)) :
+@[simp] lemma sourceCutM₁Fin_apply (r : Fin (d * D)) (c : Fin (D * d)) :
     sourceCutM₁Fin U r c =
       sourceCutM₁ U
-        ((finProdFinEquiv (m := D) (n := d)).symm r)
-        ((finProdFinEquiv (m := d) (n := D)).symm c) := rfl
+        ((finProdFinEquiv (m := d) (n := D)).symm r)
+        ((finProdFinEquiv (m := D) (n := d)).symm c) := rfl
 
 @[simp] lemma sourceCutM₂Fin_apply (r : Fin (D * d)) (c : Fin (d * D)) :
     sourceCutM₂Fin U r c =
@@ -238,8 +246,7 @@ adjunction; it does not choose or compare standard-form factors.
 Source: arXiv:1703.09188, definition `defnrl` and lines 1196–1207. -/
 theorem rightRank_physicalAdjointTensor : r[physicalAdjointTensor U] = ℓ[U] := by
   rw [rightRank, sourceCutM₁_physicalAdjointTensor]
-  change (Matrix.conjTranspose (Matrix.transpose (sourceCutM₂ U))).rank = _
-  rw [Matrix.rank_conjTranspose, Matrix.rank_transpose]
+  rw [Matrix.rank_conjTranspose]
   rfl
 
 /-- Physical adjunction exchanges the left source rank with the right source rank:
@@ -248,8 +255,7 @@ $$\ell[U^\sharp]=r[U].$$
 Source: arXiv:1703.09188, definition `defnrl` and lines 1196–1207. -/
 theorem leftRank_physicalAdjointTensor : ℓ[physicalAdjointTensor U] = r[U] := by
   rw [leftRank, sourceCutM₂_physicalAdjointTensor]
-  change (Matrix.conjTranspose (Matrix.transpose (sourceCutM₁ U))).rank = _
-  rw [Matrix.rank_conjTranspose, Matrix.rank_transpose]
+  rw [Matrix.rank_conjTranspose]
   rfl
 
 /-- Bijective physical reindexing preserves the right source rank.

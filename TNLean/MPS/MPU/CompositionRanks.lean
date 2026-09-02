@@ -10,10 +10,10 @@ import TNLean.MPS.MPU.SimpleBlocking
 # Source-rank bounds for composition
 
 This file proves the four-site source-rank bounds used in the composition part
-of the Matrix Product Unitary index theorem.  The argument is algebraic: the
-two-site factorizations through the auxiliary mixed kernels of the two factors
-give a factorization of each source cut of the four-site product tensor through
-the legs crossed by the paper's diagonal cut.
+of the Matrix Product Unitary index theorem. The argument is algebraic: the
+two-site factorizations through the paper gates of the two factors give a
+factorization of each source cut of the four-site product tensor through the
+legs crossed by the paper's diagonal cut.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -23,54 +23,57 @@ namespace MPOTensor
 
 variable {d D₁ D₂ : ℕ}
 
-/-- The left local factor in the $Y_1$--$X_2$ mixed-kernel factorization.  These
-local factors are substituted into `compositionCutLeft` and
-`compositionCutRight` to obtain the Chapter 28 factors $A_{1,4}$ and
-$B_{1,4}$.
+/-- The left local factor in the $v$--$Y_1$--$Y_2$ factorization of the
+first two-site source cut.
 
-Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `uu`. -/
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `vdagger`, lines 525--543,
+as used in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private noncomputable def rightBlockLeft (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
-    Matrix (Fin D₁ × Fin (d * d)) (Fin d × Fin r[U]) ℂ :=
-  fun (a, J) (j₂, r) =>
-    if j₂ = (finProdFinEquiv.symm J).2 then
-      S.X₁ (a, (finProdFinEquiv.symm J).1) r else 0
+    Matrix (Fin (d * d) × Fin D₁) (Fin d × Fin r[U]) ℂ :=
+  fun (I, b) (j₂, r) => ∑ l : Fin ℓ[U],
+    SourceFactors.sourceV U S (finProdFinEquiv.symm I) (r, l) * S.Y₂ l (j₂, b)
 
-/-- The right local factor in the $Y_1$--$X_2$ mixed-kernel factorization used to
-construct the Chapter 28 factors $A_{1,4}$ and $B_{1,4}$.
+/-- The right local factor in the $v$--$Y_1$--$Y_2$ factorization of the
+first two-site source cut.
 
-Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `uu`. -/
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `vdagger`, lines 525--543,
+as used in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private noncomputable def rightBlockRight (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
-    Matrix (Fin d × Fin r[U]) (Fin (d * d) × Fin D₁) ℂ :=
-  fun (j₂, r) (I, b) => ∑ l : Fin ℓ[U],
-    SourceFactors.sourceY₁X₂ U S (l, r) (finProdFinEquiv.symm I) *
-      S.Y₂ l (j₂, b)
+    Matrix (Fin d × Fin r[U]) (Fin D₁ × Fin (d * d)) ℂ :=
+  fun (j₂, r) (a, J) =>
+    if j₂ = (finProdFinEquiv.symm J).2 then
+      S.Y₁ r (a, (finProdFinEquiv.symm J).1) else 0
 
-/-- The two-site right-cut factorization through the auxiliary $Y_1$--$X_2$
-kernel; it is applied to both product factors before assembling
-$M_1((\mathcal U\mathbin{\cdot}\mathcal V)_4)=A_{1,4}B_{1,4}$.
+/-- The two-site first source cut factors through a space of dimension $d r[U]$.
+This is the coordinate factorization obtained from the paper gate $v$.
 
-Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `uu`. -/
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `vdagger`, lines 525--543,
+as used in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private theorem sourceCutM₁_blockTwo_factorization (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     sourceCutM₁ (blockTwo U) = rightBlockLeft U S * rightBlockRight U S := by
-  ext ⟨a, J⟩ ⟨I, b⟩
+  ext ⟨I, b⟩ ⟨a, J⟩
   classical
   simp only [sourceCutM₁_apply, Matrix.mul_apply, rightBlockLeft, rightBlockRight]
-  rw [SourceFactors.blockTwo_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂ U S I J a b,
+  rw [SourceFactors.blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂ U S I J a b,
     Fintype.sum_prod_type, Finset.sum_eq_single (finProdFinEquiv.symm J).2]
-  · simp only [ite_true, Finset.mul_sum]
-    ring_nf
+  · simp only [ite_true, Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    intro r _
+    apply Finset.sum_congr rfl
+    intro l _
+    ring
   · intro x _ hx
-    simp only [hx, ite_false, zero_mul, Finset.sum_const_zero]
+    simp only [hx, ite_false, mul_zero, Finset.sum_const_zero]
   · simp
 
-/-- The left local factor in the reflected $X_1$--$Y_2$ mixed-kernel factorization.
-These local factors are substituted into the generic four-site cut factors to
-obtain the Chapter 28 matrices $A_{2,4}$ and $B_{2,4}$.
+/-- The left local factor in the $X_2$--$u$--$X_1$ factorization of the
+second two-site source cut.
 
-Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `vdagger`. -/
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `uu`, lines 525--543, as used
+in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private noncomputable def leftBlockLeft (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin D₁ × Fin (d * d)) (Fin d × Fin ℓ[U]) ℂ :=
@@ -78,30 +81,29 @@ private noncomputable def leftBlockLeft (U : MPOTensor d D₁)
     if i₂ = (finProdFinEquiv.symm I).2 then
       S.X₂ (a, (finProdFinEquiv.symm I).1) l else 0
 
-/-- The right local factor in the reflected $X_1$--$Y_2$ mixed-kernel factorization
-used to construct the Chapter 28 matrices $A_{2,4}$ and $B_{2,4}$.
+/-- The right local factor in the $X_2$--$u$--$X_1$ factorization of the
+second two-site source cut.
 
-Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `vdagger`. -/
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `uu`, lines 525--543, as used
+in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private noncomputable def leftBlockRight (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin d × Fin ℓ[U]) (Fin (d * d) × Fin D₁) ℂ :=
   fun (i₂, l) (J, b) => ∑ r : Fin r[U],
-    SourceFactors.sourceX₁Y₂ U S
-      ((finProdFinEquiv.symm J).2, (finProdFinEquiv.symm J).1) (r, l) *
-        S.Y₁ r (i₂, b)
+    SourceFactors.sourceU U S (l, r) (finProdFinEquiv.symm J) * S.X₁ (i₂, b) r
 
-/-- The two-site left-cut factorization through the auxiliary $X_1$--$Y_2$
-kernel; it is applied to both product factors before assembling
-$M_2((\mathcal U\mathbin{\cdot}\mathcal V)_4)=A_{2,4}B_{2,4}$.
+/-- The two-site second source cut factors through a space of dimension $d\ell[U]$.
+This is the coordinate factorization obtained from the paper gate $u$.
 
-Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `vdagger`. -/
+Source: CPSV17 equations `SVDforms2`, `uuvv`, and `uu`, lines 525--543, as used
+in the proof of Theorem `IndexTh` (ii), lines 833--845. -/
 private theorem sourceCutM₂_blockTwo_factorization (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     sourceCutM₂ (blockTwo U) = leftBlockLeft U S * leftBlockRight U S := by
   ext ⟨a, I⟩ ⟨J, b⟩
   classical
   simp only [sourceCutM₂_apply, Matrix.mul_apply, leftBlockLeft, leftBlockRight]
-  rw [SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁ U S I J a b,
+  rw [SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁ U S I J a b,
     Fintype.sum_prod_type, Finset.sum_eq_single (finProdFinEquiv.symm I).2]
   · simp only [ite_true, Finset.mul_sum]
     ring_nf
@@ -216,30 +218,40 @@ private noncomputable def compositionCutRight
     ∑ x : Fin E₁, ∑ J : Fin q, ∑ t : ι₁,
       R₁ rs.1 (I₁, x) * L₁ (x, J) t * R₁ t (I₂, e) * R₂ rs.2 (J, f)
 
+/-- The first source cut of a two-site-blocked product factors through the two local
+first-cut factorizations.
+
+Source: CPSV17 source cut `II_SVD`, lines 458--477, and the composition proof
+of Theorem `IndexTh` (ii), lines 833--845. -/
 private theorem sourceCutM₁_blockTwo_mulTensor_factorization
     (A : MPOTensor q E₁) (B : MPOTensor q E₂)
-    (L₁ : Matrix (Fin E₁ × Fin q) ι₁ ℂ)
-    (R₁ : Matrix ι₁ (Fin q × Fin E₁) ℂ)
-    (L₂ : Matrix (Fin E₂ × Fin q) ι₂ ℂ)
-    (R₂ : Matrix ι₂ (Fin q × Fin E₂) ℂ)
+    (L₁ : Matrix (Fin q × Fin E₁) ι₁ ℂ)
+    (R₁ : Matrix ι₁ (Fin E₁ × Fin q) ℂ)
+    (L₂ : Matrix (Fin q × Fin E₂) ι₂ ℂ)
+    (R₂ : Matrix ι₂ (Fin E₂ × Fin q) ℂ)
     (h₁ : sourceCutM₁ A = L₁ * R₁) (h₂ : sourceCutM₁ B = L₂ * R₂) :
     sourceCutM₁ (blockTwo (mulTensor A B)) =
-      compositionCutLeft L₁ R₂ L₂ * compositionCutRight R₁ L₁ R₂ := by
+      (compositionCutRight L₁.transpose R₁.transpose L₂.transpose).transpose *
+        (compositionCutLeft R₁.transpose L₂.transpose R₂.transpose).transpose := by
   classical
+  apply Matrix.transpose_injective
+  simp only [Matrix.transpose_mul, Matrix.transpose_transpose]
   have hA (i j : Fin q) (a b : Fin E₁) :
-      A i j a b = ∑ t : ι₁, L₁ (a, j) t * R₁ t (i, b) := by
-    have h := congrArg (fun M => M (a, j) (i, b)) h₁
-    simpa only [sourceCutM₁_apply, Matrix.mul_apply] using h
+      A i j a b = ∑ t : ι₁, R₁.transpose (a, j) t * L₁.transpose t (i, b) := by
+    have h := congrArg (fun M => M (i, b) (a, j)) h₁
+    simpa only [sourceCutM₁_apply, Matrix.mul_apply, Matrix.transpose_apply,
+      mul_comm] using h
   have hB (i j : Fin q) (a b : Fin E₂) :
-      B i j a b = ∑ t : ι₂, L₂ (a, j) t * R₂ t (i, b) := by
-    have h := congrArg (fun M => M (a, j) (i, b)) h₂
-    simpa only [sourceCutM₁_apply, Matrix.mul_apply] using h
+      B i j a b = ∑ t : ι₂, R₂.transpose (a, j) t * L₂.transpose t (i, b) := by
+    have h := congrArg (fun M => M (i, b) (a, j)) h₂
+    simpa only [sourceCutM₁_apply, Matrix.mul_apply, Matrix.transpose_apply,
+      mul_comm] using h
   ext ⟨ac, K⟩ ⟨I, ef⟩
   rcases finProdFinEquiv.surjective ac with ⟨⟨a, c⟩, rfl⟩
   rcases finProdFinEquiv.surjective ef with ⟨⟨e, f⟩, rfl⟩
   rcases finProdFinEquiv.surjective K with ⟨⟨K₁, K₂⟩, rfl⟩
   rcases finProdFinEquiv.surjective I with ⟨⟨I₁, I₂⟩, rfl⟩
-  simp only [sourceCutM₁_apply, blockTwo_apply, Matrix.mul_apply,
+  simp only [Matrix.transpose_apply, sourceCutM₁_apply, blockTwo_apply, Matrix.mul_apply,
     compositionCutLeft, compositionCutRight, Equiv.symm_apply_apply,
     mulTensor_apply, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.kroneckerMap_apply]
@@ -247,14 +259,14 @@ private theorem sourceCutM₁_blockTwo_mulTensor_factorization
   simp only [Equiv.symm_apply_apply]
   simp_rw [hA, hB]
   exact sum_eight_cut_factorization
-    (fun j t₁ ↦ L₁ (a, j) t₁)
-    (fun t₁ x ↦ R₁ t₁ (I₁, x))
-    (fun t₂ ↦ L₂ (c, K₁) t₂)
-    (fun t₂ j y ↦ R₂ t₂ (j, y))
-    (fun x k s₁ ↦ L₁ (x, k) s₁)
-    (fun s₁ ↦ R₁ s₁ (I₂, e))
-    (fun y s₂ ↦ L₂ (y, K₂) s₂)
-    (fun s₂ k ↦ R₂ s₂ (k, f))
+    (fun j t₁ ↦ R₁.transpose (a, j) t₁)
+    (fun t₁ x ↦ L₁.transpose t₁ (I₁, x))
+    (fun t₂ ↦ R₂.transpose (c, K₁) t₂)
+    (fun t₂ j y ↦ L₂.transpose t₂ (j, y))
+    (fun x k s₁ ↦ R₁.transpose (x, k) s₁)
+    (fun s₁ ↦ L₁.transpose s₁ (I₂, e))
+    (fun y s₂ ↦ R₂.transpose (y, K₂) s₂)
+    (fun s₂ k ↦ L₂.transpose s₂ (k, f))
 
 end GenericCut
 
@@ -331,8 +343,8 @@ private def reindexBond {D' : ℕ} (e : Fin D' ≃ Fin D₁) (U : MPOTensor d D�
 private theorem rightRank_reindexBond {D' : ℕ} (e : Fin D' ≃ Fin D₁)
     (U : MPOTensor d D₁) : r[reindexBond e U] = r[U] := by
   rw [rightRank]
-  change (Matrix.reindex (Equiv.prodCongr e.symm (Equiv.refl (Fin d)))
-    (Equiv.prodCongr (Equiv.refl (Fin d)) e.symm) (sourceCutM₁ U)).rank = _
+  change (Matrix.reindex (Equiv.prodCongr (Equiv.refl (Fin d)) e.symm)
+    (Equiv.prodCongr e.symm (Equiv.refl (Fin d))) (sourceCutM₁ U)).rank = _
   rw [Matrix.rank_reindex]
   rfl
 
@@ -353,7 +365,8 @@ private def physicalFlip (U : MPOTensor d D₁) : MPOTensor d D₁ :=
 
 private theorem rightRank_physicalFlip (U : MPOTensor d D₁) :
     r[physicalFlip U] = ℓ[U] := by
-  rfl
+  change (sourceCutM₂ U).transpose.rank = (sourceCutM₂ U).rank
+  exact Matrix.rank_transpose (sourceCutM₂ U)
 
 private theorem blockTwo_physicalFlip (U : MPOTensor d D₁) :
     blockTwo (physicalFlip U) = physicalFlip (blockTwo U) := by
@@ -375,8 +388,12 @@ private theorem mulTensor_physicalFlip_swap
   simp only [Prod.swap_prod_mk]
   ring
 
+/-- Swapping the physical input and output indices sends the first source cut to the
+transpose of the second source cut.
+
+Source: CPSV17 source cuts `II_SVD`, lines 458--477. -/
 private theorem sourceCutM₁_physicalFlip (U : MPOTensor d D₁) :
-    sourceCutM₁ (physicalFlip U) = sourceCutM₂ U := by
+    sourceCutM₁ (physicalFlip U) = (sourceCutM₂ U).transpose := by
   rfl
 
 private theorem leftRank_blockTwo_mulTensor_blockTwo_le
@@ -386,17 +403,17 @@ private theorem leftRank_blockTwo_mulTensor_blockTwo_le
   let Sᵤ := sourceFactors U (1 : Matrix (Fin D₁) (Fin D₁) ℂ) Matrix.PosDef.one
   let Sᵥ := sourceFactors V (1 : Matrix (Fin D₂) (Fin D₂) ℂ) Matrix.PosDef.one
   have hU : sourceCutM₁ (physicalFlip (blockTwo U)) =
-      leftBlockLeft U Sᵤ * leftBlockRight U Sᵤ := by
-    rw [sourceCutM₁_physicalFlip]
-    exact sourceCutM₂_blockTwo_factorization U Sᵤ
+      (leftBlockRight U Sᵤ).transpose * (leftBlockLeft U Sᵤ).transpose := by
+    rw [sourceCutM₁_physicalFlip, sourceCutM₂_blockTwo_factorization,
+      Matrix.transpose_mul]
   have hV : sourceCutM₁ (physicalFlip (blockTwo V)) =
-      leftBlockLeft V Sᵥ * leftBlockRight V Sᵥ := by
-    rw [sourceCutM₁_physicalFlip]
-    exact sourceCutM₂_blockTwo_factorization V Sᵥ
+      (leftBlockRight V Sᵥ).transpose * (leftBlockLeft V Sᵥ).transpose := by
+    rw [sourceCutM₁_physicalFlip, sourceCutM₂_blockTwo_factorization,
+      Matrix.transpose_mul]
   have hfactor := sourceCutM₁_blockTwo_mulTensor_factorization
     (physicalFlip (blockTwo V)) (physicalFlip (blockTwo U))
-    (leftBlockLeft V Sᵥ) (leftBlockRight V Sᵥ)
-    (leftBlockLeft U Sᵤ) (leftBlockRight U Sᵤ) hV hU
+    (leftBlockRight V Sᵥ).transpose (leftBlockLeft V Sᵥ).transpose
+    (leftBlockRight U Sᵤ).transpose (leftBlockLeft U Sᵤ).transpose hV hU
   have hrank :
       r[blockTwo
         (mulTensor (physicalFlip (blockTwo V)) (physicalFlip (blockTwo U)))] ≤

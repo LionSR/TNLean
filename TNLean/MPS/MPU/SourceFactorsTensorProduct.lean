@@ -71,9 +71,9 @@ noncomputable def SourceFactors.independentTensorProductOfIdentityWeight
   let eCol := tensorProductCutShuffle d D e E
   let eR := tensorProductRightRankEquiv U V
   let eL := tensorProductLeftRankEquiv U V
-  let X₁ := Matrix.reindex eRow eR (S.X₁ ⊗ₖ T.X₁)
-  let Y₁ := Matrix.reindex eR eCol (S.Y₁ ⊗ₖ T.Y₁)
-  let Z₁ := Matrix.reindex eCol eR (S.Z₁ ⊗ₖ T.Z₁)
+  let X₁ := Matrix.reindex eCol eR (S.X₁ ⊗ₖ T.X₁)
+  let Y₁ := Matrix.reindex eR eRow (S.Y₁ ⊗ₖ T.Y₁)
+  let Z₁ := Matrix.reindex eRow eR (S.Z₁ ⊗ₖ T.Z₁)
   let X₂ := Matrix.reindex eRow eL (S.X₂ ⊗ₖ T.X₂)
   let Y₂ := Matrix.reindex eL eCol (S.Y₂ ⊗ₖ T.Y₂)
   let Z₂ := Matrix.reindex eCol eL (S.Z₂ ⊗ₖ T.Z₂)
@@ -92,17 +92,17 @@ noncomputable def SourceFactors.independentTensorProductOfIdentityWeight
   have hKX₂ : (S.X₂ ⊗ₖ T.X₂).IsIsometry :=
     Matrix.IsIsometry.kronecker S.X₂ T.X₂ S.X₂_isometry T.X₂_isometry
   have hX₁ : X₁.IsIsometry :=
-    Matrix.IsIsometry.reindex _ hKX₁ eRow eR
+    Matrix.IsIsometry.reindex _ hKX₁ eCol eR
   have hX₂ : X₂.IsIsometry :=
     Matrix.IsIsometry.reindex _ hKX₂ eRow eL
   have hcut₁ : sourceCutM₁ (tensorProduct U V) = X₁ * Y₁ := by
     rw [sourceCutM₁_tensorProduct, S.sourceCutM₁_eq, T.sourceCutM₁_eq]
-    change Matrix.reindex eRow eCol
+    change Matrix.reindex eCol eRow
         ((S.X₁ * S.Y₁) ⊗ₖ (T.X₁ * T.Y₁)) =
-      Matrix.reindex eRow eR (S.X₁ ⊗ₖ T.X₁) *
-        Matrix.reindex eR eCol (S.Y₁ ⊗ₖ T.Y₁)
+      Matrix.reindex eCol eR (S.X₁ ⊗ₖ T.X₁) *
+        Matrix.reindex eR eRow (S.Y₁ ⊗ₖ T.Y₁)
     rw [Matrix.mul_kronecker_mul]
-    exact (Matrix.reindexLinearEquiv_mul ℂ ℂ eRow eR eCol
+    exact (Matrix.reindexLinearEquiv_mul ℂ ℂ eCol eR eRow
       (S.X₁ ⊗ₖ T.X₁) (S.Y₁ ⊗ₖ T.Y₁)).symm
   have hcut₂ : sourceCutM₂ (tensorProduct U V) = X₂ * Y₂ := by
     rw [sourceCutM₂_tensorProduct, S.sourceCutM₂_eq, T.sourceCutM₂_eq]
@@ -120,12 +120,12 @@ noncomputable def SourceFactors.independentTensorProductOfIdentityWeight
       simp [sourceWeight]]
     simpa [Matrix.IsIsometry] using hX₁
   have hY₁Z₁ : Y₁ * Z₁ = 1 := by
-    change Matrix.reindex eR eCol (S.Y₁ ⊗ₖ T.Y₁) *
-      Matrix.reindex eCol eR (S.Z₁ ⊗ₖ T.Z₁) = 1
+    change Matrix.reindex eR eRow (S.Y₁ ⊗ₖ T.Y₁) *
+      Matrix.reindex eRow eR (S.Z₁ ⊗ₖ T.Z₁) = 1
     calc
       _ = Matrix.reindex eR eR
           ((S.Y₁ ⊗ₖ T.Y₁) * (S.Z₁ ⊗ₖ T.Z₁)) :=
-        Matrix.reindexLinearEquiv_mul ℂ ℂ eR eCol eR
+        Matrix.reindexLinearEquiv_mul ℂ ℂ eR eRow eR
           (S.Y₁ ⊗ₖ T.Y₁) (S.Z₁ ⊗ₖ T.Z₁)
       _ = 1 := by
         rw [← Matrix.mul_kronecker_mul, S.Y₁_mul_Z₁, T.Y₁_mul_Z₁]
@@ -173,7 +173,7 @@ theorem SourceFactors.sourceY₁X₂_independentTensorProductOfIdentityWeight_ap
   rw [Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro γ _
-  rw [tensorProductCutShuffle_symm_apply d D e E (i₁, β) (j₁, γ),
+  rw [tensorProductCutShuffle_symm_apply D d E e (β, i₁) (γ, j₁),
     tensorProductCutShuffle_symm_apply D d E e (β, i₂) (γ, j₂)]
   ring
 
@@ -206,8 +206,74 @@ theorem SourceFactors.sourceX₁Y₂_independentTensorProductOfIdentityWeight_ap
   rw [Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro γ _
-  rw [tensorProductCutShuffle_symm_apply D d E e (α, j₁) (γ, k₁),
+  rw [tensorProductCutShuffle_symm_apply d D e E (j₁, α) (k₁, γ),
     tensorProductCutShuffle_symm_apply d D e E (j₂, α) (k₂, γ)]
+  ring
+
+/-- The paper gate $u=Y_2\mathbin{-}Y_1$ is multiplicative for independent
+identity-weight source factors in product-rank coordinates.
+
+Formalization infrastructure for the tensoring clause of arXiv:1703.09188,
+Theorem `IndexTh` (ii), lines 824--847. -/
+theorem SourceFactors.sourceU_independentTensorProductOfIdentityWeight_apply
+    {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
+    (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
+    (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
+    (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) (rᵤ : Fin r[U]) (rᵥ : Fin r[V])
+    (i₁ i₂ : Fin d) (j₁ j₂ : Fin e) :
+    SourceFactors.sourceU (tensorProduct U V)
+        (SourceFactors.independentTensorProductOfIdentityWeight S T)
+        (tensorProductLeftRankEquiv U V (lᵤ, lᵥ),
+          tensorProductRightRankEquiv U V (rᵤ, rᵥ))
+        (finProdFinEquiv (i₁, j₁), finProdFinEquiv (i₂, j₂)) =
+      SourceFactors.sourceU U S (lᵤ, rᵤ) (i₁, i₂) *
+        SourceFactors.sourceU V T (lᵥ, rᵥ) (j₁, j₂) := by
+  simp only [SourceFactors.sourceU,
+    SourceFactors.independentTensorProductOfIdentityWeight]
+  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro β _
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro γ _
+  rw [tensorProductCutShuffle_symm_apply d D e E (i₁, β) (j₁, γ),
+    tensorProductCutShuffle_symm_apply D d E e (β, i₂) (γ, j₂)]
+  ring
+
+/-- The paper gate $v=X_1\mathbin{-}X_2$ is multiplicative for independent
+identity-weight source factors in product-rank coordinates.
+
+Formalization infrastructure for the tensoring clause of arXiv:1703.09188,
+Theorem `IndexTh` (ii), lines 824--847. -/
+theorem SourceFactors.sourceV_independentTensorProductOfIdentityWeight_apply
+    {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
+    (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
+    (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
+    (j₁ j₂ : Fin d) (k₁ k₂ : Fin e)
+    (rᵤ : Fin r[U]) (rᵥ : Fin r[V]) (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) :
+    SourceFactors.sourceV (tensorProduct U V)
+        (SourceFactors.independentTensorProductOfIdentityWeight S T)
+        (finProdFinEquiv (j₁, k₁), finProdFinEquiv (j₂, k₂))
+        (tensorProductRightRankEquiv U V (rᵤ, rᵥ),
+          tensorProductLeftRankEquiv U V (lᵤ, lᵥ)) =
+      SourceFactors.sourceV U S (j₁, j₂) (rᵤ, lᵤ) *
+        SourceFactors.sourceV V T (k₁, k₂) (rᵥ, lᵥ) := by
+  simp only [SourceFactors.sourceV,
+    SourceFactors.independentTensorProductOfIdentityWeight]
+  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro α _
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro γ _
+  rw [tensorProductCutShuffle_symm_apply d D e E (j₁, α) (k₁, γ),
+    tensorProductCutShuffle_symm_apply D d E e (α, j₂) (γ, k₂)]
   ring
 
 end MPOTensor

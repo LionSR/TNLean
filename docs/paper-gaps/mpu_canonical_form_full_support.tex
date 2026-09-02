@@ -98,39 +98,15 @@ point normalized to have trace one. Define
 \end{align}
 
 The source factors use $\rho$. In the first singular value decomposition, let
-$V_1$ be the coisometry in $M_1=V_1^\dagger D_1U_1$. The source orders the
-product index as $(j,\alpha)$ and defines the compressed positive metric by
+$V_1$ be the coisometry in $M_1=V_1^\dagger D_1U_1$. The first source cut has
+row order $(i,\beta)$, namely upper physical followed by right auxiliary. Its
+weight and compressed positive metric are therefore
 \begin{align}
-    G &= V_1(\mathbf{1}_d\otimes\rho)V_1^\dagger.
+    W_\rho &= \mathbf{1}_d\otimes\rho, \\
+    G &= V_1W_\rho V_1^\dagger.
     \label{eq:mpu_canonical_form_full_support_source_metric_physical_virtual}
 \end{align}
 The normalization factor in $X_1$ is $G^{-1/2}$, not $G$.
-
-The formal source matrix orders the same product index as $(\alpha,j)$. Define
-the product-index equivalence
-\begin{align}
-    \chi\colon\C^D\otimes\C^d
-        &\longrightarrow\C^d\otimes\C^D,
-    \label{eq:mpu_canonical_form_full_support_product_index_map}\\
-    \chi(e_\alpha\otimes e_j)
-        &= e_j\otimes e_\alpha.
-    \label{eq:mpu_canonical_form_full_support_product_index_basis}
-\end{align}
-In virtual--physical order, the source weight becomes
-\begin{align}
-    W_\rho
-        &= \chi^\dagger(\mathbf{1}_d\otimes\rho)\chi
-    \label{eq:mpu_canonical_form_full_support_weight_permutation}\\
-        &= \rho\otimes\mathbf{1}_d.
-    \label{eq:mpu_canonical_form_full_support_weight_virtual_physical}
-\end{align}
-The corresponding compressed metric is
-\begin{align}
-    A &= V_1W_\rho V_1^\dagger,
-    \label{eq:mpu_canonical_form_full_support_formal_source_metric}
-\end{align}
-and its normalization factor is $A^{-1/2}$. The two Kronecker orders are
-equivalent under $\chi$ but are not the same matrix in a fixed ordering.
 
 Existence of the inverse square root requires only that
 $V_1W_\rho V_1^\dagger$ be positive definite. It does not force $\rho$ to be

@@ -15,10 +15,9 @@ arXiv:1703.09188, Lemma `lemuisometry` (lines 545--557). It records how the phys
 acts on MPU tensors and their periodic operators, gives the exact output-first double-layer
 entry with its bond-pair order, and recovers the two right source factors from the source cuts.
 
-The first source cut uses rows `(left virtual, down physical)`, so its weight is literally
-`ρ ⊗ₖ 1` in product-index order. The output-first double layer uses `(α, γ)` for its
-left bond
-pair and `(β, δ)` for its right bond pair.
+The first source cut uses rows `(up physical, right virtual)`, so its weight is literally
+`1 ⊗ₖ ρ` in product-index order. The output-first double layer uses `(α, γ)` for its
+left bond pair and `(β, δ)` for its right bond pair.
 
 This module does not identify the resulting finite sum with
 `sourceY₁X₂ᴴ * sourceY₁X₂` and proves no isometry or rank theorem. In
@@ -77,9 +76,8 @@ theorem doubleLayerTensor_physicalAdjointTensor_apply
   simp [doubleLayerTensor, mulTensor_apply, Matrix.sum_apply, kroneckerMap_apply]
 
 /-- Recover the first right source factor by applying the weighted left inverse of `X₁` to
-`M₁ = X₁Y₁`. The product-index weight is `ρ ⊗ₖ I_d`, corresponding to the graphically
-written
-`I_d ⊗ ρ` in arXiv:1703.09188, equations `Y1Y1X1X1`--`X1X2b` (lines 487--526). -/
+`M₁ = X₁Y₁`. The product-index weight is the graphically written `I_d ⊗ ρ` from
+arXiv:1703.09188, equations `Y1Y1X1X1`--`X1X2b` (lines 487--526). -/
 theorem sourceY₁_eq_sourceX₁_conjTranspose_mul_weight_mul_sourceCutM₁
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     sourceY₁ U ρ hρ =

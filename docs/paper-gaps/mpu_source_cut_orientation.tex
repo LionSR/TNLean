@@ -1,0 +1,136 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The First MPU Source Cut and the Orientation of the Source Gates}
+\author{}
+\date{2026-09-01}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Source-cut orientation}
+
+Let $\mathcal U^i_{j,\alpha,\beta}$ be a matrix product operator tensor, with
+upper and lower physical indices $i,j$ and left and right auxiliary indices
+$\alpha,\beta$. Section~III of Ref.~\cite{Cirac2017MPU} introduces two matrix
+flattenings. The diagonal cut in the first diagram separates the upper and
+right legs from the left and lower legs. The second cut separates the left and
+upper legs from the lower and right legs. Hence
+\begin{align}
+    (M_1)_{(i,\beta),(\alpha,j)}
+     & =\mathcal U^i_{j,\alpha,\beta},
+    \label{eq:mpu_source_cut_orientation_first_cut} \\
+    (M_2)_{(\alpha,i),(j,\beta)}
+     & =\mathcal U^i_{j,\alpha,\beta}.
+    \label{eq:mpu_source_cut_orientation_second_cut}
+\end{align}
+The same leg assignment is explicit in equation \texttt{eq:3-leg} of
+Ref.~\cite{FrancoRubio2025MPUGauging}. In particular, $X_1$ carries $(i,\beta)$
+and $Y_1$ carries $(\alpha,j)$ in the factorization $M_1=X_1Y_1$.
+
+An earlier formal reading used the transpose of
+Eq.~\ref{eq:mpu_source_cut_orientation_first_cut}, with row $(\alpha,j)$ and
+column $(i,\beta)$. That reading preserved the rank of $M_1$, but it changed
+the types of $X_1$ and $Y_1$ and therefore changed every source contraction in
+which their open legs mattered. The corrected source cuts are
+\leanid{MPOTensor.sourceCutM₁} and \leanid{MPOTensor.sourceCutM₂}.
+
+\section{Weight and adjunction}
+
+The row space of $M_1$ is ordered as the upper physical factor followed by the
+right auxiliary factor. The weighted normalization in
+Ref.~\cite{Cirac2017MPU} is therefore represented without an additional swap:
+\begin{align}
+    W_\rho
+     & =\operatorname{Id}_d\otimes\rho,
+    \label{eq:mpu_source_cut_orientation_weight} \\
+    X_1^\dagger W_\rho X_1
+     & =\operatorname{Id}_r.
+    \label{eq:mpu_source_cut_orientation_weighted_isometry}
+\end{align}
+These are \leanid{MPOTensor.sourceWeight} and
+\leanid{MPOTensor.sourceX₁_weighted_isometry}. Physical adjunction exchanges
+the two cuts by conjugate transpose,
+\begin{align}
+    M_1(\mathcal U^\sharp)
+     & =M_2(\mathcal U)^\dagger,
+    \label{eq:mpu_source_cut_orientation_adjoint_one} \\
+    M_2(\mathcal U^\sharp)
+     & =M_1(\mathcal U)^\dagger.
+    \label{eq:mpu_source_cut_orientation_adjoint_two}
+\end{align}
+The corresponding formal declarations are
+\leanid{MPOTensor.sourceCutM₁_physicalAdjointTensor} and
+\leanid{MPOTensor.sourceCutM₂_physicalAdjointTensor}.
+
+\section{Source gates}
+
+With $M_1=X_1Y_1$ and $M_2=X_2Y_2$, the gates in equations
+\texttt{uuvv} of Ref.~\cite{Cirac2017MPU} and \texttt{eq:uv} of
+Ref.~\cite{FrancoRubio2025MPUGauging} have entries
+\begin{align}
+    u_{(l,r),(i_1,i_2)}
+     & =\sum_\beta
+    (Y_2)_{l,(i_1,\beta)}(Y_1)_{r,(\beta,i_2)},
+    \label{eq:mpu_source_cut_orientation_u} \\
+    v_{(j_1,j_2),(r,l)}
+     & =\sum_\alpha
+    (X_1)_{(j_1,\alpha),r}(X_2)_{(\alpha,j_2),l}.
+    \label{eq:mpu_source_cut_orientation_v}
+\end{align}
+They are formalized by \leanid{MPOTensor.SourceFactors.sourceU} and
+\leanid{MPOTensor.SourceFactors.sourceV}. The periodic two-site operator then
+factors as
+\begin{align}
+    U^{(2)}_{(i_1,i_2),(j_1,j_2)}
+     & =\sum_{l,r}
+    v_{(i_1,i_2),(r,l)}u_{(l,r),(j_2,j_1)}.
+    \label{eq:mpu_source_cut_orientation_two_site}
+\end{align}
+This is \leanid{MPOTensor.mpo_two_pair_entry_eq_sourceV_mul_sourceU_swap}.
+The open two-site forms use $X_2,u,X_1$ or $v,Y_1,Y_2$, as recorded by
+\leanid{MPOTensor.SourceFactors.mul_apply_eq_sum_X₂_mul_sourceU_mul_X₁} and
+\leanid{MPOTensor.SourceFactors.mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂}.
+
+The contractions $Y_1$--$X_2$ and $X_1$--$Y_2$ remain useful auxiliary
+kernels, but they are not the gates $u$ and $v$. Treating either mixed kernel
+as a paper gate produces the wrong physical and auxiliary leg assignment.
+
+\section{Affected claims and audit boundary}
+
+The transposed first cut affected source-factor recovery, physical adjunction,
+physical reindexing, tensor products of supplied source factors, open and
+closed source networks, source-$v$ dressing, and the explicit shift examples.
+Rank-only statements could remain numerically true because transposition
+preserves rank, while entrywise and open-leg statements required new proofs.
+The corrected declarations now use the leg assignments in
+Eqs.~\ref{eq:mpu_source_cut_orientation_first_cut}--
+\ref{eq:mpu_source_cut_orientation_v}.
+
+Any source-$u$ or source-$v$ result written before this correction must be
+revalidated from its current declaration rather than accepted from an older
+compiled artifact. In particular, a proof must expose the $Y_2$--$Y_1$
+contraction for $u$ or the $X_1$--$X_2$ contraction for $v$, with the product
+orders shown above. The Chapter~28 Blueprint links only to declarations that
+were rebuilt after the correction.
+
+\section{Verdict}
+
+The former definition of $M_1$ was the transpose of the source diagram. The
+correction changes no source rank, but it changes the typed source factors and
+all order-sensitive contractions. The first cut, weight, adjunction identities,
+paper gates, two-site factorizations, tensor products, and shift examples now
+use one consistent leg assignment. The correction is resolved, while the
+revalidation rule remains applicable to any future recovery of source-gate
+work predating this audit.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

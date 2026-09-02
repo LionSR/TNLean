@@ -68,51 +68,64 @@ private lemma sourceCutSVD_factorization_apply
   have h := congrArg (fun A => A row col) hfactor
   simpa only [Matrix.mul_apply] using h.symm
 
-private noncomputable def rightSuccLeft (U : MPOTensor d D) (k : ℕ) :
-    Matrix (Fin D × Fin (Kraus.blockPhysDim d (k + 1)))
-      (Fin d × Fin r[blockTensor U k]) ℂ :=
-  fun (α, J) (i, q) =>
-    ∑ γ : Fin D, U i (blockHead k J) α γ *
-      Matrix.conjTranspose (sourceSVD₁ (blockTensor U k)).V (γ, blockTail k J) q
+/-- The left factor for the first source cut after adjoining one blocked site.
 
-private noncomputable def rightSuccRight (U : MPOTensor d D) (k : ℕ) :
-    Matrix (Fin d × Fin r[blockTensor U k])
-      (Fin (Kraus.blockPhysDim d (k + 1)) × Fin D) ℂ :=
-  fun (i, q) (I, β) =>
+Source: CPSV17 equations `II_SVD` and `eq:sf-svd`, lines 450--486, as used in
+Proposition `index-well-defined`, lines 697--703. -/
+private noncomputable def rightSuccLeft (U : MPOTensor d D) (k : ℕ) :
+    Matrix (Fin (Kraus.blockPhysDim d (k + 1)) × Fin D)
+      (Fin d × Fin r[blockTensor U k]) ℂ :=
+  fun (I, β) (i, q) =>
     if i = blockHead k I then
-      ((sourceSVD₁ (blockTensor U k)).diagonal *
-        (sourceSVD₁ (blockTensor U k)).U) q (blockTail k I, β)
+      Matrix.conjTranspose (sourceSVD₁ (blockTensor U k)).V (blockTail k I, β) q
     else 0
 
+/-- The right factor for the first source cut after adjoining one blocked site.
+
+Source: CPSV17 equations `II_SVD` and `eq:sf-svd`, lines 450--486, as used in
+Proposition `index-well-defined`, lines 697--703. -/
+private noncomputable def rightSuccRight (U : MPOTensor d D) (k : ℕ) :
+    Matrix (Fin d × Fin r[blockTensor U k])
+      (Fin D × Fin (Kraus.blockPhysDim d (k + 1))) ℂ :=
+  fun (i, q) (α, J) =>
+    ∑ γ : Fin D,
+      ((sourceSVD₁ (blockTensor U k)).diagonal *
+        (sourceSVD₁ (blockTensor U k)).U) q (γ, blockTail k J) *
+          U i (blockHead k J) α γ
+
+/-- The first source cut after adjoining one blocked site factors through a space of
+size $d\,r[\operatorname{blockTensor}(U,k)]$.
+
+Source: CPSV17 equations `II_SVD` and `eq:sf-svd`, lines 450--486, as used in
+Proposition `index-well-defined`, lines 697--703. -/
 private theorem sourceCutM₁_blockTensor_succ_factorization
     (U : MPOTensor d D) (k : ℕ) :
     sourceCutM₁ (blockTensor U (k + 1)) =
       rightSuccLeft U k * rightSuccRight U k := by
   classical
   let S := sourceSVD₁ (blockTensor U k)
-  ext ⟨α, J⟩ ⟨I, β⟩
+  ext ⟨I, β⟩ ⟨α, J⟩
   symm
   simp only [sourceCutM₁_apply, Matrix.mul_apply, rightSuccLeft, rightSuccRight]
   rw [Fintype.sum_prod_type, Fintype.sum_eq_single (blockHead k I)]
   · simp only [ite_eq_left]
-    change (∑ q, (∑ γ, U (blockHead k I) (blockHead k J) α γ *
-      Matrix.conjTranspose S.V (γ, blockTail k J) q) *
-        (S.diagonal * S.U) q (blockTail k I, β)) = _
+    change (∑ q, Matrix.conjTranspose S.V (blockTail k I, β) q *
+      ∑ γ, (S.diagonal * S.U) q (γ, blockTail k J) *
+        U (blockHead k I) (blockHead k J) α γ) = _
     calc
-      ∑ q, (∑ γ, U (blockHead k I) (blockHead k J) α γ *
-          Matrix.conjTranspose S.V (γ, blockTail k J) q) *
-          (S.diagonal * S.U) q (blockTail k I, β) =
-          ∑ γ, U (blockHead k I) (blockHead k J) α γ *
-            ∑ q, Matrix.conjTranspose S.V (γ, blockTail k J) q *
-              (S.diagonal * S.U) q (blockTail k I, β) := by
-            simp only [Finset.sum_mul, mul_assoc]
+      _ = ∑ γ, U (blockHead k I) (blockHead k J) α γ *
+          ∑ q, Matrix.conjTranspose S.V (blockTail k I, β) q *
+            (S.diagonal * S.U) q (γ, blockTail k J) := by
+            simp only [Finset.mul_sum]
             rw [Finset.sum_comm]
             apply Finset.sum_congr rfl
             intro γ _
-            rw [Finset.mul_sum]
+            apply Finset.sum_congr rfl
+            intro q _
+            ring
       _ = ∑ γ, U (blockHead k I) (blockHead k J) α γ *
-            sourceCutM₁ (blockTensor U k) (γ, blockTail k J)
-              (blockTail k I, β) := by
+            sourceCutM₁ (blockTensor U k) (blockTail k I, β)
+              (γ, blockTail k J) := by
             apply Finset.sum_congr rfl
             intro γ _
             rw [sourceCutSVD_factorization_apply S]

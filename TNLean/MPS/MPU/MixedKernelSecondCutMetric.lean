@@ -51,15 +51,14 @@ theorem sourceY₁X₂_gram_apply_eq_secondCutMetric
     (p q : Fin d × Fin d) :
     (∑ lr : Fin ℓ[U] × Fin r[U],
       sourceY₁X₂ U ρ hρ lr q * star (sourceY₁X₂ U ρ hρ lr p)) =
-      ∑ β : Fin D, ∑ δ : Fin D, ∑ γ : Fin D, ∑ α : Fin D,
+      ∑ β : Fin D, ∑ δ : Fin D,
       ∑ j : Fin d, ∑ a : Fin D, ∑ k : Fin d, ∑ c : Fin D,
-        ρ α γ *
-          doubleLayerTensor (physicalAdjointTensor U) q.1 p.1
-            (finProdFinEquiv (γ, α)) (finProdFinEquiv (β, δ)) *
+        ((sourceCutM₁ U)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U)
+            (δ, p.1) (β, q.1) *
           (U q.2 j β a *
             (sourceZ₂ U * (sourceZ₂ U)ᴴ) (j, a) (k, c) *
               star (U p.2 k δ c)) := by
-  rw [sourceY₁X₂_gram_apply_eq_closed_output_letter]
+  rw [sourceY₁X₂_gram_apply_eq_closed_source_cuts]
   simp_rw [sourceX₂_mul_conjTranspose_eq_sourceCutM₂_mul_secondCutMetric U]
   let H := sourceZ₂ U * (sourceZ₂ U)ᴴ
   have hentry (β δ : Fin D) (i i' : Fin d) :
@@ -93,10 +92,6 @@ theorem sourceY₁X₂_gram_apply_eq_secondCutMetric
   intro β _
   apply Finset.sum_congr rfl
   intro δ _
-  apply Finset.sum_congr rfl
-  intro γ _
-  apply Finset.sum_congr rfl
-  intro α _
   rw [hentry]
   dsimp only [H]
   rw [Finset.mul_sum]

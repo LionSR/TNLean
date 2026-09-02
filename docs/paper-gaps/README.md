@@ -13,6 +13,13 @@ the current formal boundary.
 
 For the MPU index of arXiv:1703.09188:
 
+- `mpu_source_cut_orientation.tex` records the resolved correction of the first
+  source cut from the transposed row-column convention to row $(i,\beta)$ and
+  column $(\alpha,j)$. It fixes the product weight $I_d\otimes\rho$, the
+  adjunction identities, the source gates $u$ and $v$, and the order-sensitive
+  open, closed, tensor-product, and shift formulas. It also requires any
+  source-gate work predating the correction to be revalidated from its current
+  declaration.
 - `mpu_shift_specified_tensor_index_scope.tex` records that the computed shift
   formulas are values of the displayed tensors, while the source states the
   public blocking-independent MPU index. The remaining public construction is

@@ -164,17 +164,16 @@ arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
 source-cut formula. -/
 theorem sourceCutM₁_identityMPUTensor (d : ℕ) :
     sourceCutM₁ (identityMPUTensor d) =
-      Matrix.reindex (Equiv.uniqueProd (Fin d) (Fin 1)).symm
-        (Equiv.prodUnique (Fin d) (Fin 1)).symm
+      Matrix.reindex (Equiv.prodUnique (Fin d) (Fin 1)).symm
+        (Equiv.uniqueProd (Fin d) (Fin 1)).symm
         (1 : Matrix (Fin d) (Fin d) ℂ) := by
-  ext ⟨α, j⟩ ⟨i, β⟩
+  ext ⟨i, β⟩ ⟨α, j⟩
   have hαβ : α = β := Subsingleton.elim _ _
   by_cases hij : i = j
   · simp [sourceCutM₁, identityMPUTensor, idTensor, Matrix.reindex_apply,
       Matrix.one_apply, hij, hαβ]
-  · have hji : j ≠ i := Ne.symm hij
-    simp [sourceCutM₁, identityMPUTensor, idTensor, Matrix.reindex_apply,
-      hij, hji, hαβ]
+  · simp [sourceCutM₁, identityMPUTensor, idTensor, Matrix.reindex_apply,
+      hij, hαβ]
 
 /-- The second source cut of the bond-one identity tensor is the same
 reindexed identity as its first source cut.
@@ -247,12 +246,12 @@ noncomputable def identitySourceFactors (d : ℕ) :
   let eCol := Equiv.prodUnique (Fin d) (Fin 1)
   let eR := identityRightRankEquiv d
   let eL := identityLeftRankEquiv d
-  let X₁ : Matrix (Fin 1 × Fin d) (Fin r[identityMPUTensor d]) ℂ :=
-    Matrix.reindex eRow.symm eR (1 : Matrix (Fin d) (Fin d) ℂ)
-  let Y₁ : Matrix (Fin r[identityMPUTensor d]) (Fin d × Fin 1) ℂ :=
-    Matrix.reindex eR eCol.symm (1 : Matrix (Fin d) (Fin d) ℂ)
-  let Z₁ : Matrix (Fin d × Fin 1) (Fin r[identityMPUTensor d]) ℂ :=
+  let X₁ : Matrix (Fin d × Fin 1) (Fin r[identityMPUTensor d]) ℂ :=
     Matrix.reindex eCol.symm eR (1 : Matrix (Fin d) (Fin d) ℂ)
+  let Y₁ : Matrix (Fin r[identityMPUTensor d]) (Fin 1 × Fin d) ℂ :=
+    Matrix.reindex eR eRow.symm (1 : Matrix (Fin d) (Fin d) ℂ)
+  let Z₁ : Matrix (Fin 1 × Fin d) (Fin r[identityMPUTensor d]) ℂ :=
+    Matrix.reindex eRow.symm eR (1 : Matrix (Fin d) (Fin d) ℂ)
   let X₂ : Matrix (Fin 1 × Fin d) (Fin ℓ[identityMPUTensor d]) ℂ :=
     Matrix.reindex eRow.symm eL (1 : Matrix (Fin d) (Fin d) ℂ)
   let Y₂ : Matrix (Fin ℓ[identityMPUTensor d]) (Fin d × Fin 1) ℂ :=
@@ -262,16 +261,16 @@ noncomputable def identitySourceFactors (d : ℕ) :
   have hone : (1 : Matrix (Fin d) (Fin d) ℂ).IsUnitaryBetween :=
     ⟨by simp [Matrix.IsIsometry], by simp [Matrix.IsCoisometry]⟩
   have hX₁ : X₁.IsUnitaryBetween :=
-    Matrix.IsUnitaryBetween.reindex _ hone eRow.symm eR
+    Matrix.IsUnitaryBetween.reindex _ hone eCol.symm eR
   have hX₂ : X₂.IsUnitaryBetween :=
     Matrix.IsUnitaryBetween.reindex _ hone eRow.symm eL
   have hcut₁ : sourceCutM₁ (identityMPUTensor d) = X₁ * Y₁ := by
     rw [sourceCutM₁_identityMPUTensor]
-    change Matrix.reindex eRow.symm eCol.symm 1 =
-      Matrix.reindex eRow.symm eR 1 *
-        Matrix.reindex eR eCol.symm 1
+    change Matrix.reindex eCol.symm eRow.symm 1 =
+      Matrix.reindex eCol.symm eR 1 *
+        Matrix.reindex eR eRow.symm 1
     simpa only [Matrix.one_mul, Matrix.coe_reindexLinearEquiv] using
-      (Matrix.reindexLinearEquiv_mul ℂ ℂ eRow.symm eR eCol.symm
+      (Matrix.reindexLinearEquiv_mul ℂ ℂ eCol.symm eR eRow.symm
         (1 : Matrix (Fin d) (Fin d) ℂ) 1).symm
   have hcut₂ : sourceCutM₂ (identityMPUTensor d) = X₂ * Y₂ := by
     rw [sourceCutM₂_identityMPUTensor]
@@ -287,12 +286,12 @@ noncomputable def identitySourceFactors (d : ℕ) :
       simp [sourceWeight]]
     simpa [Matrix.IsIsometry] using hX₁.1
   have hY₁Z₁ : Y₁ * Z₁ = 1 := by
-    change Matrix.reindex eR eCol.symm 1 *
-        Matrix.reindex eCol.symm eR 1 = 1
+    change Matrix.reindex eR eRow.symm 1 *
+        Matrix.reindex eRow.symm eR 1 = 1
     calc
       _ = Matrix.reindex eR eR
           ((1 : Matrix (Fin d) (Fin d) ℂ) * 1) :=
-        Matrix.reindexLinearEquiv_mul ℂ ℂ eR eCol.symm eR 1 1
+        Matrix.reindexLinearEquiv_mul ℂ ℂ eR eRow.symm eR 1 1
       _ = 1 := by simp
   have hY₂Z₂ : Y₂ * Z₂ = 1 := by
     change Matrix.reindex eL eCol.symm 1 *
@@ -486,8 +485,8 @@ theorem sourceY₁X₂_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (a b i₁ i₂ : Fin d) :
     SourceFactors.sourceY₁X₂ (rightShiftTensor d) (rightShiftSourceFactors d)
         (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) (i₁, i₂) =
-      if a = i₁ ∧ b = i₂ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
-  by_cases ha : a = i₁ <;> by_cases hb : b = i₂ <;>
+      if a = i₂ ∧ b = i₁ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : a = i₂ <;> by_cases hb : b = i₁ <;>
     simp [SourceFactors.sourceY₁X₂_apply, rightShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
       Matrix.one_apply, sourceSqrt, ha, hb]
@@ -501,11 +500,11 @@ theorem sourceX₁Y₂_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (j₁ j₂ a b : Fin d) :
     SourceFactors.sourceX₁Y₂ (rightShiftTensor d) (rightShiftSourceFactors d)
         (j₁, j₂) (rightShiftRightRankEquiv d (a, b), rightShiftLeftRankEquiv d 0) =
-      if a = j₂ ∧ b = j₁ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
-  by_cases ha : a = j₂ <;> by_cases hb : b = j₁ <;>
+      if a = j₁ ∧ b = j₂ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : a = j₁ <;> by_cases hb : b = j₂ <;>
     simp [SourceFactors.sourceX₁Y₂_apply, rightShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
-      Matrix.one_apply, sourceSqrt, ha, hb, NeZero.ne d,
+      Matrix.one_apply, sourceSqrt, ha, hb,
       mul_comm, mul_left_comm]
   all_goals grind
 
@@ -538,7 +537,88 @@ theorem sourceX₁Y₂_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
   by_cases ha : a = j₂ <;> by_cases hb : b = j₁ <;>
     simp [SourceFactors.sourceX₁Y₂_apply, leftShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
-      Matrix.one_apply, sourceSqrt, ha, hb, NeZero.ne d]
-  all_goals grind
+      Matrix.one_apply, sourceSqrt, ha, hb]
+
+/-! ### Paper-gate entries of the primitive factors -/
+
+/-- Entry formula for the paper gate $u=Y_2\mathbin{-}Y_1$ of the identity tensor.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+theorem sourceU_identitySourceFactors_apply (d : ℕ) (l r i₁ i₂ : Fin d) :
+    SourceFactors.sourceU (identityMPUTensor d) (identitySourceFactors d)
+        (identityLeftRankEquiv d l, identityRightRankEquiv d r) (i₁, i₂) =
+      if l = i₁ ∧ r = i₂ then 1 else 0 := by
+  by_cases hl : l = i₁ <;> by_cases hr : r = i₂ <;>
+    simp [SourceFactors.sourceU_apply, identitySourceFactors,
+      Matrix.reindex_apply, Matrix.one_apply, hl, hr]
+
+/-- Entry formula for the paper gate $v=X_1\mathbin{-}X_2$ of the identity tensor.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+theorem sourceV_identitySourceFactors_apply (d : ℕ) (j₁ j₂ r l : Fin d) :
+    SourceFactors.sourceV (identityMPUTensor d) (identitySourceFactors d)
+        (j₁, j₂) (identityRightRankEquiv d r, identityLeftRankEquiv d l) =
+      if r = j₁ ∧ l = j₂ then 1 else 0 := by
+  by_cases hr : j₁ = r <;> by_cases hl : j₂ = l <;>
+    simp [SourceFactors.sourceV_apply, identitySourceFactors,
+      Matrix.reindex_apply, Matrix.one_apply, hr, hl, eq_comm]
+
+/-- Entry formula for the paper gate $u=Y_2\mathbin{-}Y_1$ of the right shift.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
+`eq:uv2_U3` (lines 2009--2034). -/
+theorem sourceU_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
+    (a b i₁ i₂ : Fin d) :
+    SourceFactors.sourceU (rightShiftTensor d) (rightShiftSourceFactors d)
+        (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) (i₁, i₂) =
+      if a = i₁ ∧ b = i₂ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : a = i₁ <;> by_cases hb : b = i₂ <;>
+    simp [SourceFactors.sourceU_apply, rightShiftSourceFactors,
+      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
+      Matrix.one_apply, sourceSqrt, ha, hb,
+      mul_comm, mul_left_comm]
+
+/-- Entry formula for the paper gate $v=X_1\mathbin{-}X_2$ of the right shift.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
+`eq:uv2_U3` (lines 2009--2034). -/
+theorem sourceV_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
+    (j₁ j₂ a b : Fin d) :
+    SourceFactors.sourceV (rightShiftTensor d) (rightShiftSourceFactors d)
+        (j₁, j₂) (rightShiftRightRankEquiv d (a, b), rightShiftLeftRankEquiv d 0) =
+      if a = j₁ ∧ b = j₂ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : j₁ = a <;> by_cases hb : j₂ = b <;>
+    simp [SourceFactors.sourceV_apply, rightShiftSourceFactors,
+      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
+      Matrix.one_apply, sourceSqrt, ha, hb, eq_comm]
+
+/-- Entry formula for the paper gate $u=Y_2\mathbin{-}Y_1$ of the left shift.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
+`eq:uv2_U3` (lines 2009--2034). -/
+theorem sourceU_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
+    (a b i₁ i₂ : Fin d) :
+    SourceFactors.sourceU (leftShiftTensor d) (leftShiftSourceFactors d)
+        (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0) (i₁, i₂) =
+      if a = i₁ ∧ b = i₂ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : a = i₁ <;> by_cases hb : b = i₂ <;>
+    simp [SourceFactors.sourceU_apply, leftShiftSourceFactors,
+      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
+      Matrix.one_apply, sourceSqrt, ha, hb,
+      mul_comm, mul_left_comm]
+
+/-- Entry formula for the paper gate $v=X_1\mathbin{-}X_2$ of the left shift.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
+`eq:uv2_U3` (lines 2009--2034). -/
+theorem sourceV_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
+    (j₁ j₂ a b : Fin d) :
+    SourceFactors.sourceV (leftShiftTensor d) (leftShiftSourceFactors d)
+        (j₁, j₂) (leftShiftRightRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)) =
+      if a = j₁ ∧ b = j₂ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
+  by_cases ha : j₁ = a <;> by_cases hb : j₂ = b <;>
+    simp [SourceFactors.sourceV_apply, leftShiftSourceFactors,
+      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
+      Matrix.one_apply, sourceSqrt, ha, hb, eq_comm]
 
 end MPOTensor
