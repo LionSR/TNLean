@@ -261,6 +261,78 @@ theorem sourceU_gram_eq_staggered_four_u
         Fintype.sum_prod_type]
     _ = _ := rfl
 
+/-- The Gram matrix of the paper gate \(u=Y_2\mathbin{-}Y_1\) closes to a
+fixed-pair trace of two double-layer letters.  The source weight enters as
+\(\rho^{\mathsf T}\) because `Matrix.vec` uses the column-stacking coordinates
+fixed by `finProdFinEquiv`.  The pair `p` is starred and `q` is unstarred.
+
+Source: CPSV17 equation `uUnitary` and Lemma `lemuisometry` (lines 545--557).
+-/
+theorem sourceU_gram_eq_transpose_fixedPair_trace
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
+    (p q : Fin d × Fin d) :
+    (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
+      Matrix.trace
+        (doubleLayerTensor U p.2 q.2 *
+          Matrix.vecMulVec
+            (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
+            (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
+              (finProdFinEquiv.symm x)) *
+          doubleLayerTensor U p.1 q.1) := by
+  classical
+  rcases p with ⟨p₁, p₂⟩
+  rcases q with ⟨q₁, q₂⟩
+  have hentry (a b : Fin D) :
+      (doubleLayerTensor U p₂ q₂ *
+          Matrix.vecMulVec
+            (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
+            (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
+              (finProdFinEquiv.symm x)) *
+          doubleLayerTensor U p₁ q₁)
+          (finProdFinEquiv (a, b)) (finProdFinEquiv (a, b)) =
+        ∑ β : Fin D, ∑ β' : Fin D, ∑ γ : Fin D,
+        ∑ j₁ : Fin d, ∑ j₂ : Fin d,
+          star (U j₁ p₂ a β) * U j₁ q₂ b β' * ρ β β' *
+            (star (U j₂ p₁ γ a) * U j₂ q₁ γ b) := by
+    simpa only [Matrix.transpose_apply] using
+      doubleLayerTensor_rankOne_mul_apply_four_u U ρ.transpose
+        (p₂, p₁) (q₂, q₁) (a, a) (b, b)
+  have htrace :
+      Matrix.trace
+          (doubleLayerTensor U p₂ q₂ *
+            Matrix.vecMulVec
+              (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
+              (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
+                (finProdFinEquiv.symm x)) *
+            doubleLayerTensor U p₁ q₁) =
+        ∑ a : Fin D, ∑ b : Fin D, ∑ β : Fin D, ∑ β' : Fin D,
+        ∑ γ : Fin D, ∑ j₁ : Fin d, ∑ j₂ : Fin d,
+          star (U j₁ p₂ a β) * U j₁ q₂ b β' * ρ β β' *
+            (star (U j₂ p₁ γ a) * U j₂ q₁ γ b) := by
+    unfold Matrix.trace
+    rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+    apply Finset.sum_congr rfl
+    intro a _
+    apply Finset.sum_congr rfl
+    intro b _
+    exact hentry a b
+  rw [sourceU_gram_eq_staggered_four_u, htrace]
+  apply Finset.sum_congr rfl
+  intro a _
+  apply Finset.sum_congr rfl
+  intro b _
+  apply Finset.sum_congr rfl
+  intro β _
+  apply Finset.sum_congr rfl
+  intro β' _
+  apply Finset.sum_congr rfl
+  intro γ _
+  apply Finset.sum_congr rfl
+  intro j₁ _
+  apply Finset.sum_congr rfl
+  intro j₂ _
+  ring
+
 end SourceFactors
 
 /-- The normalized input-tail contraction is the closed direct double-layer
