@@ -226,27 +226,6 @@ theorem verticalTensor_T_eq_conjTranspose_mul (v : Fin (8 * 8)) :
 
 /-! ### Matrix product vectors of the vertical tensor -/
 
-/-- The word product of a tensor conjugated by a coisometry is the conjugated
-word product, for nonempty words. -/
-private lemma evalWord_conj {d n D : ℕ} (B : MPSTensor d n) (U : Matrix (Fin n) (Fin D) ℂ)
-    (hU : U * Uᴴ = (1 : Matrix (Fin n) (Fin n) ℂ)) (i : Fin d) (w : List (Fin d)) :
-    Kraus.evalWord (fun v => Uᴴ * B v * U) (i :: w) = Uᴴ * Kraus.evalWord B (i :: w) * U := by
-  induction w generalizing i with
-  | nil => simp
-  | cons j w ih =>
-      rw [Kraus.evalWord_cons, ih j, Kraus.evalWord_cons B i]
-      simp only [Matrix.mul_assoc]
-      rw [← Matrix.mul_assoc U Uᴴ, hU, Matrix.one_mul]
-
-/-- The positive-length matrix product vectors of a tensor conjugated by a
-coisometry are those of the tensor. -/
-private lemma mpv_conj {d n D : ℕ} (B : MPSTensor d n) (U : Matrix (Fin n) (Fin D) ℂ)
-    (hU : U * Uᴴ = (1 : Matrix (Fin n) (Fin n) ℂ)) {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin d) :
-    MPSTensor.mpv (fun v => Uᴴ * B v * U) σ = MPSTensor.mpv B σ := by
-  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
-  simp only [MPSTensor.mpv, MPSTensor.coeff, List.ofFn_succ]
-  rw [evalWord_conj B U hU, Matrix.trace_mul_cycle, hU, Matrix.one_mul]
-
 /-- **Sector expansion of the vertical matrix product vectors.**  At every
 positive length $N$ the matrix product vector of the vertically viewed tensor
 is $\mu^N$ times the sum of the matrix product vectors of the two flag sectors.
@@ -255,12 +234,11 @@ Project example; not from CPSV16. -/
 theorem mpv_verticalTensor_T {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin (8 * 8)) :
     MPSTensor.mpv (verticalTensor T) σ =
       ∑ f : Fin 2, ((mu : ℝ) : ℂ) ^ N * MPSTensor.mpv (flagFamily f) σ := by
-  have h : verticalTensor T = fun v =>
-      verticalCoisometryᴴ *
-        verticalAssembledTensor sectorDim sectorMult sectorWeight flagFamily v *
-          verticalCoisometry :=
-    funext verticalTensor_T_eq_conjTranspose_mul
-  rw [h, mpv_conj _ _ verticalCoisometry_mul_conjTranspose hN,
+  rw [MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction
+      (verticalTensor T)
+      (verticalAssembledTensor sectorDim sectorMult sectorWeight flagFamily)
+      verticalCoisometry verticalCoisometry_mul_conjTranspose
+      verticalTensor_T_eq_conjTranspose_mul N hN σ,
     mpv_verticalAssembledTensor_eq_sum, Fintype.sum_sigma]
   simp [sectorWeight]
 
