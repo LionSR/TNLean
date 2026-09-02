@@ -1364,6 +1364,77 @@
     forces $g_0+g_1=0$ and $g_0-g_1=0$.
 \end{proof}
 
+\begin{theorem}[Tensor-attached algebra clause of the twisted quantum dimer]%
+    \label{thm:mpdo_twisted_dimer_bnt_algebra_tensor_clause}
+    \lean{MPOTensor.TwistedDimer.conjTranspose_flagMPO_mul_self}
+    \lean{MPOTensor.TwistedDimer.star_flagCoef_mul_self}
+    \lean{MPOTensor.TwistedDimer.flagFamily_isLeftCanonical}
+    \lean{MPOTensor.TwistedDimer.flagFamily_isNormalTensor}
+    \lean{MPOTensor.TwistedDimer.flagFamily_isCPSVBasisOfNormalTensors}
+    \lean{MPOTensor.TwistedDimer.twoLabelChiTracePowerForm}
+    \lean{MPOTensor.TwistedDimer.sectorWeight_hasIdempotentCoefficientForm}
+    \lean{MPOTensor.TwistedDimer.flagAlgebraClause}
+    \lean{MPOTensor.TwistedDimer.T_bntAlgebraTensorClause}
+    \lean{MPOTensor.TwistedDimer.T_hasBNTAlgebraTensorClause}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_twisted_dimer_vertical_cf, thm:mpdo_twisted_dimer_flag_sector_product_law, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+    The twisted quantum dimer of Definition~\ref{def:mpdo_twisted_dimer_tensor}
+    has a tensor-attached algebra clause in the sense of
+    Definition~\ref{def:mpdo_bnt_algebra_tensor_clause}, with the vertical
+    canonical form of Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf} as its
+    vertical decomposition and the two-label coefficient family of
+    Theorem~\ref{thm:mpdo_twisted_dimer_two_label_rescaling_stable} as its
+    coefficients. The two flag sectors are normal tensors in the sense of
+    \cite[lines~231--235]{Cirac2016MPDO_arXiv}: each is injective at one site
+    and left-canonical,
+    \begin{align}
+        \sum_{a,b}\bigl(\widehat M_f^{ab}\bigr)^\dagger\widehat M_f^{ab}
+         & =\mathbb 1,
+        \notag
+    \end{align}
+    so they form the basis of normal tensors of the vertically viewed tensor
+    in the sense of \cite[Proposition~4.13, lines~945--959]{Cirac2016MPDO_arXiv}.
+    The coefficient family is the trace-power family of the positive diagonal
+    family $\chi_{ff',f+f'}=\alpha$, $\chi_{ff',f+f'+1}=\beta$, the closed
+    sector operators satisfy the same-length product law of
+    Theorem~\ref{thm:mpdo_twisted_dimer_flag_sector_product_law}, and the
+    trace scalars $m_0=m_1=\mu=\frac58$ satisfy the length-one idempotent law
+    \begin{align}
+        m_g & =\sum_{f,f'}c^{(1)}_{ff'g}\,m_fm_{f'}
+        =2(\alpha+\beta)\mu^2=\frac85\cdot\frac{25}{64}=\frac58 .
+        \notag
+    \end{align}
+    Thus the coefficient family attached to the displayed tensor is one that
+    no positive rescaling of the two labels makes length independent. No
+    comparison with a blocked basis, fusion isometry, or renormalization map
+    is asserted. The tensor is a project example motivated by the question of
+    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+    there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_twisted_dimer_vertical_cf, thm:mpdo_twisted_dimer_flag_sector_product_law, thm:is_normal_tensor_of_is_normal_left_canonical}
+    The adjoint of a sector letter times the letter is the diagonal matrix
+    unit at the right bits $(p',q')$ of the bond pair with the squared modulus
+    of the coefficient, and the flag sign squares to one. Summing over the
+    bond pairs $((p,p',k),(q,q',k))$ with the right bits fixed gives, at each
+    diagonal entry,
+    \begin{align}
+        \frac{1}{(2\mu)^2}\sum_{k}\sum_{p,q}C_k[p,p']^2
+         & =\frac{2\cdot2\cdot\bigl(\tfrac14+\tfrac9{64}\bigr)}{4\cdot\tfrac{25}{64}}
+        =1,
+        \notag
+    \end{align}
+    and the off-diagonal entries vanish. Together with one-site injectivity
+    from Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf}, each sector is a
+    normal tensor by
+    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}; the
+    spanning and linear-independence clauses are those of
+    Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf}. The same-length product
+    law is Theorem~\ref{thm:mpdo_twisted_dimer_flag_sector_product_law}, and
+    the idempotent law is the displayed scalar identity, in which each label
+    $g$ receives two channels of weight $\alpha$ and two of weight $\beta$.
+\end{proof}
+
 \begin{lemma}[Doubled-index letters and their rank-one factorization]
     \label{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.toMPSTensor_R_apply}
