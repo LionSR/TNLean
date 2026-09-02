@@ -56,6 +56,7 @@ import TNLean.MPS.ParentHamiltonian.FNWContraction
 import TNLean.MPS.ParentHamiltonian.FNWLimitMap
 import TNLean.MPS.ParentHamiltonian.FNWLowerBoundary
 import TNLean.MPS.ParentHamiltonian.FNWOverlapCoordinates
+import TNLean.MPS.ParentHamiltonian.FNWOverlapEstimate
 import TNLean.MPS.ParentHamiltonian.FNWTransferConvention
 import TNLean.MPS.ParentHamiltonian.FNWTransferDecay
 import TNLean.MPS.ParentHamiltonian.GramConvergence
