@@ -789,9 +789,38 @@ abstracted — record why, so it is not re-proposed).
   five-line term. Net source delta over the four sites: −69 lines against +37
   for the lemma.
 
+### bit-indexed Kraus support fibre sums — promoted
+- **Pattern:** a Kraus operator supported on the indicator of a condition
+  prescribing some bits of a bit-encoded physical index; a sum against it is
+  rewritten into the indicator of the fibre condition by `ite_eq_left` /
+  `ite_eq_right` under `Finset.sum_congr`, and the fibre sum is then collapsed
+  to the single index (all bits prescribed) or to a sum over the free bits.
+- **Seen:** four occurrences across two files (2026-09-02):
+  `MPS/MPDO/TwistedDimerRefine.lean` (`refineKraus_col_sum`, `refineKraus_row_sum`) and
+  `MPS/MPDO/TwistedDimerViaTS.lean` (`coarseKraus_row_sum`, `coarseKraus_res_term`).
+- **Abstraction:** `MPOTensor.TwistedDimer.one_site_fiber_sum`,
+  `left_fiber_sum`, `right_fiber_sum`, and `pair_fiber_sum` in
+  `TNLean/MPS/MPDO/TwistedDimerRefine.lean`, all stated for an arbitrary
+  summand so that each caller supplies its own Kraus amplitude and contracted
+  vector.
+- **Notes:** the pair version is proved from the two one-index versions rather
+  than by expanding sixty-four terms, which keeps its proof independent of the
+  prescribed bits. The one-index versions are proved by transporting the sum
+  along the bit encoding (`sum_fin_eight`) and deciding the eight resulting
+  cases.
+
 ---
 
 ## Completed refactors
+
+### Successor under one-step finite rotation
+- **Pattern:** both closed-chain MPO calculations proved that `finRotate (N + 1)`
+  sends `i.castSucc`, for `i : Fin N`, to `i.succ` by the same cast-heavy
+  specialization of `finRotate_of_lt`.
+- **Reuse:** `Fin.finRotate_succ_castSucc` in
+  `TNLean/Algebra/FinCyclicInduction.lean` is the shared finite-index lemma.
+- **Result:** the public example-specific lemma and the duplicated local proof
+  are removed; both closed-chain calculations use the algebra lemma.
 
 ### Full support across tensor-equality casts
 - **Pattern:** `PhysicalAncilla.lean` and `TensorProductCanonicalForm.lean` each
@@ -2135,6 +2164,29 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the two current callers concern different reconstruction arguments,
   and the earlier theorem is private, so neither can reuse the other without an
   API change. This remains below the rule-of-three promotion threshold.
+
+### closed-chain Schur factorization of a matrix product operator — candidate
+- **Pattern:** prove positivity of the operator generated on a ring by an
+  explicit tensor by (i) defining the cyclic bond-matching condition together
+  with its rank-one indicator matrix, proved positive semidefinite as an outer
+  product of the indicator vector with itself; (ii) proving an entrywise
+  closed-chain formula in which the indicator multiplies a product of one-site
+  factors; (iii) proving that the corresponding Kronecker power is positive
+  semidefinite by induction, peeling the last site off with the
+  last-coordinate equivalence and using that a Kronecker product of positive
+  semidefinite matrices is positive semidefinite; and (iv) assembling with the
+  Schur product theorem and a nonnegative scalar.
+- **Seen:** 2 occurrences: `R_isMPDO` in
+  `TNLean/MPS/MPDO/RescalingStableLengthDependentRFP.lean` and `T_isMPDO` in
+  `TNLean/MPS/MPDO/TwistedDimerMPDO.lean` (2026-09-02).
+- **Abstraction (proposed):** if a third such tensor appears, extract a
+  positivity criterion parameterized by the local bond-matching relation and
+  the local factor, and specialize the existing proofs to it.
+- **Notes:** the two current instances differ in the shape of the local factor
+  (a single two-by-two matrix against a sum of two four-by-four Kronecker
+  powers proved positive semidefinite together with their difference), so a
+  common criterion would have to abstract over that as well.  Below the
+  rule-of-three promotion threshold.
 
 ---
 

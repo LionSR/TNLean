@@ -763,6 +763,154 @@
     $k=1$.
 \end{proof}
 
+\begin{theorem}[Positivity of the twisted quantum dimer]%
+    \label{thm:mpdo_twisted_dimer_ismpdo}
+    \lean{MPOTensor.TwistedDimer.mpo_T_entry_formula}
+    \lean{MPOTensor.TwistedDimer.mpo_T_eq_smul_hadamard}
+    \lean{MPOTensor.TwistedDimer.T_isMPDO}
+    \leanok
+    \uses{def:mpdo, def:mpdo_twisted_dimer_tensor}
+    The closed operator $\rho^{(N)}$ of the twisted quantum dimer is positive
+    semidefinite for every positive chain length $N$: the twisted dimer is an
+    MPDO. Writing $l_n$, $r_n$, $f_n$ for the three bits of the $n$-th letter
+    of a physical string $\sigma$ and likewise for $\tau$, the matrix element
+    is
+    \begin{align}
+        \rho^{(N)}_{\sigma\tau}
+         & =\frac1{2^N}\,
+        \mathbb 1[\text{cyclic bond match}](\sigma,\tau)\,
+        \delta_{f f'}\left(\prod_{n}C_0[l_n,l'_n]
+        +(-1)^{\lvert f\rvert}\prod_{n}C_1[l_n,l'_n]\right),
+        \notag
+    \end{align}
+    where the indicator is one exactly when both $\sigma$ and $\tau$ match
+    their bond bits around the ring, $\delta_{ff'}$ is one exactly when the two
+    flag strings agree, and $\lvert f\rvert$ is the number of sites carrying
+    flag one. So $\rho^{(N)}$ is $2^{-N}$ times the Hadamard product of the
+    rank-one bond-matching indicator with the pullback, along the flag and left
+    bits, of the sum of the $N$-fold Kronecker powers of the two local
+    four-by-four factors $g_k[(f,l),(f',l')]=\delta_{ff'}\,C_k[l,l']\,
+        (\tau_k)_{ff}$, and the Schur product theorem gives positivity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_twisted_dimer_tensor}
+    Each letter is a sum of two matrix units, one per block label, so an
+    ordered product of letters keeps a common block label and vanishes unless
+    consecutive letters match on their bond bits; the surviving product is a
+    single matrix unit whose row is read off the left bits of the first letters
+    and whose column off the right bits of the last letters. Taking the trace
+    imposes the wraparound match, which completes the segment condition to the
+    cyclic one, and leaves the sum over the block label of the product of the
+    one-site coefficients. That coefficient is half of $g_k$ evaluated at the
+    flag and left bits, so the product along the ring is $2^{-N}$ times an
+    entry of the $N$-fold Kronecker power of $g_k$.
+
+    Neither the sum nor the difference of the two Kronecker powers is a
+    Kronecker power, so both are proved positive semidefinite together by
+    induction on the chain length. Peeling the last site off the ring gives
+    \begin{align}
+        g_0^{\otimes(N+1)}\pm g_1^{\otimes(N+1)}
+         & =\frac12\Bigl[
+            \bigl(g_0^{\otimes N}+g_1^{\otimes N}\bigr)\otimes(g_0\pm g_1)
+            +\bigl(g_0^{\otimes N}-g_1^{\otimes N}\bigr)\otimes(g_0\mp g_1)
+            \Bigr],
+        \notag
+    \end{align}
+    and both local combinations are positive semidefinite: each is block
+    diagonal in the flag bit, with $C_0+C_1=\frac74P_+$ in one flag sector
+    and $C_0-C_1=\frac14P_-$ in the other, the two sectors being exchanged
+    between the sum and the difference. A Kronecker product of positive
+    semidefinite matrices is positive semidefinite, and so are sums,
+    nonnegative multiples, and pullbacks along an arbitrary reindexing.
+\end{proof}
+
+\begin{theorem}[The twisted quantum dimer is a renormalization fixed point]%
+    \label{thm:mpdo_twisted_dimer_is_rfp_via_ts}
+    \lean{MPOTensor.TwistedDimer.refineMap}
+    \lean{MPOTensor.TwistedDimer.refineMap_isKrausCPTP}
+    \lean{MPOTensor.TwistedDimer.refineMap_physClose1}
+    \lean{MPOTensor.TwistedDimer.coarseMap}
+    \lean{MPOTensor.TwistedDimer.coarseMap_isKrausCPTP}
+    \lean{MPOTensor.TwistedDimer.coarseMap_physClose2}
+    \lean{MPOTensor.TwistedDimer.isRFPViaTS_T}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mpdo_twisted_dimer_tensor}
+    The twisted quantum dimer of
+    Definition~\ref{def:mpdo_twisted_dimer_tensor} is a renormalization fixed
+    point in the sense of Definition~\ref{def:is_rfp_via_ts}. The refinement
+    map $\mathcal T$ has eight Kraus operators, labelled by the two prepared
+    site flags $f_1, f_2$ and a bond label $\varepsilon$: it prepares those two
+    flags on the output sites together with the bond state
+    $(\ket{00}+(-1)^\varepsilon\ket{11})/\sqrt2$ on the bond they share, with
+    weight $x$ for $\varepsilon=0$ and $y$ for $\varepsilon=1$, and is
+    supported on the incoming flag $f=f_1+f_2+\varepsilon$. The
+    coarse-graining map $\mathcal S$ has sixteen Kraus operators, labelled by a
+    member of the orthonormal bond basis $(\ket{00}\pm\ket{11})/\sqrt2$,
+    $\ket{01}$, $\ket{10}$ together with the two site flags: it measures the
+    shared bond pair in that basis, reads the two flags, and returns the letter
+    carrying the outer site qubits and the flag $f_1+f_2+s$, where $s$ is one
+    for the antisymmetric bond outcome and zero otherwise. The tensor is a
+    project example motivated by the question of
+    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+    there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_twisted_dimer_tensor, thm:mpdo_twisted_dimer_closures}
+    Fix a one-site letter $(l,r,f)$. The two-site letters in the support of a
+    refinement Kraus operator carry the outer bits $l$ and $r$, the two
+    prepared flags, and a free shared bond bit, so each of the four labels with
+    $f_1+f_2+\varepsilon=f$ contributes twice the squared amplitude
+    $w_\varepsilon/4$, where $w_0=x$ and $w_1=y$; two of the four labels carry
+    each value of $\varepsilon$, and the total is $x+y=1$. Supports belonging
+    to distinct one-site letters are disjoint, so the off-diagonal entries
+    vanish and the family resolves the identity. For the intertwining relation,
+    the flag signs multiply as
+    $(\tau_k)_{f_1f_1}(\tau_k)_{f_2f_2}=(\tau_k)_{gg}$ with $g=f_1+f_2$, and
+    the two prepared bond states reassemble the bond matrices through
+    \begin{align}
+        \frac{x}{4}+(-1)^{b+b'}\frac{y}{4} & =\frac12\,C_0[b,b'], &
+        \frac{x}{4}-(-1)^{b+b'}\frac{y}{4} & =\frac12\,C_1[b,b'],
+        \notag
+    \end{align}
+    for the two shared bond bits $b, b'$ of the two arguments; this is exactly
+    the coefficient of the two-site closure displayed in
+    Theorem~\ref{thm:mpdo_twisted_dimer_closures}.
+
+    For the coarse-graining map, write $B_v(b_1,b_2)$ for the amplitude of
+    the bond-basis vector $v$ at $(b_1,b_2)$. Its orthonormality gives
+    \begin{align}
+        \sum_v B_v(b_1,b_2)B_v(c_1,c_2)
+         & =\delta_{b_1c_1}\delta_{b_2c_2}.
+        \notag
+    \end{align}
+    The corresponding selector sum over the two site flags is
+    \begin{align}
+        \sum_{f_1,f_2}
+        \delta_{f_1F_1}\delta_{f_2F_2}
+        \delta_{f_1F'_1}\delta_{f_2F'_2}
+         & =\delta_{F_1F'_1}\delta_{F_2F'_2}.
+        \notag
+    \end{align}
+    These two identities identify all six bits of the two two-site letters and
+    give the resolution of the identity. On the support of the two-site closure
+    the two bond
+    qubits of each argument agree, so the outcomes $\ket{01}$ and $\ket{10}$
+    contribute nothing and the two symmetric outcomes contribute
+    $\frac12(\pm1)^{b+b'}$. Summing over the two flag pairs compatible with the
+    decoded flag leaves, for each block label $k$, the single identity
+    \begin{align}
+        \frac12\Bigl(\sum_{b,b'}C_k[b,b']
+        +(\tau_k)_{11}\sum_{b,b'}(-1)^{b+b'}C_k[b,b']\Bigr) & =1,
+        \notag
+    \end{align}
+    whose left side is $\frac12\bigl(\frac74+\frac14\bigr)=1$ in both cases:
+    for $k=0$ the alternating sum is $\frac14$ and the flag sign is $1$, and
+    for $k=1$ it is $-\frac14$ and the flag sign is $-1$. The remaining factor
+    is the one-site coefficient
+    $\frac12\,C_k[l,l']\,(\tau_k)_{ff}\,\delta_{ff'}$ of
+    Theorem~\ref{thm:mpdo_twisted_dimer_closures}.
+\end{proof}
+
 \begin{theorem}[A candidate two-label coefficient family stable under every
         positive rescaling]%
     \label{thm:mpdo_twisted_dimer_two_label_rescaling_stable}

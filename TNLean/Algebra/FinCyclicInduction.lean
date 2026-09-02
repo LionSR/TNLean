@@ -4,14 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Fin.Basic
+import Mathlib.Logic.Equiv.Fin.Rotate
 
 /-!
-# Cyclic induction on a finite cyclic index
+# Finite cyclic-index identities
 
-This file records the induction principle for a nonempty finite cyclic index
-set: a predicate that holds at the zero index and passes from each index to its
-successor holds at every index, because repeatedly adding one to zero reaches
-the whole cycle.
+This file records an induction principle for a nonempty finite cyclic index and
+the action of one-step rotation on nonterminal indices.
 -/
 
 namespace Fin
@@ -36,5 +35,15 @@ theorem cyclic_induction {m : ℕ} [NeZero m] {P : Fin m → Prop}
       exact Nat.mod_eq_of_lt (by have := i.isLt; omega)
     rw [← e]
     exact hstep _ (ih ⟨k, hk⟩ rfl)
+
+/-- One-step rotation on `Fin (N + 1)` sends the nonterminal embedding of
+`i : Fin N` to its ordinary successor. -/
+lemma finRotate_succ_castSucc {N : ℕ} (i : Fin N) :
+    finRotate (N + 1) i.castSucc = i.succ := by
+  have h := finRotate_of_lt (n := N) i.isLt
+  have e1 : (⟨(i : ℕ), i.isLt.trans_le N.le_succ⟩ : Fin (N + 1)) = i.castSucc := Fin.ext rfl
+  have e2 : (⟨(i : ℕ) + 1, Nat.succ_lt_succ i.isLt⟩ : Fin (N + 1)) = i.succ := Fin.ext rfl
+  rw [e1, e2] at h
+  exact h
 
 end Fin

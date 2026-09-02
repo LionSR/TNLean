@@ -562,6 +562,33 @@ The following notions use different transfer objects and are not interchangeable
   is distinct from pure MPS RFP, doubled-index transfer idempotence, and every
   physical-trace ZCL condition below.
 
+### Twisted-dimer matching and channel-support predicates
+
+- **Declarations:** `MPOTensor.TwistedDimer.IsOpenBondMatched` and
+  `MPOTensor.TwistedDimer.IsCyclicBondMatched` in
+  `TNLean/MPS/MPDO/TwistedDimerMPDO.lean`, and
+  `MPOTensor.TwistedDimer.IsRefineSupported` and
+  `MPOTensor.TwistedDimer.IsCoarseSupported` in
+  `TNLean/MPS/MPDO/TwistedDimerRefine.lean` and
+  `TNLean/MPS/MPDO/TwistedDimerViaTS.lean`.
+- **Meaning:** the first two predicates require consecutive physical letters to
+  match their right and left bond bits on an open segment or around a ring. The
+  latter two specify the matrix entries supporting the refinement and
+  coarse-graining Kraus operators, including their outer bits, site flags, and
+  decoded flag.
+- **Source:** project-specific coordinate conditions for the twisted-dimer
+  example. They support the explicit realization of CPSV16 Definition 4.1 but
+  are not predicates stated in arXiv:1606.00608.
+- **Sanctioned bridges:** `isOpenBondMatched_succ` peels the first open bond,
+  `isCyclicBondMatched_succ` separates the wraparound bond, and
+  `isRefineSupported_iff_col` identifies the unique one-site fibre. The Kraus
+  definitions use the two support predicates directly; the resulting public
+  conclusions are `refineMap_physClose1`, `coarseMap_physClose2`, and
+  `isRFPViaTS_T`.
+- **Caveat:** these are proof coordinates for this one tensor, not alternative
+  definitions of `MPOTensor.IsRFPViaTS`. They imply no simplicity,
+  basis-of-normal-tensors fusion law, or coefficient attachment.
+
 ### One-letter blocking up to virtual gauge
 
 - **Declarations:** `MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge M` and
