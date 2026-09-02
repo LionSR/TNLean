@@ -29,6 +29,7 @@ import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.Matrix
+import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.OperatorSchmidt
