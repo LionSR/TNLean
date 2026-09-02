@@ -144,11 +144,16 @@ theorem norm_fnwLeftOverlapAggregate_le_familyNorm [NeZero D]
   have hdual := norm_inner_fnwLeftOverlapAggregate_le_familyNorm
     ρ hρ htr A hA hρfix ℓ m r Φ horth (fnwLeftOverlapAggregate ρ A r Φ)
   rw [inner_self_eq_norm_sq_to_K] at hdual
+  have hdualAbs :
+      |‖fnwLeftOverlapAggregate ρ A r Φ‖ ^ 2| ≤
+        fnwMixingQuantity ρ hρ A htr m * ‖Φ‖ *
+          ‖fnwLeftOverlapAggregate ρ A r Φ‖ := by
+    exact_mod_cast hdual
   have hdualReal :
       ‖fnwLeftOverlapAggregate ρ A r Φ‖ ^ 2 ≤
         fnwMixingQuantity ρ hρ A htr m * ‖Φ‖ *
           ‖fnwLeftOverlapAggregate ρ A r Φ‖ := by
-    exact_mod_cast hdual
+    simpa only [abs_of_nonneg (sq_nonneg _)] using hdualAbs
   have hdual' :
       ‖fnwLeftOverlapAggregate ρ A r Φ‖ * ‖fnwLeftOverlapAggregate ρ A r Φ‖ ≤
         (fnwMixingQuantity ρ hρ A htr m * ‖Φ‖) *
@@ -187,11 +192,16 @@ theorem norm_fnwRightOverlapAggregate_le_familyNorm [NeZero D]
   have hdual := norm_inner_fnwRightOverlapAggregate_le_familyNorm
     ρ hρ htr A hA hρfix ℓ m r Ψ horth (fnwRightOverlapAggregate A ℓ Ψ)
   rw [inner_self_eq_norm_sq_to_K] at hdual
+  have hdualAbs :
+      |‖fnwRightOverlapAggregate A ℓ Ψ‖ ^ 2| ≤
+        fnwMixingQuantity ρ hρ A htr m *
+          ‖fnwRightOverlapAggregate A ℓ Ψ‖ * ‖Ψ‖ := by
+    exact_mod_cast hdual
   have hdualReal :
       ‖fnwRightOverlapAggregate A ℓ Ψ‖ ^ 2 ≤
         fnwMixingQuantity ρ hρ A htr m *
           ‖fnwRightOverlapAggregate A ℓ Ψ‖ * ‖Ψ‖ := by
-    exact_mod_cast hdual
+    simpa only [abs_of_nonneg (sq_nonneg _)] using hdualAbs
   have hdual' :
       ‖fnwRightOverlapAggregate A ℓ Ψ‖ * ‖fnwRightOverlapAggregate A ℓ Ψ‖ ≤
         (fnwMixingQuantity ρ hρ A htr m * ‖Ψ‖) *
