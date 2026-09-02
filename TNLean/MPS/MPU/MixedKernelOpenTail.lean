@@ -155,7 +155,8 @@ theorem mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂
 pair is \(q\), while \(j\) is the input pair. The name \(p\) remains reserved for the
 retained output pair in the conjugated factor of a later Gram contraction.
 
-Source-$v$ identity; this does not assert the source-$u$ isometry in CPSV17 equation `uu`. -/
+Source: CPSV17 equations `uuvv` and `vdagger`, lines 532--543. This source-$v$
+identity does not assert the source-$u$ isometry in CPSV17 equation `uu`. -/
 theorem mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂_pair
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (q j : Fin d × Fin d) (α γ : Fin D) :
@@ -170,7 +171,8 @@ theorem mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂_pair
 through $v$, $Y_1$, $Y_2$, and the unevaluated virtual tail.
 
 The retained output pair is \(q\); the pair \(j\) belongs to the input word.
-Source-$v$ identity; this does not assert the source-$u$ isometry in CPSV17 equation `uu`. -/
+Source: CPSV17 equations `uuvv` and `vdagger`, lines 532--543. This source-$v$
+identity does not assert the source-$u$ isometry in CPSV17 equation `uu`. -/
 theorem mpo_finAddTwo_eq_sum_sourceV_sourceY₁_sourceY₂_evalWord
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (K : ℕ)
     (q j : Fin d × Fin d) (τ ζ : Fin K → Fin d) :
