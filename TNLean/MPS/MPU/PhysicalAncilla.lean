@@ -322,16 +322,6 @@ theorem hasFullSupport_normalizedDiagonalLiftCFIIData
   change ∑ k, data.dim k = D
   exact hfull
 
-/-- Full support is preserved when canonical-form-II data are transported across a tensor
-identity. -/
-private theorem hasFullSupport_castCFIIData
-    {d D : ℕ} {A B : MPSTensor d D} (h : A = B)
-    (data : MPSTensor.CPSVCanonicalFormIIData B)
-    (hfull : data.toCPSVCanonicalFormData.HasFullSupport) :
-    (h.symm ▸ data).toCPSVCanonicalFormData.HasFullSupport := by
-  subst h
-  exact hfull
-
 /-- Construct canonical-form-II data for the normalized flattening after attaching a nonempty
 physical identity ancilla.
 
@@ -365,8 +355,8 @@ theorem hasFullSupport_tensorPhysicalIdCFIIData (U : MPOTensor d D)
   have hshuffle : shuffled.toCPSVCanonicalFormData.HasFullSupport :=
     MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
       lifted.toCPSVCanonicalFormData hlift (finDoubledProdEquiv d x)
-  exact hasFullSupport_castCFIIData
-    (normalizedFlattening_tensorPhysicalId U x hx) shuffled hshuffle
+  exact shuffled.hasFullSupport_cast hshuffle
+    (normalizedFlattening_tensorPhysicalId U x hx)
 
 /-- Identity-ancilla attachment leaves the transfer map of the normalized
 flattening unchanged.

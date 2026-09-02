@@ -124,14 +124,6 @@ noncomputable def tensorProductCFIIData (U : MPOTensor d D) (V : MPOTensor e E)
   (normalizedFlattening_tensorProduct U V).symm ▸
     (dataU.tensorProduct dataV).reindexPhysical (finDoubledProdEquiv d e)
 
-private theorem hasFullSupport_castCFIIData
-    {d D : ℕ} {A B : MPSTensor d D} (h : A = B)
-    (data : MPSTensor.CPSVCanonicalFormIIData B)
-    (hfull : data.toCPSVCanonicalFormData.HasFullSupport) :
-    (h.symm ▸ data).toCPSVCanonicalFormData.HasFullSupport := by
-  subst h
-  exact hfull
-
 /-- The product canonical-form-II data have full support when both supplied
 input data have full support.
 
@@ -150,8 +142,8 @@ theorem hasFullSupport_tensorProductCFIIData (U : MPOTensor d D)
     MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
       (dataU.tensorProduct dataV).toCPSVCanonicalFormData hprod
       (finDoubledProdEquiv d e)
-  exact hasFullSupport_castCFIIData
-    (normalizedFlattening_tensorProduct U V)
-    ((dataU.tensorProduct dataV).reindexPhysical (finDoubledProdEquiv d e)) hreindex
+  exact
+    ((dataU.tensorProduct dataV).reindexPhysical (finDoubledProdEquiv d e)).hasFullSupport_cast
+      hreindex (normalizedFlattening_tensorProduct U V)
 
 end MPOTensor

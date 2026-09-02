@@ -4006,6 +4006,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPSTensor.transferMap_tensorProduct_kronecker,
         MPSTensor.CPSVCanonicalFormIIData.tensorProduct,
         MPSTensor.CPSVCanonicalFormIIData.hasFullSupport_tensorProduct,
+        MPSTensor.CPSVCanonicalFormIIData.hasFullSupport_cast,
         MPOTensor.tensorProductCFIIData,
         MPOTensor.hasFullSupport_tensorProductCFIIData}
     \leanok
@@ -4015,8 +4016,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:cpsv_physical_reindexing}
     Let $A$ and $B$ have chosen canonical-form-II data with retained blocks
     $A_a$ and $B_b$, dimensions $D_a$ and $E_b$, weights $\mu_a$ and $\nu_b$,
-    and diagonal positive-definite fixed points $\Lambda_a$ and $\Gamma_b$.
-    Their independent tensor product has chosen retained data
+    diagonal positive-definite fixed points $\Lambda_a$ and $\Gamma_b$, and
+    ambient coisometries $V_A$ and $V_B$. Write $\pi_{m,n}$ for the standard
+    product-coordinate equivalence and let $\chi$ be the retained-coordinate
+    equivalence
+    \begin{align}
+        \chi\bigl((a,\alpha),(b,\beta)\bigr)
+         & =\bigl(\pi_{r_A,r_B}(a,b),
+             \pi_{D_a,E_b}(\alpha,\beta)\bigr).
+    \end{align}
+    The product ambient coisometry is
+    \begin{align}
+        W
+         & =\operatorname{reind}_{\chi,\pi_{D,E}}(V_A\otimes V_B).
+    \end{align}
+    For each retained pair $(a,b)$, the chosen product data are
     \begin{align}
         D_{(a,b)} & =D_aE_b,
     \end{align}
@@ -4024,15 +4038,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \omega_{(a,b)} & =\mu_a\nu_b,
     \end{align}
     \begin{align}
-        C_{(a,b)} & =A_a\boxtimes B_b,
+        C_{(a,b)}^{\pi_{d,e}(i,k)}
+         & =\operatorname{reind}_{\pi_{D_a,E_b},\pi_{D_a,E_b}}
+            (A_a^i\otimes B_b^k),
     \end{align}
     and
     \begin{align}
         \Lambda_{(a,b)}
-         & =\operatorname{reind}(\Lambda_a\otimes\Gamma_b).
+         & =\operatorname{reind}_{\pi_{D_a,E_b},\pi_{D_a,E_b}}
+            (\Lambda_a\otimes\Gamma_b).
     \end{align}
-    The weighted direct sum of these blocks reconstructs $A\boxtimes B$.
-    For MPO tensors $\mathcal U$ and $\mathcal V$, the doubled physical
+    The exact reconstruction is
+    \begin{align}
+        A\boxtimes B
+         & =W^\dagger
+            \left(\bigoplus_{a,b}\mu_a\nu_b
+              (A_a\boxtimes B_b)\right)W.
+        \label{eq:mpu_tensor_product_cfii_reconstruction}
+    \end{align}
+    Thus the retained direct sum is conjugated by the reindexed Kronecker
+    ambient coisometry, rather than identified directly with the ambient
+    tensor. For MPO tensors $\mathcal U$ and $\mathcal V$, the doubled physical
     equivalence of
     Theorem~\ref{thm:mpu_normalized_flattening_tensor_product} identifies these
     data with canonical-form-II data for
@@ -4053,7 +4079,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =\left(\sum_aD_a\right)\left(\sum_bE_b\right)
         =DE.
     \end{align}
-    This full-support assertion is not stated by the tensoring sentence in
+    Identifying canonical-form-II data along an equality of ambient tensors
+    leaves this retained-dimension sum unchanged. This full-support assertion
+    is not stated by the tensoring sentence in
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}; it is the supplied restriction
     documented in \cite{gap:mpu_canonical_form_full_support}.
 
@@ -4070,23 +4098,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mps_normal_block_tensor_product,
         thm:mpu_normalized_flattening_tensor_product,
         thm:cpsv_physical_reindexing}
-    Regroup retained coordinates by
+    For physical labels $i$ and $k$, set
     \begin{align}
-        ((a,\alpha),(b,\beta))
-         & \longmapsto((a,b),(\alpha,\beta)).
+        \mathsf B_A^i & =\bigoplus_a\mu_aA_a^i,
     \end{align}
-    Under this equivalence, the Kronecker product of the two weighted block
-    diagonals is the block diagonal with weights $\mu_a\nu_b$ and blocks
-    $A_a\boxtimes B_b$. The Kronecker product of the two ambient coisometries
-    is again coisometric. Left-canonicality and normality follow from
-    Theorem~\ref{thm:mps_normal_block_tensor_product}.
+    and
+    \begin{align}
+        \mathsf B_B^k & =\bigoplus_b\nu_bB_b^k.
+    \end{align}
+    Regrouping retained coordinates by $\chi$ gives the weighted-block-diagonal
+    identity
+    \begin{align}
+        \bigoplus_{a,b}\mu_a\nu_b
+          C_{(a,b)}^{\pi_{d,e}(i,k)}
+         & =\operatorname{reind}_{\chi,\chi}
+            (\mathsf B_A^i\otimes\mathsf B_B^k).
+        \label{eq:mpu_tensor_product_weighted_block_diagonal}
+    \end{align}
+    Substitute $A^i=V_A^\dagger\mathsf B_A^iV_A$ and
+    $B^k=V_B^\dagger\mathsf B_B^kV_B$. The mixed-product law for Kronecker
+    products and the definition of $W$ then give
+    equation~\eqref{eq:mpu_tensor_product_cfii_reconstruction}. Moreover,
+    $W W^\dagger=1$ follows from
+    $V_AV_A^\dagger=1$ and $V_BV_B^\dagger=1$. Left-canonicality and normality
+    follow from Theorem~\ref{thm:mps_normal_block_tensor_product}.
 
     For arbitrary matrices $X$ and $Y$, direct expansion of the finite Kraus
     sums gives
     \begin{align}
         \mathcal E_{A\boxtimes B}
-        \bigl(\operatorname{reind}(X\otimes Y)\bigr)
-         & =\operatorname{reind}
+        \left(\operatorname{reind}_{\pi_{D,E},\pi_{D,E}}(X\otimes Y)\right)
+         & =\operatorname{reind}_{\pi_{D,E},\pi_{D,E}}
         \bigl(\mathcal E_A(X)\otimes\mathcal E_B(Y)\bigr).
     \end{align}
     Taking $X=\Lambda_a$ and $Y=\Gamma_b$ proves the fixed-point equation;

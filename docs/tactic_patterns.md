@@ -793,6 +793,16 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Full support across tensor-equality casts
+- **Pattern:** `PhysicalAncilla.lean` and `TensorProductCanonicalForm.lean` each
+  carried the same local proof that casting canonical-form-II witness data along
+  an equality of ambient tensors preserves the retained-dimension sum.
+- **Reuse:** `CPSVCanonicalFormIIData.hasFullSupport_cast` in
+  `TNLean/MPS/MPU/CanonicalForm.lean` is the single canonical-form
+  infrastructure lemma used by both constructions.
+- **Result:** both five-line local proofs are removed, and each caller states
+  only its operation-specific tensor equality and full-support witness.
+
 ### Continuous-linear-map extensionality via Mathlib
 - **Pattern:** nine call sites used `ContinuousLinearMap.coe_injective`,
   `DFunLike.ext`, and `intro` to prove equality of continuous linear maps.
