@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.CommutingProjectionProduct
+import TNLean.Algebra.CommutingStarSubalgebraProduct
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
