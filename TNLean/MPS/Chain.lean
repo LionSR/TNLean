@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Chain
 
 import TNLean.MPS.Chain.AlgebraIsomorphism
+import TNLean.MPS.Chain.AlternatingNetwork
 import TNLean.MPS.Chain.BlockedChainFT
 import TNLean.MPS.Chain.CyclicBlockAverage
 import TNLean.MPS.Chain.Defs
