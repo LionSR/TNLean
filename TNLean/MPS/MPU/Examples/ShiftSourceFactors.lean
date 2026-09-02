@@ -490,7 +490,7 @@ theorem sourceU_rightShiftPaperSourceFactors_apply (d : ℕ) [NeZero d]
       hscale, mul_comm, mul_left_comm]
 
 /-- The trace-one right-shift source gate has identity Gram matrix.
-This is the normalization and orientation regression for the complete-network
+This is the normalization and orientation instance for the complete-network
 theorem corresponding to CPSV17 equation `uUnitary`. -/
 theorem sourceU_rightShiftPaperSourceFactors_gram (d : ℕ) [NeZero d]
     (p q : Fin d × Fin d) :

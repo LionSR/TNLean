@@ -198,7 +198,7 @@ private theorem sourceYTensor_gram_eq_four_u_weighted
       simp_rw [Finset.sum_mul, Finset.mul_sum]
       conv_lhs => arg 2; ext β; arg 2; ext β'; rw [Finset.sum_comm]
 
-/-- The Gram matrix of the corrected paper gate \(u=Y_2\mathbin{-}Y_1\) is
+/-- The Gram matrix of the paper gate \(u=Y_2\mathbin{-}Y_1\) is
 the literal staggered reflected--direct four-\(\mathcal U\) network.  The pair
 `p` is starred and `q` is unstarred.
 
