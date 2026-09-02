@@ -73,8 +73,8 @@ namespace MPOTensor.TwistedDimer
 /-! ### Sign form of the bond matrices -/
 
 /-- The flag sign $(\tau_k)_{11} = (-1)^k$ squares to one. -/
-lemma tau_one_mul_self (p : Fin 2) : tau p 1 * tau p 1 = 1 := by
-  fin_cases p <;> simp [tau]
+lemma tau_one_mul_self (k : Fin 2) : tau k 1 * tau k 1 = 1 := by
+  fin_cases k <;> simp [tau]
 
 /-- The flag signs are multiplicative in the flag value:
 $(\tau_k)_{f+f', f+f'} = (\tau_k)_{ff}\,(\tau_k)_{f'f'}$. -/
