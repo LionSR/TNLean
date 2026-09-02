@@ -1656,10 +1656,293 @@ normalization used in
 \end{proof}
 
 The preceding results formalize the lower-boundary assertions of
-\cite[Lemma~5.3]{Fannes1992Finitely}. They do not include Lemma~6.2, the
-projector-defect terms, a replacement by an unweighted finite Gram matrix,
-periodic coercivity, a comparison of unequal kernels, a dimension prefactor,
-or an identity $a_-(N)=1-a(N)$.
+\cite[Lemma~5.3]{Fannes1992Finitely}. They do not yet estimate the overlap of
+two three-block boundary families.
+
+% FNW 1992, Lemma 6.2, especially equation (6.5).
+\subsection{The linear overlap estimate in FNW Lemma 6.2}
+\label{subsec:fnw_linear_overlap_estimate}
+
+Fix consecutive block lengths $\ell,m,r$. Write $\mu^\ell$, $\mu^m$, and
+$\mu^r$ for configurations on these blocks. The physical configuration is
+$\mu^\ell\mu^m\mu^r$, with the first two blocks grouped before the right
+block. All virtual matrix families below use the $\rho$-weighted norm from
+(\ref{eq:fnw_weighted_norm}).
+
+\begin{definition}[Weighted spectator families and three-block coordinates]
+    \label{def:fnw_weighted_spectator_families}
+    \lean{MPSTensor.FNWBoundaryFamilySpace}
+    \lean{MPSTensor.fnwThreeBlockConfigEquiv}
+    \lean{MPSTensor.fnwThreeBlockConfigEquiv_apply}
+    \lean{MPSTensor.fnwThreeBlockConfigEquiv_symm_apply_apply}
+    \leanok
+    For a finite configuration space $S$, let
+    \begin{align}
+        \mathscr H_\rho(S)
+         & :=\bigoplus_{\mu\in S}^{\ell^2}(\MN{D},\lVert\cdot\rVert_\rho).
+        \label{eq:fnw_weighted_spectator_space}
+    \end{align}
+    The canonical three-block bijection sends
+    $((\mu^\ell,\mu^m),\mu^r)$ to the concatenated configuration
+    $\mu^\ell\mu^m\mu^r$ and has the evident inverse on such concatenations.
+\end{definition}
+
+\begin{definition}[Left and right overlap families]
+    \label{def:fnw_overlap_families}
+    \lean{MPSTensor.fnwLeftOverlapMap}
+    \lean{MPSTensor.fnwRightOverlapMap}
+    \lean{MPSTensor.fnwLeftOverlapMap_apply_append}
+    \lean{MPSTensor.fnwRightOverlapMap_apply_append}
+    \leanok
+    \uses{def:fnw_weighted_spectator_families, def:fnw_boundary_map}
+    For $\Phi\in\mathscr H_\rho(\{0,\ldots,d-1\}^r)$ and
+    $\Psi\in\mathscr H_\rho(\{0,\ldots,d-1\}^\ell)$, define physical
+    vectors $L_{\ell,m,r}\Phi$ and $R_{\ell,m,r}\Psi$ by
+    \begin{align}
+        (L_{\ell,m,r}\Phi)(\mu^\ell\mu^m\mu^r)
+         & :=F_{\ell+m}(\Phi(\mu^r))(\mu^\ell\mu^m),
+        \label{eq:fnw_left_overlap_family}           \\
+        (R_{\ell,m,r}\Psi)(\mu^\ell\mu^m\mu^r)
+         & :=F_{m+r}(\Psi(\mu^\ell))(\mu^m\mu^r).
+        \label{eq:fnw_right_overlap_family}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Middle-block boundary matrices]
+    \label{def:fnw_middle_boundary_matrices}
+    \lean{MPSTensor.fnwBoundaryMapCLM_append_eq_leftWord}
+    \lean{MPSTensor.fnwBoundaryMapCLM_append_eq_rightWord}
+    \lean{MPSTensor.fnwLeftMiddleBoundary}
+    \lean{MPSTensor.fnwRightMiddleBoundary}
+    \leanok
+    \uses{def:fnw_overlap_families, def:fnw_boundary_map}
+    Let $v(\mu)$ denote the product of the FNW letters along a word $\mu$.
+    For each pair $(\mu^\ell,\mu^r)$, set
+    \begin{align}
+        X_{\mu^\ell,\mu^r}
+         & :=v(\mu^\ell)^\dagger\Phi(\mu^r),
+        \label{eq:fnw_left_middle_boundary}  \\
+        Y_{\mu^\ell,\mu^r}
+         & :=\Psi(\mu^\ell)v(\mu^r)^\dagger.
+        \label{eq:fnw_right_middle_boundary}
+    \end{align}
+    More generally, for words $u$ and $\tau$ of lengths $K$ and $L$,
+    \begin{align}
+        F_{K+L}(B)(u\tau)
+         & =F_L(v(u)^\dagger B)(\tau)
+        =F_K(Bv(\tau)^\dagger)(u).
+        \label{eq:fnw_boundary_word_splitting}
+    \end{align}
+    Thus the left word moves to the left of the boundary matrix and the right
+    word moves to its right.
+\end{definition}
+
+\begin{theorem}[Middle-block decomposition and FNW aggregates]
+    \label{thm:fnw_overlap_aggregate_decomposition}
+    \lean{MPSTensor.inner_fnwLeftOverlapMap_fnwRightOverlapMap}
+    \lean{MPSTensor.inner_conjTranspose_mul_mul_conjTranspose_eq_aggregateSummands}
+    \lean{MPSTensor.fnwLeftOverlapAggregate}
+    \lean{MPSTensor.fnwRightOverlapAggregate}
+    \lean{MPSTensor.sum_inner_overlapFibers_eq_inner_aggregates}
+    \lean{MPSTensor.inner_overlap_sub_inner_aggregates}
+    \leanok
+    \uses{def:fnw_middle_boundary_matrices, def:fnw_overlap_families}
+    The weighted matrix identity
+    \begin{align}
+        \langle U^\dagger X,YV^\dagger\rangle_\rho
+         & =\langle X\rho V\rho^{-1},UY\rangle_\rho
+        \label{eq:fnw_aggregate_summand_pairing}
+    \end{align}
+    gives the source aggregates
+    \begin{align}
+        A_\varphi
+         & :=\sum_{\mu^r}\Phi(\mu^r)\rho v(\mu^r)\rho^{-1},
+        \label{eq:fnw_left_overlap_aggregate}               \\
+        A_\psi
+         & :=\sum_{\mu^\ell}v(\mu^\ell)\Psi(\mu^\ell).
+        \label{eq:fnw_right_overlap_aggregate}
+    \end{align}
+    Then
+    \begin{align}
+        \langle L_{\ell,m,r}\Phi,R_{\ell,m,r}\Psi\rangle
+         & =\sum_{\mu^\ell,\mu^r}
+        \langle F_m(X_{\mu^\ell,\mu^r}),
+        F_m(Y_{\mu^\ell,\mu^r})\rangle,
+        \label{eq:fnw_overlap_middle_decomposition} \\
+        \langle A_\varphi,A_\psi\rangle_\rho
+         & =\sum_{\mu^\ell,\mu^r}
+        \langle X_{\mu^\ell,\mu^r},Y_{\mu^\ell,\mu^r}\rangle_\rho.
+        \label{eq:fnw_aggregate_pairing}
+    \end{align}
+    Consequently, the difference of these two pairings is the sum of the
+    length-$m$ boundary defects over all spectator pairs.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_middle_boundary_matrices, def:fnw_overlap_families}
+    Reindex the physical inner product by the three consecutive blocks and
+    apply the two boundary-word splitting identities. For the aggregate
+    pairing, use $\rho\rho^{-1}=\rho^{-1}\rho=I_D$ and cyclicity of trace,
+    then distribute the two finite sums.
+\end{proof}
+
+\begin{theorem}[Spectator-family norm identities]
+    \label{thm:fnw_spectator_family_norm_identities}
+    \lean{MPSTensor.fnwTransferMap_pow_one}
+    \lean{MPSTensor.trace_mul_fnwTransferMap_pow}
+    \lean{MPSTensor.sum_norm_sq_conjTranspose_evalWord_mul}
+    \lean{MPSTensor.sum_norm_sq_mul_conjTranspose_evalWord}
+    \lean{MPSTensor.sum_norm_sq_fnwLeftMiddleBoundary}
+    \lean{MPSTensor.sum_norm_sq_fnwRightMiddleBoundary}
+    \leanok
+    \uses{def:fnw_middle_boundary_matrices, thm:fnw_transfer_map_one, thm:trace_mul_fnw_transfer_map}
+    Suppose that $A$ is left canonical and $\E_A(\rho)=\rho$. For every
+    $N\geq0$ and $X\in\MN{D}$,
+    \begin{align}
+        E_{\mathrm{FNW},A}^N(I_D)
+         & =I_D,
+        \label{eq:fnw_word_unitality}        \\
+        \tr\!\left(\rho E_{\mathrm{FNW},A}^N(X)\right)
+         & =\tr\!\left(\E_A^N(\rho)X\right).
+        \label{eq:fnw_power_trace_pairing}
+    \end{align}
+    Consequently,
+    \begin{align}
+        \sum_{\mu^\ell,\mu^r}
+        \lVert X_{\mu^\ell,\mu^r}\rVert_\rho^2
+         & =\lVert\Phi\rVert^2,
+        \label{eq:fnw_left_middle_family_norm} \\
+        \sum_{\mu^\ell,\mu^r}
+        \lVert Y_{\mu^\ell,\mu^r}\rVert_\rho^2
+         & =\lVert\Psi\rVert^2.
+        \label{eq:fnw_right_middle_family_norm}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_transfer_map_one, thm:trace_mul_fnw_transfer_map}
+    Unitality of $E_{\mathrm{FNW},A}^N$ gives the first word sum. The
+    trace-pairing identity and stationarity of $\rho$ give the second. Summing
+    over the remaining spectator index yields the two displayed identities.
+\end{proof}
+
+\begin{theorem}[Termwise equation (5.9) estimate]
+    \label{thm:fnw_overlap_linear_family_estimate}
+    \lean{MPSTensor.norm_inner_overlap_sub_inner_aggregates_le}
+    \lean{MPSTensor.norm_inner_overlap_sub_inner_aggregates_le_familyNorms}
+    \leanok
+    \uses{thm:fnw_overlap_aggregate_decomposition, thm:fnw_spectator_family_norm_identities, thm:fnw_boundary_near_isometry}
+    If $\tr(\rho)=1$, then
+    \begin{align}
+        \bigl|\langle L_{\ell,m,r}\Phi,R_{\ell,m,r}\Psi\rangle
+        -\langle A_\varphi,A_\psi\rangle_\rho\bigr|
+         & \leq a(m)
+        \left(\sum_{\mu^\ell,\mu^r}\lVert X_{\mu^\ell,\mu^r}\rVert_\rho^2\right)^{1/2}
+        \left(\sum_{\mu^\ell,\mu^r}\lVert Y_{\mu^\ell,\mu^r}\rVert_\rho^2\right)^{1/2}.
+        \label{eq:fnw_overlap_termwise_estimate}
+    \end{align}
+    If, in addition, $A$ is left canonical and $\E_A(\rho)=\rho$, then
+    \begin{align}
+        \bigl|\langle L_{\ell,m,r}\Phi,R_{\ell,m,r}\Psi\rangle
+        -\langle A_\varphi,A_\psi\rangle_\rho\bigr|
+         & \leq a(m)\lVert\Phi\rVert\lVert\Psi\rVert.
+        \label{eq:fnw_overlap_linear_family_estimate}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_overlap_aggregate_decomposition, thm:fnw_spectator_family_norm_identities, thm:fnw_boundary_near_isometry}
+    Apply (\ref{eq:fnw_boundary_near_isometry}) to every middle-boundary pair,
+    sum the estimates, and use finite Cauchy--Schwarz. The identities
+    (\ref{eq:fnw_left_middle_family_norm}) and
+    (\ref{eq:fnw_right_middle_family_norm}) give the stated family norms.
+\end{proof}
+
+\begin{theorem}[Overlap norms and the lower boundary constant]
+    \label{thm:fnw_overlap_lower_boundary_control}
+    \lean{MPSTensor.norm_fnwLeftOverlapMap_sq}
+    \lean{MPSTensor.norm_fnwRightOverlapMap_sq}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_mul_familyNorm_sq_le_leftOverlap}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_mul_familyNorms_le_overlapNorms}
+    \leanok
+    \uses{def:fnw_overlap_families, thm:fnw_lower_boundary_optimal, thm:fnw_lower_boundary_mono}
+    The overlap norms satisfy
+    \begin{align}
+        \lVert L_{\ell,m,r}\Phi\rVert^2
+         & =\sum_{\mu^r}\lVert F_{\ell+m}(\Phi(\mu^r))\rVert^2,
+        \label{eq:fnw_left_overlap_norm}                           \\
+        \lVert R_{\ell,m,r}\Psi\rVert^2
+         & =\sum_{\mu^\ell}\lVert F_{m+r}(\Psi(\mu^\ell))\rVert^2.
+        \label{eq:fnw_right_overlap_norm}
+    \end{align}
+    The optimal lower-boundary inequality also gives
+    \begin{align}
+        a_-(\ell+m)\lVert\Phi\rVert^2
+         & \leq\lVert L_{\ell,m,r}\Phi\rVert^2,
+        \label{eq:fnw_left_overlap_lower_boundary} \\
+        a_-(m+r)\lVert\Psi\rVert^2
+         & \leq\lVert R_{\ell,m,r}\Psi\rVert^2.
+        \label{eq:fnw_right_overlap_lower_boundary}
+    \end{align}
+    If $\E_A(\rho)=\rho$ and $a_-(m)>0$, monotonicity from $m$ to
+    $\ell+m$ and from $m$ to $m+r$ gives
+    \begin{align}
+        a_-(m)\lVert\Phi\rVert\lVert\Psi\rVert
+         & \leq\lVert L_{\ell,m,r}\Phi\rVert
+        \lVert R_{\ell,m,r}\Psi\rVert.
+        \label{eq:fnw_overlap_lower_boundary_control}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_lower_boundary_optimal, thm:fnw_lower_boundary_mono}
+    Reindex each physical norm by the spectator configuration. Apply
+    (\ref{eq:fnw_lower_boundary_universal}) to every summand. Monotonicity
+    gives $a_-(m)\leq a_-(\ell+m)$ and
+    $a_-(m)\leq a_-(m+r)$. Multiply the resulting square-root estimates.
+\end{proof}
+
+\begin{theorem}[FNW equation (6.5), linear contribution]
+    \label{thm:fnw_equation_6_5_linear}
+    \lean{MPSTensor.norm_inner_overlap_sub_inner_aggregates_le_div_lowerBoundary}
+    \leanok
+    \uses{thm:fnw_overlap_linear_family_estimate, thm:fnw_overlap_lower_boundary_control}
+    Suppose that $\tr(\rho)=1$, $A$ is left canonical,
+    $\E_A(\rho)=\rho$, and $a_-(m)>0$. Then
+    \begin{align}
+        \bigl|\langle L_{\ell,m,r}\Phi,R_{\ell,m,r}\Psi\rangle
+        -\langle A_\varphi,A_\psi\rangle_\rho\bigr|
+         & \leq\frac{a(m)}{a_-(m)}
+        \lVert L_{\ell,m,r}\Phi\rVert
+        \lVert R_{\ell,m,r}\Psi\rVert.
+        \label{eq:fnw_equation_6_5_linear}
+    \end{align}
+    This is the linear estimate in
+    \cite[Equation~(6.5)]{Fannes1992Finitely}. Positivity of the actual lower
+    boundary constant is assumed directly.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_overlap_linear_family_estimate, thm:fnw_overlap_lower_boundary_control}
+    Divide (\ref{eq:fnw_overlap_lower_boundary_control}) by $a_-(m)$ and
+    substitute the resulting family-norm bound into
+    (\ref{eq:fnw_overlap_linear_family_estimate}).
+\end{proof}
+
+This proves only the linear contribution $a(m)/a_-(m)$. The
+block-injectivity argument that supplies $a_-(m)>0$, the aggregate estimates
+coming from orthogonality to the full ground space, the separate quadratic
+contribution $a(m)^2/a_-(m)$, the common-subspace projector estimate, and the
+final assertion of Lemma~6.2 remain open. No inverse or finite Gram matrix,
+pseudoinverse, periodic coercivity, comparison of unequal kernels, cyclic
+replacement, dimension prefactor, identity $a_-(m)=1-a(m)$, identification
+$k=D$, or claim $C_\lambda=k^2$ enters the result above.
 
 \begin{theorem}[Geometric power bound below unit spectral radius]
     \label{thm:geometric_bound_of_spectral_radius_lt_one}

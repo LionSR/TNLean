@@ -128,10 +128,14 @@ the corresponding gap lower bounds. Section~6 verifies C3$'$ for GVBS/MPS
 Hamiltonians using projection estimates inherited from
 Ref.~\cite{Fannes1992Finitely}. The formal development instead proves a
 sufficient range-two estimate after physical blocking. The source lower
-boundary constant and the conclusions of FNW Lemma~5.3 are now identified by
+boundary constant and the conclusions of FNW Lemma~5.3 are identified by
 \leanid{MPSTensor.fnwLowerBoundaryConstant} and
-\leanid{MPSTensor.fnwLowerBoundaryConstant_mono}. The optimized numerator
-from Lemma~6.2 remains open.
+\leanid{MPSTensor.fnwLowerBoundaryConstant_mono}. The weighted spectator
+families and aggregates in
+\leanid{MPSTensor.norm_inner_overlap_sub_inner_aggregates_le_div_lowerBoundary}
+prove the linear contribution $a(m)/a_-(m)$ in FNW Equation~(6.5). The
+quadratic contribution and the final projector estimate in Lemma~6.2 remain
+open.
 
 \subsection{Lower-endpoint scope in Theorem 2.1(i)}
 
@@ -1694,60 +1698,45 @@ then gives the open-chain anticommutator estimate through two-projection
 geometry. The length $l$ is measured in sites of the input tensor; if that
 tensor is already blocked, one such site is one blocked-chain filtration step.
 
-The weighted virtual-space foundation and the transfer-remainder decay are now
-formalized.  For every positive-definite $\rho$, matrices carry the inner
-product
+The weighted virtual-space foundation is formalized. For every
+positive-definite $\rho$, matrices carry the inner product
 $\langle X,Y\rangle_\rho=\operatorname{Tr}(\rho X^\dagger Y)$ from
 Equation~(5.6) of Ref.~\cite{Fannes1992Finitely}, and right multiplication by
 $\sqrt\rho$ followed by vectorization identifies this space isometrically with
-$\C^{D^2}$.  The bilinear trace-adjoint remainder has the same nonunit
-eigenvalues as the Schrödinger remainder.  Its spectral radius in the weighted
-norm is therefore strictly below one.  With
+$\C^{D^2}$. The formal results also include the transfer remainder estimate
+of Lemma~5.2, the lower-boundary assertions of Lemma~5.3, the weighted
+spectator families, the two source aggregates, their middle-block
+decomposition, the spectator norm identities, and the linear estimate
 \begin{align}
-    a(n)
-    &=\operatorname{Re}\operatorname{Tr}(\rho^{-1})
-    \lVert E^n-E_\infty\rVert_{\operatorname{op},\rho},
-    \label{eq:cpgsv21_martingale_overlap_fnw_mixing_quantity}
+    \bigl|\langle L\Phi,R\Psi\rangle
+    -\langle A_\varphi,A_\psi\rangle_\rho\bigr|
+    &\leq\frac{a(m)}{a_-(m)}\lVert L\Phi\rVert\lVert R\Psi\rVert.
+    \label{eq:cpgsv21_martingale_overlap_fnw_linear_6_5}
 \end{align}
-the theorem
-\leanid{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric}
-gives, for every prescribed nonnegative $\lambda$ above that spectral radius,
-a constant $C_\lambda>0$ such that
-$a(n)\leq C_\lambda\lambda^n$ for every $n\geq1$.  The factor and weighted
-remainder norm are those entering Equations~(5.9)--(5.10), while the theorem
-proves the prescribed-rate estimate for $a(n)$ in Lemma~5.2 of
-Ref.~\cite{Fannes1992Finitely}. The exact boundary defect and the estimate in
-Equation~(5.9) are now given by
-\leanid{MPSTensor.inner_fnwBoundaryMapCLM_sub_rhoWeighted} and
-\leanid{MPSTensor.norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le}. The exact
-right-boundary recursion
-\begin{align}
-    \lVert F_{N+1}(B)\rVert^2
-     & =\sum_{\mu=0}^{d-1}\lVert F_N(BA^\mu)\rVert^2
-    \label{eq:cpgsv21_martingale_overlap_fnw_boundary_recursion}
-\end{align}
-is \leanid{MPSTensor.fnwBoundaryMapCLM_norm_sq_succ}, with
-$A^\mu=v(\mu)^\dagger$. Lemma~6.2 and the optimized numerator remain open on
-the publication base.
+This is the linear contribution in Equation~(6.5). It assumes
+$a_-(m)>0$ directly; the block-injectivity argument that supplies this
+positivity remains open.
 
 The reconstructed coefficient is not the optimized FNW expression
 \begin{align}
     c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
     \qquad
-    c\lambda^l & <1,
+    c\lambda^l&<1,
     \label{eq:cpgsv21_martingale_overlap_optimized_fnw_expression}
 \end{align}
 quoted as \path{boundAm} in Section~6 of
-Ref.~\cite{Nachtergaele1996Spectral}. The source constant $a_-(N)$, its lower
-bound $a_-(N)\geq1-a(N)$, and its monotonicity are formalized from
-Lemma~5.3 of Ref.~\cite{Fannes1992Finitely}. Recovering the optimized numerator
-still requires the projector estimates in Lemma~6.2. The present argument makes
-no unweighted finite-Gram substitution and uses no periodic coercivity,
-unequal-kernel transfer, cyclic substitute, dimension prefactor, or
-projector-defect claim $a/a_-+a^2/a_-$. It does not identify $k$ with $D$ or
-assert $C_\lambda=k^2$. The reconstructed constant is not identified with a
-source dimension-dependent value; the available unweighted conversion retains
-the proved $D^{3/2}$ norm factor inside $g$.
+Ref.~\cite{Nachtergaele1996Spectral}. The linear term $a(m)/a_-(m)$ is now
+formalized in
+Equation~\eqref{eq:cpgsv21_martingale_overlap_fnw_linear_6_5}. The aggregate
+orthogonality estimates needed for the separate term $a(m)^2/a_-(m)$ remain
+open, as do the common-subspace projector argument and the final Lemma~6.2
+estimate. No inverse or finite Gram matrix, pseudoinverse, periodic coercivity,
+comparison of unequal kernels, replacement by a cyclic tensor, dimension
+prefactor, identity $a_-(m)=1-a(m)$, identification $k=D$, or claim
+$C_\lambda=k^2$ is used in the source-coordinate estimate. The reconstructed
+constant is not identified with a source dimension-dependent value; the
+available unweighted conversion retains the proved $D^{3/2}$ norm factor
+inside $g$.
 
 \subsection{Open-to-periodic finite-range conclusion}
 
@@ -1850,8 +1839,11 @@ coefficient $7/16$, and the resulting cyclic range-two gap $1/8$ are proved
 for a suitable blocked tensor. Before blocking, lengths are measured in sites
 of the input tensor; the final chain length counts blocked sites. These bounds
 come from the formal inverse-Gram reconstruction and are not attributed to
-FNW. The source lower boundary constant and Lemma~5.3 are formalized, but
-the optimized Lemma~6.2 numerator remains open.
+FNW. The source lower boundary constant, Lemma~5.3, and the linear
+$a(m)/a_-(m)$ contribution in Equation~(6.5) are formalized. The
+block-injectivity positivity argument, the aggregate orthogonality bounds, the
+quadratic $a(m)^2/a_-(m)$ contribution, the common-subspace projector
+argument, and the final Lemma~6.2 estimate remain open.
 
 The earlier blocked-to-original comparison remains valid for periodic lengths
 divisible by the chosen block length.  It gives
