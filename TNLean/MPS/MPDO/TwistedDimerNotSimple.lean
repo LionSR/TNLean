@@ -57,8 +57,7 @@ length-$L$ configurations of the diagonal word evaluations, which is the
 $L$-th power of the one-site physical-trace transfer
 (`sum_evalWord_diag_eq_verticalLoop_pow`).
 
-Source: arXiv:1606.00608, Definition 4.2, lines 735--739, applied to the
-blocked tensor of lines 317--345. -/
+Source: arXiv:1606.00608, blocking construction at lines 227--230. -/
 theorem physTraceTransfer_blockTensor (M : MPOTensor d D) (L : ℕ) :
     physTraceTransfer (blockTensor M L) = physTraceTransfer M ^ L := by
   rw [← verticalLoop_eq_physTraceTransfer M, ← sum_evalWord_diag_eq_verticalLoop_pow]
