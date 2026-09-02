@@ -3046,6 +3046,50 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     trace gives the displayed closed trace.
 \end{proof}
 
+\begin{theorem}[Closed double-layer trace for the normalized input tail]
+    \label{thm:mpu_normalized_input_tail_closed_trace}
+    \lean{MPOTensor.normalized_mpo_input_tail_eq_closed_doubleLayer_trace}
+    \leanok
+    \uses{def:mpo_family, def:mpu_double_layer}
+    Assume $d>0$. For any MPO tensor $\mathcal U$, tail length $K$, and
+    $p,q\in\Fin d\times\Fin d$, let $W$ be its double layer and let
+    $E=d^{-1}\sum_i W^{ii}$ be the normalized physical diagonal. Then
+    \begin{align}
+        d^{-K}\sum_{\tau,\eta}
+        \overline{U^{(K+2)}_{\eta,(p,\tau)}}
+        U^{(K+2)}_{\eta,(q,\tau)}
+        =\tr\!\left[W^{p_1q_1}W^{p_2q_2}E^K\right].
+    \end{align}
+    Thus $p$ labels the starred input and $q$ the unstarred input. This is
+    the closed input-tail expression occurring on the right-hand side of
+    \cite[equation~\texttt{uUnitary} and lines~550--556]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_closed_double_layer, thm:mpu_normalized_diagonal_word_expansion}
+    Closing the common output word gives the double-layer identity
+    \begin{align}
+        \sum_\eta
+        \overline{U^{(K+2)}_{\eta,\sigma}}
+        U^{(K+2)}_{\eta,\sigma'}
+         & =W^{(K+2)}_{\sigma,\sigma'}.
+    \end{align}
+    Set $\sigma=(p,\tau)$ and $\sigma'=(q,\tau)$. Splitting off the two
+    retained sites rewrites the right-hand side as
+    \begin{align}
+        \tr\!\left[
+            W^{p_1q_1}W^{p_2q_2}
+            W^{\tau_1\tau_1}\cdots W^{\tau_K\tau_K}\right].
+    \end{align}
+    Finally,
+    \begin{align}
+        E^K
+         & =d^{-K}\sum_\tau
+        W^{\tau_1\tau_1}\cdots W^{\tau_K\tau_K}.
+    \end{align}
+    Substitute this expansion and use linearity of the trace.
+\end{proof}
+
 \begin{theorem}[Second-cut metric factorization]
     \label{thm:mpu_second_cut_metric}
     \lean{MPOTensor.sourceX₂_mul_conjTranspose_eq_sourceCutM₂_mul_secondCutMetric}
@@ -4892,6 +4936,56 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 269--280 and 397--405.
 \end{definition}
 
+\begin{theorem}[Staggered Gram expansion of the source tensor $u$]
+    \label{thm:mpu_source_u_staggered_gram}
+    \lean{MPOTensor.SourceFactors.sourceU_gram_eq_staggered_four_u}
+    \leanok
+    \uses{def:mpu_source_uv, def:mpu_weighted_source_factors}
+    Let $M_i=X_iY_i$ be supplied source factorizations for $\mathcal U$ and
+    the weight $\rho$. For retained physical pairs $p=(p_1,p_2)$ and
+    $q=(q_1,q_2)$, one has
+    \begin{align}
+        \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+        ={} & \sum_{\alpha,\alpha',\beta,\beta',\gamma,j_1,j_2}
+        \overline{\mathcal U^{j_1}_{p_2,\alpha,\beta}}
+        \rho_{\beta,\beta'}
+        \mathcal U^{j_1}_{q_2,\alpha',\beta'} \notag            \\
+            & \qquad\qquad\cdot
+        \overline{\mathcal U^{j_2}_{p_1,\gamma,\alpha}}
+        \mathcal U^{j_2}_{q_1,\gamma,\alpha'}.
+    \end{align}
+    The $p$ entries are starred and the $q$ entries are unstarred. This is
+    precisely the staggered reflected--direct four-tensor expression obtained
+    from $u=Y_2\mathbin{-}Y_1$ and the two identities in
+    \cite[equations~\texttt{X1X2b} and~\texttt{uUnitary}]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_uv, thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations}
+    Since the first cut has rows $(i,\beta)$ and columns $(\alpha,j)$,
+    its weighted normalization gives
+    \begin{align}
+        \sum_r\overline{(Y_1)_{r,(\alpha,p_2)}}
+        (Y_1)_{r,(\alpha',q_2)}
+         & =\sum_{\beta,\beta',j_1}
+        \overline{\mathcal U^{j_1}_{p_2,\alpha,\beta}}
+        \rho_{\beta,\beta'}
+        \mathcal U^{j_1}_{q_2,\alpha',\beta'}.
+    \end{align}
+    The unweighted normalization of the second cut gives
+    \begin{align}
+        \sum_l\overline{(Y_2)_{l,(p_1,\alpha)}}
+        (Y_2)_{l,(q_1,\alpha')}
+         & =\sum_{\gamma,j_2}
+        \overline{\mathcal U^{j_2}_{p_1,\gamma,\alpha}}
+        \mathcal U^{j_2}_{q_1,\gamma,\alpha'}.
+    \end{align}
+    Expand both copies of
+    $u_{(l,r),(i_1,i_2)}=\sum_\alpha
+        (Y_2)_{l,(i_1,\alpha)}(Y_1)_{r,(\alpha,i_2)}$ and substitute these two
+    Gram identities. Reordering the finite sums yields the stated formula.
+\end{proof}
+
 \begin{theorem}[Complete source-$u$ network contraction]
     \label{thm:mpu_source_u_complete_network}
     \notready
@@ -4911,8 +5005,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
          & =d^{-K}\sum_{\tau,\eta}
-        U^{(K+2)}_{(q,\tau),\eta}
-        \overline{U^{(K+2)}_{(p,\tau),\eta}}.
+        \overline{U^{(K+2)}_{\eta,(p,\tau)}}
+        U^{(K+2)}_{\eta,(q,\tau)}.
     \end{align}
     Here $\tau$ ranges over input words of length $K$, and $\eta$ ranges over
     output words of length $K+2$. This is the supplied-fixed-pair form of the
@@ -4921,6 +5015,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}
+    \uses{thm:mpu_source_u_staggered_gram, thm:mpu_normalized_input_tail_closed_trace}
     Expand both external paper gates using
     $u=Y_2\mathbin{-}Y_1$, retaining the two $Y_2$--$Y_1$ triangles and their
     common virtual indices in the staggered order of
@@ -4929,10 +5024,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     to insert $E^J=\lvert\rho)(\Phi\rvert$ into that exact network and contract
     it directly to the displayed normalized $(K+2)$-site MPU sum.
 
-    This staggered $Y_2$--$Y_1$ network identity is not yet formalized. The
-    checked $Y_1$--$X_2$ mixed-kernel Gram, range-projection, reflected-transfer,
-    and terminal-boundary lemmas concern a different network and do not supply
-    any step of this proof.
+    The staggered four-tensor expansion and the normalized input-tail trace are
+    formalized separately. The missing step is their equality after inserting
+    the fixed pair into the exact retained-interior network of
+    Figure~\texttt{II\_uUnitary.png}. The checked $Y_1$--$X_2$ mixed-kernel
+    Gram, range-projection, reflected-transfer, and terminal-boundary lemmas
+    concern a different network and do not supply that contraction.
 \end{proof}
 
 \begin{theorem}[Complete reduced source-$v$ contraction]
@@ -5022,14 +5119,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
-    \uses{thm:mpu_source_u_complete_network, thm:mpu_normalized_output_tail_coisometry}
-    Set $K=JD^2$. The complete-network identity and output-first MPU unitarity
+    \uses{thm:mpu_source_u_complete_network, thm:mpu_normalized_input_tail_isometry}
+    Set $K=JD^2$. The complete-network identity and input-first MPU unitarity
     give, for all retained physical pairs $p,q$,
     \begin{align}
         (u^\dagger u)_{p,q}
          & =d^{-K}\sum_{\tau,\eta}
-        U^{(K+2)}_{(q,\tau),\eta}
-        \overline{U^{(K+2)}_{(p,\tau),\eta}} \\
+        \overline{U^{(K+2)}_{\eta,(p,\tau)}}
+        U^{(K+2)}_{\eta,(q,\tau)}  \\
          & =\delta_{p,q}.
     \end{align}
     Hence $u^\dagger u=\Id$.
@@ -8299,6 +8396,80 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \tr(\rho_d) & =d^{-1}\tr(\Id_d)=d^{-1}d=1.
     \end{align}
     Replacing $d$ by $d^2$ proves the product-space statements.
+\end{proof}
+
+\begin{definition}[Trace-normalized source factors for the right shift]
+    \label{def:mpu_right_shift_paper_source_factors}
+    \lean{MPOTensor.rightShiftPaperSourceFactors}
+    \leanok
+    \uses{def:mpu_shift_trace_weight, def:threeMPU_supplied_source_factors}
+    Assume $d>0$, and let $T$ be the right-shift tensor. Starting from the
+    displayed source factors for $T$ with identity weight, rescale the first
+    cut by
+    \begin{align}
+        X_1' & =\sqrt d\,X_1,
+             & Y_1'           & =d^{-1/2}Y_1,
+             & Z_1'           & =\sqrt d\,Z_1,
+    \end{align}
+    and leave $X_2,Y_2,Z_2$ unchanged. Then these are supplied source factors
+    for the trace-normalized scalar weight $\rho_d=d^{-1}\Id_d$ prescribed by
+    CFII. In particular,
+    \begin{align}
+        M_i & =X_i'Y_i',
+            & (X_1')^\dagger(\Id_d\otimes\rho_d)X_1' & =\Id,
+            & (X_2')^\dagger X_2'                    & =\Id,
+            & Y_i'Z_i'                               & =\Id.
+    \end{align}
+    This is the normalization of
+    \cite[equations~\texttt{Erightleft}, \texttt{X1X2b}, and
+        \texttt{YZ=1}]{Cirac2017MPU} for the right shift. This definition
+    concerns the source-factor metric; it does not assert a transfer
+    fixed-point equation.
+\end{definition}
+
+\begin{theorem}[The paper source tensor $u$ for the right shift]
+    \label{thm:mpu_right_shift_paper_source_u}
+    \lean{MPOTensor.sourceU_rightShiftPaperSourceFactors_apply,
+        MPOTensor.sourceU_rightShiftPaperSourceFactors_gram,
+        MPOTensor.sourceU_rightShiftPaperSourceFactors_isIsometry}
+    \leanok
+    \uses{def:mpu_right_shift_paper_source_factors, def:mpu_source_uv,
+        thm:mpu_shift_source_cuts_ranks}
+    Assume $d>0$. Identify the unique left source coordinate with $0$ and the
+    right source coordinate with $(a,b)$. For the trace-normalized source
+    factors of the right shift,
+    \begin{align}
+        u_{(0,(a,b)),(i_1,i_2)}
+         & =\delta_{a,i_1}\delta_{b,i_2}.
+    \end{align}
+    Hence
+    \begin{align}
+        \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+         & =\delta_{p,q},
+         & u^\dagger u    & =\Id.
+    \end{align}
+    This fixes the order and normalization of the two triangles in
+    \cite[equations~\texttt{uu} and~\texttt{uUnitary}]{Cirac2017MPU} for this
+    basic MPU.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_right_shift_paper_source_factors, def:mpu_source_uv}
+    For the identity-weight factors, direct substitution in
+    $u=Y_2\mathbin{-}Y_1$ gives
+    \begin{align}
+        u^{(0)}_{(0,(a,b)),(i_1,i_2)}
+         & =d^{1/2}\delta_{a,i_1}\delta_{b,i_2}.
+    \end{align}
+    The trace-normalized first cut replaces $Y_1$ by $d^{-1/2}Y_1$ and leaves
+    $Y_2$ unchanged. Therefore
+    \begin{align}
+        u_{(0,(a,b)),(i_1,i_2)}
+         & =d^{-1/2}u^{(0)}_{(0,(a,b)),(i_1,i_2)}
+        =\delta_{a,i_1}\delta_{b,i_2}.
+    \end{align}
+    Summing the product of two such entries over $(a,b)$ gives
+    $\delta_{p,q}$, which is the entrywise identity $u^\dagger u=\Id$.
 \end{proof}
 
 \begin{theorem}[Local physical-species swap for the shift MPUs]
