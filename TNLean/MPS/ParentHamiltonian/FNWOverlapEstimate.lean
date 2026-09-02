@@ -322,7 +322,7 @@ theorem fnwLowerBoundaryConstant_mul_familyNorms_le_overlapNorms [NeZero D]
 
 /-- The linear numerator estimate after the two spectator-family norm
 identities are inserted. The two factors remain the genuine rho-weighted
-`PiLp 2` family norms. -/
+\(\ell^2\) family norms. -/
 theorem norm_inner_overlap_sub_inner_aggregates_le_familyNorms [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (A : MPSTensor d D) (hA : IsLeftCanonical A)

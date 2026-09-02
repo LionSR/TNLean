@@ -38,9 +38,8 @@ variable {d D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- The rho-weighted Hilbert direct sum of virtual matrices indexed by a finite
-spectator configuration space. The matrix norm and inner product are supplied
-locally by `Matrix.toMatrixNormedAddCommGroup` and
-`Matrix.toMatrixInnerProductSpace`. -/
+spectator configuration space. Each summand carries the rho-weighted matrix norm
+and inner product. -/
 abbrev FNWBoundaryFamilySpace (S : Type*) [Fintype S] :=
   PiLp 2 fun _ : S => Mat
 
@@ -176,7 +175,7 @@ theorem fnwRightOverlapMap_apply_append
   simp [fnwRightOverlapMap]
 
 /-- The right-spectator family obtained by splitting the full FNW ground vector
-with virtual boundary `B` after the left and middle blocks. -/
+with virtual boundary \(B\) after the left and middle blocks. -/
 noncomputable def fnwLeftFullGroundFamily
     (A : MPSTensor d D) (r : ℕ) (B : Mat) :
     FNWBoundaryFamilySpace (D := D) (Cfg d r) :=
@@ -184,7 +183,7 @@ noncomputable def fnwLeftFullGroundFamily
     B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ
 
 /-- The left-spectator family obtained by splitting the full FNW ground vector
-with virtual boundary `B` before the middle and right blocks. -/
+with virtual boundary \(B\) before the middle and right blocks. -/
 noncomputable def fnwRightFullGroundFamily
     (A : MPSTensor d D) (ℓ : ℕ) (B : Mat) :
     FNWBoundaryFamilySpace (D := D) (Cfg d ℓ) :=
