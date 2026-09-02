@@ -1277,6 +1277,93 @@
     $P$.
 \end{proof}
 
+\begin{theorem}[Vertical canonical form of the twisted quantum dimer]%
+    \label{thm:mpdo_twisted_dimer_vertical_cf}
+    \lean{MPOTensor.TwistedDimer.sectorDim}
+    \lean{MPOTensor.TwistedDimer.sectorMult}
+    \lean{MPOTensor.TwistedDimer.sectorWeight}
+    \lean{MPOTensor.TwistedDimer.RetainedCoordinate}
+    \lean{MPOTensor.TwistedDimer.sectorCoord}
+    \lean{MPOTensor.TwistedDimer.sectorCoord_apply}
+    \lean{MPOTensor.TwistedDimer.physCoordEquiv}
+    \lean{MPOTensor.TwistedDimer.physCoordEquiv_sectorCoord}
+    \lean{MPOTensor.TwistedDimer.verticalCoisometry}
+    \lean{MPOTensor.TwistedDimer.verticalCoisometry_apply}
+    \lean{MPOTensor.TwistedDimer.verticalCoisometry_mul_conjTranspose}
+    \lean{MPOTensor.TwistedDimer.conjTranspose_mul_verticalCoisometry}
+    \lean{MPOTensor.TwistedDimer.verticalCoisometry_conj}
+    \lean{MPOTensor.TwistedDimer.T_apply_eq_zero_of_bitF_ne}
+    \lean{MPOTensor.TwistedDimer.flagFamily_finProdFinEquiv}
+    \lean{MPOTensor.TwistedDimer.verticalCoisometry_conj_verticalTensor}
+    \lean{MPOTensor.TwistedDimer.verticalTensor_T_eq_conjTranspose_mul}
+    \lean{MPOTensor.TwistedDimer.mpv_verticalTensor_T}
+    \lean{MPOTensor.TwistedDimer.Cmat_ne_zero}
+    \lean{MPOTensor.TwistedDimer.flagWeight_physIdx_zero_ne_zero}
+    \lean{MPOTensor.TwistedDimer.exists_flagFamily_eq_smul_single}
+    \lean{MPOTensor.TwistedDimer.flagFamily_isInjective}
+    \lean{MPOTensor.TwistedDimer.flagFamily_isNormal}
+    \lean{MPOTensor.TwistedDimer.flagWeight_physIdx_zero_zero_zero}
+    \lean{MPOTensor.TwistedDimer.flagWeight_physIdx_zero_zero_one}
+    \lean{MPOTensor.TwistedDimer.linearIndependent_mpvState_flagFamily}
+    \lean{MPOTensor.TwistedDimer.flagFamily_isBNT}
+    \lean{MPOTensor.TwistedDimer.T_isVerticalCF}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_flag_sectors, def:vertical_cf_mpdo, def:vertical_tensor_mpdo, def:bnt}
+    The twisted quantum dimer of Definition~\ref{def:mpdo_twisted_dimer_tensor}
+    is in vertical canonical form in the sense of
+    Definition~\ref{def:vertical_cf_mpdo}, with the two normalized flag
+    sectors $\widehat M_0$, $\widehat M_1$ of
+    Definition~\ref{def:mpdo_twisted_dimer_flag_sectors} as basis of normal
+    tensors, multiplicity one each, and the weight $\mu=\frac58$. Let $U$ be
+    the permutation matrix reordering the physical index
+    $(l,r,f)\mapsto(f,(l,r))$, so that $U$ maps the physical space
+    $\C^8$ onto the direct sum over the flag value $f$ of two copies of the
+    two-qubit space $\C^4$. Then $UU^\dagger=U^\dagger U=I$ and, for every
+    horizontal bond pair $(a,b)$,
+    \begin{align}
+        U\,\widetilde T_{ab}\,U^\dagger
+         & =\mu\,\widehat M_0^{ab}\oplus\mu\,\widehat M_1^{ab},                       &
+        \widetilde T_{ab}
+         & =U^\dagger\bigl(\mu\,\widehat M_0^{ab}\oplus\mu\,\widehat M_1^{ab}\bigr)U.
+        \notag
+    \end{align}
+    Each flag sector is injective at one site, hence normal; the matrix
+    product vectors of the vertically viewed tensor at every positive length
+    $N$ are $\mu^N$ times the sum of those of the two sectors; and the matrix
+    product vectors of the two sectors are linearly independent at every
+    positive length. The tensor is a project example motivated by the
+    question of \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a
+    tensor stated there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_twisted_dimer_flag_sectors, lem:mpdo_twisted_dimer_flag_sector_operators, def:vertical_cf_mpdo}
+    The letter of the twisted dimer between two physical indices with
+    different flag values vanishes, because its coefficient carries the factor
+    $\delta_{ff'}$, and the letter between two indices with the common flag
+    value $f$ is $\mu$ times the letter of $\widehat M_f$ by
+    Definition~\ref{def:mpdo_twisted_dimer_flag_sectors}. Conjugating by the
+    permutation matrix therefore places the two sectors on the diagonal
+    blocks, and the reconstruction follows from $U^\dagger U=I$. The matrix
+    product vectors of the vertically viewed tensor are traces of products of
+    its letters, which conjugation by $U$ leaves unchanged, so they expand
+    along the two blocks with the coefficient $\mu^N$.
+
+    For every matrix unit $E_{(p,q),(p',q')}$ of the two-qubit space, the
+    letter of $\widehat M_f$ at the bond pair $((p,q,0),(p',q',0))$ is
+    $C_0[p,q]/(2\mu)$ times that matrix unit, with $C_0[p,q]\in\{\frac12,\frac38\}$
+    nonzero; hence the letters of each sector span the full matrix algebra and
+    the sector is normal. For the linear independence, evaluate the closed
+    sector operators of Lemma~\ref{lem:mpdo_twisted_dimer_flag_sector_operators}
+    on two cyclically bond-matched words: on the constant word of bond index
+    $(0,0,0)$ both sectors give $(2/5)^N$, since the one-site weight is
+    $C_0[0,0]/(2\mu)=\frac25$; on the word with the bond index $(0,0,1)$ at
+    the first site and $(0,0,0)$ elsewhere, the sector $f$ gives
+    $(\tau_1)_{ff}\,\frac{3}{10}\,(2/5)^{N-1}$, since $C_1[0,0]/(2\mu)=\frac3{10}$,
+    and the two flag signs are opposite. A vanishing linear combination
+    $g_0\widehat M_0+g_1\widehat M_1$ of the two matrix product vectors thus
+    forces $g_0+g_1=0$ and $g_0-g_1=0$.
+\end{proof}
+
 \begin{lemma}[Doubled-index letters and their rank-one factorization]
     \label{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.toMPSTensor_R_apply}
