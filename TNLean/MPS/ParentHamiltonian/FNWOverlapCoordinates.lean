@@ -169,6 +169,36 @@ theorem fnwRightOverlapMap_apply_append
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
   simp [fnwRightOverlapMap]
 
+/-- The right-spectator family obtained by splitting the full FNW ground vector
+with virtual boundary `B` after the left and middle blocks. -/
+noncomputable def fnwLeftFullGroundFamily
+    (A : MPSTensor d D) (r : ℕ) (B : Mat) :
+    FNWBoundaryFamilySpace (D := D) (Cfg d r) :=
+  WithLp.toLp 2 fun μr =>
+    B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ
+
+/-- The left-spectator family obtained by splitting the full FNW ground vector
+with virtual boundary `B` before the middle and right blocks. -/
+noncomputable def fnwRightFullGroundFamily
+    (A : MPSTensor d D) (ℓ : ℕ) (B : Mat) :
+    FNWBoundaryFamilySpace (D := D) (Cfg d ℓ) :=
+  WithLp.toLp 2 fun μℓ =>
+    (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))ᴴ * B
+
+@[simp]
+theorem fnwLeftFullGroundFamily_apply
+    (A : MPSTensor d D) (r : ℕ) (B : Mat) (μr : Cfg d r) :
+    (fnwLeftFullGroundFamily A r B).ofLp μr =
+      B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ := by
+  rfl
+
+@[simp]
+theorem fnwRightFullGroundFamily_apply
+    (A : MPSTensor d D) (ℓ : ℕ) (B : Mat) (μℓ : Cfg d ℓ) :
+    (fnwRightFullGroundFamily A ℓ B).ofLp μℓ =
+      (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))ᴴ * B := by
+  rfl
+
 /-- Splitting an FNW boundary configuration after a left block moves the
 adjoint left word to the left of the boundary matrix. -/
 theorem fnwBoundaryMapCLM_append_eq_leftWord
@@ -215,6 +245,60 @@ theorem fnwBoundaryMapCLM_append_eq_rightWord
   simp only [fnwBoundaryMapCLM_apply, fnwBoundaryMap_apply,
     List.ofFn_fin_append, Kraus.evalWord_append, Matrix.conjTranspose_mul,
     Matrix.mul_assoc]
+
+/-- The left overlap map of the special right-spectator family is the full FNW
+boundary vector at the associated total length. -/
+theorem fnwLeftOverlapMap_fullGroundFamily
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) (B : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    fnwLeftOverlapMap ρ hρ A ℓ m r (fnwLeftFullGroundFamily A r B) =
+      fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  apply PiLp.ext
+  intro σ
+  rw [← (fnwThreeBlockConfigEquiv d ℓ m r).apply_symm_apply σ]
+  obtain ⟨⟨μℓ, μm⟩, μr⟩ := (fnwThreeBlockConfigEquiv d ℓ m r).symm σ
+  simp only [fnwThreeBlockConfigEquiv_apply, fnwLeftOverlapMap_apply_append,
+    fnwLeftFullGroundFamily_apply, fnwBoundaryMapCLM_apply,
+    fnwBoundaryMap_apply, List.ofFn_fin_append, Kraus.evalWord_append,
+    Matrix.conjTranspose_mul, Matrix.mul_assoc]
+
+/-- The right overlap map of the special left-spectator family is the same full
+FNW boundary vector, with the total length associated to the three blocks. -/
+theorem fnwRightOverlapMap_fullGroundFamily
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) (B : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    fnwRightOverlapMap ρ hρ A ℓ m r (fnwRightFullGroundFamily A ℓ B) =
+      fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  apply PiLp.ext
+  intro σ
+  rw [← (fnwThreeBlockConfigEquiv d ℓ m r).apply_symm_apply σ]
+  obtain ⟨⟨μℓ, μm⟩, μr⟩ := (fnwThreeBlockConfigEquiv d ℓ m r).symm σ
+  simp only [fnwThreeBlockConfigEquiv_apply, fnwRightOverlapMap_apply_append,
+    fnwRightFullGroundFamily_apply, fnwBoundaryMapCLM_apply,
+    fnwBoundaryMap_apply, List.ofFn_fin_append, Kraus.evalWord_append,
+    Matrix.conjTranspose_mul, Matrix.mul_assoc]
+  simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm
+    (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))ᴴ
+    (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ *
+      (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μm))ᴴ)
 
 /-- The virtual boundary entering the middle block from the left overlap
 family. -/
@@ -426,6 +510,87 @@ theorem trace_mul_fnwTransferMap_pow
         _ = Matrix.trace ((Kraus.transferMap A ^ (N + 1)) ρ * X) := by
           rw [pow_succ', Module.End.mul_apply]
 
+/-- Stationarity collapses the special left aggregate to its full-chain
+virtual boundary. -/
+theorem fnwLeftOverlapAggregate_fullGroundFamily
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (hρfix : Kraus.transferMap A ρ = ρ) (r : ℕ) (B : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    fnwLeftOverlapAggregate ρ A r (fnwLeftFullGroundFamily A r B) = B := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  have hpow : (Kraus.transferMap A ^ r) ρ = ρ := by
+    induction r with
+    | zero => simp
+    | succ r ih => rw [pow_succ, Module.End.mul_apply, hρfix, ih]
+  rw [Kraus.mapLM_pow_apply] at hpow
+  have hsum :
+      (∑ μr : Cfg d r,
+        (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ * ρ *
+          Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr)) = ρ := by
+    calc
+      (∑ μr : Cfg d r,
+        (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ * ρ *
+          Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr)) =
+          ∑ σ : Cfg d r, Kraus.evalWord A (List.ofFn σ) * ρ *
+            (Kraus.evalWord A (List.ofFn σ))ᴴ := by
+        exact Fintype.sum_equiv (physicalSiteReverseConfigEquiv d r)
+          (fun μr : Cfg d r =>
+            (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ * ρ *
+              Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))
+          (fun σ : Cfg d r =>
+            Kraus.evalWord A (List.ofFn σ) * ρ *
+              (Kraus.evalWord A (List.ofFn σ))ᴴ) (fun μr => by
+            simp [physicalSiteReverseConfigEquiv, Equiv.arrowCongr,
+              Function.comp_def, List.ofFn_reverse, Kraus.evalWord_conjTranspose])
+      _ = ρ := hpow
+  rw [fnwLeftOverlapAggregate]
+  simp only [fnwLeftFullGroundFamily_apply]
+  calc
+    ∑ μr : Cfg d r,
+        (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ) * ρ *
+            Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr) * ρ⁻¹ =
+        B * (∑ μr : Cfg d r,
+          (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ * ρ *
+            Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr)) * ρ⁻¹ := by
+      simp only [Matrix.mul_assoc, Matrix.mul_sum, Finset.sum_mul]
+    _ = B * (ρ * ρ⁻¹) := by rw [hsum, Matrix.mul_assoc]
+    _ = B := by rw [(fnwPosDef_nonsingInverse_mul ρ hρ).1, Matrix.mul_one]
+
+/-- Word unitality collapses the special right aggregate to its full-chain
+virtual boundary. -/
+theorem fnwRightOverlapAggregate_fullGroundFamily
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (hA : IsLeftCanonical A) (ℓ : ℕ) (B : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    fnwRightOverlapAggregate A ℓ (fnwRightFullGroundFamily A ℓ B) = B := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  have hword :
+      ∑ μℓ : Cfg d ℓ,
+        Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ) *
+          (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))ᴴ = 1 := by
+    have hpow := fnwTransferMap_pow_one A hA ℓ
+    rw [fnwTransferMap, Kraus.mapLM_pow_apply] at hpow
+    simpa only [Matrix.mul_one] using hpow
+  rw [fnwRightOverlapAggregate]
+  simp only [fnwRightFullGroundFamily_apply, ← Matrix.mul_assoc,
+    ← Finset.sum_mul, hword, Matrix.one_mul]
+
 /-- Word unitality gives the first spectator-family squared-norm identity in
 FNW Lemma 6.2. -/
 theorem sum_norm_sq_conjTranspose_evalWord_mul
@@ -507,6 +672,38 @@ theorem sum_norm_sq_mul_conjTranspose_evalWord
         Matrix.mul_assoc]
     _ = (Matrix.trace (ρ * Bᴴ * B)).re := by
       simpa only [Matrix.mul_assoc] using congrArg Complex.re htrace
+
+/-- The rho-weighted norm of the special right-spectator family equals the norm
+of its full-chain virtual boundary. -/
+theorem norm_fnwLeftFullGroundFamily
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (hρfix : Kraus.transferMap A ρ = ρ) (r : ℕ) (B : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    ‖fnwLeftFullGroundFamily A r B‖ = ‖B‖ := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  apply (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg B)).mp
+  rw [PiLp.norm_sq_eq_of_L2]
+  exact sum_norm_sq_mul_conjTranspose_evalWord ρ hρ A hρfix r B
+
+/-- The rho-weighted norm of the special left-spectator family equals the norm
+of its full-chain virtual boundary. -/
+theorem norm_fnwRightFullGroundFamily
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (hA : IsLeftCanonical A) (ℓ : ℕ) (B : Mat) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    ‖fnwRightFullGroundFamily A ℓ B‖ = ‖B‖ := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  apply (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg B)).mp
+  rw [PiLp.norm_sq_eq_of_L2]
+  exact sum_norm_sq_conjTranspose_evalWord_mul ρ hρ A hA ℓ B
 
 /-- Word unitality identifies the squared norm of the left middle-boundary
 family with the squared norm of its rho-weighted spectator family. -/
@@ -750,6 +947,68 @@ theorem fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap [NeZero D]
   exact Finset.sum_le_sum fun μℓ _ =>
     fnwLowerBoundaryConstant_mul_norm_sq_le ρ hρ A (m + r) (Ψ.ofLp μℓ)
 
+/-- The square root of the middle lower-boundary constant controls the left
+spectator-family norm by the left physical overlap norm. -/
+theorem sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_leftOverlap [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
+    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    Real.sqrt (fnwLowerBoundaryConstant ρ hρ A m) * ‖Φ‖ ≤
+      ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let c := fnwLowerBoundaryConstant ρ hρ A m
+  have hc : c * ‖Φ‖ ^ 2 ≤ ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ ^ 2 :=
+    (mul_le_mul_of_nonneg_right
+      (fnwLowerBoundaryConstant_mono ρ hρ A hρfix (Nat.le_add_left m ℓ))
+      (sq_nonneg ‖Φ‖)).trans
+        (fnwLowerBoundaryConstant_mul_familyNorm_sq_le_leftOverlap
+          ρ hρ A ℓ m r Φ)
+  apply (sq_le_sq₀ (mul_nonneg (Real.sqrt_nonneg c) (norm_nonneg Φ))
+    (norm_nonneg _)).mp
+  rw [mul_pow, Real.sq_sqrt hminus.le]
+  exact hc
+
+/-- The square root of the middle lower-boundary constant controls the right
+spectator-family norm by the right physical overlap norm. -/
+theorem sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_rightOverlap [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
+    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
+    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+    letI : SeminormedAddCommGroup Mat :=
+      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+    letI : InnerProductSpace ℂ Mat :=
+      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    Real.sqrt (fnwLowerBoundaryConstant ρ hρ A m) * ‖Ψ‖ ≤
+      ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ := by
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let c := fnwLowerBoundaryConstant ρ hρ A m
+  have hc : c * ‖Ψ‖ ^ 2 ≤ ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ ^ 2 :=
+    (mul_le_mul_of_nonneg_right
+      (fnwLowerBoundaryConstant_mono ρ hρ A hρfix (Nat.le_add_right m r))
+      (sq_nonneg ‖Ψ‖)).trans
+        (fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap
+          ρ hρ A ℓ m r Ψ)
+  apply (sq_le_sq₀ (mul_nonneg (Real.sqrt_nonneg c) (norm_nonneg Ψ))
+    (norm_nonneg _)).mp
+  rw [mul_pow, Real.sq_sqrt hminus.le]
+  exact hc
+
 /-- Monotonicity of the lower-boundary constant converts both spectator
 family norms into the two physical overlap norms at the common middle length. -/
 theorem fnwLowerBoundaryConstant_mul_familyNorms_le_overlapNorms [NeZero D]
@@ -772,29 +1031,13 @@ theorem fnwLowerBoundaryConstant_mul_familyNorms_le_overlapNorms [NeZero D]
   let : InnerProductSpace ℂ Mat :=
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
   let c := fnwLowerBoundaryConstant ρ hρ A m
-  have hc_left : c * ‖Φ‖ ^ 2 ≤ ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ ^ 2 :=
-    (mul_le_mul_of_nonneg_right
-      (fnwLowerBoundaryConstant_mono ρ hρ A hρfix (Nat.le_add_left m ℓ))
-      (sq_nonneg ‖Φ‖)).trans
-        (fnwLowerBoundaryConstant_mul_familyNorm_sq_le_leftOverlap
-          ρ hρ A ℓ m r Φ)
-  have hc_right : c * ‖Ψ‖ ^ 2 ≤ ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ ^ 2 :=
-    (mul_le_mul_of_nonneg_right
-      (fnwLowerBoundaryConstant_mono ρ hρ A hρfix (Nat.le_add_right m r))
-      (sq_nonneg ‖Ψ‖)).trans
-        (fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap
-          ρ hρ A ℓ m r Ψ)
   have hsqrt : Real.sqrt c ^ 2 = c := Real.sq_sqrt hminus.le
   have hleft : Real.sqrt c * ‖Φ‖ ≤ ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ :=
-    (sq_le_sq₀ (mul_nonneg (Real.sqrt_nonneg c) (norm_nonneg Φ))
-      (norm_nonneg _)).mp <| by
-        rw [mul_pow, hsqrt]
-        exact hc_left
+    sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_leftOverlap
+      ρ hρ A hρfix ℓ m r Φ hminus
   have hright : Real.sqrt c * ‖Ψ‖ ≤ ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ :=
-    (sq_le_sq₀ (mul_nonneg (Real.sqrt_nonneg c) (norm_nonneg Ψ))
-      (norm_nonneg _)).mp <| by
-        rw [mul_pow, hsqrt]
-        exact hc_right
+    sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_rightOverlap
+      ρ hρ A hρfix ℓ m r Ψ hminus
   calc
     c * ‖Φ‖ * ‖Ψ‖ = Real.sqrt c ^ 2 * ‖Φ‖ * ‖Ψ‖ := by rw [hsqrt]
     _ = (Real.sqrt c * ‖Φ‖) * (Real.sqrt c * ‖Ψ‖) := by ring
