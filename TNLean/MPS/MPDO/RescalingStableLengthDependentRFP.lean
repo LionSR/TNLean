@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinCyclicInduction
 import TNLean.MPS.MPDO.LengthIndependentCoefficients
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.RingTheory.Nilpotent.Basic
@@ -699,17 +700,6 @@ lemma dotProduct_A_col_step {N : ℕ} (p q : Fin N → Fin 4) (n : Fin N) :
         then wMat (bondBit2 (p n)) (bondBit2 (q n)) else 0 :=
   dotProduct_A_col _ _ _ _
 
-/-- The one-step rotation `finRotate (N + 1)` sends the embedding `i.castSucc`
-of `i : Fin N` to `i.succ`, matching the ordinary (non-wraparound) successor
-step of the bond chain. -/
-lemma finRotate_succ_castSucc {N : ℕ} (i : Fin N) :
-    finRotate (N + 1) i.castSucc = i.succ := by
-  have h := finRotate_of_lt (n := N) i.isLt
-  have e1 : (⟨(i : ℕ), i.isLt.trans_le N.le_succ⟩ : Fin (N + 1)) = i.castSucc := Fin.ext rfl
-  have e2 : (⟨(i : ℕ) + 1, Nat.succ_lt_succ i.isLt⟩ : Fin (N + 1)) = i.succ := Fin.ext rfl
-  rw [e1, e2] at h
-  exact h
-
 /-- **Entrywise formula for the closed MPO operator.** For a positive chain
 length `N`, the `(p, q)` matrix element of `mpo R N` is `(25/32)^N` times the
 chain-OK indicator times the pullback of the `N`-fold Kronecker power `wN N`
@@ -758,7 +748,7 @@ theorem mpo_R_entry_formula {N : ℕ} (hN : 0 < N) (p q : Fin N → Fin 4) :
       (fun b : Fin 4 => A b (bondBit2 (p i.castSucc)) (bondBit2 (q i.castSucc))) ⬝ᵥ
           (fun a : Fin 4 => A a (bondBit1 (p i.succ)) (bondBit1 (q i.succ))) = g i.castSucc := by
     intro i
-    simp only [hg, finRotate_succ_castSucc]
+    simp only [hg, Fin.finRotate_succ_castSucc]
   have hlaststep :
       (fun b : Fin 4 => A b (bondBit2 (p (Fin.last n))) (bondBit2 (q (Fin.last n)))) ⬝ᵥ
           (fun a : Fin 4 => A a (bondBit1 (p 0)) (bondBit1 (q 0))) = g (Fin.last n) := by

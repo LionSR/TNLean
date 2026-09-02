@@ -769,8 +769,7 @@
     \lean{MPOTensor.TwistedDimer.mpo_T_eq_smul_hadamard}
     \lean{MPOTensor.TwistedDimer.T_isMPDO}
     \leanok
-    \uses{def:mpdo, def:mpdo_twisted_dimer_tensor,
-        thm:mpdo_twisted_dimer_closures}
+    \uses{def:mpdo, def:mpdo_twisted_dimer_tensor}
     The closed operator $\rho^{(N)}$ of the twisted quantum dimer is positive
     semidefinite for every positive chain length $N$: the twisted dimer is an
     MPDO. Writing $l_n$, $r_n$, $f_n$ for the three bits of the $n$-th letter
@@ -794,7 +793,7 @@
         (\tau_k)_{ff}$, and the Schur product theorem gives positivity.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpdo_twisted_dimer_tensor, thm:mpdo_twisted_dimer_closures}
+    \uses{def:mpdo_twisted_dimer_tensor}
     Each letter is a sum of two matrix units, one per block label, so an
     ordered product of letters keeps a common block label and vanishes unless
     consecutive letters match on their bond bits; the surviving product is a

@@ -813,6 +813,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Successor under one-step finite rotation
+- **Pattern:** both closed-chain MPO calculations proved that `finRotate (N + 1)`
+  sends `i.castSucc`, for `i : Fin N`, to `i.succ` by the same cast-heavy
+  specialization of `finRotate_of_lt`.
+- **Reuse:** `Fin.finRotate_succ_castSucc` in
+  `TNLean/Algebra/FinCyclicInduction.lean` is the shared finite-index lemma.
+- **Result:** the public example-specific lemma and the duplicated local proof
+  are removed; both closed-chain calculations use the algebra lemma.
+
 ### Full support across tensor-equality casts
 - **Pattern:** `PhysicalAncilla.lean` and `TensorProductCanonicalForm.lean` each
   carried the same local proof that casting canonical-form-II witness data along
@@ -2169,12 +2178,10 @@ spectral split → block extraction → MPV calculation → strict bounds
   Schur product theorem and a nonnegative scalar.
 - **Seen:** 2 occurrences: `R_isMPDO` in
   `TNLean/MPS/MPDO/RescalingStableLengthDependentRFP.lean` and `T_isMPDO` in
-  `TNLean/MPS/MPDO/TwistedDimerMPDO.lean` (2026-09-02).  The one-step rotation
-  identity for the cyclic successor is also proved in both files.
+  `TNLean/MPS/MPDO/TwistedDimerMPDO.lean` (2026-09-02).
 - **Abstraction (proposed):** if a third such tensor appears, extract a
   positivity criterion parameterized by the local bond-matching relation and
-  the local factor, together with the cyclic-successor identity, and specialize
-  the existing proofs to it.
+  the local factor, and specialize the existing proofs to it.
 - **Notes:** the two current instances differ in the shape of the local factor
   (a single two-by-two matrix against a sum of two four-by-four Kronecker
   powers proved positive semidefinite together with their difference), so a

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinCyclicInduction
 import TNLean.MPS.MPDO.TwistedDimer
 import Mathlib.Analysis.Matrix.Order
 
@@ -114,14 +115,8 @@ lemma openOK_succ {n : ℕ} (σ : Fin (n + 2) → Fin 8) :
 together with the wraparound match from the last letter back to the first. -/
 lemma chainOK_succ {n : ℕ} (σ : Fin (n + 1) → Fin 8) :
     ChainOK (n + 1) σ ↔ OpenOK σ ∧ gate (σ (Fin.last n)) (σ 0) := by
-  have hrot : ∀ i : Fin n, finRotate (n + 1) i.castSucc = i.succ := fun i => by
-    have h := finRotate_of_lt (n := n) i.isLt
-    have e1 : (⟨(i : ℕ), i.isLt.trans_le n.le_succ⟩ : Fin (n + 1)) = i.castSucc := Fin.ext rfl
-    have e2 : (⟨(i : ℕ) + 1, Nat.succ_lt_succ i.isLt⟩ : Fin (n + 1)) = i.succ := Fin.ext rfl
-    rw [e1, e2] at h
-    exact h
   rw [ChainOK, Fin.forall_fin_succ', OpenOK]
-  simp only [hrot, finRotate_last]
+  simp only [Fin.finRotate_succ_castSucc, finRotate_last]
 
 /-! ### The open-chain product of letters -/
 
