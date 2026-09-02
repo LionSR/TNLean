@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import functools
+import http.client
 import http.server
 import json
 import re
@@ -178,7 +179,7 @@ def _cdn_fetch(url: str) -> tuple[bytes, str]:
         try:
             with urllib.request.urlopen(request, timeout=60) as response:
                 return response.read(), response.headers.get_content_type()
-        except OSError:
+        except (OSError, http.client.IncompleteRead):
             if attempt == 2:
                 raise
             time.sleep(2 ** attempt)
