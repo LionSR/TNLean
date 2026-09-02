@@ -1655,6 +1655,35 @@ normalization used in
     (\ref{eq:fnw_lower_boundary_succ}); induction gives monotonicity.
 \end{proof}
 
+\begin{theorem}[Positivity from block injectivity]
+    \label{thm:fnw_lower_boundary_block_injective_pos}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_pos_of_isNBlkInjective}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_pos_of_isNBlkInjective_of_le}
+    \leanok
+    \uses{def:l_blk_injective, def:fnw_lower_boundary_constant}
+    Suppose that $A$ is block injective at length $L_0$. Then
+    \begin{align}
+        a_-(L_0) & >0.
+        \label{eq:fnw_lower_boundary_block_injective_pos}
+    \end{align}
+    If $\E_A(\rho)=\rho$, then for every $m\geq L_0$,
+    \begin{align}
+        a_-(m) & >0.
+        \label{eq:fnw_lower_boundary_block_injective_pos_mono}
+    \end{align}
+    This is the positivity input used in the proof of
+    \cite[Lemma~6.2]{Fannes1992Finitely}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_lower_boundary_singular, thm:fnw_lower_boundary_mono}
+    Injectivity makes every singular value of $F_{L_0}$ positive. The least
+    squared singular value is $a_-(L_0)$ by
+    Theorem~\ref{thm:fnw_lower_boundary_singular}. Monotonicity then gives
+    $a_-(m)\geq a_-(L_0)>0$ for $m\geq L_0$.
+\end{proof}
+
 The preceding results formalize the lower-boundary assertions of
 \cite[Lemma~5.3]{Fannes1992Finitely}. They do not yet estimate the overlap of
 two three-block boundary families.
@@ -1706,6 +1735,27 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
          & :=F_{m+r}(\Psi(\mu^\ell))(\mu^m\mu^r).
         \label{eq:fnw_right_overlap_family}
     \end{align}
+\end{definition}
+
+\begin{definition}[Full-ground spectator families]
+    \label{def:fnw_full_ground_spectator_families}
+    \lean{MPSTensor.fnwLeftFullGroundFamily}
+    \lean{MPSTensor.fnwRightFullGroundFamily}
+    \lean{MPSTensor.fnwLeftFullGroundFamily_apply}
+    \lean{MPSTensor.fnwRightFullGroundFamily_apply}
+    \leanok
+    \uses{def:fnw_weighted_spectator_families}
+    For $B\in\MN{D}$, define the special spectator families
+    \begin{align}
+        \Phi_B(\mu^r)
+         & :=Bv(\mu^r)^\dagger,
+        \label{eq:fnw_left_full_ground_family} \\
+        \Psi_B(\mu^\ell)
+         & :=v(\mu^\ell)^\dagger B.
+        \label{eq:fnw_right_full_ground_family}
+    \end{align}
+    These are the families obtained by splitting the length-$\ell+m+r$
+    boundary vector at the two sides of the middle block.
 \end{definition}
 
 \begin{definition}[Middle-block boundary matrices]
@@ -1828,6 +1878,42 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     over the remaining spectator index yields the two displayed identities.
 \end{proof}
 
+\begin{theorem}[Full-ground spectator identities]
+    \label{thm:fnw_full_ground_spectator_identities}
+    \lean{MPSTensor.fnwLeftOverlapMap_fullGroundFamily}
+    \lean{MPSTensor.fnwRightOverlapMap_fullGroundFamily}
+    \lean{MPSTensor.fnwLeftOverlapAggregate_fullGroundFamily}
+    \lean{MPSTensor.fnwRightOverlapAggregate_fullGroundFamily}
+    \lean{MPSTensor.norm_fnwLeftFullGroundFamily}
+    \lean{MPSTensor.norm_fnwRightFullGroundFamily}
+    \leanok
+    \uses{def:fnw_full_ground_spectator_families, def:fnw_overlap_families,
+        thm:fnw_spectator_family_norm_identities}
+    Suppose that $A$ is left canonical and $\E_A(\rho)=\rho$. Then
+    \begin{align}
+        L_{\ell,m,r}\Phi_B
+                           & =F_{\ell+m+r}(B)
+        =R_{\ell,m,r}\Psi_B,
+        \label{eq:fnw_full_ground_overlap_identities}   \\
+        A_{\varphi,B}      & =B=A_{\psi,B},
+        \label{eq:fnw_full_ground_aggregate_identities} \\
+        \lVert\Phi_B\rVert & =\lVert B\rVert_\rho
+        =\lVert\Psi_B\rVert.
+        \label{eq:fnw_full_ground_family_norms}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_full_ground_spectator_families, def:fnw_overlap_families,
+        thm:fnw_spectator_family_norm_identities}
+    Expand the finite words using the boundary convention from
+    \cite[Equations~(5.5) and~(5.8)]{Fannes1992Finitely}. Trace cyclicity gives
+    the right overlap identity. Stationarity of $\rho$ gives the left aggregate
+    identity, while unitality of the FNW word map gives the right one and the
+    two norm identities.
+\end{proof}
+
 \begin{theorem}[Termwise equation (5.9) estimate]
     \label{thm:fnw_overlap_linear_family_estimate}
     \lean{MPSTensor.norm_inner_overlap_sub_inner_aggregates_le}
@@ -1867,6 +1953,8 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     \lean{MPSTensor.norm_fnwRightOverlapMap_sq}
     \lean{MPSTensor.fnwLowerBoundaryConstant_mul_familyNorm_sq_le_leftOverlap}
     \lean{MPSTensor.fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap}
+    \lean{MPSTensor.sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_leftOverlap}
+    \lean{MPSTensor.sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_rightOverlap}
     \lean{MPSTensor.fnwLowerBoundaryConstant_mul_familyNorms_le_overlapNorms}
     \leanok
     \uses{def:fnw_overlap_families, thm:fnw_lower_boundary_optimal, thm:fnw_lower_boundary_mono}
@@ -1891,6 +1979,12 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     If $\E_A(\rho)=\rho$ and $a_-(m)>0$, monotonicity from $m$ to
     $\ell+m$ and from $m$ to $m+r$ gives
     \begin{align}
+        \sqrt{a_-(m)}\lVert\Phi\rVert
+         & \leq\lVert L_{\ell,m,r}\Phi\rVert,
+        \label{eq:fnw_left_overlap_sqrt_lower_boundary}  \\
+        \sqrt{a_-(m)}\lVert\Psi\rVert
+         & \leq\lVert R_{\ell,m,r}\Psi\rVert,
+        \label{eq:fnw_right_overlap_sqrt_lower_boundary} \\
         a_-(m)\lVert\Phi\rVert\lVert\Psi\rVert
          & \leq\lVert L_{\ell,m,r}\Phi\rVert
         \lVert R_{\ell,m,r}\Psi\rVert.
@@ -1935,14 +2029,159 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     (\ref{eq:fnw_overlap_linear_family_estimate}).
 \end{proof}
 
-This proves only the linear contribution $a(m)/a_-(m)$. The
-block-injectivity argument that supplies $a_-(m)>0$, the aggregate estimates
-coming from orthogonality to the full ground space, the separate quadratic
-contribution $a(m)^2/a_-(m)$, the common-subspace projector estimate, and the
-final assertion of Lemma~6.2 remain open. No inverse or finite Gram matrix,
-pseudoinverse, periodic coercivity, comparison of unequal kernels, cyclic
-replacement, dimension prefactor, identity $a_-(m)=1-a(m)$, identification
-$k=D$, or claim $C_\lambda=k^2$ enters the result above.
+The linear estimate remains separate from the aggregate contribution below.
+
+\subsection{The quadratic aggregate contribution in FNW Lemma 6.2}
+\label{subsec:fnw_quadratic_aggregate_estimate}
+
+\begin{definition}[Full boundary range]
+    \label{def:fnw_boundary_range}
+    \lean{MPSTensor.fnwBoundaryRange}
+    \leanok
+    \uses{def:fnw_boundary_clm}
+    At length $N$, let
+    \begin{align}
+        \mathcal G_N & :=\operatorname{ran}F_N.
+        \label{eq:fnw_boundary_range}
+    \end{align}
+    This is the full open-chain ground-space range used in the orthogonality
+    step of \cite[Lemma~6.2]{Fannes1992Finitely}.
+\end{definition}
+
+\begin{theorem}[Unconverted aggregate estimates]
+    \label{thm:fnw_aggregate_family_bounds}
+    \lean{MPSTensor.norm_inner_fnwLeftOverlapAggregate_le_familyNorm}
+    \lean{MPSTensor.norm_inner_fnwRightOverlapAggregate_le_familyNorm}
+    \lean{MPSTensor.norm_fnwLeftOverlapAggregate_le_familyNorm}
+    \lean{MPSTensor.norm_fnwRightOverlapAggregate_le_familyNorm}
+    \leanok
+    \uses{def:fnw_boundary_range, thm:fnw_full_ground_spectator_identities,
+        thm:fnw_overlap_linear_family_estimate}
+    Suppose that $L_{\ell,m,r}\Phi$ and $R_{\ell,m,r}\Psi$ are orthogonal to
+    $\mathcal G_{\ell+m+r}$. Then, for every $B\in\MN{D}$,
+    \begin{align}
+        |\langle A_\varphi,B\rangle_\rho|
+         & \leq a(m)\lVert\Phi\rVert\lVert B\rVert_\rho,
+        \label{eq:fnw_left_aggregate_dual_bound}         \\
+        |\langle B,A_\psi\rangle_\rho|
+         & \leq a(m)\lVert B\rVert_\rho\lVert\Psi\rVert.
+        \label{eq:fnw_right_aggregate_dual_bound}
+    \end{align}
+    Consequently,
+    \begin{align}
+        \lVert A_\varphi\rVert_\rho
+         & \leq a(m)\lVert\Phi\rVert,
+        \label{eq:fnw_left_aggregate_family_bound} \\
+        \lVert A_\psi\rVert_\rho
+         & \leq a(m)\lVert\Psi\rVert.
+        \label{eq:fnw_right_aggregate_family_bound}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_full_ground_spectator_identities,
+        thm:fnw_overlap_linear_family_estimate}
+    In the estimate preceding the lower-boundary conversion in
+    \cite[Equation~(6.5)]{Fannes1992Finitely}, test one overlap vector against
+    the matching full-ground spectator family from
+    Theorem~\ref{thm:fnw_full_ground_spectator_identities}. Orthogonality makes
+    the physical pairing vanish. Equation~(5.9) leaves the corresponding
+    aggregate pairing with the stated bound. Test once more against the
+    aggregate itself to obtain the two norm estimates.
+\end{proof}
+
+\begin{theorem}[One-sided aggregate conversion]
+    \label{thm:fnw_aggregate_sqrt_lower_boundary}
+    \lean{MPSTensor.norm_fnwLeftOverlapAggregate_le_div_sqrt_lowerBoundary}
+    \lean{MPSTensor.norm_fnwRightOverlapAggregate_le_div_sqrt_lowerBoundary}
+    \leanok
+    \uses{thm:fnw_aggregate_family_bounds,
+        thm:fnw_overlap_lower_boundary_control}
+    Under the same orthogonality assumptions, if $a_-(m)>0$, then
+    \begin{align}
+        \lVert A_\varphi\rVert_\rho
+         & \leq\frac{a(m)}{\sqrt{a_-(m)}}
+        \lVert L_{\ell,m,r}\Phi\rVert,
+        \label{eq:fnw_left_aggregate_sqrt_bound} \\
+        \lVert A_\psi\rVert_\rho
+         & \leq\frac{a(m)}{\sqrt{a_-(m)}}
+        \lVert R_{\ell,m,r}\Psi\rVert.
+        \label{eq:fnw_right_aggregate_sqrt_bound}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_aggregate_family_bounds,
+        thm:fnw_overlap_lower_boundary_control}
+    Apply only the matching one-sided square-root inequality
+    (\ref{eq:fnw_left_overlap_sqrt_lower_boundary}) or
+    (\ref{eq:fnw_right_overlap_sqrt_lower_boundary}) to each family bound.
+\end{proof}
+
+\begin{theorem}[Quadratic aggregate contribution]
+    \label{thm:fnw_aggregate_quadratic}
+    \lean{MPSTensor.norm_inner_fnwOverlapAggregates_le_sq_div_lowerBoundary}
+    \leanok
+    \uses{thm:fnw_aggregate_sqrt_lower_boundary}
+    If both overlap vectors are orthogonal to $\mathcal G_{\ell+m+r}$ and
+    $a_-(m)>0$, then
+    \begin{align}
+        |\langle A_\varphi,A_\psi\rangle_\rho|
+         & \leq\frac{a(m)^2}{a_-(m)}
+        \lVert L_{\ell,m,r}\Phi\rVert
+        \lVert R_{\ell,m,r}\Psi\rVert.
+        \label{eq:fnw_aggregate_quadratic}
+    \end{align}
+    This is the quadratic contribution in the proof of
+    \cite[Lemma~6.2]{Fannes1992Finitely}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_aggregate_sqrt_lower_boundary}
+    Apply Cauchy--Schwarz to the aggregate pairing and multiply the two
+    one-sided bounds. Since $\sqrt{a_-(m)}^2=a_-(m)$, the coefficient is
+    exactly $a(m)^2/a_-(m)$.
+\end{proof}
+
+\begin{theorem}[Linear and quadratic overlap bound]
+    \label{thm:fnw_overlap_linear_add_quadratic}
+    \lean{MPSTensor.norm_inner_fnwOverlapMaps_le_linear_add_quadratic}
+    \leanok
+    \uses{thm:fnw_equation_6_5_linear, thm:fnw_aggregate_quadratic}
+    Under the hypotheses of
+    Theorems~\ref{thm:fnw_equation_6_5_linear} and
+    \ref{thm:fnw_aggregate_quadratic},
+    \begin{align}
+        |\langle L_{\ell,m,r}\Phi,R_{\ell,m,r}\Psi\rangle|
+         & \leq\left(\frac{a(m)}{a_-(m)}
+        +\frac{a(m)^2}{a_-(m)}\right)
+        \lVert L_{\ell,m,r}\Phi\rVert
+        \lVert R_{\ell,m,r}\Psi\rVert.
+        \label{eq:fnw_overlap_linear_add_quadratic}
+    \end{align}
+    The two source contributions are deliberately left unfactored.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_equation_6_5_linear, thm:fnw_aggregate_quadratic}
+    Insert the aggregate pairing and apply the triangle inequality. The
+    difference term is bounded by Equation~(6.5), and the aggregate term is
+    bounded by Theorem~\ref{thm:fnw_aggregate_quadratic}.
+\end{proof}
+
+These results prove the block-injectivity positivity input, the linear
+coefficient $a(m)/a_-(m)$ from Equation~(6.5), and the separate quadratic
+coefficient $a(m)^2/a_-(m)$ in the proof of FNW Lemma~6.2. They stop before
+the common-subspace projector geometry and the final projector-defect estimate
+of Lemma~6.2.
+% The final common-subspace projector geometry belongs to issue #7601. No inverse or finite Gram
+matrix, pseudoinverse, periodic coercivity, comparison of unequal kernels,
+cyclic replacement, dimension prefactor, identity $a_-(m)=1-a(m)$,
+identification $k=D$, or claim $C_\lambda=k^2$ enters these results.
 
 \begin{theorem}[Geometric power bound below unit spectral radius]
     \label{thm:geometric_bound_of_spectral_radius_lt_one}
