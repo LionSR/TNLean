@@ -32,6 +32,8 @@ lemma sum_fin_cons {L : ℕ} (F : (Fin (L + 1) → ι) → R) :
   rw [← Fintype.sum_equiv (Fin.consEquiv fun _ => ι) (fun x => F (Fin.cons x.1 x.2)) F
     (fun _ => rfl), Fintype.sum_prod_type]
 
+-- `Matrix`'s identity, and hence `List.prod` including the empty product,
+-- requires decidable equality.
 variable [DecidableEq ι]
 
 /-- **Open path expansion.**  Applying the ordered product of the matrices
