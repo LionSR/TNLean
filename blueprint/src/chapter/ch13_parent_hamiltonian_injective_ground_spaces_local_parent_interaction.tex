@@ -2190,15 +2190,106 @@ The linear estimate remains separate from the aggregate contribution below.
     bounded by Theorem~\ref{thm:fnw_aggregate_quadratic}.
 \end{proof}
 
-These results prove the block-injectivity positivity input, the linear
-coefficient $a(m)/a_-(m)$ from Equation~(6.5), and the separate quadratic
-coefficient $a(m)^2/a_-(m)$ in the proof of FNW Lemma~6.2. They stop before
-the common-subspace projector geometry and the final projector-defect estimate
-of Lemma~6.2. No inverse or finite Gram matrix, pseudoinverse, periodic
-coercivity, comparison of unequal kernels, cyclic replacement, dimension
-prefactor, identity $a_-(m)=1-a(m)$, identification $k=D$, or claim
+Write $P^{\mathrm{tail}}_{r;m,\ell}$ and
+$P^{\mathrm{left}}_{r+m;\ell}$ for the orthogonal projectors onto the
+reassociated tail-boundary range and the left-boundary range, respectively,
+and write $G_{r+m+\ell}$ for the orthogonal projector onto the full ground
+space.
+
+\begin{theorem}[FNW projector defect with separate contributions]
+    \label{thm:fnw_projector_defect_unfactored}
+    \lean{MPSTensor.wholeIncrement_groundProjection_defect_le_fnw}
+    \leanok
+    \uses{thm:fnw_overlap_linear_add_quadratic,
+        thm:fnw_lower_boundary_block_injective_pos}
+    Let $A$ have nonzero bond dimension, let $\rho$ be positive definite with
+    $\tr(\rho)=1$, and suppose that $A$ is left canonical and
+    $\mathcal E_A(\rho)=\rho$. Suppose that $L_0\geq1$ is an injective length.
+    For $r,\ell\geq1$ and $m\geq L_0$,
+    \begin{align}
+        \left\lVert
+        P^{\mathrm{tail}}_{r;m,\ell}P^{\mathrm{left}}_{r+m;\ell}
+        -G_{r+m+\ell}
+        \right\rVert
+         & \leq \frac{a(m)}{a_-(m)}+\frac{a(m)^2}{a_-(m)}.
+        \label{eq:fnw_projector_defect_unfactored}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_overlap_linear_add_quadratic,
+        thm:fnw_lower_boundary_block_injective_pos}
+    In the source coordinates, let $U$ and $V$ be the two overlap ranges and
+    let $W$ be the full boundary range. Then $W\subseteq U\cap V$. For
+    $x\in U\cap W^\perp$ and $y\in V\cap W^\perp$,
+    Theorem~\ref{thm:fnw_overlap_linear_add_quadratic} gives
+    \begin{align}
+        |\langle x,y\rangle|
+         & \leq\left(\frac{a(m)}{a_-(m)}
+        +\frac{a(m)^2}{a_-(m)}\right)\lVert x\rVert\lVert y\rVert.
+    \end{align}
+    Projecting a vector first onto $V\cap W^\perp$ and then onto
+    $U\cap W^\perp$ converts this relative-overlap bound into the same
+    operator-norm bound for $P_UP_V-P_W$. Global reversal is unitary and sends
+    $U$, $V$, and $W$ to the three ranges in the statement, so it preserves
+    the norm.
+\end{proof}
+
+\begin{theorem}[FNW projector-defect coefficient]
+    \label{thm:fnw_projector_defect_factored}
+    \lean{MPSTensor.wholeIncrement_groundProjection_defect_le_fnw_factored}
+    \leanok
+    \uses{thm:fnw_projector_defect_unfactored}
+    Under the hypotheses of
+    Theorem~\ref{thm:fnw_projector_defect_unfactored},
+    \begin{align}
+        \left\lVert
+        P^{\mathrm{tail}}_{r;m,\ell}P^{\mathrm{left}}_{r+m;\ell}
+        -G_{r+m+\ell}
+        \right\rVert
+         & \leq \frac{a(m)(1+a(m))}{a_-(m)}.
+        \label{eq:fnw_projector_defect_factored}
+    \end{align}
+    This is the coefficient in
+    \cite[Lemma~6.2]{Fannes1992Finitely}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_projector_defect_unfactored}
+    First apply
+    Theorem~\ref{thm:fnw_projector_defect_unfactored}, which retains the two
+    source contributions. Then use
+    \begin{align}
+        \frac{a(m)}{a_-(m)}+\frac{a(m)^2}{a_-(m)}
+         & =\frac{a(m)(1+a(m))}{a_-(m)}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Primitive FNW projector-defect estimate]
+    \label{thm:primitive_fnw_projector_defect}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw}
+    \leanok
+    \uses{thm:fnw_projector_defect_unfactored}
+    Let $A$ be primitive with positive-definite fixed point $\rho$ and
+    $\tr(\rho)=1$. Then there is an injective length $L_0\geq1$ such that
+    Equation~\eqref{eq:fnw_projector_defect_unfactored} holds whenever
+    $m\geq L_0$ and $r,\ell\geq1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_projector_defect_unfactored}
+    Choose a positive injective length from primitivity. Left canonicality and
+    the fixed-point equation are part of the primitive hypotheses, so
+    Theorem~\ref{thm:fnw_projector_defect_unfactored} applies.
+\end{proof}
+
+No inverse or finite Gram matrix, pseudoinverse, periodic coercivity,
+comparison of unequal kernels, cyclic replacement, dimension prefactor,
+identity $a_-(m)=1-a(m)$, identification $k=D$, or claim
 $C_\lambda=k^2$ enters these results.
-% The final common-subspace projector geometry belongs to issue #7601.
 
 \begin{theorem}[Geometric power bound below unit spectral radius]
     \label{thm:geometric_bound_of_spectral_radius_lt_one}

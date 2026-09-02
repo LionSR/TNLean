@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### three-block configuration extensionality — promoted
+- **Pattern:** prove equality of vectors indexed by a concatenated three-block
+  configuration by splitting an arbitrary configuration through the canonical
+  three-block equivalence.
+- **Seen:** five occurrences in
+  `TNLean/MPS/ParentHamiltonian/FNWProjectorDefect.lean` before promotion
+  (2026-09-03).
+- **Abstraction:** the private theorem `euclideanSpace_threeBlock_ext` in
+  `TNLean/MPS/ParentHamiltonian/FNWProjectorDefect.lean`.
+- **Notes:** callers now provide the pointwise equality on the three separate
+  blocks; the helper performs the repeated extensionality and configuration
+  decomposition.
+
 ### torus-translation bond uniformity — promoted
 - **Pattern:** use a translation carrying one right (respectively up) edge to
   another to prove constancy of a bond-dimension function, then reduce an
