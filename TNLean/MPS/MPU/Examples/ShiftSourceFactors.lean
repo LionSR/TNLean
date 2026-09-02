@@ -425,14 +425,32 @@ noncomputable def rightShiftPaperSourceFactors (d : ℕ) [NeZero d] :
         simp
   have hweighted : X₁ᴴ * sourceWeight (d := d)
       (shiftPaperWeight d) * X₁ = 1 := by
-    have hS : S.X₁ᴴ * S.X₁ = 1 := by
-      simpa [sourceWeight] using S.X₁_weighted_isometry
-    simp only [X₁, shiftPaperWeight, sourceWeight,
-      Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
-      Matrix.smul_kronecker, Matrix.one_kronecker_one]
-    rw [show star s = s by simp [s, sourceSqrt], Matrix.mul_one, hS,
-      hs_weight]
-    simp
+    have hsstar : star s = s := by simp [s, sourceSqrt]
+    have hweight : sourceWeight (d := d) (shiftPaperWeight d) =
+        (d : ℂ)⁻¹ • sourceWeight (d := d)
+          (1 : Matrix (Fin d) (Fin d) ℂ) := by
+      ext x y
+      by_cases hxy : x = y
+      · subst y
+        simp [sourceWeight, shiftPaperWeight]
+      · by_cases h₁ : x.2 = y.2 <;> by_cases h₂ : x.1 = y.1
+        · have hpair : x = y := Prod.ext h₂ h₁
+          contradiction
+        · simp [sourceWeight, shiftPaperWeight, hxy, h₁, h₂]
+        · simp [sourceWeight, shiftPaperWeight, hxy, h₁]
+        · simp [sourceWeight, shiftPaperWeight, hxy, h₁, h₂]
+    have hscalar : star s * (d : ℂ)⁻¹ * s = 1 := by
+      simpa [hsstar, mul_assoc] using hs_weight
+    calc
+      X₁ᴴ * sourceWeight (d := d) (shiftPaperWeight d) * X₁ =
+          (star s * (d : ℂ)⁻¹ * s) •
+            (S.X₁ᴴ * sourceWeight (d := d)
+              (1 : Matrix (Fin d) (Fin d) ℂ) * S.X₁) := by
+        simp [X₁, hweight, Matrix.conjTranspose_smul, Matrix.smul_mul,
+          Matrix.mul_smul, smul_smul, mul_comm, mul_left_comm]
+      _ = 1 := by
+        rw [hscalar, S.X₁_weighted_isometry]
+        simp
   have hY₁Z₁ : Y₁ * Z₁ = 1 := by
     simp only [Y₁, Z₁, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
     rw [hs_mul_inv, S.Y₁_mul_Z₁]
@@ -452,30 +470,28 @@ noncomputable def rightShiftPaperSourceFactors (d : ℕ) [NeZero d] :
       Y₂_mul_Z₂ := S.Y₂_mul_Z₂ }
 
 /-- With the trace-normalized scalar weight, the paper gate
-\(u=Y_2\mathbin{-}Y_1\) of the right shift is a literal permutation matrix.
+\(u=Y_2\mathbin{-}Y_1\) of the right shift is the identity permutation on
+the two physical letters.
 
-The source coordinate `(a,b)` is sent to the physical coordinate `(b,a)`,
-fixing both the triangle order and the normalization in CPSV17 equation `uu`.
--/
+Source: CPSV17 equations `uu` and `uUnitary` (lines 532--557). -/
 theorem sourceU_rightShiftPaperSourceFactors_apply (d : ℕ) [NeZero d]
     (a b i₁ i₂ : Fin d) :
     SourceFactors.sourceU (rightShiftTensor d)
         (rightShiftPaperSourceFactors d)
         (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) (i₁, i₂) =
-      if a = i₂ ∧ b = i₁ then 1 else 0 := by
+      if a = i₁ ∧ b = i₂ then 1 else 0 := by
   have hscale : (d : ℂ) *
       ((Real.sqrt d : ℂ)⁻¹ * (Real.sqrt d : ℂ)⁻¹) = 1 := by
     simpa only [sourceSqrt] using nat_mul_sourceSqrt_inv_mul_inv d
-  by_cases ha : a = i₂ <;> by_cases hb : b = i₁ <;>
+  by_cases ha : a = i₁ <;> by_cases hb : b = i₂ <;>
     simp [SourceFactors.sourceU_apply, rightShiftPaperSourceFactors,
       rightShiftSourceFactors, normalizedIdentityColumn, normalizedIdentityVec,
       Matrix.reindex_apply, Matrix.one_apply, sourceSqrt, ha, hb,
       hscale, mul_comm, mul_left_comm]
 
-/-- The trace-one right-shift source gate has the expected input-oriented
-Gram matrix.  This is the normalization and orientation regression for the
-complete-network theorem corresponding to CPSV17 equation `uUnitary`.
--/
+/-- The trace-one right-shift source gate has identity Gram matrix.
+This is the normalization and orientation regression for the complete-network
+theorem corresponding to CPSV17 equation `uUnitary`. -/
 theorem sourceU_rightShiftPaperSourceFactors_gram (d : ℕ) [NeZero d]
     (p q : Fin d × Fin d) :
     (∑ lr, SourceFactors.sourceU (rightShiftTensor d)
@@ -490,7 +506,7 @@ theorem sourceU_rightShiftPaperSourceFactors_gram (d : ℕ) [NeZero d]
   have happly (x : Fin 1 × (Fin d × Fin d)) (i₁ i₂ : Fin d) :
       SourceFactors.sourceU (rightShiftTensor d)
           (rightShiftPaperSourceFactors d) (e x) (i₁, i₂) =
-        if x.2.1 = i₂ ∧ x.2.2 = i₁ then 1 else 0 := by
+        if x.2.1 = i₁ ∧ x.2.2 = i₂ then 1 else 0 := by
     rcases x with ⟨x₀, ⟨a, b⟩⟩
     have hx₀ : x₀ = 0 := Subsingleton.elim _ _
     subst x₀

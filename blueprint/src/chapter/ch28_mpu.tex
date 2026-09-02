@@ -3067,10 +3067,27 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}\leanok
     \uses{thm:mpu_closed_double_layer, thm:mpu_normalized_diagonal_word_expansion}
-    Close the common output word as the periodic MPO of the double layer.
-    Splitting off the two retained input sites leaves a common diagonal word
-    of length $K$. Expanding the normalized diagonal power as the normalized
-    sum of these words and using linearity of the trace gives the result.
+    Closing the common output word gives the double-layer identity
+    \begin{align}
+        \sum_\eta
+        \overline{U^{(K+2)}_{\eta,\sigma}}
+        U^{(K+2)}_{\eta,\sigma'}
+         & =W^{(K+2)}_{\sigma,\sigma'}.
+    \end{align}
+    Set $\sigma=(p,\tau)$ and $\sigma'=(q,\tau)$. Splitting off the two
+    retained sites rewrites the right-hand side as
+    \begin{align}
+        \tr\!\left[
+        W^{p_1q_1}W^{p_2q_2}
+        W^{\tau_1\tau_1}\cdots W^{\tau_K\tau_K}\right].
+    \end{align}
+    Finally,
+    \begin{align}
+        E^K
+         & =d^{-K}\sum_\tau
+        W^{\tau_1\tau_1}\cdots W^{\tau_K\tau_K}.
+    \end{align}
+    Substitute this expansion and use linearity of the trace.
 \end{proof}
 
 \begin{theorem}[Second-cut metric factorization]
@@ -4929,13 +4946,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $q=(q_1,q_2)$, one has
     \begin{align}
         \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
-        ={} & \sum_{\beta,\beta',\alpha,\alpha',\gamma,j_1,j_2}
-        \overline{\mathcal U^{p_2}_{j_1,\alpha,\beta}}
-        \rho_{\alpha,\alpha'}
-        \mathcal U^{q_2}_{j_1,\alpha',\beta'} \notag            \\
+        ={} & \sum_{\alpha,\alpha',\beta,\beta',\gamma,j_1,j_2}
+        \overline{\mathcal U^{j_1}_{p_2,\alpha,\beta}}
+        \rho_{\beta,\beta'}
+        \mathcal U^{j_1}_{q_2,\alpha',\beta'} \notag            \\
             & \qquad\qquad\cdot
-        \overline{\mathcal U^{j_2}_{p_1,\gamma,\beta}}
-        \mathcal U^{j_2}_{q_1,\gamma,\beta'}.
+        \overline{\mathcal U^{j_2}_{p_1,\gamma,\alpha}}
+        \mathcal U^{j_2}_{q_1,\gamma,\alpha'}.
     \end{align}
     The $p$ entries are starred and the $q$ entries are unstarred. This is
     precisely the staggered reflected--direct four-tensor expression obtained
@@ -4945,10 +4962,28 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{def:mpu_source_uv, thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations}
-    Expand the two copies of $u$ using their common virtual indices. The
-    $Y_1$ Gram contraction is the first source cut with the weight $\rho$,
-    and the rotated $Y_2$ Gram contraction is the second source cut. Expanding
-    both source matrices and reordering the finite sums gives the formula.
+    Since the first cut has rows $(i,\beta)$ and columns $(\alpha,j)$,
+    its weighted normalization gives
+    \begin{align}
+        \sum_r\overline{(Y_1)_{r,(\alpha,p_2)}}
+        (Y_1)_{r,(\alpha',q_2)}
+         & =\sum_{\beta,\beta',j_1}
+        \overline{\mathcal U^{j_1}_{p_2,\alpha,\beta}}
+        \rho_{\beta,\beta'}
+        \mathcal U^{j_1}_{q_2,\alpha',\beta'}.
+    \end{align}
+    The unweighted normalization of the second cut gives
+    \begin{align}
+        \sum_l\overline{(Y_2)_{l,(p_1,\alpha)}}
+        (Y_2)_{l,(q_1,\alpha')}
+         & =\sum_{\gamma,j_2}
+        \overline{\mathcal U^{j_2}_{p_1,\gamma,\alpha}}
+        \mathcal U^{j_2}_{q_1,\gamma,\alpha'}.
+    \end{align}
+    Expand both copies of
+    $u_{(l,r),(i_1,i_2)}=\sum_\alpha
+    (Y_2)_{l,(i_1,\alpha)}(Y_1)_{r,(\alpha,i_2)}$ and substitute these two
+    Gram identities. Reordering the finite sums yields the stated formula.
 \end{proof}
 
 \begin{theorem}[Complete source-$u$ network contraction]
@@ -8405,7 +8440,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     factors of the right shift,
     \begin{align}
         u_{(0,(a,b)),(i_1,i_2)}
-         & =\delta_{a,i_2}\delta_{b,i_1}.
+         & =\delta_{a,i_1}\delta_{b,i_2}.
     \end{align}
     Hence
     \begin{align}
@@ -8420,10 +8455,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{def:mpu_right_shift_paper_source_factors, def:mpu_source_uv}
-    Substitute the right-shift entries into $u=Y_2\mathbin{-}Y_1$. The two
-    virtual sums impose $a=i_2$ and $b=i_1$, while the two factors of
-    $d^{-1/2}$ cancel the remaining factor $d$. The resulting permutation
-    matrix has identity Gram matrix.
+    For the identity-weight factors, direct substitution in
+    $u=Y_2\mathbin{-}Y_1$ gives
+    \begin{align}
+        u^{(0)}_{(0,(a,b)),(i_1,i_2)}
+         & =d^{1/2}\delta_{a,i_1}\delta_{b,i_2}.
+    \end{align}
+    The trace-normalized first cut replaces $Y_1$ by $d^{-1/2}Y_1$ and leaves
+    $Y_2$ unchanged. Therefore
+    \begin{align}
+        u_{(0,(a,b)),(i_1,i_2)}
+         & =d^{-1/2}u^{(0)}_{(0,(a,b)),(i_1,i_2)}
+          =\delta_{a,i_1}\delta_{b,i_2}.
+    \end{align}
+    Summing the product of two such entries over $(a,b)$ gives
+    $\delta_{p,q}$, which is the entrywise identity $u^\dagger u=\Id$.
 \end{proof}
 
 \begin{theorem}[Local physical-species swap for the shift MPUs]

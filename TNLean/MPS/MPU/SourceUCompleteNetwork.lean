@@ -42,6 +42,38 @@ private lemma sum_rotate_four {A B C P R : Type*}
     (fun _ ↦ rfl)
   simpa only [Fintype.sum_prod_type] using h
 
+private lemma sum_rotate_three {A B C R : Type*}
+    [Fintype A] [Fintype B] [Fintype C] [AddCommMonoid R]
+    (f : A → B → C → R) :
+    (∑ a, ∑ b, ∑ c, f a b c) =
+      ∑ c, ∑ b, ∑ a, f a b c := by
+  let e : ((A × B) × C) ≃ ((C × B) × A) :=
+    { toFun := fun x ↦ ((x.2, x.1.2), x.1.1)
+      invFun := fun x ↦ ((x.2, x.1.2), x.1.1)
+      left_inv := by rintro ⟨⟨a, b⟩, c⟩; rfl
+      right_inv := by rintro ⟨⟨c, b⟩, a⟩; rfl }
+  have h := Fintype.sum_equiv e
+    (fun x ↦ f x.1.1 x.1.2 x.2)
+    (fun x ↦ f x.2 x.1.2 x.1.1)
+    (fun _ ↦ rfl)
+  simpa only [Fintype.sum_prod_type] using h
+
+private lemma sum_rotate_four_last_first {A B C P R : Type*}
+    [Fintype A] [Fintype B] [Fintype C] [Fintype P] [AddCommMonoid R]
+    (f : A → B → C → P → R) :
+    (∑ a, ∑ b, ∑ c, ∑ p, f a b c p) =
+      ∑ p, ∑ c, ∑ a, ∑ b, f a b c p := by
+  let e : (((A × B) × C) × P) ≃ (((P × C) × A) × B) :=
+    { toFun := fun x ↦ (((x.2, x.1.2), x.1.1.1), x.1.1.2)
+      invFun := fun x ↦ (((x.1.2, x.2), x.1.1.2), x.1.1.1)
+      left_inv := by rintro ⟨⟨⟨a, b⟩, c⟩, p⟩; rfl
+      right_inv := by rintro ⟨⟨⟨p, c⟩, a⟩, b⟩; rfl }
+  have h := Fintype.sum_equiv e
+    (fun x ↦ f x.1.1.1 x.1.1.2 x.1.2 x.2)
+    (fun x ↦ f x.1.2 x.2 x.1.1.2 x.1.1.1)
+    (fun _ ↦ rfl)
+  simpa only [Fintype.sum_prod_type] using h
+
 namespace SourceFactors
 
 /-- The tensor product \(Y_1\otimes Y_2\) for supplied source factors, in the
@@ -51,12 +83,12 @@ Source: CPSV17 equations `uu` and `uUnitary` (lines 532--557). -/
 private noncomputable def sourceYTensor {ρ : Matrix (Fin D) (Fin D) ℂ}
     (S : SourceFactors U ρ) :
     Matrix (Fin r[U] × Fin ℓ[U])
-      ((Fin d × Fin D) × (Fin d × Fin D)) ℂ :=
+      ((Fin D × Fin d) × (Fin d × Fin D)) ℂ :=
   S.Y₁ ⊗ₖ S.Y₂
 
 @[simp] private theorem sourceYTensor_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
     (S : SourceFactors U ρ) (r : Fin r[U]) (l : Fin ℓ[U])
-    (x₁ x₂ : Fin d × Fin D) :
+    (x₁ : Fin D × Fin d) (x₂ : Fin d × Fin D) :
     sourceYTensor U S (r, l) (x₁, x₂) = S.Y₁ r x₁ * S.Y₂ l x₂ := rfl
 
 /-- The paper gate \(u=Y_2\mathbin{-}Y_1\) is the diagonal virtual
@@ -68,7 +100,7 @@ private theorem sourceU_eq_diagonal_sourceYTensor
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (l : Fin ℓ[U]) (r : Fin r[U]) (i₁ i₂ : Fin d) :
     sourceU U S (l, r) (i₁, i₂) =
-      ∑ β : Fin D, sourceYTensor U S (r, l) ((i₂, β), (i₁, β)) := by
+      ∑ β : Fin D, sourceYTensor U S (r, l) ((β, i₂), (i₁, β)) := by
   apply Finset.sum_congr rfl
   intro β _
   simp only [sourceYTensor_apply]
@@ -77,9 +109,9 @@ private theorem sourceU_eq_diagonal_sourceYTensor
 private theorem Y₁_gram_eq_weighted_sourceCutM₁_gram
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (p q : Fin d) (a b : Fin D) :
-    (∑ r : Fin r[U], star (S.Y₁ r (p, a)) * S.Y₁ r (q, b)) =
-      ∑ α : Fin D, ∑ α' : Fin D, ∑ j : Fin d,
-        star (U p j α a) * ρ α α' * U q j α' b := by
+    (∑ r : Fin r[U], star (S.Y₁ r (a, p)) * S.Y₁ r (b, q)) =
+      ∑ β : Fin D, ∑ β' : Fin D, ∑ i : Fin d,
+        star (U i p a β) * ρ β β' * U i q b β' := by
   have hgram : S.Y₁ᴴ * S.Y₁ =
       (sourceCutM₁ U)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U := by
     calc
@@ -91,15 +123,23 @@ private theorem Y₁_gram_eq_weighted_sourceCutM₁_gram
           (S.X₁ * S.Y₁) := by
         simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
       _ = _ := by rw [← S.sourceCutM₁_eq]
-  have hentry := congrArg (fun M ↦ M (p, a) (q, b)) hgram
+  have hentry := congrArg (fun M ↦ M (a, p) (b, q)) hgram
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, sourceWeight,
-    Matrix.kronecker_apply, Matrix.one_apply, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq', Finset.mem_univ, ite_true, sourceCutM₁_apply,
-    Fintype.sum_prod_type] at hentry
-  simp_rw [Finset.sum_mul] at hentry
-  conv_rhs at hentry => arg 2; ext j; rw [Finset.sum_comm]
-  rw [Finset.sum_comm] at hentry
-  exact hentry
+    Matrix.kronecker_apply, sourceCutM₁_apply, Fintype.sum_prod_type] at hentry
+  conv_rhs at hentry =>
+    simp [Matrix.one_apply]
+    arg 2
+    ext i
+    arg 2
+    ext β'
+    rw [Finset.sum_mul]
+  calc
+    (∑ r : Fin r[U], star (S.Y₁ r (a, p)) * S.Y₁ r (b, q)) =
+        ∑ i : Fin d, ∑ β' : Fin D, ∑ β : Fin D,
+          star (U i p a β) * ρ β β' * U i q b β' := hentry
+    _ = ∑ β : Fin D, ∑ β' : Fin D, ∑ i : Fin d,
+          star (U i p a β) * ρ β β' * U i q b β' := by
+      rw [sum_rotate_three]
 
 private theorem Y₂_gram_eq_rotated_sourceCutM₂_gram
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
@@ -129,17 +169,17 @@ private theorem sourceYTensor_gram_eq_four_u_weighted
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (p q : Fin d × Fin d) (a b : Fin D × Fin D) :
     (∑ t : Fin r[U] × Fin ℓ[U],
-      star (sourceYTensor U S t ((p.1, a.1), (p.2, a.2))) *
-        sourceYTensor U S t ((q.1, b.1), (q.2, b.2))) =
-      ∑ α : Fin D, ∑ α' : Fin D, ∑ β : Fin D,
+      star (sourceYTensor U S t ((a.1, p.1), (p.2, a.2))) *
+        sourceYTensor U S t ((b.1, q.1), (q.2, b.2))) =
+      ∑ β : Fin D, ∑ β' : Fin D, ∑ γ : Fin D,
       ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-        star (U p.1 j₁ α a.1) * ρ α α' * U q.1 j₁ α' b.1 *
-          (star (U j₂ p.2 β a.2) * U j₂ q.2 β b.2) := by
+        star (U j₁ p.1 a.1 β) * ρ β β' * U j₁ q.1 b.1 β' *
+          (star (U j₂ p.2 γ a.2) * U j₂ q.2 γ b.2) := by
   rw [Fintype.sum_prod_type]
   simp only [sourceYTensor_apply, star_mul]
   calc
-    _ = (∑ r : Fin r[U], star (S.Y₁ r (p.1, a.1)) *
-          S.Y₁ r (q.1, b.1)) *
+    _ = (∑ r : Fin r[U], star (S.Y₁ r (a.1, p.1)) *
+          S.Y₁ r (b.1, q.1)) *
         (∑ l : Fin ℓ[U], star (S.Y₂ l (p.2, a.2)) *
           S.Y₂ l (q.2, b.2)) := by
       simp_rw [Finset.sum_mul_sum]
@@ -148,15 +188,15 @@ private theorem sourceYTensor_gram_eq_four_u_weighted
       apply Finset.sum_congr rfl
       intro l _
       ring
-    _ = (∑ α : Fin D, ∑ α' : Fin D, ∑ j₁ : Fin d,
-          star (U p.1 j₁ α a.1) * ρ α α' * U q.1 j₁ α' b.1) *
-        (∑ β : Fin D, ∑ j₂ : Fin d,
-          star (U j₂ p.2 β a.2) * U j₂ q.2 β b.2) := by
+    _ = (∑ β : Fin D, ∑ β' : Fin D, ∑ j₁ : Fin d,
+          star (U j₁ p.1 a.1 β) * ρ β β' * U j₁ q.1 b.1 β') *
+        (∑ γ : Fin D, ∑ j₂ : Fin d,
+          star (U j₂ p.2 γ a.2) * U j₂ q.2 γ b.2) := by
       rw [Y₁_gram_eq_weighted_sourceCutM₁_gram,
         Y₂_gram_eq_rotated_sourceCutM₂_gram]
     _ = _ := by
       simp_rw [Finset.sum_mul, Finset.mul_sum]
-      conv_lhs => arg 2; ext α; arg 2; ext α'; rw [Finset.sum_comm]
+      conv_lhs => arg 2; ext β; arg 2; ext β'; rw [Finset.sum_comm]
 
 /-- The Gram matrix of the corrected paper gate \(u=Y_2\mathbin{-}Y_1\) is
 the literal staggered reflected--direct four-\(\mathcal U\) network.  The pair
@@ -172,47 +212,54 @@ theorem sourceU_gram_eq_staggered_four_u
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (p q : Fin d × Fin d) :
     (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
-      ∑ β : Fin D, ∑ β' : Fin D, ∑ α : Fin D, ∑ α' : Fin D,
+      ∑ α : Fin D, ∑ α' : Fin D, ∑ β : Fin D, ∑ β' : Fin D,
       ∑ γ : Fin D, ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-        star (U p.2 j₁ α β) * ρ α α' * U q.2 j₁ α' β' *
-          (star (U j₂ p.1 γ β) * U j₂ q.1 γ β') := by
+        star (U j₁ p.2 α β) * ρ β β' * U j₁ q.2 α' β' *
+          (star (U j₂ p.1 γ α) * U j₂ q.1 γ α') := by
   classical
   rcases p with ⟨p₁, p₂⟩
   rcases q with ⟨q₁, q₂⟩
   rw [Fintype.sum_prod_type]
   simp_rw [sourceU_eq_diagonal_sourceYTensor, star_sum]
   simp_rw [Finset.sum_mul_sum]
-  let f := fun (l : Fin ℓ[U]) (r : Fin r[U]) (β β' : Fin D) ↦
-    sourceYTensor U S (r, l) ((q₂, β), (q₁, β)) *
-      star (sourceYTensor U S (r, l) ((p₂, β'), (p₁, β')))
-  change (∑ l, ∑ r, ∑ β, ∑ β', f l r β β') = _
+  let f := fun (l : Fin ℓ[U]) (r : Fin r[U]) (α' α : Fin D) ↦
+    sourceYTensor U S (r, l) ((α', q₂), (q₁, α')) *
+      star (sourceYTensor U S (r, l) ((α, p₂), (p₁, α)))
+  change (∑ l, ∑ r, ∑ α', ∑ α, f l r α' α) = _
   calc
-    _ = ∑ β, ∑ β', ∑ r, ∑ l,
-        star (sourceYTensor U S (r, l) ((p₂, β'), (p₁, β'))) *
-          sourceYTensor U S (r, l) ((q₂, β), (q₁, β)) := by
-      rw [sum_rotate_four]
+    _ = ∑ α, ∑ α', ∑ l, ∑ r,
+        star (sourceYTensor U S (r, l) ((α, p₂), (p₁, α))) *
+          sourceYTensor U S (r, l) ((α', q₂), (q₁, α')) := by
+      rw [sum_rotate_four_last_first]
       apply Finset.sum_congr rfl
-      intro β _
+      intro α _
       apply Finset.sum_congr rfl
-      intro β' _
-      apply Finset.sum_congr rfl
-      intro r _
+      intro α' _
       apply Finset.sum_congr rfl
       intro l _
+      apply Finset.sum_congr rfl
+      intro r _
       simp only [f]
       ring
-    _ = ∑ β, ∑ β', ∑ α, ∑ α', ∑ γ, ∑ j₁, ∑ j₂,
-        star (U p₂ j₁ α β') * ρ α α' * U q₂ j₁ α' β *
-          (star (U j₂ p₁ γ β') * U j₂ q₁ γ β) := by
+    _ = ∑ α, ∑ α', ∑ r, ∑ l,
+        star (sourceYTensor U S (r, l) ((α, p₂), (p₁, α))) *
+          sourceYTensor U S (r, l) ((α', q₂), (q₁, α')) := by
       apply Finset.sum_congr rfl
-      intro β _
+      intro α _
       apply Finset.sum_congr rfl
-      intro β' _
-      rw [← sourceYTensor_gram_eq_four_u_weighted U S
-        (p₂, p₁) (q₂, q₁) (β', β') (β, β),
-        Fintype.sum_prod_type]
-    _ = _ := by
+      intro α' _
       rw [Finset.sum_comm]
+    _ = ∑ α, ∑ α', ∑ β, ∑ β', ∑ γ, ∑ j₁, ∑ j₂,
+        star (U j₁ p₂ α β) * ρ β β' * U j₁ q₂ α' β' *
+          (star (U j₂ p₁ γ α) * U j₂ q₁ γ α') := by
+      apply Finset.sum_congr rfl
+      intro α _
+      apply Finset.sum_congr rfl
+      intro α' _
+      rw [← sourceYTensor_gram_eq_four_u_weighted U S
+        (p₂, p₁) (q₂, q₁) (α, α) (α', α'),
+        Fintype.sum_prod_type]
+    _ = _ := rfl
 
 end SourceFactors
 
