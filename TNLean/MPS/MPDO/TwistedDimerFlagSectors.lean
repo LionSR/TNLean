@@ -66,9 +66,8 @@ namespace MPOTensor.TwistedDimer
 
 /-! ### Sector weights -/
 
-/-- The vertical normalization $\mu = 5/8$ of the flag sectors: the square root
-of the vertical spectral radius $\mu^2 = (x^2 + y^2)/2 = 25/64$ of each
-sector at the rational point $x = 7/8$, $y = 1/8$.
+/-- The vertical normalization $\mu = 5/8$ of the flag sectors, with
+$\mu^2 = (x^2 + y^2)/2 = 25/64$ at the rational point $x = 7/8$, $y = 1/8$.
 
 Project example; not from CPSV16. -/
 def mu : ℝ := 5 / 8
