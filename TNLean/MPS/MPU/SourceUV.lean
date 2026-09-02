@@ -331,7 +331,7 @@ theorem mpo_two_pair_entry_eq_sourceV_mul_sourceU_swap
 The two-site physical configurations are reindexed by `finTwoArrowEquiv`.
 The first `Equiv.prodComm` changes the rows of $u$ from $\ell\times r$ to
 $r\times\ell$, as required by the columns of $v$; the second reverses the
-two physical output coordinates.
+two physical input coordinates.
 
 Source: CPSV17 `SVDforms2` and `uuvv` (lines 525--543). -/
 theorem mpo_two_reindex_eq_sourceV_mul_sourceU_swap

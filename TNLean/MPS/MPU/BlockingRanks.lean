@@ -68,6 +68,10 @@ private lemma sourceCutSVD_factorization_apply
   have h := congrArg (fun A => A row col) hfactor
   simpa only [Matrix.mul_apply] using h.symm
 
+/-- The left factor for the first source cut after adjoining one blocked site.
+
+Source: CPSV17 equations `II_SVD` and `eq:sf-svd`, lines 450--486, as used in
+Proposition `index-well-defined`, lines 697--703. -/
 private noncomputable def rightSuccLeft (U : MPOTensor d D) (k : ℕ) :
     Matrix (Fin (Kraus.blockPhysDim d (k + 1)) × Fin D)
       (Fin d × Fin r[blockTensor U k]) ℂ :=
@@ -76,6 +80,10 @@ private noncomputable def rightSuccLeft (U : MPOTensor d D) (k : ℕ) :
       Matrix.conjTranspose (sourceSVD₁ (blockTensor U k)).V (blockTail k I, β) q
     else 0
 
+/-- The right factor for the first source cut after adjoining one blocked site.
+
+Source: CPSV17 equations `II_SVD` and `eq:sf-svd`, lines 450--486, as used in
+Proposition `index-well-defined`, lines 697--703. -/
 private noncomputable def rightSuccRight (U : MPOTensor d D) (k : ℕ) :
     Matrix (Fin d × Fin r[blockTensor U k])
       (Fin D × Fin (Kraus.blockPhysDim d (k + 1))) ℂ :=
@@ -85,6 +93,11 @@ private noncomputable def rightSuccRight (U : MPOTensor d D) (k : ℕ) :
         (sourceSVD₁ (blockTensor U k)).U) q (γ, blockTail k J) *
           U i (blockHead k J) α γ
 
+/-- The first source cut after adjoining one blocked site factors through a space of
+size $d\,r[\operatorname{blockTensor}(U,k)]$.
+
+Source: CPSV17 equations `II_SVD` and `eq:sf-svd`, lines 450--486, as used in
+Proposition `index-well-defined`, lines 697--703. -/
 private theorem sourceCutM₁_blockTensor_succ_factorization
     (U : MPOTensor d D) (k : ℕ) :
     sourceCutM₁ (blockTensor U (k + 1)) =
