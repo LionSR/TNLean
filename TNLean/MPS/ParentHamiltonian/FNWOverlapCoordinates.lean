@@ -51,6 +51,7 @@ def fnwThreeBlockConfigEquiv (d ℓ m r : ℕ) :
   (Equiv.prodCongr (Fin.appendEquiv ℓ m) (Equiv.refl (Cfg d r))).trans
     (Fin.appendEquiv (ℓ + m) r)
 
+/-- The three-block configuration equivalence sends a block triple to nested append. -/
 @[simp]
 theorem fnwThreeBlockConfigEquiv_apply
     (d ℓ m r : ℕ) (μℓ : Cfg d ℓ) (μm : Cfg d m) (μr : Cfg d r) :
@@ -58,6 +59,7 @@ theorem fnwThreeBlockConfigEquiv_apply
       Fin.append (Fin.append μℓ μm) μr := by
   rfl
 
+/-- Splitting the nested append of three blocks recovers the original block triple. -/
 @[simp]
 theorem fnwThreeBlockConfigEquiv_symm_apply_apply
     (d ℓ m r : ℕ) (μℓ : Cfg d ℓ) (μm : Cfg d m) (μr : Cfg d r) :
@@ -131,6 +133,8 @@ noncomputable def fnwRightOverlapMap
         intro σ
         simp }
 
+/-- The left overlap map on an appended configuration evaluates the boundary map
+on the left and middle blocks. -/
 @[simp]
 theorem fnwLeftOverlapMap_apply_append
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
@@ -150,6 +154,8 @@ theorem fnwLeftOverlapMap_apply_append
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
   simp [fnwLeftOverlapMap]
 
+/-- The right overlap map on an appended configuration evaluates the boundary map
+on the middle and right blocks. -/
 @[simp]
 theorem fnwRightOverlapMap_apply_append
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
@@ -185,6 +191,7 @@ noncomputable def fnwRightFullGroundFamily
   WithLp.toLp 2 fun μℓ =>
     (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))ᴴ * B
 
+/-- The special right-spectator family evaluates by right-word multiplication. -/
 @[simp]
 theorem fnwLeftFullGroundFamily_apply
     (A : MPSTensor d D) (r : ℕ) (B : Mat) (μr : Cfg d r) :
@@ -192,6 +199,7 @@ theorem fnwLeftFullGroundFamily_apply
       B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ := by
   rfl
 
+/-- The special left-spectator family evaluates by left-word multiplication. -/
 @[simp]
 theorem fnwRightFullGroundFamily_apply
     (A : MPSTensor d D) (ℓ : ℕ) (B : Mat) (μℓ : Cfg d ℓ) :
