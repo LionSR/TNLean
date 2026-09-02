@@ -947,68 +947,6 @@ theorem fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap [NeZero D]
   exact Finset.sum_le_sum fun μℓ _ =>
     fnwLowerBoundaryConstant_mul_norm_sq_le ρ hρ A (m + r) (Ψ.ofLp μℓ)
 
-/-- The square root of the middle lower-boundary constant controls the left
-spectator-family norm by the left physical overlap norm. -/
-theorem sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_leftOverlap [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
-    (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
-    (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    Real.sqrt (fnwLowerBoundaryConstant ρ hρ A m) * ‖Φ‖ ≤
-      ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let c := fnwLowerBoundaryConstant ρ hρ A m
-  have hc : c * ‖Φ‖ ^ 2 ≤ ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ ^ 2 :=
-    (mul_le_mul_of_nonneg_right
-      (fnwLowerBoundaryConstant_mono ρ hρ A hρfix (Nat.le_add_left m ℓ))
-      (sq_nonneg ‖Φ‖)).trans
-        (fnwLowerBoundaryConstant_mul_familyNorm_sq_le_leftOverlap
-          ρ hρ A ℓ m r Φ)
-  apply (sq_le_sq₀ (mul_nonneg (Real.sqrt_nonneg c) (norm_nonneg Φ))
-    (norm_nonneg _)).mp
-  rw [mul_pow, Real.sq_sqrt hminus.le]
-  exact hc
-
-/-- The square root of the middle lower-boundary constant controls the right
-spectator-family norm by the right physical overlap norm. -/
-theorem sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_rightOverlap [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
-    (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
-    (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    Real.sqrt (fnwLowerBoundaryConstant ρ hρ A m) * ‖Ψ‖ ≤
-      ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let c := fnwLowerBoundaryConstant ρ hρ A m
-  have hc : c * ‖Ψ‖ ^ 2 ≤ ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ ^ 2 :=
-    (mul_le_mul_of_nonneg_right
-      (fnwLowerBoundaryConstant_mono ρ hρ A hρfix (Nat.le_add_right m r))
-      (sq_nonneg ‖Ψ‖)).trans
-        (fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap
-          ρ hρ A ℓ m r Ψ)
-  apply (sq_le_sq₀ (mul_nonneg (Real.sqrt_nonneg c) (norm_nonneg Ψ))
-    (norm_nonneg _)).mp
-  rw [mul_pow, Real.sq_sqrt hminus.le]
-  exact hc
-
 /-- Monotonicity of the lower-boundary constant converts both spectator
 family norms into the two physical overlap norms at the common middle length. -/
 theorem fnwLowerBoundaryConstant_mul_familyNorms_le_overlapNorms [NeZero D]
@@ -1031,13 +969,29 @@ theorem fnwLowerBoundaryConstant_mul_familyNorms_le_overlapNorms [NeZero D]
   let : InnerProductSpace ℂ Mat :=
     Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
   let c := fnwLowerBoundaryConstant ρ hρ A m
+  have hc_left : c * ‖Φ‖ ^ 2 ≤ ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ ^ 2 :=
+    (mul_le_mul_of_nonneg_right
+      (fnwLowerBoundaryConstant_mono ρ hρ A hρfix (Nat.le_add_left m ℓ))
+      (sq_nonneg ‖Φ‖)).trans
+        (fnwLowerBoundaryConstant_mul_familyNorm_sq_le_leftOverlap
+          ρ hρ A ℓ m r Φ)
+  have hc_right : c * ‖Ψ‖ ^ 2 ≤ ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ ^ 2 :=
+    (mul_le_mul_of_nonneg_right
+      (fnwLowerBoundaryConstant_mono ρ hρ A hρfix (Nat.le_add_right m r))
+      (sq_nonneg ‖Ψ‖)).trans
+        (fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap
+          ρ hρ A ℓ m r Ψ)
   have hsqrt : Real.sqrt c ^ 2 = c := Real.sq_sqrt hminus.le
   have hleft : Real.sqrt c * ‖Φ‖ ≤ ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ :=
-    sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_leftOverlap
-      ρ hρ A hρfix ℓ m r Φ hminus
+    (sq_le_sq₀ (mul_nonneg (Real.sqrt_nonneg c) (norm_nonneg Φ))
+      (norm_nonneg _)).mp <| by
+        rw [mul_pow, hsqrt]
+        exact hc_left
   have hright : Real.sqrt c * ‖Ψ‖ ≤ ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ :=
-    sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_rightOverlap
-      ρ hρ A hρfix ℓ m r Ψ hminus
+    (sq_le_sq₀ (mul_nonneg (Real.sqrt_nonneg c) (norm_nonneg Ψ))
+      (norm_nonneg _)).mp <| by
+        rw [mul_pow, hsqrt]
+        exact hc_right
   calc
     c * ‖Φ‖ * ‖Ψ‖ = Real.sqrt c ^ 2 * ‖Φ‖ * ‖Ψ‖ := by rw [hsqrt]
     _ = (Real.sqrt c * ‖Φ‖) * (Real.sqrt c * ‖Ψ‖) := by ring
