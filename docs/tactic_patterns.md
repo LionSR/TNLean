@@ -2189,6 +2189,23 @@ spectral split → block extraction → MPV calculation → strict bounds
   common criterion would have to abstract over that as well.  Below the
   rule-of-three promotion threshold.
 
+### matrix-unit tensor word and closed-chain expansions — candidate
+- **Pattern:** multiply a matrix-unit tensor letter into a matrix unit, induct
+  along two words using the open bond-matching condition, then take the trace
+  and split on the wraparound match to obtain a cyclic closed-operator entry
+  formula.
+- **Seen:** 2 occurrences across `TNLean/MPS/MPDO/TwistedDimerMPDO.lean`
+  (`T_mul_single_sum`, `evalWord_T_ofFn`, `mpo_T_entry_formula`) and
+  `TNLean/MPS/MPDO/TwistedDimerFlagSectors.lean` (`unitTensor_mul_single`,
+  `evalWord_unitTensor_ofFn`, `mpo_unitTensor_apply`) (2026-09-02).
+- **Abstraction (proposed):** if a third occurrence appears, extract a generic
+  closed-chain formula for block-disjoint matrix-unit tensors and derive both
+  existing calculations from it.
+- **Notes:** the twisted-dimer tensor sums over two block labels, whereas a flag
+  sector has one matrix unit per letter. A shared statement must retain this
+  distinction rather than identifying the two tensor shapes. Below the
+  rule-of-three promotion threshold.
+
 ---
 
 ## Rejected

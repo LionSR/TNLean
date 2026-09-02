@@ -279,6 +279,7 @@ theorem mpo_flagMPO_apply (f : Fin 2) {L : ℕ} (hL : 0 < L) (σ τ : Fin L → 
 index, the form in which vertical basis-of-normal-tensors data are recorded. -/
 def flagFamily (f : Fin 2) : MPSTensor (8 * 8) 4 := (flagMPO f).toMPSTensor
 
+/-- Recombining the doubled physical index of `flagFamily` recovers the flag-sector MPO. -/
 lemma verticalBNTMPO_flagFamily (f : Fin 2) : verticalBNTMPO (flagFamily f) = flagMPO f := by
   funext a b
   change flagMPO f (finProdFinEquiv.symm (finProdFinEquiv (a, b))).1

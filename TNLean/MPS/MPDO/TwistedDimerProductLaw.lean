@@ -205,11 +205,11 @@ lemma flagWeight_add (f f' : Fin 2) (a : Fin 8) :
   push_cast
   ring
 
-/-- The weights $x / (2\mu) = 7/10$ and $y / (2\mu) = 1/10$ are the two-label
-fusion weights. -/
+/-- The weight $x / (2\mu) = 7/10$ is the first two-label fusion weight. -/
 lemma alpha_eq_x_div : (1 / (2 * (mu : ℂ))) * (x : ℂ) = (alpha : ℂ) := by
   norm_num [mu, x, alpha]
 
+/-- The weight $y / (2\mu) = 1/10$ is the second two-label fusion weight. -/
 lemma beta_eq_y_div : (1 / (2 * (mu : ℂ))) * (y : ℂ) = (beta : ℂ) := by
   norm_num [mu, y, beta]
 
