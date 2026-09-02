@@ -268,7 +268,7 @@ fixed by `finProdFinEquiv`.  The pair `p` is starred and `q` is unstarred.
 
 Source: CPSV17 equation `uUnitary` and Lemma `lemuisometry` (lines 545--557).
 -/
-theorem sourceU_gram_eq_transpose_fixedPair_trace
+theorem sourceU_gram_eq_transpose_fixed_pair_trace
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (p q : Fin d × Fin d) :
     (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
