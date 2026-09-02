@@ -30,7 +30,7 @@ abstracted — record why, so it is not re-proposed).
   three-block equivalence.
 - **Seen:** five occurrences in
   `TNLean/MPS/ParentHamiltonian/FNWProjectorDefect.lean` before promotion
-  (2026-09-03).
+  (2026-09-02).
 - **Abstraction:** the private theorem `euclideanSpace_threeBlock_ext` in
   `TNLean/MPS/ParentHamiltonian/FNWProjectorDefect.lean`.
 - **Notes:** callers now provide the pointwise equality on the three separate
