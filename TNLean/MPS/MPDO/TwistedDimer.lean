@@ -89,6 +89,10 @@ def bitF (i : Fin 8) : Fin 2 := ⟨i.val % 2, by omega⟩
 lemma physIdx_bits (i : Fin 8) : physIdx (bitL i) (bitR i) (bitF i) = i := by
   ext; simp only [physIdx, bitL, bitR, bitF]; omega
 
+/-- Every index of `Fin 8` is the bit encoding of its three bits. -/
+lemma exists_eq_physIdx (i : Fin 8) : ∃ l r f, i = physIdx l r f :=
+  ⟨_, _, _, (physIdx_bits i).symm⟩
+
 lemma physIdx_inj {l r f l' r' f' : Fin 2} :
     physIdx l r f = physIdx l' r' f' ↔ l = l' ∧ r = r' ∧ f = f' := by
   constructor

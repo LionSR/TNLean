@@ -286,9 +286,8 @@ theorem toMPSTensor_T_reconstruct (i : Fin (8 * 8)) :
         ambientCoisometry := by
   rw [conjTranspose_mul_mul_ambientCoisometry]
   ext b b'
-  obtain ⟨p, p', k, rfl⟩ : ∃ p p' k, b = physIdx p p' k := ⟨_, _, _, (physIdx_bits b).symm⟩
-  obtain ⟨q, q', k', rfl⟩ : ∃ q q' k', b' = physIdx q q' k' :=
-    ⟨_, _, _, (physIdx_bits b').symm⟩
+  obtain ⟨p, p', k, rfl⟩ := exists_eq_physIdx b
+  obtain ⟨q, q', k', rfl⟩ := exists_eq_physIdx b'
   simp only [MPSTensor.toTensorFromBlocks, Matrix.reindex_apply, Matrix.submatrix_apply,
     finSigmaFinEquiv_symm_retainedBondEquiv_symm]
   change T i.divNat i.modNat (physIdx p p' k) (physIdx q q' k') = _

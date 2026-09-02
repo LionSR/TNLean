@@ -123,8 +123,8 @@ common flag value $f$. -/
 theorem flagMPO_apply_eq_T (f : Fin 2) (a b : Fin 8) (l r l' r' : Fin 2) :
     flagMPO f a b (finProdFinEquiv (l, r)) (finProdFinEquiv (l', r')) =
       ((mu : ℝ) : ℂ)⁻¹ * T (physIdx l r f) (physIdx l' r' f) a b := by
-  obtain ⟨p, p', k, rfl⟩ : ∃ p p' k, a = physIdx p p' k := ⟨_, _, _, (physIdx_bits a).symm⟩
-  obtain ⟨q, q', k', rfl⟩ : ∃ q q' k', b = physIdx q q' k' := ⟨_, _, _, (physIdx_bits b).symm⟩
+  obtain ⟨p, p', k, rfl⟩ := exists_eq_physIdx a
+  obtain ⟨q, q', k', rfl⟩ := exists_eq_physIdx b
   rw [T_apply_blocks]
   simp only [flagMPO, unitTensor, flagCoef, block, bitL_physIdx, bitR_physIdx, bitF_physIdx,
     Matrix.single_apply, finProdFinEquiv.injective.eq_iff, Prod.mk.injEq, coef_physIdx,
