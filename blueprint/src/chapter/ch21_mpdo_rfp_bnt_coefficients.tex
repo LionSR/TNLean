@@ -825,6 +825,80 @@
     nonnegative multiples, and pullbacks along an arbitrary reindexing.
 \end{proof}
 
+\begin{theorem}[The twisted quantum dimer is a renormalization fixed point]%
+    \label{thm:mpdo_twisted_dimer_is_rfp_via_ts}
+    \lean{MPOTensor.TwistedDimer.refineMap}
+    \lean{MPOTensor.TwistedDimer.refineMap_isKrausCPTP}
+    \lean{MPOTensor.TwistedDimer.refineMap_physClose1}
+    \lean{MPOTensor.TwistedDimer.coarseMap}
+    \lean{MPOTensor.TwistedDimer.coarseMap_isKrausCPTP}
+    \lean{MPOTensor.TwistedDimer.coarseMap_physClose2}
+    \lean{MPOTensor.TwistedDimer.isRFPViaTS_T}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mpdo_twisted_dimer_tensor, thm:mpdo_twisted_dimer_closures}
+    The twisted quantum dimer of
+    Definition~\ref{def:mpdo_twisted_dimer_tensor} is a renormalization fixed
+    point in the sense of Definition~\ref{def:is_rfp_via_ts}. The refinement
+    map $\mathcal T$ has eight Kraus operators, labelled by the two prepared
+    site flags $f_1, f_2$ and a bond label $\varepsilon$: it prepares those two
+    flags on the output sites together with the bond state
+    $(\ket{00}+(-1)^\varepsilon\ket{11})/\sqrt2$ on the bond they share, with
+    weight $x$ for $\varepsilon=0$ and $y$ for $\varepsilon=1$, and is
+    supported on the incoming flag $f=f_1+f_2+\varepsilon$. The
+    coarse-graining map $\mathcal S$ has sixteen Kraus operators, labelled by a
+    member of the orthonormal bond basis $(\ket{00}\pm\ket{11})/\sqrt2$,
+    $\ket{01}$, $\ket{10}$ together with the two site flags: it measures the
+    shared bond pair in that basis, reads the two flags, and returns the letter
+    carrying the outer site qubits and the flag $f_1+f_2+s$, where $s$ is one
+    for the antisymmetric bond outcome and zero otherwise. The tensor is a
+    project example motivated by the question of
+    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+    there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_twisted_dimer_tensor, thm:mpdo_twisted_dimer_closures}
+    Fix a one-site letter $(l,r,f)$. The two-site letters in the support of a
+    refinement Kraus operator carry the outer bits $l$ and $r$, the two
+    prepared flags, and a free shared bond bit, so each of the four labels with
+    $f_1+f_2+\varepsilon=f$ contributes twice the squared amplitude
+    $w_\varepsilon/4$, where $w_0=x$ and $w_1=y$; two of the four labels carry
+    each value of $\varepsilon$, and the total is $x+y=1$. Supports belonging
+    to distinct one-site letters are disjoint, so the off-diagonal entries
+    vanish and the family resolves the identity. For the intertwining relation,
+    the flag signs multiply as
+    $(\tau_k)_{f_1f_1}(\tau_k)_{f_2f_2}=(\tau_k)_{gg}$ with $g=f_1+f_2$, and
+    the two prepared bond states reassemble the bond matrices through
+    \begin{align}
+        \frac{x}{4}+(-1)^{b+b'}\frac{y}{4} & =\frac12\,C_0[b,b'], &
+        \frac{x}{4}-(-1)^{b+b'}\frac{y}{4} & =\frac12\,C_1[b,b'],
+        \notag
+    \end{align}
+    for the two shared bond bits $b, b'$ of the two arguments; this is exactly
+    the coefficient of the two-site closure displayed in
+    Theorem~\ref{thm:mpdo_twisted_dimer_closures}.
+
+    For the coarse-graining map, orthonormality of the bond basis and of the
+    pair of site flags gives the resolution of the identity: summing over the
+    bond basis identifies the two bond bits of the two arguments, and summing
+    over the flag labels identifies their flags, so all six bits of the two
+    two-site letters agree. On the support of the two-site closure the two bond
+    qubits of each argument agree, so the outcomes $\ket{01}$ and $\ket{10}$
+    contribute nothing and the two symmetric outcomes contribute
+    $\frac12(\pm1)^{b+b'}$. Summing over the two flag pairs compatible with the
+    decoded flag leaves, for each block label $k$, the single identity
+    \begin{align}
+        \frac12\Bigl(\sum_{b,b'}C_k[b,b']
+        +(\tau_k)_{11}\sum_{b,b'}(-1)^{b+b'}C_k[b,b']\Bigr) & =1,
+        \notag
+    \end{align}
+    whose left side is $\frac12\bigl(\frac74+\frac14\bigr)=1$ in both cases:
+    for $k=0$ the alternating sum is $\frac14$ and the flag sign is $1$, and
+    for $k=1$ it is $-\frac14$ and the flag sign is $-1$. The remaining factor
+    is the one-site coefficient
+    $\frac12\,C_k[l,l']\,(\tau_k)_{ff}\,\delta_{ff'}$ of
+    Theorem~\ref{thm:mpdo_twisted_dimer_closures}.
+\end{proof}
+
 \begin{theorem}[A candidate two-label coefficient family stable under every
         positive rescaling]%
     \label{thm:mpdo_twisted_dimer_two_label_rescaling_stable}
