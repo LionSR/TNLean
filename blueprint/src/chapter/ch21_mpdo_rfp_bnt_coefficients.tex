@@ -876,11 +876,24 @@
     the coefficient of the two-site closure displayed in
     Theorem~\ref{thm:mpdo_twisted_dimer_closures}.
 
-    For the coarse-graining map, orthonormality of the bond basis and of the
-    pair of site flags gives the resolution of the identity: summing over the
-    bond basis identifies the two bond bits of the two arguments, and summing
-    over the flag labels identifies their flags, so all six bits of the two
-    two-site letters agree. On the support of the two-site closure the two bond
+    For the coarse-graining map, write $B_v(b_1,b_2)$ for the amplitude of
+    the bond-basis vector $v$ at $(b_1,b_2)$. Its orthonormality gives
+    \begin{align}
+        \sum_v B_v(b_1,b_2)B_v(c_1,c_2)
+         & =\delta_{b_1c_1}\delta_{b_2c_2}.
+        \notag
+    \end{align}
+    The corresponding selector sum over the two site flags is
+    \begin{align}
+        \sum_{f_1,f_2}
+        \delta_{f_1F_1}\delta_{f_2F_2}
+        \delta_{f_1F'_1}\delta_{f_2F'_2}
+         & =\delta_{F_1F'_1}\delta_{F_2F'_2}.
+        \notag
+    \end{align}
+    These two identities identify all six bits of the two two-site letters and
+    give the resolution of the identity. On the support of the two-site closure
+    the two bond
     qubits of each argument agree, so the outcomes $\ket{01}$ and $\ket{10}$
     contribute nothing and the two symmetric outcomes contribute
     $\frac12(\pm1)^{b+b'}$. Summing over the two flag pairs compatible with the
