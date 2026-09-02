@@ -2057,8 +2057,10 @@ The linear estimate remains separate from the aggregate contribution below.
     \leanok
     \uses{def:fnw_boundary_range, thm:fnw_full_ground_spectator_identities,
         thm:fnw_overlap_linear_family_estimate}
-    Suppose that $L_{\ell,m,r}\Phi$ and $R_{\ell,m,r}\Psi$ are orthogonal to
-    $\mathcal G_{\ell+m+r}$. Then, for every $B\in\MN{D}$,
+    Suppose that $\tr(\rho)=1$, $A$ is left canonical,
+    $\E_A(\rho)=\rho$, and both $L_{\ell,m,r}\Phi$ and
+    $R_{\ell,m,r}\Psi$ are orthogonal to $\mathcal G_{\ell+m+r}$. Then, for
+    every $B\in\MN{D}$,
     \begin{align}
         |\langle A_\varphi,B\rangle_\rho|
          & \leq a(m)\lVert\Phi\rVert\lVert B\rVert_\rho,
@@ -2098,7 +2100,8 @@ The linear estimate remains separate from the aggregate contribution below.
     \leanok
     \uses{thm:fnw_aggregate_family_bounds,
         thm:fnw_overlap_lower_boundary_control}
-    Under the same orthogonality assumptions, if $a_-(m)>0$, then
+    Under the hypotheses of
+    Theorem~\ref{thm:fnw_aggregate_family_bounds}, if $a_-(m)>0$, then
     \begin{align}
         \lVert A_\varphi\rVert_\rho
          & \leq\frac{a(m)}{\sqrt{a_-(m)}}
@@ -2125,8 +2128,8 @@ The linear estimate remains separate from the aggregate contribution below.
     \lean{MPSTensor.norm_inner_fnwOverlapAggregates_le_sq_div_lowerBoundary}
     \leanok
     \uses{thm:fnw_aggregate_sqrt_lower_boundary}
-    If both overlap vectors are orthogonal to $\mathcal G_{\ell+m+r}$ and
-    $a_-(m)>0$, then
+    Under the hypotheses of
+    Theorem~\ref{thm:fnw_aggregate_family_bounds}, if $a_-(m)>0$, then
     \begin{align}
         |\langle A_\varphi,A_\psi\rangle_\rho|
          & \leq\frac{a(m)^2}{a_-(m)}
