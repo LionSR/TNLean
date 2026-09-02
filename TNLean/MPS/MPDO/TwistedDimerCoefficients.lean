@@ -12,8 +12,9 @@ import TNLean.MPS.MPDO.LengthIndependentCoefficients
 $\mathbb Z_2$-twisted quantum dimer, this file defines a two-label diagonal
 $\chi$-family and proves that its trace-power coefficients remain length
 dependent after every positive rescaling of the labels. It does not identify
-these labels with basis-of-normal-tensors blocks of a tensor and does not prove
-a tensor-attached product law.
+these labels with basis-of-normal-tensors blocks of a tensor; the same-length
+product law attaching this family to the flag-sector operators of the twisted
+dimer is proved in `TNLean.MPS.MPDO.TwistedDimerProductLaw`.
 
 For bond weights $x, y > 0$ with $x + y = 1$, the candidate weights are
 $$

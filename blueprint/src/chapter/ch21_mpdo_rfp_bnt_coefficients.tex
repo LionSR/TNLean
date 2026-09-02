@@ -798,7 +798,7 @@
     ordered product of letters keeps a common block label and vanishes unless
     consecutive letters match on their bond bits; the surviving product is a
     single matrix unit whose row is read off the left bits of the first letters
-    and whose column off the right bits of the last letters. Taking the trace
+    and whose column is read off the right bits of the last letters. Taking the trace
     imposes the wraparound match, which completes the segment condition to the
     cyclic one, and leaves the sum over the block label of the product of the
     one-site coefficients. That coefficient is half of $g_k$ evaluated at the
@@ -949,8 +949,12 @@
     \ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}, the
     obstruction here is not a block with two distinct entries but the
     inconsistency of the multiplicative system
-    $s_fs_{f'}\chi_{ff'g}=s_g$ over the eight channels. No identification of
-    this abstract family with tensor blocks is asserted.
+    $s_fs_{f'}\chi_{ff'g}=s_g$ over the eight channels. The family is
+    attached below, through the same-length product law, to the flag-sector
+    operators of the twisted quantum dimer
+    (Theorem~\ref{thm:mpdo_twisted_dimer_flag_sector_product_law}); no
+    identification of the flag sectors with the canonical basis of normal
+    tensors of that tensor is asserted.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent}
@@ -959,6 +963,189 @@
     $(0,1,0)$ give $s_0\alpha=1$ and $s_1\beta=1$; the channel $(0,0,1)$ then
     gives $s_0^2\beta/s_1=\beta^2/\alpha^2=1$, contradicting
     $\alpha\ne\beta$.
+\end{proof}
+
+\begin{definition}[Flag sectors of the twisted quantum dimer]%
+    \label{def:mpdo_twisted_dimer_flag_sectors}
+    \lean{MPOTensor.TwistedDimer.mu}
+    \lean{MPOTensor.TwistedDimer.flagWeight}
+    \lean{MPOTensor.TwistedDimer.flagWeight_physIdx}
+    \lean{MPOTensor.TwistedDimer.flagCoef}
+    \lean{MPOTensor.TwistedDimer.unitTensor}
+    \lean{MPOTensor.TwistedDimer.block_eq_unitTensor}
+    \lean{MPOTensor.TwistedDimer.flagMPO}
+    \lean{MPOTensor.TwistedDimer.flagMPO_apply_eq_T}
+    \lean{MPOTensor.TwistedDimer.flagFamily}
+    \lean{MPOTensor.TwistedDimer.verticalBNTMPO_flagFamily}
+    \lean{MPOTensor.TwistedDimer.flagOperatorFamily}
+    \lean{MPOTensor.TwistedDimer.flagOperatorFamily_operator}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_bnt_label_operator_family}
+    The letters of the twisted quantum dimer of
+    Definition~\ref{def:mpdo_twisted_dimer_tensor} are diagonal in the flag
+    qubit, so the vertically viewed tensor splits along the flag value
+    $f\in\{0,1\}$ into two tensors $M_f$ on the physical space of the two
+    qubits $L$, $R$, with letters indexed by pairs of horizontal bond indices.
+    Write $\mu=\frac58$, the normalization with $\mu^2=(x^2+y^2)/2$ at
+    $x=\frac78$, $y=\frac18$. The normalized sector $\widehat M_f=M_f/\mu$
+    has, at the bond pair $((p,p',k),(q,q',k'))$, the letter
+    \begin{align}
+        \widehat M_f^{(p,p',k),(q,q',k')}
+         & =[k=k']\,\frac1{2\mu}\,C_k[p,p']\,(\tau_k)_{ff}\,
+        E_{pp'}\otimes E_{qq'},
+        \notag
+    \end{align}
+    a matrix unit on the two qubits whose row is read off the left bits
+    $(p,q)$ and whose column is read off the right bits $(p',q')$. Its entry between
+    the qubit configurations $(l,r)$ and $(l',r')$ is $\mu^{-1}$ times the
+    bond-matrix entry of the twisted dimer at the physical letters
+    $((l,r,f),(l',r',f))$ carrying the common flag value $f$. The horizontal
+    blocks of Definition~\ref{def:mpdo_twisted_dimer_tensor} and the two flag
+    sectors are all matrix-unit tensors of this shape, with the one-site
+    coefficients as the only data. The closed operators
+    $O_L(\widehat M_f)$ on a ring of $L$ sites form a two-label operator family
+    in the sense of Definition~\ref{def:mpdo_bnt_label_operator_family}. It is
+    not asserted here that the two sectors form the canonical basis of normal
+    tensors of the twisted dimer. The tensor is a project example motivated by
+    the question of \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a
+    tensor stated there.
+\end{definition}
+
+\begin{lemma}[Cyclic path expansion of a trace]%
+    \label{lem:matrix_cyclic_path_sum}
+    \lean{Matrix.sum_fin_cons}
+    \lean{Matrix.ofFn_prod_mulVec_apply}
+    \lean{Matrix.trace_ofFn_prod_eq_sum_cyclic}
+    \leanok
+    Let $M_1,\dots,M_L$ be square matrices of the same finite size over a
+    commutative semiring, with $L\ge1$. Applying the ordered product
+    $M_1\cdots M_L$ to a vector $v$ and reading the entry at $a$ sums, over all
+    paths $(a,t_1,\dots,t_L)$ starting at $a$, the product of the entries
+    $(M_n)_{t_{n-1}t_n}$ along the path times $v_{t_L}$. Consequently
+    \begin{align}
+        \tr(M_1\cdots M_L)
+         & =\sum_{t_1,\dots,t_L}\prod_{n=1}^{L}(M_n)_{t_n t_{n+1}},
+        \notag
+    \end{align}
+    with the cyclic convention $t_{L+1}=t_1$.
+\end{lemma}
+\begin{proof}\leanok
+    The open expansion is an induction on $L$: splitting a path into its first
+    step and the remaining path, the entry of $M_1(M_2\cdots M_L)v$ at $a$ is
+    $\sum_c(M_1)_{ac}$ times the expansion of the shorter product at $c$. For
+    the trace, write $M_1\cdots M_L=(M_1\cdots M_{L-1})M_L$ and apply the open
+    expansion to the vector $c\mapsto(M_L)_{ca}$; splitting a cyclic assignment
+    into its first entry $a$ and the remaining entries identifies the two sides
+    term by term, the last factor closing the cycle from $t_L$ back to $a$.
+\end{proof}
+
+\begin{lemma}[Closed operators of the flag sectors]%
+    \label{lem:mpdo_twisted_dimer_flag_sector_operators}
+    \lean{MPOTensor.TwistedDimer.unitTensor_mul_single}
+    \lean{MPOTensor.TwistedDimer.evalWord_unitTensor_ofFn}
+    \lean{MPOTensor.TwistedDimer.mpo_unitTensor_apply}
+    \lean{MPOTensor.TwistedDimer.prod_flagCoef}
+    \lean{MPOTensor.TwistedDimer.mpo_flagMPO_apply}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_flag_sectors, def:mpdo}
+    For a matrix-unit tensor with one-site coefficients $c$, the ordered
+    product of the letters along a pair of words vanishes unless both words
+    satisfy the open bond-matching condition, in which case it is the single
+    matrix unit whose row is read off the left bits of the first letters and
+    whose column is read off the right bits of the last letters, with the product of
+    the coefficients as its entry; on a ring of positive length the closed
+    operator has entries $\mathbb 1[\text{cyclic bond match}](\sigma,\tau)\,
+        \prod_n c(\sigma_n,\tau_n)$. In particular, for a positive length $L$
+    and words $\sigma_n=(p_n,p'_n,k_n)$, $\tau_n=(q_n,q'_n,k'_n)$ of
+    horizontal bond indices,
+    \begin{align}
+        O_L(\widehat M_f)_{\sigma\tau}
+         & =\mathbb 1[\text{cyclic bond match}](\sigma,\tau)\,
+        \prod_n[k_n=k'_n]\,
+        \prod_n\frac{C_{k_n}[p_n,p'_n]\,(\tau_{k_n})_{ff}}{2\mu}.
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mpdo_twisted_dimer_flag_sectors}
+    A matrix unit multiplied on the left by a letter is a matrix unit or zero
+    according to whether the right bits of the letter match the row of the
+    unit, so the open-chain formula follows by induction on the length of the
+    words, exactly as for the twisted dimer itself in
+    Theorem~\ref{thm:mpdo_twisted_dimer_ismpdo}. Taking the trace imposes the
+    wraparound match. For the flag sector, the coefficient at a bond pair is
+    the one-site weight of the first index when the block labels agree and zero
+    otherwise, so the product of coefficients along the ring is the product of
+    the weights of the first word gated by the equality of the two label
+    strings.
+\end{proof}
+
+\begin{theorem}[The same-length product law of the flag sectors]%
+    \label{thm:mpdo_twisted_dimer_flag_sector_product_law}
+    \lean{MPOTensor.TwistedDimer.tau_one_mul_self}
+    \lean{MPOTensor.TwistedDimer.tau_add}
+    \lean{MPOTensor.TwistedDimer.Cmat_eq_signs}
+    \lean{MPOTensor.TwistedDimer.Cc}
+    \lean{MPOTensor.TwistedDimer.ofFn_Cc_prod_apply}
+    \lean{MPOTensor.TwistedDimer.trace_ofFn_Cc_prod}
+    \lean{MPOTensor.TwistedDimer.sum_cyclic_Cmat}
+    \lean{MPOTensor.TwistedDimer.prod_flagWeight_physIdx}
+    \lean{MPOTensor.TwistedDimer.sum_sector}
+    \lean{MPOTensor.TwistedDimer.flagWeight_add}
+    \lean{MPOTensor.TwistedDimer.alpha_eq_x_div}
+    \lean{MPOTensor.TwistedDimer.beta_eq_y_div}
+    \lean{MPOTensor.TwistedDimer.mpo_flagMPO_mul}
+    \lean{MPOTensor.TwistedDimer.flagOperatorFamily_hasSameLengthProductForm}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_flag_sectors, def:mpdo_bnt_label_same_length_product_form, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+    For every positive length $L$ and all flag values $f,f'\in\{0,1\}$, the
+    closed operators of the two normalized flag sectors satisfy
+    \begin{align}
+        O_L(\widehat M_f)\,O_L(\widehat M_{f'})
+         & =\alpha^L\,O_L(\widehat M_{f+f'})
+        +\beta^L\,O_L(\widehat M_{f+f'+1}),
+        \qquad\alpha=\frac{7}{10},\ \beta=\frac1{10},
+        \notag
+    \end{align}
+    with the flag values added modulo two. Thus the sector operator family of
+    Definition~\ref{def:mpdo_twisted_dimer_flag_sectors} satisfies the
+    same-length product law of
+    Definition~\ref{def:mpdo_bnt_label_same_length_product_form}, in the form
+    of \cite[Theorem~4.14(ii), lines~972--985]{Cirac2016MPDO_arXiv}, with the
+    two-label coefficient family of
+    Theorem~\ref{thm:mpdo_twisted_dimer_two_label_rescaling_stable}. The
+    flag-sector operators of the displayed tensor therefore carry a
+    length-dependent coefficient family that no positive rescaling of the two
+    labels makes length independent. It is not asserted that the two sectors
+    form the canonical basis of normal tensors of the twisted dimer. The tensor
+    is a project example motivated by the question of
+    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+    there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:mpdo_twisted_dimer_flag_sector_operators, lem:matrix_cyclic_path_sum, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+    Fix cyclically bond-matched words $\sigma$, $\tau$ with the common block
+    labels $k_n$ and left bits $p_n$ of $\sigma$; all other entries of both
+    sides vanish by Lemma~\ref{lem:mpdo_twisted_dimer_flag_sector_operators}.
+    The entry of the product is a sum over a middle word $\rho$, which must be
+    cyclically bond matched with the same labels $k_n$, hence of the form
+    $\rho_n=(t_n,t_{n+1},k_n)$ for a bit string $t$. Its contribution factors
+    as the weight of $\sigma$ in the sector $f$ times
+    $(2\mu)^{-L}\prod_n(\tau_{k_n})_{f'f'}\prod_nC_{k_n}[t_n,t_{n+1}]$, and by
+    Lemma~\ref{lem:matrix_cyclic_path_sum} the sum over $t$ of the last
+    product is $\tr(C_{k_1}\cdots C_{k_L})$. Since
+    $C_k=xP_++(-1)^kyP_-$ with orthogonal idempotents $P_\pm$, the ordered
+    product is $x^LP_++(-1)^{\sum_nk_n}y^LP_-$, with trace
+    $x^L+(-1)^{\sum_nk_n}y^L$; this is verified entrywise through the sign
+    expansion $C_k[p,q]=\frac12\bigl(x+(-1)^{k+p+q}y\bigr)$. The flag signs multiply
+    as $(\tau_k)_{ff}(\tau_k)_{f'f'}=(\tau_k)_{gg}$ with $g=f+f'$, and the
+    sign $(-1)^{\sum_nk_n}=\prod_n(\tau_{k_n})_{11}$ of the second summand
+    shifts the label to $g+1$. With $x/(2\mu)=\frac{7}{10}$ and
+    $y/(2\mu)=\frac1{10}$, the two summands are $\alpha^L$ and $\beta^L$ times
+    the entries of $O_L(\widehat M_{f+f'})$ and $O_L(\widehat M_{f+f'+1})$.
+    Reading the two channels $g=f+f'$ and $g=f+f'+1$ against the coefficient
+    family of Theorem~\ref{thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+    gives the product predicate.
 \end{proof}
 
 \begin{lemma}[Doubled-index letters and their rank-one factorization]
