@@ -131,12 +131,12 @@ lemma physClose2_T_fiber (X : Matrix (Fin 8) (Fin 8) ℂ) (L L' R R' f₁ f₂ b
 /-! ### The coarse-graining Kraus family -/
 
 /-- The support condition of the coarse-graining Kraus operators. -/
-def coarseOK (v : Fin 4) (f₁ f₂ : Fin 2) (j : Fin 8) (i : Fin 8 × Fin 8) : Prop :=
+def IsCoarseSupported (v : Fin 4) (f₁ f₂ : Fin 2) (j : Fin 8) (i : Fin 8 × Fin 8) : Prop :=
   ((bitF i.1 = f₁ ∧ bitL i.1 = bitL j) ∧ (bitF i.2 = f₂ ∧ bitR i.2 = bitR j)) ∧
     bitF j = f₁ + f₂ + bondShift v
 
-instance decidableCoarseOK (v : Fin 4) (f₁ f₂ : Fin 2) (j : Fin 8) (i : Fin 8 × Fin 8) :
-    Decidable (coarseOK v f₁ f₂ j i) :=
+instance decidableIsCoarseSupported (v : Fin 4) (f₁ f₂ : Fin 2) (j : Fin 8) (i : Fin 8 × Fin 8) :
+    Decidable (IsCoarseSupported v f₁ f₂ j i) :=
   inferInstanceAs (Decidable (((_ ∧ _) ∧ (_ ∧ _)) ∧ _))
 
 /-- The Kraus operator of the coarse-graining channel at the label
@@ -144,7 +144,7 @@ $(v, f_1, f_2)$: it reads the bond pair in the basis vector `v`, requires the
 site flags $f_1, f_2$, and returns the one-site letter with the decoded flag. -/
 def coarseKraus (v : Fin 4) (f₁ f₂ : Fin 2) : Matrix (Fin 8) (Fin 8 × Fin 8) ℂ :=
   Matrix.of fun j i =>
-    if coarseOK v f₁ f₂ j i then ((bondVec v (bitR i.1) (bitL i.2) : ℝ) : ℂ) else 0
+    if IsCoarseSupported v f₁ f₂ j i then ((bondVec v (bitR i.1) (bitL i.2) : ℝ) : ℂ) else 0
 
 /-- The coarse-graining map, from two-site to one-site physical operators. -/
 def coarseMap :
@@ -175,7 +175,7 @@ lemma coarseKraus_row_sum (v : Fin 4) (f₁ f₂ : Fin 2) (j : Fin 8) (g : Fin 8
       intro i
       simp only [coarseKraus, Matrix.of_apply]
       by_cases hi : (bitF i.1 = f₁ ∧ bitL i.1 = bitL j) ∧ (bitF i.2 = f₂ ∧ bitR i.2 = bitR j)
-      · rw [ite_eq_left (show coarseOK v f₁ f₂ j i from ⟨hi, hf⟩), ite_eq_left hi]
+      · rw [ite_eq_left (show IsCoarseSupported v f₁ f₂ j i from ⟨hi, hf⟩), ite_eq_left hi]
       · rw [ite_eq_right fun hc => hi hc.1, ite_eq_right hi, zero_mul]
     rw [Finset.sum_congr rfl fun i _ => hcongr i, pair_fiber_sum]
     simp only [bitR_physIdx, bitL_physIdx]
@@ -202,12 +202,12 @@ lemma coarseKraus_res_term (v : Fin 4) (f₁ f₂ : Fin 2) (i i' : Fin 8 × Fin 
       rw [coarseKraus_star]
       simp only [coarseKraus, Matrix.of_apply]
       by_cases hj : bitF j = f₁ + f₂ + bondShift v ∧ bitL j = bitL i.1 ∧ bitR j = bitR i.2
-      · rw [ite_eq_left (show coarseOK v f₁ f₂ j i from
+      · rw [ite_eq_left (show IsCoarseSupported v f₁ f₂ j i from
           ⟨⟨⟨h.1.1.1, hj.2.1.symm⟩, h.1.1.2, hj.2.2.symm⟩, hj.1⟩),
-          ite_eq_left (show coarseOK v f₁ f₂ j i' from
+          ite_eq_left (show IsCoarseSupported v f₁ f₂ j i' from
           ⟨⟨⟨h.1.2.1, (hj.2.1.trans h.2.1).symm⟩, h.1.2.2, (hj.2.2.trans h.2.2).symm⟩, hj.1⟩),
           ← Complex.ofReal_mul, ite_eq_left hj]
-      · have hz : ¬ coarseOK v f₁ f₂ j i := fun hc =>
+      · have hz : ¬ IsCoarseSupported v f₁ f₂ j i := fun hc =>
           hj ⟨hc.2, hc.1.1.2.symm, hc.1.2.2.symm⟩
         rw [ite_eq_right hz, zero_mul, ite_eq_right hj]
     rw [Finset.sum_congr rfl fun j _ => hcongr j]
@@ -216,8 +216,8 @@ lemma coarseKraus_res_term (v : Fin 4) (f₁ f₂ : Fin 2) (i i' : Fin 8 × Fin 
     refine Finset.sum_eq_zero fun j _ => ?_
     rw [coarseKraus_star]
     simp only [coarseKraus, Matrix.of_apply]
-    by_cases h1 : coarseOK v f₁ f₂ j i
-    · by_cases h2 : coarseOK v f₁ f₂ j i'
+    by_cases h1 : IsCoarseSupported v f₁ f₂ j i
+    · by_cases h2 : IsCoarseSupported v f₁ f₂ j i'
       · exact absurd ⟨⟨⟨h1.1.1.1, h1.1.2.1⟩, h2.1.1.1, h2.1.2.1⟩,
           h1.1.1.2.trans h2.1.1.2.symm, h1.1.2.2.trans h2.1.2.2.symm⟩ h
       · rw [ite_eq_right h2, mul_zero]

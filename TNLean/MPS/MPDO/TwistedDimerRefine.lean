@@ -180,21 +180,21 @@ lemma refineAmp_Cmat_sum (k b b' f₁ f₂ L L' : Fin 2) :
 the flags of the two-site letter are prescribed by the one-site letter and the
 Kraus label, the two-site letter satisfies the bond-matching condition, and the
 one-site flag is the sum of the two prepared flags and the bond label. -/
-def refineOK (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) : Prop :=
+def IsRefineSupported (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) : Prop :=
   ((bitF i.1 = f₁ ∧ bitL i.1 = bitL j) ∧ (bitF i.2 = f₂ ∧ bitR i.2 = bitR j)) ∧
     (gate i.1 i.2 ∧ bitF j = f₁ + f₂ + ε)
 
-instance decidableRefineOK (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) :
-    Decidable (refineOK f₁ f₂ ε i j) :=
+instance decidableIsRefineSupported (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) :
+    Decidable (IsRefineSupported f₁ f₂ ε i j) :=
   inferInstanceAs (Decidable (((_ ∧ _) ∧ (_ ∧ _)) ∧ (_ ∧ _)))
 
 /-- The support condition, read as a condition on the one-site letter for a
 fixed two-site letter. -/
-lemma refineOK_iff_col (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) :
-    refineOK f₁ f₂ ε i j ↔
+lemma isRefineSupported_iff_col (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) :
+    IsRefineSupported f₁ f₂ ε i j ↔
       (gate i.1 i.2 ∧ bitF i.1 = f₁ ∧ bitF i.2 = f₂) ∧
         (bitF j = f₁ + f₂ + ε ∧ bitL j = bitL i.1 ∧ bitR j = bitR i.2) := by
-  simp only [refineOK]
+  simp only [IsRefineSupported]
   constructor
   · rintro ⟨⟨⟨hf₁, hl⟩, hf₂, hr⟩, hg, hf⟩
     exact ⟨⟨hg, hf₁, hf₂⟩, hf, hl.symm, hr.symm⟩
@@ -207,7 +207,7 @@ sites and the bond state labelled by $\varepsilon$, with the bond sign
 $(-1)^{\varepsilon b}$ at the shared bond bit `b`. -/
 def refineKraus (f₁ f₂ ε : Fin 2) : Matrix (Fin 8 × Fin 8) (Fin 8) ℂ :=
   Matrix.of fun i j =>
-    if refineOK f₁ f₂ ε i j then ((refineAmp ε * tau ε (bitR i.1) : ℝ) : ℂ) else 0
+    if IsRefineSupported f₁ f₂ ε i j then ((refineAmp ε * tau ε (bitR i.1) : ℝ) : ℂ) else 0
 
 /-- The refinement map, from one-site to two-site physical operators. -/
 def refineMap :
@@ -238,32 +238,32 @@ lemma refineKraus_col_sum (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (g : Fin 8
       intro j
       simp only [refineKraus, Matrix.of_apply]
       by_cases hj : bitF j = f₁ + f₂ + ε ∧ bitL j = bitL i.1 ∧ bitR j = bitR i.2
-      · rw [ite_eq_left ((refineOK_iff_col f₁ f₂ ε i j).2 ⟨hi, hj⟩), ite_eq_left hj]
-      · rw [ite_eq_right fun hc => hj ((refineOK_iff_col f₁ f₂ ε i j).1 hc).2,
+      · rw [ite_eq_left ((isRefineSupported_iff_col f₁ f₂ ε i j).2 ⟨hi, hj⟩), ite_eq_left hj]
+      · rw [ite_eq_right fun hc => hj ((isRefineSupported_iff_col f₁ f₂ ε i j).1 hc).2,
           ite_eq_right hj, zero_mul]
     rw [Finset.sum_congr rfl fun j _ => hcongr j]
     exact one_site_fiber_sum _ _ _ _
   · rw [ite_eq_right hi]
     refine Finset.sum_eq_zero fun j _ => ?_
     simp only [refineKraus, Matrix.of_apply]
-    rw [ite_eq_right fun hc => hi ((refineOK_iff_col f₁ f₂ ε i j).1 hc).1, zero_mul]
+    rw [ite_eq_right fun hc => hi ((isRefineSupported_iff_col f₁ f₂ ε i j).1 hc).1, zero_mul]
 
 /-- Summing over the two-site letters in the support of a refinement Kraus
 operator leaves the two gated fibre points. -/
 lemma refineKraus_row_sum (f₁ f₂ ε : Fin 2) (j : Fin 8) (g : Fin 8 × Fin 8 → ℂ) :
-    (∑ i : Fin 8 × Fin 8, if refineOK f₁ f₂ ε i j then g i else 0) =
+    (∑ i : Fin 8 × Fin 8, if IsRefineSupported f₁ f₂ ε i j then g i else 0) =
       if bitF j = f₁ + f₂ + ε then
         g (physIdx (bitL j) 0 f₁, physIdx 0 (bitR j) f₂) +
           g (physIdx (bitL j) 1 f₁, physIdx 1 (bitR j) f₂)
       else 0 := by
-  have hcongr : ∀ i : Fin 8 × Fin 8, (if refineOK f₁ f₂ ε i j then g i else 0) =
+  have hcongr : ∀ i : Fin 8 × Fin 8, (if IsRefineSupported f₁ f₂ ε i j then g i else 0) =
       if (bitF i.1 = f₁ ∧ bitL i.1 = bitL j) ∧ (bitF i.2 = f₂ ∧ bitR i.2 = bitR j) then
         (if gate i.1 i.2 ∧ bitF j = f₁ + f₂ + ε then g i else 0) else 0 := by
     intro i
     by_cases h1 : (bitF i.1 = f₁ ∧ bitL i.1 = bitL j) ∧ (bitF i.2 = f₂ ∧ bitR i.2 = bitR j)
     · rw [ite_eq_left h1]
       by_cases h2 : gate i.1 i.2 ∧ bitF j = f₁ + f₂ + ε
-      · rw [ite_eq_left h2, ite_eq_left (show refineOK f₁ f₂ ε i j from ⟨h1, h2⟩)]
+      · rw [ite_eq_left h2, ite_eq_left (show IsRefineSupported f₁ f₂ ε i j from ⟨h1, h2⟩)]
       · rw [ite_eq_right h2, ite_eq_right fun hc => h2 hc.2]
     · rw [ite_eq_right h1, ite_eq_right fun hc => h1 hc.1]
   rw [Finset.sum_congr rfl fun i _ => hcongr i, pair_fiber_sum]
@@ -296,7 +296,7 @@ theorem refineKraus_resolution :
       rintro ⟨f₁, f₂, ε⟩
       have hcongr : ∀ i : Fin 8 × Fin 8,
           star (refineKraus f₁ f₂ ε i j) * refineKraus f₁ f₂ ε i j =
-            if refineOK f₁ f₂ ε i j then ((refineAmp ε ^ 2 : ℝ) : ℂ) else 0 := by
+            if IsRefineSupported f₁ f₂ ε i j then ((refineAmp ε ^ 2 : ℝ) : ℂ) else 0 := by
         intro i
         rw [refineKraus_star]
         simp only [refineKraus, Matrix.of_apply]
@@ -321,8 +321,8 @@ theorem refineKraus_resolution :
   · rw [Matrix.one_apply_ne hjj]
     refine Finset.sum_eq_zero fun t _ => Finset.sum_eq_zero fun i _ => ?_
     simp only [refineKraus, Matrix.of_apply]
-    by_cases h : refineOK t.1 t.2.1 t.2.2 i j
-    · have h' : ¬ refineOK t.1 t.2.1 t.2.2 i j' := by
+    by_cases h : IsRefineSupported t.1 t.2.1 t.2.2 i j
+    · have h' : ¬ IsRefineSupported t.1 t.2.1 t.2.2 i j' := by
         rintro h2
         exact hjj (eq_of_bits (h.1.1.2.symm.trans h2.1.1.2)
           (h.1.2.2.symm.trans h2.1.2.2) (h.2.2.trans h2.2.2.symm))

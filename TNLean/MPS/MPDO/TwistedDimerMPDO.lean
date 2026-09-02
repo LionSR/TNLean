@@ -81,41 +81,43 @@ segment.  A product of letters of the twisted dimer vanishes unless its ket and
 bra strings both satisfy it (`evalWord_T_ofFn`).
 
 Project example; not from CPSV16. -/
-def OpenOK {n : ℕ} (σ : Fin (n + 1) → Fin 8) : Prop :=
+def IsOpenBondMatched {n : ℕ} (σ : Fin (n + 1) → Fin 8) : Prop :=
   ∀ i : Fin n, gate (σ i.castSucc) (σ i.succ)
 
 /-- The open bond-matching condition is a finite conjunction of equalities of
 bits, hence decidable. -/
-instance decidableOpenOK {n : ℕ} (σ : Fin (n + 1) → Fin 8) : Decidable (OpenOK σ) :=
+instance decidableIsOpenBondMatched {n : ℕ} (σ : Fin (n + 1) → Fin 8) :
+    Decidable (IsOpenBondMatched σ) :=
   inferInstanceAs (Decidable (∀ i : Fin n, gate (σ i.castSucc) (σ i.succ)))
 
 /-- The **cyclic bond-matching condition** on a physical string: the right bit
 of each letter is the left bit of the next one around the ring, with the
 successor given by `finRotate`.  It is the open condition together with the
-wraparound step (`chainOK_succ`).
+wraparound step (`isCyclicBondMatched_succ`).
 
 Project example; not from CPSV16. -/
-def ChainOK (N : ℕ) (σ : Fin N → Fin 8) : Prop :=
+def IsCyclicBondMatched (N : ℕ) (σ : Fin N → Fin 8) : Prop :=
   ∀ n : Fin N, gate (σ n) (σ (finRotate N n))
 
 /-- The cyclic bond-matching condition is a finite conjunction of equalities of
 bits, hence decidable. -/
-instance decidableChainOK (N : ℕ) (σ : Fin N → Fin 8) : Decidable (ChainOK N σ) :=
+instance decidableIsCyclicBondMatched (N : ℕ) (σ : Fin N → Fin 8) :
+    Decidable (IsCyclicBondMatched N σ) :=
   inferInstanceAs (Decidable (∀ n : Fin N, gate (σ n) (σ (finRotate N n))))
 
 /-- Peeling the first site off the open bond-matching condition: the condition
 on a string of length at least two is the match across the first bond together
 with the condition on the tail. -/
-lemma openOK_succ {n : ℕ} (σ : Fin (n + 2) → Fin 8) :
-    OpenOK σ ↔ gate (σ 0) (σ (Fin.succ 0)) ∧ OpenOK (fun i => σ i.succ) := by
-  rw [OpenOK, OpenOK, Fin.forall_fin_succ]
+lemma isOpenBondMatched_succ {n : ℕ} (σ : Fin (n + 2) → Fin 8) :
+    IsOpenBondMatched σ ↔ gate (σ 0) (σ (Fin.succ 0)) ∧ IsOpenBondMatched (fun i => σ i.succ) := by
+  rw [IsOpenBondMatched, IsOpenBondMatched, Fin.forall_fin_succ]
   simp only [Fin.castSucc_zero, Fin.succ_castSucc]
 
 /-- The cyclic bond-matching condition is the open condition on the segment
 together with the wraparound match from the last letter back to the first. -/
-lemma chainOK_succ {n : ℕ} (σ : Fin (n + 1) → Fin 8) :
-    ChainOK (n + 1) σ ↔ OpenOK σ ∧ gate (σ (Fin.last n)) (σ 0) := by
-  rw [ChainOK, Fin.forall_fin_succ', OpenOK]
+lemma isCyclicBondMatched_succ {n : ℕ} (σ : Fin (n + 1) → Fin 8) :
+    IsCyclicBondMatched (n + 1) σ ↔ IsOpenBondMatched σ ∧ gate (σ (Fin.last n)) (σ 0) := by
+  rw [IsCyclicBondMatched, Fin.forall_fin_succ', IsOpenBondMatched]
   simp only [Fin.finRotate_succ_castSucc, finRotate_last]
 
 /-! ### The open-chain product of letters -/
@@ -145,7 +147,7 @@ last letters, and its coefficient is the product of the one-site coefficients.
 Project example; not from CPSV16. -/
 lemma evalWord_T_ofFn : ∀ (n : ℕ) (σ τ : Fin (n + 1) → Fin 8),
     evalWord T (List.ofFn σ) (List.ofFn τ) =
-      if OpenOK σ ∧ OpenOK τ then
+      if IsOpenBondMatched σ ∧ IsOpenBondMatched τ then
         ∑ k : Fin 2, Matrix.single (physIdx (bitL (σ 0)) (bitL (τ 0)) k)
           (physIdx (bitR (σ (Fin.last n))) (bitR (τ (Fin.last n))) k)
           (∏ i : Fin (n + 1), coef k (σ i) (τ i))
@@ -154,7 +156,7 @@ lemma evalWord_T_ofFn : ∀ (n : ℕ) (σ τ : Fin (n + 1) → Fin 8),
   induction n with
   | zero =>
       intro σ τ
-      have hopen : ∀ ρ : Fin 1 → Fin 8, OpenOK ρ := fun ρ i => i.elim0
+      have hopen : ∀ ρ : Fin 1 → Fin 8, IsOpenBondMatched ρ := fun ρ i => i.elim0
       rw [ite_eq_left ⟨hopen σ, hopen τ⟩]
       simp only [List.ofFn_succ, List.ofFn_zero, evalWord_cons, evalWord_nil, mul_one,
         Fin.last_zero, Fin.prod_univ_succ, Finset.univ_eq_empty, Finset.prod_empty]
@@ -163,20 +165,21 @@ lemma evalWord_T_ofFn : ∀ (n : ℕ) (σ τ : Fin (n + 1) → Fin 8),
       intro σ τ
       rw [List.ofFn_succ, List.ofFn_succ (f := τ), evalWord_cons,
         ih (fun i => σ i.succ) (fun i => τ i.succ)]
-      by_cases hs : OpenOK (fun i => σ i.succ) ∧ OpenOK (fun i => τ i.succ)
+      by_cases hs : IsOpenBondMatched (fun i => σ i.succ) ∧ IsOpenBondMatched (fun i => τ i.succ)
       · rw [ite_eq_left hs, T_mul_single_sum]
         by_cases hg : bitR (σ 0) = bitL (σ (Fin.succ 0)) ∧ bitR (τ 0) = bitL (τ (Fin.succ 0))
-        · rw [ite_eq_left hg,
-            ite_eq_left ⟨(openOK_succ σ).2 ⟨hg.1, hs.1⟩, (openOK_succ τ).2 ⟨hg.2, hs.2⟩⟩]
+        · rw [ite_eq_left hg, ite_eq_left ⟨
+              (isOpenBondMatched_succ σ).2 ⟨hg.1, hs.1⟩,
+              (isOpenBondMatched_succ τ).2 ⟨hg.2, hs.2⟩⟩]
           refine Finset.sum_congr rfl fun k _ => ?_
           conv_rhs => rw [Fin.prod_univ_succ]
           rw [Fin.succ_last]
         · rw [ite_eq_right hg, ite_eq_right]
           rintro ⟨hcσ, hcτ⟩
-          exact hg ⟨((openOK_succ σ).1 hcσ).1, ((openOK_succ τ).1 hcτ).1⟩
+          exact hg ⟨((isOpenBondMatched_succ σ).1 hcσ).1, ((isOpenBondMatched_succ τ).1 hcτ).1⟩
       · rw [ite_eq_right hs, mul_zero, ite_eq_right]
         rintro ⟨hcσ, hcτ⟩
-        exact hs ⟨((openOK_succ σ).1 hcσ).2, ((openOK_succ τ).1 hcτ).2⟩
+        exact hs ⟨((isOpenBondMatched_succ σ).1 hcσ).2, ((isOpenBondMatched_succ τ).1 hcτ).2⟩
 
 /-! ### The closed-chain entry formula -/
 
@@ -188,16 +191,17 @@ condition with itself, hence rank one and positive semidefinite
 
 Project example; not from CPSV16. -/
 def chainIndicator (N : ℕ) : Matrix (Fin N → Fin 8) (Fin N → Fin 8) ℂ :=
-  Matrix.of fun σ τ => if ChainOK N σ ∧ ChainOK N τ then (1 : ℂ) else 0
+  Matrix.of fun σ τ => if IsCyclicBondMatched N σ ∧ IsCyclicBondMatched N τ then (1 : ℂ) else 0
 
 /-- The chain indicator is the outer product of the indicator vector of the
 cyclic bond-matching condition with itself, hence positive semidefinite. -/
 lemma chainIndicator_posSemidef (N : ℕ) : (chainIndicator N).PosSemidef := by
-  let c : (Fin N → Fin 8) → ℂ := fun σ => if ChainOK N σ then (1 : ℂ) else 0
+  let c : (Fin N → Fin 8) → ℂ := fun σ => if IsCyclicBondMatched N σ then (1 : ℂ) else 0
   have h_eq : chainIndicator N = Matrix.vecMulVec c (star c) := by
     ext σ τ
     dsimp [chainIndicator, c, Matrix.vecMulVec, Matrix.of_apply]
-    by_cases hσ : ChainOK N σ <;> by_cases hτ : ChainOK N τ <;> simp [hσ, hτ]
+    by_cases hσ : IsCyclicBondMatched N σ <;>
+      by_cases hτ : IsCyclicBondMatched N τ <;> simp [hσ, hτ]
   rw [h_eq]
   exact Matrix.posSemidef_vecMulVec_self_star c
 
@@ -216,25 +220,26 @@ theorem mpo_T_entry_formula {N : ℕ} (hN : 0 < N) (σ τ : Fin N → Fin 8) :
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
   simp only [mpo_apply, mpoMatrixEntry]
   rw [evalWord_T_ofFn n σ τ]
-  by_cases hopen : OpenOK σ ∧ OpenOK τ
+  by_cases hopen : IsOpenBondMatched σ ∧ IsOpenBondMatched τ
   · rw [ite_eq_left hopen, Matrix.trace_sum]
     by_cases hw : gate (σ (Fin.last n)) (σ 0) ∧ gate (τ (Fin.last n)) (τ 0)
-    · have hchain : ChainOK (n + 1) σ ∧ ChainOK (n + 1) τ :=
-        ⟨(chainOK_succ σ).2 ⟨hopen.1, hw.1⟩, (chainOK_succ τ).2 ⟨hopen.2, hw.2⟩⟩
+    · have hchain : IsCyclicBondMatched (n + 1) σ ∧ IsCyclicBondMatched (n + 1) τ :=
+        ⟨(isCyclicBondMatched_succ σ).2 ⟨hopen.1, hw.1⟩,
+          (isCyclicBondMatched_succ τ).2 ⟨hopen.2, hw.2⟩⟩
       rw [chainIndicator, Matrix.of_apply, ite_eq_left hchain, one_mul]
       refine Finset.sum_congr rfl fun k _ => ?_
       rw [show physIdx (bitR (σ (Fin.last n))) (bitR (τ (Fin.last n))) k =
           physIdx (bitL (σ 0)) (bitL (τ 0)) k from by rw [hw.1, hw.2]]
       exact Matrix.trace_single_eq_same _ _
-    · have hchain : ¬ (ChainOK (n + 1) σ ∧ ChainOK (n + 1) τ) := fun h =>
-        hw ⟨((chainOK_succ σ).1 h.1).2, ((chainOK_succ τ).1 h.2).2⟩
+    · have hchain : ¬ (IsCyclicBondMatched (n + 1) σ ∧ IsCyclicBondMatched (n + 1) τ) := fun h =>
+        hw ⟨((isCyclicBondMatched_succ σ).1 h.1).2, ((isCyclicBondMatched_succ τ).1 h.2).2⟩
       rw [chainIndicator, Matrix.of_apply, ite_eq_right hchain, zero_mul]
       refine Finset.sum_eq_zero fun k _ => Matrix.trace_single_eq_of_ne _ _ _ ?_
       rw [Ne, physIdx_inj]
       rintro ⟨h1, h2, -⟩
       exact hw ⟨h1.symm, h2.symm⟩
-  · have hchain : ¬ (ChainOK (n + 1) σ ∧ ChainOK (n + 1) τ) := fun h =>
-      hopen ⟨((chainOK_succ σ).1 h.1).1, ((chainOK_succ τ).1 h.2).1⟩
+  · have hchain : ¬ (IsCyclicBondMatched (n + 1) σ ∧ IsCyclicBondMatched (n + 1) τ) := fun h =>
+      hopen ⟨((isCyclicBondMatched_succ σ).1 h.1).1, ((isCyclicBondMatched_succ τ).1 h.2).1⟩
     rw [ite_eq_right hopen, chainIndicator, Matrix.of_apply, ite_eq_right hchain, zero_mul,
       Matrix.trace_zero]
 
