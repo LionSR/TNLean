@@ -86,7 +86,8 @@ namespace CPSVCanonicalFormIIData
 The fixed-point matrices are unchanged because a bijective physical relabeling leaves each block's
 transfer map unchanged. In particular, any separately supplied trace normalization is unchanged.
 
-Source: arXiv:1703.09188, CFII definition at lines 271--281. -/
+Source: arXiv:1606.00608, Appendix A, equations `TP` and `Lambda`,
+lines 1054--1077. -/
 noncomputable def reindexPhysical {A : MPSTensor d₂ D}
     (data : CPSVCanonicalFormIIData A) (e : Fin d₁ ≃ Fin d₂) :
     CPSVCanonicalFormIIData (Kraus.reindexPhysical e A) where

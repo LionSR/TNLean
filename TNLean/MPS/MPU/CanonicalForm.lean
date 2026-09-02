@@ -62,6 +62,22 @@ theorem hasFullSupport_reindexPhysical {d' : ℕ} (data : CPSVCanonicalFormData 
   change ∑ k, data.dim k = D
   exact hfull
 
+end CPSVCanonicalFormData
+
+namespace CPSVCanonicalFormIIData
+
+/-- Full support is preserved when canonical-form-II data are cast along an equality of
+ambient tensors. -/
+theorem hasFullSupport_cast {A B : MPSTensor d D} (data : CPSVCanonicalFormIIData B)
+    (hfull : data.toCPSVCanonicalFormData.HasFullSupport) (h : A = B) :
+    (h.symm ▸ data).toCPSVCanonicalFormData.HasFullSupport := by
+  subst h
+  exact hfull
+
+end CPSVCanonicalFormIIData
+
+namespace CPSVCanonicalFormData
+
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
 private theorem isIrreducibleTensor_reindexBond
     {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPSTensor d n)
