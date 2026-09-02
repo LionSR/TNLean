@@ -4023,7 +4023,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \chi\bigl((a,\alpha),(b,\beta)\bigr)
          & =\bigl(\pi_{r_A,r_B}(a,b),
-             \pi_{D_a,E_b}(\alpha,\beta)\bigr).
+        \pi_{D_a,E_b}(\alpha,\beta)\bigr).
     \end{align}
     The product ambient coisometry is
     \begin{align}
@@ -4040,20 +4040,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         C_{(a,b)}^{\pi_{d,e}(i,k)}
          & =\operatorname{reind}_{\pi_{D_a,E_b},\pi_{D_a,E_b}}
-            (A_a^i\otimes B_b^k),
+        (A_a^i\otimes B_b^k),
     \end{align}
     and
     \begin{align}
         \Lambda_{(a,b)}
          & =\operatorname{reind}_{\pi_{D_a,E_b},\pi_{D_a,E_b}}
-            (\Lambda_a\otimes\Gamma_b).
+        (\Lambda_a\otimes\Gamma_b).
     \end{align}
     The exact reconstruction is
     \begin{align}
         A\boxtimes B
          & =W^\dagger
-            \left(\bigoplus_{a,b}\mu_a\nu_b
-              (A_a\boxtimes B_b)\right)W.
+        \left(\bigoplus_{a,b}\mu_a\nu_b
+            (A_a\boxtimes B_b)\right)W.
         \label{eq:mpu_tensor_product_cfii_reconstruction}
     \end{align}
     Thus the retained direct sum is conjugated by the reindexed Kronecker
@@ -4087,11 +4087,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
     The data considered here do not include the separate weight-normalization
     condition $|\mu_a|\leq1$ together with the existence of a unit-modulus
-    weight. Preservation of that additional condition is not asserted.
-    Independently, the already formalized raw source-rank formulas are recorded
-    in Theorem~\ref{thm:mpu_tensor_product_source_ranks}; they are not reproved
-    here. This result is project infrastructure and does not prove the MPU
-    Index Theorem or tensor-product additivity of the index.
+    weight. For the same independent tensor product, the raw source ranks
+    satisfy
+    $r(\mathcal U\boxtimes\mathcal V)=r(\mathcal U)r(\mathcal V)$ and
+    $\ell(\mathcal U\boxtimes\mathcal V)=\ell(\mathcal U)\ell(\mathcal V)$ by
+    Theorem~\ref{thm:mpu_tensor_product_source_ranks}. These rank identities do
+    not require the chosen canonical-form-II data or full-support hypotheses
+    above, while the canonical-form construction does not use source ranks.
+    Tensor-product additivity of the index is a separate conclusion.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4110,9 +4113,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     identity
     \begin{align}
         \bigoplus_{a,b}\mu_a\nu_b
-          C_{(a,b)}^{\pi_{d,e}(i,k)}
+        C_{(a,b)}^{\pi_{d,e}(i,k)}
          & =\operatorname{reind}_{\chi,\chi}
-            (\mathsf B_A^i\otimes\mathsf B_B^k).
+        (\mathsf B_A^i\otimes\mathsf B_B^k).
         \label{eq:mpu_tensor_product_weighted_block_diagonal}
     \end{align}
     Substitute $A^i=V_A^\dagger\mathsf B_A^iV_A$ and

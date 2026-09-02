@@ -25,6 +25,8 @@ claim attributed to that passage.
 
 ## Main statement
 
+* `MPSTensor.CPSVCanonicalFormIIData.tensorProduct` assembles canonical-form-II
+  data for the independent tensor product from the two supplied data.
 * `MPSTensor.IsNormalTensor.tensorProduct_of_leftCanonical` preserves CPSV
   normality for two left-canonical normal blocks;
   `MPSTensor.leftCanonical_tensorProduct`
