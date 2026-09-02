@@ -4986,6 +4986,43 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Gram identities. Reordering the finite sums yields the stated formula.
 \end{proof}
 
+\begin{lemma}[Transpose fixed-pair trace closure]
+    \label{lem:mpu_source_u_transpose_fixed_pair_trace}
+    \lean{MPOTensor.SourceFactors.sourceU_gram_eq_transpose_fixedPair_trace}
+    \leanok
+    \uses{thm:mpu_source_u_staggered_gram, thm:mpu_source_v_four_u_expansions}
+    Let $W^{ij}$ denote the $(i,j)$ double-layer letter, let
+    $\lvert\rho^{\mathsf T})$ be the column-stacking vector of
+    $\rho^{\mathsf T}$, and set
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. Then
+    \begin{align}
+        \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+         & =\operatorname{tr}\!\left(
+        W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_1q_1}
+        \right).
+    \end{align}
+    In particular, the weight is transposed rather than identified with
+    $\rho$. The retained-interior equality needed for the complete contraction
+    remains open in Issue~\#7633.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_staggered_gram, thm:mpu_source_v_four_u_expansions}
+    Enumerate each doubled-bond coordinate as
+    $\operatorname{flat}(\alpha,\alpha')$. Expanding a diagonal entry of the
+    matrix under the trace gives
+    \begin{align}
+        \sum_{\beta,\beta',\gamma,j_1,j_2}
+        \overline{\mathcal U^{j_1}_{p_2,\alpha,\beta}}
+        \mathcal U^{j_1}_{q_2,\alpha',\beta'}
+        (\rho^{\mathsf T})_{\beta',\beta}
+        \overline{\mathcal U^{j_2}_{p_1,\gamma,\alpha}}
+        \mathcal U^{j_2}_{q_1,\gamma,\alpha'}.
+    \end{align}
+    Since $(\rho^{\mathsf T})_{\beta',\beta}=\rho_{\beta,\beta'}$,
+    summing over $\alpha,\alpha'$ yields the staggered Gram expansion above.
+\end{proof}
+
 \begin{theorem}[Complete source-$u$ network contraction]
     \label{thm:mpu_source_u_complete_network}
     \notready
@@ -5015,21 +5052,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:mpu_source_u_staggered_gram, thm:mpu_normalized_input_tail_closed_trace}
-    Expand both external paper gates using
-    $u=Y_2\mathbin{-}Y_1$, retaining the two $Y_2$--$Y_1$ triangles and their
-    common virtual indices in the staggered order of
-    \cite[Figure~\texttt{II\_uUnitary.png} and
-        Lemma~III.7]{Cirac2017MPU}. The remaining source-facing obligation is
-    to insert $E^J=\lvert\rho)(\Phi\rvert$ into that exact network and contract
-    it directly to the displayed normalized $(K+2)$-site MPU sum.
-
-    The staggered four-tensor expansion and the normalized input-tail trace are
-    formalized separately. The missing step is their equality after inserting
-    the fixed pair into the exact retained-interior network of
-    Figure~\texttt{II\_uUnitary.png}. The checked $Y_1$--$X_2$ mixed-kernel
-    Gram, range-projection, reflected-transfer, and terminal-boundary lemmas
-    concern a different network and do not supply that contraction.
+    \uses{lem:mpu_source_u_transpose_fixed_pair_trace, thm:mpu_normalized_input_tail_closed_trace}
+    The preceding lemma closes the two external source gates as
+    \begin{align}
+        \operatorname{tr}\!\left(
+        W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_1q_1}
+        \right).
+    \end{align}
+    Cyclicity moves the first double-layer letter past the trace. It remains to
+    identify the resulting rank-one insertion with the $K$-site interior:
+    \begin{align}
+        \operatorname{tr}\!\left(
+        W^{p_1q_1}W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert
+        \right)
+         & =\operatorname{tr}\!\left(
+        W^{p_1q_1}W^{p_2q_2}E^K
+        \right).
+    \end{align}
+    This retained-interior contraction is Issue~\#7633. It must preserve the
+    two unblocked endpoint letters while applying the supplied simple
+    contractions to the interior. The checked $Y_1$--$X_2$ mixed-kernel
+    identities concern a different network and do not prove this equality.
 \end{proof}
 
 \begin{theorem}[Complete reduced source-$v$ contraction]
