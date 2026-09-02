@@ -5206,10 +5206,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
     If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
     Theorem~\ref{thm:mpu_source_gates_two_site_factorization} gives the exact
-    CPSV17 two-site factorization through
-    $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$. Since the two-site MPU
-    operator and the swapped gate $u$ are unitary, cancellation makes $v$
-    unitary. This step uses the corrected source-cut orientation recorded in
+    CPSV17 two-site factorization
+    \begin{align}
+        \operatorname{reindex}(U^{(2)})
+         & =v\,\operatorname{swap}_{r,\ell}(u).
+    \end{align}
+    Since $\operatorname{reindex}(U^{(2)})$ and $u$, hence also
+    $\operatorname{swap}_{r,\ell}(u)$, are unitary,
+    \begin{align}
+        v
+         & =\operatorname{reindex}(U^{(2)})
+        \,\operatorname{swap}_{r,\ell}(u)^\dagger.
+    \end{align}
+    Thus $v$ is a product of unitaries and is unitary. This step uses the
+    corrected source-cut orientation recorded in
     \texttt{docs/paper-gaps/mpu\_source\_cut\_orientation.tex}.
 
     Finally, suppose that $v$ is unitary. Unitarity gives the dressed Gram
@@ -8658,39 +8668,26 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     matrices under multiplication gives the two ordered products.
 \end{proof}
 
-\begin{theorem}[Supplied paper gates for $U_1$ and $U_3$]
+\begin{theorem}[Supplied paper gates for $U_1$]
     \label{thm:threeMPU_supplied_source_gates_one}
     \lean{MPOTensor.shiftExampleU₁SourceURowEquiv,
         MPOTensor.shiftExampleU₁SourceVColumnEquiv,
-        MPOTensor.shiftExampleU₃SourceURowEquiv,
-        MPOTensor.shiftExampleU₃SourceVColumnEquiv,
         MPOTensor.shiftExampleU₁_sourceU_fourSpin_apply,
-        MPOTensor.shiftExampleU₁_sourceV_fourSpin_apply,
-        MPOTensor.shiftExampleU₃_sourceU_fourSpin_apply,
-        MPOTensor.shiftExampleU₃_sourceV_fourSpin_apply}
+        MPOTensor.shiftExampleU₁_sourceV_fourSpin_apply}
     \leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
-    Assume $d>0$. In the four-spin coordinates of the supplied source
-    factorizations,
+    In the four-spin coordinates of the supplied source factorization,
     \begin{align}
-        u_1 & =\Id\otimes\Id,                     & v_1                             & =\Id\otimes\Id, \\
-        u_3 & =d\,(\Id\otimes\mathbb S\otimes\Id)
-        (\mathbb S\otimes\mathbb S),
-            & d\,v_3                              & =\Id\otimes\mathbb S\otimes\Id.
+        u_1 & =\Id\otimes\Id,
+            & v_1             & =\Id\otimes\Id.
     \end{align}
-    The scalar factors record the unbalanced identity-weight normalization of
-    the supplied witnesses. They can be transferred between the two gates
-    without changing the represented tensor.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
-        thm:mpu_shift_source_cuts_ranks}
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
     The tensor-product formulas for $u=Y_2\mathbin{-}Y_1$ and
     $v=X_1\mathbin{-}X_2$ reduce each entry to the product of two primitive
-    shift entries. The identity factors give the two identity matrices. For
-    $U_3$, the Kronecker deltas give the two displayed swap products, and the
-    normalization constants combine using $d(d^{-1/2})^2=1$.
+    identity entries.
 \end{proof}
 
 \begin{theorem}[Paper gates in the two-site factorizations of $U_2$]

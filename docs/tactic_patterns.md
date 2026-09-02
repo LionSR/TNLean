@@ -165,8 +165,9 @@ abstracted — record why, so it is not re-proposed).
   applying the reindexed equality with `congrFun` twice and simplifying the
   inverse equivalences.
 - **Seen:** eight packaging proofs in
-  `TNLean/MPS/MPU/Examples/ShiftSourceFormulas.lean` and four recovery proofs
-  in `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean`.
+  `TNLean/MPS/MPU/Examples/ShiftSourceMixedKernels.lean` (lines 487, 547, 620,
+  696, 798, 804, 889, and 898) and four recovery proofs in
+  `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean`.
 - **Abstraction:** none. The former project wrappers were retired with
   `QICLean.Algebra.MatrixReindex`; the direct extensionality and evaluation
   proofs are the canonical pattern.
@@ -1573,8 +1574,8 @@ current counts and full location lists).
   primitive `sourceY₁X₂`/`sourceX₁Y₂` entries, and cancel the factors
   $d(\sqrt d)^{-1}(\sqrt d)^{-1}=1$ before closing the zero and nonzero cases.
 - **Seen:** 10 four-index occurrences in
-  `TNLean/MPS/MPU/Examples/ShiftSourceFormulas.lean` (representatively lines
-  76, 121, 479, 550, and 620) and six two-index primitive-entry occurrences in
+  `TNLean/MPS/MPU/Examples/ShiftSourceMixedKernels.lean` (representatively lines
+  78, 123, 474, 534, and 607) and six two-index primitive-entry occurrences in
   `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` (lines 424--501), recorded
   2026-08-24.
 - **Abstraction (proposed):** scout Mathlib's indicator and `ite` product
