@@ -144,15 +144,22 @@ theorem norm_fnwLeftOverlapAggregate_le_familyNorm [NeZero D]
   have hdual := norm_inner_fnwLeftOverlapAggregate_le_familyNorm
     ρ hρ htr A hA hρfix ℓ m r Φ horth (fnwLeftOverlapAggregate ρ A r Φ)
   rw [inner_self_eq_norm_sq_to_K] at hdual
-  simp only [norm_pow, Complex.norm_real, abs_of_nonneg (norm_nonneg _)] at hdual
+  have hdualReal :
+      ‖fnwLeftOverlapAggregate ρ A r Φ‖ ^ 2 ≤
+        fnwMixingQuantity ρ hρ A htr m * ‖Φ‖ *
+          ‖fnwLeftOverlapAggregate ρ A r Φ‖ := by
+    exact_mod_cast hdual
   have hdual' :
       ‖fnwLeftOverlapAggregate ρ A r Φ‖ * ‖fnwLeftOverlapAggregate ρ A r Φ‖ ≤
         (fnwMixingQuantity ρ hρ A htr m * ‖Φ‖) *
           ‖fnwLeftOverlapAggregate ρ A r Φ‖ := by
-    simpa only [pow_two, mul_assoc] using hdual
+    simpa only [pow_two, mul_assoc] using hdualReal
   rcases (norm_nonneg (fnwLeftOverlapAggregate ρ A r Φ)).eq_or_lt with hzero | hpos
-  · simpa only [hzero]
-  · exact (mul_le_mul_right hpos).mp hdual'
+  · rw [← hzero]
+    exact mul_nonneg
+      (mul_nonneg (fnwTraceInverseFactor_pos hρ).le (norm_nonneg _))
+      (norm_nonneg Φ)
+  · exact le_of_mul_le_mul_right hdual' hpos
 
 /-- Before lower-boundary conversion, the right aggregate norm is controlled by
 \(a(m)\) times its spectator-family norm. -/
@@ -180,7 +187,11 @@ theorem norm_fnwRightOverlapAggregate_le_familyNorm [NeZero D]
   have hdual := norm_inner_fnwRightOverlapAggregate_le_familyNorm
     ρ hρ htr A hA hρfix ℓ m r Ψ horth (fnwRightOverlapAggregate A ℓ Ψ)
   rw [inner_self_eq_norm_sq_to_K] at hdual
-  simp only [norm_pow, Complex.norm_real, abs_of_nonneg (norm_nonneg _)] at hdual
+  have hdualReal :
+      ‖fnwRightOverlapAggregate A ℓ Ψ‖ ^ 2 ≤
+        fnwMixingQuantity ρ hρ A htr m *
+          ‖fnwRightOverlapAggregate A ℓ Ψ‖ * ‖Ψ‖ := by
+    exact_mod_cast hdual
   have hdual' :
       ‖fnwRightOverlapAggregate A ℓ Ψ‖ * ‖fnwRightOverlapAggregate A ℓ Ψ‖ ≤
         (fnwMixingQuantity ρ hρ A htr m * ‖Ψ‖) *
@@ -189,12 +200,15 @@ theorem norm_fnwRightOverlapAggregate_le_familyNorm [NeZero D]
       ‖fnwRightOverlapAggregate A ℓ Ψ‖ * ‖fnwRightOverlapAggregate A ℓ Ψ‖ =
           ‖fnwRightOverlapAggregate A ℓ Ψ‖ ^ 2 := by ring
       _ ≤ fnwMixingQuantity ρ hρ A htr m *
-          ‖fnwRightOverlapAggregate A ℓ Ψ‖ * ‖Ψ‖ := hdual
+          ‖fnwRightOverlapAggregate A ℓ Ψ‖ * ‖Ψ‖ := hdualReal
       _ = (fnwMixingQuantity ρ hρ A htr m * ‖Ψ‖) *
           ‖fnwRightOverlapAggregate A ℓ Ψ‖ := by ring
   rcases (norm_nonneg (fnwRightOverlapAggregate A ℓ Ψ)).eq_or_lt with hzero | hpos
-  · simpa only [hzero]
-  · exact (mul_le_mul_right hpos).mp hdual'
+  · rw [← hzero]
+    exact mul_nonneg
+      (mul_nonneg (fnwTraceInverseFactor_pos hρ).le (norm_nonneg _))
+      (norm_nonneg Ψ)
+  · exact le_of_mul_le_mul_right hdual' hpos
 
 /-- The sharp left aggregate estimate uses only the one-sided square-root lower
 bound for the corresponding left overlap map. -/
