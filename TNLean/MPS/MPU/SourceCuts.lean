@@ -37,6 +37,13 @@ ways to form rectangular matrices:
 * ${\cal M}_2$ groups **row = (left, up)** and **column = (down, right)**:
   $({\cal M}_2)_{(\alpha,i),(j,\beta)} = {\cal U}^{i}_{j,\alpha,\beta}$.
 
+**Local fix (first source-cut orientation):** An earlier TNLean definition
+transposed ${\cal M}_1$, placing $(\alpha,j)$ on rows and $(i,\beta)$ on
+columns. The corrected definition follows CPSV17 `II_SVD` and the factors in
+`II_X1Y1.png` and `II_SVDforms2.png`, with $(i,\beta)$ on rows and
+$(\alpha,j)$ on columns. This correction is documented in
+`docs/paper-gaps/mpu_source_cut_orientation.tex`.
+
 ## Ranks $r$ and $\ell$
 
 We set $r := \operatorname{rank} {\cal M}_1$ (the **right rank**) and
@@ -99,6 +106,10 @@ def sourceCutM₂ : Matrix (Fin D × Fin d) (Fin d × Fin D) ℂ :=
 
 /-! ### Entry lemmas — `[simp]` -/
 
+/-- Entry formula for the first source cut in its physical--virtual row orientation.
+
+Source: CPSV17 source cut `II_SVD`, lines 458--477, and the factor diagrams
+`X1Y1` and `SVDforms2`, lines 508--530. -/
 @[simp] lemma sourceCutM₁_apply (i : Fin d) (β : Fin D) (α : Fin D) (j : Fin d) :
     sourceCutM₁ U (i, β) (α, j) = U i j α β := rfl
 
