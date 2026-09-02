@@ -729,306 +729,6 @@ These projection and absorption identities precede the weighted Hilbert-space
 estimate in \cite[Lemma~5.2]{Fannes1992Finitely}. They do not by themselves
 assert a $\rho$-weighted norm bound or any quantitative decay constant.
 
-\subsection{The FNW lower boundary constant}
-\label{subsec:fnw_lower_boundary_constant}
-
-Let $D>0$, let $\rho\in\MN{D}$ be positive definite with
-$\tr(\rho)=1$, and equip $\MN{D}$ with
-\begin{align}
-    \langle B,C\rangle_\rho
-     & =\tr(\rho B^\dagger C),
-    \label{eq:fnw_weighted_inner}               \\
-    \lVert B\rVert_\rho^2
-     & =\operatorname{Re}\tr(\rho B^\dagger B).
-    \label{eq:fnw_weighted_norm}
-\end{align}
-Write $F_N$ for the length-$N$ FNW boundary map and set
-\begin{align}
-    a(N)
-     & =\operatorname{Re}\tr(\rho^{-1})
-    \bigl\lVert E_{\mathrm{FNW},A}^N-E_\infty^\rho
-    \bigr\rVert_{\mathrm{op},\rho}.
-    \label{eq:fnw_mixing_quantity}
-\end{align}
-This is the normalization used in
-\cite[Equations~(5.9)--(5.10)]{Fannes1992Finitely}.
-
-\begin{theorem}[Weighted boundary near-isometry]
-    \label{thm:fnw_boundary_near_isometry}
-    \lean{MPSTensor.norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity}
-    \lean{MPSTensor.abs_fnwBoundaryMapCLM_norm_sq_sub_rhoWeighted_norm_sq_le}
-    \lean{MPSTensor.one_sub_fnwMixingQuantity_mul_norm_sq_le_fnwBoundaryMapCLM_norm_sq}
-    \leanok
-    \uses{def:fnw_boundary_map, def:fnw_transfer_map, def:fnw_limit_map}
-    For every $B,C\in\MN{D}$,
-    \begin{align}
-        \bigl|\langle F_N(B),F_N(C)\rangle
-        -\langle B,C\rangle_\rho\bigr|
-         & \leq a(N)\lVert B\rVert_\rho\lVert C\rVert_\rho.
-        \label{eq:fnw_boundary_near_isometry}
-    \end{align}
-    In particular,
-    \begin{align}
-        \bigl|\lVert F_N(B)\rVert^2-\lVert B\rVert_\rho^2\bigr|
-         & \leq a(N)\lVert B\rVert_\rho^2,
-        \label{eq:fnw_boundary_diagonal_defect} \\
-        (1-a(N))\lVert B\rVert_\rho^2
-         & \leq\lVert F_N(B)\rVert^2.
-        \label{eq:fnw_boundary_lower_estimate}
-    \end{align}
-    No sign assumption on $a(N)$ is needed for the last inequality.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The estimate in \cite[Equation~(5.9)]{Fannes1992Finitely} gives
-    (\ref{eq:fnw_boundary_near_isometry}). Set $C=B$ and use
-    $\langle B,B\rangle_\rho=\lVert B\rVert_\rho^2$ to obtain
-    (\ref{eq:fnw_boundary_diagonal_defect}). Its lower half is
-    (\ref{eq:fnw_boundary_lower_estimate}).
-\end{proof}
-
-\begin{definition}[Lower boundary constant]
-    \label{def:fnw_lower_boundary_constant}
-    \lean{MPSTensor.fnwBoundaryNormRatio}
-    \lean{MPSTensor.fnwLowerBoundaryConstant}
-    \leanok
-    \uses{def:fnw_boundary_map}
-    For $B\neq0$, define the boundary norm-square ratio
-    \begin{align}
-        r_N(B)
-         & :=\frac{\lVert F_N(B)\rVert^2}{\lVert B\rVert_\rho^2}.
-        \label{eq:fnw_boundary_ratio}
-    \end{align}
-    The lower boundary constant of
-    \cite[Lemma~5.3]{Fannes1992Finitely} is
-    \begin{align}
-        a_-(N)
-         & :=\inf_{B\in\MN{D},\,B\neq0}r_N(B).
-        \label{eq:fnw_lower_boundary_constant}
-    \end{align}
-\end{definition}
-
-\begin{definition}[Weighted boundary Gram operator]
-    \label{def:fnw_boundary_gram}
-    \lean{MPSTensor.fnwBoundaryGram}
-    \leanok
-    \uses{def:fnw_boundary_map}
-    The weighted Gram operator on the virtual matrix Hilbert space is
-    \begin{align}
-        G_N & :=F_N^\dagger F_N.
-        \label{eq:fnw_boundary_gram}
-    \end{align}
-\end{definition}
-
-\begin{theorem}[Rayleigh characterization of the lower boundary constant]
-    \label{thm:fnw_lower_boundary_rayleigh}
-    \lean{MPSTensor.fnwBoundaryNormRatio_eq_gram_rayleighQuotient}
-    \lean{MPSTensor.fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf}
-    \lean{MPSTensor.fnwBoundaryGram_isSymmetric}
-    \lean{MPSTensor.fnwBoundaryGram_isPositive}
-    \leanok
-    \uses{def:fnw_lower_boundary_constant, def:fnw_boundary_gram}
-    The operator $G_N$ is self-adjoint and positive. For every nonzero
-    $B\in\MN{D}$,
-    \begin{align}
-        r_N(B)
-         & =\frac{\operatorname{Re}\langle G_NB,B\rangle_\rho}
-        {\lVert B\rVert_\rho^2},
-        \label{eq:fnw_boundary_rayleigh_ratio}                 \\
-        a_-(N)
-         & =\inf_{B\neq0}
-        \frac{\operatorname{Re}\langle G_NB,B\rangle_\rho}
-        {\lVert B\rVert_\rho^2}.
-        \label{eq:fnw_lower_boundary_rayleigh}
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:fnw_lower_boundary_constant, def:fnw_boundary_gram}
-    The adjoint identity gives
-    $\langle G_NB,B\rangle_\rho=\langle F_NB,F_NB\rangle$.
-    Divide by $\lVert B\rVert_\rho^2$ and take the infimum over
-    $B\neq0$. Self-adjointness and positivity follow directly from
-    $G_N=F_N^\dagger F_N$.
-\end{proof}
-
-\begin{theorem}[Least spectral value of the weighted Gram operator]
-    \label{thm:fnw_lower_boundary_spectrum}
-    \lean{MPSTensor.fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram}
-    \lean{MPSTensor.fnwLowerBoundaryConstant_le_ratio}
-    \lean{MPSTensor.fnwLowerBoundaryConstant_le_re_of_mem_spectrum_fnwBoundaryGram}
-    \leanok
-    \uses{def:fnw_lower_boundary_constant, def:fnw_boundary_gram, thm:fnw_lower_boundary_rayleigh}
-    The real number $a_-(N)$ is a spectral value of $G_N$, and every
-    $z\in\operatorname{spec}(G_N)$ satisfies
-    \begin{align}
-        a_-(N) & \leq\operatorname{Re}z.
-        \label{eq:fnw_lower_boundary_spectrum_min}
-    \end{align}
-    Thus $a_-(N)$ is the least spectral value in the sense of real parts.
-    The spectrum is a subset of $\C$, where no compatible order is fixed, so
-    the assertion is stated as spectral membership together with
-    (\ref{eq:fnw_lower_boundary_spectrum_min}).
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:fnw_lower_boundary_rayleigh}
-    The minimum of the Rayleigh quotient of a finite-dimensional self-adjoint
-    operator is an eigenvalue. Conversely, if $G_NB=zB$ with $B\neq0$, then
-    self-adjointness makes $z$ real and
-    \begin{align}
-        a_-(N)
-         & \leq r_N(B)=\operatorname{Re}z.
-    \end{align}
-\end{proof}
-
-\begin{theorem}[Least finite-domain singular value]
-    \label{thm:fnw_lower_boundary_singular}
-    \lean{MPSTensor.fnwLowerBoundaryConstant_eq_least_sq_singularValue}
-    \leanok
-    \uses{def:fnw_lower_boundary_constant, def:fnw_boundary_gram, thm:fnw_lower_boundary_spectrum}
-    Let $m=\dim_{\C}\MN{D}$. There is an index
-    $i\in\{0,\ldots,m-1\}$ such that
-    \begin{align}
-        \sigma_i(F_N)^2 & =a_-(N),
-        \label{eq:fnw_lower_boundary_least_singular}
-    \end{align}
-    and $a_-(N)\leq\sigma_j(F_N)^2$ for every
-    $j\in\{0,\ldots,m-1\}$. The indices range only over the finite
-    virtual domain dimension. No zero-padded sequence indexed by all natural
-    numbers is used.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:fnw_lower_boundary_spectrum}
-    The squared singular values of $F_N$ are the eigenvalues of
-    $F_N^\dagger F_N=G_N$, indexed by an orthonormal eigenbasis of the
-    finite-dimensional domain. Apply
-    Theorem~\ref{thm:fnw_lower_boundary_spectrum}.
-\end{proof}
-
-\begin{theorem}[Optimal quadratic lower-bound constant]
-    \label{thm:fnw_lower_boundary_optimal}
-    \lean{MPSTensor.fnwLowerBoundaryConstant_mul_norm_sq_le}
-    \lean{MPSTensor.le_fnwLowerBoundaryConstant_iff}
-    \leanok
-    \uses{def:fnw_lower_boundary_constant}
-    For every $B\in\MN{D}$,
-    \begin{align}
-        a_-(N)\lVert B\rVert_\rho^2
-         & \leq\lVert F_N(B)\rVert^2.
-        \label{eq:fnw_lower_boundary_universal}
-    \end{align}
-    More generally, a real number $c$ satisfies
-    \begin{align}
-        c\leq a_-(N)
-        \quad\Longleftrightarrow\quad
-        c\lVert B\rVert_\rho^2
-        \leq\lVert F_N(B)\rVert^2
-        \text{ for every }B\in\MN{D}.
-        \label{eq:fnw_lower_boundary_optimal}
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:fnw_lower_boundary_constant}
-    For $B\neq0$, divide the desired inequality by
-    $\lVert B\rVert_\rho^2$ and use the infimum in
-    (\ref{eq:fnw_lower_boundary_constant}). The zero matrix is immediate.
-    Taking the infimum over nonzero $B$ proves the reverse implication in
-    (\ref{eq:fnw_lower_boundary_optimal}).
-\end{proof}
-
-\begin{theorem}[FNW lower estimate and positivity]
-    \label{thm:fnw_lower_boundary_estimate}
-    \lean{MPSTensor.one_sub_fnwMixingQuantity_le_fnwLowerBoundaryConstant}
-    \lean{MPSTensor.fnwLowerBoundaryConstant_pos}
-    \leanok
-    \uses{thm:fnw_boundary_near_isometry, thm:fnw_lower_boundary_optimal}
-    The lower boundary constant satisfies
-    \begin{align}
-        a_-(N) & \geq1-a(N).
-        \label{eq:fnw_lower_boundary_one_sub}
-    \end{align}
-    Consequently, $a_-(N)>0$ whenever $a(N)<1$. This is the lower estimate in
-    \cite[Lemma~5.3]{Fannes1992Finitely}. No equality
-    $a_-(N)=1-a(N)$ is asserted.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:fnw_boundary_near_isometry, thm:fnw_lower_boundary_optimal}
-    The bound (\ref{eq:fnw_boundary_lower_estimate}) says that $1-a(N)$ is a
-    universal quadratic lower bound. Apply
-    (\ref{eq:fnw_lower_boundary_optimal}). If $a(N)<1$, then
-    $1-a(N)>0$, and (\ref{eq:fnw_lower_boundary_one_sub}) gives positivity.
-\end{proof}
-
-\begin{theorem}[Stationary weighted right-multiplication identity]
-    \label{thm:rho_weighted_right_multiplication}
-    \lean{MPSTensor.sum_rhoWeighted_norm_sq_mul_eq}
-    \leanok
-    \uses{def:transfer_map}
-    If $\E_A(\rho)=\rho$, then every $B\in\MN{D}$ satisfies
-    \begin{align}
-        \sum_{\mu=0}^{d-1}\lVert BA^\mu\rVert_\rho^2
-         & =\lVert B\rVert_\rho^2.
-        \label{eq:rho_weighted_right_multiplication}
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:transfer_map}
-    Expand the left-hand side using
-    (\ref{eq:fnw_weighted_norm}), cycle the trace, and sum over
-    $\mu$. The result is
-    $\operatorname{Re}\tr(\E_A(\rho)B^\dagger B)$, which equals the
-    right-hand side by stationarity.
-\end{proof}
-
-\begin{theorem}[Monotonicity of the lower boundary constant]
-    \label{thm:fnw_lower_boundary_mono}
-    \lean{MPSTensor.fnwLowerBoundaryConstant_le_succ}
-    \lean{MPSTensor.fnwLowerBoundaryConstant_mono}
-    \lean{MPSTensor.IsPrimitiveMPS.fnwLowerBoundaryConstant_mono}
-    \leanok
-    \uses{def:fnw_lower_boundary_constant, thm:fnw_lower_boundary_optimal, thm:rho_weighted_right_multiplication}
-    If $\E_A(\rho)=\rho$, then
-    \begin{align}
-        a_-(N+1) & \geq a_-(N)
-        \label{eq:fnw_lower_boundary_succ}
-    \end{align}
-    for every $N\in\N$. Hence $N\mapsto a_-(N)$ is nondecreasing. The same
-    conclusion holds for every primitive MPS tensor with positive-definite
-    fixed point $\rho$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:fnw_lower_boundary_optimal, thm:rho_weighted_right_multiplication}
-    The exact right-multiplication recursion in
-    \cite[Equation~(5.8)]{Fannes1992Finitely} is
-    \begin{align}
-        \lVert F_{N+1}(B)\rVert^2
-         & =\sum_{\mu=0}^{d-1}\lVert F_N(BA^\mu)\rVert^2.
-    \end{align}
-    Apply (\ref{eq:fnw_lower_boundary_universal}) to each summand and then
-    use (\ref{eq:rho_weighted_right_multiplication}). This proves
-    (\ref{eq:fnw_lower_boundary_succ}); induction gives monotonicity.
-\end{proof}
-
-The preceding results formalize the lower-boundary assertions of
-\cite[Lemma~5.3]{Fannes1992Finitely}. They do not include Lemma~6.2, the
-projector-defect terms, a replacement by an unweighted finite Gram matrix,
-periodic coercivity, a comparison of unequal kernels, a dimension prefactor,
-or an identity $a_-(N)=1-a(N)$.
-
 \begin{definition}[Operator-level Gram reshuffling]
     \label{def:gram_reshuffle}
     \lean{Matrix.gramReshuffle}
@@ -1660,11 +1360,312 @@ $A^\mu=v(\mu)^\dagger$.
 \end{proof}
 
 The preceding results establish Equations~(5.8)--(5.9) and the right-boundary
-recursion, but not Lemmas~5.3 or~6.2 of
-Ref.~\cite{Fannes1992Finitely}. In the source proof of Lemma~6.2,
-Equation~(6.5) contributes $a(m)/a_-(m)$, while the subsequent orthogonality
-estimates contribute $a(m)^2/a_-(m)$. Their sum is
+recursion used below for Lemma~5.3. They do not prove Lemma~6.2. In its source
+proof, Equation~(6.5) contributes $a(m)/a_-(m)$, while the subsequent
+orthogonality estimates contribute $a(m)^2/a_-(m)$. Their sum is
 $a(m)(1+a(m))/a_-(m)$.
+
+\subsection{The FNW lower boundary constant}
+\label{subsec:fnw_lower_boundary_constant}
+
+Let $D>0$, let $\rho\in\MN{D}$ be positive definite with
+$\tr(\rho)=1$, and equip $\MN{D}$ with
+\begin{align}
+    \langle B,C\rangle_\rho
+     & =\tr(\rho B^\dagger C),
+    \label{eq:fnw_weighted_inner}               \\
+    \lVert B\rVert_\rho^2
+     & =\operatorname{Re}\tr(\rho B^\dagger B).
+    \label{eq:fnw_weighted_norm}
+\end{align}
+Write $F_N$ for the length-$N$ FNW boundary map and set
+\begin{align}
+    a(N)
+     & =\operatorname{Re}\tr(\rho^{-1})
+    \bigl\lVert E_{\mathrm{FNW},A}^N-E_\infty^\rho
+    \bigr\rVert_{\mathrm{op},\rho}.
+    \label{eq:fnw_mixing_quantity}
+\end{align}
+This is the normalization used in
+\cite[Equations~(5.9)--(5.10)]{Fannes1992Finitely}.
+
+\begin{theorem}[Weighted boundary near-isometry]
+    \label{thm:fnw_boundary_near_isometry}
+    \lean{MPSTensor.norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity}
+    \lean{MPSTensor.abs_fnwBoundaryMapCLM_norm_sq_sub_rhoWeighted_norm_sq_le}
+    \lean{MPSTensor.one_sub_fnwMixingQuantity_mul_norm_sq_le_fnwBoundaryMapCLM_norm_sq}
+    \leanok
+    \uses{def:fnw_mixing_quantity, thm:fnw_boundary_near_isometry_exact}
+    For every $B,C\in\MN{D}$,
+    \begin{align}
+        \bigl|\langle F_N(B),F_N(C)\rangle
+        -\langle B,C\rangle_\rho\bigr|
+         & \leq a(N)\lVert B\rVert_\rho\lVert C\rVert_\rho.
+        \label{eq:fnw_boundary_near_isometry}
+    \end{align}
+    In particular,
+    \begin{align}
+        \bigl|\lVert F_N(B)\rVert^2-\lVert B\rVert_\rho^2\bigr|
+         & \leq a(N)\lVert B\rVert_\rho^2,
+        \label{eq:fnw_boundary_diagonal_defect} \\
+        (1-a(N))\lVert B\rVert_\rho^2
+         & \leq\lVert F_N(B)\rVert^2.
+        \label{eq:fnw_boundary_lower_estimate}
+    \end{align}
+    No sign assumption on $a(N)$ is needed for the last inequality.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The estimate in \cite[Equation~(5.9)]{Fannes1992Finitely} gives
+    (\ref{eq:fnw_boundary_near_isometry}). Set $C=B$ and use
+    $\langle B,B\rangle_\rho=\lVert B\rVert_\rho^2$ to obtain
+    (\ref{eq:fnw_boundary_diagonal_defect}). Its lower half is
+    (\ref{eq:fnw_boundary_lower_estimate}).
+\end{proof}
+
+\begin{definition}[Lower boundary constant]
+    \label{def:fnw_lower_boundary_constant}
+    \lean{MPSTensor.fnwBoundaryNormRatio}
+    \lean{MPSTensor.fnwLowerBoundaryConstant}
+    \leanok
+    \uses{def:fnw_boundary_clm}
+    For $B\neq0$, define the boundary norm-square ratio
+    \begin{align}
+        r_N(B)
+         & :=\frac{\lVert F_N(B)\rVert^2}{\lVert B\rVert_\rho^2}.
+        \label{eq:fnw_boundary_ratio}
+    \end{align}
+    The lower boundary constant of
+    \cite[Lemma~5.3]{Fannes1992Finitely} is
+    \begin{align}
+        a_-(N)
+         & :=\inf_{B\in\MN{D},\,B\neq0}r_N(B).
+        \label{eq:fnw_lower_boundary_constant}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Weighted boundary Gram operator]
+    \label{def:fnw_boundary_gram}
+    \lean{MPSTensor.fnwBoundaryGram}
+    \leanok
+    \uses{def:fnw_boundary_clm}
+    The weighted Gram operator on the virtual matrix Hilbert space is
+    \begin{align}
+        G_N & :=F_N^\dagger F_N.
+        \label{eq:fnw_boundary_gram}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Rayleigh characterization of the lower boundary constant]
+    \label{thm:fnw_lower_boundary_rayleigh}
+    \lean{MPSTensor.fnwBoundaryNormRatio_eq_gram_rayleighQuotient}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf}
+    \lean{MPSTensor.fnwBoundaryGram_isSymmetric}
+    \lean{MPSTensor.fnwBoundaryGram_isPositive}
+    \leanok
+    \uses{def:fnw_lower_boundary_constant, def:fnw_boundary_gram}
+    The operator $G_N$ is self-adjoint and positive. For every nonzero
+    $B\in\MN{D}$,
+    \begin{align}
+        r_N(B)
+         & =\frac{\operatorname{Re}\langle G_NB,B\rangle_\rho}
+        {\lVert B\rVert_\rho^2},
+        \label{eq:fnw_boundary_rayleigh_ratio}                 \\
+        a_-(N)
+         & =\inf_{B\neq0}
+        \frac{\operatorname{Re}\langle G_NB,B\rangle_\rho}
+        {\lVert B\rVert_\rho^2}.
+        \label{eq:fnw_lower_boundary_rayleigh}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_lower_boundary_constant, def:fnw_boundary_gram}
+    The adjoint identity gives
+    $\langle G_NB,B\rangle_\rho=\langle F_NB,F_NB\rangle$.
+    Divide by $\lVert B\rVert_\rho^2$ and take the infimum over
+    $B\neq0$. Self-adjointness and positivity follow directly from
+    $G_N=F_N^\dagger F_N$.
+\end{proof}
+
+\begin{theorem}[Least spectral value of the weighted Gram operator]
+    \label{thm:fnw_lower_boundary_spectrum}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_le_ratio}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_le_re_of_mem_spectrum_fnwBoundaryGram}
+    \leanok
+    \uses{def:fnw_lower_boundary_constant, def:fnw_boundary_gram, thm:fnw_lower_boundary_rayleigh}
+    The real number $a_-(N)$ is a spectral value of $G_N$, and every
+    $z\in\operatorname{spec}(G_N)$ satisfies
+    \begin{align}
+        a_-(N) & \leq\operatorname{Re}z.
+        \label{eq:fnw_lower_boundary_spectrum_min}
+    \end{align}
+    Thus $a_-(N)$ is the least spectral value in the sense of real parts.
+    The spectrum is a subset of $\C$, where no compatible order is fixed, so
+    the assertion is stated as spectral membership together with
+    (\ref{eq:fnw_lower_boundary_spectrum_min}).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_lower_boundary_rayleigh}
+    The minimum of the Rayleigh quotient of a finite-dimensional self-adjoint
+    operator is an eigenvalue. Conversely, if $G_NB=zB$ with $B\neq0$, then
+    self-adjointness makes $z$ real and
+    \begin{align}
+        a_-(N)
+         & \leq r_N(B)=\operatorname{Re}z.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Least finite-domain singular value]
+    \label{thm:fnw_lower_boundary_singular}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_eq_least_sq_singularValue}
+    \leanok
+    \uses{def:fnw_lower_boundary_constant, def:fnw_boundary_gram, thm:fnw_lower_boundary_spectrum}
+    Let $m=\dim_{\C}\MN{D}$. There is an index
+    $i\in\{0,\ldots,m-1\}$ such that
+    \begin{align}
+        \sigma_i(F_N)^2 & =a_-(N),
+        \label{eq:fnw_lower_boundary_least_singular}
+    \end{align}
+    and $a_-(N)\leq\sigma_j(F_N)^2$ for every
+    $j\in\{0,\ldots,m-1\}$. The indices range only over the finite
+    virtual domain dimension. No zero-padded sequence indexed by all natural
+    numbers is used.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_lower_boundary_spectrum}
+    The squared singular values of $F_N$ are the eigenvalues of
+    $F_N^\dagger F_N=G_N$, indexed by an orthonormal eigenbasis of the
+    finite-dimensional domain. Apply
+    Theorem~\ref{thm:fnw_lower_boundary_spectrum}.
+\end{proof}
+
+\begin{theorem}[Optimal quadratic lower-bound constant]
+    \label{thm:fnw_lower_boundary_optimal}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_mul_norm_sq_le}
+    \lean{MPSTensor.le_fnwLowerBoundaryConstant_iff}
+    \leanok
+    \uses{def:fnw_lower_boundary_constant}
+    For every $B\in\MN{D}$,
+    \begin{align}
+        a_-(N)\lVert B\rVert_\rho^2
+         & \leq\lVert F_N(B)\rVert^2.
+        \label{eq:fnw_lower_boundary_universal}
+    \end{align}
+    More generally, a real number $c$ satisfies
+    \begin{align}
+        c\leq a_-(N)
+        \quad\Longleftrightarrow\quad
+        c\lVert B\rVert_\rho^2
+        \leq\lVert F_N(B)\rVert^2
+        \text{ for every }B\in\MN{D}.
+        \label{eq:fnw_lower_boundary_optimal}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fnw_lower_boundary_constant}
+    For $B\neq0$, divide the desired inequality by
+    $\lVert B\rVert_\rho^2$ and use the infimum in
+    (\ref{eq:fnw_lower_boundary_constant}). The zero matrix is immediate.
+    Taking the infimum over nonzero $B$ proves the reverse implication in
+    (\ref{eq:fnw_lower_boundary_optimal}).
+\end{proof}
+
+\begin{theorem}[FNW lower estimate and positivity]
+    \label{thm:fnw_lower_boundary_estimate}
+    \lean{MPSTensor.one_sub_fnwMixingQuantity_le_fnwLowerBoundaryConstant}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_pos}
+    \leanok
+    \uses{thm:fnw_boundary_near_isometry, thm:fnw_lower_boundary_optimal}
+    The lower boundary constant satisfies
+    \begin{align}
+        a_-(N) & \geq1-a(N).
+        \label{eq:fnw_lower_boundary_one_sub}
+    \end{align}
+    Consequently, $a_-(N)>0$ whenever $a(N)<1$. This is the lower estimate in
+    \cite[Lemma~5.3]{Fannes1992Finitely}. No equality
+    $a_-(N)=1-a(N)$ is asserted.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_boundary_near_isometry, thm:fnw_lower_boundary_optimal}
+    The bound (\ref{eq:fnw_boundary_lower_estimate}) says that $1-a(N)$ is a
+    universal quadratic lower bound. Apply
+    (\ref{eq:fnw_lower_boundary_optimal}). If $a(N)<1$, then
+    $1-a(N)>0$, and (\ref{eq:fnw_lower_boundary_one_sub}) gives positivity.
+\end{proof}
+
+\begin{theorem}[Stationary weighted right-multiplication identity]
+    \label{thm:rho_weighted_right_multiplication}
+    \lean{MPSTensor.sum_rhoWeighted_norm_sq_mul_eq}
+    \leanok
+    \uses{def:transfer_map}
+    If $\E_A(\rho)=\rho$, then every $B\in\MN{D}$ satisfies
+    \begin{align}
+        \sum_{\mu=0}^{d-1}\lVert BA^\mu\rVert_\rho^2
+         & =\lVert B\rVert_\rho^2.
+        \label{eq:rho_weighted_right_multiplication}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:transfer_map}
+    Expand the left-hand side using
+    (\ref{eq:fnw_weighted_norm}), cycle the trace, and sum over
+    $\mu$. The result is
+    $\operatorname{Re}\tr(\E_A(\rho)B^\dagger B)$, which equals the
+    right-hand side by stationarity.
+\end{proof}
+
+\begin{theorem}[Monotonicity of the lower boundary constant]
+    \label{thm:fnw_lower_boundary_mono}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_le_succ}
+    \lean{MPSTensor.fnwLowerBoundaryConstant_mono}
+    \lean{MPSTensor.IsPrimitiveMPS.fnwLowerBoundaryConstant_mono}
+    \leanok
+    \uses{def:fnw_lower_boundary_constant, thm:fnw_boundary_norm_sq_succ,
+        thm:fnw_lower_boundary_optimal, thm:rho_weighted_right_multiplication}
+    If $\E_A(\rho)=\rho$, then
+    \begin{align}
+        a_-(N+1) & \geq a_-(N)
+        \label{eq:fnw_lower_boundary_succ}
+    \end{align}
+    for every $N\in\N$. Hence $N\mapsto a_-(N)$ is nondecreasing. The same
+    conclusion holds for every primitive MPS tensor with positive-definite
+    fixed point $\rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_boundary_norm_sq_succ, thm:fnw_lower_boundary_optimal,
+        thm:rho_weighted_right_multiplication}
+    The exact right-multiplication recursion in
+    \cite[Equation~(5.8)]{Fannes1992Finitely} is
+    \begin{align}
+        \lVert F_{N+1}(B)\rVert^2
+         & =\sum_{\mu=0}^{d-1}\lVert F_N(BA^\mu)\rVert^2.
+    \end{align}
+    Apply (\ref{eq:fnw_lower_boundary_universal}) to each summand and then
+    use (\ref{eq:rho_weighted_right_multiplication}). This proves
+    (\ref{eq:fnw_lower_boundary_succ}); induction gives monotonicity.
+\end{proof}
+
+The preceding results formalize the lower-boundary assertions of
+\cite[Lemma~5.3]{Fannes1992Finitely}. They do not include Lemma~6.2, the
+projector-defect terms, a replacement by an unweighted finite Gram matrix,
+periodic coercivity, a comparison of unequal kernels, a dimension prefactor,
+or an identity $a_-(N)=1-a(N)$.
 
 \begin{theorem}[Geometric power bound below unit spectral radius]
     \label{thm:geometric_bound_of_spectral_radius_lt_one}
