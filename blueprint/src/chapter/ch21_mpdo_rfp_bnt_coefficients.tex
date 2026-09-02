@@ -763,6 +763,68 @@
     $k=1$.
 \end{proof}
 
+\begin{theorem}[Positivity of the twisted quantum dimer]%
+    \label{thm:mpdo_twisted_dimer_ismpdo}
+    \lean{MPOTensor.TwistedDimer.mpo_T_entry_formula}
+    \lean{MPOTensor.TwistedDimer.mpo_T_eq_smul_hadamard}
+    \lean{MPOTensor.TwistedDimer.T_isMPDO}
+    \leanok
+    \uses{def:mpdo, def:mpdo_twisted_dimer_tensor,
+        thm:mpdo_twisted_dimer_closures}
+    The closed operator $\rho^{(N)}$ of the twisted quantum dimer is positive
+    semidefinite for every positive chain length $N$: the twisted dimer is an
+    MPDO. Writing $l_n$, $r_n$, $f_n$ for the three bits of the $n$-th letter
+    of a physical string $\sigma$ and likewise for $\tau$, the matrix element
+    is
+    \begin{align}
+        \rho^{(N)}_{\sigma\tau}
+         & =\frac1{2^N}\,
+        \mathbb 1[\text{cyclic bond match}](\sigma,\tau)\,
+        \delta_{f f'}\left(\prod_{n}C_0[l_n,l'_n]
+            +(-1)^{\lvert f\rvert}\prod_{n}C_1[l_n,l'_n]\right),
+        \notag
+    \end{align}
+    where the indicator is one exactly when both $\sigma$ and $\tau$ match
+    their bond bits around the ring, $\delta_{ff'}$ is one exactly when the two
+    flag strings agree, and $\lvert f\rvert$ is the number of sites carrying
+    flag one. So $\rho^{(N)}$ is $2^{-N}$ times the Hadamard product of the
+    rank-one bond-matching indicator with the pullback, along the flag and left
+    bits, of the sum of the $N$-fold Kronecker powers of the two local
+    four-by-four factors $g_k[(f,l),(f',l')]=\delta_{ff'}\,C_k[l,l']\,
+        (\tau_k)_{ff}$, and the Schur product theorem gives positivity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_twisted_dimer_tensor, thm:mpdo_twisted_dimer_closures}
+    Each letter is a sum of two matrix units, one per block label, so an
+    ordered product of letters keeps a common block label and vanishes unless
+    consecutive letters match on their bond bits; the surviving product is a
+    single matrix unit whose row is read off the left bits of the first letters
+    and whose column off the right bits of the last letters. Taking the trace
+    imposes the wraparound match, which completes the segment condition to the
+    cyclic one, and leaves the sum over the block label of the product of the
+    one-site coefficients. That coefficient is half of $g_k$ evaluated at the
+    flag and left bits, so the product along the ring is $2^{-N}$ times an
+    entry of the $N$-fold Kronecker power of $g_k$.
+
+    Neither the sum nor the difference of the two Kronecker powers is a
+    Kronecker power, so both are proved positive semidefinite together by
+    induction on the chain length. Peeling the last site off the ring gives
+    \begin{align}
+        g_0^{\otimes(N+1)}\pm g_1^{\otimes(N+1)}
+         & =\frac12\Bigl[
+            \bigl(g_0^{\otimes N}+g_1^{\otimes N}\bigr)\otimes(g_0\pm g_1)
+            +\bigl(g_0^{\otimes N}-g_1^{\otimes N}\bigr)\otimes(g_0\mp g_1)
+        \Bigr],
+        \notag
+    \end{align}
+    and both local combinations are positive semidefinite: each is block
+    diagonal in the flag bit, with $C_0+C_1=\frac74P_+$ in one flag sector
+    and $C_0-C_1=\frac14P_-$ in the other, the two sectors being exchanged
+    between the sum and the difference. A Kronecker product of positive
+    semidefinite matrices is positive semidefinite, and so are sums,
+    nonnegative multiples, and pullbacks along an arbitrary reindexing.
+\end{proof}
+
 \begin{theorem}[A candidate two-label coefficient family stable under every
         positive rescaling]%
     \label{thm:mpdo_twisted_dimer_two_label_rescaling_stable}
