@@ -17,9 +17,10 @@ as a continuous linear map from the matrix Hilbert space weighted by the
 faithful stationary density to the ordinary physical Euclidean space.  In
 TNLean coordinates, the source matrices satisfy \(A^\mu=v(\mu)^\dagger\).
 
-The exact boundary recursion and scalar-product formula are equation (5.8).
-Their transfer-remainder form and rho-weighted near-isometry estimate give
-(5.9). Physical-site reversal remains explicit through
+The scalar-product formula is equation (5.8), and its transfer-remainder form
+and rho-weighted near-isometry estimate give (5.9). The exact right-boundary
+recursion follows directly from the boundary formula (5.5) and is the recursion
+used in the proof of Lemma 5.3. Physical-site reversal remains explicit through
 `FNWBoundaryConvention`.
 -/
 
@@ -368,9 +369,10 @@ private theorem fnwBoundaryMap_snoc
     Matrix.conjTranspose_conjTranspose, Matrix.conjTranspose_one, Matrix.one_mul,
     Matrix.mul_assoc]
 
-/-- Exact boundary recursion from FNW 1992, equation (5.8), in TNLean
-coordinates: adjoining the final physical index multiplies the boundary matrix
-on the right by the corresponding \(A^\mu\). -/
+/-- Exact right-boundary recursion obtained from FNW 1992, equation (5.5),
+and used in the proof of Lemma 5.3. In TNLean coordinates, adjoining the final
+physical index multiplies the boundary matrix on the right by the corresponding
+\(A^\mu\). -/
 theorem fnwBoundaryMapCLM_norm_sq_succ
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (B : Mat) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ

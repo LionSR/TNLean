@@ -1344,8 +1344,9 @@ $A^\mu=v(\mu)^\dagger$.
          & =\sum_{\mu=0}^{d-1}\lVert F_N(BA^\mu)\rVert^2.
         \label{eq:fnw_boundary_norm_sq_succ}
     \end{align}
-    This is the right-boundary recursion in
-    \cite[Equation~(5.8)]{Fannes1992Finitely}, with
+    This recursion follows from the boundary formula in
+    \cite[Equation~(5.5)]{Fannes1992Finitely} and is used in the proof of
+    \cite[Lemma~5.3]{Fannes1992Finitely}. Here
     $A^\mu=v(\mu)^\dagger$.
 \end{theorem}
 
@@ -1359,10 +1360,11 @@ $A^\mu=v(\mu)^\dagger$.
     (\ref{eq:fnw_boundary_norm_sq_succ}).
 \end{proof}
 
-The passage from these boundary estimates to the overlapping-projector bound
-of Lemma~6.2 in Ref.~\cite{Fannes1992Finitely} requires the lower boundary
-constant $a_-(m)$ from Lemma~5.3. The two additional contributions are
-$a(m)/a_-(m)$ and $a(m)^2/a_-(m)$, whose sum is
+The preceding results establish Equations~(5.8)--(5.9) and the right-boundary
+recursion, but not Lemmas~5.3 or~6.2 of
+Ref.~\cite{Fannes1992Finitely}. In the source proof of Lemma~6.2,
+Equation~(6.5) contributes $a(m)/a_-(m)$, while the subsequent orthogonality
+estimates contribute $a(m)^2/a_-(m)$. Their sum is
 $a(m)(1+a(m))/a_-(m)$.
 
 \begin{theorem}[Geometric power bound below unit spectral radius]
