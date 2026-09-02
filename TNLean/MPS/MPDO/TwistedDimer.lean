@@ -11,12 +11,14 @@ import TNLean.MPS.MPDO.ZCL
 /-!
 # The $\mathbb Z_2$-twisted quantum dimer
 
-**Scope: tensor and closure formulas.** This file defines the MPO tensor of the
-$\mathbb Z_2$-twisted quantum dimer, a project example motivated by the
+**Scope: tensor and local closure formulas.** This file defines an MPO tensor
+for the $\mathbb Z_2$-twisted quantum dimer, a project example motivated by the
 length-dependence question after Theorem 4.14 of arXiv:1606.00608 (lines
-995--1010), and proves the entrywise formulas for its one-site and two-site
-physical closures and for its physical-trace transfer.  The fixed-point
-channels, positivity, and fusion data are formalized in separate files.
+995--1010), and proves entrywise formulas for its one-site and two-site physical
+closures and for the physical-trace transfers of its two displayed blocks. The
+all-length closed operator identity, positivity, fixed-point channels,
+non-simplicity of the tensor, and attachment of fusion data are not asserted
+here.
 
 ## The tensor
 
@@ -44,10 +46,9 @@ $\tfrac12 C_k[l,l']\,(\tau_k)_{ff}\,\delta_{ff'}$ (`coef`).
 * `physClose2_T` — the two-site closure is gated by the bond-matching
   condition `bitR i₁ = bitL i₂`, `bitR j₁ = bitL j₂` and keeps a common block
   label $k$;
-* `physTraceTransfer_T` — the physical-trace transfer lives in the block
-  $k = 0$ only: the flag trace $\operatorname{tr}\tau_1 = 0$ kills the block
-  $k = 1$, which is the nilpotency of Definition 4.7 for that block
-  (`physTraceTransfer_block_one`).
+* `physTraceTransfer_block_zero` and `physTraceTransfer_block_one` — the flag
+  trace $\operatorname{tr}\tau_1 = 0$ kills the displayed block $k = 1$, while
+  the transfer of the displayed block $k = 0$ has an explicit rank-one form.
 
 ## References
 
@@ -222,10 +223,10 @@ lemma coef_diag_sum_flag (k l r : Fin 2) :
   · simp [tau]
   · simp [tau]; ring
 
-/-- **The physical-trace transfer of the block `k = 1` vanishes**: the flag trace
-$\operatorname{tr}\tau_1 = 0$ kills every entry.  This is the nilpotency of
-Definition 4.7 (arXiv:1606.00608, lines 815--822) for the second horizontal block,
-so the twisted dimer is not a simple tensor. -/
+/-- **The physical-trace transfer of the displayed block `k = 1` vanishes**:
+the flag trace $\operatorname{tr}\tau_1 = 0$ kills every entry. Thus this block
+has nilpotent physical-trace transfer in the sense used by Definition 4.7 of
+arXiv:1606.00608, lines 815--822. This does not assert non-simplicity of `T`. -/
 theorem physTraceTransfer_block_one : physTraceTransfer (block 1) = 0 := by
   unfold physTraceTransfer
   rw [← Fintype.sum_equiv physEquiv (fun x => block 1 (physEquiv x) (physEquiv x))

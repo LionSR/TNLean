@@ -6,24 +6,22 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.LengthIndependentCoefficients
 
 /-!
-# Two-label fusion coefficients of the twisted quantum dimer
+# A candidate two-label coefficient family
 
-**Scope: coefficient family only.** This file records the basis-of-normal-tensors
-fusion data of the $\mathbb Z_2$-twisted quantum dimer, the project example that
-answers the length-dependence question after Theorem 4.14 of arXiv:1606.00608
-(lines 995--1010) with a tensor that is not simple.  The tensor itself and its
-fixed-point channels are formalized separately; here only the two-label
-coefficient family and its rescaling behaviour are treated.
+**Scope: abstract coefficient family only.** Motivated by the proposed
+$\mathbb Z_2$-twisted quantum dimer, this file defines a two-label diagonal
+$\chi$-family and proves that its trace-power coefficients remain length
+dependent after every positive rescaling of the labels. It does not identify
+these labels with basis-of-normal-tensors blocks of a tensor and does not prove
+a tensor-attached product law.
 
-The example depends on bond weights $x, y > 0$ with $x + y = 1$; its two vertical
-blocks are labelled by a flag bit $f \in \mathbb Z_2$ and fuse according to
+For bond weights $x, y > 0$ with $x + y = 1$, the candidate weights are
 $$
-  M_f M_{f'} \;\simeq\; \alpha\, M_{f + f'} \;\oplus\; \beta\, M_{f + f' + 1},
-  \qquad
-  \alpha = \frac{x}{\sqrt{2(x^2+y^2)}},\quad \beta = \frac{y}{\sqrt{2(x^2+y^2)}} .
+  \alpha = \frac{x}{\sqrt{2(x^2+y^2)}},\qquad
+  \beta = \frac{y}{\sqrt{2(x^2+y^2)}} .
 $$
 At the rational point $x = 7/8$, $y = 1/8$ one has $\alpha = 7/10$ and
-$\beta = 1/10$, which is the instance formalized here.
+$\beta = 1/10$, which is the abstract instance formalized here.
 
 ## Main results
 
@@ -42,7 +40,7 @@ $\beta = 1/10$, which is the instance formalized here.
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Theorem 4.14 and lines 995--1010 (the length-dependence question; the
-  tensor is a project example)
+  coefficient family is a project example)
 -/
 
 open scoped BigOperators
@@ -65,8 +63,9 @@ def alpha : ℝ := 7 / 10
 /-- The fusion weight $\beta = 1/10$ on the channel $g = f + f' + 1$. -/
 def beta : ℝ := 1 / 10
 
-/-- The two-label diagonal $\chi$-family of the twisted dimer: every
-$\chi_{f f' g}$ is a $1 \times 1$ block with entry $\alpha$ or $\beta$. -/
+/-- The candidate two-label diagonal $\chi$-family: every $\chi_{f f' g}$ is a
+$1 \times 1$ block with entry $\alpha$ or $\beta$. No tensor attachment is
+asserted. -/
 def twoLabelChi : DiagonalChiFamily (Fin 2) where
   dim _ _ _ := 1
   entry f f' g _ := if sameChannel f f' g then (alpha : ℂ) else (beta : ℂ)
@@ -99,16 +98,16 @@ theorem twoLabelCoeffs_not_lengthIndependent : ¬ twoLabelCoeffs.LengthIndepende
   simp only [hs, ite_true, alpha] at this
   norm_num at this
 
-/-- The rescaled $\chi$-family: block rescalings $M_f \mapsto s_f M_f$ act on the
-fusion data by $\chi_{f f' g} \mapsto (s_f s_{f'} / s_g)\,\chi_{f f' g}$
-(arXiv:1606.00608, the covariance of Theorem 4.14(iii) under the normalization
-freedom of Proposition 4.12). -/
+/-- The rescaled candidate $\chi$-family. Abstract label rescalings act by
+$\chi_{f f' g} \mapsto (s_f s_{f'} / s_g)\,\chi_{f f' g}$, matching the
+covariance of Theorem 4.14(iii) under the normalization freedom of Proposition
+4.12 in arXiv:1606.00608. -/
 def twoLabelChiScaled (s : Fin 2 → ℝ) : DiagonalChiFamily (Fin 2) where
   dim _ _ _ := 1
   entry f f' g _ :=
     ((s f * s f' / s g : ℝ) : ℂ) * (if sameChannel f f' g then (alpha : ℂ) else (beta : ℂ))
 
-/-- The coefficient family of the rescaled fusion data. -/
+/-- The coefficient family of the rescaled candidate data. -/
 def rescaledCoeffs (s : Fin 2 → ℝ) : BNTLabelCoefficientFamily (Fin 2) :=
   BNTLabelCoefficientFamily.ofChi (twoLabelChiScaled s)
 
@@ -131,7 +130,8 @@ $s_1\beta = 1$ (triple $(0,1,0)$) and $s_0^2\beta/s_1 = 1$ (triple $(0,0,1)$),
 hence $\beta^2 = \alpha^2$, contradicting $\alpha = 7/10 \ne 1/10 = \beta$.
 
 Source: arXiv:1606.00608, Theorem 4.14 and lines 995--1010 (the
-length-dependence question); the twisted dimer is a project example. -/
+length-dependence question); this abstract coefficient family is a project
+example and is not attached here to a tensor. -/
 theorem twoLabelCoeffs_rescaling_stable_not_lengthIndependent (s : Fin 2 → ℝ)
     (hs : ∀ f, 0 < s f) : ¬ (rescaledCoeffs s).LengthIndependent := by
   intro hLI
