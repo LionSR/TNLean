@@ -1257,6 +1257,56 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     $P_j(R)^\dagger=P_j(R)$.
 \end{proof}
 
+\begin{definition}[Common fixed subspace]
+    \label{def:mpug_common_fixed_subspace}
+    \lean{LinearMap.commonFixedSubmodule}
+    \leanok
+    Let $\mathcal H$ be a complex vector space and let $(P_j)_{j\in J}$ be any
+    family of endomorphisms of $\mathcal H$. Define
+    their common fixed subspace by
+    \begin{align}
+        \mathcal V(P)
+         & =\bigcap_{j\in J}\ker(P_j-\Id_{\mathcal H}).
+    \end{align}
+    No commutativity of the operators is required. For the averaged Gauss
+    projectors, this is the common $+1$ eigenspace called the gauge-invariant
+    subspace in
+    \cite[lines~4327--4335 and line~5198]{FrancoRubio2025MPUGauging}.
+    Here $P_j$ is an averaged projector, not an individual Gauss operator
+    $\mathcal G_g$.
+    % Source anchors: arXiv:2502.20257, lines 4327--4335 and line 5198.
+\end{definition}
+
+\begin{theorem}[Membership in the common fixed subspace]
+    \label{thm:mpug_mem_common_fixed_subspace}
+    \lean{LinearMap.mem_commonFixedSubmodule_iff}
+    \leanok
+    \uses{def:mpug_common_fixed_subspace}
+    A vector $\psi\in\mathcal H$ belongs to $\mathcal V(P)$ if and only if
+    $P_j\psi=\psi$ for every $j\in J$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_common_fixed_subspace}
+    Membership in an indexed intersection is equivalent to membership in
+    every factor, and membership in $\ker(P_j-\Id_{\mathcal H})$ is equivalent
+    to $P_j\psi=\psi$.
+\end{proof}
+
+\begin{theorem}[Nonzero-vector lower bound]
+    \label{thm:mpug_common_fixed_subspace_finrank}
+    \lean{LinearMap.one_le_finrank_commonFixedSubmodule}
+    \leanok
+    \uses{def:mpug_common_fixed_subspace}
+    If $\mathcal H$ is finite-dimensional, $\psi\in\mathcal V(P)$, and
+    $\psi\neq0$, then $1\leq\dim_{\C}\mathcal V(P)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The common fixed subspace is nonzero because it contains $\psi$, so its
+    dimension is at least one.
+\end{proof}
+
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
     \lean{TNLean.Algebra.ScalarThreeCochain,
