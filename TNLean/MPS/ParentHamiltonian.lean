@@ -51,6 +51,7 @@ import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryConvention
+import TNLean.MPS.ParentHamiltonian.FNWBoundaryEstimate
 import TNLean.MPS.ParentHamiltonian.FNWContraction
 import TNLean.MPS.ParentHamiltonian.FNWLimitMap
 import TNLean.MPS.ParentHamiltonian.FNWTransferConvention

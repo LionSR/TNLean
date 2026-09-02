@@ -1168,10 +1168,204 @@ include the later conclusions of Lemmas~5.3 and~6.2 of that paper.
 \end{proof}
 
 The theorem does not identify $C_\lambda$ with $k^2$ or identify the FNW
-auxiliary dimension $k$ with the chosen bond dimension $D$.  It introduces no
-dimension prefactor.  It does not prove the boundary-map estimate in
-\cite[Equation~(5.9)]{Fannes1992Finitely}, Lemma~5.3, Lemma~6.2, or a
-replacement of the weighted argument by a finite Gram operator.
+auxiliary dimension $k$ with the chosen bond dimension $D$.
+
+\subsection{The weighted FNW boundary estimate}
+\label{subsec:fnw_weighted_boundary_estimate}
+
+Let $\rho\in\MN{D}$ be positive definite with $\tr(\rho)=1$. Equip
+$\MN{D}$ with the inner product
+$\langle B,C\rangle_\rho=\tr(\rho B^\dagger C)$ from
+\cite[Equation~(5.6)]{Fannes1992Finitely}, and let $E_{ik}$ denote the
+standard matrix unit. Throughout this subsection,
+$A^\mu=v(\mu)^\dagger$.
+
+\begin{definition}[Euclidean physical-site reversal]
+    \label{def:physical_site_reverse_es}
+    \lean{MPSTensor.physicalSiteReverseES}
+    \lean{MPSTensor.physicalSiteReverseES_apply}
+    \leanok
+    \uses{def:physical_site_reverse_config_equiv}
+    Precomposition with the reversal $r_N$ defines a unitary operator
+    \begin{align}
+        \mathcal R_N\colon\C^{d^N}
+         & \longrightarrow\C^{d^N}, \\
+        (\mathcal R_N\psi)(\sigma)
+         & =\psi(r_N(\sigma)).
+        \label{eq:fnw_physical_reverse_es}
+    \end{align}
+\end{definition}
+
+\begin{proof}
+    \leanok
+    \uses{def:physical_site_reverse_config_equiv}
+    A permutation of the standard coordinates preserves the Euclidean inner
+    product, and evaluation gives
+    (\ref{eq:fnw_physical_reverse_es}).
+\end{proof}
+
+\begin{definition}[Weighted FNW boundary operator]
+    \label{def:fnw_boundary_clm}
+    \lean{MPSTensor.fnwBoundaryMapCLM}
+    \lean{MPSTensor.fnwBoundaryMapCLM_apply}
+    \lean{MPSTensor.fnwBoundaryMapCLM_eq_physicalSiteReverseES_comp}
+    \leanok
+    \uses{def:fnw_boundary_map, def:physical_site_reverse_es,
+        thm:weighted-virtual-inner-product}
+    The boundary map of \cite[Equation~(5.5)]{Fannes1992Finitely} defines a
+    bounded linear operator
+    \begin{align}
+        F_N\colon(\MN{D},\langle\cdot,\cdot\rangle_\rho)
+         & \longrightarrow\C^{d^N},                \\
+        F_N(B)(\sigma)
+         & =\tr\!\left(B(v^\sigma)^\dagger\right).
+        \label{eq:fnw_boundary_clm_apply}
+    \end{align}
+    In the ground-space convention,
+    \begin{align}
+        F_N & =\mathcal R_N\circ\Gamma_N^A.
+        \label{eq:fnw_boundary_clm_ground_space}
+    \end{align}
+\end{definition}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_boundary_map_eq_physical_site_reverse_comp_ground_space_map,
+        def:physical_site_reverse_es}
+    The algebraic identity
+    $F_N^v=R_N\circ\Gamma_N^A$ from
+    Theorem~\ref{thm:fnw_boundary_map_eq_physical_site_reverse_comp_ground_space_map}
+    is unchanged after equipping the domain with the weighted norm and the
+    codomain with the Euclidean norm. The reversal becomes the unitary
+    operator $\mathcal R_N$.
+\end{proof}
+
+\begin{theorem}[FNW boundary scalar product]
+    \label{thm:fnw_boundary_inner}
+    \lean{MPSTensor.inner_fnwBoundaryMapCLM}
+    \lean{MPSTensor.inner_fnwBoundaryMapCLM_eq_sum_fnwTransferMap}
+    \leanok
+    \uses{def:fnw_boundary_clm, def:fnw_transfer_map}
+    For all $B,C\in\MN{D}$,
+    \begin{align}
+        \langle F_N(B),F_N(C)\rangle
+         & =\sum_{i,k}
+        \left(B^\dagger E_{\mathrm{FNW},A}^N(E_{ik})C\right)_{ik}
+        \label{eq:fnw_boundary_inner_choi} \\
+         & =\sum_{i,k}
+        \left(E_{\mathrm{FNW},A}^N
+        \left(B^\dagger E_{ik}C\right)\right)_{ik}.
+        \label{eq:fnw_boundary_inner_source}
+    \end{align}
+    These are the two forms of the scalar-product identity in
+    \cite[Equation~(5.8)]{Fannes1992Finitely}. The second equality preserves
+    the source orientation $B^\dagger E_{ik}C$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_boundary_map_apply, def:fnw_transfer_map}
+    Expand both boundary coefficients using
+    (\ref{eq:fnw_boundary_clm_apply}), interchange the finite sums, and write
+    the two traces as sums of diagonal entries. Multiplication by the matrix
+    unit $E_{ik}$ gives respectively
+    (\ref{eq:fnw_boundary_inner_choi}) and
+    (\ref{eq:fnw_boundary_inner_source}).
+\end{proof}
+
+\begin{theorem}[Exact weighted boundary defect]
+    \label{thm:fnw_boundary_defect}
+    \lean{MPSTensor.inner_fnwBoundaryMapCLM_sub_rhoWeighted}
+    \leanok
+    \uses{thm:fnw_boundary_inner, def:fnw_limit_map,
+        thm:weighted-virtual-inner-product}
+    For all $B,C\in\MN{D}$,
+    \begin{align}
+        \langle F_N(B),F_N(C)\rangle-\langle B,C\rangle_\rho
+         & =\sum_{i,k}
+        \left(\left(E_{\mathrm{FNW},A}^N-E_\infty^\rho\right)
+        \left(B^\dagger E_{ik}C\right)\right)_{ik}.
+        \label{eq:fnw_boundary_defect}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_boundary_inner, def:fnw_limit_map,
+        thm:weighted-virtual-inner-product}
+    The trace-one limiting map satisfies
+    \begin{align}
+        \sum_{i,k}
+        \left(E_\infty^\rho(B^\dagger E_{ik}C)\right)_{ik}
+         & =\tr(\rho B^\dagger C)=\langle B,C\rangle_\rho.
+    \end{align}
+    Subtract this identity from
+    (\ref{eq:fnw_boundary_inner_source}).
+\end{proof}
+
+\begin{theorem}[Weighted FNW boundary near-isometry]
+    \label{thm:fnw_boundary_near_isometry_exact}
+    \lean{MPSTensor.norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le}
+    \leanok
+    \uses{thm:fnw_boundary_defect, def:fnw_weighted_remainder_data}
+    For all $B,C\in\MN{D}$,
+    \begin{align}
+        \bigl|\langle F_N(B),F_N(C)\rangle
+        -\langle B,C\rangle_\rho\bigr|
+         & \leq\operatorname{Re}\tr(\rho^{-1})
+        \bigl\lVert E_{\mathrm{FNW},A}^N-E_\infty^\rho
+        \bigr\rVert_{\mathrm{op},\rho}
+        \lVert B\rVert_\rho\lVert C\rVert_\rho.
+        \label{eq:fnw_boundary_near_isometry_exact}
+    \end{align}
+    This is the estimate in
+    \cite[Equation~(5.9)]{Fannes1992Finitely}. It contains no factor depending
+    only on the dimension.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_boundary_defect, def:fnw_weighted_remainder_data}
+    Regard the sum in (\ref{eq:fnw_boundary_defect}) as the trace of the
+    endomorphism obtained by composing the transfer remainder with
+    $X\mapsto B^\dagger XC$. Weighted trace duality bounds this trace by
+    $\operatorname{Re}\tr(\rho^{-1})$ times the weighted operator norm of the
+    remainder and the two weighted boundary norms.
+\end{proof}
+
+\begin{theorem}[Right-boundary successor recursion]
+    \label{thm:fnw_boundary_norm_sq_succ}
+    \lean{MPSTensor.fnwBoundaryMapCLM_norm_sq_succ}
+    \leanok
+    \uses{def:fnw_boundary_clm}
+    For every $B\in\MN{D}$,
+    \begin{align}
+        \lVert F_{N+1}(B)\rVert^2
+         & =\sum_{\mu=0}^{d-1}\lVert F_N(BA^\mu)\rVert^2.
+        \label{eq:fnw_boundary_norm_sq_succ}
+    \end{align}
+    This recursion follows from the boundary formula in
+    \cite[Equation~(5.5)]{Fannes1992Finitely} and is used in the proof of
+    \cite[Lemma~5.3]{Fannes1992Finitely}. Here
+    $A^\mu=v(\mu)^\dagger$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_boundary_map_apply, def:eval_word}
+    Split a configuration of length $N+1$ into its first $N$ entries and its
+    final entry $\mu$. The adjointed word identity gives
+    $F_{N+1}(B)(\sigma,\mu)=F_N(BA^\mu)(\sigma)$. Summing the squared absolute
+    values over $\sigma$ and $\mu$ proves
+    (\ref{eq:fnw_boundary_norm_sq_succ}).
+\end{proof}
+
+The preceding results establish Equations~(5.8)--(5.9) and the right-boundary
+recursion, but not Lemmas~5.3 or~6.2 of
+Ref.~\cite{Fannes1992Finitely}. In the source proof of Lemma~6.2,
+Equation~(6.5) contributes $a(m)/a_-(m)$, while the subsequent orthogonality
+estimates contribute $a(m)^2/a_-(m)$. Their sum is
+$a(m)(1+a(m))/a_-(m)$.
 
 \begin{theorem}[Geometric power bound below unit spectral radius]
     \label{thm:geometric_bound_of_spectral_radius_lt_one}

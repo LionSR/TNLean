@@ -1713,23 +1713,37 @@ a constant $C_\lambda>0$ such that
 $a(n)\leq C_\lambda\lambda^n$ for every $n\geq1$.  The factor and weighted
 remainder norm are those entering Equations~(5.9)--(5.10), while the theorem
 proves the prescribed-rate estimate for $a(n)$ in Lemma~5.2 of
-Ref.~\cite{Fannes1992Finitely}.  The boundary-map estimate in Equation~(5.9),
-Lemmas~5.3 and~6.2, and the optimized numerator remain open.
+Ref.~\cite{Fannes1992Finitely}. The exact boundary defect and the estimate in
+Equation~(5.9) are now given by
+\leanid{MPSTensor.inner_fnwBoundaryMapCLM_sub_rhoWeighted} and
+\leanid{MPSTensor.norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le}. The exact
+right-boundary recursion
+\begin{align}
+    \lVert F_{N+1}(B)\rVert^2
+     & =\sum_{\mu=0}^{d-1}\lVert F_N(BA^\mu)\rVert^2
+    \label{eq:cpgsv21_martingale_overlap_fnw_boundary_recursion}
+\end{align}
+is \leanid{MPSTensor.fnwBoundaryMapCLM_norm_sq_succ}, with
+$A^\mu=v(\mu)^\dagger$. Lemmas~5.3 and~6.2 and the optimized numerator remain
+open on the publication base.
 
 The reconstructed coefficient is not the optimized FNW expression
 \begin{align}
     c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
     \qquad
-    c\lambda^l&<1,
+    c\lambda^l & <1,
     \label{eq:cpgsv21_martingale_overlap_optimized_fnw_expression}
 \end{align}
 quoted as \path{boundAm} in Section~6 of
-Ref.~\cite{Nachtergaele1996Spectral}. Recovering its numerator requires the
-remaining boundary estimate in Lemma~5.2 and the weighted Gram estimates in
-Lemmas~5.3 and~6.2 of Ref.~\cite{Fannes1992Finitely}. The reconstructed
-constant is not identified
-with a source dimension-dependent value; the available unweighted conversion
-retains the proved $D^{3/2}$ norm factor inside $g$.
+Ref.~\cite{Nachtergaele1996Spectral}. Recovering its numerator still requires
+the lower-boundary and projector estimates in Lemmas~5.3 and~6.2 of
+Ref.~\cite{Fannes1992Finitely}. The present argument makes no unweighted
+finite-Gram substitution and uses no periodic coercivity, unequal-kernel
+transfer, cyclic substitute, dimension prefactor, or projector-defect claim
+$a/a_-+a^2/a_-$. It does not identify $k$ with $D$ or assert
+$C_\lambda=k^2$. The reconstructed constant is not identified with a source
+dimension-dependent value; the available unweighted conversion retains the
+proved $D^{3/2}$ norm factor inside $g$.
 
 \subsection{Open-to-periodic finite-range conclusion}
 
