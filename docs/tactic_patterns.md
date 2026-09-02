@@ -2136,6 +2136,31 @@ spectral split → block extraction → MPV calculation → strict bounds
   and the earlier theorem is private, so neither can reuse the other without an
   API change. This remains below the rule-of-three promotion threshold.
 
+### closed-chain Schur factorization of a matrix product operator — candidate
+- **Pattern:** prove positivity of the operator generated on a ring by an
+  explicit tensor by (i) defining the cyclic bond-matching condition together
+  with its rank-one indicator matrix, proved positive semidefinite as an outer
+  product of the indicator vector with itself; (ii) proving an entrywise
+  closed-chain formula in which the indicator multiplies a product of one-site
+  factors; (iii) proving that the corresponding Kronecker power is positive
+  semidefinite by induction, peeling the last site off with the
+  last-coordinate equivalence and using that a Kronecker product of positive
+  semidefinite matrices is positive semidefinite; and (iv) assembling with the
+  Schur product theorem and a nonnegative scalar.
+- **Seen:** 2 occurrences: `R_isMPDO` in
+  `TNLean/MPS/MPDO/RescalingStableLengthDependentRFP.lean` and `T_isMPDO` in
+  `TNLean/MPS/MPDO/TwistedDimerMPDO.lean` (2026-09-02).  The one-step rotation
+  identity for the cyclic successor is also proved in both files.
+- **Abstraction (proposed):** if a third such tensor appears, extract a
+  positivity criterion parameterized by the local bond-matching relation and
+  the local factor, together with the cyclic-successor identity, and specialize
+  the existing proofs to it.
+- **Notes:** the two current instances differ in the shape of the local factor
+  (a single two-by-two matrix against a sum of two four-by-four Kronecker
+  powers proved positive semidefinite together with their difference), so a
+  common criterion would have to abstract over that as well.  Below the
+  rule-of-three promotion threshold.
+
 ---
 
 ## Rejected
