@@ -38,6 +38,17 @@ theorem doubleLayerTensor_blockTensor (U : MPOTensor d D) (L : ℕ) :
   rw [doubleLayerTensor, doubleLayerTensor, blockTensor_mulTensor,
     physicalAdjointTensor_blockTensor]
 
+/-- A blocked double-layer letter encoded by two finite words is their
+unblocked double-layer word evaluation. -/
+@[simp] theorem doubleLayerTensor_blockTensor_decodeBlockEquiv_symm
+    (U : MPOTensor d D) (L : ℕ) (σ τ : Fin L → Fin d) :
+    doubleLayerTensor (blockTensor U L)
+        ((Kraus.decodeBlockEquiv d L).symm σ)
+        ((Kraus.decodeBlockEquiv d L).symm τ) =
+      evalWord (doubleLayerTensor U) (List.ofFn σ) (List.ofFn τ) := by
+  rw [doubleLayerTensor_blockTensor, blockTensor_apply]
+  simp [Kraus.wordOfBlock]
+
 /-- Contract the two physical legs of an MPO letter against a physical matrix.
 The transpose in the coefficient makes `contractPhysical W (single j i 1) = W i j`.
 
