@@ -1261,13 +1261,12 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \label{def:mpug_common_fixed_subspace}
     \lean{LinearMap.commonFixedSubmodule}
     \leanok
-    Let $\mathcal H$ be a finite-dimensional complex vector space and let
-    $(P_j)_{j\in J}$ be any family of endomorphisms of $\mathcal H$. Define
+    Let $\mathcal H$ be a complex vector space and let $(P_j)_{j\in J}$ be any
+    family of endomorphisms of $\mathcal H$. Define
     their common fixed subspace by
     \begin{align}
         \mathcal V(P)
          & =\bigcap_{j\in J}\ker(P_j-\id_{\mathcal H}).
-        \label{eq:mpug_common_fixed_subspace}
     \end{align}
     No commutativity of the operators is required. For the averaged Gauss
     projectors, this is the common $+1$ eigenspace called the gauge-invariant
@@ -1284,10 +1283,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \leanok
     \uses{def:mpug_common_fixed_subspace}
     A vector $\psi\in\mathcal H$ belongs to $\mathcal V(P)$ if and only if
-    \begin{align}
-        P_j\psi & =\psi
-        \qquad\text{for every }j\in J.
-    \end{align}
+    $P_j\psi=\psi$ for every $j\in J$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1302,14 +1298,13 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \lean{LinearMap.one_le_finrank_commonFixedSubmodule}
     \leanok
     \uses{def:mpug_common_fixed_subspace}
-    If $\psi\in\mathcal V(P)$ and $\psi\neq0$, then
-    \begin{align}
-        1 & \leq \dim_{\C}\mathcal V(P).
-    \end{align}
+    If $\mathcal H$ is finite-dimensional, $\psi\in\mathcal V(P)$, and
+    $\psi\neq0$, then $1\leq\dim_{\C}\mathcal V(P)$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The line $\C\psi$ is a nonzero subspace of $\mathcal V(P)$.
+    The common fixed subspace is nonzero because it contains $\psi$, so its
+    dimension is at least one.
 \end{proof}
 
 \begin{definition}[Scalar cochains and normalization]

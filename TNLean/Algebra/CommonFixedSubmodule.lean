@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Dimension.Finite
-import Mathlib.LinearAlgebra.FiniteDimensional.Defs
 import Mathlib.LinearAlgebra.FixedSubmodule
 
 /-!
@@ -20,20 +19,20 @@ namespace LinearMap
 variable {R V : Type*} [Semiring R] [AddCommMonoid V] [Module R V]
 
 /-- The intersection of the fixed submodules of a family of endomorphisms. -/
-def commonFixedSubmodule {ι : Type*} (f : ι → V →ₗ[R] V) : Submodule R V :=
+def commonFixedSubmodule {ι : Sort*} (f : ι → V →ₗ[R] V) : Submodule R V :=
   ⨅ i, (f i).fixedSubmodule
 
 @[simp]
-theorem mem_commonFixedSubmodule_iff {ι : Type*} {f : ι → V →ₗ[R] V} {v : V} :
+theorem mem_commonFixedSubmodule_iff {ι : Sort*} {f : ι → V →ₗ[R] V} {v : V} :
     v ∈ commonFixedSubmodule f ↔ ∀ i, f i v = v := by
-  simp [commonFixedSubmodule]
+  simp only [commonFixedSubmodule, Submodule.mem_iInf, mem_fixedSubmodule_iff]
 
 variable {K W : Type*} [DivisionRing K] [AddCommGroup W] [Module K W]
-  [FiniteDimensional K W]
+  [Module.Finite K W]
 
-/-- A common nonzero fixed vector gives a one-dimensional subspace of common
-fixed vectors. -/
-theorem one_le_finrank_commonFixedSubmodule {ι : Type*} (f : ι → W →ₗ[K] W) {v : W}
+/-- A common nonzero fixed vector ensures that the common fixed submodule has
+finrank at least one. -/
+theorem one_le_finrank_commonFixedSubmodule {ι : Sort*} (f : ι → W →ₗ[K] W) {v : W}
     (hv : v ∈ commonFixedSubmodule f) (hv0 : v ≠ 0) :
     1 ≤ Module.finrank K (commonFixedSubmodule f) := by
   rw [Submodule.one_le_finrank_iff]
