@@ -115,18 +115,15 @@ private theorem norm_fnwOverlapRange_projector_defect_le [NeZero D]
     exact norm_inner_fnwOverlapMaps_le_linear_add_quadratic
       ρ hρ htr A hA hρfix ℓ m r Φ Ψ hxW hyW hminus
 
-@[simp]
 private theorem cfg_comp_rev_comp_rev (N : ℕ) (μ : Cfg d N) :
     (μ ∘ Fin.rev) ∘ Fin.rev = μ := by
   ext i
   simp
 
-@[simp]
 private theorem physicalSiteReverseConfigEquiv_apply_cfg
     (N : ℕ) (μ : Cfg d N) :
     physicalSiteReverseConfigEquiv d N μ = μ ∘ Fin.rev := rfl
 
-@[simp]
 private theorem physicalSiteReverseConfigEquiv_apply_apply_cfg
     (N : ℕ) (μ : Cfg d N) :
     physicalSiteReverseConfigEquiv d N
@@ -169,7 +166,6 @@ private noncomputable def fnwGlobalPhysicalReverseES (d ℓ m r : ℕ) :
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (fnwGlobalPhysicalReverseConfigEquiv d ℓ m r)
 
-@[simp]
 private theorem fnwGlobalPhysicalReverseES_apply_append
     (ℓ m r : ℕ) (ψ : EuclideanSpace ℂ (Cfg d ((ℓ + m) + r)))
     (μr : Cfg d r) (μm : Cfg d m) (μℓ : Cfg d ℓ) :
@@ -194,7 +190,6 @@ private theorem euclideanSpace_threeBlock_ext
   obtain ⟨⟨μr, μm⟩, μℓ⟩ := (fnwThreeBlockConfigEquiv d r m ℓ).symm σ
   exact h μr μm μℓ
 
-@[simp]
 private theorem reassocTailBoundaryMapES_apply_threeBlock
     (A : MPSTensor d D) (r m ℓ : ℕ)
     (y : BoundaryFamilySpace (D := D) (Cfg d r))
@@ -288,7 +283,6 @@ private theorem fnwGlobalPhysicalReverseES_map_leftOverlapRange
       (boundaryFamilyEquiv (D := D) (Cfg d r) y μr)
       (Kraus.evalWord A (List.ofFn μm) * Kraus.evalWord A (List.ofFn μℓ))
 
-@[simp]
 private theorem leftBoundaryMapES_apply_threeBlock
     (A : MPSTensor d D) (r m ℓ : ℕ)
     (y : BoundaryFamilySpace (D := D) (Cfg d ℓ))
@@ -513,9 +507,10 @@ private theorem norm_fnwOverlapRange_projector_defect_eq_wholeIncrement
         ContinuousLinearMap.le_of_opNorm_le X le_rfl (E.symm v)
       _ = ‖X‖ * ‖v‖ := by rw [E.symm.norm_map]
 
-/-- Fixed-length FNW Lemma 6.2 in whole-increment coordinates for positive
-interaction and spectator lengths. The right-hand side displays the separate
-linear and quadratic source terms. -/
+/-- Fixed-length FNW Lemma 6.2 in whole-increment coordinates. The positivity
+hypotheses on the interaction and spectator lengths retain the source statement;
+the Hilbert-space estimate also holds at the zero endpoints. The right-hand side
+displays the separate linear and quadratic source terms. -/
 theorem wholeIncrement_groundProjection_defect_le_fnw [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (A : MPSTensor d D) (hA : IsLeftCanonical A)
