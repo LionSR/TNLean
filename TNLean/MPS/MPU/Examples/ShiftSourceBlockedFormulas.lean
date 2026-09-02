@@ -19,6 +19,9 @@ open scoped Matrix BigOperators
 
 namespace MPOTensor
 
+/-- The supplied $U_2$ source-$u$ gate in the paper's four-spin coordinates.
+
+Source: CPSV17 equation `eq:uv2_U2`, lines 2018--2026. -/
 private theorem shiftExampleU₂_sourceU_eq_scaled_identitySwapIdentity_apply
     (d : ℕ) [NeZero d]
     (lr : Fin ℓ[shiftExampleU₂ d] × Fin r[shiftExampleU₂ d])
@@ -35,6 +38,9 @@ private theorem shiftExampleU₂_sourceU_eq_scaled_identitySwapIdentity_apply
   simpa only [Equiv.symm_apply_apply] using
     shiftExampleU₂_sourceU_fourSpin_apply d a b c e i j k l
 
+/-- The supplied $U_2$ source-$v$ gate in the paper's four-spin coordinates.
+
+Source: CPSV17 equation `eq:uv2_U2`, lines 2018--2026. -/
 private theorem shiftExampleU₂_sourceV_eq_inv_scaled_gate_apply
     (d : ℕ) [NeZero d]
     (ij : Fin (d * d) × Fin (d * d))
@@ -109,6 +115,9 @@ theorem shiftExampleU₂_blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
     SourceFactors.blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
       (shiftExampleU₂ d) (shiftExampleU₂SourceFactors d) I J α γ
 
+/-- The supplied $U_3$ source-$u$ gate in the paper's four-spin coordinates.
+
+Source: CPSV17 equation `eq:uv2_U3`, lines 2028--2034. -/
 private theorem shiftExampleU₃_sourceU_eq_scaled_gate_apply
     (d : ℕ) [NeZero d]
     (lr : Fin ℓ[shiftExampleU₃ d] × Fin r[shiftExampleU₃ d])
@@ -125,6 +134,9 @@ private theorem shiftExampleU₃_sourceU_eq_scaled_gate_apply
   simpa only [Equiv.symm_apply_apply] using
     shiftExampleU₃_sourceU_fourSpin_apply d a b c e i j k l
 
+/-- The supplied $U_3$ source-$v$ gate in the paper's four-spin coordinates.
+
+Source: CPSV17 equation `eq:uv2_U3`, lines 2028--2034. -/
 private theorem shiftExampleU₃_sourceV_eq_inv_scaled_identitySwapIdentity_apply
     (d : ℕ) [NeZero d]
     (ij : Fin (d * d) × Fin (d * d))

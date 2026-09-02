@@ -326,7 +326,7 @@ theorem mpo_two_pair_entry_eq_sourceV_mul_sourceU_swap
     Matrix.cons_val_fin_one] using
     trace_mul_eq_sourceV_mul_sourceU_swap U ρ hρ i₁ i₂ j₁ j₂
 
-/-- The exact two-site periodic MPO factorization through the auxiliary mixed kernels.
+/-- The exact two-site periodic MPO factorization through the paper gates $v$ and $u$.
 
 The two-site physical configurations are reindexed by `finTwoArrowEquiv`.
 The first `Equiv.prodComm` changes the rows of $u$ from $\ell\times r$ to

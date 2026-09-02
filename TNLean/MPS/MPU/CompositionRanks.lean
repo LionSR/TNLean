@@ -218,6 +218,11 @@ private noncomputable def compositionCutRight
     ∑ x : Fin E₁, ∑ J : Fin q, ∑ t : ι₁,
       R₁ rs.1 (I₁, x) * L₁ (x, J) t * R₁ t (I₂, e) * R₂ rs.2 (J, f)
 
+/-- The first source cut of a two-site-blocked product factors through the two local
+first-cut factorizations.
+
+Source: CPSV17 source cut `II_SVD`, lines 458--477, and the composition proof
+of Theorem `IndexTh` (ii), lines 833--845. -/
 private theorem sourceCutM₁_blockTwo_mulTensor_factorization
     (A : MPOTensor q E₁) (B : MPOTensor q E₂)
     (L₁ : Matrix (Fin q × Fin E₁) ι₁ ℂ)
@@ -383,6 +388,10 @@ private theorem mulTensor_physicalFlip_swap
   simp only [Prod.swap_prod_mk]
   ring
 
+/-- Swapping the physical input and output indices sends the first source cut to the
+transpose of the second source cut.
+
+Source: CPSV17 source cuts `II_SVD`, lines 458--477. -/
 private theorem sourceCutM₁_physicalFlip (U : MPOTensor d D₁) :
     sourceCutM₁ (physicalFlip U) = (sourceCutM₂ U).transpose := by
   rfl
