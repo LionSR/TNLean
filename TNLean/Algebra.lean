@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CocycleCohomology
+import TNLean.Algebra.CommonFixedSubmodule
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CommutingStarSubalgebraProduct
 import TNLean.Algebra.ComplexSqrt
