@@ -171,13 +171,13 @@ class _GeneratedStructureParser(HTMLParser):
             self.paragraph_parts.append(data)
 
 
-def _cdn_fetch(url: str) -> bytes:
-    """Fetch a CDN asset with retries so the browser never requests it directly."""
+def _cdn_fetch(url: str) -> tuple[bytes, str]:
+    """Fetch a CDN asset and its media type with retries."""
     request = urllib.request.Request(url, headers={"User-Agent": "TNLean-CI/1"})
     for attempt in range(3):
         try:
             with urllib.request.urlopen(request, timeout=60) as response:
-                return response.read()
+                return response.read(), response.headers.get_content_type()
         except OSError:
             if attempt == 2:
                 raise
@@ -185,7 +185,7 @@ def _cdn_fetch(url: str) -> bytes:
     raise AssertionError("unreachable")
 
 
-def _mathjax_bundle(root: Path) -> tuple[str, bytes]:
+def _mathjax_bundle(root: Path) -> tuple[str, bytes, str]:
     """Fetch once so Chromium does not depend on a cross-origin CDN request."""
     script_sources: set[str] = set()
     script_pattern = re.compile(r'<script\b[^>]*\bsrc=["\']([^"\']+)["\']', re.I)
@@ -197,7 +197,8 @@ def _mathjax_bundle(root: Path) -> tuple[str, bytes]:
         )
     assert len(script_sources) == 1, script_sources
     url = script_sources.pop()
-    return url, _cdn_fetch(url)
+    body, content_type = _cdn_fetch(url)
+    return url, body, content_type
 
 
 def _assert_generated_blocks(root: Path) -> None:
@@ -394,7 +395,7 @@ def main() -> int:
         args.screenshot_dir.mkdir(parents=True, exist_ok=True)
     _assert_generated_blocks(root)
 
-    mathjax_url, mathjax_bundle = _mathjax_bundle(root)
+    mathjax_url, mathjax_bundle, mathjax_content_type = _mathjax_bundle(root)
     # MathJax lazily loads extensions (e.g. boldsymbol) from the same CDN tree
     # while typesetting. Serve that whole tree from Python so the browser makes
     # no cross-origin request; a flaky extension fetch must not fail the layout
@@ -403,14 +404,17 @@ def main() -> int:
         mathjax_cdn_glob = mathjax_url.split("/es5/", 1)[0] + "/es5/**"
     else:
         mathjax_cdn_glob = mathjax_url.rsplit("/", 1)[0] + "/**"
-    mathjax_cache: dict[str, bytes] = {mathjax_url: mathjax_bundle}
+    mathjax_cache: dict[str, tuple[bytes, str]] = {
+        mathjax_url: (mathjax_bundle, mathjax_content_type)
+    }
 
     def _fulfill_mathjax(route: Route) -> None:
         url = route.request.url
-        body = mathjax_cache.get(url)
-        if body is None:
-            body = mathjax_cache[url] = _cdn_fetch(url)
-        route.fulfill(body=body, content_type="application/javascript")
+        asset = mathjax_cache.get(url)
+        if asset is None:
+            asset = mathjax_cache[url] = _cdn_fetch(url)
+        body, content_type = asset
+        route.fulfill(body=body, content_type=content_type)
 
     collected: list[dict[str, object]] = []
     mobile: list[dict[str, object]] = []
