@@ -528,7 +528,8 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   restriction.
 - **Remediation**: one predicate on `MPOTensor d D` stating canonical form
   II for an MPU tensor by bundling `IsMPU`,
-  `CPSVCanonicalFormIIData U.normalizedFlattening`, and full support. The
+  `CPSVCanonicalFormIIData U.normalizedFlattening`, and the equality
+  $\sum_k D_k=D$ rather than the old `HasFullSupport` predicate. The
   left-canonical equation and diagonal positive definite trace-one fixed
   matrix $\rho$ are projections of that witness. This makes the existing
   stabilization and normality theorems directly applicable, with
@@ -536,9 +537,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   identity (no `D = 1` branch), normality, the forced-block simple
   contractions, and the five preservation lemmas proved once;
   `exists_reduced_cfii_representative` restated as the
-  without-loss-of-generality theorem; every fixed-tensor step-7-to-13
-  statement takes the predicate; delete `HasFullSupport`, the transports, the
-  `fin_one` branch, `def:mpu_reduced_full_support_source_datum`, and only the
+  without-loss-of-generality theorem. While `HasFullSupport` still exists,
+  current consumers derive it by unfolding the definition from the equality
+  field. Every fixed-tensor step-7-to-13 statement is then migrated to the
+  predicate or the equality directly; only afterward delete `HasFullSupport`,
+  the transports, the `fin_one` branch,
+  `def:mpu_reduced_full_support_source_datum`, and only the
   admissible twins whose extra content is pointwise. Retain
   `def:mpu_admissible_equivalence_datum` and every node requiring its
   continuously varying path data until a continuous-selection theorem is

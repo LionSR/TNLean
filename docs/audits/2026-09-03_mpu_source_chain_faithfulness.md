@@ -259,11 +259,12 @@ fields
 
 - `isMPU : IsMPU U`;
 - `cfii : CPSVCanonicalFormIIData U.normalizedFlattening`;
-- `fullSupport : cfii.toCPSVCanonicalFormData.HasFullSupport`.
+- `fullSupport : ∑ k, cfii.toCPSVCanonicalFormData.dim k = D`.
 
 The left-canonical equation and the diagonal positive definite trace-one fixed
-matrix $\rho$ are projections of `cfii`. Bundling the full-support CFII witness
-is necessary for the existing stabilization and normality theorems;
+matrix $\rho$ are projections of `cfii`. Bundling the CFII witness and the
+underlying full-support equality is necessary for the existing stabilization
+and normality theorems;
 reconstructing it from those conclusions would be circular. Its lemmas, proved
 once: `IsNormalTensor U.normalizedFlattening` (from
 `CanonicalForm.lean`), $E^{\max(D^2-1,1)}=\lvert\rho)(\Phi\rvert$ stated
@@ -274,12 +275,16 @@ block with witnesses $\Phi,\rho$ (from `MatchingContractions.lean`), and
 preservation under blocking, relabeling, physical adjoint, identity ancillas,
 and tensor products (collapsing the eight `hasFullSupport_*` transports and
 the five ancilla and tensor-product canonical-form-II constructions to five
-lemmas). The existing `exists_reduced_cfii_representative` becomes the
-without-loss-of-generality theorem in this predicate's terms: every MPU tensor
-has a representative satisfying the predicate with the same $U^{(N)}$ for all
-$N>0$. `HasFullSupport` then has no remaining use and is deleted with its
-marker; `mpu_canonical_form_full_support.tex` is rewritten as the convention
-record, in the manner of
+lemmas). While `HasFullSupport` still exists, the current stabilization,
+normality, and contraction theorems obtain it by unfolding the definition from
+the predicate's equality field. Each consumer is then restated to take the new
+predicate or its equality directly. Only after those consumers and preservation
+lemmas have migrated is `HasFullSupport` deleted. The existing
+`exists_reduced_cfii_representative` becomes the without-loss-of-generality
+theorem in this predicate's terms: every MPU tensor has a representative
+satisfying the predicate with the same $U^{(N)}$ for all $N>0$.
+`mpu_canonical_form_full_support.tex` is rewritten as the convention record,
+in the manner of
 `docs/audits/2026-08-23_nonzero_coefficient_convention.md`.
 
 Every fixed-tensor statement in steps 7--13 takes the predicate in place of
@@ -354,7 +359,8 @@ content still consumed by a later survivor.
 3. **Migrate the hypothesis families.** `SourceFactors.lean`, `SourceUV.lean`,
    `SourceVIsometry.lean`, `SourceUCompleteNetwork.lean`,
    `StandardForm.lean`, `SuppliedFixedWitnesses.lean`, and the admissible
-   proof plans take the predicate; delete `HasFullSupport`, the
+   proof plans first take the predicate or its full-support equality. After
+   every theorem consumer has migrated, delete `HasFullSupport`, the
    `hasFullSupport_*` transports, `normalizedDiagonalLiftCFIIData`,
    `tensorPhysicalIdCFIIData`, `tensorProductCFIIData`, the `fin_one` branch,
    and the four `**Scope restriction (full support)**` markers
