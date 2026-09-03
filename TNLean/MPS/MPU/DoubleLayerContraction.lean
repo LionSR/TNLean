@@ -236,6 +236,42 @@ theorem IsMPU.normalizedDiagonal_doubleLayerTensor_blockTensor_eq_vecMulVec
   rw [normalizedDiagonal_doubleLayerTensor_blockTensor]
   rw [(hU.normalizedTransferStabilization hD).power_eq]
 
+/-- A supplied trace-one rank-one normalized transfer power at exponent \(J\)
+remains the same rank-one projector after the further positive \(D^2\)
+blocking, so the normalized diagonal of the direct length-\(JD^2\) block is the
+explicitly reindexed projector.
+
+Source: arXiv:1703.09188, lines 397--405. -/
+theorem normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power
+    [NeZero d] [NeZero D] (U : MPOTensor d D)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρtrace : Matrix.trace ρ = 1)
+    (J : ℕ)
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
+      Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
+    normalizedDiagonal (doubleLayerTensor (blockTensor U (J * (D * D)))) =
+      Matrix.vecMulVec
+        (fun x : Fin (D * D) ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x : Fin (D * D) ↦
+          (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)) := by
+  let R := Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec
+  have hpair : (1 : Matrix (Fin D) (Fin D) ℂ).vec ⬝ᵥ ρ.vec = 1 := by
+    rw [Matrix.vec_one_dotProduct_vec_eq_trace, hρtrace]
+  have hRidem : R * R = R := by
+    simp only [R, Matrix.vecMulVec_mul_vecMulVec, hpair, one_smul]
+  have hDsq : 0 < D * D := Nat.mul_pos (NeZero.pos D) (NeZero.pos D)
+  have hpowpos : ∀ n : ℕ, 0 < n → R ^ n = R := by
+    intro n hn
+    obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn)
+    clear hn
+    induction m with
+    | zero => simp
+    | succ m ih => rw [pow_succ, ih, hRidem]
+  have hRpow : R ^ (D * D) = R := hpowpos _ hDsq
+  have hpowerR :
+      transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J = R := hpower
+  rw [normalizedDiagonal_doubleLayerTensor_blockTensor, pow_mul, hpowerR, hRpow]
+  rfl
+
 /-- A residual physical slice: subtract the identity coefficient from a physical
 contraction. This is the basis-free form of the residual matrices `S_α` in
 `WIsom`.

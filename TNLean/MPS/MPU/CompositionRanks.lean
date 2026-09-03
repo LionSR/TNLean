@@ -177,11 +177,11 @@ private theorem sum_eight_cut_factorization
   refine Finset.sum_congr rfl fun y _ => ?_
   ac_rfl
 
-/-- The left rectangular factor of the generic four-site product cut. With the
-local factors built from the auxiliary $Y_1$--$X_2$ kernel it is the Chapter 28
-matrix $A_{1,4}$; with the reflected auxiliary $X_1$--$Y_2$ kernel factors it is
-$A_{2,4}$. The rank argument uses this algebraic mixed-cut factorization rather
-than the paper source gates.
+/-- The left rectangular factor of the generic four-site product cut.
+Instantiated at the first source cuts of the two composed tensors it is the
+Chapter 28 matrix $A_{1,4}$, and at their second source cuts it is $A_{2,4}$.
+The rank argument uses this factorization of an arbitrary source cut, not a
+particular choice of source factors.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutLeft
@@ -198,11 +198,11 @@ private noncomputable def compositionCutLeft
       ∑ t : ι₂, ∑ y : Fin E₂,
         L₂ (c, K₁) t * R₂ t (J, y) * L₂ (y, K₂) rs.2
 
-/-- The right rectangular factor of the generic four-site product cut. With the
-local factors built from the auxiliary $Y_1$--$X_2$ kernel it is the Chapter 28
-matrix $B_{1,4}$; with the reflected auxiliary $X_1$--$Y_2$ kernel factors it is
-$B_{2,4}$. The rank argument uses this algebraic mixed-cut factorization rather
-than the paper source gates.
+/-- The right rectangular factor of the generic four-site product cut.
+Instantiated at the first source cuts of the two composed tensors it is the
+Chapter 28 matrix $B_{1,4}$, and at their second source cuts it is $B_{2,4}$.
+The rank argument uses this factorization of an arbitrary source cut, not a
+particular choice of source factors.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutRight

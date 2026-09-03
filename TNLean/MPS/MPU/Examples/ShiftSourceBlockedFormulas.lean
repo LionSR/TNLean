@@ -11,8 +11,8 @@ import TNLean.MPS.MPU.StandardForm
 # Blocked supplied source formulas for the cyclic-shift examples
 
 This module inserts the explicit shift gates into the two source-faithful
-factorizations of a two-site block. The auxiliary $Y_1$--$X_2$ and
-$X_1$--$Y_2$ mixed kernels do not occur in these formulas.
+factorizations of a two-site block, one through $u=Y_2\mathbin{-}Y_1$ and one
+through $v=X_1\mathbin{-}X_2$.
 -/
 
 open scoped Matrix BigOperators

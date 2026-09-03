@@ -24,15 +24,12 @@ import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.KetLeftMul
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
-import TNLean.MPS.MPU.MixedKernelOpenTail
-import TNLean.MPS.MPU.MixedKernelRangeTransport
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.ReducedRepresentative
 import TNLean.MPS.MPU.ReducedToHatTransport
 import TNLean.MPS.MPU.ReductionCommonBlocking
-import TNLean.MPS.MPU.ReflectedTransferKernel
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
@@ -49,7 +46,6 @@ import TNLean.MPS.MPU.SourceVCompleteNetwork
 import TNLean.MPS.MPU.SourceVIsometry
 import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
-import TNLean.MPS.MPU.SuppliedWitnessReblocking
 import TNLean.MPS.MPU.TensorProduct
 import TNLean.MPS.MPU.TensorProductCanonicalForm
 import TNLean.MPS.MPU.ThreeFormSpan

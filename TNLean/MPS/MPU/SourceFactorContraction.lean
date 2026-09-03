@@ -19,9 +19,8 @@ The first source cut uses rows `(up physical, right virtual)`, so its weight is 
 `1 ⊗ₖ ρ` in product-index order. The output-first double layer uses `(α, γ)` for its
 left bond pair and `(β, δ)` for its right bond pair.
 
-This module does not identify the resulting finite sum with
-`sourceY₁X₂ᴴ * sourceY₁X₂` and proves no isometry or rank theorem. In
-particular, it establishes no Gram formula for the paper gate $u$.
+This module proves no isometry or rank theorem; in particular, it establishes
+no Gram formula for the paper gate $u$.
 
 ## Main results
 

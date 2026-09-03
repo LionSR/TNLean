@@ -13,8 +13,9 @@ import TNLean.MPS.MPU.TensorProduct
 
 This module constructs supplied source factors for an independent tensor
 product from supplied identity-weight factors for its two constituents.  The
-source ranks and the entries of the auxiliary $Y_1$--$X_2$ and
-$X_1$--$Y_2$ kernels are multiplicative in the corresponding product-rank coordinates.
+source ranks and the entries of the paper gates $u=Y_2\mathbin{-}Y_1$ and
+$v=X_1\mathbin{-}X_2$ are multiplicative in the corresponding product-rank
+coordinates.
 
 The identity-weight restriction is explicit in the declaration names below.
 An arbitrary-weight construction would additionally require a source-weight
@@ -143,72 +144,6 @@ noncomputable def SourceFactors.independentTensorProductOfIdentityWeight
         simp
   exact ⟨X₁, Y₁, Z₁, X₂, Y₂, Z₂, hcut₁, hcut₂,
     hweighted, hX₂, hY₁Z₁, hY₂Z₂⟩
-
-/-- The supplied auxiliary $Y_1$--$X_2$ kernel of an independent tensor product is the product
-of the two constituent source entries in the product rank coordinates.
-
-Formalization infrastructure for the tensoring clause of Theorem `IndexTh`
-(ii), which arXiv:1703.09188 calls trivial in lines 824--847. -/
-theorem SourceFactors.sourceY₁X₂_independentTensorProductOfIdentityWeight_apply
-    {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
-    (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
-    (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
-    (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) (rᵤ : Fin r[U]) (rᵥ : Fin r[V])
-    (i₁ i₂ : Fin d) (j₁ j₂ : Fin e) :
-    SourceFactors.sourceY₁X₂ (tensorProduct U V)
-        (SourceFactors.independentTensorProductOfIdentityWeight S T)
-        (tensorProductLeftRankEquiv U V (lᵤ, lᵥ),
-          tensorProductRightRankEquiv U V (rᵤ, rᵥ))
-        (finProdFinEquiv (i₁, j₁), finProdFinEquiv (i₂, j₂)) =
-      SourceFactors.sourceY₁X₂ U S (lᵤ, rᵤ) (i₁, i₂) *
-        SourceFactors.sourceY₁X₂ V T (lᵥ, rᵥ) (j₁, j₂) := by
-  simp only [SourceFactors.sourceY₁X₂,
-    SourceFactors.independentTensorProductOfIdentityWeight]
-  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
-  rw [Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro β _
-  rw [Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro γ _
-  rw [tensorProductCutShuffle_symm_apply D d E e (β, i₁) (γ, j₁),
-    tensorProductCutShuffle_symm_apply D d E e (β, i₂) (γ, j₂)]
-  ring
-
-/-- The supplied auxiliary $X_1$--$Y_2$ kernel of an independent tensor product is the product
-of the two constituent source entries in the product rank coordinates.
-
-Formalization infrastructure for the tensoring clause of Theorem `IndexTh`
-(ii), which arXiv:1703.09188 calls trivial in lines 824--847. -/
-theorem SourceFactors.sourceX₁Y₂_independentTensorProductOfIdentityWeight_apply
-    {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
-    (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
-    (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
-    (j₁ j₂ : Fin d) (k₁ k₂ : Fin e)
-    (rᵤ : Fin r[U]) (rᵥ : Fin r[V]) (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) :
-    SourceFactors.sourceX₁Y₂ (tensorProduct U V)
-        (SourceFactors.independentTensorProductOfIdentityWeight S T)
-        (finProdFinEquiv (j₁, k₁), finProdFinEquiv (j₂, k₂))
-        (tensorProductRightRankEquiv U V (rᵤ, rᵥ),
-          tensorProductLeftRankEquiv U V (lᵤ, lᵥ)) =
-      SourceFactors.sourceX₁Y₂ U S (j₁, j₂) (rᵤ, lᵤ) *
-        SourceFactors.sourceX₁Y₂ V T (k₁, k₂) (rᵥ, lᵥ) := by
-  simp only [SourceFactors.sourceX₁Y₂,
-    SourceFactors.independentTensorProductOfIdentityWeight]
-  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
-  rw [Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro α _
-  rw [Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro γ _
-  rw [tensorProductCutShuffle_symm_apply d D e E (j₁, α) (k₁, γ),
-    tensorProductCutShuffle_symm_apply d D e E (j₂, α) (k₂, γ)]
-  ring
 
 /-- The paper gate $u=Y_2\mathbin{-}Y_1$ is multiplicative for independent
 identity-weight source factors in product-rank coordinates.

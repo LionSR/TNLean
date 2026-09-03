@@ -19,9 +19,9 @@ normalization forces
 \]
 This module records that matrix and its elementary properties. It does not
 prove a transfer-map fixed-point equation; that belongs to the later supplied
-shift witnesses. It is also independent of the identity-weight mixed kernels
-in `ShiftSourceFactors` and does not identify those kernels with the paper
-gates of `uuvv` (lines 532--543).
+shift witnesses. It is also independent of the identity-weight source-factor
+witnesses in `ShiftSourceFactors`, whose paper gates of `uuvv`
+(lines 532--543) therefore carry reciprocal normalization factors.
 
 A tensor product of two shifts has product bond dimension $d^2$, so the
 corresponding scalar trace-one matrix is

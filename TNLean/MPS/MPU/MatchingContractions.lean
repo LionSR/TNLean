@@ -8,17 +8,17 @@ import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.TransferStabilization
 
 /-!
-# Matching blocked contractions and output-tail coisometry
+# Matching blocked contractions and the input-tail isometry
 
-These checked results supply blocked matching and global coisometry identities
-used by the auxiliary $Y_1$--$X_2$ mixed-kernel calculations. They do not
-identify a Gram matrix for the paper gate $u=Y_2\mathbin{-}Y_1$.
+This module records the blocked simple contractions with the named witnesses
+$a=\Phi$ and $b=\rho$ of arXiv:1703.09188, line 427, together with the
+normalized input-tail identity
+$d^{-K}\tr_{1,\ldots,K}[U^{(K+2)\dagger}U^{(K+2)}]=\Id$ used at the last step of
+Lemma `lemuisometry` (lines 553--556).
 
-The source proof in arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma
-`lemuisometry` (lines 536--556), instead contracts the staggered paper-$u$
-network; that contraction is formalized in `SourceUCompleteNetwork`. Similar
-blocked and output-tail shapes in this file must not themselves be read as the
-paper source-$u$ identity.
+The staggered paper-$u$ network of Figure `II_uUnitary.png` (lines 536--556) is
+contracted in `SourceUCompleteNetwork`; the blocked shapes below are its
+inputs, not that identity itself.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -28,51 +28,10 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Output-first MPU coisometry, with a common output tail of length \(K\)
-traced out and normalized by \(d^{-K}\), leaves the identity on the first two output sites.
-The retained arguments occur in reversed matrix order because this convention
-keeps the first two sites and uses the output-first equation `U Uᴴ = 1`.
-
-Source: arXiv:1703.09188, equation `UisUnitary` and Figure
-`II_uUnitary.png`, lines 327--335 and 536--556. -/
-theorem IsMPU.normalized_mpo_tail_coisometry [NeZero d]
-    {U : MPOTensor d D} (hU : IsMPU U) (K : ℕ)
-    (p q : Fin d × Fin d) :
-    ((d : ℂ)⁻¹) ^ K *
-        ∑ τ : Fin K → Fin d, ∑ η : Fin (K + 2) → Fin d,
-          mpo U (K + 2) ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)) η *
-            star (mpo U (K + 2)
-              ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ)) η) =
-      if p = q then 1 else 0 := by
-  classical
-  have hco := hU.mpo_mul_conjTranspose_mpo (N := K + 2) (by omega)
-  have hentry (τ : Fin K → Fin d) :
-      (∑ η : Fin (K + 2) → Fin d,
-        mpo U (K + 2) ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)) η *
-          star (mpo U (K + 2)
-            ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ)) η)) =
-        if q = p then 1 else 0 := by
-    simpa only [(finAddTwoArrowEquiv (Fin d) K).symm.injective.eq_iff,
-      Prod.mk.injEq, and_true] using
-      Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
-        (mpo U (K + 2)) hco
-        ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))
-        ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))
-  simp_rw [hentry]
-  by_cases hpq : p = q
-  · subst q
-    simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul,
-      Fintype.card_pi_const, Fintype.card_fin, Nat.cast_pow, ite_eq_left]
-    have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
-    rw [inv_pow, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero K hd), one_mul]
-  · rw [ite_eq_right hpq, ite_eq_right (Ne.symm hpq)]
-    simp
-
 /-- Input-first MPU isometry, with a common input tail of length \(K\)
 traced out and normalized by \(d^{-K}\), leaves the identity on the first two
 input sites.
 
-This is the input-first counterpart of `IsMPU.normalized_mpo_tail_coisometry`.
 It follows directly from the global equation `Uᴴ U = 1`, without an ambient
 source-factor coisometry.
 
