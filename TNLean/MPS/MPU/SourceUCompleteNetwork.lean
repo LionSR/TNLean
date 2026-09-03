@@ -13,11 +13,25 @@ import TNLean.MPS.MPU.SourceVIsometry
 This file follows the contraction in CPSV17 Lemma `lemuisometry`.  The source
 gate is the staggered contraction \(u=Y_2\mathbin{-}Y_1\).  Its Gram matrix is
 first expanded into the literal reflected--direct four-tensor network in
-Figure `II_uUnitary.png`; the retained physical legs are not included in the
-simple interior block.
+Figure `II_uUnitary.png`.  The network is then closed against a fixed pair
+\(E^K=|\rho)(\Phi|\), while the two retained one-site letters remain outside
+the \(K\)-site interior.  The normalized input tail gives \(u^\dagger u=\Id\)
+and \(d^2\le r\ell\).
 
-Source: arXiv:1703.09188, equations `X1X2b`, `uu`, and `uUnitary`, and Lemma
-`lemuisometry` (lines 487--557).
+**Local fix (source-weight orientation):** column stacking makes the Gram
+closure insert \(|\rho^{\mathsf T})(\Phi|\), while the source fixes \(\rho\) in
+diagonal canonical-form-II coordinates, where \(\rho^{\mathsf T}=\rho\).
+The closing theorems keep `SourceFactors U ρ` and expose this convention as
+`ρ.IsDiag`, using only `ρ.IsSymm` for the algebraic trace closure.  Documented
+in `docs/paper-gaps/mpu_source_cut_orientation.tex`.
+
+**Scope restriction (supplied stabilized fixed pair):** the isometry and rank
+theorems below assume \(E^K=|\rho)(\Phi|\) explicitly.  CPSV17 Lemma
+`lemuisometry` uses the preceding canonical-form-II convention instead.
+Documented in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+
+Source: arXiv:1703.09188, equations `Erightleft`, `X1X2b`, `uu`, and
+`uUnitary`, and Lemma `lemuisometry` (lines 269--280 and 487--557).
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
@@ -333,5 +347,101 @@ theorem normalized_mpo_input_tail_eq_closed_doubleLayer_trace
   rw [normalizedDiagonal_pow_eq_sum_evalWord W K]
   simp only [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul,
     Matrix.mul_sum, Matrix.trace_sum]
+
+namespace SourceFactors
+
+/-- For a symmetric supplied source weight, the source-$u$ Gram matrix is the
+closed direct double-layer trace for any matching fixed pair.  The source
+factors remain those constructed from `ρ`; the pair `p` is starred and `q` is
+unstarred.
+
+Source: CPSV17 equation `uUnitary` and Lemma `lemuisometry` (lines 545--557),
+with the fixed point in the diagonal coordinates of lines 269--280. -/
+theorem sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) (hρ : ρ.IsSymm) (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)))
+    (p q : Fin d × Fin d) :
+    (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
+      Matrix.trace
+        (doubleLayerTensor U p.1 q.1 * doubleLayerTensor U p.2 q.2 *
+          normalizedDiagonal (doubleLayerTensor U) ^ K) := by
+  rw [sourceU_gram_eq_transpose_fixed_pair_trace, hρ.eq, ← hK]
+  exact Matrix.trace_mul_cycle _ _ _
+
+/-- For the source's diagonal fixed point satisfying \(E^K=|\rho)(\Phi|\), the
+source-$u$ Gram matrix is the normalized input-first contraction with one
+length-$K$ interior and two retained one-site endpoints.  The pair `p` is
+starred and `q` is unstarred.
+
+Source: CPSV17 equation `uUnitary` and Lemma `lemuisometry` (lines 545--557),
+with the fixed point in the diagonal coordinates of lines 269--280. -/
+theorem sourceU_gram_eq_normalized_input_tail [NeZero d]
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) (hρdiag : ρ.IsDiag)
+    (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)))
+    (p q : Fin d × Fin d) :
+    (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
+      ((d : ℂ)⁻¹) ^ K *
+        ∑ τ : Fin K → Fin d, ∑ η : Fin (K + 2) → Fin d,
+          star (mpo U (K + 2) η
+            ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))) *
+          mpo U (K + 2) η
+            ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)) := by
+  rw [normalized_mpo_input_tail_eq_closed_doubleLayer_trace]
+  exact sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm U S hρdiag.isSymm K hK p q
+
+/-- For supplied source factors and a diagonal fixed pair, the paper gate
+\(u=Y_2\mathbin{-}Y_1\) of an MPU tensor is an isometry.
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557), with the fixed point in
+the diagonal coordinates of lines 269--280. -/
+theorem sourceU_isIsometry_of_isMPU [NeZero d] (hU : IsMPU U)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) (hρdiag : ρ.IsDiag)
+    (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
+    (sourceU U S).IsIsometry := by
+  change (sourceU U S)ᴴ * sourceU U S = 1
+  ext p q
+  have h := sourceU_gram_eq_normalized_input_tail U S hρdiag K hK p q
+  rw [hU.normalized_mpo_tail_isometry] at h
+  rw [Matrix.mul_apply, Matrix.one_apply, ← h]
+  exact Finset.sum_congr rfl fun lr _ ↦ by
+    rw [Matrix.conjTranspose_apply, mul_comm]
+
+/-- The rank consequence of the supplied-fixed-pair source-$u$ isometry:
+\(d^2\le r\ell\).
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557). -/
+theorem mul_self_le_rightRank_mul_leftRank_of_isMPU [NeZero d] (hU : IsMPU U)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) (hρdiag : ρ.IsDiag)
+    (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
+    d * d ≤ r[U] * ℓ[U] := by
+  have h := Matrix.IsIsometry.card_le _ (sourceU_isIsometry_of_isMPU U hU S hρdiag K hK)
+  simpa only [Fintype.card_prod, Fintype.card_fin, Nat.mul_comm ℓ[U]] using h
+
+end SourceFactors
+
+variable {U} in
+/-- For a positive diagonal fixed point, the compact-SVD paper gate $u$ of an
+MPU tensor is an isometry.
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557), with the fixed point in
+the diagonal coordinates of lines 269--280. -/
+theorem IsMPU.sourceU_isIsometry [NeZero d] (hU : IsMPU U)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (hρdiag : ρ.IsDiag) (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
+    (sourceU U ρ hρ).IsIsometry :=
+  SourceFactors.sourceU_isIsometry_of_isMPU U hU (sourceFactors U ρ hρ) hρdiag K hK
 
 end MPOTensor

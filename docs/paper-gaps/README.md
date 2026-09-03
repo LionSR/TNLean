@@ -23,7 +23,9 @@ For the MPU index of arXiv:1703.09188:
   column-stacking transfer fixed pair differ by a transpose for non-diagonal
   $\rho$, which the source-$u$ Gram and complete source-$v$ network formulas
   carry on the inserted vector $|\rho^{\mathsf T})$ without changing the
-  source gate's weight.
+  source gate's weight. In the source's diagonal canonical-form-II coordinates,
+  $\rho^{\mathsf T}=\rho$ closes the retained source-$u$ contraction and proves
+  $u^\dagger u=I$ for the supplied fixed pair.
 - `mpu_shift_specified_tensor_index_scope.tex` records that the computed shift
   formulas are values of the displayed tensors, while the source states the
   public blocking-independent MPU index. The remaining public construction is

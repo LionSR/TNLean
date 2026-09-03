@@ -5,7 +5,7 @@
 \input{command}
 \title{Full Support in MPU Normality and Theorem III.8}
 \author{}
-\date{2026-08-24}
+\date{2026-09-03}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -175,14 +175,23 @@ In both branches, the positive trace-one matrix $\rho$ is the source weight
 used to construct the factors and the operators $u$ and $v$.
 
 The explicit reduced-CFII and full-support hypotheses resolve the
-ambient-positivity question tracked by \ghissue{5855}. They do not prove the
-two complete network identities required for Theorem~III.8 of
-Ref.~\cite{Cirac2017MPU}. For the source tensor $u$, the staggered
-reflected--direct Gram expansion and the normalized input-tail trace are
-formalized separately. Their equality after inserting the simple $K$-site
-interior of Figure~\texttt{II\_uUnitary.png} remains tracked by
-\ghissue{5982} and comes from Lemma~III.7 of Ref.~\cite{Cirac2017MPU}. The
-complete source-$v$ equivalence from the proof of Theorem~III.8 of
+ambient-positivity question tracked by \ghissue{5855}. For a supplied fixed
+pair whose matrix $\rho$ is diagonal, the arbitrary-$K$ complete source-$u$
+network is formalized by
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_input_tail}.
+Input unitarity gives the isometry and rank bound in
+\leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU} and
+\leanid{MPOTensor.SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU};
+\leanid{MPOTensor.IsMPU.sourceU_isIsometry} applies this result to the
+compact-SVD source factors. The raw trace-one transfer-power specialization is
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag}.
+These proofs keep the source factors built from $\rho$, use
+$\rho^{\mathsf T}=\rho$, and retain one $K$-site interior between two
+unblocked endpoints. This is the supplied-fixed-pair form of Lemma~III.7 of
+Ref.~\cite{Cirac2017MPU}; it does not construct such source data for an
+arbitrary MPU representative.
+
+The complete source-$v$ equivalence from the proof of Theorem~III.8 of
 Ref.~\cite{Cirac2017MPU} is formalized as
 \leanid{MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair}; it
 needs no fixed-pair datum beyond a positive definite weight, and it carries
@@ -193,8 +202,8 @@ from that same weight.
 % Source lines: paper_v2.tex 545--557 and 577--600.
 % Source equation labels: uUnitary and vUnitary.
 
-For $D>1$, the two planned results assume reduced canonical-form-II data with
-full support for the same tensor $\mathcal U$ whose cuts, ranks, and source
+For $D>1$, the admissible source results assume reduced canonical-form-II data
+with full support for the same tensor $\mathcal U$ whose cuts, ranks, and source
 operators appear in their statements. For $D=1$, the one-dimensional
 stabilization theorem supplies the source pair directly. In either branch, the
 datum supplies $J>0$, a positive trace-one matrix $\rho$, and
@@ -202,17 +211,21 @@ datum supplies $J>0$, a positive trace-one matrix $\rho$, and
     E^J &= \lvert\rho)(\Phi\rvert.
     \label{eq:mpu_canonical_form_full_support_supplied_stabilization}
 \end{align}
-The admissible source-isometry and simple-tensor equivalence nodes cite
-Lemma~III.7 and Theorem~III.8 of Ref.~\cite{Cirac2017MPU} directly. Both retain
-the source factors of $\mathcal U$.
+The source-$u$ theorem additionally assumes that $\rho$ is diagonal, as in the
+source's canonical-form-II coordinates. Supplying these same-tensor diagonal
+source data is part of the construction tracked by \ghissue{7012}; the later
+unrestricted representative remains tracked by \ghissue{7127}. The admissible
+source-isometry and simple-tensor equivalence nodes cite Lemma~III.7 and
+Theorem~III.8 of Ref.~\cite{Cirac2017MPU} directly. Both retain the source
+factors of $\mathcal U$.
 % Source lines: paper_v2.tex 545--601.
 
-Blocking occurs only within the proof of the admissible source-isometry lemma.
-Let $J$ be the supplied stabilization exponent, define $K=JD^2$, and let
-$\mathcal U^{[K]}$ denote the direct $K$-site block of $\mathcal U$. This
-internal block supplies the direct and reflected contractions used to evaluate
-the closed network for $u^\dagger u$. It does not replace the source cuts,
-ranks, or operators of $\mathcal U$, and the argument does not transport source
+Blocking occurs only within the supplied-fixed-pair source-$u$ calculation.
+Let $J$ be the supplied stabilization exponent and define $K=JD^2$. The
+reflected transfer identity converts the power at $J$ into the direct
+$K$-site double-layer fixed pair. The calculation then keeps this one interior
+between the two unblocked endpoint letters. It does not replace the source
+cuts, ranks, or operators of $\mathcal U$, and it does not transport source
 data across blocking.
 
 \section{Downstream standard-form, index, and symmetry scope}
@@ -265,8 +278,8 @@ $\mathcal U'_k$, and $\mathcal W_k$, then places $\mathcal U_{2k}$ and
 $\mathcal U'_{2k}$ in standard form and computes the ranks of
 $\mathcal W_{4k}$ \cite{Cirac2017MPU}. The admissible theorem therefore
 requires separate source data for all six exact blocked tensors. It does not
-use later-block transport. The complete source-$u$ contraction in
-\ghissue{5982} is a dependency of the admissible source-isometry proof, and the
+use later-block transport. The formalized supplied-fixed-pair source-$u$
+contraction is a dependency of the admissible source-isometry proof, and the
 formalized complete source-$v$ network is a dependency of the admissible
 simple-tensor equivalence proof. Neither establishes the unrestricted source
 statements.
@@ -520,11 +533,11 @@ The native source-data scope tracker is \ghissue{6136}. The
 dimension-bounded full-support representative is constructed by
 \ghissue{7065} and the two theorems identified above. This closes
 representative existence but does not transport selected compact-SVD factors
-between unequal bond spaces. The admissible source-unitary and standard-form
-construction is tracked by \ghissue{7012}, while \ghissue{7127} owns the later
-unrestricted standard-form representative. The independent complete-network
-issue \ghissue{5982} remains necessary for the source-$u$ conclusion; the
-source-$v$ conclusion is formalized.
+between unequal bond spaces. The supplied-fixed-pair source-$u$ network from
+\ghissue{5982} and the source-$v$ conclusion are formalized. The admissible
+source-unitary and standard-form construction remains tracked by
+\ghissue{7012}, while \ghissue{7127} owns the later unrestricted standard-form
+representative.
 
 Issue~\ghissue{6139} treats tensor products, composition, and conjugate,
 adjoint, transposed, and other transformed comparison tensors. It removes the
@@ -539,8 +552,8 @@ The twenty-nine source/scoped pairs in the continuity and symmetry subtree are
 merged only after the relevant branches close. Until then, every source label
 remains an unrestricted unformalized statement, and every reduced-source or
 path-dependent statement remains under its \texttt{mpu\_admissible} label.
-Representative existence does not discharge the independent obligation in
-\ghissue{5982}.
+The supplied-fixed-pair contraction does not by itself construct the source
+data required to remove these restrictions.
 
 \section{Verdict}
 
@@ -561,13 +574,17 @@ dimensions has been proved. The original source labels remain unrestricted and
 unformalized; the distinct admissible nodes record the current same-tensor
 source-data route.
 
-Within Theorem~III.8 itself, the remaining proof gap is the complete
-source-$u$ contraction tracked by \ghissue{5982}; the complete source-$v$
-equivalence is formalized. Downstream standard-form, index,
-continuity, and symmetry results also lack existence or preservation theorems
-for reduced source data under products, transformed comparison tensors, and
-continuous paths. Chapter~28 records these requirements as explicit
-admissibility hypotheses rather than consequences of the MPU predicate.
+Within Theorem~III.8 itself, the complete supplied-fixed-pair source-$u$
+contraction and the complete source-$v$ equivalence are formalized. The
+unrestricted source statement \texttt{lemuisometry} remains open because the
+formalization does not yet construct the required same-tensor diagonal source
+data from an arbitrary MPU. That admissible construction remains in
+\ghissue{7012}, and the unrestricted representative remains in
+\ghissue{7127}. Downstream standard-form, index, continuity, and symmetry
+results also lack existence or preservation theorems for reduced source data
+under products, transformed comparison tensors, and continuous paths.
+Chapter~28 records these requirements as explicit admissibility hypotheses
+rather than consequences of the MPU predicate.
 
 The full-support irreducibility implication is formalized by
 \leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_r_eq_one_of_fullSupport}.
