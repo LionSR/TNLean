@@ -96,7 +96,6 @@ theorem replaceWindow_two_apply {α : Type*} (hN : 2 ≤ N) (j : Fin N) (s : Fin
       if k = j then w 0 else if k = j + 1 then w 1 else s k := by
   have h1 : (1 : Fin N).val = 1 := by
     rw [Fin.val_one', Nat.mod_eq_of_lt (by omega)]
-  have hpos : 0 < N := by omega
   simp only [MPSTensor.replaceWindow]
   by_cases hkj : k = j
   · subst hkj

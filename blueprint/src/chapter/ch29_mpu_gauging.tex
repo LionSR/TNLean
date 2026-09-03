@@ -3542,8 +3542,8 @@ asks whether the common $+1$ eigenspace of the resulting Gauss projectors is
 bounded or grows with the system size. This section answers it for the
 displayed circuit tuple $(\Id,\Id,w,\tilde\lambda)$: the dimension is $2^N$ on
 $N\geq3$ blocked sites. The argument is the orbit and holonomy calculation of
-the planning note on the growth of the gauge-invariant subspace, whose labels
-are named in the Lean sources. Nothing here identifies the displayed tuple
+the planning note on the growth of the gauge-invariant subspace. Nothing here
+identifies the displayed tuple
 with a member of the full physical completion class of the CZX defect data;
 that identification requires the three defect domains and maps not supplied
 by the displayed matrices.
@@ -3724,7 +3724,7 @@ by the displayed matrices.
 
     $E$ is surjective. Given $w\in\C^{X_0}$, take on each fiber with trivial
     holonomy the potential $\Phi_x$ of
-    Theorem~\ref{thm:mpug_hypercube_potential} for the unimodular phases
+    Theorem~\ref{thm:mpug_hypercube_potential} for the invertible phases
     $\gamma\mapsto\varphi_j(x,\gamma)$, and set
     $v_{(x,\gamma)}=w_x\Phi_x(\gamma)$ there and $v=0$ on the other fibers.
     The potential relation is the transport relation, so $v\in\mathcal V(T)$,
@@ -4192,9 +4192,7 @@ by the displayed matrices.
         \dim\mathcal V_N(R^{\mathrm{CZX}}) & =2^N.
         \label{eq:mpug_czx_dimension}
     \end{align}
-    More precisely, the common invariant space is the direct sum of
-    one-dimensional fixed spaces indexed by $p\in\mathbb F_2^N$, one for each
-    fiber $S_{p,0}$. This answers the growth question of
+    This answers the growth question of
     \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} for the displayed
     circuit tuple; it does not assert that the tuple belongs to the full
     physical completion class of the CZX defect data, and it says nothing

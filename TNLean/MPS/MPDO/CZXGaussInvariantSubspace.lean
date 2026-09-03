@@ -293,6 +293,7 @@ theorem trivialHolonomy_fiberPhase_iff (hN : 3 ≤ N)
     rcases TNLean.Algebra.zmod_two_eq_zero_or_one (pb.2 k) with h0 | h1
     · exact h0
     · rw [h1, show ((1 : ZMod 2)).val = 1 from rfl] at hk
+      exfalso
       norm_num at hk
   · intro hb j k γ
     by_cases hkj : k = j
