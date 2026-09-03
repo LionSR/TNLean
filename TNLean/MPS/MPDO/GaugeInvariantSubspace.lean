@@ -36,7 +36,7 @@ line 5198) is untouched.
 support and covariance from locally orthogonal MPS blocks and its modified
 fusion maps. This module assumes those two properties. The remaining
 specialization is documented in
-`docs/paper-gaps/fbc25_state_level_gauging_covariance.tex` and tracked by #7569.
+`docs/paper-gaps/fbc25_state_level_gauging_covariance.tex`.
 
 Commutativity of the placed projectors on neighbouring windows, a spectral
 gap, and any bound on the subspace beyond dimension at least one are not
