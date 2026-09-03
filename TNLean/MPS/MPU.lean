@@ -39,6 +39,7 @@ import TNLean.MPS.MPU.ReflectedTransferKernel
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
+import TNLean.MPS.MPU.SimpleTensorEquivalence
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.SourceFactors
