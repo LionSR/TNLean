@@ -15,8 +15,8 @@ a marked `B` letter is first moved through a word at an injective blocking lengt
 
 ## Main statements
 
-* `Kraus.IsInjective.exists_smul_of_cross_mul_eq` proves the injective case.
-* `Kraus.IsNormal.exists_smul_of_cross_mul_eq` proves the normal case by blocking.
+* `Kraus.IsInjective.eq_smul_of_cross_mul_eq` proves the injective case.
+* `Kraus.IsNormal.eq_smul_of_cross_mul_eq` proves the normal case by blocking.
 
 ## References
 
@@ -177,7 +177,7 @@ private theorem eq_smul_of_factor_of_cross_mul_eq
 then all matrices of `B` are obtained from `A` by one common scalar.
 
 Source: `Papers/2502.20257/main.tex:1255-1325`. -/
-theorem IsInjective.exists_smul_of_cross_mul_eq
+theorem IsInjective.eq_smul_of_cross_mul_eq
     {A B : Fin d → Matrix (Fin D) (Fin D) ℂ} (hA : Kraus.IsInjective A)
     (hcross : ∀ i j, B i * A j = A i * B j) :
     ∃ δ : ℂ, ∀ i, B i = δ • A i := by
@@ -192,7 +192,7 @@ The proof blocks `A` to an injective word family and moves the marked `B` letter
 through each word before applying the block decomposition map.
 
 Source: `Papers/2502.20257/main.tex:1255-1325`. -/
-theorem IsNormal.exists_smul_of_cross_mul_eq
+theorem IsNormal.eq_smul_of_cross_mul_eq
     {A B : Fin d → Matrix (Fin D) (Fin D) ℂ} (hA : Kraus.IsNormal A)
     (hcross : ∀ i j, B i * A j = A i * B j) :
     ∃ δ : ℂ, ∀ i, B i = δ • A i := by
