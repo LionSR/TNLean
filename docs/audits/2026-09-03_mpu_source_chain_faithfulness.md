@@ -371,7 +371,20 @@ content still consumed by a later survivor.
    The last four groups are direct dependencies of the surviving
    `ShiftSourceGateFormulas.lean`, `ShiftSourceBlockedFormulas.lean`, and
    `ShiftSwapMatrices.lean` modules. Also delete the docstring sentence of
-   `SourceFactorContraction.lean` (lines 22--23) that names the deleted kernel.
+   `SourceFactorContraction.lean` (lines 22--23) that names the deleted kernel,
+   and reword the surviving prose that describes the kernels as present:
+   `StandardForm.lean` lines 14--15 ("remain separate"),
+   `Examples/ShiftPaperSourceFactors.lean` lines 22--24, and the Chapter 28
+   prose at `ch28_mpu.tex` lines 5081--5082 and 8421--8426, all outside the 21
+   deleted nodes. After each module deletion, the first PR's four modules
+   included, regenerate the aggregators with
+   `python3 scripts/generate_import_aggregators.py` and confirm with
+   `--check` (`docs/CONTRIBUTING.md` lines 429--441): `TNLean/MPS/MPU.lean`
+   imports `MixedKernelBoundary`, `MixedKernelSecondCutMetric`,
+   `ReflectedTransferKernel`, and `SuppliedWitnessReblocking`, and
+   `TNLean/MPS/MPU/Examples.lean` imports `ShiftSourceMixedKernels`; neither
+   is edited by hand, and without regeneration the intermediate tree does
+   not build.
    Delete the 21 Chapter 28 nodes tagging these declarations
    (`def:mpu_mixed_source_kernels`, `thm:mpu_mixed_y1_x2_*`,
    `def:mpu_mixed_y1_x2_*`, `thm:mpu_normalized_output_tail_closed_trace`,
@@ -421,7 +434,16 @@ content still consumed by a later survivor.
    `thm:mpu_physical_adjoint_full_support`, `thm:mpu_tensor_product_cfii_data`,
    `thm:mpu_identity_ancilla_reduced_cfii`, and
    `thm:mpu_normalized_transfer_fin_one`. This tag migration precedes deletion
-   of the declarations so that `leanblueprint checkdecls` remains green.
+   of the declarations so that `leanblueprint checkdecls` remains green. The
+   same holds for dependency edges: 17 surviving `\uses` references to
+   `def:mpu_full_support` in 14 nodes, among them
+   `thm:mpu_reduced_normalized_flattening_cfii`,
+   `thm:mpu_reduced_cfii_representative`,
+   `thm:mpu_unique_full_support_irreducible`,
+   `thm:mpu_reduced_cfii_transfer_stabilization`,
+   `thm:mpu_reduced_cfii_forced_block_simple_contractions`, and
+   `thm:mpu_normalized_full_support_normal`, are retargeted to the convention
+   predicate's node before that label is removed.
 4. **Merge only the pointwise blueprint twins.** Delete
    `def:mpu_reduced_full_support_source_datum` and merge each admissible node
    whose extra assumptions follow from the convention predicate into its

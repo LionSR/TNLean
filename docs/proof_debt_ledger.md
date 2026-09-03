@@ -566,7 +566,11 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `thm:mpu_full_support_blocking`, `thm:mpu_full_support_reindexing`,
   `thm:mpu_physical_adjoint_full_support`, `thm:mpu_tensor_product_cfii_data`,
   `thm:mpu_identity_ancilla_reduced_cfii`, and
-  `thm:mpu_normalized_transfer_fin_one`. Retain
+  `thm:mpu_normalized_transfer_fin_one`, and retarget the 17 surviving
+  `\uses` references to `def:mpu_full_support` in 14 nodes (the
+  reduced-representative, stabilization, forced-contraction, and normality
+  nodes among them) to the convention predicate's node before that label is
+  removed. Retain
   `def:mpu_admissible_equivalence_datum` and every node requiring its
   continuously varying path data until a continuous-selection theorem is
   proved. Keep the positive-power API in `TransferStabilization.lean` and the
@@ -619,7 +623,14 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   retire the `docs/tactic_patterns.md` candidate "supplied mixed-kernel
   indicator entries" (lines 1609--1627, all sixteen occurrences in the deleted
   formulas) and reword or drop its promoted-entry note at lines 899--900 that
-  names the auxiliary $Y_1$--$X_2$ mixed-kernel consumer. Correct the
+  names the auxiliary $Y_1$--$X_2$ mixed-kernel consumer. Reword the
+  surviving prose that treats the kernels as present (`StandardForm.lean`
+  lines 14--15, `Examples/ShiftPaperSourceFactors.lean` lines 22--24,
+  `ch28_mpu.tex` lines 5081--5082 and 8421--8426), and after every module
+  deletion, the first PR's four included, regenerate the aggregators
+  (`python3 scripts/generate_import_aggregators.py`, then `--check`), since
+  `TNLean/MPS/MPU.lean` and `TNLean/MPS/MPU/Examples.lean` import the deleted
+  modules and are never edited by hand. Correct the
   `MatchingContractions.lean` docstring, which disclaims the on-route
   input-first identity as auxiliary; delete the 21 nodes, explicitly including
   `thm:mpu_output_layer_tail_entry`, `thm:mpu_source_x1_range_projection`, and
