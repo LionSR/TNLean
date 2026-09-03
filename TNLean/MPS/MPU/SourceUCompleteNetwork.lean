@@ -74,6 +74,79 @@ private lemma sum_rotate_four_last_first {A B C P R : Type*}
     (fun _ ↦ rfl)
   simpa only [Fintype.sum_prod_type] using h
 
+/-- Coordinate expansion of the fixed-pair trace into the seven-index
+staggered network.  The endpoint letters occur in the order `p.2` then `p.1`,
+and the first-cut coefficient is `ρ β β'`.  The transpose in the rank-one
+vector records the column-stacking convention; no symmetry of `ρ` is used.
+
+Source: CPSV17 equation `uUnitary` and Lemma `lemuisometry` (lines 545--557).
+-/
+theorem transpose_fixed_pair_trace_eq_staggered_four_u
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (p q : Fin d × Fin d) :
+    Matrix.trace
+        (doubleLayerTensor U p.2 q.2 *
+          Matrix.vecMulVec
+            (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
+            (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
+              (finProdFinEquiv.symm x)) *
+          doubleLayerTensor U p.1 q.1) =
+      ∑ α : Fin D, ∑ α' : Fin D, ∑ β : Fin D, ∑ β' : Fin D,
+      ∑ γ : Fin D, ∑ j₁ : Fin d, ∑ j₂ : Fin d,
+        star (U j₁ p.2 α β) * ρ β β' * U j₁ q.2 α' β' *
+          (star (U j₂ p.1 γ α) * U j₂ q.1 γ α') := by
+  classical
+  rcases p with ⟨p₁, p₂⟩
+  rcases q with ⟨q₁, q₂⟩
+  have hentry (a b : Fin D) :
+      (doubleLayerTensor U p₂ q₂ *
+          Matrix.vecMulVec
+            (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
+            (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
+              (finProdFinEquiv.symm x)) *
+          doubleLayerTensor U p₁ q₁)
+          (finProdFinEquiv (a, b)) (finProdFinEquiv (a, b)) =
+        ∑ β : Fin D, ∑ β' : Fin D, ∑ γ : Fin D,
+        ∑ j₁ : Fin d, ∑ j₂ : Fin d,
+          star (U j₁ p₂ a β) * U j₁ q₂ b β' * ρ β β' *
+            (star (U j₂ p₁ γ a) * U j₂ q₁ γ b) := by
+    simpa only [Matrix.transpose_apply] using
+      doubleLayerTensor_rankOne_mul_apply_four_u U ρ.transpose
+        (p₂, p₁) (q₂, q₁) (a, a) (b, b)
+  change Matrix.trace
+      (doubleLayerTensor U p₂ q₂ *
+        Matrix.vecMulVec
+          (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
+          (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
+            (finProdFinEquiv.symm x)) *
+        doubleLayerTensor U p₁ q₁) =
+    ∑ a : Fin D, ∑ b : Fin D, ∑ β : Fin D, ∑ β' : Fin D,
+    ∑ γ : Fin D, ∑ j₁ : Fin d, ∑ j₂ : Fin d,
+      star (U j₁ p₂ a β) * ρ β β' * U j₁ q₂ b β' *
+        (star (U j₂ p₁ γ a) * U j₂ q₁ γ b)
+  unfold Matrix.trace
+  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  apply Finset.sum_congr rfl
+  intro a _
+  apply Finset.sum_congr rfl
+  intro b _
+  calc
+    _ = ∑ β : Fin D, ∑ β' : Fin D, ∑ γ : Fin D,
+        ∑ j₁ : Fin d, ∑ j₂ : Fin d,
+          star (U j₁ p₂ a β) * U j₁ q₂ b β' * ρ β β' *
+            (star (U j₂ p₁ γ a) * U j₂ q₁ γ b) := hentry a b
+    _ = _ := by
+      apply Finset.sum_congr rfl
+      intro β _
+      apply Finset.sum_congr rfl
+      intro β' _
+      apply Finset.sum_congr rfl
+      intro γ _
+      apply Finset.sum_congr rfl
+      intro j₁ _
+      apply Finset.sum_congr rfl
+      intro j₂ _
+      ring
+
 namespace SourceFactors
 
 /-- The tensor product \(Y_1\otimes Y_2\) for supplied source factors, in the
@@ -279,59 +352,8 @@ theorem sourceU_gram_eq_transpose_fixed_pair_trace
             (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
               (finProdFinEquiv.symm x)) *
           doubleLayerTensor U p.1 q.1) := by
-  classical
-  rcases p with ⟨p₁, p₂⟩
-  rcases q with ⟨q₁, q₂⟩
-  have hentry (a b : Fin D) :
-      (doubleLayerTensor U p₂ q₂ *
-          Matrix.vecMulVec
-            (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
-            (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
-              (finProdFinEquiv.symm x)) *
-          doubleLayerTensor U p₁ q₁)
-          (finProdFinEquiv (a, b)) (finProdFinEquiv (a, b)) =
-        ∑ β : Fin D, ∑ β' : Fin D, ∑ γ : Fin D,
-        ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-          star (U j₁ p₂ a β) * U j₁ q₂ b β' * ρ β β' *
-            (star (U j₂ p₁ γ a) * U j₂ q₁ γ b) := by
-    simpa only [Matrix.transpose_apply] using
-      doubleLayerTensor_rankOne_mul_apply_four_u U ρ.transpose
-        (p₂, p₁) (q₂, q₁) (a, a) (b, b)
-  have htrace :
-      Matrix.trace
-          (doubleLayerTensor U p₂ q₂ *
-            Matrix.vecMulVec
-              (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
-              (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
-                (finProdFinEquiv.symm x)) *
-            doubleLayerTensor U p₁ q₁) =
-        ∑ a : Fin D, ∑ b : Fin D, ∑ β : Fin D, ∑ β' : Fin D,
-        ∑ γ : Fin D, ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-          star (U j₁ p₂ a β) * U j₁ q₂ b β' * ρ β β' *
-            (star (U j₂ p₁ γ a) * U j₂ q₁ γ b) := by
-    unfold Matrix.trace
-    rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-    apply Finset.sum_congr rfl
-    intro a _
-    apply Finset.sum_congr rfl
-    intro b _
-    exact hentry a b
-  rw [sourceU_gram_eq_staggered_four_u, htrace]
-  apply Finset.sum_congr rfl
-  intro a _
-  apply Finset.sum_congr rfl
-  intro b _
-  apply Finset.sum_congr rfl
-  intro β _
-  apply Finset.sum_congr rfl
-  intro β' _
-  apply Finset.sum_congr rfl
-  intro γ _
-  apply Finset.sum_congr rfl
-  intro j₁ _
-  apply Finset.sum_congr rfl
-  intro j₂ _
-  ring
+  rw [sourceU_gram_eq_staggered_four_u,
+    ← transpose_fixed_pair_trace_eq_staggered_four_u]
 
 end SourceFactors
 
