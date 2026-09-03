@@ -137,8 +137,8 @@ $m\geq L_0$, by
 The weighted spectator families and aggregates prove the linear contribution
 $a(m)/a_-(m)$ in Equation~(6.5), the separate quadratic contribution
 $a(m)^2/a_-(m)$, and their unfactored sum. The common-subspace projector
-geometry and final projector estimate in Lemma~6.2 remain open for
-issue~\#7601.
+geometry then gives the exact coefficient $a(m)(1+a(m))/a_-(m)$ in
+Lemma~6.2. Its later prescribed-rate identification remains separate.
 
 \subsection{Lower-endpoint scope in Theorem 2.1(i)}
 
@@ -1720,32 +1720,47 @@ This is the linear contribution in Equation~(6.5). Block injectivity at the
 interaction length $L_0$ supplies $a_-(L_0)>0$, and the recursion from
 Equation~(5.5) propagates positivity to every $m\geq L_0$ by Lemma~5.3.
 
-The reconstructed coefficient is not the optimized FNW expression
-\begin{align}
-    c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
-    \qquad
-    c\lambda^l&<1,
-    \label{eq:cpgsv21_martingale_overlap_optimized_fnw_expression}
-\end{align}
-quoted as \path{boundAm} in Section~6 of
-Ref.~\cite{Nachtergaele1996Spectral}. The linear term $a(m)/a_-(m)$ is
-formalized in
+The linear term $a(m)/a_-(m)$ is formalized in
 Equation~\eqref{eq:cpgsv21_martingale_overlap_fnw_linear_6_5}. Testing the
 orthogonality hypotheses against the special full-ground families, using the
 boundary identities from Equations~(5.5) and~(5.8), and applying
-Equation~(5.9) gives the separate quadratic term $a(m)^2/a_-(m)$. The present
-estimate has the deliberately unfactored coefficient
+Equation~(5.9) gives the separate quadratic term $a(m)^2/a_-(m)$. The theorem
+\leanid{MPSTensor.wholeIncrement_groundProjection_defect_le_fnw} preserves the
+unfactored coefficient
 \begin{align}
     \frac{a(m)}{a_-(m)}+\frac{a(m)^2}{a_-(m)}.
     \label{eq:cpgsv21_martingale_overlap_fnw_unfactored_sum}
 \end{align}
-The common-subspace projector argument and final projector-defect estimate in
-Lemma~6.2 remain open for issue~\#7601. No inverse or finite Gram matrix,
-pseudoinverse, periodic coercivity, comparison of unequal kernels, replacement
-by a cyclic tensor, dimension prefactor, identity $a_-(m)=1-a(m)$,
-identification $k=D$, or claim $C_\lambda=k^2$ is used in the source-coordinate
-estimate. The reconstructed constant is not identified with a source
-dimension-dependent value; the available unweighted conversion retains the
+The two overlap ranges contain the full boundary range. After removing this
+common subspace, the overlap estimate bounds the product of the two orthogonal
+projections. Global physical reversal identifies these ranges with the two
+whole-increment ranges and the full ground space. Consequently,
+\leanid{MPSTensor.wholeIncrement_groundProjection_defect_le_fnw_factored}
+proves the coefficient in Lemma~6.2:
+\begin{align}
+    \left\lVert
+      P^{\mathrm{tail}}_{r;m,\ell}P^{\mathrm{left}}_{r+m;\ell}
+      -P_{\mathcal G_{r+m+\ell}^{\mathrm{ES}}(A)}
+    \right\rVert
+    &\leq\frac{a(m)(1+a(m))}{a_-(m)}
+    \label{eq:cpgsv21_martingale_overlap_fnw_projector_defect}
+\end{align}
+for $L_0,r,\ell\geq1$ and $m\geq L_0$, where $L_0$ is an injective length.
+The theorem
+\leanid{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw}
+chooses such an $L_0$ for a primitive tensor.
+
+The later prescribed-rate expression
+\begin{align}
+    c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l}
+    \label{eq:cpgsv21_martingale_overlap_optimized_fnw_expression}
+\end{align}
+quoted as \path{boundAm} in Section~6 of
+Ref.~\cite{Nachtergaele1996Spectral} is not identified with the exact FNW
+quantities above. No inverse or finite Gram matrix, pseudoinverse, periodic
+coercivity, comparison of unequal kernels, replacement by a cyclic tensor,
+dimension prefactor, identity $a_-(m)=1-a(m)$, identification $k=D$, or claim
+$C_\lambda=k^2$ is used. The available unweighted conversion retains the
 proved $D^{3/2}$ norm factor inside $g$.
 
 \subsection{Open-to-periodic finite-range conclusion}
@@ -1851,9 +1866,12 @@ of the input tensor; the final chain length counts blocked sites. These bounds
 come from the formal inverse-Gram reconstruction and are not attributed to
 FNW. The source lower boundary constant, Lemma~5.3, block-injectivity
 positivity, the linear $a(m)/a_-(m)$ contribution in Equation~(6.5), the
-quadratic $a(m)^2/a_-(m)$ contribution, and their unfactored sum are
-formalized. The common-subspace projector geometry and final projector-defect
-estimate in Lemma~6.2 remain open for issue~\#7601.
+quadratic $a(m)^2/a_-(m)$ contribution, their unfactored sum, and the
+common-subspace projector geometry are formalized. The resulting
+whole-increment theorem proves the exact coefficient
+$a(m)(1+a(m))/a_-(m)$ from Lemma~6.2. The separate prescribed-rate
+identification with the expression quoted by Nachtergaele remains outside
+this result.
 
 The earlier blocked-to-original comparison remains valid for periodic lengths
 divisible by the chosen block length.  It gives
