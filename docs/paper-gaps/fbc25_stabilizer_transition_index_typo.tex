@@ -1,0 +1,59 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Representative Index in the First Stabilizer Factor}
+\author{}
+\date{2026-09-03}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+Let a group $G$ act transitively on $\mathsf X$. Fix $x_0\in\mathsf X$ and
+choose $k_x\in G$ such that $k_xx_0=x$. For $g\in G$ and $x\in\mathsf X$,
+define
+\begin{align}
+    t_k(g,x)
+        &=k_{g x}^{-1}gk_x.
+    \label{eq:fbc25_stabilizer_transition}
+\end{align}
+Then $t_k(g,x)x_0=x_0$, so $t_k(g,x)$ lies in
+$H=\operatorname{Stab}_G(x_0)$, and direct cancellation gives
+\begin{align}
+    t_k(g_1g_2,x)
+        &=t_k(g_1,g_2x)t_k(g_2,x).
+    \label{eq:fbc25_stabilizer_transition_product}
+\end{align}
+
+Equation~\texttt{eq:h1h2} at line~7038 of
+Ref.~\cite{FrancoRubio2025MPUGauging} prints
+$h_1=k_{g_1g_2x}^{-1}g_1k_{g_1x}$. This expression does not generally
+stabilize $x_0$. Resolving the $g_2$ action first in
+(\ref{eq:fbc25_stabilizer_transition_product}) gives the corrected factors
+\begin{align}
+    h_2
+        &=k_{g_2x}^{-1}g_2k_x=t_k(g_2,x),
+    \label{eq:fbc25_stabilizer_h2}\\
+    h_1
+        &=k_{g_1g_2x}^{-1}g_1k_{g_2x}=t_k(g_1,g_2x).
+    \label{eq:fbc25_stabilizer_h1}
+\end{align}
+Thus the final representative in $h_1$ is $k_{g_2x}$, not $k_{g_1x}$.
+No normality or finiteness assumption is needed.\footnote{Formal declarations:
+\leanid{TNLean.Algebra.StabilizerRepresentatives.transitionElement\_mem\_stabilizer},
+\leanid{TNLean.Algebra.StabilizerRepresentatives.transitionElement\_mul}, and
+\leanid{TNLean.Algebra.StabilizerRepresentatives.h₁\_eq} in
+\doclink{TNLean/Algebra/StabilizerTransition}.}
+
+\textbf{Verdict: resolved local fix.}
+The chosen-representative product determines the corrected index uniquely.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
