@@ -20,7 +20,7 @@ jobs:
     name: Check retired tenkz catalogue stays absent
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Scan tracked files for retired catalogue residue
         run: |

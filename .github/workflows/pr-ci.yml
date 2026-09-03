@@ -248,7 +248,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -395,12 +395,12 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
@@ -465,7 +465,7 @@ jobs:
       # Lean sources, the Markdown docs, or the generator changed.
       PAPER_GAPS_CHANGED: ${{ github.event_name != 'pull_request' || needs.changes.outputs.paper_gaps == 'true' || needs.changes.outputs.workflow == 'true' }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
