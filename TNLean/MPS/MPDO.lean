@@ -106,6 +106,8 @@ import TNLean.MPS.MPDO.CPSVVerticalDecomposition
 import TNLean.MPS.MPDO.CPSVVerticalProductCornerPositivity
 import TNLean.MPS.MPDO.CPSVVerticalProductFusionDecomposition
 import TNLean.MPS.MPDO.CPSVVerticalProductSpectralFamily
+import TNLean.MPS.MPDO.CZXGaussCircuitTuple
+import TNLean.MPS.MPDO.CZXGaussInvariantSubspace
 import TNLean.MPS.MPDO.CaseIIAbsorptionCounterexample
 import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
 import TNLean.MPS.MPDO.CommonWeightAbsorption
@@ -142,6 +144,7 @@ import TNLean.MPS.MPDO.CyclicProjector
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.DiagonalCutRank
 import TNLean.MPS.MPDO.DiagonalFiniteChain
+import TNLean.MPS.MPDO.EmbedLocalOperatorMonomial
 import TNLean.MPS.MPDO.EmbedLocalOperatorTwoSite
 import TNLean.MPS.MPDO.EtaPreparation
 import TNLean.MPS.MPDO.FibonacciBoundaryRank
