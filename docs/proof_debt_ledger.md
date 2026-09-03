@@ -500,7 +500,7 @@ Evidence and remediation in
 counts checked on `origin/main` at `fb847cd35`. Ranked among themselves by
 compounding cost; D13 precedes D14 because every new MPU statement pays it.
 
-## D13. The MPU canonical-form-II convention threaded as three hypothesis families and mirrored by 39 admissible blueprint twins  —  api-design, impact 7/10, effort 5/10
+## D13. The MPU canonical-form-II convention is threaded pointwise, while admissible path nodes carry an additional continuous-source-data gap  —  api-design, impact 7/10, effort 5/10
 - **Status**: open
 - **Evidence**: `TNLean/MPS/MPU/` carries the paper's standing convention
   (`Papers/1703.09188/paper_v2.tex` lines 271--281 and 356--361) as explicit
@@ -515,11 +515,16 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`) exists
   because `Matrix.StabilizedRankOneData` needs a positive exponent at most
   `D * D - 1`, which is empty at `D = 1`. Chapter 28 has 82 `\notready`
-  nodes among 508, of which 39 carry an `mpu_admissible` label twinning a
-  source-labelled node (`lemuisometry`, `ThmFund1`, `SF`, `FundamentalMPU`,
-  `def:index`, and 34 more) whose only difference is the unfolded
-  convention. Four `**Scope restriction (full support)**` markers repeat the
-  same restriction.
+  nodes among 508, of which 39 carry an `mpu_admissible` label. The
+  fixed-tensor nodes replace the standing convention by a supplied fixed
+  pair. The family also contains
+  `def:mpu_admissible_equivalence_datum`, which has no source-labelled twin
+  and requires continuously varying reduced source data for the actual
+  blocked path and its conjugate, adjoint, transpose, and symmetry comparison
+  paths. The continuity, index, equivalence, symmetry, and example nodes that
+  depend on it record a separate continuous-selection gap. Four
+  `**Scope restriction (full support)**` markers repeat the pointwise
+  restriction.
 - **Remediation**: one predicate on `MPOTensor d D` stating canonical form
   II for an MPU tensor (`IsMPU`, left-canonical normalized flattening, a
   diagonal positive definite trace-one fixed matrix $\rho$), with the
@@ -527,11 +532,15 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   identity (no `D = 1` branch), normality, the forced-block simple
   contractions, and the five preservation lemmas proved once;
   `exists_reduced_cfii_representative` restated as the
-  without-loss-of-generality theorem; every step-7-to-13 statement takes the
-  predicate; delete `HasFullSupport`, the transports, the `fin_one` branch,
-  the 39 admissible nodes and `def:mpu_reduced_full_support_source_datum`,
-  and rewrite `docs/paper-gaps/mpu_canonical_form_full_support.tex` as the
-  convention record.
+  without-loss-of-generality theorem; every fixed-tensor step-7-to-13
+  statement takes the predicate; delete `HasFullSupport`, the transports, the
+  `fin_one` branch, `def:mpu_reduced_full_support_source_datum`, and only the
+  admissible twins whose extra content is pointwise. Retain
+  `def:mpu_admissible_equivalence_datum` and every node requiring its
+  continuously varying path data until a continuous-selection theorem is
+  proved. Rewrite `docs/paper-gaps/mpu_canonical_form_full_support.tex` as the
+  pointwise convention record while keeping the pathwise supplier gap
+  explicit.
 - **First PR**: define the predicate in `CanonicalForm.lean`, prove its
   stabilization and normality lemmas from the existing
   `normalized_transfer_power_eq_vecMulVec_of_reduced_cfii` and
@@ -568,7 +577,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `MixedKernelSecondCutMetric.lean` (676 lines, zero consumers outside the
   set) with their 10 nodes.
 
-## D15. The MPU canonical-form structure duplicates the CPSV one except for its block predicate  —  api-design, impact 2/10, effort 2/10
+## D15. The MPU canonical-form structure duplicates the CPSV reconstruction but omits nonzero weights  —  api-design, impact 2/10, effort 2/10
 - **Status**: open
 - **Evidence**: `MPUCanonicalForm.lean` (78 lines) defines
   `IsMPUCanonicalBlock`, `MPUCanonicalFormData`, and `IsMPUCanonicalForm`,
@@ -583,18 +592,25 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   normal) and the `weights_ne_zero` local fix, and no lemma relates the two;
   `prop:normal-tensor` (lines 344--355), which says that an MPU tensor in CF
   has one block and that block is normal, is not stated for this predicate.
+  The missing nonzero-weight field is logically prior: for $d=1$ and $D=2$,
+  the tensor with sole matrix $\operatorname{diag}(1,0)$ is an MPU and has a
+  current-form witness with two one-dimensional canonical blocks weighted by
+  $1$ and $0$.
 - **Remediation**: keep the clause. CF is gauge free while canonical form II
   (lines 271--281) fixes the gauge, so two MPU tensors in CF outside that
   gauge are strictly equivalent under the paper's definition; replacing the
   clause by the D13 convention predicate would add a hypothesis the source
   does not carry (the first limit of the `CLAUDE.md` convention rule: the
   paper writes "in CF" here and distinguishes CF, CFII, and SF throughout).
-  Prove `prop:normal-tensor` for `IsMPUCanonicalForm` on MPU tensors (one
-  normal block), then share one structure between the two canonical forms by
-  parametrizing the block predicate, so that the module reduces to
-  `IsMPUCanonicalBlock` and that lemma.
-- **First PR**: the `prop:normal-tensor` lemma for `IsMPUCanonicalForm`,
-  from `TransferMultiplicity.lean`; no consumer changes.
+  First add `weights_ne_zero` to `MPUCanonicalFormData`. Then prove
+  `prop:normal-tensor` for `IsMPUCanonicalForm` on MPU tensors (one normal
+  block), using transfer
+  multiplicity only after the zero-weight witness is excluded. Finally share
+  one structure between the two canonical forms by parametrizing the block
+  predicate, so that the module reduces to `IsMPUCanonicalBlock` and that
+  lemma.
+- **First PR**: add `weights_ne_zero` to `MPUCanonicalFormData` and update any
+  direct witnesses; no one-block theorem or consumer changes yet.
 
 ## Honorable mentions (ranks 11-12)
 

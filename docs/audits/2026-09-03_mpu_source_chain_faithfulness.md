@@ -11,10 +11,11 @@ infrastructure the paper uses without stating, and which follow a route the
 paper does not take. It then assesses the hypothesis families threaded through
 the chain (reduced canonical-form-II data with full support, positive definite
 $\rho$ with trace one, a supplied stabilization exponent $J$ with
-$E^J=\lvert\rho)(\Phi\rvert$, and the parallel `mpu_admissible` blueprint
-nodes) under the convention rule of `CLAUDE.md`, and records a deletion and
-consolidation plan. Every count below was checked on `origin/main` at
-`fb847cd35` (2026-09-03); no Lean or blueprint file is changed by this audit.
+$E^J=\lvert\rho)(\Phi\rvert$, and the pointwise and pathwise
+`mpu_admissible` blueprint nodes) under the convention rule of `CLAUDE.md`,
+and records a deletion and consolidation plan. Every count below was checked
+on `origin/main` at `fb847cd35` (2026-09-03); no Lean or blueprint file is
+changed by this audit.
 
 ## The paper's route
 
@@ -163,11 +164,13 @@ their only surviving content is the two range identities of
 normalizations in `SourceFactors.lean` if any later proof needs them.
 Deleting them removes about 2,300 Lean lines and 21 Chapter 28 nodes.
 
-Third, the remaining departures are not routes but hypothesis families. The
-paper states its convention once (step 3); the formalization threads
-consequences of that convention through every statement as explicit
-hypotheses, in three shapes, and duplicates every downstream blueprint node
-to record the threading.
+Third, the remaining departures split into two kinds of hypothesis data. The
+paper states its pointwise convention once (step 3), while the formalization
+threads its consequences through fixed-tensor statements in three explicit
+shapes. The continuity, equivalence, and symmetry arguments also use a
+stronger datum: continuously varying source reductions and factors for the
+actual blocked path and its comparison paths. A pointwise canonical-form-II
+predicate does not by itself supply those continuous choices.
 
 ## The hypothesis families and the convention
 
@@ -192,15 +195,20 @@ The three shapes, with their occurrence counts under `TNLean/MPS/MPU/`:
   `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`, and
   `def:mpu_reduced_full_support_source_datum` mirrors the split.
 
-Chapter 28 mirrors this: 82 of its 508 nodes are `\notready`, and 39 of them
-carry an `mpu_admissible` label paired with a source-labelled twin
-(`lemuisometry` / `lem:mpu_admissible_source_u_isometry`, `ThmFund1` /
+Chapter 28 has 82 `\notready` nodes among 508, of which 39 carry an
+`mpu_admissible` label. Sixteen are pointwise nodes, while 23 either define or
+use the pathwise equivalence datum. The fixed-tensor nodes include the pairs
+`lemuisometry` / `lem:mpu_admissible_source_u_isometry`, `ThmFund1` /
 `thm:mpu_admissible_simple_tensor_equivalence`, `SF` /
-`def:mpu_admissible_standard_form`, `FundamentalMPU` /
-`thm:mpu_admissible_fundamental`, and 35 more through the index, continuity,
-symmetry, and example sections). The source-labelled twins are phrased "under
-the source's standing canonical-form-II convention"; the admissible twins
-replace that phrase by the supplied fixed pair.
+`def:mpu_admissible_standard_form`, and `FundamentalMPU` /
+`thm:mpu_admissible_fundamental`; there the admissible form replaces the
+standing convention by a supplied fixed pair. The family is not uniform.
+`def:mpu_admissible_equivalence_datum` has no source-labelled twin. It requires
+one common blocking and continuously varying reduced source data for the
+actual blocked path and for the conjugate, adjoint, transpose, and symmetry
+comparison paths. The admissible continuity, index, equivalence, symmetry,
+and example nodes that use this datum record a genuine pathwise supplier gap,
+not merely the pointwise convention unfolded.
 
 The families are one restriction, and it is the paper's own convention. Under
 `Erightleft` (lines 271--281) a normal tensor in canonical form II has
@@ -217,24 +225,27 @@ retained blocks coisometrically and admits an ambient zero complement, and
 The stabilization $E^{D^2-1}=\lvert\rho)(\Phi\rvert$ is then a theorem
 (`normalized_transfer_power_eq_vecMulVec_of_reduced_cfii`), not a datum.
 
-`CLAUDE.md` names this situation precisely: a degenerate reading (the ambient
-zero complement of the canonical-form-II data) is a convention, to be baked into one definition and recorded once, and
-the apparatus modeling it (parallel predicate families, `\notready` twins
-beside the formalized theorem, side hypotheses repeated on every downstream
-statement, per-declaration markers) is to be deleted. Both limits of the rule
-are satisfied. The source attaches the qualifier explicitly and globally, so
-its absence from the statement of `ThmFund1` is a standing hypothesis, not a
-choice to omit it. And the convention is already available in definitional
-form: `CPSVCanonicalFormIIData` carries a positive definite diagonal fixed
-matrix per block, and `IsMPU.exists_reduced_cfii_representative` is the
-without-loss-of-generality theorem.
+`CLAUDE.md` names the pointwise part of this situation precisely: a
+degenerate reading (the ambient zero complement of the canonical-form-II
+data) is a convention, to be baked into one definition and recorded once.
+Parallel fixed-tensor predicate families, side hypotheses repeated on each
+statement, and per-declaration markers may then be deleted. Both limits of the
+rule are satisfied for that part. The source attaches the qualifier explicitly
+and globally, so its absence from the statement of `ThmFund1` is a standing
+hypothesis, not a choice to omit it. The convention is already available in
+definitional form: `CPSVCanonicalFormIIData` carries a positive definite
+diagonal fixed matrix per block, and
+`IsMPU.exists_reduced_cfii_representative` is the without-loss-of-generality
+theorem.
 
-The faithfulness rule is not weakened by this. A Lean theorem whose only
-hypothesis beyond `IsMPU` is the convention predicate has exactly the
-hypothesis set of `lemuisometry`, `ThmFund1`, `SF`, and `FundamentalMPU`,
-because the paper states those results under the convention. The admissible
-twins add nothing: they are the same theorems with the convention unfolded
-into its consequences.
+The faithfulness rule does not identify pointwise existence with continuous
+choice. A theorem whose only extra hypothesis is the convention predicate has
+the paper's hypothesis set for `lemuisometry`, `ThmFund1`, `SF`, and
+`FundamentalMPU`. The corresponding fixed-tensor admissible twins add nothing
+once the predicate and its preservation lemmas exist. By contrast, no current
+theorem chooses the reduced representatives, fixed points, or source factors
+continuously along an arbitrary path. The path datum and every node that
+requires it must remain until such a supplier is proved.
 
 ### Minimal convention change
 
@@ -265,14 +276,22 @@ marker; `mpu_canonical_form_full_support.tex` is rewritten as the convention
 record, in the manner of
 `docs/audits/2026-08-23_nonzero_coefficient_convention.md`.
 
-Every statement in steps 7--13 takes the predicate in place of the
-`(cfii, hfull)`, `(ρ, hρ, hρtrace)`, and `(J, hJ, hpower)` groups; the source
-factors and gates are constructed from the predicate's $\rho$. The 39
-`mpu_admissible` nodes and `def:mpu_reduced_full_support_source_datum` are
-deleted, their `\uses` folded into the source-labelled nodes, which state the
-convention in one sentence and receive `\lean{}` and `\leanok` as the proofs
-land. Nothing is lost: the fixed-pair form of any lemma is recovered by
-applying it to the representative.
+Every fixed-tensor statement in steps 7--13 takes the predicate in place of
+the `(cfii, hfull)`, `(ρ, hρ, hρtrace)`, and `(J, hJ, hpower)` groups; the
+source factors and gates are constructed from the predicate's $\rho$.
+`def:mpu_reduced_full_support_source_datum` and the admissible nodes whose only
+extra content is this pointwise datum are then merged into their
+source-labelled counterparts. Their `\uses` are folded into nodes that state
+the convention once and receive `\lean{}` and `\leanok` as the proofs land.
+
+The pathwise branch is retained. In particular,
+`def:mpu_admissible_equivalence_datum`,
+`prop:mpu_admissible_continuity_index`, and every downstream node requiring
+continuous source data remain explicit. They may be merged with the
+unrestricted source-labelled statements only after a theorem supplies
+continuous reduced data for the actual blocked path and all comparison paths.
+Pointwise preservation under blocking, ancillas, products, adjoints, or
+symmetries is not such a theorem.
 
 ## Deletion and consolidation plan
 
@@ -320,12 +339,16 @@ content still consumed by a later survivor.
    (`TransferStabilization.lean:119`, `TensorProductCanonicalForm.lean:130`,
    `CanonicalForm.lean:378`, `MatchingContractions.lean:190`), replacing them
    by one `**Local fix**` marker on the predicate.
-4. **Merge the blueprint twins.** Delete the 39 `mpu_admissible` nodes and
-   `def:mpu_reduced_full_support_source_datum`; the source-labelled nodes
-   absorb their `\uses` and state the convention once. Rewrite
-   `mpu_canonical_form_full_support.tex` as the convention record.
+4. **Merge only the pointwise blueprint twins.** Delete
+   `def:mpu_reduced_full_support_source_datum` and merge each admissible node
+   whose extra assumptions follow from the convention predicate into its
+   source-labelled counterpart. Retain
+   `def:mpu_admissible_equivalence_datum` and all continuity, equivalence,
+   index, symmetry, and example nodes that require its continuously varying
+   path data. Rewrite `mpu_canonical_form_full_support.tex` as the pointwise
+   convention record and keep the pathwise supplier gap explicit.
 5. **Keep `IsMPUCanonicalForm` as the endpoint clause of strict
-   equivalence, and prove `prop:normal-tensor` for it.**
+   equivalence, add nonzero weights, and then prove `prop:normal-tensor`.**
    `def:strictly-equivalent-tensors` (708--714) requires the endpoints "in
    CF" and lets the path leave CF; CF (259--262) is gauge free, while
    canonical form II (271--281) fixes the gauge ($(\Phi\rvert=\sum_n(n,n\rvert$,
@@ -334,32 +357,43 @@ content still consumed by a later survivor.
    clause by the convention predicate of step 2 would add a hypothesis the
    source does not carry; the first limit of the `CLAUDE.md` convention rule
    applies, since the paper writes "in CF" here and distinguishes CF, CFII,
-   and SF throughout. The clause stays as it is. The remaining debt is
-   structural: `MPUCanonicalFormData` duplicates `CPSVCanonicalFormData`
-   except for the block predicate (irreducible with spectral radius one,
-   against normal) and the missing nonzero-weight field. The step is to prove
-   `prop:normal-tensor` (344--355) in the form the clause needs, that an MPU
-   tensor in `IsMPUCanonicalForm` has one block and the block is normal, and
-   then to share one structure between the two canonical forms by
-   parametrizing the block predicate, so that `MPUCanonicalForm.lean` reduces
-   to the block predicate and that lemma.
-6. **Discharge the supplied fixed pair of `prop:continuity-index`** (#6136,
-   #6140, #6022): after step 2 the hypotheses of `ReducedRepresentative.lean`
-   and `ReducedToHatTransport.lean` follow for the block $\mathcal W_{D^4}$
-   from the forced-block contractions, so the "supplied fixed pair" marker
-   and `mpu_reduced_representative_supplied_fixed_pair.tex` retire with them.
+   and SF throughout. The clause stays as it is.
+
+   The remaining debt is structural. `MPUCanonicalFormData` duplicates
+   `CPSVCanonicalFormData` except for the block predicate (irreducible with
+   spectral radius one, against normal) and omits `weights_ne_zero`. That
+   omission must be repaired before using transfer multiplicity to prove one
+   block. For $d=1$ and $D=2$, the tensor with sole matrix
+   $\operatorname{diag}(1,0)$ is an MPU and admits two one-dimensional
+   canonical blocks with weights $1$ and $0$ under the current definition.
+   Thus the current predicate does not imply the claimed one-block conclusion.
+   First add `weights_ne_zero` to `MPUCanonicalFormData`. Then apply the
+   transfer-multiplicity argument to prove that an MPU tensor in
+   `IsMPUCanonicalForm` has one block and that block is normal. Finally share
+   one structure between the two canonical forms by parametrizing the block
+   predicate, so that `MPUCanonicalForm.lean` reduces to the block predicate
+   and that lemma.
+6. **Retain the pathwise source-data obligations for
+   `prop:continuity-index`** (#6136, #6140, #6022). Step 2 supplies the fixed
+   pair separately at each point, but it does not prove that the choices for
+   $\mathcal W(x)_{D^4}$ vary continuously, nor that compatible choices exist
+   for the comparison paths used later. Keep
+   `mpu_reduced_representative_supplied_fixed_pair.tex` and the admissible
+   path nodes until a continuous-selection theorem supplies exactly this
+   data. Only then may the unrestricted source-labelled statements absorb
+   them.
 
 Steps 1 and 5 are independent of the open interior contractions (#7633,
-#6071), of each other, and of steps 2--4. Steps 2--4 change theorem
-statements and follow the paper-realignment process; they do not wait for
-the interior contractions either, since every existing proof goes through
-unchanged once the predicate's lemmas reproduce the former hypotheses.
+#6071), of each other, and of steps 2--4. Steps 2--4 change the pointwise
+theorem statements and follow the paper-realignment process; they do not
+wait for the interior contractions. Step 6 is a separate continuity problem
+and does not follow formally from the pointwise predicate.
 
 ## Ledger entries
 
-Three entries were added to `docs/proof_debt_ledger.md`: D13 (the threaded
-convention and the admissible twin family), D14 (the mixed-kernel and
-reflected-kernel residue), and D15 (the duplicated canonical-form structure
+Three entries were added to `docs/proof_debt_ledger.md`: D13 (the pointwise
+convention and the distinct pathwise source-data gap), D14 (the mixed-kernel
+and reflected-kernel residue), and D15 (the duplicated canonical-form structure
 behind `IsMPUCanonicalForm`, whose gauge-free "in CF" clause is the paper's
 and stays). Each names the evidence counted above and the first one-week PR.
 
