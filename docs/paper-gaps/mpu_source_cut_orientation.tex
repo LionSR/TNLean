@@ -175,13 +175,21 @@ give
 \end{align}
 Expanding this trace produces one $K$-site input tail between two unblocked
 one-site endpoints. The $p$ entries are conjugated and the $q$ entries are not,
-so MPU tail isometry gives $u^\dagger u=\operatorname{Id}$. The corresponding
-declarations are
+so MPU tail isometry gives $u^\dagger u=\operatorname{Id}$ and $d^2\le r\ell$.
+The arbitrary-$K$ declarations are
 \leanid{MPOTensor.SourceFactors.sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm},
-\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag},
-and \leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isDiag}.
-This conclusion assumes the source's diagonal fixed point; it does not assert a
-source-$u$ theorem for arbitrary nonsymmetric $\rho$.
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_input_tail},
+\leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU}, and
+\leanid{MPOTensor.SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU}.
+The compact-SVD wrapper is \leanid{MPOTensor.IsMPU.sourceU_isIsometry}, while
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag}
+converts the raw trace-one transfer power at $J$ into the direct fixed pair at
+$K=JD^2$. The independent right-shift checks
+\leanid{MPOTensor.sourceU_rightShiftPaperSourceFactors_gram} and
+\leanid{MPOTensor.sourceU_rightShiftPaperSourceFactors_isIsometry} fix the same
+normalization and orientation explicitly. These conclusions assume the
+source's diagonal fixed point; they do not assert a source-$u$ theorem for
+arbitrary nonsymmetric $\rho$.
 
 \section{Affected claims and audit boundary}
 

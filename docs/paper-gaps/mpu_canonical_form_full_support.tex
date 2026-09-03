@@ -175,13 +175,18 @@ In both branches, the positive trace-one matrix $\rho$ is the source weight
 used to construct the factors and the operators $u$ and $v$.
 
 The explicit reduced-CFII and full-support hypotheses resolve the
-ambient-positivity question tracked by \ghissue{5855}. For a supplied positive
-trace-one fixed pair whose matrix $\rho$ is diagonal, the complete source-$u$
-network and its isometry conclusion are formalized by
-\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag}
-and \leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isDiag}. The proof
-keeps the source factors built from $\rho$, uses
-$\rho^{\mathsf T}=\rho$, and retains one $K$-site interior between two
+ambient-positivity question tracked by \ghissue{5855}. For a supplied fixed
+pair whose matrix $\rho$ is diagonal, the arbitrary-$K$ complete source-$u$
+network is formalized by
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_input_tail}.
+Input unitarity gives the isometry and rank bound in
+\leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU} and
+\leanid{MPOTensor.SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU};
+\leanid{MPOTensor.IsMPU.sourceU_isIsometry} applies this result to the
+compact-SVD source factors. The raw trace-one transfer-power specialization is
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag}.
+These proofs keep the source factors built from $\rho$, use
+$\rho^{\mathsf T}=\rho$, and retain one $K$-site interior between two
 unblocked endpoints. This is the supplied-fixed-pair form of Lemma~III.7 of
 Ref.~\cite{Cirac2017MPU}; it does not construct such source data for an
 arbitrary MPU representative.
