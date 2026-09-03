@@ -13145,6 +13145,250 @@ left/right order below agrees with the adjacent-pair convention in
     $\widehat{\mathcal R}_{2x+1}$ in $\mathcal A_{P_x}$.
 \end{proof}
 
+\begin{theorem}[Generation by two disjoint finite regions]
+    \label{thm:qca_disjoint_region_generation}
+    \lean{SpinChain.range_localObservable_mono,
+        SpinChain.range_localObservable_union}
+    \leanok
+    \uses{def:qca_algebraic_local_algebra, def:qca_local_inclusion,
+        def:qca_bipartite_local_algebra_coordinates,
+        thm:qca_bipartite_local_algebra_inclusions,
+        thm:qca_commuting_factor_kronecker_coordinates}
+    If $\Lambda\subseteq\Gamma$ are finite regions, then
+    $\iota_\Lambda(\mathcal A_\Lambda)
+        \subseteq\iota_\Gamma(\mathcal A_\Gamma)$.  If the finite regions
+    $\Lambda$ and $\Gamma$ are disjoint, then the two canonical images
+    generate the image of their union,
+    \begin{align}
+        \iota_{\Lambda\cup\Gamma}(\mathcal A_{\Lambda\cup\Gamma})
+         & =\iota_\Lambda(\mathcal A_\Lambda)
+        \vee\iota_\Gamma(\mathcal A_\Gamma).
+        \label{eq:qca_disjoint_region_generation}
+    \end{align}
+    This is the expansion of an observable on several cells into a product of
+    observables on disjoint groups of cells used in
+    \cite[lines~592--596]{Gross2012IndexTheory} and proved in
+    \cite[lines~341--364]{SchumacherWerner2004QCA}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_bipartite_local_algebra_inclusions,
+        thm:qca_commuting_factor_kronecker_coordinates,
+        thm:qca_mem_kronecker_submodule_iff}
+    Monotonicity follows from
+    $\iota_\Gamma\circ\iota_{\Lambda,\Gamma}=\iota_\Lambda$, and it gives the
+    inclusion $\supseteq$ in
+    (\ref{eq:qca_disjoint_region_generation}).  For the remaining inclusion,
+    let $\mathcal V\subseteq\mathcal A_{\Lambda\cup\Gamma}$ be the
+    star-subalgebra of those $A$ whose canonical image lies in the join on the
+    right-hand side.  In the bipartite coordinates
+    $\beta_{\Lambda,\Gamma}$, the canonical inclusion of
+    $\mathcal A_\Lambda$ is $X\mapsto X\otimes\mathbf 1$ and that of
+    $\mathcal A_\Gamma$ is $Y\mapsto\mathbf 1\otimes Y$, so
+    $\beta_{\Lambda,\Gamma}(\mathcal V)$ contains
+    $M_{\mathcal C_\Lambda}(\mathbb C)\otimes\mathbf 1$ and
+    $\mathbf 1\otimes M_{\mathcal C_\Gamma}(\mathbb C)$.  The join of these two
+    subalgebras has underlying vector space
+    $M_{\mathcal C_\Lambda}(\mathbb C)\boxtimes
+        M_{\mathcal C_\Gamma}(\mathbb C)$, and every matrix on
+    $\mathcal C_\Lambda\times\mathcal C_\Gamma$ lies in that span.  Hence
+    $\beta_{\Lambda,\Gamma}(\mathcal V)$ is everything, and
+    $\beta_{\Lambda,\Gamma}$ is bijective, so
+    $\mathcal V=\mathcal A_{\Lambda\cup\Gamma}$.
+\end{proof}
+
+\begin{lemma}[Even pairs cover the chain]
+    \label{lem:qca_even_pair_cover}
+    \lean{SpinChain.disjoint_evenPair_of_ne,
+        SpinChain.subset_biUnion_evenPair}
+    \leanok
+    \uses{def:qca_nearest_neighbor_pair_regions}
+    For $x\ne y$ the pairs $E_x$ and $E_y$ are disjoint, and every finite
+    region $\Lambda$ satisfies
+    \begin{align}
+        \Lambda & \subseteq\bigcup_{x\in X_\Lambda}E_x,
+        \label{eq:qca_even_pair_cover}
+    \end{align}
+    where $X_\Lambda=\{\lfloor i/2\rfloor\mid i\in\Lambda\}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:qca_nearest_neighbor_pair_regions}
+    Both statements are integer arithmetic: the four sites
+    $2x,2x+1,2y,2y+1$ are distinct for $x\ne y$, and every $i$ satisfies
+    $i=2\lfloor i/2\rfloor$ or $i=2\lfloor i/2\rfloor+1$.
+\end{proof}
+
+\begin{theorem}[Generation of the algebraic local algebra by the pair algebras]
+    \label{thm:qca_even_pair_algebraic_generation}
+    \lean{SpinChain.range_localObservable_biUnion_evenPair_le,
+        SpinChain.iSup_range_localObservable_evenPair}
+    \leanok
+    \uses{def:qca_nearest_neighbor_pair_regions,
+        def:qca_algebraic_local_algebra,
+        thm:qca_disjoint_region_generation, lem:qca_even_pair_cover,
+        thm:qca_local_observable_finite_support}
+    The pair algebras generate the algebraic local algebra,
+    \begin{align}
+        \bigvee_{x\in\mathbb Z}\iota_{E_x}(\mathcal A_{E_x})
+         & =\mathcal A_{\mathrm{loc}}.
+        \label{eq:qca_even_pair_algebraic_generation}
+    \end{align}
+    The completion is not involved: this is an equality of algebras of local
+    observables.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_disjoint_region_generation, lem:qca_even_pair_cover,
+        thm:qca_local_observable_finite_support}
+    For a finite set $X$ of pair labels, induction on $X$ gives
+    \begin{align}
+        \iota_{\bigcup_{x\in X}E_x}
+        \Bigl(\mathcal A_{\bigcup_{x\in X}E_x}\Bigr)
+         & \subseteq\bigvee_{x\in\mathbb Z}
+        \iota_{E_x}(\mathcal A_{E_x}).
+        \label{eq:qca_even_pair_generation_induction}
+    \end{align}
+    For $X=\varnothing$ the region is empty and contained in $E_0$, so
+    monotonicity applies.  For $X\cup\{x_0\}$ with $x_0\notin X$, the pair
+    $E_{x_0}$ is disjoint from $\bigcup_{x\in X}E_x$, so
+    (\ref{eq:qca_disjoint_region_generation}) splits the left-hand side into
+    the join of $\iota_{E_{x_0}}(\mathcal A_{E_{x_0}})$ with the algebra
+    handled by the induction hypothesis.  Every local observable is supported
+    in some finite region $\Lambda$, which is covered by
+    (\ref{eq:qca_even_pair_cover}); monotonicity and
+    (\ref{eq:qca_even_pair_generation_induction}) place it in the join.
+\end{proof}
+
+\begin{definition}[Join of the site-indexed support algebras]
+    \label{def:qca_support_algebra_join}
+    \lean{SpinChain.PropagatesWithin.supportAlgebraJoin,
+        SpinChain.PropagatesWithin.embeddedEvenSupportAlgebra_le_supportAlgebraJoin,
+        SpinChain.PropagatesWithin.embeddedOddSupportAlgebra_le_supportAlgebraJoin}
+    \leanok
+    \uses{def:qca_site_indexed_support_algebras}
+    For a star-algebra automorphism $\omega$ of the quasi-local algebra
+    propagating within $\{-1,0,1\}$, define
+    \begin{align}
+        G & =\bigvee_{y\in\mathbb Z}\widehat{\mathcal R}_y
+        \subseteq\mathcal A.
+        \label{eq:qca_support_algebra_join}
+    \end{align}
+    Each $\widehat{\mathcal R}_y$ is contained in $G$.  This is the algebraic
+    join associated with the algebra generated by all $\mathcal R_y$ in
+    \cite[lines~1276--1279]{Gross2012IndexTheory}.  No claim that $G$ is
+    proper or that it fails to be norm closed is made here.
+\end{definition}
+
+\begin{theorem}[Images of the pair algebras lie in the join]
+    \label{thm:qca_evenPair_image_in_support_algebra_join}
+    \lean{SpinChain.PropagatesWithin.quasiLocalObservable_evenPair_mem_supportAlgebraJoin,
+        SpinChain.PropagatesWithin.algebraicToQuasiLocal_mem_supportAlgebraJoin}
+    \leanok
+    \uses{def:qca_support_algebra_join,
+        def:qca_bipartite_finite_local_image,
+        thm:qca_adjacent_pair_support_containment,
+        thm:qca_even_pair_algebraic_generation}
+    For every $x\in\mathbb Z$,
+    \begin{align}
+        \omega\bigl(j_{E_x}(\mathcal A_{E_x})\bigr) & \subseteq G,
+        \label{eq:qca_evenPair_image_in_support_algebra_join}
+    \end{align}
+    and consequently
+    $\omega\bigl(j(\mathcal A_{\mathrm{loc}})\bigr)\subseteq G$.
+    Inclusion (\ref{eq:qca_evenPair_image_in_support_algebra_join}) is the
+    containment
+    $\alpha(\mathcal A_{2x}\otimes\mathcal A_{2x+1})\subseteq
+        \mathcal R_{2x}\otimes\mathcal R_{2x+1}$
+    at \cite[lines~1276--1278]{Gross2012IndexTheory}, in the homogeneous
+    fixed-$d$ setting; see
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_adjacent_pair_support_containment,
+        thm:qca_commuting_factor_kronecker_coordinates,
+        thm:qca_bipartite_local_algebra_inclusions,
+        thm:qca_even_pair_algebraic_generation}
+    Write $S_x$ for the finite image of $\mathcal A_{E_x}$ in the ordered
+    $L_x\times P_x$ coordinates.  By
+    (\ref{eq:qca_adjacent_pair_containment}), $S_x$ is contained in
+    $\mathcal R_{2x}\boxtimes\mathcal R_{2x+1}$, which is the underlying vector
+    space of the join of $\mathcal R_{2x}\otimes\mathbf 1$ and
+    $\mathbf 1\otimes\mathcal R_{2x+1}$.  The canonical quasi-local map on
+    $L_x\cup P_x$ sends $X\otimes\mathbf 1$ to the canonical embedding of
+    $X\in\mathcal R_{2x}$ and $\mathbf 1\otimes Y$ to the canonical embedding
+    of $Y\in\mathcal R_{2x+1}$, so it maps that join into $G$.  It sends the
+    image of $A\in\mathcal A_{E_x}$ to $\omega(j_{E_x}(A))$, which proves
+    (\ref{eq:qca_evenPair_image_in_support_algebra_join}).  By
+    (\ref{eq:qca_even_pair_algebraic_generation}), every local observable lies
+    in the algebra generated by the $\iota_{E_x}(\mathcal A_{E_x})$, and
+    $\omega\circ j$ is a star-algebra homomorphism, so its image lies in $G$.
+\end{proof}
+
+\begin{theorem}[Norm-closed generation by the support algebras]
+    \label{thm:qca_support_algebra_topological_generation}
+    \lean{SpinChain.PropagatesWithin.supportAlgebraJoin_topologicalClosure_eq_top}
+    \leanok
+    \uses{def:qca_support_algebra_join,
+        thm:qca_evenPair_image_in_support_algebra_join,
+        thm:qca_quasi_local_density}
+    The site-indexed support algebras generate the quasi-local algebra in the
+    norm-closed sense,
+    \begin{align}
+        \overline{G}^{\lVert\cdot\rVert} & =\mathcal A.
+        \label{eq:qca_support_algebra_topological_generation}
+    \end{align}
+    In \cite[lines~1276--1279]{Gross2012IndexTheory} the algebras
+    $\mathcal R_y$ are said to generate an algebra containing
+    $\alpha(\mathcal A(\mathbb Z))$, which equals $\mathcal A(\mathbb Z)$
+    because $\alpha$ is an automorphism.  Here this generation statement is
+    made precise by the norm-closure equality
+    (\ref{eq:qca_support_algebra_topological_generation}), without asserting
+    that the algebraic join itself is proper or non-closed.  This is reusable
+    homogeneous fixed-$d$ infrastructure and does not assert the
+    site-dependent statement of the source; see
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_evenPair_image_in_support_algebra_join,
+        thm:qca_quasi_local_density}
+    An injective star-algebra homomorphism of complex C-star algebras is
+    isometric, so $\omega$ is continuous and
+    $\omega^{-1}(\overline G)$ is closed.  By
+    (\ref{eq:qca_evenPair_image_in_support_algebra_join}) it contains
+    $j(\mathcal A_{\mathrm{loc}})$, which is dense, so
+    $\omega^{-1}(\overline G)=\mathcal A$.  Since $\omega$ is surjective,
+    every $z\in\mathcal A$ equals $\omega(\omega^{-1}(z))\in\overline G$.
+\end{proof}
+
+\begin{corollary}[Commutant of the site-indexed support algebras]
+    \label{cor:qca_support_algebra_commutant}
+    \lean{SpinChain.PropagatesWithin.commute_of_forall_commute_embeddedSupportAlgebra}
+    \leanok
+    \uses{def:qca_support_algebra_join,
+        thm:qca_support_algebra_topological_generation}
+    If $z\in\mathcal A$ satisfies $[z,R]=0$ for every $y\in\mathbb Z$ and
+    every $R\in\widehat{\mathcal R}_y$, then $[z,A]=0$ for every
+    $A\in\mathcal A$.  This is the step from commutation with all
+    $\mathcal R_y$ to commutation in the quasi-local algebra at
+    \cite[lines~1279--1282]{Gross2012IndexTheory}; see
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{def:qca_support_algebra_join,
+        thm:qca_support_algebra_topological_generation}
+    The elements commuting with $z$ and with $z^*$ form a norm-closed
+    star-subalgebra.  Each $\widehat{\mathcal R}_y$ is star closed, so the
+    hypothesis applied to $R^*$ gives $[z^*,R]=0$ as well; hence that
+    star-subalgebra contains every $\widehat{\mathcal R}_y$, therefore
+    contains $G$, and being closed it contains
+    $\overline G=\mathcal A$ by
+    (\ref{eq:qca_support_algebra_topological_generation}).
+\end{proof}
+
 \begin{definition}[Tripartite finite-region coordinates]
     \label{def:qca_tripartite_local_coordinates}
     \lean{SpinChain.Config.disjointTripleEquiv,
