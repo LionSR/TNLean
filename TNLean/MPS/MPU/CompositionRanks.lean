@@ -336,10 +336,6 @@ private theorem rightRank_blockTwo_mulTensor_blockTwo_le
       Matrix.rank_le_card_width _
     _ = d ^ 2 * r[U] * r[V] := by simp [pow_two]; ring
 
-private def reindexBond {D' : ℕ} (e : Fin D' ≃ Fin D₁) (U : MPOTensor d D₁) :
-    MPOTensor d D' :=
-  fun i j a b => U i j (e a) (e b)
-
 private theorem rightRank_reindexBond {D' : ℕ} (e : Fin D' ≃ Fin D₁)
     (U : MPOTensor d D₁) : r[reindexBond e U] = r[U] := by
   rw [rightRank]
@@ -356,10 +352,6 @@ private theorem reindexBond_blockTwo {D' : ℕ} (e : Fin D' ≃ Fin D₁)
   simp only [reindexBond, blockTwo_apply, Matrix.mul_apply]
   rw [← Equiv.sum_comp e]
 
-private def bondSwapEquiv (D₁ D₂ : ℕ) : Fin (D₂ * D₁) ≃ Fin (D₁ * D₂) :=
-  finProdFinEquiv.symm |>.trans
-    ((Equiv.prodComm (Fin D₂) (Fin D₁)).trans finProdFinEquiv)
-
 private def physicalFlip (U : MPOTensor d D₁) : MPOTensor d D₁ :=
   fun i j => U j i
 
@@ -375,10 +367,10 @@ private theorem blockTwo_physicalFlip (U : MPOTensor d D₁) :
 private theorem mulTensor_physicalFlip_swap
     (U : MPOTensor d D₁) (V : MPOTensor d D₂) :
     mulTensor (physicalFlip V) (physicalFlip U) =
-      reindexBond (bondSwapEquiv D₁ D₂) (physicalFlip (mulTensor U V)) := by
+      reindexBond (productBondSwapEquiv D₂ D₁) (physicalFlip (mulTensor U V)) := by
   classical
   ext i k x y
-  simp only [mulTensor_apply, physicalFlip, reindexBond, bondSwapEquiv,
+  simp only [mulTensor_apply, physicalFlip, reindexBond, productBondSwapEquiv,
     Equiv.trans_apply, Equiv.prodComm_apply, Equiv.symm_apply_apply,
     Matrix.submatrix_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply]
   apply Finset.sum_congr rfl
