@@ -3714,10 +3714,18 @@ by the displayed matrices.
     Theorem~\ref{thm:mpug_hypercube_potential} make it vanish on the whole
     fiber. On a fiber with trivial holonomy, $v$ therefore vanishes as soon
     as $v_{(x,0)}=0$. On a fiber where (\ref{eq:mpug_trivial_holonomy})
-    fails at some $(j,k,\gamma_0)$, transporting $v_{(x,\gamma_0)}$ along the
-    two paths to $(x,\gamma_0+e_j+e_k)$ gives two different phases times
-    $v_{(x,\gamma_0)}$, so $v_{(x,\gamma_0)}=0$ and again $v$ vanishes on the
-    fiber.
+    fails at some $(j,k,\gamma_0)$, the two paths from $(x,\gamma_0)$ to
+    $(x,\gamma_0+e_j+e_k)$ give
+    \begin{align}
+        v_{(x,\gamma_0+e_j+e_k)}
+         & =\varphi_j(x,\gamma_0)\varphi_k(x,\gamma_0+e_j)
+        v_{(x,\gamma_0)},                                  \\
+        v_{(x,\gamma_0+e_j+e_k)}
+         & =\varphi_k(x,\gamma_0)\varphi_j(x,\gamma_0+e_k)
+        v_{(x,\gamma_0)}.
+    \end{align}
+    The two phase products differ, so $v_{(x,\gamma_0)}=0$ and again $v$
+    vanishes on the fiber.
 
     $E$ is surjective. Given $w\in\C^{X_0}$, take on each fiber with trivial
     holonomy the potential $\Phi_x$ of
@@ -3802,6 +3810,10 @@ by the displayed matrices.
         MPOTensor.CZX.tildeLambda,
         MPOTensor.CZX.siteBits,
         MPOTensor.CZX.localBits,
+        MPOTensor.CZX.localBits_apply_zero,
+        MPOTensor.CZX.localBits_apply_one,
+        MPOTensor.CZX.localBits_apply_two,
+        MPOTensor.CZX.localBits_apply_three,
         MPOTensor.CZX.matterMatrix,
         MPOTensor.CZX.gen,
         MPOTensor.CZX.circuitTuple,
