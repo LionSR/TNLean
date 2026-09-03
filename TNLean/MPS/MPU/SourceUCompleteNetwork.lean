@@ -34,7 +34,7 @@ closure.  Documented in
 `docs/paper-gaps/mpu_canonical_form_full_support.tex` and
 `docs/paper-gaps/mpu_source_cut_orientation.tex`.  Elimination: replace the
 explicit fixed-pair hypotheses by the bundled canonical-form-II convention
-described in the first note.
+described in the orientation note.
 
 Source: arXiv:1703.09188, equations `Erightleft`, `X1X2b`, `uu`, and
 `uUnitary`, and Lemma `lemuisometry` (lines 269--280 and 487--557).
