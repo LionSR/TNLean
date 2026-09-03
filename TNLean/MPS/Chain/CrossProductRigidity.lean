@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Chain.OneSidedInverse
 import QICLean.Kraus.NormalCommutant
+import TNLean.MPS.Chain.OneSidedInverse
 
 /-!
 # Cross-product rigidity for matrix families
@@ -174,7 +174,9 @@ private theorem eq_smul_of_factor_of_cross_mul_eq
   simp
 
 /-- If `A` is injective and `B i * A j = A i * B j` for every pair of indices,
-then all matrices of `B` are obtained from `A` by one common scalar. -/
+then all matrices of `B` are obtained from `A` by one common scalar.
+
+Source: `Papers/2502.20257/main.tex:1255-1325`. -/
 theorem IsInjective.exists_smul_of_cross_mul_eq
     {A B : Fin d → Matrix (Fin D) (Fin D) ℂ} (hA : Kraus.IsInjective A)
     (hcross : ∀ i j, B i * A j = A i * B j) :
@@ -187,7 +189,9 @@ theorem IsInjective.exists_smul_of_cross_mul_eq
 then all matrices of `B` are obtained from `A` by one common scalar.
 
 The proof blocks `A` to an injective word family and moves the marked `B` letter
-through each word before applying the block decomposition map. -/
+through each word before applying the block decomposition map.
+
+Source: `Papers/2502.20257/main.tex:1255-1325`. -/
 theorem IsNormal.exists_smul_of_cross_mul_eq
     {A B : Fin d → Matrix (Fin D) (Fin D) ℂ} (hA : Kraus.IsNormal A)
     (hcross : ∀ i j, B i * A j = A i * B j) :
