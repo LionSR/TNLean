@@ -182,8 +182,11 @@ reflected--direct Gram expansion and the normalized input-tail trace are
 formalized separately. Their equality after inserting the simple $K$-site
 interior of Figure~\texttt{II\_uUnitary.png} remains tracked by
 \ghissue{5982} and comes from Lemma~III.7 of Ref.~\cite{Cirac2017MPU}. The
-complete source-$v$ equivalence remains tracked by \ghissue{6071} and occurs
-in the proof of Theorem~III.8 of Ref.~\cite{Cirac2017MPU}.
+complete source-$v$ equivalence from the proof of Theorem~III.8 of
+Ref.~\cite{Cirac2017MPU} is formalized as
+\leanid{MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair}; it
+needs no fixed-pair datum beyond a positive definite weight, and it carries
+the weight transpose recorded in \texttt{mpu\_source\_cut\_orientation.tex}.
 % Source lines: paper_v2.tex 545--557 and 577--600.
 % Source equation labels: uUnitary and vUnitary.
 
@@ -261,9 +264,9 @@ $\mathcal W_{4k}$ \cite{Cirac2017MPU}. The admissible theorem therefore
 requires separate source data for all six exact blocked tensors. It does not
 use later-block transport. The complete source-$u$ contraction in
 \ghissue{5982} is a dependency of the admissible source-isometry proof, and the
-complete source-$v$ contraction in \ghissue{6071} is a dependency of the
-admissible simple-tensor equivalence proof. These open proof nodes do not
-establish the unrestricted source statements.
+formalized complete source-$v$ network is a dependency of the admissible
+simple-tensor equivalence proof. Neither establishes the unrestricted source
+statements.
 % Source lines: paper_v2.tex 824--865.
 
 The same separation between source statements and scoped statements extends
@@ -517,8 +520,8 @@ representative existence but does not transport selected compact-SVD factors
 between unequal bond spaces. The admissible source-unitary and standard-form
 construction is tracked by \ghissue{7012}, while \ghissue{7127} owns the later
 unrestricted standard-form representative. The independent complete-network
-issues \ghissue{5982} and \ghissue{6071} remain necessary for the source-$u$
-and source-$v$ conclusions.
+issue \ghissue{5982} remains necessary for the source-$u$ conclusion; the
+source-$v$ conclusion is formalized.
 
 Issue~\ghissue{6139} treats tensor products, composition, and conjugate,
 adjoint, transposed, and other transformed comparison tensors. It removes the
@@ -533,8 +536,8 @@ The twenty-nine source/scoped pairs in the continuity and symmetry subtree are
 merged only after the relevant branches close. Until then, every source label
 remains an unrestricted unformalized statement, and every reduced-source or
 path-dependent statement remains under its \texttt{mpu\_admissible} label.
-Representative existence does not discharge the independent obligations in
-\ghissue{5982} and \ghissue{6071}.
+Representative existence does not discharge the independent obligation in
+\ghissue{5982}.
 
 \section{Verdict}
 
@@ -555,9 +558,9 @@ dimensions has been proved. The original source labels remain unrestricted and
 unformalized; the distinct admissible nodes record the current same-tensor
 source-data route.
 
-Within Theorem~III.8 itself, the remaining proof gaps are the complete
-source-$u$ contraction tracked by \ghissue{5982} and the complete source-$v$
-equivalence tracked by \ghissue{6071}. Downstream standard-form, index,
+Within Theorem~III.8 itself, the remaining proof gap is the complete
+source-$u$ contraction tracked by \ghissue{5982}; the complete source-$v$
+equivalence is formalized. Downstream standard-form, index,
 continuity, and symmetry results also lack existence or preservation theorems
 for reduced source data under products, transformed comparison tensors, and
 continuous paths. Chapter~28 records these requirements as explicit

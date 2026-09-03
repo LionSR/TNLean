@@ -3477,8 +3477,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     sums. No ambient identity $X_2X_2^\dagger=\Id$ is used.
 \end{proof}
 
-% This theorem is support for issue #6071.  The complete simultaneous mixed
-% source-cut contraction remains open there.
+% This theorem supplies the closed factor of the complete source-$v$ network
+% in Theorem~\ref{thm:mpu_source_v_complete_contraction}.
 \begin{theorem}[Paper-$v$ open-leg contraction]
     \label{thm:mpu_source_v_mul_source_y_tensor_entry}
     \lean{MPOTensor.sourceV_mul_sourceYTensor_apply}
@@ -3503,8 +3503,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 % Formalization scope: the input-tail, diagonal-tail, and one-sided source-$v$
-% identities above do not prove a dressed Gram identity.  The simultaneous
-% mixed source-cut contraction is tracked by the not-ready node under #6071.
+% identities above do not prove a dressed Gram identity by themselves.  The
+% complete same-tensor network is Theorem~\ref{thm:mpu_source_v_complete_contraction}.
 
 \begin{theorem}[Tensorized source right inverse]
     \label{thm:mpu_source_yz_tensor}
@@ -5083,48 +5083,128 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % The retained-interior contraction is tracked in Issue #7633.
 \end{proof}
 
-\begin{theorem}[Complete reduced source-$v$ contraction]
-    \label{thm:mpu_source_v_complete_reduced_contraction}
-    \notready
-    \discussion{6071}
-    % **Scope restriction (reduced full-support source datum):** the source
-    % equivalence labelled vUnitary is planned only for tensors carrying the
-    % datum in Definition~\ref{def:mpu_reduced_full_support_source_datum}.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_source_v_dressing, def:mpu_reduced_full_support_source_datum, thm:mpu_supplied_projector_simple2}
-    Let $\mathcal U$ be an MPU tensor equipped with a reduced full-support
-    source datum. Let $J$, $\rho$, and $(\Phi\rvert$ be its stabilization
-    exponent and normalized fixed pair, so that
+\begin{theorem}[Complete source-$v$ network]
+    \label{thm:mpu_source_v_complete_contraction}
+    \lean{MPOTensor.sourceYTensor_conjTranspose_sourceV_gram_apply,
+        MPOTensor.sourceYTensor_gram_apply_eq_doubleLayerTensor_rankOne_mul_apply,
+        MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair}
+    \leanok
+    \uses{def:mpu_source_uv, def:mpu_source_v_dressing, def:mpu_double_layer}
+    Let $\rho>0$, and compute both source cuts, the source operator $v$, and
+    the right source factors $Y_1,Y_2$ from the same tensor $\mathcal U$ using
+    $\rho$. Let $W$ be the double layer of $\mathcal U$, let
+    $\lvert\rho^{\mathsf T})$ be the column-stacking vector of
+    $\rho^{\mathsf T}$, and let
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. For the starred
+    physical pair $p=(p_1,p_2)$, the unstarred pair $q=(q_1,q_2)$, and
+    virtual paths $a=(a_1,a_2)$ and $b=(b_1,b_2)$, put
+    $x=((a_1,p_1),(p_2,a_2))$ and $y=((b_1,q_1),(q_2,b_2))$. Then
     \begin{align}
-        E^J & =\lvert\rho)(\Phi\rvert.
+        \bigl((Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)\bigr)_{x,y}
+         & =\bigl(W^{p_1q_1}W^{p_2q_2}\bigr)_{(a_1,b_1),(a_2,b_2)},
+        \label{eq:mpu_source_v_dressed_two_letter}                  \\
+        \bigl((Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2)\bigr)_{x,y}
+         & =\bigl(W^{p_1q_1}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_2q_2}\bigr)
+        _{(a_1,b_1),(a_2,b_2)}.
+        \label{eq:mpu_source_v_undressed_inserted}
     \end{align}
-    Compute both source cuts, their ranks $r$ and $\ell$, the source operator
-    $v$, and the right source factors $Y_1,Y_2$ from this same tensor
-    $\mathcal U$ using $\rho$. Let $W$ be the double layer of $\mathcal U$.
-    Then the supplied contraction
+    Consequently the dressed Gram equation
     \begin{align}
-        W^{ij}W^{k\ell}
-         & =W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}
+        (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
+         & =(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2)
     \end{align}
     holds if and only if
     \begin{align}
-        (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
-         & =(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2).
+        W^{ij}W^{k\ell}
+         & =W^{ij}\lvert\rho^{\mathsf T})(\Phi\rvert W^{k\ell}
     \end{align}
-    When $\mathcal U$ is simple,
-    Theorem~\ref{thm:mpu_supplied_projector_simple2} supplies the displayed
-    contraction with this same fixed pair. This is the complete equivalence in
-    \cite[proof of Theorem~III.8]{Cirac2017MPU}.
-    % Source equation label: vUnitary. Source lines: paper_v2.tex 577--600.
+    for all $i,j,k,\ell$. The weight is transposed, as in
+    Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace}: the source
+    gate of a tensor whose transfer fixed point is $\rho$ is the gate built
+    from $\rho^{\mathsf T}$. This is the equivalence in
+    \cite[equation~\texttt{vUnitary} and proof of Theorem~III.8]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 577--600. The weight orientation is recorded
+    % in docs/paper-gaps/mpu_source_cut_orientation.tex.
 \end{theorem}
 
-\begin{proof}
-    \uses{thm:mpu_normalized_input_tail_isometry, thm:mpu_normalized_diagonal_power_fixed_pair, thm:mpu_simple_two_letter_diagonal_tail, thm:mpu_source_v_four_u_expansions, thm:mpu_source_v_mul_source_y_tensor_entry, thm:mpu_source_v_dressed_entries}
-    Insert $E^J=\lvert\rho)(\Phi\rvert$ into the complete network while
-    retaining the source factors of $\mathcal U$. Expand both source cuts and
-    rotate the second cut. Contract the resulting four-letter expression as one
-    closed network to obtain the dressed Gram equation, and reverse the same
-    calculation for the converse.
+\begin{proof}\leanok
+    \uses{thm:mpu_source_v_mul_source_y_tensor_entry, thm:mpu_source_v_four_u_expansions}
+    Regrouping gives
+    $(Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
+        =\bigl(v(Y_1\otimes Y_2)\bigr)^\dagger v(Y_1\otimes Y_2)$, and
+    Theorem~\ref{thm:mpu_source_v_mul_source_y_tensor_entry} closes each
+    factor by the two source-cut factorizations:
+    \begin{align}
+        \bigl(v(Y_1\otimes Y_2)\bigr)_{z,x}
+         & =\sum_\gamma U^{z_1p_1}_{a_1\gamma}U^{z_2p_2}_{\gamma a_2}.
+    \end{align}
+    Summing the conjugate of this expression against the corresponding
+    expression for $y$ over $z$ and reordering the finite sums gives the
+    ordinary two-letter entry of
+    Theorem~\ref{thm:mpu_source_v_four_u_expansions}, which
+    proves~(\ref{eq:mpu_source_v_dressed_two_letter}). For
+    (\ref{eq:mpu_source_v_undressed_inserted}), the same theorem expands the
+    Gram entry of $Y_1\otimes Y_2$ with the weight $\rho_{\beta\beta'}$
+    attached to the starred index $\beta$, and expands the inserted entry with
+    $(\rho^{\mathsf T})_{\alpha'\alpha}=\rho_{\alpha\alpha'}$ attached to the
+    starred index $\alpha$; the two finite sums agree after reordering. Both
+    directions of the equivalence compare the two entry identities at every
+    $x$ and $y$. The network is kept combined, and neither source cut is
+    contracted separately.
+\end{proof}
+
+\begin{theorem}[Source-$v$ isometry of a simple tensor]
+    \label{thm:mpu_simple_source_v_isometry}
+    \lean{MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry,
+        MPOTensor.IsMPUSimple.rightRank_mul_leftRank_le}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer}
+    Let $\mathcal U$ be simple with physical dimension $d>0$, let $W$ be its
+    double layer with normalized diagonal $E$, and let $\rho>0$ satisfy
+    $E^J=\lvert\rho)(\Phi\rvert$ for some $J>0$, where
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. Let $v$ be the source
+    operator of $\mathcal U$ built from the weight $\rho^{\mathsf T}$. Then
+    $v^\dagger v=\Id_{r\ell}$, and consequently $r\ell\le d^2$. This is the
+    implication $1\to2$ in \cite[proof of Theorem~III.8]{Cirac2017MPU},
+    before the standing isometry of $u$ is used.
+    % Source lines: paper_v2.tex 577--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_projector_simple2, thm:mpu_source_v_complete_contraction, thm:mpu_source_v_dressed_gram_cancel}
+    Theorem~\ref{thm:mpu_supplied_projector_simple2} gives
+    $W^{ij}W^{k\ell}=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}$. Applying
+    Theorem~\ref{thm:mpu_source_v_complete_contraction} to the weight
+    $\rho^{\mathsf T}$, whose transposed column-stacking vector is
+    $\lvert\rho)$, gives the dressed Gram equation for the factors built from
+    $\rho^{\mathsf T}$, and Theorem~\ref{thm:mpu_source_v_dressed_gram_cancel}
+    cancels the dressing. Since $v^\dagger v=\Id$ on
+    $\C^r\otimes\C^\ell$, the map $v$ is injective, so $r\ell\le d^2$.
+\end{proof}
+
+\begin{theorem}[Simplicity from the source-$v$ isometry]
+    \label{thm:mpu_simple_of_source_v_isometry}
+    \lean{MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry}
+    \leanok
+    \uses{def:mpu, def:mpu_simple, def:mpu_source_uv}
+    Let $\mathcal U$ be an MPU tensor, let $\rho>0$, and let $v$ be its
+    source operator built from $\rho$. If $v^\dagger v=\Id_{r\ell}$, then
+    $\mathcal U$ is simple, with witnesses $(\Phi\rvert$ and
+    $\lvert\rho^{\mathsf T})$. This is the implication $4\to1$ in
+    \cite[proof of Theorem~III.8]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 596--600.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_v_dressed_gram_cancel, thm:mpu_source_v_complete_contraction, thm:mpu_supplied_witness_overlapping_reblocking}
+    By Theorem~\ref{thm:mpu_source_v_dressed_gram_cancel}, $v^\dagger v=\Id$
+    gives the dressed Gram equation, and
+    Theorem~\ref{thm:mpu_source_v_complete_contraction} turns it into
+    $W^{ij}W^{k\ell}=W^{ij}\lvert\rho^{\mathsf T})(\Phi\rvert W^{k\ell}$.
+    The same-witness implication in
+    Theorem~\ref{thm:mpu_supplied_witness_overlapping_reblocking} supplies
+    $(\Phi\rvert W^{ij}\lvert\rho^{\mathsf T})=\delta_{ij}$ from unitarity,
+    so both simple contractions hold.
 \end{proof}
 
 \begin{lemma}[The source operator $u$ is an isometry]
@@ -5232,28 +5312,23 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}
     \uses{lem:mpu_admissible_source_u_isometry,
-        thm:mpu_supplied_projector_simple2,
-        thm:mpu_supplied_witness_overlapping_reblocking,
-        thm:mpu_source_v_complete_reduced_contraction,
-        thm:mpu_source_v_dressed_gram_cancel,
+        thm:mpu_simple_source_v_isometry,
+        thm:mpu_simple_of_source_v_isometry,
         thm:mpu_source_gates_two_site_factorization}
     Lemma~\ref{lem:mpu_admissible_source_u_isometry} gives
     $u^\dagger u=\Id$ before any of the four
     conditions is assumed. Thus $u$ is a standing isometry and
     $r\ell\geq d^2$ throughout the proof.
 
-    Suppose first that $\mathcal U$ is simple.
-    Theorem~\ref{thm:mpu_supplied_projector_simple2}, applied to the stabilized
-    transfer power, gives the second contraction with the supplied pair
-    $\lvert\rho)(\Phi\rvert$. By
-    Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction},
-    \begin{align}
-        (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
-         & =(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2).
-    \end{align}
-    Cancelling the dressing by the right inverses of $Y_1$ and $Y_2$ gives
-    $v^\dagger v=\Id$, hence $r\ell\leq d^2$. Together with the standing
-    source-$u$ isometry, this gives $r\ell=d^2$.
+    Suppose first that $\mathcal U$ is simple. The stabilized transfer power
+    supplies the pair $\lvert\rho)(\Phi\rvert$, and
+    Theorem~\ref{thm:mpu_simple_source_v_isometry} gives $v^\dagger v=\Id$
+    for the source operator built from the weight $\rho^{\mathsf T}$, hence
+    $r\ell\leq d^2$. Together with the standing source-$u$ isometry, this
+    gives $r\ell=d^2$.
+    % The source gate for the fixed point ρ is the formal gate built from the
+    % weight ρᵀ; see docs/paper-gaps/mpu_source_cut_orientation.tex. The
+    % statement above must fix this weight when the theorem is formalized.
 
     If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
     Theorem~\ref{thm:mpu_source_gates_two_site_factorization} gives the exact
@@ -5273,12 +5348,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     corrected source-cut orientation recorded in
     \texttt{docs/paper-gaps/mpu\_source\_cut\_orientation.tex}.
 
-    Finally, suppose that $v$ is unitary. Unitarity gives the dressed Gram
-    identity, and
-    Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction} gives the
-    supplied second contraction for $\mathcal U$. The same-witness implication
-    in Theorem~\ref{thm:mpu_supplied_witness_overlapping_reblocking} supplies
-    the first contraction, so $\mathcal U$ is simple.
+    Finally, suppose that $v$ is unitary. Then $v^\dagger v=\Id$, and
+    Theorem~\ref{thm:mpu_simple_of_source_v_isometry} shows that
+    $\mathcal U$ is simple.
 \end{proof}
 
 \begin{definition}[Standard form]
