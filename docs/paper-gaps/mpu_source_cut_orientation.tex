@@ -102,6 +102,62 @@ The contractions $Y_1$--$X_2$ and $X_1$--$Y_2$ remain useful auxiliary
 kernels, but they are not the gates $u$ and $v$. Treating either mixed kernel
 as a paper gate produces the wrong physical and auxiliary leg assignment.
 
+\section{Weight orientation and the transfer fixed pair}
+
+Let $\rho$ be the fixed point of the normalized transfer map,
+$\frac1d\sum_{i,j}\mathcal U^{ij}\rho\,(\mathcal U^{ij})^\dagger=\rho$, and let
+$\lvert\rho)$ be its column-stacking vector, so that the doubled-bond
+coordinate $(\alpha,\alpha')$ carries the entry $\rho_{\alpha'\alpha}$, with
+$\alpha$ the index of the conjugated layer. Inserting $\lvert\rho)(\Phi\rvert$
+between two double-layer letters therefore pairs the conjugated leg with the
+column index of $\rho$:
+\begin{align}
+    \bigl(W^{p_1q_1}\lvert\rho)(\Phi\rvert W^{p_2q_2}\bigr)
+    _{(a_1,b_1),(a_2,b_2)}
+     & =\sum_{\alpha,\alpha',\beta,j_1,j_2}
+    \overline{\mathcal U^{j_1}_{p_1,a_1,\alpha}}
+    \mathcal U^{j_1}_{q_1,b_1,\alpha'}\rho_{\alpha'\alpha}
+    \overline{\mathcal U^{j_2}_{p_2,\beta,a_2}}
+    \mathcal U^{j_2}_{q_2,\beta,b_2}.
+    \label{eq:mpu_source_cut_orientation_inserted}
+\end{align}
+The printed weight $W_\rho=\operatorname{Id}_d\otimes\rho$ of
+Eq.~\ref{eq:mpu_source_cut_orientation_weight} instead pairs the conjugated
+leg with the row index of $\rho$:
+\begin{align}
+    \bigl(Y_1^\dagger Y_1\bigr)_{(a,p),(b,q)}
+     & =\sum_{i,\beta,\beta'}
+    \overline{\mathcal U^{i}_{p,a,\beta}}\rho_{\beta\beta'}
+    \mathcal U^{i}_{q,b,\beta'}.
+    \label{eq:mpu_source_cut_orientation_weighted_gram}
+\end{align}
+The two readings agree exactly when $\rho=\rho^{\mathsf T}$. In
+Ref.~\cite{Cirac2017MPU} the fixed point is diagonal, so the printed identity
+$X_1^\dagger(\operatorname{Id}\otimes\rho)X_1=\operatorname{Id}$ and the
+diagram \texttt{X1X2b} coincide there. For a general positive definite $\rho$
+the two coordinate expressions differ by a transpose; the source does not make
+that generalization.
+
+The formalization keeps the printed weight \leanid{MPOTensor.sourceWeight}
+and records the transpose on the inserted vector. The source-$u$ Gram closes
+to a trace with $\lvert\rho^{\mathsf T})(\Phi\rvert$ in
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_transpose_fixed_pair_trace},
+and the source-$v$ dressed Gram equation is equivalent to the two-letter
+identity with the insertion $\lvert\rho^{\mathsf T})(\Phi\rvert$ in
+\leanid{MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair}.
+The source gates remain the gates built from the printed weight $\rho$; replacing
+that weight by $\rho^{\mathsf T}$ recomputes $X_1,Y_1$ and gives a different
+gate when $\rho$ is not symmetric. The source's diagonal convention makes the
+two inserted vectors equal, and
+\leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry} proves the forward direction
+of Theorem~III.8 on precisely that convention. The reparametrized theorem
+\leanid{MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry} is retained as an
+auxiliary statement, not as an identification of the original gate. The
+converse direction in
+\leanid{MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry} produces the
+witnesses $(\Phi\rvert$ and $\lvert\rho^{\mathsf T})$ for the same weight
+$\rho$. No source-factor definition is changed.
+
 \section{Affected claims and audit boundary}
 
 The transposed first cut affected source-factor recovery, physical adjunction,
@@ -128,7 +184,11 @@ all order-sensitive contractions. The first cut, weight, adjunction identities,
 paper gates, two-site factorizations, tensor products, and shift examples now
 use one consistent leg assignment. The correction is resolved, while the
 revalidation rule remains applicable to any future recovery of source-gate
-work predating this audit.
+work predating this audit. The printed weight and the column-stacking transfer
+fixed pair differ by a transpose for non-diagonal $\rho$; the complete
+source-$u$ and source-$v$ network theorems carry this transpose on the
+inserted vector without changing the source gate's weight. The source's
+diagonal fixed point removes the mismatch in Theorem~III.8.
 
 \bibliographystyle{alpha}
 \bibliography{references}

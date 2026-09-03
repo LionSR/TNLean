@@ -1566,6 +1566,24 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### nested finite-sum binder permutation — promoted
+- **Pattern:** permute the binders of three to five nested finite sums over
+  `Finset.univ` by folding them into one sum over an iterated product type,
+  transporting along an explicit component permutation with
+  `Fintype.sum_equiv`, and unfolding again with `Fintype.sum_prod_type`.
+- **Seen:** five used private helpers and one unused helper across
+  `TNLean/MPS/MPU/SourceUCompleteNetwork.lean`,
+  `TNLean/MPS/MPU/MixedKernelRangeTransport.lean`, and
+  `TNLean/MPS/MPU/SourceVCompleteNetwork.lean` (2026-09-03).
+- **Abstraction:** the `Fintype.sum_reverse_three`,
+  `Fintype.sum_last_two_first_four`, `Fintype.sum_last_first_four`,
+  `Fintype.sum_last_two_first_five`, and `Fintype.sum_permute_five` helper
+  theorems in `TNLean/Algebra/FinSumPermutation.lean`.
+- **Notes:** all five motivating call sites now use the shared results, and the
+  unused sixth private helper was removed. Specific theorem statements are the
+  lowest sufficient abstraction for the five permutations currently needed;
+  no elaborator tactic or arity-indexed framework is introduced.
+
 ### cycle-edge virtual-configuration sum reindexing — candidate
 - **Pattern:** identify assignments on the edges of a cycle with assignments
   indexed by its sites using `cycleEdgeEquiv`, then, when a cyclic product is

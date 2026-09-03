@@ -45,6 +45,7 @@ import TNLean.MPS.MPU.SourceFactorsTensorProduct
 import TNLean.MPS.MPU.SourceIndexValue
 import TNLean.MPS.MPU.SourceUCompleteNetwork
 import TNLean.MPS.MPU.SourceUV
+import TNLean.MPS.MPU.SourceVCompleteNetwork
 import TNLean.MPS.MPU.SourceVIsometry
 import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.SuppliedFixedWitnesses

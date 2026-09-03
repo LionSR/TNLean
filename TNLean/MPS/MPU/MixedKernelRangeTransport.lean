@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSumPermutation
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.MixedKernelOpenTail
@@ -34,23 +35,6 @@ open Matrix
 namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
-
-private lemma sum_rotate_five {A B C P Q R : Type*}
-    [Fintype A] [Fintype B] [Fintype C] [Fintype P] [Fintype Q]
-    [AddCommMonoid R] (f : A → B → C → P → Q → R) :
-    (∑ a, ∑ b, ∑ c, ∑ p, ∑ q, f a b c p q) =
-      ∑ p, ∑ q, ∑ a, ∑ b, ∑ c, f a b c p q := by
-  let equiv : ((((A × B) × C) × P) × Q) ≃ ((((P × Q) × A) × B) × C) := {
-    toFun := fun x ↦ ((((x.1.2, x.2), x.1.1.1.1), x.1.1.1.2), x.1.1.2)
-    invFun := fun x ↦ ((((x.1.1.2, x.1.2), x.2), x.1.1.1.1), x.1.1.1.2)
-    left_inv := by rintro ⟨⟨⟨⟨a, b⟩, c⟩, p⟩, q⟩; rfl
-    right_inv := by rintro ⟨⟨⟨⟨p, q⟩, a⟩, b⟩, c⟩; rfl
-  }
-  have h := Fintype.sum_equiv equiv
-    (fun x ↦ f x.1.1.1.1 x.1.1.1.2 x.1.1.2 x.1.2 x.2)
-    (fun x ↦ f x.1.1.2 x.1.2 x.2 x.1.1.1.1 x.1.1.1.2)
-    (fun _ ↦ rfl)
-  simpa only [Fintype.sum_prod_type] using h
 
 /-- The normalized forward kernel before applying the outer $X_1$ and $X_2$
 factors. It contains exactly one factor $d^{-K}$.
@@ -126,7 +110,7 @@ theorem sourceY₁X₂ForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow
   simp_rw [normalizedDiagonal_outputLayer_pow_apply U K]
   simp only [doubleLayerTensor_physicalAdjointTensor_apply, Matrix.mul_apply,
     star_sum, star_mul', Finset.sum_mul, Finset.mul_sum]
-  rw [sum_rotate_five, Finset.sum_comm]
+  rw [Fintype.sum_last_two_first_five, Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro γ _
   apply Finset.sum_congr rfl

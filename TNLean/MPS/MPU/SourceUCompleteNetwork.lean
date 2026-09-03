@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSumPermutation
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.SourceVIsometry
 
@@ -25,54 +26,6 @@ open Matrix
 namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
-
-private lemma sum_rotate_four {A B C P R : Type*}
-    [Fintype A] [Fintype B] [Fintype C] [Fintype P] [AddCommMonoid R]
-    (f : A → B → C → P → R) :
-    (∑ a, ∑ b, ∑ c, ∑ p, f a b c p) =
-      ∑ c, ∑ p, ∑ b, ∑ a, f a b c p := by
-  let e : (((A × B) × C) × P) ≃ (((C × P) × B) × A) :=
-    { toFun := fun x ↦ (((x.1.2, x.2), x.1.1.2), x.1.1.1)
-      invFun := fun x ↦ (((x.2, x.1.2), x.1.1.1), x.1.1.2)
-      left_inv := by rintro ⟨⟨⟨a, b⟩, c⟩, p⟩; rfl
-      right_inv := by rintro ⟨⟨⟨c, p⟩, b⟩, a⟩; rfl }
-  have h := Fintype.sum_equiv e
-    (fun x ↦ f x.1.1.1 x.1.1.2 x.1.2 x.2)
-    (fun x ↦ f x.2 x.1.2 x.1.1.1 x.1.1.2)
-    (fun _ ↦ rfl)
-  simpa only [Fintype.sum_prod_type] using h
-
-private lemma sum_rotate_three {A B C R : Type*}
-    [Fintype A] [Fintype B] [Fintype C] [AddCommMonoid R]
-    (f : A → B → C → R) :
-    (∑ a, ∑ b, ∑ c, f a b c) =
-      ∑ c, ∑ b, ∑ a, f a b c := by
-  let e : ((A × B) × C) ≃ ((C × B) × A) :=
-    { toFun := fun x ↦ ((x.2, x.1.2), x.1.1)
-      invFun := fun x ↦ ((x.2, x.1.2), x.1.1)
-      left_inv := by rintro ⟨⟨a, b⟩, c⟩; rfl
-      right_inv := by rintro ⟨⟨c, b⟩, a⟩; rfl }
-  have h := Fintype.sum_equiv e
-    (fun x ↦ f x.1.1 x.1.2 x.2)
-    (fun x ↦ f x.2 x.1.2 x.1.1)
-    (fun _ ↦ rfl)
-  simpa only [Fintype.sum_prod_type] using h
-
-private lemma sum_rotate_four_last_first {A B C P R : Type*}
-    [Fintype A] [Fintype B] [Fintype C] [Fintype P] [AddCommMonoid R]
-    (f : A → B → C → P → R) :
-    (∑ a, ∑ b, ∑ c, ∑ p, f a b c p) =
-      ∑ p, ∑ c, ∑ a, ∑ b, f a b c p := by
-  let e : (((A × B) × C) × P) ≃ (((P × C) × A) × B) :=
-    { toFun := fun x ↦ (((x.2, x.1.2), x.1.1.1), x.1.1.2)
-      invFun := fun x ↦ (((x.1.2, x.2), x.1.1.2), x.1.1.1)
-      left_inv := by rintro ⟨⟨⟨a, b⟩, c⟩, p⟩; rfl
-      right_inv := by rintro ⟨⟨⟨p, c⟩, a⟩, b⟩; rfl }
-  have h := Fintype.sum_equiv e
-    (fun x ↦ f x.1.1.1 x.1.1.2 x.1.2 x.2)
-    (fun x ↦ f x.1.2 x.2 x.1.1.2 x.1.1.1)
-    (fun _ ↦ rfl)
-  simpa only [Fintype.sum_prod_type] using h
 
 namespace SourceFactors
 
@@ -139,7 +92,7 @@ private theorem Y₁_gram_eq_weighted_sourceCutM₁_gram
           star (U i p a β) * ρ β β' * U i q b β' := hentry
     _ = ∑ β : Fin D, ∑ β' : Fin D, ∑ i : Fin d,
           star (U i p a β) * ρ β β' * U i q b β' := by
-      rw [sum_rotate_three]
+      rw [Fintype.sum_reverse_three]
 
 private theorem Y₂_gram_eq_rotated_sourceCutM₂_gram
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
@@ -230,7 +183,7 @@ theorem sourceU_gram_eq_staggered_four_u
     _ = ∑ α, ∑ α', ∑ l, ∑ r,
         star (sourceYTensor U S (r, l) ((α, p₂), (p₁, α))) *
           sourceYTensor U S (r, l) ((α', q₂), (q₁, α')) := by
-      rw [sum_rotate_four_last_first]
+      rw [Fintype.sum_last_first_four]
       apply Finset.sum_congr rfl
       intro α _
       apply Finset.sum_congr rfl
