@@ -1148,6 +1148,135 @@
     gives the product predicate.
 \end{proof}
 
+\begin{theorem}[Horizontal canonical form of the twisted quantum dimer]%
+    \label{thm:mpdo_twisted_dimer_horizontal_cf}
+    \lean{MPOTensor.TwistedDimer.normalizedBlock}
+    \lean{MPOTensor.TwistedDimer.normalizedBlock_apply}
+    \lean{MPOTensor.TwistedDimer.toMPSTensor_apply_finProdFinEquiv}
+    \lean{MPOTensor.TwistedDimer.coef_flag_zero_ne_zero}
+    \lean{MPOTensor.TwistedDimer.block_toMPSTensor_isInjective}
+    \lean{MPOTensor.TwistedDimer.normalizedBlock_toMPSTensor_isInjective}
+    \lean{MPOTensor.TwistedDimer.star_coef}
+    \lean{MPOTensor.TwistedDimer.conjTranspose_mul_self_normalizedBlock}
+    \lean{MPOTensor.TwistedDimer.rightBitEquiv}
+    \lean{MPOTensor.TwistedDimer.sum_single_eq_single_sum}
+    \lean{MPOTensor.TwistedDimer.sum_normalizedCoef_sq}
+    \lean{MPOTensor.TwistedDimer.normalizedBlock_isLeftCanonical}
+    \lean{MPOTensor.TwistedDimer.normalizedBlock_isNormalTensor}
+    \lean{MPOTensor.TwistedDimer.physTraceTransfer_normalizedBlock_one}
+    \lean{MPOTensor.TwistedDimer.exists_eq_physIdx}
+    \lean{MPOTensor.TwistedDimer.blockBondEquiv}
+    \lean{MPOTensor.TwistedDimer.retainedBondEquiv}
+    \lean{MPOTensor.TwistedDimer.ambientCoisometry}
+    \lean{MPOTensor.TwistedDimer.conjTranspose_toMatrix_toPEquiv}
+    \lean{MPOTensor.TwistedDimer.ambientCoisometry_mul_conjTranspose}
+    \lean{MPOTensor.TwistedDimer.conjTranspose_mul_mul_ambientCoisometry}
+    \lean{MPOTensor.TwistedDimer.finSigmaFinEquiv_symm_retainedBondEquiv_symm}
+    \lean{MPOTensor.TwistedDimer.toMPSTensor_T_reconstruct}
+    \lean{MPOTensor.TwistedDimer.canonicalFormData}
+    \lean{MPOTensor.TwistedDimer.T_toMPSTensor_isCPSVCanonicalForm}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_tensor, def:cpsv_canonical_form, def:nt_cpsv, def:left_canonical_tensor}
+    Let $M_0$, $M_1$ be the two horizontal blocks of the twisted quantum
+    dimer of Definition~\ref{def:mpdo_twisted_dimer_tensor}, read as tensors
+    with the doubled physical index $((l,r,f),(l',r',f'))$ and bond dimension
+    four, and let $\widehat M_k=\frac85\,M_k$. The letters of each
+    $\widehat M_k$ span the full algebra of $4\times4$ matrices, the sum
+    $\sum_{i,j}(\widehat M_k^{ij})^\dagger\widehat M_k^{ij}$ is the identity,
+    and hence each $\widehat M_k$ is a normal tensor. The doubled-index
+    twisted dimer is in canonical form in the sense of
+    Definition~\ref{def:cpsv_canonical_form}: with the permutation $U$ of the
+    bond index $(p,p',k)$ into the block label $k$ followed by the block bond
+    index $(p,p')$,
+    \begin{align}
+        M^{ij} & =U^\dagger\Bigl(\tfrac58\,\widehat M_0^{ij}\oplus
+        \tfrac58\,\widehat M_1^{ij}\Bigr)U.
+        \notag
+    \end{align}
+    The physical-trace transfer of $\widehat M_1$ vanishes. The tensor is a
+    project example motivated by the question of
+    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+    there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_twisted_dimer_closures, thm:is_normal_tensor_of_is_normal_left_canonical}
+    The letter of $M_k$ at the physical pair $((p,q,0),(p',q',0))$ is the
+    matrix unit at the bond pair $((p,p'),(q,q'))$ with the nonzero
+    coefficient $\frac12C_k[p,p']$, so the letters span the bond algebra.
+    The product $(\widehat M_k^{ij})^\dagger\widehat M_k^{ij}$ is the
+    diagonal matrix unit at the right bits $(r,r')$ of $i$ and $j$, with
+    coefficient $\frac{64}{25}$ times the squared coefficient of the letter.
+    Grouping the letters by their right bits, the coefficients at fixed
+    $(r,r')$ sum to
+    $\frac{64}{25}\cdot2\cdot\frac14\bigl(2C_k[0,0]^2+2C_k[0,1]^2\bigr)=1$,
+    so the sum of the products is the identity.
+    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} gives
+    normality. The reconstruction is the block decomposition of
+    Definition~\ref{def:mpdo_twisted_dimer_tensor} entry by entry, the factor
+    $\frac58\cdot\frac85=1$ restoring the displayed blocks, and $U$ is a
+    permutation matrix, hence a coisometry. The physical-trace transfer of
+    $\widehat M_1$ is $\frac85$ times that of $M_1$, which vanishes by
+    Theorem~\ref{thm:mpdo_twisted_dimer_closures}.
+\end{proof}
+
+\begin{lemma}[Blocking raises the physical-trace transfer to a power]%
+    \label{lem:mpdo_phys_trace_transfer_blocking}
+    \lean{MPOTensor.physTraceTransfer_blockTensor}
+    \leanok
+    \uses{def:mpdo_physical_blocking, def:mpo_physical_trace_transfer}
+    For every tensor $M$ and every blocking length $L$, the physical-trace
+    transfer of the $L$-site blocking of $M$ is the $L$-th power of the
+    physical-trace transfer of $M$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mpdo_trace_loop_chain}
+    The physical-trace transfer of the blocking is the sum over all
+    length-$L$ configurations of the diagonal word evaluations, which is the
+    $L$-th power of the one-site loop by
+    Lemma~\ref{lem:mpdo_trace_loop_chain}.
+\end{proof}
+
+\begin{theorem}[The twisted quantum dimer is not simple]%
+    \label{thm:mpdo_twisted_dimer_not_simple}
+    \lean{MPOTensor.TwistedDimer.blockedCanonicalFormData}
+    \lean{MPOTensor.TwistedDimer.blockedCanonicalFormData_blocks}
+    \lean{MPOTensor.TwistedDimer.%
+        doubledPhysTraceTransfer_blockedCanonicalFormData_blocks_one}
+    \lean{MPOTensor.TwistedDimer.T_not_isSimple}
+    \leanok
+    \uses{def:mpdo_simple_tensor, def:mpdo_twisted_dimer_tensor}
+    The twisted quantum dimer of Definition~\ref{def:mpdo_twisted_dimer_tensor}
+    is not simple in the sense of Definition~\ref{def:mpdo_simple_tensor}: for
+    every positive blocking length $L$ and every BNT sector presentation of
+    the doubled-index tensor of the $L$-site blocking, some representative
+    has nilpotent physical-trace transfer. The tensor is a project example
+    motivated by the question of
+    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+    there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_twisted_dimer_horizontal_cf, thm:cpsv_literal_canonical_form_positive_blocking, thm:cpsv_physical_reindexing, thm:mpdo_blocking_doubled_index, thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_representative_sector_decomposition, thm:mpdo_bnt_nonnilpotency_independent, thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_phys_trace_transfer_blocking}
+    Fix $L>0$ and a presentation $P$. Blocking the canonical form of
+    Theorem~\ref{thm:mpdo_twisted_dimer_horizontal_cf} by $L$ sites
+    (Theorem~\ref{thm:cpsv_literal_canonical_form_positive_blocking}) and
+    relabeling the doubled alphabet along the pairing of the blocked ket and
+    bra words (Theorems~\ref{thm:cpsv_physical_reindexing}
+    and~\ref{thm:mpdo_blocking_doubled_index}) gives a canonical form of the
+    blocked doubled-index tensor whose retained blocks are the $L$-site
+    blockings of $\widehat M_0$ and $\widehat M_1$. Its BNT refinement
+    (Theorem~\ref{thm:cpsv_canonical_form_bnt_refinement}) is a BNT sector
+    presentation $Q$
+    (Theorem~\ref{thm:cpsv_representative_sector_decomposition}) in which
+    every retained block is a gauge-phase multiple of the representative of
+    its phase class. The blocked $\widehat M_1$ has vanishing physical-trace
+    transfer by Lemma~\ref{lem:mpdo_phys_trace_transfer_blocking} together
+    with Lemma~\ref{lem:mpdo_doubled_phys_trace_transfer_to_mps}, so by
+    Theorem~\ref{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase} the
+    representative of its phase class has nilpotent physical-trace transfer.
+    Theorem~\ref{thm:mpdo_bnt_nonnilpotency_independent} transfers this to
+    $P$.
+\end{proof}
+
 \begin{lemma}[Doubled-index letters and their rank-one factorization]
     \label{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.toMPSTensor_R_apply}

@@ -812,6 +812,21 @@ abstracted — record why, so it is not re-proposed).
 
 ---
 
+### twisted-dimer bit-encoding destructuring — promoted
+- **Pattern:** rewriting an index of the eight-valued physical or bond
+  alphabet of the twisted dimer as its bit encoding before case analysis:
+  ```lean
+  obtain ⟨p, p', k, rfl⟩ : ∃ p p' k, a = physIdx p p' k := ⟨_, _, _, (physIdx_bits a).symm⟩
+  ```
+- **Seen:** 4 occurrences across 2 files before promotion
+  (`TNLean/MPS/MPDO/TwistedDimerFlagSectors.lean`,
+  `TNLean/MPS/MPDO/TwistedDimerHorizontalCF.lean`).
+- **Abstraction:** `MPOTensor.TwistedDimer.exists_eq_physIdx`
+  (`TNLean/MPS/MPDO/TwistedDimer.lean`); call sites read
+  `obtain ⟨p, p', k, rfl⟩ := exists_eq_physIdx a`.
+- **Notes:** the inline existential statement and its witness are removed at
+  every call site; one line each.
+
 ## Completed refactors
 
 ### Successor under one-step finite rotation
