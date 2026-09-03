@@ -35,6 +35,7 @@ pgwsvc08 = "arXiv:0802.0447 (string order and symmetries)"
 rmp     = "Cirac, Perez-Garcia, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021)"
 spc11   = "arXiv:1010.3732 (SPT classification)"
 spwc10  = "arXiv:0909.5347 (quantum Wielandt inequality)"
+sw04    = "Schumacher and Werner, quant-ph/0405174 (quantum cellular automata)"
 tnlean  = "internal theorem-surface audit, no single external source"
 
 [blueprint.graphs]

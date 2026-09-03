@@ -13668,7 +13668,7 @@ left/right order below agrees with the adjacent-pair convention in
         SpinChain.PropagatesWithin.embeddedSupportAlgebra_map_quasiLocalTranslation_two_odd}
     \leanok
     \uses{def:qca_site_indexed_support_algebras, def:qca_translation_covariant,
-        def:qca_quasi_local_translation, lem:qca_pair_region_two_site_translation}
+        def:qca_quasi_local_translation}
     Let $\omega$ be a star-algebra automorphism of the homogeneous quasi-local
     algebra which propagates within $\{-1,0,1\}$ and commutes with every
     lattice translation.  Then, for every $y\in\mathbb Z$,
@@ -13705,9 +13705,10 @@ left/right order below agrees with the adjacent-pair convention in
 
     \textbf{Scope restriction (one-dimensional homogeneous chain):}
     Schumacher--Werner state the translated-support identity for the cube
-    lattice of an arbitrary dimension with a general neighbourhood scheme,
-    \cite[lines~309--318 and 928--941]{SchumacherWerner2004QCA}; the statement
-    above is its one-dimensional nearest-neighbour instance.  GNVW allow
+    lattice in arbitrary dimension with the cubic nearest-neighbour scheme,
+    \cite[lines~920--941]{SchumacherWerner2004QCA}; the statement above is its
+    one-dimensional instance, as recorded in
+    \cite{gap:sw04_support_covariance_scope}.  GNVW allow
     site-dependent cell sizes and assume no translation covariance, so
     (\ref{eq:qca_two_site_covariance}) is not a theorem of that paper; the
     fixed-$d$ restriction of the family $\mathcal R_y$ is recorded in
@@ -13718,9 +13719,8 @@ left/right order below agrees with the adjacent-pair convention in
     \uses{lem:qca_quasi_local_coefficient_compression,
         lem:qca_pair_region_two_site_translation,
         def:qca_site_indexed_support_algebras,
-        lem:qca_quasi_local_translation_action,
-        thm:qca_finite_region_restriction_embedding,
-        thm:qca_finite_region_restriction_translation}
+        def:qca_quasi_local_translation,
+        thm:qca_finite_region_restriction_embedding}
     Fix $x$ and put $\Lambda=E_x$, $\Gamma=L_x$, $\Delta=P_x$.  A
     finite-region observable belongs to the finite local image exactly when
     its quasi-local copy lies in the image of $\mathcal A_\Lambda$ under
