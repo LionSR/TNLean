@@ -515,7 +515,8 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`) exists
   because `Matrix.StabilizedRankOneData` needs a positive exponent at most
   `D * D - 1`, which is empty at `D = 1`. Chapter 28 has 82 `\notready`
-  nodes among 508, of which 39 carry an `mpu_admissible` label. The
+  nodes among 508, of which 39 carry an `mpu_admissible` label: 16 are
+  pointwise, while 23 define or use the pathwise equivalence datum. The
   fixed-tensor nodes replace the standing convention by a supplied fixed
   pair. The family also contains
   `def:mpu_admissible_equivalence_datum`, which has no source-labelled twin
@@ -568,10 +569,18 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 - **Remediation**: delete the set (plan step 1 of the audit) after moving
   the four $v$ identities to `StandardForm.lean` and the shift examples'
   supplied factors and rank equivalences to
-  `Examples/ShiftSourceFactors.lean`; correct the `MatchingContractions.lean`
-  docstring, which disclaims the on-route input-first identity as auxiliary;
-  delete the 21 nodes and repoint the admissible `ThmFund1` proof's two
-  `\uses` to `thm:mpu_simple1`; retire the range-restriction note.
+  `Examples/ShiftSourceFactors.lean`. Before deleting `sourceY₁X₂` and
+  `sourceX₁Y₂`, delete or migrate all six remaining consumers in that
+  destination file: the identity, right-shift, and left-shift entry formulas
+  for each kernel. Before deleting `ShiftSourceMixedKernels.lean`, also move
+  `shiftTwoSitePhysicalEquiv`, the three shared four-spin matrices, and their
+  five entry and product formulas to `ShiftSourceFactors.lean`; the surviving
+  gate, blocked-formula, and swap-matrix modules use them. Correct the
+  `MatchingContractions.lean` docstring, which disclaims the on-route
+  input-first identity as auxiliary; delete the 21 nodes and repoint the
+  admissible `ThmFund1` proof's dependency and prose reference to
+  `thm:mpu_all_later_simple_blockings`, whose linked same-witness lemma is
+  `MPOTensor.IsMPU.isMPUSimple_of_simple2`; retire the range-restriction note.
 - **First PR**: delete `ReflectedTransferKernel.lean`,
   `SuppliedWitnessReblocking.lean`, `MixedKernelBoundary.lean`, and
   `MixedKernelSecondCutMetric.lean` (676 lines, zero consumers outside the
@@ -609,8 +618,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   one structure between the two canonical forms by parametrizing the block
   predicate, so that the module reduces to `IsMPUCanonicalBlock` and that
   lemma.
-- **First PR**: add `weights_ne_zero` to `MPUCanonicalFormData` and update any
-  direct witnesses; no one-block theorem or consumer changes yet.
+- **First PR**: add `weights_ne_zero` to `MPUCanonicalFormData`, update any
+  direct witnesses, add an inline `**Local fix (nonzero canonical weights):**`
+  marker in `MPUCanonicalForm.lean`, and add the dedicated convention note
+  `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex`. Do not fold this
+  into `mpu_canonical_form_full_support.tex`, which records the distinct
+  ambient zero-complement issue. No one-block theorem or consumer changes yet.
 
 ## Honorable mentions (ranks 11-12)
 

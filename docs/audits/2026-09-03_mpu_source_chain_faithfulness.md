@@ -316,9 +316,14 @@ content still consumed by a later survivor.
    mixed-kernel entry formulas of `Examples/ShiftSourceFactors.lean`
    (`sourceY₁X₂_*SourceFactors_apply`, `sourceX₁Y₂_*SourceFactors_apply`,
    lines 606--694, consumed only by `Examples/ShiftSourceMixedKernels.lean`)
-   together with the mixed formulas of `Examples/ShiftSourceMixedKernels.lean`,
-   after moving the latter's supplied factors and rank equivalences into
-   `Examples/ShiftSourceFactors.lean`; and the docstring sentence of
+   together with the mixed formulas of `Examples/ShiftSourceMixedKernels.lean`.
+   Before deleting that module, move its supplied factors, rank equivalences,
+   `shiftTwoSitePhysicalEquiv`, `identityTensorIdentityMatrix`,
+   `identitySwapIdentityMatrix`, `swapTensorSwapMatrix`, and the five entry and
+   product formulas for those matrices into `Examples/ShiftSourceFactors.lean`.
+   The last four groups are direct dependencies of the surviving
+   `ShiftSourceGateFormulas.lean`, `ShiftSourceBlockedFormulas.lean`, and
+   `ShiftSwapMatrices.lean` modules. Also delete the docstring sentence of
    `SourceFactorContraction.lean` (lines 22--23) that names the deleted kernel.
    Delete the 21 Chapter 28 nodes tagging these declarations
    (`def:mpu_mixed_source_kernels`, `thm:mpu_mixed_y1_x2_*`,
@@ -326,9 +331,14 @@ content still consumed by a later survivor.
    `thm:mpu_second_cut_metric`, `thm:mpu_supplied_witness_overlapping_reblocking`,
    `def:mpu_reflected_blocked_transfer_coordinates`, `thm:mpu_reflected_*`,
    and `thm:mpu_normalized_output_tail_coisometry`; the shift mixed-kernel
-   formulas carry no node) and repoint the two `\uses` in the admissible `ThmFund1` proof to
-   `thm:mpu_simple1`. Retire `mpu_mixed_kernel_range_restriction.tex`. Net
-   about $-2{,}300$ Lean lines.
+   formulas carry no node). In the admissible `ThmFund1` proof, replace both
+   the `\uses` dependency and the prose reference to the deleted
+   supplied-witness node by `thm:mpu_all_later_simple_blockings`. That node
+   already links `MPOTensor.IsMPU.isMPUSimple_of_simple2`, which derives the
+   first contraction for the same supplied pair used in the second
+   contraction; `thm:mpu_simple1` is only existential and is not sufficient.
+   Retire `mpu_mixed_kernel_range_restriction.tex`. Net about $-2{,}300$ Lean
+   lines.
 2. **Define the convention predicate** as above in `CanonicalForm.lean`
    (renamed to state its content), with its lemmas moved from
    `TransferStabilization.lean` and `MatchingContractions.lean`, and restate
@@ -371,12 +381,18 @@ content still consumed by a later survivor.
    $\operatorname{diag}(1,0)$ is an MPU and admits two one-dimensional
    canonical blocks with weights $1$ and $0$ under the current definition.
    Thus the current predicate does not imply the claimed one-block conclusion.
-   First add `weights_ne_zero` to `MPUCanonicalFormData`. Then apply the
-   transfer-multiplicity argument to prove that an MPU tensor in
-   `IsMPUCanonicalForm` has one block and that block is normal. Finally share
-   one structure between the two canonical forms by parametrizing the block
-   predicate, so that `MPUCanonicalForm.lean` reduces to the block predicate
-   and that lemma.
+   First add `weights_ne_zero` to `MPUCanonicalFormData`. The same PR must add
+   an inline `**Local fix (nonzero canonical weights):**` marker in
+   `MPUCanonicalForm.lean` and a dedicated one-page note
+   `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex`. CPSV17 line 260
+   allows a literal zero coefficient, while the formal definition adopts the
+   intended convention that retained canonical blocks contribute. This is
+   distinct from the ambient zero-complement issue in
+   `mpu_canonical_form_full_support.tex`. Then apply the transfer-multiplicity
+   argument to prove that an MPU tensor in `IsMPUCanonicalForm` has one block
+   and that block is normal. Finally share one structure between the two
+   canonical forms by parametrizing the block predicate, so that
+   `MPUCanonicalForm.lean` reduces to the block predicate and that lemma.
 6. **Retain the pathwise source-data obligations for
    `prop:continuity-index`** (#6136, #6140, #6022). Step 2 supplies the fixed
    pair separately at each point, but it does not prove that the choices for
