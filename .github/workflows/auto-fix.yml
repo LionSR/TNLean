@@ -61,7 +61,7 @@ jobs:
     steps:
       - name: Resolve event context
         id: resolve
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             // Defaults
@@ -292,7 +292,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ needs.setup.outputs.head_sha }}
           fetch-depth: 10
