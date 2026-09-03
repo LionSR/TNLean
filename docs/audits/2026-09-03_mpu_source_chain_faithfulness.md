@@ -331,7 +331,11 @@ content still consumed by a later survivor.
    `thm:mpu_second_cut_metric`, `thm:mpu_supplied_witness_overlapping_reblocking`,
    `def:mpu_reflected_blocked_transfer_coordinates`, `thm:mpu_reflected_*`,
    and `thm:mpu_normalized_output_tail_coisometry`; the shift mixed-kernel
-   formulas carry no node). In the admissible `ThmFund1` proof, replace both
+   formulas carry no separate node). The surviving node
+   `def:threeMPU_supplied_source_factors` nevertheless lists all six
+   declarations in its `\lean{}` tag, so remove those six names from the tag
+   when the declarations are deleted, or repoint them if replacements are
+   introduced. In the admissible `ThmFund1` proof, replace both
    the `\uses` dependency and the prose reference to the deleted
    supplied-witness node by `thm:mpu_all_later_simple_blockings`. That node
    already links `MPOTensor.IsMPU.isMPUSimple_of_simple2`, which derives the
@@ -383,9 +387,9 @@ content still consumed by a later survivor.
    Thus the current predicate does not imply the claimed one-block conclusion.
    First add `weights_ne_zero` to `MPUCanonicalFormData`. The same PR must add
    an inline `**Local fix (nonzero canonical weights):**` marker in
-   `MPUCanonicalForm.lean` and a dedicated one-page note
-   `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex`. CPSV17 line 260
-   allows a literal zero coefficient, while the formal definition adopts the
+   `MPUCanonicalForm.lean`. That implementation PR must also create a dedicated
+   one-page paper-gap note titled "Nonzero weights in MPU canonical form."
+   CPSV17 line 260 allows a literal zero coefficient, while the formal definition adopts the
    intended convention that retained canonical blocks contribute. This is
    distinct from the ambient zero-complement issue in
    `mpu_canonical_form_full_support.tex`. Then apply the transfer-multiplicity

@@ -572,7 +572,11 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `Examples/ShiftSourceFactors.lean`. Before deleting `sourceY₁X₂` and
   `sourceX₁Y₂`, delete or migrate all six remaining consumers in that
   destination file: the identity, right-shift, and left-shift entry formulas
-  for each kernel. Before deleting `ShiftSourceMixedKernels.lean`, also move
+  for each kernel. The surviving blueprint node
+  `def:threeMPU_supplied_source_factors` lists all six declarations in its
+  `\lean{}` tag; remove those six names when the declarations are deleted, or
+  repoint them if replacements are introduced. Before deleting
+  `ShiftSourceMixedKernels.lean`, also move
   `shiftTwoSitePhysicalEquiv`, the three shared four-spin matrices, and their
   five entry and product formulas to `ShiftSourceFactors.lean`; the surviving
   gate, blocked-formula, and swap-matrix modules use them. Correct the
@@ -619,11 +623,13 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   predicate, so that the module reduces to `IsMPUCanonicalBlock` and that
   lemma.
 - **First PR**: add `weights_ne_zero` to `MPUCanonicalFormData`, update any
-  direct witnesses, add an inline `**Local fix (nonzero canonical weights):**`
-  marker in `MPUCanonicalForm.lean`, and add the dedicated convention note
-  `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex`. Do not fold this
-  into `mpu_canonical_form_full_support.tex`, which records the distinct
-  ambient zero-complement issue. No one-block theorem or consumer changes yet.
+  direct witnesses, and add an inline
+  `**Local fix (nonzero canonical weights):**` marker in
+  `MPUCanonicalForm.lean`. That implementation PR must also create a dedicated
+  one-page paper-gap note titled "Nonzero weights in MPU canonical form."
+  Keep it distinct from `mpu_canonical_form_full_support.tex`, which records
+  the ambient zero-complement issue. No one-block theorem or consumer changes
+  yet.
 
 ## Honorable mentions (ranks 11-12)
 
