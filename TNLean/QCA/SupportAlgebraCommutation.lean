@@ -194,29 +194,6 @@ namespace PropagatesWithin
 variable {d : ℕ} [NeZero d]
   {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
 
-/-- The defining finite-restriction equality after transporting along a target-region
-identity. -/
-private lemma quasiLocalObservable_transport_localRestriction
-    {𝓝 Λ T : Finset ℤ} (hω : PropagatesWithin ω 𝓝)
-    (hT : regionSumset Λ 𝓝 = T) (A : LocalAlgebra d Λ) :
-    quasiLocalObservable d T (hT ▸ hω.localRestriction Λ A) =
-      ω (quasiLocalObservable d Λ A) := by
-  subst T
-  exact hω.quasiLocalObservable_localRestriction Λ A
-
-/-- Membership in a finite local image transported along its target-region equality. -/
-private lemma mem_transport_localRestrictionRange_iff
-    {𝓝 Λ T : Finset ℤ} (hω : PropagatesWithin ω 𝓝)
-    (hT : regionSumset Λ 𝓝 = T) (A : LocalAlgebra d T) :
-    A ∈ hT ▸ hω.localRestrictionRange Λ ↔
-      ∃ A₀, A = hT ▸ hω.localRestriction Λ A₀ := by
-  subst T
-  change (∃ A₀, hω.localRestriction Λ A₀ = A) ↔
-    ∃ A₀, A = hω.localRestriction Λ A₀
-  constructor <;> rintro ⟨A₀, hA₀⟩
-  · exact ⟨A₀, hA₀.symm⟩
-  · exact ⟨A₀, hA₀.symm⟩
-
 /-- Bipartite finite-image coordinates respect equality of the left finite region. -/
 private lemma transport_bipartiteLocalRestrictionRange_left
     {𝓝 Λ Γ Γ' Δ : Finset ℤ} (hω : PropagatesWithin ω 𝓝) (q : Γ = Γ')

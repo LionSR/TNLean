@@ -43,6 +43,9 @@ Margolus unitary is constructed here.
   equality.
 * `SpinChain.PropagatesWithin.localRestriction_injective` — injectivity.
 * `SpinChain.PropagatesWithin.localRestriction_localInclusion` — compatibility under enlargement.
+* `SpinChain.PropagatesWithin.quasiLocalObservable_transport_localRestriction` and
+  `SpinChain.PropagatesWithin.mem_transport_localRestrictionRange_iff` — the defining equality
+  and the membership criterion after rewriting the target region.
 * `SpinChain.PropagatesWithin.localRestriction_translation` — translation naturality in the
   canonical quasi-local algebra.
 
@@ -148,6 +151,38 @@ locality inclusion; it is not a separately stated source definition. -/
 noncomputable def localRestrictionRange (hω : PropagatesWithin ω 𝓝) (Λ : Finset ℤ) :
     StarSubalgebra ℂ (LocalAlgebra d (regionSumset Λ 𝓝)) :=
   (hω.localRestriction Λ).range
+
+/-- The defining finite-restriction equality after rewriting the target region along an
+identity for it.
+
+Source context: arXiv:1703.09188, Appendix, line 2298. This is the same equality as
+`SpinChain.PropagatesWithin.quasiLocalObservable_localRestriction`, stated for a region presented
+in another form; it is not a separately stated source lemma. -/
+lemma quasiLocalObservable_transport_localRestriction
+    {Λ T : Finset ℤ} (hω : PropagatesWithin ω 𝓝)
+    (hT : regionSumset Λ 𝓝 = T) (A : LocalAlgebra d Λ) :
+    quasiLocalObservable d T (hT ▸ hω.localRestriction Λ A) =
+      ω (quasiLocalObservable d Λ A) := by
+  subst T
+  exact hω.quasiLocalObservable_localRestriction Λ A
+
+/-- Membership in a finite local image whose target region has been rewritten along an identity
+for it.
+
+Source context: arXiv:1703.09188, Appendix, line 2298; GNVW, arXiv:0910.3675v2, equation `RR2x`,
+lines 1249--1266. This is bookkeeping for the local image, not a separately stated source
+lemma. -/
+lemma mem_transport_localRestrictionRange_iff
+    {Λ T : Finset ℤ} (hω : PropagatesWithin ω 𝓝)
+    (hT : regionSumset Λ 𝓝 = T) (A : LocalAlgebra d T) :
+    A ∈ hT ▸ hω.localRestrictionRange Λ ↔
+      ∃ A₀, A = hT ▸ hω.localRestriction Λ A₀ := by
+  subst T
+  change (∃ A₀, hω.localRestriction Λ A₀ = A) ↔
+    ∃ A₀, A = hω.localRestriction Λ A₀
+  constructor <;> rintro ⟨A₀, hA₀⟩
+  · exact ⟨A₀, hA₀.symm⟩
+  · exact ⟨A₀, hA₀.symm⟩
 
 /-- The source local algebra is star-algebra equivalent to the range of its finite-region
 restriction.
