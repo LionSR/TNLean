@@ -49,7 +49,7 @@ to it is the prescribed isometry `D a b`.
 
 This is the defect subspace `K_{a,b}` together with the isometry
 `D_{a,b} : K_{a,b} → H_m` of the state-level fusion construction of FBC25
-(arXiv:2502.20257, lines 4215--4260 and 4325--4335). -/
+(arXiv:2502.20257, lines 4215--4326 and 4325--4335). -/
 structure DefectMaps (G n : Type*) [Fintype n] where
   /-- The defect subspace of the matter space attached to the labels `(a, b)`. -/
   domain : G → G → Submodule ℂ (n → ℂ)
@@ -69,7 +69,7 @@ defect maps when every member agrees with the prescribed map on its defect
 subspace.
 
 This is the membership condition of the full completion class attached to the
-modified fusion operators of FBC25 (arXiv:2502.20257, lines 4215--4260). -/
+modified fusion operators of FBC25 (arXiv:2502.20257, lines 4215--4326). -/
 def IsCompletion (R : G → G → Matrix.unitaryGroup n ℂ) : Prop :=
   ∀ a b, ∀ ξ ∈ D.domain a b,
     (R a b : Matrix n n ℂ) *ᵥ ξ = D.prescribed a b *ᵥ ξ
@@ -78,7 +78,7 @@ def IsCompletion (R : G → G → Matrix.unitaryGroup n ℂ) : Prop :=
 whole families of unitary matter operators.
 
 This is the completion class of the modified fusion operators of FBC25
-(arXiv:2502.20257, lines 4215--4260); no single pair of labels is singled
+(arXiv:2502.20257, lines 4215--4326); no single pair of labels is singled
 out. -/
 def completionClass : Set (G → G → Matrix.unitaryGroup n ℂ) :=
   {R | D.IsCompletion R}
