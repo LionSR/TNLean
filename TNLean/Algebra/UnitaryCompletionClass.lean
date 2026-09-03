@@ -155,6 +155,15 @@ theorem completionClass_nonempty : D.completionClass.Nonempty := by
       (D.isometry_on_domain a b)
   exact ⟨R, hR⟩
 
+/-- There exists a family of unitary matter operators extending all prescribed
+defect maps. This is the existence assertion in the modified-fusion
+construction of FBC25 (arXiv:2502.20257, lines 4215--4326). -/
+theorem exists_completion :
+    ∃ R : G → G → Matrix.unitaryGroup n ℂ, D.IsCompletion R := by
+  rcases D.completionClass_nonempty with ⟨R, hR⟩
+  change D.IsCompletion R at hR
+  exact ⟨R, hR⟩
+
 variable {D}
 
 /-- A completion agrees with the prescribed defect map on its defect subspace.
