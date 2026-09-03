@@ -26,15 +26,27 @@ namespace TNLean.Algebra
 
 variable {G X : Type*} [Group G] [MulAction G X]
 
-/-- Scalar L-symbols `Lˣ_{g,h}` for a group `G` acting on a type `X`. -/
+/-- Scalar L-symbols `Lˣ_{g,h}` for a group `G` acting on a type `X`.
+
+These are the scalars produced by the compatibility of matrix product unitary
+fusion with the action on a matrix product state, arXiv:2502.20257, `eq:defL`,
+lines 1875--1913. Only the scalars are formalized here; no fusion or action
+tensor is constructed. -/
 abbrev LSymbol (G X : Type*) := X → G → G → Units ℂ
 
-/-- Scalar action-tensor gauges `γ_{g,x}`. -/
+/-- Scalar action-tensor gauges `γ_{g,x}`, written `γˣ_g` in the source.
+
+This is the scalar gauge freedom of the action tensors, arXiv:2502.20257,
+`eq:scalar_act_ten`, lines 1871--1873. -/
 abbrev ActionTensorGauge (G X : Type*) := G → X → Units ℂ
 
 namespace ActionTensorGauge
 
-/-- An action-tensor gauge is normalized when `γ_{1,x} = 1` for every `x`. -/
+/-- An action-tensor gauge is normalized when `γ_{1,x} = 1` for every `x`.
+
+This is not a labelled equation of arXiv:2502.20257: it is the scalar shadow
+of the standing convention at lines 1936--1937 that any fusion or action
+tensor involving the identity element is trivial. -/
 def IsNormalized (γ : ActionTensorGauge G X) : Prop :=
   ∀ x, γ 1 x = 1
 
