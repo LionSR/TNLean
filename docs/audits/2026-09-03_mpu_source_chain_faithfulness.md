@@ -222,8 +222,12 @@ diagonal fixed point. The `HasFullSupport` field is the same convention seen
 from the formalization's side: the literal `CPSVCanonicalFormData` embeds the
 retained blocks coisometrically and admits an ambient zero complement, and
 `mpu_canonical_form_full_support.tex` records that reading as a local fix.
-The stabilization $E^{D^2-1}=\lvert\rho)(\Phi\rvert$ is then a theorem
-(`normalized_transfer_power_eq_vecMulVec_of_reduced_cfii`), not a datum.
+For $D>1$, the stabilization
+$E^{D^2-1}=\lvert\rho)(\Phi\rvert$ is a theorem
+(`normalized_transfer_power_eq_vecMulVec_of_reduced_cfii`); for $D=1$, the
+corresponding theorem is $E=1$. Together they give the positive-exponent
+identity $E^{\max(D^2-1,1)}=\lvert\rho)(\Phi\rvert$, rather than an extra
+datum.
 
 `CLAUDE.md` names the pointwise part of this situation precisely: a
 degenerate reading (the ambient zero complement of the canonical-form-II
