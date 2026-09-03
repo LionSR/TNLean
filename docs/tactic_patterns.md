@@ -2035,9 +2035,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   intro i _
   apply Finset.sum_congr rfl
   ```
-  descending through two nested `Finset.sum` binders to reach the summand,
-  together with its `rw [Finset.sum_comm]`-prefixed variant.
-- **Seen:** 12 occurrences across 8 files (2026-09-04 scan, scan weight 36):
+  descending through two nested `Finset.sum` binders to reach the summand.
+  A related pattern first commutes the outer binders and then descends.
+- **Seen:** 12 occurrences across 7 files (2026-09-03 scan, scan weight 36):
   `TNLean/MPS/MPU/ReflectedTransferKernel.lean:91`,
   `TNLean/MPS/MPU/DoubleLayerContraction.lean:181`,
   `TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean:567,728`,
@@ -2045,13 +2045,27 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/MPDO/VerticalCF.lean:298`,
   `TNLean/MPS/MPDO/ReflectedMarkedChain.lean:144,183`,
   `TNLean/MPS/MPDO/TwoSitePrefixReflectedMarkedChain.lean:72,145`.
-  The `rw [Finset.sum_comm]; apply Finset.sum_congr rfl; intro j _` shape
-  (8 occurrences across 6+ files) is the same pattern with a commuted outer
-  binder and folds into this entry.
+  The related `rw [Finset.sum_comm]; apply Finset.sum_congr rfl; intro j _`
+  shape occurs 8 times across 7 files:
+  `TNLean/MPS/MPDO/ActiveSectorTraceMatrixZCL.lean:90`,
+  `TNLean/MPS/MPDO/BNTThreeSiteReducedClosure.lean:240`,
+  `TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean:620,672`,
+  `TNLean/MPS/MPDO/InvariantProjection.lean:122`,
+  `TNLean/MPS/MPDO/LemmaC5CaseI.lean:194`,
+  `TNLean/MPS/ParentHamiltonian/MixedGram.lean:97`, and
+  `TNLean/MPS/Periodic/Applications.lean:173`.
+  It first commutes the outer binders and then descends through one of them;
+  `Finset.sum_comm` already owns the permutation step.
 - **Abstraction (proposed):** a two-binder congruence lemma, roughly
-  `Finset.sum_congr₂ : (∀ i ∈ s, ∀ j ∈ t, f i j = g i j) → ∑ i ∈ s, ∑ j ∈ t, f i j = ∑ i ∈ s, ∑ j ∈ t, g i j`,
-  stated once in the algebra layer. A lemma is the weakest sufficient
-  mechanism here; no macro or elaborator is warranted.
+  ```lean
+  Finset.sum_congr₂ :
+    (∀ i ∈ s, ∀ j ∈ t, f i j = g i j) →
+      ∑ i ∈ s, ∑ j ∈ t, f i j = ∑ i ∈ s, ∑ j ∈ t, g i j
+  ```
+  stated once in the algebra layer. This lemma applies directly to all 12
+  primary occurrences and to the descent after any separate binder
+  permutation. A lemma is the weakest sufficient mechanism here; no macro or
+  elaborator is warranted.
 - **Note:** one call site (`ReflectedTransferKernel.lean:91`) is inside the
   #7658 deletion set, so re-count before promoting.
 
