@@ -506,21 +506,25 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   (`Papers/1703.09188/paper_v2.tex` lines 271--281 and 356--361) as explicit
   hypotheses in three shapes: `hρ : ρ.PosDef` at 65 sites in 11 files,
   `hpower : E ^ J = vecMulVec ρ.vec 1.vec` at 38 sites in 6 files, and
-  `hfull : … .HasFullSupport` at 28 sites in 6 files; 12 `hasFullSupport_*`
+  `hfull : … .HasFullSupport` at 28 sites in 6 files; 8 `hasFullSupport_*`
   transport theorems and 3 canonical-form-II constructions
   (`PhysicalAncilla.lean`, `TensorProductCanonicalForm.lean`) exist only to
   carry the pair between statements; a separate `D = 1` branch
   (`normalizedTransferStabilization_fin_one`,
-  `normalized_transfer_matrix_eq_one_fin_one`) exists because the datum is
-  case-split. Chapter 28 has 82 `\notready` nodes among 508, of which 39
-  carry an `mpu_admissible` label twinning a source-labelled node
-  (`lemuisometry`, `ThmFund1`, `SF`, `FundamentalMPU`, `def:index`, and 34
-  more) whose only difference is the unfolded convention. Six
-  `**Scope restriction (full support)**` markers repeat the same restriction.
+  `normalized_transfer_matrix_eq_one_fin_one`, consumed on route by
+  `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`) exists
+  because `Matrix.StabilizedRankOneData` needs a positive exponent at most
+  `D * D - 1`, which is empty at `D = 1`. Chapter 28 has 82 `\notready`
+  nodes among 508, of which 39 carry an `mpu_admissible` label twinning a
+  source-labelled node (`lemuisometry`, `ThmFund1`, `SF`, `FundamentalMPU`,
+  `def:index`, and 34 more) whose only difference is the unfolded
+  convention. Four `**Scope restriction (full support)**` markers repeat the
+  same restriction.
 - **Remediation**: one predicate on `MPOTensor d D` stating canonical form
   II for an MPU tensor (`IsMPU`, left-canonical normalized flattening, a
   diagonal positive definite trace-one fixed matrix $\rho$), with the
-  stabilization $E^{D^2-1}=|\rho)(\Phi|$, normality, the forced-block simple
+  stabilization $E^{\max(D^2-1,1)}=|\rho)(\Phi|$ stated as one power
+  identity (no `D = 1` branch), normality, the forced-block simple
   contractions, and the five preservation lemmas proved once;
   `exists_reduced_cfii_representative` restated as the
   without-loss-of-generality theorem; every step-7-to-13 statement takes the
@@ -564,19 +568,33 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `MixedKernelSecondCutMetric.lean` (676 lines, zero consumers outside the
   set) with their 10 nodes.
 
-## D15. A third canonical-form predicate for MPU tensors  —  api-design, impact 3/10, effort 2/10
+## D15. The MPU canonical-form structure duplicates the CPSV one except for its block predicate  —  api-design, impact 2/10, effort 2/10
 - **Status**: open
 - **Evidence**: `MPUCanonicalForm.lean` (78 lines) defines
   `IsMPUCanonicalBlock`, `MPUCanonicalFormData`, and `IsMPUCanonicalForm`,
-  a canonical-form predicate permitting periodic blocks, beside
-  `IsCPSVCanonicalForm` and `CPSVCanonicalFormIIData`; its sole consumer is
-  the "in CF" clause of `StrictlyEquivalent` in `Equivalence.lean`.
-  `prop:normal-tensor` (lines 344--355) excludes periodic blocks for MPU
-  tensors, so for its only use the predicate coincides with the D13
-  convention predicate.
-- **Remediation**: after D13's first PR, replace the clause by the
-  convention predicate and delete the module and its three nodes.
-- **First PR**: the replacement itself (one module, one blueprint entry).
+  the paper's canonical form CF (`Papers/1703.09188/paper_v2.tex` lines
+  259--262: irreducible blocks with transfer spectral radius one, periodic
+  blocks allowed, gauge free). Its sole consumer is the "in CF" endpoint
+  clause of `StrictlyEquivalent` in `Equivalence.lean`, which transcribes
+  `def:strictly-equivalent-tensors` (lines 708--714: endpoints "in CF", the
+  path "not necessarily in CF"). `MPUCanonicalFormData` repeats every field
+  of `CPSVCanonicalFormData` (`TNLean/MPS/CanonicalForm/Definitions.lean`)
+  except the block predicate (irreducible with spectral radius one, against
+  normal) and the `weights_ne_zero` local fix, and no lemma relates the two;
+  `prop:normal-tensor` (lines 344--355), which says that an MPU tensor in CF
+  has one block and that block is normal, is not stated for this predicate.
+- **Remediation**: keep the clause. CF is gauge free while canonical form II
+  (lines 271--281) fixes the gauge, so two MPU tensors in CF outside that
+  gauge are strictly equivalent under the paper's definition; replacing the
+  clause by the D13 convention predicate would add a hypothesis the source
+  does not carry (the first limit of the `CLAUDE.md` convention rule: the
+  paper writes "in CF" here and distinguishes CF, CFII, and SF throughout).
+  Prove `prop:normal-tensor` for `IsMPUCanonicalForm` on MPU tensors (one
+  normal block), then share one structure between the two canonical forms by
+  parametrizing the block predicate, so that the module reduces to
+  `IsMPUCanonicalBlock` and that lemma.
+- **First PR**: the `prop:normal-tensor` lemma for `IsMPUCanonicalForm`,
+  from `TransferMultiplicity.lean`; no consumer changes.
 
 ## Honorable mentions (ranks 11-12)
 

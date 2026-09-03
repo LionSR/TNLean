@@ -92,13 +92,13 @@ carrying a blueprint `\lean{}` tag. Files are listed in route order.
 | `TransferMultiplicity.lean` (373) | A | `prop:normal-tensor`: the shifted traces force one canonical block (349--354) | 1 | 6/7 |
 | `CanonicalForm.lean` (402) | A | `prop:normal-tensor` conclusion for the reduced representative (319--326, 344--354); carries the full-support convention | 5 | 12/13 |
 | `ReducedCanonicalRepresentative.lean` (265) | A | the standing convention itself (lines 356--361): every MPU has a canonical-form-II representative with the same $U^{(N)}$, $N>0$ | 1 | 2/2 |
-| `TransferStabilization.lean` (282) | A | Jordan elimination $E^J=\lvert\rho)(\Phi\rvert$, $J\leq D^2-1$ (397--405); the `_of_reduced_cfii` form threads the convention as two hypotheses; the two `fin_one` declarations exist only for the $D=1$ branch of the supplied datum | 3 | 3/5 |
+| `TransferStabilization.lean` (282) | A | Jordan elimination $E^J=\lvert\rho)(\Phi\rvert$, $J\leq D^2-1$ (397--405); the `_of_reduced_cfii` form threads the convention as two hypotheses; the two `fin_one` declarations are the $D=1$ branch, which exists because `Matrix.StabilizedRankOneData` needs a positive exponent at most $D^2-1$ (lines 265--268), and are consumed on route by `cor:simple1` (`SimpleBlocking.lean:644`) and `blockingsimple`(ii) (`SimpleBlocking.lean:784`) | 3 | 3/5 |
 | `Simple.lean` (187) | A | Definition `simple`, `blockingsimple`(i) (363--398) | 15 | 8/8 |
 | `DoubleLayerContraction.lean` (588) | A | `WIsom`, `II_UTransfer`, `ESE=0` (390--409); one-letter case is a resolved local fix | 10 | 15/27 |
 | `ResidualAlgebra.lean` (182) | A | nilpotent algebra and Nagata--Higman bound `Sprime=0` (405--415), local fix $D^2$ | 2 | 9/9 |
 | `ThreeFormSpan.lean` (433) | A | `sprimeforms` (415--425) | 1 | 8/8 |
 | `SimpleBlocking.lean` (819) | A | `blockingsimple`(ii) conclusion, `cor:simple1`, all-later-blocks corollary (415--446). The Lean proof of `cor:simple1` goes through the stabilized power rather than the paper's partial trace of $U^{(J+1)}$; the statement is the paper's | 4 | 19/19 |
-| `MatchingContractions.lean` (229) | A | `blockingsimple`(ii) with the named witnesses $a=\Phi,b=\rho$ (427), and the last equality of `lemuisometry`, $d^{-k}\tr_{1,\ldots,k}[U^{(k+2)\dagger}U^{(k+2)}]=\Id$ (553--556). The module docstring wrongly describes the file as auxiliary to the $Y_1$--$X_2$ kernel; `normalized_mpo_tail_isometry` is the paper's input-first identity. The output-first `normalized_mpo_tail_coisometry` is the wrong orientation and served only the mixed kernel | 2 | 4/4 |
+| `MatchingContractions.lean` (229) | A | `blockingsimple`(ii) with the named witnesses $a=\Phi,b=\rho$ (427), and the last equality of `lemuisometry`, $d^{-k}\tr_{1,\ldots,k}[U^{(k+2)\dagger}U^{(k+2)}]=\Id$ (553--556). The module docstring wrongly describes the file as auxiliary to the $Y_1$--$X_2$ kernel; `normalized_mpo_tail_isometry` is the paper's input-first identity. The output-first `normalized_mpo_tail_coisometry` is the wrong orientation and served only the mixed kernel. Both consumers are class C (`ReflectedTransferKernel`, `MixedKernelRangeTransport`); `SourceUCompleteNetwork` imports the module without using a declaration, and `normalized_mpo_tail_isometry` has no consumer yet | 2 | 4/4 |
 | `SuppliedFixedWitnesses.lean` (203) | B | the paper's Definition `simple` is existential but every later use takes $a=\Phi$, $b=\rho$ (427, 435); this module re-aligns existential witnesses with the fixed pair. Needed for `ThmFund1` $1\to2$; its `hpower` hypothesis is a consequence of the convention | 0 | 4/4 |
 | `SuppliedWitnessReblocking.lean` (66) | C | witness-preserving copy of the all-later-blocks corollary (442--446), already formalized existentially by `IsMPU.blockTensor_isMPUSimple_of_le` and `IsMPUSimple.blockTensor`. Sole consumer is `ReflectedTransferKernel`; the blueprint proof of the admissible `ThmFund1` cites it for $4\to1$, where the paper uses `cor:simple1` | 1 | 1/1 |
 | `SourceCuts.lean` (293) | A | `II_SVD`, `defnrl` (450--477), orientation local fix | 14 | 26/26 |
@@ -122,7 +122,7 @@ carrying a blueprint `\lean{}` tag. Files are listed in route order.
 | `CompositionFlattening.lean` (66), `CompositionRanks.lean` (490) | A | `IndexTh`(ii) composition (833--845) | 0 | 3/3 |
 | `PhysicalAncilla.lean` (373) | A / B | A: $\mathcal U^{(x)}=\mathcal U\otimes\Id_x$ (706--724). B: five declarations transporting the (data, full support) pair through the ancilla (issue #6138) | 1 | 5/16 |
 | `PhysicalAdjointCanonicalForm.lean` (197) | B | canonical form II of the physical adjoint; consumed by the arXiv:2502.20257 gauge construction | 1 | 6/12 |
-| `MPUCanonicalForm.lean` (78) | C | a third canonical-form predicate (`IsMPUCanonicalForm`) beside the CPSV canonical form and canonical form II, permitting periodic blocks that `prop:normal-tensor` excludes for MPU tensors; used only by the "in CF" clause of `Equivalence.lean` | 1 | 3/3 |
+| `MPUCanonicalForm.lean` (78) | A | the paper's canonical form CF (259--262: irreducible blocks of transfer spectral radius one, periodic blocks allowed, gauge free), transcribed for the "in CF" endpoint clause of `def:strictly-equivalent-tensors` (708--714); its only consumer is that clause in `Equivalence.lean`. On an MPU tensor `prop:normal-tensor` collapses CF to one normal block but leaves the gauge free, so this clause must not be replaced by canonical form II (see D15) | 1 | 3/3 |
 | `Equivalence.lean` (307) | A (restricted) | `def:strictly-equivalent-tensors`, `def:equivalent-tensors` (706--724), symmetry variants (1340--1366); fixed-bond and coherent-family restrictions recorded in two paper-gap notes | 3 | 15/15 |
 | `VirtualSandwich.lean` (158) | A | `prop:continuity-index`: $\widehat{\mathcal W}=L\mathcal WR$ preserves both ranks (786--812) | 3 | 8/8 |
 | `FactorFreeSandwich.lean` (176) | B | continuity of $\widehat{\mathcal W}(x)$ (807--812) written as a contraction against the rank-one transfer power, avoiding a continuous choice of $L,R$ | 0 | 12/12 |
@@ -178,15 +178,19 @@ The three shapes, with their occurrence counts under `TNLean/MPS/MPU/`:
   (hfull : cfii.toCPSVCanonicalFormData.HasFullSupport)`; 28 occurrences of
   `hfull` in 6 files, with transport theorems for blocking, relabeling,
   physical adjoint, identity ancillas, and tensor products
-  (`hasFullSupport_*`, 12 declarations) whose only purpose is to carry the
+  (`hasFullSupport_*`, 8 theorems) whose only purpose is to carry the
   pair to the next statement.
 - **A positive definite trace-one weight**: `(ρ) (hρ : ρ.PosDef)`; 65
   occurrences of `hρ : ρ.PosDef` in 11 files, plus `hρtrace`.
 - **A supplied stabilized fixed pair**: `(J) (hJ : 0 < J) (hpower :
   E ^ J = vecMulVec ρ.vec 1.vec)`; 38 occurrences of `hpower` in 6 files,
   with a separate $D=1$ branch (`normalizedTransferStabilization_fin_one`,
-  `normalized_transfer_matrix_eq_one_fin_one`) because the datum is
-  case-split in `def:mpu_reduced_full_support_source_datum`.
+  `normalized_transfer_matrix_eq_one_fin_one`) because
+  `Matrix.StabilizedRankOneData` needs a positive exponent at most
+  $D^2-1$, which no exponent satisfies at $D=1$
+  (`TransferStabilization.lean:265--268`); the branch is consumed on route by
+  `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`, and
+  `def:mpu_reduced_full_support_source_datum` mirrors the split.
 
 Chapter 28 mirrors this: 82 of its 508 nodes are `\notready`, and 39 of them
 carry an `mpu_admissible` label paired with a source-labelled twin
@@ -200,8 +204,9 @@ replace that phrase by the supplied fixed pair.
 
 The families are one restriction, and it is the paper's own convention. Under
 `Erightleft` (lines 271--281) a normal tensor in canonical form II has
-$\rho_n>0$ and $(\Phi\mid\rho)=1$; lines 480--486 use exactly this positivity
-to define $X_1$ and $Z_1$; lines 356--361 impose the convention on every MPU
+$\rho_n>0$ and $(\Phi\mid\rho)=1$; lines 488--502 use exactly this positivity
+to define $X_1$ (488--489) and $Z_1$ (`Z1Z2`, 496--502), the remark at line
+495 stating that the square roots and inverses exist because $\rho_n>0$; lines 356--361 impose the convention on every MPU
 tensor without loss of generality; and `prop:normal-tensor` makes the
 canonical form a single normal block, so for an MPU tensor "canonical form
 II" already means one block filling the bond space with a positive definite
@@ -213,8 +218,7 @@ The stabilization $E^{D^2-1}=\lvert\rho)(\Phi\rvert$ is then a theorem
 (`normalized_transfer_power_eq_vecMulVec_of_reduced_cfii`), not a datum.
 
 `CLAUDE.md` names this situation precisely: a degenerate reading (the ambient
-zero complement; a canonical-form predicate weaker than the one the paper
-uses) is a convention, to be baked into one definition and recorded once, and
+zero complement of the canonical-form-II data) is a convention, to be baked into one definition and recorded once, and
 the apparatus modeling it (parallel predicate families, `\notready` twins
 beside the formalized theorem, side hypotheses repeated on every downstream
 statement, per-declaration markers) is to be deleted. Both limits of the rule
@@ -245,12 +249,13 @@ fields
   `ρ_trace : ρ.trace = 1`, `ρ_fixed : Kraus.transferMap U.normalizedFlattening ρ = ρ`.
 
 Its lemmas, proved once: `IsNormalTensor U.normalizedFlattening` (from
-`CanonicalForm.lean`), $E^{D^2-1}=\lvert\rho)(\Phi\rvert$ with no $D=1$ branch
-(from `TransferStabilization.lean`; for $D=1$ the characteristic polynomial is
-$X-1$ and the power is $E$ itself), the simple contractions of the forced
+`CanonicalForm.lean`), $E^{\max(D^2-1,1)}=\lvert\rho)(\Phi\rvert$ stated
+as one power identity rather than as `Matrix.StabilizedRankOneData`, so that
+the $D=1$ branch disappears (from `TransferStabilization.lean`; for $D=1$ the
+characteristic polynomial is $X-1$ and $E=1$), the simple contractions of the forced
 block with witnesses $\Phi,\rho$ (from `MatchingContractions.lean`), and
 preservation under blocking, relabeling, physical adjoint, identity ancillas,
-and tensor products (collapsing the twelve `hasFullSupport_*` transports and
+and tensor products (collapsing the eight `hasFullSupport_*` transports and
 the five ancilla and tensor-product canonical-form-II constructions to five
 lemmas). The existing `exists_reduced_cfii_representative` becomes the
 without-loss-of-generality theorem in this predicate's terms: every MPU tensor
@@ -284,9 +289,14 @@ content still consumed by a later survivor.
    `SourceUV.lean` and the two mixed product formulas of
    `SourceFactorsTensorProduct.lean`; `normalized_mpo_tail_coisometry` in
    `MatchingContractions.lean`, whose docstring is corrected to cite
-   `lemuisometry` (553--556) for `normalized_mpo_tail_isometry`; the mixed
-   formulas of `Examples/ShiftSourceMixedKernels.lean` after moving its
-   supplied factors and rank equivalences into `Examples/ShiftSourceFactors.lean`.
+   `lemuisometry` (553--556) for `normalized_mpo_tail_isometry`; the six
+   mixed-kernel entry formulas of `Examples/ShiftSourceFactors.lean`
+   (`sourceY₁X₂_*SourceFactors_apply`, `sourceX₁Y₂_*SourceFactors_apply`,
+   lines 606--694, consumed only by `Examples/ShiftSourceMixedKernels.lean`)
+   together with the mixed formulas of `Examples/ShiftSourceMixedKernels.lean`,
+   after moving the latter's supplied factors and rank equivalences into
+   `Examples/ShiftSourceFactors.lean`; and the docstring sentence of
+   `SourceFactorContraction.lean` (lines 22--23) that names the deleted kernel.
    Delete the 21 Chapter 28 nodes tagging these declarations
    (`def:mpu_mixed_source_kernels`, `thm:mpu_mixed_y1_x2_*`,
    `def:mpu_mixed_y1_x2_*`, `thm:mpu_normalized_output_tail_closed_trace`,
@@ -306,33 +316,52 @@ content still consumed by a later survivor.
    proof plans take the predicate; delete `HasFullSupport`, the
    `hasFullSupport_*` transports, `normalizedDiagonalLiftCFIIData`,
    `tensorPhysicalIdCFIIData`, `tensorProductCFIIData`, the `fin_one` branch,
-   and the six `**Scope restriction (full support)**` markers, replacing them
+   and the four `**Scope restriction (full support)**` markers
+   (`TransferStabilization.lean:119`, `TensorProductCanonicalForm.lean:130`,
+   `CanonicalForm.lean:378`, `MatchingContractions.lean:190`), replacing them
    by one `**Local fix**` marker on the predicate.
 4. **Merge the blueprint twins.** Delete the 39 `mpu_admissible` nodes and
    `def:mpu_reduced_full_support_source_datum`; the source-labelled nodes
    absorb their `\uses` and state the convention once. Rewrite
    `mpu_canonical_form_full_support.tex` as the convention record.
-5. **Replace `IsMPUCanonicalForm`** (`MPUCanonicalForm.lean`) by the
-   predicate in the "in CF" clauses of `Equivalence.lean`, and delete the
-   module and its three nodes.
-6. **Discharge the supplied fixed pair of `prop:continuity-index`** (#6137,
-   #6022): after step 2 the hypotheses of `ReducedRepresentative.lean` and
-   `ReducedToHatTransport.lean` follow for the block $\mathcal W_{D^4}$ from
-   the forced-block contractions, so the "supplied fixed pair" marker and
-   `mpu_reduced_representative_supplied_fixed_pair.tex` retire with them.
+5. **Keep `IsMPUCanonicalForm` as the endpoint clause of strict
+   equivalence, and prove `prop:normal-tensor` for it.**
+   `def:strictly-equivalent-tensors` (708--714) requires the endpoints "in
+   CF" and lets the path leave CF; CF (259--262) is gauge free, while
+   canonical form II (271--281) fixes the gauge ($(\Phi\rvert=\sum_n(n,n\rvert$,
+   $\rho$ diagonal). Two MPU tensors in CF that are not in the canonical-form-II
+   gauge are strictly equivalent under the paper's definition, so replacing the
+   clause by the convention predicate of step 2 would add a hypothesis the
+   source does not carry; the first limit of the `CLAUDE.md` convention rule
+   applies, since the paper writes "in CF" here and distinguishes CF, CFII,
+   and SF throughout. The clause stays as it is. The remaining debt is
+   structural: `MPUCanonicalFormData` duplicates `CPSVCanonicalFormData`
+   except for the block predicate (irreducible with spectral radius one,
+   against normal) and the missing nonzero-weight field. The step is to prove
+   `prop:normal-tensor` (344--355) in the form the clause needs, that an MPU
+   tensor in `IsMPUCanonicalForm` has one block and the block is normal, and
+   then to share one structure between the two canonical forms by
+   parametrizing the block predicate, so that `MPUCanonicalForm.lean` reduces
+   to the block predicate and that lemma.
+6. **Discharge the supplied fixed pair of `prop:continuity-index`** (#6136,
+   #6140, #6022): after step 2 the hypotheses of `ReducedRepresentative.lean`
+   and `ReducedToHatTransport.lean` follow for the block $\mathcal W_{D^4}$
+   from the forced-block contractions, so the "supplied fixed pair" marker
+   and `mpu_reduced_representative_supplied_fixed_pair.tex` retire with them.
 
 Steps 1 and 5 are independent of the open interior contractions (#7633,
-#6071) and of each other. Steps 2--4 change theorem statements and follow the
-paper-realignment process; they do not wait for the interior contractions
-either, since every existing proof goes through unchanged once the
-predicate's lemmas reproduce the former hypotheses.
+#6071), of each other, and of steps 2--4. Steps 2--4 change theorem
+statements and follow the paper-realignment process; they do not wait for
+the interior contractions either, since every existing proof goes through
+unchanged once the predicate's lemmas reproduce the former hypotheses.
 
 ## Ledger entries
 
 Three entries were added to `docs/proof_debt_ledger.md`: D13 (the threaded
 convention and the admissible twin family), D14 (the mixed-kernel and
-reflected-kernel residue), and D15 (the parallel `IsMPUCanonicalForm`
-predicate). Each names the evidence counted above and the first one-week PR.
+reflected-kernel residue), and D15 (the duplicated canonical-form structure
+behind `IsMPUCanonicalForm`, whose gauge-free "in CF" clause is the paper's
+and stays). Each names the evidence counted above and the first one-week PR.
 
 ## Proposed follow-up issues
 
