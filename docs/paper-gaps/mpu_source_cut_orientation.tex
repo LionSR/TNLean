@@ -195,6 +195,26 @@ normalization and orientation explicitly. These conclusions assume the
 source's diagonal fixed point; they do not assert a source-$u$ theorem for
 arbitrary nonsymmetric $\rho$.
 
+\section{Elimination plan for the diagonal restriction}
+
+The transposed first cut was a local correction, and it is resolved. The
+diagonal restriction recorded in the previous section is of the other kind: the
+source-$u$ closure theorems are proved on the source's own canonical-form-II
+data, where $\rho$ is diagonal with positive weights $\rho_n>0$, rather than
+for an arbitrary positive definite $\rho$. It is therefore a scope
+restriction, and the module documentation of the complete source-$u$ network
+records it as one.
+% Source lines: paper_v2.tex 269--280 and 495.
+The wider scope restriction on the source data is
+\texttt{mpu\_canonical\_form\_full\_support.tex}.
+
+Removing the restriction requires proving the source-$u$ closure for a
+Hermitian positive definite, not necessarily symmetric, $\rho$, by a same-gate
+retained-network argument bridging the $\lvert\rho)$ and
+$\lvert\rho^{\mathsf T})$ insertions for one and the same gate. That is the
+same bridge the source-$v$ isometry needs, and it is tracked by
+\ghissue{7653}.
+
 \section{Affected claims and audit boundary}
 
 The transposed first cut affected source-factor recovery, physical adjunction,
