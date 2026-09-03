@@ -4918,15 +4918,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         E^J & =\lvert\rho)(\Phi\rvert.
     \end{align}
-    These data are supplied in one of two ways.
-    \begin{enumerate}
-        \item If $D=1$, take $J=1$ and $\rho=\Id_1$ using
-              Theorem~\ref{thm:mpu_normalized_transfer_fin_one}.
-        \item If $D>1$, choose canonical-form-II data for the normalized
-              flattening of this same tensor, with its blocks filling the
-              ambient bond space. Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}
-              supplies the fixed pair with $J=D^2-1$.
-    \end{enumerate}
+    The one-dimensional case is supplied directly: if $D=1$, take $J=1$
+    and $\rho=\Id_1$ using
+    Theorem~\ref{thm:mpu_normalized_transfer_fin_one}. If $D>1$, chosen
+    canonical-form-II data with full support give a positive trace-one ambient
+    fixed point with $J=D^2-1$ by
+    Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Diagonality of
+    this ambient fixed point is an additional hypothesis: the theorem gives a
+    diagonal matrix in the unique block coordinates, but conjugation into the
+    ambient coordinates need not preserve diagonality.
     For $D>1$, this states the fixed-pair convention in
     \cite[equations labelled~\texttt{Erightleft} and~\texttt{II\_UTransfer}, and
         proof of Proposition~III.2(ii)]{Cirac2017MPU}. The $D=1$ branch is the direct
@@ -5058,7 +5058,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source locator: paper_v2.tex, lines 545--557.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}
+    \lean{MPOTensor.SourceFactors.sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm}
+    \leanok
     \uses{thm:mpu_source_u_transpose_fixed_pair_trace, thm:mpu_reflected_transfer_power, thm:mpu_normalized_input_tail_closed_trace}
     Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace} closes the two
     external source gates as
