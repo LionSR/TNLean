@@ -8,7 +8,7 @@
 
 \title{The First MPU Source Cut and the Orientation of the Source Gates}
 \author{}
-\date{2026-09-01}
+\date{2026-09-03}
 
 \begin{document}
 \maketitle
@@ -120,15 +120,63 @@ contraction for $u$ or the $X_1$--$X_2$ contraction for $v$, with the product
 orders shown above. The Chapter~28 Blueprint links only to declarations that
 were rebuilt after the correction.
 
+\section{Remaining source-$u$ comparison}
+
+The source-$u$ Gram contraction has now been expanded into the staggered
+four-tensor network and closed as
+\begin{align}
+    \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+     & =\operatorname{tr}\!\left(
+    W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_1q_1}
+    \right).
+    \label{eq:mpu_source_cut_orientation_transpose_trace}
+\end{align}
+The coordinate expansion and this closure are
+\leanid{MPOTensor.transpose_fixed_pair_trace_eq_staggered_four_u} and
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_transpose_fixed_pair_trace}.
+
+The retained input word can also be separated into its two one-site letters
+and its blocked interior:
+\begin{align}
+    W^{(K+2)}_{(p_1,p_2,\sigma),(q_1,q_2,\tau)}
+     & =\operatorname{tr}\!\left(
+    W^{p_2q_2}W_K^{\sigma,\tau}W^{p_1q_1}\right).
+    \label{eq:mpu_source_cut_orientation_endpoint_separated}
+\end{align}
+This is
+\leanid{MPOTensor.mpo_doubleLayer_finAddTwoArrowEquiv_symm_eq_endpointSeparated}.
+If $E^J=\lvert\rho)(\Phi\rvert$, $\operatorname{tr}(\rho)=1$, and
+$K=JD^2$, the normalized input-tail contraction is
+\begin{align}
+    d^{-K}\sum_{\tau,\eta}
+    \overline{U^{(K+2)}_{\eta,(p,\tau)}}
+    U^{(K+2)}_{\eta,(q,\tau)}
+     & =\operatorname{tr}\!\left(
+    W^{p_2q_2}\lvert\rho)(\Phi\rvert W^{p_1q_1}
+    \right).
+    \label{eq:mpu_source_cut_orientation_direct_trace}
+\end{align}
+This is
+\leanid{MPOTensor.normalized_mpo_input_tail_eq_fixed_pair_trace}.
+
+Consequently the unresolved step is exactly the scalar equality between
+Eqs.~\eqref{eq:mpu_source_cut_orientation_transpose_trace} and
+\eqref{eq:mpu_source_cut_orientation_direct_trace}. It compares the
+transpose-oriented fixed pair of the staggered source-$u$ Gram network with
+the direct fixed pair of the normalized input tail. No symmetry of $\rho$
+is among the stated assumptions. Therefore the complete source-$u$
+contraction, the source-$u$ isometry, and the subsequent consequences do not
+follow from the established identities alone.
+
 \section{Verdict}
 
 The former definition of $M_1$ was the transpose of the source diagram. The
 correction changes no source rank, but it changes the typed source factors and
 all order-sensitive contractions. The first cut, weight, adjunction identities,
 paper gates, two-site factorizations, tensor products, and shift examples now
-use one consistent leg assignment. The correction is resolved, while the
-revalidation rule remains applicable to any future recovery of source-gate
-work predating this audit.
+use one consistent leg assignment. The orientation correction is resolved.
+The remaining source-$u$ question is the scalar comparison between the
+transpose-oriented and direct fixed-pair traces above.
 
 \bibliographystyle{alpha}
 \bibliography{references}

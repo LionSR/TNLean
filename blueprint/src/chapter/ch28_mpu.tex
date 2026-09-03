@@ -3046,6 +3046,34 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     trace gives the displayed closed trace.
 \end{proof}
 
+\begin{lemma}[Endpoint-separated double-layer word]
+    \label{lem:mpu_endpoint_separated_double_layer_word}
+    \lean{MPOTensor.mpo_doubleLayer_finAddTwoArrowEquiv_symm_eq_endpointSeparated}
+    \leanok
+    \uses{def:mpo_family, def:mpu_double_layer,
+        thm:mpu_double_layer_blocking}
+    Let $W$ be the double layer of an MPO tensor $\mathcal U$. For words
+    $\sigma,\tau\in\{0,\ldots,d-1\}^K$ and retained pairs
+    $p=(p_1,p_2)$ and $q=(q_1,q_2)$, write
+    $(p_1,p_2,\sigma)$ and $(q_1,q_2,\tau)$ for the corresponding words of
+    length $K+2$. Then
+    \begin{align}
+        W^{(K+2)}_{(p_1,p_2,\sigma),(q_1,q_2,\tau)}
+         & =\tr\!\left[
+            W^{p_2q_2}W_K^{\sigma,\tau}W^{p_1q_1}\right],
+    \end{align}
+    where $W_K^{\sigma,\tau}$ is the blocked double-layer letter associated
+    with the two interior words.
+    % Source locator: paper_v2.tex, equation uUnitary and lines 545--557.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpo_eval_word, thm:mpu_double_layer_blocking}
+    Write the closed word with $p_1,q_1$ first and move this letter to the
+    right end by cyclicity of the trace. The remaining $K$ interior letters
+    multiply to $W_K^{\sigma,\tau}$.
+\end{proof}
+
 \begin{theorem}[Closed double-layer trace for the normalized input tail]
     \label{thm:mpu_normalized_input_tail_closed_trace}
     \lean{MPOTensor.normalized_mpo_input_tail_eq_closed_doubleLayer_trace}
@@ -3066,7 +3094,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_closed_double_layer, thm:mpu_normalized_diagonal_word_expansion}
+    \uses{lem:mpu_endpoint_separated_double_layer_word,
+        thm:mpu_closed_double_layer,
+        thm:mpu_normalized_diagonal_word_expansion}
     Closing the common output word gives the double-layer identity
     \begin{align}
         \sum_\eta
@@ -4936,6 +4966,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 269--280 and 397--405.
 \end{definition}
 
+\begin{lemma}[Coordinate expansion of the transpose fixed-pair trace]
+    \label{lem:mpu_transpose_fixed_pair_trace_expansion}
+    \lean{MPOTensor.transpose_fixed_pair_trace_eq_staggered_four_u}
+    \leanok
+    \uses{def:mpu_double_layer}
+    Let $W^{ij}$ be the double-layer letters of an MPO tensor $\mathcal U$,
+    let $\rho$ be a bond matrix, and put
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. For retained pairs
+    $p=(p_1,p_2)$ and $q=(q_1,q_2)$,
+    \begin{align}
+        \tr\!\left(
+        W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_1q_1}
+        \right)
+        ={} & \sum_{\alpha,\alpha',\beta,\beta',\gamma,j_1,j_2}
+        \overline{\mathcal U^{j_1}_{p_2,\alpha,\beta}}
+        \rho_{\beta,\beta'}
+        \mathcal U^{j_1}_{q_2,\alpha',\beta'} \notag            \\
+            & \qquad\qquad\cdot
+        \overline{\mathcal U^{j_2}_{p_1,\gamma,\alpha}}
+        \mathcal U^{j_2}_{q_1,\gamma,\alpha'}.
+    \end{align}
+    % Source locator: paper_v2.tex, equation uUnitary and lines 545--557.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_v_four_u_expansions}
+    Expand the trace over the diagonal doubled-bond coordinates. The inserted
+    coefficient is
+    $(\rho^{\mathsf T})_{\beta',\beta}=\rho_{\beta,\beta'}$; the two
+    double-layer letters supply the remaining five sums.
+\end{proof}
+
 \begin{theorem}[Staggered Gram expansion of the source tensor $u$]
     \label{thm:mpu_source_u_staggered_gram}
     \lean{MPOTensor.SourceFactors.sourceU_gram_eq_staggered_four_u}
@@ -5006,27 +5068,59 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \right).
     \end{align}
     In particular, the weight is transposed rather than identified with
-    $\rho$. The retained-interior equality needed for the complete contraction
-    remains open.
-    % The retained-interior equality is tracked in Issue #7633.
+    $\rho$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_u_staggered_gram, thm:mpu_source_v_four_u_expansions}
-    Enumerate each doubled-bond coordinate as
-    $\operatorname{flat}(\alpha,\alpha')$. Expanding a diagonal entry of the
-    matrix under the trace gives
-    \begin{align}
-        \sum_{\beta,\beta',\gamma,j_1,j_2}
-        \overline{\mathcal U^{j_1}_{p_2,\alpha,\beta}}
-        \mathcal U^{j_1}_{q_2,\alpha',\beta'}
-        (\rho^{\mathsf T})_{\beta',\beta}
-        \overline{\mathcal U^{j_2}_{p_1,\gamma,\alpha}}
-        \mathcal U^{j_2}_{q_1,\gamma,\alpha'}.
-    \end{align}
-    Since $(\rho^{\mathsf T})_{\beta',\beta}=\rho_{\beta,\beta'}$,
-    summing over $\alpha,\alpha'$ gives the identity in
+    \uses{lem:mpu_transpose_fixed_pair_trace_expansion,
+        thm:mpu_source_u_staggered_gram}
+    Lemma~\ref{lem:mpu_transpose_fixed_pair_trace_expansion} expands the
+    trace into the same seven-index expression as
     Theorem~\ref{thm:mpu_source_u_staggered_gram}.
+\end{proof}
+
+\begin{theorem}[Direct fixed-pair trace for the normalized input tail]
+    \label{thm:mpu_normalized_input_tail_fixed_pair_trace}
+    \lean{MPOTensor.normalized_mpo_input_tail_eq_fixed_pair_trace}
+    \leanok
+    \uses{def:mpo_family, def:mpu_double_layer,
+        def:mpu_normalized_flattening}
+    Assume $d,D>0$. Let $E$ be the transfer matrix of the normalized
+    flattening of an MPO tensor $\mathcal U$. Suppose that
+    $\tr(\rho)=1$ and
+    \begin{align}
+        E^J & =\lvert\rho)(\Phi\rvert,
+            & (\Phi\rvert              & =\operatorname{vec}(\Id_D)^{\mathsf T}.
+    \end{align}
+    Set $K=JD^2$, let $W^{ij}$ be the double-layer letters, and use the
+    column-stacking vectors $\lvert\rho)$ and $(\Phi\rvert$ on the doubled
+    bond space. Then, for retained pairs $p=(p_1,p_2)$ and $q=(q_1,q_2)$,
+    \begin{align}
+        d^{-K}\sum_{\tau,\eta}
+        \overline{U^{(K+2)}_{\eta,(p,\tau)}}
+        U^{(K+2)}_{\eta,(q,\tau)}
+         & =\tr\!\left(
+        W^{p_2q_2}\lvert\rho)(\Phi\rvert W^{p_1q_1}
+        \right).
+    \end{align}
+    The fixed pair is direct: the weight is $\rho$, not $\rho^{\mathsf T}$.
+    % Source locator: paper_v2.tex, equation uUnitary and lines 545--557.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_input_tail_closed_trace,
+        thm:mpu_reflected_transfer_power}
+    The normalized input-tail formula gives
+    \begin{align}
+        d^{-K}\sum_{\tau,\eta}
+        \overline{U^{(K+2)}_{\eta,(p,\tau)}}
+        U^{(K+2)}_{\eta,(q,\tau)}
+         & =\tr\!\left[W^{p_1q_1}W^{p_2q_2}R^K\right],
+    \end{align}
+    where $R$ is the normalized double-layer diagonal. The supplied transfer
+    power and the additional $D^2$ blocking give
+    $R^K=\lvert\rho)(\Phi\rvert$. Substitute this equality and cycle the first
+    letter to the right end of the trace.
 \end{proof}
 
 \begin{theorem}[Complete source-$u$ network contraction]
@@ -5058,29 +5152,22 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:mpu_source_u_transpose_fixed_pair_trace, thm:mpu_normalized_input_tail_closed_trace}
-    Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace} closes the two
-    external source gates as
+    \uses{thm:mpu_source_u_transpose_fixed_pair_trace,
+        thm:mpu_normalized_input_tail_fixed_pair_trace}
+    The two proved contractions reduce the desired equality to
     \begin{align}
-        \operatorname{tr}\!\left(
+        \tr\!\left(
         W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_1q_1}
-        \right).
-    \end{align}
-    Cyclicity moves the first double-layer letter past the trace. It remains to
-    identify the resulting rank-one insertion with the $K$-site interior:
-    \begin{align}
-        \operatorname{tr}\!\left(
-        W^{p_1q_1}W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert
         \right)
-         & =\operatorname{tr}\!\left(
-        W^{p_1q_1}W^{p_2q_2}E^K
+         & =\tr\!\left(
+        W^{p_2q_2}\lvert\rho)(\Phi\rvert W^{p_1q_1}
         \right).
     \end{align}
-    This retained-interior contraction remains open. It must preserve the two
-    unblocked endpoint letters while applying the supplied simple contractions
-    to the interior. The checked $Y_1$--$X_2$ mixed-kernel identities concern a
-    different network and do not prove this equality.
-    % The retained-interior contraction is tracked in Issue #7633.
+    Thus the remaining scalar contraction compares the transpose-oriented
+    fixed-pair trace from the source-$u$ Gram network with the direct
+    fixed-pair trace from the normalized input tail. No symmetry of $\rho$
+    has been assumed, so this comparison remains open.
+    % Remaining comparison: paper_v2.tex, equation uUnitary and lines 545--557.
 \end{proof}
 
 \begin{theorem}[Complete reduced source-$v$ contraction]
