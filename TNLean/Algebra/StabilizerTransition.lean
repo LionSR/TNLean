@@ -57,62 +57,35 @@ noncomputable def ofPretransitive [MulAction.IsPretransitive G X] (x₀ : X) :
     k_x₀ := by simp }
 
 
-/-- The paper's transition element
+/-- The paper's stabilizer-valued transition element
 `t_k(g,x) = k_(g • x)⁻¹ g k_x`. -/
-def transitionElement (K : StabilizerRepresentatives G X x₀) (g : G) (x : X) : G :=
-  (K.k (g • x))⁻¹ * g * K.k x
+def transitionElement (K : StabilizerRepresentatives G X x₀) (g : G) (x : X) :
+    MulAction.stabilizer G x₀ :=
+  ⟨(K.k (g • x))⁻¹ * g * K.k x, by
+    rw [MulAction.mem_stabilizer_iff]
+    calc
+      ((K.k (g • x))⁻¹ * g * K.k x) • x₀ =
+          (K.k (g • x))⁻¹ • (g • (K.k x • x₀)) := by
+        rw [mul_smul, mul_smul]
+      _ = (K.k (g • x))⁻¹ • (g • x) := by rw [K.k_smul_x₀]
+      _ = (K.k (g • x))⁻¹ • (K.k (g • x) • x₀) := by rw [K.k_smul_x₀]
+      _ = x₀ := by rw [← mul_smul, Group.inv_mul_cancel, one_smul]⟩
 
-/-- Every transition element belongs to the stabilizer of the basepoint. -/
-theorem transitionElement_mem_stabilizer (K : StabilizerRepresentatives G X x₀)
-    (g : G) (x : X) : transitionElement K g x ∈ MulAction.stabilizer G x₀ := by
-  rw [MulAction.mem_stabilizer_iff]
-  calc
-    ((K.k (g • x))⁻¹ * g * K.k x) • x₀ =
-        (K.k (g • x))⁻¹ • (g • (K.k x • x₀)) := by
-      rw [mul_smul, mul_smul]
-    _ = (K.k (g • x))⁻¹ • (g • x) := by rw [K.k_smul_x₀]
-    _ = (K.k (g • x))⁻¹ • (K.k (g • x) • x₀) := by rw [K.k_smul_x₀]
-    _ = x₀ := by rw [← mul_smul, Group.inv_mul_cancel, one_smul]
+/-- The underlying group element of `t_k(g,x)` is
+`k_(g • x)⁻¹ g k_x`. -/
+@[simp]
+theorem coe_transitionElement (K : StabilizerRepresentatives G X x₀)
+    (g : G) (x : X) :
+    (transitionElement K g x : G) = (K.k (g • x))⁻¹ * g * K.k x := rfl
 
-/-- The transition elements obey
+/-- The transition elements obey the subgroup identity
 `t_k(g₁g₂,x) = t_k(g₁,g₂ • x)t_k(g₂,x)`. -/
 theorem transitionElement_mul (K : StabilizerRepresentatives G X x₀)
     (g₁ g₂ : G) (x : X) :
     transitionElement K (g₁ * g₂) x =
       transitionElement K g₁ (g₂ • x) * transitionElement K g₂ x := by
-  simp [transitionElement, mul_smul, mul_assoc]
-
-/-- The factor `h₂` in arXiv:2502.20257, Equation `eq:h1h2`. -/
-def h₂ (K : StabilizerRepresentatives G X x₀) (g₂ : G) (x : X) : G :=
-  transitionElement K g₂ x
-
-/-- The corrected factor `h₁` in arXiv:2502.20257, Equation `eq:h1h2`.
-The final representative is `k_(g₂ • x)`, not the printed `k_(g₁ • x)`. -/
-def h₁ (K : StabilizerRepresentatives G X x₀) (g₁ g₂ : G) (x : X) : G :=
-  transitionElement K g₁ (g₂ • x)
-
-/-- The explicit representative formula for `h₂`. -/
-theorem h₂_eq (K : StabilizerRepresentatives G X x₀) (g₂ : G) (x : X) :
-    h₂ K g₂ x = (K.k (g₂ • x))⁻¹ * g₂ * K.k x := rfl
-
-/-- The explicit corrected representative formula for `h₁`. -/
-theorem h₁_eq (K : StabilizerRepresentatives G X x₀) (g₁ g₂ : G) (x : X) :
-    h₁ K g₁ g₂ x = (K.k ((g₁ * g₂) • x))⁻¹ * g₁ * K.k (g₂ • x) := by
-  simp [h₁, transitionElement, mul_smul]
-
-/-- Both factors in Equation `eq:h1h2` belong to the stabilizer. -/
-theorem h₁_h₂_mem_stabilizer (K : StabilizerRepresentatives G X x₀)
-    (g₁ g₂ : G) (x : X) :
-    h₁ K g₁ g₂ x ∈ MulAction.stabilizer G x₀ ∧
-      h₂ K g₂ x ∈ MulAction.stabilizer G x₀ := by
-  exact ⟨K.transitionElement_mem_stabilizer g₁ (g₂ • x),
-    K.transitionElement_mem_stabilizer g₂ x⟩
-
-/-- The transition product law identifies `t_k(g₁g₂,x)` with `h₁h₂`. -/
-theorem transitionElement_mul_eq_h₁_mul_h₂
-    (K : StabilizerRepresentatives G X x₀) (g₁ g₂ : G) (x : X) :
-    transitionElement K (g₁ * g₂) x = h₁ K g₁ g₂ x * h₂ K g₂ x :=
-  K.transitionElement_mul g₁ g₂ x
+  apply Subtype.ext
+  simp [mul_smul, mul_assoc]
 
 end StabilizerRepresentatives
 
