@@ -28,11 +28,7 @@ $\varphi_j(x,\gamma)\varphi_k(x,\gamma+e_j)
   =\varphi_k(x,\gamma)\varphi_j(x,\gamma+e_k)$,
 
 and contributes nothing otherwise. This is the monomial fixed-space criterion
-used for the gauge-invariant subspace of the CZX circuit tuple: given the
-involution property, trivial holonomy around every square of a fiber is the
-statement that $(T_jT_k)^2$ acts as the identity on that fiber, and a
-nontrivial holonomy at some basis element is an eigenvalue different from one
-of some $(T_jT_k)^2$.
+used for the gauge-invariant subspace of the CZX circuit tuple.
 
 ## Main results
 
@@ -105,9 +101,7 @@ theorem fiberFlip_apply (j : Fin r) (x : X) (γ : Fin r → ZMod 2) :
 /-- The phases of a family of monomial operators have trivial holonomy on the
 fiber over `x` when they commute around every square of that fiber:
 $\varphi_j(x,\gamma)\varphi_k(x,\gamma+e_j)
-  =\varphi_k(x,\gamma)\varphi_j(x,\gamma+e_k)$.
-For involutive operators this is the condition that $(T_jT_k)^2$ acts as the
-identity on the fiber. -/
+  =\varphi_k(x,\gamma)\varphi_j(x,\gamma+e_k)$. -/
 def TrivialHolonomy (φ : Fin r → X × (Fin r → ZMod 2) → ℂ) (x : X) : Prop :=
   ∀ (j k : Fin r) (γ : Fin r → ZMod 2),
     φ j (x, γ) * φ k (x, γ + Pi.single j 1) = φ k (x, γ) * φ j (x, γ + Pi.single k 1)

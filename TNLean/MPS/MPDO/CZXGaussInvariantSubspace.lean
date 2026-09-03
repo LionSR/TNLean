@@ -16,25 +16,23 @@ $R^{\mathrm{CZX}}=(\mathrm{id},\mathrm{id},w,\tilde\lambda)$ on a periodic
 chain of $N$ blocked sites, each carrying two matter qubits and one gauge
 qubit, the common $+1$ eigenspace $\mathcal V_N(R^{\mathrm{CZX}})$ of the
 placed Gauss projectors $\widetilde P_j$ has dimension $2^N$ for every
-$N\geq3$. This is the exact dimension theorem of the planning note
-`Notes/OpenProblemsTN/problems/p4_gauge_invariant_subspace_growth.tex`
-(label `thm:p4-czx`), answering, for this one displayed tuple, the question of
-arXiv:2502.20257, lines 5198--5204, on the growth of the gauge-invariant
-subspace.
+$N\geq3$. This is a new theorem answering, for this one displayed tuple, the
+question of arXiv:2502.20257, lines 5198--5204, on the growth of the
+gauge-invariant subspace.
 
-The proof follows the note. A computational-basis configuration of the chain
-is $s=(m^{(1)}_k,m^{(2)}_k,g_k)_{k\in\mathbb Z/N}$. The placed Gauss operator
+A computational-basis configuration of the chain is
+$s=(m^{(1)}_k,m^{(2)}_k,g_k)_{k\in\mathbb Z/N}$. The placed Gauss operator
 $G_j$ is monomial: its permutation part $\sigma_j$ flips $m^{(1)}_j$,
-$m^{(2)}_j$, $g_j$, and $g_{j+1}$ (label `eq:p4-global-move`), and its phase is
-$i^{q_j(s)}$ with the local phase table. The labels
+$m^{(2)}_j$, $g_j$, and $g_{j+1}$, and its phase is $i^{q_j(s)}$ with the
+local phase table. The labels
 
 $p_k(s)=m^{(1)}_k+m^{(2)}_k$, $b_k(s)=g_k+m^{(1)}_k+m^{(1)}_{k-1}$
 
 are invariant under every $\sigma_j$, and the fiber
 $S_{p,b}$ over each $(p,b)\in\mathbb F_2^N\times\mathbb F_2^N$ is one free
-transitive orbit of $\mathbb F_2^N$, parametrized by
-$\gamma=m^{(1)}$ (label `lem:p4-orbits`). The neighboring holonomy identity
-(label `eq:p4-holonomy`) reads $(G_jG_{j+1})^2\ket{s}=(-1)^{b_{j+1}(s)}\ket{s}$.
+transitive orbit of $\mathbb F_2^N$, parametrized by $\gamma=m^{(1)}$. The
+neighboring holonomy identity reads
+$(G_jG_{j+1})^2\ket{s}=(-1)^{b_{j+1}(s)}\ket{s}$.
 By the monomial fixed-space criterion, a fiber contributes one dimension exactly
 when $b=0$, and there are $2^N$ such fibers.
 
@@ -81,7 +79,7 @@ theorem chainDecode_apply (N : ℕ)
 variable {N : ℕ} [NeZero N]
 
 /-- The bits flipped by the bond-`j` Gauss operator: $m^{(1)}_j$, $m^{(2)}_j$,
-$g_j$, and $g_{j+1}$ (note label `eq:p4-global-move`). -/
+$g_j$, and $g_{j+1}$. -/
 def flipPattern (j : Fin N) : Fin N → Site :=
   Pi.single j ((1, 1), 1) + Pi.single (j + 1) ((0, 0), 1)
 
@@ -125,18 +123,18 @@ $(g_j,g_{j+1})$ through the local phase table. -/
 def bondExponent (j : Fin N) (s : Fin N → Site) : ZMod 4 :=
   phaseExponent ![(s j).1.1, (s j).1.2, (s (j + 1)).1.1, (s (j + 1)).1.2] (s j).2 (s (j + 1)).2
 
-/-- The label $b_k(s)=g_k+m^{(1)}_k+m^{(1)}_{k-1}$ (note label `eq:p4-b-label`). -/
+/-- The label $b_k(s)=g_k+m^{(1)}_k+m^{(1)}_{k-1}$. -/
 def bLabel (k : Fin N) (s : Fin N → Site) : ZMod 2 :=
   (s k).2 + (s k).1.1 + (s (k - 1)).1.1
 
-/-- The label $p_k(s)=m^{(1)}_k+m^{(2)}_k$ (note label `eq:p4-p-label`). -/
+/-- The label $p_k(s)=m^{(1)}_k+m^{(2)}_k$. -/
 def pLabel (k : Fin N) (s : Fin N → Site) : ZMod 2 :=
   (s k).1.1 + (s k).1.2
 
 /-! ### Involution and neighboring holonomy -/
 
 /-- Every bond Gauss operator is an involution: the phase exponents along an edge
-and back add to zero (note label `eq:p4-G-involution`). -/
+and back add to zero. -/
 theorem bondExponent_add_bondExponent_chainFlip (hN : 2 ≤ N) (j : Fin N) (s : Fin N → Site) :
     bondExponent j s + bondExponent j (chainFlip j s) = 0 := by
   simp only [bondExponent, chainFlip_apply, Pi.add_apply, flipPattern_apply_self hN,
@@ -146,8 +144,7 @@ theorem bondExponent_add_bondExponent_chainFlip (hN : 2 ≤ N) (j : Fin N) (s : 
 
 /-- **Neighboring holonomy.** Transporting around the square spanned by the bonds
 `j` and `j + 1` accumulates the phase $(-1)^{b_{j+1}(s)}$; in exponents,
-$q_j(s)+q_{j+1}(\sigma_js)=q_{j+1}(s)+q_j(\sigma_{j+1}s)+2b_{j+1}(s)\pmod4$
-(note label `eq:p4-holonomy`). -/
+$q_j(s)+q_{j+1}(\sigma_js)=q_{j+1}(s)+q_j(\sigma_{j+1}s)+2b_{j+1}(s)\pmod4$. -/
 theorem bondExponent_holonomy (hN : 3 ≤ N) (j : Fin N) (s : Fin N → Site) :
     bondExponent j s + bondExponent (j + 1) (chainFlip j s) =
       bondExponent (j + 1) s + bondExponent j (chainFlip (j + 1) s) +
@@ -178,8 +175,7 @@ theorem bondExponent_chainFlip_of_disjoint (j k : Fin N) (hkj : k ≠ j) (hkj1 :
 /-- The fiber coordinates $((p,b),\gamma)$ of a chain configuration: given the
 labels $p,b\in\mathbb F_2^N$ and the free bits $\gamma=m^{(1)}$, the
 configuration is reconstructed by $m^{(2)}_k=p_k+m^{(1)}_k$ and
-$g_k=b_k+m^{(1)}_k+m^{(1)}_{k-1}$ (note labels
-`eq:p4-fiber-reconstruct-m2` and `eq:p4-fiber-reconstruct-g`). -/
+$g_k=b_k+m^{(1)}_k+m^{(1)}_{k-1}$. -/
 def fiberEquiv (N : ℕ) [NeZero N] :
     ((Fin N → ZMod 2) × (Fin N → ZMod 2)) × (Fin N → ZMod 2) ≃ (Fin N → Site) where
   toFun x k := ((x.2 k, x.1.1 k + x.2 k), x.1.2 k + x.2 k + x.2 (k - 1))
@@ -222,8 +218,7 @@ theorem bLabel_fiberEquiv (x : ((Fin N → ZMod 2) × (Fin N → ZMod 2)) × (Fi
   generalize_decide x.2 k, x.2 (k - 1), x.1.2 k
 
 /-- **Permutation-orbit classification.** In fiber coordinates the bond-`j` move
-flips the free bit $\gamma_j$ and leaves the labels $(p,b)$ unchanged
-(note label `lem:p4-orbits`). -/
+flips the free bit $\gamma_j$ and leaves the labels $(p,b)$ unchanged. -/
 theorem chainFlip_fiberEquiv (hN : 2 ≤ N) (j : Fin N)
     (pb : (Fin N → ZMod 2) × (Fin N → ZMod 2)) (γ : Fin N → ZMod 2) :
     chainFlip j (fiberEquiv N (pb, γ)) = fiberEquiv N (pb, γ + Pi.single j 1) := by
@@ -277,7 +272,7 @@ theorem fiberPhase_ne_zero (j : Fin N)
   pow_ne_zero _ Complex.I_ne_zero
 
 /-- **Fixed spaces on the orbit fibers.** The phases have trivial holonomy on the
-fiber over $(p,b)$ exactly when $b=0$ (note label `lem:p4-good-fibers`). -/
+fiber over $(p,b)$ exactly when $b=0$. -/
 theorem trivialHolonomy_fiberPhase_iff (hN : 3 ≤ N)
     (pb : (Fin N → ZMod 2) × (Fin N → ZMod 2)) :
     TNLean.Algebra.TrivialHolonomy fiberPhase pb ↔ pb.2 = 0 := by
@@ -320,7 +315,7 @@ abbrev windowCoordinates :=
 
 /-- The local Gauss operator $G$ of the circuit tuple placed on the bond
 $(j,j+1)$ of the periodic chain; this is the operator $G_j$ whose common fixed
-space is $\mathcal V_N(R^{\mathrm{CZX}})$ (note label `eq:p4-local-G`). -/
+space is $\mathcal V_N(R^{\mathrm{CZX}})$. -/
 def placedGaussOperator (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
     ChainOperator (Fintype.card (Fin 4 × Multiplicative (ZMod 2))) N :=
   embedLocalOperator 2 N hN j
@@ -342,8 +337,7 @@ theorem gaussProjector_circuitTuple :
   push_cast
   rfl
 
-/-- The placed Gauss projector is $\widetilde P_j=(\mathrm{id}+G_j)/2$ (note label
-`eq:p4-local-projector`). -/
+/-- The placed Gauss projector is $\widetilde P_j=(\mathrm{id}+G_j)/2$. -/
 theorem placedGaussProjector_circuitTuple (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
     placedGaussProjector 4 (Multiplicative (ZMod 2)) N hN j circuitTuple =
       (2 : ℂ)⁻¹ • (1 + placedGaussOperator N hN j) := by
@@ -363,7 +357,7 @@ theorem inv_two_smul_add_mulVec_eq_iff {ι : Type*} [Fintype ι] [DecidableEq ι
 /-- The common fixed subspace of the placed Gauss projectors is the common fixed
 subspace of the placed Gauss operators $G_j$: this is the description of
 $\mathcal V_N(R^{\mathrm{CZX}})$ as the common fixed space of the translated
-bond operators (note label `eq:GN`). -/
+bond operators. -/
 theorem commonFixedSubmodule_placedGaussProjector_circuitTuple (N : ℕ) (hN : 2 ≤ N) :
     LinearMap.commonFixedSubmodule (fun j : Fin N ↦
         toLin' (placedGaussProjector 4 (Multiplicative (ZMod 2)) N hN j circuitTuple)) =
@@ -439,7 +433,7 @@ theorem chainDecode_window (hN : 2 ≤ N) (j : Fin N)
   exact ⟨rfl, rfl⟩
 
 /-- The permutation part of the placed Gauss operator is the bond flip in bit
-coordinates (note label `eq:p4-global-move`). -/
+coordinates. -/
 theorem chainDecode_windowPerm (hN : 2 ≤ N) (j : Fin N)
     (t : Fin N → Fin (Fintype.card (Fin 4 × Multiplicative (ZMod 2)))) :
     chainDecode N
@@ -510,8 +504,8 @@ theorem placedGaussOperator_eq_reindex (N : ℕ) [NeZero N] (hN : 2 ≤ N) (j : 
 tuple.** On a periodic chain of $N\geq3$ blocked sites, the common $+1$
 eigenspace $\mathcal V_N(R^{\mathrm{CZX}})$ of the placed Gauss projectors of the
 displayed circuit tuple $R^{\mathrm{CZX}}=(\mathrm{id},\mathrm{id},w,\tilde\lambda)$
-has dimension $2^N$ (note label `thm:p4-czx`; the question is raised in
-arXiv:2502.20257, lines 5198--5204).
+has dimension $2^N$. This new result addresses the growth question posed in
+arXiv:2502.20257, lines 5198--5204.
 
 The proof classifies the orbits of the bond flips by the labels $(p,b)$, applies
 the monomial fixed-space criterion, and uses the neighboring holonomy to show

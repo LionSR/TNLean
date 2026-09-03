@@ -18,11 +18,8 @@ one site carries two matter qubits, and the fusion operators on two neighboring
 blocked sites are $\lambda^R_{e,e}=\lambda^R_{e,g}=\mathrm{id}$,
 $\lambda^R_{g,e}=w_R$, and the modified fusion operator
 $\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ introduced at the end of that
-passage. In the elementary-gate form used in the planning note
-`Notes/OpenProblemsTN/problems/p4_gauge_invariant_subspace_growth.tex`
-(labels `eq:p4-w-def`, `eq:p4-lambda-def`, `eq:p4-tilde-lambda-def`,
-`eq:p4-paper-tuple`), with the four matter qubits of two neighboring blocked
-sites numbered $0,1,2,3$,
+passage. Writing the displayed circuits in elementary-gate form, with the four
+matter qubits of two neighboring blocked sites numbered $0,1,2,3$,
 
 $w=(X_0X_1)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,(Z_2Z_3)$,
 $\lambda=-i\,(X_0X_1X_2Z_3)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,X_2$,
@@ -38,10 +35,9 @@ $w\ket{x}=(-1)^{e(x)}\ket{\overline x}$,
 $\tilde\lambda\ket{x}=-i(-1)^{f(x)}\ket{\overline x}$,
 
 with $\overline x=(x_0+1,x_1+1,x_2,x_3)$,
-$e(x)=x_0x_1+x_1x_2+x_2+x_3$, and $f(x)=x_0x_1+x_1x_2+x_0+x_1+x_3$
-(labels `eq:p4-w-action` and `eq:p4-tilde-lambda-action`), and shows that the
-local Gauss operator of the tuple is the monomial operator
-$G\ket{s}=i^{q(s)}\ket{\sigma(s)}$ with the phase table `eq:p4-phase-table`.
+$e(x)=x_0x_1+x_1x_2+x_2+x_3$, and $f(x)=x_0x_1+x_1x_2+x_0+x_1+x_3$,
+and shows that the local Gauss operator of the tuple is the monomial operator
+$G\ket{s}=i^{q(s)}\ket{\sigma(s)}$ with the phase table derived below.
 
 The tuple is a tuple of matrices on the two-site matter space. Whether it
 belongs to the full physical completion class of the CZX defect data is not
@@ -75,22 +71,21 @@ def controlledZ (r s : Fin 4) : Matrix (Fin 4 → ZMod 2) (Fin 4 → ZMod 2) ℂ
   monomial 1 fun x ↦ (-1) ^ (x r * x s).val
 
 /-- The fusion operator $w=(X_0X_1)\mathrm{CZ}_{01}\mathrm{CZ}_{12}(Z_2Z_3)$ of the CZX
-model (arXiv:2502.20257, lines 4503--5183; note label `eq:p4-w-def`). Operator
-products act from right to left. -/
+model (arXiv:2502.20257, lines 4503--5183). Operator products act from right to
+left. -/
 def w : Matrix (Fin 4 → ZMod 2) (Fin 4 → ZMod 2) ℂ :=
   pauliX 0 * pauliX 1 * controlledZ 0 1 * controlledZ 1 2 * pauliZ 2 * pauliZ 3
 
 /-- The fusion operator
 $\lambda=-i(X_0X_1X_2Z_3)\mathrm{CZ}_{01}\mathrm{CZ}_{12}X_2$ of the CZX model
-(arXiv:2502.20257, lines 4503--5183; note label `eq:p4-lambda-def`). -/
+(arXiv:2502.20257, lines 4503--5183). -/
 def lambda : Matrix (Fin 4 → ZMod 2) (Fin 4 → ZMod 2) ℂ :=
   (-I) • (pauliX 0 * pauliX 1 * pauliX 2 * pauliZ 3 * controlledZ 0 1 * controlledZ 1 2 *
     pauliX 2)
 
 /-- The modified fusion operator $\tilde\lambda=\lambda Z_0$, the operator
 $\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ of arXiv:2502.20257 (end of the CZX
-passage, lines 4503--5183) in the qubit numbering $0,1,2,3$
-(note label `eq:p4-tilde-lambda-def`). -/
+passage, lines 4503--5183) in the qubit numbering $0,1,2,3$. -/
 def tildeLambda : Matrix (Fin 4 → ZMod 2) (Fin 4 → ZMod 2) ℂ :=
   lambda * pauliZ 0
 
@@ -134,8 +129,7 @@ theorem barFlip_symm : barFlip.symm = barFlip := by
   rw [← Equiv.Perm.inv_def]
   exact inv_eq_of_mul_eq_one_right barFlip_mul_barFlip
 
-/-- The phase table of $w$: $w\ket{x}=(-1)^{e(x)}\ket{\overline x}$
-(note label `eq:p4-w-action`). -/
+/-- The phase table of $w$: $w\ket{x}=(-1)^{e(x)}\ket{\overline x}$. -/
 theorem w_eq : w = monomial barFlip fun x ↦ (-1) ^ (eExponent x).val := by
   simp only [w, pauliX, pauliZ, controlledZ, monomial_mul_monomial, Equiv.Perm.coe_one, id_eq,
     mul_one, one_mul]
@@ -173,8 +167,7 @@ theorem lambda_eq : lambda = monomial barFlip fun x ↦ -I * (-1) ^ (hExponent x
   rw [Pi.smul_apply, smul_eq_mul, h0, h1, h2, h3, hh, neg_one_pow_val_add, neg_one_pow_val_add]
 
 /-- The phase table of $\tilde\lambda$:
-$\tilde\lambda\ket{x}=-i(-1)^{f(x)}\ket{\overline x}$
-(note label `eq:p4-tilde-lambda-action`). -/
+$\tilde\lambda\ket{x}=-i(-1)^{f(x)}\ket{\overline x}$. -/
 theorem tildeLambda_eq :
     tildeLambda = monomial barFlip fun x ↦ -I * (-1) ^ (fExponent x).val := by
   rw [tildeLambda, lambda_eq, pauliZ, monomial_mul_monomial, mul_one]
@@ -271,10 +264,10 @@ theorem tildeLambda_mem_unitaryGroup :
 abbrev gen : Multiplicative (ZMod 2) := Multiplicative.ofAdd 1
 
 /-- The displayed CZX circuit tuple
-$R^{\mathrm{CZX}}=(U_{0,0},U_{0,1},U_{1,0},U_{1,1})=(\mathrm{id},\mathrm{id},w,\tilde\lambda)$
-(note label `eq:p4-paper-tuple`), indexed by the ordered pair of gauge labels in
-$\mathbb Z_2$ with $e\leftrightarrow0$ and $g\leftrightarrow1$. These are the
-fusion operators $\lambda^R_{e,e}=\lambda^R_{e,g}=\mathrm{id}$,
+$R^{\mathrm{CZX}}=(U_{0,0},U_{0,1},U_{1,0},U_{1,1})=
+(\mathrm{id},\mathrm{id},w,\tilde\lambda)$, indexed by the ordered pair of gauge
+labels in $\mathbb Z_2$ with $e\leftrightarrow0$ and $g\leftrightarrow1$.
+These are the fusion operators $\lambda^R_{e,e}=\lambda^R_{e,g}=\mathrm{id}$,
 $\lambda^R_{g,e}=w_R$, and the modified fusion operator
 $\tilde\lambda^R_{g,g}$ of arXiv:2502.20257 (lines 4503--5183).
 
@@ -336,9 +329,8 @@ theorem iPow_two_mul_cast (m : ZMod 2) : iPow (2 * (m.cast : ZMod 4)) = (-1) ^ m
 def uExponent (x : Fin 4 → ZMod 2) : ZMod 4 :=
   2 * ((x 0 * x 1 + x 1 * x 2 + x 3).val : ZMod 4)
 
-/-- The phase table $q(s)$ of the local Gauss operator (note label
-`eq:p4-phase-table`), as a function of the four matter bits $x$ and the two
-gauge bits $(a,a')$:
+/-- The phase table $q(s)$ of the local Gauss operator, as a function of the four
+matter bits $x$ and the two gauge bits $(a,a')$:
 
 | $(a,a')$ | matter operator | $q(s)\pmod 4$ |
 |---|---|---|
@@ -406,8 +398,7 @@ theorem toAdd_gen_ne_zero : Multiplicative.toAdd gen ≠ 0 := by decide
 /-- **Local monomial action of the CZX Gauss operator.** Substituting the displayed
 circuit tuple into the local Gauss operator gives the monomial operator
 $G\ket{s}=i^{q(s)}\ket{\sigma(s)}$ with $\sigma(s)=(\overline x,a+1,a'+1)$ and
-the phase table `eq:p4-phase-table` (note labels `eq:p4-local-G` and
-`eq:p4-monomial-action`). -/
+the phase table defined by `phaseExponent`. -/
 theorem gaussOperator_circuitTuple_gen :
     TNLean.Algebra.gaussOperator circuitTuple gen = monomial localPerm localPhase := by
   let σ : Multiplicative (ZMod 2) → Multiplicative (ZMod 2) → Equiv.Perm (Fin 2 → Fin 4) :=
