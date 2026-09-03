@@ -60,7 +60,7 @@ left bond index.
 Source: arXiv:2502.20257, equation `eq:lemma_equality`, lines 2296--2361. -/
 noncomputable def openAlternatingNetwork
     {n : ℕ} {d : Fin n → ℕ} (D : Fin (n + 1) → ℕ) (p : Fin n → Type*)
-    [∀ i : Fin n, Fintype (p i)]
+    [∀ i : Fin n, Finite (p i)]
     (A : (i : Fin n) → MPSTensor (d i) (D i.castSucc))
     (B : (i : Fin n) → Matrix (p i × Fin (D i.castSucc)) (Fin (D i.succ)) ℂ)
     (σ : (i : Fin n) → Fin (d i)) (τ : (i : Fin n) → p i) :
@@ -172,7 +172,7 @@ This is the inverse-tensor contraction in arXiv:2502.20257, Lemma `lemma:1`,
 lines 2365--2392. -/
 theorem inverseContraction_openAlternatingNetwork
     {n : ℕ} {d : Fin n → ℕ} (D : Fin (n + 1) → ℕ) (p : Fin n → Type*)
-    [∀ i : Fin n, Fintype (p i)]
+    [∀ i : Fin n, Finite (p i)]
     (A : (i : Fin n) → MPSTensor (d i) (D i.castSucc))
     (B : (i : Fin n) → Matrix (p i × Fin (D i.castSucc)) (Fin (D i.succ)) ℂ)
     (hA : ∀ i : Fin n, Kraus.IsInjective (A i))
@@ -241,7 +241,7 @@ lines 2296--2395.  Nonvanishing is justified at the two uses on lines 2567 and
 3157. -/
 theorem exists_scalars_of_openAlternatingNetwork_eq
     {n : ℕ} {d : Fin n → ℕ} (D : Fin (n + 1) → ℕ) (p : Fin n → Type*)
-    [∀ i : Fin n, Fintype (p i)]
+    [∀ i : Fin n, Finite (p i)]
     (A : (i : Fin n) → MPSTensor (d i) (D i.castSucc))
     (B B' : (i : Fin n) →
       Matrix (p i × Fin (D i.castSucc)) (Fin (D i.succ)) ℂ)
