@@ -91,35 +91,6 @@ theorem transitionElement_mul (K : StabilizerRepresentatives G X x₀)
   apply Subtype.ext
   simp [mul_smul, mul_assoc]
 
-/-- The factor `h₂` in arXiv:2502.20257, Equation `eq:h1h2`. -/
-def h₂ (K : StabilizerRepresentatives G X x₀) (g₂ : G) (x : X) :
-    MulAction.stabilizer G x₀ :=
-  transitionElement K g₂ x
-
-/-- The corrected factor `h₁` in arXiv:2502.20257, Equation `eq:h1h2`.
-The final representative is `k_(g₂ • x)`, not the printed `k_(g₁ • x)`. -/
-def h₁ (K : StabilizerRepresentatives G X x₀) (g₁ g₂ : G) (x : X) :
-    MulAction.stabilizer G x₀ :=
-  transitionElement K g₁ (g₂ • x)
-
-/-- The underlying group element of `h₂` is `k_(g₂ • x)⁻¹ g₂ k_x`. -/
-@[simp]
-theorem coe_h₂ (K : StabilizerRepresentatives G X x₀) (g₂ : G) (x : X) :
-    (h₂ K g₂ x : G) = (K.k (g₂ • x))⁻¹ * g₂ * K.k x := rfl
-
-/-- The underlying group element of `h₁` uses the corrected representative
-`k_(g₂ • x)`. -/
-@[simp]
-theorem coe_h₁ (K : StabilizerRepresentatives G X x₀) (g₁ g₂ : G) (x : X) :
-    (h₁ K g₁ g₂ x : G) = (K.k ((g₁ * g₂) • x))⁻¹ * g₁ * K.k (g₂ • x) := by
-  simp [h₁, mul_smul]
-
-/-- The transition product law identifies `t_k(g₁g₂,x)` with `h₁h₂`. -/
-theorem transitionElement_mul_eq_h₁_mul_h₂
-    (K : StabilizerRepresentatives G X x₀) (g₁ g₂ : G) (x : X) :
-    transitionElement K (g₁ * g₂) x = h₁ K g₁ g₂ x * h₂ K g₂ x :=
-  K.transitionElement_mul g₁ g₂ x
-
 end StabilizerRepresentatives
 
 end TNLean.Algebra
