@@ -1435,7 +1435,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \uses{def:mpug_chain_label_action}
     For all $g,h\in G$,
     \begin{align}
-        T_{j,e}        & =\id,                 \\
+        T_{j,e}        & =\id,      \\
         T_{j,g}T_{j,h} & =T_{j,gh}.
         \label{eq:mpug_chain_label_action_mul}
     \end{align}
@@ -1560,6 +1560,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \leanok
     \discussion{7569}
     \uses{def:mpug_placed_gauss_operator,
+        def:mpug_completion_class,
+        def:mpug_gauged_vector,
         def:mpug_defect_state_hypotheses,
         thm:mpug_completion_transport,
         thm:mpug_chain_label_action_mul,
@@ -1570,7 +1572,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \begin{align}
         \widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\Psi_{\mathrm{gauged}}}
          & =\ket{\Psi_{\mathrm{gauged}}},
-        \label{eq:mpug_universal_invariant_vector}                      \\
+        \label{eq:mpug_universal_invariant_vector} \\
         \widetilde P_j(R)\ket{\Psi_{\mathrm{gauged}}}
          & =\ket{\Psi_{\mathrm{gauged}}}.
     \end{align}
@@ -1581,11 +1583,12 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         thm:mpug_chain_label_action_mul,
         thm:mpug_placed_gauss_projector_average,
         def:mpug_gauss_operator}
-    Fix a chain configuration and let $\alpha$ be its gauge-label part, with
-    $(a,b)=(a_j,a_{j+1})$ the two labels adjacent to the window. In the
-    column of $\widetilde{\mathcal G}^{j,j+1}_g(R)$ indexed by that
-    configuration only the gauge labels $T_{j,g^{-1}}\alpha$ survive, so with
-    $\beta=T_{j,g^{-1}}\alpha$ the component of
+    Fix an output chain configuration and let $\alpha$ be its gauge-label part,
+    with $(a,b)=(a_j,a_{j+1})$ the two labels adjacent to the window. Among the
+    columns contributing to this fixed output row of
+    $\widetilde{\mathcal G}^{j,j+1}_g(R)$, only the gauge labels
+    $T_{j,g^{-1}}\alpha$ survive. Thus, with
+    $\beta=T_{j,g^{-1}}\alpha$, the component of
     $\widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\Psi_{\mathrm{gauged}}}$ equals
     the component of
     \begin{align}
@@ -1611,14 +1614,15 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \lean{MPOTensor.gaugeInvariantSubspace}
     \leanok
     \discussion{7569}
-    \uses{def:mpug_common_fixed_subspace, def:mpug_placed_gauss_operator}
+    \uses{def:mpug_common_fixed_subspace,
+        def:mpug_placed_gauss_projector}
     For $R\in\mathfrak C(D)$ and a chain of length $N\geq2$, the
     gauge-invariant subspace is the common fixed subspace
     \begin{align}
         \mathcal V_N(R)
          & =\left\{\ket{\phi}:
-        \widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\phi}=\ket{\phi}
-        \text{ for every }j\text{ and every }g\in G\right\}.
+        \widetilde P_j(R)\ket{\phi}=\ket{\phi}
+        \text{ for every }j\right\}.
         \label{eq:mpug_gauge_invariant_subspace}
     \end{align}
     No commutativity of the projectors on neighbouring windows is assumed;
@@ -1655,9 +1659,9 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \uses{thm:mpug_universal_invariant_vector,
         thm:mpug_mem_common_fixed_subspace,
         thm:mpug_common_fixed_subspace_finrank}
-    Membership is~(\ref{eq:mpug_universal_invariant_vector}) at every window
-    and every group element. A nonzero member of a subspace forces its
-    dimension to be at least one.
+    Membership is the projector identity in
+    Theorem~\ref{thm:mpug_universal_invariant_vector} at every window. A
+    nonzero member of a subspace forces its dimension to be at least one.
 \end{proof}
 
 \begin{definition}[Scalar cochains and normalization]

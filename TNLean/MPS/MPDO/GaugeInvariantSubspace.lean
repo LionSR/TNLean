@@ -10,12 +10,12 @@ import TNLean.MPS.MPDO.GaussProjectorPlacement
 /-!
 # The gauge-invariant subspace of a completion and its universal vector
 
-For a completion `R` of prescribed defect maps, the local Gauss operators are
+For a completion `R` of prescribed defect maps, the local Gauss projectors are
 placed on the periodic two-site windows of a chain of length `N`, and their
-common `+1` eigenspace is the gauge-invariant subspace. The modified Gauss
-laws of FBC25 (arXiv:2502.20257, lines 4325--4335) are of exactly this form,
-with the gauge block of the operator at the window `(j, j + 1)` comparing the
-completion at the two labels adjacent to that window.
+common `+1` eigenspace is the gauge-invariant subspace. The projectors average
+the modified Gauss laws of FBC25 (arXiv:2502.20257, lines 4325--4335), whose
+gauge block at the window `(j, j + 1)` compares the completion at the two
+labels adjacent to that window.
 
 A chain site carries one matter index and one gauge label. Matter defect
 states `Ψ α` indexed by gauge-label configurations `α` assemble into the
@@ -25,11 +25,12 @@ the matter part of that configuration, `α` being its gauge-label part; this is
 matter support inside every window lies in the defect subspace of the two
 labels adjacent to it, and the prescribed defect maps are exactly covariant
 under moving those two labels -- the gauged vector is fixed by every placed
-Gauss operator of every completion, so it lies in the gauge-invariant subspace,
-whose dimension is then at least one whenever the gauged vector does not
-vanish. This is the invariance statement following the modified Gauss laws of
-FBC25 (arXiv:2502.20257, lines 4325--4335); the question of the size of this
-subspace (arXiv:2502.20257, line 5198) is untouched.
+Gauss operator, hence by every placed projector, of every completion. It
+therefore lies in the gauge-invariant subspace, whose dimension is at least one
+whenever the gauged vector does not vanish. This is the invariance statement
+following the modified Gauss laws of FBC25 (arXiv:2502.20257, lines
+4325--4335); the question of the size of this subspace (arXiv:2502.20257,
+line 5198) is untouched.
 
 Commutativity of the placed projectors on neighbouring windows, a spectral
 gap, and any bound on the subspace beyond dimension at least one are not
@@ -465,15 +466,14 @@ theorem placedGaussProjector_mulVec_gaugedVector (hN : 2 ≤ N)
 variable (d G)
 
 /-- The gauge-invariant subspace of a completion: the common `+1` eigenspace of
-the placed Gauss operators at every window and every group element. This is the
-subspace `𝒱_N(R)` of FBC25 (arXiv:2502.20257, lines 4325--4335 and line 5198),
-described there as the common fixed subspace of the averaged projectors. No
-commutativity of the projectors on neighbouring windows is assumed. -/
+the placed Gauss projectors at every window. This is the subspace `𝒱_N(R)` of
+FBC25 (arXiv:2502.20257, lines 4325--4335 and line 5198). No commutativity of
+the projectors on neighbouring windows is assumed. -/
 def gaugeInvariantSubspace (N : ℕ) (hN : 2 ≤ N)
     (R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ) :
     Submodule ℂ ((Fin N → Fin (Fintype.card (Fin d × G))) → ℂ) :=
-  LinearMap.commonFixedSubmodule fun p : Fin N × G ↦
-    (placedGaussOperator d G N hN p.1 R p.2).mulVecLin
+  LinearMap.commonFixedSubmodule fun j : Fin N ↦
+    (placedGaussProjector d G N hN j R).mulVecLin
 
 variable {d G}
 
@@ -487,8 +487,8 @@ theorem gaugedVector_mem_gaugeInvariantSubspace (hN : 2 ≤ N)
     (hcov : HasPrescribedDefectCovariance d G hN Dd Ψ) :
     gaugedVector d G Ψ ∈ gaugeInvariantSubspace d G N hN R := by
   rw [gaugeInvariantSubspace, LinearMap.mem_commonFixedSubmodule_iff]
-  intro p
-  exact placedGaussOperator_mulVec_gaugedVector hN hR hsupp hcov p.1 p.2
+  intro j
+  exact placedGaussProjector_mulVec_gaugedVector hN hR hsupp hcov j
 
 /-- A nonvanishing gauged vector forces the gauge-invariant subspace of every
 completion to have dimension at least one. No upper bound and no bound
