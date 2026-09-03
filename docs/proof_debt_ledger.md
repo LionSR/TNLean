@@ -586,12 +586,14 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   choose the ambient diagonal gauge; no consumer changes yet.
 
 ## D14. Residue of the pre-#7424 mixed-kernel route: five `MixedKernel*` modules, the reflected kernel, and their example twins  —  dead-weight, impact 5/10, effort 3/10
-- **Status**: open
+- **Status**: in progress (wave 1 landed: `MixedKernelBoundary.lean`,
+  `MixedKernelSecondCutMetric.lean`, and `MixedKernelClosedNetwork.lean`
+  deleted, 380 Lean lines and six Chapter 28 nodes with their two scope
+  remarks, 192 blueprint lines)
 - **Evidence**: `MixedKernelOpenTail.lean` (246, of which five paper-gate
   $v$ identities and the weighted $X_1$ entry formula survive),
-  `MixedKernelBoundary.lean` (105),
-  `MixedKernelClosedNetwork.lean` (166), `MixedKernelRangeTransport.lean`
-  (232), `MixedKernelSecondCutMetric.lean` (109),
+  `MixedKernelRangeTransport.lean`
+  (232),
   `ReflectedTransferKernel.lean` (396), `SuppliedWitnessReblocking.lean`
   (66), the `sourceY₁X₂`/`sourceX₁Y₂` half of `SourceUV.lean`, two mixed
   product formulas in `SourceFactorsTensorProduct.lean`,
@@ -643,10 +645,28 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   node. Repoint the admissible `ThmFund1` proof's dependency and prose reference
   to `thm:mpu_all_later_simple_blockings`, whose linked same-witness lemma is
   `MPOTensor.IsMPU.isMPUSimple_of_simple2`; retire the range-restriction note.
-- **First PR**: delete `ReflectedTransferKernel.lean`,
-  `SuppliedWitnessReblocking.lean`, `MixedKernelBoundary.lean`, and
-  `MixedKernelSecondCutMetric.lean` (676 lines, zero consumers outside the
-  set) with their 10 nodes.
+- **First PR** (landed): delete `MixedKernelBoundary.lean`,
+  `MixedKernelSecondCutMetric.lean`, and `MixedKernelClosedNetwork.lean`
+  (380 lines, zero consumers outside the set) with their six nodes and the two
+  scope remarks that only described them. The earlier reading of this line,
+  which paired `ReflectedTransferKernel.lean` and
+  `SuppliedWitnessReblocking.lean` with the first two modules, no longer holds:
+  `SourceURetainedInterior.lean`, added after this entry was written, imports
+  `ReflectedTransferKernel` and uses
+  `normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power`, and
+  `ReflectedTransferKernel` in turn imports `SuppliedWitnessReblocking`. Both
+  modules are therefore live and are deleted only after that one theorem is
+  relocated.
+- **Next PR**: delete `MixedKernelRangeTransport.lean` (232 lines; its six
+  declarations have no consumer left after wave 1) with its nodes, including
+  `thm:mpu_output_layer_tail_entry`, `thm:mpu_source_x1_range_projection`, and
+  `thm:mpu_source_x2_range_projection`, and retire
+  `docs/paper-gaps/mpu_mixed_kernel_range_restriction.tex`. Then relocate
+  `normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power` out of
+  `ReflectedTransferKernel.lean` so that module and
+  `SuppliedWitnessReblocking.lean` become deletable, and relocate the survivors
+  of `MixedKernelOpenTail.lean` — the five paper-gate $v$ identities and
+  `sourceX₁_weighted_isometry_apply`, which wave 1 left without a consumer.
 
 ## D15. The MPU canonical-form endpoint predicate omits nonzero weights and full support  —  api-design, impact 2/10, effort 2/10
 - **Status**: open

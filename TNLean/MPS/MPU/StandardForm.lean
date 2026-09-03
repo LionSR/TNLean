@@ -11,8 +11,7 @@ import TNLean.MPS.MPU.MixedKernelOpenTail
 
 This file records the two source-faithful factorizations of a two-site MPO
 letter through the paper gates $u=Y_2\mathbin{-}Y_1$ and
-$v=X_1\mathbin{-}X_2$. The auxiliary mixed kernels remain separate and are not
-identified with either paper gate.
+$v=X_1\mathbin{-}X_2$.
 -/
 
 open scoped Matrix BigOperators ComplexOrder

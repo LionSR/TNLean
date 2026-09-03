@@ -24,11 +24,8 @@ import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.KetLeftMul
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
-import TNLean.MPS.MPU.MixedKernelBoundary
-import TNLean.MPS.MPU.MixedKernelClosedNetwork
 import TNLean.MPS.MPU.MixedKernelOpenTail
 import TNLean.MPS.MPU.MixedKernelRangeTransport
-import TNLean.MPS.MPU.MixedKernelSecondCutMetric
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
