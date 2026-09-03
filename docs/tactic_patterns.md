@@ -177,12 +177,11 @@ abstracted — record why, so it is not re-proposed).
   `ext` and `Matrix.reindex_apply`, or restate an entry in the reindexing
   coordinates by destructuring both index arguments through `Equiv.surjective`
   and discharging the inverse equivalences with `Equiv.symm_apply_apply`.
-- **Seen:** eight packaging proofs in
-  `TNLean/MPS/MPU/Examples/ShiftSourceMixedKernels.lean` — one each in the
-  theorems at lines 487, 547, 620, and 696, and two each in the conjunctions at
-  lines 788 and 879 — together with four coordinate-restatement proofs in
+- **Seen:** four coordinate-restatement proofs in
   `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean` (lines 25, 44, 121,
-  and 140). Locations re-derived 2026-09-03 after the source-cut file split.
+  and 140). Locations re-derived 2026-09-03 after the source-cut file split and
+  recounted 2026-09-04: the eight packaging proofs formerly counted in the
+  mixed-kernel example module went with its deletion.
 - **Abstraction:** none. The former project wrappers were retired with
   `QICLean.Algebra.MatrixReindex`; the direct extensionality and evaluation
   proofs are the canonical pattern.
@@ -947,10 +946,10 @@ abstracted — record why, so it is not re-proposed).
 
 ### Reversing `List.ofFn` by `Fin.rev`
 - **Seen:** five former proofs in `Kraus.Blocking`, `Kraus.Wielandt.RankOne.Construction`,
-  `Kraus.Wielandt.RectangularSpan.Basic`, `MPS.MPDO.Defs`, and
-  `MPS.MPU.ReflectedTransferKernel`.
+  `Kraus.Wielandt.RectangularSpan.Basic`, `MPS.MPDO.Defs`, and the MPU
+  reflected-kernel module deleted on 2026-09-04.
 - **Abstraction:** `List.ofFn_reverse` in `QICLean/Kraus/Word.lean` (QICLean dependency).
-- **Result:** all five consumers use the shared theorem directly.
+- **Result:** the four surviving consumers use the shared theorem directly.
 
 ### Finite Kraus setup for channels
 - **Seen:** 2 occurrences in `Channel/Peripheral/IrreducibleChannel.lean` and
@@ -1604,16 +1603,18 @@ current counts and full location lists).
   `Fintype.sum_equiv`, and unfolding again with `Fintype.sum_prod_type`.
 - **Seen:** five used private helpers and one unused helper across
   `TNLean/MPS/MPU/SourceUCompleteNetwork.lean`,
-  `TNLean/MPS/MPU/MixedKernelRangeTransport.lean`, and
-  `TNLean/MPS/MPU/SourceVCompleteNetwork.lean` (2026-09-03).
+  `TNLean/MPS/MPU/SourceVCompleteNetwork.lean`, and the range-transport module
+  deleted on 2026-09-04 (recorded 2026-09-03).
 - **Abstraction:** the `Fintype.sum_reverse_three`,
   `Fintype.sum_last_two_first_four`, `Fintype.sum_last_first_four`,
   `Fintype.sum_last_two_first_five`, and `Fintype.sum_permute_five` helper
   theorems in `TNLean/Algebra/FinSumPermutation.lean`.
-- **Notes:** all five motivating call sites now use the shared results, and the
+- **Notes:** the four surviving call sites use the shared results, and the
   unused sixth private helper was removed. Specific theorem statements are the
-  lowest sufficient abstraction for the five permutations currently needed;
-  no elaborator tactic or arity-indexed framework is introduced.
+  lowest sufficient abstraction for the permutations needed; no elaborator
+  tactic or arity-indexed framework is introduced. After the 2026-09-04
+  mixed-kernel deletion `Fintype.sum_last_two_first_five` has no remaining call
+  site.
 
 ### cycle-edge virtual-configuration sum reindexing — candidate
 - **Pattern:** identify assignments on the edges of a cycle with assignments
