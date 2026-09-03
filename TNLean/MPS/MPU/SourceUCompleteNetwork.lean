@@ -18,25 +18,23 @@ Figure `II_uUnitary.png`.  The network is then closed against a fixed pair
 the \(K\)-site interior.  The normalized input tail gives \(u^\dagger u=\Id\)
 and \(d^2\le r\ell\).
 
-**Scope restriction (source canonical-form-II fixed pair):** the closing
-theorems below are proved on the source's own canonical-form-II data rather
-than for an arbitrary positive definite weight.  They assume the stabilized
-fixed pair \(E^K=|\rho)(\Phi|\) explicitly, whereas CPSV17 Lemma
-`lemuisometry` inherits it from the preceding canonical-form-II convention,
-and they assume that \(\rho\) is diagonal with positive weights, which is how
-the source fixes it in `Papers/1703.09188/paper_v2.tex` at lines 269--280 and
-line 495.  Diagonality is load-bearing rather than cosmetic: column stacking
-makes the Gram closure insert \(|\rho^{\mathsf T})(\Phi|\) while stabilization
-supplies \(|\rho)(\Phi|\), and the two agree exactly when
-\(\rho^{\mathsf T}=\rho\).  The closing theorems therefore keep
-`SourceFactors U ρ` built from the printed weight, expose the convention as
-`ρ.IsDiag`, and use only `ρ.IsSymm` for the algebraic trace closure.
-Documented in `docs/paper-gaps/mpu_canonical_form_full_support.tex` and
-`docs/paper-gaps/mpu_source_cut_orientation.tex`.  Elimination: prove the
-source-\(u\) closure for a Hermitian positive definite, not necessarily
-symmetric, \(\rho\) by a same-gate retained-network argument bridging the
-\(|\rho)\) and \(|\rho^{\mathsf T})\) insertions; the tracker is named in the
-elimination plan of `docs/paper-gaps/mpu_source_cut_orientation.tex`.
+**Scope restriction (supplied canonical-form-II fixed pair):** the closing
+theorems below assume the stabilized fixed pair \(E^K=|\rho)(\Phi|\)
+explicitly, whereas CPSV17 Lemma `lemuisometry` inherits it from the preceding
+canonical-form-II convention.  In that convention, \(\rho\) is diagonal with
+positive weights; see `Papers/1703.09188/paper_v2.tex` at lines 269--280 and
+line 495.  This diagonality is part of the source's scope, not a correction or
+an additional restriction.  It is load-bearing in the coordinate proof:
+column stacking makes the Gram closure insert
+\(|\rho^{\mathsf T})(\Phi|\), while stabilization supplies
+\(|\rho)(\Phi|\), and the two agree because \(\rho^{\mathsf T}=\rho\).  The
+closing theorems keep `SourceFactors U ρ` built from the printed weight, expose
+the convention as `ρ.IsDiag`, and use only `ρ.IsSymm` for the algebraic trace
+closure.  Documented in
+`docs/paper-gaps/mpu_canonical_form_full_support.tex` and
+`docs/paper-gaps/mpu_source_cut_orientation.tex`.  Elimination: replace the
+explicit fixed-pair hypotheses by the bundled canonical-form-II convention
+described in the first note.
 
 Source: arXiv:1703.09188, equations `Erightleft`, `X1X2b`, `uu`, and
 `uUnitary`, and Lemma `lemuisometry` (lines 269--280 and 487--557).
