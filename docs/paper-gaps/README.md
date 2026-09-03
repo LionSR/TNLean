@@ -324,6 +324,15 @@ For the non-periodic MPS Fundamental Theorem background:
   three-dimensional reduction with residual $E_{23}$ is a counterexample.
   The corrected formula separates the pure residual term and sums only over
   nonempty central words.
+- `mgsc18_nilpotency_length_one_terminology.tex` records the offset between
+  the nilpotency length $N_0$ of Definition 8 in arXiv:1706.07329 and the
+  sentence in arXiv:2502.20257 and arXiv:2405.00439 that blocking reduces
+  the nilpotency length to one.  The exterior fusion identity needs only
+  $N_0\leq|\mathbf p|+1$ and $N_0\leq|\mathbf q|+1$, so one common block
+  with $N_0(g,h)\leq L+1$ makes one blocked exterior site suffice; a
+  two-dimensional example shows that no blocking makes the residual letters
+  vanish.  This clarification is resolved by the formal common-blocking
+  theorem.
 - [cpsv16_bnt_uniqueness_zero_coefficient.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.pdf) records the nonzero-coefficient
   convention: every coefficient of a CPSV16 canonical form is nonzero, as the
   line-246 normalization presupposes. Under this convention Proposition 2.7,

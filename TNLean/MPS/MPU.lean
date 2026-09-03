@@ -34,6 +34,7 @@ import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.ReducedRepresentative
 import TNLean.MPS.MPU.ReducedToHatTransport
+import TNLean.MPS.MPU.ReductionCommonBlocking
 import TNLean.MPS.MPU.ReflectedTransferKernel
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.Simple

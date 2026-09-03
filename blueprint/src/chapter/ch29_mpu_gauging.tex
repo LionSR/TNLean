@@ -514,6 +514,179 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     representation proves the assertion for every further positive blocking.
 \end{proof}
 
+\begin{definition}[Selected reductions for the pairs of a representation]
+    \label{def:mpug_pair_reductions}
+    \lean{MPOTensor.GroupFamily.productTensor,
+        MPOTensor.GroupFamily.targetTensor,
+        MPOTensor.GroupFamily.ReductionFamily,
+        MPOTensor.GroupFamily.ReductionFamily.nilpotencyLength,
+        MPOTensor.GroupFamily.ReductionFamily.HasExteriorBufferLength}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpdo_operator_product,
+        def:mpo_to_mps, def:mps_rectangular_reduction,
+        def:mps_reduction_residual_nilpotency_length,
+        def:mps_reduction_exterior_buffer_length}
+    For $g,h\in G$, write
+    \begin{align}
+        B_{g,h} & =\mathcal U_g\mathbin{\cdot}\mathcal U_h,
+                & A_{g,h}                                   & =\mathcal U_{gh}
+        \label{eq:mpug_pair_tensors}
+    \end{align}
+    for the product tensor and the target tensor, both regarded as MPS
+    tensors whose physical letters are the ket--bra pairs $(i,j)$, of bond
+    dimensions $D_gD_h$ and $D_{gh}$.  A \emph{family of selected reductions}
+    consists of matrices
+    \begin{align}
+        V_{g,h} & \in\C^{D_{gh}\times D_gD_h},
+                & W_{g,h}                      & \in\C^{D_gD_h\times D_{gh}}
+        \label{eq:mpug_pair_reduction_matrices}
+    \end{align}
+    such that $(V_{g,h},W_{g,h})$ is a reduction from $B_{g,h}$ to $A_{g,h}$
+    for every pair: $V_{g,h}W_{g,h}=\Id$ and
+    $V_{g,h}B_{g,h}^{\mathbf a}W_{g,h}=A_{g,h}^{\mathbf a}$ for every word
+    $\mathbf a$.  These are the interior fusion equation of
+    \cite{FrancoRubio2025MPUGauging}, \texttt{main.tex} lines 1403--1405,
+    with $F^<_{g,h}=V_{g,h}$ and $F^>_{g,h}=W_{g,h}$.  Write
+    $N_0(g,h)=\ell(B_{g,h},A_{g,h};V_{g,h},W_{g,h})$ for the residual
+    nilpotency length of the selected reduction of $(g,h)$.  The family has
+    \emph{exterior buffer length} $m$ if $m$ is an exterior buffer length for
+    every selected reduction:
+    \begin{align}
+        B_{g,h}^{\mathbf p}W_{g,h}A_{g,h}^{\mathbf c}V_{g,h}B_{g,h}^{\mathbf q}
+         & =B_{g,h}^{\mathbf p\mathbf c\mathbf q}
+        \label{eq:mpug_pair_exterior_identity}
+    \end{align}
+    for all $g,h\in G$, every nonempty word $\mathbf c$, and all words with
+    $|\mathbf p|,|\mathbf q|\geq m$.  This is the exterior fusion equation of
+    \cite{FrancoRubio2025MPUGauging}, \texttt{main.tex} lines 1409--1498,
+    with $m\geq\ell$.
+\end{definition}
+
+\begin{theorem}[Existence of selected reductions]
+    \label{thm:mpug_pair_reductions_exist}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.nonempty_reductionFamily}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpug_pair_reductions}
+    Every MPU representation by simple injective tensors admits a family of
+    selected reductions.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpug_product_tensor_operator,
+        thm:mps_equality_reduction_exists}
+    By (\ref{eq:mpug_product_tensor_positive_chain}), $B_{g,h}$ and $A_{g,h}$
+    have the same positive-length matrix product vectors, and $A_{g,h}$ is
+    injective with $D_{gh}>0$.  Theorem~\ref{thm:mps_equality_reduction_exists}
+    gives a reduction for each pair; choose one for every pair.
+\end{proof}
+
+\begin{lemma}[Exterior buffers from the nilpotency lengths]
+    \label{lem:mpug_pair_reductions_exterior}
+    \lean{MPOTensor.GroupFamily.ReductionFamily.isReductionExteriorBufferLength_nilpotencyLength,
+        MPOTensor.GroupFamily.ReductionFamily.hasExteriorBufferLength_of_le}
+    \leanok
+    \uses{def:mpug_pair_reductions}
+    For a family of selected reductions of an MPU representation by simple
+    injective tensors, $N_0(g,h)-1$ is an exterior buffer length for the
+    selected reduction of $(g,h)$.  Consequently, if $N_0(g,h)\leq m+1$ for
+    every pair, the family has exterior buffer length $m$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mps_reduction_blocking, thm:mpug_product_tensor_operator}
+    Equality of the positive-length matrix product vectors of $B_{g,h}$ and
+    $A_{g,h}$ makes $N_0(g,h)$ a residual-word nilpotency bound, so
+    Theorem~\ref{thm:mps_reduction_blocking} applies; enlarging the buffer
+    preserves (\ref{eq:mpug_pair_exterior_identity}).
+\end{proof}
+
+\begin{definition}[Blocked selected reductions and the common buffer length]
+    \label{def:mpug_pair_reductions_block}
+    \lean{MPOTensor.GroupFamily.productTensor_block,
+        MPOTensor.GroupFamily.targetTensor_block,
+        MPOTensor.GroupFamily.ReductionFamily.block,
+        MPOTensor.GroupFamily.ReductionFamily.commonBufferLength,
+        MPOTensor.GroupFamily.ReductionFamily.commonBufferLength_pos,
+        MPOTensor.GroupFamily.ReductionFamily.nilpotencyLength_le_commonBufferLength_add_one}
+    \leanok
+    \uses{def:mpug_pair_reductions, def:mpug_common_blocking,
+        def:common_buffer_length}
+    Let $L>0$.  Under the canonical pairing of blocked ket and bra words,
+    \begin{align}
+        \mathcal U_g^{[L]}\mathbin{\cdot}\mathcal U_h^{[L]}
+         & \cong B_{g,h}^{[L]},
+         & \mathcal U_{gh}^{[L]}
+         & \cong A_{g,h}^{[L]},
+        \label{eq:mpug_pair_tensors_block}
+    \end{align}
+    so a family of selected reductions $(V_{g,h},W_{g,h})$ of
+    $\{\mathcal U_g\}_{g\in G}$ is, with the same matrices, a family of
+    selected reductions of the blocked representation
+    $\{\mathcal U_g^{[L]}\}_{g\in G}$.  The \emph{common buffer length} of
+    the family is the common buffer length (\ref{eq:common_buffer_length})
+    of the finite family $(N_0(g,h))_{(g,h)\in G\times G}$; it is positive
+    and satisfies $N_0(g,h)\leq L+1$ for every pair.
+\end{definition}
+
+\begin{theorem}[Common blocking for the one-site fusion identities]
+    \label{thm:mpug_common_blocking_one_site}
+    \lean{MPOTensor.GroupFamily.ReductionFamily.block_hasExteriorBufferLength_one,
+        MPOTensor.GroupFamily.ReductionFamily.block_commonBufferLength_hasExteriorBufferLength_one,
+        MPOTensor.GroupFamily.IsRepresentation.exists_block_reductionFamily_one}
+    \leanok
+    \discussion{7396}
+    \uses{def:mpug_pair_reductions_block, def:mpug_group_representation}
+    Let $\{\mathcal U_g\}_{g\in G}$ be an MPU representation by simple
+    injective tensors with a family of selected reductions, and let $L>0$
+    satisfy $N_0(g,h)\leq L+1$ for every pair.  Then the blocked family of
+    selected reductions of $\{\mathcal U_g^{[L]}\}_{g\in G}$ has exterior
+    buffer length $1$: for all $g,h\in G$ and all nonempty blocked words
+    $\mathbf p,\mathbf c,\mathbf q$,
+    \begin{align}
+        (B_{g,h}^{[L]})^{\mathbf p}W_{g,h}(A_{g,h}^{[L]})^{\mathbf c}
+        V_{g,h}(B_{g,h}^{[L]})^{\mathbf q}
+         & =(B_{g,h}^{[L]})^{\mathbf p\mathbf c\mathbf q}.
+        \label{eq:mpug_common_blocking_one_site}
+    \end{align}
+    The common buffer length is such an $L$.  Consequently, every MPU
+    representation of a finite group by simple injective tensors admits a
+    positive $L$ such that $\{\mathcal U_g^{[L]}\}_{g\in G}$ is again an MPU
+    representation by simple injective tensors and has a family of selected
+    reductions with exterior buffer length $1$.
+
+    This is the assertion of \cite{FrancoRubio2025MPUGauging},
+    \texttt{main.tex} line 1498, and of the footnote to Theorem~1 of
+    \cite{GarreRubioSchuch2024DomainWall}, that the nilpotency length can be
+    reduced to $1$ by blocking, read as the one-site exterior identity
+    (\ref{eq:mpug_common_blocking_one_site}).  Blocking need not make a
+    blocked residual letter vanish, and the blocked nilpotency length
+    $\ell(B_{g,h}^{[L]},A_{g,h}^{[L]};V_{g,h},W_{g,h})$ of Definition~8 in
+    \cite{Molnar2018SemiInjective} need not be $1$
+    \cite{gap:mgsc18_nilpotency_length_one_terminology}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpug_pair_reductions_exterior, thm:mps_reduction_blocking,
+        thm:mpdo_blocking_doubled_index, thm:mpdo_blocking_product,
+        thm:mpug_common_blocking_representation,
+        thm:mpug_pair_reductions_exist}
+    By Lemma~\ref{lem:mpug_pair_reductions_exterior}, $N_0(g,h)-1$ is an
+    exterior buffer length for the pair $(g,h)$, and $N_0(g,h)-1\leq L$.
+    Theorem~\ref{thm:mps_reduction_blocking} with $k=1$ makes $1$ an
+    exterior buffer length for $(V_{g,h},W_{g,h})$ as a reduction from
+    $B_{g,h}^{[L]}$ to $A_{g,h}^{[L]}$, and the pairing
+    (\ref{eq:mpug_pair_tensors_block}), obtained from the commutation of
+    blocking with the doubled-index view and with the product tensor,
+    transports it to the blocked representation.  For the last assertion,
+    choose a family of selected reductions by
+    Theorem~\ref{thm:mpug_pair_reductions_exist}, take $L$ to be its common
+    buffer length, and apply
+    Theorem~\ref{thm:mpug_common_blocking_representation}.
+\end{proof}
+
 \begin{theorem}[Zero specified source-index value determines the source ranks]
     \label{thm:mpug_zero_specified_source_index_ranks}
     \lean{MPOTensor.sourceRanks_eq_physDim_of_sourceIndexValue_eq_zero}
