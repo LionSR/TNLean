@@ -10,10 +10,11 @@ import TNLean.Algebra.StabilizerTransition
 /-!
 # L-symbols induced from stabilizer cocycles
 
-This file formalizes the scalar construction in arXiv:2502.20257, Lemma
-`lemma:h1h2` and Equations `eq:Lcocycle`, `eq:h1h2` (lines 7028–7042), using
-the corrected transition elements from `StabilizerTransition`. The same
-construction is Equation (20) of arXiv:2203.12563.
+This file formalizes the `ω = 1` scalar specialization of arXiv:2203.12563,
+Equation (20), using the corrected transition elements from
+`StabilizerTransition`. The relation to the representation-theoretic statement
+of arXiv:2502.20257, Lemma `lemma:h1h2` and Equations `eq:Lcocycle`, `eq:h1h2`
+(lines 7028–7042), is recorded only at the scalar level.
 
 For normalized representatives `k_x` and a scalar cocycle `ψ` on
 `H = Stab_G(x₀)`, define
@@ -42,8 +43,8 @@ def inducedLSymbol (K : StabilizerRepresentatives G X x₀)
   fun x g h ↦ ψ (K.transitionElement g (h • x)) (K.transitionElement h x)
 
 /-- A stabilizer cocycle induces an L-symbol compatible with the trivial scalar
-three-cochain. This is the transition-product/cocycle calculation underlying
-arXiv:2502.20257, Equation `eq:Lcocycle`. -/
+three-cochain. This is the `ω = 1` scalar specialization of arXiv:2203.12563,
+Equation (20). -/
 theorem inducedLSymbol_isCompatible (K : StabilizerRepresentatives G X x₀)
     {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} (hψ : ψ.IsCocycle) :
     LSymbol.IsCompatible (K.inducedLSymbol ψ) (fun _ _ _ ↦ 1) := by
@@ -53,15 +54,6 @@ theorem inducedLSymbol_isCompatible (K : StabilizerRepresentatives G X x₀)
   simpa only [smul_smul] using
     (hψ (K.transitionElement g ((h * k) • x))
       (K.transitionElement h (k • x)) (K.transitionElement k x)).symm
-
-/-- On a stabilizer element, the transition at the basepoint is that element
-itself. -/
-theorem transitionElement_stabilizer (K : StabilizerRepresentatives G X x₀)
-    (h : MulAction.stabilizer G x₀) :
-    K.transitionElement (h : G) x₀ = h := by
-  apply Subtype.ext
-  rw [K.coe_transitionElement, MulAction.mem_stabilizer_iff.mp h.property, K.k_x₀]
-  simp
 
 /-- Restricting the induced L-symbol to the basepoint and stabilizer arguments
 recovers the original cocycle representative. -/
@@ -94,17 +86,25 @@ theorem inducedLSymbol_eq_gauge (K : StabilizerRepresentatives G X x₀)
   simp only [div_eq_mul_inv, mul_inv_rev, inv_inv]
   ac_rfl
 
-/-- Cohomologous stabilizer cocycles induce action-gauge-equivalent L-symbols,
-with no change of fusion gauge. -/
-theorem exists_actionGauge_inducedLSymbol_eq_of_cohomologousTo
+/-- Two stabilizer cocycles are cohomologous exactly when their induced
+L-symbols differ by an action-tensor gauge with no change of fusion gauge. -/
+theorem cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq
     (K : StabilizerRepresentatives G X x₀)
-    {ψ₁ ψ₂ : ScalarCocycle (MulAction.stabilizer G x₀)}
-    (hψ : ScalarCocycle.CohomologousTo ψ₁ ψ₂) :
-    ∃ γ : ActionTensorGauge G X,
-      K.inducedLSymbol ψ₁ =
-        LSymbol.gauge (fun _ _ ↦ 1) γ (K.inducedLSymbol ψ₂) := by
-  obtain ⟨φ, hφ⟩ := hψ
-  exact ⟨K.inducedActionGauge φ, K.inducedLSymbol_eq_gauge φ hφ⟩
+    (ψ₁ ψ₂ : ScalarCocycle (MulAction.stabilizer G x₀)) :
+    ScalarCocycle.CohomologousTo ψ₁ ψ₂ ↔
+      ∃ γ : ActionTensorGauge G X,
+        K.inducedLSymbol ψ₁ =
+          LSymbol.gauge (fun _ _ ↦ 1) γ (K.inducedLSymbol ψ₂) := by
+  constructor
+  · rintro ⟨φ, hφ⟩
+    exact ⟨K.inducedActionGauge φ, K.inducedLSymbol_eq_gauge φ hφ⟩
+  · rintro ⟨γ, hγ⟩
+    refine ⟨fun h ↦ (γ (h : G) x₀)⁻¹, fun a b ↦ ?_⟩
+    have hb : (b : G) • x₀ = x₀ := MulAction.mem_stabilizer_iff.mp b.property
+    have hγab := congrFun (congrFun (congrFun hγ x₀) (a : G)) (b : G)
+    simpa only [inducedLSymbol_base, LSymbol.gauge, Pi.one_apply, mul_one, hb,
+      Subgroup.coe_mul, div_eq_mul_inv, mul_inv_rev, inv_inv, mul_assoc, mul_comm,
+      mul_left_comm] using hγab
 
 end StabilizerRepresentatives
 

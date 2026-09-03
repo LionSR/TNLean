@@ -2800,7 +2800,8 @@ show that the tensor gauge freedoms induce the joint scalar gauge
         TNLean.Algebra.StabilizerRepresentatives,
         TNLean.Algebra.StabilizerRepresentatives.ofPretransitive,
         TNLean.Algebra.StabilizerRepresentatives.transitionElement,
-        TNLean.Algebra.StabilizerRepresentatives.coe_transitionElement}
+        TNLean.Algebra.StabilizerRepresentatives.coe_transitionElement,
+        TNLean.Algebra.StabilizerRepresentatives.transitionElement_stabilizer}
     \leanok
     Suppose that $G$ acts transitively on $\mathsf X$, and fix
     $x_0\in\mathsf X$. There are representatives $k_x\in G$ satisfying
@@ -2850,11 +2851,10 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     \label{thm:mpug_stabilizer_cocycle_l_symbol}
     \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible,
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol,
-        TNLean.Algebra.StabilizerRepresentatives.transitionElement_stabilizer,
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_base,
         TNLean.Algebra.StabilizerRepresentatives.inducedActionGauge,
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_gauge,
-        TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_inducedLSymbol_eq_of_cohomologousTo}
+        TNLean.Algebra.StabilizerRepresentatives.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:is_cocycle,
         def:cohomologous_to, thm:mpug_stabilizer_transition}
@@ -2865,32 +2865,46 @@ show that the tensor gauge freedoms induce the joint scalar gauge
          & =\psi\bigl(t_k(g,hx),t_k(h,x)\bigr).
         \label{eq:mpug_induced_stabilizer_l_symbol}
     \end{align}
-    Then $L$ satisfies (\ref{eq:mpug_l_compatibility}) with $\omega=1$, and
-    its base-point restriction recovers $\psi$:
+    Formula (\ref{eq:mpug_induced_stabilizer_l_symbol}) is the $\omega=1$
+    scalar specialization of \cite[Eq.~(20)]{GarreRubio2023MPOSym}.
+    The $L$-symbol satisfies (\ref{eq:mpug_l_compatibility}) with $\omega=1$,
+    and its base-point restriction recovers $\psi$:
     \begin{align}
         L^{x_0}_{a,b} & =\psi(a,b)
         \label{eq:mpug_induced_stabilizer_base}
     \end{align}
     for all $a,b\in H$.
 
-    If $\psi_1$ and $\psi_2$ are cohomologous through
+    More precisely, two stabilizer cocycles are cohomologous exactly when
+    their induced $L$-symbols differ by an action-tensor gauge and the trivial
+    fusion-tensor gauge:
+    \begin{align}
+        \psi_1\sim\psi_2
+         & \quad\Longleftrightarrow\quad
+        \exists\gamma,\quad
+        L[\psi_1]=(1,\gamma)\mathbin{\triangleright}L[\psi_2].
+        \label{eq:mpug_induced_cohomology_iff}
+    \end{align}
+    If the cohomology relation is witnessed by
     $\varphi\colon H\to\C^\times$, with
     \begin{align}
         \psi_1(a,b)
          & =\varphi(a)\varphi(b)\varphi(ab)^{-1}\psi_2(a,b),
         \label{eq:mpug_stabilizer_cocycle_gauge}
     \end{align}
-    then their induced $L$-symbols differ by the action-tensor gauge
+    then the forward action-tensor gauge is
     \begin{align}
-        \gamma_{g,x} & =\varphi\bigl(t_k(g,x)\bigr)^{-1}
+        \gamma_{g,x} & =\varphi\bigl(t_k(g,x)\bigr)^{-1}.
         \label{eq:mpug_induced_action_gauge}
     \end{align}
-    and the trivial fusion-tensor gauge. Thus the induced action-gauge class
-    depends only on the cohomology class of $\psi$.
-    % Source anchors: arXiv:2502.20257, lemma:h1h2 and eq:Lcocycle,
-    % lines 7028--7042; arXiv:2203.12563, Eq. (20).
-    This is only the scalar construction. It does not assert that an
-    $L$-symbol obtained from MPS and MPU tensors has this form.
+    Thus the induced action-gauge class depends only on the cohomology class
+    of $\psi$.
+
+    The representation-level lemma of
+    \cite[lines~7028--7042]{FrancoRubio2025MPUGauging} also asserts that a
+    tensor-derived $L$-symbol can be put in this form. The result here is only
+    its scalar part and does not make that representation-theoretic claim.
+    % Source anchor: arXiv:2203.12563, Eq. (20).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2915,7 +2929,18 @@ show that the tensor gauge freedoms induce the joint scalar gauge
         =\varphi(a)\varphi(b)\varphi(ab)^{-1}.
     \end{align}
     Formula (\ref{eq:mpug_stabilizer_cocycle_gauge}) now identifies the two
-    induced $L$-symbols.
+    induced $L$-symbols. Conversely, suppose
+    $L[\psi_1]=(1,\gamma)\mathbin{\triangleright}L[\psi_2]$ and define
+    $\varphi(a)=\gamma_{a,x_0}^{-1}$ for $a\in H$. Evaluating the gauge
+    equality at $x_0$ and $a,b\in H$ gives
+    \begin{align}
+        \psi_1(a,b)
+         & =\frac{\gamma_{ab,x_0}}
+        {\gamma_{a,x_0}\gamma_{b,x_0}}\psi_2(a,b)
+        =\varphi(a)\varphi(b)\varphi(ab)^{-1}\psi_2(a,b).
+    \end{align}
+    Hence $\psi_1\sim\psi_2$, which proves the reverse implication in
+    (\ref{eq:mpug_induced_cohomology_iff}).
 \end{proof}
 
 \begin{definition}[Generalized coboundary and cocycle]

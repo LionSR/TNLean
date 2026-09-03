@@ -82,6 +82,16 @@ theorem coe_transitionElement (K : StabilizerRepresentatives G X x₀)
     (g : G) (x : X) :
     (transitionElement K g x : G) = (K.k (g • x))⁻¹ * g * K.k x := rfl
 
+/-- On a stabilizer element, the transition at the basepoint is that element
+itself. -/
+@[simp]
+theorem transitionElement_stabilizer (K : StabilizerRepresentatives G X x₀)
+    (h : MulAction.stabilizer G x₀) :
+    K.transitionElement (h : G) x₀ = h := by
+  apply Subtype.ext
+  rw [K.coe_transitionElement, MulAction.mem_stabilizer_iff.mp h.property, K.k_x₀]
+  simp
+
 /-- The transition elements obey the subgroup identity
 `t_k(g₁g₂,x) = t_k(g₁,g₂ • x)t_k(g₂,x)`. -/
 theorem transitionElement_mul (K : StabilizerRepresentatives G X x₀)
