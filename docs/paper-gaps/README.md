@@ -41,6 +41,10 @@ For the MPU symmetry-defect gauging paper:
   distinction between a trivial anomaly class and a pointwise trivial gauge,
   and the stable finite-periodic-chain support boundary. It is a prerequisite
   audit, not a formalization of Proposition `prop:comm_proj`.
+- `fbc25_state_level_gauging_covariance.tex` records that the current universal
+  invariant-vector theorem assumes local defect support and exact covariance,
+  while the paper derives them from its concrete locally orthogonal MPS blocks
+  and modified fusion maps. Issue #7569 tracks this specialization.
 - `fbc25_alternating_network_nondegeneracy.tex` records the one-sided
   nonvanishing convention for the alternating-network proportionality lemma.
   Both applications in the source satisfy this convention because their

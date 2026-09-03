@@ -1,0 +1,55 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
+
+\title{Defect Covariance in State-Level Gauging}
+\author{}
+\date{2026-09-03}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source statement}
+
+The modified-fusion lemma of
+Ref.~\cite[lines~4215--4326]{FrancoRubio2025MPUGauging} constructs unitary
+fusion operators from locally orthogonal matrix-product-state blocks. The
+resulting modified Gauss operators leave the gauged state invariant
+\cite[lines~4327--4335]{FrancoRubio2025MPUGauging}. Thus the paper derives the
+local defect support and covariance used in the invariance argument from its
+concrete defect tensors and fusion maps.
+
+\section{Current formal scope}
+
+The present universal-vector theorem starts with defect subspaces
+$\mathcal K_{a,b}$, prescribed maps $D_{a,b}$, and matter states
+$\ket{\Psi_\alpha}$. It assumes that every two-site matter slice lies in the
+corresponding defect subspace and that, for every window and $g\in G$,
+\begin{align}
+    (D_{a,b}\otimes\Id)\ket{\Psi_\alpha}
+     & =(D_{ag^{-1},gb}\otimes\Id)
+    \ket{\Psi_{T_{j,g}\alpha}}.
+\end{align}
+Under these hypotheses it proves invariance for every unitary completion of the
+prescribed maps. This is a conditional abstraction of the paper's argument,
+not yet a derivation of the hypotheses from locally orthogonal MPS blocks.
+
+\section{Elimination plan}
+
+To recover the full source construction, instantiate the defect subspaces,
+prescribed maps, and matter states from the FBC25 defect tensors; prove local
+support and the displayed covariance from local orthogonality and the modified
+fusion lemma; then specialize the abstract universal-vector theorem. The
+four-domain CZX instance and this source-to-abstraction bridge remain tracked
+by \ghissue{7569}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

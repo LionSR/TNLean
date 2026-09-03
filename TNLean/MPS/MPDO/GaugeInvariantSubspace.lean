@@ -32,6 +32,12 @@ following the modified Gauss laws of FBC25 (arXiv:2502.20257, lines
 4325--4335); the question of the size of this subspace (arXiv:2502.20257,
 line 5198) is untouched.
 
+**Scope restriction (abstract defect covariance):** FBC25 derives the local
+support and covariance from locally orthogonal MPS blocks and its modified
+fusion maps. This module assumes those two properties. The remaining
+specialization is documented in
+`docs/paper-gaps/fbc25_state_level_gauging_covariance.tex` and tracked by #7569.
+
 Commutativity of the placed projectors on neighbouring windows, a spectral
 gap, and any bound on the subspace beyond dimension at least one are not
 treated here.
