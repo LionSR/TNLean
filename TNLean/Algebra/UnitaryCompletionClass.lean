@@ -15,8 +15,9 @@ pair `(a, b)` of gauge labels there is a defect subspace `K a b` of the matter
 space and an isometry `D a b` defined on it. The operator used on the whole
 matter space is any unitary agreeing with `D a b` on `K a b`, and the closing
 sentence of the modified-fusion lemma of FBC25 (arXiv:2502.20257,
-lines 4215--4326) records that such an extension is not unique. A completion
-is therefore the whole family `(U a b)`, not one selected operator.
+lines 4215--4326) records that such an extension need not be unique when the
+defect vectors do not span the matter space. A completion is therefore the
+whole family `(U a b)`, not one selected operator.
 
 The matter operators are represented here as elements of
 `Matrix.unitaryGroup n ℂ`, the family type consumed by the local Gauss operator

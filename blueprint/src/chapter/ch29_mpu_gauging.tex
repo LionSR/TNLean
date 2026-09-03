@@ -1350,9 +1350,9 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         \label{eq:mpug_completion_class}
     \end{align}
     A completion is the entire family $(U_{a,b})_{a,b\in G}$, not one
-    selected operator of that family. The extension of $D_{a,b}$ to the whole
-    of $\mathcal H_{\mathrm m}$ is not unique, as observed at the end of the
-    proof of the modified-fusion lemma
+    selected operator of that family. If $\mathcal K_{a,b}$ does not span the
+    whole matter space, the extension of $D_{a,b}$ need not be unique, as
+    observed at the end of the proof of the modified-fusion lemma
     of~\cite[lines~4215--4326]{FrancoRubio2025MPUGauging}.
 \end{definition}
 
@@ -1617,6 +1617,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \leanok
     \discussion{7569}
     \uses{def:mpug_common_fixed_subspace,
+        def:mpug_completion_class,
         def:mpug_placed_gauss_projector}
     For $R\in\mathfrak C(D)$ and a chain of length $N\geq2$, the
     gauge-invariant subspace is the common fixed subspace
