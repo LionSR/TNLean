@@ -493,6 +493,208 @@ description of current `main`.
   window/blocked-weight covariance + re-derive
   `TorusWindowFamilyVertical.lean`'s 17 declarations via transport.
 
+## Hand-added debts (2026-09-03 MPU source-chain audit)
+
+Evidence and remediation in
+[`docs/audits/2026-09-03_mpu_source_chain_faithfulness.md`](audits/2026-09-03_mpu_source_chain_faithfulness.md);
+counts checked on `origin/main` at `fb847cd35`. Ranked among themselves by
+compounding cost; D13 precedes D14 because every new MPU statement pays it.
+
+## D13. The MPU canonical-form-II convention is threaded pointwise, while admissible path nodes carry an additional continuous-source-data gap  —  api-design, impact 7/10, effort 5/10
+- **Status**: open
+- **Evidence**: `TNLean/MPS/MPU/` carries the paper's standing convention
+  (`Papers/1703.09188/paper_v2.tex` lines 271--281 and 356--361) as explicit
+  hypotheses in three shapes: `hρ : ρ.PosDef` at 65 sites in 11 files,
+  `hpower : E ^ J = vecMulVec ρ.vec 1.vec` at 12 theorem-parameter binders in
+  4 files, and `hfull : … .HasFullSupport` at 28 sites in 6 files; an exact
+  `hpower` token search gives 34 lines in 6 files, including uses, derived
+  locals, and an unrelated 3-line helper in `SimpleBlocking.lean`; 8
+  `hasFullSupport_*`
+  transport theorems and 3 canonical-form-II constructions
+  (`PhysicalAncilla.lean`, `TensorProductCanonicalForm.lean`) exist only to
+  carry the pair between statements; a separate `D = 1` branch
+  (`normalizedTransferStabilization_fin_one`,
+  `normalized_transfer_matrix_eq_one_fin_one`, consumed on route by
+  `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`) exists
+  because `Matrix.StabilizedRankOneData` needs a positive exponent at most
+  `D * D - 1`, which is empty at `D = 1`. Chapter 28 has 82 `\notready`
+  nodes among 508, of which 39 carry an `mpu_admissible` label: 16 are
+  pointwise, while 23 define or use the pathwise equivalence datum. The
+  fixed-tensor nodes replace the standing convention by a supplied fixed
+  pair. The family also contains
+  `def:mpu_admissible_equivalence_datum`, which has no source-labelled twin
+  and requires continuously varying reduced source data for the actual
+  blocked path and its conjugate, adjoint, transpose, and symmetry comparison
+  paths. The continuity, index, equivalence, symmetry, and example nodes that
+  depend on it record a separate continuous-selection gap. Four
+  `**Scope restriction (full support)**` markers repeat the pointwise
+  restriction.
+- **Remediation**: one predicate on `MPOTensor d D` stating canonical form
+  II for an MPU tensor by bundling `IsMPU`,
+  `CPSVCanonicalFormIIData U.normalizedFlattening`, the equality
+  $\sum_k D_k=D$ rather than the old `HasFullSupport` predicate, and an
+  ambient positive definite diagonal trace-one fixed matrix $\rho$. The
+  left-canonical equation is inherited from the CFII witness, but ambient
+  diagonality is an additional field: blockwise diagonal fixed points may be
+  scrambled by the ambient coisometry. The existing stabilization and
+  normality theorems apply to the CFII and full-support fields, with
+  $E^{\max(D^2-1,1)}=|\rho)(\Phi|$ stated as one power
+  identity (no `D = 1` branch), normality, the forced-block simple
+  contractions, and the five preservation lemmas proved once (the
+  identity-ancilla and tensor-product lemmas build the `cfii` field with the
+  retained witness constructors `normalizedDiagonalLiftCFIIData`,
+  `tensorPhysicalIdCFIIData`, and `tensorProductCFIIData`, so only the
+  `hasFullSupport_*` wrappers are deleted);
+  their stabilized fixed matrix proved equal to the recorded $\rho$.
+  `exists_reduced_cfii_representative` is strengthened to choose the ambient
+  diagonal gauge and restated as the without-loss-of-generality theorem. This
+  supplies the explicit $\rho^{\mathsf T}=\rho$ boundary now required by #7633
+  under #5982, without an arbitrary nonsymmetric strengthening. While
+  `HasFullSupport` still exists, current consumers derive it by unfolding the
+  definition from the equality field. Every MPU-level step-7-to-13 statement
+  (one that also assumes `IsMPU`, CFII data, full support, or the stabilized
+  pair) is then migrated to the predicate or the equality directly, while the
+  generic positive-metric constructions of `SourceFactors.lean` (lines
+  82--476) and the gate constructors of `SourceUV.lean` (lines 141--202) keep
+  their `(ρ) (hρ : ρ.PosDef)` parameters, since they assume nothing about
+  $U$ and migrating them would shrink the API; only afterward delete
+  `HasFullSupport`,
+  the transports, the `fin_one` branch,
+  `def:mpu_reduced_full_support_source_datum`, and only the
+  admissible twins whose extra content is pointwise. In the same migration,
+  delete or retarget the Chapter 28 tags on `def:mpu_full_support`,
+  `thm:mpu_full_support_blocking`, `thm:mpu_full_support_reindexing`,
+  `thm:mpu_physical_adjoint_full_support`, `thm:mpu_tensor_product_cfii_data`,
+  `thm:mpu_identity_ancilla_reduced_cfii`, and
+  `thm:mpu_normalized_transfer_fin_one`, and retarget the 17 surviving
+  `\uses` references to `def:mpu_full_support` in 14 nodes (the
+  reduced-representative, stabilization, forced-contraction, and normality
+  nodes among them) to the convention predicate's node before that label is
+  removed. Retain
+  `def:mpu_admissible_equivalence_datum` and every node requiring its
+  continuously varying path data until a continuous-selection theorem is
+  proved. Keep the positive-power API in `TransferStabilization.lean` and the
+  forced-block contractions in downstream `MatchingContractions.lean`; moving
+  the latter into `CanonicalForm.lean` would create an import cycle through
+  `SimpleBlocking.lean`. Rewrite
+  `docs/paper-gaps/mpu_canonical_form_full_support.tex` as the pointwise
+  convention record while keeping the pathwise supplier gap explicit.
+- **First PR**: define the predicate in `CanonicalForm.lean` with the CFII,
+  full-support-equality, and ambient-diagonal-$\rho$ fields. Use the existing
+  theorems for normality and stabilization, prove that the stabilized matrix is
+  this recorded $\rho$, and strengthen `exists_reduced_cfii_representative` to
+  choose the ambient diagonal gauge; no consumer changes yet.
+
+## D14. Residue of the pre-#7424 mixed-kernel route: five `MixedKernel*` modules, the reflected kernel, and their example twins  —  dead-weight, impact 5/10, effort 3/10
+- **Status**: open
+- **Evidence**: `MixedKernelOpenTail.lean` (246, of which five paper-gate
+  $v$ identities and the weighted $X_1$ entry formula survive),
+  `MixedKernelBoundary.lean` (105),
+  `MixedKernelClosedNetwork.lean` (166), `MixedKernelRangeTransport.lean`
+  (232), `MixedKernelSecondCutMetric.lean` (109),
+  `ReflectedTransferKernel.lean` (396), `SuppliedWitnessReblocking.lean`
+  (66), the `sourceY₁X₂`/`sourceX₁Y₂` half of `SourceUV.lean`, two mixed
+  product formulas in `SourceFactorsTensorProduct.lean`,
+  `normalized_mpo_tail_coisometry` in `MatchingContractions.lean`, and the
+  mixed formulas of `Examples/ShiftSourceMixedKernels.lean` (908; 34
+  zero-reference declarations): about 2,300 lines built to prove
+  $u^\dagger u=1$ for the pre-#7424 gate $Y_1$--$X_2$ in the output-first
+  orientation. Every consumer is another module of the set or an example
+  file; the on-route proof in `SourceUCompleteNetwork.lean` uses none of it;
+  21 Chapter 28 nodes tag these declarations;
+  `docs/paper-gaps/mpu_mixed_kernel_range_restriction.tex` states that the
+  route is no longer a route to `lemuisometry`.
+- **Remediation**: delete the set (plan step 1 of the audit) after moving
+  all five surviving $v$ identities to `StandardForm.lean`, moving
+  `sourceX₁_weighted_isometry_apply` to `SourceFactors.lean`, and moving the
+  shift examples' supplied factors and rank equivalences to
+  `Examples/ShiftSourceFactors.lean`. Before deleting `sourceY₁X₂` and
+  `sourceX₁Y₂`, delete or migrate all six remaining consumers in that
+  destination file: the identity, right-shift, and left-shift entry formulas
+  for each kernel. The surviving blueprint node
+  `def:threeMPU_supplied_source_factors` lists eight declarations deleted by
+  this step in its `\lean{}` tag: those six entries and the two mixed
+  independent-tensor-product formulas. Remove all eight names or repoint them
+  if replacements are introduced. Before deleting
+  `ShiftSourceMixedKernels.lean`, also move
+  `shiftTwoSitePhysicalEquiv`, the three shared four-spin matrices, and their
+  five entry and product formulas to `ShiftSourceFactors.lean`; the surviving
+  gate, blocked-formula, and swap-matrix modules use them. In the same step
+  retire the `docs/tactic_patterns.md` candidate "supplied mixed-kernel
+  indicator entries" (lines 1609--1627, all sixteen occurrences in the deleted
+  formulas) and reword or drop its promoted-entry note at lines 899--900 that
+  names the auxiliary $Y_1$--$X_2$ mixed-kernel consumer. Reword the
+  surviving prose that treats the kernels as present (`StandardForm.lean`
+  lines 14--15, `Examples/ShiftPaperSourceFactors.lean` lines 22--24,
+  `ch28_mpu.tex` lines 5081--5082 and 8421--8426), and after every module
+  deletion, the first PR's four included, regenerate the aggregators
+  (`python3 scripts/generate_import_aggregators.py`, then `--check`), since
+  `TNLean/MPS/MPU.lean` and `TNLean/MPS/MPU/Examples.lean` import the deleted
+  modules and are never edited by hand. Correct the
+  `MatchingContractions.lean` docstring, which disclaims the on-route
+  input-first identity as auxiliary; delete the 21 nodes, explicitly including
+  `thm:mpu_output_layer_tail_entry`, `thm:mpu_source_x1_range_projection`, and
+  `thm:mpu_source_x2_range_projection`. Before deleting the supplied-witness
+  and reflected-coordinate nodes, retarget
+  `blockTensor_succ_simple2_of_supplied` and
+  `IsMPU.simple1_of_simple2_supplied` to
+  `thm:mpu_all_later_simple_blockings`, and retarget `bondPairSwapEquiv` with
+  its apply and inverse formulas to a surviving physical-adjoint coordinate
+  node. Repoint the admissible `ThmFund1` proof's dependency and prose reference
+  to `thm:mpu_all_later_simple_blockings`, whose linked same-witness lemma is
+  `MPOTensor.IsMPU.isMPUSimple_of_simple2`; retire the range-restriction note.
+- **First PR**: delete `ReflectedTransferKernel.lean`,
+  `SuppliedWitnessReblocking.lean`, `MixedKernelBoundary.lean`, and
+  `MixedKernelSecondCutMetric.lean` (676 lines, zero consumers outside the
+  set) with their 10 nodes.
+
+## D15. The MPU canonical-form endpoint predicate omits nonzero weights and full support  —  api-design, impact 2/10, effort 2/10
+- **Status**: open
+- **Evidence**: `MPUCanonicalForm.lean` (78 lines) defines
+  `IsMPUCanonicalBlock`, `MPUCanonicalFormData`, and `IsMPUCanonicalForm`,
+  the paper's canonical form CF (`Papers/1703.09188/paper_v2.tex` lines
+  259--262: irreducible blocks with transfer spectral radius one, periodic
+  blocks allowed, gauge free). Its sole consumer is the "in CF" endpoint
+  clause of `StrictlyEquivalent` in `Equivalence.lean`, which transcribes
+  `def:strictly-equivalent-tensors` (lines 708--714: endpoints "in CF", the
+  path "not necessarily in CF"). `MPUCanonicalFormData` repeats every field
+  of `CPSVCanonicalFormData` (`TNLean/MPS/CanonicalForm/Definitions.lean`)
+  except the block predicate (irreducible with spectral radius one, against
+  normal) and the `weights_ne_zero` local fix, and no lemma relates the two;
+  `prop:normal-tensor` (lines 344--355), which says that an MPU tensor in CF
+  has one block and that block is normal, is not stated for this predicate.
+  The missing nonzero-weight field is logically prior: for $d=1$ and $D=2$,
+  the tensor with sole matrix $\operatorname{diag}(1,0)$ is an MPU and has a
+  current-form witness with two one-dimensional canonical blocks weighted by
+  $1$ and $0$. Nonzero weights alone do not exclude the same tensor: it also
+  has a one-block, weight-one witness embedded in the first coordinate, with a
+  nontrivial ambient zero complement.
+- **Remediation**: keep the clause. CF is gauge free while canonical form II
+  (lines 271--281) fixes the gauge, so two MPU tensors in CF outside that
+  gauge are strictly equivalent under the paper's definition; replacing the
+  clause by the D13 convention predicate would add a hypothesis the source
+  does not carry (the first limit of the `CLAUDE.md` convention rule: the
+  paper writes "in CF" here and distinguishes CF, CFII, and SF throughout).
+  First add `weights_ne_zero` and require $\sum_k D_k=D$ (equivalently, full
+  support) in `MPUCanonicalFormData`, and update the source-labelled
+  `def:mpu_canonical_form` blueprint statement before retaining its `\leanok`.
+  Then prove `prop:normal-tensor` for `IsMPUCanonicalForm` on MPU tensors (one normal block), using transfer
+  multiplicity only after the zero-weight witness is excluded. Finally extract
+  a common retained-block reconstruction base with separate support-policy
+  wrappers. Literal `CPSVCanonicalFormData` keeps $\sum_k D_k\leq D$ and its
+  optional ambient complement; the MPU endpoint wrapper requires nonzero
+  weights and $\sum_k D_k=D$. Parametrizing only the block predicate would
+  conflate these two source policies.
+- **First PR**: add `weights_ne_zero` and full support to
+  `MPUCanonicalFormData`, update any direct witnesses, and add an inline
+  `**Local fix (nonzero canonical weights and full support):**` marker in
+  `MPUCanonicalForm.lean`. The marker must cite both
+  `mpu_canonical_form_full_support.tex` for the ambient zero complement and the
+  dedicated one-page paper-gap note titled "Nonzero weights in MPU canonical
+  form" created in the same PR for the zero-coefficient convention. Update the
+  `def:mpu_canonical_form` blueprint statement in the same PR. No one-block
+  theorem or consumer changes yet.
+
 ## Honorable mentions (ranks 11-12)
 
 - **D11 (plumbing tax)** — 486 `finCongr`/`Fin.cast` sites in 91 files;
