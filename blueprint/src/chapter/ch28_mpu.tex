@@ -5118,10 +5118,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         W^{ij}W^{k\ell}
          & =W^{ij}\lvert\rho^{\mathsf T})(\Phi\rvert W^{k\ell}
     \end{align}
-    for all $i,j,k,\ell$. The weight is transposed, as in
-    Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace}: the source
-    gate of a tensor whose transfer fixed point is $\rho$ is the gate built
-    from $\rho^{\mathsf T}$. This is the equivalence in
+    for all $i,j,k,\ell$. The source gate and source factors use the same
+    weight $\rho$ throughout. The transpose occurs only in the inserted
+    column-stacking vector. In the source, $\rho$ is diagonal, so this vector
+    equals $\lvert\rho)$ and the displayed equivalence is exactly
     \cite[equation~\texttt{vUnitary} and proof of Theorem~III.8]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 577--600. The weight orientation is recorded
     % in docs/paper-gaps/mpu_source_cut_orientation.tex.
@@ -5155,15 +5155,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Source-$v$ isometry of a simple tensor]
     \label{thm:mpu_simple_source_v_isometry}
-    \lean{MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry,
+    \lean{MPOTensor.IsMPUSimple.sourceV_isIsometry,
         MPOTensor.IsMPUSimple.rightRank_mul_leftRank_le}
     \leanok
     \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer}
     Let $\mathcal U$ be simple with physical dimension $d>0$, let $W$ be its
-    double layer with normalized diagonal $E$, and let $\rho>0$ satisfy
-    $E^J=\lvert\rho)(\Phi\rvert$ for some $J>0$, where
+    double layer with normalized diagonal $E$, and let the source's diagonal
+    matrix $\rho>0$ satisfy $E^J=\lvert\rho)(\Phi\rvert$ for some $J>0$, where
     $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. Let $v$ be the source
-    operator of $\mathcal U$ built from the weight $\rho^{\mathsf T}$. Then
+    operator of $\mathcal U$ built from that same weight $\rho$. Then
     $v^\dagger v=\Id_{r\ell}$, and consequently $r\ell\le d^2$. This is the
     implication $1\to2$ in \cite[proof of Theorem~III.8]{Cirac2017MPU},
     before the standing isometry of $u$ is used.
@@ -5173,12 +5173,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     \uses{thm:mpu_supplied_projector_simple2, thm:mpu_source_v_complete_contraction, thm:mpu_source_v_dressed_gram_cancel}
     Theorem~\ref{thm:mpu_supplied_projector_simple2} gives
-    $W^{ij}W^{k\ell}=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}$. Applying
-    Theorem~\ref{thm:mpu_source_v_complete_contraction} to the weight
-    $\rho^{\mathsf T}$, whose transposed column-stacking vector is
-    $\lvert\rho)$, gives the dressed Gram equation for the factors built from
-    $\rho^{\mathsf T}$, and Theorem~\ref{thm:mpu_source_v_dressed_gram_cancel}
-    cancels the dressing. Since $v^\dagger v=\Id$ on
+    $W^{ij}W^{k\ell}=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}$. Since $\rho$
+    is diagonal, $\rho^{\mathsf T}=\rho$, so
+    Theorem~\ref{thm:mpu_source_v_complete_contraction} gives the dressed Gram
+    equation for the factors built from the same weight $\rho$. Then
+    Theorem~\ref{thm:mpu_source_v_dressed_gram_cancel} cancels the dressing. Since $v^\dagger v=\Id$ on
     $\C^r\otimes\C^\ell$, the map $v$ is injective, so $r\ell\le d^2$.
 \end{proof}
 
@@ -5320,15 +5319,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     conditions is assumed. Thus $u$ is a standing isometry and
     $r\ell\geq d^2$ throughout the proof.
 
-    Suppose first that $\mathcal U$ is simple. The stabilized transfer power
-    supplies the pair $\lvert\rho)(\Phi\rvert$, and
-    Theorem~\ref{thm:mpu_simple_source_v_isometry} gives $v^\dagger v=\Id$
-    for the source operator built from the weight $\rho^{\mathsf T}$, hence
-    $r\ell\leq d^2$. Together with the standing source-$u$ isometry, this
-    gives $r\ell=d^2$.
-    % The source gate for the fixed point ρ is the formal gate built from the
-    % weight ρᵀ; see docs/paper-gaps/mpu_source_cut_orientation.tex. The
-    % statement above must fix this weight when the theorem is formalized.
+    Suppose first that $\mathcal U$ is simple. Under the source's diagonal
+    fixed-point convention, Theorem~\ref{thm:mpu_simple_source_v_isometry}
+    gives $v^\dagger v=\Id$ for the source operator built from the same weight
+    $\rho$, hence $r\ell\leq d^2$. For a general reduced full-support datum,
+    however, $\rho$ need not be symmetric. The complete network then inserts
+    $\lvert\rho^{\mathsf T})$ while stabilization supplies
+    $\lvert\rho)$, so an additional same-gate retained-network argument is
+    still required. This is one reason the present theorem remains not ready.
 
     If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
     Theorem~\ref{thm:mpu_source_gates_two_site_factorization} gives the exact

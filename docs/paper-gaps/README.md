@@ -21,8 +21,9 @@ For the MPU index of arXiv:1703.09188:
   source-gate work predating the correction to be revalidated from its current
   declaration, and it records that the printed weight $I_d\otimes\rho$ and the
   column-stacking transfer fixed pair differ by a transpose for non-diagonal
-  $\rho$, which the complete source-$u$ and source-$v$ network theorems carry
-  on the inserted vector $|\rho^{\mathsf T})$.
+  $\rho$, which the source-$u$ Gram and complete source-$v$ network formulas
+  carry on the inserted vector $|\rho^{\mathsf T})$ without changing the
+  source gate's weight.
 - `mpu_shift_specified_tensor_index_scope.tex` records that the computed shift
   formulas are values of the displayed tensors, while the source states the
   public blocking-independent MPU index. The remaining public construction is

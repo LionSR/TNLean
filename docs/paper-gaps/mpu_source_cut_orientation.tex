@@ -135,8 +135,8 @@ The two readings agree exactly when $\rho=\rho^{\mathsf T}$. In
 Ref.~\cite{Cirac2017MPU} the fixed point is diagonal, so the printed identity
 $X_1^\dagger(\operatorname{Id}\otimes\rho)X_1=\operatorname{Id}$ and the
 diagram \texttt{X1X2b} coincide there. For a general positive definite $\rho$
-they differ by a transpose, and the diagram is the reading used in the proofs
-of Lemma~III.7 and Theorem~III.8.
+the two coordinate expressions differ by a transpose; the source does not make
+that generalization.
 
 The formalization keeps the printed weight \leanid{MPOTensor.sourceWeight}
 and records the transpose on the inserted vector. The source-$u$ Gram closes
@@ -145,17 +145,18 @@ to a trace with $\lvert\rho^{\mathsf T})(\Phi\rvert$ in
 and the source-$v$ dressed Gram equation is equivalent to the two-letter
 identity with the insertion $\lvert\rho^{\mathsf T})(\Phi\rvert$ in
 \leanid{MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair}.
-Consequently the source gates of a tensor whose transfer fixed point is
-$\rho$ are the formal gates built from the weight $\rho^{\mathsf T}$; the
-forward direction of Theorem~III.8 is stated in this form in
-\leanid{MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry}, and the
+The source gates remain the gates built from the printed weight $\rho$; replacing
+that weight by $\rho^{\mathsf T}$ recomputes $X_1,Y_1$ and gives a different
+gate when $\rho$ is not symmetric. The source's diagonal convention makes the
+two inserted vectors equal, and
+\leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry} proves the forward direction
+of Theorem~III.8 on precisely that convention. The reparametrized theorem
+\leanid{MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry} is retained as an
+auxiliary statement, not as an identification of the original gate. The
 converse direction in
 \leanid{MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry} produces the
-witnesses $(\Phi\rvert$ and $\lvert\rho^{\mathsf T})$ for the weight $\rho$.
-No definition is changed. A later revision may instead replace the weight by
-$\operatorname{Id}_d\otimes\rho^{\mathsf T}$ and remove the transposes from
-these statements; every statement built on the source gates must then be
-revalidated once more.
+witnesses $(\Phi\rvert$ and $\lvert\rho^{\mathsf T})$ for the same weight
+$\rho$. No source-factor definition is changed.
 
 \section{Affected claims and audit boundary}
 
@@ -186,8 +187,8 @@ revalidation rule remains applicable to any future recovery of source-gate
 work predating this audit. The printed weight and the column-stacking transfer
 fixed pair differ by a transpose for non-diagonal $\rho$; the complete
 source-$u$ and source-$v$ network theorems carry this transpose on the
-inserted vector, so the source gates for the fixed point $\rho$ are the formal
-gates built from $\rho^{\mathsf T}$.
+inserted vector without changing the source gate's weight. The source's
+diagonal fixed point removes the mismatch in Theorem~III.8.
 
 \bibliographystyle{alpha}
 \bibliography{references}

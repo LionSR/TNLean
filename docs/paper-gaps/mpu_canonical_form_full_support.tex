@@ -186,7 +186,10 @@ complete source-$v$ equivalence from the proof of Theorem~III.8 of
 Ref.~\cite{Cirac2017MPU} is formalized as
 \leanid{MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair}; it
 needs no fixed-pair datum beyond a positive definite weight, and it carries
-the weight transpose recorded in \texttt{mpu\_source\_cut\_orientation.tex}.
+the inserted-vector transpose recorded in
+\texttt{mpu\_source\_cut\_orientation.tex}. The source's diagonal convention
+then gives \leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry} for the gate built
+from that same weight.
 % Source lines: paper_v2.tex 545--557 and 577--600.
 % Source equation labels: uUnitary and vUnitary.
 

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSumPermutation
 import TNLean.MPS.MPU.SourceVIsometry
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 
@@ -26,12 +27,11 @@ Cancelling $Z_1\otimes Z_2$ by `YZ=1` gives $v^\dagger v=\Id$.
 $X_1^\dagger(\Id_d\otimes\rho)X_1=\Id$ pairs the conjugated leg of $X_1$ with the
 row index of $\rho$, whereas the transfer fixed point inserted between two
 double-layer letters pairs the conjugated leg with the column index of $\rho$
-in the column-stacking coordinates of `Matrix.vec`.  The source works with a
-diagonal $\rho$, where both readings agree.  The formal statements keep the
-printed weight and insert the column-stacking vector of $\rho^{\mathsf T}$; the
-source gate for a tensor whose transfer fixed point is $\rho$ is therefore the
-gate built from the weight $\rho^{\mathsf T}$.  Documented in
-`docs/paper-gaps/mpu_source_cut_orientation.tex`.
+in the column-stacking coordinates of `Matrix.vec`.  The formal statements keep
+the printed weight and insert the column-stacking vector of
+$\rho^{\mathsf T}$. The source works with a diagonal $\rho$, where this vector
+is $|\rho)$ and the gate remains the one built from the same weight $\rho$.
+Documented in `docs/paper-gaps/mpu_source_cut_orientation.tex`.
 
 ## Main results
 
@@ -41,10 +41,11 @@ gate built from the weight $\rho^{\mathsf T}$.  Documented in
   undressed Gram entry is the two-letter entry with $|\rho^{\mathsf T})(\Phi|$ inserted.
 * `MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair`: the dressed Gram
   equation is equivalent to `simple2` with the insertion $|\rho^{\mathsf T})(\Phi|$.
-* `MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry`,
-  `MPOTensor.IsMPUSimple.rightRank_mul_leftRank_le`: the forward direction of
-  Theorem `ThmFund1`, $1\to2$: a simple tensor with stabilized fixed pair has
-  $v^\dagger v=\Id$ and $r\ell\le d^2$.
+* `MPOTensor.IsMPUSimple.sourceV_isIsometry`: the forward direction of Theorem
+  `ThmFund1`, $1\to2$, with the source's diagonal fixed point: the gate built
+  from that same weight has $v^\dagger v=\Id$.
+* `MPOTensor.IsMPUSimple.rightRank_mul_leftRank_le`: the resulting rank bound
+  $r\ell\le d^2$.
 * `MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry`: the direction $4\to1$ of
   Theorem `ThmFund1` from $v^\dagger v=\Id$.
 
@@ -61,37 +62,6 @@ open Matrix
 namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
-
-private lemma sum_comm_pair {A B C P R : Type*}
-    [Fintype A] [Fintype B] [Fintype C] [Fintype P] [AddCommMonoid R]
-    (f : A → B → C → P → R) :
-    (∑ a, ∑ b, ∑ c, ∑ p, f a b c p) = ∑ c, ∑ p, ∑ a, ∑ b, f a b c p := by
-  let e : (((A × B) × C) × P) ≃ (((C × P) × A) × B) :=
-    { toFun := fun x ↦ (((x.1.2, x.2), x.1.1.1), x.1.1.2)
-      invFun := fun x ↦ (((x.1.2, x.2), x.1.1.1), x.1.1.2)
-      left_inv := by rintro ⟨⟨⟨a, b⟩, c⟩, p⟩; rfl
-      right_inv := by rintro ⟨⟨⟨c, p⟩, a⟩, b⟩; rfl }
-  have h := Fintype.sum_equiv e
-    (fun x ↦ f x.1.1.1 x.1.1.2 x.1.2 x.2)
-    (fun x ↦ f x.1.2 x.2 x.1.1.1 x.1.1.2)
-    (fun _ ↦ rfl)
-  simpa only [Fintype.sum_prod_type] using h
-
-private lemma sum_perm_five {A B C P Q R : Type*}
-    [Fintype A] [Fintype B] [Fintype C] [Fintype P] [Fintype Q] [AddCommMonoid R]
-    (f : A → B → C → P → Q → R) :
-    (∑ a, ∑ b, ∑ c, ∑ p, ∑ q, f a b c p q) =
-      ∑ p, ∑ b, ∑ a, ∑ c, ∑ q, f a b c p q := by
-  let e : ((((A × B) × C) × P) × Q) ≃ ((((P × B) × A) × C) × Q) :=
-    { toFun := fun x ↦ ((((x.1.2, x.1.1.1.2), x.1.1.1.1), x.1.1.2), x.2)
-      invFun := fun x ↦ ((((x.1.1.2, x.1.1.1.2), x.1.2), x.1.1.1.1), x.2)
-      left_inv := by rintro ⟨⟨⟨⟨a, b⟩, c⟩, p⟩, q⟩; rfl
-      right_inv := by rintro ⟨⟨⟨⟨p, b⟩, a⟩, c⟩, q⟩; rfl }
-  have h := Fintype.sum_equiv e
-    (fun x ↦ f x.1.1.1.1 x.1.1.1.2 x.1.1.2 x.1.2 x.2)
-    (fun x ↦ f x.1.1.2 x.1.1.1.2 x.1.2 x.1.1.1.1 x.2)
-    (fun _ ↦ rfl)
-  simpa only [Fintype.sum_prod_type] using h
 
 /-- The dressed Gram entry of the paper gate $v=X_1\mathbin{-}X_2$ is the
 entry of two ordinary double-layer letters.  The physical pair `p` is starred
@@ -118,7 +88,7 @@ theorem sourceYTensor_conjTranspose_sourceV_gram_apply
   rw [hY, Matrix.mul_apply, doubleLayerTensor_mul_apply_four_u]
   simp only [Matrix.conjTranspose_apply, sourceV_mul_sourceYTensor_apply,
     Fintype.sum_prod_type, star_sum, star_mul', Finset.sum_mul_sum]
-  rw [sum_comm_pair]
+  rw [Fintype.sum_last_two_first_four]
   refine Finset.sum_congr rfl fun α _ ↦ Finset.sum_congr rfl fun β _ ↦
     Finset.sum_congr rfl fun j₁ _ ↦ Finset.sum_congr rfl fun j₂ _ ↦ ?_
   ring
@@ -149,7 +119,7 @@ theorem sourceYTensor_gram_apply_eq_doubleLayerTensor_rankOne_mul_apply
   rw [h, Matrix.mul_apply]
   simp only [Matrix.conjTranspose_apply]
   rw [sourceYTensor_gram_eq_four_u_weighted]
-  conv_rhs => rw [sum_perm_five]
+  conv_rhs => rw [Fintype.sum_permute_five]
   refine Finset.sum_congr rfl fun i₁ _ ↦ Finset.sum_congr rfl fun β' _ ↦
     Finset.sum_congr rfl fun β _ ↦ Finset.sum_congr rfl fun δ _ ↦
     Finset.sum_congr rfl fun i₂ _ ↦ ?_
@@ -197,17 +167,15 @@ theorem sourceVDressedGram_iff_simple2_transpose_fixed_pair
     dsimp only at hA hB
     rw [hA, hB, h]
 
-/-- Theorem `ThmFund1`, $1\to2$: a simple tensor whose normalized double-layer
-diagonal stabilizes to $|\rho)(\Phi|$ has $v^\dagger v=\Id$ for the paper gate
-$v$ built from the weight $\rho^{\mathsf T}$.
+/-- A simple tensor whose normalized double-layer diagonal stabilizes to
+$|\rho)(\Phi|$ has $v^\dagger v=\Id$ for the auxiliary gate obtained by
+recomputing the source factors with the weight $\rho^{\mathsf T}$.
 
-The supplied-projector theorem aligns `simple2` with the stabilized pair,
-the complete network gives the dressed Gram equation, and $Z_1\otimes Z_2$
-cancels the dressing by `YZ=1`.  The transposed weight is the source-weight
-orientation described in the module docstring.
-
-Source: arXiv:1703.09188, proof of Theorem `ThmFund1`, $1\to2$
-(lines 577--588). -/
+This is the reparametrized-weight consequence of the complete network. It is
+not the source gate built from the fixed-point weight $\rho$ unless
+$\rho^{\mathsf T}=\rho$. The source assumes that $\rho$ is diagonal before
+its proof of Theorem `ThmFund1`, $1\to2$ (arXiv:1703.09188, lines 495 and
+577--588). -/
 theorem IsMPUSimple.sourceV_transpose_isIsometry [NeZero d]
     {U : MPOTensor d D} (hU : IsMPUSimple U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (J : ℕ) (hJ : 0 < J)
@@ -218,6 +186,27 @@ theorem IsMPUSimple.sourceV_transpose_isIsometry [NeZero d]
   rw [← sourceVDressedGram_iff_isIsometry,
     sourceVDressedGram_iff_simple2_transpose_fixed_pair]
   simpa only [Matrix.transpose_transpose] using
+    hU.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ J hJ hpower
+
+/-- Theorem `ThmFund1`, $1\to2$: for the diagonal fixed point used by the
+source, the paper gate $v$ built from that same weight satisfies
+$v^\dagger v=\Id$.
+
+The diagonal hypothesis identifies the inserted vector
+$|\rho^{\mathsf T})$ with the stabilized vector $|\rho)$, after which the
+complete network and `YZ=1` give the isometry. Source: arXiv:1703.09188,
+lines 495 and 577--588. -/
+theorem IsMPUSimple.sourceV_isIsometry [NeZero d]
+    {U : MPOTensor d D} (hU : IsMPUSimple U)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (hρdiag : ρ.IsDiag)
+    (J : ℕ) (hJ : 0 < J)
+    (hpower : normalizedDiagonal (doubleLayerTensor U) ^ J =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
+    (sourceV U ρ hρ).IsIsometry := by
+  rw [← sourceVDressedGram_iff_isIsometry,
+    sourceVDressedGram_iff_simple2_transpose_fixed_pair]
+  simpa only [hρdiag.isSymm.eq] using
     hU.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ J hJ hpower
 
 /-- Theorem `ThmFund1`, $1\to2$, rank consequence: a simple tensor with
