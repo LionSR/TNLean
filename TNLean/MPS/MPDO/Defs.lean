@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.Word
+import TNLean.Algebra.ListOfFn
 import TNLean.MPS.Defs
 import QICLean.Kraus.Transfer
 import Mathlib.LinearAlgebra.Matrix.PosDef
@@ -227,13 +228,8 @@ theorem evalWord_ofFn_cons_snoc (M : MPOTensor d D) {K : ℕ}
         (List.ofFn (Fin.cons i₁ (Fin.snoc σ i₂)))
         (List.ofFn (Fin.cons j₁ (Fin.snoc τ j₂))) =
       M i₁ j₁ * evalWord M (List.ofFn σ) (List.ofFn τ) * M i₂ j₂ := by
-  have hσ : List.ofFn (Fin.snoc σ i₂) = List.ofFn σ ++ [i₂] := by
-    conv_lhs => rw [List.ofFn_succ' (Fin.snoc σ i₂)]
-    simp [Fin.snoc_castSucc, Fin.snoc_last]
-  have hτ : List.ofFn (Fin.snoc τ j₂) = List.ofFn τ ++ [j₂] := by
-    conv_lhs => rw [List.ofFn_succ' (Fin.snoc τ j₂)]
-    simp [Fin.snoc_castSucc, Fin.snoc_last]
-  rw [List.ofFn_cons, List.ofFn_cons, evalWord_cons, hσ, hτ,
+  rw [List.ofFn_cons, List.ofFn_cons, evalWord_cons,
+    List.ofFn_snoc, List.ofFn_snoc,
     evalWord_append M (List.ofFn σ) (List.ofFn τ) [i₂] [j₂] (by simp)]
   simp [evalWord, Matrix.mul_assoc]
 

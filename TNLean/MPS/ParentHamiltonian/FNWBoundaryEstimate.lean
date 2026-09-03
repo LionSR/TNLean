@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.WeightedSupertrace
 import QICLean.Kraus.TracePairing
+import TNLean.Algebra.ListOfFn
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryConvention
 import TNLean.MPS.ParentHamiltonian.FNWTransferDecay
 
@@ -362,9 +363,8 @@ private theorem fnwBoundaryMap_snoc
     (A : MPSTensor d D) (N : ℕ) (B : Mat) (μ : Fin d) (σ : Cfg d N) :
     fnwBoundaryMap (fun ν => (A ν)ᴴ) (N + 1) B (Fin.snoc σ μ) =
       fnwBoundaryMap (fun ν => (A ν)ᴴ) N (B * A μ) σ := by
-  rw [fnwBoundaryMap_apply, fnwBoundaryMap_apply, List.ofFn_succ']
-  simp only [Fin.snoc_castSucc, Fin.snoc_last]
-  rw [List.concat_eq_append, Kraus.evalWord_append]
+  rw [fnwBoundaryMap_apply, fnwBoundaryMap_apply, List.ofFn_snoc,
+    Kraus.evalWord_append]
   simp only [Kraus.evalWord, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, Matrix.conjTranspose_one, Matrix.one_mul,
     Matrix.mul_assoc]

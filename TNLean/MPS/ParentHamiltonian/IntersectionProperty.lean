@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ListOfFn
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.TracePairing
@@ -82,17 +83,6 @@ injectivity of the ground-space map.
 -/
 
 open scoped Matrix BigOperators
-
-namespace List
-
-/-- `List.ofFn` distributes over `Fin.snoc`: appending one element to a function
-yields the corresponding list concatenation. -/
-theorem ofFn_snoc {α : Type*} {n : ℕ} (f : Fin n → α) (x : α) :
-    List.ofFn (Fin.snoc f x) = List.ofFn f ++ [x] := by
-  conv_lhs => rw [List.ofFn_succ' (Fin.snoc f x)]
-  simp [Fin.snoc_castSucc, Fin.snoc_last]
-
-end List
 
 namespace MPSTensor
 
