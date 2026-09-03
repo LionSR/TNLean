@@ -1307,6 +1307,359 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     dimension is at least one.
 \end{proof}
 
+\begin{definition}[Prescribed defect maps]
+    \label{def:mpug_defect_maps}
+    \lean{TNLean.Algebra.DefectMaps}
+    \leanok
+    \discussion{7569}
+    Let $\mathcal H_{\mathrm m}$ be the matter space of two sites. Prescribed
+    defect maps assign to every ordered pair $(a,b)\in G^2$ a defect subspace
+    \begin{align}
+        \mathcal K_{a,b} & \subseteq\mathcal H_{\mathrm m}
+    \end{align}
+    together with a map $D_{a,b}$ of $\mathcal H_{\mathrm m}$ whose
+    restriction to that subspace is an isometry: for every
+    $\ket{\xi}\in\mathcal K_{a,b}$,
+    \begin{align}
+        D_{a,b}^\dagger D_{a,b}\ket{\xi}
+         & =\ket{\xi}.
+        \label{eq:mpug_defect_isometry}
+    \end{align}
+    When the fusion scalars are not block independent, the state-level
+    construction of~\cite[lines~4215--4260]{FrancoRubio2025MPUGauging}
+    prescribes the modified fusion operators only on such subspaces.
+    % Source anchor: arXiv:2502.20257, lemma:modif and the sentence closing
+    % its proof.
+\end{definition}
+
+\begin{definition}[Full unitary completion class]
+    \label{def:mpug_completion_class}
+    \lean{TNLean.Algebra.DefectMaps.IsCompletion,
+        TNLean.Algebra.DefectMaps.completionClass,
+        TNLean.Algebra.DefectMaps.mem_completionClass_iff}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_defect_maps}
+    The full completion class of prescribed defect maps
+    $D=(D_{a,b})_{a,b\in G}$ is
+    \begin{align}
+        \mathfrak C(D)
+         & =\left\{R=(U_{a,b})_{a,b\in G}:
+        U_{a,b}\in\mathrm U(\mathcal H_{\mathrm m}),\
+        U_{a,b}|_{\mathcal K_{a,b}}=D_{a,b}|_{\mathcal K_{a,b}}\right\}.
+        \label{eq:mpug_completion_class}
+    \end{align}
+    A completion is the entire family $(U_{a,b})_{a,b\in G}$, not one
+    selected operator of that family. The extension of $D_{a,b}$ to the whole
+    of $\mathcal H_{\mathrm m}$ is not unique, as observed at the end of the
+    proof of the modified-fusion lemma
+    of~\cite[lines~4215--4260]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Transport identity for a completion]
+    \label{thm:mpug_completion_transport}
+    \lean{TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_prescribed,
+        TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_mulVec,
+        TNLean.Algebra.DefectMaps.IsCompletion.unitaryFactorizationComparison_mulVec,
+        TNLean.Algebra.DefectMaps.IsCompletion.unitaryFactorizationComparison_gaussLegAction_mulVec}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_completion_class,
+        def:mpug_unitary_factorization_comparison,
+        def:mpug_gauss_leg_action}
+    Let $R=(U_{a,b})\in\mathfrak C(D)$, let
+    $\ket{\xi}\in\mathcal K_{a,b}$ and $\ket{\eta}\in\mathcal K_{c,d}$, and
+    assume the exact covariance
+    \begin{align}
+        D_{a,b}\ket{\xi} & =D_{c,d}\ket{\eta}.
+        \label{eq:mpug_prescribed_covariance}
+    \end{align}
+    Then
+    \begin{align}
+        U_{a,b}\ket{\xi}          & =D_{a,b}\ket{\xi},
+        \label{eq:mpug_completion_agrees}                                    \\
+        U_{a,b}\ket{\xi}          & =U_{c,d}\ket{\eta},
+        \label{eq:mpug_completion_covariance}                                \\
+        \lambda_{a,b}^{c,d}\ket{\xi} & =\ket{\eta}.
+        \label{eq:mpug_completion_transport}
+    \end{align}
+    Taking $(c,d)=T_g(a,b)$ gives the transport identity used for the
+    modified Gauss laws of~\cite[lines~4325--4335]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_completion_class,
+        thm:mpug_unitary_factorization_comparison_laws}
+    Identity~(\ref{eq:mpug_completion_agrees}) is the defining property of a
+    completion on the defect subspace. Applying it at $(a,b)$ and at $(c,d)$
+    and inserting~(\ref{eq:mpug_prescribed_covariance})
+    gives~(\ref{eq:mpug_completion_covariance}), an equality of vectors in the
+    whole matter space. Multiplying that equality by $U_{c,d}^\dagger$ and
+    using $U_{c,d}^\dagger U_{c,d}=\Id$ gives
+    \begin{align}
+        \lambda_{a,b}^{c,d}\ket{\xi}
+         & =U_{c,d}^\dagger U_{a,b}\ket{\xi}
+        =U_{c,d}^\dagger U_{c,d}\ket{\eta}
+        =\ket{\eta}.
+    \end{align}
+    The adjoint is applied only after the equality in the whole matter space
+    is available; no step asserts that $U_{c,d}^\dagger$ restricts to
+    $D_{c,d}^\dagger$ on a defect subspace.
+\end{proof}
+
+\begin{definition}[Label action at one window]
+    \label{def:mpug_chain_label_action}
+    \lean{MPOTensor.chainLabelAction,
+        MPOTensor.extractWindow_chainLabelAction_zero,
+        MPOTensor.extractWindow_chainLabelAction_one}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_gauss_leg_action}
+    Let $\alpha=(a_1,\ldots,a_N)$ be a configuration of gauge labels on a
+    periodic chain of length $N\geq2$. For a window $(j,j+1)$ and $g\in G$,
+    the configuration $T_{j,g}\alpha$ carries the labels
+    \begin{align}
+        \left(a_jg^{-1},ga_{j+1}\right)
+    \end{align}
+    on that window and agrees with $\alpha$ at every other site.
+\end{definition}
+
+\begin{theorem}[Composition of the label action]
+    \label{thm:mpug_chain_label_action_mul}
+    \lean{MPOTensor.chainLabelAction_one,
+        MPOTensor.chainLabelAction_chainLabelAction,
+        MPOTensor.chainLabelActionEquiv,
+        MPOTensor.chainLabelActionEquiv_apply}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_chain_label_action}
+    For all $g,h\in G$,
+    \begin{align}
+        T_{j,e}      & =\id,                     \\
+        T_{j,g}T_{j,h} & =T_{j,gh}.
+        \label{eq:mpug_chain_label_action_mul}
+    \end{align}
+    In particular $T_{j,g}$ is a bijection of gauge-label configurations with
+    inverse $T_{j,g^{-1}}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_chain_label_action}
+    Outside the window both sides leave $\alpha$ unchanged. On the window,
+    replacing the labels twice keeps only the second replacement, and the two
+    labels are
+    \begin{align}
+        \left(a_jh^{-1}g^{-1},gha_{j+1}\right)
+         & =\left(a_j(gh)^{-1},(gh)a_{j+1}\right).
+    \end{align}
+    At $g=e$ the labels are unchanged, so $T_{j,e}=\id$, and the composition
+    law with $h=g^{-1}$ gives the inverse.
+\end{proof}
+
+\begin{definition}[Placed Gauss operator of a completion]
+    \label{def:mpug_placed_gauss_operator}
+    \lean{MPOTensor.gaussWindowOperator,
+        MPOTensor.gaussWindowOperator_apply,
+        MPOTensor.placedGaussOperator}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_gauss_operator,
+        def:mpug_placed_gauss_projector,
+        def:mpug_completion_class}
+    Let $R\in\mathfrak C(D)$ and let a chain site carry one matter index and
+    one gauge label. Relabelling the row and column coordinates of
+    $\mathcal G_g$ by the bijection $\kappa$ of
+    Definition~\ref{def:mpug_placed_gauss_projector} and embedding the result
+    on the periodic window $(j,j+1)$ defines
+    \begin{align}
+        \widetilde{\mathcal G}^{j,j+1}_g(R)
+         & =\operatorname{Embed}_{j,j+1}\bigl(\widetilde{\mathcal G}_g(R)\bigr),
+        \label{eq:mpug_placed_gauss_operator}
+    \end{align}
+    the modified Gauss law
+    of~\cite[lines~4325--4335]{FrancoRubio2025MPUGauging}, whose block from
+    $(a,b)$ to $T_g(a,b)$ is $U_{T_g(a,b)}^\dagger U_{a,b}$.
+\end{definition}
+
+\begin{theorem}[The placed projector is the average of the placed Gauss operators]
+    \label{thm:mpug_placed_gauss_projector_average}
+    \lean{MPOTensor.placedGaussProjector_eq_average}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_placed_gauss_operator}
+    For every window $(j,j+1)$,
+    \begin{align}
+        \widetilde P_j(R)
+         & =\frac{1}{|G|}\sum_{g\in G}\widetilde{\mathcal G}^{j,j+1}_g(R).
+        \label{eq:mpug_placed_gauss_projector_average}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_gauss_projector, def:mpug_placed_gauss_operator}
+    Comparing matrix entries, the relabelling is entrywise and the embedding
+    multiplies each entry by the indicator that the two chain configurations
+    agree outside the window. Both operations commute with the normalized sum
+    over $G$ defining the local projector kernel
+    in~(\ref{eq:mpug_gauss_projector}).
+\end{proof}
+
+\begin{definition}[Gauged vector of matter defect states]
+    \label{def:mpug_gauged_vector}
+    \lean{MPOTensor.gaugedMatter,
+        MPOTensor.gaugedLabel,
+        MPOTensor.gaugedVector,
+        MPOTensor.gaugedVector_apply}
+    \leanok
+    \discussion{7569}
+    Every chain configuration splits into its matter part and its gauge-label
+    part. Given matter defect states $\ket{\Psi_\alpha}$ indexed by the
+    gauge-label configurations $\alpha$ of a chain of length $N$, the gauged
+    vector is
+    \begin{align}
+        \ket{\Psi_{\mathrm{gauged}}}
+         & =\sum_\alpha\ket{\Psi_\alpha}\otimes\ket{\alpha},
+        \label{eq:mpug_gauged_vector}
+    \end{align}
+    whose component at a chain configuration is the component of
+    $\ket{\Psi_\alpha}$ at its matter part, $\alpha$ being its gauge-label
+    part. This is the gauged state of
+    \cite[lines~4325--4335]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{definition}[Local defect support and exact defect covariance]
+    \label{def:mpug_defect_state_hypotheses}
+    \lean{MPOTensor.HasDefectSupport,
+        MPOTensor.HasPrescribedDefectCovariance}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_defect_maps, def:mpug_chain_label_action,
+        def:mpug_gauged_vector}
+    The matter defect states have local defect support when, for every
+    $\alpha$ and every window $(j,j+1)$ whose adjacent labels are
+    $(a_j,a_{j+1})$, the matter support of $\ket{\Psi_\alpha}$ lies in
+    \begin{align}
+        \mathcal K_{a_j,a_{j+1}}\otimes\mathcal H_{\mathrm{rest}}.
+    \end{align}
+    They satisfy exact defect covariance when
+    \begin{align}
+        \left(D_{a_j,a_{j+1}}\otimes\id_{\mathrm{rest}}\right)
+        \ket{\Psi_\alpha}
+         & =\left(D_{T_g(a_j,a_{j+1})}\otimes\id_{\mathrm{rest}}\right)
+        \ket{\Psi_{T_{j,g}\alpha}}
+        \label{eq:mpug_exact_defect_covariance}
+    \end{align}
+    for every $\alpha$, every window $(j,j+1)$, and every $g\in G$.
+\end{definition}
+
+\begin{theorem}[Universal invariant vector]
+    \label{thm:mpug_universal_invariant_vector}
+    \lean{MPOTensor.embedLocalOperator_mulVec_replaceWindow,
+        MPOTensor.placedGaussOperator_mulVec_gaugedVector,
+        MPOTensor.placedGaussProjector_mulVec_gaugedVector}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_placed_gauss_operator,
+        def:mpug_defect_state_hypotheses,
+        thm:mpug_completion_transport,
+        thm:mpug_chain_label_action_mul,
+        thm:mpug_placed_gauss_projector_average}
+    Assume local defect support and exact defect
+    covariance~(\ref{eq:mpug_exact_defect_covariance}). For every
+    $R\in\mathfrak C(D)$, every window $(j,j+1)$, and every $g\in G$,
+    \begin{align}
+        \widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\Psi_{\mathrm{gauged}}}
+         & =\ket{\Psi_{\mathrm{gauged}}},
+        \label{eq:mpug_universal_invariant_vector}                     \\
+        \widetilde P_j(R)\ket{\Psi_{\mathrm{gauged}}}
+         & =\ket{\Psi_{\mathrm{gauged}}}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_completion_transport,
+        thm:mpug_chain_label_action_mul,
+        thm:mpug_placed_gauss_projector_average,
+        def:mpug_gauss_operator}
+    Fix a chain configuration and let $\alpha$ be its gauge-label part, with
+    $(a,b)=(a_j,a_{j+1})$ the two labels adjacent to the window. In the
+    column of $\widetilde{\mathcal G}^{j,j+1}_g(R)$ indexed by that
+    configuration only the gauge labels $T_{j,g^{-1}}\alpha$ survive, so with
+    $\beta=T_{j,g^{-1}}\alpha$ the component of
+    $\widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\Psi_{\mathrm{gauged}}}$ equals
+    the component of
+    \begin{align}
+        \left(U_{a,b}^\dagger U_{ag,g^{-1}b}
+        \otimes\id_{\mathrm{rest}}\right)\ket{\Psi_\beta},
+    \end{align}
+    since the labels of $\beta$ adjacent to the window are $(ag,g^{-1}b)$ and
+    $T_g(ag,g^{-1}b)=(a,b)$, whence $T_{j,g}\beta=\alpha$ by the composition
+    law~(\ref{eq:mpug_chain_label_action_mul}). Local defect support puts the
+    matter slices of $\ket{\Psi_\beta}$ and $\ket{\Psi_\alpha}$ over that
+    window in $\mathcal K_{ag,g^{-1}b}$ and $\mathcal K_{a,b}$, and exact
+    covariance~(\ref{eq:mpug_exact_defect_covariance}) relates them, so the
+    transport identity~(\ref{eq:mpug_completion_transport}) turns that vector
+    into $\ket{\Psi_\alpha}$. Identifying the label configuration $\beta$ with
+    $\alpha$ through the bijection $T_{j,g}$ is the reindexing of the sum
+    over gauge-label configurations in~(\ref{eq:mpug_gauged_vector}). Averaging
+    over $g$ and using~(\ref{eq:mpug_placed_gauss_projector_average}) gives the
+    second identity.
+\end{proof}
+
+\begin{definition}[Gauge-invariant subspace of a completion]
+    \label{def:mpug_gauge_invariant_subspace}
+    \lean{MPOTensor.gaugeInvariantSubspace}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_common_fixed_subspace, def:mpug_placed_gauss_operator}
+    For $R\in\mathfrak C(D)$ and a chain of length $N\geq2$, the
+    gauge-invariant subspace is the common fixed subspace
+    \begin{align}
+        \mathcal V_N(R)
+         & =\left\{\ket{\phi}:
+        \widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\phi}=\ket{\phi}
+        \text{ for every }j\text{ and every }g\in G\right\}.
+        \label{eq:mpug_gauge_invariant_subspace}
+    \end{align}
+    No commutativity of the projectors on neighbouring windows is assumed;
+    \cite[lines~4325--4335]{FrancoRubio2025MPUGauging} observes that the
+    modified projectors need not commute.
+\end{definition}
+
+\begin{theorem}[The gauged vector spans at least one dimension]
+    \label{thm:mpug_gauge_invariant_subspace_finrank}
+    \lean{MPOTensor.gaugedVector_mem_gaugeInvariantSubspace,
+        MPOTensor.one_le_finrank_gaugeInvariantSubspace}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_gauge_invariant_subspace,
+        thm:mpug_universal_invariant_vector,
+        thm:mpug_common_fixed_subspace_finrank}
+    Under local defect support and exact defect
+    covariance~(\ref{eq:mpug_exact_defect_covariance}),
+    \begin{align}
+        \ket{\Psi_{\mathrm{gauged}}} & \in\mathcal V_N(R)
+    \end{align}
+    for every $R\in\mathfrak C(D)$. If moreover
+    $\ket{\Psi_{\mathrm{gauged}}}\neq0$, then
+    \begin{align}
+        \dim_{\C}\mathcal V_N(R) & \geq1.
+    \end{align}
+    Neither the minimum nor the maximum of $\dim_{\C}\mathcal V_N(R)$ over
+    $\mathfrak C(D)$ is asserted; the growth of this dimension with $N$ is the
+    question raised in
+    \cite[line~5198]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_universal_invariant_vector,
+        thm:mpug_mem_common_fixed_subspace,
+        thm:mpug_common_fixed_subspace_finrank}
+    Membership is~(\ref{eq:mpug_universal_invariant_vector}) at every window
+    and every group element. A nonzero member of a subspace forces its
+    dimension to be at least one.
+\end{proof}
+
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
     \lean{TNLean.Algebra.ScalarThreeCochain,
