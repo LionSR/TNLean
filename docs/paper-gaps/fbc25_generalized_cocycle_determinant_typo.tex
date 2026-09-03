@@ -14,6 +14,18 @@
 \maketitle
 \gapnote{local-correction}{resolved}
 
+\section{Setting}
+
+Let $G$ be a finite group acting on a set $\mathsf X$ of block labels, and let
+$\Omega\colon\mathsf X\times G^2\to\C^\times$ satisfy the generalized cocycle
+equation $d\Omega=1$.
+Ref.~\cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging} regards
+the group algebra $\C G$ as a Hilbert space of dimension $|G|$, defines the
+regular-action operators $X^x_g$ on it by
+$X^x_g\ket{k}=\Omega^{k^{-1}x}_{g,k}\ket{gk}$, and uses the generalized
+coboundary $[d\chi]^x_{g,h}=\chi^{h x}_g\chi^x_h/\chi^x_{gh}$ of a
+block-dependent one-cochain $\chi$.
+
 \section{Printed determinant identity}
 
 In the proof of \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging},
@@ -28,17 +40,29 @@ $\det(X^{h x}_g)\det(X^x_g)$, repeating the index $g$ in the second factor.
 
 \section{Corrected determinant identity}
 
-Taking determinants in
-Eq.~\ref{eq:fbc25_generalized_cocycle_operator} gives
+Take determinants on both sides of
+Eq.~\ref{eq:fbc25_generalized_cocycle_operator}. On the left the determinant
+is multiplicative; on the right the scalar $\Omega^x_{g,h}$ multiplies an
+operator on the $|G|$-dimensional space $\C G$, so it leaves the determinant
+scaled by its $|G|$-th power. Before any division this gives
+\begin{align}
+    \det(X^{h x}_g)\det(X^x_h)
+        &=\left(\Omega^x_{g,h}\right)^{|G|}\det(X^x_{gh}).
+    \label{eq:fbc25_generalized_cocycle_determinant_product}
+\end{align}
+The exponent $|G|$ in the conclusion of the lemma therefore originates in the
+scalar-determinant power law, applied to the dimension of $\C G$. Each
+$X^x_g$ factors as a regular permutation operator times an invertible diagonal
+operator, so $\det(X^x_{gh})\ne0$, and dividing
+Eq.~\ref{eq:fbc25_generalized_cocycle_determinant_product} by it gives
 \begin{align}
     \left(\Omega^x_{g,h}\right)^{|G|}
         &=\frac{\det(X^{h x}_g)\det(X^x_h)}{\det(X^x_{gh})}.
     \label{eq:fbc25_generalized_cocycle_determinant_corrected}
 \end{align}
 Thus the second numerator factor carries the index $h$. This is also the factor
-required by the stated choice $\chi^x_g=\det(X^x_g)$ and the preceding
-definition
-$[d\chi]^x_{g,h}=\chi^{h x}_g\chi^x_h/\chi^x_{gh}$.
+required by the stated choice $\chi^x_g=\det(X^x_g)$ and the generalized
+coboundary $[d\chi]^x_{g,h}=\chi^{h x}_g\chi^x_h/\chi^x_{gh}$.
 
 \section{Formal treatment}
 
