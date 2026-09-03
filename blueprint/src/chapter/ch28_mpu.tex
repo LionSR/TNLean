@@ -4912,8 +4912,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Let $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ be the normalized
     flattening, and let $E$ be its transfer matrix. A reduced full-support source
     datum for $\mathcal U$, with physical dimension $d>0$ and positive bond
-    dimension, consists of an integer $J>0$, a positive definite matrix $\rho$
-    with $\tr(\rho)=1$, and
+    dimension, consists of an integer $J>0$, a diagonal positive definite matrix
+    $\rho$ with $\tr(\rho)=1$, and
     $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$ such that
     \begin{align}
         E^J & =\lvert\rho)(\Phi\rvert.
@@ -5005,10 +5005,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_1q_1}
         \right).
     \end{align}
-    In particular, the weight is transposed rather than identified with
-    $\rho$. The retained-interior equality needed for the complete contraction
-    remains open.
-    % The retained-interior equality is tracked in Issue #7633.
+    Thus the fixed-pair weight is genuinely transposed at this stage. In the
+    diagonal canonical-form-II coordinates fixed above,
+    $\rho^{\mathsf T}=\rho$; this is the identification used in the complete
+    contraction below.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -5031,14 +5031,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Complete source-$u$ network contraction]
     \label{thm:mpu_source_u_complete_network}
-    \notready
+    \lean{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag}
+    \leanok
     \discussion{5982}
     \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_source_uv, def:mpo_family}
     % Revalidation boundary: docs/paper-gaps/mpu_source_cut_orientation.tex.
     Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$ and bond
-    dimension $D>0$. Let $\rho>0$ satisfy $\tr(\rho)=1$, put
-    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that for
-    some $J>0$ the normalized transfer matrix satisfies
+    dimension $D>0$. Let $\rho>0$ be diagonal with $\tr(\rho)=1$, and put
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. Suppose that for some
+    $J>0$ the normalized transfer matrix satisfies
     \begin{align}
         E^J & =\lvert\rho)(\Phi\rvert.
     \end{align}
@@ -5057,8 +5058,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source locator: paper_v2.tex, lines 545--557.
 \end{theorem}
 
-\begin{proof}
-    \uses{thm:mpu_source_u_transpose_fixed_pair_trace, thm:mpu_normalized_input_tail_closed_trace}
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_transpose_fixed_pair_trace, thm:mpu_normalized_diagonal_power_fixed_pair, thm:mpu_normalized_input_tail_closed_trace}
     Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace} closes the two
     external source gates as
     \begin{align}
@@ -5066,21 +5067,24 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_1q_1}
         \right).
     \end{align}
-    Cyclicity moves the first double-layer letter past the trace. It remains to
-    identify the resulting rank-one insertion with the $K$-site interior:
+    Diagonality gives $\rho^{\mathsf T}=\rho$. Set $K=JD^2$. The normalized
+    blocked-transfer identity supplies
+    \begin{align}
+        E^K & =\lvert\rho)(\Phi\rvert.
+    \end{align}
+    Substitute this direct fixed pair and use cyclicity of the trace to obtain
     \begin{align}
         \operatorname{tr}\!\left(
-        W^{p_1q_1}W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert
+        W^{p_2q_2}E^K W^{p_1q_1}
         \right)
          & =\operatorname{tr}\!\left(
         W^{p_1q_1}W^{p_2q_2}E^K
         \right).
     \end{align}
-    This retained-interior contraction remains open. It must preserve the two
-    unblocked endpoint letters while applying the supplied simple contractions
-    to the interior. The checked $Y_1$--$X_2$ mixed-kernel identities concern a
-    different network and do not prove this equality.
-    % The retained-interior contraction is tracked in Issue #7633.
+    Expanding the right-hand side as the normalized input tail leaves exactly
+    one $K$-site interior and the two unblocked one-site endpoints. The $p$
+    entries are starred, the $q$ entries are unstarred, and the contraction is
+    therefore the displayed input-first sum.
 \end{proof}
 
 \begin{theorem}[Complete source-$v$ network]
@@ -5224,7 +5228,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Admissible source-$u$ isometry]
     \label{lem:mpu_admissible_source_u_isometry}
-    \notready
+    \lean{MPOTensor.SourceFactors.sourceU_isIsometry_of_isDiag}
+    \leanok
     \discussion{5708}
     % **Scope restriction (supplied stabilized fixed pair):** this lemma assumes
     % the exact rank-one transfer identity explicitly, whereas source Lemma III.7
@@ -5232,9 +5237,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_source_uv}
     Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$ and bond
-    dimension $D>0$. Let $\rho>0$ satisfy $\tr(\rho)=1$, put
-    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that for
-    some $J>0$ the normalized transfer matrix satisfies
+    dimension $D>0$. Let $\rho>0$ be diagonal with $\tr(\rho)=1$, and put
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. Suppose that for some
+    $J>0$ the normalized transfer matrix satisfies
     \begin{align}
         E^J & =\lvert\rho)(\Phi\rvert.
     \end{align}
@@ -5248,7 +5253,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 545--557.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpu_source_u_complete_network, thm:mpu_normalized_input_tail_isometry}
     Set $K=JD^2$. The complete-network identity and input-first MPU unitarity
     give, for all retained physical pairs $p,q$,

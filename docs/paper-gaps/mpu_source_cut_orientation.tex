@@ -158,6 +158,31 @@ converse direction in
 witnesses $(\Phi\rvert$ and $\lvert\rho^{\mathsf T})$ for the same weight
 $\rho$. No source-factor definition is changed.
 
+For the source-$u$ gate, the transpose closure and the source's diagonal
+coordinates give a direct retained-window contraction. If the normalized
+transfer power supplies
+\begin{align}
+    E^J & =\lvert\rho)(\Phi\rvert,
+\end{align}
+then the reflected transfer identity at $K=JD^2$ and cyclicity of the trace
+give
+\begin{align}
+    \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+     & =\operatorname{tr}\!\left(
+       W^{p_1q_1}W^{p_2q_2}E^K
+       \right).
+    \label{eq:mpu_source_cut_orientation_direct_closure}
+\end{align}
+Expanding this trace produces one $K$-site input tail between two unblocked
+one-site endpoints. The $p$ entries are conjugated and the $q$ entries are not,
+so MPU tail isometry gives $u^\dagger u=\operatorname{Id}$. The corresponding
+declarations are
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm},
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag},
+and \leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isDiag}.
+This conclusion assumes the source's diagonal fixed point; it does not assert a
+source-$u$ theorem for arbitrary nonsymmetric $\rho$.
+
 \section{Affected claims and audit boundary}
 
 The transposed first cut affected source-factor recovery, physical adjunction,
@@ -173,8 +198,10 @@ Any source-$u$ or source-$v$ result written before this correction must be
 revalidated from its current declaration rather than accepted from an older
 compiled artifact. In particular, a proof must expose the $Y_2$--$Y_1$
 contraction for $u$ or the $X_1$--$X_2$ contraction for $v$, with the product
-orders shown above. The Chapter~28 Blueprint links only to declarations that
-were rebuilt after the correction.
+orders shown above. The supplied-fixed-pair source-$u$ contraction has now been
+revalidated in the source's diagonal canonical-form-II coordinates. Results
+outside this diagonal source-$u$ boundary still require the same
+statement-by-statement check.
 
 \section{Verdict}
 
@@ -185,10 +212,11 @@ paper gates, two-site factorizations, tensor products, and shift examples now
 use one consistent leg assignment. The correction is resolved, while the
 revalidation rule remains applicable to any future recovery of source-gate
 work predating this audit. The printed weight and the column-stacking transfer
-fixed pair differ by a transpose for non-diagonal $\rho$; the complete
-source-$u$ and source-$v$ network theorems carry this transpose on the
-inserted vector without changing the source gate's weight. The source's
-diagonal fixed point removes the mismatch in Theorem~III.8.
+fixed pair differ by a transpose for non-diagonal $\rho$; the source-$u$ Gram
+and source-$v$ network theorems carry this transpose on the inserted vector
+without changing the source gate's weight. The source's diagonal fixed point
+removes the mismatch in Theorem~III.8 and proves the supplied-fixed-pair
+source-$u$ isometry.
 
 \bibliographystyle{alpha}
 \bibliography{references}
