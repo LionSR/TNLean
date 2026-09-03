@@ -62,6 +62,21 @@ def gauge (β : ScalarCocycle G) (γ : ActionTensorGauge G X) (L : LSymbol G X) 
   fun x g h =>
     ((γ (g * h) x * β g h) / (γ g (h • x) * γ h x)) * L x g h
 
+/-- The identity fusion and action gauges leave an L-symbol unchanged. -/
+@[simp]
+theorem gauge_one (L : LSymbol G X) :
+    gauge (fun _ _ ↦ 1) (fun _ _ ↦ 1) L = L := by
+  funext x g h
+  simp [gauge]
+
+/-- Successive joint scalar gauges multiply both cochains pointwise. -/
+theorem gauge_comp (β₁ β₂ : ScalarCocycle G)
+    (γ₁ γ₂ : ActionTensorGauge G X) (L : LSymbol G X) :
+    gauge β₂ γ₂ (gauge β₁ γ₁ L) = gauge (β₁ * β₂) (γ₁ * γ₂) L := by
+  funext x g h
+  simp only [gauge, Pi.mul_apply]
+  (apply Units.ext; push_cast; field_simp)
+
 /-- Joint scalar gauges preserve compatibility, with the 3-cochain changed by
 the corresponding fusion gauge. -/
 theorem IsCompatible.gauge {L : LSymbol G X} {ω : ScalarThreeCochain G}

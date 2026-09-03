@@ -48,6 +48,7 @@ import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization
+import TNLean.Algebra.RestrictedScalarGauge
 import TNLean.Algebra.ScalarThreeCocycle
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleInversion
