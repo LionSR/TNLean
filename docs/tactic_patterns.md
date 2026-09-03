@@ -519,6 +519,35 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
   (`TNLean/MPS/Tactic/Basic.lean`).
 
+### generalize_decide — promoted
+- **Pattern:** abstract finitely many finite-type values occurring inside a
+  goal (`x 0`, `(s j).1.1`, `γ k`) into fresh variables, revert them, and
+  close the closed bit identity by `decide`:
+
+  ```lean
+  generalize x 0 = x0
+  generalize x 1 = x1
+  generalize x 2 = x2
+  generalize x 3 = x3
+  revert x0 x1 x2 x3
+  decide +revert
+  ```
+
+- **Seen:** fourteen occurrences across four files before promotion
+  (2026-09-03): the phase-table rows and bar-flip exponent identities in
+  `TNLean/MPS/MPDO/CZXGaussCircuitTuple.lean`, the involution, holonomy, fiber
+  coordinate, and label lemmas in
+  `TNLean/MPS/MPDO/CZXGaussInvariantSubspace.lean`, hypercube connectivity in
+  `TNLean/Algebra/HypercubePhasePotential.lean`, and the characteristic-two
+  identity in `TNLean/Algebra/MonomialFixedSubspace.lean`.
+- **Abstraction:** `generalize_decide t₁, …, tₙ` macro
+  (`TNLean/Algebra/GeneralizeDecide.lean`); the terms are abstracted in order
+  and `decide +revert` quantifies over the fresh variables.
+- **Notes:** all call sites now use the macro. The macro is meant for goals
+  whose only free data are values in small finite types with decidable
+  equality (`ZMod 2`, `ZMod 4`); a goal that still depends on other free
+  variables after abstraction fails with the usual `decide` message.
+
 ### finite-sum common-left-factor normalization — promoted
 - **Pattern:** a finite sum differs from a factored form only by pulling one
   index-independent left factor through summands of the form `a * f i * g i`.

@@ -3528,3 +3528,682 @@ $T_sT_s^*=\sigma(s)\mathbf 1$, nor the proposition identifying the MPU anomaly
 with the nontrivial time-reversal SPT class. Both statements require the tensor
 argument in \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}, beyond the
 scalar calculation above.
+
+\section{The gauge-invariant subspace of the CZX circuit tuple}
+\label{sec:mpug_czx_gauge_invariant}
+
+The CZX model of \cite[lines~4503--5183]{FrancoRubio2025MPUGauging} is the
+anomalous $\Z_2=\{e,g\}$ matrix product unitary acting on the GHZ state.
+After blocking, one site carries two matter qubits, and the fusion operators on
+two neighboring blocked sites are $\lambda^R_{e,e}=\lambda^R_{e,g}=\Id$,
+$\lambda^R_{g,e}=w_R$, together with the modified fusion operator
+$\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ introduced at the end of that
+passage. The question of \cite[lines~5198--5204]{FrancoRubio2025MPUGauging}
+asks whether the common $+1$ eigenspace of the resulting Gauss projectors is
+bounded or grows with the system size. This section answers it for the
+displayed circuit tuple $(\Id,\Id,w,\tilde\lambda)$: the dimension is $2^N$ on
+$N\geq3$ blocked sites. Nothing here identifies the displayed tuple
+with a member of the full physical completion class of the CZX defect data;
+that identification requires the three defect domains and maps not supplied
+by the displayed matrices.
+
+\subsection{Monomial operators and their common fixed space}
+
+\begin{definition}[Monomial matrix]
+    \label{def:mpug_monomial_matrix}
+    \lean{Matrix.monomial,
+        Matrix.monomial_apply,
+        Matrix.monomial_apply_perm,
+        Matrix.monomial_apply_of_ne}
+    \leanok
+    Let $\sigma$ be a permutation of a finite index set $S$ and let
+    $\varphi\colon S\to\C$. The monomial matrix $M(\sigma,\varphi)$ is the
+    operator on $\C^S$ with
+    \begin{align}
+        M(\sigma,\varphi)\ket{s} & =\varphi(s)\ket{\sigma(s)}.
+        \label{eq:mpug_monomial_matrix}
+    \end{align}
+    Its entry in row $\sigma(s)$ and column $s$ is $\varphi(s)$, and every
+    other entry vanishes.
+\end{definition}
+
+\begin{theorem}[Calculus of monomial matrices]
+    \label{thm:mpug_monomial_matrix_laws}
+    \lean{Matrix.monomial_mulVec,
+        Matrix.monomial_mulVec_eq_self_iff,
+        Matrix.monomial_mul_monomial,
+        Matrix.conjTranspose_monomial,
+        Matrix.smul_monomial,
+        Matrix.monomial_one,
+        Matrix.reindex_monomial,
+        Matrix.monomial_mem_unitaryGroup}
+    \leanok
+    \uses{def:mpug_monomial_matrix}
+    A vector $v\in\C^S$ is fixed by $M(\sigma,\varphi)$ if and only if
+    $v_{\sigma(s)}=\varphi(s)v_s$ for every $s\in S$. Products, adjoints,
+    scalar multiples, and simultaneous relabellings of monomial matrices are
+    monomial:
+    \begin{align}
+        M(\sigma,\varphi)M(\tau,\psi)
+         & =M\bigl(\sigma\tau,\ s\mapsto\varphi(\tau(s))\psi(s)\bigr),
+        \label{eq:mpug_monomial_mul}                                               \\
+        M(\sigma,\varphi)^\dagger
+         & =M\bigl(\sigma^{-1},\ t\mapsto\overline{\varphi(\sigma^{-1}(t))}\bigr).
+        \label{eq:mpug_monomial_adjoint}
+    \end{align}
+    The identity is $M(\id,1)$, and $M(\sigma,\varphi)$ is unitary when
+    $|\varphi(s)|=1$ for every $s$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_monomial_matrix}
+    The action of $M(\sigma,\varphi)$ on a vector is
+    $(M(\sigma,\varphi)v)_t=\varphi(\sigma^{-1}(t))v_{\sigma^{-1}(t)}$, which
+    gives the fixed-vector criterion after the substitution $t=\sigma(s)$.
+    The remaining identities are entrywise: in a product only the column
+    $\tau(s)$ of the first factor meets the row $\tau(s)$ of the second, the
+    adjoint transposes the single nonzero entry of each column, and a
+    relabelling conjugates the permutation. For unitarity,
+    (\ref{eq:mpug_monomial_mul}) and (\ref{eq:mpug_monomial_adjoint}) give
+    $M(\sigma,\varphi)^\dagger M(\sigma,\varphi)=M(\id,|\varphi|^2)=\Id$.
+\end{proof}
+
+\begin{theorem}[Flat phases on the hypercube have a potential]
+    \label{thm:mpug_hypercube_potential}
+    \lean{TNLean.Algebra.hypercube_induction,
+        TNLean.Algebra.exists_potential_of_flat}
+    \leanok
+    Let $M$ be a commutative group and let
+    $\varphi_j\colon\mathbb F_2^r\to M$ for $0\leq j<r$ be phases attached
+    to the edges $(\gamma,\gamma+e_j)$ of the hypercube. Assume that
+    \begin{align}
+        \varphi_j(\gamma)\varphi_j(\gamma+e_j)
+         & =1,
+        \label{eq:mpug_hypercube_involutive}       \\
+        \varphi_j(\gamma)\varphi_k(\gamma+e_j)
+         & =\varphi_k(\gamma)\varphi_j(\gamma+e_k)
+        \label{eq:mpug_hypercube_flat}
+    \end{align}
+    for all $j,k$ and $\gamma$. Then there is $\Phi\colon\mathbb F_2^r\to M$
+    with $\Phi(0)=1$ and $\Phi(\gamma+e_j)=\varphi_j(\gamma)\Phi(\gamma)$ for
+    every $j$ and $\gamma$. In addition, a property of vectors of
+    $\mathbb F_2^r$ that holds at $0$ and is preserved by every coordinate
+    flip holds everywhere.
+\end{theorem}
+
+\begin{proof}\leanok
+    Connectivity: every $\gamma$ is the sum of the $e_j$ over its support,
+    so induction on the support carries the property from $0$ to $\gamma$.
+
+    The potential is constructed by induction on $r$. Write
+    $\gamma=(a,\gamma')$ with $a\in\mathbb F_2$ and $\gamma'\in\mathbb F_2^{r-1}$.
+    The phases $\gamma'\mapsto\varphi_{j+1}(0,\gamma')$ for $0\leq j<r-1$
+    satisfy (\ref{eq:mpug_hypercube_involutive}) and
+    (\ref{eq:mpug_hypercube_flat}) on $\mathbb F_2^{r-1}$, so the induction
+    hypothesis gives a potential $\Phi'$ for them. Define
+    \begin{align}
+        \Phi(0,\gamma') & =\Phi'(\gamma'),
+        \qquad
+        \Phi(1,\gamma')=\varphi_0(0,\gamma')\Phi'(\gamma').
+        \label{eq:mpug_hypercube_potential_step}
+    \end{align}
+    The edge relation in direction $0$ at $(0,\gamma')$ is the definition,
+    and at $(1,\gamma')$ it follows from
+    (\ref{eq:mpug_hypercube_involutive}). The edge relation in a direction
+    $j+1$ at $(0,\gamma')$ is the relation for $\Phi'$, and at $(1,\gamma')$
+    it is the relation for $\Phi'$ combined with
+    (\ref{eq:mpug_hypercube_flat}) for the square spanned by the directions
+    $0$ and $j+1$ at $(0,\gamma')$.
+\end{proof}
+
+\begin{definition}[Trivial holonomy on a fiber]
+    \label{def:mpug_trivial_holonomy}
+    \lean{TNLean.Algebra.fiberFlip,
+        TNLean.Algebra.fiberFlip_apply,
+        TNLean.Algebra.IsTrivialHolonomy}
+    \leanok
+    Let $X$ be a finite set and consider the basis $X\times\mathbb F_2^r$.
+    For $0\leq j<r$ let $\sigma_j$ be the coordinate flip
+    $(x,\gamma)\mapsto(x,\gamma+e_j)$ and let
+    $\varphi_j\colon X\times\mathbb F_2^r\to\C$. The phases have trivial
+    holonomy on the fiber over $x\in X$ when
+    \begin{align}
+        \varphi_j(x,\gamma)\varphi_k(x,\gamma+e_j)
+         & =\varphi_k(x,\gamma)\varphi_j(x,\gamma+e_k)
+        \label{eq:mpug_trivial_holonomy}
+    \end{align}
+    for all $j,k$ and $\gamma\in\mathbb F_2^r$.
+\end{definition}
+
+\begin{theorem}[Monomial fixed-space criterion]
+    \label{thm:mpug_monomial_fixed_space_criterion}
+    \lean{TNLean.Algebra.reindex_mulVec,
+        TNLean.Algebra.commonFixedSubmodule_reindex,
+        TNLean.Algebra.finrank_commonFixedSubmodule_reindex,
+        TNLean.Algebra.add_self_eq_zero_pi_zmod_two,
+        TNLean.Algebra.eq_zero_of_mem_commonFixedSubmodule_monomial_fiberFlip,
+        TNLean.Algebra.finrank_commonFixedSubmodule_monomial_fiberFlip}
+    \leanok
+    \uses{def:mpug_monomial_matrix, def:mpug_trivial_holonomy,
+        def:mpug_common_fixed_subspace}
+    In the setting of Definition~\ref{def:mpug_trivial_holonomy}, let
+    $T_j=M(\sigma_j,\varphi_j)$ and assume that every $T_j$ is an involution,
+    that is, $\varphi_j(s)\varphi_j(\sigma_j(s))=1$ for every basis element
+    $s$. Then
+    \begin{align}
+        \dim\mathcal V(T)
+         & =\#\{x\in X:\text{the phases have trivial holonomy on the fiber over }x\}.
+        \label{eq:mpug_monomial_fixed_space_count}
+    \end{align}
+    The dimension of a common fixed subspace is also unchanged by a
+    simultaneous relabelling of the basis.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_monomial_matrix_laws, thm:mpug_hypercube_potential,
+        thm:mpug_mem_common_fixed_subspace}
+    By Theorem~\ref{thm:mpug_monomial_matrix_laws}, a vector $v$ lies in
+    $\mathcal V(T)$ exactly when
+    $v_{(x,\gamma+e_j)}=\varphi_j(x,\gamma)v_{(x,\gamma)}$ for all $j$, $x$,
+    and $\gamma$. Let $X_0$ be the set of fibers with trivial holonomy and
+    consider the linear map $E\colon\mathcal V(T)\to\C^{X_0}$,
+    $v\mapsto(v_{(x,0)})_{x\in X_0}$.
+
+    $E$ is injective. If $v\in\mathcal V(T)$ vanishes at one point of a
+    fiber, the transport relation and the connectivity statement of
+    Theorem~\ref{thm:mpug_hypercube_potential} make it vanish on the whole
+    fiber. On a fiber with trivial holonomy, $v$ therefore vanishes as soon
+    as $v_{(x,0)}=0$. On a fiber where (\ref{eq:mpug_trivial_holonomy})
+    fails at some $(j,k,\gamma_0)$, transporting $v_{(x,\gamma_0)}$ along the
+    two paths to $(x,\gamma_0+e_j+e_k)$ gives two different phases times
+    $v_{(x,\gamma_0)}$, so $v_{(x,\gamma_0)}=0$ and again $v$ vanishes on the
+    fiber.
+
+    $E$ is surjective. Given $w\in\C^{X_0}$, take on each fiber with trivial
+    holonomy the potential $\Phi_x$ of
+    Theorem~\ref{thm:mpug_hypercube_potential} for the invertible phases
+    $\gamma\mapsto\varphi_j(x,\gamma)$, and set
+    $v_{(x,\gamma)}=w_x\Phi_x(\gamma)$ there and $v=0$ on the other fibers.
+    The potential relation is the transport relation, so $v\in\mathcal V(T)$,
+    and $\Phi_x(0)=1$ gives $Ev=w$.
+
+    Hence $\dim\mathcal V(T)=\dim\C^{X_0}=\#X_0$. For the relabelling
+    statement, a relabelled matrix acts by relabelling the vector, acting,
+    and relabelling back, so the common fixed subspace is the image of the
+    original one under the coordinate relabelling.
+\end{proof}
+
+\begin{theorem}[Local Gauss operator of monomial matter unitaries]
+    \label{thm:mpug_gauss_operator_monomial}
+    \lean{TNLean.Algebra.gaussMonomialPerm,
+        TNLean.Algebra.gaussMonomialPerm_apply,
+        TNLean.Algebra.gaussMonomialPhase,
+        TNLean.Algebra.gaussOperator_eq_monomial}
+    \leanok
+    \uses{def:mpug_gauss_operator, def:mpug_monomial_matrix}
+    Suppose that every matter unitary of the tuple $R$ is monomial,
+    $R_{a,b}=M(\sigma_{a,b},\varphi_{a,b})$. Then the local Gauss operator
+    of Definition~\ref{def:mpug_gauss_operator} is the monomial operator
+    \begin{align}
+        \mathcal G_g\ket{i,(a,b)}
+         & =\overline{\varphi_{T_g(a,b)}\bigl(\sigma_{T_g(a,b)}^{-1}\sigma_{a,b}(i)\bigr)}\,
+        \varphi_{a,b}(i)\,
+        \ket{\sigma_{T_g(a,b)}^{-1}\sigma_{a,b}(i),\ T_g(a,b)}.
+        \label{eq:mpug_gauss_operator_monomial}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_monomial_matrix_laws, def:mpug_gauss_operator}
+    The block of $\mathcal G_g$ from $(a,b)$ to $T_g(a,b)$ is
+    $R_{T_g(a,b)}^\dagger R_{a,b}$, which is monomial by
+    (\ref{eq:mpug_monomial_mul}) and (\ref{eq:mpug_monomial_adjoint}); all
+    other blocks vanish.
+\end{proof}
+
+\begin{theorem}[Periodic placement of monomial operators]
+    \label{thm:mpug_embed_monomial}
+    \lean{MPOTensor.windowPerm,
+        MPOTensor.windowPerm_apply,
+        MPOTensor.embedLocalOperator_monomial,
+        MPOTensor.extractWindow_two,
+        MPOTensor.replaceWindow_two_apply}
+    \leanok
+    \uses{def:mpug_monomial_matrix}
+    Let $M(\sigma,\varphi)$ be a monomial operator on $L$ consecutive sites.
+    Its placement on the periodic window beginning at site $i$ of an $N$-site
+    chain is the monomial operator whose permutation replaces the window of a
+    configuration $s$ by $\sigma$ applied to that window and whose phase is
+    $\varphi$ evaluated on the window of $s$. For $L=2$ and $N\geq2$ the
+    window at $j$ is $(s_j,s_{j+1})$, and replacing it changes exactly the
+    sites $j$ and $j+1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_monomial_matrix}
+    The placed operator has entry $(t,s)$ equal to the window entry
+    $M(\sigma,\varphi)_{t_W,s_W}$ when $t$ and $s$ agree outside the window
+    and $0$ otherwise. Both conditions together say that $t$ is $s$ with its
+    window replaced by $\sigma(s_W)$, and the entry is then
+    $\varphi(s_W)$. The two-site statements are the cyclic offset
+    computations $(j+N-j)\bmod N=0$ and $(j+1+N-j)\bmod N=1$.
+\end{proof}
+
+\subsection{The displayed CZX circuit tuple}
+
+\begin{definition}[The displayed CZX circuit tuple]
+    \label{def:mpug_czx_circuit_tuple}
+    \lean{MPOTensor.CZX.bitFlip,
+        MPOTensor.CZX.pauliX,
+        MPOTensor.CZX.pauliZ,
+        MPOTensor.CZX.controlledZ,
+        MPOTensor.CZX.w,
+        MPOTensor.CZX.lambda,
+        MPOTensor.CZX.tildeLambda,
+        MPOTensor.CZX.siteBits,
+        MPOTensor.CZX.localBits,
+        MPOTensor.CZX.matterMatrix,
+        MPOTensor.CZX.gen,
+        MPOTensor.CZX.circuitTuple,
+        MPOTensor.CZX.circuitTuple_one,
+        MPOTensor.CZX.circuitTuple_gen_one,
+        MPOTensor.CZX.circuitTuple_gen_gen}
+    \leanok
+    \uses{def:mpug_monomial_matrix}
+    Number the four matter qubits of two neighboring blocked sites by
+    $0,1,2,3$, so that $(x_0,x_1)$ are the qubits of the first site and
+    $(x_2,x_3)$ those of the second, and write
+    $\ket{x}=\ket{x_0}\otimes\ket{x_1}\otimes\ket{x_2}\otimes\ket{x_3}$ for
+    $x\in\mathbb F_2^4$. The elementary gates act by
+    \begin{align}
+        X_r\ket{x}              & =\ket{x+e_r},          \\
+        Z_r\ket{x}              & =(-1)^{x_r}\ket{x},    \\
+        \mathrm{CZ}_{rs}\ket{x} & =(-1)^{x_rx_s}\ket{x},
+    \end{align}
+    and operator products act from right to left. Define
+    \begin{align}
+        w             & =(X_0X_1)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,(Z_2Z_3),
+        \label{eq:mpug_czx_w}                                                       \\
+        \lambda       & =-i\,(X_0X_1X_2Z_3)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,X_2,
+        \label{eq:mpug_czx_lambda}                                                  \\
+        \tilde\lambda & =\lambda Z_0.
+        \label{eq:mpug_czx_tilde_lambda}
+    \end{align}
+    These are the fusion operators $\lambda^R_{g,e}=w_R$ and
+    $\lambda^R_{g,g}$ and the modified fusion operator
+    $\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ of
+    \cite[lines~4503--5183]{FrancoRubio2025MPUGauging} in this qubit
+    numbering. The displayed circuit tuple, indexed by the ordered pair of
+    gauge labels in $\Z_2$ with $e\leftrightarrow0$ and $g\leftrightarrow1$,
+    is
+    \begin{align}
+        R^{\mathrm{CZX}}
+         & =\bigl(U_{0,0},U_{0,1},U_{1,0},U_{1,1}\bigr)
+        =\bigl(\Id,\Id,w,\tilde\lambda\bigr).
+        \label{eq:mpug_czx_tuple}
+    \end{align}
+    Each site index in $\{0,1,2,3\}$ is read as the pair of matter bits
+    $(m^{(1)},m^{(2)})$ with $m^{(1)}$ the leading binary digit, and the
+    four-qubit operators are transported to the two-site matter space by
+    this identification.
+    % Source anchor: arXiv:2502.20257, lines 4503--5183 (CZX model and modified
+    % fusion operator).
+\end{definition}
+
+\begin{theorem}[Phase tables of the CZX fusion operators]
+    \label{thm:mpug_czx_phase_tables}
+    \lean{MPOTensor.CZX.barFlip,
+        MPOTensor.CZX.barFlip_apply,
+        MPOTensor.CZX.barFlip_mul_barFlip,
+        MPOTensor.CZX.barFlip_symm,
+        MPOTensor.CZX.eExponent,
+        MPOTensor.CZX.hExponent,
+        MPOTensor.CZX.fExponent,
+        MPOTensor.CZX.neg_one_pow_val_add,
+        MPOTensor.CZX.w_eq,
+        MPOTensor.CZX.lambda_eq,
+        MPOTensor.CZX.tildeLambda_eq,
+        MPOTensor.CZX.fExponent_barFlip,
+        MPOTensor.CZX.eExponent_barFlip,
+        MPOTensor.CZX.matterBarFlip,
+        MPOTensor.CZX.matterBarFlip_symm,
+        MPOTensor.CZX.localBits_matterBarFlip,
+        MPOTensor.CZX.matterMatrix_monomial,
+        MPOTensor.CZX.w_mem_unitaryGroup,
+        MPOTensor.CZX.tildeLambda_mem_unitaryGroup}
+    \leanok
+    \uses{def:mpug_czx_circuit_tuple}
+    Write $\overline x=(x_0+1,x_1+1,x_2,x_3)$ and
+    \begin{align}
+        e(x) & =x_0x_1+x_1x_2+x_2+x_3,     \\
+        h(x) & =x_0x_1+x_1x_2+x_1+x_3,     \\
+        f(x) & =x_0x_1+x_1x_2+x_0+x_1+x_3.
+    \end{align}
+    Then
+    \begin{align}
+        w\ket{x}             & =(-1)^{e(x)}\ket{\overline x},
+        \label{eq:mpug_czx_w_action}                            \\
+        \lambda\ket{x}       & =-i(-1)^{h(x)}\ket{\overline x},
+        \label{eq:mpug_czx_lambda_action}                       \\
+        \tilde\lambda\ket{x} & =-i(-1)^{f(x)}\ket{\overline x},
+        \label{eq:mpug_czx_tilde_lambda_action}
+    \end{align}
+    the exponents satisfy $f(\overline x)=e(x)+1$ and
+    $e(\overline x)=f(x)+1$. After transport to the two-site matter coordinates,
+    $w$ and $\tilde\lambda$ are unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_monomial_matrix_laws, def:mpug_czx_circuit_tuple}
+    Each gate is monomial, so (\ref{eq:mpug_monomial_mul}) expresses each
+    product as a monomial operator. Reading (\ref{eq:mpug_czx_w}) from right
+    to left, the diagonal gates contribute the phase
+    $(-1)^{x_0x_1+x_1x_2+x_2+x_3}$ and the two bit flips send $x$ to
+    $\overline x$. In (\ref{eq:mpug_czx_lambda}) the first $X_2$ replaces
+    $x_2$ by $x_2+1$ in the phase of $\mathrm{CZ}_{12}$, giving
+    $x_1(x_2+1)=x_1x_2+x_1$, and the second $X_2$ restores $x_2$, so the
+    permutation is again $\overline{\,\cdot\,}$. The factor $Z_0$ in
+    (\ref{eq:mpug_czx_tilde_lambda}) adds $x_0$ to the exponent. The
+    identities between $e$ and $f$ are checked on the sixteen bit strings.
+    After relabelling the computational basis as two four-level matter sites,
+    unitarity follows from Theorem~\ref{thm:mpug_monomial_matrix_laws} because
+    all phases are unimodular.
+\end{proof}
+
+\begin{theorem}[Local monomial action of the CZX Gauss operator]
+    \label{thm:mpug_czx_local_monomial_action}
+    \lean{MPOTensor.CZX.iPow,
+        MPOTensor.CZX.iPow_add,
+        MPOTensor.CZX.iPow_natCast,
+        MPOTensor.CZX.iPow_zero,
+        MPOTensor.CZX.iPow_two,
+        MPOTensor.CZX.iPow_three,
+        MPOTensor.CZX.iPow_two_mul_val,
+        MPOTensor.CZX.iPow_two_mul_cast,
+        MPOTensor.CZX.uExponent,
+        MPOTensor.CZX.phaseExponent,
+        MPOTensor.CZX.phaseExponent_zero_zero,
+        MPOTensor.CZX.phaseExponent_zero_one,
+        MPOTensor.CZX.phaseExponent_one_zero,
+        MPOTensor.CZX.phaseExponent_one_one,
+        MPOTensor.CZX.localPerm,
+        MPOTensor.CZX.localPhase,
+        MPOTensor.CZX.gen_inv,
+        MPOTensor.CZX.gen_mul_gen,
+        MPOTensor.CZX.toAdd_gen_ne_zero,
+        MPOTensor.CZX.gaussOperator_circuitTuple_gen}
+    \leanok
+    \uses{def:mpug_czx_circuit_tuple, def:mpug_gauss_operator}
+    Let $a,a'\in\mathbb F_2$ be the two gauge bits and write
+    $s=(x_0,x_1,a,x_2,x_3,a')$ and
+    $\sigma(s)=(x_0+1,x_1+1,a+1,x_2,x_3,a'+1)$. The nontrivial local Gauss
+    operator obtained from (\ref{eq:mpug_czx_tuple}) and
+    (\ref{eq:mpug_gauss_operator}) is the monomial operator
+    \begin{align}
+        G\ket{s} & =i^{q(s)}\ket{\sigma(s)}
+        \label{eq:mpug_czx_monomial_action}
+    \end{align}
+    with, for $u(x)=2(x_0x_1+x_1x_2+x_3)\bmod4$, the phase table
+    \begin{align}
+        q(x_0,x_1,0,x_2,x_3,0) & =3+u(x)+2x_2,      \\
+        q(x_0,x_1,0,x_2,x_3,1) & =2+u(x)+2x_0+2x_1, \\
+        q(x_0,x_1,1,x_2,x_3,0) & =u(x)+2x_2,        \\
+        q(x_0,x_1,1,x_2,x_3,1) & =3+u(x)+2x_0+2x_1
+        \label{eq:mpug_czx_phase_table}
+    \end{align}
+    modulo $4$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauss_operator_monomial, thm:mpug_czx_phase_tables}
+    By Theorem~\ref{thm:mpug_gauss_operator_monomial} applied to the monomial
+    unitaries of Theorem~\ref{thm:mpug_czx_phase_tables}, the operator
+    $\mathcal G_g$ is monomial. The permutation part is
+    $\overline{\,\cdot\,}$ on the matter bits in all four gauge sectors,
+    since $\overline{\,\cdot\,}$ is an involution, and $T_g$ flips both
+    gauge bits. The phases are read off
+    (\ref{eq:mpug_czx_w_action})--(\ref{eq:mpug_czx_tilde_lambda_action})
+    and the adjoint formula (\ref{eq:mpug_monomial_adjoint}) together with
+    $f(\overline x)=e(x)+1$ and $e(\overline x)=f(x)+1$: for example the
+    first row is $-i(-1)^{e(x)}=i^{3+2e(x)}=i^{3+u(x)+2x_2}$, and the other
+    three rows follow in the same way. The four identities between the phase
+    table and $e$, $f$ are checked on the sixteen bit strings.
+\end{proof}
+
+\subsection{Orbits, holonomy, and the exact dimension}
+
+\begin{definition}[Chain configurations, bond flips, and labels]
+    \label{def:mpug_czx_chain_labels}
+    \lean{MPOTensor.CZX.Site,
+        MPOTensor.CZX.siteDecode,
+        MPOTensor.CZX.siteDecode_equivFin,
+        MPOTensor.CZX.chainDecode,
+        MPOTensor.CZX.chainDecode_apply,
+        MPOTensor.CZX.flipPattern,
+        MPOTensor.CZX.chainFlip,
+        MPOTensor.CZX.chainFlip_apply,
+        MPOTensor.CZX.succ_ne_self,
+        MPOTensor.CZX.succ_succ_ne_self,
+        MPOTensor.CZX.flipPattern_apply_self,
+        MPOTensor.CZX.flipPattern_apply_succ,
+        MPOTensor.CZX.flipPattern_apply_of_ne,
+        MPOTensor.CZX.bondExponent,
+        MPOTensor.CZX.bLabel,
+        MPOTensor.CZX.pLabel}
+    \leanok
+    \uses{thm:mpug_czx_local_monomial_action}
+    A computational-basis configuration of the periodic chain of $N$ blocked
+    sites is
+    \begin{align}
+        s & =\bigl(m^{(1)}_k,m^{(2)}_k,g_k\bigr)_{k\in\Z/N\Z}\in S_N:=(\mathbb F_2^3)^N,
+        \label{eq:mpug_czx_configuration}
+    \end{align}
+    read from the enumerated site indices of the placed Gauss projector. The
+    bond-$j$ flip $\sigma_j$ adds $1$ to $m^{(1)}_j$, $m^{(2)}_j$, $g_j$, and
+    $g_{j+1}$. The bond-$j$ phase exponent $q_j(s)$ is the table
+    (\ref{eq:mpug_czx_phase_table}) evaluated at
+    $x=(m^{(1)}_j,m^{(2)}_j,m^{(1)}_{j+1},m^{(2)}_{j+1})$ and
+    $(a,a')=(g_j,g_{j+1})$. The affine labels are
+    \begin{align}
+        p_k(s) & =m^{(1)}_k+m^{(2)}_k,
+        \label{eq:mpug_czx_p_label}            \\
+        b_k(s) & =g_k+m^{(1)}_k+m^{(1)}_{k-1}.
+        \label{eq:mpug_czx_b_label}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Permutation-orbit classification]
+    \label{thm:mpug_czx_orbit_classification}
+    \lean{MPOTensor.CZX.fiberEquiv,
+        MPOTensor.CZX.fiberEquiv_apply,
+        MPOTensor.CZX.pLabel_fiberEquiv,
+        MPOTensor.CZX.bLabel_fiberEquiv,
+        MPOTensor.CZX.chainFlip_fiberEquiv}
+    \leanok
+    \uses{def:mpug_czx_chain_labels}
+    For $N\geq2$, the map
+    \begin{align}
+        \bigl((p,b),\gamma\bigr)
+         & \longmapsto
+        \bigl(m^{(1)}_k,m^{(2)}_k,g_k\bigr)_k
+        =\bigl(\gamma_k,\ p_k+\gamma_k,\ b_k+\gamma_k+\gamma_{k-1}\bigr)_k
+        \label{eq:mpug_czx_fiber_coordinates}
+    \end{align}
+    is a bijection $\mathbb F_2^N\times\mathbb F_2^N\times\mathbb F_2^N\to S_N$
+    whose inverse reads off $p(s)$, $b(s)$, and $\gamma=m^{(1)}$. In these
+    coordinates $\sigma_j$ is $\gamma\mapsto\gamma+e_j$ and leaves $(p,b)$
+    unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_chain_labels}
+    Both compositions of (\ref{eq:mpug_czx_fiber_coordinates}) with the
+    label map are the identity, by the identity $a+a=0$ in $\mathbb F_2$.
+    The flip $\sigma_j$ adds $((1,1),1)$ at site $j$ and $((0,0),1)$ at
+    site $j+1$; in fiber coordinates this is $\gamma_j\mapsto\gamma_j+1$
+    because $k-1=j$ exactly when $k=j+1$.
+\end{proof}
+
+\begin{theorem}[Involution and neighboring holonomy]
+    \label{thm:mpug_czx_holonomy}
+    \lean{MPOTensor.CZX.bondExponent_add_bondExponent_chainFlip,
+        MPOTensor.CZX.bondExponent_holonomy,
+        MPOTensor.CZX.bondExponent_chainFlip_of_disjoint,
+        MPOTensor.CZX.fiberPhase,
+        MPOTensor.CZX.fiberPhase_mul_fiberPhase_flip,
+        MPOTensor.CZX.fiberPhase_flip_of_disjoint,
+        MPOTensor.CZX.fiberPhase_holonomy,
+        MPOTensor.CZX.fiberPhase_ne_zero}
+    \leanok
+    \uses{def:mpug_czx_chain_labels}
+    For every $N\geq3$, every bond $j$, and every configuration $s$,
+    \begin{align}
+        q_j(s)+q_j(\sigma_js)
+         & =0,
+        \label{eq:mpug_czx_involution}                \\
+        q_j(s)+q_{j+1}(\sigma_js)
+         & =q_{j+1}(s)+q_j(\sigma_{j+1}s)+2b_{j+1}(s)
+        \label{eq:mpug_czx_holonomy}
+    \end{align}
+    modulo $4$, and $q_j(\sigma_ks)=q_j(s)$ whenever
+    $k\notin\{j-1,j,j+1\}$. For the phases
+    $\varphi_j(s)=i^{q_j(s)}$, (\ref{eq:mpug_czx_involution}) gives
+    $\varphi_j(s)\varphi_j(\sigma_js)=1$, while
+    (\ref{eq:mpug_czx_holonomy}) gives the neighboring square relation with
+    factor $(-1)^{b_{j+1}(s)}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_chain_labels}
+    The exponent $q_j$ depends only on the six bits at the sites $j$ and
+    $j+1$, and $\sigma_k$ changes only the sites $k$ and $k+1$; this gives
+    the disjoint-bond statement. For (\ref{eq:mpug_czx_involution}) the
+    flip $\sigma_j$ changes $x_0$, $x_1$, $a$, and $a'$, and the identity is
+    verified on the $64$ values of the six bits. For
+    (\ref{eq:mpug_czx_holonomy}) the sites $j$, $j+1$, $j+2$ are distinct
+    because $N\geq3$; $\sigma_j$ changes the left gauge bit seen by the bond
+    $(j+1,j+2)$, and $\sigma_{j+1}$ changes $x_2$, $x_3$, and $a'$ seen by
+    the bond $(j,j+1)$, so the identity is verified on the $512$ values of
+    the nine bits at the three sites.
+\end{proof}
+
+\begin{theorem}[Fixed spaces on the orbit fibers]
+    \label{thm:mpug_czx_good_fibers}
+    \lean{MPOTensor.CZX.isTrivialHolonomy_fiberPhase_iff}
+    \leanok
+    \uses{def:mpug_trivial_holonomy, thm:mpug_czx_orbit_classification}
+    Let $N\geq3$. In the fiber coordinates
+    (\ref{eq:mpug_czx_fiber_coordinates}), the phases $i^{q_j}$ have trivial
+    holonomy on the fiber over $(p,b)$ if and only if $b=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_holonomy, thm:mpug_czx_orbit_classification}
+    If $b=0$, then for $k=j+1$ or $j=k+1$ the square identity is
+    (\ref{eq:mpug_czx_holonomy}) with $b_{j+1}=0$, for $k=j$ it is trivial,
+    and otherwise the bonds are disjoint and both sides agree. Conversely,
+    trivial holonomy at the square spanned by the bonds $k-1$ and $k$ at
+    $\gamma=0$ gives $(-1)^{b_k}=1$ by (\ref{eq:mpug_czx_holonomy}), since the
+    phases are nonzero, hence $b_k=0$ for every $k$.
+\end{proof}
+
+\begin{theorem}[The placed CZX Gauss operators]
+    \label{thm:mpug_czx_placed_operators}
+    \lean{MPOTensor.CZX.windowCoordinates,
+        MPOTensor.CZX.placedGaussOperator,
+        MPOTensor.CZX.sum_multiplicative_zmod_two,
+        MPOTensor.CZX.gaussProjector_circuitTuple,
+        MPOTensor.CZX.placedGaussProjector_circuitTuple,
+        MPOTensor.CZX.inv_two_smul_add_mulVec_eq_iff,
+        MPOTensor.CZX.commonFixedSubmodule_placedGaussProjector_circuitTuple,
+        MPOTensor.CZX.placedGaussOperator_eq_monomial,
+        MPOTensor.CZX.siteBits_eq_localBits_zero,
+        MPOTensor.CZX.siteBits_eq_localBits_one,
+        MPOTensor.CZX.barFlip_apply_zero,
+        MPOTensor.CZX.barFlip_apply_one,
+        MPOTensor.CZX.barFlip_apply_two,
+        MPOTensor.CZX.barFlip_apply_three,
+        MPOTensor.CZX.toAdd_mul_gen_inv,
+        MPOTensor.CZX.toAdd_gen_mul,
+        MPOTensor.CZX.gaussLegAction_fst,
+        MPOTensor.CZX.gaussLegAction_snd,
+        MPOTensor.CZX.chainDecode_window,
+        MPOTensor.CZX.chainDecode_windowPerm,
+        MPOTensor.CZX.localPhase_window,
+        MPOTensor.CZX.fiberCoordinates,
+        MPOTensor.CZX.placedGaussOperator_eq_reindex}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_circuit_tuple,
+        def:mpug_czx_chain_labels, def:mpug_common_fixed_subspace}
+    Let $N\geq2$ and let $G_j$ be the local Gauss operator
+    (\ref{eq:mpug_czx_monomial_action}) placed on the bond $(j,j+1)$. For
+    $\Z_2$ the placed Gauss projector of
+    Definition~\ref{def:mpug_placed_gauss_projector} is
+    \begin{align}
+        \widetilde P_j & =\tfrac12\bigl(\Id+G_j\bigr),
+        \label{eq:mpug_czx_placed_projector}
+    \end{align}
+    so the common fixed subspace $\mathcal V_N(R^{\mathrm{CZX}})$ of the
+    $\widetilde P_j$ is the common fixed subspace of the $G_j$. In the
+    coordinates (\ref{eq:mpug_czx_configuration}), $G_j$ is the monomial
+    operator $G_j\ket{s}=i^{q_j(s)}\ket{\sigma_js}$, and in the fiber
+    coordinates (\ref{eq:mpug_czx_fiber_coordinates}) it is the monomial
+    operator with permutation $\gamma\mapsto\gamma+e_j$ and phase
+    $i^{q_j}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_gauss_projector, thm:mpug_gauss_representation,
+        thm:mpug_czx_local_monomial_action, thm:mpug_embed_monomial,
+        thm:mpug_czx_orbit_classification, thm:mpug_mem_common_fixed_subspace}
+    The average over $\Z_2=\{e,g\}$ is $\frac12(\mathcal G_e+\mathcal G_g)$
+    with $\mathcal G_e=\Id$, and relabelling and placement are linear and
+    unital, which gives (\ref{eq:mpug_czx_placed_projector}). A vector $v$
+    satisfies $\frac12(v+G_jv)=v$ exactly when $G_jv=v$.
+    Theorem~\ref{thm:mpug_czx_local_monomial_action} and
+    Theorem~\ref{thm:mpug_embed_monomial} express $G_j$ as a monomial
+    operator; decoding the two-site window at $j$ into the bits of the sites
+    $j$ and $j+1$ identifies its permutation with $\sigma_j$ and its phase
+    with $i^{q_j(s)}$. Finally
+    Theorem~\ref{thm:mpug_czx_orbit_classification} transports both to the
+    fiber coordinates.
+\end{proof}
+
+\begin{theorem}[Exact dimension for the displayed CZX circuit tuple]
+    \label{thm:mpug_czx_dimension}
+    \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_circuit_tuple,
+        def:mpug_common_fixed_subspace}
+    On a periodic chain of $N\geq3$ blocked sites,
+    \begin{align}
+        \dim\mathcal V_N(R^{\mathrm{CZX}}) & =2^N.
+        \label{eq:mpug_czx_dimension}
+    \end{align}
+    This answers the growth question of
+    \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} for the displayed
+    circuit tuple; it does not assert that the tuple belongs to the full
+    physical completion class of the CZX defect data, and it says nothing
+    about the minimum or maximum over completions.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_placed_operators,
+        thm:mpug_monomial_fixed_space_criterion,
+        thm:mpug_czx_holonomy, thm:mpug_czx_good_fibers}
+    By Theorem~\ref{thm:mpug_czx_placed_operators},
+    $\mathcal V_N(R^{\mathrm{CZX}})$ is the common fixed subspace of monomial
+    operators which, in fiber coordinates, have permutations
+    $\gamma\mapsto\gamma+e_j$ on the fibers over
+    $(p,b)\in\mathbb F_2^N\times\mathbb F_2^N$, and by
+    (\ref{eq:mpug_czx_involution}) these operators are involutions. The
+    monomial fixed-space criterion
+    (\ref{eq:mpug_monomial_fixed_space_count}) counts the fibers with trivial
+    holonomy, which by Theorem~\ref{thm:mpug_czx_good_fibers} are exactly
+    the fibers with $b=0$. There is one such $b$ and there are $2^N$ values
+    of $p$, so
+    \begin{align}
+        \dim\mathcal V_N(R^{\mathrm{CZX}})
+         & =\sum_{p\in\mathbb F_2^N}1=2^N.
+    \end{align}
+\end{proof}
