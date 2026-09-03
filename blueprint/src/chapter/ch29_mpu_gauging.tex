@@ -3585,7 +3585,7 @@ by the displayed matrices.
     \begin{align}
         M(\sigma,\varphi)M(\tau,\psi)
          & =M\bigl(\sigma\tau,\ s\mapsto\varphi(\tau(s))\psi(s)\bigr),
-        \label{eq:mpug_monomial_mul}                                    \\
+        \label{eq:mpug_monomial_mul}                                               \\
         M(\sigma,\varphi)^\dagger
          & =M\bigl(\sigma^{-1},\ t\mapsto\overline{\varphi(\sigma^{-1}(t))}\bigr).
         \label{eq:mpug_monomial_adjoint}
@@ -3618,7 +3618,7 @@ by the displayed matrices.
     \begin{align}
         \varphi_j(\gamma)\varphi_j(\gamma+e_j)
          & =1,
-        \label{eq:mpug_hypercube_involutive}                     \\
+        \label{eq:mpug_hypercube_involutive}       \\
         \varphi_j(\gamma)\varphi_k(\gamma+e_j)
          & =\varphi_k(\gamma)\varphi_j(\gamma+e_k)
         \label{eq:mpug_hypercube_flat}
@@ -3815,16 +3815,16 @@ by the displayed matrices.
     $\ket{x}=\ket{x_0}\otimes\ket{x_1}\otimes\ket{x_2}\otimes\ket{x_3}$ for
     $x\in\mathbb F_2^4$. The elementary gates act by
     \begin{align}
-        X_r\ket{x}               & =\ket{x+e_r},              \\
-        Z_r\ket{x}               & =(-1)^{x_r}\ket{x},        \\
-        \mathrm{CZ}_{rs}\ket{x}  & =(-1)^{x_rx_s}\ket{x},
+        X_r\ket{x}              & =\ket{x+e_r},          \\
+        Z_r\ket{x}              & =(-1)^{x_r}\ket{x},    \\
+        \mathrm{CZ}_{rs}\ket{x} & =(-1)^{x_rx_s}\ket{x},
     \end{align}
     and operator products act from right to left. Define
     \begin{align}
         w             & =(X_0X_1)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,(Z_2Z_3),
-        \label{eq:mpug_czx_w}                                                \\
+        \label{eq:mpug_czx_w}                                                       \\
         \lambda       & =-i\,(X_0X_1X_2Z_3)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,X_2,
-        \label{eq:mpug_czx_lambda}                                           \\
+        \label{eq:mpug_czx_lambda}                                                  \\
         \tilde\lambda & =\lambda Z_0.
         \label{eq:mpug_czx_tilde_lambda}
     \end{align}
@@ -3881,9 +3881,9 @@ by the displayed matrices.
     Then
     \begin{align}
         w\ket{x}             & =(-1)^{e(x)}\ket{\overline x},
-        \label{eq:mpug_czx_w_action}                                \\
+        \label{eq:mpug_czx_w_action}                            \\
         \lambda\ket{x}       & =-i(-1)^{h(x)}\ket{\overline x},
-        \label{eq:mpug_czx_lambda_action}                           \\
+        \label{eq:mpug_czx_lambda_action}                       \\
         \tilde\lambda\ket{x} & =-i(-1)^{f(x)}\ket{\overline x},
         \label{eq:mpug_czx_tilde_lambda_action}
     \end{align}
@@ -3950,9 +3950,9 @@ by the displayed matrices.
     \end{align}
     with, for $u(x)=2(x_0x_1+x_1x_2+x_3)\bmod4$, the phase table
     \begin{align}
-        q(x_0,x_1,0,x_2,x_3,0) & =3+u(x)+2x_2,        \\
-        q(x_0,x_1,0,x_2,x_3,1) & =2+u(x)+2x_0+2x_1,   \\
-        q(x_0,x_1,1,x_2,x_3,0) & =u(x)+2x_2,          \\
+        q(x_0,x_1,0,x_2,x_3,0) & =3+u(x)+2x_2,      \\
+        q(x_0,x_1,0,x_2,x_3,1) & =2+u(x)+2x_0+2x_1, \\
+        q(x_0,x_1,1,x_2,x_3,0) & =u(x)+2x_2,        \\
         q(x_0,x_1,1,x_2,x_3,1) & =3+u(x)+2x_0+2x_1
         \label{eq:mpug_czx_phase_table}
     \end{align}
@@ -4011,7 +4011,7 @@ by the displayed matrices.
     $(a,a')=(g_j,g_{j+1})$. The affine labels are
     \begin{align}
         p_k(s) & =m^{(1)}_k+m^{(2)}_k,
-        \label{eq:mpug_czx_p_label}       \\
+        \label{eq:mpug_czx_p_label}            \\
         b_k(s) & =g_k+m^{(1)}_k+m^{(1)}_{k-1}.
         \label{eq:mpug_czx_b_label}
     \end{align}
@@ -4068,7 +4068,7 @@ by the displayed matrices.
     \begin{align}
         q_j(s)+q_j(\sigma_js)
          & =0,
-        \label{eq:mpug_czx_involution}                            \\
+        \label{eq:mpug_czx_involution}                \\
         q_j(s)+q_{j+1}(\sigma_js)
          & =q_{j+1}(s)+q_j(\sigma_{j+1}s)+2b_{j+1}(s)
         \label{eq:mpug_czx_holonomy}
