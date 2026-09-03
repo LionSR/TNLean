@@ -2846,6 +2846,77 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     corresponding specializations.
 \end{proof}
 
+\begin{theorem}[L-symbol induced by a stabilizer cocycle]
+    \label{thm:mpug_stabilizer_cocycle_l_symbol}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_base,
+        TNLean.Algebra.StabilizerRepresentatives.inducedActionGauge,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_gauge,
+        TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_inducedLSymbol_eq_of_cohomologousTo}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:is_cocycle,
+        def:cohomologous_to, thm:mpug_stabilizer_transition}
+    Let $H=\operatorname{Stab}_G(x_0)$ and let
+    $\psi\colon H\times H\to\C^\times$ be a scalar $2$-cocycle. Define
+    \begin{align}
+        L^x_{g,h}
+         & =\psi\bigl(t_k(g,hx),t_k(h,x)\bigr).
+        \label{eq:mpug_induced_stabilizer_l_symbol}
+    \end{align}
+    Then $L$ satisfies (\ref{eq:mpug_l_compatibility}) with $\omega=1$, and
+    its base-point restriction recovers $\psi$:
+    \begin{align}
+        L^{x_0}_{a,b} & =\psi(a,b)
+        \label{eq:mpug_induced_stabilizer_base}
+    \end{align}
+    for all $a,b\in H$.
+
+    If $\psi_1$ and $\psi_2$ are cohomologous through
+    $\varphi\colon H\to\C^\times$, with
+    \begin{align}
+        \psi_1(a,b)
+         & =\varphi(a)\varphi(b)\varphi(ab)^{-1}\psi_2(a,b),
+        \label{eq:mpug_stabilizer_cocycle_gauge}
+    \end{align}
+    then their induced $L$-symbols differ by the action-tensor gauge
+    \begin{align}
+        \gamma_{g,x} & =\varphi\bigl(t_k(g,x)\bigr)^{-1}
+        \label{eq:mpug_induced_action_gauge}
+    \end{align}
+    and the trivial fusion-tensor gauge. Thus the induced action-gauge class
+    depends only on the cohomology class of $\psi$.
+    % Source anchors: arXiv:2502.20257, lemma:h1h2 and eq:Lcocycle,
+    % lines 7028--7042; arXiv:2203.12563, Eq. (20).
+    This is only the scalar construction. It does not assert that an
+    $L$-symbol obtained from MPS and MPU tensors has this form.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_gauge, thm:mpug_stabilizer_transition}
+    Put
+    $a=t_k(g,hkx)$, $b=t_k(h,kx)$, and $c=t_k(k,x)$.
+    The product law (\ref{eq:mpug_stabilizer_transition_product}) gives
+    $t_k(gh,kx)=ab$ and $t_k(hk,x)=bc$. Compatibility is therefore exactly
+    \begin{align}
+        \psi(a,b)\psi(ab,c)
+         & =\psi(a,bc)\psi(b,c),
+    \end{align}
+    which is the cocycle equation. If $a,b\in H$, then
+    $t_k(a,x_0)=a$ and $t_k(b,x_0)=b$ because $k_{x_0}=e$, proving
+    (\ref{eq:mpug_induced_stabilizer_base}). Finally, substituting
+    (\ref{eq:mpug_induced_action_gauge}) into
+    (\ref{eq:mpug_l_gauge}) gives the multiplier
+    \begin{align}
+        \frac{\gamma_{gh,x}}{\gamma_{g,hx}\gamma_{h,x}}
+         & =\varphi(ab)^{-1}
+        \bigl(\varphi(a)^{-1}\varphi(b)^{-1}\bigr)^{-1}
+        =\varphi(a)\varphi(b)\varphi(ab)^{-1}.
+    \end{align}
+    Formula (\ref{eq:mpug_stabilizer_cocycle_gauge}) now identifies the two
+    induced $L$-symbols.
+\end{proof}
+
 \begin{definition}[Generalized coboundary and cocycle]
     \label{def:mpug_generalized_cocycle}
     \lean{TNLean.Algebra.GeneralizedThreeCochain,
