@@ -14,7 +14,36 @@ This file follows the contraction in CPSV17 Lemma `lemuisometry`.  The source
 gate is the staggered contraction \(u=Y_2\mathbin{-}Y_1\).  Its Gram matrix is
 first expanded into the literal reflected--direct four-tensor network in
 Figure `II_uUnitary.png`; the retained physical legs are not included in the
-simple interior block.
+simple interior block.  The network is then closed against the fixed pair
+\(E^K=|\rho)(\Phi|\) of the normalized double-layer diagonal, with the two
+retained one-site letters kept outside the \(K\)-site interior, and identified
+with the normalized input tail
+\(d^{-K}\operatorname{tr}_{1,\ldots,K}[U^{(K+2)\dagger}U^{(K+2)}]\).  Input
+unitarity then gives \(u^\dagger u=\Id\) and \(d^2\le r\ell\).
+
+**Local fix (source-weight orientation):** the weighted normalization
+\(X_1^\dagger(\Id_d\otimes\rho)X_1=\Id\) pairs the conjugated leg of \(X_1\)
+with the row index of \(\rho\), whereas the transfer fixed point inserted
+between two double-layer letters pairs the conjugated leg with the column
+index of \(\rho\) in the column-stacking coordinates of `Matrix.vec`.  The Gram
+matrix of the gate built from the weight \(\rho\) therefore closes to the
+insertion \(|\rho^{\mathsf T})(\Phi|\).  The source fixes its right fixed point
+in diagonal canonical-form-II coordinates (arXiv:1703.09188, lines 269--280
+and 356--361), where \(\rho^{\mathsf T}=\rho\); the closing theorems assume
+this diagonal convention as the named hypothesis `hρdiag` and keep the gate
+built from the same weight \(\rho\).  Documented in
+`docs/paper-gaps/mpu_source_cut_orientation.tex`.
+
+**Scope restriction (supplied stabilized fixed pair):**
+`SourceFactors.sourceU_gram_eq_normalized_input_tail`,
+`SourceFactors.sourceU_isIsometry_of_isMPU`,
+`SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU`, and
+`IsMPU.sourceU_isIsometry` take the rank-one identity \(E^K=|\rho)(\Phi|\) as
+an explicit hypothesis, whereas Lemma `lemuisometry` is stated under the
+source's standing canonical-form-II convention, which supplies this fixed pair
+together with the diagonal form of \(\rho\) (arXiv:1703.09188, lines 269--280
+and 350--361).  Documented in
+`docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 
 Source: arXiv:1703.09188, equations `X1X2b`, `uu`, and `uUnitary`, and Lemma
 `lemuisometry` (lines 487--557).
@@ -333,5 +362,109 @@ theorem normalized_mpo_input_tail_eq_closed_doubleLayer_trace
   rw [normalizedDiagonal_pow_eq_sum_evalWord W K]
   simp only [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul,
     Matrix.mul_sum, Matrix.trace_sum]
+
+namespace SourceFactors
+
+/-- The retained-interior closure of the source-\(u\) network for a symmetric
+weight.  For a symmetric weight \(\rho\), the inserted vector
+\(|\rho^{\mathsf T})\) is \(|\rho)\); when the normalized double-layer diagonal
+satisfies \(E^K=|\rho)(\Phi|\) with \((\Phi|=\operatorname{vec}(\Id_D)^{\mathsf T}\),
+the Gram matrix of \(u=Y_2\mathbin{-}Y_1\) built from the weight \(\rho\) is the
+closed double-layer trace of the two retained one-site letters followed by the
+\(K\)-site interior.  The pair `p` is starred and `q` is unstarred.
+
+Source: CPSV17 equation `uUnitary` and Lemma `lemuisometry` (lines 545--557),
+with the fixed point in the diagonal coordinates of lines 269--280. -/
+theorem sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) (hρ : ρ.IsSymm) (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)))
+    (p q : Fin d × Fin d) :
+    (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
+      Matrix.trace
+        (doubleLayerTensor U p.1 q.1 * doubleLayerTensor U p.2 q.2 *
+          normalizedDiagonal (doubleLayerTensor U) ^ K) := by
+  rw [sourceU_gram_eq_transpose_fixed_pair_trace, hρ.eq, ← hK]
+  exact Matrix.trace_mul_cycle _ _ _
+
+/-- The complete source-\(u\) network contraction.  For the source's diagonal
+fixed point \(\rho\) with \(E^K=|\rho)(\Phi|\) and
+\((\Phi|=\operatorname{vec}(\Id_D)^{\mathsf T}\), the Gram matrix of the paper
+gate \(u=Y_2\mathbin{-}Y_1\) built from the weight \(\rho\) is the normalized
+input tail \(d^{-K}\operatorname{tr}_{1,\ldots,K}[U^{(K+2)\dagger}U^{(K+2)}]\).
+The pair `p` is starred and `q` is unstarred.
+
+Source: CPSV17 equation `uUnitary` and Lemma `lemuisometry` (lines 545--557),
+with the fixed point in the diagonal coordinates of lines 269--280. -/
+theorem sourceU_gram_eq_normalized_input_tail [NeZero d]
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) (hρdiag : ρ.IsDiag)
+    (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)))
+    (p q : Fin d × Fin d) :
+    (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
+      ((d : ℂ)⁻¹) ^ K *
+        ∑ τ : Fin K → Fin d, ∑ η : Fin (K + 2) → Fin d,
+          star (mpo U (K + 2) η
+            ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))) *
+          mpo U (K + 2) η
+            ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)) := by
+  rw [normalized_mpo_input_tail_eq_closed_doubleLayer_trace]
+  exact sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm U S hρdiag.isSymm K hK p q
+
+/-- Lemma `lemuisometry` for supplied source factors: the paper gate
+\(u=Y_2\mathbin{-}Y_1\) of an MPU tensor, built from the source's diagonal
+fixed point \(\rho\) with \(E^K=|\rho)(\Phi|\), satisfies \(u^\dagger u=\Id\).
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557), with the fixed point in
+the diagonal coordinates of lines 269--280. -/
+theorem sourceU_isIsometry_of_isMPU [NeZero d] (hU : IsMPU U)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) (hρdiag : ρ.IsDiag)
+    (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
+    (sourceU U S).IsIsometry := by
+  change (sourceU U S)ᴴ * sourceU U S = 1
+  ext p q
+  have h := sourceU_gram_eq_normalized_input_tail U S hρdiag K hK p q
+  rw [hU.normalized_mpo_tail_isometry] at h
+  rw [Matrix.mul_apply, Matrix.one_apply, ← h]
+  exact Finset.sum_congr rfl fun lr _ ↦ by
+    rw [Matrix.conjTranspose_apply, mul_comm]
+
+/-- Lemma `lemuisometry`, rank consequence: since \(u\) maps a space of
+dimension \(d^2\) isometrically into one of dimension \(r\ell\), the source-cut
+ranks satisfy \(d^2\le r\ell\).
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557). -/
+theorem mul_self_le_rightRank_mul_leftRank_of_isMPU [NeZero d] (hU : IsMPU U)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) (hρdiag : ρ.IsDiag)
+    (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
+    d * d ≤ r[U] * ℓ[U] := by
+  have h := Matrix.IsIsometry.card_le _ (sourceU_isIsometry_of_isMPU U hU S hρdiag K hK)
+  simpa only [Fintype.card_prod, Fintype.card_fin, Nat.mul_comm ℓ[U]] using h
+
+end SourceFactors
+
+variable {U} in
+/-- Lemma `lemuisometry` for the compact-SVD gate: the paper gate
+\(u=Y_2\mathbin{-}Y_1\) of an MPU tensor, built from the source's diagonal
+positive fixed point \(\rho\) with \(E^K=|\rho)(\Phi|\), is an isometry.
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557), with the fixed point in
+the diagonal coordinates of lines 269--280. -/
+theorem IsMPU.sourceU_isIsometry [NeZero d] (hU : IsMPU U)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (hρdiag : ρ.IsDiag) (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
+    (sourceU U ρ hρ).IsIsometry :=
+  SourceFactors.sourceU_isIsometry_of_isMPU U hU (sourceFactors U ρ hρ) hρdiag K hK
 
 end MPOTensor

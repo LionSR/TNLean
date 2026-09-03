@@ -179,9 +179,16 @@ ambient-positivity question tracked by \ghissue{5855}. They do not prove the
 two complete network identities required for Theorem~III.8 of
 Ref.~\cite{Cirac2017MPU}. For the source tensor $u$, the staggered
 reflected--direct Gram expansion and the normalized input-tail trace are
-formalized separately. Their equality after inserting the simple $K$-site
-interior of Figure~\texttt{II\_uUnitary.png} remains tracked by
-\ghissue{5982} and comes from Lemma~III.7 of Ref.~\cite{Cirac2017MPU}. The
+formalized separately, and their equality after inserting the fixed pair
+$E^K=\lvert\rho)(\Phi\rvert$ of the $K$-site interior of
+Figure~\texttt{II\_uUnitary.png} is
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_input_tail}. It
+assumes the source's diagonal fixed point (paper\_v2.tex, lines 269--280) as
+an explicit hypothesis, so that the inserted vector
+$\lvert\rho^{\mathsf T})$ of \texttt{mpu\_source\_cut\_orientation.tex} is
+$\lvert\rho)$; input unitarity then gives Lemma~III.7 of
+Ref.~\cite{Cirac2017MPU} for the gate built from that same weight in
+\leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU}. The
 complete source-$v$ equivalence from the proof of Theorem~III.8 of
 Ref.~\cite{Cirac2017MPU} is formalized as
 \leanid{MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair}; it

@@ -16,9 +16,9 @@ identify a Gram matrix for the paper gate $u=Y_2\mathbin{-}Y_1$.
 
 The source proof in arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma
 `lemuisometry` (lines 536--556), instead contracts the staggered paper-$u$
-network. That route remains unformalized. Similar blocked and output-tail
-shapes in this file must not be read as a formalization of the figure or as
-support for the paper source-$u$ isometry.
+network; that route is formalized in `TNLean.MPS.MPU.SourceUCompleteNetwork`.
+Similar blocked and output-tail shapes in this file must not be read as a
+formalization of the figure or as support for the paper source-$u$ isometry.
 -/
 
 open scoped Matrix BigOperators ComplexOrder

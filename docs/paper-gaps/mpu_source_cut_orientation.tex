@@ -148,9 +148,15 @@ identity with the insertion $\lvert\rho^{\mathsf T})(\Phi\rvert$ in
 The source gates remain the gates built from the printed weight $\rho$; replacing
 that weight by $\rho^{\mathsf T}$ recomputes $X_1,Y_1$ and gives a different
 gate when $\rho$ is not symmetric. The source's diagonal convention makes the
-two inserted vectors equal, and
-\leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry} proves the forward direction
-of Theorem~III.8 on precisely that convention. The reparametrized theorem
+two inserted vectors equal. On precisely that convention,
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm}
+closes the source-$u$ Gram of the gate built from $\rho$ against the fixed
+pair $E^K=\lvert\rho)(\Phi\rvert$ with both retained one-site letters kept
+outside the $K$-site interior,
+\leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU} and
+\leanid{MPOTensor.IsMPU.sourceU_isIsometry} prove Lemma~III.7 for that gate,
+and \leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry} proves the forward
+direction of Theorem~III.8. The reparametrized theorem
 \leanid{MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry} is retained as an
 auxiliary statement, not as an identification of the original gate. The
 converse direction in
@@ -188,7 +194,7 @@ work predating this audit. The printed weight and the column-stacking transfer
 fixed pair differ by a transpose for non-diagonal $\rho$; the complete
 source-$u$ and source-$v$ network theorems carry this transpose on the
 inserted vector without changing the source gate's weight. The source's
-diagonal fixed point removes the mismatch in Theorem~III.8.
+diagonal fixed point removes the mismatch in Lemma~III.7 and Theorem~III.8.
 
 \bibliographystyle{alpha}
 \bibliography{references}
