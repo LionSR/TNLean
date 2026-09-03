@@ -393,7 +393,13 @@ content still consumed by a later survivor.
    `thm:mpu_output_layer_tail_entry`, `thm:mpu_source_x1_range_projection`,
    `thm:mpu_source_x2_range_projection`, and
    `thm:mpu_normalized_output_tail_coisometry`; the shift mixed-kernel
-   formulas carry no separate node). The surviving node
+   formulas carry no separate node). Before deleting the supplied-witness and
+   reflected-coordinate nodes, retarget their five surviving helpers:
+   `blockTensor_succ_simple2_of_supplied` and
+   `IsMPU.simple1_of_simple2_supplied` to
+   `thm:mpu_all_later_simple_blockings`, and `bondPairSwapEquiv` with its
+   apply and inverse formulas to a surviving physical-adjoint coordinate node.
+   The surviving node
    `def:threeMPU_supplied_source_factors` nevertheless lists eight declarations
    deleted in this step in its `\lean{}` tag: the six example entry formulas
    and the two mixed independent-tensor-product formulas. Remove all eight
@@ -476,13 +482,16 @@ content still consumed by a later survivor.
    weight-one witness embedded in the first coordinate, leaving an ambient zero
    complement. First add `weights_ne_zero` and require
    $\sum_k D_k=D$ (equivalently, full support) in `MPUCanonicalFormData`.
+   In the same PR, update the source-labelled
+   `def:mpu_canonical_form` blueprint statement to include both restrictions
+   and retain `\leanok` only after it matches the strengthened Lean definition.
    Only then does the predicate describe the paper's canonical-form endpoints.
    The same PR must add an inline
    `**Local fix (nonzero canonical weights and full support):**` marker in
-   `MPUCanonicalForm.lean`. That marker must cite the existing
-   `mpu_canonical_form_full_support.tex` note for the ambient zero complement.
-   The implementation PR must also create a dedicated one-page paper-gap note
-   titled "Nonzero weights in MPU canonical form." CPSV17 line 260 allows a
+   `MPUCanonicalForm.lean`. That marker must cite both the existing
+   `mpu_canonical_form_full_support.tex` note for the ambient zero complement
+   and the dedicated one-page paper-gap note titled "Nonzero weights in MPU
+   canonical form" created in the same PR. CPSV17 line 260 allows a
    literal zero coefficient, while the formal definition adopts the intended
    convention that retained canonical blocks contribute. Then apply the
    transfer-multiplicity argument to prove that an MPU tensor in

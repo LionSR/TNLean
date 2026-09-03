@@ -634,9 +634,14 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `MatchingContractions.lean` docstring, which disclaims the on-route
   input-first identity as auxiliary; delete the 21 nodes, explicitly including
   `thm:mpu_output_layer_tail_entry`, `thm:mpu_source_x1_range_projection`, and
-  `thm:mpu_source_x2_range_projection`, and repoint the admissible `ThmFund1`
-  proof's dependency and prose reference to
-  `thm:mpu_all_later_simple_blockings`, whose linked same-witness lemma is
+  `thm:mpu_source_x2_range_projection`. Before deleting the supplied-witness
+  and reflected-coordinate nodes, retarget
+  `blockTensor_succ_simple2_of_supplied` and
+  `IsMPU.simple1_of_simple2_supplied` to
+  `thm:mpu_all_later_simple_blockings`, and retarget `bondPairSwapEquiv` with
+  its apply and inverse formulas to a surviving physical-adjoint coordinate
+  node. Repoint the admissible `ThmFund1` proof's dependency and prose reference
+  to `thm:mpu_all_later_simple_blockings`, whose linked same-witness lemma is
   `MPOTensor.IsMPU.isMPUSimple_of_simple2`; retire the range-restriction note.
 - **First PR**: delete `ReflectedTransferKernel.lean`,
   `SuppliedWitnessReblocking.lean`, `MixedKernelBoundary.lean`, and
@@ -671,8 +676,9 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   does not carry (the first limit of the `CLAUDE.md` convention rule: the
   paper writes "in CF" here and distinguishes CF, CFII, and SF throughout).
   First add `weights_ne_zero` and require $\sum_k D_k=D$ (equivalently, full
-  support) in `MPUCanonicalFormData`. Then prove `prop:normal-tensor` for
-  `IsMPUCanonicalForm` on MPU tensors (one normal block), using transfer
+  support) in `MPUCanonicalFormData`, and update the source-labelled
+  `def:mpu_canonical_form` blueprint statement before retaining its `\leanok`.
+  Then prove `prop:normal-tensor` for `IsMPUCanonicalForm` on MPU tensors (one normal block), using transfer
   multiplicity only after the zero-weight witness is excluded. Finally extract
   a common retained-block reconstruction base with separate support-policy
   wrappers. Literal `CPSVCanonicalFormData` keeps $\sum_k D_k\leq D$ and its
@@ -682,11 +688,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 - **First PR**: add `weights_ne_zero` and full support to
   `MPUCanonicalFormData`, update any direct witnesses, and add an inline
   `**Local fix (nonzero canonical weights and full support):**` marker in
-  `MPUCanonicalForm.lean`. The marker must cite
-  `mpu_canonical_form_full_support.tex` for the ambient zero complement. That
-  implementation PR must also create a dedicated one-page paper-gap note
-  titled "Nonzero weights in MPU canonical form" for the zero-coefficient
-  convention. No one-block theorem or consumer changes yet.
+  `MPUCanonicalForm.lean`. The marker must cite both
+  `mpu_canonical_form_full_support.tex` for the ambient zero complement and the
+  dedicated one-page paper-gap note titled "Nonzero weights in MPU canonical
+  form" created in the same PR for the zero-coefficient convention. Update the
+  `def:mpu_canonical_form` blueprint statement in the same PR. No one-block
+  theorem or consumer changes yet.
 
 ## Honorable mentions (ranks 11-12)
 
