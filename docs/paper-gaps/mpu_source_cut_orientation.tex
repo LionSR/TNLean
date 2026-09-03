@@ -127,9 +127,18 @@ between the conjugated leg $\beta$ and the unconjugated leg $\beta'$.
 The two insertions agree exactly when the weight of \texttt{X1X2b} is the
 transpose of the column-stacked fixed point. With the weight $\rho$ itself,
 the Gram matrix of $u$ is $(\Phi\rvert W^{p_1q_1}W^{p_2q_2}\lvert\rho^{\mathsf T})$,
-and $\lvert\rho^{\mathsf T})$ is not a fixed vector of $E$ in general; a
-gauge-transformed right shift with a complex gauge gives $u^\dagger u\neq\operatorname{Id}$
-for that pairing. The correct pairing is therefore
+and $\lvert\rho^{\mathsf T})$ is not a fixed vector of $E$ in general. A
+witness must satisfy the fixed-pair hypothesis with $(\Phi\rvert=(1\rvert$
+and have a right fixed point that is not symmetric. A gauge-transformed
+shift is not such a witness: $(\Phi\rvert=(1\rvert$ forces its gauge to be
+unitary up to a scalar, and then $\rho$ is a multiple of the identity, so
+both pairings coincide. A two-layer brickwork unitary circuit with $d=4$
+and $D=4$, brought to the gauge $\Phi=\operatorname{Id}$ and then conjugated
+by a complex unitary, has $\lVert\rho-\rho^{\mathsf T}\rVert\approx0.73$;
+its source factors for the weight $\rho$ give
+$\lVert u^\dagger u-\operatorname{Id}\rVert\approx0.22$, while the weight
+$\rho^{\mathsf T}$ gives $u^\dagger u=\operatorname{Id}$ to machine
+precision. The correct pairing is therefore
 \begin{align}
     E^J & =\lvert\rho)(\Phi\rvert,
         & X_1^\dagger(\operatorname{Id}_d\otimes\rho^{\mathsf T})X_1

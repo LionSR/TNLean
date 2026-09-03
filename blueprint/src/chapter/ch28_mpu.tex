@@ -3236,10 +3236,39 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     precisely the simultaneous doubled-bond swap on the row and column.
 \end{proof}
 
+\begin{theorem}[Fixed pair of the simple block]
+    \label{thm:mpu_simple_block_fixed_pair}
+    \lean{MPOTensor.normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power}
+    \leanok
+    \uses{def:mpu_double_layer, def:mpdo_physical_blocking, def:mpu_normalized_flattening}
+    Let $\mathcal U$ be an MPO tensor with $d,D>0$, and write $E$ for the
+    transfer matrix of its normalized flattening.  Suppose that
+    $\tr(\rho)=1$ and that
+    \begin{align}
+        E^J=|\rho)(1|
+    \end{align}
+    for some $J$, and set $K=JD^2$.  Then the normalized diagonal $R_K$ of
+    the double layer of the $K$-site block of $\mathcal U$ satisfies
+    \begin{align}
+        R_K=|\rho)(1|,
+    \end{align}
+    where the rank-one operators use the column-stacking identification
+    $M_D(\mathbb C)\cong\mathbb C^{D^2}$.  This is the closed double layer
+    of the simple block in
+    \cite[equation~\texttt{Erightleft} and Proposition~\texttt{blockingsimple}]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_double_layer_blocking}
+    The blocked normalized diagonal is the transfer power
+    $E^K=(E^J)^{D^2}$.  Since $(1|\rho)=\tr(\rho)=1$, the rank-one matrix
+    $|\rho)(1|$ is idempotent, so the additional positive $D^2$ power
+    leaves it unchanged.
+\end{proof}
+
 \begin{theorem}[Reflected transfer-power identities]
     \label{thm:mpu_reflected_transfer_power}
-    \lean{MPOTensor.normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power,
-        MPOTensor.conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec,
+    \lean{MPOTensor.conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec,
         MPOTensor.reflected_transfer_power_eq_vecMulVec_transpose,
         MPOTensor.conjTranspose_normalizedDiagonal_reflected_blockTensor_eq_vecMulVec,
         MPOTensor.outputLayer_normalizedDiagonal_pow_eq_vecMulVec}
@@ -3259,13 +3288,11 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     No MPU, positivity, trace, positive bond-dimension, or positivity of $J$
     is needed for this implication.
 
-    Suppose in addition that $D>0$ and $\tr(\rho)=1$, and set $K=JD^2$.
-    Then the normalized diagonal $R_K$ of the double layer of the $K$-site
-    block of $\mathcal U$ satisfies
-    \begin{align}
-        R_K=|\rho)(1|.
-    \end{align}
-    More generally, if $d>0$, $\rho>0$, and the normalized diagonal $R_L$ of
+    Suppose in addition that $D>0$ and $\tr(\rho)=1$, and set $K=JD^2$, so
+    that the normalized diagonal $R_K$ of the double layer of the $K$-site
+    block of $\mathcal U$ is $|\rho)(1|$ by
+    Theorem~\ref{thm:mpu_simple_block_fixed_pair}.
+    If $d>0$, $\rho>0$, and the normalized diagonal $R_L$ of
     an $L$-site block satisfies $R_L=|\rho)(1|$, write $R_L^\sharp$ for the
     normalized diagonal of the corresponding block of $\mathcal U^\sharp$.
     Then
@@ -3283,14 +3310,14 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_double_layer_blocking, thm:mpu_reflected_normalized_diagonal}
+    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_double_layer_blocking, thm:mpu_reflected_normalized_diagonal, thm:mpu_simple_block_fixed_pair}
     The blocked normalized diagonal is the corresponding transfer power.
     Reindex the reflected diagonal by the doubled-bond swap to obtain the
     transpose weight.  When $\rho$ is positive definite, its Hermitian
     symmetry converts the conjugate-transposed reflected diagonal to
-    $|1)(\rho|$.  The trace-one condition makes $|\rho)(1|$ idempotent, so the
-    additional positive $D^2$ power leaves it unchanged.  Conjugating once
-    more gives the stated output-layer orientation.
+    $|1)(\rho|$.  Theorem~\ref{thm:mpu_simple_block_fixed_pair} supplies
+    $R_K=|\rho)(1|$ for the $K$-site block.  Conjugating once more gives
+    the stated output-layer orientation.
 \end{proof}
 
 \begin{theorem}[Reflected supplied contractions]
@@ -5057,8 +5084,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\lvert\rho)$ stacks columns: both insert the coefficient
     $\rho_{\beta'\beta}$ between the conjugated leg $\beta$ and the
     unconjugated leg $\beta'$. For the diagonal fixed point of canonical
-    form II this is the weight $\rho$ of equation \texttt{X1X2b} in
-    \cite{Cirac2017MPU}.
+    form II this is the weight $\rho$ of
+    \cite[equation~\texttt{X1X2b}]{Cirac2017MPU}.
     % Source locator: paper_v2.tex, equation uUnitary and lines 545--557.
     % Orientation: docs/paper-gaps/mpu_source_cut_orientation.tex.
 \end{lemma}
@@ -5107,11 +5134,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_source_u_retained_interior, thm:mpu_normalized_input_tail_closed_trace, thm:mpu_reflected_transfer_power}
+    \uses{lem:mpu_source_u_retained_interior, thm:mpu_normalized_input_tail_closed_trace, thm:mpu_simple_block_fixed_pair}
     Theorem~\ref{thm:mpu_normalized_input_tail_closed_trace} writes the
     right-hand side as $\tr(W^{p_1q_1}W^{p_2q_2}E^K)$. Since $(\Phi|\rho)=\tr(\rho)=1$, the
     rank-one matrix $\lvert\rho)(\Phi\rvert$ is idempotent, so
-    Theorem~\ref{thm:mpu_reflected_transfer_power} gives
+    Theorem~\ref{thm:mpu_simple_block_fixed_pair} gives
     $E^K=(E^J)^{D^2}=\lvert\rho)(\Phi\rvert$ for the closed double layer of
     the interior block of length $K=JD^2$.
     Lemma~\ref{lem:mpu_source_u_retained_interior} then identifies the Gram
