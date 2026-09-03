@@ -41,16 +41,17 @@ The proof replaces the finite matrix coefficients by their quasi-local compressi
 a sum of products taken entirely inside the quasi-local algebra. Both matrix coefficient families
 therefore become families of quasi-local elements to which lattice translation applies directly.
 
-**Scope restriction (homogeneous chain):** as in `TNLean.QCA.SiteIndexedSupportAlgebra`, the
-one-site matrix size is the fixed positive size \(d\) of the present quasi-local algebra, whereas
+**Scope restriction (homogeneous automorphic chain):** as in
+`TNLean.QCA.SiteIndexedSupportAlgebra`, the one-site matrix size is the fixed positive size \(d\)
+of the present quasi-local algebra, whereas
 Gross--Nesme--Vogts--Werner allow it to depend on the site. Their cellular automata are moreover
 not assumed translation covariant, so the theorems below are not covariance theorems of that
 paper: covariance under translation of the support algebras is supplied by Schumacher--Werner,
 quant-ph/0405174, lines 1199--1206 and 1218--1226, and the translation-covariant fixed-\(d\)
 setting by Cirac et al., arXiv:1703.09188, lines 2292--2298. Schumacher--Werner state the
-translated-support identity for the cube lattice in arbitrary dimension with the cubic
-nearest-neighbour scheme, quant-ph/0405174, lines 920--941; the theorems below are its
-one-dimensional instance. See the
+translated-support identity for a translation-commuting homomorphism on the cube lattice in
+arbitrary dimension with the cubic nearest-neighbour scheme, quant-ph/0405174, lines 309--318 and
+920--941; the theorems below treat its one-dimensional invertible case. See the
 [Schumacher--Werner covariance scope note](https://sirui-lu.com/TNLean/paper-gaps/sw04_support_covariance_scope.pdf)
 and the
 [homogeneous-chain scope note](https://sirui-lu.com/TNLean/paper-gaps/gnvw12_site_dependent_adjacent_generation_scope.pdf).

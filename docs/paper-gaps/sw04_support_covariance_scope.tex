@@ -29,7 +29,8 @@ $q\in Q$, they define the support algebra
     \mathcal A(\Box+q)\bigr).
     \label{eq:sw04_support_covariance_scope_support}
 \end{align}
-Here $\gamma$ commutes with every lattice translation. Their translated
+Here $\gamma$ is the translation-commuting algebra homomorphism of their QCA
+definition; invertibility is not assumed. Their translated
 support calculation states that
 \begin{align}
     \operatorname{Spp}(  \gamma(\mathcal A(\Box+q_1-q)),\mathcal A(\Box+q_1))
@@ -69,11 +70,13 @@ lines~2292--2298 of Ref.~\cite{Cirac2017MPU}; the ordered even and odd support
 factors agree with equation \texttt{RR2x} of
 Ref.~\cite{Gross2012IndexTheory}.
 
-The formal statement assumes exactly the propagation and translation
-covariance in
+The formal statement assumes the propagation and translation covariance in
 (\ref{eq:sw04_support_covariance_scope_propagation})--%
-(\ref{eq:sw04_support_covariance_scope_covariance}). It does not
-formalize the arbitrary-dimensional cube lattice.\footnote{Formal declaration:
+(\ref{eq:sw04_support_covariance_scope_covariance}), but it packages $\omega$
+as a star-automorphism. Schumacher--Werner require only a translation-commuting
+algebra homomorphism. Thus the formal theorem is additionally restricted to
+the invertible case and does not formalize the arbitrary-dimensional cube
+lattice.\footnote{Formal declaration:
     \leanid{SpinChain.PropagatesWithin.embeddedSupportAlgebra_map_quasiLocalTranslation_two}
     in \doclink{TNLean/QCA/SupportAlgebraCovariance}.}
 The separate restriction from site-dependent GNVW cell sizes to a homogeneous
@@ -82,10 +85,16 @@ chain is recorded in
 
 \section{Elimination plan}
 
-Removing the restriction requires a quasi-local observable algebra indexed by
-$\mathbb Z^s$, finite-region translations by vectors in $\mathbb Z^s$, and a
-propagation predicate for the cubic nearest-neighbour scheme.
-For each translated source region and each target cube, the support algebra
+Removing the invertibility restriction first requires homomorphism-valued
+versions of finite propagation, finite local restriction, translation
+covariance, and the site-indexed support-algebra family. The compression proof
+uses multiplication, addition, the star operation, and translation commutation;
+it does not require an inverse for $\omega$.
+
+Removing the dimensional restriction then requires a quasi-local observable
+algebra indexed by $\mathbb Z^s$, finite-region translations by vectors in
+$\mathbb Z^s$, and a propagation predicate for the cubic nearest-neighbour
+scheme. For each translated source region and each target cube, the support algebra
 must then be embedded canonically into the multidimensional quasi-local
 algebra. Translation covariance and the same coefficient-compression
 argument yield the vector-valued analogue of
@@ -94,9 +103,9 @@ argument yield the vector-valued analogue of
 theorem follows by specializing to $s=1$, $\mathcal N=\{-1,0,1\}$, and the
 two-site blocked pairing.
 
-Until that multidimensional observable-algebra interface is available, the
-source-labelled formal statement remains restricted to the one-dimensional
-nearest-neighbour case described above.
+Until both interfaces are available, the source-labelled formal statement
+remains restricted to star-automorphisms of the one-dimensional
+nearest-neighbour chain described above.
 
 \bibliographystyle{alpha}
 \bibliography{references}

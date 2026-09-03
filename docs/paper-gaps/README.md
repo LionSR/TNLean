@@ -59,9 +59,9 @@ restriction are recorded separately.
   restriction from arbitrary finite-dimensional $C^*$-algebra factors to
   full complex matrix factors.
 - `sw04_support_covariance_scope.tex` records that the formal
-  support-algebra covariance theorem treats a homogeneous one-dimensional
-  nearest-neighbour chain, while Schumacher--Werner state the translation
-  identity for the cubic nearest-neighbour scheme in arbitrary dimension.
+  support-algebra covariance theorem treats star-automorphisms of a homogeneous
+  one-dimensional nearest-neighbour chain, while Schumacher--Werner allow
+  homomorphisms for the cubic nearest-neighbour scheme in arbitrary dimension.
 
 For the present non-periodic MPS Fundamental Theorem work, the repeated-copy and
 equal-modulus comparison has these current reference points.
