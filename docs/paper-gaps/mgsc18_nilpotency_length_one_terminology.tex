@@ -66,10 +66,16 @@ The corrected residual expansion
     \label{eq:mgsc18_nilpotency_length_one_buffer_bounds}
 \end{align}
 because the adjacent central letter contributes one residual factor to
-each exterior residual word.  Hence the exterior buffer length in the
-sense of Ref.~\cite{FrancoRubio2025MPUGauging} is $\ell=N_0-1$ for
-$N_0\geq1$, and ``$\ell=1$'' is the statement that one exterior site
-suffices, that is, $N_0\leq2$.
+each exterior residual word.  The bound
+(\ref{eq:mgsc18_nilpotency_length_one_buffer_bounds}) is sufficient, not
+necessary, so it exhibits $N_0-1$ as \emph{an} exterior buffer length: the
+least exterior buffer length $\ell$ in the sense of
+Ref.~\cite{FrancoRubio2025MPUGauging} satisfies $\ell\leq N_0-1$ for
+$N_0\geq1$.  Correspondingly, $N_0\leq2$ implies $\ell\leq1$, that is, one
+exterior site suffices.  The sources write this as ``$\ell=1$'', which is
+the sufficiency of one exterior site and not an exact value: for $B=A$ with
+the identity reduction the residuals vanish, so $N_0=1$ while the exterior
+identity already holds with empty buffers and $\ell=0$.
 
 Blocking $L$ original sites into one blocked site turns
 (\ref{eq:mgsc18_nilpotency_length_one_buffer_bounds}) into the condition
@@ -130,9 +136,8 @@ $\mathbf w=(i_1,\ldots,i_L)$ is $B^{\mathbf w}=B^{i_L}$, which depends on
 the last original letter, while the blocked target letter is
 $A^{\mathbf w}=1$.  For any reduction $(V',W')$ of the blocked tensors, the
 blocked residual letter is $B^{i_L}-W'V'$, and the two values
-$B^0-W'V'$ and $B^1-W'V'$ cannot both vanish.  Thus every reduction of
-every blocking has nilpotency length $2$, and no blocking achieves $N_0=1$
-in the sense of Definition~8.
+$B^0-W'V'$ and $B^1-W'V'$ cannot both vanish.  Thus no reduction of any
+blocking has nilpotency length $1$ in the sense of Definition~8.
 
 One exterior site nevertheless suffices.  For $|\mathbf q|\geq1$,
 \begin{align}
