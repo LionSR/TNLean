@@ -45,6 +45,8 @@ inverse gauges trivialize `L`.
   gauges trivialize a block-independent compatible L-symbol.
 * `LSymbol.hasTrivialGauge_iff_*`: the four scalar conditions are
   equivalent for a supplied compatible L-symbol.
+* `LSymbol.hasTrivialGauge_tfae`: the four scalar conditions, listed in the
+  order of `prop:technical01`, are equivalent.
 
 These results do not establish the tensor-facing fourth condition of the source
 for an MPS–MPU pair.
@@ -379,6 +381,22 @@ theorem hasTrivialGauge_iff_isBlockIndependent [Nonempty X]
   constructor
   · exact fun h ↦ h.hasBlockConstantGauge.isBlockIndependent
   · exact IsBlockIndependent.hasTrivialGauge hCompat
+
+/-- The four scalar gauge formulations of block independence are equivalent
+for a supplied compatible L-symbol, listed in the order of
+arXiv:2502.20257, `prop:technical01` (lines 6975–6989): a gauge with all
+`Lˣ_{g,h} = 1`; a gauge with `Lˣ_{g,h}` independent of `x`; a gauge with all
+`ellˣ_{a,b;g} = 1`; and block independence. The source's fourth condition is
+stated for an MPS–MPU pair; here it is the scalar condition on the supplied
+L-symbol. -/
+theorem hasTrivialGauge_tfae [Nonempty X]
+    {L : LSymbol G X} {ω : ScalarThreeCochain G} (hCompat : IsCompatible L ω) :
+    [HasTrivialGauge L, HasBlockConstantGauge L, HasTrivialEllGauge L,
+      IsBlockIndependent L].TFAE := by
+  tfae_have 1 ↔ 2 := hasTrivialGauge_iff_hasBlockConstantGauge hCompat
+  tfae_have 1 ↔ 3 := hasTrivialGauge_iff_hasTrivialEllGauge hCompat
+  tfae_have 1 ↔ 4 := hasTrivialGauge_iff_isBlockIndependent hCompat
+  tfae_finish
 
 end LSymbol
 

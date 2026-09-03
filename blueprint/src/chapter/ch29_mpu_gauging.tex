@@ -2754,6 +2754,36 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     the original gauge.
 \end{proof}
 
+\begin{theorem}[Four scalar gauge formulations of block independence]
+    \label{thm:mpug_block_independence_four_forms}
+    \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_tfae}
+    \leanok
+    \uses{def:mpug_block_independence_gauge_forms,
+        thm:mpug_trivial_iff_block_constant,
+        thm:mpug_trivial_iff_trivial_ell,
+        thm:mpug_trivial_iff_block_independent}
+    Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
+    and suppose that $\mathsf X$ is nonempty. The four scalar gauge
+    properties (\ref{eq:mpug_block_form_trivial}),
+    (\ref{eq:mpug_block_form_constant}),
+    (\ref{eq:mpug_block_form_trivial_ell}), and
+    (\ref{eq:mpug_block_form_independent_ell}) of $L$ are equivalent. This is
+    the scalar core of the block-independence proposition of
+    \cite{FrancoRubio2025MPUGauging}, whose fourth condition is stated for an
+    MPS--MPU pair.
+    % Source anchor: arXiv:2502.20257, prop:technical01, lines 6975--6989.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_trivial_iff_block_constant,
+        thm:mpug_trivial_iff_trivial_ell,
+        thm:mpug_trivial_iff_block_independent}
+    Theorems~\ref{thm:mpug_trivial_iff_block_constant},
+    \ref{thm:mpug_trivial_iff_trivial_ell}, and
+    \ref{thm:mpug_trivial_iff_block_independent} identify each of the last
+    three properties with the first.
+\end{proof}
+
 The source's fourth condition is a statement about an MPS--MPU pair. The
 results above begin instead with a supplied compatible scalar $L$-symbol and
 prove the algebraic equivalence among its four scalar gauge properties. A
