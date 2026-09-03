@@ -357,6 +357,42 @@ theorem sourceU_gram_eq_transpose_fixed_pair_trace
 
 end SourceFactors
 
+/-- Cyclically move the first retained letter of a closed double-layer word to
+its right endpoint, leaving one blocked interior letter between the two
+unblocked endpoints.
+
+Source: CPSV17 equation `uUnitary` and Figure `II_uUnitary.png` (lines 545--557).
+-/
+theorem mpo_doubleLayer_finAddTwoArrowEquiv_symm_eq_endpointSeparated
+    (U : MPOTensor d D) (K : ℕ) (p q : Fin d × Fin d)
+    (σ τ : Fin K → Fin d) :
+    mpo (doubleLayerTensor U) (K + 2)
+        ((finAddTwoArrowEquiv (Fin d) K).symm (p, σ))
+        ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)) =
+      Matrix.trace
+        (doubleLayerTensor U p.2 q.2 *
+          doubleLayerTensor (blockTensor U K)
+            ((Kraus.decodeBlockEquiv d K).symm σ)
+            ((Kraus.decodeBlockEquiv d K).symm τ) *
+          doubleLayerTensor U p.1 q.1) := by
+  rw [mpo_apply, mpoMatrixEntry]
+  calc
+    Matrix.trace
+        (evalWord (doubleLayerTensor U)
+          (List.ofFn ((finAddTwoArrowEquiv (Fin d) K).symm (p, σ)))
+          (List.ofFn ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)))) =
+      Matrix.trace
+        (evalWord (doubleLayerTensor U)
+          (List.ofFn (Fin.cons p.2 (Fin.snoc σ p.1)))
+          (List.ofFn (Fin.cons q.2 (Fin.snoc τ q.1)))) := by
+        simpa only [finAddTwoArrowEquiv_symm_apply, List.ofFn_cons, List.ofFn_snoc,
+          List.cons_append] using
+          trace_evalWord_cons_eq_append (doubleLayerTensor U) p.1 q.1
+            (p.2 :: List.ofFn σ) (q.2 :: List.ofFn τ) (by simp)
+    _ = _ := by
+      rw [evalWord_ofFn_cons_snoc,
+        doubleLayerTensor_blockTensor_decodeBlockEquiv_symm]
+
 /-- The normalized input-tail contraction is the closed direct double-layer
 network with two retained input letters followed by the (K)-site interior.
 The retained pair `p` is starred and `q` is unstarred.
@@ -389,10 +425,12 @@ theorem normalized_mpo_input_tail_eq_closed_doubleLayer_trace
           ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)) =
         Matrix.trace (W p.1 q.1 * W p.2 q.2 *
           evalWord W (List.ofFn τ) (List.ofFn τ)) := by
-    rw [mpo_apply, mpoMatrixEntry]
-    simp only [finAddTwoArrowEquiv_symm_apply, List.ofFn_succ, evalWord_cons,
-      Fin.cons_zero, Fin.cons_succ]
-    rw [← Matrix.mul_assoc]
+    calc
+      _ = Matrix.trace
+          (W p.2 q.2 * evalWord W (List.ofFn τ) (List.ofFn τ) * W p.1 q.1) := by
+        simpa only [W, doubleLayerTensor_blockTensor_decodeBlockEquiv_symm] using
+          mpo_doubleLayer_finAddTwoArrowEquiv_symm_eq_endpointSeparated U K p q τ τ
+      _ = _ := by rw [Matrix.trace_mul_cycle]
   simp_rw [hword]
   change ((d : ℂ)⁻¹) ^ K *
       ∑ τ : Fin K → Fin d,
