@@ -35,6 +35,7 @@ import TNLean.QCA.RegionSumset
 import TNLean.QCA.RelativeCommutant
 import TNLean.QCA.SiteIndexedSupportAlgebra
 import TNLean.QCA.SupportAlgebraCommutation
+import TNLean.QCA.SupportAlgebraCovariance
 import TNLean.QCA.SupportAlgebraGeneration
 import TNLean.QCA.Translation
 import TNLean.QCA.TranslationCovariance

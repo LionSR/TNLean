@@ -1,0 +1,113 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{One-Dimensional Scope of Schumacher--Werner Support-Algebra Covariance}
+\author{}
+\date{2026-09-03}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source identity}
+
+Schumacher--Werner define a quantum cellular automaton on the cube lattice
+$\mathbb Z^s$ with a finite neighbourhood scheme
+\cite[lines~309--318]{SchumacherWerner2004QCA}. For their main structure
+theorem they specialize to the cubic nearest-neighbour scheme, group the
+$2^s$ sites of the unit cube $\Box$, and let $Q=\{-1,+1\}^s$ denote the
+quadrant vectors \cite[lines~920--941]{SchumacherWerner2004QCA}. For each
+$q\in Q$, they define the support algebra
+\begin{align}
+    \mathcal B_q
+     & =\operatorname{Spp}\bigl(\gamma(\mathcal A(\Box)),
+    \mathcal A(\Box+q)\bigr).
+    \label{eq:sw04_support_covariance_scope_support}
+\end{align}
+Here $\gamma$ is the translation-commuting algebra homomorphism of their QCA
+definition; invertibility is not assumed. Their translated
+support calculation states that
+\begin{align}
+    \operatorname{Spp}(  \gamma(\mathcal A(\Box+q_1-q)),\mathcal A(\Box+q_1))
+     & =\tau_{q_1-q}(\mathcal B_q).
+    \label{eq:sw04_support_covariance_scope_source}
+\end{align}
+The definition and calculation occur at lines~1199--1206 and 1218--1226 of
+Ref.~\cite{SchumacherWerner2004QCA}. They apply in arbitrary lattice
+dimension with this cubic nearest-neighbour scheme.
+
+\section{The formal specialization}
+
+The present quasi-local observable algebra is a homogeneous chain on
+$\mathbb Z$ with one fixed matrix size $d>0$. For a star-automorphism
+$\omega$ satisfying
+\begin{align}
+    \omega(\mathcal A_\Lambda)
+     & \subseteq\mathcal A_{\Lambda+\{-1,0,1\}},
+    \label{eq:sw04_support_covariance_scope_propagation} \\
+    \omega\tau_a
+     & =\tau_a\omega
+    \qquad(a\in\mathbb Z),
+    \label{eq:sw04_support_covariance_scope_covariance}
+\end{align}
+the support algebras are formed from the even source pair
+$E_x=\{2x,2x+1\}$ and its two neighbouring target pairs. Translation by two
+sites preserves this pairing and gives
+\begin{align}
+    \tau_2(\widehat{\mathcal R}_y)
+     & =\widehat{\mathcal R}_{y+2}.
+    \label{eq:sw04_support_covariance_scope_formal}
+\end{align}
+This is the one-dimensional, nearest-neighbour, homogeneous-chain instance of
+(\ref{eq:sw04_support_covariance_scope_source}). The fixed
+on-site dimension agrees with the QCA setting used by Cirac et al. at
+lines~2292--2298 of Ref.~\cite{Cirac2017MPU}; the ordered even and odd support
+factors agree with equation \texttt{RR2x} of
+Ref.~\cite{Gross2012IndexTheory}.
+
+The formal statement assumes the propagation and translation covariance in
+(\ref{eq:sw04_support_covariance_scope_propagation})--%
+(\ref{eq:sw04_support_covariance_scope_covariance}), but it packages $\omega$
+as a star-automorphism. Schumacher--Werner require only a translation-commuting
+algebra homomorphism. Thus the formal theorem is additionally restricted to
+the invertible case and does not formalize the arbitrary-dimensional cube
+lattice.\footnote{Formal declaration:
+    \leanid{SpinChain.PropagatesWithin.embeddedSupportAlgebra_map_quasiLocalTranslation_two}
+    in \doclink{TNLean/QCA/SupportAlgebraCovariance}.}
+The separate restriction from site-dependent GNVW cell sizes to a homogeneous
+chain is recorded in
+\path{docs/paper-gaps/gnvw12_site_dependent_adjacent_generation_scope.tex}.
+
+\section{Elimination plan}
+
+Removing the invertibility restriction first requires homomorphism-valued
+versions of finite propagation, finite local restriction, translation
+covariance, and the site-indexed support-algebra family. The compression proof
+uses multiplication, addition, the star operation, and translation commutation;
+it does not require an inverse for $\omega$.
+
+Removing the dimensional restriction then requires a quasi-local observable
+algebra indexed by $\mathbb Z^s$, finite-region translations by vectors in
+$\mathbb Z^s$, and a propagation predicate for the cubic nearest-neighbour
+scheme. For each translated source region and each target cube, the support algebra
+must then be embedded canonically into the multidimensional quasi-local
+algebra. Translation covariance and the same coefficient-compression
+argument yield the vector-valued analogue of
+(\ref{eq:sw04_support_covariance_scope_formal}), recovering
+(\ref{eq:sw04_support_covariance_scope_source}). The present
+theorem follows by specializing to $s=1$, $\mathcal N=\{-1,0,1\}$, and the
+two-site blocked pairing.
+
+Until both interfaces are available, the source-labelled formal statement
+remains restricted to star-automorphisms of the one-dimensional
+nearest-neighbour chain described above.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
