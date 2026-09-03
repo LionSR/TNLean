@@ -174,13 +174,15 @@ abstracted — record why, so it is not re-proposed).
 
 ### matrix-reindex entry transport — direct
 - **Pattern:** package an entrywise formula as a `Matrix.reindex` equality with
-  `ext` and `Matrix.reindex_apply`, or recover an original-coordinate entry by
-  applying the reindexed equality with `congrFun` twice and simplifying the
-  inverse equivalences.
+  `ext` and `Matrix.reindex_apply`, or restate an entry in the reindexing
+  coordinates by destructuring both index arguments through `Equiv.surjective`
+  and discharging the inverse equivalences with `Equiv.symm_apply_apply`.
 - **Seen:** eight packaging proofs in
-  `TNLean/MPS/MPU/Examples/ShiftSourceMixedKernels.lean` (lines 487, 547, 620,
-  696, 798, 804, 889, and 898) and four recovery proofs in
-  `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean`.
+  `TNLean/MPS/MPU/Examples/ShiftSourceMixedKernels.lean` — one each in the
+  theorems at lines 487, 547, 620, and 696, and two each in the conjunctions at
+  lines 788 and 879 — together with four coordinate-restatement proofs in
+  `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean` (lines 25, 44, 121,
+  and 140). Locations re-derived 2026-09-04 after the source-cut file split.
 - **Abstraction:** none. The former project wrappers were retired with
   `QICLean.Algebra.MatrixReindex`; the direct extensionality and evaluation
   proofs are the canonical pattern.
@@ -1658,11 +1660,14 @@ current counts and full location lists).
   explicit mixed-kernel entry, simplify the resulting indicator functions and
   primitive `sourceY₁X₂`/`sourceX₁Y₂` entries, and cancel the factors
   $d(\sqrt d)^{-1}(\sqrt d)^{-1}=1$ before closing the zero and nonzero cases.
-- **Seen:** 10 four-index occurrences in
-  `TNLean/MPS/MPU/Examples/ShiftSourceMixedKernels.lean` (representatively lines
-  78, 123, 474, 534, and 607) and six two-index primitive-entry occurrences in
-  `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` (lines 424--501), recorded
-  2026-08-24.
+- **Seen:** eight four-index mixed-kernel occurrences in
+  `TNLean/MPS/MPU/Examples/ShiftSourceMixedKernels.lean` (lines 474, 534, 607,
+  683, 741, 776, 836, and 867), two further four-index case splits for the gate
+  matrices themselves in the same file (lines 78 and 123), and six two-index
+  primitive-entry occurrences in
+  `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` (lines 616, 630, 645, 660,
+  677, and 693). Recorded 2026-08-24; counts and locations re-derived
+  2026-09-04 after the source-cut file split.
 - **Abstraction (proposed):** scout Mathlib's indicator and `ite` product
   lemmas first; otherwise extract the common scalar-indicator calculation as
   a lemma family, or mark its characterizing equalities for terminal `grind`
@@ -1671,7 +1676,10 @@ current counts and full location lists).
   permutations and in which factor carries $d(\sqrt d)^{-1}$, while the
   primitive proofs have only two equality tests.  Promotion should preserve
   those visible coordinate choices and remove only the repeated Boolean and
-  normalization calculation.
+  normalization calculation.  The source-gate siblings in
+  `TNLean/MPS/MPU/Examples/ShiftSourceGateFormulas.lean` (lines 70, 112, 170,
+  210, 265, and 298) repeat the same four-index case split for the $u$ and $v$
+  entries, so a promotion should cover them as well.
 
 ### factor pairing under a two-index finite sum — candidate
 - **Pattern:** before collapsing a two-index finite sum, use `simp_rw` with a

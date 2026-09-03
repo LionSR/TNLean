@@ -9,22 +9,32 @@ TNLean is a Lean 4 formalization of the mathematics of tensor networks: matrix p
 ## Build Commands and Mathlib Cache Policy
 
 **Canonical cache rule:** never rebuild Mathlib from source in a fresh, cloned,
-or cache-cleared worktree. After adding or updating a Mathlib dependency, fetch
-its prebuilt artifacts **before** any `lake build` or local Lean check:
+or cache-cleared worktree. Route every local Lake command through
+`scripts/lake_build_locked.sh`, run from its own TNLean worktree: it fetches the
+pinned prebuilt Mathlib artifacts first, refuses to continue when they are still
+missing, and serializes cooperating commands across worktrees on one repository
+lock. Bare `lake` commands skip both the fetch and the lock.
 
 ```bash
-# Fetch pre-built Mathlib artifacts after a Mathlib/toolchain/dependency update.
-# Do this before `lake build` or `lake env lean`; otherwise Mathlib can rebuild
-# from source and take hours.
-lake exe cache get
+# Full build. The wrapper runs `lake exe cache get` and then `lake build`, so a
+# Mathlib/toolchain/dependency update needs no separate fetch step; otherwise
+# Mathlib can rebuild from source and take hours.
+scripts/lake_build_locked.sh
 
-# Only after the cache fetch succeeds:
-lake build
 # Linter-bearing verification of one module (uses the package leanOptions):
-lake build TNLean.Path.To.File
+scripts/lake_build_locked.sh TNLean.Path.To.File
+
+# Any other command under the same lock, e.g. a bare cache fetch:
+scripts/lake_build_locked.sh -- lake exe cache get
+
+# A fresh worktree takes its .lake by APFS-cloning an existing one rather than
+# rebuilding; see docs/lake_build_cache.md for the preconditions.
+scripts/seed_lake_build.sh /path/to/new-worktree --dry-run
+scripts/seed_lake_build.sh /path/to/new-worktree
+
 # Optional fast elaboration only; this does not use the package leanOptions:
 lake env lean TNLean/Path/To/File.lean
-```
+
 # Check for sorrys/axioms in changed files
 rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 
