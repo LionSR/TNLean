@@ -232,15 +232,33 @@ this.  The same assertion is repeated at
 Definition 8, or Theorem 22, and neither audited source states a theorem that
 chooses one blocking length simultaneously for every pair in a finite group.
 After #7321 supplies representation-level common blocking and the properties
-stable under further blocking, #7322 owns this reduction-dependent finite
+stable under further blocking, #7396 owns this reduction-dependent finite
 common block for the selected family of reductions.
+
+Read literally, "nilpotency length one" in the sense of Definition 8 means
+$N^a=0$ for every letter, that is, $B^a=WA^aV$.  Blocking does not achieve
+this in general: for $A^0=A^1=1$ and
+$B^i=\begin{pmatrix}1&x_i\\0&0\end{pmatrix}$ with $x_0=0$, $x_1=1$, every
+blocked letter $B^{\mathbf w}=B^{i_L}$ depends on its last original letter,
+so no reduction of any blocking has vanishing residual letters, and the
+blocked nilpotency length stays $2$.  What blocking does achieve is the
+exterior identity with one blocked site on each side: the corrected residual
+expansion needs only $N_0\leq|\mathbf p|+1$ and $N_0\leq|\mathbf q|+1$, so
+one common block of $L$ original sites with $N_0(g,h)\leq L+1$ for every
+pair suffices.  This is the operational content of the two quoted
+sentences; see
+`docs/paper-gaps/mgsc18_nilpotency_length_one_terminology.tex`.  The
+formal statements are `MPSTensor.IsReduction.blockTensor_commonBufferLength_one`
+in `TNLean/MPS/Core/ReductionBlocking.lean` and
+`MPOTensor.GroupFamily.IsRepresentation.exists_block_reductionFamily_one` in
+`TNLean/MPS/MPU/ReductionCommonBlocking.lean`.
 
 The dependence on length one is therefore:
 
 | Conclusion | Nilpotency length one required? |
 |---|---|
 | Existence of $V,W$, $VW=1$, and `eq:fusion_2` | no |
-| `eq:fusion_1` with exterior length $m\geq N_0$ | no; it uses the actual $N_0$ |
+| `eq:fusion_1` with exterior length $m\geq N_0-1$ | no; it uses the actual $N_0$, and one blocked exterior site suffices after the common block |
 | The one-letter residual equality $B^i=WA^iV$ | yes |
 | The local three-letter identity in Garre-Rubio--Schuch Theorem 1 | yes |
 | Its one-letter boundary-dressed uniqueness statement | yes |
@@ -327,7 +345,7 @@ which #7324 may derive the displayed $\zeta$-relations.
 | Raw versus normalized flattening | `MPOTensor.toMPSTensor`, `TNLean/MPS/MPDO/Defs.lean`; `MPOTensor.normalizedFlattening`, `TNLean/MPS/MPU/TransferMatrix.lean`; `normalizedFlattening_mulTensor_apply`, `TNLean/MPS/MPU/CompositionFlattening.lean` | The cited reduction vectorizes the raw MPO tensor.  `normalizedFlattening` is the separate arXiv:1703.09188 transfer normalization; its composition formula carries an explicit $\sqrt d$. |
 | Paper's simple MPU tensor | `MPOTensor.IsMPUSimple`, `TNLean/MPS/MPU/Simple.lean` | Matches arXiv:1703.09188 Definition III.2; unrelated to MPDO simplicity. |
 | Canonical form used for a unitary inverse gauge | `MPSTensor.CPSVCanonicalFormIIData`, `TNLean/MPS/CanonicalForm/Definitions.lean`; `MPSTensor.IsLeftCanonical`, `TNLean/MPS/Core/CanonicalNormalization.lean` | The unitary-gauge API uses left-canonical irreducible tensors.  `MPSTensor.IsMPUCanonicalForm` in `TNLean/MPS/MPU/MPUCanonicalForm.lean` also permits multiblock periodic data and is too broad by itself for the injective one-block hypothesis at `main.tex:1552`. |
-| Physical blocking | `MPOTensor.blockTensor`, `toMPSTensor_blockTensor`, `blockTensor_mulTensor`, and `mpo_blockTensor_eq_reindex`, `TNLean/MPS/MPDO/PhysicalBlocking.lean` | Reusable blocking and product compatibility.  No theorem transports a chosen reduction's residual algebra or produces one common length with nilpotency length one. |
+| Physical blocking | `MPOTensor.blockTensor`, `toMPSTensor_blockTensor`, `blockTensor_mulTensor`, and `mpo_blockTensor_eq_reindex`, `TNLean/MPS/MPDO/PhysicalBlocking.lean` | Reusable blocking and product compatibility.  The transport of a chosen reduction and of its exterior buffer length through blocking, and the common buffer length for a finite family, are now `MPSTensor.IsReduction.blockTensor`, `MPSTensor.IsReductionExteriorBufferLength.blockTensor`, and `commonBufferLength` (`TNLean/MPS/Core/ReductionBlocking.lean`, `TNLean/Algebra/CommonBufferLength.lean`); no theorem produces a blocked nilpotency length equal to one, and none is needed. |
 | Normal/canonical representative | `MPOTensor.IsMPU.exists_reduced_cfii_representative`, `TNLean/MPS/MPU/ReducedCanonicalRepresentative.lean` | Gives a smaller-bond CFII representative with the same positive-length MPO.  It does not give rectangular reduction matrices back to the original tensor. |
 | Same-bond injective fundamental theorem | `MPSTensor.fundamentalTheorem_singleBlock`, `TNLean/MPS/FundamentalTheorem/Basic.lean` | Gives a square invertible gauge only when the bond dimensions already agree.  It is not Proposition 20. |
 | Unitary canonical gauge | `MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible`, `TNLean/MPS/FundamentalTheorem/UnitaryGauge.lean` | Reusable for #7323 after the required same-bond, left-canonical, irreducible data are established; it does not construct a rectangular fusion reduction. |
@@ -343,7 +361,9 @@ The following objects are genuinely missing:
    notation $\ell[U]$);
 3. the exterior residual-expansion identity and boundary-dressed uniqueness;
 4. transport of reductions under physical blocking, including the theorem
-   reducing a finite family of nilpotency lengths to one;
+   choosing one common exterior buffer for a finite family of reductions
+   (now `TNLean/MPS/Core/ReductionBlocking.lean` and
+   `TNLean/MPS/MPU/ReductionCommonBlocking.lean`);
 5. a public product-bond reindexing API and physical-adjoint/product reversal;
 6. the rectangular fusion-leg dagger and its exact leg swap.
 
@@ -392,11 +412,13 @@ must not be used as a substitute proof of fusion existence or uniqueness.
 - #7322 should first formalize the reusable rectangular MPS reduction API from
   the equality specialization ($\lambda=1$) of Proposition 20, Proposition 21,
   Definition 8, `lem:B_expand`, and Theorem 22, then choose one reduction for
-  every $(g,h)$ and prove its block and product-reindex transport.  It owns the
-  additional finite-family common block which makes those selected residual
-  letters vanish at length one, and only then constructs the fusion/anomaly
-  data.  Uniqueness must remain in the boundary-dressed form printed by the
-  source.
+  every $(g,h)$ and prove its block and product-reindex transport.  Its child
+  #7396 owns the additional finite-family common block, one positive $L$
+  with $N_0(g,h)\leq L+1$ for every pair, after which one blocked exterior
+  site satisfies `eq:fusion_1` for every selected reduction.  This block does
+  not make the selected residual letters vanish and does not make the blocked
+  nilpotency length one.  Only then are the fusion/anomaly data constructed.
+  Uniqueness must remain in the boundary-dressed form printed by the source.
 - #7323 may reuse the physical-adjoint canonical-form transport, the same-bond
   fundamental theorem, and the canonical unitary-gauge refinement for $T_g$;
   it must use `physicalAdjointTensor`, not `adjointTensor`.

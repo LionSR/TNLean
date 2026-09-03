@@ -1547,6 +1547,119 @@ $A^{-1}A=\Id$. This is the identity used in
     (\ref{eq:mps_reduction_exterior_buffer}).
 \end{proof}
 
+\begin{definition}[Exterior buffer length of a reduction]
+    \label{def:mps_reduction_exterior_buffer_length}
+    \lean{MPSTensor.IsReductionExteriorBufferLength,
+        MPSTensor.IsReductionExteriorBufferLength.mono}
+    \leanok
+    \uses{def:mps_rectangular_reduction}
+    Let $(V,W)$ be a reduction from $B$ to $A$.  A natural number $m$ is an
+    \emph{exterior buffer length} for $(V,W)$ if
+    \begin{align}
+        B^{\mathbf p}WA^{\mathbf c}VB^{\mathbf q}
+         & =B^{\mathbf p\mathbf c\mathbf q}
+        \label{eq:mps_reduction_exterior_buffer_length}
+    \end{align}
+    for every nonempty word $\mathbf c$ and all words $\mathbf p,\mathbf q$
+    with $|\mathbf p|\geq m$ and $|\mathbf q|\geq m$.  Every $m'\geq m$ is
+    then also an exterior buffer length.  This is the exterior fusion
+    equation of \cite{FrancoRubio2025MPUGauging}, \texttt{main.tex} lines
+    1409--1498, with exterior length $m\geq\ell$ and central length
+    $|\mathbf c|=n+1$, $n\geq0$.
+\end{definition}
+
+\begin{theorem}[Reductions and exterior buffers under blocking]
+    \label{thm:mps_reduction_blocking}
+    \lean{MPSTensor.IsReduction.isReductionExteriorBufferLength_of_bound,
+        MPSTensor.IsReduction.isReductionExteriorBufferLength_nilpotencyLength,
+        MPSTensor.IsReduction.blockTensor,
+        MPSTensor.IsReduction.reindexPhysical,
+        MPSTensor.IsReductionExteriorBufferLength.blockTensor,
+        MPSTensor.IsReductionExteriorBufferLength.reindexPhysical}
+    \leanok
+    \uses{def:mps_rectangular_reduction,
+        def:mps_reduction_exterior_buffer_length,
+        def:mps_reduction_residual_nilpotency_length,
+        def:same_mpv2_pos, def:blocked_tensor}
+    Let $(V,W)$ be a reduction from $B$ to $A$.  If $N$ is a residual-word
+    nilpotency bound, then $N-1$ is an exterior buffer length; in particular,
+    if $\mc{V}^+(B)=\mc{V}^+(A)$, then $\ell(B,A;V,W)-1$ is an exterior
+    buffer length.
+
+    For every $L$, the same pair $(V,W)$ is a reduction from $B^{[L]}$ to
+    $A^{[L]}$, and for every map $f$ between physical alphabets it is a
+    reduction from $B\circ f$ to $A\circ f$.  If $m$ is an exterior buffer
+    length for $(V,W)$, $L>0$, and $m\leq kL$, then $k$ is an exterior buffer
+    length for $(V,W)$ as a reduction from $B^{[L]}$ to $A^{[L]}$; reindexing
+    both tensors by the same map $f$ also preserves exterior buffer lengths.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mps_reduction_exterior_buffer,
+        thm:mps_reduction_residual_dimension_bound,
+        lem:eval_word_block}
+    The bounds $N\leq|\mathbf p|+1$ and $N\leq|\mathbf q|+1$ in
+    Theorem~\ref{thm:mps_reduction_exterior_buffer} read
+    $N-1\leq|\mathbf p|$ and $N-1\leq|\mathbf q|$, and
+    Theorem~\ref{thm:mps_reduction_residual_dimension_bound} makes the least
+    length a bound under equality of the positive-length closed chains.
+    Word evaluation of $B^{[L]}$ on a blocked word is evaluation of $B$ on
+    the flattened word, and evaluation of $B\circ f$ on a word is evaluation
+    of $B$ on the mapped word, so the reduction identities transfer.  For the
+    exterior identity, the flattened exterior words have length at least
+    $kL\geq m$ and the flattened central word has positive length $|\mathbf c|L$.
+\end{proof}
+
+\begin{definition}[Common buffer length of a finite family]
+    \label{def:common_buffer_length}
+    \lean{commonBufferLength, commonBufferLength_pos,
+        le_commonBufferLength_add_one, commonBufferLength_le}
+    \leanok
+    For a finite family of natural numbers $(N_i)_{i\in I}$, the
+    \emph{common buffer length} is
+    \begin{align}
+        L & =\max\Bigl(1,\max_{i\in I}(N_i-1)\Bigr),
+        \label{eq:common_buffer_length}
+    \end{align}
+    with $N_i-1$ read as $0$ when $N_i=0$.  It is positive, satisfies
+    $N_i\leq L+1$ for every $i\in I$, and is the least positive integer with
+    this property.
+\end{definition}
+
+\begin{theorem}[Common blocking of a finite family of reductions]
+    \label{thm:mps_reduction_common_blocking}
+    \lean{MPSTensor.IsReduction.blockTensor_commonBufferLength_one}
+    \leanok
+    \uses{def:mps_rectangular_reduction,
+        def:mps_reduction_exterior_buffer_length,
+        def:mps_reduction_residual_nilpotency_length,
+        def:common_buffer_length, def:blocked_tensor}
+    Let $(N_i)_{i\in I}$ be a finite family of natural numbers with common
+    buffer length $L$, and let $(V,W)$ be a reduction from $B$ to $A$ for
+    which $N_i$ is a residual-word nilpotency bound for some $i\in I$.  Then
+    $1$ is an exterior buffer length for $(V,W)$ as a reduction from
+    $B^{[L]}$ to $A^{[L]}$: (\ref{eq:mps_reduction_exterior_buffer_length})
+    holds for the blocked tensors whenever the blocked words
+    $\mathbf p,\mathbf c,\mathbf q$ are nonempty.
+
+    This is the sentence in \cite{FrancoRubio2025MPUGauging} and in the
+    footnote to Theorem~1 of \cite{GarreRubioSchuch2024DomainWall} that the
+    nilpotency length can be reduced to $1$ by blocking.  The blocked
+    residual letters need not vanish, and the blocked nilpotency length of
+    Definition~8 in \cite{Molnar2018SemiInjective} need not be $1$
+    \cite{gap:mgsc18_nilpotency_length_one_terminology}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mps_reduction_blocking}
+    By Theorem~\ref{thm:mps_reduction_blocking}, $N_i-1$ is an exterior
+    buffer length, and $N_i-1\leq L=1\cdot L$ with $L>0$ by
+    (\ref{eq:common_buffer_length}).  The blocking statement of the same
+    theorem with $k=1$ gives the conclusion.
+\end{proof}
+
 \begin{theorem}[Boundary-dressed uniqueness of rectangular reductions]
     \label{thm:mps_reduction_boundary_dressed_uniqueness}
     \lean{MPSTensor.IsReduction.exists_boundary_dressed_proportional,

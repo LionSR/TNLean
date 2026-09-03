@@ -1,0 +1,175 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Nilpotency Length One after Blocking: A Terminology Offset}
+\author{}
+\date{2026-09-03}
+
+\begin{document}
+\maketitle
+\gapnote{clarification}{resolved}
+
+\section{The two statements}
+
+Let $A=(A^i)_i$ be an injective matrix product state tensor, let
+$B=(B^i)_i$ be a tensor with the same physical alphabet and the same
+positive-length closed-chain coefficients, and let $(V,W)$ be a reduction
+from $B$ to $A$, so that $VW=\mathbf 1$ and
+$VB^{i_1}\cdots B^{i_n}W=A^{i_1}\cdots A^{i_n}$ for every word.  Write
+$N^i=B^i-WA^iV$ for the residual letters.  Definition~8 of
+Ref.~\cite{Molnar2018SemiInjective} calls the least $N_0$ with
+\begin{align}
+    N^{i_1}\cdots N^{i_n}
+        &=0
+        \qquad (n\geq N_0)
+    \label{eq:mgsc18_nilpotency_length_one_definition}
+\end{align}
+the nilpotency length of the selected reduction.\footnote{Source
+    coordinates in \path{cornerproblem.tex} from
+    \href{https://arxiv.org/abs/1706.07329v2}{arXiv:1706.07329v2}:
+    lines~3147--3152.}
+Thus $N_0=1$ means $N^i=0$ for every letter, that is, $B^i=WA^iV$.
+
+Ref.~\cite{FrancoRubio2025MPUGauging} states the exterior fusion identity
+\begin{align}
+    B^{\mathbf p}WA^{\mathbf c}VB^{\mathbf q}
+        &=B^{\mathbf p\mathbf c\mathbf q}
+    \label{eq:mgsc18_nilpotency_length_one_exterior_identity}
+\end{align}
+for all nonempty central words $\mathbf c$ and all exterior words with
+$|\mathbf p|,|\mathbf q|\geq\ell$, ``for some $\ell$ called the nilpotency
+length'', and then says that ``$\ell$ can always be reduced to $1$ by
+blocking the MPUs a finite number of times''.\footnote{\path{main.tex}
+    line~1498 of \href{https://arxiv.org/abs/2502.20257}{arXiv:2502.20257};
+    the fusion equations occupy lines~1409--1498.}
+The footnote to Theorem~1 of Ref.~\cite{GarreRubioSchuch2024DomainWall}
+makes the same assertion: the theorem ``assumes the nilpotency length of
+the off-diagonal blocks of $B$ is $1$'', which ``can always be achieved by
+blocking''.\footnote{\path{MPU-DW.tex} lines~358--364 of
+    \href{https://arxiv.org/abs/2405.00439v2}{arXiv:2405.00439v2}.}
+
+\section{The offset}
+
+The corrected residual expansion
+\cite{gap:mgsc18_residual_expansion_empty_word_error} gives
+(\ref{eq:mgsc18_nilpotency_length_one_exterior_identity}) as soon as
+\begin{align}
+    N_0
+        &\leq|\mathbf p|+1,
+    &N_0
+        &\leq|\mathbf q|+1,
+    \label{eq:mgsc18_nilpotency_length_one_buffer_bounds}
+\end{align}
+because the adjacent central letter contributes one residual factor to
+each exterior residual word.  Hence the exterior buffer length in the
+sense of Ref.~\cite{FrancoRubio2025MPUGauging} is $\ell=N_0-1$ for
+$N_0\geq1$, and ``$\ell=1$'' is the statement that one exterior site
+suffices, that is, $N_0\leq2$.
+
+Blocking $L$ original sites into one blocked site turns
+(\ref{eq:mgsc18_nilpotency_length_one_buffer_bounds}) into the condition
+$N_0\leq L+1$ for one blocked exterior site.  For a finite family of
+reductions with nilpotency lengths $N_0(g,h)$, the length
+\begin{align}
+    L
+        &=\max\bigl(1,\max_{(g,h)}(N_0(g,h)-1)\bigr)
+    \label{eq:mgsc18_nilpotency_length_one_common_length}
+\end{align}
+is positive and satisfies $N_0(g,h)\leq L+1$ for every pair.  After this
+common block, (\ref{eq:mgsc18_nilpotency_length_one_exterior_identity})
+holds for every pair with $|\mathbf p|,|\mathbf q|\geq1$ blocked sites.
+This is the content of the two quoted sentences that the formal
+development uses.
+
+Blocking does not, in general, make the blocked residual letters vanish,
+and the blocked nilpotency length of
+Definition~8 need not be $1$.  The two readings differ on nondegenerate
+data.
+
+\section{A counterexample to the literal reading}
+
+Take the physical letters $i\in\{0,1\}$, the one-dimensional injective
+tensor $A^0=A^1=1$, and the two-dimensional tensor
+\begin{align}
+    B^i
+        &=\begin{pmatrix}
+             1&x_i\\
+             0&0
+          \end{pmatrix},
+    &x_0
+        &=0,
+    &x_1
+        &=1.
+    \label{eq:mgsc18_nilpotency_length_one_example_tensor}
+\end{align}
+Every word evaluates to $B^{i_1}\cdots B^{i_n}=B^{i_n}$, so all
+positive-length closed-chain coefficients equal $1=A^{i_1}\cdots A^{i_n}$.
+With $V=(1,0)$ and $W=(1,0)^{\mathsf T}$,
+\begin{align}
+    VW
+        &=1,
+    &VB^{i_1}\cdots B^{i_n}W
+        &=1,
+    &N^i
+        &=\begin{pmatrix}
+             0&x_i\\
+             0&0
+          \end{pmatrix},
+    \label{eq:mgsc18_nilpotency_length_one_example_reduction}
+\end{align}
+so $(V,W)$ is a reduction, $N^1\neq0$, and $N^iN^j=0$.  Its nilpotency
+length is $N_0=2$.
+
+Block $L\geq1$ sites.  The blocked letter for the word
+$\mathbf w=(i_1,\ldots,i_L)$ is $B^{\mathbf w}=B^{i_L}$, which depends on
+the last original letter, while the blocked target letter is
+$A^{\mathbf w}=1$.  For any reduction $(V',W')$ of the blocked tensors, the
+blocked residual letter is $B^{i_L}-W'V'$, and the two values
+$B^0-W'V'$ and $B^1-W'V'$ cannot both vanish.  Thus every reduction of
+every blocking has nilpotency length $2$, and no blocking achieves $N_0=1$
+in the sense of Definition~8.
+
+One exterior site nevertheless suffices.  For $|\mathbf q|\geq1$,
+\begin{align}
+    B^{\mathbf p}WA^{\mathbf c}VB^{\mathbf q}
+        &=B^{\mathbf p}\,WV\,B^{\mathbf q}
+         =B^{i_{|\mathbf q|}}
+         =B^{\mathbf p\mathbf c\mathbf q},
+    \label{eq:mgsc18_nilpotency_length_one_example_exterior}
+\end{align}
+since $B^{\mathbf p}WV=B^0$ for every $\mathbf p$, and
+$B^0B^{\mathbf q}=B^{\mathbf q}$ is the last letter of $\mathbf q$.  The
+right buffer is necessary: for empty $\mathbf q$ and $\mathbf c=(1)$, the
+left side is $B^{\mathbf p}WV=B^0\neq B^1=B^{\mathbf p\mathbf c}$.  This
+agrees with (\ref{eq:mgsc18_nilpotency_length_one_buffer_bounds}) at
+$N_0=2$.
+
+\section{Convention}
+
+The formal development reads ``the nilpotency length is reduced to $1$
+by blocking'' as the common-block statement of
+Section~2: one positive blocking length with $N_0(g,h)\leq L+1$ for every
+pair, after which one blocked exterior site satisfies the exterior fusion
+identity.  It does not require a blocked residual letter to vanish and
+does not assert that the blocked nilpotency length equals $1$.\footnote{Formal
+declarations:
+\leanid{MPSTensor.IsReductionExteriorBufferLength},
+\leanid{MPSTensor.IsReduction.blockTensor_commonBufferLength_one},
+\leanid{MPOTensor.GroupFamily.ReductionFamily.block_hasExteriorBufferLength_one},
+and
+\leanid{MPOTensor.GroupFamily.IsRepresentation.exists_block_reductionFamily_one}.
+The corresponding blueprint entries are
+\path{thm:mps_reduction_common_blocking} in
+\path{blueprint/src/chapter/ch02_mps.tex} and
+\path{thm:mpug_common_blocking_one_site} in
+\path{blueprint/src/chapter/ch29_mpu_gauging.tex}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
