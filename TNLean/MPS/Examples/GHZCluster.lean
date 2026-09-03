@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Core.BondReindex
 import TNLean.MPS.Core.TensorProductSpan
 import TNLean.MPS.Examples.Cluster
+import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.RFP.BNTOrthogonality
 
 /-!
@@ -16,9 +17,10 @@ cluster tensor.  It has physical dimension eight and bond dimension four.  Its
 two bond-dimension-two blocks are supported on disjoint values of the GHZ
 physical qubit.
 
-The construction formalizes arXiv:2502.20257, equation `eq:z4z2MPS` and lines
-4427--4481.  It stops before the Z4 × Z2 actions, action tensors, L-symbols,
-block-independence classification, fusion operators, and gauging.
+The construction formalizes arXiv:2502.20257, equation `eq:z4z2MPS`, the block
+formulas on lines 4448--4479, and line 4481, first sentence. It stops before the
+Z4 × Z2 actions, action tensors, L-symbols, block-independence classification,
+fusion operators, and gauging.
 
 ## Main definitions
 
@@ -33,7 +35,8 @@ block-independence classification, fusion operators, and gauging.
 * `z4z2GHZClusterBlock_isInjective` proves injectivity of both blocks.
 * `z4z2GHZClusterBlocks_isBNTLocallyOrthogonal` proves local orthogonality
   directly from disjoint GHZ support.
-* `z4z2GHZClusterDirectSum_eq` identifies the direct sum with the source tensor.
+* `z4z2GHZClusterDirectSum_eq_tensor` identifies the direct sum with the source
+  tensor.
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -48,37 +51,11 @@ the GHZ tensor tensored with the once-blocked cluster tensor. -/
 def z4z2GHZClusterTensor : MPSTensor 8 4 :=
   tensorProduct ghzTensor clusterBlocked
 
-/-- The one-dimensional GHZ sector labeled by `x`.  It is supported only at
-physical GHZ value `x`. -/
-def z4z2GHZSectorTensor (x : Fin 2) : MPSTensor 2 1 := fun p =>
-  if p = x then 1 else 0
-
-@[simp] theorem z4z2GHZSectorTensor_apply_same (x : Fin 2) :
-    z4z2GHZSectorTensor x x = 1 := by
-  simp [z4z2GHZSectorTensor]
-
-/-- Every one-dimensional GHZ sector is injective. -/
-theorem z4z2GHZSectorTensor_isInjective (x : Fin 2) :
-    Kraus.IsInjective (z4z2GHZSectorTensor x) := by
-  rw [Kraus.IsInjective]
-  apply top_unique
-  intro M _
-  have hOne : (1 : Matrix (Fin 1) (Fin 1) ℂ) ∈
-      Submodule.span ℂ (Set.range (z4z2GHZSectorTensor x)) :=
-    Submodule.subset_span ⟨x, z4z2GHZSectorTensor_apply_same x⟩
-  have hM : M = M 0 0 • (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
-    ext i j
-    fin_cases i
-    fin_cases j
-    simp
-  rw [hM]
-  exact Submodule.smul_mem _ _ hOne
-
 /-- The block labeled by the GHZ value `x`, on the full eight-dimensional
 physical alphabet.  This is the product of the one-dimensional GHZ sector and
 the blocked cluster tensor. -/
 def z4z2GHZClusterBlock (x : Fin 2) : MPSTensor 8 2 :=
-  tensorProduct (z4z2GHZSectorTensor x) clusterBlocked
+  tensorProduct (ghzSectorTensor x) clusterBlocked
 
 private theorem finProdFinEquiv_zero_two (a : Fin 2) :
     finProdFinEquiv ((0 : Fin 1), a) = a := by
@@ -90,22 +67,23 @@ $A^{(x),(p,q)} = \delta_{x,p} C^q$. -/
     z4z2GHZClusterBlock x (finProdFinEquiv (p, q)) =
       if p = x then clusterBlocked q else 0 := by
   ext a b
-  have h := tensorProduct_apply (z4z2GHZSectorTensor x) clusterBlocked p q 0 0 a b
+  have h := tensorProduct_apply (ghzSectorTensor x) clusterBlocked p q 0 0 a b
   rw [finProdFinEquiv_zero_two, finProdFinEquiv_zero_two] at h
   by_cases hpx : p = x <;>
-    simpa [z4z2GHZClusterBlock, z4z2GHZSectorTensor, hpx] using h
+    simpa [z4z2GHZClusterBlock, ghzSectorTensor, hpx] using h
 
 /-- Each of the two GHZ-cluster blocks is injective.  This is the tensor-product
 injectivity theorem applied to a one-dimensional GHZ sector and the existing
 injective blocked cluster tensor. -/
 theorem z4z2GHZClusterBlock_isInjective (x : Fin 2) :
     Kraus.IsInjective (z4z2GHZClusterBlock x) :=
-  isInjective_tensorProduct _ _ (z4z2GHZSectorTensor_isInjective x)
+  isInjective_tensorProduct _ _ (ghzSectorTensor_isInjective x)
     clusterBlocked_isInjective
 
 /-- The two blocks are locally orthogonal because their GHZ physical supports
 are disjoint.  The proof is the direct termwise mixed-map calculation described
-at arXiv:2502.20257, line 4481; it uses no renormalization-group limit. -/
+at arXiv:2502.20257, line 4481, first sentence; it uses no
+renormalization-group limit. -/
 theorem z4z2GHZClusterBlocks_isBNTLocallyOrthogonal :
     IsBNTLocallyOrthogonal (dim := fun _ : Fin 2 => 2) z4z2GHZClusterBlock := by
   intro x y hxy
@@ -172,8 +150,9 @@ private theorem z4z2GHZClusterDirectSum_apply (p x y : Fin 2) (q : Fin 4)
 /-- The canonical direct sum of the two injective blocks is the GHZ tensor
 product with the blocked cluster tensor.  The equality compares the
 `finSigmaFinEquiv` direct-sum coordinates with the `finProdFinEquiv`
-tensor-product coordinates, as in arXiv:2502.20257, lines 4427--4481. -/
-theorem z4z2GHZClusterDirectSum_eq :
+tensor-product coordinates from arXiv:2502.20257, equation `eq:z4z2MPS`
+and lines 4448--4479. -/
+theorem z4z2GHZClusterDirectSum_eq_tensor :
     z4z2GHZClusterDirectSum = z4z2GHZClusterTensor := by
   ext i c d
   obtain ⟨⟨p, q⟩, rfl⟩ := (finProdFinEquiv (m := 2) (n := 4)).surjective i

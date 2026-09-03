@@ -17,12 +17,14 @@ proves its key properties.
 ## Main definitions
 
 * `ghzTensor` : the GHZ MPS tensor with `A⁰ = |0⟩⟨0|` and `A¹ = |1⟩⟨1|`
+* `ghzSectorTensor` : either one-dimensional injective sector of the GHZ tensor
 * `z2PhysicalAction` : the Z₂ on-site representation via Pauli X
 
 ## Main results
 
 * `ghz_isTransferIdempotent` : the GHZ tensor is a renormalization fixed point
 * `ghz_not_isInjective` : the GHZ tensor is not injective
+* `ghzSectorTensor_isInjective` : each one-dimensional GHZ sector is injective
 * `ghz_isOnSiteSymmetric_Z2` : the GHZ tensor is on-site symmetric under Z₂
 * `ghz_virtual_Z2_symmetric` : the virtual Z₂ symmetry, with σz commuting with every
   GHZ matrix
@@ -57,6 +59,33 @@ def ghzTensor : MPSTensor 2 2 := fun i => Matrix.diagonal (Pi.single i 1)
 
 @[simp] lemma ghzTensor_apply (i : Fin 2) :
     ghzTensor i = Matrix.diagonal (Pi.single i 1) := rfl
+
+/-- The one-dimensional GHZ sector labeled by `x`. It is supported only at
+physical value `x`. -/
+def ghzSectorTensor (x : Fin 2) : MPSTensor 2 1 := fun p =>
+  if p = x then 1 else 0
+
+/-- The GHZ sector labeled by `x` equals the one-dimensional identity at `x`. -/
+@[simp] theorem ghzSectorTensor_apply_same (x : Fin 2) :
+    ghzSectorTensor x x = 1 := by
+  simp [ghzSectorTensor]
+
+/-- Every one-dimensional GHZ sector is injective. -/
+theorem ghzSectorTensor_isInjective (x : Fin 2) :
+    Kraus.IsInjective (ghzSectorTensor x) := by
+  rw [Kraus.IsInjective]
+  apply top_unique
+  intro M _
+  have hOne : (1 : Matrix (Fin 1) (Fin 1) ℂ) ∈
+      Submodule.span ℂ (Set.range (ghzSectorTensor x)) :=
+    Submodule.subset_span ⟨x, ghzSectorTensor_apply_same x⟩
+  have hM : M = M 0 0 • (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
+    ext i j
+    fin_cases i
+    fin_cases j
+    simp
+  rw [hM]
+  exact Submodule.smul_mem _ _ hOne
 
 /-! ### Transfer map and RFP -/
 
