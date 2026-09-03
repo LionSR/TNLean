@@ -241,7 +241,7 @@ this in general: for $A^0=A^1=1$ and
 $B^i=\begin{pmatrix}1&x_i\\0&0\end{pmatrix}$ with $x_0=0$, $x_1=1$, every
 blocked letter $B^{\mathbf w}=B^{i_L}$ depends on its last original letter,
 so no reduction of any blocking has vanishing residual letters, and the
-blocked nilpotency length stays $2$.  What blocking does achieve is the
+blocked nilpotency length is never $1$.  What blocking does achieve is the
 exterior identity with one blocked site on each side: the corrected residual
 expansion needs only $N_0\leq|\mathbf p|+1$ and $N_0\leq|\mathbf q|+1$, so
 one common block of $L$ original sites with $N_0(g,h)\leq L+1$ for every
