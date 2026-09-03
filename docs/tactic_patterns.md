@@ -182,7 +182,7 @@ abstracted — record why, so it is not re-proposed).
   theorems at lines 487, 547, 620, and 696, and two each in the conjunctions at
   lines 788 and 879 — together with four coordinate-restatement proofs in
   `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean` (lines 25, 44, 121,
-  and 140). Locations re-derived 2026-09-04 after the source-cut file split.
+  and 140). Locations re-derived 2026-09-03 after the source-cut file split.
 - **Abstraction:** none. The former project wrappers were retired with
   `QICLean.Algebra.MatrixReindex`; the direct extensionality and evaluation
   proofs are the canonical pattern.
@@ -1667,7 +1667,7 @@ current counts and full location lists).
   primitive-entry occurrences in
   `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` (lines 616, 630, 645, 660,
   677, and 693). Recorded 2026-08-24; counts and locations re-derived
-  2026-09-04 after the source-cut file split.
+  2026-09-03 after the source-cut file split.
 - **Abstraction (proposed):** scout Mathlib's indicator and `ite` product
   lemmas first; otherwise extract the common scalar-indicator calculation as
   a lemma family, or mark its characterizing equalities for terminal `grind`
@@ -1679,7 +1679,10 @@ current counts and full location lists).
   normalization calculation.  The source-gate siblings in
   `TNLean/MPS/MPU/Examples/ShiftSourceGateFormulas.lean` (lines 70, 112, 170,
   210, 265, and 298) repeat the same four-index case split for the $u$ and $v$
-  entries, so a promotion should cover them as well.
+  entries, so a promotion should cover them as well. Issue #7658 plans to delete
+  the mixed-kernel occurrences and relocate the shared matrix formulas, but not
+  these six paper-gate proofs. Recount the surviving sites after that deletion
+  rather than retiring this candidate outright.
 
 ### factor pairing under a two-index finite sum — candidate
 - **Pattern:** before collapsing a two-index finite sum, use `simp_rw` with a

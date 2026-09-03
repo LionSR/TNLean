@@ -9,30 +9,41 @@ TNLean is a Lean 4 formalization of the mathematics of tensor networks: matrix p
 ## Build Commands and Mathlib Cache Policy
 
 **Canonical cache rule:** never rebuild Mathlib from source in a fresh, cloned,
-or cache-cleared worktree. Route every local Lake command through
-`scripts/lake_build_locked.sh`, run from its own TNLean worktree: it fetches the
-pinned prebuilt Mathlib artifacts first, refuses to continue when they are still
-missing, and serializes cooperating commands across worktrees on one repository
-lock. Bare `lake` commands skip both the fetch and the lock.
+or cache-cleared worktree. On macOS, route local Lake builds and cache mutations
+through `scripts/lake_build_locked.sh`, run from its own TNLean worktree, so
+cooperating commands across worktrees share one repository lock. Without `--`,
+the wrapper fetches the pinned prebuilt Mathlib artifacts, refuses to build when
+they are still missing, and then runs `lake build`. With `--`, it runs exactly
+the supplied command under the lock without fetching or checking the cache.
 
 ```bash
-# Full build. The wrapper runs `lake exe cache get` and then `lake build`, so a
-# Mathlib/toolchain/dependency update needs no separate fetch step; otherwise
-# Mathlib can rebuild from source and take hours.
+# Full build. The wrapper runs `lake exe cache get`, verifies Mathlib.olean, and
+# then runs `lake build`; do not run the build bare.
 scripts/lake_build_locked.sh
 
 # Linter-bearing verification of one module (uses the package leanOptions):
 scripts/lake_build_locked.sh TNLean.Path.To.File
 
-# Any other command under the same lock, e.g. a bare cache fetch:
+# Explicit cache fetch under the same lock; the `--` form adds no cache guard:
 scripts/lake_build_locked.sh -- lake exe cache get
 
-# A fresh worktree takes its .lake by APFS-cloning an existing one rather than
-# rebuilding; see docs/lake_build_cache.md for the preconditions.
-scripts/seed_lake_build.sh /path/to/new-worktree --dry-run
-scripts/seed_lake_build.sh /path/to/new-worktree
+# Seed a fresh worktree only from exact, fully warmed origin/main. The source is
+# explicit because the script otherwise defaults to the primary worktree.
+git -C worktrees/hot-main fetch
+git -C worktrees/hot-main reset --hard origin/main
+(cd worktrees/hot-main && scripts/lake_build_locked.sh)
+scripts/seed_lake_build.sh /path/to/new-worktree worktrees/hot-main --dry-run
+scripts/seed_lake_build.sh /path/to/new-worktree worktrees/hot-main
 
-# Optional fast elaboration only; this does not use the package leanOptions:
+# Linux fallback only, because the wrapper requires macOS lockf. Fetch and
+# verify the prebuilt cache before invoking any build; never start with build.
+lake exe cache get
+test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+lake build
+lake build TNLean.Path.To.File
+
+# Optional fast elaboration only; this is not a build, does not mutate the build
+# cache, and does not use the package leanOptions:
 lake env lean TNLean/Path/To/File.lean
 
 # Check for sorrys/axioms in changed files
