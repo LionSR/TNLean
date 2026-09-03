@@ -2231,6 +2231,58 @@ show that the tensor gauge freedoms induce the joint scalar gauge
 % Scope boundary: the tensor-facing bridge for arXiv:2502.20257,
 % prop:technical01 is not contained in the scalar L-symbol declarations.
 
+\begin{theorem}[Stabilizer transition elements]
+    \label{thm:mpug_stabilizer_transition}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.transitionElement_mul,
+        TNLean.Algebra.StabilizerRepresentatives,
+        TNLean.Algebra.StabilizerRepresentatives.ofPretransitive,
+        TNLean.Algebra.StabilizerRepresentatives.transitionElement,
+        TNLean.Algebra.StabilizerRepresentatives.coe_transitionElement}
+    \leanok
+    Suppose that $G$ acts transitively on $\mathsf X$, and fix
+    $x_0\in\mathsf X$. There are representatives $k_x\in G$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$. With
+    $H=\operatorname{Stab}_G(x_0)$, define
+    \begin{align}
+        t_k(g,x)
+         & =k_{g x}^{-1}gk_x.
+        \label{eq:mpug_stabilizer_transition}
+    \end{align}
+    Then $t_k(g,x)\in H$ and
+    \begin{align}
+        t_k(g_1g_2,x)
+         & =t_k(g_1,g_2x)t_k(g_2,x).
+        \label{eq:mpug_stabilizer_transition_product}
+    \end{align}
+    Consequently, the source factors are
+    \begin{align}
+        h_2
+         & =t_k(g_2,x)=k_{g_2x}^{-1}g_2k_x,
+        \label{eq:mpug_stabilizer_h2}                  \\
+        h_1
+         & =t_k(g_1,g_2x)=k_{g_1g_2x}^{-1}g_1k_{g_2x}.
+        \label{eq:mpug_stabilizer_h1}
+    \end{align}
+    The last representative in $h_1$ corrects the printed $k_{g_1x}$
+    \cite{gap:fbc25_stabilizer_transition_index_typo}. No finiteness or
+    normality assumption is required.
+    % Local correction:
+    % docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex.
+    % Source anchor: arXiv:2502.20257, lemma:h1h2 and eq:h1h2,
+    % lines 7028--7042.
+\end{theorem}
+
+\begin{proof}\leanok
+    Transitivity supplies one element carrying $x_0$ to each $x$; choose the
+    identity at $x=x_0$. Acting with (\ref{eq:mpug_stabilizer_transition}) on
+    $x_0$ gives
+    $k_{gx}^{-1}g(k_xx_0)=k_{gx}^{-1}(gx)=x_0$.
+    For (\ref{eq:mpug_stabilizer_transition_product}), substitute
+    (\ref{eq:mpug_stabilizer_transition}) and cancel
+    $k_{g_2x}k_{g_2x}^{-1}$. The two formulas for $h_1$ and $h_2$ are the
+    corresponding specializations.
+\end{proof}
+
 \begin{definition}[Generalized coboundary and cocycle]
     \label{def:mpug_generalized_cocycle}
     \lean{TNLean.Algebra.GeneralizedThreeCochain,
