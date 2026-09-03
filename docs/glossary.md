@@ -699,3 +699,41 @@ The following notions use different transfer objects and are not interchangeable
   The theorem
   `MPOTensor.exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL` shows
   that this tower does not imply doubled-index transfer idempotence.
+
+## State-level gauging
+
+### `TNLean.Algebra.DefectMaps.IsCompletion`
+
+- **Declaration:** `TNLean.Algebra.DefectMaps.IsCompletion D R : Prop`.
+- **Defined in:** `TNLean/Algebra/UnitaryCompletionClass.lean`.
+- **Meaning:** the whole family of unitaries $R=(U_{a,b})_{a,b\in G}$ agrees
+  with the prescribed defect maps $D_{a,b}$ on every defect subspace
+  $\mathcal K_{a,b}$.
+- **Source:** arXiv:2502.20257, modified-fusion Lemma `lemma:modif` and the
+  nonuniqueness observation at lines 4215--4326.
+- **Sanctioned bridges:** `DefectMaps.mem_completionClass_iff` identifies the
+  predicate with membership in the full completion class. The transport
+  theorems in the same module use exact prescribed-map covariance before
+  applying the target completion's adjoint.
+- **Caveat:** the predicate characterizes a supplied completion; it neither
+  constructs one nor asserts that the completion class has more than one
+  member. Nonuniqueness requires a nonspanning defect subspace.
+
+### `MPOTensor.HasDefectSupport` and `MPOTensor.HasPrescribedDefectCovariance`
+
+- **Declarations:** `MPOTensor.HasDefectSupport d G hN D Ψ : Prop` and
+  `MPOTensor.HasPrescribedDefectCovariance d G hN D Ψ : Prop`.
+- **Defined in:** `TNLean/MPS/MPDO/GaugeInvariantSubspace.lean`.
+- **Meaning:** every two-site matter slice of $\Psi_\alpha$ lies in the defect
+  subspace selected by the adjacent labels, and the prescribed defect maps
+  carry these slices covariantly under $(a,b)\mapsto(ag^{-1},gb)$.
+- **Source:** arXiv:2502.20257, lines 4325--4335.
+- **Sanctioned bridge:** together with `DefectMaps.IsCompletion`, these
+  predicates imply invariance of the gauged vector under every placed Gauss
+  operator and averaged projector through
+  `MPOTensor.placedGaussOperator_mulVec_gaugedVector` and
+  `MPOTensor.placedGaussProjector_mulVec_gaugedVector`.
+- **Caveat:** no current theorem derives either predicate from the paper's
+  concrete locally orthogonal MPS blocks. That missing specialization and the
+  CZX four-domain instance are recorded in
+  `docs/paper-gaps/fbc25_state_level_gauging_covariance.tex`.

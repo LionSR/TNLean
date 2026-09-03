@@ -50,6 +50,7 @@ import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.StabilizerTransition
 import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.TwistedRegularRepresentation
+import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
