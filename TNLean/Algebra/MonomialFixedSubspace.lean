@@ -102,7 +102,7 @@ theorem fiberFlip_apply (j : Fin r) (x : X) (γ : Fin r → ZMod 2) :
 fiber over `x` when they commute around every square of that fiber:
 $\varphi_j(x,\gamma)\varphi_k(x,\gamma+e_j)
   =\varphi_k(x,\gamma)\varphi_j(x,\gamma+e_k)$. -/
-def TrivialHolonomy (φ : Fin r → X × (Fin r → ZMod 2) → ℂ) (x : X) : Prop :=
+def IsTrivialHolonomy (φ : Fin r → X × (Fin r → ZMod 2) → ℂ) (x : X) : Prop :=
   ∀ (j k : Fin r) (γ : Fin r → ZMod 2),
     φ j (x, γ) * φ k (x, γ + Pi.single j 1) = φ k (x, γ) * φ j (x, γ + Pi.single k 1)
 
@@ -139,7 +139,7 @@ theorem finrank_commonFixedSubmodule_monomial_fiberFlip
     (hinv : ∀ (j : Fin r) (s : X × (Fin r → ZMod 2)), φ j s * φ j (fiberFlip j s) = 1) :
     Module.finrank ℂ
         (LinearMap.commonFixedSubmodule fun j ↦ toLin' (monomial (fiberFlip j) (φ j))) =
-      Nat.card {x : X // TrivialHolonomy φ x} := by
+      Nat.card {x : X // IsTrivialHolonomy φ x} := by
   classical
   set V := LinearMap.commonFixedSubmodule fun j ↦ toLin' (monomial (fiberFlip j) (φ j))
     with hV
@@ -149,22 +149,22 @@ theorem finrank_commonFixedSubmodule_monomial_fiberFlip
     intro v
     rw [hV, LinearMap.mem_commonFixedSubmodule_iff]
     simp only [toLin'_apply, monomial_mulVec_eq_self_iff, Prod.forall, fiberFlip_apply]
-  let E : V →ₗ[ℂ] ({x : X // TrivialHolonomy φ x} → ℂ) :=
+  let E : V →ₗ[ℂ] ({x : X // IsTrivialHolonomy φ x} → ℂ) :=
     { toFun := fun v x ↦ (v : X × (Fin r → ZMod 2) → ℂ) (x.1, 0)
       map_add' := fun v w ↦ rfl
       map_smul' := fun c v ↦ rfl }
   have hinj : Function.Injective E := by
     rw [← LinearMap.ker_eq_bot, LinearMap.ker_eq_bot']
     intro v hv
-    have hv0 : ∀ x : {x : X // TrivialHolonomy φ x},
+    have hv0 : ∀ x : {x : X // IsTrivialHolonomy φ x},
         (v : X × (Fin r → ZMod 2) → ℂ) (x.1, 0) = 0 :=
       fun x ↦ congrFun hv x
     apply Subtype.ext
     funext ⟨x, γ⟩
     change (v : X × (Fin r → ZMod 2) → ℂ) (x, γ) = 0
-    by_cases hx : TrivialHolonomy φ x
+    by_cases hx : IsTrivialHolonomy φ x
     · exact eq_zero_of_mem_commonFixedSubmodule_monomial_fiberFlip φ v.2 x 0 (hv0 ⟨x, hx⟩) γ
-    · simp only [TrivialHolonomy, not_forall] at hx
+    · simp only [IsTrivialHolonomy, not_forall] at hx
       obtain ⟨j, k, γ₀, hne⟩ := hx
       have hfix := (hmem v).mp v.2
       have h₁ : (v : X × (Fin r → ZMod 2) → ℂ) (x, γ₀ + Pi.single j 1 + Pi.single k 1) =
@@ -184,7 +184,7 @@ theorem finrank_commonFixedSubmodule_monomial_fiberFlip
       exact eq_zero_of_mem_commonFixedSubmodule_monomial_fiberFlip φ v.2 x γ₀ h0 γ
   have hsurj : Function.Surjective E := by
     intro w
-    have hpot : ∀ x : X, TrivialHolonomy φ x →
+    have hpot : ∀ x : X, IsTrivialHolonomy φ x →
         ∃ Φ : (Fin r → ZMod 2) → ℂˣ, Φ 0 = 1 ∧
           ∀ (j : Fin r) (γ : Fin r → ZMod 2),
             (Φ (γ + Pi.single j 1) : ℂ) = φ j (x, γ) * Φ γ := by
@@ -200,11 +200,11 @@ theorem finrank_commonFixedSubmodule_monomial_fiberFlip
       rw [hΦ j γ, Units.val_mul, Units.val_mkOfMulEqOne]
     choose Φ hΦ0 hΦ using hpot
     let v : X × (Fin r → ZMod 2) → ℂ := fun s ↦
-      if h : TrivialHolonomy φ s.1 then w ⟨s.1, h⟩ * (Φ s.1 h s.2 : ℂ) else 0
+      if h : IsTrivialHolonomy φ s.1 then w ⟨s.1, h⟩ * (Φ s.1 h s.2 : ℂ) else 0
     have hv : v ∈ V := by
       rw [hmem]
       intro j x γ
-      by_cases hx : TrivialHolonomy φ x
+      by_cases hx : IsTrivialHolonomy φ x
       · simp only [v, hx, ↓reduceDIte, hΦ x hx j γ]
         ring
       · simp [v, hx]

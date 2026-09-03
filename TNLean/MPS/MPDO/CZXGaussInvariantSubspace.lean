@@ -273,9 +273,9 @@ theorem fiberPhase_ne_zero (j : Fin N)
 
 /-- **Fixed spaces on the orbit fibers.** The phases have trivial holonomy on the
 fiber over $(p,b)$ exactly when $b=0$. -/
-theorem trivialHolonomy_fiberPhase_iff (hN : 3 ≤ N)
+theorem isTrivialHolonomy_fiberPhase_iff (hN : 3 ≤ N)
     (pb : (Fin N → ZMod 2) × (Fin N → ZMod 2)) :
-    TNLean.Algebra.TrivialHolonomy fiberPhase pb ↔ pb.2 = 0 := by
+    TNLean.Algebra.IsTrivialHolonomy fiberPhase pb ↔ pb.2 = 0 := by
   have h2 : 2 ≤ N := by omega
   constructor
   · intro h
@@ -533,12 +533,12 @@ theorem finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple (N : ℕ)
         rw [TNLean.Algebra.fiberFlip_apply]
         exact fiberPhase_mul_fiberPhase_flip h2 j pb γ)]
   let hequiv : {x : (Fin N → ZMod 2) × (Fin N → ZMod 2) //
-      TNLean.Algebra.TrivialHolonomy fiberPhase x} ≃ (Fin N → ZMod 2) :=
+      TNLean.Algebra.IsTrivialHolonomy fiberPhase x} ≃ (Fin N → ZMod 2) :=
     { toFun := fun x ↦ x.1.1
-      invFun := fun p ↦ ⟨(p, 0), (trivialHolonomy_fiberPhase_iff hN (p, 0)).mpr rfl⟩
+      invFun := fun p ↦ ⟨(p, 0), (isTrivialHolonomy_fiberPhase_iff hN (p, 0)).mpr rfl⟩
       left_inv := fun x ↦ by
         obtain ⟨⟨p, b⟩, h⟩ := x
-        have hb : b = 0 := (trivialHolonomy_fiberPhase_iff hN (p, b)).mp h
+        have hb : b = 0 := (isTrivialHolonomy_fiberPhase_iff hN (p, b)).mp h
         subst hb
         rfl
       right_inv := fun p ↦ rfl }
