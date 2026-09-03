@@ -2070,9 +2070,11 @@ spectral split → block extraction → MPV calculation → strict bounds
   stated once in the algebra layer. The dependent form applies to all 12
   literal primary occurrences, including the two dependent fusion-multiplicity
   sums in `CompleteZipperFusionPentagon.lean`, and to their alpha-renamed
-  counterparts. It also handles the descent after any separate binder
-  permutation. A lemma is the weakest sufficient mechanism here; no macro or
-  elaborator is warranted.
+  counterparts. The commutation-first bucket is recorded only as a related
+  shape: this lemma applies there only when two congruence descents follow the
+  permutation. `Finset.sum_comm` and `Finset.sum_congr` already cover the
+  one-descent cases. A lemma is the weakest sufficient mechanism for the
+  two-descent pattern; no macro or elaborator is warranted.
 - **Note:** among the 12 literal primary sites,
   `ReflectedTransferKernel.lean:91` is inside the #7658 deletion set. That
   issue also removes files containing alpha-renamed sites, so re-count both
