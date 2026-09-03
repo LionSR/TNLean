@@ -225,7 +225,7 @@ theorem gaussWindowOperator_apply
     Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply]
 
 /-- The local Gauss operator of a completion placed on the periodic two-site
-window beginning at `j`. This is the modified Gauss law `𝒢̃^{j,j+1}_g(R)` of
+window beginning at `j`. This is the modified (tilded) Gauss law `𝒢^{j,j+1}_g(R)` of
 FBC25 (arXiv:2502.20257, lines 4325--4335). -/
 def placedGaussOperator (N : ℕ) (hN : 2 ≤ N) (j : Fin N)
     (R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ) (g : G) :
