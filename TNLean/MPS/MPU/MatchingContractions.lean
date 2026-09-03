@@ -16,9 +16,11 @@ identify a Gram matrix for the paper gate $u=Y_2\mathbin{-}Y_1$.
 
 The source proof in arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma
 `lemuisometry` (lines 536--556), instead contracts the staggered paper-$u$
-network. That route remains unformalized. Similar blocked and output-tail
-shapes in this file must not be read as a formalization of the figure or as
-support for the paper source-$u$ isometry.
+network; that contraction is carried out in
+`TNLean.MPS.MPU.SourceUCompleteNetwork`, which uses from this file only the
+input-first tail isometry and the stabilized fixed pair of the simple block.
+Similar blocked and output-tail shapes in this file must not be read as a
+formalization of the figure.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -112,6 +114,43 @@ theorem IsMPU.normalized_mpo_tail_isometry [NeZero d]
     rw [inv_pow, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero K hd), one_mul]
   · rw [ite_eq_right hpq]
     simp
+
+/-- The supplied normalized transfer power remains the same rank-one
+projector after the additional positive \(D^2\) blocking: the closed double
+layer of the simple block of length \(JD^2\) is the fixed pair
+\(|\rho)(\Phi|\), written in the doubled-bond coordinates of the double layer.
+
+Source: arXiv:1703.09188, equation `Erightleft` and Proposition
+`blockingsimple`, lines 274--280 and 397--409. -/
+theorem normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power
+    [NeZero d] [NeZero D] (U : MPOTensor d D)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρtrace : Matrix.trace ρ = 1)
+    (J : ℕ)
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
+      Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
+    normalizedDiagonal (doubleLayerTensor (blockTensor U (J * (D * D)))) =
+      Matrix.vecMulVec
+        (fun x : Fin (D * D) ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x : Fin (D * D) ↦
+          (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)) := by
+  let R := Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec
+  have hpair : (1 : Matrix (Fin D) (Fin D) ℂ).vec ⬝ᵥ ρ.vec = 1 := by
+    rw [Matrix.vec_one_dotProduct_vec_eq_trace, hρtrace]
+  have hRidem : R * R = R := by
+    simp only [R, Matrix.vecMulVec_mul_vecMulVec, hpair, one_smul]
+  have hDsq : 0 < D * D := Nat.mul_pos (NeZero.pos D) (NeZero.pos D)
+  have hpowpos : ∀ n : ℕ, 0 < n → R ^ n = R := by
+    intro n hn
+    obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn)
+    clear hn
+    induction m with
+    | zero => simp
+    | succ m ih => rw [pow_succ, ih, hRidem]
+  have hRpow : R ^ (D * D) = R := hpowpos _ hDsq
+  have hpowerR :
+      transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J = R := hpower
+  rw [normalizedDiagonal_doubleLayerTensor_blockTensor, pow_mul, hpowerR, hRpow]
+  rfl
 
 /-- The stabilized first block followed by the corrected \(D^2\) block has the
 exact simple contractions obtained from the supplied fixed matrix and the

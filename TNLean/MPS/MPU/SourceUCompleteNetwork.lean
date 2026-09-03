@@ -13,7 +13,23 @@ This file follows the contraction in CPSV17 Lemma `lemuisometry`.  The source
 gate is the staggered contraction \(u=Y_2\mathbin{-}Y_1\).  Its Gram matrix is
 first expanded into the literal reflected--direct four-tensor network in
 Figure `II_uUnitary.png`; the retained physical legs are not included in the
-simple interior block.
+simple interior block.  The network is then closed against the fixed pair
+\(|\rho)(\Phi|\) of the simple interior block of length \(K=JD^2\) and
+identified with the normalized input tail
+\(d^{-K}\operatorname{tr}_{1,\ldots,K}[U^{(K+2)\dagger}U^{(K+2)}]\), which
+gives \(u^\dagger u=\Id\) and \(d^2\le r\ell\).
+
+## Orientation of the source weight
+
+The first source cut lists the conjugated right leg before the unconjugated
+one, so the weight \(\Id_d\otimes\rho\) of equation `X1X2b` inserts
+\(\rho_{\beta\beta'}\) between the bra leg \(\beta\) and the ket leg
+\(\beta'\).  The transfer matrix acts on column-stacked vectors, whose
+component at \((\beta,\beta')\) is \(\rho_{\beta'\beta}\).  Hence the weight
+of `X1X2b` is the transpose of the column-stacked right fixed point: the
+source factors are taken for the weight \(\rho^{\mathsf T}\) whenever
+\(E^J=|\rho)(\Phi|\).  For the diagonal fixed point of canonical form II the
+two matrices coincide.  See `docs/paper-gaps/mpu_source_cut_orientation.tex`.
 
 Source: arXiv:1703.09188, equations `X1X2b`, `uu`, and `uUnitary`, and Lemma
 `lemuisometry` (lines 487--557).
@@ -380,5 +396,139 @@ theorem normalized_mpo_input_tail_eq_closed_doubleLayer_trace
   rw [normalizedDiagonal_pow_eq_sum_evalWord W K]
   simp only [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul,
     Matrix.mul_sum, Matrix.trace_sum]
+
+namespace SourceFactors
+
+/-- The retained-interior contraction of the source-\(u\) network.  When the
+closed double layer of the \(K\)-site interior is the fixed pair
+\(|\rho)(\Phi|\) with \((\Phi|=\operatorname{vec}(\Id_D)^{\mathsf T}\), the
+Gram matrix of \(u=Y_2\mathbin{-}Y_1\) for the source weight
+\(\rho^{\mathsf T}\) is the closed double-layer trace of the two retained
+one-site letters followed by the \(K\)-site interior.  The pair `p` is starred
+and `q` is unstarred.
+
+The weight is \(\rho^{\mathsf T}\) because the first source cut lists the
+conjugated right leg first while `Matrix.vec` stacks columns; see the module
+docstring.
+
+Source: CPSV17 equation `uUnitary` and Lemma `lemuisometry` (lines 545--557).
+-/
+theorem sourceU_gram_eq_closed_doubleLayer_trace
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ.transpose) (K : ℕ)
+    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
+      Matrix.vecMulVec
+        (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)))
+    (p q : Fin d × Fin d) :
+    (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
+      Matrix.trace
+        (doubleLayerTensor U p.1 q.1 * doubleLayerTensor U p.2 q.2 *
+          normalizedDiagonal (doubleLayerTensor U) ^ K) := by
+  rw [sourceU_gram_eq_transpose_fixed_pair_trace, Matrix.transpose_transpose, ← hK]
+  exact Matrix.trace_mul_cycle _ _ _
+
+/-- The complete source-\(u\) network contraction.  With the stabilized fixed
+pair \(E^J=|\rho)(\Phi|\), \((\Phi|=\operatorname{vec}(\Id_D)^{\mathsf T}\),
+and the simple interior block of length \(K=JD^2\), the Gram matrix of the
+paper gate \(u=Y_2\mathbin{-}Y_1\) for the source weight \(\rho^{\mathsf T}\)
+is the normalized input tail
+\(d^{-K}\operatorname{tr}_{1,\ldots,K}[U^{(K+2)\dagger}U^{(K+2)}]\).  The
+pair `p` is starred and `q` is unstarred.
+
+Source: CPSV17 equation `uUnitary` and Lemma `lemuisometry` (lines 545--557).
+-/
+theorem sourceU_gram_eq_normalized_input_tail [NeZero d] [NeZero D]
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρtrace : Matrix.trace ρ = 1) (J : ℕ)
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
+      Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec)
+    (S : SourceFactors U ρ.transpose) (p q : Fin d × Fin d) :
+    (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
+      ((d : ℂ)⁻¹) ^ (J * (D * D)) *
+        ∑ τ : Fin (J * (D * D)) → Fin d,
+          ∑ η : Fin (J * (D * D) + 2) → Fin d,
+            star (mpo U (J * (D * D) + 2) η
+              ((finAddTwoArrowEquiv (Fin d) (J * (D * D))).symm (p, τ))) *
+            mpo U (J * (D * D) + 2) η
+              ((finAddTwoArrowEquiv (Fin d) (J * (D * D))).symm (q, τ)) := by
+  rw [normalized_mpo_input_tail_eq_closed_doubleLayer_trace]
+  have hfixed :=
+    normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power
+      U ρ hρtrace J hpower
+  rw [doubleLayerTensor_blockTensor, normalizedDiagonal_blockTensor] at hfixed
+  exact sourceU_gram_eq_closed_doubleLayer_trace U S (J * (D * D)) hfixed p q
+
+/-- The paper gate \(u=Y_2\mathbin{-}Y_1\) of an MPU tensor satisfies
+\(u^\dagger u=\Id\) for every choice of source factors with weight
+\(\rho^{\mathsf T}\), where \(E^J=|\rho)(\Phi|\) is a stabilized fixed pair
+with \(\operatorname{tr}\rho=1\).
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557). -/
+theorem sourceU_isIsometry_of_isMPU [NeZero d] [NeZero D] (hU : IsMPU U)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρtrace : Matrix.trace ρ = 1) (J : ℕ)
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
+      Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec)
+    (S : SourceFactors U ρ.transpose) :
+    (sourceU U S).IsIsometry := by
+  change (sourceU U S)ᴴ * sourceU U S = 1
+  ext p q
+  have h := sourceU_gram_eq_normalized_input_tail U hρtrace J hpower S p q
+  rw [hU.normalized_mpo_tail_isometry] at h
+  rw [Matrix.mul_apply, Matrix.one_apply, ← h]
+  exact Finset.sum_congr rfl fun lr _ ↦ by
+    rw [Matrix.conjTranspose_apply, mul_comm]
+
+/-- Since \(u\) is an isometry from a space of dimension \(d^2\) to one of
+dimension \(r\ell\), the source-cut ranks satisfy \(d^2\le r\ell\).
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557). -/
+theorem mul_self_le_leftRank_mul_rightRank_of_isMPU [NeZero d] [NeZero D]
+    (hU : IsMPU U)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρtrace : Matrix.trace ρ = 1) (J : ℕ)
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
+      Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec)
+    (S : SourceFactors U ρ.transpose) :
+    d * d ≤ ℓ[U] * r[U] := by
+  have h := Matrix.IsIsometry.card_le _
+    (sourceU_isIsometry_of_isMPU U hU hρtrace J hpower S)
+  simpa only [Fintype.card_prod, Fintype.card_fin] using h
+
+end SourceFactors
+
+variable {U} in
+/-- The compact-SVD paper gate \(u=Y_2\mathbin{-}Y_1\) with source weight
+\(\rho^{\mathsf T}\) is an isometry whenever \(E^J=|\rho)(\Phi|\) is a
+stabilized fixed pair with \(\rho>0\) and \(\operatorname{tr}\rho=1\).
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557). -/
+theorem IsMPU.sourceU_transpose_isIsometry [NeZero d] [NeZero D] (hU : IsMPU U)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (hρtrace : Matrix.trace ρ = 1)
+    (J : ℕ)
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
+      Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
+    (sourceU U ρ.transpose hρ.transpose).IsIsometry :=
+  SourceFactors.sourceU_isIsometry_of_isMPU U hU hρtrace J hpower
+    (sourceFactors U ρ.transpose hρ.transpose)
+
+variable {U} in
+/-- A reduced full-support canonical-form-II representative supplies a
+normalized positive right fixed point \(\rho\) whose transpose is the source
+weight of an isometric paper gate \(u\).
+
+**Scope restriction (full support):** the fixed pair is supplied by
+`IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii`; see
+`docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557). -/
+theorem IsMPU.exists_sourceU_transpose_isIsometry_of_reduced_cfii
+    [NeZero d] [NeZero D] (hU : IsMPU U) (hD : 1 < D)
+    (cfii : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
+    (hfull : cfii.toCPSVCanonicalFormData.HasFullSupport) :
+    ∃ (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef),
+      Matrix.trace ρ = 1 ∧ Kraus.transferMap U.normalizedFlattening ρ = ρ ∧
+      (sourceU U ρ.transpose hρ.transpose).IsIsometry := by
+  obtain ⟨_, _, ρ, _, _, _, _, _, _, hρpd, hρtrace, hρfix, _, hpower⟩ :=
+    hU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii hD cfii hfull
+  exact ⟨ρ, hρpd, hρtrace, hρfix,
+    hU.sourceU_transpose_isIsometry hρpd hρtrace _ hpower⟩
 
 end MPOTensor

@@ -102,6 +102,53 @@ The contractions $Y_1$--$X_2$ and $X_1$--$Y_2$ remain useful auxiliary
 kernels, but they are not the gates $u$ and $v$. Treating either mixed kernel
 as a paper gate produces the wrong physical and auxiliary leg assignment.
 
+\section{Orientation of the source weight}
+
+Equation \texttt{X1X2b} of Ref.~\cite{Cirac2017MPU} normalizes the first cut
+by $X_1^\dagger(\operatorname{Id}_d\otimes\rho)X_1=\operatorname{Id}$, where
+$\rho$ is the right fixed point of the transfer matrix. The source takes
+$\rho$ diagonal, so it never distinguishes $\rho$ from $\rho^{\mathsf T}$; a
+general positive definite fixed point does. Two readings of the same matrix
+occur in the network of Lemma~\texttt{lemuisometry}.
+
+In the weight $\operatorname{Id}_d\otimes\rho$, the row $(i,\beta)$ of $X_1$
+carries the right leg of the conjugated tensor and the column $(i,\beta')$
+carries the right leg of the unconjugated tensor, so the Gram matrix of
+$u=Y_2\mathbin{-}Y_1$ inserts $\rho_{\beta\beta'}$ between the conjugated leg
+$\beta$ and the unconjugated leg $\beta'$
+(\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_staggered_four_u}).
+
+The transfer matrix of the normalized flattening acts on column-stacked
+vectors, $\lvert\rho)_{(\beta,\beta')}=\rho_{\beta'\beta}$, and the doubled
+bond of the double layer lists the conjugated leg first. Hence the right
+fixed vector $E^J\lvert\rho)=\lvert\rho)$ inserts $\rho_{\beta'\beta}$
+between the conjugated leg $\beta$ and the unconjugated leg $\beta'$.
+
+The two insertions agree exactly when the weight of \texttt{X1X2b} is the
+transpose of the column-stacked fixed point. With the weight $\rho$ itself,
+the Gram matrix of $u$ is $(\Phi\rvert W^{p_1q_1}W^{p_2q_2}\lvert\rho^{\mathsf T})$,
+and $\lvert\rho^{\mathsf T})$ is not a fixed vector of $E$ in general; a
+gauge-transformed right shift with a complex gauge gives $u^\dagger u\neq\operatorname{Id}$
+for that pairing. The correct pairing is therefore
+\begin{align}
+    E^J & =\lvert\rho)(\Phi\rvert,
+        & X_1^\dagger(\operatorname{Id}_d\otimes\rho^{\mathsf T})X_1
+        & =\operatorname{Id}_r,
+    \label{eq:mpu_source_cut_orientation_weight_pairing}
+\end{align}
+and every source-$u$ statement built on a supplied fixed pair takes the
+source factors for the weight $\rho^{\mathsf T}$:
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_closed_doubleLayer_trace},
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_input_tail},
+\leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU}, and
+\leanid{MPOTensor.IsMPU.sourceU_transpose_isIsometry}. For the diagonal fixed
+point of canonical form II, $\rho^{\mathsf T}=\rho$ and
+Eq.~\ref{eq:mpu_source_cut_orientation_weight_pairing} is the printed
+convention. The source-$v$ dressing
+\leanid{MPOTensor.sourceYTensor_gram_eq_four_u_weighted} inserts the weight
+in the same conjugated-first order, so the same pairing applies to the
+equivalence labelled \texttt{vUnitary}.
+
 \section{Affected claims and audit boundary}
 
 The transposed first cut affected source-factor recovery, physical adjunction,
@@ -126,9 +173,12 @@ The former definition of $M_1$ was the transpose of the source diagram. The
 correction changes no source rank, but it changes the typed source factors and
 all order-sensitive contractions. The first cut, weight, adjunction identities,
 paper gates, two-site factorizations, tensor products, and shift examples now
-use one consistent leg assignment. The correction is resolved, while the
-revalidation rule remains applicable to any future recovery of source-gate
-work predating this audit.
+use one consistent leg assignment. The weight of the first cut is the
+transpose of the column-stacked transfer fixed point, which is invisible for
+the diagonal fixed point of the source and load-bearing for a general
+positive definite one. The correction is resolved, while the revalidation
+rule remains applicable to any future recovery of source-gate work predating
+this audit.
 
 \bibliographystyle{alpha}
 \bibliography{references}

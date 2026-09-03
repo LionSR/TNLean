@@ -5029,20 +5029,67 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Theorem~\ref{thm:mpu_source_u_staggered_gram}.
 \end{proof}
 
+\begin{lemma}[Retained-interior contraction of the source-$u$ network]
+    \label{lem:mpu_source_u_retained_interior}
+    \lean{MPOTensor.SourceFactors.sourceU_gram_eq_closed_doubleLayer_trace}
+    \leanok
+    \discussion{7633}
+    \uses{def:mpu_source_uv, def:mpu_weighted_source_factors, def:mpu_double_layer}
+    Let $\mathcal U$ be an MPO tensor with double-layer letters $W^{ij}$ and
+    normalized physical diagonal $E=d^{-1}\sum_iW^{ii}$. Let $\rho$ be a bond
+    matrix, let $\lvert\rho)$ be its column-stacking vector, put
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that the
+    closed double layer of a $K$-site interior is the fixed pair,
+    \begin{align}
+        E^K & =\lvert\rho)(\Phi\rvert.
+        \label{eq:mpu_source_u_retained_interior_fixed_pair}
+    \end{align}
+    Let $M_i=X_iY_i$ be supplied source factorizations for $\mathcal U$ and
+    the weight $\rho^{\mathsf T}$, and let $u=Y_2\mathbin{-}Y_1$. Then, for
+    retained physical pairs $p=(p_1,p_2)$ and $q=(q_1,q_2)$,
+    \begin{align}
+        \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+         & =\tr\!\left(W^{p_1q_1}W^{p_2q_2}E^K\right).
+    \end{align}
+    The two endpoint letters remain unblocked; only the interior is the
+    $K$-site block. The weight is $\rho^{\mathsf T}$ because the first source
+    cut lists the conjugated right leg before the unconjugated one, while
+    $\lvert\rho)$ stacks columns: both insert the coefficient
+    $\rho_{\beta'\beta}$ between the conjugated leg $\beta$ and the
+    unconjugated leg $\beta'$. For the diagonal fixed point of canonical
+    form II this is the weight $\rho$ of equation \texttt{X1X2b} in
+    \cite{Cirac2017MPU}.
+    % Source locator: paper_v2.tex, equation uUnitary and lines 545--557.
+    % Orientation: docs/paper-gaps/mpu_source_cut_orientation.tex.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_transpose_fixed_pair_trace}
+    Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace}, applied to the
+    weight $\rho^{\mathsf T}$, closes the two external source gates as
+    $\tr(W^{p_2q_2}\lvert\rho)(\Phi\rvert W^{p_1q_1})$, since
+    $(\rho^{\mathsf T})^{\mathsf T}=\rho$. Substituting
+    (\ref{eq:mpu_source_u_retained_interior_fixed_pair}) and cycling the
+    letter $W^{p_1q_1}$ to the front of the trace gives
+    $\tr(W^{p_1q_1}W^{p_2q_2}E^K)$.
+\end{proof}
+
 \begin{theorem}[Complete source-$u$ network contraction]
     \label{thm:mpu_source_u_complete_network}
-    \notready
+    \lean{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_input_tail}
+    \leanok
     \discussion{5982}
-    \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_source_uv, def:mpo_family}
+    \uses{def:mpu_normalized_flattening, def:mpu_source_uv, def:mpu_weighted_source_factors, def:mpo_family}
     % Revalidation boundary: docs/paper-gaps/mpu_source_cut_orientation.tex.
-    Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$ and bond
-    dimension $D>0$. Let $\rho>0$ satisfy $\tr(\rho)=1$, put
+    Let $\mathcal U$ be an MPO tensor with physical dimension $d>0$ and bond
+    dimension $D>0$. Let $\rho$ satisfy $\tr(\rho)=1$, put
     $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that for
-    some $J>0$ the normalized transfer matrix satisfies
+    some $J$ the normalized transfer matrix satisfies
     \begin{align}
         E^J & =\lvert\rho)(\Phi\rvert.
     \end{align}
-    Construct the source factors and $u$ from $\mathcal U$ using $\rho$, and set
+    Let $M_i=X_iY_i$ be supplied source factorizations for $\mathcal U$ and
+    the weight $\rho^{\mathsf T}$, let $u=Y_2\mathbin{-}Y_1$, and set
     $K=JD^2$. For retained physical pairs
     $p,q\in\{0,\ldots,d-1\}^2$, the complete source-$u$ contraction satisfies
     \begin{align}
@@ -5053,34 +5100,22 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Here $\tau$ ranges over input words of length $K$, and $\eta$ ranges over
     output words of length $K+2$. This is the supplied-fixed-pair form of the
-    complete-network equality in \cite[Lemma~III.7]{Cirac2017MPU}.
+    complete-network equality in \cite[Lemma~III.7]{Cirac2017MPU}; the
+    weight $\rho^{\mathsf T}$ is explained in
+    Lemma~\ref{lem:mpu_source_u_retained_interior}.
     % Source locator: paper_v2.tex, lines 545--557.
 \end{theorem}
 
-\begin{proof}
-    \uses{thm:mpu_source_u_transpose_fixed_pair_trace, thm:mpu_normalized_input_tail_closed_trace}
-    Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace} closes the two
-    external source gates as
-    \begin{align}
-        \operatorname{tr}\!\left(
-        W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_1q_1}
-        \right).
-    \end{align}
-    Cyclicity moves the first double-layer letter past the trace. It remains to
-    identify the resulting rank-one insertion with the $K$-site interior:
-    \begin{align}
-        \operatorname{tr}\!\left(
-        W^{p_1q_1}W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert
-        \right)
-         & =\operatorname{tr}\!\left(
-        W^{p_1q_1}W^{p_2q_2}E^K
-        \right).
-    \end{align}
-    This retained-interior contraction remains open. It must preserve the two
-    unblocked endpoint letters while applying the supplied simple contractions
-    to the interior. The checked $Y_1$--$X_2$ mixed-kernel identities concern a
-    different network and do not prove this equality.
-    % The retained-interior contraction is tracked in Issue #7633.
+\begin{proof}\leanok
+    \uses{lem:mpu_source_u_retained_interior, thm:mpu_normalized_input_tail_closed_trace, thm:mpu_reflected_transfer_power}
+    Theorem~\ref{thm:mpu_normalized_input_tail_closed_trace} writes the
+    right-hand side as $\tr(W^{p_1q_1}W^{p_2q_2}E^K)$. Since $(\Phi|\rho)=\tr(\rho)=1$, the
+    rank-one matrix $\lvert\rho)(\Phi\rvert$ is idempotent, so
+    Theorem~\ref{thm:mpu_reflected_transfer_power} gives
+    $E^K=(E^J)^{D^2}=\lvert\rho)(\Phi\rvert$ for the closed double layer of
+    the interior block of length $K=JD^2$.
+    Lemma~\ref{lem:mpu_source_u_retained_interior} then identifies the Gram
+    matrix of $u$ with $\tr(W^{p_1q_1}W^{p_2q_2}E^K)$.
 \end{proof}
 
 \begin{theorem}[Complete reduced source-$v$ contraction]
@@ -5141,35 +5176,48 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Consequently $u$ is an isometry and $r\ell\geq d^2$. This is the
     unrestricted statement of \cite[Lemma~III.7]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 545--557.
+    % Checked with an explicitly supplied stabilized fixed pair in
+    % Lemma~\ref{lem:mpu_admissible_source_u_isometry} and, for a reduced
+    % full-support representative, in
+    % Corollary~\ref{cor:mpu_reduced_cfii_source_u_isometry}. The unrestricted
+    % canonical-form-II convention is documented in
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
 \end{lemma}
 
 \begin{lemma}[Admissible source-$u$ isometry]
     \label{lem:mpu_admissible_source_u_isometry}
-    \notready
+    \lean{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU,
+        MPOTensor.SourceFactors.mul_self_le_leftRank_mul_rightRank_of_isMPU,
+        MPOTensor.IsMPU.sourceU_transpose_isIsometry}
+    \leanok
     \discussion{5708}
     % **Scope restriction (supplied stabilized fixed pair):** this lemma assumes
     % the exact rank-one transfer identity explicitly, whereas source Lemma III.7
     % uses the preceding MPU and canonical-form-II convention. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_source_uv}
+    \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_source_uv, def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$ and bond
-    dimension $D>0$. Let $\rho>0$ satisfy $\tr(\rho)=1$, put
+    dimension $D>0$. Let $\rho$ satisfy $\tr(\rho)=1$, put
     $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that for
-    some $J>0$ the normalized transfer matrix satisfies
+    some $J$ the normalized transfer matrix satisfies
     \begin{align}
         E^J & =\lvert\rho)(\Phi\rvert.
     \end{align}
-    Let $r$ and $\ell$ be the two source-cut ranks, and construct the source
-    factors and $u$ from $\mathcal U$ using $\rho$. Then
+    Let $r$ and $\ell$ be the two source-cut ranks, let $M_i=X_iY_i$ be
+    source factorizations for $\mathcal U$ and the weight $\rho^{\mathsf T}$,
+    and let $u=Y_2\mathbin{-}Y_1$. Then
     \begin{align}
         u^\dagger u & =\Id.
     \end{align}
-    Consequently $u$ is an isometry and $r\ell\geq d^2$. This is the
-    reduced-source version of \cite[Lemma~III.7]{Cirac2017MPU}.
+    Consequently $u$ is an isometry and $r\ell\geq d^2$. In particular the
+    compact-SVD gate $u$ for the positive definite weight $\rho^{\mathsf T}$
+    is an isometry when $\rho>0$. This is the reduced-source version of
+    \cite[Lemma~III.7]{Cirac2017MPU}; the weight $\rho^{\mathsf T}$ is
+    explained in Lemma~\ref{lem:mpu_source_u_retained_interior}.
     % Source lines: paper_v2.tex 545--557.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpu_source_u_complete_network, thm:mpu_normalized_input_tail_isometry}
     Set $K=JD^2$. The complete-network identity and input-first MPU unitarity
     give, for all retained physical pairs $p,q$,
@@ -5180,7 +5228,33 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         U^{(K+2)}_{\eta,(q,\tau)}  \\
          & =\delta_{p,q}.
     \end{align}
-    Hence $u^\dagger u=\Id$.
+    Hence $u^\dagger u=\Id$. Since $u$ maps a space of dimension $d^2$
+    isometrically into a space of dimension $\ell r$, its rank is $d^2$ and
+    $d^2\le r\ell$.
+\end{proof}
+
+\begin{corollary}[Source-$u$ isometry from a reduced representative]
+    \label{cor:mpu_reduced_cfii_source_u_isometry}
+    \lean{MPOTensor.IsMPU.exists_sourceU_transpose_isIsometry_of_reduced_cfii}
+    \leanok
+    % **Scope restriction (full support):** the fixed pair is supplied by the
+    % chosen reduced canonical-form-II representative. Documented in
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_source_uv, def:cpsv_cfii, def:mpu_full_support}
+    Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$ and bond
+    dimension $D>1$, and choose canonical-form-II data for its normalized
+    flattening whose blocks fill the ambient bond space. Then there is a
+    positive definite $\rho$ with $\tr(\rho)=1$, fixed by the normalized
+    transfer map, such that the compact-SVD gate $u=Y_2\mathbin{-}Y_1$ for
+    the weight $\rho^{\mathsf T}$ satisfies $u^\dagger u=\Id$.
+    % Source lines: paper_v2.tex 545--557.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_transfer_stabilization, lem:mpu_admissible_source_u_isometry}
+    Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization} supplies
+    $\rho$ with $E^{D^2-1}=\lvert\rho)(\Phi\rvert$, and
+    Lemma~\ref{lem:mpu_admissible_source_u_isometry} applies.
 \end{proof}
 
 \begin{theorem}[Simple-tensor equivalence theorem]
