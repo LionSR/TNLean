@@ -219,6 +219,24 @@ theorem evalWord_append (M : MPOTensor d D) :
           simp only [List.cons_append, evalWord_cons]
           rw [ih js l₂ k₂ (by simpa using h), Matrix.mul_assoc]
 
+/-- Evaluation of a word with one retained letter at each endpoint separates
+those letters from the interior word. -/
+theorem evalWord_ofFn_cons_snoc (M : MPOTensor d D) {K : ℕ}
+    (i₁ i₂ j₁ j₂ : Fin d) (σ τ : Fin K → Fin d) :
+    evalWord M
+        (List.ofFn (Fin.cons i₁ (Fin.snoc σ i₂)))
+        (List.ofFn (Fin.cons j₁ (Fin.snoc τ j₂))) =
+      M i₁ j₁ * evalWord M (List.ofFn σ) (List.ofFn τ) * M i₂ j₂ := by
+  have hσ : List.ofFn (Fin.snoc σ i₂) = List.ofFn σ ++ [i₂] := by
+    conv_lhs => rw [List.ofFn_succ' (Fin.snoc σ i₂)]
+    simp [Fin.snoc_castSucc, Fin.snoc_last]
+  have hτ : List.ofFn (Fin.snoc τ j₂) = List.ofFn τ ++ [j₂] := by
+    conv_lhs => rw [List.ofFn_succ' (Fin.snoc τ j₂)]
+    simp [Fin.snoc_castSucc, Fin.snoc_last]
+  rw [List.ofFn_cons, List.ofFn_cons, evalWord_cons, hσ, hτ,
+    evalWord_append M (List.ofFn σ) (List.ofFn τ) [i₂] [j₂] (by simp)]
+  simp [evalWord, Matrix.mul_assoc]
+
 /-- **Cyclicity of the closed MPO word trace.** Moving the first bra/ket letter
 to the end of both words leaves the trace of the matrix product unchanged, since
 `tr(M^{ab} \, P) = tr(P \, M^{ab})`. This is the translation invariance of the
