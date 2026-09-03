@@ -6,17 +6,16 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.SourceFactors
 
 /-!
-# Paper source gates and auxiliary mixed source-factor kernels
+# Paper source gates
 
 This file defines the paper gates $u=Y_2\mathbin{-}Y_1$ and
 $v=X_1\mathbin{-}X_2$ from arXiv:1703.09188, equations `uuvv`, `uu`, and
 `vdagger` (lines 532--543), with the triangle assignment made explicit in
 arXiv:2502.20257, equation `eq:uv` (lines 704--760).
 
-It also retains the algebraically useful mixed contractions $Y_1\mathbin{-}X_2$
-and $X_1\mathbin{-}Y_2$ under explicit factor-pair names. Those auxiliary
-kernels give an ordinary two-letter MPO factorization, but they are not the
-paper gates and carry no `uuvv`, `lemuisometry`, or standard-form claim.
+Both gates contract two factors taken from the same side of the source cuts,
+as the source prints them; no other pairing of the four source factors is
+defined here.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -27,22 +26,6 @@ namespace MPOTensor
 variable {d D : ℕ} (U : MPOTensor d D)
 
 namespace SourceFactors
-
-/-- The auxiliary $Y_1$--$X_2$ contraction for supplied source factors.
-
-This is a mixed-cut kernel used by exact algebraic factorizations below. It is
-not the tensor $u$ in CPSV17 equation `uu` or FBC25 equation `eq:uv`. -/
-def sourceY₁X₂ {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) :
-    Matrix (Fin ℓ[U] × Fin r[U]) (Fin d × Fin d) ℂ :=
-  fun (l, r) (i₁, i₂) ↦ ∑ β : Fin D, S.Y₁ r (β, i₁) * S.X₂ (β, i₂) l
-
-/-- The auxiliary $X_1$--$Y_2$ contraction for supplied source factors.
-
-This is a mixed-cut kernel used by exact algebraic factorizations below. It is
-not the tensor $v$ in CPSV17 equation `vdagger` or FBC25 equation `eq:uv`. -/
-def sourceX₁Y₂ {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) :
-    Matrix (Fin d × Fin d) (Fin r[U] × Fin ℓ[U]) ℂ :=
-  fun (j₁, j₂) (r, l) ↦ ∑ α : Fin D, S.X₁ (j₁, α) r * S.Y₂ l (j₂, α)
 
 /-- The paper gate $u : d^2 \to \ell\times r$ for supplied source factors.
 Its two triangles are $Y_2$ and $Y_1$, in that order.
@@ -61,22 +44,6 @@ equation `eq:uv` (lines 704--760). -/
 def sourceV {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin d × Fin d) (Fin r[U] × Fin ℓ[U]) ℂ :=
   fun (j₁, j₂) (r, l) ↦ ∑ α : Fin D, S.X₁ (j₁, α) r * S.X₂ (α, j₂) l
-
-/-- Entry formula for the auxiliary $Y_1$--$X_2$ kernel with supplied factors.
-
-Auxiliary mixed-cut identity; not CPSV17 equation `uu`. -/
-@[simp] theorem sourceY₁X₂_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (S : SourceFactors U ρ) (l : Fin ℓ[U]) (r : Fin r[U]) (i₁ i₂ : Fin d) :
-    sourceY₁X₂ U S (l, r) (i₁, i₂) =
-      ∑ β : Fin D, S.Y₁ r (β, i₁) * S.X₂ (β, i₂) l := rfl
-
-/-- Entry formula for the auxiliary $X_1$--$Y_2$ kernel with supplied factors.
-
-Auxiliary mixed-cut identity; not CPSV17 equation `vdagger`. -/
-@[simp] theorem sourceX₁Y₂_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (S : SourceFactors U ρ) (j₁ j₂ : Fin d) (r : Fin r[U]) (l : Fin ℓ[U]) :
-    sourceX₁Y₂ U S (j₁, j₂) (r, l) =
-      ∑ α : Fin D, S.X₁ (j₁, α) r * S.Y₂ l (j₂, α) := rfl
 
 /-- Literal entry formula for the paper gate $u=Y_2\mathbin{-}Y_1$.
 
@@ -115,24 +82,6 @@ Source: arXiv:1703.09188, equations `X2Y2` and `SVDforms2`, lines 508--528. -/
   rfl
 
 end SourceFactors
-
-/-- The compact-SVD auxiliary $Y_1$--$X_2$ mixed-cut kernel.
-
-This kernel is not the tensor $u$ in CPSV17 equation `uu` or FBC25 equation
-`eq:uv`. -/
-noncomputable def sourceY₁X₂ (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    Matrix (Fin ℓ[U] × Fin r[U]) (Fin d × Fin d) ℂ :=
-  fun (l, r) (i₁, i₂) ↦ ∑ β : Fin D,
-    sourceY₁ U ρ hρ r (β, i₁) * sourceX₂ U (β, i₂) l
-
-/-- The compact-SVD auxiliary $X_1$--$Y_2$ mixed-cut kernel.
-
-This kernel is not the tensor $v$ in CPSV17 equation `vdagger` or FBC25
-equation `eq:uv`. -/
-noncomputable def sourceX₁Y₂ (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    Matrix (Fin d × Fin d) (Fin r[U] × Fin ℓ[U]) ℂ :=
-  fun (j₁, j₂) (r, l) ↦ ∑ α : Fin D,
-    sourceX₁ U ρ hρ (j₁, α) r * sourceY₂ U l (j₂, α)
 
 /-- The compact-SVD paper gate $u=Y_2\mathbin{-}Y_1$.
 
@@ -203,56 +152,6 @@ Source: CPSV17 equation `vdagger` (lines 532--543) and FBC25 equation `eq:uv`
     (r : Fin r[U]) (l : Fin ℓ[U]) (j₁ j₂ : Fin d) :
     (sourceV U ρ hρ)ᴴ (r, l) (j₁, j₂) = star (∑ α : Fin D,
       sourceX₁ U ρ hρ (j₁, α) r * sourceX₂ U (α, j₂) l) := rfl
-
-/-- The compact-SVD factors recover the auxiliary $Y_1$--$X_2$ kernel.
-
-Algebraic consequence of the compact-SVD source factors; this is not CPSV17 $u$. -/
-@[simp] theorem sourceFactors_sourceY₁X₂
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    SourceFactors.sourceY₁X₂ U (sourceFactors U ρ hρ) = sourceY₁X₂ U ρ hρ := by
-  rfl
-
-/-- The compact-SVD factors recover the auxiliary $X_1$--$Y_2$ kernel.
-
-Algebraic consequence of the compact-SVD source factors; this is not CPSV17 $v$. -/
-@[simp] theorem sourceFactors_sourceX₁Y₂
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    SourceFactors.sourceX₁Y₂ U (sourceFactors U ρ hρ) = sourceX₁Y₂ U ρ hρ := by
-  rfl
-
-/-- Stable entry formula for the auxiliary $Y_1$--$X_2$ kernel.
-
-Auxiliary mixed-cut identity; not CPSV17 equation `uu`. -/
-@[simp] theorem sourceY₁X₂_apply (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (l : Fin ℓ[U]) (r : Fin r[U]) (i₁ i₂ : Fin d) :
-    sourceY₁X₂ U ρ hρ (l, r) (i₁, i₂) = ∑ β : Fin D,
-      sourceY₁ U ρ hρ r (β, i₁) * sourceX₂ U (β, i₂) l := rfl
-
-/-- Stable entry formula for the auxiliary $X_1$--$Y_2$ kernel.
-
-Auxiliary mixed-cut identity; not CPSV17 equation `vdagger`. -/
-@[simp] theorem sourceX₁Y₂_apply (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (j₁ j₂ : Fin d) (r : Fin r[U]) (l : Fin ℓ[U]) :
-    sourceX₁Y₂ U ρ hρ (j₁, j₂) (r, l) = ∑ α : Fin D,
-      sourceX₁ U ρ hρ (j₁, α) r * sourceY₂ U l (j₂, α) := rfl
-
-/-- Conjugate-transpose entry formula for the auxiliary $Y_1$--$X_2$ kernel.
-
-Auxiliary mixed-cut identity; not CPSV17 equations `uuvv` or `uu`. -/
-@[simp] theorem sourceY₁X₂_conjTranspose_apply
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (i₁ i₂ : Fin d) (l : Fin ℓ[U]) (r : Fin r[U]) :
-    (sourceY₁X₂ U ρ hρ)ᴴ (i₁, i₂) (l, r) = star (∑ β : Fin D,
-      sourceY₁ U ρ hρ r (β, i₁) * sourceX₂ U (β, i₂) l) := rfl
-
-/-- Conjugate-transpose entry formula for the auxiliary $X_1$--$Y_2$ kernel.
-
-Auxiliary mixed-cut identity; not CPSV17 equation `vdagger`. -/
-@[simp] theorem sourceX₁Y₂_conjTranspose_apply
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (r : Fin r[U]) (l : Fin ℓ[U]) (j₁ j₂ : Fin d) :
-    (sourceX₁Y₂ U ρ hρ)ᴴ (r, l) (j₁, j₂) = star (∑ α : Fin D,
-      sourceX₁ U ρ hρ (j₁, α) r * sourceY₂ U l (j₂, α)) := rfl
 
 /-- The traced product of two local letters factors through the paper gates $v$ and $u$.
 

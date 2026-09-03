@@ -923,33 +923,28 @@ closing a chain of $N$ copies of $\mathcal U$.
     witness.
 \end{proof}
 
-\begin{theorem}[Normalized output-tail coisometry]
-    \label{thm:mpu_normalized_output_tail_coisometry}
-    \lean{MPOTensor.IsMPU.normalized_mpo_tail_coisometry}
+\begin{theorem}[Rank-one transfer power after the second blocking]
+    \label{thm:mpu_blocked_transfer_power_rank_one}
+    \lean{MPOTensor.normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power}
     \leanok
-    Let $d>0$, let $\mathcal U$ be an MPU, and let $K\geq0$. For
-    $p,q\in\Fin d\times\Fin d$, separate the first two output sites from a
-    tail $\tau\in\Fin K\to\Fin d$. Then
+    \uses{def:mpu_double_layer, def:mpu_normalized_flattening, def:mpdo_physical_blocking}
+    Let $\mathcal U$ be an MPO tensor with $d,D>0$, let $E$ be the transfer
+    matrix of its normalized flattening, and suppose that for some $J\geq0$
+    and some trace-one $\rho$,
     \begin{align}
-        d^{-K}\sum_{\tau}\sum_{\eta}
-        U^{(K+2)}_{(q,\tau),\eta}
-        \overline{U^{(K+2)}_{(p,\tau),\eta}}
-         & =\delta_{p,q}.
+        E^J & =|\rho)(\Id|.
     \end{align}
-    The retained matrix entry has the reversed order $(q,p)$, and the global
-    contraction is the output-first equation
-    $U^{(K+2)}(U^{(K+2)})^\dagger=\Id$.
+    Then the normalized diagonal of the double layer of the direct
+    length-$JD^2$ block is the same rank-one matrix, after the standard product
+    reindexing of the doubled bond.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_mul_adjoint}
-    Apply output-first unitarity before performing any source-factor
-    rearrangement.  For each fixed tail, the inner sum is the corresponding
-    identity-matrix entry, hence it is $\delta_{p,q}$.  There are exactly
-    \begin{align}
-        |\Fin K\to\Fin d|=d^K
-    \end{align}
-    tails, and $d^{-K}d^K=1$ because $d>0$.
+    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_double_layer_blocking}
+    Trace normalization gives $(\Id|\rho)=1$, so $|\rho)(\Id|$ is idempotent
+    and every positive power of it equals itself.  The blocked normalized
+    diagonal is the corresponding power of $E$, and $E^{JD^2}$ is the $D^2$-th
+    power of $E^J$.
 \end{proof}
 
 \begin{theorem}[Normalized input-tail isometry]
@@ -987,7 +982,9 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_all_later_simple_blockings}
     \lean{MPOTensor.IsMPU.isMPUSimple_of_simple2,
         MPOTensor.IsMPU.blockTensor_succ_isMPUSimple,
-        MPOTensor.IsMPU.blockTensor_isMPUSimple_of_le}
+        MPOTensor.IsMPU.blockTensor_isMPUSimple_of_le,
+        MPOTensor.blockTensor_succ_simple2_of_supplied,
+        MPOTensor.IsMPU.simple1_of_simple2_supplied}
     \leanok
     \uses{def:mpu, def:mpu_simple}
     Let $\mathcal U$ generate an MPU, and suppose its direct length-$k$ block
@@ -2665,30 +2662,6 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \cite[Section~III, equations~\texttt{uuvv}--\texttt{vdagger}]{Cirac2017MPU}.
 \end{definition}
 
-\begin{definition}[Auxiliary mixed source-factor kernels]
-    \label{def:mpu_mixed_source_kernels}
-    \lean{MPOTensor.SourceFactors.sourceY₁X₂,
-        MPOTensor.SourceFactors.sourceX₁Y₂,
-        MPOTensor.SourceFactors.sourceY₁X₂_apply,
-        MPOTensor.SourceFactors.sourceX₁Y₂_apply,
-        MPOTensor.sourceFactors_sourceY₁X₂,
-        MPOTensor.sourceFactors_sourceX₁Y₂,
-        MPOTensor.sourceY₁X₂,MPOTensor.sourceX₁Y₂,
-        MPOTensor.sourceY₁X₂_apply,MPOTensor.sourceX₁Y₂_apply,
-        MPOTensor.sourceY₁X₂_conjTranspose_apply,
-        MPOTensor.sourceX₁Y₂_conjTranspose_apply}
-    \leanok
-    \uses{def:mpu_weighted_source_factors}
-    Define the auxiliary mixed contractions
-    \begin{align}
-        a_{(l,r),(i_1,i_2)}
-         & =\sum_\beta (Y_1)_{r,(\beta,i_1)}(X_2)_{(\beta,i_2),l},    \\
-        b_{(j_1,j_2),(r,l)}
-         & =\sum_\alpha (X_1)_{(j_1,\alpha),r}(Y_2)_{l,(j_2,\alpha)}.
-    \end{align}
-    These kernels are not the paper gates $u$ and $v$.
-\end{definition}
-
 \begin{theorem}[Paper-gate two-site factorization]
     \label{thm:mpu_source_gates_two_site_factorization}
     \lean{MPOTensor.trace_mul_eq_sourceV_mul_sourceU_swap,
@@ -2782,270 +2755,6 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     ordered pairs.
 \end{proof}
 
-\begin{theorem}[Open periodic-tail source expansion]
-    \label{thm:mpu_mixed_y1_x2_open_periodic_tail}
-    \lean{MPOTensor.mpo_finAddTwo_eq_sum_sourceV_sourceY₁_sourceY₂_evalWord,
-        MPOTensor.mpo_finAddTwo_eq_sum_sourceV_sourceY₁_sourceX₂_openTail}
-    \leanok
-    \uses{def:mpo_family, thm:mpu_source_v_open_two_site, thm:mpu_source_factor_recovery}
-    Separate the first two physical sites of a length-$(K+2)$ configuration.
-    For an output pair $q$, an input pair $j$, and tails $\tau,\zeta$, the
-    periodic entry first expands as
-    \begin{align}
-        U^{(K+2)}_{(q,\tau),(j,\zeta)}
-        =\sum_{\alpha,\gamma,r,l}
-         & v_{q,(r,l)}(Y_1)_{r,(\alpha,j_1)}
-        (Y_2)_{l,(j_2,\gamma)}
-        (T_{\tau,\zeta})_{\gamma,\alpha},
-    \end{align}
-    where $T_{\tau,\zeta}$ is the open $K$-site virtual word. Reconstructing
-    $Y_2$ gives
-    \begin{align}
-        U^{(K+2)}_{(q,\tau),(j,\zeta)}
-        =\sum_{\alpha,r,l,\beta,i}
-         & v_{q,(r,l)}(Y_1)_{r,(\alpha,j_1)}
-        \overline{(X_2)_{(\beta,i),l}}
-        (\mathcal U^{ij_2}T_{\tau,\zeta})_{\beta,\alpha}.
-    \end{align}
-    No power of $d$ occurs in either algebraic expansion.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_source_v_open_two_site, thm:mpu_source_factor_recovery}
-    Reindexing each configuration into its first two coordinates and its tail
-    gives
-    \begin{align}
-        U^{(K+2)}_{(q,\tau),(j,\zeta)}
-         & =\tr\!\left[
-            (\mathcal U^{q_1j_1}\mathcal U^{q_2j_2})
-            T_{\tau,\zeta}\right].
-    \end{align}
-    Insert the open two-site factorization from the preceding theorem.  The
-    recovery identity and its entrywise evaluation are
-    \begin{align}
-        Y_2 & =X_2^\dagger M_2,                             \\
-        (Y_2)_{l,(j_2,\gamma)}
-            & =\sum_{\beta,i}\overline{(X_2)_{(\beta,i),l}}
-        \mathcal U^i_{j_2,\beta,\gamma}.
-    \end{align}
-    Substitution combines the last raw tensor letter with
-    $T_{\tau,\zeta}$ by matrix multiplication and gives the second displayed
-    expansion.
-\end{proof}
-
-\begin{definition}[Auxiliary source-$v$ open-tail coefficient]
-    \label{def:mpu_mixed_y1_x2_open_tail_coefficient}
-    \lean{MPOTensor.sourceY₁X₂OpenTailCoefficient}
-    \leanok
-    \uses{thm:mpu_mixed_y1_x2_open_periodic_tail, def:mpu_weighted_source_factors}
-    For
-    \begin{align}
-        A^{\tau,\zeta}_{i,j_2}
-         & =\mathcal U^{ij_2}T_{\tau,\zeta},
-    \end{align}
-    define the coefficient indexed by $l,r,l',r'$ to be
-    \begin{align}
-        C^{(K)}_{lr,l'r'}=d^{-K}
-        \sum_{\substack{\tau,\zeta,j_1,j_2,\alpha,\alpha', \\
-                \beta,\beta',i,i'}}
-         & (X_1)_{(j_1,\alpha),r}
-        \overline{(X_1)_{(j_1,\alpha'),r'}}
-        \overline{(X_2)_{(\beta,i),l}}
-        (X_2)_{(\beta',i'),l'}                             \\
-         & \mathrel{\phantom{=}}\cdot
-        (A^{\tau,\zeta}_{i,j_2})_{\beta,\alpha}
-        \overline{(A^{\tau,\zeta}_{i',j_2})_{\beta',\alpha'}}.
-    \end{align}
-    This coefficient occurs after the external source-$v$ entries have been
-    separated from the open-tail expansion above. The entry $v_{q,(r,l)}$ is
-    unstarred, while $v_{p,(r',l')}$ is starred, and the display contains the
-    unique normalization factor $d^{-K}$. The coefficient is not itself a
-    source gate.
-\end{definition}
-
-\begin{definition}[Auxiliary forward mixed-kernel network]
-    \label{def:mpu_mixed_y1_x2_forward_kernel}
-    \lean{MPOTensor.sourceY₁X₂ForwardKernel}
-    \leanok
-    \uses{thm:mpu_mixed_y1_x2_open_periodic_tail}
-    For a tail of length $K$, define
-    \begin{align}
-        F^{(K)}_{ii';\beta\beta',\alpha\alpha'}
-        =d^{-K}\sum_{\tau,\zeta,j_2}
-         & (\mathcal U^{ij_2}T_{\tau,\zeta})_{\beta,\alpha}
-        \overline{(\mathcal U^{i'j_2}T_{\tau,\zeta})_{\beta',\alpha'}}.
-    \end{align}
-    The expression contains exactly one normalization factor $d^{-K}$.
-\end{definition}
-
-\begin{theorem}[Normalized output-layer tail entry]
-    \label{thm:mpu_output_layer_tail_entry}
-    \lean{MPOTensor.normalizedDiagonal_outputLayer_pow_apply}
-    \leanok
-    \uses{def:mpu_double_layer, thm:mpu_double_layer_blocking}
-    Let $W_{\mathrm{out}}$ be the output-first double layer. Then
-    \begin{align}
-        (E_{\mathrm{out}}^K)_{(\gamma,\gamma'),(\alpha,\alpha')}
-        =d^{-K}\sum_{\tau,\zeta}
-        (T_{\tau,\zeta})_{\gamma,\alpha}
-        \overline{(T_{\tau,\zeta})_{\gamma',\alpha'}}.
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_blocked_double_layer_diagonal}
-    Expand the normalized diagonal of the blocked output layer, reindex a
-    blocked physical index by its decoded word, and evaluate the product
-    double layer.  The physical adjoint contributes the conjugated second
-    word, while the blocked physical dimension supplies $d^{-K}$.
-\end{proof}
-
-\begin{theorem}[Forward-kernel double-layer packaging]
-    \label{thm:mpu_mixed_y1_x2_forward_kernel_packaging}
-    \lean{MPOTensor.sourceY₁X₂ForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow}
-    \leanok
-    \uses{def:mpu_mixed_y1_x2_forward_kernel,
-        thm:mpu_output_layer_tail_entry,
-        thm:mpu_output_first_double_layer_entry}
-    The forward kernel is
-    \begin{align}
-        F^{(K)}_{ii'}
-        =W_{\mathrm{out}}^{ii'}E_{\mathrm{out}}^K.
-    \end{align}
-    Both doubled bond indices put the unstarred component before the starred
-    component.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_output_layer_tail_entry, thm:mpu_output_first_double_layer_entry}
-    Expand the matrix product over its doubled bond index.  The first
-    output-layer letter supplies the sum over $j_2$, and the normalized
-    diagonal power supplies the common output word and contracted input word.
-    Reordering finite sums gives the defining forward kernel without reversing
-    the virtual chain.
-\end{proof}
-
-\begin{theorem}[First source-cut range projection]
-    \label{thm:mpu_source_x1_range_projection}
-    \lean{MPOTensor.sourceX₁_mul_conjTranspose_mul_weight_mul_sourceCutM₁}
-    \leanok
-    \uses{thm:mpu_source_factor_recovery}
-    On the range of the first source cut,
-    \begin{align}
-        X_1X_1^\dagger W_\rho M_1=M_1,
-        \qquad W_\rho=1_d\otimes\rho.
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_source_factor_recovery, thm:mpu_source_factorizations}
-    Substitute $X_1^\dagger W_\rho M_1=Y_1$ and then use $M_1=X_1Y_1$.
-\end{proof}
-
-\begin{theorem}[Second source-cut range projection]
-    \label{thm:mpu_source_x2_range_projection}
-    \lean{MPOTensor.sourceX₂_mul_conjTranspose_mul_sourceCutM₂}
-    \leanok
-    \uses{thm:mpu_source_factor_recovery}
-    On the range of the second source cut,
-    \begin{align}
-        X_2X_2^\dagger M_2=M_2.
-    \end{align}
-    This does not assert $X_2X_2^\dagger=1$ on the ambient product-index
-    space.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_source_factor_recovery, thm:mpu_source_factorizations}
-    Substitute $X_2^\dagger M_2=Y_2$ and then use $M_2=X_2Y_2$.
-\end{proof}
-
-\begin{theorem}[Expanded normalized source-$v$ metric]
-    \label{thm:mpu_mixed_y1_x2_expanded_metric}
-    \lean{MPOTensor.IsMPU.normalized_sourceV_openTail_metric}
-    \leanok
-    \uses{thm:mpu_mixed_y1_x2_open_periodic_tail, thm:mpu_normalized_output_tail_coisometry}
-    Assume $d>0$, let $\mathcal U$ be an MPU, and let $\rho$ be positive
-    definite. Expanding both $(K+2)$-site periodic entries through
-    $v,Y_1,X_2$ and the open tail gives
-    \begin{align}
-        d^{-K}\sum_{\tau,j,\zeta}
-        \mathcal A_{q;\tau,j,\zeta}
-        \overline{\mathcal A_{p;\tau,j,\zeta}}
-         & =\delta_{p,q},
-    \end{align}
-    where $\mathcal A_{q;\tau,j,\zeta}$ is the full source-$v$ expansion with
-    the $q$ entry unstarred. This theorem evaluates the displayed expansion
-    directly and does not identify it with the Gram matrix of $u$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_mixed_y1_x2_open_periodic_tail, thm:mpu_normalized_output_tail_coisometry}
-    Replace each source-factor sum by its periodic MPO entry. Reindex the input
-    configuration into its first two coordinates and its length-$K$ tail, then
-    apply normalized output-first MPU coisometry.
-\end{proof}
-
-\begin{theorem}[Closed source-cut formula for an auxiliary mixed-kernel Gram]
-    \label{thm:mpu_mixed_y1_x2_gram_closed_source_cuts}
-    \lean{MPOTensor.sourceY₁X₂_gram_apply_eq_closed_source_cuts}
-    \leanok
-    \uses{def:mpu_mixed_source_kernels, def:mpu_source_weight,
-        def:mpu_weighted_source_factors}
-    Let $\mathcal U$ be an MPO tensor, let $\rho$ be positive definite, and
-    let $p,q\in\Fin d\times\Fin d$. Then
-    \begin{align}
-        \sum_{l,r}a_{(l,r),q}\overline{a_{(l,r),p}}
-         & =\sum_{\beta,\delta}
-        (M_1^\dagger W_\rho M_1)_{(\delta,p_1),(\beta,q_1)}
-        (X_2X_2^\dagger)_{(\beta,q_2),(\delta,p_2)}.
-    \end{align}
-    Thus $q$ labels the unstarred entry and $p$ labels the starred entry. This
-    is an auxiliary mixed-cut identity, not the source-$u$ network in
-    \cite[Eq.~\texttt{uUnitary}]{Cirac2017MPU}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:mpu_source_matrix_one, thm:mpu_source_factor_recovery,
-        thm:mpu_source_x1_range_projection}
-    Expand both source-$a$ entries and contract their common source indices.
-    Weighted recovery of $Y_1$ replaces $Y_1^\dagger Y_1$ by
-    $M_1^\dagger W_\rho M_1$, while the remaining $X_2$ factors form the
-    range projector $X_2X_2^\dagger$.
-\end{proof}
-
-\begin{theorem}[Closed double-layer trace for the normalized output tail]
-    \label{thm:mpu_normalized_output_tail_closed_trace}
-    \lean{MPOTensor.normalized_mpo_output_tail_eq_closed_doubleLayer_trace}
-    \leanok
-    \uses{def:mpo_family, def:mpu_double_layer}
-    Assume $d>0$.  For any MPO tensor $\mathcal U$, tail length $K$, and
-    $p,q\in\Fin d\times\Fin d$, let $W_{\mathrm{out}}$ be its output-first
-    double layer and let $E_{\mathrm{out}}$ be the normalized physical
-    diagonal of $W_{\mathrm{out}}$.  Then
-    \begin{align}
-        d^{-K}\sum_{\tau,\eta}
-        U^{(K+2)}_{(q,\tau),\eta}
-        \overline{U^{(K+2)}_{(p,\tau),\eta}}
-        =\tr\!\left[
-            W_{\mathrm{out}}^{q_1p_1}
-            W_{\mathrm{out}}^{q_2p_2}E_{\mathrm{out}}^K\right].
-    \end{align}
-    The retained letters occur in $(q,p)$ order, so $q$ is unstarred and
-    $p$ is starred; their doubled bonds are in $(\text{ket},\text{bra})$
-    order.  This is the normalized closed output tail in
-    \cite[Eq.~\texttt{uUnitary} and lines~550--556]{Cirac2017MPU}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:mpdo_physical_adjoint, thm:mpu_closed_double_layer}
-    Close the contracted input configuration as the periodic MPO of the
-    output-first double layer.  Splitting off the two retained sites leaves a
-    common diagonal word of length $K$.  Expanding the normalized diagonal
-    power as the normalized sum of those words and using linearity of the
-    trace gives the displayed closed trace.
-\end{proof}
-
 \begin{theorem}[Closed double-layer trace for the normalized input tail]
     \label{thm:mpu_normalized_input_tail_closed_trace}
     \lean{MPOTensor.normalized_mpo_input_tail_eq_closed_doubleLayer_trace}
@@ -3089,301 +2798,6 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     Substitute this expansion and use linearity of the trace.
 \end{proof}
-
-\begin{theorem}[Second-cut metric factorization]
-    \label{thm:mpu_second_cut_metric}
-    \lean{MPOTensor.sourceX₂_mul_conjTranspose_eq_sourceCutM₂_mul_secondCutMetric}
-    \leanok
-    \uses{thm:mpu_source_factorizations, thm:mpu_source_factor_right_inverses}
-    Define the second-cut metric by $H_2=Z_2Z_2^\dagger$.  Then the range
-    projector of the second source cut factors as
-    \begin{align}
-        X_2X_2^\dagger=M_2H_2M_2^\dagger.
-    \end{align}
-    This is a factorization through the chosen right inverse; it does not
-    assert that $H_2$, $X_2X_2^\dagger$, or $M_2M_2^\dagger$ is the identity.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_source_factorizations, thm:mpu_source_factor_right_inverses}
-    From $M_2=X_2Y_2$ and $Y_2Z_2=1$ one obtains $M_2Z_2=X_2$.
-    Multiply this identity by its adjoint and reassociate the three factors.
-\end{proof}
-
-\begin{theorem}[Auxiliary mixed-kernel Gram entry with the second-cut metric]
-    \label{thm:mpu_mixed_y1_x2_gram_second_cut_metric}
-    \lean{MPOTensor.sourceY₁X₂_gram_apply_eq_secondCutMetric}
-    \leanok
-    \uses{thm:mpu_mixed_y1_x2_gram_closed_source_cuts, thm:mpu_second_cut_metric}
-    Let $\mathcal U$ be an MPO tensor, let $\rho$ be positive definite,
-    and let $p,q\in\Fin d\times\Fin d$ be the retained physical pairs.
-    No MPU or positive-dimension hypothesis is required. With
-    $H_2=Z_2Z_2^\dagger$, the ordinary source-$a$ Gram entry is
-    \begin{align}
-        \sum_{l,r}a_{(l,r),q}\overline{a_{(l,r),p}}
-         & =\sum_{\beta,\delta,j,a,k,c}
-        (M_1^\dagger W_\rho M_1)_{(\delta,p_1),(\beta,q_1)} \\
-         & \quad\cdot U^{q_2j}_{\beta,a}
-        (H_2)_{(j,a),(k,c)}\overline{U^{p_2k}_{\delta,c}}.
-    \end{align}
-    The $q$ factors are unstarred and the $p$ factors are starred.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_mixed_y1_x2_gram_closed_source_cuts, thm:mpu_second_cut_metric}
-    Substitute the second-cut metric factorization into the closed source-cut
-    formula and expand the second-cut matrix products. Reordering the finite
-    sums gives the displayed expression.
-\end{proof}
-
-\begin{theorem}[Supplied-witness overlapping reblocking]
-    \label{thm:mpu_supplied_witness_overlapping_reblocking}
-    \lean{MPOTensor.blockTensor_succ_simple2_of_supplied,
-        MPOTensor.IsMPU.simple1_of_simple2_supplied,
-        MPOTensor.IsMPU.blockTensor_add_two_simple_contractions_of_supplied}
-    \leanok
-    \uses{def:mpu, def:mpu_double_layer, thm:mpdo_closed_chain_physical_blocking}
-    Suppose a direct block of length $K$ satisfies the two-letter contraction
-    with specified vectors $(a|$ and $|b)$.  For an arbitrary MPO tensor, one
-    suffix/prefix extension preserves the same insertion $|b)(a|$ at direct
-    length $K+1$.  For any MPU tensor, specified vectors satisfying this
-    two-letter identity also satisfy the one-letter identity with the same
-    vectors.  Applying that implication after two extensions gives, at direct
-    length $K+2$,
-    \begin{align}
-        (a|W^{IJ}|b) & =\delta_{I,J},       \\
-        W^{IJ}W^{LM} & =W^{IJ}|b)(a|W^{LM}.
-    \end{align}
-    No positivity or nonzero-dimension hypothesis is required.  This is the
-    corollary following \cite[Proposition~III.3]{Cirac2017MPU}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:mpu_blocking, thm:mpu_closed_double_layer, thm:mpu_double_layer_blocking, lem:mpu_adjoint_mul}
-    Extend the supplied two-letter identity twice by overlapping suffix and
-    prefix windows.  For $x=(a|W^{IJ}|b)$, the constant configurations of
-    lengths two and three give $x^2=\delta_{I,J}$ and
-    $x^3=\delta_{I,J}$, which force $x=\delta_{I,J}$.  Physical blocking
-    preserves MPU unitarity, so this one-letter identity and the twice-extended
-    two-letter identity hold simultaneously at direct length $K+2$ with the
-    original supplied witnesses.
-\end{proof}
-
-\begin{definition}[Reflected blocked-transfer coordinate maps]
-    \label{def:mpu_reflected_blocked_transfer_coordinates}
-    \lean{MPOTensor.bondPairSwapEquiv,
-        MPOTensor.blockWordReverseEquiv}
-    \leanok
-    The doubled-bond coordinate reflection exchanges the two virtual factors,
-    \begin{align}
-        (a,b) & \longmapsto(b,a).
-    \end{align}
-    Independently, spatial reflection reverses a blocked word of length $K$,
-    \begin{align}
-        (i_0,\ldots,i_{K-1}) & \longmapsto(i_{K-1},\ldots,i_0).
-    \end{align}
-    These are support coordinates for the proof of
-    \cite[Lemma~III.7 in Section~III.B]{Cirac2017MPU}, rather than separate
-    definitions printed there.  The blocked-word reversal is not used in the
-    transfer transport below; conjugate transposition there reverses only the
-    order of the two blocked letters.
-\end{definition}
-
-\begin{theorem}[Reflected blocked-transfer coordinate identities]
-    \label{thm:mpu_reflected_blocked_transfer_coordinate_identities}
-    \lean{MPOTensor.bondPairSwapEquiv_apply,
-        MPOTensor.bondPairSwapEquiv_symm,
-        MPOTensor.decodeBlock_blockWordReverseEquiv,
-        MPOTensor.wordOfBlock_blockWordReverseEquiv,
-        MPOTensor.blockWordReverseEquiv_involutive}
-    \leanok
-    \uses{def:mpu_reflected_blocked_transfer_coordinates}
-    The doubled-bond equivalence and the blocked-word reversal are
-    involutions.  The latter sends the letter in position $k$ to the letter in
-    position $K-1-k$ and reverses the encoded word.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:mpu_reflected_blocked_transfer_coordinates}
-    Decode the doubled bond, apply the product swap, and encode it again.
-    Regard a blocked index as a word indexed by the $K$ ordered positions,
-    precompose with $k\mapsto K-1-k$, and reverse the corresponding finite
-    list.
-\end{proof}
-
-\begin{theorem}[Normalized diagonal under output reflection]
-    \label{thm:mpu_reflected_normalized_diagonal}
-    \lean{MPOTensor.normalizedDiagonal_doubleLayerTensor_physicalAdjointTensor}
-    \leanok
-    \uses{def:mpu_double_layer, def:mpdo_physical_adjoint, def:mpu_reflected_blocked_transfer_coordinates}
-    Let $R(\mathcal U)$ denote the normalized physical diagonal of the double
-    layer of an MPO tensor $\mathcal U$, and let $s(a,b)=(b,a)$ be the
-    doubled-bond swap.  Then
-    \begin{align}
-        R(\mathcal U^\sharp)_{x,y}=R(\mathcal U)_{s(x),s(y)}.
-    \end{align}
-    This identity requires neither the MPU property nor a positivity or
-    positive-dimension hypothesis.  It is a coordinate identity supporting
-    the calculation in the proof of
-    \cite[Lemma~III.7 in Section~III.B]{Cirac2017MPU}, not a separate theorem
-    printed there.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_reflected_blocked_transfer_coordinate_identities}
-    Expand the two normalized diagonals.  Physical adjunction exchanges the
-    two physical indices, and exchanging the two finite physical sums leaves
-    precisely the simultaneous doubled-bond swap on the row and column.
-\end{proof}
-
-\begin{theorem}[Reflected transfer-power identities]
-    \label{thm:mpu_reflected_transfer_power}
-    \lean{MPOTensor.normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power,
-        MPOTensor.conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec,
-        MPOTensor.reflected_transfer_power_eq_vecMulVec_transpose,
-        MPOTensor.conjTranspose_normalizedDiagonal_reflected_blockTensor_eq_vecMulVec,
-        MPOTensor.outputLayer_normalizedDiagonal_pow_eq_vecMulVec}
-    \leanok
-    \uses{def:mpu_double_layer, def:mpdo_physical_adjoint, def:mpdo_physical_blocking, def:mpu_normalized_flattening}
-    Let $\mathcal U$ be an MPO tensor.  Write $E$ for the transfer matrix of
-    its normalized flattening, $E^\sharp$ for that of $\mathcal U^\sharp$,
-    and $E_{\mathrm{out}}$ for the normalized diagonal of the double layer of
-    $\mathcal U^\sharp$.  If $d>0$ and
-    \begin{align}
-        E^J=|\rho)(1|,
-    \end{align}
-    then
-    \begin{align}
-        (E^\sharp)^J=|\rho^{\mathsf T})(1|.
-    \end{align}
-    No MPU, positivity, trace, positive bond-dimension, or positivity of $J$
-    is needed for this implication.
-
-    Suppose in addition that $D>0$ and $\tr(\rho)=1$, and set $K=JD^2$.
-    Then the normalized diagonal $R_K$ of the double layer of the $K$-site
-    block of $\mathcal U$ satisfies
-    \begin{align}
-        R_K=|\rho)(1|.
-    \end{align}
-    More generally, if $d>0$, $\rho>0$, and the normalized diagonal $R_L$ of
-    an $L$-site block satisfies $R_L=|\rho)(1|$, write $R_L^\sharp$ for the
-    normalized diagonal of the corresponding block of $\mathcal U^\sharp$.
-    Then
-    \begin{align}
-        R_L^{\sharp\dagger}=|1)(\rho|.
-    \end{align}
-    Consequently, under the combined assumptions $d,D>0$, $\rho>0$,
-    $\tr(\rho)=1$, and $E^J=|\rho)(1|$,
-    \begin{align}
-        R_K^{\sharp\dagger} & =|1)(\rho|,             &
-        E_{\mathrm{out}}^K  & =|\rho^{\mathsf T})(1|.
-    \end{align}
-    Here all rank-one operators use the column-stacking identification
-    $M_D(\mathbb C)\cong\mathbb C^{D^2}$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_double_layer_blocking, thm:mpu_reflected_normalized_diagonal}
-    The blocked normalized diagonal is the corresponding transfer power.
-    Reindex the reflected diagonal by the doubled-bond swap to obtain the
-    transpose weight.  When $\rho$ is positive definite, its Hermitian
-    symmetry converts the conjugate-transposed reflected diagonal to
-    $|1)(\rho|$.  The trace-one condition makes $|\rho)(1|$ idempotent, so the
-    additional positive $D^2$ power leaves it unchanged.  Conjugating once
-    more gives the stated output-layer orientation.
-\end{proof}
-
-\begin{theorem}[Reflected supplied contractions]
-    \label{thm:mpu_reflected_supplied_contractions}
-    \lean{MPOTensor.IsMPU.reflected_blockTensor_mul_sq_simple_contractions_of_transfer_power,
-        MPOTensor.IsMPU.reflected_blockTensor_mul_sq_add_two_simple_contractions}
-    \leanok
-    \uses{def:mpu, def:mpu_double_layer, def:mpdo_physical_adjoint, def:mpdo_physical_blocking, def:mpu_normalized_flattening}
-    Let $\mathcal U$ be an MPU with $d,D>0$.  Let $E$ be the transfer matrix
-    of its normalized flattening, and suppose
-    \begin{align}
-        E^J=|\rho)(1|,
-    \end{align}
-    where $\rho>0$, $\tr(\rho)=1$, and $J>0$.  Set $K=JD^2$.  For
-    $n\in\{K,K+2\}$, let $\widehat W_n$ be the double layer of the $n$-site
-    block of $\mathcal U^\sharp$.  Then, for all blocked physical indices,
-    \begin{align}
-        (\rho|\widehat W_n^{IJ\dagger}|1) & =\delta_{I,J},                     \\
-        \widehat W_n^{LM\dagger}\widehat W_n^{IJ\dagger}
-                                          & =\widehat W_n^{LM\dagger}|1)(\rho|
-        \widehat W_n^{IJ\dagger}.
-    \end{align}
-    The same supplied vectors occur at both lengths; the $K+2$ identities do
-    not replace them by existentially chosen witnesses.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_matching_direct_block_contractions, thm:mpu_physical_adjoint_identities, thm:mpu_reflected_transfer_power, thm:mpu_supplied_witness_overlapping_reblocking}
-    Apply the direct-block simple contractions to the reflected transfer power
-    $|\rho^{\mathsf T})(1|$.  Positivity identifies the conjugate-transposed
-    vectors with $(\rho|$ and $|1)$, while conjugate transposition reverses the
-    order of the two blocked letters.  Overlapping-window reblocking preserves
-    these witnesses through the two additional sites.  These contractions are
-    support identities for the graphical proof of
-    \cite[Lemma~III.7 and its proof in Section~III.B]{Cirac2017MPU}; they
-    are not asserted as a separate printed theorem of that paper.
-\end{proof}
-
-\begin{remark}[Scope of the closed source-$a$ formulas]
-    The first theorem rewrites the ordinary source-$a$ Gram entry, while the
-    second independently rewrites the normalized closed output tail. They do
-    not identify these two expressions or justify inserting source-cut range
-    projections through the intervening chain. No such identification is part
-    of the paper-gate proof: $a=Y_1\mathbin{-}X_2$ is not the paper gate
-    $u=Y_2\mathbin{-}Y_1$. Neither theorem asserts an ambient
-    $X_2X_2^\dagger=\Id$, $M_2M_2^\dagger=\Id$, or
-    $Y_2Y_2^\dagger=\Id$ identity.
-\end{remark}
-
-\begin{theorem}[Auxiliary mixed-network boundary contraction]
-    \label{thm:mpu_mixed_y1_x2_terminal_boundary}
-    \lean{MPOTensor.sourceY₁X₂_boundary_sandwich}
-    \leanok
-    \uses{def:mpu_mixed_y1_x2_open_tail_coefficient, thm:mpu_source_factor_normalizations}
-    If the normalized internal tail supplies
-    \begin{align}
-        \rho_{\alpha',\alpha}\,
-        \delta_{\beta,\beta'}\delta_{i,i'},
-    \end{align}
-    then the remaining boundary sum is
-    \begin{align}
-        \sum_{\substack{j,\alpha,\alpha',\beta,i}}
-         & (X_1)_{(j,\alpha),r}
-        \overline{(X_1)_{(j,\alpha'),r'}}
-        \overline{(X_2)_{(\beta,i),l}}
-        (X_2)_{(\beta,i),l'}\rho_{\alpha',\alpha}
-        =\delta_{l,l'}\delta_{r,r'}.
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_source_factor_normalizations}
-    Reorder the scalar factors so that the sum separates into the weighted
-    $X_1$ contraction and the unweighted $X_2$ contraction.  Evaluating
-    \begin{align}
-        X_1^\dagger W_\rho X_1 & =\Id_r,   &
-        X_2^\dagger X_2        & =\Id_\ell
-    \end{align}
-    at $(r',r)$ and $(l,l')$, respectively, gives the two Kronecker deltas.
-    This is valid source-factor algebra inside the auxiliary mixed network; it
-    is not identified with the terminal step of the paper's source-$u$
-    isometry argument.
-\end{proof}
-
-\begin{remark}[Scope of the open-tail algebra]
-    The preceding results evaluate the fully expanded normalized metric, but
-    do not prove that regrouping it through $C^{(K)}_{lr,l'r'}$ gives the
-    ordinary Gram matrix $a^\dagger a$. No such equality is claimed as part of
-    the paper-gate argument. The paper-facing proof must instead begin with
-    $u=Y_2\mathbin{-}Y_1$. No result uses $X_2X_2^\dagger=\Id$,
-    $M_2M_2^\dagger=\Id$, or
-    $Y_2Y_2^\dagger=\Id$.
-\end{remark}
 
 \begin{definition}[Tensorized source dressing]
     \label{def:mpu_source_v_dressing}
@@ -5106,7 +4520,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{thm:mpu_source_u_retained_interior,
-        thm:mpu_reflected_transfer_power}
+        thm:mpu_blocked_transfer_power_rank_one}
     Set $K=JD^2$. Trace normalization makes the supplied rank-one transfer
     matrix idempotent, and the normalized blocked-transfer identity therefore
     gives
@@ -5230,13 +4644,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_v_dressed_gram_cancel, thm:mpu_source_v_complete_contraction, thm:mpu_supplied_witness_overlapping_reblocking}
+    \uses{thm:mpu_source_v_dressed_gram_cancel, thm:mpu_source_v_complete_contraction, thm:mpu_all_later_simple_blockings}
     By Theorem~\ref{thm:mpu_source_v_dressed_gram_cancel}, $v^\dagger v=\Id$
     gives the dressed Gram equation, and
     Theorem~\ref{thm:mpu_source_v_complete_contraction} turns it into
     $W^{ij}W^{k\ell}=W^{ij}\lvert\rho^{\mathsf T})(\Phi\rvert W^{k\ell}$.
     The same-witness implication in
-    Theorem~\ref{thm:mpu_supplied_witness_overlapping_reblocking} supplies
+    Theorem~\ref{thm:mpu_all_later_simple_blockings} supplies
     $(\Phi\rvert W^{ij}\lvert\rho^{\mathsf T})=\delta_{ij}$ from unitarity,
     so both simple contractions hold.
 \end{proof}
@@ -8581,10 +7995,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
     The supplied source-factor witnesses below instead use
     $\rho_{\mathrm{aux}}=\Id_d$ for each constituent shift and
-    $\rho_{\mathrm{aux}}=\Id_{d^2}$ after tensoring. They compute both the
-    auxiliary mixed kernels and the paper gates. The latter carry reciprocal
-    factors $d$ and $d^{-1}$ because these identity weights differ from
-    $\rho_d$ and $\rho_{d^2}$ when $d>1$.
+    $\rho_{\mathrm{aux}}=\Id_{d^2}$ after tensoring. The paper gates computed
+    from them carry reciprocal factors $d$ and $d^{-1}$ because these identity
+    weights differ from $\rho_d$ and $\rho_{d^2}$ when $d>1$.
     % Source normalization: paper_v2.tex 269--280.
     % Source-factor weight: paper_v2.tex 487--495.
     % Shift and tensor-product dimensions: paper_v2.tex 1980--1994.
@@ -8825,14 +8238,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.rightShiftSourceFactors,
         MPOTensor.leftShiftSourceFactors,
         MPOTensor.SourceFactors.independentTensorProductOfIdentityWeight,
-        MPOTensor.SourceFactors.sourceY₁X₂_independentTensorProductOfIdentityWeight_apply,
-        MPOTensor.SourceFactors.sourceX₁Y₂_independentTensorProductOfIdentityWeight_apply,
-        MPOTensor.sourceY₁X₂_identitySourceFactors_apply,
-        MPOTensor.sourceX₁Y₂_identitySourceFactors_apply,
-        MPOTensor.sourceY₁X₂_rightShiftSourceFactors_apply,
-        MPOTensor.sourceX₁Y₂_rightShiftSourceFactors_apply,
-        MPOTensor.sourceY₁X₂_leftShiftSourceFactors_apply,
-        MPOTensor.sourceX₁Y₂_leftShiftSourceFactors_apply,
         MPOTensor.identityTensorIdentityMatrix,
         MPOTensor.identityTensorIdentityMatrix_apply,
         MPOTensor.swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_apply,

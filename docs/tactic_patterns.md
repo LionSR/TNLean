@@ -927,8 +927,8 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPU/CompositionRanks.lean` performs the distributivity step on
   abstract scalar functions.  Its proof descends through all eight sums by
   explicit congruences and closes the scalar identity with `ac_rfl`; the
-  concrete auxiliary $Y_1$--$X_2$ mixed-kernel proof now instantiates this
-  lemma without constructing a distributed matrix-entry expression.
+  concrete source-cut composition proof now instantiates this lemma without
+  constructing a distributed matrix-entry expression.
 - **Performance:** the cached target build before the refactor reported 25 s.
   Profiler-reported cumulative module-elaboration totals fell from 16,129,355
   heartbeats before the refactor to 13,899,455 after it, a 13.8% reduction.
@@ -1655,34 +1655,27 @@ current counts and full location lists).
 - **Notes:** below the rule-of-three promotion threshold. Do not add a one-use
   wrapper or duplicate predicate surface merely to merge these two proofs.
 
-### supplied mixed-kernel indicator entries — candidate
+### supplied paper-gate indicator entries — candidate
 - **Pattern:** case-split the two or four physical-index equalities in an
-  explicit mixed-kernel entry, simplify the resulting indicator functions and
-  primitive `sourceY₁X₂`/`sourceX₁Y₂` entries, and cancel the factors
-  $d(\sqrt d)^{-1}(\sqrt d)^{-1}=1$ before closing the zero and nonzero cases.
-- **Seen:** eight four-index mixed-kernel occurrences in
-  `TNLean/MPS/MPU/Examples/ShiftSourceMixedKernels.lean` (lines 474, 534, 607,
-  683, 741, 776, 836, and 867), two further four-index case splits for the gate
-  matrices themselves in the same file (lines 78 and 123), and six two-index
-  primitive-entry occurrences in
-  `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` (lines 616, 630, 645, 660,
-  677, and 693). Recorded 2026-08-24; counts and locations re-derived
-  2026-09-03 after the source-cut file split.
+  explicit supplied source entry, simplify the resulting indicator functions,
+  and cancel the factors $d(\sqrt d)^{-1}(\sqrt d)^{-1}=1$ before closing the
+  zero and nonzero cases.
+- **Seen:** six four-index case splits for the paper gates $u$ and $v$ in
+  `TNLean/MPS/MPU/Examples/ShiftSourceGateFormulas.lean` (lines 70, 112, 170,
+  210, 265, and 298), and two four-index case splits for the four-spin
+  matrices themselves in `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean`
+  (lines 749 and 794). Recorded 2026-08-24 as "supplied mixed-kernel indicator
+  entries"; recounted 2026-09-04, when the mixed-kernel deletion removed the
+  sixteen mixed-kernel occurrences and the two four-spin proofs moved into the
+  surviving source-factor module.
 - **Abstraction (proposed):** scout Mathlib's indicator and `ite` product
   lemmas first; otherwise extract the common scalar-indicator calculation as
   a lemma family, or mark its characterizing equalities for terminal `grind`
   once the stable goal shape is clear.  Prefer either route to a tactic macro.
-- **Notes:** the four-index proofs differ in their paper-coordinate
-  permutations and in which factor carries $d(\sqrt d)^{-1}$, while the
-  primitive proofs have only two equality tests.  Promotion should preserve
-  those visible coordinate choices and remove only the repeated Boolean and
-  normalization calculation.  The source-gate siblings in
-  `TNLean/MPS/MPU/Examples/ShiftSourceGateFormulas.lean` (lines 70, 112, 170,
-  210, 265, and 298) repeat the same four-index case split for the $u$ and $v$
-  entries, so a promotion should cover them as well. Issue #7658 plans to delete
-  the mixed-kernel occurrences and relocate the shared matrix formulas, but not
-  these six paper-gate proofs. Recount the surviving sites after that deletion
-  rather than retiring this candidate outright.
+- **Notes:** the proofs differ in their paper-coordinate permutations and in
+  which factor carries $d(\sqrt d)^{-1}$.  Promotion should preserve those
+  visible coordinate choices and remove only the repeated Boolean and
+  normalization calculation.
 
 ### factor pairing under a two-index finite sum — candidate
 - **Pattern:** before collapsing a two-index finite sum, use `simp_rw` with a

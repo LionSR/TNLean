@@ -586,7 +586,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   choose the ambient diagonal gauge; no consumer changes yet.
 
 ## D14. Residue of the pre-#7424 mixed-kernel route: five `MixedKernel*` modules, the reflected kernel, and their example twins  —  dead-weight, impact 5/10, effort 3/10
-- **Status**: open
+- **Status**: closed 2026-09-04 (#7658, with #7619 folded in)
 - **Evidence**: `MixedKernelOpenTail.lean` (246, of which five paper-gate
   $v$ identities and the weighted $X_1$ entry formula survive),
   `MixedKernelBoundary.lean` (105),
@@ -602,7 +602,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   orientation. Every consumer is another module of the set or an example
   file; the on-route proof in `SourceUCompleteNetwork.lean` uses none of it;
   21 Chapter 28 nodes tag these declarations;
-  `docs/paper-gaps/mpu_mixed_kernel_range_restriction.tex` states that the
+  `docs/paper-gaps/mpu_mixed_kernel_range_restriction.tex` stated that the
   route is no longer a route to `lemuisometry`.
 - **Remediation**: delete the set (plan step 1 of the audit) after moving
   all five surviving $v$ identities to `StandardForm.lean`, moving
@@ -643,10 +643,19 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   node. Repoint the admissible `ThmFund1` proof's dependency and prose reference
   to `thm:mpu_all_later_simple_blockings`, whose linked same-witness lemma is
   `MPOTensor.IsMPU.isMPUSimple_of_simple2`; retire the range-restriction note.
-- **First PR**: delete `ReflectedTransferKernel.lean`,
-  `SuppliedWitnessReblocking.lean`, `MixedKernelBoundary.lean`, and
-  `MixedKernelSecondCutMetric.lean` (676 lines, zero consumers outside the
-  set) with their 10 nodes.
+- **Resolution**: #7658 carried out the whole step in one pull request. The
+  seven modules and `Examples/ShiftSourceMixedKernels.lean` are gone, the
+  surviving $v$ identities and the weighted $X_1$ entry formula moved to
+  `StandardForm.lean` and `SourceFactors.lean`, and the shift examples' shared
+  witnesses moved to `Examples/ShiftSourceFactors.lean`. One theorem of
+  `ReflectedTransferKernel.lean` that is not reflected at all,
+  `normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power`,
+  had gained an on-route consumer in `SourceURetainedInterior.lean` after the
+  audit was written; it moved to `DoubleLayerContraction.lean` and keeps a
+  blueprint node under the new label
+  `thm:mpu_blocked_transfer_power_rank_one`. Twenty of the twenty-one nodes
+  were deleted and that one was replaced. The range-restriction note is
+  retired.
 
 ## D15. The MPU canonical-form endpoint predicate omits nonzero weights and full support  —  api-design, impact 2/10, effort 2/10
 - **Status**: open
