@@ -2273,7 +2273,8 @@ space.
     \label{thm:primitive_fnw_projector_defect}
     \lean{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw}
     \leanok
-    \uses{def:primitive_mps, thm:fnw_projector_defect_unfactored}
+    \uses{def:primitive_mps, def:l_blk_injective,
+        thm:fnw_projector_defect_unfactored}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and
     $\tr(\rho)=1$. Then there is an injective length $L_0\geq1$ such that
     Equation~(\ref{eq:fnw_projector_defect_unfactored}) holds whenever

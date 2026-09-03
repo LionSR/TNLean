@@ -564,8 +564,8 @@ spectator length. -/
 theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw
     [NeZero D] {ρ : Mat} {A : MPSTensor d D} (hP : IsPrimitiveMPS A ρ)
     (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1) :
-    ∃ L : ℕ, 0 < L ∧ ∀ m : ℕ, L ≤ m → ∀ r ℓ : ℕ,
-      0 < r → 0 < ℓ →
+    ∃ L : ℕ, 0 < L ∧ Kraus.IsNBlkInjective A L ∧
+      ∀ m : ℕ, L ≤ m → ∀ r ℓ : ℕ, 0 < r → 0 < ℓ →
       ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
             (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
           (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
@@ -574,7 +574,7 @@ theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw
           fnwMixingQuantity ρ hρ A htr m ^ 2 /
             fnwLowerBoundaryConstant ρ hρ A m := by
   obtain ⟨L, hL, hInj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
-  refine ⟨L, hL, fun m hLm r ℓ hr hℓ ↦ ?_⟩
+  refine ⟨L, hL, hInj, fun m hLm r ℓ hr hℓ ↦ ?_⟩
   exact wholeIncrement_groundProjection_defect_le_fnw
     ρ hρ htr A hP.norm hP.fixedPoint_is_fixed hInj hL hLm r ℓ hr hℓ
 
