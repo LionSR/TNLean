@@ -187,28 +187,35 @@ lemma single_mul_single_ite {a b c e : Fin 8} (u v : ℂ) :
   · subst h; simp
   · simp [h]
 
-/-- The bond-matching condition between consecutive letters. -/
-def gate (i₁ i₂ : Fin 8) : Prop := bitR i₁ = bitL i₂
+/-- The **bond-matching condition** on an ordered pair of consecutive letters:
+the right bit of the first letter is the left bit of the second one.  It is the
+one-bond atom of the open and cyclic conditions `IsOpenBondMatched` and
+`IsCyclicBondMatched`.
 
-instance decidableGate (i₁ i₂ : Fin 8) : Decidable (gate i₁ i₂) :=
+Project example; not from CPSV16. -/
+def IsBondMatchedPair (i₁ i₂ : Fin 8) : Prop := bitR i₁ = bitL i₂
+
+/-- The bond-matching condition on a pair is an equality of bits, hence
+decidable. -/
+instance decidableIsBondMatchedPair (i₁ i₂ : Fin 8) : Decidable (IsBondMatchedPair i₁ i₂) :=
   inferInstanceAs (Decidable (bitR i₁ = bitL i₂))
 
 /-- The product of two letters keeps a common block label and is gated by the
 bond-matching condition. -/
 lemma T_mul_T (i₁ j₁ i₂ j₂ : Fin 8) :
     T i₁ j₁ * T i₂ j₂ =
-      if gate i₁ i₂ ∧ gate j₁ j₂ then
+      if IsBondMatchedPair i₁ i₂ ∧ IsBondMatchedPair j₁ j₂ then
         ∑ k : Fin 2, Matrix.single (physIdx (bitL i₁) (bitL j₁) k)
           (physIdx (bitR i₂) (bitR j₂) k) (coef k i₁ j₁ * coef k i₂ j₂)
       else 0 := by
   simp only [T, Fin.sum_univ_two, add_mul, mul_add, single_mul_single_ite, physIdx_inj]
   by_cases h1 : bitR i₁ = bitL i₂ <;> by_cases h2 : bitR j₁ = bitL j₂ <;>
-    simp [gate, h1, h2]
+    simp [IsBondMatchedPair, h1, h2]
 
 /-- **Two-site closure.** -/
 theorem physClose2_T (X : Matrix (Fin 8) (Fin 8) ℂ) (i₁ i₂ j₁ j₂ : Fin 8) :
     physClose2 T X (i₁, i₂) (j₁, j₂) =
-      if gate i₁ i₂ ∧ gate j₁ j₂ then
+      if IsBondMatchedPair i₁ i₂ ∧ IsBondMatchedPair j₁ j₂ then
         ∑ k : Fin 2, coef k i₁ j₁ * coef k i₂ j₂ *
           X (physIdx (bitR i₂) (bitR j₂) k) (physIdx (bitL i₁) (bitL j₁) k)
       else 0 := by

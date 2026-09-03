@@ -182,7 +182,7 @@ Kraus label, the two-site letter satisfies the bond-matching condition, and the
 one-site flag is the sum of the two prepared flags and the bond label. -/
 def IsRefineSupported (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) : Prop :=
   ((bitF i.1 = f₁ ∧ bitL i.1 = bitL j) ∧ (bitF i.2 = f₂ ∧ bitR i.2 = bitR j)) ∧
-    (gate i.1 i.2 ∧ bitF j = f₁ + f₂ + ε)
+    (IsBondMatchedPair i.1 i.2 ∧ bitF j = f₁ + f₂ + ε)
 
 instance decidableIsRefineSupported (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) :
     Decidable (IsRefineSupported f₁ f₂ ε i j) :=
@@ -192,7 +192,7 @@ instance decidableIsRefineSupported (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) 
 fixed two-site letter. -/
 lemma isRefineSupported_iff_col (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) :
     IsRefineSupported f₁ f₂ ε i j ↔
-      (gate i.1 i.2 ∧ bitF i.1 = f₁ ∧ bitF i.2 = f₂) ∧
+      (IsBondMatchedPair i.1 i.2 ∧ bitF i.1 = f₁ ∧ bitF i.2 = f₂) ∧
         (bitF j = f₁ + f₂ + ε ∧ bitL j = bitL i.1 ∧ bitR j = bitR i.2) := by
   simp only [IsRefineSupported]
   constructor
@@ -226,11 +226,11 @@ lemma refineKraus_star (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (j : Fin 8) :
 the single one-site letter in its support. -/
 lemma refineKraus_col_sum (f₁ f₂ ε : Fin 2) (i : Fin 8 × Fin 8) (g : Fin 8 → ℂ) :
     (∑ j : Fin 8, refineKraus f₁ f₂ ε i j * g j) =
-      if gate i.1 i.2 ∧ bitF i.1 = f₁ ∧ bitF i.2 = f₂ then
+      if IsBondMatchedPair i.1 i.2 ∧ bitF i.1 = f₁ ∧ bitF i.2 = f₂ then
         ((refineAmp ε * tau ε (bitR i.1) : ℝ) : ℂ) *
           g (physIdx (bitL i.1) (bitR i.2) (f₁ + f₂ + ε))
       else 0 := by
-  by_cases hi : gate i.1 i.2 ∧ bitF i.1 = f₁ ∧ bitF i.2 = f₂
+  by_cases hi : IsBondMatchedPair i.1 i.2 ∧ bitF i.1 = f₁ ∧ bitF i.2 = f₂
   · rw [ite_eq_left hi]
     have hcongr : ∀ j : Fin 8, refineKraus f₁ f₂ ε i j * g j =
         if bitF j = f₁ + f₂ + ε ∧ bitL j = bitL i.1 ∧ bitR j = bitR i.2 then
@@ -258,20 +258,20 @@ lemma refineKraus_row_sum (f₁ f₂ ε : Fin 2) (j : Fin 8) (g : Fin 8 × Fin 8
       else 0 := by
   have hcongr : ∀ i : Fin 8 × Fin 8, (if IsRefineSupported f₁ f₂ ε i j then g i else 0) =
       if (bitF i.1 = f₁ ∧ bitL i.1 = bitL j) ∧ (bitF i.2 = f₂ ∧ bitR i.2 = bitR j) then
-        (if gate i.1 i.2 ∧ bitF j = f₁ + f₂ + ε then g i else 0) else 0 := by
+        (if IsBondMatchedPair i.1 i.2 ∧ bitF j = f₁ + f₂ + ε then g i else 0) else 0 := by
     intro i
     by_cases h1 : (bitF i.1 = f₁ ∧ bitL i.1 = bitL j) ∧ (bitF i.2 = f₂ ∧ bitR i.2 = bitR j)
     · rw [ite_eq_left h1]
-      by_cases h2 : gate i.1 i.2 ∧ bitF j = f₁ + f₂ + ε
+      by_cases h2 : IsBondMatchedPair i.1 i.2 ∧ bitF j = f₁ + f₂ + ε
       · rw [ite_eq_left h2, ite_eq_left (show IsRefineSupported f₁ f₂ ε i j from ⟨h1, h2⟩)]
       · rw [ite_eq_right h2, ite_eq_right fun hc => h2 hc.2]
     · rw [ite_eq_right h1, ite_eq_right fun hc => h1 hc.1]
   rw [Finset.sum_congr rfl fun i _ => hcongr i, pair_fiber_sum]
   by_cases hf : bitF j = f₁ + f₂ + ε
   · rw [ite_eq_left hf]
-    simp [Fin.sum_univ_two, gate, hf]
+    simp [Fin.sum_univ_two, IsBondMatchedPair, hf]
   · rw [ite_eq_right hf]
-    simp [gate, hf]
+    simp [IsBondMatchedPair, hf]
 
 /-- **The refinement Kraus family resolves the identity.** -/
 theorem refineKraus_resolution :
@@ -348,23 +348,23 @@ lemma refineKraus_conj_term (f₁ f₂ ε : Fin 2) (Y : Matrix (Fin 8) (Fin 8) �
     (i₁ i₂ j₁ j₂ : Fin 8) :
     (∑ a' : Fin 8, (∑ a : Fin 8, refineKraus f₁ f₂ ε (i₁, i₂) a * Y a a') *
         star (refineKraus f₁ f₂ ε (j₁, j₂) a')) =
-      if (gate i₁ i₂ ∧ bitF i₁ = f₁ ∧ bitF i₂ = f₂) ∧
-          (gate j₁ j₂ ∧ bitF j₁ = f₁ ∧ bitF j₂ = f₂) then
+      if (IsBondMatchedPair i₁ i₂ ∧ bitF i₁ = f₁ ∧ bitF i₂ = f₂) ∧
+          (IsBondMatchedPair j₁ j₂ ∧ bitF j₁ = f₁ ∧ bitF j₂ = f₂) then
         ((refineAmp ε ^ 2 * tau ε (bitR i₁) * tau ε (bitR j₁) : ℝ) : ℂ) *
           Y (physIdx (bitL i₁) (bitR i₂) (f₁ + f₂ + ε))
             (physIdx (bitL j₁) (bitR j₂) (f₁ + f₂ + ε))
       else 0 := by
   have hinner : ∀ a' : Fin 8, (∑ a : Fin 8, refineKraus f₁ f₂ ε (i₁, i₂) a * Y a a') =
-      if gate i₁ i₂ ∧ bitF i₁ = f₁ ∧ bitF i₂ = f₂ then
+      if IsBondMatchedPair i₁ i₂ ∧ bitF i₁ = f₁ ∧ bitF i₂ = f₂ then
         ((refineAmp ε * tau ε (bitR i₁) : ℝ) : ℂ) *
           Y (physIdx (bitL i₁) (bitR i₂) (f₁ + f₂ + ε)) a' else 0 :=
     fun a' => refineKraus_col_sum f₁ f₂ ε (i₁, i₂) fun a => Y a a'
   rw [Finset.sum_congr rfl fun a' _ => by rw [hinner a']]
-  by_cases hi : gate i₁ i₂ ∧ bitF i₁ = f₁ ∧ bitF i₂ = f₂
+  by_cases hi : IsBondMatchedPair i₁ i₂ ∧ bitF i₁ = f₁ ∧ bitF i₂ = f₂
   · rw [Finset.sum_congr rfl fun a' _ => by
       rw [ite_eq_left hi, refineKraus_star, mul_comm]]
     rw [refineKraus_col_sum f₁ f₂ ε (j₁, j₂)]
-    by_cases hj : gate j₁ j₂ ∧ bitF j₁ = f₁ ∧ bitF j₂ = f₂
+    by_cases hj : IsBondMatchedPair j₁ j₂ ∧ bitF j₁ = f₁ ∧ bitF j₂ = f₂
     · rw [ite_eq_left hj, ite_eq_left ⟨hi, hj⟩]
       push_cast
       ring
@@ -387,12 +387,12 @@ theorem refineMap_physClose1 (X : Matrix (Fin 8) (Fin 8) ℂ) :
   simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
   rw [Finset.sum_congr rfl fun t _ =>
     refineKraus_conj_term t.1 t.2.1 t.2.2 (physClose1 T X) i₁ i₂ j₁ j₂]
-  by_cases hg : gate i₁ i₂ ∧ gate j₁ j₂
+  by_cases hg : IsBondMatchedPair i₁ i₂ ∧ IsBondMatchedPair j₁ j₂
   · rw [ite_eq_left hg]
     by_cases e : bitF i₁ = bitF j₁ ∧ bitF i₂ = bitF j₂
     · have hiff : ∀ t : Fin 2 × Fin 2 × Fin 2,
-          (((gate i₁ i₂ ∧ bitF i₁ = t.1 ∧ bitF i₂ = t.2.1) ∧
-            (gate j₁ j₂ ∧ bitF j₁ = t.1 ∧ bitF j₂ = t.2.1)) ↔
+          (((IsBondMatchedPair i₁ i₂ ∧ bitF i₁ = t.1 ∧ bitF i₂ = t.2.1) ∧
+            (IsBondMatchedPair j₁ j₂ ∧ bitF j₁ = t.1 ∧ bitF j₂ = t.2.1)) ↔
               (t.1 = bitF i₁ ∧ t.2.1 = bitF i₂)) := by
         intro t
         constructor
@@ -428,8 +428,8 @@ theorem refineMap_physClose1 (X : Matrix (Fin 8) (Fin 8) ℂ) :
       push_cast
       ring
     · have hzero : ∀ t : Fin 2 × Fin 2 × Fin 2,
-          ¬ ((gate i₁ i₂ ∧ bitF i₁ = t.1 ∧ bitF i₂ = t.2.1) ∧
-            (gate j₁ j₂ ∧ bitF j₁ = t.1 ∧ bitF j₂ = t.2.1)) := by
+          ¬ ((IsBondMatchedPair i₁ i₂ ∧ bitF i₁ = t.1 ∧ bitF i₂ = t.2.1) ∧
+            (IsBondMatchedPair j₁ j₂ ∧ bitF j₁ = t.1 ∧ bitF j₂ = t.2.1)) := by
         rintro t ⟨⟨_, h1, h2⟩, _, h1', h2'⟩
         exact e ⟨h1.trans h1'.symm, h2.trans h2'.symm⟩
       rw [Finset.sum_congr rfl fun t _ => ite_eq_right (hzero t), Finset.sum_const_zero]

@@ -116,8 +116,9 @@ lemma physClose2_T_fiber (X : Matrix (Fin 8) (Fin 8) ℂ) (L L' R R' f₁ f₂ b
       else 0 := by
   rw [physClose2_T]
   by_cases h : b₁ = b₂ ∧ c₁ = c₂
-  · rw [ite_eq_left (show gate (physIdx L b₁ f₁) (physIdx b₂ R f₂) ∧
-      gate (physIdx L' c₁ f₁) (physIdx c₂ R' f₂) from ⟨by simp [gate, h.1], by simp [gate, h.2]⟩),
+  · rw [ite_eq_left (show IsBondMatchedPair (physIdx L b₁ f₁) (physIdx b₂ R f₂) ∧
+      IsBondMatchedPair (physIdx L' c₁ f₁) (physIdx c₂ R' f₂) from
+        ⟨by simp [IsBondMatchedPair, h.1], by simp [IsBondMatchedPair, h.2]⟩),
       ite_eq_left h]
     refine Finset.sum_congr rfl fun k _ => ?_
     rw [coef_physIdx, coef_physIdx, ite_eq_left rfl, ite_eq_left rfl]
@@ -126,7 +127,8 @@ lemma physClose2_T_fiber (X : Matrix (Fin 8) (Fin 8) ℂ) (L L' R R' f₁ f₂ b
     ring
   · rw [ite_eq_right h]
     refine ite_eq_right fun hc => ?_
-    exact absurd ⟨by simpa [gate] using hc.1, by simpa [gate] using hc.2⟩ h
+    exact absurd
+      ⟨by simpa [IsBondMatchedPair] using hc.1, by simpa [IsBondMatchedPair] using hc.2⟩ h
 
 /-! ### The coarse-graining Kraus family -/
 

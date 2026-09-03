@@ -82,13 +82,13 @@ bra strings both satisfy it (`evalWord_T_ofFn`).
 
 Project example; not from CPSV16. -/
 def IsOpenBondMatched {n : ℕ} (σ : Fin (n + 1) → Fin 8) : Prop :=
-  ∀ i : Fin n, gate (σ i.castSucc) (σ i.succ)
+  ∀ i : Fin n, IsBondMatchedPair (σ i.castSucc) (σ i.succ)
 
 /-- The open bond-matching condition is a finite conjunction of equalities of
 bits, hence decidable. -/
 instance decidableIsOpenBondMatched {n : ℕ} (σ : Fin (n + 1) → Fin 8) :
     Decidable (IsOpenBondMatched σ) :=
-  inferInstanceAs (Decidable (∀ i : Fin n, gate (σ i.castSucc) (σ i.succ)))
+  inferInstanceAs (Decidable (∀ i : Fin n, IsBondMatchedPair (σ i.castSucc) (σ i.succ)))
 
 /-- The **cyclic bond-matching condition** on a physical string: the right bit
 of each letter is the left bit of the next one around the ring, with the
@@ -97,26 +97,28 @@ wraparound step (`isCyclicBondMatched_succ`).
 
 Project example; not from CPSV16. -/
 def IsCyclicBondMatched (N : ℕ) (σ : Fin N → Fin 8) : Prop :=
-  ∀ n : Fin N, gate (σ n) (σ (finRotate N n))
+  ∀ n : Fin N, IsBondMatchedPair (σ n) (σ (finRotate N n))
 
 /-- The cyclic bond-matching condition is a finite conjunction of equalities of
 bits, hence decidable. -/
 instance decidableIsCyclicBondMatched (N : ℕ) (σ : Fin N → Fin 8) :
     Decidable (IsCyclicBondMatched N σ) :=
-  inferInstanceAs (Decidable (∀ n : Fin N, gate (σ n) (σ (finRotate N n))))
+  inferInstanceAs (Decidable (∀ n : Fin N, IsBondMatchedPair (σ n) (σ (finRotate N n))))
 
 /-- Peeling the first site off the open bond-matching condition: the condition
 on a string of length at least two is the match across the first bond together
 with the condition on the tail. -/
 lemma isOpenBondMatched_succ {n : ℕ} (σ : Fin (n + 2) → Fin 8) :
-    IsOpenBondMatched σ ↔ gate (σ 0) (σ (Fin.succ 0)) ∧ IsOpenBondMatched (fun i => σ i.succ) := by
+    IsOpenBondMatched σ ↔
+      IsBondMatchedPair (σ 0) (σ (Fin.succ 0)) ∧ IsOpenBondMatched (fun i => σ i.succ) := by
   rw [IsOpenBondMatched, IsOpenBondMatched, Fin.forall_fin_succ]
   simp only [Fin.castSucc_zero, Fin.succ_castSucc]
 
 /-- The cyclic bond-matching condition is the open condition on the segment
 together with the wraparound match from the last letter back to the first. -/
 lemma isCyclicBondMatched_succ {n : ℕ} (σ : Fin (n + 1) → Fin 8) :
-    IsCyclicBondMatched (n + 1) σ ↔ IsOpenBondMatched σ ∧ gate (σ (Fin.last n)) (σ 0) := by
+    IsCyclicBondMatched (n + 1) σ ↔
+      IsOpenBondMatched σ ∧ IsBondMatchedPair (σ (Fin.last n)) (σ 0) := by
   rw [IsCyclicBondMatched, Fin.forall_fin_succ', IsOpenBondMatched]
   simp only [Fin.finRotate_succ_castSucc, finRotate_last]
 
@@ -210,7 +212,7 @@ element of the closed operator at a pair of physical strings is the cyclic
 bond-matching indicator times the sum over the two horizontal block labels of
 the product of the one-site coefficients along the ring.
 
-Both horizontal blocks contribute with the same bond-matching gate, because the
+Both horizontal blocks contribute with the same bond-matching condition, because the
 block label is part of the bond index and is preserved by every letter product;
 closing the trace adds the wraparound match to the open condition.
 
@@ -222,7 +224,8 @@ theorem mpo_T_entry_formula {N : ℕ} (hN : 0 < N) (σ τ : Fin N → Fin 8) :
   rw [evalWord_T_ofFn n σ τ]
   by_cases hopen : IsOpenBondMatched σ ∧ IsOpenBondMatched τ
   · rw [ite_eq_left hopen, Matrix.trace_sum]
-    by_cases hw : gate (σ (Fin.last n)) (σ 0) ∧ gate (τ (Fin.last n)) (τ 0)
+    by_cases hw : IsBondMatchedPair (σ (Fin.last n)) (σ 0) ∧
+        IsBondMatchedPair (τ (Fin.last n)) (τ 0)
     · have hchain : IsCyclicBondMatched (n + 1) σ ∧ IsCyclicBondMatched (n + 1) τ :=
         ⟨(isCyclicBondMatched_succ σ).2 ⟨hopen.1, hw.1⟩,
           (isCyclicBondMatched_succ τ).2 ⟨hopen.2, hw.2⟩⟩
