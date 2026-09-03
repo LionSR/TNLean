@@ -842,6 +842,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Appending a tuple endpoint under `List.ofFn`
+- **Pattern:** three proofs expanded `List.ofFn (Fin.snoc f x)` by repeating the
+  same `List.ofFn_succ'`, `Fin.snoc_castSucc`, and `Fin.snoc_last` calculation.
+- **Reuse:** `List.ofFn_snoc` in `TNLean/Algebra/ListOfFn.lean` owns the generic
+  list identity.
+- **Result:** the parent-Hamiltonian word lemmas import the layer-0 result, and
+  `MPOTensor.evalWord_ofFn_cons_snoc` uses it for both endpoint words instead of
+  maintaining two local copies.
+
 ### Successor under one-step finite rotation
 - **Pattern:** both closed-chain MPO calculations proved that `finRotate (N + 1)`
   sends `i.castSucc`, for `i : Fin N`, to `i.succ` by the same cast-heavy
