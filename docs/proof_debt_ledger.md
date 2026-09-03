@@ -527,9 +527,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `**Scope restriction (full support)**` markers repeat the pointwise
   restriction.
 - **Remediation**: one predicate on `MPOTensor d D` stating canonical form
-  II for an MPU tensor (`IsMPU`, left-canonical normalized flattening, a
-  diagonal positive definite trace-one fixed matrix $\rho$), with the
-  stabilization $E^{\max(D^2-1,1)}=|\rho)(\Phi|$ stated as one power
+  II for an MPU tensor by bundling `IsMPU`,
+  `CPSVCanonicalFormIIData U.normalizedFlattening`, and full support. The
+  left-canonical equation and diagonal positive definite trace-one fixed
+  matrix $\rho$ are projections of that witness. This makes the existing
+  stabilization and normality theorems directly applicable, with
+  $E^{\max(D^2-1,1)}=|\rho)(\Phi|$ stated as one power
   identity (no `D = 1` branch), normality, the forced-block simple
   contractions, and the five preservation lemmas proved once;
   `exists_reduced_cfii_representative` restated as the
@@ -581,8 +584,10 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   five entry and product formulas to `ShiftSourceFactors.lean`; the surviving
   gate, blocked-formula, and swap-matrix modules use them. Correct the
   `MatchingContractions.lean` docstring, which disclaims the on-route
-  input-first identity as auxiliary; delete the 21 nodes and repoint the
-  admissible `ThmFund1` proof's dependency and prose reference to
+  input-first identity as auxiliary; delete the 21 nodes, explicitly including
+  `thm:mpu_output_layer_tail_entry`, `thm:mpu_source_x1_range_projection`, and
+  `thm:mpu_source_x2_range_projection`, and repoint the admissible `ThmFund1`
+  proof's dependency and prose reference to
   `thm:mpu_all_later_simple_blockings`, whose linked same-witness lemma is
   `MPOTensor.IsMPU.isMPUSimple_of_simple2`; retire the range-restriction note.
 - **First PR**: delete `ReflectedTransferKernel.lean`,
@@ -608,23 +613,25 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   The missing nonzero-weight field is logically prior: for $d=1$ and $D=2$,
   the tensor with sole matrix $\operatorname{diag}(1,0)$ is an MPU and has a
   current-form witness with two one-dimensional canonical blocks weighted by
-  $1$ and $0$.
+  $1$ and $0$. Nonzero weights alone do not exclude the same tensor: it also
+  has a one-block, weight-one witness embedded in the first coordinate, with a
+  nontrivial ambient zero complement.
 - **Remediation**: keep the clause. CF is gauge free while canonical form II
   (lines 271--281) fixes the gauge, so two MPU tensors in CF outside that
   gauge are strictly equivalent under the paper's definition; replacing the
   clause by the D13 convention predicate would add a hypothesis the source
   does not carry (the first limit of the `CLAUDE.md` convention rule: the
   paper writes "in CF" here and distinguishes CF, CFII, and SF throughout).
-  First add `weights_ne_zero` to `MPUCanonicalFormData`. Then prove
-  `prop:normal-tensor` for `IsMPUCanonicalForm` on MPU tensors (one normal
-  block), using transfer
+  First add `weights_ne_zero` and require $\sum_k D_k=D$ (equivalently, full
+  support) in `MPUCanonicalFormData`. Then prove `prop:normal-tensor` for
+  `IsMPUCanonicalForm` on MPU tensors (one normal block), using transfer
   multiplicity only after the zero-weight witness is excluded. Finally share
   one structure between the two canonical forms by parametrizing the block
   predicate, so that the module reduces to `IsMPUCanonicalBlock` and that
   lemma.
-- **First PR**: add `weights_ne_zero` to `MPUCanonicalFormData`, update any
-  direct witnesses, and add an inline
-  `**Local fix (nonzero canonical weights):**` marker in
+- **First PR**: add `weights_ne_zero` and full support to
+  `MPUCanonicalFormData`, update any direct witnesses, and add an inline
+  `**Local fix (nonzero canonical weights and full support):**` marker in
   `MPUCanonicalForm.lean`. That implementation PR must also create a dedicated
   one-page paper-gap note titled "Nonzero weights in MPU canonical form."
   Keep it distinct from `mpu_canonical_form_full_support.tex`, which records

@@ -258,12 +258,14 @@ for an MPU tensor (lines 269--281 and 356--361), as a structure with the
 fields
 
 - `isMPU : IsMPU U`;
-- `leftCanonical : IsLeftCanonical U.normalizedFlattening` (this is
-  $(\Phi\rvert E=(\Phi\rvert$ with $(\Phi\rvert=\sum_n(n,n\rvert$);
-- `ρ : Matrix (Fin D) (Fin D) ℂ`, `ρ_posDef : ρ.PosDef`, `ρ_isDiag : ρ.IsDiag`,
-  `ρ_trace : ρ.trace = 1`, `ρ_fixed : Kraus.transferMap U.normalizedFlattening ρ = ρ`.
+- `cfii : CPSVCanonicalFormIIData U.normalizedFlattening`;
+- `fullSupport : cfii.toCPSVCanonicalFormData.HasFullSupport`.
 
-Its lemmas, proved once: `IsNormalTensor U.normalizedFlattening` (from
+The left-canonical equation and the diagonal positive definite trace-one fixed
+matrix $\rho$ are projections of `cfii`. Bundling the full-support CFII witness
+is necessary for the existing stabilization and normality theorems;
+reconstructing it from those conclusions would be circular. Its lemmas, proved
+once: `IsNormalTensor U.normalizedFlattening` (from
 `CanonicalForm.lean`), $E^{\max(D^2-1,1)}=\lvert\rho)(\Phi\rvert$ stated
 as one power identity rather than as `Matrix.StabilizedRankOneData`, so that
 the $D=1$ branch disappears (from `TransferStabilization.lean`; for $D=1$ the
@@ -330,7 +332,9 @@ content still consumed by a later survivor.
    `def:mpu_mixed_y1_x2_*`, `thm:mpu_normalized_output_tail_closed_trace`,
    `thm:mpu_second_cut_metric`, `thm:mpu_supplied_witness_overlapping_reblocking`,
    `def:mpu_reflected_blocked_transfer_coordinates`, `thm:mpu_reflected_*`,
-   and `thm:mpu_normalized_output_tail_coisometry`; the shift mixed-kernel
+   `thm:mpu_output_layer_tail_entry`, `thm:mpu_source_x1_range_projection`,
+   `thm:mpu_source_x2_range_projection`, and
+   `thm:mpu_normalized_output_tail_coisometry`; the shift mixed-kernel
    formulas carry no separate node). The surviving node
    `def:threeMPU_supplied_source_factors` nevertheless lists all six
    declarations in its `\lean{}` tag, so remove those six names from the tag
@@ -385,12 +389,18 @@ content still consumed by a later survivor.
    $\operatorname{diag}(1,0)$ is an MPU and admits two one-dimensional
    canonical blocks with weights $1$ and $0$ under the current definition.
    Thus the current predicate does not imply the claimed one-block conclusion.
-   First add `weights_ne_zero` to `MPUCanonicalFormData`. The same PR must add
-   an inline `**Local fix (nonzero canonical weights):**` marker in
+   Nonzero weights alone are not enough: the same tensor also has a one-block,
+   weight-one witness embedded in the first coordinate, leaving an ambient zero
+   complement. First add `weights_ne_zero` and require
+   $\sum_k D_k=D$ (equivalently, full support) in `MPUCanonicalFormData`.
+   Only then does the predicate describe the paper's canonical-form endpoints.
+   The same PR must add an inline
+   `**Local fix (nonzero canonical weights and full support):**` marker in
    `MPUCanonicalForm.lean`. That implementation PR must also create a dedicated
    one-page paper-gap note titled "Nonzero weights in MPU canonical form."
-   CPSV17 line 260 allows a literal zero coefficient, while the formal definition adopts the
-   intended convention that retained canonical blocks contribute. This is
+   CPSV17 line 260 allows a literal zero coefficient, while the formal
+   definition adopts the intended convention that retained canonical blocks
+   contribute. This is
    distinct from the ambient zero-complement issue in
    `mpu_canonical_form_full_support.tex`. Then apply the transfer-multiplicity
    argument to prove that an MPU tensor in `IsMPUCanonicalForm` has one block
