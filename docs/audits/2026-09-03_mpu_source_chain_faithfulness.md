@@ -259,14 +259,18 @@ fields
 
 - `isMPU : IsMPU U`;
 - `cfii : CPSVCanonicalFormIIData U.normalizedFlattening`;
-- `fullSupport : ∑ k, cfii.toCPSVCanonicalFormData.dim k = D`.
+- `fullSupport : ∑ k, cfii.toCPSVCanonicalFormData.dim k = D`;
+- an ambient matrix $\rho$ with `ρ_posDef`, `ρ_isDiag`, `ρ_trace`, and
+  `ρ_fixed` fields stating the equations in `Erightleft`.
 
-The left-canonical equation and the diagonal positive definite trace-one fixed
-matrix $\rho$ are projections of `cfii`. Bundling the CFII witness and the
-underlying full-support equality is necessary for the existing stabilization
-and normality theorems;
-reconstructing it from those conclusions would be circular. Its lemmas, proved
-once: `IsNormalTensor U.normalizedFlattening` (from
+The left-canonical equation is inherited from `cfii`, but ambient diagonality
+is not. The block fixed points in `CPSVCanonicalFormIIData` are diagonal only
+in block coordinates; conjugation by its full-support ambient coisometry may
+scramble them. The new predicate must therefore record the ambient diagonal
+gauge explicitly. Bundling the CFII witness and full-support equality remains
+necessary for the existing stabilization and normality theorems;
+reconstructing them from those conclusions would be circular. Its lemmas,
+proved once: `IsNormalTensor U.normalizedFlattening` (from
 `CanonicalForm.lean`), $E^{\max(D^2-1,1)}=\lvert\rho)(\Phi\rvert$ stated
 as one power identity rather than as `Matrix.StabilizedRankOneData`, so that
 the $D=1$ branch disappears (from `TransferStabilization.lean`; for $D=1$ the
@@ -277,12 +281,17 @@ and tensor products (collapsing the eight `hasFullSupport_*` transports and
 the five ancilla and tensor-product canonical-form-II constructions to five
 lemmas). While `HasFullSupport` still exists, the current stabilization,
 normality, and contraction theorems obtain it by unfolding the definition from
-the predicate's equality field. Each consumer is then restated to take the new
-predicate or its equality directly. Only after those consumers and preservation
-lemmas have migrated is `HasFullSupport` deleted. The existing
-`exists_reduced_cfii_representative` becomes the without-loss-of-generality
-theorem in this predicate's terms: every MPU tensor has a representative
-satisfying the predicate with the same $U^{(N)}$ for all $N>0$.
+the predicate's equality field. Their stabilized fixed matrix must then be
+identified with the predicate's recorded diagonal $\rho$; this equality is a
+proof obligation, not a projection from `cfii`. Each consumer is then restated
+to take the new predicate or its equality directly. Only after those consumers
+and preservation lemmas have migrated is `HasFullSupport` deleted. The existing
+`exists_reduced_cfii_representative` must be strengthened to choose the ambient
+diagonal gauge and then restated as the without-loss-of-generality theorem in
+this predicate's terms: every MPU tensor has a representative satisfying the
+predicate with the same $U^{(N)}$ for all $N>0$. This is also the explicit
+$\rho^{\mathsf T}=\rho$ boundary required by the corrected source-$u$ route in
+#7633 under #5982; no arbitrary nonsymmetric version is claimed.
 `mpu_canonical_form_full_support.tex` is rewritten as the convention record,
 in the manner of
 `docs/audits/2026-08-23_nonzero_coefficient_convention.md`.
@@ -314,8 +323,12 @@ content still consumed by a later survivor.
    `SuppliedWitnessReblocking.lean`, `MixedKernelBoundary.lean`,
    `MixedKernelSecondCutMetric.lean`, `MixedKernelClosedNetwork.lean`,
    `MixedKernelRangeTransport.lean`; the periodic-tail half of
-   `MixedKernelOpenTail.lean` after moving its four paper-gate $v$ identities
-   into `StandardForm.lean`; the `sourceY₁X₂`/`sourceX₁Y₂` declarations of
+   `MixedKernelOpenTail.lean` after moving all five surviving paper-gate $v$
+   identities (`sum_sourceV_mul_Y₁`, `mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂`,
+   `sum_sourceV_mul_sourceY₁`, `mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂`,
+   and its `_pair` variant) into `StandardForm.lean`, and moving
+   `sourceX₁_weighted_isometry_apply` beside its matrix identity in
+   `SourceFactors.lean`; the `sourceY₁X₂`/`sourceX₁Y₂` declarations of
    `SourceUV.lean` and the two mixed product formulas of
    `SourceFactorsTensorProduct.lean`; `normalized_mpo_tail_coisometry` in
    `MatchingContractions.lean`, whose docstring is corrected to cite
@@ -341,10 +354,11 @@ content still consumed by a later survivor.
    `thm:mpu_source_x2_range_projection`, and
    `thm:mpu_normalized_output_tail_coisometry`; the shift mixed-kernel
    formulas carry no separate node). The surviving node
-   `def:threeMPU_supplied_source_factors` nevertheless lists all six
-   declarations in its `\lean{}` tag, so remove those six names from the tag
-   when the declarations are deleted, or repoint them if replacements are
-   introduced. In the admissible `ThmFund1` proof, replace both
+   `def:threeMPU_supplied_source_factors` nevertheless lists eight declarations
+   deleted in this step in its `\lean{}` tag: the six example entry formulas
+   and the two mixed independent-tensor-product formulas. Remove all eight
+   names from the tag when the declarations are deleted, or repoint them if
+   replacements are introduced. In the admissible `ThmFund1` proof, replace both
    the `\uses` dependency and the prose reference to the deleted
    supplied-witness node by `thm:mpu_all_later_simple_blockings`. That node
    already links `MPOTensor.IsMPU.isMPUSimple_of_simple2`, which derives the
@@ -366,7 +380,13 @@ content still consumed by a later survivor.
    and the four `**Scope restriction (full support)**` markers
    (`TransferStabilization.lean:119`, `TensorProductCanonicalForm.lean:130`,
    `CanonicalForm.lean:378`, `MatchingContractions.lean:190`), replacing them
-   by one `**Local fix**` marker on the predicate.
+   by one `**Local fix**` marker on the predicate. In the same step, delete or
+   retarget every affected Chapter 28 `\lean{}` tag: `def:mpu_full_support`,
+   `thm:mpu_full_support_blocking`, `thm:mpu_full_support_reindexing`,
+   `thm:mpu_physical_adjoint_full_support`, `thm:mpu_tensor_product_cfii_data`,
+   `thm:mpu_identity_ancilla_reduced_cfii`, and
+   `thm:mpu_normalized_transfer_fin_one`. This tag migration precedes deletion
+   of the declarations so that `leanblueprint checkdecls` remains green.
 4. **Merge only the pointwise blueprint twins.** Delete
    `def:mpu_reduced_full_support_source_datum` and merge each admissible node
    whose extra assumptions follow from the convention predicate into its

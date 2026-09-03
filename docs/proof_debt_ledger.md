@@ -528,37 +528,48 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   restriction.
 - **Remediation**: one predicate on `MPOTensor d D` stating canonical form
   II for an MPU tensor by bundling `IsMPU`,
-  `CPSVCanonicalFormIIData U.normalizedFlattening`, and the equality
-  $\sum_k D_k=D$ rather than the old `HasFullSupport` predicate. The
-  left-canonical equation and diagonal positive definite trace-one fixed
-  matrix $\rho$ are projections of that witness. This makes the existing
-  stabilization and normality theorems directly applicable, with
+  `CPSVCanonicalFormIIData U.normalizedFlattening`, the equality
+  $\sum_k D_k=D$ rather than the old `HasFullSupport` predicate, and an
+  ambient positive definite diagonal trace-one fixed matrix $\rho$. The
+  left-canonical equation is inherited from the CFII witness, but ambient
+  diagonality is an additional field: blockwise diagonal fixed points may be
+  scrambled by the ambient coisometry. The existing stabilization and
+  normality theorems apply to the CFII and full-support fields, with
   $E^{\max(D^2-1,1)}=|\rho)(\Phi|$ stated as one power
   identity (no `D = 1` branch), normality, the forced-block simple
   contractions, and the five preservation lemmas proved once;
-  `exists_reduced_cfii_representative` restated as the
-  without-loss-of-generality theorem. While `HasFullSupport` still exists,
-  current consumers derive it by unfolding the definition from the equality
-  field. Every fixed-tensor step-7-to-13 statement is then migrated to the
+  their stabilized fixed matrix proved equal to the recorded $\rho$.
+  `exists_reduced_cfii_representative` is strengthened to choose the ambient
+  diagonal gauge and restated as the without-loss-of-generality theorem. This
+  supplies the explicit $\rho^{\mathsf T}=\rho$ boundary now required by #7633
+  under #5982, without an arbitrary nonsymmetric strengthening. While
+  `HasFullSupport` still exists, current consumers derive it by unfolding the
+  definition from the equality field. Every fixed-tensor step-7-to-13 statement is then migrated to the
   predicate or the equality directly; only afterward delete `HasFullSupport`,
   the transports, the `fin_one` branch,
   `def:mpu_reduced_full_support_source_datum`, and only the
-  admissible twins whose extra content is pointwise. Retain
+  admissible twins whose extra content is pointwise. In the same migration,
+  delete or retarget the Chapter 28 tags on `def:mpu_full_support`,
+  `thm:mpu_full_support_blocking`, `thm:mpu_full_support_reindexing`,
+  `thm:mpu_physical_adjoint_full_support`, `thm:mpu_tensor_product_cfii_data`,
+  `thm:mpu_identity_ancilla_reduced_cfii`, and
+  `thm:mpu_normalized_transfer_fin_one`. Retain
   `def:mpu_admissible_equivalence_datum` and every node requiring its
   continuously varying path data until a continuous-selection theorem is
   proved. Rewrite `docs/paper-gaps/mpu_canonical_form_full_support.tex` as the
   pointwise convention record while keeping the pathwise supplier gap
   explicit.
-- **First PR**: define the predicate in `CanonicalForm.lean`, prove its
-  stabilization and normality lemmas from the existing
-  `normalized_transfer_power_eq_vecMulVec_of_reduced_cfii` and
-  `isNormalTensor_normalizedFlattening_of_cpsv`, and restate
-  `exists_reduced_cfii_representative`; no consumer changes yet.
+- **First PR**: define the predicate in `CanonicalForm.lean` with the CFII,
+  full-support-equality, and ambient-diagonal-$\rho$ fields. Use the existing
+  theorems for normality and stabilization, prove that the stabilized matrix is
+  this recorded $\rho$, and strengthen `exists_reduced_cfii_representative` to
+  choose the ambient diagonal gauge; no consumer changes yet.
 
 ## D14. Residue of the pre-#7424 mixed-kernel route: five `MixedKernel*` modules, the reflected kernel, and their example twins  —  dead-weight, impact 5/10, effort 3/10
 - **Status**: open
-- **Evidence**: `MixedKernelOpenTail.lean` (246, of which the four paper-gate
-  $v$ identities survive), `MixedKernelBoundary.lean` (105),
+- **Evidence**: `MixedKernelOpenTail.lean` (246, of which five paper-gate
+  $v$ identities and the weighted $X_1$ entry formula survive),
+  `MixedKernelBoundary.lean` (105),
   `MixedKernelClosedNetwork.lean` (166), `MixedKernelRangeTransport.lean`
   (232), `MixedKernelSecondCutMetric.lean` (109),
   `ReflectedTransferKernel.lean` (396), `SuppliedWitnessReblocking.lean`
@@ -574,15 +585,17 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `docs/paper-gaps/mpu_mixed_kernel_range_restriction.tex` states that the
   route is no longer a route to `lemuisometry`.
 - **Remediation**: delete the set (plan step 1 of the audit) after moving
-  the four $v$ identities to `StandardForm.lean` and the shift examples'
-  supplied factors and rank equivalences to
+  all five surviving $v$ identities to `StandardForm.lean`, moving
+  `sourceX₁_weighted_isometry_apply` to `SourceFactors.lean`, and moving the
+  shift examples' supplied factors and rank equivalences to
   `Examples/ShiftSourceFactors.lean`. Before deleting `sourceY₁X₂` and
   `sourceX₁Y₂`, delete or migrate all six remaining consumers in that
   destination file: the identity, right-shift, and left-shift entry formulas
   for each kernel. The surviving blueprint node
-  `def:threeMPU_supplied_source_factors` lists all six declarations in its
-  `\lean{}` tag; remove those six names when the declarations are deleted, or
-  repoint them if replacements are introduced. Before deleting
+  `def:threeMPU_supplied_source_factors` lists eight declarations deleted by
+  this step in its `\lean{}` tag: those six entries and the two mixed
+  independent-tensor-product formulas. Remove all eight names or repoint them
+  if replacements are introduced. Before deleting
   `ShiftSourceMixedKernels.lean`, also move
   `shiftTwoSitePhysicalEquiv`, the three shared four-spin matrices, and their
   five entry and product formulas to `ShiftSourceFactors.lean`; the surviving
