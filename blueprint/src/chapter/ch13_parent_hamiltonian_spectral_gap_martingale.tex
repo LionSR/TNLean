@@ -1362,15 +1362,16 @@ norm estimate is derived here.
 
 % Source: References/cond-mat_9410110/main.tex, conditions C1--C3 at
 % lines 1030--1094, Theorem 2.1(i) at lines 1119--1130, and its proof at
-% lines 1195--1259. The conditions carry lower thresholds; the statement below
-% keeps them.
+% lines 1195--1259. The statement below isolates the estimate above a chosen
+% threshold and explicitly records how its C1 range relates to source C1.
 \begin{theorem}[Threshold C1--C3 energy estimate]
     \label{thm:nachtergaele_c1_c3_threshold_energy_estimate}
     \lean{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_threshold}
     \leanok
-    Let $(G_n)_{n\geq0}$ be nested orthogonal projections on a complex
-    Hilbert space $\mathcal H$, put $E_n=G_n-G_{n+1}$, and assume
-    $G_0=\mathbf 1$. Fix $l,N,n_0\in\N$ with $n_0\leq N$, and let $Q_n$ be
+    Let $(G_n)_{n\geq0}$ be nested orthogonal projections on a
+    finite-dimensional complex Hilbert space $\mathcal H$, put
+    $E_n=G_n-G_{n+1}$, and assume $G_0=\mathbf 1$. Fix $l,N,n_0\in\N$ with
+    $n_0\leq N$, and let $Q_n$ be
     orthogonal projections for $n_0\leq n<N$. Suppose $E_mQ_n=Q_nE_m$
     whenever $m<n-l$ or $n<m$. Let $H_n$ be the local Hamiltonians and $H$
     the full Hamiltonian. Assume the quadratic-form version of C1 on the same
@@ -1411,15 +1412,17 @@ norm estimate is derived here.
         \sum_{m=\max\{0,n_0-l\}}^{n_0-1}\lVert E_mv\rVert^2.
         \label{eq:nachtergaele_c1_c3_threshold_energy_estimate}
     \end{align}
-    Conditions C2 and C3 appear here exactly as the source states them, with
-    its threshold written $n_0$, and C1 appears as the source's condition at
-    window length $l+1$, restricted to the same range; that restriction
-    follows from the source's C1 whenever the omitted local terms are
-    nonnegative. The coefficient of the martingale mass above the threshold
-    is exactly the one in Theorem~2.1(i) of \cite{Nachtergaele1996Spectral},
-    and the correction term is carried by the at most $l$ martingale
-    differences immediately below the threshold. At $n_0=0$ that correction
-    is an empty sum.
+    Conditions C2 and C3 have the source forms, with their onset represented by
+    $n_0$. The displayed C1 inequality follows from source C1 when
+    $l\leq n_0$ and the omitted local terms are nonnegative. Thus a
+    source-derived application chooses $n_0$ above both $l$ and the C2--C3
+    onset. If $n_0<l$, the displayed C1 inequality is instead an independent
+    stronger assumption. The coefficient of the martingale mass above the
+    threshold is exactly the one in Theorem~2.1(i) of
+    \cite{Nachtergaele1996Spectral}. The correction is an explicit upper bound
+    for the contribution of the at most $l$ martingale differences immediately
+    below the threshold; it uses multiplicity $l+1$ uniformly. At $n_0=0$ the
+    correction is an empty sum.
 \end{theorem}
 
 \begin{proof}

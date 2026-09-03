@@ -184,9 +184,11 @@ local Hamiltonians is stated.
 
 The threshold theorem
 \leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_threshold}
-keeps the source index ranges. It assumes the C1 sum and the C2--C3 estimates
-only for $n_0\leq n<N$ and pays for the omitted indices with an explicit
-correction term. Writing
+assumes the C1 sum and the C2--C3 estimates only for $n_0\leq n<N$. To derive
+its C1 hypothesis from source C1, choose $n_0\geq l$ as well as above the
+C2--C3 onset; for $n_0<l$, the theorem's C1 hypothesis is an independent
+stronger assumption. It pays for the omitted martingale indices with an
+explicit correction term. Writing
 \begin{align}
     P
         &=\sum_{n=n_0}^{N-1}\lVert E_n\psi\rVert^2,
@@ -207,10 +209,12 @@ $(l+1)P$. With the printed weights the estimate becomes
           \left(1-\epsilon_l\sqrt{l+1}\right)\epsilon_l\sqrt{l+1}\,S.
     \label{eq:cpgsv21_martingale_overlap_threshold_estimate}
 \end{align}
-This is the source coefficient on the martingale mass above the threshold. It
-is not the source theorem, whose conclusion is the same coefficient on
-$\lVert\psi\rVert^2$; the two agree exactly when the martingale differences
-below the threshold vanish, in which case $S=0$ and $P=\lVert\psi\rVert^2$.
+This is the source coefficient on the martingale mass above the threshold. The
+correction uses the uniform multiplicity bound $l+1$ for every term of $S$, so
+it is an upper bound rather than the exact below-threshold window count. The
+result is not the source theorem, whose conclusion is the same coefficient on
+$\lVert\psi\rVert^2$; the two agree when the martingale differences below the
+threshold vanish, in which case $S=0$ and $P=\lVert\psi\rVert^2$.
 
 The stronger full-range theorem
 \leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_full_range}

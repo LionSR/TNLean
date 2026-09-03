@@ -21,10 +21,12 @@ assumed only beyond their lower threshold \(n_l\), while C1, at lines
 nevertheless estimates every martingale difference \(E_0,\ldots,E_{N-1}\).
 
 `energy_lower_bound_of_nachtergaele_c1_c3_threshold` assumes the three
-estimates only on the index range \(n_0\leq n<N\) above the source's own
-threshold. It obtains the printed coefficient on the martingale mass above the
-threshold, together with the exact moving-window correction carried by the
-\(l\) differences immediately below it.
+estimates only on an index range \(n_0\leq n<N\). To obtain its C1 hypothesis
+from the source, one chooses \(n_0\geq l\), as well as above the C2--C3
+threshold; for smaller \(n_0\), its displayed C1 bound is an independent
+stronger assumption. The theorem obtains the printed coefficient on the
+martingale mass above the threshold, together with an explicit upper-bound
+correction carried by the \(l\) differences immediately below it.
 
 **Scope restriction (full finite range):**
 `energy_lower_bound_of_nachtergaele_c1_c3_full_range` and
@@ -306,25 +308,26 @@ private theorem enpsi_of_c2_c3_zero
   linarith
 
 /-- Threshold form of the summation in the proof of Nachtergaele's Theorem
-2.1(i) (arXiv:cond-mat/9410110, lines 1195--1259), stated on the index range
-that the source's own conditions cover.
+2.1(i) (arXiv:cond-mat/9410110, lines 1195--1259).
 
 Condition C2 at lines 1043--1058 and condition C3 at lines 1083--1094 hold
-only from a threshold onwards, and condition C1 at lines 1030--1041 begins at
-the window length. Here that threshold is \(n_0\): C2 and C3 appear exactly
-as the source states them, with C3 in its literal operator-norm form
-\(\lVert Q_nE_n\rVert\leq\epsilon_l\), and C1 appears as the source's
-condition at window length \(l+1\) restricted to the same range, which
-follows from it whenever the omitted local terms are nonnegative.
+only from a threshold onwards, while condition C1 at lines 1030--1041 begins
+at the window length. This theorem assumes all three estimates directly on
+\(n_0\leq n<N\). Its C2 and C3 hypotheses have the source forms, with C3 in
+its literal operator-norm form \(\lVert Q_nE_n\rVert\leq\epsilon_l\). To
+derive its C1 hypothesis from the source, choose \(n_0\geq l\), in addition
+to choosing it above the C2--C3 onset; if \(n_0<l\), the stated C1 bound is an
+independent stronger assumption.
 
 Summing the per-index estimate over \(n_0\leq n<N\) gives the printed
 coefficient
 \(\frac{\gamma_{l+1}}{d_{l+1}}(1-\epsilon_l\sqrt{l+1})^2\)
 on the martingale mass \(\sum_{n=n_0}^{N-1}\lVert E_n\psi\rVert^2\) above the
-threshold, corrected by the moving-window contribution of the \(l\)
-differences immediately below it. Both the coefficient and the correction are
-exact: the correction vanishes when \(n_0=0\), and then the conclusion is the
-printed estimate on \(\lVert\psi\rVert^2\).
+threshold, corrected by an upper bound for the moving-window contribution of
+the \(l\) differences immediately below it. The coefficient is exact, while
+the correction uses the uniform multiplicity bound \(l+1\). The correction
+vanishes when \(n_0=0\), and then the conclusion is the printed estimate on
+\(\lVert\psi\rVert^2\).
 
 The case \(\epsilon_l=0\) is treated separately, since the printed choice
 \(c_2=\epsilon_l/\sqrt{l+1}\) is then not positive; C3 gives \(Q_nE_n=0\)
