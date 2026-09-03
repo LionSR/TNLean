@@ -156,7 +156,11 @@ auxiliary statement, not as an identification of the original gate. The
 converse direction in
 \leanid{MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry} produces the
 witnesses $(\Phi\rvert$ and $\lvert\rho^{\mathsf T})$ for the same weight
-$\rho$. No source-factor definition is changed.
+$\rho$. Together with the diagonal source-$u$ isometry,
+\leanid{MPOTensor.IsMPU.isMPUSimple_tfae} gives the supplied-fixed-pair
+specialization of Theorem~III.8; the unrestricted representative scope remains
+recorded in \texttt{mpu\_canonical\_form\_full\_support.tex}. No source-factor
+definition is changed.
 
 For the source-$u$ gate, the transpose closure and the source's diagonal
 coordinates give a direct retained-window contraction. If the normalized

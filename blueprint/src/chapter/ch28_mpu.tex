@@ -5326,7 +5326,55 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     This is the unrestricted statement of
     \cite[Theorem~III.8]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 563--601.
+    % The supplied diagonal-fixed-pair specialization below is checked. The
+    % unrestricted node remains not ready for the representative scope recorded
+    % in docs/paper-gaps/mpu_canonical_form_full_support.tex.
 \end{theorem}
+
+\begin{theorem}[Simple-tensor equivalence with a supplied diagonal fixed pair]
+    \label{thm:mpu_diagonal_fixed_pair_simple_tensor_equivalence}
+    \lean{MPOTensor.IsMPU.isMPUSimple_tfae}
+    \leanok
+    \uses{def:mpu, def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer}
+    Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$, let $W$
+    be its double layer with normalized diagonal $E$, and let $\rho>0$ be
+    diagonal. Suppose that $E^J=\lvert\rho)(\Phi\rvert$ for some $J>0$, where
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. Compute the source-cut
+    ranks $r$ and $\ell$ and both source operators $u$ and $v$ from this same
+    tensor $\mathcal U$ and weight $\rho$. Then the following are equivalent:
+    \begin{enumerate}
+        \item $\mathcal U$ is simple;
+        \item $r\ell=d^2$;
+        \item $u$ is unitary;
+        \item $v$ is unitary.
+    \end{enumerate}
+    This is the supplied diagonal-fixed-pair specialization of
+    \cite[Theorem~III.8]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 495 and 563--601.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_admissible_source_u_isometry,
+        thm:mpu_simple_source_v_isometry,
+        thm:mpu_source_gates_two_site_factorization,
+        thm:mpu_simple_of_source_v_isometry}
+    The supplied fixed pair gives $u^\dagger u=\Id$ and
+    $d^2\leq r\ell$ before any of the four conditions is assumed. Follow the
+    cycle $1\to2\to3\to4\to1$.
+
+    If $\mathcal U$ is simple, the source-$v$ contraction for the same weight
+    $\rho$ gives $v^\dagger v=\Id$, hence $r\ell\leq d^2$ and therefore
+    $r\ell=d^2$. Conversely, this equality makes the standing isometry $u$
+    square, hence unitary. The two-site factorization gives
+    \begin{align}
+        \operatorname{reindex}(U^{(2)})
+         & =v\,\operatorname{swap}_{r,\ell}(u).
+    \end{align}
+    Reindexing preserves unitarity. Since $U^{(2)}$ and $u$ are unitary,
+    cancellation makes $v$ unitary. Finally, $v^\dagger v=\Id$ gives the
+    second simple contraction, while the MPU identity gives the first, so
+    $\mathcal U$ is simple.
+\end{proof}
 
 \begin{theorem}[Admissible simple-tensor equivalence theorem]
     \label{thm:mpu_admissible_simple_tensor_equivalence}
