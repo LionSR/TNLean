@@ -396,13 +396,13 @@ content still consumed by a later survivor.
    Only then does the predicate describe the paper's canonical-form endpoints.
    The same PR must add an inline
    `**Local fix (nonzero canonical weights and full support):**` marker in
-   `MPUCanonicalForm.lean`. That implementation PR must also create a dedicated
-   one-page paper-gap note titled "Nonzero weights in MPU canonical form."
-   CPSV17 line 260 allows a literal zero coefficient, while the formal
-   definition adopts the intended convention that retained canonical blocks
-   contribute. This is
-   distinct from the ambient zero-complement issue in
-   `mpu_canonical_form_full_support.tex`. Then apply the transfer-multiplicity
+   `MPUCanonicalForm.lean`. That marker must cite the existing
+   `mpu_canonical_form_full_support.tex` note for the ambient zero complement.
+   The implementation PR must also create a dedicated one-page paper-gap note
+   titled "Nonzero weights in MPU canonical form." CPSV17 line 260 allows a
+   literal zero coefficient, while the formal definition adopts the intended
+   convention that retained canonical blocks contribute. Then apply the
+   transfer-multiplicity
    argument to prove that an MPU tensor in `IsMPUCanonicalForm` has one block
    and that block is normal. Finally share one structure between the two
    canonical forms by parametrizing the block predicate, so that

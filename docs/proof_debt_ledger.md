@@ -595,7 +595,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `MixedKernelSecondCutMetric.lean` (676 lines, zero consumers outside the
   set) with their 10 nodes.
 
-## D15. The MPU canonical-form structure duplicates the CPSV reconstruction but omits nonzero weights  —  api-design, impact 2/10, effort 2/10
+## D15. The MPU canonical-form endpoint predicate omits nonzero weights and full support  —  api-design, impact 2/10, effort 2/10
 - **Status**: open
 - **Evidence**: `MPUCanonicalForm.lean` (78 lines) defines
   `IsMPUCanonicalBlock`, `MPUCanonicalFormData`, and `IsMPUCanonicalForm`,
@@ -632,11 +632,11 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 - **First PR**: add `weights_ne_zero` and full support to
   `MPUCanonicalFormData`, update any direct witnesses, and add an inline
   `**Local fix (nonzero canonical weights and full support):**` marker in
-  `MPUCanonicalForm.lean`. That implementation PR must also create a dedicated
-  one-page paper-gap note titled "Nonzero weights in MPU canonical form."
-  Keep it distinct from `mpu_canonical_form_full_support.tex`, which records
-  the ambient zero-complement issue. No one-block theorem or consumer changes
-  yet.
+  `MPUCanonicalForm.lean`. The marker must cite
+  `mpu_canonical_form_full_support.tex` for the ambient zero complement. That
+  implementation PR must also create a dedicated one-page paper-gap note
+  titled "Nonzero weights in MPU canonical form" for the zero-coefficient
+  convention. No one-block theorem or consumer changes yet.
 
 ## Honorable mentions (ranks 11-12)
 
