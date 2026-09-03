@@ -2034,11 +2034,12 @@ spectral split → block extraction → MPV calculation → strict bounds
   apply Finset.sum_congr rfl
   intro i _
   apply Finset.sum_congr rfl
+  intro j _
   ```
   descending through two nested `Finset.sum` binders to reach the summand.
   A related pattern first commutes the outer binders and then descends.
-- **Seen:** the scanner's literal `i`/`_` bucket contains 12 occurrences
-  across 7 files (2026-09-03 scan, scan weight 36):
+- **Seen:** the scanner's literal three-line `i`/`_` prefix contains 12
+  occurrences across 7 files (2026-09-03 scan, scan weight 36):
   `TNLean/MPS/MPU/ReflectedTransferKernel.lean:91`,
   `TNLean/MPS/MPU/DoubleLayerContraction.lean:181`,
   `TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean:567,728`,
@@ -2046,8 +2047,11 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/MPDO/VerticalCF.lean:298`,
   `TNLean/MPS/MPDO/ReflectedMarkedChain.lean:144,183`,
   `TNLean/MPS/MPDO/TwoSitePrefixReflectedMarkedChain.lean:72,145`.
-  Alpha-normalizing the binder and membership-hypothesis names gives 77
-  occurrences across 44 files. The related scanner bucket
+  Each site continues with the inner-binder introduction shown above, although
+  its binder name varies. The fully literal `i`/`j` four-line block occurs 8
+  times across 6 files (scan weight 32). Alpha-normalizing both binder and
+  membership-hypothesis names gives 77 occurrences across 44 files. The
+  related scanner bucket
   `rw [Finset.sum_comm]; apply Finset.sum_congr rfl; intro j _` contains 8
   occurrences across 7 files:
   `TNLean/MPS/MPDO/ActiveSectorTraceMatrixZCL.lean:90`,
