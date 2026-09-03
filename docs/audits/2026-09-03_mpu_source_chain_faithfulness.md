@@ -280,8 +280,13 @@ the $D=1$ branch disappears (from `TransferStabilization.lean`; for $D=1$ the
 characteristic polynomial is $X-1$ and $E=1$), the simple contractions of the forced
 block with witnesses $\Phi,\rho$ (from `MatchingContractions.lean`), and
 preservation under blocking, relabeling, physical adjoint, identity ancillas,
-and tensor products (collapsing the eight `hasFullSupport_*` transports and
-the five ancilla and tensor-product canonical-form-II constructions to five
+and tensor products (collapsing the eight `hasFullSupport_*` transports to
+five lemmas; the witness constructors `normalizedDiagonalLiftCFIIData` and
+`tensorPhysicalIdCFIIData` (`PhysicalAncilla.lean` lines 263--339) and
+`tensorProductCFIIData` (`TensorProductCanonicalForm.lean` lines 108--125)
+are retained, private if desired, since the identity-ancilla and
+tensor-product preservation lemmas build the predicate's `cfii` field with
+them, and deleting them would only inline the same constructions into five
 lemmas). While `HasFullSupport` still exists, the current stabilization,
 normality, and contraction theorems obtain it by unfolding the definition from
 the predicate's equality field. Their stabilized fixed matrix must then be
@@ -299,9 +304,22 @@ $\rho^{\mathsf T}=\rho$ boundary required by the corrected source-$u$ route in
 in the manner of
 `docs/audits/2026-08-23_nonzero_coefficient_convention.md`.
 
-Every fixed-tensor statement in steps 7--13 takes the predicate in place of
-the `(cfii, hfull)`, `(ρ, hρ, hρtrace)`, and `(J, hJ, hpower)` groups; the
-source factors and gates are constructed from the predicate's $\rho$.
+Every MPU-level statement in steps 7--13, that is, every statement that
+also assumes `IsMPU`, canonical-form-II data, full support, or the stabilized
+pair, takes the predicate in place of the `(cfii, hfull)`, `(ρ, hρ, hρtrace)`,
+and `(J, hJ, hpower)` groups and projects $\rho$ and its positive
+definiteness from it. The constructions that are generic in an arbitrary MPO
+tensor and an arbitrary positive definite metric are kept as they are:
+`sourceWeight`, `sourceX₁`, `sourceY₁`, `sourceZ₁`, `sourceFactors`, and
+their algebraic lemmas (`SourceFactors.lean` lines 82--476) and the gate
+constructors `sourceU` and `sourceV` (`SourceUV.lean` lines 141--202) take
+`(ρ) (hρ : ρ.PosDef)` and assume nothing about $U$, so migrating them to the
+predicate would shrink the reusable API rather than remove a repeated
+assumption. Of the 65 `hρ` sites, 13 lie in `SourceFactors.lean` and 19 in
+`SourceUV.lean`, mostly in this generic API, and those are not convention
+repetitions; only the
+MPU-level wrappers that construct the source factors and gates from the
+predicate's $\rho$ are migrated.
 `def:mpu_reduced_full_support_source_datum` and the admissible nodes whose only
 extra content is this pointwise datum are then merged into their
 source-labelled counterparts. Their `\uses` are folded into nodes that state
@@ -344,6 +362,12 @@ content still consumed by a later survivor.
    `shiftTwoSitePhysicalEquiv`, `identityTensorIdentityMatrix`,
    `identitySwapIdentityMatrix`, `swapTensorSwapMatrix`, and the five entry and
    product formulas for those matrices into `Examples/ShiftSourceFactors.lean`.
+   In the same step, update `docs/tactic_patterns.md`: retire the candidate
+   "supplied mixed-kernel indicator entries" (lines 1609--1627), whose
+   sixteen recorded occurrences all lie in the deleted formulas, and reword
+   or drop the promoted-entry note (lines 899--900) naming the concrete
+   auxiliary $Y_1$--$X_2$ mixed-kernel consumer, so that the ledger cites
+   no deleted evidence.
    The last four groups are direct dependencies of the surviving
    `ShiftSourceGateFormulas.lean`, `ShiftSourceBlockedFormulas.lean`, and
    `ShiftSwapMatrices.lean` modules. Also delete the docstring sentence of
@@ -379,10 +403,15 @@ content still consumed by a later survivor.
 3. **Migrate the hypothesis families.** `SourceFactors.lean`, `SourceUV.lean`,
    `SourceVIsometry.lean`, `SourceUCompleteNetwork.lean`,
    `StandardForm.lean`, `SuppliedFixedWitnesses.lean`, and the admissible
-   proof plans first take the predicate or its full-support equality. After
-   every theorem consumer has migrated, delete `HasFullSupport`, the
-   `hasFullSupport_*` transports, `normalizedDiagonalLiftCFIIData`,
-   `tensorPhysicalIdCFIIData`, `tensorProductCFIIData`, the `fin_one` branch,
+   proof plans first take the predicate or its full-support equality in
+   their MPU-level statements; the generic positive-metric constructions and
+   lemmas of `SourceFactors.lean` and `SourceUV.lean` keep their
+   `(ρ) (hρ : ρ.PosDef)` parameters. After every theorem consumer has
+   migrated, delete `HasFullSupport`, the `hasFullSupport_*` transports
+   (but not the retained witness constructors
+   `normalizedDiagonalLiftCFIIData`, `tensorPhysicalIdCFIIData`, and
+   `tensorProductCFIIData`, which the preservation lemmas use), the
+   `fin_one` branch,
    and the four `**Scope restriction (full support)**` markers
    (`TransferStabilization.lean:119`, `TensorProductCanonicalForm.lean:130`,
    `CanonicalForm.lean:378`, `MatchingContractions.lean:190`), replacing them

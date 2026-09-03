@@ -540,15 +540,25 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   normality theorems apply to the CFII and full-support fields, with
   $E^{\max(D^2-1,1)}=|\rho)(\Phi|$ stated as one power
   identity (no `D = 1` branch), normality, the forced-block simple
-  contractions, and the five preservation lemmas proved once;
+  contractions, and the five preservation lemmas proved once (the
+  identity-ancilla and tensor-product lemmas build the `cfii` field with the
+  retained witness constructors `normalizedDiagonalLiftCFIIData`,
+  `tensorPhysicalIdCFIIData`, and `tensorProductCFIIData`, so only the
+  `hasFullSupport_*` wrappers are deleted);
   their stabilized fixed matrix proved equal to the recorded $\rho$.
   `exists_reduced_cfii_representative` is strengthened to choose the ambient
   diagonal gauge and restated as the without-loss-of-generality theorem. This
   supplies the explicit $\rho^{\mathsf T}=\rho$ boundary now required by #7633
   under #5982, without an arbitrary nonsymmetric strengthening. While
   `HasFullSupport` still exists, current consumers derive it by unfolding the
-  definition from the equality field. Every fixed-tensor step-7-to-13 statement is then migrated to the
-  predicate or the equality directly; only afterward delete `HasFullSupport`,
+  definition from the equality field. Every MPU-level step-7-to-13 statement
+  (one that also assumes `IsMPU`, CFII data, full support, or the stabilized
+  pair) is then migrated to the predicate or the equality directly, while the
+  generic positive-metric constructions of `SourceFactors.lean` (lines
+  82--476) and the gate constructors of `SourceUV.lean` (lines 141--202) keep
+  their `(ρ) (hρ : ρ.PosDef)` parameters, since they assume nothing about
+  $U$ and migrating them would shrink the API; only afterward delete
+  `HasFullSupport`,
   the transports, the `fin_one` branch,
   `def:mpu_reduced_full_support_source_datum`, and only the
   admissible twins whose extra content is pointwise. In the same migration,
@@ -605,7 +615,11 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `ShiftSourceMixedKernels.lean`, also move
   `shiftTwoSitePhysicalEquiv`, the three shared four-spin matrices, and their
   five entry and product formulas to `ShiftSourceFactors.lean`; the surviving
-  gate, blocked-formula, and swap-matrix modules use them. Correct the
+  gate, blocked-formula, and swap-matrix modules use them. In the same step
+  retire the `docs/tactic_patterns.md` candidate "supplied mixed-kernel
+  indicator entries" (lines 1609--1627, all sixteen occurrences in the deleted
+  formulas) and reword or drop its promoted-entry note at lines 899--900 that
+  names the auxiliary $Y_1$--$X_2$ mixed-kernel consumer. Correct the
   `MatchingContractions.lean` docstring, which disclaims the on-route
   input-first identity as auxiliary; delete the 21 nodes, explicitly including
   `thm:mpu_output_layer_tail_entry`, `thm:mpu_source_x1_range_projection`, and
