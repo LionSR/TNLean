@@ -2028,6 +2028,33 @@ spectral split → block extraction → MPV calculation → strict bounds
   cover (membership in red/blue/crossing regions) stated once in the
   RegionBlock development.
 
+### nested finite-sum congruence under two binders — candidate
+- **Pattern:**
+  ```
+  apply Finset.sum_congr rfl
+  intro i _
+  apply Finset.sum_congr rfl
+  ```
+  descending through two nested `Finset.sum` binders to reach the summand,
+  together with its `rw [Finset.sum_comm]`-prefixed variant.
+- **Seen:** 12 occurrences across 8 files (2026-09-04 scan, scan weight 36):
+  `TNLean/MPS/MPU/ReflectedTransferKernel.lean:91`,
+  `TNLean/MPS/MPU/DoubleLayerContraction.lean:181`,
+  `TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean:567,728`,
+  `TNLean/MPS/MPDO/CPSVBlockingChannelCounterexample.lean:380,475,490`,
+  `TNLean/MPS/MPDO/VerticalCF.lean:298`,
+  `TNLean/MPS/MPDO/ReflectedMarkedChain.lean:144,183`,
+  `TNLean/MPS/MPDO/TwoSitePrefixReflectedMarkedChain.lean:72,145`.
+  The `rw [Finset.sum_comm]; apply Finset.sum_congr rfl; intro j _` shape
+  (8 occurrences across 6+ files) is the same pattern with a commuted outer
+  binder and folds into this entry.
+- **Abstraction (proposed):** a two-binder congruence lemma, roughly
+  `Finset.sum_congr₂ : (∀ i ∈ s, ∀ j ∈ t, f i j = g i j) → ∑ i ∈ s, ∑ j ∈ t, f i j = ∑ i ∈ s, ∑ j ∈ t, g i j`,
+  stated once in the algebra layer. A lemma is the weakest sufficient
+  mechanism here; no macro or elaborator is warranted.
+- **Note:** one call site (`ReflectedTransferKernel.lean:91`) is inside the
+  #7658 deletion set, so re-count before promoting.
+
 ### spectral_double_sum_continuity — candidate
 - **Pattern:**
   ```
