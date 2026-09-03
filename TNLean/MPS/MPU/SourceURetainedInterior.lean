@@ -34,7 +34,7 @@ factors remain those constructed from `ρ`.
 
 Source: CPSV17 equations `Erightleft`, `X1X2b`, and `uUnitary`, and Lemma
 `lemuisometry` (lines 269--280 and 487--557). -/
-theorem sourceU_gram_eq_closedDoubleLayerTrace_of_isSymm
+theorem sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (hρ : ρ.IsSymm) (K : ℕ)
     (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
@@ -93,7 +93,7 @@ theorem sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag
         Matrix.trace
           (doubleLayerTensor U p.1 q.1 * doubleLayerTensor U p.2 q.2 *
             normalizedDiagonal (doubleLayerTensor U) ^ K) :=
-      sourceU_gram_eq_closedDoubleLayerTrace_of_isSymm U S hρdiag.isSymm K hK p q
+      sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm U S hρdiag.isSymm K hK p q
     _ = _ := (normalized_mpo_input_tail_eq_closed_doubleLayer_trace U K p q).symm
 
 /-- In the diagonal canonical-form-II coordinates of CPSV17, the paper source
