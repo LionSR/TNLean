@@ -29,6 +29,7 @@ arXiv:1606.00608, equation `II_CF1`, lines 214--245.
   image of the paired constituent spans.
 * `MPSTensor.isNBlkInjective_tensorProduct` preserves full homogeneous word
   spans at a common length.
+* `MPSTensor.isInjective_tensorProduct` preserves one-site injectivity.
 * `MPSTensor.isNormal_tensorProduct` preserves algebraic normality by using
   the common length `N_A * N_B`.
 
@@ -123,6 +124,15 @@ theorem isNBlkInjective_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
   exact LinearMap.range_eq_top.mpr
     ((kroneckerLinearEquiv (Fin D) (Fin D) (Fin E) (Fin E) ℂ).trans
       (Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv)).surjective
+
+/-- One-site injectivity is preserved by independent tensor products. -/
+theorem isInjective_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+    (hA : Kraus.IsInjective A) (hB : Kraus.IsInjective B) :
+    Kraus.IsInjective (tensorProduct A B) := by
+  rw [Kraus.IsInjective, ← Kraus.wordSpan_one]
+  exact isNBlkInjective_tensorProduct A B
+    (Kraus.isNBlkInjective_one_of_isInjective hA)
+    (Kraus.isNBlkInjective_one_of_isInjective hB)
 
 /-- Algebraic normality is preserved by independent tensor products.
 
