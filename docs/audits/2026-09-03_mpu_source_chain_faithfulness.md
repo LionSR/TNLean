@@ -186,8 +186,11 @@ The three shapes, with their occurrence counts under `TNLean/MPS/MPU/`:
 - **A positive definite trace-one weight**: `(ρ) (hρ : ρ.PosDef)`; 65
   occurrences of `hρ : ρ.PosDef` in 11 files, plus `hρtrace`.
 - **A supplied stabilized fixed pair**: `(J) (hJ : 0 < J) (hpower :
-  E ^ J = vecMulVec ρ.vec 1.vec)`; 38 occurrences of `hpower` in 6 files,
-  with a separate $D=1$ branch (`normalizedTransferStabilization_fin_one`,
+  E ^ J = vecMulVec ρ.vec 1.vec)`; 12 theorem-parameter binders named
+  `hpower` in 4 files. An exact token search gives 34 lines in 6 files, but
+  three belong to an unrelated local helper in `SimpleBlocking.lean` and the
+  remaining non-binder lines use or derive the hypotheses. There is also a
+  separate $D=1$ branch (`normalizedTransferStabilization_fin_one`,
   `normalized_transfer_matrix_eq_one_fin_one`) because
   `Matrix.StabilizedRankOneData` needs a positive exponent at most
   $D^2-1$, which no exponent satisfies at $D=1$
@@ -367,9 +370,12 @@ content still consumed by a later survivor.
    Retire `mpu_mixed_kernel_range_restriction.tex`. Net about $-2{,}300$ Lean
    lines.
 2. **Define the convention predicate** as above in `CanonicalForm.lean`
-   (renamed to state its content), with its lemmas moved from
-   `TransferStabilization.lean` and `MatchingContractions.lean`, and restate
-   `exists_reduced_cfii_representative` in its terms.
+   (renamed to state its content), and restate
+   `exists_reduced_cfii_representative` in its terms. Keep the positive-power
+   API in `TransferStabilization.lean` and the forced-block contractions in
+   `MatchingContractions.lean`. The latter depend on `SimpleBlocking.lean`,
+   whose import chain already passes through `CanonicalForm.lean`; moving them
+   upward would create a cycle.
 3. **Migrate the hypothesis families.** `SourceFactors.lean`, `SourceUV.lean`,
    `SourceVIsometry.lean`, `SourceUCompleteNetwork.lean`,
    `StandardForm.lean`, `SuppliedFixedWitnesses.lean`, and the admissible
@@ -428,11 +434,14 @@ content still consumed by a later survivor.
    titled "Nonzero weights in MPU canonical form." CPSV17 line 260 allows a
    literal zero coefficient, while the formal definition adopts the intended
    convention that retained canonical blocks contribute. Then apply the
-   transfer-multiplicity
-   argument to prove that an MPU tensor in `IsMPUCanonicalForm` has one block
-   and that block is normal. Finally share one structure between the two
-   canonical forms by parametrizing the block predicate, so that
-   `MPUCanonicalForm.lean` reduces to the block predicate and that lemma.
+   transfer-multiplicity argument to prove that an MPU tensor in
+   `IsMPUCanonicalForm` has one block and that block is normal. Finally extract
+   a common retained-block reconstruction base while keeping the support policy
+   in separate wrappers. Literal `CPSVCanonicalFormData` retains its
+   source-faithful inequality $\sum_k D_k\leq D$ and optional ambient
+   complement; the MPU endpoint wrapper adds nonzero weights and
+   $\sum_k D_k=D$. Parametrizing only the block predicate would silently
+   strengthen the CPSV definition or weaken the MPU endpoint repair.
 6. **Retain the pathwise source-data obligations for
    `prop:continuity-index`** (#6136, #6140, #6022). Step 2 supplies the fixed
    pair separately at each point, but it does not prove that the choices for

@@ -505,8 +505,11 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 - **Evidence**: `TNLean/MPS/MPU/` carries the paper's standing convention
   (`Papers/1703.09188/paper_v2.tex` lines 271--281 and 356--361) as explicit
   hypotheses in three shapes: `hρ : ρ.PosDef` at 65 sites in 11 files,
-  `hpower : E ^ J = vecMulVec ρ.vec 1.vec` at 38 sites in 6 files, and
-  `hfull : … .HasFullSupport` at 28 sites in 6 files; 8 `hasFullSupport_*`
+  `hpower : E ^ J = vecMulVec ρ.vec 1.vec` at 12 theorem-parameter binders in
+  4 files, and `hfull : … .HasFullSupport` at 28 sites in 6 files; an exact
+  `hpower` token search gives 34 lines in 6 files, including uses, derived
+  locals, and an unrelated 3-line helper in `SimpleBlocking.lean`; 8
+  `hasFullSupport_*`
   transport theorems and 3 canonical-form-II constructions
   (`PhysicalAncilla.lean`, `TensorProductCanonicalForm.lean`) exist only to
   carry the pair between statements; a separate `D = 1` branch
@@ -556,9 +559,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `thm:mpu_normalized_transfer_fin_one`. Retain
   `def:mpu_admissible_equivalence_datum` and every node requiring its
   continuously varying path data until a continuous-selection theorem is
-  proved. Rewrite `docs/paper-gaps/mpu_canonical_form_full_support.tex` as the
-  pointwise convention record while keeping the pathwise supplier gap
-  explicit.
+  proved. Keep the positive-power API in `TransferStabilization.lean` and the
+  forced-block contractions in downstream `MatchingContractions.lean`; moving
+  the latter into `CanonicalForm.lean` would create an import cycle through
+  `SimpleBlocking.lean`. Rewrite
+  `docs/paper-gaps/mpu_canonical_form_full_support.tex` as the pointwise
+  convention record while keeping the pathwise supplier gap explicit.
 - **First PR**: define the predicate in `CanonicalForm.lean` with the CFII,
   full-support-equality, and ambient-diagonal-$\rho$ fields. Use the existing
   theorems for normality and stabilization, prove that the stabilized matrix is
@@ -642,10 +648,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   First add `weights_ne_zero` and require $\sum_k D_k=D$ (equivalently, full
   support) in `MPUCanonicalFormData`. Then prove `prop:normal-tensor` for
   `IsMPUCanonicalForm` on MPU tensors (one normal block), using transfer
-  multiplicity only after the zero-weight witness is excluded. Finally share
-  one structure between the two canonical forms by parametrizing the block
-  predicate, so that the module reduces to `IsMPUCanonicalBlock` and that
-  lemma.
+  multiplicity only after the zero-weight witness is excluded. Finally extract
+  a common retained-block reconstruction base with separate support-policy
+  wrappers. Literal `CPSVCanonicalFormData` keeps $\sum_k D_k\leq D$ and its
+  optional ambient complement; the MPU endpoint wrapper requires nonzero
+  weights and $\sum_k D_k=D$. Parametrizing only the block predicate would
+  conflate these two source policies.
 - **First PR**: add `weights_ne_zero` and full support to
   `MPUCanonicalFormData`, update any direct witnesses, and add an inline
   `**Local fix (nonzero canonical weights and full support):**` marker in
