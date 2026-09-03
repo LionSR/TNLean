@@ -13560,6 +13560,205 @@ left/right order below agrees with the adjacent-pair convention in
     physical supports, so disjoint quasi-locality applies.
 \end{proof}
 
+\begin{lemma}[Two-site translation of the pair regions]
+    \label{lem:qca_pair_region_two_site_translation}
+    \lean{SpinChain.translateRegion_evenPair,
+        SpinChain.translateRegion_leftPair,
+        SpinChain.translateRegion_rightPair}
+    \leanok
+    \uses{def:qca_nearest_neighbor_pair_regions}
+    Translation by two sites advances each of the three two-site regions by
+    one index:
+    \begin{align}
+        E_x+2 & =E_{x+1}, &
+        L_x+2 & =L_{x+1}, &
+        P_x+2 & =P_{x+1}.
+        \label{eq:qca_pair_region_two_site_translation}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:qca_nearest_neighbor_pair_regions}
+    Add $2$ to each of the two points of (\ref{eq:qca_pair_regions}) and
+    compare with the same set at the index $x+1$.
+\end{proof}
+
+\begin{lemma}[Matrix coefficients as compressions by matrix units]
+    \label{lem:qca_support_coefficient_compression}
+    \lean{Matrix.leftKroneckerEmbed_bipartiteSlice_eq_sum,
+        Matrix.rightKroneckerEmbed_operatorBlock_eq_sum}
+    \leanok
+    \uses{def:qca_left_coefficient_set, def:qca_right_coefficient_set}
+    Let $X\in M_{I\times J}(\mathbb C)$ and write $e_{rs}$ for the matrix
+    units of either factor.  Then
+    \begin{align}
+        X^{\mathrm L}_{rs}\otimes\mathbf 1
+         & =\sum_{t\in J}
+        (\mathbf 1\otimes e_{tr})\,X\,(\mathbf 1\otimes e_{st}),
+        \label{eq:qca_left_coefficient_compression}                    \\
+        \mathbf 1\otimes X^{\mathrm R}_{ij}
+         & =\sum_{k\in I}
+        (e_{ki}\otimes\mathbf 1)\,X\,(e_{jk}\otimes\mathbf 1).
+        \label{eq:qca_right_coefficient_compression}
+    \end{align}
+    Every coefficient of the expansion used at
+    \cite[lines~1188--1191]{Gross2012IndexTheory} and
+    \cite[lines~1137--1169]{SchumacherWerner2004QCA} is therefore a sum of
+    products formed inside the ambient algebra.
+\end{lemma}
+
+\begin{proof}\leanok
+    Compare entries.  On the left of
+    (\ref{eq:qca_left_coefficient_compression}), the entry at
+    $((i,t),(j,u))$ equals $X((i,r),(j,s))$ when $t=u$ and vanishes
+    otherwise.  On the right, the summand indexed by $t$ contributes
+    $X((i,r),(j,s))$ exactly when both second coordinates equal $t$, so the
+    sum over $t$ reproduces the same entry.  The second identity follows by
+    exchanging the roles of the two factors.
+\end{proof}
+
+\begin{lemma}[Quasi-local form of the coefficient compressions]
+    \label{lem:qca_quasi_local_coefficient_compression}
+    \lean{SpinChain.matrixToQuasiLocalObservable_bipartiteSlice_eq_sum,
+        SpinChain.matrixToQuasiLocalObservable_operatorBlock_eq_sum}
+    \leanok
+    \uses{lem:qca_support_coefficient_compression,
+        def:qca_bipartite_local_algebra_coordinates,
+        def:qca_quasi_local_observable,
+        def:qca_site_indexed_support_algebras}
+    Let $\Gamma$ and $\Delta$ be disjoint finite regions and let
+    $A\in\mathcal A_{\Gamma\cup\Delta}$, written in the ordered
+    $\Gamma\times\Delta$ coordinates.  For configurations
+    $r,s\in\mathcal C_\Delta$ and $i,j\in\mathcal C_\Gamma$, the canonical
+    quasi-local copies of the two coefficient families are
+    \begin{align}
+        \widehat{A^{\mathrm L}_{rs}}
+         & =\sum_{t\in\mathcal C_\Delta}
+        \widehat{e^\Delta_{tr}}\ \widehat A\ \widehat{e^\Delta_{st}},
+        \label{eq:qca_quasi_local_left_compression}       \\
+        \widehat{A^{\mathrm R}_{ij}}
+         & =\sum_{k\in\mathcal C_\Gamma}
+        \widehat{e^\Gamma_{ki}}\ \widehat A\ \widehat{e^\Gamma_{jk}},
+        \label{eq:qca_quasi_local_right_compression}
+    \end{align}
+    where a hat denotes the canonical image in the quasi-local algebra.  Both
+    right-hand sides are formed inside the quasi-local algebra alone.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_support_coefficient_compression,
+        thm:qca_bipartite_local_algebra_inclusions,
+        lem:qca_quasi_local_observable}
+    In the bipartite coordinates the inclusion of $\mathcal A_\Gamma$ is
+    $X\mapsto X\otimes\mathbf 1$ and the inclusion of $\mathcal A_\Delta$ is
+    $Y\mapsto\mathbf 1\otimes Y$.  Transport
+    (\ref{eq:qca_left_coefficient_compression}) and
+    (\ref{eq:qca_right_coefficient_compression}) through the inverse of the
+    bipartite coordinate equivalence, then apply the canonical map of
+    $\mathcal A_{\Gamma\cup\Delta}$ into the quasi-local algebra, under which
+    a finite-region inclusion leaves the quasi-local observable unchanged.
+\end{proof}
+
+\begin{theorem}[Two-site translation covariance of the support algebras]
+    \label{thm:qca_site_indexed_support_algebras_two_site_covariance}
+    \lean{SpinChain.PropagatesWithin.embeddedEvenSupportAlgebra_map_quasiLocalTranslation_two,
+        SpinChain.PropagatesWithin.embeddedOddSupportAlgebra_map_quasiLocalTranslation_two,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra_map_quasiLocalTranslation_two,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra_map_quasiLocalTranslation_two_even,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra_map_quasiLocalTranslation_two_odd}
+    \leanok
+    \uses{def:qca_site_indexed_support_algebras, def:qca_translation_covariant,
+        def:qca_quasi_local_translation, lem:qca_pair_region_two_site_translation}
+    Let $\omega$ be a star-algebra automorphism of the homogeneous quasi-local
+    algebra which propagates within $\{-1,0,1\}$ and commutes with every
+    lattice translation.  Then, for every $y\in\mathbb Z$,
+    \begin{align}
+        \tau_2\bigl(\widehat{\mathcal R}_y\bigr)
+         & =\widehat{\mathcal R}_{y+2},
+        \label{eq:qca_two_site_covariance}
+    \end{align}
+    and in the two parities
+    \begin{align}
+        \tau_2\bigl(\widehat{\mathcal R}_{2x}\bigr)
+         & =\widehat{\mathcal R}_{2x+2}, &
+        \tau_2\bigl(\widehat{\mathcal R}_{2x+1}\bigr)
+         & =\widehat{\mathcal R}_{2x+3}.
+        \label{eq:qca_two_site_covariance_parities}
+    \end{align}
+    The displacement is two sites of the original chain, that is, one blocked
+    cell.  The corresponding one-site formula
+    $\tau_1(\widehat{\mathcal R}_y)=\widehat{\mathcal R}_{y+1}$ is false in
+    general and is not asserted, because translation by one does not preserve
+    the even pairing $E_x$.  For the shift automorphism at
+    \cite[lines~1267--1268]{Gross2012IndexTheory} the even algebra is a
+    two-site full matrix algebra while the odd algebra is the scalars, and no
+    translation carries one onto the other.
+
+    Covariance of the support algebras under translation is the identity
+    displayed at
+    \cite[lines~1218--1226]{SchumacherWerner2004QCA} for the algebras defined
+    at \cite[lines~1199--1206]{SchumacherWerner2004QCA}, and the ordered even
+    and odd factors are equation \texttt{RR2x} at
+    \cite[lines~1251--1266]{Gross2012IndexTheory}.  The translation-covariant
+    fixed-$d$ setting is that of
+    \cite[lines~2292--2298]{Cirac2017MPU}.
+
+    \textbf{Scope restriction (one-dimensional homogeneous chain):}
+    Schumacher--Werner state the translated-support identity for the cube
+    lattice of an arbitrary dimension with a general neighbourhood scheme,
+    \cite[lines~309--318 and 928--941]{SchumacherWerner2004QCA}; the statement
+    above is its one-dimensional nearest-neighbour instance.  GNVW allow
+    site-dependent cell sizes and assume no translation covariance, so
+    (\ref{eq:qca_two_site_covariance}) is not a theorem of that paper; the
+    fixed-$d$ restriction of the family $\mathcal R_y$ is recorded in
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:qca_quasi_local_coefficient_compression,
+        lem:qca_pair_region_two_site_translation,
+        def:qca_site_indexed_support_algebras,
+        lem:qca_quasi_local_translation_action,
+        thm:qca_finite_region_restriction_embedding,
+        thm:qca_finite_region_restriction_translation}
+    Fix $x$ and put $\Lambda=E_x$, $\Gamma=L_x$, $\Delta=P_x$.  A
+    finite-region observable belongs to the finite local image exactly when
+    its quasi-local copy lies in the image of $\mathcal A_\Lambda$ under
+    $\omega$.  Hence, by
+    (\ref{eq:qca_quasi_local_left_compression}), the canonical quasi-local
+    copy of $\mathcal R_{2x}$ is generated by the elements
+    \begin{align}
+        \sum_{t\in\mathcal C_\Delta}
+        \widehat{e^\Delta_{tr}}\ \omega\bigl(\widehat B\bigr)\
+        \widehat{e^\Delta_{st}},
+        \qquad B\in\mathcal A_\Lambda,\quad r,s\in\mathcal C_\Delta,
+        \label{eq:qca_left_support_generators}
+    \end{align}
+    and the copy of $\mathcal R_{2x+1}$ is generated by the analogous
+    elements built from (\ref{eq:qca_quasi_local_right_compression}) with
+    $\Gamma$ in place of $\Delta$.  Since a star-algebra automorphism carries
+    the algebra generated by a set to the algebra generated by the image of
+    that set, it suffices to translate the two generating families.
+
+    Translation carries a matrix unit of a region to the matrix unit of the
+    translated region at the translated configurations, and covariance gives
+    $\tau_2(\omega(\widehat B))=\omega(\tau_2(\widehat B))$, whose right-hand
+    side is $\omega$ applied to the quasi-local copy of the translated
+    observable.  Reindexing the summation over $\mathcal C_\Delta$ along the
+    configuration translation therefore turns
+    (\ref{eq:qca_left_support_generators}) into the same family for the
+    regions $\Lambda+2$ and $\Delta+2$, and the translation is a bijection
+    between the two families.  By
+    (\ref{eq:qca_pair_region_two_site_translation}) those regions are
+    $E_{x+1}$ and $P_{x+1}$, so the translated family generates
+    $\widehat{\mathcal R}_{2x+2}$.  The odd case is identical with $\Gamma$
+    in place of $\Delta$ and $L_{x+1}$ in place of $P_{x+1}$.
+
+    Finally, splitting $y$ by parity and using $2x+2=2(x+1)$ and
+    $2x+3=2(x+1)+1$ gives (\ref{eq:qca_two_site_covariance}) and
+    (\ref{eq:qca_two_site_covariance_parities}).
+\end{proof}
+
 Equation~(A1) in lines~2300--2306 of \cite{Cirac2017MPU} defines the
 local action associated with an MPU by eventual finite-chain conjugation.  In
 lines~2300--2306, eventual constancy is used to obtain a norm-preserving
