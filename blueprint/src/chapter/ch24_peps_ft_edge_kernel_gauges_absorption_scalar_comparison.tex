@@ -239,6 +239,12 @@
     \label{def:peps_threeLegLeftIdentityForm}
     \lean{TNLean.PEPS.threeLegLeftIdentityForm}
     \leanok
+    Throughout this group of residual forms, the three virtual leg spaces
+    $\alpha,\beta,\gamma$ are nonzero finite-dimensional spaces, as in the
+    standing convention of \cite[Section~3]{Molnar2018NormalPEPS}, where every
+    virtual leg carries a drawn wire. The three definitions below and the
+    scalar reduction that follows all read under that convention.
+
     For three virtual leg spaces $\alpha,\beta,\gamma$ and an endomorphism
     $Z$ of $\beta\otimes\gamma$, define the induced endomorphism of
     $\alpha\otimes\beta\otimes\gamma$ by acting as the identity on the
@@ -272,6 +278,10 @@
     \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
     \leanok
     \uses{def:peps_threeLegLeftIdentityForm, def:peps_threeLegRightIdentityForm, def:peps_threeLegMiddleIdentityForm}
+    The three virtual leg spaces are nonzero, by the convention recorded in
+    Definition~\ref{def:peps_threeLegLeftIdentityForm}; the reduction below
+    selects a basis vector in each of them.
+
     In the proof of the generalized two-injective-tensor comparison, applying
     the inverse of the second injective tensor leaves three possible virtual
     operators on the exposed legs of the first tensor:
