@@ -87,11 +87,15 @@ condition is imposed here at every \(M\), against the corresponding member
 \(H_{\Lambda_M}\) of the family of Hamiltonians. Conditions C2 and C3 at lines
 1043--1058 and 1083--1094 are imposed from the onset index
 \(n_0=\max\{l,n_l,n_{l+1}-1\}\) onwards, hence on \(n_0\leq n<N\), and that
-onset is at least \(l\). Condition C2 at lines 1044--1049 also identifies each
-ground space with the kernel of its Hamiltonian and asks that it be
-nontrivial; both clauses are imposed, for the volumes \(\Lambda_M\) with
-\(M\leq N\) and for the windows \(\Lambda_{n+1}\setminus\Lambda_{n-l}\) on the
-C2--C3 range. The conventions \(G_{\Lambda_0}=\mathbf 1\) and
+onset is at least \(l\); only the gap inequality of C2 carries that onset.
+Condition C2 at lines 1044--1049 also identifies each ground space with the
+kernel of its Hamiltonian and asks that it be nontrivial, and those two
+clauses carry no onset: they are imposed for the volumes \(\Lambda_M\) with
+\(M\leq N\) and for every window \(\Lambda_{n+1}\setminus\Lambda_{n-l}\)
+inside \(\Lambda_N\), that is on \(0\leq n<N\). The further structural facts
+the source records about these projections are imposed on the same range: each
+is an orthogonal projection, and each commutes with the martingale differences
+outside its window. The conventions \(G_{\Lambda_0}=\mathbf 1\) and
 \(G_{\Lambda_{N+1}}=0\) at lines 1060--1061 are imposed as well.
 
 All of this is read at the volume \(\Lambda_N\) that the conclusion is about.
@@ -102,6 +106,15 @@ that space; correspondingly the printed proof sums its per-index estimate over
 \(0\leq n<N\), reading C2 at window index at most \(N\) and C3 at index at
 most \(N-1\). Condition C1 is different, because its right-hand side names the
 Hamiltonian of the volume, which is why it is imposed at every \(M\).
+
+The two readings cannot be combined. Under the convention \(G_{\Lambda_{N+1}}
+=0\) the last martingale difference is \(E_N=G_{\Lambda_N}\), which is nonzero
+because C2 asks the ground space to be nontrivial, so C3 read at \(n=N\) would
+bound the norm of \(G_{\Lambda_{N+1}\setminus\Lambda_{N-l}}G_{\Lambda_N}\) by
+\(\epsilon_l<1\); in the chain below that operator is the ground projection of
+\(\Lambda_{N+1}\), of norm one. A transcription imposing C3 past \(N-1\)
+alongside the printed convention would therefore have contradictory
+hypotheses.
 
 This is the hypothesis list of
 `NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_threshold`,
@@ -118,13 +131,13 @@ def UnrestrictedNachtergaeleEstimate (E : Type*) [NormedAddCommGroup E]
     G.projection (N + 1) = 0 →
     (∀ M ≤ N, LinearMap.ker (H M) = LinearMap.range (G.projection M)) →
     (∀ n ≤ N, G.projection n ≠ 0) →
-    (∀ n ∈ Finset.Ico n₀ N,
+    (∀ n ∈ Finset.range N,
       LinearMap.ker (localHamiltonian n) = LinearMap.range (Q n)) →
-    (∀ n ∈ Finset.Ico n₀ N, Q n ≠ 0) →
+    (∀ n ∈ Finset.range N, Q n ≠ 0) →
     v ∈ (LinearMap.range (G.projection N))ᗮ →
     0 < γ → 0 < d → 0 ≤ ε → ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) →
-    (∀ n ∈ Finset.Ico n₀ N, (Q n).IsSymmetricProjection) →
-    (∀ n ∈ Finset.Ico n₀ N, ∀ m, m < n - l ∨ n < m →
+    (∀ n ∈ Finset.range N, (Q n).IsSymmetricProjection) →
+    (∀ n ∈ Finset.range N, ∀ m, m < n - l ∨ n < m →
       (G.martingaleDifference m).comp (Q n) =
         (Q n).comp (G.martingaleDifference m)) →
     (∀ M, ∀ x,
@@ -458,11 +471,11 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
           norm_num at h
       · simp
       · exact absurd (Nat.not_lt.mp h1) h3
-  have hkerQ : ∀ n ∈ Finset.Ico 1 (k + 1),
+  have hkerQ : ∀ n ∈ Finset.range (k + 1),
       LinearMap.ker (diagonal (k + 2) (localWeight k n)) =
         LinearMap.range (diagonal (k + 2) (excitationWeight k n)) := by
     intro n hn
-    have hn2 : n < k + 1 := (Finset.mem_Ico.mp hn).2
+    have hn2 : n < k + 1 := Finset.mem_range.mp hn
     refine ker_diagonal_eq_range_diagonal _ _ _ (fun i ↦ ?_) fun i ↦ ?_
     · simp only [excitationWeight]
       split_ifs <;> simp
@@ -479,10 +492,10 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     rw [chain_projection]
     refine diagonal_ne_zero _ _ (⟨k + 1, by omega⟩ : Fin (k + 2)) ?_
     simp [groundWeight, hn]
-  have hQne : ∀ n ∈ Finset.Ico 1 (k + 1),
+  have hQne : ∀ n ∈ Finset.range (k + 1),
       diagonal (k + 2) (excitationWeight k n) ≠ 0 := by
     intro n hn
-    have hn2 : n < k + 1 := (Finset.mem_Ico.mp hn).2
+    have hn2 : n < k + 1 := Finset.mem_range.mp hn
     have hne : (k + 1 : ℕ) ≠ n := by omega
     exact diagonal_ne_zero _ _ (⟨k + 1, by omega⟩ : Fin (k + 2))
       (by simp [excitationWeight, hne])
@@ -493,10 +506,10 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     have hw : groundWeight k (k + 1) (0 : Fin (k + 2)) = 0 := by
       simp [groundWeight]
     simp [defect, chain_projection, EuclideanSpace.inner_single_right, hw]
-  have hQ : ∀ n ∈ Finset.Ico 1 (k + 1),
+  have hQ : ∀ n ∈ Finset.range (k + 1),
       (diagonal (k + 2) (excitationWeight k n)).IsSymmetricProjection :=
     fun n _ ↦ diagonal_isSymmetricProjection _ _ (excitationWeight_mul_self k n)
-  have hcomm : ∀ n ∈ Finset.Ico 1 (k + 1), ∀ m, m < n - 0 ∨ n < m →
+  have hcomm : ∀ n ∈ Finset.range (k + 1), ∀ m, m < n - 0 ∨ n < m →
       ((chain k).martingaleDifference m).comp
           (diagonal (k + 2) (excitationWeight k n)) =
         (diagonal (k + 2) (excitationWeight k n)).comp

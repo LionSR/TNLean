@@ -292,8 +292,14 @@ not act on $\mathcal H_{\Lambda_N}$, which is why the printed proof sums over
 $0\leq n<N$. The model satisfies them at every index above their thresholds,
 on the volume that index names, by
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_c2}) and
-(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_c3}). The restriction
-of
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_c3}). Reading them at
+$n=N$ as well is not an option the source leaves open, because it contradicts
+the convention $G_{\Lambda_{N+1}}=0$: that convention makes
+$E_N=G_{\Lambda_N}$, which is non-zero because C2 asks the ground space to be
+non-trivial, so C3 at $n=N$ would bound
+$\lVert G_{\Lambda_{N+1}\setminus\Lambda_{N-l}}G_{\Lambda_N}\rVert$ by
+$\epsilon_l<1$, while for the model above that operator is
+$\prod_{x\leq N+1}P_x$, of norm one. The restriction of
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_interaction}) at
 $l=0$ and $\delta=1/2$ refutes the printed statement for every chain length
 $N\geq1$.\footnote{Formal declarations:
@@ -307,7 +313,9 @@ $N\geq1$.\footnote{Formal declarations:
     (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}); it also
     carries the ordering $l\leq n_0$ of that threshold, the identification of
     each ground space with the kernel of its Hamiltonian and the
-    non-triviality of the ground spaces that C2 requires, and the conventions
+    non-triviality of the ground spaces that C2 requires, imposed for every
+    window inside $\Lambda_N$ because only the gap inequality of C2 carries an
+    onset, and the conventions
     $G_{\Lambda_0}=\mathbf 1$ and $G_{\Lambda_{N+1}}=0$. Then
     \leanid{FrustrationFree.not_unrestrictedNachtergaeleEstimate} refutes it.
     In the formal instance $l=0$, so C1 is supplied on the full range

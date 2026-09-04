@@ -1569,10 +1569,14 @@ norm estimate is derived here.
     with $l=0$, $n_0=1$, $N=k+1$, $\gamma_1=d_1=1$, and $\epsilon_0=0$, the
     required commutations hold, condition C1 holds with the single constant
     $d_1$ at every volume $\Lambda_M$ on the range $l\leq n<M$ carried by its
-    own window sum, conditions C2 and C3 hold on the range $n_0\leq n<N$ from
-    which they are imposed, every ground space is the kernel of its own
-    Hamiltonian, that is $\ker H_{\Lambda_M}=\operatorname{ran}(G_M)$ for
-    $M\leq N$ and $\ker H_n=\operatorname{ran}(Q_n)$ for $n_0\leq n<N$, and
+    own window sum, the gap inequality of condition C2 and condition C3 hold
+    on the range $n_0\leq n<N$ from which they are imposed, every ground space
+    is the kernel of its own Hamiltonian, that is
+    $\ker H_{\Lambda_M}=\operatorname{ran}(G_M)$ for $M\leq N$ and
+    $\ker H_n=\operatorname{ran}(Q_n)$ for every window inside $\Lambda_N$,
+    that is for $0\leq n<N$, where the $Q_n$ are also nonzero orthogonal
+    projections commuting with the martingale differences outside their own
+    windows, and
     \begin{align}
         \re\langle H_{\Lambda_N}v,v\rangle
          & =\tfrac12\lVert v\rVert^2
@@ -1610,8 +1614,9 @@ norm estimate is derived here.
     upper bound. Since $c_i\neq0$ for $i\leq k$, the kernel of
     $H_{\Lambda_M}$ is spanned by the $e_i$ with $i\geq M$ whenever $M\leq N$,
     which is $\operatorname{ran}(G_M)$, and the kernel of $H_n$ is spanned by
-    the $e_i$ with $i\neq n$ whenever $1\leq n<N$, which is
-    $\operatorname{ran}(Q_n)$. For $1\leq n<N$ one has $c_n=1$, so
+    the $e_i$ with $i\neq n$ whenever $0\leq n<N$, which is
+    $\operatorname{ran}(Q_n)$ and is nonzero. For $1\leq n<N$ one has $c_n=1$,
+    so
     $\lVert(\mathbf 1-Q_n)x\rVert^2=\lVert E_nx\rVert^2$ equals
     $\re\langle H_nx,x\rangle$, which is condition C2 with $\gamma_1=1$.
     Take $v=e_0$. Then $v\perp\operatorname{ran}(G_N)$, the line through
