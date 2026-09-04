@@ -45,13 +45,13 @@ theorem sq_mul_eq_one_of_sign (h₁ : σ₁ = 1 ∨ σ₁ = -1) (h₂ : σ₂ = 
   rcases h₁ with h₁ | h₁ <;> rcases h₂ with h₂ | h₂ <;> subst h₁ <;> subst h₂ <;> norm_num
 
 /-- **Odd blocking length keeps the first sign.** For signs `σ₁, σ₂ ∈ {1, -1}`
-and odd `k`, the blocked sign `σ₁(σ₁σ₂)^{k-1}` equals `σ₁`.
+and positive odd `k`, the blocked sign `σ₁(σ₁σ₂)^{k-1}` equals `σ₁`.
 
 This is the odd case of `σ⁽ᵏ⁾ = σ⁽¹⁾ζ^{k-1}` from arXiv:1703.09188,
 `paper_v2.tex` line 1732, with `ζ = σ⁽¹⁾σ⁽²⁾` from line 1687. -/
 theorem blockedSign_eq_first_of_odd (h₁ : σ₁ = 1 ∨ σ₁ = -1) (h₂ : σ₂ = 1 ∨ σ₂ = -1)
-    {k : ℕ} (hk : Odd k) : σ₁ * (σ₁ * σ₂) ^ (k - 1) = σ₁ := by
-  obtain ⟨m, hm⟩ := hk
+    {k : ℕ} (hk : 0 < k) (hko : Odd k) : σ₁ * (σ₁ * σ₂) ^ (k - 1) = σ₁ := by
+  obtain ⟨m, hm⟩ := hko
   have hk1 : k - 1 = 2 * m := by omega
   rw [hk1, pow_mul, sq_mul_eq_one_of_sign h₁ h₂, one_pow, mul_one]
 

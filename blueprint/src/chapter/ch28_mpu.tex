@@ -6527,12 +6527,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \subsection{Local characterization of symmetries}
 
-\begin{lemma}[Common transpose sign of the conjugation factors]
-    \label{lem:mpu_conjugation_common_transpose_sign}
-    \lean{Matrix.exists_common_transpose_sign_of_kronecker_map_star_mul_eq_one,
+\begin{theorem}[Common transpose sign of the conjugation factors]
+    \label{thm:mpu_conjugation_common_transpose_sign}
+    \lean{Matrix.transpose_mul_map_star_of_mem_unitaryGroup,
+        Matrix.eq_smul_transpose_of_map_star_mul_eq_smul_one,
+        Matrix.exists_common_transpose_sign_of_kronecker_map_star_mul_eq_one,
         Matrix.transpose_eq_self_or_transpose_eq_neg_of_kronecker_map_star_mul_eq_one}
     \leanok
-    \uses{thm:mpug_kronecker_identity_factors, thm:mpug_unitary_entrywise_self_sign}
     Let $x$ and $y$ be unitary matrices over $\mathbb C$, indexed by nonempty
     finite sets, whose entrywise conjugates satisfy
     \begin{align}
@@ -6543,8 +6544,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         x & =\sigma x^T, & y & =\sigma y^T.
     \end{align}
     Equivalently, either $x=x^T$ and $y=y^T$, or $x=-x^T$ and $y=-y^T$.
+    This is the algebraic conclusion in
+    \cite[lines~1033--1038]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1033--1038.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpug_kronecker_identity_factors, thm:mpug_unitary_entrywise_self_sign}
@@ -6562,7 +6565,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{prop1conj}
     \notready
     \discussion{5713}
-    \uses{FundamentalMPU, SF, lem:mpu_conjugation_common_transpose_sign}
+    \uses{FundamentalMPU, SF, thm:mpu_conjugation_common_transpose_sign}
     An MPU in standard form is invariant under complex conjugation if and only
     if there are unitaries $x$ and $y$ such that either
     $x=x^T$ and $y=y^T$, or $x=-x^T$ and $y=-y^T$, and
@@ -7538,8 +7541,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\tr(UU^\dagger)=\tr(\Id)=n$.
 \end{proof}
 
-\begin{lemma}[The exchange intertwines the Kronecker factors]
-    \label{lem:matrix_swap_kronecker_intertwine}
+\begin{theorem}[The exchange intertwines the Kronecker factors]
+    \label{thm:matrix_swap_kronecker_intertwine}
     \lean{Matrix.swapMatrix_mul_kronecker, Matrix.kronecker_mul_swapMatrix}
     \leanok
     For matrices $A,B\in\mathbb C^{n\times n}$ and the exchange matrix
@@ -7548,9 +7551,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \mathbb S(A\otimes B) & =(B\otimes A)\mathbb S, &
         (A\otimes B)\mathbb S & =\mathbb S(B\otimes A).
     \end{align}
-    % Source lines: paper_v2.tex 1624--1630, where the gauge invariance resting
-    % on this identity is asserted without a printed derivation.
-\end{lemma}
+    The equivalent two-sided exchange identity is stated in
+    \cite[lines~1316--1319]{Cirac2017MPU}; the gauge-invariance argument at
+    \cite[lines~1624--1630]{Cirac2017MPU} uses it without a printed derivation.
+    % Source lines: paper_v2.tex 1316--1319 and 1624--1630.
+\end{theorem}
 
 \begin{proof}\leanok
     In product coordinates the exchange matrix has entries
@@ -7564,18 +7569,19 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The second identity is the first with the two factors exchanged.
 \end{proof}
 
-\begin{lemma}[Exchange contraction of a scaled unitary Kronecker product]
-    \label{lem:matrix_trace_swap_scaled_kronecker}
+\begin{theorem}[Exchange contraction of a scaled unitary Kronecker product]
+    \label{thm:matrix_trace_swap_scaled_kronecker}
     \lean{Matrix.trace_swapMatrix_mul_of_eq_smul_kronecker_conjTranspose}
     \leanok
-    \uses{lem:matrix_trace_swap_kronecker}
     Let $x\in\mathbb C^{n\times n}$ be unitary, let $\sigma\in\mathbb C$, and let
     $M=\sigma\,x\otimes x^\dagger$. Then
     \begin{align}
         \tr\!\left[\mathbb SM\right] & =\sigma n.
     \end{align}
+    This is the exchange-trace evaluation in
+    \cite[lines~1608--1610]{Cirac2017MPU}; there $n=d^2$.
     % Source lines: paper_v2.tex 1608--1610.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:matrix_trace_swap_kronecker}
@@ -7608,7 +7614,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % the blocked source data required by Proposition~\ref{prop:mpu_admissible_local_time_reversal}.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{prop:mpu_admissible_local_time_reversal, def:mpu_reduced_full_support_source_datum,
-        lem:matrix_trace_swap_scaled_kronecker}
+        thm:matrix_trace_swap_scaled_kronecker}
     For a time-reversal-invariant MPU in admissible standard form, suppose its
     one-site tensor $\mathcal U$, its actual two-site block $\mathcal U_2$, and
     the physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and
@@ -7639,7 +7645,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
-    \uses{eq:sigma-from-trace, lem:matrix_swap_kronecker_intertwine}
+    \uses{eq:sigma-from-trace, thm:matrix_swap_kronecker_intertwine}
     Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
     $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
     $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
@@ -7660,7 +7666,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_admissible_sigma_gauge_invariant}
     \notready
     \discussion{5714}
-    \uses{lem:mpu_admissible_sigma_trace, lem:matrix_swap_kronecker_intertwine}
+    \uses{lem:mpu_admissible_sigma_trace, thm:matrix_swap_kronecker_intertwine}
     % Source proof: paper_v2.tex 1624--1630.
     Under the hypotheses of Lemma~\ref{lem:mpu_admissible_sigma_trace}, let $x$ and $y$ be
     unitaries and change the standard-form gauge by
@@ -7719,9 +7725,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1613--1631.
 \end{proposition}
 
-\begin{lemma}[Scalar parity law for the blocked sign]
-    \label{lem:mpu_blocked_sign_parity_scalar}
-    \lean{TNLean.Algebra.blockedSign_eq_first_of_odd,
+\begin{theorem}[Scalar parity law for the blocked sign]
+    \label{thm:mpu_blocked_sign_parity_scalar}
+    \lean{TNLean.Algebra.sq_mul_eq_one_of_sign,
+        TNLean.Algebra.blockedSign_eq_first_of_odd,
         TNLean.Algebra.blockedSign_eq_second_of_even}
     \leanok
     Let $\sigma^{(1)},\sigma^{(2)}\in\{1,-1\}$ and put
@@ -7733,8 +7740,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
                 \sigma^{(2)}, & k\text{ even}.
             \end{cases}
     \end{align}
-    % Source lines: paper_v2.tex 1687 and 1732.
-\end{lemma}
+    This is the scalar conclusion of
+    \cite[lines~1687 and 1730--1732]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1687 and 1730--1732.
+\end{theorem}
 
 \begin{proof}\leanok
     Both signs square to one, hence $\zeta^2=1$. For odd $k$ the exponent $k-1$
@@ -7748,7 +7757,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notready
     \discussion{5714}
     \uses{prop:sigma-well-defined, PropChiral, lem:mpu_blocking,
-        lem:mpu_blocked_sign_parity_scalar}
+        thm:mpu_blocked_sign_parity_scalar}
     Let $\mathcal U$ be a time-reversal-invariant MPU in standard form, and let
     $\sigma^{(k)}$ be the sign obtained from a standard form of its $k$-site
     block. Then
@@ -7794,7 +7803,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % reduced full-support source data. No preservation under blocking is
     % asserted. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, def:mpu_reduced_full_support_source_datum, lem:mpu_blocked_sign_parity_scalar}
+    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, def:mpu_reduced_full_support_source_datum, thm:mpu_blocked_sign_parity_scalar}
     For every blocking length $k$ under consideration, suppose the endpoint
     tensor $\mathcal U_k$, its actual two-site block $\mathcal U_{2k}$, and the
     physical-adjoint comparison tensor $\mathcal U_{2k}^\sharp$ are simple and
@@ -7811,7 +7820,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}
-    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, lem:mpu_blocked_sign_parity_scalar}
+    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, thm:mpu_blocked_sign_parity_scalar}
     Gauge invariance permits the standard blocked representatives used in the
     source proof. Choose
     \begin{align}

@@ -14,10 +14,10 @@ contracts the exchange against a scalar multiple of `x ⊗ x†`. This file reco
 the two algebraic steps.
 
 The exchange intertwines the two orders of a Kronecker product,
-`𝕊(A ⊗ B) = (B ⊗ A)𝕊`. The source asserts the resulting gauge invariance of the
-trace formula for the sign without printing a derivation, at arXiv:1703.09188,
-`paper_v2.tex` lines 1624--1630; the identity below is the algebraic step that
-invariance rests on, and it is proved here entrywise.
+`𝕊(A ⊗ B) = (B ⊗ A)𝕊`. The source states the equivalent two-sided identity at
+arXiv:1703.09188, `paper_v2.tex` lines 1316--1319, and later uses it in the
+gauge-invariance argument at lines 1624--1630. The one-sided forms below are
+proved entrywise.
 
 Because the exchange is available only in the square product coordinates
 `(Fin n) × (Fin n)`, both Kronecker factors are square of the same size.
@@ -35,7 +35,8 @@ Because the exchange is available only in the square product coordinates
 
 * [J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, *Matrix product
   unitaries: structure, symmetries, and topological invariants*,
-  arXiv:1703.09188, lines 1608--1610 and 1624--1630][Cirac2017MPU]
+  arXiv:1703.09188, lines 1316--1319, 1608--1610, and
+  1624--1630][Cirac2017MPU]
 -/
 
 open scoped Kronecker
@@ -47,9 +48,9 @@ variable {n : ℕ}
 /-- The tensor-factor exchange intertwines the two orders of a Kronecker
 product: `𝕊(A ⊗ B) = (B ⊗ A)𝕊`.
 
-This is the algebraic step behind the gauge invariance of the trace formula for
-the time-reversal sign, which arXiv:1703.09188 asserts without a printed
-derivation at `paper_v2.tex` lines 1624--1630. -/
+This is one side of the exchange identity in arXiv:1703.09188,
+`paper_v2.tex` lines 1316--1319, and is the algebraic step behind the gauge
+invariance asserted at lines 1624--1630. -/
 theorem swapMatrix_mul_kronecker (A B : Matrix (Fin n) (Fin n) ℂ) :
     swapMatrix n * (A ⊗ₖ B) = (B ⊗ₖ A) * swapMatrix n := by
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
@@ -65,9 +66,9 @@ theorem kronecker_mul_swapMatrix (A B : Matrix (Fin n) (Fin n) ℂ) :
 /-- Contracting the tensor-factor exchange against a scalar multiple of
 `x ⊗ x†`, for a unitary `x`, returns the scalar times the factor dimension.
 
-This is the trace evaluation `tr[𝕊 x x†] = d²` used to extract the
-time-reversal sign in arXiv:1703.09188, `paper_v2.tex` lines 1608--1610, with
-the scalar supplied by the symmetry relation. -/
+The general identity gives `tr[𝕊(x ⊗ x†)] = n`. In the MPU application,
+`x` acts on a space of dimension `d²`, giving the value `d²` in
+arXiv:1703.09188, `paper_v2.tex` lines 1608--1610. -/
 theorem trace_swapMatrix_mul_of_eq_smul_kronecker_conjTranspose
     {M : Matrix (Fin n × Fin n) (Fin n × Fin n) ℂ} {x : Matrix (Fin n) (Fin n) ℂ}
     (σ : ℂ) (hx : x ∈ unitaryGroup (Fin n) ℂ) (hM : M = σ • (x ⊗ₖ xᴴ)) :
