@@ -28,6 +28,7 @@ variable {G K : Type*} [Group G] [Group K]
 def ScalarCocycle.pullback (f : K →* G) (ω : ScalarCocycle G) : ScalarCocycle K :=
   fun a b ↦ ω (f a) (f b)
 
+/-- Evaluate a pulled-back cochain by applying the homomorphism to both arguments. -/
 @[simp]
 theorem ScalarCocycle.pullback_apply (f : K →* G) (ω : ScalarCocycle G) (a b : K) :
     ω.pullback f a b = ω (f a) (f b) := rfl
@@ -43,7 +44,8 @@ theorem ScalarCocycle.CohomologousTo.pullback {ω₁ ω₂ : ScalarCocycle G}
     (h : ω₁.CohomologousTo ω₂) (f : K →* G) :
     (ω₁.pullback f).CohomologousTo (ω₂.pullback f) := by
   obtain ⟨φ, hφ⟩ := h
-  exact ⟨φ ∘ f, fun a b ↦ by simpa using hφ (f a) (f b)⟩
+  refine ⟨φ ∘ f, fun a b ↦ ?_⟩
+  simpa only [ScalarCocycle.pullback_apply, Function.comp_apply, map_mul] using hφ (f a) (f b)
 
 /-- Multiplying a genuine cocycle by a cochain coboundary preserves its equation. -/
 theorem ScalarCocycle.IsCocycle.coboundary_mul {ω : ScalarCocycle G}
