@@ -4574,6 +4574,26 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     $\Id\neq0$ because $D>0$.
 \end{proof}
 
+\begin{theorem}[Gauge invariance of the local ground space]
+    \label{thm:local_ground_space_gauge_invariance}
+    \lean{MPSTensor.GaugeEquiv.groundSpace_le,
+        MPSTensor.GaugeEquiv.groundSpace_eq}
+    \leanok
+    \uses{def:gauge_equiv, def:ground_space_parent}
+    Let $A$ and $B$ be gauge equivalent.  For every $L$ one has
+    $G_L(A)=G_L(B)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:gauge_invariance}
+    If $B^i=XA^iX^{-1}$, then every length-$L$ word of $B$ is the conjugate
+    of the corresponding word of $A$, so the boundary parametrization of $B$
+    at $Y$ agrees with that of $A$ at $X^{-1}YX$, and conjugation by $X$ is a
+    bijection of $\MN{D}$.  This gives $G_L(B)\subseteq G_L(A)$, and the
+    symmetric argument gives the reverse inclusion.
+\end{proof}
+
 \begin{theorem}[Rescaling invariance of the local ground space]
     \label{thm:local_ground_space_rescaling}
     \lean{MPSTensor.groundSpace_smul_eq}
@@ -4608,8 +4628,8 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
 
 \begin{proof}
     \leanok
-    \uses{def:parent_interaction, def:parent_hamiltonian,
-        def:parent_hamiltonian_es}
+    \uses{def:parent_interaction, def:local_term_parent,
+        def:parent_hamiltonian, def:parent_hamiltonian_es}
     The parent interaction at length $L$ is the orthogonal projector onto
     $G_L(A)^\perp$, so it depends on $G_L(A)$ alone.  Every translated local
     term is built from that single projector, and the parent Hamiltonian is
@@ -4682,7 +4702,8 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
         thm:normality_rescaling_invariance,
         thm:local_ground_space_rescaling, thm:normal_tensor_nonzero_matrix,
         thm:tp_data_irreducible, thm:gauge_invariance_normal,
-        thm:gauge_invariance, lem:eval_word_smul,
+        thm:gauge_invariance, thm:local_ground_space_gauge_invariance,
+        lem:eval_word_smul,
         thm:parent_hamiltonian_from_ground_space,
         lem:parent_spanning_of_local_space_eq}
     Theorem~\ref{thm:normal_irreducible_transfer} makes the transfer map of
