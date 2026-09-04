@@ -57,7 +57,7 @@ This is the building-block step of the structure theorem for finite-dimensional 
 Schumacher--Werner, quant-ph/0405174, Proposition `Csform`, lines 2082--2098, specialized to an
 algebra presented as a star-subalgebra of a matrix algebra; the scope restriction is described
 in the module docstring. It is the conclusion invoked by Gross--Nesme--Vogts--Werner,
-arXiv:0910.3675, `References/0910.3675/QCI12.tex`, lines 1276--1282, where a support algebra is
+arXiv:0910.3675, `References/0910.3675v2/QCI12.tex`, lines 1276--1282, where a support algebra is
 first shown to have scalar centre, because a central element of it is central in the generated
 quasi-local algebra, and is then identified with `M_{r(x)}(ℂ)`. -/
 theorem exists_starAlgEquiv_matrix_and_finrank_of_isCentral [Nonempty n]
