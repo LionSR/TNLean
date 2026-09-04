@@ -133,4 +133,65 @@ theorem SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis
     (Fintype.linearIndependent_iff.mp (hN₁ N hN₁')
       (fun k => P.coeff N ↑k - (ζ ↑k)⁻¹ ^ N * Q.coeff N (perm ↑k)) hSubtype ⟨j, hj⟩)
 
+/-- **Blockwise multiplicity gauge in the equal case.**
+
+Under the hypotheses of the coefficient extraction, each block of the first
+decomposition has the same multiplicity as its matched block in the second, and
+the two multiplicity families agree after a reordering and after multiplication
+by a diagonal matrix whose entries are roots of unity of order the block's
+period.
+
+This is the conclusion of arXiv:1708.00029, theorem `thm:bdequal`, lines
+681--688: the equality of multiplicity power sums along the multiples of the
+period recovers the multiplicity entries up to a permutation and up to a
+period-th root of unity, and collecting those roots of unity into a diagonal
+matrix gives the relation `Z_j R_j = T_j S_j T_j^†`.
+
+The phase carried by the matched bases is kept explicit as the factor `ζ j`
+multiplying the multiplicity entries of the first decomposition. This is the
+source's "the phase can be absorbed in `S_j`" of lines 667--671, written here on
+the other side of the relation: the roots-of-unity property of the diagonal
+matrix holds against the *rescaled* multiplicities, and the rescaling factor is
+in general different from one even when the period is one, as the block pair
+`B = e^{iθ} A` with period one shows. -/
+theorem equalCase_blockwise_zgauge
+    {P Q : SectorDecomposition d}
+    (periodP : Fin P.basisCount → ℕ)
+    (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
+    (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
+    (perm : Fin P.basisCount ≃ Fin Q.basisCount)
+    (ζ : Fin P.basisCount → ℂ) (hζ : ∀ j, ζ j ≠ 0)
+    (hBasis : ∀ (j : Fin P.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+      mpv (P.basis j) σ = ζ j ^ N * mpv (Q.basis (perm j)) σ)
+    (hSame : SameMPV₂Pos P.toTensor Q.toTensor) :
+    ∀ j : Fin P.basisCount,
+      ∃ (_hCopies : P.copies j = Q.copies (perm j))
+        (τ : Fin (P.copies j) ≃ Fin (Q.copies (perm j)))
+        (Z : Matrix (Fin (P.copies j)) (Fin (P.copies j)) ℂ),
+        Z ^ periodP j = 1 ∧
+        Z * Matrix.diagonal (fun q => ζ j * P.weight j q)
+          = Matrix.diagonal (fun q => Q.weight (perm j) (τ q)) := by
+  obtain ⟨N₀, hN₀⟩ :=
+    SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis
+      periodP hPerP hNonRepP perm ζ hζ hBasis hSame
+  intro j
+  have hm : 0 < periodP j := (hPerP j).period_pos
+  have hCoeff : ∀ n > N₀,
+      P.coeff (periodP j * n) j
+        = (ζ j)⁻¹ ^ (periodP j * n) * Q.coeff (periodP j * n) (perm j) := by
+    intro n hn
+    exact hN₀ (periodP j * n)
+      (le_trans (le_of_lt hn) (Nat.le_mul_of_pos_left n hm)) j ⟨n, rfl⟩
+  obtain ⟨hCopies, τ, hτ⟩ :=
+    matched_sector_weight_pow_equiv_of_period_multiple j (perm j) (periodP j)
+      (ζ j)⁻¹ (inv_ne_zero (hζ j)) hCoeff
+  have hpow : ∀ q, Q.weight (perm j) (τ q) ^ periodP j
+      = (ζ j * P.weight j q) ^ periodP j := fun q => by
+    simpa [inv_inv] using hτ q
+  obtain ⟨Z, hZpow, hZmul⟩ :=
+    zgauge_construction (periodP j)
+      (fun q => Q.weight (perm j) (τ q)) (fun q => ζ j * P.weight j q)
+      hpow (fun q => mul_ne_zero (hζ j) (P.weight_ne_zero j q))
+  exact ⟨hCopies, τ, Z, hZpow, hZmul⟩
+
 end MPSTensor

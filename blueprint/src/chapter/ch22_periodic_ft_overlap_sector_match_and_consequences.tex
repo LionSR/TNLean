@@ -271,14 +271,12 @@
 
     \emph{Scope restriction.}  The source consequence following the
     periodic-overlap dichotomy
-    \cite[lines~589--609]{DeLasCuevas2017Irreducible} states eventual
-    independence at every sufficiently large length and also states that, for
+    \cite[lines~589--609]{DeLasCuevas2017Irreducible} also states that, for
     an ambient tensor $A$ in irreducible form having $\{A_j\}_{j\in J}$ as
     its basis of periodic tensors, the non-zero vectors $\ket{V^{(N)}(A_j)}$
     span the vector $\ket{V^{(N)}(A)}$;
     this spanning assertion is what the paper cites as justification for
     the phrase ``basis of periodic vectors''. The theorem recorded here
-    proves independence only along the common-multiple subsequence $pN$ and
     omits the spanning assertion. The corresponding paper-gap
     note, \cite{gap:dccsp17_periodic_overlap_route_alignment},
     Section ``Scope restriction: independence without spanning'', records
@@ -293,6 +291,41 @@
     non-repetition, so the cross overlap tends to zero.
     Theorem~\ref{thm:periodic_family_li_of_cross_overlap_decay} now gives the
     claimed independence along the common-period subsequence.
+\end{proof}
+
+\begin{theorem}[Independence of the non-zero periodic vectors]%
+    \label{thm:periodic_basis_nonzero_subfamily_li}
+    \lean{MPSTensor.periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent}
+    \leanok
+    \uses{def:periodic_tensor}
+    Let $\{A_j\}_{j\in J}$ be a finite family of pairwise non-repeated
+    periodic tensors, of periods $m_j$. There is an $N_0$ such that for every
+    single length $N\ge N_0$ the vectors
+    \begin{align}
+        \{\ket{V^{(N)}(A_j)} : j\in J,\ m_j\mid N\}
+        \notag
+    \end{align}
+    are linearly independent. Since $\ket{V^{(N)}(A_j)}$ vanishes unless
+    $m_j\mid N$, this is the assertion of
+    \cite[lines~604--608]{DeLasCuevas2017Irreducible} that beyond some length
+    the non-zero members of the family are independent, in the form used in
+    the proof of the equal case at
+    \cite[lines~677--679]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy}
+    There are finitely many subfamilies. For each subfamily $S\subseteq J$
+    apply Theorem~\ref{thm:periodic_family_li_of_cross_overlap_decay} at the
+    least common multiple $p_S$ of the periods occurring in $S$, the
+    cross-overlap decay coming as before from
+    Theorem~\ref{thm:periodic_overlap_dichotomy} and pairwise non-repetition;
+    this gives a threshold $M_S$. Let $L$ be the least common multiple of all
+    the periods and take $N_0$ to be the largest of the numbers $L\,M_S$.
+    Given $N\ge N_0$, let $S$ be the set of indices whose period divides $N$.
+    Every period occurring in $S$ divides $N$, so $p_S\mid N$; writing
+    $N=p_Sn$ and using $p_S\le L$ gives $L\,M_S\le N\le Ln$, hence $n\ge M_S$
+    and the subfamily is independent at the length $N=p_Sn$.
 \end{proof}
 
 \begin{remark}[Comparison with the blocking approach]\notready
