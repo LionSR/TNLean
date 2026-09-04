@@ -536,9 +536,13 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   statements silently. Two unblockers are needed; they reach disjoint parts of
   the group, neither is a prerequisite for the other, and they land in two
   stages rather than together. The converse
-  `IsMPU U → E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII U`, by the
-  spectral step of `Papers/1703.09188/paper_v2.tex` lines 344--355, turns a
-  supplied pair into a presentation of the same tensor. `IsMPU` has to stay a
+  `IsMPU U → ρ.PosDef → ρ.IsDiag → Matrix.trace ρ = 1 → 0 < J →
+  E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII U`, by the spectral
+  step of `Papers/1703.09188/paper_v2.tex` lines 344--355, turns a supplied
+  positive-definite diagonal trace-one pair into a presentation of the same
+  tensor. These fixed-weight hypotheses match the detailed gap note; trace
+  normalization is an explicit premise, not an unproved derivation.
+  `IsMPU` has to stay a
   premise, since `IsMPUCanonicalFormII` contains it and a rank-one transfer
   power constrains only the normalized double layer; every intended call site
   supplies it. The `K = 0` inputs the generic node admits are not lost: at
