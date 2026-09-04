@@ -816,6 +816,16 @@ theorem ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES
         rw [mem_groundSpaceES_iff, cyclicRestrictES_tail_window hL]
         exact hv (fun k : Fin K => τ (Fin.castAdd L k))
 
+/-- For a block-injective tensor, the kernel of the prefix Hamiltonian that
+fills its own volume is the whole open-chain ground space. -/
+theorem ker_openPrefixParentHamiltonianES_self_eq_groundSpaceES
+    {A : MPSTensor d D} [NeZero D] {L₀ n : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀n : L₀ + 1 ≤ n) :
+    LinearMap.ker (openPrefixParentHamiltonianES A (L₀ + 1) n n) =
+      groundSpaceES A n := by
+  rw [openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES,
+    ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀n]
+
 /-- Conjugating an operator by a linear isometry equivalence conjugates its
 kernel projection to the kernel projection of the conjugated operator. -/
 theorem ker_starProjection_conj_linearIsometryEquiv
@@ -942,11 +952,8 @@ theorem openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometr
         U.symm.toLinearEquiv.toLinearMap) =
     (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
       (LinearMap.ker H).starProjection).toLinearMap at hproj
-  rw [show LinearMap.ker H = groundSpaceES A n by
-    change LinearMap.ker (openPrefixParentHamiltonianES A (L₀ + 1) n n) = _
-    rw [openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES,
-      ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-        hInj hL₀ hL₀n]] at hproj
+  rw [show LinearMap.ker H = groundSpaceES A n from
+    ker_openPrefixParentHamiltonianES_self_eq_groundSpaceES hInj hL₀ hL₀n] at hproj
   exact hproj
 
 /-- In a fixed larger volume, a full suffix-window ground projection is the
