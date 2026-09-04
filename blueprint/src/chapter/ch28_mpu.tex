@@ -7538,6 +7538,32 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\tr(UU^\dagger)=\tr(\Id)=n$.
 \end{proof}
 
+\begin{lemma}[The exchange intertwines the Kronecker factors]
+    \label{lem:matrix_swap_kronecker_intertwine}
+    \lean{Matrix.swapMatrix_mul_kronecker, Matrix.kronecker_mul_swapMatrix}
+    \leanok
+    For matrices $A,B\in\mathbb C^{n\times n}$ and the exchange matrix
+    $\mathbb S$ on $\mathbb C^n\otimes\mathbb C^n$,
+    \begin{align}
+        \mathbb S(A\otimes B) & =(B\otimes A)\mathbb S, &
+        (A\otimes B)\mathbb S & =\mathbb S(B\otimes A).
+    \end{align}
+    % Source lines: paper_v2.tex 1624--1630, where the gauge invariance resting
+    % on this identity is asserted without a printed derivation.
+\end{lemma}
+
+\begin{proof}\leanok
+    In product coordinates the exchange matrix has entries
+    $\mathbb S_{(i,j),(k,l)}=\delta_{i,l}\delta_{j,k}$, so both sides of the
+    first identity have entry
+    \begin{align}
+        \left[\mathbb S(A\otimes B)\right]_{(i_1,i_2),(j_1,j_2)}
+         & =A_{i_2,j_1}B_{i_1,j_2}
+        =\left[(B\otimes A)\mathbb S\right]_{(i_1,i_2),(j_1,j_2)}.
+    \end{align}
+    The second identity is the first with the two factors exchanged.
+\end{proof}
+
 \begin{lemma}[Trace formula for the time-reversal sign]
     \label{eq:sigma-from-trace}
     \notready
@@ -7591,7 +7617,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
-    \uses{eq:sigma-from-trace}
+    \uses{eq:sigma-from-trace, lem:matrix_swap_kronecker_intertwine}
     Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
     $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
     $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
@@ -7612,7 +7638,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_admissible_sigma_gauge_invariant}
     \notready
     \discussion{5714}
-    \uses{lem:mpu_admissible_sigma_trace}
+    \uses{lem:mpu_admissible_sigma_trace, lem:matrix_swap_kronecker_intertwine}
     % Source proof: paper_v2.tex 1624--1630.
     Under the hypotheses of Lemma~\ref{lem:mpu_admissible_sigma_trace}, let $x$ and $y$ be
     unitaries and change the standard-form gauge by
