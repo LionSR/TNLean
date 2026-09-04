@@ -113,21 +113,6 @@ def IsBlockIndependent (L : LSymbol G X) : Prop :=
   ∃ β : ScalarCocycle G, ∃ γ : ActionTensorGauge G X,
     IsBlockIndependentEll (gauge β γ L)
 
-/-- The identity fusion and action gauges leave an L-symbol unchanged. -/
-@[simp]
-theorem gauge_one (L : LSymbol G X) :
-    gauge (fun _ _ ↦ 1) (fun _ _ ↦ 1) L = L := by
-  funext x g h
-  simp [gauge]
-
-/-- Successive joint scalar gauges multiply both cochains pointwise. -/
-theorem gauge_comp (β₁ β₂ : ScalarCocycle G)
-    (γ₁ γ₂ : ActionTensorGauge G X) (L : LSymbol G X) :
-    gauge β₂ γ₂ (gauge β₁ γ₁ L) = gauge (β₁ * β₂) (γ₁ * γ₂) L := by
-  funext x g h
-  simp only [gauge, Pi.mul_apply]
-  (apply Units.ext; push_cast; field_simp)
-
 omit [MulAction G X] in
 /-- Block-constant L-symbols have block-independent `ell`. -/
 theorem IsBlockConstant.isBlockIndependentEll {L : LSymbol G X}
