@@ -1736,7 +1736,7 @@ to choose $l>1$ above a positive block-injectivity length such that
     &<\frac{1}{\sqrt{l+1}}.
     \label{eq:cpgsv21_martingale_overlap_c3_chosen_threshold}
 \end{align}
-The same $l$ works for every positive spectator length $K$. The theorem
+The same $l$ works for every prefix length $K$, including $K=0$. The theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
 then gives the open-chain anticommutator estimate through two-projection
 geometry. The length $l$ is measured in sites of the input tensor; if that
@@ -1819,7 +1819,7 @@ spectral radius with the largest modulus among the nonunit transfer
 eigenvalues. The geometric theorem therefore uses the spectral-radius form
 alone, and the source's eigenvalue prescription remains unformalized.
 
-What remains unmatched is the source's assertion that the prefactor may be
+Also unmatched is the source's assertion that the prefactor may be
 taken equal to $k^2$, where $k$ is the dimension of the auxiliary space of the
 pure state. The formal prefactor is the existential rate-dependent constant
 $C_\lambda$ of Lemma~5.2. No general quantitative theorem in the inspected
@@ -1939,9 +1939,14 @@ formalized, and the resulting whole-increment theorem proves the exact
 coefficient $a(m)(1+a(m))/a_-(m)$ from Lemma~6.2. The threshold that feeds the
 gap theorems now runs through that estimate and its geometric form
 $c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$; the earlier inverse-Gram
-reconstruction and its unidentified constant have been deleted. The remaining
-restriction is the prefactor: the formal $c$ is the existential rate-dependent
-constant of Lemma~5.2, and the source value $k^2$ is not asserted.
+reconstruction and its unidentified constant have been deleted. Two
+restrictions remain. The first is the rate: the formal condition admits any
+$\lambda$ strictly above the weighted spectral radius of the transfer
+remainder, whereas the source prescribes $\lambda$ through the nonunit transfer
+eigenvalues, and the two phrasings are not shown here to describe the same
+rates, so the source's eigenvalue prescription remains unformalized. The second
+is the prefactor: the formal $c$ is the existential rate-dependent constant of
+Lemma~5.2, and the source value $k^2$ is not asserted.
 
 The earlier blocked-to-original comparison remains valid for periodic lengths
 divisible by the chosen block length.  It gives
