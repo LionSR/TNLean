@@ -449,6 +449,18 @@ note.
   load-bearing κ/θ/φ phase assembly (Case 3). It also records the scope
   restriction of `periodicBasis_eventuallyLinearlyIndependent` (independence
   half only, no spanning clause).
+- `dccsp17_thm41_forward_trace_preservation.tex` records that the forward
+  implication of Theorem 4.1 is false as printed: a positive rescaling of a
+  $p$-refinable tensor in irreducible form II stays in irreducible form II and
+  $p$-refinable while its transfer map is no longer trace preserving. The
+  corrected statement adds trace preservation of the transfer map, which the
+  source's definition of $p$-divisibility presupposes. The note also records
+  why the formal forward canonicalization hypothesis, stated over the
+  generated-family reading of irreducible form, is refuted rather than
+  dischargeable, and lists the unformalized ingredients of the printed
+  argument.
+- `dccsp17_root_kraus_rank_thm41.tex` records the Kraus-rank step that the
+  converse implication of Theorem 4.1 uses without proof.
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 

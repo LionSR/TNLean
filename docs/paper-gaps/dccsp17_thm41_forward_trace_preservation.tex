@@ -1,0 +1,197 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Trace Preservation in the Forward Direction of Theorem 4.1
+  (de las Cuevas--Cirac--Schuch--P\'erez-Garc\'ia)}
+\author{}
+\date{2026-09-04}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The assertion}
+
+This note concerns the forward implication in Theorem~4.1 of de las Cuevas,
+Cirac, Schuch, and P\'erez-Garc\'ia
+\cite[Theorem~4.1]{DeLasCuevas2017Irreducible}. The relevant source passages
+are the definition of the irreducible forms at
+\path{Papers/1708.00029/main.tex:245--266} and
+\path{Papers/1708.00029/main.tex:313--331}, the definitions of divisibility
+and refinement at \path{Papers/1708.00029/main.tex:717--724}, the theorem at
+\path{Papers/1708.00029/main.tex:728--731}, and its forward proof at
+\path{Papers/1708.00029/main.tex:735--810}. The companion note
+\path{dccsp17_root_kraus_rank_thm41.tex} records the separate gap in the
+converse implication.
+
+A tensor $B=(B^1,\ldots,B^d)$ of bond dimension $D$ is in
+\emph{irreducible form} when
+\begin{align}
+    B^i
+     & =\bigoplus_{j\in J}\mu_j\,B_j^i,
+    \qquad \mu_j>0,
+    \label{eq:dccsp17_thm41_forward_trace_preservation_irreducible_form}
+\end{align}
+with every block map $\mathcal E_{B_j}(X)=\sum_i B_j^iX(B_j^i)^\dagger$
+irreducible of spectral radius one. It is in \emph{irreducible form~II} when
+moreover every $\mathcal E_{B_j}$ is trace preserving with a diagonal
+positive fixed point. The multiplicities $\mu_j$ are arbitrary positive
+scalars in both forms; the source normalizes the blocks, not the weights.
+
+A trace-preserving completely positive map $\mathcal E$ is called
+\emph{$p$-divisible} when there is a trace-preserving completely positive map
+$\mathcal E'$ with $\mathcal E=(\mathcal E')^p$. The family $\mathcal V(B)$
+is \emph{$p$-refinable} when there are a tensor $A=(A^1,\ldots,A^d)$ and an
+isometry $W:\mathbb C^d\to(\mathbb C^d)^{\otimes p}$ with
+\begin{align}
+    \ket{V_{pN}(A)}
+     & =W^{\otimes N}\ket{V_N(B)}
+    \qquad\text{for every }N.
+    \label{eq:dccsp17_thm41_forward_trace_preservation_refinement}
+\end{align}
+Theorem~4.1 asserts, for $B$ in irreducible form~II, that $\mathcal V(B)$ is
+$p$-refinable if and only if the transfer map
+$\mathcal E_B(X)=\sum_i B^iX(B^i)^\dagger$ is $p$-divisible.
+
+\section{The counterexample}
+
+Let $B_0$ be any tensor in irreducible form~II whose multiplicities all equal
+one and whose family is $p$-refinable with witness $(A_0,W)$. The simplest
+instance has $d=D=1$, $B_0=(1)$, $A_0=(1)$, and $W=1$, for which
+$\ket{V_{pN}(A_0)}=1=\ket{V_N(B_0)}$ at every length. Fix $\lambda>1$ and
+set
+\begin{align}
+    B
+     & :=\lambda B_0,
+    \qquad
+    A
+    :=\lambda^{1/p}A_0.
+    \label{eq:dccsp17_thm41_forward_trace_preservation_scaled_tensor}
+\end{align}
+The tensor $B$ is in irreducible form~II: it has the blocks of $B_0$ and the
+multiplicities $\lambda\mu_j$, which are positive. The family
+$\mathcal V(B)$ is $p$-refinable with witness $(A,W)$, because
+\begin{align}
+    \ket{V_{pN}(A)}
+     & =\lambda^{N}\ket{V_{pN}(A_0)}
+    =\lambda^{N}W^{\otimes N}\ket{V_N(B_0)}
+    =W^{\otimes N}\ket{V_N(B)}.
+    \label{eq:dccsp17_thm41_forward_trace_preservation_scaled_refinement}
+\end{align}
+Its transfer map is $\mathcal E_B=\lambda^2\mathcal E_{B_0}$, so
+$\operatorname{tr}\mathcal E_B(X)=\lambda^2\operatorname{tr}X$. A $p$-th
+power of a trace-preserving map is trace preserving, so $\mathcal E_B$ is not
+$p$-divisible. The forward implication of Theorem~4.1 therefore fails on
+nondegenerate data satisfying its printed hypothesis.
+
+The printed argument breaks at its last line,
+\path{Papers/1708.00029/main.tex:806--810}. It constructs $\widetilde A$ with
+$\widetilde A^{(p)}=C$ and concludes
+$\mathcal E_{\widetilde A}^p=\mathcal E_C=\mathcal E_B$, which is correct,
+but $\widetilde A$ is a unitary conjugate of
+$A'=\bigoplus_j\mu_j A'_j$, whose transfer map is trace preserving only when
+every multiplicity of $A$ equals one. The argument never constrains the
+multiplicities of $B$, so it cannot deliver the trace preservation that the
+conclusion requires.
+
+\section{The corrected statement}
+
+Add to the hypothesis of the forward implication that $\mathcal E_B$ is trace
+preserving. Since
+\begin{align}
+    \sum_i (B^i)^\dagger B^i
+     & =\bigoplus_{j\in J}\mu_j^2\,\mathbf 1_{D_j}
+    \label{eq:dccsp17_thm41_forward_trace_preservation_trace_condition}
+\end{align}
+for a tensor in irreducible form~II, this is the same as requiring every
+multiplicity of $B$ to equal one. The added hypothesis is presupposed by the
+source: its definition of $p$-divisibility applies only to trace-preserving
+maps, so the conclusion ``$\mathcal E_B$ is $p$-divisible'' already asserts
+trace preservation of $\mathcal E_B$.
+
+With this hypothesis the printed argument closes. The tensor
+$C^{i_1\ldots i_p}=\sum_i W^{(i_1\ldots i_p),i}B^i$ has the blocks and
+multiplicities of $B$, all equal to one. The equal-case theorem
+\cite[Theorem~3.8]{DeLasCuevas2017Irreducible} matches the blocks of
+$A^{(p)}$ with those of $C$ and relates their multiplicities by roots of
+unity after reordering. The blocks of $A^{(p)}$ arising from a block $A_j$ of
+$A$ carry the multiplicity $\mu_j^p$, so $\mu_j^p$ is a root of unity, and
+$\mu_j>0$ forces $\mu_j=1$. Hence $A'$ and $\widetilde A=U^\dagger A'U$ are
+left canonical, $\mathcal E_{\widetilde A}$ is trace preserving, and
+$\mathcal E_B=\mathcal E_{\widetilde A}^p$ exhibits $p$-divisibility. The
+converse implication is unaffected, since it assumes $p$-divisibility and
+therefore trace preservation of $\mathcal E_B$ from the start.
+
+\section{The formal statement}
+
+The formal irreducible form is a statement about generated families rather
+than about the matrices of the tensor: a tensor is in irreducible form when it
+generates, at every length including zero, the same matrix product vectors as
+a scalar-weighted direct sum of periodic left-canonical blocks with positive
+weights.\footnote{The definition is \leanid{MPSTensor.IsIrreducibleForm} in
+    \path{TNLean/MPS/Periodic/Defs.lean}.} It does not fix the transfer map of the
+tensor. Two consequences follow for the forward canonicalization hypothesis,
+which asks, for every tensor $B$ in this formal irreducible form whose family
+is $p$-refinable, for a left-canonical tensor $\widetilde A$ with
+$\mathcal E_B=\mathcal E_{\widetilde A^{[p]}}$.\footnote{The hypothesis is
+    \leanid{MPSTensor.PRefinementCanonicalization} and the conditional forward
+    theorem is \leanid{MPSTensor.thm_4_1_p_refinement_forward}, both in
+    \path{TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean}.}
+
+First, the scaling counterexample refutes the hypothesis at bond dimension
+one for every physical dimension and every $p\geq1$: the tensor
+$\lambda B_0$ generates the same family as the weighted block sum with weight
+$\lambda$, so it is in the formal irreducible form, and the conclusion would
+identify the map $x\mapsto\lambda^2x$ with a $p$-th power of the identity.
+
+Second, even after adding trace preservation of $\mathcal E_B$, the formal
+irreducible form does not supply the block structure that the printed
+argument uses. For a left-canonical normal tensor $B_0$ and an invertible
+$Y$, the tensor $YB_0Y^{-1}$ generates the same family as $B_0$ and is in the
+formal irreducible form, while
+$\mathcal E_{YB_0Y^{-1}}$ is trace preserving exactly when $Y^\dagger Y$ is a
+fixed point of $\mathcal E_{B_0}^*$, that is, when $Y$ is a scalar multiple of
+a unitary. Recovering a unitary similarity to a block form from equality of
+families and trace preservation is a statement about arbitrary tensors that
+the cited argument does not contain; the source instead takes $B$ literally
+in the form
+(\ref{eq:dccsp17_thm41_forward_trace_preservation_irreducible_form}).
+
+The conditional formal theorems remain correct, but their hypothesis cannot
+be discharged. The elimination plan is to restate the forward direction for a
+tensor given as a multiplicity-bearing block form with every multiplicity
+equal to one, the structure already used by the formal equal-case
+theorem,\footnote{The equal-case theorem is
+    \leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm} in
+    \path{TNLean/MPS/Periodic/EqualCaseGlobal.lean}.} and then to follow the
+printed argument. Its ingredients without a formal counterpart are the
+blocking lemma for a periodic block,
+\path{Papers/1708.00029/main.tex:432--446}, the cyclic projector structure of
+a periodic block, \path{Papers/1708.00029/main.tex:335--341}, the unique
+decomposition of residues, \path{Papers/1708.00029/main.tex:446--450}, and
+the redistribution of the root-of-unity factors across the sites,
+\path{Papers/1708.00029/main.tex:765--806}.
+
+\section{Conclusion}
+
+The forward implication of Theorem~4.1 is false as printed: a positive
+rescaling of any $p$-refinable tensor in irreducible form~II is again in
+irreducible form~II and $p$-refinable, while its transfer map is not trace
+preserving and hence not $p$-divisible. The corrected statement adds trace
+preservation of $\mathcal E_B$, equivalently unit multiplicities, which the
+source's definition of $p$-divisibility presupposes; the printed argument then
+proves it. The formal forward canonicalization hypothesis inherits the
+counterexample and is refuted independently by non-unitary similarities, so
+it must be replaced by a restatement over block-form tensors with
+trace-preserving transfer map rather than discharged.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

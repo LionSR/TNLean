@@ -417,7 +417,20 @@ source step is the construction of \(A'_j\) and
 lines 765--810. The theorem
 `pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV`
 shows that this hypothesis follows from the more precise blocked equal-case
-hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`. -/
+hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`.
+
+This hypothesis is not provable as stated. The printed forward implication of
+arXiv:1708.00029, Theorem 4.1, lines 728--731, omits the trace preservation of
+\(\mathcal E_B\) that its definition of \(p\)-divisibility at lines 717--718
+presupposes: for a \(p\)-refinable tensor \(B_0\) in irreducible form II and
+\(\lambda > 1\), the tensor \(\lambda B_0\) is again in irreducible form II
+and \(p\)-refinable, while \(\mathcal E_{\lambda B_0} = \lambda^2
+\mathcal E_{B_0}\) is not trace preserving and so is not a \(p\)-th power of a
+channel. The formal `IsIrreducibleForm` moreover fixes only the generated
+matrix product vectors, so at \(p = 1\) a non-unitary similarity of a
+left-canonical normal tensor refutes the hypothesis as well. Both
+counterexamples, the corrected source statement, and the elimination plan are
+recorded in `docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. -/
 def PRefinementCanonicalization (d D p : ℕ) : Prop :=
   ∀ {B : MPSTensor d D}, IsIrreducibleForm B → IsPRefinable B p →
     ∃ A : MPSTensor d D,
@@ -479,7 +492,10 @@ This follows the same conditional pattern as
 `MPSTensor.cor_4_1_physical_symmetry_zgauge`: inputs not yet formalized are
 exposed as explicit hypotheses, while the
 algebraic structure — the blocking-commutes-with-power identity and the
-left-canonical-channel lemma — is formalized here. -/
+left-canonical-channel lemma — is formalized here. The hypothesis
+`PRefinementCanonicalization` is refuted rather than dischargeable; see its
+docstring and `docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`
+for the counterexamples and the source-faithful restatement. -/
 theorem thm_4_1_p_refinement_forward
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)
     (p : ℕ)
