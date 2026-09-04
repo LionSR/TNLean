@@ -41,21 +41,11 @@ mixing quantity \(a(N)\). -/
 theorem norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) - inner ℂ B C‖ ≤
       fnwMixingQuantity ρ hρ A htr N * ‖B‖ * ‖C‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   simpa only [fnwMixingQuantity, fnwTraceInverseFactor] using
     norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le ρ hρ htr A N B C
 
@@ -64,20 +54,10 @@ boundary norm square is at most \(a(N)\lVert B\rVert_\rho^2\). -/
 theorem abs_fnwBoundaryMapCLM_norm_sq_sub_rhoWeighted_norm_sq_le
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (A : MPSTensor d D) (N : ℕ) (B : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     |‖fnwBoundaryMapCLM ρ hρ A N B‖ ^ 2 - ‖B‖ ^ 2| ≤
       fnwMixingQuantity ρ hρ A htr N * ‖B‖ ^ 2 := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   have hbound :=
     norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity
       ρ hρ htr A N B B
@@ -99,20 +79,10 @@ No nonnegativity assumption on \(a(N)\) is needed. -/
 theorem one_sub_fnwMixingQuantity_mul_norm_sq_le_fnwBoundaryMapCLM_norm_sq
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (A : MPSTensor d D) (N : ℕ) (B : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     (1 - fnwMixingQuantity ρ hρ A htr N) * ‖B‖ ^ 2 ≤
       ‖fnwBoundaryMapCLM ρ hρ A N B‖ ^ 2 := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   have hbound := abs_le.mp
     (abs_fnwBoundaryMapCLM_norm_sq_sub_rhoWeighted_norm_sq_le
       ρ hρ htr A N B)
@@ -129,17 +99,9 @@ noncomputable def fnwBoundaryNormRatio
 /-- The weighted Gram operator \(F_N^*F_N\) on the virtual matrix Hilbert space. -/
 noncomputable def fnwBoundaryGram
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     Mat →ₗ[ℂ] Mat := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   exact LinearMap.adjoint (fnwBoundaryMapCLM ρ hρ A N).toLinearMap ∘ₗ
     (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
 
@@ -148,20 +110,10 @@ weighted Gram operator \(F_N^*F_N\). -/
 theorem fnwBoundaryNormRatio_eq_gram_rayleighQuotient
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
     (B : Mat) (hB : B ≠ 0) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     fnwBoundaryNormRatio ρ hρ A N ⟨B, hB⟩ =
       RCLike.re (inner ℂ (fnwBoundaryGram ρ hρ A N B) B) / ‖B‖ ^ 2 := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   rw [fnwBoundaryGram]
   simp only [LinearMap.coe_comp, Function.comp_apply]
   rw [LinearMap.adjoint_inner_left]
@@ -178,21 +130,11 @@ noncomputable def fnwLowerBoundaryConstant [NeZero D]
 Gram operator. -/
 theorem fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     fnwLowerBoundaryConstant ρ hρ A N =
       ⨅ B : {B : Mat // B ≠ 0},
         RCLike.re (inner ℂ (fnwBoundaryGram ρ hρ A N B.1) B.1) / ‖B.1‖ ^ 2 := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   rw [fnwLowerBoundaryConstant]
   apply iInf_congr
   intro B
@@ -201,33 +143,17 @@ theorem fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf [NeZero D]
 /-- The weighted Gram operator is symmetric. -/
 theorem fnwBoundaryGram_isSymmetric
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     (fnwBoundaryGram ρ hρ A N).IsSymmetric := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   exact (fnwBoundaryMapCLM ρ hρ A N).toLinearMap.isSymmetric_adjoint_comp_self
 
 /-- The weighted Gram operator is positive. -/
 theorem fnwBoundaryGram_isPositive
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     (fnwBoundaryGram ρ hρ A N).IsPositive := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   exact (fnwBoundaryMapCLM ρ hρ A N).toLinearMap.isPositive_adjoint_comp_self
 
 /-- FNW's identity \(a_-(N)=\inf\operatorname{spec}(F_N^*F_N)\), packaged
@@ -235,19 +161,10 @@ without ordering the complex spectrum: \(a_-(N)\), coerced to \(ℂ\), belongs t
 the spectrum of the weighted Gram operator. -/
 theorem fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     (fnwLowerBoundaryConstant ρ hρ A N : ℂ) ∈
       spectrum ℂ (fnwBoundaryGram ρ hρ A N) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   rw [← Module.End.hasEigenvalue_iff_mem_spectrum]
   rw [fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf]
   exact (fnwBoundaryGram_isSymmetric ρ hρ A N).hasEigenvalue_iInf_of_finiteDimensional
@@ -275,19 +192,9 @@ meaning of \(a_-(N)=\inf\operatorname{spec}(F_N^*F_N)\). -/
 theorem fnwLowerBoundaryConstant_le_re_of_mem_spectrum_fnwBoundaryGram [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
     (z : ℂ) (hz : z ∈ spectrum ℂ (fnwBoundaryGram ρ hρ A N)) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     fnwLowerBoundaryConstant ρ hρ A N ≤ z.re := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   have heig : Module.End.HasEigenvalue (fnwBoundaryGram ρ hρ A N) z :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz
   have hzreal : (z.re : ℂ) = z :=
@@ -315,21 +222,13 @@ The first clause gives an attaining domain index; the second gives minimality
 among all domain-indexed singular values. -/
 theorem fnwLowerBoundaryConstant_eq_least_sq_singularValue [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     let T := (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
     (∃ i : Fin (Module.finrank ℂ Mat),
       T.singularValues i ^ 2 = fnwLowerBoundaryConstant ρ hρ A N) ∧
     ∀ i : Fin (Module.finrank ℂ Mat),
       fnwLowerBoundaryConstant ρ hρ A N ≤ T.singularValues i ^ 2 := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   let T := (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
   have hsym : (LinearMap.adjoint T ∘ₗ T).IsSymmetric :=
     T.isSymmetric_adjoint_comp_self
@@ -366,11 +265,7 @@ theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
     (hInj : Kraus.IsNBlkInjective A N) :
     0 < fnwLowerBoundaryConstant ρ hρ A N := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   let T := (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
   have hT : Function.Injective T := by
     change Function.Injective (fnwBoundaryMapCLM ρ hρ A N)

@@ -264,12 +264,7 @@ private theorem boundary_scalarProduct_formula_source
 coordinates \(A^\mu=v(\mu)^\dagger\), in Choi-reshuffled form. -/
 theorem inner_fnwBoundaryMapCLM
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) =
       ∑ i : Fin D, ∑ k : Fin D,
@@ -283,12 +278,7 @@ the rank-one boundary operator \(B^*|i\rangle\langle k|C\), after which the
 \((i,k)\)-entry is summed. -/
 theorem inner_fnwBoundaryMapCLM_eq_sum_fnwTransferMap
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) =
       ∑ i : Fin D, ∑ k : Fin D,
@@ -318,12 +308,7 @@ its rho-weighted limit is the Choi reshuffling of the transfer remainder. -/
 theorem inner_fnwBoundaryMapCLM_sub_rhoWeighted
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) - inner ℂ B C =
       ∑ i : Fin D, ∑ k : Fin D,
@@ -340,12 +325,7 @@ operator norm of the transfer remainder; no dimension factor occurs. -/
 theorem norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) - inner ℂ B C‖ ≤
       (Matrix.trace ρ⁻¹).re *

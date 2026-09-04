@@ -18,9 +18,45 @@ a separate MPS-facing forwarding declaration or conversion theorem.
 
 * `IsPrimitiveMPS`: MPS-facing name for `Kraus.HasComplementaryFixedPointGap`.
 * `HasPrimitiveFixedPoint`: MPS-facing name for `Kraus.HasPrimitiveFixedPoint`.
+
+## Main results
+
+* `fixedPointProj_smul`: the fixed-point projection depends only on the ray through the
+  fixed point.
+* `Matrix.trace_inv_trace_smul`: the normalized representative of the ray has unit trace.
+* `Matrix.PosDef.inv_trace_smul`: the normalized representative of the ray of a
+  positive-definite matrix is again positive definite.
+* `MPSTensor.IsPrimitiveMPS.smul_inv_trace`: rescaling a positive-definite primitive fixed
+  point to unit trace preserves the complementary fixed-point gap.
 -/
 
 open scoped Matrix Matrix.Norms.Operator ComplexOrder BigOperators Kraus
+
+/-- The rank-one fixed-point projection \(X\mapsto(\operatorname{tr}X/\operatorname{tr}
+\rho)\rho\) is unchanged when the fixed point is rescaled by a nonzero scalar. -/
+theorem fixedPointProj_smul {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ) {c : ℂ}
+    (hcρ : Matrix.trace (c • ρ) ≠ 0) (hρ : Matrix.trace ρ ≠ 0) :
+    fixedPointProj (c • ρ) hcρ = fixedPointProj ρ hρ := by
+  have hc : c ≠ 0 := by
+    rintro rfl
+    simp at hcρ
+  ext X i j
+  simp only [fixedPointProj, LinearMap.coe_mk, AddHom.coe_mk, Matrix.trace_smul,
+    smul_eq_mul, Matrix.smul_apply]
+  field_simp
+
+/-- Dividing a matrix of nonzero trace by its own trace produces a matrix of unit
+trace: the normalized representative of the ray through it. -/
+theorem Matrix.trace_inv_trace_smul {D : ℕ} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : Matrix.trace ρ ≠ 0) : Matrix.trace ((Matrix.trace ρ)⁻¹ • ρ) = 1 := by
+  rw [Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ hρ]
+
+/-- Dividing a positive-definite matrix by its own trace, which is a positive real,
+leaves it positive definite. -/
+theorem Matrix.PosDef.inv_trace_smul {D : ℕ} [NeZero D]
+    {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : ρ.PosDef) : ((Matrix.trace ρ)⁻¹ • ρ).PosDef :=
+  hρ.smul (inv_pos.mpr hρ.trace_pos)
 
 namespace MPSTensor
 
@@ -39,5 +75,20 @@ This reducible abbreviation preserves the existential MPS vocabulary while reusi
 `Kraus.HasPrimitiveFixedPoint` directly. -/
 abbrev HasPrimitiveFixedPoint {d D : ℕ} [NeZero D] (A : MPSTensor d D) : Prop :=
   Kraus.HasPrimitiveFixedPoint A
+
+/-- Rescaling a positive-definite primitive fixed point to unit trace preserves the
+complementary fixed-point gap. Only the ray through the fixed point enters the gap
+certificate, so the normalized witness carries the same primitivity data. -/
+theorem IsPrimitiveMPS.smul_inv_trace {d D : ℕ} [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    IsPrimitiveMPS A ((Matrix.trace ρ)⁻¹ • ρ) := by
+  have htr_ne : Matrix.trace ρ ≠ 0 := ne_of_gt hρ.trace_pos
+  have hpd : ((Matrix.trace ρ)⁻¹ • ρ).PosDef := hρ.inv_trace_smul
+  have hne : Matrix.trace ((Matrix.trace ρ)⁻¹ • ρ) ≠ 0 := ne_of_gt hpd.trace_pos
+  refine ⟨hP.norm, fun h ↦ hne (by rw [h, Matrix.trace_zero]), hpd.posSemidef, ?_, ?_⟩
+  · rw [LinearMap.map_smul, hP.fixedPoint_is_fixed]
+  · simpa only [fixedPointProj_smul ρ hne htr_ne] using
+      hP.complementary_transfer_map_gap
 
 end MPSTensor

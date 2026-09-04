@@ -32,18 +32,10 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 /-- The full FNW boundary range lies in the left-overlap range. -/
 private theorem fnwBoundaryRange_le_leftOverlapRange
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwBoundaryRange ρ hρ A ((ℓ + m) + r) ≤
       LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   rintro x ⟨B, rfl⟩
   exact ⟨fnwLeftFullGroundFamily A r B,
     fnwLeftOverlapMap_fullGroundFamily ρ hρ A ℓ m r B⟩
@@ -51,18 +43,10 @@ private theorem fnwBoundaryRange_le_leftOverlapRange
 /-- The full FNW boundary range lies in the right-overlap range. -/
 private theorem fnwBoundaryRange_le_rightOverlapRange
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwBoundaryRange ρ hρ A ((ℓ + m) + r) ≤
       LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   rintro x ⟨B, rfl⟩
   exact ⟨fnwRightFullGroundFamily A ℓ B,
     fnwRightOverlapMap_fullGroundFamily ρ hρ A ℓ m r B⟩
@@ -75,11 +59,7 @@ private theorem norm_fnwOverlapRange_projector_defect_le [NeZero D]
     (A : MPSTensor d D) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     ‖(LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r)).starProjection ∘L
           (LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r)).starProjection -
         (fnwBoundaryRange ρ hρ A ((ℓ + m) + r)).starProjection‖ ≤
@@ -87,11 +67,7 @@ private theorem norm_fnwOverlapRange_projector_defect_le [NeZero D]
           fnwLowerBoundaryConstant ρ hρ A m +
         fnwMixingQuantity ρ hρ A htr m ^ 2 /
           fnwLowerBoundaryConstant ρ hρ A m := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   let U := LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r)
   let V := LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r)
   let W := fnwBoundaryRange ρ hρ A ((ℓ + m) + r)
@@ -219,19 +195,11 @@ private theorem reassocTailBoundaryMapES_apply_threeBlock
 reassociated tail boundary range. -/
 private theorem fnwGlobalPhysicalReverseES_map_leftOverlapRange
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     (LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r)).map
         (fnwGlobalPhysicalReverseES d ℓ m r).toLinearEquiv.toLinearMap =
       (reassocTailBoundaryMapES A r m ℓ).range := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   ext x
   constructor
   · rintro ⟨v, ⟨Φ, rfl⟩, rfl⟩
@@ -302,19 +270,11 @@ private theorem leftBoundaryMapES_apply_threeBlock
 boundary range in whole-increment coordinates. -/
 private theorem fnwGlobalPhysicalReverseES_map_rightOverlapRange
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     (LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r)).map
         (fnwGlobalPhysicalReverseES d ℓ m r).toLinearEquiv.toLinearMap =
       (leftBoundaryMapES A (r + m) ℓ).range := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   ext x
   constructor
   · rintro ⟨v, ⟨Ψ, rfl⟩, rfl⟩
@@ -428,22 +388,14 @@ private theorem fnwGlobalPhysicalReverseES_map_boundaryRange
 defect have equal operator norm under global physical reversal. -/
 private theorem norm_fnwOverlapRange_projector_defect_eq_wholeIncrement
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     ‖(LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r)).starProjection ∘L
           (LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r)).starProjection -
         (fnwBoundaryRange ρ hρ A ((ℓ + m) + r)).starProjection‖ =
       ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
         (groundSpaceES A (r + m + ℓ)).starProjection‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   let E := fnwGlobalPhysicalReverseES d ℓ m r
   let U := LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r)
   let V := LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r)
@@ -507,16 +459,17 @@ private theorem norm_fnwOverlapRange_projector_defect_eq_wholeIncrement
         ContinuousLinearMap.le_of_opNorm_le X le_rfl (E.symm v)
       _ = ‖X‖ * ‖v‖ := by rw [E.symm.norm_map]
 
-/-- Fixed-length FNW Lemma 6.2 in whole-increment coordinates. The positivity
-hypotheses on the interaction and spectator lengths retain the source statement;
-the Hilbert-space estimate also holds at the zero endpoints. The right-hand side
-displays the separate linear and quadratic source terms. -/
+/-- Fixed-length FNW Lemma 6.2 in whole-increment coordinates. The prefix length
+is unrestricted: the Hilbert-space estimate holds at the zero endpoint, so
+imposing the source's positivity there would only weaken the statement. The
+positivity hypothesis on the spectator length retains the source statement. The
+right-hand side displays the separate linear and quadratic source terms. -/
 theorem wholeIncrement_groundProjection_defect_le_fnw [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (A : MPSTensor d D) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) {L m : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (_hL : 0 < L) (hLm : L ≤ m)
-    (r ℓ : ℕ) (_hr : 0 < r) (_hℓ : 0 < ℓ) :
+    (r ℓ : ℕ) (_hℓ : 0 < ℓ) :
     ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
         (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
@@ -524,11 +477,7 @@ theorem wholeIncrement_groundProjection_defect_le_fnw [NeZero D]
           fnwLowerBoundaryConstant ρ hρ A m +
         fnwMixingQuantity ρ hρ A htr m ^ 2 /
           fnwLowerBoundaryConstant ρ hρ A m := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   have hminus := fnwLowerBoundaryConstant_pos_of_isNBlkInjective_of_le
     ρ hρ A hρfix hInj hLm
   rw [← norm_fnwOverlapRange_projector_defect_eq_wholeIncrement ρ hρ A ℓ m r]
@@ -541,7 +490,7 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_factored [NeZero D]
     (A : MPSTensor d D) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) {L m : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (hL : 0 < L) (hLm : L ≤ m)
-    (r ℓ : ℕ) (hr : 0 < r) (hℓ : 0 < ℓ) :
+    (r ℓ : ℕ) (hℓ : 0 < ℓ) :
     ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
         (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
@@ -556,16 +505,16 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_factored [NeZero D]
         fnwMixingQuantity ρ hρ A htr m ^ 2 /
           fnwLowerBoundaryConstant ρ hρ A m by ring]
   exact wholeIncrement_groundProjection_defect_le_fnw
-    ρ hρ htr A hA hρfix hInj hL hLm r ℓ hr hℓ
+    ρ hρ htr A hA hρfix hInj hL hLm r ℓ hℓ
 
 /-- A primitive MPS admits a positive interaction length after which the
-fixed-length FNW Lemma 6.2 estimate holds for every positive middle and
-spectator length. -/
+fixed-length FNW Lemma 6.2 estimate holds for every prefix length and every
+positive spectator length. -/
 theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw
     [NeZero D] {ρ : Mat} {A : MPSTensor d D} (hP : IsPrimitiveMPS A ρ)
     (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1) :
     ∃ L : ℕ, 0 < L ∧ Kraus.IsNBlkInjective A L ∧
-      ∀ m : ℕ, L ≤ m → ∀ r ℓ : ℕ, 0 < r → 0 < ℓ →
+      ∀ m : ℕ, L ≤ m → ∀ r ℓ : ℕ, 0 < ℓ →
       ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
             (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
           (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
@@ -574,9 +523,9 @@ theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw
           fnwMixingQuantity ρ hρ A htr m ^ 2 /
             fnwLowerBoundaryConstant ρ hρ A m := by
   obtain ⟨L, hL, hInj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
-  refine ⟨L, hL, hInj, fun m hLm r ℓ hr hℓ ↦ ?_⟩
+  refine ⟨L, hL, hInj, fun m hLm r ℓ hℓ ↦ ?_⟩
   exact wholeIncrement_groundProjection_defect_le_fnw
-    ρ hρ htr A hP.norm hP.fixedPoint_is_fixed hInj hL hLm r ℓ hr hℓ
+    ρ hρ htr A hP.norm hP.fixedPoint_is_fixed hInj hL hLm r ℓ hℓ
 
 end
 

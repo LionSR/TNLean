@@ -2516,6 +2516,28 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     \end{align}
 \end{definition}
 
+\begin{theorem}[One-site reassociation]
+    \label{thm:reassociated_tail_boundary_one_site}
+    \lean{MPSTensor.reassocTailBoundaryMapES_one}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es}
+    A one-site suffix increment needs no reassociation:
+    \begin{align}
+        \widetilde\Gamma^{\mathrm{tail}}_{K;L,1}
+         & =\Gamma^{\mathrm{tail}}_{K,L+1}.
+        \label{eq:reassociated_tail_boundary_one_site}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        def:whole_increment_physical_reassociation}
+    Reassociating a window whose last block carries a single site is the
+    identity, so the reassociated tail map is the ordinary tail map with $L+1$
+    spectator sites.
+\end{proof}
+
 \begin{theorem}[Factorization of the reassociated tail map]
     \label{thm:reassociated_tail_boundary_factorization}
     \lean{MPSTensor.reassocTailBoundaryMapES_comp_tailVirtualMapES}
@@ -2962,35 +2984,6 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     boundary pseudoinverse.
 \end{definition}
 
-\begin{theorem}[Norm bound for the whole-increment centered projector sandwich]
-    \label{thm:whole_increment_centered_projector_sandwich_bound}
-    \lean{MPSTensor.wholeIncrementCenteredProjectorResidualES_norm_le}
-    \leanok
-    \uses{def:whole_increment_centered_projector_sandwich, def:whole_increment_centered_residual, def:inverse_gram, def:ground_space_map_es}
-    Assume $D>0$, let $\rho$ be positive definite, and suppose that
-    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L}^{\mathrm{ES}}$ are
-    injective.  Put
-    \begin{align}
-        I_t    & =\mathcal K_{L+Q}^{-1}, &
-        I_\ell & =\mathcal K_{K+L}^{-1}.
-    \end{align}
-    Then the centered physical sandwich $\widehat R_{K,L,Q}$ satisfies
-    \begin{align}
-        \lVert\widehat R_{K,L,Q}\rVert
-         & \leq \sqrt{\lVert I_t\rVert}\,
-        \lVert R_{K,L,Q}\rVert\,
-        \sqrt{\lVert I_\ell\rVert}.
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:whole_increment_centered_projector_sandwich, thm:reassociated_tail_inverse_gram, thm:spectator_boundary_direct_sum_gram, thm:reassociated_tail_pseudoinverse_bound, thm:left_spectator_pseudoinverse_bound}
-    Apply submultiplicativity to the centered residual between the two
-    pseudoinverse factors.  Bound the exterior factors by the square roots of
-    the corresponding inverse-Gram norms.
-\end{proof}
-
 \begin{theorem}[Whole-increment physical correction telescope]
     \label{thm:whole_increment_finite_gram_corrections}
     \lean{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections}
@@ -3421,146 +3414,16 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     pseudoinverse identity controls $S_{K+l+1}C^\dagger$.
 \end{proof}
 
-\begin{definition}[Centered physical C3 sandwich]
-    \label{def:c3_centered_physical_sandwich}
-    \lean{MPSTensor.c3CenteredProjectorResidualES}
-    \leanok
-    \uses{def:c3_centered_overlap_factors_residual, thm:tail_boundary_map_factorization, thm:left_boundary_map_factorization}
-    Let $R_{K,l}$ be the centered virtual residual and let $S_n$ be the inverse
-    Gram at length $n$.  The centered physical sandwich is
-    \begin{align}
-        \widehat R_{K,l}
-        =\Gamma^{\mathrm{tail}}_{K,l+1}S_{l+1}^{\oplus\Omega_K}
-        R_{K,l}S_{K+l}^{\oplus\Omega_1}
-        (\Gamma^{\mathrm{left}}_{K+l,1})^\dagger.
-    \end{align}
-\end{definition}
-
-\begin{theorem}[Physical C3 assembly and centered bound]
-    \label{thm:c3_centered_physical_assembly}
-    \lean{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_corrections}
-    \lean{MPSTensor.c3CenteredProjectorResidualES_norm_le}
-    \leanok
-    \uses{def:c3_centered_physical_sandwich, def:c3_correction_sandwiches, def:open_chain_ground_subspaces_es, def:ground_space_es}
-    Whenever the three finite Grams are invertible, the common-ambient defect is
-    \begin{align}
-        P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
-        -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
-         & =\widehat R_{K,l}-Q_1-Q_2-Q_3,
-    \end{align}
-    and
-    \begin{align}
-        \lVert\widehat R_{K,l}\rVert
-         & \leq \sqrt{\lVert S_{l+1}\rVert}\,
-        \lVert R_{K,l}\rVert\sqrt{\lVert S_{K+l}\rVert}.
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:c3_projector_gram_error_telescope, thm:spectator_boundary_direct_sum_gram, thm:tail_spectator_pseudoinverse_bound, thm:left_spectator_pseudoinverse_bound}
-    Distribute the two exterior pseudoinverse factors across the exact four-term
-    telescope.  The three non-centred terms are precisely $Q_1,Q_2,Q_3$.
-    Submultiplicativity and the two square-root pseudoinverse estimates give the
-    displayed norm bound for the remaining centered sandwich.
-\end{proof}
-
-% This theorem is a TNLean reconstruction sufficient for condition C3.  It
-% does not assert the optimized FNW numerator quoted in Nachtergaele, Eq. (6.1).
-\begin{theorem}[Spectator-uniform geometric C3 projector defect]
-    \label{thm:fnw_overlapping_window_contraction}
-    \lean{MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric}
-    \leanok
-    \discussion{6134}
-    \uses{def:primitive_mps, def:open_chain_ground_subspaces_es, def:ground_space_es}
-    Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
-    bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
-    every spectator length $K$ and every $l\geq1$ satisfying $cr^l<1$,
-    \begin{align}
-        \left\|
-        P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
-        -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
-        \right\|
-         & \leq \frac{Cr^l}{1-cr^l}.
-        \notag
-    \end{align}
-    The constants are independent of $K$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:fixed_point_gram_metric_is_unit, thm:primitive_ground_space_map_geometric_inverse_gram_bounds, thm:primitive_tail_virtual_map_norm_uniform, thm:geometric_smallness_at_c3_lengths, thm:c3_centered_overlap_factorization_geometric, thm:c3_centered_physical_assembly, thm:c3_correction_bounds, thm:spectator_boundary_hilbert_factorization, thm:range_ground_space_map_es, thm:injective_range_projector_inverse_gram}
-    Put $\mathcal K_\infty=\mathscr R(P_\rho)$ and
-    $\mathcal I_\infty=\mathcal K_\infty^{-1}$.  Choose $g,c,r>0$ from
-    the geometric Gram and inverse-Gram estimate, so that
-    $c=\lVert\mathcal I_\infty\rVert g$, and choose
-    $T>0$ with $\lVert J_K^{\mathrm{tail}}\rVert\leq T$ for every $K$.  With
-    \begin{align}
-        J & =\lVert J_1^{\mathrm{left}}\rVert, &
-        M & =\lVert\mathcal K_\infty\rVert
-        \lVert\mathcal I_\infty\rVert,
-    \end{align}
-    take
-    \begin{align}
-        C=4\lVert\mathcal I_\infty\rVert T g(J+1)(M+1).
-    \end{align}
-    The condition $cr^l<1$ implies the same condition at $l+1$, $K+l$, and
-    $K+l+1$.  Hence every inverse Gram in the exact telescope is bounded by
-    $(1-cr^l)^{-1}\lVert\mathcal I_\infty\rVert$.  Pairing the two
-    square-root
-    pseudoinverse factors gives this denominator only once.  The centered term
-    and each of the three correction terms are then at most
-    \begin{align}
-        (1-cr^l)^{-1}\frac{C}{4}r^l.
-    \end{align}
-    The triangle inequality gives the displayed estimate.  Finally, the exact
-    range identities replace the three inverse-Gram range projectors by the
-    tail, left, and full physical ground-space projectors.  The coefficient is
-    the displayed reconstruction, not the optimized FNW rational numerator.
-\end{proof}
-
-% The following estimate is reconstructed from the exact inverse-Gram
-% factorization.  It is not attributed to FNW and does not claim the optimized
-% numerator in Nachtergaele's equation (6.1).
-\begin{theorem}[Prefix-uniform geometric whole-increment projector defect]
-    \label{thm:whole_increment_ground_projection_defect_geometric}
-    \lean{MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric}
-    \leanok
-    \uses{def:primitive_mps, def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es, def:ground_space_es}
-    Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
-    bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
-    all $K,L,Q\in\mathbb N$ with $L\geq1$ and $cr^L<1$,
-    \begin{align}
-         & \left\lVert
-        P^{\mathrm{tail}}_{K;L,Q}P^{\mathrm{left}}_{K+L,Q}
-        -P_{\mathcal G_{K+L+Q}^{\mathrm{ES}}(A)}
-        \right\rVert
-        \leq \frac{Cr^L}{1-cr^L}.
-    \end{align}
-    Here $P^{\mathrm{tail}}_{K;L,Q}$ is the range projector of the
-    reassociated tail boundary map and $P^{\mathrm{left}}_{K+L,Q}$ is the
-    range projector of the left boundary map.  The constants are independent
-    of both the prefix length $K$ and the suffix length $Q$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:primitive_ground_space_map_geometric_inverse_gram_bounds, thm:primitive_tail_virtual_map_norm_uniform, thm:fixed_point_gram_metric_is_unit, thm:primitive_whole_increment_centered_residual_bound, thm:whole_increment_left_virtual_norm, thm:whole_increment_centered_projector_sandwich_bound, thm:whole_increment_correction_bounds, thm:whole_increment_finite_gram_corrections, thm:injective_range_projector_inverse_gram, thm:range_ground_space_map_es}
-    Bound the centered sandwich and the three finite-Gram corrections in the
-    exact projector telescope.  Geometric convergence of the finite Grams and
-    the uniform tail-map bound make each term at most a fixed multiple of
-    $r^L/(1-cr^L)$, uniformly in $K$ and $Q$.  Sum the four estimates and
-    absorb their constants into $C$.
-\end{proof}
-
 \begin{theorem}[Uniform whole-increment defect at the coefficient $7/16$]
     \label{thm:uniform_whole_increment_defect_seven_sixteenths}
     \lean{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
     \leanok
-    \uses{thm:whole_increment_ground_projection_defect_geometric, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
+    \uses{def:primitive_mps, def:l_blk_injective,
+        def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es,
+        def:ground_space_es}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There is an integer $p>0$, measured in sites of $A$, such
-    that $A$ is $p$-block injective and, for every $K\in\mathbb N$,
+    that $A$ is $p$-block injective and, for every prefix length $K$,
     \begin{align}
         \left\lVert
         P^{\mathrm{tail}}_{K;p,p}P^{\mathrm{left}}_{K+p,p}
@@ -3572,11 +3435,13 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 
 \begin{proof}
     \leanok
-    \uses{thm:whole_increment_ground_projection_defect_geometric, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
-    Choose $p$ above a positive block-injectivity length and sufficiently large
-    that $cr^p<1$ and $Cr^p/(1-cr^p)<7/16$.  Block injectivity propagates to
-    $p$, and the geometric whole-increment estimate applies with $L=Q=p$ for
-    every prefix length $K$.
+    \uses{thm:primitive_fnw_projector_defect_geometric, thm:wordspan_blk_inj_succ}
+    The geometric estimate already supplies a positive injective length.
+    Choose $p$ above it and large enough that
+    $c\lambda^p<1$ and $c\lambda^p(1+c\lambda^p)/(1-c\lambda^p)<7/16$; the
+    rational coefficient tends to zero because $\lambda<1$.  Block injectivity
+    propagates to $p$, and the geometric whole-increment estimate applies with
+    $r=K$, $m=p$, and $\ell=p$ for every prefix length $K$.
 \end{proof}
 
 \begin{theorem}[Three-block whole-increment defect at the coefficient $7/16$]
@@ -3625,21 +3490,23 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:fnw_overlapping_window_contraction, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ, thm:nachtergaele_open_chain_projector_defect}
-    The geometric projector estimate supplies $C,c,r>0$ with $r<1$.  Since
+    \uses{thm:primitive_fnw_openchain_defect_geometric, thm:wordspan_blk_inj_succ, thm:nachtergaele_open_chain_projector_defect}
+    The open-chain geometric estimate supplies $c>0$, $0<\lambda<1$, and a
+    positive block-injectivity length.
+    Since
     \begin{align}
-        \sqrt{n+1}\,r^n & \longrightarrow0,
+        \sqrt{n+1}\,\lambda^n & \longrightarrow0,
     \end{align}
     continuity of inversion at $1$ gives
     \begin{align}
-        \frac{Cr^n}{1-cr^n}\sqrt{n+1} & \longrightarrow0.
+        \frac{c\lambda^n(1+c\lambda^n)}{1-c\lambda^n}\sqrt{n+1}
+         & \longrightarrow0.
     \end{align}
-    Normality supplies a positive block-injectivity length.  Choose $l$ above
-    that length and above $1$ so that $cr^l<1$ and the last display is less
-    than $1$.  Block injectivity propagates to $l$, and the geometric estimate
-    gives the uniform defect bound with
-    $\epsilon_l=(1-cr^l)^{-1}Cr^l$.  The open-chain projector-defect theorem
-    gives the anticommutator statement.
+    Choose $l$ above that length and above $1$ so that $c\lambda^l<1$ and the
+    last display is less than $1$.  Block injectivity propagates to $l$, and the geometric
+    estimate gives the uniform defect bound with
+    $\epsilon_l=c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$.  The open-chain
+    projector-defect theorem gives the anticommutator statement.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094.

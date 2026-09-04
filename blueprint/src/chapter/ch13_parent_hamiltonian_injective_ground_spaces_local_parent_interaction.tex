@@ -1135,6 +1135,22 @@ assert a $\rho$-weighted norm bound or any quantitative decay constant.
     \cite[Equations~(5.9)--(5.10)]{Fannes1992Finitely}.
 \end{definition}
 
+\begin{theorem}[Nonnegativity of the FNW mixing quantity]
+    \label{thm:fnw_mixing_quantity_nonneg}
+    \lean{MPSTensor.fnwWeightedOperatorNorm_nonneg}
+    \lean{MPSTensor.fnwMixingQuantity_nonneg}
+    \leanok
+    \uses{def:fnw_mixing_quantity, def:fnw_weighted_remainder_data, def:fnw_trace_inverse_factor}
+    The weighted operator norm is nonnegative, and hence so is $a(n)$ for every
+    $n\in\N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_trace_inverse_factor_pos}
+    A norm is nonnegative, and the trace factor $c_\rho$ is strictly positive.
+\end{proof}
+
 \begin{theorem}[Prescribed-rate bound for the FNW mixing quantity]
     \label{thm:fnw_mixing_quantity_geometric}
     \lean{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric}
@@ -2207,7 +2223,7 @@ space.
     Let $A$ have nonzero bond dimension, let $\rho$ be positive definite with
     $\tr(\rho)=1$, and suppose that $A$ is left canonical and
     $\mathcal E_A(\rho)=\rho$. Suppose that $L_0\geq1$ is an injective length.
-    For $r,\ell\geq1$ and $m\geq L_0$,
+    For every $r\geq0$, every $\ell\geq1$ and every $m\geq L_0$,
     \begin{align}
         \left\lVert
         P^{\mathrm{tail}}_{r;m,\ell}P^{\mathrm{left}}_{r+m;\ell}
@@ -2278,7 +2294,7 @@ space.
     Let $A$ be primitive with positive-definite fixed point $\rho$ and
     $\tr(\rho)=1$. Then there is an injective length $L_0\geq1$ such that
     Equation~(\ref{eq:fnw_projector_defect_unfactored}) holds whenever
-    $m\geq L_0$ and $r,\ell\geq1$.
+    $m\geq L_0$ and $\ell\geq1$, for every $r\geq0$.
 \end{theorem}
 
 \begin{proof}
@@ -2294,6 +2310,153 @@ No inverse or finite Gram matrix, pseudoinverse, periodic coercivity,
 comparison of unequal kernels, cyclic replacement, dimension prefactor,
 identity $a_-(m)=1-a(m)$, identification $k=D$, or claim
 $C_\lambda=k^2$ enters these results.
+
+\section{The geometric form of the FNW projector estimate}
+
+Nachtergaele imports the projector estimate of the previous section in the
+rational geometric form
+\begin{align}
+    \left\lVert
+    G_{\Lambda_n}G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}
+    -G_{\Lambda_{n+1}}
+    \right\rVert
+     & \leq c\lambda^l\,\frac{1+c\lambda^l}{1-c\lambda^l},
+    \label{eq:nachtergaele_geometric_projector_defect}
+\end{align}
+stated in \cite[lines~1180--1194]{Nachtergaele1996Spectral} and again for the
+best overlap constant $A^\alpha_m$ in
+\cite[Equation~(6.1)]{Nachtergaele1996Spectral}.  The results below assemble
+that display from the FNW coefficient $a(m)(1+a(m))/a_-(m)$, the
+lower-boundary inequality $1-a(m)\leq a_-(m)$, and the prescribed-rate estimate
+$a(m)\leq c\lambda^m$.
+
+Two features of the source's display are not reproduced, and the statements
+below are phrased so as not to assert them.  The first is the rate condition.
+The source prescribes that $\lambda$ may be any number with
+$\lambda_i<\lambda<1$ for every eigenvalue $\lambda_i\neq1$ of the transfer
+operator.  What is proved here instead admits any $\lambda$ strictly between
+the weighted spectral radius of the transfer remainder and one.  The two
+conditions would describe the same rates if the spectral radius were known to
+equal the largest modulus among the nonunit transfer eigenvalues.  That is not
+established here: what is available is the bound that every eigenvalue of the
+remainder has modulus below one, which is not a description of its spectrum.
+The theorems below therefore use the spectral-radius condition alone.  The
+second is the prefactor: the source asserts it may be taken equal to $k^2$, the
+dimension of the auxiliary space, whereas the constant produced below is the
+existential rate-dependent one.  Both deviations are recorded in
+\cite{gap:cpgsv21_martingale_overlap}.
+
+\begin{theorem}[Geometric FNW projector defect at a fixed length]
+    \label{thm:fnw_projector_defect_geometric}
+    \lean{MPSTensor.wholeIncrement_groundProjection_defect_le_fnw_geometric}
+    \leanok
+    \uses{thm:fnw_projector_defect_unfactored, def:fnw_mixing_quantity}
+    Under the hypotheses of
+    Theorem~\ref{thm:fnw_projector_defect_unfactored}, suppose in addition that
+    $a(m)\leq c\lambda^m<1$.  Then
+    \begin{align}
+        \left\lVert
+        P^{\mathrm{tail}}_{r;m,\ell}P^{\mathrm{left}}_{r+m;\ell}
+        -G_{r+m+\ell}
+        \right\rVert
+         & \leq \frac{c\lambda^m(1+c\lambda^m)}{1-c\lambda^m}.
+        \label{eq:fnw_projector_defect_geometric}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_projector_defect_factored, thm:fnw_lower_boundary_estimate,
+        thm:fnw_mixing_quantity_nonneg}
+    The FNW coefficient is $a(m)(1+a(m))/a_-(m)$.  Equation~(5.9) gives
+    $1-a(m)\leq a_-(m)$, and $a(m)\leq c\lambda^m<1$ makes the left-hand side
+    strictly positive, so the denominator may be replaced by $1-c\lambda^m$.
+    The numerator is nondecreasing in $a(m)$ on the nonnegative reals, so it is
+    at most $c\lambda^m(1+c\lambda^m)$.
+\end{proof}
+
+\begin{theorem}[Geometric FNW projector defect for a primitive tensor]
+    \label{thm:primitive_fnw_projector_defect_geometric}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric}
+    \leanok
+    \uses{def:primitive_mps, def:l_blk_injective,
+        thm:fnw_projector_defect_geometric}
+    Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
+    bond dimension.  There are constants $c>0$ and $0<\lambda<1$ and an
+    injective length $L_0\geq1$ such that, whenever $m\geq L_0$ and
+    $c\lambda^m<1$, Equation~(\ref{eq:fnw_projector_defect_geometric}) holds for
+    every prefix length $r$ and every $\ell\geq1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_projector_defect_geometric, thm:fnw_mixing_quantity_geometric,
+        thm:primitive_fixed_point_trace_normalization,
+        thm:fnw_weighted_remainder_spectral_radius_lt_one,
+        thm:normal_from_primitive_posdef}
+    Rescale the fixed point to unit trace; this changes neither the tensor nor
+    the primitivity certificate.  The weighted remainder has spectral radius
+    below one, so there is a rate $\lambda$ strictly between that radius and
+    one; the prescribed-rate estimate supplies $c>0$ with $a(m)\leq c\lambda^m$
+    for every $m\geq1$.  Normality supplies a positive injective length.  Apply
+    the fixed-length geometric estimate.
+\end{proof}
+
+\begin{theorem}[Open-chain form of the geometric FNW projector defect]
+    \label{thm:primitive_fnw_openchain_defect_geometric}
+    \lean{MPSTensor.openChain_groundProjection_defect_eq_wholeIncrement}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric}
+    \leanok
+    \uses{def:primitive_mps, def:l_blk_injective,
+        def:open_chain_ground_subspaces_es, def:ground_space_es,
+        thm:primitive_fnw_projector_defect_geometric}
+    A one-site suffix increment needs no reassociation, so the open-chain
+    projector defect at overlap length $l$ and prefix length $K$ equals the
+    whole-increment defect with $r=K$, $m=l$, and $\ell=1$.  Consequently, for
+    a primitive tensor with positive-definite fixed point there are $c>0$,
+    $0<\lambda<1$, and an injective length $L_0\geq1$ such that, whenever
+    $l\geq L_0$ and $c\lambda^l<1$, for every prefix length $K$,
+    \begin{align}
+        \left\lVert
+        P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
+        -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
+        \right\rVert
+         & \leq \frac{c\lambda^l(1+c\lambda^l)}{1-c\lambda^l}.
+        \label{eq:primitive_fnw_openchain_defect_geometric}
+    \end{align}
+    This is the inequality of
+    Equation~(\ref{eq:nachtergaele_geometric_projector_defect}) with the rate
+    and prefactor obtained as described at the head of this section, rather than
+    under the source's eigenvalue prescription and with its value $k^2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_fnw_projector_defect_geometric,
+        thm:reassociated_tail_boundary_one_site,
+        thm:spectator_boundary_hilbert_factorization}
+    The two projectors of the whole-increment display at $\ell=1$ are the two
+    projectors of the open-chain display.  Indeed
+    \begin{align}
+        \ran\widetilde\Gamma^{\mathrm{tail}}_{K;l,1}
+        =\ran\Gamma^{\mathrm{tail}}_{K,l+1}=\mathcal V_{K,l+1}(A),
+        \qquad
+        \ran\Gamma^{\mathrm{left}}_{K+l,1}=\mathcal U_{K+l}(A),
+        \label{eq:openchain_defect_range_identifications}
+    \end{align}
+    the first equality by
+    Equation~(\ref{eq:reassociated_tail_boundary_one_site}) and the remaining
+    two by Theorem~\ref{thm:spectator_boundary_hilbert_factorization}.  Taking
+    orthogonal projectors onto the three subspaces gives
+    \begin{align}
+        P^{\mathrm{tail}}_{K;l,1}=P^{\mathrm{tail}}_{K,l+1}(A),
+        \qquad
+        P^{\mathrm{left}}_{K+l;1}=P^{\mathrm{left}}_{K+l}(A),
+        \label{eq:openchain_defect_projector_identifications}
+    \end{align}
+    so the two defect operators are equal.  Substituting $\ell=1$ in the
+    geometric estimate gives the display.
+\end{proof}
 
 \begin{theorem}[Geometric power bound below unit spectral radius]
     \label{thm:geometric_bound_of_spectral_radius_lt_one}

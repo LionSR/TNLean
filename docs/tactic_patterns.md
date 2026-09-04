@@ -515,6 +515,44 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** elab rather than macro because it inspects the goal to
   distinguish the two predicate forms.
 
+### rho-weighted matrix instance preamble — promoted
+- **Pattern:** open a statement or a proof body with the three-line or
+  four-line `letI` block activating the rho-weighted normed group, seminormed
+  group, inner-product space, and (in the four-line form) norm instances on
+  the virtual matrix algebra:
+
+  ```lean
+  letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  letI : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  letI : InnerProductSpace ℂ Mat := Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  ```
+
+- **Seen:** 122 blocks across eight modules before the refactor
+  (`TNLean/MPS/ParentHamiltonian/`): `FNWOverlapCoordinates.lean` (28),
+  `FNWLowerBoundary.lean` (23), `FNWOverlapEstimate.lean` (20),
+  `FNWAggregateOrthogonality.lean` (16), `FNWProjectorDefect.lean` (13),
+  `WeightedVirtualHilbert.lean` (12), `FNWTransferDecay.lean` (6), and
+  `FNWBoundaryEstimate.lean` (4).
+- **Abstraction:** the `weighted_matrix_instances` and
+  `weighted_matrix_norm_instances` macros in
+  `TNLean/MPS/ParentHamiltonian/WeightedVirtualHilbert.lean`. Each is declared
+  twice, once in term position (`weighted_matrix_instances ρ hρ in` prefixing a
+  statement) and once in tactic position, because the block is repeated in both
+  the statement and the proof of nearly every weighted-norm theorem. The norm
+  variant expands to the plain one followed by the norm binding, so the two
+  stay in step.
+- **Notes:** a macro rather than a lemma or a simp set, because activating a
+  non-global instance is a binding, not a rewrite; the instances cannot be made
+  global without changing every matrix norm in every importing file. The
+  expansion is textual, and it ascribes the instance types with a placeholder
+  matrix type, so the elaborated statements are unchanged from the hand-written
+  blocks. All 122 blocks were refactored in the same change. Two shorter
+  prefixes of the pattern remain hand-written where they occur: the single
+  normed-group binding (22 sites) and the normed-group-plus-seminormed-group
+  pair (8 sites, all in `FNWOverlapCoordinates.lean`).
+
 ### transfer_simp — promoted
 - **Pattern:** unfolding `transferMap A X` to `∑ i, A i * X * (A i)ᴴ`.
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro

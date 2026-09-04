@@ -49,20 +49,10 @@ theorem norm_inner_fnwLeftOverlapAggregate_le_familyNorm [NeZero D]
     (horth : fnwLeftOverlapMap ρ hρ A ℓ m r Φ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (B : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwLeftOverlapAggregate ρ A r Φ) B‖ ≤
       fnwMixingQuantity ρ hρ A htr m * ‖Φ‖ * ‖B‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   have hfull :
       inner ℂ (fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B)
         (fnwLeftOverlapMap ρ hρ A ℓ m r Φ) = 0 :=
@@ -91,20 +81,10 @@ theorem norm_inner_fnwRightOverlapAggregate_le_familyNorm [NeZero D]
     (horth : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (B : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ B (fnwRightOverlapAggregate A ℓ Ψ)‖ ≤
       fnwMixingQuantity ρ hρ A htr m * ‖B‖ * ‖Ψ‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   have hfull :
       inner ℂ (fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B)
         (fnwRightOverlapMap ρ hρ A ℓ m r Ψ) = 0 :=
@@ -127,20 +107,10 @@ theorem norm_fnwLeftOverlapAggregate_le_familyNorm [NeZero D]
     (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
     (horth : fnwLeftOverlapMap ρ hρ A ℓ m r Φ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖fnwLeftOverlapAggregate ρ A r Φ‖ ≤
       fnwMixingQuantity ρ hρ A htr m * ‖Φ‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   have hdual := norm_inner_fnwLeftOverlapAggregate_le_familyNorm
     ρ hρ htr A hA hρfix ℓ m r Φ horth (fnwLeftOverlapAggregate ρ A r Φ)
   rw [inner_self_eq_norm_sq_to_K] at hdual
@@ -176,20 +146,10 @@ theorem norm_fnwRightOverlapAggregate_le_familyNorm [NeZero D]
     (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
     (horth : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖fnwRightOverlapAggregate A ℓ Ψ‖ ≤
       fnwMixingQuantity ρ hρ A htr m * ‖Ψ‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   have hdual := norm_inner_fnwRightOverlapAggregate_le_familyNorm
     ρ hρ htr A hA hρfix ℓ m r Ψ horth (fnwRightOverlapAggregate A ℓ Ψ)
   rw [inner_self_eq_norm_sq_to_K] at hdual
@@ -232,22 +192,12 @@ theorem norm_fnwLeftOverlapAggregate_le_div_sqrt_lowerBoundary [NeZero D]
     (horth : fnwLeftOverlapMap ρ hρ A ℓ m r Φ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖fnwLeftOverlapAggregate ρ A r Φ‖ ≤
       (fnwMixingQuantity ρ hρ A htr m /
         Real.sqrt (fnwLowerBoundaryConstant ρ hρ A m)) *
         ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   let a := fnwMixingQuantity ρ hρ A htr m
   let c := fnwLowerBoundaryConstant ρ hρ A m
   let s := Real.sqrt c
@@ -275,22 +225,12 @@ theorem norm_fnwRightOverlapAggregate_le_div_sqrt_lowerBoundary [NeZero D]
     (horth : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖fnwRightOverlapAggregate A ℓ Ψ‖ ≤
       (fnwMixingQuantity ρ hρ A htr m /
         Real.sqrt (fnwLowerBoundaryConstant ρ hρ A m)) *
         ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   let a := fnwMixingQuantity ρ hρ A htr m
   let c := fnwLowerBoundaryConstant ρ hρ A m
   let s := Real.sqrt c
@@ -321,24 +261,14 @@ theorem norm_inner_fnwOverlapAggregates_le_sq_div_lowerBoundary [NeZero D]
     (horthΨ : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwLeftOverlapAggregate ρ A r Φ)
         (fnwRightOverlapAggregate A ℓ Ψ)‖ ≤
       (fnwMixingQuantity ρ hρ A htr m ^ 2 /
         fnwLowerBoundaryConstant ρ hρ A m) *
         ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ *
         ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   let a := fnwMixingQuantity ρ hρ A htr m
   let c := fnwLowerBoundaryConstant ρ hρ A m
   let s := Real.sqrt c
@@ -378,12 +308,7 @@ theorem norm_inner_fnwOverlapMaps_le_linear_add_quadratic [NeZero D]
     (horthΨ : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
         (fnwRightOverlapMap ρ hρ A ℓ m r Ψ)‖ ≤
       (fnwMixingQuantity ρ hρ A htr m /
@@ -392,12 +317,7 @@ theorem norm_inner_fnwOverlapMaps_le_linear_add_quadratic [NeZero D]
           fnwLowerBoundaryConstant ρ hρ A m) *
         ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ *
         ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   let x := fnwLeftOverlapMap ρ hρ A ℓ m r Φ
   let y := fnwRightOverlapMap ρ hρ A ℓ m r Ψ
   let u := fnwLeftOverlapAggregate ρ A r Φ
