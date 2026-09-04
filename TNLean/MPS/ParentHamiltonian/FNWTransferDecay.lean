@@ -152,6 +152,30 @@ noncomputable def fnwMixingQuantity {D : ℕ}
   fnwTraceInverseFactor ρ * fnwWeightedOperatorNorm ρ hρ
     (fnwTransferMap A ^ n - fnwLimitMap ρ (by simp [htr]))
 
+/-- The rho-weighted operator norm of FNW 1992, equation (5.6), is nonnegative. -/
+theorem fnwWeightedOperatorNorm_nonneg {D : ℕ}
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) :
+    0 ≤ fnwWeightedOperatorNorm ρ hρ F := by
+  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  exact norm_nonneg _
+
+/-- The source mixing quantity \(a(n)\) of FNW 1992, equations (5.9)--(5.10), is
+nonnegative. -/
+theorem fnwMixingQuantity_nonneg [NeZero D]
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (htr : Matrix.trace ρ = 1)
+    (n : ℕ) :
+    0 ≤ fnwMixingQuantity ρ hρ A htr n :=
+  mul_nonneg (fnwTraceInverseFactor_pos hρ).le
+    (fnwWeightedOperatorNorm_nonneg ρ hρ _)
+
 /-- Prescribed-rate form of FNW 1992, Lemma 5.2 and equations (5.9)--(5.10).
 For every nonnegative rate strictly above the rho-weighted spectral radius of
 the FNW remainder, there is a positive, rate-dependent prefactor bounding

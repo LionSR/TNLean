@@ -289,6 +289,34 @@ Section~\ref{sec:app_wielandt_blocking_support}.
     Theorem~\ref{thm:wielandt_proposition_three}.
 \end{definition}
 
+\begin{theorem}[Normalizing the primitive fixed point to unit trace]
+    \label{thm:primitive_fixed_point_trace_normalization}
+    \lean{fixedPointProj_smul}
+    \lean{MPSTensor.IsPrimitiveMPS.smul_inv_trace}
+    \leanok
+    \uses{def:primitive_mps}
+    The fixed-point projection $P$ depends only on the ray through $\rho$: for
+    every nonzero scalar $c$ with $\tr(c\rho)\neq0$, the projection associated
+    to $c\rho$ equals the projection associated to $\rho$.  Consequently, if
+    $A$ is primitive with positive-definite fixed point $\rho$, then $A$ is
+    primitive with the normalized fixed point
+    \begin{align}
+        \sigma & =\frac{\rho}{\tr(\rho)},
+        \qquad \sigma>0,\qquad \tr(\sigma)=1.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:primitive_mps}
+    Both projections send $X$ to $\tr(X)\rho/\tr(\rho)$, so they agree.  The
+    trace-preservation clause does not involve $\rho$; positivity, nonvanishing
+    and the fixed-point equation are preserved by a positive real rescaling;
+    and the complementary spectral radius is unchanged because the two
+    projections coincide.
+\end{proof}
+
 \section{Primitivity and normality}
 
 Throughout this section, primitivity means the condition of

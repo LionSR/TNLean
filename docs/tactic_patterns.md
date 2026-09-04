@@ -1604,6 +1604,35 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### rho-weighted matrix instance preamble — candidate
+- **Pattern:** open a proof or definition body with the four-line `let` block
+  activating the rho-weighted normed group, seminormed group, inner-product
+  space, and norm instances on `Matrix (Fin D) (Fin D) ℂ`:
+
+  ```lean
+  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
+  let : SeminormedAddCommGroup Mat :=
+    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
+  let : InnerProductSpace ℂ Mat := Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  ```
+
+- **Seen:** 66 occurrences across six modules (2026-09-04):
+  `TNLean/MPS/ParentHamiltonian/FNWOverlapCoordinates.lean` (20),
+  `TNLean/MPS/ParentHamiltonian/FNWLowerBoundary.lean` (17),
+  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean` (10),
+  `TNLean/MPS/ParentHamiltonian/FNWAggregateOrthogonality.lean` (9),
+  `TNLean/MPS/ParentHamiltonian/FNWProjectorDefect.lean` (9), and
+  `TNLean/MPS/ParentHamiltonian/FNWTransferDecay.lean` (1).
+- **Abstraction:** proposed — a `macro` expanding to the four `let` bindings,
+  or a scoped instance section parameterized by `(ρ : Mat) (hρ : ρ.PosDef)`.
+  The statements themselves also repeat the block inside `letI`, so the
+  abstraction must serve both statement and proof positions.
+- **Notes:** the block is required because the weighted instances are not
+  global; a naive `local instance` would change elaboration for every matrix
+  norm in the file. Promotion needs a design decision on statement-position
+  reuse first, so this is recorded without a refactor.
+
 ### nested finite-sum binder permutation — promoted
 - **Pattern:** permute the binders of three to five nested finite sums over
   `Finset.univ` by folding them into one sum over an iterated product type,

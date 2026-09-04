@@ -350,8 +350,8 @@ using the identity following condition C3 in Equation~(2.4) of
 Ref.~\cite{Nachtergaele1996Spectral}. Equation~(2.5) of the same reference is
 the distinct batched condition C3$'$ involving $E_n^{(p)}$.
 
-The numerical open-chain step is complete. The geometric estimate is uniform
-in the left length, and
+The numerical open-chain step is complete. The imported FNW estimate is
+uniform in the positive left length, and
 \leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
 chooses a block-injective $l>1$, measured in sites of the input tensor, and
 $\varepsilon_l\geq0$ such that
@@ -363,10 +363,10 @@ $\varepsilon_l\geq0$ such that
 The theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
 combines Nachtergaele's projector-defect identity with the two-projection
-estimate and proves the corresponding anticommutator inequality for every left
-length. Exact blocked three-site identities then connect the three-block defect
-to the local terms of the blocked tensor. No excitation-compression estimate
-is used.
+estimate and proves the corresponding anticommutator inequality for every
+positive left length. Exact blocked three-site identities then connect the
+three-block defect to the local terms of the blocked tensor. No
+excitation-compression estimate is used.
 
 \subsection{Fixed-final-volume C3 comparison}
 
@@ -486,7 +486,7 @@ it gives
 \end{align}
 for adjacent three-site terms of $B$. The two transport theorems cover all
 overlapping off-diagonal cyclic pairs, including pairs across the periodic cut.
-This argument neither claims the optimized FNW coefficient nor uses an
+This argument neither claims the source prefactor $k^2$ nor uses an
 excitation-compression surrogate.
 
 \section{Finite-row martingale reduction}
@@ -651,7 +651,7 @@ not immediately imply
 (\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}) for every
 $L$.
 
-The optimized FNW coefficient and its source constants remain unmatched. This
+The source prefactor $k^2$ remains unmatched. This
 comparison is unnecessary for the proved range-two blocked theorem: the exact
 three-site identification gives $7/16$, and cyclic transport covers every
 overlap. The theorem
@@ -664,8 +664,8 @@ removing their common intersection, gives
     \label{eq:cpgsv21_martingale_overlap_friedrichs_anticommutator}
 \end{align}
 for the complementary excitation projections. The remaining question is
-whether the cited estimates recover the optimized numerator and source
-constants in the present Gram and blocking conventions. Existence of a
+the cited estimates recover the source prefactor in the present
+normalization and blocking conventions. Existence of a
 finite-dimensional principal-angle decomposition alone does not provide the
 required uniform numerical bound.
 
@@ -804,10 +804,10 @@ not the only usable martingale coefficient.
 
 The statement of Ref.~\cite{Cirac2021Matrix} is not challenged. The formal
 development proves a sufficient explicit estimate for a range-two parent
-Hamiltonian after blocking. Recovering the optimized FNW numerator and its
-source constants is a separate comparison.
+Hamiltonian after blocking. Recovering the source prefactor $k^2$ is a
+separate comparison.
 
-\section{Inverse-Gram reduction and the remaining optimized FNW comparison}
+\section{Inverse-Gram reduction and the remaining prefactor comparison}
 
 For $n\geq1$, define
 \begin{align}
@@ -1265,20 +1265,19 @@ partial results are complete.
     \leanid{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections},
     the latter using
     \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES}. The
-    pseudoinverse and centered-sandwich estimates are
-    \leanid{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}
-    and
-    \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES_norm_le}. The
-    correction estimates are
+    pseudoinverse estimate is
+    \leanid{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}.
+    The correction estimates are
     \leanid{MPSTensor.wholeIncrementTailFiniteGramCorrectionES_norm_le},
     \leanid{MPSTensor.wholeIncrementFullInverseGramCorrectionES_norm_le}, and
     \leanid{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES_norm_le}.
 
-    The assembled theorem is
-    \leanid{MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric}.
-    For a primitive tensor with positive-definite fixed point and nonzero bond
-    dimension, it gives $C,c,r>0$, with $r<1$, uniformly in the prefix length
-    $K$ and suffix length $Q$. If $L\geq1$ and $cr^L<1$, define
+    These finite-Gram results are no longer assembled into a projector-defect
+    estimate. The former inverse-Gram reconstruction of that estimate, whose
+    coefficient $Cr^L/(1-cr^L)$ carried an unidentified constant and the
+    $D^{3/2}$ reshuffle factor, has been deleted. The whole-increment defect is
+    now controlled by Lemma~6.2 of Ref.~\cite{Fannes1992Finitely} in the
+    geometric form quoted by Ref.~\cite{Nachtergaele1996Spectral}. Write
     \begin{align}
         P^{\mathrm{tail}}_{K;L,Q}
         &:=
@@ -1291,24 +1290,27 @@ partial results are complete.
           (\Gamma^{\mathrm{left}}_{K+L,Q})}.
         \label{eq:cpgsv21_martingale_overlap_whole_increment_left_projector}
     \end{align}
-    Then
+    The theorem
+    \leanid{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric}
+    gives $c>0$, $0<\lambda<1$, and an injective length $L_0\geq1$ such that,
+    whenever $L\geq L_0$, $c\lambda^L<1$, and $K,Q\geq1$,
     \begin{align}
         \left\lVert
           P^{\mathrm{tail}}_{K;L,Q}P^{\mathrm{left}}_{K+L,Q}
           -P_{\mathcal G_{K+L+Q}^{\mathrm{ES}}(A)}
         \right\rVert
-        &\leq\frac{Cr^L}{1-cr^L}.
+        &\leq\frac{c\lambda^L(1+c\lambda^L)}{1-c\lambda^L}.
         \label{eq:cpgsv21_martingale_overlap_whole_increment_defect}
     \end{align}
-    This reconstructed estimate is not attributed to FNW and does not claim
-    the optimized numerator in Equation~(6.1) of
-    Ref.~\cite{Nachtergaele1996Spectral}.
+    The prefix length is positive, matching the domain of the martingale
+    difference $E_n$. The prefactor $c$ is the existential rate-dependent
+    constant of Lemma~5.2; the source value $k^2$ is not asserted.
 
     The theorem
     \leanid{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
     chooses $p>0$, measured in input-tensor sites, such that $A$ is
     $p$-block injective and the defect with $L=Q=p$ is at most $7/16$ for
-    every $K$. Its specialization
+    every $K>0$. Its specialization
     \leanid{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths}
     takes $K=p$. Thus the prefix-uniform estimate and the three-block
     coefficient $7/16$ are proved in original-site units.
@@ -1692,49 +1694,47 @@ and choose $T>0$ from
       4\lVert\mathcal I_\infty\rVert Tg(J+1)(M+1).
     \label{eq:cpgsv21_martingale_overlap_uniform_defect_constant}
 \end{align}
-Then
-\leanid{MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric}
-proves, for every $K$ and every $l\geq1$ with $cr^l<1$,
+These constants no longer enter any live estimate: the reconstructed open-chain
+coefficient $C_*r^l/(1-cr^l)$ has been deleted together with its assembly. A
+one-site suffix increment needs no reassociation, so
+\leanid{MPSTensor.openChain_groundProjection_defect_eq_wholeIncrement} identifies
+the open-chain defect at overlap length $l$ and prefix length $K$ with the
+whole-increment defect at $r=K$, $m=l$, and $\ell=1$. Hence
+\leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric}
+proves, for every $K>0$ and every $l$ above an injective length with
+$c\lambda^l<1$,
 \begin{align}
     \left\lVert
       P^{\mathrm{tail}}_{K,l+1}
       P^{\mathrm{left}}_{K+l}
       -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
     \right\rVert
-    &\leq\frac{C_*r^l}{1-cr^l}.
+    &\leq\frac{c\lambda^l(1+c\lambda^l)}{1-c\lambda^l}.
     \label{eq:cpgsv21_martingale_overlap_open_chain_uniform_defect}
 \end{align}
-The proof uses
-\leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_corrections},
-\leanid{MPSTensor.c3CenteredProjectorResidualES_norm_le}, and
-\leanid{MPSTensor.c3_centeredVirtualResidualES_norm_le}. Its other inputs are
-the uniform tail estimate, the pointwise inverse-Gram estimates, the
-three-length smallness theorem, and the correction estimates
-\leanid{MPSTensor.c3TailFiniteGramCorrectionES_norm_le},
-\leanid{MPSTensor.c3FullInverseGramCorrectionES_norm_le}, and
-\leanid{MPSTensor.c3LeftFiniteGramCorrectionES_norm_le}. Exact range
-identities identify the tail, left, and full projectors. No physical projector
-is identified with a transfer fixed-point projector.
+This is the estimate imported by Ref.~\cite{Nachtergaele1996Spectral} from
+Ref.~\cite{Fannes1992Finitely}. No physical projector is identified with a
+transfer fixed-point projector.
 
-This reconstructed coefficient suffices for Nachtergaele's C3 condition. The
+The source coefficient suffices for Nachtergaele's C3 condition. The
 theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
 uses
 \begin{align}
-    \sqrt{n+1}\,r^n
+    \sqrt{n+1}\,\lambda^n
     &\longrightarrow0
     \label{eq:cpgsv21_martingale_overlap_c3_decay_threshold}
 \end{align}
 to choose $l>1$ above a positive block-injectivity length such that
 \begin{align}
-    cr^l
+    c\lambda^l
     &<1,
     \label{eq:cpgsv21_martingale_overlap_c3_chosen_smallness}\\
-    \frac{C_*r^l}{1-cr^l}
+    \frac{c\lambda^l(1+c\lambda^l)}{1-c\lambda^l}
     &<\frac{1}{\sqrt{l+1}}.
     \label{eq:cpgsv21_martingale_overlap_c3_chosen_threshold}
 \end{align}
-The same $l$ works for every spectator length $K$. The theorem
+The same $l$ works for every positive spectator length $K$. The theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
 then gives the open-chain anticommutator estimate through two-projection
 geometry. The length $l$ is measured in sites of the input tensor; if that
@@ -1795,12 +1795,37 @@ The later prescribed-rate expression
     \label{eq:cpgsv21_martingale_overlap_optimized_fnw_expression}
 \end{align}
 quoted as \path{boundAm} in Section~6 of
-Ref.~\cite{Nachtergaele1996Spectral} is not identified with the exact FNW
-quantities above. No inverse or finite Gram matrix, pseudoinverse, periodic
-coercivity, comparison of unequal kernels, replacement by a cyclic tensor,
-dimension prefactor, identity $a_-(m)=1-a(m)$, identification $k=D$, or claim
-$C_\lambda=k^2$ is used. The available unweighted conversion retains the
-proved $D^{3/2}$ norm factor inside $g$.
+Ref.~\cite{Nachtergaele1996Spectral} is now derived from the exact FNW
+quantities above. The theorem
+\leanid{MPSTensor.wholeIncrement_groundProjection_defect_le_fnw_geometric}
+replaces the denominator $a_-(m)$ by $1-c\lambda^m$ using the inequality
+$1-a(m)\leq a_-(m)$ of Equation~(5.9), which is weaker than the identity
+$a_-(m)=1-a(m)$, and bounds the numerator $a(m)(1+a(m))$ by
+$c\lambda^m(1+c\lambda^m)$ using monotonicity. The prescribed rate is supplied
+by
+\leanid{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric}: any
+$\lambda$ strictly above the weighted spectral radius of the transfer
+remainder $\mathcal E_A-E_\infty^\rho$. The source phrases the same condition
+through the transfer eigenvalues, $\lambda_i<\lambda<1$ for $\lambda_i\neq1$.
+The two phrasings agree because
+\leanid{MPSTensor.IsPrimitiveMPS.fnwRemainder_eigenvalue_norm_lt_one} shows the
+remainder to have exactly the nonunit transfer eigenvalues together with $0$;
+the equality of the spectral radius with the largest such modulus is not
+separately formalized, and the geometric theorem uses only the spectral-radius
+form.
+
+What remains unmatched is the source's assertion that the prefactor may be
+taken equal to $k^2$, where $k$ is the dimension of the auxiliary space of the
+pure state. The formal prefactor is the existential rate-dependent constant
+$C_\lambda$ of Lemma~5.2. No general quantitative theorem in the inspected
+primary sources establishes $C_\lambda=k^2$ for an arbitrary faithful
+stationary density and every prescribed $\lambda$, and no theorem identifies
+that minimal $k$ with the bond dimension $D$ used here. Accordingly, no
+inverse or finite Gram matrix, pseudoinverse, periodic coercivity, comparison
+of unequal kernels, replacement by a cyclic tensor, dimension prefactor,
+identity $a_-(m)=1-a(m)$, identification $k=D$, or claim $C_\lambda=k^2$ is
+used, and the $D^{3/2}$ reshuffle factor no longer appears in any coefficient
+on the route to condition C3.
 
 \subsection{Open-to-periodic finite-range conclusion}
 
@@ -1898,19 +1923,20 @@ attributed to those papers or to Nachtergaele's martingale theorem.
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The exact whole-increment algebra, the
-reconstructed prefix-uniform geometric C3$'$-type estimate, the three-block
-coefficient $7/16$, and the resulting cyclic range-two gap $1/8$ are proved
-for a suitable blocked tensor. Before blocking, lengths are measured in sites
-of the input tensor; the final chain length counts blocked sites. These bounds
-come from the formal inverse-Gram reconstruction and are not attributed to
-FNW. The source lower boundary constant, Lemma~5.3, block-injectivity
-positivity, the linear $a(m)/a_-(m)$ contribution in Equation~(6.5), the
-quadratic $a(m)^2/a_-(m)$ contribution, their unfactored sum, and the
-common-subspace projector geometry are formalized. The resulting
-whole-increment theorem proves the exact coefficient
-$a(m)(1+a(m))/a_-(m)$ from Lemma~6.2. The separate prescribed-rate
-identification with the expression quoted by Nachtergaele remains outside
-this result.
+prefix-uniform geometric C3$'$-type estimate, the three-block coefficient
+$7/16$, and the resulting cyclic range-two gap $1/8$ are proved for a suitable
+blocked tensor. Before blocking, lengths are measured in sites of the input
+tensor; the final chain length counts blocked sites. The source lower boundary
+constant, Lemma~5.3, block-injectivity positivity, the linear $a(m)/a_-(m)$
+contribution in Equation~(6.5), the quadratic $a(m)^2/a_-(m)$ contribution,
+their unfactored sum, and the common-subspace projector geometry are
+formalized, and the resulting whole-increment theorem proves the exact
+coefficient $a(m)(1+a(m))/a_-(m)$ from Lemma~6.2. The threshold that feeds the
+gap theorems now runs through that estimate and its geometric form
+$c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$; the earlier inverse-Gram
+reconstruction and its unidentified constant have been deleted. The remaining
+restriction is the prefactor: the formal $c$ is the existential rate-dependent
+constant of Lemma~5.2, and the source value $k^2$ is not asserted.
 
 The earlier blocked-to-original comparison remains valid for periodic lengths
 divisible by the chosen block length.  It gives
