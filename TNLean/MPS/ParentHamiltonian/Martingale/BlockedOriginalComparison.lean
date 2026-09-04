@@ -18,12 +18,13 @@ original-site coordinates.
 * `MPSTensor.parentInteractionES_blockTensor_conj` identifies the parent
   interaction on \(N\) blocked sites with the original interaction on \(Np\)
   sites under the canonical blocked-configuration isometry.
+* `MPSTensor.localTermES_blockTensor_conj_aligned` identifies the blocked
+  range-two local term at a blocked site with the original range-\(2p\) local
+  term at the aligned original start \(pi\).
 
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:2011.12127, lines 1985--1992.
-* B. Nachtergaele, arXiv:cond-mat/9410110, condition C3-prime and the rescaled
-  finite-volume sequence in the proof of Theorem 2.1(ii).
 -/
 
 namespace MPSTensor
@@ -272,52 +273,5 @@ theorem localTermES_blockTensor_conj_aligned
     ((blockedConfigEquiv d N p).symm ω)
   apply (blockedConfigEquiv d 2 p).injective
   simpa using hextract
-
-/-- The range-\(2p\) original parent Hamiltonian dominates, as a quadratic
-form, the conjugated blocked range-two Hamiltonian obtained by retaining only
-block-aligned starts. This finite cyclic sparse-sum comparison is a TNLean
-reconstruction; Nachtergaele's rescaling argument is stated for compatible open
-intervals. -/
-theorem blockTensor_parentHamiltonianES_conj_le
-    (A : MPSTensor d D) (p : ℕ) (hp : 0 < p) {N : ℕ} (hN : 2 ≤ N) :
-    (blockedConfigLinearIsometryEquiv d N p).toLinearEquiv.toLinearMap.comp
-        ((parentHamiltonianES (blockTensor A p) 2 N).comp
-          (blockedConfigLinearIsometryEquiv d N p).symm.toLinearEquiv.toLinearMap) ≤
-      parentHamiltonianES A (2 * p) (N * p) := by
-  rw [LinearMap.le_def]
-  have hFull : parentHamiltonianES A (2 * p) (N * p) =
-      ∑ j : Fin (N * p), localTermES A (2 * p) j :=
-    parentHamiltonianES_eq_sum_localTermES A (2 * p) (N * p)
-  have hSparse :
-      (blockedConfigLinearIsometryEquiv d N p).toLinearEquiv.toLinearMap.comp
-          ((parentHamiltonianES (blockTensor A p) 2 N).comp
-            (blockedConfigLinearIsometryEquiv d N p).symm.toLinearEquiv.toLinearMap) =
-        ∑ i : Fin N, localTermES A (2 * p) (alignedOriginalStart hp i) := by
-    rw [parentHamiltonianES_eq_sum_localTermES]
-    apply LinearMap.ext
-    intro v
-    simp only [LinearMap.comp_apply, LinearMap.sum_apply, map_sum]
-    apply Finset.sum_congr rfl
-    intro i hi
-    exact LinearMap.congr_fun (localTermES_blockTensor_conj_aligned A p hp hN i) v |>.symm
-  rw [hFull, hSparse]
-  let aligned : Finset (Fin (N * p)) := Finset.univ.map
-    ⟨alignedOriginalStart hp, fun i j hij => by
-      apply Fin.ext
-      have hij' := congrArg Fin.val hij
-      simp only [alignedOriginalStart] at hij'
-      exact Nat.eq_of_mul_eq_mul_right hp hij'⟩
-  have hAlignedSum :
-      ∑ i : Fin N, localTermES A (2 * p) (alignedOriginalStart hp i) =
-        ∑ j ∈ aligned, localTermES A (2 * p) j := by
-    dsimp [aligned]
-    rw [Finset.sum_map]
-    rfl
-  rw [hAlignedSum]
-  have hsplit := Finset.sum_sdiff (f := fun j : Fin (N * p) => localTermES A (2 * p) j)
-    (Finset.subset_univ aligned)
-  rw [← hsplit]
-  abel_nf
-  exact LinearMap.isPositive_sum _ fun j _ => localTermES_isPositive A (2 * p) j
 
 end MPSTensor

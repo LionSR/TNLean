@@ -8,7 +8,6 @@ import TNLean.MPS.ParentHamiltonian.Martingale.AdjacentLocalTerms
 import TNLean.MPS.ParentHamiltonian.Martingale.AnalyticBounds
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedGap
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalComparison
-import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
@@ -87,10 +86,9 @@ The twenty-five components are:
   open-chain C3 defect threshold and its anticommutator consequence;
 * `Martingale.BlockedGap` — transport of that threshold to three blocked sites
   and the explicit range-two blocked parent-Hamiltonian gap;
-* `Martingale.BlockedOriginalComparison` — exact aligned local-term conjugacy
-  and quadratic-form domination by the original range-\(2p\) Hamiltonian;
-* `Martingale.BlockedOriginalGap` — transfer of the gap constant \(1/8\) to
-  original-site periodic chains of length divisible by the block length;
+* `Martingale.BlockedOriginalComparison` — exact conjugacy of the blocked
+  parent interaction and of the blocked range-two local terms with their
+  original range-\(2p\) counterparts at block-aligned starts;
 * `Martingale.MovingWindowCount` — reversal and counting of the finite moving-window
   sums in Nachtergaele's martingale estimate;
 * `Martingale.NachtergaeleFullRangeEstimate` — the source's printed martingale-difference

@@ -4630,84 +4630,28 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     norm gap from the smaller weighted sum to the larger unweighted sum.
 \end{proof}
 
-\begin{lemma}[Blocked local terms and the aligned sparse sum]
-    \label{lem:blocked_original_aligned_sparse_sum}
+\begin{lemma}[Blocked local terms at block-aligned starts]
+    \label{lem:blocked_original_aligned_local_terms}
     \lean{MPSTensor.parentInteractionES_blockTensor_conj,
-        MPSTensor.localTermES_blockTensor_conj_aligned,
-        MPSTensor.blockTensor_parentHamiltonianES_conj_le}
+        MPSTensor.localTermES_blockTensor_conj_aligned}
     \leanok
     Assume $p>0$ and $N\geq2$. Write $h^{A,L}_j$ for the range-$L$ local term
     of a tensor $A$ at site $j$. Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
     configuration isometry from the blocked chain of length $N$ to the original
-    chain of length $Np$.  For every blocked site $i$,
+    chain of length $Np$.  The parent interaction of $B$ on $N$ blocked sites is
+    conjugate under $U$ to the parent interaction of $A$ on $Np$ sites, and for
+    every blocked site $i$,
     \begin{align}
         U h^{B,2}_i U^{-1}
          & =h^{A,2p}_{pi}.
     \end{align}
-    Hence the conjugated blocked Hamiltonian is the aligned sparse sum
-    \begin{align}
-        U H_{N,2}(B)U^{-1}
-         & =\sum_{i=0}^{N-1}h^{A,2p}_{pi},
-    \end{align}
-    and
-    \begin{align}
-        U H_{N,2}(B)U^{-1}
-         & \leq H_{Np,2p}(A)
-        \label{eq:blocked-original-loewner}
-    \end{align}
-    in Loewner order.
 \end{lemma}
-
-\begin{theorem}[Original-site gap on block-divisible periodic chains]
-    \label{thm:martingale_mps_original_site_multiples}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul}
-    \leanok
-    \uses{thm:martingale_mps, lem:positive_gap_transfer_loewner, lem:blocked_original_aligned_sparse_sum}
-    Under the hypotheses of Theorem~\ref{thm:martingale_mps}, one can choose
-    the same $p>0$ so that the original tensor has interaction range $2p$ and,
-    for every $N\ge4$ and every
-    $v\in(\ker H_{Np,2p}(A))^\perp$,
-    \begin{align}
-        \frac18\lVert v\rVert
-         & \leq \lVert H_{Np,2p}(A)v\rVert.
-    \end{align}
-    % The quantified length $Np$ records the restriction to block-divisible chains.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:martingale_mps, lem:positive_gap_transfer_loewner, lem:blocked_original_aligned_sparse_sum}
-    Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
-    configuration isometry.  Lemma~\ref{lem:blocked_original_aligned_sparse_sum}
-    gives, for every blocked site $i$,
-    \begin{align}
-        U h^{B,2}_i U^{-1}
-         & =h^{A,2p}_{pi},
-    \end{align}
-    and therefore
-    \begin{align}
-        U H_{N,2}(B)U^{-1}
-         & =\sum_{i=0}^{N-1}h^{A,2p}_{pi}
-        \leq\sum_{j=0}^{Np-1}h^{A,2p}_j
-        =H_{Np,2p}(A).
-    \end{align}
-    Block injectivity identifies the two ground-state lines under $U$, hence
-    \begin{align}
-        \ker\!\left(U H_{N,2}(B)U^{-1}\right)
-         & =\ker H_{Np,2p}(A).
-    \end{align}
-    Theorem~\ref{thm:martingale_mps} gives the norm gap $1/8$ for
-    $H_{N,2}(B)$.  Since $U$ is isometric, the same bound holds for its
-    conjugate.  Lemma~\ref{lem:positive_gap_transfer_loewner} then transfers
-    this bound through the Loewner domination~(\ref{eq:blocked-original-loewner})
-    and the kernel equality above.
-\end{proof}
 
 \begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
     \label{thm:normal_mps_parent_hamiltonian_gap}
     \notready
     \discussion{5926}
-    \uses{thm:martingale_mps_original_site_multiples, thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
+    \uses{thm:primitive_parent_hamiltonian_finite_range_knabe_gap, thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
     Let $A$ be a normal tensor.  There exist an interaction range $L>1$ and
     a constant $\gamma>0$ such that, for every $N\ge2L$ and every
     $v\in(\ker H_{N,L}(A))^\perp$,
@@ -4716,20 +4660,21 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
          & \le \lVert H_{N,L}(A)v\rVert.
         \notag
     \end{align}
-    Theorem~\ref{thm:martingale_mps_original_site_multiples} proves the estimate
-    with $L=2p$ when the periodic chain length is divisible by $p$.  The
-    unrestricted statement still requires a remainder-length comparison for
-    the finitely many congruence classes modulo $p$.
+    Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}
+    proves the estimate for a primitive tensor with a positive-definite fixed
+    point, at range $L=l+1$ and for every $N\ge2m$, with no divisibility
+    restriction on the chain length.  The unrestricted statement still requires
+    the passage from that hypothesis to an arbitrary normal tensor.
 \end{theorem}
 
 \begin{proof}
     \notready
     \discussion{5926}
-    \uses{thm:martingale_mps_original_site_multiples, thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
-    The divisible-length case is
-    Theorem~\ref{thm:martingale_mps_original_site_multiples}.  It remains to
-    control chains of length $Np+r$, $0<r<p$, by a boundary/remainder argument
-    that preserves the ground-space complement and a uniform positive constant.
+    \uses{thm:primitive_parent_hamiltonian_finite_range_knabe_gap, thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
+    The primitive case with a positive-definite fixed point is
+    Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}.  It
+    remains to reduce an arbitrary normal tensor to that case while preserving
+    the ground-space complement and a uniform positive constant.
 \end{proof}
 
 \begin{theorem}[Gap bound from cyclic overlap compression]

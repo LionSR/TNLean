@@ -76,7 +76,6 @@ import TNLean.MPS.ParentHamiltonian.Martingale.AdjacentLocalTerms
 import TNLean.MPS.ParentHamiltonian.Martingale.AnalyticBounds
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedGap
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalComparison
-import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
