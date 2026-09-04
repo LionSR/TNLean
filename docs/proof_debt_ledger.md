@@ -535,9 +535,15 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   supplied fixed pair, so deleting them singly would strengthen those 11
   statements silently. Two independent unblockers are needed, and neither
   substitutes for the other. The converse
-  `E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII`, by the spectral step
-  of `Papers/1703.09188/paper_v2.tex` lines 344--355, turns a supplied pair
-  into a presentation of the same tensor; it therefore reaches only the 4
+  `IsMPU U → E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII U`, by the
+  spectral step of `Papers/1703.09188/paper_v2.tex` lines 344--355, turns a
+  supplied pair into a presentation of the same tensor. `IsMPU` has to stay a
+  premise, since `IsMPUCanonicalFormII` contains it and a rank-one transfer
+  power constrains only the normalized double layer; every intended call site
+  supplies it. The `K = 0` inputs the generic node admits are not lost: at
+  that exponent the condition forces `D = 1`, where
+  `IsMPU.normalized_transfer_matrix_eq_one_fin_one` gives `E = 1` and the same
+  pair works at exponent one. It therefore reaches only the 4
   nodes whose restricted tensor is the one the convention already governs
   (`lem:mpu_admissible_source_u_isometry` and the 3 candidates), and it
   dissolves the citation obstruction, but it constructs no datum for a

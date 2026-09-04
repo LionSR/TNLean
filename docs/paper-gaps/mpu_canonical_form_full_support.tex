@@ -646,7 +646,7 @@ eleven carry a supplied fixed pair and nothing else. Redirecting their
 dependencies onto the convention-hypothesis entries would either strengthen
 eleven retained statements without saying so, or leave the implication
 \begin{align}
-    E^{J}=\lvert\rho)(\Phi\rvert
+    \text{unitary periodic family},\ E^{J}=\lvert\rho)(\Phi\rvert
      & \implies\text{canonical form II}
     \label{eq:mpu_canonical_form_full_support_datum_to_convention}
 \end{align}
@@ -663,15 +663,32 @@ $\mathcal U$.
 
 \begin{itemize}
     \item The converse of the stabilization theorem, namely
-          (\ref{eq:mpu_canonical_form_full_support_datum_to_convention}): a
-          positive diagonal trace-one $\rho$ with
-          $E^{J}=\lvert\rho)(\Phi\rvert$ for some $J>0$ leaves the transfer
-          matrix one nonzero eigenvalue, equal to one, hence a single normal
-          block filling the ambient bond space. This is the spectral step of
+          (\ref{eq:mpu_canonical_form_full_support_datum_to_convention}): for
+          a tensor whose periodic operators are all unitary, a positive
+          diagonal trace-one $\rho$ with $E^{J}=\lvert\rho)(\Phi\rvert$ for
+          some $J>0$ leaves the transfer matrix one nonzero eigenvalue, equal
+          to one, hence a single normal block filling the ambient bond space.
+          This is the spectral step of
           \cite[lines~344--355]{Cirac2017MPU} run from the stabilized power
-          instead of from the shifted traces. It turns a supplied fixed pair
-          into the bundled presentation of the tensor that carries it, and
-          nothing more. So it removes the restriction exactly where the
+          instead of from the shifted traces. Unitarity of the periodic
+          family is a premise and not a conclusion of the spectral step: the
+          bundled presentation contains it, while an exact rank-one transfer
+          power constrains only the normalized double layer. Every entry the
+          converse is meant to serve carries it already.
+
+          The exponent premise costs nothing. The generic supplied-pair entry
+          admits the exponent zero, where the condition reads
+          $\mathbf 1=\lvert\rho)(\Phi\rvert$; the right side has rank at most
+          one, so the bond dimension is one, and in bond dimension one the
+          normalized transfer matrix of a tensor with a unitary periodic
+          family is already the identity
+          \cite[lines~397--409]{Cirac2017MPU}. The same pair then satisfies
+          the condition at the exponent one, so the converse at a positive
+          exponent covers the zero-exponent inputs as well.
+
+          It turns a supplied fixed pair into the bundled presentation of the
+          tensor that carries it, and nothing more. So it removes the
+          restriction exactly where the
           tensor carrying the datum is the tensor the standing convention
           already governs: the four entries
           \texttt{lem:mpu\_admissible\_source\_u\_isometry} and the three
