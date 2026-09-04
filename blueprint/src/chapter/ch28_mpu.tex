@@ -4278,6 +4278,45 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\chi_E(X)=X-1$, and Cayley--Hamilton gives $E=1$.
 \end{proof}
 
+\begin{definition}[Canonical form II for a matrix product unitary]
+    \label{def:mpu_canonical_form_ii}
+    \lean{MPOTensor.IsMPUCanonicalFormII,
+        MPOTensor.IsMPUCanonicalFormII.hasFullSupport}
+    \leanok
+    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support}
+    Let $\mathcal U$ be an MPO tensor, and write
+    $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ and
+    $E=\mathcal E_{\widetilde{\mathcal U}}$. A canonical-form-II presentation
+    of $\mathcal U$ consists of the MPU condition, a literal CPSV
+    canonical-form-II representation
+    \begin{align}
+        \widetilde{\mathcal U}^{a}
+                          & =V^\dagger\!\left(\bigoplus_{k=1}^{r}\mu_kA_k^{a}\right)V,
+        \notag                                                                         \\
+        VV^\dagger        & =\Id,
+        \notag                                                                         \\
+        \sum_{k=1}^{r}D_k & =D.
+        \label{eq:mpu_ambient_cfii}
+    \end{align}
+    The ambient fixed pair has $\Phi=\Id_D$ and positive coefficients
+    $\rho_0,\ldots,\rho_{D-1}$. It satisfies
+    \begin{align}
+        \rho      & =\sum_{n=0}^{D-1}\rho_n\ketbra{n}{n},
+        \notag                                            \\
+        \tr(\rho) & =1,
+        \notag                                            \\
+        E(\rho)   & =\rho.
+        \label{eq:mpu_ambient_cfii_fixed_pair}
+    \end{align}
+    Thus the retained blocks have literal full support, and $\rho$ is a
+    positive diagonal trace-one right fixed point in the ambient bond
+    coordinates. This is the standing convention of
+    \cite[lines~269--281, 344--356, and 488--502]{Cirac2017MPU}.
+    % The ambient diagonal rho is part of the chosen presentation. No construction
+    % from arbitrary existing CFII and full-support witnesses is asserted here;
+    % that inhabitance statement is deferred to native child #7719.
+\end{definition}
+
 \begin{theorem}[Normality of a full-support normalized MPU representative]
     \label{thm:mpu_normalized_full_support_normal}
     \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}
@@ -4320,6 +4359,28 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $D$ and therefore makes $\widetilde U$ irreducible. The displayed radius
     and peripheral-spectrum identities provide its remaining normality
     fields. Consequently $\widetilde U$ is a normal tensor.
+\end{proof}
+
+\begin{theorem}[Normality in canonical form II]
+    \label{thm:mpu_canonical_form_ii_normal}
+    \lean{MPOTensor.IsMPUCanonicalFormII.isNormalTensor_normalizedFlattening}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:nt_cpsv}
+    Let $d,D>0$. If an MPO tensor $\mathcal U$ has a canonical-form-II
+    presentation in the sense of
+    Definition~\ref{def:mpu_canonical_form_ii}, then its normalized flattening
+    $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ is a normal tensor.
+    This is the normality assertion of
+    \cite[Proposition~III.1]{Cirac2017MPU} in the ambient convention
+    (\ref{eq:mpu_ambient_cfii_fixed_pair}).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_full_support_normal}
+    The presentation includes the MPU condition and the full-support identity
+    $\sum_{k=1}^{r}D_k=D$. Theorem~\ref{thm:mpu_normalized_full_support_normal}
+    therefore applies to the chosen canonical-form-II representation of
+    $\widetilde{\mathcal U}$.
 \end{proof}
 
 \section{Standard form, index, and symmetry classification}

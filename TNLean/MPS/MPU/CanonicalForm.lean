@@ -28,7 +28,7 @@ implies its ambient normality. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 -/
 
-open scoped Matrix BigOperators Matrix.Norms.Operator Kraus
+open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder Kraus
 
 namespace MPSTensor
 
@@ -324,6 +324,50 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
+/-- The canonical-form-II convention for an MPU tensor, including the chosen
+ambient right fixed point.
+
+The normalized flattening is represented in literal CPSV canonical form II
+with no unused ambient bond coordinates. The matrix `ρ` records the diagonal,
+positive, trace-one right eigenvector in the same ambient coordinates as the
+tensor.
+
+Source: CPSV17, `Papers/1703.09188/paper_v2.tex`, lines 269--281 (CFII),
+344--356 (normality and the standing CFII convention), and 488--502 (use of
+the positive diagonal ambient matrix). -/
+structure IsMPUCanonicalFormII (U : MPOTensor d D) where
+  /-- The periodic MPO family is unitary (CPSV17, lines 344--356). -/
+  isMPU : U.IsMPU
+  /-- Literal canonical-form-II data for the normalized flattening
+  (CPSV17, lines 269--281 and 344--356). -/
+  cfii : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening
+  /-- The retained CFII blocks fill the ambient bond space
+  (CPSV17, lines 344--356). -/
+  fullSupport_eq : ∑ k, cfii.toCPSVCanonicalFormData.dim k = D
+  /-- The ambient right fixed matrix `ρ` from `Erightleft`
+  (CPSV17, lines 269--281). -/
+  ρ : Matrix (Fin D) (Fin D) ℂ
+  /-- The ambient right fixed matrix is positive definite
+  (CPSV17, lines 269--281 and 488--502). -/
+  ρ_posDef : ρ.PosDef
+  /-- The ambient right fixed matrix is diagonal (CPSV17, lines 269--281). -/
+  ρ_isDiag : ρ.IsDiag
+  /-- The normalization `(Φ|ρ) = 1` is the matrix trace normalization
+  (CPSV17, lines 269--281). -/
+  ρ_trace : Matrix.trace ρ = 1
+  /-- The ambient matrix is the right fixed point of the normalized transfer map
+  (CPSV17, lines 269--281). -/
+  ρ_fixed : Kraus.transferMap U.normalizedFlattening ρ = ρ
+
+namespace IsMPUCanonicalFormII
+
+/-- The CFII blocks of an MPU in canonical form II fill its ambient bond space. -/
+theorem hasFullSupport {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
+    hU.cfii.toCPSVCanonicalFormData.HasFullSupport :=
+  hU.fullSupport_eq
+
+end IsMPUCanonicalFormII
+
 private theorem sqrt_blockPhysDim (d p : ℕ) :
     Real.sqrt (MPSTensor.blockPhysDim d p) = Real.sqrt d ^ p := by
   suffices Real.sqrt ((d ^ p : ℕ) : ℝ) = Real.sqrt d ^ p by
@@ -398,5 +442,19 @@ theorem IsMPU.isNormalTensor_normalizedFlattening_of_cpsv
       (Kraus.transferMap U.normalizedFlattening) htrace
   exact data.isNormalTensor_of_r_eq_one_of_fullSupport
     hr hfull hrad hprim
+
+namespace IsMPUCanonicalFormII
+
+/-- The normalized flattening of an MPU in canonical form II is a normal tensor.
+
+This is the normality conclusion of CPSV17, Proposition `prop:normal-tensor`,
+`Papers/1703.09188/paper_v2.tex`, lines 344--356. -/
+theorem isNormalTensor_normalizedFlattening
+    [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
+    MPSTensor.IsNormalTensor U.normalizedFlattening :=
+  hU.isMPU.isNormalTensor_normalizedFlattening_of_cpsv
+    hU.cfii.toCPSVCanonicalFormData hU.hasFullSupport
+
+end IsMPUCanonicalFormII
 
 end MPOTensor
