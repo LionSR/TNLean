@@ -29,12 +29,15 @@ the nonzero complex multiplicity weights.
   after a pure block-diagonal Perron gauge.
 * `PeriodicOverlapHypothesis.ofIsIrreducibleForm`: the scalar-weight
   irreducible-form specialization.
+* `fundamentalTheorem_periodic_proportional_sectorDecomposition`: the
+  proportional fundamental theorem itself, matching the two bases of periodic
+  tensors bijectively with equal periods and repeated blocks.
 
 ## Reference
 
 * De las Cuevas, Cirac, Schuch, Perez-Garcia,
   *Irreducible forms of Matrix Product States: Theory and Applications*,
-  arXiv:1708.00029, theorem `thm:bd`, lines 613--632.
+  arXiv:1708.00029, theorem `thm:bd`, lines 613--623.
 -/
 
 open scoped Matrix BigOperators
@@ -337,7 +340,7 @@ original representatives.
 
 Source: arXiv:1708.00029, equations `eq:bdnr` and `eq:Bbdnr`, lines 286--305
 and 575--585; normalization by block-diagonal similarity, lines 313--332; and
-theorem `thm:bd`, lines 613--632. -/
+theorem `thm:bd`, lines 613--623. -/
 theorem PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ)
@@ -396,7 +399,7 @@ or on the positive real weights.
 
 Source: arXiv:1708.00029, equations `eq:bdnr` and `eq:Bbdnr`, lines 286--305
 and 575--585; normalization by similarity, lines 313--332; and theorem
-`thm:bd`, lines 613--632.
+`thm:bd`, lines 613--623.
 
 **Scope restriction (weights, length, representation, and normalization):**
 `IsIrreducibleForm` records one positive real scalar for each periodic block,
@@ -488,5 +491,47 @@ theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
     exact tendsto_mpvOverlap_zero_swap (hA.blocks j₀) (hB.blocks k₀) hDecay
   exact PeriodicOverlapHypothesis.ofIsPeriodic
     hA.blocks hB.blocks hA.period hB.period hA.periodic hB.periodic hExA hExB
+
+/-! ## The proportional fundamental theorem for tensors in irreducible form -/
+
+/-- **Fundamental theorem for matrix product states, proportional case.**
+
+Let two tensors carry the multiplicity-bearing irreducible forms
+\(A^i=\bigoplus_{j\in J}(R_j\otimes A^i_j)\) and
+\(B^i=\bigoplus_{k\in K}(S_k\otimes B^i_k)\), with \(R_j\) and \(S_k\) diagonal
+with nonzero entries and with pairwise non-repeated bases of periodic tensors
+\(\{A_j\}\) and \(\{B_k\}\).  If the two generated matrix-product vectors are
+proportional by a nonzero scalar at every positive length, then the two bases
+have the same size and there is a bijection \(\pi\colon J\to K\) matching each
+\(A_j\) with the single \(B_{\pi(j)}\) of the same period, for which
+\(A^i_j=\xi_jY_jB^i_{\pi(j)}Y_j^{-1}\) with a unit-modulus scalar \(\xi_j\) and
+an invertible \(Y_j\).
+
+The non-decaying overlap partners come from grouped-coefficient comparison at
+each fixed length, the repeated-block classification from the periodic overlap
+dichotomy, and the equality of matched periods from the invariance of the
+peripheral transfer spectrum under the repeated-block relation.
+
+Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--623, over the
+irreducible forms `eq:bdnr`, line 294, and `eq:Bbdnr`, line 582; the
+period clause is the last clause of proposition
+`equal-or-orthogonal-generalized`, lines 602--604. -/
+theorem fundamentalTheorem_periodic_proportional_sectorDecomposition
+    (P Q : SectorDecomposition d)
+    (periodP : Fin P.basisCount → ℕ)
+    (periodQ : Fin Q.basisCount → ℕ)
+    (hPerP : ∀ j, IsSpectrallyPeriodic (periodP j) (P.basis j))
+    (hPerQ : ∀ k, IsSpectrallyPeriodic (periodQ k) (Q.basis k))
+    (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
+    (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
+    (hProp : NonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
+    PeriodicBasisMatchingWitness P.basis Q.basis periodP periodQ := by
+  obtain ⟨hCount, perm, hMatch⟩ :=
+    fundamentalTheorem_periodic_proportional P.basis Q.basis hNonRepP hNonRepQ
+      (PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions
+        P Q periodP periodQ hPerP hPerQ hNonRepP hNonRepQ hProp)
+  exact ⟨hCount, perm, fun j =>
+    ⟨IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks
+      (hPerP j) (hPerQ (perm j)) (hMatch j), hMatch j⟩⟩
 
 end MPSTensor

@@ -8,6 +8,7 @@ import TNLean.MPS.RFP.BeigiLoopFixedPoint
 import TNLean.MPS.RFP.BeigiSectorGraphConstruction
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.ResidualIsometry
+import TNLean.MPS.SharedInfra.Scaling
 
 /-!
 # Identification of Beigi loop sectors with normal tensors
@@ -188,25 +189,6 @@ theorem exists_mpvBlockPhaseEquiv_of_mem_span_eventually
       Submodule.span ℂ (Set.range fun j : ι => mpvState (d := d) (B j) N) := by
     simpa [C, Function.comp_def] using (linearIndependent_option.mp hLIN).2
   exact hNotMem hNmem
-
-/-- Multiplication of every tensor letter by a unit phase leaves the transfer map unchanged.
-
-The transfer map scales by `ζ * star ζ`, which is one when `‖ζ‖ = 1`. This is the
-normalization-sensitive scalar step in the BNT identification at arXiv:1606.00608, line 1307;
-the spectral normalization is that of lines 224--235, obtained from quantum Wielandt
-Proposition 3 (arXiv:0909.5347) and Wolf, Theorem 6.3.
--/
-theorem transferMap_smul_eq_of_norm_eq_one
-    (A : MPSTensor d D) (ζ : ℂ) (hζ : ‖ζ‖ = 1) :
-    Kraus.transferMap (fun i => ζ • A i) = Kraus.transferMap A := by
-  have hstar : starRingEnd ℂ ζ * ζ = 1 := by
-    simpa [Complex.normSq_eq_norm_sq, hζ] using
-      (Complex.normSq_eq_conj_mul_self (z := ζ)).symm
-  have hphase : ζ * starRingEnd ℂ ζ = 1 := by
-    rw [mul_comm, hstar]
-  apply LinearMap.ext
-  intro X
-  rw [transferMap_smul, hphase, one_smul]
 
 /-- An explicit unit-phase gauge relation transports transfer idempotence.
 

@@ -449,6 +449,81 @@
     cancel.
 \end{proof}
 
+\begin{theorem}[Unit-norm scaling preserves the transfer map]
+    \label{thm:transfer_map_smul_unit_norm}
+    \lean{MPSTensor.transferMap_smul_eq_of_norm_eq_one}
+    \leanok
+    If $|c|=1$, then the tensors $A$ and $cA$ have the same transfer map.
+\end{theorem}
+\begin{proof}
+    \uses{lem:transfer_map_smul}
+    \leanok
+    Scaling every tensor letter by $c$ multiplies the transfer map by
+    $c\overline c=|c|^2=1$.
+\end{proof}
+
+\begin{theorem}[Repeated blocks share a peripheral spectrum]
+    \label{thm:repeated_blocks_peripheral_spectrum}
+    \lean{MPSTensor.RepeatedBlocks.peripheralEigenvalues_transferMap_eq}
+    \leanok
+    If $A$ and $B$ are repeated blocks, then their transfer maps have the same
+    unit-circle eigenvalues.
+\end{theorem}
+\begin{proof}
+    \uses{thm:transfer_map_smul_unit_norm, thm:cpsv_gauge_transfer_similarity, %
+        lem:peripheral_spectrum_similarity}
+    \leanok
+    Write $A^i=\xi YB^iY^{-1}$ with $|\xi|=1$.  The transfer map of $\xi C$ is
+    $|\xi|^2$ times the transfer map of $C$, hence equals it, and the transfer
+    map of $YB^iY^{-1}$ is the congruence conjugate
+    $Y\mathcal{E}_B(Y^{-1}\cdot Y^{-\dagger})Y^{\dagger}$ of the transfer map
+    of $B$.  Conjugation by an invertible linear map leaves the spectrum
+    unchanged.
+\end{proof}
+
+\begin{theorem}[A root-of-unity set determines its positive exponent]
+    \label{thm:roots_of_unity_determine_period}
+    \lean{MPSTensor.period_eq_of_setOf_pow_eq_one}
+    \leanok
+    Let $m,n>0$. If
+    $\{z\in\C:z^m=1\}=\{z\in\C:z^n=1\}$, then $m=n$.
+\end{theorem}
+\begin{proof}\leanok
+    A primitive $m$-th root belongs to the second set, so $m$ divides $n$.
+    Interchanging $m$ and $n$ gives the reverse divisibility.
+\end{proof}
+
+\begin{theorem}[A common peripheral spectrum determines the period]
+    \label{thm:spectral_period_eq_of_peripheral_spectrum}
+    \lean{MPSTensor.IsSpectrallyPeriodic.period_eq_of_peripheralEigenvalues_eq}
+    \leanok
+    \uses{def:spectral_periodic_tensor}
+    Let $A$ and $B$ be spectrally periodic tensors of periods $m$ and $n$. If
+    their transfer maps have the same peripheral spectrum, then $m=n$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:roots_of_unity_determine_period}
+    \leanok
+    The two spectra are respectively the sets of $m$-th and $n$-th roots of
+    unity, so the preceding theorem applies.
+\end{proof}
+
+\begin{theorem}[Repeated periodic blocks have the same period]
+    \label{thm:repeated_blocks_period_eq}
+    \lean{MPSTensor.IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks}
+    \leanok
+    \uses{def:spectral_periodic_tensor}
+    Let $A$ and $B$ be spectrally periodic tensors of periods $m$ and $n$.  If
+    $A$ and $B$ are repeated blocks, then $m=n$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:repeated_blocks_peripheral_spectrum, %
+        thm:spectral_period_eq_of_peripheral_spectrum}
+    \leanok
+    Repeated blocks have the same peripheral spectrum. The preceding theorem
+    then identifies their periods.
+\end{proof}
+
 \begin{lemma}[Pure similarities preserve periodic overlap hypotheses]
     \label{lem:periodic_overlap_hypothesis_gauge_transport}
     \lean{MPSTensor.PeriodicOverlapHypothesis.of_gaugeEquiv}
@@ -636,10 +711,35 @@
     corresponding block-diagonal tensors.
 \end{proof}
 
+\begin{theorem}[Finite matching from the periodic overlap dichotomy]
+    \label{thm:periodic_conditional_block_matching}
+    \lean{MPSTensor.fundamentalTheorem_periodic_proportional}
+    \leanok
+    Let $\{A_j\}_{j\in J}$ and $\{B_k\}_{k\in K}$ be finite pairwise
+    non-repeated families. Suppose every tensor in either family has a tensor
+    in the other family whose mixed overlap does not tend to zero, and every
+    such non-decaying pair is repeated. Then there is a bijection
+    $\pi\colon J\to K$ such that $A_j$ and $B_{\pi(j)}$ are repeated for every
+    $j\in J$.
+
+    \emph{Scope restriction.} This result assumes the overlap consequences
+    that Theorem~3.4 derives from proportionality of the assembled
+    matrix-product vectors. It is the finite matching step, not the source
+    theorem itself.
+\end{theorem}
+\begin{proof}\leanok
+    Choose a non-decaying partner $f(j)\in K$ for every $j\in J$. If
+    $f(j_1)=f(j_2)$, the two repeated-block relations compose to show that
+    $A_{j_1}$ and $A_{j_2}$ are repeated, so pairwise non-repetition makes $f$
+    injective. The symmetric construction gives an injection $K\to J$.
+    Therefore $|J|=|K|$, and the first injection is the required bijection.
+\end{proof}
+
 \begin{theorem}[Proportional Fundamental Theorem for irreducible-form MPS]
     \label{thm:periodic_ft_proportional}
-    \notready
-    \uses{def:nonzero_proportional_mpv}
+    \lean{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
+    \leanok
+    \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
     Let $A$ and $B$ have multiplicity-bearing irreducible forms
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
@@ -649,10 +749,11 @@
     \end{align}
     where $R_j$ and $S_k$ are diagonal with nonzero diagonal entries and the
     two displayed block families are pairwise non-repeated bases of periodic
-    tensors. Suppose that, for every positive $N$, the vectors
+    tensors, spectrally periodic of periods $m_j$ and $n_k$ respectively.
+    Suppose that, for every positive $N$, the vectors
     $\ket{V^{(N)}(A)}$ and $\ket{V^{(N)}(B)}$ are proportional by a nonzero
     scalar. Then there is a bijection $\pi\colon J\to K$ such that, for every
-    $j\in J$, the blocks $A_j$ and $B_{\pi(j)}$ have the same period and there
+    $j\in J$, one has $m_j=n_{\pi(j)}$ and there
     are a unit-modulus scalar $\xi_j$ and an invertible matrix $Y_j$ such that,
     for every physical index $i$,
     \begin{align}
@@ -660,14 +761,19 @@
         \notag
     \end{align}
     Each $B_k$ occurs for exactly one $j$. This is
-    \cite[Theorem~3.4, lines~613--632]{DeLasCuevas2017Irreducible}.
+    \cite[Theorem~3.4, lines~613--623]{DeLasCuevas2017Irreducible}.
 
     The theorem relates the two bases of periodic tensors but makes no
     assertion relating their multiplicity matrices.
-    % Formalization status: the spectrally periodic multiplicity-bearing
-    % theorem above proves the complete overlap-hypothesis step for literal
-    % irreducible forms.  A source-labelled theorem retaining equality of the
-    % matched periods is still required before this exact statement can be
-    % marked ready.  Extension from arbitrary tensors through Proposition 2.1
-    % is a separate positive-length representative question.
 \end{theorem}
+\begin{proof}
+    \uses{thm:repeated_blocks_period_eq, thm:periodic_conditional_block_matching, thm:periodic_spectral_multiplicity_nondecaying_overlap}
+    \leanok
+    Theorem~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap}
+    supplies non-decaying partners in both directions and classifies every
+    such pair as repeated. Applying
+    Theorem~\ref{thm:periodic_conditional_block_matching} gives a bijection
+    $\pi\colon J\to K$ of repeated pairs. Finally,
+    Theorem~\ref{thm:repeated_blocks_period_eq} gives $m_j=n_{\pi(j)}$ for every
+    matched pair.
+\end{proof}
