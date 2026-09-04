@@ -810,7 +810,19 @@ block-diagonal normalizing similarity. Only the global similarity between the
 two tensors is conjugated.
 
 Source: arXiv:1708.00029, theorem `thm:bdequal`, lines 643--693, over the
-irreducible forms `eq:bdnr`, line 294, and `eq:Bbdnr`, line 582. -/
+irreducible forms `eq:bdnr`, line 294, and `eq:Bbdnr`, line 582.
+
+**Scope restriction (supplied periods):** the periods are received as input,
+together with witnesses that each block is spectrally periodic of the given
+period. The source instead derives the period of a block from irreducibility
+and spectral radius one at lines 257--258, citing Wolf, so that it appears in
+the conclusion of the source theorem rather than among its hypotheses. A reader
+holding only the source's two conditions on the blocks therefore cannot yet
+instantiate this statement; the missing ingredient is the existence half of the
+cyclic peripheral structure. The restriction and its elimination plan are
+recorded in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`,
+section "Scope restriction: the periods of an irreducible-form block are
+supplied". -/
 theorem fundamentalTheorem_periodic_equalCase_irreducibleForm
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)
@@ -925,15 +937,6 @@ theorem fundamentalTheorem_periodic_equalCase_irreducibleForm
   have hZcomm : Z * XP = XP * Z := by
     rw [hZdef, hXPdef, hGPdef]
     exact blockScalarMatrix_globalGaugeOfBlocks_comm _ _
-  have hmove : ∀ K : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ,
-      Z * (XP * K) = XP * (Z * K) := by
-    intro K
-    rw [← Matrix.mul_assoc, hZcomm, Matrix.mul_assoc]
-  have hcancel : ∀ M : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ,
-      XP' * (XP * M * XP') * XP = M := by
-    intro M
-    simp only [Matrix.mul_assoc]
-    rw [hXPmul', mul_one, ← Matrix.mul_assoc, hXPmul', one_mul]
   have hZP : ∀ i : Fin d, Z * P.toTensor i = P.toTensor i * Z := by
     intro i
     rw [hZdef]

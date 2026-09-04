@@ -6,10 +6,8 @@ passage to that normalization, asserted by the source at lines 330--332, is the
 blockwise similarity of \cite[eq.~\emph{unital},
     line~316]{DeLasCuevas2017Irreducible} and is carried out in the proof.
 
-\begin{theorem}[Periodic Fundamental Theorem]
+\begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
-    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
-    \leanok
     \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
         def:scalar_gauge_equiv}
     Let $A$ and $B$ be MPS tensors in irreducible form, written
@@ -18,15 +16,17 @@ blockwise similarity of \cite[eq.~\emph{unital},
         B^i & =\bigoplus_{k\in K}(S_k\otimes B_k^i), \notag
     \end{align}
     where $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ are pairwise
-    non-repeated bases of periodic tensors, spectrally periodic of periods
-    $m_j$ and $n_k$ in the sense of
-    Definition~\ref{def:spectral_periodic_tensor}, $R_j$ and $S_k$ are diagonal
+    non-repeated bases of periodic tensors, $R_j$ and $S_k$ are diagonal
     multiplicity matrices of sizes $r_j\times r_j$ and $s_k\times s_k$ with
     nonzero diagonal entries, and $A_j^i$ and $B_k^i$ act on bond spaces of
-    dimensions $D_j$ and $D_k$. No trace-preserving normalization is imposed on
-    the blocks: they are only required to have irreducible transfer maps of
-    spectral radius one, which is the source's irreducible form at
-    \cite[lines~248--261]{DeLasCuevas2017Irreducible}.
+    dimensions $D_j$ and $D_k$. The blocks are required only to have
+    irreducible transfer maps of spectral radius one, which is the source's
+    irreducible form at
+    \cite[lines~248--261]{DeLasCuevas2017Irreducible}; in particular no
+    trace-preserving normalization is imposed, and the periodicity $m_j$ of a
+    block is the derived one of
+    \cite[lines~257--258]{DeLasCuevas2017Irreducible} rather than a further
+    hypothesis.
     Suppose that $\mc{V}^+(A)=\mc{V}^+(B)$.
 
     Then $|J|=|K|$ and there is a bijection $\pi:J\to K$
@@ -59,6 +59,21 @@ blockwise similarity of \cite[eq.~\emph{unital},
     dimension, whence $\mc{V}^+(A)=\mc{V}^+(ZA)$ already extends to length
     zero.
 
+    \noindent\emph{Scope restriction: the periods are supplied.}
+    The source introduces the period $m_j$ of a block as a consequence of
+    irreducibility and spectral radius one, at
+    \cite[lines~257--258]{DeLasCuevas2017Irreducible}, citing Wolf; it appears
+    in the conclusion of Theorem~3.8, not among its hypotheses. The formal
+    statement instead receives the periods together with witnesses that each
+    block is spectrally $m_j$-periodic, so a reader holding only the source's
+    two conditions on the blocks cannot yet instantiate it. The missing
+    ingredient is the existence half of the cyclic peripheral structure. The
+    restriction and its elimination plan are recorded in
+    \cite{gap:dccsp17_periodic_overlap_route_alignment}, section ``Scope
+    restriction: the periods of an irreducible-form block are supplied''. The
+    unrestricted source statement is Theorem~\ref{thm:periodic_ft} above,
+    which remains unformalized for that reason alone.
+
     \noindent\emph{Remark on the scalars $\xi_j$.}
     The source writes the two clauses of the last display without the
     $\xi_j$, having absorbed each of them into $S_{\pi(j)}$ at
@@ -70,8 +85,22 @@ blockwise similarity of \cite[eq.~\emph{unital},
     of unity in general.
 \end{theorem}
 
+\begin{theorem}[Periodic Fundamental Theorem, periods supplied]%
+    \label{thm:periodic_ft_supplied_periods}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
+    \leanok
+    \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
+        def:scalar_gauge_equiv}
+    Theorem~\ref{thm:periodic_ft} with the periods $m_j$ and $n_k$ given
+    alongside the two block families, together with witnesses that each block is
+    spectrally periodic of the given period in the sense of
+    Definition~\ref{def:spectral_periodic_tensor}. Everything else, hypotheses
+    and conclusion alike, is as stated there.
+\end{theorem}
+
 \begin{proof}\leanok
     \uses{thm:periodic_ft_equal_case_trace_preserving,
+        lem:block_scalar_gauge_comm,
         thm:spectral_periodic_sector_normalization,
         thm:periodic_sector_basis_replacement_gauge}
     Normalize each representative by its positive-definite adjoint Perron
@@ -87,11 +116,17 @@ blockwise similarity of \cite[eq.~\emph{unital},
     Transport the conclusion back. The bijection, the scalars, the periods and
     the blockwise multiplicity gauges concern only the multiplicity data,
     which the normalization leaves untouched, and the repeated-block relations
-    compose with the two blockwise similarities. The multiplicity gauge $Z$
-    acts by a scalar on the bond space of each multiplicity copy, so it
-    commutes with the block-diagonal normalizing similarity and returns
-    unchanged; only the similarity between the two tensors is conjugated by
-    the two normalizing similarities.
+    compose with the two blockwise similarities. The multiplicity gauge is
+    unchanged: writing $X=\bigoplus_jX_j$ for the normalizing similarity,
+    Lemma~\ref{lem:block_scalar_gauge_comm} gives
+    \begin{align}
+        ZX=\bigoplus_{j}\left(Z_j\otimes\Id_{D_j}\right)X_j=XZ,
+        \qquad\text{hence}\qquad
+        X^{-1}ZX=Z.
+        \notag
+    \end{align}
+    Only the similarity between the two tensors is conjugated, by the two
+    normalizing similarities.
 \end{proof}
 
 \begin{theorem}[Diagonal multiplicity gauge from equal powers]
@@ -338,6 +373,25 @@ blockwise similarity of \cite[eq.~\emph{unital},
     $\zeta_j\mu_{j,q}$ are nonzero,
     Theorem~\ref{thm:zgauge_construction} produces the diagonal $Z_j$ with the
     two displayed properties.
+\end{proof}
+
+\begin{lemma}[The multiplicity gauge commutes with block-diagonal gauges]%
+    \label{lem:block_scalar_gauge_comm}
+    \lean{MPSTensor.blockScalarMatrix_globalGaugeOfBlocks_comm}
+    \leanok
+    Let $Z=\bigoplus_k z_k\Id_{D_k}$ act by the scalar $z_k$ on the bond space
+    of the $k$-th block, and let $X=\bigoplus_k X_k$ be block diagonal for the
+    same block decomposition. Then $ZX=XZ$.
+
+    This is why the multiplicity gauge of
+    \cite[line~653]{DeLasCuevas2017Irreducible} survives the blockwise
+    normalizing similarity of \cite[lines~313--332]{DeLasCuevas2017Irreducible}
+    unchanged.
+\end{lemma}
+
+\begin{proof}\leanok
+    On the $k$-th block the two factors are $z_k\Id_{D_k}$ and $X_k$, and a
+    scalar matrix is central.
 \end{proof}
 
 \begin{theorem}[Global multiplicity gauge and similarity]%
