@@ -6565,7 +6565,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{prop1conj}
     \notready
     \discussion{5713}
-    \uses{FundamentalMPU, SF, thm:mpu_conjugation_common_transpose_sign}
+    \uses{FundamentalMPU, SF}
     An MPU in standard form is invariant under complex conjugation if and only
     if there are unitaries $x$ and $y$ such that either
     $x=x^T$ and $y=y^T$, or $x=-x^T$ and $y=-y^T$, and
@@ -7613,8 +7613,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (two-site blocked comparison):** the trace formula uses
     % the blocked source data required by Proposition~\ref{prop:mpu_admissible_local_time_reversal}.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_local_time_reversal, def:mpu_reduced_full_support_source_datum,
-        thm:matrix_trace_swap_scaled_kronecker}
+    \uses{prop:mpu_admissible_local_time_reversal, def:mpu_reduced_full_support_source_datum}
     For a time-reversal-invariant MPU in admissible standard form, suppose its
     one-site tensor $\mathcal U$, its actual two-site block $\mathcal U_2$, and
     the physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and
@@ -7756,8 +7755,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{prop:sigma1-and-sigma2-equal}
     \notready
     \discussion{5714}
-    \uses{prop:sigma-well-defined, PropChiral, lem:mpu_blocking,
-        thm:mpu_blocked_sign_parity_scalar}
+    \uses{prop:sigma-well-defined, PropChiral, lem:mpu_blocking}
     Let $\mathcal U$ be a time-reversal-invariant MPU in standard form, and let
     $\sigma^{(k)}$ be the sign obtained from a standard form of its $k$-site
     block. Then
