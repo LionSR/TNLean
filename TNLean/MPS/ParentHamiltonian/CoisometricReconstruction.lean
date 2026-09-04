@@ -72,26 +72,6 @@ theorem groundSpace_eq_of_coisometry_reconstruction
     simp only [← Matrix.mul_assoc, hU, Matrix.one_mul]
     rw [Matrix.mul_assoc, hU, Matrix.mul_one]
 
-private theorem groundSpace_smul_eq (A : MPSTensor s d) (ζ : ℂ) (hζ : ζ ≠ 0)
-    (L : ℕ) :
-    groundSpace (ζ • A) L = groundSpace A L := by
-  have hMap (X : Matrix (Fin d) (Fin d) ℂ) :
-      groundSpaceMap (ζ • A) L X = groundSpaceMap A L ((ζ ^ L) • X) := by
-    ext σ
-    rw [groundSpaceMap_apply, groundSpaceMap_apply]
-    change Matrix.trace
-        (Kraus.evalWord (fun i ↦ ζ • A i) (List.ofFn σ) * X) = _
-    rw [Kraus.evalWord_smul]
-    simp [Matrix.trace_smul]
-  apply le_antisymm
-  · rintro _ ⟨X, rfl⟩
-    exact ⟨(ζ ^ L) • X, (hMap X).symm⟩
-  · rintro _ ⟨Y, rfl⟩
-    refine ⟨(ζ ^ L)⁻¹ • Y, ?_⟩
-    rw [hMap]
-    congr 1
-    rw [smul_smul, mul_inv_cancel₀ (pow_ne_zero L hζ), one_smul]
-
 private theorem groundSpace_blockTensor_cast_dim
     {D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor s D₁) (p L : ℕ) :
     groundSpace
