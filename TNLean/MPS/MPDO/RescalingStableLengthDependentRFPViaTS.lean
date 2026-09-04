@@ -24,9 +24,9 @@ M X` for all virtual operators `X`.
 
 * `physClose1_R_entry`, `physClose2_R_entry` — closed-form entrywise
   formulas for `R`'s one- and two-site physical operators, showing
-  `physClose2 R X` is a gate-restricted, rescaled pullback of `physClose1 R
+  `physClose2 R X` is a bond-matching-restricted, rescaled pullback of `physClose1 R
   X` along `combine p q := bondEquiv (bondBit1 p, bondBit2 q)`, with the
-  bond-matching condition `gate p q := bondBit2 p = bondBit1 q`.
+  bond-matching condition `IsBondMatchedPair p q := bondBit2 p = bondBit1 q`.
 * `refineMap` (`T`) — two Kraus operators built from `wMat`'s
   Walsh–Hadamard eigendecomposition (`eigVecs`, `eigVals`).
 * `refineMap_isKrausCPTP` — `T` is trace-preserving completely positive.
@@ -58,9 +58,9 @@ namespace MPOTensor.RescalingStableLengthDependentRFP
 
 The physical index `Fin 4` of `R` factors through the same bit reading used
 above: a physical index `p` carries the pair `(bondBit1 p, bondBit2 p)`.  `combine p q`
-glues the first bit of `p` to the second bit of `q`, and `gate p q` is the
+glues the first bit of `p` to the second bit of `q`, and `IsBondMatchedPair p q` is the
 bond-matching condition between two consecutive letters.  The two-site
-physical operator `physClose2 R X` is a rescaled, gate-restricted pullback of
+physical operator `physClose2 R X` is a rescaled, bond-matching-restricted pullback of
 the one-site physical operator `physClose1 R X` along `combine`. -/
 
 /-- The physical index gluing the first bit of `p` to the second bit of `q`. -/
@@ -74,9 +74,10 @@ def combine (p q : Fin 4) : Fin 4 := bondEquiv (bondBit1 p, bondBit2 q)
 
 /-- The bond-matching condition between two consecutive physical letters:
 the second bit of `p` equals the first bit of `q`. -/
-def gate (p q : Fin 4) : Prop := bondBit2 p = bondBit1 q
+def IsBondMatchedPair (p q : Fin 4) : Prop := bondBit2 p = bondBit1 q
 
-instance decidableGate (p q : Fin 4) : Decidable (gate p q) :=
+/-- Bond matching is decidable by equality of the shared bond bits. -/
+instance decidableIsBondMatchedPair (p q : Fin 4) : Decidable (IsBondMatchedPair p q) :=
   inferInstanceAs (Decidable (bondBit2 p = bondBit1 q))
 
 /-- The one-site physical operator of `R`, as a bilinear pairing of the
@@ -89,15 +90,17 @@ lemma physClose1_R_entry (X : Matrix (Fin 4) (Fin 4) ℂ) (i j : Fin 4) :
   rw [physClose1_apply, R_eq_vecMulVec, Matrix.smul_mul, Matrix.trace_smul,
     Matrix.vecMulVec_mul, Matrix.trace_vecMulVec, smul_eq_mul]
 
-/-- **The two-site physical operator of `R` is a gate-restricted, rescaled
+/-- **The two-site physical operator of `R` is a bond-matching-restricted, rescaled
 pullback of the one-site physical operator along `combine`.** When both
-`(i1, i2)` and `(j1, j2)` satisfy the bond-matching condition `gate`, the
+`(i1, i2)` and `(j1, j2)` satisfy the bond-matching condition `IsBondMatchedPair`, the
 `(i1,i2),(j1,j2)` entry of `physClose2 R X` is `(25/32) · wMat (bondBit2 i1)
 (bondBit2 j1)` times the `combine i1 i2, combine j1 j2` entry of `physClose1 R X`;
 otherwise it vanishes. -/
 lemma physClose2_R_entry (X : Matrix (Fin 4) (Fin 4) ℂ) (i1 i2 j1 j2 : Fin 4) :
     physClose2 R X (i1, i2) (j1, j2) =
-      (25/32 : ℂ) * (if gate i1 i2 ∧ gate j1 j2 then wMat (bondBit2 i1) (bondBit2 j1) else 0) *
+      (25/32 : ℂ) *
+        (if IsBondMatchedPair i1 i2 ∧ IsBondMatchedPair j1 j2 then
+          wMat (bondBit2 i1) (bondBit2 j1) else 0) *
         physClose1 R X (combine i1 i2) (combine j1 j2) := by
   rw [physClose2_apply, R_eq_vecMulVec, R_eq_vecMulVec]
   simp only [smul_mul_assoc, Matrix.mul_smul, smul_smul, Matrix.vecMulVec_mul_vecMulVec,
@@ -107,10 +110,11 @@ lemma physClose2_R_entry (X : Matrix (Fin 4) (Fin 4) ℂ) (i1 i2 j1 j2 : Fin 4) 
   simp only [bondBit1_combine, bondBit2_combine]
   have hdot : (fun b : Fin 4 => A b (bondBit2 i1) (bondBit2 j1)) ⬝ᵥ
       (fun a : Fin 4 => A a (bondBit1 i2) (bondBit1 j2)) =
-      if gate i1 i2 ∧ gate j1 j2 then wMat (bondBit2 i1) (bondBit2 j1) else 0 :=
+      if IsBondMatchedPair i1 i2 ∧ IsBondMatchedPair j1 j2 then
+        wMat (bondBit2 i1) (bondBit2 j1) else 0 :=
     dotProduct_A_col _ _ _ _
   rw [hdot]
-  by_cases h : gate i1 i2 ∧ gate j1 j2
+  by_cases h : IsBondMatchedPair i1 i2 ∧ IsBondMatchedPair j1 j2
   · rw [ite_eq_left h]; ring
   · rw [ite_eq_right h]; ring
 
@@ -143,11 +147,11 @@ first-site's second bit, the sum over gated pairs `(p, q)` with `combine p q
 = k` of `f (bondBit2 p)` collapses to `f 0 + f 1`. -/
 lemma gated_combine_fiber_sum (k : Fin 4) (f : Fin 2 → ℂ) :
     (∑ pq : Fin 4 × Fin 4,
-        if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then f (bondBit2 pq.1) else 0) =
+        if IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k then f (bondBit2 pq.1) else 0) =
       f 0 + f 1 := by
   rw [Fintype.sum_prod_type]
   fin_cases k <;>
-    simp [gate, combine, bondBit1, bondBit2, bondEquiv_val, Fin.sum_univ_four]
+    simp [IsBondMatchedPair, combine, bondBit1, bondBit2, bondEquiv_val, Fin.sum_univ_four]
 
 /-! ### The refinement map `T`: one-site to two-site physical operators -/
 
@@ -166,7 +170,7 @@ amplitude `refineAmp s * eigVecs s (bondBit2 p)` at the gated pair `(p, q)`
 whose `combine` equals `k`, and vanishes elsewhere. -/
 noncomputable def refineKraus (s : Fin 2) : Matrix (Fin 4 × Fin 4) (Fin 4) ℂ :=
   Matrix.of fun pq k =>
-    if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then
+    if IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k then
       (refineAmp s : ℂ) * eigVecs s (bondBit2 pq.1)
     else 0
 
@@ -183,11 +187,11 @@ lemma eigVecs_star (s b : Fin 2) : star (eigVecs s b) = eigVecs s b := by
 
 lemma refineKraus_apply_conj_mul (s : Fin 2) (pq : Fin 4 × Fin 4) (k : Fin 4) :
     star (refineKraus s pq k) * refineKraus s pq k =
-      if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then
+      if IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k then
         (refineAmp s : ℂ) ^ 2 * (eigVecs s (bondBit2 pq.1)) ^ 2
       else 0 := by
   simp only [refineKraus, Matrix.of_apply]
-  by_cases h : gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k
+  by_cases h : IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k
   · simp only [ite_eq_left h, star_mul', refineAmp_star, eigVecs_star]
     ring
   · simp [h]
@@ -228,8 +232,8 @@ lemma refineKraus_resolution :
     apply Finset.sum_eq_zero
     intro pq _
     simp only [refineKraus, Matrix.of_apply]
-    by_cases h1 : gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k
-    · have h2 : ¬ (gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k') := by
+    by_cases h1 : IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k
+    · have h2 : ¬ (IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k') := by
         rintro ⟨_, hc⟩
         exact hkk' (h1.2.symm.trans hc)
       rw [ite_eq_left h1, ite_eq_right h2, mul_zero]
@@ -252,7 +256,7 @@ theorem refineMap_physClose1 (X : Matrix (Fin 4) (Fin 4) ℂ) :
   rw [physClose2_R_entry]
   change (∑ s : Fin 2, refineKraus s * physClose1 R X * (refineKraus s)ᴴ) (i1, i2) (j1, j2) = _
   simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
-  by_cases h : gate i1 i2 ∧ gate j1 j2
+  by_cases h : IsBondMatchedPair i1 i2 ∧ IsBondMatchedPair j1 j2
   · have hstep : ∀ s : Fin 2,
         (∑ k : Fin 4, (∑ l : Fin 4, refineKraus s (i1, i2) l * physClose1 R X l k) *
             star (refineKraus s (j1, j2) k)) =
@@ -326,7 +330,7 @@ lemma coarseAmp_sq : coarseAmp ^ 2 = 1 / 2 := by
 /-- The `s`-th gated Kraus operator of the coarse-graining map `S`. -/
 noncomputable def coarseKrausGated (s : Fin 2) : Matrix (Fin 4) (Fin 4 × Fin 4) ℂ :=
   Matrix.of fun k pq =>
-    if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then
+    if IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k then
       (coarseAmp : ℂ) * eigVecs s (bondBit2 pq.1)
     else 0
 
@@ -335,7 +339,7 @@ deterministic assignment of the (exactly one) ungated pair with `combine`
 value `k` and first-site second bit `t`. -/
 noncomputable def coarseKrausUngated (t : Fin 2) : Matrix (Fin 4) (Fin 4 × Fin 4) ℂ :=
   Matrix.of fun k pq =>
-    if ¬ gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k ∧ bondBit2 pq.1 = t then 1 else 0
+    if ¬ IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k ∧ bondBit2 pq.1 = t then 1 else 0
 
 /-- The coarse-graining map `S`, with four Kraus operators: two gated
 (sharing the Walsh–Hadamard structure with `T`) and two ungated (a
@@ -366,8 +370,8 @@ lemma fin2_eq_of_ne_ne {a b c : Fin 2} (hac : a ≠ c) (hbc : b ≠ c) : a = b :
 
 /-- An ungated pair is determined by its `combine` value and the first
 site's second bit. -/
-lemma eq_of_ungated_combine_bondBit2 {pq pq' : Fin 4 × Fin 4} (h1 : ¬ gate pq.1 pq.2)
-    (h1' : ¬ gate pq'.1 pq'.2) (hc : combine pq.1 pq.2 = combine pq'.1 pq'.2)
+lemma eq_of_ungated_combine_bondBit2 {pq pq' : Fin 4 × Fin 4} (h1 : ¬ IsBondMatchedPair pq.1 pq.2)
+    (h1' : ¬ IsBondMatchedPair pq'.1 pq'.2) (hc : combine pq.1 pq.2 = combine pq'.1 pq'.2)
     (hb : bondBit2 pq.1 = bondBit2 pq'.1) : pq = pq' := by
   have e1 : bondBit1 pq.1 = bondBit1 pq'.1 := by
     have h := congrArg bondBit1 hc
@@ -387,11 +391,13 @@ lemma eq_of_ungated_combine_bondBit2 {pq pq' : Fin 4 × Fin 4} (h1 : ¬ gate pq.
 lemma coarseAmp_star : star ((coarseAmp : ℝ) : ℂ) = (coarseAmp : ℂ) :=
   Complex.conj_ofReal _
 
-/-- Two `gate`-satisfying pairs sharing a `combine` value and distinct from
+/-- Two `IsBondMatchedPair`-satisfying pairs sharing a `combine` value and distinct from
 each other cannot share their first site's second bit: if they did,
 `eq_of_bondBit1_bondBit2` would force the pairs to coincide. -/
-lemma bondBit2_ne_of_gate_combine_eq {pq pq' : Fin 4 × Fin 4} (hg : gate pq.1 pq.2)
-    (hg' : gate pq'.1 pq'.2) (hc : combine pq.1 pq.2 = combine pq'.1 pq'.2) (hne : pq ≠ pq') :
+lemma bondBit2_ne_of_isBondMatchedPair_combine_eq {pq pq' : Fin 4 × Fin 4}
+    (hg : IsBondMatchedPair pq.1 pq.2)
+    (hg' : IsBondMatchedPair pq'.1 pq'.2) (hc : combine pq.1 pq.2 = combine pq'.1 pq'.2)
+    (hne : pq ≠ pq') :
     bondBit2 pq.1 ≠ bondBit2 pq'.1 := by
   intro hb
   apply hne
@@ -425,11 +431,13 @@ lemma coarseKraus_resolution :
   -- The gated contribution at a fixed label `s`, as a sum over the domain `Fin 4`.
   have hgated_term : ∀ s : Fin 2,
       (∑ k : Fin 4, star (coarseKrausGated s k pq) * coarseKrausGated s k pq') =
-        if gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2 then
+        if IsBondMatchedPair pq.1 pq.2 ∧ IsBondMatchedPair pq'.1 pq'.2 ∧
+            combine pq.1 pq.2 = combine pq'.1 pq'.2 then
           (coarseAmp : ℂ) ^ 2 * eigVecs s (bondBit2 pq.1) * eigVecs s (bondBit2 pq'.1)
         else 0 := by
     intro s
-    by_cases h : gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2
+    by_cases h : IsBondMatchedPair pq.1 pq.2 ∧ IsBondMatchedPair pq'.1 pq'.2 ∧
+        combine pq.1 pq.2 = combine pq'.1 pq'.2
     · rw [ite_eq_left h]
       have e1 : coarseKrausGated s (combine pq.1 pq.2) pq =
           (coarseAmp : ℂ) * eigVecs s (bondBit2 pq.1) := by
@@ -459,8 +467,8 @@ lemma coarseKraus_resolution :
           simp only [coarseKrausGated, Matrix.of_apply]
           exact ite_eq_right (fun hcond => h1 hcond.1)
         rw [e]; simp
-      · by_cases hpk : gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k
-        · have hpk' : ¬ (gate pq'.1 pq'.2 ∧ combine pq'.1 pq'.2 = k) := by
+      · by_cases hpk : IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k
+        · have hpk' : ¬ (IsBondMatchedPair pq'.1 pq'.2 ∧ combine pq'.1 pq'.2 = k) := by
             rintro ⟨_, hc⟩; exact h1 (hpk.2.trans hc.symm)
           have e : coarseKrausGated s k pq' = 0 := by
             simp only [coarseKrausGated, Matrix.of_apply]
@@ -473,11 +481,12 @@ lemma coarseKraus_resolution :
   -- The ungated contribution at a fixed label `t`, as a sum over the domain `Fin 4`.
   have hungated_term : ∀ t : Fin 2,
       (∑ k : Fin 4, star (coarseKrausUngated t k pq) * coarseKrausUngated t k pq') =
-        if ¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧ bondBit2 pq.1 = t ∧
+        if ¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧ bondBit2 pq.1 = t ∧
             bondBit2 pq'.1 = t ∧
             combine pq.1 pq.2 = combine pq'.1 pq'.2 then 1 else 0 := by
     intro t
-    by_cases h : ¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧ bondBit2 pq.1 = t ∧
+    by_cases h : ¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧
+        bondBit2 pq.1 = t ∧
         bondBit2 pq'.1 = t ∧
         combine pq.1 pq.2 = combine pq'.1 pq'.2
     · rw [ite_eq_left h]
@@ -499,9 +508,9 @@ lemma coarseKraus_resolution :
     · rw [ite_eq_right h]
       apply Finset.sum_eq_zero
       intro k _
-      by_cases hpk : ¬ gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k ∧ bondBit2 pq.1 = t
+      by_cases hpk : ¬ IsBondMatchedPair pq.1 pq.2 ∧ combine pq.1 pq.2 = k ∧ bondBit2 pq.1 = t
       · have hpk' :
-            ¬ (¬ gate pq'.1 pq'.2 ∧ combine pq'.1 pq'.2 = k ∧
+            ¬ (¬ IsBondMatchedPair pq'.1 pq'.2 ∧ combine pq'.1 pq'.2 = k ∧
               bondBit2 pq'.1 = t) := by
           rintro ⟨hg', hc', hb'⟩
           exact h ⟨hpk.1, hg', hpk.2.2, hb', hpk.2.1.trans hc'.symm⟩
@@ -517,15 +526,18 @@ lemma coarseKraus_resolution :
   by_cases heq : pq = pq'
   · subst heq
     rw [ite_eq_left rfl]
-    by_cases hg : gate pq.1 pq.2
-    · have hCg : gate pq.1 pq.2 ∧ gate pq.1 pq.2 ∧ combine pq.1 pq.2 = combine pq.1 pq.2 :=
+    by_cases hg : IsBondMatchedPair pq.1 pq.2
+    · have hCg : IsBondMatchedPair pq.1 pq.2 ∧ IsBondMatchedPair pq.1 pq.2 ∧
+        combine pq.1 pq.2 = combine pq.1 pq.2 :=
         ⟨hg, hg, rfl⟩
       have hCu0 :
-          ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq.1 pq.2 ∧ bondBit2 pq.1 = (0 : Fin 2) ∧
+          ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq.1 pq.2 ∧
+              bondBit2 pq.1 = (0 : Fin 2) ∧
             bondBit2 pq.1 = (0 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2) :=
         fun hc => hc.1 hg
       have hCu1 :
-          ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq.1 pq.2 ∧ bondBit2 pq.1 = (1 : Fin 2) ∧
+          ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq.1 pq.2 ∧
+              bondBit2 pq.1 = (1 : Fin 2) ∧
             bondBit2 pq.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2) :=
         fun hc => hc.1 hg
       rw [ite_eq_left hCg, ite_eq_left hCg, ite_eq_right hCu0, ite_eq_right hCu1]
@@ -543,48 +555,53 @@ lemma coarseKraus_resolution :
             ((eigVecs 0 (bondBit2 pq.1)) ^ 2 + (eigVecs 1 (bondBit2 pq.1)) ^ 2) := by
         ring
       rw [step, hsum, hamp]; norm_num
-    · have hCg : ¬ (gate pq.1 pq.2 ∧ gate pq.1 pq.2 ∧ combine pq.1 pq.2 = combine pq.1 pq.2) :=
+    · have hCg : ¬ (IsBondMatchedPair pq.1 pq.2 ∧ IsBondMatchedPair pq.1 pq.2 ∧
+        combine pq.1 pq.2 = combine pq.1 pq.2) :=
         fun hc => hg hc.1
       rw [ite_eq_right hCg, ite_eq_right hCg]
       by_cases hb : bondBit2 pq.1 = (0 : Fin 2)
-      · have hCu0 : ¬ gate pq.1 pq.2 ∧ ¬ gate pq.1 pq.2 ∧ bondBit2 pq.1 = (0 : Fin 2) ∧
+      · have hCu0 : ¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq.1 pq.2 ∧
+          bondBit2 pq.1 = (0 : Fin 2) ∧
             bondBit2 pq.1 = (0 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2 :=
           ⟨hg, hg, hb, hb, rfl⟩
-        have hCu1 : ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq.1 pq.2 ∧ bondBit2 pq.1 = (1 : Fin 2) ∧
+        have hCu1 : ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧
+            ¬ IsBondMatchedPair pq.1 pq.2 ∧ bondBit2 pq.1 = (1 : Fin 2) ∧
             bondBit2 pq.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2) := by
           rintro ⟨_, _, hb1, _, _⟩
           rw [hb] at hb1; exact absurd hb1 (by decide)
         rw [ite_eq_left hCu0, ite_eq_right hCu1]; norm_num
       · have hb1 : bondBit2 pq.1 = (1 : Fin 2) := by omega
-        have hCu1 : ¬ gate pq.1 pq.2 ∧ ¬ gate pq.1 pq.2 ∧ bondBit2 pq.1 = (1 : Fin 2) ∧
+        have hCu1 : ¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq.1 pq.2 ∧
+            bondBit2 pq.1 = (1 : Fin 2) ∧
             bondBit2 pq.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2 :=
           ⟨hg, hg, hb1, hb1, rfl⟩
-        have hCu0 : ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq.1 pq.2 ∧ bondBit2 pq.1 = (0 : Fin 2) ∧
+        have hCu0 : ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧
+            ¬ IsBondMatchedPair pq.1 pq.2 ∧ bondBit2 pq.1 = (0 : Fin 2) ∧
             bondBit2 pq.1 = (0 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2) := by
           rintro ⟨_, _, hb0, _, _⟩
           exact hb hb0
         rw [ite_eq_right hCu0, ite_eq_left hCu1]; norm_num
   · rw [ite_eq_right heq]
-    by_cases hg : gate pq.1 pq.2
-    · by_cases hg' : gate pq'.1 pq'.2
+    by_cases hg : IsBondMatchedPair pq.1 pq.2
+    · by_cases hg' : IsBondMatchedPair pq'.1 pq'.2
       · by_cases hc : combine pq.1 pq.2 = combine pq'.1 pq'.2
         · have hCg :
-              gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧
+              IsBondMatchedPair pq.1 pq.2 ∧ IsBondMatchedPair pq'.1 pq'.2 ∧
                 combine pq.1 pq.2 = combine pq'.1 pq'.2 :=
             ⟨hg, hg', hc⟩
           have hCu0 :
-              ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧
+              ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧
                 bondBit2 pq.1 = (0 : Fin 2) ∧
               bondBit2 pq'.1 = (0 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) :=
             fun hcon => hcon.1 hg
           have hCu1 :
-              ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧
+              ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧
                 bondBit2 pq.1 = (1 : Fin 2) ∧
               bondBit2 pq'.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) :=
             fun hcon => hcon.1 hg
           rw [ite_eq_left hCg, ite_eq_left hCg, ite_eq_right hCu0, ite_eq_right hCu1]
           have hbne : bondBit2 pq.1 ≠ bondBit2 pq'.1 :=
-            bondBit2_ne_of_gate_combine_eq hg hg' hc heq
+            bondBit2_ne_of_isBondMatchedPair_combine_eq hg hg' hc heq
           have step :
               (coarseAmp : ℂ) ^ 2 * eigVecs 0 (bondBit2 pq.1) *
                 eigVecs 0 (bondBit2 pq'.1) +
@@ -595,42 +612,42 @@ lemma coarseKraus_resolution :
                   eigVecs 1 (bondBit2 pq.1) * eigVecs 1 (bondBit2 pq'.1)) := by
             ring
           rw [step, eigVecs_orthogonal' hbne, mul_zero]
-        · have hCg : ¬ (gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧
+        · have hCg : ¬ (IsBondMatchedPair pq.1 pq.2 ∧ IsBondMatchedPair pq'.1 pq'.2 ∧
               combine pq.1 pq.2 = combine pq'.1 pq'.2) := fun hcon => hc hcon.2.2
           have hCu0 :
-              ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧
+              ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧
                 bondBit2 pq.1 = (0 : Fin 2) ∧
               bondBit2 pq'.1 = (0 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) :=
             fun hcon => hcon.1 hg
           have hCu1 :
-              ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧
+              ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧
                 bondBit2 pq.1 = (1 : Fin 2) ∧
               bondBit2 pq'.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) :=
             fun hcon => hcon.1 hg
           rw [ite_eq_right hCg, ite_eq_right hCg, ite_eq_right hCu0, ite_eq_right hCu1]; norm_num
-      · have hCg : ¬ (gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧
+      · have hCg : ¬ (IsBondMatchedPair pq.1 pq.2 ∧ IsBondMatchedPair pq'.1 pq'.2 ∧
             combine pq.1 pq.2 = combine pq'.1 pq'.2) := fun hcon => hg' hcon.2.1
         have hCu0 :
-            ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧
+            ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧
               bondBit2 pq.1 = (0 : Fin 2) ∧
             bondBit2 pq'.1 = (0 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) :=
           fun hcon => hcon.1 hg
         have hCu1 :
-            ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧
+            ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧
               bondBit2 pq.1 = (1 : Fin 2) ∧
             bondBit2 pq'.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) :=
           fun hcon => hcon.1 hg
         rw [ite_eq_right hCg, ite_eq_right hCg, ite_eq_right hCu0, ite_eq_right hCu1]; norm_num
-    · have hCg : ¬ (gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧
+    · have hCg : ¬ (IsBondMatchedPair pq.1 pq.2 ∧ IsBondMatchedPair pq'.1 pq'.2 ∧
           combine pq.1 pq.2 = combine pq'.1 pq'.2) := fun hcon => hg hcon.1
       have hCu0 :
-          ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧
+          ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧
             bondBit2 pq.1 = (0 : Fin 2) ∧
           bondBit2 pq'.1 = (0 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) := by
         rintro ⟨hg1, hg1', hb1, hb1', hceq⟩
         exact heq (eq_of_ungated_combine_bondBit2 hg1 hg1' hceq (hb1.trans hb1'.symm))
       have hCu1 :
-          ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧
+          ¬ (¬ IsBondMatchedPair pq.1 pq.2 ∧ ¬ IsBondMatchedPair pq'.1 pq'.2 ∧
             bondBit2 pq.1 = (1 : Fin 2) ∧
           bondBit2 pq'.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) := by
         rintro ⟨hg1, hg1', hb1, hb1', hceq⟩
@@ -664,10 +681,11 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
     have hinner : (∑ p : Fin 4 × Fin 4, coarseKrausUngated t i p * physClose2 R X p q) = 0 := by
       apply Finset.sum_eq_zero
       intro p _
-      by_cases hp : ¬ gate p.1 p.2 ∧ combine p.1 p.2 = i ∧ bondBit2 p.1 = t
+      by_cases hp : ¬ IsBondMatchedPair p.1 p.2 ∧ combine p.1 p.2 = i ∧ bondBit2 p.1 = t
       · have hz : physClose2 R X p q = 0 := by
           rw [physClose2_R_entry,
-            ite_eq_right (fun hcon : gate p.1 p.2 ∧ gate q.1 q.2 => hp.1 hcon.1)]
+            ite_eq_right (fun hcon : IsBondMatchedPair p.1 p.2 ∧
+                IsBondMatchedPair q.1 q.2 => hp.1 hcon.1)]
           ring
         rw [hz, mul_zero]
       · have e : coarseKrausUngated t i p = 0 := by
@@ -687,27 +705,27 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
   -- eigendecomposition and collapses to `physClose1 R X i j` exactly.
   have hinner : ∀ s : Fin 2, ∀ q : Fin 4 × Fin 4,
       (∑ p : Fin 4 × Fin 4, coarseKrausGated s i p * physClose2 R X p q) =
-        (if gate q.1 q.2 then
+        (if IsBondMatchedPair q.1 q.2 then
             (coarseAmp : ℂ) * (25 / 32 : ℂ) * physClose1 R X i (combine q.1 q.2) *
               (eigVecs s 0 * wMat 0 (bondBit2 q.1) + eigVecs s 1 * wMat 1 (bondBit2 q.1))
           else 0) := by
     intro s q
-    by_cases hq : gate q.1 q.2
+    by_cases hq : IsBondMatchedPair q.1 q.2
     · rw [ite_eq_left hq]
       have hcongr : (∑ p : Fin 4 × Fin 4, coarseKrausGated s i p * physClose2 R X p q) =
-          ∑ p : Fin 4 × Fin 4, if gate p.1 p.2 ∧ combine p.1 p.2 = i then
+          ∑ p : Fin 4 × Fin 4, if IsBondMatchedPair p.1 p.2 ∧ combine p.1 p.2 = i then
               (coarseAmp : ℂ) * (25 / 32 : ℂ) * physClose1 R X i (combine q.1 q.2) *
                 (eigVecs s (bondBit2 p.1) * wMat (bondBit2 p.1) (bondBit2 q.1))
             else 0 := by
         apply Finset.sum_congr rfl
         intro p _
-        by_cases hp : gate p.1 p.2 ∧ combine p.1 p.2 = i
+        by_cases hp : IsBondMatchedPair p.1 p.2 ∧ combine p.1 p.2 = i
         · rw [ite_eq_left hp]
           have e : coarseKrausGated s i p = (coarseAmp : ℂ) * eigVecs s (bondBit2 p.1) := by
             simp only [coarseKrausGated, Matrix.of_apply]
             exact ite_eq_left hp
           have c1 :
-              (if gate p.1 p.2 ∧ gate q.1 q.2 then
+              (if IsBondMatchedPair p.1 p.2 ∧ IsBondMatchedPair q.1 q.2 then
                 wMat (bondBit2 p.1) (bondBit2 q.1) else 0) =
               wMat (bondBit2 p.1) (bondBit2 q.1) := ite_eq_left ⟨hp.1, hq⟩
           rw [e, physClose2_R_entry, hp.2, c1]; ring
@@ -722,12 +740,12 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
     · rw [ite_eq_right hq]
       apply Finset.sum_eq_zero
       intro p _
-      by_cases hp : gate p.1 p.2 ∧ combine p.1 p.2 = i
+      by_cases hp : IsBondMatchedPair p.1 p.2 ∧ combine p.1 p.2 = i
       · have e : coarseKrausGated s i p = (coarseAmp : ℂ) * eigVecs s (bondBit2 p.1) := by
           simp only [coarseKrausGated, Matrix.of_apply]
           exact ite_eq_left hp
         have c1 :
-            (if gate p.1 p.2 ∧ gate q.1 q.2 then
+            (if IsBondMatchedPair p.1 p.2 ∧ IsBondMatchedPair q.1 q.2 then
               wMat (bondBit2 p.1) (bondBit2 q.1) else 0) = 0 :=
           ite_eq_right (fun hcon => hq hcon.2)
         rw [e, physClose2_R_entry, c1]; ring
@@ -744,7 +762,7 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
     intro s
     have hcongr : (∑ q : Fin 4 × Fin 4, (∑ p : Fin 4 × Fin 4,
         coarseKrausGated s i p * physClose2 R X p q) * star (coarseKrausGated s j q)) =
-        ∑ q : Fin 4 × Fin 4, if gate q.1 q.2 ∧ combine q.1 q.2 = j then
+        ∑ q : Fin 4 × Fin 4, if IsBondMatchedPair q.1 q.2 ∧ combine q.1 q.2 = j then
             (coarseAmp : ℂ) ^ 2 * (25 / 32 : ℂ) * physClose1 R X i j *
               (eigVecs s 0 * wMat 0 (bondBit2 q.1) + eigVecs s 1 * wMat 1 (bondBit2 q.1)) *
               eigVecs s (bondBit2 q.1)
@@ -752,14 +770,14 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
       apply Finset.sum_congr rfl
       intro q _
       rw [hinner]
-      by_cases hqj : gate q.1 q.2 ∧ combine q.1 q.2 = j
+      by_cases hqj : IsBondMatchedPair q.1 q.2 ∧ combine q.1 q.2 = j
       · rw [ite_eq_left hqj.1, ite_eq_left hqj, hqj.2]
         have e : coarseKrausGated s j q = (coarseAmp : ℂ) * eigVecs s (bondBit2 q.1) := by
           simp only [coarseKrausGated, Matrix.of_apply]
           exact ite_eq_left hqj
         rw [e, star_mul', eigVecs_star, coarseAmp_star]
         ring
-      · by_cases hq : gate q.1 q.2
+      · by_cases hq : IsBondMatchedPair q.1 q.2
         · have hqne : combine q.1 q.2 ≠ j := fun hcon => hqj ⟨hq, hcon⟩
           rw [ite_eq_left hq, ite_eq_right hqj]
           have e : coarseKrausGated s j q = 0 := by
