@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import TNLean.Algebra.GaussRepresentation
 
 /-!
@@ -88,6 +89,80 @@ def completionClass : Set (G → G → Matrix.unitaryGroup n ℂ) :=
 theorem mem_completionClass_iff {R : G → G → Matrix.unitaryGroup n ℂ} :
     R ∈ D.completionClass ↔ D.IsCompletion R :=
   Iff.rfl
+
+private theorem exists_unitary_eq_mulVec_on_submodule
+    (K : Submodule ℂ (n → ℂ)) (A : Matrix n n ℂ)
+    (hA : ∀ ξ ∈ K, (star A * A) *ᵥ ξ = ξ) :
+    ∃ U : Matrix.unitaryGroup n ℂ, ∀ ξ ∈ K, (U : Matrix n n ℂ) *ᵥ ξ = A *ᵥ ξ := by
+  classical
+  let e : (n → ℂ) ≃ₗ[ℂ] EuclideanSpace ℂ n :=
+    (WithLp.linearEquiv 2 ℂ (n → ℂ)).symm
+  let S : Submodule ℂ (EuclideanSpace ℂ n) := Submodule.map e.toLinearMap K
+  let L₀ : S →ₗ[ℂ] EuclideanSpace ℂ n :=
+    (Matrix.toLpLin 2 2 A).comp S.subtype
+  have hL₀_norm (x : S) : ‖L₀ x‖ = ‖x‖ := by
+    have hx : WithLp.ofLp (x : EuclideanSpace ℂ n) ∈ K := by
+      change e.symm (x : EuclideanSpace ℂ n) ∈ K
+      rw [← Submodule.mem_map_equiv K]
+      exact x.property
+    have hA' := hA _ hx
+    change (Aᴴ * A) *ᵥ WithLp.ofLp (x : EuclideanSpace ℂ n) =
+      WithLp.ofLp (x : EuclideanSpace ℂ n) at hA'
+    have hinner :
+        inner ℂ (WithLp.toLp 2 (A *ᵥ WithLp.ofLp (x : EuclideanSpace ℂ n)))
+            (WithLp.toLp 2 (A *ᵥ WithLp.ofLp (x : EuclideanSpace ℂ n))) =
+          inner ℂ (x : EuclideanSpace ℂ n) (x : EuclideanSpace ℂ n) := by
+      rw [EuclideanSpace.inner_toLp_toLp, dotProduct_comm, Matrix.star_mulVec,
+        ← Matrix.dotProduct_mulVec, Matrix.mulVec_mulVec, hA']
+      change star (WithLp.ofLp (x : EuclideanSpace ℂ n)) ⬝ᵥ
+          WithLp.ofLp (x : EuclideanSpace ℂ n) =
+        inner ℂ (WithLp.toLp 2 (WithLp.ofLp (x : EuclideanSpace ℂ n)))
+          (WithLp.toLp 2 (WithLp.ofLp (x : EuclideanSpace ℂ n)))
+      rw [EuclideanSpace.inner_toLp_toLp, dotProduct_comm]
+    change ‖WithLp.toLp 2 (A *ᵥ WithLp.ofLp (x : EuclideanSpace ℂ n))‖ =
+      ‖(x : EuclideanSpace ℂ n)‖
+    apply (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).mp
+    rw [← inner_self_eq_norm_sq (𝕜 := ℂ), ← inner_self_eq_norm_sq (𝕜 := ℂ)]
+    exact congrArg RCLike.re hinner
+  let L : S →ₗᵢ[ℂ] EuclideanSpace ℂ n :=
+    { toLinearMap := L₀
+      norm_map' := hL₀_norm }
+  let E : EuclideanSpace ℂ n ≃ₗᵢ[ℂ] EuclideanSpace ℂ n :=
+    L.extend.toLinearIsometryEquiv rfl
+  let b : OrthonormalBasis n ℂ (EuclideanSpace ℂ n) := EuclideanSpace.basisFun n ℂ
+  let U₀ : Matrix n n ℂ := E.toMatrix b.toBasis b.toBasis
+  have hU₀ : U₀ ∈ Matrix.unitaryGroup n ℂ := E.toMatrix_mem_unitaryGroup b b
+  refine ⟨⟨U₀, hU₀⟩, fun ξ hξ ↦ ?_⟩
+  apply WithLp.toLp_injective
+  change Matrix.toLpLin 2 2 U₀ (WithLp.toLp 2 ξ) =
+    Matrix.toLpLin 2 2 A (WithLp.toLp 2 ξ)
+  have hUlin : Matrix.toLpLin 2 2 U₀ = E.toLinearEquiv.toLinearMap := by
+    rw [Matrix.toLpLin_eq_toLin]
+    dsimp only [U₀]
+    exact Matrix.toLin_toMatrix b.toBasis b.toBasis E.toLinearEquiv.toLinearMap
+  rw [hUlin]
+  let x : S := ⟨WithLp.toLp 2 ξ, Submodule.mem_map.mpr ⟨ξ, hξ, rfl⟩⟩
+  change E (x : EuclideanSpace ℂ n) = L₀ x
+  rw [LinearIsometry.toLinearIsometryEquiv_apply, LinearIsometry.extend_apply]
+  rfl
+
+/-- Every family of prescribed defect isometries admits a full unitary
+completion. -/
+theorem completionClass_nonempty : D.completionClass.Nonempty := by
+  classical
+  choose R hR using fun a b ↦
+    exists_unitary_eq_mulVec_on_submodule (D.domain a b) (D.prescribed a b)
+      (D.isometry_on_domain a b)
+  exact ⟨R, hR⟩
+
+/-- There exists a family of unitary matter operators extending all prescribed
+defect maps. This is the existence assertion in the modified-fusion
+construction of FBC25 (arXiv:2502.20257, lines 4215--4326). -/
+theorem exists_completion :
+    ∃ R : G → G → Matrix.unitaryGroup n ℂ, D.IsCompletion R := by
+  rcases D.completionClass_nonempty with ⟨R, hR⟩
+  change D.IsCompletion R at hR
+  exact ⟨R, hR⟩
 
 variable {D}
 
