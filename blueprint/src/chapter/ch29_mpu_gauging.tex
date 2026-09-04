@@ -283,6 +283,51 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     coefficient in (\ref{eq:mpug_physical_adjoint_inverse_mpv}).
 \end{proof}
 
+\begin{theorem}[Physical adjunction reverses the operator product]
+    \label{thm:mpug_physical_adjoint_product_reversal}
+    \lean{MPOTensor.bondProdSwapEquiv,
+        MPOTensor.physicalAdjointTensor_mulTensor}
+    \leanok
+    \uses{def:mpdo_operator_product, def:mpdo_physical_adjoint}
+    Let $M$ and $N$ be MPO tensors with bond dimensions $D_M$ and $D_N$.
+    Write a left bond index of the product tensor as a pair
+    $(\alpha,\gamma)$, with $\alpha$ in the bond space of $M$ and $\gamma$ in
+    the bond space of $N$, and a right bond index as $(\beta,\delta)$
+    likewise. Then, for every pair of physical indices $i,k$,
+    \begin{align}
+        \bigl((M\mathbin{\cdot}N)^\sharp\bigr)^{ik}
+        _{(\alpha\gamma),(\beta\delta)}
+         & =\bigl(N^\sharp\mathbin{\cdot}M^\sharp\bigr)^{ik}
+        _{(\gamma\alpha),(\delta\beta)}.
+        \label{eq:mpug_physical_adjoint_product_reversal}
+    \end{align}
+    The two bond spaces need not have the same dimension, so the exchange of
+    the two factors of a product bond space is recorded here for unequal
+    dimensions.
+    % Source anchor: arXiv:2502.20257, line 1662 and prop:zetas,
+    % lines 1662--1677.
+    This is the inverse-product step used in the proof of
+    Proposition~\texttt{prop:zetas}
+    of~\cite[lines~1662--1677]{FrancoRubio2025MPUGauging}, for the dagger
+    operation described there, which conjugates every entry and exchanges the
+    two legs lying on the same side of a tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_operator_product, def:mpdo_physical_adjoint}
+    Expand both sides. The left side is the complex conjugate of the
+    $\bigl((\alpha\gamma),(\beta\delta)\bigr)$ entry of
+    $\sum_j M^{kj}\otimes N^{ji}$, namely
+    $\sum_j\overline{M^{kj}_{\alpha\beta}}\,
+        \overline{N^{ji}_{\gamma\delta}}$.
+    The right side is the
+    $\bigl((\gamma\alpha),(\delta\beta)\bigr)$ entry of
+    $\sum_j (N^\sharp)^{ij}\otimes(M^\sharp)^{jk}$, namely
+    $\sum_j\overline{N^{ji}_{\gamma\delta}}\,
+        \overline{M^{kj}_{\alpha\beta}}$.
+    The two sums agree term by term.
+\end{proof}
+
 Suppose now that the normalized flattening of every $\mathcal U_g$ is
 left-canonical.  This is the canonical-form hypothesis used in
 \cite[lines~1552--1557]{FrancoRubio2025MPUGauging}.
