@@ -44,8 +44,8 @@ variable {m n : Type*} [Fintype m] [DecidableEq m] [Nonempty m]
 
 omit [Nonempty m] in
 /-- For a unitary matrix, the transpose is a left inverse of the entrywise
-conjugate. This is the identity behind the step `conj(x) = e^{-iφ} x†` in
-arXiv:1703.09188, `paper_v2.tex` lines 1035--1037. -/
+conjugate. It permits multiplying `conj(x)x = e^{iφ}𝟙` on the left by `xᵀ` in
+arXiv:1703.09188, `paper_v2.tex` lines 1035--1036. -/
 theorem transpose_mul_map_star_of_mem_unitaryGroup {x : Matrix m m ℂ}
     (hx : x ∈ unitaryGroup m ℂ) : xᵀ * x.map (starRingEnd ℂ) = 1 := by
   have hstar : xᴴ * x = 1 := by
