@@ -9,6 +9,7 @@ import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.SharedInfra.Scaling
+import TNLean.MPS.Tactic.Basic
 
 /-!
 # Components of the periodic Fundamental Theorem of MPS
@@ -153,11 +154,9 @@ theorem HetRepeatedBlocks.exists_phase_rescaling_sameMPV₂Pos {D₁ D₂ : ℕ}
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} (h : HetRepeatedBlocks A B) :
     ∃ ξ : ℂ, ‖ξ‖ = 1 ∧ SameMPV₂Pos (fun i => ξ • A i) B := by
   obtain ⟨ζ, hζ, hmpv⟩ := h.exists_unit_phase_power_mpv
-  have hζ0 : ζ ≠ 0 := by
-    intro h0
-    rw [h0, norm_zero] at hζ
-    exact zero_ne_one hζ
-  refine ⟨ζ⁻¹, by rw [norm_inv, hζ, inv_one], fun N _hN σ => ?_⟩
+  have hζ0 : ζ ≠ 0 := Complex.ne_zero_of_norm_eq_one hζ
+  refine ⟨ζ⁻¹, by rw [norm_inv, hζ, inv_one], ?_⟩
+  mpv_ext
   have hscale : mpv (fun i => ζ⁻¹ • A i) σ = ζ⁻¹ ^ N * mpv A σ :=
     mpv_eq_pow_mul_of_gaugePhase A (fun i => ζ⁻¹ • A i) 1 ζ⁻¹ (fun i => by simp) N σ
   rw [hscale, hmpv N σ, ← mul_assoc, ← mul_pow, inv_mul_cancel₀ hζ0, one_pow, one_mul]
