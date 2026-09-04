@@ -519,6 +519,7 @@
         MPSTensor.ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES,
         MPSTensor.openSuffixParentHamiltonianES_full_window_eq_localTermES,
         MPSTensor.ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES,
+        MPSTensor.ker_openPrefixParentHamiltonianES_self_eq_groundSpaceES,
         MPSTensor.openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}
@@ -528,7 +529,9 @@
     Let $K,l,n,r\in\mathbb{N}$.  Suppose that $A$ has nonzero bond dimension,
     is block injective at length $L_0>0$, and satisfies $L_0+1\leq n$.  The
     kernel of the range-$(L_0+1)$ prefix Hamiltonian on the first $n$ sites of
-    the $(n+1)$-site volume is the left open-chain ground space.  Independently,
+    the $(n+1)$-site volume is the left open-chain ground space.  When that
+    prefix instead fills its own $n$-site volume, its kernel is the whole
+    $n$-site ground space.  Independently,
     the kernel of the full final length-$(l+1)$ suffix window beginning at $K$
     is the tail open-chain ground space.  Let $U_{\mathrm{pre}}$ and
     $U_{\mathrm{tail}}$ be the canonical right-spectator isometries for the
