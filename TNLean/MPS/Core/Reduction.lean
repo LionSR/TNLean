@@ -55,6 +55,23 @@ theorem smul (h : IsReduction B A V W) (c : ℂ) :
   refine ⟨h.mul_eq_one, fun w => ?_⟩
   simp only [Kraus.evalWord_smul, Matrix.mul_smul, Matrix.smul_mul, h.evalWord]
 
+/-- Reciprocal scalar rescaling: scaling `W` by a nonzero `β` and `V` by
+$\beta^{-1}$ again gives a rectangular reduction from `B` to `A`.
+
+Under the identification $F^<=V$, $F^>=W$ of the fusion tensors of a pair with
+the two matrices of a reduction, this is the scalar gauge freedom
+$F^>\mapsto\beta F^>$, $F^<\mapsto\beta^{-1}F^<$ of arXiv:2502.20257,
+`eq:scalar_fus_ten`, `main.tex` lines 1500--1504.  The statement is that a
+reciprocal rescaling of a reduction is again a reduction; that every reduction
+from `B` to `A` arises this way is a separate claim and is not asserted. -/
+theorem reciprocal_smul (h : IsReduction B A V W) {β : ℂ} (hβ : β ≠ 0) :
+    IsReduction B A (β⁻¹ • V) (β • W) := by
+  refine ⟨?_, fun w ↦ ?_⟩
+  · simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, mul_inv_cancel₀ hβ,
+      one_smul, h.mul_eq_one]
+  · simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, mul_inv_cancel₀ hβ,
+      one_smul, h.evalWord]
+
 /-- A reduction whose target is scaled by `c` intertwines an unscaled source
 word with `c` to the word length times the corresponding unscaled target word.
 
