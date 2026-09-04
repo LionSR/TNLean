@@ -192,7 +192,7 @@ unconditional result.
     \label{thm:periodic_equalcase_coefficient_extraction}
     \lean{MPSTensor.SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis}
     \leanok
-    \uses{def:same_mpv2, def:periodic_tensor, lem:paper_decomp_formula,
+    \uses{def:same_mpv2_pos, def:periodic_tensor, lem:paper_decomp_formula,
         thm:periodic_basis_nonzero_subfamily_li,
         thm:pgvwc07_periodic_state_vector_decomposition}
     Let
@@ -210,8 +210,8 @@ unconditional result.
         \notag
     \end{align}
     for every length $N$, with $\{A_j\}_{j\in J}$ pairwise non-repeated and
-    $A_j$ periodic of period $m_j$. If $\mc{V}(A)=\mc{V}(B)$ at every positive
-    length, then there is an $N_0$ such that
+    $A_j$ periodic of period $m_j$. If $\mc{V}^+(A)=\mc{V}^+(B)$, then there is
+    an $N_0$ such that
     \begin{align}
         \tr\bigl(R_j^{N}\bigr)
         =\zeta_j^{-N}\,\tr\bigl(S_{\pi(j)}^{N}\bigr)

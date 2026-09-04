@@ -70,6 +70,7 @@ theorem periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent
       LinearIndependent ℂ
         (fun j : {j : Fin g // period j ∣ N} => mpvState (d := d) (A ↑j) N) := by
   classical
+  -- Positive bond dimensions, needed as instances by the overlap dichotomy.
   have : ∀ j, NeZero (dim j) := fun j => ⟨(hPer j).bondDim_ne_zero⟩
   -- Every period is positive, so every least common multiple of periods is.
   have hlcmPos : ∀ S : Finset (Fin g), 0 < S.lcm period := by

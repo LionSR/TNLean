@@ -41,7 +41,7 @@ variable {d : ℕ}
 /-- **Coefficient extraction in the equal case.**
 
 Two multiplicity-bearing decompositions whose bases of periodic tensors are
-matched by a bijection up to unit-modulus phases, and whose assembled tensors
+matched by a bijection up to nonzero scalars, and whose assembled tensors
 generate the same matrix-product vector at every positive length, have
 multiplicity power sums that agree at every sufficiently large length divisible
 by the corresponding period, once the phase carried by the matching is undone.
@@ -54,7 +54,12 @@ the other, which is what the source means by absorbing the phase into `S_j` at
 lines 667--671. The lengths that the period does not divide drop out because
 the corresponding basis vector vanishes there (lines 660--661), and the
 surviving vectors are independent by the consequence of proposition
-`equal-or-orthogonal-generalized` recorded at lines 677--679. -/
+`equal-or-orthogonal-generalized` recorded at lines 677--679.
+
+The matching scalars are only assumed nonzero, which is all the argument uses.
+In the intended application they are the unit-modulus scalars of the
+repeated-block relation, supplied by
+`HetRepeatedBlocks.exists_unit_phase_power_mpv`. -/
 theorem SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis
     {P Q : SectorDecomposition d}
     (periodP : Fin P.basisCount → ℕ)
