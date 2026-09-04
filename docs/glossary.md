@@ -564,18 +564,24 @@ The following notions use different transfer objects and are not interchangeable
 
 ### Twisted-dimer matching and channel-support predicates
 
-- **Declarations:** `MPOTensor.TwistedDimer.IsOpenBondMatched` and
+- **Declarations:** `MPOTensor.TwistedDimer.IsBondMatchedPair` in
+  `TNLean/MPS/MPDO/TwistedDimer.lean`,
+  `MPOTensor.TwistedDimer.IsOpenBondMatched` and
   `MPOTensor.TwistedDimer.IsCyclicBondMatched` in
-  `TNLean/MPS/MPDO/TwistedDimerMPDO.lean`, and
+  `TNLean/MPS/MPDO/TwistedDimerMPDO.lean`,
   `MPOTensor.TwistedDimer.IsRefineSupported` and
   `MPOTensor.TwistedDimer.IsCoarseSupported` in
   `TNLean/MPS/MPDO/TwistedDimerRefine.lean` and
-  `TNLean/MPS/MPDO/TwistedDimerViaTS.lean`.
-- **Meaning:** the first two predicates require consecutive physical letters to
-  match their right and left bond bits on an open segment or around a ring. The
-  latter two specify the matrix entries supporting the refinement and
+  `TNLean/MPS/MPDO/TwistedDimerViaTS.lean`, and
+  `MPOTensor.TwistedDimer.IsSameChannel` in
+  `TNLean/MPS/MPDO/TwistedDimerCoefficients.lean`.
+- **Meaning:** the first predicate requires one ordered pair of physical letters
+  to match the right bit of the first against the left bit of the second; the
+  next two quantify it over an open segment or around a ring. The two support
+  predicates specify the matrix entries carrying the refinement and
   coarse-graining Kraus operators, including their outer bits, site flags, and
-  decoded flag.
+  decoded flag. The last one selects the fusion channel $g = f + f'$ of two flag
+  labels against its complement.
 - **Source:** project-specific coordinate conditions for the twisted-dimer
   example. They support the explicit realization of CPSV16 Definition 4.1 but
   are not predicates stated in arXiv:1606.00608.

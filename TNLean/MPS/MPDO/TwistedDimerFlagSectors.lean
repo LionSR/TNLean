@@ -222,7 +222,8 @@ theorem mpo_unitTensor_apply (c : Fin 8 → Fin 8 → ℂ) {N : ℕ} (hN : 0 < N
   rw [evalWord_unitTensor_ofFn c n σ τ]
   by_cases hopen : IsOpenBondMatched σ ∧ IsOpenBondMatched τ
   · rw [ite_eq_left hopen]
-    by_cases hw : gate (σ (Fin.last n)) (σ 0) ∧ gate (τ (Fin.last n)) (τ 0)
+    by_cases hw : IsBondMatchedPair (σ (Fin.last n)) (σ 0) ∧
+        IsBondMatchedPair (τ (Fin.last n)) (τ 0)
     · have hchain : IsCyclicBondMatched (n + 1) σ ∧ IsCyclicBondMatched (n + 1) τ :=
         ⟨(isCyclicBondMatched_succ σ).2 ⟨hopen.1, hw.1⟩,
           (isCyclicBondMatched_succ τ).2 ⟨hopen.2, hw.2⟩⟩

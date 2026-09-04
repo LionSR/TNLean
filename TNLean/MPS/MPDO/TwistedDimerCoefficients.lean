@@ -50,11 +50,14 @@ noncomputable section
 
 namespace MPOTensor.TwistedDimer
 
-/-- The fusion channel of two flag labels: the label $f + f'$ (`0`) or its
-complement $f + f' + 1$ (`1`), decided by whether `g = f + f'`. -/
-def sameChannel (f f' g : Fin 2) : Prop := g = f + f'
+/-- The **fusion-channel condition** on three flag labels: the outgoing label
+$g$ is the sum $f + f'$ of the two incoming ones, as opposed to its complement
+$f + f' + 1$. -/
+def IsSameChannel (f f' g : Fin 2) : Prop := g = f + f'
 
-instance decidableSameChannel (f f' g : Fin 2) : Decidable (sameChannel f f' g) :=
+/-- The fusion-channel condition is an equality of flag labels, hence
+decidable. -/
+instance decidableIsSameChannel (f f' g : Fin 2) : Decidable (IsSameChannel f f' g) :=
   inferInstanceAs (Decidable (g = f + f'))
 
 /-- The fusion weight $\alpha = 7/10$ on the channel $g = f + f'$ (rational point
@@ -69,11 +72,11 @@ $1 \times 1$ block with entry $\alpha$ or $\beta$. No tensor attachment is
 asserted. -/
 def twoLabelChi : DiagonalChiFamily (Fin 2) where
   dim _ _ _ := 1
-  entry f f' g _ := if sameChannel f f' g then (alpha : ℂ) else (beta : ℂ)
+  entry f f' g _ := if IsSameChannel f f' g then (alpha : ℂ) else (beta : ℂ)
 
 lemma twoLabelChi_posEntries : twoLabelChi.PosEntries := by
   intro f f' g k
-  by_cases h : sameChannel f f' g
+  by_cases h : IsSameChannel f f' g
   · simp only [twoLabelChi, h, ite_true]
     exact Complex.zero_lt_real.mpr (by norm_num [alpha])
   · simp only [twoLabelChi, h, ite_false]
@@ -85,17 +88,17 @@ def twoLabelCoeffs : BNTLabelCoefficientFamily (Fin 2) :=
 
 theorem twoLabelCoeffs_coeff (L : ℕ) (f f' g : Fin 2) :
     twoLabelCoeffs.coeff L f f' g =
-      if sameChannel f f' g then (alpha : ℂ) ^ L else (beta : ℂ) ^ L := by
+      if IsSameChannel f f' g then (alpha : ℂ) ^ L else (beta : ℂ) ^ L := by
   dsimp [twoLabelCoeffs, BNTLabelCoefficientFamily.ofChi,
     DiagonalChiFamily.tracePowerCoeff, twoLabelChi]
-  by_cases h : sameChannel f f' g <;> simp [h]
+  by_cases h : IsSameChannel f f' g <;> simp [h]
 
 /-- The channel-$\alpha$ coefficient $(7/10)^L$ differs between lengths one and two. -/
 theorem twoLabelCoeffs_not_lengthIndependent : ¬ twoLabelCoeffs.LengthIndependent := by
   intro h
   have := h.coeff_eq one_pos (by norm_num : (0 : ℕ) < 2) 0 0 0
   rw [twoLabelCoeffs_coeff, twoLabelCoeffs_coeff] at this
-  have hs : sameChannel 0 0 0 := by decide
+  have hs : IsSameChannel 0 0 0 := by decide
   simp only [hs, ite_true, alpha] at this
   norm_num at this
 
@@ -106,7 +109,7 @@ covariance of Theorem 4.14(iii) under the normalization freedom of Proposition
 def twoLabelChiScaled (s : Fin 2 → ℝ) : DiagonalChiFamily (Fin 2) where
   dim _ _ _ := 1
   entry f f' g _ :=
-    ((s f * s f' / s g : ℝ) : ℂ) * (if sameChannel f f' g then (alpha : ℂ) else (beta : ℂ))
+    ((s f * s f' / s g : ℝ) : ℂ) * (if IsSameChannel f f' g then (alpha : ℂ) else (beta : ℂ))
 
 /-- The coefficient family of the rescaled candidate data. -/
 def rescaledCoeffs (s : Fin 2 → ℝ) : BNTLabelCoefficientFamily (Fin 2) :=
@@ -115,7 +118,7 @@ def rescaledCoeffs (s : Fin 2 → ℝ) : BNTLabelCoefficientFamily (Fin 2) :=
 theorem rescaledCoeffs_coeff (s : Fin 2 → ℝ) (L : ℕ) (f f' g : Fin 2) :
     (rescaledCoeffs s).coeff L f f' g =
       (((s f * s f' / s g : ℝ) : ℂ) *
-        (if sameChannel f f' g then (alpha : ℂ) else (beta : ℂ))) ^ L := by
+        (if IsSameChannel f f' g then (alpha : ℂ) else (beta : ℂ))) ^ L := by
   dsimp [rescaledCoeffs, BNTLabelCoefficientFamily.ofChi,
     DiagonalChiFamily.tracePowerCoeff, twoLabelChiScaled]
   simp
@@ -140,14 +143,14 @@ theorem twoLabelCoeffs_rescaling_stable_not_lengthIndependent (s : Fin 2 → ℝ
   have h1 := hs 1
   -- a positive-length coefficient equal at lengths 1 and 2 is a real number t with t = t^2
   have key : ∀ f f' g : Fin 2,
-      (s f * s f' / s g) * (if sameChannel f f' g then alpha else beta) = 1 := by
+      (s f * s f' / s g) * (if IsSameChannel f f' g then alpha else beta) = 1 := by
     intro f f' g
     have e := hLI.coeff_eq (show (0 : ℕ) < 2 by norm_num) (show (0 : ℕ) < 1 by norm_num) f f' g
     rw [rescaledCoeffs_coeff, rescaledCoeffs_coeff] at e
     have hq : 0 < s f * s f' / s g := div_pos (mul_pos (hs f) (hs f')) (hs g)
-    have hw : 0 < (if sameChannel f f' g then alpha else beta) := by
+    have hw : 0 < (if IsSameChannel f f' g then alpha else beta) := by
       split_ifs <;> norm_num [alpha, beta]
-    set t : ℝ := (s f * s f' / s g) * (if sameChannel f f' g then alpha else beta) with ht
+    set t : ℝ := (s f * s f' / s g) * (if IsSameChannel f f' g then alpha else beta) with ht
     have et : ((t : ℝ) : ℂ) ^ 2 = ((t : ℝ) : ℂ) ^ 1 := by
       rw [ht]
       push_cast
@@ -159,9 +162,9 @@ theorem twoLabelCoeffs_rescaling_stable_not_lengthIndependent (s : Fin 2 → ℝ
   have e000 := key 0 0 0
   have e010 := key 0 1 0
   have e001 := key 0 0 1
-  have hs000 : sameChannel 0 0 0 := by decide
-  have hs010 : ¬ sameChannel 0 1 0 := by decide
-  have hs001 : ¬ sameChannel 0 0 1 := by decide
+  have hs000 : IsSameChannel 0 0 0 := by decide
+  have hs010 : ¬ IsSameChannel 0 1 0 := by decide
+  have hs001 : ¬ IsSameChannel 0 0 1 := by decide
   simp only [hs000, hs010, hs001, ite_true, ite_false] at e000 e010 e001
   -- e000 : s 0 * s 0 / s 0 * alpha = 1, e010 : s 0 * s 1 / s 0 * beta = 1,
   -- e001 : s 0 * s 0 / s 1 * beta = 1

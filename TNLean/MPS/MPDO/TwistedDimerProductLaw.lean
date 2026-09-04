@@ -173,7 +173,7 @@ lemma sum_sector (f : Fin 2) (L : ℕ) (k : Fin L → Fin 2) :
     simpa [hφ] using this
   have hcond : ∀ t, IsCyclicBondMatched L (φ t) ∧ ∀ n, k n = bitF (φ t n) := by
     intro t
-    exact ⟨fun n => by simp [hφ, gate], fun n => by simp [hφ]⟩
+    exact ⟨fun n => by simp [hφ, IsBondMatchedPair], fun n => by simp [hφ]⟩
   symm
   calc (∑ t : Fin L → Fin 2, ∏ n, flagWeight f (φ t n))
       = ∑ t : Fin L → Fin 2,
@@ -282,6 +282,6 @@ theorem flagOperatorFamily_hasSameLengthProductForm :
   intro L hL f f'
   simp only [flagOperatorFamily_operator, twoLabelCoeffs_coeff, Fin.sum_univ_two]
   rw [mpo_flagMPO_mul hL]
-  fin_cases f <;> fin_cases f' <;> simp [sameChannel, add_comm]
+  fin_cases f <;> fin_cases f' <;> simp [IsSameChannel, add_comm]
 
 end MPOTensor.TwistedDimer

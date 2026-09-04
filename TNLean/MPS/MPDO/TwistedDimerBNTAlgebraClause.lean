@@ -164,7 +164,7 @@ theorem sectorWeight_hasIdempotentCoefficientForm :
   intro g
   simp only [verticalBNTTraceScalarFamily_traceScalar, sectorWeight, twoLabelCoeffs_coeff,
     Fin.sum_univ_two, Finset.sum_const, Finset.card_univ, Fintype.card_fin, one_smul]
-  fin_cases g <;> simp [sameChannel] <;> norm_num [mu, alpha, beta]
+  fin_cases g <;> simp [IsSameChannel] <;> norm_num [mu, alpha, beta]
 
 /-- The algebra clause for the flag-sector operators and trace scalars. -/
 def flagAlgebraClause :

@@ -319,11 +319,11 @@ private lemma bitR_signWord (n : ℕ) (m : Fin (n + 1)) : bitR (signWord n m) = 
   refine Fin.cases ?_ (fun m => ?_) m <;> simp [signWord]
 
 private lemma isCyclicBondMatched_signWord (n : ℕ) : IsCyclicBondMatched (n + 1) (signWord n) :=
-  fun m => by rw [gate, bitR_signWord, bitL_signWord]
+  fun m => by rw [IsBondMatchedPair, bitR_signWord, bitL_signWord]
 
 private lemma isCyclicBondMatched_const (n : ℕ) :
     IsCyclicBondMatched (n + 1) fun _ : Fin (n + 1) => physIdx 0 0 0 :=
-  fun _ => by simp [gate]
+  fun _ => by simp [IsBondMatchedPair]
 
 /-- The sector matrix product vector on the doubled constant word of bond index
 $(0, 0, 0)$ is $(2/5)^{N}$. -/
