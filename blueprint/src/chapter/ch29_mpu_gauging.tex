@@ -1640,6 +1640,47 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     of~\cite[lines~4215--4326]{FrancoRubio2025MPUGauging}.
 \end{definition}
 
+\begin{theorem}[Existence of full unitary completions]
+    \label{thm:mpug_completion_class_nonempty}
+    \lean{TNLean.Algebra.DefectMaps.completionClass_nonempty,
+        TNLean.Algebra.DefectMaps.exists_completion}
+    \leanok
+    \discussion{7702}
+    \uses{def:mpug_defect_maps, def:mpug_completion_class}
+    Let $\mathcal H_{\mathrm m}$ be finite-dimensional. Every family of
+    prescribed defect maps satisfying (\ref{eq:mpug_defect_isometry}) admits a
+    simultaneous unitary extension:
+    \begin{align}
+        \mathfrak C(D) & \neq\varnothing.
+        \label{eq:mpug_completion_class_nonempty}
+    \end{align}
+    Equivalently, there is a family
+    $R=\{U_{a,b}\}_{(a,b)\in G^2}$ of unitary operators such that, for every
+    $a,b\in G$ and every $\ket{\xi}\in\mathcal K_{a,b}$,
+    \begin{align}
+        U_{a,b}\ket{\xi}
+         & =D_{a,b}\ket{\xi}.
+        \label{eq:mpug_completion_exists}
+    \end{align}
+    This is the finite-dimensional extension step implicit in the freedom of
+    the modified fusion operators at
+    \cite[lines~4215--4326]{FrancoRubio2025MPUGauging}. The subspaces
+    $\mathcal K_{a,b}$ and their prescribed isometries are hypotheses here.
+    % Source anchor: arXiv:2502.20257, lemma:modif and its proof,
+    % lines 4215--4326. The theorem does not assert that the defect data arise
+    % from locally orthogonal MPS blocks or action tensors; their construction
+    % remains in issues #7349, #7350, and #7569.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_defect_maps, def:mpug_completion_class}
+    For each pair $(a,b)$, regard the restriction of $D_{a,b}$ to
+    $\mathcal K_{a,b}$ as a linear isometry. Extend it to a unitary operator
+    on the whole finite-dimensional matter space. Choosing one such extension
+    for every pair gives a family $R$ satisfying
+    (\ref{eq:mpug_completion_exists}), hence a member of $\mathfrak C(D)$.
+\end{proof}
+
 \begin{theorem}[Transport identity for a completion]
     \label{thm:mpug_completion_transport}
     \lean{TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_prescribed,
@@ -2272,6 +2313,47 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     %   eq:scalar_act_ten.
 \end{definition}
 
+\begin{definition}[Restricted scalar gauges]
+    \label{def:mpug_restricted_scalar_gauge}
+    \lean{TNLean.Algebra.ScalarCocycle.IsInverseNormalized,
+        TNLean.Algebra.ScalarCocycle.isInverseNormalized_one,
+        TNLean.Algebra.RestrictedFusionGauge.one,
+        TNLean.Algebra.RestrictedFusionGauge.mul,
+        TNLean.Algebra.RestrictedFusionGauge.inv,
+        TNLean.Algebra.RestrictedScalarGauge.one,
+        TNLean.Algebra.RestrictedScalarGauge.mul,
+        TNLean.Algebra.RestrictedScalarGauge.inv,
+        TNLean.Algebra.ScalarCocycle.IsInverseNormalized.mul,
+        TNLean.Algebra.ScalarCocycle.IsInverseNormalized.inv,
+        TNLean.Algebra.ActionTensorGauge.isNormalized_one,
+        TNLean.Algebra.ActionTensorGauge.IsNormalized.mul,
+        TNLean.Algebra.ActionTensorGauge.IsNormalized.inv,
+        TNLean.Algebra.RestrictedFusionGauge,
+        TNLean.Algebra.RestrictedScalarGauge}
+    \leanok
+    \discussion{7700}
+    \uses{def:mpug_fusion_gauge, def:mpug_l_gauge, def:mpug_l_normalized}
+    A fusion scalar $\beta\colon G^2\to\C^\times$ is
+    \emph{inverse-normalized} when, for every $g\in G$,
+    \begin{align}
+        \beta_{g,e}=\beta_{e,g}=\beta_{g,g^{-1}}
+         & =1.
+        \label{eq:mpug_restricted_fusion_gauge}
+    \end{align}
+    A restricted scalar gauge is a pair $(\beta,\gamma)$ in which $\beta$ is
+    inverse-normalized and, for every $x\in\mathsf X$,
+    \begin{align}
+        \gamma^x_e & =1.
+        \label{eq:mpug_restricted_action_gauge}
+    \end{align}
+    These pairs form a group under pointwise multiplication and inversion.
+    The conditions are the standing restriction imposed at
+    \cite[lines~2050--2054]{FrancoRubio2025MPUGauging} after the earlier
+    fusion and action gauges have been fixed.
+    % Source anchor: arXiv:2502.20257, unlabelled display at lines 2050--2054,
+    % immediately after eq:zetas_in_gauge.
+\end{definition}
+
 \begin{theorem}[Joint scalar gauges preserve L-symbol compatibility]
     \label{thm:mpug_l_gauge_preservation}
     \lean{TNLean.Algebra.LSymbol.IsCompatible.gauge,
@@ -2345,6 +2427,56 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     (\ref{eq:mpug_l_gauge_right}) and
     (\ref{eq:mpug_l_gauge_left}), from which the normalization statements
     follow.
+\end{proof}
+
+\begin{theorem}[Action of the restricted scalar gauge group]
+    \label{thm:mpug_restricted_scalar_gauge_action}
+    \lean{TNLean.Algebra.RestrictedFusionGauge.fusionGauge_one,
+        TNLean.Algebra.RestrictedFusionGauge.isNormalized_fusionGauge,
+        TNLean.Algebra.RestrictedFusionGauge.isCocycle_fusionGauge,
+        TNLean.Algebra.RestrictedFusionGauge.fusionGauge_mul,
+        TNLean.Algebra.RestrictedFusionGauge.fusionGauge_inv,
+        TNLean.Algebra.RestrictedScalarGauge.gauge_one,
+        TNLean.Algebra.RestrictedScalarGauge.isNormalized_gauge,
+        TNLean.Algebra.RestrictedScalarGauge.isCompatible_gauge,
+        TNLean.Algebra.RestrictedScalarGauge.gauge_mul,
+        TNLean.Algebra.RestrictedScalarGauge.gauge_inv}
+    \leanok
+    \discussion{7700}
+    \uses{def:mpug_restricted_scalar_gauge,
+        thm:mpug_gauge_preserves_cocycle,
+        thm:mpug_gauge_preserves_normalization,
+        thm:mpug_l_gauge_composition,
+        thm:mpug_l_gauge_preservation}
+    Let $\kappa=(\beta,\gamma)$ be a restricted scalar gauge. If $\omega$ is
+    a normalized scalar $3$-cocycle and $L$ is a normalized $L$-symbol
+    compatible with $\omega$, then
+    \begin{align}
+        \omega' & =\beta\mathbin{\triangleright}\omega,     \\
+        L'      & =(\beta,\gamma)\mathbin{\triangleright}L.
+        \label{eq:mpug_restricted_gauge_action}
+    \end{align}
+    are again normalized, $\omega'$ is a scalar $3$-cocycle, and $L'$ is
+    compatible with $\omega'$. The identity gauge acts trivially, successive
+    restricted gauges compose by pointwise multiplication, and applying
+    $\kappa^{-1}$ after $\kappa$ recovers $(\omega,L)$.
+    These are scalar statements only.
+    % The theorem does not choose fusion tensors, action tensors, or
+    % tensor-level gauges satisfying the same normalization. Tensor-level
+    % restricted gauge choices remain issue #7325.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_restricted_scalar_gauge,
+        thm:mpug_gauge_preserves_cocycle,
+        thm:mpug_gauge_preserves_normalization,
+        thm:mpug_l_gauge_composition,
+        thm:mpug_l_gauge_preservation}
+    The three specified values of $\beta$ and the identity value of $\gamma$
+    remain equal to $1$ under pointwise products and inverses. Apply the
+    general preservation laws to~(\ref{eq:mpug_restricted_gauge_action}).
+    The group laws and the composition formulas for the two gauge actions give
+    the identity, composition, and inverse assertions.
 \end{proof}
 
 \begin{theorem}[Cocycles and coboundaries for trivial coefficients]
@@ -3868,6 +4000,91 @@ $T_sT_s^*=\sigma(s)\mathbf 1$, nor the proposition identifying the MPU anomaly
 with the nontrivial time-reversal SPT class. Both statements require the tensor
 argument in \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}, beyond the
 scalar calculation above.
+
+\section{The GHZ--blocked-cluster tensor}
+\label{sec:mpug_ghz_blocked_cluster}
+
+\begin{definition}[GHZ--blocked-cluster tensor and its two blocks]
+    \label{def:mpug_ghz_blocked_cluster_tensor}
+    \lean{MPSTensor.ghzTensor_apply,
+        MPSTensor.ghzSectorTensor,
+        MPSTensor.ghzSectorTensor_apply_same,
+        MPSTensor.z4z2GHZClusterTensor,
+        MPSTensor.z4z2GHZClusterBlock,
+        MPSTensor.z4z2GHZClusterBlock_apply,
+        MPSTensor.z4z2GHZClusterDirectSum}
+    \leanok
+    \discussion{7699}
+    \uses{def:ghz_tensor, def:cluster_tensor,
+        def:mps_independent_tensor_product}
+    Let $C=\{C^q\}_{q=0}^3$ be the once-blocked cluster-state tensor. The tensor
+    obtained by taking its independent tensor product with the GHZ tensor has
+    physical dimension $8$ and bond dimension $4$:
+    \begin{align}
+        A & =A^{\mathrm{GHZ}}\otimes C.
+        \label{eq:mpug_ghz_blocked_cluster_tensor}
+    \end{align}
+    For $x\in\{0,1\}$, let $E_x$ be the one-dimensional GHZ sector supported
+    at the physical value $x$. The two bond-dimension-$2$ tensors
+    \begin{align}
+        A_x & =E_x\otimes C
+    \end{align}
+    satisfy, for $p,x\in\{0,1\}$ and $q\in\{0,1,2,3\}$,
+    \begin{align}
+        A_x^{(p,q)} & =\delta_{p,x}C^q.
+        \label{eq:mpug_ghz_blocked_cluster_blocks}
+    \end{align}
+    Their canonical direct sum is denoted $A_0\oplus A_1$. This is the tensor
+    and block formula in
+    \cite[lines~4427--4479]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, example:z4z2, eq:z4z2MPS and
+    % lines 4427--4479.
+\end{definition}
+
+\begin{theorem}[Injective and locally orthogonal GHZ--cluster blocks]
+    \label{thm:mpug_ghz_blocked_cluster_blocks}
+    \lean{MPSTensor.ghzSectorTensor_isInjective,
+        MPSTensor.isInjective_tensorProduct,
+        MPSTensor.z4z2GHZClusterBlock_isInjective,
+        MPSTensor.z4z2GHZClusterBlocks_isBNTLocallyOrthogonal,
+        MPSTensor.z4z2GHZClusterDirectSum_eq_tensor}
+    \leanok
+    \discussion{7699}
+    \uses{def:mpug_ghz_blocked_cluster_tensor, def:injective,
+        def:is_bnt_locally_orthogonal, thm:cluster_normal}
+    Each tensor $A_x$ is injective. For $x\neq y$ and every
+    $X\in\operatorname{Mat}_2(\C)$, their one-site mixed transfer map satisfies
+    \begin{align}
+        \mathcal E_{x,y}(X)
+         & =\sum_{p=0}^1\sum_{q=0}^3
+        A_x^{(p,q)}X\bigl(A_y^{(p,q)}\bigr)^\dagger
+        =0.
+        \label{eq:mpug_ghz_blocked_cluster_local_orthogonality}
+    \end{align}
+    Thus the two blocks are locally orthogonal, and
+    \begin{align}
+        A_0\oplus A_1 & =A
+        \label{eq:mpug_ghz_blocked_cluster_direct_sum}
+    \end{align}
+    after the canonical identification of the direct-sum and product bond
+    coordinates. The local orthogonality is the observation at
+    \cite[line~4481]{FrancoRubio2025MPUGauging}.
+    % The theorem does not construct the Z4 x Z2 action, its virtual action
+    % tensors, its L-symbols, or its gauging data. The group action and gauging
+    % of this example remain issue #7352.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_ghz_blocked_cluster_tensor, def:injective,
+        def:is_bnt_locally_orthogonal, thm:cluster_normal}
+    The one-dimensional sector $E_x$ is injective, and injectivity is preserved
+    by independent tensor products, so $A_x=E_x\otimes C$ is injective.
+    If $x\neq y$, formula~(\ref{eq:mpug_ghz_blocked_cluster_blocks}) makes
+    every summand in
+    (\ref{eq:mpug_ghz_blocked_cluster_local_orthogonality}) vanish: a physical
+    value $p$ cannot equal both $x$ and $y$. The direct-sum identity follows by
+    comparing the same formula in the two canonical bond coordinate systems.
+\end{proof}
 
 \section{The gauge-invariant subspace of the CZX circuit tuple}
 \label{sec:mpug_czx_gauge_invariant}
