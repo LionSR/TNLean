@@ -31,6 +31,9 @@ in the column-stacking coordinates of `Matrix.vec`.  The formal statements keep
 the printed weight and insert the column-stacking vector of
 $\rho^{\mathsf T}$. The source works with a diagonal $\rho$, where this vector
 is $|\rho)$ and the gate remains the one built from the same weight $\rho$.
+For a weight that is not symmetric the same pairing is kept: the stabilized
+fixed pair is $|\rho^{\mathsf T})(\Phi|$ for the weight $\rho$ carried by the
+source cuts and by the gate.
 Documented in `docs/paper-gaps/mpu_source_cut_orientation.tex`.
 
 ## Main results
@@ -41,9 +44,12 @@ Documented in `docs/paper-gaps/mpu_source_cut_orientation.tex`.
   undressed Gram entry is the two-letter entry with $|\rho^{\mathsf T})(\Phi|$ inserted.
 * `MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair`: the dressed Gram
   equation is equivalent to `simple2` with the insertion $|\rho^{\mathsf T})(\Phi|$.
-* `MPOTensor.IsMPUSimple.sourceV_isIsometry`: the forward direction of Theorem
-  `ThmFund1`, $1\to2$, with the source's diagonal fixed point: the gate built
-  from that same weight has $v^\dagger v=\Id$.
+* `MPOTensor.IsMPUSimple.sourceV_isIsometry_of_transpose_fixed_pair`: the
+  forward direction of Theorem `ThmFund1`, $1\to2$, for an arbitrary positive
+  definite weight $\rho$ whose transpose is the stabilized fixed point.
+* `MPOTensor.IsMPUSimple.sourceV_isIsometry`: the same statement with the
+  source's diagonal fixed point: the gate built from that same weight has
+  $v^\dagger v=\Id$.
 * `MPOTensor.IsMPUSimple.rightRank_mul_leftRank_le`: the resulting rank bound
   $r\ell\le d^2$.
 * `MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry`: the direction $4\to1$ of
@@ -167,26 +173,48 @@ theorem sourceVDressedGram_iff_simple2_transpose_fixed_pair
     dsimp only at hA hB
     rw [hA, hB, h]
 
-/-- A simple tensor whose normalized double-layer diagonal stabilizes to
-$|\rho)(\Phi|$ has $v^\dagger v=\Id$ for the auxiliary gate obtained by
-recomputing the source factors with the weight $\rho^{\mathsf T}$.
+/-- Theorem `ThmFund1`, $1\to2$, for an arbitrary positive definite source
+weight: if the stabilized normalized double-layer diagonal of a simple tensor
+is $|\rho^{\mathsf T})(\Phi|$, then the paper gate $v$ built from the weight
+$\rho$ satisfies $v^\dagger v=\Id$.
 
-This is the reparametrized-weight consequence of the complete network. It is
-not the source gate built from the fixed-point weight $\rho$ unless
-$\rho^{\mathsf T}=\rho$. The source assumes that $\rho$ is diagonal before
-its proof of Theorem `ThmFund1`, $1\to2$ (arXiv:1703.09188, lines 495 and
-577--588). -/
+No symmetry of $\rho$ is used.  The two weighted normalizations `X1X2b` make
+the complete network insert the column-stacking vector of $\rho^{\mathsf T}$,
+and that is exactly the vector the stabilized pair supplies here, so the gate,
+the source cuts, and the fixed pair all refer to the same weight and the same
+tensor.  The source works in canonical-form-II coordinates, where $\rho$ is
+diagonal and the two matrices coincide.
+
+Source: arXiv:1703.09188, equation `vUnitary` and the proof of Theorem
+`ThmFund1`, $1\to2$ (lines 495 and 577--588). -/
+theorem IsMPUSimple.sourceV_isIsometry_of_transpose_fixed_pair [NeZero d]
+    {U : MPOTensor d D} (hU : IsMPUSimple U)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (J : ℕ) (hJ : 0 < J)
+    (hpower : normalizedDiagonal (doubleLayerTensor U) ^ J =
+      Matrix.vecMulVec (fun x ↦ ρᵀ.vec (finProdFinEquiv.symm x))
+        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
+    (sourceV U ρ hρ).IsIsometry := by
+  rw [← sourceVDressedGram_iff_isIsometry,
+    sourceVDressedGram_iff_simple2_transpose_fixed_pair]
+  exact hU.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ J hJ hpower
+
+/-- A simple tensor whose normalized double-layer diagonal stabilizes to
+$|\rho)(\Phi|$ has $v^\dagger v=\Id$ for the gate obtained by recomputing the
+source factors with the weight $\rho^{\mathsf T}$.
+
+This is the fixed-point reading of the previous theorem: the transfer fixed
+point is named $\rho$ and the source cuts carry the weight
+$\rho^{\mathsf T}$.  The two readings agree when $\rho^{\mathsf T}=\rho$, which
+is the case the source works in (arXiv:1703.09188, lines 495 and 577--588). -/
 theorem IsMPUSimple.sourceV_transpose_isIsometry [NeZero d]
     {U : MPOTensor d D} (hU : IsMPUSimple U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (J : ℕ) (hJ : 0 < J)
     (hpower : normalizedDiagonal (doubleLayerTensor U) ^ J =
       Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
         (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
-    (sourceV U ρᵀ hρ.transpose).IsIsometry := by
-  rw [← sourceVDressedGram_iff_isIsometry,
-    sourceVDressedGram_iff_simple2_transpose_fixed_pair]
-  simpa only [Matrix.transpose_transpose] using
-    hU.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ J hJ hpower
+    (sourceV U ρᵀ hρ.transpose).IsIsometry :=
+  hU.sourceV_isIsometry_of_transpose_fixed_pair ρᵀ hρ.transpose J hJ
+    (by simpa only [Matrix.transpose_transpose] using hpower)
 
 /-- Theorem `ThmFund1`, $1\to2$: for the diagonal fixed point used by the
 source, the paper gate $v$ built from that same weight satisfies
@@ -203,11 +231,9 @@ theorem IsMPUSimple.sourceV_isIsometry [NeZero d]
     (hpower : normalizedDiagonal (doubleLayerTensor U) ^ J =
       Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
         (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
-    (sourceV U ρ hρ).IsIsometry := by
-  rw [← sourceVDressedGram_iff_isIsometry,
-    sourceVDressedGram_iff_simple2_transpose_fixed_pair]
-  simpa only [hρdiag.isSymm.eq] using
-    hU.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ J hJ hpower
+    (sourceV U ρ hρ).IsIsometry :=
+  hU.sourceV_isIsometry_of_transpose_fixed_pair ρ hρ J hJ
+    (by simpa only [hρdiag.isSymm.eq] using hpower)
 
 /-- Theorem `ThmFund1`, $1\to2$, rank consequence: a simple tensor with
 stabilized fixed pair satisfies $r\ell\le d^2$, since the isometry $v$ maps

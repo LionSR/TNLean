@@ -206,18 +206,16 @@ For $D>1$, the admissible source results assume reduced canonical-form-II data
 with full support for the same tensor $\mathcal U$ whose cuts, ranks, and source
 operators appear in their statements. For $D=1$, the one-dimensional
 stabilization theorem supplies the source pair directly. In either branch, the
-datum supplies $J>0$, a positive trace-one matrix $\rho$, and
+datum supplies $J>0$, a positive trace-one weight $\rho$, and
 \begin{align}
-    E^J &= \lvert\rho)(\Phi\rvert.
+    E^J &= \lvert\rho^{\mathsf T})(\Phi\rvert.
     \label{eq:mpu_canonical_form_full_support_supplied_stabilization}
 \end{align}
-The source-$u$ theorem additionally assumes that $\rho$ is diagonal, as in the
-source's canonical-form-II coordinates. Supplying these same-tensor diagonal
-source data is part of the construction tracked by \ghissue{7012}; the later
-unrestricted representative remains tracked by \ghissue{7127}. The admissible
-source-isometry and simple-tensor equivalence nodes cite Lemma~III.7 and
-Theorem~III.8 of Ref.~\cite{Cirac2017MPU} directly. Both retain the source
-factors of $\mathcal U$.
+Supplying these same-tensor source data is part of the construction tracked by
+\ghissue{7012}; the later unrestricted representative remains tracked by
+\ghissue{7127}. The admissible source-isometry and simple-tensor equivalence
+nodes cite Lemma~III.7 and Theorem~III.8 of Ref.~\cite{Cirac2017MPU} directly.
+Both retain the source factors of $\mathcal U$.
 % Source lines: paper_v2.tex 545--601.
 
 Blocking occurs only within the supplied-fixed-pair source-$u$ calculation.
@@ -227,6 +225,51 @@ $K$-site double-layer fixed pair. The calculation then keeps this one interior
 between the two unblocked endpoint letters. It does not replace the source
 cuts, ranks, or operators of $\mathcal U$, and it does not transport source
 data across blocking.
+
+\section{Pairing the source weight with the transfer fixed point}
+
+The diagonal hypothesis on the ambient matrix is not needed once the source
+weight and the transfer fixed point are paired as the column-stacking
+coordinates require. Both complete networks insert the column-stacking vector
+of $\rho^{\mathsf T}$, where $\rho$ is the weight of the two normalizations
+\texttt{X1X2b}. Supplying
+\begin{align}
+    E^J &= \lvert\rho^{\mathsf T})(\Phi\rvert
+    \label{eq:mpu_canonical_form_full_support_transposed_supplied_stabilization}
+\end{align}
+therefore matches the insertion exactly, for every positive definite $\rho$.
+% Source lines: paper_v2.tex 487--494, 545--557, and 577--588.
+
+On the source-$u$ side, the exact closure
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_transpose_fixed_pair_trace}
+already holds for every weight;
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_closed_doubleLayer_trace_of_transpose_fixed_pair}
+substitutes~\eqref{eq:mpu_canonical_form_full_support_transposed_supplied_stabilization}
+and
+\leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU_of_transpose_fixed_pair}
+reads off $u^\dagger u=\Id$ from input-first unitarity, with the compact-SVD
+wrapper \leanid{MPOTensor.IsMPU.sourceU_isIsometry_of_transpose_fixed_pair}. On
+the source-$v$ side,
+\leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry_of_transpose_fixed_pair} gives
+$v^\dagger v=\Id$ for the gate built from the same weight $\rho$. The full
+equivalence is
+\leanid{MPOTensor.IsMPU.isMPUSimple_tfae_of_transpose_fixed_pair}. None of these
+assumes that $\rho$ is diagonal or symmetric. A diagonal weight has
+$\rho^{\mathsf T}=\rho$, so the source's own convention is the special case,
+and the diagonal statements are now derived from the general ones.
+% Source lines: paper_v2.tex 495 and 563--601.
+
+Existence is unaffected. If the reduced canonical-form-II data supply a
+positive trace-one ambient fixed point $\sigma$ with
+$E^J=\lvert\sigma)(\Phi\rvert$, take $\rho=\sigma^{\mathsf T}$: it is again
+positive definite with trace one, and it
+satisfies~\eqref{eq:mpu_canonical_form_full_support_transposed_supplied_stabilization}.
+The diagonality clause previously carried by the reduced full-support source
+datum is therefore removed, and the diagonal-weight scope restriction on the
+source-$u$ and source-$v$ isometries is eliminated. What remains open in this
+note is the construction of the source datum itself for an arbitrary
+representative, not the shape of its weight.
+% Source lines: paper_v2.tex 269--280 and 397--405.
 
 \section{Downstream standard-form, index, and symmetry scope}
 
@@ -575,9 +618,11 @@ unformalized; the distinct admissible nodes record the current same-tensor
 source-data route.
 
 Within Theorem~III.8 itself, the complete supplied-fixed-pair source-$u$
-contraction and the complete source-$v$ equivalence are formalized. The
+contraction, the complete source-$v$ equivalence, and the full four-way
+equivalence are formalized for an arbitrary positive definite source weight,
+with no diagonality or symmetry assumed. The
 unrestricted source statement \texttt{lemuisometry} remains open because the
-formalization does not yet construct the required same-tensor diagonal source
+formalization does not yet construct the required same-tensor source
 data from an arbitrary MPU. That admissible construction remains in
 \ghissue{7012}, and the unrestricted representative remains in
 \ghissue{7127}. Downstream standard-form, index, continuity, and symmetry

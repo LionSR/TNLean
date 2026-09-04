@@ -4912,21 +4912,25 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Let $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ be the normalized
     flattening, and let $E$ be its transfer matrix. A reduced full-support source
     datum for $\mathcal U$, with physical dimension $d>0$ and positive bond
-    dimension, consists of an integer $J>0$, a diagonal positive definite matrix
+    dimension, consists of an integer $J>0$, a positive definite matrix
     $\rho$ with $\tr(\rho)=1$, and
     $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$ such that
     \begin{align}
-        E^J & =\lvert\rho)(\Phi\rvert.
+        E^J & =\lvert\rho^{\mathsf T})(\Phi\rvert.
     \end{align}
+    Here $\rho$ is the weight carried by the two source-cut normalizations and
+    $\rho^{\mathsf T}$ is the stabilized right fixed point; the two are paired
+    this way by the column-stacking coordinates recorded in
+    \texttt{docs/paper-gaps/mpu\_source\_cut\_orientation.tex}, and they
+    coincide in the source's diagonal canonical-form-II coordinates.
     The one-dimensional case is supplied directly: if $D=1$, take $J=1$
     and $\rho=\Id_1$ using
     Theorem~\ref{thm:mpu_normalized_transfer_fin_one}. If $D>1$, chosen
     canonical-form-II data with full support give a positive trace-one ambient
-    fixed point with $J=D^2-1$ by
-    Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Diagonality of
-    this ambient fixed point is an additional hypothesis: the theorem gives a
-    diagonal matrix in the unique block coordinates, but conjugation into the
-    ambient coordinates need not preserve diagonality.
+    fixed point $\sigma$ with $J=D^2-1$ by
+    Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}; take
+    $\rho=\sigma^{\mathsf T}$, which is again positive definite with trace one.
+    No diagonality of the ambient fixed point is required.
     For $D>1$, this states the fixed-pair convention in
     \cite[equations labelled~\texttt{Erightleft} and~\texttt{II\_UTransfer}, and
         proof of Proposition~III.2(ii)]{Cirac2017MPU}. The $D=1$ branch is the direct
@@ -5188,6 +5192,44 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     contracted separately.
 \end{proof}
 
+\begin{theorem}[Source-$v$ isometry for a transposed fixed pair]
+    \label{thm:mpu_transpose_fixed_pair_source_v_isometry}
+    \lean{MPOTensor.IsMPUSimple.sourceV_isIsometry_of_transpose_fixed_pair}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer}
+    Let $\mathcal U$ be simple with physical dimension $d>0$, let $W$ be its
+    double layer with normalized diagonal $E$, and let $\rho>0$ be a weight
+    that is not assumed symmetric. Put
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$ and suppose that
+    \begin{align}
+        E^J & =\lvert\rho^{\mathsf T})(\Phi\rvert
+    \end{align}
+    for some $J>0$. Let $v$ be the source operator of $\mathcal U$ built from
+    the weight $\rho$. Then $v^\dagger v=\Id_{r\ell}$.
+
+    The weight carried by the two normalizations and the stabilized right fixed
+    point are paired here as the column-stacking coordinates require. A
+    diagonal weight has $\rho^{\mathsf T}=\rho$, which recovers the source's
+    own convention. This is the implication $1\to2$ in
+    \cite[proof of Theorem~III.8]{Cirac2017MPU}, before the standing isometry
+    of $u$ is used.
+    % Source lines: paper_v2.tex 495 and 577--588. The weight orientation is
+    % recorded in docs/paper-gaps/mpu_source_cut_orientation.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_projector_simple2,
+        thm:mpu_source_v_complete_contraction,
+        thm:mpu_source_v_dressed_gram_cancel}
+    Theorem~\ref{thm:mpu_supplied_projector_simple2} applied to the supplied
+    rank-one matrix gives
+    $W^{ij}W^{k\ell}=W^{ij}\lvert\rho^{\mathsf T})(\Phi\rvert W^{k\ell}$, which
+    is exactly the inserted identity produced by
+    Theorem~\ref{thm:mpu_source_v_complete_contraction} for the factors built
+    from the weight $\rho$. Hence the dressed Gram equation holds, and
+    Theorem~\ref{thm:mpu_source_v_dressed_gram_cancel} cancels the dressing.
+\end{proof}
+
 \begin{theorem}[Source-$v$ isometry of a simple tensor]
     \label{thm:mpu_simple_source_v_isometry}
     \lean{MPOTensor.IsMPUSimple.sourceV_isIsometry,
@@ -5206,13 +5248,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_supplied_projector_simple2, thm:mpu_source_v_complete_contraction, thm:mpu_source_v_dressed_gram_cancel}
-    Theorem~\ref{thm:mpu_supplied_projector_simple2} gives
-    $W^{ij}W^{k\ell}=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}$. Since $\rho$
-    is diagonal, $\rho^{\mathsf T}=\rho$, so
-    Theorem~\ref{thm:mpu_source_v_complete_contraction} gives the dressed Gram
-    equation for the factors built from the same weight $\rho$. Then
-    Theorem~\ref{thm:mpu_source_v_dressed_gram_cancel} cancels the dressing. Since $v^\dagger v=\Id$ on
+    \uses{thm:mpu_transpose_fixed_pair_source_v_isometry}
+    Since $\rho$ is diagonal, $\rho^{\mathsf T}=\rho$, so the supplied fixed
+    pair is the one required by
+    Theorem~\ref{thm:mpu_transpose_fixed_pair_source_v_isometry} for the weight
+    $\rho$, which gives $v^\dagger v=\Id$. Since $v^\dagger v=\Id$ on
     $\C^r\otimes\C^\ell$, the map $v$ is injective, so $r\ell\le d^2$.
 \end{proof}
 
@@ -5308,6 +5348,59 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     isometrically into one of dimension $r\ell$, one also has $d^2\leq r\ell$.
 \end{proof}
 
+\begin{lemma}[Source-$u$ isometry for a transposed fixed pair]
+    \label{lem:mpu_transpose_fixed_pair_source_u_isometry}
+    \lean{MPOTensor.SourceFactors.sourceU_gram_eq_closed_doubleLayer_trace_of_transpose_fixed_pair,
+        MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU_of_transpose_fixed_pair,
+        MPOTensor.IsMPU.sourceU_isIsometry_of_transpose_fixed_pair}
+    \leanok
+    % **Scope restriction (supplied stabilized fixed pair):** this lemma
+    % assumes the exact rank-one identity explicitly, whereas source Lemma
+    % III.7 inherits it from the preceding canonical-form-II convention.
+    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    \uses{def:mpu, def:mpu_source_uv, def:mpu_weighted_source_factors,
+        def:mpu_double_layer}
+    Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$. Let $W$ be
+    its double layer, put $E=d^{-1}\sum_iW^{ii}$ and
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and let $\rho>0$ be a
+    weight that is not assumed symmetric, with
+    \begin{align}
+        E^K & =\lvert\rho^{\mathsf T})(\Phi\rvert
+    \end{align}
+    for some $K\geq0$. Construct the source factors and $u$ from $\mathcal U$
+    using $\rho$. Then, for all physical pairs $p,q$,
+    \begin{align}
+        \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+         & =\operatorname{tr}\!\left(W^{p_1q_1}W^{p_2q_2}E^K\right),
+    \end{align}
+    and consequently
+    \begin{align}
+        u^\dagger u & =\Id.
+    \end{align}
+    The weight of the two normalizations and the stabilized right fixed point
+    are paired as the column-stacking coordinates require; a diagonal weight
+    has $\rho^{\mathsf T}=\rho$, which recovers
+    Lemma~\ref{lem:mpu_admissible_source_u_isometry}. This is the
+    supplied-fixed-pair version of \cite[Lemma~III.7]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 269--280 and 545--557. The weight orientation
+    % is recorded in docs/paper-gaps/mpu_source_cut_orientation.tex.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_transpose_fixed_pair_trace,
+        thm:mpu_normalized_input_tail_closed_trace,
+        thm:mpu_normalized_input_tail_isometry}
+    Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace} closes the
+    source-$u$ Gram matrix to
+    $\operatorname{tr}(W^{p_2q_2}\lvert\rho^{\mathsf T})(\Phi\rvert W^{p_1q_1})$
+    for every weight, with no symmetry assumed. Substituting the supplied fixed
+    pair and cycling the first endpoint letter gives the displayed trace.
+    Theorem~\ref{thm:mpu_normalized_input_tail_closed_trace} expands that trace
+    as the normalized input tail, and
+    Theorem~\ref{thm:mpu_normalized_input_tail_isometry} evaluates the tail as
+    $\delta_{p,q}$.
+\end{proof}
+
 \begin{theorem}[Simple-tensor equivalence theorem]
     \label{ThmFund1}
     \notready
@@ -5330,6 +5423,58 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % unrestricted node remains not ready for the representative scope recorded
     % in docs/paper-gaps/mpu_canonical_form_full_support.tex.
 \end{theorem}
+
+\begin{theorem}[Simple-tensor equivalence with a transposed fixed pair]
+    \label{thm:mpu_transpose_fixed_pair_simple_tensor_equivalence}
+    \lean{MPOTensor.IsMPU.isMPUSimple_tfae_of_transpose_fixed_pair}
+    \leanok
+    \uses{def:mpu, def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer}
+    Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$, let $W$
+    be its double layer with normalized diagonal $E$, and let $\rho>0$ be a
+    weight that is not assumed symmetric. Suppose that
+    $E^J=\lvert\rho^{\mathsf T})(\Phi\rvert$ for some $J>0$, where
+    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. Compute the source-cut
+    ranks $r$ and $\ell$ and both source operators $u$ and $v$ from this same
+    tensor $\mathcal U$ and weight $\rho$. Then the following are equivalent:
+    \begin{enumerate}
+        \item $\mathcal U$ is simple;
+        \item $r\ell=d^2$;
+        \item $u$ is unitary;
+        \item $v$ is unitary.
+    \end{enumerate}
+    The weight carried by the source cuts and the stabilized right fixed point
+    are paired as the column-stacking coordinates require, and no symmetry of
+    $\rho$ is used. This is the supplied-fixed-pair version of
+    \cite[Theorem~III.8]{Cirac2017MPU}, whose own convention makes $\rho$
+    diagonal.
+    % Source lines: paper_v2.tex 495 and 563--601. The weight orientation is
+    % recorded in docs/paper-gaps/mpu_source_cut_orientation.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_transpose_fixed_pair_source_u_isometry,
+        thm:mpu_transpose_fixed_pair_source_v_isometry,
+        thm:mpu_source_gates_two_site_factorization,
+        thm:mpu_simple_of_source_v_isometry}
+    Lemma~\ref{lem:mpu_transpose_fixed_pair_source_u_isometry} gives
+    $u^\dagger u=\Id$, hence $d^2\leq r\ell$, before any of the four conditions
+    is assumed. Follow the cycle $1\to2\to3\to4\to1$.
+
+    If $\mathcal U$ is simple,
+    Theorem~\ref{thm:mpu_transpose_fixed_pair_source_v_isometry} gives
+    $v^\dagger v=\Id$ for the operator built from the same weight $\rho$, hence
+    $r\ell\leq d^2$ and therefore $r\ell=d^2$. Conversely, this equality makes
+    the standing isometry $u$ square, hence unitary. The two-site factorization
+    gives
+    \begin{align}
+        \operatorname{reindex}(U^{(2)})
+         & =v\,\operatorname{swap}_{r,\ell}(u).
+    \end{align}
+    Reindexing preserves unitarity. Since $U^{(2)}$ and $u$ are unitary,
+    cancellation makes $v$ unitary. Finally, $v^\dagger v=\Id$ gives the second
+    simple contraction, while the MPU identity gives the first, so
+    $\mathcal U$ is simple.
+\end{proof}
 
 \begin{theorem}[Simple-tensor equivalence with a supplied diagonal fixed pair]
     \label{thm:mpu_diagonal_fixed_pair_simple_tensor_equivalence}
@@ -5354,31 +5499,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_admissible_source_u_isometry,
-        thm:mpu_simple_source_v_isometry,
-        thm:mpu_source_gates_two_site_factorization,
-        thm:mpu_simple_of_source_v_isometry}
-    The supplied fixed pair gives $u^\dagger u=\Id$ and
-    $d^2\leq r\ell$ before any of the four conditions is assumed. Follow the
-    cycle $1\to2\to3\to4\to1$.
-
-    If $\mathcal U$ is simple, the source-$v$ contraction for the same weight
-    $\rho$ gives $v^\dagger v=\Id$, hence $r\ell\leq d^2$ and therefore
-    $r\ell=d^2$. Conversely, this equality makes the standing isometry $u$
-    square, hence unitary. The two-site factorization gives
-    \begin{align}
-        \operatorname{reindex}(U^{(2)})
-         & =v\,\operatorname{swap}_{r,\ell}(u).
-    \end{align}
-    Reindexing preserves unitarity. Since $U^{(2)}$ and $u$ are unitary,
-    cancellation makes $v$ unitary. Finally, $v^\dagger v=\Id$ gives the
-    second simple contraction, while the MPU identity gives the first, so
-    $\mathcal U$ is simple.
+    \uses{thm:mpu_transpose_fixed_pair_simple_tensor_equivalence}
+    Since $\rho$ is diagonal, $\rho^{\mathsf T}=\rho$, so the supplied fixed
+    pair is the one required by
+    Theorem~\ref{thm:mpu_transpose_fixed_pair_simple_tensor_equivalence} for
+    the weight $\rho$.
 \end{proof}
 
 \begin{theorem}[Admissible simple-tensor equivalence theorem]
     \label{thm:mpu_admissible_simple_tensor_equivalence}
-    \notready
+    \lean{MPOTensor.IsMPU.isMPUSimple_tfae_of_transpose_fixed_pair}
+    \leanok
     \discussion{5708}
     % **Scope restriction (all positive bond dimensions):** the $D=1$ branch
     % uses one-dimensional transfer stabilization; the $D>1$ branch uses chosen
@@ -5388,7 +5519,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_reduced_full_support_source_datum}
     Let $\mathcal U$ be an MPU tensor equipped with a reduced full-support
-    source datum, and let $\rho$ and $(\Phi\rvert$ be its normalized fixed pair.
+    source datum, and let $\rho$ and $(\Phi\rvert$ be its normalized source
+    weight and left fixed covector.
     Compute the source-cut ranks $r$ and $\ell$ and the source operators $u$ and
     $v$ from this same tensor $\mathcal U$ using $\rho$. Then the following
     conditions are equivalent:
@@ -5398,26 +5530,31 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \item $u$ is unitary;
         \item $v$ is unitary.
     \end{enumerate}
-    This is the reduced-source version of
+    The datum does not require $\rho$ to be diagonal, whereas
+    \cite[Theorem~III.8]{Cirac2017MPU} is stated under its preceding
+    canonical-form-II convention, in which $\rho$ is diagonal. Dropping that
+    convention is a generalization of the source statement and is not
+    attributed to it. This is the reduced-source version of
     \cite[Theorem~III.8]{Cirac2017MPU}.
-    % Source lines: paper_v2.tex 563--601.
+    % Source lines: paper_v2.tex 495 and 563--601.
 \end{theorem}
 
-\begin{proof}
-    \uses{lem:mpu_admissible_source_u_isometry,
-        thm:mpu_simple_source_v_isometry,
+\begin{proof}\leanok
+    \uses{lem:mpu_transpose_fixed_pair_source_u_isometry,
+        thm:mpu_transpose_fixed_pair_source_v_isometry,
         thm:mpu_simple_of_source_v_isometry,
         thm:mpu_source_gates_two_site_factorization}
-    Lemma~\ref{lem:mpu_admissible_source_u_isometry} gives
+    Lemma~\ref{lem:mpu_transpose_fixed_pair_source_u_isometry} gives
     $u^\dagger u=\Id$ before any of the four
     conditions is assumed. Thus $u$ is a standing isometry and
     $r\ell\geq d^2$ throughout the proof.
 
     Suppose first that $\mathcal U$ is simple. The reduced full-support datum
-    requires $\rho$ to be diagonal, so
-    Theorem~\ref{thm:mpu_simple_source_v_isometry} gives
-    $v^\dagger v=\Id$ for the source operator built from the same weight
-    $\rho$, hence $r\ell\leq d^2$.
+    supplies $E^J=\lvert\rho^{\mathsf T})(\Phi\rvert$, which is exactly the
+    insertion produced by the two weighted normalizations for the weight
+    $\rho$, so Theorem~\ref{thm:mpu_transpose_fixed_pair_source_v_isometry}
+    gives $v^\dagger v=\Id$ for the source operator built from that same weight
+    $\rho$, hence $r\ell\leq d^2$. No symmetry of $\rho$ is needed.
 
     If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
     Theorem~\ref{thm:mpu_source_gates_two_site_factorization} gives the exact
