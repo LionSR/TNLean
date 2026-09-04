@@ -287,4 +287,37 @@ theorem matched_sector_weight_equiv
     simp [castEquiv]
   rw [hQ, hPoint, ← mul_assoc, inv_mul_cancel₀ hζ, one_mul]
 
+/-- **Matched-sector weight-permutation extractor along an arithmetic
+progression.**
+
+The proof of the equal-case fundamental theorem compares the multiplicity power
+sums of two blocks only at the multiples of the block's period, because at every
+other length the block generates the zero vector. Raising every sector weight of
+both decompositions to that period turns the progression into a full tail, so
+the comparison at every multiple of the period recovers the matched multiplicity
+entries up to a permutation and up to the period-th power.
+
+Source: arXiv:1708.00029, theorem `thm:bdequal`, lines 681--684, where the
+conclusion is `μ_{j,l}^{m_j} = ν_{j,π(l)}^{m_j}`; the underlying power-sum
+recovery is lemma `lem:momentsN0`, lines 537--569. -/
+theorem matched_sector_weight_pow_equiv_of_period_multiple
+    {P Q : SectorDecomposition d}
+    (j₀ : Fin P.basisCount) (k₀' : Fin Q.basisCount)
+    (m : ℕ) (ζ : ℂ) (hζ : ζ ≠ 0)
+    {n₀ : ℕ}
+    (hCoeff : ∀ n > n₀, P.coeff (m * n) j₀ = ζ ^ (m * n) * Q.coeff (m * n) k₀') :
+    ∃ (_hCopies : P.copies j₀ = Q.copies k₀')
+      (τ : Fin (P.copies j₀) ≃ Fin (Q.copies k₀')),
+      ∀ q : Fin (P.copies j₀),
+        Q.weight k₀' (τ q) ^ m = (ζ⁻¹ * P.weight j₀ q) ^ m := by
+  obtain ⟨hCopies, τ, hτ⟩ :=
+    matched_sector_weight_equiv (P := P.powWeights m) (Q := Q.powWeights m)
+      j₀ k₀' (ζ ^ m) (pow_ne_zero m hζ) (N₀ := n₀)
+      (fun n hn => by
+        simpa [SectorDecomposition.coeff_powWeights, pow_mul] using hCoeff n hn)
+  refine ⟨hCopies, τ, fun q => ?_⟩
+  have hq : Q.weight k₀' (τ q) ^ m = (ζ ^ m)⁻¹ * P.weight j₀ q ^ m := hτ q
+  rw [mul_pow, inv_pow]
+  exact hq
+
 end MPSTensor
