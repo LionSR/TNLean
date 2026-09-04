@@ -283,12 +283,26 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     coefficient in (\ref{eq:mpug_physical_adjoint_inverse_mpv}).
 \end{proof}
 
+\begin{definition}[Exchange of product bond factors]
+    \label{def:mpug_product_bond_swap}
+    \lean{MPOTensor.productBondSwapEquiv}
+    \leanok
+    For bond dimensions $D_M$ and $D_N$, the exchange of product bond factors
+    is the equivalence
+    \begin{align}
+        \{0,\ldots,D_MD_N-1\}  & \longrightarrow
+        \{0,\ldots,D_ND_M-1\}, &
+        (\alpha,\gamma)        & \longmapsto (\gamma,\alpha).
+        \label{eq:mpug_product_bond_swap}
+    \end{align}
+\end{definition}
+
 \begin{theorem}[Physical adjunction reverses the operator product]
     \label{thm:mpug_physical_adjoint_product_reversal}
-    \lean{MPOTensor.productBondSwapEquiv,
-        MPOTensor.physicalAdjointTensor_mulTensor}
+    \lean{MPOTensor.physicalAdjointTensor_mulTensor}
     \leanok
-    \uses{def:mpdo_operator_product, def:mpdo_physical_adjoint}
+    \uses{def:mpug_product_bond_swap, def:mpdo_operator_product,
+        def:mpdo_physical_adjoint}
     Let $M$ and $N$ be MPO tensors with bond dimensions $D_M$ and $D_N$.
     Write a left bond index of the product tensor as a pair
     $(\alpha,\gamma)$, with $\alpha$ in the bond space of $M$ and $\gamma$ in
@@ -296,9 +310,9 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     likewise. Then, for every pair of physical indices $i,k$,
     \begin{align}
         \bigl((M\mathbin{\cdot}N)^\sharp\bigr)^{ik}
-            _{(\alpha\gamma),(\beta\delta)}
+            _{(\alpha,\gamma),(\beta,\delta)}
          & =\bigl(N^\sharp\mathbin{\cdot}M^\sharp\bigr)^{ik}
-        _{(\gamma\alpha),(\delta\beta)}.
+        _{(\gamma,\alpha),(\delta,\beta)}.
         \label{eq:mpug_physical_adjoint_product_reversal}
     \end{align}
     The two bond spaces need not have the same dimension, so the exchange of
@@ -314,7 +328,8 @@ $N\geq1$. In particular, no identity at length zero is asserted.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_operator_product, def:mpdo_physical_adjoint}
+    \uses{def:mpug_product_bond_swap, def:mpdo_operator_product,
+        def:mpdo_physical_adjoint}
     Expand both sides. The left side is the complex conjugate of the
     $\bigl((\alpha,\gamma),(\beta,\delta)\bigr)$ entry of
     $\sum_j M^{kj}\otimes N^{ji}$, namely
@@ -1059,16 +1074,16 @@ Definition~\ref{def:mpug_group_representation}.
     (\ref{eq:mpug_unitary_kronecker_factors}).
 \end{proof}
 
-\begin{theorem}[Cross-product rigidity of a commuting family]
+\begin{theorem}[Cross-product rigidity]
     \label{thm:mpug_cross_product_rigidity}
     \lean{Kraus.IsNormal.eq_smul_of_cross_mul_eq,
         Kraus.IsInjective.eq_smul_of_cross_mul_eq}
     \leanok
     \uses{def:injective, def:normal}
     Let $A_i$ and $B_i$ be two families of square matrices of the same size,
-    indexed by the same finite alphabet, and suppose that
+    indexed by the same finite alphabet, and suppose that, for every $i,j$,
     \begin{align}
-        B_iA_j & =A_iB_j\qquad\text{for all }i,j.
+        B_iA_j & =A_iB_j.
         \label{eq:mpug_cross_product_rigidity}
     \end{align}
     If $A$ is injective, or more generally normal, then there is a scalar
@@ -1086,14 +1101,15 @@ Definition~\ref{def:mpug_group_representation}.
     Let $N\geq1$ be a blocking length at which the length-$N$ words of $A$
     span the full matrix algebra, and decompose the identity as
     $\mathbf 1=\sum_\sigma c_\sigma A^{\sigma_1}\cdots A^{\sigma_N}$. The
-    cross relation moves the marked letter one step to the right,
+    cross relation moves the marked letter successively through the word,
     \begin{align}
         B_iA^{\sigma_1}\cdots A^{\sigma_N}
-         & =A_iB^{\sigma_1}A^{\sigma_2}\cdots A^{\sigma_N}.
+         & =A_i\left(\prod_{r=1}^{N-1}A^{\sigma_r}\right)B^{\sigma_N},
         \notag
     \end{align}
-    Thus $B_i=A_iC$ with
-    $C=\sum_\sigma c_\sigma B^{\sigma_1}A^{\sigma_2}\cdots A^{\sigma_N}$.
+    where the product is the identity when $N=1$. Thus $B_i=A_iC$ with
+    $C=\sum_\sigma c_\sigma
+        \left(\prod_{r=1}^{N-1}A^{\sigma_r}\right)B^{\sigma_N}$.
     Substituting this identity into
     (\ref{eq:mpug_cross_product_rigidity}) gives
     $A_i(CA_j-A_jC)=0$ for all $i$ and $j$. Multiplying on the left by a
