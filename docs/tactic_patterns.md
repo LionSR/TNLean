@@ -2349,6 +2349,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   distinction rather than identifying the two tensor shapes. Below the
   rule-of-three promotion threshold.
 
+### trace-one ambient block fixed matrix — candidate
+- **Pattern:** from canonical-form-II data with one retained block and full
+  support, rescale the block's diagonal positive fixed matrix to trace one,
+  use the unit weight forced by the shifted transfer traces, and transport the
+  rescaled matrix along the ambient block inclusion to a positive trace-one
+  right fixed matrix of the ambient transfer map.
+- **Seen:** two occurrences,
+  `TNLean/MPS/MPU/TransferStabilization.lean` (the stabilized-power theorem)
+  and `TNLean/MPS/MPU/ReducedCanonicalRepresentative.lean` (the reduced
+  representative in the ambient diagonal gauge), recorded 2026-09-04.
+- **Abstraction:** proposed lemma on canonical-form-II data producing the
+  normalized block matrix together with its weighted-block fixed-point
+  equation, leaving each call site to choose the ambient coordinates.
+- **Notes:** below the promotion threshold at two occurrences. The two call
+  sites differ in their conclusion: one keeps the original ambient
+  coordinates and therefore cannot assert diagonality, while the other
+  changes gauge to the block coordinates and can. Only the shared normalized
+  block matrix and its fixed-point equation should be factored out.
+
 ---
 
 ## Rejected
