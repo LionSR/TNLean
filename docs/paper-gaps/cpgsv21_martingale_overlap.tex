@@ -1948,21 +1948,38 @@ rates, so the source's eigenvalue prescription remains unformalized. The second
 is the prefactor: the formal $c$ is the existential rate-dependent constant of
 Lemma~5.2, and the source value $k^2$ is not asserted.
 
-The earlier blocked-to-original comparison remains valid for periodic lengths
-divisible by the chosen block length.  It gives
-\leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul} and
-the explicit lower bound
-\begin{align}
-    \operatorname{gap}(H_{Np,2p}(A))
-    &\geq\frac{1}{8}
-    \qquad(N\geq4).
-    \label{eq:cpgsv21_martingale_overlap_original_aligned_length_gap}
-\end{align}
-That sparse aligned-sum theorem is no longer needed to obtain an all-length
-periodic gap.  The compatible open-chain estimate, cyclic active-block
-identity, and finite-range inequality give
+An earlier blocked-to-original comparison derived the bound
+$\operatorname{gap}(H_{Np,2p}(A))\geq1/8$ for $N\geq4$, on periodic lengths
+divisible by the chosen block length.  Its engine was a finite cyclic
+sparse-sum domination obtained by discarding the local terms whose start is not
+block-aligned.  Ref.~\cite{Nachtergaele1996Spectral} instead argues
+the corresponding statement by rescaling to the increasing sequence of finite
+volumes
+$\tilde\Lambda_n=\Lambda_{ln}$ and applying part~(i) of its Theorem~2.1 with
+$l=1$, so the finite cyclic domination was a reconstruction rather than the
+printed route.  That theorem and its sparse-sum engine are no longer needed to
+obtain an all-length periodic gap, and both have been deleted.  The removed
+declarations are
+\path{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul},
+which carried the divisible-length bound; its engine
+\path{MPSTensor.blockTensor_parentHamiltonianES_conj_le}, which carried the
+sparse aligned-sum domination; the pair of exact conjugation identities
+\path{MPSTensor.parentInteractionES_blockTensor_conj} and
+\path{MPSTensor.localTermES_blockTensor_conj_aligned}, which related the
+blocked parent interaction and the blocked range-two local terms to their
+original range-$2p$ counterparts at block-aligned starts; and the private
+helpers serving them.  The replacement for the first is
+\leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe},
+whose compatible open-chain estimate, cyclic active-block identity, and
+finite-range inequality give
 (\ref{eq:cpgsv21_martingale_overlap_open_knabe_periodic_gap}) for every
-$N\geq2m$.  No periodic boundary coercivity, comparison of unequal kernels,
+$N\geq2m$, with no divisibility restriction on the chain length.  The two
+conjugation identities had no consumer once the sparse-sum domination was gone,
+so they needed no replacement and were deleted with the rest; nothing survives
+from that development.  The dated audit note
+\path{docs/audits/2026-08-29_fbc25_local_orthogonality_rg_scope.md} was amended
+in the same change so that it cites the surviving theorem rather than the
+removed one.  No periodic boundary coercivity, comparison of unequal kernels,
 periodic uniqueness argument, divisibility substitution, or replacement by a
 different cyclic tensor is used.
 
