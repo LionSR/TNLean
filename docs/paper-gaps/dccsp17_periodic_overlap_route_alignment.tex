@@ -601,6 +601,58 @@ irreducible-form theorem to arbitrary input tensors through Proposition~2.1
 requires the positive-length, possibly lower-dimensional comparison at lines
 266--271 of the same source. That extension is not part of Theorem~3.4.
 
+\subsection{Per-length proportionality and the blockwise phase}
+
+The hypothesis of Theorem~3.4, lines 613--623, of
+Ref.~\cite{DeLasCuevas2017Irreducible} is projective proportionality separately
+at each positive length:
+\begin{align}
+    \forall N\geq1,\ \exists c_N\neq0,\qquad
+    \ket{V_N(A)}
+    &=c_N\ket{V_N(B)}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_per_length_proportionality}
+\end{align}
+No scalar independent of $N$ is assumed, and none may be introduced. The
+one-dimensional blocks $B^0=1$ and $A^0=e^{i\theta}$ satisfy
+\begin{align}
+    \ket{V_N(A)}
+    &=e^{iN\theta}\ket{V_N(B)},
+    \label{eq:dccsp17_periodic_overlap_route_alignment_phase_power_example}
+\end{align}
+so a length-independent scalar is false unless the phase is trivial. The
+formal statements accordingly quantify the scalar over the length, and the
+repeated-block consequence records the scalar in the exponential form
+\begin{align}
+    \ket{V_N(A_j)}
+    &=\zeta_j^{\,N}\ket{V_N(B_{\pi(j)})},
+    \qquad|\zeta_j|=1,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_blockwise_phase_power}
+\end{align}
+which follows from the repeated-block relation \emph{eq:rep}, lines 276--284,
+by cancelling the similarity inside the closed-chain trace.\footnote{Formal
+declaration:
+\leanid{MPSTensor.HetRepeatedBlocks.exists_unit_phase_power_mpv}.}
+
+The conclusion of Theorem~3.4 is blockwise. Each matched pair carries its own
+phase $\xi_j$ in
+\begin{align}
+    A_j^i
+    &=e^{i\xi_j}Y_jB_{\pi(j)}^iY_j^{-1},
+    \label{eq:dccsp17_periodic_overlap_route_alignment_blockwise_relation}
+\end{align}
+and distinct matched pairs may carry distinct phases. The source states at
+lines 625--627 that the theorem relates only the bases of periodic tensors and
+not the assembled tensors themselves, so no single phase for the assembled
+tensors is available at this stage. The formal phase-absorption statement is
+therefore also blockwise: for one matched pair it produces a unit-modulus
+$\xi$ with $\ket{V_N(\xi A_j)}=\ket{V_N(B_{\pi(j)})}$ for every $N\geq1$,
+matching the phase absorption used at lines 302--305 and again at lines
+667--671.\footnote{Formal declaration:
+\leanid{MPSTensor.HetRepeatedBlocks.exists_phase_rescaling_sameMPV₂Pos}.} Its
+scope restriction is recorded on the declaration itself. Relating the
+assembled tensors requires the multiplicities and is possible only in the
+equal case, theorem \emph{thm:bdequal}, lines 643--658.
+
 \subsection{Remaining elimination plan}
 
 A source-labelled theorem must combine the spectrally periodic overlap theorem

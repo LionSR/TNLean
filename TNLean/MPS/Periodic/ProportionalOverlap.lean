@@ -52,15 +52,13 @@ private lemma mpvState_eq_smul_of_hetRepeatedBlocks
     (hRep : HetRepeatedBlocks A B) :
     ∃ α : ℕ → ℂ, ∀ N : ℕ, mpvState (d := d) A N = α N • mpvState (d := d) B N := by
   classical
-  rcases hRep with ⟨hDim, ξ, Y, _hξ, hGauge⟩
+  obtain ⟨ξ, _hξ, hmpv⟩ := hRep.exists_unit_phase_power_mpv
   refine ⟨fun N : ℕ => ξ ^ N, ?_⟩
   intro N
   apply PiLp.ext
   intro σ
   simp only [mpvState_apply]
-  rw [← mpv_cast_dim hDim A N σ]
-  exact mpv_eq_pow_mul_of_gaugePhase B
-    (cast (congr_arg (MPSTensor d) hDim) A) Y ξ hGauge N σ
+  exact hmpv N σ
 
 /-- A chosen block has a non-decaying overlap partner when two tensors with
 the prescribed periodic-basis expansions are projectively proportional.

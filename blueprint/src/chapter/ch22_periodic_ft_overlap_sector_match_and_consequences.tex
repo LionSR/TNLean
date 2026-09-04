@@ -400,6 +400,56 @@
     Invert the pure gauge and take the repeated-block phase to be one.
 \end{proof}
 
+\begin{lemma}[Repeated blocks scale their vectors by a phase power]
+    \label{lem:repeated_blocks_phase_power_mpv}
+    \lean{MPSTensor.HetRepeatedBlocks.exists_unit_phase_power_mpv}
+    \leanok
+    Let $A$ and $B$ be repeated blocks.  Then there is a scalar $\zeta$ with
+    $|\zeta|=1$ such that, for every length $N$,
+    \begin{align}
+        \ket{V^{(N)}(A)}=\zeta^{N}\ket{V^{(N)}(B)}.
+        \notag
+    \end{align}
+    The proportionality scalar therefore depends on the length.  Already the
+    one-dimensional blocks with a single physical index, $B^0=1$ and
+    $A^0=\zeta$, satisfy $\ket{V^{(N)}(A)}=\zeta^{N}\ket{V^{(N)}(B)}$, so no
+    scalar independent of the length works unless $\zeta=1$.
+\end{lemma}
+\begin{proof}
+    \uses{thm:gauge_phase_mpv_scaling}
+    \leanok
+    Write $A^i=\zeta YB^iY^{-1}$ with $|\zeta|=1$.  A closed chain of length
+    $N$ is the trace of a product of $N$ such factors.  The neighbouring
+    similarities cancel and the trace is invariant under the outer
+    conjugation, while each site contributes one factor $\zeta$.
+\end{proof}
+
+\begin{lemma}[Absorbing the phase of a repeated-block relation]
+    \label{lem:repeated_blocks_phase_absorption}
+    \lean{MPSTensor.HetRepeatedBlocks.exists_phase_rescaling_sameMPV₂Pos}
+    \leanok
+    Let $A$ and $B$ be repeated blocks.  Then there is a scalar $\xi$ with
+    $|\xi|=1$ such that $\xi A$ and $B$ generate the same vector at every
+    positive length,
+    \begin{align}
+        \ket{V^{(N)}(\xi A)}=\ket{V^{(N)}(B)},
+        \qquad N\geq1.
+        \notag
+    \end{align}
+    The phase belongs to the matched pair $A,B$; distinct matched pairs of two
+    bases of periodic tensors may require distinct phases, so no single phase
+    is asserted for the assembled tensors
+    \cite[lines~286--305, 625--627]{DeLasCuevas2017Irreducible}.
+\end{lemma}
+\begin{proof}
+    \uses{lem:repeated_blocks_phase_power_mpv, thm:gauge_phase_mpv_scaling}
+    \leanok
+    Take $\xi$ to be the reciprocal of the phase of the preceding lemma, which
+    is nonzero because it has modulus one.  Rescaling every matrix of a block
+    by $\xi$ multiplies its length-$N$ vector by $\xi^{N}$, and the two powers
+    cancel.
+\end{proof}
+
 \begin{lemma}[Pure similarities preserve periodic overlap hypotheses]
     \label{lem:periodic_overlap_hypothesis_gauge_transport}
     \lean{MPSTensor.PeriodicOverlapHypothesis.of_gaugeEquiv}
