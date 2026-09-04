@@ -2437,11 +2437,27 @@ existential rate-dependent one.  Both deviations are recorded in
     \uses{thm:primitive_fnw_projector_defect_geometric,
         thm:reassociated_tail_boundary_one_site,
         thm:spectator_boundary_hilbert_factorization}
-    The reassociated tail boundary map with a one-site suffix is the tail
-    boundary map on $l+1$ sites, whose range is the open-chain tail ground
-    space; the left boundary map with a one-site interval has the open-chain
-    left ground space as its range.  Substituting $\ell=1$ in the geometric
-    estimate gives the display.
+    The two projectors of the whole-increment display at $\ell=1$ are the two
+    projectors of the open-chain display.  Indeed
+    \begin{align}
+        \ran\widetilde\Gamma^{\mathrm{tail}}_{K;l,1}
+        =\ran\Gamma^{\mathrm{tail}}_{K,l+1}=\mathcal V_{K,l+1}(A),
+        \qquad
+        \ran\Gamma^{\mathrm{left}}_{K+l,1}=\mathcal U_{K+l}(A),
+        \label{eq:openchain_defect_range_identifications}
+    \end{align}
+    the first equality by
+    Equation~(\ref{eq:reassociated_tail_boundary_one_site}) and the remaining
+    two by Theorem~\ref{thm:spectator_boundary_hilbert_factorization}.  Taking
+    orthogonal projectors onto the three subspaces gives
+    \begin{align}
+        P^{\mathrm{tail}}_{K;l,1}=P^{\mathrm{tail}}_{K,l+1}(A),
+        \qquad
+        P^{\mathrm{left}}_{K+l;1}=P^{\mathrm{left}}_{K+l}(A),
+        \label{eq:openchain_defect_projector_identifications}
+    \end{align}
+    so the two defect operators are equal.  Substituting $\ell=1$ in the
+    geometric estimate gives the display.
 \end{proof}
 
 \begin{theorem}[Geometric power bound below unit spectral radius]
