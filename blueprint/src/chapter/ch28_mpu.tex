@@ -7697,11 +7697,36 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1613--1631.
 \end{proposition}
 
+\begin{lemma}[Scalar parity law for the blocked sign]
+    \label{lem:mpu_blocked_sign_parity_scalar}
+    \lean{TNLean.Algebra.blockedSign_eq_first_of_odd,
+        TNLean.Algebra.blockedSign_eq_second_of_even}
+    \leanok
+    Let $\sigma^{(1)},\sigma^{(2)}\in\{1,-1\}$ and put
+    $\zeta=\sigma^{(1)}\sigma^{(2)}$. For every $k\geq1$,
+    \begin{align}
+        \sigma^{(1)}\zeta^{k-1}
+         & =\begin{cases}
+                \sigma^{(1)}, & k\text{ odd},  \\
+                \sigma^{(2)}, & k\text{ even}.
+            \end{cases}
+    \end{align}
+    % Source lines: paper_v2.tex 1687 and 1732.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both signs square to one, hence $\zeta^2=1$. For odd $k$ the exponent $k-1$
+    is even, so $\zeta^{k-1}=1$ and the product is $\sigma^{(1)}$. For even
+    $k\geq2$ the exponent $k-1$ is odd, so $\zeta^{k-1}=\zeta$ and the product
+    is $(\sigma^{(1)})^2\sigma^{(2)}=\sigma^{(2)}$.
+\end{proof}
+
 \begin{proposition}[Blocking parity of the time-reversal sign]
     \label{prop:sigma1-and-sigma2-equal}
     \notready
     \discussion{5714}
-    \uses{prop:sigma-well-defined, PropChiral, lem:mpu_blocking}
+    \uses{prop:sigma-well-defined, PropChiral, lem:mpu_blocking,
+        lem:mpu_blocked_sign_parity_scalar}
     Let $\mathcal U$ be a time-reversal-invariant MPU in standard form, and let
     $\sigma^{(k)}$ be the sign obtained from a standard form of its $k$-site
     block. Then
@@ -7747,7 +7772,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % reduced full-support source data. No preservation under blocking is
     % asserted. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, def:mpu_reduced_full_support_source_datum}
+    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, def:mpu_reduced_full_support_source_datum, lem:mpu_blocked_sign_parity_scalar}
     For every blocking length $k$ under consideration, suppose the endpoint
     tensor $\mathcal U_k$, its actual two-site block $\mathcal U_{2k}$, and the
     physical-adjoint comparison tensor $\mathcal U_{2k}^\sharp$ are simple and
@@ -7764,7 +7789,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}
-    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking}
+    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, lem:mpu_blocked_sign_parity_scalar}
     Gauge invariance permits the standard blocked representatives used in the
     source proof. Choose
     \begin{align}

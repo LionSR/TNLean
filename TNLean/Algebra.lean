@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
 
+import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CocycleCohomology
