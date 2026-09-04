@@ -10,7 +10,7 @@ import TNLean.MPS.Examples.GHZCluster
 # The GHZ–cluster physical representation and literal action table
 
 The onsite representation and virtual matrices of arXiv:2502.20257,
-`example:z4z2`, lines 4481–4487. Physical coordinates are
+`example:z4z2`, lines 4481–4489. Physical coordinates are
 `|p,s,r⟩ ↔ 4*p + 2*s + r`: the blocked cluster tensor stores its first
 factor in the least significant bit. Thus physical qubits 2 and 3 correspond
 to the second and first stored cluster factors, respectively.
@@ -135,7 +135,7 @@ def z4z2GHZClusterIndex (p s r : Fin 2) : Fin 8 :=
 
 /-- The source generators and the square of the first generator, stated on
 computational basis columns. These are precisely `(X₁⊗X₂) CNOT₁→₂`, `X₃`,
-and `X₂`, respectively (arXiv:2502.20257, lines 4481 and 4487). -/
+and `X₂`, respectively (arXiv:2502.20257, lines 4481 and 4489). -/
 theorem z4z2GHZClusterAction_generators (p s r : Fin 2) (i : Fin 8) :
     (z4z2GHZClusterAction (.ofAdd (1, 0)) i (z4z2GHZClusterIndex p s r) =
       if i = z4z2GHZClusterIndex (p + 1) (s + p + 1) r then 1 else 0) ∧
@@ -200,7 +200,7 @@ theorem z4z2GHZClusterBlock_covariance (g : Multiplicative (ZMod 4 × ZMod 2))
 /-- On the unbroken subgroup `(2a,b)`, the table is the existing cluster
 projective representation with swapped physical coordinates and the literal
 phase `-i` at `(a,b)=(1,1)`. In particular the Y entries are not the real
-product ZX. Source: arXiv:2502.20257, line 4487. -/
+product ZX. Source: arXiv:2502.20257, line 4489. -/
 theorem z4z2GHZClusterVirtual_stabilizer (a b : ZMod 2) (x : Fin 2) :
     z4z2GHZClusterVirtual (2 * (a.val : ZMod 4), b) x =
       (if a = 1 ∧ b = 1 then -Complex.I else 1) •

@@ -4113,11 +4113,14 @@ scalar calculation above.
     Let $V_{g,x}$ be given by the following table, where
     $Y=\left(\begin{smallmatrix}0&-i\\i&0\end{smallmatrix}\right)$:
     \begin{center}
-        \begin{tabular}{c|cccccccc}
+        \begin{tabular}{ccccccccc}
+            \toprule
             $g$   & $(0,0)$ & $(2,0)$ & $(0,1)$ & $(2,1)$
-                  & $(1,0)$ & $(3,0)$ & $(1,1)$ & $(3,1)$                             \\\hline
+                  & $(1,0)$ & $(3,0)$ & $(1,1)$ & $(3,1)$                             \\
+            \midrule
             $x=0$ & $\Id$   & $X$     & $Z$     & $Y$     & $X$   & $\Id$ & $Y$ & $Z$ \\
-            $x=1$ & $\Id$   & $X$     & $Z$     & $Y$     & $\Id$ & $X$   & $Z$ & $Y$
+            $x=1$ & $\Id$   & $X$     & $Z$     & $Y$     & $\Id$ & $X$   & $Z$ & $Y$ \\
+            \bottomrule
         \end{tabular}
     \end{center}
     Every $V_{g,x}$ is Hermitian and squares to the identity. For every
@@ -4131,7 +4134,7 @@ scalar calculation above.
     cluster virtual representatives $W_{(b,a)}=Z^bX^a$ is
     $V_{(2a,b),x}=(-i)^{ab}W_{(b,a)}$.
     These are the physical representation and matrix action identities of
-    \cite[lines~4481--4487]{FrancoRubio2025MPUGauging}.
+    \cite[lines~4481--4489]{FrancoRubio2025MPUGauging}.
     % Scoped calculation only: no defect normalization, L-symbols,
     % cocycle nonextension, block independence, or gauging is asserted.
     % Those remaining parts of example:z4z2 stay open in #7352.
