@@ -2316,18 +2316,6 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 \begin{definition}[Restricted scalar gauges]
     \label{def:mpug_restricted_scalar_gauge}
     \lean{TNLean.Algebra.ScalarCocycle.IsInverseNormalized,
-        TNLean.Algebra.ScalarCocycle.isInverseNormalized_one,
-        TNLean.Algebra.RestrictedFusionGauge.one,
-        TNLean.Algebra.RestrictedFusionGauge.mul,
-        TNLean.Algebra.RestrictedFusionGauge.inv,
-        TNLean.Algebra.RestrictedScalarGauge.one,
-        TNLean.Algebra.RestrictedScalarGauge.mul,
-        TNLean.Algebra.RestrictedScalarGauge.inv,
-        TNLean.Algebra.ScalarCocycle.IsInverseNormalized.mul,
-        TNLean.Algebra.ScalarCocycle.IsInverseNormalized.inv,
-        TNLean.Algebra.ActionTensorGauge.isNormalized_one,
-        TNLean.Algebra.ActionTensorGauge.IsNormalized.mul,
-        TNLean.Algebra.ActionTensorGauge.IsNormalized.inv,
         TNLean.Algebra.RestrictedFusionGauge,
         TNLean.Algebra.RestrictedScalarGauge}
     \leanok
@@ -2430,7 +2418,19 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 
 \begin{theorem}[Action of the restricted scalar gauge group]
     \label{thm:mpug_restricted_scalar_gauge_action}
-    \lean{TNLean.Algebra.RestrictedFusionGauge.fusionGauge_one,
+    \lean{TNLean.Algebra.ScalarCocycle.isInverseNormalized_one,
+        TNLean.Algebra.ScalarCocycle.IsInverseNormalized.mul,
+        TNLean.Algebra.ScalarCocycle.IsInverseNormalized.inv,
+        TNLean.Algebra.ActionTensorGauge.isNormalized_one,
+        TNLean.Algebra.ActionTensorGauge.IsNormalized.mul,
+        TNLean.Algebra.ActionTensorGauge.IsNormalized.inv,
+        TNLean.Algebra.RestrictedFusionGauge.one,
+        TNLean.Algebra.RestrictedFusionGauge.mul,
+        TNLean.Algebra.RestrictedFusionGauge.inv,
+        TNLean.Algebra.RestrictedScalarGauge.one,
+        TNLean.Algebra.RestrictedScalarGauge.mul,
+        TNLean.Algebra.RestrictedScalarGauge.inv,
+        TNLean.Algebra.RestrictedFusionGauge.fusionGauge_one,
         TNLean.Algebra.RestrictedFusionGauge.isNormalized_fusionGauge,
         TNLean.Algebra.RestrictedFusionGauge.isCocycle_fusionGauge,
         TNLean.Algebra.RestrictedFusionGauge.fusionGauge_mul,
@@ -4005,8 +4005,7 @@ scalar calculation above.
 
 \begin{definition}[GHZ--blocked-cluster tensor and its two blocks]
     \label{def:mpug_ghz_blocked_cluster_tensor}
-    \lean{MPSTensor.ghzTensor_apply,
-        MPSTensor.ghzSectorTensor,
+    \lean{MPSTensor.ghzSectorTensor,
         MPSTensor.ghzSectorTensor_apply_same,
         MPSTensor.z4z2GHZClusterTensor,
         MPSTensor.z4z2GHZClusterBlock,
