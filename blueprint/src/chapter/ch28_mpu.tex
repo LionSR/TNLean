@@ -7666,7 +7666,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_admissible_sigma_gauge_invariant}
     \notready
     \discussion{5714}
-    \uses{lem:mpu_admissible_sigma_trace, thm:matrix_swap_kronecker_intertwine}
+    \uses{lem:mpu_admissible_sigma_trace}
     % Source proof: paper_v2.tex 1624--1630.
     Under the hypotheses of Lemma~\ref{lem:mpu_admissible_sigma_trace}, let $x$ and $y$ be
     unitaries and change the standard-form gauge by
@@ -7679,7 +7679,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:mpu_admissible_sigma_trace}
+    \uses{lem:mpu_admissible_sigma_trace, thm:matrix_swap_kronecker_intertwine}
     Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
     $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
     $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
