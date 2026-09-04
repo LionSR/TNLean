@@ -18,17 +18,23 @@ Figure `II_uUnitary.png`.  The network is then closed against a fixed pair
 the \(K\)-site interior.  The normalized input tail gives \(u^\dagger u=\Id\)
 and \(d^2\le r\ell\).
 
-**Local fix (source-weight orientation):** column stacking makes the Gram
-closure insert \(|\rho^{\mathsf T})(\Phi|\), while the source fixes \(\rho\) in
-diagonal canonical-form-II coordinates, where \(\rho^{\mathsf T}=\rho\).
-The closing theorems keep `SourceFactors U ρ` and expose this convention as
-`ρ.IsDiag`, using only `ρ.IsSymm` for the algebraic trace closure.  Documented
-in `docs/paper-gaps/mpu_source_cut_orientation.tex`.
-
-**Scope restriction (supplied stabilized fixed pair):** the isometry and rank
-theorems below assume \(E^K=|\rho)(\Phi|\) explicitly.  CPSV17 Lemma
-`lemuisometry` uses the preceding canonical-form-II convention instead.
-Documented in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+**Scope restriction (supplied canonical-form-II fixed pair):** the closing
+theorems below assume the stabilized fixed pair \(E^K=|\rho)(\Phi|\)
+explicitly, whereas CPSV17 Lemma `lemuisometry` inherits it from the preceding
+canonical-form-II convention.  In that convention, \(\rho\) is diagonal with
+positive weights; see `Papers/1703.09188/paper_v2.tex` at lines 269--280 and
+line 495.  This diagonality is part of the source's scope, not a correction or
+an additional restriction.  It is load-bearing in the coordinate proof:
+column stacking makes the Gram closure insert
+\(|\rho^{\mathsf T})(\Phi|\), while stabilization supplies
+\(|\rho)(\Phi|\), and the two agree because \(\rho^{\mathsf T}=\rho\).  The
+closing theorems keep `SourceFactors U ρ` built from the printed weight, expose
+the convention as `ρ.IsDiag`, and use only `ρ.IsSymm` for the algebraic trace
+closure.  Documented in
+`docs/paper-gaps/mpu_canonical_form_full_support.tex` and
+`docs/paper-gaps/mpu_source_cut_orientation.tex`.  Elimination: replace the
+explicit fixed-pair hypotheses by the bundled canonical-form-II convention
+described in the orientation note.
 
 Source: arXiv:1703.09188, equations `Erightleft`, `X1X2b`, `uu`, and
 `uUnitary`, and Lemma `lemuisometry` (lines 269--280 and 487--557).

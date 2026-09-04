@@ -195,6 +195,25 @@ normalization and orientation explicitly. These conclusions assume the
 source's diagonal fixed point; they do not assert a source-$u$ theorem for
 arbitrary nonsymmetric $\rho$.
 
+\section{Marker boundary for the complete source-$u$ network}
+
+The transposed first cut was a local correction, and it is resolved. The
+complete source-$u$ module has a separate scope restriction: its closing
+theorems assume the stabilized fixed pair explicitly, whereas Lemma~III.7
+inherits that pair from the source's standing canonical-form-II convention.
+The source itself fixes $\rho$ to be diagonal with positive weights
+$\rho_n>0$, so diagonality is not a restriction relative to the cited lemma.
+% Source lines: paper_v2.tex 269--280 and 495.
+Accordingly, the module carries one scope marker for the supplied fixed pair.
+The wider source-data restriction is recorded in
+\texttt{mpu\_canonical\_form\_full\_support.tex}.
+
+Eliminating the supplied-data restriction means bundling the standing
+canonical-form-II convention and restating the MPU-level results through it,
+as tracked by \ghissue{7657} and \ghissue{7659}. Issue \ghissue{7653} instead
+asks for a nonsymmetric ambient-weight strengthening that CPSV17 does not
+claim. It is not the elimination step for the source-faithful theorem.
+
 \section{Affected claims and audit boundary}
 
 The transposed first cut affected source-factor recovery, physical adjunction,
