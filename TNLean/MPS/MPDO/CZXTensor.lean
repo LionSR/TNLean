@@ -15,7 +15,6 @@ and `eq:deltas` (lines 3795–3851) is the unnormalized Hadamard weight
 `W = √2 H`. Thus this is not the block of the normalized tensor printed in
 arXiv:1703.09188, lines 1906–1943: if that tensor is P, the present tensor is
 `(Z ⊗ Z) blockTwo (√2 • P)`. The output Z gates are part of the 2025 diagram.
-The source normalization audit is tracked in PR #7749.
 
 We use exactly the two-bit ordering of `CZX.siteBits`. No GHZ, fusion,
 defect, injectivity or classification assertion is made here.
