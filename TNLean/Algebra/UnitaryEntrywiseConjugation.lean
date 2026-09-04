@@ -11,8 +11,10 @@ import Mathlib.LinearAlgebra.UnitaryGroup
 
 This file proves the generic unitary-matrix algebra used for the virtual-gauge signs in
 FBC25, equations `eq:defT` and `eq:intro_sigma` (arXiv:2502.20257, lines 1557--1567).
-The operation on the second matrix is entrywise complex conjugation
-`Matrix.map (starRingEnd ℂ)`, not conjugate transpose.
+Its self-relation theorem also gives the sign step in the conjugation-symmetry
+proposition of arXiv:1703.09188, `paper_v2.tex` lines 1036--1038. The operation on the
+second matrix is entrywise complex conjugation `Matrix.map (starRingEnd ℂ)`, not
+conjugate transpose.
 
 These results are conditional on the scalar-matrix relations. They do not construct the
 virtual gauges or prove those relations for an MPU representation.
@@ -83,8 +85,9 @@ theorem paired_scalars_mul_eq_one_of_mul_map_star_eq_smul_one
   exact hτunit
 
 /-- In the self relation, the scalar multiplying the identity is `1` or `-1`. This is the
-involution conclusion after FBC25, equation `eq:intro_sigma`
-(arXiv:2502.20257, lines 1563--1567). -/
+step `𝟙 = xx† = e^{2iφ}𝟙`, hence `e^{iφ} = ±1`, in the conjugation-symmetry proposition of
+arXiv:1703.09188, `paper_v2.tex` lines 1036--1038; it is used again as the involution
+conclusion after FBC25, equation `eq:intro_sigma` (arXiv:2502.20257, lines 1563--1567). -/
 theorem scalar_eq_one_or_neg_one_of_mul_map_star_self_eq_smul_one
     (T : Matrix.unitaryGroup n ℂ) (σ : ℂ)
     (hσ : (T : Matrix n n ℂ) * (T : Matrix n n ℂ).map (starRingEnd ℂ) = σ • 1) :

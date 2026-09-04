@@ -6527,6 +6527,40 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \subsection{Local characterization of symmetries}
 
+\begin{theorem}[Common transpose sign of the conjugation factors]
+    \label{thm:mpu_conjugation_common_transpose_sign}
+    \lean{Matrix.transpose_mul_map_star_of_mem_unitaryGroup,
+        Matrix.eq_smul_transpose_of_map_star_mul_eq_smul_one,
+        Matrix.exists_common_transpose_sign_of_kronecker_map_star_mul_eq_one,
+        Matrix.transpose_eq_self_or_transpose_eq_neg_of_kronecker_map_star_mul_eq_one}
+    \leanok
+    Let $x$ and $y$ be unitary matrices over $\mathbb C$, indexed by nonempty
+    finite sets, whose entrywise conjugates satisfy
+    \begin{align}
+        \overline xx\otimes\overline yy & =\Id.
+    \end{align}
+    Then there is a sign $\sigma\in\{1,-1\}$ with
+    \begin{align}
+        x & =\sigma x^T, & y & =\sigma y^T.
+    \end{align}
+    Equivalently, either $x=x^T$ and $y=y^T$, or $x=-x^T$ and $y=-y^T$.
+    This is the algebraic conclusion in
+    \cite[lines~1033--1038]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1033--1038.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_kronecker_identity_factors, thm:mpug_unitary_entrywise_self_sign}
+    A Kronecker product equal to the identity has reciprocal scalar factors, so
+    $\overline xx=e^{i\phi}\Id$ and $\overline yy=e^{-i\phi}\Id$. Since $x$ is
+    unitary, $x^T$ is a left inverse of $\overline x$; multiplying the first
+    relation by $x^T$ on the left gives $x=e^{i\phi}x^T$, and the same argument
+    gives $y=e^{-i\phi}y^T$. Reading the first relation as a relation for the
+    unitary $\overline x$ against its own entrywise conjugate gives
+    $\Id=xx^\dagger=e^{2i\phi}\Id$, so $e^{i\phi}=\pm1$ and
+    $e^{-i\phi}=e^{i\phi}$. The two matrices therefore carry one transpose sign.
+\end{proof}
+
 \begin{proposition}[Conjugation symmetry]
     \label{prop1conj}
     \notready
@@ -7507,6 +7541,56 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\tr(UU^\dagger)=\tr(\Id)=n$.
 \end{proof}
 
+\begin{theorem}[The exchange intertwines the Kronecker factors]
+    \label{thm:matrix_swap_kronecker_intertwine}
+    \lean{Matrix.swapMatrix_mul_kronecker, Matrix.kronecker_mul_swapMatrix}
+    \leanok
+    For matrices $A,B\in\mathbb C^{n\times n}$ and the exchange matrix
+    $\mathbb S$ on $\mathbb C^n\otimes\mathbb C^n$,
+    \begin{align}
+        \mathbb S(A\otimes B) & =(B\otimes A)\mathbb S, &
+        (A\otimes B)\mathbb S & =\mathbb S(B\otimes A).
+    \end{align}
+    The equivalent two-sided exchange identity is stated in
+    \cite[lines~1316--1319]{Cirac2017MPU}; the gauge-invariance argument at
+    \cite[lines~1624--1630]{Cirac2017MPU} uses it without a printed derivation.
+    % Source lines: paper_v2.tex 1316--1319 and 1624--1630.
+\end{theorem}
+
+\begin{proof}\leanok
+    In product coordinates the exchange matrix has entries
+    $\mathbb S_{(i,j),(k,l)}=\delta_{i,l}\delta_{j,k}$, so both sides of the
+    first identity have entry
+    \begin{align}
+        \left[\mathbb S(A\otimes B)\right]_{(i_1,i_2),(j_1,j_2)}
+         & =A_{i_2,j_1}B_{i_1,j_2}
+        =\left[(B\otimes A)\mathbb S\right]_{(i_1,i_2),(j_1,j_2)}.
+    \end{align}
+    The second identity is the first with the two factors exchanged.
+\end{proof}
+
+\begin{theorem}[Exchange contraction of a scaled unitary Kronecker product]
+    \label{thm:matrix_trace_swap_scaled_kronecker}
+    \lean{Matrix.trace_swapMatrix_mul_of_eq_smul_kronecker_conjTranspose}
+    \leanok
+    Let $x\in\mathbb C^{n\times n}$ be unitary, let $\sigma\in\mathbb C$, and let
+    $M=\sigma\,x\otimes x^\dagger$. Then
+    \begin{align}
+        \tr\!\left[\mathbb SM\right] & =\sigma n.
+    \end{align}
+    This is the exchange-trace evaluation in
+    \cite[lines~1608--1610]{Cirac2017MPU}; there $n=d^2$.
+    % Source lines: paper_v2.tex 1608--1610.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:matrix_trace_swap_kronecker}
+    The trace is linear, so
+    $\tr[\mathbb SM]=\sigma\tr[\mathbb S(x\otimes x^\dagger)]$, and
+    Lemma~\ref{lem:matrix_trace_swap_kronecker} evaluates the remaining
+    contraction as $n$.
+\end{proof}
+
 \begin{lemma}[Trace formula for the time-reversal sign]
     \label{eq:sigma-from-trace}
     \notready
@@ -7560,7 +7644,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
-    \uses{eq:sigma-from-trace}
+    \uses{eq:sigma-from-trace, thm:matrix_swap_kronecker_intertwine}
     Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
     $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
     $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
@@ -7594,7 +7678,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:mpu_admissible_sigma_trace}
+    \uses{lem:mpu_admissible_sigma_trace, thm:matrix_swap_kronecker_intertwine}
     Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
     $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
     $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
@@ -7640,6 +7724,33 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1613--1631.
 \end{proposition}
 
+\begin{theorem}[Scalar parity law for the blocked sign]
+    \label{thm:mpu_blocked_sign_parity_scalar}
+    \lean{TNLean.Algebra.sq_mul_eq_one_of_sign,
+        TNLean.Algebra.blockedSign_eq_first_of_odd,
+        TNLean.Algebra.blockedSign_eq_second_of_even}
+    \leanok
+    Let $\sigma^{(1)},\sigma^{(2)}\in\{1,-1\}$ and put
+    $\zeta=\sigma^{(1)}\sigma^{(2)}$. For every $k\geq1$,
+    \begin{align}
+        \sigma^{(1)}\zeta^{k-1}
+         & =\begin{cases}
+                \sigma^{(1)}, & k\text{ odd},  \\
+                \sigma^{(2)}, & k\text{ even}.
+            \end{cases}
+    \end{align}
+    This is the scalar conclusion of
+    \cite[lines~1687 and 1730--1732]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1687 and 1730--1732.
+\end{theorem}
+
+\begin{proof}\leanok
+    Both signs square to one, hence $\zeta^2=1$. For odd $k$ the exponent $k-1$
+    is even, so $\zeta^{k-1}=1$ and the product is $\sigma^{(1)}$. For even
+    $k\geq2$ the exponent $k-1$ is odd, so $\zeta^{k-1}=\zeta$ and the product
+    is $(\sigma^{(1)})^2\sigma^{(2)}=\sigma^{(2)}$.
+\end{proof}
+
 \begin{proposition}[Blocking parity of the time-reversal sign]
     \label{prop:sigma1-and-sigma2-equal}
     \notready
@@ -7659,7 +7770,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}
-    \uses{lem:mpu_sigma_gauge_invariant, PropChiral, lem:mpu_blocking}
+    \uses{lem:mpu_sigma_gauge_invariant, PropChiral, lem:mpu_blocking,
+        thm:mpu_blocked_sign_parity_scalar}
     Gauge invariance permits the standard blocked representatives used in the
     source proof. Choose
     \begin{align}
@@ -7707,7 +7819,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}
-    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking}
+    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, thm:mpu_blocked_sign_parity_scalar}
     Gauge invariance permits the standard blocked representatives used in the
     source proof. Choose
     \begin{align}
