@@ -149,7 +149,7 @@ private theorem diagonal_isSymmetric (k : ℕ) (f : Fin k → ℝ) :
 private theorem diagonal_isSymmetricProjection (k : ℕ) (f : Fin k → ℝ)
     (hf : ∀ i, f i * f i = f i) : (diagonal k f).IsSymmetricProjection where
   isIdempotentElem := by
-    show diagonal k f * diagonal k f = diagonal k f
+    change diagonal k f * diagonal k f = diagonal k f
     rw [Module.End.mul_eq_comp, diagonal_comp]
     exact diagonal_congr k hf
   isSymmetric := diagonal_isSymmetric k f
