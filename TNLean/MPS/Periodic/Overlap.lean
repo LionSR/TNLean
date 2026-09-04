@@ -9,6 +9,7 @@ import TNLean.MPS.Periodic.Overlap.DifferentPeriod
 import TNLean.MPS.Periodic.Overlap.NoSectorMatch
 import TNLean.MPS.Periodic.Overlap.SectorMatch
 import TNLean.MPS.Periodic.Overlap.Dichotomy
+import TNLean.MPS.Periodic.Overlap.NonzeroSubfamily
 
 /-!
 # Periodic overlap dichotomy
@@ -29,6 +30,8 @@ The supporting modules are:
   repeated blocks.
 * `TNLean.MPS.Periodic.Overlap.Dichotomy` — the source proposition
   `equal-or-orthogonal-generalized` and eventual linear independence.
+* `TNLean.MPS.Periodic.Overlap.NonzeroSubfamily` — independence of the
+  non-zero members of a basis of periodic vectors at every large length.
 
 ## References
 

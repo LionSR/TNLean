@@ -200,6 +200,36 @@ lemma coeff_not_eventually_zero (P : SectorDecomposition d)
   rw [hcard] at h0
   exact (Nat.cast_ne_zero.mpr (P.copies_pos j).ne') h0
 
+/-! ### Re-indexing the sector weights along an arithmetic progression -/
+
+/--
+The same basis blocks carrying the `m`-th powers of the original sector weights.
+
+Raising every sector weight to a fixed power leaves the multiplicities and the
+basis blocks untouched and turns the coefficient sequence read along the
+arithmetic progression of multiples of `m` into a full coefficient sequence.
+This is what lets a power-sum comparison available only along the multiples of a
+period be fed to a comparison theorem asking for every large exponent, as in
+arXiv:1708.00029, theorem `thm:bdequal`, lines 681--684.
+-/
+def powWeights (P : SectorDecomposition d) (m : ℕ) : SectorDecomposition d where
+  basisCount := P.basisCount
+  basisDim := P.basisDim
+  basis := P.basis
+  sectors :=
+    { copies := P.copies
+      copies_pos := P.copies_pos
+      weight := fun j q => P.weight j q ^ m
+      weight_ne_zero := fun j q => pow_ne_zero m (P.weight_ne_zero j q) }
+
+/-- The coefficients of the `m`-th power weights read the original coefficients
+along the multiples of `m`. -/
+@[simp]
+theorem coeff_powWeights (P : SectorDecomposition d) (m n : ℕ)
+    (j : Fin P.basisCount) : (P.powWeights m).coeff n j = P.coeff (m * n) j := by
+  simp only [coeff, SectorWeightData.coeff, powWeights, pow_mul]
+  rfl
+
 /-- Total number of sectors after flattening the pairs `(j, q)`. -/
 def totalCopies (P : SectorDecomposition d) : ℕ :=
   ∑ j : Fin P.basisCount, P.copies j

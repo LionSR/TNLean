@@ -127,3 +127,150 @@ unconditional result.
     Theorem~\ref{thm:equalcase_zgauge_power_sums} to the singleton list of
     multiplicity entries.
 \end{proof}
+
+\begin{lemma}[Power weights of a sector decomposition]%
+    \label{lem:sector_power_weights}
+    \lean{MPSTensor.SectorDecomposition.powWeights,
+        MPSTensor.SectorDecomposition.coeff_powWeights}
+    \leanok
+    \uses{def:sector_weight_data}
+    Raising every multiplicity entry of a sector decomposition to a fixed
+    power $m$ leaves the basis blocks and the multiplicities unchanged, and
+    the coefficient of the resulting decomposition at length $n$ is the
+    original coefficient at length $mn$:
+    \begin{align}
+        \sum_{q}\bigl(\mu_{j,q}^{m}\bigr)^{n}
+        =\sum_{q}\mu_{j,q}^{mn}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The entries $\mu_{j,q}^{m}$ are again nonzero, so they form a sector
+    weight family over the same basis, and the displayed identity is the
+    exponent rule.
+\end{proof}
+
+\begin{lemma}[Matched multiplicity entries along a period progression]%
+    \label{lem:matched_sector_weight_pow_equiv_period}
+    \lean{MPSTensor.matched_sector_weight_pow_equiv_of_period_multiple}
+    \leanok
+    \uses{lem:sector_power_weights, lem:sector_bnt_matched_sector_weight_equiv}
+    Let two sector decompositions have distinguished blocks $j_0$ and $k_0$,
+    with multiplicity entries $(\mu_{j_0,q})_q$ and $(\nu_{k_0,q})_q$, and let
+    $\zeta$ be a nonzero scalar. Suppose that
+    \begin{align}
+        \sum_{q}\mu_{j_0,q}^{mn}
+        =\zeta^{mn}\sum_{q}\nu_{k_0,q}^{mn}
+        \notag
+    \end{align}
+    for every $n$ beyond some threshold. Then the two blocks carry the same
+    multiplicity, and there is a bijection $\tau$ between their copy indices
+    with
+    \begin{align}
+        \nu_{k_0,\tau(q)}^{m}=\bigl(\zeta^{-1}\mu_{j_0,q}\bigr)^{m}
+        \notag
+    \end{align}
+    for every $q$. This is the form in which the power-sum comparison enters
+    \cite[lines~681--684]{DeLasCuevas2017Irreducible}, where the comparison is
+    available only along the multiples of a period; the recovery of the
+    entries from their power sums is
+    \cite[lines~537--569]{DeLasCuevas2017Irreducible}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Raise all multiplicity entries of both decompositions to the power $m$.
+    By Lemma~\ref{lem:sector_power_weights} the hypothesis becomes a
+    comparison of the coefficients of the two resulting decompositions at
+    every exponent beyond the threshold, with scalar $\zeta^{m}$. Applying
+    Lemma~\ref{lem:sector_bnt_matched_sector_weight_equiv} to those
+    decompositions gives the multiplicity equality and the bijection, and its
+    conclusion is the displayed identity.
+\end{proof}
+
+\begin{theorem}[Equal-case coefficient extraction]%
+    \label{thm:periodic_equalcase_coefficient_extraction}
+    \lean{MPSTensor.SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis}
+    \leanok
+    \uses{def:same_mpv2_pos, def:periodic_tensor, lem:paper_decomp_formula,
+        thm:periodic_basis_nonzero_subfamily_li,
+        thm:pgvwc07_periodic_state_vector_decomposition}
+    Let
+    \begin{align}
+        A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
+        \notag                                       \\
+        B^i & =\bigoplus_{k\in K}(S_k\otimes B_k^i),
+        \notag
+    \end{align}
+    be two multiplicity-bearing decompositions whose bases of periodic
+    tensors are matched by a bijection $\pi\colon J\to K$ and nonzero scalars
+    $\zeta_j$ with
+    \begin{align}
+        \ket{V^{(N)}(A_j)}=\zeta_j^{N}\ket{V^{(N)}(B_{\pi(j)})}
+        \notag
+    \end{align}
+    for every length $N$, with $\{A_j\}_{j\in J}$ pairwise non-repeated and
+    $A_j$ periodic of period $m_j$. If $\mc{V}^+(A)=\mc{V}^+(B)$, then there is
+    an $N_0$ such that
+    \begin{align}
+        \tr\bigl(R_j^{N}\bigr)
+        =\zeta_j^{-N}\,\tr\bigl(S_{\pi(j)}^{N}\bigr)
+        \notag
+    \end{align}
+    for every $N\ge N_0$ with $m_j\mid N$ and every $j\in J$.
+    This is \cite[lines~672--680]{DeLasCuevas2017Irreducible}. The scalar
+    $\zeta_j$ is displayed rather than suppressed: the identity compares the
+    power sums of $R_j$ with the \emph{rescaled} power sums of $S_{\pi(j)}$,
+    which is what the source means at
+    \cite[lines~667--671]{DeLasCuevas2017Irreducible} by absorbing the phase
+    into $S_j$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand both vectors along the basis $\{A_j\}_{j\in J}$ by
+    Lemma~\ref{lem:paper_decomp_formula}, rewriting each
+    $\ket{V^{(N)}(B_{\pi(j)})}$ as $\zeta_j^{-N}\ket{V^{(N)}(A_j)}$. Equality
+    of the two vectors makes the combination of the $\ket{V^{(N)}(A_j)}$ with
+    coefficients $\tr(R_j^N)-\zeta_j^{-N}\tr(S_{\pi(j)}^N)$ vanish. By
+    Theorem~\ref{thm:pgvwc07_periodic_state_vector_decomposition} the term
+    for an index with $m_j\nmid N$ contributes the zero vector, so the
+    combination runs over the indices with $m_j\mid N$, and by
+    Theorem~\ref{thm:periodic_basis_nonzero_subfamily_li} those vectors are
+    independent for every large $N$. Each coefficient therefore vanishes.
+\end{proof}
+
+\begin{theorem}[Blockwise multiplicity gauge in the equal case]%
+    \label{thm:periodic_equalcase_blockwise_zgauge}
+    \lean{MPSTensor.equalCase_blockwise_zgauge}
+    \leanok
+    \uses{thm:periodic_equalcase_coefficient_extraction,
+        lem:matched_sector_weight_pow_equiv_period, thm:zgauge_construction}
+    Under the hypotheses of
+    Theorem~\ref{thm:periodic_equalcase_coefficient_extraction}, for every
+    $j\in J$ the multiplicity matrices $R_j$ and $S_{\pi(j)}$ have the same
+    size $r_j$, and there are a reordering $\tau$ of the diagonal entries of
+    $S_{\pi(j)}$ and a diagonal matrix $Z_j$ with
+    \begin{align}
+        Z_j^{m_j}=\Id_{r_j},\qquad
+        Z_j\,\bigl(\zeta_j R_j\bigr)=T_jS_{\pi(j)}T_j^{\dagger},
+        \notag
+    \end{align}
+    where $T_j$ implements $\tau$. This is
+    \cite[lines~681--688]{DeLasCuevas2017Irreducible}. The scalar $\zeta_j$
+    stays visible: the diagonal entries of $Z_j$ are $m_j$-th roots of unity
+    against the rescaled multiplicity matrix $\zeta_jR_j$, and the rescaling
+    is in general not trivial even for period one, as the pair of blocks
+    $B_j=e^{i\theta}A_j$ shows.
+\end{theorem}
+
+\begin{proof}\leanok
+    Fix $j$. Theorem~\ref{thm:periodic_equalcase_coefficient_extraction}
+    compares the power sums of $R_j$ and $S_{\pi(j)}$ at every multiple of
+    $m_j$ beyond $N_0$, with scalar $\zeta_j^{-1}$. Feeding that progression
+    to Lemma~\ref{lem:matched_sector_weight_pow_equiv_period} gives the
+    equality of sizes, the reordering $\tau$, and the entry identity
+    $\nu_{\pi(j),\tau(q)}^{m_j}=(\zeta_j\mu_{j,q})^{m_j}$. Since the entries
+    $\zeta_j\mu_{j,q}$ are nonzero,
+    Theorem~\ref{thm:zgauge_construction} produces the diagonal $Z_j$ with the
+    two displayed properties.
+\end{proof}

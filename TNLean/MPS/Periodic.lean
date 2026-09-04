@@ -12,6 +12,7 @@ import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Periodic.CornerContraction
 import TNLean.MPS.Periodic.CornerTransition
 import TNLean.MPS.Periodic.Defs
+import TNLean.MPS.Periodic.EqualCase
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.GlobalGauge
 import TNLean.MPS.Periodic.NormalCanonicalPeriodOne
@@ -22,6 +23,7 @@ import TNLean.MPS.Periodic.Overlap.Dichotomy
 import TNLean.MPS.Periodic.Overlap.DifferentPeriod
 import TNLean.MPS.Periodic.Overlap.GaugePhase
 import TNLean.MPS.Periodic.Overlap.NoSectorMatch
+import TNLean.MPS.Periodic.Overlap.NonzeroSubfamily
 import TNLean.MPS.Periodic.Overlap.SectorMatch
 import TNLean.MPS.Periodic.Overlap.SectorMatch.Basic
 import TNLean.MPS.Periodic.Overlap.SectorMatch.Consequences
