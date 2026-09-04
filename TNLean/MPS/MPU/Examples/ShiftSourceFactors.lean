@@ -747,10 +747,11 @@ Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
     (a b c e i j k l : Fin d) :
     identityTensorIdentityMatrix d ((a, b), (c, e)) ((i, j), (k, l)) =
       if a = i ∧ b = j ∧ c = k ∧ e = l then 1 else 0 := by
-  by_cases ha : a = i <;> by_cases hb : b = j <;>
-    by_cases hc : c = k <;> by_cases he : e = l <;>
-    simp [identityTensorIdentityMatrix, Matrix.kroneckerMap_apply,
-      Prod.ext_iff, ha, hb, hc, he]
+  rw [identityTensorIdentityMatrix, Matrix.kroneckerMap_apply]
+  change ((if (a, b) = (i, j) then 1 else 0) *
+    (if (c, e) = (k, l) then 1 else 0)) = _
+  rw [ite_zero_mul_ite_zero]
+  simp only [Prod.mk.injEq, one_mul, and_assoc]
 
 /-- The four-spin matrix $\Id\otimes\mathbb S\otimes\Id$, with the two
 physical sites grouped as `((1, 2), (3, 4))`.
@@ -792,10 +793,11 @@ Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
     (a b c e i j k l : Fin d) :
     swapTensorSwapMatrix d ((a, b), (c, e)) ((i, j), (k, l)) =
       if a = j ∧ b = i ∧ c = l ∧ e = k then 1 else 0 := by
-  by_cases ha : a = j <;> by_cases hb : b = i <;>
-    by_cases hc : c = l <;> by_cases he : e = k <;>
-    simp [swapTensorSwapMatrix, Matrix.kroneckerMap_apply,
-      Matrix.swapMatrix_apply, ha, hb, hc, he]
+  rw [swapTensorSwapMatrix, Matrix.kroneckerMap_apply]
+  change ((if a = j ∧ b = i then 1 else 0) *
+    (if c = l ∧ e = k then 1 else 0)) = _
+  rw [ite_zero_mul_ite_zero]
+  simp only [one_mul, and_assoc]
 
 /-- Entry formula for
 $(\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes\Id)$.

@@ -1656,27 +1656,22 @@ current counts and full location lists).
 - **Notes:** below the rule-of-three promotion threshold. Do not add a one-use
   wrapper or duplicate predicate surface merely to merge these two proofs.
 
-### supplied paper-gate indicator entries — candidate
-- **Pattern:** case-split the two or four physical-index equalities in an
-  explicit supplied source entry, simplify the resulting indicator functions,
-  and cancel the factors $d(\sqrt d)^{-1}(\sqrt d)^{-1}=1$ before closing the
-  zero and nonzero cases.
-- **Seen:** six four-index case splits for the paper gates $u$ and $v$ in
-  `TNLean/MPS/MPU/Examples/ShiftSourceGateFormulas.lean` (lines 70, 112, 170,
-  210, 265, and 298), and two four-index case splits for the four-spin
-  matrices themselves in `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean`
-  (lines 749 and 794). Recorded 2026-08-24 as "supplied mixed-kernel indicator
-  entries"; recounted 2026-09-04, when the mixed-kernel deletion removed the
-  sixteen mixed-kernel occurrences and the two four-spin proofs moved into the
-  surviving source-factor module.
-- **Abstraction (proposed):** scout Mathlib's indicator and `ite` product
-  lemmas first; otherwise extract the common scalar-indicator calculation as
-  a lemma family, or mark its characterizing equalities for terminal `grind`
-  once the stable goal shape is clear.  Prefer either route to a tactic macro.
-- **Notes:** the proofs differ in their paper-coordinate permutations and in
-  which factor carries $d(\sqrt d)^{-1}$.  Promotion should preserve those
-  visible coordinate choices and remove only the repeated Boolean and
-  normalization calculation.
+### supplied paper-gate indicator entries — completed refactor
+- **Pattern:** multiply two source-entry indicator functions, combine their
+  two pairs of physical-index equalities, and cancel the shift normalization.
+- **Seen:** six paper-gate entry proofs in
+  `TNLean/MPS/MPU/Examples/ShiftSourceGateFormulas.lean` and the two four-spin
+  matrix entry proofs in
+  `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` (recounted 2026-09-04 after
+  deleting the mixed-kernel examples).
+- **Abstraction:** Mathlib's `ite_zero_mul_ite_zero` combines the two indicator
+  factors into one conjunction.  The source-specific scalar identities
+  `shiftSourceScale_square_cancel` and
+  `shiftSourceScale_inv_square_cancel` record the two remaining normalization
+  calculations.
+- **Result:** all eight proofs use `ite_zero_mul_ite_zero`; the six gate proofs
+  reuse the scalar lemmas, and no four-equality case-split chain remains.  The
+  different paper-coordinate permutations stay visible at the call sites.
 
 ### factor pairing under a two-index finite sum — candidate
 - **Pattern:** before collapsing a two-index finite sum, use `simp_rw` with a
