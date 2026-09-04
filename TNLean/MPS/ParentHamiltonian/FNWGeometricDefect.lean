@@ -104,8 +104,11 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
 arXiv:cond-mat/9410110, lines 2401--2412, with a rate strictly below one and a positive
 prefactor: there is a positive interaction length beyond which the whole-increment ground
 projector defect is at most \(c\lambda^m(1+c\lambda^m)/(1-c\lambda^m)\), uniformly in the
-prefix and suffix lengths. The rate is any number strictly above the rho-weighted spectral
-radius of the transfer remainder and strictly below one. -/
+prefix and suffix lengths. The rate is chosen inside the proof, as some number strictly
+between the rho-weighted spectral radius of the transfer remainder and one; the conclusion
+exports only that the chosen rate is positive and below one. A caller that needs a
+particular admissible rate uses the rate-parameterized mixing estimate together with the
+fixed-length geometric bound instead. -/
 theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric
     [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
     (hρ : ρ.PosDef) :
