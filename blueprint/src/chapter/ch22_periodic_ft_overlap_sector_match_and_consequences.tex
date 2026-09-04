@@ -449,6 +449,38 @@
     cancel.
 \end{proof}
 
+\begin{lemma}[Repeated blocks share a peripheral spectrum]
+    \label{lem:repeated_blocks_peripheral_spectrum}
+    \lean{MPSTensor.RepeatedBlocks.peripheralEigenvalues_transferMap_eq}
+    \leanok
+    If $A$ and $B$ are repeated blocks, then their transfer maps have the same
+    unit-circle eigenvalues.
+\end{lemma}
+\begin{proof}\leanok
+    Write $A^i=\xi YB^iY^{-1}$ with $|\xi|=1$.  The transfer map of $\xi C$ is
+    $|\xi|^2$ times the transfer map of $C$, hence equals it, and the transfer
+    map of $YB^iY^{-1}$ is the congruence conjugate
+    $Y\mathcal{E}_B(Y^{-1}\cdot Y^{-\dagger})Y^{\dagger}$ of the transfer map
+    of $B$.  Conjugation by an invertible linear map leaves the spectrum
+    unchanged.
+\end{proof}
+
+\begin{lemma}[Repeated periodic blocks have the same period]
+    \label{lem:repeated_blocks_period_eq}
+    \lean{MPSTensor.IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks}
+    \leanok
+    \uses{def:spectral_periodic_tensor}
+    Let $A$ and $B$ be spectrally periodic tensors of periods $m$ and $n$.  If
+    $A$ and $B$ are repeated blocks, then $m=n$.
+\end{lemma}
+\begin{proof}
+    \uses{lem:repeated_blocks_peripheral_spectrum}
+    \leanok
+    The two peripheral spectra coincide, and they are the sets of roots of
+    unity of orders $m$ and $n$.  A primitive $m$-th root of unity then
+    satisfies $z^n=1$, so $m$ divides $n$, and symmetrically $n$ divides $m$.
+\end{proof}
+
 \begin{lemma}[Pure similarities preserve periodic overlap hypotheses]
     \label{lem:periodic_overlap_hypothesis_gauge_transport}
     \lean{MPSTensor.PeriodicOverlapHypothesis.of_gaugeEquiv}
@@ -638,8 +670,9 @@
 
 \begin{theorem}[Proportional Fundamental Theorem for irreducible-form MPS]
     \label{thm:periodic_ft_proportional}
-    \notready
-    \uses{def:nonzero_proportional_mpv}
+    \lean{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
+    \leanok
+    \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
     Let $A$ and $B$ have multiplicity-bearing irreducible forms
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
@@ -649,10 +682,11 @@
     \end{align}
     where $R_j$ and $S_k$ are diagonal with nonzero diagonal entries and the
     two displayed block families are pairwise non-repeated bases of periodic
-    tensors. Suppose that, for every positive $N$, the vectors
+    tensors, spectrally periodic of periods $m_j$ and $n_k$ respectively.
+    Suppose that, for every positive $N$, the vectors
     $\ket{V^{(N)}(A)}$ and $\ket{V^{(N)}(B)}$ are proportional by a nonzero
     scalar. Then there is a bijection $\pi\colon J\to K$ such that, for every
-    $j\in J$, the blocks $A_j$ and $B_{\pi(j)}$ have the same period and there
+    $j\in J$, one has $m_j=n_{\pi(j)}$ and there
     are a unit-modulus scalar $\xi_j$ and an invertible matrix $Y_j$ such that,
     for every physical index $i$,
     \begin{align}
@@ -664,10 +698,19 @@
 
     The theorem relates the two bases of periodic tensors but makes no
     assertion relating their multiplicity matrices.
-    % Formalization status: the spectrally periodic multiplicity-bearing
-    % theorem above proves the complete overlap-hypothesis step for literal
-    % irreducible forms.  A source-labelled theorem retaining equality of the
-    % matched periods is still required before this exact statement can be
-    % marked ready.  Extension from arbitrary tensors through Proposition 2.1
-    % is a separate positive-length representative question.
 \end{theorem}
+\begin{proof}
+    \uses{lem:repeated_blocks_period_eq, thm:periodic_spectral_multiplicity_nondecaying_overlap}
+    \leanok
+    By Theorem~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap},
+    every tensor of either basis has a partner in the other basis whose mixed
+    overlap does not tend to zero, and every such pair is a repeated pair.
+    Choosing one partner for each tensor of the first basis gives a map
+    $\pi\colon J\to K$.  It is injective: two tensors of the first basis with a
+    common partner would be repeated with each other, contradicting pairwise
+    non-repetition.  The same construction in the reverse direction is
+    injective as well, so $J$ and $K$ have the same finite cardinality and
+    $\pi$ is a bijection.  Finally,
+    Lemma~\ref{lem:repeated_blocks_period_eq} gives $m_j=n_{\pi(j)}$ for every
+    matched pair.
+\end{proof}

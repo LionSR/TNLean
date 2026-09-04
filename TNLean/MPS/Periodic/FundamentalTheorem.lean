@@ -24,9 +24,11 @@ in its equal-case strengthening:
   theorem `thm:bd` instead assumes proportionality of the assembled MPV
   families. The companion module `ProportionalOverlap` proves the deduction
   for literal multiplicity-bearing families of spectrally periodic blocks,
-  including transport through their sectorwise Perron similarities. A
-  source-labelled matching theorem retaining equality of matched periods
-  remains to be stated.
+  including transport through their sectorwise Perron similarities, and
+  assembles the source-labelled theorem
+  `fundamentalTheorem_periodic_proportional_sectorDecomposition` over the
+  stronger witness `PeriodicBasisMatchingWitness`, which retains equality of
+  the matched periods.
 
 * **Supporting lemmas for the equal-case theorem `thm:bdequal`**: The equal-case
   strengthening produces per-block Z-gauge data (diagonal Z with Z^m = 1) from the
@@ -160,6 +162,53 @@ theorem HetRepeatedBlocks.exists_phase_rescaling_sameMPV₂Pos {D₁ D₂ : ℕ}
   have hscale : mpv (fun i => ζ⁻¹ • A i) σ = ζ⁻¹ ^ N * mpv A σ :=
     mpv_eq_pow_mul_of_gaugePhase A (fun i => ζ⁻¹ • A i) 1 ζ⁻¹ (fun i => by simp) N σ
   rw [hscale, hmpv N σ, ← mul_assoc, ← mul_pow, inv_mul_cancel₀ hζ0, one_pow, one_mul]
+/-! ## Repeated blocks have a common period -/
+
+/-- Repeated blocks have the same peripheral transfer spectrum.
+
+Multiplying every matrix of a block by a unit-modulus phase leaves its transfer
+map unchanged, and the remaining bond-space similarity conjugates that map.
+Neither operation moves the unit-circle eigenvalues.
+
+Source: arXiv:1708.00029, definition `def:repeated` and equation `eq:rep`,
+lines 276--284; the spectral invariance is the content of the last clause of
+proposition `equal-or-orthogonal-generalized`, line 608. -/
+theorem RepeatedBlocks.peripheralEigenvalues_transferMap_eq {D : ℕ}
+    {A B : MPSTensor d D} (h : RepeatedBlocks A B) :
+    peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
+  obtain ⟨ξ, Y, hξ, hRel⟩ := h
+  have hphase : ξ * starRingEnd ℂ ξ = 1 := by
+    simp [Complex.mul_conj, Complex.normSq_eq_norm_sq, hξ]
+  have hGauge : GaugeEquiv B (fun i =>
+      (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
+        (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :=
+    ⟨Y, fun _ => rfl⟩
+  have hSmul : Kraus.transferMap (d := d) (D := D) A =
+      Kraus.transferMap (d := d) (D := D) (fun i =>
+        (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
+          (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := by
+    have hAeq : A = fun i => ξ • ((Y : Matrix (Fin D) (Fin D) ℂ) * B i *
+        (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := funext hRel
+    refine LinearMap.ext fun X => ?_
+    rw [hAeq, transferMap_smul, hphase, one_smul]
+  obtain ⟨C, hC, hMap⟩ := hGauge.transferMap_eq_similarityMap
+  rw [hSmul, hMap]
+  exact peripheralEigenvalues_similarityMap_eq (D := D) C hC _
+
+/-- Repeated spectrally periodic blocks have the same period.
+
+This is the last clause of arXiv:1708.00029, proposition
+`equal-or-orthogonal-generalized`, line 608: the repeated-block relation can
+only hold between blocks of equal period. -/
+theorem IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks
+    {D₁ D₂ m n : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsSpectrallyPeriodic m A) (hB : IsSpectrallyPeriodic n B)
+    (h : HetRepeatedBlocks A B) : m = n := by
+  obtain ⟨hDim, hRep⟩ := h
+  subst hDim
+  exact hA.period_eq_of_peripheralEigenvalues_eq hB
+    hRep.peripheralEigenvalues_transferMap_eq
 
 /-! ## Periodic block matching witness -/
 
@@ -174,6 +223,25 @@ abbrev PeriodicBlockMatchingWitness
   ∃ _h : rA = rB,
     ∃ perm : Fin rA ≃ Fin rB,
       ∀ j : Fin rA, HetRepeatedBlocks (A j) (B (perm j))
+
+/-- Witness for the matching conclusion of the proportional fundamental theorem
+for tensors in irreducible form: equal numbers of blocks, a bijection between
+the two bases of periodic tensors, equality of the two matched periods, and the
+repeated-block relation for every matched pair.
+
+This strengthens `PeriodicBlockMatchingWitness` by the period equality asserted
+in arXiv:1708.00029, theorem `thm:bd`, lines 623--626 ("there is exactly one
+`k ∈ K` (with the same period)"). -/
+abbrev PeriodicBasisMatchingWitness
+    {rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (periodA : Fin rA → ℕ) (periodB : Fin rB → ℕ) : Prop :=
+  ∃ _h : rA = rB,
+    ∃ perm : Fin rA ≃ Fin rB,
+      ∀ j : Fin rA,
+        periodA j = periodB (perm j) ∧ HetRepeatedBlocks (A j) (B (perm j))
 
 /-! ## Periodic overlap dichotomy hypothesis -/
 
@@ -384,10 +452,9 @@ hypotheses for literal multiplicity-bearing normalized periodic forms, with
 specialization. Its theorem
 `PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions` performs
 the sectorwise Perron normalization and transports the hypothesis back to the
-original spectral-radius-one blocks. The remaining source-faithfulness gap is
-to package the matching conclusion while retaining equality of matched
-periods, as recorded in
-`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
+original spectral-radius-one blocks. Combining the two gives the source-labelled
+`fundamentalTheorem_periodic_proportional_sectorDecomposition`, which also
+retains equality of the matched periods.
 
 The `PeriodicOverlapHypothesis` parameter can be supplied via
 `PeriodicOverlapHypothesis.ofIsPeriodic`, which uses the proved

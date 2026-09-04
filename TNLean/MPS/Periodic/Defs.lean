@@ -331,6 +331,27 @@ theorem ZGaugeEquiv.blockTensor_sameMPV {m : ℕ} {A B : MPSTensor d D}
     SameMPV (blockTensor A m) (blockTensor B m) :=
   GaugeEquiv.sameMPV (ZGaugeEquiv.blockTensor_gaugeEquiv h)
 
+/-- A positive period is determined by its set of complex roots of unity.
+
+The unit-circle spectrum of a periodic block is exactly the set of roots of
+unity whose order is the period (arXiv:1708.00029, lines 257--258), so two
+periodic blocks with a common peripheral spectrum have a common period. -/
+theorem period_eq_of_setOf_pow_eq_one {m n : ℕ} (hm : 0 < m) (hn : 0 < n)
+    (h : {μ : ℂ | μ ^ m = 1} = {μ : ℂ | μ ^ n = 1}) : m = n := by
+  obtain ⟨ω, hω⟩ : ∃ ω : ℂ, IsPrimitiveRoot ω m :=
+    ⟨Complex.exp (2 * Real.pi * Complex.I / m), Complex.isPrimitiveRoot_exp m hm.ne'⟩
+  obtain ⟨η, hη⟩ : ∃ η : ℂ, IsPrimitiveRoot η n :=
+    ⟨Complex.exp (2 * Real.pi * Complex.I / n), Complex.isPrimitiveRoot_exp n hn.ne'⟩
+  have hωn : ω ^ n = 1 := by
+    have hmem : ω ∈ ({μ : ℂ | μ ^ m = 1} : Set ℂ) := hω.pow_eq_one
+    rw [h] at hmem
+    exact hmem
+  have hηm : η ^ m = 1 := by
+    have hmem : η ∈ ({μ : ℂ | μ ^ n = 1} : Set ℂ) := hη.pow_eq_one
+    rw [← h] at hmem
+    exact hmem
+  exact Nat.dvd_antisymm (hω.dvd_of_pow_eq_one _ hωn) (hη.dvd_of_pow_eq_one _ hηm)
+
 /-- Repeated periodic blocks have equal periods, provided they share peripheral spectrum. -/
 theorem IsPeriodic.period_eq_of_repeatedBlocks
     {m n : ℕ} {A B : MPSTensor d D}
@@ -338,27 +359,23 @@ theorem IsPeriodic.period_eq_of_repeatedBlocks
     (_hRep : RepeatedBlocks A B)
     (hSpec : peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
       peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B)) :
-    m = n := by
-  rcases hA.primitiveRoot with ⟨ω, hω⟩
-  rcases hB.primitiveRoot with ⟨η, hη⟩
-  have hωm : ω ^ m = 1 := hω.pow_eq_one
-  have hηn : η ^ n = 1 := hη.pow_eq_one
-  have hω_mem_A : ω ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) := by
-    rw [hA.peripheral_eq]
-    exact hωm
-  have hη_mem_B : η ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
-    rw [hB.peripheral_eq]
-    exact hηn
-  have hω_mem_B : ω ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
-    simpa [hSpec] using hω_mem_A
-  have hη_mem_A : η ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) := by
-    simpa [hSpec] using hη_mem_B
-  have hωn : ω ^ n = 1 := by
-    have : ω ∈ ({μ : ℂ | μ ^ n = 1} : Set ℂ) := by simpa [hB.peripheral_eq] using hω_mem_B
-    exact this
-  have hηm : η ^ m = 1 := by
-    have : η ∈ ({μ : ℂ | μ ^ m = 1} : Set ℂ) := by simpa [hA.peripheral_eq] using hη_mem_A
-    exact this
-  exact Nat.dvd_antisymm (hω.dvd_of_pow_eq_one _ hωn) (hη.dvd_of_pow_eq_one _ hηm)
+    m = n :=
+  period_eq_of_setOf_pow_eq_one hA.period_pos hB.period_pos
+    (by rw [← hA.peripheral_eq, ← hB.peripheral_eq]; exact hSpec)
+
+/-- Spectrally periodic blocks with a common peripheral transfer spectrum have
+equal periods.
+
+This is the spectral content of the last clause of arXiv:1708.00029,
+proposition `equal-or-orthogonal-generalized`, line 608: blocks related by the
+repeated-block condition can only have the same period. -/
+theorem IsSpectrallyPeriodic.period_eq_of_peripheralEigenvalues_eq
+    {m n : ℕ} {A B : MPSTensor d D}
+    (hA : IsSpectrallyPeriodic m A) (hB : IsSpectrallyPeriodic n B)
+    (hSpec : peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B)) :
+    m = n :=
+  period_eq_of_setOf_pow_eq_one hA.period_pos hB.period_pos
+    (by rw [← hA.peripheral_eq, ← hB.peripheral_eq]; exact hSpec)
 
 end MPSTensor

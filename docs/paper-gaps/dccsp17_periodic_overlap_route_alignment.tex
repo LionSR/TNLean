@@ -593,13 +593,43 @@ partner fields, and prove finite block matching. Together with the spectrally
 periodic multiplicity theorem, they yield block matching for literal
 irreducible forms.
 
-The exact source-labelled theorem is not ready because the existing matching
-conclusion does not explicitly preserve equality of the matched periods. This
-is the remaining gap intrinsic to Theorem~3.4, lines 613--632, of
-Ref.~\cite{DeLasCuevas2017Irreducible}. Separately, extending the
-irreducible-form theorem to arbitrary input tensors through Proposition~2.1
-requires the positive-length, possibly lower-dimensional comparison at lines
-266--271 of the same source. That extension is not part of Theorem~3.4.
+\subsection{Equality of the matched periods}
+
+The remaining clause of Theorem~3.4, lines 623--626, of
+Ref.~\cite{DeLasCuevas2017Irreducible} asserts that the unique matched block
+carries the same period. The source justifies this by the last clause of the
+generalized equal-or-orthogonal proposition, line 608: the repeated-block
+relation ``can only happen if $m_a=m_b$''.
+
+The formal argument is the spectral one already used for different-period
+decay. If $A^i=\xi YB^iY^{-1}$ with $|\xi|=1$, then
+\begin{align}
+    \mathcal E_A(Z)
+    &=Y\mathcal E_B\!\left(Y^{-1}ZY^{-\dagger}\right)Y^\dagger,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_repeated_transfer_congruence}
+\end{align}
+because the unit-modulus scalar contributes the factor $\xi\bar\xi=1$.
+Conjugation by an invertible linear map preserves the spectrum, so the
+peripheral spectra of $\mathcal E_A$ and $\mathcal E_B$ agree.\footnote{Formal
+declaration:
+\leanid{MPSTensor.RepeatedBlocks.peripheralEigenvalues_transferMap_eq}.} For
+spectrally periodic blocks those spectra are the sets of roots of unity of
+orders $m$ and $n$, and
+(\ref{eq:dccsp17_periodic_overlap_route_alignment_periodic_spectrum}) then
+forces $m=n$ by mutual divisibility of the two orders.\footnote{Formal
+declarations: \leanid{MPSTensor.period_eq_of_setOf_pow_eq_one} and
+\leanid{MPSTensor.IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks}.}
+
+The source-labelled theorem is therefore formalized. It combines the
+spectrally periodic overlap theorem with the finite matching argument and
+records the matched periods in the conclusion.\footnote{Formal declaration:
+\leanid{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition},
+over the witness \path{MPSTensor.PeriodicBasisMatchingWitness}. Blueprint
+entry: \emph{thm:periodic\_ft\_proportional}.} Its hypotheses are the source
+hypotheses: multiplicity-bearing irreducible forms with nonzero diagonal
+entries, spectrally periodic and pairwise non-repeated bases of periodic
+tensors, and nonzero proportionality of the generated matrix-product vectors
+at every positive length.
 
 \subsection{Per-length proportionality and the blockwise phase}
 
@@ -655,12 +685,11 @@ equal case, theorem \emph{thm:bdequal}, lines 643--658.
 
 \subsection{Remaining elimination plan}
 
-A source-labelled theorem must combine the spectrally periodic overlap theorem
-with the finite matching argument while retaining equality of matched periods.
-The separate extension beyond Theorem~3.4 requires a positive-length
-comparison with the representative supplied by Proposition~2.1 of
-Ref.~\cite{DeLasCuevas2017Irreducible}. The completed overlap-hypothesis step
-is tracked by
+Extending the irreducible-form theorem to arbitrary input tensors through
+Proposition~2.1 of Ref.~\cite{DeLasCuevas2017Irreducible} requires the
+positive-length, possibly lower-dimensional comparison at lines 266--271 of
+the same source. That extension is not part of Theorem~3.4. The completed
+overlap-hypothesis step is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5342}{issue \#5342}; the
 subsequent multiplicity-power extraction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5344}{issue \#5344}.
