@@ -1,0 +1,63 @@
+\subsection{Full-matrix presentation of a factor with scalar centre}
+
+\begin{theorem}[Scalar centre forces a full matrix algebra of a definite size]
+    \label{thm:qca_central_star_subalgebra_matrix}
+    \lean{StarSubalgebra.exists_starAlgEquiv_matrix_and_finrank_of_isCentral}
+    \leanok
+    Let $I$ be a finite nonempty set and let $S\subseteq M_I(\C)$ be a unital
+    star-subalgebra whose centre consists of the multiples of its unit,
+    \begin{align}
+        \{z\in S\mid zs=sz\text{ for every }s\in S\}
+         & =\C\mathbf 1.
+        \label{eq:qca_central_star_subalgebra_scalar_centre}
+    \end{align}
+    Then there is an $r\geq1$ with
+    \begin{align}
+        S            & \cong\MN{r}, \notag \\
+        \dim_{\C}(S) & =r^2,
+    \end{align}
+    the first isomorphism being one of star-algebras.
+
+    Nonemptiness of $I$ cannot be dropped.  For $I=\emptyset$ the ambient
+    algebra $M_I(\C)$ is the zero algebra, its unique subalgebra still
+    satisfies (\ref{eq:qca_central_star_subalgebra_scalar_centre}), and it is
+    isomorphic to no $\MN{r}$ with $r\geq1$.
+
+    \textbf{Scope restriction (Schumacher--Werner \texttt{Csform}):}
+    This is the single building block of the structure theorem for
+    finite-dimensional $C^*$-algebras, Proposition~\texttt{Csform}
+    \cite[lines~2082--2098]{SchumacherWerner2004QCA}, for an algebra already
+    presented inside a matrix algebra.  It asserts neither the direct-sum
+    decomposition $\mathcal A\cong\bigoplus_\mu\MN{n_\mu}$ of that
+    proposition, nor its cut by the minimal projections of the centre, nor the
+    abstract $C^*$-algebra generality in which it is stated.  The omitted
+    content and its elimination plan are recorded in
+    \cite{gap:sw04_csform_matrix_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    A star-subalgebra of a complex matrix algebra is semisimple, so it is
+    isomorphic to a finite product $\prod_{k=1}^{m}\MN{d_k}$ with every
+    $d_k\geq1$.  The element that is the unit in the $k$-th coordinate and
+    zero in the others is central, hence by
+    (\ref{eq:qca_central_star_subalgebra_scalar_centre}) a multiple
+    $\lambda\mathbf 1$; comparing its $k$-th coordinate with another one gives
+    $\lambda=1$ and $\lambda=0$, so $m\leq1$.  The unit of $M_I(\C)$ is
+    nonzero because $I$ is nonempty, so $m=1$ and $S$ is a simple ring.  The
+    Wedderburn theorem over the algebraically closed field $\C$ then produces
+    an $r\geq1$ and an isomorphism of $\C$-algebras $S\cong\MN{r}$, and
+    conjugating it by a positive definite matrix makes it preserve adjoints
+    \cite[``A $*$-subalgebra with scalar centre is a full matrix
+        algebra'']{QICLean2026Blueprint}.  A star-isomorphism is in particular
+    a $\C$-linear isomorphism, and $\dim_{\C}\MN{r}=r^2$
+    \cite[``Dimension of a subalgebra presented as a full matrix
+        algebra'']{QICLean2026Blueprint}.
+\end{proof}
+
+Gross, Nesme, Vogts and Werner apply this conclusion to the site-indexed
+support algebras \cite[lines~1276--1282]{Gross2012IndexTheory}: an element of
+$\mathcal R_x$ commuting with all of $\mathcal R_x$ commutes with every
+$\mathcal R_y$, hence with the algebra they generate, which is the whole
+quasi-local algebra; its centre is scalar, so
+(\ref{eq:qca_central_star_subalgebra_scalar_centre}) holds for $\mathcal R_x$
+and $\mathcal R_x\cong M_{r(x)}(\C)$.
