@@ -656,7 +656,10 @@ entry is the parallel-family-with-a-bridge configuration that the repository's
 convention rule forbids.
 
 The merge is therefore one operation on the whole pointwise group, and it
-closes when either of the following is available.
+needs both of the following. Neither substitutes for the other: the first
+reaches the four entries whose restricted tensor is $\mathcal U$ itself, the
+second reaches the twelve whose restricted tensor is derived from
+$\mathcal U$.
 
 \begin{itemize}
     \item The converse of the stabilization theorem, namely
@@ -666,20 +669,56 @@ closes when either of the following is available.
           matrix one nonzero eigenvalue, equal to one, hence a single normal
           block filling the ambient bond space. This is the spectral step of
           \cite[lines~344--355]{Cirac2017MPU} run from the stabilized power
-          instead of from the shifted traces. It makes every supplied fixed
-          pair a bundled presentation, and the sixteen pointwise entries then
-          go together.
-    \item Preservation of the bundled presentation under positive physical
-          blocking, physical adjunction, transposition, conjugation, identity
-          ancillas, tensor products, and composition. Full support alone is
-          already preserved under blocking, adjunction, relabelling, and
-          identity ancillas; the outstanding clause is the ambient fixed
-          matrix, whose behaviour under each operation is fixed by the
-          corresponding transfer-map identity already recorded in Chapter~28.
-          Blocking is the case the source states outright at line~356.
+          instead of from the shifted traces. It turns a supplied fixed pair
+          into the bundled presentation of the tensor that carries it, and
+          nothing more. So it removes the restriction exactly where the
+          tensor carrying the datum is the tensor the standing convention
+          already governs: the four entries
+          \texttt{lem:mpu\_admissible\_source\_u\_isometry} and the three
+          candidates. It also dissolves the citation obstruction above, since
+          the eleven citing entries then obtain the presentation from their
+          own supplied pair instead of through a bridge entry. For the twelve
+          it rewrites the restriction without weakening it, because the
+          tensor carrying the datum is a derived one and the converse
+          constructs no datum for a derived tensor.
+    \item Preservation of the bundled presentation along each operation the
+          twelve use: positive physical blocking, physical adjunction,
+          transposition, complex conjugation, independent tensor products,
+          and composition. A preservation statement must deliver all four
+          clauses of the presentation for the derived tensor: unitarity of
+          its periodic operator family, literal canonical-form-II data for
+          its normalized flattening, full support of those data, and a
+          positive diagonal trace-one ambient matrix fixed by its normalized
+          transfer map. Blocking is the case the source states outright at
+          line~356.
 \end{itemize}
 
-Until one of these exists, deleting any of the three candidates moves a
+The second item is not uniformly distant. For blocking, physical adjunction,
+and independent tensor products all four clauses are separately available and
+only the assembled statement is missing. Blocking preserves unitarity,
+transports canonical-form-II data to the blocked normalized flattening,
+preserves full support, and iterates the transfer map, so the same ambient
+matrix stays fixed. Physical adjunction preserves unitarity, transports the
+data together with their full support, and conjugates the transfer map
+entrywise. Independent tensor products preserve unitarity, carry product
+canonical-form-II data whose full support follows from full support of the two
+factors, and act on transfer maps as a Kronecker product, under which the
+Kronecker product of the two ambient matrices is again positive definite,
+diagonal, of trace one, and fixed. Transposition and conjugation are
+transported only through their composite, physical adjunction; neither half is
+transported on its own.
+
+Composition is the far case. Unitarity of a composition is available, but the
+only recorded statement about its normalized flattening is the entrywise
+physical-contraction formula. No canonical-form-II data are constructed for a
+composition tensor, and no transfer-map identity for one is recorded, so
+neither the canonical-form-II clause nor the ambient-fixed-matrix clause of
+the presentation can be produced there at all. The composition case of the
+second item therefore needs two results and not one, and until it has them
+\texttt{lem:mpu\_admissible\_index\_composition} keeps its six per-block
+restrictions even if every other preservation statement is proved.
+
+Until both items exist, deleting any of the three candidates moves a
 hypothesis boundary out of sight without removing it, so the sixteen pointwise
 entries all remain.
 

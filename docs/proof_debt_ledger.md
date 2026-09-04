@@ -533,12 +533,35 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `cor:mpu_admissible_continuous_standard_form`, and
   `lem:mpu_admissible_symmetry_path_criterion`) whose tensors carry only a
   supplied fixed pair, so deleting them singly would strengthen those 11
-  statements silently. The two unblockers are the converse
-  `E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII` by the spectral step
-  of `Papers/1703.09188/paper_v2.tex` lines 344--355, and preservation of
+  statements silently. Two independent unblockers are needed, and neither
+  substitutes for the other. The converse
+  `E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII`, by the spectral step
+  of `Papers/1703.09188/paper_v2.tex` lines 344--355, turns a supplied pair
+  into a presentation of the same tensor; it therefore reaches only the 4
+  nodes whose restricted tensor is the one the convention already governs
+  (`lem:mpu_admissible_source_u_isometry` and the 3 candidates), and it
+  dissolves the citation obstruction, but it constructs no datum for a
+  derived tensor and so leaves all 12 restricted. Preservation of
   `IsMPUCanonicalFormII` under positive physical blocking (asserted at source
-  line 356), physical adjunction, transposition, conjugation, identity
-  ancillas, tensor products, and composition. The
+  line 356), physical adjunction, transposition, conjugation, tensor
+  products, and composition is what reaches the 12; each such statement must
+  produce all four clauses (`isMPU`, `cfii`, `fullSupport_eq`, and the
+  positive diagonal trace-one `ρ` with `ρ_fixed`) for the derived tensor. For
+  blocking, physical adjunction, and tensor products every clause is
+  separately available (`IsMPU.blockTensor`, `blockTensorCFIIData`,
+  `hasFullSupport_blockTensor`, `transferMap_blockTensor`;
+  `IsMPU.physicalAdjointTensor`, `physicalAdjointNormalizedFlattening`,
+  `hasFullSupport_physicalAdjointNormalizedFlattening`,
+  `transferMap_mapStar`; `IsMPU.tensorProduct`, `tensorProductCFIIData`,
+  `hasFullSupport_tensorProductCFIIData`,
+  `transferMap_tensorProduct_kronecker`) and only the assembled statement is
+  missing; transposition and conjugation exist only as the composite. For
+  composition only `IsMPU.mulTensor` is available: `TNLean/MPS/MPU/` has no
+  canonical-form-II construction for `mulTensor` and no transfer-map identity
+  for it, only the entrywise `normalizedFlattening_mulTensor_apply`, so that
+  case needs two new results and
+  `lem:mpu_admissible_index_composition` stays restricted until it has them.
+  The
   nonsymmetric same-fixed-point problem in #7653 remains an optional
   out-of-source question; the transpose-reparameterized construction rejected
   in #7705 is not part of this plan.
