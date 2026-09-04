@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Cocycle Representatives in the Stabilizer Extension Calculation}
+\author{}
+\date{2026-09-04}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Proposition \texttt{prop:BI\_psi} of
+Ref.~\cite{FrancoRubio2025MPUGauging}, lines 7042--7064, writes
+$\Psi\in H^2(G,U(1))$ and then evaluates $\Psi(g,h)$.
+Evaluation is defined for a cocycle representative, not for a cohomology class.
+At the class level the hypothesis is
+$[\psi]\in\operatorname{im}(\operatorname{res}^G_H)$.
+At the representative level the displayed calculation uses a genuine
+cocycle $\Psi$ satisfying $\Psi|_{H\times H}=\psi$ after compatible
+coboundary choices.
+
+The present scalar result assumes exactly this latter equality and proves
+\begin{align}
+ \gamma_g^x&=\frac{\Psi(k_{gx}^{-1},gk_x)\Psi(g,k_x)}
+ {\Psi(e,e)\Psi(k_x,k_x^{-1})},\\
+ \psi(t_k(g_1,g_2x),t_k(g_2,x))
+ &=\Psi(g_1,g_2)\frac{\gamma_{g_1g_2}^x}
+ {\gamma_{g_1}^{g_2x}\gamma_{g_2}^x}.
+\end{align}
+Here $t_k(g,x)=k_{gx}^{-1}gk_x$, with the corrected index in the first
+transition factor documented in the companion representative-index note.
+The printed formula for $\gamma$ itself requires no correction, including
+its denominator involving $k_x$ rather than $k_{gx}$.
+The inverse gauges trivialize the induced scalar symbols.
+No normalization of $\Psi$, finiteness, or normality of $H$ is assumed.
+The result is proved for $\mathbb C^\times$ coefficients, and hence applies
+to unit-circle-valued cocycles viewed as nonzero complex scalars.
+
+\textbf{Remaining scope.}
+This is only the forward scalar representative calculation. It does not
+construct fusion or action tensors, prove the converse, or identify the
+class-level restriction image. Issue \#7361 remains open for the full
+proposition. Its completion must justify compatible coboundary choices,
+prove the converse and class-level equivalence, and connect the scalar
+calculation to the tensor hypotheses. No quotient group structure on
+$G/H$ is used or required.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
