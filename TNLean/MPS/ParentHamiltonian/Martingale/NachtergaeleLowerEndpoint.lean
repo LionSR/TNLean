@@ -47,8 +47,9 @@ operator involved, produces the coordinate model below.
 
 **Local fix (lower endpoint of Theorem 2.1(i)):** The printed statement is
 repaired by requiring the martingale differences below the C2--C3 onset to
-annihilate \(\psi\); see
-`FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero`.
+annihilate \(\psi\). The repaired theorem is
+`energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero`
+in `TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleFullRangeEstimate`.
 The source defect and the repair are recorded in
 `docs/paper-gaps/nachtergaele96_theorem_2_1_lower_endpoint.tex`.
 -/
