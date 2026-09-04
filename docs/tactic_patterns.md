@@ -2028,6 +2028,62 @@ spectral split → block extraction → MPV calculation → strict bounds
   cover (membership in red/blue/crossing regions) stated once in the
   RegionBlock development.
 
+### nested finite-sum congruence under two binders — candidate
+- **Pattern:**
+  ```
+  apply Finset.sum_congr rfl
+  intro i _
+  apply Finset.sum_congr rfl
+  intro j _
+  ```
+  descending through two nested `Finset.sum` binders to reach the summand.
+  A related pattern first commutes the outer binders and then descends.
+- **Seen:** the scanner's literal three-line `i`/`_` prefix contains 12
+  occurrences across 7 files (2026-09-03 scan, scan weight 36):
+  `TNLean/MPS/MPU/ReflectedTransferKernel.lean:91`,
+  `TNLean/MPS/MPU/DoubleLayerContraction.lean:181`,
+  `TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean:567,728`,
+  `TNLean/MPS/MPDO/CPSVBlockingChannelCounterexample.lean:380,475,490`,
+  `TNLean/MPS/MPDO/VerticalCF.lean:298`,
+  `TNLean/MPS/MPDO/ReflectedMarkedChain.lean:144,183`,
+  `TNLean/MPS/MPDO/TwoSitePrefixReflectedMarkedChain.lean:72,145`.
+  Each site continues with the inner-binder introduction shown above, although
+  its binder name varies. The fully literal `i`/`j` four-line block occurs 8
+  times across 6 files (scan weight 32). Alpha-normalizing both binder and
+  membership-hypothesis names gives 77 occurrences across 44 files. The
+  related scanner bucket
+  `rw [Finset.sum_comm]; apply Finset.sum_congr rfl; intro j _` contains 8
+  occurrences across 7 files:
+  `TNLean/MPS/MPDO/ActiveSectorTraceMatrixZCL.lean:90`,
+  `TNLean/MPS/MPDO/BNTThreeSiteReducedClosure.lean:240`,
+  `TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean:620,672`,
+  `TNLean/MPS/MPDO/InvariantProjection.lean:122`,
+  `TNLean/MPS/MPDO/LemmaC5CaseI.lean:194`,
+  `TNLean/MPS/ParentHamiltonian/MixedGram.lean:97`, and
+  `TNLean/MPS/Periodic/Applications.lean:173`.
+  Alpha-normalizing this shape gives 58 occurrences across 33 files. It first
+  commutes the outer binders and then descends through one of them;
+  `Finset.sum_comm` already owns the permutation step.
+- **Abstraction (proposed):** a two-binder congruence lemma supporting a
+  dependent inner binder, roughly
+  ```lean
+  Finset.sum_congr₂ :
+    (∀ i ∈ s, ∀ j ∈ t i, f i j = g i j) →
+      ∑ i ∈ s, ∑ j ∈ t i, f i j = ∑ i ∈ s, ∑ j ∈ t i, g i j
+  ```
+  stated once in the algebra layer. The dependent form applies to all 12
+  literal primary occurrences, including the two dependent fusion-multiplicity
+  sums in `CompleteZipperFusionPentagon.lean`, and to their alpha-renamed
+  counterparts. The commutation-first bucket is recorded only as a related
+  shape: this lemma applies there only when two congruence descents follow the
+  permutation. `Finset.sum_comm` and `Finset.sum_congr` already cover the
+  one-descent cases. A lemma is the weakest sufficient mechanism for the
+  two-descent pattern; no macro or elaborator is warranted.
+- **Note:** among the 12 literal primary sites,
+  `ReflectedTransferKernel.lean:91` is inside the #7658 deletion set. That
+  issue also removes files containing alpha-renamed sites, so re-count both
+  totals before promoting.
+
 ### spectral_double_sum_continuity — candidate
 - **Pattern:**
   ```
