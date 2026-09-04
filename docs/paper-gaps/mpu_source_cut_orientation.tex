@@ -214,6 +214,19 @@ as tracked by \ghissue{7657} and \ghissue{7659}. Issue \ghissue{7653} instead
 asks for a nonsymmetric ambient-weight strengthening that CPSV17 does not
 claim. It is not the elimination step for the source-faithful theorem.
 
+That strengthening is now formalized separately, without touching the
+diagonal statements of the complete source-$u$ module. It pairs the source-cut
+weight $\rho$ with the stabilized fixed point $\rho^{\mathsf T}$, which is the
+pairing the column stacking of this note produces, and assumes no symmetry:
+\leanid{MPOTensor.SourceFactors.sourceU_gram_eq_closed_doubleLayer_trace_of_transpose_fixed_pair},
+\leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU_of_transpose_fixed_pair},
+\leanid{MPOTensor.IsMPU.sourceU_isIsometry_of_transpose_fixed_pair},
+\leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry_of_transpose_fixed_pair}, and
+\leanid{MPOTensor.IsMPU.isMPUSimple_tfae_of_transpose_fixed_pair}. The
+consequences for the reduced full-support source datum are recorded in
+\texttt{mpu\_canonical\_form\_full\_support.tex}. The source-labelled statement
+remains the diagonal one.
+
 \section{Affected claims and audit boundary}
 
 The transposed first cut affected source-factor recovery, physical adjunction,
