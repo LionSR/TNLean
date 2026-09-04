@@ -47,6 +47,13 @@ For the MPU symmetry-defect gauging paper:
   invariant-vector theorem assumes local defect support and exact covariance,
   while the paper derives them from its concrete locally orthogonal MPS blocks
   and modified fusion maps. Issue #7569 tracks this specialization.
+- `fbc25_czx_defect_domains.tex` derives the eight two-site defect vectors of
+  the CZX example by finite contraction of the displayed tensors, hence the
+  four defect domains and prescribed maps. The even and odd target supports
+  are $\operatorname{span}\{\ket{0000},\ket{1111}\}$ and
+  $\operatorname{span}\{\ket{1100},\ket{0011}\}$, orthogonal rather than
+  equal, and the displayed circuits restrict to the prescribed maps in the
+  source's own conventions. Issues #7355 and #7569 track the formal instance.
 - `fbc25_alternating_network_nondegeneracy.tex` records the one-sided
   nonvanishing convention for the alternating-network proportionality lemma.
   Both applications in the source satisfy this convention because their
