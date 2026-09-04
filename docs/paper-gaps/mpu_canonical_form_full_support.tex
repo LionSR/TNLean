@@ -201,8 +201,9 @@ network is formalized by
 Input unitarity gives the isometry and rank bound in
 \leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU} and
 \leanid{MPOTensor.SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU};
-\leanid{MPOTensor.IsMPU.sourceU_isIsometry} applies this result to the
-compact-SVD source factors. The raw trace-one transfer-power specialization is
+\leanid{MPOTensor.IsMPUCanonicalFormII.sourceU_isIsometry} applies this result
+to the compact-SVD source factors of a tensor in canonical form II, where the
+weight and the transfer power come from the convention. The raw trace-one transfer-power specialization is
 \leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag}.
 These proofs keep the source factors built from $\rho$, use
 $\rho^{\mathsf T}=\rho$, and retain one $K$-site interior between two
@@ -216,8 +217,8 @@ Ref.~\cite{Cirac2017MPU} is formalized as
 needs no fixed-pair datum beyond a positive definite weight, and it carries
 the inserted-vector transpose recorded in
 \texttt{mpu\_source\_cut\_orientation.tex}. The source's diagonal convention
-then gives \leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry} for the gate built
-from that same weight.
+then gives \leanid{MPOTensor.IsMPUCanonicalFormII.sourceV_isIsometry} for the
+gate built from that same weight.
 % Source lines: paper_v2.tex 545--557 and 577--600.
 % Source equation labels: uUnitary and vUnitary.
 
@@ -586,22 +587,33 @@ A source-faithful formalization must therefore construct the reduced
 representative. If a theorem retains named source cuts, the formalization must
 also justify the corresponding source constructions separately. The
 representative reduction is now formalized for every positive bond dimension
-and preserves the positive-length periodic operator family. The admissible
-source statements still require full-support data for the same named tensor
-because no identification of source factors across potentially unequal bond
-dimensions has been proved. The original source labels remain unrestricted and
-unformalized; the distinct admissible nodes record the current same-tensor
-source-data route.
+and preserves the positive-length periodic operator family. Statements about a
+tensor already in canonical form II take the bundled presentation, which is the
+source's own standing hypothesis. Statements that would start from an arbitrary
+ambient MPU still need an identification of source factors across potentially
+unequal bond dimensions, which has not been proved.
 
-Within Theorem~III.8 itself, the complete supplied-fixed-pair source-$u$
-contraction and the complete source-$v$ equivalence are formalized. The
-unrestricted source statement \texttt{lemuisometry} remains open because the
-formalization does not yet construct the required same-tensor diagonal source
-data from an arbitrary MPU. That admissible construction remains in
-\ghissue{7012}, and the unrestricted representative remains in
-\ghissue{7127}. Downstream standard-form, index, continuity, and symmetry
-results also lack existence or preservation theorems for reduced source data
-under products, transformed comparison tensors, and continuous paths.
+Within Theorem~III.8 itself, the complete source-$u$ contraction and the
+complete source-$v$ equivalence are formalized. Both are stated for a tensor
+satisfying the bundled canonical-form-II presentation, which is exactly the
+hypothesis the source states once before Lemma~III.7 and never repeats. The
+ambient positive diagonal weight and the stabilized rank-one transfer power
+$E^{J}=\lvert\rho)(\Phi\rvert$ at the positive exponent $J=\max(D^2-1,1)$ are
+consequences of that presentation rather than supplied data, so
+\texttt{lemuisometry} and \texttt{ThmFund1} carry the source's hypothesis set.
+The generic supplied-fixed-pair contractions remain available as the reusable
+step, stated for an arbitrary positive diagonal weight and an arbitrary
+stabilization exponent.
+
+What remains open is the transport of source cuts. For an arbitrary MPU
+representative the reduction produces a new tensor of possibly smaller bond
+dimension, and no theorem identifies the compact-SVD cuts, ranks, or selected
+source factors of that representative with those of the original ambient
+tensor. That transport remains in \ghissue{7012}, and the unrestricted
+representative remains in \ghissue{7127}. Downstream standard-form, index,
+continuity, and symmetry results also lack existence or preservation theorems
+for reduced source data under products, transformed comparison tensors, and
+continuous paths.
 Chapter~28 records these requirements as explicit admissibility hypotheses
 rather than consequences of the MPU predicate.
 

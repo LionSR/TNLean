@@ -134,55 +134,39 @@ theorem IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
     have hijkl := hs.2 (e i) (e j) (e k) (e l)
     simpa only [e, ← htensor, doubleLayerTensor_reindexPhysical] using hijkl
 
-/-- A reduced full-support canonical-form-II representative supplies the
-normalized positive fixed pair and the exact aligned simple contractions on
-the forced block of length \(J D^2\), where \(J = D^2 - 1\).
+/-- An MPU in canonical form II has the exact aligned simple contractions on
+the forced block of length \(JD^2\), with \(J=\max(D^2-1,1)\) and the named
+witnesses \(a=\Phi\), \(b=\rho\) of the convention.
 
-All fixed-point data and both contractions refer to the same original tensor
-and its direct block; no source-cut factorization or source-v isometry is
-asserted.
+Both contractions refer to the same original tensor and its direct block; no
+source-cut factorization or source-v isometry is asserted. The ambient fixed
+matrix, its positivity and normalization, and the two fixed-vector equations
+are the fields of the convention, so they are no longer restated here.
 
 Source: arXiv:1703.09188, Section III.A, lines 397--427. The forced simple
 block is subsequently used in Lemma III.7, lines 550--556; Theorem III.8 uses
 that lemma at lines 589 and 592.
 
-**Scope restriction (full support):** This uses the chosen reduced
-representative supplied by
-`IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii`. See
-`docs/paper-gaps/mpu_canonical_form_full_support.tex`.
-
 **Local fix (nil-matrix length):** the second blocking uses \(D^2\); see
 <https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>. -/
-theorem IsMPU.exists_reduced_cfii_forced_block_simple_contractions
-    [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) (hD : 1 < D)
-    (cfii : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
-    (hfull : cfii.toCPSVCanonicalFormData.HasFullSupport) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
-      ρ.PosDef ∧ Matrix.trace ρ = 1 ∧
-      Kraus.transferMap U.normalizedFlattening ρ = ρ ∧
-      Matrix.vecMul (1 : Matrix (Fin D) (Fin D) ℂ).vec
-          (transferMatrix (Kraus.transferMap U.normalizedFlattening)) =
-        (1 : Matrix (Fin D) (Fin D) ℂ).vec ∧
-      transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ (D * D - 1) =
-        Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec ∧
-      let J := D * D - 1
-      let ρ' : Fin (D * D) → ℂ := fun i ↦ ρ.vec (finProdFinEquiv.symm i)
-      let Φ' : Fin (D * D) → ℂ := fun i ↦
-        (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm i)
-      (∀ i j : Fin (MPSTensor.blockPhysDim d (J * (D * D))),
-        Φ' ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *ᵥ ρ') =
-          if i = j then 1 else 0) ∧
-      (∀ i j k l : Fin (MPSTensor.blockPhysDim d (J * (D * D))),
+theorem IsMPUCanonicalFormII.forced_block_simple_contractions
+    [NeZero d] {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
+    let J := max (D * D - 1) 1
+    let ρ' : Fin (D * D) → ℂ := fun i ↦ hU.ρ.vec (finProdFinEquiv.symm i)
+    let Φ' : Fin (D * D) → ℂ := fun i ↦
+      (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm i)
+    (∀ i j : Fin (MPSTensor.blockPhysDim d (J * (D * D))),
+      Φ' ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *ᵥ ρ') =
+        if i = j then 1 else 0) ∧
+    (∀ i j k l : Fin (MPSTensor.blockPhysDim d (J * (D * D))),
+      doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
+          doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l =
         doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
-            doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l =
-          doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
-            Matrix.vecMulVec ρ' Φ' *
-              doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l) := by
-  obtain ⟨_, _, ρ, _, _, _, _, _, _, hρpd, hρtrace, hρfix, hΦfix, hpower⟩ :=
-    hU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii hD cfii hfull
-  have hJ : 0 < D * D - 1 := Nat.sub_pos_of_lt (by nlinarith)
-  have hs := hU.blockTensor_mul_sq_simple_contractions_of_transfer_power
-    ρ hρtrace (D * D - 1) hJ hpower
-  exact ⟨ρ, hρpd, hρtrace, hρfix, hΦfix, hpower, hs⟩
+          Matrix.vecMulVec ρ' Φ' *
+            doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l) := by
+  have := hU.neZero_bond
+  exact hU.isMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
+    hU.ρ hU.ρ_trace (max (D * D - 1) 1) (by omega)
+    hU.normalized_transfer_power_eq_vecMulVec
 
 end MPOTensor

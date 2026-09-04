@@ -272,6 +272,26 @@ theorem normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power
   rw [normalizedDiagonal_doubleLayerTensor_blockTensor, pow_mul, hpowerR, hRpow]
   rfl
 
+/-- The normalized double-layer diagonal of an MPU in canonical form II
+stabilizes at the positive exponent \(J=\max(D^2-1,1)\) to the vectorized
+rank-one projector \(\lvert\rho)(\Phi\rvert\) built from the ambient fixed
+matrix recorded by the convention.
+
+Source: arXiv:1703.09188, equation `Erightleft` (lines 269--281) and lines
+397--405. -/
+theorem IsMPUCanonicalFormII.normalizedDiagonal_pow_eq_vecMulVec [NeZero d]
+    {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
+    normalizedDiagonal (doubleLayerTensor U) ^ max (D * D - 1) 1 =
+      Matrix.vecMulVec
+        (fun x : Fin (D * D) ↦ hU.ρ.vec (finProdFinEquiv.symm x))
+        (fun x : Fin (D * D) ↦
+          (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)) := by
+  have := hU.neZero_bond
+  have h := normalizedDiagonal_doubleLayerTensor_blockTensor U (max (D * D - 1) 1)
+  rw [doubleLayerTensor_blockTensor, normalizedDiagonal_blockTensor] at h
+  rw [h, hU.normalized_transfer_power_eq_vecMulVec]
+  rfl
+
 /-- A residual physical slice: subtract the identity coefficient from a physical
 contraction. This is the basis-free form of the residual matrices `S_α` in
 `WIsom`.

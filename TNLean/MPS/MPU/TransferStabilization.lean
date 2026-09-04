@@ -35,6 +35,11 @@ right fixed witnesses.
   reduced canonical-form-II data.
 * `MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one` proves that the
   one-dimensional normalized transfer matrix is the identity.
+* `MPOTensor.IsMPUCanonicalFormII.normalized_transfer_power_eq_vecMulVec` and
+  `MPOTensor.IsMPUCanonicalFormII.vecMul_one_vec_transferMatrix` state the two
+  equations of `Erightleft` for the ambient matrix the convention records, as a
+  single power identity at the exponent `max (D * D - 1) 1` valid in every bond
+  dimension.
 
 ## References
 
@@ -248,6 +253,17 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
     hΛfix, rfl, hρpd, hρtrace, hρfix, hleft, ?_⟩
   simpa using hpower
 
+/-- Every power of the transfer matrix fixes the vectorization of a fixed point
+of the underlying map. -/
+private theorem transferMatrix_pow_mulVec_vec_of_fixed {D : ℕ}
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hfix : T ρ = ρ) (n : ℕ) :
+    transferMatrix T ^ n *ᵥ ρ.vec = ρ.vec := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [pow_succ, ← Matrix.mulVec_mulVec, transferMatrix_mulVec_eq, hfix, ih]
+
 /-- In bond dimension one, the normalized transfer matrix of an MPU is the identity.
 
 Source: arXiv:1703.09188, lines 397--409, specialized to `D = 1`. -/
@@ -278,5 +294,74 @@ noncomputable def IsMPU.normalizedTransferStabilization_fin_one
     simp
   · rw [hE]
     simp
+
+namespace IsMPUCanonicalFormII
+
+variable [NeZero d] {U : MPOTensor d D}
+
+/-- The vectorized identity is a left fixed vector of the normalized transfer
+matrix of an MPU in canonical form II: this is `(Φ|E = (Φ|`.
+
+Source: arXiv:1703.09188, equation `Erightleft`, lines 269--281. -/
+theorem vecMul_one_vec_transferMatrix (hU : IsMPUCanonicalFormII U) :
+    Matrix.vecMul (1 : Matrix (Fin D) (Fin D) ℂ).vec
+        (transferMatrix (Kraus.transferMap U.normalizedFlattening)) =
+      (1 : Matrix (Fin D) (Fin D) ℂ).vec := by
+  have := hU.neZero_bond
+  rcases lt_or_ge 1 D with hD | hD
+  · obtain ⟨-, -, -, -, -, -, -, -, -, -, -, -, hΦ, -⟩ :=
+      hU.isMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii hD hU.cfii
+        hU.hasFullSupport
+    exact hΦ
+  · obtain rfl : D = 1 := le_antisymm hD (NeZero.pos D)
+    rw [hU.isMPU.normalized_transfer_matrix_eq_one_fin_one, Matrix.vecMul_one]
+
+/-- The ambient right fixed matrix recorded by the canonical-form-II convention
+is exactly the stabilized value of the normalized transfer matrix:
+`E ^ J = |ρ)(Φ|` at the positive exponent `J = max (D² - 1) 1`.
+
+The stabilized power is rank one with left factor `(Φ|`, so the trace-one fixed
+matrix `ρ` recorded by the convention is the one the elimination of the
+zero-primary component produces; no separate stabilized pair is supplied. The
+exponent is `D² - 1` whenever `D > 1` and `1` in bond dimension one, where the
+normalized transfer matrix is already the identity.
+
+Source: arXiv:1703.09188, equation `Erightleft` (lines 269--281) and the Jordan
+elimination of lines 397--405. -/
+theorem normalized_transfer_power_eq_vecMulVec (hU : IsMPUCanonicalFormII U) :
+    transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ max (D * D - 1) 1 =
+      Matrix.vecMulVec hU.ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec := by
+  have := hU.neZero_bond
+  rcases lt_or_ge 1 D with hD | hD
+  · obtain ⟨-, -, σ, -, -, -, -, -, -, -, -, -, -, hpower⟩ :=
+      hU.isMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii hD hU.cfii
+        hU.hasFullSupport
+    have hDD : 2 * 2 ≤ D * D :=
+      Nat.mul_le_mul (by omega : 2 ≤ D) (by omega : 2 ≤ D)
+    have hmax : max (D * D - 1) 1 = D * D - 1 := max_eq_left (by omega)
+    have hfix :
+        transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ (D * D - 1) *ᵥ
+          hU.ρ.vec = hU.ρ.vec :=
+      transferMatrix_pow_mulVec_vec_of_fixed _ hU.ρ_fixed _
+    rw [hpower, Matrix.vecMulVec_mulVec, Matrix.vec_one_dotProduct_vec_eq_trace,
+      hU.ρ_trace] at hfix
+    simp only [MulOpposite.op_one, one_smul] at hfix
+    rw [hmax, hpower, hfix]
+  · obtain rfl : D = 1 := le_antisymm hD (NeZero.pos D)
+    have hρ : hU.ρ = 1 := by
+      have h := hU.ρ_trace
+      ext i j
+      fin_cases i
+      fin_cases j
+      simpa [Matrix.trace_fin_one, Matrix.one_apply] using h
+    rw [hU.isMPU.normalized_transfer_matrix_eq_one_fin_one, hρ, one_pow]
+    ext ⟨p₁, p₂⟩ ⟨q₁, q₂⟩
+    fin_cases p₁
+    fin_cases p₂
+    fin_cases q₁
+    fin_cases q₂
+    simp [Matrix.vecMulVec_apply]
+
+end IsMPUCanonicalFormII
 
 end MPOTensor

@@ -366,6 +366,17 @@ theorem hasFullSupport {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
     hU.cfii.toCPSVCanonicalFormData.HasFullSupport :=
   hU.fullSupport_eq
 
+/-- The bond space of an MPU in canonical form II is nonempty: the normalization
+`(Φ|ρ) = 1` of `Erightleft` fails on an empty bond space, where every trace
+vanishes.
+
+Source: CPSV17, `Papers/1703.09188/paper_v2.tex`, lines 269--281. -/
+theorem neZero_bond {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) : NeZero D :=
+  ⟨by
+    rintro rfl
+    have h := hU.ρ_trace
+    simp [Matrix.trace] at h⟩
+
 end IsMPUCanonicalFormII
 
 private theorem sqrt_blockPhysDim (d p : ℕ) :

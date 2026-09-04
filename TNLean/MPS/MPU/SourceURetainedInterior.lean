@@ -13,11 +13,13 @@ This module converts a supplied normalized transfer-matrix power at length
 the arbitrary-interior complete-network theorem for the paper gate
 \(u=Y_2\mathbin{-}Y_1\).
 
-**Scope restriction (supplied stabilized fixed pair):** the theorem assumes the
-raw rank-one transfer identity and the source's diagonal canonical-form-II
-coordinates explicitly.  It keeps `SourceFactors U ρ`; no source factor is
-recomputed from \(\rho^{\mathsf T}\).  Documented in
-`docs/paper-gaps/mpu_canonical_form_full_support.tex` and
+The theorem below is the reusable generic step: it takes supplied source
+factors for an arbitrary positive weight, together with the raw rank-one
+transfer identity and the source's diagonal coordinates, and assumes nothing
+else about the tensor.  Lemma `lemuisometry` itself is stated for an MPU in
+canonical form II, where both are recorded by the convention.  The step keeps
+`SourceFactors U ρ`; no source factor is recomputed from
+\(\rho^{\mathsf T}\).  The column-stacking orientation is documented in
 `docs/paper-gaps/mpu_source_cut_orientation.tex`.
 
 Source: arXiv:1703.09188, equations `Erightleft`, `X1X2b`, and `uUnitary`,

@@ -149,17 +149,18 @@ The source gates remain the gates built from the printed weight $\rho$; replacin
 that weight by $\rho^{\mathsf T}$ recomputes $X_1,Y_1$ and gives a different
 gate when $\rho$ is not symmetric. The source's diagonal convention makes the
 two inserted vectors equal, and
-\leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry} proves the forward direction
-of Theorem~III.8 on precisely that convention. The reparametrized theorem
+\leanid{MPOTensor.IsMPUCanonicalFormII.sourceV_isIsometry} proves the forward
+direction of Theorem~III.8 on precisely that convention. The reparametrized theorem
 \leanid{MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry} is retained as an
 auxiliary statement, not as an identification of the original gate. The
 converse direction in
 \leanid{MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry} produces the
 witnesses $(\Phi\rvert$ and $\lvert\rho^{\mathsf T})$ for the same weight
 $\rho$. Together with the diagonal source-$u$ isometry,
-\leanid{MPOTensor.IsMPU.isMPUSimple_tfae} gives the supplied-fixed-pair
-specialization of Theorem~III.8; the unrestricted representative scope remains
-recorded in \texttt{mpu\_canonical\_form\_full\_support.tex}. No source-factor
+\leanid{MPOTensor.IsMPUCanonicalFormII.isMPUSimple_tfae} gives Theorem~III.8
+under the source's standing convention; the transport of source cuts to a
+reduced representative of an arbitrary ambient MPU remains recorded in
+\texttt{mpu\_canonical\_form\_full\_support.tex}. No source-factor
 definition is changed.
 
 For the source-$u$ gate, the transpose closure and the source's diagonal
@@ -185,7 +186,8 @@ The arbitrary-$K$ declarations are
 \leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_input_tail},
 \leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU}, and
 \leanid{MPOTensor.SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU}.
-The compact-SVD wrapper is \leanid{MPOTensor.IsMPU.sourceU_isIsometry}, while
+The compact-SVD wrapper is
+\leanid{MPOTensor.IsMPUCanonicalFormII.sourceU_isIsometry}, while
 \leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag}
 converts the raw trace-one transfer power at $J$ into the direct fixed pair at
 $K=JD^2$. The independent right-shift checks
