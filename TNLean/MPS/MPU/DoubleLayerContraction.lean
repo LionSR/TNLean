@@ -279,7 +279,7 @@ matrix recorded by the convention.
 
 Source: arXiv:1703.09188, equation `Erightleft` (lines 269--281) and lines
 397--405. -/
-theorem IsMPUCanonicalFormII.normalizedDiagonal_pow_eq_vecMulVec [NeZero d]
+theorem IsMPUCanonicalFormII.normalizedDiagonal_pow_eq_vecMulVec
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
     normalizedDiagonal (doubleLayerTensor U) ^ max (D * D - 1) 1 =
       Matrix.vecMulVec
@@ -287,6 +287,7 @@ theorem IsMPUCanonicalFormII.normalizedDiagonal_pow_eq_vecMulVec [NeZero d]
         (fun x : Fin (D * D) ↦
           (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)) := by
   have := hU.neZero_bond
+  have := hU.neZero_phys
   have h := normalizedDiagonal_doubleLayerTensor_blockTensor U (max (D * D - 1) 1)
   rw [doubleLayerTensor_blockTensor, normalizedDiagonal_blockTensor] at h
   rw [h, hU.normalized_transfer_power_eq_vecMulVec]

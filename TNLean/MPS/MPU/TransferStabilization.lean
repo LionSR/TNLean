@@ -297,7 +297,7 @@ noncomputable def IsMPU.normalizedTransferStabilization_fin_one
 
 namespace IsMPUCanonicalFormII
 
-variable [NeZero d] {U : MPOTensor d D}
+variable {U : MPOTensor d D}
 
 /-- The vectorized identity is a left fixed vector of the normalized transfer
 matrix of an MPU in canonical form II: this is `(Φ|E = (Φ|`.
@@ -308,6 +308,7 @@ theorem vecMul_one_vec_transferMatrix (hU : IsMPUCanonicalFormII U) :
         (transferMatrix (Kraus.transferMap U.normalizedFlattening)) =
       (1 : Matrix (Fin D) (Fin D) ℂ).vec := by
   have := hU.neZero_bond
+  have := hU.neZero_phys
   rcases lt_or_ge 1 D with hD | hD
   · obtain ⟨-, -, -, -, -, -, -, -, -, -, -, -, hΦ, -⟩ :=
       hU.isMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii hD hU.cfii
@@ -332,6 +333,7 @@ theorem normalized_transfer_power_eq_vecMulVec (hU : IsMPUCanonicalFormII U) :
     transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ max (D * D - 1) 1 =
       Matrix.vecMulVec hU.ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec := by
   have := hU.neZero_bond
+  have := hU.neZero_phys
   rcases lt_or_ge 1 D with hD | hD
   · obtain ⟨-, -, σ, -, -, -, -, -, -, -, -, -, -, hpower⟩ :=
       hU.isMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii hD hU.cfii

@@ -4302,8 +4302,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.IsMPUCanonicalFormII.forced_block_simple_contractions}
     \leanok
     \uses{def:mpu_canonical_form_ii, def:mpdo_physical_blocking, def:mpu_double_layer}
-    Let $d>0$ and let $\mathcal U$ be an MPU in canonical form II, with ambient
-    fixed matrix $\rho$. Put $J=\max(D^2-1,1)$ and $W=\mathcal U_{JD^2}$. With
+    Let $\mathcal U$ be an MPU in canonical form II, with ambient fixed
+    matrix $\rho$. Put $J=\max(D^2-1,1)$ and $W=\mathcal U_{JD^2}$. With
     the vectorized pair $\rho',\Phi'$ of $\rho$ and of the identity, the
     blocked tensor $W$ satisfies the two aligned simple contractions
     \begin{align}
@@ -4350,7 +4350,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{def:mpu_canonical_form_ii}
     \lean{MPOTensor.IsMPUCanonicalFormII,
         MPOTensor.IsMPUCanonicalFormII.hasFullSupport,
-        MPOTensor.IsMPUCanonicalFormII.neZero_bond}
+        MPOTensor.IsMPUCanonicalFormII.neZero_bond,
+        MPOTensor.IsMPUCanonicalFormII.neZero_phys}
     \leanok
     \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support}
     Let $\mathcal U$ be an MPO tensor, and write
@@ -4380,7 +4381,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Thus the retained blocks have literal full support, and $\rho$ is a
     positive diagonal trace-one right fixed point in the ambient bond
     coordinates. In particular the normalization $\tr(\rho)=1$ forces the bond
-    space to be nonempty. This is the standing convention of
+    space to be nonempty, and together with $E(\rho)=\rho$ it forces the
+    physical dimension to be positive as well: on an empty physical index the
+    normalized transfer map is zero, so its fixed matrix vanishes and cannot
+    have unit trace. This is the standing convention of
     \cite[lines~269--281, 344--356, and 488--502]{Cirac2017MPU}.
     % The ambient diagonal rho is part of the chosen presentation. No construction
     % from arbitrary existing CFII and full-support witnesses is asserted:
@@ -4461,8 +4465,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.IsMPUCanonicalFormII.normalizedDiagonal_pow_eq_vecMulVec}
     \leanok
     \uses{def:mpu_canonical_form_ii, def:mpu_double_layer}
-    Let $d>0$ and let $\mathcal U$ be an MPU in canonical form II with ambient
-    fixed matrix $\rho$, and put $J=\max(D^2-1,1)$. Then
+    Let $\mathcal U$ be an MPU in canonical form II with ambient fixed
+    matrix $\rho$, and put $J=\max(D^2-1,1)$. Then
     \begin{align}
         (\Phi\rvert E & =(\Phi\rvert,
                       & E^J           & =\lvert\rho)(\Phi\rvert,
@@ -4788,8 +4792,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_le}
     \leanok
     \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer, def:mpu_canonical_form_ii}
-    Let $\mathcal U$ be simple with physical dimension $d>0$ and in canonical
-    form II, with ambient fixed matrix $\rho$. Let $v$ be the source operator
+    Let $\mathcal U$ be simple and in canonical form II, with ambient fixed
+    matrix $\rho$. Let $v$ be the source operator
     of $\mathcal U$ built from that same weight $\rho$. Then
     $v^\dagger v=\Id_{r\ell}$, and consequently $r\ell\le d^2$. This is the
     implication $1\to2$ in \cite[proof of Theorem~III.8]{Cirac2017MPU},

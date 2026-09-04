@@ -252,13 +252,20 @@ data across blocking.
 
 Chapter~28 of the blueprint records the preceding assumptions as a reduced
 full-support source datum for the same tensor. This datum is an explicit input,
-not an existence theorem. The chapter retains unrestricted, unformalized
-source entries under the original labels \texttt{lemuisometry},
-\texttt{ThmFund1}, \texttt{SF}, \texttt{def:index},
+not an existence theorem. The labels \texttt{lemuisometry} and
+\texttt{ThmFund1} are no longer among the unformalized source entries: both
+are now stated and proved for a tensor satisfying the bundled
+canonical-form-II presentation, which is the standing hypothesis the source
+fixes once before Lemma~III.7 and never repeats, and both carry the source's
+hypothesis set. The chapter retains unrestricted, unformalized source entries
+under the original labels \texttt{SF}, \texttt{def:index},
 \texttt{index-well-defined}, \texttt{lem:mpu\_index\_tensor}, and
-\texttt{lem:mpu\_index\_composition}. The restricted full-support statements
-have the distinct labels
-\texttt{lem:mpu\_admissible\_source\_u\_isometry},
+\texttt{lem:mpu\_index\_composition}. The label
+\texttt{lem:mpu\_admissible\_source\_u\_isometry} likewise no longer
+records a restriction: it is the reusable supplied-fixed-pair step, stated for
+an arbitrary positive diagonal weight and an arbitrary stabilization exponent,
+through which \texttt{lemuisometry} is proved. The remaining restricted
+full-support statements have the distinct labels
 \texttt{thm:mpu\_admissible\_simple\_tensor\_equivalence},
 \texttt{def:mpu\_admissible\_standard\_form},
 \texttt{def:mpu\_admissible\_index},
@@ -298,11 +305,12 @@ $\mathcal U'_k$, and $\mathcal W_k$, then places $\mathcal U_{2k}$ and
 $\mathcal U'_{2k}$ in standard form and computes the ranks of
 $\mathcal W_{4k}$ \cite{Cirac2017MPU}. The admissible theorem therefore
 requires separate source data for all six exact blocked tensors. It does not
-use later-block transport. The formalized supplied-fixed-pair source-$u$
-contraction is a dependency of the admissible source-isometry proof, and the
-formalized complete source-$v$ network is a dependency of the admissible
-simple-tensor equivalence proof. Neither establishes the unrestricted source
-statements.
+use later-block transport. The supplied-fixed-pair source-$u$
+contraction and the complete source-$v$ network are the steps through which
+\texttt{lemuisometry} and \texttt{ThmFund1} are proved for a tensor in
+canonical form II. Neither establishes the downstream standard-form and index
+source statements, which require source data at every blocking length they
+use.
 % Source lines: paper_v2.tex 824--865.
 
 The same separation between source statements and scoped statements extends

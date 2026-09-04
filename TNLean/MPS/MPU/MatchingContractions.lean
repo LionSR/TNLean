@@ -150,7 +150,7 @@ that lemma at lines 589 and 592.
 **Local fix (nil-matrix length):** the second blocking uses \(D^2\); see
 <https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>. -/
 theorem IsMPUCanonicalFormII.forced_block_simple_contractions
-    [NeZero d] {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
+    {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
     let J := max (D * D - 1) 1
     let ρ' : Fin (D * D) → ℂ := fun i ↦ hU.ρ.vec (finProdFinEquiv.symm i)
     let Φ' : Fin (D * D) → ℂ := fun i ↦
@@ -165,6 +165,7 @@ theorem IsMPUCanonicalFormII.forced_block_simple_contractions
           Matrix.vecMulVec ρ' Φ' *
             doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l) := by
   have := hU.neZero_bond
+  have := hU.neZero_phys
   exact hU.isMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
     hU.ρ hU.ρ_trace (max (D * D - 1) 1) (by omega)
     hU.normalized_transfer_power_eq_vecMulVec

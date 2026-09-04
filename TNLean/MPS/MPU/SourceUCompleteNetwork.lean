@@ -437,14 +437,16 @@ variable {U} in
 /-- Lemma `lemuisometry` under the source's standing convention: the compact-SVD
 paper gate $u=Y_2\mathbin{-}Y_1$ of an MPU in canonical form II is an isometry.
 
-The diagonal positive ambient fixed point and the stabilized rank-one power are
-recorded by the convention, so neither is supplied as a separate hypothesis.
+The diagonal positive ambient fixed point, the stabilized rank-one power, and
+the nonzero physical dimension are recorded by the convention, so none of them
+is supplied as a separate hypothesis.
 
 Source: CPSV17 Lemma `lemuisometry` (lines 545--557), with the fixed point in
 the diagonal coordinates of `Erightleft` (lines 269--280). -/
-theorem IsMPUCanonicalFormII.sourceU_isIsometry [NeZero d]
+theorem IsMPUCanonicalFormII.sourceU_isIsometry
     (hU : IsMPUCanonicalFormII U) :
     (sourceU U hU.ρ hU.ρ_posDef).IsIsometry :=
+  have := hU.neZero_phys
   SourceFactors.sourceU_isIsometry_of_isMPU U hU.isMPU
     (sourceFactors U hU.ρ hU.ρ_posDef) hU.ρ_isDiag _
     hU.normalizedDiagonal_pow_eq_vecMulVec
@@ -454,7 +456,7 @@ variable {U} in
 canonical-form-II convention: $d^2\le r\ell$.
 
 Source: CPSV17 Lemma `lemuisometry` (lines 545--557). -/
-theorem IsMPUCanonicalFormII.mul_self_le_rightRank_mul_leftRank [NeZero d]
+theorem IsMPUCanonicalFormII.mul_self_le_rightRank_mul_leftRank
     (hU : IsMPUCanonicalFormII U) :
     d * d ≤ r[U] * ℓ[U] := by
   have h := Matrix.IsIsometry.card_le _ hU.sourceU_isIsometry

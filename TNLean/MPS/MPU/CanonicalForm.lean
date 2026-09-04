@@ -377,6 +377,23 @@ theorem neZero_bond {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) : NeZero D
     have h := hU.ρ_trace
     simp [Matrix.trace] at h⟩
 
+/-- The physical dimension of an MPU in canonical form II is nonzero: on an empty
+physical index the normalized transfer map is the zero map, so its fixed matrix
+vanishes and the normalization `(Φ|ρ) = 1` of `Erightleft` fails.
+
+Source: CPSV17, `Papers/1703.09188/paper_v2.tex`, lines 269--281. -/
+theorem neZero_phys {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) : NeZero d :=
+  ⟨by
+    rintro rfl
+    have hfix := hU.ρ_fixed
+    rw [Kraus.transferMap_apply] at hfix
+    have hzero : hU.ρ = 0 := by
+      rw [← hfix]
+      exact Finset.sum_eq_zero fun i _ ↦ absurd i.isLt (by omega)
+    have h := hU.ρ_trace
+    rw [hzero] at h
+    simp at h⟩
+
 end IsMPUCanonicalFormII
 
 private theorem sqrt_blockPhysDim (d p : ℕ) :

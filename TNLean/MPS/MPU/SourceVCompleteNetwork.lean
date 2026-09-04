@@ -195,10 +195,11 @@ $v^\dagger v=\Id$.
 Diagonality of $\rho$ identifies the inserted vector $|\rho^{\mathsf T})$ with
 the stabilized vector $|\rho)$, after which the complete network and `YZ=1`
 give the isometry. Source: arXiv:1703.09188, lines 495 and 577--588. -/
-theorem IsMPUCanonicalFormII.sourceV_isIsometry [NeZero d]
+theorem IsMPUCanonicalFormII.sourceV_isIsometry
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) (hS : IsMPUSimple U) :
     (sourceV U hU.ρ hU.ρ_posDef).IsIsometry := by
   have := hU.neZero_bond
+  have := hU.neZero_phys
   rw [← sourceVDressedGram_iff_isIsometry,
     sourceVDressedGram_iff_simple2_transpose_fixed_pair]
   simpa only [hU.ρ_isDiag.isSymm.eq] using
@@ -215,7 +216,7 @@ off a reparametrized gate.
 
 Source: arXiv:1703.09188, proof of Theorem `ThmFund1`, $1\to2$
 (lines 577--588). -/
-theorem IsMPUCanonicalFormII.rightRank_mul_leftRank_le [NeZero d]
+theorem IsMPUCanonicalFormII.rightRank_mul_leftRank_le
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) (hS : IsMPUSimple U) :
     r[U] * ℓ[U] ≤ d * d := by
   have h := Matrix.IsIsometry.card_le _ (hU.sourceV_isIsometry hS)

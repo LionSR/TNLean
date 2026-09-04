@@ -56,8 +56,8 @@ recorded weight $\rho$, the following are equivalent:
 4. $v$ is unitary.
 
 The proof is the source's cycle $1\to2\to3\to4\to1$:
-`IsMPUCanonicalFormII.sourceU_isIsometry` and the same-weight
-`IsMPUCanonicalFormII.sourceV_isIsometry` give $1\to2$; the standing isometry
+`IsMPUCanonicalFormII.mul_self_le_rightRank_mul_leftRank` and the same-weight
+`IsMPUCanonicalFormII.rightRank_mul_leftRank_le` give $1\to2$; the standing isometry
 $u$ with $\ell r=d^2$ is unitary ($2\to3$);
 `mpo_two_reindex_eq_sourceV_mul_sourceU_swap` writes the unitary $U^{(2)}$ as
 $v$ times the reindexed $u$, so $v$ is unitary ($3\to4$); and
@@ -65,22 +65,16 @@ $v$ times the reindexed $u$, so $v$ is unitary ($3\to4$); and
 
 Source: arXiv:1703.09188, Theorem `ThmFund1` and its proof (lines 563--601),
 with the diagonal fixed point of line 495. -/
-theorem IsMPUCanonicalFormII.isMPUSimple_tfae [NeZero d] {U : MPOTensor d D}
+theorem IsMPUCanonicalFormII.isMPUSimple_tfae {U : MPOTensor d D}
     (hU : IsMPUCanonicalFormII U) :
     List.TFAE [IsMPUSimple U,
       r[U] * ℓ[U] = d * d,
       (sourceU U hU.ρ hU.ρ_posDef).IsUnitaryBetween,
       (sourceV U hU.ρ hU.ρ_posDef).IsUnitaryBetween] := by
   have hu : (sourceU U hU.ρ hU.ρ_posDef).IsIsometry := hU.sourceU_isIsometry
-  have hrankLower : d * d ≤ r[U] * ℓ[U] := by
-    have h := Matrix.IsIsometry.card_le _ hu
-    simpa only [Fintype.card_prod, Fintype.card_fin, Nat.mul_comm ℓ[U]] using h
-  tfae_have 1 → 2 := fun hS ↦ by
-    have hv : (sourceV U hU.ρ hU.ρ_posDef).IsIsometry := hU.sourceV_isIsometry hS
-    have hrankUpper := Matrix.IsIsometry.card_le _ hv
-    apply le_antisymm
-    · simpa only [Fintype.card_prod, Fintype.card_fin] using hrankUpper
-    · exact hrankLower
+  have hrankLower : d * d ≤ r[U] * ℓ[U] := hU.mul_self_le_rightRank_mul_leftRank
+  tfae_have 1 → 2 := fun hS ↦
+    le_antisymm (hU.rightRank_mul_leftRank_le hS) hrankLower
   tfae_have 2 → 3 := fun h ↦
     hu.isUnitaryBetween_of_card_eq _ (by
       simp only [Fintype.card_prod, Fintype.card_fin]
