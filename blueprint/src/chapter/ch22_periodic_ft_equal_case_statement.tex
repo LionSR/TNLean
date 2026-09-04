@@ -285,7 +285,7 @@ awaits the passage between the two forms.
     \label{thm:periodic_equalcase_global_zgauge}
     \lean{MPSTensor.equalCase_global_zgauge_of_blockwise}
     \leanok
-    \uses{def:periodic_tensor, def:same_mpv2,
+    \uses{def:periodic_tensor, def:same_mpv2_pos,
         thm:pgvwc07_periodic_state_vector_decomposition}
     Let
     \begin{align}
@@ -311,7 +311,7 @@ awaits the passage between the two forms.
     where $A_j$ is $m_j$-periodic and every $m_j$ divides $L$. Writing $Z_j$
     for the diagonal matrix of the $z_{j,l}$ and
     $Z=\bigoplus_{j\in J}Z_j\otimes\Id_{D_j}$, one has $Z^L=\Id$,
-    $[A^i,Z]=0$ for every $i$, $\mc{V}(A)=\mc{V}(ZA)$, and there is an
+    $[A^i,Z]=0$ for every $i$, $\mc{V}^+(A)=\mc{V}^+(ZA)$, and there is an
     invertible $Y$ with $ZA^i=YB^iY^{-1}$ for every $i$.
 
     This is the assembly of
@@ -339,7 +339,7 @@ awaits the passage between the two forms.
     \label{thm:periodic_ft_equal_case_form_two}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_sectorDecomposition}
     \leanok
-    \uses{def:periodic_tensor, def:same_mpv2,
+    \uses{def:periodic_tensor, def:same_mpv2_pos,
         thm:periodic_equalcase_global_zgauge,
         thm:periodic_equalcase_blockwise_zgauge,
         thm:periodic_equalcase_coefficient_extraction,
@@ -356,7 +356,7 @@ awaits the passage between the two forms.
     where $R_j$ and $S_k$ are diagonal with nonzero entries and the two
     displayed families are pairwise non-repeated bases of periodic tensors
     whose blocks are trace preserving, of periods $m_j$ and $n_k$. If
-    $\mc{V}(A)=\mc{V}(B)$ at every positive length, then there is a bijection
+    $\mc{V}^+(A)=\mc{V}^+(B)$, then there is a bijection
     $\pi\colon J\to K$ such that, for every $j$, one has $m_j=n_{\pi(j)}$,
     the blocks $A_j$ and $B_{\pi(j)}$ are repeated with unit-modulus scalar
     $\xi_j$, the multiplicity matrices $R_j$ and $S_{\pi(j)}$ have the same
@@ -369,7 +369,7 @@ awaits the passage between the two forms.
     \end{align}
     Writing $Z=\bigoplus_{j\in J}Z_j\otimes\Id_{D_j}$, one has
     $Z^{\operatorname{lcm}_j m_j}=\Id$, $[A^i,Z]=0$ for every $i$,
-    $\mc{V}(A)=\mc{V}(ZA)$, and there is an invertible $Y$ with
+    $\mc{V}^+(A)=\mc{V}^+(ZA)$, and there is an invertible $Y$ with
     $ZA^i=YB^iY^{-1}$ for every $i$.
 
     \emph{Scope restriction.}  This is
