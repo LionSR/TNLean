@@ -66,7 +66,7 @@ def IsCompatible (L : LSymbol G X) (ω : ScalarThreeCochain G) : Prop :=
 
 /-- The joint fusion-tensor and action-tensor scalar gauge action:
 
-`Lˣ_{g,h} ↦ γ_{gh,x} β_{g,h} / (γ_{g,h • x} γ_{h,x}) Lˣ_{g,h}`.
+`Lˣ_{g,h} ↦ γˣ_{gh} β_{g,h} / (γ^{h • x}_g γˣ_h) Lˣ_{g,h}`.
 
 This is arXiv:2502.20257, `eq:Lsymbgauge`. -/
 def gauge (β : ScalarCocycle G) (γ : ActionTensorGauge G X) (L : LSymbol G X) :
