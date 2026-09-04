@@ -3,11 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.MaximallyEntangled
 import TNLean.Algebra.ComplexSqrt
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import TNLean.MPS.MPU.Examples.ShiftPaperSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
-import TNLean.MPS.MPU.SourceUV
+import TNLean.MPS.MPU.SourceFactorsTensorProduct
 
 /-!
 # Supplied source factors for the cyclic-shift examples
@@ -18,9 +19,14 @@ matrices printed for the three shift families in arXiv:1703.09188, equations
 not print these normalized factors or their intermediate coordinate
 identities.  None of the statements below identifies the supplied witnesses
 with factors chosen by compact singular-value decomposition.
+
+The primitive right-shift, left-shift, and identity factorizations come first;
+the tensor-product witnesses for $U_1$, $U_2$, and $U_3$, their source-rank
+coordinates, and the four-spin permutation matrices of the paper's blocked
+formulas follow.
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix Kronecker BigOperators ComplexOrder
 
 namespace MPOTensor
 
@@ -603,98 +609,6 @@ noncomputable def leftShiftSourceFactors (d : ℕ) [NeZero d] :
   exact ⟨C, R, Z, P, Pᴴ, P, hcut₁, hcut₂, hweighted, hP.1,
     hRZ, hP.1⟩
 
-/-- Entry formula for the auxiliary $Y_1$--$X_2$ kernel supplied by the bond-one identity
-factors. The kernel row has order (left, right).
-
-Formalization coordinate identity used to derive equation `eq:SF_u1_u3` in
-arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
-entry formula. -/
-theorem sourceY₁X₂_identitySourceFactors_apply (d : ℕ) (l r i₁ i₂ : Fin d) :
-    SourceFactors.sourceY₁X₂ (identityMPUTensor d) (identitySourceFactors d)
-        (identityLeftRankEquiv d l, identityRightRankEquiv d r) (i₁, i₂) =
-      if r = i₁ ∧ l = i₂ then 1 else 0 := by
-  by_cases hr : r = i₁ <;> by_cases hl : l = i₂ <;>
-    simp [SourceFactors.sourceY₁X₂_apply, identitySourceFactors,
-      Matrix.reindex_apply, Matrix.one_apply, hr, hl, ne_comm]
-
-/-- Entry formula for the auxiliary $X_1$--$Y_2$ kernel supplied by the
-bond-one identity factors. Its kernel column has order (right, left).
-
-Formalization coordinate identity used to derive equation `eq:SF_u1_u3` in
-arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
-entry formula. -/
-theorem sourceX₁Y₂_identitySourceFactors_apply (d : ℕ) (j₁ j₂ r l : Fin d) :
-    SourceFactors.sourceX₁Y₂ (identityMPUTensor d) (identitySourceFactors d)
-        (j₁, j₂) (identityRightRankEquiv d r, identityLeftRankEquiv d l) =
-      if r = j₁ ∧ l = j₂ then 1 else 0 := by
-  by_cases hr : r = j₁ <;> by_cases hl : l = j₂ <;>
-    simp [SourceFactors.sourceX₁Y₂_apply, identitySourceFactors,
-      Matrix.reindex_apply, Matrix.one_apply, hr, hl]
-  all_goals grind
-
-/-- Entry formula for the auxiliary $Y_1$--$X_2$ kernel supplied by the right-shift factors.
-
-Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
-`eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
-does not state this intermediate entry formula. -/
-theorem sourceY₁X₂_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
-    (a b i₁ i₂ : Fin d) :
-    SourceFactors.sourceY₁X₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-        (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) (i₁, i₂) =
-      if a = i₂ ∧ b = i₁ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
-  by_cases ha : a = i₂ <;> by_cases hb : b = i₁ <;>
-    simp [SourceFactors.sourceY₁X₂_apply, rightShiftSourceFactors,
-      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
-      Matrix.one_apply, sourceSqrt, ha, hb]
-
-/-- Entry formula for the auxiliary $X_1$--$Y_2$ kernel supplied by the right-shift factors.
-
-Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
-`eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
-does not state this intermediate entry formula. -/
-theorem sourceX₁Y₂_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
-    (j₁ j₂ a b : Fin d) :
-    SourceFactors.sourceX₁Y₂ (rightShiftTensor d) (rightShiftSourceFactors d)
-        (j₁, j₂) (rightShiftRightRankEquiv d (a, b), rightShiftLeftRankEquiv d 0) =
-      if a = j₁ ∧ b = j₂ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
-  by_cases ha : a = j₁ <;> by_cases hb : b = j₂ <;>
-    simp [SourceFactors.sourceX₁Y₂_apply, rightShiftSourceFactors,
-      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
-      Matrix.one_apply, sourceSqrt, ha, hb,
-      mul_comm, mul_left_comm]
-  all_goals grind
-
-/-- Entry formula for the auxiliary $Y_1$--$X_2$ kernel supplied by the left-shift factors.
-
-Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
-`eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
-does not state this intermediate entry formula. -/
-theorem sourceY₁X₂_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
-    (a b i₁ i₂ : Fin d) :
-    SourceFactors.sourceY₁X₂ (leftShiftTensor d) (leftShiftSourceFactors d)
-        (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0) (i₁, i₂) =
-      if a = i₁ ∧ b = i₂ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
-  by_cases ha : a = i₁ <;> by_cases hb : b = i₂ <;>
-    simp [SourceFactors.sourceY₁X₂_apply, leftShiftSourceFactors,
-      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
-      Matrix.one_apply, sourceSqrt, ha, hb, NeZero.ne d, ne_comm,
-      mul_comm, mul_left_comm]
-
-/-- Entry formula for the auxiliary $X_1$--$Y_2$ kernel supplied by the left-shift factors.
-
-Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
-`eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
-does not state this intermediate entry formula. -/
-theorem sourceX₁Y₂_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
-    (j₁ j₂ a b : Fin d) :
-    SourceFactors.sourceX₁Y₂ (leftShiftTensor d) (leftShiftSourceFactors d)
-        (j₁, j₂) (leftShiftRightRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)) =
-      if a = j₂ ∧ b = j₁ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
-  by_cases ha : a = j₂ <;> by_cases hb : b = j₁ <;>
-    simp [SourceFactors.sourceX₁Y₂_apply, leftShiftSourceFactors,
-      normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
-      Matrix.one_apply, sourceSqrt, ha, hb]
-
 /-! ### Paper-gate entries of the primitive factors -/
 
 /-- Entry formula for the paper gate $u=Y_2\mathbin{-}Y_1$ of the identity tensor.
@@ -776,5 +690,267 @@ theorem sourceV_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
     simp [SourceFactors.sourceV_apply, leftShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
       Matrix.one_apply, sourceSqrt, ha, hb, eq_comm]
+
+/-! ### Supplied source factors and four-spin matrices of the three shift MPUs -/
+
+/-- Explicit supplied source factors for the paper's identity family $U_1$.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+noncomputable def shiftExampleU₁SourceFactors (d : ℕ) :
+    SourceFactors (shiftExampleU₁ d) (1 : Matrix (Fin 1) (Fin 1) ℂ) :=
+  SourceFactors.independentTensorProductOfIdentityWeight (identitySourceFactors d)
+    (identitySourceFactors d)
+
+/-- Explicit supplied source factors for the paper's counter-shift family $U_2$.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2027). -/
+noncomputable def shiftExampleU₂SourceFactors (d : ℕ) [NeZero d] :
+    SourceFactors (shiftExampleU₂ d)
+      (1 : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) :=
+  SourceFactors.independentTensorProductOfIdentityWeight (leftShiftSourceFactors d)
+    (rightShiftSourceFactors d)
+
+/-- Explicit supplied source factors for the paper's reversed counter-shift
+family $U_3$.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3` and `eq:uv2_U3`
+(lines 2009--2016 and 2028--2034). -/
+noncomputable def shiftExampleU₃SourceFactors (d : ℕ) [NeZero d] :
+    SourceFactors (shiftExampleU₃ d)
+      (1 : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) :=
+  SourceFactors.independentTensorProductOfIdentityWeight (rightShiftSourceFactors d)
+    (leftShiftSourceFactors d)
+
+/-- Decode the two physical sites of a shift-family source matrix into their
+four constituent $d$-dimensional spins, in site order.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
+`eq:uv2_U3` (lines 2009--2034). -/
+def shiftTwoSitePhysicalEquiv (d : ℕ) :
+    ((Fin d × Fin d) × (Fin d × Fin d)) ≃
+      (Fin (d * d) × Fin (d * d)) :=
+  Equiv.prodCongr finProdFinEquiv finProdFinEquiv
+
+/-- The matrix $\Id\otimes\Id$ on the two composite physical sites.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+noncomputable def identityTensorIdentityMatrix (d : ℕ) :
+    Matrix ((Fin d × Fin d) × (Fin d × Fin d))
+      ((Fin d × Fin d) × (Fin d × Fin d)) ℂ :=
+  (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+    (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+
+/-- Entry formula for the paper's $\Id\otimes\Id$.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+@[simp] theorem identityTensorIdentityMatrix_apply (d : ℕ)
+    (a b c e i j k l : Fin d) :
+    identityTensorIdentityMatrix d ((a, b), (c, e)) ((i, j), (k, l)) =
+      if a = i ∧ b = j ∧ c = k ∧ e = l then 1 else 0 := by
+  rw [identityTensorIdentityMatrix, Matrix.kroneckerMap_apply]
+  change ((if (a, b) = (i, j) then 1 else 0) *
+    (if (c, e) = (k, l) then 1 else 0)) = _
+  rw [ite_zero_mul_ite_zero]
+  simp only [Prod.mk.injEq, one_mul, and_assoc]
+
+/-- The four-spin matrix $\Id\otimes\mathbb S\otimes\Id$, with the two
+physical sites grouped as `((1, 2), (3, 4))`.
+
+Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
+(lines 2018--2034). -/
+noncomputable def identitySwapIdentityMatrix (d : ℕ) :
+    Matrix ((Fin d × Fin d) × (Fin d × Fin d))
+      ((Fin d × Fin d) × (Fin d × Fin d)) ℂ :=
+  fun ((a, b), (c, e)) ((i, j), (k, l)) ↦
+    if a = i ∧ b = k ∧ c = j ∧ e = l then 1 else 0
+
+/-- Entry formula for $\Id\otimes\mathbb S\otimes\Id$ in the paper's
+four-spin order.
+
+Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
+(lines 2018--2034). -/
+@[simp] theorem identitySwapIdentityMatrix_apply (d : ℕ)
+    (a b c e i j k l : Fin d) :
+    identitySwapIdentityMatrix d ((a, b), (c, e)) ((i, j), (k, l)) =
+      if a = i ∧ b = k ∧ c = j ∧ e = l then 1 else 0 := rfl
+
+/-- The four-spin matrix $\mathbb S\otimes\mathbb S$, with the two swaps
+acting on the pairs `(1, 2)` and `(3, 4)`.
+
+Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
+(lines 2018--2034). -/
+noncomputable def swapTensorSwapMatrix (d : ℕ) :
+    Matrix ((Fin d × Fin d) × (Fin d × Fin d))
+      ((Fin d × Fin d) × (Fin d × Fin d)) ℂ :=
+  Matrix.swapMatrix d ⊗ₖ Matrix.swapMatrix d
+
+/-- Entry formula for $\mathbb S\otimes\mathbb S$ in the paper's four-spin
+order.
+
+Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
+(lines 2018--2034). -/
+@[simp] theorem swapTensorSwapMatrix_apply (d : ℕ)
+    (a b c e i j k l : Fin d) :
+    swapTensorSwapMatrix d ((a, b), (c, e)) ((i, j), (k, l)) =
+      if a = j ∧ b = i ∧ c = l ∧ e = k then 1 else 0 := by
+  rw [swapTensorSwapMatrix, Matrix.kroneckerMap_apply]
+  change ((if a = j ∧ b = i then 1 else 0) *
+    (if c = l ∧ e = k then 1 else 0)) = _
+  rw [ite_zero_mul_ite_zero]
+  simp only [one_mul, and_assoc]
+
+/-- Entry formula for
+$(\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes\Id)$.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2021--2026). -/
+@[simp] theorem swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_apply
+    (d : ℕ) (a b c e i j k l : Fin d) :
+    (swapTensorSwapMatrix d * identitySwapIdentityMatrix d)
+        ((a, b), (c, e)) ((i, j), (k, l)) =
+      if a = k ∧ b = i ∧ c = l ∧ e = j then 1 else 0 := by
+  classical
+  simp only [Matrix.mul_apply, Fintype.sum_prod_type]
+  simp [swapTensorSwapMatrix_apply, identitySwapIdentityMatrix_apply,
+    ite_and, eq_comm]
+
+/-- Entry formula for
+$(\Id\otimes\mathbb S\otimes\Id)(\mathbb S\otimes\mathbb S)$.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2030--2034). -/
+@[simp] theorem identitySwapIdentityMatrix_mul_swapTensorSwapMatrix_apply
+    (d : ℕ) (a b c e i j k l : Fin d) :
+    (identitySwapIdentityMatrix d * swapTensorSwapMatrix d)
+        ((a, b), (c, e)) ((i, j), (k, l)) =
+      if a = j ∧ b = l ∧ c = i ∧ e = k then 1 else 0 := by
+  classical
+  simp only [Matrix.mul_apply, Fintype.sum_prod_type]
+  simp [swapTensorSwapMatrix_apply, identitySwapIdentityMatrix_apply,
+    ite_and, eq_comm]
+
+/-- The product coordinates are the left source coordinates of $U_1$.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+noncomputable def shiftExampleU₁LeftRankEquiv (d : ℕ) :
+    Fin d × Fin d ≃ Fin ℓ[shiftExampleU₁ d] :=
+  (Equiv.prodCongr (identityLeftRankEquiv d) (identityLeftRankEquiv d)).trans
+    (tensorProductLeftRankEquiv (identityMPUTensor d) (identityMPUTensor d))
+
+/-- The product coordinates are the right source coordinates of $U_1$.
+
+Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+noncomputable def shiftExampleU₁RightRankEquiv (d : ℕ) :
+    Fin d × Fin d ≃ Fin r[shiftExampleU₁ d] :=
+  (Equiv.prodCongr (identityRightRankEquiv d) (identityRightRankEquiv d)).trans
+    (tensorProductRightRankEquiv (identityMPUTensor d) (identityMPUTensor d))
+
+/-- The two nontrivial left-shift coordinates are the left source coordinates
+of $U_2$; the right-shift left source has its unique value.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2027). -/
+noncomputable def shiftExampleU₂LeftRankEquiv (d : ℕ) [NeZero d] :
+    Fin d × Fin d ≃ Fin ℓ[shiftExampleU₂ d] :=
+  (Equiv.prodUnique (Fin d × Fin d) (Fin 1)).symm.trans
+    ((Equiv.prodCongr (leftShiftLeftRankEquiv d)
+      (rightShiftLeftRankEquiv d)).trans
+        (tensorProductLeftRankEquiv (leftShiftTensor d) (rightShiftTensor d)))
+
+/-- The two nontrivial right-shift coordinates are the right source
+coordinates of $U_2$; the left-shift right source has its unique value.
+
+Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2027). -/
+noncomputable def shiftExampleU₂RightRankEquiv (d : ℕ) [NeZero d] :
+    Fin d × Fin d ≃ Fin r[shiftExampleU₂ d] :=
+  (Equiv.uniqueProd (Fin d × Fin d) (Fin 1)).symm.trans
+    ((Equiv.prodCongr (leftShiftRightRankEquiv d)
+      (rightShiftRightRankEquiv d)).trans
+        (tensorProductRightRankEquiv (leftShiftTensor d) (rightShiftTensor d)))
+
+/-- The two nontrivial left-shift coordinates are the left source coordinates
+of $U_3$; the right-shift left source has its unique value.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3` and `eq:uv2_U3`
+(lines 2009--2016 and 2028--2034). -/
+noncomputable def shiftExampleU₃LeftRankEquiv (d : ℕ) [NeZero d] :
+    Fin d × Fin d ≃ Fin ℓ[shiftExampleU₃ d] :=
+  (Equiv.uniqueProd (Fin d × Fin d) (Fin 1)).symm.trans
+    ((Equiv.prodCongr (rightShiftLeftRankEquiv d)
+      (leftShiftLeftRankEquiv d)).trans
+        (tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)))
+
+/-- The two nontrivial right-shift coordinates are the right source
+coordinates of $U_3$; the left-shift right source has its unique value.
+
+Source: arXiv:1703.09188, equations `eq:SF_u1_u3` and `eq:uv2_U3`
+(lines 2009--2016 and 2028--2034). -/
+noncomputable def shiftExampleU₃RightRankEquiv (d : ℕ) [NeZero d] :
+    Fin d × Fin d ≃ Fin r[shiftExampleU₃ d] :=
+  (Equiv.prodUnique (Fin d × Fin d) (Fin 1)).symm.trans
+    ((Equiv.prodCongr (rightShiftRightRankEquiv d)
+      (leftShiftRightRankEquiv d)).trans
+        (tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)))
+
+/-- Evaluation of the left source-rank coordinates of $U_1$.
+
+Formalization coordinate identity for arXiv:1703.09188, equation
+`eq:SF_u1_u3` (lines 2009--2016); the paper states the resulting source
+matrix, not this intermediate equivalence. -/
+@[simp] theorem shiftExampleU₁LeftRankEquiv_apply (d : ℕ) (a b : Fin d) :
+    shiftExampleU₁LeftRankEquiv d (a, b) =
+      tensorProductLeftRankEquiv (identityMPUTensor d) (identityMPUTensor d)
+        (identityLeftRankEquiv d a, identityLeftRankEquiv d b) := rfl
+
+/-- Evaluation of the right source-rank coordinates of $U_1$.
+
+Formalization coordinate identity for arXiv:1703.09188, equation
+`eq:SF_u1_u3` (lines 2009--2016); the paper states the resulting source
+matrix, not this intermediate equivalence. -/
+@[simp] theorem shiftExampleU₁RightRankEquiv_apply (d : ℕ) (a b : Fin d) :
+    shiftExampleU₁RightRankEquiv d (a, b) =
+      tensorProductRightRankEquiv (identityMPUTensor d) (identityMPUTensor d)
+        (identityRightRankEquiv d a, identityRightRankEquiv d b) := rfl
+
+/-- Evaluation of the left source-rank coordinates of $U_2$.
+
+Formalization coordinate identity for arXiv:1703.09188, equation `eq:uv2_U2`
+(lines 2018--2027); the paper states the resulting source matrix, not this
+intermediate equivalence. -/
+@[simp] theorem shiftExampleU₂LeftRankEquiv_apply (d : ℕ) [NeZero d]
+    (a b : Fin d) :
+    shiftExampleU₂LeftRankEquiv d (a, b) =
+      tensorProductLeftRankEquiv (leftShiftTensor d) (rightShiftTensor d)
+        (leftShiftLeftRankEquiv d (a, b), rightShiftLeftRankEquiv d 0) := rfl
+
+/-- Evaluation of the right source-rank coordinates of $U_2$.
+
+Formalization coordinate identity for arXiv:1703.09188, equation `eq:uv2_U2`
+(lines 2018--2027); the paper states the resulting source matrix, not this
+intermediate equivalence. -/
+@[simp] theorem shiftExampleU₂RightRankEquiv_apply (d : ℕ) [NeZero d]
+    (a b : Fin d) :
+    shiftExampleU₂RightRankEquiv d (a, b) =
+      tensorProductRightRankEquiv (leftShiftTensor d) (rightShiftTensor d)
+        (leftShiftRightRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) := rfl
+
+/-- Evaluation of the left source-rank coordinates of $U_3$.
+
+Formalization coordinate identity for arXiv:1703.09188, equations
+`eq:SF_u1_u3` and `eq:uv2_U3` (lines 2009--2016 and 2028--2034); the paper
+states the resulting source matrices, not this intermediate equivalence. -/
+@[simp] theorem shiftExampleU₃LeftRankEquiv_apply (d : ℕ) [NeZero d]
+    (a b : Fin d) :
+    shiftExampleU₃LeftRankEquiv d (a, b) =
+      tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)
+        (rightShiftLeftRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)) := rfl
+
+/-- Evaluation of the right source-rank coordinates of $U_3$.
+
+Formalization coordinate identity for arXiv:1703.09188, equations
+`eq:SF_u1_u3` and `eq:uv2_U3` (lines 2009--2016 and 2028--2034); the paper
+states the resulting source matrices, not this intermediate equivalence. -/
+@[simp] theorem shiftExampleU₃RightRankEquiv_apply (d : ℕ) [NeZero d]
+    (a b : Fin d) :
+    shiftExampleU₃RightRankEquiv d (a, b) =
+      tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)
+        (rightShiftRightRankEquiv d (a, b), leftShiftRightRankEquiv d 0) := rfl
 
 end MPOTensor

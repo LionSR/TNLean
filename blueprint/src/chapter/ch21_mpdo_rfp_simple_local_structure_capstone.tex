@@ -450,7 +450,10 @@
     \label{def:mpdo_physical_adjoint}
     \lean{MPOTensor.physicalAdjointTensor,
         MPOTensor.physicalSlice_physicalAdjointTensor,
-        MPOTensor.mpo_physicalAdjointTensor}
+        MPOTensor.mpo_physicalAdjointTensor,
+        MPOTensor.bondPairSwapEquiv,
+        MPOTensor.bondPairSwapEquiv_apply,
+        MPOTensor.bondPairSwapEquiv_symm}
     \leanok
     For an MPO tensor $K$, define $K^\sharp$ by
     \begin{align}
@@ -459,7 +462,10 @@
         \notag
     \end{align}
     Thus $K^\sharp[\beta,\alpha]=K[\beta,\alpha]^*$, while the virtual
-    indices retain their order. For every periodic chain,
+    indices retain their order. The doubled-bond coordinate exchange
+    $(a,b)\mapsto(b,a)$, an involution of the doubled virtual space, is
+    recorded here as the coordinate map accompanying this definition.
+    For every periodic chain,
     \begin{align}
         \rho^{(N)}(K^\sharp)_{\sigma,\tau}
          & =\overline{\rho^{(N)}(K)_{\tau,\sigma}}.

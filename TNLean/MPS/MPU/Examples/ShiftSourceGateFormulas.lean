@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.Examples.ShiftSourceMixedKernels
+import TNLean.MPS.MPU.Examples.ShiftSourceFactors
 
 /-!
 # Supplied source gates for the cyclic-shift examples
@@ -18,6 +18,18 @@ those factors explicitly.
 open scoped Matrix Kronecker BigOperators
 
 namespace MPOTensor
+
+private theorem shiftSourceScale_square_cancel (d : ℕ) [NeZero d] :
+    ((d : ℂ) * (Real.sqrt d : ℂ)⁻¹) *
+      ((d : ℂ) * (Real.sqrt d : ℂ)⁻¹) = d := by
+  calc
+    _ = (d : ℂ) * (((d : ℂ) * (Real.sqrt d : ℂ)⁻¹) *
+        (Real.sqrt d : ℂ)⁻¹) := by ring
+    _ = d := by rw [shiftSourceScale_cancel, mul_one]
+
+private theorem shiftSourceScale_inv_square_cancel (d : ℕ) [NeZero d] :
+    (d : ℂ) * ((Real.sqrt d : ℂ)⁻¹ * (Real.sqrt d : ℂ)⁻¹) = 1 := by
+  simpa only [mul_assoc] using shiftSourceScale_cancel d
 
 /-- Four-spin row coordinates for the paper gate $u_2=Y_2\mathbin{-}Y_1$.
 
@@ -67,11 +79,8 @@ theorem shiftExampleU₂_sourceU_fourSpin_apply (d : ℕ) [NeZero d]
     _ = _ := by
       rw [sourceU_leftShiftSourceFactors_apply,
         sourceU_rightShiftSourceFactors_apply]
-      by_cases ha : a = i <;> by_cases hb : b = k <;>
-        by_cases hc : c = j <;> by_cases he : e = l <;>
-        simp [identitySwapIdentityMatrix, ha, hb, hc, he]
-      all_goals
-        linear_combination (d : ℂ) * shiftSourceScale_cancel d
+      rw [ite_zero_mul_ite_zero, shiftSourceScale_square_cancel]
+      split_ifs <;> simp_all [identitySwapIdentityMatrix_apply]
 
 /-- Entry formula for the balanced paper gate
 $v_2^{(2)}=(\mathbb S\otimes\mathbb S)
@@ -109,13 +118,10 @@ theorem shiftExampleU₂_sourceV_fourSpin_apply (d : ℕ) [NeZero d]
     _ = _ := by
       rw [sourceV_leftShiftSourceFactors_apply,
         sourceV_rightShiftSourceFactors_apply]
-      by_cases ha : a = j <;> by_cases hb : b = l <;>
-        by_cases hc : c = i <;> by_cases he : e = k <;>
-        simp_all only [mul_ite, ite_mul, zero_mul, mul_zero,
-          swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_apply]
-      all_goals try grind
-      all_goals
-        simpa [mul_assoc] using shiftSourceScale_cancel d
+      rw [ite_zero_mul_ite_zero, mul_ite, mul_zero,
+        shiftSourceScale_inv_square_cancel]
+      split_ifs <;> simp_all [eq_comm,
+        swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_apply]
 
 /-- Four-spin row coordinates for the paper gate $u_3=Y_2\mathbin{-}Y_1$.
 
@@ -167,11 +173,12 @@ theorem shiftExampleU₃_sourceU_fourSpin_apply (d : ℕ) [NeZero d]
     _ = _ := by
       rw [sourceU_rightShiftSourceFactors_apply,
         sourceU_leftShiftSourceFactors_apply]
-      by_cases ha : a = j <;> by_cases hb : b = l <;>
-        by_cases hc : c = i <;> by_cases he : e = k <;>
-        simp [ha, hb, hc, he]
-      all_goals
-        linear_combination (d : ℂ) * shiftSourceScale_cancel d
+      rw [ite_zero_mul_ite_zero, shiftSourceScale_square_cancel]
+      by_cases h : a = j ∧ b = l ∧ c = i ∧ e = k
+      · rcases h with ⟨rfl, rfl, rfl, rfl⟩
+        simp
+      · have h' : ¬((c = i ∧ e = k) ∧ a = j ∧ b = l) := by tauto
+        simp [h, h']
 
 /-- Entry formula for the balanced paper gate
 $v_3^{(2)}=\Id\otimes\mathbb S\otimes\Id$.
@@ -207,13 +214,9 @@ theorem shiftExampleU₃_sourceV_fourSpin_apply (d : ℕ) [NeZero d]
     _ = _ := by
       rw [sourceV_rightShiftSourceFactors_apply,
         sourceV_leftShiftSourceFactors_apply]
-      by_cases ha : a = i <;> by_cases hb : b = k <;>
-        by_cases hc : c = j <;> by_cases he : e = l <;>
-        simp_all only [mul_ite, ite_mul, zero_mul, mul_zero,
-          identitySwapIdentityMatrix_apply]
-      all_goals try grind
-      all_goals
-        simpa [mul_assoc] using shiftSourceScale_cancel d
+      rw [ite_zero_mul_ite_zero, mul_ite, mul_zero,
+        shiftSourceScale_inv_square_cancel]
+      split_ifs <;> simp_all [eq_comm, identitySwapIdentityMatrix_apply]
 
 /-- Four-spin row coordinates for the paper gate $u_1=Y_2\mathbin{-}Y_1$.
 
@@ -261,10 +264,8 @@ theorem shiftExampleU₁_sourceU_fourSpin_apply (d : ℕ)
           (identityRightRankEquiv d c) (identityRightRankEquiv d e) i k j l
     _ = _ := by
       rw [sourceU_identitySourceFactors_apply,
-        sourceU_identitySourceFactors_apply]
-      by_cases ha : a = i <;> by_cases hb : b = j <;>
-        by_cases hc : c = k <;> by_cases he : e = l <;>
-        simp [identityTensorIdentityMatrix_apply, ha, hb, hc, he]
+        sourceU_identitySourceFactors_apply, ite_zero_mul_ite_zero]
+      split_ifs <;> simp_all
 
 /-- Entry formula for $v_1=\Id\otimes\Id$.
 
@@ -294,10 +295,7 @@ theorem shiftExampleU₁_sourceV_fourSpin_apply (d : ℕ)
           (identityLeftRankEquiv d c) (identityLeftRankEquiv d e)
     _ = _ := by
       rw [sourceV_identitySourceFactors_apply,
-        sourceV_identitySourceFactors_apply]
-      by_cases ha : a = i <;> by_cases hb : b = j <;>
-        by_cases hc : c = k <;> by_cases he : e = l <;>
-        simp [identityTensorIdentityMatrix_apply, ha, hb, hc, he]
-      all_goals grind
+        sourceV_identitySourceFactors_apply, ite_zero_mul_ite_zero]
+      split_ifs <;> simp_all [eq_comm]
 
 end MPOTensor

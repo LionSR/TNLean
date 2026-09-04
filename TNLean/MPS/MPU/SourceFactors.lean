@@ -48,9 +48,10 @@ product.
   `MPOTensor.sourceCutM₂_eq_sourceX₂_mul_sourceY₂`: the exact source-cut factorizations.
 * `MPOTensor.sourceX₁_mul_sourceY₁_apply`, `MPOTensor.sourceX₂_mul_sourceY₂_apply`: the
   entry formulas identifying the two graphical source decompositions with the tensor entries.
-* `MPOTensor.sourceX₁_weighted_isometry`, `MPOTensor.sourceX₂_isometry`,
-  `MPOTensor.sourceX₂_isometry_apply`: the two left-factor normalizations and the entrywise
-  second-cut identity.
+* `MPOTensor.sourceX₁_weighted_isometry`, `MPOTensor.sourceX₁_weighted_isometry_apply`,
+  `MPOTensor.sourceX₂_isometry`,
+  `MPOTensor.sourceX₂_isometry_apply`: the two left-factor normalizations and their entrywise
+  forms.
 * `MPOTensor.sourceY₁_mul_sourceZ₁`, `MPOTensor.sourceY₂_mul_sourceZ₂`: the two right-inverse
   identities.
 
@@ -453,6 +454,19 @@ theorem sourceX₁_weighted_isometry
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     (sourceX₁ U ρ hρ)ᴴ * sourceWeight (d := d) ρ * sourceX₁ U ρ hρ = 1 :=
   (sourceFactors U ρ hρ).X₁_weighted_isometry
+
+/-- Entrywise form of the weighted $X_1$ normalization
+$X_1^\dagger W_\rho X_1=\Id_r$.
+
+Source: arXiv:1703.09188, equation `Y1Y1X1X1`, lines 479--494. -/
+theorem sourceX₁_weighted_isometry_apply
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (r r' : Fin r[U]) :
+    (∑ y : Fin d × Fin D, ∑ x : Fin d × Fin D,
+      star (sourceX₁ U ρ hρ x r) * sourceWeight (d := d) ρ x y *
+        sourceX₁ U ρ hρ y r') = if r = r' then 1 else 0 := by
+  have h := congrArg (fun M ↦ M r r') (sourceX₁_weighted_isometry U ρ hρ)
+  simpa only [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply,
+    Finset.sum_mul] using h
 
 /-- The ordinary $X_2$ normalization, arXiv:1703.09188,
 `Y1Y1X1X1` and its graphical form `X1X2b` (lines 487--524). -/
