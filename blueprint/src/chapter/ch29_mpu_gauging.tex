@@ -4039,7 +4039,6 @@ scalar calculation above.
 \begin{theorem}[Injective and locally orthogonal GHZ--cluster blocks]
     \label{thm:mpug_ghz_blocked_cluster_blocks}
     \lean{MPSTensor.ghzSectorTensor_isInjective,
-        MPSTensor.isInjective_tensorProduct,
         MPSTensor.z4z2GHZClusterBlock_isInjective,
         MPSTensor.z4z2GHZClusterBlocks_isBNTLocallyOrthogonal,
         MPSTensor.z4z2GHZClusterDirectSum_eq_tensor}
@@ -4071,7 +4070,8 @@ scalar calculation above.
 
 \begin{proof}\leanok
     \uses{def:mpug_ghz_blocked_cluster_tensor, def:injective,
-        def:is_bnt_locally_orthogonal, thm:cluster_normal}
+        def:is_bnt_locally_orthogonal, thm:mps_word_span_tensor_product,
+        thm:cluster_normal}
     The one-dimensional sector $E_x$ is injective, and injectivity is preserved
     by independent tensor products, so $A_x=E_x\boxtimes C$ is injective.
     If $x\neq y$, formula~(\ref{eq:mpug_ghz_blocked_cluster_blocks}) makes
