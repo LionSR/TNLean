@@ -3093,7 +3093,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     and moreover $\rho$ is positive definite and diagonal with
     \begin{align}
         \tr(\rho) & =1,
-                  & \mathcal E_{A_{\mathrm{red}}}(\rho) & =\rho.
+                  & \E_{A_{\mathrm{red}}}(\rho) & =\rho.
         \label{eq:mpu_reduced_ambient_rho}
     \end{align}
     This organizes the dimension-bounded canonical replacement used in
@@ -3108,7 +3108,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, thm:nonzero_irreducible_block_decomposition, lem:overlap_eq_of_pos_mpv, thm:mpu_transfer_matrix_overlap, thm:mpu_normalized_transfer_trace, thm:mpu_transfer_matrix_eigenvalues, thm:mpu_dependent_block_inclusion_identities, lem:transfer_map_corner_intertwine, lem:irreducible_transfer_perron_pair, lem:irreducible_block_spectral_normalization, thm:mpu_shifted_trace_power_spectrum, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_shifted_transfer_trace_primitive, thm:mpu_unique_full_support_normal, thm:cpsv_cf_to_cfii_gauge, thm:gauge_invariance}
+    \uses{def:cpsv_canonical_form, thm:nonzero_irreducible_block_decomposition, lem:overlap_eq_of_pos_mpv, thm:mpu_transfer_matrix_overlap, thm:mpu_normalized_transfer_trace, thm:mpu_transfer_matrix_eigenvalues, thm:mpu_dependent_block_inclusion_identities, lem:transfer_map_corner_intertwine, lem:irreducible_transfer_perron_pair, lem:irreducible_block_spectral_normalization, thm:mpu_shifted_trace_power_spectrum, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_shifted_transfer_trace_primitive, thm:mpu_unique_full_support_normal, thm:cpsv_cf_to_cfii_gauge, thm:gauge_invariance, thm:mpu_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_full_support_geometry, thm:coisometry_reconstruction_same_mpv_pos}
     Remove the zero irreducible blocks of $\widetilde U$ and write
     \begin{align}
         A_0^i & =\bigoplus_{k=1}^{r}B_k^i,
@@ -3143,27 +3143,65 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
     The direct sum now has literal canonical-form data with full support.
     Apply the nonsingular blockwise canonical-form-II gauge. It preserves the
-    block dimensions and all periodic vectors, so the resulting tensor
-    $A_{\mathrm{red}}$ still satisfies
+    block dimensions and all periodic vectors, so the resulting tensor $A_1$
+    still satisfies
     \begin{align}
         \sum_{k=1}^{r}D_k & =D_{\mathrm{red}},
-                          & \tr(E_{A_{\mathrm{red}}}^{\,N}) & =1,
+                          & \tr(E_{A_1}^{\,N}) & =1,
     \end{align}
     for every integer $N>1$.
-    The shifted traces force $r=1$, spectral radius one, and primitivity.
-    Full support identifies the unique block with the ambient bond space, so
-    the inclusion $J_1$ of that block is unitary.
+    The shifted traces force $r=1$ and $\left|\mu_1\right|=1$, and full
+    support identifies the unique retained block with the ambient bond space,
+    so its inclusion $J_1$ is a unitary of $\mathbb C^{D_{\mathrm{red}}}$:
+    \begin{align}
+        J_1^\dagger J_1 & =\Id,
+                        & J_1J_1^\dagger & =\Id,
+                        & A_1^iJ_1       & =J_1\mu_1B_1^i.
+    \end{align}
 
     The retained block carries a diagonal positive definite fixed matrix
-    $\Lambda$ of its own transfer map. Rescale it so that $\tr(\Lambda)=1$.
-    Because the shifted traces force $|\mu_1|=1$, the matrix $\Lambda$ is also
-    fixed by the transfer map of the weighted block. Conjugating the ambient
-    tensor by $J_1$ therefore produces a tensor with the same positive-length
-    matrix product vectors, the same canonical-form-II blocks, and the ambient
-    right fixed matrix $\rho=\Lambda$ read in the ambient coordinates. It is
-    positive definite, diagonal, and of trace one, which is
-    (\ref{eq:mpu_reduced_ambient_rho}). Taking $A_{\mathrm{red}}$ to be this
-    conjugated tensor, full support and $r=1$ again make it normal.
+    $\Lambda_0$ of its own transfer map; rescale it to
+    $\Lambda=\tr(\Lambda_0)^{-1}\Lambda_0$, so that
+    \begin{align}
+        \Lambda                & >0,
+                               & \tr(\Lambda)                           & =1, \\
+        \E_{\mu_1B_1}(\Lambda) & =\left|\mu_1\right|^2\E_{B_1}(\Lambda)
+        =\Lambda,
+    \end{align}
+    the last equality because $\left|\mu_1\right|=1$. Now conjugate the
+    ambient tensor by $J_1$ and read the block matrix in the resulting
+    coordinates:
+    \begin{align}
+        A_{\mathrm{red}}^i & =J_1^\dagger A_1^iJ_1=\mu_1B_1^i,
+                           & \rho                              & =\Lambda.
+    \end{align}
+    Since $J_1$ is unitary this is a change of ambient coordinates:
+    $A_1^i=J_1A_{\mathrm{red}}^iJ_1^\dagger$, so $A_1$ and $A_{\mathrm{red}}$
+    have the same matrix product vectors at every positive length, and
+    replacing the ambient coisometry $\Phi$ of the canonical-form-II data by
+    $\Phi J_1$ leaves a coisometry reconstructing $A_{\mathrm{red}}$ from the
+    same blocks and weights. The fixed matrix transports along the same
+    conjugation:
+    \begin{align}
+        \E_{A_1}(J_1\rho J_1^\dagger)
+         & =J_1\E_{\mu_1B_1}(\Lambda)J_1^\dagger=J_1\rho J_1^\dagger, \\
+        \E_{A_{\mathrm{red}}}(\rho)
+         & =J_1^\dagger\E_{A_1}(J_1\rho J_1^\dagger)J_1=\rho,
+    \end{align}
+    and $\rho$ is positive definite, diagonal, and of trace one because
+    $\Lambda$ is. This is (\ref{eq:mpu_reduced_ambient_rho}).
+
+    It remains to see that the conjugated tensor is normal. Transport the
+    trace identity to it: for every integer $N>1$,
+    \begin{align}
+        \tr(E_{A_{\mathrm{red}}}^{\,N})
+         & =\sum_\sigma\left|V^{(N)}(A_{\mathrm{red}})_\sigma\right|^2
+        =\sum_\sigma\left|V^{(N)}(\widetilde U)_\sigma\right|^2=1.
+    \end{align}
+    These shifted traces force the spectral radius of $E_{A_{\mathrm{red}}}$
+    to be one and $E_{A_{\mathrm{red}}}$ to be primitive. Together with $r=1$
+    and full support, both preserved by the conjugation, they make
+    $A_{\mathrm{red}}$ normal.
 \end{proof}
 
 \begin{theorem}[Reduced canonical representative of an MPU]
