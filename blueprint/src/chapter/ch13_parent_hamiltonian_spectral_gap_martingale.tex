@@ -4630,23 +4630,6 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     norm gap from the smaller weighted sum to the larger unweighted sum.
 \end{proof}
 
-\begin{lemma}[Blocked local terms at block-aligned starts]
-    \label{lem:blocked_original_aligned_local_terms}
-    \lean{MPSTensor.parentInteractionES_blockTensor_conj,
-        MPSTensor.localTermES_blockTensor_conj_aligned}
-    \leanok
-    Assume $p>0$ and $N\geq2$. Write $h^{A,L}_j$ for the range-$L$ local term
-    of a tensor $A$ at site $j$. Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
-    configuration isometry from the blocked chain of length $N$ to the original
-    chain of length $Np$.  The parent interaction of $B$ on $N$ blocked sites is
-    conjugate under $U$ to the parent interaction of $A$ on $Np$ sites, and for
-    every blocked site $i$,
-    \begin{align}
-        U h^{B,2}_i U^{-1}
-         & =h^{A,2p}_{pi}.
-    \end{align}
-\end{lemma}
-
 \begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
     \label{thm:normal_mps_parent_hamiltonian_gap}
     \notready
