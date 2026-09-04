@@ -10,16 +10,23 @@ blockwise similarity of \cite[eq.~\emph{unital},
     \label{thm:periodic_ft}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
     \leanok
-    \uses{def:irreducible_form, def:same_mpv2_pos, def:scalar_gauge_equiv}
-    Let $A$ and $B$ be MPS tensors in irreducible form. Write
+    \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
+        def:scalar_gauge_equiv}
+    Let $A$ and $B$ be MPS tensors in irreducible form, written
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i), \notag \\
         B^i & =\bigoplus_{k\in K}(S_k\otimes B_k^i), \notag
     \end{align}
-    where $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ are bases of periodic
-    tensors, $R_j$ and $S_k$ are diagonal multiplicity matrices of sizes
-    $r_j\times r_j$ and $s_k\times s_k$ with nonzero diagonal entries, and
-    $A_j^i$ and $B_k^i$ act on bond spaces of dimensions $D_j$ and $D_k$.
+    where $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ are pairwise
+    non-repeated bases of periodic tensors, spectrally periodic of periods
+    $m_j$ and $n_k$ in the sense of
+    Definition~\ref{def:spectral_periodic_tensor}, $R_j$ and $S_k$ are diagonal
+    multiplicity matrices of sizes $r_j\times r_j$ and $s_k\times s_k$ with
+    nonzero diagonal entries, and $A_j^i$ and $B_k^i$ act on bond spaces of
+    dimensions $D_j$ and $D_k$. No trace-preserving normalization is imposed on
+    the blocks: they are only required to have irreducible transfer maps of
+    spectral radius one, which is the source's irreducible form at
+    \cite[lines~248--261]{DeLasCuevas2017Irreducible}.
     Suppose that $\mc{V}^+(A)=\mc{V}^+(B)$.
 
     Then $|J|=|K|$ and there is a bijection $\pi:J\to K$
@@ -44,10 +51,13 @@ blockwise similarity of \cite[eq.~\emph{unital},
     \noindent\emph{Remark on the length range.}
     The source writes both matrix-product-vector identities over all lengths.
     They are taken here at positive lengths only, following the convention of
-    this development that the empty word is not a physical chain. On the
-    hypothesis this makes the statement stronger, since equality at positive
-    lengths is the weaker assumption; on the conclusion it makes it weaker by
-    the empty word alone, at which both sides are the bond dimension.
+    this development that the empty word is not a physical chain. This
+    strengthens the theorem and costs nothing. On the hypothesis, equality at
+    positive lengths is the weaker assumption. On the conclusion, nothing is
+    lost either: $Z$ acts on the bond space of $A$, so $ZA$ has the bond
+    dimension of $A$, and the empty-word coefficient of a tensor is its bond
+    dimension, whence $\mc{V}^+(A)=\mc{V}^+(ZA)$ already extends to length
+    zero.
 
     \noindent\emph{Remark on the scalars $\xi_j$.}
     The source writes the two clauses of the last display without the
