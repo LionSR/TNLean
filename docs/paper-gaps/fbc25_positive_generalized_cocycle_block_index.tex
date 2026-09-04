@@ -16,39 +16,93 @@
 
 \section{Source context}
 
+Let $G$ be a finite group acting on a set $\mathsf X$ of block labels. For a
+block-dependent one-cochain $\chi\colon\mathsf X\times G\to\C^\times$ the
+generalized coboundary is
+\begin{align}
+    (d\chi)^x_{g,h}
+        &=\frac{\chi^{h x}_g\chi^x_h}{\chi^x_{gh}},
+    \label{eq:fbc25_positive_block_index_coboundary}
+\end{align}
+and a block-dependent two-cochain $\Omega$ is a generalized cocycle when
+$d\Omega=1$, that is, when
+$\Omega^x_{g,hk}\Omega^x_{h,k}=\Omega^{k x}_{g,h}\Omega^x_{gh,k}$.
+
 The finite-group determinant lemma in
 Ref.~\cite[lines~5931--5947]{FrancoRubio2025MPUGauging} starts with a
 block-dependent generalized cocycle $\Omega^x_{g,h}$ and constructs a
-block-dependent cochain $\chi^x_g=\det X^x_g$. The following corollary instead
-writes that there exists $\chi_g>0$ with $\Omega=d\chi$.
+block-dependent cochain $\chi^x_g=\det X^x_g$. The corollary that follows it
+instead asserts the existence of a positive $\chi_g$ with $\Omega=d\chi$,
+written without the block label
+\cite[Corollary~\texttt{cor:positive\_trivial}, lines~5950--5952]
+{FrancoRubio2025MPUGauging}.
 
 The omitted superscript is shorthand, not a restriction to a block-independent
-cochain. The later displays at lines~6023--6029 similarly suppress block
-indices while applying the same generalized-cocycle result to
-block-dependent quantities.
+cochain. The application to $\zeta$ in
+Ref.~\cite[line~6018]{FrancoRubio2025MPUGauging} concerns an ordinary scalar
+cochain. The later application to the block-dependent cochain $|L|$
+\cite[lines~6023--6029]{FrancoRubio2025MPUGauging} suppresses its block label
+while using the generalized conclusion block by block.
 
 \section{A two-block counterexample}
 
-Let $G=C_2=\{e,s\}$ act trivially on the two-element block set
+Let $G=C_2=\{e,s\}$, with $s^2=e$, act trivially on the two-element block set
 $\mathsf X=\{a,b\}$. Define a positive block-dependent $1$-cochain $\rho$ by
 \begin{align}
     \rho^a_e=\rho^b_e&=1,
     &\rho^a_s&=1,
-    &\rho^b_s&=2.
+    &\rho^b_s&=2,
     \label{eq:fbc25_positive_block_index_cochain}
 \end{align}
-Set $\Omega=d\rho$. Since the action is trivial and $s^2=e$,
+and set $\Omega=d\rho$. Because the action is trivial,
+Eq.~\ref{eq:fbc25_positive_block_index_coboundary} reads
+$\Omega^x_{g,h}=\rho^x_g\rho^x_h/\rho^x_{gh}$. Every value of $\Omega$ is
+therefore a product and quotient of the positive numbers in
+Eq.~\ref{eq:fbc25_positive_block_index_cochain}, hence positive; explicitly,
+for $x\in\{a,b\}$ and $g\in G$,
 \begin{align}
+    \Omega^x_{e,e}=\Omega^x_{e,g}=\Omega^x_{g,e}
+        &=\rho^x_e=1,
+    \label{eq:fbc25_positive_block_index_identity_axes}\\
     \Omega^a_{s,s}
         &=\frac{\rho^a_s\rho^a_s}{\rho^a_e}=1,
-    &
+    \label{eq:fbc25_positive_block_index_value_a}\\
     \Omega^b_{s,s}
         &=\frac{\rho^b_s\rho^b_s}{\rho^b_e}=4.
     \label{eq:fbc25_positive_block_index_values}
 \end{align}
+Equations~\ref{eq:fbc25_positive_block_index_identity_axes},
+\ref{eq:fbc25_positive_block_index_value_a} and
+\ref{eq:fbc25_positive_block_index_values} exhaust the four pairs $(g,h)$ in
+each block, so $\Omega$ is positive.
+
+The cocycle condition $d\Omega=d(d\rho)=1$ holds for the generalized
+coboundary of any one-cochain, with no hypothesis on the action: substituting
+Eq.~\ref{eq:fbc25_positive_block_index_coboundary} into both sides of the
+cocycle equation gives
+\begin{align}
+    (d\rho)^x_{g,hk}(d\rho)^x_{h,k}
+        &=\frac{\rho^{(hk)x}_g\rho^x_{hk}}{\rho^x_{ghk}}
+          \cdot\frac{\rho^{k x}_h\rho^x_k}{\rho^x_{hk}}
+        =\frac{\rho^{(hk)x}_g\rho^{k x}_h\rho^x_k}{\rho^x_{ghk}},
+    \label{eq:fbc25_positive_block_index_cocycle_left}\\
+    (d\rho)^{k x}_{g,h}(d\rho)^x_{gh,k}
+        &=\frac{\rho^{h(k x)}_g\rho^{k x}_h}{\rho^{k x}_{gh}}
+          \cdot\frac{\rho^{k x}_{gh}\rho^x_k}{\rho^x_{ghk}}
+        =\frac{\rho^{h(k x)}_g\rho^{k x}_h\rho^x_k}{\rho^x_{ghk}},
+    \label{eq:fbc25_positive_block_index_cocycle_right}
+\end{align}
+and the action law $h(k x)=(hk)x$ makes
+Eq.~\ref{eq:fbc25_positive_block_index_cocycle_left} and
+Eq.~\ref{eq:fbc25_positive_block_index_cocycle_right} equal.\footnote{Formal
+declaration:
+\leanid{TNLean.Algebra.ActionTensorGauge.isGeneralizedCocycle\_coboundary} in
+\doclink{TNLean/Algebra/GeneralizedCocycle}.}
+
 Thus $\Omega$ is a positive generalized $2$-cocycle and a generalized
-coboundary. If a primitive $\chi_g$ were independent of the block, then
-$(d\chi)^x_{s,s}$ would also be independent of $x$, contradicting
+coboundary, and it satisfies the hypotheses of the corollary. If a primitive
+$\chi_g$ were independent of the block, then $(d\chi)^x_{s,s}$ would also be
+independent of $x$, contradicting
 Eq.~\ref{eq:fbc25_positive_block_index_values}.
 
 \section{Corrected statement}

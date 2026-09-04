@@ -950,9 +950,10 @@ nonzero complex numbers. The fusion tensors have the scalar gauge freedom
 % Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
 This is the fusion-tensor gauge freedom of~\cite{FrancoRubio2025MPUGauging}.
 Apart from the matrix results below, the results in this section formalize
-only the scalar functions $\beta$, $\omega$, $\gamma$, and $L$; they construct
-neither fusion tensors nor action tensors. The representation-level data were
-specified in Definition~\ref{def:mpug_group_representation}.
+only the scalar functions $\beta$, $\omega$, $\gamma$, $L$, $\sigma$, and
+$\Xi$; they construct neither fusion tensors nor action tensors. The
+representation-level data were specified in
+Definition~\ref{def:mpug_group_representation}.
 
 \begin{theorem}[Scalar factors of an identity Kronecker product]
     \label{thm:mpug_kronecker_identity_factors}
@@ -1850,14 +1851,22 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     Recall from Definition~\ref{def:scalar_cocycle} that a scalar $2$-cochain
     is a function $\beta\colon G^2\to\C^\times$. A scalar $3$-cochain is a
     function $\omega\colon G^3\to\C^\times$. Following the paper's later
-    standing convention, it is normalized when
+    standing convention, it is normalized when, for all $g,h,k\in G$,
     \begin{align}
         \omega(e,h,k) & = 1, \\
         \omega(g,e,k) & = 1, \\
         \omega(g,h,e) & = 1.
         \label{eq:mpug_three_normalized}
     \end{align}
-    % Source anchor: arXiv:2502.20257, standing convention following eq:triv_omegas.
+    The standing convention of~\cite{FrancoRubio2025MPUGauging} makes every
+    fusion tensor involving the identity trivial, which is what forces all
+    three identity axes. Its printed display repeats the third axis in place
+    of the first two; the three-axis form is the local correction recorded in
+    \cite{gap:fbc25_three_cocycle_normalization_typo}.
+    % Source anchor: arXiv:2502.20257, standing convention at lines 1936--1937
+    %   and its display eq:triv_omegas, whose printed form repeats
+    %   omega(g,h,e) three times.
+    % Local fix: docs/paper-gaps/fbc25_three_cocycle_normalization_typo.tex.
     The scalar $2$-cochain $\beta$ is normalized when
     $\beta(e,g)=\beta(g,e)=1$ for every $g\in G$.
 \end{definition}
@@ -1977,10 +1986,9 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \leanok
     \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
     The $3$-coboundary $d\beta$ is normalized if and only if there is a
-    constant $c\in\C^\times$ such that
+    constant $c\in\C^\times$ such that, for every $g\in G$,
     \begin{align}
-        \beta(e,g) & =c=\beta(g,e)
-        \qquad\text{for every }g\in G.
+        \beta(e,g) & =c=\beta(g,e).
         \label{eq:mpug_coboundary_normalized_iff}
     \end{align}
     In particular, a normalized scalar $2$-cochain has normalized
@@ -1991,18 +1999,21 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
 \begin{proof}\leanok
     \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
     Set one argument at a time equal to $e$ in
-    (\ref{eq:mpug_coboundary}). If $d\beta$ is normalized, the first identity
-    at $(e,e,g)$ and the second at $(g,e,e)$ give
-    $\beta(e,g)=\beta(e,e)=\beta(g,e)$. Conversely, these constant-axis
-    identities give
+    (\ref{eq:mpug_coboundary}). If $d\beta$ is normalized, then
+    (\ref{eq:mpug_three_normalized}) for $d\beta$ at $(e,e,g)$ and at
+    $(g,e,e)$ gives $\beta(e,g)=\beta(e,e)=\beta(g,e)$. Conversely,
+    (\ref{eq:mpug_coboundary_normalized_iff}) gives
     \begin{align}
         (d\beta)(e,h,k) & =1, \\
         (d\beta)(g,e,k) & =1, \\
         (d\beta)(g,h,e) & =1.
+        \label{eq:mpug_coboundary_normalized_converse}
     \end{align}
     Taking the common constant to be $1$ proves the normalized-$\beta$
-    corollary. Pointwise products preserve the three identities, so
-    (\ref{eq:mpug_gauge_action}) is normalized when $\omega$ is normalized.
+    corollary. Since pointwise products preserve
+    (\ref{eq:mpug_coboundary_normalized_converse}), the gauged cochain
+    $\beta\mathbin{\triangleright}\omega$ of (\ref{eq:mpug_gauge_action}) is
+    normalized whenever both $\beta$ and $\omega$ are normalized.
 \end{proof}
 
 \begin{definition}[Cohomologous scalar three-cochains]
@@ -2077,18 +2088,22 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_fusion_gauge}
     An action-tensor scalar gauge is a function
-    $\gamma\colon G\times\mathsf X\to\C^\times$. Together with a
-    fusion-tensor scalar gauge $\beta\colon G^2\to\C^\times$, it changes an
-    $L$-symbol by
+    $\gamma\colon G\times\mathsf X\to\C^\times$, written $\gamma^x_g$.
+    Together with a fusion-tensor scalar gauge $\beta\colon G^2\to\C^\times$,
+    it changes an $L$-symbol by
     \begin{align}
         (\beta,\gamma)\mathbin{\triangleright}L^x_{g,h}
-         & =\frac{\gamma_{gh,x}\beta_{g,h}}
-        {\gamma_{g,hx}\gamma_{h,x}}L^x_{g,h}.
+         & =\frac{\gamma^x_{gh}\beta_{g,h}}
+        {\gamma^{h x}_g\gamma^x_h}L^x_{g,h}.
         \label{eq:mpug_l_gauge}
     \end{align}
     This is the joint fusion-tensor and action-tensor gauge freedom in
-    \cite{FrancoRubio2025MPUGauging}.
-    % Source anchor: arXiv:2502.20257, eq:Lsymbgauge.
+    \cite{FrancoRubio2025MPUGauging}, written with the block label as a
+    superscript throughout, as that source does for its block-dependent
+    cochains.
+    % Source anchor: arXiv:2502.20257, eq:Lsymbgauge (which spells the block
+    %   label as a second subscript); the superscript spelling gamma^x_g is
+    %   the paper's own at lines 5908 and 5988--5990.
 \end{definition}
 
 \begin{theorem}[Identity and composition of joint scalar gauges]
@@ -2130,10 +2145,22 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         L^x_{e,g} & =1.
         \label{eq:mpug_l_normalized_left}
     \end{align}
-    The action-tensor gauge is normalized when $\gamma_{e,x}=1$ for every
-    $x\in\mathsf X$. These conventions match the trivial-identity choices of
-    \cite{FrancoRubio2025MPUGauging}.
-    % Source anchor: arXiv:2502.20257, eq:triv_Ls.
+    Equations (\ref{eq:mpug_l_normalized_right}) and
+    (\ref{eq:mpug_l_normalized_left}) are the normalization of the
+    $L$-symbols in \cite{FrancoRubio2025MPUGauging}. The action-tensor gauge
+    is normalized when
+    \begin{align}
+        \gamma^x_e & =1
+        \label{eq:mpug_action_gauge_normalized}
+    \end{align}
+    for every $x\in\mathsf X$. This last condition is not a displayed
+    equation of the source: it is the scalar shadow of the standing
+    convention that every action tensor involving the identity is trivial.
+    % Source anchor: arXiv:2502.20257, eq:triv_Ls for the L-symbol axes;
+    %   gamma^x_e = 1 is not a labelled source equation but the standing
+    %   convention at lines 1936--1937 that any fusion or action tensor
+    %   involving e is trivial, applied to the action-tensor gauge scalar of
+    %   eq:scalar_act_ten.
 \end{definition}
 
 \begin{theorem}[Joint scalar gauges preserve L-symbol compatibility]
@@ -2152,28 +2179,60 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     formula is exactly
     \begin{align}
         ((\beta,\gamma)\mathbin{\triangleright}L)^x_{g,e}
-         & =\frac{\beta_{g,e}}{\gamma_{e,x}}L^x_{g,e}.
+         & =\frac{\beta_{g,e}}{\gamma^x_e}L^x_{g,e}.
         \label{eq:mpug_l_gauge_right}
     \end{align}
     \begin{align}
         ((\beta,\gamma)\mathbin{\triangleright}L)^x_{e,g}
-         & =\frac{\beta_{e,g}}{\gamma_{e,gx}}L^x_{e,g}.
+         & =\frac{\beta_{e,g}}{\gamma^{g x}_e}L^x_{e,g}.
         \label{eq:mpug_l_gauge_left}
     \end{align}
     Thus the gauged $L$-symbol is normalized exactly when
-    $\beta_{g,e}L^x_{g,e}=\gamma_{e,x}$ and
-    $\beta_{e,g}L^x_{e,g}=\gamma_{e,gx}$ for all $x$ and $g$. In particular,
+    $\beta_{g,e}L^x_{g,e}=\gamma^x_e$ and
+    $\beta_{e,g}L^x_{e,g}=\gamma^{g x}_e$ for all $x$ and $g$. In particular,
     normalized $\beta$, $\gamma$, and $L$ give a normalized gauged $L$-symbol.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpug_fusion_gauge, def:mpug_l_symbols, def:mpug_l_gauge,
         def:mpug_l_normalized}
-    Substitute (\ref{eq:mpug_l_gauge}) into both sides of
-    (\ref{eq:mpug_l_compatibility}). The $L$-factors give the original
-    compatibility relation, while the remaining $\beta$-factors give
-    $d\beta$. The $\gamma$-factors cancel after using
-    $h(kx)=(hk)x$. Setting either group argument equal to $e$ gives
+    Write $L'=(\beta,\gamma)\mathbin{\triangleright}L$. Substituting
+    (\ref{eq:mpug_l_gauge}) into the left side of
+    (\ref{eq:mpug_l_compatibility}) for $L'$ cancels the factor
+    $\gamma^x_{hk}$ and leaves
+    \begin{align}
+        {L'}^x_{g,hk}{L'}^x_{h,k}
+         & =\frac{\gamma^x_{ghk}}
+        {\gamma^{(hk)x}_g\gamma^{k x}_h\gamma^x_k}\,
+        \beta_{g,hk}\beta_{h,k}\,L^x_{g,hk}L^x_{h,k}.
+        \label{eq:mpug_l_gauge_left_side}
+    \end{align}
+    The same substitution on the right side cancels
+    $\gamma^{k x}_{gh}$ and leaves
+    \begin{align}
+        {L'}^{k x}_{g,h}{L'}^x_{gh,k}
+         & =\frac{\gamma^x_{ghk}}
+        {\gamma^{h(k x)}_g\gamma^{k x}_h\gamma^x_k}\,
+        \beta_{g,h}\beta_{gh,k}\,L^{k x}_{g,h}L^x_{gh,k}.
+        \label{eq:mpug_l_gauge_right_side}
+    \end{align}
+    The action law $h(k x)=(hk)x$ makes the two action-tensor prefactors of
+    (\ref{eq:mpug_l_gauge_left_side}) and
+    (\ref{eq:mpug_l_gauge_right_side}) equal. Applying
+    (\ref{eq:mpug_l_compatibility}) for $L$ and $\omega$ to the right of
+    (\ref{eq:mpug_l_gauge_left_side}) therefore gives
+    \begin{align}
+        {L'}^x_{g,hk}{L'}^x_{h,k}
+         & =\frac{\beta_{g,hk}\beta_{h,k}}
+        {\beta_{g,h}\beta_{gh,k}}\,\omega(g,h,k)\,
+        {L'}^{k x}_{g,h}{L'}^x_{gh,k},
+        \label{eq:mpug_l_gauge_compatibility}
+    \end{align}
+    whose scalar factor is
+    $(\beta\mathbin{\triangleright}\omega)(g,h,k)$ by
+    (\ref{eq:mpug_coboundary}) and
+    (\ref{eq:mpug_gauge_action}). Setting either group argument equal
+    to $e$ in (\ref{eq:mpug_l_gauge}) gives
     (\ref{eq:mpug_l_gauge_right}) and
     (\ref{eq:mpug_l_gauge_left}), from which the normalization statements
     follow.
@@ -3100,10 +3159,24 @@ show that the tensor gauge freedoms induce the joint scalar gauge
 
 \begin{proof}\leanok
     \uses{def:mpug_generalized_cocycle, def:mpug_generalized_hat}
-    Apply the group action law and cancel each group element with its inverse.
-    Expanding both sides of
-    (\ref{eq:mpug_generalized_hat_coboundary}) gives the same three cochain
-    values, with their scalar factors reordered in $\C^\times$.
+    Applying (\ref{eq:mpug_generalized_hat_one}) twice and cancelling each
+    group element with its inverse gives
+    (\ref{eq:mpug_generalized_hat_hat_one}), and applying
+    (\ref{eq:mpug_generalized_hat_two}) twice gives
+    (\ref{eq:mpug_generalized_hat_hat_two}). For
+    (\ref{eq:mpug_generalized_hat_coboundary}), the action law
+    $g(h x)=(gh)x$ and $g^{-1}\bigl((gh)x\bigr)=h x$ give
+    \begin{align}
+        (d\widehat\chi)^x_{g,h}
+         & =\frac{\widehat\chi^{\,h x}_g\widehat\chi^{\,x}_h}
+        {\widehat\chi^{\,x}_{gh}}
+        =\frac{\chi^{(gh)x}_{g^{-1}}\chi^{h x}_{h^{-1}}}
+        {\chi^{(gh)x}_{(gh)^{-1}}}
+        =(d\chi)^{(gh)x}_{h^{-1},g^{-1}}
+        =\widehat{d\chi}^{\,x}_{g,h}.
+    \end{align}
+    The two sides therefore carry the same three values of $\chi$, reordered
+    in $\C^\times$.
 \end{proof}
 
 \begin{definition}[Regular-action matrices]
@@ -3129,12 +3202,17 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     \leanok
     \uses{def:mpug_generalized_cocycle,
         def:mpug_generalized_regular_matrices}
-    If $\Omega$ satisfies~(\ref{eq:mpug_generalized_cocycle}), then
+    Let $G$ be finite. If $\Omega$
+    satisfies~(\ref{eq:mpug_generalized_cocycle}), then
     \begin{align}
         X^{h x}_gX^x_h
          & =\Omega^x_{g,h}X^x_{gh}.
         \label{eq:mpug_generalized_regular_multiplication}
     \end{align}
+    % Source anchor: arXiv:2502.20257, lemma:G_cocycle, lines 5931--5943,
+    %   which states this multiplication law "for G being a finite group".
+    %   The blueprint statement previously omitted that hypothesis, which the
+    %   formal statement carries.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3177,7 +3255,11 @@ show that the tensor gauge freedoms induce the joint scalar gauge
         \label{eq:mpug_generalized_power_coboundary}
     \end{align}
     This is
-    \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging}.
+    \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging}. The
+    second numerator determinant in
+    (\ref{eq:mpug_generalized_power_coboundary}) carries the index $h$; this
+    local correction of the printed formula is recorded in
+    \cite{gap:fbc25_generalized_cocycle_determinant_typo}.
 
     % Local fix: docs/paper-gaps/fbc25_generalized_cocycle_determinant_typo.tex.
     % Source anchor: arXiv:2502.20257, lemma:G_cocycle, lines 5931--5948.
@@ -3198,14 +3280,24 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     is nonzero, $\det X^x_g\ne0$. Thus
     (\ref{eq:mpug_generalized_determinant_cochain}) takes values in
     $\C^\times$. Taking determinants in
-    (\ref{eq:mpug_generalized_regular_multiplication}) and using
-    $\det(cX)=c^{|G|}\det X$ gives
+    (\ref{eq:mpug_generalized_regular_multiplication}), using
+    multiplicativity of the determinant on the left and
+    $\det(cX)=c^{|G|}\det X$ for the $|G|\times|G|$ matrix $X^x_{gh}$ on the
+    right, gives
+    \begin{align}
+        \det X^{h x}_g\det X^x_h
+         & =\left(\Omega^x_{g,h}\right)^{|G|}\det X^x_{gh}.
+        \label{eq:mpug_generalized_determinant_product}
+    \end{align}
+    Dividing (\ref{eq:mpug_generalized_determinant_product}) by
+    $\det X^x_{gh}$ gives
     (\ref{eq:mpug_generalized_power_coboundary}).
 \end{proof}
 
 \begin{theorem}[Positive generalized cocycles are coboundaries]
     \label{thm:mpug_positive_generalized_cocycle}
     \lean{TNLean.Algebra.PositiveUnits.positiveRpow,
+        TNLean.Algebra.PositiveUnits.positiveRpow_inv_natCast_pow,
         TNLean.Algebra.ActionTensorGauge.positiveRpow,
         TNLean.Algebra.LSymbol.positivePrimitive,
         TNLean.Algebra.LSymbol.isPositiveValued_positivePrimitive,
@@ -3227,9 +3319,11 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     for all $x\in\mathsf X$ and $g,h\in G$.
     This is the first assertion of
     \cite[Corollary at lines~5950--5960]{FrancoRubio2025MPUGauging}.
-    The source writes $\chi_g$ here, whereas the
-    preceding determinant lemma constructs $\chi^x_g$; the block label $x$ is
-    therefore retained.
+    The source writes $\chi_g$ here, whereas
+    Theorem~\ref{thm:mpug_generalized_cocycle_power} constructs $\chi^x_g$
+    through (\ref{eq:mpug_generalized_determinant_cochain}); the block label
+    $x$ is therefore retained, as recorded in
+    \cite{gap:fbc25_positive_generalized_cocycle_block_index}.
     % Local correction:
     % docs/paper-gaps/fbc25_positive_generalized_cocycle_block_index.tex.
     % Source anchor: arXiv:2502.20257, cor:positive_trivial, lines 5950--5956.
@@ -3246,13 +3340,24 @@ show that the tensor gauge freedoms induce the joint scalar gauge
         \label{eq:mpug_positive_determinant_root}
     \end{align}
     The regular-action permutation can contribute a sign to $\delta^x_g$.
-    Its norm is therefore taken before the positive $\lvert G\rvert$-th root.
-    Taking norms in $\Omega^{\lvert G\rvert}=d\delta$ gives
+    Its norm is therefore taken before the positive $\lvert G\rvert$-th root,
+    as recorded in
+    \cite{gap:fbc25_positive_generalized_cocycle_determinant_sign}.
+    Since $\Omega$ is positive and the complex norm is multiplicative, taking
+    norms in (\ref{eq:mpug_generalized_power_coboundary}) gives
     \begin{align}
         \Omega^{\lvert G\rvert} & =d\lvert\delta\rvert.
+        \label{eq:mpug_positive_norm_power}
     \end{align}
-    Positive real powers are multiplicative, and the
-    $\lvert G\rvert$-th power is injective on $\mathbb R_{>0}$. Hence
+    Positive real powers are multiplicative, so
+    (\ref{eq:mpug_positive_determinant_root}) and
+    (\ref{eq:mpug_positive_norm_power}) give
+    \begin{align}
+        (d\chi_0)^{\lvert G\rvert}
+         & =d\lvert\delta\rvert=\Omega^{\lvert G\rvert},
+        \label{eq:mpug_positive_root_power}
+    \end{align}
+    and the $\lvert G\rvert$-th power is injective on $\mathbb R_{>0}$. Hence
     $d\chi_0=\Omega$.
     % Consolidated clarification:
     % docs/paper-gaps/fbc25_positive_generalized_cocycle_determinant_sign.tex.
@@ -3307,19 +3412,20 @@ show that the tensor gauge freedoms induce the joint scalar gauge
         \label{eq:mpug_positive_hat_witness}
     \end{align}
     All values are positive, so the positive square roots are unambiguous.
-    Using $\widehat{d\chi_0}=d\widehat\chi_0$ and
-    $\Omega\widehat\Omega=1$ gives
+    Using (\ref{eq:mpug_generalized_hat_coboundary}) and the hypothesis
+    (\ref{eq:mpug_positive_hat_hypothesis}) gives
     \begin{align}
         d\chi
-         & =\sqrt{\frac{d\chi_0}{d\widehat\chi_0}}
-        =\sqrt{\frac{\Omega}{\widehat\Omega}}
+         & =\sqrt{d\chi_0/d\widehat\chi_0}
+        =\sqrt{\Omega/\widehat\Omega}
         =\sqrt{\Omega^2}
         =\Omega.
     \end{align}
-    Moreover,
+    The same substitution in
+    (\ref{eq:mpug_positive_hat_witness}) gives
     \begin{align}
         \widehat\chi
-         & =\sqrt{\frac{\widehat\chi_0}{\chi_0}}
+         & =\sqrt{\widehat\chi_0/\chi_0}
         =\chi^{-1},
     \end{align}
     which proves
@@ -3367,18 +3473,44 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     % Source anchors: arXiv:2502.20257, lines 5910--5916 and eq:introXi.
 \end{definition}
 
+\begin{theorem}[The hat operation is an involution]
+    \label{thm:mpug_scalar_hat_involution}
+    \lean{TNLean.Algebra.ScalarCocycle.hat_hat,
+        TNLean.Algebra.ScalarThreeCochain.hat_hat}
+    \leanok
+    \uses{def:mpug_inversion_cochains}
+    Let $G$ be an arbitrary group. Every scalar $2$-cochain $\beta$ and every
+    scalar $3$-cochain $\omega$ satisfy
+    \begin{align}
+        \widehat{\widehat\beta} & =\beta,
+        \label{eq:mpug_two_hat_hat}
+    \end{align}
+    \begin{align}
+        \widehat{\widehat\omega} & =\omega.
+        \label{eq:mpug_three_hat_hat}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, line 5912, where the hat operation is
+    %   introduced as an involution for cochains of any arity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_inversion_cochains}
+    Reversing the arguments of (\ref{eq:mpug_two_hat}) and inverting each of
+    them twice restores the original arguments, and likewise for
+    (\ref{eq:mpug_three_hat}).
+\end{proof}
+
 \begin{theorem}[Two inversion-cochain formulas]
     \label{thm:mpug_inversion_cochain_formulas}
-    \lean{TNLean.Algebra.ScalarCocycle.hat_hat,
-        TNLean.Algebra.ScalarThreeCochain.hat_hat,
-        TNLean.Algebra.ScalarThreeCochain.Xi_eq_second_formula,
+    \lean{TNLean.Algebra.ScalarThreeCochain.Xi_eq_second_formula,
         TNLean.Algebra.ScalarThreeCochain.sigma_inv}
     \leanok
-    \uses{def:mpug_three_cocycle, def:mpug_inversion_cochains}
+    \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
+        def:mpug_inversion_cochains}
     These formulas are part of the cocycle calculation in
     \cite[lines~5967--5979]{FrancoRubio2025MPUGauging}.
-    Let $\omega$ be a normalized scalar $3$-cocycle. The hat operation is an
-    involution, and
+    Let $G$ be an arbitrary group and let $\omega$ be a normalized scalar
+    $3$-cocycle. Then
     \begin{align}
         \Xi(g,h) & =
         \frac{\omega(h^{-1},g^{-1},g)}
@@ -3388,24 +3520,24 @@ show that the tensor gauge freedoms induce the joint scalar gauge
         {\omega(g^{-1},g,h)}.
         \label{eq:mpug_Xi_two_formulas}
     \end{align}
-    Moreover,
+    The inversion one-cochain satisfies
     \begin{align}
         \sigma(g^{-1}) & =\sigma(g)^{-1}.
         \label{eq:mpug_sigma_inverse}
     \end{align}
-    No finiteness assumption on $G$ is needed.
     % Source anchor: arXiv:2502.20257, eq:introXi and lemma:omegaXi.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_three_cocycle, def:mpug_inversion_cochains}
-    Apply the cocycle identity to $(h^{-1},g^{-1},g,h)$ and use normalization;
-    this gives the second quotient in
-    (\ref{eq:mpug_Xi_two_formulas}). Applying it to
+    \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
+        def:mpug_inversion_cochains}
+    Apply (\ref{eq:mpug_three_cocycle}) to $(h^{-1},g^{-1},g,h)$ and use
+    (\ref{eq:mpug_three_normalized}); this gives the second quotient in
+    (\ref{eq:mpug_Xi_two_formulas}). Applying
+    (\ref{eq:mpug_three_cocycle}) to
     $(g,g^{-1},g,g^{-1})$ gives
     $1=\sigma(g)\sigma(g^{-1})$, hence
-    (\ref{eq:mpug_sigma_inverse}). Reversing and inverting the arguments twice
-    proves the involution statements.
+    (\ref{eq:mpug_sigma_inverse}).
 \end{proof}
 
 \begin{theorem}[Inversion identities for a normalized three-cocycle]
@@ -3413,8 +3545,8 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     \lean{TNLean.Algebra.ScalarThreeCochain.hat_eq_mul_coboundary_Xi,
         TNLean.Algebra.ScalarThreeCochain.Xi_eq_hat_mul_coboundary_sigma}
     \leanok
-    \uses{def:mpug_fusion_gauge, def:mpug_inversion_cochains,
-        thm:mpug_inversion_cochain_formulas}
+    \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_inversion_cochains}
     These inversion identities and their cocycle substitutions are given in
     \cite[lines~5967--5979]{FrancoRubio2025MPUGauging}.
     Let $\omega$ be a normalized scalar $3$-cocycle. Then
@@ -3431,7 +3563,8 @@ show that the tensor gauge freedoms induce the joint scalar gauge
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_three_cocycle, thm:mpug_inversion_cochain_formulas}
+    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge,
+        def:mpug_inversion_cochains, thm:mpug_inversion_cochain_formulas}
     For (\ref{eq:mpug_hat_omega}), multiply the cocycle identities at
     \begin{align}
          & (k^{-1},h^{-1},g^{-1},g),\quad
