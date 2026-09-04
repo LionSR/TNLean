@@ -1498,8 +1498,15 @@ norm estimate is derived here.
     \lean{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero}
     \leanok
     Assume the hypotheses of
-    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate}, and
-    assume in addition that $E_nv=0$ for every $n<n_0$. Then
+    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate}, except
+    that $l\leq n_0$ is assumed and
+    (\ref{eq:nachtergaele_c1_threshold_form}) is replaced by condition C1 on
+    the range $l\leq n<M$ of its own window sum at the two volumes at which
+    the source asserts it: the full inequality
+    $0\leq\sum_{n=l}^{N-1}\re\langle H_nx,x\rangle
+        \leq d_{l+1}\re\langle Hx,x\rangle$ at $M=N$, and its non-negativity
+    clause $0\leq\sum_{n=l}^{n_0-1}\re\langle H_nx,x\rangle$ at $M=n_0$.
+    Assume in addition that $E_nv=0$ for every $n<n_0$. Then
     \begin{align}
         \frac{\gamma_{l+1}}{d_{l+1}}
         \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert^2
@@ -1507,10 +1514,8 @@ norm estimate is derived here.
         \label{eq:nachtergaele_c1_c3_below_threshold_energy_estimate}
     \end{align}
     This is the conclusion of Theorem~2.1(i) of
-    \cite{Nachtergaele1996Spectral} with conditions C2 and C3 imposed only on
-    $n_0\leq n<N$, which is where the source imposes them, and C1 imposed on
-    that same range rather than on the wider range $l\leq n<N$ of its own
-    window sum. The added
+    \cite{Nachtergaele1996Spectral} with each of C1, C2, and C3 imposed on the
+    range at which the source imposes it. The added
     vanishing hypothesis is the minimal repair of that theorem: the two
     below-threshold quantities in
     (\ref{eq:nachtergaele_c1_c3_threshold_energy_estimate}) enter
@@ -1527,7 +1532,12 @@ norm estimate is derived here.
     \leanok
     \uses{thm:nachtergaele_c1_c3_threshold_energy_estimate,
         thm:martingale-difference-final-complement-norm-decomposition}
-    The window correction in
+    Condition C1 on the threshold range $n_0\leq n<N$ follows from the
+    assumed form: its upper bound by subtracting from the sum over
+    $l\leq n<N$ the initial sum over $l\leq n<n_0$, which is non-negative by
+    C1 at the volume $\Lambda_{n_0}$, and its non-negativity clause termwise
+    from C2, each of whose left-hand sides is non-negative. The window
+    correction in
     (\ref{eq:nachtergaele_c1_c3_threshold_energy_estimate}) is a sum of
     squared norms of martingale differences with index below $n_0$, hence
     zero. The Pythagorean decomposition of a vector orthogonal to
@@ -1541,8 +1551,8 @@ norm estimate is derived here.
 
 % Source: References/cond-mat_9410110/main.tex, conditions C1--C3 at
 % lines 1030--1094 and Theorem 2.1(i) at lines 1119--1130. The witness is the
-% one-site chain with a weakened leftmost interaction, restricted to its
-% single-excitation subspace; see
+% one-site chain with a weakened leftmost interaction, restricted to the span
+% of its ground state and its single excitations; see
 % docs/paper-gaps/nachtergaele96_theorem_2_1_lower_endpoint.tex.
 \begin{theorem}[The source conditions on their own ranges do not give the
         estimate]
@@ -1550,15 +1560,17 @@ norm estimate is derived here.
     \lean{FrustrationFree.not_unrestrictedNachtergaeleEstimate}
     \leanok
     In the notation of
-    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate}: for every
-    $k$ there are, on a complex Hilbert space of dimension $k+2$, nested
-    orthogonal projections $(G_n)_{n\geq0}$ with $G_0=\mathbf 1$, orthogonal
-    projections $Q_n$, local operators $H_n$, an operator $H$, and a vector
-    $v\perp\operatorname{ran}(G_{k+2})$ such that, with $l=0$, $n_0=1$,
-    $N=k+2$, $\gamma_1=d_1=1$, and $\epsilon_0=0$, the required commutations
-    hold, condition C1 holds on the range $l\leq n<N$ carried by its own
-    window sum, conditions C2 and C3 hold on the range $n_0\leq n<N$ from
-    which they are imposed, and
+    Theorem~\ref{thm:nachtergaele_c1_c3_below_threshold_energy_estimate}: for
+    every $k$ there are, on a complex Hilbert space of dimension $k+2$, nested
+    orthogonal projections $(G_n)_{n\geq0}$ with $G_0=\mathbf 1$ and
+    $G_n\neq0$ for every $n\leq N$, nonzero orthogonal projections $Q_n$,
+    local operators $H_n$, an operator $H$, and a vector
+    $v\perp\operatorname{ran}(G_N)$ such that, with $l=0$, $n_0=1$,
+    $N=k+1$, $\gamma_1=d_1=1$, and $\epsilon_0=0$, the required commutations
+    hold, condition C1 holds on the range $l\leq n<M$ carried by its own
+    window sum, both at $M=N$ and, in its non-negativity clause, at $M=n_0$,
+    conditions C2 and C3 hold on the range $n_0\leq n<N$ from which they are
+    imposed, and
     \begin{align}
         \re\langle Hv,v\rangle
          & =\tfrac12\lVert v\rVert^2
@@ -1566,29 +1578,36 @@ norm estimate is derived here.
         \left(1-\epsilon_0\right)^2\lVert v\rVert^2.
         \label{eq:nachtergaele_threshold_conditions_insufficient}
     \end{align}
-    Hence condition C1 on $l\leq n<N$ together with conditions C2 and C3 on
-    $n_0\leq n<N$, the ranges at which \cite{Nachtergaele1996Spectral}
-    imposes them, do not imply the conclusion of its Theorem~2.1(i).
+    Hence condition C1 on the range of its own window sum together with
+    conditions C2 and C3 on $n_0\leq n<N$, the ranges at which
+    \cite{Nachtergaele1996Spectral} imposes them, do not imply the conclusion
+    of its Theorem~2.1(i), even when every ground space is nontrivial, as
+    condition C2 also requires.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:nachtergaele_c1_c3_threshold_energy_estimate}
     Fix an orthonormal basis $e_0,\ldots,e_{k+1}$ and let every operator be
-    diagonal in it. Let $G_n$ have weight $1$ at $e_i$ when $n\leq i$ and
-    weight $0$ otherwise, so that $G_0=\mathbf 1$, $G_{k+2}=0$, and $E_n$ is
-    the projection onto $e_n$. Let $c_0=\tfrac12$ and $c_i=1$ for $i\geq1$,
-    let $H$ have weight $c_i$ at $e_i$, let $H_n$ have weight $c_n$ at $e_n$
-    and weight $0$ elsewhere, and let $Q_n=\mathbf 1-E_n$. All operators are
-    diagonal, so the required commutations hold, and $Q_nE_n=0$ gives
-    condition C3 with $\epsilon_0=0$. Summing $H_n$ over the whole C1 range
-    $0\leq n<k+2$ gives $H$ itself, and the weights $c_i$ are nonnegative, so
-    condition C1 holds with $d_1=1$, with equality in its upper bound. For
-    $n\geq1$ one has $c_n=1$, so
+    diagonal in it. The first $N=k+1$ basis vectors carry the single
+    excitations of a chain of $N$ sites and the last carries its ground state.
+    Let $G_n$ have weight $1$ at $e_i$ when $n\leq i$ and weight $0$
+    otherwise, so that $G_0=\mathbf 1$, every $G_n$ with $n\leq N$ is nonzero
+    because it retains $e_{k+1}$, $G_N$ is the projection onto $e_{k+1}$, and
+    $E_n$ is the projection onto $e_n$ for $n<N$. Let $c_0=\tfrac12$, let
+    $c_i=1$ for $1\leq i\leq k$, and let $c_{k+1}=0$; let $H$ have weight
+    $c_i$ at $e_i$, let $H_n$ have weight $c_n$ at $e_n$ and weight $0$
+    elsewhere, and let $Q_n=\mathbf 1-E_n$, which is nonzero because the space
+    has dimension at least two. All operators are diagonal, so the required
+    commutations hold, and $Q_nE_n=0$ gives condition C3 with $\epsilon_0=0$.
+    Summing $H_n$ over the whole C1 range $0\leq n<N$ gives $H$ itself, and
+    the weights $c_i$ are nonnegative, so condition C1 holds with $d_1=1$,
+    with equality in its upper bound, and its non-negativity clause holds over
+    every initial range. For $1\leq n<N$ one has $c_n=1$, so
     $\lVert(\mathbf 1-Q_n)x\rVert^2=\lVert E_nx\rVert^2$ equals
     $\re\langle H_nx,x\rangle$, which is condition C2 with $\gamma_1=1$.
-    Take $v=e_0$. Then $v\perp\operatorname{ran}(G_{k+2})=\{0\}$ and
-    $\re\langle Hv,v\rangle=c_0=\tfrac12$, while $\lVert v\rVert^2=1$, which
+    Take $v=e_0$. Then $v\perp\operatorname{ran}(G_N)$, the line through
+    $e_{k+1}$, and $\re\langle Hv,v\rangle=c_0=\tfrac12$, while
+    $\lVert v\rVert^2=1$, which
     is (\ref{eq:nachtergaele_threshold_conditions_insufficient}). The whole
     martingale mass of $v$ sits at the index $n=0$, which C1 covers while C2
     and C3 exclude it, and it is at that index that C2 fails.

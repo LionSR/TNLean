@@ -152,12 +152,14 @@ vanish.
 \section{The printed statement fails}
 
 They do not. The following model satisfies C1, C2, and C3 with their printed
-lower endpoints, for every $l$ and every $N$, and violates
+lower endpoints, for every $l$ and every $N$; its parameter $\delta$ is chosen
+after the length $l$, and every choice below $1/(l+1)$ violates
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}).
 
 Let the sites be $x=1,2,\ldots$ with $\mathcal H_x=\mathbb C^2$ and basis
-$\lvert0\rangle,\lvert1\rangle$, let $\Lambda_n=\{1,\ldots,n\}$, and fix
-$0<\delta<1$. Take one-site interactions
+$\lvert0\rangle,\lvert1\rangle$, let $\Lambda_n=\{1,\ldots,n\}$, fix a length
+$l$, and then fix $\delta$ with $0<\delta<1/(l+1)$. Take one-site
+interactions
 \begin{align}
     h_1
         &=\delta\,\lvert1\rangle\langle1\rvert_1,
@@ -252,8 +254,8 @@ with $H_{\Lambda_N}\psi=\delta\psi$. The printed conclusion
          =\frac{1}{l+1},
     \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_contradiction}
 \end{align}
-which is false whenever $\delta<1/(l+1)$. The choice of $\delta$ is
-independent of $N$, so the failure is not an artefact of small volumes: it
+which is false by the choice $\delta<1/(l+1)$ made above. That choice depends
+on $l$ but not on $N$, so the failure is not an artefact of small volumes: it
 persists for every $N\geq1$ with the same $l$, the same constants, and the
 same threshold $n_l$.
 
@@ -268,20 +270,26 @@ regardless.
 
 A formal instance of this model is verified in the Lean development. Every
 operator above is diagonal in the computational basis, so the span of the
-single-excitation vectors
+ground state $\lvert0^N\rangle$ together with the single-excitation vectors
 $\lvert0^m10^{N-1-m}\rangle$, $0\leq m<N$, is invariant under all of them, and
-the model restricts to that span with $E_m$ the projection onto the $m$-th
-coordinate. The restriction of
+the model restricts to that span, of dimension $N+1$, with $E_m$ the
+projection onto the $m$-th excitation coordinate. Retaining the ground-state
+coordinate keeps every $\mathcal G_{\Lambda_n}$ non-trivial, as C2 requires;
+on the restricted space $\mathcal G_{\Lambda_N}$ is the line it spans, and
+$\psi$ is orthogonal to it. The restriction of
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_interaction}) at
-$l=0$ and $\delta=1/2$ refutes the printed statement in every dimension
-$N\geq2$.\footnote{Formal declarations:
+$l=0$ and $\delta=1/2$ refutes the printed statement for every chain length
+$N\geq1$.\footnote{Formal declarations:
     \leanid{FrustrationFree.UnrestrictedNachtergaeleEstimate} transcribes
     (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}) with each
-    condition on the range the source gives it, namely C1 on $l\leq n<N$, the
+    condition on the range the source gives it, namely C1 on $l\leq n<M$, the
     range of its reindexed window sum
-    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1_reindex}), and C2
-    and C3 on
-    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}); then
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1_reindex}) at the
+    volume $\Lambda_M$, imposed at $M=N$ and, in its non-negativity clause,
+    at $M=n_0$, and C2 and C3 on
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}); it also
+    carries the ordering $l\leq n_0$ of that threshold and the non-triviality
+    of the ground spaces that C2 requires. Then
     \leanid{FrustrationFree.not_unrestrictedNachtergaeleEstimate} refutes it.
     In the formal instance $l=0$, so C1 is supplied on the full range
     $0\leq n<N$, where the local terms sum to $H_{\Lambda_N}$ exactly.}
@@ -323,19 +331,24 @@ mutually orthogonal projections, is equivalent to
 \end{align}
 Under (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}) the
 conclusion (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion})
-holds with the printed coefficient and with C1, C2, and C3 assumed only on
-the source range
-(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}).\footnote{Formal
+holds with the printed coefficient, with C2 and C3 assumed only on the source
+range (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}) and C1
+only on the range $l\leq n<M$ of its own window sum, at the volumes
+$\Lambda_{n_0}$ and $\Lambda_N$ at which the source asserts
+it.\footnote{Formal
     declaration:
     \leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero};
     the implication from
     (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair_projection}) to
     (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}) is
     \leanid{FrustrationFree.NestedGroundProjections.martingaleDifference_apply_eq_zero_of_lt}.}
-The earlier full-range formulation
+The passage from C1 on $l\leq n<N$ to the sum over the threshold range
+$n_0\leq n<N$ that the printed proof estimates is available because C1 at the
+volume $\Lambda_{n_0}$ makes the omitted initial sum non-negative, while C2
+makes each retained term non-negative. The earlier full-range formulation
 \leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_full_range},
 which assumes C1, C2, and C3 on every index $0\leq n<N$, is the case
-$n_0=0$, where
+$n_0=0$ of the threshold estimate, where
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}) is vacuous.
 
 The repair is a hypothesis on the pair $(\psi,n_0)$, not a strengthening of
@@ -354,7 +367,8 @@ martingale difference; and no convention stated in the source removes the
 difference between the two ranges. The one-site chain
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_interaction}) with a
 weakened leftmost interaction satisfies all three conditions with constants
-uniform in $N$ and violates the printed bound by the factor $\delta(l+1)$.
+uniform in $N$, and for any $\delta<1/(l+1)$ it violates the printed bound by
+the factor $\delta(l+1)$.
 
 The correct statement adds
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}), the vanishing of

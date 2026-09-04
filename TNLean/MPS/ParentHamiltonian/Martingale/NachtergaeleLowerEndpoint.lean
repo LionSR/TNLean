@@ -25,8 +25,11 @@ proof at lines 1195--1259 resolves \(\psi\) over the whole range
 This file shows that the printed conclusion does not follow from the printed
 hypotheses. `FrustrationFree.UnrestrictedNachtergaeleEstimate` transcribes
 Theorem 2.1(i) with each condition imposed exactly on the source range it
-carries -- C1 on \(l\leq n<N\) after the reindexing of its window sum, C2 and
-C3 on \(n_0\leq n<N\) -- and the conclusion on \(\lVert\psi\rVert^2\), and
+carries -- C1 on \(l\leq n<N\) after the reindexing of its window sum, at the
+volumes \(\Lambda_{n_0}\) and \(\Lambda_N\) at which the source asserts it,
+and C2 and C3 on \(n_0\leq n<N\) -- together with the source's ordering
+\(l\leq n_0\) of the onset, the nontriviality of every ground space that C2
+requires, and the conclusion on \(\lVert\psi\rVert^2\); then
 `FrustrationFree.not_unrestrictedNachtergaeleEstimate` refutes it in every
 dimension \(k+2\).
 
@@ -42,9 +45,14 @@ because the weakened bond at the left end is inside
 \(\psi=\lvert10\cdots0\rangle\) is orthogonal to \(\mathcal G_{\Lambda_N}\)
 and satisfies \(\langle\psi\mid H_{\Lambda_N}\psi\rangle=\frac12
 \lVert\psi\rVert^2\), which is below the printed bound
-\(\frac{\gamma_1}{d_1}\lVert\psi\rVert^2=\lVert\psi\rVert^2\). Restricting to
-the span of \(\lvert0^m10^{N-m-1}\rangle\), an invariant subspace of every
-operator involved, produces the coordinate model below.
+\(\frac{\gamma_1}{d_1}\lVert\psi\rVert^2=\lVert\psi\rVert^2\).
+
+The span of the vacuum \(\lvert0^N\rangle\) together with the single
+excitations \(\lvert0^m10^{N-m-1}\rangle\) is invariant under every operator
+involved, and restricting to it produces the coordinate model below on a space
+of dimension \(N+1\). Keeping the vacuum coordinate keeps every ground space
+\(\mathcal G_{\Lambda_n}=\ker H_{\Lambda_n}\) of the chain nontrivial, as C2
+requires, and in particular \(\mathcal G_{\Lambda_N}\) is the line it spans.
 
 **Local fix (lower endpoint of Theorem 2.1(i)):** The printed statement is
 repaired by requiring the martingale differences below the C2--C3 onset to
@@ -68,25 +76,32 @@ transcribed in the finite-filtration notation of its proof at lines
 range it carries and the conclusion on \(\lVert v\rVert^2\).
 
 Condition C1 at lines 1030--1035 sums from the window length, so at window
-\(l+1\) it reads
-\(0\leq\sum_{n=l+1}^{N}H_{\Lambda_n\setminus\Lambda_{n-l-1}}
-\leq d_{l+1}H_{\Lambda_N}\); reindexing to the summand
-\(H_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\) puts it on \(l\leq n<N\).
+\(l+1\) and volume \(\Lambda_M\) it reads
+\(0\leq\sum_{n=l+1}^{M}H_{\Lambda_n\setminus\Lambda_{n-l-1}}
+\leq d_{l+1}H_{\Lambda_M}\); reindexing to the summand
+\(H_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\) puts it on \(l\leq n<M\). It is
+assumed here at the two volumes the source makes available and the printed
+proof uses, namely \(M=N\) in full and \(M=n_0\) in its nonnegativity clause.
 Conditions C2 and C3 at lines 1043--1058 and 1083--1094 are imposed from the
-onset index \(n_0\) onwards, hence on \(n_0\leq n<N\).
+onset index \(n_0=\max\{l,n_l,n_{l+1}-1\}\) onwards, hence on \(n_0\leq n<N\),
+and that onset is at least \(l\). Condition C2 also asks that each ground
+space \(\mathcal G_\Lambda=\ker H_\Lambda\) be nontrivial, which is the
+nonvanishing of the corresponding projection.
 
 This is the hypothesis list of
 `NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_threshold`,
-with C1 widened from the C2--C3 range to the source range of C1, together
-with the printed conclusion in place of the estimate on the martingale mass
-above the threshold. It is refuted by
+with C1 restated on its own source range and the nontriviality clause of C2
+adjoined, together with the printed conclusion in place of the estimate on the
+martingale mass above the threshold. It is refuted by
 `not_unrestrictedNachtergaeleEstimate`. -/
 def UnrestrictedNachtergaeleEstimate (E : Type*) [NormedAddCommGroup E]
     [InnerProductSpace ℂ E] [FiniteDimensional ℂ E] : Prop :=
   ∀ (G : NestedGroundProjections (E := E)) (Q localHamiltonian : ℕ → E →ₗ[ℂ] E)
     (H : E →ₗ[ℂ] E) (N n₀ l : ℕ) (v : E) (γ d ε : ℝ),
-    n₀ ≤ N →
+    l ≤ n₀ → n₀ ≤ N →
     G.projection 0 = LinearMap.id →
+    (∀ n ≤ N, G.projection n ≠ 0) →
+    (∀ n ∈ Finset.Ico n₀ N, Q n ≠ 0) →
     v ∈ (LinearMap.range (G.projection N))ᗮ →
     0 < γ → 0 < d → 0 ≤ ε → ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) →
     (∀ n ∈ Finset.Ico n₀ N, (Q n).IsSymmetricProjection) →
@@ -97,6 +112,7 @@ def UnrestrictedNachtergaeleEstimate (E : Type*) [NormedAddCommGroup E]
       0 ≤ ∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n x, x⟫_ℂ).re ∧
       (∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
         d * (⟪H x, x⟫_ℂ).re) →
+    (∀ x, 0 ≤ ∑ n ∈ Finset.Ico l n₀, (⟪localHamiltonian n x, x⟫_ℂ).re) →
     (∀ n ∈ Finset.Ico n₀ N, ∀ x,
       γ * ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) x‖ ^ 2 ≤
         (⟪localHamiltonian n x, x⟫_ℂ).re) →
@@ -151,6 +167,15 @@ private theorem diagonal_zero (k : ℕ) :
   ext x i
   simp
 
+private theorem diagonal_ne_zero (k : ℕ) (f : Fin k → ℝ) (i : Fin k)
+    (hf : f i ≠ 0) : diagonal k f ≠ 0 := by
+  intro hzero
+  refine hf ?_
+  have hi : diagonal k f (EuclideanSpace.single i (1 : ℂ)) i = 0 := by
+    rw [hzero]
+    simp
+  simpa using hi
+
 private theorem diagonal_isSymmetric (k : ℕ) (f : Fin k → ℝ) :
     (diagonal k f).IsSymmetric := by
   intro x y
@@ -187,19 +212,22 @@ private theorem norm_sq_diagonal (k : ℕ) (f : Fin k → ℝ)
 /-! ### The refuting model
 
 The weights below are the restrictions of the spin-chain operators of the
-module docstring to the span of the single-excitation vectors. Coordinate
-\(i\) carries the excitation at site \(i+1\); the weakened left bond appears
-as the coefficient \(1/2\) at coordinate \(0\). -/
+module docstring to the span of the vacuum and the single-excitation vectors,
+for the chain of \(N=k+1\) sites. Coordinate \(i<k+1\) carries the excitation
+at site \(i+1\), and the last coordinate \(k+1\) carries the vacuum
+\(\lvert0^N\rangle\); the weakened left bond appears as the coefficient
+\(1/2\) at coordinate \(0\). -/
 
-/-- The ground-space weight of \(G_{\Lambda_n}\): coordinate \(i\) survives
-exactly when the excitation sits outside \(\Lambda_n\). -/
+/-- The ground-space weight of \(G_{\Lambda_n}\): a coordinate survives
+exactly when its excitation sits outside \(\Lambda_n\), and the vacuum
+coordinate survives at every level \(n\leq k+1\). -/
 private noncomputable def groundWeight (k n : ℕ) : Fin (k + 2) → ℝ :=
   fun i ↦ if n ≤ (i : ℕ) then 1 else 0
 
-/-- The one-site energy: \(1/2\) at the weakened left bond and \(1\)
-elsewhere. -/
+/-- The one-site energy: \(1/2\) at the weakened left bond, \(1\) at the
+remaining excitations, and \(0\) at the vacuum coordinate. -/
 private noncomputable def siteWeight (k : ℕ) : Fin (k + 2) → ℝ :=
-  fun i ↦ if (i : ℕ) = 0 then 1 / 2 else 1
+  fun i ↦ if (i : ℕ) = 0 then 1 / 2 else if (i : ℕ) = k + 1 then 0 else 1
 
 /-- The weight of the local Hamiltonian
 \(H_{\Lambda_{n+1}\setminus\Lambda_n}\). -/
@@ -213,6 +241,25 @@ private noncomputable def excitationWeight (k n : ℕ) : Fin (k + 2) → ℝ :=
 /-- The weight of the martingale difference \(E_n\). -/
 private noncomputable def differenceWeight (k n : ℕ) : Fin (k + 2) → ℝ :=
   fun i ↦ if (i : ℕ) = n then 1 else 0
+
+private theorem siteWeight_nonneg (k : ℕ) (i : Fin (k + 2)) :
+    0 ≤ siteWeight k i := by
+  simp only [siteWeight]
+  split_ifs <;> norm_num
+
+private theorem localWeight_nonneg (k n : ℕ) (i : Fin (k + 2)) :
+    0 ≤ localWeight k n i := by
+  simp only [localWeight]
+  split_ifs with h
+  · exact siteWeight_nonneg k i
+  · exact le_rfl
+
+private theorem inner_localWeight_nonneg (k n : ℕ)
+    (x : EuclideanSpace ℂ (Fin (k + 2))) :
+    0 ≤ (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re := by
+  rw [inner_diagonal_re]
+  exact Finset.sum_nonneg fun i _ ↦
+    mul_nonneg (localWeight_nonneg k n i) (sq_nonneg _)
 
 private theorem groundWeight_mul_self (k n : ℕ) (i : Fin (k + 2)) :
     groundWeight k n i * groundWeight k n i = groundWeight k n i := by
@@ -283,16 +330,19 @@ is false as printed: with each of C1, C2, and C3 imposed on the source range
 it carries at lines 1030--1094, the printed conclusion fails in every
 dimension \(k+2\).
 
-The witness is described in the module docstring: a chain of one-site
-interactions whose leftmost term is halved. All three conditions hold with
+The witness is described in the module docstring: the chain of \(N=k+1\)
+one-site interactions whose leftmost term is halved, restricted to the span of
+its vacuum and its single excitations. All three conditions hold with
 \(l=0\), \(n_0=1\), \(\gamma_1=1\), \(d_1=1\), and \(\epsilon_0=0\), so the
 printed bound would read
 \(\langle\psi\mid H_{\Lambda_N}\psi\rangle\geq\lVert\psi\rVert^2\), while the
 single-excitation vector at the weakened bond has energy
 \(\frac12\lVert\psi\rVert^2\). Condition C1 is supplied on its own range
-\(0\leq n<N\), where the local terms sum to \(H_{\Lambda_N}\) exactly; the
-index \(n=0\) is excluded only from C2 and C3, and the printed proof
-estimates its martingale difference all the same. -/
+\(0\leq n<N\), where the local terms sum to \(H_{\Lambda_N}\) exactly, and at
+the volume \(\Lambda_{n_0}\) as well; every ground space is the nonzero span
+of the vacuum, so the nontriviality clause of C2 holds too. The index \(n=0\)
+is excluded only from C2 and C3, and the printed proof estimates its
+martingale difference all the same. -/
 theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     ¬ UnrestrictedNachtergaeleEstimate (EuclideanSpace ℂ (Fin (k + 2))) := by
   intro hsource
@@ -302,18 +352,29 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     rw [chain_projection, ← diagonal_one (k + 2)]
     refine diagonal_congr _ fun i ↦ ?_
     simp [groundWeight]
-  have hfinal : (chain k).projection (k + 2) = 0 := by
-    rw [chain_projection, ← diagonal_zero (k + 2)]
-    refine diagonal_congr _ fun i ↦ ?_
-    have hi : ¬ k + 2 ≤ (i : ℕ) := not_le.mpr i.isLt
-    simp only [groundWeight, hi, ite_false]
-  have hv : defect k ∈ (LinearMap.range ((chain k).projection (k + 2)))ᗮ := by
-    rw [hfinal, LinearMap.range_zero, Submodule.bot_orthogonal_eq_top]
-    exact Submodule.mem_top
-  have hQ : ∀ n ∈ Finset.Ico 1 (k + 2),
+  have hgroundne : ∀ n ≤ k + 1, (chain k).projection n ≠ 0 := by
+    intro n hn
+    rw [chain_projection]
+    refine diagonal_ne_zero _ _ (⟨k + 1, by omega⟩ : Fin (k + 2)) ?_
+    simp [groundWeight, hn]
+  have hQne : ∀ n ∈ Finset.Ico 1 (k + 1),
+      diagonal (k + 2) (excitationWeight k n) ≠ 0 := by
+    intro n hn
+    have hn2 : n < k + 1 := (Finset.mem_Ico.mp hn).2
+    have hne : (k + 1 : ℕ) ≠ n := by omega
+    exact diagonal_ne_zero _ _ (⟨k + 1, by omega⟩ : Fin (k + 2))
+      (by simp [excitationWeight, hne])
+  have hv : defect k ∈ (LinearMap.range ((chain k).projection (k + 1)))ᗮ := by
+    rw [Submodule.mem_orthogonal]
+    intro u hu
+    obtain ⟨x, rfl⟩ := LinearMap.mem_range.mp hu
+    have hw : groundWeight k (k + 1) (0 : Fin (k + 2)) = 0 := by
+      simp [groundWeight]
+    simp [defect, chain_projection, EuclideanSpace.inner_single_right, hw]
+  have hQ : ∀ n ∈ Finset.Ico 1 (k + 1),
       (diagonal (k + 2) (excitationWeight k n)).IsSymmetricProjection :=
     fun n _ ↦ diagonal_isSymmetricProjection _ _ (excitationWeight_mul_self k n)
-  have hcomm : ∀ n ∈ Finset.Ico 1 (k + 2), ∀ m, m < n - 0 ∨ n < m →
+  have hcomm : ∀ n ∈ Finset.Ico 1 (k + 1), ∀ m, m < n - 0 ∨ n < m →
       ((chain k).martingaleDifference m).comp
           (diagonal (k + 2) (excitationWeight k n)) =
         (diagonal (k + 2) (excitationWeight k n)).comp
@@ -322,48 +383,51 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     rw [chain_martingaleDifference, diagonal_comp, diagonal_comp]
     exact diagonal_congr _ fun i ↦ mul_comm _ _
   have hlocal : ∀ (x : EuclideanSpace ℂ (Fin (k + 2))),
-      ∑ n ∈ Finset.Ico 0 (k + 2),
+      ∑ n ∈ Finset.Ico 0 (k + 1),
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re =
         (⟪diagonal (k + 2) (siteWeight k) x, x⟫_ℂ).re := by
     intro x
     have hswap :
-        ∑ n ∈ Finset.Ico 0 (k + 2), ∑ i, localWeight k n i * ‖x i‖ ^ 2 =
-          ∑ i, ∑ n ∈ Finset.Ico 0 (k + 2), localWeight k n i * ‖x i‖ ^ 2 :=
+        ∑ n ∈ Finset.Ico 0 (k + 1), ∑ i, localWeight k n i * ‖x i‖ ^ 2 =
+          ∑ i, ∑ n ∈ Finset.Ico 0 (k + 1), localWeight k n i * ‖x i‖ ^ 2 :=
       Finset.sum_comm
     calc
-      ∑ n ∈ Finset.Ico 0 (k + 2),
+      ∑ n ∈ Finset.Ico 0 (k + 1),
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re =
-          ∑ n ∈ Finset.Ico 0 (k + 2), ∑ i, localWeight k n i * ‖x i‖ ^ 2 :=
+          ∑ n ∈ Finset.Ico 0 (k + 1), ∑ i, localWeight k n i * ‖x i‖ ^ 2 :=
         Finset.sum_congr rfl fun n _ ↦ inner_diagonal_re _ _ x
-      _ = ∑ i, ∑ n ∈ Finset.Ico 0 (k + 2), localWeight k n i * ‖x i‖ ^ 2 := hswap
+      _ = ∑ i, ∑ n ∈ Finset.Ico 0 (k + 1), localWeight k n i * ‖x i‖ ^ 2 := hswap
       _ = ∑ i : Fin (k + 2), siteWeight k i * ‖x i‖ ^ 2 := by
         refine Finset.sum_congr rfl fun i _ ↦ ?_
         rw [← Finset.sum_mul]
         congr 1
-        simp only [localWeight, Finset.sum_ite_eq, Finset.mem_Ico, i.isLt,
-          Nat.zero_le, and_self, ite_true]
+        rw [← Finset.range_eq_Ico]
+        have hi : (i : ℕ) < k + 2 := i.isLt
+        simp only [localWeight, Finset.sum_ite_eq, Finset.mem_range, siteWeight]
+        split_ifs <;> first | rfl | (exfalso; omega)
       _ = (⟪diagonal (k + 2) (siteWeight k) x, x⟫_ℂ).re :=
         (inner_diagonal_re _ _ x).symm
   have hC1 : ∀ (x : EuclideanSpace ℂ (Fin (k + 2))),
-      0 ≤ ∑ n ∈ Finset.Ico 0 (k + 2),
+      0 ≤ ∑ n ∈ Finset.Ico 0 (k + 1),
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re ∧
-      (∑ n ∈ Finset.Ico 0 (k + 2),
+      (∑ n ∈ Finset.Ico 0 (k + 1),
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re) ≤
         1 * (⟪diagonal (k + 2) (siteWeight k) x, x⟫_ℂ).re := by
     intro x
-    rw [hlocal x, one_mul, inner_diagonal_re]
-    refine ⟨Finset.sum_nonneg fun i _ ↦ ?_, le_rfl⟩
-    have : 0 ≤ siteWeight k i := by
-      simp only [siteWeight]
-      split_ifs <;> norm_num
-    positivity
-  have hC2 : ∀ n ∈ Finset.Ico 1 (k + 2), ∀ x : EuclideanSpace ℂ (Fin (k + 2)),
+    refine ⟨Finset.sum_nonneg fun n _ ↦ inner_localWeight_nonneg k n x, ?_⟩
+    exact le_of_eq (by rw [hlocal x, one_mul])
+  have hC1below : ∀ (x : EuclideanSpace ℂ (Fin (k + 2))),
+      0 ≤ ∑ n ∈ Finset.Ico 0 1,
+          (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re :=
+    fun x ↦ Finset.sum_nonneg fun n _ ↦ inner_localWeight_nonneg k n x
+  have hC2 : ∀ n ∈ Finset.Ico 1 (k + 1), ∀ x : EuclideanSpace ℂ (Fin (k + 2)),
       (1 : ℝ) * ‖((LinearMap.id :
             EuclideanSpace ℂ (Fin (k + 2)) →ₗ[ℂ] EuclideanSpace ℂ (Fin (k + 2))) -
           diagonal (k + 2) (excitationWeight k n)) x‖ ^ 2 ≤
         (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re := by
     intro n hn x
     have hn1 : 1 ≤ n := (Finset.mem_Ico.mp hn).1
+    have hn2 : n < k + 1 := (Finset.mem_Ico.mp hn).2
     have hid :
         (LinearMap.id : EuclideanSpace ℂ (Fin (k + 2)) →ₗ[ℂ]
               EuclideanSpace ℂ (Fin (k + 2))) -
@@ -378,7 +442,7 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     refine mul_le_mul_of_nonneg_right ?_ (sq_nonneg _)
     simp only [differenceWeight, localWeight, siteWeight]
     split_ifs <;> first | (exfalso; omega) | norm_num
-  have hC3 : ∀ n ∈ Finset.Ico 1 (k + 2),
+  have hC3 : ∀ n ∈ Finset.Ico 1 (k + 1),
       ‖(diagonal (k + 2) (excitationWeight k n)).toContinuousLinearMap.comp
           ((chain k).martingaleDifference n).toContinuousLinearMap‖ ≤ 0 := by
     intro n _
@@ -402,9 +466,9 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
   have hmain := hsource (chain k)
     (fun n ↦ diagonal (k + 2) (excitationWeight k n))
     (fun n ↦ diagonal (k + 2) (localWeight k n))
-    (diagonal (k + 2) (siteWeight k)) (k + 2) 1 0 (defect k) 1 1 0
-    (by omega) hzero hv one_pos one_pos le_rfl (by rw [hsqrt]; norm_num)
-    hQ hcomm hC1 hC2 hC3
+    (diagonal (k + 2) (siteWeight k)) (k + 1) 1 0 (defect k) 1 1 0
+    (by omega) (by omega) hzero hgroundne hQne hv one_pos one_pos le_rfl
+    (by rw [hsqrt]; norm_num) hQ hcomm hC1 hC1below hC2 hC3
   rw [hsqrt, norm_sq_defect, inner_defect] at hmain
   norm_num at hmain
 

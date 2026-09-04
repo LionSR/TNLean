@@ -29,17 +29,18 @@ martingale mass above the threshold, together with an explicit upper-bound
 correction carried by the \(l\) differences immediately below it.
 
 `energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero`
-keeps those source ranges and adds the vanishing of the martingale differences
-below \(n_0\), which is the minimal repair of the printed statement; without it
-the printed statement is false, by
+imposes each of C1, C2, and C3 on the source range it carries, namely C1 on
+\(l\leq n<N\) and C2 and C3 on \(n_0\leq n<N\), and adds the vanishing of the
+martingale differences below \(n_0\), which is the minimal repair of the
+printed statement; without it the printed statement is false, by
 `FrustrationFree.not_unrestrictedNachtergaeleEstimate`.
 
 **Scope restriction (full finite range):**
 `energy_lower_bound_of_nachtergaele_c1_c3_full_range` and
-`norm_lower_bound_of_nachtergaele_c1_c3_full_range` are the case \(n_0=0\),
-where that correction is empty and the added vanishing is vacuous. They assume
-the three estimates on the entire finite range, which is stronger than the
-source's lower-threshold hypotheses. This extra hypothesis is recorded in
+`norm_lower_bound_of_nachtergaele_c1_c3_full_range` are the case \(n_0=0\) of
+the threshold estimate, where that correction is empty. They assume the three
+estimates on the entire finite range, which is stronger than the source's
+lower-threshold hypotheses. This extra hypothesis is recorded in
 `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. Thus they are a full-range
 version with the source coefficient, not a formalization of the unrestricted
 source theorem.
@@ -509,11 +510,22 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_threshold
       field_simp [hδ.ne', hγ.ne', hd.ne']
 
 /-- Nachtergaele's Theorem 2.1(i) (arXiv:cond-mat/9410110, lines 1119--1130)
-with its conditions C1, C2, and C3 on the source range \(n_0\leq n<N\) and the
-printed conclusion
+with each of its conditions C1, C2, and C3 on the source range that condition
+carries, and the printed conclusion
 \(\frac{\gamma_{l+1}}{d_{l+1}}(1-\epsilon_l\sqrt{l+1})^2\lVert\psi\rVert^2\),
 under the added hypothesis that every martingale difference below \(n_0\)
 annihilates \(\psi\).
+
+Condition C1 at lines 1030--1041 sums from the window length and is assumed at
+every volume, so at window \(l+1\) and volume \(\Lambda_M\) its reindexed form
+runs over \(l\leq n<M\). It enters here twice: at \(M=N\) through `hC1`, and at
+\(M=n_0\) through the nonnegativity clause `hC1below`. Conditions C2 and C3 at
+lines 1043--1058 and 1083--1094 are imposed from the onset index \(n_0\)
+onwards. The source's onset is
+\(n_0=\max\{l,n_l,n_{l+1}-1\}\), whence `hl`. The C1 hypothesis of
+`energy_lower_bound_of_nachtergaele_c1_c3_threshold` on \(n_0\leq n<N\) is
+recovered from these: its upper bound by subtracting the nonnegative sum below
+\(n_0\), and its nonnegativity clause termwise from C2.
 
 **Local fix (lower endpoint of Theorem 2.1(i)):** That hypothesis is the
 minimal repair of the printed statement. It is what the threshold estimate
@@ -532,7 +544,7 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_e
     [FiniteDimensional ℂ E]
     (G : NestedGroundProjections (E := E)) (Q : ℕ → E →ₗ[ℂ] E)
     (localHamiltonian : ℕ → E →ₗ[ℂ] E) (H : E →ₗ[ℂ] E)
-    (N n₀ l : ℕ) (v : E) (hn₀ : n₀ ≤ N)
+    (N n₀ l : ℕ) (v : E) (hl : l ≤ n₀) (hn₀ : n₀ ≤ N)
     (hzero : G.projection 0 = LinearMap.id)
     (hv : v ∈ (LinearMap.range (G.projection N))ᗮ)
     (hbelow : ∀ n < n₀, G.martingaleDifference n v = 0)
@@ -544,11 +556,13 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_e
         (G.martingaleDifference m).comp (Q n) =
           (Q n).comp (G.martingaleDifference m))
     (hC1 : ∀ x,
-      0 ≤ ∑ n ∈ Finset.Ico n₀ N,
+      0 ≤ ∑ n ∈ Finset.Ico l N,
           (⟪localHamiltonian n x, x⟫_ℂ).re ∧
-      (∑ n ∈ Finset.Ico n₀ N,
+      (∑ n ∈ Finset.Ico l N,
           (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
         d * (⟪H x, x⟫_ℂ).re)
+    (hC1below : ∀ x,
+      0 ≤ ∑ n ∈ Finset.Ico l n₀, (⟪localHamiltonian n x, x⟫_ℂ).re)
     (hC2 : ∀ n ∈ Finset.Ico n₀ N, ∀ x,
       γ * ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) x‖ ^ 2 ≤
         (⟪localHamiltonian n x, x⟫_ℂ).re)
@@ -557,6 +571,22 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_e
           (G.martingaleDifference n).toContinuousLinearMap‖ ≤ ε) :
     (γ / d) * (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 * ‖v‖ ^ 2 ≤
       (⟪H v, v⟫_ℂ).re := by
+  have hC1threshold : ∀ x,
+      0 ≤ ∑ n ∈ Finset.Ico n₀ N,
+          (⟪localHamiltonian n x, x⟫_ℂ).re ∧
+      (∑ n ∈ Finset.Ico n₀ N,
+          (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
+        d * (⟪H x, x⟫_ℂ).re := by
+    intro x
+    have hsplit :
+        (∑ n ∈ Finset.Ico l n₀, (⟪localHamiltonian n x, x⟫_ℂ).re) +
+            ∑ n ∈ Finset.Ico n₀ N, (⟪localHamiltonian n x, x⟫_ℂ).re =
+          ∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n x, x⟫_ℂ).re :=
+      Finset.sum_Ico_consecutive _ hl hn₀
+    have hupper := (hC1 x).2
+    have hprefix := hC1below x
+    refine ⟨Finset.sum_nonneg fun n hn ↦ ?_, by linarith⟩
+    exact le_trans (mul_nonneg hγ.le (sq_nonneg _)) (hC2 n hn x)
   have hcorrection :
       ∑ m ∈ Finset.Ico (n₀ - l) n₀, ‖G.martingaleDifference m v‖ ^ 2 = 0 :=
     Finset.sum_eq_zero fun m hm ↦ by
@@ -577,7 +607,8 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_e
     rw [G.norm_sq_eq_sum_martingaleDifference_of_mem_orthogonal N v hzero hv,
       ← hsplit, hprefix, zero_add]
   have h := energy_lower_bound_of_nachtergaele_c1_c3_threshold G Q
-    localHamiltonian H N n₀ l v hn₀ hzero hv hγ hd hε hεlt hQ hcomm hC1 hC2 hC3
+    localHamiltonian H N n₀ l v hn₀ hzero hv hγ hd hε hεlt hQ hcomm hC1threshold
+    hC2 hC3
   rw [hmass, hcorrection, mul_zero, add_zero] at h
   exact h
 
@@ -592,9 +623,10 @@ inequalities, and C3 is the source's literal operator-norm bound
 The finite sum runs over every index \(n=0,\ldots,N-1\), with only
 \(G_0=\mathbf 1\) needed for the martingale resolution. Thus C1, C2, and C3
 are assumed on that full finite range, which is stronger than the source's
-lower-threshold hypotheses. This is
-`energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero`
-at \(n_0=0\), where nothing lies below the threshold.
+lower-threshold hypotheses. This is the threshold estimate
+`energy_lower_bound_of_nachtergaele_c1_c3_threshold` at \(n_0=0\), where the
+window correction below the threshold is empty and the martingale mass above
+it is \(\lVert\psi\rVert^2\).
 The proof uses the upper inequality in C1; its nonnegativity clause is retained
 because it is part of the source's condition C1. -/
 theorem energy_lower_bound_of_nachtergaele_c1_c3_full_range
@@ -625,14 +657,20 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_full_range
           (G.martingaleDifference n).toContinuousLinearMap‖ ≤ ε) :
     (γ / d) * (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 * ‖v‖ ^ 2 ≤
       (⟪H v, v⟫_ℂ).re := by
-  refine energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero
-    G Q localHamiltonian H N 0 l v (Nat.zero_le N) hzero hv
-    (fun n hn ↦ absurd hn (Nat.not_lt_zero n)) hγ hd hε hεlt
+  have hnorm :
+      ∑ n ∈ Finset.Ico 0 N, ‖G.martingaleDifference n v‖ ^ 2 = ‖v‖ ^ 2 := by
+    rw [← Finset.range_eq_Ico]
+    exact (G.norm_sq_eq_sum_martingaleDifference_of_mem_orthogonal N v
+      hzero hv).symm
+  have h := energy_lower_bound_of_nachtergaele_c1_c3_threshold G Q
+    localHamiltonian H N 0 l v (Nat.zero_le N) hzero hv hγ hd hε hεlt
     (by simpa only [Finset.range_eq_Ico] using hQ)
     (by simpa only [Finset.range_eq_Ico] using hcomm)
     (by simpa only [Finset.range_eq_Ico] using hC1)
     (by simpa only [Finset.range_eq_Ico] using hC2)
     (by simpa only [Finset.range_eq_Ico] using hC3)
+  simpa only [Nat.zero_sub, Finset.Ico_self, Finset.sum_empty, mul_zero,
+    add_zero, hnorm] using h
 
 /-- Norm-gap form of the full-range C1--C3 estimate above. The ground-space
 identity identifies the last filtration range with the kernel of the positive
