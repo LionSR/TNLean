@@ -4645,18 +4645,26 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     \end{align}
     Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}
     proves the estimate for a primitive tensor with a positive-definite fixed
-    point, at range $L=l+1$ and for every $N\ge2m$, with no divisibility
-    restriction on the chain length.  The unrestricted statement still requires
-    the passage from that hypothesis to an arbitrary normal tensor.
+    point, at range $L=l+1$, with no divisibility restriction on the chain
+    length, but only for $N\ge2m$, where the Knabe volume $m$ satisfies
+    $m\ge l+1$ and is chosen large enough that $l^2<m\gamma_{\mathrm{open}}$.
+    Two steps therefore remain.  The chain lengths with $2(l+1)\le N<2m$ are
+    not covered by that theorem, so a finite-volume estimate on this finite
+    set of lengths, together with a common positive constant, is still needed.
+    The passage from a primitive tensor with a positive-definite fixed point
+    to an arbitrary normal tensor is also still needed.
 \end{theorem}
 
 \begin{proof}
     \notready
     \discussion{5926}
     \uses{thm:primitive_parent_hamiltonian_finite_range_knabe_gap, thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
-    The primitive case with a positive-definite fixed point is
+    The primitive case with a positive-definite fixed point, at the lengths
+    $N\ge2m$, is
     Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}.  It
-    remains to reduce an arbitrary normal tensor to that case while preserving
+    remains to bound the gap from below on the finitely many lengths
+    $2(l+1)\le N<2m$ and to take the minimum of the two constants, and then to
+    reduce an arbitrary normal tensor to the primitive case while preserving
     the ground-space complement and a uniform positive constant.
 \end{proof}
 

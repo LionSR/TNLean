@@ -14,6 +14,17 @@ Pérez-García, N. Schuch, and F. Verstraete, arXiv:1606.00608,
 
 **Repository snapshot:** `origin/main` at `522bc8c15`
 
+**Amendment (2026-09-04):** the illustrative gap theorem cited below was
+originally `MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul`,
+which bounded the gap on periodic lengths divisible by the chosen block length.
+That declaration was deleted together with its sparse aligned-sum engine
+`MPSTensor.blockTensor_parentHamiltonianES_conj_le`, and its replacement is
+`MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe`,
+which carries no divisibility restriction on the chain length.  The example
+below now names the replacement.  The deletion and its rationale are recorded
+in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.  No conclusion of this
+audit changes: neither declaration contains a Hamiltonian-level gauging map.
+
 ## Conclusion
 
 Lemma `lemma:modif` in arXiv:2502.20257 assumes exact local
@@ -295,10 +306,11 @@ canonical parent Hamiltonian attached to one supplied MPS tensor:
 There are also exact uniqueness and gap theorems, with their own hypotheses.
 For example, `MPSTensor.parentHamiltonian_unique_gs` assumes positive-length
 block injectivity, while
-`MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul` assumes a
-primitive MPS tensor with a positive-definite fixed point and concludes a gap
-for its canonical parent Hamiltonians at selected interaction ranges and
-system sizes.  None of these declarations contains a Hamiltonian-level gauging
+`MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe`
+assumes a primitive MPS tensor with a positive-definite fixed point and
+concludes a gap for its canonical parent Hamiltonian of the associated
+interaction range on every periodic chain at or beyond the associated length
+threshold.  None of these declarations contains a Hamiltonian-level gauging
 map or compares two gauging constructions.  They therefore cannot establish
 gap preservation or equality of the two ground spaces considered at line
 5196 of the target paper.

@@ -1921,16 +1921,28 @@ statement instead by rescaling to the increasing sequence of finite volumes
 $\tilde\Lambda_n=\Lambda_{ln}$ and applying part~(i) of its Theorem~2.1 with
 $l=1$, so the finite cyclic domination was a reconstruction rather than the
 printed route.  That theorem and its sparse-sum engine are no longer needed to
-obtain an all-length periodic gap, and both have been deleted.  The compatible
-open-chain estimate, cyclic active-block identity, and finite-range inequality
-give
+obtain an all-length periodic gap, and both have been deleted.  The removed
+declarations are
+\path{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul},
+which carried the divisible-length bound; its engine
+\path{MPSTensor.blockTensor_parentHamiltonianES_conj_le}, which carried the
+sparse aligned-sum domination; the pair of exact conjugation identities
+\path{MPSTensor.parentInteractionES_blockTensor_conj} and
+\path{MPSTensor.localTermES_blockTensor_conj_aligned}, which related the
+blocked parent interaction and the blocked range-two local terms to their
+original range-$2p$ counterparts at block-aligned starts; and the private
+helpers serving them.  The replacement for the first is
+\leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe},
+whose compatible open-chain estimate, cyclic active-block identity, and
+finite-range inequality give
 (\ref{eq:cpgsv21_martingale_overlap_open_knabe_periodic_gap}) for every
-$N\geq2m$, with no divisibility restriction.  Nothing survives from the deleted
-development.  The pair of exact conjugation identities relating the blocked
-parent interaction and the blocked range-two local terms to their original
-range-$2p$ counterparts at block-aligned starts was retained at first, but it
-had no consumer once the sparse-sum domination was gone, so it was deleted with
-the rest.  No periodic boundary coercivity, comparison of unequal kernels,
+$N\geq2m$, with no divisibility restriction on the chain length.  The two
+conjugation identities had no consumer once the sparse-sum domination was gone,
+so they needed no replacement and were deleted with the rest; nothing survives
+from that development.  The dated audit note
+\path{docs/audits/2026-08-29_fbc25_local_orthogonality_rg_scope.md} was amended
+in the same change so that it cites the surviving theorem rather than the
+removed one.  No periodic boundary coercivity, comparison of unequal kernels,
 periodic uniqueness argument, divisibility substitution, or replacement by a
 different cyclic tensor is used.
 
