@@ -454,7 +454,7 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_threshold
           norm_num
     · have hc₂ : (0 : ℝ) < ε / s := div_pos hεpos hs
       have hεc₂ : ε ^ 2 / (2 * (ε / s)) = ε * s / 2 := by
-        field_simp
+        field_simp [hεpos.ne', hs.ne']
       have hpoint : ∀ n ∈ Finset.Ico n₀ N,
           ‖G.martingaleDifference n v‖ ^ 2 ≤
             (1 / (2 * (1 - ε * s) * γ)) *
@@ -479,7 +479,7 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_threshold
         mul_le_mul_of_nonneg_left hC1' hinv
       have hcoef : ((ε / s) / 2) * ((l : ℝ) + 1) = ε * s / 2 := by
         rw [show ((l : ℝ) + 1) = s ^ 2 by rw [hsquare]; push_cast; ring]
-        field_simp
+        field_simp [hs.ne']
       have hwin :
           ((ε / s) / 2) *
               (∑ n ∈ Finset.Ico n₀ N,
@@ -500,7 +500,7 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_threshold
           ((1 / (2 * (1 - ε * s) * γ)) * (d * A) + (ε * s / 2) * S) :=
       mul_le_mul_of_nonneg_left key hmulpos.le
     _ = A + (γ / d) * ((1 - ε * s) * (ε * s)) * S := by
-      field_simp
+      field_simp [hδ.ne', hγ.ne', hd.ne']
 
 /-- Full-range form of the summation in Nachtergaele's Theorem 2.1(i), in the
 finite-filtration notation of its proof (arXiv:cond-mat/9410110, lines
