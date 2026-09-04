@@ -730,8 +730,7 @@ The conclusion asserts that the similarity is invertible. The source remark at
 lines 330--332 and 625 that in irreducible form II the similarity is unitary is
 a separate statement and is not asserted here.
 
-\section{Scope restriction: the periods of an irreducible-form block are
-    supplied}
+\section{The periods of an irreducible-form block: restriction eliminated}
 
 The source defines irreducible form at line 261 by two conditions on each
 block: its transfer map is an irreducible completely positive map, and its
@@ -742,35 +741,31 @@ for some $m_j$, and calls the block periodic of period $m_j$ on that basis.
 Theorem~3.8 accordingly mentions $m_j$ in its conclusion, not among its
 hypotheses.
 
-The formal equal-case theorem\footnote{Formal declaration:
-\leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}.}
-instead receives the periods as input, together with witnesses that each block
-is spectrally periodic of the given period.\footnote{Formal declaration:
-\leanid{MPSTensor.IsSpectrallyPeriodic}.} That predicate carries four fields,
-of which the source's definition supplies only the first two; the remaining
-two, positivity of $m$ and the identification of the peripheral spectrum with
-the $m$-th roots of unity, are the derived content. A reader holding exactly
-the source's hypotheses therefore cannot instantiate the formal theorem, and
-the same applies to the proportional case, Theorem~3.4.\footnote{Formal
-declaration:
-\leanid{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}.}
+That derivation is now carried out.\footnote{Formal declaration:
+\leanid{MPSTensor.exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one}.}
+The spectral periodicity predicate\footnote{Formal declaration:
+\leanid{MPSTensor.IsSpectrallyPeriodic}.} carries four fields, of which the
+source's definition supplies the first two; the remaining two, positivity of
+$m$ and the identification of the peripheral spectrum with the $m$-th roots of
+unity, are produced from them.
 
-\subsection{Elimination plan}
-
-What is missing is one existence statement: for a family $A$ with irreducible
-transfer map of spectral radius one, there is an $m$ with
-$\operatorname{Spec}_{\mathrm{per}}(\E_A) = \{\mu : \mu^m = 1\}$ and $m>0$. The
-ingredients are present.
+\subsection{The route}
 
 \begin{enumerate}
-    \item The unitalization of Eq.~\emph{unital}, line 316, is already
-          formalized from exactly the source's two conditions, and it preserves
-          irreducibility and the peripheral spectrum.\footnote{Formal
-          declaration:
+    \item The unitalization of Eq.~\emph{unital}, line 316, is formalized from
+          exactly the source's two conditions, and it preserves irreducibility
+          and the peripheral spectrum.\footnote{Formal declaration:
           \leanid{MPSTensor.exists_tpGauge_of_irreducible_spectralRadius_one}.}
+          The gauged block is trace preserving, so its conjugate-transposed
+          Kraus family is unital.
+    \item That conjugate-transposed family has the trace adjoint of the
+          transfer map for its map, and the Perron fixed point of the transfer
+          map itself, positive definite because the gauged block is irreducible
+          of spectral radius one, is exactly the positive-definite adjoint
+          fixed point that the cyclic structure theorem asks for.
     \item The cyclic structure of the peripheral spectrum of a unital
           irreducible finite-Kraus map with a positive-definite adjoint fixed
-          point is available in the companion library, in the form
+          point comes from the companion library, in the form
           $\operatorname{Spec}_{\mathrm{per}} = \{\gamma^k : k<m\}$ with
           $\gamma$ a primitive $m$-th root of unity.\footnote{Formal
           declaration:
@@ -779,15 +774,25 @@ ingredients are present.
           note on Wolf Theorem 6.6.
     \item For a primitive $m$-th root $\gamma$ over $\C$ the two descriptions
           agree, $\{\gamma^k : k<m\} = \{\mu : \mu^m=1\}$.
+    \item Passing back from the adjoint orientation conjugates the peripheral
+          spectrum, and the set of $m$-th roots of unity is closed under
+          conjugation, so the two orientations give the same period. The
+          unitalizing gauge is a similarity and changes nothing.
 \end{enumerate}
 
-The assembly has to pass between the unital and trace-preserving orientations,
-which exchange a Kraus family with its adjoint family and conjugate the
-peripheral spectrum; the same conjugation is already carried out for the
-transported statement in \path{SelfOverlapSetup.lean}. Once the existence
-statement is available, both the proportional and the equal case can be
-restated over the source's two conditions with the periods produced rather than
-supplied.
+\subsection{Consequence for the two fundamental theorems}
+
+Both fundamental theorems are consequently available over the source's two
+conditions on the blocks, with the periods produced in the conclusion:
+Theorem~3.4 in the proportional case\footnote{Formal declaration:
+\leanid{MPSTensor.fundamentalTheorem_periodic_proportional_irreducibleForm}.}
+and Theorem~3.8 in the equal case.\footnote{Formal declaration:
+\leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_derivedPeriods}.} The
+period-receiving statements\footnote{Formal declarations:
+\leanid{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
+and
+\leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}.}
+remain as the working forms through which the two are proved.
 
 \section{Independence of the non-zero periodic vectors}
 

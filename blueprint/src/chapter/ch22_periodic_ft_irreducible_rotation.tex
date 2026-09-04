@@ -14,6 +14,36 @@
     \cite[lines~248--261 and 313--332]{DeLasCuevas2017Irreducible}.
 \end{definition}
 
+\begin{theorem}[The period of an irreducible-form block]
+    \label{thm:spectral_periodic_period_existence}
+    \lean{MPSTensor.exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one}
+    \leanok
+    \uses{def:spectral_periodic_tensor}
+    Let $A$ be an MPS tensor whose transfer map is irreducible with spectral
+    radius one; these are the two conditions imposed on a block of the
+    irreducible form of \cite[lines~248--261]{DeLasCuevas2017Irreducible}. Then
+    there is a positive integer $m$ for which $A$ is spectrally $m$-periodic,
+    that is, for which the eigenvalues of $\E_A$ of modulus one are exactly the
+    $m$-th roots of unity. This is the derived periodicity of
+    \cite[lines~257--258]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $\sigma$ be the positive definite fixed point of $\E_A^*$ and pass to
+    the similar tensor $\sigma^{1/2}A\sigma^{-1/2}$ of
+    \cite[eq.~\emph{unital}, line~316]{DeLasCuevas2017Irreducible}, whose map is
+    trace preserving and still irreducible of spectral radius one. Its adjoint
+    map is unital, and the positive definite Perron fixed point of the map
+    itself is the positive definite fixed point required of the adjoint of that
+    unital map. The eigenvalues of modulus one of a unital irreducible map
+    possessing such a fixed point form a finite cyclic group
+    \cite[Theorem~6.6]{Wolf2012Quantum}, hence are the powers of a primitive
+    $m$-th root of unity for some positive $m$; those powers are exactly the
+    $m$-th roots of unity. Passing back from the adjoint conjugates the
+    peripheral spectrum, which leaves that set of roots of unity fixed, and the
+    similarity leaves it unchanged as well.
+\end{proof}
+
 \begin{theorem}[A spectrally periodic tensor has positive bond dimension]
     \label{thm:spectral_periodic_bond_dimension_pos}
     \lean{MPSTensor.IsSpectrallyPeriodic.bondDim_ne_zero}
