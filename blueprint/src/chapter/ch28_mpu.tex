@@ -5449,8 +5449,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{ThmFund1, def:mpu_source_uv}
     Let $\mathcal U$ be a simple tensor under the source's standing
     canonical-form-II convention. Its standard form is the depth-two form of
-    the two-site block $\mathcal U_2$ determined by the source unitaries $u$ and
-    $v$. This is the unrestricted definition of
+    the two-site block $\mathcal U_2$ determined by the source unitaries
+    \begin{align}
+        u & \colon\mathbb C^d\otimes\mathbb C^d
+        \longrightarrow\mathbb C^\ell\otimes\mathbb C^r, \\
+        v & \colon\mathbb C^r\otimes\mathbb C^\ell
+        \longrightarrow\mathbb C^d\otimes\mathbb C^d.
+    \end{align}
+    On four consecutive blocked legs its unitary is
+    \begin{align}
+        U & =v_{23}v_{41}u_{12}u_{34}.
+    \end{align}
+    This is the unrestricted definition of
     \cite[Definition~III.9]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 603--622.
 \end{definition}
@@ -5486,10 +5496,22 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notready
     \discussion{6020}
     \uses{SF}
-    Given two simple tensors $\mathcal U$ and $\mathcal V$ with standard forms,
-    they generate the same MPU for every $N$ if and only if there are unitaries
-    $x$, $y$, and $z$ relating the two standard forms by the local gauge equations
-    of \cite[Eqns.~(SFuu) and (SFvv)]{Cirac2017MPU}. This is the unrestricted
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors written in standard
+    form, with source unitaries $(u_{\mathcal U},v_{\mathcal U})$ and
+    $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU for every
+    $N$,
+    \begin{align}
+        U^{(N)} & =V^{(N)},
+    \end{align}
+    if and only if their standard forms are related by the local unitary gauges
+    of \cite[Eqns.~(SFuu) and (SFvv)]{Cirac2017MPU}: there are unitaries $x$,
+    $y$, and $z$ on the three corresponding source and canonical-form-II legs.
+    In particular, the source unitaries obey the local relation
+    \begin{align}
+        u_{\mathcal V} & =(x\otimes y)u_{\mathcal U},
+    \end{align}
+    while the two canonical-form-II tensors are related on their virtual leg by
+    $z$ and on their source legs by $x$ and $y$. This is the unrestricted
     statement of the source's Fundamental Theorem of MPU.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
@@ -5650,6 +5672,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \operatorname{ind}(\mathcal U)
          & =\frac12(\log_2 r-\log_2\ell).
+    \end{align}
+    Since $r\ell=d^{2k}$, this is equivalently
+    \begin{align}
+        \operatorname{ind}(\mathcal U)
+         & =\log_2\frac{r}{d^k}
+        =-\log_2\frac{\ell}{d^k}.
     \end{align}
     This is the unrestricted definition of
     \cite[Definition~IV.1]{Cirac2017MPU}.
@@ -7089,6 +7117,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \overline u & =(x\otimes y)u,                 &
         \overline v & =v(y^\dagger\otimes x^\dagger).
     \end{align}
+    This is the unrestricted conjugation characterization in
+    \cite[Proposition~V.1]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1008--1039.
 \end{proposition}
 
@@ -7274,14 +7304,19 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \overline{u'} & =u', & \overline{v'} & =v',
     \end{align}
-    uniquely up to local orthogonal transformations. In Case II,
+    and the choice is unique up to local orthogonal transformations. In Case II,
     \begin{align}
         \overline{u'} & =(\Sigma_\ell\otimes\Sigma_r)u', &
         \overline{v'} & =v'(\Sigma_r\otimes\Sigma_\ell),
     \end{align}
-    uniquely up to local symplectic transformations, where
-    $\Sigma_x=\Id_{x/2}\otimes\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
-    Case II can occur only when $r$ and $\ell$ are even.
+    where
+    \begin{align}
+        \Sigma_x & =\Id_{x/2}\otimes Y,                    &
+        Y        & =\begin{pmatrix}0&1\\-1&0\end{pmatrix}.
+    \end{align}
+    The choice is unique up to local symplectic transformations $S_x$
+    satisfying $S_x^T\Sigma_xS_x=\Sigma_x$. Case II can occur only when $r$ and
+    $\ell$ are even.
     % Source lines: paper_v2.tex 1094--1163.
 \end{proposition}
 
@@ -7360,9 +7395,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{PropChiral}
     \notready
     \discussion{5714}
-    \uses{FundamentalMPU, SF}
+    \uses{FundamentalMPU, SF, def:index}
     Let an MPU be in standard form, with one-site physical space
-    $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
+    $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Time-reversal symmetry forces
+    $\operatorname{ind}(\mathcal U)=0$. The MPU satisfies
     $U^{(N)}=U^{(N)\dagger}$ for every even $N$ if and only if there is a
     unitary $x$ such that
     \begin{align}
@@ -7372,6 +7408,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source lines: paper_v2.tex 1201--1252.
 \end{proposition}
+
+\begin{proof}
+    \uses{FundamentalMPU, index-well-defined, def:index,
+        thm:mpu_physical_adjoint_source_ranks}
+    Under time reversal, the two-site block $\mathcal U_2$ and its
+    physical-adjoint comparison tensor $\mathcal U_2^\sharp$ generate the
+    same MPU. The fundamental theorem identifies their source spaces,
+    so their corresponding source-cut ranks agree. Physical adjunction exchanges
+    the two cuts by Theorem~\ref{thm:mpu_physical_adjoint_source_ranks}. Hence
+    \begin{align}
+        r(\mathcal U_2)
+         & =r(\mathcal U_2^\sharp)
+        =\ell(\mathcal U_2).
+    \end{align}
+    Definition~\ref{def:index} therefore gives
+    $\operatorname{ind}(\mathcal U_2)=0$, and blocking independence gives
+    $\operatorname{ind}(\mathcal U)=0$.
+
+    Apply the two gauge equations of the fundamental theorem to the standard
+    forms of $\mathcal U_2$ and $\mathcal U_2^\sharp$. Substituting the second
+    equation into the first gives
+    \begin{align}
+        x_{12}y_{12}\otimes y_{34}x_{34} & =\Id.
+    \end{align}
+    Therefore $y=\pm x^\dagger$, which yields the displayed local relation.
+    Conversely, contract that relation and its adjoint alternately around an
+    even periodic chain.
+    % Source lines: paper_v2.tex 1201--1252.
+\end{proof}
 
 \begin{proposition}[Admissible local characterization of time reversal]
     \label{prop:mpu_admissible_local_time_reversal}
@@ -7423,9 +7488,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{prop:local-char-transposition}
     \notready
     \discussion{5714}
-    \uses{FundamentalMPU, SF}
+    \uses{FundamentalMPU, SF, def:index}
     Let an MPU be in standard form, with one-site physical space
-    $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
+    $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Transposition symmetry forces
+    $\operatorname{ind}(\mathcal U)=0$. The MPU satisfies
     $U^{(N)}=U^{(N)T}$ for every even $N$ if and only if there are a unitary
     $x$ and a phase $e^{i\phi}$ such that
     \begin{align}
@@ -7435,6 +7501,33 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source lines: paper_v2.tex 1257--1288.
 \end{proposition}
+
+\begin{proof}
+    \uses{FundamentalMPU, index-well-defined, def:index,
+        def:mpu_source_matrix_one, def:mpu_source_matrix_two,
+        def:mpu_right_rank, def:mpu_left_rank}
+    Under transposition, the two-site block $\mathcal U_2$ and its transposed
+    comparison tensor $\mathcal U_2^{\mathsf T}$ generate the same MPU. The
+    fundamental theorem identifies their source spaces, so their corresponding
+    source-cut ranks agree. Swapping the physical input and output indices
+    transposes the first source matrix into the second and therefore exchanges
+    the two ranks. Hence
+    \begin{align}
+        r(\mathcal U_2)
+         & =r(\mathcal U_2^{\mathsf T})
+        =\ell(\mathcal U_2).
+    \end{align}
+    Thus $\operatorname{ind}(\mathcal U_2)=0$ by
+    Definition~\ref{def:index}, and blocking independence gives
+    $\operatorname{ind}(\mathcal U)=0$.
+
+    Apply the two gauge equations of the fundamental theorem to the standard
+    forms of $\mathcal U_2$ and $\mathcal U_2^{\mathsf T}$. Their compatibility
+    gives $y=e^{i\phi}x^T$ for some phase $e^{i\phi}$, which yields the
+    displayed local relation. Conversely, contract that relation around an
+    even periodic chain; the phases cancel pairwise.
+    % Source lines: paper_v2.tex 1257--1288.
+\end{proof}
 
 \begin{proposition}[Admissible local characterization of transposition]
     \label{prop:mpu_admissible_local_transposition}
@@ -7997,7 +8090,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notready
     \discussion{5714}
     \uses{PropChiral, lem:matrix_trace_swap_kronecker}
-    For a time-reversal-invariant MPU in standard form, the sign $\sigma$ is
+    For a time-reversal-invariant MPU in standard form, the sign $\sigma$ of
+    Proposition~\ref{PropChiral} is
     \begin{align}
         \sigma & =\frac1{d^2}\tr\!\left[\mathbb S_{12,34}
             v_{23}u_{12}u_{34}v_{23}\right],
@@ -8032,12 +8126,34 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notready
     \discussion{5714}
     \uses{eq:sigma-from-trace}
-    Under $u'=(x\otimes y)u$ and
-    $v'=v(y^\dagger\otimes x^\dagger)$, the trace formula in
-    Lemma~\ref{eq:sigma-from-trace} has the same value for $(u',v')$ as for
-    $(u,v)$. Thus $\sigma$ is independent of the standard-form gauge.
+    Under the hypotheses of Lemma~\ref{eq:sigma-from-trace}, let $x$ and $y$ be
+    unitaries and change the standard-form gauge by
+    \begin{align}
+        u' & =(x\otimes y)u,                 &
+        v' & =v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    Then the trace formula has the same value for $(u',v')$ as for $(u,v)$.
+    Consequently the sign $\sigma$ is independent of the standard-form gauge.
     % Source proof: paper_v2.tex 1624--1630.
 \end{lemma}
+
+\begin{proof}
+    \uses{eq:sigma-from-trace}
+    Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
+    $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
+    $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
+    Substitution into Lemma~\ref{eq:sigma-from-trace}, cancellation on the
+    middle legs, and
+    $\mathbb S_{12,34}x_1y_4=x_3y_2\mathbb S_{12,34}$ give
+    \begin{align}
+        \tr\!\left[\mathbb S_{12,34}v'_{23}u'_{12}u'_{34}v'_{23}\right]
+         & =\tr\!\left[x_3y_2\mathbb S_{12,34}
+        v_{23}u_{12}u_{34}v_{23}y_2^\dagger x_3^\dagger\right]           \\
+         & =\tr\!\left[\mathbb S_{12,34}v_{23}u_{12}u_{34}v_{23}\right].
+    \end{align}
+    The last equality follows from cyclicity of the trace and unitarity of
+    $x$ and $y$.
+\end{proof}
 
 \begin{lemma}[Admissible gauge invariance of the time-reversal sign]
     \label{lem:mpu_admissible_sigma_gauge_invariant}
@@ -8119,6 +8235,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source lines: paper_v2.tex 1633--1733.
 \end{proposition}
+
+\begin{proof}
+    \uses{lem:mpu_sigma_gauge_invariant, PropChiral, lem:mpu_blocking}
+    Gauge invariance permits the standard blocked representatives used in the
+    source proof. Choose
+    \begin{align}
+        u^{(2)} & =v_{23}u_{12}u_{34}, & v^{(2)} & =v_{45},
+    \end{align}
+    and put $\zeta=\sigma^{(2)}/\sigma^{(1)}$. The one- and two-site local
+    time-reversal relations give the unwinding identity
+    \begin{align}
+        \zeta\big[(\Id\otimes v\otimes\Id)(u\otimes x)\big]^\dagger
+         & =(\Id\otimes v\otimes\Id)(x^\dagger\otimes u).
+    \end{align}
+    Applying this identity successively through a block of length $k$ gives
+    \begin{align}
+        \sigma^{(k)}
+         & =\sigma^{(1)}\zeta^{k-1}.
+    \end{align}
+    Since each sign is $\pm1$, this equals $\sigma^{(1)}$ for odd $k$ and
+    $\sigma^{(2)}$ for even $k$.
+    % Source lines: paper_v2.tex 1657--1732.
+\end{proof}
 
 \begin{proposition}[Admissible blocking parity of the time-reversal sign]
     \label{prop:mpu_admissible_sigma_blocking_parity}
