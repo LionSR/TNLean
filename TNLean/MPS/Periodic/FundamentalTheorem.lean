@@ -171,8 +171,8 @@ map unchanged, and the remaining bond-space similarity conjugates that map.
 Neither operation moves the unit-circle eigenvalues.
 
 Source: arXiv:1708.00029, definition `def:repeated` and equation `eq:rep`,
-lines 276--284; the spectral invariance is the content of the last clause of
-proposition `equal-or-orthogonal-generalized`, line 608. -/
+lines 276--284; the spectral invariance supports the last clause of proposition
+`equal-or-orthogonal-generalized`, lines 602--604. -/
 theorem RepeatedBlocks.peripheralEigenvalues_transferMap_eq {D : ℕ}
     {A B : MPSTensor d D} (h : RepeatedBlocks A B) :
     peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
@@ -199,8 +199,8 @@ theorem RepeatedBlocks.peripheralEigenvalues_transferMap_eq {D : ℕ}
 /-- Repeated spectrally periodic blocks have the same period.
 
 This is the last clause of arXiv:1708.00029, proposition
-`equal-or-orthogonal-generalized`, line 608: the repeated-block relation can
-only hold between blocks of equal period. -/
+`equal-or-orthogonal-generalized`, lines 602--604: the repeated-block relation
+can only hold between blocks of equal period. -/
 theorem IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks
     {D₁ D₂ m n : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsSpectrallyPeriodic m A) (hB : IsSpectrallyPeriodic n B)
@@ -230,7 +230,7 @@ the two bases of periodic tensors, equality of the two matched periods, and the
 repeated-block relation for every matched pair.
 
 This strengthens `PeriodicBlockMatchingWitness` by the period equality asserted
-in arXiv:1708.00029, theorem `thm:bd`, lines 623--626 ("there is exactly one
+in arXiv:1708.00029, theorem `thm:bd`, lines 616--620 ("there is exactly one
 `k ∈ K` (with the same period)"). -/
 abbrev PeriodicBasisMatchingWitness
     {rA rB : ℕ}
@@ -429,7 +429,7 @@ their bases of periodic tensors match: equal block counts, a bijection, and per-
 `HetRepeatedBlocks` equivalence.
 
 **Scope restriction (conditional overlap hypothesis):** source theorem
-`thm:bd` at arXiv:1708.00029, lines 613--632 assumes proportional assembled
+`thm:bd` at arXiv:1708.00029, lines 613--623 assumes proportional assembled
 MPVs. Here the required non-decaying partners and their repeated-block
 classification are supplied directly through `PeriodicOverlapHypothesis`.
 Thus this theorem is a conditional matching lemma toward `thm:bd`, not its
@@ -533,7 +533,7 @@ full-cycle contraction `sectorTensor_proportional_of_blockedMatch`. The explicit
 non-decaying cross-family overlap hypotheses remain additional inputs.
 
 **Scope restriction (conditional non-decay witnesses):** source theorem
-`thm:bd` at arXiv:1708.00029, lines 613--632 assumes proportionality of the
+`thm:bd` at arXiv:1708.00029, lines 613--623 assumes proportionality of the
 assembled MPVs and derives these witnesses. This declaration is only the
 subsequent finite matching step. The gap is recorded in
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/

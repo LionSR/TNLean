@@ -37,7 +37,7 @@ the nonzero complex multiplicity weights.
 
 * De las Cuevas, Cirac, Schuch, Perez-Garcia,
   *Irreducible forms of Matrix Product States: Theory and Applications*,
-  arXiv:1708.00029, theorem `thm:bd`, lines 613--632.
+  arXiv:1708.00029, theorem `thm:bd`, lines 613--623.
 -/
 
 open scoped Matrix BigOperators
@@ -340,7 +340,7 @@ original representatives.
 
 Source: arXiv:1708.00029, equations `eq:bdnr` and `eq:Bbdnr`, lines 286--305
 and 575--585; normalization by block-diagonal similarity, lines 313--332; and
-theorem `thm:bd`, lines 613--632. -/
+theorem `thm:bd`, lines 613--623. -/
 theorem PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ)
@@ -399,7 +399,7 @@ or on the positive real weights.
 
 Source: arXiv:1708.00029, equations `eq:bdnr` and `eq:Bbdnr`, lines 286--305
 and 575--585; normalization by similarity, lines 313--332; and theorem
-`thm:bd`, lines 613--632.
+`thm:bd`, lines 613--623.
 
 **Scope restriction (weights, length, representation, and normalization):**
 `IsIrreducibleForm` records one positive real scalar for each periodic block,
@@ -512,10 +512,10 @@ each fixed length, the repeated-block classification from the periodic overlap
 dichotomy, and the equality of matched periods from the invariance of the
 peripheral transfer spectrum under the repeated-block relation.
 
-Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--632, over the
+Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--623, over the
 irreducible forms `eq:bdnr`, line 294, and `eq:Bbdnr`, line 582; the
 period clause is the last clause of proposition
-`equal-or-orthogonal-generalized`, line 608. -/
+`equal-or-orthogonal-generalized`, lines 602--604. -/
 theorem fundamentalTheorem_periodic_proportional_sectorDecomposition
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ)

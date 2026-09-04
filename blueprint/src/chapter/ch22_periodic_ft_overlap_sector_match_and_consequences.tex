@@ -449,14 +449,16 @@
     cancel.
 \end{proof}
 
-\begin{lemma}[Repeated blocks share a peripheral spectrum]
-    \label{lem:repeated_blocks_peripheral_spectrum}
+\begin{theorem}[Repeated blocks share a peripheral spectrum]
+    \label{thm:repeated_blocks_peripheral_spectrum}
     \lean{MPSTensor.RepeatedBlocks.peripheralEigenvalues_transferMap_eq}
     \leanok
     If $A$ and $B$ are repeated blocks, then their transfer maps have the same
     unit-circle eigenvalues.
-\end{lemma}
-\begin{proof}\leanok
+\end{theorem}
+\begin{proof}
+    \uses{lem:transfer_map_smul, thm:cpsv_gauge_transfer_similarity, lem:peripheral_spectrum_similarity}
+    \leanok
     Write $A^i=\xi YB^iY^{-1}$ with $|\xi|=1$.  The transfer map of $\xi C$ is
     $|\xi|^2$ times the transfer map of $C$, hence equals it, and the transfer
     map of $YB^iY^{-1}$ is the congruence conjugate
@@ -465,16 +467,16 @@
     unchanged.
 \end{proof}
 
-\begin{lemma}[Repeated periodic blocks have the same period]
-    \label{lem:repeated_blocks_period_eq}
+\begin{theorem}[Repeated periodic blocks have the same period]
+    \label{thm:repeated_blocks_period_eq}
     \lean{MPSTensor.IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks}
     \leanok
     \uses{def:spectral_periodic_tensor}
     Let $A$ and $B$ be spectrally periodic tensors of periods $m$ and $n$.  If
     $A$ and $B$ are repeated blocks, then $m=n$.
-\end{lemma}
+\end{theorem}
 \begin{proof}
-    \uses{lem:repeated_blocks_peripheral_spectrum}
+    \uses{thm:repeated_blocks_peripheral_spectrum}
     \leanok
     The two peripheral spectra coincide, and they are the sets of roots of
     unity of orders $m$ and $n$.  A primitive $m$-th root of unity then
@@ -668,6 +670,30 @@
     corresponding block-diagonal tensors.
 \end{proof}
 
+\begin{theorem}[Finite matching from the periodic overlap dichotomy]
+    \label{thm:periodic_conditional_block_matching}
+    \lean{MPSTensor.fundamentalTheorem_periodic_proportional}
+    \leanok
+    Let $\{A_j\}_{j\in J}$ and $\{B_k\}_{k\in K}$ be finite pairwise
+    non-repeated families. Suppose every tensor in either family has a tensor
+    in the other family whose mixed overlap does not tend to zero, and every
+    such non-decaying pair is repeated. Then there is a bijection
+    $\pi\colon J\to K$ such that $A_j$ and $B_{\pi(j)}$ are repeated for every
+    $j\in J$.
+
+    \emph{Scope restriction.} This result assumes the overlap consequences
+    that Theorem~3.4 derives from proportionality of the assembled
+    matrix-product vectors. It is the finite matching step, not the source
+    theorem itself.
+\end{theorem}
+\begin{proof}\leanok
+    Choose a non-decaying partner $f(j)\in K$ for every $j\in J$. If
+    $f(j_1)=f(j_2)$, the two repeated-block relations compose to show that
+    $A_{j_1}$ and $A_{j_2}$ are repeated, so pairwise non-repetition makes $f$
+    injective. The symmetric construction gives an injection $K\to J$.
+    Therefore $|J|=|K|$, and the first injection is the required bijection.
+\end{proof}
+
 \begin{theorem}[Proportional Fundamental Theorem for irreducible-form MPS]
     \label{thm:periodic_ft_proportional}
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
@@ -694,23 +720,19 @@
         \notag
     \end{align}
     Each $B_k$ occurs for exactly one $j$. This is
-    \cite[Theorem~3.4, lines~613--632]{DeLasCuevas2017Irreducible}.
+    \cite[Theorem~3.4, lines~613--623]{DeLasCuevas2017Irreducible}.
 
     The theorem relates the two bases of periodic tensors but makes no
     assertion relating their multiplicity matrices.
 \end{theorem}
 \begin{proof}
-    \uses{lem:repeated_blocks_period_eq, thm:periodic_spectral_multiplicity_nondecaying_overlap}
+    \uses{thm:repeated_blocks_period_eq, thm:periodic_conditional_block_matching, thm:periodic_spectral_multiplicity_nondecaying_overlap}
     \leanok
-    By Theorem~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap},
-    every tensor of either basis has a partner in the other basis whose mixed
-    overlap does not tend to zero, and every such pair is a repeated pair.
-    Choosing one partner for each tensor of the first basis gives a map
-    $\pi\colon J\to K$.  It is injective: two tensors of the first basis with a
-    common partner would be repeated with each other, contradicting pairwise
-    non-repetition.  The same construction in the reverse direction is
-    injective as well, so $J$ and $K$ have the same finite cardinality and
-    $\pi$ is a bijection.  Finally,
-    Lemma~\ref{lem:repeated_blocks_period_eq} gives $m_j=n_{\pi(j)}$ for every
+    Theorem~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap}
+    supplies non-decaying partners in both directions and classifies every
+    such pair as repeated. Applying
+    Theorem~\ref{thm:periodic_conditional_block_matching} gives a bijection
+    $\pi\colon J\to K$ of repeated pairs. Finally,
+    Theorem~\ref{thm:repeated_blocks_period_eq} gives $m_j=n_{\pi(j)}$ for every
     matched pair.
 \end{proof}

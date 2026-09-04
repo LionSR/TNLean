@@ -352,7 +352,10 @@ theorem period_eq_of_setOf_pow_eq_one {m n : ℕ} (hm : 0 < m) (hn : 0 < n)
     exact hmem
   exact Nat.dvd_antisymm (hω.dvd_of_pow_eq_one _ hωn) (hη.dvd_of_pow_eq_one _ hηm)
 
-/-- Repeated periodic blocks have equal periods, provided they share peripheral spectrum. -/
+/-- Periodic blocks with the same peripheral transfer spectrum have equal periods.
+
+The repeated-block premise records the intended application, but the common
+peripheral spectrum is the sufficient hypothesis. -/
 theorem IsPeriodic.period_eq_of_repeatedBlocks
     {m n : ℕ} {A B : MPSTensor d D}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
@@ -367,8 +370,8 @@ theorem IsPeriodic.period_eq_of_repeatedBlocks
 equal periods.
 
 This is the spectral content of the last clause of arXiv:1708.00029,
-proposition `equal-or-orthogonal-generalized`, line 608: blocks related by the
-repeated-block condition can only have the same period. -/
+proposition `equal-or-orthogonal-generalized`, lines 602--604: blocks related
+by the repeated-block condition can only have the same period. -/
 theorem IsSpectrallyPeriodic.period_eq_of_peripheralEigenvalues_eq
     {m n : ℕ} {A B : MPSTensor d D}
     (hA : IsSpectrallyPeriodic m A) (hB : IsSpectrallyPeriodic n B)
