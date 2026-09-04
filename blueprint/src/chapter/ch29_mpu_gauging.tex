@@ -2442,11 +2442,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
         TNLean.Algebra.RestrictedScalarGauge.gauge_inv}
     \leanok
     \discussion{7700}
-    \uses{def:mpug_restricted_scalar_gauge,
-        thm:mpug_gauge_preserves_cocycle,
-        thm:mpug_gauge_preserves_normalization,
-        thm:mpug_l_gauge_composition,
-        thm:mpug_l_gauge_preservation}
+    \uses{def:mpug_restricted_scalar_gauge}
     Let $\kappa=(\beta,\gamma)$ be a restricted scalar gauge. If $\omega$ is
     a normalized scalar $3$-cocycle and $L$ is a normalized $L$-symbol
     compatible with $\omega$, then
@@ -4020,13 +4016,13 @@ scalar calculation above.
     obtained by taking its independent tensor product with the GHZ tensor has
     physical dimension $8$ and bond dimension $4$:
     \begin{align}
-        A & =A^{\mathrm{GHZ}}\otimes C.
+        A & =A^{\mathrm{GHZ}}\boxtimes C.
         \label{eq:mpug_ghz_blocked_cluster_tensor}
     \end{align}
     For $x\in\{0,1\}$, let $E_x$ be the one-dimensional GHZ sector supported
     at the physical value $x$. The two bond-dimension-$2$ tensors
     \begin{align}
-        A_x & =E_x\otimes C
+        A_x & =E_x\boxtimes C
     \end{align}
     satisfy, for $p,x\in\{0,1\}$ and $q\in\{0,1,2,3\}$,
     \begin{align}
@@ -4050,7 +4046,7 @@ scalar calculation above.
     \leanok
     \discussion{7699}
     \uses{def:mpug_ghz_blocked_cluster_tensor, def:injective,
-        def:is_bnt_locally_orthogonal, thm:cluster_normal}
+        def:is_bnt_locally_orthogonal}
     Each tensor $A_x$ is injective. For $x\neq y$ and every
     $X\in\operatorname{Mat}_2(\C)$, their one-site mixed transfer map satisfies
     \begin{align}
@@ -4077,12 +4073,20 @@ scalar calculation above.
     \uses{def:mpug_ghz_blocked_cluster_tensor, def:injective,
         def:is_bnt_locally_orthogonal, thm:cluster_normal}
     The one-dimensional sector $E_x$ is injective, and injectivity is preserved
-    by independent tensor products, so $A_x=E_x\otimes C$ is injective.
+    by independent tensor products, so $A_x=E_x\boxtimes C$ is injective.
     If $x\neq y$, formula~(\ref{eq:mpug_ghz_blocked_cluster_blocks}) makes
     every summand in
     (\ref{eq:mpug_ghz_blocked_cluster_local_orthogonality}) vanish: a physical
-    value $p$ cannot equal both $x$ and $y$. The direct-sum identity follows by
-    comparing the same formula in the two canonical bond coordinate systems.
+    value $p$ cannot equal both $x$ and $y$. For $p,x,y\in\{0,1\}$,
+    $q\in\{0,1,2,3\}$, and $a,b\in\{0,1\}$, the direct-sum and product tensors
+    have the same entry in their canonical bond coordinates:
+    \begin{align}
+        (A_0\oplus A_1)^{(p,q)}_{(x,a),(y,b)}
+         & =A^{(p,q)}_{(x,a),(y,b)}
+        =\delta_{x,y}\delta_{p,x}C^q_{a,b}.
+    \end{align}
+    Equality of all entries proves
+    (\ref{eq:mpug_ghz_blocked_cluster_direct_sum}).
 \end{proof}
 
 \section{The gauge-invariant subspace of the CZX circuit tuple}
