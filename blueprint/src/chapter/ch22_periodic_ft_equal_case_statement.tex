@@ -1,59 +1,133 @@
 The following is the equal-case theorem of
-\cite[lines~643--656]{DeLasCuevas2017Irreducible}.
-The periodic-overlap and coefficient-power hypotheses that earlier statements
-carried are now derived from equality of the generated matrix-product vectors,
-and the theorem is obtained as a single unconditional result for tensors whose
-blocks are trace preserving
-(Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving}). The source theorem
-for the unrestricted irreducible form, stated below, still awaits the passage
-to that normalization.
+\cite[lines~643--656]{DeLasCuevas2017Irreducible}, stated for tensors in
+irreducible form. Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving}
+below is the same statement for blocks whose maps are trace preserving; the
+passage to that normalization, asserted by the source at lines 330--332, is the
+blockwise similarity of \cite[eq.~\emph{unital},
+    line~316]{DeLasCuevas2017Irreducible} and is carried out in the proof.
 
-% Remaining gap for the source-level statement: the formal equal-case theorem
-% assumes trace-preserving block maps, the normalization of eq:unital at line
-% 316. The passage from irreducible form to that normalization by a
-% block-diagonal similarity, asserted by the source at lines 330--332, is not
-% formalized.
 \begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
-    \uses{def:irreducible_form}
-    Let $A$ and $B$ be MPS tensors in irreducible form. Write
+    \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
+        def:scalar_gauge_equiv}
+    Let $A$ and $B$ be MPS tensors in irreducible form, written
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i), \notag \\
         B^i & =\bigoplus_{k\in K}(S_k\otimes B_k^i), \notag
     \end{align}
-    where $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ are bases of periodic
-    tensors, $R_j$ and $S_k$ are diagonal multiplicity matrices of sizes
-    $r_j\times r_j$ and $s_k\times s_k$, and $A_j^i$ and $B_k^i$ act on
-    bond spaces of dimensions $D_j$ and $D_k$.
-    Suppose that $\mc{V}(A)=\mc{V}(B)$
-    (equal MPV families for all lengths $N$).
+    where $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ are pairwise
+    non-repeated bases of periodic tensors, $R_j$ and $S_k$ are diagonal
+    multiplicity matrices of sizes $r_j\times r_j$ and $s_k\times s_k$ with
+    nonzero diagonal entries, and $A_j^i$ and $B_k^i$ act on bond spaces of
+    dimensions $D_j$ and $D_k$. The blocks are required only to have
+    irreducible transfer maps of spectral radius one, which is the source's
+    irreducible form at
+    \cite[lines~248--261]{DeLasCuevas2017Irreducible}; in particular no
+    trace-preserving normalization is imposed, and the periodicity $m_j$ of a
+    block is the derived one of
+    \cite[lines~257--258]{DeLasCuevas2017Irreducible} rather than a further
+    hypothesis.
+    Suppose that $\mc{V}^+(A)=\mc{V}^+(B)$.
 
     Then $|J|=|K|$ and there is a bijection $\pi:J\to K$
     such that $A_j$ and $B_{\pi(j)}$ are $m_j$-periodic for the same
     period $m_j$.
-    Moreover, for each $j\in J$ there exists:
+    Moreover, for each $j\in J$ there exist:
     \begin{enumerate}
-        \item an invertible matrix $Y_j$ of size $D_{\pi(j)}\times D_j$,
-              and
-        \item a diagonal unitary matrix $Z_j$ of size $r_j\times r_j$
-              satisfying $Z_j^{m_j}=\Id_{r_j}$,
+        \item a unit-modulus scalar $\xi_j$ and an invertible matrix $Y_j$
+              with $A_j^i=\xi_jY_jB_{\pi(j)}^iY_j^{-1}$ for every physical
+              index~$i$ (Definition~\ref{def:scalar_gauge_equiv}), and
+        \item a diagonal matrix $Z_j$ of size $r_j\times r_j$ with
+              $Z_j^{m_j}=\Id_{r_j}$, so that all its diagonal entries are
+              $m_j$-th roots of unity, and a reordering $T_j$ of the diagonal
+              entries of $S_{\pi(j)}$ with
+              $Z_j\left(\xi_jR_j\right)=T_jS_{\pi(j)}T_j^\dagger$.
     \end{enumerate}
-    such that $B_{\pi(j)}^i=Y_jA_j^iY_j^{-1}$ for every physical
-    index~$i$, and, after reordering the diagonal entries of the
-    multiplicity matrix $S_{\pi(j)}$, one has $Z_jR_j=S_{\pi(j)}$.
-    Equivalently, setting $Z=\bigoplus_j Z_j\otimes\Id_{D_j}$ gives an
-    invertible matrix $Y$ such that $ZA^i=YB^iY^{-1}$ for all $i$,
-    with $[A^i,Z]=0$ and $\mc{V}(A)=\mc{V}(ZA)$.
+    Setting $Z=\bigoplus_j Z_j\otimes\Id_{D_j}$ one has
+    $Z^{\operatorname{lcm}_jm_j}=\Id$, $[A^i,Z]=0$ for every $i$,
+    $\mc{V}^+(A)=\mc{V}^+(ZA)$, and there is an invertible matrix $Y$ with
+    $ZA^i=YB^iY^{-1}$ for all $i$.
 
-    \noindent\emph{Remark.}
-    Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving} is this statement
-    for tensors whose block maps are trace preserving, the normalization of
-    \cite[eq.~\emph{unital}, line~316]{DeLasCuevas2017Irreducible}. What
-    separates the two is the passage to that normalization by a block-diagonal
-    similarity, asserted by the source at lines 330--332 and recorded in
+    \noindent\emph{Remark on the length range.}
+    The source writes both matrix-product-vector identities over all lengths.
+    They are taken here at positive lengths only, following the convention of
+    this development that the empty word is not a physical chain. This
+    strengthens the theorem and costs nothing. On the hypothesis, equality at
+    positive lengths is the weaker assumption. On the conclusion, nothing is
+    lost either: $Z$ acts on the bond space of $A$, so $ZA$ has the bond
+    dimension of $A$, and the empty-word coefficient of a tensor is its bond
+    dimension, whence $\mc{V}^+(A)=\mc{V}^+(ZA)$ already extends to length
+    zero.
+
+    \noindent\emph{Scope restriction: the periods are supplied.}
+    The source introduces the period $m_j$ of a block as a consequence of
+    irreducibility and spectral radius one, at
+    \cite[lines~257--258]{DeLasCuevas2017Irreducible}, citing Wolf; it appears
+    in the conclusion of Theorem~3.8, not among its hypotheses. The formal
+    statement instead receives the periods together with witnesses that each
+    block is spectrally $m_j$-periodic, so a reader holding only the source's
+    two conditions on the blocks cannot yet instantiate it. The missing
+    ingredient is the existence half of the cyclic peripheral structure. The
+    restriction and its elimination plan are recorded in
     \cite{gap:dccsp17_periodic_overlap_route_alignment}, section ``Scope
-    restriction: the equal case with trace-preserving blocks''.
+    restriction: the periods of an irreducible-form block are supplied''. The
+    unrestricted source statement is Theorem~\ref{thm:periodic_ft} above,
+    which remains unformalized for that reason alone.
+
+    \noindent\emph{Remark on the scalars $\xi_j$.}
+    The source writes the two clauses of the last display without the
+    $\xi_j$, having absorbed each of them into $S_{\pi(j)}$ at
+    \cite[lines~667--671]{DeLasCuevas2017Irreducible}. They are displayed here
+    instead, in both places at once, so that the statement speaks about the
+    given multiplicity matrices rather than about rescaled ones. The scalars
+    are genuinely present: for $m_j=1$ and $B_j=e^{i\theta}A_j$ the ratio
+    between the two multiplicity families is $e^{i\theta}$, which is not a root
+    of unity in general.
 \end{theorem}
+
+\begin{theorem}[Periodic Fundamental Theorem, periods supplied]%
+    \label{thm:periodic_ft_supplied_periods}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
+    \leanok
+    \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
+        def:scalar_gauge_equiv}
+    Theorem~\ref{thm:periodic_ft} with the periods $m_j$ and $n_k$ given
+    alongside the two block families, together with witnesses that each block is
+    spectrally periodic of the given period in the sense of
+    Definition~\ref{def:spectral_periodic_tensor}. Everything else, hypotheses
+    and conclusion alike, is as stated there.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_ft_equal_case_trace_preserving,
+        lem:block_scalar_gauge_comm,
+        thm:spectral_periodic_sector_normalization,
+        thm:periodic_sector_basis_replacement_gauge}
+    Normalize each representative by its positive-definite adjoint Perron
+    fixed point, which is the source construction at
+    \cite[lines~313--332]{DeLasCuevas2017Irreducible}. The normalized
+    representatives are periodic with trace-preserving block maps and are
+    blockwise similar to the originals, so the multiplicities and their power
+    sums are unchanged, the non-repetition of the two bases is preserved, and
+    the two assembled tensors generate the same matrix-product vectors as
+    before. Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving} applies
+    to the normalized pair.
+
+    Transport the conclusion back. The bijection, the scalars, the periods and
+    the blockwise multiplicity gauges concern only the multiplicity data,
+    which the normalization leaves untouched, and the repeated-block relations
+    compose with the two blockwise similarities. The multiplicity gauge is
+    unchanged: writing $X=\bigoplus_jX_j$ for the normalizing similarity,
+    Lemma~\ref{lem:block_scalar_gauge_comm} gives
+    \begin{align}
+        ZX=\bigoplus_{j}\left(Z_j\otimes\Id_{D_j}\right)X_j=XZ,
+        \qquad\text{hence}\qquad
+        X^{-1}ZX=Z.
+        \notag
+    \end{align}
+    Only the similarity between the two tensors is conjugated, by the two
+    normalizing similarities.
+\end{proof}
 
 \begin{theorem}[Diagonal multiplicity gauge from equal powers]
     \label{thm:zgauge_construction}
@@ -301,6 +375,25 @@ to that normalization.
     two displayed properties.
 \end{proof}
 
+\begin{lemma}[The multiplicity gauge commutes with block-diagonal gauges]%
+    \label{lem:block_scalar_gauge_comm}
+    \lean{MPSTensor.blockScalarMatrix_globalGaugeOfBlocks_comm}
+    \leanok
+    Let $Z=\bigoplus_k z_k\Id_{D_k}$ act by the scalar $z_k$ on the bond space
+    of the $k$-th block, and let $X=\bigoplus_k X_k$ be block diagonal for the
+    same block decomposition. Then $ZX=XZ$.
+
+    This is why the multiplicity gauge of
+    \cite[line~653]{DeLasCuevas2017Irreducible} survives the blockwise
+    normalizing similarity of \cite[lines~313--332]{DeLasCuevas2017Irreducible}
+    unchanged.
+\end{lemma}
+
+\begin{proof}\leanok
+    On the $k$-th block the two factors are $z_k\Id_{D_k}$ and $X_k$, and a
+    scalar matrix is central.
+\end{proof}
+
 \begin{theorem}[Global multiplicity gauge and similarity]%
     \label{thm:periodic_equalcase_global_zgauge}
     \lean{MPSTensor.equalCase_global_zgauge_of_blockwise}
@@ -418,21 +511,19 @@ to that normalization.
     the phase into $S_j$; the scalar is genuinely present, as the period-one
     pair $B_j=e^{i\theta}A_j$ shows.
 
-    \emph{Scope restriction.}  This is
+    This is
     \cite[Theorem~3.8, lines~643--693]{DeLasCuevas2017Irreducible} for tensors
     whose block maps are trace preserving, the normalization of
-    \cite[eq.~\emph{unital}, line~316]{DeLasCuevas2017Irreducible}. This is
+    \cite[eq.~\emph{unital}, line~316]{DeLasCuevas2017Irreducible}. That is
     less than the source's irreducible form II, which asks in addition for a
-    diagonal fixed point, so the statement is correspondingly stronger; but it
-    is more than the source's irreducible form, which asks only for
-    irreducibility and spectral radius one. The source asserts at lines
-    330--332 that one passes to the normalized form by a block-diagonal
-    similarity; that passage is not carried out here. The restriction and its
-    elimination plan are recorded in
-    \cite{gap:dccsp17_periodic_overlap_route_alignment}, section ``Scope
-    restriction: the equal case with trace-preserving blocks''. The
-    unrestricted source theorem is Theorem~\ref{thm:periodic_ft}, which remains
-    unformalized.
+    diagonal fixed point, and more than the source's irreducible form, which
+    asks only for irreducibility and spectral radius one. The passage from
+    irreducible form to this normalization, asserted by the source at lines
+    330--332, is carried out in Theorem~\ref{thm:periodic_ft}, which is the
+    source statement itself. The present statement is the normalized half of
+    that pair, isolated because the periodic overlap dichotomy and the
+    vanishing of an off-period block are available in the normalized
+    orientation.
 \end{theorem}
 
 \begin{proof}\leanok

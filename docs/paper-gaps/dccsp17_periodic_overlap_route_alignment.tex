@@ -694,51 +694,100 @@ overlap-hypothesis step is tracked by
 subsequent multiplicity-power extraction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5344}{issue \#5344}.
 
-\section{Scope restriction: the equal case with trace-preserving blocks}
+\section{The equal case with trace-preserving blocks: restriction eliminated}
 
 Theorem~3.8 of Ref.~\cite{DeLasCuevas2017Irreducible}, lines 643--693, assumes
 that the two tensors are in irreducible form, that is, that every block map is
-irreducible of spectral radius one. The formal equal-case
-theorem\footnote{Formal declaration:
-\leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_sectorDecomposition} in
-\path{EqualCaseGlobal.lean}.} assumes in addition that every block is
-left-canonical, that is, that every block map is trace preserving. This is the
-normalization of Eq.~\emph{unital}, line 316 of the source.
+irreducible of spectral radius one. The equal-case argument runs in the
+normalized orientation, since the periodic overlap dichotomy and the vanishing
+of the matrix-product vector of a periodic block at lengths that its period
+does not divide are both available only there. It therefore first produces the
+statement for blocks whose maps are trace preserving, the normalization of
+Eq.~\emph{unital}, line 316.\footnote{Formal declaration:
+\leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_sectorDecomposition}.}
 
-It is worth being precise about how much this assumes, since the source's
-irreducible form II is a different and stronger condition. Form II, described
-at lines 320--332, asks for trace-preserving block maps \emph{and} for the
-fixed point of each block map to be diagonal, the latter obtained by the
-further conjugation $A''_j = U_j^\dagger A'_j U_j$. The formal hypothesis is
-only the first of the two, so the formal statement is stronger than the form-II
-statement and weaker than the source's.
+That hypothesis is worth placing precisely, since the source's irreducible form
+II is a different and stronger condition: form II, at lines 320--332, asks for
+trace-preserving block maps \emph{and} for the fixed point of each block map to
+be diagonal, the latter obtained by the further conjugation
+$A''_j = U_j^\dagger A'_j U_j$. Only the first of the two is assumed, so the
+normalized statement is stronger than the form-II statement.
 
-The source asserts at lines 330--332 that one passes from irreducible form to
-irreducible form II by a block-diagonal similarity. Only the first half of that
-passage, the unitalization of Eq.~\emph{unital}, is needed to reach the formal
-hypothesis. That passage is not carried out in the formal development, so the
-formal statement is the normalized statement and not the unrestricted source
-theorem.
+The passage that the source asserts at lines 330--332 is carried out, so the
+unrestricted source statement is
+formalized.\footnote{Formal declaration:
+\leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}.} Only
+the unitalization of Eq.~\emph{unital} is needed: each representative is
+conjugated by the square root of the positive-definite fixed point of the
+adjoint block map. Being blockwise, it leaves every multiplicity entry and
+every multiplicity power sum untouched, and the multiplicity gauge, which is
+scalar on the bond space of each multiplicity copy, commutes with it and
+returns unchanged. Only the similarity between the two tensors is conjugated.
+The second half of the form-II construction, the diagonalization of the fixed
+point, is not needed.
 
-Two ingredients force the restriction. The periodic overlap
-dichotomy\footnote{Formal declaration:
-\leanid{MPSTensor.periodicOverlapDichotomy}.} and the vanishing of the
-matrix-product vector of a periodic block at lengths that its period does not
-divide\footnote{Formal declaration:
-\leanid{MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}; see also
-\path{docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex}.} are both
-available only in the normalized orientation.
+The conclusion asserts that the similarity is invertible. The source remark at
+lines 330--332 and 625 that in irreducible form II the similarity is unitary is
+a separate statement and is not asserted here.
+
+\section{Scope restriction: the periods of an irreducible-form block are
+    supplied}
+
+The source defines irreducible form at line 261 by two conditions on each
+block: its transfer map is an irreducible completely positive map, and its
+spectral radius is one. The period $m_j$ is then \emph{derived}: at lines
+257--258, citing Ref.~\cite{Wolf2012Quantum}, the source records that the
+peripheral spectrum of such a map is exactly the set of $m_j$-th roots of unity
+for some $m_j$, and calls the block periodic of period $m_j$ on that basis.
+Theorem~3.8 accordingly mentions $m_j$ in its conclusion, not among its
+hypotheses.
+
+The formal equal-case theorem\footnote{Formal declaration:
+\leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}.}
+instead receives the periods as input, together with witnesses that each block
+is spectrally periodic of the given period.\footnote{Formal declaration:
+\leanid{MPSTensor.IsSpectrallyPeriodic}.} That predicate carries four fields,
+of which the source's definition supplies only the first two; the remaining
+two, positivity of $m$ and the identification of the peripheral spectrum with
+the $m$-th roots of unity, are the derived content. A reader holding exactly
+the source's hypotheses therefore cannot instantiate the formal theorem, and
+the same applies to the proportional case, Theorem~3.4.\footnote{Formal
+declaration:
+\leanid{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}.}
 
 \subsection{Elimination plan}
 
-Normalize both bases by the unitalization of Eq.~\emph{unital}, using the
-sectorwise similarity of the section ``Pure normalization theorem'' above,
-apply the normalized theorem to the normalized decompositions, and transport
-the conclusion back. The multiplicity gauge is unchanged by the transport: it
-acts by a scalar on each block, so it commutes with every block-diagonal
-similarity. The global similarity is conjugated by the two normalizing
-similarities. The second half of the source's form-II construction, the
-diagonalization of the fixed point, is not needed.
+What is missing is one existence statement: for a family $A$ with irreducible
+transfer map of spectral radius one, there is an $m$ with
+$\operatorname{Spec}_{\mathrm{per}}(\E_A) = \{\mu : \mu^m = 1\}$ and $m>0$. The
+ingredients are present.
+
+\begin{enumerate}
+    \item The unitalization of Eq.~\emph{unital}, line 316, is already
+          formalized from exactly the source's two conditions, and it preserves
+          irreducibility and the peripheral spectrum.\footnote{Formal
+          declaration:
+          \leanid{MPSTensor.exists_tpGauge_of_irreducible_spectralRadius_one}.}
+    \item The cyclic structure of the peripheral spectrum of a unital
+          irreducible finite-Kraus map with a positive-definite adjoint fixed
+          point is available in the companion library, in the form
+          $\operatorname{Spec}_{\mathrm{per}} = \{\gamma^k : k<m\}$ with
+          $\gamma$ a primitive $m$-th root of unity.\footnote{Formal
+          declaration:
+          \leanid{PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure}.}
+          It carries its own scope restriction, recorded in that library's
+          note on Wolf Theorem 6.6.
+    \item For a primitive $m$-th root $\gamma$ over $\C$ the two descriptions
+          agree, $\{\gamma^k : k<m\} = \{\mu : \mu^m=1\}$.
+\end{enumerate}
+
+The assembly has to pass between the unital and trace-preserving orientations,
+which exchange a Kraus family with its adjoint family and conjugate the
+peripheral spectrum; the same conjugation is already carried out for the
+transported statement in \path{SelfOverlapSetup.lean}. Once the existence
+statement is available, both the proportional and the equal case can be
+restated over the source's two conditions with the periods produced rather than
+supplied.
 
 \section{Independence of the non-zero periodic vectors}
 
