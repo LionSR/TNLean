@@ -23,6 +23,9 @@ a separate MPS-facing forwarding declaration or conversion theorem.
 
 * `fixedPointProj_smul`: the fixed-point projection depends only on the ray through the
   fixed point.
+* `Matrix.trace_inv_trace_smul`: the normalized representative of the ray has unit trace.
+* `Matrix.PosDef.inv_trace_smul`: the normalized representative of the ray of a
+  positive-definite matrix is again positive definite.
 * `MPSTensor.IsPrimitiveMPS.smul_inv_trace`: rescaling a positive-definite primitive fixed
   point to unit trace preserves the complementary fixed-point gap.
 -/
@@ -39,8 +42,21 @@ theorem fixedPointProj_smul {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ) {c : ℂ
     simp at hcρ
   ext X i j
   simp only [fixedPointProj, LinearMap.coe_mk, AddHom.coe_mk, Matrix.trace_smul,
-    smul_eq_mul, Matrix.smul_apply, smul_eq_mul]
+    smul_eq_mul, Matrix.smul_apply]
   field_simp
+
+/-- Dividing a matrix of nonzero trace by its own trace produces a matrix of unit
+trace: the normalized representative of the ray through it. -/
+theorem Matrix.trace_inv_trace_smul {D : ℕ} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : Matrix.trace ρ ≠ 0) : Matrix.trace ((Matrix.trace ρ)⁻¹ • ρ) = 1 := by
+  rw [Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ hρ]
+
+/-- Dividing a positive-definite matrix by its own trace, which is a positive real,
+leaves it positive definite. -/
+theorem Matrix.PosDef.inv_trace_smul {D : ℕ} [NeZero D]
+    {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : ρ.PosDef) : ((Matrix.trace ρ)⁻¹ • ρ).PosDef :=
+  hρ.smul (inv_pos.mpr hρ.trace_pos)
 
 namespace MPSTensor
 
@@ -67,10 +83,8 @@ theorem IsPrimitiveMPS.smul_inv_trace {d D : ℕ} [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
     IsPrimitiveMPS A ((Matrix.trace ρ)⁻¹ • ρ) := by
-  have htr_pos : 0 < Matrix.trace ρ := hρ.trace_pos
-  have htr_ne : Matrix.trace ρ ≠ 0 := ne_of_gt htr_pos
-  have hinv_pos : 0 < (Matrix.trace ρ)⁻¹ := inv_pos.mpr htr_pos
-  have hpd : ((Matrix.trace ρ)⁻¹ • ρ).PosDef := hρ.smul hinv_pos
+  have htr_ne : Matrix.trace ρ ≠ 0 := ne_of_gt hρ.trace_pos
+  have hpd : ((Matrix.trace ρ)⁻¹ • ρ).PosDef := hρ.inv_trace_smul
   have hne : Matrix.trace ((Matrix.trace ρ)⁻¹ • ρ) ≠ 0 := ne_of_gt hpd.trace_pos
   refine ⟨hP.norm, fun h ↦ hne (by rw [h, Matrix.trace_zero]), hpd.posSemidef, ?_, ?_⟩
   · rw [LinearMap.map_smul, hP.fixedPoint_is_fixed]

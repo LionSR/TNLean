@@ -67,9 +67,10 @@ Two features of the source's display are not reproduced.
 The rate condition proved here is that the rate lie strictly between the
 weighted spectral radius of the transfer remainder and one. Nachtergaele
 prescribes instead that it exceed the moduli of the nonunit transfer
-eigenvalues. The remainder has exactly those eigenvalues together with zero, so
-the two conditions describe the same rates once the spectral radius is known to
-equal the largest such modulus; that equality is not formalized, and only the
+eigenvalues. The two conditions would describe the same rates once the spectral
+radius is known to equal the largest such modulus. That is not formalized: what
+is available is the bound that every eigenvalue of the remainder has modulus
+below one, which is not a description of the remainder's spectrum, so only the
 spectral-radius form is used. The blueprint section head states the proved
 condition and cites the paper-gap note, so the source's phrasing is not
 presented as what is proved.
@@ -82,6 +83,19 @@ for an arbitrary faithful stationary density and every prescribed rate, plus an
 identification of the minimal auxiliary dimension with the bond dimension used
 here. That residue is recorded in
 `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
+
+## Promoted proof pattern
+
+The rho-weighted matrix instance preamble, recorded as a candidate in
+`docs/tactic_patterns.md` at 122 blocks across eight parent-Hamiltonian modules,
+is promoted in this change to the `weighted_matrix_instances` and
+`weighted_matrix_norm_instances` macros of
+`TNLean/MPS/ParentHamiltonian/WeightedVirtualHilbert.lean`, declared once in
+term position for statements and once in tactic position for proofs. Every one
+of the 122 blocks is refactored to the macros; the two shorter prefixes of the
+pattern that also occur, the single normed-group binding and the
+normed-group-plus-seminormed-group pair, are left hand-written and noted in the
+ledger.
 
 ## Follow-up
 

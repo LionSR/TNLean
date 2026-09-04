@@ -75,14 +75,7 @@ the norm choice explicit without comparing it to TNLean's ambient matrix norm. -
 noncomputable def fnwWeightedRemainderSpectralRadius {D : ℕ}
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     {d : ℕ} (A : MPSTensor d D) (htr : Matrix.trace ρ ≠ 0) : ℝ≥0∞ := by
-  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ)
     (Matrix (Fin D) (Fin D) ℂ)
   exact spectralRadius ℂ (Φ (fnwTransferMap A - fnwLimitMap ρ htr))
@@ -92,14 +85,7 @@ equation (5.6). -/
 noncomputable def fnwWeightedOperatorNorm {D : ℕ}
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) : ℝ := by
-  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ)
     (Matrix (Fin D) (Fin D) ℂ)
   exact ‖Φ F‖
@@ -108,24 +94,10 @@ private theorem rhoWeighted_spectralRadius_lt_one_of_eigenvalues_lt_one
     {D : ℕ} [NeZero D] (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
     (hF : ∀ ν : ℂ, Module.End.HasEigenvalue F ν → ‖ν‖ < 1) :
-    letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-      Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-    letI : Norm (Matrix (Fin D) (Fin D) ℂ) :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+    weighted_matrix_norm_instances ρ hρ in
     spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) F) < 1 := by
-  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   exact spectralRadius_lt_one_of_eigenvalues_lt_one F hF
 
 /-- In the rho-weighted matrix norm, the continuous FNW remainder has spectral
@@ -157,14 +129,7 @@ theorem fnwWeightedOperatorNorm_nonneg {D : ℕ}
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) :
     0 ≤ fnwWeightedOperatorNorm ρ hρ F := by
-  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm (Matrix (Fin D) (Fin D) ℂ) :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   exact norm_nonneg _
 
 /-- The source mixing quantity \(a(n)\) of FNW 1992, equations (5.9)--(5.10), is
@@ -189,12 +154,7 @@ theorem IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric [NeZero D]
       (rate : ℝ≥0∞)) :
     ∃ C : ℝ, 0 < C ∧ ∀ n : ℕ, 1 ≤ n →
       fnwMixingQuantity ρ hρ A htr n ≤ C * (rate : ℝ) ^ n := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
-  let : Norm Mat := (Matrix.toMatrixNormedAddCommGroup ρ hρ).toNorm
+  weighted_matrix_norm_instances ρ hρ
   let hComplete : CompleteSpace Mat := FiniteDimensional.complete ℂ Mat
   let : CompleteSpace Mat := hComplete
   let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) Mat

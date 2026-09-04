@@ -71,18 +71,10 @@ theorem fnwThreeBlockConfigEquiv_symm_apply_apply
 \(F_{\ell+m}(\Phi(\mu^r))\). -/
 noncomputable def fnwLeftOverlapMap
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     FNWBoundaryFamilySpace (D := D) (Cfg d r) →ₗ[ℂ]
       EuclideanSpace ℂ (Cfg d ((ℓ + m) + r)) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   exact
     { toFun := fun Φ => WithLp.toLp 2 fun σ =>
         let blocks := (fnwThreeBlockConfigEquiv d ℓ m r).symm σ
@@ -104,18 +96,10 @@ noncomputable def fnwLeftOverlapMap
 \(F_{m+r}(\Psi(\mu^\ell))\). -/
 noncomputable def fnwRightOverlapMap
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     FNWBoundaryFamilySpace (D := D) (Cfg d ℓ) →ₗ[ℂ]
       EuclideanSpace ℂ (Cfg d ((ℓ + m) + r)) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   exact
     { toFun := fun Ψ => WithLp.toLp 2 fun σ =>
         let blocks := (fnwThreeBlockConfigEquiv d ℓ m r).symm σ
@@ -139,18 +123,10 @@ theorem fnwLeftOverlapMap_apply_append
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
     (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
     (μℓ : Cfg d ℓ) (μm : Cfg d m) (μr : Cfg d r) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwLeftOverlapMap ρ hρ A ℓ m r Φ (Fin.append (Fin.append μℓ μm) μr) =
       fnwBoundaryMapCLM ρ hρ A (ℓ + m) (Φ.ofLp μr) (Fin.append μℓ μm) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   simp [fnwLeftOverlapMap]
 
 /-- The right overlap map on an appended configuration evaluates the boundary map
@@ -160,18 +136,10 @@ theorem fnwRightOverlapMap_apply_append
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
     (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
     (μℓ : Cfg d ℓ) (μm : Cfg d m) (μr : Cfg d r) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwRightOverlapMap ρ hρ A ℓ m r Ψ (Fin.append (Fin.append μℓ μm) μr) =
       fnwBoundaryMapCLM ρ hρ A (m + r) (Ψ.ofLp μℓ) (Fin.append μm μr) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   simp [fnwRightOverlapMap]
 
 /-- The right-spectator family obtained by splitting the full FNW ground vector
@@ -211,19 +179,11 @@ adjoint left word to the left of the boundary matrix. -/
 theorem fnwBoundaryMapCLM_append_eq_leftWord
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (K L : ℕ)
     (B : Mat) (u : Cfg d K) (τ : Cfg d L) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwBoundaryMapCLM ρ hρ A (K + L) B (Fin.append u τ) =
       fnwBoundaryMapCLM ρ hρ A L
         ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn u))ᴴ * B) τ := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   simp only [fnwBoundaryMapCLM_apply, fnwBoundaryMap_apply,
     List.ofFn_fin_append, Kraus.evalWord_append, Matrix.conjTranspose_mul,
     Matrix.mul_assoc]
@@ -236,19 +196,11 @@ adjoint right word to the right of the boundary matrix. -/
 theorem fnwBoundaryMapCLM_append_eq_rightWord
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (K L : ℕ)
     (B : Mat) (u : Cfg d K) (τ : Cfg d L) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwBoundaryMapCLM ρ hρ A (K + L) B (Fin.append u τ) =
       fnwBoundaryMapCLM ρ hρ A K
         (B * (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn τ))ᴴ) u := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   simp only [fnwBoundaryMapCLM_apply, fnwBoundaryMap_apply,
     List.ofFn_fin_append, Kraus.evalWord_append, Matrix.conjTranspose_mul,
     Matrix.mul_assoc]
@@ -257,18 +209,10 @@ theorem fnwBoundaryMapCLM_append_eq_rightWord
 boundary vector at the associated total length. -/
 theorem fnwLeftOverlapMap_fullGroundFamily
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) (B : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwLeftOverlapMap ρ hρ A ℓ m r (fnwLeftFullGroundFamily A r B) =
       fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   apply PiLp.ext
   intro σ
   rw [← (fnwThreeBlockConfigEquiv d ℓ m r).apply_symm_apply σ]
@@ -282,18 +226,10 @@ theorem fnwLeftOverlapMap_fullGroundFamily
 FNW boundary vector, with the total length associated to the three blocks. -/
 theorem fnwRightOverlapMap_fullGroundFamily
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) (B : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwRightOverlapMap ρ hρ A ℓ m r (fnwRightFullGroundFamily A ℓ B) =
       fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   apply PiLp.ext
   intro σ
   rw [← (fnwThreeBlockConfigEquiv d ℓ m r).apply_symm_apply σ]
@@ -331,11 +267,7 @@ theorem inner_fnwLeftOverlapMap_fnwRightOverlapMap
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
     (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
     (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
         (fnwRightOverlapMap ρ hρ A ℓ m r Ψ) =
       ∑ μℓ : Cfg d ℓ, ∑ μr : Cfg d r,
@@ -345,11 +277,7 @@ theorem inner_fnwLeftOverlapMap_fnwRightOverlapMap
           (fnwBoundaryMapCLM ρ hρ A m
             (Ψ.ofLp μℓ *
               (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ)) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   rw [PiLp.inner_apply]
   trans ∑ p : (Cfg d ℓ × Cfg d m) × Cfg d r,
       inner ℂ
@@ -384,18 +312,10 @@ private theorem fnwPosDef_nonsingInverse_mul (ρ : Mat) (hρ : ρ.PosDef) :
 exactly the pairing of the corresponding aggregate summands. -/
 theorem inner_conjTranspose_mul_mul_conjTranspose_eq_aggregateSummands
     (ρ : Mat) (hρ : ρ.PosDef) (U V X Y : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     inner ℂ (Uᴴ * X) (Y * Vᴴ) =
       inner ℂ (X * ρ * V * ρ⁻¹) (U * Y) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   rw [Matrix.rhoWeighted_inner ρ hρ, Matrix.rhoWeighted_inner ρ hρ]
   simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
     Matrix.conjTranspose_nonsing_inv, hρ.isHermitian.eq]
@@ -427,11 +347,7 @@ theorem sum_inner_overlapFibers_eq_inner_aggregates
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ r : ℕ)
     (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
     (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     ∑ μℓ : Cfg d ℓ, ∑ μr : Cfg d r,
         inner ℂ
           ((Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))ᴴ * Φ.ofLp μr)
@@ -439,11 +355,7 @@ theorem sum_inner_overlapFibers_eq_inner_aggregates
             (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μr))ᴴ) =
       inner ℂ (fnwLeftOverlapAggregate ρ A r Φ)
         (fnwRightOverlapAggregate A ℓ Ψ) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   rw [fnwLeftOverlapAggregate, fnwRightOverlapAggregate, sum_inner]
   simp_rw [inner_sum]
   rw [Finset.sum_comm]
@@ -463,11 +375,7 @@ theorem inner_overlap_sub_inner_aggregates
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
     (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
     (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
         (fnwRightOverlapMap ρ hρ A ℓ m r Ψ) -
       inner ℂ (fnwLeftOverlapAggregate ρ A r Φ)
@@ -478,11 +386,7 @@ theorem inner_overlap_sub_inner_aggregates
             (fnwBoundaryMapCLM ρ hρ A m (fnwRightMiddleBoundary A Ψ p)) -
           inner ℂ (fnwLeftMiddleBoundary A Φ p)
             (fnwRightMiddleBoundary A Ψ p)) := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   rw [inner_fnwLeftOverlapMap_fnwRightOverlapMap,
     ← sum_inner_overlapFibers_eq_inner_aggregates]
   simp only [fnwLeftMiddleBoundary, fnwRightMiddleBoundary,
@@ -522,17 +426,9 @@ virtual boundary. -/
 theorem fnwLeftOverlapAggregate_fullGroundFamily
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
     (hρfix : Kraus.transferMap A ρ = ρ) (r : ℕ) (B : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwLeftOverlapAggregate ρ A r (fnwLeftFullGroundFamily A r B) = B := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   have hpow : (Kraus.transferMap A ^ r) ρ = ρ := by
     induction r with
     | zero => simp
@@ -576,17 +472,9 @@ virtual boundary. -/
 theorem fnwRightOverlapAggregate_fullGroundFamily
     (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
     (hA : IsLeftCanonical A) (ℓ : ℕ) (B : Mat) :
-    letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    letI : SeminormedAddCommGroup Mat :=
-      (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-    letI : InnerProductSpace ℂ Mat :=
-      Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+    weighted_matrix_instances ρ hρ in
     fnwRightOverlapAggregate A ℓ (fnwRightFullGroundFamily A ℓ B) = B := by
-  let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-  let : SeminormedAddCommGroup Mat :=
-    (Matrix.toMatrixNormedAddCommGroup ρ hρ).toSeminormedAddCommGroup
-  let : InnerProductSpace ℂ Mat :=
-    Matrix.toMatrixInnerProductSpace ρ hρ.posSemidef
+  weighted_matrix_instances ρ hρ
   have hword :
       ∑ μℓ : Cfg d ℓ,
         Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ) *

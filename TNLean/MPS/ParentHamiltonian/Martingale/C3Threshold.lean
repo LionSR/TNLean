@@ -120,8 +120,8 @@ private theorem tendsto_fnw_coefficient
 
 /-- There is a positive block-injective length \(p\), measured in sites of the
 input tensor, such that the whole-increment projector defect with overlap and
-suffix lengths \(L=Q=p\) is at most \(7/16\) for every positive prefix length
-\(K\).
+suffix lengths \(L=Q=p\) is at most \(7/16\) for every prefix length \(K\),
+including \(K=0\).
 
 The coefficient decays because it is the rational function
 \(c\lambda^p(1+c\lambda^p)/(1-c\lambda^p)\) of Nachtergaele,

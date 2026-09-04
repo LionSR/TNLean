@@ -351,7 +351,7 @@ Ref.~\cite{Nachtergaele1996Spectral}. Equation~(2.5) of the same reference is
 the distinct batched condition C3$'$ involving $E_n^{(p)}$.
 
 The numerical open-chain step is complete. The imported FNW estimate is
-uniform in the positive left length, and
+uniform in the left length, the empty prefix included, and
 \leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
 chooses a block-injective $l>1$, measured in sites of the input tensor, and
 $\varepsilon_l\geq0$ such that
@@ -363,9 +363,9 @@ $\varepsilon_l\geq0$ such that
 The theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
 combines Nachtergaele's projector-defect identity with the two-projection
-estimate and proves the corresponding anticommutator inequality for every
-positive left length. Exact blocked three-site identities then connect the
-three-block defect to the local terms of the blocked tensor. No
+estimate and proves the corresponding anticommutator inequality for every left
+length, the empty prefix included. Exact blocked three-site identities then
+connect the three-block defect to the local terms of the blocked tensor. No
 excitation-compression estimate is used.
 
 \subsection{Fixed-final-volume C3 comparison}
@@ -1807,14 +1807,17 @@ $c\lambda^m(1+c\lambda^m)$ using monotonicity. The prescribed rate is supplied
 by
 \leanid{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric}: any
 $\lambda$ strictly above the weighted spectral radius of the transfer
-remainder $\mathcal E_A-E_\infty^\rho$. The source phrases the same condition
-through the transfer eigenvalues, $\lambda_i<\lambda<1$ for $\lambda_i\neq1$.
-The two phrasings agree because
-\leanid{MPSTensor.IsPrimitiveMPS.fnwRemainder_eigenvalue_norm_lt_one} shows the
-remainder to have exactly the nonunit transfer eigenvalues together with $0$;
-the equality of the spectral radius with the largest such modulus is not
-separately formalized, and the geometric theorem uses only the spectral-radius
-form.
+remainder $\mathcal E_A-E_\infty^\rho$. The source instead phrases its
+condition through the transfer eigenvalues, $\lambda_i<\lambda<1$ for
+$\lambda_i\neq1$. The two phrasings are not shown here to describe the same
+rates. What is formalized about the remainder's spectrum is
+\leanid{MPSTensor.IsPrimitiveMPS.fnwRemainder_eigenvalue_norm_lt_one}: every
+eigenvalue of the remainder has modulus below one. That is a bound, not a
+characterization. It does not exhibit the remainder's spectrum as the nonunit
+transfer eigenvalues together with $0$, and it does not identify the weighted
+spectral radius with the largest modulus among the nonunit transfer
+eigenvalues. The geometric theorem therefore uses the spectral-radius form
+alone, and the source's eigenvalue prescription remains unformalized.
 
 What remains unmatched is the source's assertion that the prefactor may be
 taken equal to $k^2$, where $k$ is the dimension of the auxiliary space of the

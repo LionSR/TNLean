@@ -2516,6 +2516,28 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     \end{align}
 \end{definition}
 
+\begin{theorem}[One-site reassociation]
+    \label{thm:reassociated_tail_boundary_one_site}
+    \lean{MPSTensor.reassocTailBoundaryMapES_one}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es}
+    A one-site suffix increment needs no reassociation:
+    \begin{align}
+        \widetilde\Gamma^{\mathrm{tail}}_{K;L,1}
+         & =\Gamma^{\mathrm{tail}}_{K,L+1}.
+        \label{eq:reassociated_tail_boundary_one_site}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        def:whole_increment_physical_reassociation}
+    Reassociating a window whose last block carries a single site is the
+    identity, so the reassociated tail map is the ordinary tail map with $L+1$
+    spectator sites.
+\end{proof}
+
 \begin{theorem}[Factorization of the reassociated tail map]
     \label{thm:reassociated_tail_boundary_factorization}
     \lean{MPSTensor.reassocTailBoundaryMapES_comp_tailVirtualMapES}
@@ -3396,7 +3418,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     \label{thm:uniform_whole_increment_defect_seven_sixteenths}
     \lean{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
     \leanok
-    \uses{thm:primitive_fnw_projector_defect_geometric, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
+    \uses{def:primitive_mps, def:l_blk_injective,
+        def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es,
+        def:ground_space_es}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There is an integer $p>0$, measured in sites of $A$, such
     that $A$ is $p$-block injective and, for every prefix length $K$,
@@ -3411,8 +3435,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_fnw_projector_defect_geometric, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
-    Choose $p$ above a positive injective length and large enough that
+    \uses{thm:primitive_fnw_projector_defect_geometric, thm:wordspan_blk_inj_succ}
+    The geometric estimate already supplies a positive injective length.
+    Choose $p$ above it and large enough that
     $c\lambda^p<1$ and $c\lambda^p(1+c\lambda^p)/(1-c\lambda^p)<7/16$; the
     rational coefficient tends to zero because $\lambda<1$.  Block injectivity
     propagates to $p$, and the geometric whole-increment estimate applies with
@@ -3465,8 +3490,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:primitive_fnw_openchain_defect_geometric, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ, thm:nachtergaele_open_chain_projector_defect}
-    The open-chain geometric estimate supplies $c>0$ and $0<\lambda<1$.  Since
+    \uses{thm:primitive_fnw_openchain_defect_geometric, thm:wordspan_blk_inj_succ, thm:nachtergaele_open_chain_projector_defect}
+    The open-chain geometric estimate supplies $c>0$, $0<\lambda<1$, and a
+    positive block-injectivity length.
+    Since
     \begin{align}
         \sqrt{n+1}\,\lambda^n & \longrightarrow0,
     \end{align}
@@ -3475,9 +3502,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
         \frac{c\lambda^n(1+c\lambda^n)}{1-c\lambda^n}\sqrt{n+1}
          & \longrightarrow0.
     \end{align}
-    Normality supplies a positive block-injectivity length.  Choose $l$ above
-    that length and above $1$ so that $c\lambda^l<1$ and the last display is
-    less than $1$.  Block injectivity propagates to $l$, and the geometric
+    Choose $l$ above that length and above $1$ so that $c\lambda^l<1$ and the
+    last display is less than $1$.  Block injectivity propagates to $l$, and the geometric
     estimate gives the uniform defect bound with
     $\epsilon_l=c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$.  The open-chain
     projector-defect theorem gives the anticommutator statement.

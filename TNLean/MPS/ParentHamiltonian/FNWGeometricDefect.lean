@@ -27,10 +27,21 @@ gives the coefficient \(a(m)(1+a(m))/a_-(m)\); equation (5.9) gives \(1-a(m)\le
 a_-(m)\); and Lemma 5.2 with equations (5.9)--(5.10) gives \(a(m)\le c\lambda^m\) for
 every prescribed rate above the rho-weighted spectral radius of the transfer remainder.
 
-**Scope restriction (FNW prefactor):** the source states that the prefactor \(c\) may be
-taken equal to \(k^2\), the dimension of the auxiliary space. The prefactor produced here
-is the existential rate-dependent one supplied by Lemma 5.2; no dimension-only value is
-asserted. See `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
+**Scope restriction (FNW rate and prefactor):** two clauses of the source display are
+narrower here than in print, and both are recorded in
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
+
+The rate: the source prescribes that \(\lambda\) may be any number with
+\(\lambda_i<\lambda<1\) for every eigenvalue \(\lambda_i\ne 1\) of the transfer operator.
+What is proved below holds instead for any rate strictly above the rho-weighted spectral
+radius of the transfer remainder. The two conditions are known to describe the same rates
+only once that radius is identified with the largest modulus among the nonunit transfer
+eigenvalues, and that identification is not formalized: the available eigenvalue result
+bounds each eigenvalue of the remainder below one without characterizing its spectrum.
+
+The prefactor: the source states that \(c\) may be taken equal to \(k^2\), the dimension
+of the auxiliary space. The prefactor produced here is the existential rate-dependent one
+supplied by Lemma 5.2; no dimension-only value is asserted.
 
 ## Main results
 
@@ -105,12 +116,12 @@ theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geom
                 (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
               (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
             c * lam ^ m * (1 + c * lam ^ m) / (1 - c * lam ^ m) := by
-  have htr_pos : 0 < Matrix.trace ρ := hρ.trace_pos
   set σ : Mat := (Matrix.trace ρ)⁻¹ • ρ with hσ_def
-  have hσ : σ.PosDef := hρ.smul (inv_pos.mpr htr_pos)
+  have hσ : σ.PosDef := hρ.inv_trace_smul
   have hPσ : IsPrimitiveMPS A σ := IsPrimitiveMPS.smul_inv_trace hP hρ
   have htr : Matrix.trace σ = 1 := by
-    rw [hσ_def, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ (ne_of_gt htr_pos)]
+    rw [hσ_def]
+    exact Matrix.trace_inv_trace_smul (ne_of_gt hρ.trace_pos)
   obtain ⟨rate, hrate, hrate_one⟩ :=
     ENNReal.lt_iff_exists_nnreal_btwn.mp (hPσ.fnwWeightedRemainder_spectralRadius_lt_one hσ)
   obtain ⟨c, hc, hbound⟩ :=
