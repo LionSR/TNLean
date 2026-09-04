@@ -672,7 +672,7 @@ prerequisite for the other.
           (\ref{eq:mpu_canonical_form_full_support_datum_to_convention}): for
           a tensor whose periodic operators are all unitary, a positive
           diagonal trace-one $\rho$ with $E^{J}=\lvert\rho)(\Phi\rvert$ for
-          some $J>0$ leaves the transfer matrix one nonzero eigenvalue, equal
+          some $J>0$ leaves the transfer matrix with one nonzero eigenvalue, equal
           to one, hence a single normal block filling the ambient bond space.
           This is the spectral step of
           \cite[lines~344--355]{Cirac2017MPU} run from the stabilized power
@@ -682,11 +682,40 @@ prerequisite for the other.
           power constrains only the normalized double layer. Every entry the
           converse is meant to serve carries it already.
 
+          Trace normalization need not be added to the generic supplied-pair
+          entry. Write $P=\lvert\rho)(\Phi\rvert$ and $t=\tr(\rho)$.
+          Since $(\Phi\vert\rho)=t$, direct multiplication gives
+          \begin{align}
+              P^2&=tP, & \tr(P)&=t.
+              \label{eq:mpu_canonical_form_full_support_pair_trace}
+          \end{align}
+          The MPU trace identities hold at every length greater than one
+          \cite[lines~349--354]{Cirac2017MPU}. Thus, if $E^K=P$ and $K\geq2$,
+          \begin{align}
+              t&=\tr(P)=\tr(E^K)=1.
+              \label{eq:mpu_canonical_form_full_support_trace_large_exponent}
+          \end{align}
+          If $K=1$, use lengths two and three instead of assuming a
+          length-one trace identity. By
+          (\ref{eq:mpu_canonical_form_full_support_pair_trace}),
+          \begin{align}
+              t^2&=\tr(P^2)=\tr(E^2)=1, &
+              t^3&=\tr(P^3)=\tr(E^3)=1, & t&=1.
+              \label{eq:mpu_canonical_form_full_support_trace_exponent_one}
+          \end{align}
           The exponent premise costs nothing. The generic supplied-pair entry
           admits the exponent zero, where the condition reads
           $\mathbf 1=\lvert\rho)(\Phi\rvert$; the right side has rank at most
-          one, so the bond dimension is one, and in bond dimension one the
-          normalized transfer matrix of a tensor with a unitary periodic
+          one. The bond dimension cannot vanish, since a zero-dimensional
+          bond space gives a zero periodic operator on the nonempty physical
+          space. Hence $D=1$, and taking traces gives
+          \begin{align}
+              t&=\tr(P)=\tr(\mathbf 1_{D^2})=D^2=1.
+              \label{eq:mpu_canonical_form_full_support_trace_exponent_zero}
+          \end{align}
+          Thus the normalization required by the converse follows in every
+          case. In bond dimension one the normalized transfer matrix of a
+          tensor with a unitary periodic
           family is already the identity
           \cite[lines~397--409]{Cirac2017MPU}. The same pair then satisfies
           the condition at the exponent one, so the converse at a positive

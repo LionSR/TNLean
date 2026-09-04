@@ -520,7 +520,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   predicate. Of the 16 pointwise nodes,
   `lem:mpu_admissible_source_u_isometry` is the generic supplied-fixed-pair
   step whose Lean statements still carry `(ρ, hρ, K, hpower)` and which the
-  `lemuisometry` proof consumes; 3
+  `lemuisometry` proof consumes. Three nodes
   (`thm:mpu_admissible_simple_tensor_equivalence`,
   `def:mpu_admissible_standard_form`, `thm:mpu_admissible_fundamental`)
   restrict only the tensor their source-labelled counterpart already places
@@ -540,11 +540,20 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII U`, by the spectral
   step of `Papers/1703.09188/paper_v2.tex` lines 344--355, turns a supplied
   positive-definite diagonal trace-one pair into a presentation of the same
-  tensor. These fixed-weight hypotheses match the detailed gap note; trace
-  normalization is an explicit premise, not an unproved derivation.
-  `IsMPU` has to stay a
-  premise, since `IsMPUCanonicalFormII` contains it and a rank-one transfer
-  power constrains only the normalized double layer; every intended call site
+  tensor. The generic supplied-pair entry does not assume trace normalization,
+  but it follows from its power identity. Put $P=|\rho)(\Phi|$ and
+  $t=\operatorname{tr}(\rho)$, so $P^2=tP$ and $\operatorname{tr}(P)=t$.
+  For $K\geq2$, the MPU trace identity gives $t=\operatorname{tr}(E^K)=1$.
+  For $K=1$, it gives $t^2=\operatorname{tr}(E^2)=1$ and
+  $t^3=\operatorname{tr}(E^3)=1$, hence $t=1$; no length-one MPU trace
+  identity is needed. For $K=0$, $P=I$ and $D=1$ as below give $t=1$.
+  Thus this premise of the missing converse does not strengthen that entry.
+  The positive-length trace identities are formalized in
+  `IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one` for lengths
+  greater than one; the detailed gap note records the calculation.
+  `IsMPU` has to stay a premise, since `IsMPUCanonicalFormII` contains it and
+  a rank-one transfer power constrains only the normalized double layer;
+  every intended call site
   supplies it. The `K = 0` inputs the generic node admits are not lost: at
   that exponent the condition forces `D = 1`, where
   `IsMPU.normalized_transfer_matrix_eq_one_fin_one` gives `E = 1` and the same
