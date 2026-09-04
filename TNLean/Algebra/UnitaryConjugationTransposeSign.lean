@@ -10,7 +10,7 @@ import TNLean.Algebra.UnitaryKronecker
 # A common transpose sign for the two conjugation factors
 
 Applying the conjugation relation of a matrix product unitary twice leaves the
-single Kronecker identity `x̄x ⊗ ȳy = 𝟙` between the two virtual unitaries `x`
+single Kronecker identity `conj(x) x ⊗ conj(y) y = 𝟙` between the two virtual unitaries `x`
 and `y`. This file isolates the purely algebraic consequence drawn from that
 identity in arXiv:1703.09188, `paper_v2.tex` lines 1033--1038: the identity is
 equivalent to `x = e^{iφ} xᵀ` and `y = e^{-iφ} yᵀ`, and unitarity of `x` forces
@@ -44,7 +44,7 @@ variable {m n : Type*} [Fintype m] [DecidableEq m] [Nonempty m]
 
 omit [Nonempty m] in
 /-- For a unitary matrix, the transpose is a left inverse of the entrywise
-conjugate. This is the identity behind the step `x̄ = e^{-iφ} x†` in
+conjugate. This is the identity behind the step `conj(x) = e^{-iφ} x†` in
 arXiv:1703.09188, `paper_v2.tex` lines 1035--1037. -/
 theorem transpose_mul_map_star_of_mem_unitaryGroup {x : Matrix m m ℂ}
     (hx : x ∈ unitaryGroup m ℂ) : xᵀ * x.map (starRingEnd ℂ) = 1 := by
@@ -58,7 +58,7 @@ theorem transpose_mul_map_star_of_mem_unitaryGroup {x : Matrix m m ℂ}
 omit [Nonempty m] in
 /-- A unitary matrix whose entrywise conjugate times itself is a scalar matrix
 equals that scalar times its own transpose. This is the passage from
-`x̄x = e^{iφ}𝟙` to `x = e^{iφ} xᵀ` in arXiv:1703.09188, `paper_v2.tex`
+`conj(x) x = e^{iφ}𝟙` to `x = e^{iφ} xᵀ` in arXiv:1703.09188, `paper_v2.tex`
 lines 1035--1036. -/
 theorem eq_smul_transpose_of_map_star_mul_eq_smul_one {x : Matrix m m ℂ}
     (hx : x ∈ unitaryGroup m ℂ) {c : ℂ} (hc : x.map (starRingEnd ℂ) * x = c • 1) :
@@ -71,7 +71,7 @@ theorem eq_smul_transpose_of_map_star_mul_eq_smul_one {x : Matrix m m ℂ}
 
 /-- **Common transpose sign of the two conjugation factors.** If the entrywise
 conjugation relations of two unitary matrices assemble into the Kronecker
-identity `x̄x ⊗ ȳy = 𝟙`, then one sign `σ = ±1` satisfies `x = σ • xᵀ` and
+identity `conj(x) x ⊗ conj(y) y = 𝟙`, then one sign `σ = ±1` satisfies `x = σ • xᵀ` and
 `y = σ • yᵀ`.
 
 This is the algebraic tail of the conjugation-symmetry proposition in
@@ -97,7 +97,7 @@ theorem exists_common_transpose_sign_of_kronecker_map_star_mul_eq_one
     eq_smul_transpose_of_map_star_mul_eq_smul_one hy (by rwa [hcinv] at hcy)⟩
 
 /-- **Both factors symmetric or both skew-symmetric.** The Kronecker identity
-`x̄x ⊗ ȳy = 𝟙` between two unitary matrices leaves exactly two possibilities:
+`conj(x) x ⊗ conj(y) y = 𝟙` between two unitary matrices leaves exactly two possibilities:
 both matrices are symmetric, or both are skew-symmetric. This is the form of
 arXiv:1703.09188, `paper_v2.tex` lines 1033--1038 used in the structural
 discussion of symmetric and skew-symmetric unitaries that follows it. -/
