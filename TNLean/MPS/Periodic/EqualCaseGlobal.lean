@@ -616,14 +616,15 @@ multiplicity matrix `ξ_j R_j`, which is what the source means at lines
 667--671 by absorbing the phase into `S_j`. The scalar is genuinely present:
 for period one and `B_j = e^{iθ} A_j` it is not a root of unity.
 
-The blocks are assumed left-canonical, that is, in irreducible form II. The
-source theorem assumes only irreducible form and asserts at lines 330--332 that
-one passes between the two forms by a block-diagonal similarity; that passage
-is carried out in `fundamentalTheorem_periodic_equalCase_irreducibleForm`,
-which is the source statement itself. The present statement is the normalized
-half of that pair, isolated because the periodic overlap dichotomy and the
-vanishing of an off-period block are available in the normalized
-orientation. -/
+The blocks are assumed left-canonical, that is, the block maps are trace
+preserving. This is the normalization of `eq:unital` at line 316, and it is
+weaker than the source's irreducible form II, which additionally requires the
+unique fixed point to be diagonal. The source theorem assumes only irreducible
+form and asserts at lines 330--332 that one passes between the forms by a
+block-diagonal similarity; that passage is not carried out here. The present
+statement is the normalized half of the pair, isolated because the periodic
+overlap dichotomy and the vanishing of an off-period block are available in the
+normalized orientation. -/
 theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)
