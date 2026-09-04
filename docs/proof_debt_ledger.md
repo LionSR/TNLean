@@ -516,6 +516,29 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   tensor-product transports and by the reduced-representative construction),
   and the `fin_one` stabilization branch (still consumed on route by
   `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`). The
+  blueprint-side merge is now blocked on preservation rather than on the
+  predicate. Of the 16 pointwise nodes,
+  `lem:mpu_admissible_source_u_isometry` is the generic supplied-fixed-pair
+  step whose Lean statements still carry `(ρ, hρ, K, hpower)` and which the
+  `lemuisometry` proof consumes; 3
+  (`thm:mpu_admissible_simple_tensor_equivalence`,
+  `def:mpu_admissible_standard_form`, `thm:mpu_admissible_fundamental`)
+  restrict only the tensor their source-labelled counterpart already places
+  under the convention and have no Lean restriction left; the other 12
+  restrict a physical block, a physical-adjoint, transposed, or conjugate
+  comparison tensor, a tensor product, or a composition, for which no
+  preservation statement of the predicate exists. The 3 are cited by 11
+  retained nodes (7 pointwise plus the path nodes
+  `prop:mpu_admissible_continuity_index`, `thm:mpu_admissible_index`,
+  `cor:mpu_admissible_continuous_standard_form`, and
+  `lem:mpu_admissible_symmetry_path_criterion`) whose tensors carry only a
+  supplied fixed pair, so deleting them singly would strengthen those 11
+  statements silently. The two unblockers are the converse
+  `E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII` by the spectral step
+  of `Papers/1703.09188/paper_v2.tex` lines 344--355, and preservation of
+  `IsMPUCanonicalFormII` under positive physical blocking (asserted at source
+  line 356), physical adjunction, transposition, conjugation, identity
+  ancillas, tensor products, and composition. The
   nonsymmetric same-fixed-point problem in #7653 remains an optional
   out-of-source question; the transpose-reparameterized construction rejected
   in #7705 is not part of this plan.

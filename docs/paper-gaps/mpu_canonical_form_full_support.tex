@@ -583,6 +583,91 @@ path-dependent statement remains under its \texttt{mpu\_admissible} label.
 The supplied-fixed-pair contraction does not by itself construct the source
 data required to remove these restrictions.
 
+\subsection*{The pointwise family is one connected group}
+
+Now that the bundled presentation carries the stabilized pair, the pointwise
+family splits three ways rather than two, and the split explains why its
+entries cannot be removed one at a time.
+
+Of the thirty-nine \texttt{mpu\_admissible} entries of Chapter~28, twenty-three
+are \texttt{def:mpu\_admissible\_equivalence\_datum} together with the entries
+whose dependencies cite it. These carry continuously varying path data and
+belong to \ghissue{6140}. The remaining sixteen are pointwise.
+
+One of the sixteen,
+\texttt{lem:mpu\_admissible\_source\_u\_isometry}, is not a duplicate. It is
+the generic step, stated for an arbitrary positive diagonal weight $\rho$ and
+an arbitrary exponent $K$ with $E^{K}=\lvert\rho)(\Phi\rvert$, and its formal
+statements still carry both inputs. The source-labelled Lemma~III.7 entry is
+proved from it together with the stabilized power of the bundled presentation,
+so it remains as the reusable step.
+
+Three of the sixteen ---
+\texttt{thm:mpu\_admissible\_simple\_tensor\_equivalence},
+\texttt{def:mpu\_admissible\_standard\_form}, and
+\texttt{thm:mpu\_admissible\_fundamental} --- restrict only the tensors that
+their source-labelled counterparts already place under the standing
+convention, and no formal statement carries their restriction any more. They
+are the only merge candidates.
+
+The other twelve restrict a tensor other than the one the source entry is
+about: an exact physical block $\mathcal U_k$, a physical-adjoint, transposed,
+or conjugate comparison tensor, a tensor product, or a composition. Assuming
+the presentation there is not the presentation on $\mathcal U$; it is the
+assertion that the presentation survives those operations. For blocking the
+source asserts exactly that, writing that the blocked tensor is again normal
+and in canonical form II \cite[line~356]{Cirac2017MPU}; for the comparison
+tensors, products, and compositions it is the content of \ghissue{6139}. In
+neither case is a preservation statement available, so all twelve keep their
+restriction.
+
+The three candidates cannot be removed while the twelve stand. Eleven retained
+entries cite them: seven pointwise entries, and the four path entries
+\texttt{prop:mpu\_admissible\_continuity\_index},
+\texttt{thm:mpu\_admissible\_index},
+\texttt{cor:mpu\_admissible\_continuous\_standard\_form}, and
+\texttt{lem:mpu\_admissible\_symmetry\_path\_criterion}. The tensors of all
+eleven carry a supplied fixed pair and nothing else. Redirecting their
+dependencies onto the convention-hypothesis entries would either strengthen
+eleven retained statements without saying so, or leave the implication
+\begin{align}
+    E^{J}=\lvert\rho)(\Phi\rvert
+     & \implies\text{canonical form II}
+    \label{eq:mpu_canonical_form_full_support_datum_to_convention}
+\end{align}
+unrecorded between the two families. Stating
+(\ref{eq:mpu_canonical_form_full_support_datum_to_convention}) as a bridge
+entry is the parallel-family-with-a-bridge configuration that the repository's
+convention rule forbids.
+
+The merge is therefore one operation on the whole pointwise group, and it
+closes when either of the following is available.
+
+\begin{itemize}
+    \item The converse of the stabilization theorem, namely
+          (\ref{eq:mpu_canonical_form_full_support_datum_to_convention}): a
+          positive diagonal trace-one $\rho$ with
+          $E^{J}=\lvert\rho)(\Phi\rvert$ for some $J>0$ leaves the transfer
+          matrix one nonzero eigenvalue, equal to one, hence a single normal
+          block filling the ambient bond space. This is the spectral step of
+          \cite[lines~344--355]{Cirac2017MPU} run from the stabilized power
+          instead of from the shifted traces. It makes every supplied fixed
+          pair a bundled presentation, and the sixteen pointwise entries then
+          go together.
+    \item Preservation of the bundled presentation under positive physical
+          blocking, physical adjunction, transposition, conjugation, identity
+          ancillas, tensor products, and composition. Full support alone is
+          already preserved under blocking, adjunction, relabelling, and
+          identity ancillas; the outstanding clause is the ambient fixed
+          matrix, whose behaviour under each operation is fixed by the
+          corresponding transfer-map identity already recorded in Chapter~28.
+          Blocking is the case the source states outright at line~356.
+\end{itemize}
+
+Until one of these exists, deleting any of the three candidates moves a
+hypothesis boundary out of sight without removing it, so the sixteen pointwise
+entries all remain.
+
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The normal-tensor proposition,
@@ -623,7 +708,10 @@ continuity, and symmetry results also lack existence or preservation theorems
 for reduced source data under products, transformed comparison tensors, and
 continuous paths.
 Chapter~28 records these requirements as explicit admissibility hypotheses
-rather than consequences of the MPU predicate.
+rather than consequences of the MPU predicate. Those hypotheses form one
+connected group, so the corresponding entries are removed together and not
+singly; the elimination plan above records which of them are already free of a
+formal restriction and what the remaining three need.
 
 The full-support irreducibility implication is formalized by
 \leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_r_eq_one_of_fullSupport}.
