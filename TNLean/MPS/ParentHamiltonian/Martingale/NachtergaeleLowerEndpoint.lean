@@ -25,11 +25,13 @@ proof at lines 1195--1259 resolves \(\psi\) over the whole range
 This file shows that the printed conclusion does not follow from the printed
 hypotheses. `FrustrationFree.UnrestrictedNachtergaeleEstimate` transcribes
 Theorem 2.1(i) with each condition imposed exactly on the source range it
-carries -- C1 on \(l\leq n<M\) after the reindexing of its window sum, at the
-volumes \(\Lambda_M\) for \(M=N\) and \(M=n_0\) at which the source asserts
-it, and C2 and C3 on \(n_0\leq n<N\) -- together with the source's ordering
-\(l\leq n_0\) of the onset, the nontriviality of every ground space that C2
-requires, and the conclusion on \(\lVert\psi\rVert^2\); then
+carries -- C1 on \(l\leq n<M\) after the reindexing of its window sum, with
+one constant at every volume \(\Lambda_M\), and C2 and C3 on \(n_0\leq n<N\)
+-- together with the source's ordering \(l\leq n_0\) of the onset, the
+identification of every ground space with the kernel of its Hamiltonian and
+its nontriviality that C2 requires, the conventions
+\(G_{\Lambda_0}=\mathbf 1\) and \(G_{\Lambda_{N+1}}=0\), and the conclusion on
+\(\lVert\psi\rVert^2\); then
 `FrustrationFree.not_unrestrictedNachtergaeleEstimate` refutes it in every
 dimension \(k+2\).
 
@@ -79,28 +81,36 @@ Condition C1 at lines 1030--1035 sums from the window length, so at window
 \(l+1\) and volume \(\Lambda_M\) it reads
 \(0\leq\sum_{n=l+1}^{M}H_{\Lambda_n\setminus\Lambda_{n-l-1}}
 \leq d_{l+1}H_{\Lambda_M}\); reindexing to the summand
-\(H_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\) puts it on \(l\leq n<M\). It is
-assumed here at the two volumes the source makes available and the printed
-proof uses, namely \(M=N\) in full and \(M=n_0\) in its nonnegativity clause.
-Conditions C2 and C3 at lines 1043--1058 and 1083--1094 are imposed from the
-onset index \(n_0=\max\{l,n_l,n_{l+1}-1\}\) onwards, hence on \(n_0\leq n<N\),
-and that onset is at least \(l\). Condition C2 also asks that each ground
-space \(\mathcal G_\Lambda=\ker H_\Lambda\) be nontrivial, which is the
-nonvanishing of the corresponding projection.
+\(H_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\) puts it on \(l\leq n<M\). The
+source supplies a single constant \(d_{l+1}\) serving every volume, so the
+condition is imposed here at every \(M\), against the corresponding member
+\(H_{\Lambda_M}\) of the family of Hamiltonians. Conditions C2 and C3 at lines
+1043--1058 and 1083--1094 are imposed from the onset index
+\(n_0=\max\{l,n_l,n_{l+1}-1\}\) onwards, hence on \(n_0\leq n<N\), and that
+onset is at least \(l\). Condition C2 at lines 1044--1049 also identifies each
+ground space with the kernel of its Hamiltonian and asks that it be
+nontrivial; both clauses are imposed, for the volumes \(\Lambda_M\) with
+\(M\leq N\) and for the windows \(\Lambda_{n+1}\setminus\Lambda_{n-l}\) on the
+C2--C3 range. The conventions \(G_{\Lambda_0}=\mathbf 1\) and
+\(G_{\Lambda_{N+1}}=0\) at lines 1060--1061 are imposed as well.
 
 This is the hypothesis list of
 `NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_threshold`,
-with C1 restated on its own source range and the nontriviality clause of C2
-adjoined, together with the printed conclusion in place of the estimate on the
-martingale mass above the threshold. It is refuted by
-`not_unrestrictedNachtergaeleEstimate`. -/
+with C1 restated on its own source range at every volume and the remaining
+clauses of C2 and the two conventions adjoined, together with the printed
+conclusion in place of the estimate on the martingale mass above the
+threshold. It is refuted by `not_unrestrictedNachtergaeleEstimate`. -/
 def UnrestrictedNachtergaeleEstimate (E : Type*) [NormedAddCommGroup E]
     [InnerProductSpace ℂ E] [FiniteDimensional ℂ E] : Prop :=
-  ∀ (G : NestedGroundProjections (E := E)) (Q localHamiltonian : ℕ → E →ₗ[ℂ] E)
-    (H : E →ₗ[ℂ] E) (N n₀ l : ℕ) (v : E) (γ d ε : ℝ),
+  ∀ (G : NestedGroundProjections (E := E))
+    (Q localHamiltonian H : ℕ → E →ₗ[ℂ] E) (N n₀ l : ℕ) (v : E) (γ d ε : ℝ),
     l ≤ n₀ → n₀ ≤ N →
     G.projection 0 = LinearMap.id →
+    G.projection (N + 1) = 0 →
+    (∀ M ≤ N, LinearMap.ker (H M) = LinearMap.range (G.projection M)) →
     (∀ n ≤ N, G.projection n ≠ 0) →
+    (∀ n ∈ Finset.Ico n₀ N,
+      LinearMap.ker (localHamiltonian n) = LinearMap.range (Q n)) →
     (∀ n ∈ Finset.Ico n₀ N, Q n ≠ 0) →
     v ∈ (LinearMap.range (G.projection N))ᗮ →
     0 < γ → 0 < d → 0 ≤ ε → ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) →
@@ -108,11 +118,10 @@ def UnrestrictedNachtergaeleEstimate (E : Type*) [NormedAddCommGroup E]
     (∀ n ∈ Finset.Ico n₀ N, ∀ m, m < n - l ∨ n < m →
       (G.martingaleDifference m).comp (Q n) =
         (Q n).comp (G.martingaleDifference m)) →
-    (∀ x,
-      0 ≤ ∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n x, x⟫_ℂ).re ∧
-      (∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
-        d * (⟪H x, x⟫_ℂ).re) →
-    (∀ x, 0 ≤ ∑ n ∈ Finset.Ico l n₀, (⟪localHamiltonian n x, x⟫_ℂ).re) →
+    (∀ M, ∀ x,
+      0 ≤ ∑ n ∈ Finset.Ico l M, (⟪localHamiltonian n x, x⟫_ℂ).re ∧
+      (∑ n ∈ Finset.Ico l M, (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
+        d * (⟪H M x, x⟫_ℂ).re) →
     (∀ n ∈ Finset.Ico n₀ N, ∀ x,
       γ * ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) x‖ ^ 2 ≤
         (⟪localHamiltonian n x, x⟫_ℂ).re) →
@@ -120,7 +129,7 @@ def UnrestrictedNachtergaeleEstimate (E : Type*) [NormedAddCommGroup E]
       ‖(Q n).toContinuousLinearMap.comp
           (G.martingaleDifference n).toContinuousLinearMap‖ ≤ ε) →
     (γ / d) * (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 * ‖v‖ ^ 2 ≤
-      (⟪H v, v⟫_ℂ).re
+      (⟪H N v, v⟫_ℂ).re
 
 namespace NachtergaeleLowerEndpoint
 
@@ -176,6 +185,38 @@ private theorem diagonal_ne_zero (k : ℕ) (f : Fin k → ℝ) (i : Fin k)
     simp
   simpa using hi
 
+/-- The kernel of a diagonal operator is the range of the diagonal projection
+onto the coordinates that the operator annihilates. -/
+private theorem ker_diagonal_eq_range_diagonal (k : ℕ) (f g : Fin k → ℝ)
+    (hg : ∀ i, g i = 0 ∨ g i = 1) (hfg : ∀ i, f i = 0 ↔ g i = 1) :
+    LinearMap.ker (diagonal k f) = LinearMap.range (diagonal k g) := by
+  ext x
+  simp only [LinearMap.mem_ker, LinearMap.mem_range]
+  constructor
+  · intro hx
+    refine ⟨x, ?_⟩
+    ext i
+    have hxi : (f i : ℂ) * x i = 0 := by
+      rw [← diagonal_apply k f x i, hx]
+      simp
+    rcases hg i with h | h
+    · have hne : (f i : ℂ) ≠ 0 := by
+        have : f i ≠ 0 := fun hf ↦ by rw [(hfg i).mp hf] at h; norm_num at h
+        exact_mod_cast this
+      have hxz : x i = 0 := (mul_eq_zero.mp hxi).resolve_left hne
+      simp [h, hxz]
+    · simp [h]
+  · rintro ⟨y, rfl⟩
+    have hcomp : (diagonal k f).comp (diagonal k g) = 0 := by
+      rw [diagonal_comp, ← diagonal_zero k]
+      refine diagonal_congr _ fun i ↦ ?_
+      rcases hg i with h | h
+      · simp [h]
+      · simp [(hfg i).mpr h]
+    have hy := congrArg (fun T : EuclideanSpace ℂ (Fin k) →ₗ[ℂ]
+      EuclideanSpace ℂ (Fin k) ↦ T y) hcomp
+    simpa using hy
+
 private theorem diagonal_isSymmetric (k : ℕ) (f : Fin k → ℝ) :
     (diagonal k f).IsSymmetric := by
   intro x y
@@ -229,6 +270,12 @@ remaining excitations, and \(0\) at the vacuum coordinate. -/
 private noncomputable def siteWeight (k : ℕ) : Fin (k + 2) → ℝ :=
   fun i ↦ if (i : ℕ) = 0 then 1 / 2 else if (i : ℕ) = k + 1 then 0 else 1
 
+/-- The weight of the Hamiltonian \(H_{\Lambda_M}\): the excitations inside
+the volume carry their one-site energy and every other coordinate carries
+none. -/
+private noncomputable def hamiltonianWeight (k M : ℕ) : Fin (k + 2) → ℝ :=
+  fun i ↦ if (i : ℕ) < M then siteWeight k i else 0
+
 /-- The weight of the local Hamiltonian
 \(H_{\Lambda_{n+1}\setminus\Lambda_n}\). -/
 private noncomputable def localWeight (k n : ℕ) : Fin (k + 2) → ℝ :=
@@ -247,12 +294,25 @@ private theorem siteWeight_nonneg (k : ℕ) (i : Fin (k + 2)) :
   simp only [siteWeight]
   split_ifs <;> norm_num
 
+private theorem siteWeight_ne_zero (k : ℕ) (i : Fin (k + 2))
+    (hi : (i : ℕ) ≠ k + 1) : siteWeight k i ≠ 0 := by
+  simp only [siteWeight]
+  split_ifs with h₁
+  · norm_num
+  · norm_num
+
 private theorem localWeight_nonneg (k n : ℕ) (i : Fin (k + 2)) :
     0 ≤ localWeight k n i := by
   simp only [localWeight]
   split_ifs with h
   · exact siteWeight_nonneg k i
   · exact le_rfl
+
+private theorem sum_localWeight (k M : ℕ) (i : Fin (k + 2)) :
+    ∑ n ∈ Finset.Ico 0 M, localWeight k n i = hamiltonianWeight k M i := by
+  rw [← Finset.range_eq_Ico]
+  simp only [localWeight, hamiltonianWeight, Finset.sum_ite_eq,
+    Finset.mem_range]
 
 private theorem inner_localWeight_nonneg (k n : ℕ)
     (x : EuclideanSpace ℂ (Fin (k + 2))) :
@@ -313,10 +373,11 @@ private theorem norm_sq_defect (k : ℕ) : ‖defect k‖ ^ 2 = 1 := by
   simp [defect]
 
 private theorem inner_defect (k : ℕ) :
-    (⟪diagonal (k + 2) (siteWeight k) (defect k), defect k⟫_ℂ).re = 1 / 2 := by
+    (⟪diagonal (k + 2) (hamiltonianWeight k (k + 1)) (defect k),
+      defect k⟫_ℂ).re = 1 / 2 := by
   rw [inner_diagonal_re]
   rw [Finset.sum_eq_single (0 : Fin (k + 2))]
-  · simp [defect, siteWeight]
+  · simp [defect, hamiltonianWeight, siteWeight]
   · intro i _ hi
     simp [defect, hi]
   · intro h
@@ -338,11 +399,13 @@ printed bound would read
 \(\langle\psi\mid H_{\Lambda_N}\psi\rangle\geq\lVert\psi\rVert^2\), while the
 single-excitation vector at the weakened bond has energy
 \(\frac12\lVert\psi\rVert^2\). Condition C1 is supplied on its own range
-\(0\leq n<N\), where the local terms sum to \(H_{\Lambda_N}\) exactly, and at
-the volume \(\Lambda_{n_0}\) as well; every ground space is the nonzero span
-of the vacuum, so the nontriviality clause of C2 holds too. The index \(n=0\)
-is excluded only from C2 and C3, and the printed proof estimates its
-martingale difference all the same. -/
+\(0\leq n<M\) at every volume \(\Lambda_M\) with the one constant \(d_1=1\),
+because the local terms below \(M\) sum to \(H_{\Lambda_M}\) exactly. Every
+ground space is the kernel of its own Hamiltonian and is the nonzero span of
+the vacuum, so both clauses of C2 hold, as do the conventions
+\(G_{\Lambda_0}=\mathbf 1\) and \(G_{\Lambda_{N+1}}=0\). The index \(n=0\) is
+excluded only from C2 and C3, and the printed proof estimates its martingale
+difference all the same. -/
 theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     ¬ UnrestrictedNachtergaeleEstimate (EuclideanSpace ℂ (Fin (k + 2))) := by
   intro hsource
@@ -352,6 +415,49 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     rw [chain_projection, ← diagonal_one (k + 2)]
     refine diagonal_congr _ fun i ↦ ?_
     simp [groundWeight]
+  have hfinal : (chain k).projection (k + 1 + 1) = 0 := by
+    rw [chain_projection, ← diagonal_zero (k + 2)]
+    refine diagonal_congr _ fun i ↦ ?_
+    have hi : (i : ℕ) < k + 2 := i.isLt
+    simp only [groundWeight]
+    split_ifs with h
+    · exact absurd h (Nat.not_le.mpr (by omega))
+    · rfl
+  have hkerH : ∀ M ≤ k + 1,
+      LinearMap.ker (diagonal (k + 2) (hamiltonianWeight k M)) =
+        LinearMap.range ((chain k).projection M) := by
+    intro M hM
+    rw [chain_projection]
+    refine ker_diagonal_eq_range_diagonal _ _ _ (fun i ↦ ?_) fun i ↦ ?_
+    · simp only [groundWeight]
+      split_ifs <;> simp
+    · have hi : (i : ℕ) < k + 2 := i.isLt
+      simp only [hamiltonianWeight, groundWeight]
+      split_ifs with h1 h2 h3
+      · exact absurd h2 (Nat.not_le.mpr h1)
+      · constructor
+        · intro h
+          exact absurd h (siteWeight_ne_zero k i (by omega))
+        · intro h
+          norm_num at h
+      · simp
+      · exact absurd (Nat.not_lt.mp h1) h3
+  have hkerQ : ∀ n ∈ Finset.Ico 1 (k + 1),
+      LinearMap.ker (diagonal (k + 2) (localWeight k n)) =
+        LinearMap.range (diagonal (k + 2) (excitationWeight k n)) := by
+    intro n hn
+    have hn2 : n < k + 1 := (Finset.mem_Ico.mp hn).2
+    refine ker_diagonal_eq_range_diagonal _ _ _ (fun i ↦ ?_) fun i ↦ ?_
+    · simp only [excitationWeight]
+      split_ifs <;> simp
+    · simp only [localWeight, excitationWeight]
+      split_ifs with hin
+      · constructor
+        · intro h
+          exact absurd h (siteWeight_ne_zero k i (by omega))
+        · intro h
+          norm_num at h
+      · simp
   have hgroundne : ∀ n ≤ k + 1, (chain k).projection n ≠ 0 := by
     intro n hn
     rw [chain_projection]
@@ -382,44 +488,35 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     intro n _ m _
     rw [chain_martingaleDifference, diagonal_comp, diagonal_comp]
     exact diagonal_congr _ fun i ↦ mul_comm _ _
-  have hlocal : ∀ (x : EuclideanSpace ℂ (Fin (k + 2))),
-      ∑ n ∈ Finset.Ico 0 (k + 1),
+  have hlocal : ∀ (M : ℕ) (x : EuclideanSpace ℂ (Fin (k + 2))),
+      ∑ n ∈ Finset.Ico 0 M,
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re =
-        (⟪diagonal (k + 2) (siteWeight k) x, x⟫_ℂ).re := by
-    intro x
+        (⟪diagonal (k + 2) (hamiltonianWeight k M) x, x⟫_ℂ).re := by
+    intro M x
     have hswap :
-        ∑ n ∈ Finset.Ico 0 (k + 1), ∑ i, localWeight k n i * ‖x i‖ ^ 2 =
-          ∑ i, ∑ n ∈ Finset.Ico 0 (k + 1), localWeight k n i * ‖x i‖ ^ 2 :=
+        ∑ n ∈ Finset.Ico 0 M, ∑ i, localWeight k n i * ‖x i‖ ^ 2 =
+          ∑ i, ∑ n ∈ Finset.Ico 0 M, localWeight k n i * ‖x i‖ ^ 2 :=
       Finset.sum_comm
     calc
-      ∑ n ∈ Finset.Ico 0 (k + 1),
+      ∑ n ∈ Finset.Ico 0 M,
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re =
-          ∑ n ∈ Finset.Ico 0 (k + 1), ∑ i, localWeight k n i * ‖x i‖ ^ 2 :=
+          ∑ n ∈ Finset.Ico 0 M, ∑ i, localWeight k n i * ‖x i‖ ^ 2 :=
         Finset.sum_congr rfl fun n _ ↦ inner_diagonal_re _ _ x
-      _ = ∑ i, ∑ n ∈ Finset.Ico 0 (k + 1), localWeight k n i * ‖x i‖ ^ 2 := hswap
-      _ = ∑ i : Fin (k + 2), siteWeight k i * ‖x i‖ ^ 2 := by
+      _ = ∑ i, ∑ n ∈ Finset.Ico 0 M, localWeight k n i * ‖x i‖ ^ 2 := hswap
+      _ = ∑ i : Fin (k + 2), hamiltonianWeight k M i * ‖x i‖ ^ 2 := by
         refine Finset.sum_congr rfl fun i _ ↦ ?_
-        rw [← Finset.sum_mul]
-        congr 1
-        rw [← Finset.range_eq_Ico]
-        have hi : (i : ℕ) < k + 2 := i.isLt
-        simp only [localWeight, Finset.sum_ite_eq, Finset.mem_range, siteWeight]
-        split_ifs <;> first | rfl | (exfalso; omega)
-      _ = (⟪diagonal (k + 2) (siteWeight k) x, x⟫_ℂ).re :=
+        rw [← Finset.sum_mul, sum_localWeight]
+      _ = (⟪diagonal (k + 2) (hamiltonianWeight k M) x, x⟫_ℂ).re :=
         (inner_diagonal_re _ _ x).symm
-  have hC1 : ∀ (x : EuclideanSpace ℂ (Fin (k + 2))),
-      0 ≤ ∑ n ∈ Finset.Ico 0 (k + 1),
+  have hC1 : ∀ (M : ℕ) (x : EuclideanSpace ℂ (Fin (k + 2))),
+      0 ≤ ∑ n ∈ Finset.Ico 0 M,
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re ∧
-      (∑ n ∈ Finset.Ico 0 (k + 1),
+      (∑ n ∈ Finset.Ico 0 M,
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re) ≤
-        1 * (⟪diagonal (k + 2) (siteWeight k) x, x⟫_ℂ).re := by
-    intro x
+        1 * (⟪diagonal (k + 2) (hamiltonianWeight k M) x, x⟫_ℂ).re := by
+    intro M x
     refine ⟨Finset.sum_nonneg fun n _ ↦ inner_localWeight_nonneg k n x, ?_⟩
-    exact le_of_eq (by rw [hlocal x, one_mul])
-  have hC1below : ∀ (x : EuclideanSpace ℂ (Fin (k + 2))),
-      0 ≤ ∑ n ∈ Finset.Ico 0 1,
-          (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re :=
-    fun x ↦ Finset.sum_nonneg fun n _ ↦ inner_localWeight_nonneg k n x
+    exact le_of_eq (by rw [hlocal M x, one_mul])
   have hC2 : ∀ n ∈ Finset.Ico 1 (k + 1), ∀ x : EuclideanSpace ℂ (Fin (k + 2)),
       (1 : ℝ) * ‖((LinearMap.id :
             EuclideanSpace ℂ (Fin (k + 2)) →ₗ[ℂ] EuclideanSpace ℂ (Fin (k + 2))) -
@@ -466,9 +563,10 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
   have hmain := hsource (chain k)
     (fun n ↦ diagonal (k + 2) (excitationWeight k n))
     (fun n ↦ diagonal (k + 2) (localWeight k n))
-    (diagonal (k + 2) (siteWeight k)) (k + 1) 1 0 (defect k) 1 1 0
-    (by omega) (by omega) hzero hgroundne hQne hv one_pos one_pos le_rfl
-    (by rw [hsqrt]; norm_num) hQ hcomm hC1 hC1below hC2 hC3
+    (fun M ↦ diagonal (k + 2) (hamiltonianWeight k M)) (k + 1) 1 0 (defect k)
+    1 1 0
+    (by omega) (by omega) hzero hfinal hkerH hgroundne hkerQ hQne hv one_pos
+    one_pos le_rfl (by rw [hsqrt]; norm_num) hQ hcomm hC1 hC2 hC3
   rw [hsqrt, norm_sq_defect, inner_defect] at hmain
   norm_num at hmain
 

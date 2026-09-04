@@ -34,6 +34,9 @@ $d_q$ with
          \leq d_qH_{\Lambda_N}.
     \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1}
 \end{align}
+The constant does not depend on the volume: the source asserts
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1}) for every $N$ with one
+$d_q$, and Theorem~2.1(i) is stated for every $N$ with the same $d_{l+1}$.
 Condition~C2 assumes that $\mathcal G_\Lambda=\ker H_\Lambda$ is a non-trivial
 subspace, writes $G_\Lambda$ for the orthogonal projection onto
 $\mathcal G_\Lambda\otimes\mathcal H_{\Lambda_N\setminus\Lambda}$, and assumes
@@ -276,7 +279,12 @@ the model restricts to that span, of dimension $N+1$, with $E_m$ the
 projection onto the $m$-th excitation coordinate. Retaining the ground-state
 coordinate keeps every $\mathcal G_{\Lambda_n}$ non-trivial, as C2 requires;
 on the restricted space $\mathcal G_{\Lambda_N}$ is the line it spans, and
-$\psi$ is orthogonal to it. The restriction of
+$\psi$ is orthogonal to it. Each ground space of the restricted model is again
+the kernel of the restricted Hamiltonian of its volume, and for $M>N$ the
+restricted $H_{\Lambda_M}$ coincides with $H_{\Lambda_N}$, because the
+retained vectors carry no excitation beyond site $N$; the whole family of
+volume Hamiltonians and the conventions $G_{\Lambda_0}=\mathbf 1$ and
+$G_{\Lambda_{N+1}}=0$ therefore survive the restriction. The restriction of
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_interaction}) at
 $l=0$ and $\delta=1/2$ refutes the printed statement for every chain length
 $N\geq1$.\footnote{Formal declarations:
@@ -284,15 +292,18 @@ $N\geq1$.\footnote{Formal declarations:
     (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}) with each
     condition on the range the source gives it, namely C1 on $l\leq n<M$, the
     range of its reindexed window sum
-    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1_reindex}) at the
-    volume $\Lambda_M$, imposed at $M=N$ and, in its non-negativity clause,
-    at $M=n_0$, and C2 and C3 on
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1_reindex}), imposed
+    with a single constant at every volume $\Lambda_M$ against the
+    corresponding member of the family of Hamiltonians, and C2 and C3 on
     (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}); it also
-    carries the ordering $l\leq n_0$ of that threshold and the non-triviality
-    of the ground spaces that C2 requires. Then
+    carries the ordering $l\leq n_0$ of that threshold, the identification of
+    each ground space with the kernel of its Hamiltonian and the
+    non-triviality of the ground spaces that C2 requires, and the conventions
+    $G_{\Lambda_0}=\mathbf 1$ and $G_{\Lambda_{N+1}}=0$. Then
     \leanid{FrustrationFree.not_unrestrictedNachtergaeleEstimate} refutes it.
     In the formal instance $l=0$, so C1 is supplied on the full range
-    $0\leq n<N$, where the local terms sum to $H_{\Lambda_N}$ exactly.}
+    $0\leq n<M$, where the local terms sum to $H_{\Lambda_M}$ exactly at every
+    volume.}
 
 \section{The minimal repair}
 
@@ -333,9 +344,9 @@ Under (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}) the
 conclusion (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion})
 holds with the printed coefficient, with C2 and C3 assumed only on the source
 range (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}) and C1
-only on the range $l\leq n<M$ of its own window sum, at the volumes
-$\Lambda_{n_0}$ and $\Lambda_N$ at which the source asserts
-it.\footnote{Formal
+only on the range $l\leq n<M$ of its own window sum, and only at the two
+volumes $\Lambda_{n_0}$ and $\Lambda_N$ among the volumes at which the source
+asserts it.\footnote{Formal
     declaration:
     \leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero};
     the implication from
