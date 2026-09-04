@@ -149,17 +149,18 @@ The source gates remain the gates built from the printed weight $\rho$; replacin
 that weight by $\rho^{\mathsf T}$ recomputes $X_1,Y_1$ and gives a different
 gate when $\rho$ is not symmetric. The source's diagonal convention makes the
 two inserted vectors equal, and
-\leanid{MPOTensor.IsMPUSimple.sourceV_isIsometry} proves the forward direction
-of Theorem~III.8 on precisely that convention. The reparametrized theorem
+\leanid{MPOTensor.IsMPUCanonicalFormII.sourceV_isIsometry} proves the forward
+direction of Theorem~III.8 on precisely that convention. The reparametrized theorem
 \leanid{MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry} is retained as an
 auxiliary statement, not as an identification of the original gate. The
 converse direction in
 \leanid{MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry} produces the
 witnesses $(\Phi\rvert$ and $\lvert\rho^{\mathsf T})$ for the same weight
 $\rho$. Together with the diagonal source-$u$ isometry,
-\leanid{MPOTensor.IsMPU.isMPUSimple_tfae} gives the supplied-fixed-pair
-specialization of Theorem~III.8; the unrestricted representative scope remains
-recorded in \texttt{mpu\_canonical\_form\_full\_support.tex}. No source-factor
+\leanid{MPOTensor.IsMPUCanonicalFormII.isMPUSimple_tfae} gives Theorem~III.8
+under the source's standing convention; the transport of source cuts to a
+reduced representative of an arbitrary ambient MPU remains recorded in
+\texttt{mpu\_canonical\_form\_full\_support.tex}. No source-factor
 definition is changed.
 
 For the source-$u$ gate, the transpose closure and the source's diagonal
@@ -185,7 +186,8 @@ The arbitrary-$K$ declarations are
 \leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_input_tail},
 \leanid{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU}, and
 \leanid{MPOTensor.SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU}.
-The compact-SVD wrapper is \leanid{MPOTensor.IsMPU.sourceU_isIsometry}, while
+The compact-SVD wrapper is
+\leanid{MPOTensor.IsMPUCanonicalFormII.sourceU_isIsometry}, while
 \leanid{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag}
 converts the raw trace-one transfer power at $J$ into the direct fixed pair at
 $K=JD^2$. The independent right-shift checks
@@ -198,19 +200,23 @@ arbitrary nonsymmetric $\rho$.
 \section{Marker boundary for the complete source-$u$ network}
 
 The transposed first cut was a local correction, and it is resolved. The
-complete source-$u$ module has a separate scope restriction: its closing
-theorems assume the stabilized fixed pair explicitly, whereas Lemma~III.7
-inherits that pair from the source's standing canonical-form-II convention.
-The source itself fixes $\rho$ to be diagonal with positive weights
-$\rho_n>0$, so diagonality is not a restriction relative to the cited lemma.
+separate supplied-fixed-pair restriction of the complete source-$u$ module is
+resolved as well. Its generic theorems still take a stabilized fixed pair as an
+explicit hypothesis, but they are stated as reusable steps for an arbitrary
+positive diagonal weight and an arbitrary stabilization exponent, and
+Lemma~III.7 itself is now stated for a tensor in canonical form II, where the
+weight and the stabilized power are both recorded by the convention. The source
+itself fixes $\rho$ to be diagonal with positive weights $\rho_n>0$, so
+diagonality is not a restriction relative to the cited lemma.
 % Source lines: paper_v2.tex 269--280 and 495.
-Accordingly, the module carries one scope marker for the supplied fixed pair.
-The wider source-data restriction is recorded in
+Accordingly, the module carries no scope marker for the supplied fixed pair.
+The remaining source-data restriction, namely the transport of source cuts from
+an arbitrary ambient MPU to its reduced representative, is recorded in
 \texttt{mpu\_canonical\_form\_full\_support.tex}.
 
-Eliminating the supplied-data restriction means bundling the standing
-canonical-form-II convention and restating the MPU-level results through it,
-as tracked by \ghissue{7657} and \ghissue{7659}. Issue \ghissue{7653} instead
+The elimination step for the supplied-data restriction was the bundling of the
+standing canonical-form-II convention and the restatement of the MPU-level
+results through it, and it is complete. Issue \ghissue{7653} instead
 asks for a nonsymmetric ambient-weight strengthening that CPSV17 does not
 claim. It is not the elimination step for the source-faithful theorem.
 

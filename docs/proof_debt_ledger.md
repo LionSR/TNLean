@@ -501,15 +501,24 @@ counts checked on `origin/main` at `fb847cd35`. Ranked among themselves by
 compounding cost; D13 precedes D14 because every new MPU statement pays it.
 
 ## D13. The MPU canonical-form-II convention is threaded pointwise, while admissible path nodes carry an additional continuous-source-data gap  —  api-design, impact 7/10, effort 5/10
-- **Status**: open. The convention predicate now exists, and the reduced
-  representative is constructed in the ambient diagonal gauge, so the
-  predicate is inhabited for the tensor the source arguments use. The
-  source-labelled Chapter 28 nodes contain the source formulas and proof
-  sketches needed for eventual consolidation, but the 16 pointwise
-  `mpu_admissible` twins remain until the theorem migration of #7659 lands. Removing them earlier would
-  hide the current Lean hypothesis boundary. The nonsymmetric same-fixed-point
-  problem in #7653 remains an optional out-of-source question; the transpose-
-  reparameterized construction rejected in #7705 is not part of this plan.
+- **Status**: open. The convention predicate exists, the reduced
+  representative is constructed in the ambient diagonal gauge, and the
+  MPU-level theorem migration has landed: the stabilized pair is now a
+  consequence of the predicate at the single positive exponent
+  $\max(D^2-1,1)$, and the forced-block contractions, the source-$u$
+  isometry with its rank bound, the source-$v$ isometry with its rank bound,
+  and the simple-tensor equivalence take the predicate in place of the
+  `(cfii, hfull)`, `(ρ, hρ, hρdiag)` and `(J, hJ, hpower)` groups. The
+  source-labelled nodes `lemuisometry` and `ThmFund1` are therefore checked
+  against those statements. What remains is the blueprint-side merge of the
+  surviving pointwise `mpu_admissible` twins, the `HasFullSupport` deletion
+  (still consumed by the physical-adjoint, identity-ancilla, and
+  tensor-product transports and by the reduced-representative construction),
+  and the `fin_one` stabilization branch (still consumed on route by
+  `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`). The
+  nonsymmetric same-fixed-point problem in #7653 remains an optional
+  out-of-source question; the transpose-reparameterized construction rejected
+  in #7705 is not part of this plan.
 - **Evidence**: `TNLean/MPS/MPU/` carries the paper's standing convention
   (`Papers/1703.09188/paper_v2.tex` lines 271--281 and 356--361) as explicit
   hypotheses in three shapes: `hρ : ρ.PosDef` at 65 sites in 11 files,

@@ -4297,40 +4297,34 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     factorization for the stabilized power.
 \end{proof}
 
-\begin{theorem}[Reduced-CFII data for the forced simple block]
+\begin{theorem}[Forced simple block in canonical form II]
     \label{thm:mpu_reduced_cfii_forced_block_simple_contractions}
-    \lean{MPOTensor.IsMPU.exists_reduced_cfii_forced_block_simple_contractions}
+    \lean{MPOTensor.IsMPUCanonicalFormII.forced_block_simple_contractions}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support, def:mpdo_physical_blocking, def:mpu_double_layer}
-    Let $d>0$, $D>1$, and let $\mathcal U$ be an MPU whose normalized
-    flattening has chosen canonical-form-II data with full support. Put
-    $J=D^2-1$ and $W=\mathcal U_{JD^2}$. There is a matrix $\rho>0$ with
-    $\tr(\rho)=1$ such that
-    \begin{align}
-        E\lvert\rho) & =\lvert\rho),
-                     & (\Phi\rvert E & =(\Phi\rvert,
-                     & E^J           & =\lvert\rho)(\Phi\rvert.
-    \end{align}
-    With the corresponding vectorized pair $\rho',\Phi'$, the same blocked
-    tensor $W$ satisfies the two aligned simple contractions
+    \uses{def:mpu_canonical_form_ii, def:mpdo_physical_blocking, def:mpu_double_layer}
+    Let $\mathcal U$ be an MPU in canonical form II, with ambient fixed
+    matrix $\rho$. Put $J=\max(D^2-1,1)$ and $W=\mathcal U_{JD^2}$. With
+    the vectorized pair $\rho',\Phi'$ of $\rho$ and of the identity, the
+    blocked tensor $W$ satisfies the two aligned simple contractions
     \begin{align}
         \Phi'\mathbin{\boldsymbol\cdot}W^{ij}\rho'
          & =\delta_{ij},                              \\
         W^{ij}W^{k\ell}
          & =W^{ij}\lvert\rho')(\Phi'\rvert W^{k\ell}.
     \end{align}
-    This theorem supplies only the fixed pair and the two simple contractions.
-    It does not assert a source-cut factorization or source-$v$ isometry.
+    This theorem asserts only the two simple contractions. It does not assert a
+    source-cut factorization or source-$v$ isometry.
     % Source lines: paper_v2.tex 397--427, 550--556, 589, and 592.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_matching_direct_block_contractions, thm:mpu_reduced_cfii_transfer_stabilization}
-    Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization} gives the
-    positive trace-one fixed matrix and the identity
-    $E^J=\lvert\rho)(\Phi\rvert$. Applying
-    Theorem~\ref{thm:mpu_matching_direct_block_contractions} with this pair
-    gives both contractions on the direct block $W=\mathcal U_{JD^2}$.
+    \uses{thm:mpu_matching_direct_block_contractions, thm:mpu_canonical_form_ii_transfer_stabilization, thm:mpu_canonical_form_ii_positive_dimensions}
+    The convention records a positive trace-one ambient fixed matrix, and
+    Theorem~\ref{thm:mpu_canonical_form_ii_transfer_stabilization} identifies
+    the stabilized power with $\lvert\rho)(\Phi\rvert$ at the positive exponent
+    $J$. Applying Theorem~\ref{thm:mpu_matching_direct_block_contractions} with
+    this pair gives both contractions on the direct block
+    $W=\mathcal U_{JD^2}$.
 \end{proof}
 
 \begin{theorem}[One-dimensional normalized transfer matrix]
@@ -4391,6 +4385,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % inhabitance is proved only for the constructed reduced representative of
     % Theorem thm:mpu_reduced_cfii_representative.
 \end{definition}
+
+\begin{theorem}[Canonical form II forces positive dimensions]
+    \label{thm:mpu_canonical_form_ii_positive_dimensions}
+    \lean{MPOTensor.IsMPUCanonicalFormII.neZero_bond,
+        MPOTensor.IsMPUCanonicalFormII.neZero_phys}
+    \leanok
+    \uses{def:mpu_canonical_form_ii}
+    If an MPO tensor $\mathcal U$ admits a canonical-form-II presentation, then
+    its bond space is nonempty and its physical dimension is positive:
+    \begin{align}
+        D & >0, & d & >0.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Both dimensions are forced by the normalization $\tr(\rho)=1$ of
+    (\ref{eq:mpu_ambient_cfii_fixed_pair}). If $D=0$, the ambient bond index
+    set is empty and every trace over it vanishes,
+    \begin{align}
+        \tr(\rho) & =\sum_{n\in\varnothing}\rho_{nn}=0\neq1.
+    \end{align}
+    If $d=0$, the physical index set is empty, so the normalized transfer map
+    is an empty sum,
+    \begin{align}
+        E(\rho) & =\sum_{i\in\varnothing}\widetilde{\mathcal U}^{i}\rho
+        \bigl(\widetilde{\mathcal U}^{i}\bigr)^\dagger=0.
+    \end{align}
+    The fixed-point equation $E(\rho)=\rho$ of
+    (\ref{eq:mpu_ambient_cfii_fixed_pair}) then gives $\rho=0$, hence
+    $\tr(\rho)=0\neq1$.
+\end{proof}
 
 \begin{theorem}[Normality of a full-support normalized MPU representative]
     \label{thm:mpu_normalized_full_support_normal}
@@ -4456,6 +4481,65 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\sum_{k=1}^{r}D_k=D$. Theorem~\ref{thm:mpu_normalized_full_support_normal}
     therefore applies to the chosen canonical-form-II representation of
     $\widetilde{\mathcal U}$.
+\end{proof}
+
+\begin{theorem}[Ambient fixed pair in canonical form II]
+    \label{thm:mpu_canonical_form_ii_transfer_stabilization}
+    \lean{MPOTensor.IsMPUCanonicalFormII.vecMul_one_vec_transferMatrix,
+        MPOTensor.IsMPUCanonicalFormII.normalized_transfer_power_eq_vecMulVec,
+        MPOTensor.IsMPUCanonicalFormII.normalizedDiagonal_pow_eq_vecMulVec}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_double_layer}
+    Let $\mathcal U$ be an MPU in canonical form II with ambient fixed
+    matrix $\rho$, and put $J=\max(D^2-1,1)$. Then
+    \begin{align}
+        (\Phi\rvert E & =(\Phi\rvert,
+                      & E^J           & =\lvert\rho)(\Phi\rvert.
+        \label{eq:mpu_ambient_cfii_stabilization}
+    \end{align}
+    Let $q:\Fin D\times\Fin D\to\Fin{D^2}$ be the standard product encoding,
+    let $R$ be the normalized physical diagonal of the double layer
+    $\mathcal W(\mathcal U)$, and let $\rho',\Phi'$ be the vectorizations of
+    $\rho$ and of $\Phi=\Id_D$ in the doubled bond coordinates $\Fin{D^2}$,
+    that is $\rho'_{q(m,n)}=\rho_{mn}$ and $\Phi'_{q(m,n)}=(\Id_D)_{mn}$. Then
+    also
+    \begin{align}
+        R^J & =\lvert\rho')(\Phi'\rvert.
+        \label{eq:mpu_ambient_cfii_double_layer}
+    \end{align}
+    The exponent is positive in every bond dimension, so no separate
+    one-dimensional branch is needed.
+    % Source lines: paper_v2.tex 269--281 and 397--405.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_transfer_stabilization, thm:mpu_normalized_transfer_fin_one, thm:mpu_blocked_double_layer_diagonal, thm:mpu_canonical_form_ii_positive_dimensions}
+    If $D=1$, the normalized transfer matrix is the identity, $\rho=1$ by
+    $\tr(\rho)=1$, and both identities hold at $J=1$. If $D>1$, then
+    $J=D^2-1$, and
+    Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization} applied to the
+    canonical-form-II data of the presentation produces a positive trace-one
+    matrix $\sigma$ with $(\Phi\rvert E=(\Phi\rvert$ and
+    $E^J=\lvert\sigma)(\Phi\rvert$. Since $\rho$ is a fixed point of $E$,
+    \begin{align}
+        \lvert\rho) & =E^J\lvert\rho)              \\
+                    & =\lvert\sigma)(\Phi\mid\rho) \\
+                    & =\tr(\rho)\lvert\sigma)      \\
+                    & =\lvert\sigma),
+    \end{align}
+    so $\sigma=\rho$. For the double-layer form,
+    Theorem~\ref{thm:mpu_blocked_double_layer_diagonal} identifies the
+    normalized diagonal of the $J$-fold block with the $J$-th power of the
+    normalized transfer matrix after the encoding $q$, so
+    (\ref{eq:mpu_ambient_cfii_stabilization}) gives, for all
+    $a,b\in\Fin{D^2}$,
+    \begin{align}
+        \bigl(R^J\bigr)_{ab}
+         & =\bigl(E^J\bigr)_{q^{-1}(a),q^{-1}(b)}
+        =\bigl(\lvert\rho)(\Phi\rvert\bigr)_{q^{-1}(a),q^{-1}(b)}
+        =\bigl(\lvert\rho')(\Phi'\rvert\bigr)_{ab},
+    \end{align}
+    which is (\ref{eq:mpu_ambient_cfii_double_layer}).
 \end{proof}
 
 \section{Standard form, index, and symmetry classification}
@@ -4748,15 +4832,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Source-$v$ isometry of a simple tensor]
     \label{thm:mpu_simple_source_v_isometry}
-    \lean{MPOTensor.IsMPUSimple.sourceV_isIsometry,
-        MPOTensor.IsMPUSimple.rightRank_mul_leftRank_le}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceV_isIsometry,
+        MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_le}
     \leanok
-    \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer}
-    Let $\mathcal U$ be simple with physical dimension $d>0$, let $W$ be its
-    double layer with normalized diagonal $E$, and let the source's diagonal
-    matrix $\rho>0$ satisfy $E^J=\lvert\rho)(\Phi\rvert$ for some $J>0$, where
-    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. Let $v$ be the source
-    operator of $\mathcal U$ built from that same weight $\rho$. Then
+    \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer, def:mpu_canonical_form_ii}
+    Let $\mathcal U$ be simple and in canonical form II, with ambient fixed
+    matrix $\rho$. Let $v$ be the source operator
+    of $\mathcal U$ built from that same weight $\rho$. Then
     $v^\dagger v=\Id_{r\ell}$, and consequently $r\ell\le d^2$. This is the
     implication $1\to2$ in \cite[proof of Theorem~III.8]{Cirac2017MPU},
     before the standing isometry of $u$ is used.
@@ -4764,8 +4846,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_supplied_projector_simple2, thm:mpu_source_v_complete_contraction, thm:mpu_source_v_dressed_gram_cancel}
-    Theorem~\ref{thm:mpu_supplied_projector_simple2} gives
+    \uses{thm:mpu_supplied_projector_simple2, thm:mpu_source_v_complete_contraction, thm:mpu_source_v_dressed_gram_cancel, thm:mpu_canonical_form_ii_transfer_stabilization}
+    The convention supplies the stabilized power
+    $E^J=\lvert\rho)(\Phi\rvert$, and
+    Theorem~\ref{thm:mpu_supplied_projector_simple2} then gives
     $W^{ij}W^{k\ell}=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}$. Since $\rho$
     is diagonal, $\rho^{\mathsf T}=\rho$, so
     Theorem~\ref{thm:mpu_source_v_complete_contraction} gives the dressed Gram
@@ -4801,9 +4885,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[The source operator $u$ is an isometry]
     \label{lemuisometry}
-    \notready
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceU_isIsometry,
+        MPOTensor.IsMPUCanonicalFormII.mul_self_le_rightRank_mul_leftRank}
+    \leanok
     \discussion{5708}
-    \uses{def:mpu_source_uv}
+    \uses{def:mpu_source_uv, def:mpu_canonical_form_ii}
     For any MPU tensor $\mathcal U$ under the source's standing
     canonical-form-II convention, let $r$ and $\ell$ be the two source-cut
     ranks and let $u$ be the source operator. Then
@@ -4815,16 +4901,25 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 545--557.
 \end{lemma}
 
-\begin{lemma}[Admissible source-$u$ isometry]
+\begin{proof}\leanok
+    \uses{lem:mpu_admissible_source_u_isometry, thm:mpu_canonical_form_ii_transfer_stabilization}
+    The convention records a positive diagonal ambient weight $\rho$ and,
+    by Theorem~\ref{thm:mpu_canonical_form_ii_transfer_stabilization}, the
+    stabilized power $E^J=\lvert\rho)(\Phi\rvert$ at the positive exponent
+    $J=\max(D^2-1,1)$. Lemma~\ref{lem:mpu_admissible_source_u_isometry},
+    applied to the source factors built from that same weight, gives
+    $u^\dagger u=\Id$ and $d^2\le r\ell$.
+\end{proof}
+
+\begin{lemma}[Supplied-fixed-pair source-$u$ isometry]
     \label{lem:mpu_admissible_source_u_isometry}
     \lean{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU,
-        MPOTensor.SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU,
-        MPOTensor.IsMPU.sourceU_isIsometry}
+        MPOTensor.SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU}
     \leanok
     \discussion{5708}
-    % **Scope restriction (supplied stabilized diagonal fixed pair):** this
-    % lemma assumes the exact rank-one identity explicitly, whereas source
-    % Lemma III.7 uses the preceding canonical-form-II convention. Documented
+    % This lemma is the reusable generic form: it assumes the exact rank-one
+    % identity for an arbitrary positive diagonal weight, and is the step used
+    % by the source-labelled Lemma III.7 above. Orientation documented
     % in docs/paper-gaps/mpu_canonical_form_full_support.tex and
     % docs/paper-gaps/mpu_source_cut_orientation.tex.
     \uses{def:mpu, def:mpu_source_uv, def:mpu_weighted_source_factors,
@@ -4868,12 +4963,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Simple-tensor equivalence theorem]
     \label{ThmFund1}
-    \notready
+    \lean{MPOTensor.IsMPUCanonicalFormII.isMPUSimple_tfae}
+    \leanok
     \discussion{5708}
-    \uses{lemuisometry, def:mpu_simple, def:mpu_source_uv}
+    \uses{lemuisometry, def:mpu_simple, def:mpu_source_uv, def:mpu_canonical_form_ii}
     Let $\mathcal U$ be an MPU tensor under the source's standing
     canonical-form-II convention. Let $r$ and $\ell$ be its source-cut ranks,
-    and let $u$ and $v$ be its source operators. Then the following conditions
+    and let $u$ and $v$ be its source operators, both built from the ambient
+    weight $\rho$ recorded by the convention. Then the following conditions
     are equivalent:
     \begin{enumerate}
         \item $\mathcal U$ is simple;
@@ -4884,39 +4981,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     This is the unrestricted statement of
     \cite[Theorem~III.8]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 563--601.
-    % The supplied diagonal-fixed-pair specialization below is checked. The
-    % unrestricted node remains not ready for the representative scope recorded
-    % in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-\end{theorem}
-
-\begin{theorem}[Simple-tensor equivalence with a supplied diagonal fixed pair]
-    \label{thm:mpu_diagonal_fixed_pair_simple_tensor_equivalence}
-    \lean{MPOTensor.IsMPU.isMPUSimple_tfae}
-    \leanok
-    \uses{def:mpu, def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer}
-    Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$, let $W$
-    be its double layer with normalized diagonal $E$, and let $\rho>0$ be
-    diagonal. Suppose that $E^J=\lvert\rho)(\Phi\rvert$ for some $J>0$, where
-    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$. Compute the source-cut
-    ranks $r$ and $\ell$ and both source operators $u$ and $v$ from this same
-    tensor $\mathcal U$ and weight $\rho$. Then the following are equivalent:
-    \begin{enumerate}
-        \item $\mathcal U$ is simple;
-        \item $r\ell=d^2$;
-        \item $u$ is unitary;
-        \item $v$ is unitary.
-    \end{enumerate}
-    This is the supplied diagonal-fixed-pair specialization of
-    \cite[Theorem~III.8]{Cirac2017MPU}.
-    % Source lines: paper_v2.tex 495 and 563--601.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_admissible_source_u_isometry,
+    \uses{lemuisometry,
         thm:mpu_simple_source_v_isometry,
         thm:mpu_source_gates_two_site_factorization,
         thm:mpu_simple_of_source_v_isometry}
-    The supplied fixed pair gives $u^\dagger u=\Id$ and
+    The convention gives $u^\dagger u=\Id$ and
     $d^2\leq r\ell$ before any of the four conditions is assumed. Follow the
     cycle $1\to2\to3\to4\to1$.
 
@@ -4971,11 +5043,19 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     conditions is assumed. Thus $u$ is a standing isometry and
     $r\ell\geq d^2$ throughout the proof.
 
-    Suppose first that $\mathcal U$ is simple. The reduced full-support datum
-    requires $\rho$ to be diagonal, so
+    Suppose first that $\mathcal U$ is simple.
     Theorem~\ref{thm:mpu_simple_source_v_isometry} gives
-    $v^\dagger v=\Id$ for the source operator built from the same weight
-    $\rho$, hence $r\ell\leq d^2$.
+    $v^\dagger v=\Id$ for the source operator built from the ambient fixed
+    matrix of a canonical-form-II presentation, hence $r\ell\leq d^2$. The
+    reduced full-support datum supplies only a diagonal positive weight
+    $\rho$ together with the stabilized power
+    $E^{J}=\lvert\rho)(\Phi\rvert$; it becomes a canonical-form-II
+    presentation exactly when that weight is the ambient fixed matrix of the
+    convention, and the passage from the supplied datum to the presentation
+    is the open step recorded in
+    \texttt{docs/paper-gaps/mpu\_canonical\_form\_full\_support.tex}. Until
+    that step is available, this implication is the reason the present
+    theorem is not ready.
 
     If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
     Theorem~\ref{thm:mpu_source_gates_two_site_factorization} gives the exact

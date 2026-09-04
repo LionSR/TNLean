@@ -41,11 +41,11 @@ Documented in `docs/paper-gaps/mpu_source_cut_orientation.tex`.
   undressed Gram entry is the two-letter entry with $|\rho^{\mathsf T})(\Phi|$ inserted.
 * `MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair`: the dressed Gram
   equation is equivalent to `simple2` with the insertion $|\rho^{\mathsf T})(\Phi|$.
-* `MPOTensor.IsMPUSimple.sourceV_isIsometry`: the forward direction of Theorem
-  `ThmFund1`, $1\to2$, with the source's diagonal fixed point: the gate built
-  from that same weight has $v^\dagger v=\Id$.
-* `MPOTensor.IsMPUSimple.rightRank_mul_leftRank_le`: the resulting rank bound
-  $r\ell\le d^2$.
+* `MPOTensor.IsMPUCanonicalFormII.sourceV_isIsometry`: the forward direction of
+  Theorem `ThmFund1`, $1\to2$, under the standing canonical-form-II convention:
+  the gate built from the recorded weight has $v^\dagger v=\Id$.
+* `MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_le`: the resulting rank
+  bound $r\ell\le d^2$.
 * `MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry`: the direction $4\to1$ of
   Theorem `ThmFund1` from $v^\dagger v=\Id$.
 
@@ -188,41 +188,38 @@ theorem IsMPUSimple.sourceV_transpose_isIsometry [NeZero d]
   simpa only [Matrix.transpose_transpose] using
     hU.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ J hJ hpower
 
-/-- Theorem `ThmFund1`, $1\to2$: for the diagonal fixed point used by the
-source, the paper gate $v$ built from that same weight satisfies
+/-- Theorem `ThmFund1`, $1\to2$: under the source's standing canonical-form-II
+convention, the paper gate $v$ built from the recorded weight $\rho$ satisfies
 $v^\dagger v=\Id$.
 
-The diagonal hypothesis identifies the inserted vector
-$|\rho^{\mathsf T})$ with the stabilized vector $|\rho)$, after which the
-complete network and `YZ=1` give the isometry. Source: arXiv:1703.09188,
-lines 495 and 577--588. -/
-theorem IsMPUSimple.sourceV_isIsometry [NeZero d]
-    {U : MPOTensor d D} (hU : IsMPUSimple U)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (hρdiag : ρ.IsDiag)
-    (J : ℕ) (hJ : 0 < J)
-    (hpower : normalizedDiagonal (doubleLayerTensor U) ^ J =
-      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
-        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
-    (sourceV U ρ hρ).IsIsometry := by
+Diagonality of $\rho$ identifies the inserted vector $|\rho^{\mathsf T})$ with
+the stabilized vector $|\rho)$, after which the complete network and `YZ=1`
+give the isometry. Source: arXiv:1703.09188, lines 495 and 577--588. -/
+theorem IsMPUCanonicalFormII.sourceV_isIsometry
+    {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) (hS : IsMPUSimple U) :
+    (sourceV U hU.ρ hU.ρ_posDef).IsIsometry := by
+  have := hU.neZero_bond
+  have := hU.neZero_phys
   rw [← sourceVDressedGram_iff_isIsometry,
     sourceVDressedGram_iff_simple2_transpose_fixed_pair]
-  simpa only [hρdiag.isSymm.eq] using
-    hU.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ J hJ hpower
+  simpa only [hU.ρ_isDiag.isSymm.eq] using
+    hS.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ (max (D * D - 1) 1)
+      (by omega) hU.normalizedDiagonal_pow_eq_vecMulVec
 
-/-- Theorem `ThmFund1`, $1\to2$, rank consequence: a simple tensor with
-stabilized fixed pair satisfies $r\ell\le d^2$, since the isometry $v$ maps
+/-- Theorem `ThmFund1`, $1\to2$, rank consequence: a simple tensor in canonical
+form II satisfies $r\ell\le d^2$, since the isometry $v$ maps
 $\C^r\otimes\C^\ell$ into $\C^d\otimes\C^d$.
+
+The isometry used here is the source gate built from the recorded weight
+$\rho$, so the bound is read off the printed network of the source rather than
+off a reparametrized gate.
 
 Source: arXiv:1703.09188, proof of Theorem `ThmFund1`, $1\to2$
 (lines 577--588). -/
-theorem IsMPUSimple.rightRank_mul_leftRank_le [NeZero d]
-    {U : MPOTensor d D} (hU : IsMPUSimple U)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (J : ℕ) (hJ : 0 < J)
-    (hpower : normalizedDiagonal (doubleLayerTensor U) ^ J =
-      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
-        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
+theorem IsMPUCanonicalFormII.rightRank_mul_leftRank_le
+    {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) (hS : IsMPUSimple U) :
     r[U] * ℓ[U] ≤ d * d := by
-  have h := Matrix.IsIsometry.card_le _ (hU.sourceV_transpose_isIsometry ρ hρ J hJ hpower)
+  have h := Matrix.IsIsometry.card_le _ (hU.sourceV_isIsometry hS)
   simpa only [Fintype.card_prod, Fintype.card_fin] using h
 
 /-- Theorem `ThmFund1`, $4\to1$: if the paper gate $v$ of an MPU tensor

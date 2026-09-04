@@ -18,23 +18,20 @@ Figure `II_uUnitary.png`.  The network is then closed against a fixed pair
 the \(K\)-site interior.  The normalized input tail gives \(u^\dagger u=\Id\)
 and \(d^2\le r\ell\).
 
-**Scope restriction (supplied canonical-form-II fixed pair):** the closing
-theorems below assume the stabilized fixed pair \(E^K=|\rho)(\Phi|\)
-explicitly, whereas CPSV17 Lemma `lemuisometry` inherits it from the preceding
-canonical-form-II convention.  In that convention, \(\rho\) is diagonal with
-positive weights; see `Papers/1703.09188/paper_v2.tex` at lines 269--280 and
-line 495.  This diagonality is part of the source's scope, not a correction or
-an additional restriction.  It is load-bearing in the coordinate proof:
-column stacking makes the Gram closure insert
-\(|\rho^{\mathsf T})(\Phi|\), while stabilization supplies
-\(|\rho)(\Phi|\), and the two agree because \(\rho^{\mathsf T}=\rho\).  The
-closing theorems keep `SourceFactors U ρ` built from the printed weight, expose
-the convention as `ρ.IsDiag`, and use only `ρ.IsSymm` for the algebraic trace
-closure.  Documented in
-`docs/paper-gaps/mpu_canonical_form_full_support.tex` and
-`docs/paper-gaps/mpu_source_cut_orientation.tex`.  Elimination: replace the
-explicit fixed-pair hypotheses by the bundled canonical-form-II convention
-described in the orientation note.
+The closing theorems in the `SourceFactors` namespace are generic: they take
+arbitrary supplied source factors for an arbitrary positive weight together
+with the stabilized fixed pair \(E^K=|\rho)(\Phi|\), and assume nothing else
+about \(\mathcal U\).  Lemma `lemuisometry` itself is stated for an MPU in
+canonical form II, where the diagonal positive weight and the stabilized power
+are both recorded by the convention.  In that convention, \(\rho\) is diagonal
+with positive weights; see `Papers/1703.09188/paper_v2.tex` at lines 269--280
+and line 495.  Diagonality is load-bearing in the coordinate proof: column
+stacking makes the Gram closure insert \(|\rho^{\mathsf T})(\Phi|\), while
+stabilization supplies \(|\rho)(\Phi|\), and the two agree because
+\(\rho^{\mathsf T}=\rho\).  The generic theorems keep `SourceFactors U ρ` built
+from the printed weight, expose the convention as `ρ.IsDiag`, and use only
+`ρ.IsSymm` for the algebraic trace closure.  The column-stacking orientation is
+recorded in `docs/paper-gaps/mpu_source_cut_orientation.tex`.
 
 Source: arXiv:1703.09188, equations `Erightleft`, `X1X2b`, `uu`, and
 `uUnitary`, and Lemma `lemuisometry` (lines 269--280 and 487--557).
@@ -437,17 +434,32 @@ theorem mul_self_le_rightRank_mul_leftRank_of_isMPU [NeZero d] (hU : IsMPU U)
 end SourceFactors
 
 variable {U} in
-/-- For a positive diagonal fixed point, the compact-SVD paper gate $u$ of an
-MPU tensor is an isometry.
+/-- Lemma `lemuisometry` under the source's standing convention: the compact-SVD
+paper gate $u=Y_2\mathbin{-}Y_1$ of an MPU in canonical form II is an isometry.
+
+The diagonal positive ambient fixed point, the stabilized rank-one power, and
+the nonzero physical dimension are recorded by the convention, so none of them
+is supplied as a separate hypothesis.
 
 Source: CPSV17 Lemma `lemuisometry` (lines 545--557), with the fixed point in
-the diagonal coordinates of lines 269--280. -/
-theorem IsMPU.sourceU_isIsometry [NeZero d] (hU : IsMPU U)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (hρdiag : ρ.IsDiag) (K : ℕ)
-    (hK : normalizedDiagonal (doubleLayerTensor U) ^ K =
-      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
-        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
-    (sourceU U ρ hρ).IsIsometry :=
-  SourceFactors.sourceU_isIsometry_of_isMPU U hU (sourceFactors U ρ hρ) hρdiag K hK
+the diagonal coordinates of `Erightleft` (lines 269--280). -/
+theorem IsMPUCanonicalFormII.sourceU_isIsometry
+    (hU : IsMPUCanonicalFormII U) :
+    (sourceU U hU.ρ hU.ρ_posDef).IsIsometry :=
+  have := hU.neZero_phys
+  SourceFactors.sourceU_isIsometry_of_isMPU U hU.isMPU
+    (sourceFactors U hU.ρ hU.ρ_posDef) hU.ρ_isDiag _
+    hU.normalizedDiagonal_pow_eq_vecMulVec
+
+variable {U} in
+/-- The rank consequence of Lemma `lemuisometry` under the standing
+canonical-form-II convention: $d^2\le r\ell$.
+
+Source: CPSV17 Lemma `lemuisometry` (lines 545--557). -/
+theorem IsMPUCanonicalFormII.mul_self_le_rightRank_mul_leftRank
+    (hU : IsMPUCanonicalFormII U) :
+    d * d ≤ r[U] * ℓ[U] := by
+  have h := Matrix.IsIsometry.card_le _ hU.sourceU_isIsometry
+  simpa only [Fintype.card_prod, Fintype.card_fin, Nat.mul_comm ℓ[U]] using h
 
 end MPOTensor
