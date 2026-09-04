@@ -1328,6 +1328,7 @@ norm estimate is derived here.
     \label{thm:moving_window_sum_le}
     \lean{FrustrationFree.movingWindow_sum_le}
     \lean{FrustrationFree.movingWindow_sum_range_le}
+    \lean{FrustrationFree.movingWindow_sum_Ico_le}
     \leanok
     Let $(a_m)_{m\geq0}$ be a nonnegative real sequence. For all $l,N\in\N$,
     \begin{align}
@@ -1335,7 +1336,14 @@ norm estimate is derived here.
          & \leq (l+1)\sum_{m=0}^{N-1}a_m.
         \label{eq:moving_window_sum_le}
     \end{align}
-    The same bound holds after omitting the terms with $n<l$.
+    The same bound holds after omitting the terms with $n<l$. More generally,
+    for a threshold $n_0\in\N$ only the coefficients indexed by
+    $m\geq\max\{0,n_0-l\}$ occur, so
+    \begin{align}
+        \sum_{n=n_0}^{N-1}\sum_{m=\max\{0,n-l\}}^{n}a_m
+         & \leq (l+1)\sum_{m=\max\{0,n_0-l\}}^{N-1}a_m.
+        \label{eq:moving_window_sum_Ico_le}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -1348,7 +1356,115 @@ norm estimate is derived here.
     Nachtergaele's Theorem~2.1(i), between Equation~(Enpsi2) and the following
     summed estimate: for $a_m=\lVert E_m\psi\rVert^2$, each term occurs in at
     most $l+1$ consecutive windows
-    \cite[Proof of Theorem~2.1(i)]{Nachtergaele1996Spectral}.
+    \cite[Proof of Theorem~2.1(i)]{Nachtergaele1996Spectral}. For
+    (\ref{eq:moving_window_sum_Ico_le}), replace $a_m$ by the sequence that
+    vanishes below $\max\{0,n_0-l\}$ and agrees with $a_m$ above it. Every
+    window with $n\geq n_0$ is unchanged, and the previous bound applied to
+    the replacement sequence gives the claim.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, conditions C1--C3 at
+% lines 1030--1094, Theorem 2.1(i) at lines 1119--1130, and its proof at
+% lines 1195--1259. The statement below isolates the estimate above a chosen
+% threshold and explicitly records how its C1 range relates to source C1.
+\begin{theorem}[Threshold C1--C3 energy estimate]
+    \label{thm:nachtergaele_c1_c3_threshold_energy_estimate}
+    \lean{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_threshold}
+    \leanok
+    Let $(G_n)_{n\geq0}$ be nested orthogonal projections on a
+    finite-dimensional complex Hilbert space $\mathcal H$, put
+    $E_n=G_n-G_{n+1}$, and assume $G_0=\mathbf 1$. Fix $l,N,n_0\in\N$ with
+    $n_0\leq N$, and let $Q_n$ be
+    orthogonal projections for $n_0\leq n<N$. Suppose $E_mQ_n=Q_nE_m$
+    whenever $m<n-l$ or $n<m$. Let $H_n$ be the local Hamiltonians and $H$
+    the full Hamiltonian. Assume the quadratic-form version of C1 on the same
+    range, for every $x\in\mathcal H$,
+    \begin{align}
+        0
+         & \leq\sum_{n=n_0}^{N-1}\re\langle H_nx,x\rangle
+        \leq d_{l+1}\re\langle Hx,x\rangle,
+        \label{eq:nachtergaele_c1_threshold_form}
+    \end{align}
+    the quadratic-form version of C2 for every $x\in\mathcal H$ and
+    $n_0\leq n<N$,
+    \begin{align}
+        \gamma_{l+1}\lVert(\mathbf 1-Q_n)x\rVert^2
+         & \leq\re\langle H_nx,x\rangle,
+        \label{eq:nachtergaele_c2_threshold_form}
+    \end{align}
+    and the literal condition C3 for $n_0\leq n<N$,
+    \begin{align}
+        \lVert Q_nE_n\rVert
+         & \leq\epsilon_l,
+         & 0\leq\epsilon_l
+         & <\frac{1}{\sqrt{l+1}}.
+        \label{eq:nachtergaele_c3_threshold_form}
+    \end{align}
+    If $\gamma_{l+1}>0$, $d_{l+1}>0$, and $v\perp\operatorname{ran}(G_N)$,
+    then
+    \begin{align}
+        \frac{\gamma_{l+1}}{d_{l+1}}
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2
+        \sum_{n=n_0}^{N-1}\lVert E_nv\rVert^2
+         & \leq
+        \re\langle Hv,v\rangle
+        \nonumber \\
+         & \quad
+        +\frac{\gamma_{l+1}}{d_{l+1}}
+        \left(1-\epsilon_l\sqrt{l+1}\right)\epsilon_l\sqrt{l+1}
+        \sum_{m=\max\{0,n_0-l\}}^{n_0-1}\lVert E_mv\rVert^2.
+        \label{eq:nachtergaele_c1_c3_threshold_energy_estimate}
+    \end{align}
+    Conditions C2 and C3 have the source forms, with their onset represented by
+    $n_0$. The displayed C1 inequality follows from source C1 when
+    $l\leq n_0$ and the omitted local terms are nonnegative. Thus a
+    source-derived application chooses $n_0$ above both $l$ and the C2--C3
+    onset. If $n_0<l$, the displayed C1 inequality is instead an independent
+    stronger assumption. The coefficient of the martingale mass above the
+    threshold is exactly the one in Theorem~2.1(i) of
+    \cite{Nachtergaele1996Spectral}. The correction is an explicit upper bound
+    for the contribution of the at most $l$ martingale differences immediately
+    below the threshold; it uses multiplicity $l+1$ uniformly. At $n_0=0$ the
+    correction is an empty sum.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:truncated-martingale-difference-reconstruction,
+        thm:martingale-difference-pythagorean-identity,
+        thm:outside-window-martingale-cancellation,
+        lem:nachtergaele_weighted_inner_product,
+        lem:nachtergaele_c3_projection_composition,
+        thm:moving_window_sum_le}
+    Write $P=\sum_{n=n_0}^{N-1}\lVert E_nv\rVert^2$ and
+    $S=\sum_{m=\max\{0,n_0-l\}}^{n_0-1}\lVert E_mv\rVert^2$. The martingale
+    resolution $v=\sum_{n=0}^{N-1}E_nv$ and outside-window cancellation
+    reduce the identity labelled \textup{Enpsi} at index $n$ to the active
+    window $m\in[n-l,n]$; this uses only $n<N$, so it is available for every
+    $n\geq n_0$. Apply the weighted inner-product estimate with positive
+    parameters $c_1,c_2$, then C2 and C3, and sum over $n_0\leq n<N$. The
+    martingale differences are mutually orthogonal, so each window norm
+    square splits into its summands, and
+    (\ref{eq:moving_window_sum_Ico_le}) bounds the resulting double sum by
+    $(l+1)(S+P)$. With C1 this gives
+    \begin{align}
+        \left(2-c_1-\frac{\epsilon_l^2}{c_2}-(l+1)c_2\right)P
+         & \leq
+        \frac{d_{l+1}}{c_1\gamma_{l+1}}\re\langle Hv,v\rangle
+        +(l+1)c_2S.
+    \end{align}
+    For $\epsilon_l>0$, take $c_1=1-\epsilon_l\sqrt{l+1}$ and
+    $c_2=\epsilon_l/\sqrt{l+1}$, so that
+    $\epsilon_l^2/c_2=(l+1)c_2=\epsilon_l\sqrt{l+1}$ and the left factor is
+    $1-\epsilon_l\sqrt{l+1}$. Multiplying by
+    $c_1\gamma_{l+1}/d_{l+1}$ gives
+    (\ref{eq:nachtergaele_c1_c3_threshold_energy_estimate}). If
+    $\epsilon_l=0$, then $c_2=0$ is not an admissible weighted parameter. In
+    that case C3 instead gives $Q_nE_n=0$, so the second inner product in
+    \textup{Enpsi} vanishes; applying only the first weighted estimate with
+    $c_1=1$ yields $P\leq(d_{l+1}/\gamma_{l+1})\re\langle Hv,v\rangle$,
+    which is the same formula because the correction term vanishes. This
+    repair is documented in \cite{gap:cpgsv21_martingale_overlap}.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, conditions C1--C3 at
@@ -1404,50 +1520,22 @@ norm estimate is derived here.
     \cite{gap:cpgsv21_martingale_overlap}. The coefficient is exactly the one
     in Theorem~2.1(i) of \cite{Nachtergaele1996Spectral}:
     $\gamma_{l+1}/d_{l+1}$ times
-    $(1-\epsilon_l\sqrt{l+1})^2$.
+    $(1-\epsilon_l\sqrt{l+1})^2$. This is
+    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} at
+    threshold $n_0=0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:truncated-martingale-difference-reconstruction,
-        thm:martingale-difference-pythagorean-identity,
-        thm:martingale-difference-final-complement-norm-decomposition,
-        thm:outside-window-martingale-cancellation,
-        lem:nachtergaele_weighted_inner_product,
-        lem:nachtergaele_c3_projection_composition,
-        thm:moving_window_sum_le}
-    The martingale resolution gives
-    \begin{align}
-        v
-         & =\sum_{n=0}^{N-1}E_nv,
-         & \lVert v\rVert^2
-         & =\sum_{n=0}^{N-1}\lVert E_nv\rVert^2.
-    \end{align}
-    Outside-window cancellation reduces the second term in the identity
-    labelled \textup{Enpsi} to $m\in[n-l,n]$. Apply the weighted
-    inner-product estimate with positive parameters $c_1,c_2$ and then use
-    C2 and C3. Summing over $n$ and applying the moving-window count gives
-    \begin{align}
-        \left(2-c_1-\frac{\epsilon_l^2}{c_2}-(l+1)c_2\right)
-        \lVert v\rVert^2
-         & \leq
-        \frac{d_{l+1}}{c_1\gamma_{l+1}}
-        \re\langle Hv,v\rangle.
-    \end{align}
-    For $\epsilon_l>0$, take
-    \begin{align}
-        c_1
-         & =1-\epsilon_l\sqrt{l+1},
-         & c_2
-         & =\frac{\epsilon_l}{\sqrt{l+1}}.
-    \end{align}
-    These values reduce the preceding inequality to
-    (\ref{eq:nachtergaele_c1_c3_full_range_energy_estimate}). If
-    $\epsilon_l=0$, then $c_2=0$ is not an admissible weighted parameter.
-    In that case C3 instead gives $Q_nE_n=0$, so the second inner product in
-    \textup{Enpsi} vanishes; applying only the first weighted estimate with
-    $c_1=1$ yields the same formula. This repair is documented in
-    \cite{gap:cpgsv21_martingale_overlap}.
+    \uses{thm:nachtergaele_c1_c3_threshold_energy_estimate,
+        thm:martingale-difference-final-complement-norm-decomposition}
+    Apply
+    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} with
+    $n_0=0$. The correction sum is then empty, and the Pythagorean
+    decomposition of a vector orthogonal to $\operatorname{ran}(G_N)$
+    identifies the martingale mass $\sum_{n=0}^{N-1}\lVert E_nv\rVert^2$ with
+    $\lVert v\rVert^2$. This gives
+    (\ref{eq:nachtergaele_c1_c3_full_range_energy_estimate}).
 \end{proof}
 
 \begin{theorem}[Energy form to norm bound]

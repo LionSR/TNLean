@@ -10,20 +10,33 @@ import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
 
 /-!
-# Full-range form of Nachtergaele's C1--C3 energy estimate
+# Nachtergaele's C1--C3 energy estimate
 
 This file follows the summation in the proof of Theorem 2.1(i) in Nachtergaele,
 arXiv:cond-mat/9410110, lines 1195--1259.
 
-**Scope restriction (full finite range):** Conditions C2 and C3 in the source
-are assumed only beyond their lower threshold \(n_l\), while C1 starts at the
-corresponding window length; the printed proof nevertheless estimates every
-martingale difference \(E_0,\ldots,E_{N-1}\). The theorem below instead assumes
-the three estimates on the entire finite range. This extra hypothesis and the
-required lower-endpoint repair are recorded in
-`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. Thus the result is a
-full-range version with the source coefficient, not a formalization of the
-unrestricted source theorem.
+Conditions C2 and C3 in the source, at lines 1043--1058 and 1083--1094, are
+assumed only beyond their lower threshold \(n_l\), while C1, at lines
+1030--1041, starts at the corresponding window length; the printed proof
+nevertheless estimates every martingale difference \(E_0,\ldots,E_{N-1}\).
+
+`energy_lower_bound_of_nachtergaele_c1_c3_threshold` assumes the three
+estimates only on an index range \(n_0\leq n<N\). To obtain its C1 hypothesis
+from the source, one chooses \(n_0\geq l\), as well as above the C2--C3
+threshold; for smaller \(n_0\), its displayed C1 bound is an independent
+stronger assumption. The theorem obtains the printed coefficient on the
+martingale mass above the threshold, together with an explicit upper-bound
+correction carried by the \(l\) differences immediately below it.
+
+**Scope restriction (full finite range):**
+`energy_lower_bound_of_nachtergaele_c1_c3_full_range` and
+`norm_lower_bound_of_nachtergaele_c1_c3_full_range` are the case \(n_0=0\),
+where that correction is empty. They assume the three estimates on the entire
+finite range, which is stronger than the source's lower-threshold hypotheses.
+This extra hypothesis and the required lower-endpoint repair are recorded in
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. Thus they are a full-range
+version with the source coefficient, not a formalization of the unrestricted
+source theorem.
 
 **Local fix (zero C3 constant):** The source chooses
 \(c_2=\epsilon_l/\sqrt{l+1}\) after requiring \(c_2>0\). When
@@ -294,6 +307,201 @@ private theorem enpsi_of_c2_c3_zero
         mul_le_mul_of_nonneg_left hC2 (by positivity)
   linarith
 
+/-- Threshold form of the summation in the proof of Nachtergaele's Theorem
+2.1(i) (arXiv:cond-mat/9410110, lines 1195--1259).
+
+Condition C2 at lines 1043--1058 and condition C3 at lines 1083--1094 hold
+only from a threshold onwards, while condition C1 at lines 1030--1041 begins
+at the window length. This theorem assumes all three estimates directly on
+\(n_0\leq n<N\). Its C2 and C3 hypotheses have the source forms, with C3 in
+its literal operator-norm form \(\lVert Q_nE_n\rVert\leq\epsilon_l\). To
+derive its C1 hypothesis from the source, choose \(n_0\geq l\), in addition
+to choosing it above the C2--C3 onset; if \(n_0<l\), the stated C1 bound is an
+independent stronger assumption.
+
+Summing the per-index estimate over \(n_0\leq n<N\) gives the printed
+coefficient
+\(\frac{\gamma_{l+1}}{d_{l+1}}(1-\epsilon_l\sqrt{l+1})^2\)
+on the martingale mass \(\sum_{n=n_0}^{N-1}\lVert E_n\psi\rVert^2\) above the
+threshold, corrected by an upper bound for the moving-window contribution of
+the \(l\) differences immediately below it. The coefficient is exact, while
+the correction uses the uniform multiplicity bound \(l+1\). The correction
+vanishes when \(n_0=0\), and then the conclusion is the printed estimate on
+\(\lVert\psi\rVert^2\).
+
+The case \(\epsilon_l=0\) is treated separately, since the printed choice
+\(c_2=\epsilon_l/\sqrt{l+1}\) is then not positive; C3 gives \(Q_nE_n=0\)
+instead.
+
+**Scope restriction (martingale mass above the threshold):** The source
+concludes the same coefficient on \(\lVert\psi\rVert^2\). The two conclusions
+agree exactly when the martingale differences below the threshold vanish, and
+the printed proof supplies no argument for the omitted indices. The
+discrepancy is recorded in
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+theorem energy_lower_bound_of_nachtergaele_c1_c3_threshold
+    [FiniteDimensional ℂ E]
+    (G : NestedGroundProjections (E := E)) (Q : ℕ → E →ₗ[ℂ] E)
+    (localHamiltonian : ℕ → E →ₗ[ℂ] E) (H : E →ₗ[ℂ] E)
+    (N n₀ l : ℕ) (v : E) (hn₀ : n₀ ≤ N)
+    (hzero : G.projection 0 = LinearMap.id)
+    (hv : v ∈ (LinearMap.range (G.projection N))ᗮ)
+    {γ d ε : ℝ} (hγ : 0 < γ) (hd : 0 < d) (hε : 0 ≤ ε)
+    (hεlt : ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ))
+    (hQ : ∀ n ∈ Finset.Ico n₀ N, (Q n).IsSymmetricProjection)
+    (hcomm : ∀ n ∈ Finset.Ico n₀ N, ∀ m,
+      m < n - l ∨ n < m →
+        (G.martingaleDifference m).comp (Q n) =
+          (Q n).comp (G.martingaleDifference m))
+    (hC1 : ∀ x,
+      0 ≤ ∑ n ∈ Finset.Ico n₀ N,
+          (⟪localHamiltonian n x, x⟫_ℂ).re ∧
+      (∑ n ∈ Finset.Ico n₀ N,
+          (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
+        d * (⟪H x, x⟫_ℂ).re)
+    (hC2 : ∀ n ∈ Finset.Ico n₀ N, ∀ x,
+      γ * ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) x‖ ^ 2 ≤
+        (⟪localHamiltonian n x, x⟫_ℂ).re)
+    (hC3 : ∀ n ∈ Finset.Ico n₀ N,
+      ‖(Q n).toContinuousLinearMap.comp
+          (G.martingaleDifference n).toContinuousLinearMap‖ ≤ ε) :
+    (γ / d) * (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 *
+        ∑ n ∈ Finset.Ico n₀ N, ‖G.martingaleDifference n v‖ ^ 2 ≤
+      (⟪H v, v⟫_ℂ).re +
+        (γ / d) *
+            ((1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) *
+              (ε * Real.sqrt ((l + 1 : ℕ) : ℝ))) *
+          ∑ m ∈ Finset.Ico (n₀ - l) n₀, ‖G.martingaleDifference m v‖ ^ 2 := by
+  classical
+  set s := Real.sqrt ((l + 1 : ℕ) : ℝ)
+  have hs : 0 < s := Real.sqrt_pos.2 (by positivity)
+  have hsquare : s ^ 2 = ((l + 1 : ℕ) : ℝ) := Real.sq_sqrt (by positivity)
+  have hεs : ε * s < 1 := (lt_div_iff₀ hs).mp hεlt
+  have hδ : 0 < 1 - ε * s := sub_pos.mpr hεs
+  have hc₁γ : 0 < 2 * (1 - ε * s) * γ :=
+    mul_pos (mul_pos (by norm_num) hδ) hγ
+  have hinv : 0 ≤ 1 / (2 * (1 - ε * s) * γ) := one_div_nonneg.mpr hc₁γ.le
+  have hC1' :
+      (∑ n ∈ Finset.Ico n₀ N, (⟪localHamiltonian n v, v⟫_ℂ).re) ≤
+        d * (⟪H v, v⟫_ℂ).re := (hC1 v).2
+  have hC3point : ∀ n ∈ Finset.Ico n₀ N, ∀ x,
+      ‖Q n (G.martingaleDifference n x)‖ ^ 2 ≤
+        ε ^ 2 * ‖G.martingaleDifference n x‖ ^ 2 := by
+    intro n hn x
+    simpa using norm_sq_apply_projection_le_of_norm_comp_le
+      (Q n).toContinuousLinearMap
+      (G.martingaleDifference n).toContinuousLinearMap
+      (G.martingaleDifference_isSymmetricProjection n) (hC3 n hn) x
+  set P := ∑ n ∈ Finset.Ico n₀ N, ‖G.martingaleDifference n v‖ ^ 2 with hP
+  set S := ∑ m ∈ Finset.Ico (n₀ - l) n₀, ‖G.martingaleDifference m v‖ ^ 2
+    with hS
+  set A := (⟪H v, v⟫_ℂ).re
+  have hwindow :
+      ∑ n ∈ Finset.Ico n₀ N,
+          ‖∑ m ∈ Finset.Icc (n - l) n, G.martingaleDifference m v‖ ^ 2 ≤
+        ((l : ℝ) + 1) * (S + P) := by
+    have hsplit :
+        (∑ m ∈ Finset.Ico (n₀ - l) n₀, ‖G.martingaleDifference m v‖ ^ 2) +
+            ∑ m ∈ Finset.Ico n₀ N, ‖G.martingaleDifference m v‖ ^ 2 =
+          ∑ m ∈ Finset.Ico (n₀ - l) N, ‖G.martingaleDifference m v‖ ^ 2 :=
+      Finset.sum_Ico_consecutive _ (Nat.sub_le n₀ l) hn₀
+    calc
+      ∑ n ∈ Finset.Ico n₀ N,
+          ‖∑ m ∈ Finset.Icc (n - l) n, G.martingaleDifference m v‖ ^ 2 =
+          ∑ n ∈ Finset.Ico n₀ N, ∑ m ∈ Finset.Icc (n - l) n,
+            ‖G.martingaleDifference m v‖ ^ 2 :=
+        Finset.sum_congr rfl fun n _ ↦
+          G.norm_sq_sum_martingaleDifference_finset (Finset.Icc (n - l) n) v
+      _ ≤ ((l : ℝ) + 1) *
+            ∑ m ∈ Finset.Ico (n₀ - l) N,
+              ‖G.martingaleDifference m v‖ ^ 2 :=
+        movingWindow_sum_Ico_le
+          (fun m ↦ ‖G.martingaleDifference m v‖ ^ 2) l n₀ N
+          (fun m ↦ sq_nonneg _)
+      _ = ((l : ℝ) + 1) * (S + P) := by rw [hS, hP, hsplit]
+  have key : ((1 - ε * s) / 2) * P ≤
+      (1 / (2 * (1 - ε * s) * γ)) * (d * A) + (ε * s / 2) * S := by
+    rcases hε.eq_or_lt with hεzero | hεpos
+    · subst ε
+      have hpoint : ∀ n ∈ Finset.Ico n₀ N,
+          ‖G.martingaleDifference n v‖ ^ 2 ≤
+            (1 / (2 * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re +
+              (1 / 2) * ‖G.martingaleDifference n v‖ ^ 2 := by
+        intro n hn
+        have hnN : n < N := (Finset.mem_Ico.mp hn).2
+        have hqzero : Q n (G.martingaleDifference n v) = 0 := by
+          have hb : ‖Q n (G.martingaleDifference n v)‖ ^ 2 ≤ 0 := by
+            simpa using hC3point n hn v
+          have hnorm : ‖Q n (G.martingaleDifference n v)‖ = 0 := by
+            nlinarith [norm_nonneg (Q n (G.martingaleDifference n v))]
+          exact norm_eq_zero.mp hnorm
+        simpa using enpsi_of_c2_c3_zero G Q localHamiltonian N n l hnN v
+          hzero hv (hQ n hn) (hcomm n hn) hγ (by norm_num : (0 : ℝ) < 1)
+          (hC2 n hn v) hqzero
+      have hsum := Finset.sum_le_sum hpoint
+      rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
+        ← hP] at hsum
+      have hbudget :
+          (1 / (2 * γ)) *
+              (∑ n ∈ Finset.Ico n₀ N, (⟪localHamiltonian n v, v⟫_ℂ).re) ≤
+            (1 / (2 * γ)) * (d * A) :=
+        mul_le_mul_of_nonneg_left hC1' (by positivity)
+      have hgoal : (1 / 2 : ℝ) * P ≤ (1 / (2 * γ)) * (d * A) := by linarith
+      calc
+        ((1 - 0 * s) / 2) * P = (1 / 2 : ℝ) * P := by ring
+        _ ≤ (1 / (2 * γ)) * (d * A) := hgoal
+        _ = (1 / (2 * (1 - 0 * s) * γ)) * (d * A) + (0 * s / 2) * S := by
+          norm_num
+    · have hc₂ : (0 : ℝ) < ε / s := div_pos hεpos hs
+      have hεc₂ : ε ^ 2 / (2 * (ε / s)) = ε * s / 2 := by
+        field_simp [hεpos.ne', hs.ne']
+      have hpoint : ∀ n ∈ Finset.Ico n₀ N,
+          ‖G.martingaleDifference n v‖ ^ 2 ≤
+            (1 / (2 * (1 - ε * s) * γ)) *
+                (⟪localHamiltonian n v, v⟫_ℂ).re +
+              ((1 - ε * s) / 2 + ε * s / 2) *
+                ‖G.martingaleDifference n v‖ ^ 2 +
+              ((ε / s) / 2) *
+                ‖∑ m ∈ Finset.Icc (n - l) n,
+                  G.martingaleDifference m v‖ ^ 2 := by
+        intro n hn
+        have hnN : n < N := (Finset.mem_Ico.mp hn).2
+        simpa only [hεc₂] using
+          enpsi2_of_c2_c3 G Q localHamiltonian N n l hnN v hzero hv
+            (hQ n hn) (hcomm n hn) hγ hδ hc₂ (hC2 n hn v) (hC3point n hn v)
+      have hsum := Finset.sum_le_sum hpoint
+      rw [Finset.sum_add_distrib, Finset.sum_add_distrib, ← Finset.mul_sum,
+        ← Finset.mul_sum, ← Finset.mul_sum, ← hP] at hsum
+      have hbudget :
+          (1 / (2 * (1 - ε * s) * γ)) *
+              (∑ n ∈ Finset.Ico n₀ N, (⟪localHamiltonian n v, v⟫_ℂ).re) ≤
+            (1 / (2 * (1 - ε * s) * γ)) * (d * A) :=
+        mul_le_mul_of_nonneg_left hC1' hinv
+      have hcoef : ((ε / s) / 2) * ((l : ℝ) + 1) = ε * s / 2 := by
+        rw [show ((l : ℝ) + 1) = s ^ 2 by rw [hsquare]; push_cast; ring]
+        field_simp [hs.ne']
+      have hwin :
+          ((ε / s) / 2) *
+              (∑ n ∈ Finset.Ico n₀ N,
+                ‖∑ m ∈ Finset.Icc (n - l) n,
+                  G.martingaleDifference m v‖ ^ 2) ≤
+            (ε * s / 2) * (S + P) := by
+        calc
+          _ ≤ ((ε / s) / 2) * (((l : ℝ) + 1) * (S + P)) :=
+            mul_le_mul_of_nonneg_left hwindow (by positivity)
+          _ = (((ε / s) / 2) * ((l : ℝ) + 1)) * (S + P) := by ring
+          _ = (ε * s / 2) * (S + P) := by rw [hcoef]
+      linarith
+  have hmulpos : 0 < 2 * (1 - ε * s) * γ / d := div_pos hc₁γ hd
+  calc
+    (γ / d) * (1 - ε * s) ^ 2 * P =
+        (2 * (1 - ε * s) * γ / d) * (((1 - ε * s) / 2) * P) := by ring
+    _ ≤ (2 * (1 - ε * s) * γ / d) *
+          ((1 / (2 * (1 - ε * s) * γ)) * (d * A) + (ε * s / 2) * S) :=
+      mul_le_mul_of_nonneg_left key hmulpos.le
+    _ = A + (γ / d) * ((1 - ε * s) * (ε * s)) * S := by
+      field_simp [hδ.ne', hγ.ne', hd.ne']
+
 /-- Full-range form of the summation in Nachtergaele's Theorem 2.1(i), in the
 finite-filtration notation of its proof (arXiv:cond-mat/9410110, lines
 1195--1259). Conditions C1 and C2 are stated as their quadratic-form
@@ -305,8 +513,10 @@ inequalities, and C3 is the source's literal operator-norm bound
 The finite sum runs over every index \(n=0,\ldots,N-1\), with only
 \(G_0=\mathbf 1\) needed for the martingale resolution. Thus C1, C2, and C3
 are assumed on that full finite range, which is stronger than the source's
-lower-threshold hypotheses. The case \(\epsilon_l=0\) is treated separately,
-since the printed choice \(c_2=\epsilon_l/\sqrt{l+1}\) is then not positive.
+lower-threshold hypotheses. This is the threshold estimate
+`energy_lower_bound_of_nachtergaele_c1_c3_threshold` at \(n_0=0\), where the
+window correction below the threshold is empty and the martingale mass above
+it is \(\lVert\psi\rVert^2\).
 The proof uses the upper inequality in C1; its nonnegativity clause is retained
 because it is part of the source's condition C1. -/
 theorem energy_lower_bound_of_nachtergaele_c1_c3_full_range
@@ -337,150 +547,20 @@ theorem energy_lower_bound_of_nachtergaele_c1_c3_full_range
           (G.martingaleDifference n).toContinuousLinearMap‖ ≤ ε) :
     (γ / d) * (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 * ‖v‖ ^ 2 ≤
       (⟪H v, v⟫_ℂ).re := by
-  have hactiveNorm :
-      ∑ n ∈ Finset.range N, ‖G.martingaleDifference n v‖ ^ 2 = ‖v‖ ^ 2 := by
-    rw [← G.norm_sq_eq_sum_martingaleDifference_of_mem_orthogonal N v hzero hv]
-  have hwindow :
-      ∑ n ∈ Finset.range N,
-          ‖∑ m ∈ Finset.Icc (n - l) n, G.martingaleDifference m v‖ ^ 2 ≤
-        (l + 1) * ‖v‖ ^ 2 := by
-    calc
-      ∑ n ∈ Finset.range N,
-          ‖∑ m ∈ Finset.Icc (n - l) n, G.martingaleDifference m v‖ ^ 2 =
-          ∑ n ∈ Finset.range N, ∑ m ∈ Finset.Icc (n - l) n,
-            ‖G.martingaleDifference m v‖ ^ 2 := by
-              apply Finset.sum_congr rfl
-              intro n _
-              exact G.norm_sq_sum_martingaleDifference_finset
-                (Finset.Icc (n - l) n) v
-      _ ≤ (l + 1) *
-          ∑ m ∈ Finset.range N, ‖G.martingaleDifference m v‖ ^ 2 :=
-        movingWindow_sum_range_le
-          (fun m ↦ ‖G.martingaleDifference m v‖ ^ 2) l N
-          (fun m ↦ sq_nonneg ‖G.martingaleDifference m v‖)
-      _ = (l + 1) * ‖v‖ ^ 2 := by rw [hactiveNorm]
-  let s := Real.sqrt ((l + 1 : ℕ) : ℝ)
-  have hs : 0 < s := Real.sqrt_pos.2 (by positivity)
-  have hsquare : s ^ 2 = ((l + 1 : ℕ) : ℝ) := by
-    exact Real.sq_sqrt (by positivity)
-  have hεs : ε * s < 1 := by
-    rw [lt_div_iff₀ hs] at hεlt
-    exact hεlt
-  have hδ : 0 < 1 - ε * s := sub_pos.mpr hεs
-  have hC3point : ∀ n ∈ Finset.range N, ∀ x,
-      ‖Q n (G.martingaleDifference n x)‖ ^ 2 ≤
-        ε ^ 2 * ‖G.martingaleDifference n x‖ ^ 2 := by
-    intro n hn x
-    simpa using norm_sq_apply_projection_le_of_norm_comp_le
-      (Q n).toContinuousLinearMap
-      (G.martingaleDifference n).toContinuousLinearMap
-      (G.martingaleDifference_isSymmetricProjection n) (hC3 n hn) x
-  rcases hε.eq_or_lt with hεzero | hεpos
-  · subst ε
-    have hpoint : ∀ n ∈ Finset.range N,
-        ‖G.martingaleDifference n v‖ ^ 2 ≤
-          (1 / (2 * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re +
-            (1 / 2) * ‖G.martingaleDifference n v‖ ^ 2 := by
-      intro n hn
-      have hbound : ‖Q n (G.martingaleDifference n v)‖ ^ 2 ≤ 0 := by
-        simpa using hC3point n hn v
-      have hqnorm : ‖Q n (G.martingaleDifference n v)‖ ^ 2 = 0 :=
-        le_antisymm hbound (sq_nonneg _)
-      have hqzero : Q n (G.martingaleDifference n v) = 0 := by
-        rw [← norm_eq_zero]
-        nlinarith [sq_nonneg ‖Q n (G.martingaleDifference n v)‖]
-      simpa using enpsi_of_c2_c3_zero G Q localHamiltonian N n l
-        (Finset.mem_range.mp hn) v
-        hzero hv (hQ n hn) (hcomm n hn) hγ (by norm_num : (0 : ℝ) < 1)
-        (hC2 n hn v) hqzero
-    have hsumPoint := Finset.sum_le_sum fun n hn ↦ hpoint n hn
-    have hsumPoint' : ‖v‖ ^ 2 ≤
-        (1 / (2 * γ)) *
-            (∑ n ∈ Finset.range N, (⟪localHamiltonian n v, v⟫_ℂ).re) +
-          (1 / 2) * ‖v‖ ^ 2 := by
-      simpa only [Finset.sum_add_distrib, ← Finset.mul_sum, hactiveNorm] using hsumPoint
-    have henergy :
-        (1 / (2 * γ)) *
-            (∑ n ∈ Finset.range N, (⟪localHamiltonian n v, v⟫_ℂ).re) ≤
-          (1 / (2 * γ)) * (d * (⟪H v, v⟫_ℂ).re) :=
-      mul_le_mul_of_nonneg_left (hC1 v).2 (by positivity)
-    have hhalf : (1 / 2 : ℝ) * ‖v‖ ^ 2 ≤
-        (1 / (2 * γ)) * (d * (⟪H v, v⟫_ℂ).re) := by
-      linarith
-    calc
-      (γ / d) * (1 - 0 * s) ^ 2 * ‖v‖ ^ 2 =
-          (2 * γ / d) * ((1 / 2 : ℝ) * ‖v‖ ^ 2) := by ring
-      _ ≤ (2 * γ / d) *
-          ((1 / (2 * γ)) * (d * (⟪H v, v⟫_ℂ).re)) :=
-        mul_le_mul_of_nonneg_left hhalf (by positivity)
-      _ = (⟪H v, v⟫_ℂ).re := by
-        field_simp [hγ.ne', hd.ne']
-  · let c₁ := 1 - ε * s
-    let c₂ := ε / s
-    have hc₁ : 0 < c₁ := hδ
-    have hc₂ : 0 < c₂ := div_pos hεpos hs
-    have hεc₂ : ε ^ 2 / (2 * c₂) = ε * s / 2 := by
-      dsimp only [c₂]
-      field_simp [hεpos.ne', hs.ne']
-    have hc₂window : (c₂ / 2) * ((l + 1 : ℕ) : ℝ) = ε * s / 2 := by
-      dsimp only [c₂]
-      rw [← hsquare]
-      field_simp [hs.ne']
-    have hpoint : ∀ n ∈ Finset.range N,
-        ‖G.martingaleDifference n v‖ ^ 2 ≤
-          (1 / (2 * c₁ * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re +
-          (c₁ / 2 + ε * s / 2) * ‖G.martingaleDifference n v‖ ^ 2 +
-          (c₂ / 2) *
-            ‖∑ m ∈ Finset.Icc (n - l) n,
-              G.martingaleDifference m v‖ ^ 2 := by
-      intro n hn
-      simpa only [hεc₂] using
-        enpsi2_of_c2_c3 G Q localHamiltonian N n l
-          (Finset.mem_range.mp hn) v hzero hv
-          (hQ n hn) (hcomm n hn) hγ hc₁ hc₂ (hC2 n hn v) (hC3point n hn v)
-    have hsumPoint := Finset.sum_le_sum fun n hn ↦ hpoint n hn
-    have hsumPoint' : ‖v‖ ^ 2 ≤
-        (1 / (2 * c₁ * γ)) *
-            (∑ n ∈ Finset.range N, (⟪localHamiltonian n v, v⟫_ℂ).re) +
-        (c₁ / 2 + ε * s / 2) * ‖v‖ ^ 2 +
-        (c₂ / 2) *
-          (∑ n ∈ Finset.range N,
-            ‖∑ m ∈ Finset.Icc (n - l) n,
-              G.martingaleDifference m v‖ ^ 2) := by
-      simpa only [Finset.sum_add_distrib, ← Finset.mul_sum, hactiveNorm] using hsumPoint
-    have henergy :
-        (1 / (2 * c₁ * γ)) *
-            (∑ n ∈ Finset.range N, (⟪localHamiltonian n v, v⟫_ℂ).re) ≤
-          (1 / (2 * c₁ * γ)) * (d * (⟪H v, v⟫_ℂ).re) :=
-      mul_le_mul_of_nonneg_left (hC1 v).2 (by positivity)
-    have hwindow' :
-        (c₂ / 2) *
-            (∑ n ∈ Finset.range N,
-              ‖∑ m ∈ Finset.Icc (n - l) n,
-                G.martingaleDifference m v‖ ^ 2) ≤
-          (ε * s / 2) * ‖v‖ ^ 2 := by
-      calc
-        _ ≤ (c₂ / 2) * ((l + 1) * ‖v‖ ^ 2) :=
-          mul_le_mul_of_nonneg_left hwindow (by positivity)
-        _ = ((c₂ / 2) * ((l + 1 : ℕ) : ℝ)) * ‖v‖ ^ 2 := by
-          push_cast
-          ring
-        _ = (ε * s / 2) * ‖v‖ ^ 2 := by rw [hc₂window]
-    have hhalf : (c₁ / 2) * ‖v‖ ^ 2 ≤
-        (1 / (2 * c₁ * γ)) * (d * (⟪H v, v⟫_ℂ).re) := by
-      dsimp only [c₁]
-      dsimp only [c₁] at hsumPoint' henergy
-      linarith
-    calc
-      (γ / d) * (1 - ε * s) ^ 2 * ‖v‖ ^ 2 =
-          (2 * (1 - ε * s) * γ / d) *
-            (((1 - ε * s) / 2) * ‖v‖ ^ 2) := by ring
-      _ ≤ (2 * (1 - ε * s) * γ / d) *
-          ((1 / (2 * (1 - ε * s) * γ)) *
-            (d * (⟪H v, v⟫_ℂ).re)) :=
-        mul_le_mul_of_nonneg_left hhalf (by positivity)
-      _ = (⟪H v, v⟫_ℂ).re := by
-        field_simp [hδ.ne', hγ.ne', hd.ne']
+  have hnorm :
+      ∑ n ∈ Finset.Ico 0 N, ‖G.martingaleDifference n v‖ ^ 2 = ‖v‖ ^ 2 := by
+    rw [← Finset.range_eq_Ico]
+    exact (G.norm_sq_eq_sum_martingaleDifference_of_mem_orthogonal N v
+      hzero hv).symm
+  have h := energy_lower_bound_of_nachtergaele_c1_c3_threshold G Q
+    localHamiltonian H N 0 l v (Nat.zero_le N) hzero hv hγ hd hε hεlt
+    (by simpa only [Finset.range_eq_Ico] using hQ)
+    (by simpa only [Finset.range_eq_Ico] using hcomm)
+    (by simpa only [Finset.range_eq_Ico] using hC1)
+    (by simpa only [Finset.range_eq_Ico] using hC2)
+    (by simpa only [Finset.range_eq_Ico] using hC3)
+  simpa only [Nat.zero_sub, Finset.Ico_self, Finset.sum_empty, mul_zero,
+    add_zero, hnorm] using h
 
 /-- Norm-gap form of the full-range C1--C3 estimate above. The ground-space
 identity identifies the last filtration range with the kernel of the positive

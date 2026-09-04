@@ -144,4 +144,56 @@ theorem movingWindow_sum_range_le (a : ℕ → ℝ) (l N : ℕ) (ha : ∀ m, 0 �
           Finset.sum_le_sum_of_subset_of_nonneg hg_sub fun m _ _ ↦ ha m
     _ = (l + 1) * ∑ m ∈ Finset.range N, a m := by simp
 
+/-- Moving-window count above a lower threshold. For nonnegative coefficients,
+summing the windows \([n-l,n]\) over \(n\in[n_0,N)\) counts each coefficient at
+most \(l+1\) times, and only the coefficients indexed by \(m\ge n_0-l\) occur.
+
+The source's conditions C2 and C3 in Nachtergaele, arXiv:cond-mat/9410110,
+lines 1043--1094, hold only above a threshold, so the summation after
+equation \(\mathrm{Enpsi2}\), lines 1220--1255, runs over
+\(n\in[n_0,N)\). This estimate is the corresponding double count. -/
+theorem movingWindow_sum_Ico_le (a : ℕ → ℝ) (l n₀ N : ℕ) (ha : ∀ m, 0 ≤ a m) :
+    ∑ n ∈ Finset.Ico n₀ N, ∑ m ∈ Finset.Icc (n - l) n, a m ≤
+      (l + 1) * ∑ m ∈ Finset.Ico (n₀ - l) N, a m := by
+  classical
+  obtain ⟨b, hb⟩ : ∃ b : ℕ → ℝ, ∀ m, b m = if n₀ - l ≤ m then a m else 0 :=
+    ⟨_, fun _ ↦ rfl⟩
+  have hb_nonneg : ∀ m, 0 ≤ b m := by
+    intro m
+    rw [hb]
+    split_ifs with hm
+    · exact ha m
+    · exact le_rfl
+  have hb_eq : ∀ m, n₀ - l ≤ m → b m = a m := by
+    intro m hm
+    rw [hb]
+    split_ifs
+    rfl
+  have hfilter :
+      Finset.Ico (n₀ - l) N =
+        (Finset.range N).filter (fun m ↦ n₀ - l ≤ m) := by
+    ext m
+    simp only [Finset.mem_Ico, Finset.mem_filter, Finset.mem_range]
+    omega
+  have hb_sum :
+      ∑ m ∈ Finset.range N, b m = ∑ m ∈ Finset.Ico (n₀ - l) N, a m := by
+    rw [hfilter, Finset.sum_filter]
+    exact Finset.sum_congr rfl fun m _ ↦ hb m
+  calc
+    ∑ n ∈ Finset.Ico n₀ N, ∑ m ∈ Finset.Icc (n - l) n, a m =
+        ∑ n ∈ Finset.Ico n₀ N, ∑ m ∈ Finset.Icc (n - l) n, b m := by
+          refine Finset.sum_congr rfl fun n hn ↦
+            Finset.sum_congr rfl fun m hm ↦ ?_
+          have hn' := Finset.mem_Ico.mp hn
+          have hm' := Finset.mem_Icc.mp hm
+          exact (hb_eq m (by omega)).symm
+    _ ≤ ∑ n ∈ Finset.range N, ∑ m ∈ Finset.Icc (n - l) n, b m := by
+          refine Finset.sum_le_sum_of_subset_of_nonneg ?_ ?_
+          · rw [Finset.range_eq_Ico]
+            exact Finset.Ico_subset_Ico (Nat.zero_le _) le_rfl
+          · exact fun n _ _ ↦ Finset.sum_nonneg fun m _ ↦ hb_nonneg m
+    _ ≤ (l + 1) * ∑ m ∈ Finset.range N, b m :=
+          movingWindow_sum_range_le b l N hb_nonneg
+    _ = (l + 1) * ∑ m ∈ Finset.Ico (n₀ - l) N, a m := by rw [hb_sum]
+
 end FrustrationFree
