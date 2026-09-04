@@ -276,10 +276,15 @@ coordinate. The restriction of
 $l=0$ and $\delta=1/2$ refutes the printed statement in every dimension
 $N\geq2$.\footnote{Formal declarations:
     \leanid{FrustrationFree.UnrestrictedNachtergaeleEstimate} transcribes
-    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}) with C1,
-    C2, and C3 imposed on the range
-    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}), and
-    \leanid{FrustrationFree.not_unrestrictedNachtergaeleEstimate} refutes it.}
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}) with each
+    condition on the range the source gives it, namely C1 on $l\leq n<N$, the
+    range of its reindexed window sum
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1_reindex}), and C2
+    and C3 on
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}); then
+    \leanid{FrustrationFree.not_unrestrictedNachtergaeleEstimate} refutes it.
+    In the formal instance $l=0$, so C1 is supplied on the full range
+    $0\leq n<N$, where the local terms sum to $H_{\Lambda_N}$ exactly.}
 
 \section{The minimal repair}
 

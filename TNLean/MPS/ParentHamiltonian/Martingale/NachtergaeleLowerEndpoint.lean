@@ -24,8 +24,9 @@ proof at lines 1195--1259 resolves \(\psi\) over the whole range
 
 This file shows that the printed conclusion does not follow from the printed
 hypotheses. `FrustrationFree.UnrestrictedNachtergaeleEstimate` transcribes
-Theorem 2.1(i) with the conditions imposed exactly on the source range
-\(n_0\leq n<N\) and the conclusion on \(\lVert\psi\rVert^2\), and
+Theorem 2.1(i) with each condition imposed exactly on the source range it
+carries -- C1 on \(l\leq n<N\) after the reindexing of its window sum, C2 and
+C3 on \(n_0\leq n<N\) -- and the conclusion on \(\lVert\psi\rVert^2\), and
 `FrustrationFree.not_unrestrictedNachtergaeleEstimate` refutes it in every
 dimension \(k+2\).
 
@@ -63,13 +64,22 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- Theorem 2.1(i) of Nachtergaele, arXiv:cond-mat/9410110, lines 1119--1130,
 transcribed in the finite-filtration notation of its proof at lines
-1195--1259, with conditions C1, C2, and C3 imposed exactly on the source
-index range \(n_0\leq n<N\) and the conclusion on \(\lVert v\rVert^2\).
+1195--1259, with each of C1, C2, and C3 imposed exactly on the source index
+range it carries and the conclusion on \(\lVert v\rVert^2\).
+
+Condition C1 at lines 1030--1035 sums from the window length, so at window
+\(l+1\) it reads
+\(0\leq\sum_{n=l+1}^{N}H_{\Lambda_n\setminus\Lambda_{n-l-1}}
+\leq d_{l+1}H_{\Lambda_N}\); reindexing to the summand
+\(H_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\) puts it on \(l\leq n<N\).
+Conditions C2 and C3 at lines 1043--1058 and 1083--1094 are imposed from the
+onset index \(n_0\) onwards, hence on \(n_0\leq n<N\).
 
 This is the hypothesis list of
-`NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_threshold`
-together with the printed conclusion in place of the estimate on the
-martingale mass above the threshold. It is refuted by
+`NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_threshold`,
+with C1 widened from the C2--C3 range to the source range of C1, together
+with the printed conclusion in place of the estimate on the martingale mass
+above the threshold. It is refuted by
 `not_unrestrictedNachtergaeleEstimate`. -/
 def UnrestrictedNachtergaeleEstimate (E : Type*) [NormedAddCommGroup E]
     [InnerProductSpace ℂ E] [FiniteDimensional ℂ E] : Prop :=
@@ -84,8 +94,8 @@ def UnrestrictedNachtergaeleEstimate (E : Type*) [NormedAddCommGroup E]
       (G.martingaleDifference m).comp (Q n) =
         (Q n).comp (G.martingaleDifference m)) →
     (∀ x,
-      0 ≤ ∑ n ∈ Finset.Ico n₀ N, (⟪localHamiltonian n x, x⟫_ℂ).re ∧
-      (∑ n ∈ Finset.Ico n₀ N, (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
+      0 ≤ ∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n x, x⟫_ℂ).re ∧
+      (∑ n ∈ Finset.Ico l N, (⟪localHamiltonian n x, x⟫_ℂ).re) ≤
         d * (⟪H x, x⟫_ℂ).re) →
     (∀ n ∈ Finset.Ico n₀ N, ∀ x,
       γ * ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) x‖ ^ 2 ≤
@@ -269,9 +279,9 @@ end NachtergaeleLowerEndpoint
 
 open NachtergaeleLowerEndpoint in
 /-- Theorem 2.1(i) of Nachtergaele, arXiv:cond-mat/9410110, lines 1119--1130,
-is false as printed: with conditions C1, C2, and C3 imposed on the source
-range \(n_0\leq n<N\) of lines 1030--1094, the printed conclusion fails in
-every dimension \(k+2\).
+is false as printed: with each of C1, C2, and C3 imposed on the source range
+it carries at lines 1030--1094, the printed conclusion fails in every
+dimension \(k+2\).
 
 The witness is described in the module docstring: a chain of one-site
 interactions whose leftmost term is halved. All three conditions hold with
@@ -279,8 +289,10 @@ interactions whose leftmost term is halved. All three conditions hold with
 printed bound would read
 \(\langle\psi\mid H_{\Lambda_N}\psi\rangle\geq\lVert\psi\rVert^2\), while the
 single-excitation vector at the weakened bond has energy
-\(\frac12\lVert\psi\rVert^2\). The excluded index is \(n=0\), which is exactly
-the index at which C2 fails; the printed proof estimates it all the same. -/
+\(\frac12\lVert\psi\rVert^2\). Condition C1 is supplied on its own range
+\(0\leq n<N\), where the local terms sum to \(H_{\Lambda_N}\) exactly; the
+index \(n=0\) is excluded only from C2 and C3, and the printed proof
+estimates its martingale difference all the same. -/
 theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     ¬ UnrestrictedNachtergaeleEstimate (EuclideanSpace ℂ (Fin (k + 2))) := by
   intro hsource
@@ -310,45 +322,41 @@ theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     rw [chain_martingaleDifference, diagonal_comp, diagonal_comp]
     exact diagonal_congr _ fun i ↦ mul_comm _ _
   have hlocal : ∀ (x : EuclideanSpace ℂ (Fin (k + 2))),
-      ∑ n ∈ Finset.Ico 1 (k + 2),
+      ∑ n ∈ Finset.Ico 0 (k + 2),
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re =
-        ∑ i : Fin (k + 2), (if 1 ≤ (i : ℕ) then siteWeight k i else 0) * ‖x i‖ ^ 2 := by
+        (⟪diagonal (k + 2) (siteWeight k) x, x⟫_ℂ).re := by
     intro x
     have hswap :
-        ∑ n ∈ Finset.Ico 1 (k + 2), ∑ i, localWeight k n i * ‖x i‖ ^ 2 =
-          ∑ i, ∑ n ∈ Finset.Ico 1 (k + 2), localWeight k n i * ‖x i‖ ^ 2 :=
+        ∑ n ∈ Finset.Ico 0 (k + 2), ∑ i, localWeight k n i * ‖x i‖ ^ 2 =
+          ∑ i, ∑ n ∈ Finset.Ico 0 (k + 2), localWeight k n i * ‖x i‖ ^ 2 :=
       Finset.sum_comm
     calc
-      ∑ n ∈ Finset.Ico 1 (k + 2),
+      ∑ n ∈ Finset.Ico 0 (k + 2),
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re =
-          ∑ n ∈ Finset.Ico 1 (k + 2), ∑ i, localWeight k n i * ‖x i‖ ^ 2 :=
+          ∑ n ∈ Finset.Ico 0 (k + 2), ∑ i, localWeight k n i * ‖x i‖ ^ 2 :=
         Finset.sum_congr rfl fun n _ ↦ inner_diagonal_re _ _ x
-      _ = ∑ i, ∑ n ∈ Finset.Ico 1 (k + 2), localWeight k n i * ‖x i‖ ^ 2 := hswap
-      _ = ∑ i : Fin (k + 2),
-            (if 1 ≤ (i : ℕ) then siteWeight k i else 0) * ‖x i‖ ^ 2 := by
+      _ = ∑ i, ∑ n ∈ Finset.Ico 0 (k + 2), localWeight k n i * ‖x i‖ ^ 2 := hswap
+      _ = ∑ i : Fin (k + 2), siteWeight k i * ‖x i‖ ^ 2 := by
         refine Finset.sum_congr rfl fun i _ ↦ ?_
         rw [← Finset.sum_mul]
         congr 1
         simp only [localWeight, Finset.sum_ite_eq, Finset.mem_Ico, i.isLt,
-          and_true]
+          Nat.zero_le, and_self, ite_true]
+      _ = (⟪diagonal (k + 2) (siteWeight k) x, x⟫_ℂ).re :=
+        (inner_diagonal_re _ _ x).symm
   have hC1 : ∀ (x : EuclideanSpace ℂ (Fin (k + 2))),
-      0 ≤ ∑ n ∈ Finset.Ico 1 (k + 2),
+      0 ≤ ∑ n ∈ Finset.Ico 0 (k + 2),
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re ∧
-      (∑ n ∈ Finset.Ico 1 (k + 2),
+      (∑ n ∈ Finset.Ico 0 (k + 2),
           (⟪diagonal (k + 2) (localWeight k n) x, x⟫_ℂ).re) ≤
         1 * (⟪diagonal (k + 2) (siteWeight k) x, x⟫_ℂ).re := by
     intro x
     rw [hlocal x, one_mul, inner_diagonal_re]
-    constructor
-    · refine Finset.sum_nonneg fun i _ ↦ ?_
-      have : 0 ≤ (if 1 ≤ (i : ℕ) then siteWeight k i else 0) := by
-        simp only [siteWeight]
-        split_ifs <;> norm_num
-      positivity
-    · refine Finset.sum_le_sum fun i _ ↦ ?_
-      refine mul_le_mul_of_nonneg_right ?_ (sq_nonneg _)
+    refine ⟨Finset.sum_nonneg fun i _ ↦ ?_, le_rfl⟩
+    have : 0 ≤ siteWeight k i := by
       simp only [siteWeight]
       split_ifs <;> norm_num
+    positivity
   have hC2 : ∀ n ∈ Finset.Ico 1 (k + 2), ∀ x : EuclideanSpace ℂ (Fin (k + 2)),
       (1 : ℝ) * ‖((LinearMap.id :
             EuclideanSpace ℂ (Fin (k + 2)) →ₗ[ℂ] EuclideanSpace ℂ (Fin (k + 2))) -
