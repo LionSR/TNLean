@@ -1663,6 +1663,30 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### reciprocal scalar cancellation across a matrix product — candidate
+- **Pattern:** cancel a scalar and its inverse sitting on two different factors
+  of one matrix product, by pushing both scalars out of the product and
+  multiplying them together.
+
+  ```lean
+  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, mul_inv_cancel₀ hβ,
+    one_smul]
+  ```
+- **Seen:** three occurrences (2026-09-04): `MPSTensor.IsReduction.reciprocal_smul`
+  in `TNLean/MPS/Core/Reduction.lean`,
+  `MPSTensor.reductionResidual_reciprocal_smul` in
+  `TNLean/MPS/Core/ReductionResidual/Basic.lean`, and
+  `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff` in
+  `TNLean/MPS/Core/ReductionBlocking.lean`.
+- **Abstraction:** a `@[reciprocal_smul]` simp set holding the three Mathlib
+  rewriting lemmas, invoked as `simp [reciprocal_smul, hβ]`.
+- **Notes:** the goals differ only in how many factors separate the two
+  scalars (two, three, and five), so no single helper theorem covers them; a
+  simp set is the weakest mechanism that would. The saving is one line per call
+  site, so the entry is recorded rather than promoted; a fourth call site makes
+  the set worth adding. Which of `mul_inv_cancel₀` and `inv_mul_cancel₀` fires
+  depends on which factor carries the inverse.
+
 ### nested finite-sum binder permutation — promoted
 - **Pattern:** permute the binders of three to five nested finite sums over
   `Finset.univ` by folding them into one sum over an iterated product type,
