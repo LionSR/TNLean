@@ -16,10 +16,10 @@ spectral radius one.  Both normalizations are taken "without loss of generality"
 by the sources: Nachtergaele, arXiv:cond-mat/9410110, rewrites the generalized
 valence-bond construction so that equations (3.2a) and (3.2b) hold (lines
 1394--1435), and Pérez-García, Verstraete, Wolf, and Cirac, arXiv:quant-ph/0608197,
-open the proof of their translation-invariant canonical form (Theorem
-`Th:TIcanonical`, statement lines 742--761, proof lines 765--770) by assuming
-that the spectral radius of the transfer map is one and gauging by the square
-root of a positive fixed point.
+open the proof of Theorem 4, the translation-invariant canonical form
+(statement lines 742--761, proof lines 765--770), by assuming that the spectral
+radius of the transfer map is one and gauging by the square root of a positive
+fixed point.
 
 This file performs that step. From a normal tensor \(A\) it produces a positive
 scalar \(\zeta\), a virtual gauge \(X\), and the rescaled gauged tensor
@@ -35,8 +35,9 @@ it is stated here for an arbitrary normal tensor.
 The orientation is the mirror of the printed one: the gauge is built from the
 Perron eigenvector of the *adjoint* transfer map, so the resulting family is
 trace preserving rather than unital.  Both orientations are already in the
-sources.  The blocks of the canonical form of arXiv:quant-ph/0608197, Theorem
-`Th:TIcanonical`, statement lines 752--758, satisfy conditions 1 and 2,
+sources.  The blocks of the translation-invariant canonical form of
+arXiv:quant-ph/0608197, Theorem 4, statement lines 752--758, satisfy
+conditions 1 and 2,
 \(\sum_i A^iA^{i\dagger}=\mathbb 1\) and
 \(\sum_i A^{i\dagger}\Lambda A^i=\Lambda\) with \(\Lambda>0\); the further gauge
 by \(\Lambda^{1/2}\) turns condition 2 into the trace-preserving normalization
@@ -49,17 +50,19 @@ valence-bond construction.
 
 * `MPSTensor.isNBlkInjective_smul_iff`, `MPSTensor.isNormal_smul_iff`: block
   injectivity and normality are invariant under a nonzero rescaling.
+* `MPSTensor.exists_apply_ne_zero_of_isNormal`: a normal tensor on a nonzero
+  bond space has a nonzero matrix.
 * `MPSTensor.exists_isPrimitiveMPS_gauge_of_isNormal`: the normalized primitive
   gauge of a normal tensor.
-* `MPSTensor.IsNormal.exists_parentHamiltonianES_gap`: the finite-range Knabe
-  gap for the parent Hamiltonian of an arbitrary normal tensor.
+* `MPSTensor.exists_parentHamiltonianES_gap_of_isNormal`: the finite-range
+  Knabe gap for the parent Hamiltonian of an arbitrary normal tensor.
 
 ## References
 
 * B. Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b), lines
   1394--1435.
 * D. Pérez-García, F. Verstraete, M. Wolf, J. I. Cirac, arXiv:quant-ph/0608197,
-  Theorem `Th:TIcanonical`, lines 742--770.
+  Theorem 4, lines 742--770.
 * M. Sanz, D. Pérez-García, M. Wolf, J. I. Cirac, arXiv:0909.5347,
   Proposition 3.
 * J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, arXiv:2011.12127,
@@ -176,7 +179,7 @@ coincide.
 
 This is the step taken without loss of generality at
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b), lines 1394--1435, and at
-arXiv:quant-ph/0608197, Theorem `Th:TIcanonical`, proof lines 765--770: rescale
+arXiv:quant-ph/0608197, Theorem 4, proof lines 765--770: rescale
 so that the transfer map has spectral radius one and gauge by the square root of
 a positive fixed point.  The gauge here is built from the Perron eigenvector of
 the adjoint transfer map, giving the trace-preserving orientation, which is what
@@ -241,7 +244,7 @@ representative with a positive definite fixed point, which is where the
 finite-range Knabe estimate applies; the parent Hamiltonian is unchanged by that
 replacement, and block injectivity transfers back through the rescaling and the
 gauge. -/
-theorem IsNormal.exists_parentHamiltonianES_gap [NeZero D] {A : MPSTensor d D}
+theorem exists_parentHamiltonianES_gap_of_isNormal [NeZero D] {A : MPSTensor d D}
     (hA : Kraus.IsNormal A) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ m : ℕ, ∃ δ : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧

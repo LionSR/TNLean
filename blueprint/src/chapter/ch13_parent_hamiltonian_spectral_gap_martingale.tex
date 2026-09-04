@@ -4537,8 +4537,8 @@ assuming that the transfer map has spectral radius one and gauging by the
 square root of a positive fixed point.  This section carries out that step and
 uses it to state the finite-range gap for an arbitrary normal tensor.
 
-\begin{lemma}[Rescaling invariance of block injectivity and normality]
-    \label{lem:normality_rescaling_invariance}
+\begin{theorem}[Rescaling invariance of block injectivity and normality]
+    \label{thm:normality_rescaling_invariance}
     \lean{MPSTensor.wordSpan_smul_eq, MPSTensor.isNBlkInjective_smul_iff,
         MPSTensor.isNormal_smul_iff}
     \leanok
@@ -4546,34 +4546,50 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     Let $\zeta\neq0$ and let $A$ be a tensor.  For every $N$ the length-$N$
     word spans of $A$ and of $\zeta A$ agree, so $\zeta A$ is $N$-block
     injective exactly when $A$ is, and $\zeta A$ is normal exactly when $A$ is.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:l_blk_injective, def:normal}
     Every length-$N$ word of $\zeta A$ is the corresponding word of $A$
     multiplied by $\zeta^{N}$, and $\zeta^{N}$ is invertible, so each span
     contains the other.
 \end{proof}
 
-\begin{lemma}[Rescaling invariance of the local ground space]
-    \label{lem:local_ground_space_rescaling}
+\begin{theorem}[A normal tensor has a nonzero matrix]
+    \label{thm:normal_tensor_nonzero_matrix}
+    \lean{MPSTensor.exists_apply_ne_zero_of_isNormal}
+    \leanok
+    \uses{def:normal}
+    Let $D>0$ and let $A$ be a normal tensor.  Then $A^i\neq0$ for at least
+    one $i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:l_blk_injective}
+    If every $A^i$ vanished, then every word of positive length would vanish,
+    so the span of the length-$N$ words would be $\{0\}$ for the length $N>0$
+    at which $A$ is block injective.  That span is $\MN{D}$, which contains
+    $\Id\neq0$ because $D>0$.
+\end{proof}
+
+\begin{theorem}[Rescaling invariance of the local ground space]
+    \label{thm:local_ground_space_rescaling}
     \lean{MPSTensor.groundSpace_smul_eq}
     \leanok
     \uses{def:ground_space_parent}
     Let $\zeta\neq0$.  For every $L$ one has $G_L(\zeta A)=G_L(A)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:ground_space_parent}
     The boundary parametrization of $\zeta A$ at length $L$ sends $X$ to the
     value of the boundary parametrization of $A$ at $\zeta^{L}X$, and
     multiplication by $\zeta^{L}$ is a bijection of $\MN{D}$.
 \end{proof}
 
-\begin{lemma}[Local ground spaces determine the parent Hamiltonian]
-    \label{lem:parent_hamiltonian_from_ground_space}
+\begin{theorem}[Local ground spaces determine the parent Hamiltonian]
+    \label{thm:parent_hamiltonian_from_ground_space}
     \lean{MPSTensor.parentInteraction_eq_of_groundSpace_eq,
         MPSTensor.localTerm_eq_of_parentInteraction_eq,
         MPSTensor.parentHamiltonian_eq_of_groundSpace_eq,
@@ -4586,12 +4602,12 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     all their translated local terms and their parent Hamiltonians
     $H_{N,L}(A)=H_{N,L}(B)$ and $H_{N,L}^{\mathrm{ES}}(A)
         =H_{N,L}^{\mathrm{ES}}(B)$ on every periodic chain.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:ground_space_parent, def:parent_interaction,
-        def:parent_hamiltonian, def:parent_hamiltonian_es}
+    \uses{def:parent_interaction, def:parent_hamiltonian,
+        def:parent_hamiltonian_es}
     The parent interaction at length $L$ is the orthogonal projector onto
     $G_L(A)^\perp$, so it depends on $G_L(A)$ alone.  Every translated local
     term is built from that single projector, and the parent Hamiltonian is
@@ -4604,20 +4620,19 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     \leanok
     \uses{def:normal, def:primitive_mps, def:gauge_equiv, def:mpv,
         def:ground_space_parent, def:parent_interaction,
-        def:chain_ground_space, thm:wielandt_proposition_three,
-        lem:normality_rescaling_invariance, lem:local_ground_space_rescaling}
+        def:chain_ground_space}
     Let $D>0$ and let $A$ be a normal tensor.  There exist a scalar
     $\zeta\neq0$, a tensor $B$, and a matrix $\rho>0$ such that $\zeta A$ and
     $B$ are gauge equivalent, the pair $(B,\rho)$ is primitive, and
     \begin{align}
         V^{(N)}(B)_{\sigma}
-         & =\zeta^{N}V^{(N)}(A)_{\sigma}
+         & =\zeta^{N}V^{(N)}(A)_{\sigma} \notag
     \end{align}
     for every chain length $N$ and every configuration $\sigma$.  Moreover
     \begin{align}
-        G_L(A)              & =G_L(B),             \\
-        h_L(A)              & =h_L(B),             \\
-        \mathcal G_{N,L}(A) & =\mathcal G_{N,L}(B)
+        G_L(A)              & =G_L(B), \notag             \\
+        h_L(A)              & =h_L(B), \notag             \\
+        \mathcal G_{N,L}(A) & =\mathcal G_{N,L}(B) \notag
     \end{align}
     for all $L$ and $N$, where $h_L$ is the canonical parent interaction and
     $\mathcal G_{N,L}$ the periodic chain ground space.
@@ -4638,29 +4653,36 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:wielandt_proposition_three, lem:normality_rescaling_invariance,
-        lem:local_ground_space_rescaling}
+    \uses{thm:wielandt_proposition_three, thm:normality_rescaling_invariance,
+        thm:local_ground_space_rescaling, thm:normal_tensor_nonzero_matrix,
+        thm:tp_data_irreducible, thm:gauge_invariance_normal,
+        thm:parent_hamiltonian_from_ground_space,
+        lem:parent_spanning_of_local_space_eq}
     Normality gives the uniform spreading condition, hence irreducibility of
-    the transfer map, so the adjoint transfer map has a positive definite
-    Perron eigenvector $\sigma$ with eigenvalue $r>0$.  Set
-    $\zeta=r^{-1/2}$ and $B^i=\zeta\,\sigma^{1/2}A^i\sigma^{-1/2}$; then
-    $\sum_i(B^i)^\dagger B^i=\Id$, and $\zeta A$ and $B$ are gauge equivalent.
-    Rescaling and gauging preserve normality, so $B$ is normal, and the
+    the transfer map, and Theorem~\ref{thm:normal_tensor_nonzero_matrix}
+    supplies the nonzero matrix that the Perron--Frobenius eigenvector
+    requires.  Theorem~\ref{thm:tp_data_irreducible} therefore returns a
+    positive definite $\sigma$ and an eigenvalue $r>0$ of the adjoint transfer
+    map.  Set $\zeta=r^{-1/2}$ and $B^i=\zeta\,\sigma^{1/2}A^i\sigma^{-1/2}$;
+    then $\sum_i(B^i)^\dagger B^i=\Id$, and $\zeta A$ and $B$ are gauge
+    equivalent.  Rescaling preserves normality by
+    Theorem~\ref{thm:normality_rescaling_invariance} and gauging preserves it
+    by Theorem~\ref{thm:gauge_invariance_normal}, so $B$ is normal, and the
     equivalence of the three primitivity conditions returns a positive definite
     $\rho$ with $(B,\rho)$ primitive.  Multiplying every matrix by $\zeta$
-    multiplies every length-$N$ coefficient by $\zeta^{N}$, and by the two
-    preceding rescaling lemmas together with gauge invariance of the local
-    ground space, $G_L(A)=G_L(\zeta A)=G_L(B)$; the parent interaction and the
-    periodic chain ground space are functions of the local ground space alone.
+    multiplies every length-$N$ coefficient by $\zeta^{N}$, and by
+    Theorem~\ref{thm:local_ground_space_rescaling} together with gauge
+    invariance of the local ground space, $G_L(A)=G_L(\zeta A)=G_L(B)$.  The
+    parent interaction then agrees by
+    Theorem~\ref{thm:parent_hamiltonian_from_ground_space} and the periodic
+    chain ground space by Lemma~\ref{lem:parent_spanning_of_local_space_eq}.
 \end{proof}
 
 \begin{theorem}[Uniform finite-range gap for normal MPS parent Hamiltonians]
     \label{thm:normal_parent_hamiltonian_finite_range_knabe_gap}
-    \lean{MPSTensor.IsNormal.exists_parentHamiltonianES_gap}
+    \lean{MPSTensor.exists_parentHamiltonianES_gap_of_isNormal}
     \leanok
-    \uses{def:normal, thm:normalized_primitive_gauge,
-        thm:primitive_parent_hamiltonian_finite_range_knabe_gap,
-        lem:parent_hamiltonian_from_ground_space}
+    \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
     Let $D>0$ and let $A$ be a normal tensor.  There exist $l>1$,
     $\epsilon_l\geq0$, an integer $m\geq l+1$, and $\delta>0$ such that $A$ is
     $l$-block injective, $\epsilon_l<1/\sqrt{l+1}$,
@@ -4688,15 +4710,19 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     \leanok
     \uses{thm:normalized_primitive_gauge,
         thm:primitive_parent_hamiltonian_finite_range_knabe_gap,
-        lem:parent_hamiltonian_from_ground_space,
-        lem:normality_rescaling_invariance}
+        thm:parent_hamiltonian_from_ground_space,
+        thm:normality_rescaling_invariance,
+        lem:gauge_invariance_block_injective}
     Replace $A$ by the normalized primitive representative $B$ of
     Theorem~\ref{thm:normalized_primitive_gauge} and apply
     Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap} to
-    $B$.  Since $G_L(A)=G_L(B)$ for every $L$, the two parent Hamiltonians
-    coincide, so both the kernel and the norm bound transfer verbatim.  Block
-    injectivity of $B$ at length $l$ returns to $A$ through the gauge and the
-    rescaling.
+    $B$.  Since $G_L(A)=G_L(B)$ for every $L$,
+    Theorem~\ref{thm:parent_hamiltonian_from_ground_space} makes the two
+    parent Hamiltonians equal, so both the kernel and the norm bound transfer
+    verbatim.  Block injectivity of $B$ at length $l$ passes to $\zeta A$ by
+    Lemma~\ref{lem:gauge_invariance_block_injective} applied to the inverse
+    gauge, and from $\zeta A$ to $A$ by
+    Theorem~\ref{thm:normality_rescaling_invariance}.
 \end{proof}
 
 \begin{lemma}[Positive gap transfer under Loewner domination]
