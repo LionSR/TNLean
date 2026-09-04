@@ -232,12 +232,19 @@ The associated norm theorem
 reuses the existing finite-dimensional spectral theorem. These declarations
 are not identified with the unrestricted source theorem.
 
-The abstract limitation remains: the source-threshold hypotheses alone do not
-justify the full-range summation without additional control of the initial
-volumes. Equation~\eqref{eq:cpgsv21_martingale_overlap_threshold_estimate}
-isolates exactly what that control has to supply, namely the vanishing of the
-martingale mass below the threshold; it does not by itself remove the
-requirement. The nonwrapping open MPS specialization supplies this control and
+The source-threshold hypotheses do not justify the full-range summation, and
+no convention stated in Ref.~\cite{Nachtergaele1996Spectral} repairs this.
+A one-site chain whose leftmost interaction is weakened satisfies C1, C2, and
+C3 with constants uniform in $N$ and violates the printed conclusion of
+Theorem~2.1(i); the model, the verification of the three conditions, and the
+resulting minimal repair are in
+\path{docs/paper-gaps/nachtergaele96_theorem_2_1_lower_endpoint.tex}. The
+repair is exactly what
+Equation~\eqref{eq:cpgsv21_martingale_overlap_threshold_estimate} isolates,
+namely the vanishing of the martingale mass below the threshold, and the
+resulting theorem is
+\leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero}.
+The nonwrapping open MPS specialization supplies this control and
 therefore satisfies the stronger full-range assumptions. The early local
 terms in C1 vanish. The early C2 expressions also vanish because the suffix
 Hamiltonian is zero and the complementary projection $\Id-Q_n$ is zero. For
@@ -1983,12 +1990,15 @@ removed one.  No periodic boundary coercivity, comparison of unequal kernels,
 periodic uniqueness argument, divisibility substitution, or replacement by a
 different cyclic tensor is used.
 
-The abstract caveat remains unchanged.  The printed hypotheses of
-\cite[Theorem~2.1(i)]{Nachtergaele1996Spectral} do not control the initial
-indices in the full martingale sum.  The primitive MPS theorem applies because
-the compatible open-chain Hamiltonians make the early C1 and C2 terms vanish
-and the boundary C3 product is zero.  Thus the MPS specialization is complete,
-while the unrestricted abstract full-range identification is not asserted.
+The abstract caveat is now settled against the source.  The printed
+hypotheses of \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral} do not control
+the initial indices in the full martingale sum, and the printed conclusion is
+false without such control; the counterexample and the minimal repair are in
+\path{docs/paper-gaps/nachtergaele96_theorem_2_1_lower_endpoint.tex}.  The
+primitive MPS theorem applies because the compatible open-chain Hamiltonians
+make the early C1 and C2 terms vanish and the boundary C3 product is zero.
+Thus the MPS specialization is complete, while the unrestricted abstract
+full-range identification is not asserted.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -86,6 +86,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbientMartingaleBound
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleFullRangeEstimate
+import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleLowerEndpoint
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap

@@ -18,6 +18,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbientMartingaleBound
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleFullRangeEstimate
+import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleLowerEndpoint
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
@@ -45,7 +46,7 @@ all-vector norm-compression estimates for the excitation projections are also
 recorded as conditional sufficient hypotheses; they are not the source
 principal-angle estimate for the local ground spaces.
 
-The twenty-four components are:
+The twenty-five components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale_of_finiteDimensional`
@@ -89,6 +90,9 @@ The twenty-four components are:
   sums in Nachtergaele's martingale estimate;
 * `Martingale.NachtergaeleFullRangeEstimate` — the source's printed martingale-difference
   summation with the exact C1--C3 energy coefficient and its norm-gap form;
+* `Martingale.NachtergaeleLowerEndpoint` — the refutation of the printed
+  Theorem 2.1(i) from its conditions on the ranges they carry, by a
+  single-excitation coordinate model of a weakened one-site chain;
 * `Martingale.OpenParentGap` — the physical nonwrapping open MPS specialization,
   with \(d_{l+1}=\gamma_{l+1}=1\) and the same \(\epsilon_l\) as condition C3;
 * `Martingale.OverlapReduction` — reduction from overlapping-window commutation

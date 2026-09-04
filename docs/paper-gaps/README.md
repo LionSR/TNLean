@@ -384,9 +384,17 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   nearest-neighbor parent Hamiltonian for the blocked tensor from the sharper
   original-lattice range claim and its quantification over all sufficiently
   long periodic chains.
+- `nachtergaele96_theorem_2_1_lower_endpoint.tex` records that Nachtergaele's
+  Theorem 2.1(i) is false as printed. Its conditions C1, C2 and C3 carry lower
+  endpoints while its proof estimates every martingale difference, and a
+  one-site chain whose leftmost interaction is weakened satisfies all three
+  with constants uniform in the volume and violates the printed bound. The
+  note also shows that the vanishing of the martingale differences below the
+  threshold is the minimal repair, and that repaired theorem is formalized.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison, including the lower-endpoint mismatch in the printed proof of
-  Nachtergaele's Theorem 2.1(i). The exact coefficient is formalized under
+  Nachtergaele's Theorem 2.1(i), whose resolution is in the note above. The
+  exact coefficient is formalized under
   full-range C1--C3 hypotheses, while the source starts the C1 sum at the
   window length and assumes C2 and C3 only beyond their thresholds. The same
   note records the finite-row cyclic-window

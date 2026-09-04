@@ -1467,6 +1467,168 @@ norm estimate is derived here.
     repair is documented in \cite{gap:cpgsv21_martingale_overlap}.
 \end{proof}
 
+% Source: References/cond-mat_9410110/main.tex, the definition of E_n at
+% lines 1068--1074. The vanishing below a fixed level is what the printed
+% proof at lines 1195--1259 needs at the indices excluded by the lower
+% endpoints of C2 and C3.
+\begin{lemma}[Martingale differences below a fixed level]
+    \label{lem:martingale_difference_vanishing_below_level}
+    \lean{FrustrationFree.NestedGroundProjections.martingaleDifference_apply_eq_zero_of_lt}
+    \leanok
+    Let $(G_n)_{n\geq0}$ be nested orthogonal projections on a complex
+    Hilbert space, and put $E_n=G_n-G_{n+1}$. If $G_{n_0}v=v$ for some
+    $n_0$, then $E_nv=0$ for every $n<n_0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For $m\leq n_0$ the ranges are nested, so $G_mG_{n_0}=G_{n_0}$ and hence
+    $G_mv=G_mG_{n_0}v=G_{n_0}v=v$. For $n<n_0$ this applies to both $n$ and
+    $n+1$, so $E_nv=G_nv-G_{n+1}v=v-v=0$.
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, conditions C1--C3 at
+% lines 1030--1094, Theorem 2.1(i) at lines 1119--1130, and its proof at
+% lines 1195--1259. The vanishing hypothesis below the threshold is the
+% minimal repair of the printed statement; the source defect it repairs is
+% documented in
+% docs/paper-gaps/nachtergaele96_theorem_2_1_lower_endpoint.tex.
+\begin{theorem}[C1--C3 energy estimate with no mass below the threshold]
+    \label{thm:nachtergaele_c1_c3_below_threshold_energy_estimate}
+    \lean{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero}
+    \leanok
+    \uses{thm:nachtergaele_c1_c3_threshold_energy_estimate}
+    Assume the hypotheses of
+    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate}, except
+    that $l\leq n_0$ is assumed and
+    (\ref{eq:nachtergaele_c1_threshold_form}) is replaced by condition C1 on
+    the range $l\leq n<M$ of its own window sum at the two volumes at which
+    the source asserts it: the full inequality
+    $0\leq\sum_{n=l}^{N-1}\re\langle H_nx,x\rangle
+        \leq d_{l+1}\re\langle Hx,x\rangle$ at $M=N$, and its non-negativity
+    clause $0\leq\sum_{n=l}^{n_0-1}\re\langle H_nx,x\rangle$ at $M=n_0$.
+    Assume in addition that $E_nv=0$ for every $n<n_0$. Then
+    \begin{align}
+        \frac{\gamma_{l+1}}{d_{l+1}}
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert^2
+         & \leq\re\langle Hv,v\rangle.
+        \label{eq:nachtergaele_c1_c3_below_threshold_energy_estimate}
+    \end{align}
+    This is the conclusion of Theorem~2.1(i) of
+    \cite{Nachtergaele1996Spectral} with each of C1, C2, and C3 imposed on the
+    range at which the source imposes it. The added
+    vanishing hypothesis is the minimal repair of that theorem: the two
+    below-threshold quantities in
+    (\ref{eq:nachtergaele_c1_c3_threshold_energy_estimate}) enter
+    (\ref{eq:nachtergaele_c1_c3_below_threshold_energy_estimate}) with
+    non-negative weights, so both have to vanish, and the vanishing of the
+    omitted martingale mass forces the vanishing of the window correction.
+    Without the added hypothesis the statement is false, by
+    Theorem~\ref{thm:nachtergaele_threshold_conditions_insufficient}. The
+    source defect and the repair are recorded in
+    \cite{gap:nachtergaele96_theorem_2_1_lower_endpoint}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:nachtergaele_c1_c3_threshold_energy_estimate,
+        thm:martingale-difference-final-complement-norm-decomposition}
+    Condition C1 on the threshold range $n_0\leq n<N$ follows from the
+    assumed form: its upper bound by subtracting from the sum over
+    $l\leq n<N$ the initial sum over $l\leq n<n_0$, which is non-negative by
+    C1 at the volume $\Lambda_{n_0}$, and its non-negativity clause termwise
+    from C2, each of whose left-hand sides is non-negative. The window
+    correction in
+    (\ref{eq:nachtergaele_c1_c3_threshold_energy_estimate}) is a sum of
+    squared norms of martingale differences with index below $n_0$, hence
+    zero. The Pythagorean decomposition of a vector orthogonal to
+    $\operatorname{ran}(G_N)$ splits $\lVert v\rVert^2$ into the sum over
+    $n<n_0$, which is zero for the same reason, and the martingale mass
+    $\sum_{n=n_0}^{N-1}\lVert E_nv\rVert^2$. Hence the latter equals
+    $\lVert v\rVert^2$, and
+    (\ref{eq:nachtergaele_c1_c3_threshold_energy_estimate}) becomes
+    (\ref{eq:nachtergaele_c1_c3_below_threshold_energy_estimate}).
+\end{proof}
+
+% Source: References/cond-mat_9410110/main.tex, conditions C1--C3 at
+% lines 1030--1094 and Theorem 2.1(i) at lines 1119--1130. The witness is the
+% one-site chain with a weakened leftmost interaction, restricted to the span
+% of its ground state and its single excitations; see
+% docs/paper-gaps/nachtergaele96_theorem_2_1_lower_endpoint.tex.
+\begin{theorem}[The source conditions on their own ranges do not give the
+        estimate]
+    \label{thm:nachtergaele_threshold_conditions_insufficient}
+    \lean{FrustrationFree.not_unrestrictedNachtergaeleEstimate}
+    \leanok
+    \uses{thm:nachtergaele_c1_c3_below_threshold_energy_estimate}
+    In the notation of
+    Theorem~\ref{thm:nachtergaele_c1_c3_below_threshold_energy_estimate}: for
+    every $k$ there are, on a complex Hilbert space of dimension $k+2$, nested
+    orthogonal projections $(G_n)_{n\geq0}$ with $G_0=\mathbf 1$,
+    $G_{N+1}=0$, and $G_n\neq0$ for every $n\leq N$, nonzero orthogonal
+    projections $Q_n$, local operators $H_n$, volume Hamiltonians
+    $H_{\Lambda_M}$, and a vector $v\perp\operatorname{ran}(G_N)$ such that,
+    with $l=0$, $n_0=1$, $N=k+1$, $\gamma_1=d_1=1$, and $\epsilon_0=0$, the
+    required commutations hold, condition C1 holds with the single constant
+    $d_1$ at every volume $\Lambda_M$ on the range $l\leq n<M$ carried by its
+    own window sum, the gap inequality of condition C2 and condition C3 hold
+    on the range $n_0\leq n<N$ from which they are imposed, every ground space
+    is the kernel of its own Hamiltonian, that is
+    $\ker H_{\Lambda_M}=\operatorname{ran}(G_M)$ for $M\leq N$ and
+    $\ker H_n=\operatorname{ran}(Q_n)$ for every window inside $\Lambda_N$,
+    that is for $0\leq n<N$, where the $Q_n$ are also nonzero orthogonal
+    projections commuting with the martingale differences outside their own
+    windows, and
+    \begin{align}
+        \re\langle H_{\Lambda_N}v,v\rangle
+         & =\tfrac12\lVert v\rVert^2
+        <\frac{\gamma_1}{d_1}
+        \left(1-\epsilon_0\right)^2\lVert v\rVert^2.
+        \label{eq:nachtergaele_threshold_conditions_insufficient}
+    \end{align}
+    Hence condition C1 at every volume on the range of its own window sum
+    together with conditions C2 and C3 on $n_0\leq n<N$, the ranges at which
+    \cite{Nachtergaele1996Spectral} imposes them, do not imply the conclusion
+    of its Theorem~2.1(i), even when every ground space is the kernel of its
+    Hamiltonian and is nontrivial, as condition C2 also requires, and even
+    under the conventions the source attaches to the extreme volumes.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix an orthonormal basis $e_0,\ldots,e_{k+1}$ and let every operator be
+    diagonal in it. The first $N=k+1$ basis vectors carry the single
+    excitations of a chain of $N$ sites and the last carries its ground state.
+    Let $G_n$ have weight $1$ at $e_i$ when $n\leq i$ and weight $0$
+    otherwise, so that $G_0=\mathbf 1$, $G_{N+1}=0$ because no basis vector
+    has index at least $N+1$, every $G_n$ with $n\leq N$ is nonzero
+    because it retains $e_{k+1}$, $G_N$ is the projection onto $e_{k+1}$, and
+    $E_n$ is the projection onto $e_n$ for $n<N$. Let $c_0=\tfrac12$, let
+    $c_i=1$ for $1\leq i\leq k$, and let $c_{k+1}=0$; let $H_{\Lambda_M}$ have
+    weight $c_i$ at $e_i$ when $i<M$ and weight $0$ otherwise, let $H_n$ have
+    weight $c_n$ at $e_n$ and weight $0$
+    elsewhere, and let $Q_n=\mathbf 1-E_n$, which is nonzero because the space
+    has dimension at least two. All operators are diagonal, so the required
+    commutations hold, and $Q_nE_n=0$ gives condition C3 with $\epsilon_0=0$.
+    Summing $H_n$ over the C1 range $0\leq n<M$ gives $H_{\Lambda_M}$ exactly,
+    at every $M$, and the weights $c_i$ are nonnegative, so condition C1 holds
+    at every volume with the single constant $d_1=1$ and with equality in its
+    upper bound. Since $c_i\neq0$ for $i\leq k$, the kernel of
+    $H_{\Lambda_M}$ is spanned by the $e_i$ with $i\geq M$ whenever $M\leq N$,
+    which is $\operatorname{ran}(G_M)$, and the kernel of $H_n$ is spanned by
+    the $e_i$ with $i\neq n$ whenever $0\leq n<N$, which is
+    $\operatorname{ran}(Q_n)$ and is nonzero. For $1\leq n<N$ one has $c_n=1$,
+    so
+    $\lVert(\mathbf 1-Q_n)x\rVert^2=\lVert E_nx\rVert^2$ equals
+    $\re\langle H_nx,x\rangle$, which is condition C2 with $\gamma_1=1$.
+    Take $v=e_0$. Then $v\perp\operatorname{ran}(G_N)$, the line through
+    $e_{k+1}$, and $\re\langle H_{\Lambda_N}v,v\rangle=c_0=\tfrac12$, while
+    $\lVert v\rVert^2=1$, which
+    is (\ref{eq:nachtergaele_threshold_conditions_insufficient}). The whole
+    martingale mass of $v$ sits at the index $n=0$, which C1 covers while C2
+    and C3 exclude it, and it is at that index that C2 fails.
+\end{proof}
+
 % Source: References/cond-mat_9410110/main.tex, conditions C1--C3 at
 % lines 1030--1094, Theorem 2.1(i) at lines 1119--1130, and its proof at
 % lines 1195--1259. The lower-endpoint restriction is documented in
@@ -1514,15 +1676,16 @@ norm estimate is derived here.
     \end{align}
     This full-range statement is stronger than the unrestricted source
     theorem in general. It assumes C1, C2, and C3 for every $0\leq n<N$,
-    whereas the source imposes lower thresholds on these conditions. Without
-    separate control of the initial volumes, the source hypotheses do not
-    imply the assumptions above; see
-    \cite{gap:cpgsv21_martingale_overlap}. The coefficient is exactly the one
-    in Theorem~2.1(i) of \cite{Nachtergaele1996Spectral}:
-    $\gamma_{l+1}/d_{l+1}$ times
+    whereas the source imposes lower thresholds on these conditions. Those
+    thresholds cannot simply be dropped: without separate control of the
+    initial volumes the source hypotheses imply neither the assumptions above
+    nor the conclusion, by
+    Theorem~\ref{thm:nachtergaele_threshold_conditions_insufficient}. The
+    coefficient is exactly the one in Theorem~2.1(i) of
+    \cite{Nachtergaele1996Spectral}: $\gamma_{l+1}/d_{l+1}$ times
     $(1-\epsilon_l\sqrt{l+1})^2$. This is
     Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} at
-    threshold $n_0=0$.
+    threshold $n_0=0$, where nothing lies below the threshold.
 \end{theorem}
 
 \begin{proof}
@@ -1531,10 +1694,10 @@ norm estimate is derived here.
         thm:martingale-difference-final-complement-norm-decomposition}
     Apply
     Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} with
-    $n_0=0$. The correction sum is then empty, and the Pythagorean
-    decomposition of a vector orthogonal to $\operatorname{ran}(G_N)$
-    identifies the martingale mass $\sum_{n=0}^{N-1}\lVert E_nv\rVert^2$ with
-    $\lVert v\rVert^2$. This gives
+    $n_0=0$ and the given window length $l$. Its window correction is a sum
+    over an empty range, hence zero, and its martingale mass over
+    $0\leq n<N$ is $\lVert v\rVert^2$ by the Pythagorean decomposition of a
+    vector orthogonal to $\operatorname{ran}(G_N)$. What remains is
     (\ref{eq:nachtergaele_c1_c3_full_range_energy_estimate}).
 \end{proof}
 

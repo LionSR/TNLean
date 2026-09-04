@@ -121,6 +121,23 @@ theorem inner_martingaleDifference_eq_zero {m n : ℕ} (hmn : m ≠ n) (x y : E)
   rw [G.martingaleDifference_comp_eq_zero hmn]
   simp
 
+/-- A vector fixed by the ground-space projection at level \(n_0\) is
+annihilated by every earlier martingale difference. This is the vanishing that
+the proof of Nachtergaele's Theorem 2.1(i) (arXiv:cond-mat/9410110, lines
+1195--1259) needs at the indices below the lower endpoints of its conditions
+C2 and C3. -/
+theorem martingaleDifference_apply_eq_zero_of_lt {n₀ n : ℕ} (hn : n < n₀)
+    (v : E) (hv : G.projection n₀ v = v) : G.martingaleDifference n v = 0 := by
+  have hfix : ∀ m, m ≤ n₀ → G.projection m v = v := by
+    intro m hm
+    calc
+      G.projection m v = G.projection m (G.projection n₀ v) := by rw [hv]
+      _ = ((G.projection m).comp (G.projection n₀)) v := rfl
+      _ = G.projection n₀ v := by rw [G.projection_comp_eq_of_le hm]
+      _ = v := hv
+  simp only [martingaleDifference, LinearMap.sub_apply, hfix n hn.le,
+    hfix (n + 1) hn, sub_self]
+
 /-- The finite martingale-difference sum telescopes with both endpoints shown
 explicitly. -/
 theorem sum_martingaleDifference (N : ℕ) :

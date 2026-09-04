@@ -2460,6 +2460,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Result:** the inline evaluation-at-identity proof is removed; no duplicate
   implementation remains.
 
+### indicator-weight case split — candidate
+- **Pattern:** prove a pointwise identity or inequality between coordinate
+  weights built from `if` on index arithmetic by `split_ifs <;> first |
+  (exfalso; omega) | norm_num`: the arithmetically impossible branches close by
+  `omega` on the accumulated index hypotheses and the remaining branches are
+  numeric.
+- **Seen:** five occurrences in
+  `TNLean/MPS/ParentHamiltonian/Martingale/NachtergaeleLowerEndpoint.lean`
+  (2026-09-04), all inside one refuting model.
+- **Abstraction (proposed):** none yet. The rule of three asks for occurrences
+  across at least two files; if a second coordinate model needs the same
+  split, extract a `weight_split` macro next to the diagonal-operator helpers
+  rather than a general tactic.
+
 ## Retired
 
 ### block_words — retired

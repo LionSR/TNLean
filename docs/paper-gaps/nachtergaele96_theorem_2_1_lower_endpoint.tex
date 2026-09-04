@@ -1,0 +1,414 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Lower Endpoint of Nachtergaele's Theorem 2.1(i)}
+\author{}
+\date{2026-09-04}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The source statement}
+
+Fix an increasing sequence of finite volumes
+$\Lambda_0=\emptyset\subset\Lambda_1\subset\Lambda_2\subset\cdots$ and local
+Hamiltonians $H_\Lambda$ defined for every volume $\Lambda_n\setminus\Lambda_m$
+with $m\leq n$. Nachtergaele's spectral-gap criterion assumes three
+conditions for one and the same finite length $l$, at
+lines~1030--1094 of the local source for
+Ref.~\cite{Nachtergaele1996Spectral}.
+
+Condition~C1 assumes, for a window parameter $q$, that there is a constant
+$d_q$ with
+\begin{align}
+    0
+        &\leq\sum_{n=q}^{N}H_{\Lambda_n\setminus\Lambda_{n-q}}
+         \leq d_qH_{\Lambda_N}.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1}
+\end{align}
+The constant does not depend on the volume: the source asserts
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1}) for every $N$ with one
+$d_q$, and Theorem~2.1(i) is stated for every $N$ with the same $d_{l+1}$.
+Condition~C2 assumes that $\mathcal G_\Lambda=\ker H_\Lambda$ is a non-trivial
+subspace, writes $G_\Lambda$ for the orthogonal projection onto
+$\mathcal G_\Lambda\otimes\mathcal H_{\Lambda_N\setminus\Lambda}$, and assumes
+a local gap $\gamma_q>0$ with
+\begin{align}
+    H_{\Lambda_n\setminus\Lambda_{n-q}}
+        &\geq\gamma_q\left(\mathbf 1-G_{\Lambda_n\setminus\Lambda_{n-q}}\right)
+        &&\text{for all }n\geq n_q.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_c2}
+\end{align}
+With the conventions $G_{\Lambda_0}=\mathbf 1$ and $G_{\Lambda_{N+1}}=0$, the
+martingale differences
+\begin{align}
+    E_n
+        &=G_{\Lambda_n}-G_{\Lambda_{n+1}}
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_martingale_difference}
+\end{align}
+are mutually orthogonal projections summing to $\mathbf 1$. Condition~C3
+assumes $\epsilon_l<1/\sqrt{l+1}$ with
+\begin{align}
+    \left\lVert G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n\right\rVert
+        &\leq\epsilon_l
+        &&\text{for all }n\geq n_l.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_c3}
+\end{align}
+Theorem~2.1(i), at lines~1119--1130, concludes that for any $N$ and any $\psi$
+with $G_{\Lambda_N}\psi=0$,
+\begin{align}
+    \langle\psi\mid H_{\Lambda_N}\psi\rangle
+        &\geq\frac{\gamma_{l+1}}{d_{l+1}}
+             \left(1-\epsilon_l\sqrt{l+1}\right)^2
+             \lVert\psi\rVert^2.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}
+\end{align}
+
+\section{The point at issue}
+
+The printed proof, at lines~1195--1259, resolves $\psi$ over the whole range
+\begin{align}
+    \psi
+        &=\sum_{n=0}^{N-1}E_n\psi,
+    &
+    \lVert\psi\rVert^2
+        &=\sum_{n=0}^{N-1}\lVert E_n\psi\rVert^2,
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_resolution}
+\end{align}
+derives for each index $n$ and each pair of positive weights $c_1,c_2$ the
+estimate
+\begin{align}
+    \left(2-c_1-\frac{\epsilon_l^2}{c_2}\right)\lVert E_n\psi\rVert^2
+    -c_2\sum_{m=n-l}^{n}\lVert E_m\psi\rVert^2
+        &\leq
+          \frac{1}{c_1\gamma_{l+1}}
+          \left\langle\psi\mid
+            H_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\psi\right\rangle,
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_per_index}
+\end{align}
+and then sums it over the same full range.
+
+Three separate hypotheses enter
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_per_index}) and its
+summation, and each carries its own lower endpoint. The Hamiltonian on the
+right comes from estimating $\mathbf 1-G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$
+by C2 for the volume $\Lambda_{n+1}\setminus\Lambda_{n-l}$, that is by
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c2}) at window $q=l+1$ and
+index $n+1$, which needs $n+1\geq n_{l+1}$. The coefficient
+$\epsilon_l^2/c_2$ comes from C3 at index $n$, which needs $n\geq n_l$. The
+summation applies C1 at $q=l+1$; reindexing
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1}) by $k=n+1$ turns its
+left-hand sum into
+\begin{align}
+    \sum_{k=l+1}^{N}H_{\Lambda_k\setminus\Lambda_{k-l-1}}
+        &=\sum_{n=l}^{N-1}H_{\Lambda_{n+1}\setminus\Lambda_{n-l}},
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1_reindex}
+\end{align}
+so C1 budgets exactly the local terms with $n\geq l$. The summed estimate is
+therefore available on
+\begin{align}
+    n_0
+        &=\max\{l,\;n_l,\;n_{l+1}-1\}
+        \leq n<N,
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}
+\end{align}
+and not below. What it yields there is
+\begin{align}
+    \kappa\left(1-t\right)^2P
+        &\leq\langle\psi\mid H_{\Lambda_N}\psi\rangle
+              +\kappa\left(1-t\right)tS,
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold_estimate}
+\end{align}
+where
+\begin{align}
+    \kappa
+        &=\frac{\gamma_{l+1}}{d_{l+1}},
+    &
+    t
+        &=\epsilon_l\sqrt{l+1}\in[0,1),
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_constants}\\
+    P
+        &=\sum_{n=n_0}^{N-1}\lVert E_n\psi\rVert^2,
+    &
+    S
+        &=\sum_{m=\max\{0,n_0-l\}}^{n_0-1}\lVert E_m\psi\rVert^2.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_masses}
+\end{align}
+Passing from
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold_estimate}) to
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}) requires
+$P=\lVert\psi\rVert^2$ and $S=0$. The stated conventions
+$\Lambda_0=\emptyset$, $G_{\Lambda_0}=\mathbf 1$, and
+$G_{\Lambda_{N+1}}=0$ do not make the early differences $E_n$ vanish, and the
+source states no padding convention for the early local Hamiltonians. The
+question is whether C1, C2, and C3 nevertheless force the missing mass to
+vanish.
+
+\section{The printed statement fails}
+
+They do not. The following model satisfies C1, C2, and C3 with their printed
+lower endpoints, for every $l$ and every $N$; its parameter $\delta$ is chosen
+after the length $l$, and every choice below $1/(l+1)$ violates
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}).
+
+Let the sites be $x=1,2,\ldots$ with $\mathcal H_x=\mathbb C^2$ and basis
+$\lvert0\rangle,\lvert1\rangle$, let $\Lambda_n=\{1,\ldots,n\}$, fix a length
+$l$, and then fix $\delta$ with $0<\delta<1/(l+1)$. Take one-site
+interactions
+\begin{align}
+    h_1
+        &=\delta\,\lvert1\rangle\langle1\rvert_1,
+    &
+    h_x
+        &=\lvert1\rangle\langle1\rvert_x
+    \quad(x\geq2),
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_interaction}
+\end{align}
+and set $H_\Lambda=\sum_{x\in\Lambda}h_x$ for every volume $\Lambda$, so that
+every $H_{\Lambda_n\setminus\Lambda_m}$ is defined. Writing
+$P_x=\lvert0\rangle\langle0\rvert_x$, the kernel of $H_\Lambda$ is spanned by
+$\lvert0\rangle^{\otimes\Lambda}$ and
+\begin{align}
+    G_\Lambda
+        &=\prod_{x\in\Lambda}P_x,
+    &
+    E_n
+        &=\left(\prod_{x\leq n}P_x\right)\left(\mathbf 1-P_{n+1}\right)
+    \quad(n<N).
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_projections}
+\end{align}
+These ground spaces are non-trivial, the projections $G_\Lambda$ commute,
+and $G_{\Lambda_0}=\mathbf 1$, so the martingale structure of the source is in
+place.
+
+Condition~C1 holds with $d_q=q$ for every $q$ and every $N$: each $h_x$ lies
+in $H_{\Lambda_n\setminus\Lambda_{n-q}}$ for at most $q$ values of $n$ in
+$\{q,\ldots,N\}$, and all terms are non-negative, so
+\begin{align}
+    0
+        &\leq\sum_{n=q}^{N}H_{\Lambda_n\setminus\Lambda_{n-q}}
+         \leq qH_{\Lambda_N}.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_c1}
+\end{align}
+Condition~C2 holds with $\gamma_q=1$ and $n_q=q+1$: for $n\geq q+1$ the
+volume $\Lambda_n\setminus\Lambda_{n-q}=\{n-q+1,\ldots,n\}$ excludes site $1$,
+so its Hamiltonian is a sum of commuting complementary projections and
+\begin{align}
+    H_{\Lambda_n\setminus\Lambda_{n-q}}
+        &=\sum_{x=n-q+1}^{n}\left(\mathbf 1-P_x\right)
+         \geq\mathbf 1-\prod_{x=n-q+1}^{n}P_x
+         =\mathbf 1-G_{\Lambda_n\setminus\Lambda_{n-q}}.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_c2}
+\end{align}
+The middle inequality is checked in the joint eigenbasis of the commuting
+$P_x$: both sides vanish where every $P_x$ acts as the identity, and the left
+side is at least $1$ elsewhere. Condition~C3 holds with $\epsilon_l=0$ for
+every $l$ and every $n\geq0$, since $P_{n+1}$ occurs in
+$G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$ and
+\begin{align}
+    G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
+        &=\left(\prod_{x\leq n}P_x\right)
+          P_{n+1}\left(\mathbf 1-P_{n+1}\right)
+         =0.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_c3}
+\end{align}
+For $n<l$ the volume is read with $\Lambda_{n-l}=\Lambda_0=\emptyset$ and the
+same computation applies. Thus C1, C2, and C3 hold for one and the same $l$,
+with
+\begin{align}
+    d_{l+1}
+        &=l+1,
+    &
+    \gamma_{l+1}
+        &=1,
+    &
+    \epsilon_l
+        &=0,
+    &
+    n_l
+        &=l+1.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_constants}
+\end{align}
+The constants are the ones the source itself would supply: they are uniform in
+$N$, and $\epsilon_l=0$ is admitted by C3, whose only requirement is
+$\epsilon_l<1/\sqrt{l+1}$.
+
+Now take
+\begin{align}
+    \psi
+        &=\lvert1\rangle_1\otimes\lvert0\rangle^{\otimes(N-1)}.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_vector}
+\end{align}
+Then $P_1\psi=0$, hence $G_{\Lambda_N}\psi=0$, and $\psi$ is a unit vector
+with $H_{\Lambda_N}\psi=\delta\psi$. The printed conclusion
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}) would give
+\begin{align}
+    \delta
+        &=\langle\psi\mid H_{\Lambda_N}\psi\rangle
+         \geq\frac{\gamma_{l+1}}{d_{l+1}}\left(1-0\right)^2
+         =\frac{1}{l+1},
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_contradiction}
+\end{align}
+which is false by the choice $\delta<1/(l+1)$ made above. That choice depends
+on $l$ but not on $N$, so the failure is not an artefact of small volumes: it
+persists for every $N\geq1$ with the same $l$, the same constants, and the
+same threshold $n_l$.
+
+The mechanism is exactly the one located in the previous section. Here
+$\psi=E_0\psi$, so the entire martingale mass sits at the index $n=0$, which
+is below the threshold
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}) for every $l$.
+Condition~C2 fails at that index --- the weakened bond $h_1$ has local gap
+$\delta$, not $\gamma_{l+1}=1$ --- and this is precisely what its lower
+endpoint $n_{l+1}=l+2$ permits. The printed proof estimates the index
+regardless.
+
+A formal instance of this model is verified in the Lean development. Every
+operator above is diagonal in the computational basis, so the span of the
+ground state $\lvert0^N\rangle$ together with the single-excitation vectors
+$\lvert0^m10^{N-1-m}\rangle$, $0\leq m<N$, is invariant under all of them, and
+the model restricts to that span, of dimension $N+1$, with $E_m$ the
+projection onto the $m$-th excitation coordinate. Retaining the ground-state
+coordinate keeps every $\mathcal G_{\Lambda_n}$ non-trivial, as C2 requires;
+on the restricted space $\mathcal G_{\Lambda_N}$ is the line it spans, and
+$\psi$ is orthogonal to it. Each ground space of the restricted model is again
+the kernel of the restricted Hamiltonian of its volume, and for $M>N$ the
+restricted $H_{\Lambda_M}$ coincides with $H_{\Lambda_N}$, because the
+retained vectors carry no excitation beyond site $N$; the whole family of
+volume Hamiltonians and the conventions $G_{\Lambda_0}=\mathbf 1$ and
+$G_{\Lambda_{N+1}}=0$ therefore survive the restriction. Conditions C2 and C3
+are read at the volume $\Lambda_N$ of the conclusion: their source ranges
+extend upwards without bound, but at an index $n\geq N$ the window
+$\Lambda_{n+1}\setminus\Lambda_{n-l}$ leaves $\Lambda_N$ and its operators do
+not act on $\mathcal H_{\Lambda_N}$, which is why the printed proof sums over
+$0\leq n<N$. The model satisfies them at every index above their thresholds,
+on the volume that index names, by
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_c2}) and
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_c3}). Reading them at
+$n=N$ as well is not an option the source leaves open, because it contradicts
+the convention $G_{\Lambda_{N+1}}=0$: that convention makes
+$E_N=G_{\Lambda_N}$, which is non-zero because C2 asks the ground space to be
+non-trivial, so C3 at $n=N$ would bound
+$\lVert G_{\Lambda_{N+1}\setminus\Lambda_{N-l}}G_{\Lambda_N}\rVert$ by
+$\epsilon_l<1$, while for the model above that operator is
+$\prod_{x\leq N+1}P_x$, of norm one. The restriction of
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_interaction}) at
+$l=0$ and $\delta=1/2$ refutes the printed statement for every chain length
+$N\geq1$.\footnote{Formal declarations:
+    \leanid{FrustrationFree.UnrestrictedNachtergaeleEstimate} transcribes
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}) with each
+    condition on the range the source gives it, namely C1 on $l\leq n<M$, the
+    range of its reindexed window sum
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c1_reindex}), imposed
+    with a single constant at every volume $\Lambda_M$ against the
+    corresponding member of the family of Hamiltonians, and C2 and C3 on
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}); it also
+    carries the ordering $l\leq n_0$ of that threshold, the identification of
+    each ground space with the kernel of its Hamiltonian and the
+    non-triviality of the ground spaces that C2 requires, imposed for every
+    window inside $\Lambda_N$ because only the gap inequality of C2 carries an
+    onset, and the conventions
+    $G_{\Lambda_0}=\mathbf 1$ and $G_{\Lambda_{N+1}}=0$. Then
+    \leanid{FrustrationFree.not_unrestrictedNachtergaeleEstimate} refutes it.
+    In the formal instance $l=0$, so C1 is supplied on the full range
+    $0\leq n<M$, where the local terms sum to $H_{\Lambda_M}$ exactly at every
+    volume.}
+
+\section{The minimal repair}
+
+Along the printed route the missing hypothesis is determined uniquely.
+Suppose (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion}) is to
+be deduced from
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold_estimate}).
+Subtracting the two inequalities, the deduction is available exactly when
+\begin{align}
+    \kappa\left(1-t\right)^2
+    \left(\lVert\psi\rVert^2-P\right)
+    +\kappa\left(1-t\right)tS
+        &\leq0.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_deficit}
+\end{align}
+Here $\kappa>0$ and $1-t>0$, and by
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_resolution}) the deficit
+$\lVert\psi\rVert^2-P$ equals $\sum_{n<n_0}\lVert E_n\psi\rVert^2$, so both
+summands in
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_deficit}) are
+non-negative. Both must therefore vanish, and the vanishing of the first
+already implies the vanishing of the second, since $S$ is a subsum of it.
+The minimal added hypothesis is thus
+\begin{align}
+    E_n\psi
+        &=0
+        &&\text{for all }0\leq n<n_0,
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}
+\end{align}
+which, because $\sum_{n<n_0}E_n=\mathbf 1-G_{\Lambda_{n_0}}$ and the $E_n$ are
+mutually orthogonal projections, is equivalent to
+\begin{align}
+    G_{\Lambda_{n_0}}\psi
+        &=\psi.
+    \label{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair_projection}
+\end{align}
+Under (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}) the
+conclusion (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_conclusion})
+holds with the printed coefficient, with C2 and C3 assumed only on the source
+range (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}) and C1
+only on the range $l\leq n<M$ of its own window sum, and only at the two
+volumes $\Lambda_{n_0}$ and $\Lambda_N$ among the volumes at which the source
+asserts it.\footnote{Formal
+    declaration:
+    \leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero};
+    the implication from
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair_projection}) to
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}) is
+    \leanid{FrustrationFree.NestedGroundProjections.martingaleDifference_apply_eq_zero_of_lt}.}
+The passage from C1 on $l\leq n<N$ to the sum over the threshold range
+$n_0\leq n<N$ that the printed proof estimates is available because C1 at the
+volume $\Lambda_{n_0}$ makes the omitted initial sum non-negative, while C2
+makes each retained term non-negative. The earlier full-range formulation
+\leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_full_range},
+which assumes C1, C2, and C3 on every index $0\leq n<N$, is the case
+$n_0=0$ of the threshold estimate, where
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}) is vacuous.
+
+The repair is a hypothesis on the pair $(\psi,n_0)$, not a strengthening of
+C1, C2, or C3, and it is what applications supply. In the nonwrapping open
+matrix-product-state parent Hamiltonian the early martingale differences are
+identically zero, so
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}) holds for every
+$\psi$; that specialization is recorded in
+\path{docs/paper-gaps/cpgsv21_martingale_overlap.tex}.
+
+\section{Conclusion}
+
+Theorem~2.1(i) of Ref.~\cite{Nachtergaele1996Spectral} is false as printed.
+Its conditions C1, C2, and C3 carry lower endpoints; its proof estimates every
+martingale difference; and no convention stated in the source removes the
+difference between the two ranges. The one-site chain
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_model_interaction}) with a
+weakened leftmost interaction satisfies all three conditions with constants
+uniform in $N$, and for any $\delta<1/(l+1)$ it violates the printed bound by
+the factor $\delta(l+1)$.
+
+The correct statement adds
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}), the vanishing of
+the martingale differences below the threshold
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}). That
+hypothesis is not merely sufficient: by
+(\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_deficit}) it is forced by
+the estimate the printed proof actually establishes. The intended
+applications, in which the initial volumes carry no ground-space defect,
+satisfy it.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
