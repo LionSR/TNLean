@@ -694,6 +694,55 @@ overlap-hypothesis step is tracked by
 subsequent multiplicity-power extraction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5344}{issue \#5344}.
 
+\section{Scope restriction: the equal case in irreducible form II}
+
+Theorem~3.8 of Ref.~\cite{DeLasCuevas2017Irreducible}, lines 643--693, assumes
+that the two tensors are in irreducible form, that is, that every block map is
+irreducible of spectral radius one. The formal equal-case
+theorem\footnote{Formal declaration:
+\leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_sectorDecomposition} in
+\path{EqualCaseGlobal.lean}.} assumes in addition that every block is
+left-canonical, that is, that every block map is trace preserving. In the
+language of the source, lines 320--332, the blocks are in irreducible form II.
+
+The source asserts at lines 330--332 that one passes from irreducible form to
+irreducible form II by a block-diagonal similarity, so that a result proved in
+either form applies to the other after replacing ``invertible'' by
+``unitary''. That passage is not carried out in the formal development, so the
+formal statement is the form-II statement and not the unrestricted source
+theorem.
+
+Two ingredients force the restriction. The periodic overlap
+dichotomy\footnote{Formal declaration:
+\leanid{MPSTensor.periodicOverlapDichotomy}.} and the vanishing of the
+matrix-product vector of a periodic block at lengths that its period does not
+divide\footnote{Formal declaration:
+\leanid{MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}; see also
+\path{docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex}.} are both
+available only in the normalized orientation.
+
+\subsection{Elimination plan}
+
+Normalize both bases by the sectorwise similarity of the section ``Pure
+normalization theorem'' above, apply the form-II theorem to the normalized
+decompositions, and transport the conclusion back. The multiplicity gauge is
+unchanged by the transport: it acts by a scalar on each block, so it commutes
+with every block-diagonal similarity. The global similarity is conjugated by
+the two normalizing similarities.
+
+\section{Independence of the non-zero periodic vectors}
+
+The scope restriction of the section ``Scope restriction: independence without
+spanning'' above concerned two separate weakenings: independence only along a
+common-multiple subsequence, and the missing spanning clause. The
+first is now removed: independence of the non-zero members of the family at
+every sufficiently large length is
+formalized.\footnote{Formal declaration:
+\leanid{MPSTensor.periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent}
+in \path{NonzeroSubfamily.lean}.} Only the spanning clause remains
+unformalized.
+
+
 \begin{thebibliography}{9}
 \bibitem{DeLasCuevas2017Irreducible}
 G.~de las Cuevas, J.~I.~Cirac, N.~Schuch, and D.~P\'erez-Garc\'ia,

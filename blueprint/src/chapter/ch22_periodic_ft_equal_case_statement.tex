@@ -1,14 +1,16 @@
 The following is the equal-case theorem of
 \cite[lines~643--656]{DeLasCuevas2017Irreducible}.
-The statements recorded here are conditional components of that theorem: the
-final comparison still assumes periodic-overlap and power-equality hypotheses,
-so the literature theorem has not yet been obtained here as a single
-unconditional result.
+The periodic-overlap and coefficient-power hypotheses that earlier statements
+carried are now derived from equality of the generated matrix-product vectors,
+and the theorem is obtained as a single unconditional result for tensors in
+irreducible form II, Theorem~\ref{thm:periodic_ft_equal_case_form_two}. The
+source theorem for the unrestricted irreducible form, stated below, still
+awaits the passage between the two forms.
 
-% The source-level equal-case theorem remains not ready as a single theorem:
-% the present Lean statements still assume the periodic-overlap and
-% coefficient-power hypotheses which the paper derives from equality of the
-% MPV family. The Z-gauge/root-of-unity construction is already formalized.
+% Remaining gap for the source-level statement: the formal equal-case theorem
+% assumes trace-preserving block maps (irreducible form II). The passage from
+% irreducible form to irreducible form II by a block-diagonal similarity,
+% asserted by the source at lines 330--332, is not formalized.
 \begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
     \uses{def:irreducible_form}
@@ -42,9 +44,13 @@ unconditional result.
     with $[A^i,Z]=0$ and $\mc{V}(A)=\mc{V}(ZA)$.
 
     \noindent\emph{Remark.}
-    The proof is conditional on the periodic-overlap dichotomy of
-    \cite[lines~589--609]{DeLasCuevas2017Irreducible},
-    which is left here as a separate hypothesis.
+    Theorem~\ref{thm:periodic_ft_equal_case_form_two} is this statement for
+    tensors in irreducible form II, that is, with trace-preserving block maps.
+    What separates the two is the passage between irreducible form and
+    irreducible form II by a block-diagonal similarity, asserted by the source
+    at lines 330--332 and recorded in
+    \cite{gap:dccsp17_periodic_overlap_route_alignment}, section ``Scope
+    restriction: the equal case in irreducible form II''.
 \end{theorem}
 
 \begin{theorem}[Diagonal multiplicity gauge from equal powers]
@@ -273,4 +279,134 @@ unconditional result.
     $\zeta_j\mu_{j,q}$ are nonzero,
     Theorem~\ref{thm:zgauge_construction} produces the diagonal $Z_j$ with the
     two displayed properties.
+\end{proof}
+
+\begin{theorem}[Global multiplicity gauge and similarity]%
+    \label{thm:periodic_equalcase_global_zgauge}
+    \lean{MPSTensor.equalCase_global_zgauge_of_blockwise}
+    \leanok
+    \uses{def:periodic_tensor, def:same_mpv2,
+        thm:pgvwc07_periodic_state_vector_decomposition}
+    Let
+    \begin{align}
+        A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
+        \notag                                       \\
+        B^i & =\bigoplus_{k\in K}(S_k\otimes B_k^i),
+        \notag
+    \end{align}
+    be two multiplicity-bearing decompositions, let $\pi\colon J\to K$ be a
+    bijection with $D_j=D_{\pi(j)}$, let $\tau_j$ reorder the multiplicity
+    copies of the matched blocks, let $\xi_j$ be scalars and $Y_j$ invertible
+    matrices with
+    \begin{align}
+        A_j^i=\xi_jY_jB_{\pi(j)}^iY_j^{-1},
+        \notag
+    \end{align}
+    and let $z_{j,l}$ be scalars with
+    \begin{align}
+        z_{j,l}\,\xi_j\mu_{j,l}=\nu_{\pi(j),\tau_j(l)},
+        \qquad z_{j,l}^{m_j}=1,
+        \notag
+    \end{align}
+    where $A_j$ is $m_j$-periodic and every $m_j$ divides $L$. Writing $Z_j$
+    for the diagonal matrix of the $z_{j,l}$ and
+    $Z=\bigoplus_{j\in J}Z_j\otimes\Id_{D_j}$, one has $Z^L=\Id$,
+    $[A^i,Z]=0$ for every $i$, $\mc{V}(A)=\mc{V}(ZA)$, and there is an
+    invertible $Y$ with $ZA^i=YB^iY^{-1}$ for every $i$.
+
+    This is the assembly of
+    \cite[lines~689--690]{DeLasCuevas2017Irreducible}, with $Y$ the direct sum
+    $\bigoplus_jT_j\otimes Y_j$ of the copy reorderings and the blockwise
+    similarities.
+\end{theorem}
+
+\begin{proof}\leanok
+    The multiplicity gauge acts by the scalar $z_{j,l}$ on the bond space of
+    the copy $(j,l)$, so it commutes with every block-diagonal matrix and its
+    $L$-th power is the identity. Multiplying $A^i$ by it rescales the
+    multiplicity entries by the $z_{j,l}$, and the hypothesis on the
+    $z_{j,l}$ makes the rescaled entries equal to the matched entries of $B$.
+    The matched blocks are therefore related copy by copy, so the two
+    assembled tensors are related by the permutation of the matched copies
+    followed by the direct sum of the blockwise similarities. For the
+    matrix-product vectors, a copy whose period divides the length contributes
+    the factor $z_{j,l}^N=1$, and a copy whose period does not divide the
+    length contributes the zero vector by
+    Theorem~\ref{thm:pgvwc07_periodic_state_vector_decomposition}.
+\end{proof}
+
+\begin{theorem}[Fundamental theorem for MPS in irreducible form II, equal case]%
+    \label{thm:periodic_ft_equal_case_form_two}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_sectorDecomposition}
+    \leanok
+    \uses{def:periodic_tensor, def:same_mpv2,
+        thm:periodic_equalcase_global_zgauge,
+        thm:periodic_equalcase_blockwise_zgauge,
+        thm:periodic_equalcase_coefficient_extraction,
+        thm:periodic_conditional_block_matching,
+        thm:periodic_multiplicity_nondecaying_overlap,
+        thm:zgauge_construction}
+    Let $A$ and $B$ carry the multiplicity-bearing forms
+    \begin{align}
+        A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
+        \notag                                       \\
+        B^i & =\bigoplus_{k\in K}(S_k\otimes B_k^i),
+        \notag
+    \end{align}
+    where $R_j$ and $S_k$ are diagonal with nonzero entries and the two
+    displayed families are pairwise non-repeated bases of periodic tensors
+    whose blocks are trace preserving, of periods $m_j$ and $n_k$. If
+    $\mc{V}(A)=\mc{V}(B)$ at every positive length, then there is a bijection
+    $\pi\colon J\to K$ such that, for every $j$, one has $m_j=n_{\pi(j)}$,
+    the blocks $A_j$ and $B_{\pi(j)}$ are repeated with unit-modulus scalar
+    $\xi_j$, the multiplicity matrices $R_j$ and $S_{\pi(j)}$ have the same
+    size, and there are a reordering $T_j$ of the diagonal entries of
+    $S_{\pi(j)}$ and a diagonal matrix $Z_j$ with
+    \begin{align}
+        Z_j^{m_j}=\Id,\qquad
+        Z_j\left(\xi_jR_j\right)=T_jS_{\pi(j)}T_j^\dagger.
+        \notag
+    \end{align}
+    Writing $Z=\bigoplus_{j\in J}Z_j\otimes\Id_{D_j}$, one has
+    $Z^{\operatorname{lcm}_j m_j}=\Id$, $[A^i,Z]=0$ for every $i$,
+    $\mc{V}(A)=\mc{V}(ZA)$, and there is an invertible $Y$ with
+    $ZA^i=YB^iY^{-1}$ for every $i$.
+
+    \emph{Scope restriction.}  This is
+    \cite[Theorem~3.8, lines~643--693]{DeLasCuevas2017Irreducible} for tensors
+    in irreducible form II, that is, with trace-preserving block maps. The
+    source theorem assumes only irreducible form and asserts at lines 330--332
+    that one passes between the two forms by a block-diagonal similarity, so
+    that a proof in either form applies to the other; that passage is not
+    carried out here. The restriction and its elimination plan are recorded in
+    \cite{gap:dccsp17_periodic_overlap_route_alignment}, section ``Scope
+    restriction: the equal case in irreducible form II''. The unrestricted
+    source theorem is Theorem~\ref{thm:periodic_ft}, which remains
+    unformalized.
+
+    The unit-modulus scalar of each matched pair is displayed rather than
+    suppressed. The entries of $Z_j$ are $m_j$-th roots of unity against the
+    rescaled multiplicity matrix $\xi_jR_j$, which is what the source means at
+    lines 667--671 by absorbing the phase into $S_j$; the scalar is genuinely
+    present, as the period-one pair $B_j=e^{i\theta}A_j$ shows.
+\end{theorem}
+
+\begin{proof}\leanok
+    Equality of the generated matrix-product vectors is in particular
+    proportionality, so
+    Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} supplies
+    non-decaying partners and
+    Theorem~\ref{thm:periodic_conditional_block_matching} matches the two
+    bases; matched blocks have equal periods because repeated blocks have the
+    same peripheral spectrum. Each matched pair carries a unit-modulus scalar
+    $\xi_j$ relating its matrix-product vectors at every length, so
+    Theorem~\ref{thm:periodic_equalcase_coefficient_extraction} compares the
+    multiplicity power sums at every large multiple of $m_j$, and
+    Theorem~\ref{thm:periodic_equalcase_blockwise_zgauge} turns that
+    comparison into the reordering $T_j$ and the entry identities
+    $\nu_{\pi(j),\tau_j(l)}^{m_j}=(\xi_j\mu_{j,l})^{m_j}$. The ratios
+    $\nu_{\pi(j),\tau_j(l)}/(\xi_j\mu_{j,l})$ are therefore $m_j$-th roots of
+    unity, and Theorem~\ref{thm:zgauge_construction} collects them into
+    $Z_j$. Theorem~\ref{thm:periodic_equalcase_global_zgauge} assembles the
+    blockwise data into the global $Z$ and $Y$.
 \end{proof}
