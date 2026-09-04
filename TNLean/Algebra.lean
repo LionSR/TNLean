@@ -60,6 +60,7 @@ import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.TwistedRegularRepresentation
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence
+import TNLean.Algebra.UnitaryConjugationTransposeSign
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
 import TNLean.Algebra.UnitaryKronecker

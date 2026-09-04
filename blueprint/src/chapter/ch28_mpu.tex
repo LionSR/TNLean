@@ -6527,11 +6527,42 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \subsection{Local characterization of symmetries}
 
+\begin{lemma}[Common transpose sign of the conjugation factors]
+    \label{lem:mpu_conjugation_common_transpose_sign}
+    \lean{Matrix.exists_common_transpose_sign_of_kronecker_map_star_mul_eq_one,
+        Matrix.transpose_eq_self_or_transpose_eq_neg_of_kronecker_map_star_mul_eq_one}
+    \leanok
+    \uses{thm:mpug_kronecker_identity_factors, thm:mpug_unitary_entrywise_self_sign}
+    Let $x$ and $y$ be unitary matrices over $\mathbb C$, indexed by nonempty
+    finite sets, whose entrywise conjugates satisfy
+    \begin{align}
+        \overline xx\otimes\overline yy & =\Id.
+    \end{align}
+    Then there is a sign $\sigma\in\{1,-1\}$ with
+    \begin{align}
+        x & =\sigma x^T, & y & =\sigma y^T.
+    \end{align}
+    Equivalently, either $x=x^T$ and $y=y^T$, or $x=-x^T$ and $y=-y^T$.
+    % Source lines: paper_v2.tex 1033--1038.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_kronecker_identity_factors, thm:mpug_unitary_entrywise_self_sign}
+    A Kronecker product equal to the identity has reciprocal scalar factors, so
+    $\overline xx=e^{i\phi}\Id$ and $\overline yy=e^{-i\phi}\Id$. Since $x$ is
+    unitary, $x^T$ is a left inverse of $\overline x$; multiplying the first
+    relation by $x^T$ on the left gives $x=e^{i\phi}x^T$, and the same argument
+    gives $y=e^{-i\phi}y^T$. Reading the first relation as a relation for the
+    unitary $\overline x$ against its own entrywise conjugate gives
+    $\Id=xx^\dagger=e^{2i\phi}\Id$, so $e^{i\phi}=\pm1$ and
+    $e^{-i\phi}=e^{i\phi}$. The two matrices therefore carry one transpose sign.
+\end{proof}
+
 \begin{proposition}[Conjugation symmetry]
     \label{prop1conj}
     \notready
     \discussion{5713}
-    \uses{FundamentalMPU, SF}
+    \uses{FundamentalMPU, SF, lem:mpu_conjugation_common_transpose_sign}
     An MPU in standard form is invariant under complex conjugation if and only
     if there are unitaries $x$ and $y$ such that either
     $x=x^T$ and $y=y^T$, or $x=-x^T$ and $y=-y^T$, and
