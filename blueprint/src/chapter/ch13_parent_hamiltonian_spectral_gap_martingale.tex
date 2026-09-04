@@ -1677,17 +1677,21 @@ norm estimate is derived here.
     coefficient is exactly the one in Theorem~2.1(i) of
     \cite{Nachtergaele1996Spectral}: $\gamma_{l+1}/d_{l+1}$ times
     $(1-\epsilon_l\sqrt{l+1})^2$. This is
-    Theorem~\ref{thm:nachtergaele_c1_c3_below_threshold_energy_estimate} at
+    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} at
     threshold $n_0=0$, where nothing lies below the threshold.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:nachtergaele_c1_c3_below_threshold_energy_estimate}
+    \uses{thm:nachtergaele_c1_c3_threshold_energy_estimate,
+        thm:martingale-difference-final-complement-norm-decomposition}
     Apply
-    Theorem~\ref{thm:nachtergaele_c1_c3_below_threshold_energy_estimate} with
-    $n_0=0$. Its added vanishing hypothesis is then vacuous, and its
-    conclusion is (\ref{eq:nachtergaele_c1_c3_full_range_energy_estimate}).
+    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} with
+    $n_0=0$ and the given window length $l$. Its window correction is a sum
+    over an empty range, hence zero, and its martingale mass over
+    $0\leq n<N$ is $\lVert v\rVert^2$ by the Pythagorean decomposition of a
+    vector orthogonal to $\operatorname{ran}(G_N)$. What remains is
+    (\ref{eq:nachtergaele_c1_c3_full_range_energy_estimate}).
 \end{proof}
 
 \begin{theorem}[Energy form to norm bound]

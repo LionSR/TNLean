@@ -94,6 +94,15 @@ nontrivial; both clauses are imposed, for the volumes \(\Lambda_M\) with
 C2--C3 range. The conventions \(G_{\Lambda_0}=\mathbf 1\) and
 \(G_{\Lambda_{N+1}}=0\) at lines 1060--1061 are imposed as well.
 
+All of this is read at the volume \(\Lambda_N\) that the conclusion is about.
+The source ranges of C2 and C3 extend upwards without bound, but at an index
+\(n\geq N\) the window \(\Lambda_{n+1}\setminus\Lambda_{n-l}\) reaches outside
+\(\Lambda_N\), so neither its Hamiltonian nor its ground projection acts on
+that space; correspondingly the printed proof sums its per-index estimate over
+\(0\leq n<N\), reading C2 at window index at most \(N\) and C3 at index at
+most \(N-1\). Condition C1 is different, because its right-hand side names the
+Hamiltonian of the volume, which is why it is imposed at every \(M\).
+
 This is the hypothesis list of
 `NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_threshold`,
 with C1 restated on its own source range at every volume and the remaining
@@ -405,7 +414,9 @@ ground space is the kernel of its own Hamiltonian and is the nonzero span of
 the vacuum, so both clauses of C2 hold, as do the conventions
 \(G_{\Lambda_0}=\mathbf 1\) and \(G_{\Lambda_{N+1}}=0\). The index \(n=0\) is
 excluded only from C2 and C3, and the printed proof estimates its martingale
-difference all the same. -/
+difference all the same. The refutation is asserted separately in each
+dimension; from \(k=1\) onwards the C2--C3 range \(n_0\leq n<N\) is nonempty,
+so both conditions carry content at the witness. -/
 theorem not_unrestrictedNachtergaeleEstimate (k : ℕ) :
     ¬ UnrestrictedNachtergaeleEstimate (EuclideanSpace ℂ (Fin (k + 2))) := by
   intro hsource
