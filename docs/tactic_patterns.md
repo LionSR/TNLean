@@ -2092,7 +2092,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/MPDO/InvariantProjection.lean:122`,
   `TNLean/MPS/MPDO/LemmaC5CaseI.lean:194`,
   `TNLean/MPS/ParentHamiltonian/MixedGram.lean:97`, and
-  `TNLean/MPS/Periodic/Applications.lean:173`.
+  `TNLean/MPS/Periodic/Applications.lean:105`.
   It first commutes the outer binders and then descends through one of them;
   `Finset.sum_comm` already owns the permutation step.
 - **Abstraction (proposed):** a two-binder congruence lemma supporting a
