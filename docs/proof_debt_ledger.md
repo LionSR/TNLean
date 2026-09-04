@@ -602,8 +602,8 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   orientation. Every consumer is another module of the set or an example
   file; the on-route proof in `SourceUCompleteNetwork.lean` uses none of it;
   21 Chapter 28 nodes tag these declarations;
-  `docs/paper-gaps/mpu_mixed_kernel_range_restriction.tex` stated that the
-  route is no longer a route to `lemuisometry`.
+  the mixed-kernel range-restriction paper-gap note, retired with them, stated
+  that the route is no longer a route to `lemuisometry`.
 - **Remediation**: delete the set (plan step 1 of the audit) after moving
   all five surviving $v$ identities to `StandardForm.lean`, moving
   `sourceX₁_weighted_isometry_apply` to `SourceFactors.lean`, and moving the
