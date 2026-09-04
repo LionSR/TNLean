@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{CZX: Normalization and the Physical Z Gates}
+\author{}
+\date{2026-09-04}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The 2017 contraction convention and its obstruction}
+In arXiv:1703.09188, equation \texttt{coefficients}
+(\texttt{paper\_v2.tex}, lines 226--246) defines the periodic contraction
+as an ordinary trace, with no length-dependent prefactor. Section III,
+lines 318--350, requires the resulting operator to be unitary and separately
+normalizes its transfer matrix by $1/d$. That transfer normalization does
+not rescale the physical operator.
+
+Write $u,d,\ell,r\in\{0,1\}$ for upper, lower, left and right indices,
+$X_{ud}=\delta_{u,1-d}$, and $H_{\ell r}=2^{-1/2}(-1)^{\ell r}$.
+Example \texttt{example:czx}, lines 1914--1930, prints
+\[
+ P^{ud}_{\ell r}=X_{ud}\delta_{u,\ell}H_{\ell r}.
+\]
+For binary output and input configurations $a,b$ of length $n>0$, with
+cyclic indices $a_n=a_0$, the copy deltas force the unique virtual path
+$\ell_j=a_j$. Consequently
+\[
+ \operatorname{MPO}_n(P)_{a,b}
+ =2^{-n/2}\prod_{j=0}^{n-1}\delta_{a_j,1-b_j}
+       (-1)^{\sum_{j=0}^{n-1}a_ja_{j+1}}.
+\]
+Every row and column has one nonzero entry, of modulus $2^{-n/2}$, so
+$\operatorname{MPO}_n(P)\operatorname{MPO}_n(P)^\dagger=2^{-n}I$,
+not $I$. At $n=2$ the row indexed by $00$ has only the entry
+$\operatorname{MPO}_2(P)_{00,11}=1/2$; its squared norm is $1/4$.
+Blocking $L>0$ sites replaces $n$ by $Ln$ and cannot remove this obstruction.
+This is a nondegenerate normalization error, not a zero-sector convention.
+
+\section{What the 2025 diagram actually says}
+In arXiv:2502.20257, \texttt{main.tex}, equations \texttt{eq:CZ} and
+\texttt{eq:deltas} (lines 3795--3851), the blue two-leg tensor is explicitly
+$W=\sqrt{2}H$, with entries $W_{\ell r}=(-1)^{\ell r}$; the wire junctions
+are ordinary copy deltas. Equation \texttt{eq:MPU\_CZX}
+(lines 4503--4547) has two such blue tensors, two lower physical $X$
+gates and two upper physical $Z$ gates. None may be dropped.
+
+For comparison only, let $A=\sqrt{2}P$. Reading the two physical legs
+left to right, let their outputs be $a,b$ and inputs $c,d$.
+The ordinary two-site block of $A$ is
+\[
+ (A_2)^{ab,cd}_{\ell r}
+ =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}(-1)^{ab+br}.
+\]
+Since $Z_{aa}=(-1)^a$, the displayed 2025 tensor is instead
+\[
+ B^{ab,cd}_{\ell r}
+ =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}(-1)^{a+b+ab+br}
+ =(-1)^{a+b}(A_2)^{ab,cd}_{\ell r}.
+\]
+Thus $B=(Z\otimes Z)A_2$ on the output physical leg, equivalently the
+block of the one-site tensor with entries $(-1)^u A^{ud}_{\ell r}$.
+It is neither $P_2$ nor $A_2$ in these coordinates. For example, at
+$(a,b,c,d,\ell,r)=(0,1,1,0,0,0)$, their entries are respectively
+$B=-1$, $P_2=1/2$, $A_2=1$.
+On a ring of $m$ blocked sites the additional factor is
+$(-1)^{\sum_{j=0}^{2m-1}a_j}$, which is not a constant phase.
+At $m=2$, compare all-zero output with output $0100$, each against its
+bitwise-complement input. This also excludes an identification merely by
+periodic virtual gauge transformation or a global scalar.
+
+The left-to-right pair $(a,b)$ is encoded as $2a+b$, consistent with
+\leanid{MPOTensor.CZX.siteBits}; successive pairs give the four-bit order
+of \leanid{MPOTensor.CZX.localBits}. No new gate or bit encoding is needed.
+The formulas for $A$ and $B$ above are an informal source audit, not new
+public tensor definitions or a formal proof of their correspondence.
+
+\section{Checked boundary and elimination plan}
+\leanid{MPOTensor.CZX.printed2017Tensor} records only the literal printed
+2017 witness. Theorems
+\leanid{MPOTensor.CZX.printed2017Tensor\_two\_zero\_row} and
+\leanid{MPOTensor.CZX.printed2017Tensor\_not\_isMPU} formally prove the
+two-site row formula and the failure of the MPU predicate.
+The all-length contraction and the 2025 formulas above are mathematical
+derivations, not claims of additional checked Lean theorems.
+
+Issue \#7738 must not be closed as though its requested exact identity
+were proved. Its source identification needs correction: expose one
+shared, Z-decorated, unnormalized tensor for the 2025 target, use the
+existing blocking equivalence and bit ordering, and prove its all-length
+monomial formula and unitarity. Any connection to the 2017 gate pair
+$u=CZ(X\otimes X), v=CZ$ must explicitly specify the normalization and
+physical change of representative, rather than assert literal equality.
+No classification signs, action data, defect tensors, or completion
+certificates are supplied here. The two original CZX blueprint claims
+remain unformalized.
+\end{document}
