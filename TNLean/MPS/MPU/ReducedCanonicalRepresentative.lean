@@ -47,7 +47,7 @@ tensor generating the same positive-length matrix product vectors as its
 normalized flattening.
 
 Source: arXiv:1703.09188, lines 344--356. -/
-private theorem trace_transferMatrix_pow_eq_one_of_sameMPV
+private theorem trace_transferMatrix_pow_eq_one_of_sameMPV₂Pos
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : U.IsMPU)
     {E : ℕ} [NeZero E] {A : MPSTensor (d * d) E}
     (hSame : MPSTensor.SameMPV₂Pos U.normalizedFlattening A)
@@ -144,7 +144,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
   let _ : NeZero Dred := NeZero.of_pos hDred
   have hTrace : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap Ared) ^ N) = 1 :=
-    trace_transferMatrix_pow_eq_one_of_sameMPV hU hSame
+    trace_transferMatrix_pow_eq_one_of_sameMPV₂Pos hU hSame
   have hBlocksNormal : ∀ k : Fin r, MPSTensor.IsNormalTensor (blocks k) := by
     intro k
     let _ : NeZero (dim k) := NeZero.of_pos (hDim k)
@@ -200,7 +200,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
     hSame.trans hGaugePos
   have hTraceB : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap B) ^ N) = 1 :=
-    trace_transferMatrix_pow_eq_one_of_sameMPV hU hSameB
+    trace_transferMatrix_pow_eq_one_of_sameMPV₂Pos hU hSameB
   have hFullB : dataB.toCPSVCanonicalFormData.HasFullSupport := by
     change (∑ k : Fin dataB.r, dataB.dim k) = Dred
     exact hTotalDim.trans hFull
@@ -317,7 +317,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
     hSameB.trans hSameBC
   have hTraceC : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap C) ^ N) = 1 :=
-    trace_transferMatrix_pow_eq_one_of_sameMPV hU hSameC
+    trace_transferMatrix_pow_eq_one_of_sameMPV₂Pos hU hSameC
   obtain ⟨hRadiusC, hPrimitiveC⟩ :=
     spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace
       (Kraus.transferMap C) hTraceC

@@ -44,8 +44,12 @@ tensor is normal.
 
 The constructed representative is written in the ambient coordinates of its
 unique retained block. In those coordinates the ambient right fixed matrix is
-the block's own diagonal positive fixed matrix, normalized to trace one, which
-is the matrix $\rho$ of the source canonical form II. The construction
+the block's own diagonal positive fixed matrix, normalized to trace one. This
+is the matrix denoted $\rho$ in the source canonical form II, namely the
+diagonal positive definite right fixed matrix of the normalized transfer map
+with $\tr(\rho)=1$; it is exhibited in ambient coordinates in
+Eq.~\ref{eq:mpu_canonical_form_full_support_ambient_fixed_point} below. The
+construction
 therefore inhabits the bundled canonical-form-II presentation
 \leanid{MPOTensor.IsMPUCanonicalFormII}. This inhabitance is specific to the
 constructed gauge: canonical-form-II data together with full support do not by

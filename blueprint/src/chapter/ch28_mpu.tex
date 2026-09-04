@@ -3177,11 +3177,18 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     Since $J_1$ is unitary this is a change of ambient coordinates:
     $A_1^i=J_1A_{\mathrm{red}}^iJ_1^\dagger$, so $A_1$ and $A_{\mathrm{red}}$
-    have the same matrix product vectors at every positive length, and
-    replacing the ambient coisometry $\Phi$ of the canonical-form-II data by
-    $\Phi J_1$ leaves a coisometry reconstructing $A_{\mathrm{red}}$ from the
-    same blocks and weights. The fixed matrix transports along the same
-    conjugation:
+    have the same matrix product vectors at every positive length. The
+    canonical-form-II data travel along the same factor: if $\Phi$ is the
+    ambient coisometry reconstructing $A_1$ from the blocks $B_k$ and the
+    weights $\mu_k$, then $\Phi J_1$ is again a coisometry and reconstructs
+    $A_{\mathrm{red}}$ from those same blocks and weights,
+    \begin{align}
+        (\Phi J_1)(\Phi J_1)^\dagger
+         & =\Phi J_1J_1^\dagger\Phi^\dagger=\Phi\Phi^\dagger=\Id, \\
+        (\Phi J_1)^\dagger\left(\bigoplus_{k=1}^{r}\mu_kB_k^i\right)(\Phi J_1)
+         & =J_1^\dagger A_1^iJ_1=A_{\mathrm{red}}^i.
+    \end{align}
+    The fixed matrix transports along the same conjugation:
     \begin{align}
         \E_{A_1}(J_1\rho J_1^\dagger)
          & =J_1\E_{\mu_1B_1}(\Lambda)J_1^\dagger=J_1\rho J_1^\dagger, \\
