@@ -2556,6 +2556,62 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     % Rep.ofMulDistribMulAction with the explicit trivial action.
 \end{definition}
 
+\begin{definition}[Pullback of scalar cohomology]
+    \label{def:mpug_h2_pullback}
+    \lean{TNLean.Algebra.ScalarCocycle.pullback,
+        TNLean.Algebra.ScalarCocycle.pullback_apply,
+        TNLean.Algebra.ScalarCocycle.IsCocycle.pullback,
+        TNLean.Algebra.ScalarCocycle.CohomologousTo.pullback,
+        TNLean.Algebra.H2.pullback,
+        TNLean.Algebra.H2.pullback_mk}
+    \leanok
+    \uses{def:h2_cx, def:cohomologous_to, def:is_cocycle}
+    Let $f:K\to G$ be a group homomorphism. For a scalar $2$-cochain
+    $\omega:G\times G\to\C^\times$, define
+    $(f^*\omega)(a,b)=\omega(f(a),f(b))$.
+    Pullback preserves the cocycle equation. If $\omega_1$ and $\omega_2$
+    differ by the coboundary of $\varphi:G\to\C^\times$, their pullbacks
+    differ by the coboundary of $\varphi\circ f$. Thus pullback defines
+    $f^*:H^2(G,\C^\times)\to H^2(K,\C^\times)$ by
+    $f^*[\omega]=[f^*\omega]$.
+\end{definition}
+
+% Partial support for #7361 (child #7754), not the full prop:BI_psi criterion.
+% No U(1) restriction naturality or tensor-level block-independence claim.
+\begin{theorem}[Exact extension of a subgroup cocycle]
+    \label{thm:mpug_h2_exact_extension}
+    \lean{TNLean.Algebra.H2.mem_range_pullback_subtype_iff,
+        TNLean.Algebra.ScalarCocycle.IsCocycle.coboundary_mul}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:is_cocycle}
+    Let $H\le G$ be any subgroup, let $\iota:H\hookrightarrow G$ be its
+    inclusion, and let $\psi:H\times H\to\C^\times$ be a $2$-cocycle.
+    Then $[\psi]$ belongs to the image of $\iota^*$ if and only if there is
+    a $2$-cocycle $\Psi:G\times G\to\C^\times$ with
+    $\Psi(a,b)=\psi(a,b)$ for every $a,b\in H$.
+    No normalization of either cocycle is required.
+    This is the representative adjustment implicit in the extension
+    condition of \cite[lines~7042--7064]{FrancoRubio2025MPUGauging},
+    here stated with $\C^\times$ coefficients.
+    % Source: Papers/2502.20257/main.tex:7042--7064.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    Suppose $[\psi]=\iota^*[\omega]$. Choose a cochain
+    $\varphi:H\to\C^\times$ such that
+    $\psi(a,b)=\varphi(a)\varphi(b)\varphi(ab)^{-1}\omega(a,b)$.
+    Extend $\varphi$ to a function $\Phi:G\to\C^\times$, taking value $1$
+    outside $H$, and set
+    $\Psi(g,h)=\Phi(g)\Phi(h)\Phi(gh)^{-1}\omega(g,h)$.
+    In the cocycle equation for $\Psi$, cancellation leaves the common
+    factor $\Phi(g)\Phi(h)\Phi(k)\Phi(ghk)^{-1}$ multiplied by the two sides
+    of the cocycle equation for $\omega$. Hence $\Psi$ is a cocycle, and
+    $\Phi|_H=\varphi$ gives $\Psi|_{H\times H}=\psi$ exactly.
+    Conversely, any exact extension $\Psi$ satisfies
+    $\iota^*[\Psi]=[\psi]$.
+\end{proof}
+
 \begin{theorem}[Circle and nonzero-complex coefficients in degree two]
     \label{thm:mpug_circle_complex_units_h2}
     \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
