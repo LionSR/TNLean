@@ -20,7 +20,9 @@ The source writes the deformed tensor as \(A^i = \sum_j \Lambda_{ij} B^j\) with 
 invertible, and the deformed state as \(\ket{\psi'} = R^{\otimes N}\ket{\psi}\).  Here the
 original tensor is \(A\) and the deformed tensor is \(\Lambda A\), with
 \((\Lambda A)^i = \sum_j \Lambda_{ij} A^j\); the on-site map \(\Lambda\) plays the role of the
-source's \(\Lambda\) and \(R\).
+source's \(\Lambda\) and \(R\).  The source states the correspondence for tensor network
+states on a general graph; this module formalizes its instance for matrix product states on
+the periodic chain.
 
 ## Main definitions
 
@@ -383,8 +385,9 @@ theorem map_chainGroundSpace_le_chainGroundSpace_rotatePhysical
 
 /-- The one-to-one correspondence of arXiv:2011.12127, lines 2035--2037, between the ground
 states of the parent Hamiltonians of \(\ket\psi\) and \(\ket{\psi'} = R^{\otimes N}\ket\psi\)
-for an invertible on-site map \(R\): the chain ground space of the deformed tensor is the
-image of the chain ground space of the original tensor under \(R^{\otimes N}\). -/
+for an invertible on-site map \(R\), in its instance for matrix product states on the
+periodic chain: the chain ground space of the deformed tensor is the image of the chain
+ground space of the original tensor under \(R^{\otimes N}\). -/
 theorem chainGroundSpace_rotatePhysical {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ)
     (A : MPSTensor d D) (L N : ℕ) :
     chainGroundSpace (rotatePhysical Λ A) L N =
