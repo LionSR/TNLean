@@ -4526,9 +4526,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 
 \section{The normalized primitive gauge of a normal tensor}
 
-A normal tensor carries neither the trace-preserving normalization nor a
-positive definite fixed point of its transfer map.  Both are supplied without
-loss of generality by the sources:
+A normal tensor need not carry the trace-preserving normalization, nor need its
+transfer map have spectral radius one; normality alone forces neither.  Both
+normalizations are supplied without loss of generality by the sources:
 \cite[equations~(3.1)--(3.2b), lines~1394--1435]{Nachtergaele1996Spectral}
 rewrites the generalized valence-bond construction so that the two
 normalizations hold, and
@@ -4614,6 +4614,29 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     their sum.
 \end{proof}
 
+\begin{theorem}[Normality alone gives an irreducible transfer map]
+    \label{thm:normal_irreducible_transfer}
+    \lean{MPSTensor.isPrimitivePaper_of_isNormal,
+        MPSTensor.isIrreducibleTensor_of_isPrimitivePaper}
+    \leanok
+    \uses{def:normal, def:paper_primitive, def:irreducible_tensor}
+    Let $A$ be a normal tensor.  Then $A$ is primitive in the sense of
+    Definition~\ref{def:paper_primitive}, and its transfer map has no
+    nontrivial invariant projection.  No normalization is imposed on $A$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:eventually_full_kraus_rank, rem:wolf_6_8_pairwise}
+    Normality is eventual full Kraus rank
+    (Remark~\ref{rem:wolf_6_8_pairwise}), so $S_N(A)=\MN{D}$ for some $N>0$.
+    Applying the length-$N$ words to a nonzero $\varphi$ then spans $\C^D$,
+    which is the spreading condition.  A subspace invariant under all matrices
+    of $A$ and containing a nonzero vector therefore contains the span of the
+    images of that vector, namely all of $\C^D$; so no invariant projection is
+    nontrivial.
+\end{proof}
+
 \begin{theorem}[Normalized primitive gauge of a normal tensor]
     \label{thm:normalized_primitive_gauge}
     \lean{MPSTensor.exists_isPrimitiveMPS_gauge_of_isNormal}
@@ -4653,24 +4676,32 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:wielandt_proposition_three, thm:normality_rescaling_invariance,
+    \uses{thm:normal_irreducible_transfer, thm:wielandt_proposition_three,
+        thm:normality_rescaling_invariance,
         thm:local_ground_space_rescaling, thm:normal_tensor_nonzero_matrix,
         thm:tp_data_irreducible, thm:gauge_invariance_normal,
+        thm:gauge_invariance, lem:eval_word_smul,
         thm:parent_hamiltonian_from_ground_space,
         lem:parent_spanning_of_local_space_eq}
-    Normality gives the uniform spreading condition, hence irreducibility of
-    the transfer map, and Theorem~\ref{thm:normal_tensor_nonzero_matrix}
-    supplies the nonzero matrix that the Perron--Frobenius eigenvector
-    requires.  Theorem~\ref{thm:tp_data_irreducible} therefore returns a
+    Theorem~\ref{thm:normal_irreducible_transfer} makes the transfer map of
+    $A$ irreducible, with no normalization imposed on $A$, and
+    Theorem~\ref{thm:normal_tensor_nonzero_matrix} supplies the nonzero matrix
+    that the Perron--Frobenius eigenvector requires.
+    Theorem~\ref{thm:tp_data_irreducible} therefore returns a
     positive definite $\sigma$ and an eigenvalue $r>0$ of the adjoint transfer
     map.  Set $\zeta=r^{-1/2}$ and $B^i=\zeta\,\sigma^{1/2}A^i\sigma^{-1/2}$;
     then $\sum_i(B^i)^\dagger B^i=\Id$, and $\zeta A$ and $B$ are gauge
     equivalent.  Rescaling preserves normality by
     Theorem~\ref{thm:normality_rescaling_invariance} and gauging preserves it
-    by Theorem~\ref{thm:gauge_invariance_normal}, so $B$ is normal, and the
-    equivalence of the three primitivity conditions returns a positive definite
-    $\rho$ with $(B,\rho)$ primitive.  Multiplying every matrix by $\zeta$
-    multiplies every length-$N$ coefficient by $\zeta^{N}$, and by
+    by Theorem~\ref{thm:gauge_invariance_normal}, so $B$ is normal.  Since $B$
+    is trace preserving, the equivalence of the three primitivity conditions,
+    Theorem~\ref{thm:wielandt_proposition_three}, applies to it and returns a
+    positive definite $\rho$ with $(B,\rho)$ primitive.  Gauge equivalence
+    leaves the matrix product vectors unchanged by
+    Theorem~\ref{thm:gauge_invariance}, and multiplying every matrix by
+    $\zeta$ multiplies every length-$N$ word by $\zeta^{N}$ by
+    Lemma~\ref{lem:eval_word_smul}, hence every length-$N$ coefficient of $B$
+    is $\zeta^{N}$ times that of $A$.  By
     Theorem~\ref{thm:local_ground_space_rescaling} together with gauge
     invariance of the local ground space, $G_L(A)=G_L(\zeta A)=G_L(B)$.  The
     parent interaction then agrees by

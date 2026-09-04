@@ -188,11 +188,12 @@ further gauge by the square root of the matrix \(\Lambda\) appearing in
 condition 2.
 
 Normality supplies the irreducibility that the Perron--Frobenius eigenvector
-requires, through the primitivity equivalences of arXiv:0909.5347,
-Proposition 3, and it survives both the rescaling and the gauge; the
-trace-preserving representative is therefore normal as well, and Proposition 3
-returns the complementary transfer-map gap with a positive definite fixed
-point. -/
+requires, through the direction of arXiv:0909.5347, Proposition 3, that imposes
+no normalization on the tensor, and it survives both the rescaling and the
+gauge; the trace-preserving representative is therefore normal as well, and the
+full equivalence of Proposition 3, which does assume the trace-preserving
+normalization, returns the complementary transfer-map gap with a positive
+definite fixed point. -/
 theorem exists_isPrimitiveMPS_gauge_of_isNormal [NeZero D] {A : MPSTensor d D}
     (hA : Kraus.IsNormal A) :
     ∃ (B : MPSTensor d D) (ζ : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ),
