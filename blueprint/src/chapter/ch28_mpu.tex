@@ -4318,7 +4318,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_matching_direct_block_contractions, thm:mpu_canonical_form_ii_transfer_stabilization}
+    \uses{thm:mpu_matching_direct_block_contractions, thm:mpu_canonical_form_ii_transfer_stabilization, thm:mpu_canonical_form_ii_positive_dimensions}
     The convention records a positive trace-one ambient fixed matrix, and
     Theorem~\ref{thm:mpu_canonical_form_ii_transfer_stabilization} identifies
     the stabilized power with $\lvert\rho)(\Phi\rvert$ at the positive exponent
@@ -4349,9 +4349,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{definition}[Canonical form II for a matrix product unitary]
     \label{def:mpu_canonical_form_ii}
     \lean{MPOTensor.IsMPUCanonicalFormII,
-        MPOTensor.IsMPUCanonicalFormII.hasFullSupport,
-        MPOTensor.IsMPUCanonicalFormII.neZero_bond,
-        MPOTensor.IsMPUCanonicalFormII.neZero_phys}
+        MPOTensor.IsMPUCanonicalFormII.hasFullSupport}
     \leanok
     \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support}
     Let $\mathcal U$ be an MPO tensor, and write
@@ -4380,17 +4378,44 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Thus the retained blocks have literal full support, and $\rho$ is a
     positive diagonal trace-one right fixed point in the ambient bond
-    coordinates. In particular the normalization $\tr(\rho)=1$ forces the bond
-    space to be nonempty, and together with $E(\rho)=\rho$ it forces the
-    physical dimension to be positive as well: on an empty physical index the
-    normalized transfer map is zero, so its fixed matrix vanishes and cannot
-    have unit trace. This is the standing convention of
+    coordinates. This is the standing convention of
     \cite[lines~269--281, 344--356, and 488--502]{Cirac2017MPU}.
     % The ambient diagonal rho is part of the chosen presentation. No construction
     % from arbitrary existing CFII and full-support witnesses is asserted:
     % inhabitance is proved only for the constructed reduced representative of
     % Theorem thm:mpu_reduced_cfii_representative.
 \end{definition}
+
+\begin{theorem}[Canonical form II forces positive dimensions]
+    \label{thm:mpu_canonical_form_ii_positive_dimensions}
+    \lean{MPOTensor.IsMPUCanonicalFormII.neZero_bond,
+        MPOTensor.IsMPUCanonicalFormII.neZero_phys}
+    \leanok
+    \uses{def:mpu_canonical_form_ii}
+    If an MPO tensor $\mathcal U$ admits a canonical-form-II presentation, then
+    its bond space is nonempty and its physical dimension is positive:
+    \begin{align}
+        D & >0, & d & >0.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Both dimensions are forced by the normalization $\tr(\rho)=1$ of
+    (\ref{eq:mpu_ambient_cfii_fixed_pair}). If $D=0$, the ambient bond index
+    set is empty and every trace over it vanishes,
+    \begin{align}
+        \tr(\rho) & =\sum_{n\in\varnothing}\rho_{nn}=0\neq1.
+    \end{align}
+    If $d=0$, the physical index set is empty, so the normalized transfer map
+    is an empty sum,
+    \begin{align}
+        E(\rho) & =\sum_{i\in\varnothing}\widetilde{\mathcal U}^{i}\rho
+        \bigl(\widetilde{\mathcal U}^{i}\bigr)^\dagger=0.
+    \end{align}
+    The fixed-point equation $E(\rho)=\rho$ of
+    (\ref{eq:mpu_ambient_cfii_fixed_pair}) then gives $\rho=0$, hence
+    $\tr(\rho)=0\neq1$.
+\end{proof}
 
 \begin{theorem}[Normality of a full-support normalized MPU representative]
     \label{thm:mpu_normalized_full_support_normal}
@@ -4469,17 +4494,26 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     matrix $\rho$, and put $J=\max(D^2-1,1)$. Then
     \begin{align}
         (\Phi\rvert E & =(\Phi\rvert,
-                      & E^J           & =\lvert\rho)(\Phi\rvert,
+                      & E^J           & =\lvert\rho)(\Phi\rvert.
         \label{eq:mpu_ambient_cfii_stabilization}
     \end{align}
-    and the same identity holds for the normalized diagonal of the double layer
-    in the vectorized bond coordinates. The exponent is positive in every bond
-    dimension, so no separate one-dimensional branch is needed.
+    Let $q:\Fin D\times\Fin D\to\Fin{D^2}$ be the standard product encoding,
+    let $R$ be the normalized physical diagonal of the double layer
+    $\mathcal W(\mathcal U)$, and let $\rho',\Phi'$ be the vectorizations of
+    $\rho$ and of $\Phi=\Id_D$ in the doubled bond coordinates $\Fin{D^2}$,
+    that is $\rho'_{q(m,n)}=\rho_{mn}$ and $\Phi'_{q(m,n)}=(\Id_D)_{mn}$. Then
+    also
+    \begin{align}
+        R^J & =\lvert\rho')(\Phi'\rvert.
+        \label{eq:mpu_ambient_cfii_double_layer}
+    \end{align}
+    The exponent is positive in every bond dimension, so no separate
+    one-dimensional branch is needed.
     % Source lines: paper_v2.tex 269--281 and 397--405.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_cfii_transfer_stabilization, thm:mpu_normalized_transfer_fin_one, thm:mpu_blocked_double_layer_diagonal}
+    \uses{thm:mpu_reduced_cfii_transfer_stabilization, thm:mpu_normalized_transfer_fin_one, thm:mpu_blocked_double_layer_diagonal, thm:mpu_canonical_form_ii_positive_dimensions}
     If $D=1$, the normalized transfer matrix is the identity, $\rho=1$ by
     $\tr(\rho)=1$, and both identities hold at $J=1$. If $D>1$, then
     $J=D^2-1$, and
@@ -4493,9 +4527,19 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
                     & =\tr(\rho)\lvert\sigma)      \\
                     & =\lvert\sigma),
     \end{align}
-    so $\sigma=\rho$. The double-layer form follows by rewriting the
-    normalized diagonal of the $J$-fold block as the $J$-th power of the
-    normalized transfer matrix in the vectorized bond coordinates.
+    so $\sigma=\rho$. For the double-layer form,
+    Theorem~\ref{thm:mpu_blocked_double_layer_diagonal} identifies the
+    normalized diagonal of the $J$-fold block with the $J$-th power of the
+    normalized transfer matrix after the encoding $q$, so
+    (\ref{eq:mpu_ambient_cfii_stabilization}) gives, for all
+    $a,b\in\Fin{D^2}$,
+    \begin{align}
+        \bigl(R^J\bigr)_{ab}
+         & =\bigl(E^J\bigr)_{q^{-1}(a),q^{-1}(b)}
+        =\bigl(\lvert\rho)(\Phi\rvert\bigr)_{q^{-1}(a),q^{-1}(b)}
+        =\bigl(\lvert\rho')(\Phi'\rvert\bigr)_{ab},
+    \end{align}
+    which is (\ref{eq:mpu_ambient_cfii_double_layer}).
 \end{proof}
 
 \section{Standard form, index, and symmetry classification}
