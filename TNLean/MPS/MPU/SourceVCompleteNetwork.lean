@@ -209,15 +209,16 @@ theorem IsMPUCanonicalFormII.sourceV_isIsometry [NeZero d]
 form II satisfies $r\ell\le d^2$, since the isometry $v$ maps
 $\C^r\otimes\C^\ell$ into $\C^d\otimes\C^d$.
 
+The isometry used here is the source gate built from the recorded weight
+$\rho$, so the bound is read off the printed network of the source rather than
+off a reparametrized gate.
+
 Source: arXiv:1703.09188, proof of Theorem `ThmFund1`, $1\to2$
 (lines 577--588). -/
 theorem IsMPUCanonicalFormII.rightRank_mul_leftRank_le [NeZero d]
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) (hS : IsMPUSimple U) :
     r[U] * ℓ[U] ≤ d * d := by
-  have := hU.neZero_bond
-  have h := Matrix.IsIsometry.card_le _
-    (hS.sourceV_transpose_isIsometry hU.ρ hU.ρ_posDef (max (D * D - 1) 1) (by omega)
-      hU.normalizedDiagonal_pow_eq_vecMulVec)
+  have h := Matrix.IsIsometry.card_le _ (hU.sourceV_isIsometry hS)
   simpa only [Fintype.card_prod, Fintype.card_fin] using h
 
 /-- Theorem `ThmFund1`, $4\to1$: if the paper gate $v$ of an MPU tensor
