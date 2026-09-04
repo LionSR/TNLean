@@ -410,9 +410,14 @@ single-excitation vector at the weakened bond has energy
 \(\frac12\lVert\psi\rVert^2\). Condition C1 is supplied on its own range
 \(0\leq n<M\) at every volume \(\Lambda_M\) with the one constant \(d_1=1\),
 because the local terms below \(M\) sum to \(H_{\Lambda_M}\) exactly. Every
-ground space is the kernel of its own Hamiltonian and is the nonzero span of
-the vacuum, so both clauses of C2 hold, as do the conventions
-\(G_{\Lambda_0}=\mathbf 1\) and \(G_{\Lambda_{N+1}}=0\). The index \(n=0\) is
+ground space is the kernel of its own Hamiltonian, spanned by the vacuum
+together with the excitations outside its volume, so it contains the vacuum
+and is nonzero and both clauses of C2 hold; the conventions
+\(G_{\Lambda_0}=\mathbf 1\) and \(G_{\Lambda_{N+1}}=0\) hold as well, the
+first because the empty volume constrains no coordinate and the second
+because every coordinate lies below \(N+1\). At the chain length the ground
+space is the line the vacuum spans, and the witness vector is orthogonal to
+it. The index \(n=0\) is
 excluded only from C2 and C3, and the printed proof estimates its martingale
 difference all the same. The refutation is asserted separately in each
 dimension; from \(k=1\) onwards the C2--C3 range \(n_0\leq n<N\) is nonempty,
