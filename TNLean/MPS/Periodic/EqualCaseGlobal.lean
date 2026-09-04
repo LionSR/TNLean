@@ -577,7 +577,13 @@ theorem ScalarGaugeEquiv.of_gaugeEquiv_right {D₁ D₂ : ℕ} {ζ : ℂ}
 
 /-! ## The equal-case fundamental theorem over multiplicity-bearing decompositions -/
 
-/-- Repeated periodic blocks in left-canonical form have equal periods. -/
+/-- Repeated periodic blocks in left-canonical form have equal periods.
+
+This is the last clause of arXiv:1708.00029, proposition
+`equal-or-orthogonal-generalized`, lines 602--604: the repeated-block relation
+`A^i = e^{iφ} Y B^i Y^{-1}` can hold only between blocks of equal period. The
+repeated-block relation preserves the peripheral transfer spectrum, which for a
+periodic block is the set of `m`-th roots of unity. -/
 theorem IsPeriodic.period_eq_of_hetRepeatedBlocks
     {D₁ D₂ m n : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
@@ -616,15 +622,18 @@ multiplicity matrix `ξ_j R_j`, which is what the source means at lines
 667--671 by absorbing the phase into `S_j`. The scalar is genuinely present:
 for period one and `B_j = e^{iθ} A_j` it is not a root of unity.
 
-The blocks are assumed left-canonical, that is, the block maps are trace
-preserving. This is the normalization of `eq:unital` at line 316, and it is
-weaker than the source's irreducible form II, which additionally requires the
-unique fixed point to be diagonal. The source theorem assumes only irreducible
-form and asserts at lines 330--332 that one passes between the forms by a
-block-diagonal similarity; that passage is not carried out here. The present
-statement is the normalized half of the pair, isolated because the periodic
-overlap dichotomy and the vanishing of an off-period block are available in the
-normalized orientation. -/
+**Scope restriction (trace-preserving blocks):** the blocks are assumed
+left-canonical, that is, their maps are trace preserving. This is the
+normalization of `eq:unital` at line 316, and it is weaker than the source's
+irreducible form II, which additionally requires the unique fixed point to be
+diagonal. The source theorem assumes only irreducible form and asserts at lines
+330--332 that one passes between the forms by a block-diagonal similarity; that
+passage is not carried out here. The present statement is the normalized half
+of the pair, isolated because the periodic overlap dichotomy and the vanishing
+of an off-period block are available in the normalized orientation. The
+restriction and its elimination plan are recorded in
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`, section "Scope
+restriction: the equal case with trace-preserving blocks". -/
 theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)
