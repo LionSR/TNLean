@@ -501,10 +501,12 @@ counts checked on `origin/main` at `fb847cd35`. Ranked among themselves by
 compounding cost; D13 precedes D14 because every new MPU statement pays it.
 
 ## D13. The MPU canonical-form-II convention is threaded pointwise, while admissible path nodes carry an additional continuous-source-data gap  —  api-design, impact 7/10, effort 5/10
-- **Status**: open. The source-labelled Chapter 28 nodes now contain the
-  source formulas and proof sketches needed for eventual consolidation, but
-  the 16 pointwise `mpu_admissible` twins remain until the convention predicate
-  of #7657 and the theorem migration of #7659 land. Removing them earlier would
+- **Status**: open. The convention predicate now exists, and the reduced
+  representative is constructed in the ambient diagonal gauge, so the
+  predicate is inhabited for the tensor the source arguments use. The
+  source-labelled Chapter 28 nodes contain the source formulas and proof
+  sketches needed for eventual consolidation, but the 16 pointwise
+  `mpu_admissible` twins remain until the theorem migration of #7659 lands. Removing them earlier would
   hide the current Lean hypothesis boundary. The nonsymmetric same-fixed-point
   problem in #7653 remains an optional out-of-source question; the transpose-
   reparameterized construction rejected in #7705 is not part of this plan.

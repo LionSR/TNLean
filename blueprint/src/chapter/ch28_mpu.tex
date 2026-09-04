@@ -3080,21 +3080,30 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Let $d,D>0$, let $U$ be an MPU tensor of physical dimension $d$ and
     bond dimension $D$, and let $\widetilde U=d^{-1/2}U$ be its normalized
     doubled-index tensor. There are an integer $D_{\mathrm{red}}>0$, a normal
-    tensor $A_{\mathrm{red}}$ of bond dimension $D_{\mathrm{red}}$, and
-    canonical-form-II data for $A_{\mathrm{red}}$ such that, for every
+    tensor $A_{\mathrm{red}}$ of bond dimension $D_{\mathrm{red}}$,
+    canonical-form-II data for $A_{\mathrm{red}}$, and a matrix $\rho$ on the
+    ambient bond space of $A_{\mathrm{red}}$ such that, for every
     integer $N>0$ and every word $\sigma$ of length $N$,
     \begin{align}
         D_{\mathrm{red}}  & \leq D,                        \\
         V^{(N)}(A_{\mathrm{red}})_\sigma
                           & =V^{(N)}(\widetilde U)_\sigma, \\
-        \sum_{k=1}^{r}D_k & =D_{\mathrm{red}}.
+        \sum_{k=1}^{r}D_k & =D_{\mathrm{red}},
+    \end{align}
+    and moreover $\rho$ is positive definite and diagonal with
+    \begin{align}
+        \tr(\rho)                        & =1,
+                                         & \mathcal E_{A_{\mathrm{red}}}(\rho) & =\rho.
+        \label{eq:mpu_reduced_ambient_rho}
     \end{align}
     This organizes the dimension-bounded canonical replacement used in
     \cite[lines~257--294 and 319--326]{Cirac2017MPU}. Its irreducible
     reduction and canonical-form-II gauge are those of
     \cite[lines~195--255 and 1058--1077]{Cirac2016MPDO_arXiv}. The shifted
     transfer argument is the one used in
-    \cite[lines~344--356]{Cirac2017MPU}.
+    \cite[lines~344--356]{Cirac2017MPU}, and the diagonal positive trace-one
+    ambient right fixed matrix is the one of
+    \cite[lines~269--281]{Cirac2017MPU}.
     % Source role: replacement infrastructure, not a separately named source theorem.
 \end{theorem}
 
@@ -3143,24 +3152,38 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     for every integer $N>1$.
     The shifted traces force $r=1$, spectral radius one, and primitivity.
     Full support identifies the unique block with the ambient bond space, so
-    $A_{\mathrm{red}}$ is normal.
+    the inclusion $J_1$ of that block is unitary.
+
+    The retained block carries a diagonal positive definite fixed matrix
+    $\Lambda$ of its own transfer map. Rescale it so that $\tr(\Lambda)=1$.
+    Because the shifted traces force $|\mu_1|=1$, the matrix $\Lambda$ is also
+    fixed by the transfer map of the weighted block. Conjugating the ambient
+    tensor by $J_1$ therefore produces a tensor with the same positive-length
+    matrix product vectors, the same canonical-form-II blocks, and the ambient
+    right fixed matrix $\rho=\Lambda$ read in the ambient coordinates. It is
+    positive definite, diagonal, and of trace one, which is
+    (\ref{eq:mpu_reduced_ambient_rho}). Taking $A_{\mathrm{red}}$ to be this
+    conjugated tensor, full support and $r=1$ again make it normal.
 \end{proof}
 
 \begin{theorem}[Reduced canonical representative of an MPU]
     \label{thm:mpu_reduced_cfii_representative}
     \lean{MPOTensor.IsMPU.exists_reduced_cfii_representative}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support}
+    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support, def:mpu_canonical_form_ii}
     Let $d,D>0$ and let $U$ be an MPU tensor. There are
-    $D_{\mathrm{red}}>0$ and an MPU tensor $U_{\mathrm{red}}$ of bond
-    dimension $D_{\mathrm{red}}$ such that, for every integer $N>0$,
+    $D_{\mathrm{red}}>0$ and an MPO tensor $U_{\mathrm{red}}$ of bond
+    dimension $D_{\mathrm{red}}$ carrying a canonical-form-II presentation in
+    the sense of Definition~\ref{def:mpu_canonical_form_ii} such that, for
+    every integer $N>0$,
     \begin{align}
         D_{\mathrm{red}}       & \leq D,   \\
         U_{\mathrm{red}}^{(N)} & =U^{(N)}.
     \end{align}
-    The normalized doubled-index tensor of $U_{\mathrm{red}}$ has
-    canonical-form-II data whose retained block dimensions sum to
-    $D_{\mathrm{red}}$. No equality is asserted at length zero, and no
+    In particular $U_{\mathrm{red}}$ is an MPU, the retained block dimensions
+    of its normalized doubled-index tensor sum to $D_{\mathrm{red}}$, and the
+    ambient right fixed matrix of that presentation is positive definite,
+    diagonal, and of trace one. No equality is asserted at length zero, and no
     virtual gauge is asserted between the two potentially unequal-dimensional
     bond spaces.
     % Source role: MPU corollary of the canonical-replacement infrastructure.
@@ -3184,7 +3207,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
          & =(U^{(N)})_{\sigma,\tau}.
     \end{align}
     Hence the periodic operators agree at every positive length. For $N>1$
-    the right side is unitary, so $U_{\mathrm{red}}$ is an MPU.
+    the right side is unitary, so $U_{\mathrm{red}}$ is an MPU. Its normalized
+    doubled-index tensor is $A_{\mathrm{red}}$, so the canonical-form-II data,
+    the full-support identity, and the diagonal positive trace-one ambient
+    right fixed matrix supplied by
+    Theorem~\ref{thm:mpu_reduced_normalized_flattening_cfii} assemble into a
+    canonical-form-II presentation of $U_{\mathrm{red}}$.
 \end{proof}
 
 \begin{theorem}[Full support under physical blocking]
@@ -4314,8 +4342,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     coordinates. This is the standing convention of
     \cite[lines~269--281, 344--356, and 488--502]{Cirac2017MPU}.
     % The ambient diagonal rho is part of the chosen presentation. No construction
-    % from arbitrary existing CFII and full-support witnesses is asserted here;
-    % that inhabitance statement is deferred to native child #7719.
+    % from arbitrary existing CFII and full-support witnesses is asserted:
+    % inhabitance is proved only for the constructed reduced representative of
+    % Theorem thm:mpu_reduced_cfii_representative.
 \end{definition}
 
 \begin{theorem}[Normality of a full-support normalized MPU representative]

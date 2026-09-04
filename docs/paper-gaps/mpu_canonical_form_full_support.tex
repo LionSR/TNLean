@@ -42,6 +42,18 @@ data, and generates the same periodic operators at every positive length. It
 is a new representative; the theorem does not imply that the original ambient
 tensor is normal.
 
+The constructed representative is written in the ambient coordinates of its
+unique retained block. In those coordinates the ambient right fixed matrix is
+the block's own diagonal positive fixed matrix, normalized to trace one, which
+is the matrix $\rho$ of the source canonical form II. The construction
+therefore inhabits the bundled canonical-form-II presentation
+\leanid{MPOTensor.IsMPUCanonicalFormII}. This inhabitance is specific to the
+constructed gauge: canonical-form-II data together with full support do not by
+themselves make the ambient right fixed matrix diagonal, because a
+non-monomial unitary change of ambient coordinates carries a non-scalar
+diagonal fixed matrix to a nondiagonal one. No such general projection is
+claimed.
+
 This distinction is necessary. Given any MPU representative, adjoin a zero
 virtual direct summand. The periodic contractions do not change, so the
 enlarged tensor generates the same unitary operators at every length. However,
@@ -70,7 +82,10 @@ from the nonzero irreducible reduction, it transfers the shifted trace
 identities to the retained direct sum. Every transfer eigenvalue of a retained
 block embeds into the ambient transfer spectrum. Its positive Perron value and
 each peripheral value therefore equal one, so every retained block is normal.
-The canonical-form-II gauge preserves their total bond dimension.
+The canonical-form-II gauge preserves their total bond dimension. A final
+gauge transformation by the inclusion of the unique retained block places the
+representative in the coordinates carrying the diagonal ambient right fixed
+matrix.
 
 \section{The source factors and Theorem III.8}
 
