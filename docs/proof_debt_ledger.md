@@ -533,8 +533,9 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `cor:mpu_admissible_continuous_standard_form`, and
   `lem:mpu_admissible_symmetry_path_criterion`) whose tensors carry only a
   supplied fixed pair, so deleting them singly would strengthen those 11
-  statements silently. Two independent unblockers are needed, and neither
-  substitutes for the other. The converse
+  statements silently. Two unblockers are needed; they reach disjoint parts of
+  the group, neither is a prerequisite for the other, and they land in two
+  stages rather than together. The converse
   `IsMPU U → E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII U`, by the
   spectral step of `Papers/1703.09188/paper_v2.tex` lines 344--355, turns a
   supplied pair into a presentation of the same tensor. `IsMPU` has to stay a
@@ -547,7 +548,9 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   nodes whose restricted tensor is the one the convention already governs
   (`lem:mpu_admissible_source_u_isometry` and the 3 candidates), and it
   dissolves the citation obstruction, but it constructs no datum for a
-  derived tensor and so leaves all 12 restricted. Preservation of
+  derived tensor and so leaves all 12 restricted. The 3 candidates therefore
+  merge as soon as the converse lands, with the 12 still standing; the second
+  unblocker is not needed for them. Preservation of
   `IsMPUCanonicalFormII` under positive physical blocking (asserted at source
   line 356), physical adjunction, transposition, conjugation, tensor
   products, and composition is what reaches the 12; each such statement must
@@ -564,9 +567,19 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   missing; transposition and conjugation exist only as the composite. For
   composition only `IsMPU.mulTensor` is available: `TNLean/MPS/MPU/` has no
   canonical-form-II construction for `mulTensor` and no transfer-map identity
-  for it, only the entrywise `normalizedFlattening_mulTensor_apply`, so that
-  case needs two new results and
-  `lem:mpu_admissible_index_composition` stays restricted until it has them.
+  for it, only the entrywise `normalizedFlattening_mulTensor_apply`. Supplying
+  those two would not settle that case, because no preservation statement can
+  hold for `mulTensor` as it stands: `mulTensor (rightShiftTensor d)
+  (leftShiftTensor d)` for `d ≥ 2` generates the identity operator with
+  one-site matrices `A (i, k) = |i, k⟩⟨Φ|`, `⟨Φ| = ∑ γ, ⟨γ, γ|`, which are
+  rank one with a common row functional, so every product at every length is
+  rank one, no retained block of dimension ≥ 2 fits, blocks of dimension 1
+  would force the `A (i, k)` to commute, and they do not
+  (`A (0, 0) * A (0, 1) = 0` while `A (0, 1) * A (0, 0) ≠ 0`). The composition
+  case therefore needs `IsMPU.exists_reduced_cfii_representative` applied to
+  the product plus a transport of the source cuts and ranks across that
+  reduction, which that theorem explicitly does not give, and
+  `lem:mpu_admissible_index_composition` stays restricted until both exist.
   The
   nonsymmetric same-fixed-point problem in #7653 remains an optional
   out-of-source question; the transpose-reparameterized construction rejected

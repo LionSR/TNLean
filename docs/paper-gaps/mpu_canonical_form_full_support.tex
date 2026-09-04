@@ -634,10 +634,13 @@ a presentation from canonical data for a tensor equal to a normalized
 flattening, and from an arbitrary matrix product unitary by dimension
 reduction. Not one of the sixteen carries a presentation on $\mathcal U$ to a
 presentation on a physical block, an adjoint, a transpose, a conjugate, a
-tensor product, or a composition, which is the statement the twelve entries
-would need.
+tensor product, or a composition, which is what the twelve entries would need;
+for the composition entry the transport has to run through a reduced
+representative, as the last part of this subsection shows.
 
-The three candidates cannot be removed while the twelve stand. Eleven retained
+As the development stands today, the three candidates cannot be removed while
+the twelve stand, and what blocks them is a citation obstruction rather than a
+missing preservation result. Eleven retained
 entries cite them: seven pointwise entries, and the four path entries
 \texttt{prop:mpu\_admissible\_continuity\_index},
 \texttt{thm:mpu\_admissible\_index},
@@ -656,11 +659,13 @@ unrecorded between the two families. Stating
 entry is the parallel-family-with-a-bridge configuration that the repository's
 convention rule forbids.
 
-The merge is therefore one operation on the whole pointwise group, and it
-needs both of the following. Neither substitutes for the other: the first
-reaches the four entries whose restricted tensor is $\mathcal U$ itself, the
-second reaches the twelve whose restricted tensor is derived from
-$\mathcal U$.
+Two results are missing, and they unblock disjoint parts of the group in two
+independent stages rather than in one operation. The first reaches the four
+entries whose restricted tensor is $\mathcal U$ itself, and it dissolves the
+citation obstruction along with them, so the three candidates merge as soon as
+it exists, with the twelve still standing. The second reaches the twelve whose
+restricted tensor is derived from $\mathcal U$, and neither result is a
+prerequisite for the other.
 
 \begin{itemize}
     \item The converse of the stabilization theorem, namely
@@ -695,7 +700,9 @@ $\mathcal U$.
           \texttt{lem:mpu\_admissible\_source\_u\_isometry} and the three
           candidates. It also dissolves the citation obstruction above, since
           the eleven citing entries then obtain the presentation from their
-          own supplied pair instead of through a bridge entry. For the twelve
+          own supplied pair instead of through a bridge entry, so the three
+          candidates can be deleted at that point and the second item is not
+          needed for them. For the twelve
           it rewrites the restriction without weakening it, because the
           tensor carrying the datum is a derived one and the converse
           constructs no datum for a derived tensor.
@@ -708,7 +715,9 @@ $\mathcal U$.
           its normalized flattening, full support of those data, and a
           positive diagonal trace-one ambient matrix fixed by its normalized
           transfer map. Blocking is the case the source states outright at
-          line~356.
+          line~356. For composition no such statement about the product
+          tensor is available, for the reason given below; that case has to
+          go through a reduced representative instead.
 \end{itemize}
 
 The second item is not uniformly distant. For blocking, physical adjunction,
@@ -726,19 +735,66 @@ diagonal, of trace one, and fixed. Transposition and conjugation are
 transported only through their composite, physical adjunction; neither half is
 transported on its own.
 
-Composition is the far case. Unitarity of a composition is available, but the
-only recorded statement about its normalized flattening is the entrywise
-physical-contraction formula. No canonical-form-II data are constructed for a
-composition tensor, and no transfer-map identity for one is recorded, so
-neither the canonical-form-II clause nor the ambient-fixed-matrix clause of
-the presentation can be produced there at all. The composition case of the
-second item therefore needs two results and not one, and until it has them
-\texttt{lem:mpu\_admissible\_index\_composition} keeps its six per-block
-restrictions even if every other preservation statement is proved.
+Composition is the far case, and it differs from the other five in kind and
+not only in distance. Unitarity of a composition is available, but the only
+recorded statement about its normalized flattening is the entrywise
+physical-contraction formula: no canonical-form-II data are constructed for a
+composition tensor, and no transfer-map identity for one is recorded. Supplying
+those two results would still not settle the case, because for a composition
+the presentation can fail outright.
 
-Until both items exist, deleting any of the three candidates moves a
-hypothesis boundary out of sight without removing it, so the sixteen pointwise
-entries all remain.
+A composition keeps the whole product bond space $D_1D_2$, and that space can
+be too large for the full-support clause. Take the right shift on $d\geq 2$
+levels and its physical adjoint, both matrix product unitaries
+(\leanid{MPOTensor.rightShiftTensor} and \leanid{MPOTensor.leftShiftTensor}).
+Their composite generates the identity operator at every length, and in the
+product bond space $\mathbb C^{d}\otimes\mathbb C^{d}$ its one-site matrices
+are
+\begin{align}
+    A^{(i,k)} & =\lvert i,k\rangle\langle\Phi\rvert,\qquad
+    \langle\Phi\rvert=\sum_{\gamma}\langle\gamma,\gamma\rvert.
+    \label{eq:mpu_canonical_form_full_support_shift_composite}
+\end{align}
+Each of these has rank one, and they share the row functional
+$\langle\Phi\rvert$, so every product of them, at every length, again has rank
+one and every element of the span of the length-$L$ products has rank at most
+one. A tensor with full-support canonical-form-II data is a unitary conjugate
+of a direct sum of nonzero multiples of normal blocks whose dimensions add up
+to the ambient dimension. A retained block of dimension at least two would put
+a matrix of rank at least two into that span, so every block would have
+dimension one; but then the one-site matrices would all be diagonal in one
+basis and would commute, and
+Eq.~\ref{eq:mpu_canonical_form_full_support_shift_composite} gives
+$A^{(0,0)}A^{(0,1)}=0$ while
+$A^{(0,1)}A^{(0,0)}=\lvert 0,1\rangle\langle\Phi\rvert\neq 0$.
+The composite therefore has no
+full-support canonical-form-II data in the product bond space at all, and no
+amount of blocking repairs it, since the blocked matrices are the same
+products and stay of rank one.
+
+This is the enlargement phenomenon of the opening section met again: the
+composite is a nonminimal ambient representative of the operator family it
+generates, and the presentation is a property of the representative and not of
+the operators. The composition case therefore does not ask for a preservation
+statement about the product tensor. It asks for the reduced representative
+\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative} applied to the
+product, together with an identification of the source cuts and ranks of
+\texttt{lem:mpu\_admissible\_index\_composition} across that reduction, which
+is exactly what the reduced-representative theorem does not supply. The source
+takes the same route implicitly: its index-additivity argument blocks the
+composite until it is simple \cite[lines~837--841]{Cirac2017MPU}, which for a
+composite of this shape is unreachable in the product bond space, so the
+tensor it blocks is already a reduced representative. Until that reduction and
+that transport exist,
+\texttt{lem:mpu\_admissible\_index\_composition} keeps its six per-block
+restrictions even if every other preservation statement is proved, and the
+work it needs is larger than the two missing results named above.
+
+Until the first item exists, deleting any of the three candidates moves a
+hypothesis boundary out of sight without removing it, so all sixteen pointwise
+entries remain. Once it exists, the three candidates merge and thirteen remain:
+the generic supplied-pair step, which is kept deliberately, and the twelve
+derived-tensor entries, each waiting on its own operation in the second item.
 
 \section{Verdict}
 
