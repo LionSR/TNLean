@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
+import TNLean.Algebra.StabilizerCocycleLSymbol
 
 /-!
 # Explicit extension-to-gauge identity
@@ -15,7 +15,7 @@ stabilizer representative. The displayed action gauge is retained verbatim.
 
 **Scope restriction (scalar representatives):** This proves neither the tensor
 statement nor the equivalence on cohomology classes; see
-`docs/paper-gaps/fbc25_stabilizer_extension_representatives.tex`.
+`docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex`.
 The corrected transition index is explained in
 `docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex`.
 -/
@@ -62,7 +62,7 @@ private theorem cocycle_transition_identity {Ψ : ScalarCocycle G} (hΨ : Ψ.IsC
 
 namespace StabilizerRepresentatives
 
-/-- The exact displayed gauge in arXiv:2502.20257, `prop:BI_psi`, line 7055.
+/-- The exact displayed gauge in arXiv:2502.20257, `prop:BI_psi`, line 7054.
 No normalization of the cocycle is assumed. -/
 def extensionActionGauge (K : StabilizerRepresentatives G X x₀)
     (Ψ : ScalarCocycle G) : ActionTensorGauge G X :=
