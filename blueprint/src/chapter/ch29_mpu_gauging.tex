@@ -287,12 +287,14 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     \label{def:mpug_product_bond_swap}
     \lean{MPOTensor.productBondSwapEquiv}
     \leanok
-    For bond dimensions $D_M$ and $D_N$, the exchange of product bond factors
-    is the equivalence
+    For bond dimensions $D_M$ and $D_N$, identify a product bond index with
+    its pair of factor indices. The exchange of product bond factors is the
+    equivalence
     \begin{align}
-        \{0,\ldots,D_MD_N-1\}  & \longrightarrow
-        \{0,\ldots,D_ND_M-1\}, &
-        (\alpha,\gamma)        & \longmapsto (\gamma,\alpha).
+        \{0,\ldots,D_M-1\}\times\{0,\ldots,D_N-1\}
+                                                    & \longrightarrow
+        \{0,\ldots,D_N-1\}\times\{0,\ldots,D_M-1\}, &
+        (\alpha,\gamma)                             & \longmapsto (\gamma,\alpha).
         \label{eq:mpug_product_bond_swap}
     \end{align}
 \end{definition}
@@ -1104,12 +1106,12 @@ Definition~\ref{def:mpug_group_representation}.
     cross relation moves the marked letter successively through the word,
     \begin{align}
         B_iA^{\sigma_1}\cdots A^{\sigma_N}
-         & =A_i\left(\prod_{r=1}^{N-1}A^{\sigma_r}\right)B^{\sigma_N},
+         & =A_iA^{\sigma_1}\cdots A^{\sigma_{N-1}}B^{\sigma_N}.
         \notag
     \end{align}
-    where the product is the identity when $N=1$. Thus $B_i=A_iC$ with
+    When $N=1$, the middle word on the right is absent. Thus $B_i=A_iC$ with
     $C=\sum_\sigma c_\sigma
-        \left(\prod_{r=1}^{N-1}A^{\sigma_r}\right)B^{\sigma_N}$.
+        A^{\sigma_1}\cdots A^{\sigma_{N-1}}B^{\sigma_N}$.
     Substituting this identity into
     (\ref{eq:mpug_cross_product_rigidity}) gives
     $A_i(CA_j-A_jC)=0$ for all $i$ and $j$. Multiplying on the left by a
