@@ -986,9 +986,11 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{proof}
 
 % CPSV16 Theorem 4.4, the unlabeled theorem environment at lines 777--784.
-% Gap: docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
+% Gaps: docs/paper-gaps/cpsv16_purification_rfp_definition.tex and
+% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \begin{theorem}[Purification fixed-point equivalence]
     \label{thm:cpsv_theorem44_printed_status}
+    \discussion{7298}
     \uses{def:mpdo_is_prfp, def:mpo_physical_trace_idempotence}
     \notready
     For an MPO tensor with the one-site purification presentation displayed in
@@ -1006,4 +1008,11 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     presentation by
     Theorem~\ref{thm:prfp_has_purification_rfp_witness}, but it does not by
     itself determine that presentation.
+
+    The repeated-copy formula uses phases indexed by $(j,q)$, whereas the
+    physical isometry in \cite[lines~546--563]{Cirac2016MPDO_arXiv} is indexed
+    only by $j$. The source does not specify how the copy index $q$ enters
+    that isometry or the physical direct sum. Thus the displayed formulas
+    do not determine a common physical realization of the repeated copies;
+    this ambiguity is recorded in \cite{gap:cpsv16_rfp_isometry_scope}.
 \end{theorem}
