@@ -7564,6 +7564,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The second identity is the first with the two factors exchanged.
 \end{proof}
 
+\begin{lemma}[Exchange contraction of a scaled unitary Kronecker product]
+    \label{lem:matrix_trace_swap_scaled_kronecker}
+    \lean{Matrix.trace_swapMatrix_mul_of_eq_smul_kronecker_conjTranspose}
+    \leanok
+    \uses{lem:matrix_trace_swap_kronecker}
+    Let $x\in\mathbb C^{n\times n}$ be unitary, let $\sigma\in\mathbb C$, and let
+    $M=\sigma\,x\otimes x^\dagger$. Then
+    \begin{align}
+        \tr\!\left[\mathbb SM\right] & =\sigma n.
+    \end{align}
+    % Source lines: paper_v2.tex 1608--1610.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:matrix_trace_swap_kronecker}
+    The trace is linear, so
+    $\tr[\mathbb SM]=\sigma\tr[\mathbb S(x\otimes x^\dagger)]$, and
+    Lemma~\ref{lem:matrix_trace_swap_kronecker} evaluates the remaining
+    contraction as $n$.
+\end{proof}
+
 \begin{lemma}[Trace formula for the time-reversal sign]
     \label{eq:sigma-from-trace}
     \notready
@@ -7586,7 +7607,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (two-site blocked comparison):** the trace formula uses
     % the blocked source data required by Proposition~\ref{prop:mpu_admissible_local_time_reversal}.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_local_time_reversal, def:mpu_reduced_full_support_source_datum}
+    \uses{prop:mpu_admissible_local_time_reversal, def:mpu_reduced_full_support_source_datum,
+        lem:matrix_trace_swap_scaled_kronecker}
     For a time-reversal-invariant MPU in admissible standard form, suppose its
     one-site tensor $\mathcal U$, its actual two-site block $\mathcal U_2$, and
     the physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and
