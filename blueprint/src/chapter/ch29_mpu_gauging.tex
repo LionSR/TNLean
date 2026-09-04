@@ -1058,6 +1058,50 @@ specified in Definition~\ref{def:mpug_group_representation}.
     (\ref{eq:mpug_unitary_kronecker_factors}).
 \end{proof}
 
+\begin{theorem}[Cross-product rigidity of a commuting family]
+    \label{thm:mpug_cross_product_rigidity}
+    \lean{Kraus.IsNormal.eq_smul_of_cross_mul_eq,
+        Kraus.IsInjective.eq_smul_of_cross_mul_eq}
+    \leanok
+    \uses{def:injective, def:normal, def:decomposition_map}
+    Let $A_i$ and $B_i$ be two families of square matrices of the same size,
+    indexed by the same finite alphabet, and suppose that
+    \begin{align}
+        B_iA_j & =A_iB_j\qquad\text{for all }i,j.
+        \label{eq:mpug_cross_product_rigidity}
+    \end{align}
+    If $A$ is injective, or more generally normal, then there is a scalar
+    $c\in\C$ with $B_i=cA_i$ for every $i$.
+    % Source anchor: arXiv:2502.20257, prop:MPUsplus, lines 1255--1325.
+    This is the commuting-tensor step in the proof of
+    Proposition~\texttt{prop:MPUsplus}
+    of~\cite[lines~1255--1325]{FrancoRubio2025MPUGauging}, where the tensor
+    commuting with a normal matrix product unitary tensor is shown to be a
+    multiple of it.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:decomposition_map, thm:normal_tensor_gram_rigidity}
+    Let $N\geq1$ be a blocking length at which the length-$N$ words of $A$
+    span the full matrix algebra, and decompose the identity as
+    $\mathbf 1=\sum_\sigma c_\sigma A^{\sigma_1}\cdots A^{\sigma_N}$. The
+    cross relation moves the marked letter one step to the right,
+    \begin{align}
+        B_iA^{\sigma_1}\cdots A^{\sigma_N}
+         & =A_iB^{\sigma_1}A^{\sigma_2}\cdots A^{\sigma_N},
+        \notag
+    \end{align}
+    so $B_i=A_iC$ with
+    $C=\sum_\sigma c_\sigma B^{\sigma_1}A^{\sigma_2}\cdots A^{\sigma_N}$.
+    Substituting this into (\ref{eq:mpug_cross_product_rigidity}) gives
+    $A_i(CA_j-A_jC)=0$ for all $i$ and $j$. Multiplying on the left by a
+    length-$N$ word, whose last letter absorbs one of the $A_i$, and
+    recombining the words into the identity gives $CA_j=A_jC$. A matrix
+    commuting with every letter of a normal family is a multiple of the
+    identity, so $C=c\mathbf 1$ and $B_i=cA_i$. The injective case is the
+    case of blocking length one.
+\end{proof}
+
 \begin{theorem}[Comparison of factorizations from one-sided inverses]
     \label{thm:mpug_factorization_comparison}
     \lean{Matrix.factorization_comparison_of_one_sided_inverses}
