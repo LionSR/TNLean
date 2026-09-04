@@ -95,9 +95,9 @@ and then sums it over the same full range.
 
 Three separate hypotheses enter
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_per_index}) and its
-summation, and each carries its own lower endpoint. The first term on the
-right is estimated by C2 for the volume
-$\Lambda_{n+1}\setminus\Lambda_{n-l}$, that is by
+summation, and each carries its own lower endpoint. The Hamiltonian on the
+right comes from estimating $\mathbf 1-G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$
+by C2 for the volume $\Lambda_{n+1}\setminus\Lambda_{n-l}$, that is by
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_c2}) at window $q=l+1$ and
 index $n+1$, which needs $n+1\geq n_{l+1}$. The coefficient
 $\epsilon_l^2/c_2$ comes from C3 at index $n$, which needs $n\geq n_l$. The
@@ -323,8 +323,9 @@ the source range
 (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_threshold}).\footnote{Formal
     declaration:
     \leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero};
-    the equivalence with
-    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair_projection}) is
+    the implication from
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair_projection}) to
+    (\ref{eq:nachtergaele96_theorem_2_1_lower_endpoint_repair}) is
     \leanid{FrustrationFree.NestedGroundProjections.martingaleDifference_apply_eq_zero_of_lt}.}
 The earlier full-range formulation
 \leanid{FrustrationFree.NestedGroundProjections.energy_lower_bound_of_nachtergaele_c1_c3_full_range},
