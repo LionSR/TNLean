@@ -377,7 +377,12 @@ Parent-Hamiltonian notes live here too, but they are not part of the current
 non-periodic FT cleanup loop unless explicitly brought back into scope.
 
 - `cpgsv21_normal_range_reduction.tex` records the normal parent-Hamiltonian
-  range-reduction comparison and the remaining periodic-boundary identity.
+  range-reduction comparison and the remaining periodic-boundary identity,
+  together with the provenance of the minimal-ring cyclic change of cut (a
+  TNLean reconstruction, since the review prints no proof at the minimal
+  ring and the PGVWC07 route needs a ring of length at least twice the
+  injectivity length) and of the wrapped/mirror witness comparison (a
+  reformulation of the printed change of cut).
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span. The fixed-window

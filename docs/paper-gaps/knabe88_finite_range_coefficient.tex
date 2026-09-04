@@ -219,6 +219,38 @@ The abstract result concerns a cyclic family of projections. Applying it
 uniformly to sufficiently large MPS parent Hamiltonians still requires a
 uniform gap for the corresponding nonwrapping open interaction.
 
+\section{The Gosset--Mozgunov threshold}
+
+For nearest-neighbor chains, Gosset and Mozgunov improve the threshold
+(\ref{eq:knabe88_finite_range_coefficient_knabe_threshold}). Write $n=m+1$
+for the number of sites of the open window and $\epsilon^\circ_N$ for the
+gap of the periodic chain of $N$ sites. For $n>2$ and $N>2n$ they prove
+\begin{align}
+    \epsilon^\circ_N
+        &\geq\frac56\,\frac{n^2+n}{n^2-4}
+          \left(\gamma-\frac{6}{n(n+1)}\right),
+    \label{eq:knabe88_finite_range_coefficient_gosset_mozgunov_bound}
+\end{align}
+so the local gap threshold becomes
+\begin{align}
+    \gamma
+        &>\frac{6}{n(n+1)},
+    \label{eq:knabe88_finite_range_coefficient_gosset_mozgunov_threshold}
+\end{align}
+which is strictly smaller than $1/(n-1)$ for all $n>3$ and has the optimal
+order $n^{-2}$ \cite{Gosset2016Local}. Ref.~\cite{Cirac2021Matrix} cites
+this improvement at lines~2196--2197 of its local source. A local copy of
+the source is on disk at
+\path{References/1512.00088/Knabeimproved_periodic.tex}, outside version
+control; the theorem is at lines~130--136 of that file. The improvement is
+unformalized: no declaration derives
+Eq.~\ref{eq:knabe88_finite_range_coefficient_gosset_mozgunov_bound}, and
+the bibliography entry \path{Gosset2016Local} in
+\path{blueprint/src/references.bib} is cited by no blueprint chapter. Its
+proof weights the terms of each window by a nonuniform coefficient
+sequence, so it is not a specialization of the uniform-window derivation
+above.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 

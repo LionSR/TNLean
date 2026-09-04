@@ -666,6 +666,13 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
 /-- Boundary matrices agree once their right-products with every \(A^j\) agree:
 \(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j\Rightarrow
 Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
+The two witness families \(Y^+\), \(Y^-\), indexed by full ring
+configurations and compared through the fixed background letter \(\eta\), are
+a reformulation of the single change-of-cut relation
+\(XA_{i_1}\cdots A_{i_{L₀}}=A_{i_1}\cdots A_{i_{L₀}}Y\) in the periodic
+uniqueness proof of [PGVWC07] arXiv:quant-ph/0608197, lines 1277--1291, not
+a different argument: each family records the shifted-cut matrix \(Y\) for
+one of the two boundary-crossing windows.
 **Scope restriction:** \(L₀+1<N\) excludes the minimal ring \(N=L₀+1\);
 see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
@@ -711,8 +718,20 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 /-- At the source-minimal length \(N=L₀+1\), the full-ring cyclic
 change-of-cut argument identifies the chain ground space with the MPS line.
 
-This is the closure-property endpoint used for the uniqueness theorem in
-arXiv:2011.12127, Section IV.C, lines 2078--2094. -/
+This is the minimal-ring endpoint of the range-\((L₀+1)\) uniqueness theorem
+stated in arXiv:2011.12127, Section IV.C, lines 2087--2090. The source prints
+no proof of this endpoint: its closure-property sentence, lines 2078--2079,
+only says that once the iterated range reaches \(2L₀\) one may resort to the
+range-\(2L₀\) theorem or apply a similar argument when closing the
+boundaries. The full-ring cyclic change of cut is a TNLean reconstruction,
+because the printed periodic argument, [PGVWC07] arXiv:quant-ph/0608197,
+Theorem `uniqueGS`, lines 1268--1291, moves a length-\(L₀\) word through the
+cut and needs an injective complementary word, hence \(N\ge 2L₀\). At
+\(N=L₀+1\) the word moved through the cut is a single letter, one move gives
+only the intertwining \(XA^a=A^aY\), and the commutation is recovered by
+comparing the boundary matrices at all \(L₀+1\) cyclic cuts. The route is
+recorded in the minimal-ring section of
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring
     {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
