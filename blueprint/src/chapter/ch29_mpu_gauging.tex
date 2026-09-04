@@ -4353,6 +4353,74 @@ by the displayed matrices.
     computations $(j+N-j)\bmod N=0$ and $(j+1+N-j)\bmod N=1$.
 \end{proof}
 
+\subsection{The exact CZX matrix product unitary}
+
+\begin{definition}[The once-blocked CZX tensor]
+    \label{def:mpug_czx_exact_tensor}
+    % Principal declaration: MPOTensor.CZX.tensor.
+    \lean{MPOTensor.CZX.decoratedSiteTensor, MPOTensor.CZX.tensor,
+        MPOTensor.CZX.tensor_eq_blockTensor, MPOTensor.CZX.complementSite,
+        MPOTensor.CZX.complement, MPOTensor.CZX.edgeExponent,
+        MPOTensor.CZX.cyclicExponent}
+    \leanok
+    \uses{def:mpdo_physical_blocking}
+    Write a physical index as $2a+b$, with $a,b\in\{0,1\}$, and let
+    $\overline{(a,b)}=(1-a,1-b)$. The tensor in
+    \cite[lines~4503--4547]{FrancoRubio2025MPUGauging}
+    is the two-site block $B^{ab,cd}=C^{a,c}C^{b,d}$ of
+    \begin{align}
+        C^{u,d}_{\ell r}
+         & =\delta_{u,1-d}\delta_{\ell,u}(-1)^{u+\ell r}.
+    \end{align}
+    Here the weight is $W_{\ell r}=(-1)^{\ell r}=\sqrt{2}H_{\ell r}$,
+    where $H$ is the normalized Hadamard matrix, and the factor $(-1)^u$
+    is the output Pauli $Z$. Thus, if $P$ denotes the normalized tensor
+    printed in \cite[lines~1906--1943]{Cirac2017MPU}, then
+    $B=(Z\otimes Z)\operatorname{block}_2(\sqrt{2}P)$, not
+    $\operatorname{block}_2(P)$.
+    For a periodic configuration $s_j=(a_j,b_j)$ of positive length $N$,
+    define its complement pointwise and set
+    \begin{align}
+        E(s) & =\sum_{j=0}^{N-1}
+        (a_j+b_j+a_jb_j+b_ja_{j+1}),
+    \end{align}
+    where $j+1$ is interpreted modulo $N$ and the bit values in the sum
+    are integers.
+\end{definition}
+
+\begin{theorem}[Coordinates and unitarity of the exact CZX tensor]
+    \label{thm:mpug_czx_exact_tensor_unitary}
+    % Principal declaration: MPOTensor.CZX.tensor_isMPU.
+    \lean{MPOTensor.CZX.tensor_apply, MPOTensor.CZX.tensor_apply_bits,
+        MPOTensor.CZX.mpo_tensor_apply, MPOTensor.CZX.mpo_tensor,
+        MPOTensor.CZX.mpo_tensor_mem_unitaryGroup, MPOTensor.CZX.tensor_isMPU}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpug_monomial_matrix, def:mpu}
+    The tensor $B$ has bond dimension two and coordinates
+    \begin{align}
+        B^{ab,cd}_{\ell r}
+         & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}
+        (-1)^{a+b+ab+br}.
+    \end{align}
+    Its periodic operator is unitary for every $N>0$, with entries
+    \begin{align}
+        O_N(B)_{s,t} & =\delta_{s,\overline t}(-1)^{E(s)}.
+    \end{align}
+    In particular, $B$ is a matrix product unitary. This assertion does
+    not include its phase classification, GHZ action, or defect data.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Multiplication of the two constituent matrices forces the intermediate
+    bond to be $b$, giving the displayed coordinates. In the cyclic trace
+    expansion, the left-bond delta at site $j$ forces the virtual path to
+    have value $a_j$. All other paths vanish. The remaining product is zero
+    unless $s=\overline t$, and otherwise its exponent is $E(s)$.
+    Thus the operator is the monomial matrix for complementation, with
+    column phase $(-1)^{E(\overline t)}$. Each phase has absolute value one,
+    which proves unitarity.
+\end{proof}
+
 \subsection{The displayed CZX circuit tuple}
 
 \begin{definition}[The displayed CZX circuit tuple]
