@@ -63,7 +63,7 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
     {c lam : ℝ}
     (hmix : fnwMixingQuantity ρ hρ A htr m ≤ c * lam ^ m)
     (hsmall : c * lam ^ m < 1)
-    (r ℓ : ℕ) (hr : 0 < r) (hℓ : 0 < ℓ) :
+    (r ℓ : ℕ) (hℓ : 0 < ℓ) :
     ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
         (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
@@ -86,7 +86,7 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
         fnwMixingQuantity ρ hρ A htr m * (1 + fnwMixingQuantity ρ hρ A htr m) /
           fnwLowerBoundaryConstant ρ hρ A m :=
       wholeIncrement_groundProjection_defect_le_fnw_factored
-        ρ hρ htr A hA hρfix hInj hL hLm r ℓ hr hℓ
+        ρ hρ htr A hA hρfix hInj hL hLm r ℓ hℓ
     _ ≤ c * lam ^ m * (1 + c * lam ^ m) / (1 - c * lam ^ m) := by gcongr
 
 /-- A primitive matrix-product state satisfies display (6.1) of Nachtergaele,
@@ -100,7 +100,7 @@ theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geom
     (hρ : ρ.PosDef) :
     ∃ c lam : ℝ, ∃ L : ℕ,
       0 < c ∧ 0 < lam ∧ lam < 1 ∧ 0 < L ∧ Kraus.IsNBlkInjective A L ∧
-        ∀ m : ℕ, L ≤ m → c * lam ^ m < 1 → ∀ r ℓ : ℕ, 0 < r → 0 < ℓ →
+        ∀ m : ℕ, L ≤ m → c * lam ^ m < 1 → ∀ r ℓ : ℕ, 0 < ℓ →
           ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
                 (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
               (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
@@ -122,9 +122,9 @@ theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geom
   have hrate_lt : (rate : ℝ) < 1 := by exact_mod_cast ENNReal.coe_lt_one_iff.mp hrate_one
   obtain ⟨L, hL, hInj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
   refine ⟨c, (rate : ℝ), L, hc, hrate_pos, hrate_lt, hL, hInj,
-    fun m hLm hsmall r ℓ hr hℓ ↦ ?_⟩
+    fun m hLm hsmall r ℓ hℓ ↦ ?_⟩
   exact wholeIncrement_groundProjection_defect_le_fnw_geometric σ hσ htr A hP.norm
-    hPσ.fixedPoint_is_fixed hInj hL hLm (hbound m (le_trans hL hLm)) hsmall r ℓ hr hℓ
+    hPσ.fixedPoint_is_fixed hInj hL hLm (hbound m (le_trans hL hLm)) hsmall r ℓ hℓ
 
 /-- The open-chain projector defect at overlap length \(l\) is the whole-increment defect
 with a one-site suffix. -/
@@ -140,25 +140,26 @@ theorem openChain_groundProjection_defect_eq_wholeIncrement
     reassocTailBoundaryMapES_one, range_tailBoundaryMapES, range_leftBoundaryMapES_one]
 
 /-- The open-chain form of display (6.1) of Nachtergaele, arXiv:cond-mat/9410110,
-lines 1180--1194: a positive prefix length and an overlap length beyond the interaction
+lines 1180--1194: any prefix length and an overlap length beyond the interaction
 length give the projector defect
 \(\lVert G_{\Lambda_n}G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}-G_{\Lambda_{n+1}}\rVert\)
-at most \(c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)\). -/
+at most \(c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)\). The one-site suffix supplies
+the source's positive spectator length, so no restriction on the prefix remains. -/
 theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric
     [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
     (hρ : ρ.PosDef) :
     ∃ c lam : ℝ, ∃ L : ℕ,
       0 < c ∧ 0 < lam ∧ lam < 1 ∧ 0 < L ∧ Kraus.IsNBlkInjective A L ∧
-        ∀ l : ℕ, L ≤ l → c * lam ^ l < 1 → ∀ K : ℕ, 0 < K →
+        ∀ l : ℕ, L ≤ l → c * lam ^ l < 1 → ∀ K : ℕ,
           ‖openChainTailGroundProjectionES A K (l + 1) ∘L
                 openChainLeftGroundProjectionES A (K + l) -
               (groundSpaceES A (K + l + 1)).starProjection‖ ≤
             c * lam ^ l * (1 + c * lam ^ l) / (1 - c * lam ^ l) := by
   obtain ⟨c, lam, L, hc, hlam, hlam_one, hL, hInj, hDefect⟩ :=
     hP.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric hρ
-  refine ⟨c, lam, L, hc, hlam, hlam_one, hL, hInj, fun l hLl hsmall K hK ↦ ?_⟩
+  refine ⟨c, lam, L, hc, hlam, hlam_one, hL, hInj, fun l hLl hsmall K ↦ ?_⟩
   rw [openChain_groundProjection_defect_eq_wholeIncrement]
-  exact hDefect l hLl hsmall K 1 hK one_pos
+  exact hDefect l hLl hsmall K 1 one_pos
 
 end
 

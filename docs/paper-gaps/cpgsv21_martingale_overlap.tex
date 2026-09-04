@@ -1293,7 +1293,7 @@ partial results are complete.
     The theorem
     \leanid{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric}
     gives $c>0$, $0<\lambda<1$, and an injective length $L_0\geq1$ such that,
-    whenever $L\geq L_0$, $c\lambda^L<1$, and $K,Q\geq1$,
+    whenever $L\geq L_0$, $c\lambda^L<1$, $Q\geq1$, and $K\geq0$,
     \begin{align}
         \left\lVert
           P^{\mathrm{tail}}_{K;L,Q}P^{\mathrm{left}}_{K+L,Q}
@@ -1302,15 +1302,17 @@ partial results are complete.
         &\leq\frac{c\lambda^L(1+c\lambda^L)}{1-c\lambda^L}.
         \label{eq:cpgsv21_martingale_overlap_whole_increment_defect}
     \end{align}
-    The prefix length is positive, matching the domain of the martingale
-    difference $E_n$. The prefactor $c$ is the existential rate-dependent
-    constant of Lemma~5.2; the source value $k^2$ is not asserted.
+    The prefix length is unrestricted: the estimate holds at $K=0$, so the
+    domain of the martingale difference $E_n$ is imposed only where that
+    difference itself appears. The prefactor $c$ is the existential
+    rate-dependent constant of Lemma~5.2; the source value $k^2$ is not
+    asserted.
 
     The theorem
     \leanid{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
     chooses $p>0$, measured in input-tensor sites, such that $A$ is
     $p$-block injective and the defect with $L=Q=p$ is at most $7/16$ for
-    every $K>0$. Its specialization
+    every $K$. Its specialization
     \leanid{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths}
     takes $K=p$. Thus the prefix-uniform estimate and the three-block
     coefficient $7/16$ are proved in original-site units.
@@ -1701,8 +1703,8 @@ one-site suffix increment needs no reassociation, so
 the open-chain defect at overlap length $l$ and prefix length $K$ with the
 whole-increment defect at $r=K$, $m=l$, and $\ell=1$. Hence
 \leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric}
-proves, for every $K>0$ and every $l$ above an injective length with
-$c\lambda^l<1$,
+proves, for every prefix length $K$ and every $l$ above an injective length
+with $c\lambda^l<1$,
 \begin{align}
     \left\lVert
       P^{\mathrm{tail}}_{K,l+1}

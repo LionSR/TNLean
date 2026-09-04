@@ -19,14 +19,16 @@ grows, so some overlap length puts it below the C3 threshold \(1/\sqrt{l+1}\). I
 input tensor is already a blocked representative, one such site is one blocked-chain
 filtration step.
 
-The prefix length is positive throughout, matching the domain of Nachtergaele's
-martingale difference \(E_n=G_{\Lambda_n}-G_{\Lambda_{n+1}}\), which is indexed by
-volumes strictly larger than the interaction range.
+The prefix length is unrestricted, as it was before the coefficient was replaced.
+The projector estimate holds at the zero prefix, so the source's positivity there
+is not needed. Only the literal martingale-difference statement keeps a positive
+prefix, because Nachtergaele's difference \(E_n=G_{\Lambda_n}-G_{\Lambda_{n+1}}\)
+is itself indexed by volumes strictly larger than the interaction range.
 
 ## Main results
 
 * `MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths`
-  chooses one original-site scale uniformly for every positive prefix length.
+  chooses one original-site scale uniformly for every prefix length.
 * `MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths`
   specializes the uniform estimate to three equal original-site blocks.
 * `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold`
@@ -129,7 +131,7 @@ theorem IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
-        ∀ K : ℕ, 0 < K →
+        ∀ K : ℕ,
           ‖(reassocTailBoundaryMapES A K p p).range.starProjection ∘L
                 (leftBoundaryMapES A (K + p) p).range.starProjection -
               (groundSpaceES A (K + p + p)).starProjection‖ ≤ 7 / 16 := by
@@ -151,8 +153,8 @@ theorem IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
   have hp : 0 < p := lt_of_lt_of_le (by omega) hp_large
   have hLle : L ≤ p := le_trans (le_max_right 1 L) hp_large
   have hInj : Kraus.IsNBlkInjective A p := isNBlkInjective_of_le hLpos hLinj hLle
-  refine ⟨p, hp, hInj, fun K hK ↦ ?_⟩
-  exact (hDefect p hLle hp_small K p hK hp).trans hp_coefficient.le
+  refine ⟨p, hp, hInj, fun K ↦ ?_⟩
+  exact (hDefect p hLle hp_small K p hp).trans hp_coefficient.le
 
 /-- At the length \(p\) chosen uniformly above, taking the prefix length
 \(K=p\) gives three consecutive blocks of \(p\) original sites and projector
@@ -167,7 +169,7 @@ theorem IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteent
             (groundSpaceES A (p + p + p)).starProjection‖ ≤ 7 / 16 := by
   obtain ⟨p, hp, hInj, hDefect⟩ :=
     hP.exists_uniform_wholeIncrement_defect_le_seven_sixteenths hρ
-  exact ⟨p, hp, hInj, hDefect p hp⟩
+  exact ⟨p, hp, hInj, hDefect p⟩
 
 /-- A primitive MPS with faithful fixed point has a block-injective overlap length
 at which the uniform open-chain ground-projector defect satisfies Nachtergaele's
@@ -183,7 +185,7 @@ theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold
     ∃ l : ℕ, ∃ ε : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧ 0 ≤ ε ∧
       ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
-      ∀ K : ℕ, 0 < K →
+      ∀ K : ℕ,
         ‖openChainTailGroundProjectionES A K (l + 1) ∘L
               openChainLeftGroundProjectionES A (K + l) -
             (groundSpaceES A (K + l + 1)).starProjection‖ ≤ ε := by
@@ -217,8 +219,8 @@ theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold
     rw [lt_div_iff₀ hsqrt]
     simpa only [ε, one_mul] using hl_coefficient
   refine ⟨l, ε, hl, hInj, hε, hε_lt, ?_⟩
-  intro K hK
-  exact hDefect l hLle hl_small K hK
+  intro K
+  exact hDefect l hLle hl_small K
 
 /-- A primitive MPS with faithful fixed point satisfies Nachtergaele's condition C3
 in its literal martingale-difference form
@@ -243,7 +245,7 @@ theorem IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshol
     hP.exists_openChain_groundProjection_defect_lt_c3_threshold hρ
   refine ⟨l, ε, hl, hInj, hε, hε_lt, fun K hK ↦ ?_⟩
   rw [openChainTailGroundProjection_comp_martingaleDifference hInj hl.le hK]
-  exact hDefect K hK
+  exact hDefect K
 
 /-- The C3 threshold yields the uniform open-chain anticommutator estimate for
 the complementary excitation projections. Nachtergaele's identity following condition
@@ -254,7 +256,7 @@ theorem IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ,
       1 < l ∧ 0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
-      ∀ (K : ℕ), 0 < K → ∀ v : EuclideanSpace ℂ (Cfg d (K + l + 1)),
+      ∀ (K : ℕ) (v : EuclideanSpace ℂ (Cfg d (K + l + 1))),
         -ε *
             (RCLike.re
                 (⟪(openChainTailGroundSpaceES A K (l + 1))ᗮ.starProjection v, v⟫_ℂ) +
@@ -269,8 +271,8 @@ theorem IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold
   obtain ⟨l, ε, hl, hInj, hε, hε_lt, hDefect⟩ :=
     hP.exists_openChain_groundProjection_defect_lt_c3_threshold hρ
   refine ⟨l, ε, hl, hε, hε_lt, ?_⟩
-  intro K hK v
+  intro K v
   exact re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
-    hInj hl.le (hDefect K hK) v
+    hInj hl.le (hDefect K) v
 
 end MPSTensor

@@ -35,27 +35,46 @@ first two modules and are gone with them.
 
 ## Statement changes
 
-The C3 threshold theorems now quantify over positive prefix lengths only. The
-FNW estimate is stated for `0 < r` and `0 < ℓ`, matching the source domain
-`ℓ ≤ 1, r ≥ m` of the best overlap constant, and matching the domain of
-Nachtergaele's martingale difference, which needs a nonwrapping window. Both
-Lean consumers,
-`MPSTensor.IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold`
-and the blocked three-site route in
-`TNLean/MPS/ParentHamiltonian/Martingale/BlockedGap.lean`, already supplied a
-positive prefix length, so no downstream statement changed.
+None. The C3 threshold theorems quantify over every prefix length, as they did
+before the rewiring.
 
-The affected theorems are
+An intermediate revision of this work narrowed them to positive prefix lengths,
+on the reasoning that the FNW estimate is stated for `0 < r`. That narrowing was
+reverted. The prefix positivity was already dead where it entered the chain: it
+was bound as `_hr` in
+`MPSTensor.wholeIncrement_groundProjection_defect_le_fnw`, whose docstring said
+the estimate also holds at the zero endpoints, and whose two ingredients take no
+positivity in the prefix or the spectator length. Dropping `0 < r` through
+`_fnw`, `_fnw_factored`, `exists_..._le_fnw`, `_fnw_geometric`,
+`exists_..._le_fnw_geometric`, and `exists_openChain_..._le_fnw_geometric`
+restores the original quantifier in
 `MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths`,
 `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold`,
 and
 `MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold`.
 
+The spectator positivity `0 < ℓ` is kept: it is the source's, and the open-chain
+wrapper discharges it at `ℓ = 1`. The one statement still carrying a positive
+prefix is
+`MPSTensor.IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold`,
+which carried it before this work too, because the martingale difference is only
+defined for a positive prefix.
+
 ## Remaining residue
 
-The prescription for the rate is now the source's own: any number strictly
-above the moduli of the nonunit transfer eigenvalues and strictly below one.
-The prefactor is not. Nachtergaele states that it may be taken equal to `k²`,
+Two features of the source's display are not reproduced.
+
+The rate condition proved here is that the rate lie strictly between the
+weighted spectral radius of the transfer remainder and one. Nachtergaele
+prescribes instead that it exceed the moduli of the nonunit transfer
+eigenvalues. The remainder has exactly those eigenvalues together with zero, so
+the two conditions describe the same rates once the spectral radius is known to
+equal the largest such modulus; that equality is not formalized, and only the
+spectral-radius form is used. The blueprint section head states the proved
+condition and cites the paper-gap note, so the source's phrasing is not
+presented as what is proved.
+
+The prefactor is the second. Nachtergaele states that it may be taken equal to `k²`,
 the dimension of the auxiliary space of the pure state; the formal prefactor is
 the existential rate-dependent constant of Lemma 5.2. Establishing `c = k²`
 needs a quantitative theorem that the inspected primary sources do not supply
