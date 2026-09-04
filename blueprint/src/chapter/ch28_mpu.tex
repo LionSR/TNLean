@@ -940,7 +940,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_double_layer_blocking}
+    \uses{thm:mpu_blocked_double_layer_diagonal}
     Trace normalization gives $(\Id|\rho)=1$, so $|\rho)(\Id|$ is idempotent
     and every positive power of it equals itself.  The blocked normalized
     diagonal is the corresponding power of $E$, and $E^{JD^2}$ is the $D^2$-th
@@ -987,10 +987,18 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.IsMPU.simple1_of_simple2_supplied}
     \leanok
     \uses{def:mpu, def:mpu_simple}
-    Let $\mathcal U$ generate an MPU, and suppose its direct length-$k$ block
-    is simple for some $k>0$.  Then its direct length-$k'$ block is simple for
-    every $k'\geq k$, without any divisibility condition on $k'$ by $k$.
-    This is the corollary following
+    Let $\mathcal U$ generate an MPU.  If specified vectors $a,b$ satisfy the
+    two-letter insertion identity
+    \begin{align}
+        W^{ij}W^{k\ell} & =W^{ij}|b)(a|W^{k\ell},
+    \end{align}
+    then the same vectors satisfy
+    \begin{align}
+        (a|W^{ij}|b) & =\delta_{ij}.
+    \end{align}
+    Moreover, if the direct length-$k$ block is simple for some $k>0$, then
+    its direct length-$k'$ block is simple for every $k'\geq k$, without any
+    divisibility condition on $k'$ by $k$.  This is the corollary following
     \cite[Proposition~III.3]{Cirac2017MPU}.
 \end{theorem}
 
