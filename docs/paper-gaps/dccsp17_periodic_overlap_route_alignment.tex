@@ -694,7 +694,7 @@ overlap-hypothesis step is tracked by
 subsequent multiplicity-power extraction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5344}{issue \#5344}.
 
-\section{Scope restriction: the equal case in irreducible form II}
+\section{Scope restriction: the equal case with trace-preserving blocks}
 
 Theorem~3.8 of Ref.~\cite{DeLasCuevas2017Irreducible}, lines 643--693, assumes
 that the two tensors are in irreducible form, that is, that every block map is
@@ -702,14 +702,22 @@ irreducible of spectral radius one. The formal equal-case
 theorem\footnote{Formal declaration:
 \leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_sectorDecomposition} in
 \path{EqualCaseGlobal.lean}.} assumes in addition that every block is
-left-canonical, that is, that every block map is trace preserving. In the
-language of the source, lines 320--332, the blocks are in irreducible form II.
+left-canonical, that is, that every block map is trace preserving. This is the
+normalization of Eq.~\emph{unital}, line 316 of the source.
+
+It is worth being precise about how much this assumes, since the source's
+irreducible form II is a different and stronger condition. Form II, described
+at lines 320--332, asks for trace-preserving block maps \emph{and} for the
+fixed point of each block map to be diagonal, the latter obtained by the
+further conjugation $A''_j = U_j^\dagger A'_j U_j$. The formal hypothesis is
+only the first of the two, so the formal statement is stronger than the form-II
+statement and weaker than the source's.
 
 The source asserts at lines 330--332 that one passes from irreducible form to
-irreducible form II by a block-diagonal similarity, so that a result proved in
-either form applies to the other after replacing ``invertible'' by
-``unitary''. That passage is not carried out in the formal development, so the
-formal statement is the form-II statement and not the unrestricted source
+irreducible form II by a block-diagonal similarity. Only the first half of that
+passage, the unitalization of Eq.~\emph{unital}, is needed to reach the formal
+hypothesis. That passage is not carried out in the formal development, so the
+formal statement is the normalized statement and not the unrestricted source
 theorem.
 
 Two ingredients force the restriction. The periodic overlap
@@ -723,12 +731,14 @@ available only in the normalized orientation.
 
 \subsection{Elimination plan}
 
-Normalize both bases by the sectorwise similarity of the section ``Pure
-normalization theorem'' above, apply the form-II theorem to the normalized
-decompositions, and transport the conclusion back. The multiplicity gauge is
-unchanged by the transport: it acts by a scalar on each block, so it commutes
-with every block-diagonal similarity. The global similarity is conjugated by
-the two normalizing similarities.
+Normalize both bases by the unitalization of Eq.~\emph{unital}, using the
+sectorwise similarity of the section ``Pure normalization theorem'' above,
+apply the normalized theorem to the normalized decompositions, and transport
+the conclusion back. The multiplicity gauge is unchanged by the transport: it
+acts by a scalar on each block, so it commutes with every block-diagonal
+similarity. The global similarity is conjugated by the two normalizing
+similarities. The second half of the source's form-II construction, the
+diagonalization of the fixed point, is not needed.
 
 \section{Independence of the non-zero periodic vectors}
 

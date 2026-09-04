@@ -340,6 +340,52 @@ theorem reindex_trans_finCongr {n m k : ℕ} (h₁ : n = m) (h₂ : m = k)
 
 end Transport
 
+/-- The scalar attached to each flattened multiplicity copy by a blockwise
+family of multiplicity scalars.
+
+This flattens `(j, q) ↦ z_{j,q}`, so that the block-scalar matrix built from it
+is the direct sum `⊕_j Z_j ⊗ 1_{D_j}` with `Z_j` the diagonal matrix of the
+`z_{j,q}`, as at arXiv:1708.00029, line 653. -/
+noncomputable def SectorDecomposition.flatCopyScalar (P : SectorDecomposition d)
+    (z : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ) : Fin P.totalCopies → ℂ :=
+  fun s => z (P.flatIndexEquiv.symm s).1 (P.flatIndexEquiv.symm s).2
+
+/-- The multiplicity gauge does not change the generated matrix-product
+vectors: on a copy whose period divides the length it contributes the factor
+one, and on a copy whose period does not divide the length the block generates
+the zero vector.
+
+Source: arXiv:1708.00029, theorem `thm:bdequal`, lines 655 and 661--663. -/
+theorem sameMPV₂Pos_blockScalarMatrix_mul_toTensor
+    (P : SectorDecomposition d)
+    (z : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ)
+    (period : Fin P.basisCount → ℕ)
+    (hzm : ∀ j q, z j q ^ period j = 1)
+    (hZero : ∀ (j : Fin P.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+      ¬ period j ∣ N → mpv (P.basis j) σ = 0) :
+    SameMPV₂Pos P.toTensor
+      (fun i => blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i) := by
+  classical
+  intro N _hN σ
+  have hfun :
+      (fun i => blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i) =
+        toTensorFromBlocks (d := d)
+          (μ := fun s => P.flatCopyScalar z s * P.flatWeight s) P.flatBasis :=
+    funext fun i =>
+      blockScalarMatrix_mul_toTensorFromBlocks _ P.flatWeight P.flatBasis i
+  rw [hfun]
+  change mpv (toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis) σ = _
+  rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
+  refine Finset.sum_congr rfl fun s _ => ?_
+  by_cases hdvd : period (P.flatIndexEquiv.symm s).1 ∣ N
+  · obtain ⟨c, hc⟩ := hdvd
+    have hz1 : P.flatCopyScalar z s ^ N = 1 := by
+      rw [SectorDecomposition.flatCopyScalar, hc, pow_mul, hzm, one_pow]
+    rw [mul_pow, hz1, one_mul]
+  · have hzero : mpv (P.flatBasis s) σ = 0 := hZero _ N σ hdvd
+    rw [hzero]
+    simp
+
 /-! ## The global multiplicity gauge in the equal case -/
 
 /-- **Global multiplicity gauge and similarity in the equal case.**
@@ -378,20 +424,24 @@ theorem equalCase_global_zgauge_of_blockwise
     (hPer : ∀ j, IsPeriodic (period j) (P.basis j))
     (hzm : ∀ j q, z j q ^ period j = 1)
     (L : ℕ) (hLdvd : ∀ j, period j ∣ L) :
-    ∃ (Z : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ)
-      (Y : Matrix (Fin P.totalDim) (Fin Q.totalDim) ℂ)
+    ∃ (Y : Matrix (Fin P.totalDim) (Fin Q.totalDim) ℂ)
       (Y' : Matrix (Fin Q.totalDim) (Fin P.totalDim) ℂ),
-      Z ^ L = 1 ∧ Y * Y' = 1 ∧ Y' * Y = 1 ∧
-      (∀ i : Fin d, Z * P.toTensor i = P.toTensor i * Z) ∧
-      (∀ i : Fin d, Z * P.toTensor i = Y * Q.toTensor i * Y') ∧
-      SameMPV₂Pos P.toTensor (fun i => Z * P.toTensor i) := by
+      Y * Y' = 1 ∧ Y' * Y = 1 ∧
+      blockScalarMatrix P.flatDim (P.flatCopyScalar z) ^ L = 1 ∧
+      (∀ i : Fin d,
+        blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i =
+          P.toTensor i * blockScalarMatrix P.flatDim (P.flatCopyScalar z)) ∧
+      (∀ i : Fin d,
+        blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i =
+          Y * Q.toTensor i * Y') ∧
+      SameMPV₂Pos P.toTensor
+        (fun i => blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i) := by
   classical
   have hzL : ∀ j q, z j q ^ L = 1 := by
     intro j q
     obtain ⟨c, hc⟩ := hLdvd j
     rw [hc, pow_mul, hzm, one_pow]
-  set zflat : Fin P.totalCopies → ℂ := fun s =>
-    z (P.flatIndexEquiv.symm s).1 (P.flatIndexEquiv.symm s).2 with hzflat
+  set zflat : Fin P.totalCopies → ℂ := P.flatCopyScalar z with hzflat
   set Z : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ :=
     blockScalarMatrix P.flatDim zflat with hZ
   -- The gauged first tensor is the first tensor with rescaled multiplicities.
@@ -457,7 +507,7 @@ theorem equalCase_global_zgauge_of_blockwise
     toTensorFromBlocks_conj_of_matched_blocks (d := d)
       (fun s => zflat s * P.flatWeight s) P.flatBasis
       Q.flatWeight Q.flatBasis e hd (matched_block_gauge (Q := Q) Yb) hrel
-  refine ⟨Z, Y, Y', ?_, hYY', hY'Y, ?_, ?_, ?_⟩
+  refine ⟨Y, Y', hYY', hY'Y, ?_, ?_, ?_, ?_⟩
   · rw [hZ, blockScalarMatrix_pow]
     have hone : (fun s : Fin P.totalCopies => zflat s ^ L) = fun _ => (1 : ℂ) := by
       funext s
@@ -465,25 +515,65 @@ theorem equalCase_global_zgauge_of_blockwise
     rw [hone, blockScalarMatrix_one]
   · intro i; rw [hZmul i, hZmulr i]
   · intro i; rw [hZmul i]; exact hconj i
-  · -- the gauged tensor generates the same matrix-product vectors
-    intro N _hN σ
-    have hfun : (fun i => Z * P.toTensor i) =
-        toTensorFromBlocks (d := d)
-          (μ := fun s => zflat s * P.flatWeight s) P.flatBasis := funext hZmul
-    rw [hfun]
-    change mpv (toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis) σ = _
-    rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
-    refine Finset.sum_congr rfl fun s _ => ?_
-    by_cases hdvd : period (P.flatIndexEquiv.symm s).1 ∣ N
-    · obtain ⟨c, hc⟩ := hdvd
-      have hz1 : zflat s ^ N = 1 := by
-        rw [hzflat, hc, pow_mul, hzm, one_pow]
-      rw [mul_pow, hz1, one_mul]
-    · have hzero : mpv (P.flatBasis s) σ = 0 :=
-        pgvwc07_stateVector_eq_zero_of_not_dvd (P.flatBasis s)
-          (hPer (P.flatIndexEquiv.symm s).1) hdvd σ
-      rw [hzero]
-      simp
+  · exact sameMPV₂Pos_blockScalarMatrix_mul_toTensor P z period hzm
+      (fun j N σ h => pgvwc07_stateVector_eq_zero_of_not_dvd (P.basis j) (hPer j) h σ)
+
+/-! ## Similarity carrying a prescribed scalar -/
+
+/-- The two tensors have equal bond dimension and, after that identification,
+the matrices of the first are the prescribed scalar `ζ` times a fixed conjugate
+of those of the second.
+
+This is the repeated-block relation of arXiv:1708.00029, definition
+`def:repeated` and equation `eq:rep`, lines 276--284, with the scalar named
+instead of bound existentially. Naming it is what lets one statement use the
+same scalar in the similarity and in the multiplicity relation, as the equal
+case does at lines 667--671 and 681--688. -/
+def ScalarGaugeEquiv {D₁ D₂ : ℕ} (ζ : ℂ) (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+    Prop :=
+  ∃ (h : D₁ = D₂) (Y : GL (Fin D₂) ℂ),
+    ∀ i, (cast (congr_arg (MPSTensor d) h) A) i =
+      ζ • ((Y : Matrix (Fin D₂) (Fin D₂) ℂ) * B i *
+        ((Y⁻¹ : GL (Fin D₂) ℂ) : Matrix (Fin D₂) (Fin D₂) ℂ))
+
+/-- Forgetting the name of the scalar recovers the repeated-block relation. -/
+theorem ScalarGaugeEquiv.toHetRepeatedBlocks {D₁ D₂ : ℕ} {ζ : ℂ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} (hζ : ‖ζ‖ = 1)
+    (h : ScalarGaugeEquiv ζ A B) : HetRepeatedBlocks A B := by
+  obtain ⟨hd, Y, hY⟩ := h
+  exact ⟨hd, ζ, Y, hζ, hY⟩
+
+/-- Replacing the first tensor by a purely similar one keeps the scalar. -/
+theorem ScalarGaugeEquiv.of_gaugeEquiv_left {D₁ D₂ : ℕ} {ζ : ℂ}
+    {A A' : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hAA' : GaugeEquiv A A') (h : ScalarGaugeEquiv ζ A' B) :
+    ScalarGaugeEquiv ζ A B := by
+  obtain ⟨hd, Y, hY⟩ := h
+  subst hd
+  obtain ⟨X, hX⟩ := hAA'
+  refine ⟨rfl, X⁻¹ * Y, fun i => ?_⟩
+  have hA : A i =
+      ((X⁻¹ : GL (Fin D₁) ℂ) : Matrix (Fin D₁) (Fin D₁) ℂ) * A' i *
+        (X : Matrix (Fin D₁) (Fin D₁) ℂ) := by
+    rw [hX i]
+    simp [Matrix.mul_assoc]
+  have hA' : A' i =
+      ζ • ((Y : Matrix (Fin D₁) (Fin D₁) ℂ) * B i *
+        ((Y⁻¹ : GL (Fin D₁) ℂ) : Matrix (Fin D₁) (Fin D₁) ℂ)) := hY i
+  change A i = _
+  rw [hA, hA']
+  simp [Matrix.mul_assoc, mul_inv_rev]
+
+/-- Replacing the second tensor by a purely similar one keeps the scalar. -/
+theorem ScalarGaugeEquiv.of_gaugeEquiv_right {D₁ D₂ : ℕ} {ζ : ℂ}
+    {A : MPSTensor d D₁} {B B' : MPSTensor d D₂}
+    (h : ScalarGaugeEquiv ζ A B') (hBB' : GaugeEquiv B B') :
+    ScalarGaugeEquiv ζ A B := by
+  obtain ⟨hd, Y, hY⟩ := h
+  obtain ⟨W, hW⟩ := hBB'
+  refine ⟨hd, Y * W, fun i => ?_⟩
+  rw [hY i, hW i]
+  simp [Matrix.mul_assoc, mul_inv_rev]
 
 /-! ## The equal-case fundamental theorem over multiplicity-bearing decompositions -/
 
@@ -526,13 +616,14 @@ multiplicity matrix `ξ_j R_j`, which is what the source means at lines
 667--671 by absorbing the phase into `S_j`. The scalar is genuinely present:
 for period one and `B_j = e^{iθ} A_j` it is not a root of unity.
 
-**Scope restriction (irreducible form II):** the blocks are assumed
-left-canonical, that is, in irreducible form II. The source theorem assumes
-only irreducible form, and asserts at lines 330--332 that one passes between
-the two forms by a block-diagonal similarity, so that a proof in either form
-applies to the other; that passage is not carried out here. The restriction is
-recorded in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`,
-section "Scope restriction: the equal case in irreducible form II". -/
+The blocks are assumed left-canonical, that is, in irreducible form II. The
+source theorem assumes only irreducible form and asserts at lines 330--332 that
+one passes between the two forms by a block-diagonal similarity; that passage
+is carried out in `fundamentalTheorem_periodic_equalCase_irreducibleForm`,
+which is the source statement itself. The present statement is the normalized
+half of that pair, isolated because the periodic overlap dichotomy and the
+vanishing of an off-period block are available in the normalized
+orientation. -/
 theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)
@@ -541,23 +632,31 @@ theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
     (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hSame : SameMPV₂Pos P.toTensor Q.toTensor) :
-    ∃ (perm : Fin P.basisCount ≃ Fin Q.basisCount) (ξ : Fin P.basisCount → ℂ),
+    ∃ (perm : Fin P.basisCount ≃ Fin Q.basisCount) (ξ : Fin P.basisCount → ℂ)
+      (z : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ),
       (∀ j, ‖ξ j‖ = 1) ∧
       (∀ j, periodP j = periodQ (perm j)) ∧
+      (∀ j, ScalarGaugeEquiv (ξ j) (P.basis j) (Q.basis (perm j))) ∧
       (∀ j, HetRepeatedBlocks (P.basis j) (Q.basis (perm j))) ∧
+      (∀ j, Matrix.diagonal (z j) ^ periodP j = 1) ∧
       (∀ j, ∃ (_hCopies : P.copies j = Q.copies (perm j))
-              (τ : Fin (P.copies j) ≃ Fin (Q.copies (perm j)))
-              (Zj : Matrix (Fin (P.copies j)) (Fin (P.copies j)) ℂ),
-            Zj ^ periodP j = 1 ∧
-            Zj * Matrix.diagonal (fun q => ξ j * P.weight j q) =
+              (τ : Fin (P.copies j) ≃ Fin (Q.copies (perm j))),
+            Matrix.diagonal (z j) * Matrix.diagonal (fun q => ξ j * P.weight j q) =
               Matrix.diagonal (fun q => Q.weight (perm j) (τ q))) ∧
-      ∃ (Z : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ)
-        (Y : Matrix (Fin P.totalDim) (Fin Q.totalDim) ℂ)
+      ∃ (Y : Matrix (Fin P.totalDim) (Fin Q.totalDim) ℂ)
         (Y' : Matrix (Fin Q.totalDim) (Fin P.totalDim) ℂ),
-        Z ^ (Finset.univ.lcm periodP) = 1 ∧ Y * Y' = 1 ∧ Y' * Y = 1 ∧
-        (∀ i : Fin d, Z * P.toTensor i = P.toTensor i * Z) ∧
-        (∀ i : Fin d, Z * P.toTensor i = Y * Q.toTensor i * Y') ∧
-        SameMPV₂Pos P.toTensor (fun i => Z * P.toTensor i) := by
+        Y * Y' = 1 ∧ Y' * Y = 1 ∧
+        blockScalarMatrix P.flatDim (P.flatCopyScalar z) ^
+          (Finset.univ.lcm periodP) = 1 ∧
+        (∀ i : Fin d,
+          blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i =
+            P.toTensor i * blockScalarMatrix P.flatDim (P.flatCopyScalar z)) ∧
+        (∀ i : Fin d,
+          blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i =
+            Y * Q.toTensor i * Y') ∧
+        SameMPV₂Pos P.toTensor
+          (fun i =>
+            blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i) := by
   classical
   -- Theorem 3.4 supplies the matching of the two bases of periodic tensors.
   obtain ⟨_hCount, perm, hMatch⟩ :=
@@ -609,24 +708,27 @@ theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
   have hzm : ∀ j q, z j q ^ periodP j = 1 := by
     intro j q
     rw [hzdef, div_pow, hτpow j q, div_self (pow_ne_zero _ (hden j q))]
-  refine ⟨perm, ξ, hξ, hPeriodEq, hMatch', ?_, ?_⟩
-  · -- blockwise multiplicity gauge
+  refine ⟨perm, ξ, z, hξ, hPeriodEq,
+    fun j => ⟨hDimJ j, Yb' j, hConj' j⟩, hMatch', ?_, ?_, ?_⟩
+  · -- each blockwise multiplicity gauge has order the block period
     intro j
-    obtain ⟨Zj, hZjpow, hZjmul⟩ :=
-      zgauge_construction (periodP j)
-        (fun q => Q.weight (perm j) (τ j q)) (fun q => ξ j * P.weight j q)
-        (fun q => hτpow j q) (fun q => hden j q)
-    exact ⟨hCopies j, τ j, Zj, hZjpow, hZjmul⟩
+    simp only [Matrix.diagonal_pow, Pi.pow_def]
+    rw [show (fun q => z j q ^ periodP j) = (1 : Fin (P.copies j) → ℂ) from
+      funext (hzm j)]
+    exact Matrix.diagonal_one
+  · -- the blockwise multiplicity gauge relates the two multiplicity matrices
+    intro j
+    refine ⟨hCopies j, τ j, ?_⟩
+    rw [Matrix.diagonal_mul_diagonal]
+    exact congrArg Matrix.diagonal (funext fun q => hz j q)
   · -- global multiplicity gauge and similarity
-    obtain ⟨Z, Y, Y', hZpow, hYY', hY'Y, hcomm, hgauge, hmpv⟩ :=
-      equalCase_global_zgauge_of_blockwise perm hDimJ τ ξ
-        (Equiv.piCongrLeft (fun k => GL (Fin (Q.basisDim k)) ℂ) perm Yb')
-        (by
-          intro j i
-          rw [Equiv.piCongrLeft_apply_apply]
-          exact hConj' j i)
-        z hz periodP hPerP hzm (Finset.univ.lcm periodP)
-        (fun j => Finset.dvd_lcm (Finset.mem_univ j))
-    exact ⟨Z, Y, Y', hZpow, hYY', hY'Y, hcomm, hgauge, hmpv⟩
+    exact equalCase_global_zgauge_of_blockwise perm hDimJ τ ξ
+      (Equiv.piCongrLeft (fun k => GL (Fin (Q.basisDim k)) ℂ) perm Yb')
+      (by
+        intro j i
+        rw [Equiv.piCongrLeft_apply_apply]
+        exact hConj' j i)
+      z hz periodP hPerP hzm (Finset.univ.lcm periodP)
+      (fun j => Finset.dvd_lcm (Finset.mem_univ j))
 
 end MPSTensor
