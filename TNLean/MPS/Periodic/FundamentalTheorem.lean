@@ -9,6 +9,7 @@ import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.SharedInfra.Scaling
+import TNLean.MPS.Tactic.Basic
 
 /-!
 # Components of the periodic Fundamental Theorem of MPS
@@ -112,6 +113,53 @@ theorem GaugeEquiv.toHetRepeatedBlocks {D : ℕ} {A B : MPSTensor d D}
     (h : GaugeEquiv A B) : HetRepeatedBlocks A B :=
   HetRepeatedBlocks.of_repeatedBlocks
     ((equivalentBlocks_iff_gaugeEquiv.mpr h).to_repeatedBlocks)
+
+/-! ## Phase powers carried by a repeated-block relation -/
+
+/-- Two repeated blocks have proportional matrix-product vectors at every chain
+length, and the proportionality scalar at length `N` is the `N`-th power of a
+single unit-modulus phase.
+
+This is the matrix-product-vector reading of the repeated-block relation
+`A_j^i = e^{i ξ} Y B_k^i Y^{-1}`: the similarity drops out under the closed-chain
+trace, and each of the `N` sites contributes one factor of the phase. In
+particular, the proportionality scalar genuinely depends on the length; already
+the one-site tensors `B^0 = 1` and `A^0 = e^{i ξ}` have `V_N(A) = e^{i N ξ} V_N(B)`.
+
+Source: arXiv:1708.00029, definition `def:repeated` and equation `eq:rep`,
+lines 276--284; the proportional statement compared at every length is the
+hypothesis of theorem `thm:bd`, lines 613--623. -/
+theorem HetRepeatedBlocks.exists_unit_phase_power_mpv {D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} (h : HetRepeatedBlocks A B) :
+    ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = ζ ^ N * mpv B σ := by
+  obtain ⟨hDim, ξ, Y, hξ, hGauge⟩ := h
+  refine ⟨ξ, hξ, fun N σ => ?_⟩
+  rw [← mpv_cast_dim hDim A N σ]
+  exact mpv_eq_pow_mul_of_gaugePhase B (cast (congr_arg (MPSTensor d) hDim) A) Y ξ hGauge N σ
+
+/-- The phase of a repeated-block relation can be absorbed into one of the two
+blocks: rescaling the first block by the reciprocal phase makes the two
+matrix-product-vector families equal at every positive chain length.
+
+Source: arXiv:1708.00029, definition `def:repeated` and equation `eq:rep`, lines
+276--284; the absorption of a repeated-block phase into the multiplicities is
+used at lines 302--305 and again in the proof of theorem `thm:bdequal`, lines
+667--671.
+
+**Scope restriction (blockwise phase):** the phase produced here belongs to one
+matched pair of basis tensors. Distinct matched pairs may carry distinct phases,
+so no single phase is asserted for the assembled tensors of lines 286--305; see
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
+theorem HetRepeatedBlocks.exists_phase_rescaling_sameMPV₂Pos {D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} (h : HetRepeatedBlocks A B) :
+    ∃ ξ : ℂ, ‖ξ‖ = 1 ∧ SameMPV₂Pos (fun i => ξ • A i) B := by
+  obtain ⟨ζ, hζ, hmpv⟩ := h.exists_unit_phase_power_mpv
+  have hζ0 : ζ ≠ 0 := Complex.ne_zero_of_norm_eq_one hζ
+  refine ⟨ζ⁻¹, by rw [norm_inv, hζ, inv_one], ?_⟩
+  mpv_ext
+  have hscale : mpv (fun i => ζ⁻¹ • A i) σ = ζ⁻¹ ^ N * mpv A σ :=
+    mpv_eq_pow_mul_of_gaugePhase A (fun i => ζ⁻¹ • A i) 1 ζ⁻¹ (fun i => by simp) N σ
+  rw [hscale, hmpv N σ, ← mul_assoc, ← mul_pow, inv_mul_cancel₀ hζ0, one_pow, one_mul]
 
 /-! ## Periodic block matching witness -/
 
