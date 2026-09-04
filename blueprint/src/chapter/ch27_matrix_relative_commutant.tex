@@ -1,0 +1,169 @@
+%% ==================================================
+%% Chapter: Relative commutants of full matrix algebras
+%% Finite-dimensional prerequisite for the index argument of the matrix
+%% product unitary and cellular automaton chapter.
+%% ==================================================
+
+\chapter{Relative Commutants of Full Matrix Algebras}%
+\label{ch:matrix_relative_commutant}
+
+Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of complex
+algebras with $\Phi(\Id_p)=\Id_q$.  Its \emph{relative commutant} is the
+algebra
+\begin{align}
+    \Phi(\MN{p})^{\prime}\cap\MN{q}
+     & =\{T\in\MN{q}:\
+    T\Phi(A)=\Phi(A)T\ \ \forall A\in\MN{p}\},
+    \label{eq:matalg_relative_commutant}
+\end{align}
+which always contains the scalar matrices $\C\Id_q$.  This is not the
+centre of the image: the centre requires $T\in\Phi(\MN{p})$, whereas the
+relative commutant allows every $T\in\MN{q}$.  In particular, a scalar
+centre of the image alone does not imply surjectivity.  This chapter shows
+that equality in
+$\C\Id_q\subseteq\Phi(\MN{p})^{\prime}\cap\MN{q}$ forces $\Phi$ to be
+onto, and records the contrapositive witness.  Injectivity of $\Phi$ is
+not assumed; it follows from simplicity of $\MN{p}$.
+
+These are general statements about finite-dimensional complex matrix
+algebras.  Neither \cite{SchumacherWerner2004QCA} nor
+\cite{Gross2012IndexTheory} states them separately, and on their own they
+close no theorem of either source.  They isolate the finite-dimensional step
+behind two passages of \cite{Gross2012IndexTheory}: the inclusion
+$\alpha(\mathcal A_{2x}\otimes\mathcal A_{2x+1})\subseteq
+    \mathcal R_{2x}\otimes\mathcal R_{2x+1}$
+at \cite[lines~1276--1287]{Gross2012IndexTheory} is not strict, because a
+strict inclusion would produce an element of the relative commutant, and the
+inclusion
+$\mathcal R_{2x+1}\otimes\mathcal R_{2x+2}\subseteq
+    \mathcal A_{2x+1}\otimes\mathcal A_{2x+2}$
+at \cite[lines~1306--1315]{Gross2012IndexTheory} is not strict, because
+otherwise the automorphism $\alpha$ would fail to be onto.
+
+\begin{lemma}[Simplicity of the defining module]
+    \label{lem:matalg_defining_module_simple}
+    \lean{Matrix.isSimpleModule_pi}
+    \leanok
+    Let $K$ be a field and let $n$ be a nonempty finite index set.  The
+    defining module $K^n$ of $M_n(K)$, with $A$ acting by $v\mapsto Av$, is
+    a simple $M_n(K)$-module.
+\end{lemma}
+
+\begin{proof}\leanok
+    Sending a matrix to the endomorphism $v\mapsto Av$ is an isomorphism of
+    $K$-algebras $M_n(K)\to\End_{K}(K^n)$, and the identity map of $K^n$ is
+    semilinear along it, since it carries the matrix action to the
+    endomorphism action.  A nonzero vector space over a division ring is a
+    simple module over its own endomorphism ring, and simplicity transports
+    along that semilinear bijection.  Schumacher and Werner call $K^n$ the
+    defining representation of $M_n(K)$ at
+    \cite[lines~2112--2114]{SchumacherWerner2004QCA}.
+\end{proof}
+
+\begin{lemma}[Uniqueness of the simple module over a simple Artinian ring]
+    \label{lem:matalg_simple_module_unique}
+    \lean{IsSimpleRing.nonempty_linearEquiv_of_isSimpleModule}
+    \leanok
+    Let $R$ be a simple Artinian ring and let $M$ and $N$ be simple
+    $R$-modules.  Then $M\cong N$ as $R$-modules.
+\end{lemma}
+
+\begin{proof}\leanok
+    A simple Artinian ring is semisimple, so a simple module over it is
+    isomorphic to a simple left ideal: $M\cong I$ and $N\cong J$ with
+    $I,J\subseteq R$ simple left ideals.  The regular module of a simple
+    Artinian ring is isotypic, so $I\cong J$, and composing gives
+    $M\cong N$.  This is the general form of the property of $\MN{d}$ that
+    all its irreducible representations are unitarily equivalent to the
+    defining one, quoted at
+    \cite[lines~2112--2114]{SchumacherWerner2004QCA}.
+\end{proof}
+
+\begin{theorem}[Equal matrix sizes from a scalar relative commutant]
+    \label{thm:matalg_size_eq}
+    \lean{Matrix.AlgHom.size_eq_of_centralizer_range_eq_bot}
+    \leanok
+    Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of
+    complex algebras with $\Phi(\Id_p)=\Id_q$.  If
+    $\Phi(\MN{p})^{\prime}\cap\MN{q}=\C\Id_q$, then $p=q$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:matalg_defining_module_simple,
+        lem:matalg_simple_module_unique}
+    Give $\C^q$ the $\MN{p}$-action $A\cdot v=\Phi(A)v$; it is compatible
+    with the complex scalars because $\Phi$ is complex linear.  Let
+    $W\subseteq\C^q$ be an $\MN{p}$-submodule, choose an $\MN{p}$-submodule
+    complement $W^{\prime}$ with $\C^q=W\oplus W^{\prime}$, and let $P$ be
+    the projection onto $W$ along $W^{\prime}$, so that $W=\ran P$.  Since
+    $P$ is
+    $\MN{p}$-linear, $P\Phi(A)=\Phi(A)P$ for every $A\in\MN{p}$, so $P$
+    lies in (\ref{eq:matalg_relative_commutant}) and hence $P=c\,\Id_q$ for
+    some $c\in\C$.  If $c=0$ then $P=0$ and $W=0$; if $c\neq0$ then
+    $v=P(c^{-1}v)$ for every $v\in\C^q$ and $W=\C^q$.  So $\C^q$ is a
+    simple $\MN{p}$-module.  The ring $\MN{p}$ is simple Artinian and
+    $\C^p$ is a simple $\MN{p}$-module by
+    Lemma~\ref{lem:matalg_defining_module_simple}, so
+    Lemma~\ref{lem:matalg_simple_module_unique} gives an $\MN{p}$-linear
+    isomorphism $\C^q\cong\C^p$.  Reading it as an isomorphism of complex
+    vector spaces and comparing dimensions gives $q=p$.  This is the
+    single-summand, multiplicity-one case of the representation argument at
+    \cite[lines~2101--2116]{SchumacherWerner2004QCA}.
+\end{proof}
+
+\begin{theorem}[Scalar relative commutant forces surjectivity]
+    \label{thm:matalg_surjective_of_scalar_relative_commutant}
+    \lean{Matrix.AlgHom.surjective_of_centralizer_range_eq_bot}
+    \leanok
+    Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of
+    complex algebras with $\Phi(\Id_p)=\Id_q$.  If
+    $\Phi(\MN{p})^{\prime}\cap\MN{q}=\C\Id_q$, then $\Phi$ is onto.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:matalg_size_eq}
+    The kernel of $\Phi$ is a two-sided ideal of the simple algebra
+    $\MN{p}$, and it is not all of $\MN{p}$ because
+    $\Phi(\Id_p)=\Id_q\neq0$; hence $\Phi$ is injective.  By
+    Theorem~\ref{thm:matalg_size_eq}, $p=q$, so $\MN{p}$ and $\MN{q}$ have
+    the same finite complex dimension, and an injective complex-linear map
+    between complex vector spaces of equal finite dimension is onto.
+\end{proof}
+
+\begin{theorem}[Scalar relative commutant forces surjectivity of a star
+        homomorphism]
+    \label{thm:matalg_surjective_star}
+    \lean{Matrix.StarAlgHom.surjective_of_centralizer_range_eq_bot}
+    \leanok
+    Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of
+    complex matrix algebras with $\Phi(A^\dagger)=\Phi(A)^\dagger$ and
+    $\Phi(\Id_p)=\Id_q$.  If
+    $\Phi(\MN{p})^{\prime}\cap\MN{q}=\C\Id_q$, then $\Phi$ is onto.  This
+    is the form matching the unital star homomorphisms of
+    \cite[lines~2101--2105]{SchumacherWerner2004QCA}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:matalg_surjective_of_scalar_relative_commutant}
+    The involution plays no part in the argument, so
+    Theorem~\ref{thm:matalg_surjective_of_scalar_relative_commutant}
+    applies to $\Phi$ read as a homomorphism of complex algebras.
+\end{proof}
+
+\begin{theorem}[Non-scalar relative commutant of a proper image]
+    \label{thm:matalg_nonscalar_relative_commutant}
+    \lean{Matrix.AlgHom.exists_commute_notMem_bot_of_not_surjective}
+    \leanok
+    Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of
+    complex algebras with $\Phi(\Id_p)=\Id_q$ that is not onto.  Then there
+    is $T\in\MN{q}$ with $T\Phi(A)=\Phi(A)T$ for every $A\in\MN{p}$ and
+    $T\notin\C\Id_q$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:matalg_surjective_of_scalar_relative_commutant}
+    If every $T$ commuting with the whole image of $\Phi$ were scalar, then
+    (\ref{eq:matalg_relative_commutant}) would equal $\C\Id_q$ and
+    Theorem~\ref{thm:matalg_surjective_of_scalar_relative_commutant} would
+    make $\Phi$ onto.
+\end{proof}
