@@ -25,9 +25,9 @@ proof at lines 1195--1259 resolves \(\psi\) over the whole range
 This file shows that the printed conclusion does not follow from the printed
 hypotheses. `FrustrationFree.UnrestrictedNachtergaeleEstimate` transcribes
 Theorem 2.1(i) with each condition imposed exactly on the source range it
-carries -- C1 on \(l\leq n<N\) after the reindexing of its window sum, at the
-volumes \(\Lambda_{n_0}\) and \(\Lambda_N\) at which the source asserts it,
-and C2 and C3 on \(n_0\leq n<N\) -- together with the source's ordering
+carries -- C1 on \(l\leq n<M\) after the reindexing of its window sum, at the
+volumes \(\Lambda_M\) for \(M=N\) and \(M=n_0\) at which the source asserts
+it, and C2 and C3 on \(n_0\leq n<N\) -- together with the source's ordering
 \(l\leq n_0\) of the onset, the nontriviality of every ground space that C2
 requires, and the conclusion on \(\lVert\psi\rVert^2\); then
 `FrustrationFree.not_unrestrictedNachtergaeleEstimate` refutes it in every
