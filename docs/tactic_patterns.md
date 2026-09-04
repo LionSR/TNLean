@@ -1341,6 +1341,14 @@ abstracted — record why, so it is not re-proposed).
   6.7 seconds in the declaration profiler. The full profiled source check falls
   below 25 seconds locally, with every declaration below 7 seconds.
 
+### Unit-norm scalar invariance of the transfer map
+- **Pattern:** three modules separately expanded `transferMap_smul` and proved
+  that the factor $c\overline c$ is one from `‖c‖ = 1`.
+- **Reuse:** `MPSTensor.transferMap_smul_eq_of_norm_eq_one` in
+  `MPS/SharedInfra/Scaling.lean` states the map equality once.
+- **Result:** periodicity transport, periodic repeated-block spectrum
+  comparison, and Beigi-loop transfer idempotence now use the shared theorem.
+
 ### Anticommuting-involution projective multiplication
 - **Pattern:** split both `Z₂ × Z₂` inputs into sixteen cases, expand two concrete
   `2 × 2` matrices entrywise, and normalize every resulting scalar expression.

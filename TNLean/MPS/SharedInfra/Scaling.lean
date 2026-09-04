@@ -28,6 +28,18 @@ theorem transferMap_smul (c : ℂ) (A : MPSTensor d D) (X : Matrix (Fin D) (Fin 
   simp_rw [smul_mul_assoc, mul_smul_comm, smul_smul, ← Finset.smul_sum]
   rfl
 
+/-- Multiplying every tensor letter by a unit-norm scalar leaves the transfer
+map unchanged. -/
+theorem transferMap_smul_eq_of_norm_eq_one
+    (A : MPSTensor d D) (c : ℂ) (hc : ‖c‖ = 1) :
+    Kraus.transferMap (fun i => c • A i) = Kraus.transferMap A := by
+  apply LinearMap.ext
+  intro X
+  rw [transferMap_smul]
+  have hphase : c * starRingEnd ℂ c = 1 := by
+    simpa [Complex.normSq_eq_norm_sq, hc] using Complex.mul_conj c
+  rw [hphase, one_smul]
+
 /-- The transfer spectral radius scales by the squared modulus of the tensor scalar. -/
 theorem spectralRadius_transferMap_smul [Nonempty (Fin D)]
     (c : ℂ) (hc : c ≠ 0) (A : MPSTensor d D) :
@@ -130,12 +142,8 @@ theorem isPeriodic_smul_of_norm_one
     (A : MPSTensor d D) (hA : IsPeriodic m A) :
     IsPeriodic m (fun i => c • A i) := by
   have hc_ne : c ≠ 0 := Complex.ne_zero_of_norm_eq_one hc
-  have hTransfer : Kraus.transferMap (fun i => c • A i) = Kraus.transferMap A := by
-    ext X : 1
-    rw [transferMap_smul]
-    have hsc : c * starRingEnd ℂ c = 1 := by
-      simpa [Complex.normSq_eq_norm_sq, hc] using Complex.mul_conj c
-    simp [hsc]
+  have hTransfer : Kraus.transferMap (fun i => c • A i) = Kraus.transferMap A :=
+    transferMap_smul_eq_of_norm_eq_one A c hc
   refine ⟨isIrreducibleTensor_smul hc_ne A hA.irreducible,
     leftCanonical_smul_of_norm_one c hc A hA.leftCanonical,
     hA.period_pos, ?_⟩

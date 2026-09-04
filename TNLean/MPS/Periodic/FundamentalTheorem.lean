@@ -178,8 +178,6 @@ theorem RepeatedBlocks.peripheralEigenvalues_transferMap_eq {D : ℕ}
     peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
       peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
   obtain ⟨ξ, Y, hξ, hRel⟩ := h
-  have hphase : ξ * starRingEnd ℂ ξ = 1 := by
-    simp [Complex.mul_conj, Complex.normSq_eq_norm_sq, hξ]
   have hGauge : GaugeEquiv B (fun i =>
       (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :=
@@ -190,8 +188,8 @@ theorem RepeatedBlocks.peripheralEigenvalues_transferMap_eq {D : ℕ}
           (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := by
     have hAeq : A = fun i => ξ • ((Y : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := funext hRel
-    refine LinearMap.ext fun X => ?_
-    rw [hAeq, transferMap_smul, hphase, one_smul]
+    rw [hAeq]
+    exact transferMap_smul_eq_of_norm_eq_one _ ξ hξ
   obtain ⟨C, hC, hMap⟩ := hGauge.transferMap_eq_similarityMap
   rw [hSmul, hMap]
   exact peripheralEigenvalues_similarityMap_eq (D := D) C hC _
