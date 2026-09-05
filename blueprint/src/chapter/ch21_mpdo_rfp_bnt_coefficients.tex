@@ -1015,11 +1015,13 @@ expression equals $2$.
     displayed identity are the scalar $2$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:cpsv_example412_normalized_rfp_maps}
+    \uses{thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_literal_formula}
     Substitute the identity and Pauli $Z$ matrices in the definition of
     $\omega_N$. Its expression $2^{-N}(I^{\otimes N}+Z^{\otimes N})$
-    is the closed operator of $\widehat M$; the empty case is evaluated
-    directly. Positivity, normalization, and the two channel equations
+    is the closed operator of $\widehat M$ by
+    Theorem~\ref{thm:cpsv_example412_literal_formula} and the factor
+    $2^{-N}$; the empty case is evaluated directly. Positivity,
+    normalization, and the two channel equations
     follow from Theorem~\ref{thm:cpsv_example412_normalized_rfp_maps}.
 \end{proof}
 
@@ -1064,7 +1066,7 @@ $I/\sqrt2,Z/\sqrt2$.
     \lean{MPOTensor.TwistedDimer.bondSiteEquiv, MPOTensor.TwistedDimer.sigmaDimer}
     \lean{MPOTensor.TwistedDimer.incomingBondEquiv}
     \leanok
-    \uses{def:mpdo_twisted_dimer_controlled_flip}
+    \uses{def:mpdo_twisted_dimer_controlled_flip, def:mpdo_twisted_dimer_tensor}
     Let
     \begin{align}
         C & =\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}.
@@ -1106,12 +1108,27 @@ $I/\sqrt2,Z/\sqrt2$.
     empty closed operator is $4$ and the empty bond product is $1$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpdo_twisted_dimer_bond_tensor, thm:mpdo_twisted_dimer_factor_normalization}
-    Multiplication of matrix units forces the right qubit of each
-    letter to match the left qubit of the next letter, in both matrix
-    arguments. Taking the trace closes this condition around the ring.
-    The surviving coefficient is the product of the corresponding
-    entries of $C$, hence of $\sigma$ on the matched bond subspace.
+    \uses{def:mpdo_twisted_dimer_bond_tensor, lem:matrix_cyclic_path_sum, lem:mpdo_twisted_dimer_bond_state_entries, thm:mpdo_twisted_dimer_factor_normalization}
+    Fix independent configurations $s_m=(l_m,r_m)$ and
+    $t_m=(l'_m,r'_m)$, with $m=0,\dots,N-1$ and cyclic successors.
+    The cyclic trace expansion of Lemma~\ref{lem:matrix_cyclic_path_sum}
+    has only one possibly nonzero virtual path, namely $(l_m,l'_m)_m$.
+    Hence
+    \begin{align}
+        \tr\!\left(\prod_{m=0}^{N-1}Q^{(l_m,r_m),(l'_m,r'_m)}\right)
+        & =\begin{cases}
+            \displaystyle\prod_{m=0}^{N-1}C_{l_m l'_m}
+              & \text{if } r_m=l_{m+1} \text{ and } r'_m=l'_{m+1}
+                \text{ for every }m, \\
+            0 & \text{otherwise}.
+        \end{cases}
+        \label{eq:mpdo_dimer_closed_entries}
+    \end{align}
+    By Lemma~\ref{lem:mpdo_twisted_dimer_bond_state_entries}, the
+    $(s,t)$ entry of $B_N^\dagger\sigma^{\otimes N}B_N$ is
+    $\prod_m\sigma_{(r_{m-1},l_m),(r'_{m-1},l'_m)}$.
+    Its matching conditions and value agree with
+    (\ref{eq:mpdo_dimer_closed_entries}) after cyclic relabeling.
     Positivity and trace one follow from
     Theorem~\ref{thm:mpdo_twisted_dimer_factor_normalization}.
 \end{proof}
@@ -1173,7 +1190,7 @@ $I/\sqrt2,Z/\sqrt2$.
     Definition~\ref{def:is_rfp_via_ts}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_factor_normalization, def:mpdo_twisted_dimer_bond_tensor}
+    \uses{thm:mpdo_twisted_dimer_factor_normalization, def:mpdo_twisted_dimer_bond_tensor, lem:mpdo_twisted_dimer_bond_state_entries}
     Preparation of the positive trace-one state $\sigma$, permutation
     of basis coordinates, and partial trace are quantum channels.
     Tracing out the prepared state proves the retraction identity.
