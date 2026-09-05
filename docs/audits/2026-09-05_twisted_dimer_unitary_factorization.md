@@ -132,7 +132,7 @@ $$
 (L_j,R_j,F_j)=((b_{j-1})_2,(b_j)_1,f_{j-1}).
 $$
 
-Thus this is a permutation of all computational basis configurations, including for $N=1$. In the separated bond-string and flag-string coordinates define
+Thus this is a permutation of all computational basis configurations, including for $N=1$. The current Lean definition uses incoming cells $e_N^{\mathrm{in}}(s)_m=((R_{m-1},L_m),F_m)$ instead: the outgoing cell used here satisfies $e_N^{\mathrm{out}}(s)_m=e_N^{\mathrm{in}}(s)_{m+1}$. Simultaneously cyclically permuting the identical bond–flag cells leaves the resulting physical matrices unchanged. In the separated bond-string and flag-string coordinates define
 
 $$
 (U_N)_{(b,f),(c,g)}=\prod_m V_{(b_m,f_m),(c_m,g_m)},\qquad
@@ -172,6 +172,6 @@ The positive-length restriction cannot be removed. At $N=0$ the original closed 
 
 ## Conclusion and formalization boundary
 
-The displayed bond–flag coupling can be removed by an explicit whole-space unitary after the stated neighboring-register regrouping. This is a project-derived operator-family factorization. It is not an on-site tensor factorization or a virtual-gauge equivalence, and no whole-site depth-one or other formal circuit-depth theorem is claimed. A strict non-decoration assertion allowing only some of those operations still needs a precise specification and a separate argument in #7751.
+The displayed bond–flag coupling can be removed by an explicit whole-space unitary after the stated neighboring-register regrouping. This is a project-derived operator-family factorization. It is not an on-site tensor factorization or a virtual-gauge equivalence, and no whole-site depth-one or other formal circuit-depth theorem is claimed. The operator identity does not itself classify the factors as renormalization fixed-point tensors. A strict non-decoration assertion allowing only some of those operations still needs a precise specification and a separate argument in #7751.
 
 The new formalization is assigned to `TwistedDimerUnitaryFactorization.lean` under #7776. No speculative declaration tags or new Blueprint nodes are introduced by this note. Blueprint synchronization in `blueprint/src/chapter/ch21_mpdo_rfp_bnt_coefficients.tex` awaits the worker's exact final names, signatures, and compilation evidence from the coordinating parent. This note alone does not certify those new Lean proofs.
