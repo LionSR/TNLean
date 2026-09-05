@@ -6,14 +6,27 @@ Authors: TNLean contributors
 import Mathlib.Data.Fintype.BigOperators
 
 /-!
-# Permutations of nested finite sums
+# Congruence and permutations of nested finite sums
 
 This file collects the binder permutations used by finite tensor-network
-contractions. Each result folds nested sums into an iterated product, reindexes
+contractions, together with congruence for dependent nested sums. Each permutation
+result folds nested sums into an iterated product, reindexes
 that product by an explicit equivalence, and unfolds the sums again.
 -/
 
 open scoped BigOperators
+
+namespace Finset
+
+/-- Equality of summands gives equality of two nested finite sums, even when
+the inner index type depends on the outer index. -/
+theorem sum_congr₂ {ι M : Type*} {κ : ι → Type*} [AddCommMonoid M]
+    {s : Finset ι} {t : (i : ι) → Finset (κ i)} {f g : (i : ι) → κ i → M}
+    (h : ∀ i ∈ s, ∀ j ∈ t i, f i j = g i j) :
+    (∑ i ∈ s, ∑ j ∈ t i, f i j) = ∑ i ∈ s, ∑ j ∈ t i, g i j :=
+  sum_congr rfl fun i hi ↦ sum_congr rfl (h i hi)
+
+end Finset
 
 namespace Fintype
 

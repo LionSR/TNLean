@@ -141,10 +141,8 @@ theorem coordinateCompression_eq_markedChainCoefficient
     Matrix.trace_smul, smul_eq_mul]
   simp only [mpo_apply, mpoMatrixEntry, List.ofFn_succ, Fin.cons_zero,
     Fin.cons_succ, evalWord_cons]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  apply Finset.sum_congr₂
+  intro i _ j _
   ring
 
 /-- The coordinate compression of an MPDO is Hermitian for every tail
@@ -180,10 +178,8 @@ theorem IsMPDO.coordinateCompression_star
     rw [star_mul', star_mul', star_star]
     ring
   rw [hstar, Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  apply Finset.sum_congr₂
+  intro i _ j _
   rw [(hM (N + 1) (by omega)).isHermitian.apply]
 
 /-- **The reflected marked-chain identity of Figure 7.**

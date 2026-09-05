@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSumPermutation
 import Mathlib.LinearAlgebra.BilinearForm.Properties
 import TNLean.Algebra.ListProduct
 import QICLean.Algebra.MatrixTracePairing
@@ -178,10 +179,8 @@ theorem normalizedDiagonal_doubleLayerTensor [NeZero d] (U : MPOTensor d D) :
         (d : ℂ)⁻¹ * ((starRingEnd ℂ) (U j i p₁ q₁) * U j i p₂ q₂)) =
         ∑ x : Fin d × Fin d, g x := by
       rw [Finset.sum_comm, Fintype.sum_prod_type]
-      apply Finset.sum_congr rfl
-      intro i _
-      apply Finset.sum_congr rfl
-      intro j _
+      apply Finset.sum_congr₂
+      intro i _ j _
       simp only [g]
       rw [← hnorm]
       ring
