@@ -251,10 +251,14 @@ theorem clusterSource_groundSpace_three_eq_eigenspace_neg_one :
 
 /-! ### The translated stabilizers on a periodic chain -/
 
-/-- The translated stabilizer \(K_i = \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\)
-on a periodic chain of \(N\) sites, acting by
+/-- The translated stabilizer \(K_i\) on a periodic chain of \(N\) sites, with
+site indices taken modulo \(N\), acting by
 \((K_i\psi)(\sigma) = (-1)^{\sigma_i + \sigma_{i+2}}\,
-\psi(\sigma\text{ with }\sigma_{i+1}\text{ replaced by }\sigma_{i+1}+1)\). -/
+\psi(\sigma\text{ with }\sigma_{i+1}\text{ replaced by }\sigma_{i+1}+1)\).
+For \(N \ge 3\) the sites \(i, i+1, i+2\) are distinct and this is the Pauli
+string \(\sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\); every result below assumes
+\(N \ge 3\). On one site the coordinate formula is \(\sigma^x\), not
+\(\sigma^z\sigma^x\sigma^z = -\sigma^x\). -/
 def clusterChainStabilizer {N : ℕ} (i : Fin N) : NSiteSpace 2 N →ₗ[ℂ] NSiteSpace 2 N where
   toFun ψ σ :=
     (-1 : ℂ) ^ ((σ i).val + (σ (cyclicForwardSite i 2)).val) *

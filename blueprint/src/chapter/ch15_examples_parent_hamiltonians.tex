@@ -256,14 +256,17 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
 \begin{definition}[Translated cluster stabilizers]\label{def:cluster_chain_stabilizer}
     \lean{MPSTensor.clusterChainStabilizer}
     \leanok
-    On a periodic chain of $N$ sites, the stabilizer at site $i$ is
-    $K_i = \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$, with indices modulo $N$:
+    On a periodic chain of $N$ sites, the stabilizer at site $i$ is the
+    operator
     \begin{align}
         (K_i\psi)(\sigma)
          & = (-1)^{\sigma_i+\sigma_{i+2}}\,
-        \psi(\sigma_1,\ldots,\sigma_i,\sigma_{i+1}+1,\sigma_{i+2},\ldots,\sigma_N).
+        \psi(\sigma_1,\ldots,\sigma_i,\sigma_{i+1}+1,\sigma_{i+2},\ldots,\sigma_N),
         \notag
     \end{align}
+    with site indices modulo $N$. For $N\ge3$ the sites $i$, $i+1$, $i+2$
+    are distinct and $K_i = \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$; the
+    results below assume $N\ge3$.
 \end{definition}
 
 \begin{theorem}[Cluster stabilizer ground space is the periodic chain ground space]
