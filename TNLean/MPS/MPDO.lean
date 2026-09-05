@@ -339,6 +339,7 @@ import TNLean.MPS.MPDO.TwistedDimerMPDO
 import TNLean.MPS.MPDO.TwistedDimerNotSimple
 import TNLean.MPS.MPDO.TwistedDimerProductLaw
 import TNLean.MPS.MPDO.TwistedDimerRefine
+import TNLean.MPS.MPDO.TwistedDimerUnitaryFactorization
 import TNLean.MPS.MPDO.TwistedDimerVerticalCF
 import TNLean.MPS.MPDO.TwistedDimerViaTS
 import TNLean.MPS.MPDO.TwoSitePrefixReflectedMarkedChain
