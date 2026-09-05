@@ -230,7 +230,7 @@ private lemma decoratedState_eq (N : ℕ) :
   ext s t
   simp only [decoratedState, evenFlagState, Matrix.submatrix_apply, Matrix.kronecker_apply,
     Matrix.smul_apply, Matrix.add_apply, smul_eq_mul, powN, Equiv.trans_apply,
-    bondFlagEquiv, Equiv.coe_fn_mk]
+    bondFlagEquiv, Equiv.arrowProdEquivProdArrow_apply]
   ring
 
 private lemma conjugate_decoratedState (N : ℕ) :
