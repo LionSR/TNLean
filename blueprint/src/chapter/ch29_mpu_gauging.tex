@@ -4775,3 +4775,292 @@ by the displayed matrices.
          & =\sum_{p\in\mathbb F_2^N}1=2^N.
     \end{align}
 \end{proof}
+
+\subsection{A second displayed circuit tuple at three and four sites}
+
+The source constrains the block $U_{1,1}$ of (\ref{eq:mpug_czx_tuple}) only
+through its action on the prescribed defect subspace
+$\spn_{\C}\{\ket{0011},\ket{1100}\}$; the three remaining defect domains and
+maps are not supplied. Replacing $\tilde\lambda$ by another unitary with the
+same action on that subspace therefore produces a second displayed tuple, and
+the dimension of the associated common $+1$ eigenspace changes already at three
+and four blocked sites.
+
+\begin{definition}[The second displayed circuit tuple]
+    \label{def:mpug_czx_star_tuple}
+    \lean{MPOTensor.CZX.rStarExponent,
+        MPOTensor.CZX.rStar,
+        MPOTensor.CZX.rStar_eq,
+        MPOTensor.CZX.rStarExponent_zero_zero_one_one,
+        MPOTensor.CZX.rStarExponent_one_one_zero_zero,
+        MPOTensor.CZX.rStar_mulVec_eq_self,
+        MPOTensor.CZX.tildeLambdaStar,
+        MPOTensor.CZX.tildeLambdaStar_eq,
+        MPOTensor.CZX.tildeLambdaStar_mem_unitaryGroup,
+        MPOTensor.CZX.circuitTupleStar,
+        MPOTensor.CZX.circuitTupleStar_one,
+        MPOTensor.CZX.circuitTupleStar_gen_one,
+        MPOTensor.CZX.circuitTupleStar_gen_gen}
+    \leanok
+    \uses{def:mpug_czx_circuit_tuple, thm:mpug_czx_phase_tables}
+    In the qubit numbering of Definition~\ref{def:mpug_czx_circuit_tuple}, set
+    \begin{align}
+        r_\star(x) & =x_1+x_3+x_0x_1+x_0x_3+x_1x_2+x_2x_3,
+        \label{eq:mpug_czx_star_phase}                                         \\
+        R_\star    & =Z_1Z_3\,\mathrm{CZ}_{01}\mathrm{CZ}_{03}\mathrm{CZ}_{12}
+        \mathrm{CZ}_{23}.
+        \label{eq:mpug_czx_star_gate}
+    \end{align}
+    Then $R_\star\ket{x}=(-1)^{r_\star(x)}\ket{x}$, and
+    $r_\star(0011)=r_\star(1100)=0$, so $R_\star$ fixes the prescribed defect
+    subspace $\spn_{\C}\{\ket{0011},\ket{1100}\}$ pointwise. The second
+    displayed circuit tuple is
+    \begin{align}
+        R^\star
+         & =\bigl(U^\star_{0,0},U^\star_{0,1},U^\star_{1,0},U^\star_{1,1}\bigr)
+        =\bigl(\Id,\Id,w,\tilde\lambda R_\star\bigr),
+        \label{eq:mpug_czx_star_tuple}
+    \end{align}
+    with
+    $\tilde\lambda R_\star\ket{x}=-i(-1)^{f(x)+r_\star(x)}\ket{\overline x}$;
+    after transport to the two-site matter coordinates it is unitary. It has the
+    same action as $R^{\mathrm{CZX}}$ on the prescribed defect subspace. Since
+    the other three defect domains and maps are not supplied, this does not
+    place the two tuples in one fully defined four-sector completion class.
+    % Source anchor: arXiv:2502.20257, lines 4503--5183 (CZX model, defect and
+    % fusion data, modified Gauss law).
+\end{definition}
+
+\begin{theorem}[Local monomial action of the second tuple's Gauss operator]
+    \label{thm:mpug_czx_star_local_monomial_action}
+    \lean{MPOTensor.CZX.rStarExponent_barFlip,
+        MPOTensor.CZX.starDefect,
+        MPOTensor.CZX.phaseExponentStar,
+        MPOTensor.CZX.phaseExponentStar_zero_zero,
+        MPOTensor.CZX.phaseExponentStar_zero_one,
+        MPOTensor.CZX.phaseExponentStar_one_zero,
+        MPOTensor.CZX.phaseExponentStar_one_one,
+        MPOTensor.CZX.localPhaseStar,
+        MPOTensor.CZX.gaussOperator_circuitTupleStar_gen}
+    \leanok
+    \uses{def:mpug_czx_star_tuple, def:mpug_gauss_operator}
+    The nontrivial local Gauss operator obtained from
+    (\ref{eq:mpug_czx_star_tuple}) and (\ref{eq:mpug_gauss_operator}) is the
+    monomial operator $G^\star\ket{s}=i^{q^\star(s)}\ket{\sigma(s)}$ with the
+    same permutation part $\sigma$ as in
+    (\ref{eq:mpug_czx_monomial_action}) and with
+    \begin{align}
+        q^\star(x_0,x_1,a,x_2,x_3,a') & =q(x_0,x_1,a,x_2,x_3,a')
+        +2\delta_\star(x,a,a')
+        \label{eq:mpug_czx_star_phase_table}
+    \end{align}
+    modulo $4$, where $\delta_\star(x,0,0)=r_\star(\overline x)$,
+    $\delta_\star(x,1,1)=r_\star(x)$, and $\delta_\star$ vanishes in the two
+    remaining gauge sectors. The phase polynomial satisfies
+    \begin{align}
+        r_\star(\overline x) & =r_\star(x)+x_0+x_1+x_2+x_3.
+        \label{eq:mpug_czx_star_bar}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauss_operator_monomial, thm:mpug_czx_phase_tables,
+        def:mpug_czx_star_tuple}
+    By Theorem~\ref{thm:mpug_gauss_operator_monomial} the operator is monomial,
+    and the two blocks $U^\star_{0,1}=\Id$ and $U^\star_{1,0}=w$ agree with
+    those of (\ref{eq:mpug_czx_tuple}), so the $(0,1)$ and $(1,0)$ rows of the
+    phase table are unchanged. In the $(1,1)$ sector the phase acquires the
+    factor $(-1)^{r_\star(x)}$ from
+    $\tilde\lambda R_\star\ket{x}=-i(-1)^{f(x)+r_\star(x)}\ket{\overline x}$; in
+    the $(0,0)$ sector the adjoint formula
+    (\ref{eq:mpug_monomial_adjoint}) evaluates that phase at $\overline x$ and
+    conjugates it, which contributes $(-1)^{r_\star(\overline x)}$. Since
+    $R_\star$ is diagonal, the permutation part is that of
+    (\ref{eq:mpug_czx_monomial_action}). Identity
+    (\ref{eq:mpug_czx_star_bar}) and the four rows of
+    (\ref{eq:mpug_czx_star_phase_table}) are checked on the sixteen bit
+    strings.
+\end{proof}
+
+\begin{theorem}[Involution and neighboring holonomy for the second tuple]
+    \label{thm:mpug_czx_star_holonomy}
+    \lean{MPOTensor.CZX.bondExponentStar,
+        MPOTensor.CZX.starHolonomyLabel,
+        MPOTensor.CZX.bondExponentStar_add_bondExponentStar_chainFlip,
+        MPOTensor.CZX.bondExponentStar_holonomy,
+        MPOTensor.CZX.bondExponentStar_chainFlip_of_disjoint,
+        MPOTensor.CZX.starFiberLabel,
+        MPOTensor.CZX.starHolonomyLabel_fiberEquiv,
+        MPOTensor.CZX.fiberPhaseStar,
+        MPOTensor.CZX.fiberPhaseStar_mul_fiberPhaseStar_flip,
+        MPOTensor.CZX.fiberPhaseStar_flip_of_disjoint,
+        MPOTensor.CZX.fiberPhaseStar_holonomy,
+        MPOTensor.CZX.fiberPhaseStar_ne_zero}
+    \leanok
+    \uses{def:mpug_czx_chain_labels, def:mpug_czx_star_tuple}
+    Let $q^\star_j(s)$ be the table (\ref{eq:mpug_czx_star_phase_table})
+    evaluated on the bond $(j,j+1)$ as in
+    Definition~\ref{def:mpug_czx_chain_labels}, and set
+    \begin{align}
+        c_j(s) & =b_{j+1}(s)\bigl(1+p_j(s)+p_{j+1}(s)\bigr)
+        +b_{j+2}(s)\bigl(p_{j+1}(s)+p_{j+2}(s)\bigr).
+        \label{eq:mpug_czx_star_holonomy_label}
+    \end{align}
+    For every $N\geq3$, every bond $j$, and every configuration $s$,
+    \begin{align}
+        q^\star_j(s)+q^\star_j(\sigma_js)
+         & =0,
+        \label{eq:mpug_czx_star_involution}                   \\
+        q^\star_j(s)+q^\star_{j+1}(\sigma_js)
+         & =q^\star_{j+1}(s)+q^\star_j(\sigma_{j+1}s)+2c_j(s)
+        \label{eq:mpug_czx_star_holonomy}
+    \end{align}
+    modulo $4$, and $q^\star_j(\sigma_ks)=q^\star_j(s)$ whenever
+    $k\notin\{j-1,j,j+1\}$. In the fiber coordinates
+    (\ref{eq:mpug_czx_fiber_coordinates}) the label $c_j$ depends only on the
+    orbit labels, $c_j(p,b)=b_{j+1}(1+p_j+p_{j+1})+b_{j+2}(p_{j+1}+p_{j+2})$,
+    and the phases $\varphi^\star_j=i^{q^\star_j}$ are involutive and satisfy
+    the neighboring square relation with factor $(-1)^{c_j(p,b)}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_local_monomial_action,
+        thm:mpug_czx_orbit_classification}
+    The exponent $q^\star_j$ depends only on the six bits at the sites $j$ and
+    $j+1$, which gives the disjoint-bond statement. For
+    (\ref{eq:mpug_czx_star_involution}) the flip $\sigma_j$ changes $x_0$,
+    $x_1$, $a$, and $a'$, and the identity is verified on the $64$ values of
+    those six bits. For (\ref{eq:mpug_czx_star_holonomy}) the sites $j$,
+    $j+1$, $j+2$ are distinct because $N\geq3$, and the identity is verified on
+    the $512$ values of the nine bits at those three sites. In fiber
+    coordinates $p$ and $b$ are read off by
+    Theorem~\ref{thm:mpug_czx_orbit_classification}, which turns $c_j$ into the
+    displayed polynomial in the orbit labels alone.
+\end{proof}
+
+\begin{theorem}[Fixed spaces on the orbit fibers for the second tuple]
+    \label{thm:mpug_czx_star_good_fibers}
+    \lean{MPOTensor.CZX.isTrivialHolonomy_fiberPhaseStar_iff}
+    \leanok
+    \uses{def:mpug_trivial_holonomy, thm:mpug_czx_orbit_classification,
+        thm:mpug_czx_star_holonomy}
+    Let $N\geq3$. In the fiber coordinates
+    (\ref{eq:mpug_czx_fiber_coordinates}), the phases $i^{q^\star_j}$ have
+    trivial holonomy on the fiber over $(p,b)$ if and only if $c_j(p,b)=0$ for
+    every $j\in\Z/N\Z$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_holonomy, thm:mpug_czx_orbit_classification}
+    If all $c_j(p,b)$ vanish, then for $k=j+1$ or $j=k+1$ the square identity is
+    (\ref{eq:mpug_czx_star_holonomy}) with vanishing correction, for $k=j$ it is
+    trivial, and otherwise the bonds are disjoint and both sides agree.
+    Conversely, trivial holonomy at the square spanned by the bonds $j$ and
+    $j+1$ at $\gamma=0$ gives $(-1)^{c_j(p,b)}=1$ by
+    (\ref{eq:mpug_czx_star_holonomy}), since the phases are nonzero, hence
+    $c_j(p,b)=0$.
+\end{proof}
+
+\begin{theorem}[The placed Gauss operators of the second tuple]
+    \label{thm:mpug_czx_star_placed_operators}
+    \lean{MPOTensor.CZX.placedGaussOperatorStar,
+        MPOTensor.CZX.gaussProjector_circuitTupleStar,
+        MPOTensor.CZX.placedGaussProjector_circuitTupleStar,
+        MPOTensor.CZX.commonFixedSubmodule_placedGaussProjector_circuitTupleStar,
+        MPOTensor.CZX.placedGaussOperatorStar_eq_monomial,
+        MPOTensor.CZX.localPhaseStar_window,
+        MPOTensor.CZX.placedGaussOperatorStar_eq_reindex}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
+        def:mpug_czx_chain_labels, def:mpug_common_fixed_subspace}
+    Let $N\geq2$ and let $G^\star_j$ be the local Gauss operator of
+    Theorem~\ref{thm:mpug_czx_star_local_monomial_action} placed on the bond
+    $(j,j+1)$. The placed Gauss projector of
+    Definition~\ref{def:mpug_placed_gauss_projector} is
+    $\widetilde P^\star_j=\tfrac12(\Id+G^\star_j)$, so the common fixed subspace
+    $\mathcal V_N(R^\star)$ of the $\widetilde P^\star_j$ is the common fixed
+    subspace of the $G^\star_j$. In the coordinates
+    (\ref{eq:mpug_czx_configuration}), $G^\star_j$ is the monomial operator
+    $G^\star_j\ket{s}=i^{q^\star_j(s)}\ket{\sigma_js}$, and in the fiber
+    coordinates (\ref{eq:mpug_czx_fiber_coordinates}) it is the monomial
+    operator with permutation $\gamma\mapsto\gamma+e_j$ and phase
+    $i^{q^\star_j}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_gauss_projector, thm:mpug_czx_star_local_monomial_action,
+        thm:mpug_embed_monomial, thm:mpug_czx_orbit_classification,
+        thm:mpug_czx_placed_operators}
+    The average over $\Z_2=\{e,g\}$ is $\frac12(\mathcal G_e+\mathcal G_g)$ with
+    $\mathcal G_e=\Id$, and relabelling and placement are linear and unital. A
+    vector $v$ satisfies $\frac12(v+G^\star_jv)=v$ exactly when
+    $G^\star_jv=v$. Theorem~\ref{thm:mpug_czx_star_local_monomial_action} and
+    Theorem~\ref{thm:mpug_embed_monomial} express $G^\star_j$ as a monomial
+    operator; the permutation part is that of
+    Theorem~\ref{thm:mpug_czx_placed_operators}, and decoding the two-site
+    window at $j$ identifies the phase with $i^{q^\star_j(s)}$. Finally
+    Theorem~\ref{thm:mpug_czx_orbit_classification} transports both to the
+    fiber coordinates.
+\end{proof}
+
+\begin{theorem}[Reduction of the dimension to a finite count]
+    \label{thm:mpug_czx_star_reduction}
+    \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
+        def:mpug_common_fixed_subspace}
+    On a periodic chain of $N\geq3$ blocked sites,
+    \begin{align}
+        \dim\mathcal V_N(R^\star)
+         & =\#\bigl\{(p,b)\in\mathbb F_2^N\times\mathbb F_2^N:
+        c_j(p,b)=0\text{ for all }j\in\Z/N\Z\bigr\}.
+        \label{eq:mpug_czx_star_count}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_placed_operators,
+        thm:mpug_monomial_fixed_space_criterion,
+        thm:mpug_czx_star_holonomy, thm:mpug_czx_star_good_fibers}
+    By Theorem~\ref{thm:mpug_czx_star_placed_operators},
+    $\mathcal V_N(R^\star)$ is the common fixed subspace of monomial operators
+    which, in fiber coordinates, have permutations $\gamma\mapsto\gamma+e_j$ on
+    the fibers over $(p,b)$, and by (\ref{eq:mpug_czx_star_involution}) these
+    operators are involutions. The monomial fixed-space criterion
+    (\ref{eq:mpug_monomial_fixed_space_count}) counts the fibers with trivial
+    holonomy, which by Theorem~\ref{thm:mpug_czx_star_good_fibers} are exactly
+    the fibers whose labels satisfy the $N$ equations $c_j(p,b)=0$.
+\end{proof}
+
+\begin{theorem}[Dimensions for the second displayed tuple at three and four sites]
+    \label{thm:mpug_czx_star_dimension}
+    \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar_three,
+        MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar_four}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
+        def:mpug_common_fixed_subspace}
+    On periodic chains of three and four blocked sites,
+    \begin{align}
+        \dim\mathcal V_3(R^\star) & =14,
+        \label{eq:mpug_czx_star_dim_three} \\
+        \dim\mathcal V_4(R^\star) & =36.
+        \label{eq:mpug_czx_star_dim_four}
+    \end{align}
+    These two values are certificates at two system sizes. They carry no
+    asymptotic content, and no growth law for $\dim\mathcal V_N(R^\star)$
+    follows from them. They assert nothing about the physical completion class
+    of the CZX defect data, since the three remaining defect domains and maps
+    are not supplied, and they give no value for the minimum or the maximum of
+    the dimension over completions. Compared with
+    (\ref{eq:mpug_czx_dimension}), which gives $8$ and $16$ at the same two
+    sizes, they exhibit dependence of the dimension on the displayed circuit
+    data at those two sizes.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_reduction}
+    Evaluate the right-hand side of (\ref{eq:mpug_czx_star_count}) by
+    exhaustive enumeration: at $N=3$ the $64$ pairs $(p,b)$ yield $14$
+    solutions of the three equations $c_j(p,b)=0$, and at $N=4$ the $256$ pairs
+    yield $36$ solutions of the four equations.
+\end{proof}
