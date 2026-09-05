@@ -381,8 +381,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   together with the provenance of the minimal-ring cyclic change of cut (a
   TNLean reconstruction, since the review prints no proof at the minimal
   ring and the PGVWC07 route needs a ring of length at least twice the
-  injectivity length) and of the wrapped/mirror witness comparison (a
-  reformulation of the printed change of cut).
+  injectivity length) and of the wrapped/mirror witness comparison (the
+  printed comparison of two cut matrices, derived by a single-letter route
+  that is an alternative proof on the printed range and a TNLean
+  reconstruction on the short rings below twice the injectivity length).
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span. The fixed-window

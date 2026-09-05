@@ -667,12 +667,24 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
 \(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j\Rightarrow
 Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
 The two witness families \(Y^+\), \(Y^-\), indexed by full ring
-configurations and compared through the fixed background letter \(\eta\), are
-a reformulation of the single change-of-cut relation
-\(XA_{i_1}\cdots A_{i_{L₀}}=A_{i_1}\cdots A_{i_{L₀}}Y\) in the periodic
-uniqueness proof of [PGVWC07] arXiv:quant-ph/0608197, lines 1277--1291, not
-a different argument: each family records the shifted-cut matrix \(Y\) for
-one of the two boundary-crossing windows.
+configurations and compared through the fixed background letter \(\eta\),
+record the shifted-cut matrix \(Y\) of the periodic uniqueness proof of
+[PGVWC07] arXiv:quant-ph/0608197, lines 1277--1291, at the two
+boundary-crossing windows, and their equality is that proof's comparison of
+the boundary matrices at two cuts, read at those windows.
+
+The printed proof reaches its comparison by moving a length-\(L₀\) word
+through the cut and using injectivity of the complementary word of length
+\(N-L₀\); its hypothesis is \(N\ge 2L₀\), line 1268. The proof here moves a
+single letter through the cut instead, transports the shifted-cut matrix
+along adjacent windows of length \(L₀+1\), and cancels the right-products by
+the length-\(L₀\) words inside one window. It uses no word of length
+\(N-L₀\) and is uniform in \(N\). For \(N\ge 2L₀\) it is an alternative
+derivation of the printed comparison on the printed range. For the short
+rings \(L₀+1<N<2L₀\) the complementary word is shorter than \(L₀\), the
+printed derivation does not apply, and the single-letter route is a TNLean
+reconstruction, recorded in the provenance section of
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
 **Scope restriction:** \(L₀+1<N\) excludes the minimal ring \(N=L₀+1\);
 see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
@@ -716,7 +728,8 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ < M) hψred hψX YAt hYAt η μ j
 
 /-- At the source-minimal length \(N=L₀+1\), the full-ring cyclic
-change-of-cut argument identifies the chain ground space with the MPS line.
+change-of-cut argument proves the containment of the chain ground space in
+the MPS line; the reverse inclusion is `mpv_mem_chainGroundSpace`.
 
 This is the minimal-ring endpoint of the range-\((L₀+1)\) uniqueness theorem
 stated in arXiv:2011.12127, Section IV.C, lines 2087--2090. The source prints

@@ -387,9 +387,8 @@ word, and block injectivity at length $L_0+1$ makes $X$ scalar. The formal
 argument is
 \leanid{MPSTensor.full_ring_boundary_intertwines_of_chainGroundSpace}.
 
-The boundary comparison for $L_0+1<N$ is a reformulation of
-Eq.~\ref{eq:cpgsv21_normal_range_reduction_printed_change_of_cut}, not a
-different argument. The formal statement
+The boundary comparison for $L_0+1<N$ splits into the printed range
+$N\geq 2L_0$ and the short rings $L_0+1<N<2L_0$. The formal statement
 \leanid{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace} records
 the shifted-cut matrix $Y$ of Ref.~\cite{PerezGarcia2007Matrix} as two
 families $Y^+$ and $Y^-$ indexed by full ring configurations, one for each
@@ -398,8 +397,38 @@ letter $\eta$ and complementary word $\mu$ of
 Eqs.~\ref{eq:cpgsv21_normal_range_reduction_positive_boundary_word}
 and~\ref{eq:cpgsv21_normal_range_reduction_negative_boundary_word}. The
 equality $Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}$ is the printed
-relation read at the two windows that cross the cut; the bookkeeping is
-heavier than the printed two lines, but the mathematics is the same.
+comparison of the boundary matrices at two cuts, read at the two windows
+that cross the cut.
+
+The formal derivation of this equality does not follow the printed one. The
+printed derivation moves a length-$L_0$ word through the cut and needs the
+complementary word of length $N-L_0$ to be injective, which is the
+hypothesis $N\geq 2L_0$. The formal derivation moves a single letter through
+the cut, as in the minimal-ring reconstruction above: the two
+boundary-crossing windows give the one-sided equations
+Eqs.~\ref{eq:cpgsv21_normal_range_reduction_left_boundary_product}
+and~\ref{eq:cpgsv21_normal_range_reduction_right_boundary_product}, the
+shifted-cut matrix is transported along adjacent windows of length $L_0+1$ to
+the block-window identity
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_block_window_matrix_identity},
+the block-injective commutation lemma turns that identity into
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_one_site_commutation}, and the
+right-products $Y^+A^j=Y^-A^j$ are cancelled by the spanning length-$L_0$
+words. Every injectivity step uses a word of length $L_0$ inside one window;
+no step uses a word of length $N-L_0$, and the derivation is uniform in $N$.
+
+For $N\geq 2L_0$ the printed hypothesis holds, the printed derivation through
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_printed_change_of_cut} applies,
+and the formal derivation is an alternative proof of the same comparison on
+the printed range. For the short rings $L_0+1<N<2L_0$ the complementary word
+of a length-$L_0$ word has length $N-L_0<L_0$, on which the tensor need not
+be injective, so the printed derivation does not apply, and the single-letter
+derivation is a TNLean reconstruction. It differs from the minimal-ring
+reconstruction only in how the commutation is recovered: the complementary
+word $\mu$ is nonempty, so the boundary-crossing windows already yield
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_block_window_matrix_identity},
+and Eq.~\ref{eq:cpgsv21_normal_range_reduction_one_site_commutation} follows
+from block injectivity without comparing all $N$ cyclic cuts.
 
 \section{Conclusion}
 
