@@ -4574,6 +4574,22 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     $\Id\neq0$ because $D>0$.
 \end{proof}
 
+\begin{lemma}[Trace pairing of a conjugated word against a boundary matrix]
+    \label{lem:trace_gauge_boundary}
+    \lean{MPSTensor.trace_gauge_boundary}
+    \leanok
+    Let $X$ be invertible and let $E$ and $Y$ be $D\times D$ matrices.  Then
+    \begin{align}
+        \tr\bigl(XEX^{-1}Y\bigr) & =\tr\bigl(E\,X^{-1}YX\bigr). \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Cyclicity of the trace moves the leading factor $X$ to the end of the
+    product.
+\end{proof}
+
 \begin{theorem}[Gauge invariance of the local ground space]
     \label{thm:local_ground_space_gauge_invariance}
     \lean{MPSTensor.GaugeEquiv.groundSpace_le,
@@ -4586,12 +4602,13 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:gauge_invariance}
-    If $B^i=XA^iX^{-1}$, then every length-$L$ word of $B$ is the conjugate
-    of the corresponding word of $A$, so the boundary parametrization of $B$
-    at $Y$ agrees with that of $A$ at $X^{-1}YX$, and conjugation by $X$ is a
-    bijection of $\MN{D}$.  This gives $G_L(B)\subseteq G_L(A)$, and the
-    symmetric argument gives the reverse inclusion.
+    \uses{lem:eval_word_gauge, lem:trace_gauge_boundary}
+    If $B^i=XA^iX^{-1}$, then $B^\sigma=XA^\sigma X^{-1}$ for every length-$L$
+    configuration $\sigma$ by Lemma~\ref{lem:eval_word_gauge}, so by
+    Lemma~\ref{lem:trace_gauge_boundary} the boundary parametrization of $B$
+    at $Y$ agrees with that of $A$ at $X^{-1}YX$.  This gives
+    $G_L(B)\subseteq G_L(A)$, and the symmetric argument applied to
+    $A^i=X^{-1}B^iX$ gives the reverse inclusion.
 \end{proof}
 
 \begin{theorem}[Rescaling invariance of the local ground space]
@@ -4673,7 +4690,9 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
         V^{(N)}(B)_{\sigma}
          & =\zeta^{N}V^{(N)}(A)_{\sigma} \notag
     \end{align}
-    for every chain length $N$ and every configuration $\sigma$.  Moreover
+    for every chain length $N$ and every configuration $\sigma$.  The local
+    ground spaces, the parent interactions, and the periodic chain ground
+    spaces of $A$ and $B$ also coincide:
     \begin{align}
         G_L(A)              & =G_L(B), \notag             \\
         h_L(A)              & =h_L(B), \notag             \\
