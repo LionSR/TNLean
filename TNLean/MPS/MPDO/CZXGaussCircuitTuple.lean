@@ -271,9 +271,11 @@ These are the fusion operators $\lambda^R_{e,e}=\lambda^R_{e,g}=\mathrm{id}$,
 $\lambda^R_{g,e}=w_R$, and the modified fusion operator
 $\tilde\lambda^R_{g,g}$ of arXiv:2502.20257 (lines 4503--5183).
 
-Whether this tuple belongs to the full physical completion class of the CZX
-defect data is not asserted; only the $(1,1)$ defect map is supplied by the
-source. -/
+The source displays only the $(1,1)$ defect map, so membership of this tuple in
+the full completion class of the CZX defect data is not visible from the
+matrices alone. Against the four defect maps derived from the displayed
+tensors it is proved in
+`MPOTensor.CZX.circuitTuple_mem_completionClass`. -/
 def circuitTuple (a b : Multiplicative (ZMod 2)) : Matrix.unitaryGroup (Fin 2 → Fin 4) ℂ :=
   if Multiplicative.toAdd a = 0 then 1
   else if Multiplicative.toAdd b = 0 then ⟨matterMatrix w, w_mem_unitaryGroup⟩

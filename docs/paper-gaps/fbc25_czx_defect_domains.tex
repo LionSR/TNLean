@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{clarification}{open}
+\gapnote{clarification}{resolved}
 
 \section{The assertion}
 
@@ -403,30 +403,35 @@ the opposite reading the two scalars are exchanged. Either reading gives the
 same four domains and the same four prescribed maps, since the scalars enter
 both sides of Eq.~\ref{eq:fbc25_czx_prescription} consistently.
 
-\section{Formal boundary and elimination plan}
+\section{Formal state}
 
-The single-site defects of
-Eqs.~\ref{eq:fbc25_czx_defect_g1}--\ref{eq:fbc25_czx_defect_e}, the eight
-two-site vectors of
+The gap is resolved. Everything this note asserts is formal: the single-site
+defects of Eqs.~\ref{eq:fbc25_czx_defect_g1}--\ref{eq:fbc25_czx_defect_e}, the
+eight two-site vectors of
 Eqs.~\ref{eq:fbc25_czx_v_ee}--\ref{eq:fbc25_czx_v_gg}, the domains of
 Eqs.~\ref{eq:fbc25_czx_even_domains} and~\ref{eq:fbc25_czx_odd_domains}, and
 the prescribed maps of
-Eqs.~\ref{eq:fbc25_czx_maps_identity}--\ref{eq:fbc25_czx_map_gg} are carried
-by formal declarations, packaged as one family of prescribed defect maps
-satisfying Eq.~\ref{eq:fbc25_czx_prescription} on their domains, together with
-the orthogonality of Eq.~\ref{eq:fbc25_czx_targets_orthogonal} and the
-two-dimensionality of each domain. The formal development also contains the
-four circuits, their phase
-tables, and the exact dimension of the gauge-invariant subspace of the
-displayed tuple. What remains is the finite computation of
-Eqs.~\ref{eq:fbc25_czx_w_identity_0}--\ref{eq:fbc25_czx_tilde_identity_1},
-proving that the displayed tuple is a member of the completion class of those
-prescribed maps; this removes the conditional clause from the lower bound on
-the maximal gauge-invariant dimension. The CZX defect and fusion data are
-tracked by \ghissue{7355}, the prescribed defect maps by \ghissue{7739}, the
-completion membership of the displayed tuple by \ghissue{7740}, the
-completion-class instance by \ghissue{7569}, and the
-gauge-invariant-subspace problem by \ghissue{7568}.
+Eqs.~\ref{eq:fbc25_czx_maps_identity}--\ref{eq:fbc25_czx_map_gg}, packaged as
+one family of prescribed defect maps satisfying
+Eq.~\ref{eq:fbc25_czx_prescription} on their domains, together with the
+orthogonality of Eq.~\ref{eq:fbc25_czx_targets_orthogonal} and the
+two-dimensionality of each domain. The four circuits and their phase tables
+are formal, as is the finite computation of
+Eqs.~\ref{eq:fbc25_czx_w_identity_0}--\ref{eq:fbc25_czx_tilde_identity_1}: both
+displayed tuples are members of the completion class of those prescribed maps,
+and the lower bounds on the gauge-invariant dimension over that class carry no
+conditional clause.
+
+The minimum over the class, the exact value of the supremum, and which
+completion attains it lie outside this note, which concerns the defect data
+read off the diagrams. They are questions about the completion class itself,
+tracked by \ghissue{7568}, and the source raises neither: what
+Ref.~\cite[lines~5198--5204]{FrancoRubio2025MPUGauging} leaves open is whether
+the gauge-invariant subspace of the state-level gauging stays bounded or grows
+with the system size. The CZX defect and fusion data are tracked by
+\ghissue{7355}, the prescribed defect maps by \ghissue{7739}, the completion
+membership of the displayed tuples by \ghissue{7740}, and the completion-class
+instance by \ghissue{7569}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

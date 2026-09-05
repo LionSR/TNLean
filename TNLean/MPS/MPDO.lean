@@ -106,6 +106,7 @@ import TNLean.MPS.MPDO.CPSVVerticalDecomposition
 import TNLean.MPS.MPDO.CPSVVerticalProductCornerPositivity
 import TNLean.MPS.MPDO.CPSVVerticalProductFusionDecomposition
 import TNLean.MPS.MPDO.CPSVVerticalProductSpectralFamily
+import TNLean.MPS.MPDO.CZXCompletion
 import TNLean.MPS.MPDO.CZXDefectMaps
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
 import TNLean.MPS.MPDO.CZXGaussInvariantSubspace
