@@ -3,6 +3,7 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
 \title{CZX: Normalization and the Physical Z Gates}
 \author{}
 \date{2026-09-04}
@@ -11,16 +12,22 @@
 \gapnote{false-source}{open}
 
 \section{The 2017 contraction convention and its obstruction}
-In \cite{Cirac2017MPU}, equation \texttt{coefficients}
-(\texttt{paper\_v2.tex}, lines 226--246) defines the periodic contraction
-as an ordinary trace, with no length-dependent prefactor. Section III,
-lines 318--350, requires the resulting operator to be unitary and separately
-normalizes its transfer matrix by $1/d$. That transfer normalization does
-not rescale the physical operator.
+Section II, ``Basics in Matrix Product Vectors'', of
+\cite{Cirac2017MPU} defines the periodic contraction as an ordinary trace,
+with no length-dependent prefactor. Section III, ``Structure of MPU'',
+requires the resulting operator to be unitary and separately normalizes
+its transfer matrix by $1/q$, where $q$ is the local physical dimension
+($q=2$ here). That transfer normalization does not rescale the physical
+operator.\footnote{Source traceability: \path{Papers/1703.09188/paper_v2.tex},
+    lines 226--246 and 318--350. The declared auxiliary-label build for this
+    archived source currently fails at the title's malformed accent command;
+    the printed section and example designations are used here instead.}
 
 Write $u,d,\ell,r\in\{0,1\}$ for upper, lower, left and right indices,
 $X_{ud}=\delta_{u,1-d}$, and $H_{\ell r}=2^{-1/2}(-1)^{\ell r}$.
-Example \texttt{example:czx} of \cite{Cirac2017MPU}, lines 1914--1930, prints
+The example headed ``CZX'' in the time-reversal symmetry subsection of
+\cite{Cirac2017MPU} prints\footnote{Source traceability:
+    \path{Papers/1703.09188/paper_v2.tex}, lines 1914--1930.}
 \begin{align}
     P^{ud}_{\ell r} & =X_{ud}\delta_{u,\ell}H_{\ell r}.
     \label{eq:czx_printed_tensor}
@@ -42,16 +49,20 @@ Blocking $L>0$ sites replaces $n$ by $Ln$ and cannot remove this obstruction.
 This is a nondegenerate normalization error, not a zero-sector convention.
 
 \section{What the 2025 diagram actually says}
-In \cite{FrancoRubio2025MPUGauging}, \texttt{main.tex}, equations \texttt{eq:CZ} and
-\texttt{eq:deltas} (lines 3795--3851), the blue two-leg tensor is explicitly
-$W=\sqrt{2}H$, with entries $W_{\ell r}=(-1)^{\ell r}$; the wire junctions
-are ordinary copy deltas. Equation \texttt{eq:MPU\_CZX}
-(lines 4503--4547) has two such blue tensors, two lower physical $X$
-gates and two upper physical $Z$ gates. None may be dropped.
+Equations~\papereqref{fbc25}{eq:CZ} and
+\papereqref{fbc25}{eq:deltas} of \cite{FrancoRubio2025MPUGauging}
+define the blue two-leg tensor as $W=\sqrt{2}H$, with entries
+$W_{\ell r}=(-1)^{\ell r}$; the wire junctions are ordinary copy deltas.
+The CZX tensor in Equation~\papereqref{fbc25}{eq:MPU_CZX} of
+\cite{FrancoRubio2025MPUGauging} has two such blue tensors, two lower
+physical $X$ gates and two upper physical $Z$ gates. None may be
+omitted.\footnote{Source traceability: \path{Papers/2502.20257/main.tex},
+    lines 3795--3851 and 4503--4547.}
 
 For comparison only, let $A=\sqrt{2}P$. Reading the two physical legs
 left to right, let their outputs be $a,b$ and inputs $c,d$.
-The ordinary two-site block of $A$ is
+Writing $P_2$ and $A_2$ for the ordinary two-site blocks of $P$ and $A$,
+the latter has entries
 \begin{align}
     (A_2)^{ab,cd}_{\ell r}
      & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}(-1)^{ab+br}.
@@ -75,32 +86,39 @@ At $m=2$, compare all-zero output with output $0100$, each against its
 bitwise-complement input. This also excludes an identification merely by
 periodic virtual gauge transformation or a global scalar.
 
-The left-to-right pair $(a,b)$ is encoded as $2a+b$, consistent with
-\leanid{MPOTensor.CZX.siteBits}; successive pairs give the four-bit order
-of \leanid{MPOTensor.CZX.localBits}. No new gate or bit encoding is needed.
+The left-to-right pair $(a,b)$ is encoded as $2a+b$; successive pairs
+give the four-bit order used for two neighboring blocked sites.\footnote{The
+    existing encodings are \leanid{MPOTensor.CZX.siteBits} and
+    \leanid{MPOTensor.CZX.localBits}.}
 The formulas (\ref{eq:czx_repaired_block}) and
 (\ref{eq:czx_decorated_block}) are an informal source audit, not new
 public tensor definitions or a formal proof of their correspondence.
 
 \section{Checked boundary and elimination plan}
-\leanid{MPOTensor.CZX.printed2017Tensor} records only the literal printed
-2017 witness. Theorems
-\leanid{MPOTensor.CZX.printed2017Tensor\_two\_zero\_row} and
-\leanid{MPOTensor.CZX.printed2017Tensor\_not\_isMPU} formally prove the
-two-site row formula and the failure of the MPU predicate.
-The all-length contraction and the 2025 formulas above are mathematical
-derivations, not claims of additional checked Lean theorems.
+The checked witness is exactly the printed tensor
+(\ref{eq:czx_printed_tensor}). The formal results establish its two-site
+all-zero row formula and its failure to generate a matrix product
+unitary.\footnote{Witness: \leanid{MPOTensor.CZX.printed2017Tensor}.
+    Results: \leanid{MPOTensor.CZX.printed2017Tensor_two_zero_row} and
+    \leanid{MPOTensor.CZX.printed2017Tensor_not_isMPU}.}
+The all-length contraction (\ref{eq:czx_periodic_contraction}) and the
+comparison (\ref{eq:czx_decorated_block}) are mathematical derivations
+in this note, not additional checked correspondence theorems.
 
-Issue \#7738 must not be closed as though its requested exact identity
-were proved. Its source identification needs correction: expose one
-shared, Z-decorated, unnormalized tensor for the 2025 target, use the
-existing blocking equivalence and bit ordering, and prove its all-length
-monomial formula and unitarity. Any connection to the 2017 gate pair
-$u=CZ(X\otimes X), v=CZ$ must explicitly specify the normalization and
+The literal printed cross-paper tensor identity is false. The corrected
+target is the exact Z-decorated tensor
+(\ref{eq:czx_decorated_block}), with its all-length monomial formula and
+unitarity, using ordinary blocking and the stated bit ordering.\footnote{The
+    corrected target is tracked by \ghissue{7738} and its implementation
+    child \ghissue{7752}; this audit does not assert that implementation
+    is merged or that its correspondence theorem is available here.}
+Any connection to the 2017 gate pair
+$u=CZ(X\otimes X), v=CZ$, where $CZ=\operatorname{diag}(1,1,1,-1)$,
+of \cite{Cirac2017MPU} must explicitly specify the normalization and
 physical change of representative, rather than assert literal equality.
 No classification signs, action data, defect tensors, or completion
-certificates are supplied here. The two original CZX blueprint claims
-remain unformalized.
+certificates are supplied here. This audit does not establish the two
+original CZX classification claims.
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
