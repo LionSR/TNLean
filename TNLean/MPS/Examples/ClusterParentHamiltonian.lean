@@ -272,51 +272,6 @@ def clusterChainStabilizer {N : ℕ} (i : Fin N) : NSiteSpace 2 N →ₗ[ℂ] NS
       (-1 : ℂ) ^ ((σ i).val + (σ (cyclicForwardSite i 2)).val) *
         ψ (Function.update σ (cyclicForwardSite i 1) (σ (cyclicForwardSite i 1) + 1)) := rfl
 
-/-- Reading an assembled cyclic configuration at the site with offset \(r\)
-recovers the window value. -/
-private lemma cyclicCfg_forwardSite {d N : ℕ} (hN : 0 < N) {L : ℕ} (hLN : L ≤ N)
-    (i : Fin N) (ω : Fin L → Fin d) (τ : Fin N → Fin d) (r : Fin L) :
-    cyclicCfg hN L i ω τ (cyclicForwardSite i r.val) = ω r :=
-  congrFun (cyclicCfg_cyclicForwardSite hN hLN i ω τ) r
-
-/-- Assembling the window extracted from a configuration around that same
-configuration gives it back. -/
-private lemma cyclicCfg_extractWindow {d N : ℕ} (hN : 0 < N) (L : ℕ) (i : Fin N)
-    (σ : Fin N → Fin d) :
-    cyclicCfg hN L i (extractWindow L i σ) σ = σ := by
-  ext k
-  simp only [cyclicCfg]
-  by_cases hk : (k.val + N - i.val) % N < L
-  · rw [dite_eq_left hk]
-    have hsite :
-        k = ⟨(i.val + (k.val + N - i.val) % N) % N, Nat.mod_lt _ hN⟩ :=
-      eq_cyclic_site_of_offset_eq (N := N) hN (i := i) (k := k)
-        (r := (k.val + N - i.val) % N) rfl
-    exact congrArg Fin.val (by simpa [extractWindow] using congrArg σ hsite.symm)
-  · rw [dite_eq_right hk]
-
-/-- Updating an assembled cyclic configuration at a window site is the same as
-updating the window. -/
-private lemma update_cyclicCfg {d N : ℕ} (hN : 0 < N) {L : ℕ} (hLN : L ≤ N)
-    (i : Fin N) (ω : Fin L → Fin d) (τ : Fin N → Fin d) (r : Fin L) (x : Fin d) :
-    Function.update (cyclicCfg hN L i ω τ) (cyclicForwardSite i r.val) x =
-      cyclicCfg hN L i (Function.update ω r x) τ := by
-  ext k
-  by_cases hk : k = cyclicForwardSite i r.val
-  · subst hk
-    rw [Function.update_self, cyclicCfg_forwardSite hN hLN, Function.update_self]
-  · rw [Function.update_of_ne hk]
-    simp only [cyclicCfg]
-    by_cases hoff : (k.val + N - i.val) % N < L
-    · rw [dite_eq_left hoff, dite_eq_left hoff]
-      have hne : (⟨(k.val + N - i.val) % N, hoff⟩ : Fin L) ≠ r := by
-        intro hr
-        apply hk
-        have hoffr : (k.val + N - i.val) % N = r.val := congrArg Fin.val hr
-        exact eq_cyclic_site_of_offset_eq (N := N) hN (i := i) (k := k) hoffr
-      rw [Function.update_of_ne hne]
-    · rw [dite_eq_right hoff, dite_eq_right hoff]
-
 private lemma update_one_eq (s : Fin 3 → Fin 2) :
     Function.update s 1 (s 1 + 1) = ![s 0, s 1 + 1, s 2] := by
   ext k
@@ -332,12 +287,12 @@ private lemma clusterStabilizer_cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (hN3 : 
   rw [clusterStabilizer_apply, cyclicRestrictₗ_apply, cyclicRestrictₗ_apply,
     clusterChainStabilizer_apply]
   have h0 : cyclicCfg hN 3 i s τ i = s 0 := by
-    have := cyclicCfg_forwardSite hN hN3 i s τ 0
+    have := cyclicCfg_cyclicForwardSite_apply hN hN3 i s τ 0
     rwa [Fin.val_zero, cyclicForwardSite_zero] at this
   have h1 : cyclicCfg hN 3 i s τ (cyclicForwardSite i 1) = s 1 :=
-    cyclicCfg_forwardSite hN hN3 i s τ 1
+    cyclicCfg_cyclicForwardSite_apply hN hN3 i s τ 1
   have h2 : cyclicCfg hN 3 i s τ (cyclicForwardSite i 2) = s 2 :=
-    cyclicCfg_forwardSite hN hN3 i s τ 2
+    cyclicCfg_cyclicForwardSite_apply hN hN3 i s τ 2
   rw [h0, h1, h2]
   congr 2
   rw [← update_one_eq]
@@ -358,7 +313,7 @@ private lemma mem_eigenspace_clusterChainStabilizer_iff {N : ℕ} (hN : 0 < N) (
     ext σ
     have hσ := congrFun (hτ σ) (extractWindow 3 i σ)
     rw [clusterStabilizer_cyclicRestrictₗ hN hN3, cyclicRestrictₗ_apply, cyclicRestrictₗ_apply,
-      cyclicCfg_extractWindow] at hσ
+      cyclicCfg_extractWindow hN hN3] at hσ
     exact hσ
 
 /-- **The common \(+1\) eigenspace of the translated stabilizers is the periodic

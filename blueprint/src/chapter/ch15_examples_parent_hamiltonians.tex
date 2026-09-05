@@ -369,11 +369,6 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
         2v_{00} + v_{12} + v_{21} = 0.
         \label{eq:aklt_two_site_constraints}
     \end{align}
-    Thus $\mathcal G_2(A)$ is the four-dimensional span of
-    $\ket{01}-\ket{10}$, $\ket{02}-\ket{20}$, $\ket{00}-2\ket{12}$, and
-    $\ket{00}-2\ket{21}$.
-    % This span is the spin-0 and spin-1 subspace of two spin-1 particles;
-    % that identification is not part of the formal statement.
 \end{theorem}
 
 \begin{proof}
@@ -398,6 +393,17 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     $X_{11} = -c^2v_{21}$ satisfies $\Gamma_2(X) = c^2b^2\,v$ by
     (\ref{eq:aklt_gamma_two}), so $v = \Gamma_2(X/(c^2b^2))$.
 \end{proof}
+
+\begin{remark}[AKLT two-site parent space as a span]\label{rem:aklt_ground_space_two_span}
+    % The spanning set and the dimension count are not formalized; the formal
+    % statement is the coordinate description of
+    % Theorem~\ref{thm:aklt_ground_space_two}.
+    The constraints (\ref{eq:aklt_two_site_constraints}) of
+    Theorem~\ref{thm:aklt_ground_space_two} describe $\mathcal G_2(A)$ as the
+    four-dimensional span of $\ket{01}-\ket{10}$, $\ket{02}-\ket{20}$,
+    $\ket{00}-2\ket{12}$, and $\ket{00}-2\ket{21}$. This span is the spin-0
+    and spin-1 subspace of two spin-1 particles.
+\end{remark}
 
 \begin{theorem}[AKLT three-site intersection property]
     \label{thm:aklt_ground_space_intersection_two}
@@ -479,7 +485,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
 
 \begin{proof}
     \leanok
-    \uses{thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:chain_ground_space_eq_mpv_normal, thm:parent_hamiltonian_unique_gs}
+    \uses{thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:chain_ground_space_eq_mpv_normal, lem:mpv_mem_chain_ground_space, thm:mpv_ne_zero_blk_injective}
     Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{AKLT}})$. Every cyclic three-site
     window restricts on either side to a cyclic two-site window, so both
     restrictions of $\psi|_{[i,i+2],\tau}$ lie in
@@ -489,10 +495,14 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     $\mathcal G_{N,2}(A_{\mathrm{AKLT}})\subseteq\mathcal G_{N,3}(A_{\mathrm{AKLT}})$.
     The AKLT tensor is injective after blocking $L_0 = 2$ sites
     (Theorem~\ref{thm:aklt_normal}), so
-    Theorem~\ref{thm:parent_hamiltonian_unique_gs} with $L = 3\le N$ gives
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} with $L = 3\le N$ gives
     $\mathcal G_{N,3}(A_{\mathrm{AKLT}}) = \C\,V^{(N)}(A_{\mathrm{AKLT}})$.
     The reverse inclusion holds because the periodic MPS vector satisfies
-    every cyclic two-site constraint.
+    every cyclic two-site constraint
+    (Lemma~\ref{lem:mpv_mem_chain_ground_space}). Finally
+    $V^{(N)}(A_{\mathrm{AKLT}})\ne0$ by
+    Theorem~\ref{thm:mpv_ne_zero_blk_injective} with $L_0 = 2 < N$, so
+    $\dim\mathcal G_{N,2}(A_{\mathrm{AKLT}}) = 1$.
 \end{proof}
 
 \begin{remark}[AKLT polynomial Hamiltonian and edge modes]\label{rem:aklt_parent_hamiltonian}

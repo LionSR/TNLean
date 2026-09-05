@@ -704,6 +704,43 @@ theorem cyclicCfg_cyclicForwardSite {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     exact hoff
   rw [dite_eq_left (by rw [hoff]; exact r.isLt), hidx]
 
+/-- Reading the assembled cyclic configuration at the site with cyclic offset
+\(r\) recovers the inserted word at \(r\). -/
+theorem cyclicCfg_cyclicForwardSite_apply {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (i : Fin N) (ω : Fin L → Fin d) (τ : Fin N → Fin d) (r : Fin L) :
+    cyclicCfg hN L i ω τ (cyclicForwardSite i r.val) = ω r :=
+  congrFun (cyclicCfg_cyclicForwardSite hN hLN i ω τ) r
+
+/-- Assembling the window extracted from a configuration around that same
+configuration gives the configuration back. The assembled cyclic configuration
+is the window replacement `replaceWindow` with its arguments reordered. -/
+theorem cyclicCfg_extractWindow {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N) (i : Fin N)
+    (σ : Fin N → Fin d) :
+    cyclicCfg hN L i (extractWindow L i σ) σ = σ := by
+  change replaceWindow L hLN i σ (extractWindow L i σ) = σ
+  rw [replaceWindow_extractWindow]
+
+/-- Updating an assembled cyclic configuration at the site with cyclic offset
+\(r\) is the same as updating the inserted word at \(r\). -/
+theorem update_cyclicCfg {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (i : Fin N) (ω : Fin L → Fin d) (τ : Fin N → Fin d) (r : Fin L) (x : Fin d) :
+    Function.update (cyclicCfg hN L i ω τ) (cyclicForwardSite i r.val) x =
+      cyclicCfg hN L i (Function.update ω r x) τ := by
+  ext k
+  by_cases hk : k = cyclicForwardSite i r.val
+  · subst hk
+    rw [Function.update_self, cyclicCfg_cyclicForwardSite_apply hN hLN, Function.update_self]
+  · rw [Function.update_of_ne hk]
+    simp only [cyclicCfg]
+    by_cases hoff : (k.val + N - i.val) % N < L
+    · rw [dite_eq_left hoff, dite_eq_left hoff]
+      have hne : (⟨(k.val + N - i.val) % N, hoff⟩ : Fin L) ≠ r := by
+        intro hr
+        apply hk
+        exact eq_cyclic_site_of_offset_eq (N := N) hN (i := i) (k := k) (congrArg Fin.val hr)
+      rw [Function.update_of_ne hne]
+    · rw [dite_eq_right hoff, dite_eq_right hoff]
+
 /-- Restricting the final site of a cyclic \((L + 1)\)-window peels off the site with
 cyclic offset \(L\) and stores its value in the outside configuration. -/
 theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
