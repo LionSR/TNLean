@@ -18,7 +18,7 @@
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv}
     \leanok
-    \uses{thm:trace_eval_word_eq_sum_cyclic, lem:appendixB_basis_change_parent_interaction, def:appendixB_two_site_basic_space, def:appendixB_qax, def:appendixB_qxb, lem:appendixB_qax_qxb_parent_interaction, lem:appendixB_three_site_parent_lifts, lem:appendixB_lift_commutator_parent_terms, lem:local_term_idempotent}
+    \uses{thm:trace_eval_word_eq_sum_cyclic, lem:appendixB_basis_change_parent_interaction, def:appendixB_two_site_basic_space, def:appendixB_qax, def:appendixB_qxb, lem:appendixB_qax_qxb_parent_interaction, lem:appendixB_three_site_parent_lifts, lem:appendixB_lift_commutator_parent_terms}
     The Appendix~B structural form supplies $A^i=X\Lambda U^iX^{-1}$.
     In the source unit pair-index convention, the residual tensor satisfies
     \begin{align}
@@ -151,9 +151,21 @@
     $U^{(a,b)}_{x,y}=\delta_{x,a}\delta_{y,b}$, with
     $A^{(a,b)}=\lambda_a E_{a,b}$ and $\lambda_0,\lambda_1>0$.
     The pair-index isometry holds. For the word
-    $((0,1),(1,0),(1,0),(0,1))$, the cyclic coefficient is zero, whereas the
-    product of the two disjoint two-site amplitudes is
-    $\lambda_0^2\lambda_1^2>0$.
+    $\sigma=((0,1),(1,0),(1,0),(0,1))$, the cyclic coefficient is
+    \begin{align}
+        V^{(4)}(A)_\sigma
+         & =
+        C_4(\sigma)=0.
+        \notag
+    \end{align}
+    In contrast, the product over disjoint physical pairs is
+    \begin{align}
+        \prod_{p=0}^{1}\phi_2(\sigma_{2p},\sigma_{2p+1})
+         & =
+        (\lambda_0\lambda_1)(\lambda_1\lambda_0)
+        =\lambda_0^2\lambda_1^2>0.
+        \notag
+    \end{align}
 \end{remark}
 
 \begin{theorem}[Eventual dimension of nearest-neighbor parent ground spaces]%
