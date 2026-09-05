@@ -1044,9 +1044,11 @@ expression equals $2$.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
-    The Bell projectors are positive rank-one operators of trace one,
-    and their weights in $\sigma$ sum to one. Positivity and trace
+    \uses{lem:mpdo_twisted_dimer_bond_state_entries, thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
+    The Bell projectors are positive rank-one operators. By
+    Lemma~\ref{lem:mpdo_twisted_dimer_bond_state_entries},
+    $\operatorname{tr}\sigma=C_{00}+C_{11}=1$.
+    Positivity and trace
     multiply under tensor products and are preserved by unitary
     changes of coordinates. Apply these facts to $D_N$ and then use
     Theorem~\ref{thm:mpdo_twisted_dimer_unitary_factorization}.
@@ -1205,10 +1207,30 @@ $I/\sqrt2,Z/\sqrt2$.
             \end{cases}
         \notag
     \end{align}
-    On the matched subspace the coefficient is exactly the entry of
-    the one-site closure tensored with the inserted bond state. This
-    proves the identity for arbitrary boundary matrices. Applying the
-    retraction gives the coarse-graining equation.
+    For every boundary matrix $A\in M_4(\mathbb C)$, the one-site
+    closure has entries
+    \begin{align}
+        [Q_1(A)]_{(l,r),(l',r')} & =C_{ll'}A_{(r,r'),(l,l')}.
+        \notag
+    \end{align}
+    Put $a=((l,r),(u,v))$ and $b=((l',r'),(u',v'))$.
+    The definition of the insertion map and
+    Lemma~\ref{lem:mpdo_twisted_dimer_bond_state_entries} give
+    \begin{align}
+        [\mathcal T_Q(Q_1(A))]_{a,b}
+         & =[Q_1(A)]_{(l,v),(l',v')}\sigma_{(r,u),(r',u')}
+        \notag                                             \\
+         & =\begin{cases}
+                C_{ll'}C_{uu'}A_{(v,v'),(l,l')}
+                  & \text{if } r=u \text{ and } r'=u', \\
+                0 & \text{otherwise}
+            \end{cases}
+        \notag                                             \\
+         & =[Q_2(A)]_{a,b}.
+        \notag
+    \end{align}
+    Thus the refinement equation holds for arbitrary boundary matrices.
+    Applying the retraction gives the coarse-graining equation.
 \end{proof}
 
 These channel equations independently classify the exact bond dimer as a
