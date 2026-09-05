@@ -84,7 +84,7 @@ theorem tensor_apply_bits (a b c d l r : ZMod 2) :
     tensor (siteBits.symm (a, b)) (siteBits.symm (c, d)) l r =
       if a = 1 - c ∧ b = 1 - d ∧ l = a then
         (-1 : ℂ) ^ (a.val + b.val + a.val * b.val + b.val * r.val) else 0 := by
-  erw [tensor_apply]
+  refine (tensor_apply (siteBits.symm (a, b)) (siteBits.symm (c, d)) l r).trans ?_
   have hc : (siteBits.symm (a, b) = complementSite (siteBits.symm (c, d)) ∧
       l = (show Fin 2 from (siteBits (siteBits.symm (a, b))).1)) ↔
       (a = 1 - c ∧ b = 1 - d ∧ l = a) := by
