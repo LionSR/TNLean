@@ -630,6 +630,420 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
 \end{proof}
 
 %% ---------------------------------------------------------
+\section{Uniqueness of the translation-invariant canonical form at a fixed ring length}%
+\label{sec:pgvwc07_ti_uniqueness}
+%% ---------------------------------------------------------
+
+The uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix} compares two
+translation-invariant canonical representations of one state on a ring of
+$N$ sites. Its printed proof rewrites both representations as open-boundary
+representations on the doubled bond space, compares them with the
+open-boundary canonical form, and obtains invertible intertwiners at the
+cuts of a window of $D^4$ sites; the two auxiliary results of
+Section~\ref{sec:quadratic_reconstruction} then produce a nonzero
+intertwiner between the two local tensors. This section records the
+cut-vector argument that supplies those intertwiners directly from condition
+C1, the resulting fixed-length intertwiner, and the corrected uniqueness
+theorem. The printed conclusion is false on a finite ring because of an
+$N$th-root phase \cite{gap:pgvwc07_quadratic_reconstruction_phase}; the
+corrected statement carries that phase explicitly
+\cite{gap:pgvwc07_ti_uniqueness_scope}.
+
+\begin{definition}[Cut vectors]
+    \label{def:pgvwc07_cut_vectors}
+    \lean{MPSTensor.leftCutVector, MPSTensor.rightCutVector,
+        MPSTensor.coeff_append_eq_sum_cutVector,
+        MPSTensor.leftCutVector_append_single}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A=(A_i)_i$ be a tensor of bond dimension $D$ and let $L\ge0$. For
+    $\alpha,\beta\in\Fin{D}$ the \emph{left cut vector} and the \emph{right
+        cut vector} of length $L$ are the vectors
+    \begin{align}
+        \lvert\Phi_{\alpha,\beta}\rangle
+         & =\sum_{i_1,\ldots,i_L}\langle\alpha|A_{i_1}\cdots A_{i_L}|\beta\rangle
+        \,\lvert i_1\cdots i_L\rangle,
+        \label{eq:pgvwc07_left_cut_vector}                                        \\
+        \lvert\Psi_{\alpha,\beta}\rangle
+         & =\sum_{i_1,\ldots,i_L}\langle\beta|A_{i_1}\cdots A_{i_L}|\alpha\rangle
+        \,\lvert i_1\cdots i_L\rangle.
+        \label{eq:pgvwc07_right_cut_vector}
+    \end{align}
+    For a word split into a left part of length $k$ and a right part of
+    length $m$, the coefficient of the ring state factors across the cut as
+    \begin{align}
+        \operatorname{tr}\bigl(A_{i_1}\cdots A_{i_k}A_{j_1}\cdots A_{j_m}\bigr)
+         & =\sum_{\alpha,\beta}\Phi_{\alpha,\beta}(i_1\cdots i_k)\,
+        \Psi_{\alpha,\beta}(j_1\cdots j_m),
+        \label{eq:pgvwc07_cut_resolution}
+    \end{align}
+    and extending the left word by one site multiplies the left cut vectors
+    by the matrix of that site,
+    $\Phi_{\alpha,\beta}(i_1\cdots i_k\,i)
+        =\sum_\gamma\Phi_{\alpha,\gamma}(i_1\cdots i_k)\,(A_i)_{\gamma\beta}$.
+    These are the vectors introduced in the proof of the proposition on
+    condition C1 in \cite{PerezGarcia2007Matrix}.
+\end{definition}
+
+\begin{lemma}[Linear independence of the cut vectors]
+    \label{lem:pgvwc07_cut_vectors_linearIndependent}
+    \lean{MPSTensor.linearIndependent_leftCutVector,
+        MPSTensor.linearIndependent_rightCutVector,
+        MPSTensor.isNBlkInjective_of_le_of_unital}
+    \leanok
+    \uses{def:pgvwc07_cut_vectors, def:l_blk_injective}
+    If $A$ is $L$-block injective, then the $D^2$ left cut vectors of length
+    $L$ are linearly independent, and so are the $D^2$ right cut vectors of
+    length $L$. If moreover $\sum_iA_iA_i^\dagger=\Id$, then $A$ is
+    $L'$-block injective for every $L'\ge L$, so both statements hold at
+    every length at least $L$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A vanishing combination $\sum_{\alpha,\beta}c_{\alpha,\beta}
+        \lvert\Phi_{\alpha,\beta}\rangle=0$ says that the linear functional
+    $M\mapsto\sum_{\alpha,\beta}c_{\alpha,\beta}M_{\alpha\beta}$ annihilates
+    every product of $L$ matrices of $A$. These products span $M_D(\C)$, so
+    the functional vanishes on the matrix units and $c=0$. The right cut
+    vectors are treated in the same way with the transposed functional.
+    For the propagation, every matrix $M$ equals
+    $\sum_iA_i(A_i^\dagger M)$, and each $A_i^\dagger M$ is a combination of
+    products of $L'$ matrices, so $M$ is a combination of products of $L'+1$
+    matrices.
+\end{proof}
+
+\begin{lemma}[Intertwiners at the cuts]
+    \label{lem:pgvwc07_cut_intertwiner}
+    \lean{MPSTensor.exists_cutGauge_of_coeff_eq, MPSTensor.cutGauge_chain}
+    \leanok
+    \uses{def:pgvwc07_cut_vectors}
+    Let $B$ and $C$ be tensors of bond dimension $D$ whose coefficients agree
+    on every word of length $k+m$, and suppose that the left cut vectors of
+    $B$ of length $k$ and the right cut vectors of $B$ of length $m$ are
+    linearly independent. Then there is an invertible matrix $W$ on the
+    doubled bond space with
+    \begin{align}
+        \Phi^{C}_{a}
+         & =\sum_{b}W_{b,a}\,\Phi^{B}_{b}
+        \qquad\text{for every index pair }a,
+        \label{eq:pgvwc07_cut_intertwiner}
+    \end{align}
+    where the index pairs are written column first. If $W$ and $W'$ realize
+    (\ref{eq:pgvwc07_cut_intertwiner}) at the cuts after $k$ and after $k+1$
+    sites, and the left cut vectors of $B$ of length $k$ are linearly
+    independent, then
+    \begin{align}
+        W(C_i\otimes\Id) & =(B_i\otimes\Id)W' \qquad\text{for every }i.
+        \label{eq:pgvwc07_cut_chain_relation}
+    \end{align}
+    This is the square case of the freedom theorem for open-boundary
+    representations \cite[Theorem~2]{PerezGarcia2007Matrix} invoked in the
+    proof of \cite[Theorem~7]{PerezGarcia2007Matrix}, obtained here by a
+    direct comparison of the two bipartite decompositions
+    (\ref{eq:pgvwc07_cut_resolution}).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc07_cut_vectors_linearIndependent,
+        thm:peps_existsUnique_virtualOperation_of_endPair}
+    Both decompositions (\ref{eq:pgvwc07_cut_resolution}) of the same
+    coefficients have $D^2$ terms. The dual functionals of the linearly
+    independent right cut vectors of $B$ read off a matrix $G$ with
+    $\Phi^{B}_{\mu}=\sum_\nu G_{\mu\nu}\Phi^{C}_{\nu}$; linear independence of
+    the left cut vectors of $B$ shows that no nonzero row vector annihilates
+    $G$, so $G$ is invertible, and $W=(G^{-1})^{\mathsf T}$ satisfies
+    (\ref{eq:pgvwc07_cut_intertwiner}). For the chain relation, extend the
+    left words by one site: the two expressions of $\Phi^{C}$ at length
+    $k+1$ through (\ref{eq:pgvwc07_cut_intertwiner}) at the two cuts are
+    combinations of the independent family $\Phi^{B}$ of length $k$, and
+    comparing coefficients gives (\ref{eq:pgvwc07_cut_chain_relation})
+    entrywise.
+\end{proof}
+
+\begin{theorem}[Fixed-length intertwiner]
+    \label{thm:pgvwc07_fixed_length_intertwiner}
+    \lean{MPSTensor.exists_intertwiner_of_fixedLength_mpv_eq,
+        MPSTensor.exists_pgvwc07_chain_root}
+    \leanok
+    \uses{def:l_blk_injective, def:mpv}
+    Let $B$ be a tensor of bond dimension $D\ge1$ with
+    $\sum_iB_iB_i^\dagger=\Id$ that is $L_0$-block injective, let
+    $N\ge2L_0+D^4$, and let $C$ be a tensor of bond dimension $D$ with the
+    same length-$N$ coefficients as $B$. Then there are a nonzero matrix
+    $R\in\MN{D}$ and a scalar $x\neq0$ such that
+    \begin{align}
+        RC_i & =\tfrac1x\,B_iR \qquad\text{for every }i.
+        \label{eq:pgvwc07_fixed_length_intertwiner}
+    \end{align}
+    This is the intertwiner obtained in the proof of
+    \cite[Theorem~7]{PerezGarcia2007Matrix} before the unitarity argument,
+    with the intertwiner count corrected to the $D^4+1$ cuts of the window
+    \cite{gap:pgvwc07_intertwiner_chain_off_by_one}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc07_cut_vectors_linearIndependent,
+        lem:pgvwc07_cut_intertwiner, lem:pgvwc07_chain_combination,
+        lem:pgvwc07_kronecker_intertwiner}
+    Consider the $D^4+1$ cuts after $L_0,\ldots,L_0+D^4$ sites; each leaves
+    at least $L_0$ sites on both sides, so by
+    Lemma~\ref{lem:pgvwc07_cut_vectors_linearIndependent} the cut vectors of
+    $B$ are linearly independent there, and
+    Lemma~\ref{lem:pgvwc07_cut_intertwiner} supplies invertible matrices
+    $W_0,\ldots,W_{D^4}$ on the doubled bond space with
+    $W_k(C_i\otimes\Id)=(B_i\otimes\Id)W_{k+1}$. Since $\MN{D^2}$ has
+    dimension $D^4$, there is a first index $n\ge1$ such that
+    $W_0,\ldots,W_{n-1}$ are linearly independent and
+    $W_n=\sum_{k<n}\lambda_kW_k$; some $\lambda_k$ is nonzero because $W_n$
+    is invertible, so the polynomial equation
+    (\ref{eq:chain_combination_polynomial}) has positive degree and a nonzero
+    root $x$. Lemma~\ref{lem:pgvwc07_chain_combination}, applied to right
+    multiplication by $C_i\otimes\Id$ and left multiplication by
+    $B_i\otimes\Id$, gives a nonzero combination $W$ of $W_0,\ldots,W_{n-1}$
+    with $W(C_i\otimes\Id)=(\tfrac1xB_i\otimes\Id)W$ for every $i$, and
+    Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} extracts a nonzero
+    multiplicity slice $R$ satisfying (\ref{eq:pgvwc07_fixed_length_intertwiner}).
+\end{proof}
+
+\begin{lemma}[Unitarity of the intertwiner]
+    \label{lem:pgvwc07_intertwiner_unitary}
+    \lean{MPSTensor.isUnit_of_intertwines_of_isNBlkInjective,
+        MPSTensor.exists_unitaryConj_of_intertwines_of_isNBlkInjective,
+        MPSTensor.mpv_eq_pow_mul_mpv_of_unitaryConj}
+    \leanok
+    \uses{def:l_blk_injective, def:mpv}
+    Let $B$ and $C$ satisfy $\sum_iB_iB_i^\dagger=\Id$ and
+    $\sum_iC_iC_i^\dagger=\Id$, let $B$ be $L_0$-block injective, and let
+    $R\neq0$ and $x\neq0$ satisfy (\ref{eq:pgvwc07_fixed_length_intertwiner}).
+    Then $R$ is invertible, $|x|=1$, and there is a unitary $U$ with
+    \begin{align}
+        B_i & =x\,UC_iU^\dagger \qquad\text{for every }i.
+        \label{eq:pgvwc07_intertwiner_unitary_conjugacy}
+    \end{align}
+    Consequently the length-$N$ coefficients of $B$ and $C$ satisfy
+    $V^{(N)}(B)=x^NV^{(N)}(C)$ for every $N$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    The range of $R$ is invariant under every $B_i$, hence under every
+    product of $L_0$ matrices of $B$; block injectivity leaves no nontrivial
+    invariant subspace, so the range is everything and $R$ is invertible.
+    Block injectivity also makes the transfer maps of $B$ and of $C$
+    irreducible, the latter because $C_i=\tfrac1xR^{-1}B_iR$. The
+    conjugate-transposed families are therefore left-canonical irreducible
+    tensors related by the gauge $(R^\dagger)^{-1}$ and the scalar
+    $\overline{x}$, and
+    Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    replaces the gauge by a unitary and gives $|x|=1$. Taking adjoints
+    returns (\ref{eq:pgvwc07_intertwiner_unitary_conjugacy}). This is the
+    fixed-point argument of \cite[Theorem~7]{PerezGarcia2007Matrix}, which
+    derives $|x|=1$ from the dual fixed point of $B$ and $RR^\dagger=\Id$
+    from the single-block property; both follow from condition C1 through
+    the Perron--Frobenius theory of irreducible maps. The coefficient
+    relation follows from (\ref{eq:pgvwc07_intertwiner_unitary_conjugacy})
+    because conjugation by $U$ does not change traces.
+\end{proof}
+
+\begin{definition}[Translation-invariant canonical representation]
+    \label{def:pgvwc07_ti_canonical_representation}
+    \lean{MPSTensor.PGVWC07CanonicalFormData, MPSTensor.IsPGVWC07CanonicalForm}
+    \leanok
+    \uses{def:mps_tensor}
+    A tensor $A$ of bond dimension $D$ is a \emph{translation-invariant
+        canonical representation} when its bond indices split into finitely
+    many blocks of positive size, and there are weights $1\ge\lambda_j>0$ and
+    tensors $A^j$ on the blocks with
+    \begin{align}
+        A_i & =\bigoplus_j\lambda_jA_i^j \qquad\text{for every }i,
+        \label{eq:pgvwc07_ti_canonical_representation_block_form}
+    \end{align}
+    such that every block satisfies the three conditions of
+    Theorem~\ref{thm:pgvwc07_ti_canonical_form}:
+    $\sum_iA_i^j(A_i^j)^\dagger=\Id$, there is a diagonal positive definite
+    $\Lambda^j$ with $\sum_i(A_i^j)^\dagger\Lambda^jA_i^j=\Lambda^j$, and
+    the identity is the only fixed point of
+    $X\mapsto\sum_iA_i^jX(A_i^j)^\dagger$ up to scalars. This is the block
+    form of \cite[Theorem~4]{PerezGarcia2007Matrix}, which lists the blocks
+    consecutively.
+\end{definition}
+
+\begin{lemma}[Canonical representations from the existence theorem]
+    \label{lem:pgvwc07_ti_canonical_representation_of_blocks}
+    \lean{MPSTensor.isPGVWC07CanonicalForm_toTensorFromBlocks}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation,
+        thm:pgvwc07_ti_canonical_form}
+    The weighted direct sum $\bigoplus_k\mu_kA_k$ of positive-dimensional
+    blocks produced by Theorem~\ref{thm:pgvwc07_ti_canonical_form}, with
+    positive weights $\mu_k\le1$, is a translation-invariant canonical
+    representation with the blocks in consecutive order.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The weights are positive reals of modulus at most one, and the block
+    conditions are those of Definition~\ref{def:pgvwc07_ti_canonical_representation}.
+\end{proof}
+
+\begin{lemma}[A block-injective canonical representation has one block]
+    \label{lem:pgvwc07_ti_canonical_representation_single_block}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.evalWord_eq,
+        MPSTensor.PGVWC07CanonicalFormData.not_isNBlkInjective_of_ne,
+        MPSTensor.PGVWC07CanonicalFormData.sum_mul_conjTranspose_eq,
+        MPSTensor.PGVWC07CanonicalFormData.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective}
+    Let $A$ be a translation-invariant canonical representation with the
+    block form (\ref{eq:pgvwc07_ti_canonical_representation_block_form}).
+    Every product $A_{i_1}\cdots A_{i_L}$ is block diagonal, with
+    $\lambda_j^LA^j_{i_1}\cdots A^j_{i_L}$ on block $j$, and
+    \begin{align}
+        \sum_iA_iA_i^\dagger & =\bigoplus_j\lambda_j^2\,\Id.
+        \label{eq:pgvwc07_ti_canonical_representation_sum}
+    \end{align}
+    If $A$ has two distinct blocks, then $A$ is not $L$-block injective for
+    any $L$. Consequently, if $D\ge1$ and $A$ is $L$-block injective for
+    some $L$, then $A$ has a single block, and
+    $\sum_iA_iA_i^\dagger=\lambda^2\,\Id$ with $0<\lambda\le1$. This is the
+    first assertion of the proposition on condition C1 in
+    \cite{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The block-diagonal form of the products follows from
+    (\ref{eq:pgvwc07_ti_canonical_representation_block_form}) by induction
+    on the length, and (\ref{eq:pgvwc07_ti_canonical_representation_sum})
+    from the first block condition. If $\alpha$ lies in one block and
+    $\beta$ in another, the entry $(\alpha,\beta)$ of every product
+    vanishes while the matrix unit $\lvert\alpha\rangle\langle\beta\rvert$
+    has entry one there, so the products of any length do not span
+    $M_D(\C)$. When $D\ge1$ there is at least one block, and block
+    injectivity leaves exactly one; then
+    (\ref{eq:pgvwc07_ti_canonical_representation_sum}) is the scalar
+    $\lambda^2$ of that block.
+\end{proof}
+
+\begin{lemma}[Uniqueness for a single block]
+    \label{lem:pgvwc07_ti_uniqueness_single_block}
+    \lean{MPSTensor.pgvwc07_uniqueness_of_unital,
+        MPSTensor.pgvwc07_uniqueness_of_weighted,
+        MPSTensor.sum_smul_mul_conjTranspose_smul,
+        MPSTensor.sum_inv_smul_mul_conjTranspose_eq_one}
+    \leanok
+    \uses{def:l_blk_injective, def:mpv}
+    Let $B$ and $C$ be tensors of bond dimension $D$ with
+    $\sum_iB_iB_i^\dagger=\lambda_B^2\,\Id$ and
+    $\sum_iC_iC_i^\dagger=\lambda_C^2\,\Id$ for some $\lambda_B,\lambda_C>0$,
+    let $B$ be $L_0$-block injective, let $N>2L_0+D^4$, and let $B$ and $C$
+    represent the same nonzero state on the ring of $N$ sites. Then
+    $\lambda_B=\lambda_C$, and there are a unitary $U$ and a scalar
+    $\xi\in\C$ with
+    \begin{align}
+        |\xi| & =1, & \xi^N & =1, & B_i & =\xi\,UC_iU^\dagger
+        \qquad\text{for every }i.
+        \label{eq:pgvwc07_ti_uniqueness_conclusion}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pgvwc07_fixed_length_intertwiner,
+        lem:pgvwc07_intertwiner_unitary}
+    For $\lambda_B=\lambda_C=1$,
+    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R\neq0$ and
+    $x\neq0$ with $RC_i=\tfrac1xB_iR$, and
+    Lemma~\ref{lem:pgvwc07_intertwiner_unitary} turns $R$ into a unitary $U$
+    with $|x|=1$ and $B_i=xUC_iU^\dagger$. The coefficients then satisfy
+    $V^{(N)}(B)=x^NV^{(N)}(C)=x^NV^{(N)}(B)$, and since the state is nonzero,
+    $x^N=1$; take $\xi=x$. For general weights, $\lambda_B^{-1}B$ and
+    $\lambda_B^{-1}C$ represent the same state and the first is unital, so
+    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R$ and $x$ for
+    this pair. The same $R$ satisfies
+    $R\,(\lambda_C^{-1}C_i)=y^{-1}(\lambda_B^{-1}B_i)R$ with
+    $y=x\lambda_C/\lambda_B$, and
+    Lemma~\ref{lem:pgvwc07_intertwiner_unitary} applied to the two unital
+    families gives $|y|=1$ and $B_i=xUC_iU^\dagger$. As before $x^N=1$, so
+    $|x|=1$, and $|y|=1$ forces $\lambda_B=\lambda_C$.
+\end{proof}
+
+\begin{theorem}[Uniqueness of the canonical form, as printed]
+    \label{thm:pgvwc07_ti_uniqueness_printed}
+    \notready
+    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective}
+    Let $\lvert\psi\rangle=\sum\operatorname{tr}(B_{i_1}\cdots B_{i_N})
+        \lvert i_1\cdots i_N\rangle$ be a translation-invariant canonical
+    $D$-MPS such that condition C1 holds at some length $L_0$, the
+    open-boundary canonical representation of $\lvert\psi\rangle$ is unique,
+    and $N>2L_0+D^4$. Then, if $\lvert\psi\rangle$ admits another
+    translation-invariant canonical $D$-MPS representation with matrices
+    $C_i$, there is a unitary $U$ with $B_i=UC_iU^\dagger$ for every $i$.
+    This is \cite[Theorem~7]{PerezGarcia2007Matrix} as printed. Its
+    conclusion is false: for $d=D=1$, $B_0=1$ and $C_0=\eta$ with $\eta\neq1$
+    an $N$th root of unity are two canonical representations of the same
+    nonzero state on $N>3$ sites, and unitary conjugation acts trivially in
+    bond dimension one \cite{gap:pgvwc07_quadratic_reconstruction_phase}.
+    The corrected statement is Theorem~\ref{thm:pgvwc07_ti_uniqueness}.
+\end{theorem}
+
+\begin{theorem}[Uniqueness of the canonical form, corrected]
+    \label{thm:pgvwc07_ti_uniqueness}
+    \lean{MPSTensor.pgvwc07_uniqueness_of_canonical_form,
+        MPSTensor.pgvwc07_uniqueness_of_canonical_form_rephased,
+        MPSTensor.pgvwc07_uniqueness_of_canonical_form_unitGaugePhaseEquiv}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective,
+        def:mpv}
+    Let $B=(B_i)_i$ and $C=(C_i)_i$ be translation-invariant canonical
+    representations of bond dimension $D$ in the sense of
+    Definition~\ref{def:pgvwc07_ti_canonical_representation}. Assume that
+    $B$ is $L_0$-block injective, that $N>2L_0+D^4$, and that $B$ and $C$
+    represent the same nonzero state on the ring of $N$ sites. Then there
+    are a unitary $U$ and a scalar $\xi\in\C$ satisfying
+    (\ref{eq:pgvwc07_ti_uniqueness_conclusion}). The rephased
+    representation $\widehat C_i:=\xi C_i$ represents the same length-$N$
+    state and satisfies $B_i=U\widehat C_iU^\dagger$ exactly; equivalently,
+    $C$ and $B$ are gauge-phase equivalent with the unitary gauge $U$ and the
+    unit-modulus phase $\xi$.
+
+    The printed hypothesis that the open-boundary canonical representation
+    of the state is unique is not needed: the intertwiners it supplies in
+    the printed proof are obtained from condition C1 alone in
+    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner}. The corrected
+    conclusion is the one recorded in \cite{gap:pgvwc07_ti_uniqueness_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc07_ti_canonical_representation_single_block,
+        thm:pgvwc07_fixed_length_intertwiner,
+        lem:pgvwc07_intertwiner_unitary,
+        lem:pgvwc07_ti_uniqueness_single_block}
+    The state is nonzero, so $D\ge1$, and
+    Lemma~\ref{lem:pgvwc07_ti_canonical_representation_single_block} leaves
+    $B$ with a single block: $\sum_iB_iB_i^\dagger=\lambda_B^2\,\Id$ with
+    $0<\lambda_B\le1$. The tensors $\lambda_B^{-1}B$ and $\lambda_B^{-1}C$
+    represent the same state and the first is unital and $L_0$-block
+    injective, so Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} gives
+    $R\neq0$ and $x\neq0$ with $R\,(\lambda_B^{-1}C_i)=\tfrac1x(\lambda_B^{-1}B_i)R$,
+    and $R$ is invertible by Lemma~\ref{lem:pgvwc07_intertwiner_unitary}.
+    Hence $C_i=\tfrac1xR^{-1}B_iR$ is conjugate to a nonzero multiple of
+    $B_i$, so $C$ is $L_0$-block injective, and
+    Lemma~\ref{lem:pgvwc07_ti_canonical_representation_single_block} leaves
+    $C$ with a single block as well:
+    $\sum_iC_iC_i^\dagger=\lambda_C^2\,\Id$ with $0<\lambda_C\le1$.
+    Lemma~\ref{lem:pgvwc07_ti_uniqueness_single_block} now gives $U$ and
+    $\xi$. Rephasing $C$ by $\xi$ multiplies every length-$N$ coefficient by
+    $\xi^N=1$, and $\xi\overline{\xi}=|\xi|^2=1$ makes $(U,\xi)$ a
+    unit-modulus gauge-phase equivalence.
+\end{proof}
+
+%% ---------------------------------------------------------
 \section{One-sided inverse and physical realisation of virtual insertions}%
 \label{sec:decomposition_map}
 %% ---------------------------------------------------------

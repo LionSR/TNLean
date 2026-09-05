@@ -359,6 +359,15 @@ For the non-periodic MPS Fundamental Theorem background:
   sources.
 - `pgvwc07_direct_sum_input.tex` explains the older MPS representation
   paper's direct-sum input behind block-injective canonical form.
+- `pgvwc07_ti_canonical_form_positive_blocks.tex` records the convention
+  that every listed block of the translation-invariant canonical form has
+  positive bond dimension, used once when condition C1 forces a single block.
+- `pgvwc07_ti_uniqueness_scope.tex` records that the block-separation lemmas
+  do not formalize the uniqueness theorem for the translation-invariant
+  canonical form, states the corrected root-of-unity conclusion, and records
+  the formal route through the cut vectors of condition C1, which does not
+  consume the printed hypothesis that the open-boundary canonical form is
+  unique.
 - `pgvwc07_quadratic_reconstruction_phase.tex` records the unit-modulus phase
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
