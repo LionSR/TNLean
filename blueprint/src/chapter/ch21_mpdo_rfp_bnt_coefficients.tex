@@ -1065,7 +1065,11 @@ $I/\sqrt2,Z/\sqrt2$.
     \lean{MPOTensor.TwistedDimer.incomingBondEquiv}
     \leanok
     \uses{def:mpdo_twisted_dimer_controlled_flip}
-    Let $C=\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}$.
+    Let
+    \begin{align}
+        C & =\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}.
+        \notag
+    \end{align}
     A physical site consists of qubits $(l,r)\in\{0,1\}^2$.
     With virtual indices in $\{0,1\}^2$, define the tensor $Q$ by
     \begin{align}
@@ -1073,13 +1077,14 @@ $I/\sqrt2,Z/\sqrt2$.
         \notag
     \end{align}
     where $E_{a,b}$ is the matrix unit with row $a$ and column $b$.
-    Both physical and virtual dimensions are four. For $N>0$, let
+    Both physical and virtual dimensions are four. For $N\ge0$, let
     $B_N$ be the permutation of basis configurations given by
     \begin{align}
         B_N\ket{((l_m,r_m))_m} & =\ket{((r_{m-1},l_m))_m},
         \notag
     \end{align}
-    with cyclic indices. Its inverse sends a bond configuration $(b_m)_m$
+    with cyclic indices when $N>0$ and the unique empty configuration
+    when $N=0$. Its inverse sends a bond configuration $(b_m)_m$
     to the site configuration $(( (b_m)_2,(b_{m+1})_1))_m$.
 \end{definition}
 
