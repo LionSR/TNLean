@@ -1,0 +1,349 @@
+\section{Ground-space correspondence under an invertible on-site map}
+\label{sec:physical_deformation}
+
+An invertible map $\Lambda$ on the physical space $\C^d$ acts on a tensor by
+mixing its physical matrices, $A^i\mapsto\sum_j\Lambda_{ij}A^j$. This section
+records the correspondence, stated in \cite[Section~IV.C]{Cirac2021Matrix}, between
+the parent Hamiltonians of the original and of the deformed tensor: the deformed
+local interaction $h'=({\Lambda^{-1}}^\dagger)^{\otimes L}h(\Lambda^{-1})^{\otimes L}$
+is a parent interaction for the deformed tensor, and the ground spaces of the two
+chain Hamiltonians correspond one-to-one through $\Lambda^{\otimes N}$. The source
+states the correspondence for tensor network states on a general graph; here it
+is formalized for matrix product states on the periodic chain.
+
+\begin{definition}[Physical rotation of a tensor]\label{def:physical_rotation}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    For a matrix $\Lambda\in\MN{d}$ and a tensor $A=(A^i)_{i=0}^{d-1}$, the
+    \emph{physically rotated tensor} $\Lambda A$ has matrices
+    \begin{align}
+        (\Lambda A)^i & =\sum_{j=0}^{d-1}\Lambda_{ij}A^j.
+        \label{eq:physical_rotation}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Rotation by the identity]\label{lem:physical_rotation_one}
+    \lean{MPSTensor.rotatePhysical_one}
+    \leanok
+    \uses{def:physical_rotation}
+    Rotation by the identity is trivial: $\Id A=A$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:physical_rotation}
+    Since $\Id_{ij}=\delta_{ij}$, each component in (\ref{eq:physical_rotation})
+    reduces to $\sum_j\delta_{ij}A^j=A^i$.
+\end{proof}
+
+\begin{lemma}[Composition of rotations]\label{lem:physical_rotation_mul}
+    \lean{MPSTensor.rotatePhysical_rotatePhysical}
+    \leanok
+    \uses{def:physical_rotation}
+    For $\Lambda,\Lambda'\in\MN{d}$,
+    \begin{align}
+        \Lambda(\Lambda'A) & =(\Lambda\Lambda')A.
+        \label{eq:physical_rotation_mul}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:physical_rotation}
+    Expand both sides of (\ref{eq:physical_rotation_mul}) by
+    (\ref{eq:physical_rotation}) and swap the order of summation:
+    \begin{align}
+        \big(\Lambda(\Lambda'A)\big)^i
+         & =\sum_{j}\Lambda_{ij}\sum_{k}\Lambda'_{jk}A^k
+        =\sum_{k}\Big(\sum_{j}\Lambda_{ij}\Lambda'_{jk}\Big)A^k
+        =\big((\Lambda\Lambda')A\big)^i.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{definition}[Tensor power of an on-site map]\label{def:on_site_tensor_pow}
+    \lean{MPSTensor.onSiteTensorPow}
+    \lean{MPSTensor.onSiteTensorPow_apply}
+    \leanok
+    For $\Lambda\in\MN{d}$ and $L\ge0$, the tensor power $\Lambda^{\otimes L}$ is the
+    matrix on $L$-site configurations with entries
+    \begin{align}
+        (\Lambda^{\otimes L})_{\sigma,\tau} & =\prod_{n=0}^{L-1}\Lambda_{\sigma_n\tau_n}.
+        \label{eq:on_site_tensor_pow}
+    \end{align}
+    It acts on the $L$-site space $\Fin{d}^{L}\to\C$ by matrix multiplication and on
+    its Hilbert-space realization $\ell^2(\Fin{d}^{L})$ in the same way.
+\end{definition}
+
+\begin{lemma}[Multiplicativity of the tensor power]\label{lem:on_site_tensor_pow_mul}
+    \lean{MPSTensor.onSiteTensorPow_eq_submatrix_blockKron}
+    \lean{MPSTensor.onSiteTensorPow_mul}
+    \lean{MPSTensor.onSiteTensorPow_one}
+    \lean{MPSTensor.onSiteTensorPow_conjTranspose}
+    \lean{MPSTensor.onSiteTensorPow_inv_mul}
+    \lean{MPSTensor.onSiteTensorPow_mul_inv}
+    \lean{MPSTensor.toEuclideanLin_onSiteTensorPow_mul_apply}
+    \leanok
+    \uses{def:on_site_tensor_pow}
+    For $\Lambda,\Lambda'\in\MN{d}$ one has
+    $(\Lambda\Lambda')^{\otimes L}=\Lambda^{\otimes L}\Lambda'^{\otimes L}$,
+    $\Id^{\otimes L}=\Id$, and
+    $(\Lambda^{\otimes L})^\dagger=(\Lambda^\dagger)^{\otimes L}$.
+    If $\Lambda$ is invertible, then $(\Lambda^{-1})^{\otimes L}$ is a two-sided
+    inverse of $\Lambda^{\otimes L}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Reading the blocked physical index of $L$ consecutive sites as an
+    $L$-site configuration identifies $\Lambda^{\otimes L}$ with the Kronecker
+    lift of $\Lambda$ through blocking, for which multiplicativity, the
+    identity, and the conjugate transpose are known. The inverse statements follow
+    from multiplicativity applied to $\Lambda^{-1}\Lambda=\Lambda\Lambda^{-1}=\Id$.
+\end{proof}
+
+\begin{lemma}[State and boundary map of the rotated tensor]\label{lem:physical_rotation_state}
+    \lean{MPSTensor.evalWord_rotatePhysical_ofFn}
+    \lean{MPSTensor.mpv_rotatePhysical}
+    \lean{MPSTensor.mpv_rotatePhysical_eq_toLin'}
+    \lean{MPSTensor.groundSpaceMap_rotatePhysical}
+    \leanok
+    \uses{def:physical_rotation, def:on_site_tensor_pow, def:ground_space_map}
+    For every word $\sigma$ of length $N$,
+    \begin{align}
+        (\Lambda A)^{\sigma}
+         & =\sum_{\tau}\Big(\prod_{n=0}^{N-1}\Lambda_{\sigma_n\tau_n}\Big)A^{\tau},
+        \label{eq:physical_rotation_word}
+    \end{align}
+    so that $\ket{V^{(N)}(\Lambda A)}=\Lambda^{\otimes N}\ket{V^{(N)}(A)}$ and
+    $\Gamma_L^{\Lambda A}(X)=\Lambda^{\otimes L}\,\Gamma_L^{A}(X)$ for every
+    boundary matrix $X\in\MN{D}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand each factor of $(\Lambda A)^{\sigma_1}\cdots(\Lambda A)^{\sigma_N}$ by
+    (\ref{eq:physical_rotation}) and collect the coefficient of $A^{\tau}$, by
+    induction on $N$. Taking the trace against $X$ gives the boundary-map
+    identity, and $X=\Id$ gives the state identity.
+\end{proof}
+
+\begin{theorem}[Local ground space of the rotated tensor]\label{thm:ground_space_physical_rotation}
+    \lean{MPSTensor.groundSpace_rotatePhysical}
+    \lean{MPSTensor.groundSpaceES_rotatePhysical}
+    \leanok
+    \uses{def:physical_rotation, def:on_site_tensor_pow, def:ground_space_parent, def:ground_space_es}
+    For every $\Lambda\in\MN{d}$ and $L\ge0$,
+    \begin{align}
+        G_L(\Lambda A) & =\Lambda^{\otimes L}\,G_L(A),
+        \label{eq:ground_space_physical_rotation}
+    \end{align}
+    and the same identity holds for the Hilbert-space realizations of the two
+    local ground spaces.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:physical_rotation_state}
+    By Lemma~\ref{lem:physical_rotation_state}, the boundary map of $\Lambda A$ is
+    the composition of $\Lambda^{\otimes L}$ with the boundary map of $A$, so its
+    range is the image of $G_L(A)$ under $\Lambda^{\otimes L}$.
+\end{proof}
+
+\begin{definition}[Parent interaction]\label{def:is_parent_interaction}
+    \lean{MPSTensor.IsParentInteraction}
+    \leanok
+    \uses{def:ground_space_es}
+    Following \cite[Section~IV.C, Definition (Parent Hamiltonian)]{Cirac2021Matrix},
+    a \emph{parent interaction} on $L$ sites for the tensor $A$ is a hermitian
+    positive semidefinite operator $h\ge0$ on $\ell^2(\Fin{d}^{L})$ whose kernel
+    equals $G_L(A)$.
+\end{definition}
+
+\begin{theorem}[The canonical parent interaction is a parent interaction]\label{thm:canonical_parent_interaction_is_parent_interaction}
+    \lean{MPSTensor.isParentInteraction_parentInteractionES}
+    \leanok
+    \uses{def:is_parent_interaction, rem:euclidean_local_projector_ingredients}
+    The canonical parent interaction $P_L^{\mathrm{ES}}(A)$, the orthogonal
+    projector onto $G_L(A)^\perp$, is a parent interaction on $L$ sites for $A$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:euclidean_local_projector_positive, lem:parent_interaction_es_kernel}
+    An orthogonal projector is hermitian and positive semidefinite
+    (Lemma~\ref{lem:euclidean_local_projector_positive}), and by
+    Lemma~\ref{lem:parent_interaction_es_kernel} a vector is annihilated by the
+    projector onto $G_L(A)^\perp$ exactly when it lies in $G_L(A)$, so
+    $\ker P_L^{\mathrm{ES}}(A)=G_L(A)$.
+\end{proof}
+
+\begin{definition}[Deformed interaction]\label{def:deformed_interaction}
+    \lean{MPSTensor.deformedInteraction}
+    \leanok
+    \uses{def:on_site_tensor_pow}
+    For $\Lambda\in\MN{d}$ and an operator $h$ on $\ell^2(\Fin{d}^{L})$, the
+    \emph{deformed interaction} is
+    \begin{align}
+        h' & =({\Lambda^{-1}}^\dagger)^{\otimes L}\,h\,(\Lambda^{-1})^{\otimes L}.
+        \label{eq:deformed_interaction}
+    \end{align}
+    This is the operator written in \cite[Section~IV.C]{Cirac2021Matrix} as
+    $h'=(A^{-1}\otimes A^{-1})^\dagger h(A^{-1}\otimes A^{-1})$ for the
+    two-site interaction of an isometric tensor network, and as
+    $h'=({\Lambda^{-1}}^\dagger)^{\otimes k}h(\Lambda^{-1})^{\otimes k}$ for a
+    general physical perturbation.
+\end{definition}
+
+\begin{theorem}[The deformed interaction is a parent interaction]\label{thm:deformed_interaction_parent}
+    \lean{MPSTensor.deformedInteraction_isPositive}
+    \lean{MPSTensor.ker_deformedInteraction}
+    \lean{MPSTensor.IsParentInteraction.deformedInteraction}
+    \leanok
+    \uses{def:physical_rotation, def:is_parent_interaction, def:deformed_interaction}
+    Let $\Lambda\in\MN{d}$ be invertible and let $h$ be a parent interaction on $L$
+    sites for $A$. Then the deformed interaction $h'$ of
+    (\ref{eq:deformed_interaction}) is a parent interaction on $L$ sites for
+    $\Lambda A$: $h'\ge0$ and $\ker h'=G_L(\Lambda A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:on_site_tensor_pow_mul, thm:ground_space_physical_rotation}
+    Write $S=(\Lambda^{-1})^{\otimes L}$. By Lemma~\ref{lem:on_site_tensor_pow_mul},
+    $({\Lambda^{-1}}^\dagger)^{\otimes L}=S^\dagger$, so $h'=S^\dagger hS$ is
+    positive semidefinite. Since $S$ and $S^\dagger$ are invertible with inverses
+    $\Lambda^{\otimes L}$ and $(\Lambda^\dagger)^{\otimes L}$,
+    \begin{align}
+        h'\Phi=0
+        \iff hS\Phi=0
+        \iff S\Phi\in G_L(A)
+        \iff \Phi\in\Lambda^{\otimes L}G_L(A)
+        =G_L(\Lambda A),
+        \label{eq:deformed_interaction_kernel}
+    \end{align}
+    where the last equality is (\ref{eq:ground_space_physical_rotation}).
+\end{proof}
+
+\begin{lemma}[Window factorization of the tensor power]\label{lem:cyclic_restrict_tensor_pow}
+    \lean{MPSTensor.cyclicRestrictₗ_toLin'_onSiteTensorPow}
+    \leanok
+    \uses{def:on_site_tensor_pow, rem:cyclic_window_operators, def:cyclic_window_support}
+    Let $0<N$, $L\le N$, let $i\in\Fin{N}$, and let $\tau\in\Fin{d}^{N}$ be an
+    outside configuration. For every $\phi\colon\Fin{d}^{N}\to\C$, the restriction of
+    $\Lambda^{\otimes N}\phi$ to the cyclic window $[i,i+L-1]$ with outside
+    configuration $\tau$ is
+    \begin{align}
+        \big(\Lambda^{\otimes N}\phi\big)\big|_{[i,i+L-1],\tau}
+         & =\Lambda^{\otimes L}\sum_{\omega}c_{\tau}(\omega)\,
+        \phi\big|_{[i,i+L-1],\omega},
+        \label{eq:cyclic_restrict_tensor_pow}
+    \end{align}
+    where the sum runs over the configurations $\omega\in\Fin{d}^{N}$ that agree
+    with $\tau$ on the window, and
+    $c_\tau(\omega)=\prod_{k\notin[i,i+L-1]}\Lambda_{\tau_k\omega_k}$ is the product
+    of the entries of $\Lambda$ over the sites outside the window.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $W=[i,i+L-1]$ for the window. For a configuration $\omega\in\Fin{d}^{N}$
+    let $\omega_W\in\Fin{d}^{L}$ be the word read off the window,
+    $(\omega_W)_r=\omega_{i+r}$, and for a window word $\sigma'\in\Fin{d}^{L}$ let
+    $\omega[\sigma']\in\Fin{d}^{N}$ be the configuration that reads $\sigma'$ on the
+    window and agrees with $\omega$ outside it, so that
+    $(\phi|_{W,\omega})(\sigma')=\phi(\omega[\sigma'])$,
+    $(\omega[\sigma'])_W=\sigma'$, $\omega[\sigma'][\omega_W]=\omega$, and
+    $c_\tau(\omega[\sigma'])=c_\tau(\omega)$. Evaluate both sides of
+    (\ref{eq:cyclic_restrict_tensor_pow}) at a window word $\sigma$. On the left,
+    the product over all sites in (\ref{eq:on_site_tensor_pow}) splits into the
+    product over the window, where $\tau[\sigma]$ reads $\sigma$, and the product
+    over its complement, where $\tau[\sigma]$ agrees with $\tau$:
+    \begin{align}
+        \big(\Lambda^{\otimes N}\phi\big)(\tau[\sigma])
+         & =\sum_{\rho}\Big(\prod_{k=0}^{N-1}\Lambda_{\tau[\sigma]_k\rho_k}\Big)\phi(\rho)
+        =\sum_{\rho}\Big(\prod_{r=0}^{L-1}\Lambda_{\sigma_r\rho_{i+r}}\Big)
+        c_\tau(\rho)\,\phi(\rho).
+        \label{eq:cyclic_restrict_tensor_pow_left}
+    \end{align}
+    On the right, with $[\,\cdot\,]$ equal to $1$ when the enclosed condition holds
+    and to $0$ otherwise,
+    \begin{align}
+        \sum_{\sigma'}\Big(\prod_{r=0}^{L-1}\Lambda_{\sigma_r\sigma'_r}\Big)
+        \sum_{\omega}[\omega_W=\tau_W]\,c_\tau(\omega)\,\phi(\omega[\sigma'])
+         & =\sum_{\sigma'}\sum_{\omega}
+        \Big(\prod_{r=0}^{L-1}\Lambda_{\sigma_r\omega_{i+r}}\Big)
+        [\sigma'=\tau_W]\,c_\tau(\omega)\,\phi(\omega)
+        \notag                                                                     \\
+         & =\sum_{\omega}\Big(\prod_{r=0}^{L-1}\Lambda_{\sigma_r\omega_{i+r}}\Big)
+        c_\tau(\omega)\,\phi(\omega),
+        \label{eq:cyclic_restrict_tensor_pow_right}
+    \end{align}
+    where the first equality reindexes the double sum by the involution
+    \begin{align}
+        (\sigma',\omega) & \longmapsto\big(\omega_W,\ \omega[\sigma']\big)
+        \label{eq:cyclic_restrict_tensor_pow_swap}
+    \end{align}
+    on pairs of a window word and a configuration, and the second collapses the sum
+    over $\sigma'$ to the single term $\sigma'=\tau_W$. The right sides of
+    (\ref{eq:cyclic_restrict_tensor_pow_left}) and
+    (\ref{eq:cyclic_restrict_tensor_pow_right}) agree term by term with
+    $\rho=\omega$.
+\end{proof}
+
+\begin{theorem}[Ground-space correspondence]\label{thm:chain_ground_space_physical_rotation}
+    \lean{MPSTensor.map_chainGroundSpace_le_chainGroundSpace_rotatePhysical}
+    \lean{MPSTensor.chainGroundSpace_rotatePhysical}
+    \lean{MPSTensor.ker_parentHamiltonian_rotatePhysical}
+    \leanok
+    \uses{def:physical_rotation, def:on_site_tensor_pow, def:chain_ground_space, def:parent_hamiltonian}
+    Let $\Lambda\in\MN{d}$ be invertible. Then, for all $L$ and $N$,
+    \begin{align}
+        \mathcal G_{N,L}(\Lambda A) & =\Lambda^{\otimes N}\,\mathcal G_{N,L}(A),
+        \label{eq:chain_ground_space_physical_rotation}
+    \end{align}
+    and for $0<N$ and $L\le N$ the kernels of the parent Hamiltonians satisfy
+    $\ker H_N(\Lambda A)=\Lambda^{\otimes N}\ker H_N(A)$. This is the
+    matrix-product-state instance, on the periodic chain, of the one-to-one
+    correspondence, through $R^{\otimes N}$, between the ground states of the parent
+    Hamiltonians of $\ket\psi$ and $\ket{\psi'}=R^{\otimes N}\ket\psi$ for an
+    invertible map $R$ stated in \cite[Section~IV.C]{Cirac2021Matrix} for tensor
+    network states on a general graph. Without
+    invertibility, the inclusion
+    $\Lambda^{\otimes N}\mathcal G_{N,L}(A)\subseteq\mathcal G_{N,L}(\Lambda A)$
+    still holds.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:cyclic_restrict_tensor_pow, thm:ground_space_physical_rotation, lem:on_site_tensor_pow_mul, lem:physical_rotation_one, lem:physical_rotation_mul, thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    Let $\phi\in\mathcal G_{N,L}(A)$, so that every window restriction of $\phi$
+    lies in $G_L(A)$. By (\ref{eq:cyclic_restrict_tensor_pow}), every window
+    restriction of $\Lambda^{\otimes N}\phi$ is $\Lambda^{\otimes L}$ applied to a
+    linear combination of window restrictions of $\phi$, hence lies in
+    $\Lambda^{\otimes L}G_L(A)=G_L(\Lambda A)$ by
+    (\ref{eq:ground_space_physical_rotation}). This proves the inclusion
+    $\Lambda^{\otimes N}\mathcal G_{N,L}(A)\subseteq\mathcal G_{N,L}(\Lambda A)$
+    for every $\Lambda$. Applying it to $\Lambda^{-1}$ and $\Lambda A$ gives
+    $(\Lambda^{-1})^{\otimes N}\mathcal G_{N,L}(\Lambda A)\subseteq\mathcal G_{N,L}(A)$,
+    and composing with $\Lambda^{\otimes N}$ gives the reverse inclusion. The kernel
+    statement follows from
+    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space}.
+\end{proof}
+
+\begin{theorem}[Uniqueness of the ground state is preserved]\label{thm:unique_ground_state_physical_rotation}
+    \lean{MPSTensor.onSiteTensorPowEquiv}
+    \lean{MPSTensor.hasUniqueGroundState_chainGroundSpace_rotatePhysical}
+    \leanok
+    \uses{def:physical_rotation, def:chain_ground_space, def:has_unique_ground_state}
+    Let $\Lambda\in\MN{d}$ be invertible. If $\dim\mathcal G_{N,L}(A)=1$, then
+    $\dim\mathcal G_{N,L}(\Lambda A)=1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:chain_ground_space_physical_rotation, lem:on_site_tensor_pow_mul}
+    By (\ref{eq:chain_ground_space_physical_rotation}), $\mathcal G_{N,L}(\Lambda A)$
+    is the image of $\mathcal G_{N,L}(A)$ under the linear automorphism
+    $\Lambda^{\otimes N}$, which preserves dimension.
+\end{proof}
