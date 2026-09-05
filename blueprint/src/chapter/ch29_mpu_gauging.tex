@@ -5064,3 +5064,255 @@ and four blocked sites.
     solutions of the three equations $c_j(p,b)=0$, and at $N=4$ the $256$ pairs
     yield $36$ solutions of the four equations.
 \end{proof}
+
+\section{The CZX defect domains and prescribed defect maps}
+\label{sec:mpug_czx_defect_maps}
+
+The modified-fusion lemma of
+\cite[lines~4215--4254]{FrancoRubio2025MPUGauging} attaches to every ordered
+pair $(a,b)$ of gauge labels and every injective block $x$ a two-site defect
+vector $v(a,b,x)$ and prescribes a unitary carrying it to $v(e,ab,x)$. For the
+CZX model the source displays the injective blocks, the action tensors, and the
+single-site evaluations of the domain-wall defect, but not the eight two-site
+vectors; their values, the four subspaces they span, and the four prescribed
+maps are obtained by finite contraction of the displayed tensors
+in~\cite{gap:fbc25_czx_defect_domains}. This section carries that derived data.
+It does not assert that the circuit tuple $R^{\mathrm{CZX}}$ of
+Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
+
+\begin{definition}[Single-site CZX defects]
+    \label{def:mpug_czx_site_defects}
+    \lean{MPOTensor.CZX.identityDefect,
+        MPOTensor.CZX.flipDefect,
+        MPOTensor.CZX.siteDefect,
+        MPOTensor.CZX.identityDefect_zero,
+        MPOTensor.CZX.identityDefect_one,
+        MPOTensor.CZX.flipDefect_zero,
+        MPOTensor.CZX.flipDefect_one}
+    \leanok
+    \discussion{7739}
+    One blocked site of the CZX model carries two matter qubits, and the two
+    injective blocks of the once-blocked GHZ state are the product vectors
+    $\ket{\circ}=\ket{00}$ and $\ket{\bullet}=\ket{11}$
+    \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}, both of bond dimension
+    one. Writing $e\leftrightarrow0$ and $g\leftrightarrow1$ for the labels of
+    $\Z_2=\{e,g\}$, the identity defect and the domain-wall defect of
+    \cite[lines~2831--2845]{FrancoRubio2025MPUGauging} at the block
+    $x\in\mathbb F_2$ are
+    \begin{align}
+        e[x] & =\ket{xx},   \label{eq:mpug_czx_identity_defect}  \\
+        g[0] & =\ket{00},   \label{eq:mpug_czx_flip_defect_zero} \\
+        g[1] & =-i\ket{11}. \label{eq:mpug_czx_flip_defect_one}
+    \end{align}
+    Contracting the action tensors $A^{\Gamma}_{g,0}=-i\bra{1}$ and
+    $A^{\Gamma}_{g,1}=\bra{0}$ of
+    \cite[lines~4690--4694]{FrancoRubio2025MPUGauging} against the defect
+    diagram gives (\ref{eq:mpug_czx_flip_defect_zero}) and
+    (\ref{eq:mpug_czx_flip_defect_one}), which are the evaluations displayed
+    in \cite[lines~4800--4859]{FrancoRubio2025MPUGauging}; the derivation is
+    carried out in~\cite{gap:fbc25_czx_defect_domains}.
+\end{definition}
+
+\begin{definition}[Two-site CZX defect vectors]
+    \label{def:mpug_czx_defect_vectors}
+    \lean{MPOTensor.CZX.defectVector,
+        MPOTensor.CZX.defectVector_one_one,
+        MPOTensor.CZX.defectVector_one_gen,
+        MPOTensor.CZX.defectVector_gen_one,
+        MPOTensor.CZX.defectVector_gen_gen}
+    \leanok
+    \uses{def:mpug_czx_site_defects}
+    The two-site defect vector of the label pair $(a,b)$ and the block $x$ is
+    the left defect $a[bx]$ tensored with the right defect $b[x]$, in that
+    order \cite[lines~4234--4245]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        v(a,b,x) & =a[bx]\otimes b[x].
+        \label{eq:mpug_czx_defect_vector}
+    \end{align}
+    The four qubits of two neighboring blocked sites are numbered $0,1$ on the
+    left site and $2,3$ on the right, and the computational basis of the
+    sixteen-dimensional two-site matter space is written $\ket{x_0x_1x_2x_3}$.
+\end{definition}
+
+\begin{theorem}[The eight CZX defect vectors]
+    \label{thm:mpug_czx_defect_vector_values}
+    \lean{MPOTensor.CZX.defectVector_one_one_zero,
+        MPOTensor.CZX.defectVector_one_one_one,
+        MPOTensor.CZX.defectVector_one_gen_zero,
+        MPOTensor.CZX.defectVector_one_gen_one,
+        MPOTensor.CZX.defectVector_gen_one_zero,
+        MPOTensor.CZX.defectVector_gen_one_one,
+        MPOTensor.CZX.defectVector_gen_gen_zero,
+        MPOTensor.CZX.defectVector_gen_gen_one,
+        MPOTensor.CZX.star_defectVector_dotProduct_defectVector}
+    \leanok
+    \uses{def:mpug_czx_defect_vectors}
+    The eight two-site defect vectors of the CZX model are
+    \begin{align}
+        v(e,e,0) & =\ket{0000},   & v(e,e,1) & =\ket{1111},
+        \label{eq:mpug_czx_v_ee}                              \\
+        v(e,g,0) & =\ket{1100},   & v(e,g,1) & =-i\ket{0011},
+        \label{eq:mpug_czx_v_eg}                              \\
+        v(g,e,0) & =\ket{0000},   & v(g,e,1) & =-i\ket{1111},
+        \label{eq:mpug_czx_v_ge}                              \\
+        v(g,g,0) & =-i\ket{1100}, & v(g,g,1) & =-i\ket{0011}.
+        \label{eq:mpug_czx_v_gg}
+    \end{align}
+    For every label pair the two vectors $v(a,b,0)$ and $v(a,b,1)$ are
+    orthonormal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_site_defects, def:mpug_czx_defect_vectors}
+    Substituting (\ref{eq:mpug_czx_identity_defect}),
+    (\ref{eq:mpug_czx_flip_defect_zero}), and
+    (\ref{eq:mpug_czx_flip_defect_one}) into
+    (\ref{eq:mpug_czx_defect_vector}), with $bx=x+b$ in $\mathbb F_2$, gives
+    the eight values. The two vectors of a label pair differ in the last two
+    bits, hence are orthogonal, and each carries a scalar of modulus one,
+    hence is a unit vector.
+\end{proof}
+
+\begin{definition}[CZX defect domains]
+    \label{def:mpug_czx_defect_domains}
+    \lean{MPOTensor.CZX.defectDomain,
+        MPOTensor.CZX.evenTarget,
+        MPOTensor.CZX.oddTarget}
+    \leanok
+    \uses{def:mpug_czx_defect_vectors}
+    The defect domain of the label pair $(a,b)$ and the two target planes are
+    \begin{align}
+        \mathcal K_{a,b} & =\spn_{\C}\{v(a,b,x):x\in\mathbb F_2\},
+        \label{eq:mpug_czx_domain}                                 \\
+        \mathcal L_0     & =\spn_{\C}\{\ket{0000},\ket{1111}\},
+        \label{eq:mpug_czx_even_target}                            \\
+        \mathcal L_1     & =\spn_{\C}\{\ket{1100},\ket{0011}\}.
+        \label{eq:mpug_czx_odd_target}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The four CZX defect domains]
+    \label{thm:mpug_czx_defect_domains}
+    \lean{MPOTensor.CZX.defectDomain_one_one,
+        MPOTensor.CZX.defectDomain_gen_one,
+        MPOTensor.CZX.defectDomain_one_gen,
+        MPOTensor.CZX.defectDomain_gen_gen,
+        MPOTensor.CZX.defectDomain_eq,
+        MPOTensor.CZX.star_dotProduct_eq_zero_of_mem_evenTarget_of_mem_oddTarget,
+        MPOTensor.CZX.finrank_evenTarget,
+        MPOTensor.CZX.finrank_oddTarget,
+        MPOTensor.CZX.finrank_defectDomain}
+    \leanok
+    \uses{def:mpug_czx_defect_domains}
+    The four CZX defect domains are
+    \begin{align}
+        \mathcal K_{e,e}=\mathcal K_{g,e} & =\mathcal L_0,
+        \label{eq:mpug_czx_even_domains}                   \\
+        \mathcal K_{e,g}=\mathcal K_{g,g} & =\mathcal L_1,
+        \label{eq:mpug_czx_odd_domains}
+    \end{align}
+    so the domain depends only on the right label. The two planes are
+    orthogonal, $\mathcal L_0\perp\mathcal L_1$, and each has dimension two.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_defect_vector_values, def:mpug_czx_defect_domains}
+    By (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) the two spanning
+    vectors of $\mathcal K_{a,b}$ are the two spanning vectors of
+    $\mathcal L_b$ up to nonzero scalars, and rescaling a spanning vector by a
+    nonzero scalar leaves the span unchanged, which gives
+    (\ref{eq:mpug_czx_even_domains}) and (\ref{eq:mpug_czx_odd_domains}). The
+    four basis vectors occurring in (\ref{eq:mpug_czx_even_target}) and
+    (\ref{eq:mpug_czx_odd_target}) are pairwise distinct members of the
+    computational basis, so expanding a vector of $\mathcal L_0$ and a vector
+    of $\mathcal L_1$ in that basis makes every one of the four cross terms of
+    their inner product vanish, and the two spanning vectors of each plane are
+    linearly independent.
+\end{proof}
+
+\begin{definition}[The prescribed CZX defect maps]
+    \label{def:mpug_czx_prescribed_maps}
+    \lean{MPOTensor.CZX.prescribedMap}
+    \leanok
+    \uses{def:mpug_czx_defect_vectors, def:mpug_czx_defect_domains}
+    The prescribed defect map of the label pair $(a,b)$ is the partial
+    isometry
+    \begin{align}
+        D_{a,b} & =\sum_{x\in\mathbb F_2}\ketbra{v(e,ab,x)}{v(a,b,x)}
+        \label{eq:mpug_czx_prescribed_map}
+    \end{align}
+    of the two-site matter space. It is assembled from the defect vectors
+    (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) and not from the
+    circuits $w$ and $\tilde\lambda$ of
+    Definition~\ref{def:mpug_czx_circuit_tuple}.
+\end{definition}
+
+\begin{theorem}[Action of the prescribed CZX defect maps]
+    \label{thm:mpug_czx_prescribed_action}
+    \lean{MPOTensor.CZX.prescribedMap_mulVec_defectVector,
+        MPOTensor.CZX.prescribedMap_mem_defectDomain,
+        MPOTensor.CZX.isometry_on_defectDomain,
+        MPOTensor.CZX.prescribedMap_one_one_mulVec,
+        MPOTensor.CZX.prescribedMap_one_gen_mulVec,
+        MPOTensor.CZX.prescribedMap_gen_one_mulVec_zero,
+        MPOTensor.CZX.prescribedMap_gen_one_mulVec_one,
+        MPOTensor.CZX.prescribedMap_gen_gen_mulVec_zero,
+        MPOTensor.CZX.prescribedMap_gen_gen_mulVec_one}
+    \leanok
+    \uses{def:mpug_czx_prescribed_maps}
+    For every label pair and every block,
+    \begin{align}
+        D_{a,b}v(a,b,x) & =v(e,ab,x),
+        \label{eq:mpug_czx_prescription}
+    \end{align}
+    the map $D_{a,b}$ carries $\mathcal K_{a,b}$ into $\mathcal K_{e,ab}$, and
+    it is an isometry on $\mathcal K_{a,b}$, that is,
+    $D_{a,b}^{\dagger}D_{a,b}\ket{\xi}=\ket{\xi}$ for every
+    $\ket{\xi}\in\mathcal K_{a,b}$. In the computational basis,
+    \begin{align}
+        D_{e,e} & =\Id_{\mathcal L_0},
+        \label{eq:mpug_czx_map_ee}                     \\
+        D_{e,g} & =\Id_{\mathcal L_1},
+        \label{eq:mpug_czx_map_eg}                     \\
+        D_{g,e}\ket{0000}=\ket{1100},
+                & \quad D_{g,e}\ket{1111}=\ket{0011},
+        \label{eq:mpug_czx_map_ge}                     \\
+        D_{g,g}\ket{1100}=i\ket{0000},
+                & \quad D_{g,g}\ket{0011}=i\ket{1111}.
+        \label{eq:mpug_czx_map_gg}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_defect_vector_values, def:mpug_czx_prescribed_maps}
+    Applying (\ref{eq:mpug_czx_prescribed_map}) to $v(a,b,x)$ and using the
+    orthonormality of $v(a,b,0)$ and $v(a,b,1)$ of
+    Theorem~\ref{thm:mpug_czx_defect_vector_values} leaves the single term
+    $v(e,ab,x)$, which is (\ref{eq:mpug_czx_prescription}). The same
+    computation for the adjoint gives
+    $D_{a,b}^{\dagger}v(e,ab,x)=v(a,b,x)$, and composing the two identities on
+    a linear combination of $v(a,b,0)$ and $v(a,b,1)$ gives the isometry
+    property and the inclusion of the images. Substituting
+    (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) into
+    (\ref{eq:mpug_czx_prescription}) and cancelling the scalars of modulus one
+    gives (\ref{eq:mpug_czx_map_ee})--(\ref{eq:mpug_czx_map_gg}).
+\end{proof}
+
+\begin{definition}[Prescribed defect maps of the CZX model]
+    \label{def:mpug_czx_defect_maps}
+    \lean{MPOTensor.CZX.defectMaps,
+        MPOTensor.CZX.defectMaps_domain,
+        MPOTensor.CZX.defectMaps_prescribed}
+    \leanok
+    \uses{def:mpug_defect_maps, def:mpug_czx_defect_domains,
+        def:mpug_czx_prescribed_maps, thm:mpug_czx_prescribed_action}
+    The four domains (\ref{eq:mpug_czx_even_domains}) and
+    (\ref{eq:mpug_czx_odd_domains}) together with the four maps
+    (\ref{eq:mpug_czx_prescribed_map}) are prescribed defect maps in the sense
+    of Definition~\ref{def:mpug_defect_maps} for the group $\Z_2$ and the
+    two-site matter space of the CZX model, the isometry condition
+    (\ref{eq:mpug_defect_isometry}) being
+    Theorem~\ref{thm:mpug_czx_prescribed_action}. Whether the circuit tuple
+    $R^{\mathrm{CZX}}$ lies in the resulting completion class
+    (\ref{eq:mpug_completion_class}) is not decided here.
+\end{definition}
