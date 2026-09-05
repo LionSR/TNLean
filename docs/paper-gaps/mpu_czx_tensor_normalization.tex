@@ -1,0 +1,124 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
+\title{CZX: Normalization and the Physical Z Gates}
+\author{}
+\date{2026-09-04}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The 2017 contraction convention and its obstruction}
+Section II, ``Basics in Matrix Product Vectors'', of
+\cite{Cirac2017MPU} defines the periodic contraction as an ordinary trace,
+with no length-dependent prefactor. Section III, ``Structure of MPU'',
+requires the resulting operator to be unitary and separately normalizes
+its transfer matrix by $1/q$, where $q$ is the local physical dimension
+($q=2$ here). That transfer normalization does not rescale the physical
+operator.\footnote{Source traceability: \path{Papers/1703.09188/paper_v2.tex},
+    lines 226--246 and 318--350. The declared auxiliary-label build for this
+    archived source currently fails at the title's malformed accent command;
+    the printed section and example designations are used here instead.}
+
+Write $u,d,\ell,r\in\{0,1\}$ for upper, lower, left and right indices,
+$X_{ud}=\delta_{u,1-d}$, and $H_{\ell r}=2^{-1/2}(-1)^{\ell r}$.
+The example headed ``CZX'' in the time-reversal symmetry subsection of
+\cite{Cirac2017MPU} prints\footnote{Source traceability:
+    \path{Papers/1703.09188/paper_v2.tex}, lines 1914--1930.}
+\begin{align}
+    P^{ud}_{\ell r} & =X_{ud}\delta_{u,\ell}H_{\ell r}.
+    \label{eq:czx_printed_tensor}
+\end{align}
+For binary output and input configurations $a,b$ of length $n>0$, with
+cyclic indices $a_n=a_0$, the copy deltas force the unique virtual path
+$\ell_j=a_j$. Consequently
+\begin{align}
+    \operatorname{MPO}_n(P)_{a,b}
+     & =2^{-n/2}\prod_{j=0}^{n-1}\delta_{a_j,1-b_j}
+    (-1)^{\sum_{j=0}^{n-1}a_ja_{j+1}}.
+    \label{eq:czx_periodic_contraction}
+\end{align}
+Every row and column has one nonzero entry, of modulus $2^{-n/2}$, so
+$\operatorname{MPO}_n(P)\operatorname{MPO}_n(P)^\dagger=2^{-n}I$,
+not $I$. At $n=2$ the row indexed by $00$ has only the entry
+$\operatorname{MPO}_2(P)_{00,11}=1/2$; its squared norm is $1/4$.
+Blocking $L>0$ sites replaces $n$ by $Ln$ and cannot remove this obstruction.
+This is a nondegenerate normalization error, not a zero-sector convention.
+
+\section{What the 2025 diagram actually says}
+Equations~\papereqref{fbc25}{eq:CZ} and
+\papereqref{fbc25}{eq:deltas} of \cite{FrancoRubio2025MPUGauging}
+define the blue two-leg tensor as $W=\sqrt{2}H$, with entries
+$W_{\ell r}=(-1)^{\ell r}$; the wire junctions are ordinary copy deltas.
+The CZX tensor in Equation~\papereqref{fbc25}{eq:MPU_CZX} of
+\cite{FrancoRubio2025MPUGauging} has two such blue tensors, two lower
+physical $X$ gates and two upper physical $Z$ gates. None may be
+omitted.\footnote{Source traceability: \path{Papers/2502.20257/main.tex},
+    lines 3795--3851 and 4503--4547.}
+
+For comparison only, let $A=\sqrt{2}P$. Reading the two physical legs
+left to right, let their outputs be $a,b$ and inputs $c,d$.
+Writing $P_2$ and $A_2$ for the ordinary two-site blocks of $P$ and $A$,
+the latter has entries
+\begin{align}
+    (A_2)^{ab,cd}_{\ell r}
+     & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}(-1)^{ab+br}.
+    \label{eq:czx_repaired_block}
+\end{align}
+Since $Z_{aa}=(-1)^a$, the displayed 2025 tensor is instead
+\begin{align}
+    B^{ab,cd}_{\ell r}
+     & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}(-1)^{a+b+ab+br}
+    =(-1)^{a+b}(A_2)^{ab,cd}_{\ell r}.
+    \label{eq:czx_decorated_block}
+\end{align}
+Thus $B=(Z\otimes Z)A_2$ on the output physical leg, equivalently the
+block of the one-site tensor with entries $(-1)^u A^{ud}_{\ell r}$.
+It is neither $P_2$ nor $A_2$ in these coordinates. For example, at
+$(a,b,c,d,\ell,r)=(0,1,1,0,0,0)$, their entries are respectively
+$B=-1$, $P_2=1/2$, $A_2=1$.
+On a ring of $m$ blocked sites the additional factor is
+$(-1)^{\sum_{j=0}^{2m-1}a_j}$, which is not a constant phase.
+At $m=2$, compare all-zero output with output $0100$, each against its
+bitwise-complement input. This also excludes an identification merely by
+periodic virtual gauge transformation or a global scalar.
+
+The left-to-right pair $(a,b)$ is encoded as $2a+b$; successive pairs
+give the four-bit order used for two neighboring blocked sites.\footnote{The
+    existing encodings are \leanid{MPOTensor.CZX.siteBits} and
+    \leanid{MPOTensor.CZX.localBits}.}
+The formulas (\ref{eq:czx_repaired_block}) and
+(\ref{eq:czx_decorated_block}) are an informal source audit, not new
+public tensor definitions or a formal proof of their correspondence.
+
+\section{Checked boundary and elimination plan}
+The checked witness is exactly the printed tensor
+(\ref{eq:czx_printed_tensor}). The formal results establish its two-site
+all-zero row formula and its failure to generate a matrix product
+unitary.\footnote{Witness: \leanid{MPOTensor.CZX.printed2017Tensor}.
+    Results: \leanid{MPOTensor.CZX.printed2017Tensor_two_zero_row} and
+    \leanid{MPOTensor.CZX.printed2017Tensor_not_isMPU}.}
+The all-length contraction (\ref{eq:czx_periodic_contraction}) and the
+comparison (\ref{eq:czx_decorated_block}) are mathematical derivations
+in this note, not additional checked correspondence theorems.
+
+The literal printed cross-paper tensor identity is false. The corrected
+target is the exact Z-decorated tensor
+(\ref{eq:czx_decorated_block}), with its all-length monomial formula and
+unitarity, using ordinary blocking and the stated bit ordering.\footnote{The
+    corrected target is tracked by \ghissue{7738} and its implementation
+    child \ghissue{7752}; this audit does not assert that implementation
+    is merged or that its correspondence theorem is available here.}
+Any connection to the 2017 gate pair
+$u=CZ(X\otimes X), v=CZ$, where $CZ=\operatorname{diag}(1,1,1,-1)$,
+of \cite{Cirac2017MPU} must explicitly specify the normalization and
+physical change of representative, rather than assert literal equality.
+No classification signs, action data, defect tensors, or completion
+certificates are supplied here. This audit does not establish the two
+original CZX classification claims.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

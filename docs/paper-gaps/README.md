@@ -13,6 +13,11 @@ the current formal boundary.
 
 For the MPU index of arXiv:1703.09188:
 
+- `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
+  normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
+  tensors and physical Z gates of the 2025 diagram. The shared-tensor
+  correspondence remains open under #7738.
+
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
   column $(\alpha,j)$. It fixes the product weight $I_d\otimes\rho$, the
