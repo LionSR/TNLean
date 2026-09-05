@@ -770,7 +770,7 @@
 
 \begin{theorem}[Proportional Fundamental Theorem for irreducible-form MPS]
     \label{thm:periodic_ft_proportional}
-    \lean{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
+    \lean{MPSTensor.fundamentalTheorem_periodic_proportional_irreducibleForm}
     \leanok
     \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
     Let $A$ and $B$ have multiplicity-bearing irreducible forms
@@ -782,11 +782,14 @@
     \end{align}
     where $R_j$ and $S_k$ are diagonal with nonzero diagonal entries and the
     two displayed block families are pairwise non-repeated bases of periodic
-    tensors, spectrally periodic of periods $m_j$ and $n_k$ respectively.
+    tensors, each block being required only to have an irreducible transfer map
+    of spectral radius one, which is the source's irreducible form at
+    \cite[lines~248--261]{DeLasCuevas2017Irreducible}.
     Suppose that, for every positive $N$, the vectors
     $\ket{V^{(N)}(A)}$ and $\ket{V^{(N)}(B)}$ are proportional by a nonzero
-    scalar. Then there is a bijection $\pi\colon J\to K$ such that, for every
-    $j\in J$, one has $m_j=n_{\pi(j)}$ and there
+    scalar. Then the blocks carry periods $m_j$ and $n_k$ for which they are
+    spectrally periodic, and there is a bijection $\pi\colon J\to K$ such that,
+    for every $j\in J$, one has $m_j=n_{\pi(j)}$ and there
     are a unit-modulus scalar $\xi_j$ and an invertible matrix $Y_j$ such that,
     for every physical index $i$,
     \begin{align}
@@ -797,7 +800,31 @@
     \cite[Theorem~3.4, lines~613--623]{DeLasCuevas2017Irreducible}.
 
     The theorem relates the two bases of periodic tensors but makes no
-    assertion relating their multiplicity matrices.
+    assertion relating their multiplicity matrices. The periods are produced,
+    not assumed, exactly as at
+    \cite[lines~257--258]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:spectral_periodic_period_existence,
+        thm:periodic_ft_proportional_supplied_periods}
+    \leanok
+    Theorem~\ref{thm:spectral_periodic_period_existence} produces a positive
+    period for each block of either family, and
+    Theorem~\ref{thm:periodic_ft_proportional_supplied_periods} applied to
+    those periods gives the matching.
+\end{proof}
+
+\begin{theorem}[Proportional Fundamental Theorem, periods supplied]%
+    \label{thm:periodic_ft_proportional_supplied_periods}
+    \lean{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
+    \leanok
+    \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
+    Theorem~\ref{thm:periodic_ft_proportional} with the periods $m_j$ and $n_k$
+    given alongside the two block families, together with witnesses that each
+    block is spectrally periodic of the given period in the sense of
+    Definition~\ref{def:spectral_periodic_tensor}. Everything else, hypotheses
+    and conclusion alike, is as stated there. This is the working form of the
+    theorem.
 \end{theorem}
 \begin{proof}
     \uses{thm:repeated_blocks_period_eq, thm:periodic_conditional_block_matching, thm:periodic_spectral_multiplicity_nondecaying_overlap}

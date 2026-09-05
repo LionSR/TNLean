@@ -6,8 +6,10 @@ passage to that normalization, asserted by the source at lines 330--332, is the
 blockwise similarity of \cite[eq.~\emph{unital},
     line~316]{DeLasCuevas2017Irreducible} and is carried out in the proof.
 
-\begin{theorem}[Periodic Fundamental Theorem]\notready
+\begin{theorem}[Periodic Fundamental Theorem]
     \label{thm:periodic_ft}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_derivedPeriods}
+    \leanok
     \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
         def:scalar_gauge_equiv}
     Let $A$ and $B$ be MPS tensors in irreducible form, written
@@ -59,20 +61,12 @@ blockwise similarity of \cite[eq.~\emph{unital},
     dimension, whence $\mc{V}^+(A)=\mc{V}^+(ZA)$ already extends to length
     zero.
 
-    \noindent\emph{Scope restriction: the periods are supplied.}
-    The source introduces the period $m_j$ of a block as a consequence of
-    irreducibility and spectral radius one, at
-    \cite[lines~257--258]{DeLasCuevas2017Irreducible}, citing Wolf; it appears
-    in the conclusion of Theorem~3.8, not among its hypotheses. The formal
-    statement instead receives the periods together with witnesses that each
-    block is spectrally $m_j$-periodic, so a reader holding only the source's
-    two conditions on the blocks cannot yet instantiate it. The missing
-    ingredient is the existence half of the cyclic peripheral structure. The
-    restriction and its elimination plan are recorded in
-    \cite{gap:dccsp17_periodic_overlap_route_alignment}, section ``Scope
-    restriction: the periods of an irreducible-form block are supplied''. The
-    unrestricted source statement is Theorem~\ref{thm:periodic_ft} above,
-    which remains unformalized for that reason alone.
+    \noindent\emph{Remark on the periods.}
+    The period $m_j$ of a block is not a hypothesis. It is produced by
+    Theorem~\ref{thm:spectral_periodic_period_existence} from irreducibility
+    and spectral radius one alone, as the source produces it at
+    \cite[lines~257--258]{DeLasCuevas2017Irreducible}, and the periods so
+    produced are the ones occurring in every clause of the conclusion.
 
     \noindent\emph{Remark on the scalars $\xi_j$.}
     The source writes the two clauses of the last display without the
@@ -84,6 +78,17 @@ blockwise similarity of \cite[eq.~\emph{unital},
     between the two multiplicity families is $e^{i\theta}$, which is not a root
     of unity in general.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:spectral_periodic_period_existence,
+        thm:periodic_ft_supplied_periods}
+    Theorem~\ref{thm:spectral_periodic_period_existence} produces, for each
+    block of either family, a positive period for which that block is
+    spectrally periodic; irreducibility and spectral radius one are all it
+    needs. Theorem~\ref{thm:periodic_ft_supplied_periods}, applied to those
+    periods, gives every clause of the conclusion, and the periods it speaks
+    about are the produced ones.
+\end{proof}
 
 \begin{theorem}[Periodic Fundamental Theorem, periods supplied]%
     \label{thm:periodic_ft_supplied_periods}
@@ -95,7 +100,11 @@ blockwise similarity of \cite[eq.~\emph{unital},
     alongside the two block families, together with witnesses that each block is
     spectrally periodic of the given period in the sense of
     Definition~\ref{def:spectral_periodic_tensor}. Everything else, hypotheses
-    and conclusion alike, is as stated there.
+    and conclusion alike, is as stated there. This is the working form of the
+    theorem; the periods it receives are supplied by
+    Theorem~\ref{thm:spectral_periodic_period_existence} in the proof of
+    Theorem~\ref{thm:periodic_ft} above, so the source statement no longer
+    depends on them being given.
 \end{theorem}
 
 \begin{proof}\leanok

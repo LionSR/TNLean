@@ -14,6 +14,50 @@
     \cite[lines~248--261 and 313--332]{DeLasCuevas2017Irreducible}.
 \end{definition}
 
+\begin{theorem}[The period of an irreducible-form block]
+    \label{thm:spectral_periodic_period_existence}
+    \lean{MPSTensor.exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one}
+    \leanok
+    \uses{def:spectral_periodic_tensor}
+    Let $A$ be an MPS tensor whose transfer map is irreducible with spectral
+    radius one; these are the two conditions imposed on a block of the
+    irreducible form of \cite[lines~248--261]{DeLasCuevas2017Irreducible}. Then
+    there is a positive integer $m$ for which $A$ is spectrally $m$-periodic,
+    that is, for which the eigenvalues of $\E_A$ of modulus one are exactly the
+    $m$-th roots of unity. This is the derived periodicity of
+    \cite[lines~257--258]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:pure_perron_tp_gauge, thm:cpsv_spectral_radius_similarity, lem:peripheral_spectrum_similarity, lem:irreducible_transfer_perron_pair, thm:transfer_map_irreducible_of_tensor}
+    \leanok
+    Let $\sigma$ be the positive definite fixed point of $\E_A^*$ and pass to
+    the similar tensor $B=\sigma^{1/2}A\sigma^{-1/2}$ of
+    \cite[eq.~\emph{unital}, line~316]{DeLasCuevas2017Irreducible}, whose map is
+    trace preserving and still irreducible of spectral radius one. Its adjoint
+    map is unital, and the positive definite Perron fixed point of the map
+    itself is the positive definite fixed point required of the adjoint of that
+    unital map. Write $B^\dagger$ for the family with matrices $(B^i)^\dagger$,
+    so that $\E_{B^\dagger}=\E_B^*$. By
+    \cite[Theorem~6.6]{Wolf2012Quantum}, there are a positive integer $m$ and a
+    primitive $m$-th root of unity $\gamma$ such that
+    \begin{align}
+        \operatorname{Spec}_{\mathrm{per}}(\E_{B^\dagger})
+         & =\{\gamma^k:0\leq k<m\}
+        =\{\mu\in\C:\mu^m=1\}.
+        \notag
+    \end{align}
+    Passing back from the adjoint conjugates the peripheral spectrum. Since
+    complex conjugation preserves the set of $m$-th roots of unity,
+    \begin{align}
+        \operatorname{Spec}_{\mathrm{per}}(\E_B)
+         & =\overline{\{\mu\in\C:\mu^m=1\}}
+        =\{\mu\in\C:\mu^m=1\}.
+        \notag
+    \end{align}
+    Finally, similarity gives
+    $\operatorname{Spec}_{\mathrm{per}}(\E_A)=\operatorname{Spec}_{\mathrm{per}}(\E_B)$.
+\end{proof}
+
 \begin{theorem}[A spectrally periodic tensor has positive bond dimension]
     \label{thm:spectral_periodic_bond_dimension_pos}
     \lean{MPSTensor.IsSpectrallyPeriodic.bondDim_ne_zero}
