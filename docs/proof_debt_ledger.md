@@ -93,6 +93,24 @@ Removed declaration targets:
 Removed labels:
 - `lem:product_pair_local_projectors_from_overlap`
 
+### Additional removed Lean declaration
+
+The same retirement also removes
+`MPSTensor.HasProductPairLocalProjectors.commuting_twoSite_localTerms` from
+`TNLean/MPS/ParentHamiltonian/ProductPair.lean`. It had no Blueprint tag,
+so the inventory remains 27 removed tags and three removed labels, but covers
+28 removed explicit Lean declarations in total.
+
+**Replacement: none.** This theorem recovered commutation from the redundant
+local-projector witness and was retired with that witness. The retained
+Appendix B consumers instead use
+`MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute` and
+`MPSTensor.isNNCPH_of_adjacent_twoSite_commute` directly; this is not a
+replacement theorem on the deleted witness type. The conditional physical-pair
+constructions and their witness-dependent declarations listed above likewise
+have no replacements. The source cyclic-coefficient and adjacent-commutation
+results are retained, not substitutes for the rejected factorization.
+
 The retained questions #7751, #7611, #7371, and #7298 are unchanged by
 this retirement and its review corrections.
 
