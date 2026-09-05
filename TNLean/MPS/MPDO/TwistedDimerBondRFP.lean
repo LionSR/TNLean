@@ -248,7 +248,7 @@ lemma onsiteBondFlagEquiv_incoming (N : ℕ) :
   · funext m
     simp only [Equiv.trans_apply, Equiv.prodCongr_apply, onsiteBondFlagEquiv,
       incomingBondEquiv, incomingCellEquiv, bondFlagEquiv, Equiv.coe_fn_mk,
-      Prod.map_fst, Equiv.symm_apply_apply]
+      Equiv.arrowProdEquivProdArrow_apply, Prod.map_fst, Equiv.symm_apply_apply]
   · rfl
 
 /-- At positive length the decorated state is the on-site reindexing of the
