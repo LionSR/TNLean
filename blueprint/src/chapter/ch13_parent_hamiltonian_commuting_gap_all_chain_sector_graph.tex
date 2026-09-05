@@ -111,10 +111,8 @@
         V^{(2)}(\Lambda U)(a,b).
         \notag
     \end{align}
-    This cyclic virtual-pair formula does not imply factorization of a fixed
-    physical-word coefficient over disjoint physical pairs. The source instead
-    places each virtual pair across neighboring sites and applies an on-site
-    physical isometry, as in
+    The source places each virtual pair across neighboring sites and applies an
+    on-site physical isometry, as in
     \cite[equations~(3.17)--(3.18) and Appendix~B]{Cirac2016MPDO_arXiv}.
     On a three-site chain, the two adjacent length-two local terms are the
     $AX$ and $XB$ actions of the canonical two-site parent interaction.
@@ -141,6 +139,21 @@
     Theorem~\ref{thm:appendixB_definition_d2_coefficient_analogue}; identifying
     its hatted maps with the source projectors remains separate and is not
     needed for the chain commutator.
+\end{remark}
+
+\begin{remark}[Cyclic contraction and disjoint physical pairs]
+    \label{rem:cyclic_contraction_not_disjoint_pairs}
+    \uses{rem:product_pair_projectors}
+    The unit pair-index isometry and cyclic coefficient formula in
+    Remark~\ref{rem:product_pair_projectors} do not imply factorization of a
+    fixed physical-word coefficient over disjoint physical pairs.
+    For example, take virtual indices $0,1$, physical labels $(a,b)$, and
+    $U^{(a,b)}_{x,y}=\delta_{x,a}\delta_{y,b}$, with
+    $A^{(a,b)}=\lambda_a E_{a,b}$ and $\lambda_0,\lambda_1>0$.
+    The pair-index isometry holds. For the word
+    $((0,1),(1,0),(1,0),(0,1))$, the cyclic coefficient is zero, whereas the
+    product of the two disjoint two-site amplitudes is
+    $\lambda_0^2\lambda_1^2>0$.
 \end{remark}
 
 \begin{theorem}[Eventual dimension of nearest-neighbor parent ground spaces]%
