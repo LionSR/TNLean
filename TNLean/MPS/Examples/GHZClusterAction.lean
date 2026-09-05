@@ -12,7 +12,7 @@ import TNLean.MPS.Examples.GHZCluster
 The onsite representation and virtual matrices of arXiv:2502.20257,
 `example:z4z2`, lines 4481–4489. Physical coordinates are
 `|p,s,r⟩ ↔ 4*p + 2*s + r`: the blocked cluster tensor stores its first
-factor in the least significant bit. Thus physical qubits 2 and 3 correspond
+factor as the units digit of `q = 2*s + r`. Thus physical qubits 2 and 3 correspond
 to the second and first stored cluster factors, respectively.
 
 Only the representation and block covariance are treated here, not L-symbols,
@@ -176,7 +176,7 @@ theorem z4z2GHZClusterVirtual_sq (g : ZMod 4 × ZMod 2) (x : Fin 2) :
     simp [z4z2GHZClusterVirtual, z4z2GHZClusterPauliY, pauliX_literal, pauliZ,
       Matrix.one_fin_two]
 
-/-- The onsite matrix action on each block is implemented by the literal
+/-- The onsite matrix action on each block is given by the literal
 virtual representative, while its block label changes by parity of `a`.
 This is the block action claim of arXiv:2502.20257, `example:z4z2`;
 no normalization claim about defect tensors is made here. -/
@@ -197,7 +197,7 @@ theorem z4z2GHZClusterBlock_covariance (g : Multiplicative (ZMod 4 × ZMod 2))
   simp only [← mul_assoc, z4z2GHZClusterVirtual_sq, one_mul]
   rw [mul_assoc, z4z2GHZClusterVirtual_sq, mul_one]
 
-/-- On the unbroken subgroup `(2a,b)`, the table is the existing cluster
+/-- On the unbroken subgroup `(2a,b)`, the table is the cluster
 projective representation with swapped physical coordinates and the literal
 phase `-i` at `(a,b)=(1,1)`. In particular the Y entries are not the real
 product ZX. Source: arXiv:2502.20257, line 4489. -/
