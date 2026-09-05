@@ -12,6 +12,7 @@ import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CocycleCohomology
+import TNLean.Algebra.CocycleRestriction
 import TNLean.Algebra.CommonBufferLength
 import TNLean.Algebra.CommonFixedSubmodule
 import TNLean.Algebra.CommutingProjectionProduct
@@ -55,6 +56,7 @@ import TNLean.Algebra.ScalarThreeCocycle
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.SemisimpleTracePowers
+import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerTransition
 import TNLean.Algebra.SwapKronecker
