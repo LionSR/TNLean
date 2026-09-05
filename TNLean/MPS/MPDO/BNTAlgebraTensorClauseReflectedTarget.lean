@@ -235,9 +235,11 @@ Appendix C.4, lines 2048--2057. -/
 noncomputable def UnitarySectorConjugacy.ofAlgebraTensorClause
     (S : TwoSiteExactSectorGauge H)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
-    (hM : IsMPDO M) : UnitarySectorConjugacy S where
-  unitary γ := Classical.choose (S.exists_unitary_sector_conjugacy hCanonical hM γ)
-  tensor_eq γ := Classical.choose_spec (S.exists_unitary_sector_conjugacy hCanonical hM γ)
+    (hM : IsMPDO M) : UnitarySectorConjugacy S := by
+  have h := S.exists_unitary_sector_conjugacy hCanonical hM
+  exact
+    { unitary := fun γ => Classical.choose (h γ)
+      tensor_eq := fun γ => Classical.choose_spec (h γ) }
 
 end BNTAlgebraTensorClause.TwoSiteExactSectorGauge
 

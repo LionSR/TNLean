@@ -22,11 +22,14 @@ each open debt attached as a native sub-issue.
 - **Preserved**: structural/core-tensor, gauge, cyclic virtual-pair, and support
   results; direct overlap, adjacency, NNCPH, and ground-space statements.
 - **Verification**: 99 retained declaration headers are unchanged from
-  `00ff0ec40`; the source audit finds no retired consumers in production Lean,
-  Blueprint sources, or live paper-gap notes. Generated import checks pass.
-  The three edited Blueprint fragments have no missing declaration references;
-  27 retired tags and three retired labels are recorded exactly in the commit
-  message of `2114f2dfa`. The warm-cache package gate for
+  the pre-retirement source, as reported in [PR #7779](https://github.com/LionSR/TNLean/pull/7779).
+  The production Lean and Blueprint source audit found no retired consumers;
+  the review additionally identified and corrected the stale audit fixture and
+  two live paper-gap narratives. Generated import checks pass.
+  The three edited Blueprint fragments have no missing declaration references.
+  The 27 retired declaration targets and three retired labels are listed below,
+  recovered from the [PR #7779 file diff](https://github.com/LionSR/TNLean/pull/7779/files).
+  The warm-cache package gate for
   `TNLean.MPS.RFP.NNCPHGroundSpace` and
   `TNLean.MPS.RFP.NNCPHGroundSpacesMultiSector` passes (9,111 jobs).
   The gate exposed one transitive import, repaired by importing
@@ -34,6 +37,82 @@ each open debt attached as a native sub-issue.
   clean diagnostics. Source Blueprint synchronization passes globally; 41 retained
   Blueprint declarations in the targeted cone also resolve in compiled Lean.
   Both direct NNCPH theorems use only `propext`, `Classical.choice`, and `Quot.sound`.
+
+### Exact Blueprint removals
+
+The following inventory records the retirement diff reviewed at PR #7779 head
+`3ce26ade4505170eb9b801b154b10840af251264`. These are removed `\lean{}`
+targets and `\label{}` values, not a claim that the source paper's
+cyclic virtual-pair or adjacent-commutation results were removed.
+
+From `blueprint/src/chapter/ch13_parent_hamiltonian_commuting_gap_all_chain_sector_graph.tex`:
+
+Removed declaration targets:
+- `MPSTensor.productPairWindow`
+- `MPSTensor.productPairWindow_one`
+- `MPSTensor.productPairState`
+- `MPSTensor.productPairState_one`
+- `MPSTensor.HasProductPairMPV`
+- `MPSTensor.HasProductPairLocalProjectors`
+- `MPSTensor.HasProductPairLocalProjectors.of_commuting_localTerms`
+- `MPSTensor.HasProductPairLocalProjectors.isNNCPH`
+- `MPSTensor.ProductPairBridge`
+- `MPSTensor.ProductPairBridge.commuting_twoSite_localTerms`
+- `MPSTensor.ProductPairBridge.isNNCPH`
+- `MPSTensor.AppendixBStructuralData.mpv_coreTensor_eq_productPairState_one`
+- `MPSTensor.AppendixBStructuralData.mpv_eq_productPairState_one`
+- `MPSTensor.AppendixBProductPairExtraction`
+- `MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorization`
+- `MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndCommutation`
+- `MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndOverlapCommutation`
+- `MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndAdjacentCommutation`
+- `MPSTensor.AppendixBProductPairExtraction.toProductPairBridge`
+- `MPSTensor.AppendixBProductPairExtraction.commuting_twoSite_localTerms`
+- `MPSTensor.rfp_implies_nncph_of_appendixBExtraction`
+- `MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction`
+- `MPSTensor.ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning`
+- `MPSTensor.rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning`
+
+Removed labels:
+- `thm:appendixB_product_pair_has_nncph_ground_spaces`
+
+From `blueprint/src/chapter/ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex`:
+
+Removed declaration targets:
+- `MPSTensor.AppendixBStructuralData.hasProductPairLocalProjectors`
+
+Removed labels:
+- `def:appendixB_chain_local_projectors`
+
+From `blueprint/src/chapter/ch13_parent_hamiltonian_commuting_gap_local_terms.tex`:
+
+Removed declaration targets:
+- `MPSTensor.HasProductPairLocalProjectors.of_adjacent_twoSite_commute`
+- `MPSTensor.HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute`
+
+Removed labels:
+- `lem:product_pair_local_projectors_from_overlap`
+
+### Additional removed Lean declaration
+
+The same retirement also removes
+`MPSTensor.HasProductPairLocalProjectors.commuting_twoSite_localTerms` from
+`TNLean/MPS/ParentHamiltonian/ProductPair.lean`. It had no Blueprint tag,
+so the inventory remains 27 removed tags and three removed labels, but covers
+28 removed explicit Lean declarations in total.
+
+**Replacement: none.** This theorem recovered commutation from the redundant
+local-projector witness and was retired with that witness. The retained
+Appendix B consumers instead use
+`MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute` and
+`MPSTensor.isNNCPH_of_adjacent_twoSite_commute` directly; this is not a
+replacement theorem on the deleted witness type. The conditional physical-pair
+constructions and their witness-dependent declarations listed above likewise
+have no replacements. The source cyclic-coefficient and adjacent-commutation
+results are retained, not substitutes for the rejected factorization.
+
+The retained questions #7751, #7611, #7371, and #7298 are unchanged by
+this retirement and its review corrections.
 
 ## Demolition candidates (2026-07-20 shrink tournament)
 
