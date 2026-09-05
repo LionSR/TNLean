@@ -364,26 +364,13 @@
     adjacent pair on the periodic chain.
 \end{proof}
 
-\begin{definition}[Appendix B local-projector family]
-    \label{def:appendixB_chain_local_projectors}
-    \lean{MPSTensor.AppendixBStructuralData.hasProductPairLocalProjectors}
-    \leanok
-    \uses{thm:appendixB_adjacent_chain_commutation, lem:nncph_from_adjacent_two_site_commutation}
-    For an Appendix~B structural datum and a periodic chain of length $N>2$,
-    set $p_i=h_i^{(N)}$ for $i\in\mathbb Z/N\mathbb Z$, where $h_i^{(N)}$ is
-    the translated length-two parent interaction. These maps are idempotent
-    and commute pairwise: adjacent commutation follows from
-    Theorem~\ref{thm:appendixB_adjacent_chain_commutation}, while disjoint
-    length-two interactions commute by locality.
-\end{definition}
-
 \begin{theorem}[Left-canonical RFP commutation and zero energy]
     \label{thm:left_canonical_rfp_chain_commutation}
     \lean{MPSTensor.AppendixBStructuralData.isNNCPH}
     \lean{MPSTensor.rfp_implies_nncph_of_leftCanonical}
     \lean{MPSTensor.rfp_implies_nncph_ground_state_of_leftCanonical}
     \leanok
-    \uses{def:appendixB_chain_local_projectors}
+    \uses{thm:appendixB_adjacent_chain_commutation, lem:nncph_from_adjacent_two_site_commutation}
     A normal left-canonical renormalization fixed-point tensor of nonzero
     virtual dimension has pairwise
     commuting length-two parent interactions on every periodic chain of length
@@ -395,9 +382,11 @@
 
 \begin{proof}
     \leanok
-    The Appendix~B structural theorem supplies the datum used in
-    Definition~\ref{def:appendixB_chain_local_projectors}. Its commuting
-    idempotents are precisely the translated parent interactions. The
+    The Appendix~B structural theorem supplies a datum whose adjacent
+    translated parent interactions commute by
+    Theorem~\ref{thm:appendixB_adjacent_chain_commutation}.
+    Lemma~\ref{lem:nncph_from_adjacent_two_site_commutation} gives pairwise
+    commutation directly. The
     standard frustration-free identity shows that each interaction annihilates
     the periodic matrix product vector.
 \end{proof}

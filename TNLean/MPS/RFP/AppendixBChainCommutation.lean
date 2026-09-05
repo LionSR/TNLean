@@ -19,10 +19,6 @@ of commuting parent interactions used in the RFP-to-NNCPH direction.
 The chain length is restricted to (N>2), exactly as in arXiv:1606.00608,
 Theorem 3.10.  The case (N=2) is not part of the source statement: its two
 cyclic windows traverse the same pair of sites in opposite orders.
-
-This file also carries the two conditional Appendix~B extraction constructors
-that reduce the all-pairs commutation input to overlapping or adjacent
-length-two cyclic windows.
 -/
 
 namespace MPSTensor
@@ -103,23 +99,6 @@ theorem AppendixBStructuralData.adjacent_twoSite_localTerms_commute
       hStruct.hasOverlappingTwoSiteCommutation)
     (by omega) i
 
-/-- The Appendix B structural datum supplies the commuting local-projector
-family on every periodic chain of length (N>2).
-
-The projectors are the translated canonical length-two parent interactions.
-Their idempotency is general; their commutation follows from the source
-three-site projector equation and cyclic transport.
-
-Source: arXiv:1606.00608, Definition 3.9, source lines 517--524; Theorem 3.10,
-source lines 534--540; and the structural characterization and basic-vector
-form, source lines 543--578. -/
-noncomputable def AppendixBStructuralData.hasProductPairLocalProjectors
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {N : ℕ} (hN : 2 < N) :
-    HasProductPairLocalProjectors A N :=
-  HasProductPairLocalProjectors.of_adjacent_twoSite_commute (by omega)
-    (hStruct.adjacent_twoSite_localTerms_commute hN)
-
 /-- The Appendix B structural datum satisfies the nearest-neighbor commutation
 equations on every periodic chain of length (N>2).
 
@@ -130,7 +109,8 @@ theorem AppendixBStructuralData.isNNCPH
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     {N : ℕ} (hN : 2 < N) :
     IsNNCPH A N :=
-  (hStruct.hasProductPairLocalProjectors hN).isNNCPH
+  isNNCPH_of_adjacent_twoSite_commute (le_of_lt hN)
+    (hStruct.adjacent_twoSite_localTerms_commute hN)
 
 /-- A normal left-canonical renormalization fixed-point tensor has commuting
 length-two parent interactions on every periodic chain of length (N>2).
@@ -227,45 +207,5 @@ theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
     (N : ℕ) (hN : 2 < N) :
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState (by omega)
-
-/-- Construct the conditional Appendix B extraction from the coefficient
-factorization and the overlapping length-two cyclic-window commutation
-equations on every chain.
-
-This is only the locality reduction from overlapping pairs to all pairs; the
-source \(Q_{AX},Q_{XB}\) projectors and their lifted commutator remain separate
-inputs to the proof of the overlap hypotheses. -/
-noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndOverlapCommutation
-    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
-      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hOverlap : ∀ N, 2 < N → ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
-      localTerm A 2 N i * localTerm A 2 N j =
-        localTerm A 2 N j * localTerm A 2 N i) :
-    AppendixBProductPairExtraction hStruct :=
-  AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
-    (fun N hN =>
-      HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute
-        (A := A) (by omega) (hOverlap N hN))
-
-/-- Construct the conditional Appendix B extraction from the coefficient
-factorization and the adjacent length-two cyclic-window commutation equations on
-every chain.
-
-This is the finite-chain reduction from the source nearest-neighbor commutator
-\([\tau_1(P_2),P_2]=0\) to full pairwise commutation of all translated two-site
-local terms. It does not prove the Appendix B source-projector commutator. -/
-noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndAdjacentCommutation
-    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
-      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hAdjacent : ∀ N, 2 < N → ∀ i : Fin N,
-      localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
-        localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i) :
-    AppendixBProductPairExtraction hStruct :=
-  AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
-    (fun N hN =>
-      HasProductPairLocalProjectors.of_adjacent_twoSite_commute
-        (A := A) (by omega) (hAdjacent N hN))
 
 end MPSTensor

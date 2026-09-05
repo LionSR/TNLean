@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.ParentHamiltonian.LocalSupport
-import TNLean.MPS.ParentHamiltonian.ProductPair
 import TNLean.MPS.RFP.StructuralFull
 
 /-!
@@ -19,8 +18,7 @@ canonical-form RFP tensor as
   A^i = X\Lambda U^iX^{-1},
 \]
 with the source pair-index isometry condition on \(U\). The declarations construct
-the physical isometry, compare the core tensor \(\Lambda U\) with \(A\), and formulate
-the conditional Appendix B product-pair extraction.
+the physical isometry and compare the core tensor \(\Lambda U\) with \(A\).
 
 The two-site bond insertion and contraction maps are constructed in
 `TNLean.MPS.RFP.AppendixBVirtualBondSupport`; the tensor powers of \(U\), the
@@ -41,7 +39,7 @@ variable {d D : ℕ}
 
 The theorem `rfp_nt_structural_full_unit_pair` proves existence of this
 structural form from the RFP, normality, and left-canonical hypotheses. The
-remaining coefficient condition and parent-term identities must use the same
+coefficient formulas and parent-term identities use the same
 \(X,\Lambda,U\). -/
 structure AppendixBStructuralData (A : MPSTensor d D) where
   /-- The virtual-bond change of basis. -/
@@ -190,9 +188,8 @@ noncomputable def AppendixBStructuralData.ofRFP (A : MPSTensor d D) [NeZero D]
 /-- The two-site amplitude read from a chosen Appendix B structural
 form.
 
-The key point is that this amplitude depends on the chosen decomposition
-\(X,\Lambda,U\); the even-chain factorization must use this particular
-structural amplitude, not an unrelated two-site vector. -/
+This amplitude is the two-site periodic coefficient of the chosen
+decomposition \(X,\Lambda,U\). -/
 noncomputable def AppendixBStructuralData.twoSiteAmplitude {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 :=
   let L : Matrix (Fin D) (Fin D) ℂ :=
@@ -282,9 +279,8 @@ This is the coefficient form of
   \qquad
   |\varphi_j\rangle=\sum_m\lambda_m|m,m\rangle,
 \]
-with \(\varphi_j\) shared between \(b_t\) and \(a_{t+1}\). It is not the
-even-chain physical-pair factorization used later for nearest-neighbor
-parent-term commutation. -/
+with \(\varphi_j\) shared between \(b_t\) and \(a_{t+1}\). It does not assert
+factorization over disjoint physical pairs. -/
 theorem AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     {L : ℕ} (hL : 0 < L) (σ : Cfg d L) :
@@ -563,8 +559,7 @@ Source: arXiv:1606.00608, lines 543--555.
 
 This combines the gauge-invariance of MPV coefficients with the coefficient
 formula for the core tensor \(\Lambda U^i\).  The conclusion is the source
-cyclic virtual-pair expression, not the even-chain physical-pair factorization
-used later in the conditional parent-Hamiltonian theorem. -/
+cyclic virtual-pair expression, not a factorization over disjoint physical pairs. -/
 theorem AppendixBStructuralData.mpv_eq_cyclicVirtualPairState {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) {L : ℕ} (hL : 0 < L) (σ : Cfg d L) :
     mpv A σ = hStruct.cyclicVirtualPairState hL σ := by
@@ -592,90 +587,5 @@ theorem AppendixBStructuralData.cyclicVirtualPairState_two_eq_twoSiteAmplitude
       hStruct.twoSiteAmplitude σ := by
   rw [← hStruct.mpv_coreTensor_eq_cyclicVirtualPairState (by decide : 0 < 2) σ,
     hStruct.twoSiteAmplitude_eq_coreTensor_mpv]
-
-/-- The length-two case of the even-chain physical-pair factorization. -/
-theorem AppendixBStructuralData.mpv_coreTensor_eq_productPairState_one {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) (σ : Cfg d (2 * 1)) :
-    mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
-  rw [productPairState_one]
-  exact (hStruct.twoSiteAmplitude_eq_coreTensor_mpv σ).symm
-
-/-- The length-two case of the requested even-chain factorization is automatic
-from the definition of the structural two-site amplitude. -/
-theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) (σ : Cfg d (2 * 1)) :
-    mpv A σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
-  rw [productPairState_one, hStruct.twoSiteAmplitude_eq_mpv]
-
-/-- The even-chain physical-pair factorization considered after the source
-basic-vector expression.
-
-For a fixed structural form, this captures the proposed identification of
-\(U^{\otimes N}\varphi_j^{\otimes N}\) with the repeated physical-pair
-two-site amplitude stated here. It also records the translated
-length-two local projectors explicitly; the Appendix B commutation results provide
-those projectors without using the physical-pair factorization. -/
-structure AppendixBProductPairExtraction {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) where
-  /-- Positive even-chain factorization through the structural two-site amplitude. -/
-  hmpv : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
-    mpv A σ = productPairState hStruct.twoSiteAmplitude N σ
-  /-- Local projectors realizing the nearest-neighbor parent terms for chains
-  of length greater than two. -/
-  localProjectors : ∀ N, 2 < N → HasProductPairLocalProjectors A N
-
-/-- Construct the coefficient part of the conditional structure from the
-Appendix B core tensor.
-
-This reduces the coefficient computation to the core tensor \(\Lambda U^i\);
-the translated length-two commutation identities remain a separate hypothesis. -/
-noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
-    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
-      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hProj : ∀ N, 2 < N → HasProductPairLocalProjectors A N) :
-    AppendixBProductPairExtraction hStruct where
-  hmpv := by
-    intro N hN σ
-    rw [hStruct.mpv_eq_coreTensor σ]
-    exact hCore N hN σ
-  localProjectors := hProj
-
-/-- Construct the conditional Appendix B extraction from the coefficient
-factorization and the \(N > 2\) commutation equations for the translated
-length-two parent terms.
-
-The idempotency of the local terms is supplied by `localTerm_idempotent`; the
-source-dependent obligation in this constructor is only the commutation family. -/
-noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndCommutation
-    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
-      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hComm : ∀ N, 2 < N → ∀ i j : Fin N,
-      localTerm A 2 N i * localTerm A 2 N j =
-        localTerm A 2 N j * localTerm A 2 N i) :
-    AppendixBProductPairExtraction hStruct :=
-  AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
-    (fun N hN => HasProductPairLocalProjectors.of_commuting_localTerms (hComm N hN))
-
-/-- The conditional Appendix B hypotheses yield the `ProductPairBridge`
-structure used by the parent-Hamiltonian statements. -/
-noncomputable def AppendixBProductPairExtraction.toProductPairBridge
-    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hExtract : AppendixBProductPairExtraction hStruct) :
-    ProductPairBridge A where
-  pairAmplitude := hStruct.twoSiteAmplitude
-  hmpv := hExtract.hmpv
-  localProjectors := hExtract.localProjectors
-
-/-- The conditional Appendix B hypotheses give the unfolded nearest-neighbor
-commutation statement on every finite chain of length greater than two. -/
-theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
-    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hExtract : AppendixBProductPairExtraction hStruct) (N : ℕ) (hN : 2 < N) :
-    ∀ i j : Fin N,
-      localTerm A 2 N i * localTerm A 2 N j =
-        localTerm A 2 N j * localTerm A 2 N i :=
-  hExtract.toProductPairBridge.commuting_twoSite_localTerms N hN
 
 end MPSTensor

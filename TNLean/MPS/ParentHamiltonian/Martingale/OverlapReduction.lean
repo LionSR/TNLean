@@ -70,33 +70,4 @@ theorem isNNCPH_of_adjacent_twoSite_commute
   · subst i
     exact (hAdjacent j).symm
 
-/-- Overlapping length-two cyclic-window commutation supplies the
-local-projector hypotheses used by the conditional Appendix B extraction.
-
-The idempotency part is the general translated-parent-term idempotency; the
-overlap reduction supplies the missing all-pairs commutation equations. -/
-noncomputable def HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute
-    {A : MPSTensor d D} {N : ℕ} (hN : 2 ≤ N)
-    (hOverlap : ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
-      localTerm A 2 N i * localTerm A 2 N j =
-        localTerm A 2 N j * localTerm A 2 N i) :
-    HasProductPairLocalProjectors A N :=
-  HasProductPairLocalProjectors.of_commuting_localTerms
-    (isNNCPH_of_twoSite_cyclicWindowsOverlap_commute (A := A) hN hOverlap)
-
-/-- Adjacent length-two cyclic-window commutation supplies the local-projector
-hypotheses used by the conditional Appendix B extraction.
-
-This is the nearest-neighbor specialization of the overlap reduction: for
-length-two windows, it is enough to check each local term against its cyclic right
-neighbor. -/
-noncomputable def HasProductPairLocalProjectors.of_adjacent_twoSite_commute
-    {A : MPSTensor d D} {N : ℕ} (hN : 2 ≤ N)
-    (hAdjacent : ∀ i : Fin N,
-      localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
-        localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i) :
-    HasProductPairLocalProjectors A N :=
-  HasProductPairLocalProjectors.of_commuting_localTerms
-    (isNNCPH_of_adjacent_twoSite_commute (A := A) hN hAdjacent)
-
 end MPSTensor
