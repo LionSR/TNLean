@@ -521,9 +521,11 @@ The proof classifies the orbits of the bond flips by the labels $(p,b)$, applies
 the monomial fixed-space criterion, and uses the neighboring holonomy to show
 that exactly the fibers with $b=0$ carry a fixed vector.
 
-This theorem concerns the displayed circuit tuple only. It does not assert that
-the tuple belongs to the full physical completion class of the CZX defect
-data. -/
+This theorem concerns the displayed circuit tuple only, and by itself says
+nothing about the completion class of the CZX defect data. That the tuple is a
+member of that class is proved in
+`MPOTensor.CZX.circuitTuple_mem_completionClass`, which turns this value into a
+lower bound on the supremum of the dimension over the class. -/
 theorem finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple (N : ℕ) (hN : 3 ≤ N) :
     Module.finrank ℂ (LinearMap.commonFixedSubmodule fun j : Fin N ↦
       toLin' (placedGaussProjector 4 (Multiplicative (ZMod 2)) N (by omega) j circuitTuple)) =

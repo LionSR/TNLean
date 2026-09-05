@@ -56,12 +56,13 @@ and each bounds the supremum over the class from below at that chain length.
 
 ## What is and is not claimed
 
-The two memberships and the lower bounds are unconditional. They replace the
-conditional statements recorded earlier in this development: the docstrings of
-`MPOTensor.CZX.circuitTuple`, `MPOTensor.CZX.circuitTupleStar`, and of the
-dimension theorems withhold the identification of a displayed tuple with a
-member of a full physical completion class, and those dimension theorems are
-stated for one displayed tuple at a time.
+The two memberships and the lower bounds are unconditional. They settle what
+the earlier development left undecided: the displayed matrices alone do not
+exhibit a tuple as a member of a full completion class, since the source
+displays only the defect map of the pair $(g,g)$, and the dimension theorems
+are each stated for one displayed tuple in isolation. The defect maps derived
+from the displayed tensors supply what is missing, and the theorems here make
+the identification.
 
 Nothing is claimed here about the minimum of the gauge-invariant dimension over
 the completion class, about the exact value of its supremum, or about which
@@ -86,17 +87,8 @@ basis vector. -/
 theorem matterMatrix_monomial_mulVec_matterKet (σ : Equiv.Perm (Fin 4 → ZMod 2))
     (φ : (Fin 4 → ZMod 2) → ℂ) (x : Fin 4 → ZMod 2) :
     matterMatrix (monomial σ φ) *ᵥ matterKet x = φ x • matterKet (σ x) := by
-  rw [matterMatrix_monomial, monomial_mulVec]
-  funext i
-  by_cases h : i = localBits.symm (σ x)
-  · subst h
-    simp [matterKet, Pi.single_apply]
-  · have hne : localBits.symm (σ.symm (localBits i)) ≠ localBits.symm x := by
-      intro hcon
-      apply h
-      have hx : σ.symm (localBits i) = x := localBits.symm.injective hcon
-      rw [← hx, Equiv.apply_symm_apply, Equiv.symm_apply_apply]
-    simp [matterKet, hne, h]
+  rw [matterMatrix_monomial, matterKet, monomial_mulVec_single]
+  simp [matterKet]
 
 /-- The movement operator on a computational basis vector:
 $w\ket{x}=(-1)^{e(x)}\ket{\overline x}$ transported to the two-site matter
