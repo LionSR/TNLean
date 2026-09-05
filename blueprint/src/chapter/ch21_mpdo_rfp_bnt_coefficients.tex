@@ -1154,6 +1154,62 @@ from its closed-operator factorization. The bond eigenvalues are $7/8$
 and $1/8$. No simplicity, canonical-form normalization, or attached
 vertical coefficient formula for $Q$ is asserted here.
 
+\begin{definition}[On-site separation of bond qubits and flags]%
+    \label{def:mpdo_twisted_dimer_onsite_split}
+    \lean{MPOTensor.TwistedDimer.onsiteBondFlagEquiv}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_bond_tensor}
+    For $N$ sites, let $H_N$ be the basis permutation separating each
+    site's two bond qubits from its flag:
+    \[
+        H_N\ket{((l_m,r_m,f_m))_m}
+        =\ket{((l_m,r_m))_m}\otimes\ket{(f_m)_m}.
+    \]
+    Unlike the incoming-bond regrouping, this separation does not move
+    any qubit between physical sites.
+\end{definition}
+
+\begin{theorem}[Attachment of the two fixed-point factors]%
+    \label{thm:mpdo_twisted_dimer_rfp_factor_attachment}
+    \lean{MPOTensor.TwistedDimer.onsiteBondFlagEquiv_incoming}
+    \lean{MPOTensor.TwistedDimer.decoratedState_eq_mpo_factors}
+    \lean{MPOTensor.TwistedDimer.mpo_eq_unitary_mpo_factors}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_onsite_split, def:mpdo_twisted_dimer_bond_flag_regrouping, thm:mpdo_twisted_dimer_flag_factor}
+    Let $Q$ be the mixed-Bell bond tensor and let $\widehat M$ be the
+    density-normalized tensor of Example~4.12. For every $N>0$,
+    \[
+        D_N=H_N^\dagger
+        \bigl(\rho^{(N)}(Q)\otimes\rho^{(N)}(\widehat M)\bigr)H_N,
+    \]
+    \[
+        \rho^{(N)}(T)=U_NH_N^\dagger
+        \bigl(\rho^{(N)}(Q)\otimes\rho^{(N)}(\widehat M)\bigr)
+        H_NU_N^\dagger.
+    \]
+    Both factor tensors are MPDO renormalization fixed points, by
+    Theorems~\ref{thm:mpdo_twisted_dimer_bond_product},
+    \ref{thm:mpdo_twisted_dimer_bond_rfp}, and
+    \ref{thm:mpdo_twisted_dimer_flag_factor}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_twisted_dimer_bond_product, thm:mpdo_twisted_dimer_bond_rfp, thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
+    The coordinate permutations satisfy
+    $(B_N\otimes I)H_N=S_NE_N$: both read the incoming bonds
+    $(r_{m-1},l_m)$ and the unchanged flags $f_m$.
+    Substitute the bond-product formula and the flag identification
+    into the definition of $D_N$. The second identity then follows
+    from Theorem~\ref{thm:mpdo_twisted_dimer_unitary_factorization}.
+    The channel classifications of the two factors were proved
+    independently in the cited theorems.
+\end{proof}
+
+The separation $H_N$ is on-site, but the conjugating operator $U_N$ acts
+across neighboring sites. The displayed identities therefore do not
+assert an on-site or virtual-gauge equivalence of the original tensors.
+At $N=0$, $D_0=2$, whereas the product of the two empty MPOs is
+$4\cdot2=8$; the factor attachment requires positive length.
+
 \begin{theorem}[The twisted quantum dimer is a renormalization fixed point]%
     \label{thm:mpdo_twisted_dimer_is_rfp_via_ts}
     \lean{MPOTensor.TwistedDimer.refineMap}

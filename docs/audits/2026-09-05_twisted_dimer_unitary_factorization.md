@@ -253,3 +253,33 @@ Their complete positivity and trace preservation are proved by `sigmaDimerRefine
 The exact bond state here has eigenvalues $7/8,1/8$. The previously formalized tensor `RescalingStableLengthDependentRFP.R` instead has bond eigenvalues $25/32,7/32`; its canonical-form and simplicity results are not certificates for this new tensor. No global source-unit-weight canonical form, simplicity theorem, canonical multiplicity matrix, or attached normalized vertical coefficient classification is asserted for $Q$ in this continuation. The independent RFP classification does not prove strict on-site or virtual-gauge equivalence for the twisted dimer or a circuit-depth statement, and strict N3 remains unresolved.
 
 The new Blueprint labels are `def:mpdo_twisted_dimer_bond_tensor`, `thm:mpdo_twisted_dimer_bond_product`, `def:mpdo_twisted_dimer_bond_channels`, and `thm:mpdo_twisted_dimer_bond_rfp`.
+
+## Attachment to the two explicit tensor families
+
+The completed bond module, commit `e3b600353`, additionally identifies the independent factors with the two actual tensor families. The parent confirmed compilation, positive-length equality tests, and the standard-axiom audit before these declarations were added to the Blueprint.
+
+The declaration `MPOTensor.TwistedDimer.onsiteBondFlagEquiv` separates the bond qubits and flags without moving qubits between sites. Write its basis permutation as
+
+$$
+H_N|((l_m,r_m,f_m))_m\rangle
+=|((l_m,r_m))_m\rangle\otimes|(f_m)_m\rangle.
+$$
+
+In the Blueprint's incoming-cell convention, `onsiteBondFlagEquiv_incoming` is the identity $(B_N\otimes I)H_N=S_NE_N$. Here $B_N$ reads incoming bonds from the bond-site chain, $E_N$ forms the incoming bond–flag cells, and $S_N$ separates their bond and flag strings. All maps read the same incoming bonds $(R_{m-1},L_m)$ and unchanged flags $F_m$.
+
+For $N>0$, `decoratedState_eq_mpo_factors` proves
+
+$$
+D_N=H_N^\dagger\bigl(\rho^{(N)}(Q)\otimes\rho^{(N)}(\widehat M)\bigr)H_N.
+$$
+
+With $U_N$ now denoting the physical-coordinate unitary as in the Blueprint, `mpo_eq_unitary_mpo_factors` gives
+
+$$
+\rho^{(N)}(T)=U_NH_N^\dagger
+\bigl(\rho^{(N)}(Q)\otimes\rho^{(N)}(\widehat M)\bigr)H_NU_N^\dagger.
+$$
+
+Thus the factors in the operator identity are attached to the exact independently classified bond and flag RFP tensors. This conclusion uses both the product formulas and the separate channel proofs, rather than inferring channel fixed-point structure from unitary equivalence of closed states. At $N=0$ the proposed first identity fails: $D_0=2$, whereas the product of the two empty MPOs is $4\cdot2=8$.
+
+Although $H_N$ only separates on-site registers, $U_N$ crosses site boundaries. Neither equality proves strict on-site tensor equivalence, virtual-gauge equivalence, a circuit-depth bound, simplicity, or an attached canonical vertical coefficient formula. In particular, they do not settle N3. Blueprint labels: `def:mpdo_twisted_dimer_onsite_split` and `thm:mpdo_twisted_dimer_rfp_factor_attachment`.
