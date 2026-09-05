@@ -225,15 +225,12 @@ additional constructions used below.
     $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
     $\E_B = \E_{\widetilde A^{[p]}}$. Then
     $p$-refinability of $B$ implies $p$-divisibility of $\E_B$.
-    The assumed construction cannot be discharged in this generality:
-    the printed forward implication of
-    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} omits the trace
-    preservation of $\E_B$ that its notion of $p$-divisibility presupposes,
-    and a positive rescaling of a $p$-refinable tensor in irreducible
-    form~II refutes it. The corrected source statement and the formal
-    boundary are recorded in
-    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
 \end{theorem}
+% Formalization status: the assumed construction is refuted, not merely
+% unproved (Remark~\ref{rem:thm_4_1_forward_trace_preservation}), so the
+% Lean theorem carries an Unfaithful marker and this node stays conditional;
+% the elimination plan is in
+% docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex.
 
 \begin{proof}\leanok
     The construction supplies $\widetilde A$ with
@@ -245,6 +242,46 @@ additional constructions used below.
     then identifies $\E_B$ with the $p$-th power of the channel
     $\E_{\widetilde A}$.
 \end{proof}
+
+\begin{remark}[Trace preservation in the forward direction]
+    \label{rem:thm_4_1_forward_trace_preservation}
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
+    The construction assumed in
+    Theorem~\ref{thm:thm_4_1_p_refinement_forward} does not follow from
+    irreducible form~II alone, and the printed forward implication of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} omits the trace
+    preservation of $\E_B$ that its notion of $p$-divisibility presupposes.
+    Let $B_0$ be $p$-refinable with witness $(A_0, W)$ and in irreducible
+    form~II with every multiplicity equal to one, and let $\lambda > 1$. Set
+    \begin{align}
+        B
+         & = \lambda B_0,
+        \qquad
+        A = \lambda^{1/p} A_0.
+        \notag
+    \end{align}
+    Then $B$ is in irreducible form~II with the blocks of $B_0$ and the
+    multiplicities $\lambda$, and it is $p$-refinable with witness $(A, W)$:
+    \begin{align}
+        \ket{V^{(pN)}(A)}
+         & = \lambda^{N}\ket{V^{(pN)}(A_0)}
+        = \lambda^{N} W^{\otimes N}\ket{V^{(N)}(B_0)}
+        = W^{\otimes N}\ket{V^{(N)}(B)}.
+        \notag
+    \end{align}
+    Its transfer map satisfies
+    \begin{align}
+        \E_B
+         & = \lambda^{2}\,\E_{B_0},
+        \qquad
+        \tr \E_B(X) = \lambda^{2}\tr X \neq \tr X,
+        \notag
+    \end{align}
+    so $\E_B$ is not trace preserving and is not the $p$-th power of a CPTP
+    map. The corrected statement adds trace preservation of $\E_B$,
+    equivalently unit multiplicities, under which the printed argument
+    closes \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{remark}
 
 \begin{definition}[Blocked-to-root channel-root hypothesis from $Z$-gauge]
     \label{def:peripheral_equalcase_root_channel_from_zgauge}
