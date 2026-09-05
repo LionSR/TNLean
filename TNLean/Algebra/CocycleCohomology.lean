@@ -75,6 +75,19 @@ def ScalarCocycle.CohomologousTo (ω₁ ω₂ : ScalarCocycle G) : Prop :=
 def ScalarCocycle.IsCocycle (ω : ScalarCocycle G) : Prop :=
   ∀ g h k : G, ω g h * ω (g * h) k = ω g (h * k) * ω h k
 
+/-- A scalar cochain cohomologous to a genuine cocycle satisfies the cocycle equation. -/
+theorem ScalarCocycle.IsCocycle.of_cohomologousTo {ω₁ ω₂ : ScalarCocycle G}
+    (hω₂ : ω₂.IsCocycle) (h : ω₁.CohomologousTo ω₂) : ω₁.IsCocycle := by
+  obtain ⟨φ, hφ⟩ := h
+  intro a b c
+  simp only [hφ]
+  calc
+    _ = (φ a * φ b * φ c * (φ (a * (b * c)))⁻¹) *
+        (ω₂ a b * ω₂ (a * b) c) := by simp [mul_assoc, mul_comm, mul_left_comm]
+    _ = (φ a * φ b * φ c * (φ (a * (b * c)))⁻¹) *
+        (ω₂ a (b * c) * ω₂ b c) := by rw [hω₂ a b c]
+    _ = _ := by simp [mul_assoc, mul_comm, mul_left_comm]
+
 /-- Every projective representation of positive bond dimension has a genuine 2-cocycle
 as factor system.  This is the `Units ℂ`-level lift of
 `ProjectiveRepresentation.cocycle_of_assoc`: associativity of matrix multiplication
