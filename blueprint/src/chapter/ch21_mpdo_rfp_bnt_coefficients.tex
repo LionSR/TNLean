@@ -1194,9 +1194,18 @@ $I/\sqrt2,Z/\sqrt2$.
     Preparation of the positive trace-one state $\sigma$, permutation
     of basis coordinates, and partial trace are quantum channels.
     Tracing out the prepared state proves the retraction identity.
-    For the refinement equation, the product of two tensor letters
-    vanishes unless both intermediate qubits match. On the matched
-    subspace its coefficient is $C_{ll'}C_{uu'}$, exactly the entry of
+    For the refinement equation, fix independent ket and bra indices
+    $l,r,l',r',u,v,u',v'\in\{0,1\}$. Multiplication of matrix units gives
+    \begin{align}
+        Q^{(l,r),(l',r')}Q^{(u,v),(u',v')}
+         & =\begin{cases}
+                C_{ll'}C_{uu'}E_{(l,l'),(v,v')}
+                  & \text{if } r=u \text{ and } r'=u', \\
+                0 & \text{otherwise}.
+            \end{cases}
+        \notag
+    \end{align}
+    On the matched subspace the coefficient is exactly the entry of
     the one-site closure tensored with the inserted bond state. This
     proves the identity for arbitrary boundary matrices. Applying the
     retraction gives the coarse-graining equation.
@@ -1250,7 +1259,7 @@ vertical coefficient formula for $Q$ is asserted here.
     \ref{thm:mpdo_twisted_dimer_flag_factor}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_bond_product, thm:mpdo_twisted_dimer_bond_rfp, thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
+    \uses{thm:mpdo_twisted_dimer_bond_product, thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
     The coordinate permutations satisfy
     $(B_N\otimes I)H_N=S_NE_N$: both read the incoming bonds
     $(r_{m-1},l_m)$ and the unchanged flags $f_m$.
