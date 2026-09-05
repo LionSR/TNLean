@@ -10,8 +10,8 @@ import TNLean.MPS.MPDO.TwistedDimerMPDO
 
 This is a project-derived identity for the closed operator family of `T`, not
 an assertion from CPSV16. The motivating source is arXiv:1606.00608, lines
-995--1010; the precise operator identity and its scope are recorded in issue
-#7776 and `docs/audits/2026-09-05_twisted_dimer_unitary_factorization.md`.
+995--1010; the precise operator identity and its scope are recorded in
+`docs/audits/2026-09-05_twisted_dimer_unitary_factorization.md`.
 It does not assert on-site tensor equivalence, virtual gauge equivalence,
 a general non-decoration theorem, or a whole-site circuit-depth bound.
 
@@ -250,7 +250,8 @@ private lemma conjugate_decoratedState (N : ℕ) :
 /-- The closed twisted-dimer operator is the explicit unitary conjugate of
 independent bond states and the even-parity flag state, for every positive
 length, including length one. This is an operator identity, not a strict
-on-site or virtual-gauge equivalence of tensors (project issue #7776). -/
+on-site or virtual-gauge equivalence of tensors. See
+`docs/audits/2026-09-05_twisted_dimer_unitary_factorization.md`. -/
 theorem mpo_eq_unitary_factorization {N : ℕ} (hN : 0 < N) :
     mpo T N = chainUnitary N * decoratedState N * (chainUnitary N)ᴴ := by
   rw [conjugate_decoratedState]
