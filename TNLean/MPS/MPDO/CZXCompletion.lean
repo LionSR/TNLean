@@ -8,7 +8,7 @@ import TNLean.MPS.MPDO.CZXGaussInvariantSubspace
 import TNLean.MPS.MPDO.GaugeInvariantSubspace
 
 /-!
-# The displayed CZX tuple is a completion, and the maximum over its class
+# The displayed CZX tuple is a completion, and the supremum over its class
 
 The displayed CZX circuit tuple
 $R^{\mathrm{CZX}}=(\mathrm{id},\mathrm{id},w,\tilde\lambda)$ of
@@ -25,7 +25,7 @@ modified-fusion lemma of FBC25 (arXiv:2502.20257, lines 4215--4254). Since the
 two defect vectors of a label pair span its defect domain, the tuple belongs to
 the full completion class of the CZX prescribed defect maps. Combined with the
 exact dimension $2^N$ of the gauge-invariant subspace of that tuple, the
-maximum of the gauge-invariant dimension over the whole completion class is at
+supremum of the gauge-invariant dimension over the whole completion class is at
 least $2^N$ for every $N\geq3$.
 
 The four displayed operators are read on the computational basis through the
@@ -54,9 +54,10 @@ physical completion class, and the dimension theorem is stated for the
 displayed tuple alone.
 
 Nothing is claimed here about the minimum of the gauge-invariant dimension over
-the completion class, about the exact value of its maximum, or about the
-behaviour of either quantity as the chain length grows; those questions are
-left open by the source (arXiv:2502.20257, lines 5198--5204).
+the completion class, about the exact value of its supremum, about which
+completion attains that supremum, or about the behaviour of either quantity as
+the chain length grows; those questions are left open by the source
+(arXiv:2502.20257, lines 5198--5204).
 -/
 
 noncomputable section
@@ -75,8 +76,6 @@ theorem matterMatrix_monomial_mulVec_matterKet (σ : Equiv.Perm (Fin 4 → ZMod 
     matterMatrix (monomial σ φ) *ᵥ matterKet x = φ x • matterKet (σ x) := by
   rw [matterMatrix_monomial, monomial_mulVec]
   funext i
-  have hsymm : (localBits.trans (σ.trans localBits.symm)).symm i =
-      localBits.symm (σ.symm (localBits i)) := rfl
   by_cases h : i = localBits.symm (σ x)
   · subst h
     simp [matterKet, Pi.single_apply]
@@ -234,11 +233,12 @@ CZX prescribed defect maps. -/
 theorem circuitTuple_mem_completionClass : circuitTuple ∈ defectMaps.completionClass :=
   defectMaps.mem_completionClass_iff.mpr isCompletion_circuitTuple
 
-/-! ### A lower bound on the maximum over the completion class -/
+/-! ### A lower bound on the supremum over the completion class -/
 
 /-- The gauge-invariant dimensions of the members of the CZX completion class
 are bounded above by the dimension of the whole chain space, so their supremum
-is a genuine maximum. -/
+is finite. Attainment of the supremum by a particular completion is not
+asserted. -/
 theorem bddAbove_range_finrank_gaugeInvariantSubspace (N : ℕ) (hN : 2 ≤ N) :
     BddAbove (Set.range fun R ↦ ⨆ _ : R ∈ defectMaps.completionClass,
       Module.finrank ℂ (gaugeInvariantSubspace 4 (Multiplicative (ZMod 2)) N hN R)) := by
@@ -247,18 +247,19 @@ theorem bddAbove_range_finrank_gaugeInvariantSubspace (N : ℕ) (hN : 2 ≤ N) :
   rintro _ ⟨R, rfl⟩
   exact ciSup_le' fun _ ↦ Submodule.finrank_le _
 
-/-- **The maximum of the gauge-invariant dimension over the CZX completion
+/-- **The supremum of the gauge-invariant dimension over the CZX completion
 class is at least $2^N$.** On a periodic chain of $N\geq3$ blocked sites, the
 displayed circuit tuple lies in the completion class of the CZX prescribed
 defect maps and its gauge-invariant subspace has dimension $2^N$, so the
-maximum over the class is at least $2^N$.
+supremum over the class is at least $2^N$.
 
 This is unconditional, where the same bound was previously available only
 conditionally on the displayed tuple being a completion. It claims nothing
 about the minimum of the dimension over the class, nothing about the exact
-value of the maximum, and nothing about the behaviour of either quantity in the
-chain length; those are the questions left open by arXiv:2502.20257, lines
-5198--5204. The defect domains and maps entering the class are derived in
+value of the supremum, nothing about which completion attains it, and nothing
+about the behaviour of either quantity in the chain length; those are the
+questions left open by arXiv:2502.20257, lines 5198--5204. The defect domains
+and maps entering the class are derived in
 `docs/paper-gaps/fbc25_czx_defect_domains.tex`.
 
 The gauge-invariant subspace of the displayed tuple is the common fixed

@@ -5363,7 +5363,7 @@ Definition~\ref{def:mpug_czx_circuit_tuple} obey those constraints exactly, so
 the displayed tuple is one member of the full completion class of the CZX
 prescribed defect maps $D^{\mathrm{CZX}}$. The exact dimension
 (\ref{eq:mpug_czx_dimension}), which concerns the displayed tuple alone, then
-bounds from below the maximum of the gauge-invariant dimension over the whole
+bounds from below the supremum of the gauge-invariant dimension over the whole
 class.
 
 \begin{theorem}[The displayed CZX tuple is a completion]
@@ -5434,7 +5434,7 @@ class.
     (\ref{eq:mpug_czx_tuple_completion}).
 \end{proof}
 
-\begin{theorem}[Lower bound on the maximum over the CZX completion class]
+\begin{theorem}[Lower bound on the supremum over the CZX completion class]
     \label{thm:mpug_czx_class_maximum}
     \lean{MPOTensor.CZX.bddAbove_range_finrank_gaugeInvariantSubspace,
         MPOTensor.CZX.two_pow_le_iSup_finrank_gaugeInvariantSubspace_completionClass}
@@ -5444,14 +5444,15 @@ class.
         thm:mpug_czx_dimension}
     On a periodic chain of $N\geq3$ blocked sites the gauge-invariant
     dimensions of the members of the CZX completion class are bounded above by
-    the dimension of the chain space, so their supremum is attained, and
+    the dimension of the chain space, so their supremum is finite, and
     \begin{align}
-        \max_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_N(R) & \geq2^N.
+        \sup_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_N(R) & \geq2^N.
         \label{eq:mpug_czx_class_maximum}
     \end{align}
     Nothing is asserted about the minimum of $\dim\mathcal V_N(R)$ over the
-    class, about the exact value of the maximum, or about the behaviour of
-    either quantity as $N$ grows; those are the questions left open
+    class, about the exact value of the supremum, about which completion
+    attains it, or about the behaviour of either quantity as $N$ grows; those
+    are the questions left open
     by~\cite[lines~5198--5204]{FrancoRubio2025MPUGauging}. The domains and the
     maps entering the class are derived
     in~\cite{gap:fbc25_czx_defect_domains}.
@@ -5462,8 +5463,8 @@ class.
     Every gauge-invariant subspace (\ref{eq:mpug_gauge_invariant_subspace}) is
     a subspace of the chain space, so the dimensions of the members of the
     class are bounded above by the dimension of that space and their supremum
-    is a maximum. By Theorem~\ref{thm:mpug_czx_tuple_completion} the displayed
+    is finite. By Theorem~\ref{thm:mpug_czx_tuple_completion} the displayed
     tuple lies in the class, and by Theorem~\ref{thm:mpug_czx_dimension} its
     gauge-invariant subspace has dimension $2^N$, which is therefore at most
-    the maximum.
+    the supremum.
 \end{proof}

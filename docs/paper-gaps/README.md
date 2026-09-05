@@ -54,8 +54,11 @@ For the MPU symmetry-defect gauging paper:
   $\operatorname{span}\{\ket{1100},\ket{0011}\}$, orthogonal rather than
   equal, and the displayed circuits restrict to the prescribed maps in the
   source's own conventions. The derived vectors, domains, and maps are carried
-  by the formal prescribed defect maps of the CZX model; issue #7740 tracks the
-  remaining proof that the displayed circuit tuple completes them.
+  by the formal prescribed defect maps of the CZX model, and the displayed
+  circuit tuple is formally a member of their completion class, which makes the
+  lower bound on the gauge-invariant dimension over that class unconditional.
+  The minimum over the class, the exact value of the supremum, and which
+  completion attains it remain open, as in the source.
 - `fbc25_alternating_network_nondegeneracy.tex` records the one-sided
   nonvanishing convention for the alternating-network proportionality lemma.
   Both applications in the source satisfy this convention because their
