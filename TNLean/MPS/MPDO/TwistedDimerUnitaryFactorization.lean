@@ -76,16 +76,16 @@ theorem localV_conjTranspose : localVᴴ = localV := localV_laws.1
 /-- The local controlled flag flip is an involution on the whole cell. -/
 theorem localV_mul_self : localV * localV = 1 := localV_laws.2
 
-set_option maxHeartbeats 800000 in
--- Exact rational evaluation of both eight-by-eight matrix products exceeds the default limit.
 private lemma localV_intertwine (k : Fin 2) :
     localV * (sigma ⊗ₖ flagMatrix k) = (bondState k ⊗ₖ flagMatrix k) * localV := by
-  fin_cases k <;> apply Matrix.ext <;> intro a b <;> revert a b <;>
-    simp only [Prod.forall, Fin.forall_fin_two] <;>
-    norm_num [localV,
-      sigma, bondState, bellProjector, flagFlip, flagMatrix, tau, x, y,
-      Matrix.mul_apply, Fintype.sum_prod_type, Fin.sum_univ_two,
-      Matrix.kronecker_apply, Matrix.one_apply, Matrix.diagonal_apply]
+  apply Matrix.ext
+  intro a b
+  simp only [localV, sigma, bondState, Matrix.mul_apply, Fintype.sum_prod_type,
+    Fin.sum_univ_two, Matrix.add_apply]
+  revert a b
+  fin_cases k <;> simp only [Prod.forall, Fin.forall_fin_two] <;>
+    norm_num [bellProjector, flagFlip, flagMatrix, tau, x, y,
+      Matrix.one_apply, Matrix.diagonal_apply]
 
 /-- Both local conjugation identities, with the identity flag at label zero and Z at one. -/
 theorem localV_conjugate (k : Fin 2) :
