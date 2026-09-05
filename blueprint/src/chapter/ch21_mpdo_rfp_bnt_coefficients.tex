@@ -1002,9 +1002,10 @@ expression equals $2$.
     Let $\widehat M$ be the density-normalized tensor of
     Theorem~\ref{thm:cpsv_example412_normalized_rfp_maps}. For every
     $N\geq0$, the flag operator satisfies
-    \[
-        \omega_N=\rho^{(N)}(\widehat M).
-    \]
+    \begin{align}
+        \omega_N & =\rho^{(N)}(\widehat M).
+        \notag
+    \end{align}
     In particular, the flag family has an MPDO representation satisfying
     both renormalization channel equations. For $N>0$, $\omega_N$ is
     positive semidefinite and has trace one. At $N=0$, both sides of the
@@ -1032,9 +1033,10 @@ expression equals $2$.
     The bond operator $\sigma$ is positive semidefinite and has trace one.
     Every tensor power $\sigma^{\otimes N}$ has trace one, including
     $N=0$. For every $N>0$, $D_N$ is positive semidefinite and
-    \[
-        \operatorname{tr}D_N=\operatorname{tr}\rho^{(N)}(T)=1.
-    \]
+    \begin{align}
+        \operatorname{tr}D_N & =\operatorname{tr}\rho^{(N)}(T)=1.
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
@@ -1063,15 +1065,17 @@ $I/\sqrt2,Z/\sqrt2$.
     Let $C=\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}$.
     A physical site consists of qubits $(l,r)\in\{0,1\}^2$.
     With virtual indices in $\{0,1\}^2$, define the tensor $Q$ by
-    \[
-        Q^{(l,r),(l',r')}=C_{ll'}E_{(l,l'),(r,r')},
-    \]
+    \begin{align}
+        Q^{(l,r),(l',r')} & =C_{ll'}E_{(l,l'),(r,r')},
+        \notag
+    \end{align}
     where $E_{a,b}$ is the matrix unit with row $a$ and column $b$.
     Both physical and virtual dimensions are four. For $N>0$, let
     $B_N$ be the permutation of basis configurations given by
-    \[
-        B_N\ket{((l_m,r_m))_m}=\ket{((r_{m-1},l_m))_m},
-    \]
+    \begin{align}
+        B_N\ket{((l_m,r_m))_m} & =\ket{((r_{m-1},l_m))_m},
+        \notag
+    \end{align}
     with cyclic indices. Its inverse sends a bond configuration $(b_m)_m$
     to the site configuration $(( (b_m)_2,(b_{m+1})_1))_m$.
 \end{definition}
@@ -1085,9 +1089,10 @@ $I/\sqrt2,Z/\sqrt2$.
     \uses{def:mpdo_twisted_dimer_bond_tensor, def:mpdo}
     For every $N>0$, the tensor $Q$ of
     Definition~\ref{def:mpdo_twisted_dimer_bond_tensor} satisfies
-    \[
-        \rho^{(N)}(Q)=B_N^\dagger\sigma^{\otimes N}B_N.
-    \]
+    \begin{align}
+        \rho^{(N)}(Q) & =B_N^\dagger\sigma^{\otimes N}B_N.
+        \notag
+    \end{align}
     This operator is positive semidefinite and has trace one. In
     particular, $Q$ is an MPDO. The identity excludes $N=0$, where the
     empty closed operator is $4$ and the empty bond product is $1$.
@@ -1111,16 +1116,19 @@ $I/\sqrt2,Z/\sqrt2$.
     \uses{def:mpdo_twisted_dimer_controlled_flip, def:mpdo_twisted_dimer_bond_tensor}
     Let $J$ be the basis permutation from an exterior site and an
     inserted bond to two sites:
-    \[
-        J\ket{(l,r),(u,v)}=\ket{(l,u),(v,r)}.
-    \]
+    \begin{align}
+        J\ket{(l,r),(u,v)} & =\ket{(l,u),(v,r)}.
+        \notag
+    \end{align}
     Define the refinement and coarse-graining maps by
-    \[
-        \mathcal T_Q(Y)=J(Y\otimes\sigma)J^\dagger,
-    \]
-    \[
-        \mathcal S_Q(W)=\operatorname{tr}_{\mathrm{bond}}(J^\dagger WJ).
-    \]
+    \begin{align}
+        \mathcal T_Q(Y) & =J(Y\otimes\sigma)J^\dagger,
+        \notag
+    \end{align}
+    \begin{align}
+        \mathcal S_Q(W) & =\operatorname{tr}_{\mathrm{bond}}(J^\dagger WJ).
+        \notag
+    \end{align}
     The partial trace is over the inserted bond, leaving the two
     exterior qubits as a single physical site.
 \end{definition}
@@ -1139,17 +1147,20 @@ $I/\sqrt2,Z/\sqrt2$.
     The maps $\mathcal T_Q$ and $\mathcal S_Q$ of
     Definition~\ref{def:mpdo_twisted_dimer_bond_channels} are completely
     positive and trace preserving. For every one-site operator $Y$,
-    \[
-        \mathcal S_Q(\mathcal T_Q(Y))=Y.
-    \]
+    \begin{align}
+        \mathcal S_Q(\mathcal T_Q(Y)) & =Y.
+        \notag
+    \end{align}
     For every virtual boundary matrix $A\in M_4(\mathbb C)$, the
     one-site and two-site physical closures satisfy
-    \[
-        \mathcal T_Q(Q_1(A))=Q_2(A),
-    \]
-    \[
-        \mathcal S_Q(Q_2(A))=Q_1(A).
-    \]
+    \begin{align}
+        \mathcal T_Q(Q_1(A)) & =Q_2(A),
+        \notag
+    \end{align}
+    \begin{align}
+        \mathcal S_Q(Q_2(A)) & =Q_1(A).
+        \notag
+    \end{align}
     Thus $Q$ is a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}.
 \end{theorem}
@@ -1179,10 +1190,11 @@ vertical coefficient formula for $Q$ is asserted here.
     \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_bond_tensor}
     For $N$ sites, let $H_N$ be the basis permutation separating each
     site's two bond qubits from its flag:
-    \[
+    \begin{align}
         H_N\ket{((l_m,r_m,f_m))_m}
-        =\ket{((l_m,r_m))_m}\otimes\ket{(f_m)_m}.
-    \]
+         & =\ket{((l_m,r_m))_m}\otimes\ket{(f_m)_m}.
+        \notag
+    \end{align}
     Unlike the incoming-bond regrouping, this separation does not move
     any qubit between physical sites.
 \end{definition}
@@ -1196,15 +1208,17 @@ vertical coefficient formula for $Q$ is asserted here.
     \uses{def:mpdo_twisted_dimer_onsite_split, def:mpdo_twisted_dimer_bond_flag_regrouping, thm:mpdo_twisted_dimer_flag_factor}
     Let $Q$ be the mixed-Bell bond tensor and let $\widehat M$ be the
     density-normalized tensor of Example~4.12. For every $N>0$,
-    \[
-        D_N=H_N^\dagger
+    \begin{align}
+        D_N & =H_N^\dagger
         \bigl(\rho^{(N)}(Q)\otimes\rho^{(N)}(\widehat M)\bigr)H_N,
-    \]
-    \[
-        \rho^{(N)}(T)=U_NH_N^\dagger
+        \notag
+    \end{align}
+    \begin{align}
+        \rho^{(N)}(T) & =U_NH_N^\dagger
         \bigl(\rho^{(N)}(Q)\otimes\rho^{(N)}(\widehat M)\bigr)
         H_NU_N^\dagger.
-    \]
+        \notag
+    \end{align}
     Both factor tensors are MPDO renormalization fixed points, by
     Theorems~\ref{thm:mpdo_twisted_dimer_bond_product},
     \ref{thm:mpdo_twisted_dimer_bond_rfp}, and
