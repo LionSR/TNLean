@@ -4219,6 +4219,74 @@ scalar calculation above.
     (\ref{eq:mpug_ghz_blocked_cluster_direct_sum}).
 \end{proof}
 
+\begin{theorem}[GHZ--cluster physical representation and virtual action table]
+    \label{thm:mpug_ghz_cluster_action_table}
+    % Principal declaration: MPSTensor.z4z2GHZClusterBlock_covariance.
+    \lean{MPSTensor.z4z2GHZClusterBlock_covariance,
+        MPSTensor.z4z2GHZClusterAction,
+        MPSTensor.z4z2GHZClusterAction_unitary,
+        MPSTensor.z4z2GHZClusterAction_generators,
+        MPSTensor.z4z2GHZClusterIndex,
+        MPSTensor.z4z2GHZClusterBlockAction,
+        MPSTensor.z4z2GHZClusterVirtual,
+        MPSTensor.z4z2GHZClusterVirtual_table,
+        MPSTensor.z4z2GHZClusterVirtual_adjoint,
+        MPSTensor.z4z2GHZClusterVirtual_sq,
+        MPSTensor.z4z2GHZClusterVirtual_stabilizer}
+    \leanok
+    \discussion{7747}
+    \uses{def:mpug_ghz_blocked_cluster_tensor}
+    Write the physical basis as $|p,s,r\rangle$, with integer index
+    $4p+2s+r$ for $p,s,r\in\{0,1\}$. Thus the blocked cluster index is
+    $q=2s+r$. The operators
+    $U_{(1,0)}=(X_1\otimes X_2)\mathrm{CNOT}_{1\to2}$ and
+    $U_{(0,1)}=X_3$ generate a unitary representation of
+    $G=\Z_4\times\Z_2$, with $U_{(2,0)}=X_2$.
+    Put $g\cdot x=x+a\pmod 2$ for $g=(a,b)$ and $x\in\{0,1\}$.
+    Let $V_{g,x}$ be given by the following table, where
+    $Y=\left(\begin{smallmatrix}0&-i\\i&0\end{smallmatrix}\right)$:
+    \begin{center}
+        \begin{tabular}{ccccccccc}
+            $g$   & $(0,0)$ & $(2,0)$ & $(0,1)$ & $(2,1)$
+                  & $(1,0)$ & $(3,0)$ & $(1,1)$ & $(3,1)$                             \\
+            $x=0$ & $\Id$   & $X$     & $Z$     & $Y$     & $X$   & $\Id$ & $Y$ & $Z$ \\
+            $x=1$ & $\Id$   & $X$     & $Z$     & $Y$     & $\Id$ & $X$   & $Z$ & $Y$ \\
+        \end{tabular}
+    \end{center}
+    Every $V_{g,x}$ is Hermitian and squares to the identity. For every
+    physical index $i$, the blocks satisfy
+    \begin{align}
+        \sum_j (U_g)_{i,j} A_x^j
+         & =V_{g,x}A_{g\cdot x}^iV_{g,x}^{\dagger}.
+        \label{eq:mpug_ghz_cluster_block_covariance}
+    \end{align}
+    On the subgroup $H=\{(2a,b):a,b\in\{0,1\}\}$, the comparison with the
+    cluster virtual representatives $W_{(b,a)}=Z^bX^a$ is
+    $V_{(2a,b),x}=(-i)^{ab}W_{(b,a)}$.
+    These are the physical representation and matrix action identities of
+    \cite[lines~4481--4489]{FrancoRubio2025MPUGauging}.
+    No claim is made about defect normalization, $L$-symbols, cocycle
+    nonextension, block independence, or gauging.
+    % Scoped calculation only: no defect normalization, L-symbols,
+    % cocycle nonextension, block independence, or gauging is asserted.
+    % Those remaining parts of example:z4z2 stay open in #7352.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_ghz_blocked_cluster_tensor, thm:mpug_monomial_matrix_laws}
+    On basis vectors the generators send $(p,s,r)$ to $(p+1,s+p+1,r)$
+    and $(p,s,r+1)$, with coordinates added modulo two. Their permutations
+    have orders four and two and commute. The corresponding permutation
+    matrices are unitary and preserve multiplication.
+    Substitute $A_x^{(p,q)}=\delta_{p,x}C^q$ into
+    (\ref{eq:mpug_ghz_cluster_block_covariance}). For each of the eight group
+    elements and two block labels, matrix multiplication gives the displayed
+    table. Hermiticity and $V_{g,x}^2=\Id$ turn forward transport of the
+    physical index into the stated conjugation identity.
+    Finally, $ZX=iY$, so the only phase needed to compare the restriction
+    with $Z^bX^a$ is $-i$ when $a=b=1$.
+\end{proof}
+
 \section{The gauge-invariant subspace of the CZX circuit tuple}
 \label{sec:mpug_czx_gauge_invariant}
 
