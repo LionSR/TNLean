@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinVecEta
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
@@ -18,9 +19,19 @@ unique ground state, which "can be seen e.g. by checking by hand that
 \(\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}\)"
 (arXiv:2011.12127, line 2095).
 
-This file carries out that hand check. With
+This file carries out that hand check. The tensor is the one of the AKLT
+example module,
 \(A^0 = c\,\sigma^z\), \(A^1 = b\,\sigma^+\), \(A^2 = -b\,\sigma^-\),
-\(c = 1/\sqrt3\), \(b = \sqrt2/\sqrt3\), the two-site local ground space is
+\(c = 1/\sqrt3\), \(b = \sqrt2/\sqrt3\). It is the review's Pauli form
+\(A^{-}=\sigma^x/\sqrt2\), \(A^{+}=\sigma^y/\sqrt2\), \(A^{0}=\sigma^z/\sqrt2\)
+of lines 2390--2392, rescaled by \(\sqrt{2/3}\) and read in the physical basis
+that pairs the two Pauli matrices into \(\sigma^{\pm}\):
+\[
+  A^0=\sqrt{\tfrac23}\,\frac{\sigma^z}{\sqrt2},\qquad
+  A^1=\sqrt{\tfrac23}\,\frac{A^{-}+iA^{+}}{\sqrt2},\qquad
+  A^2=-\sqrt{\tfrac23}\,\frac{A^{-}-iA^{+}}{\sqrt2}.
+\]
+The two-site local ground space is
 \[
   \mathcal G_2(A) = \{v : v_{11} = v_{22} = 0,\ v_{01} + v_{10} = 0,\
     v_{02} + v_{20} = 0,\ 2 v_{00} + v_{12} + v_{21} = 0\},
@@ -46,7 +57,9 @@ theorem identifies with the span of the AKLT state.
 ## References
 
 * Cirac--Pérez-García--Schuch--Verstraete 2021, arXiv:2011.12127, line 2095
-  (the remark) and lines 2372--2396 (the tensor).
+  (the remark) and lines 2390--2392 (the Pauli form of the tensor, which the
+  tensor used here reproduces up to the overall factor \(\sqrt{2/3}\) and a
+  unitary change of the physical basis).
 -/
 
 open scoped Matrix BigOperators
@@ -91,10 +104,6 @@ private lemma aklt_groundSpaceMap_two_apply (X : Matrix (Fin 2) (Fin 2) ℂ) (a 
       Matrix.trace (akltTensor a * (akltTensor b * X)) := by
   simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
 
-private lemma cfg_two_eq (σ : Fin 2 → Fin 3) : σ = ![σ 0, σ 1] := by
-  ext k
-  fin_cases k <;> rfl
-
 /-- The two-site local ground space of the AKLT tensor is cut out by five linear
 constraints: with \(A^0 = c\,\sigma^z\), \(A^1 = b\,\sigma^+\),
 \(A^2 = -b\,\sigma^-\), the products \(A^{a}A^{b}\) are
@@ -132,7 +141,7 @@ theorem mem_aklt_groundSpace_two_iff (v : NSiteSpace 3 2) :
       !![-(c * c * v ![1, 2]), c * b * v ![0, 2]; c * b * v ![0, 1], -(c * c * v ![2, 1])]
     have key : groundSpaceMap akltTensor 2 X = (c * c * (b * b)) • v := by
       ext σ
-      rw [cfg_two_eq σ]
+      rw [Matrix.eq_vecCons_fin_two σ]
       generalize σ 0 = a
       generalize σ 1 = a'
       fin_cases a <;> fin_cases a' <;>
@@ -156,10 +165,6 @@ theorem mem_aklt_groundSpace_two_iff (v : NSiteSpace 3 2) :
     rw [map_smul, key, smul_smul, inv_mul_cancel₀ hK, one_smul]
 
 /-! ### The three-site intersection property -/
-
-private lemma cfg_three_eq (σ : Fin 3 → Fin 3) : σ = ![σ 0, σ 1, σ 2] := by
-  ext k
-  fin_cases k <;> rfl
 
 private lemma fin_snoc_two (a b j : Fin 3) :
     (Fin.snoc ![a, b] j : Fin 3 → Fin 3) = ![a, b, j] := by
@@ -226,7 +231,7 @@ theorem aklt_mem_groundSpace_three_of_inLeftGround_of_inRightGround
     !![c * ψ ![1, 0, 2], -(b * ψ ![0, 0, 2]); b * ψ ![0, 0, 1], c * ψ ![2, 1, 0]]
   have key : groundSpaceMap akltTensor 3 X = (c * c * (b * b)) • ψ := by
     ext σ
-    rw [cfg_three_eq σ]
+    rw [Matrix.eq_vecCons_fin_three σ]
     generalize σ 0 = a
     generalize σ 1 = a'
     generalize σ 2 = a''

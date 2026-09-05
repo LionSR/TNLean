@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinVecEta
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 
@@ -88,17 +89,13 @@ private lemma cluster_groundSpaceMap_three_apply (X : Matrix (Fin 2) (Fin 2) ℂ
       Matrix.trace (clusterTensor a * (clusterTensor b * (clusterTensor c * X))) := by
   simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
 
-private lemma cfg_three_eq (s : Fin 3 → Fin 2) : s = ![s 0, s 1, s 2] := by
-  ext k
-  fin_cases k <;> rfl
-
 /-- Every vector of the three-site local ground space is fixed by the
 stabilizer. -/
 private lemma clusterStabilizer_groundSpaceMap (X : Matrix (Fin 2) (Fin 2) ℂ) :
     clusterStabilizer (groundSpaceMap clusterTensor 3 X) =
       groundSpaceMap clusterTensor 3 X := by
   ext s
-  rw [cfg_three_eq s, clusterStabilizer_apply]
+  rw [Matrix.eq_vecCons_fin_three s, clusterStabilizer_apply]
   generalize s 0 = a
   generalize s 1 = b
   generalize s 2 = c
@@ -145,7 +142,7 @@ theorem cluster_groundSpace_three_eq_eigenspace :
     have key : groundSpaceMap clusterTensor 3 X =
         ((2 : ℂ) * (↑(1 / Real.sqrt 2) : ℂ) ^ 3) • v := by
       ext s
-      rw [cfg_three_eq s]
+      rw [Matrix.eq_vecCons_fin_three s]
       generalize s 0 = a
       generalize s 1 = b
       generalize s 2 = c
@@ -187,7 +184,7 @@ private lemma clusterStabilizer_source_groundSpaceMap (X : Matrix (Fin 2) (Fin 2
     clusterStabilizer (groundSpaceMap clusterSourceTensor 3 X) =
       (-1 : ℂ) • groundSpaceMap clusterSourceTensor 3 X := by
   ext s
-  rw [cfg_three_eq s, clusterStabilizer_apply, Pi.smul_apply, smul_eq_mul]
+  rw [Matrix.eq_vecCons_fin_three s, clusterStabilizer_apply, Pi.smul_apply, smul_eq_mul]
   generalize s 0 = a
   generalize s 1 = b
   generalize s 2 = c
@@ -234,7 +231,7 @@ theorem clusterSource_groundSpace_three_eq_eigenspace_neg_one :
         -(v ![1, 0, 0] - v ![1, 0, 1]), v ![0, 0, 0] - v ![0, 0, 1]]
     have key : groundSpaceMap clusterSourceTensor 3 X = (2 : ℂ) • v := by
       ext s
-      rw [cfg_three_eq s]
+      rw [Matrix.eq_vecCons_fin_three s]
       generalize s 0 = a
       generalize s 1 = b
       generalize s 2 = c
