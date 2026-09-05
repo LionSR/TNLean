@@ -5010,6 +5010,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_admissible_simple_tensor_equivalence}
     \notready
     \discussion{5708}
+    % **Scope restriction (supplied reduced full-support fixed-pair data):**
+    % this entry assumes a chosen positive diagonal weight and stabilized
+    % fixed pair on the reduced full-support representative, rather than
+    % deriving that datum from the source's standing convention. See
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     % Retained under #7660: the source-labelled theorem now uses the bundled
     % canonical-form-II presentation, but downstream supplied-fixed-pair
     % statements cannot yet be redirected to it. The stabilization converse
@@ -5108,6 +5113,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{def:mpu_admissible_standard_form}
     \notready
     \discussion{6019}
+    % **Scope restriction (supplied reduced full-support fixed-pair data):**
+    % this standard form uses source unitaries constructed from a chosen
+    % reduced full-support datum with its positive diagonal weight and
+    % stabilized fixed pair. The passage from this supplied datum to the
+    % source's standing convention remains open; see
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     % Retained under #7660 with the supplied-fixed-pair equivalence theorem.
     % Redirecting its downstream uses to SF requires the stabilization
     % converse and normalization tracked by #7758; the bundled convention
@@ -5160,6 +5171,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_admissible_fundamental}
     \notready
     \discussion{6020}
+    % **Scope restriction (supplied reduced full-support fixed-pair data):**
+    % both tensors carry chosen reduced full-support source data, including
+    % positive diagonal weights and stabilized fixed pairs, for their
+    % admissible standard forms. These supplied hypotheses have not yet been
+    % identified with the source's standing convention; see
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     % Retained under #7660: both supplied-fixed-pair presentations must be
     % related to the standing canonical-form-II convention before downstream
     % uses can be redirected to FundamentalMPU. The converse and normalization
