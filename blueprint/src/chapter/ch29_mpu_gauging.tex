@@ -4469,7 +4469,7 @@ by the displayed matrices.
     \lean{MPOTensor.CZX.tensor_eq_blockTensor}
     \leanok
     \uses{def:mpug_czx_exact_tensor, def:mpdo_physical_blocking,
-        def:mpdo_two_site_blocking, thm:mpdo_block_two_as_positive_blocking}
+        def:mpdo_two_site_blocking}
     Let $\varphi:\{0,1,2,3\}\to\{0,1\}^2$ be the pair-index bijection
     $\varphi(2a+b)=(a,b)$, regarded as a word of length two. Write
     $C^{[L]}$ for the general physical blocking of $C$ from
@@ -4480,6 +4480,7 @@ by the displayed matrices.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_block_two_as_positive_blocking}
     Apply Theorem~\ref{thm:mpdo_block_two_as_positive_blocking} to $C$.
     For $i=2a+b$ and $j=2c+d$, both sides are the same ordered product:
     \begin{align}
@@ -4495,8 +4496,7 @@ by the displayed matrices.
         MPOTensor.CZX.mpo_tensor_apply, MPOTensor.CZX.mpo_tensor,
         MPOTensor.CZX.mpo_tensor_mem_unitaryGroup, MPOTensor.CZX.tensor_isMPU}
     \leanok
-    \uses{def:mpug_czx_exact_tensor, def:mpug_monomial_matrix, def:mpu,
-        thm:trace_eval_word_eq_sum_cyclic, thm:mpug_monomial_matrix_laws}
+    \uses{def:mpug_czx_exact_tensor, def:mpug_monomial_matrix, def:mpu}
     The tensor $B$ has bond dimension two and coordinates
     \begin{align}
         B^{ab,cd}_{\ell r}
@@ -4514,6 +4514,7 @@ by the displayed matrices.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:trace_eval_word_eq_sum_cyclic, thm:mpug_monomial_matrix_laws}
     The two-site block is the matrix product contracted over a binary
     intermediate bond $m$. The second factor vanishes unless $m=b$, so
     \begin{align}
