@@ -38,8 +38,9 @@ single biconditional.
 
 **Unfaithful:** This proof calls `thm_4_1_p_refinement_forward`, whose
 hypothesis `PRefinementCanonicalization` deviates from arXiv:1708.00029,
-Theorem 4.1, lines 728--731: it is refuted at bond dimension one by a positive
-rescaling of a \(p\)-refinable tensor, because the printed forward implication
+Theorem 4.1, lines 728--731: it is refuted for \(p \ge 1\) at bond dimension
+one by a positive rescaling of a \(p\)-refinable tensor, because the printed
+forward implication
 omits the trace preservation of \(\mathcal E_B\) presupposed by its definition
 of \(p\)-divisibility at lines 717--718. Documented in
 `docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. Elimination:

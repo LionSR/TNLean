@@ -64,8 +64,8 @@ $\mathcal E_B(X)=\sum_i B^iX(B^i)^\dagger$ is $p$-divisible.
 Let $B_0$ be any tensor in irreducible form~II whose multiplicities all equal
 one and whose family is $p$-refinable with witness $(A_0,W)$. The simplest
 instance has $d=D=1$, $B_0=(1)$, $A_0=(1)$, and $W=1$, for which
-$\ket{V_{pN}(A_0)}=1=\ket{V_N(B_0)}$ at every length. Fix $\lambda>1$ and
-set
+$\ket{V_{pN}(A_0)}=1=\ket{V_N(B_0)}$ at every length. Fix $p\geq1$ and
+$\lambda>1$ and set
 \begin{align}
     B
      & :=\lambda B_0,
@@ -145,7 +145,7 @@ $\mathcal E_B=\mathcal E_{\widetilde A^{[p]}}$.\footnote{The hypothesis is
     \path{TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean}.}
 
 First, the scaling counterexample refutes the hypothesis at bond dimension
-one for every physical dimension and every $p\geq1$: the tensor
+one for every positive physical dimension and every $p\geq1$: the tensor
 $\lambda B_0$ generates the same family as the weighted block sum with weight
 $\lambda$, so it is in the formal irreducible form, and the conclusion would
 identify the map $x\mapsto\lambda^2x$ with a $p$-th power of the identity.
@@ -190,10 +190,12 @@ hypotheses themselves are
 \leanid{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge},
 \leanid{MPSTensor.PeripheralEqualCaseRootFromZGauge},
 \leanid{MPSTensor.PeripheralEqualCasePeriodicFTOfSameMPV}, and
-\leanid{MPSTensor.PRefinementCanonicalization}; each implies the next, and
-the first is already refuted by the one-dimensional data $C = A^{(p)} =
-    (\lambda)$ with the trivial $Z$-gauge, since no channel has $p$-th power
-$x\mapsto\lambda^2x$.
+\leanid{MPSTensor.PRefinementCanonicalization}. The first implies the
+second, the second together with the blocked $Z$-gauge extraction
+hypothesis \leanid{MPSTensor.PeripheralEqualCaseZGaugeOfSameMPV} implies the
+third, and the third implies the fourth. For $p\geq1$ each of the four is
+refuted by the one-dimensional data $C = A^{(p)} = (\lambda)$ with the
+trivial $Z$-gauge, since no channel has $p$-th power $x\mapsto\lambda^2x$.
 
 \section{Conclusion}
 

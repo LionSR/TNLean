@@ -64,7 +64,7 @@ available, the tensor-level reconstruction follows by choosing a Kraus family
 with `d` operators.
 
 This hypothesis is refuted by the rescaling counterexample of
-`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`: at physical
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`: for \(p \ge 1\) at physical
 and bond dimension one the tensors \(C = A^{[p]} = (\lambda)\) with
 \(\lambda > 1\) are related by the trivial \(Z\)-gauge with \(m = 1\), and
 \(C\) is in irreducible form II, while \(\mathcal E_C(x) = \lambda^2 x\) is
@@ -89,7 +89,7 @@ and blocking recovers the transfer map of `C`.
 **Unfaithful:** This proof relies on the hypothesis
 `PeripheralEqualCaseRootChannelOfZGauge` and produces
 `PeripheralEqualCaseRootFromZGauge`; both deviate from arXiv:1708.00029,
-lines 765--810, and both are refuted at physical and bond dimension one by
+lines 765--810, and both are refuted for \(p \ge 1\) at physical and bond dimension one by
 \(C = A^{[p]} = (\lambda)\), \(\lambda > 1\), with the trivial \(Z\)-gauge,
 because the printed forward implication of Theorem 4.1, lines 728--731, omits
 the trace preservation of \(\mathcal E_B\) presupposed by its definition of

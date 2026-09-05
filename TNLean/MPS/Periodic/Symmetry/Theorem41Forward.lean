@@ -345,7 +345,7 @@ conditional input for arbitrary `A`; it does not assert the irreducible block
 data of `A` as hypotheses.
 
 This hypothesis is refuted by the rescaling counterexample of
-`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`: at physical
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`: for \(p \ge 1\) at physical
 and bond dimension one the tensors \(C = A^{[p]} = (\lambda)\) with
 \(\lambda > 1\) are related by the trivial \(Z\)-gauge with \(m = 1\), and
 \(C\) is in irreducible form II, while no left-canonical \(A'\) has
@@ -376,7 +376,7 @@ with the phase-distribution construction in lines 765--810, where the scalars
 
 This hypothesis implies `PRefinementCanonicalization` (see
 `pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV`)
-and is refuted by the same rescaling: at bond dimension one the tensors
+and is refuted by the same rescaling for \(p \ge 1\): at bond dimension one the tensors
 \(C = (\lambda)\) and \(A = (\lambda^{1/p})\) with \(\lambda > 1\) satisfy the
 premises, while no left-canonical \(A'\) has
 \(\mathcal E_{A'}^p(x) = \lambda^2 x\). See
@@ -404,7 +404,7 @@ obligations: the equal-case \(Z\)-gauge existence step and the construction of
 **Unfaithful:** This proof relies on the hypothesis
 `PeripheralEqualCaseRootFromZGauge`, which deviates from arXiv:1708.00029,
 lines 765--810: the printed construction of \(\widetilde A\) is left canonical
-only when every multiplicity is one, and the hypothesis is refuted at physical
+only when every multiplicity is one, and the hypothesis is refuted for \(p \ge 1\) at physical
 and bond dimension one by \(C = A^{[p]} = (\lambda)\), \(\lambda > 1\), with
 the trivial \(Z\)-gauge. Documented in
 `docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. Elimination:
@@ -447,8 +447,8 @@ hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`.
 This hypothesis is not provable as stated. The printed forward implication of
 arXiv:1708.00029, Theorem 4.1, lines 728--731, omits the trace preservation of
 \(\mathcal E_B\) that its definition of \(p\)-divisibility at lines 717--718
-presupposes: for a \(p\)-refinable tensor \(B_0\) in irreducible form II and
-\(\lambda > 1\), the tensor \(\lambda B_0\) is again in irreducible form II
+presupposes: for \(p \ge 1\), a \(p\)-refinable tensor \(B_0\) in irreducible
+form II, and \(\lambda > 1\), the tensor \(\lambda B_0\) is again in irreducible form II
 and \(p\)-refinable, while \(\mathcal E_{\lambda B_0} = \lambda^2
 \mathcal E_{B_0}\) is not trace preserving and so is not a \(p\)-th power of a
 channel. The formal `IsIrreducibleForm` moreover fixes only the generated
@@ -474,7 +474,7 @@ equal-case construction of \(\widetilde A\) captured by
 **Unfaithful:** This proof relies on the hypothesis
 `PeripheralEqualCasePeriodicFTOfSameMPV` and produces
 `PRefinementCanonicalization`; both deviate from arXiv:1708.00029,
-Theorem 4.1, lines 728--731, and both are refuted at bond dimension one by a
+Theorem 4.1, lines 728--731, and both are refuted for \(p \ge 1\) at bond dimension one by a
 positive rescaling, because the printed forward implication omits the trace
 preservation of \(\mathcal E_B\) presupposed by its definition of
 \(p\)-divisibility at lines 717--718. Documented in
@@ -511,7 +511,7 @@ hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`.
 **Unfaithful:** This proof relies on the hypothesis
 `PeripheralEqualCasePeriodicFTOfSameMPV`, which deviates from
 arXiv:1708.00029, Theorem 4.1, lines 728--731, in the same way as
-`PRefinementCanonicalization`: it is refuted at bond dimension one by a
+`PRefinementCanonicalization`: it is refuted for \(p \ge 1\) at bond dimension one by a
 positive rescaling, because the printed forward implication omits the trace
 preservation of \(\mathcal E_B\) presupposed by its definition of
 \(p\)-divisibility at lines 717--718. Documented in
@@ -545,7 +545,7 @@ left-canonical-channel lemma — is formalized here.
 
 **Unfaithful:** This proof relies on the hypothesis `PRefinementCanonicalization`,
 which deviates from arXiv:1708.00029, Theorem 4.1, lines 728--731: the
-hypothesis is refuted at bond dimension one by a positive rescaling of a
+hypothesis is refuted for \(p \ge 1\) at bond dimension one by a positive rescaling of a
 \(p\)-refinable tensor, and the printed forward implication itself omits the
 trace preservation of \(\mathcal E_B\) that its definition of
 \(p\)-divisibility at lines 717--718 presupposes. Documented in
