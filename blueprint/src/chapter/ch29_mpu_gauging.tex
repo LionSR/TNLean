@@ -2560,21 +2560,39 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \label{def:mpug_h2_pullback}
     \lean{TNLean.Algebra.ScalarCocycle.pullback,
         TNLean.Algebra.ScalarCocycle.pullback_apply,
-        TNLean.Algebra.ScalarCocycle.IsCocycle.pullback,
-        TNLean.Algebra.ScalarCocycle.CohomologousTo.pullback,
         TNLean.Algebra.H2.pullback,
         TNLean.Algebra.H2.pullback_mk}
     \leanok
-    \uses{def:h2_cx, def:cohomologous_to, def:is_cocycle}
+    \uses{def:h2_cx}
     Let $f:K\to G$ be a group homomorphism. For a scalar $2$-cochain
     $\omega:G\times G\to\C^\times$, define
     $(f^*\omega)(a,b)=\omega(f(a),f(b))$.
-    Pullback preserves the cocycle equation. If $\omega_1$ and $\omega_2$
-    differ by the coboundary of $\varphi:G\to\C^\times$, their pullbacks
-    differ by the coboundary of $\varphi\circ f$. Thus pullback defines
-    $f^*:H^2(G,\C^\times)\to H^2(K,\C^\times)$ by
+    The induced pullback map
+    $f^*:H^2(G,\C^\times)\to H^2(K,\C^\times)$ is defined by
     $f^*[\omega]=[f^*\omega]$.
 \end{definition}
+
+\begin{theorem}[Pullback preserves cocycles and cohomology]
+    \label{thm:mpug_h2_pullback_preserves}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle.pullback,
+        TNLean.Algebra.ScalarCocycle.CohomologousTo.pullback}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    Let $f:K\to G$ be a group homomorphism. If $\omega$ is a scalar
+    $2$-cocycle on $G$, then $f^*\omega$ is a scalar $2$-cocycle on $K$.
+    If $\omega_1$ and $\omega_2$ are cohomologous scalar $2$-cochains on $G$,
+    then $f^*\omega_1$ and $f^*\omega_2$ are cohomologous on $K$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    For $a,b,c\in K$, substitute $f(a),f(b),f(c)$ in the cocycle equation
+    for $\omega$ and use $f(ab)=f(a)f(b)$ and $f(bc)=f(b)f(c)$.
+    If $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$,
+    set $\eta=\varphi\circ f$. Substituting $g=f(a)$ and $h=f(b)$ gives
+    $(f^*\omega_1)(a,b)=\eta(a)\eta(b)\eta(ab)^{-1}(f^*\omega_2)(a,b)$,
+    so $\eta$ witnesses the required cohomology relation.
+\end{proof}
 
 % Partial support for #7361 (child #7754), not the full prop:BI_psi criterion.
 % No U(1) restriction naturality or tensor-level block-independence claim.
