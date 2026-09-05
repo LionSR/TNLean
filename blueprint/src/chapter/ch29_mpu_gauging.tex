@@ -4776,6 +4776,35 @@ by the displayed matrices.
     \end{align}
 \end{proof}
 
+\begin{theorem}[The CZX dimension in the gauge-invariant subspace of the displayed tuple]
+    \label{thm:mpug_czx_dimension_of_completion}
+    \lean{MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTuple}
+    \leanok
+    \uses{def:mpug_gauge_invariant_subspace, def:mpug_czx_circuit_tuple}
+    For the gauge-invariant subspace~(\ref{eq:mpug_gauge_invariant_subspace}) at
+    $R=R^{\mathrm{CZX}}$ and $N\geq3$,
+    $\dim_{\C}\mathcal V_N(R^{\mathrm{CZX}})=2^N$. The value is thereby
+    recorded for the subspace that
+    Definition~\ref{def:mpug_gauge_invariant_subspace} attaches to an arbitrary
+    tuple, so exhibiting $R^{\mathrm{CZX}}$ as a completion of prescribed
+    defect maps with matter defect states satisfying local defect support,
+    exact defect covariance, and nonvanishing of the gauged vector would put
+    the exact value beside the lower bound $\dim_{\C}\mathcal V_N(R)\geq1$ of
+    Theorem~\ref{thm:mpug_gauge_invariant_subspace_finrank}. None of those
+    hypotheses is established here. The statement is about the displayed
+    circuit tuple and asserts no membership in the full physical completion
+    class of the CZX defect data.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_dimension, def:mpug_placed_gauss_projector}
+    Both subspaces are the common fixed subspace of the placed Gauss
+    projectors $\widetilde P_j(R^{\mathrm{CZX}})$ of
+    Definition~\ref{def:mpug_placed_gauss_projector} acting on the
+    configuration space of the chain, so
+    Theorem~\ref{thm:mpug_czx_dimension} gives the value.
+\end{proof}
+
 \subsection{A second displayed circuit tuple at three and four sites}
 
 The source constrains the block $U_{1,1}$ of (\ref{eq:mpug_czx_tuple}) only
