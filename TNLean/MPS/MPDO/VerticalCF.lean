@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSumPermutation
 import QICLean.Algebra.HermitianHelpers
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.MPDO.PhysicalAdjoint
@@ -295,10 +296,8 @@ theorem ketLeftBraRightAction_mpv (M : MPOTensor d D)
   rw [← finProdFinEquiv.sum_comp]
   rw [Fintype.sum_prod_type]
   simp only [ketLeftBraRightAction, finProdFinEquiv_divNat, finProdFinEquiv_modNat]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  apply Finset.sum_congr₂
+  intro i _ j _
   rw [mpv_toMPSTensor_cons_pair]
   simp only [Function.comp_apply]
   ring
