@@ -178,10 +178,22 @@ decomposition of residues, \path{Papers/1708.00029/main.tex:446--450}, and
 the redistribution of the root-of-unity factors across the sites,
 \path{Papers/1708.00029/main.tex:765--806}. The restatement is tracked in
 \href{https://github.com/LionSR/TNLean/issues/7762}{issue \#7762}, a child
-of \href{https://github.com/LionSR/TNLean/issues/622}{issue \#622}; the
-conditional forward theorem, its blocked-stage variant, and the bundled
-biconditional carry unfaithfulness markers naming this note until that
-restatement lands.
+of \href{https://github.com/LionSR/TNLean/issues/622}{issue \#622}. Until
+that restatement lands, every formal theorem whose proof consumes a refuted
+hypothesis carries an unfaithfulness marker naming this note: the conditional
+forward theorem, its blocked-stage variant, the bundled biconditional, and
+the three reduction theorems between the refuted hypotheses, namely
+\leanid{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV},
+\leanid{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV},
+and \leanid{MPSTensor.peripheralEqualCaseRootFromZGauge_of_rootChannel}. The
+hypotheses themselves are
+\leanid{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge},
+\leanid{MPSTensor.PeripheralEqualCaseRootFromZGauge},
+\leanid{MPSTensor.PeripheralEqualCasePeriodicFTOfSameMPV}, and
+\leanid{MPSTensor.PRefinementCanonicalization}; each implies the next, and
+the first is already refuted by the one-dimensional data $C = A^{(p)} =
+    (\lambda)$ with the trivial $Z$-gauge, since no channel has $p$-th power
+$x\mapsto\lambda^2x$.
 
 \section{Conclusion}
 
