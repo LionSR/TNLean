@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Positive Block Dimensions in the PGVWC07 Canonical Form}
+\author{}
+\date{2026-09-05}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed block form}
+
+Theorem~4 of Ref.~\cite{PerezGarcia2007MPSReps}
+(\path{Papers/quant-ph_0608197/MPSarchive.tex}, lines~742--763) writes the
+matrices of a translation-invariant canonical representation as
+\begin{align}
+    A_i
+     & =\bigoplus_j\lambda_jA_i^j,
+    \qquad 1\ge\lambda_j>0,
+    \label{eq:pgvwc07_ti_canonical_form_positive_blocks_block_form}
+\end{align}
+where every block $A^j$ satisfies $\sum_iA_i^j(A_i^j)^\dagger=\Id$, admits a
+diagonal positive full-rank matrix $\Lambda^j$ with
+$\sum_i(A_i^j)^\dagger\Lambda^jA_i^j=\Lambda^j$, and has the identity as the
+only fixed point of $X\mapsto\sum_iA_i^jX(A_i^j)^\dagger$. The source does not
+state the size of a block.
+
+\section{The convention}
+
+A block of size zero contributes nothing to
+(\ref{eq:pgvwc07_ti_canonical_form_positive_blocks_block_form}) and is not a
+summand the source intends: its weight $\lambda_j$ would be a listed weight of
+no matrix, and its conditions would hold vacuously. The formal predicate for
+the block form of Theorem~4 therefore requires every listed block to have
+positive bond dimension. This is a convention of the same kind as the
+nonzero-coefficient convention for canonical forms, not a faithfulness gap:
+the predicate admits exactly the block forms the source describes, and the
+existence theorem for the canonical form produces only blocks of positive
+dimension.
+
+The convention is used once. In the uniqueness theorem for the canonical
+form (Theorem~7, lines~1002--1015), condition C1 forces a single block, by the
+first assertion of the proposition on condition C1 (lines~911--919): a matrix
+unit supported on an off-diagonal block is annihilated by every word. Choosing
+that matrix unit requires one bond index in each of two distinct blocks, which
+positive block dimension supplies.\footnote{The formal declarations are
+    \leanid{MPSTensor.PGVWC07CanonicalFormData} and
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.not_isNBlkInjective_of_ne}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

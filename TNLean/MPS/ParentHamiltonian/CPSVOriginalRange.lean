@@ -152,28 +152,6 @@ private theorem IsCPSVBasisOfNormalTensors.of_family_gaugeEquiv
     rw [← hEq]
     exact hLI N hN
 
-/-- Nonzero scalar multiplication does not change a positive-length local MPS
-space. -/
-private theorem groundSpace_smul_eq_of_ne_zero
-    {s n : ℕ} (A : MPSTensor s n) (ζ : ℂ) (hζ : ζ ≠ 0) (L : ℕ) :
-    groundSpace (ζ • A) L = groundSpace A L := by
-  have hMap (X : Matrix (Fin n) (Fin n) ℂ) :
-      groundSpaceMap (ζ • A) L X = groundSpaceMap A L ((ζ ^ L) • X) := by
-    ext σ
-    rw [groundSpaceMap_apply, groundSpaceMap_apply]
-    change Matrix.trace
-        (Kraus.evalWord (fun i => ζ • A i) (List.ofFn σ) * X) = _
-    rw [Kraus.evalWord_smul]
-    simp [Matrix.trace_smul]
-  apply le_antisymm
-  · rintro _ ⟨X, rfl⟩
-    exact ⟨(ζ ^ L) • X, (hMap X).symm⟩
-  · rintro _ ⟨Y, rfl⟩
-    refine ⟨(ζ ^ L)⁻¹ • Y, ?_⟩
-    rw [hMap]
-    congr 1
-    rw [smul_smul, mul_inv_cancel₀ (pow_ne_zero L hζ), one_smul]
-
 /-- Changing only the presentation of the bond dimension does not change the
 local MPS space. -/
 private theorem groundSpace_cast_bond_dim
@@ -244,7 +222,7 @@ private theorem CPSVCanonicalFormData.groundSpace_eq_iSup_representatives
       _ = groundSpace
           (cast (congr_arg (MPSTensor s) (ref.copyDimEq k))
             (data.blocks (data.representativeIndex (data.classCopy k).1))) L :=
-        groundSpace_smul_eq_of_ne_zero _ _ hPhaseNe L
+        groundSpace_smul_eq _ _ hPhaseNe L
       _ = groundSpace
           (data.blocks (data.representativeIndex (data.classCopy k).1)) L :=
         groundSpace_cast_bond_dim (ref.copyDimEq k) _ L

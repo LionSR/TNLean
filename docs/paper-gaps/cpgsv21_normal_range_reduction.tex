@@ -332,6 +332,104 @@ The public theorems
 \leanid{MPSTensor.parentHamiltonian_unique_gs_injective} now use the
 non-strict source bound.
 
+\subsection{Provenance of the two periodic routes}
+\label{sec:cpgsv21_normal_range_reduction_route_provenance}
+
+The minimal-ring argument above is a TNLean reconstruction; the source
+prints no proof of the endpoint $N=L_0+1$. Ref.~\cite{Cirac2021Matrix}
+states the range-$(L_0+1)$ uniqueness theorem after its closure-property
+sentence, which says only that, once the iterated range reaches $2L_0$, one
+may resort to the range-$2L_0$ theorem or apply a similar argument when
+closing the boundaries.\footnote{Source location:
+\path{Papers/2011.12127/TN-Review-main.tex}:2078--2079 for the sentence and
+\path{Papers/2011.12127/TN-Review-main.tex}:2087--2090 for the theorem.} The
+printed periodic argument is the uniqueness theorem with translation
+invariance and periodic boundary conditions of
+Ref.~\cite{PerezGarcia2007Matrix}, stated under the hypothesis $N\geq 2L_0$.
+It writes a ground state as $\Gamma_N(X)$, moves the cut past a word of
+length $L_0$ to write the same state as
+$\tr(A^{i_1}\cdots A^{i_{L_0}}\,Y\,A^{i_{L_0+1}}\cdots A^{i_N})$, and uses
+injectivity of the complementary word of length $N-L_0$ to obtain
+\begin{align}
+    XA^{i_1}\cdots A^{i_{L_0}}
+        &= A^{i_1}\cdots A^{i_{L_0}}Y.
+    \label{eq:cpgsv21_normal_range_reduction_printed_change_of_cut}
+\end{align}
+Injectivity of the length-$L_0$ word then gives $X=Y$, and
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_printed_change_of_cut} becomes a
+commutation.\footnote{Source location:
+\path{Papers/quant-ph_0608197/MPSarchive.tex}:1267--1291, the hypothesis,
+the theorem labelled \path{uniqueGS}, and its proof.} The complementary word
+must have length at least $L_0$, which is the printed hypothesis
+$N\geq 2L_0$. For $L_0\geq 2$ the minimal ring has $N=L_0+1<2L_0$: the
+complement of a length-$L_0$ word is a single site, on which the tensor need
+not be injective, so the printed route does not apply there.
+
+The reconstruction reverses the roles of word and complement. On the ring
+of length $L_0+1$, the word moved through the cut is a single letter and the
+complement is a word of length $L_0$, so one move yields only the
+intertwining
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_full_ring_intertwining} between
+two different matrices. To recover a commutation, choose a matrix $Y_i$ at
+every cyclic cut $i\in\mathbb Z/(L_0+1)$, with $\Gamma_{L_0+1}(Y_i)$ the
+state translated by $i$ sites and $Y_0=X$. Translating by $L_0$ sites moves
+one letter through the cut and gives
+\begin{align}
+    Y_iA^j
+        &= A^jY_{i+L_0}
+        \qquad\text{for every cut $i$ and every physical letter $j$}.
+    \label{eq:cpgsv21_normal_range_reduction_cyclic_cut_step}
+\end{align}
+Iterating Eq.~\ref{eq:cpgsv21_normal_range_reduction_cyclic_cut_step} along
+a full-ring word of length $L_0+1$ returns to the starting cut, because
+$(L_0+1)L_0\equiv 0$ modulo $L_0+1$. Hence $X$ commutes with every full-ring
+word, and block injectivity at length $L_0+1$ makes $X$ scalar. The formal
+argument is
+\leanid{MPSTensor.full_ring_boundary_intertwines_of_chainGroundSpace}.
+
+The boundary comparison for $L_0+1<N$ splits into the printed range
+$N\geq 2L_0$ and the short rings $L_0+1<N<2L_0$. The formal statement
+\leanid{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace} records
+the shifted-cut matrix $Y$ of Ref.~\cite{PerezGarcia2007Matrix} as two
+families $Y^+$ and $Y^-$ indexed by full ring configurations, one for each
+boundary-crossing window, and compares them through the fixed background
+letter $\eta$ and complementary word $\mu$ of
+Eqs.~\ref{eq:cpgsv21_normal_range_reduction_positive_boundary_word}
+and~\ref{eq:cpgsv21_normal_range_reduction_negative_boundary_word}. The
+equality $Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}$ is the printed
+comparison of the boundary matrices at two cuts, read at the two windows
+that cross the cut.
+
+The formal derivation of this equality does not follow the printed one. The
+printed derivation moves a length-$L_0$ word through the cut and needs the
+complementary word of length $N-L_0$ to be injective, which is the
+hypothesis $N\geq 2L_0$. The formal derivation moves a single letter through
+the cut, as in the minimal-ring reconstruction above: the two
+boundary-crossing windows give the one-sided equations
+Eqs.~\ref{eq:cpgsv21_normal_range_reduction_left_boundary_product}
+and~\ref{eq:cpgsv21_normal_range_reduction_right_boundary_product}, the
+shifted-cut matrix is transported along adjacent windows of length $L_0+1$ to
+the block-window identity
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_block_window_matrix_identity},
+the block-injective commutation lemma turns that identity into
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_one_site_commutation}, and the
+right-products $Y^+A^j=Y^-A^j$ are cancelled by the spanning length-$L_0$
+words. Every injectivity step uses a word of length $L_0$ inside one window;
+no step uses a word of length $N-L_0$, and the derivation is uniform in $N$.
+
+For $N\geq 2L_0$ the printed hypothesis holds, the printed derivation through
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_printed_change_of_cut} applies,
+and the formal derivation is an alternative proof of the same comparison on
+the printed range. For the short rings $L_0+1<N<2L_0$ the complementary word
+of a length-$L_0$ word has length $N-L_0<L_0$, on which the tensor need not
+be injective, so the printed derivation does not apply, and the single-letter
+derivation is a TNLean reconstruction. It differs from the minimal-ring
+reconstruction only in how the commutation is recovered: the complementary
+word $\mu$ is nonempty, so the boundary-crossing windows already yield
+Eq.~\ref{eq:cpgsv21_normal_range_reduction_block_window_matrix_identity},
+and Eq.~\ref{eq:cpgsv21_normal_range_reduction_one_site_commutation} follows
+from block injectivity without comparing all $N$ cyclic cuts.
+
 \section{Conclusion}
 
 The source argument is not refuted. Ref.~\cite{Cirac2021Matrix} compresses two

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
 import TNLean.MPS.MPDO.EmbedLocalOperatorMonomial
+import TNLean.MPS.MPDO.GaugeInvariantSubspace
 import TNLean.MPS.MPDO.GaussProjectorPlacement
 
 /-!
@@ -36,8 +37,17 @@ $(G_jG_{j+1})^2\ket{s}=(-1)^{b_{j+1}(s)}\ket{s}$.
 By the monomial fixed-space criterion, a fiber contributes one dimension exactly
 when $b=0$, and there are $2^N$ such fibers.
 
-The theorem concerns the displayed circuit tuple acting through the local
-Gauss operator. It does not identify this tuple with a member of the full
+The same value is recorded for the gauge-invariant subspace
+$\mathcal V_N(R)$ that the general theory attaches to an arbitrary tuple $R$:
+the two spellings of the placed projector as a linear map agree, so the exact
+dimension of the displayed tuple is a statement about that subspace. Whether
+the displayed tuple is a completion of prescribed defect maps carrying matter
+defect states with local defect support, exact defect covariance, and a
+nonvanishing gauged vector, the hypotheses under which the general lower bound
+$\dim\mathcal V_N(R)\geq1$ is available, is not settled here.
+
+The theorems concern the displayed circuit tuple acting through the local
+Gauss operator. They do not identify this tuple with a member of the full
 physical completion class of the CZX defect data, which would require the
 three defect domains and maps not supplied by the displayed matrices.
 -/
@@ -511,9 +521,11 @@ The proof classifies the orbits of the bond flips by the labels $(p,b)$, applies
 the monomial fixed-space criterion, and uses the neighboring holonomy to show
 that exactly the fibers with $b=0$ carry a fixed vector.
 
-This theorem concerns the displayed circuit tuple only. It does not assert that
-the tuple belongs to the full physical completion class of the CZX defect
-data. -/
+This theorem concerns the displayed circuit tuple only, and by itself says
+nothing about the completion class of the CZX defect data. That the tuple is a
+member of that class is proved in
+`MPOTensor.CZX.circuitTuple_mem_completionClass`, which turns this value into a
+lower bound on the supremum of the dimension over the class. -/
 theorem finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple (N : ℕ) (hN : 3 ≤ N) :
     Module.finrank ℂ (LinearMap.commonFixedSubmodule fun j : Fin N ↦
       toLin' (placedGaussProjector 4 (Multiplicative (ZMod 2)) N (by omega) j circuitTuple)) =
@@ -543,5 +555,41 @@ theorem finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple (N : ℕ)
         rfl
       right_inv := fun p ↦ rfl }
   rw [Nat.card_congr hequiv, Nat.card_eq_fintype_card, Fintype.card_pi_const, ZMod.card]
+
+/-- **The exact dimension in the gauge-invariant subspace of the displayed
+tuple.** On a periodic chain of $N\geq3$ blocked sites with two matter qubits and
+one gauge qubit per site, the gauge-invariant subspace
+$\mathcal V_N(R^{\mathrm{CZX}})$ of the displayed CZX circuit tuple
+$R^{\mathrm{CZX}}=(\mathrm{id},\mathrm{id},w,\tilde\lambda)$ has dimension $2^N$.
+
+This restates the exact dimension for the subspace that the general theory
+attaches to an arbitrary tuple, the two descriptions of a placed Gauss projector
+as a linear map on the configuration space being the same map; no part of the
+orbit, holonomy, or fiber count is repeated. It does not verify, for the
+displayed tuple, the hypotheses under which the general lower bound
+$\dim\mathcal V_N(R)\geq1$ is available: a completion of prescribed defect maps
+and matter defect states with local defect support, exact defect covariance, and
+a nonvanishing gauged vector. Only once those are supplied do the exact value
+and the lower bound stand beside each other.
+
+Sources: arXiv:2502.20257, lines 4503--5183 for the CZX matrix product unitary,
+its defect and fusion data, the gauged matrix product state, and the modified
+Gauss law; lines 5198--5204 for the growth question that the value $2^N$
+answers for this one tuple.
+
+This statement concerns the displayed circuit tuple only. It makes no claim that
+the tuple belongs to the full physical completion class of the CZX defect data,
+which would require the defect domains and maps that the displayed matrices do
+not supply, and it says nothing about the minimum or the maximum of the
+dimension over completions. -/
+theorem finrank_gaugeInvariantSubspace_circuitTuple (N : ℕ) (hN : 3 ≤ N) :
+    Module.finrank ℂ
+      (gaugeInvariantSubspace 4 (Multiplicative (ZMod 2)) N (by omega) circuitTuple) = 2 ^ N := by
+  have hsubspace : gaugeInvariantSubspace 4 (Multiplicative (ZMod 2)) N (by omega) circuitTuple =
+      LinearMap.commonFixedSubmodule fun j : Fin N ↦
+        toLin' (placedGaussProjector 4 (Multiplicative (ZMod 2)) N (by omega) j circuitTuple) := by
+    simp only [gaugeInvariantSubspace, Matrix.toLin'_apply']
+  rw [hsubspace]
+  exact finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple N hN
 
 end MPOTensor.CZX

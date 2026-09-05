@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPU.Examples
 
+import TNLean.MPS.MPU.Examples.CZXNormalizationAudit
 import TNLean.MPS.MPU.Examples.Shift
 import TNLean.MPS.MPU.Examples.ShiftIndex
 import TNLean.MPS.MPU.Examples.ShiftPaperSourceFactors

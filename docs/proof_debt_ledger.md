@@ -516,6 +516,84 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   tensor-product transports and by the reduced-representative construction),
   and the `fin_one` stabilization branch (still consumed on route by
   `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`). The
+  blueprint-side merge is now blocked on preservation rather than on the
+  predicate. Of the 16 pointwise nodes,
+  `lem:mpu_admissible_source_u_isometry` is the generic supplied-fixed-pair
+  step whose Lean statements still carry `(ρ, hρ, K, hpower)` and which the
+  `lemuisometry` proof consumes. Three nodes
+  (`thm:mpu_admissible_simple_tensor_equivalence`,
+  `def:mpu_admissible_standard_form`, `thm:mpu_admissible_fundamental`)
+  restrict only the tensor their source-labelled counterpart already places
+  under the convention and have no Lean restriction left; the other 12
+  restrict a physical block, a physical-adjoint, transposed, or conjugate
+  comparison tensor, a tensor product, or a composition, for which no
+  preservation statement of the predicate exists. The 3 are cited by 11
+  retained nodes (7 pointwise plus the path nodes
+  `prop:mpu_admissible_continuity_index`, `thm:mpu_admissible_index`,
+  `cor:mpu_admissible_continuous_standard_form`, and
+  `lem:mpu_admissible_symmetry_path_criterion`) whose tensors carry only a
+  supplied fixed pair, so deleting them singly would strengthen those 11
+  statements silently. Two unblockers are needed; they reach disjoint parts of
+  the group, neither is a prerequisite for the other, and they land in two
+  stages rather than together. The converse
+  `IsMPU U → ρ.PosDef → ρ.IsDiag → Matrix.trace ρ = 1 → 0 < J →
+  E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII U`, by the spectral
+  step of `Papers/1703.09188/paper_v2.tex` lines 344--355, turns a supplied
+  positive-definite diagonal trace-one pair into a presentation of the same
+  tensor. The generic supplied-pair entry does not assume trace normalization,
+  but it follows from its power identity. Put $P=|\rho)(\Phi|$ and
+  $t=\operatorname{tr}(\rho)$, so $P^2=tP$ and $\operatorname{tr}(P)=t$.
+  For $K\geq2$, the MPU trace identity gives $t=\operatorname{tr}(E^K)=1$.
+  For $K=1$, it gives $t^2=\operatorname{tr}(E^2)=1$ and
+  $t^3=\operatorname{tr}(E^3)=1$, hence $t=1$; no length-one MPU trace
+  identity is needed. For $K=0$, $P=I$ and $D=1$ as below give $t=1$.
+  Thus this premise of the missing converse does not strengthen that entry.
+  The positive-length trace identities are formalized in
+  `IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one` for lengths
+  greater than one; the detailed gap note records the calculation.
+  `IsMPU` has to stay a premise, since `IsMPUCanonicalFormII` contains it and
+  a rank-one transfer power constrains only the normalized double layer;
+  every intended call site
+  supplies it. The `K = 0` inputs the generic node admits are not lost: at
+  that exponent the condition forces `D = 1`, where
+  `IsMPU.normalized_transfer_matrix_eq_one_fin_one` gives `E = 1` and the same
+  pair works at exponent one. It therefore reaches only the 4
+  nodes whose restricted tensor is the one the convention already governs
+  (`lem:mpu_admissible_source_u_isometry` and the 3 candidates), and it
+  dissolves the citation obstruction, but it constructs no datum for a
+  derived tensor and so leaves all 12 restricted. The 3 candidates therefore
+  merge as soon as the converse lands, with the 12 still standing; the second
+  unblocker is not needed for them. Preservation of
+  `IsMPUCanonicalFormII` under positive physical blocking (asserted at source
+  line 356), physical adjunction, transposition, conjugation, tensor
+  products, and composition is what reaches the 12; each such statement must
+  produce all four clauses (`isMPU`, `cfii`, `fullSupport_eq`, and the
+  positive diagonal trace-one `ρ` with `ρ_fixed`) for the derived tensor. For
+  blocking, physical adjunction, and tensor products every clause is
+  separately available (`IsMPU.blockTensor`, `blockTensorCFIIData`,
+  `hasFullSupport_blockTensor`, `transferMap_blockTensor`;
+  `IsMPU.physicalAdjointTensor`, `physicalAdjointNormalizedFlattening`,
+  `hasFullSupport_physicalAdjointNormalizedFlattening`,
+  `transferMap_mapStar`; `IsMPU.tensorProduct`, `tensorProductCFIIData`,
+  `hasFullSupport_tensorProductCFIIData`,
+  `transferMap_tensorProduct_kronecker`) and only the assembled statement is
+  missing; transposition and conjugation exist only as the composite. For
+  composition only `IsMPU.mulTensor` is available: `TNLean/MPS/MPU/` has no
+  canonical-form-II construction for `mulTensor` and no transfer-map identity
+  for it, only the entrywise `normalizedFlattening_mulTensor_apply`. Supplying
+  those two would not settle that case, because no preservation statement can
+  hold for `mulTensor` as it stands: `mulTensor (rightShiftTensor d)
+  (leftShiftTensor d)` for `d ≥ 2` generates the identity operator with
+  one-site matrices `A (i, k) = |i, k⟩⟨Φ|`, `⟨Φ| = ∑ γ, ⟨γ, γ|`, which are
+  rank one with a common row functional, so every product at every length is
+  rank one, no retained block of dimension ≥ 2 fits, blocks of dimension 1
+  would force the `A (i, k)` to commute, and they do not
+  (`A (0, 0) * A (0, 1) = 0` while `A (0, 1) * A (0, 0) ≠ 0`). The composition
+  case therefore needs `IsMPU.exists_reduced_cfii_representative` applied to
+  the product plus a transport of the source cuts and ranks across that
+  reduction, which that theorem explicitly does not give, and
+  `lem:mpu_admissible_index_composition` stays restricted until both exist.
+  The
   nonsymmetric same-fixed-point problem in #7653 remains an optional
   out-of-source question; the transpose-reparameterized construction rejected
   in #7705 is not part of this plan.

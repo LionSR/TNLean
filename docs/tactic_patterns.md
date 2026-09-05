@@ -908,6 +908,27 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the inline existential statement and its witness are removed at
   every call site; one line each.
 
+### ground-space invariance under nonzero tensor rescaling — promoted
+- **Pattern:** identify the local MPS spaces of `ζ • A` and `A` for `ζ ≠ 0`
+  by rewriting `groundSpaceMap (ζ • A) L X` as
+  `groundSpaceMap A L ((ζ ^ L) • X)`, then use multiplication by
+  `ζ ^ L` and its inverse for the two range inclusions.
+- **Seen:** three occurrences before promotion (2026-09-04): the private
+  `groundSpace_smul_eq` in
+  `TNLean/MPS/ParentHamiltonian/CoisometricReconstruction.lean`, the private
+  `groundSpace_smul_eq_of_ne_zero` in
+  `TNLean/MPS/ParentHamiltonian/CPSVOriginalRange.lean` (both 2026-08-31), and
+  the normalized primitive gauge of a normal tensor in
+  `TNLean/MPS/ParentHamiltonian/PrimitiveGaugeExistence.lean`.
+- **Abstraction:** `MPSTensor.groundSpace_smul_eq` in
+  `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`, placed beside
+  `MPSTensor.GaugeEquiv.groundSpace_eq` so that the scalar and the gauge half
+  of the normalization are available together.
+- **Notes:** both private copies are deleted and their call sites now pass the
+  nonzero scalar to the public theorem; the third consumer chains it with the
+  gauge half to identify the local MPS spaces of a tensor and of its
+  normalized representative.
+
 ## Completed refactors
 
 ### Appending a tuple endpoint under `List.ofFn`
@@ -2092,7 +2113,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/MPDO/InvariantProjection.lean:122`,
   `TNLean/MPS/MPDO/LemmaC5CaseI.lean:194`,
   `TNLean/MPS/ParentHamiltonian/MixedGram.lean:97`, and
-  `TNLean/MPS/Periodic/Applications.lean:173`.
+  `TNLean/MPS/Periodic/Applications.lean:105`.
   It first commutes the outer binders and then descends through one of them;
   `Finset.sum_comm` already owns the permutation step.
 - **Abstraction (proposed):** a two-binder congruence lemma supporting a
@@ -2331,22 +2352,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/Channel/Determinant/HeisenbergDual.lean:103`; a follow-up sweep can retire this
   candidate once those are also converted to `norm_star`.
 
-### ground-space invariance under nonzero tensor rescaling — candidate
-- **Pattern:** identify the local MPS spaces of `ζ • A` and `A` for `ζ ≠ 0`
-  by rewriting `groundSpaceMap (ζ • A) L X` as
-  `groundSpaceMap A L ((ζ ^ L) • X)`, then use multiplication by
-  `ζ ^ L` and its inverse for the two range inclusions.
-- **Seen:** two nearly identical private lemmas:
-  `groundSpace_smul_eq` in
-  `TNLean/MPS/ParentHamiltonian/CoisometricReconstruction.lean` and
-  `groundSpace_smul_eq_of_ne_zero` in
-  `TNLean/MPS/ParentHamiltonian/CPSVOriginalRange.lean` (2026-08-31).
-- **Abstraction (proposed):** if a third consumer appears, promote one public
-  theorem beside the ground-space definitions and replace both private proofs.
-- **Notes:** the two current callers concern different reconstruction arguments,
-  and the earlier theorem is private, so neither can reuse the other without an
-  API change. This remains below the rule-of-three promotion threshold.
-
 ### closed-chain Schur factorization of a matrix product operator — candidate
 - **Pattern:** prove positivity of the operator generated on a ring by an
   explicit tensor by (i) defining the cyclic bond-matching condition together
@@ -2407,6 +2412,24 @@ spectral split → block extraction → MPV calculation → strict bounds
   block matrix and its fixed-point equation should be factored out.
 
 ---
+
+### scalar multiple preserves block injectivity — candidate
+- **Pattern:** rewrite `Kraus.IsNBlkInjective` as `wordSpan = ⊤`, run
+  `Submodule.span_induction` on a matrix of the original span, and absorb the
+  scalar `z ^ N` of `Kraus.evalWord_smul` with `inv_smul_smul₀`.
+- **Seen:** 2 occurrences across 2 files: the private
+  `isNBlkInjective_smul_of_ne` in
+  `TNLean/MPS/Periodic/Overlap/SectorMatch/Basic.lean` and
+  `MPSTensor.isNBlkInjective_smul` in
+  `TNLean/MPS/CanonicalForm/TranslationInvariantUniqueness.lean`
+  (recorded 2026-09-05).
+- **Abstraction:** one public theorem next to
+  `MPSTensor.isNBlkInjective_of_gaugeEquiv` in `TNLean/MPS/Defs.lean`, with
+  `isNormal_smul` as its normality corollary; both call sites then drop their
+  local copies.
+- **Notes:** below the rule of three. The promotion was deferred because a
+  change to `TNLean/MPS/Defs.lean` rebuilds the whole library; do it in a
+  dedicated cleanup.
 
 ## Rejected
 

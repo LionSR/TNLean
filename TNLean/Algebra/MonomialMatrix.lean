@@ -100,6 +100,18 @@ theorem monomial_mulVec [NonAssocSemiring R] (σ : Equiv.Perm ι) (φ : ι → R
     exact hs (by rw [h, Equiv.symm_apply_apply])
   · simp
 
+/-- A monomial matrix carries a standard basis vector to its phase times the
+permuted standard basis vector. -/
+theorem monomial_mulVec_single [NonAssocSemiring R] (σ : Equiv.Perm ι) (φ : ι → R) (s : ι) :
+    monomial σ φ *ᵥ Pi.single s 1 = φ s • Pi.single (σ s) 1 := by
+  rw [monomial_mulVec]
+  funext t
+  by_cases h : t = σ s
+  · subst h
+    simp
+  · have hne : σ.symm t ≠ s := fun hc ↦ h (by rw [← hc, Equiv.apply_symm_apply])
+    simp [h, hne]
+
 /-- A vector is fixed by a monomial matrix exactly when its coordinates transport
 along the permutation with the given phases. -/
 theorem monomial_mulVec_eq_self_iff [NonAssocSemiring R] (σ : Equiv.Perm ι) (φ : ι → R)

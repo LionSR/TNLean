@@ -2556,6 +2556,80 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     % Rep.ofMulDistribMulAction with the explicit trivial action.
 \end{definition}
 
+\begin{definition}[Pullback of scalar cohomology]
+    \label{def:mpug_h2_pullback}
+    \lean{TNLean.Algebra.ScalarCocycle.pullback,
+        TNLean.Algebra.ScalarCocycle.pullback_apply,
+        TNLean.Algebra.H2.pullback,
+        TNLean.Algebra.H2.pullback_mk}
+    \leanok
+    \uses{def:h2_cx}
+    Let $f:K\to G$ be a group homomorphism. For a scalar $2$-cochain
+    $\omega:G\times G\to\C^\times$, define
+    $(f^*\omega)(a,b)=\omega(f(a),f(b))$.
+    The induced pullback map
+    $f^*:H^2(G,\C^\times)\to H^2(K,\C^\times)$ is defined by
+    $f^*[\omega]=[f^*\omega]$.
+\end{definition}
+
+\begin{theorem}[Pullback preserves cocycles and cohomology]
+    \label{thm:mpug_h2_pullback_preserves}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle.pullback,
+        TNLean.Algebra.ScalarCocycle.CohomologousTo.pullback}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    Let $f:K\to G$ be a group homomorphism. If $\omega$ is a scalar
+    $2$-cocycle on $G$, then $f^*\omega$ is a scalar $2$-cocycle on $K$.
+    If $\omega_1$ and $\omega_2$ are cohomologous scalar $2$-cochains on $G$,
+    then $f^*\omega_1$ and $f^*\omega_2$ are cohomologous on $K$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    For $a,b,c\in K$, substitute $f(a),f(b),f(c)$ in the cocycle equation
+    for $\omega$ and use $f(ab)=f(a)f(b)$ and $f(bc)=f(b)f(c)$.
+    If $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$,
+    set $\eta=\varphi\circ f$. Substituting $g=f(a)$ and $h=f(b)$ gives
+    $(f^*\omega_1)(a,b)=\eta(a)\eta(b)\eta(ab)^{-1}(f^*\omega_2)(a,b)$,
+    so $\eta$ witnesses the required cohomology relation.
+\end{proof}
+
+% Partial support for #7361 (child #7754), not the full prop:BI_psi criterion.
+% No U(1) restriction naturality or tensor-level block-independence claim.
+\begin{theorem}[Exact extension of a subgroup cocycle]
+    \label{thm:mpug_h2_exact_extension}
+    \lean{TNLean.Algebra.H2.mem_range_pullback_subtype_iff,
+        TNLean.Algebra.ScalarCocycle.IsCocycle.coboundary_mul}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:is_cocycle}
+    Let $H\le G$ be any subgroup, let $\iota:H\hookrightarrow G$ be its
+    inclusion, and let $\psi:H\times H\to\C^\times$ be a $2$-cocycle.
+    Then $[\psi]$ belongs to the image of $\iota^*$ if and only if there is
+    a $2$-cocycle $\Psi:G\times G\to\C^\times$ with
+    $\Psi(a,b)=\psi(a,b)$ for every $a,b\in H$.
+    No normalization of either cocycle is required.
+    This is the representative adjustment implicit in the extension
+    condition of \cite[lines~7042--7064]{FrancoRubio2025MPUGauging},
+    here stated with $\C^\times$ coefficients.
+    % Source: Papers/2502.20257/main.tex:7042--7064.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    Suppose $[\psi]=\iota^*[\omega]$. Choose a cochain
+    $\varphi:H\to\C^\times$ such that
+    $\psi(a,b)=\varphi(a)\varphi(b)\varphi(ab)^{-1}\omega(a,b)$.
+    Extend $\varphi$ to a function $\Phi:G\to\C^\times$, taking value $1$
+    outside $H$, and set
+    $\Psi(g,h)=\Phi(g)\Phi(h)\Phi(gh)^{-1}\omega(g,h)$.
+    In the cocycle equation for $\Psi$, cancellation leaves the common
+    factor $\Phi(g)\Phi(h)\Phi(k)\Phi(ghk)^{-1}$ multiplied by the two sides
+    of the cocycle equation for $\omega$. Hence $\Psi$ is a cocycle, and
+    $\Phi|_H=\varphi$ gives $\Psi|_{H\times H}=\psi$ exactly.
+    Conversely, any exact extension $\Psi$ satisfies
+    $\iota^*[\Psi]=[\psi]$.
+\end{proof}
+
 \begin{theorem}[Circle and nonzero-complex coefficients in degree two]
     \label{thm:mpug_circle_complex_units_h2}
     \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
@@ -4894,4 +4968,783 @@ by the displayed matrices.
         \dim\mathcal V_N(R^{\mathrm{CZX}})
          & =\sum_{p\in\mathbb F_2^N}1=2^N.
     \end{align}
+\end{proof}
+
+\begin{theorem}[The CZX dimension in the gauge-invariant subspace of the displayed tuple]
+    \label{thm:mpug_czx_dimension_of_completion}
+    \lean{MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTuple}
+    \leanok
+    \uses{def:mpug_gauge_invariant_subspace, def:mpug_czx_circuit_tuple}
+    For the gauge-invariant subspace~(\ref{eq:mpug_gauge_invariant_subspace}) at
+    $R=R^{\mathrm{CZX}}$ and $N\geq3$,
+    $\dim_{\C}\mathcal V_N(R^{\mathrm{CZX}})=2^N$. The value is thereby
+    recorded for the subspace that
+    Definition~\ref{def:mpug_gauge_invariant_subspace} attaches to an arbitrary
+    tuple, so exhibiting $R^{\mathrm{CZX}}$ as a completion of prescribed
+    defect maps with matter defect states satisfying local defect support,
+    exact defect covariance, and nonvanishing of the gauged vector would put
+    the exact value beside the lower bound $\dim_{\C}\mathcal V_N(R)\geq1$ of
+    Theorem~\ref{thm:mpug_gauge_invariant_subspace_finrank}. None of those
+    hypotheses is established here. The statement is about the displayed
+    circuit tuple and asserts no membership in the full physical completion
+    class of the CZX defect data.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_dimension, def:mpug_placed_gauss_projector}
+    Both subspaces are the common fixed subspace of the placed Gauss
+    projectors $\widetilde P_j(R^{\mathrm{CZX}})$ of
+    Definition~\ref{def:mpug_placed_gauss_projector} acting on the
+    configuration space of the chain, so
+    Theorem~\ref{thm:mpug_czx_dimension} gives the value.
+\end{proof}
+
+\subsection{A second displayed circuit tuple at three and four sites}
+
+The source constrains the block $U_{1,1}$ of (\ref{eq:mpug_czx_tuple}) only
+through its action on the prescribed defect subspace
+$\spn_{\C}\{\ket{0011},\ket{1100}\}$; the three remaining defect domains and
+maps are not supplied. Replacing $\tilde\lambda$ by another unitary with the
+same action on that subspace therefore produces a second displayed tuple, and
+the dimension of the associated common $+1$ eigenspace changes already at three
+and four blocked sites.
+
+\begin{definition}[The second displayed circuit tuple]
+    \label{def:mpug_czx_star_tuple}
+    \lean{MPOTensor.CZX.rStarExponent,
+        MPOTensor.CZX.rStar,
+        MPOTensor.CZX.rStar_eq,
+        MPOTensor.CZX.rStarExponent_zero_zero_one_one,
+        MPOTensor.CZX.rStarExponent_one_one_zero_zero,
+        MPOTensor.CZX.rStar_mulVec_eq_self,
+        MPOTensor.CZX.tildeLambdaStar,
+        MPOTensor.CZX.tildeLambdaStar_eq,
+        MPOTensor.CZX.tildeLambdaStar_mem_unitaryGroup,
+        MPOTensor.CZX.circuitTupleStar,
+        MPOTensor.CZX.circuitTupleStar_one,
+        MPOTensor.CZX.circuitTupleStar_gen_one,
+        MPOTensor.CZX.circuitTupleStar_gen_gen}
+    \leanok
+    \uses{def:mpug_czx_circuit_tuple, thm:mpug_czx_phase_tables}
+    In the qubit numbering of Definition~\ref{def:mpug_czx_circuit_tuple}, set
+    \begin{align}
+        r_\star(x) & =x_1+x_3+x_0x_1+x_0x_3+x_1x_2+x_2x_3,
+        \label{eq:mpug_czx_star_phase}                                         \\
+        R_\star    & =Z_1Z_3\,\mathrm{CZ}_{01}\mathrm{CZ}_{03}\mathrm{CZ}_{12}
+        \mathrm{CZ}_{23}.
+        \label{eq:mpug_czx_star_gate}
+    \end{align}
+    Then $R_\star\ket{x}=(-1)^{r_\star(x)}\ket{x}$, and
+    $r_\star(0011)=r_\star(1100)=0$, so $R_\star$ fixes the prescribed defect
+    subspace $\spn_{\C}\{\ket{0011},\ket{1100}\}$ pointwise. The second
+    displayed circuit tuple is
+    \begin{align}
+        R^\star
+         & =\bigl(U^\star_{0,0},U^\star_{0,1},U^\star_{1,0},U^\star_{1,1}\bigr)
+        =\bigl(\Id,\Id,w,\tilde\lambda R_\star\bigr),
+        \label{eq:mpug_czx_star_tuple}
+    \end{align}
+    with
+    $\tilde\lambda R_\star\ket{x}=-i(-1)^{f(x)+r_\star(x)}\ket{\overline x}$;
+    after transport to the two-site matter coordinates it is unitary. It has the
+    same action as $R^{\mathrm{CZX}}$ on that defect subspace. The four defect
+    domains and prescribed maps of
+    Definition~\ref{def:mpug_czx_defect_maps} determine a four-sector
+    completion class, and both tuples extend all four prescribed maps: the
+    first by Theorem~\ref{thm:mpug_czx_tuple_completion} and the second by
+    Theorem~\ref{thm:mpug_czx_star_tuple_completion}, because $R_\star$ fixes
+    the defect domain of the pair $(g,g)$ pointwise and the other three
+    operators are those of $R^{\mathrm{CZX}}$.
+    % Source anchor: arXiv:2502.20257, lines 4503--5183 (CZX model, defect and
+    % fusion data, modified Gauss law).
+\end{definition}
+
+\begin{theorem}[Local monomial action of the second tuple's Gauss operator]
+    \label{thm:mpug_czx_star_local_monomial_action}
+    \lean{MPOTensor.CZX.rStarExponent_barFlip,
+        MPOTensor.CZX.starDefect,
+        MPOTensor.CZX.phaseExponentStar,
+        MPOTensor.CZX.phaseExponentStar_zero_zero,
+        MPOTensor.CZX.phaseExponentStar_zero_one,
+        MPOTensor.CZX.phaseExponentStar_one_zero,
+        MPOTensor.CZX.phaseExponentStar_one_one,
+        MPOTensor.CZX.localPhaseStar,
+        MPOTensor.CZX.gaussOperator_circuitTupleStar_gen}
+    \leanok
+    \uses{def:mpug_czx_star_tuple, def:mpug_gauss_operator}
+    The nontrivial local Gauss operator obtained from
+    (\ref{eq:mpug_czx_star_tuple}) and (\ref{eq:mpug_gauss_operator}) is the
+    monomial operator $G^\star\ket{s}=i^{q^\star(s)}\ket{\sigma(s)}$ with the
+    same permutation part $\sigma$ as in
+    (\ref{eq:mpug_czx_monomial_action}) and with
+    \begin{align}
+        q^\star(x_0,x_1,a,x_2,x_3,a') & =q(x_0,x_1,a,x_2,x_3,a')
+        +2\delta_\star(x,a,a')
+        \label{eq:mpug_czx_star_phase_table}
+    \end{align}
+    modulo $4$, where $\delta_\star(x,0,0)=r_\star(\overline x)$,
+    $\delta_\star(x,1,1)=r_\star(x)$, and $\delta_\star$ vanishes in the two
+    remaining gauge sectors. The phase polynomial satisfies
+    \begin{align}
+        r_\star(\overline x) & =r_\star(x)+x_0+x_1+x_2+x_3.
+        \label{eq:mpug_czx_star_bar}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauss_operator_monomial, thm:mpug_czx_phase_tables,
+        def:mpug_czx_star_tuple}
+    By Theorem~\ref{thm:mpug_gauss_operator_monomial} the operator is monomial,
+    and the two blocks $U^\star_{0,1}=\Id$ and $U^\star_{1,0}=w$ agree with
+    those of (\ref{eq:mpug_czx_tuple}), so the $(0,1)$ and $(1,0)$ rows of the
+    phase table are unchanged. In the $(1,1)$ sector the phase acquires the
+    factor $(-1)^{r_\star(x)}$ from
+    $\tilde\lambda R_\star\ket{x}=-i(-1)^{f(x)+r_\star(x)}\ket{\overline x}$; in
+    the $(0,0)$ sector the adjoint formula
+    (\ref{eq:mpug_monomial_adjoint}) evaluates that phase at $\overline x$ and
+    conjugates it, which contributes $(-1)^{r_\star(\overline x)}$. Since
+    $R_\star$ is diagonal, the permutation part is that of
+    (\ref{eq:mpug_czx_monomial_action}). Identity
+    (\ref{eq:mpug_czx_star_bar}) and the four rows of
+    (\ref{eq:mpug_czx_star_phase_table}) are checked on the sixteen bit
+    strings.
+\end{proof}
+
+\begin{theorem}[Involution and neighboring holonomy for the second tuple]
+    \label{thm:mpug_czx_star_holonomy}
+    \lean{MPOTensor.CZX.bondExponentStar,
+        MPOTensor.CZX.starHolonomyLabel,
+        MPOTensor.CZX.bondExponentStar_add_bondExponentStar_chainFlip,
+        MPOTensor.CZX.bondExponentStar_holonomy,
+        MPOTensor.CZX.bondExponentStar_chainFlip_of_disjoint,
+        MPOTensor.CZX.starFiberLabel,
+        MPOTensor.CZX.starHolonomyLabel_fiberEquiv,
+        MPOTensor.CZX.fiberPhaseStar,
+        MPOTensor.CZX.fiberPhaseStar_mul_fiberPhaseStar_flip,
+        MPOTensor.CZX.fiberPhaseStar_flip_of_disjoint,
+        MPOTensor.CZX.fiberPhaseStar_holonomy,
+        MPOTensor.CZX.fiberPhaseStar_ne_zero}
+    \leanok
+    \uses{def:mpug_czx_chain_labels, def:mpug_czx_star_tuple}
+    Let $q^\star_j(s)$ be the table (\ref{eq:mpug_czx_star_phase_table})
+    evaluated on the bond $(j,j+1)$ as in
+    Definition~\ref{def:mpug_czx_chain_labels}, and set
+    \begin{align}
+        c_j(s) & =b_{j+1}(s)\bigl(1+p_j(s)+p_{j+1}(s)\bigr)
+        +b_{j+2}(s)\bigl(p_{j+1}(s)+p_{j+2}(s)\bigr).
+        \label{eq:mpug_czx_star_holonomy_label}
+    \end{align}
+    For every $N\geq3$, every bond $j$, and every configuration $s$,
+    \begin{align}
+        q^\star_j(s)+q^\star_j(\sigma_js)
+         & =0,
+        \label{eq:mpug_czx_star_involution}                   \\
+        q^\star_j(s)+q^\star_{j+1}(\sigma_js)
+         & =q^\star_{j+1}(s)+q^\star_j(\sigma_{j+1}s)+2c_j(s)
+        \label{eq:mpug_czx_star_holonomy}
+    \end{align}
+    modulo $4$, and $q^\star_j(\sigma_ks)=q^\star_j(s)$ whenever
+    $k\notin\{j-1,j,j+1\}$. In the fiber coordinates
+    (\ref{eq:mpug_czx_fiber_coordinates}) the label $c_j$ depends only on the
+    orbit labels, $c_j(p,b)=b_{j+1}(1+p_j+p_{j+1})+b_{j+2}(p_{j+1}+p_{j+2})$,
+    and the phases $\varphi^\star_j=i^{q^\star_j}$ are involutive and satisfy
+    the neighboring square relation with factor $(-1)^{c_j(p,b)}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_local_monomial_action,
+        thm:mpug_czx_orbit_classification}
+    The exponent $q^\star_j$ depends only on the six bits at the sites $j$ and
+    $j+1$, which gives the disjoint-bond statement. For
+    (\ref{eq:mpug_czx_star_involution}) the flip $\sigma_j$ changes $x_0$,
+    $x_1$, $a$, and $a'$, and the identity is verified on the $64$ values of
+    those six bits. For (\ref{eq:mpug_czx_star_holonomy}) the sites $j$,
+    $j+1$, $j+2$ are distinct because $N\geq3$, and the identity is verified on
+    the $512$ values of the nine bits at those three sites. In fiber
+    coordinates $p$ and $b$ are read off by
+    Theorem~\ref{thm:mpug_czx_orbit_classification}, which turns $c_j$ into the
+    displayed polynomial in the orbit labels alone.
+\end{proof}
+
+\begin{theorem}[Fixed spaces on the orbit fibers for the second tuple]
+    \label{thm:mpug_czx_star_good_fibers}
+    \lean{MPOTensor.CZX.isTrivialHolonomy_fiberPhaseStar_iff}
+    \leanok
+    \uses{def:mpug_trivial_holonomy, thm:mpug_czx_orbit_classification,
+        thm:mpug_czx_star_holonomy}
+    Let $N\geq3$. In the fiber coordinates
+    (\ref{eq:mpug_czx_fiber_coordinates}), the phases $i^{q^\star_j}$ have
+    trivial holonomy on the fiber over $(p,b)$ if and only if $c_j(p,b)=0$ for
+    every $j\in\Z/N\Z$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_holonomy, thm:mpug_czx_orbit_classification}
+    If all $c_j(p,b)$ vanish, then for $k=j+1$ or $j=k+1$ the square identity is
+    (\ref{eq:mpug_czx_star_holonomy}) with vanishing correction, for $k=j$ it is
+    trivial, and otherwise the bonds are disjoint and both sides agree.
+    Conversely, trivial holonomy at the square spanned by the bonds $j$ and
+    $j+1$ at $\gamma=0$ gives $(-1)^{c_j(p,b)}=1$ by
+    (\ref{eq:mpug_czx_star_holonomy}), since the phases are nonzero, hence
+    $c_j(p,b)=0$.
+\end{proof}
+
+\begin{theorem}[The placed Gauss operators of the second tuple]
+    \label{thm:mpug_czx_star_placed_operators}
+    \lean{MPOTensor.CZX.placedGaussOperatorStar,
+        MPOTensor.CZX.gaussProjector_circuitTupleStar,
+        MPOTensor.CZX.placedGaussProjector_circuitTupleStar,
+        MPOTensor.CZX.commonFixedSubmodule_placedGaussProjector_circuitTupleStar,
+        MPOTensor.CZX.placedGaussOperatorStar_eq_monomial,
+        MPOTensor.CZX.localPhaseStar_window,
+        MPOTensor.CZX.placedGaussOperatorStar_eq_reindex}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
+        def:mpug_czx_chain_labels, def:mpug_common_fixed_subspace}
+    Let $N\geq2$ and let $G^\star_j$ be the local Gauss operator of
+    Theorem~\ref{thm:mpug_czx_star_local_monomial_action} placed on the bond
+    $(j,j+1)$. The placed Gauss projector of
+    Definition~\ref{def:mpug_placed_gauss_projector} is
+    $\widetilde P^\star_j=\tfrac12(\Id+G^\star_j)$, so the common fixed subspace
+    $\mathcal V_N(R^\star)$ of the $\widetilde P^\star_j$ is the common fixed
+    subspace of the $G^\star_j$. In the coordinates
+    (\ref{eq:mpug_czx_configuration}), $G^\star_j$ is the monomial operator
+    $G^\star_j\ket{s}=i^{q^\star_j(s)}\ket{\sigma_js}$, and in the fiber
+    coordinates (\ref{eq:mpug_czx_fiber_coordinates}) it is the monomial
+    operator with permutation $\gamma\mapsto\gamma+e_j$ and phase
+    $i^{q^\star_j}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_gauss_projector, thm:mpug_czx_star_local_monomial_action,
+        thm:mpug_embed_monomial, thm:mpug_czx_orbit_classification,
+        thm:mpug_czx_placed_operators}
+    The average over $\Z_2=\{e,g\}$ is $\frac12(\mathcal G_e+\mathcal G_g)$ with
+    $\mathcal G_e=\Id$, and relabelling and placement are linear and unital. A
+    vector $v$ satisfies $\frac12(v+G^\star_jv)=v$ exactly when
+    $G^\star_jv=v$. Theorem~\ref{thm:mpug_czx_star_local_monomial_action} and
+    Theorem~\ref{thm:mpug_embed_monomial} express $G^\star_j$ as a monomial
+    operator; the permutation part is that of
+    Theorem~\ref{thm:mpug_czx_placed_operators}, and decoding the two-site
+    window at $j$ identifies the phase with $i^{q^\star_j(s)}$. Finally
+    Theorem~\ref{thm:mpug_czx_orbit_classification} transports both to the
+    fiber coordinates.
+\end{proof}
+
+\begin{theorem}[Reduction of the dimension to a finite count]
+    \label{thm:mpug_czx_star_reduction}
+    \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
+        def:mpug_common_fixed_subspace}
+    On a periodic chain of $N\geq3$ blocked sites,
+    \begin{align}
+        \dim\mathcal V_N(R^\star)
+         & =\#\bigl\{(p,b)\in\mathbb F_2^N\times\mathbb F_2^N:
+        c_j(p,b)=0\text{ for all }j\in\Z/N\Z\bigr\}.
+        \label{eq:mpug_czx_star_count}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_placed_operators,
+        thm:mpug_monomial_fixed_space_criterion,
+        thm:mpug_czx_star_holonomy, thm:mpug_czx_star_good_fibers}
+    By Theorem~\ref{thm:mpug_czx_star_placed_operators},
+    $\mathcal V_N(R^\star)$ is the common fixed subspace of monomial operators
+    which, in fiber coordinates, have permutations $\gamma\mapsto\gamma+e_j$ on
+    the fibers over $(p,b)$, and by (\ref{eq:mpug_czx_star_involution}) these
+    operators are involutions. The monomial fixed-space criterion
+    (\ref{eq:mpug_monomial_fixed_space_count}) counts the fibers with trivial
+    holonomy, which by Theorem~\ref{thm:mpug_czx_star_good_fibers} are exactly
+    the fibers whose labels satisfy the $N$ equations $c_j(p,b)=0$.
+\end{proof}
+
+\begin{theorem}[Dimensions for the second displayed tuple at three and four sites]
+    \label{thm:mpug_czx_star_dimension}
+    \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar_three,
+        MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar_four}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
+        def:mpug_common_fixed_subspace}
+    On periodic chains of three and four blocked sites,
+    \begin{align}
+        \dim\mathcal V_3(R^\star) & =14,
+        \label{eq:mpug_czx_star_dim_three} \\
+        \dim\mathcal V_4(R^\star) & =36.
+        \label{eq:mpug_czx_star_dim_four}
+    \end{align}
+    These two values are certificates at two system sizes. They carry no
+    asymptotic content, and no growth law for $\dim\mathcal V_N(R^\star)$
+    follows from them. Since $R^\star$ extends the four prescribed maps of
+    Definition~\ref{def:mpug_czx_defect_maps} by
+    Theorem~\ref{thm:mpug_czx_star_tuple_completion}, these are two values of
+    the dimension on that completion class, recorded as lower bounds on its
+    supremum in Theorem~\ref{thm:mpug_czx_star_class_values}; they give no
+    value for the minimum or the maximum of the dimension over completions.
+    Compared with
+    (\ref{eq:mpug_czx_dimension}), which gives $8$ and $16$ at the same two
+    sizes, they exhibit dependence of the dimension on the displayed circuit
+    data at those two sizes.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_reduction}
+    Evaluate the right-hand side of (\ref{eq:mpug_czx_star_count}) by
+    exhaustive enumeration: at $N=3$ the $64$ pairs $(p,b)$ yield $14$
+    solutions of the three equations $c_j(p,b)=0$, and at $N=4$ the $256$ pairs
+    yield $36$ solutions of the four equations.
+\end{proof}
+
+\section{The CZX defect domains and prescribed defect maps}
+\label{sec:mpug_czx_defect_maps}
+
+The modified-fusion lemma of
+\cite[lines~4215--4254]{FrancoRubio2025MPUGauging} attaches to every ordered
+pair $(a,b)$ of gauge labels and every injective block $x$ a two-site defect
+vector $v(a,b,x)$ and prescribes a unitary carrying it to $v(e,ab,x)$. For the
+CZX model the source displays the injective blocks, the action tensors, and the
+single-site evaluations of the domain-wall defect, but not the eight two-site
+vectors; their values, the four subspaces they span, and the four prescribed
+maps are obtained by finite contraction of the displayed tensors
+in~\cite{gap:fbc25_czx_defect_domains}. This section carries that derived data.
+It does not assert that the circuit tuple $R^{\mathrm{CZX}}$ of
+Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
+
+\begin{definition}[Single-site CZX defects]
+    \label{def:mpug_czx_site_defects}
+    \lean{MPOTensor.CZX.identityDefect,
+        MPOTensor.CZX.flipDefect,
+        MPOTensor.CZX.siteDefect,
+        MPOTensor.CZX.identityDefect_zero,
+        MPOTensor.CZX.identityDefect_one,
+        MPOTensor.CZX.flipDefect_zero,
+        MPOTensor.CZX.flipDefect_one,
+        MPOTensor.CZX.siteDefect_one,
+        MPOTensor.CZX.siteDefect_gen}
+    \leanok
+    \discussion{7739}
+    One blocked site of the CZX model carries two matter qubits, and the two
+    injective blocks of the once-blocked GHZ state are the product vectors
+    $\ket{\circ}=\ket{00}$ and $\ket{\bullet}=\ket{11}$
+    \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}, both of bond dimension
+    one. Writing $e\leftrightarrow0$ and $g\leftrightarrow1$ for the labels of
+    $\Z_2=\{e,g\}$, the identity defect and the domain-wall defect of
+    \cite[lines~2831--2845]{FrancoRubio2025MPUGauging} at the block
+    $x\in\mathbb F_2$ are
+    \begin{align}
+        e[x] & =\ket{xx},   \label{eq:mpug_czx_identity_defect}  \\
+        g[0] & =\ket{00},   \label{eq:mpug_czx_flip_defect_zero} \\
+        g[1] & =-i\ket{11}. \label{eq:mpug_czx_flip_defect_one}
+    \end{align}
+    Contracting the action tensors $A^{\Gamma}_{g,0}=-i\bra{1}$ and
+    $A^{\Gamma}_{g,1}=\bra{0}$ of
+    \cite[lines~4690--4694]{FrancoRubio2025MPUGauging} against the defect
+    diagram gives (\ref{eq:mpug_czx_flip_defect_zero}) and
+    (\ref{eq:mpug_czx_flip_defect_one}), which are the evaluations displayed
+    in \cite[lines~4800--4859]{FrancoRubio2025MPUGauging}; the derivation is
+    carried out in~\cite{gap:fbc25_czx_defect_domains}.
+\end{definition}
+
+\begin{definition}[Two-site CZX defect vectors]
+    \label{def:mpug_czx_defect_vectors}
+    \lean{MPOTensor.CZX.defectVector,
+        MPOTensor.CZX.defectVector_one_one,
+        MPOTensor.CZX.defectVector_one_gen,
+        MPOTensor.CZX.defectVector_gen_one,
+        MPOTensor.CZX.defectVector_gen_gen}
+    \leanok
+    \uses{def:mpug_czx_site_defects}
+    The two-site defect vector of the label pair $(a,b)$ and the block $x$ is
+    the left defect $a[bx]$ tensored with the right defect $b[x]$, in that
+    order \cite[lines~4234--4245]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        v(a,b,x) & =a[bx]\otimes b[x].
+        \label{eq:mpug_czx_defect_vector}
+    \end{align}
+    The four qubits of two neighboring blocked sites are numbered $0,1$ on the
+    left site and $2,3$ on the right, and the computational basis of the
+    sixteen-dimensional two-site matter space is written $\ket{x_0x_1x_2x_3}$.
+\end{definition}
+
+\begin{theorem}[The eight CZX defect vectors]
+    \label{thm:mpug_czx_defect_vector_values}
+    \lean{MPOTensor.CZX.defectVector_one_one_zero,
+        MPOTensor.CZX.defectVector_one_one_one,
+        MPOTensor.CZX.defectVector_one_gen_zero,
+        MPOTensor.CZX.defectVector_one_gen_one,
+        MPOTensor.CZX.defectVector_gen_one_zero,
+        MPOTensor.CZX.defectVector_gen_one_one,
+        MPOTensor.CZX.defectVector_gen_gen_zero,
+        MPOTensor.CZX.defectVector_gen_gen_one,
+        MPOTensor.CZX.star_defectVector_dotProduct_defectVector}
+    \leanok
+    \uses{def:mpug_czx_defect_vectors}
+    The eight two-site defect vectors of the CZX model are
+    \begin{align}
+        v(e,e,0) & =\ket{0000},   & v(e,e,1) & =\ket{1111},
+        \label{eq:mpug_czx_v_ee}                              \\
+        v(e,g,0) & =\ket{1100},   & v(e,g,1) & =-i\ket{0011},
+        \label{eq:mpug_czx_v_eg}                              \\
+        v(g,e,0) & =\ket{0000},   & v(g,e,1) & =-i\ket{1111},
+        \label{eq:mpug_czx_v_ge}                              \\
+        v(g,g,0) & =-i\ket{1100}, & v(g,g,1) & =-i\ket{0011}.
+        \label{eq:mpug_czx_v_gg}
+    \end{align}
+    For every label pair the two vectors $v(a,b,0)$ and $v(a,b,1)$ are
+    orthonormal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_site_defects, def:mpug_czx_defect_vectors}
+    Substituting (\ref{eq:mpug_czx_identity_defect}),
+    (\ref{eq:mpug_czx_flip_defect_zero}), and
+    (\ref{eq:mpug_czx_flip_defect_one}) into
+    (\ref{eq:mpug_czx_defect_vector}), with $bx=x+b$ in $\mathbb F_2$, gives
+    the eight values. The two vectors of a label pair differ in the last two
+    bits, hence are orthogonal, and each carries a scalar of modulus one,
+    hence is a unit vector.
+\end{proof}
+
+\begin{definition}[CZX defect domains]
+    \label{def:mpug_czx_defect_domains}
+    \lean{MPOTensor.CZX.defectDomain,
+        MPOTensor.CZX.evenTarget,
+        MPOTensor.CZX.oddTarget}
+    \leanok
+    \uses{def:mpug_czx_defect_vectors}
+    The defect domain of the label pair $(a,b)$ and the two target planes are
+    \begin{align}
+        \mathcal K_{a,b} & =\spn_{\C}\{v(a,b,x):x\in\mathbb F_2\},
+        \label{eq:mpug_czx_domain}                                 \\
+        \mathcal L_0     & =\spn_{\C}\{\ket{0000},\ket{1111}\},
+        \label{eq:mpug_czx_even_target}                            \\
+        \mathcal L_1     & =\spn_{\C}\{\ket{1100},\ket{0011}\}.
+        \label{eq:mpug_czx_odd_target}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The four CZX defect domains]
+    \label{thm:mpug_czx_defect_domains}
+    \lean{MPOTensor.CZX.defectDomain_one_one,
+        MPOTensor.CZX.defectDomain_gen_one,
+        MPOTensor.CZX.defectDomain_one_gen,
+        MPOTensor.CZX.defectDomain_gen_gen,
+        MPOTensor.CZX.defectDomain_eq,
+        MPOTensor.CZX.star_dotProduct_eq_zero_of_mem_evenTarget_of_mem_oddTarget,
+        MPOTensor.CZX.finrank_evenTarget,
+        MPOTensor.CZX.finrank_oddTarget,
+        MPOTensor.CZX.finrank_defectDomain}
+    \leanok
+    \uses{def:mpug_czx_defect_domains}
+    The four CZX defect domains are
+    \begin{align}
+        \mathcal K_{e,e}=\mathcal K_{g,e} & =\mathcal L_0,
+        \label{eq:mpug_czx_even_domains}                   \\
+        \mathcal K_{e,g}=\mathcal K_{g,g} & =\mathcal L_1,
+        \label{eq:mpug_czx_odd_domains}
+    \end{align}
+    so the domain depends only on the right label. The two planes are
+    orthogonal, $\mathcal L_0\perp\mathcal L_1$, and each has dimension two.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_defect_vector_values, def:mpug_czx_defect_domains}
+    By (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) the two spanning
+    vectors of $\mathcal K_{a,b}$ are the two spanning vectors of
+    $\mathcal L_b$ up to nonzero scalars, and rescaling a spanning vector by a
+    nonzero scalar leaves the span unchanged, which gives
+    (\ref{eq:mpug_czx_even_domains}) and (\ref{eq:mpug_czx_odd_domains}). The
+    four basis vectors occurring in (\ref{eq:mpug_czx_even_target}) and
+    (\ref{eq:mpug_czx_odd_target}) are pairwise distinct members of the
+    computational basis, so expanding a vector of $\mathcal L_0$ and a vector
+    of $\mathcal L_1$ in that basis makes every one of the four cross terms of
+    their inner product vanish, and the two spanning vectors of each plane are
+    linearly independent.
+\end{proof}
+
+\begin{definition}[The prescribed CZX defect maps]
+    \label{def:mpug_czx_prescribed_maps}
+    \lean{MPOTensor.CZX.prescribedMap}
+    \leanok
+    \uses{def:mpug_czx_defect_vectors, def:mpug_czx_defect_domains}
+    The prescribed defect map of the label pair $(a,b)$ is the partial
+    isometry
+    \begin{align}
+        D_{a,b} & =\sum_{x\in\mathbb F_2}\ketbra{v(e,ab,x)}{v(a,b,x)}
+        \label{eq:mpug_czx_prescribed_map}
+    \end{align}
+    of the two-site matter space. It is assembled from the defect vectors
+    (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) and not from the
+    circuits $w$ and $\tilde\lambda$ of
+    Definition~\ref{def:mpug_czx_circuit_tuple}.
+\end{definition}
+
+\begin{theorem}[Action of the prescribed CZX defect maps]
+    \label{thm:mpug_czx_prescribed_action}
+    \lean{MPOTensor.CZX.prescribedMap_mulVec_defectVector,
+        MPOTensor.CZX.prescribedMap_mem_defectDomain,
+        MPOTensor.CZX.isometry_on_defectDomain,
+        MPOTensor.CZX.prescribedMap_one_one_mulVec,
+        MPOTensor.CZX.prescribedMap_one_gen_mulVec,
+        MPOTensor.CZX.prescribedMap_gen_one_mulVec_zero,
+        MPOTensor.CZX.prescribedMap_gen_one_mulVec_one,
+        MPOTensor.CZX.prescribedMap_gen_gen_mulVec_zero,
+        MPOTensor.CZX.prescribedMap_gen_gen_mulVec_one}
+    \leanok
+    \uses{def:mpug_czx_prescribed_maps}
+    For every label pair and every block,
+    \begin{align}
+        D_{a,b}v(a,b,x) & =v(e,ab,x),
+        \label{eq:mpug_czx_prescription}
+    \end{align}
+    the map $D_{a,b}$ carries $\mathcal K_{a,b}$ into $\mathcal K_{e,ab}$, and
+    it is an isometry on $\mathcal K_{a,b}$, that is,
+    $D_{a,b}^{\dagger}D_{a,b}\ket{\xi}=\ket{\xi}$ for every
+    $\ket{\xi}\in\mathcal K_{a,b}$. In the computational basis,
+    \begin{align}
+        D_{e,e} & =\Id_{\mathcal L_0},
+        \label{eq:mpug_czx_map_ee}                     \\
+        D_{e,g} & =\Id_{\mathcal L_1},
+        \label{eq:mpug_czx_map_eg}                     \\
+        D_{g,e}\ket{0000}=\ket{1100},
+                & \quad D_{g,e}\ket{1111}=\ket{0011},
+        \label{eq:mpug_czx_map_ge}                     \\
+        D_{g,g}\ket{1100}=i\ket{0000},
+                & \quad D_{g,g}\ket{0011}=i\ket{1111}.
+        \label{eq:mpug_czx_map_gg}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_defect_vector_values, def:mpug_czx_prescribed_maps}
+    Applying (\ref{eq:mpug_czx_prescribed_map}) to $v(a,b,x)$ and using the
+    orthonormality of $v(a,b,0)$ and $v(a,b,1)$ of
+    Theorem~\ref{thm:mpug_czx_defect_vector_values} leaves the single term
+    $v(e,ab,x)$, which is (\ref{eq:mpug_czx_prescription}). The same
+    computation for the adjoint gives
+    $D_{a,b}^{\dagger}v(e,ab,x)=v(a,b,x)$, and composing the two identities on
+    a linear combination of $v(a,b,0)$ and $v(a,b,1)$ gives the isometry
+    property and the inclusion of the images. Substituting
+    (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) into
+    (\ref{eq:mpug_czx_prescription}) and cancelling the scalars of modulus one
+    gives (\ref{eq:mpug_czx_map_ee})--(\ref{eq:mpug_czx_map_gg}).
+\end{proof}
+
+\begin{definition}[Prescribed defect maps of the CZX model]
+    \label{def:mpug_czx_defect_maps}
+    \lean{MPOTensor.CZX.defectMaps,
+        MPOTensor.CZX.defectMaps_domain,
+        MPOTensor.CZX.defectMaps_prescribed}
+    \leanok
+    \uses{def:mpug_defect_maps, def:mpug_czx_defect_domains,
+        def:mpug_czx_prescribed_maps, thm:mpug_czx_prescribed_action}
+    The four domains (\ref{eq:mpug_czx_even_domains}) and
+    (\ref{eq:mpug_czx_odd_domains}) together with the four maps
+    (\ref{eq:mpug_czx_prescribed_map}) are prescribed defect maps in the sense
+    of Definition~\ref{def:mpug_defect_maps} for the group $\Z_2$ and the
+    two-site matter space of the CZX model, the isometry condition
+    (\ref{eq:mpug_defect_isometry}) being
+    Theorem~\ref{thm:mpug_czx_prescribed_action}. That the circuit tuple
+    $R^{\mathrm{CZX}}$ lies in the resulting completion class
+    (\ref{eq:mpug_completion_class}) is proved unconditionally in
+    Theorem~\ref{thm:mpug_czx_tuple_completion} below.
+\end{definition}
+
+\section{The displayed CZX tuple as a completion}
+\label{sec:mpug_czx_completion}
+
+The four defect domains and the four prescribed maps of
+Section~\ref{sec:mpug_czx_defect_maps} constrain the fusion operator of each
+ordered label pair on one plane of the two-site matter space. The four
+displayed operators $(\Id,\Id,w,\tilde\lambda)$ of
+Definition~\ref{def:mpug_czx_circuit_tuple} obey those constraints exactly, so
+the displayed tuple is one member of the full completion class of the CZX
+prescribed defect maps $D^{\mathrm{CZX}}$. The exact dimension
+(\ref{eq:mpug_czx_dimension}), which concerns the displayed tuple alone, then
+bounds from below the supremum of the gauge-invariant dimension over the whole
+class.
+
+\begin{theorem}[The displayed CZX tuple is a completion]
+    \label{thm:mpug_czx_tuple_completion}
+    \lean{MPOTensor.CZX.circuitTuple_one_mulVec_defectVector,
+        MPOTensor.CZX.circuitTuple_gen_one_mulVec_defectVector_zero,
+        MPOTensor.CZX.circuitTuple_gen_one_mulVec_defectVector_one,
+        MPOTensor.CZX.circuitTuple_gen_gen_mulVec_defectVector_zero,
+        MPOTensor.CZX.circuitTuple_gen_gen_mulVec_defectVector_one,
+        MPOTensor.CZX.circuitTuple_mulVec_defectVector,
+        MPOTensor.CZX.isCompletion_circuitTuple,
+        MPOTensor.CZX.circuitTuple_mem_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_czx_circuit_tuple,
+        def:mpug_completion_class}
+    For every ordered pair $(a,b)$ of labels of $\Z_2$ and every injective
+    block $x$, the displayed operator of the pair carries the defect vector of
+    the pair to the defect vector of the product label,
+    \begin{align}
+        U^{\mathrm{CZX}}_{a,b}v(a,b,x) & =v(e,ab,x),
+        \label{eq:mpug_czx_tuple_fusion}
+    \end{align}
+    that is,
+    \begin{align}
+        \Id\,v(e,b,x)           & =v(e,b,x),
+        \label{eq:mpug_czx_tuple_fusion_trivial}  \\
+        w\,v(g,e,x)             & =v(e,g,x),
+        \label{eq:mpug_czx_tuple_fusion_movement} \\
+        \tilde\lambda\,v(g,g,x) & =v(e,e,x).
+        \label{eq:mpug_czx_tuple_fusion_modified}
+    \end{align}
+    Consequently the displayed operator of every pair agrees on
+    $\mathcal K_{a,b}$ with the prescribed map $D_{a,b}$, and the displayed
+    tuple lies in the full completion class,
+    \begin{align}
+        R^{\mathrm{CZX}} & \in\mathfrak C(D^{\mathrm{CZX}}).
+        \label{eq:mpug_czx_tuple_completion}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values,
+        thm:mpug_czx_defect_domains, thm:mpug_czx_prescribed_action}
+    The phase tables (\ref{eq:mpug_czx_w_action}) and
+    (\ref{eq:mpug_czx_tilde_lambda_action}), evaluated at the four
+    computational basis states carrying the defect vectors of
+    Theorem~\ref{thm:mpug_czx_defect_vector_values}, give
+    \begin{align}
+        w\ket{0000}             & =\ket{1100},
+                                & w\ket{1111}
+                                & =\ket{0011},
+        \label{eq:mpug_czx_w_basis_action}                \\
+        \tilde\lambda\ket{1100} & =i\ket{0000},
+                                & \tilde\lambda\ket{0011}
+                                & =i\ket{1111},
+        \label{eq:mpug_czx_tilde_lambda_basis_action}
+    \end{align}
+    because $e(0000)=e(1111)=0$ and $f(1100)=f(0011)=1$. Substituting
+    (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) and cancelling the
+    factors $-i$ gives (\ref{eq:mpug_czx_tuple_fusion_movement}) and
+    (\ref{eq:mpug_czx_tuple_fusion_modified}); the pairs with left label $e$
+    carry the identity operator, so
+    (\ref{eq:mpug_czx_tuple_fusion_trivial}) is immediate. The two defect
+    vectors of a pair span $\mathcal K_{a,b}$ by (\ref{eq:mpug_czx_domain}),
+    and the prescribed map obeys the same identity
+    (\ref{eq:mpug_czx_prescription}), so the displayed operator and the
+    prescribed map agree on the whole plane, which is
+    (\ref{eq:mpug_czx_tuple_completion}).
+\end{proof}
+
+\begin{theorem}[Lower bound on the supremum over the CZX completion class]
+    \label{thm:mpug_czx_class_maximum}
+    \lean{MPOTensor.CZX.bddAbove_range_finrank_gaugeInvariantSubspace,
+        MPOTensor.CZX.two_pow_le_iSup_finrank_gaugeInvariantSubspace_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_czx_circuit_tuple,
+        def:mpug_completion_class, def:mpug_gauge_invariant_subspace,
+        thm:mpug_czx_dimension_of_completion}
+    On a periodic chain of $N\geq3$ blocked sites the gauge-invariant
+    dimensions of the members of the CZX completion class are bounded above by
+    the dimension of the chain space, so their supremum is finite, and
+    \begin{align}
+        \sup_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_N(R) & \geq2^N.
+        \label{eq:mpug_czx_class_maximum}
+    \end{align}
+    Nothing is asserted about the minimum of $\dim\mathcal V_N(R)$ over the
+    class, about the exact value of the supremum, or about which completion
+    attains it. Those extrema are questions about this completion class, not
+    questions the source raises;
+    \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} asks only whether the
+    gauge-invariant subspace of the state-level gauging stays bounded or grows
+    with the system size, and nothing is asserted about that growth either. The
+    domains and the maps entering the class are derived
+    in~\cite{gap:fbc25_czx_defect_domains}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_dimension_of_completion}
+    Every gauge-invariant subspace (\ref{eq:mpug_gauge_invariant_subspace}) is
+    a subspace of the chain space, so the dimensions of the members of the
+    class are bounded above by the dimension of that space and their supremum
+    is finite. By Theorem~\ref{thm:mpug_czx_tuple_completion} the displayed
+    tuple lies in the class, and by
+    Theorem~\ref{thm:mpug_czx_dimension_of_completion} its gauge-invariant
+    subspace has dimension $2^N$, which is therefore at most the supremum.
+\end{proof}
+
+\begin{theorem}[The second displayed CZX tuple is a completion]
+    \label{thm:mpug_czx_star_tuple_completion}
+    \lean{MPOTensor.CZX.matterMatrix_tildeLambdaStar_mulVec_matterKet_zero,
+        MPOTensor.CZX.matterMatrix_tildeLambdaStar_mulVec_matterKet_one,
+        MPOTensor.CZX.circuitTupleStar_gen_gen_mulVec_defectVector_zero,
+        MPOTensor.CZX.circuitTupleStar_gen_gen_mulVec_defectVector_one,
+        MPOTensor.CZX.circuitTupleStar_mulVec_defectVector,
+        MPOTensor.CZX.isCompletion_circuitTupleStar,
+        MPOTensor.CZX.circuitTupleStar_mem_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_czx_star_tuple,
+        def:mpug_completion_class}
+    The second displayed tuple obeys the same prescription
+    (\ref{eq:mpug_czx_tuple_fusion}) as the first,
+    \begin{align}
+        U^\star_{a,b}v(a,b,x) & =v(e,ab,x),
+        \label{eq:mpug_czx_star_tuple_fusion}
+    \end{align}
+    and therefore lies in the full completion class,
+    \begin{align}
+        R^\star & \in\mathfrak C(D^{\mathrm{CZX}}).
+        \label{eq:mpug_czx_star_tuple_completion}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_defect_domains,
+        def:mpug_czx_star_tuple}
+    The pairs $(e,e)$, $(e,g)$, and $(g,e)$ carry the same operators in
+    $R^\star$ as in $R^{\mathrm{CZX}}$, so
+    Theorem~\ref{thm:mpug_czx_tuple_completion} gives
+    (\ref{eq:mpug_czx_star_tuple_fusion}) there. For the pair $(g,g)$ the
+    operator is $\tilde\lambda R_\star$, and the defect domain is
+    $\mathcal K_{g,g}=\mathcal L_1=\spn_{\C}\{\ket{1100},\ket{0011}\}$ by
+    (\ref{eq:mpug_czx_odd_domains}). Since
+    $r_\star(1100)=r_\star(0011)=0$, the factor $R_\star$ fixes both spanning
+    vectors, so $\tilde\lambda R_\star$ has the same values there as
+    $\tilde\lambda$, namely $i\ket{0000}$ and $i\ket{1111}$. The two defect
+    vectors of the pair span its domain, which gives
+    (\ref{eq:mpug_czx_star_tuple_completion}).
+\end{proof}
+
+\begin{theorem}[Two further values of the dimension on the CZX completion
+        class]
+    \label{thm:mpug_czx_star_class_values}
+    \lean{MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTupleStar_three,
+        MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTupleStar_four,
+        MPOTensor.CZX.fourteen_le_iSup_finrank_gaugeInvariantSubspace_completionClass,
+        MPOTensor.CZX.thirtySix_le_iSup_finrank_gaugeInvariantSubspace_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_completion_class,
+        def:mpug_gauge_invariant_subspace, thm:mpug_czx_star_tuple_completion,
+        thm:mpug_czx_star_dimension}
+    The dimensions $14$ at three sites and $36$ at four sites are values of the
+    gauge-invariant dimension on the CZX completion class, so
+    \begin{align}
+        \sup_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_3(R) & \geq14,
+        \label{eq:mpug_czx_star_class_three}                                  \\
+        \sup_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_4(R) & \geq36.
+        \label{eq:mpug_czx_star_class_four}
+    \end{align}
+    Beside the values $8$ and $16$ of the first displayed tuple at the same two
+    chain lengths, these exhibit two different values of the dimension on the
+    class at each of those lengths. Nothing follows about the minimum, the
+    exact supremum, which completion attains it, or the behaviour of any of
+    these as $N$ grows.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_tuple_completion, thm:mpug_czx_star_dimension}
+    By Theorem~\ref{thm:mpug_czx_star_tuple_completion} the second displayed
+    tuple lies in the class, and by
+    Theorem~\ref{thm:mpug_czx_star_dimension} its gauge-invariant subspace has
+    dimensions $14$ and $36$ at three and four sites. Each value is therefore
+    at most the supremum over the class at that chain length, by the same
+    boundedness argument as in
+    Theorem~\ref{thm:mpug_czx_class_maximum}.
 \end{proof}

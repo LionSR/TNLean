@@ -226,6 +226,11 @@ additional constructions used below.
     $\E_B = \E_{\widetilde A^{[p]}}$. Then
     $p$-refinability of $B$ implies $p$-divisibility of $\E_B$.
 \end{theorem}
+% Formalization status: the assumed construction is refuted, not merely
+% unproved (Remark~\ref{rem:thm_4_1_forward_trace_preservation}), so the
+% Lean theorem carries an Unfaithful marker and this node stays conditional;
+% the elimination plan is in
+% docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex.
 
 \begin{proof}\leanok
     The construction supplies $\widetilde A$ with
@@ -237,6 +242,62 @@ additional constructions used below.
     then identifies $\E_B$ with the $p$-th power of the channel
     $\E_{\widetilde A}$.
 \end{proof}
+
+\begin{remark}[Trace preservation in the forward direction]
+    \label{rem:thm_4_1_forward_trace_preservation}
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel, def:peripheral_equalcase_root_from_zgauge, def:peripheral_equalcase_periodicFT_sameMPV, def:peripheral_equalcase_root_channel_from_zgauge}
+    The construction assumed in
+    Theorem~\ref{thm:thm_4_1_p_refinement_forward} does not follow from
+    irreducible form~II alone, and the printed forward implication of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} omits the trace
+    preservation of $\E_B$ that its notion of $p$-divisibility presupposes.
+    Let $p \ge 1$, let $B_0$ be $p$-refinable with witness $(A_0, W)$ and in
+    irreducible form~II with every multiplicity equal to one, and let
+    $\lambda > 1$. Set
+    \begin{align}
+        B
+         & = \lambda B_0,
+        \qquad
+        A = \lambda^{1/p} A_0.
+        \notag
+    \end{align}
+    Then $B$ is in irreducible form~II with the blocks of $B_0$ and the
+    multiplicities $\lambda$, and it is $p$-refinable with witness $(A, W)$:
+    \begin{align}
+        \ket{V^{(pN)}(A)}
+         & = \lambda^{N}\ket{V^{(pN)}(A_0)}
+        = \lambda^{N} W^{\otimes N}\ket{V^{(N)}(B_0)}
+        = W^{\otimes N}\ket{V^{(N)}(B)}.
+        \notag
+    \end{align}
+    Its transfer map satisfies
+    \begin{align}
+        \E_B
+         & = \lambda^{2}\,\E_{B_0},
+        \qquad
+        \tr \E_B(\Id) = \lambda^{2}\tr \Id \neq \tr \Id,
+        \notag
+    \end{align}
+    so $\E_B$ is not trace preserving and is not the $p$-th power of a CPTP
+    map. At physical and bond dimension one, with $B_0 = (1)$, the same data
+    give $C = A^{[p]} = (\lambda)$ related by the trivial $\Z_1$-gauge, and
+    no left-canonical $\widetilde A$ or CPTP root has $p$-th power
+    $x \mapsto \lambda^2 x$; so the constructions assumed in
+    Definitions~\ref{def:peripheral_equalcase_root_from_zgauge},
+    \ref{def:peripheral_equalcase_periodicFT_sameMPV},
+    and~\ref{def:peripheral_equalcase_root_channel_from_zgauge} fail as well.
+    The corrected statement takes $B$ literally in the block form of
+    irreducible form~II from \cite{DeLasCuevas2017Irreducible}, as the source
+    does, and adds trace preservation of $\E_B$; for such a block form this is
+    equivalent to every multiplicity being one, since
+    $\sum_i (B^i)^\dagger B^i = \bigoplus_j \mu_j^2 \Id$. Under this
+    hypothesis the printed argument closes
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}. The equivalence does
+    not extend to the generated-family reading of
+    Definition~\ref{def:irreducible_form}: a non-unitary similarity of a
+    left-canonical normal tensor generates the same family with unit weights,
+    while its transfer map is not trace preserving.
+\end{remark}
 
 \begin{definition}[Blocked-to-root channel-root hypothesis from $Z$-gauge]
     \label{def:peripheral_equalcase_root_channel_from_zgauge}

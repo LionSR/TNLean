@@ -1,0 +1,439 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
+
+\title{CZX Defect Domains from the Source Diagrams}
+\author{}
+\date{2026-09-04}
+
+\begin{document}
+\maketitle
+\gapnote{clarification}{resolved}
+
+\section{The assertion}
+
+The state-level gauging of the anomalous $\mathbb Z_2$ CZX symmetry in
+Ref.~\cite[lines~4503--5183]{FrancoRubio2025MPUGauging} rests on the
+modified-fusion lemma of
+Ref.~\cite[lines~4215--4254]{FrancoRubio2025MPUGauging}. That lemma attaches
+to every ordered pair of group labels $(g,h)$ and every injective block $x$ a
+two-site defect vector $v(g,h,x)$, drawn as the contraction of the defect
+tensor $g[hx]$ on the left site with the defect tensor $h[x]$ on the right
+site, and prescribes unitary fusion operators $\tilde\lambda_{g,h}$ on the
+two-site matter space with
+\begin{align}
+    \tilde\lambda_{g,h}\,v(g,h,x)
+        &=v(e,gh,x).
+    \label{eq:fbc25_czx_prescription}
+\end{align}
+For the CZX example the source displays the blocked symmetry tensor, its two
+decompositions, the two injective blocks of the invariant GHZ state, the
+action tensors, the two domain-wall defect tensors, the movement operator,
+the fusion operators, and the modification of the $(g,g)$ fusion operator.
+It does not display the eight two-site vectors $v(g,h,x)$ themselves, nor
+the four defect domains
+\begin{align}
+    \mathcal K_{g,h}
+        &=\operatorname{span}\{v(g,h,x):x\in\{0,1\}\}
+    \label{eq:fbc25_czx_domain_definition}
+\end{align}
+on which Eq.~\ref{eq:fbc25_czx_prescription} constrains the fusion
+operators. Unpublished planning material for the gauge-invariant-subspace
+problem therefore treated two statements as explicit axioms: that the
+retained four-qubit circuits coincide with the source's fusion operators in
+one common blocking, basis, phase, and fusion gauge, and that the odd target
+support $\operatorname{span}\{v(e,g,x):x\}$ coincides with the even one
+$\operatorname{span}\{v(e,e,x):x\}$. This note derives all eight vectors by
+finite contraction of the displayed tensors and settles both statements.
+The first is a theorem. The second is false: the two target supports are
+orthogonal.
+
+\section{Conventions read off the diagrams}
+
+One blocked site carries two qubits. Two neighboring blocked sites carry the
+qubits $0,1$ (left site) and $2,3$ (right site), and the computational basis
+of the sixteen-dimensional two-site matter space is written
+$\ket{x_0x_1x_2x_3}$. The two injective blocks of the once-blocked GHZ state
+are the product vectors
+\begin{align}
+    \ket{\circ}&=\ket{00},
+    &
+    \ket{\bullet}&=\ket{11},
+    \label{eq:fbc25_czx_blocks}
+\end{align}
+drawn as a white and a black circle
+\cite[lines~4660--4670]{FrancoRubio2025MPUGauging}. Both blocks have bond
+dimension one, so every virtual contraction between neighboring defect
+tensors is a scalar and every single-site defect tensor is a two-qubit
+vector.
+
+Circuit diagrams are read from the bottom (input) to the top (output), and
+operator products act from right to left. The controlled-$Z$ gate is drawn
+as a bond of dimension two between the two qubit lines with a blue dot on the
+bond \cite[lines~3800--3845]{FrancoRubio2025MPUGauging}: the attachment on a
+qubit line is the copy tensor $\delta_{i,j,k}$, which exports the qubit value
+onto the bond, and the blue dot is the matrix
+\begin{align}
+    \sqrt2H
+        &=\begin{pmatrix}1&1\\1&-1\end{pmatrix},
+    &
+    \mathrm{CZ}_{rs}\ket{x}
+        &=(-1)^{x_rx_s}\ket{x}.
+    \label{eq:fbc25_czx_cz_decomposition}
+\end{align}
+The blocked symmetry tensor \papereqref{fbc25}{eq:MPU_CZX} of
+Ref.~\cite[lines~4505--4545]{FrancoRubio2025MPUGauging} applies $X\otimes X$
+at the bottom, then a controlled-$Z$ between its two qubits, exports the
+first qubit onto the left bond and the second qubit onto the right bond
+(with the blue dot on the right bond), and applies $Z\otimes Z$ at the top.
+The source picks two decompositions of this tensor
+\cite[lines~4559--4659]{FrancoRubio2025MPUGauging}. The one used in the
+definition of the defect tensors is the white tensor with a wavy output leg
+and a bond leg to the left: it applies $Z\otimes Z$, exports the first qubit
+onto the bond through a copy tensor, and carries the Pauli matrix $Y$ on the
+bond. On a block vector $\ket{xx}$ its output is therefore
+\begin{align}
+    \ket{xx}\otimes Y\ket{x}
+        &=i(-1)^{x}\,\ket{xx}\otimes\ket{x+1},
+    \label{eq:fbc25_czx_white_tensor_on_block}
+\end{align}
+where the second factor lives on the bond. The truncated symmetry displayed
+in Ref.~\cite[lines~4700--4798]{FrancoRubio2025MPUGauging}, whose rightmost
+site carries this white tensor, has the overall prefactor $i$ that
+Eq.~\ref{eq:fbc25_czx_white_tensor_on_block} produces; this confirms the
+direction in which $Y$ acts on the bond. The left action tensors are the
+bond covectors
+\begin{align}
+    A^{\Gamma}_{g,0}&=-i\bra{1},
+    &
+    A^{\Gamma}_{g,1}&=\bra{0}
+    \label{eq:fbc25_czx_action_tensors}
+\end{align}
+of Ref.~\cite[lines~4690--4694]{FrancoRubio2025MPUGauging}, labelled by the
+block $x$ to the right of the defect.
+
+\section{The single-site defect vectors}
+
+The domain-wall defect $g[x]$ is defined in
+Ref.~\cite[lines~2831--2845]{FrancoRubio2025MPUGauging} as the block tensor
+$x$ at the bottom, the white tensor of
+Eq.~\ref{eq:fbc25_czx_white_tensor_on_block} on its physical leg, and the
+left action tensor contracted against the bond. Since $g$ exchanges the two
+blocks, the defect $g[1]$ carries block $0$ to its left and block $1$ to its
+right, which the source writes $g[1]\equiv0|1$, and similarly
+$g[0]\equiv1|0$. Contracting Eq.~\ref{eq:fbc25_czx_white_tensor_on_block}
+with Eq.~\ref{eq:fbc25_czx_action_tensors} gives
+\begin{align}
+    g[1]
+        &=A^{\Gamma}_{g,1}\bigl(i(-1)^{1}\ket{0}\bigr)\,\ket{11}
+        =-i\ket{11},
+    \label{eq:fbc25_czx_defect_g1}\\
+    g[0]
+        &=A^{\Gamma}_{g,0}\bigl(i\ket{1}\bigr)\,\ket{00}
+        =\ket{00}.
+    \label{eq:fbc25_czx_defect_g0}
+\end{align}
+These are exactly the evaluations displayed in
+Ref.~\cite[lines~4800--4859]{FrancoRubio2025MPUGauging}: $g[1]$ equals $-i$
+times the black circle and $g[0]$ equals the white circle. The displayed
+values fix the reading of the diagram. The transposed action of $Y$ on the
+bond would give $g[1]=i\ket{11}$ and $g[0]=-\ket{00}$, contradicting both
+displayed evaluations. The alternative expressions displayed in the same
+lines, through the black tensor of the first decomposition and the right
+action tensors $-\tfrac{i}{\sqrt2}\ket{-}$ for block $0$ and
+$\tfrac1{\sqrt2}\ket{+}$ for block $1$, labelled by the block to the left of
+the defect, reproduce Eqs.~\ref{eq:fbc25_czx_defect_g1}
+and~\ref{eq:fbc25_czx_defect_g0} with the displayed signs, that is, with
+the sign function $\xi_g(1)=-1$ and $\xi_g(0)=1$ of
+Ref.~\cite[lines~2925--2962]{FrancoRubio2025MPUGauging}.
+
+The identity defect $e[x]$ is the block tensor itself,
+\begin{align}
+    e[0]&=\ket{00},
+    &
+    e[1]&=\ket{11}.
+    \label{eq:fbc25_czx_defect_e}
+\end{align}
+This is the source's convention: projecting the gauge degrees of freedom of
+the gauged tensor onto the neutral element recovers the original tensor
+\cite[lines~3494--3529]{FrancoRubio2025MPUGauging}, and every displayed
+fusion identity in
+Ref.~\cite[lines~4889--5066]{FrancoRubio2025MPUGauging} draws a fused
+identity defect as a plain block circle.
+
+\section{The two-site defect vectors, domains, and prescribed maps}
+
+The two-site vector $v(a,b,x)$ is the tensor product of the left defect
+$a[bx]$ with the right defect $b[x]$, in this order
+\cite[lines~4234--4245]{FrancoRubio2025MPUGauging}. Writing $e\leftrightarrow0$
+and $g\leftrightarrow1$ for the labels, so that $bx=x+b$ in $\mathbb F_2$,
+Eqs.~\ref{eq:fbc25_czx_defect_g1}--\ref{eq:fbc25_czx_defect_e} give
+\begin{align}
+    v(e,e,0)&=\ket{0000},
+    &
+    v(e,e,1)&=\ket{1111},
+    \label{eq:fbc25_czx_v_ee}\\
+    v(e,g,0)&=\ket{1100},
+    &
+    v(e,g,1)&=-i\ket{0011},
+    \label{eq:fbc25_czx_v_eg}\\
+    v(g,e,0)&=\ket{0000},
+    &
+    v(g,e,1)&=-i\ket{1111},
+    \label{eq:fbc25_czx_v_ge}\\
+    v(g,g,0)&=-i\ket{1100},
+    &
+    v(g,g,1)&=-i\ket{0011}.
+    \label{eq:fbc25_czx_v_gg}
+\end{align}
+Each pair $v(a,b,0)$, $v(a,b,1)$ is orthogonal, as the modified-fusion
+lemma requires. The four defect domains of
+Eq.~\ref{eq:fbc25_czx_domain_definition} are
+\begin{align}
+    \mathcal K_{e,e}=\mathcal K_{g,e}
+        &=\mathcal L_0
+        :=\operatorname{span}\{\ket{0000},\ket{1111}\},
+    \label{eq:fbc25_czx_even_domains}\\
+    \mathcal K_{e,g}=\mathcal K_{g,g}
+        &=\mathcal L_1
+        :=\operatorname{span}\{\ket{1100},\ket{0011}\}.
+    \label{eq:fbc25_czx_odd_domains}
+\end{align}
+Here $\mathcal L_p=\operatorname{span}\{v(e,p,x):x\}$ is the target support
+of the product label $p$. The two supports are orthogonal,
+\begin{align}
+    \mathcal L_0\perp\mathcal L_1,
+    \qquad
+    \mathcal L_1\neq\mathcal L_0.
+    \label{eq:fbc25_czx_targets_orthogonal}
+\end{align}
+The domain depends only on the right label $b$, because the single-site
+defects $g[x]$ and $e[x]$ are proportional.
+
+The prescribed maps $D_{a,b}\colon\mathcal K_{a,b}\to\mathcal L_{a+b}$,
+$v(a,b,x)\mapsto v(e,a+b,x)$, of Eq.~\ref{eq:fbc25_czx_prescription} are
+\begin{align}
+    D_{e,e}&=\Id_{\mathcal L_0},
+    &
+    D_{e,g}&=\Id_{\mathcal L_1},
+    \label{eq:fbc25_czx_maps_identity}\\
+    D_{g,e}\ket{0000}&=\ket{1100},
+    &
+    D_{g,e}\ket{1111}&=\ket{0011},
+    \label{eq:fbc25_czx_map_ge}\\
+    D_{g,g}\ket{1100}&=i\ket{0000},
+    &
+    D_{g,g}\ket{0011}&=i\ket{1111}.
+    \label{eq:fbc25_czx_map_gg}
+\end{align}
+Each is a unitary isomorphism between its domain and its target. The maps
+$D_{g,e}$ and $D_{g,g}$ exchange the two supports, while $D_{e,e}$ and
+$D_{e,g}$ preserve them.
+
+\section{The displayed fusion operators restrict to the prescribed maps}
+
+The movement operator $w_R$ of
+Ref.~\cite[lines~4860--4888]{FrancoRubio2025MPUGauging} acts on the four
+qubit lines with $Z$ on qubits $2,3$ at the bottom, a controlled-$Z$ between
+qubits $1,2$, a controlled-$Z$ between qubits $0,1$, and $X$ on qubits $0,1$
+at the top. The fusion operator $\lambda^R_{g,g}$ of
+Ref.~\cite[lines~4989--5013]{FrancoRubio2025MPUGauging} carries the
+prefactor $-i$, $X$ on qubit $2$ at the bottom, the same two controlled-$Z$
+gates, and $X$ on qubits $0,1,2$ together with $Z$ on qubit $3$ at the top.
+Read from bottom to top,
+\begin{align}
+    w
+        &=(X_0X_1)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,(Z_2Z_3),
+    \label{eq:fbc25_czx_w}\\
+    \lambda
+        &=-i\,(X_0X_1X_2Z_3)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,X_2,
+    \label{eq:fbc25_czx_lambda}\\
+    \tilde\lambda
+        &=\lambda Z_0,
+    \label{eq:fbc25_czx_tilde_lambda}
+\end{align}
+where Eq.~\ref{eq:fbc25_czx_tilde_lambda} is the modification
+$\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ of
+Ref.~\cite[lines~5179--5183]{FrancoRubio2025MPUGauging}. The source names
+this factor ``the Pauli $Z$ operator on the first qubit'' and numbers the
+qubits of a site from $1$, whereas the present note numbers the four qubits
+of the two sites $0,1,2,3$. The source's $Z_1$ and the $Z_0$ of
+Eq.~\ref{eq:fbc25_czx_tilde_lambda} are therefore one operator, the Pauli
+$Z$ on the first qubit of the left site, written in the two numbering
+conventions.\footnote{These are the gate forms
+transcribed in \doclink{TNLean/MPS/MPDO/CZXGaussCircuitTuple}, whose
+qubit numbering and phase tables the present note verifies against the
+diagrams.} With $\overline x=(x_0+1,x_1+1,x_2,x_3)$, the phase tables are
+\begin{align}
+    w\ket{x}
+        &=(-1)^{x_0x_1+x_1x_2+x_2+x_3}\ket{\overline x},
+    \label{eq:fbc25_czx_w_phase}\\
+    \lambda\ket{x}
+        &=-i(-1)^{x_0x_1+x_1x_2+x_1+x_3}\ket{\overline x},
+    \label{eq:fbc25_czx_lambda_phase}\\
+    \tilde\lambda\ket{x}
+        &=-i(-1)^{x_0x_1+x_1x_2+x_0+x_1+x_3}\ket{\overline x}.
+    \label{eq:fbc25_czx_tilde_lambda_phase}
+\end{align}
+
+These transcriptions reproduce every fusion identity the source displays.
+The two movement identities of
+Ref.~\cite[lines~4889--4988]{FrancoRubio2025MPUGauging} read, in the
+vectors of Eqs.~\ref{eq:fbc25_czx_v_eg} and~\ref{eq:fbc25_czx_v_ge},
+\begin{align}
+    w\,v(g,e,0)
+        &=w\ket{0000}=\ket{1100}=v(e,g,0),
+    \label{eq:fbc25_czx_w_identity_0}\\
+    w\,v(g,e,1)
+        &=-i\,w\ket{1111}=-i\ket{0011}=v(e,g,1),
+    \label{eq:fbc25_czx_w_identity_1}
+\end{align}
+which is the statement $\lambda^R_{g,e}=w_R$ with trivial $L$-symbols
+\papereqref{fbc25}{eq:simplecases} of
+Ref.~\cite[lines~3331--3340]{FrancoRubio2025MPUGauging}. The two identities
+displayed for $\lambda^R_{g,g}$ in
+Ref.~\cite[lines~5014--5066]{FrancoRubio2025MPUGauging} read
+\begin{align}
+    \lambda\,v(g,g,0)
+        &=-i\,\lambda\ket{1100}=-i\,(-i)\ket{0000}=-v(e,e,0),
+    \label{eq:fbc25_czx_lambda_identity_0}\\
+    \lambda\,v(g,g,1)
+        &=-i\,\lambda\ket{0011}=-i\,(i)\ket{1111}=v(e,e,1),
+    \label{eq:fbc25_czx_lambda_identity_1}
+\end{align}
+which are the printed $L$-symbols $L^0_{g,g}=-1$ and $L^1_{g,g}=1$
+\cite[line~5067]{FrancoRubio2025MPUGauging}. The alternative top-to-bottom
+reading of the circuits would give $w\,v(g,e,0)=-v(e,g,0)$ and
+$\lambda\,v(g,g,1)=-v(e,e,1)$, contradicting the displayed identities; the
+displayed identities therefore pin the reading. The modified operator then
+satisfies
+\begin{align}
+    \tilde\lambda\,v(g,g,0)
+        &=\lambda Z_0\bigl(-i\ket{1100}\bigr)
+        =i\,\lambda\ket{1100}
+        =\ket{0000}=v(e,e,0),
+    \label{eq:fbc25_czx_tilde_identity_0}\\
+    \tilde\lambda\,v(g,g,1)
+        &=\lambda Z_0\bigl(-i\ket{0011}\bigr)
+        =-i\,\lambda\ket{0011}
+        =\ket{1111}=v(e,e,1),
+    \label{eq:fbc25_czx_tilde_identity_1}
+\end{align}
+which is Eq.~\ref{eq:fbc25_czx_prescription} exactly. The $Z$ on qubit $1$
+would do the same, because both vectors of $\mathcal L_1$ have equal first
+two bits; a $Z$ on qubit $2$ or $3$, or the product $Z_0\lambda$, would
+satisfy the prescription only up to a global sign $-1$. The source's
+choice, $Z$ on the first qubit applied before $\lambda^R_{g,g}$, is the one
+that satisfies Eq.~\ref{eq:fbc25_czx_prescription} without a sign.
+
+Together with the trivial cases $\lambda^R_{e,e}=\lambda^R_{e,g}=\Id$,
+Eqs.~\ref{eq:fbc25_czx_w_identity_0}--\ref{eq:fbc25_czx_tilde_identity_1}
+show that the four displayed operators $(\Id,\Id,w,\tilde\lambda)$, indexed
+by $(a,b)\in\{e,g\}^2$, restrict on the domains of
+Eqs.~\ref{eq:fbc25_czx_even_domains} and~\ref{eq:fbc25_czx_odd_domains} to
+the prescribed maps of
+Eqs.~\ref{eq:fbc25_czx_maps_identity}--\ref{eq:fbc25_czx_map_gg}.
+
+\section{Verdicts}
+
+\paragraph{Convention matching is a theorem.}
+The retained four-qubit circuits are the source's fusion operators in the
+conventions of the preceding sections: qubits $0,1$ on the left blocked
+site and $2,3$ on the right, circuits read from bottom to top, the
+controlled-$Z$ decomposition of Eq.~\ref{eq:fbc25_czx_cz_decomposition},
+the displayed prefactor $-i$, and the displayed fusion gauge
+$\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$. Every one of these conventions
+is either stated by the source or forced by a displayed identity, and the
+restrictions of the circuits to the derived domains are the prescribed maps.
+No axiom is needed.
+
+\paragraph{The single-image identification is false.}
+The odd target support is
+\begin{align}
+    \mathcal L_1
+        &=\operatorname{span}\{\ket{1100},\ket{0011}\}
+        =\mathcal K_{g,g},
+    \label{eq:fbc25_czx_L1}
+\end{align}
+which is orthogonal to $\mathcal L_0=\operatorname{span}\{\ket{0000},\ket{1111}\}$
+by Eq.~\ref{eq:fbc25_czx_targets_orthogonal}. The source draws enough to
+fix $\mathcal L_1$, so this is not a source gap. The identification
+$\mathcal L_1=\mathcal L_0$ assumed in the planning material yields the
+domains $\mathcal K_{e,g}=\mathcal L_0$ and $\mathcal K_{g,e}=\mathcal L_1$,
+which are the wrong way round: by
+Eqs.~\ref{eq:fbc25_czx_even_domains} and~\ref{eq:fbc25_czx_odd_domains},
+$\mathcal K_{e,g}=\mathcal L_1$ and $\mathcal K_{g,e}=\mathcal L_0$. The
+support-level classification by a Grassmannian of rank-two odd targets
+collapses: the source fixes the odd target, and the four-sector
+support-and-restriction system is unique. The support projector of the
+sector $(a,b)$ is the orthogonal projector onto $\mathcal L_b$. Transports
+between sectors with different product labels are the maps $D_{g,e}$ and
+$D_{g,g}$ themselves, so no additional identification of the two supports is
+required or available.
+
+\paragraph{Membership in the full completion class.}
+Because the displayed tuple $(\Id,\Id,w,\tilde\lambda)$ agrees with the
+prescribed isometries on all four domains, it is a member of the full unitary
+completion class of the CZX defect maps, the class of unitary tuples that
+extend the four prescribed maps. The exact dimension $2^N$ of its
+gauge-invariant subspace on $N\geq3$ blocked sites is therefore a lower
+bound on the maximum of that dimension over the full class. The value $2^N$
+is not stated in the source, whose outlook
+\cite[line~5198]{FrancoRubio2025MPUGauging} leaves the growth of this
+subspace to future work; it is a theorem of the formal development about the
+displayed tuple alone, proved from the explicit gates.\footnote{The theorem is
+\texttt{finrank\_commonFixedSubmodule\_placedGaussProjector\_circuitTuple}
+in \doclink{TNLean/MPS/MPDO/CZXGaussInvariantSubspace}.} This lower bound
+was previously conditional on supplying the three undisplayed domains and
+maps; the derivation above supplies them.
+
+\paragraph{An index convention that does not matter.}
+The gauged tensor displayed in
+Ref.~\cite[lines~5131--5178]{FrancoRubio2025MPUGauging} carries, for gauge
+label $1$, the matrix with entries $1$ and $-i$ off the diagonal. With rows
+indexed by the block to the right of the defect and columns by the block to
+its left, its entries are the scalars of
+Eqs.~\ref{eq:fbc25_czx_defect_g0} and~\ref{eq:fbc25_czx_defect_g1}; with
+the opposite reading the two scalars are exchanged. Either reading gives the
+same four domains and the same four prescribed maps, since the scalars enter
+both sides of Eq.~\ref{eq:fbc25_czx_prescription} consistently.
+
+\section{Formal state}
+
+The gap is resolved. Everything this note asserts is formal: the single-site
+defects of Eqs.~\ref{eq:fbc25_czx_defect_g1}--\ref{eq:fbc25_czx_defect_e}, the
+eight two-site vectors of
+Eqs.~\ref{eq:fbc25_czx_v_ee}--\ref{eq:fbc25_czx_v_gg}, the domains of
+Eqs.~\ref{eq:fbc25_czx_even_domains} and~\ref{eq:fbc25_czx_odd_domains}, and
+the prescribed maps of
+Eqs.~\ref{eq:fbc25_czx_maps_identity}--\ref{eq:fbc25_czx_map_gg}, packaged as
+one family of prescribed defect maps satisfying
+Eq.~\ref{eq:fbc25_czx_prescription} on their domains, together with the
+orthogonality of Eq.~\ref{eq:fbc25_czx_targets_orthogonal} and the
+two-dimensionality of each domain. The four circuits and their phase tables
+are formal, as is the finite computation of
+Eqs.~\ref{eq:fbc25_czx_w_identity_0}--\ref{eq:fbc25_czx_tilde_identity_1}: both
+displayed tuples are members of the completion class of those prescribed maps,
+and the lower bounds on the gauge-invariant dimension over that class carry no
+conditional clause.
+
+The minimum over the class, the exact value of the supremum, and which
+completion attains it lie outside this note, which concerns the defect data
+read off the diagrams. They are questions about the completion class itself,
+tracked by \ghissue{7568}, and the source raises neither: what
+Ref.~\cite[lines~5198--5204]{FrancoRubio2025MPUGauging} leaves open is whether
+the gauge-invariant subspace of the state-level gauging stays bounded or grows
+with the system size. The CZX defect and fusion data are tracked by
+\ghissue{7355}, the prescribed defect maps by \ghissue{7739}, the completion
+membership of the displayed tuples by \ghissue{7740}, and the completion-class
+instance by \ghissue{7569}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -583,6 +583,248 @@ path-dependent statement remains under its \texttt{mpu\_admissible} label.
 The supplied-fixed-pair contraction does not by itself construct the source
 data required to remove these restrictions.
 
+\subsection*{The pointwise family is one connected group}
+
+Now that the bundled presentation carries the stabilized pair, the pointwise
+family splits three ways rather than two, and the split explains why its
+entries cannot be removed one at a time.
+
+Of the thirty-nine \texttt{mpu\_admissible} entries of Chapter~28, twenty-three
+are \texttt{def:mpu\_admissible\_equivalence\_datum} together with the entries
+whose dependencies cite it. These carry continuously varying path data and
+belong to \ghissue{6140}. The remaining sixteen are pointwise.
+
+One of the sixteen,
+\texttt{lem:mpu\_admissible\_source\_u\_isometry}, is not a duplicate. It is
+the generic step, stated for an arbitrary positive diagonal weight $\rho$ and
+an arbitrary exponent $K$ with $E^{K}=\lvert\rho)(\Phi\rvert$, and its formal
+statements still carry both inputs. The source-labelled Lemma~III.7 entry is
+proved from it together with the stabilized power of the bundled presentation,
+so it remains as the reusable step.
+
+Three of the sixteen ---
+\texttt{thm:mpu\_admissible\_simple\_tensor\_equivalence},
+\texttt{def:mpu\_admissible\_standard\_form}, and
+\texttt{thm:mpu\_admissible\_fundamental} --- restrict only the tensors that
+their source-labelled counterparts already place under the standing
+convention, and no formal statement carries their restriction any more. They
+are the only merge candidates.
+
+The other twelve restrict a tensor other than the one the source entry is
+about: an exact physical block $\mathcal U_k$, a physical-adjoint, transposed,
+or conjugate comparison tensor, a tensor product, or a composition. Assuming
+the presentation there is not the presentation on $\mathcal U$; it is the
+assertion that the presentation survives those operations. For blocking the
+source asserts exactly that, writing that the blocked tensor is again normal
+and in canonical form II \cite[line~356]{Cirac2017MPU}; for the comparison
+tensors, products, and compositions it is the content of \ghissue{6139}. In
+neither case is a preservation statement available, so all twelve keep their
+restriction.
+
+The census behind that unavailability is the following. Sixteen formal
+declarations mention the bundled presentation: the structure itself, thirteen
+that consume it, and two that construct one. The thirteen consumers conclude,
+about the same tensor, that its retained blocks fill the ambient bond space,
+that its bond space is nonempty, that its physical space is nonempty, that its
+normalized flattening is a normal tensor, that its block contractions are
+forced, the simplicity equivalence,
+the two stabilized transfer identities, the normalized diagonal power, and the
+four source-factor isometry and rank statements. The two constructions produce
+a presentation from canonical data for a tensor equal to a normalized
+flattening, and from an arbitrary matrix product unitary by dimension
+reduction. Not one of the sixteen carries a presentation on $\mathcal U$ to a
+presentation on a physical block, an adjoint, a transpose, a conjugate, a
+tensor product, or a composition, which is what the twelve entries would need;
+for the composition entry the transport has to run through a reduced
+representative, as the last part of this subsection shows.
+
+As the development stands today, the three candidates cannot be removed while
+the twelve stand, and what blocks them is a citation obstruction rather than a
+missing preservation result. Eleven retained
+entries cite them: seven pointwise entries, and the four path entries
+\texttt{prop:mpu\_admissible\_continuity\_index},
+\texttt{thm:mpu\_admissible\_index},
+\texttt{cor:mpu\_admissible\_continuous\_standard\_form}, and
+\texttt{lem:mpu\_admissible\_symmetry\_path\_criterion}. The tensors of all
+eleven carry a supplied fixed pair and nothing else. Redirecting their
+dependencies onto the convention-hypothesis entries would either strengthen
+eleven retained statements without saying so, or leave the implication
+\begin{align}
+    \text{unitary periodic family},\ E^{J}=\lvert\rho)(\Phi\rvert
+     & \implies\text{canonical form II}
+    \label{eq:mpu_canonical_form_full_support_datum_to_convention}
+\end{align}
+unrecorded between the two families. Stating
+(\ref{eq:mpu_canonical_form_full_support_datum_to_convention}) as a bridge
+entry is the parallel-family-with-a-bridge configuration that the repository's
+convention rule forbids.
+
+Two results are missing, and they unblock disjoint parts of the group in two
+independent stages rather than in one operation. The first reaches the four
+entries whose restricted tensor is $\mathcal U$ itself, and it dissolves the
+citation obstruction along with them, so the three candidates merge as soon as
+it exists, with the twelve still standing. The second reaches the twelve whose
+restricted tensor is derived from $\mathcal U$, and neither result is a
+prerequisite for the other.
+
+\begin{itemize}
+    \item The converse of the stabilization theorem, namely
+          (\ref{eq:mpu_canonical_form_full_support_datum_to_convention}): for
+          a tensor whose periodic operators are all unitary, a positive
+          diagonal trace-one $\rho$ with $E^{J}=\lvert\rho)(\Phi\rvert$ for
+          some $J>0$ leaves the transfer matrix with one nonzero eigenvalue, equal
+          to one, hence a single normal block filling the ambient bond space.
+          This is the spectral step of
+          \cite[lines~344--355]{Cirac2017MPU} run from the stabilized power
+          instead of from the shifted traces. Unitarity of the periodic
+          family is a premise and not a conclusion of the spectral step: the
+          bundled presentation contains it, while an exact rank-one transfer
+          power constrains only the normalized double layer. Every entry the
+          converse is meant to serve carries it already.
+
+          Trace normalization need not be added to the generic supplied-pair
+          entry. Write $P=\lvert\rho)(\Phi\rvert$ and $t=\tr(\rho)$.
+          Since $(\Phi\vert\rho)=t$, direct multiplication gives
+          \begin{align}
+              P^2&=tP, & \tr(P)&=t.
+              \label{eq:mpu_canonical_form_full_support_pair_trace}
+          \end{align}
+          The MPU trace identities hold at every length greater than one
+          \cite[lines~349--354]{Cirac2017MPU}. Thus, if $E^K=P$ and $K\geq2$,
+          \begin{align}
+              t&=\tr(P)=\tr(E^K)=1.
+              \label{eq:mpu_canonical_form_full_support_trace_large_exponent}
+          \end{align}
+          If $K=1$, use lengths two and three instead of assuming a
+          length-one trace identity. By
+          (\ref{eq:mpu_canonical_form_full_support_pair_trace}),
+          \begin{align}
+              t^2&=\tr(P^2)=\tr(E^2)=1, &
+              t^3&=\tr(P^3)=\tr(E^3)=1, & t&=1.
+              \label{eq:mpu_canonical_form_full_support_trace_exponent_one}
+          \end{align}
+          The exponent premise costs nothing. The generic supplied-pair entry
+          admits the exponent zero, where the condition reads
+          $\mathbf 1=\lvert\rho)(\Phi\rvert$; the right side has rank at most
+          one. The bond dimension cannot vanish, since a zero-dimensional
+          bond space gives a zero periodic operator on the nonempty physical
+          space. Hence $D=1$, and taking traces gives
+          \begin{align}
+              t&=\tr(P)=\tr(\mathbf 1_{D^2})=D^2=1.
+              \label{eq:mpu_canonical_form_full_support_trace_exponent_zero}
+          \end{align}
+          Thus the normalization required by the converse follows in every
+          case. In bond dimension one the normalized transfer matrix of a
+          tensor with a unitary periodic
+          family is already the identity
+          \cite[lines~397--409]{Cirac2017MPU}. The same pair then satisfies
+          the condition at the exponent one, so the converse at a positive
+          exponent covers the zero-exponent inputs as well.
+
+          It turns a supplied fixed pair into the bundled presentation of the
+          tensor that carries it, and nothing more. So it removes the
+          restriction exactly where the
+          tensor carrying the datum is the tensor the standing convention
+          already governs: the four entries
+          \texttt{lem:mpu\_admissible\_source\_u\_isometry} and the three
+          candidates. It also dissolves the citation obstruction above, since
+          the eleven citing entries then obtain the presentation from their
+          own supplied pair instead of through a bridge entry, so the three
+          candidates can be deleted at that point and the second item is not
+          needed for them. For the twelve
+          it rewrites the restriction without weakening it, because the
+          tensor carrying the datum is a derived one and the converse
+          constructs no datum for a derived tensor.
+    \item Preservation of the bundled presentation along each operation the
+          twelve use: positive physical blocking, physical adjunction,
+          transposition, complex conjugation, independent tensor products,
+          and composition. A preservation statement must deliver all four
+          clauses of the presentation for the derived tensor: unitarity of
+          its periodic operator family, literal canonical-form-II data for
+          its normalized flattening, full support of those data, and a
+          positive diagonal trace-one ambient matrix fixed by its normalized
+          transfer map. Blocking is the case the source states outright at
+          line~356. For composition no such statement about the product
+          tensor is available, for the reason given below; that case has to
+          go through a reduced representative instead.
+\end{itemize}
+
+The second item is not uniformly distant. For blocking, physical adjunction,
+and independent tensor products all four clauses are separately available and
+only the assembled statement is missing. Blocking preserves unitarity,
+transports canonical-form-II data to the blocked normalized flattening,
+preserves full support, and iterates the transfer map, so the same ambient
+matrix stays fixed. Physical adjunction preserves unitarity, transports the
+data together with their full support, and conjugates the transfer map
+entrywise. Independent tensor products preserve unitarity, carry product
+canonical-form-II data whose full support follows from full support of the two
+factors, and act on transfer maps as a Kronecker product, under which the
+Kronecker product of the two ambient matrices is again positive definite,
+diagonal, of trace one, and fixed. Transposition and conjugation are
+transported only through their composite, physical adjunction; neither half is
+transported on its own.
+
+Composition is the far case, and it differs from the other five in kind and
+not only in distance. Unitarity of a composition is available, but the only
+recorded statement about its normalized flattening is the entrywise
+physical-contraction formula: no canonical-form-II data are constructed for a
+composition tensor, and no transfer-map identity for one is recorded. Supplying
+those two results would still not settle the case, because for a composition
+the presentation can fail outright.
+
+A composition keeps the whole product bond space $D_1D_2$, and that space can
+be too large for the full-support clause. Take the right shift on $d\geq 2$
+levels and its physical adjoint, both matrix product unitaries
+(\leanid{MPOTensor.rightShiftTensor} and \leanid{MPOTensor.leftShiftTensor}).
+Their composite generates the identity operator at every length, and in the
+product bond space $\mathbb C^{d}\otimes\mathbb C^{d}$ its one-site matrices
+are
+\begin{align}
+    A^{(i,k)} & =\lvert i,k\rangle\langle\Phi\rvert,\qquad
+    \langle\Phi\rvert=\sum_{\gamma}\langle\gamma,\gamma\rvert.
+    \label{eq:mpu_canonical_form_full_support_shift_composite}
+\end{align}
+Each of these has rank one, and they share the row functional
+$\langle\Phi\rvert$, so every product of them, at every length, again has rank
+one and every element of the span of the length-$L$ products has rank at most
+one. A tensor with full-support canonical-form-II data is a unitary conjugate
+of a direct sum of nonzero multiples of normal blocks whose dimensions add up
+to the ambient dimension. A retained block of dimension at least two would put
+a matrix of rank at least two into that span, so every block would have
+dimension one; but then the one-site matrices would all be diagonal in one
+basis and would commute, and
+Eq.~\ref{eq:mpu_canonical_form_full_support_shift_composite} gives
+$A^{(0,0)}A^{(0,1)}=0$ while
+$A^{(0,1)}A^{(0,0)}=\lvert 0,1\rangle\langle\Phi\rvert\neq 0$.
+The composite therefore has no
+full-support canonical-form-II data in the product bond space at all, and no
+amount of blocking repairs it, since the blocked matrices are the same
+products and stay of rank one.
+
+This is the enlargement phenomenon of the opening section met again: the
+composite is a nonminimal ambient representative of the operator family it
+generates, and the presentation is a property of the representative and not of
+the operators. The composition case therefore does not ask for a preservation
+statement about the product tensor. It asks for the reduced representative
+\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative} applied to the
+product, together with an identification of the source cuts and ranks of
+\texttt{lem:mpu\_admissible\_index\_composition} across that reduction, which
+is exactly what the reduced-representative theorem does not supply. The source
+takes the same route implicitly: its index-additivity argument blocks the
+composite until it is simple \cite[lines~837--841]{Cirac2017MPU}, which for a
+composite of this shape is unreachable in the product bond space, so the
+tensor it blocks is already a reduced representative. Until that reduction and
+that transport exist,
+\texttt{lem:mpu\_admissible\_index\_composition} keeps its six per-block
+restrictions even if every other preservation statement is proved, and the
+work it needs is larger than the two missing results named above.
+
+Until the first item exists, deleting any of the three candidates moves a
+hypothesis boundary out of sight without removing it, so all sixteen pointwise
+entries remain. Once it exists, the three candidates merge and thirteen remain:
+the generic supplied-pair step, which is kept deliberately, and the twelve
+derived-tensor entries, each waiting on its own operation in the second item.
+
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The normal-tensor proposition,
@@ -623,7 +865,15 @@ continuity, and symmetry results also lack existence or preservation theorems
 for reduced source data under products, transformed comparison tensors, and
 continuous paths.
 Chapter~28 records these requirements as explicit admissibility hypotheses
-rather than consequences of the MPU predicate.
+rather than consequences of the MPU predicate. They come off in two stages,
+neither singly nor all at once. The converse of the stabilization theorem
+releases the three entries that already carry no formal restriction, together
+with the citation obstruction that holds them at present. Preservation along
+each derived-tensor operation releases the twelve whose restriction is on a
+physical block, a comparison tensor, a tensor product, or a composition, the
+last of these by way of a reduced representative rather than a preservation
+statement. The elimination plan above records both stages and what each one
+needs.
 
 The full-support irreducibility implication is formalized by
 \leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_r_eq_one_of_fullSupport}.

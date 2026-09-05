@@ -84,6 +84,32 @@ theorem GaugeEquiv.groundSpace_eq {A B : MPSTensor d D}
   · exact h.symm.groundSpace_le L
   · exact h.groundSpace_le L
 
+/-- Rescaling every matrix of a tensor by a nonzero scalar leaves the local MPS
+space unchanged at every length.
+
+Multiplying each \(A^i\) by \(\zeta\) multiplies every length-\(L\) word by
+\(\zeta^L\), which is absorbed by the boundary matrix. This is the scalar half
+of the "without loss of generality" normalization taken at
+arXiv:cond-mat/9410110, equations (3.1)--(3.2b), lines 1394--1435. -/
+theorem groundSpace_smul_eq (A : MPSTensor d D) (ζ : ℂ) (hζ : ζ ≠ 0) (L : ℕ) :
+    groundSpace (ζ • A) L = groundSpace A L := by
+  have hMap (X : Matrix (Fin D) (Fin D) ℂ) :
+      groundSpaceMap (ζ • A) L X = groundSpaceMap A L ((ζ ^ L) • X) := by
+    ext σ
+    rw [groundSpaceMap_apply, groundSpaceMap_apply]
+    change Matrix.trace
+        (Kraus.evalWord (fun i ↦ ζ • A i) (List.ofFn σ) * X) = _
+    rw [Kraus.evalWord_smul]
+    simp [Matrix.trace_smul]
+  apply le_antisymm
+  · rintro _ ⟨X, rfl⟩
+    exact ⟨(ζ ^ L) • X, (hMap X).symm⟩
+  · rintro _ ⟨Y, rfl⟩
+    refine ⟨(ζ ^ L)⁻¹ • Y, ?_⟩
+    rw [hMap]
+    congr 1
+    rw [smul_smul, mul_inv_cancel₀ (pow_ne_zero L hζ), one_smul]
+
 /-- The span of the periodic MPS vectors associated to a finite family of BNT
 components.
 

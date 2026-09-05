@@ -29,11 +29,13 @@ import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
 import TNLean.MPS.CanonicalForm.CyclicSectors.FixedAdjoint
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.Existence
+import TNLean.MPS.CanonicalForm.FixedLengthIntertwiner
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.NormalReduction.Main
 import TNLean.MPS.CanonicalForm.NormalReduction.TPGauge
 import TNLean.MPS.CanonicalForm.NormalReduction.WeightNormalization
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
+import TNLean.MPS.CanonicalForm.PGVWC07CanonicalForm
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.ProjectorClosure
@@ -43,3 +45,4 @@ import TNLean.MPS.CanonicalForm.QuadraticReconstruction
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.SectorComparison
 import TNLean.MPS.CanonicalForm.TensorProduct
+import TNLean.MPS.CanonicalForm.TranslationInvariantUniqueness

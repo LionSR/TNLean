@@ -342,7 +342,14 @@ In the irreducible-form subcase treated in arXiv:1708.00029, lines 765--810, def
 \(\widetilde A = U^\dagger A' U\). The witness called `A'` below is this final
 tensor \(\widetilde A\). The formal statement keeps this construction as a
 conditional input for arbitrary `A`; it does not assert the irreducible block
-data of `A` as hypotheses. -/
+data of `A` as hypotheses.
+
+This hypothesis is refuted by the rescaling counterexample of
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`: for \(p \ge 1\) at physical
+and bond dimension one the tensors \(C = A^{[p]} = (\lambda)\) with
+\(\lambda > 1\) are related by the trivial \(Z\)-gauge with \(m = 1\), and
+\(C\) is in irreducible form II, while no left-canonical \(A'\) has
+\(\mathcal E_{A'}^p(x) = \lambda^2 x\). -/
 def PeripheralEqualCaseRootFromZGauge (d D p : ℕ) : Prop :=
   ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D} {m : ℕ},
     IsIrreducibleForm C →
@@ -365,8 +372,15 @@ In the paper this is the point where the blocked equal-case Fundamental Theorem
 (source theorem `thm:bdequal`, arXiv:1708.00029, lines 643--656) is combined
 with the phase-distribution construction in lines 765--810, where the scalars
 \(c_{j,\alpha}\) are redistributed to form \(A'_j\) and then
-\(\widetilde A = U^\dagger A' U\). The formal statement is kept as a separate
-hypothesis until that source argument is fully formalized. -/
+\(\widetilde A = U^\dagger A' U\).
+
+This hypothesis implies `PRefinementCanonicalization` (see
+`pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV`)
+and is refuted by the same rescaling for \(p \ge 1\): at bond dimension one the tensors
+\(C = (\lambda)\) and \(A = (\lambda^{1/p})\) with \(\lambda > 1\) satisfy the
+premises, while no left-canonical \(A'\) has
+\(\mathcal E_{A'}^p(x) = \lambda^2 x\). See
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. -/
 def PeripheralEqualCasePeriodicFTOfSameMPV (d D p : ℕ) : Prop :=
   ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D},
     IsIrreducibleForm C →
@@ -385,7 +399,18 @@ continuation hypothesis
 
 This splits the blocked equal-case part of the forward proof into two explicit
 obligations: the equal-case \(Z\)-gauge existence step and the construction of
-\(\widetilde A\) described in arXiv:1708.00029, lines 765--810. -/
+\(\widetilde A\) described in arXiv:1708.00029, lines 765--810.
+
+**Unfaithful:** This proof relies on the hypothesis
+`PeripheralEqualCaseRootFromZGauge`, which deviates from arXiv:1708.00029,
+lines 765--810: the printed construction of \(\widetilde A\) is left canonical
+only when every multiplicity is one, and the hypothesis is refuted for \(p \ge 1\) at physical
+and bond dimension one by \(C = A^{[p]} = (\lambda)\), \(\lambda > 1\), with
+the trivial \(Z\)-gauge. Documented in
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. Elimination:
+restate the construction over a block-form tensor with every multiplicity
+equal to one, as described in the marker of `thm_4_1_p_refinement_forward`;
+tracked in the follow-up issue cited by the paper-gap note. -/
 theorem peripheralEqualCase_periodicFT_of_sameMPV
     (hZGauge : PeripheralEqualCaseZGaugeOfSameMPV d D p)
     (hRoot : PeripheralEqualCaseRootFromZGauge d D p) :
@@ -417,7 +442,20 @@ source step is the construction of \(A'_j\) and
 lines 765--810. The theorem
 `pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV`
 shows that this hypothesis follows from the more precise blocked equal-case
-hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`. -/
+hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`.
+
+This hypothesis is not provable as stated. The printed forward implication of
+arXiv:1708.00029, Theorem 4.1, lines 728--731, omits the trace preservation of
+\(\mathcal E_B\) that its definition of \(p\)-divisibility at lines 717--718
+presupposes: for \(p \ge 1\), a \(p\)-refinable tensor \(B_0\) in irreducible
+form II, and \(\lambda > 1\), the tensor \(\lambda B_0\) is again in irreducible form II
+and \(p\)-refinable, while \(\mathcal E_{\lambda B_0} = \lambda^2
+\mathcal E_{B_0}\) is not trace preserving and so is not a \(p\)-th power of a
+channel. The formal `IsIrreducibleForm` moreover fixes only the generated
+matrix product vectors, so at \(p = 1\) a non-unitary similarity of a
+left-canonical normal tensor refutes the hypothesis as well. Both
+counterexamples, the corrected source statement, and the elimination plan are
+recorded in `docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. -/
 def PRefinementCanonicalization (d D p : ℕ) : Prop :=
   ∀ {B : MPSTensor d D}, IsIrreducibleForm B → IsPRefinable B p →
     ∃ A : MPSTensor d D,
@@ -431,7 +469,19 @@ Assuming `PeripheralEqualCasePeriodicFTOfSameMPV`, the theorem
 full forward-side canonicalization hypothesis `PRefinementCanonicalization`.
 Thus the remaining forward gap in Theorem 4.1 is exactly the blocked
 equal-case construction of \(\widetilde A\) captured by
-`PeripheralEqualCasePeriodicFTOfSameMPV`. -/
+`PeripheralEqualCasePeriodicFTOfSameMPV`.
+
+**Unfaithful:** This proof relies on the hypothesis
+`PeripheralEqualCasePeriodicFTOfSameMPV` and produces
+`PRefinementCanonicalization`; both deviate from arXiv:1708.00029,
+Theorem 4.1, lines 728--731, and both are refuted for \(p \ge 1\) at bond dimension one by a
+positive rescaling, because the printed forward implication omits the trace
+preservation of \(\mathcal E_B\) presupposed by its definition of
+\(p\)-divisibility at lines 717--718. Documented in
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. Elimination:
+restate both hypotheses over a block-form tensor with every multiplicity equal
+to one, as described in the marker of `thm_4_1_p_refinement_forward`; tracked
+in the follow-up issue cited by the paper-gap note. -/
 theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
     (hPeripheralEq : PeripheralEqualCasePeriodicFTOfSameMPV d D p) :
     PRefinementCanonicalization d D p := by
@@ -456,7 +506,19 @@ theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
 
 This restates `thm_4_1_p_refinement_forward` after replacing the broader
 hypothesis `PRefinementCanonicalization` by the more precise blocked-stage
-hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`. -/
+hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`.
+
+**Unfaithful:** This proof relies on the hypothesis
+`PeripheralEqualCasePeriodicFTOfSameMPV`, which deviates from
+arXiv:1708.00029, Theorem 4.1, lines 728--731, in the same way as
+`PRefinementCanonicalization`: it is refuted for \(p \ge 1\) at bond dimension one by a
+positive rescaling, because the printed forward implication omits the trace
+preservation of \(\mathcal E_B\) presupposed by its definition of
+\(p\)-divisibility at lines 717--718. Documented in
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. Elimination:
+the same restatement over a block-form tensor with unit multiplicities
+described in the marker of `thm_4_1_p_refinement_forward`; tracked in the
+follow-up issue cited by the paper-gap note. -/
 theorem thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)
     (p : ℕ)
@@ -479,7 +541,23 @@ This follows the same conditional pattern as
 `MPSTensor.cor_4_1_physical_symmetry_zgauge`: inputs not yet formalized are
 exposed as explicit hypotheses, while the
 algebraic structure — the blocking-commutes-with-power identity and the
-left-canonical-channel lemma — is formalized here. -/
+left-canonical-channel lemma — is formalized here.
+
+**Unfaithful:** This proof relies on the hypothesis `PRefinementCanonicalization`,
+which deviates from arXiv:1708.00029, Theorem 4.1, lines 728--731: the
+hypothesis is refuted for \(p \ge 1\) at bond dimension one by a positive rescaling of a
+\(p\)-refinable tensor, and the printed forward implication itself omits the
+trace preservation of \(\mathcal E_B\) that its definition of
+\(p\)-divisibility at lines 717--718 presupposes. Documented in
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. Elimination:
+restate the forward direction over a block-form tensor with every multiplicity
+equal to one, so that \(\mathcal E_B\) is trace preserving, consuming
+`fundamentalTheorem_periodic_equalCase_irreducibleForm` for the equal-case
+step and formalizing the blocking lemma for a periodic block (lines 432--446),
+the cyclic projector structure of a periodic block (lines 335--341), the unique
+decomposition of residues (lines 446--450), and the redistribution of the
+root-of-unity factors across the sites (lines 765--806); tracked in the
+follow-up issue cited by the paper-gap note. -/
 theorem thm_4_1_p_refinement_forward
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)
     (p : ℕ)

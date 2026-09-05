@@ -7,6 +7,7 @@ import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Channel.KrausRepresentation
 import QICLean.Kraus.MixedMap
 import QICLean.Kraus.Transfer
+import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Periodic.Defs
 
@@ -21,10 +22,9 @@ Section 4, that depend on the periodic fundamental theorem. The refinement and
 divisibility material belongs to Section 4.1, while the symmetry-to-`Z`-gauge
 corollary belongs to Section 4.2. It contains:
 
-1. The physical-index rotation `rotatePhysical` and its matrix-product-vector expansion.
-2. A **periodic-form theorem** that isolates the periodic equal-case FT input
+1. A **periodic-form theorem** that isolates the periodic equal-case FT input
    for the symmetry corollary of arXiv:1708.00029, Section 4.2.
-3. **Preservation lemmas** showing that unitary rotation of the physical index
+2. **Preservation lemmas** showing that unitary rotation of the physical index
    preserves transfer maps, rectangular mixed transfer maps, left-canonical
    normalization, irreducibility, periodicity, and irreducible form II
    structure.
@@ -44,75 +44,6 @@ namespace MPSTensor
 noncomputable section
 
 variable {d D : ℕ}
-
-/-- Physical-index rotation of a tensor by a matrix `M` on the physical leg:
-
-`(rotatePhysical M A) i = ∑ j, M i j • A j`.
--/
-def rotatePhysical (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTensor d D :=
-  fun i => ∑ j : Fin d, M i j • A j
-
-@[simp] lemma rotatePhysical_apply
-    (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) (i : Fin d) :
-    rotatePhysical M A i = ∑ j : Fin d, M i j • A j := rfl
-
-/-- Expanding a word of a physically rotated tensor gives the sitewise matrix
-coefficients multiplying the corresponding unrotated words. -/
-theorem evalWord_rotatePhysical_ofFn
-    (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) :
-    ∀ (N : ℕ) (s : Fin N → Fin d),
-      Kraus.evalWord (rotatePhysical M A) (List.ofFn s) =
-        ∑ t : Fin N → Fin d,
-          (∏ n : Fin N, M (s n) (t n)) • Kraus.evalWord A (List.ofFn t) := by
-  intro N
-  induction N with
-  | zero =>
-      intro s
-      classical
-      simp
-  | succ N ih =>
-      intro s
-      classical
-      rw [List.ofFn_succ, Kraus.evalWord_cons, rotatePhysical_apply]
-      rw [ih (fun n : Fin N => s n.succ)]
-      rw [Finset.sum_mul_sum]
-      let e : (Fin d × (Fin N → Fin d)) ≃ (Fin (N + 1) → Fin d) :=
-        Fin.consEquiv (fun _ => Fin d)
-      have hreindex :
-          (∑ t : Fin (N + 1) → Fin d,
-              (∏ n : Fin (N + 1), M (s n) (t n)) •
-                Kraus.evalWord A (List.ofFn t)) =
-            ∑ p : Fin d × (Fin N → Fin d),
-              (∏ n : Fin (N + 1), M (s n) (e p n)) •
-                Kraus.evalWord A (List.ofFn (e p)) :=
-        (Fintype.sum_equiv e
-          (f := fun p : Fin d × (Fin N → Fin d) =>
-            (∏ n : Fin (N + 1), M (s n) (e p n)) •
-              Kraus.evalWord A (List.ofFn (e p)))
-          (g := fun t : Fin (N + 1) → Fin d =>
-            (∏ n : Fin (N + 1), M (s n) (t n)) •
-              Kraus.evalWord A (List.ofFn t))
-          (by intro p; rfl)).symm
-      rw [hreindex, ← Fintype.sum_prod_type']
-      refine Finset.sum_congr rfl ?_
-      rintro ⟨i, t⟩ _
-      have hprod :
-          (∏ n : Fin (N + 1), M (s n) (e (i, t) n)) =
-            M (s 0) i * ∏ n : Fin N, M (s n.succ) (t n) := by
-        rw [Fin.prod_univ_succ]
-        simp [e, Fin.consEquiv]
-      have hlist : List.ofFn (e (i, t)) = i :: List.ofFn t := by
-        simp [e, Fin.consEquiv]
-      rw [hprod, hlist, Kraus.evalWord_cons, smul_mul_smul_comm]
-
-/-- The matrix product vector of a physical-index rotation is the sitewise
-matrix action on the original matrix product vector. -/
-theorem mpv_rotatePhysical (M : Matrix (Fin d) (Fin d) ℂ)
-    (A : MPSTensor d D) {N : ℕ} (s : Fin N → Fin d) :
-    mpv (rotatePhysical M A) s =
-      ∑ t : Fin N → Fin d, (∏ n : Fin N, M (s n) (t n)) * mpv A t := by
-  rw [mpv, coeff, evalWord_rotatePhysical_ofFn, Matrix.trace_sum]
-  simp only [Matrix.trace_smul, smul_eq_mul, mpv, coeff]
 
 /-- Corollary 4.1 (periodic form).
 

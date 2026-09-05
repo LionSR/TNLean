@@ -34,7 +34,20 @@ statement, lines 728--731, does not assume the two canonicalization hypotheses.
 The converse root/Kraus-rank gap is recorded in
 `docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`. This theorem combines
 `thm_4_1_p_refinement_forward` and `thm_4_1_p_refinement_reverse` into a
-single biconditional. -/
+single biconditional.
+
+**Unfaithful:** This proof calls `thm_4_1_p_refinement_forward`, whose
+hypothesis `PRefinementCanonicalization` deviates from arXiv:1708.00029,
+Theorem 4.1, lines 728--731: it is refuted for \(p \ge 1\) at bond dimension
+one by a positive rescaling of a \(p\)-refinable tensor, because the printed
+forward implication
+omits the trace preservation of \(\mathcal E_B\) presupposed by its definition
+of \(p\)-divisibility at lines 717--718. Documented in
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. Elimination:
+restate the forward direction over a block-form tensor with every multiplicity
+equal to one, as described in the marker of `thm_4_1_p_refinement_forward`,
+and rebuild this biconditional from the restated forward direction; tracked in
+the follow-up issue cited by the paper-gap note. -/
 theorem thm_4_1_p_refinement
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)
     (p : ℕ) (hp : 0 < p)

@@ -40,21 +40,47 @@ theorem parentInteraction_idempotent (A : MPSTensor d D) (L : ℕ) :
   rw [LinearEquiv.symm_apply_apply]
   exact congr_arg e (LinearMap.congr_fun hP (e.symm v))
 
+/-- Two tensors with the same local MPS space at length \(L\) have the same
+canonical parent interaction at that length.
+
+The parent interaction is the orthogonal projector onto \(G_L(A)^\perp\), so it
+is a function of \(G_L(A)\) alone. -/
+theorem parentInteraction_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
+    (h : groundSpace A L = groundSpace B L) :
+    parentInteraction A L = parentInteraction B L := by
+  simp [parentInteraction, groundSpaceES, h]
+
+/-- Equal parent interactions give equal translated local terms. -/
+theorem localTerm_eq_of_parentInteraction_eq {A B : MPSTensor d D} {L : ℕ}
+    (h : parentInteraction A L = parentInteraction B L) (N : ℕ) (i : Fin N) :
+    localTerm A L N i = localTerm B L N i := by
+  unfold localTerm
+  rw [h]
+
+/-- Two tensors with the same local MPS space at length \(L\) have the same
+finite-chain parent Hamiltonian on every periodic chain. -/
+theorem parentHamiltonian_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
+    (h : groundSpace A L = groundSpace B L) (N : ℕ) :
+    parentHamiltonian A L N = parentHamiltonian B L N := by
+  unfold parentHamiltonian
+  exact Finset.sum_congr rfl fun i _ =>
+    localTerm_eq_of_parentInteraction_eq
+      (parentInteraction_eq_of_groundSpace_eq h) N i
+
 /-- A virtual gauge change leaves the canonical parent interaction unchanged.
 
 The parent interaction depends only on the local MPS space, and gauge-equivalent
 tensors have the same local MPS space at every length. -/
 theorem GaugeEquiv.parentInteraction_eq {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (L : ℕ) :
-    parentInteraction A L = parentInteraction B L := by
-  simp [parentInteraction, groundSpaceES, h.groundSpace_eq L]
+    parentInteraction A L = parentInteraction B L :=
+  parentInteraction_eq_of_groundSpace_eq (h.groundSpace_eq L)
 
 /-- A virtual gauge change leaves every translated parent interaction unchanged. -/
 theorem GaugeEquiv.localTerm_eq {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (L N : ℕ) (i : Fin N) :
-    localTerm A L N i = localTerm B L N i := by
-  unfold localTerm
-  rw [h.parentInteraction_eq L]
+    localTerm A L N i = localTerm B L N i :=
+  localTerm_eq_of_parentInteraction_eq (h.parentInteraction_eq L) N i
 
 /-- Pointwise formula for a translated local term when the window length is at
 most the chain length. -/

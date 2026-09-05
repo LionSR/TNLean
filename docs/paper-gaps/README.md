@@ -13,6 +13,11 @@ the current formal boundary.
 
 For the MPU index of arXiv:1703.09188:
 
+- `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
+  normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
+  tensors and physical Z gates of the 2025 diagram. The shared-tensor
+  correspondence remains open under #7738.
+
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
   column $(\alpha,j)$. It fixes the product weight $I_d\otimes\rho$, the
@@ -47,6 +52,20 @@ For the MPU symmetry-defect gauging paper:
   invariant-vector theorem assumes local defect support and exact covariance,
   while the paper derives them from its concrete locally orthogonal MPS blocks
   and modified fusion maps. Issue #7569 tracks this specialization.
+- `fbc25_czx_defect_domains.tex` derives the eight two-site defect vectors of
+  the CZX example by finite contraction of the displayed tensors, hence the
+  four defect domains and prescribed maps. The even and odd target supports
+  are $\operatorname{span}\{\ket{0000},\ket{1111}\}$ and
+  $\operatorname{span}\{\ket{1100},\ket{0011}\}$, orthogonal rather than
+  equal, and the displayed circuits restrict to the prescribed maps in the
+  source's own conventions. This clarification is resolved: the derived
+  vectors, domains, and maps are carried by the formal prescribed defect maps
+  of the CZX model, and both displayed circuit tuples are formally members of
+  their completion class, which makes the lower bounds on the gauge-invariant
+  dimension over that class unconditional. The minimum over the class, the
+  exact value of the supremum, and which completion attains it are questions
+  about that class rather than questions the source raises; they are tracked
+  separately.
 - `fbc25_alternating_network_nondegeneracy.tex` records the one-sided
   nonvanishing convention for the alternating-network proportionality lemma.
   Both applications in the source satisfy this convention because their
@@ -352,6 +371,15 @@ For the non-periodic MPS Fundamental Theorem background:
   sources.
 - `pgvwc07_direct_sum_input.tex` explains the older MPS representation
   paper's direct-sum input behind block-injective canonical form.
+- `pgvwc07_ti_canonical_form_positive_blocks.tex` records the convention
+  that every listed block of the translation-invariant canonical form has
+  positive bond dimension, used once when condition C1 forces a single block.
+- `pgvwc07_ti_uniqueness_scope.tex` records that the block-separation lemmas
+  do not formalize the uniqueness theorem for the translation-invariant
+  canonical form, states the corrected root-of-unity conclusion, and records
+  the formal route through the cut vectors of condition C1, which does not
+  consume the printed hypothesis that the open-boundary canonical form is
+  unique.
 - `pgvwc07_quadratic_reconstruction_phase.tex` records the unit-modulus phase
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
@@ -370,7 +398,14 @@ Parent-Hamiltonian notes live here too, but they are not part of the current
 non-periodic FT cleanup loop unless explicitly brought back into scope.
 
 - `cpgsv21_normal_range_reduction.tex` records the normal parent-Hamiltonian
-  range-reduction comparison and the remaining periodic-boundary identity.
+  range-reduction comparison and the remaining periodic-boundary identity,
+  together with the provenance of the minimal-ring cyclic change of cut (a
+  TNLean reconstruction, since the review prints no proof at the minimal
+  ring and the PGVWC07 route needs a ring of length at least twice the
+  injectivity length) and of the wrapped/mirror witness comparison (the
+  printed comparison of two cut matrices, derived by a single-letter route
+  that is an alternative proof on the printed range and a TNLean
+  reconstruction on the short rings below twice the injectivity length).
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span. The fixed-window
@@ -442,6 +477,18 @@ note.
   load-bearing κ/θ/φ phase assembly (Case 3). It also records the scope
   restriction of `periodicBasis_eventuallyLinearlyIndependent` (independence
   half only, no spanning clause).
+- `dccsp17_thm41_forward_trace_preservation.tex` records that the forward
+  implication of Theorem 4.1 is false as printed: a positive rescaling of a
+  $p$-refinable tensor in irreducible form II stays in irreducible form II and
+  $p$-refinable while its transfer map is no longer trace preserving. The
+  corrected statement adds trace preservation of the transfer map, which the
+  source's definition of $p$-divisibility presupposes. The note also records
+  why the formal forward canonicalization hypothesis, stated over the
+  generated-family reading of irreducible form, is refuted rather than
+  dischargeable, and lists the unformalized ingredients of the printed
+  argument.
+- `dccsp17_root_kraus_rank_thm41.tex` records the Kraus-rank step that the
+  converse implication of Theorem 4.1 uses without proof.
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
