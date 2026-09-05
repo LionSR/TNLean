@@ -4824,9 +4824,12 @@ and four blocked sites.
     with
     $\tilde\lambda R_\star\ket{x}=-i(-1)^{f(x)+r_\star(x)}\ket{\overline x}$;
     after transport to the two-site matter coordinates it is unitary. It has the
-    same action as $R^{\mathrm{CZX}}$ on the prescribed defect subspace. Since
-    the other three defect domains and maps are not supplied, this does not
-    place the two tuples in one fully defined four-sector completion class.
+    same action as $R^{\mathrm{CZX}}$ on that defect subspace. The four defect
+    domains and prescribed maps of
+    Definition~\ref{def:mpug_czx_defect_maps} determine a four-sector
+    completion class; whether either tuple extends all four prescribed maps
+    remains to be proved, and agreement on one domain alone does not place the
+    two tuples in that class.
     % Source anchor: arXiv:2502.20257, lines 4503--5183 (CZX model, defect and
     % fusion data, modified Gauss law).
 \end{definition}
@@ -5048,10 +5051,11 @@ and four blocked sites.
     \end{align}
     These two values are certificates at two system sizes. They carry no
     asymptotic content, and no growth law for $\dim\mathcal V_N(R^\star)$
-    follows from them. They assert nothing about the physical completion class
-    of the CZX defect data, since the three remaining defect domains and maps
-    are not supplied, and they give no value for the minimum or the maximum of
-    the dimension over completions. Compared with
+    follows from them. They assert nothing about the completion class of the
+    CZX defect data of Definition~\ref{def:mpug_czx_defect_maps}, since whether
+    the displayed tuples extend the four prescribed maps remains to be proved,
+    and they give no value for the minimum or the maximum of the dimension over
+    completions. Compared with
     (\ref{eq:mpug_czx_dimension}), which gives $8$ and $16$ at the same two
     sizes, they exhibit dependence of the dimension on the displayed circuit
     data at those two sizes.
@@ -5088,7 +5092,9 @@ Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
         MPOTensor.CZX.identityDefect_zero,
         MPOTensor.CZX.identityDefect_one,
         MPOTensor.CZX.flipDefect_zero,
-        MPOTensor.CZX.flipDefect_one}
+        MPOTensor.CZX.flipDefect_one,
+        MPOTensor.CZX.siteDefect_one,
+        MPOTensor.CZX.siteDefect_gen}
     \leanok
     \discussion{7739}
     One blocked site of the CZX model carries two matter qubits, and the two
