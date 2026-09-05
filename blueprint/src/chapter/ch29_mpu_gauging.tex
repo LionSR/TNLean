@@ -4096,6 +4096,9 @@ scalar calculation above.
         MPSTensor.z4z2GHZClusterAction,
         MPSTensor.z4z2GHZClusterAction_unitary,
         MPSTensor.z4z2GHZClusterAction_generators,
+        MPSTensor.z4z2GHZClusterIndex,
+        MPSTensor.z4z2GHZClusterBlockAction,
+        MPSTensor.z4z2GHZClusterVirtual,
         MPSTensor.z4z2GHZClusterVirtual_table,
         MPSTensor.z4z2GHZClusterVirtual_adjoint,
         MPSTensor.z4z2GHZClusterVirtual_sq,
@@ -4132,13 +4135,15 @@ scalar calculation above.
     $V_{(2a,b),x}=(-i)^{ab}W_{(b,a)}$.
     These are the physical representation and matrix action identities of
     \cite[lines~4481--4489]{FrancoRubio2025MPUGauging}.
+    No claim is made about defect normalization, $L$-symbols, cocycle
+    nonextension, block independence, or gauging.
     % Scoped calculation only: no defect normalization, L-symbols,
     % cocycle nonextension, block independence, or gauging is asserted.
     % Those remaining parts of example:z4z2 stay open in #7352.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_ghz_blocked_cluster_tensor}
+    \uses{def:mpug_ghz_blocked_cluster_tensor, thm:mpug_monomial_matrix_laws}
     On basis vectors the generators send $(p,s,r)$ to $(p+1,s+p+1,r)$
     and $(p,s,r+1)$, with coordinates added modulo two. Their permutations
     have orders four and two and commute. The corresponding permutation
