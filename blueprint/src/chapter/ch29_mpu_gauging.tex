@@ -5442,7 +5442,7 @@ class.
     \leanok
     \uses{def:mpug_czx_defect_maps, def:mpug_czx_circuit_tuple,
         def:mpug_completion_class, def:mpug_gauge_invariant_subspace,
-        thm:mpug_czx_dimension}
+        thm:mpug_czx_dimension_of_completion}
     On a periodic chain of $N\geq3$ blocked sites the gauge-invariant
     dimensions of the members of the CZX completion class are bounded above by
     the dimension of the chain space, so their supremum is finite, and
@@ -5460,12 +5460,12 @@ class.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_dimension}
+    \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_dimension_of_completion}
     Every gauge-invariant subspace (\ref{eq:mpug_gauge_invariant_subspace}) is
     a subspace of the chain space, so the dimensions of the members of the
     class are bounded above by the dimension of that space and their supremum
     is finite. By Theorem~\ref{thm:mpug_czx_tuple_completion} the displayed
-    tuple lies in the class, and by Theorem~\ref{thm:mpug_czx_dimension} its
-    gauge-invariant subspace has dimension $2^N$, which is therefore at most
-    the supremum.
+    tuple lies in the class, and by
+    Theorem~\ref{thm:mpug_czx_dimension_of_completion} its gauge-invariant
+    subspace has dimension $2^N$, which is therefore at most the supremum.
 \end{proof}

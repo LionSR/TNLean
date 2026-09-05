@@ -262,18 +262,15 @@ questions left open by arXiv:2502.20257, lines 5198--5204. The defect domains
 and maps entering the class are derived in
 `docs/paper-gaps/fbc25_czx_defect_domains.tex`.
 
-The gauge-invariant subspace of the displayed tuple is the common fixed
-subspace of its placed Gauss projectors, so the dimension used here is the one
-computed in
-`MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple`;
-the two spellings of that subspace are definitionally equal. -/
+The dimension of the gauge-invariant subspace of the displayed tuple is the one
+computed in `MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTuple`. -/
 theorem two_pow_le_iSup_finrank_gaugeInvariantSubspace_completionClass {N : ℕ} (hN : 3 ≤ N) :
     2 ^ N ≤ ⨆ R ∈ defectMaps.completionClass,
       Module.finrank ℂ (gaugeInvariantSubspace 4 (Multiplicative (ZMod 2)) N
         (Nat.le_of_succ_le hN) R) := by
   have hcirc : Module.finrank ℂ (gaugeInvariantSubspace 4 (Multiplicative (ZMod 2)) N
       (Nat.le_of_succ_le hN) circuitTuple) = 2 ^ N :=
-    finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple N hN
+    finrank_gaugeInvariantSubspace_circuitTuple N hN
   refine le_ciSup_of_le (bddAbove_range_finrank_gaugeInvariantSubspace N (Nat.le_of_succ_le hN))
     circuitTuple ?_
   rw [ciSup_pos circuitTuple_mem_completionClass, hcirc]
