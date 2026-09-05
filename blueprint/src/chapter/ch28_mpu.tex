@@ -8234,7 +8234,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:mpu, lem:mpu_mul_adjoint}
+    \uses{lem:mpu_mul_adjoint}
     The copy deltas fix both virtual indices to zero. The physical bit
     flips then force the input to be $11$, and the two Hadamard entries
     contribute $1/2$. If the operator were unitary, its all-zero diagonal
@@ -8258,7 +8258,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         B & =(Z\otimes Z)A_2.
         \label{eq:mpu_czx_decorated_block}
     \end{align}
-    Its coordinate derivation is given in
+    The coordinate derivation of (\ref{eq:mpu_czx_decorated_block}) is given in
     \cite{gap:mpu_czx_tensor_normalization}.
 \end{remark}
 
