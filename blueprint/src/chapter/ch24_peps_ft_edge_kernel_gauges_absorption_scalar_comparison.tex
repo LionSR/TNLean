@@ -272,14 +272,13 @@
     \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
     \leanok
     \uses{def:peps_threeLegLeftIdentityForm, def:peps_threeLegRightIdentityForm, def:peps_threeLegMiddleIdentityForm}
-    \emph{Local fix (nonzero virtual legs).} This statement, and only this
-    statement among the four in this group, assumes that each of the three
-    virtual leg spaces is nonzero-dimensional; the three residual forms above
-    are defined without that restriction. The reduction fixes an arbitrary
-    index in each leg and reads off one matrix entry to name the scalar, so it
-    has no content on an empty leg. The assumption is the standing one of
-    \cite[Section~3]{Molnar2018NormalPEPS}, where every virtual leg carries a
-    drawn wire, and it does not follow from injectivity; it is recorded in
+    \emph{Local fix (nonzero virtual legs).} The residual forms are defined
+    for arbitrary leg index sets. This scalar-recovery statement assumes each
+    index set is nonempty. If one leg is empty, equality of the induced
+    three-leg operators need not constrain the residual operator on the other
+    two legs. The assumption records the nonzero-dimensional virtual bond
+    spaces of \cite[Section~3]{Molnar2018NormalPEPS} and does not follow from
+    injectivity; it is recorded in
     \cite{gap:peps_injective_ft_section3_route}.
 
     In the proof of the generalized two-injective-tensor comparison, applying
