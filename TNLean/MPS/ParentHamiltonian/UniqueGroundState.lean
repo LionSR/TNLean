@@ -675,7 +675,7 @@ the boundary matrices at two cuts, read at those windows.
 
 The printed proof reaches its comparison by moving a length-\(L₀\) word
 through the cut and using injectivity of the complementary word of length
-\(N-L₀\); its hypothesis is \(N\ge 2L₀\), line 1268. The proof here moves a
+\(N-L₀\); its hypothesis is \(N\ge 2L₀\), lines 1267--1268. The proof here moves a
 single letter through the cut instead, transports the shifted-cut matrix
 along adjacent windows of length \(L₀+1\), and cancels the right-products by
 the length-\(L₀\) words inside one window. It uses no word of length
@@ -738,9 +738,12 @@ only says that once the iterated range reaches \(2L₀\) one may resort to the
 range-\(2L₀\) theorem or apply a similar argument when closing the
 boundaries. The full-ring cyclic change of cut is a TNLean reconstruction,
 because the printed periodic argument, [PGVWC07] arXiv:quant-ph/0608197,
-Theorem `uniqueGS`, lines 1268--1291, moves a length-\(L₀\) word through the
-cut and needs an injective complementary word, hence \(N\ge 2L₀\). At
-\(N=L₀+1\) the word moved through the cut is a single letter, one move gives
+Theorem `uniqueGS`, lines 1267--1291, moves a length-\(L₀\) word through the
+cut and needs an injective complementary word, hence \(N\ge 2L₀\). For
+\(L₀=1\) the minimal ring \(N=2=2L₀\) lies inside that hypothesis and the
+complementary word has the injectivity length, so the printed route covers
+it; the reconstruction below is needed for \(L₀\ge 2\), where \(N=L₀+1<2L₀\).
+At \(N=L₀+1\) the word moved through the cut is a single letter, one move gives
 only the intertwining \(XA^a=A^aY\), and the commutation is recovered by
 comparing the boundary matrices at all \(L₀+1\) cyclic cuts. The route is
 recorded in the minimal-ring section of
