@@ -255,9 +255,20 @@ state.\footnote{Formal declarations:
 cluster parent space is the $+1$ eigenspace of $\sigma^z_1\sigma^x_2\sigma^z_3$
 for the reflected convention
 (\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_zero})--(\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_one})
-as well, so no local-basis change is needed, and the common $+1$ eigenspace of
-the translated stabilizers on $N\ge3$ periodic sites is spanned by the cluster
-state.\footnote{Formal declarations:
+as well, and the common $+1$ eigenspace of the translated stabilizers on
+$N\ge3$ periodic sites is spanned by the cluster state. On the two matrices
+displayed in the older review the stabilizer has eigenvalue $-1$ instead, so
+the sign printed in
+(\ref{eq:rmp_example_parent_hamiltonian_scope_cluster_three_body}) is correct
+for those matrices; the two states differ by $\sigma^z$ on every site, which
+conjugates each stabilizer to its negative and exchanges $\sum_i K_i$ with
+$-\sum_i K_i$.\footnote{Formal declarations:
+\leanid{MPSTensor.clusterSourceTensor} and
+\leanid{MPSTensor.clusterSource_groundSpace_three_eq_eigenspace_neg_one} in
+\path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.} The identification
+of the parent interaction with $\tfrac12(I-K)$ as an operator identity is not
+formalized; the formal statements are the eigenspace
+identities.\footnote{Formal declarations:
 \leanid{MPSTensor.cluster_groundSpace_three_eq_eigenspace},
 \leanid{MPSTensor.cluster_iInf_eigenspace_eq_chainGroundSpace},
 \leanid{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule}, and

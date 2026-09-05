@@ -184,11 +184,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
          & = \{v : Kv = v\},
         \notag
     \end{align}
-    the $+1$ eigenspace of $K = \sigma^z_1\sigma^x_2\sigma^z_3$. Hence the
-    three-site parent interaction, the orthogonal projector with kernel
-    $\mathcal G_3(A)$, is the projector onto the $-1$ eigenspace of $K$,
-    namely $h^{ZXZ} = \tfrac12(\Id - K)$
-    \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}.
+    the $+1$ eigenspace of $K = \sigma^z_1\sigma^x_2\sigma^z_3$.
 \end{theorem}
 
 \begin{proof}
@@ -210,6 +206,51 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     $X_{s0} = v(0,0,s) + v(1,0,s)$, $X_{s1} = v(0,0,s) - v(1,0,s)$ satisfies
     $\Gamma_3(X) = 2q^3\,v$ by (\ref{eq:cluster_gamma_three}); hence
     $v = \Gamma_3(X/(2q^3)) \in \mathcal G_3(A)$.
+\end{proof}
+
+\begin{theorem}[The stabilizer has eigenvalue $-1$ on the source's matrices]
+    \label{thm:cluster_source_ground_space_three_eigenspace}
+    \lean{MPSTensor.clusterSourceTensor, MPSTensor.clusterSource_groundSpace_three_eq_eigenspace_neg_one}
+    \leanok
+    \uses{def:ground_space_parent, def:cluster_stabilizer}
+    Let $A_{\mathrm{src}}$ be the tensor with the two matrices displayed in
+    \cite[local TeX lines~378--387]{PerezGarcia2007Matrix}, the source's
+    physical labels $1,2$ written as $0,1$:
+    \begin{align}
+        A_{\mathrm{src}}^0
+         & = \begin{pmatrix} 0 & 0 \\ 1 & 1 \end{pmatrix},
+        \qquad
+        A_{\mathrm{src}}^1
+        = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \mathcal G_3(A_{\mathrm{src}})
+         & = \{v : Kv = -v\},
+        \notag
+    \end{align}
+    the $-1$ eigenspace of $K = \sigma^z_1\sigma^x_2\sigma^z_3$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_map, def:cluster_stabilizer}
+    With $A_{\mathrm{src}}^t = \ket{1-t}\bra{r_t}$, $r_0 = (1,1)$,
+    $r_1 = (1,-1)$, one has $\braket{r_t}{u} = (-1)^{tu}$ and
+    \begin{align}
+        \Gamma_3(X)(t_1,t_2,t_3)
+         & = (-1)^{t_1(1-t_2)+t_2(1-t_3)}
+        \bigl(X_{0,1-t_1} + (-1)^{t_3}X_{1,1-t_1}\bigr).
+        \label{eq:cluster_source_gamma_three}
+    \end{align}
+    Replacing $t_2$ by $t_2+1$ changes the exponent by $1+t_1+t_3$ modulo
+    $2$, so $K\Gamma_3(X) = -\Gamma_3(X)$. Conversely, if $Kv = -v$, then
+    $v(t_1,1,t_3) = -(-1)^{t_1+t_3}v(t_1,0,t_3)$, and the matrix $X$ with
+    $X_{0,1-t} = (-1)^t\bigl(v(t,0,0)+v(t,0,1)\bigr)$,
+    $X_{1,1-t} = (-1)^t\bigl(v(t,0,0)-v(t,0,1)\bigr)$ satisfies
+    $\Gamma_3(X) = 2v$ by (\ref{eq:cluster_source_gamma_three}); hence
+    $v = \Gamma_3(X/2)\in\mathcal G_3(A_{\mathrm{src}})$.
 \end{proof}
 
 \begin{definition}[Translated cluster stabilizers]\label{def:cluster_chain_stabilizer}
@@ -254,7 +295,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     fixed by $K$ exactly when it lies in $\mathcal G_3(A_{\mathrm{cl}})$.
 \end{proof}
 
-\begin{theorem}[Cluster states are unique ground states of the $ZXZ$ interactions]
+\begin{theorem}[The cluster state spans the common $+1$ eigenspace of the $ZXZ$ stabilizers]
     \label{thm:cluster_stabilizer_unique_gs}
     \lean{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.cluster_stabilizer_unique_gs}
     \leanok
@@ -265,20 +306,20 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
          & = \C\,V^{(N)}(A_{\mathrm{cl}}),
         \notag
     \end{align}
-    so the cluster state is the unique ground state of
-    $\sum_i \tfrac12(\Id - \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2})$
-    \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}.
+    and this common eigenspace is one-dimensional.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:cluster_stabilizer_chain_ground_space, thm:cluster_normal, thm:parent_hamiltonian_unique_gs}
+    \uses{thm:cluster_stabilizer_chain_ground_space, thm:cluster_normal, thm:chain_ground_space_eq_mpv_normal, thm:parent_hamiltonian_unique_gs}
     By Theorem~\ref{thm:cluster_stabilizer_chain_ground_space} the common
     eigenspace is $\mathcal G_{N,3}(A_{\mathrm{cl}})$. The cluster tensor is
     injective after blocking $L_0 = 2$ sites
     (Theorem~\ref{thm:cluster_normal}), so
-    Theorem~\ref{thm:parent_hamiltonian_unique_gs} with $L = 3 \le N$ gives
-    $\mathcal G_{N,3}(A_{\mathrm{cl}}) = \C\,V^{(N)}(A_{\mathrm{cl}})$.
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} with $L = 3 \le N$
+    gives $\mathcal G_{N,3}(A_{\mathrm{cl}}) = \C\,V^{(N)}(A_{\mathrm{cl}})$,
+    and Theorem~\ref{thm:parent_hamiltonian_unique_gs} gives
+    $\dim\mathcal G_{N,3}(A_{\mathrm{cl}}) = 1$.
 \end{proof}
 
 \begin{remark}[Cluster-state stabilizer convention]\label{rem:cluster_stabilizer_convention}
@@ -286,9 +327,30 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     convention of the tensor displayed in
     \cite[lines~2364--2369]{Cirac2021Matrix}. By (\ref{eq:cluster_gamma_three})
     and its reflected counterpart, the three-site parent space of either
-    convention is the $+1$ eigenspace of $\sigma^z_1\sigma^x_2\sigma^z_3$, so
-    the $ZXZ$ stabilizer of \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}
-    applies to both without any local-basis change.
+    convention is the $+1$ eigenspace of $\sigma^z_1\sigma^x_2\sigma^z_3$.
+    Since each $K_i$ is a self-adjoint involution, $\tfrac12(\Id-K_i)$ is the
+    orthogonal projector onto its $-1$ eigenspace, and
+    Theorem~\ref{thm:cluster_stabilizer_unique_gs} says that the cluster state
+    is the unique ground state of
+    $\sum_i \tfrac12(\Id - \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2})$, with
+    ground energy $0$.
+    % The identification of the parent interaction with (1-K)/2 as an
+    % operator identity, and the self-adjoint-involution property of K_i,
+    % are not formalized; the formal statements are the eigenspace
+    % identities above.
+
+    The older review states instead that cluster states are unique ground
+    states of $\sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$ with the sign as
+    printed \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}. Both
+    statements are correct for their own tensors: on the matrices
+    $A_{\mathrm{src}}$ displayed there every stabilizer has eigenvalue $-1$
+    (Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace}), while on
+    $A_{\mathrm{cl}}$ it has eigenvalue $+1$. The two tensors are related by
+    $A_{\mathrm{src}}^t = \sqrt2\,\sigma^x A^t$ for the tensor $A$ of
+    \cite[lines~2364--2369]{Cirac2021Matrix}, and since
+    $\bra{\pm}\sigma^x = \pm\bra{\pm}$ the states differ by $\sigma^z$ on
+    every site, which conjugates each $K_i$ to $-K_i$ and exchanges the two
+    Hamiltonians $\sum_i K_i$ and $-\sum_i K_i = \sum_i(\Id-K_i) - N\Id$.
 \end{remark}
 
 \begin{theorem}[AKLT two-site parent space]\label{thm:aklt_ground_space_two}
@@ -417,7 +479,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
 
 \begin{proof}
     \leanok
-    \uses{thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:parent_hamiltonian_unique_gs}
+    \uses{thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:chain_ground_space_eq_mpv_normal, thm:parent_hamiltonian_unique_gs}
     Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{AKLT}})$. Every cyclic three-site
     window restricts on either side to a cyclic two-site window, so both
     restrictions of $\psi|_{[i,i+2],\tau}$ lie in

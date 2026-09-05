@@ -35,6 +35,14 @@ Since \(\Gamma_3(X)(s_1,s_2,s_3)
 stabilizer is \(ZXZ\) for this convention as well as for the reflected
 convention of arXiv:2011.12127; no local-basis change is needed.
 
+The sign is convention-dependent. On the two matrices displayed in
+arXiv:quant-ph/0608197, local TeX lines 378--387, the stabilizer has eigenvalue
+\(-1\), so that source's Hamiltonian \(\sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\)
+has its state as a ground state with the sign as printed; the two states differ
+by \(\sigma^z\) on every site, which conjugates each stabilizer to its
+negative. This file also records that \(-1\) eigenspace identity for the
+source's matrices.
+
 ## Main results
 
 * The three-site stabilizer \(K = \sigma^z_1\sigma^x_2\sigma^z_3\) and the
@@ -151,6 +159,95 @@ theorem cluster_groundSpace_three_eq_eigenspace :
         ring
     refine ⟨((2 : ℂ) * (↑(1 / Real.sqrt 2) : ℂ) ^ 3)⁻¹ • X, ?_⟩
     rw [map_smul, key, smul_smul, inv_mul_cancel₀ cluster_scalar_ne_zero, one_smul]
+
+/-! ### The sign of the stabilizer on the source's matrices -/
+
+/-- The two matrices displayed in arXiv:quant-ph/0608197, local TeX lines
+378--387, \(A_1 = \begin{pmatrix}0&0\\1&1\end{pmatrix}\),
+\(A_2 = \begin{pmatrix}1&-1\\0&0\end{pmatrix}\), with the source's physical
+labels \(1, 2\) written as \(0, 1\). -/
+def clusterSourceTensor : MPSTensor 2 2 := fun i =>
+  match i with
+  | 0 => !![0, 0; 1, 1]
+  | 1 => !![1, -1; 0, 0]
+
+lemma clusterSourceTensor_zero : clusterSourceTensor 0 = !![0, 0; 1, 1] := rfl
+
+lemma clusterSourceTensor_one : clusterSourceTensor 1 = !![1, -1; 0, 0] := rfl
+
+private lemma clusterSource_groundSpaceMap_three_apply (X : Matrix (Fin 2) (Fin 2) ℂ)
+    (a b c : Fin 2) :
+    groundSpaceMap clusterSourceTensor 3 X ![a, b, c] =
+      Matrix.trace (clusterSourceTensor a * (clusterSourceTensor b *
+        (clusterSourceTensor c * X))) := by
+  simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
+
+/-- On the source's matrices the stabilizer acts as \(-1\). -/
+private lemma clusterStabilizer_source_groundSpaceMap (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    clusterStabilizer (groundSpaceMap clusterSourceTensor 3 X) =
+      (-1 : ℂ) • groundSpaceMap clusterSourceTensor 3 X := by
+  ext s
+  rw [cfg_three_eq s, clusterStabilizer_apply, Pi.smul_apply, smul_eq_mul]
+  generalize s 0 = a
+  generalize s 1 = b
+  generalize s 2 = c
+  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two,
+    Matrix.tail_cons]
+  fin_cases a <;> fin_cases b <;> fin_cases c <;>
+    simp only [clusterSource_groundSpaceMap_three_apply, clusterSourceTensor_zero,
+      clusterSourceTensor_one, Fin.isValue, Fin.zero_eta, Fin.mk_one, Fin.reduceAdd,
+      Matrix.trace_fin_two, Matrix.mul_apply, Fin.sum_univ_two, Matrix.of_apply,
+      Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
+      Matrix.cons_val_fin_one, mul_zero, zero_mul, add_zero, zero_add, one_mul,
+      neg_mul, mul_neg, neg_neg, neg_zero, pow_zero, pow_one] <;>
+    ring
+
+/-- **The stabilizer has eigenvalue \(-1\) on the source's cluster state.** For
+the matrices displayed in arXiv:quant-ph/0608197, local TeX lines 378--387,
+\[
+  \Gamma_3(X)(t_1,t_2,t_3)
+    = (-1)^{t_1(1-t_2)+t_2(1-t_3)}\bigl(X_{0,1-t_1} + (-1)^{t_3}X_{1,1-t_1}\bigr),
+\]
+so the three-site local ground space is the \(-1\) eigenspace of
+\(\sigma^z_1\sigma^x_2\sigma^z_3\), and the state is a ground state of the
+source's Hamiltonian \(\sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\) with the
+sign as printed there. The present cluster tensor produces the \(+1\)
+eigenspace instead; the two states differ by \(\sigma^z\) on every site, which
+conjugates each stabilizer to its negative. -/
+theorem clusterSource_groundSpace_three_eq_eigenspace_neg_one :
+    groundSpace clusterSourceTensor 3 = Module.End.eigenspace clusterStabilizer (-1) := by
+  ext v
+  rw [Module.End.mem_eigenspace_iff]
+  constructor
+  · rintro ⟨X, rfl⟩
+    exact clusterStabilizer_source_groundSpaceMap X
+  · intro hv
+    have h := fun s => congrFun hv s
+    have h010' : v ![0, 0, 0] = -v ![0, 1, 0] := by simpa using h ![0, 1, 0]
+    have h010 : v ![0, 1, 0] = -v ![0, 0, 0] := (neg_eq_iff_eq_neg.mpr h010').symm
+    have h011 : v ![0, 1, 1] = v ![0, 0, 1] := Eq.symm (by simpa using h ![0, 1, 1])
+    have h110 : v ![1, 1, 0] = v ![1, 0, 0] := Eq.symm (by simpa using h ![1, 1, 0])
+    have h111' : v ![1, 0, 1] = -v ![1, 1, 1] := by simpa using h ![1, 1, 1]
+    have h111 : v ![1, 1, 1] = -v ![1, 0, 1] := (neg_eq_iff_eq_neg.mpr h111').symm
+    let X : Matrix (Fin 2) (Fin 2) ℂ :=
+      !![-(v ![1, 0, 0] + v ![1, 0, 1]), v ![0, 0, 0] + v ![0, 0, 1];
+        -(v ![1, 0, 0] - v ![1, 0, 1]), v ![0, 0, 0] - v ![0, 0, 1]]
+    have key : groundSpaceMap clusterSourceTensor 3 X = (2 : ℂ) • v := by
+      ext s
+      rw [cfg_three_eq s]
+      generalize s 0 = a
+      generalize s 1 = b
+      generalize s 2 = c
+      fin_cases a <;> fin_cases b <;> fin_cases c <;>
+        simp only [X, h010, h011, h110, h111, clusterSource_groundSpaceMap_three_apply,
+          clusterSourceTensor_zero, clusterSourceTensor_one, Fin.isValue, Fin.zero_eta,
+          Fin.mk_one, Matrix.trace_fin_two, Matrix.mul_apply, Fin.sum_univ_two,
+          Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
+          Matrix.empty_val', Matrix.cons_val_fin_one, Pi.smul_apply, smul_eq_mul, mul_zero,
+          zero_mul, add_zero, zero_add, one_mul, neg_mul, mul_neg, neg_neg, neg_zero] <;>
+        ring
+    refine ⟨(2 : ℂ)⁻¹ • X, ?_⟩
+    rw [map_smul, key, smul_smul, inv_mul_cancel₀ two_ne_zero, one_smul]
 
 /-! ### The translated stabilizers on a periodic chain -/
 
@@ -276,18 +373,19 @@ theorem cluster_iInf_eigenspace_eq_chainGroundSpace {N : ℕ} (hN : 3 ≤ N) :
     cluster_groundSpace_three_eq_eigenspace]
   exact forall_congr' fun i => mem_eigenspace_clusterChainStabilizer_iff hNpos hN i ψ
 
-/-- **Cluster states are unique ground states of the three-body interactions**
-\(\sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\)
-(arXiv:quant-ph/0608197, local TeX lines 374--387): on a periodic chain of
-\(N\ge3\) sites, the common \(+1\) eigenspace of the stabilizers
-\(K_i = \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\) is spanned by the cluster
-state,
+/-- **The cluster state spans the common \(+1\) eigenspace of the stabilizers**
+\(K_i = \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\): on a periodic chain of
+\(N\ge3\) sites,
 \[
   \bigcap_i \{\psi : K_i\psi = \psi\} = \mathbb C\,V^{(N)}(A_{\mathrm{cl}}).
 \]
-The cluster tensor is injective after blocking two sites, so the general
-theorem for normal tensors identifies the periodic three-site chain ground
-space with the span of the cluster state. -/
+This is the statement that cluster states are unique ground states of the
+three-body interactions \(\sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\)
+(arXiv:quant-ph/0608197, local TeX lines 374--387), transported to the present
+tensor, on which each stabilizer has eigenvalue \(+1\) rather than \(-1\); see
+the module docstring for the sign. The cluster tensor is injective after
+blocking two sites, so the general theorem for normal tensors identifies the
+periodic three-site chain ground space with the span of the cluster state. -/
 theorem cluster_iInf_eigenspace_eq_mpvSubmodule {N : ℕ} (hN : 3 ≤ N) :
     (⨅ i : Fin N, Module.End.eigenspace (clusterChainStabilizer i) 1) =
       mpvSubmodule clusterTensor N := by
@@ -296,9 +394,11 @@ theorem cluster_iInf_eigenspace_eq_mpvSubmodule {N : ℕ} (hN : 3 ≤ N) :
     (by norm_num) (by omega) (by norm_num) hN (by omega)
 
 /-- The common \(+1\) eigenspace of the translated cluster stabilizers on
-\(N\ge3\) periodic sites is one-dimensional: the cluster state is the unique
-ground state of \(\sum_i \tfrac12(1 - \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2})\),
-arXiv:quant-ph/0608197, local TeX lines 374--387. -/
+\(N\ge3\) periodic sites is one-dimensional. Since each stabilizer is a
+self-adjoint involution, this says that the cluster state is the unique ground
+state of \(\sum_i \tfrac12(1 - \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2})\), the
+form the interaction of arXiv:quant-ph/0608197, local TeX lines 374--387,
+takes on the present tensor. -/
 theorem cluster_stabilizer_unique_gs {N : ℕ} (hN : 3 ≤ N) :
     HasUniqueGroundState
       (⨅ i : Fin N, Module.End.eigenspace (clusterChainStabilizer i) 1) := by
