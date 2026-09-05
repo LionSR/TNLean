@@ -195,3 +195,61 @@ The same module proves `sigma_posSemidef`, `trace_sigma`, and `trace_powN_sigma`
 Normalization of the flag representatives matters separately from normalization of the physical density family. Raw $I,Z$ representatives have constant group-ring multiplication coefficients but transfer value $2$. Replacing them by $I/\sqrt2,Z/\sqrt2$ gives the geometric coefficient $(1/\sqrt2)^L$ at length $L$, since each product acquires one additional factor $1/\sqrt2$ per letter. Rescaling back removes this dependence but loses spectral normalization. No attached normalized vertical coefficient classification or source-global unit-weight canonical form follows from the flag identification.
 
 The corresponding new Blueprint labels are `thm:mpdo_twisted_dimer_flag_factor` and `thm:mpdo_twisted_dimer_factor_normalization`.
+
+## The exact bond RFP tensor, issue #7783
+
+The live issue #7783 and the base implementation `TNLean/MPS/MPDO/TwistedDimerBondRFP.lean`, commit `e50d9f802`, were inspected on September 5, 2026. The parent confirmed compilation and an axiom audit using only the three standard axioms. This is an independent channel proof for a specified bond tensor, not a classification inferred solely from the earlier operator identity.
+
+The source is `Notes/OpenProblemsTN/strategies/p6_round44_graded_dimer_twist.tex:162–193`, proposition `prop:p6-r44-dimer`. Its SHA256 was recomputed again for this continuation and still equals `01cad261200337e3b8ea53dc20900c005ed1bcb6123f2205a1cd381c86163ff7`. The local ignored file was not added. The bond-state definition at lines 162–165 is:
+
+```tex
+Let $C$ be a positive $2\times2$ matrix with $\tr C=1$, eigenvalues
+$x_1,x_2$, and no vanishing entry. Let $\sigma_C=\sum_{rs}C_{rs}|rr\rangle
+\langle ss|$ and let $\rho_N=\bigotimes_n\sigma_C^{(R_n,L_{n+1})}$ on sites
+$\C^2_L\otimes\C^2_R$.
+```
+
+The relevant channel assertion at lines 175–176 reads:
+
+```tex
+$Q$ satisfies \cref{eq:p6-r44-def41} with $\mathcal T(X)=\Pi(X\otimes\sigma_C)
+\Pi^\dagger$ and $\mathcal S=\tr_{R_1L_2}\circ\Pi^\dagger(\cdot)\Pi$.
+```
+
+Its channel proof at lines 185–188 is:
+
+```tex
+$(QQ)^{ab}=C_{pp'}E_{pp'}\otimes\sigma_C\otimes E_{qq'}$ because
+$\sum_{tt'}C_{tt'}E_{tt'}\otimes E_{tt'}=\sigma_C$; this is
+$\mathcal T(Q^{ab})$, and tracing out the inserted bond returns $Q^{ab}$ since
+$\tr\sigma_C=1$.
+```
+
+The source also discusses canonical forms and fusion coefficients, but this continuation formalizes only the displayed bond state and its preparation/partial-trace mechanism. In explicit physical and virtual indices the implemented tensor is
+
+$$
+Q^{(l,r),(l',r')}=C_{ll'}E_{(l,l'),(r,r')},\qquad
+C=\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}.
+$$
+
+This matrix-unit formula fixes the index convention without relying on the source's compressed notation. Both physical and virtual dimensions are four. In namespace `MPOTensor.TwistedDimer` the declaration is `sigmaDimer`; `incomingBondEquiv` sends a site configuration to the bonds $(R_{m-1},L_m)$. The theorem `mpo_sigmaDimer_eq_bondProduct` proves
+
+$$
+\rho^{(N)}(Q)=B_N^\dagger\sigma^{\otimes N}B_N\quad(N>0),
+$$
+
+where $B_N$ is the corresponding basis permutation. The declarations `sigmaDimer_isMPDO` and `trace_mpo_sigmaDimer` prove positivity and trace one. At $N=0$ the closed tensor gives $4$, not the empty bond product $1$.
+
+The basis permutation `bondInsertionEquiv` is $J:((l,r),(u,v))\mapsto((l,u),(v,r))$. The maps `sigmaDimerRefine` and `sigmaDimerCoarse` are respectively
+
+$$
+\mathcal T_Q(Y)=J(Y\otimes\sigma)J^\dagger,
+\qquad
+\mathcal S_Q(W)=\operatorname{tr}_{\mathrm{bond}}(J^\dagger WJ).
+$$
+
+Their complete positivity and trace preservation are proved by `sigmaDimerRefine_isKrausCPTP` and `sigmaDimerCoarse_isKrausCPTP`, using preparation, reindexing, and partial-trace results rather than a copied specialized Kraus calculation. The retraction `sigmaDimerCoarse_refine` holds for every input operator. The theorems `sigmaDimerRefine_physClose1` and `sigmaDimerCoarse_physClose2` prove the two physical-closure equations for every virtual boundary matrix, not only for the periodic density family. They give `sigmaDimer_isRFPViaTS`.
+
+The exact bond state here has eigenvalues $7/8,1/8$. The previously formalized tensor `RescalingStableLengthDependentRFP.R` instead has bond eigenvalues $25/32,7/32`; its canonical-form and simplicity results are not certificates for this new tensor. No global source-unit-weight canonical form, simplicity theorem, canonical multiplicity matrix, or attached normalized vertical coefficient classification is asserted for $Q$ in this continuation. The independent RFP classification does not prove strict on-site or virtual-gauge equivalence for the twisted dimer or a circuit-depth statement, and strict N3 remains unresolved.
+
+The new Blueprint labels are `def:mpdo_twisted_dimer_bond_tensor`, `thm:mpdo_twisted_dimer_bond_product`, `def:mpdo_twisted_dimer_bond_channels`, and `thm:mpdo_twisted_dimer_bond_rfp`.

@@ -940,8 +940,9 @@ This factorization concerns the closed operators of the project example,
 not a result stated in \cite{Cirac2016MPDO_arXiv}. Its gates act on an
 incoming bond and its receiving flag, and hence cross neighboring physical
 sites. It asserts neither an on-site tensor factorization nor a virtual
-gauge equivalence. No circuit-depth bound or classification of the factors
-as renormalization fixed-point tensors is asserted. Positive length is
+gauge equivalence. This theorem alone gives neither a circuit-depth bound
+nor a classification of the factors as renormalization fixed-point tensors.
+Positive length is
 necessary: the empty closed operator equals $8$, while the empty product
 expression equals $2$.
 
@@ -1008,6 +1009,126 @@ attached normalized vertical presentation. In particular, constant
 multiplication coefficients for the raw representatives $I,Z$ should not
 be confused with those for the spectrally normalized representatives
 $I/\sqrt2,Z/\sqrt2$.
+
+% Project issue #7783; round44 construction note, lines 162--193,
+% prop:p6-r44-dimer. Only its bond-state and channel construction is used.
+\begin{definition}[The mixed-Bell bond dimer]%
+    \label{def:mpdo_twisted_dimer_bond_tensor}
+    \lean{MPOTensor.TwistedDimer.bondSiteEquiv, MPOTensor.TwistedDimer.sigmaDimer}
+    \lean{MPOTensor.TwistedDimer.incomingBondEquiv}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_controlled_flip}
+    Let $C=\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}$.
+    A physical site consists of qubits $(l,r)\in\{0,1\}^2$.
+    With virtual indices in $\{0,1\}^2$, define the tensor $Q$ by
+    \[
+        Q^{(l,r),(l',r')}=C_{ll'}E_{(l,l'),(r,r')},
+    \]
+    where $E_{a,b}$ is the matrix unit with row $a$ and column $b$.
+    Both physical and virtual dimensions are four. For $N>0$, let
+    $B_N$ be the permutation of basis configurations given by
+    \[
+        B_N\ket{((l_m,r_m))_m}=\ket{((r_{m-1},l_m))_m},
+    \]
+    with cyclic indices. Its inverse sends a bond configuration $(b_m)_m$
+    to the site configuration $(( (b_m)_2,(b_{m+1})_1))_m$.
+\end{definition}
+
+\begin{theorem}[Closed operators of the mixed-Bell dimer]%
+    \label{thm:mpdo_twisted_dimer_bond_product}
+    \lean{MPOTensor.TwistedDimer.mpo_sigmaDimer_eq_bondProduct}
+    \lean{MPOTensor.TwistedDimer.sigmaDimer_isMPDO}
+    \lean{MPOTensor.TwistedDimer.trace_mpo_sigmaDimer}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_bond_tensor, def:mpdo}
+    For every $N>0$, the tensor $Q$ of
+    Definition~\ref{def:mpdo_twisted_dimer_bond_tensor} satisfies
+    \[
+        \rho^{(N)}(Q)=B_N^\dagger\sigma^{\otimes N}B_N.
+    \]
+    This operator is positive semidefinite and has trace one. In
+    particular, $Q$ is an MPDO. The identity excludes $N=0$, where the
+    empty closed operator is $4$ and the empty bond product is $1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_twisted_dimer_bond_tensor, thm:mpdo_twisted_dimer_factor_normalization}
+    Multiplication of matrix units forces the right qubit of each
+    letter to match the left qubit of the next letter, in both matrix
+    arguments. Taking the trace closes this condition around the ring.
+    The surviving coefficient is the product of the corresponding
+    entries of $C$, hence of $\sigma$ on the matched bond subspace.
+    Positivity and trace one follow from
+    Theorem~\ref{thm:mpdo_twisted_dimer_factor_normalization}.
+\end{proof}
+
+\begin{definition}[Bond insertion and removal]%
+    \label{def:mpdo_twisted_dimer_bond_channels}
+    \lean{MPOTensor.TwistedDimer.bondInsertionEquiv}
+    \lean{MPOTensor.TwistedDimer.sigmaDimerRefine, MPOTensor.TwistedDimer.sigmaDimerCoarse}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_controlled_flip, def:mpdo_twisted_dimer_bond_tensor}
+    Let $J$ be the basis permutation from an exterior site and an
+    inserted bond to two sites:
+    \[
+        J\ket{(l,r),(u,v)}=\ket{(l,u),(v,r)}.
+    \]
+    Define the refinement and coarse-graining maps by
+    \[
+        \mathcal T_Q(Y)=J(Y\otimes\sigma)J^\dagger,
+    \]
+    \[
+        \mathcal S_Q(W)=\operatorname{tr}_{\mathrm{bond}}(J^\dagger WJ).
+    \]
+    The partial trace is over the inserted bond, leaving the two
+    exterior qubits as a single physical site.
+\end{definition}
+
+\begin{theorem}[Channel equations for the mixed-Bell dimer]%
+    \label{thm:mpdo_twisted_dimer_bond_rfp}
+    \lean{MPOTensor.TwistedDimer.sigmaDimer_physClose1, MPOTensor.TwistedDimer.sigmaDimer_mul}
+    \lean{MPOTensor.TwistedDimer.sigmaDimerRefine_isKrausCPTP}
+    \lean{MPOTensor.TwistedDimer.sigmaDimerCoarse_isKrausCPTP}
+    \lean{MPOTensor.TwistedDimer.sigmaDimerCoarse_refine}
+    \lean{MPOTensor.TwistedDimer.sigmaDimerRefine_physClose1}
+    \lean{MPOTensor.TwistedDimer.sigmaDimerCoarse_physClose2}
+    \lean{MPOTensor.TwistedDimer.sigmaDimer_isRFPViaTS}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_bond_channels, def:is_rfp_via_ts}
+    The maps $\mathcal T_Q$ and $\mathcal S_Q$ of
+    Definition~\ref{def:mpdo_twisted_dimer_bond_channels} are completely
+    positive and trace preserving. For every one-site operator $Y$,
+    \[
+        \mathcal S_Q(\mathcal T_Q(Y))=Y.
+    \]
+    For every virtual boundary matrix $A\in M_4(\mathbb C)$, the
+    one-site and two-site physical closures satisfy
+    \[
+        \mathcal T_Q(Q_1(A))=Q_2(A),
+    \]
+    \[
+        \mathcal S_Q(Q_2(A))=Q_1(A).
+    \]
+    Thus $Q$ is a renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_twisted_dimer_factor_normalization, def:mpdo_twisted_dimer_bond_tensor}
+    Preparation of the positive trace-one state $\sigma$, permutation
+    of basis coordinates, and partial trace are quantum channels.
+    Tracing out the prepared state proves the retraction identity.
+    For the refinement equation, the product of two tensor letters
+    vanishes unless both intermediate qubits match. On the matched
+    subspace its coefficient is $C_{ll'}C_{uu'}$, exactly the entry of
+    the one-site closure tensored with the inserted bond state. This
+    proves the identity for arbitrary boundary matrices. Applying the
+    retraction gives the coarse-graining equation.
+\end{proof}
+
+These channel equations independently classify the exact bond dimer as a
+renormalization fixed point; that classification does not follow merely
+from its closed-operator factorization. The bond eigenvalues are $7/8$
+and $1/8$. No simplicity, canonical-form normalization, or attached
+vertical coefficient formula for $Q$ is asserted here.
 
 \begin{theorem}[The twisted quantum dimer is a renormalization fixed point]%
     \label{thm:mpdo_twisted_dimer_is_rfp_via_ts}
