@@ -4856,10 +4856,11 @@ and four blocked sites.
     same action as $R^{\mathrm{CZX}}$ on that defect subspace. The four defect
     domains and prescribed maps of
     Definition~\ref{def:mpug_czx_defect_maps} determine a four-sector
-    completion class. The tuple $R^{\mathrm{CZX}}$ extends all four prescribed
-    maps by Theorem~\ref{thm:mpug_czx_tuple_completion}; whether $R^\star$ does
-    remains to be proved, and its agreement with $R^{\mathrm{CZX}}$ on one
-    domain alone does not place it in that class.
+    completion class, and both tuples extend all four prescribed maps: the
+    first by Theorem~\ref{thm:mpug_czx_tuple_completion} and the second by
+    Theorem~\ref{thm:mpug_czx_star_tuple_completion}, because $R_\star$ fixes
+    the defect domain of the pair $(g,g)$ pointwise and the other three
+    operators are those of $R^{\mathrm{CZX}}$.
     % Source anchor: arXiv:2502.20257, lines 4503--5183 (CZX model, defect and
     % fusion data, modified Gauss law).
 \end{definition}
@@ -5081,11 +5082,13 @@ and four blocked sites.
     \end{align}
     These two values are certificates at two system sizes. They carry no
     asymptotic content, and no growth law for $\dim\mathcal V_N(R^\star)$
-    follows from them. They assert nothing about the completion class of the
-    CZX defect data of Definition~\ref{def:mpug_czx_defect_maps}, since whether
-    $R^\star$ extends the four prescribed maps remains to be proved,
-    and they give no value for the minimum or the maximum of the dimension over
-    completions. Compared with
+    follows from them. Since $R^\star$ extends the four prescribed maps of
+    Definition~\ref{def:mpug_czx_defect_maps} by
+    Theorem~\ref{thm:mpug_czx_star_tuple_completion}, these are two values of
+    the dimension on that completion class, recorded as lower bounds on its
+    supremum in Theorem~\ref{thm:mpug_czx_star_class_values}; they give no
+    value for the minimum or the maximum of the dimension over completions.
+    Compared with
     (\ref{eq:mpug_czx_dimension}), which gives $8$ and $16$ at the same two
     sizes, they exhibit dependence of the dimension on the displayed circuit
     data at those two sizes.
@@ -5451,11 +5454,13 @@ class.
         \label{eq:mpug_czx_class_maximum}
     \end{align}
     Nothing is asserted about the minimum of $\dim\mathcal V_N(R)$ over the
-    class, about the exact value of the supremum, about which completion
-    attains it, or about the behaviour of either quantity as $N$ grows; those
-    are the questions left open
-    by~\cite[lines~5198--5204]{FrancoRubio2025MPUGauging}. The domains and the
-    maps entering the class are derived
+    class, about the exact value of the supremum, or about which completion
+    attains it. Those extrema are questions about this completion class, not
+    questions the source raises;
+    \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} asks only whether the
+    gauge-invariant subspace of the state-level gauging stays bounded or grows
+    with the system size, and nothing is asserted about that growth either. The
+    domains and the maps entering the class are derived
     in~\cite{gap:fbc25_czx_defect_domains}.
 \end{theorem}
 
@@ -5468,4 +5473,83 @@ class.
     tuple lies in the class, and by
     Theorem~\ref{thm:mpug_czx_dimension_of_completion} its gauge-invariant
     subspace has dimension $2^N$, which is therefore at most the supremum.
+\end{proof}
+
+\begin{theorem}[The second displayed CZX tuple is a completion]
+    \label{thm:mpug_czx_star_tuple_completion}
+    \lean{MPOTensor.CZX.matterMatrix_tildeLambdaStar_mulVec_matterKet_zero,
+        MPOTensor.CZX.matterMatrix_tildeLambdaStar_mulVec_matterKet_one,
+        MPOTensor.CZX.circuitTupleStar_gen_gen_mulVec_defectVector_zero,
+        MPOTensor.CZX.circuitTupleStar_gen_gen_mulVec_defectVector_one,
+        MPOTensor.CZX.circuitTupleStar_mulVec_defectVector,
+        MPOTensor.CZX.isCompletion_circuitTupleStar,
+        MPOTensor.CZX.circuitTupleStar_mem_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_czx_star_tuple,
+        def:mpug_completion_class}
+    The second displayed tuple obeys the same prescription
+    (\ref{eq:mpug_czx_tuple_fusion}) as the first,
+    \begin{align}
+        U^\star_{a,b}v(a,b,x) & =v(e,ab,x),
+        \label{eq:mpug_czx_star_tuple_fusion}
+    \end{align}
+    and therefore lies in the full completion class,
+    \begin{align}
+        R^\star & \in\mathfrak C(D^{\mathrm{CZX}}).
+        \label{eq:mpug_czx_star_tuple_completion}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_defect_domains,
+        def:mpug_czx_star_tuple}
+    The pairs $(e,e)$, $(e,g)$, and $(g,e)$ carry the same operators in
+    $R^\star$ as in $R^{\mathrm{CZX}}$, so
+    Theorem~\ref{thm:mpug_czx_tuple_completion} gives
+    (\ref{eq:mpug_czx_star_tuple_fusion}) there. For the pair $(g,g)$ the
+    operator is $\tilde\lambda R_\star$, and the defect domain is
+    $\mathcal K_{g,g}=\mathcal L_1=\spn_{\C}\{\ket{1100},\ket{0011}\}$ by
+    (\ref{eq:mpug_czx_odd_domains}). Since
+    $r_\star(1100)=r_\star(0011)=0$, the factor $R_\star$ fixes both spanning
+    vectors, so $\tilde\lambda R_\star$ has the same values there as
+    $\tilde\lambda$, namely $i\ket{0000}$ and $i\ket{1111}$. The two defect
+    vectors of the pair span its domain, which gives
+    (\ref{eq:mpug_czx_star_tuple_completion}).
+\end{proof}
+
+\begin{theorem}[Two further values of the dimension on the CZX completion
+        class]
+    \label{thm:mpug_czx_star_class_values}
+    \lean{MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTupleStar_three,
+        MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTupleStar_four,
+        MPOTensor.CZX.fourteen_le_iSup_finrank_gaugeInvariantSubspace_completionClass,
+        MPOTensor.CZX.thirtySix_le_iSup_finrank_gaugeInvariantSubspace_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_completion_class,
+        def:mpug_gauge_invariant_subspace, thm:mpug_czx_star_tuple_completion,
+        thm:mpug_czx_star_dimension}
+    The dimensions $14$ at three sites and $36$ at four sites are values of the
+    gauge-invariant dimension on the CZX completion class, so
+    \begin{align}
+        \sup_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_3(R) & \geq14,
+        \label{eq:mpug_czx_star_class_three}                                  \\
+        \sup_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_4(R) & \geq36.
+        \label{eq:mpug_czx_star_class_four}
+    \end{align}
+    Beside the values $8$ and $16$ of the first displayed tuple at the same two
+    chain lengths, these exhibit two different values of the dimension on the
+    class at each of those lengths. Nothing follows about the minimum, the
+    exact supremum, which completion attains it, or the behaviour of any of
+    these as $N$ grows.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_tuple_completion, thm:mpug_czx_star_dimension}
+    By Theorem~\ref{thm:mpug_czx_star_tuple_completion} the second displayed
+    tuple lies in the class, and by
+    Theorem~\ref{thm:mpug_czx_star_dimension} its gauge-invariant subspace has
+    dimensions $14$ and $36$ at three and four sites. Each value is therefore
+    at most the supremum over the class at that chain length, by the same
+    boundedness argument as in
+    Theorem~\ref{thm:mpug_czx_class_maximum}.
 \end{proof}
