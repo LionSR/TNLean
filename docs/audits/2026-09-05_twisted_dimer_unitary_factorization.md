@@ -177,3 +177,109 @@ The displayed bond–flag coupling can be removed by an explicit whole-space uni
 The formalization in `TNLean/MPS/MPDO/TwistedDimerUnitaryFactorization.lean`, included in PR #7780, proves `MPOTensor.TwistedDimer.mpo_eq_unitary_factorization` with the explicit hypothesis `hN : 0 < N` and conclusion `mpo T N = chainUnitary N * decoratedState N * (chainUnitary N)ᴴ`. In the same namespace, `localV_conjTranspose`, `localV_mul_self`, and `localV_conjugate` prove the local identities; `chainUnitary_conjTranspose`, `chainUnitary_mul_conjTranspose`, and `chainUnitary_conjTranspose_mul` prove the full-space self-adjointness and both unitary laws for every natural length. The coordinating parent reported a clean 3058-job targeted build with no warnings and an axiom audit of the factorization and unitary laws containing only `propext`, `Classical.choice`, and `Quot.sound`. This audit did not duplicate that build.
 
 Blueprint coverage in `blueprint/src/chapter/ch21_mpdo_rfp_bnt_coefficients.tex` uses the incoming-cell convention and the physical-coordinate identity exactly as formalized. The labels are `def:mpdo_twisted_dimer_controlled_flip`, `lem:mpdo_twisted_dimer_bond_state_entries`, `lem:mpdo_twisted_dimer_controlled_flip`, `def:mpdo_twisted_dimer_bond_flag_regrouping`, and `thm:mpdo_twisted_dimer_unitary_factorization`. These results do not settle strict N3 in #7751.
+
+## Flag identification and normalization, issue #7782
+
+The live issue #7782 and `TNLean/MPS/MPDO/TwistedDimerFactorStates.lean` were read on September 5, 2026. The parent confirmed compilation and an axiom audit using only the three standard axioms above. The initial factor-state implementation is commit `aca5e6100`; the current source was inspected for the exact declarations below.
+
+In namespace `MPOTensor.TwistedDimer`, `evenFlagState_eq_mpo_Mhat` identifies the flag operator with the existing density-normalized CPSV16 Example 4.12 tensor at every natural length:
+
+$$
+\omega_N=\rho^{(N)}(\widehat M),\qquad \widehat M=\tfrac12 M.
+$$
+
+At zero length both sides are $2$. The source anchor is `Papers/1606.00608/MPDO-22-12-17-2.tex:932–939`, which prints the unnormalized expression $I^{\otimes N}+Z^{\otimes N}$. The factor uses the halved tensor, not that printed tensor. Its channel fixed-point property and positive-length density normalization were already proved in `CPSVExample412NormalizedRFP.lean`; they are reused, not inferred merely from the operator factorization. The declaration `evenFlagState_has_rfpRepresentation` packages this existing MPDO and channel representation, while `evenFlagState_posSemidef` and `trace_evenFlagState` state positivity and trace one for $N>0$. The Blueprint links to `thm:cpsv_example412_normalized_rfp_maps` rather than duplicating those channel proofs.
+
+The same module proves `sigma_posSemidef`, `trace_sigma`, and `trace_powN_sigma`. In particular, the mixed Bell bond matrix is positive and normalized, and every finite tensor power has trace one. The declarations `decoratedState_posSemidef`, `trace_decoratedState`, and `trace_mpo_T` then show that the independent factors and the conjugated twisted-dimer operator are density operators at every positive length. These are normalization statements; by themselves they do not construct a bond RFP tensor.
+
+Normalization of the flag representatives matters separately from normalization of the physical density family. Raw $I,Z$ representatives have constant group-ring multiplication coefficients but transfer value $2$. Replacing them by $I/\sqrt2,Z/\sqrt2$ gives the geometric coefficient $(1/\sqrt2)^L$ at length $L$, since each product acquires one additional factor $1/\sqrt2$ per letter. Rescaling back removes this dependence but loses spectral normalization. No attached normalized vertical coefficient classification or source-global unit-weight canonical form follows from the flag identification.
+
+The corresponding new Blueprint labels are `thm:mpdo_twisted_dimer_flag_factor` and `thm:mpdo_twisted_dimer_factor_normalization`.
+
+## The exact bond RFP tensor, issue #7783
+
+The live issue #7783 and the base implementation `TNLean/MPS/MPDO/TwistedDimerBondRFP.lean`, commit `e50d9f802`, were inspected on September 5, 2026. The parent confirmed compilation and an axiom audit using only the three standard axioms. This is an independent channel proof for a specified bond tensor, not a classification inferred solely from the earlier operator identity.
+
+The source is `Notes/OpenProblemsTN/strategies/p6_round44_graded_dimer_twist.tex:162–193`, proposition `prop:p6-r44-dimer`. Its SHA256 was recomputed again for this continuation and still equals `01cad261200337e3b8ea53dc20900c005ed1bcb6123f2205a1cd381c86163ff7`. The local ignored file was not added. The bond-state definition at lines 162–165 is:
+
+```tex
+Let $C$ be a positive $2\times2$ matrix with $\tr C=1$, eigenvalues
+$x_1,x_2$, and no vanishing entry. Let $\sigma_C=\sum_{rs}C_{rs}|rr\rangle
+\langle ss|$ and let $\rho_N=\bigotimes_n\sigma_C^{(R_n,L_{n+1})}$ on sites
+$\C^2_L\otimes\C^2_R$.
+```
+
+The relevant channel assertion at lines 175–176 reads:
+
+```tex
+$Q$ satisfies \cref{eq:p6-r44-def41} with $\mathcal T(X)=\Pi(X\otimes\sigma_C)
+\Pi^\dagger$ and $\mathcal S=\tr_{R_1L_2}\circ\Pi^\dagger(\cdot)\Pi$.
+```
+
+Its channel proof at lines 185–188 is:
+
+```tex
+$(QQ)^{ab}=C_{pp'}E_{pp'}\otimes\sigma_C\otimes E_{qq'}$ because
+$\sum_{tt'}C_{tt'}E_{tt'}\otimes E_{tt'}=\sigma_C$; this is
+$\mathcal T(Q^{ab})$, and tracing out the inserted bond returns $Q^{ab}$ since
+$\tr\sigma_C=1$.
+```
+
+The source also discusses canonical forms and fusion coefficients, but this continuation formalizes only the displayed bond state and its preparation/partial-trace mechanism. In explicit physical and virtual indices the implemented tensor is
+
+$$
+Q^{(l,r),(l',r')}=C_{ll'}E_{(l,l'),(r,r')},\qquad
+C=\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}.
+$$
+
+This matrix-unit formula fixes the index convention without relying on the source's compressed notation. Both physical and virtual dimensions are four. In namespace `MPOTensor.TwistedDimer` the declaration is `sigmaDimer`; `incomingBondEquiv` sends a site configuration to the bonds $(R_{m-1},L_m)$. The theorem `mpo_sigmaDimer_eq_bondProduct` proves
+
+$$
+\rho^{(N)}(Q)=B_N^\dagger\sigma^{\otimes N}B_N\quad(N>0),
+$$
+
+where $B_N$ is the corresponding basis permutation. The declarations `sigmaDimer_isMPDO` and `trace_mpo_sigmaDimer` prove positivity and trace one. At $N=0$ the closed tensor gives $4$, not the empty bond product $1$.
+
+The basis permutation `bondInsertionEquiv` is $J:((l,r),(u,v))\mapsto((l,u),(v,r))$. The maps `sigmaDimerRefine` and `sigmaDimerCoarse` are respectively
+
+$$
+\mathcal T_Q(Y)=J(Y\otimes\sigma)J^\dagger,
+\qquad
+\mathcal S_Q(W)=\operatorname{tr}_{\mathrm{bond}}(J^\dagger WJ).
+$$
+
+Their complete positivity and trace preservation are proved by `sigmaDimerRefine_isKrausCPTP` and `sigmaDimerCoarse_isKrausCPTP`, using preparation, reindexing, and partial-trace results rather than a copied specialized Kraus calculation. The retraction `sigmaDimerCoarse_refine` holds for every input operator. The theorems `sigmaDimerRefine_physClose1` and `sigmaDimerCoarse_physClose2` prove the two physical-closure equations for every virtual boundary matrix, not only for the periodic density family. They give `sigmaDimer_isRFPViaTS`.
+
+The exact bond state here has nonzero eigenvalues $7/8,1/8$. The previously formalized tensor `RescalingStableLengthDependentRFP.R` instead has nonzero bond eigenvalues $25/32,7/32`; its canonical-form and simplicity results are not certificates for this new tensor. No global source-unit-weight canonical form, simplicity theorem, canonical multiplicity matrix, or attached normalized vertical coefficient classification is asserted for $Q$ in this continuation. The independent RFP classification does not prove strict on-site or virtual-gauge equivalence for the twisted dimer or a circuit-depth statement, and strict N3 remains unresolved.
+
+The new Blueprint labels are `def:mpdo_twisted_dimer_bond_tensor`, `thm:mpdo_twisted_dimer_bond_product`, `def:mpdo_twisted_dimer_bond_channels`, and `thm:mpdo_twisted_dimer_bond_rfp`.
+
+## Attachment to the two explicit tensor families
+
+The completed bond module, commit `e3b600353`, additionally identifies the independent factors with the two actual tensor families. The parent confirmed compilation, positive-length equality tests, and the standard-axiom audit before these declarations were added to the Blueprint.
+
+The declaration `MPOTensor.TwistedDimer.onsiteBondFlagEquiv` separates the bond qubits and flags without moving qubits between sites. Write its basis permutation as
+
+$$
+H_N|((l_m,r_m,f_m))_m\rangle
+=|((l_m,r_m))_m\rangle\otimes|(f_m)_m\rangle.
+$$
+
+In the Blueprint's incoming-cell convention, `onsiteBondFlagEquiv_incoming` is the identity $(B_N\otimes I)H_N=S_NE_N$. Here $B_N$ reads incoming bonds from the bond-site chain, $E_N$ forms the incoming bond–flag cells, and $S_N$ separates their bond and flag strings. All maps read the same incoming bonds $(R_{m-1},L_m)$ and unchanged flags $F_m$.
+
+For $N>0$, `decoratedState_eq_mpo_factors` proves
+
+$$
+D_N=H_N^\dagger\bigl(\rho^{(N)}(Q)\otimes\rho^{(N)}(\widehat M)\bigr)H_N.
+$$
+
+With $U_N$ now denoting the physical-coordinate unitary as in the Blueprint, `mpo_eq_unitary_mpo_factors` gives
+
+$$
+\rho^{(N)}(T)=U_NH_N^\dagger
+\bigl(\rho^{(N)}(Q)\otimes\rho^{(N)}(\widehat M)\bigr)H_NU_N^\dagger.
+$$
+
+Thus the factors in the operator identity are attached to the exact independently classified bond and flag RFP tensors. This conclusion uses both the product formulas and the separate channel proofs, rather than inferring channel fixed-point structure from unitary equivalence of closed states. At $N=0$ the proposed first identity fails: $D_0=2$, whereas the product of the two empty MPOs is $4\cdot2=8$.
+
+Although $H_N$ only separates on-site registers, $U_N$ crosses site boundaries. Neither equality proves strict on-site tensor equivalence, virtual-gauge equivalence, a circuit-depth bound, simplicity, or an attached canonical vertical coefficient formula. In particular, they do not settle N3. Blueprint labels: `def:mpdo_twisted_dimer_onsite_split` and `thm:mpdo_twisted_dimer_rfp_factor_attachment`.
