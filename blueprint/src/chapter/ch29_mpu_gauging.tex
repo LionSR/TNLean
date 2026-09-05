@@ -3313,6 +3313,62 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     (\ref{eq:mpug_induced_cohomology_iff}).
 \end{proof}
 
+\begin{theorem}[Explicit gauge from a stabilizer cocycle extension]
+    \label{thm:mpug_stabilizer_extension_gauge}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.extensionActionGauge,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_extensionActionGauge,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_hasTrivialGauge_of_extension}
+    \leanok
+    \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge,
+        def:mpug_block_independence_gauge_forms}
+    Let $G$ act on $\mathsf X$, with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$.
+    Let $\psi\colon H\times H\to\C^\times$ and let
+    $\Psi\colon G\times G\to\C^\times$ be a two-cocycle whose restriction
+    to $H\times H$ is $\psi$. Define
+    \begin{align}
+        \gamma_g^x
+         & =\frac{\Psi(k_{gx}^{-1},gk_x)\Psi(g,k_x)}
+        {\Psi(e,e)\Psi(k_x,k_x^{-1})}.
+        \label{eq:mpug_extension_gamma}
+    \end{align}
+    With $h_1=t_k(g_1,g_2x)$ and $h_2=t_k(g_2,x)$, the induced symbols satisfy
+    \begin{align}
+        L^x_{g_1,g_2}=\psi(h_1,h_2)
+         & =\Psi(g_1,g_2)\frac{\gamma_{g_1g_2}^x}
+        {\gamma_{g_1}^{g_2x}\gamma_{g_2}^x}.
+        \label{eq:mpug_extension_identity}
+    \end{align}
+    Consequently the inverse fusion and action gauges
+    $(\Psi^{-1},\gamma^{-1})$ make $L$ identically one.
+    This is the scalar representative calculation in the forward proof of
+    the block-independence extension proposition of
+    \cite{FrancoRubio2025MPUGauging};
+    here extension means the equality $\Psi|_{H\times H}=\psi$ of chosen
+    cocycle representatives, rather than only equality of their classes.
+    This scalar calculation does not construct action tensors or assert the
+    converse or the class-level restriction-image equivalence; the distinction
+    between representatives, classes, and tensor data is explained in
+    \cite{gap:fbc25_mpu_action_stabilizer_source_audit}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Put $a=k_{g_1g_2x}$, $b=k_{g_2x}$, $c=k_x$, $u=g_1$, and $v=g_2$.
+    The cocycle equation gives $\Psi(z,e)=\Psi(e,z)=\Psi(e,e)$ and
+    $\Psi(b^{-1},b)=\Psi(b,b^{-1})$. Apply it successively to the triples
+    \begin{align}
+         & (a^{-1}ub,b^{-1},vc),\quad (a^{-1}ub,b^{-1},b),\quad
+        (a^{-1},u,vc),\quad (a^{-1},u,b),\quad (u,v,c).
+    \end{align}
+    Solving these equalities for the corresponding factors of
+    $\Psi(a^{-1}ub,b^{-1}vc)$ and cancelling yields
+    (\ref{eq:mpug_extension_identity}) with
+    (\ref{eq:mpug_extension_gamma}). The restriction hypothesis identifies
+    its left side with $\psi(h_1,h_2)$. Substitution into
+    (\ref{eq:mpug_l_gauge}) cancels the multiplier under the inverse gauges.
+\end{proof}
+
 \begin{definition}[Generalized coboundary and cocycle]
     \label{def:mpug_generalized_cocycle}
     \lean{TNLean.Algebra.GeneralizedThreeCochain,
