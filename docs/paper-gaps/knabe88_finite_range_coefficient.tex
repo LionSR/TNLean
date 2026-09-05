@@ -22,7 +22,7 @@ terms in each open window, and let $\gamma$ be the gap of the corresponding
 open-window Hamiltonian. Knabe's finite-size criterion has threshold
 \begin{align}
     \gamma
-        &>\frac{1}{m}.
+     & >\frac{1}{m}.
     \label{eq:knabe88_finite_range_coefficient_knabe_threshold}
 \end{align}
 This threshold originates in Ref.~\cite{Knabe1988Energy}. It is quoted for
@@ -34,7 +34,7 @@ threshold.
 The closed-form periodic coefficient in the nearest-neighbor case is
 \begin{align}
     \delta
-        &=\frac{m\gamma-1}{m-1}.
+     & =\frac{m\gamma-1}{m-1}.
     \label{eq:knabe88_finite_range_coefficient_nearest_neighbor_coefficient}
 \end{align}
 The derivation below obtains this expression as the range-two specialization
@@ -48,81 +48,81 @@ periodic Hamiltonian $H$, the length-$m$ window operators $A_s$, and the
 separation-$q$ pair sums $Q_q$ by
 \begin{align}
     H
-        &=\sum_i h_i,
-    \label{eq:knabe88_finite_range_coefficient_periodic_hamiltonian}\\
+     & =\sum_i h_i,
+    \label{eq:knabe88_finite_range_coefficient_periodic_hamiltonian} \\
     A_s
-        &=\sum_{a=0}^{m-1}h_{s+a},
-    \label{eq:knabe88_finite_range_coefficient_window_hamiltonian}\\
+     & =\sum_{a=0}^{m-1}h_{s+a},
+    \label{eq:knabe88_finite_range_coefficient_window_hamiltonian}   \\
     Q_q
-        &=\sum_i(h_i h_{i+q}+h_i h_{i-q}).
+     & =\sum_i(h_i h_{i+q}+h_i h_{i-q}).
     \label{eq:knabe88_finite_range_coefficient_pair_sum}
 \end{align}
 Assume
 \begin{align}
     1
-        &\leq R\leq m,
-    \label{eq:knabe88_finite_range_coefficient_range_bounds}\\
+     & \leq R\leq m,
+    \label{eq:knabe88_finite_range_coefficient_range_bounds} \\
     N
-        &\geq2m,
+     & \geq2m,
     \label{eq:knabe88_finite_range_coefficient_cycle_size}
 \end{align}
 and assume that terms at cyclic separation at least $R$ commute. Cyclic
 double counting gives
 \begin{align}
     \sum_s A_s^2
-        &=mH+\sum_{q=1}^{m-1}(m-q)Q_q.
+     & =mH+\sum_{q=1}^{m-1}(m-q)Q_q.
     \label{eq:knabe88_finite_range_coefficient_window_square_sum}
 \end{align}
 
 For orthogonal projections, the operator inequality
 \begin{align}
     h_i h_j+h_j h_i
-        &\leq h_i+h_j
+     & \leq h_i+h_j
     \label{eq:knabe88_finite_range_coefficient_projection_pair_bound}
 \end{align}
 implies
 \begin{align}
     Q_q
-        &\leq2H.
+     & \leq2H.
     \label{eq:knabe88_finite_range_coefficient_pair_sum_upper_bound}
 \end{align}
 If $q\geq R$, the separated projections commute, so
 \begin{align}
     Q_q
-        &\geq0.
+     & \geq0.
     \label{eq:knabe88_finite_range_coefficient_pair_sum_nonnegative}
 \end{align}
 Expansion of $H^2$ also gives
 \begin{align}
     H+\sum_{q=1}^{m-1}Q_q
-        &\leq H^2.
+     & \leq H^2.
     \label{eq:knabe88_finite_range_coefficient_hamiltonian_square_lower_bound}
 \end{align}
 
 Define
 \begin{align}
     c
-        &=m-R+1.
+     & =m-R+1.
     \label{eq:knabe88_finite_range_coefficient_baseline_coefficient}
 \end{align}
 Then
 \begin{align}
     m-q
-        &=c+(R-1-q).
+     & =c+(R-1-q).
     \label{eq:knabe88_finite_range_coefficient_weight_decomposition}
 \end{align}
 The correction term splits into short-range and separated contributions:
 \begin{align}
     \sum_{q=1}^{m-1}(R-1-q)Q_q
-        &=\sum_{q=1}^{R-2}(R-1-q)Q_q
-          +\sum_{q=R}^{m-1}(R-1-q)Q_q.
+     & =\sum_{q=1}^{R-2}(R-1-q)Q_q
+    +\sum_{q=R}^{m-1}(R-1-q)Q_q.
     \label{eq:knabe88_finite_range_coefficient_correction_split}
 \end{align}
 The short-range contribution satisfies
 \begin{align}
     \sum_{q=1}^{R-2}(R-1-q)Q_q
-        &\leq
-          2H\sum_{q=1}^{R-2}(R-1-q),
+     & \leq
+    2H\sum_{q=1}^{R-2}(R-1-q),
     \label{eq:knabe88_finite_range_coefficient_short_range_bound}
 \end{align}
 because its weights are positive and
@@ -130,20 +130,20 @@ because its weights are positive and
 termwise. The separated contribution satisfies
 \begin{align}
     \sum_{q=R}^{m-1}(R-1-q)Q_q
-        &\leq0,
+     & \leq0,
     \label{eq:knabe88_finite_range_coefficient_separated_bound}
 \end{align}
 because $R-1-q\leq0$ and $Q_q\geq0$. The nonnegativity applies throughout
 the required range since
 \begin{align}
     R
-        &\leq q\leq m-1\leq N-R.
+     & \leq q\leq m-1\leq N-R.
     \label{eq:knabe88_finite_range_coefficient_separation_range}
 \end{align}
 The triangular sum is
 \begin{align}
     \sum_{q=1}^{R-2}(R-1-q)
-        &=\frac{(R-1)(R-2)}{2}.
+     & =\frac{(R-1)(R-2)}{2}.
     \label{eq:knabe88_finite_range_coefficient_triangular_sum}
 \end{align}
 
@@ -155,46 +155,46 @@ Substituting
 (\ref{eq:knabe88_finite_range_coefficient_separated_bound}), yields
 \begin{align}
     \sum_s A_s^2
-        &\leq
-          cH^2+(m-c+(R-1)(R-2))H.
+     & \leq
+    cH^2+(m-c+(R-1)(R-2))H.
     \label{eq:knabe88_finite_range_coefficient_preliminary_upper_bound}
 \end{align}
 The scalar coefficient simplifies as
 \begin{align}
     m-c+(R-1)(R-2)
-        &=(R-1)^2.
+     & =(R-1)^2.
     \label{eq:knabe88_finite_range_coefficient_scalar_simplification}
 \end{align}
 Therefore
 \begin{align}
     \sum_s A_s^2
-        &\leq cH^2+(R-1)^2H.
+     & \leq cH^2+(R-1)^2H.
     \label{eq:knabe88_finite_range_coefficient_window_square_upper_bound}
 \end{align}
 
 Assume that every window satisfies the local gap inequality
 \begin{align}
     A_s^2
-        &\geq\gamma A_s.
+     & \geq\gamma A_s.
     \label{eq:knabe88_finite_range_coefficient_local_gap_inequality}
 \end{align}
 Summing over $s$ and using
 \begin{align}
     \sum_s A_s
-        &=mH
+     & =mH
     \label{eq:knabe88_finite_range_coefficient_window_sum}
 \end{align}
 gives
 \begin{align}
     H^2
-        &\geq
-          \frac{m\gamma-(R-1)^2}{m-R+1}H.
+     & \geq
+    \frac{m\gamma-(R-1)^2}{m-R+1}H.
     \label{eq:knabe88_finite_range_coefficient_finite_range_bound}
 \end{align}
 The coefficient is positive under the condition
 \begin{align}
     (R-1)^2
-        &<m\gamma.
+     & <m\gamma.
     \label{eq:knabe88_finite_range_coefficient_positive_coefficient_condition}
 \end{align}
 For $R=2$,
@@ -218,37 +218,6 @@ Theorem~2.1(i) of Nachtergaele's martingale argument
 The abstract result concerns a cyclic family of projections. Applying it
 uniformly to sufficiently large MPS parent Hamiltonians still requires a
 uniform gap for the corresponding nonwrapping open interaction.
-
-\section{The Gosset--Mozgunov threshold}
-
-For nearest-neighbor chains, Gosset and Mozgunov improve the threshold
-(\ref{eq:knabe88_finite_range_coefficient_knabe_threshold}). Write $n=m+1$
-for the number of sites of the open window and $\epsilon^\circ_N$ for the
-gap of the periodic chain of $N$ sites. For $n>2$ and $N>2n$ they prove
-\begin{align}
-    \epsilon^\circ_N
-        &\geq\frac56\,\frac{n^2+n}{n^2-4}
-          \left(\gamma-\frac{6}{n(n+1)}\right),
-    \label{eq:knabe88_finite_range_coefficient_gosset_mozgunov_bound}
-\end{align}
-so the local gap threshold becomes
-\begin{align}
-    \gamma
-        &>\frac{6}{n(n+1)},
-    \label{eq:knabe88_finite_range_coefficient_gosset_mozgunov_threshold}
-\end{align}
-which is strictly smaller than $1/(n-1)$ for all $n>3$ and has the optimal
-order $n^{-2}$ \cite{Gosset2016Local}. Ref.~\cite{Cirac2021Matrix} cites
-this improvement at line~2196 of its local source. The bound is Theorem~3,
-in Section~2, of the arXiv version of Ref.~\cite{Gosset2016Local}; the
-source is not tracked in this repository. The improvement is
-unformalized: no declaration derives
-Eq.~\ref{eq:knabe88_finite_range_coefficient_gosset_mozgunov_bound}, and
-the bibliography entry \path{Gosset2016Local} in
-\path{blueprint/src/references.bib} is cited by no blueprint chapter. Its
-proof weights the terms of each window by a nonuniform coefficient
-sequence, so it is not a specialization of the uniform-window derivation
-above.
 
 \bibliographystyle{alpha}
 \bibliography{references}
