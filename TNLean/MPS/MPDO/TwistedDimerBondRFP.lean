@@ -223,4 +223,57 @@ theorem sigmaDimer_isRFPViaTS : IsRFPViaTS sigmaDimer :=
     sigmaDimerRefine_isKrausCPTP, sigmaDimerCoarse_physClose2,
     sigmaDimerRefine_physClose1⟩
 
+/-- Split each physical site into its left/right qubits and its flag, without
+moving any qubit between sites. This is distinct from the incoming-bond regrouping. -/
+def onsiteBondFlagEquiv (N : ℕ) :
+    (Fin N → Fin 8) ≃ (Fin N → Fin 4) × (Fin N → Fin 2) where
+  toFun s := (fun m => bondSiteEquiv (bitL (s m), bitR (s m)), fun m => bitF (s m))
+  invFun a m := physIdx (bondSiteEquiv.symm (a.1 m)).1
+    (bondSiteEquiv.symm (a.1 m)).2 (a.2 m)
+  left_inv s := by funext m; simp only [Equiv.symm_apply_apply, physIdx_bits]
+  right_inv a := by
+    apply Prod.ext <;> funext m
+    · simp only [bitL_physIdx, bitR_physIdx, Prod.eta, Equiv.apply_symm_apply]
+    · exact bitF_physIdx _ _ _
+
+/-- The on-site split followed by incoming-bond regrouping agrees with the
+bond/flag coordinates of the explicit unitary factorization. -/
+lemma onsiteBondFlagEquiv_incoming (N : ℕ) :
+    (onsiteBondFlagEquiv N).trans
+      (Equiv.prodCongr (incomingBondEquiv N) (Equiv.refl _)) =
+      (incomingCellEquiv N).trans (bondFlagEquiv N) := by
+  apply Equiv.ext
+  intro s
+  apply Prod.ext
+  · funext m
+    simp only [Equiv.trans_apply, Equiv.prodCongr_apply, onsiteBondFlagEquiv,
+      incomingBondEquiv, incomingCellEquiv, bondFlagEquiv, Equiv.coe_fn_mk,
+      Prod.map_fst, Equiv.symm_apply_apply]
+  · rfl
+
+/-- At positive length the decorated state is the on-site reindexing of the
+Kronecker product of the exact bond-dimer MPO and normalized Example 4.12 MPO.
+At length zero these expressions instead have entries two and eight. -/
+theorem decoratedState_eq_mpo_factors {N : ℕ} (hN : 0 < N) :
+    decoratedState N =
+      (mpo sigmaDimer N ⊗ₖ mpo CPSVExample412NormalizedRFP.Mhat N).submatrix
+        (onsiteBondFlagEquiv N) (onsiteBondFlagEquiv N) := by
+  rw [mpo_sigmaDimer_eq_bondProduct hN, ← evenFlagState_eq_mpo_Mhat]
+  ext s t
+  have hs := Equiv.congr_fun (onsiteBondFlagEquiv_incoming N) s
+  have ht := Equiv.congr_fun (onsiteBondFlagEquiv_incoming N) t
+  change _ = powN sigma N _ _ * evenFlagState N _ _
+  change (powN sigma N ⊗ₖ evenFlagState N) _ _ = _
+  rw [← hs, ← ht]
+  rfl
+
+/-- The twisted-dimer MPO is unitarily conjugate to the on-site product of
+the two explicit RFP tensor families. The conjugating unitary acts across site
+boundaries; this does not assert strict on-site or virtual-gauge tensor equivalence. -/
+theorem mpo_eq_unitary_mpo_factors {N : ℕ} (hN : 0 < N) :
+    mpo T N = chainUnitary N *
+      (mpo sigmaDimer N ⊗ₖ mpo CPSVExample412NormalizedRFP.Mhat N).submatrix
+        (onsiteBondFlagEquiv N) (onsiteBondFlagEquiv N) * (chainUnitary N)ᴴ := by
+  rw [mpo_eq_unitary_factorization hN, decoratedState_eq_mpo_factors hN]
+
 end MPOTensor.TwistedDimer
