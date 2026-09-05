@@ -480,6 +480,35 @@ formulated via a complementary transfer-map gap, directly to normality
 using the convergence of the transfer-map iterates to the
 projection onto the fixed-point subspace.
 
+\begin{lemma}[Strongly irreducible tensors are primitive with a positive-definite fixed point]%
+    \label{lem:primitive_from_strongly_irred}
+    \lean{MPSTensor.isPrimitiveMPS_of_isStronglyIrreduciblePaper}
+    \leanok
+    \uses{def:strongly_irreducible_paper, def:primitive_mps}
+    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.  If $\E_A$ is
+    strongly irreducible in the sense of
+    Definition~\ref{def:strongly_irreducible_paper}, then there is a matrix
+    $\rho>0$ such that $(A,\rho)$ is primitive in the sense of
+    Definition~\ref{def:primitive_mps}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Irreducibility of $\E_A$ gives irreducibility of the tensor $A$: if $P$
+    were a nontrivial invariant projection of $A$, then $\E_A$ would map the
+    corner $P\MN{D}P$ into itself, and $P$ would be a nontrivial invariant
+    projection of $\E_A$.  The trace-preserving normalization supplies a
+    nonzero positive semidefinite fixed point $\rho$ of $\E_A$.  Since $A$ is
+    irreducible and the peripheral spectrum of $\E_A$ is $\{1\}$, the
+    eigenvalue $1$ is simple, so the spectral radius of $\E_A-P_\rho$ is below
+    one; this is the complementary transfer-map gap of
+    Definition~\ref{def:primitive_mps}.  Finally, a nonzero positive
+    semidefinite fixed point of an irreducible transfer map is positive
+    definite, since the projection onto its kernel would otherwise be a
+    nontrivial invariant projection of $\E_A$.
+\end{proof}
+
 \begin{lemma}[Primitive tensors with positive-definite fixed point are strongly irreducible]%
     \label{lem:strongly_irred_from_primitive}
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef}

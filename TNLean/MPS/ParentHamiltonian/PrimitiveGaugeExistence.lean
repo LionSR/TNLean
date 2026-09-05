@@ -80,36 +80,20 @@ variable {d D : ℕ}
 /-- Rescaling every matrix of a tensor by a nonzero scalar preserves the span of
 the length-\(N\) words.
 
-Each length-\(N\) word acquires the common factor \(\zeta^N\), which is
-invertible, so the two spans contain each other. -/
+Each length-\(N\) word acquires the common factor \(\zeta^N\), which is a unit,
+and the span of a set is unchanged by a unit scalar. -/
 theorem wordSpan_smul_eq {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPSTensor d D) (N : ℕ) :
     Kraus.wordSpan (ζ • A) N = Kraus.wordSpan A N := by
   have hword : ∀ σ : Fin N → Fin d,
       Kraus.evalWord (ζ • A) (List.ofFn σ) =
-        (ζ ^ N) • Kraus.evalWord A (List.ofFn σ) := by
-    intro σ
+        (ζ ^ N) • Kraus.evalWord A (List.ofFn σ) := fun σ => by
     have h := Kraus.evalWord_smul ζ A (List.ofFn σ)
     rw [List.length_ofFn] at h
     exact h
   simp only [Kraus.wordSpan]
-  apply le_antisymm
-  · refine Submodule.span_le.2 ?_
-    rintro _ ⟨σ, rfl⟩
-    have hmem : Kraus.evalWord (ζ • A) (List.ofFn σ) ∈
-        Submodule.span ℂ (Set.range fun τ : Fin N → Fin d =>
-          Kraus.evalWord A (List.ofFn τ)) := by
-      rw [hword σ]
-      exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨σ, rfl⟩)
-    exact hmem
-  · refine Submodule.span_le.2 ?_
-    rintro _ ⟨σ, rfl⟩
-    have hmem : Kraus.evalWord (ζ • A) (List.ofFn σ) ∈
-        Submodule.span ℂ (Set.range fun τ : Fin N → Fin d =>
-          Kraus.evalWord (ζ • A) (List.ofFn τ)) :=
-      Submodule.subset_span ⟨σ, rfl⟩
-    have hscaled := Submodule.smul_mem _ ((ζ ^ N)⁻¹) hmem
-    rw [hword σ, smul_smul, inv_mul_cancel₀ (pow_ne_zero N hζ), one_smul] at hscaled
-    exact hscaled
+  simp_rw [hword]
+  rw [Set.range_smul]
+  exact Submodule.span_smul_eq_of_isUnit _ _ (pow_ne_zero N hζ).isUnit
 
 /-- Rescaling every matrix of a tensor by a nonzero scalar preserves block
 injectivity at every blocking length. -/

@@ -254,6 +254,27 @@ matrices, and let $\E_K$ be its Kraus map.
     $o(\lVert B\rVert^2)$. For large $m$ this is a contradiction.
 \end{proof}
 
+\begin{corollary}[Normalized normal tensors are strongly irreducible]
+    \label{cor:normalized_normal_strongly_irreducible}
+    \lean{MPSTensor.isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank,
+        MPSTensor.isNormal_implies_stronglyIrreducible}
+    \leanok
+    \uses{def:eventually_full_kraus_rank, def:normal,
+        def:strongly_irreducible_paper}
+    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.  If $A$ has
+    eventually full Kraus rank, or equivalently is normal, then $\E_A$ is
+    strongly irreducible.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:wielandt_proposition_three, rem:wolf_6_8_pairwise}
+    Normality is eventual full Kraus rank by
+    Remark~\ref{rem:wolf_6_8_pairwise}, and the implication
+    (2)$\Rightarrow$(3) of Theorem~\ref{thm:wielandt_proposition_three}
+    gives strong irreducibility.
+\end{proof}
+
 % Scope restriction (primitive channels): Proposition 1 is universal, whereas
 % the theorem below assumes paper primitivity. See
 % docs/paper-gaps/spwc10_wielandt_one_step_subspace.tex.

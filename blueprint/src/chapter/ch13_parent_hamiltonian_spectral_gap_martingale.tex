@@ -4542,7 +4542,7 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     \lean{MPSTensor.wordSpan_smul_eq, MPSTensor.isNBlkInjective_smul_iff,
         MPSTensor.isNormal_smul_iff}
     \leanok
-    \uses{def:l_blk_injective, def:normal}
+    \uses{def:word_span, def:l_blk_injective, def:normal}
     Let $\zeta\neq0$ and let $A$ be a tensor.  For every $N$ the length-$N$
     word spans of $A$ and of $\zeta A$ agree, so $\zeta A$ is $N$-block
     injective exactly when $A$ is, and $\zeta A$ is normal exactly when $A$ is.
@@ -4653,15 +4653,18 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     their sum.
 \end{proof}
 
-\begin{theorem}[Normality alone gives an irreducible transfer map]
-    \label{thm:normal_irreducible_transfer}
+\begin{theorem}[Normality alone gives an irreducible tensor]
+    \label{thm:normal_irreducible_tensor}
     \lean{MPSTensor.isPrimitivePaper_of_isNormal,
         MPSTensor.isIrreducibleTensor_of_isPrimitivePaper}
     \leanok
-    \uses{def:normal, def:paper_primitive, def:irreducible_tensor}
+    \uses{def:normal, def:paper_primitive, def:has_inv_proj,
+        def:irreducible_tensor}
     Let $A$ be a normal tensor.  Then $A$ is primitive in the sense of
-    Definition~\ref{def:paper_primitive}, and its transfer map has no
-    nontrivial invariant projection.  No normalization is imposed on $A$.
+    Definition~\ref{def:paper_primitive}, and $A$ has no nontrivial invariant
+    projection, so $A$ is irreducible in the sense of
+    Definition~\ref{def:irreducible_tensor}.  No normalization is imposed on
+    $A$.
 \end{theorem}
 
 \begin{proof}
@@ -4717,7 +4720,9 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:normal_irreducible_transfer, thm:wielandt_proposition_three,
+    \uses{thm:normal_irreducible_tensor,
+        cor:normalized_normal_strongly_irreducible,
+        lem:primitive_from_strongly_irred,
         thm:normality_rescaling_invariance,
         thm:local_ground_space_rescaling, thm:normal_tensor_nonzero_matrix,
         thm:tp_data_irreducible, thm:gauge_invariance_normal,
@@ -4725,8 +4730,8 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
         lem:eval_word_smul,
         thm:parent_hamiltonian_from_ground_space,
         lem:parent_spanning_of_local_space_eq}
-    Theorem~\ref{thm:normal_irreducible_transfer} makes the transfer map of
-    $A$ irreducible, with no normalization imposed on $A$, and
+    Theorem~\ref{thm:normal_irreducible_tensor} makes $A$ an irreducible
+    tensor, with no normalization imposed on $A$, and
     Theorem~\ref{thm:normal_tensor_nonzero_matrix} supplies the nonzero matrix
     that the Perron--Frobenius eigenvector requires.
     Theorem~\ref{thm:tp_data_irreducible} therefore returns a
@@ -4736,9 +4741,11 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     equivalent.  Rescaling preserves normality by
     Theorem~\ref{thm:normality_rescaling_invariance} and gauging preserves it
     by Theorem~\ref{thm:gauge_invariance_normal}, so $B$ is normal.  Since $B$
-    is trace preserving, the equivalence of the three primitivity conditions,
-    Theorem~\ref{thm:wielandt_proposition_three}, applies to it and returns a
-    positive definite $\rho$ with $(B,\rho)$ primitive.  Gauge equivalence
+    is trace preserving,
+    Corollary~\ref{cor:normalized_normal_strongly_irreducible} makes $B$
+    strongly irreducible, and
+    Lemma~\ref{lem:primitive_from_strongly_irred} then returns a positive
+    definite $\rho$ with $(B,\rho)$ primitive.  Gauge equivalence
     leaves the matrix product vectors unchanged by
     Theorem~\ref{thm:gauge_invariance}, and multiplying every matrix by
     $\zeta$ multiplies every length-$N$ word by $\zeta^{N}$ by
