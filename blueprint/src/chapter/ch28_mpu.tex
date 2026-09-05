@@ -8234,6 +8234,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{def:mpu, lem:mpu_mul_adjoint}
     The copy deltas fix both virtual indices to zero. The physical bit
     flips then force the input to be $11$, and the two Hadamard entries
     contribute $1/2$. If the operator were unitary, its all-zero diagonal
@@ -8250,8 +8251,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     the obstruction above. In contrast, the blue tensors in
     the CZX tensor diagram of \cite{FrancoRubio2025MPUGauging}
     are $\sqrt{2}H$, and this diagram also has a $Z$ gate on each
-    output qubit. Neither normalization nor these gates can be omitted
-    in identifying the two examples.
+    output qubit. Let $A=\sqrt2 P$, let $A_2$ denote its two-site block,
+    and let $B$ denote that displayed Z-decorated tensor. The output-leg
+    relation is
+    \begin{align}
+        B & =(Z\otimes Z)A_2.
+        \label{eq:mpu_czx_decorated_block}
+    \end{align}
+    Its coordinate derivation is given in
+    \cite{gap:mpu_czx_tensor_normalization}.
 \end{remark}
 
 \begin{proposition}[CZX]
