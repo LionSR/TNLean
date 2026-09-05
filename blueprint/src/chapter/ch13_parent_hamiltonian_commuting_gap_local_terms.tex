@@ -345,9 +345,8 @@
 \begin{lemma}[Adjacent two-site translates suffice for nearest-neighbor commutation]
     \label{lem:nncph_from_adjacent_two_site_commutation}
     \lean{MPSTensor.isNNCPH_of_adjacent_twoSite_commute}
-    \lean{MPSTensor.HasProductPairLocalProjectors.of_adjacent_twoSite_commute}
     \leanok
-    \uses{lem:two_site_cyclic_window_overlap_cases, lem:commuting_parent_ham_overlap_reduction, lem:local_term_idempotent}
+    \uses{lem:two_site_cyclic_window_overlap_cases, lem:commuting_parent_ham_overlap_reduction}
     Let $N\ge2$. Suppose that, for every $i\in\Z/N\Z$, the translated
     length-two local term commutes with its cyclic right neighbor:
     \begin{align}
@@ -356,9 +355,7 @@
         h_{i+1}(A,2)h_i(A,2).
         \label{eq:parent_adjacent_two_site_commutation}
     \end{align}
-    Then all translated length-two local terms commute, and the family
-    $p_i=h_i(A,2)$ satisfies the finite-chain local-projector hypotheses used
-    in the conditional Appendix~B extraction.
+    Then all translated length-two local terms commute.
 \end{lemma}
 
 \begin{proof}
@@ -369,24 +366,6 @@
     $h_i(A,2)=h_j(A,2)$. The two nearest-neighbor cases are
     (\ref{eq:parent_adjacent_two_site_commutation}) and its transpose. The
     overlap-reduction lemma supplies the remaining disjoint pairs by locality.
-\end{proof}
-
-\begin{lemma}[Local-projector hypotheses from overlapping two-site commutation]
-    \label{lem:product_pair_local_projectors_from_overlap}
-    \lean{MPSTensor.HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute}
-    \leanok
-    \uses{lem:commuting_parent_ham_overlap_reduction, lem:local_term_idempotent}
-    Let $N\ge2$. Suppose that the translated length-two local terms commute for
-    every pair of overlapping cyclic windows:
-    $h_i(A,2)h_j(A,2) = h_j(A,2)h_i(A,2)$.
-    Then the family $p_i=h_i(A,2)$ gives the finite-chain local-projector
-    hypotheses used in the conditional Appendix~B extraction.
-\end{lemma}
-
-\begin{proof}\leanok
-    Lemma~\ref{lem:commuting_parent_ham_overlap_reduction} turns the
-    overlapping-pair commutation equations into commutation for all pairs. The
-    idempotency equation is Lemma~\ref{lem:local_term_idempotent}.
 \end{proof}
 
 \begin{definition}[Commutation and zero-energy equations for nearest-neighbor local terms]%

@@ -582,8 +582,8 @@ Source: arXiv:1606.00608, Definition 3.9, lines 517--524, Theorem 3.10, lines
 theorem isNNCPH
     (h : ResidualFamilyAppendixBData B) {N : ℕ} (hN : 2 < N) :
     IsNNCPH (directSumTensor B) N :=
-  (HasProductPairLocalProjectors.of_adjacent_twoSite_commute (by omega)
-    (h.adjacent_twoSite_localTerms_commute hN)).isNNCPH
+  isNNCPH_of_adjacent_twoSite_commute (le_of_lt hN)
+    (h.adjacent_twoSite_localTerms_commute hN)
 
 end ResidualFamilyAppendixBData
 
