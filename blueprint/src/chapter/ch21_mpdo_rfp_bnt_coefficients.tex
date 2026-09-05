@@ -834,17 +834,22 @@
     \lean{MPOTensor.TwistedDimer.localV}
     \leanok
     On two bond qubits let
-    \[
-        \ket{\Phi_\pm}=\frac{\ket{00}\pm\ket{11}}{\sqrt2},
-        \qquad \Pi_\pm=\ket{\Phi_\pm}\bra{\Phi_\pm}.
-    \]
+    \begin{align}
+        \ket{\Phi_\pm} & =\frac{\ket{00}\pm\ket{11}}{\sqrt2},
+        \notag
+    \end{align}
+    \begin{align}
+        \Pi_\pm & =\ket{\Phi_\pm}\bra{\Phi_\pm}.
+        \notag
+    \end{align}
     Define $\sigma=\frac78\Pi_++\frac18\Pi_-$ and
     $\sigma'=\frac78\Pi_+-\frac18\Pi_-$.
     On a flag qubit let $X\ket f=\ket{f+1}$, with addition modulo two,
     and $Z\ket f=(-1)^f\ket f$. The controlled Bell-sign flip is
-    \[
-        V=(I-\Pi_-)\otimes I+\Pi_-\otimes X.
-    \]
+    \begin{align}
+        V & =(I-\Pi_-)\otimes I+\Pi_-\otimes X.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Bond-state matrix entries]%
@@ -857,13 +862,14 @@
     Definition~\ref{def:mpdo_twisted_dimer_controlled_flip}.
     Let $C_k$ be the matrix of Definition~\ref{def:mpdo_twisted_dimer_tensor}.
     For $r,l,r',l'\in\{0,1\}$, in right-then-left bond order,
-    \[
-        \bra{r,l}\sigma_k\ket{r',l'}=
+    \begin{align}
+        \bra{r,l}\sigma_k\ket{r',l'} & =
         \begin{cases}
             C_k[l,l'] & \text{if } r=l \text{ and } r'=l', \\
             0         & \text{otherwise}.
         \end{cases}
-    \]
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_controlled_flip}
@@ -880,18 +886,23 @@
     The operator $V$ of Definition~\ref{def:mpdo_twisted_dimer_controlled_flip}
     is self-adjoint and satisfies $V^2=I$ on the full bond--flag space.
     Moreover,
-    \[
-        V(\sigma\otimes I)V^\dagger=\sigma\otimes I,
-    \]
-    \[
-        V(\sigma\otimes Z)V^\dagger=\sigma'\otimes Z.
-    \]
+    \begin{align}
+        V(\sigma\otimes I)V^\dagger & =\sigma\otimes I,
+        \notag
+    \end{align}
+    \begin{align}
+        V(\sigma\otimes Z)V^\dagger & =\sigma'\otimes Z.
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:mpdo_twisted_dimer_controlled_flip}
-    The complementary projections $I-\Pi_-$ and $\Pi_-$ annihilate each
-    other and commute with $\sigma$. Expand the products and use
-    $X^\dagger=X$, $X^2=I$, and $XZX=-Z$.
+    Evaluate the $8\times8$ matrices entry by entry in the computational
+    basis. This gives $V^\dagger=V$, $V^2=I$, and
+    $V(\sigma\otimes I)=(\sigma\otimes I)V$ and
+    $V(\sigma\otimes Z)=(\sigma'\otimes Z)V$.
+    Multiplying each intertwining identity on the right by $V^\dagger$
+    gives the stated conjugation identities.
 \end{proof}
 
 \begin{definition}[Bond--flag regrouping]%
@@ -904,23 +915,27 @@
     \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_controlled_flip}
     For a ring of $N>0$ sites, write each physical configuration as
     $s=((l_m,r_m,f_m))_m$, with cyclic indices. Its incoming cells are
-    \[
-        e_N(s)_m=((r_{m-1},l_m),f_m).
-    \]
+    \begin{align}
+        e_N(s)_m & =((r_{m-1},l_m),f_m).
+        \notag
+    \end{align}
     For cells $a_m=(b_m,g_m)$, with $b_m\in\{0,1\}^2$, the inverse
     reconstructs site $m$ as $((b_m)_2,(b_{m+1})_1,g_m)$.
     Let $E_N\ket s=\ket{e_N(s)}$, and let $S_N$ separate a cell
     configuration into its bond string and flag string. Define
-    \[
-        \omega_N=2^{-N}(I^{\otimes N}+Z^{\otimes N}),
-    \]
-    \[
-        D_N=E_N^\dagger S_N^\dagger
+    \begin{align}
+        \omega_N & =2^{-N}(I^{\otimes N}+Z^{\otimes N}),
+        \notag
+    \end{align}
+    \begin{align}
+        D_N & =E_N^\dagger S_N^\dagger
         (\sigma^{\otimes N}\otimes\omega_N)S_NE_N,
-    \]
-    \[
-        U_N=E_N^\dagger V^{\otimes N}E_N.
-    \]
+        \notag
+    \end{align}
+    \begin{align}
+        U_N & =E_N^\dagger V^{\otimes N}E_N.
+        \notag
+    \end{align}
     Thus $\omega_N$ is the uniform state on even-parity flag strings,
     and $D_N$ is the product of independent bond states and that flag
     state, expressed in the physical site coordinates.
@@ -939,19 +954,22 @@
     Definition~\ref{def:mpdo_twisted_dimer_bond_flag_regrouping} is
     self-adjoint and obeys $U_NU_N^\dagger=U_N^\dagger U_N=I$.
     The closed operator of the twisted quantum dimer satisfies
-    \[
-        \rho^{(N)}(T)=U_ND_NU_N^\dagger.
-    \]
+    \begin{align}
+        \rho^{(N)}(T) & =U_ND_NU_N^\dagger.
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:mpdo_twisted_dimer_controlled_flip, lem:mpdo_twisted_dimer_bond_state_entries, thm:mpdo_twisted_dimer_ismpdo}
     Take tensor products of the identities in
     Lemma~\ref{lem:mpdo_twisted_dimer_controlled_flip}. After separating
-    the bond and flag strings, the conjugated operator is
-    \[
-        2^{-N}\left(\sigma^{\otimes N}\otimes I^{\otimes N}
+    the bond and flag strings, we obtain
+    \begin{align}
+        S_NE_NU_ND_NU_N^\dagger E_N^\dagger S_N^\dagger
+         & =2^{-N}\left(\sigma^{\otimes N}\otimes I^{\otimes N}
         +(\sigma')^{\otimes N}\otimes Z^{\otimes N}\right).
-    \]
+        \notag
+    \end{align}
     By Lemma~\ref{lem:mpdo_twisted_dimer_bond_state_entries}, both bond
     operators vanish outside the span of $\ket{00}$ and
     $\ket{11}$; on this span their matrices are $C_0$ and $C_1$,
