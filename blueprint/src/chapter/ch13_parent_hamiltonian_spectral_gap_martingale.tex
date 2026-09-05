@@ -4645,7 +4645,7 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
 
 \begin{proof}
     \leanok
-    \uses{def:parent_interaction, def:local_term_parent,
+    \uses{def:ground_space_es, def:parent_interaction, def:local_term_parent,
         def:parent_hamiltonian, def:parent_hamiltonian_es}
     The parent interaction at length $L$ is the orthogonal projector onto
     $G_L(A)^\perp$, so it depends on $G_L(A)$ alone.  Every translated local
@@ -4721,8 +4721,8 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
 \begin{proof}
     \leanok
     \uses{thm:normal_irreducible_tensor,
-        cor:normalized_normal_strongly_irreducible,
-        lem:primitive_from_strongly_irred,
+        thm:normalized_normal_strongly_irreducible,
+        thm:primitive_from_strongly_irred,
         thm:normality_rescaling_invariance,
         thm:local_ground_space_rescaling, thm:normal_tensor_nonzero_matrix,
         thm:tp_data_irreducible, thm:gauge_invariance_normal,
@@ -4742,9 +4742,9 @@ uses it to state the finite-range gap for an arbitrary normal tensor.
     Theorem~\ref{thm:normality_rescaling_invariance} and gauging preserves it
     by Theorem~\ref{thm:gauge_invariance_normal}, so $B$ is normal.  Since $B$
     is trace preserving,
-    Corollary~\ref{cor:normalized_normal_strongly_irreducible} makes $B$
+    Theorem~\ref{thm:normalized_normal_strongly_irreducible} makes $B$
     strongly irreducible, and
-    Lemma~\ref{lem:primitive_from_strongly_irred} then returns a positive
+    Theorem~\ref{thm:primitive_from_strongly_irred} then returns a positive
     definite $\rho$ with $(B,\rho)$ primitive.  Gauge equivalence
     leaves the matrix product vectors unchanged by
     Theorem~\ref{thm:gauge_invariance}, and multiplying every matrix by

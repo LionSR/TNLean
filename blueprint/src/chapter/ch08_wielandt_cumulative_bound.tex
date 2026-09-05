@@ -212,6 +212,46 @@ matrices, and let $\E_K$ be its Kraus map.
     Theorem~\ref{thm:wielandt_proposition_three}.
 \end{remark}
 
+\begin{theorem}[Eventual full Kraus rank gives paper primitivity]
+    \label{thm:paper_primitive_of_full_kraus_rank}
+    \lean{MPSTensor.isPrimitivePaper_of_hasEventuallyFullKrausRank}
+    \leanok
+    \uses{def:eventually_full_kraus_rank, def:paper_primitive}
+    If $S_i(A)=\MN{D}$ for some positive $i$, then $H_i(A,\varphi)=\C^D$ for
+    every $\varphi\neq0$, so $A$ is primitive in the sense of
+    Definition~\ref{def:paper_primitive}.  No normalization is imposed on
+    $A$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Applying every matrix of $\MN{D}$ to a nonzero vector $\varphi$ gives all
+    of $\C^D$, and $S_i(A)\varphi$ is the span of the length-$i$ words
+    applied to $\varphi$.
+\end{proof}
+
+\begin{theorem}[Paper primitivity gives strong irreducibility]
+    \label{thm:strongly_irreducible_of_paper_primitive}
+    \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitivePaper}
+    \leanok
+    \uses{def:paper_primitive, def:strongly_irreducible_paper}
+    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.  If $A$ is primitive
+    in the sense of Definition~\ref{def:paper_primitive}, then $\E_A$ is
+    strongly irreducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Regard the matrices of $A$ as a finite Kraus family.
+    Theorems~\cite[``Positive-definite fixed point from vector spreading'']{QICLean2026Blueprint}
+    and~\cite[``Primitivity from vector spreading'']{QICLean2026Blueprint}
+    give a positive-definite fixed point and show that $1$ is the only
+    peripheral eigenvalue, and
+    Theorem~\cite[``Irreducibility from vector spreading'']{QICLean2026Blueprint}
+    gives irreducibility of $\E_A$.  Together these are the three conditions
+    of Definition~\ref{def:strongly_irreducible_paper}.
+\end{proof}
+
 \begin{theorem}[Strengthened form of the primitivity equivalence]
     \label{thm:wielandt_proposition_three}
     \lean{MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank}
@@ -235,15 +275,12 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-
-    If $S_i(A)=\MN{D}$ and $\varphi\neq0$, then
-    $S_i(A)\varphi=\C^D$, proving (2)$\Rightarrow$(1).
-    For (1)$\Rightarrow$(3), regard the matrices of $A$ as a finite Kraus
-    family. Theorems~\cite[``Positive-definite fixed point from vector spreading'']{QICLean2026Blueprint}
-    and~\cite[``Primitivity from vector spreading'']{QICLean2026Blueprint} give a positive-definite
-    fixed point and show that $1$ is the only peripheral eigenvalue.
-    Theorem~\cite[``Irreducibility from vector spreading'']{QICLean2026Blueprint} gives irreducibility.
-    Together these facts say that $\E_A$ is strongly irreducible.
+    \uses{thm:paper_primitive_of_full_kraus_rank,
+        thm:strongly_irreducible_of_paper_primitive}
+    Theorem~\ref{thm:paper_primitive_of_full_kraus_rank} is
+    (2)$\Rightarrow$(1), and
+    Theorem~\ref{thm:strongly_irreducible_of_paper_primitive} is
+    (1)$\Rightarrow$(3).
 
     For (3)$\Rightarrow$(2), write
     $\E_A^m=P_\rho+(\E_A-P_\rho)^m$. The complementary powers tend to zero.
@@ -254,8 +291,8 @@ matrices, and let $\E_K$ be its Kraus map.
     $o(\lVert B\rVert^2)$. For large $m$ this is a contradiction.
 \end{proof}
 
-\begin{corollary}[Normalized normal tensors are strongly irreducible]
-    \label{cor:normalized_normal_strongly_irreducible}
+\begin{theorem}[Normalized normal tensors are strongly irreducible]
+    \label{thm:normalized_normal_strongly_irreducible}
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank,
         MPSTensor.isNormal_implies_stronglyIrreducible}
     \leanok
@@ -264,14 +301,16 @@ matrices, and let $\E_K$ be its Kraus map.
     Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.  If $A$ has
     eventually full Kraus rank, or equivalently is normal, then $\E_A$ is
     strongly irreducible.
-\end{corollary}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:wielandt_proposition_three, rem:wolf_6_8_pairwise}
+    \uses{thm:paper_primitive_of_full_kraus_rank,
+        thm:strongly_irreducible_of_paper_primitive, rem:wolf_6_8_pairwise}
     Normality is eventual full Kraus rank by
-    Remark~\ref{rem:wolf_6_8_pairwise}, and the implication
-    (2)$\Rightarrow$(3) of Theorem~\ref{thm:wielandt_proposition_three}
+    Remark~\ref{rem:wolf_6_8_pairwise}.
+    Theorem~\ref{thm:paper_primitive_of_full_kraus_rank} then gives paper
+    primitivity, and Theorem~\ref{thm:strongly_irreducible_of_paper_primitive}
     gives strong irreducibility.
 \end{proof}
 
