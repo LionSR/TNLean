@@ -236,8 +236,40 @@ The normal-MPS range-reduction theorem still depends on the periodic-boundary
 comparison. This is the remaining formal gap in the general unique-ground-state
 statement.\footnote{Formal declaration:
 \leanid{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}. See
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:822--846 and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:856--894.}
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:666--709 and
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:734--771.}
+
+The cluster and AKLT targets stated in the sources are now formalized. The
+two-site AKLT parent space is cut out by the five linear constraints
+$v_{11}=v_{22}=0$, $v_{01}+v_{10}=0$, $v_{02}+v_{20}=0$,
+$2v_{00}+v_{12}+v_{21}=0$; the three-site intersection
+(\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_intersection}) is proved by
+the hand computation the review asks for, and the periodic two-site parent
+Hamiltonian on $N\ge3$ sites has the AKLT state as its unique ground
+state.\footnote{Formal declarations:
+\leanid{MPSTensor.mem_aklt_groundSpace_two_iff},
+\leanid{MPSTensor.aklt_groundSpace_intersection_two},
+\leanid{MPSTensor.aklt_chainGroundSpace_two_eq_mpvSubmodule}, and
+\leanid{MPSTensor.aklt_parentHamiltonian_two_unique_gs} in
+\path{TNLean/MPS/Examples/AKLTParentHamiltonian.lean}.} The three-site
+cluster parent space is the $+1$ eigenspace of $\sigma^z_1\sigma^x_2\sigma^z_3$
+for the reflected convention
+(\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_zero})--(\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_one})
+as well, so no local-basis change is needed, and the common $+1$ eigenspace of
+the translated stabilizers on $N\ge3$ periodic sites is spanned by the cluster
+state.\footnote{Formal declarations:
+\leanid{MPSTensor.cluster_groundSpace_three_eq_eigenspace},
+\leanid{MPSTensor.cluster_iInf_eigenspace_eq_chainGroundSpace},
+\leanid{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule}, and
+\leanid{MPSTensor.cluster_stabilizer_unique_gs} in
+\path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.}
+
+Three items remain outside the formal development: the identification of the
+GHZ parent interaction with the ferromagnetic Ising interaction
+(\ref{eq:rmp_example_parent_hamiltonian_scope_ising_hamiltonian}) as an
+operator identity, the polynomial AKLT Hamiltonian
+(\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) and its
+spin-$2$ projector form, and the open-boundary edge-mode degeneracy.
 
 \section{Source-faithful order of work}
 
@@ -254,12 +286,14 @@ A source-faithful formalization of issue \#2315 should proceed as follows.
           $ZXZ$ interaction stated in the older MPS review
           \cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}. State any
           other convention only after proving the required local-basis or
-          index-shift equivalence.
+          index-shift equivalence. Both parts are done: the three-site parent
+          space is the $ZXZ$ stabilizer eigenspace, and the general theorem
+          gives the unique ground state.
 
     \item For AKLT, first use the two-site criterion
           (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_intersection}) and
-          the existing two-block injectivity proof. The polynomial Hamiltonian
-          in
+          the existing two-block injectivity proof; this is done. The
+          polynomial Hamiltonian in
           (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) is
           locally sourced. Introduce the spin-$2$ projector formulation only
           after citing or proving its equivalence with the polynomial form.
@@ -273,7 +307,10 @@ This is a scope restriction. Issue \#2315 is source-faithful only when it
 separates three types of targets: parent-Hamiltonian consequences explicitly
 stated in the review, explicit stabilizer or spin-projector formulas, and
 open-boundary edge-mode ground spaces. These are distinct mathematical
-statements with distinct source obligations.
+statements with distinct source obligations. The first type and the cluster
+stabilizer are formalized; the GHZ Ising operator identity, the AKLT
+polynomial and spin-$2$ projector forms, and the open-boundary edge modes
+remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
