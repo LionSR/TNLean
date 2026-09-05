@@ -19,8 +19,7 @@ open scoped BigOperators
 namespace Finset
 
 /-- Equality of summands gives equality of two nested finite sums, even when
-the inner index type depends on the outer index. This replaces two successive
-applications of `Finset.sum_congr rfl`. -/
+the inner index type depends on the outer index. -/
 theorem sum_congr₂ {ι M : Type*} {κ : ι → Type*} [AddCommMonoid M]
     {s : Finset ι} {t : (i : ι) → Finset (κ i)} {f g : (i : ι) → κ i → M}
     (h : ∀ i ∈ s, ∀ j ∈ t i, f i j = g i j) :
