@@ -177,3 +177,21 @@ The displayed bond–flag coupling can be removed by an explicit whole-space uni
 The formalization in `TNLean/MPS/MPDO/TwistedDimerUnitaryFactorization.lean`, commit `23cefc934`, proves `MPOTensor.TwistedDimer.mpo_eq_unitary_factorization` with the explicit hypothesis `hN : 0 < N` and conclusion `mpo T N = chainUnitary N * decoratedState N * (chainUnitary N)ᴴ`. In the same namespace, `localV_conjTranspose`, `localV_mul_self`, and `localV_conjugate` prove the local identities; `chainUnitary_conjTranspose`, `chainUnitary_mul_conjTranspose`, and `chainUnitary_conjTranspose_mul` prove the full-space self-adjointness and both unitary laws for every natural length. The coordinating parent reported a clean 3058-job targeted build with no warnings and an axiom audit of the factorization and unitary laws containing only `propext`, `Classical.choice`, and `Quot.sound`. This audit did not duplicate that build.
 
 Blueprint coverage in `blueprint/src/chapter/ch21_mpdo_rfp_bnt_coefficients.tex` uses the incoming-cell convention and the physical-coordinate identity exactly as formalized. The labels are `def:mpdo_twisted_dimer_controlled_flip`, `lem:mpdo_twisted_dimer_controlled_flip`, `def:mpdo_twisted_dimer_bond_flag_regrouping`, and `thm:mpdo_twisted_dimer_unitary_factorization`. These results do not settle strict N3 in #7751.
+
+## Flag identification and normalization, issue #7782
+
+The live issue #7782 and `TNLean/MPS/MPDO/TwistedDimerFactorStates.lean` were read on September 5, 2026. The parent confirmed compilation and an axiom audit using only the three standard axioms above. The initial factor-state implementation is commit `aca5e6100`; the current source was inspected for the exact declarations below.
+
+In namespace `MPOTensor.TwistedDimer`, `evenFlagState_eq_mpo_Mhat` identifies the flag operator with the existing density-normalized CPSV16 Example 4.12 tensor at every natural length:
+
+$$
+\omega_N=\rho^{(N)}(\widehat M),\qquad \widehat M=\tfrac12 M.
+$$
+
+At zero length both sides are $2$. The source anchor is `Papers/1606.00608/MPDO-22-12-17-2.tex:932–939`, which prints the unnormalized expression $I^{\otimes N}+Z^{\otimes N}$. The factor uses the halved tensor, not that printed tensor. Its channel fixed-point property and positive-length density normalization were already proved in `CPSVExample412NormalizedRFP.lean`; they are reused, not inferred merely from the operator factorization. The declaration `evenFlagState_has_rfpRepresentation` packages this existing MPDO and channel representation, while `evenFlagState_posSemidef` and `trace_evenFlagState` state positivity and trace one for $N>0$. The Blueprint links to `thm:cpsv_example412_normalized_rfp_maps` rather than duplicating those channel proofs.
+
+The same module proves `sigma_posSemidef`, `trace_sigma`, and `trace_powN_sigma`. In particular, the mixed Bell bond matrix is positive and normalized, and every finite tensor power has trace one. The declarations `decoratedState_posSemidef`, `trace_decoratedState`, and `trace_mpo_T` then show that the independent factors and the conjugated twisted-dimer operator are density operators at every positive length. These are normalization statements; by themselves they do not construct a bond RFP tensor.
+
+Normalization of the flag representatives matters separately from normalization of the physical density family. Raw $I,Z$ representatives have constant group-ring multiplication coefficients but transfer value $2$. Replacing them by $I/\sqrt2,Z/\sqrt2$ gives the geometric coefficient $(1/\sqrt2)^L$ at length $L$, since each product acquires one additional factor $1/\sqrt2$ per letter. Rescaling back removes this dependence but loses spectral normalization. No attached normalized vertical coefficient classification or source-global unit-weight canonical form follows from the flag identification.
+
+The corresponding new Blueprint labels are `thm:mpdo_twisted_dimer_flag_factor` and `thm:mpdo_twisted_dimer_factor_normalization`.

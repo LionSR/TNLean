@@ -945,6 +945,70 @@ as renormalization fixed-point tensors is asserted. Positive length is
 necessary: the empty closed operator equals $8$, while the empty product
 expression equals $2$.
 
+% Project issue #7782; CPSV16 Example 4.12, source lines 932--939,
+% with the density normalization already specified in the cited theorem.
+\begin{theorem}[Identification of the flag factor]%
+    \label{thm:mpdo_twisted_dimer_flag_factor}
+    \lean{MPOTensor.TwistedDimer.flagMatrix_zero, MPOTensor.TwistedDimer.flagMatrix_one}
+    \lean{MPOTensor.TwistedDimer.evenFlagState_eq_mpo_Mhat}
+    \lean{MPOTensor.TwistedDimer.evenFlagState_has_rfpRepresentation}
+    \lean{MPOTensor.TwistedDimer.evenFlagState_posSemidef}
+    \lean{MPOTensor.TwistedDimer.trace_evenFlagState}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_bond_flag_regrouping, thm:cpsv_example412_normalized_rfp_maps}
+    Let $\widehat M$ be the density-normalized tensor of
+    Theorem~\ref{thm:cpsv_example412_normalized_rfp_maps}. For every
+    $N\geq0$, the flag operator satisfies
+    \[
+        \omega_N=\rho^{(N)}(\widehat M).
+    \]
+    In particular, the flag family has an MPDO representation satisfying
+    both renormalization channel equations. For $N>0$, $\omega_N$ is
+    positive semidefinite and has trace one. At $N=0$, both sides of the
+    displayed identity are the scalar $2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cpsv_example412_normalized_rfp_maps}
+    Substitute the identity and Pauli $Z$ matrices in the definition of
+    $\omega_N$. Its expression $2^{-N}(I^{\otimes N}+Z^{\otimes N})$
+    is the closed operator of $\widehat M$; the empty case is evaluated
+    directly. Positivity, normalization, and the two channel equations
+    follow from Theorem~\ref{thm:cpsv_example412_normalized_rfp_maps}.
+\end{proof}
+
+\begin{theorem}[Normalization of the bond--flag factorization]%
+    \label{thm:mpdo_twisted_dimer_factor_normalization}
+    \lean{MPOTensor.TwistedDimer.bellProjector_posSemidef}
+    \lean{MPOTensor.TwistedDimer.sigma_posSemidef, MPOTensor.TwistedDimer.trace_sigma}
+    \lean{MPOTensor.TwistedDimer.trace_powN_sigma}
+    \lean{MPOTensor.TwistedDimer.decoratedState_posSemidef}
+    \lean{MPOTensor.TwistedDimer.trace_decoratedState}
+    \lean{MPOTensor.TwistedDimer.trace_mpo_T}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_controlled_flip, def:mpdo_twisted_dimer_bond_flag_regrouping, def:mpdo_twisted_dimer_tensor}
+    The bond operator $\sigma$ is positive semidefinite and has trace one.
+    Every tensor power $\sigma^{\otimes N}$ has trace one, including
+    $N=0$. For every $N>0$, $D_N$ is positive semidefinite and
+    \[
+        \operatorname{tr}D_N=\operatorname{tr}\rho^{(N)}(T)=1.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
+    The Bell projectors are positive rank-one operators of trace one,
+    and their weights in $\sigma$ sum to one. Positivity and trace
+    multiply under tensor products and are preserved by unitary
+    changes of coordinates. Apply these facts to $D_N$ and then use
+    Theorem~\ref{thm:mpdo_twisted_dimer_unitary_factorization}.
+\end{proof}
+
+The flag identification uses $\widehat M$, not the unnormalized tensor
+printed in Example~4.12. It does not classify the coefficients of an
+attached normalized vertical presentation. In particular, constant
+multiplication coefficients for the raw representatives $I,Z$ should not
+be confused with those for the spectrally normalized representatives
+$I/\sqrt2,Z/\sqrt2$.
+
 \begin{theorem}[The twisted quantum dimer is a renormalization fixed point]%
     \label{thm:mpdo_twisted_dimer_is_rfp_via_ts}
     \lean{MPOTensor.TwistedDimer.refineMap}
