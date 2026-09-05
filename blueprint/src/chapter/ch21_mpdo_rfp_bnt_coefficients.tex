@@ -847,6 +847,29 @@
     \]
 \end{definition}
 
+\begin{lemma}[Bond-state matrix entries]%
+    \label{lem:mpdo_twisted_dimer_bond_state_entries}
+    \lean{MPOTensor.TwistedDimer.bondState_apply}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_controlled_flip}
+    For $k\in\{0,1\}$, put $\sigma_k=\frac78\Pi_++(-1)^k\frac18\Pi_-$,
+    where $\Pi_\pm$ are the Bell projections of
+    Definition~\ref{def:mpdo_twisted_dimer_controlled_flip}.
+    Let $C_k$ be the matrix of Definition~\ref{def:mpdo_twisted_dimer_tensor}.
+    For $r,l,r',l'\in\{0,1\}$, in right-then-left bond order,
+    \[
+        \bra{r,l}\sigma_k\ket{r',l'}=
+        \begin{cases}
+            C_k[l,l'] & \text{if } r=l \text{ and } r'=l', \\
+            0         & \text{otherwise}.
+        \end{cases}
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_controlled_flip}
+    Expand the two Bell projections in the computational basis.
+\end{proof}
+
 \begin{lemma}[Local unitary identities]%
     \label{lem:mpdo_twisted_dimer_controlled_flip}
     \lean{MPOTensor.TwistedDimer.localV_conjTranspose}
@@ -921,7 +944,7 @@
     \]
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:mpdo_twisted_dimer_controlled_flip, thm:mpdo_twisted_dimer_ismpdo}
+    \uses{lem:mpdo_twisted_dimer_controlled_flip, lem:mpdo_twisted_dimer_bond_state_entries, thm:mpdo_twisted_dimer_ismpdo}
     Take tensor products of the identities in
     Lemma~\ref{lem:mpdo_twisted_dimer_controlled_flip}. After separating
     the bond and flag strings, the conjugated operator is
@@ -929,7 +952,8 @@
         2^{-N}\left(\sigma^{\otimes N}\otimes I^{\otimes N}
         +(\sigma')^{\otimes N}\otimes Z^{\otimes N}\right).
     \]
-    Both bond operators vanish outside the span of $\ket{00}$ and
+    By Lemma~\ref{lem:mpdo_twisted_dimer_bond_state_entries}, both bond
+    operators vanish outside the span of $\ket{00}$ and
     $\ket{11}$; on this span their matrices are $C_0$ and $C_1$,
     respectively. In physical coordinates the entries therefore equal
     the cyclic bond-matching formula of
