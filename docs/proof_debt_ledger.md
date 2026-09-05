@@ -26,8 +26,14 @@ each open debt attached as a native sub-issue.
   Blueprint sources, or live paper-gap notes. Generated import checks pass.
   The three edited Blueprint fragments have no missing declaration references;
   27 retired tags and three retired labels are recorded exactly in the commit
-  message. Targeted compilation awaits the parent-confirmed warm cache; this
-  entry does not claim a completed build.
+  message of `2114f2dfa`. The warm-cache package gate for
+  `TNLean.MPS.RFP.NNCPHGroundSpace` and
+  `TNLean.MPS.RFP.NNCPHGroundSpacesMultiSector` passes (9,111 jobs).
+  The gate exposed one transitive import, repaired by importing
+  `ParentHamiltonian.Basic` directly. All five retained edited Lean modules have
+  clean diagnostics. Source Blueprint synchronization passes globally; 41 retained
+  Blueprint declarations in the targeted cone also resolve in compiled Lean.
+  Both direct NNCPH theorems use only `propext`, `Classical.choice`, and `Quot.sound`.
 
 ## Demolition candidates (2026-07-20 shrink tournament)
 
