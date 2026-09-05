@@ -5351,3 +5351,119 @@ Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
     $R^{\mathrm{CZX}}$ lies in the resulting completion class
     (\ref{eq:mpug_completion_class}) is not decided here.
 \end{definition}
+
+\section{The displayed CZX tuple as a completion}
+\label{sec:mpug_czx_completion}
+
+The four defect domains and the four prescribed maps of
+Section~\ref{sec:mpug_czx_defect_maps} constrain the fusion operator of each
+ordered label pair on one plane of the two-site matter space. The four
+displayed operators $(\Id,\Id,w,\tilde\lambda)$ of
+Definition~\ref{def:mpug_czx_circuit_tuple} obey those constraints exactly, so
+the displayed tuple is one member of the full completion class of the CZX
+prescribed defect maps $D^{\mathrm{CZX}}$. The exact dimension
+(\ref{eq:mpug_czx_dimension}), which concerns the displayed tuple alone, then
+bounds from below the maximum of the gauge-invariant dimension over the whole
+class.
+
+\begin{theorem}[The displayed CZX tuple is a completion]
+    \label{thm:mpug_czx_tuple_completion}
+    \lean{MPOTensor.CZX.circuitTuple_one_mulVec_defectVector,
+        MPOTensor.CZX.circuitTuple_gen_one_mulVec_defectVector_zero,
+        MPOTensor.CZX.circuitTuple_gen_one_mulVec_defectVector_one,
+        MPOTensor.CZX.circuitTuple_gen_gen_mulVec_defectVector_zero,
+        MPOTensor.CZX.circuitTuple_gen_gen_mulVec_defectVector_one,
+        MPOTensor.CZX.circuitTuple_mulVec_defectVector,
+        MPOTensor.CZX.isCompletion_circuitTuple,
+        MPOTensor.CZX.circuitTuple_mem_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_czx_circuit_tuple,
+        def:mpug_completion_class}
+    For every ordered pair $(a,b)$ of labels of $\Z_2$ and every injective
+    block $x$, the displayed operator of the pair carries the defect vector of
+    the pair to the defect vector of the product label,
+    \begin{align}
+        U^{\mathrm{CZX}}_{a,b}v(a,b,x) & =v(e,ab,x),
+        \label{eq:mpug_czx_tuple_fusion}
+    \end{align}
+    that is,
+    \begin{align}
+        \Id\,v(e,b,x)           & =v(e,b,x),
+        \label{eq:mpug_czx_tuple_fusion_trivial}  \\
+        w\,v(g,e,x)             & =v(e,g,x),
+        \label{eq:mpug_czx_tuple_fusion_movement} \\
+        \tilde\lambda\,v(g,g,x) & =v(e,e,x).
+        \label{eq:mpug_czx_tuple_fusion_modified}
+    \end{align}
+    Consequently the displayed operator of every pair agrees on
+    $\mathcal K_{a,b}$ with the prescribed map $D_{a,b}$, and the displayed
+    tuple lies in the full completion class,
+    \begin{align}
+        R^{\mathrm{CZX}} & \in\mathfrak C(D^{\mathrm{CZX}}).
+        \label{eq:mpug_czx_tuple_completion}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values,
+        thm:mpug_czx_defect_domains, thm:mpug_czx_prescribed_action}
+    The phase tables (\ref{eq:mpug_czx_w_action}) and
+    (\ref{eq:mpug_czx_tilde_lambda_action}), evaluated at the four
+    computational basis states carrying the defect vectors of
+    Theorem~\ref{thm:mpug_czx_defect_vector_values}, give
+    \begin{align}
+        w\ket{0000}             & =\ket{1100},
+                                & w\ket{1111}
+                                & =\ket{0011},
+        \label{eq:mpug_czx_w_basis_action}                \\
+        \tilde\lambda\ket{1100} & =i\ket{0000},
+                                & \tilde\lambda\ket{0011}
+                                & =i\ket{1111},
+        \label{eq:mpug_czx_tilde_lambda_basis_action}
+    \end{align}
+    because $e(0000)=e(1111)=0$ and $f(1100)=f(0011)=1$. Substituting
+    (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) and cancelling the
+    factors $-i$ gives (\ref{eq:mpug_czx_tuple_fusion_movement}) and
+    (\ref{eq:mpug_czx_tuple_fusion_modified}); the pairs with left label $e$
+    carry the identity operator, so
+    (\ref{eq:mpug_czx_tuple_fusion_trivial}) is immediate. The two defect
+    vectors of a pair span $\mathcal K_{a,b}$ by (\ref{eq:mpug_czx_domain}),
+    and the prescribed map obeys the same identity
+    (\ref{eq:mpug_czx_prescription}), so the displayed operator and the
+    prescribed map agree on the whole plane, which is
+    (\ref{eq:mpug_czx_tuple_completion}).
+\end{proof}
+
+\begin{theorem}[Lower bound on the maximum over the CZX completion class]
+    \label{thm:mpug_czx_class_maximum}
+    \lean{MPOTensor.CZX.bddAbove_range_finrank_gaugeInvariantSubspace,
+        MPOTensor.CZX.two_pow_le_iSup_finrank_gaugeInvariantSubspace_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_czx_circuit_tuple,
+        def:mpug_completion_class, def:mpug_gauge_invariant_subspace,
+        thm:mpug_czx_dimension}
+    On a periodic chain of $N\geq3$ blocked sites the gauge-invariant
+    dimensions of the members of the CZX completion class are bounded above by
+    the dimension of the chain space, so their supremum is attained, and
+    \begin{align}
+        \max_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_N(R) & \geq2^N.
+        \label{eq:mpug_czx_class_maximum}
+    \end{align}
+    Nothing is asserted about the minimum of $\dim\mathcal V_N(R)$ over the
+    class, about the exact value of the maximum, or about the behaviour of
+    either quantity as $N$ grows; those are the questions left open
+    by~\cite[lines~5198--5204]{FrancoRubio2025MPUGauging}. The domains and the
+    maps entering the class are derived
+    in~\cite{gap:fbc25_czx_defect_domains}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_dimension}
+    Every gauge-invariant subspace (\ref{eq:mpug_gauge_invariant_subspace}) is
+    a subspace of the chain space, so the dimensions of the members of the
+    class are bounded above by the dimension of that space and their supremum
+    is a maximum. By Theorem~\ref{thm:mpug_czx_tuple_completion} the displayed
+    tuple lies in the class, and by Theorem~\ref{thm:mpug_czx_dimension} its
+    gauge-invariant subspace has dimension $2^N$, which is therefore at most
+    the maximum.
+\end{proof}
