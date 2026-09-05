@@ -579,6 +579,9 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPDO/CZXGaussInvariantSubspace.lean`, hypercube connectivity in
   `TNLean/Algebra/HypercubePhasePotential.lean`, and the characteristic-two
   identity in `TNLean/Algebra/MonomialFixedSubspace.lean`.
+- **Mathlib replacement:** the characteristic-two identity in
+  `MonomialFixedSubspace.lean` now uses `CharTwo.add_self_eq_zero` pointwise;
+  finite-case automation is no longer needed at that call site.
 - **Abstraction:** `generalize_decide t₁, …, tₙ` macro
   (`TNLean/Algebra/GeneralizeDecide.lean`); the terms are abstracted in order
   and `decide +revert` quantifies over the fresh variables.

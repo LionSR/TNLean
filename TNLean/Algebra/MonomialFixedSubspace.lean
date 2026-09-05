@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Algebra.CharP.Two
 import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Dimension.Constructions
 import TNLean.Algebra.CommonFixedSubmodule
@@ -108,9 +109,7 @@ def IsTrivialHolonomy (φ : Fin r → X × (Fin r → ZMod 2) → ℂ) (x : X) :
 
 /-- Adding a vector of $\mathbb F_2^r$ to itself gives zero. -/
 theorem add_self_eq_zero_pi_zmod_two (γ : Fin r → ZMod 2) : γ + γ = 0 := by
-  funext k
-  simp only [Pi.add_apply, Pi.zero_apply]
-  generalize_decide γ k
+  exact funext fun _ ↦ CharTwo.add_self_eq_zero _
 
 variable [Fintype X] [DecidableEq X]
 
