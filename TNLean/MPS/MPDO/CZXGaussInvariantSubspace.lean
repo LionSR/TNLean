@@ -38,10 +38,13 @@ By the monomial fixed-space criterion, a fiber contributes one dimension exactly
 when $b=0$, and there are $2^N$ such fibers.
 
 The same value is recorded for the gauge-invariant subspace
-$\mathcal V_N(R)$ of a completion, whose general lower bound
-$\dim\mathcal V_N(R)\geq1$ is stated for that subspace; the two spellings of
-the placed projector as a linear map agree, so the exact value and the lower
-bound speak about one subspace.
+$\mathcal V_N(R)$ that the general theory attaches to an arbitrary tuple $R$:
+the two spellings of the placed projector as a linear map agree, so the exact
+dimension of the displayed tuple is a statement about that subspace. Whether
+the displayed tuple is a completion of prescribed defect maps carrying matter
+defect states with local defect support, exact defect covariance, and a
+nonvanishing gauged vector, the hypotheses under which the general lower bound
+$\dim\mathcal V_N(R)\geq1$ is available, is not settled here.
 
 The theorems concern the displayed circuit tuple acting through the local
 Gauss operator. They do not identify this tuple with a member of the full
@@ -551,17 +554,21 @@ theorem finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple (N : ℕ)
       right_inv := fun p ↦ rfl }
   rw [Nat.card_congr hequiv, Nat.card_eq_fintype_card, Fintype.card_pi_const, ZMod.card]
 
-/-- **The exact dimension in the gauge-invariant subspace of a completion.** On a
-periodic chain of $N\geq3$ blocked sites with two matter qubits and one gauge
-qubit per site, the gauge-invariant subspace $\mathcal V_N(R^{\mathrm{CZX}})$ of
-the displayed CZX circuit tuple
+/-- **The exact dimension in the gauge-invariant subspace of the displayed
+tuple.** On a periodic chain of $N\geq3$ blocked sites with two matter qubits and
+one gauge qubit per site, the gauge-invariant subspace
+$\mathcal V_N(R^{\mathrm{CZX}})$ of the displayed CZX circuit tuple
 $R^{\mathrm{CZX}}=(\mathrm{id},\mathrm{id},w,\tilde\lambda)$ has dimension $2^N$.
 
-This restates the exact dimension for the subspace carrying the general lower
-bound $\dim\mathcal V_N(R)\geq1$, so that the exact value and that bound are
-statements about one subspace. The two descriptions of a placed Gauss projector
-as a linear map on the configuration space agree, and no part of the orbit,
-holonomy, or fiber count is repeated.
+This restates the exact dimension for the subspace that the general theory
+attaches to an arbitrary tuple, the two descriptions of a placed Gauss projector
+as a linear map on the configuration space being the same map; no part of the
+orbit, holonomy, or fiber count is repeated. It does not verify, for the
+displayed tuple, the hypotheses under which the general lower bound
+$\dim\mathcal V_N(R)\geq1$ is available: a completion of prescribed defect maps
+and matter defect states with local defect support, exact defect covariance, and
+a nonvanishing gauged vector. Only once those are supplied do the exact value
+and the lower bound stand beside each other.
 
 Sources: arXiv:2502.20257, lines 4503--5183 for the CZX matrix product unitary,
 its defect and fusion data, the gauged matrix product state, and the modified

@@ -4776,17 +4776,22 @@ by the displayed matrices.
     \end{align}
 \end{proof}
 
-\begin{theorem}[The CZX dimension in the gauge-invariant subspace of a completion]
+\begin{theorem}[The CZX dimension in the gauge-invariant subspace of the displayed tuple]
     \label{thm:mpug_czx_dimension_of_completion}
     \lean{MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTuple}
     \leanok
     \uses{thm:mpug_czx_dimension, def:mpug_gauge_invariant_subspace}
     For the gauge-invariant subspace~(\ref{eq:mpug_gauge_invariant_subspace}) at
     $R=R^{\mathrm{CZX}}$ and $N\geq3$,
-    $\dim_{\C}\mathcal V_N(R^{\mathrm{CZX}})=2^N$. The exact value and the
-    lower bound $\dim_{\C}\mathcal V_N(R)\geq1$ of
-    Theorem~\ref{thm:mpug_gauge_invariant_subspace_finrank} therefore concern
-    the same subspace of the same chain. The statement is about the displayed
+    $\dim_{\C}\mathcal V_N(R^{\mathrm{CZX}})=2^N$. The value is thereby
+    recorded for the subspace that
+    Definition~\ref{def:mpug_gauge_invariant_subspace} attaches to an arbitrary
+    tuple, so exhibiting $R^{\mathrm{CZX}}$ as a completion of prescribed
+    defect maps with matter defect states satisfying local defect support,
+    exact defect covariance, and nonvanishing of the gauged vector would put
+    the exact value beside the lower bound $\dim_{\C}\mathcal V_N(R)\geq1$ of
+    Theorem~\ref{thm:mpug_gauge_invariant_subspace_finrank}. None of those
+    hypotheses is established here. The statement is about the displayed
     circuit tuple and asserts no membership in the full physical completion
     class of the CZX defect data.
 \end{theorem}
