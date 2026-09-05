@@ -331,7 +331,9 @@ import TNLean.MPS.MPDO.TopologicalProjectors
 import TNLean.MPS.MPDO.TopologicalTerminalSpectral
 import TNLean.MPS.MPDO.TwistedDimer
 import TNLean.MPS.MPDO.TwistedDimerBNTAlgebraClause
+import TNLean.MPS.MPDO.TwistedDimerBondRFP
 import TNLean.MPS.MPDO.TwistedDimerCoefficients
+import TNLean.MPS.MPDO.TwistedDimerFactorStates
 import TNLean.MPS.MPDO.TwistedDimerFlagSectors
 import TNLean.MPS.MPDO.TwistedDimerHorizontalCF
 import TNLean.MPS.MPDO.TwistedDimerMPDO
