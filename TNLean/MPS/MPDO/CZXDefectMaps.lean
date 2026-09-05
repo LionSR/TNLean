@@ -251,12 +251,18 @@ theorem star_defectVector_dotProduct_defectVector (a b : Multiplicative (ZMod 2)
 /-! ### The defect domains -/
 
 /-- The even target $\mathcal L_0=\operatorname{span}\{\ket{0000},\ket{1111}\}$,
-the support of the identity defect pair. -/
+the support of the defect pair with product label $e$. Its two spanning vectors
+are the values of $v(e,e,x)$ derived from the tensors of arXiv:2502.20257,
+lines 4660--4694 and 4800--4859, in
+`docs/paper-gaps/fbc25_czx_defect_domains.tex`. -/
 def evenTarget : Submodule ℂ ((Fin 2 → Fin 4) → ℂ) :=
   Submodule.span ℂ {matterKet ![0, 0, 0, 0], matterKet ![1, 1, 1, 1]}
 
 /-- The odd target $\mathcal L_1=\operatorname{span}\{\ket{1100},\ket{0011}\}$,
-the support of the defect pair with product label $g$. -/
+the support of the defect pair with product label $g$. Its two spanning vectors
+are the values of $v(e,g,x)$ derived from the tensors of arXiv:2502.20257,
+lines 4660--4694 and 4800--4859, in
+`docs/paper-gaps/fbc25_czx_defect_domains.tex`. -/
 def oddTarget : Submodule ℂ ((Fin 2 → Fin 4) → ℂ) :=
   Submodule.span ℂ {matterKet ![1, 1, 0, 0], matterKet ![0, 0, 1, 1]}
 
@@ -379,11 +385,13 @@ def prescribedMap (a b : Multiplicative (ZMod 2)) :
   vecMulVec (defectVector 1 (a * b) 0) (star (defectVector a b 0)) +
     vecMulVec (defectVector 1 (a * b) 1) (star (defectVector a b 1))
 
+/-- `Matrix.vecMulVec_mulVec` with the scalar of the commutative field ℂ in
+place of its opposite. -/
 theorem vecMulVec_mulVec_eq_smul (u v w : (Fin 2 → Fin 4) → ℂ) :
     vecMulVec u v *ᵥ w = (v ⬝ᵥ w) • u := by
+  rw [Matrix.vecMulVec_mulVec]
   funext i
-  simp only [mulVec, dotProduct, vecMulVec_apply, Pi.smul_apply, smul_eq_mul, Finset.sum_mul]
-  exact Finset.sum_congr rfl fun j _ ↦ by ring
+  simp [MulOpposite.smul_eq_mul_unop, mul_comm]
 
 theorem star_prescribedMap (a b : Multiplicative (ZMod 2)) :
     star (prescribedMap a b) =

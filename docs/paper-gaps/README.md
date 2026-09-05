@@ -53,7 +53,9 @@ For the MPU symmetry-defect gauging paper:
   are $\operatorname{span}\{\ket{0000},\ket{1111}\}$ and
   $\operatorname{span}\{\ket{1100},\ket{0011}\}$, orthogonal rather than
   equal, and the displayed circuits restrict to the prescribed maps in the
-  source's own conventions. Issues #7355 and #7569 track the formal instance.
+  source's own conventions. The derived vectors, domains, and maps are carried
+  by the formal prescribed defect maps of the CZX model; issue #7740 tracks the
+  remaining proof that the displayed circuit tuple completes them.
 - `fbc25_alternating_network_nondegeneracy.tex` records the one-sided
   nonvanishing convention for the alternating-network proportionality lemma.
   Both applications in the source satisfy this convention because their
