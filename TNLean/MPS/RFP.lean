@@ -31,7 +31,6 @@ import TNLean.MPS.RFP.BeigiSpatialDecomposition
 import TNLean.MPS.RFP.BellPairCIDObstruction
 import TNLean.MPS.RFP.CPSVCIDNotRFPExample
 import TNLean.MPS.RFP.CPSVCanonicalForm
-import TNLean.MPS.RFP.CommutingBridge
 import TNLean.MPS.RFP.Convergence
 import TNLean.MPS.RFP.Decorrelation
 import TNLean.MPS.RFP.Defs

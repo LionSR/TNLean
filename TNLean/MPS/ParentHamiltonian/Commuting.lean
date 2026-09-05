@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Periodic.Defs
-import TNLean.MPS.ParentHamiltonian.ProductPair
 
 /-!
 # Commuting parent Hamiltonians
@@ -38,9 +37,6 @@ clause from Definition 3.9.
 
 * `MPSTensor.IsCommutingParentHam.ham_comm_localTerm` — if local terms commute,
   the full Hamiltonian commutes with each local term.
-* `MPSTensor.ProductPairBridge.isNNCPH` — if the two-site local terms are
-  projectors \(pᵢ\) with \(pᵢpⱼ = pⱼpᵢ\), then the parent Hamiltonian satisfies
-  \(hᵢhⱼ = hⱼhᵢ\).
 * `MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning` —
   the all-chain source condition is equivalently all-chain nearest-neighbor
   commutation together with the ground-space spanning clause of
@@ -327,39 +323,6 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree
   intro j
   simp only [parentHamiltonian, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ => h j i
-
-/-- If the two-site parent terms are idempotents \(pᵢ\) with
-\(pᵢpⱼ = pⱼpᵢ\), then the nearest-neighbor parent Hamiltonian is commuting on
-that finite chain. -/
-theorem HasProductPairLocalProjectors.isNNCPH {A : MPSTensor d D} {N : ℕ}
-    (hPair : HasProductPairLocalProjectors A N) :
-    IsNNCPH A N :=
-  hPair.commuting_twoSite_localTerms
-
-/-- The even-chain physical-pair factorization and the two-site projector
-identities give NNCPH on each finite chain of length greater than two. -/
-theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBridge A)
-    (N : ℕ) (hN : 2 < N) :
-    IsNNCPH A N :=
-  (hBridge.localProjectors N hN).isNNCPH
-
-/-- The conditional even-chain hypotheses and the ground-space spanning
-equation give the full all-chain nearest-neighbor parent-Hamiltonian condition.
-
-The even-chain hypotheses supply the translated length-two commutation
-equations. The usual parent-Hamiltonian frustration-free equation gives
-zero energy of \(V^{(N)}(B)\). The separate hypothesis
-`HasParentHamiltonianGroundSpaceSpanning B 2 A` supplies the remaining
-Definition 3.9 ground-space spanning clause from arXiv:1606.00608,
-source lines 522--524. -/
-theorem ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning
-    {B : MPSTensor d D} (hBridge : ProductPairBridge B)
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
-    (hSpan : HasParentHamiltonianGroundSpaceSpanning B 2 A) :
-    HasNNCPHGroundSpaces B A := by
-  intro N hN
-  exact ⟨(hBridge.isNNCPH N (by omega)).isNNCPHGroundState (by omega),
-    hSpan N hN⟩
 
 /-- The commuting condition is symmetric: if `h i j` holds, then `h j i` holds. -/
 theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}

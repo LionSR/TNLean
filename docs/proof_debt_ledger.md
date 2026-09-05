@@ -9,6 +9,32 @@ weekly audits update evidence and status rather than renumbering.
 Tracking issue: [#4529](https://github.com/LionSR/TNLean/issues/4529), with
 each open debt attached as a native sub-issue.
 
+## Appendix B physical-pair extraction retirement (#7774)
+
+- **Change**: retire the rejected disjoint physical-pair coefficient extraction,
+  its conditional bridges, and the redundant local-projector witness. The two
+  live Appendix B NNCPH consumers use the existing adjacent-commutation theorem
+  directly, with their original statements and the source range `N > 2`.
+- **Source boundary**: CPSV16 (`1606.00608`), lines 534–540, 570–578, and
+  1305–1307, gives cyclic virtual pairs and an on-site physical isometry, not
+  disjoint physical-word factorization. Historical #3372 rejected that target;
+  #3373 completed the source-faithful commutation replacement.
+- **Preserved**: structural/core-tensor, gauge, cyclic virtual-pair, and support
+  results; direct overlap, adjacency, NNCPH, and ground-space statements.
+- **Verification**: 99 retained declaration headers are unchanged from
+  `00ff0ec40`; the source audit finds no retired consumers in production Lean,
+  Blueprint sources, or live paper-gap notes. Generated import checks pass.
+  The three edited Blueprint fragments have no missing declaration references;
+  27 retired tags and three retired labels are recorded exactly in the commit
+  message of `2114f2dfa`. The warm-cache package gate for
+  `TNLean.MPS.RFP.NNCPHGroundSpace` and
+  `TNLean.MPS.RFP.NNCPHGroundSpacesMultiSector` passes (9,111 jobs).
+  The gate exposed one transitive import, repaired by importing
+  `ParentHamiltonian.Basic` directly. All five retained edited Lean modules have
+  clean diagnostics. Source Blueprint synchronization passes globally; 41 retained
+  Blueprint declarations in the targeted cone also resolve in compiled Lean.
+  Both direct NNCPH theorems use only `propext`, `Classical.choice`, and `Quot.sound`.
+
 ## Demolition candidates (2026-07-20 shrink tournament)
 
 From the `proof-shrink-tournament` workflow: 34 raw candidates from 9 lenses,
