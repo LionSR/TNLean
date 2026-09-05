@@ -9,11 +9,11 @@
 
 \title{Scope of the Formal Block-Separation Lemmas Relative to PGVWC07 Uniqueness}
 \author{}
-\date{2026-05-12}
+\date{2026-05-12, updated 2026-09-05}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source theorem}
 
@@ -26,16 +26,16 @@ and Cirac
 For a translation-invariant tensor $A=(A_i)_i$ and a length $L$, define
 \begin{align}
     \Gamma_L(X)
-        &:=
-        \sum_{i_1,\ldots,i_L}
-        \tr\!\left(XA_{i_1}\cdots A_{i_L}\right)
-        \ket{i_1\cdots i_L}.
+     & :=
+    \sum_{i_1,\ldots,i_L}
+    \tr\!\left(XA_{i_1}\cdots A_{i_L}\right)
+    \ket{i_1\cdots i_L}.
     \label{eq:pgvwc07_ti_uniqueness_scope_gamma_map}
 \end{align}
 Condition C1 in the source requires a finite length $L_0$ such that
 \begin{align}
     \Gamma_{L_0}
-        &\text{ is injective}.
+     & \text{ is injective}.
     \label{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}
 \end{align}
 The source introduces this condition in lines~888--908 of
@@ -47,15 +47,15 @@ open-boundary-condition (OBC) canonical representation of the MPS state, and
 the finite-size bound
 \begin{align}
     N
-        &> 2L_0+D^4.
+     & > 2L_0+D^4.
     \label{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}
 \end{align}
 As printed, it concludes that one unitary matrix $U$ intertwines the two
 representations exactly:
 \begin{align}
     B_i
-        &=UC_iU^\dagger
-        \qquad\text{for every }i.
+     & =UC_iU^\dagger
+    \qquad\text{for every }i.
     \label{eq:pgvwc07_ti_uniqueness_scope_printed_unitary_intertwiner}
 \end{align}
 When the Schmidt weights are nondegenerate, the source gives the usual
@@ -68,14 +68,14 @@ finite-ring phase. If the tensors represent the same nonzero length-$N$ state,
 the corrected conclusion has a unitary $U$ and a scalar $\xi\in\C$ satisfying
 \begin{align}
     |\xi|
-        &=1,
-    \label{eq:pgvwc07_ti_uniqueness_scope_unit_phase}\\
+     & =1,
+    \label{eq:pgvwc07_ti_uniqueness_scope_unit_phase} \\
     \xi^N
-        &=1,
-    \label{eq:pgvwc07_ti_uniqueness_scope_root_phase}\\
+     & =1,
+    \label{eq:pgvwc07_ti_uniqueness_scope_root_phase} \\
     B_i
-        &=\xi UC_iU^\dagger
-        \qquad\text{for every }i.
+     & =\xi UC_iU^\dagger
+    \qquad\text{for every }i.
     \label{eq:pgvwc07_ti_uniqueness_scope_corrected_unitary_intertwiner}
 \end{align}
 The counterexample and corrected reconstruction statement are recorded in
@@ -91,10 +91,10 @@ family and equality of the corresponding MPV families; the global and
 canonical-form variants retain the same block correspondence and use a common,
 otherwise arbitrary, weight function. They assume neither blockwise
 normalization nor strict ordering of weight moduli.\footnote{The formal declarations are
-\leanid{MPSTensor.fundamentalTheorem_multiBlock_blocks},
-\leanid{MPSTensor.fundamentalTheorem_multiBlock_global},
-\leanid{MPSTensor.fundamentalTheorem_canonicalForm_sameStructure}, and
-\leanid{MPSTensor.fundamentalTheorem_multiBlock_explicit}.}
+    \leanid{MPSTensor.fundamentalTheorem_multiBlock_blocks},
+    \leanid{MPSTensor.fundamentalTheorem_multiBlock_global},
+    \leanid{MPSTensor.fundamentalTheorem_canonicalForm_sameStructure}, and
+    \leanid{MPSTensor.fundamentalTheorem_multiBlock_explicit}.}
 
 These same-structure assumptions are useful in local MPS arguments, but they
 are not the source hypotheses. In particular, the source theorem does not
@@ -104,10 +104,10 @@ uniqueness of the OBC canonical representation and the Horn--Johnson
 matrix-lemma route described after Theorem~\texttt{thm-uniq} in
 Ref.~\cite{PerezGarcia2007MPSReps}.
 
-The distinction is theorem-level. PGVWC07 Theorem~\texttt{thm-uniq} is not
-currently formalized. The available results establish conditional
-same-structure consequences under stronger assumptions and must not be cited
-as formalizations of that theorem.
+The distinction is theorem-level. The same-structure results establish
+conditional consequences under stronger assumptions and must not be cited as
+formalizations of PGVWC07 Theorem~\texttt{thm-uniq}; the corrected theorem is
+formalized separately, as recorded below.
 
 \section{Required formalization}
 
@@ -129,6 +129,112 @@ source argument has produced a common block correspondence and established,
 block by block, equality of the corresponding matrix product vector families.
 They do not themselves derive that correspondence from finite-ring state
 equality and therefore cannot replace the source theorem.
+
+\section{Formal route}
+
+The corrected theorem is now formalized. The declaration
+\leanid{MPSTensor.pgvwc07_uniqueness_of_canonical_form} takes two
+translation-invariant canonical representations $B$ and $C$ in the block
+form of Theorem~4 of Ref.~\cite{PerezGarcia2007MPSReps}, that is, weighted
+direct sums $\bigoplus_j\lambda_jA^j$ with $1\ge\lambda_j>0$ whose blocks are
+unital, carry a positive-definite diagonal dual fixed point, and have scalar
+fixed points of their transfer maps (the predicate
+\leanid{MPSTensor.IsPGVWC07CanonicalForm}), condition
+(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}) for $B$, the bound
+(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}), and equality of the
+two nonzero length-$N$ states, and concludes
+(\ref{eq:pgvwc07_ti_uniqueness_scope_unit_phase})--%
+(\ref{eq:pgvwc07_ti_uniqueness_scope_corrected_unitary_intertwiner}). The
+companion \leanid{MPSTensor.pgvwc07_uniqueness_of_canonical_form_rephased}
+states exact unitary conjugacy after the rephasing $\widehat C_i=\xi C_i$
+together with the invariance of the length-$N$ state, and
+\leanid{MPSTensor.pgvwc07_uniqueness_of_canonical_form_unitGaugePhaseEquiv}
+packages the pair $(U,\xi)$ as a unit-modulus gauge-phase equivalence. The
+single-block cases, with unit weights and with the block weights
+$0<\lambda_B,\lambda_C\le1$ of Theorem~4, are
+\leanid{MPSTensor.pgvwc07_uniqueness_of_unital} and
+\leanid{MPSTensor.pgvwc07_uniqueness_of_weighted}; the latter concludes
+$\lambda_B=\lambda_C$ as well.
+
+Condition (\ref{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}) leaves
+$B$ with a single block, the first assertion of the proposition on condition
+C1 (lines~911--919;
+\leanid{MPSTensor.PGVWC07CanonicalFormData.not_isNBlkInjective_of_ne}): a
+matrix unit supported on an off-diagonal block is annihilated by every word.
+The intertwiner $R$ obtained below is invertible by the same condition
+(lines~1105--1108), so $C_i=x^{-1}R^{-1}B_iR$ is conjugate to a multiple of
+$B_i$ and satisfies
+(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}) as well; hence $C$
+also has a single block, and the weighted single-block theorem applies. The
+printed proof uses $\sum_iC_iC_i^\dagger=\Id$ at line~1104 and thereby treats
+only a single unit-weight block for $C$; the block form of $C$ is handled by
+this reduction.
+
+The printed proof (lines~1063--1108) obtains invertible intertwiners on the
+doubled bond space by rewriting both representations as open-boundary
+representations and comparing them, through the freedom theorem
+(Theorem~2, lines~466--486) and the uniqueness of the open-boundary
+canonical form, with that canonical form. The open-boundary canonical form
+is not formalized. The formal route obtains the same intertwiners directly.
+For a cut after $k$ sites with $m=N-k$ sites to its right, the cut vectors
+of the proof of the proposition on condition C1 (lines~921--931),
+\begin{align}
+    \lvert\Phi_{\alpha,\beta}\rangle
+     & =\sum_{i_1,\ldots,i_k}\langle\alpha|A_{i_1}\cdots A_{i_k}|\beta\rangle
+    \,\lvert i_1\cdots i_k\rangle,
+    \label{eq:pgvwc07_ti_uniqueness_scope_left_cut_vector}                    \\
+    \lvert\Psi_{\alpha,\beta}\rangle
+     & =\sum_{j_1,\ldots,j_m}\langle\beta|A_{j_1}\cdots A_{j_m}|\alpha\rangle
+    \,\lvert j_1\cdots j_m\rangle,
+    \label{eq:pgvwc07_ti_uniqueness_scope_right_cut_vector}
+\end{align}
+resolve the ring state as
+$\sum_{\alpha,\beta}\lvert\Phi_{\alpha,\beta}\rangle\lvert\Psi_{\alpha,\beta}\rangle$
+(lines~921--924), and condition
+(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}) makes both families
+linearly independent whenever $k,m\geq L_0$ (lines~936--949; formal
+declarations \leanid{MPSTensor.linearIndependent_leftCutVector} and
+\leanid{MPSTensor.linearIndependent_rightCutVector}). Two decompositions of
+the same state with linearly independent factors on the $B$ side are related
+by an invertible matrix $W_k$ on the doubled bond space
+(\leanid{MPSTensor.exists_cutGauge_of_coeff_eq}), and consecutive cuts
+satisfy the printed chain relation
+\begin{align}
+    W_k(C_i\otimes\Id)
+     & =(B_i\otimes\Id)W_{k+1}
+    \label{eq:pgvwc07_ti_uniqueness_scope_chain_relation}
+\end{align}
+of lines~1084--1086 (\leanid{MPSTensor.cutGauge_chain}). This is the square
+case of Theorem~2, since the cut ranks equal $D^2$ on the window. From the
+$D^4+1$ cuts after $L_0,\ldots,L_0+D^4$ sites, the chain-combination and
+Kronecker intertwiner results before the proof of Theorem~7 produce the
+nonzero intertwiner $R$ with $RC_i=x^{-1}B_iR$
+(\leanid{MPSTensor.exists_intertwiner_of_fixedLength_mpv_eq}), with the
+intertwiner count corrected as in
+\path{docs/paper-gaps/pgvwc07_intertwiner_chain_off_by_one.tex}.
+
+Consequently the printed hypothesis that the open-boundary canonical
+representation is unique is not consumed by the formal proof, and it does
+not appear in the formal statement. The remaining printed steps (lines
+1097--1108) derive $|x|=1$ from the dual fixed point $\Lambda$ and
+$RR^\dagger=\Id$ from the single-block property. The formal proof derives
+both from condition
+(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}): block injectivity
+makes $R$ invertible and both transfer maps irreducible, and the unitary
+gauge theorem for left-canonical irreducible tensors, applied to the
+conjugate-transposed families, gives the unitary $U$ and $|x|=1$
+(\leanid{MPSTensor.exists_unitaryConj_of_intertwines_of_isNBlkInjective}).
+The dual fixed point and the scalar fixed-point condition remain hypotheses
+of the formal statement, so no hypothesis of the printed theorem is
+strengthened. The root-of-unity condition
+(\ref{eq:pgvwc07_ti_uniqueness_scope_root_phase}) follows from the equality
+of the two nonzero length-$N$ states.
+
+The printed theorem itself, with its exact conjugacy conclusion, remains
+false by the counterexample of
+\path{docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex} and
+carries no formal declaration; the blueprint states it beside the corrected
+theorem.
 
 \section{Tracked consequences}
 
