@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSumPermutation
 import QICLean.Analysis.TraceNormContractivity
 import TNLean.MPS.MPDO.NonCartesianActiveSectorCandidate
 import TNLean.MPS.MPDO.PhysicalBlocking
@@ -377,10 +378,8 @@ private lemma traceNorm_threeSiteObstruction :
     _ = ∑ i : Fin 4, ∑ k : Fin 4,
         (∑ j : Fin 4, traceMatrix i j * traceMatrix j k) *
           |endpointPairing i k| := by
-      apply Finset.sum_congr rfl
-      intro i _
-      apply Finset.sum_congr rfl
-      intro k _
+      apply Finset.sum_congr₂
+      intro i _ k _
       rw [Finset.sum_mul]
     _ = ∑ i : Fin 4, ∑ k : Fin 4,
         (traceMatrix ^ 2) i k * |endpointPairing i k| := by
@@ -472,10 +471,8 @@ private lemma traceNorm_fourSiteObstruction :
         ∑ i : Fin 4, ∑ j : Fin 4, ∑ l : Fin 4, ∑ k : Fin 4,
           traceMatrix i j * traceMatrix j k * traceMatrix k l *
             |endpointPairing i l| := by
-      apply Finset.sum_congr rfl
-      intro i _
-      apply Finset.sum_congr rfl
-      intro j _
+      apply Finset.sum_congr₂
+      intro i _ j _
       rw [Finset.sum_comm]
     _ = ∑ i : Fin 4, ∑ l : Fin 4, ∑ j : Fin 4, ∑ k : Fin 4,
         traceMatrix i j * traceMatrix j k * traceMatrix k l *
@@ -487,10 +484,8 @@ private lemma traceNorm_fourSiteObstruction :
         (∑ j : Fin 4, ∑ k : Fin 4,
           traceMatrix i j * traceMatrix j k * traceMatrix k l) *
             |endpointPairing i l| := by
-      apply Finset.sum_congr rfl
-      intro i _
-      apply Finset.sum_congr rfl
-      intro l _
+      apply Finset.sum_congr₂
+      intro i _ l _
       rw [Finset.sum_mul]
       apply Finset.sum_congr rfl
       intro j _
