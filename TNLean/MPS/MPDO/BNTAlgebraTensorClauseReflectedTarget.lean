@@ -3,22 +3,28 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalRFP
+import QICLean.Kraus.NormalCommutant
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalPhysicalMaps
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalUnitary
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseIdentityPhysicalSpan
+import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.TwoSitePrefixReflectedMarkedChain
 
 /-!
-# The positive-tail reflected target of the two-site algebra tensor
+# Unitary sector gauges from the mixed-prefix Gram identity
 
 This file completes the one-site/two-site marked comparison in Appendix C.4
 of arXiv:1606.00608.  A one-site raw sector corner and a two-site
 gauge-dressed corner are reflected while retaining the same unblocked tail.
 The resulting common target identifies the two Gram dressings by the literal
-CPSV form of Lemma L.
+CPSV form of Lemma L. Normality makes each gauge Gram matrix a positive scalar
+multiple of the identity, so scalar normalization gives the unitary sector gauges.
 
 ## Main results
 
 * `TwoSiteExactSectorGauge.gramDressing_gauge_eq_one`
-* `TwoSiteExactSectorGauge.has_identity_positive_tail_reflected_target`
+* `TwoSiteExactSectorGauge.gauge_gram_eq_pos_smul_one`
+* `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy`
 * `BNTAlgebraTensorClause.isRFPViaTS`
 
 ## References
@@ -158,27 +164,6 @@ theorem gramDressing_gauge_eq_one
       Matrix.one_mul, inv_one, Matrix.mul_one]
   simpa only [A] using hRaw.trans hOne.symm
 
-/-- The positive-tail reflected target follows from the tensor-attached
-algebra clause, literal CPSV canonical form, and MPDO positivity.
-
-**Local fix (mixed one-site/two-site prefix):** The common target is obtained
-from the mixed-prefix comparison used in `gramDressing_gauge_eq_one`, as
-documented in
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
-Source: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
-1898--1921, and Appendix C.4, lines 2048--2057. -/
-theorem has_identity_positive_tail_reflected_target
-    (S : TwoSiteExactSectorGauge H)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
-    (hM : IsMPDO M) (γ : Fin H.labelCount) :
-    HasIdentityPositiveTailReflectedTarget S γ := by
-  have hGram := S.gramDressing_gauge_eq_one hCanonical hM γ
-  intro N _hN r s σ τ
-  rw [← hGram]
-  exact S.markedChainCoefficient_gauge_eq_reflectedAdjoint
-    hM γ N r s σ τ
-
 /-- The Gram matrix of every exact two-site sector gauge is a positive real
 multiple of the identity.
 
@@ -199,10 +184,17 @@ theorem gauge_gram_eq_pos_smul_one
           (S.gauge γ : Matrix
             (Fin (S.decomposition.bondDim (S.relabel γ)))
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) =
-        (ω : ℂ) • 1 :=
-  S.gauge_gram_eq_pos_smul_one_of_positive_tail_reflected_target
-    hCanonical hM γ
-      (S.has_identity_positive_tail_reflected_target hCanonical hM γ)
+        (ω : ℂ) • 1 := by
+  have hDress := S.gramDressing_gauge_eq_one hCanonical hM γ
+  have hNormalTensor : MPSTensor.IsNormalTensor
+      (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ)) (H.tensor γ)) :=
+    (MPSTensor.isNormalTensor_cast_iff (S.bondDim_eq γ) (H.tensor γ)).2
+      (H.isCPSVBNT.blocks_normal γ)
+  apply hNormalTensor.isNormal.gram_eq_pos_smul_one_of_gram_conj_eq
+    (Matrix.isUnits_det_units (S.gauge γ))
+  intro v
+  simpa only [gramDressing, Units.val_one, Matrix.conjTranspose_one,
+    Matrix.one_mul, inv_one, Matrix.mul_one] using congrFun hDress v
 
 /-- Every exact two-site sector gauge can be normalized to a unitary with the
 same conjugation action.
@@ -226,10 +218,10 @@ theorem exists_unitary_sector_conjugacy
           (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
             (H.tensor γ)) i *
           (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
-            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ :=
-  S.exists_unitary_sector_conjugacy_of_positive_tail_reflected_target
-    hCanonical hM γ
-      (S.has_identity_positive_tail_reflected_target hCanonical hM γ)
+            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ := by
+  obtain ⟨ω, hω, hGram⟩ := S.gauge_gram_eq_pos_smul_one hCanonical hM γ
+  exact S.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
+    γ ω hω hGram
 
 /-- The exact sector gauges determine simultaneous unitary conjugacies between
 the paired one-site and two-site BNT tensors.
@@ -243,10 +235,9 @@ Appendix C.4, lines 2048--2057. -/
 noncomputable def UnitarySectorConjugacy.ofAlgebraTensorClause
     (S : TwoSiteExactSectorGauge H)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
-    (hM : IsMPDO M) : UnitarySectorConjugacy S :=
-  UnitarySectorConjugacy.ofPositiveTailReflectedTarget
-    S hCanonical hM fun γ ↦
-      S.has_identity_positive_tail_reflected_target hCanonical hM γ
+    (hM : IsMPDO M) : UnitarySectorConjugacy S where
+  unitary γ := Classical.choose (S.exists_unitary_sector_conjugacy hCanonical hM γ)
+  tensor_eq γ := Classical.choose_spec (S.exists_unitary_sector_conjugacy hCanonical hM γ)
 
 end BNTAlgebraTensorClause.TwoSiteExactSectorGauge
 
