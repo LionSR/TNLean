@@ -51,13 +51,7 @@ theorem ScalarCocycle.CohomologousTo.pullback {ω₁ ω₂ : ScalarCocycle G}
 theorem ScalarCocycle.IsCocycle.coboundary_mul {ω : ScalarCocycle G}
     (hω : ω.IsCocycle) (φ : G → ℂˣ) :
     ScalarCocycle.IsCocycle (fun a b ↦ φ a * φ b * (φ (a * b))⁻¹ * ω a b) := by
-  intro a b c
-  calc
-    _ = (φ a * φ b * φ c * (φ (a * (b * c)))⁻¹) *
-        (ω a b * ω (a * b) c) := by simp [mul_assoc, mul_comm, mul_left_comm]
-    _ = (φ a * φ b * φ c * (φ (a * (b * c)))⁻¹) *
-        (ω a (b * c) * ω b c) := by rw [hω a b c]
-    _ = _ := by simp [mul_assoc, mul_comm, mul_left_comm]
+  exact hω.of_cohomologousTo ⟨φ, fun _ _ ↦ rfl⟩
 
 /-- Contravariant pullback on the existing genuine-cocycle cohomology quotient. -/
 def H2.pullback (f : K →* G) : H2 G → H2 K :=
