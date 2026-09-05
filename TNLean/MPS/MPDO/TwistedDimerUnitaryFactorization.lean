@@ -137,11 +137,8 @@ def incomingCellEquiv (N : ℕ) : (Fin N → Fin 8) ≃ (Fin N → Cell) where
     simp only [bitR_physIdx, bitL_physIdx, bitF_physIdx, Equiv.apply_symm_apply]
 
 /-- Separate the bond configuration and the flag configuration of the incoming cells. -/
-def bondFlagEquiv (N : ℕ) : (Fin N → Cell) ≃ (Fin N → Bond) × (Fin N → Fin 2) where
-  toFun a := (fun m => (a m).1, fun m => (a m).2)
-  invFun a m := (a.1 m, a.2 m)
-  left_inv _ := rfl
-  right_inv _ := rfl
+def bondFlagEquiv (N : ℕ) : (Fin N → Cell) ≃ (Fin N → Bond) × (Fin N → Fin 2) :=
+  Equiv.arrowProdEquivProdArrow (Fin N) (fun _ ↦ Bond) (fun _ ↦ Fin 2)
 
 private lemma powN_kronecker (A : Matrix Bond Bond ℂ)
     (B : Matrix (Fin 2) (Fin 2) ℂ) (N : ℕ) :
@@ -233,7 +230,7 @@ private lemma decoratedState_eq (N : ℕ) :
   ext s t
   simp only [decoratedState, evenFlagState, Matrix.submatrix_apply, Matrix.kronecker_apply,
     Matrix.smul_apply, Matrix.add_apply, smul_eq_mul, powN, Equiv.trans_apply,
-    bondFlagEquiv, Equiv.coe_fn_mk]
+    bondFlagEquiv, Equiv.arrowProdEquivProdArrow_apply]
   ring
 
 private lemma conjugate_decoratedState (N : ℕ) :
