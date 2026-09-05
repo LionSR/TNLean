@@ -24,7 +24,7 @@ unnormalized tensor; see
 Its existing channel fixed-point theorem is used without changing that scale.
 No strict on-site tensor or virtual-gauge equivalence is asserted. Nor is the
 flag tensor claimed to have literally length-independent coefficients in a
-spectrally normalized horizontal basis; see
+spectrally normalized vertical basis; see
 <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>.
 -/
 
