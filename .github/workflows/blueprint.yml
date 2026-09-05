@@ -12,6 +12,7 @@ on:
       - 'blueprint/src/**'
       - 'docs/paper-gaps/**'
       - 'Papers/1606.00608/**'
+      - 'Papers/2502.20257/**'
       - 'scripts/generate_paper_aux.sh'
       - 'texra-blueprint.toml'
       # Trees the paper-gap reference check scans (texra-blueprint

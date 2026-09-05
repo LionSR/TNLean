@@ -59,6 +59,7 @@ on:
       - 'scripts/audit_cpsv16_labels.py'
       - 'scripts/test_audit_cpsv16_labels.py'
       - 'Papers/1606.00608/**'
+      - 'Papers/2502.20257/**'
       - 'scripts/generate_paper_aux.sh'
       - 'docs/audits/2026-05-08-mps-ft-paper-coverage.md'
       - 'docs/audits/2026-08-10-cpsv16-every-label-audit.md'
@@ -122,6 +123,7 @@ on:
       - 'scripts/audit_cpsv16_labels.py'
       - 'scripts/test_audit_cpsv16_labels.py'
       - 'Papers/1606.00608/**'
+      - 'Papers/2502.20257/**'
       - 'scripts/generate_paper_aux.sh'
       - 'docs/audits/2026-05-08-mps-ft-paper-coverage.md'
       - 'docs/audits/2026-08-10-cpsv16-every-label-audit.md'
@@ -221,6 +223,7 @@ jobs:
             paper_gaps:
               - 'docs/paper-gaps/**'
               - 'Papers/1606.00608/**'
+              - 'Papers/2502.20257/**'
               - 'scripts/generate_paper_aux.sh'
               - '**.lean'
               - 'blueprint/src/**'
