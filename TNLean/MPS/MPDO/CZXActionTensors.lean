@@ -35,17 +35,56 @@ def blockedSector (x : Fin 2) : MPSTensor 4 1 :=
     (MPSTensor.blockTensor (MPSTensor.ghzSectorTensor x) 2)
 
 /-- Direct physical contraction of the shared CZX tensor with a bond-one
-blocked GHZ sector; no MPO multiplication is used. -/
+blocked GHZ sector; no MPO multiplication is used.
+
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex` lines 4660–4670:
+"This MPU group leaves the GHZ MPS invariant. After blocking once,
+the two injective blocks are given by"
+followed by the blocks $\ket{00}$ and $\ket{11}$. The printed contraction is
+`eq:action_interior` (lines 1841–1869); the CZX boundary tensors are chosen
+in lines 4690–4694, "and we choose action tensors," with
+$A^\Gamma_{g,0}=-i\bra{1}$, $A^\Gamma_{g,1}=\bra{0}$,
+$A^\ammaG_{g,0}=-\frac{i}{\sqrt 2}\ket{-}$ and
+$A^\ammaG_{g,1}=\frac{\ket{+}}{\sqrt 2}$.
+This definition implements the local bulk contraction in that diagram in
+our `Fin 4` physical coordinates; it is not one of the printed boundary
+action tensors and does not assert the empty-word interior equation. -/
 def actedSector (x : Fin 2) : MPSTensor 4 2 :=
   fun i l r ↦ ∑ j, tensor i j l r * blockedSector x j 0 0
 
-/-- The actual target sector, with the two GHZ labels exchanged. -/
+/-- The actual target sector, with the two GHZ labels exchanged.
+
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex` lines 4660–4670:
+"This MPU group leaves the GHZ MPS invariant. After blocking once,
+the two injective blocks are given by"
+followed by $\ket{00}$ and $\ket{11}$. The target in the printed
+`eq:action_interior` (lines 1841–1869) is labeled $gx$.
+The expression `1 - x` is our coordinate description of this CZX exchange
+on `Fin 2`, not a separately printed formula in the source. -/
 def actionTarget (x : Fin 2) : MPSTensor 4 1 := blockedSector (1 - x)
 
-/-- The unique supported output letter of the action on sector `x`. -/
+/-- The unique supported output letter of the action on sector `x`.
+
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex` lines 4660–4670:
+"After blocking once, the two injective blocks are given by" the displayed
+$\ket{00}$ and $\ket{11}$. This letter is our `finProdFinEquiv` encoding
+of the exchanged block $\ket{(1-x)(1-x)}$ in `Fin 4`; neither this encoding
+nor the name `actionLetter` is printed in the source. -/
 def actionLetter (x : Fin 2) : Fin 4 := finProdFinEquiv (1 - x, 1 - x)
 
-/-- The supported matrix is an evaluation of the shared CZX tensor. -/
+/-- The supported matrix is an evaluation of the shared CZX tensor.
+
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex` lines 4660–4670
+specify the blocked sectors $\ket{00}$ and $\ket{11}$; lines 4690–4694
+say "and we choose action tensors," and print
+$A^\Gamma_{g,0}=-i\bra{1}$, $A^\Gamma_{g,1}=\bra{0}$,
+$A^\ammaG_{g,0}=-\frac{i}{\sqrt 2}\ket{-}$ and
+$A^\ammaG_{g,1}=\frac{\ket{+}}{\sqrt 2}$.
+This matrix is our supported bulk coefficient of `actedSector`, obtained
+by evaluating `tensor` at the encoded output and input letters. It is a
+local coordinate construction for the printed `eq:action_interior`
+(lines 1841–1869), not a matrix printed there or one of those boundary
+action tensors; its coordinates are proved in `actionMatrix_coordinates`. -/
 def actionMatrix (x : Fin 2) : Matrix (Fin 2) (Fin 2) ℂ :=
   tensor (actionLetter x) (finProdFinEquiv (x, x))
 

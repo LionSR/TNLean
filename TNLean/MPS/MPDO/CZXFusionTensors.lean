@@ -230,8 +230,9 @@ private theorem evalWord_fusion_projection_insertion (p q : List (Fin (4 * 4)))
 /-- The printed CZX `F^<_{g,g}` and `F^>_{g,g}` caps form an all-word
 rectangular reduction from the actual product tensor to the bond-one identity.
 
-Source: arXiv:2502.20257, `eq:Fgg`, lines 2000--2037, specialized by the CZX
-display in lines 4671--4689. -/
+Source: arXiv:2502.20257, `eq:fusion_2`, `main.tex` lines 1458--1498
+(all-word identity); `eq:Fgg`, lines 2000--2037, specialized by the CZX
+display in lines 4671--4689 (caps). -/
 theorem fusion_isReduction :
     MPSTensor.IsReduction
       (MPOTensor.mulTensor tensor tensor).toMPSTensor
@@ -243,7 +244,11 @@ set_option maxHeartbeats 2000000 in
 -- The proof reassociates three nonempty word insertions around the rectangular caps.
 /-- The concrete CZX fusion reduction satisfies the exterior identity with
 one physical letter on each side. This is only the reduction-buffer statement
-for the concrete `g,g` product slice. -/
+for the concrete `g,g` product slice.
+
+Source: arXiv:2502.20257, `eq:fusion_1`, `main.tex` lines 1405--1457,
+with the length conditions in line 1498 (exterior identity); `eq:Fgg`,
+lines 2000--2037 and the CZX display in lines 4671--4689 (caps). -/
 theorem fusion_isReductionExteriorBufferLength_one :
     MPSTensor.IsReductionExteriorBufferLength
       (MPOTensor.mulTensor tensor tensor).toMPSTensor

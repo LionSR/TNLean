@@ -17,7 +17,7 @@ These are explicit witnesses, not identifications with choice-selected SVD facto
 
 noncomputable section
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Kronecker
 
 namespace MPOTensor.CZX
 
@@ -62,18 +62,54 @@ theorem displayed_cuts :
       Fin.divNat, Fin.modNat, Fin.rev, ZMod.val, Fin.reduceEq]
 
 /-- The four Gram identities for the displayed factors in
-arXiv:2502.20257, lines 4559–4659, with unnormalized Hadamard weights. -/
+arXiv:2502.20257, lines 4559–4659, with unnormalized Hadamard weights.
+The Pauli-gauge identities `displayedX₁ = (1 ⊗ₖ daggerGauge) * displayedY₂ᴴ` and
+`displayedY₁ = displayedX₂ᴴ * (daggerGauge ⊗ₖ 1)` reduce the first and third
+conjuncts to the second and fourth via unitarity of the dagger gauge. -/
 theorem displayed_grams :
     displayedX₁ᴴ * displayedX₁ = (2 : ℂ) • 1 ∧
     displayedX₂ᴴ * displayedX₂ = 1 ∧
     displayedY₁ * displayedY₁ᴴ = 1 ∧
     displayedY₂ * displayedY₂ᴴ = (2 : ℂ) • 1 := by
-  refine ⟨?_, ?_, ?_, ?_⟩ <;> ext i j <;>
+  have hX₂ : displayedX₂ᴴ * displayedX₂ = (1 : Matrix (Fin 4) (Fin 4) ℂ) := by
+    ext i j
     fin_cases i <;> fin_cases j <;>
-    norm_num +decide [Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_prod_type,
-      Fin.sum_univ_two, Fin.sum_univ_four, displayedX₁, displayedY₁,
-      displayedX₂, displayedY₂, daggerGauge, SpinCover.pauli_one,
-      Fin.divNat, Fin.modNat, Fin.rev, Matrix.one_apply, Fin.reduceEq]
+      norm_num +decide [Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_prod_type,
+        Fin.sum_univ_two, Fin.sum_univ_four, displayedX₂, Fin.divNat, Fin.modNat,
+        Matrix.one_apply, Fin.reduceEq]
+  have hY₂ : displayedY₂ * displayedY₂ᴴ = (2 : ℂ) • (1 : Matrix (Fin 4) (Fin 4) ℂ) := by
+    ext i j
+    fin_cases i <;> fin_cases j <;>
+      norm_num +decide [Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_prod_type,
+        Fin.sum_univ_two, Fin.sum_univ_four, displayedY₂, Fin.divNat, Fin.modNat, Fin.rev,
+        Matrix.one_apply, Fin.reduceEq]
+  have hK1 : ((1 : Matrix (Fin 4) (Fin 4) ℂ) ⊗ₖ daggerGauge)ᴴ *
+      ((1 : Matrix (Fin 4) (Fin 4) ℂ) ⊗ₖ daggerGauge) = 1 := by
+    rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one, daggerGauge_conjTranspose,
+      ← Matrix.mul_kronecker_mul, one_mul, daggerGauge_mul_self, Matrix.one_kronecker_one]
+  have hK2 : (daggerGauge ⊗ₖ (1 : Matrix (Fin 4) (Fin 4) ℂ)) *
+      (daggerGauge ⊗ₖ (1 : Matrix (Fin 4) (Fin 4) ℂ))ᴴ = 1 := by
+    rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one, daggerGauge_conjTranspose,
+      ← Matrix.mul_kronecker_mul, daggerGauge_mul_self, one_mul, Matrix.one_kronecker_one]
+  have hX₁ : displayedX₁ = ((1 : Matrix (Fin 4) (Fin 4) ℂ) ⊗ₖ daggerGauge) * displayedY₂ᴴ := by
+    ext ⟨i, β⟩ k
+    simp [displayedX₁, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
+      Matrix.conjTranspose_apply, Matrix.one_apply]
+  have hY₁ : displayedY₁ = displayedX₂ᴴ * (daggerGauge ⊗ₖ (1 : Matrix (Fin 4) (Fin 4) ℂ)) := by
+    ext k ⟨α, j⟩
+    simp [displayedY₁, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
+      Matrix.conjTranspose_apply, Matrix.one_apply]
+  refine ⟨?_, hX₂, ?_, hY₂⟩
+  · rw [hX₁, Matrix.conjTranspose_mul, Matrix.mul_assoc,
+      ← Matrix.mul_assoc ((1 : Matrix (Fin 4) (Fin 4) ℂ) ⊗ₖ daggerGauge)ᴴ
+        ((1 : Matrix (Fin 4) (Fin 4) ℂ) ⊗ₖ daggerGauge) displayedY₂ᴴ,
+      hK1, Matrix.one_mul, Matrix.conjTranspose_conjTranspose]
+    exact hY₂
+  · rw [hY₁, Matrix.conjTranspose_mul, Matrix.mul_assoc,
+      ← Matrix.mul_assoc (daggerGauge ⊗ₖ (1 : Matrix (Fin 4) (Fin 4) ℂ))
+        (daggerGauge ⊗ₖ (1 : Matrix (Fin 4) (Fin 4) ℂ))ᴴ (displayedX₂ᴴ)ᴴ,
+      hK2, Matrix.one_mul, Matrix.conjTranspose_conjTranspose]
+    exact hX₂
 
 /-- Explicit right inverses of the displayed right factors, compatible with
 arXiv:1703.09188, `Z1Z2`, for arXiv:2502.20257, lines 4559–4659. -/
