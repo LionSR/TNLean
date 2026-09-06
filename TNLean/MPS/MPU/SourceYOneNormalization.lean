@@ -28,25 +28,21 @@ theorem IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction
     (hU : IsMPUCanonicalFormII U) :
     let S := sourceFactors U hU.ρ hU.ρ_posDef
     sourceCutM₁ (adjointSimpleContraction U hU.ρ) = S.X₁ * (S.Y₁ * S.Y₁ᴴ) * S.Y₁ := by
-  change sourceCutM₁ (adjointSimpleContraction U hU.ρ) =
-    sourceX₁ U hU.ρ hU.ρ_posDef *
-      (sourceY₁ U hU.ρ hU.ρ_posDef * (sourceY₁ U hU.ρ hU.ρ_posDef)ᴴ) *
-        sourceY₁ U hU.ρ hU.ρ_posDef
-  rw [← Matrix.mul_assoc, ← sourceCutM₁_eq_sourceX₁_mul_sourceY₁, Matrix.mul_assoc]
-  ext ⟨i, b⟩ ⟨a, j⟩
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_prod_type,
-    sourceCutM₁_apply]
-  simp_rw [sourceY₁_gram_eq_weighted_sourceCutM₁_gram]
-  simp only [adjointSimpleContraction, Finset.mul_sum, Finset.sum_mul]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr₂ fun p _ x _ ↦ ?_
-  rw [Fintype.sum_reverse_three]
-  refine Finset.sum_congr₂ fun q _ t _ ↦ ?_
-  refine Finset.sum_congr rfl fun r _ ↦ ?_
-  have hρ : hU.ρ t r = hU.ρ r t :=
-    congrArg (fun M : Matrix (Fin D) (Fin D) ℂ ↦ M r t) hU.ρ_isDiag.isSymm.eq
-  rw [hρ]
-  ring
+  let S := sourceFactors U hU.ρ hU.ρ_posDef
+  have hW : (sourceWeight (d := d) hU.ρ)ᵀ = sourceWeight (d := d) hU.ρ := by
+    rw [sourceWeight, ← Matrix.kroneckerMap_transpose, Matrix.transpose_one,
+      hU.ρ_isDiag.isSymm.eq]
+  rw [sourceCutM₁_adjointSimpleContraction_raw, S.sourceCutM₁_eq, hW]
+  rw [Matrix.conjTranspose_mul]
+  simp only [Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc (sourceWeight (d := d) hU.ρ) S.X₁ S.Y₁,
+    ← Matrix.mul_assoc S.X₁ᴴ (sourceWeight (d := d) hU.ρ * S.X₁) S.Y₁]
+  have hX : S.X₁ᴴ * (sourceWeight (d := d) hU.ρ * S.X₁) = 1 := by
+    simpa only [Matrix.mul_assoc] using S.X₁_weighted_isometry
+  rw [hX]
+  simp only [Matrix.one_mul]
+  change S.X₁ * (S.Y₁ * (S.Y₁ᴴ * S.Y₁)) = S.X₁ * (S.Y₁ * (S.Y₁ᴴ * S.Y₁))
+  rfl
 
 /-- The source-rank Gram matrix of the first chosen source factor is scalar.
 The weighted left inverse and the supplied right inverse cancel the dressing.

@@ -1674,6 +1674,37 @@ Definition~\ref{def:mpug_group_representation}.
 
 \subsection{Normalization of the first source factor}
 
+\begin{theorem}[The raw first-cut contraction]
+    \label{thm:mpug_raw_first_cut_contraction}
+    \lean{MPOTensor.sourceCutM₁_adjointSimpleContraction_raw}
+    \leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
+        def:mpug_adjoint_simple_contraction}
+    For an arbitrary tensor $A$ of physical dimension $d$ and bond
+    dimension $D$, and an arbitrary $D\times D$ matrix $\rho$, put
+    $M=M_1(A)$ and $W=I_d\otimes\rho$. Then
+    \begin{align}
+        M_1(s(A,\rho)) & =MM^\dagger W^{\mathsf T}M.
+        \label{eq:mpug_raw_first_cut_contraction}
+    \end{align}
+    No positivity, canonical-form, or simplicity hypothesis is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
+        def:mpug_adjoint_simple_contraction}
+    In the first-cut coordinates, multiplication and the physical
+    Kronecker delta in $W^{\mathsf T}$ give
+    \begin{align}
+        (MM^\dagger W^{\mathsf T}M)_{(i,b),(a,j)}
+         & =\sum_{p,q=0}^{d-1}\sum_{x,r,t=0}^{D-1}
+        A^{i,p}_{xb}\,\overline{A^{q,p}_{xr}}\,
+        A^{q,j}_{at}\,\rho_{tr}                    \\
+         & =s(A,\rho)^{i,j}_{ab}.
+    \end{align}
+    The transpose preserves the boundary entry $\rho_{tr}$ in the
+    defining contraction.
+\end{proof}
+
 \begin{theorem}[The first cut of the adjoint-simple contraction]
     \label{thm:mpug_first_cut_adjoint_contraction}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction}
@@ -1696,14 +1727,16 @@ Definition~\ref{def:mpug_group_representation}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_factorizations,
-        thm:mpu_source_v_four_u_expansions,
-        def:mpug_adjoint_simple_contraction}
-    Replace $X_1Y_1$ by $M_1(\mathcal U)$ and expand the remaining Gram
-    factor with the weighted first-cut identity of
-    Theorem~\ref{thm:mpu_source_v_four_u_expansions}. Reorder the finite
-    sums. Since $\rho$ is diagonal, $\rho_{tr}=\rho_{rt}$, and the result
-    is exactly the raw contraction defining $M_1(s)$.
+    \uses{thm:mpug_raw_first_cut_contraction,
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    Put $W=I_d\otimes\rho$. Diagonality gives $W^{\mathsf T}=W$.
+    The cut factorization and weighted isometry then yield
+    \begin{align}
+        M_1(s)
+         & = (X_1Y_1)(X_1Y_1)^\dagger W(X_1Y_1)       \\
+         & =X_1(Y_1Y_1^\dagger)(X_1^\dagger W X_1)Y_1 \\
+         & =X_1(Y_1Y_1^\dagger)Y_1.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[The first source Gram matrix is scalar]
@@ -1830,10 +1863,10 @@ Definition~\ref{def:mpug_group_representation}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_adjoint_simple_contraction,
+    \uses{thm:mpug_raw_first_cut_contraction,
         thm:mpu_physical_adjoint_source_cuts,
-        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations}
-    Expanding the raw contraction of any tensor $A$ gives
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    Theorem~\ref{thm:mpug_raw_first_cut_contraction} gives
     \begin{align}
         M_1(s(A,\rho)) & =M_1(A)M_1(A)^\dagger W^{\mathsf T}M_1(A).
     \end{align}

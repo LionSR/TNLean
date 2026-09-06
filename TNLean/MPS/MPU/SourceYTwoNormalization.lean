@@ -23,30 +23,6 @@ namespace MPOTensor
 
 variable {d D : ℕ} {U : MPOTensor d D}
 
--- The transpose records the raw contraction's boundary entry `ρ t r`.
-private theorem sourceCutM₁_adjointSimpleContraction_raw (T : MPOTensor d D)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    sourceCutM₁ (adjointSimpleContraction T ρ) =
-      sourceCutM₁ T * (sourceCutM₁ T)ᴴ * (sourceWeight (d := d) ρ)ᵀ *
-        sourceCutM₁ T := by
-  ext ⟨i, b⟩ ⟨a, j⟩
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.transpose_apply,
-    Fintype.sum_prod_type, sourceWeight, kroneckerMap_apply, Matrix.one_apply,
-    ite_mul, one_mul, zero_mul, Finset.sum_mul, Finset.mul_sum,
-    sourceCutM₁_apply, adjointSimpleContraction]
-  simp only [mul_ite, ite_mul, mul_zero, zero_mul, Finset.sum_ite_irrel, Finset.sum_const_zero,
-    Finset.sum_ite_eq, Finset.mem_univ, ite_true]
-  conv_rhs =>
-    rw [Fintype.sum_last_two_first_five, Finset.sum_comm]
-    arg 2; ext p
-    arg 2; ext x
-    rw [Fintype.sum_reverse_three]
-  congr 1
-  ext p
-  refine Finset.sum_congr₂ fun x _ r _ ↦ ?_
-  refine Finset.sum_congr₂ fun t _ q _ ↦ ?_
-  ring
-
 /-- The adjoint raw contraction factors through the weighted Gram matrix of
 our chosen second source factor. Source: arXiv:2502.20257, proof of
 Proposition `prop:MPUsplus`, second identity of `eq:MPUnice3`. -/
