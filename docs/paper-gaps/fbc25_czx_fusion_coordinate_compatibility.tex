@@ -1,0 +1,193 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
+
+\title{Compatibility of CZX Fusion and Action Coordinates}
+\author{}
+\date{2026-09-06}
+
+\begin{document}
+\maketitle
+\gapnote{open-gap}{wip}
+
+\section{The comparison to be established}
+
+The definition of the fusion--action scalar in
+\papereqref{fbc25}{eq:defL} of
+Ref.~\cite[lines~1875--1913]{FrancoRubio2025MPUGauging} compares a right fusion cap with two successive right action tensors. The neutral action is trivial, with bond dimension one
+\cite[line~1937]{FrancoRubio2025MPUGauging}. For the CZX generator $g$, which exchanges the two GHZ blocks, the right boundary on the successive-action side is therefore $q_{1-x}\otimes q_x$, where $x\in\{0,1\}$ is the initial block. The source later gives the scalars $L^0_{g,g}=-1$ and $L^1_{g,g}=1$, as well as physical fusion identities with these signs
+\cite[lines~4695--4699 and 4989--5067]{FrancoRubio2025MPUGauging}.
+
+The maintained cap/action coordinates specified here give successive-action proportionality coefficients $c_0=1$ and $c_1=-1$. This is a nonzero, positive-length obstruction to identifying the two calculations in those coordinates. It is not yet a proof that the source assertion is false: that conclusion requires a common interpretation of every oriented leg, density insertion, and fusion gauge. In particular, a finite contraction with well-defined indices need not be the contraction intended by an incompletely typed diagram.
+
+\section{Fixed coordinates and oriented boundaries}
+
+Write a physical index as $j=2a+b$, with $a,b\in\{0,1\}$, and use the computational basis in this order. The GHZ block $x$ has coordinates $A_x^j=\delta_{j,3x}$. All matrices below have output indices on rows and input indices on columns; boundary covectors are rows and boundary vectors are columns. No additional complex conjugation is applied when a row is contracted with a column. In the product virtual space the ordered pair $(\alpha,\gamma)$ has index $2\alpha+\gamma$, with the upper symmetry tensor first. The interior-action diagram places the left action tensor at the left boundary and the right action tensor at the right boundary
+\cite[lines~1841--1855]{FrancoRubio2025MPUGauging}. The right fusion symbol has its two unfused legs to the left, ordered upper then lower; the right action symbol likewise has the symmetry leg above the block leg.\footnote{The direct orientation anchors are
+    \path{Papers/2502.20257/main.tex}, lines~1841--1855, and the drawing definitions in
+    \path{Papers/2502.20257/Commands.tex}, lines~324--338 for right fusion and lines~386--399 for right action.}
+
+The blocked CZX tensor of \papereqref{fbc25}{eq:MPU_CZX} in
+Ref.~\cite[lines~4505--4547]{FrancoRubio2025MPUGauging}, including its two output $Z$ gates and unnormalized Hadamard weights, has coordinates
+\begin{align*}
+    T^{2a+b,\,2c+d}_{\alpha\beta}
+     & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\alpha,a}
+    (-1)^{a+b+ab+b\beta}.
+\end{align*}
+Here $\alpha$ is the left virtual index and $\beta$ the right virtual index. The printed action tensors and the right fusion cap in
+Ref.~\cite[lines~4671--4694]{FrancoRubio2025MPUGauging} are read as
+\begin{align}
+    p_0               & =(0,-i),                     & p_1                                     & =(1,0), \notag                     \\
+    q_0               & =\tfrac12(-i,i)^{\mathsf T}, & q_1                                     & =\tfrac12(1,1)^{\mathsf T}, \notag \\
+    W_{2\beta+\gamma} & =\tfrac12Y_{\gamma\beta},
+                      & Y                            & =\begin{pmatrix}0&-i\\i&0\end{pmatrix},
+                      & W                            & =\tfrac12(0,i,-i,0)^{\mathsf T}.
+    \label{eq:fbc25_czx_compat_fusion_cap}
+\end{align}
+The action columns use $|\pm\rangle=(|0\rangle\pm|1\rangle)/\sqrt2$. In particular, the ordered cap in
+(\ref{eq:fbc25_czx_compat_fusion_cap}) uses $Y_{\gamma\beta}$, not $Y_{\beta\gamma}$.
+
+Let $B_x$ be the supported letter of the product of the two symmetry tensors on block $x$. Its left and right product indices are $(\alpha,\gamma)$ and $(\beta,\delta)$, respectively:
+\begin{align*}
+    (B_x)_{2\alpha+\gamma,\,2\beta+\delta}
+        & =\sum_{j=0}^3 T^{3x,j}_{\alpha\beta}T^{j,3x}_{\gamma\delta},                        \\
+    P_x & =p_{1-x}\otimes p_x,
+        & Q_x                                                          & =q_{1-x}\otimes q_x.
+\end{align*}
+The scalar neutral action contributes the number $1$ on the fused side. Thus the candidate coordinate reading of the defining comparison is $B_xW=c_xB_xQ_x$, with the same order of virtual legs on both sides.
+
+Direct substitution gives
+\begin{align}
+    B_0 & =\begin{pmatrix}0&0&0&0\\-1&1&-1&1\\0&0&0&0\\0&0&0&0\end{pmatrix},
+        & B_1                                                                & =\begin{pmatrix}0&0&0&0\\0&0&0&0\\-1&-1&1&1\\0&0&0&0\end{pmatrix},
+    \label{eq:fbc25_czx_compat_sparse_letters}                                                                                                                          \\
+    P_0 & =(0,-i,0,0),                                                       & P_1                                                                & =(0,0,-i,0), \notag \\
+    Q_0 & =\tfrac14(-i,i,-i,i)^{\mathsf T},
+        & Q_1                                                                & =\tfrac14(-i,-i,i,i)^{\mathsf T}.
+    \label{eq:fbc25_czx_compat_product_columns}
+\end{align}
+These are ordinary finite matrices; their definition does not presume an identification with the source's $L$-symbols.
+
+\section{The positive-length obstruction}
+
+Let $e_0,e_1,e_2,e_3$ denote the standard basis of the product virtual space. Multiplication of the matrices in
+(\ref{eq:fbc25_czx_compat_sparse_letters})--(\ref{eq:fbc25_czx_compat_product_columns}) gives
+\begin{align}
+    B_0Q_0    & =i e_1, & B_0W  & =i e_1, \notag  \\
+    B_1Q_1    & =i e_2, & B_1W  & =-i e_2, \notag \\
+    P_xB_xQ_x & =1,     & B_x^2 & =B_x.
+    \label{eq:fbc25_czx_compat_normalization_idempotence}
+\end{align}
+Consequently the coefficient is uniquely determined:
+\begin{align}
+    c_x  & :=P_xB_xW,
+         & c_0                & =1, & c_1 & =-1,
+    \label{eq:fbc25_czx_compat_coefficients}     \\
+    B_xW & =c_xB_xQ_x. \notag
+\end{align}
+Indeed, applying $P_x$ to any proposed proportionality and using
+(\ref{eq:fbc25_czx_compat_normalization_idempotence}) recovers its coefficient. For every integer $n\geq1$, idempotence also gives
+\begin{align*}
+    B_x^n & =B_x,
+          & P_xB_x^nQ_x & =1,
+          & B_x^nW      & =c_xB_x^nQ_x.
+\end{align*}
+The discrepancy therefore persists at every positive repetition of the supported letter. It does not arise from an empty product. The separate empty-word correction to the action pair neither explains nor removes
+(\ref{eq:fbc25_czx_compat_coefficients}).\footnote{See
+    \path{docs/paper-gaps/fbc25_czx_action_empty_word.tex}. The coordinate statements are recorded in
+    \leanid{MPOTensor.CZX.fusionActionCoefficient_coordinates},
+    \leanid{MPOTensor.CZX.fusionAction_finite_identities}, and
+    \leanid{MPOTensor.CZX.fusionAction_positive_power}, in
+    \doclink{TNLean/MPS/MPDO/CZXFusionActionCoordinates}.
+    These names identify the explicit contractions, not a theorem equating them with the source's $L$-symbols.}
+
+\section{The retained physical operator}
+
+For two blocked sites, number the four qubits $0,1,2,3$ from left to right. Read circuits from bottom to top and operator products from right to left. The unmodified physical operator printed in
+Ref.~\cite[lines~4989--5013]{FrancoRubio2025MPUGauging} is
+\begin{align*}
+    \lambda & =-i(X_0X_1X_2Z_3) \mathrm{CZ}_{01}\mathrm{CZ}_{12}X_2.
+\end{align*}
+The displayed defect evaluations are $g[0]=|00\rangle$ and $g[1]=-i|11\rangle$
+\cite[lines~4800--4859]{FrancoRubio2025MPUGauging}. Retain these evaluations and set $e[x]=|xx\rangle$. With the left defect first, define
+\begin{align*}
+    v_x & =g[1-x]\otimes g[x], & u_x            & =e[x]\otimes e[x],                  \\
+    v_0 & =-i|1100\rangle,     & v_1            & =-i|0011\rangle,
+        & u_0                  & =|0000\rangle, & u_1                & =|1111\rangle.
+\end{align*}
+The retained operator gives precisely the printed signs
+\cite[lines~5014--5067]{FrancoRubio2025MPUGauging}:
+\begin{align}
+    \lambda v_0 & =-u_0, & \lambda v_1 & =u_1.
+    \label{eq:fbc25_czx_compat_physical_signs}
+\end{align}
+Thus the physical coefficients in
+(\ref{eq:fbc25_czx_compat_physical_signs}) are $-c_x$, not $c_x$.\footnote{The two physical contractions are
+    \leanid{MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_zero} and
+    \leanid{MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_one}, in
+    \doclink{TNLean/MPS/MPDO/CZXUnmodifiedFusion}. They concern the unmodified physical operator and do not identify its coefficients with a virtual fusion--action scalar.} This comparison does not alter $\lambda$, the cap, the block labels, or the displayed defects. In particular, it does not replace the unmodified operator by the modified fusion operator.
+
+\section{Two orientation diagnostics}
+
+The displayed factorization in
+Ref.~\cite[lines~4559--4659]{FrancoRubio2025MPUGauging} admits the following explicit index convention. For $j=2a+b$, $k=2c+d$, and $\bar j=3-j$, define factors with the indicated row and column indices by
+\begin{align}
+    (X_2)_{(\alpha,j),k} & =\delta_{j,k}\delta_{\alpha,a}(-1)^{a+b},
+    \label{eq:fbc25_czx_compat_filled_left}                                           \\
+    (Y_2)_{k,(j,\beta)}  & =\delta_{k,\bar j}(-1)^{cd+d\beta}, \notag                 \\
+    (X_1)_{(j,\beta),k}  & =\sum_{t=0}^1Y_{\beta t}\overline{(Y_2)_{k,(j,t)}}, \notag \\
+    (Y_1)_{k,(\alpha,j)} & =\sum_{t=0}^1\overline{(X_2)_{(t,j),k}}Y_{t\alpha}.
+    \label{eq:fbc25_czx_compat_empty_right}
+\end{align}
+Bars on entries denote complex conjugation; $\bar j$ denotes only the complemented physical index. These formulas specify the direction of every horizontal $Y$ factor.
+
+With identity on the one-dimensional fused endpoint, consider the fully typed two-site contraction
+\begin{align}
+    \Lambda_{(j,r),(k,l)}
+     & =\sum_{\alpha,\beta,\gamma=0}^1\sum_{s=0}^3
+    (X_1)_{(j,\alpha),k}
+    T^{r,s}_{\alpha\beta}
+    (X_1)_{(s,\gamma),l}
+    W_{2\beta+\gamma}.
+    \label{eq:fbc25_czx_compat_typed_fusion}
+\end{align}
+The free output indices are $(j,r)$ and the free input indices are $(k,l)$, each in left-site, right-site order. A separate coordinate diagnostic yields
+\begin{align}
+    \Lambda_{(j,r),(k,l)} & =-\langle j,r|\lambda|k,l\rangle.
+    \label{eq:fbc25_czx_compat_typed_fusion_sign}
+\end{align}
+This is not an identification of
+(\ref{eq:fbc25_czx_compat_typed_fusion}) with the general source definition. In
+\papereqref{fbc25}{eq:lambda_R} of
+Ref.~\cite[lines~2675--2704]{FrancoRubio2025MPUGauging}, the density insertion is labelled $\rho_g$ on the fused bond. For $g=h$ in this example that bond has dimension $D_{gh}=D_e=1$, whereas $D_g=2$. Interpreting that insertion requires an explicit domain and codomain; silently replacing it by the identity on the fused endpoint is not a source justification.
+
+There is a second diagnostic at one site:
+\begin{align}
+    \sum_{\alpha=0}^1p_0(\alpha)(Y_1)_{0,(\alpha,0)} & =-1,
+                                                     & \sum_{\alpha=0}^1p_1(\alpha)(Y_1)_{3,(\alpha,3)} & =i.
+    \label{eq:fbc25_czx_compat_typed_defect_signs}
+\end{align}
+These are opposite to the displayed defect coefficients. The convention used to recover the displayed defects takes the outgoing bond amplitude on block $x$ to be $Y_{\alpha x}$; the factor in
+(\ref{eq:fbc25_czx_compat_empty_right}) supplies $Y_{x\alpha}$. Since $Y^{\mathsf T}=-Y$, these readings differ by a sign. The existing defect-domain note fixes its reading by the displayed defect evaluations; it does not settle the compatibility of that reading with all four factors in
+(\ref{eq:fbc25_czx_compat_filled_left})--(\ref{eq:fbc25_czx_compat_empty_right}).\footnote{See
+    \path{docs/paper-gaps/fbc25_czx_defect_domains.tex}. The calculations
+    (\ref{eq:fbc25_czx_compat_typed_fusion_sign}) and
+    (\ref{eq:fbc25_czx_compat_typed_defect_signs}) remain diagnostic calculations: no identification of either with the intended source diagram is asserted here.}
+% The two diagnostic calculations have separate temporary Lean proof witnesses;
+% neither has a public declaration.
+
+\section{Verdict and elimination criterion}
+
+The classification is an open gap under active investigation. The explicit boundary coefficients, their uniqueness, and their persistence at positive length are determined. The retained physical signs are also determined. What remains open is whether a single source-faithful convention identifies these two constructions. The present result is not a verdict that the paper contains a proved error, nor does it invalidate the finite restrictions of the retained physical circuits on the displayed defect vectors.
+
+To eliminate the gap, specify the domain and codomain of every factor in the fusion and defect diagrams, including the fused density insertion, and write all contractions with common physical and virtual index orders. The same convention must recover the blocked tensor, both displayed decompositions, the printed fusion and action tensors, the neutral action, the displayed defects, and the unmodified physical fusion circuit. It must then derive the fusion--action comparison and the physical defect identities within that convention. If a representation or gauge transformation intervenes, its effect on every one of these objects and on the scalar must be exhibited, rather than changing only the sign at the disputed step.
+
+No cap negation, scalar gauge flip, block relabelling, dressed action tensor, or change of the modified fusion operator is adopted here to force agreement. If a common convention is found, the note can be resolved by giving the explicit identifications. If the source fixes incompatible conventions and no such identification is possible, the precise affected assertion and its correction must first be isolated. The coordinate obstruction alone does not settle broader completion or gauging questions.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
