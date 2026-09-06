@@ -7065,9 +7065,19 @@ unbuffered defect formulas.
     \begin{align*}
         \sum_{\beta=0}^1(X_1)_{(i,\beta),a}(Y_1)_{r,(\beta,j)}.
     \end{align*}
-    Substitute the displayed factors and compare with the sparse action
-    (\ref{eq:mpug_czx_w_action}). The two expressions agree for each of
-    the $4^4$ choices of external indices.
+    The sparse action (\ref{eq:mpug_czx_w_action}) gives
+    \begin{align*}
+        W_{(i,r),(a,j)}
+         & =\begin{cases}
+                (-1)^{e(x)}, & i=3-a\text{ and }r=j, \\
+                0,           & \text{otherwise},
+            \end{cases}
+    \end{align*}
+    where $x=(x_0,x_1,x_2,x_3)\in\{0,1\}^4$ satisfies
+    $a=2x_0+x_1$ and $j=2x_2+x_3$.
+    Substitute the displayed factors, first discarding the zero entries
+    of the empty factor $X_1$ by comparing $i$ and $a$. Only then
+    compare $r$ and $j$; on the surviving support the phases agree.
 \end{proof}
 
 \begin{theorem}[Left movement coordinates of the displayed CZX factors]
@@ -7099,9 +7109,15 @@ unbuffered defect formulas.
     \begin{align*}
         \sum_{\beta=0}^1(Y_2)_{l,(j,\beta)}(X_2)_{(\beta,i),k}.
     \end{align*}
-    Substitute the displayed factors and compare with the complex
-    conjugate of the $((j,k),(l,i))$ entry of the sparse matrix in
-    (\ref{eq:mpug_czx_w_action}). Check the $4^4$ external index choices.
+    Use the conjugated reversed entry
+    $(W^\dagger)_{(l,i),(j,k)}=\overline{W_{(j,k),(l,i)}}$.
+    By (\ref{eq:mpug_czx_w_action}), it vanishes unless $j=3-l$ and
+    $k=i$; on this support it is $\overline{(-1)^{e(x)}}$, where
+    $x=(x_0,x_1,x_2,x_3)\in\{0,1\}^4$ satisfies
+    $l=2x_0+x_1$ and $i=2x_2+x_3$.
+    Substitute the displayed factors, first discarding the zero entries
+    of the filled factor $Y_2$ by comparing $l$ and $j$. Only then
+    compare $i$ and $k$ and verify the remaining phases.
 \end{proof}
 
 % Scope of #7355 here: only the two displayed movement-coordinate identities.
