@@ -5941,9 +5941,11 @@ by the displayed matrices.
     The four explicit factors of
     Definition~\ref{def:mpug_czx_displayed_factors} satisfy
     \begin{align}
-        X_1^\dagger X_1 & =2I_4, \\
-        X_2^\dagger X_2 & =I_4,  \\
-        Y_1Y_1^\dagger  & =I_4,  \\
+        X_1^\dagger X_1 & =2I_4,
+        \label{eq:mpug_czx_displayed_gram_x1} \\
+        X_2^\dagger X_2 & =I_4,
+        \label{eq:mpug_czx_displayed_gram_x2} \\
+        Y_1Y_1^\dagger  & =I_4,               \\
         Y_2Y_2^\dagger  & =2I_4.
     \end{align}
     The factors of two retain the unnormalized Hadamard weights of
@@ -5951,10 +5953,18 @@ by the displayed matrices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_czx_displayed_factors, def:mpug_czx_dagger_gauge}
-    Expand the four Gram matrices over their product-index spaces and
-    substitute the factor coordinates and the Pauli matrix. Evaluation
-    at each pair of factor indices gives the displayed scalar identities.
+    \uses{def:mpug_czx_displayed_factors, lem:mpug_czx_dagger_gauge_laws}
+    The empty factors are Pauli-gauge contractions of the filled factors,
+    $X_1=(I_4\otimes Y)Y_2^\dagger$ and $Y_1=X_2^\dagger(Y\otimes I_4)$.
+    By Lemma~\ref{lem:mpug_czx_dagger_gauge_laws}, $Y$ is unitary, hence so
+    are $I_4\otimes Y$ and $Y\otimes I_4$; composing a unitary matrix with
+    $Y_2^\dagger$, respectively with $X_2^\dagger$, leaves the Gram matrix
+    unchanged, so $X_1^\dagger X_1=Y_2Y_2^\dagger$ and
+    $Y_1Y_1^\dagger=X_2^\dagger X_2$. It remains to expand the two filled
+    Gram matrices $X_2^\dagger X_2$ and $Y_2Y_2^\dagger$ over their
+    product-index spaces and substitute the factor coordinates; evaluation
+    at each pair of factor indices gives the two displayed scalar
+    identities.
 \end{proof}
 
 \begin{definition}[Right inverses of the displayed CZX factors]
@@ -5979,8 +5989,10 @@ by the displayed matrices.
         def:mpug_czx_displayed_right_inverses, def:mpu_source_weight}
     Set $\rho=I_2/2$. The displayed factors and right inverses satisfy
     \begin{align}
-        Y_1Z_1                         & =I_4, \\
-        Y_2Z_2                         & =I_4, \\
+        Y_1Z_1                         & =I_4,
+        \label{eq:mpug_czx_displayed_right_inverse_y1} \\
+        Y_2Z_2                         & =I_4,
+        \label{eq:mpug_czx_displayed_right_inverse_y2} \\
         X_1^\dagger(I_4\otimes\rho)X_1 & =I_4.
     \end{align}
 \end{theorem}
@@ -6015,8 +6027,10 @@ by the displayed matrices.
         thm:mpug_czx_displayed_normalizations}
     Each cut factors through a four-dimensional space, so its rank is at
     most four. For the first cut take $L_1=X_1^\dagger/2$, and for the
-    second take $L_2=X_2^\dagger$. The preceding identities give
-    $L_iX_i=I_4$ and $Y_iZ_i=I_4$, hence
+    second take $L_2=X_2^\dagger$. By (\ref{eq:mpug_czx_displayed_gram_x1})
+    and (\ref{eq:mpug_czx_displayed_gram_x2}), $L_iX_i=I_4$; by
+    (\ref{eq:mpug_czx_displayed_right_inverse_y1}) and
+    (\ref{eq:mpug_czx_displayed_right_inverse_y2}), $Y_iZ_i=I_4$, hence
     $L_i(X_iY_i)Z_i=I_4$. Multiplication cannot increase rank, so each cut
     has rank at least four.
 \end{proof}
@@ -6024,11 +6038,14 @@ by the displayed matrices.
 \begin{definition}[The displayed factors in source-rank coordinates]
     \label{def:mpug_czx_displayed_source_factors}
     \lean{MPOTensor.CZX.displayedRightEquiv, MPOTensor.CZX.displayedLeftEquiv,
-        MPOTensor.CZX.displayedSourceFactors}
+        MPOTensor.CZX.displayedSourceFactors,
+        MPOTensor.CZX.displayedSourceFactors_coordinates,
+        MPOTensor.CZX.displayedSourceFactors_inverse_coordinates}
     \leanok
     \uses{def:mpug_czx_displayed_factors,
         def:mpug_czx_displayed_right_inverses, thm:mpug_czx_displayed_ranks,
-        def:mpug_czx_exact_tensor, def:mpu_weighted_source_factors}
+        def:mpug_czx_exact_tensor, def:mpu_weighted_source_factors,
+        def:mpug_czx_dagger_gauge}
     Let $d_r,d_l$ be the two source-cut ranks of the exact CZX tensor $B$.
     By Theorem~\ref{thm:mpug_czx_displayed_ranks}, both are four. Let
     \begin{align}
@@ -6043,52 +6060,19 @@ by the displayed matrices.
     Definition~\ref{def:mpu_weighted_source_factors}, satisfying both cut
     factorizations, the two left-factor normalizations, and both
     right-inverse identities.
-    % This is an explicit SourceFactors witness, not an equality with the
-    % choice-selected compact SVD factors. It supplies no canonical-form-II
-    % presentation, fusion tensors, local action tensors, or anomaly data.
-\end{definition}
 
-\begin{proof}\leanok
-    \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
-        thm:mpug_czx_displayed_normalizations}
-    Transport the cut factorizations and inverse identities along the
-    two index bijections. Products, conjugate transposes, and identities
-    are preserved. The weighted first normalization and the ordinary
-    second normalization therefore hold in the source-rank coordinates.
-\end{proof}
-
-\begin{theorem}[Coordinates of the transported CZX source factors]
-    \label{thm:mpug_czx_displayed_source_coordinates}
-    \lean{MPOTensor.CZX.displayedSourceFactors_coordinates}
-    \leanok
-    \uses{def:mpug_czx_displayed_source_factors,
-        def:mpug_czx_displayed_factors, def:mpug_czx_displayed_right_inverses}
-    For $0\leq k,i<4$ and $\alpha\in\{0,1\}$, the transported factors
-    of Definition~\ref{def:mpug_czx_displayed_source_factors} satisfy
+    Explicitly, for $0\leq k,i<4$ and $\alpha,\beta\in\{0,1\}$, evaluating
+    the pullbacks gives
     \begin{align}
         (\widehat X_1)_{(i,\alpha),e_r^{-1}(k)} & =(X_1)_{(i,\alpha),k}, \\
         (\widehat Y_1)_{e_r^{-1}(k),(\alpha,i)} & =(Y_1)_{k,(\alpha,i)}, \\
         (\widehat Z_1)_{(\alpha,i),e_r^{-1}(k)} & =(Z_1)_{(\alpha,i),k}, \\
         (\widehat X_2)_{(\alpha,i),e_l^{-1}(k)} & =(X_2)_{(\alpha,i),k}, \\
         (\widehat Y_2)_{e_l^{-1}(k),(i,\alpha)} & =(Y_2)_{k,(i,\alpha)}, \\
-        (\widehat Z_2)_{(i,\alpha),e_l^{-1}(k)} & =(Z_2)_{(i,\alpha),k}.
+        (\widehat Z_2)_{(i,\alpha),e_l^{-1}(k)} & =(Z_2)_{(i,\alpha),k},
     \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:mpug_czx_displayed_source_factors,
-        def:mpug_czx_displayed_factors, def:mpug_czx_displayed_right_inverses}
-    Evaluate the pullbacks and use $e_r(e_r^{-1}(k))=k$ and
-    $e_l(e_l^{-1}(k))=k$.
-\end{proof}
-
-\begin{theorem}[Pauli and inverse coordinates after transport]
-    \label{thm:mpug_czx_displayed_inverse_coordinates}
-    \lean{MPOTensor.CZX.displayedSourceFactors_inverse_coordinates}
-    \leanok
-    \uses{def:mpug_czx_displayed_source_factors, def:mpug_czx_dagger_gauge}
-    For $0\leq k,i<4$ and $\beta\in\{0,1\}$, the transported factors
-    satisfy
+    and substituting the definitions of $X_1,Y_1,Z_1,Z_2$ gives the
+    Pauli and inverse coordinates
     \begin{align}
         (\widehat X_1)_{(i,\beta),e_r^{-1}(k)}
          & =\sum_{t=0}^1Y_{\beta t}
@@ -6103,14 +6087,23 @@ by the displayed matrices.
     In particular, transport preserves the Pauli orientation $Y_{\beta t}$
     in the first factor of
     \cite[lines~4611--4659]{FrancoRubio2025MPUGauging}.
-\end{theorem}
+    % This is an explicit SourceFactors witness, not an equality with the
+    % choice-selected compact SVD factors. It supplies no canonical-form-II
+    % presentation, fusion tensors, local action tensors, or anomaly data.
+\end{definition}
 
 \begin{proof}\leanok
-    \uses{def:mpug_czx_displayed_source_factors,
-        def:mpug_czx_displayed_factors, def:mpug_czx_displayed_right_inverses}
-    Expand the transported factors, then substitute the definitions of
-    $X_1,Y_1,Z_1,Z_2$. The inverse bijections cancel the corresponding
-    pullbacks, leaving the four displayed expressions.
+    \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
+        thm:mpug_czx_displayed_normalizations, def:mpug_czx_displayed_factors,
+        def:mpug_czx_displayed_right_inverses}
+    Transport the cut factorizations and inverse identities along the
+    two index bijections. Products, conjugate transposes, and identities
+    are preserved. The weighted first normalization and the ordinary
+    second normalization therefore hold in the source-rank coordinates.
+    Evaluating the pullbacks, using $e_r(e_r^{-1}(k))=k$ and
+    $e_l(e_l^{-1}(k))=k$, gives the coordinate identities; substituting
+    the definitions of $X_1,Y_1,Z_1,Z_2$ and cancelling the inverse
+    bijections gives the Pauli and inverse coordinates.
 \end{proof}
 
 \subsection{The blocked GHZ state and its CZX invariance}
