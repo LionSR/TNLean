@@ -1185,6 +1185,79 @@ asserted in that passage.
     formulas, since $e^{-1}(e(l))=l$.
 \end{proof}
 
+\begin{theorem}[Unitary transport of the first source factors]
+    \label{thm:mpug_inverse_source_unitary_transport}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_unitary_transport,
+        MPOTensor.inverseCompatibleSourceFactors_gram_eq}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors,
+        def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_comparison_k,
+        def:mpu_weighted_source_factors, def:mpu_canonical_form_ii,
+        def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
+    form II, with recorded positive-definite matrix $\rho$. Suppose
+    that $T$ is unitary on $\C^D$, that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$, and that $T\overline T=\sigma I_D$ for a
+    scalar $\sigma\in\C$. Let $\widetilde X_1,\widetilde Y_1$ be the
+    chosen first source factors at this same weight, and let
+    $\widehat X_1,\widehat Y_1$ be the inverse-compatible first factors
+    of Definition~\ref{def:mpug_inverse_compatible_source_factors}.
+    Put $r=\operatorname{rank}M_1(\mathcal U)$ and
+    $\ell=\operatorname{rank}M_2(\mathcal U)$. Take the weighted
+    comparison $K\colon\C^\ell\to\C^r$ of
+    Definition~\ref{def:mpug_inverse_cut_comparison_k} and the
+    permutation matrix $P_e\colon\C^\ell\to\C^r$ of
+    Definition~\ref{def:mpug_inverse_cut_rank_equiv}. The square matrix
+    $C=KP_e^\dagger$ is unitary on $\C^r$, and
+    \begin{align}
+        \widehat X_1 & =\widetilde X_1C,         \\
+        \widehat Y_1 & =C^\dagger\widetilde Y_1.
+    \end{align}
+    Consequently, the Gram matrices on the external first-cut spaces
+    are unchanged:
+    \begin{align}
+        \widehat X_1\widehat X_1^\dagger
+         & =\widetilde X_1\widetilde X_1^\dagger, \\
+        \widehat Y_1^\dagger\widehat Y_1
+         & =\widetilde Y_1^\dagger\widetilde Y_1.
+    \end{align}
+    This is the transport of the comparison in
+    \cite[lines~5432--5443]{FrancoRubio2025MPUGauging}, after its
+    unitarity is established at lines~5444--5487. It asserts no
+    transport formula for the chosen first right inverse and no
+    further pleasant properties.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_comparison_unitary,
+        thm:mpug_inverse_cut_comparison, thm:mpug_inverse_cut_unitary_consequences,
+        def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_compatible_source_factors}
+    The comparison results give $K^\dagger K=I_\ell$, $KK^\dagger=I_r$,
+    $X=\widetilde X_1K$, and $Y=K^\dagger\widetilde Y_1$ for the
+    untransported candidates $X,Y$. Reindexing the columns of $K$
+    along $e$ gives $C=KP_e^\dagger$. Since $P_e$ identifies the two
+    coordinate bases,
+    \begin{align}
+        C^\dagger C & =P_eK^\dagger KP_e^\dagger=I_r, \\
+        CC^\dagger  & =KP_e^\dagger P_eK^\dagger=I_r.
+    \end{align}
+    Reindexing the two candidate factors gives
+    \begin{align}
+        \widehat X_1 & =XP_e^\dagger
+        =\widetilde X_1KP_e^\dagger=\widetilde X_1C, \\
+        \widehat Y_1 & =P_eY
+        =P_eK^\dagger\widetilde Y_1=C^\dagger\widetilde Y_1.
+    \end{align}
+    Cancel $CC^\dagger$ in the external Gram matrices:
+    \begin{align}
+        \widehat X_1\widehat X_1^\dagger
+         & =\widetilde X_1(CC^\dagger)\widetilde X_1^\dagger
+        =\widetilde X_1\widetilde X_1^\dagger,               \\
+        \widehat Y_1^\dagger\widehat Y_1
+         & =\widetilde Y_1^\dagger(CC^\dagger)\widetilde Y_1
+        =\widetilde Y_1^\dagger\widetilde Y_1.
+    \end{align}
+\end{proof}
 \begin{definition}[Literal gates on the common second-cut space]
     \label{def:mpug_inverse_compatible_gates}
     \lean{MPOTensor.inverseCompatibleU, MPOTensor.inverseCompatibleV}
