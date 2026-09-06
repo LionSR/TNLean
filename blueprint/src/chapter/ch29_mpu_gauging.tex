@@ -1761,6 +1761,7 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{thm:mpug_raw_first_cut_contraction,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
         def:mpu_weighted_source_factors, def:mpu_source_weight}
     Put $W=I_d\otimes\rho$. Diagonality gives $W^{\mathsf T}=W$.
     The cut factorization and weighted isometry then yield
@@ -1898,6 +1899,7 @@ Definition~\ref{def:mpug_group_representation}.
 \begin{proof}\leanok
     \uses{thm:mpug_raw_first_cut_contraction,
         thm:mpu_physical_adjoint_source_cuts,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
         def:mpu_weighted_source_factors, def:mpu_source_weight}
     Theorem~\ref{thm:mpug_raw_first_cut_contraction} gives
     \begin{align}
