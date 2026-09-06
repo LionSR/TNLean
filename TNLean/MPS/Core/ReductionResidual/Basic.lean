@@ -209,4 +209,41 @@ theorem reductionResidual_mem_reductionResidualAlgebra
   apply NonUnitalAlgebra.subset_adjoin ℂ
   exact ⟨i, rfl⟩
 
+/-- The residual letters $N^i=B^i-WA^iV$ are unchanged by the reciprocal scalar
+rescaling $W\mapsto\beta W$, $V\mapsto\beta^{-1}V$: the two scalars meet inside
+the product $WA^iV$ and cancel.
+
+Under the identification $F^<=V$, $F^>=W$ this is the scalar gauge freedom of
+arXiv:2502.20257, `eq:scalar_fus_ten`, `main.tex` lines 1500--1504. -/
+theorem reductionResidual_reciprocal_smul (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) {β : ℂ} (hβ : β ≠ 0) :
+    reductionResidual B A (β⁻¹ • V) (β • W) = reductionResidual B A V W := by
+  funext i
+  simp (disch := exact hβ) only [reductionResidual, matrix_reciprocal_smul]
+
+/-- The reciprocal scalar rescaling preserves every exact-length residual-word
+nilpotency bound, in both directions. -/
+theorem isReductionResidualNilpotencyBound_reciprocal_smul (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) {β : ℂ} (hβ : β ≠ 0) (N : ℕ) :
+    IsReductionResidualNilpotencyBound B A (β⁻¹ • V) (β • W) N ↔
+      IsReductionResidualNilpotencyBound B A V W N := by
+  unfold IsReductionResidualNilpotencyBound
+  rw [reductionResidual_reciprocal_smul B A V W hβ]
+
+/-- The MGSC18 nilpotency length of a reduction is unchanged by the reciprocal
+scalar rescaling. -/
+theorem reductionResidualNilpotencyLength_reciprocal_smul (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) {β : ℂ} (hβ : β ≠ 0) :
+    reductionResidualNilpotencyLength B A (β⁻¹ • V) (β • W) =
+      reductionResidualNilpotencyLength B A V W := by
+  have hset : {N | IsReductionResidualNilpotencyBound B A (β⁻¹ • V) (β • W) N} =
+      {N | IsReductionResidualNilpotencyBound B A V W N} := by
+    ext N
+    exact isReductionResidualNilpotencyBound_reciprocal_smul B A V W hβ N
+  unfold reductionResidualNilpotencyLength
+  rw [hset]
+
 end MPSTensor

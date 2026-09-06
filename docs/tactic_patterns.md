@@ -24,6 +24,30 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### reciprocal scalar cancellation across a matrix product — promoted
+- **Pattern:** move scalars out of a matrix product and cancel nested actions
+  by a nonzero scalar and its inverse, in either order.
+
+  ```lean
+  simp (disch := exact hβ) only [matrix_reciprocal_smul]
+  ```
+- **Seen:** three declarations across three files (2026-09-04):
+  `MPSTensor.IsReduction.reciprocal_smul` in `TNLean/MPS/Core/Reduction.lean`
+  (two goals), `MPSTensor.reductionResidual_reciprocal_smul` in
+  `TNLean/MPS/Core/ReductionResidual/Basic.lean`, and
+  `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff` in
+  `TNLean/MPS/Core/ReductionBlocking.lean`.
+- **Abstraction:** the `matrix_reciprocal_smul` simp set, registered in
+  [`TNLean/Tactic/Attr.lean`](../TNLean/Tactic/Attr.lean) and populated in
+  [`TNLean/Tactic/MatrixReciprocalSmul.lean`](../TNLean/Tactic/MatrixReciprocalSmul.lean)
+  with Mathlib's `Matrix.smul_mul`, `Matrix.mul_smul`, `inv_smul_smul₀`, and
+  `smul_inv_smul₀`. No new cancellation theorem or tactic is needed.
+- **Notes:** all three declarations now use the set (four proof lines removed).
+  An explicit discharger supplies the nonzero premise to the conditional
+  cancellation lemmas; `simp only [matrix_reciprocal_smul, hβ]` alone does not
+  discharge it on the pinned toolchain. Do not add `smul_smul`: the intended
+  normal form preserves nested actions until reciprocal pairs cancel.
+
 ### nested finite-sum congruence under two binders — promoted
 - **Pattern:** two successive `apply Finset.sum_congr rfl` steps, each
   followed by an index and membership introduction.

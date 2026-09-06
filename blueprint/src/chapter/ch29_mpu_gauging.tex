@@ -750,6 +750,99 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     Theorem~\ref{thm:mpug_common_blocking_representation}.
 \end{proof}
 
+\begin{definition}[Fusion tensors of a pair]
+    \label{def:mpug_fusion_tensors}
+    \lean{MPOTensor.GroupFamily.ReductionFamily.V,
+        MPOTensor.GroupFamily.ReductionFamily.W}
+    \leanok
+    \uses{def:mpug_pair_reductions}
+    Let $\{\mathcal U_g\}_{g\in G}$ be an MPU representation by simple
+    injective tensors with a family of selected reductions.  The \emph{fusion
+        tensors} of the pair $(g,h)$ are the two matrices of the selected
+    reduction of that pair,
+    \begin{align}
+        F^<_{g,h} & =V_{g,h}, & F^>_{g,h} & =W_{g,h}.
+        \label{eq:mpug_fusion_tensors}
+    \end{align}
+    Under this identification the reduction identities
+    $V_{g,h}W_{g,h}=\Id$ and
+    $V_{g,h}B_{g,h}^{\mathbf a}W_{g,h}=A_{g,h}^{\mathbf a}$ are the interior
+    fusion equation of \cite[lines 1459--1497]{FrancoRubio2025MPUGauging}, and
+    (\ref{eq:mpug_pair_exterior_identity}) is its exterior fusion equation.
+
+    Two features of the source are recorded here.  First, the existence of the
+    fusion tensors is not proved in \cite{FrancoRubio2025MPUGauging}: at
+    \texttt{main.tex} line 1405 it is attributed to
+    \cite{Molnar2018SemiInjective}, whose Proposition~20 and Theorem~22 carry
+    the existence and the uniqueness; the existence statement used here is
+    Theorem~\ref{thm:mpug_pair_reductions_exist}.  Second, the reduction of
+    the nilpotency length to $1$ by blocking is asserted at \texttt{main.tex}
+    line 1498 without proof; the content used here is the one-site exterior
+    identity (\ref{eq:mpug_common_blocking_one_site}).  Blocking need not make
+    a blocked residual letter vanish, and the blocked nilpotency length of
+    Definition~8 in \cite{Molnar2018SemiInjective} need not be $1$
+    \cite{gap:mgsc18_nilpotency_length_one_terminology}.
+\end{definition}
+
+\begin{theorem}[Reciprocal scalar rescaling of the fusion tensors]
+    \label{thm:mpug_fusion_scalar_gauge}
+    \lean{MPSTensor.IsReduction.reciprocal_smul,
+        MPSTensor.reductionResidual_reciprocal_smul,
+        MPSTensor.isReductionResidualNilpotencyBound_reciprocal_smul,
+        MPSTensor.reductionResidualNilpotencyLength_reciprocal_smul,
+        MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul,
+        MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff,
+        MPOTensor.GroupFamily.ReductionFamily.smul,
+        MPOTensor.GroupFamily.ReductionFamily.hasExteriorBufferLength_smul,
+        MPOTensor.GroupFamily.ReductionFamily.block_smul}
+    \leanok
+    \discussion{7397}
+    \uses{def:mpug_fusion_tensors, def:mpug_pair_reductions,
+        def:mpug_pair_reductions_block, def:scalar_cocycle,
+        def:mps_rectangular_reduction,
+        def:mps_reduction_residual_nilpotency_length,
+        def:mps_reduction_exterior_buffer_length}
+    Let $(V,W)$ be a reduction from $B$ to $A$ and let
+    $\beta\in\C^\times$.  Then $(\beta^{-1}V,\beta W)$ is again a reduction
+    from $B$ to $A$; its residual letters $N^i=B^i-WA^iV$ are unchanged, hence
+    so are its residual-word nilpotency bounds and its residual nilpotency
+    length $\ell(B,A;V,W)$; and a natural number is an exterior buffer length
+    for $(\beta^{-1}V,\beta W)$ if and only if it is one for $(V,W)$.
+
+    Consequently, let $\beta\colon G^2\to\C^\times$ be a scalar $2$-cochain
+    and let $\{\mathcal U_g\}_{g\in G}$ have a family of selected reductions.
+    The rescaled matrices of (\ref{eq:mpug_fusion_gauge}), namely
+    $W_{g,h}\mapsto\beta_{g,h}W_{g,h}$ and
+    $V_{g,h}\mapsto\beta_{g,h}^{-1}V_{g,h}$, again form a family of selected
+    reductions of $\{\mathcal U_g\}_{g\in G}$.  It has exterior buffer length
+    $m$ exactly when the original family does, and rescaling commutes with
+    blocking by any length $L$.
+
+    This is the scalar gauge freedom of the fusion tensors in
+    \cite[\texttt{main.tex} lines 1500--1504]{FrancoRubio2025MPUGauging},
+    under the identification (\ref{eq:mpug_fusion_tensors}).  The assertion is
+    that a reciprocal rescaling of a family of selected reductions is again
+    such a family.  That every family of selected reductions of a given
+    representation arises from a fixed one by such a rescaling is a separate,
+    stronger claim which \cite{FrancoRubio2025MPUGauging} does not prove; the
+    available uniqueness is the boundary-dressed statement of
+    Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mps_rectangular_reduction_identities}
+    In each identity the two scalars occur in one of the combinations
+    $(\beta^{-1}V)(\beta W)$, $(\beta W)A^{\mathbf c}(\beta^{-1}V)$, and
+    $(\beta^{-1}V)B^{\mathbf a}(\beta W)$; in every case they multiply to
+    $\beta\beta^{-1}=1$ and disappear.  The residual letters and the exterior
+    identity are therefore unchanged, and equality of the two sets of
+    residual-word nilpotency bounds gives equality of their infima.  The
+    statements for a family follow pair by pair, and blocking changes only the
+    physical alphabet of the tensors, leaving $V_{g,h}$ and $W_{g,h}$
+    untouched.
+\end{proof}
+
 \begin{theorem}[Zero specified source-index value determines the source ranks]
     \label{thm:mpug_zero_specified_source_index_ranks}
     \lean{MPOTensor.sourceRanks_eq_physDim_of_sourceIndexValue_eq_zero}

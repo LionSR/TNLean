@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.MPS.Core.ReductionBlocking
 import TNLean.MPS.Core.ReductionExistence
 import TNLean.MPS.MPU.GroupRepresentation
@@ -49,6 +50,8 @@ Fusion tensors and the associator are not defined here.
   length `L` with `N₀(g,h) ≤ L + 1` for every pair.
 * `MPOTensor.GroupFamily.ReductionFamily.block`: the selected reductions as
   reductions of the commonly blocked representation.
+* `MPOTensor.GroupFamily.ReductionFamily.smul`: the reciprocal scalar
+  rescaling of a family of selected reductions by a scalar $2$-cochain.
 
 ## Main results
 
@@ -59,6 +62,9 @@ Fusion tensors and the associator are not defined here.
   one exterior site suffices for every pair.
 * `MPOTensor.GroupFamily.IsRepresentation.exists_block_reductionFamily_one`:
   the common-blocking theorem, packaged with the blocked representation.
+* `MPOTensor.GroupFamily.ReductionFamily.hasExteriorBufferLength_smul`,
+  `MPOTensor.GroupFamily.ReductionFamily.block_smul`: the reciprocal scalar
+  rescaling preserves the exterior buffer lengths and commutes with blocking.
 
 Sources: arXiv:2502.20257, `main.tex` lines 1403--1405 and 1498;
 arXiv:2405.00439v2, Theorem 1 and its footnote, `MPU-DW.tex` lines 358--364.
@@ -219,6 +225,42 @@ theorem block_hasExteriorBufferLength_one (R : F.ReductionFamily)
   rw [productTensor_block, targetTensor_block]
   exact ((R.isReductionExteriorBufferLength_nilpotencyLength hF g h).blockTensor hL
     (by have := hN g h; omega)).reindexPhysical _
+
+/-- The reciprocal scalar rescaling of a family of selected reductions by a
+scalar $2$-cochain $\beta\colon G^2\to\mathbb{C}^\times$:
+$W_{g,h}\mapsto\beta_{g,h}W_{g,h}$ and
+$V_{g,h}\mapsto\beta_{g,h}^{-1}V_{g,h}$.  The rescaled matrices are again a
+family of selected reductions of the same representation.
+
+Under the identification $F^<_{g,h}=V_{g,h}$, $F^>_{g,h}=W_{g,h}$ this is the
+gauge freedom of the fusion tensors in arXiv:2502.20257, `eq:scalar_fus_ten`,
+`main.tex` lines 1500--1504.  The source calls the fusion tensors "defined up
+to a scalar"; what is stated here is that a reciprocal rescaling of a family
+of selected reductions is again such a family, not that every family arises
+this way. -/
+noncomputable def smul (R : F.ReductionFamily)
+    (β : TNLean.Algebra.ScalarCocycle G) : F.ReductionFamily where
+  V g h := (β g h : ℂ)⁻¹ • R.V g h
+  W g h := (β g h : ℂ) • R.W g h
+  isReduction g h := (R.isReduction g h).reciprocal_smul (β g h).ne_zero
+
+/-- The reciprocal scalar rescaling preserves the exterior identity
+`eq:fusion_1` for the same buffer length, in both directions: the two scalars
+meet inside the central segment $W_{g,h}A_{g,h}^{\mathbf c}V_{g,h}$ and
+cancel. -/
+theorem hasExteriorBufferLength_smul (R : F.ReductionFamily)
+    (β : TNLean.Algebra.ScalarCocycle G) (m : ℕ) :
+    (R.smul β).HasExteriorBufferLength m ↔ R.HasExteriorBufferLength m := by
+  unfold HasExteriorBufferLength
+  refine forall_congr' fun g ↦ forall_congr' fun h ↦ ?_
+  exact MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff
+    (β g h).ne_zero
+
+/-- The reciprocal scalar rescaling commutes with physical blocking: blocking
+acts on the tensors only, and the rescaling acts on the reduction matrices
+only. -/
+theorem block_smul (R : F.ReductionFamily) (β : TNLean.Algebra.ScalarCocycle G)
+    (L : ℕ) : (R.smul β).block L = (R.block L).smul β := rfl
 
 section Finite
 

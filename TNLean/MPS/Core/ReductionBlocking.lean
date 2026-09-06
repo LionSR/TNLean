@@ -49,6 +49,9 @@ one; see `docs/paper-gaps/mgsc18_nilpotency_length_one_terminology.tex`.
 * `MPSTensor.IsReduction.blockTensor_commonBufferLength_one`: for a member of
   a finite family of nilpotency bounds, blocking by the common buffer length
   makes one blocked exterior site suffice.
+* `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul`: the reciprocal
+  scalar rescaling of arXiv:2502.20257, `eq:scalar_fus_ten`, preserves an
+  exterior buffer length.
 -/
 
 open scoped Matrix
@@ -82,6 +85,25 @@ variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
 theorem mono (h : IsReductionExteriorBufferLength B A V W m) {n : ℕ}
     (hmn : m ≤ n) : IsReductionExteriorBufferLength B A V W n :=
   fun p c q hc hp hq ↦ h p c q hc (hmn.trans hp) (hmn.trans hq)
+
+/-- The reciprocal scalar rescaling $W\mapsto\beta W$, $V\mapsto\beta^{-1}V$
+by a nonzero `β` leaves the exterior identity unchanged: the two scalars meet
+inside the central segment $WA^{\mathbf c}V$ and cancel.
+
+Under the identification $F^<=V$, $F^>=W$ this is the scalar gauge freedom of
+arXiv:2502.20257, `eq:scalar_fus_ten`, `main.tex` lines 1500--1504, applied to
+the exterior fusion equation `eq:fusion_1`, `main.tex` lines 1409--1456. -/
+theorem reciprocal_smul_iff {β : ℂ} (hβ : β ≠ 0) :
+    IsReductionExteriorBufferLength B A (β⁻¹ • V) (β • W) m ↔
+      IsReductionExteriorBufferLength B A V W m := by
+  unfold IsReductionExteriorBufferLength
+  simp (disch := exact hβ) only [matrix_reciprocal_smul]
+
+/-- The reciprocal scalar rescaling preserves an exterior buffer length, for
+the same `m`. -/
+theorem reciprocal_smul (h : IsReductionExteriorBufferLength B A V W m) {β : ℂ}
+    (hβ : β ≠ 0) : IsReductionExteriorBufferLength B A (β⁻¹ • V) (β • W) m :=
+  (reciprocal_smul_iff hβ).2 h
 
 /-- Reindexing the physical alphabet of both tensors by the same map preserves
 an exterior buffer length. -/
