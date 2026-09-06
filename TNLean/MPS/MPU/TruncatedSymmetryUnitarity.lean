@@ -35,17 +35,6 @@ open scoped Matrix Kronecker BigOperators
 
 namespace MPOTensor
 
-private theorem isUnitaryBetween_kronecker {A B C E : Type*}
-    [Fintype A] [Fintype B] [Fintype C] [Fintype E]
-    [DecidableEq A] [DecidableEq B] [DecidableEq C] [DecidableEq E]
-    (M : Matrix A B ℂ) (P : Matrix C E ℂ)
-    (hM : M.IsUnitaryBetween) (hP : P.IsUnitaryBetween) :
-    (M ⊗ₖ P).IsUnitaryBetween := by
-  refine ⟨hM.1.kronecker _ _ hP.1, ?_⟩
-  have h := (hM.conjTranspose M).1.kronecker _ _ (hP.conjTranspose P).1
-  simpa only [← Matrix.conjTranspose_kronecker,
-    Matrix.IsIsometry, Matrix.IsCoisometry, Matrix.conjTranspose_conjTranspose] using h
-
 /-- Regroup the first bulk letter and its tail without changing either endpoint. -/
 private def truncatedConsEquiv (A B : Type*) (d N : ℕ) :
     (A × Fin d × (Fin N → Fin d) × B) ≃ (A × (Fin (N + 1) → Fin d) × B) where
@@ -91,8 +80,8 @@ theorem IsMPUCanonicalFormII.truncatedSymmetry_isUnitaryBetween
     have hIR : (1 : Matrix R R ℂ).IsUnitaryBetween := by
       simp [Matrix.IsUnitaryBetween, Matrix.IsIsometry, Matrix.IsCoisometry]
     have hA : A.IsUnitaryBetween :=
-      (isUnitaryBetween_kronecker _ _ hL hIR).reindex _ _ _
-    have hB : B.IsUnitaryBetween := isUnitaryBetween_kronecker _ _ hId ih
+      (hL.kronecker _ _ hIR).reindex _ _ _
+    have hB : B.IsUnitaryBetween := hId.kronecker _ _ ih
     have heq : S.truncatedSymmetry (N + 1) =
         Matrix.reindex (truncatedConsEquiv (Fin ℓ[U]) (Fin r[U]) d N)
           (truncatedConsEquiv (Fin d) (Fin d) d N) (A * B) := by

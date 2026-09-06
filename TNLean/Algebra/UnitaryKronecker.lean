@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.UnitaryGroup
+import QICLean.Algebra.MatrixIsometryKronecker
 import TNLean.Algebra.ComplexSqrt
 
 /-!
@@ -29,6 +30,23 @@ Kronecker product is the identity.
 open scoped ComplexOrder Kronecker
 
 namespace Matrix
+
+namespace IsUnitaryBetween
+
+/-- The Kronecker product of two matrices unitary between finite coordinate
+spaces is again unitary between the product coordinate spaces. -/
+theorem kronecker {m n o p : Type*}
+    [Fintype m] [Fintype n] [Fintype o] [Fintype p]
+    [DecidableEq m] [DecidableEq n] [DecidableEq o] [DecidableEq p]
+    (A : Matrix m n ℂ) (B : Matrix o p ℂ)
+    (hA : A.IsUnitaryBetween) (hB : B.IsUnitaryBetween) :
+    (A ⊗ₖ B).IsUnitaryBetween := by
+  refine ⟨hA.1.kronecker _ _ hB.1, ?_⟩
+  have h := (hA.conjTranspose A).1.kronecker _ _ (hB.conjTranspose B).1
+  simpa only [← Matrix.conjTranspose_kronecker,
+    Matrix.IsIsometry, Matrix.IsCoisometry, Matrix.conjTranspose_conjTranspose] using h
+
+end IsUnitaryBetween
 
 variable {m n : Type*} [DecidableEq m] [DecidableEq n] [Nonempty m] [Nonempty n]
 

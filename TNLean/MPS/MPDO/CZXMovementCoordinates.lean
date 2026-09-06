@@ -22,8 +22,13 @@ open scoped Matrix BigOperators
 
 namespace MPOTensor.CZX
 
-set_option maxHeartbeats 2000000 in
--- The sparse coordinate check has 256 cases, each with a two-term virtual contraction.
+private theorem movement_entry (i r a j : Fin 4) :
+    matterMatrix w ![i, r] ![a, j] =
+      if i = a.rev ∧ r = j then (-1 : ℂ) ^ (eExponent (localBits ![a, j])).val else 0 := by
+  have h : ∀ i r a j : Fin 4,
+      localBits ![i, r] = barFlip (localBits ![a, j]) ↔ i = a.rev ∧ r = j := by decide
+  simp only [w_eq, matterMatrix, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_symm, Matrix.monomial_apply, h]
 
 /-- The displayed right movement contraction is the CZX circuit in physical
 coordinates. Source: arXiv:2502.20257, lines 811–869, 4559–4659, 4860–4888. -/
@@ -32,15 +37,15 @@ theorem displayedSourceFactors_sourceWR_coordinates (i r a j : Fin 4) :
       (i, displayedRightEquiv.symm r) (displayedRightEquiv.symm a, j) =
         matterMatrix w ![i, r] ![a, j] := by
   simp only [SourceFactors.sourceWR, displayedSourceFactors, Matrix.submatrix_apply,
-    Equiv.apply_symm_apply, Equiv.refl_apply, w_eq, matterMatrix, Matrix.reindex_apply,
-    Equiv.symm_symm, Matrix.monomial_apply]
-  fin_cases i <;> fin_cases r <;> fin_cases a <;> fin_cases j <;>
+    Equiv.apply_symm_apply, Equiv.refl_apply, movement_entry]
+  -- Discard the zero entries of the empty factor before splitting the other two indices.
+  fin_cases i <;> fin_cases a <;>
+    norm_num [displayedX₁, displayedY₂, Fin.sum_univ_two, Fin.rev, Fin.reduceEq] <;>
+    fin_cases r <;> fin_cases j <;>
     norm_num +decide [displayedX₁, displayedY₁, displayedX₂, displayedY₂,
       Fin.sum_univ_two, daggerGauge, SpinCover.pauli_one, Fin.divNat, Fin.modNat,
-      Fin.rev, Fin.reduceEq, localBits, siteBits, barFlip, eExponent, ZMod.val]
+      Fin.rev, Fin.reduceEq, localBits, siteBits, eExponent, ZMod.val]
 
-set_option maxHeartbeats 2000000 in
--- The sparse coordinate check has 256 cases, each with a two-term virtual contraction.
 /-- The displayed left movement contraction is the adjoint of the same CZX
 circuit. Source: arXiv:2502.20257, lines 811–869, 4559–4659, 4860–4888. -/
 theorem displayedSourceFactors_sourceWL_coordinates (l i j k : Fin 4) :
@@ -49,10 +54,13 @@ theorem displayedSourceFactors_sourceWL_coordinates (l i j k : Fin 4) :
         (matterMatrix w)ᴴ ![l, i] ![j, k] := by
   simp only [SourceFactors.sourceWL, displayedSourceFactors, Matrix.submatrix_apply,
     Equiv.apply_symm_apply, Equiv.refl_apply, Matrix.conjTranspose_apply,
-    w_eq, matterMatrix, Matrix.reindex_apply, Equiv.symm_symm, Matrix.monomial_apply]
-  fin_cases l <;> fin_cases i <;> fin_cases j <;> fin_cases k <;>
+    movement_entry]
+  -- Discard the zero entries of the filled factor before splitting the other two indices.
+  fin_cases l <;> fin_cases j <;>
+    norm_num [displayedY₂, Fin.sum_univ_two, Fin.rev, Fin.reduceEq] <;>
+    fin_cases i <;> fin_cases k <;>
     norm_num +decide [displayedX₂, displayedY₂, Fin.sum_univ_two,
       Fin.divNat, Fin.modNat, Fin.rev, Fin.reduceEq,
-      localBits, siteBits, barFlip, eExponent, ZMod.val]
+      localBits, siteBits, eExponent, ZMod.val]
 
 end MPOTensor.CZX
