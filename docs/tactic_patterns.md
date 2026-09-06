@@ -24,6 +24,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### simplicity with the recorded canonical fixed pair — promoted
+- **Pattern:** specialize supplied-witness `simple2` to the canonical transfer
+  power at `max (D * D - 1) 1`, deriving physical nonvanishing from canonical
+  form II and using the recorded vectorized right boundary and identity left boundary.
+- **Seen:** three occurrences across three files (2026-09-06):
+  `IsMPUCanonicalFormII.sourceV_isIsometry` in
+  `TNLean/MPS/MPU/SourceVCompleteNetwork.lean`,
+  `IsMPUCanonicalFormII.doubleLayer_boundary_contractions` in
+  `TNLean/MPS/MPU/AdjointSimpleContraction.lean`, and
+  `IsMPUCanonicalFormII.oneLetter_physical_contraction` in
+  `TNLean/MPS/MPU/SourceYPhysicalContractions.lean`.
+- **Abstraction:** `MPOTensor.IsMPUCanonicalFormII.simple2_recorded_fixed_pair`
+  in `TNLean/MPS/MPU/SuppliedFixedWitnesses.lean`.
+- **Notes:** all three callers use the helper; the source-V proof retains its
+  explicit transpose-symmetry conversion. The boundary-contraction proof gives
+  the local hypothesis its original vector-shaped type to preserve rewriting
+  through the local `ρ` and `Φ` definitions. No new imports, structures, or
+  `simple1` wrapper are introduced; caller proof bodies lose one line overall.
+
 ### source-rank nonvanishing from a trace equation — promoted
 - **Pattern:** derive `rank ≠ 0` from `htrace : coefficient * rank = d` and
   `hd : d ≠ 0` by assuming the rank is zero and simplifying the trace equation.

@@ -424,6 +424,7 @@ follow-up, not against the temporary `sorry` count.
 
 | Name | Kind | Use when | Defined in |
 |---|---|---|---|
+| `MPOTensor.IsMPUCanonicalFormII.simple2_recorded_fixed_pair` | helper theorem | Specializing two-letter simplicity to the recorded canonical right boundary `ρ` and identity left boundary | `TNLean/MPS/MPU/SuppliedFixedWitnesses.lean` |
 | `Equiv.Perm.permMatrix_mem_unitaryGroup` | helper theorem | Showing that a complex permutation matrix is unitary | `TNLean/Algebra/PermutationMatrixUnitary.lean` |
 | `List.ofFn_reverse` | helper theorem | Reversing a `List.ofFn`-indexed finite word by precomposition with `Fin.rev` | `QICLean/Kraus/Word.lean` (QICLean dependency) |
 | `verticalAssembledTensor_apply_copy_same` | helper theorem | Evaluating an assembled vertical tensor at two coordinates in the same retained multiplicity copy | `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean` |
