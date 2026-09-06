@@ -1019,11 +1019,11 @@ gauges and scalar relation have been constructed.
     where $\rho$ is a matrix on the virtual space. Define
     \begin{align}
         (w_L)_{(l,i),(j,l')}
-         &=\sum_{\beta=1}^D (Y_2)_{l,(j,\beta)}
-            (X_2)_{(\beta,i),l'}, \\
+         & =\sum_{\beta=1}^D (Y_2)_{l,(j,\beta)}
+        (X_2)_{(\beta,i),l'}, \\
         (w_R)_{(i,r),(r',j)}
-         &=\sum_{\beta=1}^D (X_1)_{(i,\beta),r'}
-            (Y_1)_{r,(\beta,j)}.
+         & =\sum_{\beta=1}^D (X_1)_{(i,\beta),r'}
+        (Y_1)_{r,(\beta,j)}.
     \end{align}
     Thus $w_L\colon\C^d\otimes\C^{d_l}\to\C^{d_l}\otimes\C^d$
     and $w_R\colon\C^{d_r}\otimes\C^d\to\C^d\otimes\C^{d_r}$.
@@ -1043,7 +1043,7 @@ gauges and scalar relation have been constructed.
     Its action on the middle two legs is the matrix $M_{23}$ defined by
     \begin{align}
         (M_{23})_{((a,b),(c,e)),((a',b'),(c',e'))}
-         &=\delta_{a,a'}M_{(b,c),(b',c')}\delta_{e,e'}.
+         & =\delta_{a,a'}M_{(b,c),(b',c')}\delta_{e,e'}.
     \end{align}
     This is $(I_A\otimes M)\otimes I_E$ after regrouping
     $((a,b),(c,e))$ as $((a,(b,c)),e)$, as in the first network in the
@@ -1079,7 +1079,7 @@ gauges and scalar relation have been constructed.
     Definition~\ref{def:mpug_staircase_gates}, and form $u,v,w_L,w_R$
     from those same factors. Then
     \begin{align}
-        (w_L\otimes w_R)u_{23}&=v_{23}(u\otimes u).
+        (w_L\otimes w_R)u_{23} & =v_{23}(u\otimes u).
         \label{eq:mpug_staircase_network_uncancelled}
     \end{align}
     No simplicity or unitarity assumption on $\mathcal U$ is required.
@@ -1113,9 +1113,9 @@ gauges and scalar relation have been constructed.
     $uu^\dagger=I_{d_ld_r}$, then
     \begin{align}
         w_L\otimes w_R
-         &=v_{23}(u\otimes u)(u^\dagger)_{23} \\
-         &=(I\otimes v\otimes I)(u\otimes u)
-            (I\otimes u^\dagger\otimes I).
+         & =v_{23}(u\otimes u)(u^\dagger)_{23} \\
+         & =(I\otimes v\otimes I)(u\otimes u)
+        (I\otimes u^\dagger\otimes I).
         \label{eq:mpug_staircase_network_cancelled}
     \end{align}
     The second expression uses the regrouping of
@@ -4818,7 +4818,7 @@ by the displayed matrices.
     Hadamard weights and both output $Z$ gates, is injective:
     \begin{align}
         \operatorname{span}_{\C}\{B^{i,j}:0\leq i,j<4\}
-         &=\operatorname{Mat}_2(\C).
+         & =\operatorname{Mat}_2(\C).
     \end{align}
     Here $B^{2a+b,2c+d}=B^{ab,cd}$ for binary $a,b,c,d$.
     This is the injectivity assertion preceding the tensor diagram in
@@ -4832,10 +4832,14 @@ by the displayed matrices.
     Let $E_{ab}$ be the bond matrix units, with $a,b\in\{0,1\}$.
     The coordinate formula gives
     \begin{align}
-        E_{00}&=\tfrac12(B^{0,3}-B^{1,2}), &
-        E_{01}&=\tfrac12(B^{0,3}+B^{1,2}), \\
-        E_{10}&=-\tfrac12(B^{2,1}+B^{3,0}), &
-        E_{11}&=\tfrac12(B^{3,0}-B^{2,1}).
+        E_{00}
+         & =\tfrac12(B^{0,3}-B^{1,2}), \\
+        E_{01}
+         & =\tfrac12(B^{0,3}+B^{1,2}), \\
+        E_{10}
+         & =-\tfrac12(B^{2,1}+B^{3,0}), \\
+        E_{11}
+         & =\tfrac12(B^{3,0}-B^{2,1}).
     \end{align}
     Thus every bond matrix unit lies in the span of the physical letters.
     Since every $2\times2$ matrix is a linear combination of these units,
