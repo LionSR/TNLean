@@ -103,8 +103,9 @@ noncomputable def IsMPUCanonicalFormII.physicalAdjointTensor
 
 /-- The reflected double layer admits canonical boundary removal using the
 same \(I,\rho\) boundaries. The adjoint-simple hypothesis is the explicit
-additional source hypothesis of arXiv:2502.20257, Proposition `eq:MPUnice3`--
-`eq:MPUnice4`, lines 1070--1163; the contraction is used in lines 1164--1254.
+additional source hypothesis of arXiv:2502.20257, lines 1070--1163 (the
+proposition establishing the normalized source-factor identities); the
+contraction is used in lines 1164--1254.
 -/
 theorem IsMPUCanonicalFormII.physicalAdjoint_doubleLayer_boundary_contractions
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
