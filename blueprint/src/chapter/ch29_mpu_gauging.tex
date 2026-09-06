@@ -1431,6 +1431,30 @@ gauges and scalar relation have been constructed.
     the same right endpoint factor $Y_1$.
 \end{proof}
 
+\begin{theorem}[Kronecker product of unitary maps]
+    \label{thm:matrix_unitary_between_kronecker}
+    \lean{Matrix.IsUnitaryBetween.kronecker}
+    \leanok
+    Let $A,B,C,E$ be finite sets, possibly empty, and let
+    $M\colon\C^B\to\C^A$ and $P\colon\C^E\to\C^C$ be unitary maps:
+    $M^\dagger M=I_B$, $MM^\dagger=I_A$, $P^\dagger P=I_E$, and
+    $PP^\dagger=I_C$. Then $M\otimes P$ is a unitary map from
+    $\C^{B\times E}$ to $\C^{A\times C}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The adjoint and multiplication identities for Kronecker products give
+    \begin{align}
+        (M\otimes P)^\dagger(M\otimes P)
+         & =(M^\dagger M)\otimes(P^\dagger P)
+        =I_B\otimes I_E=I_{B\times E},        \\
+        (M\otimes P)(M\otimes P)^\dagger
+         & =(MM^\dagger)\otimes(PP^\dagger)
+        =I_A\otimes I_C=I_{A\times C}.
+    \end{align}
+    The second identity is the first applied to $M^\dagger$ and $P^\dagger$.
+\end{proof}
+
 \begin{theorem}[Unitarity at every bulk length]
     \label{thm:mpug_truncated_symmetry_unitary}
     \lean{MPOTensor.IsMPUCanonicalFormII.truncatedSymmetry_isUnitaryBetween}
@@ -1476,7 +1500,7 @@ gauges and scalar relation have been constructed.
 \begin{proof}\leanok
     \uses{ThmFund1, thm:mpug_staircase_gates_unitary,
         thm:mpug_truncated_symmetry_zero, thm:mpug_truncated_symmetry_left_growth,
-        def:mpug_truncated_symmetry}
+        thm:matrix_unitary_between_kronecker, def:mpug_truncated_symmetry}
     Theorem~\ref{ThmFund1} gives unitary $u$, and
     Theorem~\ref{thm:mpug_staircase_gates_unitary} gives unitary $w_L$,
     both for the constructed source factors. Induct on $N$. For $N=0$,
@@ -1494,9 +1518,11 @@ gauges and scalar relation have been constructed.
     The output reindexing sends $(l,i,\sigma,r)$ to $(l,i\sigma,r)$,
     and the input reindexing sends $(a,b,\tau,c)$ to $(a,b\tau,c)$.
     These are bijections given by splitting off the first bulk letter;
-    they leave both endpoint coordinates unchanged. Tensoring unitary
-    maps with identities, composing them, and reindexing preserve both
-    Gram identities. The induction therefore covers every $N$, not just
+    they leave both endpoint coordinates unchanged.
+    Theorem~\ref{thm:matrix_unitary_between_kronecker} makes both
+    $w_L\otimes I_{\mathcal R_N}$ and $I_d\otimes U^N$ unitary.
+    Composition and the two coordinate bijections preserve both Gram
+    identities. The induction therefore covers every $N$, not just
     one parity of bulk lengths.
 \end{proof}
 
