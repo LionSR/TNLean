@@ -1301,8 +1301,8 @@ Definition~\ref{def:mpug_group_representation}.
     put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
     $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
     \begin{align}
-        (\Phi|W^{ij}W^{kl}&=\delta_{ij}(\Phi|W^{kl}, \\
-        W^{ij}W^{kl}|\rho)&=\delta_{kl}W^{ij}|\rho).
+        (\Phi|W^{ij}W^{kl} & =\delta_{ij}(\Phi|W^{kl}, \\
+        W^{ij}W^{kl}|\rho) & =\delta_{kl}W^{ij}|\rho).
         \label{eq:mpug_simple_canonical_boundaries}
     \end{align}
     These are the boundary removals used in the six-tensor argument of
@@ -1333,9 +1333,9 @@ Definition~\ref{def:mpug_group_representation}.
     $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
     \begin{align}
         (\Phi|W_\dagger^{ij}W_\dagger^{kl}
-         &=\delta_{ij}(\Phi|W_\dagger^{kl}, \\
+         & =\delta_{ij}(\Phi|W_\dagger^{kl}, \\
         W_\dagger^{ij}W_\dagger^{kl}|\rho)
-         &=\delta_{kl}W_\dagger^{ij}|\rho).
+         & =\delta_{kl}W_\dagger^{ij}|\rho).
     \end{align}
     The simplicity assumption is precisely the additional hypothesis used
     for the reflected reduction in
@@ -1360,10 +1360,10 @@ Definition~\ref{def:mpug_group_representation}.
     Define an MPO tensor $s$ of the same dimensions by
     \begin{align}
         s^{ij}_{ab}
-         &=\sum_{p,q=1}^d\sum_{x,r,t=1}^D
-            \mathcal U^{ip}_{xb}\,
-            \overline{\mathcal U^{qp}_{xr}}\,
-            \mathcal U^{qj}_{at}\,\rho_{tr}.
+         & =\sum_{p,q=0}^{d-1}\sum_{x,r,t=0}^{D-1}
+        \mathcal U^{ip}_{xb}\,
+        \overline{\mathcal U^{qp}_{xr}}\,
+        \mathcal U^{qj}_{at}\,\rho_{tr}.
         \label{eq:mpug_adjoint_simple_contraction}
     \end{align}
     The left open bond is on the bottom tensor and the right open bond is
@@ -1386,7 +1386,7 @@ Definition~\ref{def:mpug_group_representation}.
     by (\ref{eq:mpug_adjoint_simple_contraction}). For all physical
     indices $i,j,k,l$,
     \begin{align}
-        s^{ij}\mathcal U^{kl}&=\mathcal U^{ij}s^{kl}.
+        s^{ij}\mathcal U^{kl} & =\mathcal U^{ij}s^{kl}.
         \label{eq:mpug_adjoint_simple_cross_product}
     \end{align}
     This is the equality obtained from the two reductions in
@@ -1399,11 +1399,11 @@ Definition~\ref{def:mpug_group_representation}.
     For fixed open indices $i,j,k,l,a,b$, expand the six-tensor network as
     \begin{align}
         \mathcal N^{ij,kl}_{ab}
-         &=\sum_{p,q,v,w}\sum_{x,m,n,z,r,t}
-            \mathcal U^{ip}_{xm}\mathcal U^{kq}_{mb}
-            \overline{\mathcal U^{vp}_{xn}}
-            \overline{\mathcal U^{wq}_{nr}}
-            \mathcal U^{vj}_{az}\mathcal U^{wl}_{zt}\rho_{tr}.
+         & =\sum_{p,q,v,w}\sum_{x,m,n,z,r,t}
+        \mathcal U^{ip}_{xm}\mathcal U^{kq}_{mb}
+        \overline{\mathcal U^{vp}_{xn}}
+        \overline{\mathcal U^{wq}_{nr}}
+        \mathcal U^{vj}_{az}\mathcal U^{wl}_{zt}\rho_{tr}.
     \end{align}
     The first sum ranges over physical indices and the second over virtual
     indices. Applying the right-boundary contraction to the lower two
@@ -1426,7 +1426,7 @@ Definition~\ref{def:mpug_group_representation}.
     $\mathcal U^\dagger$ are simple. Then the tensor $s$ constructed
     from this $\rho$ satisfies
     \begin{align}
-        s^{ij}&=\delta\mathcal U^{ij}
+        s^{ij} & =\delta\mathcal U^{ij}
     \end{align}
     for a single scalar $\delta\in\C$ and every physical pair $i,j$.
     This is the proportionality conclusion in
@@ -1443,7 +1443,7 @@ Definition~\ref{def:mpug_group_representation}.
     $\widetilde{\mathcal U}$. Scaling
     (\ref{eq:mpug_adjoint_simple_cross_product}) gives
     $s^{ij}\widetilde{\mathcal U}^{kl}
-    =\widetilde{\mathcal U}^{ij}s^{kl}$.
+        =\widetilde{\mathcal U}^{ij}s^{kl}$.
     Cross-product rigidity, using blocking to an injective tensor, gives
     $s^{ij}=c\widetilde{\mathcal U}^{ij}$ for one scalar $c$.
     Set $\delta=c/\sqrt d$.
@@ -5050,7 +5050,7 @@ by the displayed matrices.
     Identify the blocked physical alphabet with $\{0,1,2,3\}$ by
     $\varphi(2a+b)=(a,b)$, for $a,b\in\{0,1\}$. Define
     \begin{align}
-        \widehat A^{2a+b}&=A^aA^b=(A^{[2]})^{\varphi(2a+b)}.
+        \widehat A^{2a+b} & =A^aA^b=(A^{[2]})^{\varphi(2a+b)}.
     \end{align}
     This is the once-blocked GHZ tensor used in
     \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}, with the same
@@ -5061,11 +5061,11 @@ by the displayed matrices.
     \label{thm:mpug_czx_blocked_ghz_sectors}
     \lean{MPOTensor.CZX.blockTensor_ghzSectorTensor_apply}
     \leanok
-    \uses{def:mpug_czx_blocked_ghz}
+    \uses{def:mpug_ghz_blocked_cluster_tensor, def:blocked_tensor}
     For $x\in\{0,1\}$, let $A_x^a=\delta_{a,x}$ be the
     bond-one GHZ sector. Under $\varphi(2a+b)=(a,b)$ its two-site block is
     \begin{align}
-        (A_x^{[2]})^{\varphi(i)}&=\delta_{i,3x},
+        (A_x^{[2]})^{\varphi(i)} & =\delta_{i,3x},
         \qquad i\in\{0,1,2,3\}.
     \end{align}
     Thus the blocked sector vectors are $\ket{00}$ and $\ket{11}$, as in
@@ -5087,7 +5087,7 @@ by the displayed matrices.
     $\widehat A$ is
     \begin{align}
         \ket{\psi_N}
-         &=\ket{0}^{\otimes N}+\ket{3}^{\otimes N}.
+         & =\ket{0}^{\otimes N}+\ket{3}^{\otimes N}.
         \label{eq:mpug_czx_blocked_ghz_mpv}
     \end{align}
     In the original two-qubit alphabet the two summands are
@@ -5102,9 +5102,9 @@ by the displayed matrices.
     Hence, for $s\in\{0,1,2,3\}^N$,
     \begin{align}
         \operatorname{tr}\bigl(\widehat A^{s_1}\cdots
-            \widehat A^{s_N}\bigr)
-         &=\prod_{j=1}^N\delta_{s_j,0}
-            +\prod_{j=1}^N\delta_{s_j,3}.
+        \widehat A^{s_N}\bigr)
+         & =\prod_{j=1}^N\delta_{s_j,0}
+        +\prod_{j=1}^N\delta_{s_j,3}.
     \end{align}
     These are the coefficients of the two constant configurations.
 \end{proof}
@@ -5120,12 +5120,12 @@ by the displayed matrices.
     Transport the matrix product vector of the two-site-blocked GHZ tensor
     $A^{[2]}$ by the alphabet bijection $\varphi(2a+b)=(a,b)$:
     \begin{align}
-        \psi_N(s)&=V^{(N)}(A^{[2]})_{(\varphi(s_1),\ldots,\varphi(s_N))},
+        \psi_N(s) & =V^{(N)}(A^{[2]})_{(\varphi(s_1),\ldots,\varphi(s_N))},
         \qquad s\in\{0,1,2,3\}^N.
     \end{align}
     Then the periodic CZX operator satisfies
     \begin{align}
-        O_N(B)\ket{\psi_N}&=\ket{\psi_N}.
+        O_N(B)\ket{\psi_N} & =\ket{\psi_N}.
     \end{align}
     This is the GHZ-invariance assertion in
     \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}.
@@ -5141,8 +5141,8 @@ by the displayed matrices.
     the cyclic exponent is zero on $0^N$ and $4N$ on $3^N$.
     Consequently
     \begin{align}
-        O_N(B)\ket{0}^{\otimes N}&=\ket{3}^{\otimes N}, &
-        O_N(B)\ket{3}^{\otimes N}&=\ket{0}^{\otimes N}.
+        O_N(B)\ket{0}^{\otimes N} & =\ket{3}^{\otimes N}, &
+        O_N(B)\ket{3}^{\otimes N} & =\ket{0}^{\otimes N}.
     \end{align}
     Their sum is invariant.
 \end{proof}
