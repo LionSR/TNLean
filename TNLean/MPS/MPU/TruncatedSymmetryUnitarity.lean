@@ -13,15 +13,22 @@ For a simple MPU in canonical form II, the endpoint contraction in
 arXiv:2502.20257, `eq:truncsym` and the sentence immediately following it
 (lines 2062–2101), is unitary between its input and output coordinate spaces.
 The zero-bulk contraction is the source gate $u$ of arXiv:1703.09188,
-`uu` (lines 532–543), unitary by Theorem `ThmFund1`. Each additional bulk
-site is added by the unitary left movement gate of arXiv:2502.20257,
-`cor:mpu`(a), using the left-end factorization of `eq:move_trunc_sym`.
+`uu` (lines 532–543), whose unitarity follows from the simple-MPU
+source-gate equivalence theorem of arXiv:1703.09188 (lines 563–601). Each
+additional bulk site is added by the unitary left movement gate of
+arXiv:2502.20257, `cor:mpu`(a), using the left-end factorization of
+`eq:move_trunc_sym`.
 
-**Scope restriction:** the conclusion is unitary-between the stated
-rectangularly indexed coordinate spaces. It does not identify each endpoint
-source space with a physical site, specialize to a finite-group operator,
-prove agreement of the interior action with a global symmetry, or establish
-the complementary movement equation. No adjoint-simplicity premise is used.
+**Scope restriction (endpoint-coordinate unitarity):** the conclusion is
+unitary-between the stated rectangularly indexed coordinate spaces. The
+two-sided source-factorization growth identity of `eq:move_trunc_sym` is
+formalized separately in `TruncatedSymmetryGrowth`. This theorem does not
+identify each endpoint source space with a physical site, specialize to a
+finite-group operator, prove agreement of the interior action with a global
+symmetry, or establish the complementary finite-chain relation following
+`eq:move_trunc_sym`. Documented in
+`docs/paper-gaps/fbc25_truncated_symmetry_endpoint_unitarity_scope.tex`.
+No adjoint-simplicity premise is used.
 -/
 
 open scoped Matrix Kronecker BigOperators
