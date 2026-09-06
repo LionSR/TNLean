@@ -1929,16 +1929,21 @@ Definition~\ref{def:mpug_group_representation}.
     \begin{align}
         \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr) & =d.
     \end{align}
+    This is the physical-trace calculation used, by analogy with the
+    first identity, in \cite[line~1398]{FrancoRubio2025MPUGauging}.
     Simplicity of $\mathcal U^\dagger$ is not required.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{cor:mpug_source_y_physical_contractions, def:mpu_source_weight}
-    Move the last factor to the front inside the trace and expand
-    $I_d\otimes\rho$. Grouping by the physical index gives the sum of
-    the diagonal physical closures from
-    Corollary~\ref{cor:mpug_source_y_physical_contractions}. Each of the
-    $d$ terms is one.
+    Cyclic invariance and expanding $I_d\otimes\rho$ give
+    \begin{align}
+        \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr)
+         & =\sum_{p=0}^{d-1}\sum_{x,y=0}^{D-1}\sum_{l=0}^{d_l-1}
+        \overline{(Y_2)_{l,(p,y)}}(Y_2)_{l,(p,x)}\rho_{xy}
+        =\sum_{p=0}^{d-1}1=d
+    \end{align}
+    by Corollary~\ref{cor:mpug_source_y_physical_contractions} at $q=p$.
 \end{proof}
 
 \begin{theorem}[Normalization of the weighted second source Gram matrix]
