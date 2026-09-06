@@ -16,7 +16,9 @@ The factors are raw matrices on the actual source cuts, not normalized
 `SourceFactors` records. Only the unitarity of the two literal $u$ contractions
 from clause (b) is used; the unitarity of $v$ is unused. Thus the result has
 weaker premises, and applies in particular to the decompositions in the source.
-No clause (c), canonical-form, or weighted normalization hypothesis is needed.
+No positive-physical-dimension, clause (c), canonical-form, or weighted
+normalization hypothesis is needed; when `d = 0`, the source-cut ranks are zero
+and the raw physical matrix equalities are vacuous.
 -/
 
 open scoped Matrix Kronecker BigOperators
@@ -57,12 +59,14 @@ FBC25, arXiv:2502.20257, Lemma `lem:deco` (lines 1052--1066). Only the
 $u$ part of clause (b) is required: $v$ unitarity is unused, so these weaker
 premises give a stronger result applying to the source. Chosen left inverses
 of the tilde $X$ factors and right inverses of the original $Y$ factors suffice.
-Positive physical dimension forces both ranks to be nonempty internally.
+In positive physical dimension the two unitary contractions force both ranks to
+be nonempty internally. In dimension zero, the source cuts have rank zero and
+identity gauges with scalar one satisfy the vacuous raw matrix equalities.
 
 The source scalars are $\delta_1=\delta^{-1}$ and $\delta_2=\delta$;
 the final equality is exactly $\delta_1\delta_2=1$. The gauges have the
 source orientation, with their adjoints acting on the $Y$ factors. -/
-theorem exists_reciprocal_unitary_source_gauges [NeZero d]
+theorem exists_reciprocal_unitary_source_gauges
     {X₁ Xt₁ : Matrix (Fin d × Fin D) (Fin r[U]) ℂ}
     {Y₁ Yt₁ : Matrix (Fin r[U]) (Fin D × Fin d) ℂ}
     {X₂ Xt₂ : Matrix (Fin D × Fin d) (Fin ℓ[U]) ℂ}
@@ -91,9 +95,24 @@ theorem exists_reciprocal_unitary_source_gauges [NeZero d]
       Yt₂ = (δ : ℂ)⁻¹ • (star (W₂ : Matrix (Fin ℓ[U]) (Fin ℓ[U]) ℂ) * Y₂) ∧
       (δ : ℂ)⁻¹ * (δ : ℂ) = 1 := by
   classical
+  by_cases hd : d = 0
+  · subst d
+    refine ⟨1, by norm_num, 1, 1, ?_, ?_, ?_, ?_, ?_⟩
+    · ext ⟨i, _⟩ _
+      exact Fin.elim0 i
+    · ext _ ⟨_, i⟩
+      exact Fin.elim0 i
+    · ext ⟨_, i⟩ _
+      exact Fin.elim0 i
+    · ext _ ⟨i, _⟩
+      exact Fin.elim0 i
+    · norm_num
   have hcard := hu.1.card_le _
+  have hdpos : 0 < Fintype.card (Fin d × Fin d) := by
+    rw [Fintype.card_pos_iff]
+    exact ⟨⟨⟨0, Nat.pos_of_ne_zero hd⟩, ⟨0, Nat.pos_of_ne_zero hd⟩⟩⟩
   have hpos : 0 < Fintype.card (Fin ℓ[U] × Fin r[U]) :=
-    lt_of_lt_of_le Fintype.card_pos hcard
+    lt_of_lt_of_le hdpos hcard
   obtain ⟨l, r⟩ := Fintype.card_pos_iff.mp hpos
   have : Nonempty (Fin r[U]) := ⟨r⟩
   have : Nonempty (Fin ℓ[U]) := ⟨l⟩
