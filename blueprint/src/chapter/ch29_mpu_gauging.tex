@@ -6948,6 +6948,156 @@ unbuffered defect formulas.
     applying the word insertion identity twice.
 \end{proof}
 
+\subsection{Literal fusion--action coordinate contractions}
+
+The following contractions use the printed action pair and the right fusion
+cap in \cite[lines~4671--4694]{FrancoRubio2025MPUGauging}, with fixed product-bond
+order. They are motivated by the fusion--action comparison in
+\cite[lines~1875--1913]{FrancoRubio2025MPUGauging}, but do not identify its
+$L$-symbol or its retained physical scalar. Compatibility of the oriented
+legs, density insertion, and fusion gauge remains open, as discussed in
+\cite{gap:fbc25_czx_fusion_coordinate_compatibility}. No cap, action tensor,
+block label, or physical gate is changed here.
+
+\begin{definition}[Sequential action covector]
+    \label{def:mpug_czx_sequential_action_bra}
+    \lean{MPOTensor.CZX.sequentialActionBra}
+    \leanok
+    \uses{def:mpug_czx_printed_action_pair}
+    For $x\in\{0,1\}$, let $p_x$ be the printed action row of
+    Definition~\ref{def:mpug_czx_printed_action_pair}. Define the row
+    $P_x\colon\C^4\to\C$ by the following coordinates, for
+    $\alpha,\gamma\in\{0,1\}$:
+    \begin{align}
+        P_x                    & =p_{1-x}\otimes p_x,         &
+        (P_x)_{2\alpha+\gamma} & =p_{1-x}(\alpha)p_x(\gamma).
+    \end{align}
+    The first action factor occupies the first product-bond coordinate.
+\end{definition}
+
+\begin{definition}[Sequential action vector]
+    \label{def:mpug_czx_sequential_action_ket}
+    \lean{MPOTensor.CZX.sequentialActionKet}
+    \leanok
+    \uses{def:mpug_czx_printed_action_pair}
+    For $x\in\{0,1\}$, let $q_x$ be the printed action column of
+    Definition~\ref{def:mpug_czx_printed_action_pair}. Define the column
+    $Q_x\colon\C\to\C^4$ by the following coordinates, for
+    $\alpha,\gamma\in\{0,1\}$:
+    \begin{align}
+        Q_x                    & =q_{1-x}\otimes q_x,         &
+        (Q_x)_{2\alpha+\gamma} & =q_{1-x}(\alpha)q_x(\gamma).
+    \end{align}
+    Rows contract with columns by ordinary matrix multiplication, with no
+    additional complex conjugation.
+\end{definition}
+
+\begin{definition}[Supported product letter]
+    \label{def:mpug_czx_fusion_action_letter}
+    \lean{MPOTensor.CZX.fusionActionLetter}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpdo_operator_product}
+    Let $T$ be the exact blocked CZX tensor of
+    Definition~\ref{def:mpug_czx_exact_tensor}. For $x\in\{0,1\}$, define
+    $B_x\in\operatorname{Mat}_4(\C)$ to be the physical $(3x,3x)$ letter
+    of $T\mathbin{\cdot}T$. Explicitly, for
+    $\alpha,\gamma,\beta,\delta\in\{0,1\}$,
+    \begin{align}
+        (B_x)_{2\alpha+\gamma,2\beta+\delta}
+         & =\sum_{j=0}^3 T^{3x,j}_{\alpha\beta}T^{j,3x}_{\gamma\delta}.
+    \end{align}
+    The physical index $3x$ encodes the two bits $(x,x)$.
+\end{definition}
+
+\begin{definition}[Literal fusion--action coefficient]
+    \label{def:mpug_czx_fusion_action_coefficient}
+    \lean{MPOTensor.CZX.fusionActionCoefficient}
+    \leanok
+    \uses{def:mpug_czx_sequential_action_bra,
+        def:mpug_czx_fusion_action_letter, def:mpug_czx_fusion_caps}
+    For $x\in\{0,1\}$, let $P_x$ and $B_x$ be the sequential action row
+    and supported product letter, and put
+    $W=F^>_{g,g}=\tfrac12(0,i,-i,0)^{\mathsf T}$, in the product-bond
+    order of Definition~\ref{def:mpug_czx_fusion_caps}. Define
+    \begin{align}
+        c_x & =P_xB_xW\in\C.
+    \end{align}
+    The one-by-one matrix on the right is identified with its sole entry.
+\end{definition}
+
+\begin{theorem}[Values of the literal coefficient]
+    \label{thm:mpug_czx_fusion_action_coefficient_coordinates}
+    \lean{MPOTensor.CZX.fusionActionCoefficient_coordinates}
+    \leanok
+    \uses{def:mpug_czx_fusion_action_coefficient}
+    The literal coefficients satisfy $c_0=1$ and $c_1=-1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_fusion_action_letter,
+        def:mpug_czx_sequential_action_bra, def:mpug_czx_printed_action_pair,
+        def:mpug_czx_fusion_caps}
+    Expanding the two supported product letters gives
+    \begin{align}
+        B_0 & =\begin{pmatrix}
+                   0 & 0 & 0 & 0 \\-1&1&-1&1\\0&0&0&0\\0&0&0&0
+               \end{pmatrix}, &
+        B_1 & =\begin{pmatrix}
+                   0 & 0 & 0 & 0 \\0&0&0&0\\-1&-1&1&1\\0&0&0&0
+               \end{pmatrix}.
+    \end{align}
+    Substitute the printed rows and the column $W$ into $P_xB_xW$.
+    The two finite matrix products give the asserted values.
+\end{proof}
+
+\begin{theorem}[Normalization, proportionality, and idempotence]
+    \label{thm:mpug_czx_fusion_action_finite_identities}
+    \lean{MPOTensor.CZX.fusionAction_finite_identities}
+    \leanok
+    \uses{def:mpug_czx_sequential_action_bra,
+        def:mpug_czx_sequential_action_ket, def:mpug_czx_fusion_action_letter,
+        def:mpug_czx_fusion_action_coefficient, def:mpug_czx_fusion_caps}
+    For each $x\in\{0,1\}$, the literal rows, columns, and supported
+    product letter satisfy
+    \begin{align}
+        P_xB_xQ_x & =1, & B_xW & =c_xB_xQ_x, & B_x^2 & =B_x.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_fusion_action_letter,
+        def:mpug_czx_sequential_action_bra, def:mpug_czx_sequential_action_ket,
+        def:mpug_czx_printed_action_pair, def:mpug_czx_fusion_caps,
+        def:mpug_czx_fusion_action_coefficient}
+    Expand the two supported letters and substitute the printed action
+    rows and columns and the cap $W$. For each of the two values of $x$,
+    finite matrix multiplication gives simultaneously the normalization,
+    proportionality with coefficient $1$ or $-1$, idempotence, and the
+    same value of $P_xB_xW$. Substitute this last value for $c_x$.
+\end{proof}
+
+\begin{theorem}[Positive repetitions of the supported letter]
+    \label{thm:mpug_czx_fusion_action_positive_power}
+    \lean{MPOTensor.CZX.fusionAction_positive_power}
+    \leanok
+    \uses{def:mpug_czx_sequential_action_bra,
+        def:mpug_czx_sequential_action_ket, def:mpug_czx_fusion_action_letter,
+        def:mpug_czx_fusion_action_coefficient, def:mpug_czx_fusion_caps}
+    For every $x\in\{0,1\}$ and every integer $n\geq0$,
+    \begin{align}
+        B_x^{n+1}       & =B_x, & P_xB_x^{n+1}W & =c_x,             \\
+        P_xB_x^{n+1}Q_x & =1,   & B_x^{n+1}W    & =c_xB_x^{n+1}Q_x.
+    \end{align}
+    These statements concern repetitions of this single supported letter,
+    not arbitrary words or an identification with the source $L$-symbol.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_fusion_action_finite_identities,
+        def:mpug_czx_fusion_action_coefficient}
+    Induct on $n$. The first power is $B_x$; multiplication by $B_x$ and
+    idempotence prove the successor step. Substitute $B_x^{n+1}=B_x$
+    into the remaining three identities, and use the definition of $c_x$
+    and the normalization and proportionality of
+    Theorem~\ref{thm:mpug_czx_fusion_action_finite_identities}.
+\end{proof}
 \subsection{The displayed CZX circuit tuple}
 
 \begin{definition}[The displayed CZX circuit tuple]

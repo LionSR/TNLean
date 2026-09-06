@@ -108,6 +108,7 @@ import TNLean.MPS.MPDO.CZXActionTensors
 import TNLean.MPS.MPDO.CZXCompletion
 import TNLean.MPS.MPDO.CZXDaggerGauge
 import TNLean.MPS.MPDO.CZXDefectMaps
+import TNLean.MPS.MPDO.CZXFusionActionCoordinates
 import TNLean.MPS.MPDO.CZXFusionTensors
 import TNLean.MPS.MPDO.CZXGHZAction
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
