@@ -1335,8 +1335,17 @@ gauges and scalar relation have been constructed.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpug_truncated_symmetry, def:mpo_eval_word, def:mpu_source_uv}
-    The bulk product is $I_D$. Its Kronecker delta identifies $\alpha$
-    and $\beta$, leaving exactly the two-triangle contraction defining $u$.
+    The bulk product $\mathcal U^{\varnothing,\varnothing}$ is the empty
+    ordered product $I_D$, so $(\mathcal U^{\varnothing,\varnothing})_{\alpha\beta}
+        =\delta_{\alpha\beta}$. Instantiating
+    (\ref{eq:mpug_truncated_symmetry_contraction}) at $N=0$ gives
+    \begin{align}
+        (U^0)_{(l,\varnothing,r),(a,\varnothing,b)}
+         & =\sum_{\alpha,\beta=0}^{D-1}(Y_2)_{l,(a,\alpha)}
+        \delta_{\alpha\beta}(Y_1)_{r,(\beta,b)}
+        =\sum_{\alpha=0}^{D-1}(Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}
+        =u_{(l,r),(a,b)}.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Two-sided growth by the movement operators]
@@ -6377,8 +6386,18 @@ unbuffered defect formulas.
 \begin{proof}\leanok
     \uses{def:mpug_czx_acted_sectors, thm:mpug_czx_blocked_ghz_sectors,
         def:mpug_czx_exact_tensor}
-    The input contraction selects $j=3x$. Expand the defining CZX matrices
-    at this input. Only $i=3(1-x)$ survives, giving the two displayed matrices.
+    Since $A_x^j=\delta_{j,3x}$, the defining sum of
+    Definition~\ref{def:mpug_czx_acted_sectors} collapses to
+    $B_x^i=\sum_{j=0}^3 B^{i,j}A_x^j=B^{i,3x}$. The exact CZX tensor of
+    Definition~\ref{def:mpug_czx_exact_tensor} vanishes off its support,
+    giving
+    \begin{align}
+        B^{i,3x} & =\delta_{i,3(1-x)}B^{3(1-x),3x}=\delta_{i,k_x}C_x,
+    \end{align}
+    so $B_x^i=\delta_{i,k_x}C_x$; likewise $A_x^j=\delta_{j,3x}$ at
+    $x\mapsto1-x$ gives $A_{1-x}^i=\delta_{i,k_x}$. Expanding the defining
+    CZX matrices at $B^{k_x,3x}$ evaluates the two displayed matrices
+    $C_0,C_1$.
 \end{proof}
 
 \begin{definition}[The printed action pair]
@@ -6457,7 +6476,7 @@ unbuffered defect formulas.
         \label{eq:mpug_czx_printed_exterior}
     \end{align}
     No equality of buffer lengths is needed. The equal-length case is
-    the exterior diagram of \cite[lines~1788--1870]{FrancoRubio2025MPUGauging}.
+    the exterior diagram of \cite[lines~1788--1838]{FrancoRubio2025MPUGauging}.
     The interior equation covers only the nonempty part of that source
     assertion; see \cite{gap:fbc25_czx_action_empty_word}.
 \end{theorem}
