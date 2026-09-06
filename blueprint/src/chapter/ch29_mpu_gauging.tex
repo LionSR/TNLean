@@ -6895,14 +6895,16 @@ unbuffered defect formulas.
     through Definition~\ref{def:mpo_to_mps}), and let $I$ be the
     doubled-index bond-one identity tensor of
     Definition~\ref{threeMPU}. Then $(F^<_{g,g},F^>_{g,g})$ is a
-    reduction from $B$ to $I$ with exterior buffer length one:
+    reduction from $B$ to $I$ with exterior buffer length one. For every
+    word $\mathbf c$, including the empty word,
     \begin{align}
-        F^<_{g,g}F^>_{g,g}              & =1,                              &
-        F^<_{g,g}B^{\mathbf c}F^>_{g,g} & =I^{\mathbf c}
-        \quad(|\mathbf c|\geq0),                                             \\
+        F^<_{g,g}F^>_{g,g}              & =1,             \\
+        F^<_{g,g}B^{\mathbf c}F^>_{g,g} & =I^{\mathbf c}.
+    \end{align}
+    For nonempty words $\mathbf p,\mathbf q,\mathbf c$,
+    \begin{align}
         B^{\mathbf p}F^>_{g,g}I^{\mathbf c}F^<_{g,g}B^{\mathbf q}
-                                        & =B^{\mathbf p\mathbf c\mathbf q}
-        \quad(|\mathbf p|,|\mathbf q|,|\mathbf c|\geq1).
+         & =B^{\mathbf p\mathbf c\mathbf q}.
         \label{eq:mpug_czx_fusion_reduction}
     \end{align}
     This is the concrete $g,g$ instance of the fusion reduction
@@ -6919,8 +6921,22 @@ unbuffered defect formulas.
         VW & =1, & VB^iW & =I^i, & B^iWVB^j & =B^iB^j.
         \label{eq:mpug_czx_fusion_local_identities}
     \end{align}
-    The insertion identity extends to nonempty words by stripping the
-    final letter of the left word and the first letter of the right word.
+    Induct on the nonempty left word $\mathbf p$, removing its first
+    letter. For the singleton case $\mathbf p=i$ and
+    $\mathbf q=j\mathbf q'$, the local insertion identity in
+    (\ref{eq:mpug_czx_fusion_local_identities}) gives
+    \begin{align}
+        B^iWVB^{j\mathbf q'}
+         & =(B^iWVB^j)B^{\mathbf q'}
+        =B^iB^jB^{\mathbf q'}=B^{i j\mathbf q'}.
+    \end{align}
+    If $\mathbf p=i\mathbf p'$ with $\mathbf p'$ nonempty, apply the
+    induction hypothesis to the tail:
+    \begin{align}
+        B^{i\mathbf p'}WVB^{\mathbf q}
+         & =B^i(B^{\mathbf p'}WVB^{\mathbf q})
+        =B^iB^{\mathbf p'\mathbf q}=B^{i\mathbf p'\mathbf q}.
+    \end{align}
     Using it in an induction gives $VB^{\mathbf c}W=I^{\mathbf c}$;
     the empty case is $VW=1$. For nonempty buffers and middle word,
     \begin{align}
