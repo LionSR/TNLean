@@ -6831,33 +6831,47 @@ unbuffered defect formulas.
 
 \begin{definition}[The CZX $g,g$ fusion caps]
     \label{def:mpug_czx_fusion_caps}
-    \lean{MPOTensor.CZX.fusionV, MPOTensor.CZX.fusionW,
-        MPOTensor.CZX.fusion_caps_apply}
+    \lean{MPOTensor.CZX.fusionV, MPOTensor.CZX.fusionW}
     \leanok
-    \uses{def:mpug_czx_dagger_gauge}
-    On the bond space $\C^4\cong\C^2\otimes\C^2$, in the product-bond
-    coordinate $(a,b)$ for bond bits $a,b\in\{0,1\}$, define the row
-    vector $F^<_{g,g}\colon\C^4\to\C$ and the column vector
-    $F^>_{g,g}\colon\C\to\C^4$ by decorating one leg of a rank-one bond
-    cap with the Pauli matrix $Y$ of
-    Definition~\ref{def:mpug_czx_dagger_gauge}: a single $Y$ on the
-    left cap, and $Y$ together with the printed weight $\tfrac12$ on
-    the right cap, exactly as displayed in
-    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}, itself the
+    In the ordered bond coordinates $0,1,2,3$, define the row vector
+    $F^<_{g,g}\colon\C^4\to\C$ and the column vector
+    $F^>_{g,g}\colon\C\to\C^4$ by
+    \begin{align}
+        F^<_{g,g} & =(0,-i,i,0),                     \\
+        F^>_{g,g} & =\tfrac12(0,i,-i,0)^{\mathsf T}.
+    \end{align}
+    These are the concrete caps in
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}, the
     $g=h=g^{-1}$ specialization of the general fusion-tensor display
-    \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}. Concretely,
-    for all bond bits $a,b\in\{0,1\}$,
+    \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}.
+    % Only the concrete g,g slice of #7354 is covered here.
+\end{definition}
+
+\begin{theorem}[Product coordinates of the CZX fusion caps]
+    \label{thm:mpug_czx_fusion_caps_apply}
+    \lean{MPOTensor.CZX.fusion_caps_apply}
+    \leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
+    Let $F^<_{g,g},F^>_{g,g}$ be the caps of
+    Definition~\ref{def:mpug_czx_fusion_caps}, and let $Y$ be the Pauli
+    matrix of Definition~\ref{def:mpug_czx_dagger_gauge}. Identify the
+    product-bond coordinate $(a,b)$ with $2a+b$. For all bond bits
+    $a,b\in\{0,1\}$,
     \begin{align}
         F^<_{g,g}(a,b) & =Y_{a,b},         &
         F^>_{g,g}(a,b) & =\tfrac12Y_{b,a},
         \label{eq:mpug_czx_fusion_caps_apply}
     \end{align}
-    so both caps vanish at the two diagonal bond coordinates
-    (matching $Y_{0,0}=Y_{1,1}=0$), and the two caps carry $Y$ in
-    opposite orientations, reflecting the left/right mirroring of the
-    printed diagram.
-    % Only the concrete g,g slice of #7354 is covered here.
-\end{definition}
+    Thus both caps vanish at the diagonal bond coordinates and carry
+    $Y$ in opposite orientations, as in the printed diagram of
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
+    Evaluate both caps at $2a+b$ for the four pairs $(a,b)$ and compare
+    with the entries of $Y$ to obtain
+    (\ref{eq:mpug_czx_fusion_caps_apply}).
+\end{proof}
 
 \begin{theorem}[The CZX fusion reduction]
     \label{thm:mpug_czx_fusion_reduction}
