@@ -117,6 +117,7 @@ import TNLean.MPS.MPDO.CZXSecondTupleCertificate
 import TNLean.MPS.MPDO.CZXSourceFactors
 import TNLean.MPS.MPDO.CZXTensor
 import TNLean.MPS.MPDO.CZXTensorInjectivity
+import TNLean.MPS.MPDO.CZXUnmodifiedFusion
 import TNLean.MPS.MPDO.CaseIIAbsorptionCounterexample
 import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
 import TNLean.MPS.MPDO.CommonWeightAbsorption
