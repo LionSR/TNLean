@@ -6976,6 +6976,78 @@ unbuffered defect formulas.
     all phases are unimodular.
 \end{proof}
 
+\begin{theorem}[Right movement coordinates of the displayed CZX factors]
+    \label{thm:mpug_czx_displayed_right_movement_coordinates}
+    \lean{MPOTensor.CZX.displayedSourceFactors_sourceWR_coordinates}
+    \leanok
+    \discussion{7355}
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_circuit_tuple}
+    Let $w_R$ be the crossed contraction of the displayed source factors
+    of the exact CZX tensor $B$, and let $e_r$ be their right-rank
+    identification with $\{0,1,2,3\}$. Let $W$ denote the matrix of
+    $w=(X_0X_1)\mathrm{CZ}_{01}\mathrm{CZ}_{12}(Z_2Z_3)$ on two
+    four-level matter sites, with each site read in leading-bit-first
+    binary order. For every $i,r,a,j\in\{0,1,2,3\}$,
+    \begin{align}
+        (w_R)_{(i,e_r^{-1}(r)),(e_r^{-1}(a),j)}
+         & =W_{(i,r),(a,j)}.
+    \end{align}
+    This identifies the right movement contraction in
+    \cite[lines~811--869, 4559--4659, 4860--4888]{FrancoRubio2025MPUGauging}
+    without additional hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_displayed_factors, thm:mpug_czx_phase_tables}
+    Pull back the rank indices and expand the crossed contraction as
+    \begin{align*}
+        \sum_{\beta=0}^1(X_1)_{(i,\beta),a}(Y_1)_{r,(\beta,j)}.
+    \end{align*}
+    Substitute the displayed factors and compare with the sparse action
+    (\ref{eq:mpug_czx_w_action}). The two expressions agree for each of
+    the $4^4$ choices of external indices.
+\end{proof}
+
+\begin{theorem}[Left movement coordinates of the displayed CZX factors]
+    \label{thm:mpug_czx_displayed_left_movement_coordinates}
+    \lean{MPOTensor.CZX.displayedSourceFactors_sourceWL_coordinates}
+    \leanok
+    \discussion{7355}
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_circuit_tuple}
+    Let $w_L$ be the crossed contraction of the displayed source factors
+    of the exact CZX tensor $B$, and let $e_l$ be their left-rank
+    identification with $\{0,1,2,3\}$. Let $W$ denote the matrix of
+    $w=(X_0X_1)\mathrm{CZ}_{01}\mathrm{CZ}_{12}(Z_2Z_3)$ on two
+    four-level matter sites, with each site read in leading-bit-first
+    binary order. For every $l,i,j,k\in\{0,1,2,3\}$,
+    \begin{align}
+        (w_L)_{(e_l^{-1}(l),i),(j,e_l^{-1}(k))}
+         & =(W^\dagger)_{(l,i),(j,k)}.
+    \end{align}
+    This is the left movement identification in
+    \cite[lines~811--869, 4559--4659, 4860--4888]{FrancoRubio2025MPUGauging}
+    in the same matter coordinates, without additional hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_displayed_factors, thm:mpug_czx_phase_tables}
+    Pull back the rank indices and expand the crossed contraction as
+    \begin{align*}
+        \sum_{\beta=0}^1(Y_2)_{l,(j,\beta)}(X_2)_{(\beta,i),k}.
+    \end{align*}
+    Substitute the displayed factors and compare with the complex
+    conjugate of the $((j,k),(l,i))$ entry of the sparse matrix in
+    (\ref{eq:mpug_czx_w_action}). Check the $4^4$ external index choices.
+\end{proof}
+
+% Scope of #7355 here: only the two displayed movement-coordinate identities.
+% No full truncated-symmetry formula, associator, sign, or parent issue
+% completion is asserted.
+
 \begin{theorem}[Local monomial action of the CZX Gauss operator]
     \label{thm:mpug_czx_local_monomial_action}
     \lean{MPOTensor.CZX.iPow,
