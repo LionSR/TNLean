@@ -8,7 +8,7 @@ import Mathlib.Tactic.Attr.Register
 /-!
 # Simp attributes for tensor-network proofs
 
-This file registers cross-cutting simp sets independently of their rewriting lemmas.
+This file registers simp sets independently of their rewriting lemmas.
 -/
 
 /-- Move scalars out of matrix products and cancel nested reciprocal scalar actions.
