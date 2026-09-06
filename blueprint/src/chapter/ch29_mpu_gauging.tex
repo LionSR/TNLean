@@ -1749,15 +1749,15 @@ gauges and scalar relation have been constructed.
     $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$, and
     $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$ be complex matrices
     satisfying only $M_2=X_2Y_2$, that is,
-    \begin{align*}
+    \begin{align}
         \mathcal U^{i,b}_{\gamma,\alpha}
          & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
-    \end{align*}
+    \end{align}
     Define the crossed contraction
-    \begin{align*}
+    \begin{align}
         (w_L)_{(l,i),(a,t)}
          & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}.
-    \end{align*}
+    \end{align}
     For $N\geq0$, physical words $\sigma,\tau$ of length $N$,
     source indices $l,r$, and physical indices $i,a,b,c$,
     \begin{align}
@@ -1777,25 +1777,25 @@ gauges and scalar relation have been constructed.
     \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
         def:mpo_eval_word}
     The second cut factorization gives, for each virtual index $\alpha$,
-    \begin{align*}
+    \begin{align}
         \sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}
         \mathcal U^{i,b}_{\gamma,\alpha}
          & =\sum_{\gamma=0}^{D-1}\sum_{t=0}^{d_l-1}
         (Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}
         (Y_2)_{t,(b,\alpha)}                                           \\
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}(Y_2)_{t,(b,\alpha)}.
-    \end{align*}
+    \end{align}
     Expand $\mathcal U^{i\sigma,b\tau}
         =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}$ and substitute this equality
     into the endpoint contraction. Regrouping the finite sums yields
-    \begin{align*}
+    \begin{align}
         (U^{N+3})_{(l,i\sigma,r),(a,b\tau,c)}
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
         \sum_{\alpha,\beta=0}^{D-1}(Y_2)_{t,(b,\alpha)}
         (\mathcal U^{\sigma,\tau})_{\alpha,\beta}(Y_1)_{r,(\beta,c)} \\
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
         (U^{N+2})_{(t,\sigma,r),(b,\tau,c)}.
-    \end{align*}
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Two-sided movement-operator growth]
@@ -1814,20 +1814,20 @@ gauges and scalar relation have been constructed.
     $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$, and
     $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$ be complex matrices
     satisfying only $M_1=X_1Y_1$ and $M_2=X_2Y_2$. In coordinates,
-    \begin{align*}
+    \begin{align}
         \mathcal U^{j,c}_{\beta,\delta}
          & =\sum_{s=0}^{d_r-1}(X_1)_{(j,\delta),s}(Y_1)_{s,(\beta,c)},  \\
         \mathcal U^{i,b}_{\gamma,\alpha}
          & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
-    \end{align*}
+    \end{align}
     Form $U^{N+2}$ using the endpoints $Y_2,Y_1$, and define the crossed
     contractions
-    \begin{align*}
+    \begin{align}
         (w_L)_{(l,i),(a,t)}
          & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}, \\
         (w_R)_{(j,r),(s,e)}
          & =\sum_{\delta=0}^{D-1}(X_1)_{(j,\delta),s}(Y_1)_{r,(\delta,e)}.
-    \end{align*}
+    \end{align}
     For $N\geq0$, physical words $\sigma,\tau$ of length $N$, source
     indices $l,r$, and physical indices $i,j,a,b,c,e$, one has
     \begin{align}
@@ -7273,14 +7273,16 @@ unbuffered defect formulas.
     through Definition~\ref{def:mpo_to_mps}), and let $I$ be the
     doubled-index bond-one identity tensor of
     Definition~\ref{threeMPU}. Then $(F^<_{g,g},F^>_{g,g})$ is a
-    reduction from $B$ to $I$ with exterior buffer length one:
+    reduction from $B$ to $I$ with exterior buffer length one. For every
+    word $\mathbf c$, including the empty word,
     \begin{align}
-        F^<_{g,g}F^>_{g,g}              & =1,                              &
-        F^<_{g,g}B^{\mathbf c}F^>_{g,g} & =I^{\mathbf c}
-        \quad(|\mathbf c|\geq0),                                             \\
+        F^<_{g,g}F^>_{g,g}              & =1,             \\
+        F^<_{g,g}B^{\mathbf c}F^>_{g,g} & =I^{\mathbf c}.
+    \end{align}
+    For nonempty words $\mathbf p,\mathbf q,\mathbf c$,
+    \begin{align}
         B^{\mathbf p}F^>_{g,g}I^{\mathbf c}F^<_{g,g}B^{\mathbf q}
-                                        & =B^{\mathbf p\mathbf c\mathbf q}
-        \quad(|\mathbf p|,|\mathbf q|,|\mathbf c|\geq1).
+         & =B^{\mathbf p\mathbf c\mathbf q}.
         \label{eq:mpug_czx_fusion_reduction}
     \end{align}
     This is the concrete $g,g$ instance of the fusion reduction
@@ -7297,8 +7299,22 @@ unbuffered defect formulas.
         VW & =1, & VB^iW & =I^i, & B^iWVB^j & =B^iB^j.
         \label{eq:mpug_czx_fusion_local_identities}
     \end{align}
-    The insertion identity extends to nonempty words by stripping the
-    final letter of the left word and the first letter of the right word.
+    Induct on the nonempty left word $\mathbf p$, removing its first
+    letter. For the singleton case $\mathbf p=i$ and
+    $\mathbf q=j\mathbf q'$, the local insertion identity in
+    (\ref{eq:mpug_czx_fusion_local_identities}) gives
+    \begin{align}
+        B^iWVB^{j\mathbf q'}
+         & =(B^iWVB^j)B^{\mathbf q'}
+        =B^iB^jB^{\mathbf q'}=B^{i j\mathbf q'}.
+    \end{align}
+    If $\mathbf p=i\mathbf p'$ with $\mathbf p'$ nonempty, apply the
+    induction hypothesis to the tail:
+    \begin{align}
+        B^{i\mathbf p'}WVB^{\mathbf q}
+         & =B^i(B^{\mathbf p'}WVB^{\mathbf q})
+        =B^iB^{\mathbf p'\mathbf q}=B^{i\mathbf p'\mathbf q}.
+    \end{align}
     Using it in an induction gives $VB^{\mathbf c}W=I^{\mathbf c}$;
     the empty case is $VW=1$. For nonempty buffers and middle word,
     \begin{align}
@@ -7329,10 +7345,10 @@ block label, or physical gate is changed here.
     Definition~\ref{def:mpug_czx_printed_action_pair}. Define the row
     $P_x\colon\C^4\to\C$ by the following coordinates, for
     $\alpha,\gamma\in\{0,1\}$:
-    \begin{align*}
+    \begin{align}
         P_x                    & =p_{1-x}\otimes p_x,         &
         (P_x)_{2\alpha+\gamma} & =p_{1-x}(\alpha)p_x(\gamma).
-    \end{align*}
+    \end{align}
     The first action factor occupies the first product-bond coordinate.
 \end{definition}
 
@@ -7345,10 +7361,10 @@ block label, or physical gate is changed here.
     Definition~\ref{def:mpug_czx_printed_action_pair}. Define the column
     $Q_x\colon\C\to\C^4$ by the following coordinates, for
     $\alpha,\gamma\in\{0,1\}$:
-    \begin{align*}
+    \begin{align}
         Q_x                    & =q_{1-x}\otimes q_x,         &
         (Q_x)_{2\alpha+\gamma} & =q_{1-x}(\alpha)q_x(\gamma).
-    \end{align*}
+    \end{align}
     Rows contract with columns by ordinary matrix multiplication, with no
     additional complex conjugation.
 \end{definition}
@@ -7363,10 +7379,10 @@ block label, or physical gate is changed here.
     $B_x\in\operatorname{Mat}_4(\C)$ to be the physical $(3x,3x)$ letter
     of $T\mathbin{\cdot}T$. Explicitly, for
     $\alpha,\gamma,\beta,\delta\in\{0,1\}$,
-    \begin{align*}
+    \begin{align}
         (B_x)_{2\alpha+\gamma,2\beta+\delta}
          & =\sum_{j=0}^3 T^{3x,j}_{\alpha\beta}T^{j,3x}_{\gamma\delta}.
-    \end{align*}
+    \end{align}
     The physical index $3x$ encodes the two bits $(x,x)$.
 \end{definition}
 
@@ -7380,9 +7396,9 @@ block label, or physical gate is changed here.
     and supported product letter, and put
     $W=F^>_{g,g}=\tfrac12(0,i,-i,0)^{\mathsf T}$, in the product-bond
     order of Definition~\ref{def:mpug_czx_fusion_caps}. Define
-    \begin{align*}
+    \begin{align}
         c_x & =P_xB_xW\in\C.
-    \end{align*}
+    \end{align}
     The one-by-one matrix on the right is identified with its sole entry.
 \end{definition}
 
@@ -7398,14 +7414,14 @@ block label, or physical gate is changed here.
         def:mpug_czx_sequential_action_bra, def:mpug_czx_printed_action_pair,
         def:mpug_czx_fusion_caps}
     Expanding the two supported product letters gives
-    \begin{align*}
+    \begin{align}
         B_0 & =\begin{pmatrix}
                    0 & 0 & 0 & 0 \\-1&1&-1&1\\0&0&0&0\\0&0&0&0
                \end{pmatrix}, &
         B_1 & =\begin{pmatrix}
                    0 & 0 & 0 & 0 \\0&0&0&0\\-1&-1&1&1\\0&0&0&0
                \end{pmatrix}.
-    \end{align*}
+    \end{align}
     Substitute the printed rows and the column $W$ into $P_xB_xW$.
     The two finite matrix products give the asserted values.
 \end{proof}
@@ -7419,9 +7435,9 @@ block label, or physical gate is changed here.
         def:mpug_czx_fusion_action_coefficient, def:mpug_czx_fusion_caps}
     For each $x\in\{0,1\}$, the literal rows, columns, and supported
     product letter satisfy
-    \begin{align*}
+    \begin{align}
         P_xB_xQ_x & =1, & B_xW & =c_xB_xQ_x, & B_x^2 & =B_x.
-    \end{align*}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpug_czx_fusion_action_letter,
@@ -7443,10 +7459,10 @@ block label, or physical gate is changed here.
         def:mpug_czx_sequential_action_ket, def:mpug_czx_fusion_action_letter,
         def:mpug_czx_fusion_action_coefficient, def:mpug_czx_fusion_caps}
     For every $x\in\{0,1\}$ and every integer $n\geq0$,
-    \begin{align*}
+    \begin{align}
         B_x^{n+1}       & =B_x, & P_xB_x^{n+1}W & =c_x,             \\
         P_xB_x^{n+1}Q_x & =1,   & B_x^{n+1}W    & =c_xB_x^{n+1}Q_x.
-    \end{align*}
+    \end{align}
     These statements concern repetitions of this single supported letter,
     not arbitrary words or an identification with the source $L$-symbol.
 \end{theorem}
@@ -8416,15 +8432,15 @@ Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
     Let $\Z_2=\{e,g\}$, and let $v(a,b,x)$ be the two-site defect vectors
     of Definition~\ref{def:mpug_czx_defect_vectors}, where $x\in\{0,1\}$.
     On the four matter qubits, numbered $0,1,2,3$, the unmodified operator
-    \[
-        \lambda=\lambda^R_{g,g}
+    \begin{align}
+        \lambda & =\lambda^R_{g,g}
         =-i\,(X_0X_1X_2Z_3) \mathrm{CZ}_{01}\mathrm{CZ}_{12}\,X_2
-    \]
+    \end{align}
     satisfies
-    \begin{align*}
+    \begin{align}
         \lambda\,v(g,g,0) & =-v(e,e,0), \\
         \lambda\,v(g,g,1) & =v(e,e,1).
-    \end{align*}
+    \end{align}
     These are the two contractions displayed in
     \cite[lines~4989--5067]{FrancoRubio2025MPUGauging}.
     Here $\lambda$ is the unmodified operator, not
@@ -8435,10 +8451,10 @@ Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
     \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values}
     The phase formula~(\ref{eq:mpug_czx_lambda_action}) gives the two
     basis calculations
-    \begin{align*}
+    \begin{align}
         \lambda\ket{1100} & =-i\ket{0000}, \\
         \lambda\ket{0011} & =i\ket{1111},
-    \end{align*}
+    \end{align}
     since $h(1100)=0$ and $h(0011)=1$.
     By Theorem~\ref{thm:mpug_czx_defect_vector_values}, the input defect
     vectors are $-i\ket{1100}$ and $-i\ket{0011}$, while the target
