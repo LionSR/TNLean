@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{false-source}{resolved}
 
 \section{The assertion and its boundary}
 
@@ -48,11 +48,9 @@ output $Z$ gates and the unnormalized Hadamard weights. Contracting its input
 with block $x$ gives
 \begin{align}
     B_x^i & =\sum_{j=0}^3 T^{i,j}A_x^j
-    =\delta_{i,3(1-x)}C_x,
-    \label{eq:fbc25_czx_empty_acted_tensor}                                                                  \\
+    =\delta_{i,3(1-x)}C_x,                                                                                   \\
     C_0   & =T^{3,0}=\begin{pmatrix}0&0\\-1&1\end{pmatrix},
           & C_1                                             & =T^{0,3}=\begin{pmatrix}1&1\\0&0\end{pmatrix}.
-    \label{eq:fbc25_czx_empty_supported_matrices}
 \end{align}
 
 Denote the source's printed left action tensor by $p_x$ and its printed
@@ -121,7 +119,6 @@ Then $V_xW_x=p_xC_xq_x=1$. Idempotency of $C_x$ gives, for every word,
 \begin{align}
     V_xB_x^{\mathbf a}W_x & =A_{1-x}^{\mathbf a}
     \qquad (|\mathbf a|\geq0).
-    \label{eq:fbc25_czx_empty_corrected_reduction}
 \end{align}
 For the empty word this is $V_xW_x=1$; for nonempty words it follows from
 the same supported-letter calculation. Moreover,
@@ -140,16 +137,23 @@ in an unbuffered defect formula.
 
 \section{Verdict and formal boundary}
 
-The local correction concerns only the empty-length instance of the interior
-identity for the printed CZX action pair. Its nonempty interior identities
-and buffered exterior identities remain valid. A different, dressed pair
+For the source's actual nonzero injective GHZ sectors, the printed CZX
+pair fails the interior identity at length zero, which the source explicitly
+includes by $n\geq0$ \cite[line~1870]{FrancoRubio2025MPUGauging}.
+This nondegenerate counterexample warrants the false-source classification
+for the specific assertion that the printed pair satisfies the all-length
+interior identity, not for general existence of action tensors or later
+defect claims. Its nonempty interior identities and buffered exterior
+identities remain valid. A different, dressed pair
 satisfies the genuine all-word reduction relation without an extra
 hypothesis. The general action-tensor audit retains that all-word relation;
 this calculation does not weaken it.\footnote{See
     \path{docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex},
     particularly its discussion of the interior identity.}
 
-The later defect evaluations are not invalidated. The source gives
+The later defect evaluations are not invalidated by this empty-word
+calculation; this is not a certificate of their global compatibility.
+The source gives
 $g[0]=|00\rangle$ and $g[1]=-i|11\rangle$
 \cite[lines~4800--4859]{FrancoRubio2025MPUGauging}.
 These evaluations use the literal printed action tensors, not the replacement
@@ -164,8 +168,8 @@ is asserted here.
 The finite identities, the nonempty printed interior and exterior
 identities, the failure of the printed empty contraction, and the all-word
 dressed reduction with exterior buffer length one are formally verified.
-The local correction is resolved; the printed pair itself still fails at
-length zero.\footnote{In \doclink{TNLean/MPS/MPDO/CZXActionTensors},
+The discrepancy and the separate all-word replacement are resolved;
+the printed pair itself still fails at length zero.\footnote{In \doclink{TNLean/MPS/MPDO/CZXActionTensors},
     \leanid{MPOTensor.CZX.printedAction_finite_identities},
     \leanid{MPOTensor.CZX.printedAction_interior},
     \leanid{MPOTensor.CZX.printedAction_exterior},
