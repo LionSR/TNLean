@@ -35,10 +35,11 @@ matrix between the two factorizations.
 This is the one-sided-inverse step in FBC25, Lemma `lem:deco`
 (arXiv:2502.20257, lines 1052--1066). -/
 theorem factorization_comparison_of_one_sided_inverses
-    {α β γ 𝕜 : Type*} [Fintype α] [Fintype β] [Fintype γ]
-    [DecidableEq β] [Semiring 𝕜]
-    {X Xt : Matrix α β 𝕜} {Y Yt : Matrix β γ 𝕜}
-    {Lt : Matrix β α 𝕜} {R : Matrix γ β 𝕜}
+    {α β βt γ 𝕜 : Type*} [Fintype α] [Fintype β] [Fintype βt] [Fintype γ]
+    [DecidableEq β] [DecidableEq βt] [Semiring 𝕜]
+    {X : Matrix α β 𝕜} {Xt : Matrix α βt 𝕜}
+    {Y : Matrix β γ 𝕜} {Yt : Matrix βt γ 𝕜}
+    {Lt : Matrix βt α 𝕜} {R : Matrix γ β 𝕜}
     (hfac : X * Y = Xt * Yt) (hleft : Lt * Xt = 1) (hright : Y * R = 1) :
     Lt * X = Yt * R ∧ X = Xt * (Lt * X) ∧ Yt = (Lt * X) * Y := by
   have hK : Lt * X = Yt * R := by
