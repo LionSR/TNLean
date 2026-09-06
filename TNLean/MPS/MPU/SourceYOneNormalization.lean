@@ -23,7 +23,7 @@ namespace MPOTensor
 variable {d D : ℕ} {U : MPOTensor d D}
 
 /-- Factorization of the raw contraction through the Gram matrix of the exact
-chosen first source factor. Source: arXiv:2502.20257, lines 1326–1369. -/
+chosen first source factor. Source: arXiv:2502.20257, lines 1326–1374. -/
 theorem IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction
     (hU : IsMPUCanonicalFormII U) :
     let S := sourceFactors U hU.ρ hU.ρ_posDef
@@ -46,7 +46,7 @@ theorem IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction
 
 /-- The source-rank Gram matrix of the first chosen source factor is scalar.
 The weighted left inverse and the supplied right inverse cancel the dressing.
-Source: arXiv:2502.20257, proof of `eq:MPUnice3`, lines 1326–1369. -/
+Source: arXiv:2502.20257, proof of `eq:MPUnice3`, lines 1375–1397. -/
 theorem IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose_eq_smul
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
     (hadjoint : IsMPUSimple (MPOTensor.physicalAdjointTensor U)) :

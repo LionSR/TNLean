@@ -1281,21 +1281,21 @@ gauges and scalar relation have been constructed.
 
 \begin{definition}[Truncated symmetry]
     \label{def:mpug_truncated_symmetry}
-    \lean{MPOTensor.SourceFactors.truncatedSymmetry}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints,
+        MPOTensor.SourceFactors.truncatedSymmetry}
     \leanok
     \discussion{7319}
-    \uses{def:mpu_weighted_source_factors, def:mpo_eval_word}
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
+        def:mpo_eval_word, def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
-    dimension $D$. Let $\rho$ be a complex matrix on the virtual space,
-    and let $X_1,Y_1,Z_1,X_2,Y_2,Z_2$ be source factors with
-    $M_1=X_1Y_1$, $M_2=X_2Y_2$,
-    $X_1^\dagger(I_d\otimes\rho)X_1=I_{d_r}$,
-    $X_2^\dagger X_2=I_{d_l}$, and $Y_iZ_i=I$ for $i=1,2$,
-    where $d_l,d_r$ are the source-cut ranks.
+    dimension $D$, and let $d_l=\operatorname{rank}M_2$ and
+    $d_r=\operatorname{rank}M_1$. Choose arbitrary complex endpoint matrices
+    $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$ and
+    $Y_1\colon\C^D\otimes\C^d\to\C^{d_r}$.
     For $N\geq0$ and physical words $\sigma,\tau$ of length $N$, put
     \begin{align}
         \mathcal U^{\sigma,\tau}
-         & =\mathcal U^{\sigma_1,\tau_1}\cdots\mathcal U^{\sigma_N,\tau_N}, \\
+         & =\mathcal U^{\sigma_0,\tau_0}\cdots\mathcal U^{\sigma_{N-1},\tau_{N-1}}, \\
         (U^N)_{(l,\sigma,r),(a,\tau,b)}
          & =\sum_{\alpha,\beta=0}^{D-1}
         (Y_2)_{l,(a,\alpha)}
@@ -1313,24 +1313,32 @@ gauges and scalar relation have been constructed.
     This is the endpoint contraction of
     \cite[lines~2062--2100]{FrancoRubio2025MPUGauging}, with the group
     label suppressed. The superscript counts the $N$ bulk tensors only,
-    not the two endpoint triangles. No group representation or unitarity
-    assertion is included in this definition.
+    not the two endpoint triangles. No cut factorization is needed.
+    For the normalized source factors of
+    Definition~\ref{def:mpu_weighted_source_factors}, choosing their
+    matrices $Y_2,Y_1$ recovers the source-factor endpoint contraction.
+    No group representation or unitarity assertion is included in this
+    definition; arbitrary endpoint matrices need not give a unitary map.
 \end{definition}
 
 \begin{theorem}[The zero-bulk contraction]
     \label{thm:mpug_truncated_symmetry_zero}
-    \lean{MPOTensor.SourceFactors.truncatedSymmetry_zero}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints_zero,
+        MPOTensor.SourceFactors.truncatedSymmetry_zero}
     \leanok
     \uses{def:mpug_truncated_symmetry, def:mpu_source_uv}
-    For the source factors of Definition~\ref{def:mpug_truncated_symmetry},
-    the endpoint contraction with no bulk sites is the source gate $u$.
-    More precisely, for endpoint indices $l,r,a,b$ and the empty words
-    $\varnothing$,
+    Let $\mathcal U$ and the arbitrary endpoint matrices $Y_2,Y_1$ have
+    the dimensions in Definition~\ref{def:mpug_truncated_symmetry}.
+    For endpoint indices $l,r,a,b$ and the empty words $\varnothing$,
     \begin{align}
         (U^0)_{(l,\varnothing,r),(a,\varnothing,b)}
-         & =u_{(l,r),(a,b)}.
+         & =\sum_{\alpha=0}^{D-1}
+        (Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}.
         \label{eq:mpug_truncated_symmetry_zero}
     \end{align}
+    This requires no cut factorization. For normalized source factors,
+    the right-hand side is $u_{(l,r),(a,b)}$, with $u$ as in
+    Definition~\ref{def:mpu_source_uv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpug_truncated_symmetry, def:mpo_eval_word, def:mpu_source_uv}
@@ -1342,22 +1350,105 @@ gauges and scalar relation have been constructed.
         (U^0)_{(l,\varnothing,r),(a,\varnothing,b)}
          & =\sum_{\alpha,\beta=0}^{D-1}(Y_2)_{l,(a,\alpha)}
         \delta_{\alpha\beta}(Y_1)_{r,(\beta,b)}
-        =\sum_{\alpha=0}^{D-1}(Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}
-        =u_{(l,r),(a,b)}.
+        =\sum_{\alpha=0}^{D-1}(Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}.
     \end{align}
+    For normalized source factors this is the defining contraction of $u$.
 \end{proof}
 
-\begin{theorem}[Two-sided growth by the movement operators]
+\begin{theorem}[Left growth from the second cut]
+    \label{thm:mpug_truncated_symmetry_left_growth}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints_cons,
+        MPOTensor.SourceFactors.truncatedSymmetry_cons}
+    \leanok
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
+        def:mpug_staircase_gates}
+    Let $\mathcal U$ be an MPO tensor with physical dimension $d$ and bond
+    dimension $D$, and put $d_l=\operatorname{rank}M_2$ and
+    $d_r=\operatorname{rank}M_1$. Let
+    $Y_1\colon\C^D\otimes\C^d\to\C^{d_r}$,
+    $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$, and
+    $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$ be complex matrices
+    satisfying only $M_2=X_2Y_2$, that is,
+    \begin{align*}
+        \mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
+    \end{align*}
+    Define the crossed contraction
+    \begin{align*}
+        (w_L)_{(l,i),(a,t)}
+         & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}.
+    \end{align*}
+    For $N\geq0$, physical words $\sigma,\tau$ of length $N$,
+    source indices $l,r$, and physical indices $i,a,b,c$,
+    \begin{align}
+        (U^{N+1})_{(l,i\sigma,r),(a,b\tau,c)}
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
+        (U^N)_{(t,\sigma,r),(b,\tau,c)}.
+    \end{align}
+    The right endpoint $Y_1$ is arbitrary and unchanged; no first-cut
+    factorization is assumed. For normalized source factors, $w_L$ is
+    the movement operator of Definition~\ref{def:mpug_staircase_gates}.
+    The identity is the left-end factorization step of
+    \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}, using the second
+    decomposition in \cite[lines~479--530]{Cirac2017MPU}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
+        def:mpo_eval_word}
+    The second cut factorization gives, for each virtual index $\alpha$,
+    \begin{align*}
+        \sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}
+        \mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_{\gamma=0}^{D-1}\sum_{t=0}^{d_l-1}
+        (Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}
+        (Y_2)_{t,(b,\alpha)}                                           \\
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}(Y_2)_{t,(b,\alpha)}.
+    \end{align*}
+    Expand $\mathcal U^{i\sigma,b\tau}
+        =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}$ and substitute this equality
+    into the endpoint contraction. Regrouping the finite sums yields
+    \begin{align*}
+        (U^{N+1})_{(l,i\sigma,r),(a,b\tau,c)}
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
+        \sum_{\alpha,\beta=0}^{D-1}(Y_2)_{t,(b,\alpha)}
+        (\mathcal U^{\sigma,\tau})_{\alpha,\beta}(Y_1)_{r,(\beta,c)} \\
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
+        (U^N)_{(t,\sigma,r),(b,\tau,c)}.
+    \end{align*}
+\end{proof}
+
+\begin{theorem}[Two-sided movement-operator growth]
     \label{thm:mpug_truncated_symmetry_growth}
-    \lean{MPOTensor.SourceFactors.truncatedSymmetry_cons_snoc}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints_cons_snoc,
+        MPOTensor.SourceFactors.truncatedSymmetry_cons_snoc}
     \leanok
     \discussion{7319}
-    \uses{def:mpug_truncated_symmetry, def:mpug_staircase_gates}
-    Let $\mathcal U$ have source factors as in
-    Definition~\ref{def:mpug_truncated_symmetry}, and construct $U^N,w_L,w_R$
-    from these same factors. For $N\geq0$, physical words $\sigma,\tau$
-    of length $N$, source indices $l,r$, and physical indices
-    $i,j,a,b,c,e$, one has
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two, def:mpug_staircase_gates}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$, with $d_l=\operatorname{rank}M_2$ and
+    $d_r=\operatorname{rank}M_1$. Let
+    $X_1\colon\C^{d_r}\to\C^d\otimes\C^D$,
+    $Y_1\colon\C^D\otimes\C^d\to\C^{d_r}$,
+    $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$, and
+    $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$ be complex matrices
+    satisfying only $M_1=X_1Y_1$ and $M_2=X_2Y_2$. In coordinates,
+    \begin{align*}
+        \mathcal U^{j,c}_{\beta,\delta}
+         & =\sum_{s=0}^{d_r-1}(X_1)_{(j,\delta),s}(Y_1)_{s,(\beta,c)},  \\
+        \mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
+    \end{align*}
+    Form $U^N$ using the endpoints $Y_2,Y_1$, and define the crossed
+    contractions
+    \begin{align*}
+        (w_L)_{(l,i),(a,t)}
+         & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}, \\
+        (w_R)_{(j,r),(s,e)}
+         & =\sum_{\delta=0}^{D-1}(X_1)_{(j,\delta),s}(Y_1)_{r,(\delta,e)}.
+    \end{align*}
+    For $N\geq0$, physical words $\sigma,\tau$ of length $N$, source
+    indices $l,r$, and physical indices $i,j,a,b,c,e$, one has
     \begin{align}
         (U^{N+2})_{(l,i\sigma j,r),(a,b\tau c,e)}
          & =\sum_{t=0}^{d_l-1}\sum_{s=0}^{d_r-1}
@@ -1369,14 +1460,17 @@ gauges and scalar relation have been constructed.
     Concatenation $i\sigma j$ inserts $i$ before the word and $j$ after
     it. This is the source-factorization identity in the growth diagram
     of \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}. It adds one
-    bulk site at each end. No simplicity or unitarity assumption on
-    $\mathcal U$ is needed.
-    % Partial coverage of #7319: endpoint contraction, zero bulk, and the
-    % first two-sided growth identity only. No all-length unitarity,
-    % finite-group specialization, or complementary movement is asserted.
+    bulk site at each end, using only the two decompositions in
+    \cite[lines~479--530]{Cirac2017MPU}. For normalized source factors,
+    the crossed contractions are precisely the movement operators of
+    Definition~\ref{def:mpug_staircase_gates}, so the same identity holds
+    for the source-factor endpoint contraction. No simplicity or unitarity
+    assumption on $\mathcal U$ is needed. These algebraic identities do
+    not assert unitarity for arbitrary factors, the finite-group physical
+    specialization, or the complementary finite-chain movement relation.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpu_source_factorization_entries, def:mpug_staircase_gates,
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
         def:mpug_truncated_symmetry, def:mpo_eval_word}
     Expand the enlarged bulk product as
     $\mathcal U^{i\sigma j,b\tau c}
@@ -1393,41 +1487,6 @@ gauges and scalar relation have been constructed.
     \end{align}
     Substitute both equalities into the endpoint contraction and regroup
     the finite sums. The remaining interior contraction is $U^N$.
-\end{proof}
-
-\begin{theorem}[Left-end growth]
-    \label{thm:mpug_truncated_symmetry_left_growth}
-    \lean{MPOTensor.SourceFactors.truncatedSymmetry_cons}
-    \leanok
-    \discussion{7319}
-    \uses{def:mpug_truncated_symmetry, def:mpug_staircase_gates}
-    Let $\mathcal U$ have source factors as in
-    Definition~\ref{def:mpug_truncated_symmetry}, and construct $U^N,w_L$
-    from these same factors. For $N\geq0$, physical words $\sigma,\tau$
-    of length $N$, source indices $l,r$, and physical indices $i,a,b,c$,
-    \begin{align}
-        (U^{N+1})_{(l,i\sigma,r),(a,b\tau,c)}
-         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
-        (U^N)_{(t,\sigma,r),(b,\tau,c)}.
-        \label{eq:mpug_truncated_symmetry_left_growth}
-    \end{align}
-    The right endpoint is unchanged. This is the left-end factorization
-    in the growth diagram of
-    \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}. No simplicity
-    or unitarity assumption on $\mathcal U$ is required.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{def:mpug_truncated_symmetry, def:mpug_staircase_gates,
-        def:mpo_eval_word, thm:mpu_source_factorization_entries}
-    Expand $\mathcal U^{i\sigma,b\tau}
-        =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}$ in the endpoint
-    contraction. The second source-cut factorization gives
-    \begin{align}
-        \sum_\gamma(Y_2)_{l,(a,\gamma)}\mathcal U^{i,b}_{\gamma,\alpha}
-         & =\sum_t(w_L)_{(l,i),(a,t)}(Y_2)_{t,(b,\alpha)}.
-    \end{align}
-    Substitution and regrouping of the finite sums leave $U^N$ with
-    the same right endpoint factor $Y_1$.
 \end{proof}
 
 \begin{theorem}[Kronecker product of unitary maps]
@@ -1551,9 +1610,11 @@ gauges and scalar relation have been constructed.
     \uses{thm:mpug_simple_canonical_boundary_contractions,
         thm:mpu_all_later_simple_blockings}
     Theorem~\ref{thm:mpug_simple_canonical_boundary_contractions}
-    supplies the recorded two-letter insertion. The one-letter consequence
-    of Theorem~\ref{thm:mpu_all_later_simple_blockings} and its coordinate
-    expansion give
+    supplies the two-letter insertion identity with the recorded canonical
+    boundaries $(\Phi|_{(a,b)}=\delta_{a,b}$ and
+    $|\rho)_{(a,b)}=\rho_{ba}$. Applying
+    Theorem~\ref{thm:mpu_all_later_simple_blockings} to this fixed pair
+    gives the one-letter contraction. Expanding its coefficient yields
     \begin{align}
         W^{pq}W^{kl} & =W^{pq}|\rho)(\Phi|W^{kl},                     \\
         (\Phi|W^{pq}|\rho)
@@ -6621,8 +6682,10 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
     For each $x\in\{0,1\}$,
     \begin{align}
-        C_x^2     & =C_x, & p_xq_x       & =\tfrac12, &
-        p_xC_xq_x & =1,   & C_xq_xp_xC_x & =C_x.
+        C_x^2        & =C_x,      \\
+        p_xq_x       & =\tfrac12, \\
+        p_xC_xq_x    & =1,        \\
+        C_xq_xp_xC_x & =C_x.
         \label{eq:mpug_czx_printed_action_contractions}
     \end{align}
 \end{theorem}
@@ -6739,13 +6802,14 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_dressed_action, def:mps_rectangular_reduction,
         def:mps_reduction_exterior_buffer_length}
     For each $x\in\{0,1\}$, $(V_x,W_x)$ is a reduction from $B_x$
-    to $A_{1-x}$ with exterior buffer length one. Thus
+    to $A_{1-x}$ with exterior buffer length one. The reduction identity
+    holds for every word $\mathbf c$, including the empty word; the exterior
+    identity holds for nonempty words $\mathbf a$, $\mathbf b$, and
+    $\mathbf c$. Thus
     \begin{align}
-        V_xW_x & =1,                                & V_xB_x^{\mathbf c}W_x & =A_{1-x}^{\mathbf c}
-        \quad (|\mathbf c|\geq0),                                                                  \\
+        V_xW_x & =1,                                 & V_xB_x^{\mathbf c}W_x & =A_{1-x}^{\mathbf c}, \\
         B_x^{\mathbf a}W_xA_{1-x}^{\mathbf c}V_xB_x^{\mathbf b}
-               & =B_x^{\mathbf a\mathbf c\mathbf b}
-        \quad (|\mathbf a|,|\mathbf b|,|\mathbf c|\geq1).
+               & =B_x^{\mathbf a\mathbf c\mathbf b}.
         \label{eq:mpug_czx_dressed_action_reduction}
     \end{align}
     This proves the all-word relation for the separately dressed pair,
