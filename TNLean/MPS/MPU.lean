@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPU
 
+import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm

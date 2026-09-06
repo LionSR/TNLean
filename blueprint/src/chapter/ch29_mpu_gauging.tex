@@ -1258,6 +1258,204 @@ Definition~\ref{def:mpug_group_representation}.
     case of blocking length one.
 \end{proof}
 
+\begin{definition}[Canonical boundaries under physical adjunction]
+    \label{def:mpug_adjoint_canonical_boundaries}
+    \lean{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPU with a canonical-form-II presentation and
+    recorded positive diagonal fixed matrix $\rho$, with
+    $\operatorname{tr}\rho=1$. Its physical adjoint has letters
+    $(\mathcal U^\dagger)^{ij}=\overline{\mathcal U^{ji}}$; the virtual
+    indices are not transposed. Give its normalized flattening the
+    conjugated canonical blocks with the physical indices exchanged, and
+    retain the same full support and the same fixed matrix $\rho$.
+    This defines canonical-form-II data for $\mathcal U^\dagger$ with
+    the same left and right boundaries $I,\rho$.
+    These are the reflected boundaries used in
+    \cite[lines~1164--1254]{FrancoRubio2025MPUGauging}.
+    % This construction does not assert preservation of simplicity.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_physical_adjoint_identities,
+        def:mpu_physical_adjoint_cfii_data,
+        thm:mpu_physical_adjoint_normalized_flattening,
+        thm:cpsv_map_star_transfer_fixed_point}
+    Physical adjunction preserves periodic unitarity and transports the
+    canonical blocks without changing their dimensions. Writing
+    $\mathcal E_{\mathcal U}$ for the transfer map of $\mathcal U$, the
+    transported fixed-point equation is
+    \begin{align}
+        \mathcal E_{\mathcal U^\dagger}(\rho)
+         & =\overline{\mathcal E_{\mathcal U}(\overline\rho)}
+        =\overline{\mathcal E_{\mathcal U}(\rho)}
+        =\overline\rho=\rho,
+    \end{align}
+    using $\overline\rho=\rho$ and $\mathcal E_{\mathcal U}(\rho)=\rho$. The
+    physical-index permutation does not change the transfer map, so the
+    transported data have the same fixed matrix.
+\end{proof}
+
+\begin{theorem}[Canonical boundary contractions]
+    \label{thm:mpug_simple_canonical_boundary_contractions}
+    \lean{MPOTensor.IsMPUCanonicalFormII.doubleLayer_boundary_contractions}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_double_layer}
+    Let $\mathcal U$ be a simple MPU with a canonical-form-II presentation
+    and recorded fixed matrix $\rho$. Let $W$ be its raw double layer,
+    put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
+    $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
+    \begin{align}
+        (\Phi|W^{ij}W^{kl} & =\delta_{ij}(\Phi|W^{kl}, \\
+        W^{ij}W^{kl}|\rho) & =\delta_{kl}W^{ij}|\rho).
+        \label{eq:mpug_simple_canonical_boundaries}
+    \end{align}
+    These are the boundary removals used in the six-tensor argument of
+    \cite[lines~1164--1254]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_transfer_stabilization,
+        thm:mpu_supplied_projector_simple2,
+        thm:mpu_all_later_simple_blockings}
+    Align the simplicity witnesses with the canonical fixed pair using
+    the stabilized normalized transfer power. The resulting identities are
+    $W^{ij}W^{kl}=W^{ij}|\rho)(\Phi|W^{kl}$ and
+    $(\Phi|W^{ij}|\rho)=\delta_{ij}$. Contract the first identity on
+    the left with $(\Phi|$ or on the right with $|\rho)$.
+\end{proof}
+
+\begin{theorem}[Canonical boundary contractions for a simple physical adjoint]
+    \label{thm:mpug_adjoint_canonical_boundary_contractions}
+    \lean{MPOTensor.IsMPUCanonicalFormII.physicalAdjoint_doubleLayer_boundary_contractions}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_double_layer}
+    Let $\mathcal U$ be an MPU with a canonical-form-II presentation and
+    recorded fixed matrix $\rho$. Assume that $\mathcal U^\dagger$ is
+    simple. Let $W_\dagger$ be the raw double layer of
+    $\mathcal U^\dagger$, put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
+    $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
+    \begin{align}
+        (\Phi|W_\dagger^{ij}W_\dagger^{kl}
+         & =\delta_{ij}(\Phi|W_\dagger^{kl}, \\
+        W_\dagger^{ij}W_\dagger^{kl}|\rho)
+         & =\delta_{kl}W_\dagger^{ij}|\rho).
+    \end{align}
+    The simplicity assumption is precisely the additional hypothesis used
+    for the reflected reduction in
+    \cite[lines~1221--1254]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_adjoint_canonical_boundaries,
+        thm:mpug_simple_canonical_boundary_contractions}
+    Transport the canonical presentation to $\mathcal U^\dagger$ with
+    the same $\rho$, then apply
+    Theorem~\ref{thm:mpug_simple_canonical_boundary_contractions}
+    using the assumed simplicity of $\mathcal U^\dagger$.
+\end{proof}
+
+\begin{definition}[The three-tensor contraction $s$]
+    \label{def:mpug_adjoint_simple_contraction}
+    \lean{MPOTensor.adjointSimpleContraction}
+    \leanok
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$, and let $\rho$ be a complex $D\times D$ matrix.
+    Define an MPO tensor $s$ of the same dimensions by
+    \begin{align}
+        s^{ij}_{ab}
+         & =\sum_{p,q=0}^{d-1}\sum_{x,r,t=0}^{D-1}
+        \mathcal U^{ip}_{xb}\,
+        \overline{\mathcal U^{qp}_{xr}}\,
+        \mathcal U^{qj}_{at}\,\rho_{tr}.
+        \label{eq:mpug_adjoint_simple_contraction}
+    \end{align}
+    The left open bond is on the bottom tensor and the right open bond is
+    on the top tensor. For diagonal $\rho$ only $t=r$ contributes.
+    This is the tensor marked $s$ in
+    \cite[lines~1190--1218]{FrancoRubio2025MPUGauging}.
+    No factor $1/d$ occurs: the letters in this contraction are unnormalized.
+\end{definition}
+
+\begin{theorem}[The two reductions of the six-tensor network]
+    \label{thm:mpug_adjoint_simple_cross_product}
+    \lean{MPOTensor.IsMPUCanonicalFormII.adjointSimpleContraction_cross_mul}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpug_adjoint_simple_contraction}
+    Let $\mathcal U$ have a canonical-form-II presentation with recorded
+    fixed matrix $\rho$, and assume that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Construct $s$ from this same $\rho$
+    by (\ref{eq:mpug_adjoint_simple_contraction}). For all physical
+    indices $i,j,k,l$,
+    \begin{align}
+        s^{ij}\mathcal U^{kl} & =\mathcal U^{ij}s^{kl}.
+        \label{eq:mpug_adjoint_simple_cross_product}
+    \end{align}
+    This is the equality obtained from the two reductions in
+    \cite[lines~1164--1254]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_simple_canonical_boundary_contractions,
+        thm:mpug_adjoint_canonical_boundary_contractions}
+    For fixed open indices $i,j,k,l,a,b$, expand the six-tensor network as
+    \begin{align}
+        \mathcal N^{ij,kl}_{ab}
+         & =\sum_{p,q,v,w}\sum_{x,m,n,z,r,t}
+        \mathcal U^{ip}_{xm}\mathcal U^{kq}_{mb}
+        \overline{\mathcal U^{vp}_{xn}}
+        \overline{\mathcal U^{wq}_{nr}}
+        \mathcal U^{vj}_{az}\mathcal U^{wl}_{zt}\rho_{tr}.
+    \end{align}
+    The first sum ranges over physical indices and the second over virtual
+    indices. Applying the right-boundary contraction to the lower two
+    layers gives $\mathcal N^{ij,kl}_{ab}=(s^{ij}\mathcal U^{kl})_{ab}$.
+    Regrouping the same finite sum and applying the left-boundary
+    contraction for the physical adjoint to the upper two layers gives
+    $\mathcal N^{ij,kl}_{ab}=(\mathcal U^{ij}s^{kl})_{ab}$.
+    Both expressions are therefore equal.
+\end{proof}
+
+\begin{theorem}[The contraction $s$ is a scalar multiple of the MPU tensor]
+    \label{thm:mpug_adjoint_simple_scalar}
+    \lean{MPOTensor.IsMPUCanonicalFormII.adjointSimpleContraction_eq_smul}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpug_adjoint_simple_contraction}
+    Let $\mathcal U$ have a canonical-form-II presentation with recorded
+    fixed matrix $\rho$, and suppose that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Then the tensor $s$ constructed
+    from this $\rho$ satisfies
+    \begin{align}
+        s^{ij} & =\delta\mathcal U^{ij}
+    \end{align}
+    for a single scalar $\delta\in\C$ and every physical pair $i,j$.
+    This is the proportionality conclusion in
+    \cite[lines~1255--1325]{FrancoRubio2025MPUGauging}.
+    % Only proportionality is proved. The scalar is not evaluated, and
+    % eq:MPUnice3, eq:MPUnice4, and the full prop:MPUsplus remain open.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_adjoint_simple_cross_product,
+        thm:mpu_canonical_form_ii_normal, thm:mpug_cross_product_rigidity}
+    Put $\widetilde{\mathcal U}^{ij}=d^{-1/2}\mathcal U^{ij}$.
+    Canonical form II gives $d,D>0$ and normality of
+    $\widetilde{\mathcal U}$. Scaling
+    (\ref{eq:mpug_adjoint_simple_cross_product}) gives
+    $s^{ij}\widetilde{\mathcal U}^{kl}
+        =\widetilde{\mathcal U}^{ij}s^{kl}$.
+    Cross-product rigidity, using blocking to an injective tensor, gives
+    $s^{ij}=c\widetilde{\mathcal U}^{ij}$ for one scalar $c$.
+    Set $\delta=c/\sqrt d$.
+\end{proof}
+
 \begin{theorem}[Comparison of factorizations from one-sided inverses]
     \label{thm:mpug_factorization_comparison}
     \lean{Matrix.factorization_comparison_of_one_sided_inverses}
@@ -4845,6 +5043,115 @@ by the displayed matrices.
     Thus every bond matrix unit lies in the span of the physical letters.
     Since every $2\times2$ matrix is a linear combination of these units,
     the letters span the full bond matrix algebra.
+\end{proof}
+
+\subsection{The blocked GHZ state and its CZX invariance}
+
+\begin{definition}[The GHZ tensor in the blocked CZX alphabet]
+    \label{def:mpug_czx_blocked_ghz}
+    \lean{MPOTensor.CZX.blockedGHZTensor}
+    \leanok
+    \discussion{7354}
+    \uses{def:ghz_tensor, def:blocked_tensor}
+    Let $A^0=\ketbra{0}{0}$ and $A^1=\ketbra{1}{1}$ be the GHZ tensor.
+    Identify the blocked physical alphabet with $\{0,1,2,3\}$ by
+    $\varphi(2a+b)=(a,b)$, for $a,b\in\{0,1\}$. Define
+    \begin{align}
+        \widehat A^{2a+b} & =A^aA^b=(A^{[2]})^{\varphi(2a+b)}.
+    \end{align}
+    This is the once-blocked GHZ tensor used in
+    \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}, with the same
+    physical-index order as the CZX tensor $B$.
+\end{definition}
+
+\begin{theorem}[The two blocked GHZ sectors]
+    \label{thm:mpug_czx_blocked_ghz_sectors}
+    \lean{MPOTensor.CZX.blockTensor_ghzSectorTensor_apply}
+    \leanok
+    \uses{def:mpug_ghz_blocked_cluster_tensor, def:blocked_tensor}
+    For $x\in\{0,1\}$, let $A_x^a=\delta_{a,x}$ be the
+    bond-one GHZ sector. Under $\varphi(2a+b)=(a,b)$ its two-site block is
+    \begin{align}
+        (A_x^{[2]})^{\varphi(i)} & =\delta_{i,3x},
+        \qquad i\in\{0,1,2,3\}.
+    \end{align}
+    Thus the blocked sector vectors are $\ket{00}$ and $\ket{11}$, as in
+    \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $i=2a+b$, the block coefficient is
+    $A_x^aA_x^b=\delta_{a,x}\delta_{b,x}$, which equals one exactly when
+    $a=b=x$, or equivalently $i=3x$.
+\end{proof}
+
+\begin{theorem}[The matrix product vector of the blocked GHZ tensor]
+    \label{thm:mpug_czx_blocked_ghz_mpv}
+    \lean{MPOTensor.CZX.mpv_blockedGHZTensor}
+    \leanok
+    \uses{def:mpug_czx_blocked_ghz, def:mpv}
+    For every $N\geq0$, the periodic matrix product vector of
+    $\widehat A$ is
+    \begin{align}
+        \ket{\psi_N}
+         & =\ket{0}^{\otimes N}+\ket{3}^{\otimes N}.
+        \label{eq:mpug_czx_blocked_ghz_mpv}
+    \end{align}
+    In the original two-qubit alphabet the two summands are
+    $\ket{00}^{\otimes N}$ and $\ket{11}^{\otimes N}$.
+    At $N=0$ they are the same empty configuration, with total coefficient
+    two.
+\end{theorem}
+
+\begin{proof}\leanok
+    The blocked letters are diagonal, with
+    $\widehat A^i=\operatorname{diag}(\delta_{i,0},\delta_{i,3})$.
+    Hence, for $s\in\{0,1,2,3\}^N$,
+    \begin{align}
+        \operatorname{tr}\bigl(\widehat A^{s_1}\cdots
+        \widehat A^{s_N}\bigr)
+         & =\prod_{j=1}^N\delta_{s_j,0}
+        +\prod_{j=1}^N\delta_{s_j,3}.
+    \end{align}
+    These are the coefficients of the two constant configurations.
+\end{proof}
+
+\begin{theorem}[CZX invariance of the blocked GHZ state]
+    \label{thm:mpug_czx_blocked_ghz_invariant}
+    \lean{MPOTensor.CZX.mpo_tensor_mulVec_blockedGHZ}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_exact_tensor, def:mpug_czx_blocked_ghz, def:mpv}
+    Let $B$ be the once-blocked CZX tensor, with both output $Z$ gates and
+    the unnormalized Hadamard weights, and let $N>0$.
+    Transport the matrix product vector of the two-site-blocked GHZ tensor
+    $A^{[2]}$ by the alphabet bijection $\varphi(2a+b)=(a,b)$:
+    \begin{align}
+        \psi_N(s) & =V^{(N)}(A^{[2]})_{(\varphi(s_1),\ldots,\varphi(s_N))},
+        \qquad s\in\{0,1,2,3\}^N.
+    \end{align}
+    Then the periodic CZX operator satisfies
+    \begin{align}
+        O_N(B)\ket{\psi_N} & =\ket{\psi_N}.
+    \end{align}
+    This is the GHZ-invariance assertion in
+    \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}.
+    % Only the actual blocked GHZ MPV and its positive-length invariance
+    % are asserted. Fusion, action tensors, and classification remain open.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_blocked_ghz_mpv, thm:mpug_czx_exact_tensor_unitary}
+    Reindexing the alphabet gives the vector in
+    (\ref{eq:mpug_czx_blocked_ghz_mpv}). The CZX operator complements
+    every matter bit. Its phase on either constant configuration is one:
+    the cyclic exponent is zero on $0^N$ and $4N$ on $3^N$.
+    Consequently
+    \begin{align}
+        O_N(B)\ket{0}^{\otimes N} & =\ket{3}^{\otimes N}, &
+        O_N(B)\ket{3}^{\otimes N} & =\ket{0}^{\otimes N}.
+    \end{align}
+    Their sum is invariant.
 \end{proof}
 
 \subsection{The displayed CZX circuit tuple}
