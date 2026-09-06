@@ -62,6 +62,7 @@ import TNLean.Algebra.StabilizerTransition
 import TNLean.Algebra.SwapKronecker
 import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.TwistedRegularRepresentation
+import TNLean.Algebra.UnitaryAdjointKronecker
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence
 import TNLean.Algebra.UnitaryConjugationTransposeSign
