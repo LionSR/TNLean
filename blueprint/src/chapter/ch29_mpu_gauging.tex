@@ -1372,15 +1372,15 @@ gauges and scalar relation have been constructed.
     $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$, and
     $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$ be complex matrices
     satisfying only $M_2=X_2Y_2$, that is,
-    \begin{align*}
+    \begin{align}
         \mathcal U^{i,b}_{\gamma,\alpha}
          & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
-    \end{align*}
+    \end{align}
     Define the crossed contraction
-    \begin{align*}
+    \begin{align}
         (w_L)_{(l,i),(a,t)}
          & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}.
-    \end{align*}
+    \end{align}
     For $N\geq0$, physical words $\sigma,\tau$ of length $N$,
     source indices $l,r$, and physical indices $i,a,b,c$,
     \begin{align}
@@ -1400,25 +1400,25 @@ gauges and scalar relation have been constructed.
     \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
         def:mpo_eval_word}
     The second cut factorization gives, for each virtual index $\alpha$,
-    \begin{align*}
+    \begin{align}
         \sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}
         \mathcal U^{i,b}_{\gamma,\alpha}
          & =\sum_{\gamma=0}^{D-1}\sum_{t=0}^{d_l-1}
         (Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}
         (Y_2)_{t,(b,\alpha)}                                           \\
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}(Y_2)_{t,(b,\alpha)}.
-    \end{align*}
+    \end{align}
     Expand $\mathcal U^{i\sigma,b\tau}
         =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}$ and substitute this equality
     into the endpoint contraction. Regrouping the finite sums yields
-    \begin{align*}
+    \begin{align}
         (U^{N+3})_{(l,i\sigma,r),(a,b\tau,c)}
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
         \sum_{\alpha,\beta=0}^{D-1}(Y_2)_{t,(b,\alpha)}
         (\mathcal U^{\sigma,\tau})_{\alpha,\beta}(Y_1)_{r,(\beta,c)} \\
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
         (U^{N+2})_{(t,\sigma,r),(b,\tau,c)}.
-    \end{align*}
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Two-sided movement-operator growth]
@@ -1437,20 +1437,20 @@ gauges and scalar relation have been constructed.
     $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$, and
     $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$ be complex matrices
     satisfying only $M_1=X_1Y_1$ and $M_2=X_2Y_2$. In coordinates,
-    \begin{align*}
+    \begin{align}
         \mathcal U^{j,c}_{\beta,\delta}
          & =\sum_{s=0}^{d_r-1}(X_1)_{(j,\delta),s}(Y_1)_{s,(\beta,c)},  \\
         \mathcal U^{i,b}_{\gamma,\alpha}
          & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
-    \end{align*}
+    \end{align}
     Form $U^{N+2}$ using the endpoints $Y_2,Y_1$, and define the crossed
     contractions
-    \begin{align*}
+    \begin{align}
         (w_L)_{(l,i),(a,t)}
          & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}, \\
         (w_R)_{(j,r),(s,e)}
          & =\sum_{\delta=0}^{D-1}(X_1)_{(j,\delta),s}(Y_1)_{r,(\delta,e)}.
-    \end{align*}
+    \end{align}
     For $N\geq0$, physical words $\sigma,\tau$ of length $N$, source
     indices $l,r$, and physical indices $i,j,a,b,c,e$, one has
     \begin{align}
