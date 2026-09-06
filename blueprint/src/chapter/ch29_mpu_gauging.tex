@@ -1423,6 +1423,159 @@ asserted in that passage.
     Apply Theorem~\ref{thm:mpug_inverse_new_gates_unitary_phase} with
     the canonical-form-II presentation at $g$.
 \end{proof}
+\begin{theorem}[The adjoint gauge along a word]
+    \label{thm:mpug_inverse_word_gauge}
+    \lean{MPOTensor.evalWord_physicalAdjointTensor_eq_unitary_gauge}
+    \leanok
+    \uses{def:mpo_eval_word, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPO tensor of dimensions $d,D$ and $T$ a
+    unitary matrix on $\C^D$. Suppose that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$. For equal-length physical words $p,q$, including
+    the empty words, their ordered matrix products satisfy
+    \begin{align}
+        (\mathcal U^\dagger)[p,q] & =T^\dagger\mathcal U[p,q]T.
+    \end{align}
+    This iterates the local gauge relation of
+    \cite[lines~1552--1557]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpo_eval_word}
+    Induct on the first word, using equality of lengths to split the
+    second word at the same position. The empty case is
+    $I_D=T^\dagger I_DT$. For $p=ip'$ and $q=jq'$, cancellation gives
+    \begin{align}
+        (\mathcal U^\dagger)[ip',jq']
+         & =T^\dagger\mathcal U^{ij}T
+        T^\dagger\mathcal U[p',q']T
+        =T^\dagger\mathcal U[ip',jq']T.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Recovering the second endpoint from the candidate]
+    \label{thm:mpug_inverse_endpoint_recovery}
+    \lean{MPOTensor.sourceY₂_eq_inverseCompatibleX₁_adjoint_mul_leftGauge}
+    \leanok
+    \uses{def:mpug_inverse_cut_factors, def:mpug_inverse_cut_gauges,
+        def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be any MPO tensor and $T$ any unitary virtual
+    matrix. For $A=I_d\otimes\overline T$ and the candidate
+    $X=AY_2^\dagger$, one has $Y_2=X^\dagger A$.
+    This is the endpoint recovery from the candidate in
+    \cite[line~5432]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_inverse_cut_factors, def:mpug_inverse_cut_gauges}
+    Unitarity gives $A^\dagger A=I$, so
+    $X^\dagger A=Y_2A^\dagger A=Y_2$.
+\end{proof}
+
+\begin{definition}[The two endpoint matrices along a word]
+    \label{def:mpug_inverse_word_endpoints}
+    \lean{MPOTensor.inverseCompatibleWordA, MPOTensor.inverseCompatibleWordB,
+        MPOTensor.inverseCompatibleWordA_zero_apply,
+        MPOTensor.inverseCompatibleWordB_zero_apply}
+    \leanok
+    \uses{def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors,
+        def:mpo_eval_word, def:mpug_inverse_compatible_gates}
+    Let $\mathcal U$ be an MPO tensor of dimensions $d,D$ and $T$ a
+    unitary virtual matrix. Take the second source factors $X_2,Y_2$
+    and the raw candidates $X=(I_d\otimes\overline T)Y_2^\dagger$,
+    $Y=X_2^\dagger(T^{\mathsf T}\otimes I_d)$. Put
+    $\ell=\operatorname{rank}M_2(\mathcal U)$ and
+    $\Omega_N=\{0,\ldots,d-1\}^{\{0,\ldots,N-1\}}$ for $N\geq0$.
+    Define
+    \begin{align}
+        \mathcal H_N & =\C^d\otimes(\C^{\Omega_N}\otimes\C^d),       \\
+        \mathcal R_N & =\C^\ell\otimes(\C^{\Omega_N}\otimes\C^\ell).
+    \end{align}
+    The matrices $A_N\colon\mathcal H_N\to\mathcal R_N$ and
+    $B_N\colon\mathcal R_N\to\mathcal H_N$ have the following entries
+    for $p,q\in\Omega_N$, physical indices $a,b$, and source indices $l,s$:
+    \begin{align}
+        (A_N)_{(l,(p,s)),(a,(q,b))}
+         & =\sum_{\alpha,\beta=0}^{D-1}(Y_2)_{l,(a,\alpha)}
+        \mathcal U[p,q]_{\alpha\beta}Y_{s,(\beta,b)},       \\
+        (B_N)_{(a,(p,b)),(l,(q,s))}
+         & =\sum_{\alpha,\beta=0}^{D-1}X_{(a,\alpha),l}
+        \mathcal U[p,q]_{\alpha\beta}(X_2)_{(\beta,b),s}.
+    \end{align}
+    The words are read in their given order. These are the all-word
+    endpoint contractions extending
+    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}.
+    With $\varnothing$ the unique empty configuration, the zero-length
+    entries recover the literal new gates:
+    \begin{align}
+        (A_0)_{(l,(\varnothing,s)),(a,(\varnothing,b))}
+         & =(u_{\mathrm{new}})_{(l,s),(a,b)}, \\
+        (B_0)_{(a,(\varnothing,b)),(l,(\varnothing,s))}
+         & =(v_{\mathrm{new}})_{(a,b),(l,s)}.
+    \end{align}
+\end{definition}
+\begin{proof}\leanok
+    \uses{def:mpo_eval_word, def:mpug_inverse_compatible_gates}
+    At length zero, $\mathcal U[\varnothing,\varnothing]=I_D$.
+    The entry $\delta_{\alpha\beta}$ contracts the two sums, respectively, to
+    \begin{align}
+         & \sum_\alpha(Y_2)_{l,(a,\alpha)}Y_{s,(\alpha,b)},  \\
+         & \sum_\alpha X_{(a,\alpha),l}(X_2)_{(\alpha,b),s}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[All-word adjunction of the endpoints]
+    \label{thm:mpug_inverse_word_adjoint}
+    \lean{MPOTensor.inverseCompatibleWordA_eq_smul_wordB_adjoint}
+    \leanok
+    \uses{def:mpug_inverse_word_endpoints, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPO tensor and $T$ a unitary virtual matrix.
+    Suppose that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
+    for every physical pair and that $T\overline T=\sigma I_D$ for a
+    scalar $\sigma\in\C$. For every $N\geq0$, the endpoint matrices
+    of Definition~\ref{def:mpug_inverse_word_endpoints} satisfy
+    $A_N=\sigma B_N^\dagger$. The scalar occurs once, independently of
+    $N$. Adjointing exchanges the physical configurations without reversing
+    either word or inserting an additional swap. No canonical form,
+    simplicity, comparison matrix, or rank transport is required.
+    This is an all-word local extension of
+    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}, not the final
+    truncated-chain sewing identity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_word_gauge, thm:mpug_inverse_endpoint_recovery,
+        def:mpug_inverse_word_endpoints, def:mpug_inverse_cut_factors,
+        def:mpug_inverse_cut_gauges, def:mpdo_physical_adjoint,
+        def:mpo_eval_word}
+    Fix $p,q\in\Omega_N$ and physical indices $a,b$. Put
+    $M=\mathcal U[p,q]$ and $W=\overline{\mathcal U[q,p]}$, and define
+    slices $C_{t\gamma}=\overline{X_{(a,\gamma),t}}$ and
+    $E_{\delta t}=\overline{(X_2)_{(\delta,b),t}}$.
+    Physical adjunction conjugates each letter and exchanges its two
+    physical indices, so
+    $W=(\mathcal U^\dagger)[p,q]=T^\dagger MT$ by
+    Theorem~\ref{thm:mpug_inverse_word_gauge}. The phase relation gives
+    $\overline T=\sigma T^\dagger$. Endpoint recovery and the definition
+    of $Y$ give, for virtual indices $\alpha,\beta$,
+    \begin{align}
+        (Y_2)_{l,(a,\alpha)} & =(C\overline T)_{l\alpha}, \\
+        Y_{s,(\beta,b)}      & =(TE)_{\beta s}.
+    \end{align}
+    The two virtual sums therefore contract as
+    \begin{align}
+        (A_N)_{(l,(p,s)),(a,(q,b))}
+         & =(C\overline T MTE)_{ls}
+        =\sigma(C(T^\dagger MT)E)_{ls}
+        =\sigma(CWE)_{ls}.
+    \end{align}
+    Expanding the remaining product gives
+    \begin{align}
+        (CWE)_{ls}
+         & =\overline{\sum_{\alpha,\beta=0}^{D-1}
+        X_{(a,\alpha),l}\mathcal U[q,p]_{\alpha\beta}(X_2)_{(\beta,b),s}} \\
+         & =\overline{(B_N)_{(a,(q,b)),(l,(p,s))}}.
+    \end{align}
+    This is precisely the entry of $B_N^\dagger$ at the original row
+    and column, with the spatial order unchanged.
+\end{proof}
 \begin{definition}[Common positive physical blocking]
     \label{def:mpug_common_blocking}
     \lean{MPOTensor.GroupFamily.block}
