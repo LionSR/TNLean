@@ -7895,6 +7895,46 @@ Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
     hence is a unit vector.
 \end{proof}
 
+\begin{theorem}[Unmodified CZX fusion contractions]
+    \label{thm:mpug_czx_unmodified_fusion}
+    \lean{MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_zero,
+        MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_one}
+    \leanok
+    \discussion{7355}
+    \uses{def:mpug_czx_circuit_tuple, def:mpug_czx_defect_vectors}
+    Let $\Z_2=\{e,g\}$, and let $v(a,b,x)$ be the two-site defect vectors
+    of Definition~\ref{def:mpug_czx_defect_vectors}, where $x\in\{0,1\}$.
+    On the four matter qubits, numbered $0,1,2,3$, the unmodified operator
+    \begin{align}
+        \lambda & =\lambda^R_{g,g}
+        =-i\,(X_0X_1X_2Z_3) \mathrm{CZ}_{01}\mathrm{CZ}_{12}\,X_2
+    \end{align}
+    satisfies
+    \begin{align}
+        \lambda\,v(g,g,0) & =-v(e,e,0), \\
+        \lambda\,v(g,g,1) & =v(e,e,1).
+    \end{align}
+    These are the two contractions displayed in
+    \cite[lines~4989--5067]{FrancoRubio2025MPUGauging}.
+    Here $\lambda$ is the unmodified operator, not
+    $\tilde\lambda=\lambda Z_0$ used in the displayed circuit tuple.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values}
+    The phase formula~(\ref{eq:mpug_czx_lambda_action}) gives the two
+    basis calculations
+    \begin{align}
+        \lambda\ket{1100} & =-i\ket{0000}, \\
+        \lambda\ket{0011} & =i\ket{1111},
+    \end{align}
+    since $h(1100)=0$ and $h(0011)=1$.
+    By Theorem~\ref{thm:mpug_czx_defect_vector_values}, the input defect
+    vectors are $-i\ket{1100}$ and $-i\ket{0011}$, while the target
+    vectors are $\ket{0000}$ and $\ket{1111}$. Multiplying the two
+    basis calculations by $-i$ gives the claimed signs.
+\end{proof}
+
 \begin{definition}[CZX defect domains]
     \label{def:mpug_czx_defect_domains}
     \lean{MPOTensor.CZX.defectDomain,
