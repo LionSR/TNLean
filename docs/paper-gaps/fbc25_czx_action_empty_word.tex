@@ -1,0 +1,186 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
+
+\title{The Empty Interior Word in the Printed CZX Action Pair}
+\author{}
+\date{2026-09-05}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The assertion and its boundary}
+
+The interior action identity \papereqref{fbc25}{eq:action_interior} in
+Ref.~\cite[lines~1841--1870]{FrancoRubio2025MPUGauging} includes words of
+length $n\geq0$. On a bond-one block it requires
+\begin{align}
+    p_x B_x^{\mathbf a}q_x & =A_{1-x}^{\mathbf a}
+    \qquad (|\mathbf a|\geq0),
+    \label{eq:fbc25_czx_empty_interior}
+\end{align}
+where $B_x$ is the tensor obtained by acting with the CZX symmetry on GHZ
+block $x\in\{0,1\}$, $A_{1-x}$ is the target block, and $p_x,q_x$ are the
+left and right action tensors. Products over the empty word are identities,
+so (\ref{eq:fbc25_czx_empty_interior}) requires $p_xq_x=1$.
+The source prints a specific action pair in
+Ref.~\cite[lines~4690--4694]{FrancoRubio2025MPUGauging}. That pair satisfies
+(\ref{eq:fbc25_czx_empty_interior}) for every nonempty word but not for the
+empty word. This note isolates that boundary and gives a different pair
+which satisfies the identity at every length. It does not change the
+all-word requirement of a reduction.
+
+\section{The printed pair and the acted tensor}
+
+Use the physical alphabet $2a+b$, with $a,b\in\{0,1\}$. The once-blocked
+GHZ sectors are $|00\rangle$ and $|11\rangle$, and the generator exchanges
+their labels \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}. Thus
+$A_x^i=\delta_{i,3x}$. Let $T^{i,j}$ be the bond-two CZX tensor in
+\papereqref{fbc25}{eq:MPU_CZX} of
+Ref.~\cite[lines~4505--4547]{FrancoRubio2025MPUGauging}, retaining both
+output $Z$ gates and the unnormalized Hadamard weights. Contracting its input
+with block $x$ gives
+\begin{align}
+    B_x^i & =\sum_{j=0}^3 T^{i,j}A_x^j
+    =\delta_{i,3(1-x)}C_x,                                                                                   \\
+    C_0   & =T^{3,0}=\begin{pmatrix}0&0\\-1&1\end{pmatrix},
+          & C_1                                             & =T^{0,3}=\begin{pmatrix}1&1\\0&0\end{pmatrix}.
+\end{align}
+
+Denote the source's printed left action tensor by $p_x$ and its printed
+right action tensor by $q_x$. In the normalized convention
+$|\pm\rangle=(|0\rangle\pm|1\rangle)/\sqrt2$, their coordinates are
+\begin{align}
+    p_0 & =(0,-i),                                   & p_1                                       & =(1,0),
+    \label{eq:fbc25_czx_empty_printed_rows}                                                                \\
+    q_0 & =\frac12\begin{pmatrix}-i\\i\end{pmatrix},
+        & q_1                                        & =\frac12\begin{pmatrix}1\\1\end{pmatrix}.
+    \label{eq:fbc25_czx_empty_printed_columns}
+\end{align}
+These are the formulas printed in
+Ref.~\cite[lines~4690--4694]{FrancoRubio2025MPUGauging}. The source does not
+explicitly specify the normalization of $|\pm\rangle$ there. The convention
+in (\ref{eq:fbc25_czx_empty_printed_columns}) is consistent with the black
+factor in the tensor decomposition and the later defect evaluations
+\cite[lines~4589--4601 and 4800--4859]{FrancoRubio2025MPUGauging}.
+The left and right action symbols are ordinary row and column contractions;
+there is no extra matrix between them in the interior diagram.\footnote{The
+    archived drawing definitions are in \path{Papers/2502.20257/Commands.tex},
+    lines 372--399.}
+
+Direct multiplication gives, for each $x$,
+\begin{align}
+    C_x^2     & =C_x, & p_xq_x       & =\frac12,
+    \label{eq:fbc25_czx_empty_idempotent_and_empty} \\
+    p_xC_xq_x & =1,   & C_xq_xp_xC_x & =C_x.
+    \label{eq:fbc25_czx_empty_nonempty_and_exterior}
+\end{align}
+For a nonempty word supported on the sole nonzero letter of $B_x$, its
+matrix product is $C_x$; for any other nonempty word it is zero. Consequently
+(\ref{eq:fbc25_czx_empty_nonempty_and_exterior}) proves the interior
+identity at every positive length. At length zero,
+(\ref{eq:fbc25_czx_empty_idempotent_and_empty}) gives $1/2$ instead of $1$.
+Changing the common normalization of the two printed kets cannot remove the
+conflict: replacing $q_x$ by $tq_x$ gives $p_xC_x(tq_x)=t$ and
+$p_x(tq_x)=t/2$. These two quantities cannot both equal one.
+
+\section{The valid exterior identity and a local replacement}
+
+For a word $\mathbf a$, let $B_x^{\mathbf a}$ and
+$A_{1-x}^{\mathbf a}$ denote the ordered products of the corresponding
+letters. The exterior action identity
+\papereqref{fbc25}{eq:action_exterior} in
+Ref.~\cite[lines~1788--1838]{FrancoRubio2025MPUGauging} has two buffers of
+length $m\geq1$ after the stipulated blocking and a middle word of length
+$n+1\geq1$. The printed pair satisfies precisely that identity:
+\begin{align}
+    B_x^{\mathbf a}q_x A_{1-x}^{\mathbf c}p_x B_x^{\mathbf b}
+     & =B_x^{\mathbf a\mathbf c\mathbf b},
+    \qquad |\mathbf a|=|\mathbf b|\geq1,\quad |\mathbf c|\geq1.
+    \label{eq:fbc25_czx_empty_buffered_exterior}
+\end{align}
+If any letter is unsupported, both sides vanish. Otherwise the left side is
+$C_xq_xp_xC_x=C_x$, which is also the right side.
+
+A local replacement of the left boundary gives an all-word reduction. Set
+\begin{align}
+    V_x & =p_xC_x, & W_x & =q_x,
+    \label{eq:fbc25_czx_empty_dressed_pair} \\
+    V_0 & =(i,-i), & V_1 & =(1,1).
+    \label{eq:fbc25_czx_empty_dressed_rows}
+\end{align}
+Then $V_xW_x=p_xC_xq_x=1$. Idempotency of $C_x$ gives, for every word,
+\begin{align}
+    V_xB_x^{\mathbf a}W_x & =A_{1-x}^{\mathbf a}
+    \qquad (|\mathbf a|\geq0).
+\end{align}
+For the empty word this is $V_xW_x=1$; for nonempty words it follows from
+the same supported-letter calculation. Moreover,
+\begin{align}
+    V_xB_x^{\mathbf b} & =p_xB_x^{\mathbf b}
+    \qquad (|\mathbf b|\geq1).
+    \label{eq:fbc25_czx_empty_buffered_agreement}
+\end{align}
+Thus replacing $p_x$ by $V_x$ leaves
+(\ref{eq:fbc25_czx_empty_buffered_exterior}) unchanged. This replacement
+is not a scalar gauge transformation: the rows in
+(\ref{eq:fbc25_czx_empty_dressed_rows}) are not scalar multiples of the
+corresponding rows in (\ref{eq:fbc25_czx_empty_printed_rows}). In particular,
+(\ref{eq:fbc25_czx_empty_buffered_agreement}) does not permit substitution
+in an unbuffered defect formula.
+
+\section{Verdict and formal boundary}
+
+For the source's actual nonzero injective GHZ sectors, the printed CZX
+pair fails the interior identity at length zero, which the source explicitly
+includes by $n\geq0$ \cite[line~1870]{FrancoRubio2025MPUGauging}.
+This nondegenerate counterexample warrants the false-source classification
+for the specific assertion that the printed pair satisfies the all-length
+interior identity, not for general existence of action tensors or later
+defect claims. Its nonempty interior identities and buffered exterior
+identities remain valid. A different, dressed pair
+satisfies the genuine all-word reduction relation without an extra
+hypothesis. The general action-tensor audit retains that all-word relation;
+this calculation does not weaken it.\footnote{See
+    \path{docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex},
+    particularly its discussion of the interior identity.}
+
+The later defect evaluations are not invalidated by this empty-word
+calculation; this is not a certificate of their global compatibility.
+The source gives
+$g[0]=|00\rangle$ and $g[1]=-i|11\rangle$
+\cite[lines~4800--4859]{FrancoRubio2025MPUGauging}.
+These evaluations use the literal printed action tensors, not the replacement
+(\ref{eq:fbc25_czx_empty_dressed_pair}). Their existing derivation remains
+separate, as does the normalization issue for the different 2017 printed
+CZX tensor.\footnote{The respective notes are
+    \path{docs/paper-gaps/fbc25_czx_defect_domains.tex} and
+    \path{docs/paper-gaps/mpu_czx_tensor_normalization.tex}.}
+No correction of fusion tensors, defect vectors, or the global symmetry
+is asserted here.
+
+The finite identities, the nonempty printed interior and exterior
+identities, the failure of the printed empty contraction, and the all-word
+dressed reduction with exterior buffer length one are formally verified.
+The discrepancy and the separate all-word replacement are resolved;
+the printed pair itself still fails at length zero.\footnote{In \doclink{TNLean/MPS/MPDO/CZXActionTensors},
+    \leanid{MPOTensor.CZX.printedAction_finite_identities},
+    \leanid{MPOTensor.CZX.printedAction_interior},
+    \leanid{MPOTensor.CZX.printedAction_exterior},
+    \leanid{MPOTensor.CZX.printedAction_empty_ne}, and
+    \leanid{MPOTensor.CZX.printedAction_not_isReduction} certify the precise
+    printed boundary. The separate correction is certified by
+    \leanid{MPOTensor.CZX.dressedActionBra_absorption},
+    \leanid{MPOTensor.CZX.dressedAction_isReduction}, and
+    \leanid{MPOTensor.CZX.dressedAction_isReductionExteriorBufferLength}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -64,8 +64,10 @@ theorem IsMPUCanonicalFormII.doubleLayer_boundary_contractions
   let Φ : Fin (D * D) → ℂ := fun x ↦
     (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)
   let ρ : Fin (D * D) → ℂ := fun x ↦ hU.ρ.vec (finProdFinEquiv.symm x)
-  have h₂ := hsimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec
-    ρ Φ (max (D * D - 1) 1) (by omega) hU.normalizedDiagonal_pow_eq_vecMulVec
+  have h₂ : ∀ i j k l : Fin d,
+      doubleLayerTensor U i j * doubleLayerTensor U k l =
+        doubleLayerTensor U i j * Matrix.vecMulVec ρ Φ * doubleLayerTensor U k l :=
+    hU.simple2_recorded_fixed_pair hsimple
   have h₁ := hU.isMPU.simple1_of_simple2_supplied Φ ρ h₂
   intro i j k l
   change Matrix.vecMul Φ (_ * _) = _ • Matrix.vecMul Φ _ ∧

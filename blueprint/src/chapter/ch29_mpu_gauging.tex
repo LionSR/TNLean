@@ -1277,6 +1277,220 @@ gauges and scalar relation have been constructed.
     dimension, hence unitary.
 \end{proof}
 
+\subsection{Endpoint contraction and growth of truncated symmetries}
+
+\begin{definition}[Truncated symmetry]
+    \label{def:mpug_truncated_symmetry}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints,
+        MPOTensor.SourceFactors.truncatedSymmetry}
+    \leanok
+    \discussion{7319}
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
+        def:mpo_eval_word, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$, and let $d_l=\operatorname{rank}M_2$ and
+    $d_r=\operatorname{rank}M_1$. Choose arbitrary complex endpoint matrices
+    $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$ and
+    $Y_1\colon\C^D\otimes\C^d\to\C^{d_r}$.
+    For $N\geq0$ and physical words $\sigma,\tau$ of length $N$, put
+    \begin{align}
+        \mathcal U^{\sigma,\tau}
+         & =\mathcal U^{\sigma_0,\tau_0}\cdots\mathcal U^{\sigma_{N-1},\tau_{N-1}}, \\
+        (U^{N+2})_{(l,\sigma,r),(a,\tau,b)}
+         & =\sum_{\alpha,\beta=0}^{D-1}
+        (Y_2)_{l,(a,\alpha)}
+        (\mathcal U^{\sigma,\tau})_{\alpha,\beta}
+        (Y_1)_{r,(\beta,b)}.
+        \label{eq:mpug_truncated_symmetry_contraction}
+    \end{align}
+    Here $0\leq l<d_l$, $0\leq r<d_r$, and $a,b$ are physical
+    indices. The empty ordered matrix product is $I_D$. Thus
+    \begin{align}
+        U^{N+2}\colon \C^d\otimes(\C^d)^{\otimes N}\otimes\C^d
+         & \longrightarrow
+        \C^{d_l}\otimes(\C^d)^{\otimes N}\otimes\C^{d_r}.
+    \end{align}
+    This is the endpoint contraction of
+    \cite[lines~2062--2100]{FrancoRubio2025MPUGauging}, with the group
+    label suppressed. The source superscript is the total length
+    $L=N+2\geq2$, including the two endpoint triangles; $N$ counts
+    only the bulk tensors. No cut factorization is needed.
+    For the normalized source factors of
+    Definition~\ref{def:mpu_weighted_source_factors}, choosing their
+    matrices $Y_2,Y_1$ recovers the source-factor endpoint contraction.
+    No group representation or unitarity assertion is included in this
+    definition; arbitrary endpoint matrices need not give a unitary map.
+\end{definition}
+
+\begin{theorem}[The zero-bulk contraction]
+    \label{thm:mpug_truncated_symmetry_zero}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints_zero,
+        MPOTensor.SourceFactors.truncatedSymmetry_zero}
+    \leanok
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_uv}
+    Let $\mathcal U$ and the arbitrary endpoint matrices $Y_2,Y_1$ have
+    the dimensions in Definition~\ref{def:mpug_truncated_symmetry}.
+    For endpoint indices $l,r,a,b$ and the empty words $\varnothing$,
+    \begin{align}
+        (U^2)_{(l,\varnothing,r),(a,\varnothing,b)}
+         & =\sum_{\alpha=0}^{D-1}
+        (Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}.
+        \label{eq:mpug_truncated_symmetry_zero}
+    \end{align}
+    This is total length two and requires no cut factorization.
+    For normalized source factors,
+    the right-hand side is $u_{(l,r),(a,b)}$, with $u$ as in
+    Definition~\ref{def:mpu_source_uv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_truncated_symmetry, def:mpo_eval_word, def:mpu_source_uv}
+    The bulk product $\mathcal U^{\varnothing,\varnothing}$ is the empty
+    ordered product $I_D$, so $(\mathcal U^{\varnothing,\varnothing})_{\alpha\beta}
+        =\delta_{\alpha\beta}$. Instantiating
+    (\ref{eq:mpug_truncated_symmetry_contraction}) at $N=0$ gives
+    \begin{align}
+        (U^2)_{(l,\varnothing,r),(a,\varnothing,b)}
+         & =\sum_{\alpha,\beta=0}^{D-1}(Y_2)_{l,(a,\alpha)}
+        \delta_{\alpha\beta}(Y_1)_{r,(\beta,b)}
+        =\sum_{\alpha=0}^{D-1}(Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}.
+    \end{align}
+    For normalized source factors this is the defining contraction of $u$.
+\end{proof}
+
+\begin{theorem}[Left growth from the second cut]
+    \label{thm:mpug_truncated_symmetry_left_growth}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints_cons,
+        MPOTensor.SourceFactors.truncatedSymmetry_cons}
+    \leanok
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
+        def:mpug_staircase_gates}
+    Let $\mathcal U$ be an MPO tensor with physical dimension $d$ and bond
+    dimension $D$, and put $d_l=\operatorname{rank}M_2$ and
+    $d_r=\operatorname{rank}M_1$. Let
+    $Y_1\colon\C^D\otimes\C^d\to\C^{d_r}$,
+    $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$, and
+    $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$ be complex matrices
+    satisfying only $M_2=X_2Y_2$, that is,
+    \begin{align}
+        \mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
+    \end{align}
+    Define the crossed contraction
+    \begin{align}
+        (w_L)_{(l,i),(a,t)}
+         & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}.
+    \end{align}
+    For $N\geq0$, physical words $\sigma,\tau$ of length $N$,
+    source indices $l,r$, and physical indices $i,a,b,c$,
+    \begin{align}
+        (U^{N+3})_{(l,i\sigma,r),(a,b\tau,c)}
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
+        (U^{N+2})_{(t,\sigma,r),(b,\tau,c)}.
+    \end{align}
+    The right endpoint $Y_1$ is arbitrary and unchanged; no first-cut
+    factorization is assumed. For normalized source factors, $w_L$ is
+    the movement operator of Definition~\ref{def:mpug_staircase_gates}.
+    The identity is the left-end factorization step of
+    \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}, using the second
+    decomposition in \cite[lines~479--530]{Cirac2017MPU}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
+        def:mpo_eval_word}
+    The second cut factorization gives, for each virtual index $\alpha$,
+    \begin{align}
+        \sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}
+        \mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_{\gamma=0}^{D-1}\sum_{t=0}^{d_l-1}
+        (Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}
+        (Y_2)_{t,(b,\alpha)}                                           \\
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}(Y_2)_{t,(b,\alpha)}.
+    \end{align}
+    Expand $\mathcal U^{i\sigma,b\tau}
+        =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}$ and substitute this equality
+    into the endpoint contraction. Regrouping the finite sums yields
+    \begin{align}
+        (U^{N+3})_{(l,i\sigma,r),(a,b\tau,c)}
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
+        \sum_{\alpha,\beta=0}^{D-1}(Y_2)_{t,(b,\alpha)}
+        (\mathcal U^{\sigma,\tau})_{\alpha,\beta}(Y_1)_{r,(\beta,c)} \\
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
+        (U^{N+2})_{(t,\sigma,r),(b,\tau,c)}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Two-sided movement-operator growth]
+    \label{thm:mpug_truncated_symmetry_growth}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints_cons_snoc,
+        MPOTensor.SourceFactors.truncatedSymmetry_cons_snoc}
+    \leanok
+    \discussion{7319}
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two, def:mpug_staircase_gates}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$, with $d_l=\operatorname{rank}M_2$ and
+    $d_r=\operatorname{rank}M_1$. Let
+    $X_1\colon\C^{d_r}\to\C^d\otimes\C^D$,
+    $Y_1\colon\C^D\otimes\C^d\to\C^{d_r}$,
+    $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$, and
+    $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$ be complex matrices
+    satisfying only $M_1=X_1Y_1$ and $M_2=X_2Y_2$. In coordinates,
+    \begin{align}
+        \mathcal U^{j,c}_{\beta,\delta}
+         & =\sum_{s=0}^{d_r-1}(X_1)_{(j,\delta),s}(Y_1)_{s,(\beta,c)},  \\
+        \mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
+    \end{align}
+    Form $U^{N+2}$ using the endpoints $Y_2,Y_1$, and define the crossed
+    contractions
+    \begin{align}
+        (w_L)_{(l,i),(a,t)}
+         & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}, \\
+        (w_R)_{(j,r),(s,e)}
+         & =\sum_{\delta=0}^{D-1}(X_1)_{(j,\delta),s}(Y_1)_{r,(\delta,e)}.
+    \end{align}
+    For $N\geq0$, physical words $\sigma,\tau$ of length $N$, source
+    indices $l,r$, and physical indices $i,j,a,b,c,e$, one has
+    \begin{align}
+        (U^{N+4})_{(l,i\sigma j,r),(a,b\tau c,e)}
+         & =\sum_{t=0}^{d_l-1}\sum_{s=0}^{d_r-1}
+        (w_L)_{(l,i),(a,t)}
+        (U^{N+2})_{(t,\sigma,s),(b,\tau,c)}
+        (w_R)_{(j,r),(s,e)}.
+        \label{eq:mpug_truncated_symmetry_growth}
+    \end{align}
+    Concatenation $i\sigma j$ inserts $i$ before the word and $j$ after
+    it. This is the source-factorization identity in the growth diagram
+    of \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}. It adds one
+    bulk site at each end, using only the two decompositions in
+    \cite[lines~479--530]{Cirac2017MPU}. For normalized source factors,
+    the crossed contractions are precisely the movement operators of
+    Definition~\ref{def:mpug_staircase_gates}, so the same identity holds
+    for the source-factor endpoint contraction. No simplicity or unitarity
+    assumption on $\mathcal U$ is needed. These algebraic identities do
+    not assert unitarity for arbitrary factors, the finite-group physical
+    specialization, or the complementary finite-chain movement relation.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
+        def:mpug_truncated_symmetry, def:mpo_eval_word}
+    Expand the enlarged bulk product as
+    $\mathcal U^{i\sigma j,b\tau c}
+        =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}\mathcal U^{j,c}$.
+    The second source-cut factorization gives
+    \begin{align}
+        \sum_\gamma(Y_2)_{l,(a,\gamma)}\mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_t(w_L)_{(l,i),(a,t)}(Y_2)_{t,(b,\alpha)}.
+    \end{align}
+    The first source-cut factorization similarly gives
+    \begin{align}
+        \sum_\delta\mathcal U^{j,c}_{\beta,\delta}(Y_1)_{r,(\delta,e)}
+         & =\sum_s(Y_1)_{s,(\beta,c)}(w_R)_{(j,r),(s,e)}.
+    \end{align}
+    Substitute both equalities into the endpoint contraction and regroup
+    the finite sums. The remaining interior contraction is $U^{N+2}$.
+\end{proof}
+
 \subsection{Physical closures of the source factors}
 
 \begin{theorem}[The canonical one-letter physical contraction]
@@ -1300,16 +1514,14 @@ gauges and scalar relation have been constructed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_ii_transfer_stabilization,
-        thm:mpu_supplied_projector_simple2,
+    \uses{thm:mpug_simple_canonical_boundary_contractions,
         thm:mpu_all_later_simple_blockings}
-    The stabilized transfer power of
-    Theorem~\ref{thm:mpu_canonical_form_ii_transfer_stabilization},
-    combined with Theorem~\ref{thm:mpu_supplied_projector_simple2},
-    supplies the simplicity witnesses $a=\Phi$, $b=\rho$ aligned with the
-    canonical boundaries. Instantiating
-    Theorem~\ref{thm:mpu_all_later_simple_blockings} with these witnesses
-    gives
+    Theorem~\ref{thm:mpug_simple_canonical_boundary_contractions}
+    supplies the two-letter insertion identity with the recorded canonical
+    boundaries $(\Phi|_{(a,b)}=\delta_{a,b}$ and
+    $|\rho)_{(a,b)}=\rho_{ba}$. Applying
+    Theorem~\ref{thm:mpu_all_later_simple_blockings} to this fixed pair
+    gives the one-letter contraction. Expanding its coefficient yields
     \begin{align}
         W^{pq}W^{kl} & =W^{pq}|\rho)(\Phi|W^{kl},                     \\
         (\Phi|W^{pq}|\rho)
@@ -1547,7 +1759,8 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{theorem}[Canonical boundary contractions]
     \label{thm:mpug_simple_canonical_boundary_contractions}
-    \lean{MPOTensor.IsMPUCanonicalFormII.doubleLayer_boundary_contractions}
+    \lean{MPOTensor.IsMPUCanonicalFormII.simple2_recorded_fixed_pair,
+        MPOTensor.IsMPUCanonicalFormII.doubleLayer_boundary_contractions}
     \leanok
     \discussion{7317}
     \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_double_layer}
@@ -1556,7 +1769,8 @@ Definition~\ref{def:mpug_group_representation}.
     put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
     $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
     \begin{align}
-        (\Phi|W^{ij}W^{kl} & =\delta_{ij}(\Phi|W^{kl}, \\
+        W^{ij}W^{kl}       & =W^{ij}|\rho)(\Phi|W^{kl}, \\
+        (\Phi|W^{ij}W^{kl} & =\delta_{ij}(\Phi|W^{kl},  \\
         W^{ij}W^{kl}|\rho) & =\delta_{kl}W^{ij}|\rho).
         \label{eq:mpug_simple_canonical_boundaries}
     \end{align}
@@ -6285,6 +6499,240 @@ by the displayed matrices.
         O_N(B)\ket{3}^{\otimes N} & =\ket{0}^{\otimes N}.
     \end{align}
     Their sum is invariant.
+\end{proof}
+
+\subsection{The printed CZX action pair and its empty-word boundary}
+
+The action tensors displayed in
+\cite[lines~4690--4694]{FrancoRubio2025MPUGauging} satisfy the interior
+identity for nonempty words and the exterior identity with nonempty buffers.
+Their empty contraction is one half, whereas the general interior identity
+in \cite[lines~1841--1870]{FrancoRubio2025MPUGauging} includes length zero.
+The distinction and a local replacement are recorded in
+\cite{gap:fbc25_czx_action_empty_word}. The replacement below is a different
+pair, not a scalar gauge of the printed pair or a substitution in the
+unbuffered defect formulas.
+
+\begin{definition}[The acted GHZ sectors]
+    \label{def:mpug_czx_acted_sectors}
+    \lean{MPOTensor.CZX.blockedSector, MPOTensor.CZX.actedSector,
+        MPOTensor.CZX.actionTarget, MPOTensor.CZX.actionLetter,
+        MPOTensor.CZX.actionMatrix}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpug_ghz_blocked_cluster_tensor,
+        def:blocked_tensor}
+    For $x\in\{0,1\}$, let $A_x$ be the actual two-site block of the
+    bond-one GHZ sector, with physical indices identified by
+    $\varphi(2a+b)=(a,b)$. Thus $A_x^i=\delta_{i,3x}$.
+    Write $B^{i,j}$ for the CZX tensor and define
+    \begin{align}
+        B_x^i & =\sum_{j=0}^3 B^{i,j}A_x^j, &
+        k_x   & =3(1-x),                    & C_x & =B^{k_x,3x}.
+        \label{eq:mpug_czx_acted_sectors}
+    \end{align}
+    The target sector is $A_{1-x}$. These are the physical contraction
+    and exchanged GHZ blocks of
+    \cite[lines~4660--4694]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Coordinates of the acted sectors]
+    \label{thm:mpug_czx_acted_sector_coordinates}
+    \lean{MPOTensor.CZX.actedSector_apply, MPOTensor.CZX.actionTarget_apply,
+        MPOTensor.CZX.actionMatrix_coordinates}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors}
+    For $x\in\{0,1\}$ and $i\in\{0,1,2,3\}$,
+    \begin{align}
+        B_x^i & =\delta_{i,k_x}C_x,                     & A_{1-x}^i & =\delta_{i,k_x}, \\
+        C_0   & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}, &
+        C_1   & =\begin{pmatrix}1&1\\0&0\end{pmatrix}.
+        \label{eq:mpug_czx_action_matrices}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_acted_sectors, thm:mpug_czx_blocked_ghz_sectors,
+        def:mpug_czx_exact_tensor}
+    Since $A_x^j=\delta_{j,3x}$, the defining sum of
+    Definition~\ref{def:mpug_czx_acted_sectors} collapses to
+    $B_x^i=\sum_{j=0}^3 B^{i,j}A_x^j=B^{i,3x}$. The exact CZX tensor of
+    Definition~\ref{def:mpug_czx_exact_tensor} vanishes off its support,
+    giving
+    \begin{align}
+        B^{i,3x} & =\delta_{i,3(1-x)}B^{3(1-x),3x}=\delta_{i,k_x}C_x,
+    \end{align}
+    so $B_x^i=\delta_{i,k_x}C_x$; likewise $A_x^j=\delta_{j,3x}$ at
+    $x\mapsto1-x$ gives $A_{1-x}^i=\delta_{i,k_x}$. Expanding the defining
+    CZX matrices at $B^{k_x,3x}$ evaluates the two displayed matrices
+    $C_0,C_1$.
+\end{proof}
+
+\begin{definition}[The printed action pair]
+    \label{def:mpug_czx_printed_action_pair}
+    \lean{MPOTensor.CZX.printedActionBra, MPOTensor.CZX.printedActionKet}
+    \leanok
+    For $x\in\{0,1\}$, denote the printed left and right action tensors
+    by $p_x$ and $q_x$. With $|\pm\rangle=(|0\rangle\pm|1\rangle)/\sqrt2$,
+    the formulas of \cite[lines~4690--4694]{FrancoRubio2025MPUGauging} read
+    \begin{align}
+        p_0 & =(0,-i),                                    & p_1 & =(1,0), \\
+        q_0 & =\tfrac12\begin{pmatrix}-i\\i\end{pmatrix}, &
+        q_1 & =\tfrac12\begin{pmatrix}1\\1\end{pmatrix}.
+        \label{eq:mpug_czx_printed_action_pair}
+    \end{align}
+    The normalization of the kets is not specified explicitly in that
+    passage. These coordinates agree with the later defect evaluations;
+    see \cite{gap:fbc25_czx_action_empty_word}.
+\end{definition}
+
+\begin{theorem}[Finite contractions of the printed action pair]
+    \label{thm:mpug_czx_printed_action_contractions}
+    \lean{MPOTensor.CZX.printedAction_finite_identities}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
+    For each $x\in\{0,1\}$,
+    \begin{align}
+        C_x^2        & =C_x,      \\
+        p_xq_x       & =\tfrac12, \\
+        p_xC_xq_x    & =1,        \\
+        C_xq_xp_xC_x & =C_x.
+        \label{eq:mpug_czx_printed_action_contractions}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_acted_sector_coordinates, def:mpug_czx_printed_action_pair}
+    Multiply the two-by-two matrices and the printed rows and columns.
+\end{proof}
+
+\begin{theorem}[Nonempty acted and target words]
+    \label{thm:mpug_czx_action_words}
+    \lean{MPOTensor.CZX.evalWord_actedSector, MPOTensor.CZX.evalWord_actionTarget}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors}
+    For a word $\mathbf a$ in $\{0,1,2,3\}$, write $B_x^{\mathbf a}$
+    and $A_{1-x}^{\mathbf a}$ for ordered products of letters. If
+    $|\mathbf a|>0$, then
+    \begin{align}
+        B_x^{\mathbf a}     & =
+        \begin{cases}C_x&\text{if every letter is }k_x,\\0&\text{otherwise},\end{cases} \\
+        A_{1-x}^{\mathbf a} & =
+        \begin{cases}1&\text{if every letter is }k_x,\\0&\text{otherwise}.\end{cases}
+        \label{eq:mpug_czx_action_words}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_acted_sector_coordinates, thm:mpug_czx_printed_action_contractions}
+    An unsupported letter makes the product zero. Otherwise every acted
+    letter is $C_x$, whose positive powers equal $C_x$ by idempotency.
+\end{proof}
+
+\begin{theorem}[Printed interior and buffered exterior identities]
+    \label{thm:mpug_czx_printed_action_words}
+    \lean{MPOTensor.CZX.printedAction_interior, MPOTensor.CZX.printedAction_exterior}
+    \leanok
+    % **Scope restriction (nonempty printed interior):** the empty interior
+    % claim fails for the literal pair. See docs/paper-gaps/fbc25_czx_action_empty_word.tex.
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
+    Let $x\in\{0,1\}$. For every nonempty word $\mathbf c$,
+    \begin{align}
+        p_xB_x^{\mathbf c}q_x & =A_{1-x}^{\mathbf c}.
+        \label{eq:mpug_czx_printed_interior}
+    \end{align}
+    If $\mathbf a,\mathbf b$ are also nonempty, then
+    \begin{align}
+        B_x^{\mathbf a}q_xA_{1-x}^{\mathbf c}p_xB_x^{\mathbf b}
+         & =B_x^{\mathbf a\mathbf c\mathbf b}.
+        \label{eq:mpug_czx_printed_exterior}
+    \end{align}
+    No equality of buffer lengths is needed. The equal-length case is
+    the exterior diagram of \cite[lines~1788--1838]{FrancoRubio2025MPUGauging}.
+    The interior equation covers only the nonempty part of that source
+    assertion; see \cite{gap:fbc25_czx_action_empty_word}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_action_words, thm:mpug_czx_printed_action_contractions}
+    If an unsupported letter occurs, both sides vanish. Otherwise the
+    interior is $p_xC_xq_x=1$ and the exterior is $C_xq_xp_xC_x=C_x$.
+\end{proof}
+
+\begin{theorem}[The printed pair is not an all-word reduction]
+    \label{thm:mpug_czx_printed_action_empty}
+    \lean{MPOTensor.CZX.printedAction_empty_ne, MPOTensor.CZX.printedAction_not_isReduction}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair,
+        def:mps_rectangular_reduction}
+    For each $x\in\{0,1\}$, the printed pair $(p_x,q_x)$ is not a
+    reduction from $B_x$ to $A_{1-x}$. Indeed, if $\varepsilon$ is the
+    empty word, then
+    \begin{align}
+        p_xB_x^{\varepsilon}q_x & =\tfrac12\ne1=A_{1-x}^{\varepsilon}.
+        \label{eq:mpug_czx_printed_action_empty}
+    \end{align}
+    This is the empty-word obstruction of \cite{gap:fbc25_czx_action_empty_word}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_printed_action_contractions}
+    Empty products are identities, whereas $p_xq_x=1/2$.
+\end{proof}
+
+\begin{definition}[A separately dressed left action tensor]
+    \label{def:mpug_czx_dressed_action}
+    \lean{MPOTensor.CZX.dressedActionBra}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
+    For $x\in\{0,1\}$, define $V_x=p_xC_x$ and retain $W_x=q_x$.
+    This is the local replacement of \cite{gap:fbc25_czx_action_empty_word},
+    not the literal printed pair. In coordinates $V_0=(i,-i)$ and
+    $V_1=(1,1)$, so neither is a scalar multiple of the corresponding
+    printed row. No replacement in an unbuffered defect formula is asserted.
+\end{definition}
+
+\begin{theorem}[Dressing is absorbed by a nonempty buffer]
+    \label{thm:mpug_czx_dressed_action_absorption}
+    \lean{MPOTensor.CZX.dressedActionBra_absorption}
+    \leanok
+    \uses{def:mpug_czx_dressed_action}
+    For $x\in\{0,1\}$ and every nonempty word $\mathbf b$,
+    \begin{align}
+        V_xB_x^{\mathbf b} & =p_xB_x^{\mathbf b}.
+        \label{eq:mpug_czx_dressed_action_absorption}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_action_words, thm:mpug_czx_printed_action_contractions,
+        def:mpug_czx_dressed_action}
+    The word is either zero or $C_x$; use $C_x^2=C_x$ in the latter case.
+\end{proof}
+
+\begin{theorem}[An all-word reduction with exterior buffer length one]
+    \label{thm:mpug_czx_dressed_action_reduction}
+    \lean{MPOTensor.CZX.dressedAction_isReduction,
+        MPOTensor.CZX.dressedAction_isReductionExteriorBufferLength}
+    \leanok
+    \uses{def:mpug_czx_dressed_action, def:mps_rectangular_reduction,
+        def:mps_reduction_exterior_buffer_length}
+    For each $x\in\{0,1\}$, $(V_x,W_x)$ is a reduction from $B_x$
+    to $A_{1-x}$ with exterior buffer length one. The reduction identity
+    holds for every word $\mathbf c$, including the empty word; the exterior
+    identity holds for nonempty words $\mathbf a$, $\mathbf b$, and
+    $\mathbf c$. Thus
+    \begin{align}
+        V_xW_x                & =1,                                 \\
+        V_xB_x^{\mathbf c}W_x & =A_{1-x}^{\mathbf c},               \\
+        B_x^{\mathbf a}W_xA_{1-x}^{\mathbf c}V_xB_x^{\mathbf b}
+                              & =B_x^{\mathbf a\mathbf c\mathbf b}.
+        \label{eq:mpug_czx_dressed_action_reduction}
+    \end{align}
+    This proves the all-word relation for the separately dressed pair,
+    not the empty-word claim for the printed pair.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_printed_action_contractions,
+        thm:mpug_czx_printed_action_words, thm:mpug_czx_dressed_action_absorption,
+        def:mpug_czx_dressed_action}
+    The empty contraction is $V_xW_x=p_xC_xq_x=1$. For a nonempty
+    interior word, absorb $C_x$ and apply the printed interior identity.
+    In the exterior identity, absorb $C_x$ into the right buffer and
+    apply (\ref{eq:mpug_czx_printed_exterior}).
 \end{proof}
 
 \subsection{The displayed CZX circuit tuple}
