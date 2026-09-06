@@ -88,4 +88,26 @@ theorem truncatedSymmetry_cons_snoc (S : SourceFactors U ρ) {N : ℕ}
     exact Finset.sum_congr₂ fun t _ s _ ↦
       Finset.sum_congr₂ fun α _ β _ ↦ by ac_rfl
 
+/-- Adding one bulk site on the left is contraction with the left movement
+gate. This is the left-end source-factorization step in arXiv:2502.20257,
+`eq:move_trunc_sym` (lines 2101–2174), with the right endpoint unchanged. -/
+theorem truncatedSymmetry_cons (S : SourceFactors U ρ) {N : ℕ}
+    (l : Fin ℓ[U]) (r : Fin r[U]) (i a b c : Fin d)
+    (σ τ : Fin N → Fin d) :
+    S.truncatedSymmetry (N + 1) (l, Fin.cons i σ, r) (a, Fin.cons b τ, c) =
+      ∑ t, sourceWL U S (l, i) (a, t) *
+        S.truncatedSymmetry N (t, σ, r) (b, τ, c) := by
+  simp only [truncatedSymmetry, List.ofFn_cons, evalWord_cons, Matrix.mul_apply,
+    Finset.mul_sum, Finset.sum_mul]
+  rw [Fintype.sum_reverse_three]
+  symm
+  simp only [sourceWL, Finset.sum_mul]
+  rw [Fintype.sum_reverse_three, Finset.sum_comm]
+  refine Finset.sum_congr₂ fun α _ β _ ↦ ?_
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun γ _ ↦ ?_
+  rw [← X₂_mul_Y₂_apply U S γ i b α, Matrix.mul_apply]
+  simp only [Finset.mul_sum, Finset.sum_mul]
+  exact Finset.sum_congr rfl fun t _ ↦ by ac_rfl
+
 end MPOTensor.SourceFactors
