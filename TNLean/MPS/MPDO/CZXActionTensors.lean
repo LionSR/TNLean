@@ -102,7 +102,11 @@ private theorem blockedSector_apply (x : Fin 2) (i : Fin 4) :
     blockedSector x i = if i = finProdFinEquiv (x, x) then 1 else 0 :=
   blockTensor_ghzSectorTensor_apply x i
 
-/-- Sparse support of the actual physical contraction. -/
+/-- Sparse support of the actual physical contraction.
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex`, `eq:MPU_CZX`
+(lines 4503–4547) and the blocked GHZ sectors (lines 4660–4670).
+This is the local coordinate support calculation for `actedSector`, not a
+separately printed formula or an assertion of the empty-word interior equation. -/
 theorem actedSector_apply (x : Fin 2) (i : Fin 4) :
     actedSector x i = if i = actionLetter x then actionMatrix x else 0 := by
   ext l r
@@ -113,12 +117,20 @@ theorem actedSector_apply (x : Fin 2) (i : Fin 4) :
     norm_num [actionLetter, actionMatrix, tensor, blockTwo, decoratedSiteTensor,
       Matrix.mul_apply, Fin.sum_univ_two, finProdFinEquiv, Fin.divNat, Fin.modNat]
 
-/-- Sparse support of the actual reindexed target sector. -/
+/-- Sparse support of the actual reindexed target sector.
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex` lines 4660–4670
+print the sectors $\ket{00}$ and $\ket{11}$; `eq:action_interior`
+(lines 1841–1869) labels the target $gx$. This is their local coordinate
+expression under the CZX label exchange and the maintained physical reindexing. -/
 theorem actionTarget_apply (x : Fin 2) (i : Fin 4) :
     actionTarget x i = if i = actionLetter x then 1 else 0 :=
   blockedSector_apply (1 - x) i
 
-/-- Coordinates of the two named evaluations of the shared tensor. -/
+/-- Coordinates of the two named evaluations of the shared tensor.
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex`, `eq:MPU_CZX`
+(lines 4503–4547), evaluated on the blocked GHZ sectors (lines 4660–4670).
+These matrices are derived bulk coefficients in our coordinates, not the boundary
+action tensors printed at lines 4690–4694. -/
 theorem actionMatrix_coordinates :
     actionMatrix 0 = !![0, 0; -1, 1] ∧
     actionMatrix 1 = !![1, 1; 0, 0] := by
@@ -127,7 +139,14 @@ theorem actionMatrix_coordinates :
       Matrix.mul_apply, Fin.sum_univ_two, finProdFinEquiv, Fin.divNat, Fin.modNat]
 
 /-- Kernel-checked local identities for the printed pair. In particular its
-empty contraction differs from its one-letter contraction. -/
+empty contraction differs from its one-letter contraction.
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex` lines 4690–4694
+print the boundary pair; here plus/minus states are interpreted as normalized.
+The one-letter interior and buffered exterior contractions specialize `eq:action_interior`
+(lines 1841–1869) and `eq:action_exterior` (lines 1788–1838), respectively.
+Idempotency extends these local checks to positive-length words; the computed
+empty contraction is instead one half of the identity, so this does not establish
+the printed all-word interior claim. -/
 theorem printedAction_finite_identities (x : Fin 2) :
     actionMatrix x * actionMatrix x = actionMatrix x ∧
     printedActionBra x * printedActionKet x = (1 / 2 : ℂ) • (1 : Matrix (Fin 1) (Fin 1) ℂ) ∧

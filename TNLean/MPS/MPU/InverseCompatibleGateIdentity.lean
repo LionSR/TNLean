@@ -17,8 +17,13 @@ $u=\sigma(K^\dagger\otimes K)v^\dagger$.
 
 This follows the contraction in arXiv:2502.20257, `main.tex` lines 5444–5487:
 adjoint the first comparison to express $Y_2$, substitute the comparison for
-$\tilde Y_1$, and contract $\overline T T$. The diagram's $\tilde Y_1$ is used,
-retaining the tilde omitted in the preceding printed equation. The weight remains
+$\tilde Y_1$, and contract $\overline T T$.
+
+**Local fix:** `Papers/2502.20257/main.tex` lines 5440–5443 print $Y_1$
+without a tilde in the first comparison; we retain the $\tilde Y_1$ explicitly
+shown in the following gate diagram (lines 5444–5487, label at line 5457).
+See `docs/paper-gaps/fbc25_inverse_compatible_tilde_omission.tex`.
+This correction concerns only that missing tilde. The weight remains
 in the chosen source factors and $K$. No identification of the inverse comparison
 with $K^\dagger$, gate unitarity, simplicity, or unit modulus of $\sigma$ is assumed.
 The row orders of $u$ and $v^\dagger$ are respectively $(\ell,r)$ and $(r,\ell)$;
