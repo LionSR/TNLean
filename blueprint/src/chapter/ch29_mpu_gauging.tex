@@ -6740,6 +6740,120 @@ unbuffered defect formulas.
     apply (\ref{eq:mpug_czx_printed_exterior}).
 \end{proof}
 
+\subsection{The displayed CZX circuit tuple}`), i.e. splice
+% the block below in place of the current blank line 6742.
+%
+% Scope: only the concrete CZX g,g fusion-cap slice of eq:Fgg. No general
+% fusion-tensor existence, anomaly, action, defect, or gauging statement.
+%
+% Labels/citations located in the current blueprint sources:
+%   def:mpug_czx_exact_tensor        <- MPOTensor.CZX.tensor            (ch29, line 5885)
+%   def:mpug_czx_dagger_gauge        <- MPOTensor.CZX.daggerGauge (= Y) (ch29, line 6046)
+%   def:mpdo_operator_product        <- MPOTensor.mulTensor             (ch21, line 90)
+%   def:mpo_to_mps                   <- MPOTensor.toMPSTensor           (ch20, line 24)
+%   threeMPU                         <- MPOTensor.identityMPUTensor     (ch28, line ~8516)
+%   def:mps_rectangular_reduction    <- MPSTensor.IsReduction                     (ch02, line 323)
+%   def:mps_reduction_exterior_buffer_length
+%                                     <- MPSTensor.IsReductionExteriorBufferLength (ch02, line 1551)
+% Precedent for grouping an IsReduction + IsReductionExteriorBufferLength pair
+% under ONE \begin{theorem}: thm:mpug_czx_dressed_action_reduction, ch29 lines
+% 6713-6741 (mirrored below).
+%
+% def:mpug_czx_fusion_caps does NOT \use{def:mpdo_operator_product} or
+% def:mpo_to_mps: fusionV/fusionW are raw bond-space matrices (Matrix (Fin 1)
+% (Fin 4) ℂ / Matrix (Fin 4) (Fin 1) ℂ) whose own definitions and
+% fusion_caps_apply do not mention the product tensor or its doubled-index
+% view at all — that connection is made only in the reduction theorem below,
+% which is where those two labels belong.
+%
+% Confirmed against the live file: the identityMPUTensor4 wrapper is gone;
+% both theorem statements now target `(identityMPUTensor 4).toMPSTensor`
+% directly, so `threeMPU` (already in blueprint/lean_decls) is the correct
+% and only identity-tensor dependency — no new identity definition to add.
+
+\subsection{The CZX \texorpdfstring{$g,g$}{g,g} fusion caps}
+
+\begin{definition}[The CZX $g,g$ fusion caps]
+    \label{def:mpug_czx_fusion_caps}
+    \lean{MPOTensor.CZX.fusionV, MPOTensor.CZX.fusionW,
+        MPOTensor.CZX.fusion_caps_apply}
+    \leanok
+    \uses{def:mpug_czx_dagger_gauge}
+    On the bond space $\C^4\cong\C^2\otimes\C^2$, in the product-bond
+    coordinate $(a,b)$ for bond bits $a,b\in\{0,1\}$, define the row
+    vector $F^<_{g,g}\colon\C^4\to\C$ and the column vector
+    $F^>_{g,g}\colon\C\to\C^4$ by decorating one leg of a rank-one bond
+    cap with the Pauli matrix $Y$ of
+    Definition~\ref{def:mpug_czx_dagger_gauge}: a single $Y$ on the
+    left cap, and $Y$ together with the printed weight $\tfrac12$ on
+    the right cap, exactly as displayed in
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}, itself the
+    $g=h=g^{-1}$ specialization of the general fusion-tensor display
+    \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}. Concretely,
+    for all bond bits $a,b\in\{0,1\}$,
+    \begin{align}
+        F^<_{g,g}(a,b) & =Y_{a,b},         &
+        F^>_{g,g}(a,b) & =\tfrac12Y_{b,a},
+        \label{eq:mpug_czx_fusion_caps_apply}
+    \end{align}
+    so both caps vanish at the two diagonal bond coordinates
+    (matching $Y_{0,0}=Y_{1,1}=0$), and the two caps carry $Y$ in
+    opposite orientations, reflecting the left/right mirroring of the
+    printed diagram.
+    % Only the concrete g,g slice of #7354 is covered here.
+\end{definition}
+
+\begin{theorem}[The CZX fusion reduction]
+    \label{thm:mpug_czx_fusion_reduction}
+    \lean{MPOTensor.CZX.fusion_isReduction,
+        MPOTensor.CZX.fusion_isReductionExteriorBufferLength_one}
+    \leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpdo_operator_product,
+        def:mpug_czx_exact_tensor, threeMPU, def:mpo_to_mps,
+        def:mps_rectangular_reduction,
+        def:mps_reduction_exterior_buffer_length}
+    Let $B$ be the doubled-index tensor of the actual product
+    $\mathcal U_g\cdot\mathcal U_g$
+    (Definition~\ref{def:mpdo_operator_product} applied to
+    Definition~\ref{def:mpug_czx_exact_tensor} with itself, viewed
+    through Definition~\ref{def:mpo_to_mps}), and let $I$ be the
+    doubled-index bond-one identity tensor of
+    Definition~\ref{threeMPU}. Then $(F^<_{g,g},F^>_{g,g})$ is a
+    reduction from $B$ to $I$ with exterior buffer length one:
+    \begin{align}
+        F^<_{g,g}F^>_{g,g}              & =1,                              &
+        F^<_{g,g}B^{\mathbf c}F^>_{g,g} & =I^{\mathbf c}
+        \quad(|\mathbf c|\geq0),                                             \\
+        B^{\mathbf p}F^>_{g,g}I^{\mathbf c}F^<_{g,g}B^{\mathbf q}
+                                        & =B^{\mathbf p\mathbf c\mathbf q}
+        \quad(|\mathbf p|,|\mathbf q|,|\mathbf c|\geq1).
+        \label{eq:mpug_czx_fusion_reduction}
+    \end{align}
+    This is the concrete $g,g$ instance of the fusion equation
+    \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}, specialized to
+    the CZX display \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_exact_tensor,
+        def:mpdo_operator_product, def:mpo_to_mps, threeMPU}
+    Put $V=F^<_{g,g}$ and $W=F^>_{g,g}$. Substituting the cap and
+    tensor coordinates gives
+    \begin{align}
+        VW & =1, & VB^iW & =I^i, & B^iWVB^j & =B^iB^j.
+        \label{eq:mpug_czx_fusion_local_identities}
+    \end{align}
+    The insertion identity extends to nonempty words by stripping the
+    final letter of the left word and the first letter of the right word.
+    Using it in an induction gives $VB^{\mathbf c}W=I^{\mathbf c}$;
+    the empty case is $VW=1$. For nonempty buffers and middle word,
+    \begin{align}
+        B^{\mathbf p}WI^{\mathbf c}VB^{\mathbf q}
+         & =B^{\mathbf p}WVB^{\mathbf c}WVB^{\mathbf q}
+        =B^{\mathbf p\mathbf c\mathbf q},
+    \end{align}
+    applying the word insertion identity twice.
+\end{proof}
+
 \subsection{The displayed CZX circuit tuple}
 
 \begin{definition}[The displayed CZX circuit tuple]
