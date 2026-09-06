@@ -23,6 +23,7 @@ import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinSumPermutation
 import TNLean.Algebra.FinTupleEquiv
+import TNLean.Algebra.FinVecEta
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupUnitaryAverage
 import TNLean.Algebra.FinsetSubtypeSum

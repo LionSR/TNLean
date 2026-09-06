@@ -159,46 +159,357 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     two-site space and interaction.
 \end{remark}
 
+\begin{definition}[Cluster-state stabilizer]\label{def:cluster_stabilizer}
+    \lean{MPSTensor.clusterStabilizer}
+    \leanok
+    The three-site stabilizer of \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}
+    is $K = \sigma^z_1\sigma^x_2\sigma^z_3$. In the computational basis, with
+    $\sigma^z\ket{s} = (-1)^s\ket{s}$ and $\sigma^x\ket{s} = \ket{s+1}$, it acts
+    on a three-site vector $v$ by
+    \begin{align}
+        (Kv)(s_1,s_2,s_3)
+         & = (-1)^{s_1+s_3}\, v(s_1, s_2+1, s_3).
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Cluster three-site parent space is the stabilizer eigenspace]
+    \label{thm:cluster_ground_space_three_eigenspace}
+    \lean{MPSTensor.cluster_groundSpace_three_eq_eigenspace}
+    \leanok
+    \uses{def:cluster_tensor, def:ground_space_parent, def:cluster_stabilizer}
+    For the cluster tensor $A$ of Definition~\ref{def:cluster_tensor},
+    \begin{align}
+        \mathcal G_3(A)
+         & = \{v : Kv = v\},
+        \notag
+    \end{align}
+    the $+1$ eigenspace of $K = \sigma^z_1\sigma^x_2\sigma^z_3$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cluster_tensor, def:ground_space_map, def:cluster_stabilizer}
+    Write $q = 1/\sqrt2$. The matrices $A^s = \ketbra{\pm}{s}$ have entries
+    $A^s_{ij} = q(-1)^{is}\delta_{sj}$, so
+    \begin{align}
+        \Gamma_3(X)(s_1,s_2,s_3)
+         & = \tr(A^{s_1}A^{s_2}A^{s_3}X)
+        = q^3(-1)^{s_1s_2+s_2s_3}
+        \bigl(X_{s_30} + (-1)^{s_1}X_{s_31}\bigr).
+        \label{eq:cluster_gamma_three}
+    \end{align}
+    The sign $(-1)^{s_1s_2+s_2s_3}$ changes by $(-1)^{s_1+s_3}$ when $s_2$ is
+    replaced by $s_2+1$, so $K\Gamma_3(X) = \Gamma_3(X)$ by
+    (\ref{eq:cluster_gamma_three}). Conversely, if $Kv = v$, then
+    $v(s_1,1,s_3) = (-1)^{s_1+s_3}v(s_1,0,s_3)$, and the matrix $X$ with rows
+    $X_{s0} = v(0,0,s) + v(1,0,s)$, $X_{s1} = v(0,0,s) - v(1,0,s)$ satisfies
+    $\Gamma_3(X) = 2q^3\,v$ by (\ref{eq:cluster_gamma_three}); hence
+    $v = \Gamma_3(X/(2q^3)) \in \mathcal G_3(A)$.
+\end{proof}
+
+\begin{theorem}[The stabilizer has eigenvalue $-1$ on the source's matrices]
+    \label{thm:cluster_source_ground_space_three_eigenspace}
+    \lean{MPSTensor.clusterSourceTensor, MPSTensor.clusterSource_groundSpace_three_eq_eigenspace_neg_one}
+    \leanok
+    \uses{def:ground_space_parent, def:cluster_stabilizer}
+    Let $A_{\mathrm{src}}$ be the tensor with the two matrices displayed in
+    \cite[local TeX lines~378--387]{PerezGarcia2007Matrix}, the source's
+    physical labels $1,2$ written as $0,1$:
+    \begin{align}
+        A_{\mathrm{src}}^0
+         & = \begin{pmatrix} 0 & 0 \\ 1 & 1 \end{pmatrix},
+        \qquad
+        A_{\mathrm{src}}^1
+        = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \mathcal G_3(A_{\mathrm{src}})
+         & = \{v : Kv = -v\},
+        \notag
+    \end{align}
+    the $-1$ eigenspace of $K = \sigma^z_1\sigma^x_2\sigma^z_3$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_map, def:cluster_stabilizer}
+    With $A_{\mathrm{src}}^t = \ket{1-t}\bra{r_t}$, $r_0 = (1,1)$,
+    $r_1 = (1,-1)$, one has $\braket{r_t}{u} = (-1)^{tu}$ and
+    \begin{align}
+        \Gamma_3(X)(t_1,t_2,t_3)
+         & = (-1)^{t_1(1-t_2)+t_2(1-t_3)}
+        \bigl(X_{0,1-t_1} + (-1)^{t_3}X_{1,1-t_1}\bigr).
+        \label{eq:cluster_source_gamma_three}
+    \end{align}
+    Replacing $t_2$ by $t_2+1$ changes the exponent by $1+t_1+t_3$ modulo
+    $2$, so $K\Gamma_3(X) = -\Gamma_3(X)$. Conversely, if $Kv = -v$, then
+    $v(t_1,1,t_3) = -(-1)^{t_1+t_3}v(t_1,0,t_3)$, and the matrix $X$ with
+    $X_{0,1-t} = (-1)^t\bigl(v(t,0,0)+v(t,0,1)\bigr)$,
+    $X_{1,1-t} = (-1)^t\bigl(v(t,0,0)-v(t,0,1)\bigr)$ satisfies
+    $\Gamma_3(X) = 2v$ by (\ref{eq:cluster_source_gamma_three}); hence
+    $v = \Gamma_3(X/2)\in\mathcal G_3(A_{\mathrm{src}})$.
+\end{proof}
+
+\begin{definition}[Translated cluster stabilizers]\label{def:cluster_chain_stabilizer}
+    \lean{MPSTensor.clusterChainStabilizer}
+    \leanok
+    On a periodic chain of $N$ sites, the stabilizer at site $i$ is the
+    operator
+    \begin{align}
+        (K_i\psi)(\sigma)
+         & = (-1)^{\sigma_i+\sigma_{i+2}}\,
+        \psi(\sigma_1,\ldots,\sigma_i,\sigma_{i+1}+1,\sigma_{i+2},\ldots,\sigma_N),
+        \notag
+    \end{align}
+    with site indices modulo $N$. For $N\ge3$ the sites $i$, $i+1$, $i+2$
+    are distinct and $K_i = \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$; the
+    results below assume $N\ge3$.
+\end{definition}
+
+\begin{theorem}[Cluster stabilizer ground space is the periodic chain ground space]
+    \label{thm:cluster_stabilizer_chain_ground_space}
+    \lean{MPSTensor.cluster_iInf_eigenspace_eq_chainGroundSpace}
+    \leanok
+    \uses{def:cluster_tensor, def:chain_ground_space, def:cluster_chain_stabilizer}
+    For $N\ge3$, the common $+1$ eigenspace of the translated stabilizers is
+    the periodic three-site chain ground space of the cluster tensor:
+    \begin{align}
+        \bigcap_{i=1}^{N}\{\psi : K_i\psi = \psi\}
+         & = \mathcal G_{N,3}(A_{\mathrm{cl}}).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cluster_ground_space_three_eigenspace}
+    For a cyclic three-site window at $i$ and an outside assignment $\tau$,
+    the restriction $\psi|_{[i,i+2],\tau}$ satisfies
+    $K\bigl(\psi|_{[i,i+2],\tau}\bigr) = (K_i\psi)|_{[i,i+2],\tau}$, since
+    $K_i$ reads $\sigma_i$, $\sigma_{i+2}$ and flips $\sigma_{i+1}$ inside the
+    window. Thus $K_i\psi = \psi$ implies that every restriction is fixed by
+    $K$; conversely, if every restriction is fixed by $K$, then evaluating at
+    the window extracted from $\sigma$ with outside assignment $\sigma$ itself
+    gives $(K_i\psi)(\sigma) = \psi(\sigma)$. By
+    Theorem~\ref{thm:cluster_ground_space_three_eigenspace}, a restriction is
+    fixed by $K$ exactly when it lies in $\mathcal G_3(A_{\mathrm{cl}})$.
+\end{proof}
+
+\begin{theorem}[The cluster state spans the common $+1$ eigenspace of the $ZXZ$ stabilizers]
+    \label{thm:cluster_stabilizer_unique_gs}
+    \lean{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.cluster_stabilizer_unique_gs}
+    \leanok
+    \uses{def:cluster_tensor, def:mpv_submodule, def:cluster_chain_stabilizer}
+    For $N\ge3$,
+    \begin{align}
+        \bigcap_{i=1}^{N}\{\psi : K_i\psi = \psi\}
+         & = \C\,V^{(N)}(A_{\mathrm{cl}}),
+        \notag
+    \end{align}
+    and this common eigenspace is one-dimensional.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cluster_stabilizer_chain_ground_space, thm:cluster_normal, thm:chain_ground_space_eq_mpv_normal, thm:parent_hamiltonian_unique_gs}
+    By Theorem~\ref{thm:cluster_stabilizer_chain_ground_space} the common
+    eigenspace is $\mathcal G_{N,3}(A_{\mathrm{cl}})$. The cluster tensor is
+    injective after blocking $L_0 = 2$ sites
+    (Theorem~\ref{thm:cluster_normal}), so
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} with $L = 3 \le N$
+    gives $\mathcal G_{N,3}(A_{\mathrm{cl}}) = \C\,V^{(N)}(A_{\mathrm{cl}})$,
+    and Theorem~\ref{thm:parent_hamiltonian_unique_gs} gives
+    $\dim\mathcal G_{N,3}(A_{\mathrm{cl}}) = 1$.
+\end{proof}
+
 \begin{remark}[Cluster-state stabilizer convention]\label{rem:cluster_stabilizer_convention}
-    The one-dimensional cluster tensor in Definition~\ref{def:cluster_tensor}
-    is the reflected convention of the tensor displayed in
-    \cite[lines~2364--2369]{Cirac2021Matrix}. The sourced stabilizer is
-    $K_i^{ZXZ}=\sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$.
-    The corresponding positive parent interaction is
-    \begin{align}
-        h_i^{ZXZ}
-         & = \frac12(\Id-K_i^{ZXZ}), \notag \\
-        H_{\mathrm{cl},N}^{ZXZ}
-         & = \sum_i h_i^{ZXZ}, \notag       \\
-        \dim\ker H_{\mathrm{cl},N}^{ZXZ}
-         & = 1
-        \notag
-    \end{align}
-    \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}. Thus an $XZX$
-    formula should be used for this tensor only after establishing an
-    equivalence such as
-    \begin{align}
-        U H_{\mathrm{cl},N}^{ZXZ} U^\dagger
-         & = H_{\mathrm{cl},N}^{XZX}, \notag \\
-        T H_{\mathrm{cl},N}^{ZXZ} T^{-1}
-         & = H_{\mathrm{cl},N}^{XZX}.
-        \notag
-    \end{align}
+    The cluster tensor of Definition~\ref{def:cluster_tensor} is the reflected
+    convention of the tensor displayed in
+    \cite[lines~2364--2369]{Cirac2021Matrix}. By (\ref{eq:cluster_gamma_three})
+    and its reflected counterpart, the three-site parent space of either
+    convention is the $+1$ eigenspace of $\sigma^z_1\sigma^x_2\sigma^z_3$.
+    Since each $K_i$ is a self-adjoint involution, $\tfrac12(\Id-K_i)$ is the
+    orthogonal projector onto its $-1$ eigenspace, and
+    Theorem~\ref{thm:cluster_stabilizer_unique_gs} says that the cluster state
+    is the unique ground state of
+    $\sum_i \tfrac12(\Id - \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2})$, with
+    ground energy $0$.
+    % The identification of the parent interaction with (1-K)/2 as an
+    % operator identity, and the self-adjoint-involution property of K_i,
+    % are not formalized; the formal statements are the eigenspace
+    % identities above.
+
+    The older review states instead that cluster states are unique ground
+    states of $\sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$ with the sign as
+    printed \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}. Both
+    statements are correct for their own tensors: on the matrices
+    $A_{\mathrm{src}}$ displayed there every stabilizer has eigenvalue $-1$
+    (Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace}), while on
+    $A_{\mathrm{cl}}$ it has eigenvalue $+1$. The two tensors are related by
+    $A_{\mathrm{src}}^t = \sqrt2\,\sigma^x A^t$ for the tensor $A$ of
+    \cite[lines~2364--2369]{Cirac2021Matrix}, and since
+    $\bra{\pm}\sigma^x = \pm\bra{\pm}$ the states differ by $\sigma^z$ on
+    every site, which conjugates each $K_i$ to $-K_i$ and exchanges the two
+    Hamiltonians $\sum_i K_i$ and $-\sum_i K_i = \sum_i(\Id-K_i) - N\Id$.
 \end{remark}
 
-\begin{remark}[AKLT parent Hamiltonian and edge modes]\label{rem:aklt_parent_hamiltonian}
-    For the AKLT tensor of Definition~\ref{def:aklt_tensor}, let
-    $\mathcal G_{[a,b]}$ denote the local ground space on sites
-    $a,\ldots,b$. Then $L_0=2$, and the three-site intersection property is
+\begin{theorem}[AKLT two-site parent space]\label{thm:aklt_ground_space_two}
+    \lean{MPSTensor.mem_aklt_groundSpace_two_iff}
+    \leanok
+    \uses{def:aklt_tensor, def:ground_space_parent}
+    For the AKLT tensor $A$ of Definition~\ref{def:aklt_tensor}, a two-site
+    vector $v$ lies in $\mathcal G_2(A)$ if and only if
+    \begin{align}
+        v_{11} = v_{22} = 0,
+        \quad
+        v_{01} + v_{10} = 0,
+        \quad
+        v_{02} + v_{20} = 0,
+        \quad
+        2v_{00} + v_{12} + v_{21} = 0.
+        \label{eq:aklt_two_site_constraints}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:aklt_tensor, def:ground_space_map}
+    Write $A^0 = c\,\sigma^z$, $A^1 = b\,\sigma^+$, $A^2 = -b\,\sigma^-$ with
+    $c = 1/\sqrt3$, $b = \sqrt2/\sqrt3$, so that $b^2 = 2c^2$. The products are
+    $A^0A^0 = c^2\Id$, $A^0A^1 = -A^1A^0 = cb\,\ketbra01$,
+    $A^0A^2 = -A^2A^0 = cb\,\ketbra10$, $A^1A^2 = -b^2\ketbra00$,
+    $A^2A^1 = -b^2\ketbra11$, and $A^1A^1 = A^2A^2 = 0$. Hence
+    $\Gamma_2(X)(a,b) = \tr(A^aA^bX)$ has coordinates
+    \begin{align}
+        \Gamma_2(X)
+         & = \bigl(c^2(X_{00}+X_{11}),\ cbX_{10},\ cbX_{01},\ -cbX_{10},\ 0,\
+        -b^2X_{00},\ -cbX_{01},\ -b^2X_{11},\ 0\bigr)
+        \label{eq:aklt_gamma_two}
+    \end{align}
+    in the order $00,01,02,10,11,12,20,21,22$, which satisfies
+    (\ref{eq:aklt_two_site_constraints}) because $2c^2 = b^2$. Conversely,
+    given $v$ satisfying (\ref{eq:aklt_two_site_constraints}), the matrix
+    $X$ with $X_{00} = -c^2v_{12}$, $X_{01} = cb\,v_{02}$, $X_{10} = cb\,v_{01}$,
+    $X_{11} = -c^2v_{21}$ satisfies $\Gamma_2(X) = c^2b^2\,v$ by
+    (\ref{eq:aklt_gamma_two}), so $v = \Gamma_2(X/(c^2b^2))$.
+\end{proof}
+
+\begin{remark}[AKLT two-site parent space as a span]\label{rem:aklt_ground_space_two_span}
+    % The spanning set and the dimension count are not formalized; the formal
+    % statement is the coordinate description of
+    % Theorem~\ref{thm:aklt_ground_space_two}.
+    The constraints (\ref{eq:aklt_two_site_constraints}) of
+    Theorem~\ref{thm:aklt_ground_space_two} describe $\mathcal G_2(A)$ as the
+    four-dimensional span of $\ket{01}-\ket{10}$, $\ket{02}-\ket{20}$,
+    $\ket{00}-2\ket{12}$, and $\ket{00}-2\ket{21}$. This span is the spin-0
+    and spin-1 subspace of two spin-1 particles.
+\end{remark}
+
+\begin{theorem}[AKLT three-site intersection property]
+    \label{thm:aklt_ground_space_intersection_two}
+    \lean{MPSTensor.aklt_groundSpace_intersection_two, MPSTensor.aklt_mem_groundSpace_three_of_inLeftGround_of_inRightGround}
+    \leanok
+    \uses{def:aklt_tensor, def:ground_space_parent, def:restrict_last, def:restrict_first}
+    For the AKLT tensor $A$, the three-site intersection property holds:
     \begin{align}
         (\mathcal G_{[1,2]}\otimes\mathcal H_3)
         \cap(\mathcal H_1\otimes\mathcal G_{[2,3]})
-         & = \mathcal G_{[1,3]}.
+         & = \mathcal G_{[1,3]},
         \notag
     \end{align}
-    This is the dimensionally explicit form of the identity in
-    \cite[line~2095]{Cirac2021Matrix}. The displayed local spin-chain
-    Hamiltonian is
+    where $\mathcal G_{[a,b]}$ denotes the local ground space
+    $\mathcal G_{b-a+1}(A)$ placed on sites $a,\ldots,b$. This is the identity
+    $\mathcal G_{1,2}\cap\mathcal G_{2,3} = \mathcal G_{1,2,3}$ that
+    \cite[line~2095]{Cirac2021Matrix} asks to check by hand; it is not an
+    instance of the general intersection property, since the AKLT tensor is
+    not injective on one site.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_ground_space_two, lem:ground_space_in_left_ground, lem:ground_space_in_right_ground}
+    The inclusion $\supseteq$ is the restriction property of local ground
+    spaces (Lemmas~\ref{lem:ground_space_in_left_ground}
+    and~\ref{lem:ground_space_in_right_ground}). For $\subseteq$, let $\psi$
+    be a three-site vector whose restrictions $\psi(i,\cdot,\cdot)$ and
+    $\psi(\cdot,\cdot,k)$ all lie in $\mathcal G_2(A)$, so that each satisfies
+    (\ref{eq:aklt_two_site_constraints}). With $c$, $b$ as in the proof of
+    Theorem~\ref{thm:aklt_ground_space_two}, the products $A^aA^bA^c$ give
+    \begin{align}
+        \Gamma_3(X)
+         & = c^3(X_{00}-X_{11})\ket{000}
+        + c^2b\,X_{10}\bigl(\ket{001}-\ket{010}+\ket{100}\bigr)
+        - c^2b\,X_{01}\bigl(\ket{002}-\ket{020}+\ket{200}\bigr)
+        \notag                           \\
+         & \quad
+        + cb^2X_{00}\bigl(\ket{102}-\ket{012}-\ket{120}\bigr)
+        + cb^2X_{11}\bigl(\ket{021}-\ket{201}+\ket{210}\bigr)
+        - b^3X_{10}\ket{121}
+        + b^3X_{01}\ket{212}.
+        \label{eq:aklt_gamma_three}
+    \end{align}
+    Set $X_{00} = c\,\psi_{102}$, $X_{01} = -b\,\psi_{002}$,
+    $X_{10} = b\,\psi_{001}$, $X_{11} = c\,\psi_{210}$. Then
+    $\Gamma_3(X) = c^2b^2\,\psi$ coordinate by coordinate: the twelve
+    coordinates absent from (\ref{eq:aklt_gamma_three}) vanish for $\psi$ by
+    the constraints $v_{11} = v_{22} = 0$ on the six restrictions, together
+    with $\psi_{101} = -\psi_{110} = 0$ and $\psi_{202} = -\psi_{220} = 0$;
+    the sign relations $\psi_{010} = -\psi_{001} = -\psi_{100}$,
+    $\psi_{020} = -\psi_{002} = -\psi_{200}$, $\psi_{012} = -\psi_{102} = \psi_{120}$,
+    $\psi_{201} = -\psi_{210}$ come from $v_{01}+v_{10} = 0$ and
+    $v_{02}+v_{20} = 0$; and the remaining coordinates use
+    $2v_{00}+v_{12}+v_{21} = 0$ with $b^2 = 2c^2$:
+    $2\psi_{000} = \psi_{102}-\psi_{210}$, $\psi_{021} = \psi_{210}$,
+    $\psi_{121} = -2\psi_{001}$, $\psi_{212} = -2\psi_{002}$. Hence
+    $\psi = \Gamma_3(X/(c^2b^2)) \in \mathcal G_3(A)$.
+\end{proof}
+
+\begin{theorem}[Unique ground state of the two-site AKLT parent Hamiltonian]
+    \label{thm:aklt_chain_ground_space_two}
+    \lean{MPSTensor.aklt_chainGroundSpace_two_eq_mpvSubmodule, MPSTensor.aklt_parentHamiltonian_two_unique_gs}
+    \leanok
+    \uses{def:aklt_tensor, def:chain_ground_space, def:mpv_submodule}
+    For $N\ge3$, the periodic two-site chain ground space of the AKLT tensor
+    is spanned by the AKLT state:
+    \begin{align}
+        \mathcal G_{N,2}(A_{\mathrm{AKLT}})
+         & = \C\,V^{(N)}(A_{\mathrm{AKLT}}).
+        \notag
+    \end{align}
+    Thus the two-site parent Hamiltonian has a unique ground state although
+    the AKLT tensor becomes injective only after blocking $L_0 = 2$ sites
+    \cite[line~2095]{Cirac2021Matrix}. On two periodic sites the two-site
+    chain ground space is $\mathcal G_2(A_{\mathrm{AKLT}})$ itself, so the
+    condition $N\ge3$ is necessary.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:chain_ground_space_eq_mpv_normal, lem:mpv_mem_chain_ground_space, thm:mpv_ne_zero_blk_injective}
+    Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{AKLT}})$. Every cyclic three-site
+    window restricts on either side to a cyclic two-site window, so both
+    restrictions of $\psi|_{[i,i+2],\tau}$ lie in
+    $\mathcal G_2(A_{\mathrm{AKLT}})$, and
+    Theorem~\ref{thm:aklt_ground_space_intersection_two} places
+    $\psi|_{[i,i+2],\tau}$ in $\mathcal G_3(A_{\mathrm{AKLT}})$. Hence
+    $\mathcal G_{N,2}(A_{\mathrm{AKLT}})\subseteq\mathcal G_{N,3}(A_{\mathrm{AKLT}})$.
+    The AKLT tensor is injective after blocking $L_0 = 2$ sites
+    (Theorem~\ref{thm:aklt_normal}), so
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} with $L = 3\le N$ gives
+    $\mathcal G_{N,3}(A_{\mathrm{AKLT}}) = \C\,V^{(N)}(A_{\mathrm{AKLT}})$.
+    The reverse inclusion holds because the periodic MPS vector satisfies
+    every cyclic two-site constraint
+    (Lemma~\ref{lem:mpv_mem_chain_ground_space}). Finally
+    $V^{(N)}(A_{\mathrm{AKLT}})\ne0$ by
+    Theorem~\ref{thm:mpv_ne_zero_blk_injective} with $L_0 = 2 < N$, so
+    $\dim\mathcal G_{N,2}(A_{\mathrm{AKLT}}) = 1$.
+\end{proof}
+
+\begin{remark}[AKLT polynomial Hamiltonian and edge modes]\label{rem:aklt_parent_hamiltonian}
+    The displayed local spin-chain Hamiltonian of the AKLT state is
     \begin{align}
         H_{\mathrm{AKLT},N}
          & =
@@ -231,4 +542,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
         \notag
     \end{align}
     \cite[lines~1169--1174]{Cirac2021Matrix}.
+    % Neither the polynomial form nor the open-boundary degeneracy is
+    % formalized; the periodic two-site uniqueness is
+    % thm:aklt_chain_ground_space_two.
 \end{remark}
