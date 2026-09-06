@@ -9,7 +9,10 @@ import TNLean.MPS.MPU.StaircaseGates
 # Endpoint contraction and growth of truncated symmetries
 
 The contraction in arXiv:2502.20257, `eq:truncsym` (lines 2062–2100), has
-`N` bulk tensors, in addition to its two endpoint triangles. Rows are
+`N` bulk tensors, in addition to its two endpoint triangles. The source counts
+both endpoints in the total length $L=N+2\geq2$ (`eq:truncsym`, lines 2094–2097;
+CZX display, lines 4700–4713). Thus the bulk-indexed contraction here corresponds
+to $U_g^{N+2}$ in the source, not $U_g^N$; zero bulk has total length two. Rows are
 (left source, bulk output, right source); columns are
 (left physical, bulk input, right physical). The endpoint convention is
 arXiv:1703.09188, equations `XY`, `SVDforms2`, and `uu` (lines 510–543).
@@ -32,7 +35,9 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 /-- The endpoint contraction of arXiv:2502.20257, `eq:truncsym`, with `N`
-bulk sites (not counting the two endpoint triangles). -/
+bulk sites (not counting the two endpoint triangles). The source total length
+is $L=N+2\geq2$, so its length notation is $U_g^{N+2}$, not $U_g^N$
+(lines 2094–2097). The parameter `N` remains the bulk count. -/
 noncomputable def truncatedSymmetryOfEndpoints (U : MPOTensor d D)
     (Y₂ : Matrix (Fin ℓ[U]) (Fin d × Fin D) ℂ)
     (Y₁ : Matrix (Fin r[U]) (Fin D × Fin d) ℂ) (N : ℕ) :
@@ -41,7 +46,8 @@ noncomputable def truncatedSymmetryOfEndpoints (U : MPOTensor d D)
   fun (l, σ, r) (a, τ, b) ↦ ∑ α, ∑ β,
     Y₂ l (a, α) * evalWord U (List.ofFn σ) (List.ofFn τ) α β * Y₁ r (β, b)
 
-/-- With no bulk sites, `eq:truncsym` is precisely the two-triangle gate
+/-- With no bulk sites (`N = 0`), the source total length is two, not zero.
+At this length, `eq:truncsym` is precisely the two-triangle gate
 `sourceU` of arXiv:1703.09188, equation `uu` (lines 532–543). -/
 @[simp] theorem truncatedSymmetryOfEndpoints_zero (U : MPOTensor d D)
     (Y₂ : Matrix (Fin ℓ[U]) (Fin d × Fin D) ℂ)
@@ -53,7 +59,8 @@ noncomputable def truncatedSymmetryOfEndpoints (U : MPOTensor d D)
   simp [truncatedSymmetryOfEndpoints, Matrix.one_apply, mul_ite]
 
 /-- Two-sided growth for four explicit matrices, assuming only the two cut
-factorizations. The crossed contractions are the movement gates of FBC25,
+factorizations. Total length grows from $N+2$ to $N+4$.
+The crossed contractions are the movement gates of FBC25,
 `eq:wLR` (lines 811–869). This is the algebraic identity of FBC25,
 `eq:move_trunc_sym` (lines 2101–2174), using CPSV17 `eq:sf-svd`, `X1Y1`,
 `X2Y2`, and `SVDforms2` (lines 479–530), not their normalization or inverses. -/
@@ -118,7 +125,8 @@ theorem truncatedSymmetryOfEndpoints_cons_snoc (U : MPOTensor d D)
       Finset.sum_congr₂ fun α _ β _ ↦ by ac_rfl
 
 /-- Left growth needs only the second cut factorization; the right endpoint
-is arbitrary and unchanged. The inline crossed contraction is FBC25 `eq:wLR`
+is arbitrary and unchanged. Total length grows from $N+2$ to $N+3$.
+The inline crossed contraction is FBC25 `eq:wLR`
 (lines 811–869). This is the left-end step of `eq:move_trunc_sym`
 (lines 2101–2174), using CPSV17 `X2Y2` and `SVDforms2` (lines 479–530). -/
 theorem truncatedSymmetryOfEndpoints_cons (U : MPOTensor d D)
@@ -155,13 +163,16 @@ namespace SourceFactors
 variable {U : MPOTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
 
 /-- The endpoint contraction of arXiv:2502.20257, `eq:truncsym`, with `N`
-bulk sites (not counting the two endpoint triangles). -/
+bulk sites (not counting the two endpoint triangles). The source total length
+is $L=N+2\geq2$, so its length notation is $U_g^{N+2}$, not $U_g^N$
+(lines 2094–2097). The parameter `N` remains the bulk count. -/
 noncomputable def truncatedSymmetry (S : SourceFactors U ρ) (N : ℕ) :
     Matrix (Fin ℓ[U] × (Fin N → Fin d) × Fin r[U])
       (Fin d × (Fin N → Fin d) × Fin d) ℂ :=
   truncatedSymmetryOfEndpoints U S.Y₂ S.Y₁ N
 
-/-- With no bulk sites, `eq:truncsym` is precisely the two-triangle gate
+/-- With no bulk sites (`N = 0`), the source total length is two, not zero.
+At this length, `eq:truncsym` is precisely the two-triangle gate
 `sourceU` of arXiv:1703.09188, equation `uu` (lines 532–543). -/
 @[simp] theorem truncatedSymmetry_zero (S : SourceFactors U ρ)
     (l : Fin ℓ[U]) (r : Fin r[U]) (a b : Fin d)
@@ -170,7 +181,8 @@ noncomputable def truncatedSymmetry (S : SourceFactors U ρ) (N : ℕ) :
   exact truncatedSymmetryOfEndpoints_zero U S.Y₂ S.Y₁ l r a b σ τ
 
 /-- Adding one bulk site at either end is contraction with the existing
-source movement gates. This is the algebraic growth identity of
+source movement gates. Total length grows from $N+2$ to $N+4$.
+This is the algebraic growth identity of
 arXiv:2502.20257, `eq:move_trunc_sym` (lines 2101–2174), using only the
 factorizations `X1Y1`, `X2Y2`, and `SVDforms2` of arXiv:1703.09188. -/
 theorem truncatedSymmetry_cons_snoc (S : SourceFactors U ρ) {N : ℕ}
@@ -184,7 +196,8 @@ theorem truncatedSymmetry_cons_snoc (S : SourceFactors U ρ) {N : ℕ}
     S.sourceCutM₁_eq S.sourceCutM₂_eq l r i j a b c e σ τ
 
 /-- Adding one bulk site on the left is contraction with the left movement
-gate. This is the left-end source-factorization step in arXiv:2502.20257,
+gate. Total length grows from $N+2$ to $N+3$.
+This is the left-end source-factorization step in arXiv:2502.20257,
 `eq:move_trunc_sym` (lines 2101–2174), with the right endpoint unchanged. -/
 theorem truncatedSymmetry_cons (S : SourceFactors U ρ) {N : ℕ}
     (l : Fin ℓ[U]) (r : Fin r[U]) (i a b c : Fin d)
