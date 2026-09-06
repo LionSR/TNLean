@@ -584,7 +584,7 @@ def _self_test(repo_root: Path) -> int:
             "Also cites the multiline deprecated alias "
             "`Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef`.\n"
             "Also cites the structure field "
-            "`AppendixBProductPairExtraction.localProjectors`.\n"
+            "`AppendixBStructuralData.hU_pair`.\n"
             "Also mentions `scripts/audit_stale_issues.py` (should be ignored)."
         ),
     }
@@ -611,7 +611,7 @@ def _self_test(repo_root: Path) -> int:
         problems.append(
             "multiline deprecated alias was incorrectly flagged as missing"
         )
-    if "AppendixBProductPairExtraction.localProjectors" in r.missing_decls:
+    if "AppendixBStructuralData.hU_pair" in r.missing_decls:
         problems.append(
             "structure field projection was incorrectly flagged as missing"
         )

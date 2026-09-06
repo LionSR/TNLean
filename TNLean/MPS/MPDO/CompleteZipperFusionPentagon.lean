@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSumPermutation
 import QICLean.Algebra.FinSum
 import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
 
@@ -512,17 +513,13 @@ theorem leftInnerFourfoldSynthesis_mul_leftAssocToLeftInnerPrintedFMatrix
       rw [Finset.sum_comm]
       enter [2, sigma]
       rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro h _
-    apply Finset.sum_congr rfl
-    intro sigma _
+    apply Finset.sum_congr₂
+    intro h _ sigma _
     apply Finset.sum_congr rfl
     intro lambda _
     rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro yh _
-    apply Finset.sum_congr rfl
-    intro yg _
+    apply Finset.sum_congr₂
+    intro yh _ yg _
     ring
   · simp_rw [Finset.sum_mul]
     rw [Finset.sum_comm]
@@ -564,10 +561,8 @@ theorem middleFourfoldSynthesis_mul_leftInnerToMiddlePrintedFMatrix
       rw [Finset.sum_comm]
       enter [2, omega]
       rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro i _
-    apply Finset.sum_congr rfl
-    intro omega _
+    apply Finset.sum_congr₂
+    intro i _ omega _
     apply Finset.sum_congr rfl
     intro kappa _
     simp_rw [Finset.sum_mul]
@@ -576,10 +571,8 @@ theorem middleFourfoldSynthesis_mul_leftInnerToMiddlePrintedFMatrix
     simpa only [mul_comm, mul_left_comm, mul_assoc] using
       (Fintype.sum_mul_mul_eq_mul_sum_mul (R := ℂ) _ _ _)
   · simp_rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro yh _
-    apply Finset.sum_congr rfl
-    intro yg _
+    apply Finset.sum_congr₂
+    intro yh _ yg _
     ring
 
 /-- The third edge of the three-edge path is the printed F-move on the
@@ -618,17 +611,13 @@ theorem rightAssocFourfoldSynthesis_mul_middleToRightAssocPrintedFMatrix
       rw [Finset.sum_comm]
       enter [2, gamma]
       rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro j _
-    apply Finset.sum_congr rfl
-    intro gamma _
+    apply Finset.sum_congr₂
+    intro j _ gamma _
     apply Finset.sum_congr rfl
     intro delta _
     rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro yj _
-    apply Finset.sum_congr rfl
-    intro yi _
+    apply Finset.sum_congr₂
+    intro yj _ yi _
     ring
   · simp_rw [Finset.sum_mul]
     rw [Finset.sum_comm]
@@ -670,10 +659,8 @@ theorem pairFourfoldSynthesis_mul_leftAssocToPairPrintedFMatrix
       rw [Finset.sum_comm]
       enter [2, gamma]
       rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro j _
-    apply Finset.sum_congr rfl
-    intro gamma _
+    apply Finset.sum_congr₂
+    intro j _ gamma _
     apply Finset.sum_congr rfl
     intro tau _
     simp_rw [Finset.sum_mul]
@@ -682,10 +669,8 @@ theorem pairFourfoldSynthesis_mul_leftAssocToPairPrintedFMatrix
     simpa only [mul_comm, mul_left_comm, mul_assoc] using
       (Fintype.sum_mul_mul_eq_mul_sum_mul (R := ℂ) _ _ _)
   · simp_rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro yf _
-    apply Finset.sum_congr rfl
-    intro yg _
+    apply Finset.sum_congr₂
+    intro yf _ yg _
     ring
 
 /-- The second edge of the two-edge path is the printed F-move on the
@@ -725,10 +710,8 @@ theorem rightAssocFourfoldSynthesis_mul_pairToRightAssocPrintedFMatrix
       rw [Finset.sum_comm]
       enter [2, delta]
       rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro i _
-    apply Finset.sum_congr rfl
-    intro delta _
+    apply Finset.sum_congr₂
+    intro i _ delta _
     apply Finset.sum_congr rfl
     intro kappa _
     simp_rw [Finset.sum_mul]
@@ -738,10 +721,8 @@ theorem rightAssocFourfoldSynthesis_mul_pairToRightAssocPrintedFMatrix
       (Fintype.sum_mul_mul_eq_mul_sum_mul (R := ℂ) _ _ _)
   · simp_rw [Finset.mul_sum]
     rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro yj _
-    apply Finset.sum_congr rfl
-    intro yf _
+    apply Finset.sum_congr₂
+    intro yj _ yf _
     ring
 
 /-- The three-edge path carries the fully left-associated synthesis to the

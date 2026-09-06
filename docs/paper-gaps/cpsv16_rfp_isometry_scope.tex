@@ -150,9 +150,9 @@ pair-index equation in the source unit convention,
 \end{align}
 Both conventions are available, and their relation is fully recorded.
 
-The structural datum in Appendix~\cpsvref{AppendixPure} used in the conditional
-parent-Hamiltonian theorem adopts the unit pair-index convention, so the
-coefficient problem starts from the source normalization. The same appendix of
+The structural datum in Appendix~\cpsvref{AppendixPure} used in the retained
+commutation proof adopts the unit pair-index convention. Its cyclic coefficient
+formula therefore uses the source normalization. The same appendix of
 Ref.~\cite{Cirac2016MPDO_arXiv} gives the coefficient form of the basic-vector
 expression as
 \begin{align}
@@ -173,10 +173,11 @@ This is the coefficient form of
     U^{\otimes L}\ket{\varphi_j}^{\otimes L},
     \label{eq:cpsv16_basic_vector_expression}
 \end{align}
-where $\varphi_j$ is shared between $b_t$ and $a_{t+1}$. The even-chain
-physical-pair factorization considered in the conditional parent-Hamiltonian
-theorem is therefore a separate statement rather than the source expression
-itself.
+where $\varphi_j$ is shared between $b_t$ and $a_{t+1}$. The rejected even-chain
+physical-pair factorization construction and its conditional parent-Hamiltonian
+theorems have been retired without replacement. They did not express this
+source identity; the proved commutation theorem uses adjacent commutation
+directly.
 
 For every nonempty chain length and chosen structural datum, the formal
 development proves the cyclic coefficient formula for the original tensor
@@ -194,11 +195,10 @@ factorization.
 
 The pair-index isometry in Eq.~\ref{eq:cpsv16_per_block_unit_pair_isometry}
 sums over the physical letter $i$ and thus does not supply a coefficient identity
-for an individual physical word $\sigma$. Proving a fixed-word physical-pair
-factorization requires the source basic-vector expression in
-Eq.~\ref{eq:cpsv16_basic_vector_expression} or an explicit projector
-construction, because the physical indices in $C_L(\sigma)$ are fixed rather
-than summed.
+for an individual physical word $\sigma$. The source basic-vector expression
+in Eq.~\ref{eq:cpsv16_basic_vector_expression} gives the cyclic contraction
+$C_L(\sigma)$, not a product over disjoint physical pairs. The following
+example distinguishes these two coefficient expressions.
 
 This obstruction is structural rather than a formal artifact. Consider two
 virtual indices, physical labels $i=(a,b)$, and

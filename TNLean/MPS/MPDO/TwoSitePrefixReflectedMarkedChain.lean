@@ -69,10 +69,8 @@ private theorem blockTwoPrefixCoordinateCompression_eq_markedChainCoefficient
     Matrix.trace_smul, smul_eq_mul]
   simp only [mpo_apply, mpoMatrixEntry, List.ofFn_succ, Fin.cons_zero,
     Fin.cons_succ, evalWord_cons, blockTwo]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  apply Finset.sum_congr₂
+  intro i _ j _
   rw [Matrix.mul_assoc]
   ring
 
@@ -142,10 +140,8 @@ private theorem IsMPDO.blockTwoPrefixCoordinateCompression_star
     rw [star_mul', star_mul', star_star]
     ring
   rw [hstar, Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  apply Finset.sum_congr₂
+  intro i _ j _
   rw [(hM (N + 2) (by omega)).isHermitian.apply]
 
 /-- A two-site prefix corner has the reflected-adjoint marked chain with an

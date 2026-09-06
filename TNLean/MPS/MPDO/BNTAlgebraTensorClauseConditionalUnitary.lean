@@ -3,27 +3,19 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalGram
+import QICLean.Algebra.MatrixGramUnitary
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum
 
 /-!
-# Conditional unitary conjugacy for exact two-site sectors
+# Unitary normalization of exact two-site sector gauges
 
 An exact invertible sector gauge whose Gram matrix is a positive scalar
 multiple of the identity can be normalized to a unitary matrix without
-changing its conjugation action.  Composing this normalization with the
-conditional Gram identity gives unitary conjugacy under an identity-dressed
-marked realization.
-
-The physical-letter part of the marked realization is constructed from the
-exact sector gauge, while the declarations here retain the positive-tail
-reflected target as a hypothesis.  The mixed-prefix argument in
-`BNTAlgebraTensorClauseReflectedTarget` derives that target under the standing
-canonical-form and positivity assumptions.
+changing its conjugation action.
 
 ## Main results
 
 * `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`
-* `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_positive_tail_reflected_target`
 
 ## References
 
@@ -76,38 +68,6 @@ theorem exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
     (Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one
       ((cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
         (H.tensor γ)) i) (S.gauge γ) hω hGram).symm
-
-/-- Under the conditional positive-tail reflected target, every exact two-site
-sector is unitarily conjugate to its matched one-site tensor.  The
-physical-letter coefficients are constructed from the exact sector gauge.
-
-**Scope restriction (conditional reflected target):** The target is a
-hypothesis of this theorem.  Its derivation from the tensor-attached algebra
-clause by the mixed-prefix comparison is documented in
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
-Source comparison: arXiv:1606.00608, Proposition 4.13, lines 1903--1908,
-applied at Appendix C.4, lines 2048--2057. -/
-theorem exists_unitary_sector_conjugacy_of_positive_tail_reflected_target
-    (S : TwoSiteExactSectorGauge H)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
-    (hM : IsMPDO M) (γ : Fin H.labelCount)
-    (hTarget : HasIdentityPositiveTailReflectedTarget S γ) :
-    ∃ U : Matrix.unitaryGroup
-        (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ,
-      ∀ i : Fin (D * D),
-        S.decomposition.tensor (S.relabel γ) i =
-          (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
-            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
-          (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
-            (H.tensor γ)) i *
-          (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
-            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ := by
-  obtain ⟨ω, hω, hGram⟩ :=
-    S.gauge_gram_eq_pos_smul_one_of_positive_tail_reflected_target
-      hCanonical hM γ hTarget
-  exact S.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
-    γ ω hω hGram
 
 end BNTAlgebraTensorClause.TwoSiteExactSectorGauge
 

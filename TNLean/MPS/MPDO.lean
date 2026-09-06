@@ -18,9 +18,7 @@ import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorCoordinates
-import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalGram
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalPhysicalMaps
-import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalRFP
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalUnitary
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseCorner
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseDirectSumUnitary
@@ -111,6 +109,8 @@ import TNLean.MPS.MPDO.CZXDefectMaps
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
 import TNLean.MPS.MPDO.CZXGaussInvariantSubspace
 import TNLean.MPS.MPDO.CZXSecondTupleCertificate
+import TNLean.MPS.MPDO.CZXTensor
+import TNLean.MPS.MPDO.CZXTensorInjectivity
 import TNLean.MPS.MPDO.CaseIIAbsorptionCounterexample
 import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
 import TNLean.MPS.MPDO.CommonWeightAbsorption
@@ -333,13 +333,16 @@ import TNLean.MPS.MPDO.TopologicalProjectors
 import TNLean.MPS.MPDO.TopologicalTerminalSpectral
 import TNLean.MPS.MPDO.TwistedDimer
 import TNLean.MPS.MPDO.TwistedDimerBNTAlgebraClause
+import TNLean.MPS.MPDO.TwistedDimerBondRFP
 import TNLean.MPS.MPDO.TwistedDimerCoefficients
+import TNLean.MPS.MPDO.TwistedDimerFactorStates
 import TNLean.MPS.MPDO.TwistedDimerFlagSectors
 import TNLean.MPS.MPDO.TwistedDimerHorizontalCF
 import TNLean.MPS.MPDO.TwistedDimerMPDO
 import TNLean.MPS.MPDO.TwistedDimerNotSimple
 import TNLean.MPS.MPDO.TwistedDimerProductLaw
 import TNLean.MPS.MPDO.TwistedDimerRefine
+import TNLean.MPS.MPDO.TwistedDimerUnitaryFactorization
 import TNLean.MPS.MPDO.TwistedDimerVerticalCF
 import TNLean.MPS.MPDO.TwistedDimerViaTS
 import TNLean.MPS.MPDO.TwoSitePrefixReflectedMarkedChain

@@ -1093,6 +1093,141 @@ gauges and scalar relation have been constructed.
     (\ref{eq:mpug_alternating_network_proportionality}).
 \end{proof}
 
+\section{Staircase gates and the first source network}
+\label{sec:mpug_staircase_gates}
+
+\begin{definition}[Staircase gates]
+    \label{def:mpug_staircase_gates}
+    \lean{MPOTensor.SourceFactors.sourceWL,
+        MPOTensor.SourceFactors.sourceWR}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$. Put $d_l=\ell$ and $d_r=r$ for its source-cut ranks.
+    Let $X_1,Y_1,Z_1,X_2,Y_2,Z_2$ be source factors with
+    $M_1=X_1Y_1$, $M_2=X_2Y_2$,
+    $X_1^\dagger(I_d\otimes\rho)X_1=I_r$,
+    $X_2^\dagger X_2=I_\ell$, and $Y_iZ_i=I$ for $i=1,2$,
+    where $\rho$ is a matrix on the virtual space. Define
+    \begin{align}
+        (w_L)_{(l,i),(j,l')}
+         & =\sum_{\beta=0}^{D-1} (Y_2)_{l,(j,\beta)}
+        (X_2)_{(\beta,i),l'},                         \\
+        (w_R)_{(i,r),(r',j)}
+         & =\sum_{\beta=0}^{D-1} (X_1)_{(i,\beta),r'}
+        (Y_1)_{r,(\beta,j)}.
+    \end{align}
+    Thus $w_L\colon\C^d\otimes\C^{d_l}\to\C^{d_l}\otimes\C^d$
+    and $w_R\colon\C^{d_r}\otimes\C^d\to\C^d\otimes\C^{d_r}$.
+    Rows are the upper legs and columns the lower legs, each in spatial
+    left-to-right order. These are the crossed contractions of
+    \cite[lines~811--869]{FrancoRubio2025MPUGauging}.
+    % Source: main.tex, eq:wLR, lines 811--869. This definition does not
+    % assert the unitarity or normalization conclusions of cor:mpu.
+\end{definition}
+
+\begin{definition}[An operator on the middle two legs]
+    \label{def:mpug_staircase_middle}
+    \lean{MPOTensor.staircaseMiddle}
+    \leanok
+    Let $A,B,C,B',C',E$ be index sets and let $M$ be a complex matrix with
+    rows indexed by $B\times C$ and columns by $B'\times C'$.
+    Its action on the middle two legs is the matrix $M_{23}$ defined by
+    \begin{align}
+        (M_{23})_{((a,b),(c,e)),((a',b'),(c',e'))}
+         & =\delta_{a,a'}M_{(b,c),(b',c')}\delta_{e,e'}.
+    \end{align}
+    This is $(I_A\otimes M)\otimes I_E$ after regrouping
+    $((a,b),(c,e))$ as $((a,(b,c)),e)$, as in the first network in the
+    proof of the staircase-gate corollary of
+    \cite[lines~918--974]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Composition on the middle two legs]
+    \label{thm:mpug_staircase_middle_composition}
+    \lean{MPOTensor.staircaseMiddle_mul, MPOTensor.staircaseMiddle_one}
+    \leanok
+    \uses{def:mpug_staircase_middle}
+    Let $M$ and $N$ be composable complex matrices between pairs of index
+    sets. If their common index sets and the two outer index sets are finite,
+    then $(MN)_{23}=M_{23}N_{23}$. The identity matrix satisfies $I_{23}=I$.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the matrix product, the two outer Kronecker deltas fix the outer
+    indices. The remaining sum is the entry formula for $MN$.
+    For the identity, the four Kronecker deltas give equality of the two
+    four-leg indices.
+\end{proof}
+
+\begin{theorem}[The first staircase network before cancellation]
+    \label{thm:mpug_staircase_network_uncancelled}
+    \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_mul_middle_sourceU}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpug_staircase_gates, def:mpug_staircase_middle,
+        def:mpu_source_uv}
+    Let $\mathcal U$ have source factors as in
+    Definition~\ref{def:mpug_staircase_gates}, and form $u,v,w_L,w_R$
+    from those same factors. Then
+    \begin{align}
+        (w_L\otimes w_R)u_{23} & =v_{23}(u\otimes u).
+        \label{eq:mpug_staircase_network_uncancelled}
+    \end{align}
+    No simplicity or unitarity assumption on $\mathcal U$ is required.
+    This is the first diagram in the proof of the staircase-gate corollary
+    of \cite[lines~918--968]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
+    Expand the crossed contractions on both sides. For output index
+    $((l,i_2),(i_3,r))$ and input index $((j_1,j_2),(j_3,j_4))$,
+    the two open factorizations identify both entries with
+    \begin{align}
+        \sum_{\alpha,\gamma=0}^{D-1}
+        (Y_2)_{l,(j_1,\alpha)}
+        (\mathcal U^{i_2}_{j_2}\mathcal U^{i_3}_{j_3})_{\alpha,\gamma}
+        (Y_1)_{r,(\gamma,j_4)}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The first staircase network after cancellation]
+    \label{thm:mpug_staircase_network_cancelled}
+    \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_eq}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpug_staircase_gates, def:mpug_staircase_middle,
+        def:mpu_source_uv}
+    Let $\mathcal U$ have source factors as in
+    Definition~\ref{def:mpug_staircase_gates}, and form $u,v,w_L,w_R$
+    from those same factors. If $u$ is a coisometry, so that
+    $uu^\dagger=I_{d_ld_r}$, then
+    \begin{align}
+        w_L\otimes w_R
+         & =v_{23}(u\otimes u)(u^\dagger)_{23} \\
+         & =(I\otimes v\otimes I)(u\otimes u)
+        (I\otimes u^\dagger\otimes I).
+        \label{eq:mpug_staircase_network_cancelled}
+    \end{align}
+    The second expression uses the regrouping of
+    Definition~\ref{def:mpug_staircase_middle}. This is the displayed
+    network identity in
+    \cite[lines~969--974]{FrancoRubio2025MPUGauging}.
+    % Partial result under the explicit coisometry premise, not cor:mpu:
+    % no second network, individual gate unitarity, or scalar normalization.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_staircase_network_uncancelled,
+        thm:mpug_staircase_middle_composition}
+    Multiply (\ref{eq:mpug_staircase_network_uncancelled}) on the right by
+    $(u^\dagger)_{23}$. The middle layers compose to
+    $(uu^\dagger)_{23}=I$, giving
+    (\ref{eq:mpug_staircase_network_cancelled}).
+\end{proof}
+
 \section{Scalar three-cocycles and fusion-tensor gauge freedom}
 \label{sec:mpug_scalar_gauge}
 
@@ -2649,6 +2784,80 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     % Rep.ofMulDistribMulAction with the explicit trivial action.
 \end{definition}
 
+\begin{definition}[Pullback of scalar cohomology]
+    \label{def:mpug_h2_pullback}
+    \lean{TNLean.Algebra.ScalarCocycle.pullback,
+        TNLean.Algebra.ScalarCocycle.pullback_apply,
+        TNLean.Algebra.H2.pullback,
+        TNLean.Algebra.H2.pullback_mk}
+    \leanok
+    \uses{def:h2_cx}
+    Let $f:K\to G$ be a group homomorphism. For a scalar $2$-cochain
+    $\omega:G\times G\to\C^\times$, define
+    $(f^*\omega)(a,b)=\omega(f(a),f(b))$.
+    The induced pullback map
+    $f^*:H^2(G,\C^\times)\to H^2(K,\C^\times)$ is defined by
+    $f^*[\omega]=[f^*\omega]$.
+\end{definition}
+
+\begin{theorem}[Pullback preserves cocycles and cohomology]
+    \label{thm:mpug_h2_pullback_preserves}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle.pullback,
+        TNLean.Algebra.ScalarCocycle.CohomologousTo.pullback}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    Let $f:K\to G$ be a group homomorphism. If $\omega$ is a scalar
+    $2$-cocycle on $G$, then $f^*\omega$ is a scalar $2$-cocycle on $K$.
+    If $\omega_1$ and $\omega_2$ are cohomologous scalar $2$-cochains on $G$,
+    then $f^*\omega_1$ and $f^*\omega_2$ are cohomologous on $K$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    For $a,b,c\in K$, substitute $f(a),f(b),f(c)$ in the cocycle equation
+    for $\omega$ and use $f(ab)=f(a)f(b)$ and $f(bc)=f(b)f(c)$.
+    If $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$,
+    set $\eta=\varphi\circ f$. Substituting $g=f(a)$ and $h=f(b)$ gives
+    $(f^*\omega_1)(a,b)=\eta(a)\eta(b)\eta(ab)^{-1}(f^*\omega_2)(a,b)$,
+    so $\eta$ witnesses the required cohomology relation.
+\end{proof}
+
+% Partial support for #7361 (child #7754), not the full prop:BI_psi criterion.
+% No U(1) restriction naturality or tensor-level block-independence claim.
+\begin{theorem}[Exact extension of a subgroup cocycle]
+    \label{thm:mpug_h2_exact_extension}
+    \lean{TNLean.Algebra.H2.mem_range_pullback_subtype_iff,
+        TNLean.Algebra.ScalarCocycle.IsCocycle.coboundary_mul}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:is_cocycle}
+    Let $H\le G$ be any subgroup, let $\iota:H\hookrightarrow G$ be its
+    inclusion, and let $\psi:H\times H\to\C^\times$ be a $2$-cocycle.
+    Then $[\psi]$ belongs to the image of $\iota^*$ if and only if there is
+    a $2$-cocycle $\Psi:G\times G\to\C^\times$ with
+    $\Psi(a,b)=\psi(a,b)$ for every $a,b\in H$.
+    No normalization of either cocycle is required.
+    This is the representative adjustment implicit in the extension
+    condition of \cite[lines~7042--7064]{FrancoRubio2025MPUGauging},
+    here stated with $\C^\times$ coefficients.
+    % Source: Papers/2502.20257/main.tex:7042--7064.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    Suppose $[\psi]=\iota^*[\omega]$. Choose a cochain
+    $\varphi:H\to\C^\times$ such that
+    $\psi(a,b)=\varphi(a)\varphi(b)\varphi(ab)^{-1}\omega(a,b)$.
+    Extend $\varphi$ to a function $\Phi:G\to\C^\times$, taking value $1$
+    outside $H$, and set
+    $\Psi(g,h)=\Phi(g)\Phi(h)\Phi(gh)^{-1}\omega(g,h)$.
+    In the cocycle equation for $\Psi$, cancellation leaves the common
+    factor $\Phi(g)\Phi(h)\Phi(k)\Phi(ghk)^{-1}$ multiplied by the two sides
+    of the cocycle equation for $\omega$. Hence $\Psi$ is a cocycle, and
+    $\Phi|_H=\varphi$ gives $\Psi|_{H\times H}=\psi$ exactly.
+    Conversely, any exact extension $\Psi$ satisfies
+    $\iota^*[\Psi]=[\psi]$.
+\end{proof}
+
 \begin{theorem}[Circle and nonzero-complex coefficients in degree two]
     \label{thm:mpug_circle_complex_units_h2}
     \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
@@ -3330,6 +3539,62 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     \end{align}
     Hence $\psi_1\sim\psi_2$, which proves the reverse implication in
     (\ref{eq:mpug_induced_cohomology_iff}).
+\end{proof}
+
+\begin{theorem}[Explicit gauge from a stabilizer cocycle extension]
+    \label{thm:mpug_stabilizer_extension_gauge}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.extensionActionGauge,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_extensionActionGauge,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_hasTrivialGauge_of_extension}
+    \leanok
+    \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge,
+        def:mpug_block_independence_gauge_forms}
+    Let $G$ act on $\mathsf X$, with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$.
+    Let $\psi\colon H\times H\to\C^\times$ and let
+    $\Psi\colon G\times G\to\C^\times$ be a two-cocycle whose restriction
+    to $H\times H$ is $\psi$. Define
+    \begin{align}
+        \gamma_g^x
+         & =\frac{\Psi(k_{gx}^{-1},gk_x)\Psi(g,k_x)}
+        {\Psi(e,e)\Psi(k_x,k_x^{-1})}.
+        \label{eq:mpug_extension_gamma}
+    \end{align}
+    With $h_1=t_k(g_1,g_2x)$ and $h_2=t_k(g_2,x)$, the induced symbols satisfy
+    \begin{align}
+        L^x_{g_1,g_2}=\psi(h_1,h_2)
+         & =\Psi(g_1,g_2)\frac{\gamma_{g_1g_2}^x}
+        {\gamma_{g_1}^{g_2x}\gamma_{g_2}^x}.
+        \label{eq:mpug_extension_identity}
+    \end{align}
+    Consequently the inverse fusion and action gauges
+    $(\Psi^{-1},\gamma^{-1})$ make $L$ identically one.
+    This is the scalar representative calculation in the forward proof of
+    the block-independence extension proposition of
+    \cite{FrancoRubio2025MPUGauging};
+    here extension means the equality $\Psi|_{H\times H}=\psi$ of chosen
+    cocycle representatives, rather than only equality of their classes.
+    This scalar calculation does not construct action tensors or assert the
+    converse or the class-level restriction-image equivalence; the distinction
+    between representatives, classes, and tensor data is explained in
+    \cite{gap:fbc25_mpu_action_stabilizer_source_audit}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Put $a=k_{g_1g_2x}$, $b=k_{g_2x}$, $c=k_x$, $u=g_1$, and $v=g_2$.
+    The cocycle equation gives $\Psi(z,e)=\Psi(e,z)=\Psi(e,e)$ and
+    $\Psi(b^{-1},b)=\Psi(b,b^{-1})$. Apply it successively to the triples
+    \begin{align}
+         & (a^{-1}ub,b^{-1},vc),\quad (a^{-1}ub,b^{-1},b),\quad
+        (a^{-1},u,vc),\quad (a^{-1},u,b),\quad (u,v,c).
+    \end{align}
+    Solving these equalities for the corresponding factors of
+    $\Psi(a^{-1}ub,b^{-1}vc)$ and cancelling yields
+    (\ref{eq:mpug_extension_identity}) with
+    (\ref{eq:mpug_extension_gamma}). The restriction hypothesis identifies
+    its left side with $\psi(h_1,h_2)$. Substitution into
+    (\ref{eq:mpug_l_gauge}) cancels the multiplier under the inverse gauges.
 \end{proof}
 
 \begin{definition}[Generalized coboundary and cocycle]
@@ -4182,6 +4447,74 @@ scalar calculation above.
     (\ref{eq:mpug_ghz_blocked_cluster_direct_sum}).
 \end{proof}
 
+\begin{theorem}[GHZ--cluster physical representation and virtual action table]
+    \label{thm:mpug_ghz_cluster_action_table}
+    % Principal declaration: MPSTensor.z4z2GHZClusterBlock_covariance.
+    \lean{MPSTensor.z4z2GHZClusterBlock_covariance,
+        MPSTensor.z4z2GHZClusterAction,
+        MPSTensor.z4z2GHZClusterAction_unitary,
+        MPSTensor.z4z2GHZClusterAction_generators,
+        MPSTensor.z4z2GHZClusterIndex,
+        MPSTensor.z4z2GHZClusterBlockAction,
+        MPSTensor.z4z2GHZClusterVirtual,
+        MPSTensor.z4z2GHZClusterVirtual_table,
+        MPSTensor.z4z2GHZClusterVirtual_adjoint,
+        MPSTensor.z4z2GHZClusterVirtual_sq,
+        MPSTensor.z4z2GHZClusterVirtual_stabilizer}
+    \leanok
+    \discussion{7747}
+    \uses{def:mpug_ghz_blocked_cluster_tensor}
+    Write the physical basis as $|p,s,r\rangle$, with integer index
+    $4p+2s+r$ for $p,s,r\in\{0,1\}$. Thus the blocked cluster index is
+    $q=2s+r$. The operators
+    $U_{(1,0)}=(X_1\otimes X_2)\mathrm{CNOT}_{1\to2}$ and
+    $U_{(0,1)}=X_3$ generate a unitary representation of
+    $G=\Z_4\times\Z_2$, with $U_{(2,0)}=X_2$.
+    Put $g\cdot x=x+a\pmod 2$ for $g=(a,b)$ and $x\in\{0,1\}$.
+    Let $V_{g,x}$ be given by the following table, where
+    $Y=\left(\begin{smallmatrix}0&-i\\i&0\end{smallmatrix}\right)$:
+    \begin{center}
+        \begin{tabular}{ccccccccc}
+            $g$   & $(0,0)$ & $(2,0)$ & $(0,1)$ & $(2,1)$
+                  & $(1,0)$ & $(3,0)$ & $(1,1)$ & $(3,1)$                             \\
+            $x=0$ & $\Id$   & $X$     & $Z$     & $Y$     & $X$   & $\Id$ & $Y$ & $Z$ \\
+            $x=1$ & $\Id$   & $X$     & $Z$     & $Y$     & $\Id$ & $X$   & $Z$ & $Y$ \\
+        \end{tabular}
+    \end{center}
+    Every $V_{g,x}$ is Hermitian and squares to the identity. For every
+    physical index $i$, the blocks satisfy
+    \begin{align}
+        \sum_j (U_g)_{i,j} A_x^j
+         & =V_{g,x}A_{g\cdot x}^iV_{g,x}^{\dagger}.
+        \label{eq:mpug_ghz_cluster_block_covariance}
+    \end{align}
+    On the subgroup $H=\{(2a,b):a,b\in\{0,1\}\}$, the comparison with the
+    cluster virtual representatives $W_{(b,a)}=Z^bX^a$ is
+    $V_{(2a,b),x}=(-i)^{ab}W_{(b,a)}$.
+    These are the physical representation and matrix action identities of
+    \cite[lines~4481--4489]{FrancoRubio2025MPUGauging}.
+    No claim is made about defect normalization, $L$-symbols, cocycle
+    nonextension, block independence, or gauging.
+    % Scoped calculation only: no defect normalization, L-symbols,
+    % cocycle nonextension, block independence, or gauging is asserted.
+    % Those remaining parts of example:z4z2 stay open in #7352.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_ghz_blocked_cluster_tensor, thm:mpug_monomial_matrix_laws}
+    On basis vectors the generators send $(p,s,r)$ to $(p+1,s+p+1,r)$
+    and $(p,s,r+1)$, with coordinates added modulo two. Their permutations
+    have orders four and two and commute. The corresponding permutation
+    matrices are unitary and preserve multiplication.
+    Substitute $A_x^{(p,q)}=\delta_{p,x}C^q$ into
+    (\ref{eq:mpug_ghz_cluster_block_covariance}). For each of the eight group
+    elements and two block labels, matrix multiplication gives the displayed
+    table. Hermiticity and $V_{g,x}^2=\Id$ turn forward transport of the
+    physical index into the stated conjugation identity.
+    Finally, $ZX=iY$, so the only phase needed to compare the restriction
+    with $Z^bX^a$ is $-i$ when $a=b=1$.
+\end{proof}
+
 \section{The gauge-invariant subspace of the CZX circuit tuple}
 \label{sec:mpug_czx_gauge_invariant}
 
@@ -4444,6 +4777,167 @@ by the displayed matrices.
     window replaced by $\sigma(s_W)$, and the entry is then
     $\varphi(s_W)$. The two-site statements are the cyclic offset
     computations $(j+N-j)\bmod N=0$ and $(j+1+N-j)\bmod N=1$.
+\end{proof}
+
+\subsection{The exact CZX matrix product unitary}
+
+\begin{definition}[The once-blocked CZX tensor]
+    \label{def:mpug_czx_exact_tensor}
+    % Principal declaration: MPOTensor.CZX.tensor.
+    \lean{MPOTensor.CZX.decoratedSiteTensor, MPOTensor.CZX.tensor,
+        MPOTensor.CZX.complementSite, MPOTensor.CZX.complement,
+        MPOTensor.CZX.edgeExponent, MPOTensor.CZX.cyclicExponent}
+    \leanok
+    \uses{def:mpdo_two_site_blocking}
+    Write a physical index as $2a+b$, with $a,b\in\{0,1\}$, and let
+    $\overline{(a,b)}=(1-a,1-b)$. The tensor in
+    \cite[lines~4503--4547]{FrancoRubio2025MPUGauging}
+    is the two-site block $B^{ab,cd}=C^{a,c}C^{b,d}$ of the bond-two tensor
+    \begin{align}
+        C^{u,d}_{\ell r}
+         & =\delta_{u,1-d}\delta_{\ell,u}(-1)^{u+\ell r}.
+    \end{align}
+    Here the constituent indices $u,d,\ell,r$ are binary, the weight is
+    $W_{\ell r}=(-1)^{\ell r}=\sqrt{2}H_{\ell r}$, where $H$ is the
+    normalized Hadamard matrix, and the factor $(-1)^u$ is the output
+    Pauli $Z$. Thus, if $P$ denotes the normalized tensor printed in
+    \cite[lines~1906--1943]{Cirac2017MPU}, then
+    $B=(Z\otimes Z)\operatorname{block}_2(\sqrt{2}P)$, not
+    $\operatorname{block}_2(P)$.
+    Define the local integer exponent $e((a,b),r)=a+b+ab+br$.
+    For a periodic configuration $s_j=(a_j,b_j)$ of positive length $N$,
+    let $\kappa_N(s)_j=\overline{s_j}$ and set
+    \begin{align}
+        E(s) & =\sum_{j=0}^{N-1}e(s_j,a_{j+1})
+        =\sum_{j=0}^{N-1}(a_j+b_j+a_jb_j+b_ja_{j+1}),
+    \end{align}
+    where $j+1$ is interpreted modulo $N$ and the bit values in the sum
+    are integers.
+\end{definition}
+
+\begin{theorem}[CZX tensor as general length-two blocking]
+    \label{thm:mpug_czx_tensor_general_blocking}
+    % Principal declaration: MPOTensor.CZX.tensor_eq_blockTensor.
+    \lean{MPOTensor.CZX.tensor_eq_blockTensor}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpdo_physical_blocking,
+        def:mpdo_two_site_blocking}
+    Let $\varphi:\{0,1,2,3\}\to\{0,1\}^2$ be the pair-index bijection
+    $\varphi(2a+b)=(a,b)$, regarded as a word of length two. Write
+    $C^{[L]}$ for the general physical blocking of $C$ from
+    Definition~\ref{def:mpdo_physical_blocking}. For physical indices $i,j$,
+    \begin{align}
+        B^{i,j} & =(C^{[L]})^{\varphi(i),\varphi(j)}\bigm|_{L=2}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_block_two_as_positive_blocking}
+    Apply Theorem~\ref{thm:mpdo_block_two_as_positive_blocking} to $C$.
+    For $i=2a+b$ and $j=2c+d$, both sides are the same ordered product:
+    \begin{align}
+        (C^{[L]})^{\varphi(i),\varphi(j)}\bigm|_{L=2}
+         & =C^{a,c}C^{b,d}=B^{ab,cd}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Coordinates and unitarity of the exact CZX tensor]
+    \label{thm:mpug_czx_exact_tensor_unitary}
+    % Principal declaration: MPOTensor.CZX.tensor_isMPU.
+    \lean{MPOTensor.CZX.tensor_apply, MPOTensor.CZX.tensor_apply_bits,
+        MPOTensor.CZX.mpo_tensor_apply, MPOTensor.CZX.mpo_tensor,
+        MPOTensor.CZX.mpo_tensor_mem_unitaryGroup, MPOTensor.CZX.tensor_isMPU}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpug_monomial_matrix, def:mpu}
+    The tensor $B$ has bond dimension two and coordinates
+    \begin{align}
+        B^{ab,cd}_{\ell r}
+         & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}
+        (-1)^{a+b+ab+br}.
+    \end{align}
+    Its periodic operator is unitary for every $N>0$, with entries and
+    monomial form
+    \begin{align}
+        O_N(B)_{s,t} & =\delta_{s,\kappa_N(t)}(-1)^{E(s)},                     \\
+        O_N(B)       & =M\bigl(\kappa_N,\ t\mapsto(-1)^{E(\kappa_N(t))}\bigr).
+    \end{align}
+    In particular, $B$ is a matrix product unitary. This assertion does
+    not include its phase classification, GHZ action, or defect data.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:trace_eval_word_eq_sum_cyclic, thm:mpug_monomial_matrix_laws}
+    The two-site block is the matrix product contracted over a binary
+    intermediate bond $m$. The second factor vanishes unless $m=b$, so
+    \begin{align}
+        B^{ab,cd}_{\ell r}
+         & =\sum_{m\in\{0,1\}}C^{a,c}_{\ell m}C^{b,d}_{mr} \\
+         & =C^{a,c}_{\ell b}C^{b,d}_{br}                   \\
+         & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}
+        (-1)^{a+\ell b+b+br}                               \\
+         & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}
+        (-1)^{a+b+ab+br}.
+    \end{align}
+    For the periodic contraction, write $s_j=(a_j,b_j)$ and
+    $t_j=(c_j,d_j)$. The cyclic trace expansion is
+    \begin{align}
+        O_N(B)_{s,t}
+         & =\sum_{g:\Z/N\Z\to\{0,1\}}
+        \prod_{j=0}^{N-1}B^{s_j,t_j}_{g_j,g_{j+1}}.
+    \end{align}
+    The factor at $j$ vanishes unless $g_j=a_j$, so only the path
+    $g_j=a_j$ can contribute. Substituting it gives
+    \begin{align}
+        O_N(B)_{s,t}
+         & =\prod_{j=0}^{N-1}B^{s_j,t_j}_{a_j,a_{j+1}} \\
+         & =\prod_{j=0}^{N-1}
+        \delta_{a_j,1-c_j}\delta_{b_j,1-d_j}
+        (-1)^{a_j+b_j+a_jb_j+b_ja_{j+1}}               \\
+         & =\delta_{s,\kappa_N(t)}(-1)^{E(s)}.
+    \end{align}
+    Thus the operator is the monomial matrix for complementation, with
+    column phase $(-1)^{E(\kappa_N(t))}$. Each phase has absolute value one,
+    so Theorem~\ref{thm:mpug_monomial_matrix_laws} proves unitarity.
+\end{proof}
+
+\begin{theorem}[Injectivity of the once-blocked CZX tensor]
+    \label{thm:mpug_czx_exact_tensor_injective}
+    \lean{MPOTensor.CZX.tensor_isInjective}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_exact_tensor, def:injective}
+    The once-blocked CZX tensor $B$ of
+    Definition~\ref{def:mpug_czx_exact_tensor}, with the unnormalized
+    Hadamard weights and both output $Z$ gates, is injective:
+    \begin{align}
+        \operatorname{span}_{\C}\{B^{i,j}:0\leq i,j<4\}
+         & =\operatorname{Mat}_2(\C).
+    \end{align}
+    Here $B^{2a+b,2c+d}=B^{ab,cd}$ for binary $a,b,c,d$.
+    This is the injectivity assertion preceding the tensor diagram in
+    \cite[lines~4505--4547]{FrancoRubio2025MPUGauging}.
+    % Source: eq:MPU_CZX. This proves only injectivity of the shared tensor;
+    % it does not complete the GHZ, fusion, or action-data scope of #7354.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_exact_tensor_unitary}
+    Let $E_{ab}$ be the bond matrix units, with $a,b\in\{0,1\}$.
+    The coordinate formula in
+    Theorem~\ref{thm:mpug_czx_exact_tensor_unitary} gives
+    \begin{align}
+        E_{00}
+         & =\tfrac12(B^{0,3}-B^{1,2}),  \\
+        E_{01}
+         & =\tfrac12(B^{0,3}+B^{1,2}),  \\
+        E_{10}
+         & =-\tfrac12(B^{2,1}+B^{3,0}), \\
+        E_{11}
+         & =\tfrac12(B^{3,0}-B^{2,1}).
+    \end{align}
+    Thus every bond matrix unit lies in the span of the physical letters.
+    Since every $2\times2$ matrix is a linear combination of these units,
+    the letters span the full bond matrix algebra.
 \end{proof}
 
 \subsection{The displayed CZX circuit tuple}

@@ -702,17 +702,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                   (F.leftFiberOpenEdgeEquiv_symm_boundary_zero
                     (F.leftSectorWord j kL) zL))
               · obtain ⟨A, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hA
-                have hk0 : k (Fin.last (A + 1 + C) + 1) =
-                    F.leftSectorWord j kL 0 := by
-                  calc
-                    k (Fin.last (A + 1 + C) + 1) = k 0 := congrArg k he
-                    _ = kL 0 := hkLeft 0
-                    _ = F.leftSectorWord j kL 0 := by
-                      rw [show (0 : Fin (A + 2)) =
-                        Fin.castSucc (0 : Fin (A + 1)) by rfl]
-                      exact (@Fin.lastCases_castSucc (A + 1)
-                        (fun _ ↦ Fin F.sectorCount) j kL 0).symm
-                exact (sectorIndex_fst_heq_of_heq F hk0
+                exact (sectorIndex_fst_heq_of_heq F (congrArg Subtype.val hfirst)
                   ((congr_arg_heq v he).trans (huL 0))).trans (heq_of_eq
                     (F.leftFiberOpenEdgeEquiv_symm_boundary_succ
                       (F.leftSectorWord j kL) zL))
@@ -729,17 +719,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                   (F.leftFiberOpenEdgeEquiv_symm_boundary_zero
                     (F.leftSectorWord j kL) zL'))
               · obtain ⟨A, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hA
-                have hk0 : k (Fin.last (A + 1 + C) + 1) =
-                    F.leftSectorWord j kL 0 := by
-                  calc
-                    k (Fin.last (A + 1 + C) + 1) = k 0 := congrArg k he
-                    _ = kL 0 := hkLeft 0
-                    _ = F.leftSectorWord j kL 0 := by
-                      rw [show (0 : Fin (A + 2)) =
-                        Fin.castSucc (0 : Fin (A + 1)) by rfl]
-                      exact (@Fin.lastCases_castSucc (A + 1)
-                        (fun _ ↦ Fin F.sectorCount) j kL 0).symm
-                exact (sectorIndex_fst_heq_of_heq F hk0
+                exact (sectorIndex_fst_heq_of_heq F (congrArg Subtype.val hfirst)
                   ((congr_arg_heq v' he).trans (huL' 0))).trans (heq_of_eq
                     (F.leftFiberOpenEdgeEquiv_symm_boundary_succ
                       (F.leftSectorWord j kL) zL'))
@@ -761,19 +741,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                   ext
                   simp
                   omega
-                have hkLast : k (Fin.last (A + (C + 1))) =
-                    F.rightSectorWord j kR (Fin.last (C + 1)) := by
-                  calc
-                    k (Fin.last (A + (C + 1))) =
-                        k ⟨A + 1 + Fin.last C, by omega⟩ := congrArg k he
-                    _ = kR (Fin.last C) := hkRight (Fin.last C)
-                    _ = F.rightSectorWord j kR (Fin.last (C + 1)) := by
-                      rw [show Fin.last (C + 1) = (Fin.last C).succ by
-                        ext
-                        simp]
-                      exact (@Fin.cases_succ (C + 1)
-                        (fun _ ↦ Fin F.sectorCount) j kR (Fin.last C)).symm
-                exact (sectorIndex_snd_heq_of_heq F hkLast
+                exact (sectorIndex_snd_heq_of_heq F (congrArg Subtype.val hlast)
                   ((congr_arg_heq v he).trans (huR (Fin.last C)))).trans
                     (heq_of_eq (F.rightFiberOpenEdgeEquiv_symm_boundary_succ
                       (F.rightSectorWord j kR) zR))
@@ -795,19 +763,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                   ext
                   simp
                   omega
-                have hkLast : k (Fin.last (A + (C + 1))) =
-                    F.rightSectorWord j kR (Fin.last (C + 1)) := by
-                  calc
-                    k (Fin.last (A + (C + 1))) =
-                        k ⟨A + 1 + Fin.last C, by omega⟩ := congrArg k he
-                    _ = kR (Fin.last C) := hkRight (Fin.last C)
-                    _ = F.rightSectorWord j kR (Fin.last (C + 1)) := by
-                      rw [show Fin.last (C + 1) = (Fin.last C).succ by
-                        ext
-                        simp]
-                      exact (@Fin.cases_succ (C + 1)
-                        (fun _ ↦ Fin F.sectorCount) j kR (Fin.last C)).symm
-                exact (sectorIndex_snd_heq_of_heq F hkLast
+                exact (sectorIndex_snd_heq_of_heq F (congrArg Subtype.val hlast)
                   ((congr_arg_heq v' he).trans (huR' (Fin.last C)))).trans
                     (heq_of_eq (F.rightFiberOpenEdgeEquiv_symm_boundary_succ
                       (F.rightSectorWord j kR) zR'))
