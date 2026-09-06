@@ -1258,6 +1258,240 @@ asserted in that passage.
         =\widetilde Y_1^\dagger\widetilde Y_1.
     \end{align}
 \end{proof}
+
+\begin{theorem}[Physical closures of the compatible right factors]
+    \label{thm:mpug_inverse_source_y_physical}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_Y_physical_contractions}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors, def:mpu_canonical_form_ii,
+        def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
+    form II, with recorded positive-definite matrix $\rho$. Suppose
+    that $T$ is unitary, that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair, and that $T\overline T=\sigma I_D$ for $\sigma\in\C$.
+    Let $\widehat Y_1,\widehat Y_2$ be the inverse-compatible source
+    factors at this same weight. Put $r=\operatorname{rank}M_1(\mathcal U)$
+    and $\ell=\operatorname{rank}M_2(\mathcal U)$. For physical indices
+    $p,q$, one has
+    \begin{align}
+        \sum_{s=0}^{r-1}\sum_{\alpha=0}^{D-1}
+        \overline{(\widehat Y_1)_{s,(\alpha,p)}}
+        (\widehat Y_1)_{s,(\alpha,q)}
+         & =\delta_{p,q}, \\
+        \sum_{t=0}^{\ell-1}\sum_{\alpha,\beta=0}^{D-1}
+        \overline{(\widehat Y_2)_{t,(p,\alpha)}}
+        (\widehat Y_2)_{t,(q,\beta)}\rho_{\beta\alpha}
+         & =\delta_{p,q}.
+    \end{align}
+    These are the physical closures of
+    \cite[lines~869--917]{FrancoRubio2025MPUGauging}, transported as in
+    lines~5486--5487. Simplicity of $\mathcal U^\dagger$ is not required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_source_unitary_transport,
+        thm:mpug_source_y_physical_contractions,
+        def:mpug_inverse_compatible_source_factors}
+    Write $\widetilde Y_1,Y_2$ for the original source factors at $\rho$.
+    The external Gram equality gives
+    \begin{align}
+        \sum_{\alpha=0}^{D-1}
+        (\widehat Y_1^\dagger\widehat Y_1)_{(\alpha,p),(\alpha,q)}
+         & =\sum_{\alpha=0}^{D-1}
+        (\widetilde Y_1^\dagger\widetilde Y_1)_{(\alpha,p),(\alpha,q)}
+        =\delta_{p,q}.
+    \end{align}
+    Expanding each Gram entry gives the first closure.
+    The second follows from $\widehat Y_2=Y_2$ and
+    Theorem~\ref{thm:mpug_source_y_physical_contractions}, with the
+    same weight entries $\rho_{\beta\alpha}$.
+\end{proof}
+
+\begin{theorem}[Rank normalizations of the compatible right factors]
+    \label{thm:mpug_inverse_source_y_rank}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_Y_rank_normalizations}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors, def:mpu_canonical_form_ii,
+        def:mpu_simple, def:mpdo_physical_adjoint, def:mpu_source_weight}
+    Let $\mathcal U$ be an MPU of dimensions $d,D$ in canonical form II,
+    with recorded positive-definite matrix $\rho$. Assume that both
+    $\mathcal U$ and $\mathcal U^\dagger$ are simple. Suppose that $T$
+    is unitary, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
+    for every physical pair, and that $T\overline T=\sigma I_D$ for
+    $\sigma\in\C$. Let $\widehat Y_1,\widehat Y_2$ be its
+    inverse-compatible source factors at $\rho$, with cut ranks $r,\ell$.
+    Then
+    \begin{align}
+        \widehat Y_1\widehat Y_1^\dagger & =\frac{d}{r}I_r,       \\
+        \widehat Y_2(I_d\otimes\rho)\widehat Y_2^\dagger
+                                         & =\frac{d}{\ell}I_\ell.
+    \end{align}
+    These are the rank normalizations of
+    \cite[lines~1064--1119]{FrancoRubio2025MPUGauging}, transported at
+    lines~5486--5487. The adjoint-simplicity hypothesis is retained.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_source_unitary_transport,
+        thm:mpug_source_y_one_normalization,
+        thm:mpug_source_y_two_normalization,
+        def:mpug_inverse_compatible_source_factors}
+    Let $\widetilde Y_1,Y_2$ be the original factors. Unitary transport
+    gives $\widehat Y_1=C^\dagger\widetilde Y_1$ with $C^\dagger C=I_r$.
+    Conjugating the original scalar Gram matrix yields
+    \begin{align}
+        \widehat Y_1\widehat Y_1^\dagger
+         & =C^\dagger(\widetilde Y_1\widetilde Y_1^\dagger)C
+        =C^\dagger\left(\frac{d}{r}I_r\right)C
+        =\frac{d}{r}I_r.
+    \end{align}
+    The second normalization is unchanged because $\widehat Y_2=Y_2$.
+\end{proof}
+
+\begin{theorem}[Physical closures of the compatible left factors]
+    \label{thm:mpug_inverse_source_x_physical}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_X_physical_contractions}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors, def:mpu_canonical_form_ii,
+        def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPU of dimensions $d,D$ in canonical form II,
+    with recorded positive-definite matrix $\rho$. Assume that both
+    $\mathcal U$ and $\mathcal U^\dagger$ are simple. Suppose that $T$
+    is unitary, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
+    for every physical pair, and that $T\overline T=\sigma I_D$ for
+    $\sigma\in\C$. Let $\widehat X_1,\widehat X_2$ be its
+    inverse-compatible source factors at $\rho$, with cut ranks $r,\ell$.
+    For physical indices $i,j$,
+    \begin{align}
+        \sum_{s=0}^{r-1}\sum_{\alpha,\beta=0}^{D-1}
+        (\widehat X_1)_{(i,\alpha),s}\rho_{\beta\alpha}
+        \overline{(\widehat X_1)_{(j,\beta),s}}
+         & =\frac{r}{d}\delta_{i,j},    \\
+        \sum_{t=0}^{\ell-1}\sum_{x=0}^{D-1}
+        (\widehat X_2)_{(x,i),t}\overline{(\widehat X_2)_{(x,j),t}}
+         & =\frac{\ell}{d}\delta_{i,j}.
+    \end{align}
+    These are the physical left-factor closures of
+    \cite[lines~1120--1162]{FrancoRubio2025MPUGauging}, transported at
+    lines~5486--5487. The canonical weight is not replaced by the identity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_source_unitary_transport,
+        thm:mpug_source_x_one_physical_normalization,
+        thm:mpug_source_x_two_physical_normalization,
+        def:mpug_inverse_compatible_source_factors}
+    Write $\widetilde X_1,X_2$ for the original factors. Multiply the
+    $((i,\alpha),(j,\beta))$ entries of the external Gram equality by
+    $\rho_{\beta\alpha}$ and sum over the virtual indices:
+    \begin{align}
+        \sum_{\alpha,\beta=0}^{D-1}
+        (\widehat X_1\widehat X_1^\dagger)_{(i,\alpha),(j,\beta)}
+        \rho_{\beta\alpha}
+         & =\sum_{\alpha,\beta=0}^{D-1}
+        (\widetilde X_1\widetilde X_1^\dagger)_{(i,\alpha),(j,\beta)}
+        \rho_{\beta\alpha}              \\
+         & =\frac{r}{d}\delta_{i,j}.
+    \end{align}
+    Expanding each Gram entry and regrouping the finite sums gives the
+    first closure. The second is the original physical closure because
+    $\widehat X_2=X_2$.
+\end{proof}
+
+These six identities concern only the stated closures and normalizations.
+They do not assert movement identities, truncated-gate identities, transport
+of the chosen first right inverse, or the complete set of pleasant properties.
+
+\subsection{Movement gates of the inverse-compatible source factors}
+
+\begin{theorem}[Transport of the movement gates]
+    \label{thm:mpug_inverse_movement_transport}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_movement_transport}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors,
+        def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_comparison_k,
+        def:mpug_staircase_gates, def:mpu_weighted_source_factors,
+        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ with a
+    canonical-form-II presentation and recorded positive-definite matrix
+    $\rho$. Let $T$ be unitary on $\C^D$ and let $\sigma\in\C$ satisfy
+    $T\overline T=\sigma I_D$. Suppose that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$. Let $S_0$ be the chosen source factors at this
+    $\rho$, and let $S$ be the inverse-compatible source factors of
+    Definition~\ref{def:mpug_inverse_compatible_source_factors} for the
+    same data. Put $r=\operatorname{rank}M_1(\mathcal U)$ and
+    $\ell=\operatorname{rank}M_2(\mathcal U)$. Let
+    $e\colon\{0,\ldots,\ell-1\}\to\{0,\ldots,r-1\}$ be the
+    rank identification of Definition~\ref{def:mpug_inverse_cut_rank_equiv}.
+    Reindex the columns of the comparison $K$ by $e$ to obtain
+    $C\in\operatorname{Mat}_r(\C)$, with $C_{a,b}=K_{a,e^{-1}(b)}$.
+    Then the crossed movement gates satisfy
+    \begin{align}
+        w_L(S) & =w_L(S_0),                                     \\
+        w_R(S) & =(I_d\otimes C^\dagger)w_R(S_0)(C\otimes I_d).
+        \label{eq:mpug_inverse_movement_transport}
+    \end{align}
+    The right gate has row order $(\text{physical},\text{first rank})$
+    and column order $(\text{first rank},\text{physical})$; no leg
+    permutation occurs. These are the crossed contractions of
+    \cite[lines~811--869]{FrancoRubio2025MPUGauging}, transported by the
+    unitary comparison as in \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_source_unitary_transport,
+        def:mpug_inverse_compatible_source_factors, def:mpug_staircase_gates}
+    The second factors are unchanged, giving the left-gate equality.
+    For the first factors, Theorem~\ref{thm:mpug_inverse_source_unitary_transport}
+    gives $X_1(S)=X_1(S_0)C$ and $Y_1(S)=C^\dagger Y_1(S_0)$.
+    For physical indices $i,j$ and first-rank indices $t,t'$, substitute
+    these into the crossed contraction:
+    \begin{align}
+        (w_R(S))_{(i,t),(t',j)}
+         & =\sum_{a,b=0}^{r-1}\overline{C_{b,t}}
+        \left(\sum_{\beta=0}^{D-1}
+        (X_1(S_0))_{(i,\beta),a}(Y_1(S_0))_{b,(\beta,j)}\right)C_{a,t'} \\
+         & =\sum_{a,b=0}^{r-1}\overline{C_{b,t}}
+        (w_R(S_0))_{(i,b),(a,j)}C_{a,t'}.
+    \end{align}
+    Regrouping the finite sums gives the right-gate formula in
+    (\ref{eq:mpug_inverse_movement_transport}).
+\end{proof}
+
+\begin{theorem}[Unitarity of the transported movement gates]
+    \label{thm:mpug_inverse_movement_unitary}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_movement_isUnitaryBetween}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors, def:mpug_staircase_gates,
+        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ with a
+    canonical-form-II presentation and recorded positive-definite matrix
+    $\rho$. Suppose that $T$ is unitary on $\C^D$, that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$, and that $T\overline T=\sigma I_D$ for a scalar
+    $\sigma\in\C$. Let $S$ be its inverse-compatible source factors
+    constructed with this same $\rho$. With source-cut ranks $r,\ell$,
+    both movement gates are unitary maps between their indicated spaces:
+    \begin{align}
+        w_L(S) & \colon\C^d\otimes\C^\ell\longrightarrow\C^\ell\otimes\C^d, \\
+        w_R(S) & \colon\C^r\otimes\C^d\longrightarrow\C^d\otimes\C^r.
+    \end{align}
+    No simplicity hypothesis on the physical adjoint is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_source_unitary_transport,
+        thm:mpug_staircase_gates_unitary, thm:mpug_inverse_movement_transport,
+        thm:matrix_unitary_between_kronecker}
+    Theorem~\ref{thm:mpug_inverse_source_unitary_transport} makes $C$
+    unitary, and Theorem~\ref{thm:mpug_staircase_gates_unitary} makes the
+    chosen gates $w_L(S_0),w_R(S_0)$ unitary. The transport theorem
+    leaves the left gate unchanged. For the right gate, use
+    (\ref{eq:mpug_inverse_movement_transport}). The two outer factors of
+    $(I_d\otimes C^\dagger)w_R(S_0)(C\otimes I_d)$ are unitary by
+    Theorem~\ref{thm:matrix_unitary_between_kronecker}; the middle factor
+    $w_R(S_0)$ is already unitary. Their composition is the right gate. This is the movement-gate consequence
+    of the comparison transport in
+    \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}.
+\end{proof}
+
 \begin{definition}[Literal gates on the common second-cut space]
     \label{def:mpug_inverse_compatible_gates}
     \lean{MPOTensor.inverseCompatibleU, MPOTensor.inverseCompatibleV}
@@ -2716,6 +2950,240 @@ gauges and scalar relation have been constructed.
     identities. The induction therefore covers every $N$, not just
     one parity of bulk lengths.
 \end{proof}
+
+\begin{theorem}[Unitary coordinate transport of the endpoint contraction]
+    \label{thm:mpug_inverse_truncation_transport}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_apply,
+        MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_eq}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors,
+        thm:mpug_inverse_source_unitary_transport, def:mpug_truncated_symmetry,
+        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
+    form II, with recorded positive-definite matrix $\rho$. Suppose that
+    $T$ is unitary, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
+    for every physical pair, and that $T\overline T=\sigma I_D$ for
+    $\sigma\in\C$. Let $S_0$ denote its chosen source factors at $\rho$
+    and $S$ its inverse-compatible source factors. Put
+    $r=\operatorname{rank}M_1(\mathcal U)$ and
+    $\ell=\operatorname{rank}M_2(\mathcal U)$, and take the square unitary
+    comparison $C=KP_e^\dagger$ of
+    Theorem~\ref{thm:mpug_inverse_source_unitary_transport}.
+    For $N\geq0$, let $\Omega_N$ be the set of physical configurations
+    on $N$ sites. Write $U_0^{N+2}$ and $\widehat U^{N+2}$ for the
+    endpoint contractions of Definition~\ref{def:mpug_truncated_symmetry}
+    formed from $S_0$ and $S$, respectively. Their common domain and
+    codomain, with the indicated association, are
+    \begin{align}
+        \mathcal H_N & =\C^d\otimes(\C^{\Omega_N}\otimes\C^d),    \\
+        \mathcal R_N & =\C^\ell\otimes(\C^{\Omega_N}\otimes\C^r).
+    \end{align}
+    Then
+    \begin{align}
+        \widehat U^{N+2}
+         & =[I_\ell\otimes(I_{\Omega_N}\otimes C^\dagger)]
+        U_0^{N+2}.
+    \end{align}
+    Explicitly, for source indices $l,s$, configurations $p,q\in\Omega_N$,
+    and physical indices $a,b$,
+    \begin{align}
+        (\widehat U^{N+2})_{(l,(p,s)),(a,(q,b))}
+         & =\sum_{t=0}^{r-1}(C^\dagger)_{st}
+        (U_0^{N+2})_{(l,(p,t)),(a,(q,b))}.
+    \end{align}
+    Only the right source coordinate changes. Here $N$ counts bulk
+    sites and the total source length is $N+2$, including both endpoints.
+    This applies the comparison transport of
+    \cite[lines~5432--5487]{FrancoRubio2025MPUGauging} to the endpoint
+    contraction at lines~2062--2099. No simplicity assumption on the
+    physical adjoint is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_source_unitary_transport,
+        def:mpug_inverse_compatible_source_factors, def:mpug_truncated_symmetry}
+    Write $\widetilde Y_1,Y_2$ for the chosen endpoints and
+    $\widehat Y_1,\widehat Y_2$ for the compatible ones. Substitute
+    $\widehat Y_1=C^\dagger\widetilde Y_1$ and $\widehat Y_2=Y_2$
+    into the endpoint contraction. Regrouping the finite sums gives
+    \begin{align}
+        (\widehat U^{N+2})_{(l,(p,s)),(a,(q,b))}
+         & =\sum_{t=0}^{r-1}(C^\dagger)_{st}
+        \sum_{\alpha,\beta=0}^{D-1}(Y_2)_{l,(a,\alpha)}
+        \mathcal U[p,q]_{\alpha\beta}(\widetilde Y_1)_{t,(\beta,b)} \\
+         & =\sum_{t=0}^{r-1}(C^\dagger)_{st}
+        (U_0^{N+2})_{(l,(p,t)),(a,(q,b))}.
+    \end{align}
+    Expanding the two identity factors in
+    $I_\ell\otimes(I_{\Omega_N}\otimes C^\dagger)$ fixes the left
+    source index and the bulk configuration. Its matrix product with
+    $U_0^{N+2}$ therefore has exactly these entries.
+\end{proof}
+
+\begin{theorem}[Unitarity of the compatible endpoint contractions]
+    \label{thm:mpug_inverse_truncation_unitary}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_isUnitaryBetween}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors, def:mpug_truncated_symmetry,
+        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
+    form II, with recorded positive-definite matrix $\rho$. Suppose that
+    $T$ is unitary, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
+    for every physical pair, and that $T\overline T=\sigma I_D$ for
+    $\sigma\in\C$. For every bulk length $N\geq0$, the endpoint
+    contraction $\widehat U^{N+2}$ formed from the inverse-compatible
+    source factors is unitary from
+    $\mathcal H_N=\C^d\otimes(\C^{\Omega_N}\otimes\C^d)$ to
+    $\mathcal R_N=\C^\ell\otimes(\C^{\Omega_N}\otimes\C^r)$, where
+    $\Omega_N$ is the set of length-$N$ physical configurations and
+    $r,\ell$ are the first and second cut ranks. The case $N=0$ has
+    total length two. No simplicity assumption on the physical adjoint
+    is needed. This transports the unitarity assertion following the
+    endpoint diagram of \cite[lines~2062--2099]{FrancoRubio2025MPUGauging},
+    using its comparison argument at lines~5486--5487.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_source_unitary_transport,
+        thm:mpug_inverse_truncation_transport,
+        thm:matrix_unitary_between_kronecker, thm:mpug_truncated_symmetry_unitary}
+    The comparison $C$ is unitary. By
+    Theorem~\ref{thm:matrix_unitary_between_kronecker},
+    $Q_N=I_\ell\otimes(I_{\Omega_N}\otimes C^\dagger)$ is unitary.
+    The chosen-source contraction $U_0^{N+2}$ is unitary by
+    Theorem~\ref{thm:mpug_truncated_symmetry_unitary}, and the transport
+    theorem gives $\widehat U^{N+2}=Q_NU_0^{N+2}$. Hence
+    \begin{align}
+        (\widehat U^{N+2})^\dagger\widehat U^{N+2}
+         & =(U_0^{N+2})^\dagger Q_N^\dagger Q_NU_0^{N+2}
+        =I_{\mathcal H_N},                               \\
+        \widehat U^{N+2}(\widehat U^{N+2})^\dagger
+         & =Q_NU_0^{N+2}(U_0^{N+2})^\dagger Q_N^\dagger
+        =I_{\mathcal R_N}.
+    \end{align}
+    This uses the existing all-length theorem, without another induction.
+\end{proof}
+
+These are coordinate transport and unitarity statements, not the final
+truncated-chain sewing identity or a finite-group physical-action assertion.
+
+\begin{theorem}[Raw endpoint unitarity by rank-coordinate transport]
+    \label{thm:mpug_inverse_word_unitary}
+    \lean{MPOTensor.inverseCompatibleWordA_eq_reindex_truncatedSymmetry,
+        MPOTensor.inverseCompatibleWordA_isUnitaryBetween}
+    \leanok
+    \uses{def:mpug_inverse_word_endpoints,
+        def:mpug_inverse_compatible_source_factors,
+        def:mpug_inverse_cut_rank_equiv, def:mpug_truncated_symmetry,
+        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
+    form II. Suppose that $T$ is unitary, that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair, and that $T\overline T=\sigma I_D$ for $\sigma\in\C$.
+    Construct the inverse-compatible source factors at the recorded
+    canonical weight. Put $r=\operatorname{rank}M_1(\mathcal U)$,
+    $\ell=\operatorname{rank}M_2(\mathcal U)$, and take the rank bijection
+    $e\colon\{0,\ldots,\ell-1\}\to\{0,\ldots,r-1\}$ of
+    Definition~\ref{def:mpug_inverse_cut_rank_equiv}.
+    For every $N\geq0$, let $\Omega_N$ be the length-$N$ physical
+    configurations. The raw and packaged source spaces and the physical
+    space are, with right association,
+    \begin{align}
+        \mathcal R_N^{\mathrm{raw}}
+                     & =\C^\ell\otimes(\C^{\Omega_N}\otimes\C^\ell), \\
+        \mathcal R_N^{\mathrm{pkg}}
+                     & =\C^\ell\otimes(\C^{\Omega_N}\otimes\C^r),    \\
+        \mathcal H_N & =\C^d\otimes(\C^{\Omega_N}\otimes\C^d).
+    \end{align}
+    Let $E_N(l,(p,s))=(l,(p,e(s)))$, and let
+    $P_{E_N}\colon\mathcal R_N^{\mathrm{raw}}\to\mathcal R_N^{\mathrm{pkg}}$
+    be its permutation matrix. If $\widehat U^{N+2}$ is the endpoint
+    contraction of the inverse-compatible source factors, then the raw
+    matrix $A_N$ of Definition~\ref{def:mpug_inverse_word_endpoints} satisfies
+    \begin{align}
+        A_N & =P_{E_N}^\dagger\widehat U^{N+2}.
+    \end{align}
+    Equivalently, for raw source indices $l,s$, configurations $p,q$, and
+    physical indices $a,b$,
+    \begin{align}
+        (A_N)_{(l,(p,s)),(a,(q,b))}
+         & =(\widehat U^{N+2})_{(l,(p,e(s))),(a,(q,b))}.
+    \end{align}
+    Thus $A_N\colon\mathcal H_N\to\mathcal R_N^{\mathrm{raw}}$ is
+    unitary. This transports only the right endpoint back along $e^{-1}$;
+    no spatial permutation is introduced. The total source length is
+    $N+2$, so $N=0$ has total length two. This is coordinate transport
+    of the endpoint construction in
+    \cite[lines~2062--2099 and 5390--5487]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_inverse_word_endpoints, def:mpug_truncated_symmetry,
+        def:mpug_inverse_compatible_source_factors,
+        def:mpug_inverse_cut_rank_equiv, thm:mpug_inverse_truncation_unitary}
+    The compatible endpoints obey $\widehat Y_2=Y_2$ and
+    $(\widehat Y_1)_{e(s),(\beta,b)}=Y_{s,(\beta,b)}$. Substitution gives
+    \begin{align}
+        (\widehat U^{N+2})_{(l,(p,e(s))),(a,(q,b))}
+         & =\sum_{\alpha,\beta=0}^{D-1}(Y_2)_{l,(a,\alpha)}
+        \mathcal U[p,q]_{\alpha\beta}Y_{s,(\beta,b)}
+        =(A_N)_{(l,(p,s)),(a,(q,b))}.
+    \end{align}
+    Hence $A_N=P_{E_N}^\dagger\widehat U^{N+2}$.
+    Theorem~\ref{thm:mpug_inverse_truncation_unitary} makes
+    $\widehat U^{N+2}$ unitary, and transport along the coordinate
+    bijection preserves both Gram identities. Therefore
+    $A_N^\dagger A_N=I_{\mathcal H_N}$ and
+    $A_NA_N^\dagger=I_{\mathcal R_N^{\mathrm{raw}}}$.
+\end{proof}
+
+\begin{theorem}[Local cancellation with one phase]
+    \label{thm:mpug_inverse_word_phase_cancellation}
+    \lean{MPOTensor.inverseCompatibleWord_mul_eq_smul_one}
+    \leanok
+    \uses{def:mpug_inverse_word_endpoints, def:mpu_canonical_form_ii,
+        def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
+    form II. Suppose that $T$ is unitary, that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair, and that $T\overline T=\sigma I_D$ for $\sigma\in\C$.
+    For every bulk length $N\geq0$, take the raw endpoint matrices
+    $A_N\colon\mathcal H_N\to\mathcal R_N^{\mathrm{raw}}$ and
+    $B_N\colon\mathcal R_N^{\mathrm{raw}}\to\mathcal H_N$ of
+    Definition~\ref{def:mpug_inverse_word_endpoints}, where
+    $\mathcal H_N=\C^d\otimes(\C^{\Omega_N}\otimes\C^d)$ and
+    $\mathcal R_N^{\mathrm{raw}}=\C^\ell\otimes(\C^{\Omega_N}\otimes\C^\ell)$.
+    Here $\Omega_N$ is the set of length-$N$ physical configurations and
+    $\ell$ is the second-cut rank. Then
+    \begin{align}
+        A_NB_N & =\sigma I_{\mathcal R_N^{\mathrm{raw}}}, \\
+        B_NA_N & =\sigma I_{\mathcal H_N}.
+    \end{align}
+    There is a single phase, independent of $N$; the total source length
+    is $N+2$. These are local endpoint cancellations extending
+    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}, with the phase
+    relation at lines~1559--1562. They do not establish the final
+    truncated-chain sewing identity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_word_unitary, thm:mpug_inverse_word_adjoint,
+        thm:mpug_unitary_entrywise_scalar_phase, def:mpu_canonical_form_ii}
+    Canonical form II gives $D>0$.
+    Theorem~\ref{thm:mpug_unitary_entrywise_scalar_phase} applied to
+    $T\overline T=\sigma I_D$ therefore gives
+    $\sigma\overline\sigma=1$, without any further positivity assumption.
+    Adjointing $A_N=\sigma B_N^\dagger$ yields the reverse relation
+    \begin{align}
+        \sigma A_N^\dagger
+         & =\sigma\overline\sigma B_N=B_N.
+    \end{align}
+    Unitarity of $A_N$ now gives
+    \begin{align}
+        A_NB_N & =\sigma A_NA_N^\dagger
+        =\sigma I_{\mathcal R_N^{\mathrm{raw}}}, \\
+        B_NA_N & =\sigma A_N^\dagger A_N
+        =\sigma I_{\mathcal H_N}.
+    \end{align}
+\end{proof}
+
+
 
 \subsection{Physical closures of the source factors}
 
