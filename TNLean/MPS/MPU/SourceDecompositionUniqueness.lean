@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.SourceCuts
-import TNLean.Algebra.UnitaryKroneckerComparison
-import TNLean.Algebra.FinSumPermutation
 import QICLean.Algebra.MatrixUnitaryBetween
+import TNLean.Algebra.FinSumPermutation
+import TNLean.Algebra.UnitaryKroneckerComparison
+import TNLean.MPS.MPU.SourceCuts
 
 /-!
 # Uniqueness of the raw source decompositions
