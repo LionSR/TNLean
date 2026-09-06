@@ -112,6 +112,7 @@ import TNLean.MPS.MPDO.CZXFusionTensors
 import TNLean.MPS.MPDO.CZXGHZAction
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
 import TNLean.MPS.MPDO.CZXGaussInvariantSubspace
+import TNLean.MPS.MPDO.CZXMovementCoordinates
 import TNLean.MPS.MPDO.CZXSecondTupleCertificate
 import TNLean.MPS.MPDO.CZXSourceFactors
 import TNLean.MPS.MPDO.CZXTensor
