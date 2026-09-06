@@ -1,0 +1,113 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
+
+\title{The Missing Tilde in the Inverse-Compatible Gate Argument}
+\author{}
+\date{2026-09-06}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The omitted distinction}
+
+The proof of the inverse-compatible decomposition in
+Ref.~\cite[lines~5350--5487]{FrancoRubio2025MPUGauging} distinguishes the original first-cut factors $\widetilde X_1,\widetilde Y_1$ from the candidate factors $X_1,Y_1$. The distinction is explicit when the original factors are introduced and when the candidates are defined
+\cite[lines~5391 and 5432--5435]{FrancoRubio2025MPUGauging}. In the unnumbered equation immediately before the gate diagram, however, the source writes
+$Y_1=K(I\otimes T^{\mathsf T})X_2^\dagger$, with no tilde on the left
+\cite[lines~5440--5443]{FrancoRubio2025MPUGauging}. The gate diagram itself labels that factor $\widetilde Y_1$
+\cite[lines~5444--5487]{FrancoRubio2025MPUGauging}.
+The correction is to restore the tilde in that textual equation. The placement of the gauge on its virtual leg must also be respected when translating the diagram into matrices; the formula below fixes that index order explicitly.
+
+\section{The two factors in matrix coordinates}
+
+Let $\mathcal U$ be a tensor with physical dimension $d$ and virtual dimension $D$, and let $T$ be a unitary virtual gauge such that
+$(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$.
+Let $\rho$ be a positive-definite virtual weight. Denote the first and second cut ranks by $r$ and $\ell$, respectively. Write
+$\widetilde X_1,\widetilde Y_1$ for the original first-cut factors and $X_2,Y_2$ for the second-cut factors.
+The rows of $\widetilde X_1$ and columns of $Y_2$ are ordered as $(i,\beta)$; the rows of $X_2$ and columns of $\widetilde Y_1$ are ordered as $(\alpha,j)$, where $i,j$ are physical and $\alpha,\beta$ virtual indices. Their remaining indices have sizes $r$ and $\ell$, respectively. Set $A=I_d\otimes\overline T$ and $B=T^{\mathsf T}\otimes I_d$, where the bar means entrywise conjugation.
+
+In these product-index orders, the candidate factors from
+\papereqref{fbc25}{eq:modif_XY}, used in the proof at
+\cite[line~5432]{FrancoRubio2025MPUGauging}, are
+\begin{align}
+    X_1 & =AY_2^\dagger,  \\
+    Y_1 & =X_2^\dagger B.
+    \label{eq:fbc25_inverse_tilde_candidates}
+\end{align}
+In particular, the candidate $Y_1$ in
+(\ref{eq:fbc25_inverse_tilde_candidates}) contains no comparison matrix $K$.
+The original factors are the normalized source factors constructed using this same weight $\rho$, so $\widetilde X_1^\dagger(I_d\otimes\rho)\widetilde X_1=I_r$.
+Retain the weighted comparison, defined using the weighted left inverse of the original first factor:
+\begin{align}
+    \widetilde L_1               & =\widetilde X_1^\dagger(I_d\otimes\rho),                          \\
+    \widetilde L_1\widetilde X_1 & =I_r,                                                             \\
+    K                            & =\widetilde L_1X_1\colon\mathbb C^\ell\longrightarrow\mathbb C^r.
+    \label{eq:fbc25_inverse_tilde_weighted_comparison}
+\end{align}
+The first-cut comparison gives $X_1=\widetilde X_1K$ and $\widetilde Y_1=KY_1$. Hence the factor required in the gate diagram is
+\begin{align}
+    \widetilde Y_1 & =KY_1=KX_2^\dagger B.
+    \label{eq:fbc25_inverse_tilde_corrected_factor}
+\end{align}
+Equation~(\ref{eq:fbc25_inverse_tilde_corrected_factor}) is the corrected textual assertion in the specified matrix order. It agrees with the distinction already made in
+Ref.~\cite[lines~5432--5435]{FrancoRubio2025MPUGauging}.
+Identifying its left side with the candidate $Y_1$ would erase the distinction between the old and new factors. Nothing in this local correction replaces the weighted $K$ of
+(\ref{eq:fbc25_inverse_tilde_weighted_comparison}) by an unweighted overlap or identifies the inverse comparison with $K^\dagger$.
+
+\section{Where the corrected factor is used}
+
+Adjointing $AY_2^\dagger=\widetilde X_1K$ and using $A^\dagger A=I$ yields
+\begin{align}
+    Y_2 & =K^\dagger\widetilde X_1^\dagger A.
+    \label{eq:fbc25_inverse_tilde_second_factor}
+\end{align}
+Use the original factors to define the two gates of
+\papereqref{fbc25}{eq:uv}, as in the proof diagram
+\cite[lines~5444--5487]{FrancoRubio2025MPUGauging}:
+\begin{align}
+    u_{(a,b),(i,j)} & =\sum_{\beta=0}^{D-1}(Y_2)_{a,(i,\beta)}
+    (\widetilde Y_1)_{b,(\beta,j)},
+    \label{eq:fbc25_inverse_tilde_gate_entries}                             \\
+    v_{(i,j),(b,a)} & =\sum_{\alpha=0}^{D-1}(\widetilde X_1)_{(i,\alpha),b}
+    (X_2)_{(\alpha,j),a}.
+\end{align}
+Here $0\leq a<\ell$, $0\leq b<r$, and $0\leq i,j<d$.
+For fixed $i,j$, put
+$C_{b,\gamma}=\overline{(\widetilde X_1)_{(i,\gamma),b}}$ and
+$E_{\delta,a}=\overline{(X_2)_{(\delta,j),a}}$.
+Substituting
+(\ref{eq:fbc25_inverse_tilde_corrected_factor}) and
+(\ref{eq:fbc25_inverse_tilde_second_factor}) into
+(\ref{eq:fbc25_inverse_tilde_gate_entries}) contracts the virtual gauge factors as $\overline T T$.
+If $T\overline T=\sigma I_D$, unitarity of $T$ also gives $\overline T T=\sigma I_D$. Thus
+\begin{align}
+    u_{(a,b),(i,j)}
+      & =(K^\dagger C\overline T T E K^{\mathsf T})_{a,b}
+    =\sigma(K^\dagger C E K^{\mathsf T})_{a,b},
+    \label{eq:fbc25_inverse_tilde_contraction}            \\
+    u & =\sigma(K^\dagger\otimes K)v^\dagger.
+    \label{eq:fbc25_inverse_tilde_gate_identity}
+\end{align}
+Equation~(\ref{eq:fbc25_inverse_tilde_contraction}) locates the use of the corrected factor: its $K$ supplies the right-hand comparison in the contraction. The row orders in
+(\ref{eq:fbc25_inverse_tilde_gate_identity}) are $(\ell,r)$ for $u$ and $(r,\ell)$ for $v^\dagger$; the Kronecker product maps between them without an additional swap. This is precisely the algebraic gate identity displayed by the source
+\cite[lines~5484--5486]{FrancoRubio2025MPUGauging}.\footnote{The adjointed comparison and gate contraction are recorded in
+    \leanid{MPOTensor.sourceY}\textsubscript{2}\leanid{_eq_inverseCompatibleComparisonK_adjoint} and
+    \leanid{MPOTensor.sourceU_eq_smul_inverseCompatibleComparisonK_kronecker_sourceV_adjoint}, in
+    \doclink{TNLean/MPS/MPU/InverseCompatibleGateIdentity}.}
+
+\section{Conclusion}
+
+This is a local correction of the factor's name, not a new hypothesis or a change of gauge. The correction is justified by the already distinguished factors and by the explicit tilde in the proof diagram. Its elimination criterion is that the factor substituted into the old gate be
+(\ref{eq:fbc25_inverse_tilde_corrected_factor}), rather than the candidate alone, and that the resulting contraction retain both the weighted comparison and the scalar $\sigma$. Equations~(\ref{eq:fbc25_inverse_tilde_contraction}) and
+(\ref{eq:fbc25_inverse_tilde_gate_identity}) meet that criterion.
+No broader error in the decomposition argument is asserted. In particular, the gate identity here does not by itself establish the subsequent unitarity conclusion for $K$ or for the candidate gates.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
