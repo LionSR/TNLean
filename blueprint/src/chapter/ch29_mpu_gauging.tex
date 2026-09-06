@@ -2184,7 +2184,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \leanok
     \discussion{7315}
     \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
-    Let $U$ have positive physical dimension $d$ and bond dimension $D$.
+    Let $U$ have physical dimension $d$ and bond dimension $D$.
     Put $r=\operatorname{rank}M_1(U)$ and $\ell=\operatorname{rank}M_2(U)$.
     Suppose that
     \begin{align}
@@ -2228,7 +2228,11 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \begin{proof}\leanok
     \uses{thm:mpug_factorization_comparison,
         thm:mpug_source_contraction_transport, thm:mpug_reciprocal_unitary_gauges}
-    Since $d>0$ and $u$ is an isometry, $\ell r\geq d^2>0$; hence both
+    If $d=0$, every factor equality has an empty physical row or column
+    index. Thus $\delta=1$ and identity gauges satisfy all four
+    equalities, and $\delta^{-1}\delta=1$.
+    Suppose now that $d>0$. Since $u$ is an isometry,
+    $\ell r\geq d^2>0$; hence both
     source ranks are positive. Theorem~\ref{thm:mpug_factorization_comparison}
     gives $K_i=L_iX_i=\widetilde Y_iR_i$ with
     $X_i=\widetilde X_iK_i$ and $\widetilde Y_i=K_iY_i$.
@@ -6057,7 +6061,8 @@ by the displayed matrices.
     \label{thm:mpug_czx_displayed_source_coordinates}
     \lean{MPOTensor.CZX.displayedSourceFactors_coordinates}
     \leanok
-    \uses{def:mpug_czx_displayed_source_factors}
+    \uses{def:mpug_czx_displayed_source_factors,
+        def:mpug_czx_displayed_factors, def:mpug_czx_displayed_right_inverses}
     For $0\leq k,i<4$ and $\alpha\in\{0,1\}$, the transported factors
     of Definition~\ref{def:mpug_czx_displayed_source_factors} satisfy
     \begin{align}
@@ -6071,7 +6076,8 @@ by the displayed matrices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_czx_displayed_source_factors}
+    \uses{def:mpug_czx_displayed_source_factors,
+        def:mpug_czx_displayed_factors, def:mpug_czx_displayed_right_inverses}
     Evaluate the pullbacks and use $e_r(e_r^{-1}(k))=k$ and
     $e_l(e_l^{-1}(k))=k$.
 \end{proof}
