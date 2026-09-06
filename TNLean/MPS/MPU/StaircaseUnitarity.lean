@@ -154,7 +154,7 @@ theorem IsMPUCanonicalFormII.sourceWL_sourceWR_isUnitaryBetween
   have hv : (SourceFactors.sourceV U S).IsUnitaryBetween :=
     (hU.isMPUSimple_tfae.out 0 3).mp hsimple
   have hrank : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 0 1).mp hsimple
-  let := hU.neZero_phys
+  have := hU.neZero_phys
   have hrl : 0 < r[U] * ℓ[U] := by
     rw [hrank]
     exact Nat.mul_pos (NeZero.pos d) (NeZero.pos d)

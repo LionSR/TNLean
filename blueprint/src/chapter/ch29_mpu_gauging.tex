@@ -1137,8 +1137,8 @@ gauges and scalar relation have been constructed.
 
 \subsection{The second network and unitarity of the staircase gates}
 
-\begin{lemma}[Isometries on the middle two legs]
-    \label{lem:mpug_staircase_middle_isometry}
+\begin{theorem}[Isometries on the middle two legs]
+    \label{thm:mpug_staircase_middle_isometry}
     \lean{MPOTensor.staircaseMiddle_isIsometry}
     \leanok
     \uses{def:mpug_staircase_middle}
@@ -1147,7 +1147,7 @@ gauges and scalar relation have been constructed.
     by $B'\times C'$. If $M^\dagger M=I$, then
     $(M_{23})^\dagger M_{23}=I$, with the middle-leg placement of
     Definition~\ref{def:mpug_staircase_middle}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpug_staircase_middle}
@@ -1169,7 +1169,6 @@ gauges and scalar relation have been constructed.
     \begin{align}
         (w_L\otimes I_d)(I_d\otimes w_L)
          & =(I_{d_l}\otimes v)(u\otimes I_{d_l}).
-        \label{eq:mpug_staircase_second_network}
     \end{align}
     Both sides map $\C^d\otimes\C^d\otimes\C^{d_l}$ to
     $\C^{d_l}\otimes\C^d\otimes\C^d$. Explicitly, for
@@ -1197,8 +1196,8 @@ gauges and scalar relation have been constructed.
     after regrouping the three external indices.
 \end{proof}
 
-\begin{lemma}[Isometry of the first staircase network]
-    \label{lem:mpug_staircase_first_network_isometry}
+\begin{theorem}[Isometry of the first staircase network]
+    \label{thm:mpug_staircase_first_network_isometry}
     \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_isIsometry}
     \leanok
     \uses{def:mpug_staircase_gates, def:mpu_source_uv}
@@ -1208,18 +1207,18 @@ gauges and scalar relation have been constructed.
     \begin{align}
         (w_L\otimes w_R)^\dagger(w_L\otimes w_R) & =I.
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpug_staircase_network_cancelled,
-        lem:mpug_staircase_middle_isometry}
+        thm:mpug_staircase_middle_isometry}
     Theorem~\ref{thm:mpug_staircase_network_cancelled} expresses
     $w_L\otimes w_R$ as $v_{23}(u\otimes u)(u^\dagger)_{23}$.
     Each factor is an isometry, so their product is an isometry.
 \end{proof}
 
-\begin{lemma}[Isometry of the second staircase network]
-    \label{lem:mpug_staircase_second_network_isometry}
+\begin{theorem}[Isometry of the second staircase network]
+    \label{thm:mpug_staircase_second_network_isometry}
     \lean{MPOTensor.SourceFactors.sourceWL_second_network_isIsometry}
     \leanok
     \uses{def:mpug_staircase_gates, def:mpu_source_uv}
@@ -1228,7 +1227,7 @@ gauges and scalar relation have been constructed.
     $d_l$. If $u^\dagger u=I$ and $v^\dagger v=I$, then
     $K=(w_L\otimes I_d)(I_d\otimes w_L)$ satisfies $K^\dagger K=I$,
     with the three-leg associativity identifications understood.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpug_staircase_second_network}
@@ -1238,8 +1237,8 @@ gauges and scalar relation have been constructed.
     preserve isometries.
 \end{proof}
 
-\begin{corollary}[Unitary staircase gates]
-    \label{cor:mpug_staircase_gates_unitary}
+\begin{theorem}[Unitary staircase gates]
+    \label{thm:mpug_staircase_gates_unitary}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceWL_sourceWR_isUnitaryBetween}
     \leanok
     \discussion{7314}
@@ -1255,24 +1254,24 @@ gauges and scalar relation have been constructed.
     \end{align}
     This is part~(a) of the staircase-gate corollary in
     \cite[lines~811--1012]{FrancoRubio2025MPUGauging}.
-\end{corollary}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{ThmFund1, lem:mpug_staircase_first_network_isometry,
+    \uses{ThmFund1, thm:mpug_staircase_first_network_isometry,
         thm:mpug_kronecker_identity_factors,
-        lem:mpug_staircase_second_network_isometry}
+        thm:mpug_staircase_second_network_isometry}
     Theorem~\ref{ThmFund1} gives unitary $u,v$ and $d_rd_l=d^2>0$.
-    Lemma~\ref{lem:mpug_staircase_first_network_isometry} gives
+    Theorem~\ref{thm:mpug_staircase_first_network_isometry} gives
     \begin{align}
         (w_L^\dagger w_L)\otimes(w_R^\dagger w_R) & =I.
     \end{align}
     By Theorem~\ref{thm:mpug_kronecker_identity_factors}, the two Gram
     matrices are $\delta I$ and $\delta^{-1}I$ for a nonzero scalar
-    $\delta$. Positivity of the first Gram matrix makes $\delta>0$.
+    $\delta$. Positivity of the first Gram matrix makes $\delta\geq0$.
     Each of the two left-gate layers in
     $K=(w_L\otimes I_d)(I_d\otimes w_L)$ has Gram matrix $\delta I$,
     so $K^\dagger K=\delta^2 I$. By
-    Lemma~\ref{lem:mpug_staircase_second_network_isometry}, this equals
+    Theorem~\ref{thm:mpug_staircase_second_network_isometry}, this equals
     $I$. Thus $\delta^2=1$, equivalently $\delta^{-2}=1$, and positivity
     gives $\delta=1$. Both gates are isometries between spaces of equal
     dimension, hence unitary.
@@ -1282,21 +1281,21 @@ gauges and scalar relation have been constructed.
 
 \begin{definition}[Truncated symmetry]
     \label{def:mpug_truncated_symmetry}
-    \lean{MPOTensor.SourceFactors.truncatedSymmetry}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints,
+        MPOTensor.SourceFactors.truncatedSymmetry}
     \leanok
     \discussion{7319}
-    \uses{def:mpu_weighted_source_factors, def:mpo_eval_word}
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
+        def:mpo_eval_word, def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
-    dimension $D$. Let $\rho$ be a complex matrix on the virtual space,
-    and let $X_1,Y_1,Z_1,X_2,Y_2,Z_2$ be source factors with
-    $M_1=X_1Y_1$, $M_2=X_2Y_2$,
-    $X_1^\dagger(I_d\otimes\rho)X_1=I_{d_r}$,
-    $X_2^\dagger X_2=I_{d_l}$, and $Y_iZ_i=I$ for $i=1,2$,
-    where $d_l,d_r$ are the source-cut ranks.
+    dimension $D$, and let $d_l=\operatorname{rank}M_2$ and
+    $d_r=\operatorname{rank}M_1$. Choose arbitrary complex endpoint matrices
+    $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$ and
+    $Y_1\colon\C^D\otimes\C^d\to\C^{d_r}$.
     For $N\geq0$ and physical words $\sigma,\tau$ of length $N$, put
     \begin{align}
         \mathcal U^{\sigma,\tau}
-         & =\mathcal U^{\sigma_1,\tau_1}\cdots\mathcal U^{\sigma_N,\tau_N}, \\
+         & =\mathcal U^{\sigma_0,\tau_0}\cdots\mathcal U^{\sigma_{N-1},\tau_{N-1}}, \\
         (U^N)_{(l,\sigma,r),(a,\tau,b)}
          & =\sum_{\alpha,\beta=0}^{D-1}
         (Y_2)_{l,(a,\alpha)}
@@ -1314,24 +1313,32 @@ gauges and scalar relation have been constructed.
     This is the endpoint contraction of
     \cite[lines~2062--2100]{FrancoRubio2025MPUGauging}, with the group
     label suppressed. The superscript counts the $N$ bulk tensors only,
-    not the two endpoint triangles. No group representation or unitarity
-    assertion is included in this definition.
+    not the two endpoint triangles. No cut factorization is needed.
+    For the normalized source factors of
+    Definition~\ref{def:mpu_weighted_source_factors}, choosing their
+    matrices $Y_2,Y_1$ recovers the source-factor endpoint contraction.
+    No group representation or unitarity assertion is included in this
+    definition; arbitrary endpoint matrices need not give a unitary map.
 \end{definition}
 
 \begin{theorem}[The zero-bulk contraction]
     \label{thm:mpug_truncated_symmetry_zero}
-    \lean{MPOTensor.SourceFactors.truncatedSymmetry_zero}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints_zero,
+        MPOTensor.SourceFactors.truncatedSymmetry_zero}
     \leanok
     \uses{def:mpug_truncated_symmetry, def:mpu_source_uv}
-    For the source factors of Definition~\ref{def:mpug_truncated_symmetry},
-    the endpoint contraction with no bulk sites is the source gate $u$.
-    More precisely, for endpoint indices $l,r,a,b$ and the empty words
-    $\varnothing$,
+    Let $\mathcal U$ and the arbitrary endpoint matrices $Y_2,Y_1$ have
+    the dimensions in Definition~\ref{def:mpug_truncated_symmetry}.
+    For endpoint indices $l,r,a,b$ and the empty words $\varnothing$,
     \begin{align}
         (U^0)_{(l,\varnothing,r),(a,\varnothing,b)}
-         & =u_{(l,r),(a,b)}.
+         & =\sum_{\alpha=0}^{D-1}
+        (Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}.
         \label{eq:mpug_truncated_symmetry_zero}
     \end{align}
+    This requires no cut factorization. For normalized source factors,
+    the right-hand side is $u_{(l,r),(a,b)}$, with $u$ as in
+    Definition~\ref{def:mpu_source_uv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpug_truncated_symmetry, def:mpo_eval_word, def:mpu_source_uv}
@@ -1343,22 +1350,105 @@ gauges and scalar relation have been constructed.
         (U^0)_{(l,\varnothing,r),(a,\varnothing,b)}
          & =\sum_{\alpha,\beta=0}^{D-1}(Y_2)_{l,(a,\alpha)}
         \delta_{\alpha\beta}(Y_1)_{r,(\beta,b)}
-        =\sum_{\alpha=0}^{D-1}(Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}
-        =u_{(l,r),(a,b)}.
+        =\sum_{\alpha=0}^{D-1}(Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}.
     \end{align}
+    For normalized source factors this is the defining contraction of $u$.
 \end{proof}
 
-\begin{theorem}[Two-sided growth by the movement operators]
+\begin{theorem}[Left growth from the second cut]
+    \label{thm:mpug_truncated_symmetry_left_growth}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints_cons,
+        MPOTensor.SourceFactors.truncatedSymmetry_cons}
+    \leanok
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
+        def:mpug_staircase_gates}
+    Let $\mathcal U$ be an MPO tensor with physical dimension $d$ and bond
+    dimension $D$, and put $d_l=\operatorname{rank}M_2$ and
+    $d_r=\operatorname{rank}M_1$. Let
+    $Y_1\colon\C^D\otimes\C^d\to\C^{d_r}$,
+    $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$, and
+    $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$ be complex matrices
+    satisfying only $M_2=X_2Y_2$, that is,
+    \begin{align*}
+        \mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
+    \end{align*}
+    Define the crossed contraction
+    \begin{align*}
+        (w_L)_{(l,i),(a,t)}
+         & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}.
+    \end{align*}
+    For $N\geq0$, physical words $\sigma,\tau$ of length $N$,
+    source indices $l,r$, and physical indices $i,a,b,c$,
+    \begin{align}
+        (U^{N+1})_{(l,i\sigma,r),(a,b\tau,c)}
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
+        (U^N)_{(t,\sigma,r),(b,\tau,c)}.
+    \end{align}
+    The right endpoint $Y_1$ is arbitrary and unchanged; no first-cut
+    factorization is assumed. For normalized source factors, $w_L$ is
+    the movement operator of Definition~\ref{def:mpug_staircase_gates}.
+    The identity is the left-end factorization step of
+    \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}, using the second
+    decomposition in \cite[lines~479--530]{Cirac2017MPU}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
+        def:mpo_eval_word}
+    The second cut factorization gives, for each virtual index $\alpha$,
+    \begin{align*}
+        \sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}
+        \mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_{\gamma=0}^{D-1}\sum_{t=0}^{d_l-1}
+        (Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}
+        (Y_2)_{t,(b,\alpha)}                                           \\
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}(Y_2)_{t,(b,\alpha)}.
+    \end{align*}
+    Expand $\mathcal U^{i\sigma,b\tau}
+        =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}$ and substitute this equality
+    into the endpoint contraction. Regrouping the finite sums yields
+    \begin{align*}
+        (U^{N+1})_{(l,i\sigma,r),(a,b\tau,c)}
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
+        \sum_{\alpha,\beta=0}^{D-1}(Y_2)_{t,(b,\alpha)}
+        (\mathcal U^{\sigma,\tau})_{\alpha,\beta}(Y_1)_{r,(\beta,c)} \\
+         & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
+        (U^N)_{(t,\sigma,r),(b,\tau,c)}.
+    \end{align*}
+\end{proof}
+
+\begin{theorem}[Two-sided movement-operator growth]
     \label{thm:mpug_truncated_symmetry_growth}
-    \lean{MPOTensor.SourceFactors.truncatedSymmetry_cons_snoc}
+    \lean{MPOTensor.truncatedSymmetryOfEndpoints_cons_snoc,
+        MPOTensor.SourceFactors.truncatedSymmetry_cons_snoc}
     \leanok
     \discussion{7319}
-    \uses{def:mpug_truncated_symmetry, def:mpug_staircase_gates}
-    Let $\mathcal U$ have source factors as in
-    Definition~\ref{def:mpug_truncated_symmetry}, and construct $U^N,w_L,w_R$
-    from these same factors. For $N\geq0$, physical words $\sigma,\tau$
-    of length $N$, source indices $l,r$, and physical indices
-    $i,j,a,b,c,e$, one has
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two, def:mpug_staircase_gates}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$, with $d_l=\operatorname{rank}M_2$ and
+    $d_r=\operatorname{rank}M_1$. Let
+    $X_1\colon\C^{d_r}\to\C^d\otimes\C^D$,
+    $Y_1\colon\C^D\otimes\C^d\to\C^{d_r}$,
+    $X_2\colon\C^{d_l}\to\C^D\otimes\C^d$, and
+    $Y_2\colon\C^d\otimes\C^D\to\C^{d_l}$ be complex matrices
+    satisfying only $M_1=X_1Y_1$ and $M_2=X_2Y_2$. In coordinates,
+    \begin{align*}
+        \mathcal U^{j,c}_{\beta,\delta}
+         & =\sum_{s=0}^{d_r-1}(X_1)_{(j,\delta),s}(Y_1)_{s,(\beta,c)},  \\
+        \mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
+    \end{align*}
+    Form $U^N$ using the endpoints $Y_2,Y_1$, and define the crossed
+    contractions
+    \begin{align*}
+        (w_L)_{(l,i),(a,t)}
+         & =\sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}(X_2)_{(\gamma,i),t}, \\
+        (w_R)_{(j,r),(s,e)}
+         & =\sum_{\delta=0}^{D-1}(X_1)_{(j,\delta),s}(Y_1)_{r,(\delta,e)}.
+    \end{align*}
+    For $N\geq0$, physical words $\sigma,\tau$ of length $N$, source
+    indices $l,r$, and physical indices $i,j,a,b,c,e$, one has
     \begin{align}
         (U^{N+2})_{(l,i\sigma j,r),(a,b\tau c,e)}
          & =\sum_{t=0}^{d_l-1}\sum_{s=0}^{d_r-1}
@@ -1370,14 +1460,17 @@ gauges and scalar relation have been constructed.
     Concatenation $i\sigma j$ inserts $i$ before the word and $j$ after
     it. This is the source-factorization identity in the growth diagram
     of \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}. It adds one
-    bulk site at each end. No simplicity or unitarity assumption on
-    $\mathcal U$ is needed.
-    % Partial coverage of #7319: endpoint contraction, zero bulk, and the
-    % first two-sided growth identity only. No all-length unitarity,
-    % finite-group specialization, or complementary movement is asserted.
+    bulk site at each end, using only the two decompositions in
+    \cite[lines~479--530]{Cirac2017MPU}. For normalized source factors,
+    the crossed contractions are precisely the movement operators of
+    Definition~\ref{def:mpug_staircase_gates}, so the same identity holds
+    for the source-factor endpoint contraction. No simplicity or unitarity
+    assumption on $\mathcal U$ is needed. These algebraic identities do
+    not assert unitarity for arbitrary factors, the finite-group physical
+    specialization, or the complementary finite-chain movement relation.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpu_source_factorization_entries, def:mpug_staircase_gates,
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
         def:mpug_truncated_symmetry, def:mpo_eval_word}
     Expand the enlarged bulk product as
     $\mathcal U^{i\sigma j,b\tau c}
@@ -1398,8 +1491,8 @@ gauges and scalar relation have been constructed.
 
 \subsection{Physical closures of the source factors}
 
-\begin{lemma}[The canonical one-letter physical contraction]
-    \label{lem:mpug_one_letter_physical_contraction}
+\begin{theorem}[The canonical one-letter physical contraction]
+    \label{thm:mpug_one_letter_physical_contraction}
     \lean{MPOTensor.IsMPUCanonicalFormII.oneLetter_physical_contraction}
     \leanok
     \discussion{7314}
@@ -1416,20 +1509,31 @@ gauges and scalar relation have been constructed.
     This is the one-letter diagram in the proof of part~(b) of the
     staircase-gate corollary in
     \cite[lines~1013--1030]{FrancoRubio2025MPUGauging}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpug_simple_canonical_boundary_contractions,
         thm:mpu_all_later_simple_blockings}
-    The canonical two-letter insertion identity of
     Theorem~\ref{thm:mpug_simple_canonical_boundary_contractions}
-    implies the one-letter physical identity with the same boundaries
-    $I$ and $\rho$. Expanding its double-layer coefficient gives the displayed
-    sum; the right boundary contributes $\rho_{\beta\alpha}$.
+    supplies the two-letter insertion identity with the recorded canonical
+    boundaries $(\Phi|_{(a,b)}=\delta_{a,b}$ and
+    $|\rho)_{(a,b)}=\rho_{ba}$. Applying
+    Theorem~\ref{thm:mpu_all_later_simple_blockings} to this fixed pair
+    gives the one-letter contraction. Expanding its coefficient yields
+    \begin{align}
+        W^{pq}W^{kl} & =W^{pq}|\rho)(\Phi|W^{kl},                     \\
+        (\Phi|W^{pq}|\rho)
+                     & =\sum_{x,\alpha,\beta=0}^{D-1}\sum_{z=0}^{d-1}
+        \overline{\mathcal U^{z,p}_{x\alpha}}
+        \mathcal U^{z,q}_{x\beta}\rho_{\beta\alpha}
+        =\delta_{p,q}.
+    \end{align}
+    The left boundary identifies the two bond indices $x$, while the
+    right boundary contributes $\rho_{\beta\alpha}$.
 \end{proof}
 
-\begin{corollary}[Physical closures of the two source factors]
-    \label{cor:mpug_source_y_physical_contractions}
+\begin{theorem}[Physical closures of the two source factors]
+    \label{thm:mpug_source_y_physical_contractions}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_physical_contraction,
         MPOTensor.IsMPUCanonicalFormII.sourceY₁_physical_contraction}
     \leanok
@@ -1454,24 +1558,39 @@ gauges and scalar relation have been constructed.
     on the source-cut spaces. They are the two diagrams of part~(b) of
     the staircase-gate corollary in
     \cite[lines~869--917]{FrancoRubio2025MPUGauging}.
-    % Together with cor:mpug_staircase_gates_unitary this establishes
+    % Together with thm:mpug_staircase_gates_unitary this establishes
     % cor:mpu for the source factors of the canonical-form-II presentation.
     % No adjoint-simplicity hypothesis or subsequent eq:MPUnice3/4
     % source-factor constants are asserted here.
-\end{corollary}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpug_one_letter_physical_contraction,
+    \uses{thm:mpug_one_letter_physical_contraction,
         thm:mpu_source_y_two_rotated_gram,
         thm:mpu_source_v_four_u_expansions}
-    The rotated second-cut Gram identity rewrites the first sum as the
-    one-letter contraction of
-    Lemma~\ref{lem:mpug_one_letter_physical_contraction}. The weighted
-    first-cut Gram identity rewrites the second sum in the same way;
-    diagonality of $\rho$ gives $\rho_{\alpha\beta}=\rho_{\beta\alpha}$.
-    Both sums therefore equal $\delta_{p,q}$. These Gram identities cancel
-    the $X_2$ and $X_1$ factors using their respective normalizations, as
-    in \cite[lines~1030--1050]{FrancoRubio2025MPUGauging}.
+    Theorem~\ref{thm:mpu_source_y_two_rotated_gram} at $a=\alpha,b=\beta$
+    gives
+    \begin{align}
+        \sum_{l=0}^{d_l-1}\overline{(Y_2)_{l,(p,\alpha)}}(Y_2)_{l,(q,\beta)}
+         & =\sum_{x=0}^{D-1}\sum_{z=0}^{d-1}
+        \overline{\mathcal U^{z,p}_{x\alpha}}\mathcal U^{z,q}_{x\beta}.
+    \end{align}
+    Multiplying by $\rho_{\beta\alpha}$ and summing over $\alpha,\beta$
+    rewrites the first sum as the one-letter contraction of
+    Theorem~\ref{thm:mpug_one_letter_physical_contraction}. Theorem~\ref{thm:mpu_source_v_four_u_expansions}
+    at the diagonal case $a_1=b_1=\alpha$, $p_1=p$, $q_1=q$ gives
+    \begin{align}
+        \sum_{r=0}^{d_r-1}\overline{(Y_1)_{r,(\alpha,p)}}(Y_1)_{r,(\alpha,q)}
+         & =\sum_{\beta,\gamma=0}^{D-1}\sum_{z=0}^{d-1}
+        \overline{\mathcal U^{z,p}_{\alpha\beta}}\rho_{\beta\gamma}
+        \mathcal U^{z,q}_{\alpha\gamma}.
+    \end{align}
+    Summing over $\alpha$ rewrites the second sum in the same way, after
+    renaming $(\alpha,\beta,\gamma)$ to $(x,\alpha,\beta)$; diagonality of
+    $\rho$ gives $\rho_{\alpha\beta}=\rho_{\beta\alpha}$. Both sums
+    therefore equal $\delta_{p,q}$. These Gram identities cancel the $X_2$
+    and $X_1$ factors using their respective normalizations, as in
+    \cite[lines~1030--1050]{FrancoRubio2025MPUGauging}.
 \end{proof}
 
 \section{Scalar three-cocycles and fusion-tensor gauge freedom}
@@ -1619,14 +1738,21 @@ Definition~\ref{def:mpug_group_representation}.
 \begin{proof}\leanok
     \uses{thm:mpu_physical_adjoint_identities,
         def:mpu_physical_adjoint_cfii_data,
-        thm:mpu_physical_adjoint_full_support,
         thm:mpu_physical_adjoint_normalized_flattening,
         thm:cpsv_map_star_transfer_fixed_point}
     Physical adjunction preserves periodic unitarity and transports the
-    canonical blocks without changing their dimensions. Since $\rho$ is
-    real and diagonal, conjugating the fixed-point equation leaves $\rho$
-    unchanged. The physical-index permutation does not change the transfer
-    map, so the transported data have the same fixed matrix.
+    canonical blocks without changing their dimensions. Writing
+    $\mathcal E_{\mathcal U}$ for the transfer map of $\mathcal U$, the
+    transported fixed-point equation is
+    \begin{align}
+        \mathcal E_{\mathcal U^\dagger}(\rho)
+         & =\overline{\mathcal E_{\mathcal U}(\overline\rho)}
+        =\overline{\mathcal E_{\mathcal U}(\rho)}
+        =\overline\rho=\rho,
+    \end{align}
+    using $\overline\rho=\rho$ and $\mathcal E_{\mathcal U}(\rho)=\rho$. The
+    physical-index permutation does not change the transfer map, so the
+    transported data have the same fixed matrix.
 \end{proof}
 
 \begin{theorem}[Canonical boundary contractions]
@@ -1793,8 +1919,39 @@ Definition~\ref{def:mpug_group_representation}.
 
 \subsection{Normalization of the first source factor}
 
-\begin{lemma}[The first cut of the adjoint-simple contraction]
-    \label{lem:mpug_first_cut_adjoint_contraction}
+\begin{theorem}[The raw first-cut contraction]
+    \label{thm:mpug_raw_first_cut_contraction}
+    \lean{MPOTensor.sourceCutM₁_adjointSimpleContraction_raw}
+    \leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
+        def:mpug_adjoint_simple_contraction}
+    For an arbitrary tensor $A$ of physical dimension $d$ and bond
+    dimension $D$, and an arbitrary $D\times D$ matrix $\rho$, put
+    $M=M_1(A)$ and $W=I_d\otimes\rho$. Then
+    \begin{align}
+        M_1(s(A,\rho)) & =MM^\dagger W^{\mathsf T}M.
+        \label{eq:mpug_raw_first_cut_contraction}
+    \end{align}
+    No positivity, canonical-form, or simplicity hypothesis is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
+        def:mpug_adjoint_simple_contraction}
+    In the first-cut coordinates, multiplication and the physical
+    Kronecker delta in $W^{\mathsf T}$ give
+    \begin{align}
+        (MM^\dagger W^{\mathsf T}M)_{(i,b),(a,j)}
+         & =\sum_{p,q=0}^{d-1}\sum_{x,r,t=0}^{D-1}
+        A^{i,p}_{xb}\,\overline{A^{q,p}_{xr}}\,
+        A^{q,j}_{at}\,\rho_{tr}                    \\
+         & =s(A,\rho)^{i,j}_{ab}.
+    \end{align}
+    The transpose preserves the boundary entry $\rho_{tr}$ in the
+    defining contraction.
+\end{proof}
+
+\begin{theorem}[The first cut of the adjoint-simple contraction]
+    \label{thm:mpug_first_cut_adjoint_contraction}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction}
     \leanok
     \discussion{7317}
@@ -1812,21 +1969,23 @@ Definition~\ref{def:mpug_group_representation}.
     This factorization requires no simplicity assumption. It is the
     source-factor expansion in
     \cite[lines~1326--1374]{FrancoRubio2025MPUGauging}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_factorizations,
-        thm:mpu_source_v_four_u_expansions,
-        def:mpug_adjoint_simple_contraction}
-    Replace $X_1Y_1$ by $M_1(\mathcal U)$ and expand the remaining Gram
-    factor with the weighted first-cut identity of
-    Theorem~\ref{thm:mpu_source_v_four_u_expansions}. Reorder the finite
-    sums. Since $\rho$ is diagonal, $\rho_{tr}=\rho_{rt}$, and the result
-    is exactly the raw contraction defining $M_1(s)$.
+    \uses{thm:mpug_raw_first_cut_contraction,
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    Put $W=I_d\otimes\rho$. Diagonality gives $W^{\mathsf T}=W$.
+    The cut factorization and weighted isometry then yield
+    \begin{align}
+        M_1(s)
+         & = (X_1Y_1)(X_1Y_1)^\dagger W(X_1Y_1)       \\
+         & =X_1(Y_1Y_1^\dagger)(X_1^\dagger W X_1)Y_1 \\
+         & =X_1(Y_1Y_1^\dagger)Y_1.
+    \end{align}
 \end{proof}
 
-\begin{lemma}[The first source Gram matrix is scalar]
-    \label{lem:mpug_source_y_one_scalar_gram}
+\begin{theorem}[The first source Gram matrix is scalar]
+    \label{thm:mpug_source_y_one_scalar_gram}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose_eq_smul}
     \leanok
     \uses{def:mpu_canonical_form_ii, def:mpu_simple,
@@ -1841,17 +2000,17 @@ Definition~\ref{def:mpug_group_representation}.
     \end{align}
     This is the scalar Gram identity in
     \cite[lines~1375--1397]{FrancoRubio2025MPUGauging}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpug_adjoint_simple_scalar,
-        lem:mpug_first_cut_adjoint_contraction,
+        thm:mpug_first_cut_adjoint_contraction,
         thm:mpu_source_factor_normalizations,
         thm:mpu_source_factor_right_inverses,
         thm:mpu_source_factorizations}
     By Theorem~\ref{thm:mpug_adjoint_simple_scalar}, $s=\delta\mathcal U$.
     Applying the first cut and
-    Lemma~\ref{lem:mpug_first_cut_adjoint_contraction} gives
+    Theorem~\ref{thm:mpug_first_cut_adjoint_contraction} gives
     \begin{align}
         X_1(Y_1Y_1^\dagger)Y_1 & =\delta X_1Y_1.
     \end{align}
@@ -1861,8 +2020,8 @@ Definition~\ref{def:mpug_group_representation}.
     cancel the two outer factors.
 \end{proof}
 
-\begin{lemma}[Trace of the first source Gram matrix]
-    \label{lem:mpug_source_y_one_gram_trace}
+\begin{theorem}[Trace of the first source Gram matrix]
+    \label{thm:mpug_source_y_one_gram_trace}
     \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₁_mul_conjTranspose}
     \leanok
     \uses{def:mpu_canonical_form_ii, def:mpu_simple,
@@ -1876,10 +2035,10 @@ Definition~\ref{def:mpug_group_representation}.
     This is the physical-trace calculation used in
     \cite[line~1398]{FrancoRubio2025MPUGauging}. It does not require
     simplicity of $\mathcal U^\dagger$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:mpug_source_y_physical_contractions}
+    \uses{thm:mpug_source_y_physical_contractions}
     Cyclic invariance gives
     $\operatorname{tr}(Y_1Y_1^\dagger)=\operatorname{tr}(Y_1^\dagger Y_1)$.
     Grouping the latter sum by its physical index gives
@@ -1889,7 +2048,7 @@ Definition~\ref{def:mpug_group_representation}.
         \overline{(Y_1)_{r,(\alpha,p)}}(Y_1)_{r,(\alpha,p)}
         =\sum_{p=0}^{d-1}1=d
     \end{align}
-    by Corollary~\ref{cor:mpug_source_y_physical_contractions}.
+    by Theorem~\ref{thm:mpug_source_y_physical_contractions}.
 \end{proof}
 
 \begin{theorem}[Normalization of the first source Gram matrix]
@@ -1914,11 +2073,11 @@ Definition~\ref{def:mpug_group_representation}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpug_source_y_one_scalar_gram,
-        lem:mpug_source_y_one_gram_trace}
+    \uses{thm:mpug_source_y_one_scalar_gram,
+        thm:mpug_source_y_one_gram_trace}
     Write $Y_1Y_1^\dagger=\delta I_{d_r}$ using
-    Lemma~\ref{lem:mpug_source_y_one_scalar_gram}. Taking traces and using
-    Lemma~\ref{lem:mpug_source_y_one_gram_trace} gives $\delta d_r=d$.
+    Theorem~\ref{thm:mpug_source_y_one_scalar_gram}. Taking traces and using
+    Theorem~\ref{thm:mpug_source_y_one_gram_trace} gives $\delta d_r=d$.
     Canonical form II gives $d>0$, so $d_r\ne0$. Dividing gives
     $\delta=d/d_r$, as in
     \cite[line~1398]{FrancoRubio2025MPUGauging}.
@@ -1926,8 +2085,8 @@ Definition~\ref{def:mpug_group_representation}.
 
 \subsection{Normalization of the weighted second source factor}
 
-\begin{lemma}[The first cut of the reflected contraction]
-    \label{lem:mpug_adjoint_cut_second_gram}
+\begin{theorem}[The first cut of the reflected contraction]
+    \label{thm:mpug_adjoint_cut_second_gram}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction_physicalAdjoint}
     \leanok
     \discussion{7317}
@@ -1946,13 +2105,13 @@ Definition~\ref{def:mpug_group_representation}.
     the normalization proposition in
     \cite[lines~1064--1119 and 1398]{FrancoRubio2025MPUGauging}.
     No simplicity hypothesis is needed for this factorization.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_adjoint_simple_contraction,
+    \uses{thm:mpug_raw_first_cut_contraction,
         thm:mpu_physical_adjoint_source_cuts,
-        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations}
-    Expanding the raw contraction of any tensor $A$ gives
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    Theorem~\ref{thm:mpug_raw_first_cut_contraction} gives
     \begin{align}
         M_1(s(A,\rho)) & =M_1(A)M_1(A)^\dagger W^{\mathsf T}M_1(A).
     \end{align}
@@ -1963,8 +2122,8 @@ Definition~\ref{def:mpug_group_representation}.
     $\mathcal U$, not newly chosen factors of its adjoint.
 \end{proof}
 
-\begin{lemma}[The weighted second source Gram matrix is scalar]
-    \label{lem:mpug_source_y_two_scalar_gram}
+\begin{theorem}[The weighted second source Gram matrix is scalar]
+    \label{thm:mpug_source_y_two_scalar_gram}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose_eq_smul}
     \leanok
     \uses{def:mpu_canonical_form_ii, def:mpu_simple,
@@ -1978,12 +2137,12 @@ Definition~\ref{def:mpug_group_representation}.
     \begin{align}
         Y_2(I_d\otimes\rho)Y_2^\dagger & =\varepsilon I_{d_l}.
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpug_adjoint_canonical_boundaries,
         thm:mpug_adjoint_simple_scalar, thm:mpu_physical_adjoint_identities,
-        lem:mpug_adjoint_cut_second_gram,
+        thm:mpug_adjoint_cut_second_gram,
         thm:mpu_physical_adjoint_source_cuts,
         thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
         thm:mpu_source_factor_right_inverses}
@@ -1992,7 +2151,7 @@ Definition~\ref{def:mpug_group_representation}.
     $s_\dagger=\varepsilon\mathcal U^\dagger$, since physical adjunction
     is involutive and both required simplicity hypotheses hold.
     Taking the first cut and applying
-    Lemma~\ref{lem:mpug_adjoint_cut_second_gram} gives
+    Theorem~\ref{thm:mpug_adjoint_cut_second_gram} gives
     \begin{align}
         Y_2^\dagger(Y_2(I_d\otimes\rho)Y_2^\dagger)X_2^\dagger
          & =\varepsilon Y_2^\dagger X_2^\dagger.
@@ -2003,8 +2162,8 @@ Definition~\ref{def:mpug_group_representation}.
     identified with the scalar for the original tensor.
 \end{proof}
 
-\begin{lemma}[Trace of the weighted second source Gram matrix]
-    \label{lem:mpug_source_y_two_gram_trace}
+\begin{theorem}[Trace of the weighted second source Gram matrix]
+    \label{thm:mpug_source_y_two_gram_trace}
     \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₂_weighted_mul_conjTranspose}
     \leanok
     \uses{def:mpu_canonical_form_ii, def:mpu_simple,
@@ -2015,16 +2174,21 @@ Definition~\ref{def:mpug_group_representation}.
     \begin{align}
         \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr) & =d.
     \end{align}
+    This is the physical-trace calculation used, by analogy with the
+    first identity, in \cite[line~1398]{FrancoRubio2025MPUGauging}.
     Simplicity of $\mathcal U^\dagger$ is not required.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:mpug_source_y_physical_contractions, def:mpu_source_weight}
-    Move the last factor to the front inside the trace and expand
-    $I_d\otimes\rho$. Grouping by the physical index gives the sum of
-    the diagonal physical closures from
-    Corollary~\ref{cor:mpug_source_y_physical_contractions}. Each of the
-    $d$ terms is one.
+    \uses{thm:mpug_source_y_physical_contractions, def:mpu_source_weight}
+    Cyclic invariance and expanding $I_d\otimes\rho$ give
+    \begin{align}
+        \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr)
+         & =\sum_{p=0}^{d-1}\sum_{x,y=0}^{D-1}\sum_{l=0}^{d_l-1}
+        \overline{(Y_2)_{l,(p,y)}}(Y_2)_{l,(p,x)}\rho_{xy}
+        =\sum_{p=0}^{d-1}1=d
+    \end{align}
+    by Theorem~\ref{thm:mpug_source_y_physical_contractions} at $q=p$.
 \end{proof}
 
 \begin{theorem}[Normalization of the weighted second source Gram matrix]
@@ -2050,11 +2214,11 @@ Definition~\ref{def:mpug_group_representation}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpug_source_y_two_scalar_gram,
-        lem:mpug_source_y_two_gram_trace}
+    \uses{thm:mpug_source_y_two_scalar_gram,
+        thm:mpug_source_y_two_gram_trace}
     Write the Gram matrix as $\varepsilon I_{d_l}$ using
-    Lemma~\ref{lem:mpug_source_y_two_scalar_gram}. Its trace is $d$ by
-    Lemma~\ref{lem:mpug_source_y_two_gram_trace}, so $\varepsilon d_l=d$.
+    Theorem~\ref{thm:mpug_source_y_two_scalar_gram}. Its trace is $d$ by
+    Theorem~\ref{thm:mpug_source_y_two_gram_trace}, so $\varepsilon d_l=d$.
     As $d>0$, the rank $d_l$ is nonzero, giving $\varepsilon=d/d_l$.
     This is the trace argument indicated in
     \cite[line~1398]{FrancoRubio2025MPUGauging}.
@@ -2062,8 +2226,8 @@ Definition~\ref{def:mpug_group_representation}.
 
 \subsection{Physical normalizations of the two source X factors}
 
-\begin{lemma}[The canonical one-letter output contraction]
-    \label{lem:mpug_one_letter_output_contraction}
+\begin{theorem}[The canonical one-letter output contraction]
+    \label{thm:mpug_one_letter_output_contraction}
     \lean{MPOTensor.IsMPUCanonicalFormII.oneLetter_output_contraction}
     \leanok
     \discussion{7317}
@@ -2082,12 +2246,12 @@ Definition~\ref{def:mpug_group_representation}.
     reflected one-letter contraction used for the physical source-factor
     normalizations in \cite[lines~1120--1162 and 1398]{FrancoRubio2025MPUGauging}.
     Simplicity of $\mathcal U$ is not required for this contraction.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpug_adjoint_canonical_boundaries,
-        lem:mpug_one_letter_physical_contraction, def:mpdo_physical_adjoint}
-    Apply Lemma~\ref{lem:mpug_one_letter_physical_contraction} to
+        thm:mpug_one_letter_physical_contraction, def:mpdo_physical_adjoint}
+    Apply Theorem~\ref{thm:mpug_one_letter_physical_contraction} to
     $\mathcal U^\dagger$ with its canonical presentation carrying the
     same $\rho$. Its letters are
     $(\mathcal U^\dagger)^{p,i}_{x\alpha}=\overline{\mathcal U^{i,p}_{x\alpha}}$.
@@ -2119,7 +2283,7 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{thm:mpug_source_y_one_normalization,
-        lem:mpug_source_y_one_gram_trace, lem:mpug_one_letter_output_contraction,
+        thm:mpug_source_y_one_gram_trace, thm:mpug_one_letter_output_contraction,
         thm:mpu_source_factorizations, def:mpu_source_matrix_one}
     Factor $M_1(\mathcal U)=X_1Y_1$ and apply
     Theorem~\ref{thm:mpug_source_y_one_normalization} to obtain
@@ -2129,9 +2293,9 @@ Definition~\ref{def:mpug_group_representation}.
     \end{align}
     Multiply the $((i,\alpha),(j,\beta))$ entry by
     $\rho_{\beta\alpha}$ and sum over $\alpha,\beta$.
-    Lemma~\ref{lem:mpug_one_letter_output_contraction} makes the left-hand
+    Theorem~\ref{thm:mpug_one_letter_output_contraction} makes the left-hand
     side $\delta_{i,j}$. The trace identity in
-    Lemma~\ref{lem:mpug_source_y_one_gram_trace} gives $d_r\ne0$, and
+    Theorem~\ref{thm:mpug_source_y_one_gram_trace} gives $d_r\ne0$, and
     canonical form II gives $d>0$. Multiplication by $d_r/d$ gives the
     required physical contraction.
 \end{proof}
@@ -2158,7 +2322,7 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{thm:mpug_source_y_two_normalization,
-        lem:mpug_source_y_two_gram_trace, lem:mpug_one_letter_output_contraction,
+        thm:mpug_source_y_two_gram_trace, thm:mpug_one_letter_output_contraction,
         thm:mpu_source_factorizations, def:mpu_source_matrix_two,
         def:mpu_source_weight}
     Put $W=I_d\otimes\rho$. The factorization $M_2(\mathcal U)=X_2Y_2$
@@ -2169,8 +2333,8 @@ Definition~\ref{def:mpug_group_representation}.
     \end{align}
     Sum the $((x,i),(x,j))$ entry over $x$. Expanding the left-hand side,
     using $\rho_{\alpha\beta}=\rho_{\beta\alpha}$, gives
-    $\delta_{i,j}$ by Lemma~\ref{lem:mpug_one_letter_output_contraction}.
-    The trace identity in Lemma~\ref{lem:mpug_source_y_two_gram_trace}
+    $\delta_{i,j}$ by Theorem~\ref{thm:mpug_one_letter_output_contraction}.
+    The trace identity in Theorem~\ref{thm:mpug_source_y_two_gram_trace}
     gives $d_l\ne0$, and $d>0$. Multiply by $d_l/d$ to conclude.
 \end{proof}
 
@@ -2303,7 +2467,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \leanok
     \discussion{7315}
     \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
-    Let $U$ have positive physical dimension $d$ and bond dimension $D$.
+    Let $U$ have physical dimension $d$ and bond dimension $D$.
     Put $r=\operatorname{rank}M_1(U)$ and $\ell=\operatorname{rank}M_2(U)$.
     Suppose that
     \begin{align}
@@ -2347,7 +2511,11 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \begin{proof}\leanok
     \uses{thm:mpug_factorization_comparison,
         thm:mpug_source_contraction_transport, thm:mpug_reciprocal_unitary_gauges}
-    Since $d>0$ and $u$ is an isometry, $\ell r\geq d^2>0$; hence both
+    If $d=0$, every factor equality has an empty physical row or column
+    index. Thus $\delta=1$ and identity gauges satisfy all four
+    equalities, and $\delta^{-1}\delta=1$.
+    Suppose now that $d>0$. Since $u$ is an isometry,
+    $\ell r\geq d^2>0$; hence both
     source ranks are positive. Theorem~\ref{thm:mpug_factorization_comparison}
     gives $K_i=L_iX_i=\widetilde Y_iR_i$ with
     $X_i=\widetilde X_iK_i$ and $\widetilde Y_i=K_iY_i$.
@@ -5883,8 +6051,8 @@ by the displayed matrices.
     \cite[lines~4547--4559]{FrancoRubio2025MPUGauging}.
 \end{definition}
 
-\begin{lemma}[Elementary identities for the Pauli adjoint gauge]
-    \label{lem:mpug_czx_dagger_gauge_laws}
+\begin{theorem}[Elementary identities for the Pauli adjoint gauge]
+    \label{thm:mpug_czx_dagger_gauge_laws}
     \lean{MPOTensor.CZX.daggerGauge_conjTranspose,
         MPOTensor.CZX.daggerGauge_mul_self,
         MPOTensor.CZX.daggerGauge_mem_unitaryGroup}
@@ -5897,7 +6065,7 @@ by the displayed matrices.
     \end{align}
     In particular, $Y\in\mathrm{U}(2)$. These identities give the unitary
     gauge used in \cite[lines~4547--4559]{FrancoRubio2025MPUGauging}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_dagger_gauge}
@@ -5940,10 +6108,9 @@ by the displayed matrices.
     \uses{def:mpug_czx_exact_tensor, def:mpug_czx_dagger_gauge,
         def:mpdo_physical_adjoint}
     For the exact once-blocked CZX tensor $B$, the matrix $T=Y$, regarded
-    as an element of $\mathrm{U}(2)$, satisfies
+    as an element of $\mathrm{U}(2)$, satisfies, for $0\leq u,v<4$,
     \begin{align}
-        (B^\dagger)^{u,v} & =T^\dagger B^{u,v}T,
-        \qquad 0\leq u,v<4.
+        (B^\dagger)^{u,v} & =T^\dagger B^{u,v}T.
     \end{align}
     This is the unitary gauge convention of
     \cite[lines~1552--1557 and 4547--4559]{FrancoRubio2025MPUGauging}.
@@ -5952,14 +6119,14 @@ by the displayed matrices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpug_czx_dagger_gauge_laws, thm:mpug_czx_physical_adjoint}
-    Lemma~\ref{lem:mpug_czx_dagger_gauge_laws} gives $Y\in\mathrm{U}(2)$
+    \uses{thm:mpug_czx_dagger_gauge_laws, thm:mpug_czx_physical_adjoint}
+    Theorem~\ref{thm:mpug_czx_dagger_gauge_laws} gives $Y\in\mathrm{U}(2)$
     and $Y^\dagger=Y$. Substitute into
     Theorem~\ref{thm:mpug_czx_physical_adjoint}.
 \end{proof}
 
-\begin{lemma}[The sign of the explicit CZX adjoint gauge]
-    \label{lem:mpug_czx_dagger_sign}
+\begin{theorem}[The CZX adjoint-gauge sign]
+    \label{thm:mpug_czx_dagger_sign}
     \lean{MPOTensor.CZX.daggerGauge_map_star,
         MPOTensor.CZX.daggerGauge_mul_map_star}
     \leanok
@@ -5974,13 +6141,13 @@ by the displayed matrices.
     as stated in \cite[lines~4547--4559]{FrancoRubio2025MPUGauging}.
     % These entries do not determine fusion tensors, local action tensors,
     % L-symbols, or a gauge selected by the generic existence theorem.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_czx_dagger_gauge, lem:mpug_czx_dagger_gauge_laws}
+    \uses{def:mpug_czx_dagger_gauge, thm:mpug_czx_dagger_gauge_laws}
     Conjugating each entry of the displayed Pauli matrix gives
     $\overline{Y}=-Y$. Then $Y\overline{Y}=-Y^2=-I_2$ by
-    Lemma~\ref{lem:mpug_czx_dagger_gauge_laws}.
+    Theorem~\ref{thm:mpug_czx_dagger_gauge_laws}.
 \end{proof}
 
 \subsection{The displayed CZX source factors}
@@ -6056,9 +6223,11 @@ by the displayed matrices.
     The four explicit factors of
     Definition~\ref{def:mpug_czx_displayed_factors} satisfy
     \begin{align}
-        X_1^\dagger X_1 & =2I_4, \\
-        X_2^\dagger X_2 & =I_4,  \\
-        Y_1Y_1^\dagger  & =I_4,  \\
+        X_1^\dagger X_1 & =2I_4,
+        \label{eq:mpug_czx_displayed_gram_x1} \\
+        X_2^\dagger X_2 & =I_4,
+        \label{eq:mpug_czx_displayed_gram_x2} \\
+        Y_1Y_1^\dagger  & =I_4,               \\
         Y_2Y_2^\dagger  & =2I_4.
     \end{align}
     The factors of two retain the unnormalized Hadamard weights of
@@ -6066,10 +6235,18 @@ by the displayed matrices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_czx_displayed_factors, def:mpug_czx_dagger_gauge}
-    Expand the four Gram matrices over their product-index spaces and
-    substitute the factor coordinates and the Pauli matrix. Evaluation
-    at each pair of factor indices gives the displayed scalar identities.
+    \uses{def:mpug_czx_displayed_factors, thm:mpug_czx_dagger_gauge_laws}
+    The empty factors are Pauli-gauge contractions of the filled factors,
+    $X_1=(I_4\otimes Y)Y_2^\dagger$ and $Y_1=X_2^\dagger(Y\otimes I_4)$.
+    By Theorem~\ref{thm:mpug_czx_dagger_gauge_laws}, $Y$ is unitary, hence so
+    are $I_4\otimes Y$ and $Y\otimes I_4$; composing a unitary matrix with
+    $Y_2^\dagger$, respectively with $X_2^\dagger$, leaves the Gram matrix
+    unchanged, so $X_1^\dagger X_1=Y_2Y_2^\dagger$ and
+    $Y_1Y_1^\dagger=X_2^\dagger X_2$. It remains to expand the two filled
+    Gram matrices $X_2^\dagger X_2$ and $Y_2Y_2^\dagger$ over their
+    product-index spaces and substitute the factor coordinates; evaluation
+    at each pair of factor indices gives the two displayed scalar
+    identities.
 \end{proof}
 
 \begin{definition}[Right inverses of the displayed CZX factors]
@@ -6094,8 +6271,10 @@ by the displayed matrices.
         def:mpug_czx_displayed_right_inverses, def:mpu_source_weight}
     Set $\rho=I_2/2$. The displayed factors and right inverses satisfy
     \begin{align}
-        Y_1Z_1                         & =I_4, \\
-        Y_2Z_2                         & =I_4, \\
+        Y_1Z_1                         & =I_4,
+        \label{eq:mpug_czx_displayed_right_inverse_y1} \\
+        Y_2Z_2                         & =I_4,
+        \label{eq:mpug_czx_displayed_right_inverse_y2} \\
         X_1^\dagger(I_4\otimes\rho)X_1 & =I_4.
     \end{align}
 \end{theorem}
@@ -6130,8 +6309,10 @@ by the displayed matrices.
         thm:mpug_czx_displayed_normalizations}
     Each cut factors through a four-dimensional space, so its rank is at
     most four. For the first cut take $L_1=X_1^\dagger/2$, and for the
-    second take $L_2=X_2^\dagger$. The preceding identities give
-    $L_iX_i=I_4$ and $Y_iZ_i=I_4$, hence
+    second take $L_2=X_2^\dagger$. By (\ref{eq:mpug_czx_displayed_gram_x1})
+    and (\ref{eq:mpug_czx_displayed_gram_x2}), $L_iX_i=I_4$; by
+    (\ref{eq:mpug_czx_displayed_right_inverse_y1}) and
+    (\ref{eq:mpug_czx_displayed_right_inverse_y2}), $Y_iZ_i=I_4$, hence
     $L_i(X_iY_i)Z_i=I_4$. Multiplication cannot increase rank, so each cut
     has rank at least four.
 \end{proof}
@@ -6139,11 +6320,14 @@ by the displayed matrices.
 \begin{definition}[The displayed factors in source-rank coordinates]
     \label{def:mpug_czx_displayed_source_factors}
     \lean{MPOTensor.CZX.displayedRightEquiv, MPOTensor.CZX.displayedLeftEquiv,
-        MPOTensor.CZX.displayedSourceFactors}
+        MPOTensor.CZX.displayedSourceFactors,
+        MPOTensor.CZX.displayedSourceFactors_coordinates,
+        MPOTensor.CZX.displayedSourceFactors_inverse_coordinates}
     \leanok
     \uses{def:mpug_czx_displayed_factors,
         def:mpug_czx_displayed_right_inverses, thm:mpug_czx_displayed_ranks,
-        def:mpug_czx_exact_tensor, def:mpu_weighted_source_factors}
+        def:mpug_czx_exact_tensor, def:mpu_weighted_source_factors,
+        def:mpug_czx_dagger_gauge}
     Let $d_r,d_l$ be the two source-cut ranks of the exact CZX tensor $B$.
     By Theorem~\ref{thm:mpug_czx_displayed_ranks}, both are four. Let
     \begin{align}
@@ -6158,50 +6342,19 @@ by the displayed matrices.
     Definition~\ref{def:mpu_weighted_source_factors}, satisfying both cut
     factorizations, the two left-factor normalizations, and both
     right-inverse identities.
-    % This is an explicit SourceFactors witness, not an equality with the
-    % choice-selected compact SVD factors. It supplies no canonical-form-II
-    % presentation, fusion tensors, local action tensors, or anomaly data.
-\end{definition}
 
-\begin{proof}\leanok
-    \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
-        thm:mpug_czx_displayed_normalizations}
-    Transport the cut factorizations and inverse identities along the
-    two index bijections. Products, conjugate transposes, and identities
-    are preserved. The weighted first normalization and the ordinary
-    second normalization therefore hold in the source-rank coordinates.
-\end{proof}
-
-\begin{theorem}[Coordinates of the transported CZX source factors]
-    \label{thm:mpug_czx_displayed_source_coordinates}
-    \lean{MPOTensor.CZX.displayedSourceFactors_coordinates}
-    \leanok
-    \uses{def:mpug_czx_displayed_source_factors}
-    For $0\leq k,i<4$ and $\alpha\in\{0,1\}$, the transported factors
-    of Definition~\ref{def:mpug_czx_displayed_source_factors} satisfy
+    Explicitly, for $0\leq k,i<4$ and $\alpha,\beta\in\{0,1\}$, evaluating
+    the pullbacks gives
     \begin{align}
         (\widehat X_1)_{(i,\alpha),e_r^{-1}(k)} & =(X_1)_{(i,\alpha),k}, \\
         (\widehat Y_1)_{e_r^{-1}(k),(\alpha,i)} & =(Y_1)_{k,(\alpha,i)}, \\
         (\widehat Z_1)_{(\alpha,i),e_r^{-1}(k)} & =(Z_1)_{(\alpha,i),k}, \\
         (\widehat X_2)_{(\alpha,i),e_l^{-1}(k)} & =(X_2)_{(\alpha,i),k}, \\
         (\widehat Y_2)_{e_l^{-1}(k),(i,\alpha)} & =(Y_2)_{k,(i,\alpha)}, \\
-        (\widehat Z_2)_{(i,\alpha),e_l^{-1}(k)} & =(Z_2)_{(i,\alpha),k}.
+        (\widehat Z_2)_{(i,\alpha),e_l^{-1}(k)} & =(Z_2)_{(i,\alpha),k},
     \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:mpug_czx_displayed_source_factors}
-    Evaluate the pullbacks and use $e_r(e_r^{-1}(k))=k$ and
-    $e_l(e_l^{-1}(k))=k$.
-\end{proof}
-
-\begin{theorem}[Pauli and inverse coordinates after transport]
-    \label{thm:mpug_czx_displayed_inverse_coordinates}
-    \lean{MPOTensor.CZX.displayedSourceFactors_inverse_coordinates}
-    \leanok
-    \uses{def:mpug_czx_displayed_source_factors, def:mpug_czx_dagger_gauge}
-    For $0\leq k,i<4$ and $\beta\in\{0,1\}$, the transported factors
-    satisfy
+    and substituting the definitions of $X_1,Y_1,Z_1,Z_2$ gives the
+    Pauli and inverse coordinates
     \begin{align}
         (\widehat X_1)_{(i,\beta),e_r^{-1}(k)}
          & =\sum_{t=0}^1Y_{\beta t}
@@ -6216,14 +6369,23 @@ by the displayed matrices.
     In particular, transport preserves the Pauli orientation $Y_{\beta t}$
     in the first factor of
     \cite[lines~4611--4659]{FrancoRubio2025MPUGauging}.
-\end{theorem}
+    % This is an explicit SourceFactors witness, not an equality with the
+    % choice-selected compact SVD factors. It supplies no canonical-form-II
+    % presentation, fusion tensors, local action tensors, or anomaly data.
+\end{definition}
 
 \begin{proof}\leanok
-    \uses{def:mpug_czx_displayed_source_factors,
-        def:mpug_czx_displayed_factors, def:mpug_czx_displayed_right_inverses}
-    Expand the transported factors, then substitute the definitions of
-    $X_1,Y_1,Z_1,Z_2$. The inverse bijections cancel the corresponding
-    pullbacks, leaving the four displayed expressions.
+    \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
+        thm:mpug_czx_displayed_normalizations, def:mpug_czx_displayed_factors,
+        def:mpug_czx_displayed_right_inverses}
+    Transport the cut factorizations and inverse identities along the
+    two index bijections. Products, conjugate transposes, and identities
+    are preserved. The weighted first normalization and the ordinary
+    second normalization therefore hold in the source-rank coordinates.
+    Evaluating the pullbacks, using $e_r(e_r^{-1}(k))=k$ and
+    $e_l(e_l^{-1}(k))=k$, gives the coordinate identities; substituting
+    the definitions of $X_1,Y_1,Z_1,Z_2$ and cancelling the inverse
+    bijections gives the Pauli and inverse coordinates.
 \end{proof}
 
 \subsection{The blocked GHZ state and its CZX invariance}
@@ -6425,8 +6587,10 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
     For each $x\in\{0,1\}$,
     \begin{align}
-        C_x^2     & =C_x, & p_xq_x       & =\tfrac12, &
-        p_xC_xq_x & =1,   & C_xq_xp_xC_x & =C_x.
+        C_x^2        & =C_x,      \\
+        p_xq_x       & =\tfrac12, \\
+        p_xC_xq_x    & =1,        \\
+        C_xq_xp_xC_x & =C_x.
         \label{eq:mpug_czx_printed_action_contractions}
     \end{align}
 \end{theorem}
@@ -6543,13 +6707,14 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_dressed_action, def:mps_rectangular_reduction,
         def:mps_reduction_exterior_buffer_length}
     For each $x\in\{0,1\}$, $(V_x,W_x)$ is a reduction from $B_x$
-    to $A_{1-x}$ with exterior buffer length one. Thus
+    to $A_{1-x}$ with exterior buffer length one. The reduction identity
+    holds for every word $\mathbf c$, including the empty word; the exterior
+    identity holds for nonempty words $\mathbf a$, $\mathbf b$, and
+    $\mathbf c$. Thus
     \begin{align}
-        V_xW_x & =1,                                & V_xB_x^{\mathbf c}W_x & =A_{1-x}^{\mathbf c}
-        \quad (|\mathbf c|\geq0),                                                                  \\
+        V_xW_x & =1,                                 & V_xB_x^{\mathbf c}W_x & =A_{1-x}^{\mathbf c}, \\
         B_x^{\mathbf a}W_xA_{1-x}^{\mathbf c}V_xB_x^{\mathbf b}
-               & =B_x^{\mathbf a\mathbf c\mathbf b}
-        \quad (|\mathbf a|,|\mathbf b|,|\mathbf c|\geq1).
+               & =B_x^{\mathbf a\mathbf c\mathbf b}.
         \label{eq:mpug_czx_dressed_action_reduction}
     \end{align}
     This proves the all-word relation for the separately dressed pair,
