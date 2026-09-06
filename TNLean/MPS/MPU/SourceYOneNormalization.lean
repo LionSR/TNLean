@@ -11,7 +11,7 @@ import TNLean.MPS.MPU.SourceYPhysicalContractions
 
 The first identity of arXiv:2502.20257, equation `eq:MPUnice3`, follows by
 factoring the raw adjoint-simple contraction, cancelling the chosen source
-factors, and taking the physical trace (proof, lines 1326–1369).
+factors, and taking the physical trace (proof, lines 1326–1398).
 No additional physical-dimension normalization is inserted.
 -/
 
@@ -90,7 +90,7 @@ theorem IsMPUCanonicalFormII.trace_sourceY₁_mul_conjTranspose
 
 /-- First source-factor constant, with the exact chosen factors and no extra
 normalization: $Y_1Y_1^\dagger=(d/r)I$.
-Source: arXiv:2502.20257, first identity of `eq:MPUnice3`, proof lines 1326–1369. -/
+Source: arXiv:2502.20257, first identity of `eq:MPUnice3`, proof lines 1326–1398. -/
 theorem IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
     (hadjoint : IsMPUSimple (MPOTensor.physicalAdjointTensor U)) :
