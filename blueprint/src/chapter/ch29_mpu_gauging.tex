@@ -1169,7 +1169,6 @@ gauges and scalar relation have been constructed.
     \begin{align}
         (w_L\otimes I_d)(I_d\otimes w_L)
          & =(I_{d_l}\otimes v)(u\otimes I_{d_l}).
-        \label{eq:mpug_staircase_second_network}
     \end{align}
     Both sides map $\C^d\otimes\C^d\otimes\C^{d_l}$ to
     $\C^{d_l}\otimes\C^d\otimes\C^d$. Explicitly, for
@@ -2039,8 +2038,8 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{def:mpug_adjoint_canonical_boundaries,
-        lem:mpug_one_letter_physical_contraction, def:mpdo_physical_adjoint}
-    Apply Lemma~\ref{lem:mpug_one_letter_physical_contraction} to
+        thm:mpug_one_letter_physical_contraction, def:mpdo_physical_adjoint}
+    Apply Theorem~\ref{thm:mpug_one_letter_physical_contraction} to
     $\mathcal U^\dagger$ with its canonical presentation carrying the
     same $\rho$. Its letters are
     $(\mathcal U^\dagger)^{p,i}_{x\alpha}=\overline{\mathcal U^{i,p}_{x\alpha}}$.
@@ -5897,10 +5896,9 @@ by the displayed matrices.
     \uses{def:mpug_czx_exact_tensor, def:mpug_czx_dagger_gauge,
         def:mpdo_physical_adjoint}
     For the exact once-blocked CZX tensor $B$, the matrix $T=Y$, regarded
-    as an element of $\mathrm{U}(2)$, satisfies
+    as an element of $\mathrm{U}(2)$, satisfies, for $0\leq u,v<4$,
     \begin{align}
-        (B^\dagger)^{u,v} & =T^\dagger B^{u,v}T,
-        \qquad 0\leq u,v<4.
+        (B^\dagger)^{u,v} & =T^\dagger B^{u,v}T.
     \end{align}
     This is the unitary gauge convention of
     \cite[lines~1552--1557 and 4547--4559]{FrancoRubio2025MPUGauging}.
