@@ -6951,10 +6951,10 @@ block label, or physical gate is changed here.
     Definition~\ref{def:mpug_czx_printed_action_pair}. Define the row
     $P_x\colon\C^4\to\C$ by the following coordinates, for
     $\alpha,\gamma\in\{0,1\}$:
-    \begin{align*}
+    \begin{align}
         P_x                    & =p_{1-x}\otimes p_x,         &
         (P_x)_{2\alpha+\gamma} & =p_{1-x}(\alpha)p_x(\gamma).
-    \end{align*}
+    \end{align}
     The first action factor occupies the first product-bond coordinate.
 \end{definition}
 
@@ -6967,10 +6967,10 @@ block label, or physical gate is changed here.
     Definition~\ref{def:mpug_czx_printed_action_pair}. Define the column
     $Q_x\colon\C\to\C^4$ by the following coordinates, for
     $\alpha,\gamma\in\{0,1\}$:
-    \begin{align*}
+    \begin{align}
         Q_x                    & =q_{1-x}\otimes q_x,         &
         (Q_x)_{2\alpha+\gamma} & =q_{1-x}(\alpha)q_x(\gamma).
-    \end{align*}
+    \end{align}
     Rows contract with columns by ordinary matrix multiplication, with no
     additional complex conjugation.
 \end{definition}
@@ -6985,10 +6985,10 @@ block label, or physical gate is changed here.
     $B_x\in\operatorname{Mat}_4(\C)$ to be the physical $(3x,3x)$ letter
     of $T\mathbin{\cdot}T$. Explicitly, for
     $\alpha,\gamma,\beta,\delta\in\{0,1\}$,
-    \begin{align*}
+    \begin{align}
         (B_x)_{2\alpha+\gamma,2\beta+\delta}
          & =\sum_{j=0}^3 T^{3x,j}_{\alpha\beta}T^{j,3x}_{\gamma\delta}.
-    \end{align*}
+    \end{align}
     The physical index $3x$ encodes the two bits $(x,x)$.
 \end{definition}
 
@@ -7002,9 +7002,9 @@ block label, or physical gate is changed here.
     and supported product letter, and put
     $W=F^>_{g,g}=\tfrac12(0,i,-i,0)^{\mathsf T}$, in the product-bond
     order of Definition~\ref{def:mpug_czx_fusion_caps}. Define
-    \begin{align*}
+    \begin{align}
         c_x & =P_xB_xW\in\C.
-    \end{align*}
+    \end{align}
     The one-by-one matrix on the right is identified with its sole entry.
 \end{definition}
 
@@ -7020,14 +7020,14 @@ block label, or physical gate is changed here.
         def:mpug_czx_sequential_action_bra, def:mpug_czx_printed_action_pair,
         def:mpug_czx_fusion_caps}
     Expanding the two supported product letters gives
-    \begin{align*}
+    \begin{align}
         B_0 & =\begin{pmatrix}
                    0 & 0 & 0 & 0 \\-1&1&-1&1\\0&0&0&0\\0&0&0&0
                \end{pmatrix}, &
         B_1 & =\begin{pmatrix}
                    0 & 0 & 0 & 0 \\0&0&0&0\\-1&-1&1&1\\0&0&0&0
                \end{pmatrix}.
-    \end{align*}
+    \end{align}
     Substitute the printed rows and the column $W$ into $P_xB_xW$.
     The two finite matrix products give the asserted values.
 \end{proof}
@@ -7041,9 +7041,9 @@ block label, or physical gate is changed here.
         def:mpug_czx_fusion_action_coefficient, def:mpug_czx_fusion_caps}
     For each $x\in\{0,1\}$, the literal rows, columns, and supported
     product letter satisfy
-    \begin{align*}
+    \begin{align}
         P_xB_xQ_x & =1, & B_xW & =c_xB_xQ_x, & B_x^2 & =B_x.
-    \end{align*}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpug_czx_fusion_action_letter,
@@ -7065,10 +7065,10 @@ block label, or physical gate is changed here.
         def:mpug_czx_sequential_action_ket, def:mpug_czx_fusion_action_letter,
         def:mpug_czx_fusion_action_coefficient, def:mpug_czx_fusion_caps}
     For every $x\in\{0,1\}$ and every integer $n\geq0$,
-    \begin{align*}
+    \begin{align}
         B_x^{n+1}       & =B_x, & P_xB_x^{n+1}W & =c_x,             \\
         P_xB_x^{n+1}Q_x & =1,   & B_x^{n+1}W    & =c_xB_x^{n+1}Q_x.
-    \end{align*}
+    \end{align}
     These statements concern repetitions of this single supported letter,
     not arbitrary words or an identification with the source $L$-symbol.
 \end{theorem}
