@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### source-rank nonvanishing from a trace equation — promoted
+- **Pattern:** derive `rank ≠ 0` from `htrace : coefficient * rank = d` and
+  `hd : d ≠ 0` by assuming the rank is zero and simplifying the trace equation.
+- **Seen:** four occurrences across three files (2026-09-06):
+  `IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose` in
+  `TNLean/MPS/MPU/SourceYOneNormalization.lean`,
+  `IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose` in
+  `TNLean/MPS/MPU/SourceYTwoNormalization.lean`, and
+  `IsMPUCanonicalFormII.sourceX₁_physical_contraction` and
+  `IsMPUCanonicalFormII.sourceX₂_physical_contraction` in
+  `TNLean/MPS/MPU/SourceXPhysicalNormalization.lean`.
+- **Abstraction:** existing Mathlib `right_ne_zero_of_mul`, applied as
+  `right_ne_zero_of_mul (htrace.trans_ne hd)`.
+- **Notes:** resolved by direct library reuse at all four sites, removing twelve
+  proof lines. No new helper, tactic, import, or public statement is needed.
+
 ### nested finite-sum congruence under two binders — promoted
 - **Pattern:** two successive `apply Finset.sum_congr rfl` steps, each
   followed by an index and membership introduction.

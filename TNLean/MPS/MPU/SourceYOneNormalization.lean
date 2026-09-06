@@ -104,10 +104,7 @@ theorem IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose
   have hd : (d : ℂ) ≠ 0 := by
     have := hU.neZero_phys
     exact_mod_cast (NeZero.ne d)
-  have hr : (r[U] : ℂ) ≠ 0 := by
-    intro hzero
-    rw [hzero, mul_zero] at htrace
-    exact hd htrace.symm
+  have hr : (r[U] : ℂ) ≠ 0 := right_ne_zero_of_mul (htrace.trans_ne hd)
   have hscalar : δ = (d : ℂ) / (r[U] : ℂ) := (eq_div_iff hr).mpr htrace
   simpa only [hscalar] using hδ
 
