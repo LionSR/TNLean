@@ -1135,6 +1135,228 @@ gauges and scalar relation have been constructed.
     (\ref{eq:mpug_staircase_network_cancelled}).
 \end{proof}
 
+\subsection{The second network and unitarity of the staircase gates}
+
+\begin{lemma}[Isometries on the middle two legs]
+    \label{thm:mpug_staircase_middle_isometry}
+    \lean{MPOTensor.staircaseMiddle_isIsometry}
+    \leanok
+    \uses{def:mpug_staircase_middle}
+    Let $A,B,C,E$ be finite index sets, let $B',C'$ be index sets, and let
+    $M$ be a complex matrix with rows indexed by $B\times C$ and columns
+    by $B'\times C'$. If $M^\dagger M=I$, then
+    $(M_{23})^\dagger M_{23}=I$, with the middle-leg placement of
+    Definition~\ref{def:mpug_staircase_middle}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_staircase_middle}
+    Tensoring an isometry with identity matrices preserves its Gram
+    matrix. Regrouping the four indices preserves this identity.
+\end{proof}
+
+\begin{theorem}[The second staircase network]
+    \label{thm:mpug_staircase_second_network}
+    \lean{MPOTensor.SourceFactors.sourceWL_second_network_apply,
+        MPOTensor.SourceFactors.sourceWL_second_network}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpug_staircase_gates, def:mpu_source_uv}
+    Let $\mathcal U$ have source factors as in
+    Definition~\ref{def:mpug_staircase_gates}, and form $u,v,w_L$ from
+    those same factors. Write $d_l,d_r$ for the source-cut ranks. Under
+    the natural associativity identifications of the three tensor factors,
+    \begin{align}
+        (w_L\otimes I_d)(I_d\otimes w_L)
+         & =(I_{d_l}\otimes v)(u\otimes I_{d_l}).
+        \label{eq:mpug_staircase_second_network}
+    \end{align}
+    Both sides map $\C^d\otimes\C^d\otimes\C^{d_l}$ to
+    $\C^{d_l}\otimes\C^d\otimes\C^d$. Explicitly, for
+    $0\leq l,k<d_l$ and $0\leq i,j,a,b<d$,
+    \begin{align}
+        \sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}(w_L)_{(t,j),(b,k)}
+         & =\sum_{r=0}^{d_r-1}u_{(l,r),(a,b)}v_{(i,j),(r,k)}.
+    \end{align}
+    This is the second network in
+    \cite[lines~977--1011]{FrancoRubio2025MPUGauging}. It uses two copies
+    of $w_L$ and requires no simplicity or unitarity hypothesis.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_staircase_gates, def:mpu_source_uv,
+        thm:mpu_source_factorization_entries}
+    Expand the crossed gates and use $M_2=X_2Y_2$. The left-hand entry is
+    \begin{align}
+        \sum_{\alpha,\beta=0}^{D-1}
+        (Y_2)_{l,(a,\alpha)}\mathcal U^{i,b}_{\alpha\beta}
+        (X_2)_{(\beta,j),k}.
+    \end{align}
+    Expanding $u,v$ and using $M_1=X_1Y_1$ gives the same expression on
+    the right. The displayed matrix equality is this entry identity
+    after regrouping the three external indices.
+\end{proof}
+
+\begin{lemma}[Isometry of the first staircase network]
+    \label{thm:mpug_staircase_first_network_isometry}
+    \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_isIsometry}
+    \leanok
+    \uses{def:mpug_staircase_gates, def:mpu_source_uv}
+    Let $\mathcal U$ have source factors as in
+    Definition~\ref{def:mpug_staircase_gates}. If the associated operators
+    $u$ and $v$ are unitary between their respective spaces, then
+    \begin{align}
+        (w_L\otimes w_R)^\dagger(w_L\otimes w_R) & =I.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_staircase_network_cancelled,
+        thm:mpug_staircase_middle_isometry}
+    Theorem~\ref{thm:mpug_staircase_network_cancelled} expresses
+    $w_L\otimes w_R$ as $v_{23}(u\otimes u)(u^\dagger)_{23}$.
+    Each factor is an isometry, so their product is an isometry.
+\end{proof}
+
+\begin{lemma}[Isometry of the second staircase network]
+    \label{thm:mpug_staircase_second_network_isometry}
+    \lean{MPOTensor.SourceFactors.sourceWL_second_network_isIsometry}
+    \leanok
+    \uses{def:mpug_staircase_gates, def:mpu_source_uv}
+    Let $\mathcal U$ have source factors as in
+    Definition~\ref{def:mpug_staircase_gates}, with left source-cut rank
+    $d_l$. If $u^\dagger u=I$ and $v^\dagger v=I$, then
+    $K=(w_L\otimes I_d)(I_d\otimes w_L)$ satisfies $K^\dagger K=I$,
+    with the three-leg associativity identifications understood.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_staircase_second_network}
+    By Theorem~\ref{thm:mpug_staircase_second_network},
+    $K=(I_{d_l}\otimes v)(u\otimes I_{d_l})$.
+    Tensoring with an identity, regrouping indices, and composition
+    preserve isometries.
+\end{proof}
+
+\begin{corollary}[Unitary staircase gates]
+    \label{thm:mpug_staircase_gates_unitary}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceWL_sourceWR_isUnitaryBetween}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpug_staircase_gates}
+    Let $\mathcal U$ be a simple MPU in canonical form II, with recorded
+    positive diagonal fixed matrix $\rho$. Construct the source factors
+    from $\mathcal U$ and this same $\rho$, and let $d_l,d_r$ be their
+    source-cut ranks. Then the staircase gates are unitary maps
+    \begin{align}
+        w_L & :\C^d\otimes\C^{d_l}\longrightarrow\C^{d_l}\otimes\C^d, \\
+        w_R & :\C^{d_r}\otimes\C^d\longrightarrow\C^d\otimes\C^{d_r}.
+    \end{align}
+    This is part~(a) of the staircase-gate corollary in
+    \cite[lines~811--1012]{FrancoRubio2025MPUGauging}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{ThmFund1, thm:mpug_staircase_first_network_isometry,
+        thm:mpug_kronecker_identity_factors,
+        thm:mpug_staircase_second_network_isometry}
+    Theorem~\ref{ThmFund1} gives unitary $u,v$ and $d_rd_l=d^2>0$.
+    Lemma~\ref{thm:mpug_staircase_first_network_isometry} gives
+    \begin{align}
+        (w_L^\dagger w_L)\otimes(w_R^\dagger w_R) & =I.
+    \end{align}
+    By Theorem~\ref{thm:mpug_kronecker_identity_factors}, the two Gram
+    matrices are $\delta I$ and $\delta^{-1}I$ for a nonzero scalar
+    $\delta$. Positivity of the first Gram matrix makes $\delta>0$.
+    Each of the two left-gate layers in
+    $K=(w_L\otimes I_d)(I_d\otimes w_L)$ has Gram matrix $\delta I$,
+    so $K^\dagger K=\delta^2 I$. By
+    Lemma~\ref{thm:mpug_staircase_second_network_isometry}, this equals
+    $I$. Thus $\delta^2=1$, equivalently $\delta^{-2}=1$, and positivity
+    gives $\delta=1$. Both gates are isometries between spaces of equal
+    dimension, hence unitary.
+\end{proof}
+
+\subsection{Physical closures of the source factors}
+
+\begin{lemma}[The canonical one-letter physical contraction]
+    \label{thm:mpug_one_letter_physical_contraction}
+    \lean{MPOTensor.IsMPUCanonicalFormII.oneLetter_physical_contraction}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple}
+    Let $\mathcal U$ be a simple MPU in canonical form II, with physical
+    dimension $d$, bond dimension $D$, and recorded fixed matrix $\rho$.
+    For $0\leq p,q<d$,
+    \begin{align}
+        \sum_{x,\alpha,\beta=0}^{D-1}\sum_{z=0}^{d-1}
+        \overline{\mathcal U^{z,p}_{x\alpha}}
+        \mathcal U^{z,q}_{x\beta}\rho_{\beta\alpha}
+         & =\delta_{p,q}.
+    \end{align}
+    This is the one-letter diagram in the proof of part~(b) of the
+    staircase-gate corollary in
+    \cite[lines~1013--1030]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_transfer_stabilization,
+        thm:mpu_supplied_projector_simple2,
+        thm:mpu_all_later_simple_blockings}
+    The stabilized transfer power identifies the simplicity witnesses
+    with the canonical boundaries $I$ and $\rho$. The two-letter insertion
+    identity with these witnesses implies the one-letter physical
+    identity. Expanding its double-layer coefficient gives the displayed
+    sum; the right boundary contributes $\rho_{\beta\alpha}$.
+\end{proof}
+
+\begin{corollary}[Physical closures of the two source factors]
+    \label{thm:mpug_source_y_physical_contractions}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_physical_contraction,
+        MPOTensor.IsMPUCanonicalFormII.sourceY₁_physical_contraction}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be a simple MPU in canonical form II, with physical
+    dimension $d$, bond dimension $D$, and recorded positive diagonal
+    fixed matrix $\rho$. Let $Y_1,Y_2$ be the source factors constructed
+    from this tensor and this same $\rho$, with source-cut ranks $d_r,d_l$.
+    For $0\leq p,q<d$,
+    \begin{align}
+        \sum_{l=0}^{d_l-1}\sum_{\alpha,\beta=0}^{D-1}
+        \overline{(Y_2)_{l,(p,\alpha)}}(Y_2)_{l,(q,\beta)}
+        \rho_{\beta\alpha}
+         & =\delta_{p,q}, \\
+        \sum_{r=0}^{d_r-1}\sum_{\alpha=0}^{D-1}
+        \overline{(Y_1)_{r,(\alpha,p)}}(Y_1)_{r,(\alpha,q)}
+         & =\delta_{p,q}.
+    \end{align}
+    The open indices are physical; these are identities on $\C^d$, not
+    on the source-cut spaces. They are the two diagrams of part~(b) of
+    the staircase-gate corollary in
+    \cite[lines~869--917]{FrancoRubio2025MPUGauging}.
+    % Together with thm:mpug_staircase_gates_unitary this establishes
+    % cor:mpu for the source factors of the canonical-form-II presentation.
+    % No adjoint-simplicity hypothesis or subsequent eq:MPUnice3/4
+    % source-factor constants are asserted here.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_one_letter_physical_contraction,
+        thm:mpu_source_y_two_rotated_gram,
+        thm:mpu_source_v_four_u_expansions}
+    The rotated second-cut Gram identity rewrites the first sum as the
+    one-letter contraction of
+    Lemma~\ref{thm:mpug_one_letter_physical_contraction}. The weighted
+    first-cut Gram identity rewrites the second sum in the same way;
+    diagonality of $\rho$ gives $\rho_{\alpha\beta}=\rho_{\beta\alpha}$.
+    Both sums therefore equal $\delta_{p,q}$. These Gram identities cancel
+    the $X_2$ and $X_1$ factors using their respective normalizations, as
+    in \cite[lines~1030--1050]{FrancoRubio2025MPUGauging}.
+\end{proof}
+
 \section{Scalar three-cocycles and fusion-tensor gauge freedom}
 \label{sec:mpug_scalar_gauge}
 
@@ -5036,6 +5258,122 @@ by the displayed matrices.
     Thus every bond matrix unit lies in the span of the physical letters.
     Since every $2\times2$ matrix is a linear combination of these units,
     the letters span the full bond matrix algebra.
+\end{proof}
+
+\subsection{The explicit CZX adjoint gauge}
+
+\begin{definition}[The Pauli adjoint gauge]
+    \label{def:mpug_czx_dagger_gauge}
+    \lean{MPOTensor.CZX.daggerGauge}
+    \leanok
+    \discussion{7354}
+    On the bond space $\C^2$, with basis indexed by $0,1$, define the
+    Pauli matrix
+    \begin{align}
+        Y & =\begin{pmatrix}0&-\mathrm{i}\\ \mathrm{i}&0\end{pmatrix}.
+    \end{align}
+    This is the matrix on both virtual legs in the adjoint diagram of
+    \cite[lines~4547--4559]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{lemma}[Elementary identities for the Pauli adjoint gauge]
+    \label{thm:mpug_czx_dagger_gauge_laws}
+    \lean{MPOTensor.CZX.daggerGauge_conjTranspose,
+        MPOTensor.CZX.daggerGauge_mul_self,
+        MPOTensor.CZX.daggerGauge_mem_unitaryGroup}
+    \leanok
+    \uses{def:mpug_czx_dagger_gauge}
+    The matrix $Y$ of Definition~\ref{def:mpug_czx_dagger_gauge} satisfies
+    \begin{align}
+        Y^\dagger & =Y,   \\
+        Y^2       & =I_2.
+    \end{align}
+    In particular, $Y\in\mathrm{U}(2)$. These identities give the unitary
+    gauge used in \cite[lines~4547--4559]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_dagger_gauge}
+    Conjugate-transpose the displayed matrix and use the Pauli
+    multiplication rule $Y^2=I_2$. Thus $YY^\dagger=I_2$.
+\end{proof}
+
+\begin{theorem}[The physical adjoint of the exact CZX tensor]
+    \label{thm:mpug_czx_physical_adjoint}
+    \lean{MPOTensor.CZX.physicalAdjointTensor_tensor}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_exact_tensor, def:mpug_czx_dagger_gauge,
+        def:mpdo_physical_adjoint}
+    Let $B$ be the exact once-blocked CZX tensor of
+    Definition~\ref{def:mpug_czx_exact_tensor}. For $0\leq u,v<4$,
+    \begin{align}
+        (B^\dagger)^{u,v} & =YB^{u,v}Y.
+    \end{align}
+    Here $(B^\dagger)^{u,v}_{\ell r}=\overline{B^{v,u}_{\ell r}}$;
+    the virtual indices are not transposed. This is the adjoint diagram
+    in \cite[lines~4547--4559]{FrancoRubio2025MPUGauging}, with no scalar
+    prefactor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_exact_tensor_unitary,
+        def:mpug_czx_dagger_gauge, def:mpdo_physical_adjoint}
+    Insert the coordinate formula from
+    Theorem~\ref{thm:mpug_czx_exact_tensor_unitary} on both sides and expand
+    the two matrix products over the binary bond indices. Substituting
+    the four physical values and the two bond values verifies each entry.
+\end{proof}
+
+\begin{theorem}[An explicit unitary adjoint gauge for CZX]
+    \label{thm:mpug_czx_unitary_dagger_gauge}
+    \lean{MPOTensor.CZX.daggerGaugeUnitary,
+        MPOTensor.CZX.physicalAdjointTensor_tensor_eq_unitaryGauge}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpug_czx_dagger_gauge,
+        def:mpdo_physical_adjoint}
+    For the exact once-blocked CZX tensor $B$, the matrix $T=Y$, regarded
+    as an element of $\mathrm{U}(2)$, satisfies
+    \begin{align}
+        (B^\dagger)^{u,v} & =T^\dagger B^{u,v}T,
+        \qquad 0\leq u,v<4.
+    \end{align}
+    This is the unitary gauge convention of
+    \cite[lines~1552--1557 and 4547--4559]{FrancoRubio2025MPUGauging}.
+    % This exhibits the explicit witness, not an identification with the
+    % choice-selected generic dagger-inverse gauge.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_dagger_gauge_laws, thm:mpug_czx_physical_adjoint}
+    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws} gives $Y\in\mathrm{U}(2)$
+    and $Y^\dagger=Y$. Substitute into
+    Theorem~\ref{thm:mpug_czx_physical_adjoint}.
+\end{proof}
+
+\begin{lemma}[The sign of the explicit CZX adjoint gauge]
+    \label{thm:mpug_czx_dagger_sign}
+    \lean{MPOTensor.CZX.daggerGauge_map_star,
+        MPOTensor.CZX.daggerGauge_mul_map_star}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_dagger_gauge}
+    For the Pauli adjoint gauge $Y$, entrywise complex conjugation gives
+    \begin{align}
+        \overline{Y}  & =-Y,   \\
+        Y\overline{Y} & =-I_2.
+    \end{align}
+    Hence the sign in $Y\overline{Y}=\sigma_g I_2$ is $\sigma_g=-1$,
+    as stated in \cite[lines~4547--4559]{FrancoRubio2025MPUGauging}.
+    % These entries do not determine fusion tensors, local action tensors,
+    % L-symbols, or a gauge selected by the generic existence theorem.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_dagger_gauge, thm:mpug_czx_dagger_gauge_laws}
+    Conjugating each entry of the displayed Pauli matrix gives
+    $\overline{Y}=-Y$. Then $Y\overline{Y}=-Y^2=-I_2$ by
+    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws}.
 \end{proof}
 
 \subsection{The blocked GHZ state and its CZX invariance}
