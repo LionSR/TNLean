@@ -87,12 +87,29 @@ private theorem fusion_product_letter_eq (i j : Fin 4) :
   simp only [Matrix.submatrix_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply,
     finProdFinEquiv.symm_apply_apply]
   rw [Finset.sum_eq_single (complementSite i)]
-  · fin_cases i <;> fin_cases j <;> fin_cases x₁ <;> fin_cases x₂ <;>
-      fin_cases y₁ <;> fin_cases y₂ <;>
-      norm_num +decide [fusionProductLetter, fusionProductDiagonalLetter,
-        tensor_apply, hc, hb, edgeExponent, Fin.divNat, Fin.modNat, Fin.rev,
-        ZMod.val, Fin.reduceEq, finProdFinEquiv, Matrix.cons_val_zero,
-        Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three]
+  · by_cases hij : i = j
+    · subst j
+      by_cases hx : x₁ = (show Fin 2 from (siteBits i).1) ∧
+          x₂ = (show Fin 2 from (siteBits (complementSite i)).1)
+      · rcases hx with ⟨rfl, rfl⟩
+        fin_cases i <;> fin_cases y₁ <;> fin_cases y₂ <;>
+          norm_num +decide [fusionProductLetter, fusionProductDiagonalLetter,
+            tensor_apply, hc, hb, edgeExponent, Fin.divNat, Fin.modNat, Fin.rev,
+            ZMod.val, Fin.reduceEq, finProdFinEquiv]
+      · have hz : fusionProductLetter i i (finProdFinEquiv (x₁, x₂))
+            (finProdFinEquiv (y₁, y₂)) = 0 := by
+          fin_cases i <;> fin_cases x₁ <;> fin_cases x₂ <;>
+            norm_num +decide [hc, hb, Fin.divNat, Fin.modNat, Fin.rev, ZMod.val,
+              Fin.reduceEq] at hx <;>
+            norm_num +decide [fusionProductLetter, fusionProductDiagonalLetter,
+              Fin.reduceEq, finProdFinEquiv]
+        rw [hz]
+        simp only [tensor_apply, ite_zero_mul_ite_zero]
+        split_ifs with h
+        · exact (hx ⟨h.1.2, h.2.2⟩).elim
+        · rfl
+    · have hne : complementSite i ≠ complementSite j := complementSite.injective.ne hij
+      simp [tensor_apply, hne, fusionProductLetter, hij]
   · intro b _ hbne
     have hfirst : i ≠ complementSite b := by
       intro hi
@@ -172,11 +189,18 @@ private theorem fusion_projection_insertion (ij kl : Fin (4 * 4)) :
     by_cases hkl : k = l
     · subst l
       ext a b
-      fin_cases a <;> fin_cases b <;> fin_cases i <;> fin_cases k <;>
-        simp [fusionV, fusionW, fusionProductLetter, fusionProductDiagonalLetter,
-          Matrix.mul_apply, Fin.sum_univ_four, Fin.reduceEq] <;>
-        ring_nf <;>
-        simp [Complex.I_sq]
+      by_cases ha : a = (if i = 0 ∨ i = 1 then 1 else 2)
+      · subst a
+        fin_cases i <;> fin_cases b <;> fin_cases k <;>
+          simp [fusionV, fusionW, fusionProductLetter, fusionProductDiagonalLetter,
+            Matrix.mul_apply, Fin.sum_univ_four, Fin.reduceEq] <;>
+          ring_nf <;>
+          simp [Complex.I_sq]
+      · have hz : ∀ c, fusionProductLetter i i a c = 0 := by
+          intro c
+          fin_cases i <;>
+            simp_all [fusionProductLetter, fusionProductDiagonalLetter, Fin.reduceEq]
+        simp [Matrix.mul_apply, hz]
     · simp [fusionProductLetter, hkl]
   · simp [fusionProductLetter, hij]
 
