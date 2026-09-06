@@ -33,7 +33,6 @@ This file does not prove the four normalized source-factor equations
 -/
 
 open scoped Matrix BigOperators
-open Matrix
 
 namespace MPOTensor
 
