@@ -6825,37 +6825,6 @@ unbuffered defect formulas.
     apply (\ref{eq:mpug_czx_printed_exterior}).
 \end{proof}
 
-\subsection{The displayed CZX circuit tuple}`), i.e. splice
-% the block below in place of the current blank line 6742.
-%
-% Scope: only the concrete CZX g,g fusion-cap slice of eq:Fgg. No general
-% fusion-tensor existence, anomaly, action, defect, or gauging statement.
-%
-% Labels/citations located in the current blueprint sources:
-%   def:mpug_czx_exact_tensor        <- MPOTensor.CZX.tensor            (ch29, line 5885)
-%   def:mpug_czx_dagger_gauge        <- MPOTensor.CZX.daggerGauge (= Y) (ch29, line 6046)
-%   def:mpdo_operator_product        <- MPOTensor.mulTensor             (ch21, line 90)
-%   def:mpo_to_mps                   <- MPOTensor.toMPSTensor           (ch20, line 24)
-%   threeMPU                         <- MPOTensor.identityMPUTensor     (ch28, line ~8516)
-%   def:mps_rectangular_reduction    <- MPSTensor.IsReduction                     (ch02, line 323)
-%   def:mps_reduction_exterior_buffer_length
-%                                     <- MPSTensor.IsReductionExteriorBufferLength (ch02, line 1551)
-% Precedent for grouping an IsReduction + IsReductionExteriorBufferLength pair
-% under ONE \begin{theorem}: thm:mpug_czx_dressed_action_reduction, ch29 lines
-% 6713-6741 (mirrored below).
-%
-% def:mpug_czx_fusion_caps does NOT \use{def:mpdo_operator_product} or
-% def:mpo_to_mps: fusionV/fusionW are raw bond-space matrices (Matrix (Fin 1)
-% (Fin 4) ℂ / Matrix (Fin 4) (Fin 1) ℂ) whose own definitions and
-% fusion_caps_apply do not mention the product tensor or its doubled-index
-% view at all — that connection is made only in the reduction theorem below,
-% which is where those two labels belong.
-%
-% Confirmed against the live file: the identityMPUTensor4 wrapper is gone;
-% both theorem statements now target `(identityMPUTensor 4).toMPSTensor`
-% directly, so `threeMPU` (already in blueprint/lean_decls) is the correct
-% and only identity-tensor dependency — no new identity definition to add.
-
 \subsection{The CZX \texorpdfstring{$g,g$}{g,g} fusion caps}
 
 \begin{definition}[The CZX $g,g$ fusion caps]
@@ -6914,8 +6883,9 @@ unbuffered defect formulas.
         \quad(|\mathbf p|,|\mathbf q|,|\mathbf c|\geq1).
         \label{eq:mpug_czx_fusion_reduction}
     \end{align}
-    This is the concrete $g,g$ instance of the fusion equation
-    \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}, specialized to
+    This is the concrete $g,g$ instance of the fusion reduction
+    \cite[lines~1405--1498]{FrancoRubio2025MPUGauging}, with the fusion
+    tensors of \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}, specialized to
     the CZX display \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 \begin{proof}\leanok
@@ -7441,7 +7411,7 @@ unbuffered defect formulas.
     \uses{def:mpug_gauge_invariant_subspace, def:mpug_czx_circuit_tuple}
     For the gauge-invariant subspace~(\ref{eq:mpug_gauge_invariant_subspace}) at
     $R=R^{\mathrm{CZX}}$ and $N\geq3$,
-    $\dim_{\C}\mathcal V_N(R^{\mathrm{CZX}})=2^N$. The value is thereby
+    $\dim_{\C}\mathcal V_N(R^{\mathrm{CZX}})\allowbreak=2^N$. The value is thereby
     recorded for the subspace that
     Definition~\ref{def:mpug_gauge_invariant_subspace} attaches to an arbitrary
     tuple, so exhibiting $R^{\mathrm{CZX}}$ as a completion of prescribed
