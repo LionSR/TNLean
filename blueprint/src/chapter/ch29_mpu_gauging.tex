@@ -449,6 +449,242 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
     from the three unitary matrix identities below.
 \end{proof}
 
+The following construction is the first algebraic step of
+\cite[lines~5390--5432]{FrancoRubio2025MPUGauging}. It gives a first-cut
+factorization through the second-cut space and explicit one-sided inverses.
+It does not identify the two cut ranks or establish weighted normalizations,
+the comparison matrix $K$, or the full compatibility properties of
+\cite[lines~5342--5350]{FrancoRubio2025MPUGauging}.
+
+\begin{definition}[Gauge matrices for the first cut]
+    \label{def:mpug_inverse_cut_gauges}
+    \lean{MPOTensor.inverseCompatibleLeftGauge,
+        MPOTensor.inverseCompatibleRightGauge}
+    \leanok
+    For a unitary matrix $T$ on $\C^D$, define matrices on
+    $\C^d\otimes\C^D$ and $\C^D\otimes\C^d$, respectively, by
+    \begin{align}
+        A & =I_d\otimes\overline T,    \\
+        B & =T^{\mathsf T}\otimes I_d.
+    \end{align}
+    These are the gauge matrices in the first construction of
+    \cite[lines~5390--5432]{FrancoRubio2025MPUGauging}. The order in $B$
+    follows the virtual--physical column order of the first cut.
+\end{definition}
+
+\begin{definition}[Candidate first-cut factors]
+    \label{def:mpug_inverse_cut_factors}
+    \lean{MPOTensor.inverseCompatibleX₁, MPOTensor.inverseCompatibleY₁}
+    \leanok
+    \uses{def:mpug_inverse_cut_gauges, def:mpu_weighted_source_factors,
+        def:mpu_source_matrix_two}
+    Let $\mathcal U$ be a tensor of physical dimension $d$ and bond
+    dimension $D$, and let $T$ be unitary on $\C^D$. Let
+    $\ell=\operatorname{rank}M_2(\mathcal U)$. For the chosen compact
+    singular-value decomposition $M_2(\mathcal U)=V_2^\dagger D_2U_2$, set
+    \begin{align}
+        X_2 & =V_2^\dagger,          \\
+        Y_2 & =D_2U_2,               \\
+        Z_2 & =U_2^\dagger D_2^{-1}.
+    \end{align}
+    With $A,B$ from
+    Definition~\ref{def:mpug_inverse_cut_gauges}, define
+    \begin{align}
+        X & =AY_2^\dagger\colon\C^\ell\longrightarrow\C^d\otimes\C^D,  \\
+        Y & =X_2^\dagger B\colon\C^D\otimes\C^d\longrightarrow\C^\ell.
+    \end{align}
+    These are the candidate factors of
+    \cite[line~5432]{FrancoRubio2025MPUGauging}. Their intermediate
+    coordinate space is $\C^\ell$, indexed by $\{0,\ldots,\ell-1\}$.
+    The second-cut factors require no choice of a positive weight.
+\end{definition}
+
+\begin{theorem}[Reversing a unitary adjoint gauge]
+    \label{thm:mpug_inverse_cut_reverse_gauge}
+    \lean{MPOTensor.eq_unitary_mul_physicalAdjointTensor_mul_conjTranspose}
+    \leanok
+    \uses{def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a tensor of physical dimension $d$ and bond
+    dimension $D$. Suppose that $T$ is unitary on $\C^D$ and that, for
+    every physical pair $i,j$,
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$. Then, for every
+    physical pair $i,j$,
+    $\mathcal U^{ij}=T(\mathcal U^\dagger)^{ij}T^\dagger$.
+    Here $\mathcal U^\dagger$ denotes physical
+    adjunction. This reverses the gauge relation used in
+    \cite[lines~5391--5410]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    Unitarity gives
+    $T(\mathcal U^\dagger)^{ij}T^\dagger
+        =(TT^\dagger)\mathcal U^{ij}(TT^\dagger)=\mathcal U^{ij}$.
+\end{proof}
+
+\begin{theorem}[The first cut as a dressed second cut]
+    \label{thm:mpug_inverse_cut_dressed}
+    \lean{MPOTensor.sourceCutM₁_eq_inverseCompatible_dressed_cut}
+    \leanok
+    \uses{def:mpug_inverse_cut_gauges, def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a tensor of physical dimension $d$ and bond
+    dimension $D$. Suppose that $T$ is unitary and that, for every
+    physical pair $i,j$, $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$.
+    With $A=I_d\otimes\overline T$ and
+    $B=T^{\mathsf T}\otimes I_d$, the source cuts satisfy
+    $M_1(\mathcal U)=AM_2(\mathcal U)^\dagger B$. This is the cut
+    identity underlying \cite[lines~5391--5431]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_reverse_gauge,
+        thm:mpu_physical_adjoint_source_cuts, def:mpug_inverse_cut_gauges,
+        def:mpu_source_matrix_one}
+    Physical adjunction gives
+    $M_2(\mathcal U)^\dagger=M_1(\mathcal U^\dagger)$.
+    For physical indices $i,j$ and virtual indices $a,b$, expand the
+    matrix product and apply Theorem~\ref{thm:mpug_inverse_cut_reverse_gauge}:
+    \begin{align}
+        (AM_1(\mathcal U^\dagger)B)_{(i,b),(a,j)}
+         & =\sum_{x,y=0}^{D-1}\overline{T_{bx}}
+        (\mathcal U^\dagger)^{ij}_{yx}T_{ay}           \\
+         & =(T(\mathcal U^\dagger)^{ij}T^\dagger)_{ab}
+        =\mathcal U^{ij}_{ab}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Factorization through the second-cut space]
+    \label{thm:mpug_inverse_cut_factorization}
+    \lean{MPOTensor.sourceCutM₁_eq_inverseCompatibleX₁_mul_inverseCompatibleY₁}
+    \leanok
+    \uses{def:mpug_inverse_cut_factors, def:mpu_source_matrix_one,
+        def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a tensor and $T$ a unitary virtual matrix such
+    that, for every physical pair $i,j$,
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$. The candidates $X,Y$ of
+    Definition~\ref{def:mpug_inverse_cut_factors} satisfy
+    $M_1(\mathcal U)=XY$. This is the candidate decomposition of
+    \cite[line~5432]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_dressed, thm:mpu_source_factorizations,
+        def:mpug_inverse_cut_factors}
+    Substitute the second-cut factorization to obtain
+    \begin{align}
+        M_1(\mathcal U)
+         & =A(X_2Y_2)^\dagger B
+        =(AY_2^\dagger)(X_2^\dagger B)=XY.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[A left inverse for the candidate first factor]
+    \label{thm:mpug_inverse_cut_left_inverse}
+    \lean{MPOTensor.inverseCompatibleX₁_leftInverse}
+    \leanok
+    \uses{def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be any tensor and $T$ any unitary virtual matrix.
+    For the candidate $X=AY_2^\dagger$ on the second-cut space
+    $\C^\ell$, the matrix $Z_2^\dagger A^\dagger$ is a left inverse:
+    $(Z_2^\dagger A^\dagger)X=I_\ell$.
+    No adjoint gauge relation is required. This verifies the
+    left-invertibility used in
+    \cite[line~5432]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_inverse_cut_gauges, def:mpug_inverse_cut_factors,
+        thm:mpu_source_factor_right_inverses}
+    Unitarity of $T$ gives
+    $A^\dagger A=I_d\otimes(T^{\mathsf T}\overline T)=I_{dD}$.
+    Hence
+    \begin{align}
+        (Z_2^\dagger A^\dagger)X
+         & =Z_2^\dagger(A^\dagger A)Y_2^\dagger
+        =(Y_2Z_2)^\dagger=I_\ell.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[A right inverse for the candidate second factor]
+    \label{thm:mpug_inverse_cut_right_inverse}
+    \lean{MPOTensor.inverseCompatibleY₁_rightInverse}
+    \leanok
+    \uses{def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be any tensor and $T$ any unitary virtual matrix.
+    For the candidate $Y=X_2^\dagger B$ on the second-cut space
+    $\C^\ell$, the matrix $B^\dagger X_2$ is a right inverse:
+    $Y(B^\dagger X_2)=I_\ell$.
+    No adjoint gauge relation is required. This verifies the
+    right-invertibility used in
+    \cite[line~5432]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_inverse_cut_gauges, def:mpug_inverse_cut_factors,
+        thm:mpu_source_factor_normalizations}
+    Unitarity of $T$ gives
+    $BB^\dagger=(T^{\mathsf T}\overline T)\otimes I_d=I_{Dd}$.
+    Hence $Y(B^\dagger X_2)=X_2^\dagger(BB^\dagger)X_2
+        =X_2^\dagger X_2=I_\ell$.
+\end{proof}
+
+\begin{theorem}[The chosen adjoint gauge at an involutive element]
+    \label{thm:mpug_involutive_adjoint_gauge}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.physicalAdjointTensor_eq_daggerInverseGauge_of_inv_eq}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
+        def:left_canonical_tensor, thm:mpug_dagger_inverse_gauge}
+    Let $G$ be a group and $\{\mathcal U_a\}_{a\in G}$ a representation
+    by simple injective MPUs. Assume that the normalized flattening of
+    $\mathcal U_a$ is left-canonical for every $a\in G$. If $g^{-1}=g$,
+    the chosen unitary gauge $T_g$ of
+    Theorem~\ref{thm:mpug_dagger_inverse_gauge} satisfies, for every
+    physical pair $i,j$,
+    $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
+    This specializes the gauge relation
+    of \cite[lines~1552--1557]{FrancoRubio2025MPUGauging} to the
+    involutive case discussed in
+    \cite[lines~1933--1955]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_dagger_inverse_gauge}
+    The equality $g^{-1}=g$ identifies both the tensors and their bond
+    spaces. Thus the chosen gauge satisfies
+    $(\mathcal U_g^\dagger)^{ij}
+        =T_g^\dagger\mathcal U_{g^{-1}}^{ij}T_g
+        =T_g^\dagger\mathcal U_g^{ij}T_g$.
+\end{proof}
+
+\begin{theorem}[The first-cut construction at an involutive element]
+    \label{thm:mpug_involutive_first_cut}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.inverseCompatibleFirstCut_of_inv_eq}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
+        def:left_canonical_tensor, thm:mpug_dagger_inverse_gauge,
+        def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors}
+    Let $G$ be a group and $\{\mathcal U_a\}_{a\in G}$ a representation
+    by simple injective MPUs whose normalized flattenings are
+    left-canonical for every $a\in G$. Let $g^{-1}=g$, and take the
+    chosen gauge $T_g$ of Theorem~\ref{thm:mpug_dagger_inverse_gauge}.
+    For $\mathcal U_g$, put $\ell=\operatorname{rank}M_2(\mathcal U_g)$,
+    $A=I_d\otimes\overline{T_g}$, $B=T_g^{\mathsf T}\otimes I_d$,
+    $X=AY_2^\dagger$, and $Y=X_2^\dagger B$, using its second-cut
+    factors $X_2,Y_2,Z_2$. Then
+    \begin{align}
+        M_1(\mathcal U_g)        & =XY,     \\
+        (Z_2^\dagger A^\dagger)X & =I_\ell, \\
+        Y(B^\dagger X_2)         & =I_\ell.
+    \end{align}
+    This is the first algebraic construction of
+    \cite[lines~5390--5432]{FrancoRubio2025MPUGauging}, with the
+    gauge chosen from the representation rather than supplied separately.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_involutive_adjoint_gauge,
+        thm:mpug_inverse_cut_factorization, thm:mpug_inverse_cut_left_inverse,
+        thm:mpug_inverse_cut_right_inverse}
+    Theorem~\ref{thm:mpug_involutive_adjoint_gauge} gives
+    $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
+    Theorem~\ref{thm:mpug_inverse_cut_factorization} therefore gives
+    $M_1(\mathcal U_g)=XY$. Theorems~\ref{thm:mpug_inverse_cut_left_inverse}
+    and~\ref{thm:mpug_inverse_cut_right_inverse} give
+    $(Z_2^\dagger A^\dagger)X=I_\ell$ and $Y(B^\dagger X_2)=I_\ell$.
+\end{proof}
 \begin{definition}[Common positive physical blocking]
     \label{def:mpug_common_blocking}
     \lean{MPOTensor.GroupFamily.block}
