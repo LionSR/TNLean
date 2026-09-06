@@ -23,7 +23,7 @@ setting, a finite-order representing operator has zero source index, and the
 paper identifies the two source dimensions with the physical dimension
 \cite[line~1547]{FrancoRubio2025MPUGauging}:
 \begin{align}
-    d_r &= d, & d_l &= d.
+    d_r & = d, & d_l & = d.
     \label{eq:fbc25_truncated_symmetry_source_rank_identification}
 \end{align}
 The truncated-symmetry display \papereqref{fbc25}{eq:truncsym} then defines
@@ -46,31 +46,31 @@ MPU tensor.\footnote{Formal declaration:
     in \doclink{TNLean/MPS/MPU/TruncatedSymmetryUnitarity}.}
 For \(N\geq0\), the endpoint contraction is the matrix
 \begin{align}
-    U^N :
+    U^{N+2} :
     \C^d\otimes(\C^d)^{\otimes N}\otimes\C^d
-      &\longrightarrow
+     & \longrightarrow
     \C^{d_l}\otimes(\C^d)^{\otimes N}\otimes\C^{d_r},
     \label{eq:fbc25_truncated_symmetry_formal_spaces}
 \end{align}
 with entries
 \begin{align}
-    (U^N)_{(l,\sigma,r),(a,\tau,b)}
-      &=
-      \sum_{\alpha,\beta}
-      (Y_2)_{l,(a,\alpha)}
-      \mathcal U^{\sigma,\tau}_{\alpha,\beta}
-      (Y_1)_{r,(\beta,b)}.
+    (U^{N+2})_{(l,\sigma,r),(a,\tau,b)}
+     & =
+    \sum_{\alpha,\beta}
+    (Y_2)_{l,(a,\alpha)}
+    \mathcal U^{\sigma,\tau}_{\alpha,\beta}
+    (Y_1)_{r,(\beta,b)}.
     \label{eq:fbc25_truncated_symmetry_formal_entries}
 \end{align}
-Here \(\sigma,\tau\) are words of length \(N\), and the superscript \(N\)
-counts only the bulk tensor letters, not the two endpoint triangles. The
+Here \(\sigma,\tau\) are words of bulk length \(N\). The source superscript
+is the total length \(L=N+2\geq2\), including the two endpoint triangles. The
 formal conclusion is unitarity between the two coordinate spaces:
 \begin{align}
-    (U^N)^\dagger U^N
-      &= I_{\C^d\otimes(\C^d)^{\otimes N}\otimes\C^d},
-    \label{eq:fbc25_truncated_symmetry_formal_isometry} \\
-    U^N(U^N)^\dagger
-      &= I_{\C^{d_l}\otimes(\C^d)^{\otimes N}\otimes\C^{d_r}}.
+    (U^{N+2})^\dagger U^{N+2}
+     & = I_{\C^d\otimes(\C^d)^{\otimes N}\otimes\C^d},
+    \label{eq:fbc25_truncated_symmetry_formal_isometry}        \\
+    U^{N+2}(U^{N+2})^\dagger
+     & = I_{\C^{d_l}\otimes(\C^d)^{\otimes N}\otimes\C^{d_r}}.
     \label{eq:fbc25_truncated_symmetry_formal_coisometry}
 \end{align}
 
@@ -78,26 +78,28 @@ The theorem assumes canonical form II and simplicity. The source-gate
 equivalence theorem for simple MPUs gives
 \cite[lines~532--543 and 563--601]{Cirac2017MPU}
 \begin{align}
-    d_rd_l &= d^2,
+    d_rd_l      & = d^2,
     \label{eq:fbc25_truncated_symmetry_rank_product} \\
-    u^\dagger u &= uu^\dagger = I.
+    u^\dagger u & = uu^\dagger = I.
     \label{eq:fbc25_truncated_symmetry_source_gate_unitarity}
 \end{align}
 Together with the movement-gate unitarity of
 \papereqref{fbc25}{eq:wLR} \cite[lines~811--869 and 918--1012]{FrancoRubio2025MPUGauging},
 these inputs prove
 (\ref{eq:fbc25_truncated_symmetry_formal_isometry}) and
-(\ref{eq:fbc25_truncated_symmetry_formal_coisometry}) by induction on \(N\).
+(\ref{eq:fbc25_truncated_symmetry_formal_coisometry}) by induction on the
+bulk length \(N\). The base case \(N=0\) has total length two:
+\(U^2=u\) after removing the empty-word coordinates.
 The rank product in
 (\ref{eq:fbc25_truncated_symmetry_rank_product}) makes the two sides of
 (\ref{eq:fbc25_truncated_symmetry_formal_spaces}) have equal total dimension:
 \begin{align}
-    d^{N+2} &= d_l d^N d_r.
+    d^{N+2} & = d_l d^N d_r.
     \label{eq:fbc25_truncated_symmetry_total_dimension}
 \end{align}
 It does not by itself provide the individual endpoint identifications
 \begin{align}
-    \C^{d_l} &\simeq \C^d, & \C^{d_r} &\simeq \C^d.
+    \C^{d_l} & \simeq \C^d, & \C^{d_r} & \simeq \C^d.
     \label{eq:fbc25_truncated_symmetry_missing_endpoint_equivalences}
 \end{align}
 
@@ -107,12 +109,12 @@ The two-end source-factorization identity represented by
 \papereqref{fbc25}{eq:move_trunc_sym} is already formalized separately. It
 adds one bulk site at each end:
 \begin{align}
-    (U^{N+2})_{(l,i\sigma j,r),(a,b\tau c,e)}
-      &=
-      \sum_{t,s}
-      (w_L)_{(l,i),(a,t)}
-      (U^N)_{(t,\sigma,s),(b,\tau,c)}
-      (w_R)_{(j,r),(s,e)}.
+    (U^{N+4})_{(l,i\sigma j,r),(a,b\tau c,e)}
+     & =
+    \sum_{t,s}
+    (w_L)_{(l,i),(a,t)}
+    (U^{N+2})_{(t,\sigma,s),(b,\tau,c)}
+    (w_R)_{(j,r),(s,e)}.
     \label{eq:fbc25_truncated_symmetry_two_end_growth}
 \end{align}
 The all-length unitarity proof uses the one-left-end version of this
@@ -129,7 +131,7 @@ complementary finite-chain relation is adjacent remaining scope after the
 movement display, not part of the literal sentence at lines 2062--2099, and
 the endpoint-coordinate theorem does not prove it:
 \begin{align}
-    U_g^L U_{g^{-1}}^\infty &= U_{g^{-1}}^{\infty-L}.
+    U_g^L U_{g^{-1}}^\infty & = U_{g^{-1}}^{\infty-L}.
     \label{eq:fbc25_truncated_symmetry_complementary_relation}
 \end{align}
 This is \papereqref{fbc25}{eq:complementary} in

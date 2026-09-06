@@ -12,7 +12,10 @@ import TNLean.MPS.MPU.TruncatedSymmetryGrowth
 For a simple MPU in canonical form II, the endpoint contraction in
 arXiv:2502.20257, `eq:truncsym` and the sentence immediately following it
 (lines 2062–2101), is unitary between its input and output coordinate spaces.
-The zero-bulk contraction is the source gate $u$ of arXiv:1703.09188,
+Here `N` counts bulk sites, while the source total length is $L=N+2\geq2$
+(`eq:truncsym`, lines 2094–2097; CZX display, lines 4700–4713). The corresponding
+source length notation is $U_g^{N+2}$, not $U_g^N$. The zero-bulk base case has
+total length two and is the source gate $u$ of arXiv:1703.09188,
 `uu` (lines 532–543), whose unitarity follows from the simple-MPU
 source-gate equivalence theorem of arXiv:1703.09188 (lines 563–601). Each
 additional bulk site is added by the unitary left movement gate of
@@ -44,7 +47,10 @@ private def truncatedConsEquiv (A B : Type*) (d N : ℕ) :
   right_inv x := by simp
 
 /-- The truncated symmetry is unitary between its coordinate spaces for every
-number `N` of bulk sites. Source: arXiv:2502.20257, `eq:truncsym` and its
+number `N` of bulk sites, hence every source total length $L=N+2\geq2$.
+In source length notation this is $U_g^{N+2}$; the `N = 0` base case is the
+two-site endpoint contraction, not a length-zero operator.
+Source: arXiv:2502.20257, `eq:truncsym` and its
 following unitarity assertion (lines 2062–2101). The assumptions are precisely
 canonical form II and simplicity; the source and movement gate unitarities
 are derived rather than supplied as hypotheses. -/
