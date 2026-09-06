@@ -1278,6 +1278,115 @@ gauges and scalar relation have been constructed.
     dimension, hence unitary.
 \end{proof}
 
+\subsection{Endpoint contraction and growth of truncated symmetries}
+
+\begin{definition}[The endpoint contraction of a truncated symmetry]
+    \label{def:mpug_truncated_symmetry}
+    \lean{MPOTensor.SourceFactors.truncatedSymmetry}
+    \leanok
+    \discussion{7319}
+    \uses{def:mpu_weighted_source_factors, def:mpo_eval_word}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$. Let $\rho$ be a complex matrix on the virtual space,
+    and let $X_1,Y_1,Z_1,X_2,Y_2,Z_2$ be source factors with
+    $M_1=X_1Y_1$, $M_2=X_2Y_2$,
+    $X_1^\dagger(I_d\otimes\rho)X_1=I_{d_r}$,
+    $X_2^\dagger X_2=I_{d_l}$, and $Y_iZ_i=I$ for $i=1,2$,
+    where $d_l,d_r$ are the source-cut ranks.
+    For $N\geq0$ and physical words $\sigma,\tau$ of length $N$, put
+    \begin{align}
+        \mathcal U^{\sigma,\tau}
+         & =\mathcal U^{\sigma_1,\tau_1}\cdots\mathcal U^{\sigma_N,\tau_N}, \\
+        (U^N)_{(l,\sigma,r),(a,\tau,b)}
+         & =\sum_{\alpha,\beta=0}^{D-1}
+        (Y_2)_{l,(a,\alpha)}
+        (\mathcal U^{\sigma,\tau})_{\alpha,\beta}
+        (Y_1)_{r,(\beta,b)}.
+        \label{eq:mpug_truncated_symmetry_contraction}
+    \end{align}
+    Here $0\leq l<d_l$, $0\leq r<d_r$, and $a,b$ are physical
+    indices. The empty ordered matrix product is $I_D$. Thus
+    \begin{align}
+        U^N\colon \C^d\otimes(\C^d)^{\otimes N}\otimes\C^d
+         & \longrightarrow
+        \C^{d_l}\otimes(\C^d)^{\otimes N}\otimes\C^{d_r}.
+    \end{align}
+    This is the endpoint contraction of
+    \cite[lines~2062--2100]{FrancoRubio2025MPUGauging}, with the group
+    label suppressed. The superscript counts the $N$ bulk tensors only,
+    not the two endpoint triangles. No group representation or unitarity
+    assertion is included in this definition.
+\end{definition}
+
+\begin{theorem}[The zero-bulk contraction]
+    \label{thm:mpug_truncated_symmetry_zero}
+    \lean{MPOTensor.SourceFactors.truncatedSymmetry_zero}
+    \leanok
+    \uses{def:mpug_truncated_symmetry, def:mpu_source_uv}
+    For the source factors of Definition~\ref{def:mpug_truncated_symmetry},
+    the endpoint contraction with no bulk sites is the source gate $u$.
+    More precisely, for endpoint indices $l,r,a,b$ and the empty words
+    $\varnothing$,
+    \begin{align}
+        (U^0)_{(l,\varnothing,r),(a,\varnothing,b)}
+         & =u_{(l,r),(a,b)}.
+        \label{eq:mpug_truncated_symmetry_zero}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_truncated_symmetry, def:mpo_eval_word, def:mpu_source_uv}
+    The bulk product is $I_D$. Its Kronecker delta identifies $\alpha$
+    and $\beta$, leaving exactly the two-triangle contraction defining $u$.
+\end{proof}
+
+\begin{theorem}[Two-sided growth by the movement operators]
+    \label{thm:mpug_truncated_symmetry_growth}
+    \lean{MPOTensor.SourceFactors.truncatedSymmetry_cons_snoc}
+    \leanok
+    \discussion{7319}
+    \uses{def:mpug_truncated_symmetry, def:mpug_staircase_gates}
+    Let $\mathcal U$ have source factors as in
+    Definition~\ref{def:mpug_truncated_symmetry}, and construct $U^N,w_L,w_R$
+    from these same factors. For $N\geq0$, physical words $\sigma,\tau$
+    of length $N$, source indices $l,r$, and physical indices
+    $i,j,a,b,c,e$, one has
+    \begin{align}
+        (U^{N+2})_{(l,i\sigma j,r),(a,b\tau c,e)}
+         & =\sum_{t=0}^{d_l-1}\sum_{s=0}^{d_r-1}
+        (w_L)_{(l,i),(a,t)}
+        (U^N)_{(t,\sigma,s),(b,\tau,c)}
+        (w_R)_{(j,r),(s,e)}.
+        \label{eq:mpug_truncated_symmetry_growth}
+    \end{align}
+    Concatenation $i\sigma j$ inserts $i$ before the word and $j$ after
+    it. This is the source-factorization identity in the growth diagram
+    of \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}. It adds one
+    bulk site at each end. No simplicity or unitarity assumption on
+    $\mathcal U$ is needed.
+    % Partial coverage of #7319: endpoint contraction, zero bulk, and the
+    % first two-sided growth identity only. No all-length unitarity,
+    % finite-group specialization, or complementary movement is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factorization_entries, def:mpug_staircase_gates,
+        def:mpug_truncated_symmetry, def:mpo_eval_word}
+    Expand the enlarged bulk product as
+    $\mathcal U^{i\sigma j,b\tau c}
+        =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}\mathcal U^{j,c}$.
+    The second source-cut factorization gives
+    \begin{align}
+        \sum_\gamma(Y_2)_{l,(a,\gamma)}\mathcal U^{i,b}_{\gamma,\alpha}
+         & =\sum_t(w_L)_{(l,i),(a,t)}(Y_2)_{t,(b,\alpha)}.
+    \end{align}
+    The first source-cut factorization similarly gives
+    \begin{align}
+        \sum_\delta\mathcal U^{j,c}_{\beta,\delta}(Y_1)_{r,(\delta,e)}
+         & =\sum_s(Y_1)_{s,(\beta,c)}(w_R)_{(j,r),(s,e)}.
+    \end{align}
+    Substitute both equalities into the endpoint contraction and regroup
+    the finite sums. The remaining interior contraction is $U^N$.
+\end{proof}
+
 \subsection{Physical closures of the source factors}
 
 \begin{lemma}[The canonical one-letter physical contraction]
