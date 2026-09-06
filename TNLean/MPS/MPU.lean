@@ -24,6 +24,7 @@ import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.InverseCompatibleCutComparison
 import TNLean.MPS.MPU.InverseCompatibleFirstCut
+import TNLean.MPS.MPU.InverseCompatibleGateIdentity
 import TNLean.MPS.MPU.KetLeftMul
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions

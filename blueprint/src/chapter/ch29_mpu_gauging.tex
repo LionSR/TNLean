@@ -826,6 +826,116 @@ inverse-compatible decomposition is asserted.
     \end{align}
     This argument does not use the rank equality to transport matrices.
 \end{proof}
+\begin{theorem}[The second source factor from the adjoint comparison]
+    \label{thm:mpug_inverse_cut_adjoint_comparison}
+    \lean{MPOTensor.sourceY₂_eq_inverseCompatibleComparisonK_adjoint}
+    \leanok
+    \uses{def:mpug_inverse_cut_comparison_k, def:mpug_inverse_cut_gauges,
+        def:mpu_weighted_source_factors, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$, let $\rho$ be positive definite on $\C^D$, and let
+    $T$ be unitary on $\C^D$. Suppose that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$. Write $\widetilde X_1,\widetilde Y_1$ for the
+    first source factors with weight $\rho$, and $X_2,Y_2$ for the
+    second source factors. Put $A=I_d\otimes\overline T$ and take the
+    weighted comparison
+    $K=\widetilde X_1^\dagger(I_d\otimes\rho)AY_2^\dagger$ of
+    Definition~\ref{def:mpug_inverse_cut_comparison_k}. Then
+    \begin{align}
+        Y_2 & =K^\dagger\widetilde X_1^\dagger A.
+    \end{align}
+    This is the adjointed comparison used in
+    \cite[lines~5440--5443]{FrancoRubio2025MPUGauging}, in the maintained
+    physical--virtual column order.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_comparison, def:mpug_inverse_cut_factors,
+        def:mpug_inverse_cut_gauges}
+    Theorem~\ref{thm:mpug_inverse_cut_comparison} gives
+    $AY_2^\dagger=\widetilde X_1K$. Since $A^\dagger A=I$,
+    \begin{align}
+        K^\dagger\widetilde X_1^\dagger A
+         & =(AY_2^\dagger)^\dagger A
+        =Y_2A^\dagger A=Y_2.
+    \end{align}
+    No identification of the reverse comparison with $K^\dagger$ is used.
+\end{proof}
+
+\begin{theorem}[The inverse-compatible source-gate identity]
+    \label{thm:mpug_inverse_cut_gate_identity}
+    \lean{MPOTensor.sourceU_eq_smul_inverseCompatibleComparisonK_kronecker_sourceV_adjoint}
+    \leanok
+    \uses{def:mpug_inverse_cut_comparison_k, def:mpug_inverse_cut_gauges,
+        def:mpu_weighted_source_factors, def:mpdo_physical_adjoint,
+        def:mpu_source_uv}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$, let $\rho$ be positive definite on $\C^D$, and let
+    $T$ be unitary on $\C^D$. Suppose that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$, and that $T\overline T=\sigma I_D$ for a scalar
+    $\sigma\in\C$. Write $\widetilde X_1,\widetilde Y_1$ for the first
+    source factors constructed with this $\rho$, and $X_2,Y_2$ for the
+    second source factors. Set $r=\operatorname{rank}M_1(\mathcal U)$,
+    $\ell=\operatorname{rank}M_2(\mathcal U)$, and
+    $K=\widetilde X_1^\dagger(I_d\otimes\rho)
+        (I_d\otimes\overline T)Y_2^\dagger\colon\C^\ell\to\C^r$.
+    For the source gates $u,v$ of Definition~\ref{def:mpu_source_uv}
+    formed from $\widetilde X_1,\widetilde Y_1,X_2,Y_2$,
+    \begin{align}
+        u & =\sigma(K^\dagger\otimes K)v^\dagger.
+    \end{align}
+    The row orders of $u$ and $v^\dagger$ are respectively
+    $(\ell,r)$ and $(r,\ell)$; the Kronecker product maps between these
+    orders without an additional swap or identification of the rank
+    coordinates. This is the contraction in
+    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}, retaining the
+    diagram's $\widetilde Y_1$. Neither canonical form, simplicity,
+    gate unitarity, nor $|\sigma|=1$ is a hypothesis. The conclusion is
+    the algebraic identity, not unitarity of $K$ or the gates.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_adjoint_comparison,
+        thm:mpug_inverse_cut_comparison, def:mpug_inverse_cut_factors,
+        def:mpug_inverse_cut_gauges, def:mpu_source_uv}
+    Conjugating the phase relation by $T$ gives
+    $\overline T T=T^\dagger(T\overline T)T=\sigma I_D$.
+    Theorem~\ref{thm:mpug_inverse_cut_adjoint_comparison} and
+    Theorem~\ref{thm:mpug_inverse_cut_comparison} give
+    \begin{align}
+        Y_2            & =K^\dagger\widetilde X_1^\dagger(I_d\otimes\overline T), \\
+        \widetilde Y_1 & =KX_2^\dagger(T^{\mathsf T}\otimes I_d).
+    \end{align}
+    Fix physical indices $i,j$. Define slices
+    $C\in\operatorname{Mat}_{r\times D}(\C)$ and
+    $E\in\operatorname{Mat}_{D\times\ell}(\C)$ by
+    $C_{a\gamma}=\overline{(\widetilde X_1)_{(i,\gamma),a}}$ and
+    $E_{\delta b}=\overline{(X_2)_{(\delta,j),b}}$.
+    For every virtual index $\beta$ and source indices $l,s$,
+    \begin{align}
+        (Y_2)_{l,(i,\beta)}
+         & =(K^\dagger C\overline T)_{l\beta}, \\
+        (\widetilde Y_1)_{s,(\beta,j)}
+         & =(TEK^{\mathsf T})_{\beta s}.
+    \end{align}
+    Contract the virtual index in the defining expression for $u$:
+    \begin{align}
+        u_{(l,s),(i,j)}
+         & =\sum_{\beta=0}^{D-1}(Y_2)_{l,(i,\beta)}
+        (\widetilde Y_1)_{s,(\beta,j)}                      \\
+         & =(K^\dagger C\overline T T E K^{\mathsf T})_{ls}
+        =\sigma(K^\dagger C E K^{\mathsf T})_{ls}.
+    \end{align}
+    Finally expand the matrix products and regroup the finite sums:
+    \begin{align}
+        (K^\dagger C E K^{\mathsf T})_{ls}
+         & =\sum_{a=0}^{r-1}\sum_{b=0}^{\ell-1}
+        (K^\dagger)_{la}K_{sb}
+        \overline{\sum_{\gamma=0}^{D-1}
+        (\widetilde X_1)_{(i,\gamma),a}(X_2)_{(\gamma,j),b}} \\
+         & =((K^\dagger\otimes K)v^\dagger)_{(l,s),(i,j)}.
+    \end{align}
+\end{proof}
 \begin{definition}[Common positive physical blocking]
     \label{def:mpug_common_blocking}
     \lean{MPOTensor.GroupFamily.block}
@@ -2111,6 +2221,42 @@ Definition~\ref{def:mpug_group_representation}.
     $((i_0,j),(i_0,j'))$ entry gives $B_{jj'}=c^{-1}\delta_{jj'}$.
 \end{proof}
 
+\begin{theorem}[Unitarity from an adjoint Kronecker product]
+    \label{thm:matrix_unitary_adjoint_kronecker}
+    \lean{Matrix.isUnitaryBetween_of_conjTranspose_kronecker}
+    \leanok
+    Let $M,N$ be nonempty finite sets, and let
+    $K\colon\C^N\to\C^M$ be a complex matrix. If
+    $K^\dagger\otimes K\colon\C^{M\times N}\to\C^{N\times M}$
+    is unitary, then $K$ is unitary between its coordinate spaces:
+    \begin{align}
+        K^\dagger K & =I_N, \\
+        KK^\dagger  & =I_M.
+    \end{align}
+    No equality of $|M|$ and $|N|$ is assumed. This is the matrix
+    implication used in \cite[lines~5444--5487]{FrancoRubio2025MPUGauging};
+    the tensor-network identity to which it is applied is a separate result.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_kronecker_identity_factors}
+    The isometry identity for $K^\dagger\otimes K$ gives
+    \begin{align}
+        (KK^\dagger)\otimes(K^\dagger K) & =I_{M\times N}.
+    \end{align}
+    By Theorem~\ref{thm:mpug_kronecker_identity_factors}, there is a
+    nonzero $c\in\C$ with $KK^\dagger=cI_M$ and
+    $K^\dagger K=c^{-1}I_N$. Consequently,
+    \begin{align}
+        (KK^\dagger)^2
+         & =K(K^\dagger K)K^\dagger
+        =c^{-1}KK^\dagger=I_M.
+    \end{align}
+    Choose $i\in M$. The $(i,i)$ entry gives $c^2=1$, while positivity
+    of the Gram matrix gives $c=(KK^\dagger)_{ii}\geq0$.
+    Thus $c=1$, and the two scalar Gram identities become
+    $K^\dagger K=I_N$ and $KK^\dagger=I_M$.
+\end{proof}
 \begin{theorem}[Unitary factors of a unitary Kronecker product]
     \label{thm:mpug_unitary_kronecker_factors}
     \lean{Matrix.exists_pos_real_rescaling_mem_unitaryGroup_of_kronecker_mem_unitaryGroup,
