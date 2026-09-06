@@ -412,6 +412,8 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
         MPOTensor.GroupFamily.IsRepresentation.daggerInverseScalar_mul_star_eq_one,
         MPOTensor.GroupFamily.IsRepresentation.norm_daggerInverseScalar,
         MPOTensor.GroupFamily.IsRepresentation.daggerInverseScalar_mul_inverse_eq_one,
+        MPOTensor.GroupFamily.IsRepresentation.inverseDaggerInverseGauge_eq_of_inv_eq,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseGauge_mul_mapStar_self_eq_smul_one_of_inv_eq,
         MPOTensor.GroupFamily.IsRepresentation.daggerInverseScalar_eq_one_or_neg_one_of_inv_eq}
     \leanok
     \uses{thm:mpug_dagger_inverse_gauge}
@@ -423,10 +425,13 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
     \end{align}
     Every such scalar lies in $U(1)$, and
     \begin{align}
-        |\sigma_g|              & =1, &
+        |\sigma_g|              & =1, \\
         \sigma_g\sigma_{g^{-1}} & =1.
     \end{align}
-    If $g^{-1}=g$, then $\sigma_g\in\{1,-1\}$.  These are
+    If $g^{-1}=g$, the chosen gauge at $g^{-1}$, transported to the
+    bond coordinates at $g$, equals $T_g$. Thus the same chosen scalar
+    satisfies $T_gT_g^*=\sigma_g\mathbf 1$, and
+    $\sigma_g\in\{1,-1\}$. These are
     the dagger--inverse scalar relation and its immediate consequences
     in \cite[lines~1557--1567]{FrancoRubio2025MPUGauging}.
 \end{theorem}
@@ -445,8 +450,15 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
     uniqueness says that $T_{g^{-1}}^*$ is a nonzero scalar multiple of
     $T_g^\dagger$.  Multiplication on the left by $T_g$ gives
     (\ref{eq:mpug_dagger_inverse_scalar}) with the displayed orientation.
-    The unit-modulus, inverse-pair, and self-inverse conclusions now follow
-    from the three unitary matrix identities below.
+    The unit-modulus and inverse-pair conclusions follow from
+    Theorems~\ref{thm:mpug_unitary_entrywise_scalar_phase}
+    and~\ref{thm:mpug_unitary_entrywise_paired_scalars}. If $g^{-1}=g$,
+    transporting the chosen gauge along this equality gives $T_g$ itself
+    in the current bond coordinates. Substitution in
+    (\ref{eq:mpug_dagger_inverse_scalar}) gives
+    $T_gT_g^*=\sigma_g\mathbf 1$ with the same chosen scalar. Apply
+    Theorem~\ref{thm:mpug_unitary_entrywise_self_sign} to obtain
+    $\sigma_g\in\{1,-1\}$.
 \end{proof}
 
 The following construction is the first algebraic step of
@@ -936,6 +948,147 @@ inverse-compatible decomposition is asserted.
          & =((K^\dagger\otimes K)v^\dagger)_{(l,s),(i,j)}.
     \end{align}
 \end{proof}
+\subsection{Unitarity of the first-cut comparison}
+
+\begin{theorem}[Unitarity of the first-cut comparison]
+    \label{thm:mpug_inverse_cut_comparison_unitary}
+    \lean{MPOTensor.inverseCompatibleComparisonK_isUnitaryBetween}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpug_inverse_cut_comparison_k}
+    Let $\mathcal U$ be a simple MPU of physical dimension $d$ and bond
+    dimension $D$, with a canonical-form-II presentation and its recorded
+    positive-definite matrix $\rho$. Let $T$ be unitary on $\C^D$ and
+    let $\sigma\in\C$. Suppose that, for every physical pair $i,j$,
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$, and that
+    $T\overline T=\sigma I_D$. Construct the first source factor
+    $\widetilde X$ with this same $\rho$ and the second source factor $Y_2$.
+    Put $r=\operatorname{rank}M_1(\mathcal U)$ and
+    $\ell=\operatorname{rank}M_2(\mathcal U)$. The comparison
+    \begin{align}
+        K & =\widetilde X^\dagger(I_d\otimes\rho)
+        (I_d\otimes\overline T)Y_2^\dagger
+        \colon\C^\ell\longrightarrow\C^r
+    \end{align}
+    is unitary between these spaces: $K^\dagger K=I_\ell$ and
+    $KK^\dagger=I_r$. This is the comparison-unitarity step of
+    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lemuisometry, ThmFund1, thm:mpug_inverse_cut_gate_identity,
+        thm:mpug_unitary_entrywise_scalar_phase,
+        thm:matrix_unitary_adjoint_kronecker}
+    Canonical form gives $d,D>0$, and Lemma~\ref{lemuisometry} gives
+    $d^2\leq r\ell$, so both rank spaces are nonempty. By
+    Theorem~\ref{thm:mpug_unitary_entrywise_scalar_phase},
+    $\sigma\overline\sigma=1$. Theorem~\ref{ThmFund1} gives unitary
+    source gates $u,v$, constructed with the recorded $\rho$. Put
+    $H=K^\dagger\otimes K\colon\C^r\otimes\C^\ell
+        \to\C^\ell\otimes\C^r$.
+    Theorem~\ref{thm:mpug_inverse_cut_gate_identity} gives
+    $u=\sigma Hv^\dagger$. Cancelling the unitary right factor makes
+    $\sigma H$ unitary. Its two Gram identities give
+    \begin{align}
+        I_{r\ell}  & =(\sigma H)^\dagger(\sigma H)
+        =\overline\sigma\sigma H^\dagger H=H^\dagger H, \\
+        I_{\ell r} & =(\sigma H)(\sigma H)^\dagger
+        =\sigma\overline\sigma HH^\dagger=HH^\dagger.
+    \end{align}
+    Thus $H$ is unitary. Theorem~\ref{thm:matrix_unitary_adjoint_kronecker}
+    implies that $K$ is unitary without identifying the two rank bases.
+\end{proof}
+
+\begin{theorem}[Adjoint inverse and weighted normalization]
+    \label{thm:mpug_inverse_cut_unitary_consequences}
+    \lean{MPOTensor.inverseCompatibleComparisonJ_eq_conjTranspose,
+        MPOTensor.inverseCompatibleX₁_weighted_isometry}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpug_inverse_cut_comparison_k,
+        def:mpug_inverse_cut_comparison_j, def:mpug_inverse_cut_factors}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$, with a
+    canonical-form-II presentation and recorded positive-definite matrix
+    $\rho$. Suppose that $T$ is unitary on $\C^D$, that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$, and that $T\overline T=\sigma I_D$ for a scalar
+    $\sigma\in\C$. Put $r=\operatorname{rank}M_1(\mathcal U)$ and
+    $\ell=\operatorname{rank}M_2(\mathcal U)$.
+    Form the first source factors with this same $\rho$,
+    the candidate $X=(I_d\otimes\overline T)Y_2^\dagger$, and the comparisons
+    $K\colon\C^\ell\to\C^r$ and $J\colon\C^r\to\C^\ell$ of
+    Definitions~\ref{def:mpug_inverse_cut_comparison_k}
+    and~\ref{def:mpug_inverse_cut_comparison_j}. Then
+    \begin{align}
+        J                          & =K^\dagger, \\
+        X^\dagger(I_d\otimes\rho)X & =I_\ell.
+    \end{align}
+    These give the adjoint identification and first weighted normalization in
+    \cite[lines~5432--5487]{FrancoRubio2025MPUGauging},
+    retaining the source normalization in
+    \cite[lines~487--494]{Cirac2017MPU}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_comparison_unitary,
+        thm:mpug_inverse_cut_comparison, thm:mpu_source_factor_normalizations}
+    Theorems~\ref{thm:mpug_inverse_cut_comparison_unitary}
+    and~\ref{thm:mpug_inverse_cut_comparison} give
+    $K^\dagger K=I_\ell$ and $KJ=I_r$. Hence
+    $J=(K^\dagger K)J=K^\dagger(KJ)=K^\dagger$.
+    For the normalization, let $\widetilde X$ be the first source factor
+    constructed with $\rho$. Substituting $X=\widetilde XK$ gives
+    \begin{align}
+        X^\dagger(I_d\otimes\rho)X
+         & =K^\dagger\bigl[\widetilde X^\dagger
+            (I_d\otimes\rho)\widetilde X\bigr]K
+        =K^\dagger K=I_\ell.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The unitary comparison at an involutive element]
+    \label{thm:mpug_involutive_comparison_unitary}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.inverseCompatibleComparison_unitary_of_inv_eq}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
+        def:left_canonical_tensor, def:mpu_canonical_form_ii,
+        thm:mpug_dagger_inverse_gauge, def:mpug_inverse_cut_comparison_k,
+        def:mpug_inverse_cut_comparison_j, def:mpug_inverse_cut_factors}
+    Let $G$ be a group and let $\{\mathcal U_a\}_{a\in G}$ be a
+    representation by simple injective MPUs of physical dimension $d$.
+    Suppose that the normalized flattening of $\mathcal U_a$ is
+    left-canonical for every $a\in G$. Fix $g\in G$ with $g^{-1}=g$,
+    and give $\mathcal U_g$ a canonical-form-II presentation with recorded
+    positive-definite matrix $\rho_g$. Take the chosen gauge $T_g$ of
+    Theorem~\ref{thm:mpug_dagger_inverse_gauge}. For $\mathcal U_g$, set
+    $r=\operatorname{rank}M_1(\mathcal U_g)$ and
+    $\ell=\operatorname{rank}M_2(\mathcal U_g)$. Construct $K_g,J_g$
+    with this $T_g$ and this same $\rho_g$, and put
+    $X_g=(I_d\otimes\overline{T_g})Y_2^\dagger$, using its second-cut
+    factor $Y_2$. Then
+    \begin{align}
+        K_g^\dagger K_g                  & =I_\ell,      \\
+        K_gK_g^\dagger                   & =I_r,         \\
+        J_g                              & =K_g^\dagger, \\
+        X_g^\dagger(I_d\otimes\rho_g)X_g & =I_\ell.
+    \end{align}
+    Canonical form II is required only at $g$; left-canonicity of the
+    normalized flattenings is required throughout the family.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_group_representation, thm:mpug_involutive_adjoint_gauge,
+        thm:mpug_dagger_inverse_scalar,
+        thm:mpug_inverse_cut_comparison_unitary,
+        thm:mpug_inverse_cut_unitary_consequences}
+    The representation makes $\mathcal U_g$ simple.
+    Theorem~\ref{thm:mpug_involutive_adjoint_gauge} supplies
+    $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$ for
+    every physical pair. For the same chosen scalar $\sigma_g$,
+    Theorem~\ref{thm:mpug_dagger_inverse_scalar} gives
+    $T_g\overline{T_g}=\sigma_g I_{D_g}$. Apply
+    Theorems~\ref{thm:mpug_inverse_cut_comparison_unitary}
+    and~\ref{thm:mpug_inverse_cut_unitary_consequences} with the recorded
+    $\rho_g$. No new gauge, scalar, or simplicity assumption is needed.
+\end{proof}
+
 \begin{definition}[Common positive physical blocking]
     \label{def:mpug_common_blocking}
     \lean{MPOTensor.GroupFamily.block}
