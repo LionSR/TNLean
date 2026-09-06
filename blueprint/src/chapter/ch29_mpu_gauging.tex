@@ -1138,7 +1138,7 @@ gauges and scalar relation have been constructed.
 \subsection{The second network and unitarity of the staircase gates}
 
 \begin{lemma}[Isometries on the middle two legs]
-    \label{thm:mpug_staircase_middle_isometry}
+    \label{lem:mpug_staircase_middle_isometry}
     \lean{MPOTensor.staircaseMiddle_isIsometry}
     \leanok
     \uses{def:mpug_staircase_middle}
@@ -1198,7 +1198,7 @@ gauges and scalar relation have been constructed.
 \end{proof}
 
 \begin{lemma}[Isometry of the first staircase network]
-    \label{thm:mpug_staircase_first_network_isometry}
+    \label{lem:mpug_staircase_first_network_isometry}
     \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_isIsometry}
     \leanok
     \uses{def:mpug_staircase_gates, def:mpu_source_uv}
@@ -1212,14 +1212,14 @@ gauges and scalar relation have been constructed.
 
 \begin{proof}\leanok
     \uses{thm:mpug_staircase_network_cancelled,
-        thm:mpug_staircase_middle_isometry}
+        lem:mpug_staircase_middle_isometry}
     Theorem~\ref{thm:mpug_staircase_network_cancelled} expresses
     $w_L\otimes w_R$ as $v_{23}(u\otimes u)(u^\dagger)_{23}$.
     Each factor is an isometry, so their product is an isometry.
 \end{proof}
 
 \begin{lemma}[Isometry of the second staircase network]
-    \label{thm:mpug_staircase_second_network_isometry}
+    \label{lem:mpug_staircase_second_network_isometry}
     \lean{MPOTensor.SourceFactors.sourceWL_second_network_isIsometry}
     \leanok
     \uses{def:mpug_staircase_gates, def:mpu_source_uv}
@@ -1239,7 +1239,7 @@ gauges and scalar relation have been constructed.
 \end{proof}
 
 \begin{corollary}[Unitary staircase gates]
-    \label{thm:mpug_staircase_gates_unitary}
+    \label{cor:mpug_staircase_gates_unitary}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceWL_sourceWR_isUnitaryBetween}
     \leanok
     \discussion{7314}
@@ -1258,11 +1258,11 @@ gauges and scalar relation have been constructed.
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{ThmFund1, thm:mpug_staircase_first_network_isometry,
+    \uses{ThmFund1, lem:mpug_staircase_first_network_isometry,
         thm:mpug_kronecker_identity_factors,
-        thm:mpug_staircase_second_network_isometry}
+        lem:mpug_staircase_second_network_isometry}
     Theorem~\ref{ThmFund1} gives unitary $u,v$ and $d_rd_l=d^2>0$.
-    Lemma~\ref{thm:mpug_staircase_first_network_isometry} gives
+    Lemma~\ref{lem:mpug_staircase_first_network_isometry} gives
     \begin{align}
         (w_L^\dagger w_L)\otimes(w_R^\dagger w_R) & =I.
     \end{align}
@@ -1272,7 +1272,7 @@ gauges and scalar relation have been constructed.
     Each of the two left-gate layers in
     $K=(w_L\otimes I_d)(I_d\otimes w_L)$ has Gram matrix $\delta I$,
     so $K^\dagger K=\delta^2 I$. By
-    Lemma~\ref{thm:mpug_staircase_second_network_isometry}, this equals
+    Lemma~\ref{lem:mpug_staircase_second_network_isometry}, this equals
     $I$. Thus $\delta^2=1$, equivalently $\delta^{-2}=1$, and positivity
     gives $\delta=1$. Both gates are isometries between spaces of equal
     dimension, hence unitary.
@@ -1281,7 +1281,7 @@ gauges and scalar relation have been constructed.
 \subsection{Physical closures of the source factors}
 
 \begin{lemma}[The canonical one-letter physical contraction]
-    \label{thm:mpug_one_letter_physical_contraction}
+    \label{lem:mpug_one_letter_physical_contraction}
     \lean{MPOTensor.IsMPUCanonicalFormII.oneLetter_physical_contraction}
     \leanok
     \discussion{7314}
@@ -1312,7 +1312,7 @@ gauges and scalar relation have been constructed.
 \end{proof}
 
 \begin{corollary}[Physical closures of the two source factors]
-    \label{thm:mpug_source_y_physical_contractions}
+    \label{cor:mpug_source_y_physical_contractions}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_physical_contraction,
         MPOTensor.IsMPUCanonicalFormII.sourceY₁_physical_contraction}
     \leanok
@@ -1337,19 +1337,19 @@ gauges and scalar relation have been constructed.
     on the source-cut spaces. They are the two diagrams of part~(b) of
     the staircase-gate corollary in
     \cite[lines~869--917]{FrancoRubio2025MPUGauging}.
-    % Together with thm:mpug_staircase_gates_unitary this establishes
+    % Together with cor:mpug_staircase_gates_unitary this establishes
     % cor:mpu for the source factors of the canonical-form-II presentation.
     % No adjoint-simplicity hypothesis or subsequent eq:MPUnice3/4
     % source-factor constants are asserted here.
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_one_letter_physical_contraction,
+    \uses{lem:mpug_one_letter_physical_contraction,
         thm:mpu_source_y_two_rotated_gram,
         thm:mpu_source_v_four_u_expansions}
     The rotated second-cut Gram identity rewrites the first sum as the
     one-letter contraction of
-    Lemma~\ref{thm:mpug_one_letter_physical_contraction}. The weighted
+    Lemma~\ref{lem:mpug_one_letter_physical_contraction}. The weighted
     first-cut Gram identity rewrites the second sum in the same way;
     diagonality of $\rho$ gives $\rho_{\alpha\beta}=\rho_{\beta\alpha}$.
     Both sums therefore equal $\delta_{p,q}$. These Gram identities cancel
@@ -5277,7 +5277,7 @@ by the displayed matrices.
 \end{definition}
 
 \begin{lemma}[Elementary identities for the Pauli adjoint gauge]
-    \label{thm:mpug_czx_dagger_gauge_laws}
+    \label{lem:mpug_czx_dagger_gauge_laws}
     \lean{MPOTensor.CZX.daggerGauge_conjTranspose,
         MPOTensor.CZX.daggerGauge_mul_self,
         MPOTensor.CZX.daggerGauge_mem_unitaryGroup}
@@ -5345,14 +5345,14 @@ by the displayed matrices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_czx_dagger_gauge_laws, thm:mpug_czx_physical_adjoint}
-    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws} gives $Y\in\mathrm{U}(2)$
+    \uses{lem:mpug_czx_dagger_gauge_laws, thm:mpug_czx_physical_adjoint}
+    Lemma~\ref{lem:mpug_czx_dagger_gauge_laws} gives $Y\in\mathrm{U}(2)$
     and $Y^\dagger=Y$. Substitute into
     Theorem~\ref{thm:mpug_czx_physical_adjoint}.
 \end{proof}
 
 \begin{lemma}[The sign of the explicit CZX adjoint gauge]
-    \label{thm:mpug_czx_dagger_sign}
+    \label{lem:mpug_czx_dagger_sign}
     \lean{MPOTensor.CZX.daggerGauge_map_star,
         MPOTensor.CZX.daggerGauge_mul_map_star}
     \leanok
@@ -5370,10 +5370,10 @@ by the displayed matrices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_czx_dagger_gauge, thm:mpug_czx_dagger_gauge_laws}
+    \uses{def:mpug_czx_dagger_gauge, lem:mpug_czx_dagger_gauge_laws}
     Conjugating each entry of the displayed Pauli matrix gives
     $\overline{Y}=-Y$. Then $Y\overline{Y}=-Y^2=-I_2$ by
-    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws}.
+    Lemma~\ref{lem:mpug_czx_dagger_gauge_laws}.
 \end{proof}
 
 \subsection{The blocked GHZ state and its CZX invariance}
