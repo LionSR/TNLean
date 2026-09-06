@@ -1362,6 +1362,7 @@ gauges and scalar relation have been constructed.
     \lean{MPOTensor.truncatedSymmetryOfEndpoints_cons,
         MPOTensor.SourceFactors.truncatedSymmetry_cons}
     \leanok
+    \discussion{7319}
     \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
         def:mpug_staircase_gates}
     Let $\mathcal U$ be an MPO tensor with physical dimension $d$ and bond
@@ -1386,6 +1387,7 @@ gauges and scalar relation have been constructed.
         (U^{N+3})_{(l,i\sigma,r),(a,b\tau,c)}
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
         (U^{N+2})_{(t,\sigma,r),(b,\tau,c)}.
+        \label{eq:mpug_truncated_symmetry_left_growth}
     \end{align}
     The right endpoint $Y_1$ is arbitrary and unchanged; no first-cut
     factorization is assumed. For normalized source factors, $w_L$ is
@@ -1489,6 +1491,103 @@ gauges and scalar relation have been constructed.
     \end{align}
     Substitute both equalities into the endpoint contraction and regroup
     the finite sums. The remaining interior contraction is $U^{N+2}$.
+\end{proof}
+
+\begin{theorem}[Kronecker product of unitary maps]
+    \label{thm:matrix_unitary_between_kronecker}
+    \lean{Matrix.IsUnitaryBetween.kronecker}
+    \leanok
+    Let $A,B,C,E$ be finite sets, possibly empty, and let
+    $M\colon\C^B\to\C^A$ and $P\colon\C^E\to\C^C$ be unitary maps:
+    $M^\dagger M=I_B$, $MM^\dagger=I_A$, $P^\dagger P=I_E$, and
+    $PP^\dagger=I_C$. Then $M\otimes P$ is a unitary map from
+    $\C^{B\times E}$ to $\C^{A\times C}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The adjoint and multiplication identities for Kronecker products give
+    \begin{align}
+        (M\otimes P)^\dagger(M\otimes P)
+         & =(M^\dagger M)\otimes(P^\dagger P)
+        =I_B\otimes I_E=I_{B\times E},        \\
+        (M\otimes P)(M\otimes P)^\dagger
+         & =(MM^\dagger)\otimes(PP^\dagger)
+        =I_A\otimes I_C=I_{A\times C}.
+    \end{align}
+    The second identity is the first applied to $M^\dagger$ and $P^\dagger$.
+\end{proof}
+
+\begin{theorem}[Unitarity at every bulk length]
+    \label{thm:mpug_truncated_symmetry_unitary}
+    \lean{MPOTensor.IsMPUCanonicalFormII.truncatedSymmetry_isUnitaryBetween}
+    \leanok
+    \discussion{7319}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpu_weighted_source_factors, def:mpug_truncated_symmetry}
+    Let $\mathcal U$ be a simple MPU with a canonical-form-II presentation
+    and recorded positive diagonal fixed matrix $\rho$. Construct the
+    source factors from this tensor and this same $\rho$. For every
+    $N\geq0$, their endpoint contraction $U^{N+2}$ is a unitary map
+    \begin{align}
+        U^{N+2}\colon\mathcal H_{\mathrm{in},N}
+         & \longrightarrow\mathcal H_{\mathrm{out},N},        \\
+        \mathcal H_{\mathrm{in},N}
+         & =\C^d\otimes(\C^d)^{\otimes N}\otimes\C^d,         \\
+        \mathcal H_{\mathrm{out},N}
+         & =\C^{d_l}\otimes(\C^d)^{\otimes N}\otimes\C^{d_r}.
+        \label{eq:mpug_truncated_symmetry_unitary_spaces}
+    \end{align}
+    The subscripts of $\mathcal H_{\mathrm{in},N}$ and
+    $\mathcal H_{\mathrm{out},N}$ record the bulk length $N$. Equivalently,
+    \begin{align}
+        (U^{N+2})^\dagger U^{N+2} & =I_{\mathcal H_{\mathrm{in},N}},  &
+        U^{N+2}(U^{N+2})^\dagger  & =I_{\mathcal H_{\mathrm{out},N}}.
+        \label{eq:mpug_truncated_symmetry_unitary}
+    \end{align}
+    This is the endpoint-coordinate unitarity part of the assertion
+    following the truncated-symmetry diagram in
+    \cite[lines~2062--2099]{FrancoRubio2025MPUGauging}, between the
+    displayed input and output spaces. The scope restriction is recorded
+    in \cite{gap:fbc25_truncated_symmetry_endpoint_unitarity_scope}.
+    Neither simplicity of the physical adjoint nor unitarity of supplied
+    gates is assumed. The assertion does not identify each endpoint
+    source space with a physical site, specialize to a finite-group
+    family, prove agreement with a global symmetry on interior
+    observables, or establish the complementary finite-chain relation
+    following the movement display at
+    \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}.
+    % Partial coverage of #7319: all-length unitarity between these
+    % coordinate spaces only. The remaining physical and group-level
+    % assertions are not marked complete.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{ThmFund1, thm:mpug_staircase_gates_unitary,
+        thm:mpug_truncated_symmetry_zero, thm:mpug_truncated_symmetry_left_growth,
+        thm:matrix_unitary_between_kronecker, def:mpug_truncated_symmetry}
+    Theorem~\ref{ThmFund1} gives unitary $u$, and
+    Theorem~\ref{thm:mpug_staircase_gates_unitary} gives unitary $w_L$,
+    both for the constructed source factors. Induct on the bulk length $N$.
+    For $N=0$, the total length is two. In $U^2$,
+    remove the unique empty word from both index sets; by
+    Theorem~\ref{thm:mpug_truncated_symmetry_zero}, the resulting matrix
+    is $u$.
+
+    For the successor step put
+    $\mathcal R_N=(\C^d)^{\otimes N}\otimes\C^{d_r}$. After the natural
+    associativity identifications, the left-end growth identity expresses
+    $U^{N+3}$ as
+    \begin{align}
+        (w_L\otimes I_{\mathcal R_N})(I_d\otimes U^{N+2}).
+    \end{align}
+    The output reindexing sends $(l,i,\sigma,r)$ to $(l,i\sigma,r)$,
+    and the input reindexing sends $(a,b,\tau,c)$ to $(a,b\tau,c)$.
+    These are bijections given by splitting off the first bulk letter;
+    they leave both endpoint coordinates unchanged.
+    Theorem~\ref{thm:matrix_unitary_between_kronecker} makes both
+    $w_L\otimes I_{\mathcal R_N}$ and $I_d\otimes U^{N+2}$ unitary.
+    Composition and the two coordinate bijections preserve both Gram
+    identities. The induction therefore covers every $N$, not just
+    one parity of bulk lengths.
 \end{proof}
 
 \subsection{Physical closures of the source factors}

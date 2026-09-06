@@ -50,6 +50,11 @@ For the MPU symmetry-defect gauging paper:
   or a replacement in unbuffered defect formulas. This local correction is
   formally verified and resolved; the literal printed pair still fails at
   empty length.
+- `fbc25_truncated_symmetry_endpoint_unitarity_scope.tex` records that the
+  all-length truncated-symmetry theorem proves unitarity between endpoint
+  coordinate spaces, while the finite-group endpoint identifications
+  \(d_l=d_r=d\), the interior action condition, and the complementary
+  finite-chain relation remain outside that theorem.
 - `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
   matter--link space and multiplication convention of the local Gauss-law
   representation, the cited three-defect associator calculation, the

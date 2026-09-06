@@ -17,10 +17,14 @@ to $U_g^{N+2}$ in the source, not $U_g^N$; zero bulk has total length two. Rows 
 (left physical, bulk input, right physical). The endpoint convention is
 arXiv:1703.09188, equations `XY`, `SVDforms2`, and `uu` (lines 510–543).
 
-**Scope restriction:** this file establishes only the endpoint contraction,
-its zero-bulk value, and the source-factorization algebra of `eq:move_trunc_sym`
-(arXiv:2502.20257, lines 2101–2174). It does not establish all-length unitarity,
-the finite-group operator specialization, or the complementary movement equation.
+**Scope restriction (endpoint contraction and growth):** this file establishes
+only the endpoint contraction, its zero-bulk value, and the source-factorization
+algebra of `eq:move_trunc_sym` (arXiv:2502.20257, lines 2101–2174).
+All-length endpoint-coordinate unitarity is established separately in
+`TruncatedSymmetryUnitarity`; this algebraic growth layer does not import that
+unitarity layer. This file does not establish the finite-group operator
+specialization or the complementary finite-chain relation. Documented in
+`docs/paper-gaps/fbc25_truncated_symmetry_endpoint_unitarity_scope.tex`.
 The raw endpoint API requires no simplicity, unitarity, normalized Gram, or
 inverse-gauge premise: zero bulk needs no factorization, left growth needs
 only the second cut factorization, and two-sided growth needs both. The
