@@ -111,6 +111,7 @@ import TNLean.MPS.MPDO.CZXGHZAction
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
 import TNLean.MPS.MPDO.CZXGaussInvariantSubspace
 import TNLean.MPS.MPDO.CZXSecondTupleCertificate
+import TNLean.MPS.MPDO.CZXSourceFactors
 import TNLean.MPS.MPDO.CZXTensor
 import TNLean.MPS.MPDO.CZXTensorInjectivity
 import TNLean.MPS.MPDO.CaseIIAbsorptionCounterexample

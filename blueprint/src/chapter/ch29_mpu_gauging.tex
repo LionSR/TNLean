@@ -2216,13 +2216,108 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $\delta^{-1}\delta=1$.
 \end{proof}
 
-The full decomposition theorem also requires the comparison matrices obtained
-from the MPU source-gate identities to have unitary Kronecker product. Once
-this tensor-specific statement is established,
-Theorems~\ref{thm:mpug_factorization_comparison} and
-\ref{thm:mpug_reciprocal_unitary_gauges} yield the claimed gauges.
-% Formalization boundary: the MPU-specific source-gate transport and the final
-% lem:deco wrapper remain outside this slice and depend on issue #7313.
+\subsection{Uniqueness of the source decompositions}
+
+\begin{theorem}[Transport of the source contraction]
+    \label{thm:mpug_source_contraction_transport}
+    \lean{MPOTensor.sourceU_contraction_transport}
+    \leanok
+    \discussion{7315}
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    Let $U$ have physical dimension $d$ and bond dimension $D$, and write
+    $r=\operatorname{rank}M_1(U)$ and $\ell=\operatorname{rank}M_2(U)$.
+    Let $Y_1,\widetilde Y_1\in\operatorname{Mat}_{r\times(D\times d)}(\C)$
+    and $Y_2,\widetilde Y_2\in\operatorname{Mat}_{\ell\times(d\times D)}(\C)$.
+    For square matrices $K_1\in\operatorname{Mat}_r(\C)$ and
+    $K_2\in\operatorname{Mat}_\ell(\C)$, suppose that
+    $\widetilde Y_i=K_iY_i$ for $i=1,2$. Define
+    $u,\widetilde u\colon\C^d\otimes\C^d\to\C^\ell\otimes\C^r$ by
+    \begin{align}
+        u_{(l,r'),(p,q)}
+         & =\sum_{\beta=0}^{D-1}(Y_2)_{l,(p,\beta)}(Y_1)_{r',(\beta,q)}, \\
+        \widetilde u_{(l,r'),(p,q)}
+         & =\sum_{\beta=0}^{D-1}(\widetilde Y_2)_{l,(p,\beta)}
+        (\widetilde Y_1)_{r',(\beta,q)}.
+        \label{eq:mpug_raw_source_contractions}
+    \end{align}
+    Here $0\leq l<\ell$, $0\leq r'<r$, and $0\leq p,q<d$.
+    Then $\widetilde u=(K_2\otimes K_1)u$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Substitute $\widetilde Y_i=K_iY_i$ into
+    (\ref{eq:mpug_raw_source_contractions}) and interchange the three finite
+    sums. The coefficient of $u_{(l',r''),(p,q)}$ is
+    $(K_2)_{l,l'}(K_1)_{r',r''}$, the corresponding entry of $K_2\otimes K_1$.
+\end{proof}
+
+\begin{theorem}[Reciprocal unitary gauges for the source decompositions]
+    \label{thm:mpug_source_decomposition_gauges}
+    \lean{MPOTensor.exists_reciprocal_unitary_source_gauges}
+    \leanok
+    \discussion{7315}
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    Let $U$ have physical dimension $d$ and bond dimension $D$.
+    Put $r=\operatorname{rank}M_1(U)$ and $\ell=\operatorname{rank}M_2(U)$.
+    Suppose that
+    \begin{align}
+        X_1,\widetilde X_1 & \in\operatorname{Mat}_{(d\times D)\times r}(\C),   &
+        Y_1,\widetilde Y_1 & \in\operatorname{Mat}_{r\times(D\times d)}(\C),      \\
+        X_2,\widetilde X_2 & \in\operatorname{Mat}_{(D\times d)\times\ell}(\C), &
+        Y_2,\widetilde Y_2 & \in\operatorname{Mat}_{\ell\times(d\times D)}(\C)
+    \end{align}
+    satisfy $X_iY_i=\widetilde X_i\widetilde Y_i=M_i(U)$ for $i=1,2$.
+    Suppose there are matrices $L_i,R_i$ with
+    $L_i\widetilde X_i=I$ and $Y_iR_i=I$.
+    Assume that the maps $u,\widetilde u\colon\C^d\otimes\C^d\to
+        \C^\ell\otimes\C^r$ with coordinates
+    \begin{align}
+        u_{(l,r'),(p,q)}
+         & =\sum_{\beta=0}^{D-1}(Y_2)_{l,(p,\beta)}(Y_1)_{r',(\beta,q)}, \\
+        \widetilde u_{(l,r'),(p,q)}
+         & =\sum_{\beta=0}^{D-1}(\widetilde Y_2)_{l,(p,\beta)}
+        (\widetilde Y_1)_{r',(\beta,q)}
+    \end{align}
+    are unitary. The indices range over $0\leq l<\ell$, $0\leq r'<r$,
+    and $0\leq p,q<d$. Then there exist $\delta>0$ and unitaries
+    $W_1\in\operatorname{Mat}_r(\C)$, $W_2\in\operatorname{Mat}_\ell(\C)$ such that
+    \begin{align}
+        \widetilde X_1 & =\delta^{-1}X_1W_1,          &
+        \widetilde Y_1 & =\delta W_1^\dagger Y_1,       \\
+        \widetilde X_2 & =\delta X_2W_2,              &
+        \widetilde Y_2 & =\delta^{-1}W_2^\dagger Y_2.
+        \label{eq:mpug_source_decomposition_gauges}
+    \end{align}
+    Thus $\delta_1=\delta^{-1}$ and $\delta_2=\delta$ satisfy
+    $\delta_1\delta_2=1$. This proves the decomposition lemma of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}: its cut factorizations,
+    one-sided inverses, and unitarity of $u,\widetilde u$ suffice.
+    Unitarity of the second contraction $v$ is not needed.
+    % Source lem:deco, issue #7315. No clause (c), weighted normalization,
+    % canonical-form-II, density, or physical-adjoint hypothesis is used.
+    % This result does not assert completion of the separate #7313 assembly.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_factorization_comparison,
+        thm:mpug_source_contraction_transport, thm:mpug_reciprocal_unitary_gauges}
+    If $d=0$, every factor equality has an empty physical row or column
+    index. Thus $\delta=1$ and identity gauges satisfy all four
+    equalities, and $\delta^{-1}\delta=1$.
+    Suppose now that $d>0$. Since $u$ is an isometry,
+    $\ell r\geq d^2>0$; hence both
+    source ranks are positive. Theorem~\ref{thm:mpug_factorization_comparison}
+    gives $K_i=L_iX_i=\widetilde Y_iR_i$ with
+    $X_i=\widetilde X_iK_i$ and $\widetilde Y_i=K_iY_i$.
+    Theorem~\ref{thm:mpug_source_contraction_transport} yields
+    $\widetilde u=(K_2\otimes K_1)u$. Therefore
+    $K_2\otimes K_1=\widetilde u u^\dagger$ is unitary.
+    Interchanging the two tensor factors makes $K_1\otimes K_2$ unitary.
+    Apply Theorem~\ref{thm:mpug_reciprocal_unitary_gauges} to obtain
+    (\ref{eq:mpug_source_decomposition_gauges}). In particular, if
+    $K_1=\delta V_1$ and $K_2=\delta^{-1}V_2$ with $V_i$ unitary,
+    the required orientation is $W_i=V_i^\dagger$.
+\end{proof}
 
 \begin{definition}[Unitary factorization comparison]
     \label{def:mpug_unitary_factorization_comparison}
@@ -5843,6 +5938,244 @@ by the displayed matrices.
     Conjugating each entry of the displayed Pauli matrix gives
     $\overline{Y}=-Y$. Then $Y\overline{Y}=-Y^2=-I_2$ by
     Theorem~\ref{thm:mpug_czx_dagger_gauge_laws}.
+\end{proof}
+
+\subsection{The displayed CZX source factors}
+
+\begin{definition}[Four explicit CZX source factors]
+    \label{def:mpug_czx_displayed_factors}
+    \lean{MPOTensor.CZX.displayedX₂, MPOTensor.CZX.displayedY₂,
+        MPOTensor.CZX.displayedX₁, MPOTensor.CZX.displayedY₁}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_dagger_gauge}
+    For $0\leq i<4$, write $i=2a(i)+b(i)$ with $a(i),b(i)\in\{0,1\}$,
+    and put $\overline i=3-i$. Let $Y$ be the Pauli matrix of
+    Definition~\ref{def:mpug_czx_dagger_gauge}. Define matrices
+    $X_2\in\operatorname{Mat}_{(2\times4)\times4}(\C)$ and
+    $Y_2\in\operatorname{Mat}_{4\times(4\times2)}(\C)$ by
+    \begin{align}
+        (X_2)_{(\alpha,i),k}
+         & =\delta_{i,k}\delta_{\alpha,a(i)}(-1)^{a(i)+b(i)}, \\
+        (Y_2)_{k,(j,\beta)}
+         & =\delta_{k,\overline j}(-1)^{a(k)b(k)+b(k)\beta},
+    \end{align}
+    where $0\leq i,j,k<4$ and $\alpha,\beta\in\{0,1\}$. Define
+    $X_1\in\operatorname{Mat}_{(4\times2)\times4}(\C)$ and
+    $Y_1\in\operatorname{Mat}_{4\times(2\times4)}(\C)$ by
+    \begin{align}
+        (X_1)_{(i,\beta),k}
+         & =\sum_{t=0}^1Y_{\beta t}\overline{(Y_2)_{k,(i,t)}}, \\
+        (Y_1)_{k,(\alpha,j)}
+         & =\sum_{t=0}^1\overline{(X_2)_{(t,j),k}}Y_{t\alpha}.
+    \end{align}
+    Product indices in these matrix spaces retain their displayed order.
+    These are the filled and empty factors in
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging}. The weights
+    $(-1)^{ab}$ are unnormalized Hadamard weights, and $(-1)^{a(i)+b(i)}$
+    includes both output $Z$ gates. In the formula for $X_1$, the Pauli
+    entry is $Y_{\beta t}$, not $Y_{t\beta}$.
+\end{definition}
+
+\begin{theorem}[The displayed factors recover both CZX cuts]
+    \label{thm:mpug_czx_displayed_cuts}
+    \lean{MPOTensor.CZX.displayed_cuts}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors, def:mpug_czx_exact_tensor,
+        def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    For the exact once-blocked CZX tensor $B$, the factors of
+    Definition~\ref{def:mpug_czx_displayed_factors} satisfy
+    \begin{align}
+        X_1Y_1 & =M_1(B), \\
+        X_2Y_2 & =M_2(B).
+    \end{align}
+    Here $(M_1(B))_{(i,\beta),(\alpha,j)}=B^{i,j}_{\alpha\beta}$ and
+    $(M_2(B))_{(\alpha,i),(j,\beta)}=B^{i,j}_{\alpha\beta}$. These are
+    the two decompositions in
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_factors, def:mpug_czx_dagger_gauge,
+        thm:mpug_czx_exact_tensor_unitary,
+        def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    Expand each matrix product over its four-dimensional factor index.
+    Substitute the displayed formulas and the coordinate formula from
+    Theorem~\ref{thm:mpug_czx_exact_tensor_unitary}. Evaluating the binary
+    bond indices and the four physical values proves both entry identities.
+\end{proof}
+
+\begin{theorem}[Four Gram matrices of the displayed CZX factors]
+    \label{thm:mpug_czx_displayed_grams}
+    \lean{MPOTensor.CZX.displayed_grams}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors}
+    The four explicit factors of
+    Definition~\ref{def:mpug_czx_displayed_factors} satisfy
+    \begin{align}
+        X_1^\dagger X_1 & =2I_4,
+        \label{eq:mpug_czx_displayed_gram_x1} \\
+        X_2^\dagger X_2 & =I_4,
+        \label{eq:mpug_czx_displayed_gram_x2} \\
+        Y_1Y_1^\dagger  & =I_4,               \\
+        Y_2Y_2^\dagger  & =2I_4.
+    \end{align}
+    The factors of two retain the unnormalized Hadamard weights of
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_factors, thm:mpug_czx_dagger_gauge_laws}
+    The empty factors are Pauli-gauge contractions of the filled factors,
+    $X_1=(I_4\otimes Y)Y_2^\dagger$ and $Y_1=X_2^\dagger(Y\otimes I_4)$.
+    By Theorem~\ref{thm:mpug_czx_dagger_gauge_laws}, $Y$ is unitary, hence so
+    are $I_4\otimes Y$ and $Y\otimes I_4$; composing a unitary matrix with
+    $Y_2^\dagger$, respectively with $X_2^\dagger$, leaves the Gram matrix
+    unchanged, so $X_1^\dagger X_1=Y_2Y_2^\dagger$ and
+    $Y_1Y_1^\dagger=X_2^\dagger X_2$. It remains to expand the two filled
+    Gram matrices $X_2^\dagger X_2$ and $Y_2Y_2^\dagger$ over their
+    product-index spaces and substitute the factor coordinates; evaluation
+    at each pair of factor indices gives the two displayed scalar
+    identities.
+\end{proof}
+
+\begin{definition}[Right inverses of the displayed CZX factors]
+    \label{def:mpug_czx_displayed_right_inverses}
+    \lean{MPOTensor.CZX.displayedZ₁, MPOTensor.CZX.displayedZ₂}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors}
+    For the factors of Definition~\ref{def:mpug_czx_displayed_factors}, set
+    \begin{align}
+        Z_1 & =Y_1^\dagger,         \\
+        Z_2 & =\tfrac12Y_2^\dagger.
+    \end{align}
+    These are the right inverses associated with the explicit
+    decompositions in \cite[lines~4559--4659]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Right inverses and weighted normalization]
+    \label{thm:mpug_czx_displayed_normalizations}
+    \lean{MPOTensor.CZX.displayed_normalizations}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors,
+        def:mpug_czx_displayed_right_inverses, def:mpu_source_weight}
+    Set $\rho=I_2/2$. The displayed factors and right inverses satisfy
+    \begin{align}
+        Y_1Z_1                         & =I_4,
+        \label{eq:mpug_czx_displayed_right_inverse_y1} \\
+        Y_2Z_2                         & =I_4,
+        \label{eq:mpug_czx_displayed_right_inverse_y2} \\
+        X_1^\dagger(I_4\otimes\rho)X_1 & =I_4.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_displayed_grams,
+        def:mpug_czx_displayed_right_inverses, def:mpu_source_weight}
+    The two inverse identities follow directly from
+    Theorem~\ref{thm:mpug_czx_displayed_grams}. Since
+    $I_4\otimes\rho=I_8/2$, the weighted identity is
+    $\tfrac12X_1^\dagger X_1=I_4$.
+\end{proof}
+
+\begin{theorem}[Both CZX source-cut ranks are four]
+    \label{thm:mpug_czx_displayed_ranks}
+    \lean{MPOTensor.CZX.displayed_ranks}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two}
+    For the exact once-blocked CZX tensor $B$,
+    \begin{align}
+        d_r=\operatorname{rank}M_1(B) & =4, \\
+        d_l=\operatorname{rank}M_2(B) & =4.
+    \end{align}
+    Thus the four-dimensional legs in
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging} have the actual
+    source-cut dimensions.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
+        thm:mpug_czx_displayed_normalizations}
+    Each cut factors through a four-dimensional space, so its rank is at
+    most four. For the first cut take $L_1=X_1^\dagger/2$, and for the
+    second take $L_2=X_2^\dagger$. By (\ref{eq:mpug_czx_displayed_gram_x1})
+    and (\ref{eq:mpug_czx_displayed_gram_x2}), $L_iX_i=I_4$; by
+    (\ref{eq:mpug_czx_displayed_right_inverse_y1}) and
+    (\ref{eq:mpug_czx_displayed_right_inverse_y2}), $Y_iZ_i=I_4$, hence
+    $L_i(X_iY_i)Z_i=I_4$. Multiplication cannot increase rank, so each cut
+    has rank at least four.
+\end{proof}
+
+\begin{definition}[The displayed factors in source-rank coordinates]
+    \label{def:mpug_czx_displayed_source_factors}
+    \lean{MPOTensor.CZX.displayedRightEquiv, MPOTensor.CZX.displayedLeftEquiv,
+        MPOTensor.CZX.displayedSourceFactors,
+        MPOTensor.CZX.displayedSourceFactors_coordinates,
+        MPOTensor.CZX.displayedSourceFactors_inverse_coordinates}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors,
+        def:mpug_czx_displayed_right_inverses, thm:mpug_czx_displayed_ranks,
+        def:mpug_czx_exact_tensor, def:mpu_weighted_source_factors,
+        def:mpug_czx_dagger_gauge}
+    Let $d_r,d_l$ be the two source-cut ranks of the exact CZX tensor $B$.
+    By Theorem~\ref{thm:mpug_czx_displayed_ranks}, both are four. Let
+    \begin{align}
+        e_r & :\{0,\ldots,d_r-1\}\longrightarrow\{0,1,2,3\}, \\
+        e_l & :\{0,\ldots,d_l-1\}\longrightarrow\{0,1,2,3\}
+    \end{align}
+    be the bijections that preserve each integer index. Pull back the
+    four-dimensional factor index of $X_1,Y_1,Z_1$ along $e_r$, and that
+    of $X_2,Y_2,Z_2$ along $e_l$. Denote the resulting matrices by
+    $\widehat X_i,\widehat Y_i,\widehat Z_i$. Together with $\rho=I_2/2$,
+    these give source factors for $B$ in the sense of
+    Definition~\ref{def:mpu_weighted_source_factors}, satisfying both cut
+    factorizations, the two left-factor normalizations, and both
+    right-inverse identities.
+
+    Explicitly, for $0\leq k,i<4$ and $\alpha,\beta\in\{0,1\}$, evaluating
+    the pullbacks gives
+    \begin{align}
+        (\widehat X_1)_{(i,\alpha),e_r^{-1}(k)} & =(X_1)_{(i,\alpha),k}, \\
+        (\widehat Y_1)_{e_r^{-1}(k),(\alpha,i)} & =(Y_1)_{k,(\alpha,i)}, \\
+        (\widehat Z_1)_{(\alpha,i),e_r^{-1}(k)} & =(Z_1)_{(\alpha,i),k}, \\
+        (\widehat X_2)_{(\alpha,i),e_l^{-1}(k)} & =(X_2)_{(\alpha,i),k}, \\
+        (\widehat Y_2)_{e_l^{-1}(k),(i,\alpha)} & =(Y_2)_{k,(i,\alpha)}, \\
+        (\widehat Z_2)_{(i,\alpha),e_l^{-1}(k)} & =(Z_2)_{(i,\alpha),k},
+    \end{align}
+    and substituting the definitions of $X_1,Y_1,Z_1,Z_2$ gives the
+    Pauli and inverse coordinates
+    \begin{align}
+        (\widehat X_1)_{(i,\beta),e_r^{-1}(k)}
+         & =\sum_{t=0}^1Y_{\beta t}
+        \overline{(\widehat Y_2)_{e_l^{-1}(k),(i,t)}},                           \\
+        (\widehat Y_1)_{e_r^{-1}(k),(\beta,i)}
+         & =\sum_{t=0}^1\overline{(\widehat X_2)_{(t,i),e_l^{-1}(k)}}Y_{t\beta}, \\
+        (\widehat Z_1)_{(\beta,i),e_r^{-1}(k)}
+         & =\overline{(\widehat Y_1)_{e_r^{-1}(k),(\beta,i)}},                   \\
+        (\widehat Z_2)_{(i,\beta),e_l^{-1}(k)}
+         & =\tfrac12\overline{(\widehat Y_2)_{e_l^{-1}(k),(i,\beta)}}.
+    \end{align}
+    In particular, transport preserves the Pauli orientation $Y_{\beta t}$
+    in the first factor of
+    \cite[lines~4611--4659]{FrancoRubio2025MPUGauging}.
+    % This is an explicit SourceFactors witness, not an equality with the
+    % choice-selected compact SVD factors. It supplies no canonical-form-II
+    % presentation, fusion tensors, local action tensors, or anomaly data.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
+        thm:mpug_czx_displayed_normalizations, def:mpug_czx_displayed_factors,
+        def:mpug_czx_displayed_right_inverses}
+    Transport the cut factorizations and inverse identities along the
+    two index bijections. Products, conjugate transposes, and identities
+    are preserved. The weighted first normalization and the ordinary
+    second normalization therefore hold in the source-rank coordinates.
+    Evaluating the pullbacks, using $e_r(e_r^{-1}(k))=k$ and
+    $e_l(e_l^{-1}(k))=k$, gives the coordinate identities; substituting
+    the definitions of $X_1,Y_1,Z_1,Z_2$ and cancelling the inverse
+    bijections gives the Pauli and inverse coordinates.
 \end{proof}
 
 \subsection{The blocked GHZ state and its CZX invariance}
