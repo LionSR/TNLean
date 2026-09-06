@@ -6834,6 +6834,120 @@ unbuffered defect formulas.
     apply (\ref{eq:mpug_czx_printed_exterior}).
 \end{proof}
 
+\subsection{The CZX \texorpdfstring{$g,g$}{g,g} fusion caps}
+
+\begin{definition}[The CZX $g,g$ fusion caps]
+    \label{def:mpug_czx_fusion_caps}
+    \lean{MPOTensor.CZX.fusionV, MPOTensor.CZX.fusionW}
+    \leanok
+    In the ordered bond coordinates $0,1,2,3$, define the row vector
+    $F^<_{g,g}\colon\C^4\to\C$ and the column vector
+    $F^>_{g,g}\colon\C\to\C^4$ by
+    \begin{align}
+        F^<_{g,g} & =(0,-i,i,0),                     \\
+        F^>_{g,g} & =\tfrac12(0,i,-i,0)^{\mathsf T}.
+    \end{align}
+    These are the concrete caps in
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}, the
+    $g=h=g^{-1}$ specialization of the general fusion-tensor display
+    \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}.
+    % Only the concrete g,g slice of #7354 is covered here.
+\end{definition}
+
+\begin{theorem}[Product coordinates of the CZX fusion caps]
+    \label{thm:mpug_czx_fusion_caps_apply}
+    \lean{MPOTensor.CZX.fusion_caps_apply}
+    \leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
+    Let $F^<_{g,g},F^>_{g,g}$ be the caps of
+    Definition~\ref{def:mpug_czx_fusion_caps}, and let $Y$ be the Pauli
+    matrix of Definition~\ref{def:mpug_czx_dagger_gauge}. Identify the
+    product-bond coordinate $(a,b)$ with $2a+b$. For all bond bits
+    $a,b\in\{0,1\}$,
+    \begin{align}
+        F^<_{g,g}(a,b) & =Y_{a,b},         &
+        F^>_{g,g}(a,b) & =\tfrac12Y_{b,a},
+        \label{eq:mpug_czx_fusion_caps_apply}
+    \end{align}
+    Thus both caps vanish at the diagonal bond coordinates and carry
+    $Y$ in opposite orientations, as in the printed diagram of
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
+    Evaluate both caps at $2a+b$ for the four pairs $(a,b)$ and compare
+    with the entries of $Y$ to obtain
+    (\ref{eq:mpug_czx_fusion_caps_apply}).
+\end{proof}
+
+\begin{theorem}[The CZX fusion reduction]
+    \label{thm:mpug_czx_fusion_reduction}
+    \lean{MPOTensor.CZX.fusion_isReduction,
+        MPOTensor.CZX.fusion_isReductionExteriorBufferLength_one}
+    \leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpdo_operator_product,
+        def:mpug_czx_exact_tensor, threeMPU, def:mpo_to_mps,
+        def:mps_rectangular_reduction,
+        def:mps_reduction_exterior_buffer_length}
+    Let $B$ be the doubled-index tensor of the actual product
+    $\mathcal U_g\cdot\mathcal U_g$
+    (Definition~\ref{def:mpdo_operator_product} applied to
+    Definition~\ref{def:mpug_czx_exact_tensor} with itself, viewed
+    through Definition~\ref{def:mpo_to_mps}), and let $I$ be the
+    doubled-index bond-one identity tensor of
+    Definition~\ref{threeMPU}. Then $(F^<_{g,g},F^>_{g,g})$ is a
+    reduction from $B$ to $I$ with exterior buffer length one. For every
+    word $\mathbf c$, including the empty word,
+    \begin{align}
+        F^<_{g,g}F^>_{g,g}              & =1,             \\
+        F^<_{g,g}B^{\mathbf c}F^>_{g,g} & =I^{\mathbf c}.
+    \end{align}
+    For nonempty words $\mathbf p,\mathbf q,\mathbf c$,
+    \begin{align}
+        B^{\mathbf p}F^>_{g,g}I^{\mathbf c}F^<_{g,g}B^{\mathbf q}
+         & =B^{\mathbf p\mathbf c\mathbf q}.
+        \label{eq:mpug_czx_fusion_reduction}
+    \end{align}
+    This is the concrete $g,g$ instance of the fusion reduction
+    \cite[lines~1405--1498]{FrancoRubio2025MPUGauging}, with the fusion
+    tensors of \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}, specialized to
+    the CZX display \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_exact_tensor,
+        def:mpdo_operator_product, def:mpo_to_mps, threeMPU}
+    Put $V=F^<_{g,g}$ and $W=F^>_{g,g}$. Substituting the cap and
+    tensor coordinates gives
+    \begin{align}
+        VW & =1, & VB^iW & =I^i, & B^iWVB^j & =B^iB^j.
+        \label{eq:mpug_czx_fusion_local_identities}
+    \end{align}
+    Induct on the nonempty left word $\mathbf p$, removing its first
+    letter. For the singleton case $\mathbf p=i$ and
+    $\mathbf q=j\mathbf q'$, the local insertion identity in
+    (\ref{eq:mpug_czx_fusion_local_identities}) gives
+    \begin{align}
+        B^iWVB^{j\mathbf q'}
+         & =(B^iWVB^j)B^{\mathbf q'}
+        =B^iB^jB^{\mathbf q'}=B^{i j\mathbf q'}.
+    \end{align}
+    If $\mathbf p=i\mathbf p'$ with $\mathbf p'$ nonempty, apply the
+    induction hypothesis to the tail:
+    \begin{align}
+        B^{i\mathbf p'}WVB^{\mathbf q}
+         & =B^i(B^{\mathbf p'}WVB^{\mathbf q})
+        =B^iB^{\mathbf p'\mathbf q}=B^{i\mathbf p'\mathbf q}.
+    \end{align}
+    Using it in an induction gives $VB^{\mathbf c}W=I^{\mathbf c}$;
+    the empty case is $VW=1$. For nonempty buffers and middle word,
+    \begin{align}
+        B^{\mathbf p}WI^{\mathbf c}VB^{\mathbf q}
+         & =B^{\mathbf p}WVB^{\mathbf c}WVB^{\mathbf q}
+        =B^{\mathbf p\mathbf c\mathbf q},
+    \end{align}
+    applying the word insertion identity twice.
+\end{proof}
+
 \subsection{The displayed CZX circuit tuple}
 
 \begin{definition}[The displayed CZX circuit tuple]
@@ -6958,6 +7072,94 @@ unbuffered defect formulas.
     unitarity follows from Theorem~\ref{thm:mpug_monomial_matrix_laws} because
     all phases are unimodular.
 \end{proof}
+
+\begin{theorem}[Right movement coordinates of the displayed CZX factors]
+    \label{thm:mpug_czx_displayed_right_movement_coordinates}
+    \lean{MPOTensor.CZX.displayedSourceFactors_sourceWR_coordinates}
+    \leanok
+    \discussion{7355}
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_circuit_tuple}
+    Let $w_R$ be the crossed contraction of the displayed source factors
+    of the exact CZX tensor $B$, and let $e_r$ be their right-rank
+    identification with $\{0,1,2,3\}$. Let $W$ denote the matrix of
+    $w=(X_0X_1)\mathrm{CZ}_{01}\mathrm{CZ}_{12}(Z_2Z_3)$ on two
+    four-level matter sites, with each site read in leading-bit-first
+    binary order. For every $i,r,a,j\in\{0,1,2,3\}$,
+    \begin{align}
+        (w_R)_{(i,e_r^{-1}(r)),(e_r^{-1}(a),j)}
+         & =W_{(i,r),(a,j)}.
+    \end{align}
+    This identifies the right movement contraction in
+    \cite[lines~811--869, 4559--4659, 4860--4888]{FrancoRubio2025MPUGauging}
+    without additional hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_displayed_factors, thm:mpug_czx_phase_tables}
+    Pull back the rank indices and expand the crossed contraction as
+    \begin{align*}
+        \sum_{\beta=0}^1(X_1)_{(i,\beta),a}(Y_1)_{r,(\beta,j)}.
+    \end{align*}
+    The sparse action (\ref{eq:mpug_czx_w_action}) gives
+    \begin{align*}
+        W_{(i,r),(a,j)}
+         & =\begin{cases}
+                (-1)^{e(x)}, & i=3-a\text{ and }r=j, \\
+                0,           & \text{otherwise},
+            \end{cases}
+    \end{align*}
+    where $x=(x_0,x_1,x_2,x_3)\in\{0,1\}^4$ satisfies
+    $a=2x_0+x_1$ and $j=2x_2+x_3$.
+    Substitute the displayed factors, first discarding the zero entries
+    of the empty factor $X_1$ by comparing $i$ and $a$. Only then
+    compare $r$ and $j$; on the surviving support the phases agree.
+\end{proof}
+
+\begin{theorem}[Left movement coordinates of the displayed CZX factors]
+    \label{thm:mpug_czx_displayed_left_movement_coordinates}
+    \lean{MPOTensor.CZX.displayedSourceFactors_sourceWL_coordinates}
+    \leanok
+    \discussion{7355}
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_circuit_tuple}
+    Let $w_L$ be the crossed contraction of the displayed source factors
+    of the exact CZX tensor $B$, and let $e_l$ be their left-rank
+    identification with $\{0,1,2,3\}$. Let $W$ denote the matrix of
+    $w=(X_0X_1)\mathrm{CZ}_{01}\mathrm{CZ}_{12}(Z_2Z_3)$ on two
+    four-level matter sites, with each site read in leading-bit-first
+    binary order. For every $l,i,j,k\in\{0,1,2,3\}$,
+    \begin{align}
+        (w_L)_{(e_l^{-1}(l),i),(j,e_l^{-1}(k))}
+         & =(W^\dagger)_{(l,i),(j,k)}.
+    \end{align}
+    This is the left movement identification in
+    \cite[lines~811--869, 4559--4659, 4860--4888]{FrancoRubio2025MPUGauging}
+    in the same matter coordinates, without additional hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_displayed_factors, thm:mpug_czx_phase_tables}
+    Pull back the rank indices and expand the crossed contraction as
+    \begin{align*}
+        \sum_{\beta=0}^1(Y_2)_{l,(j,\beta)}(X_2)_{(\beta,i),k}.
+    \end{align*}
+    Use the conjugated reversed entry
+    $(W^\dagger)_{(l,i),(j,k)}=\overline{W_{(j,k),(l,i)}}$.
+    By (\ref{eq:mpug_czx_w_action}), it vanishes unless $j=3-l$ and
+    $k=i$; on this support it is $\overline{(-1)^{e(x)}}$, where
+    $x=(x_0,x_1,x_2,x_3)\in\{0,1\}^4$ satisfies
+    $l=2x_0+x_1$ and $i=2x_2+x_3$.
+    Substitute the displayed factors, first discarding the zero entries
+    of the filled factor $Y_2$ by comparing $l$ and $j$. Only then
+    compare $i$ and $k$ and verify the remaining phases.
+\end{proof}
+
+% Scope of #7355 here: only the two displayed movement-coordinate identities.
+% No full truncated-symmetry formula, associator, sign, or parent issue
+% completion is asserted.
 
 \begin{theorem}[Local monomial action of the CZX Gauss operator]
     \label{thm:mpug_czx_local_monomial_action}
@@ -7264,7 +7466,7 @@ unbuffered defect formulas.
     \uses{def:mpug_gauge_invariant_subspace, def:mpug_czx_circuit_tuple}
     For the gauge-invariant subspace~(\ref{eq:mpug_gauge_invariant_subspace}) at
     $R=R^{\mathrm{CZX}}$ and $N\geq3$,
-    $\dim_{\C}\mathcal V_N(R^{\mathrm{CZX}})=2^N$. The value is thereby
+    $\dim_{\C}\mathcal V_N(R^{\mathrm{CZX}})\allowbreak=2^N$. The value is thereby
     recorded for the subspace that
     Definition~\ref{def:mpug_gauge_invariant_subspace} attaches to an arbitrary
     tuple, so exhibiting $R^{\mathrm{CZX}}$ as a completion of prescribed
