@@ -1827,7 +1827,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:mpug_source_y_physical_contractions}
+    \uses{thm:mpug_source_y_physical_contractions}
     Cyclic invariance gives
     $\operatorname{tr}(Y_1Y_1^\dagger)=\operatorname{tr}(Y_1^\dagger Y_1)$.
     Grouping the latter sum by its physical index gives
@@ -1837,7 +1837,7 @@ Definition~\ref{def:mpug_group_representation}.
         \overline{(Y_1)_{r,(\alpha,p)}}(Y_1)_{r,(\alpha,p)}
         =\sum_{p=0}^{d-1}1=d
     \end{align}
-    by Corollary~\ref{cor:mpug_source_y_physical_contractions}.
+    by Theorem~\ref{thm:mpug_source_y_physical_contractions}.
 \end{proof}
 
 \begin{theorem}[Normalization of the first source Gram matrix]
@@ -1969,7 +1969,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:mpug_source_y_physical_contractions, def:mpu_source_weight}
+    \uses{thm:mpug_source_y_physical_contractions, def:mpu_source_weight}
     Cyclic invariance and expanding $I_d\otimes\rho$ give
     \begin{align}
         \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr)
@@ -1977,7 +1977,7 @@ Definition~\ref{def:mpug_group_representation}.
         \overline{(Y_2)_{l,(p,y)}}(Y_2)_{l,(p,x)}\rho_{xy}
         =\sum_{p=0}^{d-1}1=d
     \end{align}
-    by Corollary~\ref{cor:mpug_source_y_physical_contractions} at $q=p$.
+    by Theorem~\ref{thm:mpug_source_y_physical_contractions} at $q=p$.
 \end{proof}
 
 \begin{theorem}[Normalization of the weighted second source Gram matrix]
