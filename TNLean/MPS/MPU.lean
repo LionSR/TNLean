@@ -44,6 +44,7 @@ import TNLean.MPS.MPU.SourceURetainedInterior
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.SourceVCompleteNetwork
 import TNLean.MPS.MPU.SourceVIsometry
+import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.TensorProduct

@@ -1000,6 +1000,141 @@ gauges and scalar relation have been constructed.
     (\ref{eq:mpug_alternating_network_proportionality}).
 \end{proof}
 
+\section{Staircase gates and the first source network}
+\label{sec:mpug_staircase_gates}
+
+\begin{definition}[Staircase gates]
+    \label{def:mpug_staircase_gates}
+    \lean{MPOTensor.SourceFactors.sourceWL,
+        MPOTensor.SourceFactors.sourceWR}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$. Put $d_l=\ell$ and $d_r=r$ for its source-cut ranks.
+    Let $X_1,Y_1,Z_1,X_2,Y_2,Z_2$ be source factors with
+    $M_1=X_1Y_1$, $M_2=X_2Y_2$,
+    $X_1^\dagger(I_d\otimes\rho)X_1=I_r$,
+    $X_2^\dagger X_2=I_\ell$, and $Y_iZ_i=I$ for $i=1,2$,
+    where $\rho$ is a matrix on the virtual space. Define
+    \begin{align}
+        (w_L)_{(l,i),(j,l')}
+         & =\sum_{\beta=0}^{D-1} (Y_2)_{l,(j,\beta)}
+        (X_2)_{(\beta,i),l'},                         \\
+        (w_R)_{(i,r),(r',j)}
+         & =\sum_{\beta=0}^{D-1} (X_1)_{(i,\beta),r'}
+        (Y_1)_{r,(\beta,j)}.
+    \end{align}
+    Thus $w_L\colon\C^d\otimes\C^{d_l}\to\C^{d_l}\otimes\C^d$
+    and $w_R\colon\C^{d_r}\otimes\C^d\to\C^d\otimes\C^{d_r}$.
+    Rows are the upper legs and columns the lower legs, each in spatial
+    left-to-right order. These are the crossed contractions of
+    \cite[lines~811--869]{FrancoRubio2025MPUGauging}.
+    % Source: main.tex, eq:wLR, lines 811--869. This definition does not
+    % assert the unitarity or normalization conclusions of cor:mpu.
+\end{definition}
+
+\begin{definition}[An operator on the middle two legs]
+    \label{def:mpug_staircase_middle}
+    \lean{MPOTensor.staircaseMiddle}
+    \leanok
+    Let $A,B,C,B',C',E$ be index sets and let $M$ be a complex matrix with
+    rows indexed by $B\times C$ and columns by $B'\times C'$.
+    Its action on the middle two legs is the matrix $M_{23}$ defined by
+    \begin{align}
+        (M_{23})_{((a,b),(c,e)),((a',b'),(c',e'))}
+         & =\delta_{a,a'}M_{(b,c),(b',c')}\delta_{e,e'}.
+    \end{align}
+    This is $(I_A\otimes M)\otimes I_E$ after regrouping
+    $((a,b),(c,e))$ as $((a,(b,c)),e)$, as in the first network in the
+    proof of the staircase-gate corollary of
+    \cite[lines~918--974]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Composition on the middle two legs]
+    \label{thm:mpug_staircase_middle_composition}
+    \lean{MPOTensor.staircaseMiddle_mul, MPOTensor.staircaseMiddle_one}
+    \leanok
+    \uses{def:mpug_staircase_middle}
+    Let $M$ and $N$ be composable complex matrices between pairs of index
+    sets. If their common index sets and the two outer index sets are finite,
+    then $(MN)_{23}=M_{23}N_{23}$. The identity matrix satisfies $I_{23}=I$.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the matrix product, the two outer Kronecker deltas fix the outer
+    indices. The remaining sum is the entry formula for $MN$.
+    For the identity, the four Kronecker deltas give equality of the two
+    four-leg indices.
+\end{proof}
+
+\begin{theorem}[The first staircase network before cancellation]
+    \label{thm:mpug_staircase_network_uncancelled}
+    \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_mul_middle_sourceU}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpug_staircase_gates, def:mpug_staircase_middle,
+        def:mpu_source_uv}
+    Let $\mathcal U$ have source factors as in
+    Definition~\ref{def:mpug_staircase_gates}, and form $u,v,w_L,w_R$
+    from those same factors. Then
+    \begin{align}
+        (w_L\otimes w_R)u_{23} & =v_{23}(u\otimes u).
+        \label{eq:mpug_staircase_network_uncancelled}
+    \end{align}
+    No simplicity or unitarity assumption on $\mathcal U$ is required.
+    This is the first diagram in the proof of the staircase-gate corollary
+    of \cite[lines~918--968]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
+    Expand the crossed contractions on both sides. For output index
+    $((l,i_2),(i_3,r))$ and input index $((j_1,j_2),(j_3,j_4))$,
+    the two open factorizations identify both entries with
+    \begin{align}
+        \sum_{\alpha,\gamma=0}^{D-1}
+        (Y_2)_{l,(j_1,\alpha)}
+        (\mathcal U^{i_2}_{j_2}\mathcal U^{i_3}_{j_3})_{\alpha,\gamma}
+        (Y_1)_{r,(\gamma,j_4)}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The first staircase network after cancellation]
+    \label{thm:mpug_staircase_network_cancelled}
+    \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_eq}
+    \leanok
+    \discussion{7314}
+    \uses{def:mpug_staircase_gates, def:mpug_staircase_middle,
+        def:mpu_source_uv}
+    Let $\mathcal U$ have source factors as in
+    Definition~\ref{def:mpug_staircase_gates}, and form $u,v,w_L,w_R$
+    from those same factors. If $u$ is a coisometry, so that
+    $uu^\dagger=I_{d_ld_r}$, then
+    \begin{align}
+        w_L\otimes w_R
+         & =v_{23}(u\otimes u)(u^\dagger)_{23} \\
+         & =(I\otimes v\otimes I)(u\otimes u)
+        (I\otimes u^\dagger\otimes I).
+        \label{eq:mpug_staircase_network_cancelled}
+    \end{align}
+    The second expression uses the regrouping of
+    Definition~\ref{def:mpug_staircase_middle}. This is the displayed
+    network identity in
+    \cite[lines~969--974]{FrancoRubio2025MPUGauging}.
+    % Partial result under the explicit coisometry premise, not cor:mpu:
+    % no second network, individual gate unitarity, or scalar normalization.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_staircase_network_uncancelled,
+        thm:mpug_staircase_middle_composition}
+    Multiply (\ref{eq:mpug_staircase_network_uncancelled}) on the right by
+    $(u^\dagger)_{23}$. The middle layers compose to
+    $(uu^\dagger)_{23}=I$, giving
+    (\ref{eq:mpug_staircase_network_cancelled}).
+\end{proof}
+
 \section{Scalar three-cocycles and fusion-tensor gauge freedom}
 \label{sec:mpug_scalar_gauge}
 
@@ -4670,6 +4805,46 @@ by the displayed matrices.
     Thus the operator is the monomial matrix for complementation, with
     column phase $(-1)^{E(\kappa_N(t))}$. Each phase has absolute value one,
     so Theorem~\ref{thm:mpug_monomial_matrix_laws} proves unitarity.
+\end{proof}
+
+\begin{theorem}[Injectivity of the once-blocked CZX tensor]
+    \label{thm:mpug_czx_exact_tensor_injective}
+    \lean{MPOTensor.CZX.tensor_isInjective}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_exact_tensor, def:injective}
+    The once-blocked CZX tensor $B$ of
+    Definition~\ref{def:mpug_czx_exact_tensor}, with the unnormalized
+    Hadamard weights and both output $Z$ gates, is injective:
+    \begin{align}
+        \operatorname{span}_{\C}\{B^{i,j}:0\leq i,j<4\}
+         & =\operatorname{Mat}_2(\C).
+    \end{align}
+    Here $B^{2a+b,2c+d}=B^{ab,cd}$ for binary $a,b,c,d$.
+    This is the injectivity assertion preceding the tensor diagram in
+    \cite[lines~4505--4547]{FrancoRubio2025MPUGauging}.
+    % Source: eq:MPU_CZX. This proves only injectivity of the shared tensor;
+    % it does not complete the GHZ, fusion, or action-data scope of #7354.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_exact_tensor_unitary}
+    Let $E_{ab}$ be the bond matrix units, with $a,b\in\{0,1\}$.
+    The coordinate formula in
+    Theorem~\ref{thm:mpug_czx_exact_tensor_unitary} gives
+    \begin{align}
+        E_{00}
+         & =\tfrac12(B^{0,3}-B^{1,2}),  \\
+        E_{01}
+         & =\tfrac12(B^{0,3}+B^{1,2}),  \\
+        E_{10}
+         & =-\tfrac12(B^{2,1}+B^{3,0}), \\
+        E_{11}
+         & =\tfrac12(B^{3,0}-B^{2,1}).
+    \end{align}
+    Thus every bond matrix unit lies in the span of the physical letters.
+    Since every $2\times2$ matrix is a linear combination of these units,
+    the letters span the full bond matrix algebra.
 \end{proof}
 
 \subsection{The displayed CZX circuit tuple}

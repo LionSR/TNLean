@@ -5010,11 +5010,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_admissible_simple_tensor_equivalence}
     \notready
     \discussion{5708}
-    % **Scope restriction (all positive bond dimensions):** the $D=1$ branch
-    % uses one-dimensional transfer stabilization; the $D>1$ branch uses chosen
-    % reduced full-support canonical-form-II data.
-    % Source Theorem III.8 is stated under the preceding representative
-    % convention without these displayed hypotheses. Documented in
+    % **Scope restriction (supplied reduced full-support fixed-pair data):**
+    % this entry assumes a chosen positive diagonal weight and stabilized
+    % fixed pair on the reduced full-support representative, rather than
+    % deriving that datum from the source's standing convention. See
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    % Retained under #7660: the source-labelled theorem now uses the bundled
+    % canonical-form-II presentation, but downstream supplied-fixed-pair
+    % statements cannot yet be redirected to it. The stabilization converse
+    % and exponent-dependent normalization in #7758 must first justify that
+    % change of hypotheses. This is one of the three same-tensor merge
+    % candidates, not a derived-tensor preservation statement. See
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_reduced_full_support_source_datum}
     Let $\mathcal U$ be an MPU tensor equipped with a reduced full-support
@@ -5107,11 +5113,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{def:mpu_admissible_standard_form}
     \notready
     \discussion{6019}
-    % **Scope restriction (reduced full-support source datum):** this standard
-    % form uses Theorem~\ref{thm:mpu_admissible_simple_tensor_equivalence} for a
-    % tensor carrying the datum in
-    % Definition~\ref{def:mpu_reduced_full_support_source_datum}.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    % **Scope restriction (supplied reduced full-support fixed-pair data):**
+    % this standard form uses source unitaries constructed from a chosen
+    % reduced full-support datum with its positive diagonal weight and
+    % stabilized fixed pair. The passage from this supplied datum to the
+    % source's standing convention remains open; see
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    % Retained under #7660 with the supplied-fixed-pair equivalence theorem.
+    % Redirecting its downstream uses to SF requires the stabilization
+    % converse and normalization tracked by #7758; the bundled convention
+    % alone does not justify that change of hypotheses. Keep the twelve
+    % derived-tensor restrictions and the pathwise data separate. See
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{thm:mpu_admissible_simple_tensor_equivalence, def:mpu_source_uv, def:mpu_reduced_full_support_source_datum}
     Let $\mathcal U$ be a simple tensor equipped with a reduced full-support
     source datum. The admissible standard form of the two-site blocking
@@ -5158,9 +5171,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_admissible_fundamental}
     \notready
     \discussion{6020}
-    % **Scope restriction (reduced full-support source data):** both tensors
-    % carry the data required by
-    % Definition~\ref{def:mpu_admissible_standard_form}. Documented in
+    % **Scope restriction (supplied reduced full-support fixed-pair data):**
+    % both tensors carry chosen reduced full-support source data, including
+    % positive diagonal weights and stabilized fixed pairs, for their
+    % admissible standard forms. These supplied hypotheses have not yet been
+    % identified with the source's standing convention; see
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    % Retained under #7660: both supplied-fixed-pair presentations must be
+    % related to the standing canonical-form-II convention before downstream
+    % uses can be redirected to FundamentalMPU. The converse and normalization
+    % in #7758 address this same-tensor obstruction, not preservation under
+    % derived-tensor operations or continuous choice along paths. The generic
+    % supplied-pair source-u lemma remains a reusable step. See
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{def:mpu_admissible_standard_form, thm:mpu_admissible_simple_tensor_equivalence, def:mpu_reduced_full_support_source_datum}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors equipped with reduced
