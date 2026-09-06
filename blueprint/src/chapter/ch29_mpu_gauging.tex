@@ -1090,6 +1090,339 @@ inverse-compatible decomposition is asserted.
     $\rho_g$. No new gauge, scalar, or simplicity assumption is needed.
 \end{proof}
 
+\subsection{The compatible decomposition and its literal gates}
+
+The construction below gives source factors and unitary gates from the
+candidate decomposition in \cite[lines~5390--5487]{FrancoRubio2025MPUGauging}.
+It establishes the stated factor identities and the phase relation between
+the new gates, not all the pleasant properties or the truncated-chain identity
+asserted in that passage.
+
+\begin{definition}[The identification of the first-cut coordinates]
+    \label{def:mpug_inverse_cut_rank_equiv}
+    \lean{MPOTensor.inverseCompatibleRankEquiv}
+    \leanok
+    \uses{thm:mpug_inverse_cut_rank_equality, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPO tensor of dimensions $d,D$ and let $T$
+    be unitary on $\C^D$. Suppose that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$. Put $r=\operatorname{rank}M_1(\mathcal U)$ and
+    $\ell=\operatorname{rank}M_2(\mathcal U)$. The equality $\ell=r$ of
+    Theorem~\ref{thm:mpug_inverse_cut_rank_equality} defines the
+    order-preserving bijection
+    $e\colon\{0,\ldots,\ell-1\}\to\{0,\ldots,r-1\}$, with $e(l)=l$.
+    Write $P_e\colon\C^\ell\to\C^r$ for its permutation matrix.
+    This explicitly identifies the intermediate coordinates in the
+    comparison of \cite[lines~5432--5443]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{definition}[The inverse-compatible source factors]
+    \label{def:mpug_inverse_compatible_source_factors}
+    \lean{MPOTensor.inverseCompatibleSourceFactors,
+        MPOTensor.inverseCompatibleSourceFactors_X₁,
+        MPOTensor.inverseCompatibleSourceFactors_Y₁,
+        MPOTensor.inverseCompatibleSourceFactors_Z₁,
+        MPOTensor.inverseCompatibleSourceFactors_X₂,
+        MPOTensor.inverseCompatibleSourceFactors_Y₂,
+        MPOTensor.inverseCompatibleSourceFactors_Z₂,
+        MPOTensor.inverseCompatibleSourceFactors_apply}
+    \leanok
+    \uses{def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_factors,
+        def:mpu_weighted_source_factors, def:mpu_canonical_form_ii,
+        def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU in canonical form II, with recorded
+    positive-definite matrix $\rho$. Suppose that $T$ is unitary on
+    $\C^D$, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
+    for every physical pair $i,j$, and that $T\overline T=\sigma I_D$
+    for a scalar $\sigma\in\C$. Take the chosen second-cut factors
+    $X_2,Y_2,Z_2$ and put $X=(I_d\otimes\overline T)Y_2^\dagger$,
+    $Y=X_2^\dagger(T^{\mathsf T}\otimes I_d)$. With $e,P_e$ as in
+    Definition~\ref{def:mpug_inverse_cut_rank_equiv}, define the source
+    factors $\widehat X_1,\widehat Y_1,\widehat Z_1,
+        \widehat X_2,\widehat Y_2,\widehat Z_2$ by
+    \begin{align}
+        \widehat X_1 & =XP_e^\dagger,          \\
+        \widehat Y_1 & =P_eY,                  \\
+        \widehat Z_1 & =Y^\dagger P_e^\dagger, \\
+        \widehat X_2 & =X_2,                   \\
+        \widehat Y_2 & =Y_2,                   \\
+        \widehat Z_2 & =Z_2.
+    \end{align}
+    Thus only the first intermediate coordinate is transported. For
+    physical--virtual indices $a$, virtual--physical indices $b$, and
+    $0\leq l<\ell$, their coordinates are
+    \begin{align}
+        (\widehat X_1)_{a,e(l)} & =X_{a,l},            \\
+        (\widehat Y_1)_{e(l),b} & =Y_{l,b},            \\
+        (\widehat Z_1)_{b,e(l)} & =\overline{Y_{l,b}}.
+    \end{align}
+    These factors satisfy the two source-cut factorizations, the weighted
+    first isometry, the ordinary second isometry, and the two right-inverse
+    identities at the same weight $\rho$. This is the candidate construction
+    of \cite[lines~5390--5432]{FrancoRubio2025MPUGauging}, with its
+    normalization supplied by the comparison argument at lines~5444--5487.
+\end{definition}
+\begin{proof}\leanok
+    \uses{def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_factors,
+        def:mpu_weighted_source_factors, thm:mpug_inverse_cut_factorization,
+        thm:mpug_inverse_cut_unitary_consequences,
+        thm:mpug_inverse_cut_right_inverse}
+    The second factors and their identities are unchanged. Put
+    $W=I_d\otimes\rho$. The candidate identities are
+    $XY=M_1(\mathcal U)$, $X^\dagger WX=I_\ell$, and $YY^\dagger=I_\ell$;
+    the last follows because the right inverse $B^\dagger X_2$ of $Y$
+    is $Y^\dagger$, where $B=T^{\mathsf T}\otimes I_d$.
+    Transporting along $P_e$ gives
+    \begin{align}
+        \widehat X_1\widehat Y_1
+         & =XP_e^\dagger P_eY=XY=M_1(\mathcal U), \\
+        \widehat X_1^\dagger W\widehat X_1
+         & =P_e(X^\dagger WX)P_e^\dagger=I_r,     \\
+        \widehat Y_1\widehat Z_1
+         & =P_eYY^\dagger P_e^\dagger=I_r.
+    \end{align}
+    Evaluating the transported matrices at $e(l)$ gives the coordinate
+    formulas, since $e^{-1}(e(l))=l$.
+\end{proof}
+
+\begin{theorem}[Unitary transport of the first source factors]
+    \label{thm:mpug_inverse_source_unitary_transport}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_unitary_transport,
+        MPOTensor.inverseCompatibleSourceFactors_gram_eq}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors,
+        def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_comparison_k,
+        def:mpu_weighted_source_factors, def:mpu_canonical_form_ii,
+        def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
+    form II, with recorded positive-definite matrix $\rho$. Suppose
+    that $T$ is unitary on $\C^D$, that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$, and that $T\overline T=\sigma I_D$ for a
+    scalar $\sigma\in\C$. Let $\widetilde X_1,\widetilde Y_1$ be the
+    chosen first source factors at this same weight, and let
+    $\widehat X_1,\widehat Y_1$ be the inverse-compatible first factors
+    of Definition~\ref{def:mpug_inverse_compatible_source_factors}.
+    Put $r=\operatorname{rank}M_1(\mathcal U)$ and
+    $\ell=\operatorname{rank}M_2(\mathcal U)$. Take the weighted
+    comparison $K\colon\C^\ell\to\C^r$ of
+    Definition~\ref{def:mpug_inverse_cut_comparison_k} and the
+    permutation matrix $P_e\colon\C^\ell\to\C^r$ of
+    Definition~\ref{def:mpug_inverse_cut_rank_equiv}. The square matrix
+    $C=KP_e^\dagger$ is unitary on $\C^r$, and
+    \begin{align}
+        \widehat X_1 & =\widetilde X_1C,         \\
+        \widehat Y_1 & =C^\dagger\widetilde Y_1.
+    \end{align}
+    Consequently, the Gram matrices on the external first-cut spaces
+    are unchanged:
+    \begin{align}
+        \widehat X_1\widehat X_1^\dagger
+         & =\widetilde X_1\widetilde X_1^\dagger, \\
+        \widehat Y_1^\dagger\widehat Y_1
+         & =\widetilde Y_1^\dagger\widetilde Y_1.
+    \end{align}
+    This is the transport of the comparison in
+    \cite[lines~5432--5443]{FrancoRubio2025MPUGauging}, after its
+    unitarity is established at lines~5444--5487. It asserts no
+    transport formula for the chosen first right inverse and no
+    further pleasant properties.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_comparison_unitary,
+        thm:mpug_inverse_cut_comparison, thm:mpug_inverse_cut_unitary_consequences,
+        def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_compatible_source_factors}
+    The comparison results give $K^\dagger K=I_\ell$, $KK^\dagger=I_r$,
+    $X=\widetilde X_1K$, and $Y=K^\dagger\widetilde Y_1$ for the
+    untransported candidates $X,Y$. Reindexing the columns of $K$
+    along $e$ gives $C=KP_e^\dagger$. Since $P_e$ identifies the two
+    coordinate bases,
+    \begin{align}
+        C^\dagger C & =P_eK^\dagger KP_e^\dagger=I_r, \\
+        CC^\dagger  & =KP_e^\dagger P_eK^\dagger=I_r.
+    \end{align}
+    Reindexing the two candidate factors gives
+    \begin{align}
+        \widehat X_1 & =XP_e^\dagger
+        =\widetilde X_1KP_e^\dagger=\widetilde X_1C, \\
+        \widehat Y_1 & =P_eY
+        =P_eK^\dagger\widetilde Y_1=C^\dagger\widetilde Y_1.
+    \end{align}
+    Cancel $CC^\dagger$ in the external Gram matrices:
+    \begin{align}
+        \widehat X_1\widehat X_1^\dagger
+         & =\widetilde X_1(CC^\dagger)\widetilde X_1^\dagger
+        =\widetilde X_1\widetilde X_1^\dagger,               \\
+        \widehat Y_1^\dagger\widehat Y_1
+         & =\widetilde Y_1^\dagger(CC^\dagger)\widetilde Y_1
+        =\widetilde Y_1^\dagger\widetilde Y_1.
+    \end{align}
+\end{proof}
+\begin{definition}[Literal gates on the common second-cut space]
+    \label{def:mpug_inverse_compatible_gates}
+    \lean{MPOTensor.inverseCompatibleU, MPOTensor.inverseCompatibleV}
+    \leanok
+    \uses{def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be any MPO tensor of dimensions $d,D$ and $T$ any
+    unitary virtual matrix. Put $\ell=\operatorname{rank}M_2(\mathcal U)$.
+    From the candidates $X=(I_d\otimes\overline T)Y_2^\dagger$ and
+    $Y=X_2^\dagger(T^{\mathsf T}\otimes I_d)$ and the second factors
+    $X_2,Y_2$, define
+    $u_{\mathrm{new}}\colon\C^d\otimes\C^d\to\C^\ell\otimes\C^\ell$
+    and $v_{\mathrm{new}}\colon\C^\ell\otimes\C^\ell\to\C^d\otimes\C^d$.
+    For physical indices $i,j$ and second-cut indices $l,s$, set
+    \begin{align}
+        (u_{\mathrm{new}})_{(l,s),(i,j)}
+         & =\sum_{\beta=0}^{D-1}(Y_2)_{l,(i,\beta)}Y_{s,(\beta,j)}, \\
+        (v_{\mathrm{new}})_{(i,j),(l,s)}
+         & =\sum_{\beta=0}^{D-1}X_{(i,\beta),l}(X_2)_{(\beta,j),s}.
+    \end{align}
+    These are the literal contractions of the candidate factors, before
+    transporting a rank coordinate. They are the new gates in
+    \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Comparison transport of the new left gate]
+    \label{thm:mpug_inverse_new_u_transport}
+    \lean{MPOTensor.inverseCompatibleU_eq_comparisonJ_mul_sourceU}
+    \leanok
+    \uses{def:mpug_inverse_compatible_gates, def:mpug_inverse_cut_comparison_j,
+        def:mpu_source_uv, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPO tensor, $\rho$ a positive-definite virtual
+    matrix, and $T$ a unitary virtual matrix satisfying
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair. Let $u$ be its source gate at weight $\rho$ and $J$
+    its reverse comparison at that weight. Put
+    $r=\operatorname{rank}M_1(\mathcal U)$ and
+    $\ell=\operatorname{rank}M_2(\mathcal U)$. Then
+    $u_{\mathrm{new}}=(I_\ell\otimes J)u$.
+    This is the comparison transport used in
+    \cite[lines~5432--5443 and 5486--5487]{FrancoRubio2025MPUGauging};
+    it does not require $J=K^\dagger$ or gate unitarity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_comparison, def:mpug_inverse_compatible_gates,
+        def:mpu_source_uv}
+    Write $\widetilde Y_1$ for the old first factor. Substitute
+    $Y=J\widetilde Y_1$ and interchange the finite sums:
+    \begin{align}
+        (u_{\mathrm{new}})_{(l,s),(i,j)}
+         & =\sum_{a=0}^{r-1}J_{sa}
+        \sum_{\beta=0}^{D-1}(Y_2)_{l,(i,\beta)}
+        (\widetilde Y_1)_{a,(\beta,j)}          \\
+         & =((I_\ell\otimes J)u)_{(l,s),(i,j)}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Comparison transport of the new right gate]
+    \label{thm:mpug_inverse_new_v_transport}
+    \lean{MPOTensor.inverseCompatibleV_eq_sourceV_mul_comparisonK}
+    \leanok
+    \uses{def:mpug_inverse_compatible_gates, def:mpug_inverse_cut_comparison_k,
+        def:mpu_source_uv, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPO tensor, $\rho$ a positive-definite virtual
+    matrix, and $T$ a unitary virtual matrix satisfying
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair. Let $v$ be its source gate at weight $\rho$ and $K$
+    its weighted comparison. Put $r=\operatorname{rank}M_1(\mathcal U)$
+    and $\ell=\operatorname{rank}M_2(\mathcal U)$. Then
+    $v_{\mathrm{new}}=v(K\otimes I_\ell)$.
+    This is the comparison transport used in
+    \cite[lines~5432--5443 and 5486--5487]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_comparison, def:mpug_inverse_compatible_gates,
+        def:mpu_source_uv}
+    Write $\widetilde X_1$ for the old first factor. Substitute
+    $X=\widetilde X_1K$ and interchange the finite sums:
+    \begin{align}
+        (v_{\mathrm{new}})_{(i,j),(l,s)}
+         & =\sum_{a=0}^{r-1}\left(\sum_{\beta=0}^{D-1}
+        (\widetilde X_1)_{(i,\beta),a}(X_2)_{(\beta,j),s}\right)K_{al} \\
+         & =(v(K\otimes I_\ell))_{(i,j),(l,s)}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Unitarity and the phase relation of the new gates]
+    \label{thm:mpug_inverse_new_gates_unitary_phase}
+    \lean{MPOTensor.inverseCompatibleGates_unitary_and_phase}
+    \leanok
+    \uses{def:mpug_inverse_compatible_gates, def:mpu_canonical_form_ii,
+        def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU in canonical form II, with recorded
+    positive-definite matrix $\rho$. Suppose that $T$ is unitary,
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair, and $T\overline T=\sigma I_D$ for $\sigma\in\C$.
+    The literal gates of Definition~\ref{def:mpug_inverse_compatible_gates}
+    are unitary between $\C^d\otimes\C^d$ and
+    $\C^\ell\otimes\C^\ell$, and satisfy
+    $u_{\mathrm{new}}=\sigma v_{\mathrm{new}}^\dagger$.
+    This is the new-gate conclusion of
+    \cite[lines~5440--5487]{FrancoRubio2025MPUGauging}. The equality uses
+    the common second-cut coordinate space, not the differently ordered
+    rank spaces of the gates formed after transporting the first factors.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_new_u_transport, thm:mpug_inverse_new_v_transport,
+        thm:mpug_inverse_cut_comparison_unitary,
+        thm:mpug_inverse_cut_unitary_consequences, ThmFund1,
+        thm:matrix_unitary_between_kronecker, thm:mpug_inverse_cut_gate_identity}
+    Use the old source gates at the recorded weight $\rho$. The comparison
+    results give $J=K^\dagger$ and $K^\dagger K=I_\ell$. Thus
+    \begin{align}
+        u_{\mathrm{new}} & =(I_\ell\otimes K^\dagger)u, \\
+        v_{\mathrm{new}} & =v(K\otimes I_\ell).
+    \end{align}
+    By Theorem~\ref{ThmFund1}, $u,v$ are unitary.
+    Theorem~\ref{thm:matrix_unitary_between_kronecker} makes both
+    Kronecker factors unitary, so the two compositions are unitary.
+    Substitute the old gate identity and cancel $K^\dagger K$:
+    \begin{align}
+        u_{\mathrm{new}}
+         & =\sigma(I_\ell\otimes K^\dagger)
+        (K^\dagger\otimes K)v^\dagger                \\
+         & =\sigma(K^\dagger\otimes I_\ell)v^\dagger
+        =\sigma(v(K\otimes I_\ell))^\dagger
+        =\sigma v_{\mathrm{new}}^\dagger.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The new gates at an involutive group element]
+    \label{thm:mpug_involutive_new_gates}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.inverseCompatibleGates_unitary_and_phase_of_inv_eq}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
+        def:left_canonical_tensor, def:mpu_canonical_form_ii,
+        thm:mpug_dagger_inverse_gauge, thm:mpug_dagger_inverse_scalar,
+        def:mpug_inverse_compatible_gates}
+    Let $G$ be a group and $\{\mathcal U_a\}_{a\in G}$ a representation
+    by simple injective MPUs. Assume that the normalized flattening of
+    $\mathcal U_a$ is left-canonical for every $a\in G$. Fix $g$ with
+    $g^{-1}=g$ and give $\mathcal U_g$ a canonical-form-II presentation.
+    Use its chosen gauge $T_g$ and scalar $\sigma_g$ from
+    Theorems~\ref{thm:mpug_dagger_inverse_gauge}
+    and~\ref{thm:mpug_dagger_inverse_scalar}. The literal new gates of
+    $\mathcal U_g,T_g$ are unitary and satisfy
+    $u_{\mathrm{new},g}=\sigma_g v_{\mathrm{new},g}^\dagger$ on the
+    common second-cut rank-pair space. Canonical form II is needed only
+    at $g$; left-canonicity of normalized flattenings is required for the
+    whole family. This specializes the construction of
+    \cite[lines~5440--5487]{FrancoRubio2025MPUGauging} using its
+    dagger--inverse gauges at lines~1552--1562.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_group_representation, thm:mpug_involutive_adjoint_gauge,
+        thm:mpug_dagger_inverse_scalar, thm:mpug_inverse_new_gates_unitary_phase}
+    The representation supplies simplicity at $g$. Its chosen gauge and
+    scalar satisfy
+    \begin{align}
+        (\mathcal U_g^\dagger)^{ij}
+                          & =T_g^\dagger\mathcal U_g^{ij}T_g, \\
+        T_g\overline{T_g} & =\sigma_g I_{D_g}.
+    \end{align}
+    Apply Theorem~\ref{thm:mpug_inverse_new_gates_unitary_phase} with
+    the canonical-form-II presentation at $g$.
+\end{proof}
 \begin{definition}[Common positive physical blocking]
     \label{def:mpug_common_blocking}
     \lean{MPOTensor.GroupFamily.block}
