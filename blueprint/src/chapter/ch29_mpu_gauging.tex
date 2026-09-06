@@ -1360,6 +1360,7 @@ gauges and scalar relation have been constructed.
     \lean{MPOTensor.truncatedSymmetryOfEndpoints_cons,
         MPOTensor.SourceFactors.truncatedSymmetry_cons}
     \leanok
+    \discussion{7319}
     \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
         def:mpug_staircase_gates}
     Let $\mathcal U$ be an MPO tensor with physical dimension $d$ and bond
@@ -1384,6 +1385,7 @@ gauges and scalar relation have been constructed.
         (U^{N+1})_{(l,i\sigma,r),(a,b\tau,c)}
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
         (U^N)_{(t,\sigma,r),(b,\tau,c)}.
+        \label{eq:mpug_truncated_symmetry_left_growth}
     \end{align}
     The right endpoint $Y_1$ is arbitrary and unchanged; no first-cut
     factorization is assumed. For normalized source factors, $w_L$ is
