@@ -1019,10 +1019,10 @@ gauges and scalar relation have been constructed.
     where $\rho$ is a matrix on the virtual space. Define
     \begin{align}
         (w_L)_{(l,i),(j,l')}
-         & =\sum_{\beta=1}^D (Y_2)_{l,(j,\beta)}
-        (X_2)_{(\beta,i),l'}, \\
+         & =\sum_{\beta=0}^{D-1} (Y_2)_{l,(j,\beta)}
+        (X_2)_{(\beta,i),l'},                         \\
         (w_R)_{(i,r),(r',j)}
-         & =\sum_{\beta=1}^D (X_1)_{(i,\beta),r'}
+         & =\sum_{\beta=0}^{D-1} (X_1)_{(i,\beta),r'}
         (Y_1)_{r,(\beta,j)}.
     \end{align}
     Thus $w_L\colon\C^d\otimes\C^{d_l}\to\C^{d_l}\otimes\C^d$
@@ -1093,7 +1093,7 @@ gauges and scalar relation have been constructed.
     $((l,i_2),(i_3,r))$ and input index $((j_1,j_2),(j_3,j_4))$,
     the two open factorizations identify both entries with
     \begin{align}
-        \sum_{\alpha,\gamma=1}^D
+        \sum_{\alpha,\gamma=0}^{D-1}
         (Y_2)_{l,(j_1,\alpha)}
         (\mathcal U^{i_2}_{j_2}\mathcal U^{i_3}_{j_3})_{\alpha,\gamma}
         (Y_1)_{r,(\gamma,j_4)}.
@@ -4830,12 +4830,13 @@ by the displayed matrices.
 \begin{proof}\leanok
     \uses{thm:mpug_czx_exact_tensor_unitary}
     Let $E_{ab}$ be the bond matrix units, with $a,b\in\{0,1\}$.
-    The coordinate formula gives
+    The coordinate formula in
+    Theorem~\ref{thm:mpug_czx_exact_tensor_unitary} gives
     \begin{align}
         E_{00}
-         & =\tfrac12(B^{0,3}-B^{1,2}), \\
+         & =\tfrac12(B^{0,3}-B^{1,2}),  \\
         E_{01}
-         & =\tfrac12(B^{0,3}+B^{1,2}), \\
+         & =\tfrac12(B^{0,3}+B^{1,2}),  \\
         E_{10}
          & =-\tfrac12(B^{2,1}+B^{3,0}), \\
         E_{11}
