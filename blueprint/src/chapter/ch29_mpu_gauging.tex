@@ -1686,8 +1686,9 @@ Definition~\ref{def:mpug_group_representation}.
     for a single scalar $\delta\in\C$ and every physical pair $i,j$.
     This is the proportionality conclusion in
     \cite[lines~1255--1325]{FrancoRubio2025MPUGauging}.
-    % Only proportionality is proved. The scalar is not evaluated, and
-    % eq:MPUnice3, eq:MPUnice4, and the full prop:MPUsplus remain open.
+    % This theorem proves only proportionality. Normalization requires
+    % the separate source-factor and trace arguments below; the raw
+    % proportionality theorem itself does not evaluate its scalar.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1703,6 +1704,442 @@ Definition~\ref{def:mpug_group_representation}.
     $s^{ij}=c\widetilde{\mathcal U}^{ij}$ for one scalar $c$.
     Set $\delta=c/\sqrt d$.
 \end{proof}
+
+\subsection{Normalization of the first source factor}
+
+\begin{theorem}[The raw first-cut contraction]
+    \label{thm:mpug_raw_first_cut_contraction}
+    \lean{MPOTensor.sourceCutM₁_adjointSimpleContraction_raw}
+    \leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
+        def:mpug_adjoint_simple_contraction}
+    For an arbitrary tensor $A$ of physical dimension $d$ and bond
+    dimension $D$, and an arbitrary $D\times D$ matrix $\rho$, put
+    $M=M_1(A)$ and $W=I_d\otimes\rho$. Then
+    \begin{align}
+        M_1(s(A,\rho)) & =MM^\dagger W^{\mathsf T}M.
+        \label{eq:mpug_raw_first_cut_contraction}
+    \end{align}
+    No positivity, canonical-form, or simplicity hypothesis is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
+        def:mpug_adjoint_simple_contraction}
+    In the first-cut coordinates, multiplication and the physical
+    Kronecker delta in $W^{\mathsf T}$ give
+    \begin{align}
+        (MM^\dagger W^{\mathsf T}M)_{(i,b),(a,j)}
+         & =\sum_{p,q=0}^{d-1}\sum_{x,r,t=0}^{D-1}
+        A^{i,p}_{xb}\,\overline{A^{q,p}_{xr}}\,
+        A^{q,j}_{at}\,\rho_{tr}                    \\
+         & =s(A,\rho)^{i,j}_{ab}.
+    \end{align}
+    The transpose preserves the boundary entry $\rho_{tr}$ in the
+    defining contraction.
+\end{proof}
+
+\begin{theorem}[The first cut of the adjoint-simple contraction]
+    \label{thm:mpug_first_cut_adjoint_contraction}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
+        def:mpu_source_matrix_one, def:mpug_adjoint_simple_contraction}
+    Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
+    matrix $\rho$, and let $X_1,Y_1$ be its chosen source factors for this
+    same $\rho$. Construct $s$ from $\mathcal U,\rho$ as in
+    Definition~\ref{def:mpug_adjoint_simple_contraction}. With the first
+    cut convention $(M_1(A))_{(i,b),(a,j)}=A^{i,j}_{ab}$,
+    \begin{align}
+        M_1(s) & =X_1(Y_1Y_1^\dagger)Y_1.
+        \label{eq:mpug_first_cut_adjoint_contraction}
+    \end{align}
+    This factorization requires no simplicity assumption. It is the
+    source-factor expansion in
+    \cite[lines~1326--1374]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_raw_first_cut_contraction,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    Put $W=I_d\otimes\rho$. Diagonality gives $W^{\mathsf T}=W$.
+    The cut factorization and weighted isometry then yield
+    \begin{align}
+        M_1(s)
+         & = (X_1Y_1)(X_1Y_1)^\dagger W(X_1Y_1)       \\
+         & =X_1(Y_1Y_1^\dagger)(X_1^\dagger W X_1)Y_1 \\
+         & =X_1(Y_1Y_1^\dagger)Y_1.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The first source Gram matrix is scalar]
+    \label{thm:mpug_source_y_one_scalar_gram}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose_eq_smul}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPU in canonical form II, and suppose that
+    both $\mathcal U$ and $\mathcal U^\dagger$ are simple. Construct the
+    source factors from $\mathcal U$ and its recorded fixed matrix
+    $\rho$. If $d_r$ is the first source-cut rank, then there is a scalar
+    $\delta\in\C$ such that
+    \begin{align}
+        Y_1Y_1^\dagger & =\delta I_{d_r}.
+    \end{align}
+    This is the scalar Gram identity in
+    \cite[lines~1375--1397]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_adjoint_simple_scalar,
+        thm:mpug_first_cut_adjoint_contraction,
+        thm:mpu_source_factor_normalizations,
+        thm:mpu_source_factor_right_inverses,
+        thm:mpu_source_factorizations}
+    By Theorem~\ref{thm:mpug_adjoint_simple_scalar}, $s=\delta\mathcal U$.
+    Applying the first cut and
+    Theorem~\ref{thm:mpug_first_cut_adjoint_contraction} gives
+    \begin{align}
+        X_1(Y_1Y_1^\dagger)Y_1 & =\delta X_1Y_1.
+    \end{align}
+    Multiply on the left by $X_1^\dagger(I_d\otimes\rho)$ and on the
+    right by $Z_1$. The identities
+    $X_1^\dagger(I_d\otimes\rho)X_1=I_{d_r}$ and $Y_1Z_1=I_{d_r}$
+    cancel the two outer factors.
+\end{proof}
+
+\begin{theorem}[Trace of the first source Gram matrix]
+    \label{thm:mpug_source_y_one_gram_trace}
+    \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₁_mul_conjTranspose}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be a simple MPU in canonical form II, with physical
+    dimension $d$, bond dimension $D$, first source-cut rank $d_r$, and
+    recorded fixed matrix $\rho$. Its chosen first source factor satisfies
+    \begin{align}
+        \operatorname{tr}(Y_1Y_1^\dagger) & =d.
+    \end{align}
+    This is the physical-trace calculation used in
+    \cite[line~1398]{FrancoRubio2025MPUGauging}. It does not require
+    simplicity of $\mathcal U^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_physical_contractions}
+    Cyclic invariance gives
+    $\operatorname{tr}(Y_1Y_1^\dagger)=\operatorname{tr}(Y_1^\dagger Y_1)$.
+    Grouping the latter sum by its physical index gives
+    \begin{align}
+        \operatorname{tr}(Y_1^\dagger Y_1)
+         & =\sum_{p=0}^{d-1}\sum_{r=0}^{d_r-1}\sum_{\alpha=0}^{D-1}
+        \overline{(Y_1)_{r,(\alpha,p)}}(Y_1)_{r,(\alpha,p)}
+        =\sum_{p=0}^{d-1}1=d
+    \end{align}
+    by Theorem~\ref{thm:mpug_source_y_physical_contractions}.
+\end{proof}
+
+\begin{theorem}[Normalization of the first source Gram matrix]
+    \label{thm:mpug_source_y_one_normalization}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$, and suppose that both $\mathcal U$ and $\mathcal U^\dagger$ are
+    simple. Let $Y_1$ be the first source factor constructed from
+    $\mathcal U$ and its recorded fixed matrix $\rho$, and let $d_r$ be
+    the first source-cut rank. Then
+    \begin{align}
+        Y_1Y_1^\dagger & =\frac{d}{d_r}I_{d_r}.
+    \end{align}
+    This is the first identity of the source-factor normalization
+    proposition in \cite[lines~1064--1119]{FrancoRubio2025MPUGauging}.
+    % Source: first identity of eq:MPUnice3. The other three constants
+    % and the full prop:MPUsplus are not established by this entry.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_one_scalar_gram,
+        thm:mpug_source_y_one_gram_trace}
+    Write $Y_1Y_1^\dagger=\delta I_{d_r}$ using
+    Theorem~\ref{thm:mpug_source_y_one_scalar_gram}. Taking traces and using
+    Theorem~\ref{thm:mpug_source_y_one_gram_trace} gives $\delta d_r=d$.
+    Canonical form II gives $d>0$, so $d_r\ne0$. Dividing gives
+    $\delta=d/d_r$, as in
+    \cite[line~1398]{FrancoRubio2025MPUGauging}.
+\end{proof}
+
+\subsection{Normalization of the weighted second source factor}
+
+\begin{theorem}[The first cut of the reflected contraction]
+    \label{thm:mpug_adjoint_cut_second_gram}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction_physicalAdjoint}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
+        def:mpu_source_matrix_one, def:mpug_adjoint_simple_contraction,
+        def:mpdo_physical_adjoint, def:mpu_source_weight}
+    Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
+    matrix $\rho$, and let $X_2,Y_2$ be its chosen second source factors.
+    Set $W=I_d\otimes\rho$ and let $s_\dagger$ be the raw contraction of
+    Definition~\ref{def:mpug_adjoint_simple_contraction}, applied to
+    $\mathcal U^\dagger$ and this same $\rho$. Then
+    \begin{align}
+        M_1(s_\dagger) & =Y_2^\dagger(Y_2WY_2^\dagger)X_2^\dagger.
+    \end{align}
+    This is the reflected factorization used for the second identity of
+    the normalization proposition in
+    \cite[lines~1064--1119 and 1398]{FrancoRubio2025MPUGauging}.
+    No simplicity hypothesis is needed for this factorization.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_raw_first_cut_contraction,
+        thm:mpu_physical_adjoint_source_cuts,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    Theorem~\ref{thm:mpug_raw_first_cut_contraction} gives
+    \begin{align}
+        M_1(s(A,\rho)) & =M_1(A)M_1(A)^\dagger W^{\mathsf T}M_1(A).
+    \end{align}
+    The transpose records the boundary coefficient $\rho_{tr}$. Here
+    $\rho$ is diagonal, so $W^{\mathsf T}=W$. Substitute
+    $M_1(\mathcal U^\dagger)=M_2(\mathcal U)^\dagger=Y_2^\dagger X_2^\dagger$
+    and cancel $X_2^\dagger X_2=I$. All factors are those of
+    $\mathcal U$, not newly chosen factors of its adjoint.
+\end{proof}
+
+\begin{theorem}[The weighted second source Gram matrix is scalar]
+    \label{thm:mpug_source_y_two_scalar_gram}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose_eq_smul}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors,
+        def:mpu_source_weight}
+    Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
+    matrix $\rho$, and assume that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Let $Y_2$ be its chosen second
+    source factor and $d_l$ its second source-cut rank. There is a scalar
+    $\varepsilon\in\C$ such that
+    \begin{align}
+        Y_2(I_d\otimes\rho)Y_2^\dagger & =\varepsilon I_{d_l}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_adjoint_canonical_boundaries,
+        thm:mpug_adjoint_simple_scalar, thm:mpu_physical_adjoint_identities,
+        thm:mpug_adjoint_cut_second_gram,
+        thm:mpu_physical_adjoint_source_cuts,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
+        thm:mpu_source_factor_right_inverses}
+    Transport canonical form II to $\mathcal U^\dagger$ with the same
+    $\rho$. Theorem~\ref{thm:mpug_adjoint_simple_scalar} gives
+    $s_\dagger=\varepsilon\mathcal U^\dagger$, since physical adjunction
+    is involutive and both required simplicity hypotheses hold.
+    Taking the first cut and applying
+    Theorem~\ref{thm:mpug_adjoint_cut_second_gram} gives
+    \begin{align}
+        Y_2^\dagger(Y_2(I_d\otimes\rho)Y_2^\dagger)X_2^\dagger
+         & =\varepsilon Y_2^\dagger X_2^\dagger.
+    \end{align}
+    Multiply on the left by $Z_2^\dagger$ and on the right by $X_2$.
+    Use $Z_2^\dagger Y_2^\dagger=I$ and $X_2^\dagger X_2=I$.
+    The scalar comes from the adjoint contraction; it has not been
+    identified with the scalar for the original tensor.
+\end{proof}
+
+\begin{theorem}[Trace of the weighted second source Gram matrix]
+    \label{thm:mpug_source_y_two_gram_trace}
+    \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₂_weighted_mul_conjTranspose}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    Let $\mathcal U$ be a simple MPU in canonical form II of physical
+    dimension $d$, with recorded fixed matrix $\rho$ and chosen second
+    source factor $Y_2$. Then
+    \begin{align}
+        \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr) & =d.
+    \end{align}
+    This is the physical-trace calculation used, by analogy with the
+    first identity, in \cite[line~1398]{FrancoRubio2025MPUGauging}.
+    Simplicity of $\mathcal U^\dagger$ is not required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_physical_contractions, def:mpu_source_weight}
+    Cyclic invariance and expanding $I_d\otimes\rho$ give
+    \begin{align}
+        \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr)
+         & =\sum_{p=0}^{d-1}\sum_{x,y=0}^{D-1}\sum_{l=0}^{d_l-1}
+        \overline{(Y_2)_{l,(p,y)}}(Y_2)_{l,(p,x)}\rho_{xy}
+        =\sum_{p=0}^{d-1}1=d
+    \end{align}
+    by Theorem~\ref{thm:mpug_source_y_physical_contractions} at $q=p$.
+\end{proof}
+
+\begin{theorem}[Normalization of the weighted second source Gram matrix]
+    \label{thm:mpug_source_y_two_normalization}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors,
+        def:mpu_source_weight}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$, and suppose that both $\mathcal U$ and $\mathcal U^\dagger$ are
+    simple. Let $Y_2$ be the second source factor constructed from
+    $\mathcal U$ and its recorded fixed matrix $\rho$, and let $d_l$ be
+    the second source-cut rank. Then
+    \begin{align}
+        Y_2(I_d\otimes\rho)Y_2^\dagger & =\frac{d}{d_l}I_{d_l}.
+    \end{align}
+    This is the second identity of the source-factor normalization
+    proposition in \cite[lines~1064--1119]{FrancoRubio2025MPUGauging}.
+    % Source: second identity of eq:MPUnice3. Neither physical X
+    % normalization nor the full prop:MPUsplus follows from this entry alone.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_two_scalar_gram,
+        thm:mpug_source_y_two_gram_trace}
+    Write the Gram matrix as $\varepsilon I_{d_l}$ using
+    Theorem~\ref{thm:mpug_source_y_two_scalar_gram}. Its trace is $d$ by
+    Theorem~\ref{thm:mpug_source_y_two_gram_trace}, so $\varepsilon d_l=d$.
+    As $d>0$, the rank $d_l$ is nonzero, giving $\varepsilon=d/d_l$.
+    This is the trace argument indicated in
+    \cite[line~1398]{FrancoRubio2025MPUGauging}.
+\end{proof}
+
+\subsection{Physical normalizations of the two source X factors}
+
+\begin{theorem}[The canonical one-letter output contraction]
+    \label{thm:mpug_one_letter_output_contraction}
+    \lean{MPOTensor.IsMPUCanonicalFormII.oneLetter_output_contraction}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$ and bond dimension $D$, with recorded fixed matrix $\rho$.
+    Suppose that $\mathcal U^\dagger$ is simple. For $0\leq i,j<d$,
+    \begin{align}
+        \sum_{x,\alpha,\beta=0}^{D-1}\sum_{p=0}^{d-1}
+        \mathcal U^{i,p}_{x\alpha}
+        \overline{\mathcal U^{j,p}_{x\beta}}\rho_{\beta\alpha}
+         & =\delta_{i,j}.
+    \end{align}
+    The open indices are the physical output indices. This is the
+    reflected one-letter contraction used for the physical source-factor
+    normalizations in \cite[lines~1120--1162 and 1398]{FrancoRubio2025MPUGauging}.
+    Simplicity of $\mathcal U$ is not required for this contraction.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_adjoint_canonical_boundaries,
+        thm:mpug_one_letter_physical_contraction, def:mpdo_physical_adjoint}
+    Apply Theorem~\ref{thm:mpug_one_letter_physical_contraction} to
+    $\mathcal U^\dagger$ with its canonical presentation carrying the
+    same $\rho$. Its letters are
+    $(\mathcal U^\dagger)^{p,i}_{x\alpha}=\overline{\mathcal U^{i,p}_{x\alpha}}$.
+    Substitution and double conjugation give the displayed sum.
+\end{proof}
+
+\begin{theorem}[Physical normalization of the first source X factor]
+    \label{thm:mpug_source_x_one_physical_normalization}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceX₁_physical_contraction}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$ and bond dimension $D$. Assume that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Let $X_1$ be the first source factor
+    constructed from $\mathcal U$ and its recorded fixed matrix $\rho$,
+    and let $d_r$ be the first source-cut rank. For $0\leq i,j<d$,
+    \begin{align}
+        \sum_{r=0}^{d_r-1}\sum_{\alpha,\beta=0}^{D-1}
+        (X_1)_{(i,\alpha),r}\rho_{\beta\alpha}
+        \overline{(X_1)_{(j,\beta),r}}
+         & =\frac{d_r}{d}\delta_{i,j}.
+    \end{align}
+    This is the first physical source-factor normalization in
+    \cite[lines~1120--1162]{FrancoRubio2025MPUGauging}. The matrix $\rho$
+    acts on the virtual legs; the identity acts on the physical space.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_one_normalization,
+        thm:mpug_source_y_one_gram_trace, thm:mpug_one_letter_output_contraction,
+        thm:mpu_source_factorizations, def:mpu_source_matrix_one}
+    Factor $M_1(\mathcal U)=X_1Y_1$ and apply
+    Theorem~\ref{thm:mpug_source_y_one_normalization} to obtain
+    \begin{align}
+        M_1(\mathcal U)M_1(\mathcal U)^\dagger
+         & =\frac{d}{d_r}X_1X_1^\dagger.
+    \end{align}
+    Multiply the $((i,\alpha),(j,\beta))$ entry by
+    $\rho_{\beta\alpha}$ and sum over $\alpha,\beta$.
+    Theorem~\ref{thm:mpug_one_letter_output_contraction} makes the left-hand
+    side $\delta_{i,j}$. The trace identity in
+    Theorem~\ref{thm:mpug_source_y_one_gram_trace} gives $d_r\ne0$, and
+    canonical form II gives $d>0$. Multiplication by $d_r/d$ gives the
+    required physical contraction.
+\end{proof}
+
+\begin{theorem}[Physical normalization of the second source X factor]
+    \label{thm:mpug_source_x_two_physical_normalization}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceX₂_physical_contraction}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$ and bond dimension $D$. Assume that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Let $X_2$ be its chosen second source
+    factor and let $d_l$ be the second source-cut rank. For $0\leq i,j<d$,
+    \begin{align}
+        \sum_{l=0}^{d_l-1}\sum_{x=0}^{D-1}
+        (X_2)_{(x,i),l}\overline{(X_2)_{(x,j),l}}
+         & =\frac{d_l}{d}\delta_{i,j}.
+    \end{align}
+    This is the second physical source-factor normalization in
+    \cite[lines~1120--1162]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_two_normalization,
+        thm:mpug_source_y_two_gram_trace, thm:mpug_one_letter_output_contraction,
+        thm:mpu_source_factorizations, def:mpu_source_matrix_two,
+        def:mpu_source_weight}
+    Put $W=I_d\otimes\rho$. The factorization $M_2(\mathcal U)=X_2Y_2$
+    and Theorem~\ref{thm:mpug_source_y_two_normalization} give
+    \begin{align}
+        M_2(\mathcal U)WM_2(\mathcal U)^\dagger
+         & =\frac{d}{d_l}X_2X_2^\dagger.
+    \end{align}
+    Sum the $((x,i),(x,j))$ entry over $x$. Expanding the left-hand side,
+    using $\rho_{\alpha\beta}=\rho_{\beta\alpha}$, gives
+    $\delta_{i,j}$ by Theorem~\ref{thm:mpug_one_letter_output_contraction}.
+    The trace identity in Theorem~\ref{thm:mpug_source_y_two_gram_trace}
+    gives $d_l\ne0$, and $d>0$. Multiply by $d_l/d$ to conclude.
+\end{proof}
+
+Theorems~\ref{thm:mpug_source_y_one_normalization},
+\ref{thm:mpug_source_y_two_normalization},
+\ref{thm:mpug_source_x_one_physical_normalization}, and
+\ref{thm:mpug_source_x_two_physical_normalization} establish all four
+identities of the source-factor normalization proposition in
+\cite[lines~1064--1162]{FrancoRubio2025MPUGauging} for the compact source
+factors constructed from the canonical presentation. Their hypotheses
+are canonical form II and simplicity of both $\mathcal U$ and
+$\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
+% This establishes prop:MPUsplus for the constructed source factors.
+% It does not identify arbitrary separately supplied factors or modify
+% the scope of the earlier raw proportionality theorem.
 
 \begin{theorem}[Comparison of factorizations from one-sided inverses]
     \label{thm:mpug_factorization_comparison}

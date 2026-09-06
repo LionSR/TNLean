@@ -45,7 +45,10 @@ import TNLean.MPS.MPU.SourceURetainedInterior
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.SourceVCompleteNetwork
 import TNLean.MPS.MPU.SourceVIsometry
+import TNLean.MPS.MPU.SourceXPhysicalNormalization
+import TNLean.MPS.MPU.SourceYOneNormalization
 import TNLean.MPS.MPU.SourceYPhysicalContractions
+import TNLean.MPS.MPU.SourceYTwoNormalization
 import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
