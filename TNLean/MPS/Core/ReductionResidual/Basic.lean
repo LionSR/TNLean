@@ -220,8 +220,7 @@ theorem reductionResidual_reciprocal_smul (B : MPSTensor d D_B)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) {β : ℂ} (hβ : β ≠ 0) :
     reductionResidual B A (β⁻¹ • V) (β • W) = reductionResidual B A V W := by
   funext i
-  simp only [reductionResidual, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
-    inv_mul_cancel₀ hβ, one_smul]
+  simp (disch := exact hβ) only [reductionResidual, matrix_reciprocal_smul]
 
 /-- The reciprocal scalar rescaling preserves every exact-length residual-word
 nilpotency bound, in both directions. -/

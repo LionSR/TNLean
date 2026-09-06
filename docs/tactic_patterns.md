@@ -24,6 +24,30 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### reciprocal scalar cancellation across a matrix product — promoted
+- **Pattern:** move scalars out of a matrix product and cancel nested actions
+  by a nonzero scalar and its inverse, in either order.
+
+  ```lean
+  simp (disch := exact hβ) only [matrix_reciprocal_smul]
+  ```
+- **Seen:** three declarations across three files (2026-09-04):
+  `MPSTensor.IsReduction.reciprocal_smul` in `TNLean/MPS/Core/Reduction.lean`
+  (two goals), `MPSTensor.reductionResidual_reciprocal_smul` in
+  `TNLean/MPS/Core/ReductionResidual/Basic.lean`, and
+  `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff` in
+  `TNLean/MPS/Core/ReductionBlocking.lean`.
+- **Abstraction:** the `matrix_reciprocal_smul` simp set, registered in
+  [`TNLean/Tactic/Attr.lean`](../TNLean/Tactic/Attr.lean) and populated in
+  [`TNLean/Tactic/MatrixReciprocalSmul.lean`](../TNLean/Tactic/MatrixReciprocalSmul.lean)
+  with Mathlib's `Matrix.smul_mul`, `Matrix.mul_smul`, `inv_smul_smul₀`, and
+  `smul_inv_smul₀`. No new cancellation theorem or tactic is needed.
+- **Notes:** all three declarations now use the set (four proof lines removed).
+  An explicit discharger supplies the nonzero premise to the conditional
+  cancellation lemmas; `simp only [matrix_reciprocal_smul, hβ]` alone does not
+  discharge it on the pinned toolchain. Do not add `smul_smul`: the intended
+  normal form preserves nested actions until reciprocal pairs cancel.
+
 ### three-block configuration extensionality — promoted
 - **Pattern:** prove equality of vectors indexed by a concatenated three-block
   configuration by splitting an arbitrary configuration through the canonical
@@ -1662,30 +1686,6 @@ abstracted — record why, so it is not re-proposed).
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
-
-### reciprocal scalar cancellation across a matrix product — candidate
-- **Pattern:** cancel a scalar and its inverse sitting on two different factors
-  of one matrix product, by pushing both scalars out of the product and
-  multiplying them together.
-
-  ```lean
-  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, mul_inv_cancel₀ hβ,
-    one_smul]
-  ```
-- **Seen:** three occurrences (2026-09-04): `MPSTensor.IsReduction.reciprocal_smul`
-  in `TNLean/MPS/Core/Reduction.lean`,
-  `MPSTensor.reductionResidual_reciprocal_smul` in
-  `TNLean/MPS/Core/ReductionResidual/Basic.lean`, and
-  `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff` in
-  `TNLean/MPS/Core/ReductionBlocking.lean`.
-- **Abstraction:** a `@[reciprocal_smul]` simp set holding the three Mathlib
-  rewriting lemmas, invoked as `simp [reciprocal_smul, hβ]`.
-- **Notes:** the goals differ only in how many factors separate the two
-  scalars (two, three, and five), so no single helper theorem covers them; a
-  simp set is the weakest mechanism that would. The saving is one line per call
-  site, so the entry is recorded rather than promoted; a fourth call site makes
-  the set worth adding. Which of `mul_inv_cancel₀` and `inv_mul_cancel₀` fires
-  depends on which factor carries the inverse.
 
 ### nested finite-sum binder permutation — promoted
 - **Pattern:** permute the binders of three to five nested finite sums over

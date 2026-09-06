@@ -424,6 +424,7 @@ follow-up, not against the temporary `sorry` count.
 
 | Name | Kind | Use when | Defined in |
 |---|---|---|---|
+| `matrix_reciprocal_smul` | simp set | Moving scalars out of matrix products and cancelling nested reciprocal actions; use `simp (disch := exact hβ) only [matrix_reciprocal_smul]` for `hβ : β ≠ 0` | `TNLean/Tactic/Attr.lean`, `TNLean/Tactic/MatrixReciprocalSmul.lean` |
 | `Equiv.Perm.permMatrix_mem_unitaryGroup` | helper theorem | Showing that a complex permutation matrix is unitary | `TNLean/Algebra/PermutationMatrixUnitary.lean` |
 | `List.ofFn_reverse` | helper theorem | Reversing a `List.ofFn`-indexed finite word by precomposition with `Fin.rev` | `QICLean/Kraus/Word.lean` (QICLean dependency) |
 | `verticalAssembledTensor_apply_copy_same` | helper theorem | Evaluating an assembled vertical tensor at two coordinates in the same retained multiplicity copy | `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean` |

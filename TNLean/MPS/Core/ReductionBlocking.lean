@@ -97,8 +97,7 @@ theorem reciprocal_smul_iff {β : ℂ} (hβ : β ≠ 0) :
     IsReductionExteriorBufferLength B A (β⁻¹ • V) (β • W) m ↔
       IsReductionExteriorBufferLength B A V W m := by
   unfold IsReductionExteriorBufferLength
-  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ hβ,
-    one_smul]
+  simp (disch := exact hβ) only [matrix_reciprocal_smul]
 
 /-- The reciprocal scalar rescaling preserves an exterior buffer length, for
 the same `m`. -/
