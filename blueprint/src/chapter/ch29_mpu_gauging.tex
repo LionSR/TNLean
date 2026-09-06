@@ -1296,7 +1296,7 @@ gauges and scalar relation have been constructed.
     \begin{align}
         \mathcal U^{\sigma,\tau}
          & =\mathcal U^{\sigma_0,\tau_0}\cdots\mathcal U^{\sigma_{N-1},\tau_{N-1}}, \\
-        (U^N)_{(l,\sigma,r),(a,\tau,b)}
+        (U^{N+2})_{(l,\sigma,r),(a,\tau,b)}
          & =\sum_{\alpha,\beta=0}^{D-1}
         (Y_2)_{l,(a,\alpha)}
         (\mathcal U^{\sigma,\tau})_{\alpha,\beta}
@@ -1306,14 +1306,15 @@ gauges and scalar relation have been constructed.
     Here $0\leq l<d_l$, $0\leq r<d_r$, and $a,b$ are physical
     indices. The empty ordered matrix product is $I_D$. Thus
     \begin{align}
-        U^N\colon \C^d\otimes(\C^d)^{\otimes N}\otimes\C^d
+        U^{N+2}\colon \C^d\otimes(\C^d)^{\otimes N}\otimes\C^d
          & \longrightarrow
         \C^{d_l}\otimes(\C^d)^{\otimes N}\otimes\C^{d_r}.
     \end{align}
     This is the endpoint contraction of
     \cite[lines~2062--2100]{FrancoRubio2025MPUGauging}, with the group
-    label suppressed. The superscript counts the $N$ bulk tensors only,
-    not the two endpoint triangles. No cut factorization is needed.
+    label suppressed. The source superscript is the total length
+    $L=N+2\geq2$, including the two endpoint triangles; $N$ counts
+    only the bulk tensors. No cut factorization is needed.
     For the normalized source factors of
     Definition~\ref{def:mpu_weighted_source_factors}, choosing their
     matrices $Y_2,Y_1$ recovers the source-factor endpoint contraction.
@@ -1331,12 +1332,13 @@ gauges and scalar relation have been constructed.
     the dimensions in Definition~\ref{def:mpug_truncated_symmetry}.
     For endpoint indices $l,r,a,b$ and the empty words $\varnothing$,
     \begin{align}
-        (U^0)_{(l,\varnothing,r),(a,\varnothing,b)}
+        (U^2)_{(l,\varnothing,r),(a,\varnothing,b)}
          & =\sum_{\alpha=0}^{D-1}
         (Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}.
         \label{eq:mpug_truncated_symmetry_zero}
     \end{align}
-    This requires no cut factorization. For normalized source factors,
+    This is total length two and requires no cut factorization.
+    For normalized source factors,
     the right-hand side is $u_{(l,r),(a,b)}$, with $u$ as in
     Definition~\ref{def:mpu_source_uv}.
 \end{theorem}
@@ -1347,7 +1349,7 @@ gauges and scalar relation have been constructed.
         =\delta_{\alpha\beta}$. Instantiating
     (\ref{eq:mpug_truncated_symmetry_contraction}) at $N=0$ gives
     \begin{align}
-        (U^0)_{(l,\varnothing,r),(a,\varnothing,b)}
+        (U^2)_{(l,\varnothing,r),(a,\varnothing,b)}
          & =\sum_{\alpha,\beta=0}^{D-1}(Y_2)_{l,(a,\alpha)}
         \delta_{\alpha\beta}(Y_1)_{r,(\beta,b)}
         =\sum_{\alpha=0}^{D-1}(Y_2)_{l,(a,\alpha)}(Y_1)_{r,(\alpha,b)}.
@@ -1382,9 +1384,9 @@ gauges and scalar relation have been constructed.
     For $N\geq0$, physical words $\sigma,\tau$ of length $N$,
     source indices $l,r$, and physical indices $i,a,b,c$,
     \begin{align}
-        (U^{N+1})_{(l,i\sigma,r),(a,b\tau,c)}
+        (U^{N+3})_{(l,i\sigma,r),(a,b\tau,c)}
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
-        (U^N)_{(t,\sigma,r),(b,\tau,c)}.
+        (U^{N+2})_{(t,\sigma,r),(b,\tau,c)}.
         \label{eq:mpug_truncated_symmetry_left_growth}
     \end{align}
     The right endpoint $Y_1$ is arbitrary and unchanged; no first-cut
@@ -1410,12 +1412,12 @@ gauges and scalar relation have been constructed.
         =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}$ and substitute this equality
     into the endpoint contraction. Regrouping the finite sums yields
     \begin{align*}
-        (U^{N+1})_{(l,i\sigma,r),(a,b\tau,c)}
+        (U^{N+3})_{(l,i\sigma,r),(a,b\tau,c)}
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
         \sum_{\alpha,\beta=0}^{D-1}(Y_2)_{t,(b,\alpha)}
         (\mathcal U^{\sigma,\tau})_{\alpha,\beta}(Y_1)_{r,(\beta,c)} \\
          & =\sum_{t=0}^{d_l-1}(w_L)_{(l,i),(a,t)}
-        (U^N)_{(t,\sigma,r),(b,\tau,c)}.
+        (U^{N+2})_{(t,\sigma,r),(b,\tau,c)}.
     \end{align*}
 \end{proof}
 
@@ -1441,7 +1443,7 @@ gauges and scalar relation have been constructed.
         \mathcal U^{i,b}_{\gamma,\alpha}
          & =\sum_{t=0}^{d_l-1}(X_2)_{(\gamma,i),t}(Y_2)_{t,(b,\alpha)}.
     \end{align*}
-    Form $U^N$ using the endpoints $Y_2,Y_1$, and define the crossed
+    Form $U^{N+2}$ using the endpoints $Y_2,Y_1$, and define the crossed
     contractions
     \begin{align*}
         (w_L)_{(l,i),(a,t)}
@@ -1452,10 +1454,10 @@ gauges and scalar relation have been constructed.
     For $N\geq0$, physical words $\sigma,\tau$ of length $N$, source
     indices $l,r$, and physical indices $i,j,a,b,c,e$, one has
     \begin{align}
-        (U^{N+2})_{(l,i\sigma j,r),(a,b\tau c,e)}
+        (U^{N+4})_{(l,i\sigma j,r),(a,b\tau c,e)}
          & =\sum_{t=0}^{d_l-1}\sum_{s=0}^{d_r-1}
         (w_L)_{(l,i),(a,t)}
-        (U^N)_{(t,\sigma,s),(b,\tau,c)}
+        (U^{N+2})_{(t,\sigma,s),(b,\tau,c)}
         (w_R)_{(j,r),(s,e)}.
         \label{eq:mpug_truncated_symmetry_growth}
     \end{align}
@@ -1488,7 +1490,7 @@ gauges and scalar relation have been constructed.
          & =\sum_s(Y_1)_{s,(\beta,c)}(w_R)_{(j,r),(s,e)}.
     \end{align}
     Substitute both equalities into the endpoint contraction and regroup
-    the finite sums. The remaining interior contraction is $U^N$.
+    the finite sums. The remaining interior contraction is $U^{N+2}$.
 \end{proof}
 
 \begin{theorem}[Kronecker product of unitary maps]
@@ -1525,9 +1527,9 @@ gauges and scalar relation have been constructed.
     Let $\mathcal U$ be a simple MPU with a canonical-form-II presentation
     and recorded positive diagonal fixed matrix $\rho$. Construct the
     source factors from this tensor and this same $\rho$. For every
-    $N\geq0$, their endpoint contraction $U^N$ is a unitary map
+    $N\geq0$, their endpoint contraction $U^{N+2}$ is a unitary map
     \begin{align}
-        U^N\colon\mathcal H_{\mathrm{in},N}
+        U^{N+2}\colon\mathcal H_{\mathrm{in},N}
          & \longrightarrow\mathcal H_{\mathrm{out},N},        \\
         \mathcal H_{\mathrm{in},N}
          & =\C^d\otimes(\C^d)^{\otimes N}\otimes\C^d,         \\
@@ -1535,10 +1537,11 @@ gauges and scalar relation have been constructed.
          & =\C^{d_l}\otimes(\C^d)^{\otimes N}\otimes\C^{d_r}.
         \label{eq:mpug_truncated_symmetry_unitary_spaces}
     \end{align}
-    Equivalently,
+    The subscripts of $\mathcal H_{\mathrm{in},N}$ and
+    $\mathcal H_{\mathrm{out},N}$ record the bulk length $N$. Equivalently,
     \begin{align}
-        (U^N)^\dagger U^N & =I_{\mathcal H_{\mathrm{in},N}},  &
-        U^N(U^N)^\dagger  & =I_{\mathcal H_{\mathrm{out},N}}.
+        (U^{N+2})^\dagger U^{N+2} & =I_{\mathcal H_{\mathrm{in},N}},  &
+        U^{N+2}(U^{N+2})^\dagger  & =I_{\mathcal H_{\mathrm{out},N}}.
         \label{eq:mpug_truncated_symmetry_unitary}
     \end{align}
     This is the endpoint-coordinate unitarity part of the assertion
@@ -1563,7 +1566,8 @@ gauges and scalar relation have been constructed.
         thm:matrix_unitary_between_kronecker, def:mpug_truncated_symmetry}
     Theorem~\ref{ThmFund1} gives unitary $u$, and
     Theorem~\ref{thm:mpug_staircase_gates_unitary} gives unitary $w_L$,
-    both for the constructed source factors. Induct on $N$. For $N=0$,
+    both for the constructed source factors. Induct on the bulk length $N$.
+    For $N=0$, the total length is two. In $U^2$,
     remove the unique empty word from both index sets; by
     Theorem~\ref{thm:mpug_truncated_symmetry_zero}, the resulting matrix
     is $u$.
@@ -1571,16 +1575,16 @@ gauges and scalar relation have been constructed.
     For the successor step put
     $\mathcal R_N=(\C^d)^{\otimes N}\otimes\C^{d_r}$. After the natural
     associativity identifications, the left-end growth identity expresses
-    $U^{N+1}$ as
+    $U^{N+3}$ as
     \begin{align}
-        (w_L\otimes I_{\mathcal R_N})(I_d\otimes U^N).
+        (w_L\otimes I_{\mathcal R_N})(I_d\otimes U^{N+2}).
     \end{align}
     The output reindexing sends $(l,i,\sigma,r)$ to $(l,i\sigma,r)$,
     and the input reindexing sends $(a,b,\tau,c)$ to $(a,b\tau,c)$.
     These are bijections given by splitting off the first bulk letter;
     they leave both endpoint coordinates unchanged.
     Theorem~\ref{thm:matrix_unitary_between_kronecker} makes both
-    $w_L\otimes I_{\mathcal R_N}$ and $I_d\otimes U^N$ unitary.
+    $w_L\otimes I_{\mathcal R_N}$ and $I_d\otimes U^{N+2}$ unitary.
     Composition and the two coordinate bijections preserve both Gram
     identities. The induction therefore covers every $N$, not just
     one parity of bulk lengths.
@@ -2070,6 +2074,7 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{thm:mpug_raw_first_cut_contraction,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
         def:mpu_weighted_source_factors, def:mpu_source_weight}
     Put $W=I_d\otimes\rho$. Diagonality gives $W^{\mathsf T}=W$.
     The cut factorization and weighted isometry then yield
@@ -2207,6 +2212,7 @@ Definition~\ref{def:mpug_group_representation}.
 \begin{proof}\leanok
     \uses{thm:mpug_raw_first_cut_contraction,
         thm:mpu_physical_adjoint_source_cuts,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
         def:mpu_weighted_source_factors, def:mpu_source_weight}
     Theorem~\ref{thm:mpug_raw_first_cut_contraction} gives
     \begin{align}
@@ -6831,33 +6837,47 @@ unbuffered defect formulas.
 
 \begin{definition}[The CZX $g,g$ fusion caps]
     \label{def:mpug_czx_fusion_caps}
-    \lean{MPOTensor.CZX.fusionV, MPOTensor.CZX.fusionW,
-        MPOTensor.CZX.fusion_caps_apply}
+    \lean{MPOTensor.CZX.fusionV, MPOTensor.CZX.fusionW}
     \leanok
-    \uses{def:mpug_czx_dagger_gauge}
-    On the bond space $\C^4\cong\C^2\otimes\C^2$, in the product-bond
-    coordinate $(a,b)$ for bond bits $a,b\in\{0,1\}$, define the row
-    vector $F^<_{g,g}\colon\C^4\to\C$ and the column vector
-    $F^>_{g,g}\colon\C\to\C^4$ by decorating one leg of a rank-one bond
-    cap with the Pauli matrix $Y$ of
-    Definition~\ref{def:mpug_czx_dagger_gauge}: a single $Y$ on the
-    left cap, and $Y$ together with the printed weight $\tfrac12$ on
-    the right cap, exactly as displayed in
-    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}, itself the
+    In the ordered bond coordinates $0,1,2,3$, define the row vector
+    $F^<_{g,g}\colon\C^4\to\C$ and the column vector
+    $F^>_{g,g}\colon\C\to\C^4$ by
+    \begin{align}
+        F^<_{g,g} & =(0,-i,i,0),                     \\
+        F^>_{g,g} & =\tfrac12(0,i,-i,0)^{\mathsf T}.
+    \end{align}
+    These are the concrete caps in
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}, the
     $g=h=g^{-1}$ specialization of the general fusion-tensor display
-    \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}. Concretely,
-    for all bond bits $a,b\in\{0,1\}$,
+    \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}.
+    % Only the concrete g,g slice of #7354 is covered here.
+\end{definition}
+
+\begin{theorem}[Product coordinates of the CZX fusion caps]
+    \label{thm:mpug_czx_fusion_caps_apply}
+    \lean{MPOTensor.CZX.fusion_caps_apply}
+    \leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
+    Let $F^<_{g,g},F^>_{g,g}$ be the caps of
+    Definition~\ref{def:mpug_czx_fusion_caps}, and let $Y$ be the Pauli
+    matrix of Definition~\ref{def:mpug_czx_dagger_gauge}. Identify the
+    product-bond coordinate $(a,b)$ with $2a+b$. For all bond bits
+    $a,b\in\{0,1\}$,
     \begin{align}
         F^<_{g,g}(a,b) & =Y_{a,b},         &
         F^>_{g,g}(a,b) & =\tfrac12Y_{b,a},
         \label{eq:mpug_czx_fusion_caps_apply}
     \end{align}
-    so both caps vanish at the two diagonal bond coordinates
-    (matching $Y_{0,0}=Y_{1,1}=0$), and the two caps carry $Y$ in
-    opposite orientations, reflecting the left/right mirroring of the
-    printed diagram.
-    % Only the concrete g,g slice of #7354 is covered here.
-\end{definition}
+    Thus both caps vanish at the diagonal bond coordinates and carry
+    $Y$ in opposite orientations, as in the printed diagram of
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
+    Evaluate both caps at $2a+b$ for the four pairs $(a,b)$ and compare
+    with the entries of $Y$ to obtain
+    (\ref{eq:mpug_czx_fusion_caps_apply}).
+\end{proof}
 
 \begin{theorem}[The CZX fusion reduction]
     \label{thm:mpug_czx_fusion_reduction}
