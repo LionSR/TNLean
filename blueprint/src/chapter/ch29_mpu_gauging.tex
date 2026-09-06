@@ -1529,14 +1529,21 @@ Definition~\ref{def:mpug_group_representation}.
 \begin{proof}\leanok
     \uses{thm:mpu_physical_adjoint_identities,
         def:mpu_physical_adjoint_cfii_data,
-        thm:mpu_physical_adjoint_full_support,
         thm:mpu_physical_adjoint_normalized_flattening,
         thm:cpsv_map_star_transfer_fixed_point}
     Physical adjunction preserves periodic unitarity and transports the
-    canonical blocks without changing their dimensions. Since $\rho$ is
-    real and diagonal, conjugating the fixed-point equation leaves $\rho$
-    unchanged. The physical-index permutation does not change the transfer
-    map, so the transported data have the same fixed matrix.
+    canonical blocks without changing their dimensions. Writing
+    $\mathcal E_{\mathcal U}$ for the transfer map of $\mathcal U$, the
+    transported fixed-point equation is
+    \begin{align}
+        \mathcal E_{\mathcal U^\dagger}(\rho)
+         & =\overline{\mathcal E_{\mathcal U}(\overline\rho)}
+        =\overline{\mathcal E_{\mathcal U}(\rho)}
+        =\overline\rho=\rho,
+    \end{align}
+    using $\overline\rho=\rho$ and $\mathcal E_{\mathcal U}(\rho)=\rho$. The
+    physical-index permutation does not change the transfer map, so the
+    transported data have the same fixed matrix.
 \end{proof}
 
 \begin{theorem}[Canonical boundary contractions]
