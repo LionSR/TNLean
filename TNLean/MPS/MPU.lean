@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPU
 
+import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm
@@ -35,6 +36,7 @@ import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SimpleTensorEquivalence
 import TNLean.MPS.MPU.SourceCuts
+import TNLean.MPS.MPU.SourceDecompositionUniqueness
 import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.SourceFactors
 import TNLean.MPS.MPU.SourceFactorsTensorProduct
@@ -44,7 +46,12 @@ import TNLean.MPS.MPU.SourceURetainedInterior
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.SourceVCompleteNetwork
 import TNLean.MPS.MPU.SourceVIsometry
+import TNLean.MPS.MPU.SourceXPhysicalNormalization
+import TNLean.MPS.MPU.SourceYOneNormalization
+import TNLean.MPS.MPU.SourceYPhysicalContractions
+import TNLean.MPS.MPU.SourceYTwoNormalization
 import TNLean.MPS.MPU.StaircaseGates
+import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.TensorProduct
