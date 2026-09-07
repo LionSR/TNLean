@@ -104,6 +104,7 @@ import TNLean.MPS.MPDO.CPSVVerticalDecomposition
 import TNLean.MPS.MPDO.CPSVVerticalProductCornerPositivity
 import TNLean.MPS.MPDO.CPSVVerticalProductFusionDecomposition
 import TNLean.MPS.MPDO.CPSVVerticalProductSpectralFamily
+import TNLean.MPS.MPDO.CZXActionTensors
 import TNLean.MPS.MPDO.CZXCompletion
 import TNLean.MPS.MPDO.CZXDaggerGauge
 import TNLean.MPS.MPDO.CZXDefectMaps

@@ -42,6 +42,14 @@ For the MPU index of arXiv:1703.09188:
 
 For the MPU symmetry-defect gauging paper:
 
+- `fbc25_czx_action_empty_word.tex` isolates the empty-interior failure of
+  the printed CZX action pair: its empty contraction is one half, although
+  the nonempty interior and buffered exterior identities hold. Dressing the
+  left boundary by the supported acted matrix gives an all-word reduction
+  without changing buffered exterior contractions. It is not a scalar gauge
+  or a replacement in unbuffered defect formulas. This local correction is
+  formally verified and resolved; the literal printed pair still fails at
+  empty length.
 - `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
   matter--link space and multiplication convention of the local Gauss-law
   representation, the cited three-defect associator calculation, the

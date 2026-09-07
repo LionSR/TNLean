@@ -202,9 +202,7 @@ theorem IsMPUCanonicalFormII.sourceV_isIsometry
   have := hU.neZero_phys
   rw [← sourceVDressedGram_iff_isIsometry,
     sourceVDressedGram_iff_simple2_transpose_fixed_pair]
-  simpa only [hU.ρ_isDiag.isSymm.eq] using
-    hS.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ (max (D * D - 1) 1)
-      (by omega) hU.normalizedDiagonal_pow_eq_vecMulVec
+  simpa only [hU.ρ_isDiag.isSymm.eq] using hU.simple2_recorded_fixed_pair hS
 
 /-- Theorem `ThmFund1`, $1\to2$, rank consequence: a simple tensor in canonical
 form II satisfies $r\ell\le d^2$, since the isometry $v$ maps

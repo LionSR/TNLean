@@ -4846,10 +4846,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_supplied_projector_simple2, thm:mpu_source_v_complete_contraction, thm:mpu_source_v_dressed_gram_cancel, thm:mpu_canonical_form_ii_transfer_stabilization}
-    The convention supplies the stabilized power
-    $E^J=\lvert\rho)(\Phi\rvert$, and
-    Theorem~\ref{thm:mpu_supplied_projector_simple2} then gives
+    \uses{thm:mpug_simple_canonical_boundary_contractions,
+        thm:mpu_source_v_complete_contraction, thm:mpu_source_v_dressed_gram_cancel}
+    Theorem~\ref{thm:mpug_simple_canonical_boundary_contractions} gives
+    the insertion identity for the recorded canonical boundaries:
     $W^{ij}W^{k\ell}=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}$. Since $\rho$
     is diagonal, $\rho^{\mathsf T}=\rho$, so
     Theorem~\ref{thm:mpu_source_v_complete_contraction} gives the dressed Gram

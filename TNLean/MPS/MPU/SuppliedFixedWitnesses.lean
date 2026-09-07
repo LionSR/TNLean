@@ -134,6 +134,26 @@ theorem IsMPUSimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec
     _ = doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
         doubleLayerTensor W k l := by rw [hpower]
 
+/-- The two-letter simplicity identity holds for the recorded canonical right
+boundary `ρ` and identity left boundary, in that order in `Matrix.vecMulVec`.
+
+Source: arXiv:1703.09188, equations `Erightleft` and `simple2`, lines 274--280
+and 356--374. This is the canonical boundary alignment used in arXiv:2502.20257,
+Corollary `cor:mpu` and Proposition `prop:MPUsplus`, lines 1013--1050 and
+1164--1254. -/
+theorem IsMPUCanonicalFormII.simple2_recorded_fixed_pair
+    {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U) :
+    ∀ i j k l : Fin d,
+      doubleLayerTensor U i j * doubleLayerTensor U k l =
+        doubleLayerTensor U i j * Matrix.vecMulVec
+          (fun x : Fin (D * D) ↦ hU.ρ.vec (finProdFinEquiv.symm x))
+          (fun x : Fin (D * D) ↦
+            (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)) *
+          doubleLayerTensor U k l := by
+  have := hU.neZero_phys
+  exact hsimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec
+    _ _ (max (D * D - 1) 1) (by omega) hU.normalizedDiagonal_pow_eq_vecMulVec
+
 /-- A normalized rank-one power with normalized fixed pair fixes its
 right vector and its left covector. These are the two boundaries of the
 stabilized diagonal tail.
