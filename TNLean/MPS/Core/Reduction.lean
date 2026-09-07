@@ -83,6 +83,32 @@ theorem iff_forall_evalWord :
     refine ⟨?_, h⟩
     simpa using h []
 
+/-- Three local identities already force a rectangular reduction: the caps
+multiply to one, every single letter compresses as $VB^iW=A^i$, and every
+ordered pair of letters absorbs the reinserted projection, $B^iWVB^j=B^iB^j$.
+The all-word intertwining equation then follows by induction on the word,
+peeling one letter and splitting the caps off the two factors. -/
+theorem of_local_compression (hVW : V * W = 1)
+    (hletter : ∀ i, V * B i * W = A i)
+    (hinsert : ∀ i j, B i * W * V * B j = B i * B j) :
+    IsReduction B A V W := by
+  refine ⟨hVW, fun w ↦ ?_⟩
+  induction w with
+  | nil => simp [hVW]
+  | cons i w ih =>
+      cases w with
+      | nil => simpa using hletter i
+      | cons j w =>
+          calc
+            V * Kraus.evalWord B (i :: j :: w) * W =
+                V * ((B i * W * V * B j) * Kraus.evalWord B w) * W := by
+              rw [Kraus.evalWord_cons, Kraus.evalWord_cons, hinsert i j]
+              simp [Matrix.mul_assoc]
+            _ = (V * B i * W) * (V * Kraus.evalWord B (j :: w) * W) := by
+              simp [Matrix.mul_assoc]
+            _ = A i * Kraus.evalWord A (j :: w) := by rw [hletter i, ih]
+            _ = Kraus.evalWord A (i :: j :: w) := rfl
+
 end IsReduction
 
 end MPSTensor

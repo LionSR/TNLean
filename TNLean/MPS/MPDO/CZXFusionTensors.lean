@@ -122,33 +122,6 @@ private theorem fusion_product_letter_eq (i j : Fin 4) :
   · intro hbnot
     exact (hbnot (Finset.mem_univ _)).elim
 
-private theorem isReduction_of_local_compression {d D₁ D₂ : ℕ}
-    {B : MPSTensor d D₂} {A : MPSTensor d D₁}
-    {V : Matrix (Fin D₁) (Fin D₂) ℂ} {W : Matrix (Fin D₂) (Fin D₁) ℂ}
-    (hVW : V * W = 1)
-    (hletter : ∀ i, V * B i * W = A i)
-    (hinsert : ∀ i j, B i * W * V * B j = B i * B j) :
-    MPSTensor.IsReduction B A V W := by
-  refine ⟨hVW, fun w ↦ ?_⟩
-  induction w with
-  | nil =>
-      simp [hVW]
-  | cons i w ih =>
-      cases w with
-      | nil =>
-          simpa using hletter i
-      | cons j w =>
-          calc
-            V * Kraus.evalWord B (i :: j :: w) * W =
-                V * ((B i * W * V * B j) * Kraus.evalWord B w) * W := by
-              rw [Kraus.evalWord_cons, Kraus.evalWord_cons, hinsert i j]
-              simp [Matrix.mul_assoc]
-            _ = (V * B i * W) * (V * Kraus.evalWord B (j :: w) * W) := by
-              simp [Matrix.mul_assoc]
-            _ = A i * Kraus.evalWord A (j :: w) := by
-              rw [hletter i, ih]
-            _ = Kraus.evalWord A (i :: j :: w) := rfl
-
 private theorem fusionV_mul_fusionW :
     fusionV * fusionW = (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
   ext i j
@@ -261,7 +234,7 @@ theorem fusion_isReduction :
     MPSTensor.IsReduction
       (MPOTensor.mulTensor tensor tensor).toMPSTensor
       (identityMPUTensor 4).toMPSTensor fusionV fusionW :=
-  isReduction_of_local_compression fusionV_mul_fusionW
+  MPSTensor.IsReduction.of_local_compression fusionV_mul_fusionW
     fusion_letter_compression fusion_projection_insertion
 
 set_option maxHeartbeats 2000000 in

@@ -2451,6 +2451,24 @@ spectral split → block extraction → MPV calculation → strict bounds
   change to `TNLean/MPS/Defs.lean` rebuilds the whole library; do it in a
   dedicated cleanup.
 
+### rectangular reduction from local compression data — candidate
+- **Pattern:** prove `MPSTensor.IsReduction B A V W` by
+  `refine ⟨hVW, fun w ↦ ?_⟩` followed by `induction w` with `nil`, singleton,
+  and `cons i (cons j w)` cases, the last one rewriting `B i * W * V * B j`
+  to `B i * B j` and then splitting the caps off the two factors.
+- **Seen:** one occurrence, in `MPOTensor.CZX.fusion_isReduction`
+  (`TNLean/MPS/MPDO/CZXFusionTensors.lean`), recorded 2026-09-07.
+- **Abstraction:** `MPSTensor.IsReduction.of_local_compression` in
+  `TNLean/MPS/Core/Reduction.lean`, taking `V * W = 1`, per-letter
+  compression, and the two-letter reinsertion identity.
+- **Notes:** below the rule of three, but the abstraction now sits beside the
+  definition it constructs, so a second local-compression reduction reuses it
+  instead of repeating the word induction.
+  `MPOTensor.CZX.dressedAction_isReduction`
+  (`TNLean/MPS/MPDO/CZXActionTensors.lean`) is not an occurrence: it obtains
+  the all-word equation by absorbing the dressing into a nonempty acted word,
+  not from per-letter data.
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected

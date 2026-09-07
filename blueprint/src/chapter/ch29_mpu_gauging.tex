@@ -6865,9 +6865,10 @@ unbuffered defect formulas.
     product-bond coordinate $(a,b)$ with $2a+b$. For all bond bits
     $a,b\in\{0,1\}$,
     \begin{align}
-        F^<_{g,g}(a,b) & =Y_{a,b},         &
-        F^>_{g,g}(a,b) & =\tfrac12Y_{b,a},
-        \label{eq:mpug_czx_fusion_caps_apply}
+        F^<_{g,g}(a,b) & =Y_{a,b},
+        \label{eq:mpug_czx_fusion_caps_apply} \\
+        F^>_{g,g}(a,b) & =\tfrac12Y_{b,a}.
+        \label{eq:mpug_czx_fusion_caps_apply_right}
     \end{align}
     Thus both caps vanish at the diagonal bond coordinates and carry
     $Y$ in opposite orientations, as in the printed diagram of
@@ -6877,7 +6878,8 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
     Evaluate both caps at $2a+b$ for the four pairs $(a,b)$ and compare
     with the entries of $Y$ to obtain
-    (\ref{eq:mpug_czx_fusion_caps_apply}).
+    (\ref{eq:mpug_czx_fusion_caps_apply}) and
+    (\ref{eq:mpug_czx_fusion_caps_apply_right}).
 \end{proof}
 
 \begin{theorem}[The CZX fusion reduction]
@@ -6917,15 +6919,37 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_fusion_caps, def:mpug_czx_exact_tensor,
         def:mpdo_operator_product, def:mpo_to_mps, threeMPU}
     Put $V=F^<_{g,g}$ and $W=F^>_{g,g}$. Substituting the cap and
-    tensor coordinates gives
+    tensor coordinates gives the three local identities
     \begin{align}
-        VW & =1, & VB^iW & =I^i, & B^iWVB^j & =B^iB^j.
-        \label{eq:mpug_czx_fusion_local_identities}
+        VW       & =1,
+        \label{eq:mpug_czx_fusion_cap_product} \\
+        VB^iW    & =I^i,
+        \label{eq:mpug_czx_fusion_letter}      \\
+        B^iWVB^j & =B^iB^j.
+        \label{eq:mpug_czx_fusion_letter_insertion}
     \end{align}
-    Induct on the nonempty left word $\mathbf p$, removing its first
+    The all-word identity $VB^{\mathbf c}W=I^{\mathbf c}$ follows by
+    induction on $\mathbf c$, removing its first letter. The empty word
+    is (\ref{eq:mpug_czx_fusion_cap_product}) and a single letter is
+    (\ref{eq:mpug_czx_fusion_letter}). For $\mathbf c=ij\mathbf c'$,
+    insert $WV$ after the first letter by
+    (\ref{eq:mpug_czx_fusion_letter_insertion}), split the caps off both
+    factors, and apply (\ref{eq:mpug_czx_fusion_letter}) together with
+    the induction hypothesis for $j\mathbf c'$:
+    \begin{align}
+        VB^{ij\mathbf c'}W
+         & =(VB^iW)(VB^{j\mathbf c'}W)
+        =I^iI^{j\mathbf c'}=I^{ij\mathbf c'}.
+    \end{align}
+    For nonempty words $\mathbf p,\mathbf q$ a second induction gives
+    \begin{align}
+        B^{\mathbf p}WVB^{\mathbf q} & =B^{\mathbf p\mathbf q}.
+        \label{eq:mpug_czx_fusion_word_insertion}
+    \end{align}
+    Induct on the left word $\mathbf p$, again removing its first
     letter. For the singleton case $\mathbf p=i$ and
-    $\mathbf q=j\mathbf q'$, the local insertion identity in
-    (\ref{eq:mpug_czx_fusion_local_identities}) gives
+    $\mathbf q=j\mathbf q'$,
+    (\ref{eq:mpug_czx_fusion_letter_insertion}) gives
     \begin{align}
         B^iWVB^{j\mathbf q'}
          & =(B^iWVB^j)B^{\mathbf q'}
@@ -6938,14 +6962,14 @@ unbuffered defect formulas.
          & =B^i(B^{\mathbf p'}WVB^{\mathbf q})
         =B^iB^{\mathbf p'\mathbf q}=B^{i\mathbf p'\mathbf q}.
     \end{align}
-    Using it in an induction gives $VB^{\mathbf c}W=I^{\mathbf c}$;
-    the empty case is $VW=1$. For nonempty buffers and middle word,
+    For nonempty buffers and middle word, substitute
+    $I^{\mathbf c}=VB^{\mathbf c}W$ and apply
+    (\ref{eq:mpug_czx_fusion_word_insertion}) twice:
     \begin{align}
         B^{\mathbf p}WI^{\mathbf c}VB^{\mathbf q}
          & =B^{\mathbf p}WVB^{\mathbf c}WVB^{\mathbf q}
-        =B^{\mathbf p\mathbf c\mathbf q},
+        =B^{\mathbf p\mathbf c\mathbf q}.
     \end{align}
-    applying the word insertion identity twice.
 \end{proof}
 
 \subsection{The displayed CZX circuit tuple}
@@ -7097,19 +7121,18 @@ unbuffered defect formulas.
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
-        def:mpug_czx_displayed_factors, thm:mpug_czx_phase_tables}
+        def:mpug_czx_displayed_factors, def:mpug_czx_circuit_tuple,
+        thm:mpug_czx_phase_tables}
     Pull back the rank indices and expand the crossed contraction as
-    \begin{align*}
-        \sum_{\beta=0}^1(X_1)_{(i,\beta),a}(Y_1)_{r,(\beta,j)}.
-    \end{align*}
+    $\sum_{\beta=0}^1(X_1)_{(i,\beta),a}(Y_1)_{r,(\beta,j)}$.
     The sparse action (\ref{eq:mpug_czx_w_action}) gives
-    \begin{align*}
+    \begin{align}
         W_{(i,r),(a,j)}
          & =\begin{cases}
                 (-1)^{e(x)}, & i=3-a\text{ and }r=j, \\
                 0,           & \text{otherwise},
             \end{cases}
-    \end{align*}
+    \end{align}
     where $x=(x_0,x_1,x_2,x_3)\in\{0,1\}^4$ satisfies
     $a=2x_0+x_1$ and $j=2x_2+x_3$.
     Substitute the displayed factors, first discarding the zero entries
@@ -7141,11 +7164,10 @@ unbuffered defect formulas.
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
-        def:mpug_czx_displayed_factors, thm:mpug_czx_phase_tables}
+        def:mpug_czx_displayed_factors, def:mpug_czx_circuit_tuple,
+        thm:mpug_czx_phase_tables}
     Pull back the rank indices and expand the crossed contraction as
-    \begin{align*}
-        \sum_{\beta=0}^1(Y_2)_{l,(j,\beta)}(X_2)_{(\beta,i),k}.
-    \end{align*}
+    $\sum_{\beta=0}^1(Y_2)_{l,(j,\beta)}(X_2)_{(\beta,i),k}$.
     Use the conjugated reversed entry
     $(W^\dagger)_{(l,i),(j,k)}=\overline{W_{(j,k),(l,i)}}$.
     By (\ref{eq:mpug_czx_w_action}), it vanishes unless $j=3-l$ and
