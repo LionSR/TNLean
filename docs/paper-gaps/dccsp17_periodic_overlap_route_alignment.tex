@@ -756,28 +756,64 @@ unity, are produced from them.
           exactly the source's two conditions, and it preserves irreducibility
           and the peripheral spectrum.\footnote{Formal declaration:
           \leanid{MPSTensor.exists_tpGauge_of_irreducible_spectralRadius_one}.}
-          The gauged block is trace preserving, so its conjugate-transposed
-          Kraus family is unital.
+          Write $B=(B^i)_i$ for the gauged block. It is trace preserving, so
+          the conjugate-transposed family
+          $B^\dagger=\left((B^i)^\dagger\right)_i$ is unital.
     \item That conjugate-transposed family has the trace adjoint of the
-          transfer map for its map, and the Perron fixed point of the transfer
-          map itself, positive definite because the gauged block is irreducible
-          of spectral radius one, is exactly the positive-definite adjoint
-          fixed point that the cyclic structure theorem asks for.
+          transfer map of $B$ for its map,
+          \begin{align}
+              \mathcal E_{B^\dagger}
+              &=\mathcal E_B^*,
+              \label{eq:dccsp17_periodic_overlap_route_alignment_adjoint_orientation}
+          \end{align}
+          and the Perron fixed point of $\mathcal E_B$ itself, positive
+          definite because $B$ is irreducible of spectral radius one, is
+          exactly the positive-definite adjoint fixed point that the cyclic
+          structure theorem asks for.
     \item The cyclic structure of the peripheral spectrum of a unital
           irreducible finite-Kraus map with a positive-definite adjoint fixed
-          point comes from the companion library, in the form
-          $\operatorname{Spec}_{\mathrm{per}} = \{\gamma^k : k<m\}$ with
-          $\gamma$ a primitive $m$-th root of unity.\footnote{Formal
-          declaration:
+          point comes from the companion library.\footnote{Formal declaration:
           \leanid{PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure}.}
-          It carries its own scope restriction, recorded in that library's
-          note on Wolf Theorem 6.6.
+          It supplies a positive integer $m$ and a primitive $m$-th root of
+          unity $\gamma$ for which
+          \begin{align}
+              \operatorname{spec}_{\mathrm{per}}(\mathcal E_{B^\dagger})
+              &=\left\{\gamma^k:0\leq k<m\right\}.
+              \label{eq:dccsp17_periodic_overlap_route_alignment_cyclic_peripheral_spectrum}
+          \end{align}
+          That library result carries its own scope restriction, recorded in
+          its note on Wolf Theorem 6.6.
     \item For a primitive $m$-th root $\gamma$ over $\C$ the two descriptions
-          agree, $\{\gamma^k : k<m\} = \{\mu : \mu^m=1\}$.
+          agree,
+          \begin{align}
+              \left\{\gamma^k:0\leq k<m\right\}
+              &=\left\{\mu\in\C:\mu^m=1\right\}.
+              \label{eq:dccsp17_periodic_overlap_route_alignment_primitive_root_powers}
+          \end{align}
     \item Passing back from the adjoint orientation conjugates the peripheral
           spectrum, and the set of $m$-th roots of unity is closed under
-          conjugation, so the two orientations give the same period. The
-          unitalizing gauge is a similarity and changes nothing.
+          conjugation, so
+          (\ref{eq:dccsp17_periodic_overlap_route_alignment_cyclic_peripheral_spectrum})
+          and
+          (\ref{eq:dccsp17_periodic_overlap_route_alignment_primitive_root_powers})
+          give
+          \begin{align}
+              \operatorname{spec}_{\mathrm{per}}(\mathcal E_B)
+              &=\overline{\operatorname{spec}_{\mathrm{per}}
+                  (\mathcal E_{B^\dagger})}
+              =\overline{\left\{\mu\in\C:\mu^m=1\right\}}
+              =\left\{\mu\in\C:\mu^m=1\right\}.
+              \label{eq:dccsp17_periodic_overlap_route_alignment_adjoint_conjugation_invariance}
+          \end{align}
+          The two orientations therefore give the same period. The unitalizing
+          gauge is a similarity, so
+          \begin{align}
+              \operatorname{spec}_{\mathrm{per}}(\mathcal E_A)
+              &=\operatorname{spec}_{\mathrm{per}}(\mathcal E_B),
+              \label{eq:dccsp17_periodic_overlap_route_alignment_gauge_similarity_spectrum}
+          \end{align}
+          and the period of $A$ is the $m$ of
+          (\ref{eq:dccsp17_periodic_overlap_route_alignment_adjoint_conjugation_invariance}).
 \end{enumerate}
 
 \subsection{Consequence for the two fundamental theorems}
