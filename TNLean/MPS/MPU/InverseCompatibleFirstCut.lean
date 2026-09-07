@@ -20,8 +20,14 @@ This is only the first algebraic construction in arXiv:2502.20257,
 The factor space is `Fin ℓ[U]`; no identification with `Fin r[U]`, weighted
 normalization, comparison matrix $K$, pleasant properties, or `eq:UUU` is asserted.
 No simplicity or weight hypothesis is needed for this algebraic step.
-The order in $B$ follows the maintained (virtual, physical) column indices of
-$\mathcal M_1$, rather than silently swapping the factors in the printed formula.
+
+**Local fix (right-gauge factor order):** the printed candidate at
+arXiv:2502.20257, line 5432 writes the right dressing as $I_d\otimes T^T$, in
+physical-then-virtual order. The maintained first source cut carries its column
+index $(\alpha,j)$ in (virtual, physical) order, so the same operator is
+$B=T^T\otimes I_d$ here. The order is inherited from the corrected first cut;
+that correction and the dressings derived from it are documented in
+`docs/paper-gaps/mpu_source_cut_orientation.tex`.
 -/
 
 open scoped Matrix Kronecker

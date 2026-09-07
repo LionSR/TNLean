@@ -1,0 +1,210 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Comparison Matrix Between the Two First-Cut Factorizations}
+\author{}
+\date{2026-09-07}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{open}
+
+\section{The comparison step}
+
+Let $\mathcal U$ be a matrix product operator tensor with physical dimension
+$d$ and bond dimension $D$, let $M_1$ and $M_2$ be its two matrix flattenings,
+and let $r$ and $\ell$ be their ranks. Section~III of
+Ref.~\cite{Cirac2017MPU} constructs factorizations
+$M_1=\tilde X_1\tilde Y_1$ and $M_2=X_2Y_2$ from singular value
+decompositions, together with the auxiliary factors $\tilde Z_1$ and $Z_2$
+that invert $\tilde Y_1$ and $Y_2$ on the right. Writing $\rho$ for the
+positive diagonal fixed point of the normalized transfer map and
+$W_\rho=\operatorname{Id}_d\otimes\rho$ for the associated weight, the printed
+normalizations are
+\begin{align}
+    X_2^\dagger X_2
+     & =\operatorname{Id}_\ell,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_second_isometry} \\
+    \tilde X_1^\dagger W_\rho\tilde X_1
+     & =\operatorname{Id}_r.
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_weighted_isometry}
+\end{align}
+The second factorization is a plain isometry, whereas the first is an isometry
+only against the weight $W_\rho$.\footnote{Source traceability:
+    \path{Papers/1703.09188/paper_v2.tex}, lines 480--500. The declared
+    auxiliary-label build for this archived source fails on the title's
+    malformed accent command, so the printed section designation is used.}
+
+The appendix of Ref.~\cite{FrancoRubio2025MPUGauging} treats a tensor whose
+adjoint is a unitary virtual gauge conjugate of itself,
+$\mathcal U^\dagger_{ij}=T^\dagger\mathcal U_{ij}T$, and builds a second
+factorization $M_1=X_1Y_1$ out of the second-cut factors,
+\begin{align}
+    X_1
+     & =A Y_2^\dagger,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_candidate_x} \\
+    Y_1
+     & =X_2^\dagger B,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_candidate_y}
+\end{align}
+where $A$ and $B$ are the virtual dressings built from $T$. It then compares
+the two factorizations of $M_1$ through a single invertible matrix $K$, printed
+as
+\begin{align}
+    K
+     & =\tilde X_1^\dagger X_1
+    =\tilde Y_1Y_1^\dagger,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_printed_k} \\
+    \tilde Y_1
+     & =KY_1,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_printed_pairing} \\
+    \tilde X_1
+     & =X_1K^\dagger.
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_printed_adjoint}
+\end{align}
+This note concerns
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_printed_k}) and
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_printed_adjoint}).\footnote{Source
+    traceability: \path{Papers/2502.20257/main.tex}, lines 5432--5443, in the
+    proof of the second appendix proposition of the $\mathbb Z_2$ appendix.}
+
+\section{The comparison matrix is determined, and carries the weight}
+
+Suppose $M_1=X_1Y_1=\tilde X_1\tilde Y_1$, that $\tilde L$ is a left inverse of
+$\tilde X_1$, and that $R$ is a right inverse of $Y_1$. Put $K=\tilde LX_1$.
+Then
+\begin{align}
+    \tilde Y_1
+     & =\tilde LM_1
+    =\tilde LX_1Y_1
+    =KY_1,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_derived_pairing} \\
+    X_1
+     & =M_1R
+    =\tilde X_1\tilde Y_1R
+    =\tilde X_1K,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_derived_factor} \\
+    K
+     & =\tilde Y_1R.
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_derived_k}
+\end{align}
+The third line follows from the second because $\tilde L\tilde X_1
+=\operatorname{Id}_r$. In particular $K$ does not depend on the choice of
+$\tilde L$ or of $R$: it is the unique matrix with
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_derived_pairing}), since
+$Y_1$ has a right inverse.
+
+Now
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_second_isometry}) and
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_candidate_y}) give
+$Y_1Y_1^\dagger=X_2^\dagger BB^\dagger X_2=\operatorname{Id}_\ell$, because $B$
+is a unitary dressing. Hence $Y_1^\dagger$ is a right inverse of $Y_1$ and the
+second printed expression in
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_printed_k}) is exactly
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_derived_k}); it is correct
+as printed.
+
+The first printed expression is not. By
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_weighted_isometry}) the
+matrix $\tilde X_1^\dagger$ is a left inverse of $\tilde X_1$ only after the
+weight is inserted, so the available left inverse is
+$\tilde L=\tilde X_1^\dagger W_\rho$ and the comparison matrix is
+\begin{align}
+    K
+     & =\tilde X_1^\dagger W_\rho X_1.
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_weighted_k}
+\end{align}
+Deleting $W_\rho$ from
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_weighted_k}) reproduces the
+printed formula, and the two agree exactly when
+$\tilde X_1^\dagger(W_\rho-\operatorname{Id}_{dD})X_1=0$, hence in particular
+when $\rho=\operatorname{Id}_D$. Since $\rho$ is the normalized transfer fixed
+point, that equality is not available in general. The printed
+$\tilde X_1^\dagger$ is therefore the same shorthand for the weighted adjoint
+that Section~III of Ref.~\cite{Cirac2017MPU} uses throughout: every occurrence
+of the adjoint of $\tilde X_1$ in the role of a left inverse is an occurrence
+of $\tilde X_1^\dagger W_\rho$. Reading it that way makes the appendix
+comparison correct with no further change, which is why this is a local
+correction rather than a defect in the argument.
+
+The formal development uses
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_weighted_k}) as the
+definition and proves
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_derived_k}) as a
+theorem.\footnote{Formal declarations:
+    \leanid{MPOTensor.inverseCompatibleComparisonK} and
+    \leanid{MPOTensor.inverseCompatibleComparison} in
+    \doclink{TNLean/MPS/MPU/InverseCompatibleCutComparison}; the weighted
+    normalization is \leanid{MPOTensor.sourceX₁_weighted_isometry}.}
+
+\section{The inverse comparison}
+
+Equation
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_printed_adjoint})
+asserts more than invertibility of $K$: it names $K^\dagger$ as the inverse,
+which is the statement that $K$ is unitary. In the appendix that unitarity is
+obtained afterwards, from the pleasant properties reestablished for the new
+factorization.
+
+The same construction applied in the opposite direction supplies an inverse
+without any normalization argument. If $L$ is a left inverse of $X_1$ and
+$\tilde Z_1$ a right inverse of $\tilde Y_1$, put $J=L\tilde X_1$. Then, by
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_derived_pairing})--(\ref{eq:fbc25_inverse_compatible_comparison_matrix_derived_k})
+with the two factorizations exchanged,
+\begin{align}
+    Y_1
+     & =J\tilde Y_1,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_reverse_pairing} \\
+    \tilde X_1
+     & =X_1J,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_reverse_factor} \\
+    J
+     & =Y_1\tilde Z_1,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_reverse_j}
+\end{align}
+and substituting each pairing into the other gives
+\begin{align}
+    KJ
+     & =\operatorname{Id}_r,
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_kj} \\
+    JK
+     & =\operatorname{Id}_\ell.
+    \label{eq:fbc25_inverse_compatible_comparison_matrix_jk}
+\end{align}
+Thus $J$ occupies the position of $K^\dagger$ in
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_printed_adjoint}), and
+$J=K^\dagger$ holds precisely when $K$ is unitary. The formal statement keeps
+$J$ as constructed and asserts
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_reverse_pairing})--(\ref{eq:fbc25_inverse_compatible_comparison_matrix_jk})
+only; it asserts neither $J=K^\dagger$ nor unitarity of $K$. It also keeps the
+rectangular index types $r$ and $\ell$ rather than transporting along the
+proved equality $r=\ell$.\footnote{Formal declarations:
+    \leanid{MPOTensor.inverseCompatibleComparisonJ} and
+    \leanid{MPOTensor.rightRank_eq_leftRank_of_physicalAdjointTensor_eq_unitary_gauge}
+    in \doclink{TNLean/MPS/MPU/InverseCompatibleCutComparison}.}
+
+\section{Verdict}
+
+The second printed expression for the comparison matrix is correct. The first
+is the usual shorthand in which the adjoint of $\tilde X_1$ stands for the
+weighted adjoint $\tilde X_1^\dagger W_\rho$, and it is correct only under that
+reading; the formalization inserts the weight. This is a local correction, and
+it changes no conclusion of the appendix argument.
+
+The identification of the inverse comparison with $K^\dagger$ is a separate
+statement that the appendix obtains from the pleasant properties of the new
+factorization. The formal development proves only that $K$ has a two-sided
+inverse, exhibited explicitly. The elimination step is the formalization of the
+appendix normalization that makes $K$ unitary; until it exists, the
+$K^\dagger$ form of the pairing remains outside the formalized statement, and
+the note stays open.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
