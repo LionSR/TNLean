@@ -101,6 +101,33 @@ Equation~(\ref{eq:fbc25_inverse_tilde_contraction}) locates the use of the corre
     \leanid{MPOTensor.sourceU_eq_smul_inverseCompatibleComparisonK_kronecker_sourceV_adjoint}, in
     \doclink{TNLean/MPS/MPU/InverseCompatibleGateIdentity}.}
 
+\section{An explicit check on the displayed CZX factors}
+
+The explicit factors displayed for the CZX tensor in
+Ref.~\cite[lines~4559--4659]{FrancoRubio2025MPUGauging} make the role of the weight visible in coordinates. There $d=4$, $D=2$, the maintained gauge is the Pauli matrix $Y$, and the recorded weight is $\rho=I_2/2$. Writing
+$\widehat X_1=(I_4\otimes\overline Y)Y_2^\dagger$ and
+$\widehat Y_1=X_2^\dagger(Y^{\mathsf T}\otimes I_4)$ for the candidates of
+(\ref{eq:fbc25_inverse_tilde_candidates}) on these factors, both candidates are the negatives of the displayed factors, and the three overlaps of
+Ref.~\cite[lines~5438--5441]{FrancoRubio2025MPUGauging} take the values
+\begin{align}
+    X_1^\dagger\widehat X_1                 & =-2I_4,
+    \label{eq:fbc25_inverse_tilde_czx_raw}                    \\
+    X_1^\dagger(I_4\otimes\rho)\widehat X_1 & =-I_4,
+    \label{eq:fbc25_inverse_tilde_czx_weighted}               \\
+    Y_1\widehat Y_1^\dagger                 & =-I_4.
+    \label{eq:fbc25_inverse_tilde_czx_right}
+\end{align}
+The unweighted left overlap (\ref{eq:fbc25_inverse_tilde_czx_raw}) has Gram matrix $4I_4$, so it is not unitary, and it differs from the right overlap
+(\ref{eq:fbc25_inverse_tilde_czx_right}). The weighted comparison
+(\ref{eq:fbc25_inverse_tilde_czx_weighted}), which is the $K$ of
+(\ref{eq:fbc25_inverse_tilde_weighted_comparison}), is unitary and recovers both displayed factors as $X_1=\widehat X_1K^\dagger$ and $Y_1=K\widehat Y_1$.
+This is a calculation on the explicit displayed witness rather than on choice-selected factors, so it diagnoses the intermediate formula on those factors; it is not a counterexample to the proposition proved in
+Ref.~\cite[lines~5350--5487]{FrancoRubio2025MPUGauging}, and it changes no gauge phase.\footnote{The three overlaps, the failure of unitarity of the unweighted one, and the weighted recovery are recorded in
+    \leanid{MPOTensor.CZX.displayedComparison_coordinates},
+    \leanid{MPOTensor.CZX.displayedRawComparison_not_isUnitaryBetween}, and
+    \leanid{MPOTensor.CZX.displayedWeightedComparison_spec}, in
+    \doclink{TNLean/MPS/MPDO/CZXComparisonNormalization}.}
+
 \section{Conclusion}
 
 This is a local correction of the factor's name, not a new hypothesis or a change of gauge. The correction is justified by the already distinguished factors and by the explicit tilde in the proof diagram. Its elimination criterion is that the factor substituted into the old gate be
