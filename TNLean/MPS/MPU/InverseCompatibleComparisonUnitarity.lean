@@ -25,6 +25,19 @@ Source: arXiv:2502.20257, `main.tex` lines 5444–5487. This is the printed
 gate-unitarity argument and its first weighted-normalization consequence;
 it does not assert all pleasant properties or `eq:UUU`, and does not replace
 the weighted comparison by an unweighted formula.
+
+**Local fix (weighted comparison):** `Papers/2502.20257/main.tex` lines
+5436–5439 print the comparison as $K=\tilde X_1^\dagger X_1$, without the
+weight. The source normalizes its first factor as
+$\tilde X_1^\dagger(I_d\otimes\rho)\tilde X_1=I_r$ (arXiv:1703.09188, label
+`Y1Y1X1X1`, lines 487–494), so $\tilde X_1^\dagger$ alone does not left-invert
+$\tilde X_1$, and the printed expression is not in general a left-inverse
+comparison. The weight is restored, so that
+$K=\tilde X_1^\dagger(I_d\otimes\rho)X_1$ is the matrix named $K$ here and in
+the gate identity. See
+`docs/paper-gaps/fbc25_inverse_compatible_tilde_omission.tex`, equation
+`eq:fbc25_inverse_tilde_weighted_comparison`. This correction concerns only
+the omitted weight; unitarity of $K$ is proved below, not assumed.
 -/
 
 open scoped ComplexOrder Matrix Kronecker
