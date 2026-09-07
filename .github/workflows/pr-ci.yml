@@ -276,6 +276,16 @@ jobs:
             lake build lint_style
           } 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
 
+      # TNLeanTest is outside the default library target. Reuse the imports
+      # compiled above, but elaborate these regression examples on every build.
+      - name: Test reciprocal scalar cancellation
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/MatrixReciprocalSmul.lean
+
       - name: Check changed Lean compilation times
         id: compilation-time
         if: github.event_name == 'pull_request'

@@ -25,7 +25,7 @@ All-length endpoint-coordinate unitarity is established separately in
 unitarity layer. This file does not establish the finite-group operator
 specialization or the complementary finite-chain relation. Documented in
 `docs/paper-gaps/fbc25_truncated_symmetry_endpoint_unitarity_scope.tex`.
-The raw endpoint API requires no simplicity, unitarity, normalized Gram, or
+The raw endpoint results require no simplicity, unitarity, normalized Gram, or
 inverse-gauge premise: zero bulk needs no factorization, left growth needs
 only the second cut factorization, and two-sided growth needs both. The
 `SourceFactors` results are specializations to the supplied normalized factors;
