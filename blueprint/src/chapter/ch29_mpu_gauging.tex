@@ -1126,6 +1126,99 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     Theorem~\ref{thm:mpug_common_blocking_representation}.
 \end{proof}
 
+\begin{definition}[Fusion tensors of a pair]
+    \label{def:mpug_fusion_tensors}
+    \lean{MPOTensor.GroupFamily.ReductionFamily.V,
+        MPOTensor.GroupFamily.ReductionFamily.W}
+    \leanok
+    \uses{def:mpug_pair_reductions}
+    Let $\{\mathcal U_g\}_{g\in G}$ be an MPU representation by simple
+    injective tensors with a family of selected reductions.  The \emph{fusion
+        tensors} of the pair $(g,h)$ are the two matrices of the selected
+    reduction of that pair,
+    \begin{align}
+        F^<_{g,h} & =V_{g,h}, & F^>_{g,h} & =W_{g,h}.
+        \label{eq:mpug_fusion_tensors}
+    \end{align}
+    Under this identification the reduction identities
+    $V_{g,h}W_{g,h}=\Id$ and
+    $V_{g,h}B_{g,h}^{\mathbf a}W_{g,h}=A_{g,h}^{\mathbf a}$ are the interior
+    fusion equation of \cite[lines 1459--1497]{FrancoRubio2025MPUGauging}, and
+    (\ref{eq:mpug_pair_exterior_identity}) is its exterior fusion equation.
+
+    Two features of the source are recorded here.  First, the existence of the
+    fusion tensors is not proved in \cite{FrancoRubio2025MPUGauging}: at
+    \texttt{main.tex} line 1405 it is attributed to
+    \cite{Molnar2018SemiInjective}, whose Proposition~20 and Theorem~22 carry
+    the existence and the uniqueness; the existence statement used here is
+    Theorem~\ref{thm:mpug_pair_reductions_exist}.  Second, the reduction of
+    the nilpotency length to $1$ by blocking is asserted at \texttt{main.tex}
+    line 1498 without proof; the content used here is the one-site exterior
+    identity (\ref{eq:mpug_common_blocking_one_site}).  Blocking need not make
+    a blocked residual letter vanish, and the blocked nilpotency length of
+    Definition~8 in \cite{Molnar2018SemiInjective} need not be $1$
+    \cite{gap:mgsc18_nilpotency_length_one_terminology}.
+\end{definition}
+
+\begin{theorem}[Reciprocal scalar rescaling of the fusion tensors]
+    \label{thm:mpug_fusion_scalar_gauge}
+    \lean{MPSTensor.IsReduction.reciprocal_smul,
+        MPSTensor.reductionResidual_reciprocal_smul,
+        MPSTensor.isReductionResidualNilpotencyBound_reciprocal_smul,
+        MPSTensor.reductionResidualNilpotencyLength_reciprocal_smul,
+        MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul,
+        MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff,
+        MPOTensor.GroupFamily.ReductionFamily.smul,
+        MPOTensor.GroupFamily.ReductionFamily.hasExteriorBufferLength_smul,
+        MPOTensor.GroupFamily.ReductionFamily.block_smul}
+    \leanok
+    \discussion{7397}
+    \uses{def:mpug_fusion_tensors, def:mpug_pair_reductions,
+        def:mpug_pair_reductions_block, def:scalar_cocycle,
+        def:mps_rectangular_reduction,
+        def:mps_reduction_residual_nilpotency_length,
+        def:mps_reduction_exterior_buffer_length}
+    Let $(V,W)$ be a reduction from $B$ to $A$ and let
+    $\beta\in\C^\times$.  Then $(\beta^{-1}V,\beta W)$ is again a reduction
+    from $B$ to $A$; its residual letters $N^i=B^i-WA^iV$ are unchanged, hence
+    so are its residual-word nilpotency bounds and its residual nilpotency
+    length $\ell(B,A;V,W)$; and a natural number is an exterior buffer length
+    for $(\beta^{-1}V,\beta W)$ if and only if it is one for $(V,W)$.
+
+    Consequently, let $\beta\colon G^2\to\C^\times$ be a scalar $2$-cochain
+    and let $\{\mathcal U_g\}_{g\in G}$ have a family of selected reductions.
+    The rescaled matrices of (\ref{eq:mpug_fusion_gauge}), namely
+    $W_{g,h}\mapsto\beta_{g,h}W_{g,h}$ and
+    $V_{g,h}\mapsto\beta_{g,h}^{-1}V_{g,h}$, again form a family of selected
+    reductions of $\{\mathcal U_g\}_{g\in G}$.  It has exterior buffer length
+    $m$ exactly when the original family does, and rescaling commutes with
+    blocking by any length $L$.
+
+    This is the scalar gauge freedom of the fusion tensors in
+    \cite[\texttt{main.tex} lines 1500--1504]{FrancoRubio2025MPUGauging},
+    under the identification (\ref{eq:mpug_fusion_tensors}).  The assertion is
+    that a reciprocal rescaling of a family of selected reductions is again
+    such a family.  That every family of selected reductions of a given
+    representation arises from a fixed one by such a rescaling is a separate,
+    stronger claim which \cite{FrancoRubio2025MPUGauging} does not prove; the
+    available uniqueness is the boundary-dressed statement of
+    Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mps_rectangular_reduction_identities}
+    In each identity the two scalars occur in one of the combinations
+    $(\beta^{-1}V)(\beta W)$, $(\beta W)A^{\mathbf c}(\beta^{-1}V)$, and
+    $(\beta^{-1}V)B^{\mathbf a}(\beta W)$; in every case they multiply to
+    $\beta\beta^{-1}=1$ and disappear.  The residual letters and the exterior
+    identity are therefore unchanged, and equality of the two sets of
+    residual-word nilpotency bounds gives equality of their infima.  The
+    statements for a family follow pair by pair, and blocking changes only the
+    physical alphabet of the tensors, leaving $V_{g,h}$ and $W_{g,h}$
+    untouched.
+\end{proof}
+
 \begin{theorem}[Zero specified source-index value determines the source ranks]
     \label{thm:mpug_zero_specified_source_index_ranks}
     \lean{MPOTensor.sourceRanks_eq_physDim_of_sourceIndexValue_eq_zero}
@@ -7002,8 +7095,9 @@ unbuffered defect formulas.
     $\varphi(2a+b)=(a,b)$. Thus $A_x^i=\delta_{i,3x}$.
     Write $B^{i,j}$ for the CZX tensor and define
     \begin{align}
-        B_x^i & =\sum_{j=0}^3 B^{i,j}A_x^j, &
-        k_x   & =3(1-x),                    & C_x & =B^{k_x,3x}.
+        B_x^i & =\sum_{j=0}^3 B^{i,j}A_x^j, \\
+        k_x   & =3(1-x),                    \\
+        C_x   & =B^{k_x,3x}.
         \label{eq:mpug_czx_acted_sectors}
     \end{align}
     The target sector is $A_{1-x}$. These are the physical contraction
@@ -7019,9 +7113,10 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_acted_sectors}
     For $x\in\{0,1\}$ and $i\in\{0,1,2,3\}$,
     \begin{align}
-        B_x^i & =\delta_{i,k_x}C_x,                     & A_{1-x}^i & =\delta_{i,k_x}, \\
-        C_0   & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}, &
-        C_1   & =\begin{pmatrix}1&1\\0&0\end{pmatrix}.
+        B_x^i     & =\delta_{i,k_x}C_x,                     \\
+        A_{1-x}^i & =\delta_{i,k_x},                        \\
+        C_0       & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}, \\
+        C_1       & =\begin{pmatrix}1&1\\0&0\end{pmatrix}.
         \label{eq:mpug_czx_action_matrices}
     \end{align}
 \end{theorem}
@@ -7050,8 +7145,9 @@ unbuffered defect formulas.
     by $p_x$ and $q_x$. With $|\pm\rangle=(|0\rangle\pm|1\rangle)/\sqrt2$,
     the formulas of \cite[lines~4690--4694]{FrancoRubio2025MPUGauging} read
     \begin{align}
-        p_0 & =(0,-i),                                    & p_1 & =(1,0), \\
-        q_0 & =\tfrac12\begin{pmatrix}-i\\i\end{pmatrix}, &
+        p_0 & =(0,-i),                                    \\
+        p_1 & =(1,0),                                     \\
+        q_0 & =\tfrac12\begin{pmatrix}-i\\i\end{pmatrix}, \\
         q_1 & =\tfrac12\begin{pmatrix}1\\1\end{pmatrix}.
         \label{eq:mpug_czx_printed_action_pair}
     \end{align}
@@ -7105,8 +7201,6 @@ unbuffered defect formulas.
     \label{thm:mpug_czx_printed_action_words}
     \lean{MPOTensor.CZX.printedAction_interior, MPOTensor.CZX.printedAction_exterior}
     \leanok
-    % **Scope restriction (nonempty printed interior):** the empty interior
-    % claim fails for the literal pair. See docs/paper-gaps/fbc25_czx_action_empty_word.tex.
     \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
     Let $x\in\{0,1\}$. For every nonempty word $\mathbf c$,
     \begin{align}
@@ -7242,9 +7336,10 @@ unbuffered defect formulas.
     product-bond coordinate $(a,b)$ with $2a+b$. For all bond bits
     $a,b\in\{0,1\}$,
     \begin{align}
-        F^<_{g,g}(a,b) & =Y_{a,b},         &
-        F^>_{g,g}(a,b) & =\tfrac12Y_{b,a},
-        \label{eq:mpug_czx_fusion_caps_apply}
+        F^<_{g,g}(a,b) & =Y_{a,b},
+        \label{eq:mpug_czx_fusion_caps_apply} \\
+        F^>_{g,g}(a,b) & =\tfrac12Y_{b,a}.
+        \label{eq:mpug_czx_fusion_caps_apply_right}
     \end{align}
     Thus both caps vanish at the diagonal bond coordinates and carry
     $Y$ in opposite orientations, as in the printed diagram of
@@ -7254,7 +7349,8 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
     Evaluate both caps at $2a+b$ for the four pairs $(a,b)$ and compare
     with the entries of $Y$ to obtain
-    (\ref{eq:mpug_czx_fusion_caps_apply}).
+    (\ref{eq:mpug_czx_fusion_caps_apply}) and
+    (\ref{eq:mpug_czx_fusion_caps_apply_right}).
 \end{proof}
 
 \begin{theorem}[The CZX fusion reduction]
@@ -7294,15 +7390,37 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_fusion_caps, def:mpug_czx_exact_tensor,
         def:mpdo_operator_product, def:mpo_to_mps, threeMPU}
     Put $V=F^<_{g,g}$ and $W=F^>_{g,g}$. Substituting the cap and
-    tensor coordinates gives
+    tensor coordinates gives the three local identities
     \begin{align}
-        VW & =1, & VB^iW & =I^i, & B^iWVB^j & =B^iB^j.
-        \label{eq:mpug_czx_fusion_local_identities}
+        VW       & =1,
+        \label{eq:mpug_czx_fusion_cap_product} \\
+        VB^iW    & =I^i,
+        \label{eq:mpug_czx_fusion_letter}      \\
+        B^iWVB^j & =B^iB^j.
+        \label{eq:mpug_czx_fusion_letter_insertion}
     \end{align}
-    Induct on the nonempty left word $\mathbf p$, removing its first
+    The all-word identity $VB^{\mathbf c}W=I^{\mathbf c}$ follows by
+    induction on $\mathbf c$, removing its first letter. The empty word
+    is (\ref{eq:mpug_czx_fusion_cap_product}) and a single letter is
+    (\ref{eq:mpug_czx_fusion_letter}). For $\mathbf c=ij\mathbf c'$,
+    insert $WV$ after the first letter by
+    (\ref{eq:mpug_czx_fusion_letter_insertion}), split the caps off both
+    factors, and apply (\ref{eq:mpug_czx_fusion_letter}) together with
+    the induction hypothesis for $j\mathbf c'$:
+    \begin{align}
+        VB^{ij\mathbf c'}W
+         & =(VB^iW)(VB^{j\mathbf c'}W)
+        =I^iI^{j\mathbf c'}=I^{ij\mathbf c'}.
+    \end{align}
+    For nonempty words $\mathbf p,\mathbf q$ a second induction gives
+    \begin{align}
+        B^{\mathbf p}WVB^{\mathbf q} & =B^{\mathbf p\mathbf q}.
+        \label{eq:mpug_czx_fusion_word_insertion}
+    \end{align}
+    Induct on the left word $\mathbf p$, again removing its first
     letter. For the singleton case $\mathbf p=i$ and
-    $\mathbf q=j\mathbf q'$, the local insertion identity in
-    (\ref{eq:mpug_czx_fusion_local_identities}) gives
+    $\mathbf q=j\mathbf q'$,
+    (\ref{eq:mpug_czx_fusion_letter_insertion}) gives
     \begin{align}
         B^iWVB^{j\mathbf q'}
          & =(B^iWVB^j)B^{\mathbf q'}
@@ -7315,14 +7433,14 @@ unbuffered defect formulas.
          & =B^i(B^{\mathbf p'}WVB^{\mathbf q})
         =B^iB^{\mathbf p'\mathbf q}=B^{i\mathbf p'\mathbf q}.
     \end{align}
-    Using it in an induction gives $VB^{\mathbf c}W=I^{\mathbf c}$;
-    the empty case is $VW=1$. For nonempty buffers and middle word,
+    For nonempty buffers and middle word, substitute
+    $I^{\mathbf c}=VB^{\mathbf c}W$ and apply
+    (\ref{eq:mpug_czx_fusion_word_insertion}) twice:
     \begin{align}
         B^{\mathbf p}WI^{\mathbf c}VB^{\mathbf q}
          & =B^{\mathbf p}WVB^{\mathbf c}WVB^{\mathbf q}
-        =B^{\mathbf p\mathbf c\mathbf q},
+        =B^{\mathbf p\mathbf c\mathbf q}.
     \end{align}
-    applying the word insertion identity twice.
 \end{proof}
 
 \subsection{Literal fusion--action coordinate contractions}
@@ -7624,19 +7742,18 @@ block label, or physical gate is changed here.
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
-        def:mpug_czx_displayed_factors, thm:mpug_czx_phase_tables}
+        def:mpug_czx_displayed_factors, def:mpug_czx_circuit_tuple,
+        thm:mpug_czx_phase_tables}
     Pull back the rank indices and expand the crossed contraction as
-    \begin{align*}
-        \sum_{\beta=0}^1(X_1)_{(i,\beta),a}(Y_1)_{r,(\beta,j)}.
-    \end{align*}
+    $\sum_{\beta=0}^1(X_1)_{(i,\beta),a}(Y_1)_{r,(\beta,j)}$.
     The sparse action (\ref{eq:mpug_czx_w_action}) gives
-    \begin{align*}
+    \begin{align}
         W_{(i,r),(a,j)}
          & =\begin{cases}
                 (-1)^{e(x)}, & i=3-a\text{ and }r=j, \\
                 0,           & \text{otherwise},
             \end{cases}
-    \end{align*}
+    \end{align}
     where $x=(x_0,x_1,x_2,x_3)\in\{0,1\}^4$ satisfies
     $a=2x_0+x_1$ and $j=2x_2+x_3$.
     Substitute the displayed factors, first discarding the zero entries
@@ -7668,11 +7785,10 @@ block label, or physical gate is changed here.
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
-        def:mpug_czx_displayed_factors, thm:mpug_czx_phase_tables}
+        def:mpug_czx_displayed_factors, def:mpug_czx_circuit_tuple,
+        thm:mpug_czx_phase_tables}
     Pull back the rank indices and expand the crossed contraction as
-    \begin{align*}
-        \sum_{\beta=0}^1(Y_2)_{l,(j,\beta)}(X_2)_{(\beta,i),k}.
-    \end{align*}
+    $\sum_{\beta=0}^1(Y_2)_{l,(j,\beta)}(X_2)_{(\beta,i),k}$.
     Use the conjugated reversed entry
     $(W^\dagger)_{(l,i),(j,k)}=\overline{W_{(j,k),(l,i)}}$.
     By (\ref{eq:mpug_czx_w_action}), it vanishes unless $j=3-l$ and

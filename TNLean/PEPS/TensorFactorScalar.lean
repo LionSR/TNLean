@@ -73,8 +73,23 @@ $$
 with the identity in the three complementary positions forces the residual
 operators $Z$, $U$, and $W$ to be scalar multiples of the identity.
 
-The nonempty hypotheses express the paper's standing convention that virtual
-Hilbert spaces are nonzero finite-dimensional spaces. -/
+**Local fix (nonzero virtual legs):** the residual forms are defined for
+arbitrary leg index sets, while this scalar-recovery statement assumes each
+index set is nonempty.  In coordinates the two hypotheses read
+$$
+  \delta_{aa'}Z_{bc,b'c'} = U_{ab,a'b'}\delta_{cc'},
+  \qquad
+  \delta_{aa'}Z_{bc,b'c'} = W_{ac,a'c'}\delta_{bb'},
+$$
+quantified over $a,a'\in\alpha$, $b,b'\in\beta$, and $c,c'\in\gamma$.  If one
+of the three index sets is empty, then so is
+$\alpha\times\beta\times\gamma$, both hypotheses are equalities of functions on
+an empty domain, and they hold for arbitrary $Z$, $U$, $W$: with $\alpha$
+empty, $\beta$ a one-point set and $\gamma$ a two-point set, the matrix
+$Z=\operatorname{diag}(1,2)$ satisfies both while being no multiple of the
+identity.  The nonempty hypotheses encode the source's nonzero-dimensional
+virtual bond spaces and do not follow from injectivity.  Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
 theorem threeLeg_residual_forms_scalar [Nonempty α] [Nonempty β] [Nonempty γ]
     (Z : Matrix (β × γ) (β × γ) ℂ)
     (U : Matrix (α × β) (α × β) ℂ)
