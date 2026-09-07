@@ -2517,6 +2517,49 @@ spectral split → block extraction → MPV calculation → strict bounds
   split, extract a `weight_split` macro next to the diagonal-operator helpers
   rather than a general tactic.
 
+### CZX phase-table entry evaluation — rejected
+- **Pattern:** evaluate one transported four-qubit monomial operator at one
+  computational basis vector by naming the two decidable facts that hold there
+  and closing the scalar arithmetic:
+
+  ```lean
+  have hperm : barFlip ![1, 1, 0, 0] = ![0, 0, 0, 0] := by decide
+  have hphase : hExponent ![1, 1, 0, 0] = 0 := by decide
+  rw [<operator basis action>, hperm, hphase]
+  norm_num [show ((1 : ZMod 2)).val = 1 from rfl]
+  ```
+
+- **Seen:** eight occurrences across three files (2026-09-07): the six
+  `matterMatrix_{w,tildeLambda,tildeLambdaStar}_mulVec_matterKet_{zero,one}`
+  proofs in `TNLean/MPS/MPDO/CZXCompletion.lean`, and the two
+  `matterMatrix_lambda_mulVec_defectVector_{zero,one}` proofs in
+  `TNLean/MPS/MPDO/CZXUnmodifiedFusion.lean`.
+- **Reason:** the shared step is already abstracted. Every occurrence reaches
+  `MPOTensor.CZX.matterMatrix_monomial_mulVec_matterKet`, directly or through
+  the per-operator wrappers `matterMatrix_w_mulVec_matterKet` and
+  `matterMatrix_tildeLambda_mulVec_matterKet`, and that lemma carries the whole
+  mathematical content of the step. What is left at each site is the site's own
+  data: which bit string the permutation sends where, and what the sign
+  exponent is there. The eight sites use four different operators, four
+  different exponent functions, three different scalar prefactors, and eight
+  different bit strings, so they share no conclusion from which a further lemma
+  could be extracted; they are eight entries of a phase table.
+- **Prototype:** a helper `(hperm : σ x = y) → (hphase : φ x = c) →
+  matterMatrix (monomial σ φ) *ᵥ matterKet x = c • matterKet y` was written out
+  on paper, in full for one site of each of the three shapes that occur and by
+  shape for the remaining five. It does not shorten them. The permutation fact
+  survives verbatim as an explicit argument; the exponent fact does not,
+  because `φ x` is a complex number and `φ x = c` is undecidable, so each site
+  must wrap its `decide` inside a `norm_num` proof of the sign, which is longer
+  than the `have` it replaces. Each of the eight proof bodies grows by one line
+  and the helper adds nine, for about seventeen lines net. The prototype was
+  not compiled.
+- **Notes:** the one fragment genuinely shared by the sites is the closing
+  `show ((1 : ZMod 2)).val = 1 from rfl`, an inlined shadow of Mathlib's
+  `ZMod.val_one`. Replacing it is a Mathlib-reuse cleanup across the three CZX
+  files rather than a tactic abstraction, and is recorded here so it is not
+  confused with this pattern.
+
 ## Retired
 
 ### block_words — retired

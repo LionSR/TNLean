@@ -7895,6 +7895,33 @@ Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
     hence is a unit vector.
 \end{proof}
 
+\begin{lemma}[Transported monomial operators on the computational basis]
+    \label{lem:mpug_czx_matter_monomial_action}
+    \lean{MPOTensor.CZX.matterKet,
+        MPOTensor.CZX.matterMatrix_monomial_mulVec_matterKet}
+    \leanok
+    \uses{def:mpug_monomial_matrix, def:mpug_czx_circuit_tuple,
+        def:mpug_czx_defect_vectors}
+    Write $\ket{x}$ for the computational basis vector of the two-site matter
+    space attached to $x\in\mathbb F_2^4$ by the qubit numbering of
+    Definition~\ref{def:mpug_czx_defect_vectors}. After transport to that
+    space a monomial four-qubit operator still acts on the computational basis
+    by its phase and its permutation, so that for every $x\in\mathbb F_2^4$
+    \begin{align}
+        M(\sigma,\varphi)\ket{x} & =\varphi(x)\ket{\sigma(x)}.
+        \label{eq:mpug_czx_matter_monomial_action}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_monomial_matrix_laws, def:mpug_czx_circuit_tuple}
+    Transport is the simultaneous relabelling of rows and columns along the
+    qubit numbering. It carries $M(\sigma,\varphi)$ to the monomial matrix of
+    the relabelled permutation and phase, and carries the basis vector of $x$
+    to $\ket{x}$, so reading (\ref{eq:mpug_monomial_matrix}) in the new labels
+    gives (\ref{eq:mpug_czx_matter_monomial_action}).
+\end{proof}
+
 \begin{theorem}[Unmodified CZX fusion contractions]
     \label{thm:mpug_czx_unmodified_fusion}
     \lean{MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_zero,
@@ -7921,18 +7948,22 @@ Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values}
-    The phase formula~(\ref{eq:mpug_czx_lambda_action}) gives the two
-    basis calculations
+    \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values,
+        lem:mpug_czx_matter_monomial_action}
+    The phase formula~(\ref{eq:mpug_czx_lambda_action}), read on the two-site
+    matter space through (\ref{eq:mpug_czx_matter_monomial_action}), gives
     \begin{align}
-        \lambda\ket{1100} & =-i\ket{0000}, \\
+        \lambda\ket{1100} & =-i\ket{0000},
+        \label{eq:mpug_czx_lambda_ket_even} \\
         \lambda\ket{0011} & =i\ket{1111},
+        \label{eq:mpug_czx_lambda_ket_odd}
     \end{align}
     since $h(1100)=0$ and $h(0011)=1$.
     By Theorem~\ref{thm:mpug_czx_defect_vector_values}, the input defect
     vectors are $-i\ket{1100}$ and $-i\ket{0011}$, while the target
-    vectors are $\ket{0000}$ and $\ket{1111}$. Multiplying the two
-    basis calculations by $-i$ gives the claimed signs.
+    vectors are $\ket{0000}$ and $\ket{1111}$. Multiplying
+    (\ref{eq:mpug_czx_lambda_ket_even}) and
+    (\ref{eq:mpug_czx_lambda_ket_odd}) by $-i$ gives the claimed signs.
 \end{proof}
 
 \begin{definition}[CZX defect domains]
