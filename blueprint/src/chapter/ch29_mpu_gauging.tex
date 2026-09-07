@@ -507,16 +507,15 @@ the comparison matrix $K$, or the full compatibility properties of
     Let $\mathcal U$ be a tensor of physical dimension $d$ and bond
     dimension $D$. Suppose that $T$ is unitary on $\C^D$ and that, for
     every physical pair $i,j$,
-    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$. Then, for every
+    $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$. Then, for every
     physical pair $i,j$,
-    $\mathcal U^{ij}=T(\mathcal U^\dagger)^{ij}T^\dagger$.
-    Here $\mathcal U^\dagger$ denotes physical
-    adjunction. This reverses the gauge relation used in
+    $\mathcal U^{ij}=T(\mathcal U^\sharp)^{ij}T^\dagger$.
+    This reverses the gauge relation used in
     \cite[lines~5391--5410]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 \begin{proof}\leanok
     Unitarity gives
-    $T(\mathcal U^\dagger)^{ij}T^\dagger
+    $T(\mathcal U^\sharp)^{ij}T^\dagger
         =(TT^\dagger)\mathcal U^{ij}(TT^\dagger)=\mathcal U^{ij}$.
 \end{proof}
 
@@ -528,7 +527,7 @@ the comparison matrix $K$, or the full compatibility properties of
         def:mpu_source_matrix_two, def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a tensor of physical dimension $d$ and bond
     dimension $D$. Suppose that $T$ is unitary and that, for every
-    physical pair $i,j$, $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$.
+    physical pair $i,j$, $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$.
     With $A=I_d\otimes\overline T$ and
     $B=T^{\mathsf T}\otimes I_d$, the source cuts satisfy
     $M_1(\mathcal U)=AM_2(\mathcal U)^\dagger B$. This is the cut
@@ -539,14 +538,14 @@ the comparison matrix $K$, or the full compatibility properties of
         thm:mpu_physical_adjoint_source_cuts, def:mpug_inverse_cut_gauges,
         def:mpu_source_matrix_one}
     Physical adjunction gives
-    $M_2(\mathcal U)^\dagger=M_1(\mathcal U^\dagger)$.
+    $M_2(\mathcal U)^\dagger=M_1(\mathcal U^\sharp)$.
     For physical indices $i,j$ and virtual indices $a,b$, expand the
     matrix product and apply Theorem~\ref{thm:mpug_inverse_cut_reverse_gauge}:
     \begin{align}
-        (AM_1(\mathcal U^\dagger)B)_{(i,b),(a,j)}
+        (AM_1(\mathcal U^\sharp)B)_{(i,b),(a,j)}
          & =\sum_{x,y=0}^{D-1}\overline{T_{bx}}
-        (\mathcal U^\dagger)^{ij}_{yx}T_{ay}           \\
-         & =(T(\mathcal U^\dagger)^{ij}T^\dagger)_{ab}
+        (\mathcal U^\sharp)^{ij}_{yx}T_{ay}           \\
+         & =(T(\mathcal U^\sharp)^{ij}T^\dagger)_{ab}
         =\mathcal U^{ij}_{ab}.
     \end{align}
 \end{proof}
@@ -559,7 +558,7 @@ the comparison matrix $K$, or the full compatibility properties of
         def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a tensor and $T$ a unitary virtual matrix such
     that, for every physical pair $i,j$,
-    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$. The candidates $X,Y$ of
+    $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$. The candidates $X,Y$ of
     Definition~\ref{def:mpug_inverse_cut_factors} satisfy
     $M_1(\mathcal U)=XY$. This is the candidate decomposition of
     \cite[line~5432]{FrancoRubio2025MPUGauging}.
@@ -635,7 +634,7 @@ the comparison matrix $K$, or the full compatibility properties of
     the chosen unitary gauge $T_g$ of
     Theorem~\ref{thm:mpug_dagger_inverse_gauge} satisfies, for every
     physical pair $i,j$,
-    $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
+    $(\mathcal U_g^\sharp)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
     This specializes the gauge relation
     of \cite[lines~1552--1557]{FrancoRubio2025MPUGauging} to the
     involutive case discussed in
@@ -645,7 +644,7 @@ the comparison matrix $K$, or the full compatibility properties of
     \uses{thm:mpug_dagger_inverse_gauge}
     The equality $g^{-1}=g$ identifies both the tensors and their bond
     spaces. Thus the chosen gauge satisfies
-    $(\mathcal U_g^\dagger)^{ij}
+    $(\mathcal U_g^\sharp)^{ij}
         =T_g^\dagger\mathcal U_{g^{-1}}^{ij}T_g
         =T_g^\dagger\mathcal U_g^{ij}T_g$.
 \end{proof}
@@ -679,7 +678,7 @@ the comparison matrix $K$, or the full compatibility properties of
         thm:mpug_inverse_cut_factorization, thm:mpug_inverse_cut_left_inverse,
         thm:mpug_inverse_cut_right_inverse}
     Theorem~\ref{thm:mpug_involutive_adjoint_gauge} gives
-    $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
+    $(\mathcal U_g^\sharp)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
     Theorem~\ref{thm:mpug_inverse_cut_factorization} therefore gives
     $M_1(\mathcal U_g)=XY$. Theorems~\ref{thm:mpug_inverse_cut_left_inverse}
     and~\ref{thm:mpug_inverse_cut_right_inverse} give
@@ -701,8 +700,8 @@ inverse-compatible decomposition is asserted.
     \uses{def:mpu_right_rank, def:mpu_left_rank, def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
     dimension $D$. Suppose that $T$ is unitary on $\C^D$ and
-    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
-    $0\leq i,j<d$, where $\mathcal U^\dagger$ denotes physical adjunction.
+    $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    $0\leq i,j<d$.
     Then its source-cut ranks satisfy
     $r=\operatorname{rank}M_1(\mathcal U)
         =\operatorname{rank}M_2(\mathcal U)=\ell$.
@@ -773,7 +772,7 @@ inverse-compatible decomposition is asserted.
         def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$, let $T$ be
     unitary on $\C^D$, and suppose that
-    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
     $0\leq i,j<d$. Let $\rho$ be positive definite on $\C^D$.
     Write $\widetilde X,\widetilde Y,\widetilde Z$ for the first
     source factors with weight $\rho$, and $X_2,Y_2,Z_2$ for the

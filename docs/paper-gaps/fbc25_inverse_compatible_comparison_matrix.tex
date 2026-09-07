@@ -12,7 +12,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{scope-restriction}{open}
 
 \section{The comparison step}
 
@@ -72,6 +72,14 @@ This note concerns
 (\ref{eq:fbc25_inverse_compatible_comparison_matrix_printed_adjoint}).\footnote{Source
     traceability: \path{Papers/2502.20257/main.tex}, lines 5432--5443, in the
     proof of the second appendix proposition of the $\mathbb Z_2$ appendix.}
+The two deviate from the formal statement in different ways. The first printed
+expression for $K$ needs the weight $W_\rho$ inserted; that is a local
+correction, and the formal development applies it, so nothing about it remains
+open. The second names $K^\dagger$ as the inverse of $K$, hence asserts that
+$K$ is unitary, and the formal development proves no such thing: it exhibits a
+separately constructed two-sided inverse instead. The formal statement is
+therefore a restriction of the printed one, and that restriction, not the
+weight, fixes the classification of this note.
 
 \section{The comparison matrix is determined, and carries the weight}
 
@@ -129,7 +137,7 @@ $\tilde X_1^\dagger$ is therefore the same shorthand for the weighted adjoint
 that Section~III of Ref.~\cite{Cirac2017MPU} uses throughout: every occurrence
 of the adjoint of $\tilde X_1$ in the role of a left inverse is an occurrence
 of $\tilde X_1^\dagger W_\rho$. Reading it that way makes the appendix
-comparison correct with no further change, which is why this is a local
+comparison correct with no further change, which is why the weight is a local
 correction rather than a defect in the argument.
 
 The formal development uses
@@ -193,16 +201,22 @@ proved equality $r=\ell$.\footnote{Formal declarations:
 The second printed expression for the comparison matrix is correct. The first
 is the usual shorthand in which the adjoint of $\tilde X_1$ stands for the
 weighted adjoint $\tilde X_1^\dagger W_\rho$, and it is correct only under that
-reading; the formalization inserts the weight. This is a local correction, and
-it changes no conclusion of the appendix argument.
+reading; the formalization inserts the weight. This is a local correction, it
+changes no conclusion of the appendix argument, and it is carried out in full,
+so it leaves nothing open.
 
 The identification of the inverse comparison with $K^\dagger$ is a separate
 statement that the appendix obtains from the pleasant properties of the new
 factorization. The formal development proves only that $K$ has a two-sided
-inverse, exhibited explicitly. The elimination step is the formalization of the
-appendix normalization that makes $K$ unitary; until it exists, the
-$K^\dagger$ form of the pairing remains outside the formalized statement, and
-the note stays open.
+inverse, exhibited explicitly. Its pairing is therefore the printed pairing
+restricted to the case in which the inverse is that explicit matrix rather than
+$K^\dagger$, and the unitarity of $K$ that the appendix establishes afterwards
+is absent. This restriction, and not the weight, is the live content of the
+note, and it is the reason the note is classified as a scope restriction rather
+than as a local correction. The elimination step is the formalization of the
+appendix normalization that makes $K$ unitary; the note becomes resolved when
+that argument gives $J=K^\dagger$, and until then the $K^\dagger$ form of the
+pairing remains outside the formalized statement and the note stays open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
