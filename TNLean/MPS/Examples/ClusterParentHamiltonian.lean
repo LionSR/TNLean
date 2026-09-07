@@ -83,12 +83,6 @@ def clusterStabilizer : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3 where
     clusterStabilizer v s =
       (-1 : ℂ) ^ ((s 0).val + (s 2).val) * v ![s 0, s 1 + 1, s 2] := rfl
 
-private lemma cluster_groundSpaceMap_three_apply (X : Matrix (Fin 2) (Fin 2) ℂ)
-    (a b c : Fin 2) :
-    groundSpaceMap clusterTensor 3 X ![a, b, c] =
-      Matrix.trace (clusterTensor a * (clusterTensor b * (clusterTensor c * X))) := by
-  simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
-
 /-- Every vector of the three-site local ground space is fixed by the
 stabilizer. -/
 private lemma clusterStabilizer_groundSpaceMap (X : Matrix (Fin 2) (Fin 2) ℂ) :
@@ -102,7 +96,7 @@ private lemma clusterStabilizer_groundSpaceMap (X : Matrix (Fin 2) (Fin 2) ℂ) 
   simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two,
     Matrix.tail_cons]
   fin_cases a <;> fin_cases b <;> fin_cases c <;>
-    simp only [cluster_groundSpaceMap_three_apply, clusterTensor_zero, clusterTensor_one,
+    simp only [groundSpaceMap_three_apply, clusterTensor_zero, clusterTensor_one,
       Fin.isValue, Fin.zero_eta, Fin.mk_one, Fin.reduceAdd, Matrix.trace_fin_two,
       Matrix.mul_apply, Fin.sum_univ_two, Matrix.smul_apply, Matrix.of_apply, Matrix.cons_val',
       Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
@@ -147,7 +141,7 @@ theorem cluster_groundSpace_three_eq_eigenspace :
       generalize s 1 = b
       generalize s 2 = c
       fin_cases a <;> fin_cases b <;> fin_cases c <;>
-        simp only [X, h010, h011, h110, h111, cluster_groundSpaceMap_three_apply,
+        simp only [X, h010, h011, h110, h111, groundSpaceMap_three_apply,
           clusterTensor_zero, clusterTensor_one, Fin.isValue, Fin.zero_eta, Fin.mk_one,
           Matrix.trace_fin_two, Matrix.mul_apply, Fin.sum_univ_two, Matrix.smul_apply,
           Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
@@ -172,13 +166,6 @@ lemma clusterSourceTensor_zero : clusterSourceTensor 0 = !![0, 0; 1, 1] := rfl
 
 lemma clusterSourceTensor_one : clusterSourceTensor 1 = !![1, -1; 0, 0] := rfl
 
-private lemma clusterSource_groundSpaceMap_three_apply (X : Matrix (Fin 2) (Fin 2) ℂ)
-    (a b c : Fin 2) :
-    groundSpaceMap clusterSourceTensor 3 X ![a, b, c] =
-      Matrix.trace (clusterSourceTensor a * (clusterSourceTensor b *
-        (clusterSourceTensor c * X))) := by
-  simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
-
 /-- On the source's matrices the stabilizer acts as \(-1\). -/
 private lemma clusterStabilizer_source_groundSpaceMap (X : Matrix (Fin 2) (Fin 2) ℂ) :
     clusterStabilizer (groundSpaceMap clusterSourceTensor 3 X) =
@@ -191,7 +178,7 @@ private lemma clusterStabilizer_source_groundSpaceMap (X : Matrix (Fin 2) (Fin 2
   simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two,
     Matrix.tail_cons]
   fin_cases a <;> fin_cases b <;> fin_cases c <;>
-    simp only [clusterSource_groundSpaceMap_three_apply, clusterSourceTensor_zero,
+    simp only [groundSpaceMap_three_apply, clusterSourceTensor_zero,
       clusterSourceTensor_one, Fin.isValue, Fin.zero_eta, Fin.mk_one, Fin.reduceAdd,
       Matrix.trace_fin_two, Matrix.mul_apply, Fin.sum_univ_two, Matrix.of_apply,
       Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
@@ -236,7 +223,7 @@ theorem clusterSource_groundSpace_three_eq_eigenspace_neg_one :
       generalize s 1 = b
       generalize s 2 = c
       fin_cases a <;> fin_cases b <;> fin_cases c <;>
-        simp only [X, h010, h011, h110, h111, clusterSource_groundSpaceMap_three_apply,
+        simp only [X, h010, h011, h110, h111, groundSpaceMap_three_apply,
           clusterSourceTensor_zero, clusterSourceTensor_one, Fin.isValue, Fin.zero_eta,
           Fin.mk_one, Matrix.trace_fin_two, Matrix.mul_apply, Fin.sum_univ_two,
           Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,

@@ -186,11 +186,6 @@ private lemma aklt_left_constraints (ψ : NSiteSpace 3 3) (k : Fin 3)
   have := (mem_aklt_groundSpace_two_iff _).1 h
   simpa only [restrictLast_apply, fin_snoc_two] using this
 
-private lemma aklt_groundSpaceMap_three_apply (X : Matrix (Fin 2) (Fin 2) ℂ) (a b c : Fin 3) :
-    groundSpaceMap akltTensor 3 X ![a, b, c] =
-      Matrix.trace (akltTensor a * (akltTensor b * (akltTensor c * X))) := by
-  simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
-
 /-- **The AKLT hand check** of arXiv:2011.12127, line 2095: a three-site vector
 whose restrictions to sites \(\{1,2\}\) and \(\{2,3\}\) lie in the two-site
 local ground space lies in the three-site local ground space. The boundary
@@ -236,7 +231,7 @@ theorem aklt_mem_groundSpace_three_of_inLeftGround_of_inRightGround
     generalize σ 1 = a'
     generalize σ 2 = a''
     fin_cases a <;> fin_cases a' <;> fin_cases a'' <;>
-      simp only [X, aklt_groundSpaceMap_three_apply, akltTensor_zero', akltTensor_one',
+      simp only [X, groundSpaceMap_three_apply, akltTensor_zero', akltTensor_one',
       akltTensor_two', Fin.isValue, Fin.zero_eta, Fin.mk_one, Fin.reduceFinMk,
       Matrix.trace_fin_two, Matrix.mul_apply, Fin.sum_univ_two, Matrix.smul_apply,
       Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,

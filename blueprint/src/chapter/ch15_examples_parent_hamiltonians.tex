@@ -277,7 +277,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     For $N\ge3$, the common $+1$ eigenspace of the translated stabilizers is
     the periodic three-site chain ground space of the cluster tensor:
     \begin{align}
-        \bigcap_{i=1}^{N}\{\psi : K_i\psi = \psi\}
+        \bigcap_i\{\psi : K_i\psi = \psi\}
          & = \mathcal G_{N,3}(A_{\mathrm{cl}}).
         \notag
     \end{align}
@@ -285,7 +285,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
 
 \begin{proof}
     \leanok
-    \uses{thm:cluster_ground_space_three_eigenspace}
+    \uses{thm:cluster_ground_space_three_eigenspace, rem:cyclic_window_operators}
     For a cyclic three-site window at $i$ and an outside assignment $\tau$,
     the restriction $\psi|_{[i,i+2],\tau}$ satisfies
     $K\bigl(\psi|_{[i,i+2],\tau}\bigr) = (K_i\psi)|_{[i,i+2],\tau}$, since
@@ -305,7 +305,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     \uses{def:cluster_tensor, def:mpv_submodule, def:cluster_chain_stabilizer}
     For $N\ge3$,
     \begin{align}
-        \bigcap_{i=1}^{N}\{\psi : K_i\psi = \psi\}
+        \bigcap_i\{\psi : K_i\psi = \psi\}
          & = \C\,V^{(N)}(A_{\mathrm{cl}}),
         \notag
     \end{align}
