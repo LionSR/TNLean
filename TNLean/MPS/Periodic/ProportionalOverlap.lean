@@ -515,7 +515,12 @@ peripheral transfer spectrum under the repeated-block relation.
 Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--623, over the
 irreducible forms `eq:bdnr`, line 294, and `eq:Bbdnr`, line 582; the
 period clause is the last clause of proposition
-`equal-or-orthogonal-generalized`, lines 602--604. -/
+`equal-or-orthogonal-generalized`, lines 602--604.
+
+The periods are received as input here, whereas the source derives them from
+irreducibility and spectral radius one at lines 257--258. This is the working
+form; the source statement, with the periods produced, is
+`fundamentalTheorem_periodic_proportional_irreducibleForm`. -/
 theorem fundamentalTheorem_periodic_proportional_sectorDecomposition
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ)
