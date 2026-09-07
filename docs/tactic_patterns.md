@@ -43,6 +43,30 @@ abstracted — record why, so it is not re-proposed).
   through the local `ρ` and `Φ` definitions. No new imports, structures, or
   `simple1` wrapper are introduced; caller proof bodies lose one line overall.
 
+### reciprocal scalar cancellation across a matrix product — promoted
+- **Pattern:** move scalars out of a matrix product and cancel nested actions
+  by a nonzero scalar and its inverse, in either order.
+
+  ```lean
+  simp (disch := exact hβ) only [matrix_reciprocal_smul]
+  ```
+- **Seen:** three declarations across three files (2026-09-04):
+  `MPSTensor.IsReduction.reciprocal_smul` in `TNLean/MPS/Core/Reduction.lean`
+  (two goals), `MPSTensor.reductionResidual_reciprocal_smul` in
+  `TNLean/MPS/Core/ReductionResidual/Basic.lean`, and
+  `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff` in
+  `TNLean/MPS/Core/ReductionBlocking.lean`.
+- **Abstraction:** the `matrix_reciprocal_smul` simp set, registered in
+  [`TNLean/Tactic/Attr.lean`](../TNLean/Tactic/Attr.lean) and populated in
+  [`TNLean/Tactic/MatrixReciprocalSmul.lean`](../TNLean/Tactic/MatrixReciprocalSmul.lean)
+  with Mathlib's `Matrix.smul_mul`, `Matrix.mul_smul`, `inv_smul_smul₀`, and
+  `smul_inv_smul₀`. No new cancellation theorem or tactic is needed.
+- **Notes:** all three declarations now use the set (four proof lines removed).
+  An explicit discharger supplies the nonzero premise to the conditional
+  cancellation lemmas; `simp only [matrix_reciprocal_smul, hβ]` alone does not
+  discharge it on the pinned toolchain. Do not add `smul_smul`: the intended
+  normal form preserves nested actions until reciprocal pairs cancel.
+
 ### source-rank nonvanishing from a trace equation — promoted
 - **Pattern:** derive `rank ≠ 0` from `htrace : coefficient * rank = d` and
   `hd : d ≠ 0` by assuming the rank is zero and simplifying the trace equation.

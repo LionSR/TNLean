@@ -179,13 +179,28 @@ private theorem evalWord_sparse {D : ℕ} (A : MPSTensor 4 D)
       rw [Kraus.evalWord_cons, hA, ih (by simp), ite_zero_mul_ite_zero, hC]
       simp
 
-/-- All nonempty acted words are either zero or the supported idempotent. -/
+/-- All nonempty acted words are either zero or the supported idempotent.
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex`, `eq:MPU_CZX`
+(lines 4503–4547) contracted with the blocked GHZ sectors (lines 4660–4670).
+This is the positive-length consequence of `actedSector_apply` and idempotency
+of `actionMatrix`. It is the ordered bulk product standing between the boundary
+tensors of `eq:action_interior` (lines 1841–1870) and `eq:action_exterior`
+(lines 1788–1838), in our `Fin 4` coordinates; it is not one of the boundary
+action tensors printed at lines 4690–4694. The nonempty hypothesis belongs to
+this product formula alone; the empty word is treated in
+`printedAction_empty_ne`. -/
 theorem evalWord_actedSector (x : Fin 2) (w : List (Fin 4)) (hw : w ≠ []) :
     Kraus.evalWord (actedSector x) w =
       if ∀ i ∈ w, i = actionLetter x then actionMatrix x else 0 :=
   evalWord_sparse _ _ _ (actedSector_apply x) (printedAction_finite_identities x).1 w hw
 
-/-- All nonempty target words are either zero or the bond-one identity. -/
+/-- All nonempty target words are either zero or the bond-one identity.
+Source: arXiv:2502.20257, `Papers/2502.20257/main.tex` lines 4660–4670 print the
+blocked sectors $\ket{00}$ and $\ket{11}$, whose labels the generator exchanges;
+`eq:action_interior` (lines 1841–1870) labels the target $gx$. This is the
+positive-length consequence of `actionTarget_apply`: the ordered product on the
+right-hand side of that interior equation in our `Fin 4` coordinates, not a
+boundary action tensor printed at lines 4690–4694. -/
 theorem evalWord_actionTarget (x : Fin 2) (w : List (Fin 4)) (hw : w ≠ []) :
     Kraus.evalWord (actionTarget x) w =
       if ∀ i ∈ w, i = actionLetter x then 1 else 0 :=
