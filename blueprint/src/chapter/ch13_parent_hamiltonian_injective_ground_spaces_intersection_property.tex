@@ -214,7 +214,22 @@
     \end{align}
     For every $r<L$, the inserted word is recovered as
     $\rho^{\mathrm{cyc}}_{i,L,\omega}(i+r)=\omega(r)$. Here site labels are
-    taken modulo $N$. The remaining listed identities say that deleting the
+    taken modulo $N$. Reassembling a configuration around itself returns it:
+    taking $\rho=\sigma$ and $\omega(r)=\sigma(i+r)$ for $r<L$,
+    \begin{align}
+        \sigma^{\mathrm{cyc}}_{i,L,\omega}
+         & = \sigma.
+        \notag
+    \end{align}
+    Changing one inserted value commutes with the assembly: for $r<L$ and a
+    letter $x$, writing $\omega[r\mapsto x]$ for the word $\omega$ with its
+    value at $r$ replaced by $x$,
+    \begin{align}
+        \rho^{\mathrm{cyc}}_{i,L,\omega}[\,i+r\mapsto x\,]
+         & = \rho^{\mathrm{cyc}}_{i,L,\omega[r\mapsto x]}.
+        \notag
+    \end{align}
+    The remaining listed identities say that deleting the
     final site of an $(L+1)$-interval gives the $L$-interval beginning at $i$;
     if $L+1\le N$, deleting the first site gives the $L$-interval beginning at
     $i+1$; and the cyclic formula agrees with the contiguous formula when the
