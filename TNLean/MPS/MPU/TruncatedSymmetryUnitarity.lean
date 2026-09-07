@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.TruncatedSymmetryGrowth
 
@@ -40,11 +41,10 @@ namespace MPOTensor
 
 /-- Regroup the first bulk letter and its tail without changing either endpoint. -/
 private def truncatedConsEquiv (A B : Type*) (d N : ℕ) :
-    (A × Fin d × (Fin N → Fin d) × B) ≃ (A × (Fin (N + 1) → Fin d) × B) where
-  toFun x := (x.1, Fin.cons x.2.1 x.2.2.1, x.2.2.2)
-  invFun x := (x.1, x.2.1 0, Fin.tail x.2.1, x.2.2)
-  left_inv x := by simp
-  right_inv x := by simp
+    (A × Fin d × (Fin N → Fin d) × B) ≃ (A × (Fin (N + 1) → Fin d) × B) :=
+  Equiv.prodCongr (Equiv.refl A)
+    ((Equiv.prodAssoc (Fin d) (Fin N → Fin d) B).symm.trans
+      (Equiv.prodCongr (finSuccArrowEquiv (Fin d) N).symm (Equiv.refl B)))
 
 /-- The truncated symmetry is unitary between its coordinate spaces for every
 number `N` of bulk sites, hence every source total length $L=N+2\geq2$.
