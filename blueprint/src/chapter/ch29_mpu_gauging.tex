@@ -7009,6 +7009,34 @@ block label, or physical gate is changed here.
     The physical index $3x$ encodes the two bits $(x,x)$.
 \end{definition}
 
+\begin{theorem}[Coordinates of the supported product letters]
+    \label{thm:mpug_czx_supported_letter_coordinates}
+    \lean{MPOTensor.CZX.mulTensor_diagonal_letter_coordinates}
+    \leanok
+    \uses{def:mpug_czx_fusion_action_letter}
+    The two supported product letters have coordinates
+    \begin{align}
+        B_0 & =\begin{pmatrix}
+                   0 & 0 & 0 & 0 \\-1&1&-1&1\\0&0&0&0\\0&0&0&0
+               \end{pmatrix}, \\
+        B_1 & =\begin{pmatrix}
+                   0 & 0 & 0 & 0 \\0&0&0&0\\-1&-1&1&1\\0&0&0&0
+               \end{pmatrix}.
+        \label{eq:mpug_czx_supported_letters}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpdo_operator_product}
+    The letter of $T\mathbin{\cdot}T$ at a physical pair $(i,i')$ vanishes
+    unless $i=i'$, because the blocked tensor complements the physical index
+    it carries. At $i=i'=3x$ the summation index of
+    Definition~\ref{def:mpug_czx_fusion_action_letter} retains the single
+    term $j=3(1-x)$, whose two factors force the left virtual pair
+    $(\alpha,\gamma)=(x,1-x)$, the row of index $x+1$. On that row the
+    surviving sign is $(-1)^{1+(1-x)\delta+x\beta}$, which is the row
+    displayed above.
+\end{proof}
+
 \begin{definition}[Literal fusion--action coefficient]
     \label{def:mpug_czx_fusion_action_coefficient}
     \lean{MPOTensor.CZX.fusionActionCoefficient}
@@ -7033,20 +7061,13 @@ block label, or physical gate is changed here.
     The literal coefficients satisfy $c_0=1$ and $c_1=-1$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpug_czx_fusion_action_letter,
+    \uses{thm:mpug_czx_supported_letter_coordinates,
         def:mpug_czx_sequential_action_bra, def:mpug_czx_printed_action_pair,
         def:mpug_czx_fusion_caps}
-    Expanding the two supported product letters gives
-    \begin{align}
-        B_0 & =\begin{pmatrix}
-                   0 & 0 & 0 & 0 \\-1&1&-1&1\\0&0&0&0\\0&0&0&0
-               \end{pmatrix}, &
-        B_1 & =\begin{pmatrix}
-                   0 & 0 & 0 & 0 \\0&0&0&0\\-1&-1&1&1\\0&0&0&0
-               \end{pmatrix}.
-    \end{align}
-    Substitute the printed rows and the column $W$ into $P_xB_xW$.
-    The two finite matrix products give the asserted values.
+    Substitute the supported letters of
+    (\ref{eq:mpug_czx_supported_letters}), the printed rows, and the column
+    $W$ into $P_xB_xW$. The two finite matrix products give the asserted
+    values.
 \end{proof}
 
 \begin{theorem}[Normalization, proportionality, and idempotence]
@@ -7063,15 +7084,30 @@ block label, or physical gate is changed here.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpug_czx_fusion_action_letter,
+    \uses{thm:mpug_czx_supported_letter_coordinates,
+        def:mpug_czx_fusion_action_letter,
         def:mpug_czx_sequential_action_bra, def:mpug_czx_sequential_action_ket,
         def:mpug_czx_printed_action_pair, def:mpug_czx_fusion_caps,
         def:mpug_czx_fusion_action_coefficient}
-    Expand the two supported letters and substitute the printed action
-    rows and columns and the cap $W$. For each of the two values of $x$,
-    finite matrix multiplication gives simultaneously the normalization,
-    proportionality with coefficient $1$ or $-1$, idempotence, and the
-    same value of $P_xB_xW$. Substitute this last value for $c_x$.
+    Substituting the printed action columns gives
+    $Q_0=\tfrac14(-i,i,-i,i)^{\mathsf T}$ and
+    $Q_1=\tfrac14(-i,-i,i,i)^{\mathsf T}$. With $e_0,\dots,e_3$ the standard
+    basis of the product bond, the two supported letters of
+    (\ref{eq:mpug_czx_supported_letters}) contract with these columns and
+    with the cap $W$ as
+    \begin{align}
+        B_0Q_0 & =ie_1,  \\
+        B_0W   & =ie_1,  \\
+        B_1Q_1 & =ie_2,  \\
+        B_1W   & =-ie_2.
+        \label{eq:mpug_czx_fusion_action_contractions}
+    \end{align}
+    The printed rows are $P_0=(0,-i,0,0)$ and $P_1=(0,0,-i,0)$, so applying
+    $P_x$ to (\ref{eq:mpug_czx_fusion_action_contractions}) gives
+    $P_xB_xQ_x=1$ and $P_xB_xW=c_x$, with $c_0=1$ and $c_1=-1$. Comparing
+    the two right-hand sides for each $x$ gives $B_xW=c_xB_xQ_x$. Each
+    matrix of (\ref{eq:mpug_czx_supported_letters}) has a single nonzero row,
+    whose entry in the supporting column is $1$, so $B_x^2=B_x$.
 \end{proof}
 
 \begin{theorem}[Positive repetitions of the supported letter]

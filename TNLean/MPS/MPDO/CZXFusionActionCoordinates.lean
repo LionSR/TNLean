@@ -52,18 +52,12 @@ product letter, and the maintained right fusion cap. Source: arXiv:2502.20257,
 def fusionActionCoefficient (x : Fin 2) : ℂ :=
   (sequentialActionBra x * fusionActionLetter x * fusionW) 0 0
 
-set_option maxHeartbeats 800000 in
--- Only the two supported four-by-four product letters are evaluated.
+-- The supported letter is the diagonal product letter of the concrete fusion slice.
 private theorem fusionActionLetter_coordinates (x : Fin 2) :
     fusionActionLetter x = if x = 0 then
       !![0, 0, 0, 0; -1, 1, -1, 1; 0, 0, 0, 0; 0, 0, 0, 0]
-    else !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0] := by
-  ext a b
-  fin_cases x <;> fin_cases a <;> fin_cases b <;>
-    norm_num [fusionActionLetter, mulTensor_apply, Matrix.submatrix_apply, Matrix.sum_apply,
-      Matrix.kroneckerMap_apply, Fin.sum_univ_four, tensor, blockTwo,
-      decoratedSiteTensor, Matrix.mul_apply, Fin.sum_univ_two,
-      finProdFinEquiv, Fin.divNat, Fin.modNat]
+    else !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0] :=
+  mulTensor_diagonal_letter_coordinates x
 
 set_option maxHeartbeats 800000 in
 -- The sparse letters reduce all four assertions to small complex coordinate calculations.

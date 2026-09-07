@@ -122,6 +122,23 @@ private theorem fusion_product_letter_eq (i j : Fin 4) :
   · intro hbnot
     exact (hbnot (Finset.mem_univ _)).elim
 
+/-- Coordinates of the two supported diagonal letters of the product tensor
+`CZX.tensor * CZX.tensor`: the physical letter `(3x, 3x)` carried by the GHZ
+block `x`, in the product-bond order `finProdFinEquiv`.
+
+Source: arXiv:2502.20257, `eq:MPU_CZX`, lines 4505--4547. -/
+theorem mulTensor_diagonal_letter_coordinates (x : Fin 2) :
+    MPOTensor.mulTensor tensor tensor (finProdFinEquiv (x, x)) (finProdFinEquiv (x, x)) =
+      if x = 0 then !![0, 0, 0, 0; -1, 1, -1, 1; 0, 0, 0, 0; 0, 0, 0, 0]
+      else !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0] := by
+  have h := fusion_product_letter_eq (finProdFinEquiv (x, x)) (finProdFinEquiv (x, x))
+  simp only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+    MPSTensor.finProdFinEquiv_modNat] at h
+  rw [h]
+  fin_cases x <;> ext a b <;> fin_cases a <;> fin_cases b <;>
+    norm_num +decide [fusionProductLetter, fusionProductDiagonalLetter, finProdFinEquiv,
+      Fin.divNat, Fin.modNat, Fin.reduceEq]
+
 private theorem isReduction_of_local_compression {d D₁ D₂ : ℕ}
     {B : MPSTensor d D₂} {A : MPSTensor d D₁}
     {V : Matrix (Fin D₁) (Fin D₂) ℂ} {W : Matrix (Fin D₂) (Fin D₁) ℂ}
