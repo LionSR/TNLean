@@ -2529,7 +2529,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   norm_num [show ((1 : ZMod 2)).val = 1 from rfl]
   ```
 
-- **Seen:** eight occurrences across three files (2026-09-07): the six
+- **Seen:** eight occurrences across two files (2026-09-07): the six
   `matterMatrix_{w,tildeLambda,tildeLambdaStar}_mulVec_matterKet_{zero,one}`
   proofs in `TNLean/MPS/MPDO/CZXCompletion.lean`, and the two
   `matterMatrix_lambda_mulVec_defectVector_{zero,one}` proofs in
