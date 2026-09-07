@@ -812,17 +812,14 @@ two tensors is conjugated.
 Source: arXiv:1708.00029, theorem `thm:bdequal`, lines 643--693, over the
 irreducible forms `eq:bdnr`, line 294, and `eq:Bbdnr`, line 582.
 
-**Scope restriction (supplied periods):** the periods are received as input,
-together with witnesses that each block is spectrally periodic of the given
-period. The source instead derives the period of a block from irreducibility
-and spectral radius one at lines 257--258, citing Wolf, so that it appears in
-the conclusion of the source theorem rather than among its hypotheses. A reader
-holding only the source's two conditions on the blocks therefore cannot yet
-instantiate this statement; the missing ingredient is the existence half of the
-cyclic peripheral structure. The restriction and its elimination plan are
-recorded in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`,
-section "Scope restriction: the periods of an irreducible-form block are
-supplied". -/
+The periods are received as input here, together with witnesses that each block
+is spectrally periodic of the given period, whereas the source derives the
+period of a block from irreducibility and spectral radius one at lines
+257--258, citing Wolf. This is the working form; the source statement, with the
+periods produced from the source's two conditions on the blocks, is
+`fundamentalTheorem_periodic_equalCase_derivedPeriods`. See
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`, section "The
+periods of an irreducible-form block: restriction eliminated". -/
 theorem fundamentalTheorem_periodic_equalCase_irreducibleForm
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)

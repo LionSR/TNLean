@@ -486,6 +486,43 @@ is \leanid{TNLean.PEPS.threeLeg_residual_forms_scalar}, and the required
 inversion and regrouping are contained in
 \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison_core}.
 
+This scalar conclusion also needs nonzero legs, for a reason independent of the
+positive-bond hypotheses above. The three residual forms are defined for
+arbitrary leg index sets $\alpha$, $\beta$, $\gamma$, and the two compatibility
+hypotheses read, in coordinates,
+\begin{align}
+    \delta_{aa'}Z_{bc,b'c'}
+        &= U_{ab,a'b'}\delta_{cc'},
+    \label{eq:peps_injective_ft_section3_route_three_leg_left_right}\\
+    \delta_{aa'}Z_{bc,b'c'}
+        &= W_{ac,a'c'}\delta_{bb'},
+    \label{eq:peps_injective_ft_section3_route_three_leg_left_middle}
+\end{align}
+quantified over $a,a'\in\alpha$, $b,b'\in\beta$, and $c,c'\in\gamma$. If one of
+the three index sets is empty, then $\alpha\times\beta\times\gamma$ is empty,
+both compatibility conditions are equalities of functions on an empty domain,
+and they therefore hold for arbitrary $Z$, $U$, and $W$. The residual operator
+carried by the two legs complementary to the empty one is then unconstrained,
+and the scalar conclusion fails. For $\alpha=\varnothing$, let $\beta$ be a
+one-point set, let $\gamma$ be a two-point set, and put
+\begin{align}
+    Z &= \begin{pmatrix} 1 & 0\\ 0 & 2\end{pmatrix}
+    \qquad\text{on } \beta\times\gamma .
+    \label{eq:peps_injective_ft_section3_route_three_leg_empty_witness}
+\end{align}
+The matrices $U$ on $\alpha\times\beta$ and $W$ on $\alpha\times\gamma$ are the
+unique empty matrices, so
+(\ref{eq:peps_injective_ft_section3_route_three_leg_left_right}) and
+(\ref{eq:peps_injective_ft_section3_route_three_leg_left_middle}) hold, while no
+scalar $\lambda$ satisfies $Z=\lambda\Id$. The cases $\beta=\varnothing$ and
+$\gamma=\varnothing$ are the same statement with $W$ on $\alpha\times\gamma$ and
+$U$ on $\alpha\times\beta$ as the unconstrained operator. The three
+nonemptiness hypotheses of
+\leanid{TNLean.PEPS.threeLeg_residual_forms_scalar} are therefore load-bearing:
+like the positive-bond hypotheses elsewhere in this route, they record the
+nonzero-dimensional virtual bond spaces of Ref.~\cite{Molnar2018NormalPEPS}
+rather than a consequence of injectivity.
+
 \item
 Both injective blocks in the one-vertex-versus-complement comparison are
 formalized. The selected-vertex block is
