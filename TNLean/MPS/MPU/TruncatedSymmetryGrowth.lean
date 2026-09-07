@@ -21,7 +21,7 @@ arXiv:1703.09188, equations `XY`, `SVDforms2`, and `uu` (lines 510–543).
 its zero-bulk value, and the source-factorization algebra of `eq:move_trunc_sym`
 (arXiv:2502.20257, lines 2101–2174). It does not establish all-length unitarity,
 the finite-group operator specialization, or the complementary movement equation.
-The raw endpoint API requires no simplicity, unitarity, normalized Gram, or
+The raw endpoint results require no simplicity, unitarity, normalized Gram, or
 inverse-gauge premise: zero bulk needs no factorization, left growth needs
 only the second cut factorization, and two-sided growth needs both. The
 `SourceFactors` results are specializations to the supplied normalized factors;

@@ -6526,8 +6526,9 @@ unbuffered defect formulas.
     $\varphi(2a+b)=(a,b)$. Thus $A_x^i=\delta_{i,3x}$.
     Write $B^{i,j}$ for the CZX tensor and define
     \begin{align}
-        B_x^i & =\sum_{j=0}^3 B^{i,j}A_x^j, &
-        k_x   & =3(1-x),                    & C_x & =B^{k_x,3x}.
+        B_x^i & =\sum_{j=0}^3 B^{i,j}A_x^j, \\
+        k_x   & =3(1-x),                    \\
+        C_x   & =B^{k_x,3x}.
         \label{eq:mpug_czx_acted_sectors}
     \end{align}
     The target sector is $A_{1-x}$. These are the physical contraction
@@ -6543,9 +6544,10 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_acted_sectors}
     For $x\in\{0,1\}$ and $i\in\{0,1,2,3\}$,
     \begin{align}
-        B_x^i & =\delta_{i,k_x}C_x,                     & A_{1-x}^i & =\delta_{i,k_x}, \\
-        C_0   & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}, &
-        C_1   & =\begin{pmatrix}1&1\\0&0\end{pmatrix}.
+        B_x^i     & =\delta_{i,k_x}C_x,                        \\
+        A_{1-x}^i & =\delta_{i,k_x},                           \\
+        C_0       & =\begin{pmatrix}0&0\\-1&1\end{pmatrix},    \\
+        C_1       & =\begin{pmatrix}1&1\\0&0\end{pmatrix}.
         \label{eq:mpug_czx_action_matrices}
     \end{align}
 \end{theorem}
@@ -6574,8 +6576,9 @@ unbuffered defect formulas.
     by $p_x$ and $q_x$. With $|\pm\rangle=(|0\rangle\pm|1\rangle)/\sqrt2$,
     the formulas of \cite[lines~4690--4694]{FrancoRubio2025MPUGauging} read
     \begin{align}
-        p_0 & =(0,-i),                                    & p_1 & =(1,0), \\
-        q_0 & =\tfrac12\begin{pmatrix}-i\\i\end{pmatrix}, &
+        p_0 & =(0,-i),                                    \\
+        p_1 & =(1,0),                                     \\
+        q_0 & =\tfrac12\begin{pmatrix}-i\\i\end{pmatrix}, \\
         q_1 & =\tfrac12\begin{pmatrix}1\\1\end{pmatrix}.
         \label{eq:mpug_czx_printed_action_pair}
     \end{align}
@@ -6629,8 +6632,6 @@ unbuffered defect formulas.
     \label{thm:mpug_czx_printed_action_words}
     \lean{MPOTensor.CZX.printedAction_interior, MPOTensor.CZX.printedAction_exterior}
     \leanok
-    % **Scope restriction (nonempty printed interior):** the empty interior
-    % claim fails for the literal pair. See docs/paper-gaps/fbc25_czx_action_empty_word.tex.
     \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
     Let $x\in\{0,1\}$. For every nonempty word $\mathbf c$,
     \begin{align}
