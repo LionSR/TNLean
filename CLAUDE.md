@@ -425,6 +425,7 @@ follow-up, not against the temporary `sorry` count.
 | Name | Kind | Use when | Defined in |
 |---|---|---|---|
 | `MPOTensor.IsMPUCanonicalFormII.simple2_recorded_fixed_pair` | helper theorem | Specializing two-letter simplicity to the recorded canonical right boundary `ρ` and identity left boundary | `TNLean/MPS/MPU/SuppliedFixedWitnesses.lean` |
+| `matrix_reciprocal_smul` | simp set | Moving scalars out of matrix products and cancelling nested reciprocal actions; use `simp (disch := exact hβ) only [matrix_reciprocal_smul]` for `hβ : β ≠ 0` | `TNLean/Tactic/Attr.lean`, `TNLean/Tactic/MatrixReciprocalSmul.lean` |
 | `Equiv.Perm.permMatrix_mem_unitaryGroup` | helper theorem | Showing that a complex permutation matrix is unitary | `TNLean/Algebra/PermutationMatrixUnitary.lean` |
 | `List.ofFn_reverse` | helper theorem | Reversing a `List.ofFn`-indexed finite word by precomposition with `Fin.rev` | `QICLean/Kraus/Word.lean` (QICLean dependency) |
 | `verticalAssembledTensor_apply_copy_same` | helper theorem | Evaluating an assembled vertical tensor at two coordinates in the same retained multiplicity copy | `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean` |
@@ -457,4 +458,5 @@ follow-up, not against the temporary `sorry` count.
 | `Matrix.monomial_mem_unitaryGroup` | helper theorem | Showing that a monomial matrix with unimodular phases is unitary | `TNLean/Algebra/MonomialMatrix.lean` |
 | `TNLean.Algebra.finrank_commonFixedSubmodule_monomial_fiberFlip` | helper theorem | Counting the common fixed subspace of involutive monomial operators whose permutations are the coordinate flips of hypercube fibers, as the number of fibers with trivial holonomy | `TNLean/Algebra/MonomialFixedSubspace.lean` |
 | `MPOTensor.embedLocalOperator_monomial` | helper theorem | Expressing the periodic placement of a monomial window operator as a monomial chain operator | `TNLean/MPS/MPDO/EmbedLocalOperatorMonomial.lean` |
+| `Matrix.eq_vecCons_fin_two`, `Matrix.eq_vecCons_fin_three` | helper theorems | Rewriting a configuration on a two- or three-site window into vector notation before a coordinate-by-coordinate evaluation of an example tensor | `TNLean/Algebra/FinVecEta.lean` |
 | `Matrix.AlgHom.surjective_of_centralizer_range_eq_bot`, `Matrix.StarAlgHom.surjective_of_centralizer_range_eq_bot`, `Matrix.AlgHom.exists_commute_notMem_bot_of_not_surjective` | helper theorems | Deriving surjectivity of a unital homomorphism of full complex matrix algebras from a scalar relative commutant, or extracting a non-scalar element of the relative commutant of a proper image, instead of rerunning the representation argument | `QICLean/Algebra/MatrixAlgHomCentralizer.lean` (QICLean dependency) |

@@ -40,6 +40,16 @@ noncomputable def groundSpaceMap (A : MPSTensor d D) (L : ℕ) :
     groundSpaceMap A L X σ = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * X) := by
   simp [groundSpaceMap, Matrix.traceLinearMap_apply]
 
+/-- The length-three case of `groundSpaceMap_apply`, with the word expanded into
+an ordered triple product:
+\[
+  Γ_3(X)(a,b,c) = \operatorname{tr}\bigl(A^a A^b A^c X\bigr).
+\] -/
+lemma groundSpaceMap_three_apply (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
+    (a b c : Fin d) :
+    groundSpaceMap A 3 X ![a, b, c] = Matrix.trace (A a * (A b * (A c * X))) := by
+  simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
+
 /-- Ground space on \(L\) consecutive sites:
 \(G_L(A) = \operatorname{range} Γ_L\). -/
 noncomputable def groundSpace (A : MPSTensor d D) (L : ℕ) :
