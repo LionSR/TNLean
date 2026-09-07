@@ -7064,10 +7064,20 @@ block label, or physical gate is changed here.
     \uses{thm:mpug_czx_supported_letter_coordinates,
         def:mpug_czx_sequential_action_bra, def:mpug_czx_printed_action_pair,
         def:mpug_czx_fusion_caps}
-    Substitute the supported letters of
-    (\ref{eq:mpug_czx_supported_letters}), the printed rows, and the column
-    $W$ into $P_xB_xW$. The two finite matrix products give the asserted
-    values.
+    The printed rows are $P_0=(0,-i,0,0)$ and $P_1=(0,0,-i,0)$, and the
+    column is $W=\tfrac12(0,i,-i,0)^{\mathsf T}$. With $e_0,\dots,e_3$ the
+    standard basis of the product bond, the single nonzero row of each
+    supported letter of (\ref{eq:mpug_czx_supported_letters}) contracts with
+    $W$ as
+    \begin{align}
+        B_0W & =\tfrac12(i+i)e_1=ie_1,   \\
+        B_1W & =\tfrac12(-i-i)e_2=-ie_2,
+    \end{align}
+    so the two finite matrix products are
+    \begin{align}
+        c_0 & =P_0B_0W=(0,-i,0,0)\,ie_1=1,     \\
+        c_1 & =P_1B_1W=(0,0,-i,0)\,(-ie_2)=-1.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Normalization, proportionality, and idempotence]
