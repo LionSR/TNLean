@@ -75,7 +75,14 @@ operators $Z$, $U$, and $W$ to be scalar multiples of the identity.
 
 **Local fix (nonzero virtual legs):** the residual forms are defined for
 arbitrary leg index sets, while this scalar-recovery statement assumes each
-index set is nonempty.  If one of them is empty, then so is
+index set is nonempty.  In coordinates the two hypotheses read
+$$
+  \delta_{aa'}Z_{bc,b'c'} = U_{ab,a'b'}\delta_{cc'},
+  \qquad
+  \delta_{aa'}Z_{bc,b'c'} = W_{ac,a'c'}\delta_{bb'},
+$$
+quantified over $a,a'\in\alpha$, $b,b'\in\beta$, and $c,c'\in\gamma$.  If one
+of the three index sets is empty, then so is
 $\alpha\times\beta\times\gamma$, both hypotheses are equalities of functions on
 an empty domain, and they hold for arbitrary $Z$, $U$, $W$: with $\alpha$
 empty, $\beta$ a one-point set and $\gamma$ a two-point set, the matrix
