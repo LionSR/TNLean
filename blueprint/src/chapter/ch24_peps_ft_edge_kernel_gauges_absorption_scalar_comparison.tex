@@ -272,6 +272,32 @@
     \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
     \leanok
     \uses{def:peps_threeLegLeftIdentityForm, def:peps_threeLegRightIdentityForm, def:peps_threeLegMiddleIdentityForm}
+    \emph{Local fix (nonzero virtual legs).} The residual forms are defined
+    for arbitrary leg index sets, whereas the scalar recovery below assumes
+    that each of $\alpha,\beta,\gamma$ is nonzero. In coordinates the two
+    compatibility conditions read
+    \begin{align}
+        \delta_{aa'}Z_{bc,b'c'}
+         & =
+        U_{ab,a'b'}\delta_{cc'},
+        \qquad
+        \delta_{aa'}Z_{bc,b'c'}
+        =
+        W_{ac,a'c'}\delta_{bb'},
+        \notag
+    \end{align}
+    quantified over $a,a'\in\alpha$, $b,b'\in\beta$, $c,c'\in\gamma$. If one of
+    the three index sets is empty, then so is $\alpha\times\beta\times\gamma$,
+    both conditions are equalities of functions on an empty index set, and they
+    hold for arbitrary $Z,U,W$: with $\alpha$ empty, $\beta$ a one-point set
+    and $\gamma$ a two-point set, the operator $Z=\operatorname{diag}(1,2)$ on
+    $\beta\times\gamma$ satisfies both conditions while being no multiple of
+    the identity. The assumption records the
+    nonzero-dimensional virtual bond spaces of
+    \cite[Section~3]{Molnar2018NormalPEPS} and does not follow from
+    injectivity; the counterexample above is recorded in
+    \cite{gap:peps_injective_ft_section3_route}.
+
     In the proof of the generalized two-injective-tensor comparison, applying
     the inverse of the second injective tensor leaves three possible virtual
     operators on the exposed legs of the first tensor:

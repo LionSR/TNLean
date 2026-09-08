@@ -22,7 +22,7 @@ Ref.~\cite[lines~5350--5487]{FrancoRubio2025MPUGauging} distinguishes the origin
 $Y_1=K(I\otimes T^{\mathsf T})X_2^\dagger$, with no tilde on the left
 \cite[lines~5440--5443]{FrancoRubio2025MPUGauging}. The gate diagram itself labels that factor $\widetilde Y_1$
 \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}.
-The correction is to restore the tilde in that textual equation. The placement of the gauge on its virtual leg must also be respected when translating the diagram into matrices; the formula below fixes that index order explicitly.
+The correction is to restore the tilde in that textual equation. A second omission of the same kind occurs in the displayed definition of the comparison $K$ itself, where the weight of the chosen normalization is dropped; that omission and its repair are recorded in the next section. The placement of the gauge on its virtual leg must also be respected when translating the diagram into matrices; the formula below fixes that index order explicitly.
 
 \section{The two factors in matrix coordinates}
 
@@ -42,8 +42,10 @@ In these product-index orders, the candidate factors from
 \end{align}
 In particular, the candidate $Y_1$ in
 (\ref{eq:fbc25_inverse_tilde_candidates}) contains no comparison matrix $K$.
-The original factors are the normalized source factors constructed using this same weight $\rho$, so $\widetilde X_1^\dagger(I_d\otimes\rho)\widetilde X_1=I_r$.
-Retain the weighted comparison, defined using the weighted left inverse of the original first factor:
+The original factors are the normalized source factors constructed using this same weight $\rho$, so $\widetilde X_1^\dagger(I_d\otimes\rho)\widetilde X_1=I_r$; this is the normalization chosen when the factors are introduced
+\cite[lines~487--494]{Cirac2017MPU}. The second omission of the argument is in the comparison itself: the source defines it without that weight, as
+$K=\widetilde X_1^\dagger X_1=\widetilde Y_1Y_1^\dagger$
+\cite[lines~5436--5439]{FrancoRubio2025MPUGauging}. Under the chosen normalization the unweighted $\widetilde X_1^\dagger$ is not a left inverse of $\widetilde X_1$, so the printed expression is not in general a left-inverse comparison and does not satisfy $X_1=\widetilde X_1K$. Restoring the weight repairs this, and gives the comparison used throughout:
 \begin{align}
     \widetilde L_1               & =\widetilde X_1^\dagger(I_d\otimes\rho),                          \\
     \widetilde L_1\widetilde X_1 & =I_r,                                                             \\
@@ -132,7 +134,7 @@ Ref.~\cite[lines~5350--5487]{FrancoRubio2025MPUGauging}, and it changes no gauge
 
 \section{Conclusion}
 
-This is a local correction of the factor's name, not a new hypothesis or a change of gauge. The correction is justified by the already distinguished factors and by the explicit tilde in the proof diagram. Its elimination criterion is that the factor substituted into the old gate be
+These are local corrections of the factor's name and of the omitted weight, not a new hypothesis or a change of gauge. The first is justified by the already distinguished factors and by the explicit tilde in the proof diagram; the second by the source's own normalization of the first factor, which the unweighted comparison does not invert. The elimination criterion for both is that the factor substituted into the old gate be
 (\ref{eq:fbc25_inverse_tilde_corrected_factor}), rather than the candidate alone, and that the resulting contraction retain both the weighted comparison and the scalar $\sigma$. Equations~(\ref{eq:fbc25_inverse_tilde_contraction}) and
 (\ref{eq:fbc25_inverse_tilde_gate_identity}) meet that criterion.
 No broader error in the decomposition argument is asserted. In particular, the gate identity here does not by itself establish the subsequent unitarity conclusion for $K$ or for the candidate gates.

@@ -16,6 +16,7 @@ import TNLean.MPS.Periodic.EqualCase
 import TNLean.MPS.Periodic.EqualCaseGlobal
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.GlobalGauge
+import TNLean.MPS.Periodic.IrreducibleFormPeriods
 import TNLean.MPS.Periodic.NormalCanonicalPeriodOne
 import TNLean.MPS.Periodic.Normalization
 import TNLean.MPS.Periodic.NormalizedSelfOverlap
@@ -36,6 +37,7 @@ import TNLean.MPS.Periodic.Overlap.SectorOverlapTransport
 import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep
 import TNLean.MPS.Periodic.Overlap.SelfOverlapSetup
+import TNLean.MPS.Periodic.PeriodExistence
 import TNLean.MPS.Periodic.ProjectiveRep
 import TNLean.MPS.Periodic.ProportionalOverlap
 import TNLean.MPS.Periodic.SectorContraction

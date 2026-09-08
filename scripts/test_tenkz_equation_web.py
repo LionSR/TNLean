@@ -116,8 +116,12 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
-class ReusableTCPServer(socketserver.TCPServer):
+class ReusableTCPServer(socketserver.ThreadingTCPServer):
+    # Serve subresources concurrently: the large MPDO pages request many
+    # assets while parsing, and a single-threaded server serializes them
+    # behind one another, stalling DOMContentLoaded on a loaded runner.
     allow_reuse_address = True
+    daemon_threads = True
 
 
 @contextlib.contextmanager
@@ -425,8 +429,15 @@ def main() -> int:
         page.route(mathjax_cdn_glob, _fulfill_mathjax)
         for filename in PAGES:
             # The MPDO-RFP page is large; do not wait for every unrelated asset.
-            # The fixture pictures have their own readiness check below.
-            page.goto(f"{base_url}/{filename}", wait_until="domcontentloaded")
+            # The fixture pictures have their own readiness check below. Reaching
+            # DOMContentLoaded on these large pages can itself take minutes on a
+            # loaded runner, so budget it like the typesetting waits rather than
+            # the 30s default.
+            page.goto(
+                f"{base_url}/{filename}",
+                wait_until="domcontentloaded",
+                timeout=300_000,
+            )
             _assert_font_relative_reading_width(page)
             # Settle MathJax before measuring selectable operators between the
             # pictures. The bundle is served from the local route above, but

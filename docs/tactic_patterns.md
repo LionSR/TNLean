@@ -43,6 +43,30 @@ abstracted — record why, so it is not re-proposed).
   through the local `ρ` and `Φ` definitions. No new imports, structures, or
   `simple1` wrapper are introduced; caller proof bodies lose one line overall.
 
+### reciprocal scalar cancellation across a matrix product — promoted
+- **Pattern:** move scalars out of a matrix product and cancel nested actions
+  by a nonzero scalar and its inverse, in either order.
+
+  ```lean
+  simp (disch := exact hβ) only [matrix_reciprocal_smul]
+  ```
+- **Seen:** three declarations across three files (2026-09-04):
+  `MPSTensor.IsReduction.reciprocal_smul` in `TNLean/MPS/Core/Reduction.lean`
+  (two goals), `MPSTensor.reductionResidual_reciprocal_smul` in
+  `TNLean/MPS/Core/ReductionResidual/Basic.lean`, and
+  `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff` in
+  `TNLean/MPS/Core/ReductionBlocking.lean`.
+- **Abstraction:** the `matrix_reciprocal_smul` simp set, registered in
+  [`TNLean/Tactic/Attr.lean`](../TNLean/Tactic/Attr.lean) and populated in
+  [`TNLean/Tactic/MatrixReciprocalSmul.lean`](../TNLean/Tactic/MatrixReciprocalSmul.lean)
+  with Mathlib's `Matrix.smul_mul`, `Matrix.mul_smul`, `inv_smul_smul₀`, and
+  `smul_inv_smul₀`. No new cancellation theorem or tactic is needed.
+- **Notes:** all three declarations now use the set (four proof lines removed).
+  An explicit discharger supplies the nonzero premise to the conditional
+  cancellation lemmas; `simp only [matrix_reciprocal_smul, hβ]` alone does not
+  discharge it on the pinned toolchain. Do not add `smul_smul`: the intended
+  normal form preserves nested actions until reciprocal pairs cancel.
+
 ### source-rank nonvanishing from a trace equation — promoted
 - **Pattern:** derive `rank ≠ 0` from `htrace : coefficient * rank = d` and
   `hd : d ≠ 0` by assuming the rank is zero and simplifying the trace equation.
@@ -2451,6 +2475,24 @@ spectral split → block extraction → MPV calculation → strict bounds
   change to `TNLean/MPS/Defs.lean` rebuilds the whole library; do it in a
   dedicated cleanup.
 
+### rectangular reduction from local compression data — candidate
+- **Pattern:** prove `MPSTensor.IsReduction B A V W` by
+  `refine ⟨hVW, fun w ↦ ?_⟩` followed by `induction w` with `nil`, singleton,
+  and `cons i (cons j w)` cases, the last one rewriting `B i * W * V * B j`
+  to `B i * B j` and then splitting the caps off the two factors.
+- **Seen:** one occurrence, in `MPOTensor.CZX.fusion_isReduction`
+  (`TNLean/MPS/MPDO/CZXFusionTensors.lean`), recorded 2026-09-07.
+- **Abstraction:** `MPSTensor.IsReduction.of_local_compression` in
+  `TNLean/MPS/Core/Reduction.lean`, taking `V * W = 1`, per-letter
+  compression, and the two-letter reinsertion identity.
+- **Notes:** below the rule of three, but the abstraction now sits beside the
+  definition it constructs, so a second local-compression reduction reuses it
+  instead of repeating the word induction.
+  `MPOTensor.CZX.dressedAction_isReduction`
+  (`TNLean/MPS/MPDO/CZXActionTensors.lean`) is not an occurrence: it obtains
+  the all-word equation by absorbing the dressing into a nonempty acted word,
+  not from per-letter data.
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected
@@ -2516,6 +2558,49 @@ spectral split → block extraction → MPV calculation → strict bounds
   across at least two files; if a second coordinate model needs the same
   split, extract a `weight_split` macro next to the diagonal-operator helpers
   rather than a general tactic.
+
+### CZX phase-table entry evaluation — rejected
+- **Pattern:** evaluate one transported four-qubit monomial operator at one
+  computational basis vector by naming the two decidable facts that hold there
+  and closing the scalar arithmetic:
+
+  ```lean
+  have hperm : barFlip ![1, 1, 0, 0] = ![0, 0, 0, 0] := by decide
+  have hphase : hExponent ![1, 1, 0, 0] = 0 := by decide
+  rw [<operator basis action>, hperm, hphase]
+  norm_num [show ((1 : ZMod 2)).val = 1 from rfl]
+  ```
+
+- **Seen:** eight occurrences across two files (2026-09-07): the six
+  `matterMatrix_{w,tildeLambda,tildeLambdaStar}_mulVec_matterKet_{zero,one}`
+  proofs in `TNLean/MPS/MPDO/CZXCompletion.lean`, and the two
+  `matterMatrix_lambda_mulVec_defectVector_{zero,one}` proofs in
+  `TNLean/MPS/MPDO/CZXUnmodifiedFusion.lean`.
+- **Reason:** the shared step is already abstracted. Every occurrence reaches
+  `MPOTensor.CZX.matterMatrix_monomial_mulVec_matterKet`, directly or through
+  the per-operator wrappers `matterMatrix_w_mulVec_matterKet` and
+  `matterMatrix_tildeLambda_mulVec_matterKet`, and that lemma carries the whole
+  mathematical content of the step. What is left at each site is the site's own
+  data: which bit string the permutation sends where, and what the sign
+  exponent is there. The eight sites use four different operators, four
+  different exponent functions, three different scalar prefactors, and eight
+  different bit strings, so they share no conclusion from which a further lemma
+  could be extracted; they are eight entries of a phase table.
+- **Prototype:** a helper `(hperm : σ x = y) → (hphase : φ x = c) →
+  matterMatrix (monomial σ φ) *ᵥ matterKet x = c • matterKet y` was written out
+  on paper, in full for one site of each of the three shapes that occur and by
+  shape for the remaining five. It does not shorten them. The permutation fact
+  survives verbatim as an explicit argument; the exponent fact does not,
+  because `φ x` is a complex number and `φ x = c` is undecidable, so each site
+  must wrap its `decide` inside a `norm_num` proof of the sign, which is longer
+  than the `have` it replaces. Each of the eight proof bodies grows by one line
+  and the helper adds nine, for about seventeen lines net. The prototype was
+  not compiled.
+- **Notes:** the one fragment genuinely shared by the sites is the closing
+  `show ((1 : ZMod 2)).val = 1 from rfl`, an inlined shadow of Mathlib's
+  `ZMod.val_one`. Replacing it is a Mathlib-reuse cleanup across the three CZX
+  files rather than a tactic abstraction, and is recorded here so it is not
+  confused with this pattern.
 
 ## Retired
 
