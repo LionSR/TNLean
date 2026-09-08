@@ -12,7 +12,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The comparison step}
 
@@ -76,10 +76,10 @@ The two deviate from the formal statement in different ways. The first printed
 expression for $K$ needs the weight $W_\rho$ inserted; that is a local
 correction, and the formal development applies it, so nothing about it remains
 open. The second names $K^\dagger$ as the inverse of $K$, hence asserts that
-$K$ is unitary, and the formal development proves no such thing: it exhibits a
-separately constructed two-sided inverse instead. The formal statement is
-therefore a restriction of the printed one, and that restriction, not the
-weight, fixes the classification of this note.
+$K$ is unitary. The formal development first exhibited only a separately
+constructed two-sided inverse, which made its statement a restriction of the
+printed one and fixed the classification of this note; that restriction has
+since been removed, as recorded in the verdict.
 
 \section{The comparison matrix is determined, and carries the weight}
 
@@ -189,12 +189,18 @@ Thus $J$ occupies the position of $K^\dagger$ in
 $J=K^\dagger$ holds precisely when $K$ is unitary. The formal statement keeps
 $J$ as constructed and asserts
 (\ref{eq:fbc25_inverse_compatible_comparison_matrix_reverse_pairing})--(\ref{eq:fbc25_inverse_compatible_comparison_matrix_jk})
-only; it asserts neither $J=K^\dagger$ nor unitarity of $K$. It also keeps the
-rectangular index types $r$ and $\ell$ rather than transporting along the
-proved equality $r=\ell$.\footnote{Formal declarations:
+as constructed. For a simple canonical-form-II tensor whose physical adjoint is
+carried by a unitary gauge with $T\overline T=\sigma I_D$, both $K$ unitary and
+$J=K^\dagger$ are now formalized, so the pairing holds in its printed
+$K^\dagger$ form. The formal statement still keeps the rectangular index types
+$r$ and $\ell$ rather than transporting along the proved equality
+$r=\ell$.\footnote{Formal declarations:
     \leanid{MPOTensor.inverseCompatibleComparisonJ} and
     \leanid{MPOTensor.rightRank_eq_leftRank_of_physicalAdjointTensor_eq_unitary_gauge}
-    in \doclink{TNLean/MPS/MPU/InverseCompatibleCutComparison}.}
+    in \doclink{TNLean/MPS/MPU/InverseCompatibleCutComparison};
+    \leanid{MPOTensor.inverseCompatibleComparisonK_isUnitaryBetween} and
+    \leanid{MPOTensor.inverseCompatibleComparisonJ_eq_conjTranspose}
+    in \doclink{TNLean/MPS/MPU/InverseCompatibleComparisonUnitarity}.}
 
 \section{Verdict}
 
@@ -207,16 +213,19 @@ so it leaves nothing open.
 
 The identification of the inverse comparison with $K^\dagger$ is a separate
 statement that the appendix obtains from the pleasant properties of the new
-factorization. The formal development proves only that $K$ has a two-sided
-inverse, exhibited explicitly. Its pairing is therefore the printed pairing
-restricted to the case in which the inverse is that explicit matrix rather than
-$K^\dagger$, and the unitarity of $K$ that the appendix establishes afterwards
-is absent. This restriction, and not the weight, is the live content of the
-note, and it is the reason the note is classified as a scope restriction rather
-than as a local correction. The elimination step is the formalization of the
-appendix normalization that makes $K$ unitary; the note becomes resolved when
-that argument gives $J=K^\dagger$, and until then the $K^\dagger$ form of the
-pairing remains outside the formalized statement and the note stays open.
+factorization. It was the live content of this note, and the reason for the
+scope-restriction classification: the formal development at first proved only
+that $K$ has a two-sided inverse, exhibited explicitly, so its pairing was the
+printed pairing restricted to that explicit inverse rather than $K^\dagger$.
+
+That restriction is now eliminated. For a simple canonical-form-II tensor whose
+physical adjoint is carried by a unitary gauge with $T\overline T=\sigma I_D$,
+the weighted comparison is unitary, and substituting that unitarity into
+(\ref{eq:fbc25_inverse_compatible_comparison_matrix_kj}) gives
+$J=K^\dagger$. The pairing therefore holds in the printed form, on the
+hypotheses the appendix itself uses, and the note is resolved. What remains is
+presentational only: the formal statement keeps the rectangular index types $r$
+and $\ell$ instead of transporting along the proved equality $r=\ell$.
 
 \bibliographystyle{alpha}
 \bibliography{references}

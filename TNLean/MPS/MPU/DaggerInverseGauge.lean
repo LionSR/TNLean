@@ -621,6 +621,48 @@ theorem IsRepresentation.daggerInverseScalar_mul_inverse_eq_one [Group G]
     (hF.daggerInverseGauge_mul_mapStar_inverse_eq_smul_one F hcanonical g)
     (hF.inverseDaggerInverseGauge_mul_mapStar_eq_smul_one F hcanonical g)
 
+/-- At an involutive element, the inverse gauge transported to the current
+bond coordinates equals the chosen gauge itself.
+Source: arXiv:2502.20257, `eq:intro_sigma`, lines 1557–1562, and the involutive
+conventions at lines 1933–1955. -/
+theorem IsRepresentation.inverseDaggerInverseGauge_eq_of_inv_eq
+    [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
+    (hcanonical : ∀ g : G,
+      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+    (g : G) (hg : g⁻¹ = g) :
+    hF.inverseDaggerInverseGauge F hcanonical g =
+      hF.daggerInverseGauge F hcanonical g := by
+  change unitaryReindex (hF.bondDim_inv F g).symm
+    (hF.daggerInverseGauge F hcanonical g⁻¹) =
+      hF.daggerInverseGauge F hcanonical g
+  calc
+    unitaryReindex (hF.bondDim_inv F g).symm
+        (hF.daggerInverseGauge F hcanonical g⁻¹) =
+        unitaryReindex (rfl : F.bondDim g = F.bondDim g)
+          (hF.daggerInverseGauge F hcanonical g) :=
+      unitaryReindex_dependent_eq (fun x ↦ F.bondDim x)
+        (fun x ↦ hF.daggerInverseGauge F hcanonical x) hg
+        (hF.bondDim_inv F g).symm rfl
+    _ = hF.daggerInverseGauge F hcanonical g := unitaryReindex_self _ _
+
+/-- The chosen gauge at an involutive element satisfies
+$T_g\overline{T_g}=\sigma_g I$ with the existing chosen scalar.
+Source: arXiv:2502.20257, `eq:intro_sigma`, lines 1557–1562, specialized as in
+lines 1933–1955. This supplies the chosen phase used by the gate contraction
+at lines 5444–5487, without making another scalar choice. -/
+theorem IsRepresentation.daggerInverseGauge_mul_mapStar_self_eq_smul_one_of_inv_eq
+    [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
+    (hcanonical : ∀ g : G,
+      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+    (g : G) (hg : g⁻¹ = g) :
+    (hF.daggerInverseGauge F hcanonical g :
+        Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ) *
+      (hF.daggerInverseGauge F hcanonical g :
+        Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ).map (starRingEnd ℂ) =
+      hF.daggerInverseScalar F hcanonical g • 1 := by
+  simpa only [hF.inverseDaggerInverseGauge_eq_of_inv_eq F hcanonical g hg] using
+    hF.daggerInverseGauge_mul_mapStar_inverse_eq_smul_one F hcanonical g
+
 /-- If \(g=g^{-1}\), then the scalar \(\sigma_g\) is \(1\) or \(-1\).
 
 This is the involution conclusion following equation `eq:intro_sigma` in
@@ -632,23 +674,8 @@ theorem IsRepresentation.daggerInverseScalar_eq_one_or_neg_one_of_inv_eq
     (g : G) (hg : g⁻¹ = g) :
     hF.daggerInverseScalar F hcanonical g = 1 ∨
       hF.daggerInverseScalar F hcanonical g = -1 := by
-  have hGauge : hF.inverseDaggerInverseGauge F hcanonical g =
-      hF.daggerInverseGauge F hcanonical g := by
-    change unitaryReindex (hF.bondDim_inv F g).symm
-      (hF.daggerInverseGauge F hcanonical g⁻¹) =
-        hF.daggerInverseGauge F hcanonical g
-    calc
-      unitaryReindex (hF.bondDim_inv F g).symm
-          (hF.daggerInverseGauge F hcanonical g⁻¹) =
-          unitaryReindex (rfl : F.bondDim g = F.bondDim g)
-            (hF.daggerInverseGauge F hcanonical g) :=
-        unitaryReindex_dependent_eq (fun x ↦ F.bondDim x)
-          (fun x ↦ hF.daggerInverseGauge F hcanonical x) hg
-          (hF.bondDim_inv F g).symm rfl
-      _ = hF.daggerInverseGauge F hcanonical g := unitaryReindex_self _ _
   apply Matrix.scalar_eq_one_or_neg_one_of_mul_map_star_self_eq_smul_one
     (hF.daggerInverseGauge F hcanonical g)
-  simpa [hGauge] using
-    hF.daggerInverseGauge_mul_mapStar_inverse_eq_smul_one F hcanonical g
+  exact hF.daggerInverseGauge_mul_mapStar_self_eq_smul_one_of_inv_eq F hcanonical g hg
 
 end MPOTensor.GroupFamily
