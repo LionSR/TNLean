@@ -423,15 +423,17 @@ Proposition~\ref{cpsv-prop2to5}. If $M$ denotes the two-site block of $K$,
 	\qquad M\text{ is not an RFP}.
 	\label{eq:M-block-id}
 \end{align}
-For the boundary $Y$, Eq.~\eqref{eq:norm-gap} contradicts the
-trace-norm contraction required by Eq.~\eqref{eq:C15-statement}.
-The same contradiction at four sites excludes the RFP map for the two-site
-block in Theorem~\ref{cpsv-thm:main-simple}(ii)$\Rightarrow$(v).
-Both conclusions therefore fail under the printed standing hypotheses.
+\begin{refutation}
+	For the boundary $Y$, Eq.~\eqref{eq:norm-gap} contradicts the
+	trace-norm contraction required by Eq.~\eqref{eq:C15-statement}.
+	The same contradiction at four sites excludes the RFP map for the two-site
+	block in Theorem~\ref{cpsv-thm:main-simple}(ii)$\Rightarrow$(v).
+	Both conclusions therefore fail under the printed standing hypotheses.
+\end{refutation}
 A corrected implication would require additional hypotheses; the results
 here do not determine such a criterion.
 The complete counterexample, including all standing hypotheses and the
-nonexistence of both tpCPMs, is formalized in Lean.\footnote{\href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/MPDO/CPSVBlockingChannelAmbientCounterexample.lean\#L124}{Lean proof of the Proposition C.15 and blocked-RFP counterexample}.}
+nonexistence of both tpCPMs, is formalized in Lean.\footnote{\href{https://github.com/LionSR/TNLean/blob/f45bfbbccf671395e4f6018845f81b8aaaad4cb1/TNLean/MPS/MPDO/CPSVBlockingChannelAmbientCounterexample.lean\#L124}{Lean proof of the Proposition C.15 and blocked-RFP counterexample}.}
 
 \subsection{Two points in the structural proof}
 
@@ -444,15 +446,17 @@ source Lemma~\ref{cpsv-SALZCL}:
 	                       & =\frac{22\cdot23-19\cdot24}{10000}=\frac1{200}\ne0.
 	\label{eq:T-jordan}
 \end{align}
-Here $T>0$ means entrywise positivity. Lemma~\ref{cpsv-SALZCL} asserts
-that if $T$ is primitive with $\tr(T^N)=\tr T=1$ for all $N$, then $T$ has
-rank one, $T_{k,h}=a_kb_h$. The matrix $T=Q+N_0$ in Eq.~\eqref{eq:T-jordan}
-satisfies those trace conditions, yet has rank two because
-$T_{00}T_{11}-T_{01}T_{10}=1/200\ne0$. For an injective normal tensor with
+\begin{refutation}
+	Here $T>0$ means entrywise positivity. Lemma~\ref{cpsv-SALZCL} asserts
+	that if $T$ is primitive with $\tr(T^N)=\tr T=1$ for all $N$, then $T$ has
+	rank one, $T_{k,h}=a_kb_h$. The matrix $T=Q+N_0$ in Eq.~\eqref{eq:T-jordan}
+	satisfies those trace conditions, yet has rank two because
+	$T_{00}T_{11}-T_{01}T_{10}=1/200\ne0$.
+\end{refutation} For an injective normal tensor with
 SAL and literal ZCL, the rank-one neighboring-trace factorization is
 established because the normal self-overlap limit isolates a single active
 sector. This corrected Case-I statement is formalized in Lean under
-injectivity, normality, SAL, and the stated ZCL identity.\footnote{\href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/MPDO/InverseMapLemmaC5CaseI.lean\#L97}{Lean construction of the active-sector rank-one factorization}.}
+injectivity, normality, SAL, and the stated ZCL identity.\footnote{\href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/MPDO/InverseMapLemmaC5CaseI.html\#MPOTensor.exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL}{Lean construction of the active-sector rank-one factorization}.}
 
 In Case~II, the argument absorbs the canonical copy weights $\mu_j$ into the
 normal representatives $\mc K_j$:
@@ -462,10 +466,12 @@ normal representatives $\mc K_j$:
 	r(\mc E_{\mu_j\mc K_j})=|\mu_j|^2.
 	\label{eq:weight-absorption}
 \end{align}
-Equation~\eqref{eq:weight-absorption} shows that this absorption scales the
-transfer spectral radius to $|\mu_j|^2$. When $|\mu_j|<1$, as for $\mu\mc K_0$
-in Eq.~\eqref{eq:ambient}, the absorbed representative loses normality, so this
-repair does not extend to general simple tensors.
+\begin{refutation}
+	Equation~\eqref{eq:weight-absorption} shows that this absorption scales the
+	transfer spectral radius to $|\mu_j|^2$. When $|\mu_j|<1$, as for $\mu\mc K_0$
+	in Eq.~\eqref{eq:ambient}, the absorbed representative loses normality, so this
+	repair does not extend to general simple tensors.
+\end{refutation}
 
 \section{Canonical coefficients and relative phases}\label{sec:weights-phases}
 
@@ -513,9 +519,12 @@ for the matrix unit $e_{12}$,
 	\mc E_A^2(e_{12})=\tfrac14e_{12}.
 	\label{eq:transfer-non-idempotent}
 \end{align}
-Thus pure ZCL does not imply idempotence in source
-Theorem~\ref{cpsv-TheoremZCLPure}, or the unrestricted equivalence
-of Theorem~\ref{cpsv-thm:main-MPS}. Directly, the RFP equation gives
+\begin{refutation}
+	Thus pure ZCL does not imply idempotence in source
+	Theorem~\ref{cpsv-TheoremZCLPure}, or the unrestricted equivalence
+	of Theorem~\ref{cpsv-thm:main-MPS}.
+\end{refutation}
+Directly, the RFP equation gives
 \begin{align}
 	(A^0)^2=uA^0
 	\quad\Longrightarrow\quad u=1,\quad \tfrac14=\tfrac12,
@@ -530,7 +539,7 @@ BNT local orthogonality is equivalent to transfer idempotence $\mathbb E^2=\math
 Replacing the original tensor by this basis direct sum modifies the selected
 tensor and can change its normalized physical family.
 Both the counterexample with coefficients $(1,1/2)$ and this
-unit-coefficient representative theorem are formalized in Lean.\footnote{\href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/RFP/BNTWeightCounterexample.lean\#L268}{Canonical-coefficient counterexample}; \href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/RFP/ZCLReverse.lean\#L501}{positive-gap ZCL equivalence for the unit-coefficient basis direct sum}.}
+unit-coefficient representative theorem are formalized in Lean.\footnote{\href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/RFP/BNTWeightCounterexample.html\#MPSTensor.halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp}{Canonical-coefficient counterexample}; \href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/RFP/ZCLReverse.html\#MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent}{positive-gap ZCL equivalence for the unit-coefficient basis direct sum}.}
 
 As an MPDO tensor, $K^{00}=\diag(1,1/2)$ independently tests
 Theorem~\ref{cpsv-thm:main-simple}(iv)$\Rightarrow$(v):
@@ -551,9 +560,11 @@ Trace preservation for its two-site block requires
 	\diag(1,1/16)=\diag(1,1/4),
 	\label{eq:K00-four-two}
 \end{align}
-which fails. Condition~(iv) constrains the normal representatives without
-restricting the canonical coefficients $\mu_{j,q}$, and copy-independent
-weights alone are insufficient when weights are strictly below one.
+\begin{refutation}
+	The required identity fails. Condition~(iv) constrains the normal representatives without
+	restricting the canonical coefficients $\mu_{j,q}$, and copy-independent
+	weights alone are insufficient when weights are strictly below one.
+\end{refutation}
 A sufficient strengthened theorem requires exact assembly up to gauge,
 simultaneous one-site span, and copy-independent weights. The weight-absorbed
 representatives must satisfy layer orthogonality and admit physical-sector
@@ -562,7 +573,7 @@ $\tr\eta_{kh}=a_kb_h$ and $\sum_k a_kb_k=1$. Specializing all copy weights to $\
 biCF, layer orthogonality, and the physical-sector factorizations of condition~(iv)
 suffices to prove that the blocked tensor is an RFP.
 The counterexample and the sufficient theorem with the stated
-factorization hypotheses have Lean proofs.\footnote{\href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean\#L363}{Counterexample to Theorem 4.9(iv) to (v)}; \href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/MPDO/BNTFactorizationChannels.lean\#L94}{sufficient theorem for coefficient-absorbed factorizations}.}
+factorization hypotheses have Lean proofs.\footnote{\href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.html\#MPOTensor.CaseIIAbsorptionCounterexample.printed_theorem49_iv_to_v_is_false}{Counterexample to Theorem 4.9(iv) to (v)}; \href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/MPDO/BNTFactorizationChannels.html\#MPOTensor.blockTwo_isRFPViaTS_of_bntLayerOrthogonal_of_physicalSectorFactorization_of_commonWeight}{sufficient theorem for coefficient-absorbed factorizations}.}
 
 \subsection{Peripheral phases and similarity under squaring}
 
@@ -583,8 +594,10 @@ Both scalar normal copies have unit-modulus weights, yet
 	 \end{cases}
 	\label{eq:phase-cycle}
 \end{align}
-This contradicts the universal CF convergence assertion following
-source Theorem~\ref{cpsv-thm:renormalization-flow} and in Appendix~B.
+\begin{refutation}
+	This contradicts the universal CF convergence assertion following
+	source Theorem~\ref{cpsv-thm:renormalization-flow} and in Appendix~B.
+\end{refutation}
 A sufficient condition for convergence of $\mc E^{2^n}$ is that all
 unit-modulus copies within each normal representative share the same phase.
 Under this condition, surviving relative phase factors equal one, subunit
@@ -605,16 +618,18 @@ The doubled tensor is in CF, with scalar normal copies and
 	\qquad \rho^{(N)}(M)=|1+\omega^N|^2>0.
 	\label{eq:doubled-weights}
 \end{align}
-Identity maps on the one-dimensional physical algebras satisfy both
-virtual-gauge equations in Appendix~D. Equation~\eqref{eq:gauge-blocking-tensor}
-also gives $M^2\ne M$, which violates the ordinary RFP condition.
-Thus the asserted equivalence is false. Virtual conjugation preserves an
+\begin{refutation}
+	Identity maps on the one-dimensional physical algebras satisfy both
+	virtual-gauge equations in Appendix~D. Equation~\eqref{eq:gauge-blocking-tensor}
+	also gives $M^2\ne M$, which violates the ordinary RFP condition.
+	Thus the asserted equivalence is false.
+\end{refutation} Virtual conjugation preserves an
 idempotent transfer map; obtaining idempotence from the blocking-up-to-gauge
 condition requires a further hypothesis excluding the peripheral cycles.
 No replacement equivalence is proved here.
 Lean proofs verify the failure of dyadic convergence and the
 blocking-up-to-gauge counterexample, including canonical form and
-normalization of the doubled tensor.\footnote{\href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/RFP/PhaseOscillation.lean\#L194}{Nonconvergence of the dyadic transfer powers}; \href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/RFP/GaugeBlockingCounterexample.lean\#L496}{pure blocking-up-to-gauge counterexample}.}
+normalization of the doubled tensor.\footnote{\href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/RFP/PhaseOscillation.html\#MPSTensor.cubePhaseTensor_not_tendsto_dyadic_transferMap}{Nonconvergence of the dyadic transfer powers}; \href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/RFP/GaugeBlockingCounterexample.html\#MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false}{pure blocking-up-to-gauge counterexample}.}
 
 Theorem~\ref{cpsv-thm:renormalization-flow} remains valid as a
 limit characterization:
@@ -667,10 +682,12 @@ Therefore
 	\qquad(L\geq1),
 	\label{eq:oscillation-limit}
 \end{align}
-so the unrestricted inner limit in source
-Proposition~\ref{cpsv-PropILILp1} does not exist.
+\begin{refutation}
+	The the unrestricted inner limit in source
+	Proposition~\ref{cpsv-PropILILp1} does not exist.
+\end{refutation}
 The MPDO property and failure of this limit at every fixed positive cut
-are formalized in Lean.\footnote{\href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/MPDO/ThermodynamicLimitCounterexample.lean\#L679}{Lean proof of the Proposition 4.5 limit counterexample}.}
+are formalized in Lean.\footnote{\href{https://github.com/LionSR/TNLean/blob/f45bfbbccf671395e4f6018845f81b8aaaad4cb1/TNLean/MPS/MPDO/ThermodynamicLimitCounterexample.lean\#L679}{Lean proof of the Proposition 4.5 limit counterexample}.}
 
 The finite-chain bounds remain separate. Strong subadditivity
 on consecutive lengths $1,L,N-2L-1$, with translation invariance,
@@ -766,8 +783,10 @@ probability distributions,
 	 & \text{equality iff }q=p,
 	\label{eq:kl-positivity}
 \end{align}
-by $-\ln x\geq1-x$. The conditional mutual information is
-strictly positive, so the literal four-ring fails SAL.
+\begin{refutation}
+	by $-\ln x\geq1-x$. The conditional mutual information is
+	strictly positive, so the literal four-ring fails SAL.
+\end{refutation}
 
 The non-ZCL claim remains correct:
 \begin{align}
@@ -780,7 +799,7 @@ The non-ZCL claim remains correct:
 Literal physical-trace idempotence would identify these reduced
 closures and their normalizations. Lean proofs establish both the
 failure of SAL and non-idempotence of the physical-trace matrix for the
-original two-qubit-site tensor.\footnote{\href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/MPDO/CPSVExample411Entropy.lean\#L179}{Failure of SAL for the ambient Example 4.11 tensor}; \href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/MPDO/CPSVExample411SourceZCL.lean\#L200}{non-idempotence of its physical-trace matrix}.}
+original two-qubit-site tensor.\footnote{\href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/MPDO/CPSVExample411Entropy.html\#MPOTensor.CPSVExample411Entropy.ambientM_not_isSAL}{Failure of SAL for the ambient Example 4.11 tensor}; \href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/MPDO/CPSVExample411SourceZCL.html\#MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_not_idempotent}{non-idempotence of its physical-trace matrix}.}
 A replacement for the failed SAL example is an MPDO
 with diagonal physical slices $K^{00}=\diag(1,0)$ and $K^{11}=\diag(0,c)$
 for a fixed constant $0<c<1$, with all off-diagonal slices zero.
@@ -886,7 +905,7 @@ gives the global similarity in Corollary~\ref{cpsv-II_cor2}.
 For proportional families, the conclusion establishes sector matching.
 The proportional sector-matching theorem and the equal-family
 global-similarity theorem are formalized in Lean, including the passage
-from eventual coefficient identities to equality of coefficient multisets.\footnote{\href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean\#L612}{Equal-family global similarity}; \href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean\#L662}{proportional sector matching}; \href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/FundamentalTheorem/SectorBNT/WeightEquiv.lean\#L71}{coefficient-multiset recovery from eventual identities}.}
+from eventual coefficient identities to equality of coefficient multisets.\footnote{\href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.html\#MPSTensor.fundamentalTheorem_equal_canonicalForm}{Equal-family global similarity}; \href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.html\#MPSTensor.fundamentalTheorem_proportional_canonicalForm}{proportional sector matching}; \href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/FundamentalTheorem/SectorBNT/WeightEquiv.html\#MPSTensor.matched_sector_weight_multiset_eq}{coefficient-multiset recovery from eventual identities}.}
 
 \section{Local corrections}\label{sec:local}
 
@@ -920,8 +939,10 @@ $\ket{\varphi}=(\ket{00}+\ket{11})/\sqrt2$,
 	 & =\left[\tfrac12(1-1)\right]^2=0.
 	\label{eq:bell-correlations}
 \end{align}
-The printed CID interval permits this translation because the regions
-remain disjoint. Thus idempotence does not imply CID for adjacent regions.
+\begin{refutation}
+	The printed CID interval permits this translation because the regions
+	remain disjoint. Thus idempotence does not imply CID for adjacent regions.
+\end{refutation}
 
 Let $g_1,g_2$ and $g'_1,g'_2$ be the complementary gap lengths
 before and after translation. The corrected forward statement
@@ -935,7 +956,7 @@ requires
 \end{align}
 At adjacency, $\mathbb E^0=\Id$ instead. The resulting statement
 is an adjacency correction for spatial correlators. The Bell-pair
-counterexample and the positive-gap implication are both formalized in Lean.\footnote{\href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/RFP/BellPairCIDObstruction.lean\#L489}{Bell-pair adjacency counterexample}; \href{https://github.com/LionSR/TNLean/blob/2e05faa04d4ac6b6c25fc42ec1c65bdf2e66adfa/TNLean/MPS/RFP/ZeroCorrelationLength.lean\#L164}{positive-gap CID from transfer idempotence}.}
+counterexample and the positive-gap implication are both formalized in Lean.\footnote{\href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/RFP/BellPairCIDObstruction.html\#MPSTensor.bellPairChain_isNormalTensor_isTransferIdempotent_and_not_isPhysicalCID}{Bell-pair adjacency counterexample}; \href{https://sirui-lu.com/TNLean/docs/TNLean/MPS/RFP/ZeroCorrelationLength.html\#MPSTensor.isPositiveGapPhysicalCID_of_isTransferIdempotent}{positive-gap CID from transfer idempotence}.}
 
 \subsection{Square-root normalization}
 

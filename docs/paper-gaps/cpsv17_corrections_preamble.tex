@@ -26,3 +26,8 @@
 \setcounter{secnumdepth}{3}
 \setlength{\emergencystretch}{1em}
 
+
+% Mark the paragraphs that identify a contradiction to an original claim.
+\usepackage{xcolor,framed}
+\definecolor{shadecolor}{RGB}{255,246,218}
+\newenvironment{refutation}{\begin{shaded}\noindent\textbf{Refutation. }\ignorespaces}{\end{shaded}}
