@@ -29,6 +29,7 @@ import TNLean.MPS.MPU.InverseCompatibleGateIdentity
 import TNLean.MPS.MPU.InverseCompatibleGates
 import TNLean.MPS.MPU.InverseCompatibleSourceFactors
 import TNLean.MPS.MPU.InverseCompatibleSourceTransport
+import TNLean.MPS.MPU.InverseCompatibleWordAdjoint
 import TNLean.MPS.MPU.KetLeftMul
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
