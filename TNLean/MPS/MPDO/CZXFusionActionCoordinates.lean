@@ -95,8 +95,9 @@ theorem fusionAction_finite_identities (x : Fin 2) :
     fusionActionLetter x * fusionW =
       fusionActionCoefficient x • (fusionActionLetter x * sequentialActionKet x) ∧
     fusionActionLetter x * fusionActionLetter x = fusionActionLetter x := by
-  rw [(fusionAction_finite_calculation x).1]
-  exact (fusionAction_finite_calculation x).2
+  have hcalc := fusionAction_finite_calculation x
+  rw [hcalc.1]
+  exact hcalc.2
 
 /-- Positive repetitions of the supported letter preserve both contractions and
 open-boundary proportionality. This is a matrix consequence of the literal CZX
@@ -108,14 +109,14 @@ theorem fusionAction_positive_power (x : Fin 2) (n : ℕ) :
     (sequentialActionBra x * fusionActionLetter x ^ (n + 1) * sequentialActionKet x) 0 0 = 1 ∧
     fusionActionLetter x ^ (n + 1) * fusionW =
       fusionActionCoefficient x • (fusionActionLetter x ^ (n + 1) * sequentialActionKet x) := by
+  have hid := fusionAction_finite_identities x
   have hp : fusionActionLetter x ^ (n + 1) = fusionActionLetter x := by
     induction n with
     | zero => simp
     | succ n ih =>
       rw [pow_succ, ih]
-      exact (fusionAction_finite_identities x).2.2
+      exact hid.2.2
   rw [hp]
-  exact ⟨rfl, rfl, (fusionAction_finite_identities x).1,
-    (fusionAction_finite_identities x).2.1⟩
+  exact ⟨rfl, rfl, hid.1, hid.2.1⟩
 
 end MPOTensor.CZX
