@@ -52,18 +52,12 @@ product letter, and the maintained right fusion cap. Source: arXiv:2502.20257,
 def fusionActionCoefficient (x : Fin 2) : ℂ :=
   (sequentialActionBra x * fusionActionLetter x * fusionW) 0 0
 
-set_option maxHeartbeats 800000 in
--- Only the two supported four-by-four product letters are evaluated.
+-- The supported letter is the diagonal product letter of the concrete fusion slice.
 private theorem fusionActionLetter_coordinates (x : Fin 2) :
     fusionActionLetter x = if x = 0 then
       !![0, 0, 0, 0; -1, 1, -1, 1; 0, 0, 0, 0; 0, 0, 0, 0]
-    else !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0] := by
-  ext a b
-  fin_cases x <;> fin_cases a <;> fin_cases b <;>
-    norm_num [fusionActionLetter, mulTensor_apply, Matrix.submatrix_apply, Matrix.sum_apply,
-      Matrix.kroneckerMap_apply, Fin.sum_univ_four, tensor, blockTwo,
-      decoratedSiteTensor, Matrix.mul_apply, Fin.sum_univ_two,
-      finProdFinEquiv, Fin.divNat, Fin.modNat]
+    else !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0] :=
+  mulTensor_diagonal_letter_coordinates x
 
 set_option maxHeartbeats 800000 in
 -- The sparse letters reduce all four assertions to small complex coordinate calculations.
@@ -101,8 +95,9 @@ theorem fusionAction_finite_identities (x : Fin 2) :
     fusionActionLetter x * fusionW =
       fusionActionCoefficient x • (fusionActionLetter x * sequentialActionKet x) ∧
     fusionActionLetter x * fusionActionLetter x = fusionActionLetter x := by
-  rw [(fusionAction_finite_calculation x).1]
-  exact (fusionAction_finite_calculation x).2
+  have hcalc := fusionAction_finite_calculation x
+  rw [hcalc.1]
+  exact hcalc.2
 
 /-- Positive repetitions of the supported letter preserve both contractions and
 open-boundary proportionality. This is a matrix consequence of the literal CZX
@@ -114,14 +109,14 @@ theorem fusionAction_positive_power (x : Fin 2) (n : ℕ) :
     (sequentialActionBra x * fusionActionLetter x ^ (n + 1) * sequentialActionKet x) 0 0 = 1 ∧
     fusionActionLetter x ^ (n + 1) * fusionW =
       fusionActionCoefficient x • (fusionActionLetter x ^ (n + 1) * sequentialActionKet x) := by
+  have hid := fusionAction_finite_identities x
   have hp : fusionActionLetter x ^ (n + 1) = fusionActionLetter x := by
     induction n with
     | zero => simp
     | succ n ih =>
       rw [pow_succ, ih]
-      exact (fusionAction_finite_identities x).2.2
+      exact hid.2.2
   rw [hp]
-  exact ⟨rfl, rfl, (fusionAction_finite_identities x).1,
-    (fusionAction_finite_identities x).2.1⟩
+  exact ⟨rfl, rfl, hid.1, hid.2.1⟩
 
 end MPOTensor.CZX

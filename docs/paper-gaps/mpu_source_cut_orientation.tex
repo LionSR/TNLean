@@ -197,6 +197,40 @@ normalization and orientation explicitly. These conclusions assume the
 source's diagonal fixed point; they do not assert a source-$u$ theorem for
 arbitrary nonsymmetric $\rho$.
 
+\section{Dressings acting on the corrected cut}
+
+Any operator written against a row or a column space of $M_1$ inherits the leg
+order of Eq.~\ref{eq:mpu_source_cut_orientation_first_cut}. The
+$\mathbb Z_2$ appendix of Ref.~\cite{FrancoRubio2025MPUGauging} considers a
+tensor whose adjoint is a unitary virtual gauge conjugate of itself,
+$\mathcal U^\dagger_{ij}=T^\dagger\mathcal U_{ij}T$, and dresses the second cut
+into the first,
+\begin{align}
+    M_1(\mathcal U)
+     & =AM_2(\mathcal U)^\dagger B,
+    \label{eq:mpu_source_cut_orientation_dressed_cut}
+\end{align}
+with $A$ acting on the row index $(i,\beta)$ and $B$ on the column index
+$(\alpha,j)$. The printed candidate factors place the identity factor first in
+both dressings.\footnote{Source traceability:
+    \path{Papers/2502.20257/main.tex}, line 5432.} The row index is physical
+followed by auxiliary, so the left dressing keeps that order, whereas the
+column index is auxiliary followed by physical and reverses it:
+\begin{align}
+    A
+     & =\operatorname{Id}_d\otimes\overline T,
+    \label{eq:mpu_source_cut_orientation_left_dressing} \\
+    B
+     & =T^{\mathsf T}\otimes\operatorname{Id}_d.
+    \label{eq:mpu_source_cut_orientation_right_dressing}
+\end{align}
+These are the same two operators as the printed ones; only the order in which
+their tensor factors are written follows
+Eq.~\ref{eq:mpu_source_cut_orientation_first_cut}. No further correction is
+involved, and the corresponding declarations are
+\leanid{MPOTensor.inverseCompatibleLeftGauge} and
+\leanid{MPOTensor.inverseCompatibleRightGauge}.
+
 \section{Marker boundary for the complete source-$u$ network}
 
 The transposed first cut was a local correction, and it is resolved. The
