@@ -1,0 +1,28 @@
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,bm,dsfont,graphicx,booktabs,microtype}
+\usepackage{xr-hyper}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage{cleveref}
+\crefname{equation}{Eq.}{Eqs.}
+\IfFileExists{../../build/paper-aux/1606.00608/MPDO-22-12-17-2-note.aux}{%
+	\externaldocument[cpsv-]{../../build/paper-aux/1606.00608/MPDO-22-12-17-2-note}[https://arxiv.org/pdf/1606.00608]%
+}{%
+	\IfFileExists{build/paper-aux/1606.00608/MPDO-22-12-17-2-note.aux}{%
+		\externaldocument[cpsv-]{build/paper-aux/1606.00608/MPDO-22-12-17-2-note}[https://arxiv.org/pdf/1606.00608]%
+	}{\externaldocument[cpsv-]{MPDO-22-12-17-2-note}[https://arxiv.org/pdf/1606.00608]}%
+}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\Id}{\mathds{1}}
+\newcommand{\ket}[1]{\lvert#1\rangle}
+\newcommand{\bra}[1]{\langle#1\rvert}
+\newcommand{\ketbra}[2]{\lvert#1\rangle\langle#2\rvert}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\diag}{\operatorname{diag}}
+% revtex4-2 fails to patch current releases of the array package, so ragged
+% paragraph columns are started cell by cell rather than in a column preamble.
+\newcommand{\raggedcell}{\raggedright\let\\\tabularnewline}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\setcounter{secnumdepth}{3}
+\setlength{\emergencystretch}{1em}
+

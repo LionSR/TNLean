@@ -1,32 +1,6 @@
 % Build from the repository root with: bash scripts/build_cpsv17_corrections.sh
 \documentclass[aps,pra,reprint,nofootinbib,onecolumn]{revtex4-2}
-\usepackage[T1]{fontenc}
-\usepackage{amsmath,amssymb,amsthm,bm,dsfont,graphicx,booktabs,microtype}
-\usepackage{xr-hyper}
-\usepackage[colorlinks=true,allcolors=blue]{hyperref}
-\usepackage{cleveref}
-\crefname{equation}{Eq.}{Eqs.}
-\IfFileExists{../../build/paper-aux/1606.00608/MPDO-22-12-17-2-note.aux}{%
-  \externaldocument[cpsv-]{../../build/paper-aux/1606.00608/MPDO-22-12-17-2-note}[https://arxiv.org/pdf/1606.00608]%
-}{%
-  \IfFileExists{build/paper-aux/1606.00608/MPDO-22-12-17-2-note.aux}{%
-    \externaldocument[cpsv-]{build/paper-aux/1606.00608/MPDO-22-12-17-2-note}[https://arxiv.org/pdf/1606.00608]%
-  }{\externaldocument[cpsv-]{MPDO-22-12-17-2-note}[https://arxiv.org/pdf/1606.00608]}%
-}
-\newcommand{\tr}{\operatorname{tr}}
-\newcommand{\Id}{\mathds{1}}
-\newcommand{\ket}[1]{\lvert#1\rangle}
-\newcommand{\bra}[1]{\langle#1\rvert}
-\newcommand{\ketbra}[2]{\lvert#1\rangle\langle#2\rvert}
-\newcommand{\mc}[1]{\mathcal{#1}}
-\newcommand{\diag}{\operatorname{diag}}
-% revtex4-2 fails to patch current releases of the array package, so ragged
-% paragraph columns are started cell by cell rather than in a column preamble.
-\newcommand{\raggedcell}{\raggedright\let\\\tabularnewline}
-\newtheorem{proposition}{Proposition}
-\newtheorem{lemma}{Lemma}
-\setcounter{secnumdepth}{3}
-\setlength{\emergencystretch}{1em}
+\input{cpsv17_corrections_preamble}
 
 \begin{document}
 \title{Corrections to matrix product density operator fixed-point statements}
@@ -42,9 +16,8 @@
 	an explicit tensor satisfies all standing hypotheses but has
 	$\|K_2(Y)\|_1=337/250<27/20=\|K_3(Y)\|_1=\|K_4(Y)\|_1$,
 	excluding any such trace-preserving completely positive map by trace-norm contraction.
-	We distinguish these counterexamples from a proof completion for the
-	fundamental theorem and from local corrections. The pure
-	limit/fixed-point characterization itself remains valid.
+	We present these counterexamples alongside a coefficient-separation proof for
+	the fundamental theorem of matrix product vectors and several local corrections.
 \end{abstract}
 \maketitle
 
@@ -54,10 +27,12 @@ The statements examined in Ref.~\cite{Cirac2017MPDO_AnnPhys} concern
 three distinct questions: fixed-point characterizations, existence of
 limits, and exact finite-ring entropy identities.
 Table~\ref{tab:source-map} identifies each source claim and its treatment
-here. The first counterexample concerns Proposition~\ref{cpsv-prop2to5}
-and Theorem~\ref{cpsv-thm:main-simple}; the later counterexamples do not
-depend on that example. Section~\ref{sec:matching} instead completes a
-proof without changing its intended conclusion, and
+here. Section~\ref{sec:blocking} examines Proposition~\ref{cpsv-prop2to5}
+and Theorem~\ref{cpsv-thm:main-simple}. Section~\ref{sec:weights-phases}
+addresses raw weights and phase cycles in pure and mixed renormalization
+flows. Section~\ref{sec:entropy} discusses entropy limits and finite-ring
+area-law saturation. Section~\ref{sec:matching} provides a proof completion
+for the fundamental theorem of matrix product vectors, and
 Sec.~\ref{sec:local} collects local corrections.
 Source references use arXiv:1606.00608v4 numbering;
 unqualified equation references are local.
@@ -99,7 +74,7 @@ unqualified equation references are local.
 		                   & \raggedcell Strict entropy defect, Sec.~\ref{sec:entropy}                                                                  \\[0.4em]
 		\raggedcell Theorem~\ref{cpsv-thm1}; Corollary~\ref{cpsv-II_cor2}
 		                   & \raggedcell Sector matching and equal-MPV weight recovery
-		                   & \raggedcell Proof completion, not refutation, Sec.~\ref{sec:matching}                                                      \\
+		                   & \raggedcell Proof completion, Sec.~\ref{sec:matching}                                                                      \\
 		\bottomrule
 	\end{tabular}
 \end{table*}
@@ -192,7 +167,7 @@ This is the identity represented in diagram~\eqref{cpsv-3to5tcpm}.
 Theorem~\ref{cpsv-thm:main-simple} then defines $M$ as the two-site block
 of $K$ [Eq.~\eqref{cpsv-K=MM}] and concludes that $M$ is a renormalization
 fixed point (RFP) via the implication chain (ii)~$\Rightarrow$~(v).
-By Definition~\ref{cpsv-RFPMixedTS}, an RFP map for $M$ would require a
+By Definition~\ref{cpsv-RFPMixedTS}, an RFP map for $M$ requires a
 tpCPM mapping $M_1(X) = K_2(X)$ to $M_2(X) = K_4(X)$ for all
 $X\in M_D(\mathbb C)$.
 
@@ -440,10 +415,13 @@ Proposition~\ref{cpsv-prop2to5}. If $M$ denotes the two-site block of $K$,
 	\qquad M\text{ is not an RFP}.
 	\label{eq:M-block-id}
 \end{align}
-so $M$ is not an RFP. This also refutes Theorem~\ref{cpsv-thm:main-simple}(ii)$\Rightarrow$(v).
-The obstruction excludes every trace-preserving completely positive map,
-not only the proposed construction based on local factorizations. It makes no
-claim about every larger blocking or about Theorem~\ref{cpsv-thm:IV.13}.
+For the boundary $Y$, Eq.~\eqref{eq:norm-gap} contradicts the
+trace-norm contraction required by Eq.~\eqref{eq:C15-statement}.
+The same contradiction at four sites excludes the RFP map for the two-site
+block in Theorem~\ref{cpsv-thm:main-simple}(ii)$\Rightarrow$(v).
+Both conclusions therefore fail under the printed standing hypotheses.
+A corrected implication would require additional hypotheses; the results
+here do not determine such a criterion.
 
 \subsection{Two points in the structural proof}
 
@@ -456,24 +434,27 @@ source Lemma~\ref{cpsv-SALZCL}:
 	                       & =\frac{22\cdot23-19\cdot24}{10000}=\frac1{200}\ne0.
 	\label{eq:T-jordan}
 \end{align}
-Here $T>0$ means entrywise positivity. Primitivity and traces of
-powers do not imply rank one; the nilpotent part is invisible
-in those traces.
+Here $T>0$ means entrywise positivity. Lemma~\ref{cpsv-SALZCL} asserts
+that if $T$ is primitive with $\tr(T^N)=\tr T=1$ for all $N$, then $T$ has
+rank one, $T_{k,h}=a_kb_h$. The matrix $T=Q+N_0$ in Eq.~\eqref{eq:T-jordan}
+satisfies those trace conditions, yet has rank two because
+$T_{00}T_{11}-T_{01}T_{10}=1/200\ne0$. For an injective normal tensor with
+SAL and literal ZCL, the rank-one neighboring-trace factorization is
+established because the normal self-overlap limit isolates a single active
+sector.
 
-Common-weight absorption after source Lemma~\ref{cpsv-lemmus}
-has a separate normalization problem:
+In Case~II, the argument absorbs the canonical copy weights $\mu_j$ into the
+normal representatives $\mc K_j$:
 \begin{align}
 	\mc E_{\mu_j\mc K_j}=|\mu_j|^2\mc E_{\mc K_j},
 	\qquad
 	r(\mc E_{\mu_j\mc K_j})=|\mu_j|^2.
 	\label{eq:weight-absorption}
 \end{align}
-For a normal $\mc K_j$, absorption preserves normality only when
-$|\mu_j|=1$. In \cref{eq:ambient},
-$r(\mc E_{\mu\mc K_0})=r<1$.
-These are defects in the structural argument. The refutation of
-Proposition~\ref{cpsv-prop2to5} does not require a universal claim
-about all possible physical-sector factorizations.
+Equation~\eqref{eq:weight-absorption} shows that this absorption scales the
+transfer spectral radius to $|\mu_j|^2$. When $|\mu_j|<1$, as for $\mu\mc K_0$
+in Eq.~\eqref{eq:ambient}, the absorbed representative loses normality, so this
+repair does not extend to general simple tensors.
 
 \section{Raw weights and peripheral phases}\label{sec:weights-phases}
 
@@ -529,9 +510,16 @@ of Theorem~\ref{cpsv-thm:main-MPS}. Directly, the RFP equation gives
 	\quad\Longrightarrow\quad u=1,\quad \tfrac14=\tfrac12,
 	\label{eq:rfp-pure-contradiction}
 \end{align}
-a contradiction.
+a contradiction. Theorems~\ref{cpsv-TheoremZCLPure} and~\ref{cpsv-thm:main-MPS}
+require that pure ZCL be equivalent to transfer idempotence $\mathbb E^2=\mathbb E$
+and to the RFP property. An established replacement restricts the assertion to
+the basis direct sum containing exactly one unit-weight copy of each distinct
+BNT representative. For that direct sum, positive-gap physical CID combined with
+BNT local orthogonality is equivalent to transfer idempotence $\mathbb E^2=\mathbb E$.
+Replacing an arbitrary raw tensor by this basis direct sum modifies the selected
+tensor and can change its normalized physical family.
 
-As an MPDO tensor, $K^{00}=\diag(1,1/2)$ independently refutes
+As an MPDO tensor, $K^{00}=\diag(1,1/2)$ independently tests
 Theorem~\ref{cpsv-thm:main-simple}(iv)$\Rightarrow$(v):
 \begin{align}
 	 & \mc K_1^{00}=1,\qquad
@@ -542,17 +530,24 @@ Theorem~\ref{cpsv-thm:main-simple}(iv)$\Rightarrow$(v):
 	 & \eta=1,\quad a=b=1.
 	\label{eq:K00-props}
 \end{align}
-These are simplicity, biCF, global normalization, positivity,
+These satisfy simplicity, biCF, global normalization, positivity,
 and the complete scalar factorization in condition~(iv).
-Trace preservation for its two-site block would require
+Trace preservation for its two-site block requires
 \begin{align}
 	(K^{00})^4=(K^{00})^2,\qquad
 	\diag(1,1/16)=\diag(1,1/4),
 	\label{eq:K00-four-two}
 \end{align}
-which is false. Condition~(iv) constrains normal representatives,
-not raw copy weights. Here $B_K^2\ne B_K$; this is not the
-counterexample to Proposition~\ref{cpsv-prop2to5}.
+which fails. Condition~(iv) constrains the normal representatives without
+restricting the raw canonical copy weights $\mu_{j,q}$, and copy-independent
+weights alone are insufficient when weights are strictly below one.
+A sufficient strengthened theorem requires exact assembly up to gauge,
+simultaneous one-site span, and copy-independent weights. The weight-absorbed
+representatives must satisfy layer orthogonality and admit physical-sector
+factorizations with positive neighboring operators obeying
+$\tr\eta_{kh}=a_kb_h$ and $\sum_k a_kb_k=1$. Specializing all copy weights to $\mu_{j,q}=1$ while retaining
+biCF, layer orthogonality, and the physical-sector factorizations of condition~(iv)
+suffices to prove that the blocked tensor is an RFP.
 
 \subsection{Peripheral phases and similarity under squaring}
 
@@ -573,10 +568,14 @@ Both scalar normal copies have unit-modulus weights, yet
 	 \end{cases}
 	\label{eq:phase-cycle}
 \end{align}
-This refutes the universal CF convergence assertion following
+This contradicts the universal CF convergence assertion following
 source Theorem~\ref{cpsv-thm:renormalization-flow} and in Appendix~B.
+A sufficient condition for convergence of $\mc E^{2^n}$ is that all
+unit-modulus copies within each normal representative share the same phase.
+Under this condition, surviving relative phase factors equal one, subunit
+factors decay, and cross terms between distinct normal representatives decay.
 
-It also refutes the pure-state equivalence asserted after source
+The construction also tests the pure-state equivalence asserted after source
 Eq.~\eqref{cpsv-RFP-gauge}:
 \begin{align}
 	\omega S(A^0)^2S^{-1} & =\omega\diag(\omega^2,1)=A^0,\nonumber               \\
@@ -591,12 +590,15 @@ The doubled tensor is in CF, with scalar normal copies and
 	\qquad \rho^{(N)}(M)=|1+\omega^N|^2>0.
 	\label{eq:doubled-weights}
 \end{align}
-Identity maps on the one-dimensional physical algebras give
-blocking up to virtual gauge in both directions, but not an RFP
-in the sense of Definition~\ref{cpsv-RFPMixedTS}. Similarity under
-squaring allows root-of-unity cycles, not only spectrum in $\{0,1\}$.
+Identity maps on the one-dimensional physical algebras satisfy both
+virtual-gauge equations in Appendix~D. Equation~\eqref{eq:gauge-blocking-tensor}
+also gives $M^2\ne M$, which violates the ordinary RFP condition.
+Thus the asserted equivalence is false. Virtual conjugation preserves an
+idempotent transfer map; obtaining idempotence from the blocking-up-to-gauge
+condition requires a further hypothesis excluding the peripheral cycles.
+No replacement equivalence is proved here.
 
-Theorem~\ref{cpsv-thm:renormalization-flow} itself survives as a
+Theorem~\ref{cpsv-thm:renormalization-flow} remains valid as a
 limit characterization:
 \begin{align}
 	\mc E^{2^n}\longrightarrow F
@@ -606,8 +608,8 @@ limit characterization:
 	\label{eq:limit-characterization}
 \end{align}
 The correspondence between completely positive maps and physical
-isometry classes of Kraus tensors gives the stated characterization.
-It does not establish convergence for every CF initial tensor.
+isometry classes of Kraus tensors yields the stated characterization
+whenever a limit exists.
 
 \section{Finite-chain entropy and thermodynamic limits}\label{sec:entropy}
 
@@ -650,9 +652,9 @@ Therefore
 so the unrestricted inner limit in source
 Proposition~\ref{cpsv-PropILILp1} does not exist.
 
-The finite-chain statements remain separate. Strong subadditivity
+The finite-chain bounds remain separate. Strong subadditivity
 on consecutive lengths $1,L,N-2L-1$, with translation invariance,
-gives
+yields
 \begin{align}
 	S_L^{(N)}+S_{N-L}^{(N)}
 	          & \leq S_{L+1}^{(N)}+S_{N-L-1}^{(N)},\nonumber \\
@@ -661,8 +663,8 @@ gives
 	\label{eq:finite-monotonicity}
 \end{align}
 The source proof also quotes $I_L^{(N)}\leq4\log_2D$.
-These bounds do not imply convergence in $N$. If the fixed-$L$
-limits exist, they do imply
+These bounds establish outer convergence whenever each fixed-cut
+inner limit exists:
 \begin{align}
 	J_L:=\lim_{N\to\infty}I_L^{(N)}
 	                     & \quad\Longrightarrow\quad
@@ -670,6 +672,10 @@ limits exist, they do imply
 	\lim_{L\to\infty}J_L & \leq4\log_2D.
 	\label{eq:JL-limits}
 \end{align}
+Replacing the inner limit by $\limsup_{N\to\infty}I_L^{(N)}$ gives
+a bounded monotone sequence in $L$, so its outer limit exists. The original
+iterated-limit formulation requires hypotheses ensuring the fixed-cut
+limits; such hypotheses are not derived here.
 
 \subsection{The literal periodic state in Example~\ref{cpsv-ExSALnoZCL}}
 
@@ -752,19 +758,32 @@ The non-ZCL claim remains correct:
 	\label{eq:non-zcl-check}
 \end{align}
 Literal physical-trace idempotence would identify these reduced
-closures and their normalizations. A common rescaling of $W$
-changes neither probabilities nor entropies. This removes the
-printed finite-periodic SAL witness, not the independence of SAL
-and ZCL.
+closures and their normalizations. A replacement for the failed SAL example is an MPDO
+with diagonal physical slices $K^{00}=\diag(1,0)$ and $K^{11}=\diag(0,c)$
+for a fixed constant $0<c<1$, with all off-diagonal slices zero.
+This generates the family
+$\sigma^{(N)}=\ketbra{0^N}{0^N}+c^N\ketbra{1^N}{1^N}$.
+For every proper connected cut $1\leq L<N$, tracing $N-L$ spins leaves the
+two nonzero eigenvalues $1/(1+c^N)$ and $c^N/(1+c^N)$, matching the normalized
+spectrum of the full state. Consequently $S_L^{(N)}=S_N^{(N)}=h_2(c^N/(1+c^N))$
+and $I_L^{(N)}=h_2(c^N/(1+c^N))$ for every proper cut, giving exact SAL across
+cuts on every finite ring. The physical-trace matrix $B_K=\diag(1,c)$ has
+$B_K^2=\diag(1,c^2)\ne B_K$, so ZCL fails. This supplies the intended SAL-without-ZCL example.
 
 \section{A coefficient-separation argument for the fundamental theorem}\label{sec:matching}
 
-The proof of source Theorem~\ref{cpsv-thm1} compares one $B$-sector
-with the $A$-family, although the proportionality relation contains
-all $B$-sectors. Full-family coefficient comparison supplies the
-step and preserves that theorem and Corollary~\ref{cpsv-II_cor2}.
-Retain only active, nonzero canonical weights; zero-weight blocks
-carry no dimension information.
+Theorem~\ref{cpsv-thm1} states that if two tensors $A$ and $B$ in CF
+generate proportional MPV families
+$\ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}$, with $c_N\ne0$ for every
+positive $N$, then their BNTs
+have the same cardinality $g_a=g_b$ and match up to phases and similarity
+transformations. Corollary~\ref{cpsv-II_cor2} concludes that if the
+families are equal ($c_N=1$), their matrices are related by a global
+similarity $A^i=XB^iX^{-1}$. The source proof compares one $B$-sector
+with the $A$-family using Lemma~\ref{cpsv-Lem1}, but the proportionality
+relation contains all $B$-sectors simultaneously. Full-family coefficient
+comparison supplies the missing step. Retain only active, nonzero canonical
+weights; zero-weight blocks carry no dimension information.
 
 For distinct nonzero $z_1,\ldots,z_m$,
 \begin{align}
@@ -835,9 +854,7 @@ The second line follows by grouping distinct nonzero weights and
 applying the determinant argument to their multiplicity differences.
 The sums then agree at every positive length; matching copies
 gives the global similarity in Corollary~\ref{cpsv-II_cor2}.
-
-For proportional families, $c_N$ remains in every sector identity.
-The conclusion is sector matching, not copy-weight recovery.
+For proportional families, the conclusion establishes sector matching.
 
 \section{Local corrections}\label{sec:local}
 
@@ -871,9 +888,8 @@ $\ket{\varphi}=(\ket{00}+\ket{11})/\sqrt2$,
 	 & =\left[\tfrac12(1-1)\right]^2=0.
 	\label{eq:bell-correlations}
 \end{align}
-The printed CID interval permits this translation. Thus
-idempotence does not imply CID for arbitrary disjoint,
-possibly adjacent regions.
+The printed CID interval permits this translation because the regions
+remain disjoint. Thus idempotence does not imply CID for adjacent regions.
 
 Let $g_1,g_2$ and $g'_1,g'_2$ be the complementary gap lengths
 before and after translation. The corrected forward statement
@@ -885,8 +901,8 @@ requires
 	=\mathbb E^{g'_1}=\mathbb E^{g'_2}=\mathbb E.
 	\label{eq:positive-gaps}
 \end{align}
-At adjacency, $\mathbb E^0=\Id$ instead. This is a positive-gap
-correction, not a copy-weight normalization.
+At adjacency, $\mathbb E^0=\Id$ instead. The resulting statement
+is an adjacency correction for spatial correlators.
 
 \subsection{Square-root normalization}
 
@@ -922,8 +938,7 @@ $\tr(\Lambda^2)<1$. Including the gauge, the corrected forms are equivalently
 \end{align}
 In the first convention, the bond state has amplitudes
 $\sqrt{\Lambda_{aa}}$; in the second, $\Lambda$ is the
-Schmidt-amplitude matrix. Neither convention removes the
-independent copy-phase obstruction.
+Schmidt-amplitude matrix. Both conventions yield normal RFP tensors.
 
 \subsection{Indices, exponents, and endpoints}
 
@@ -976,8 +991,7 @@ The entropy equality following SAL is
 The closing proof of Theorem~\ref{cpsv-thm:main-simple}
 cyclically interchanges conditions~(iii) and~(iv) in its
 proposition assignments; Proposition~\ref{cpsv-prop2to5}
-starts from condition~(ii). Correct labels do not repair the
-false implications above.
+starts from condition~(ii).
 
 Finally, source Example~\ref{cpsv-ExZCLnoSAL} requires
 \begin{align}
@@ -992,7 +1006,7 @@ The exception list for strict failure of SAL must include $p=1$:
 	S_N=0,\qquad I_L=4.
 	\label{eq:p1-exception}
 \end{align}
-Indeed, deterministic on-site unitary conjugation preserves the
+Deterministic on-site unitary conjugation preserves the
 Bell-pair ring entropies, with two maximally mixed boundary qubits
 at every proper connected cut. The non-SAL witness at $p=1/4$
 is unaffected.
