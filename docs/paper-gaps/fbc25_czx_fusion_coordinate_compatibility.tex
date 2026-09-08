@@ -19,10 +19,10 @@
 The definition of the fusion--action scalar in
 \papereqref{fbc25}{eq:defL} of
 Ref.~\cite[lines~1875--1913]{FrancoRubio2025MPUGauging} compares a right fusion cap with two successive right action tensors. The neutral action is trivial, with bond dimension one
-\cite[line~1937]{FrancoRubio2025MPUGauging}. For the CZX generator $g$, which exchanges the two GHZ blocks, the right boundary on the successive-action side is therefore $q_{1-x}\otimes q_x$, where $x\in\{0,1\}$ is the initial block. The source later gives the scalars $L^0_{g,g}=-1$ and $L^1_{g,g}=1$, as well as physical fusion identities with these signs
+\cite[line~1937]{FrancoRubio2025MPUGauging}. Write $q_x$ for the printed right action column on the GHZ block $x$, a vector in $\mathbb C^2$, and $p_x$ for the printed right action row. For the CZX generator $g$, which exchanges the two GHZ blocks, the right boundary on the successive-action side is therefore $q_{1-x}\otimes q_x$, where $x\in\{0,1\}$ is the initial block. The source later gives the scalars $L^0_{g,g}=-1$ and $L^1_{g,g}=1$, as well as physical fusion identities with these signs
 \cite[lines~4695--4699 and 4989--5067]{FrancoRubio2025MPUGauging}.
 
-The maintained cap/action coordinates specified here give successive-action proportionality coefficients $c_0=1$ and $c_1=-1$. This is a nonzero, positive-length obstruction to identifying the two calculations in those coordinates. It is not yet a proof that the source assertion is false: that conclusion requires a common interpretation of every oriented leg, density insertion, and fusion gauge. In particular, a finite contraction with well-defined indices need not be the contraction intended by an incompletely typed diagram.
+The maintained cap/action coordinates specified here give successive-action proportionality coefficients $c_0=1$ and $c_1=-1$, where $c_x$ is the scalar by which the fusion cap and the successive action columns differ after one supported product letter on block $x$. This is a nonzero, positive-length obstruction to identifying the two calculations in those coordinates. It is not yet a proof that the source assertion is false: that conclusion requires a common interpretation of every oriented leg, density insertion, and fusion gauge. In particular, a finite contraction with well-defined indices need not be the contraction intended by an incompletely typed diagram.
 
 \section{Fixed coordinates and oriented boundaries}
 
@@ -33,11 +33,12 @@ Write a physical index as $j=2a+b$, with $a,b\in\{0,1\}$, and use the computatio
 
 The blocked CZX tensor of \papereqref{fbc25}{eq:MPU_CZX} in
 Ref.~\cite[lines~4505--4547]{FrancoRubio2025MPUGauging}, including its two output $Z$ gates and unnormalized Hadamard weights, has coordinates
-\begin{align*}
+\begin{align}
     T^{2a+b,\,2c+d}_{\alpha\beta}
      & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\alpha,a}
     (-1)^{a+b+ab+b\beta}.
-\end{align*}
+    \label{eq:fbc25_czx_compat_blocked_tensor}
+\end{align}
 Here $\alpha$ is the left virtual index and $\beta$ the right virtual index. The printed action tensors and the right fusion cap in
 Ref.~\cite[lines~4671--4694]{FrancoRubio2025MPUGauging} are read as
 \begin{align}
@@ -52,15 +53,20 @@ The action columns use $|\pm\rangle=(|0\rangle\pm|1\rangle)/\sqrt2$. In particul
 (\ref{eq:fbc25_czx_compat_fusion_cap}) uses $Y_{\gamma\beta}$, not $Y_{\beta\gamma}$.
 
 Let $B_x$ be the supported letter of the product of the two symmetry tensors on block $x$. Its left and right product indices are $(\alpha,\gamma)$ and $(\beta,\delta)$, respectively:
-\begin{align*}
+\begin{align}
     (B_x)_{2\alpha+\gamma,\,2\beta+\delta}
-        & =\sum_{j=0}^3 T^{3x,j}_{\alpha\beta}T^{j,3x}_{\gamma\delta},                        \\
+        & =\sum_{j=0}^3 T^{3x,j}_{\alpha\beta}T^{j,3x}_{\gamma\delta},
+    \label{eq:fbc25_czx_compat_supported_letter}                                              \\
     P_x & =p_{1-x}\otimes p_x,
         & Q_x                                                          & =q_{1-x}\otimes q_x.
-\end{align*}
+    \label{eq:fbc25_czx_compat_action_products}
+\end{align}
 The scalar neutral action contributes the number $1$ on the fused side. Thus the candidate coordinate reading of the defining comparison is $B_xW=c_xB_xQ_x$, with the same order of virtual legs on both sides.
 
-Direct substitution gives
+Direct substitution of
+(\ref{eq:fbc25_czx_compat_blocked_tensor}) into
+(\ref{eq:fbc25_czx_compat_supported_letter}) and
+(\ref{eq:fbc25_czx_compat_action_products}) gives
 \begin{align}
     B_0 & =\begin{pmatrix}0&0&0&0\\-1&1&-1&1\\0&0&0&0\\0&0&0&0\end{pmatrix},
         & B_1                                                                & =\begin{pmatrix}0&0&0&0\\0&0&0&0\\-1&-1&1&1\\0&0&0&0\end{pmatrix},
@@ -84,19 +90,24 @@ Let $e_0,e_1,e_2,e_3$ denote the standard basis of the product virtual space. Mu
 \end{align}
 Consequently the coefficient is uniquely determined:
 \begin{align}
-    c_x  & :=P_xB_xW,
-         & c_0                & =1, & c_1 & =-1,
-    \label{eq:fbc25_czx_compat_coefficients}     \\
+    c_x  & :=P_xB_xW, \label{eq:fbc25_czx_compat_coefficients} \\
+    c_0  & =P_0(ie_1)=(-i)(i)=1, \notag      \\
+    c_1  & =P_1(-ie_2)=(-i)(-i)=-1, \notag   \\
     B_xW & =c_xB_xQ_x. \notag
 \end{align}
+The two substitutions pair the values of $B_0W$ and $B_1W$ in
+(\ref{eq:fbc25_czx_compat_normalization_idempotence}) with the second and third
+entries of $P_0$ and $P_1$ in
+(\ref{eq:fbc25_czx_compat_product_columns}).
 Indeed, applying $P_x$ to any proposed proportionality and using
 (\ref{eq:fbc25_czx_compat_normalization_idempotence}) recovers its coefficient. For every integer $n\geq1$, idempotence also gives
-\begin{align*}
+\begin{align}
     B_x^n & =B_x,
           & P_xB_x^nQ_x & =1,
           & B_x^nW      & =c_xB_x^nQ_x.
-\end{align*}
-The discrepancy therefore persists at every positive repetition of the supported letter. It does not arise from an empty product. The separate empty-word correction to the action pair neither explains nor removes
+    \label{eq:fbc25_czx_compat_positive_powers}
+\end{align}
+By (\ref{eq:fbc25_czx_compat_positive_powers}) the discrepancy therefore persists at every positive repetition of the supported letter. It does not arise from an empty product. The separate empty-word correction to the action pair neither explains nor removes
 (\ref{eq:fbc25_czx_compat_coefficients}).\footnote{See
     \path{docs/paper-gaps/fbc25_czx_action_empty_word.tex}. The coordinate statements are recorded in
     \leanid{MPOTensor.CZX.fusionActionCoefficient_coordinates},
@@ -109,17 +120,22 @@ The discrepancy therefore persists at every positive repetition of the supported
 
 For two blocked sites, number the four qubits $0,1,2,3$ from left to right. Read circuits from bottom to top and operator products from right to left. The unmodified physical operator printed in
 Ref.~\cite[lines~4989--5013]{FrancoRubio2025MPUGauging} is
-\begin{align*}
+\begin{align}
     \lambda & =-i(X_0X_1X_2Z_3) \mathrm{CZ}_{01}\mathrm{CZ}_{12}X_2.
-\end{align*}
+    \label{eq:fbc25_czx_compat_retained_operator}
+\end{align}
 The displayed defect evaluations are $g[0]=|00\rangle$ and $g[1]=-i|11\rangle$
 \cite[lines~4800--4859]{FrancoRubio2025MPUGauging}. Retain these evaluations and set $e[x]=|xx\rangle$. With the left defect first, define
-\begin{align*}
-    v_x & =g[1-x]\otimes g[x], & u_x            & =e[x]\otimes e[x],                  \\
+\begin{align}
+    v_x & =g[1-x]\otimes g[x], & u_x            & =e[x]\otimes e[x],
+    \label{eq:fbc25_czx_compat_defect_pairs}                                                   \\
     v_0 & =-i|1100\rangle,     & v_1            & =-i|0011\rangle,
         & u_0                  & =|0000\rangle, & u_1                & =|1111\rangle.
-\end{align*}
-The retained operator gives precisely the printed signs
+    \label{eq:fbc25_czx_compat_defect_values}
+\end{align}
+The retained operator of
+(\ref{eq:fbc25_czx_compat_retained_operator}) applied to the vectors of
+(\ref{eq:fbc25_czx_compat_defect_values}) gives precisely the printed signs
 \cite[lines~5014--5067]{FrancoRubio2025MPUGauging}:
 \begin{align}
     \lambda v_0 & =-u_0, & \lambda v_1 & =u_1.
@@ -176,9 +192,7 @@ These are opposite to the displayed defect coefficients. The convention used to 
 (\ref{eq:fbc25_czx_compat_filled_left})--(\ref{eq:fbc25_czx_compat_empty_right}).\footnote{See
     \path{docs/paper-gaps/fbc25_czx_defect_domains.tex}. The calculations
     (\ref{eq:fbc25_czx_compat_typed_fusion_sign}) and
-    (\ref{eq:fbc25_czx_compat_typed_defect_signs}) remain diagnostic calculations: no identification of either with the intended source diagram is asserted here.}
-% The two diagnostic calculations have separate temporary Lean proof witnesses;
-% neither has a public declaration.
+    (\ref{eq:fbc25_czx_compat_typed_defect_signs}) remain diagnostic calculations: neither carries a formal declaration, and no identification of either with the intended source diagram is asserted here.}
 
 \section{Verdict and elimination criterion}
 

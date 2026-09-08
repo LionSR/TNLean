@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.InvariantBasisNumber
 import TNLean.MPS.Defs
+import TNLean.Tactic.MatrixReciprocalSmul
 
 /-!
 # Rectangular reductions of matrix product state tensors
@@ -55,6 +56,21 @@ theorem smul (h : IsReduction B A V W) (c : ℂ) :
   refine ⟨h.mul_eq_one, fun w => ?_⟩
   simp only [Kraus.evalWord_smul, Matrix.mul_smul, Matrix.smul_mul, h.evalWord]
 
+/-- Reciprocal scalar rescaling: scaling `W` by a nonzero `β` and `V` by
+$\beta^{-1}$ again gives a rectangular reduction from `B` to `A`.
+
+Under the identification $F^<=V$, $F^>=W$ of the fusion tensors of a pair with
+the two matrices of a reduction, this is the scalar gauge freedom
+$F^>\mapsto\beta F^>$, $F^<\mapsto\beta^{-1}F^<$ of arXiv:2502.20257,
+`eq:scalar_fus_ten`, `main.tex` lines 1500--1504.  The statement is that a
+reciprocal rescaling of a reduction is again a reduction; that every reduction
+from `B` to `A` arises this way is a separate claim and is not asserted. -/
+theorem reciprocal_smul (h : IsReduction B A V W) {β : ℂ} (hβ : β ≠ 0) :
+    IsReduction B A (β⁻¹ • V) (β • W) := by
+  refine ⟨?_, fun w ↦ ?_⟩
+  · simp (disch := exact hβ) only [matrix_reciprocal_smul, h.mul_eq_one]
+  · simp (disch := exact hβ) only [matrix_reciprocal_smul, h.evalWord]
+
 /-- A reduction whose target is scaled by `c` intertwines an unscaled source
 word with `c` to the word length times the corresponding unscaled target word.
 
@@ -82,6 +98,32 @@ theorem iff_forall_evalWord :
   · intro h
     refine ⟨?_, h⟩
     simpa using h []
+
+/-- Three local identities already force a rectangular reduction: the caps
+multiply to one, every single letter compresses as $VB^iW=A^i$, and every
+ordered pair of letters absorbs the reinserted projection, $B^iWVB^j=B^iB^j$.
+The all-word intertwining equation then follows by induction on the word,
+peeling one letter and splitting the caps off the two factors. -/
+theorem of_local_compression (hVW : V * W = 1)
+    (hletter : ∀ i, V * B i * W = A i)
+    (hinsert : ∀ i j, B i * W * V * B j = B i * B j) :
+    IsReduction B A V W := by
+  refine ⟨hVW, fun w ↦ ?_⟩
+  induction w with
+  | nil => simp [hVW]
+  | cons i w ih =>
+      cases w with
+      | nil => simpa using hletter i
+      | cons j w =>
+          calc
+            V * Kraus.evalWord B (i :: j :: w) * W =
+                V * ((B i * W * V * B j) * Kraus.evalWord B w) * W := by
+              rw [Kraus.evalWord_cons, Kraus.evalWord_cons, hinsert i j]
+              simp [Matrix.mul_assoc]
+            _ = (V * B i * W) * (V * Kraus.evalWord B (j :: w) * W) := by
+              simp [Matrix.mul_assoc]
+            _ = A i * Kraus.evalWord A (j :: w) := by rw [hletter i, ih]
+            _ = Kraus.evalWord A (i :: j :: w) := rfl
 
 end IsReduction
 
