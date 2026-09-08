@@ -733,6 +733,32 @@ inverse-compatible decomposition is asserted.
         \leq\operatorname{rank}M_1=r$.
 \end{proof}
 
+\begin{theorem}[Both source-cut ranks equal the physical dimension]
+    \label{thm:mpug_inverse_source_ranks_physical}
+    \lean{MPOTensor.inverseCompatible_sourceRanks_eq_physical,
+        MPOTensor.inverseCompatiblePhysicalEquiv}
+    \leanok
+    \uses{def:mpu_right_rank, def:mpu_left_rank, def:mpu_simple,
+        def:mpu_canonical_form_ii, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of physical dimension $d$ and bond
+    dimension $D$ in canonical form II. Suppose that $T$ is unitary on
+    $\C^D$ and that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
+    for every $0\leq i,j<d$. Then $\ell=r=d$, and the resulting bijection
+    of $\{0,\ldots,\ell-1\}$ with $\{0,\ldots,d-1\}$ carries the raw
+    source-cut index to the physical index. Neither the phase relation
+    $T\overline T=\sigma I_D$, nor simplicity of $\mathcal U^\dagger$, nor
+    a further virtual gauge enters. This is the self-inverse case of
+    \cite[lines~1552--1563]{FrancoRubio2025MPUGauging}, in which the
+    general finite-group index argument of line~1547 is not needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_cut_rank_equality, ThmFund1}
+    Theorem~\ref{thm:mpug_inverse_cut_rank_equality} gives $r=\ell$ from
+    the adjoint gauge relation alone. Simplicity of a canonical-form-II
+    tensor is equivalent to $r\ell=d^2$ by Theorem~\ref{ThmFund1}.
+    Substituting $r=\ell$ gives $\ell^2=d^2$, hence $\ell=d$ and $r=d$.
+\end{proof}
+
 \begin{definition}[The weighted comparison matrix]
     \label{def:mpug_inverse_cut_comparison_k}
     \lean{MPOTensor.inverseCompatibleComparisonK}
@@ -1661,6 +1687,86 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     Apply Theorem~\ref{thm:mpug_inverse_new_gates_unitary_phase} with
     the canonical-form-II presentation at $g$.
 \end{proof}
+
+\begin{theorem}[Source properties at an involutive group element]
+    \label{thm:mpug_involutive_source_properties}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.inverseCompatibleSourceProperties_of_inv_eq}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
+        def:left_canonical_tensor, def:mpu_canonical_form_ii,
+        def:mpug_inverse_compatible_source_factors, def:mpu_source_weight,
+        thm:mpug_dagger_inverse_gauge, thm:mpug_dagger_inverse_scalar}
+    Let $G$ be a group and $\{\mathcal U_a\}_{a\in G}$ a representation by
+    simple injective MPUs whose normalized flattenings are all
+    left-canonical. Fix $g$ with $g^{-1}=g$, give $\mathcal U_g$ a
+    canonical-form-II presentation with recorded positive-definite matrix
+    $\rho$, and build the inverse-compatible source factors
+    $\widehat X_1,\widehat Y_1,\widehat X_2,\widehat Y_2$ from the chosen
+    gauge $T_g$ and scalar $\sigma_g$ of
+    Theorems~\ref{thm:mpug_dagger_inverse_gauge}
+    and~\ref{thm:mpug_dagger_inverse_scalar}. Write $r,\ell$ for the two
+    source-cut ranks of $\mathcal U_g$ and $D_g$ for its bond dimension.
+    Then all three pairs of source properties hold: for physical indices
+    $p,q$,
+    \begin{align}
+        \sum_{s=0}^{r-1}\sum_{\alpha=0}^{D_g-1}
+        \overline{(\widehat Y_1)_{s,(\alpha,p)}}
+        (\widehat Y_1)_{s,(\alpha,q)}
+         & =\delta_{p,q}, \\
+        \sum_{t=0}^{\ell-1}\sum_{\alpha,\beta=0}^{D_g-1}
+        \overline{(\widehat Y_2)_{t,(p,\alpha)}}
+        (\widehat Y_2)_{t,(q,\beta)}\rho_{\beta\alpha}
+         & =\delta_{p,q};
+    \end{align}
+    the two rank normalizations
+    \begin{align}
+        \widehat Y_1\widehat Y_1^\dagger & =\frac{d}{r}I_r,       \\
+        \widehat Y_2(I_d\otimes\rho)\widehat Y_2^\dagger
+                                         & =\frac{d}{\ell}I_\ell;
+    \end{align}
+    and, for physical indices $i,j$,
+    \begin{align}
+        \sum_{s=0}^{r-1}\sum_{\alpha,\beta=0}^{D_g-1}
+        (\widehat X_1)_{(i,\alpha),s}\rho_{\beta\alpha}
+        \overline{(\widehat X_1)_{(j,\beta),s}}
+         & =\frac{r}{d}\delta_{i,j},    \\
+        \sum_{t=0}^{\ell-1}\sum_{x=0}^{D_g-1}
+        (\widehat X_2)_{(x,i),t}\overline{(\widehat X_2)_{(x,j),t}}
+         & =\frac{\ell}{d}\delta_{i,j}.
+    \end{align}
+    Simplicity of $\mathcal U_g^\dagger$, which
+    \cite[line~5344]{FrancoRubio2025MPUGauging} assumes, is here a
+    consequence of the canonical-form-II presentation at $g$. No further
+    gauge or scalar is chosen, and the truncated-symmetry complement
+    identity is not asserted. These are the properties labelled
+    \emph{eq:MPUnice2}--\emph{eq:MPUnice4} in
+    \cite[lines~1064--1162]{FrancoRubio2025MPUGauging}, transported as at
+    lines~5486--5487.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_involutive_adjoint_gauge, thm:mpug_dagger_inverse_scalar,
+        thm:mpug_inverse_source_y_physical, thm:mpug_inverse_source_y_rank,
+        thm:mpug_inverse_source_x_physical, ThmFund1,
+        thm:mpu_physical_adjoint_source_ranks,
+        def:mpug_adjoint_canonical_boundaries}
+    The representation supplies simplicity of $\mathcal U_g$, and its
+    chosen gauge and scalar satisfy
+    $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$ and
+    $T_g\overline{T_g}=\sigma_gI_{D_g}$ by
+    Theorems~\ref{thm:mpug_involutive_adjoint_gauge}
+    and~\ref{thm:mpug_dagger_inverse_scalar}. For the adjoint premise,
+    Theorem~\ref{ThmFund1} turns simplicity of the canonical-form-II
+    tensor $\mathcal U_g$ into $r\ell=d^2$. The adjoint carries the
+    canonical boundaries of Definition~\ref{def:mpug_adjoint_canonical_boundaries},
+    and Theorem~\ref{thm:mpu_physical_adjoint_source_ranks} exchanges the
+    two source-cut ranks, so $\mathcal U_g^\dagger$ has rank product
+    $\ell r=d^2$ and Theorem~\ref{ThmFund1} makes it simple as well. The
+    three pairs are then
+    Theorems~\ref{thm:mpug_inverse_source_y_physical},
+    \ref{thm:mpug_inverse_source_y_rank},
+    and~\ref{thm:mpug_inverse_source_x_physical} at $\mathcal U_g,T_g$.
+\end{proof}
+
 \begin{theorem}[The adjoint gauge along a word]
     \label{thm:mpug_inverse_word_gauge}
     \lean{MPOTensor.evalWord_physicalAdjointTensor_eq_unitary_gauge}
@@ -3291,6 +3397,199 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
 \end{proof}
 
 
+
+\subsection{Periodic sewing of the two source arcs}
+
+The periodic chain carries two marked sites. Cutting the marked tensors by
+the two source cuts produces two open arcs that share both marked sites,
+and the shared rank indices sew them back to the periodic trace. The arcs
+have lengths $n+2$ and $m+2$ on a ring of $n+m+2$ sites; the second is not
+the disjoint complement of the first.
+
+\begin{definition}[The two sewn source arcs]
+    \label{def:mpug_source_periodic_arcs}
+    \lean{MPOTensor.sourcePeriodicArcA, MPOTensor.sourcePeriodicArcB}
+    \leanok
+    \uses{def:mpo_eval_word, def:mpu_right_rank, def:mpu_left_rank}
+    Let $\mathcal U$ be an MPO tensor of dimensions $d,D$, and let
+    $X_1,Y_1$ and $X_2,Y_2$ be any factorizations of its two source cuts
+    through $\C^r$ and $\C^\ell$. For $N\geq0$ and configurations
+    $p,q\in\Omega_N$, define matrices $A^{\mathrm{sew}}_N$ and
+    $B^{\mathrm{sew}}_N$ by
+    \begin{align}
+        (A^{\mathrm{sew}}_N)_{(s,(p,t)),(a,(q,b))}
+         & =\sum_{\alpha,\beta=0}^{D-1}(Y_2)_{s,(a,\alpha)}
+        \mathcal U[p,q]_{\alpha\beta}(Y_1)_{t,(\beta,b)},   \\
+        (B^{\mathrm{sew}}_N)_{(a,(p,b)),(t,(q,s))}
+         & =\sum_{\alpha,\beta=0}^{D-1}(X_1)_{(a,\alpha),t}
+        \mathcal U[p,q]_{\alpha\beta}(X_2)_{(\beta,b),s},
+    \end{align}
+    with $0\leq s<\ell$, $0\leq t<r$, and physical indices $a,b$. Both
+    words are read in their given order; neither is reversed, and the row
+    order $(\ell,r)$ of the first arc is the order in which its endpoints
+    are traversed. This is the local algebra of the sewing referred to in
+    \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}, using its source
+    decompositions at lines~5390--5432.
+\end{definition}
+
+\begin{theorem}[Sewing the periodic trace at two marked sites]
+    \label{thm:mpug_source_periodic_sewing}
+    \lean{MPOTensor.trace_two_marked_evalWord_eq_sourcePeriodic_sewing,
+        MPOTensor.mpo_two_marked_entry_eq_sourcePeriodic_sewing}
+    \leanok
+    \uses{def:mpug_source_periodic_arcs, def:mpo_eval_word, def:mpo_family,
+        def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    Let $\mathcal U$ be an MPO tensor with $M_1(\mathcal U)=X_1Y_1$ and
+    $M_2(\mathcal U)=X_2Y_2$. Fix bulk lengths $n,m$, marked physical
+    indices $a,a',b,b'$, and configurations $p,p'\in\Omega_n$,
+    $q,q'\in\Omega_m$. Then
+    \begin{align}
+        \tr\!\left(\mathcal U^{aa'}\mathcal U[p,p']
+        \mathcal U^{bb'}\mathcal U[q,q']\right)
+         & =\sum_{t=0}^{r-1}\sum_{s=0}^{\ell-1}
+        (B^{\mathrm{sew}}_n)_{(a,(p,b)),(t,(p',s))}
+        (A^{\mathrm{sew}}_m)_{(s,(q,t)),(b',(q',a'))}.
+        \label{eq:mpug_source_periodic_sewing}
+    \end{align}
+    The same sum is the entry of the periodic operator
+    $\mathcal U^{(n+m+2)}$ at the concatenated configurations
+    $(a,p,b,q)$ and $(a',p',b',q')$. The ring has $n+m+2$ sites, including
+    two distinct marked sites even when $n=m=0$, and the two
+    endpoint-inclusive arcs overlap at both marked sites. Only the two cut
+    factorizations are used: neither canonicality, simplicity,
+    normalization, unitarity, nor a phase relation is assumed, and the
+    phase-bearing operator identity of
+    \cite[lines~5486--5487]{FrancoRubio2025MPUGauging} is not asserted here.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_source_periodic_arcs, def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two, def:mpo_eval_word, def:mpo_family}
+    Write $P=\mathcal U[p,p']$ and $Q=\mathcal U[q,q']$, and define slices
+    \begin{align}
+        C_{t\alpha}  & =(X_1)_{(a,\alpha),t},  \\
+        H_{\delta t} & =(Y_1)_{t,(\delta,a')}, \\
+        E_{\beta s}  & =(X_2)_{(\beta,b),s},   \\
+        F_{s\gamma}  & =(Y_2)_{s,(b',\gamma)}.
+    \end{align}
+    Reading the two cut factorizations entrywise gives
+    $\mathcal U^{aa'}=HC$ and $\mathcal U^{bb'}=EF$. Cyclicity of the
+    trace and associativity then give
+    \begin{align}
+        \tr\!\left(HCPEFQ\right)
+         & =\tr\!\left((CPE)(FQH)\right).
+    \end{align}
+    The entries of the two products are
+    $(CPE)_{ts}=(B^{\mathrm{sew}}_n)_{(a,(p,b)),(t,(p',s))}$ and
+    $(FQH)_{st}=(A^{\mathrm{sew}}_m)_{(s,(q,t)),(b',(q',a'))}$, so
+    expanding the trace of the product as a double sum over $t$ and $s$
+    gives~(\ref{eq:mpug_source_periodic_sewing}). For the operator entry,
+    expand word evaluation along the concatenation
+    $(a,p,b,q)$: splitting off the two marked letters and the two bulk
+    words returns the same trace.
+\end{proof}
+
+\begin{definition}[Grouped periodic coordinates and the complementary arc]
+    \label{def:mpug_inverse_periodic_grouping}
+    \lean{MPOTensor.sourcePeriodicGroupedConfig,
+        MPOTensor.inverseCompatibleGroupedMPO,
+        MPOTensor.inverseCompatibleFirstArcEmbedding,
+        MPOTensor.inverseCompatibleComplementaryArc}
+    \leanok
+    \uses{def:mpo_family, def:mpug_inverse_word_endpoints}
+    Fix bulk lengths $n,m$ and group a periodic configuration as
+    $((a,p,b),q)$ with $p\in\Omega_n$ and $q\in\Omega_m$, placed on the
+    ring in the order $(a,p,b,q)$. Let $M_{n,m}$ be the periodic operator
+    $\mathcal U^{(n+m+2)}$ pulled back along this grouping in both its row
+    and its column index. With $A_N,B_N$ the endpoint matrices of
+    Definition~\ref{def:mpug_inverse_word_endpoints}, put
+    \begin{align}
+        \widehat A_{n,m} & =A_n\otimes I_{\Omega_m},
+    \end{align}
+    which acts as the first endpoint operator on $(a,p,b)$ and as the
+    identity on the second bulk. Define the complementary arc
+    $C_{n,m}$ independently by
+    \begin{align}
+        (C_{n,m})_{((l,(p,s)),q),((a',(p',b')),q')}
+         & =\delta_{p,p'}(A_m)_{(s,(q,l)),(b',(q',a'))}.
+    \end{align}
+    It retains the first bulk unchanged and traverses the other arc from
+    the second marked site back to the first, with rank order $(s,q,l)$.
+    These are the shared-boundary coordinates of the sewing referred to in
+    \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}; no interval
+    hierarchy, spatial reflection, or identification of rank with physical
+    coordinates is introduced.
+\end{definition}
+
+\begin{theorem}[Factorization of the grouped periodic operator]
+    \label{thm:mpug_inverse_periodic_factorization}
+    \lean{MPOTensor.inverseCompatibleGroupedMPO_eq_wordB_mul_complementaryArc}
+    \leanok
+    \uses{def:mpug_inverse_periodic_grouping, def:mpug_inverse_word_endpoints,
+        def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPO tensor of dimensions $d,D$ and $T$ a
+    unitary virtual matrix with
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair. For all bulk lengths $n,m$,
+    \begin{align}
+        M_{n,m} & =\left(B_n\otimes I_{\Omega_m}\right)C_{n,m}.
+        \label{eq:mpug_inverse_periodic_factorization}
+    \end{align}
+    Neither simplicity, canonical form, nor a phase relation is used; the
+    complementary arc is the independently defined $C_{n,m}$, not a
+    rearrangement of $M_{n,m}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_source_periodic_sewing, def:mpug_inverse_periodic_grouping,
+        def:mpug_inverse_word_endpoints, def:mpug_inverse_cut_factors,
+        thm:mpug_inverse_cut_factorization, thm:mpu_source_factorizations}
+    Apply Theorem~\ref{thm:mpug_source_periodic_sewing} to the
+    factorization $M_1=\widehat X_1\widehat Y_1$ of
+    Theorem~\ref{thm:mpug_inverse_cut_factorization} and the factorization
+    $M_2=X_2Y_2$ of Theorem~\ref{thm:mpu_source_factorizations}. The two
+    sewn arcs of Definition~\ref{def:mpug_source_periodic_arcs} built from
+    these factors are exactly $B_n$ and $A_m$. On the right-hand side of
+    (\ref{eq:mpug_inverse_periodic_factorization}) the identity factor
+    contributes $\delta_{q,q'}$ on the second bulk and the Kronecker
+    delta of $C_{n,m}$ contributes $\delta_{p,p'}$, so the matrix product
+    collapses to the double sum of
+    (\ref{eq:mpug_source_periodic_sewing}) at the grouped configurations.
+\end{proof}
+
+\begin{theorem}[One phase in the periodic composition]
+    \label{thm:mpug_inverse_periodic_one_phase}
+    \lean{MPOTensor.inverseCompatibleFirstArcEmbedding_mul_groupedMPO}
+    \leanok
+    \uses{def:mpug_inverse_periodic_grouping, def:mpu_canonical_form_ii,
+        def:mpu_simple, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical form
+    II. Suppose that $T$ is unitary, that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair, and that $T\overline T=\sigma I_D$ for $\sigma\in\C$.
+    For all bulk lengths $n,m$,
+    \begin{align}
+        \widehat A_{n,m}M_{n,m} & =\sigma C_{n,m}.
+    \end{align}
+    Exactly one phase occurs, independently of $n$ and $m$. The two
+    endpoint-inclusive arcs share both marked sites, so this is a
+    shared-boundary composition and not the disjoint-complement identity
+    of \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_periodic_factorization,
+        thm:mpug_inverse_word_phase_cancellation,
+        def:mpug_inverse_periodic_grouping}
+    Substituting (\ref{eq:mpug_inverse_periodic_factorization}) and
+    using $(A_n\otimes I_{\Omega_m})(B_n\otimes I_{\Omega_m})
+        =(A_nB_n)\otimes I_{\Omega_m}$ gives
+    \begin{align}
+        \widehat A_{n,m}M_{n,m}
+         & =\left((A_nB_n)\otimes I_{\Omega_m}\right)C_{n,m}.
+    \end{align}
+    Theorem~\ref{thm:mpug_inverse_word_phase_cancellation} gives
+    $A_nB_n=\sigma I$ on the raw source space, and the scalar passes
+    through the Kronecker product. The cancellation used is the one on
+    the source space, not the reverse product $B_nA_n$.
+\end{proof}
 
 \subsection{Physical closures of the source factors}
 

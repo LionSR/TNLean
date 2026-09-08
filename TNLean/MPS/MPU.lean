@@ -24,10 +24,13 @@ import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.InverseCompatibleComparisonUnitarity
 import TNLean.MPS.MPU.InverseCompatibleCutComparison
+import TNLean.MPS.MPU.InverseCompatibleFamilyProperties
 import TNLean.MPS.MPU.InverseCompatibleFirstCut
 import TNLean.MPS.MPU.InverseCompatibleGateIdentity
 import TNLean.MPS.MPU.InverseCompatibleGates
 import TNLean.MPS.MPU.InverseCompatibleMovement
+import TNLean.MPS.MPU.InverseCompatiblePeriodicComposition
+import TNLean.MPS.MPU.InverseCompatiblePhysicalRanks
 import TNLean.MPS.MPU.InverseCompatibleSourceFactors
 import TNLean.MPS.MPU.InverseCompatibleSourceProperties
 import TNLean.MPS.MPU.InverseCompatibleSourceTransport
@@ -53,6 +56,7 @@ import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.SourceFactors
 import TNLean.MPS.MPU.SourceFactorsTensorProduct
 import TNLean.MPS.MPU.SourceIndexValue
+import TNLean.MPS.MPU.SourcePeriodicSewing
 import TNLean.MPS.MPU.SourceUCompleteNetwork
 import TNLean.MPS.MPU.SourceURetainedInterior
 import TNLean.MPS.MPU.SourceUV
