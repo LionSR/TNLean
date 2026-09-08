@@ -10,7 +10,8 @@ import TNLean.MPS.MPU.DaggerInverseGauge
 # The first algebraic inverse-compatible cut construction
 
 Let $U$ be a tensor and $T$ a unitary virtual gauge with
-$U^\dagger_{ij}=T^\dagger U_{ij}T$. Put $A=I_d\otimes\overline T$ and
+$U^\sharp_{ij}=T^\dagger U_{ij}T$, where $\sharp$ denotes physical adjunction
+and $\dagger$ the ordinary Hermitian adjoint. Put $A=I_d\otimes\overline T$ and
 $B=T^T\otimes I_d$. The source cuts then satisfy
 $\mathcal M_1(U)=A\mathcal M_2(U)^\dagger B$. Consequently the second source
 factors give $X=AY_2^\dagger$ and $Y=X_2^\dagger B$, with explicit left and right inverses.
