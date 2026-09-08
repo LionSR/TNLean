@@ -1,9 +1,9 @@
 % Build from the repository root with: bash scripts/build_cpsv17_corrections.sh
-\documentclass[aps,pra,reprint,nofootinbib]{revtex4-2}
+\documentclass[aps,pra,reprint,nofootinbib,onecolumn]{revtex4-2}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsthm,bm,dsfont,graphicx,booktabs,microtype}
 \usepackage{xr-hyper}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
 \usepackage{cleveref}
 \crefname{equation}{Eq.}{Eqs.}
 \IfFileExists{../../build/paper-aux/1606.00608/MPDO-22-12-17-2-note.aux}{%
@@ -20,6 +20,9 @@
 \newcommand{\ketbra}[2]{\lvert#1\rangle\langle#2\rvert}
 \newcommand{\mc}[1]{\mathcal{#1}}
 \newcommand{\diag}{\operatorname{diag}}
+% revtex4-2 fails to patch current releases of the array package, so ragged
+% paragraph columns are started cell by cell rather than in a column preamble.
+\newcommand{\raggedcell}{\raggedright\let\\\tabularnewline}
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}
 \setcounter{secnumdepth}{3}
@@ -28,94 +31,191 @@
 \begin{document}
 \title{Corrections to matrix product density operator fixed-point statements}
 \begin{abstract}
-	A simple matrix product density operator tensor in block-injective
-	canonical form can have literal zero correlation length and exact
-	finite-ring saturation of the area law without admitting the blocking
-	channels asserted in Proposition~\ref{cpsv-prop2to5} of
-	Cirac--P\'erez-Garc\'ia--Schuch--Verstraete.
-	We give an explicit example satisfying the global canonical-weight
-	normalization. A Hermitian boundary closure increases in trace norm
-	from two sites to either three or four sites, excluding the required
-	refinement channels and the implied two-site-blocked fixed point.
-	We also give compact counterexamples involving canonical copy weights,
-	peripheral phases, and finite-periodic entropy. These are separated from
-	local corrections and from conclusions that remain valid, including
-	the pure renormalization-flow limit characterization and active-sector
-	matching in the fundamental theorem.
+	We examine several fixed-point, convergence, and entropy statements in
+	Cirac--\allowbreak P\'erez-Garc\'ia--\allowbreak Schuch--\allowbreak Verstraete.
+	The counterexamples concern the simple-MPDO implication chain in
+	Theorem~\ref{cpsv-thm:main-simple}, the pure-state zero-correlation-length
+	equivalences, convergence of canonical-form renormalization flows,
+	the thermodynamic limit in Proposition~\ref{cpsv-PropILILp1}, and the
+	finite-ring saturation claim in Example~\ref{cpsv-ExSALnoZCL}.
+	For the map from two to three sites asserted in Proposition~\ref{cpsv-prop2to5},
+	an explicit tensor satisfies all standing hypotheses but has
+	$\|K_2(Y)\|_1=337/250<27/20=\|K_3(Y)\|_1=\|K_4(Y)\|_1$,
+	excluding any such trace-preserving completely positive map by trace-norm contraction.
+	We distinguish these counterexamples from a proof completion for the
+	fundamental theorem and from local corrections. The pure
+	limit/fixed-point characterization itself remains valid.
 \end{abstract}
 \maketitle
 
 \section{Scope and conventions}\label{sec:scope}
 
-Proposition~\ref{cpsv-prop2to5} of
-Ref.~\cite{Cirac2017MPDO_AnnPhys} is false under all its printed standing
-hypotheses. The example below also disproves the implication from
-condition~(ii) to condition~(v) in the displayed chain of
-Theorem~\ref{cpsv-thm:main-simple}.
-Source references use the numbering of arXiv:1606.00608v4;
+The statements examined in Ref.~\cite{Cirac2017MPDO_AnnPhys} concern
+three distinct questions: fixed-point characterizations, existence of
+limits, and exact finite-ring entropy identities.
+Table~\ref{tab:source-map} identifies each source claim and its treatment
+here. The first counterexample concerns Proposition~\ref{cpsv-prop2to5}
+and Theorem~\ref{cpsv-thm:main-simple}; the later counterexamples do not
+depend on that example. Section~\ref{sec:matching} instead completes a
+proof without changing its intended conclusion, and
+Sec.~\ref{sec:local} collects local corrections.
+Source references use arXiv:1606.00608v4 numbering;
 unqualified equation references are local.
 
-For an MPDO tensor $K$, with physical dimension $d$ and bond dimension
-$D$, define its boundary closure by
+\begin{table*}[t]
+	\caption{Source statements and their treatment. Each claim is read with
+		its hypotheses in Ref.~\cite{Cirac2017MPDO_AnnPhys}; only the conclusion
+		at issue is abbreviated here. CF denotes canonical form, RFP a
+		renormalization fixed point, ZCL zero correlation length, and SAL
+		saturation of the area law. The notation $K^{[2]}$ means two-site
+		blocking, $\mc E$ denotes the pure-state transfer map, and
+		$I_L^{(N)}$ is the mutual information of an $L$-site block in an
+		$N$-site ring; $\sim$ denotes similarity.}
+	\label{tab:source-map}
+	\begin{tabular}{@{}p{0.27\textwidth}p{0.46\textwidth}p{0.20\textwidth}@{}}
+		\toprule
+		Original statement & Claim at issue                                                                                            & Treatment here \\
+		\midrule
+		\raggedcell Proposition~\ref{cpsv-prop2to5}; Theorem~\ref{cpsv-thm:main-simple}(ii)$\Rightarrow$(v)
+		                   & \raggedcell Maps from two to three sites; $\mathrm{SAL}+\mathrm{ZCL}\Rightarrow K^{[2]}\text{ is an RFP}$
+		                   & \raggedcell Counterexample, Sec.~\ref{sec:blocking}                                                                        \\[0.4em]
+		\raggedcell Theorem~\ref{cpsv-thm:main-simple}(iv)$\Rightarrow$(v)
+		                   & \raggedcell Structure of normal representatives $\Rightarrow K^{[2]}\text{ is an RFP}$
+		                   & \raggedcell Copy-weight counterexample, Sec.~\ref{sec:weights-phases}                                                      \\[0.4em]
+		\raggedcell Theorems~\ref{cpsv-TheoremZCLPure} and~\ref{cpsv-thm:main-MPS}
+		                   & \raggedcell Pure ZCL $\Leftrightarrow\mc E^2=\mc E\Leftrightarrow\mathrm{RFP}$
+		                   & \raggedcell Weight and adjacency obstructions, Secs.~\ref{sec:weights-phases} and~\ref{sec:local}                          \\[0.4em]
+		\raggedcell Convergence assertion after Theorem~\ref{cpsv-thm:renormalization-flow} and in Appendix~B
+		                   & \raggedcell $\mc E^{2^n}$ converges for every CF initial tensor
+		                   & \raggedcell Phase-cycle counterexample, Sec.~\ref{sec:weights-phases}                                                      \\[0.4em]
+		\raggedcell Appendix~D, after Eq.~\eqref{cpsv-RFP-gauge}
+		                   & \raggedcell $\mc E^2\sim\mc E\Rightarrow\mc E^2=\mc E$
+		                   & \raggedcell Gauge-blocking counterexample, Sec.~\ref{sec:weights-phases}                                                   \\[0.4em]
+		\raggedcell Proposition~\ref{cpsv-PropILILp1}
+		                   & \raggedcell $\lim_{N\to\infty}I_L^{(N)}$ exists at fixed $L$
+		                   & \raggedcell Parity counterexample, Sec.~\ref{sec:entropy}                                                                  \\[0.4em]
+		\raggedcell Example~\ref{cpsv-ExSALnoZCL}
+		                   & \raggedcell The displayed finite-periodic family has SAL: $I_2^{(4)}=I_1^{(4)}$
+		                   & \raggedcell Strict entropy defect, Sec.~\ref{sec:entropy}                                                                  \\[0.4em]
+		\raggedcell Theorem~\ref{cpsv-thm1}; Corollary~\ref{cpsv-II_cor2}
+		                   & \raggedcell Sector matching and equal-MPV weight recovery
+		                   & \raggedcell Proof completion, not refutation, Sec.~\ref{sec:matching}                                                      \\
+		\bottomrule
+	\end{tabular}
+\end{table*}
+
+For an MPDO tensor $K$ with physical dimension $d$, bond dimension
+$D$, and boundary matrix $X\in M_D(\mathbb C)$, define
 \begin{align}
 	K_N(X)
 	                & =\sum_{\boldsymbol i,\boldsymbol j}
 	\tr\!\left(XK^{i_1j_1}\cdots K^{i_Nj_N}\right)
 	\ket{\boldsymbol i}\bra{\boldsymbol j},
 	\label{eq:closure}                                    \\
-	\sigma^{(N)}(K) & =K_N(\Id_D).
-	\nonumber
+	\sigma^{(N)}(K) & =K_N(\Id_D).\nonumber
 \end{align}
-Here $X$ is any complex $D\times D$ matrix. Two different transfer
-objects must be distinguished:
-\begin{align*}
-	B_K        & =\sum_iK^{ii},                      &
-	\mc E_K(H) & =\sum_{i,j}K^{ij}H(K^{ij})^\dagger.
-\end{align*}
-Mixed-state zero correlation length (ZCL) is the literal identity
-$B_K^2=B_K$. A renormalization fixed point (RFP) requires
-trace-preserving completely positive maps $\mc T,\mc S$ with
-$\mc T[K_1(X)]=K_2(X)$ and $\mc S[K_2(X)]=K_1(X)$ for every $X$.
+Here $M_D(\mathbb C)$ denotes the $D\times D$ matrices. The tensor
+$K$ generates translationally invariant operators $\sigma^{(N)}(K)\geq0$.
+Mixed-state zero correlation length (ZCL) uses the first of two distinct
+transfer objects:
+\begin{align}
+	B_K                    & =\sum_iK^{ii},\qquad
+	\mc E_K(H)=\sum_{i,j}K^{ij}H(K^{ij})^\dagger,
+	\label{eq:transfer-objects}                   \\
+	K\text{ has mixed ZCL} & \iff B_K^2=B_K.
+	\label{eq:mixed-zcl-def}
+\end{align}
+A renormalization fixed point (RFP) requires trace-preserving
+completely positive maps (tpCPMs):
+\begin{align}
+	\exists\,\mc T,\mc S\text{ tpCPM}:\quad
+	\begin{cases}
+		\mc T[K_1(X)]=K_2(X), \\
+		\mc S[K_2(X)]=K_1(X)
+	\end{cases}
+	\quad\forall X\in M_D(\mathbb C).
+	\label{eq:rfp-def}
+\end{align}
 
-We use the source definitions of canonical form (CF), normal tensors,
-a basis of normal tensors (BNT), and block-injective canonical form (biCF).
-Normal representatives are irreducible and have completely positive
-transfer maps of spectral radius one, with no other peripheral
-eigenvalue. In biCF their one-site tuples span the direct sum of the
-representatives' full matrix algebras.
-Canonical weights obey $|\mu_{j,q}|\leq1$, with at least one
-unit-modulus weight globally, not necessarily in every sector.
-Simplicity means that no BNT representative has nilpotent
-physical-trace matrix.
+We use the canonical form (CF), normal tensors, and basis
+of normal tensors (BNT) as defined in Ref.~\cite{Cirac2017MPDO_AnnPhys}.
+For normal representatives $\mc K_a$, the relevant conditions are
+\begin{align}
+	 & \{\mc K_a^{ij}\}_{i,j}\text{ irreducible},\qquad
+	r(\mc E_{\mc K_a})=1,\nonumber                                       \\
+	 & \operatorname{spec}(\mc E_{\mc K_a})\cap\{|z|=1\}=\{1\},\nonumber \\
+	 & \text{biCF}:\quad
+	\operatorname{span}_{i,j}\{\oplus_a\mc K_a^{ij}\}
+	=\oplus_a M_{D_a}(\mathbb C),\nonumber                               \\
+	 & 0<|\mu_{a,q}|\leq1,\qquad \max_{a,q}|\mu_{a,q}|=1,\nonumber       \\
+	 & \text{simple}:\quad
+	B_{\mc K_a}=\sum_i\mc K_a^{ii}\text{ is not nilpotent}
+	\quad\forall a.
+	\label{eq:canonical-conditions}
+\end{align}
+Here $r$ is the spectral radius, biCF means block-injective
+canonical form, and $\mu_{a,q}$ are the canonical copy weights.
+Only active weights are retained. The unit-modulus weight is
+required globally, not in each sector.
 
-Entropies concern normalized periodic operators and use base-two
-logarithms. For a connected block of $L$ sites, write
-\[
+Entropies use base-two logarithms and the normalized periodic state:
+\begin{align}
+	\widehat\sigma^{(N)}=\frac{\sigma^{(N)}}{\tr\sigma^{(N)}},
+	\qquad
 	I_L^{(N)}=S_L^{(N)}+S_{N-L}^{(N)}-S_N^{(N)}.
-\]
-Saturation of the area law (SAL) means equality of these mutual
-informations up to half the ring. Normalization for entropy calculations
-does not rescale the tensor in a channel identity.
+	\label{eq:entropy-sal-def}
+\end{align}
+Here $S_L^{(N)}$ is the entropy of a connected $L$-site block.
+Saturation of the area law (SAL) means
+$I_L^{(N)}=I_1^{(N)}$ for $1\leq L\leq\lfloor N/2\rfloor$.
+Entropy normalization does not rescale $K$ in a channel identity.
 
-\section{Saturation and zero correlation length do not imply the stated blocking channel}\label{sec:blocking}
+\section{Local maps for simple tensors with saturation and zero correlation length}\label{sec:blocking}
+
+In Appendix~C.2 of Ref.~\cite{Cirac2017MPDO_AnnPhys}, the standing setup
+considers a simple tensor $K$ in block-injective canonical form (biCF) that
+satisfies saturation of the area law (SAL) and zero correlation length (ZCL).
+Under these assumptions, Proposition~\ref{cpsv-prop2to5} asserts that there
+exist two trace-preserving completely positive maps (tpCPMs) $\mc T$ and $\mc S$
+acting on the physical indices,
+\begin{align}
+	\mc T & : M_{d^2}(\mathbb C) \to M_{d^3}(\mathbb C), \nonumber \\
+	\mc S & : M_{d^3}(\mathbb C) \to M_{d^2}(\mathbb C),
+	\label{eq:TS-domains}
+\end{align}
+such that for every boundary matrix $X\in M_D(\mathbb C)$,
+\begin{align}
+	\mc T[K_2(X)] = K_3(X), \qquad \mc S[K_3(X)] = K_2(X).
+	\label{eq:C15-statement}
+\end{align}
+This is the identity represented in diagram~\eqref{cpsv-3to5tcpm}.
+Theorem~\ref{cpsv-thm:main-simple} then defines $M$ as the two-site block
+of $K$ [Eq.~\eqref{cpsv-K=MM}] and concludes that $M$ is a renormalization
+fixed point (RFP) via the implication chain (ii)~$\Rightarrow$~(v).
+By Definition~\ref{cpsv-RFPMixedTS}, an RFP map for $M$ would require a
+tpCPM mapping $M_1(X) = K_2(X)$ to $M_2(X) = K_4(X)$ for all
+$X\in M_D(\mathbb C)$.
+
+The following construction satisfies all standing hypotheses of
+Appendix~C.2, but directly tests and excludes these maps.
 
 \subsection{The four-letter tensor}
 
-Let $i=0,1,2,3$, and set
-\begin{align*}
-	t   & =(1,2,-7,4)^{\mathsf T},                  &
-	s   & =(-3,-1,1,3)^{\mathsf T},                   \\
-	l_i & =\begin{pmatrix}1\\t_i\end{pmatrix},      &
-	r_i & =\begin{pmatrix}1/4&s_i/100\end{pmatrix}.
-\end{align*}
-Define a diagonal physical tensor $F$ by $F^{ii}=F_i=l_ir_i$,
-with all off-diagonal physical slices zero. Its physical dimension
-is four and its bond dimension is two. Let $L$ have columns $l_i$
-and $R$ have rows $r_i$. The identities $\sum_i t_i=\sum_i s_i=\sum_i s_it_i=0$ give
+For $i=0,1,2,3$, set
 \begin{align}
-	LR & =P=\diag(1,0), \label{eq:LR} \\
-	T:=RL
-	   & =\frac1{100}
+	t      & =(1,2,-7,4)^{\mathsf T},\qquad
+	s=(-3,-1,1,3)^{\mathsf T},\nonumber                   \\
+	l_i    & =\begin{pmatrix}1\\ t_i\end{pmatrix},\qquad
+	r_i=\begin{pmatrix}1/4&s_i/100\end{pmatrix},\nonumber \\
+	F^{ii} & =F_i=l_ir_i,\qquad F^{ij}=0\quad(i\ne j).
+	\label{eq:slices}
+\end{align}
+Thus $d_F=4$ and $D_F=2$. With $L=(l_0,\ldots,l_3)$ and
+$R$ having rows $r_i$,
+\begin{align}
+	\sum_it_i=\sum_is_i=\sum_is_it_i & =0,\qquad
+	LR=P=\diag(1,0),\label{eq:LR}                   \\
+	T:=RL                            & =\frac1{100}
 	\begin{pmatrix}
 		22 & 19 & 46 & 13 \\
 		24 & 23 & 32 & 21 \\
@@ -124,648 +224,778 @@ and $R$ have rows $r_i$. The identities $\sum_i t_i=\sum_i s_i=\sum_i s_it_i=0$ 
 	\end{pmatrix}.
 	\label{eq:T}
 \end{align}
-In particular, $T_{ij}=1/4+s_it_j/100$ is strictly positive,
-and every row and column sums to one.
-
-Let $\boldsymbol1=(1,1,1,1)^{\mathsf T}$. Put
-$Q=\boldsymbol1\boldsymbol1^{\mathsf T}/4$ and
-$N_0=st^{\mathsf T}/100$. The three scalar sums above imply
-\[
-	Q^2=Q,\qquad QN_0=N_0Q=N_0^2=0.
-\]
-Since $T=Q+N_0$, we have the exact identities
+In particular,
 \begin{align}
+	T_{ij}        & =\frac14+\frac{s_it_j}{100}>0,\qquad
+	\boldsymbol1=(1,1,1,1)^{\mathsf T},\nonumber         \\
+	T\boldsymbol1 & =\boldsymbol1,\qquad
+	\boldsymbol1^{\mathsf T}T=\boldsymbol1^{\mathsf T}.
+	\label{eq:T-stochastic}
+\end{align}
+Writing $Q=\boldsymbol1\boldsymbol1^{\mathsf T}/4$ and
+$N_0=st^{\mathsf T}/100$ gives
+\begin{align}
+	T   & =Q+N_0,\quad Q^2=Q,\quad QN_0=N_0Q=N_0^2=0,\nonumber \\
 	T^2 & =Q,\qquad T^m=Q\quad(m\geq2).
 	\label{eq:Tpowers}
 \end{align}
-Rank-one multiplication also gives
+Rank-one multiplication yields
 \begin{align}
 	F_{i_1}\cdots F_{i_N}
-	 & =l_{i_1}\left(\prod_{a=1}^{N-1}T_{i_ai_{a+1}}\right)r_{i_N}.
-	\label{eq:rankone}
+	 & =l_{i_1}\left(\prod_{a=1}^{N-1}T_{i_ai_{a+1}}\right)r_{i_N},
+	\label{eq:rankone}                                              \\
+	\tr(F_{i_1}\cdots F_{i_N})
+	 & =\prod_{a=1}^NT_{i_ai_{a+1}}>0,\qquad i_{N+1}=i_1.\nonumber
 \end{align}
-Its trace is $\prod_{a=1}^{N}T_{i_ai_{a+1}}$, with
-$i_{N+1}=i_1$. Thus every periodic operator is positive and
-$\tr\sigma^{(N)}(F)=\tr T^N=1$, since $\tr T=\tr Q=1$.
-Moreover $B_F=LR=P$, so $B_F^2=B_F$.
-Neither positivity nor literal ZCL requires a rescaling.
+Consequently, without rescaling,
+\begin{align}
+	\sigma^{(N)}(F)\geq0,\qquad
+	\tr\sigma^{(N)}(F) & =\tr T^N=1\quad(N\geq1),\nonumber \\
+	B_F=LR             & =P=P^2.
+	\label{eq:F-state}
+\end{align}
 
 \subsection{Exact finite-ring SAL}
 
-The normalized periodic distribution is
-$p_N(i_1,\ldots,i_N)=\prod_aT_{i_ai_{a+1}}$.
-For every proper connected block, summing over the complementary
-path gives
+The periodic distribution and its proper connected marginals are
 \begin{align}
+	p_N(i_1,\ldots,i_N) & =\prod_{a=1}^NT_{i_ai_{a+1}},\nonumber       \\
 	p_{N,L}(i_1,\ldots,i_L)
-	 & =\left(\prod_{a=1}^{L-1}T_{i_ai_{a+1}}\right)
-	    (T^{N-L+1})_{i_Li_1}\nonumber \\
-	 & =\frac14\prod_{a=1}^{L-1}T_{i_ai_{a+1}},
+	                    & =\left(\prod_{a=1}^{L-1}T_{i_ai_{a+1}}\right)
+	                       (T^{N-L+1})_{i_Li_1}\nonumber \\
+	                    & =\frac14\prod_{a=1}^{L-1}T_{i_ai_{a+1}},
 	\qquad 1\leq L<N.
 	\label{eq:marginal}
 \end{align}
-The complementary exponent is at least two, so
-\cref{eq:Tpowers} applies even when only one site is traced out.
-
-Define the mean row entropy
-\[
+The complementary exponent $N-L+1\geq2$ makes
+\cref{eq:Tpowers} applicable even when one site is traced out.
+Define
+\begin{align}
 	h=-\frac14\sum_{i,j}T_{ij}\log_2T_{ij}.
-\]
-The marginal in \cref{eq:marginal} has a uniform initial letter
-and internal edge probabilities $T_{ij}/4$. Therefore
-\begin{align*}
-	S_L^{(N)}
-	 & =-\mathbb E\!\left[-2+\sum_{a=1}^{L-1}\log_2T_{i_ai_{a+1}}\right] \\
-	 & =2+(L-1)h.
-\end{align*}
-For $N\geq3$, each edge of the full ring also has distribution
-$T_{ij}(T^{N-1})_{ji}=T_{ij}/4$. Hence
-\begin{align*}
-	S_N^{(N)} & =Nh,                    \\
-	I_L^{(N)}
-	          & =2+(L-1)h+2+(N-L-1)h-Nh \\
-	          & =4-2h.
-\end{align*}
-This proves exact finite-ring SAL. At $N=2$ there is only one
-nonempty cut size and thus no additional equality to check.
+	\label{eq:h-entropy}
+\end{align}
+The initial letter is uniform and every internal edge has
+probability $T_{ij}/4$, so
+\begin{align}
+	S_L^{(N)} & =2+(L-1)h\qquad(1\leq L<N),\nonumber                  \\
+	p_N(i_a=i,i_{a+1}=j)
+	          & =T_{ij}(T^{N-1})_{ji}=T_{ij}/4\quad(N\geq3),\nonumber \\
+	S_N^{(N)} & =Nh\qquad(N\geq3),\nonumber                           \\
+	I_L^{(N)} & =4-2h\qquad(N\geq3,\ 1\leq L<N).
+	\label{eq:SL-IL}
+\end{align}
+This proves finite-ring SAL; at $N=2$ there is only one
+nonempty cut size.
 
 \subsection{Normal form and the global canonical weight}
 
-To meet the standing canonical normalization, the four-letter
-tensor must be placed inside a slightly larger tensor rather than
-rescaled arbitrarily. First, its slices span $M_2(\mathbb C)$.
-Their coordinate rows, in the order
-$(11,12,21,22)$, are
-$(1/4,s_i/100,t_i/4,s_it_i/100)$.
-The determinant of this four-by-four coordinate matrix is
-$-3/2000\ne0$, proving the span assertion.
-
-This span makes $\mc E_F$ strictly positive. Indeed, for
-$H\geq0$, $H\ne0$, and $v\ne0$,
-\[
-	v^\dagger\mc E_F(H)v
-	=\sum_i\|H^{1/2}F_i^\dagger v\|^2>0.
-\]
-Equality would imply $H^{1/2}A^\dagger v=0$ for every
-$A\in M_2(\mathbb C)$, although these vectors $A^\dagger v$
-span $\mathbb C^2$. Finite-dimensional Perron--Frobenius theory
-then supplies a Perron value $r>0$, positive-definite left and
-right eigenmatrices, and no other peripheral eigenvalue.
-
-We also need $r<1$. Write $\mc E_F^*$ for the trace adjoint.
-For $H=\diag(20,1)$, direct substitution gives
-\[
-	H-\mc E_F^*(H)
-	=\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0,
-\]
-Its leading principal minor is positive and its determinant is
-$19861/2000>0$.
-Pairing with a right Perron eigenmatrix $\rho>0$ gives
-\begin{align*}
-	0 & <\tr[(H-\mc E_F^*(H))\rho]      \\
-	  & =\tr(H\rho)-\tr(H\mc E_F(\rho)) \\
-	  & =(1-r)\tr(H\rho),
-\end{align*}
-so $0<r<1$.
-
-Let $\mu=\sqrt r$. If $H_*>0$ is a left Perron eigenmatrix,
-set $G=H_*^{1/2}$ and
-$\mc K_0^{ii}=\mu^{-1}GF_iG^{-1}$. Then
-\[
-	\sum_i(\mc K_0^{ii})^\dagger\mc K_0^{ii}
-	=r^{-1}G^{-1}\mc E_F^*(H_*)G^{-1}=\Id_2.
-\]
-Thus $\mc K_0$ is a normal representative with $0<\mu<1$.
-
-Embed its physical support into the first four coordinates of
-$\mathbb C^5$. On the fifth coordinate take the bond-one normal
-tensor $\mc K_1^{44}=1$, with all other slices zero. Define
+The coordinate matrix of the four slices, ordered as
+$(11,12,21,22)$, satisfies
 \begin{align}
-	K=(\mu\mc K_0)\oplus\mc K_1.
+	\det\left[\frac14,\frac{s_i}{100},\frac{t_i}{4},\frac{s_it_i}{100}\right]_{i=0}^3 & =-\frac3{2000}\ne0,\nonumber \\
+	\operatorname{span}\{F_i\}                                                        & =M_2(\mathbb C).
+	\label{eq:span-M2-det}
+\end{align}
+Hence $\mc E_F$ is strictly positive:
+\begin{align}
+	v^\dagger\mc E_F(H)v
+	=\sum_i\|H^{1/2}F_i^\dagger v\|^2>0
+	\quad(H\geq0,\ H\ne0,\ v\ne0).
+	\label{eq:EF-strictly-positive}
+\end{align}
+Equality would force $H^{1/2}A^\dagger v=0$ for every
+$A\in M_2(\mathbb C)$, whereas
+$\{A^\dagger v:A\in M_2(\mathbb C)\}=\mathbb C^2$.
+Perron--Frobenius theory therefore gives positive left and right
+eigenmatrices, unique up to positive scalar multiples:
+\begin{align}
+	\mc E_F(\rho)=r\rho,\qquad
+	\mc E_F^*(H_*)=rH_*,
+	\qquad \rho,H_*>0,\quad r>0,
+	\label{eq:perron-evals}
+\end{align}
+with no other peripheral eigenvalue; $\mc E_F^*$ is the trace adjoint.
+
+For $H=\diag(20,1)$,
+\begin{align}
+	H-\mc E_F^*(H)
+	                     & =\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0,\nonumber \\
+	\det(H-\mc E_F^*(H)) & =\frac{19861}{2000}>0.
+	\label{eq:H-contraction-val}
+\end{align}
+Pairing with $\rho$ shows
+\begin{align}
+	0<\tr[(H-\mc E_F^*(H))\rho]
+	=(1-r)\tr(H\rho),\qquad 0<r<1.
+	\label{eq:r-strictly-less-1}
+\end{align}
+Put $\mu=\sqrt r$, $G=H_*^{1/2}$, and
+$\mc K_0^{ii}=\mu^{-1}GF_iG^{-1}$. Then
+\begin{align}
+	\sum_i(\mc K_0^{ii})^\dagger\mc K_0^{ii}
+	=r^{-1}G^{-1}\mc E_F^*(H_*)G^{-1}=\Id_2,
+	\label{eq:K0-normal}
+\end{align}
+so $\mc K_0$ is normal.
+
+Embed its physical support in the first four coordinates of
+$\mathbb C^5$, and take the bond-one normal tensor
+$\mc K_1^{44}=1$ on the fifth coordinate, with other slices zero.
+The required ambient tensor is
+\begin{align}
+	K=(\mu\mc K_0)\oplus\mc K_1,\qquad d_K=5,\quad D_K=3.
 	\label{eq:ambient}
 \end{align}
-This tensor has physical dimension five and bond dimension three.
-The representatives have orthogonal physical supports and simultaneous
-one-site span $M_2(\mathbb C)\oplus\mathbb C$, proving biCF.
-Their weights $\mu,1$ satisfy the printed global normalization.
-Their physical-trace matrices are
-$\mu^{-1}GPG^{-1}$ and $1$, neither nilpotent; hence $K$ is simple.
-
-The periodic operator is the orthogonal sum of the embedded
-$\sigma^{(N)}(F)$ and $\ketbra{4^N}{4^N}$, both of trace one.
-It is positive with trace two at every positive length.
-Every nonempty marginal, including the full state, satisfies
-\[
-	S_L^{(N)}(K)=1+\tfrac12S_L^{(N)}(F).
-\]
-It follows that
-$I_L^{(N)}(K)=1+\frac12I_L^{(N)}(F)$, proving SAL.
-Finally,
-\[
-	B_K=(GPG^{-1})\oplus1,\qquad B_K^2=B_K.
-\]
-All standing hypotheses hold simultaneously.
-
-\subsection{A boundary excluding every refinement channel}
-
-Take
-\[
-	X=\begin{pmatrix}-1&2/5\\-5&0\end{pmatrix}.
-\]
-The endpoint coefficients derived from \cref{eq:rankone} are
-\begin{align*}
-	D_{ij}=r_jXl_i
-	  & =-\frac14+\frac{t_i}{10}-\frac{s_j}{20}, \\
-	D & =\begin{pmatrix}
-		     0    & -1/10 & -1/5  & -3/10  \\
-		     1/10 & 0     & -1/10 & -1/5   \\
-		     -4/5 & -9/10 & -1    & -11/10 \\
-		     3/10 & 1/5   & 1/10  & 0
-	     \end{pmatrix}.
-\end{align*}
-Every $F_N(X)$ is real diagonal, with coefficient
-$D_{i_1i_N}\prod_{a=1}^{N-1}T_{i_ai_{a+1}}$.
-It is therefore Hermitian, even though $X$ need not be.
-Positivity of the path weights gives
+Its simultaneous canonical conditions are
 \begin{align}
-	\|F_N(X)\|_1
-	=\sum_{i,j}|D_{ij}|(T^{N-1})_{ij}.
+	 & \operatorname{span}_{i,j}
+	\{\mc K_0^{ij}\oplus\mc K_1^{ij}\}
+	=M_2(\mathbb C)\oplus\mathbb C,\nonumber                       \\
+	 & (\mu_{0,1},\mu_{1,1})=(\mu,1),\qquad
+	0<\mu<1=\max_{j,q}|\mu_{j,q}|,\nonumber                        \\
+	 & B_{\mc K_0}=\mu^{-1}GPG^{-1},\qquad B_{\mc K_1}=1,\nonumber \\
+	 & B_{\mc K_j}^{\,n}\ne0\qquad(j=0,1,\ n\geq1).
+	\label{eq:ambient-canonical-conds}
+\end{align}
+Orthogonal physical supports make these representatives a BNT;
+the span and nonnilpotence prove biCF and simplicity.
+
+For the coordinate inclusion $V:\mathbb C^4\to\mathbb C^5$,
+\begin{align}
+	\sigma^{(N)}(K)
+	                   & =V^{\otimes N}\sigma^{(N)}(F)(V^{\otimes N})^\dagger
+	+\ketbra{4^N}{4^N}\geq0,\nonumber                                           \\
+	\tr\sigma^{(N)}(K) & =2\qquad(N\geq1),\nonumber                             \\
+	S_L^{(N)}(K)       & =1+\tfrac12S_L^{(N)}(F)\qquad(1\leq L\leq N),\nonumber \\
+	I_L^{(N)}(K)       & =1+\tfrac12I_L^{(N)}(F)\qquad(1\leq L<N),\nonumber     \\
+	B_K                & =(GPG^{-1})\oplus1,\qquad B_K^2=B_K.
+	\label{eq:ambient-verified}
+\end{align}
+Thus positivity of generated states, global weight normalization,
+biCF, simplicity, finite-ring SAL, and literal ZCL hold together.
+
+\subsection{A boundary excluding trace-preserving completely positive maps}
+
+Choose
+\begin{align}
+	X=\begin{pmatrix}-1&2/5\\-5&0\end{pmatrix}.
+	\label{eq:boundary-X}
+\end{align}
+The endpoint coefficients in \cref{eq:rankone} are
+\begin{align}
+	D_{ij} & =r_jXl_i=-\frac14+\frac{t_i}{10}-\frac{s_j}{20},\nonumber \\
+	D      & =\begin{pmatrix}
+		          0    & -1/10 & -1/5  & -3/10  \\
+		          1/10 & 0     & -1/10 & -1/5   \\
+		          -4/5 & -9/10 & -1    & -11/10 \\
+		          3/10 & 1/5   & 1/10  & 0
+	          \end{pmatrix}.
+	\label{eq:D-matrix}
+\end{align}
+Although $X$ need not be Hermitian, every closure is real diagonal:
+\begin{align}
+	F_N(X)
+	             & =\sum_{\boldsymbol i}
+	D_{i_1i_N}\prod_{a=1}^{N-1}T_{i_ai_{a+1}}
+	\ketbra{\boldsymbol i}{\boldsymbol i}
+	=F_N(X)^\dagger,\nonumber                         \\
+	\|F_N(X)\|_1 & =\sum_{i,j}|D_{ij}|(T^{N-1})_{ij}.
 	\label{eq:norm}
 \end{align}
-Using the displayed matrices and \cref{eq:Tpowers} gives
+The displayed matrices give
 \begin{align}
-	\|F_2(X)\|_1              & =\frac{337}{250},\nonumber \\
-	\|F_3(X)\|_1=\|F_4(X)\|_1 & =\frac{27}{20}.
+	\|F_2(X)\|_1                  & =\frac{337}{250}
+	<\frac{27}{20}=\|F_3(X)\|_1=\|F_4(X)\|_1,\nonumber \\
+	\frac{27}{20}-\frac{337}{250} & =\frac1{500}>0.
 	\label{eq:norm-gap}
 \end{align}
-The increase is $27/20-337/250=1/500>0$.
-
-Let $V:\mathbb C^4\longrightarrow\mathbb C^5$ be the coordinate
-inclusion. Use the same ambient boundary
-$Y=(GXG^{-1})\oplus0$ at every length. Cyclicity of the trace
-cancels the virtual gauges, while the zero terminal boundary removes
-the fifth-letter sector:
+Use the same ambient boundary at every length:
 \begin{align}
-	K_N(Y)=V^{\otimes N}F_N(X)(V^{\otimes N})^\dagger.
+	Y      & =(GXG^{-1})\oplus0,\nonumber                 \\
+	K_N(Y) & =V^{\otimes N}F_N(X)(V^{\otimes N})^\dagger.
 	\label{eq:boundary}
 \end{align}
-This isometric embedding preserves all singular values except for
-adding zeros, so \cref{eq:norm-gap} holds unchanged.
+Cyclicity cancels the gauges, the zero boundary removes the
+fifth-letter sector, and the isometry preserves the trace norm.
 
-A positive trace-preserving map $\Phi$ contracts the trace norm of
-Hermitian matrices. In fact, for $Z=Z_+-Z_-$,
-\begin{align*}
+Every positive trace-preserving map contracts that norm on
+Hermitian inputs. For $Z=Z_+-Z_-$,
+\begin{align}
 	\|\Phi(Z)\|_1
-	 & \leq\|\Phi(Z_+)\|_1+\|\Phi(Z_-)\|_1 \\
-	 & =\tr\Phi(Z_+)+\tr\Phi(Z_-)=\|Z\|_1.
-\end{align*}
-Thus no channel can send $K_2(Y)$ to $K_3(Y)$ or to $K_4(Y)$.
-
-Proposition~\ref{cpsv-prop2to5}, which requires the two-to-three-site
-identity for every boundary, is false. The two-site-blocked tensor
-in Theorem~\ref{cpsv-thm:main-simple} is not an RFP either, because
-its refinement would send $K_2(Y)$ to $K_4(Y)$.
-This excludes all channels, not merely the channel obtained from
-one proposed factorization. It makes no assertion about every larger
-blocking and does not refute Theorem~\ref{cpsv-thm:IV.13}.
+	\leq\tr\Phi(Z_+)+\tr\Phi(Z_-)
+	=\tr Z_++\tr Z_-=\|Z\|_1.
+	\label{eq:contraction-prop}
+\end{align}
+Thus the failed conclusions are
+\begin{align}
+	\nexists\,\Phi\text{ tpCPM}:\quad
+	\Phi[K_2(Y)]=K_m(Y),
+	\qquad m=3,4.
+	\label{eq:no-channel-m34}
+\end{align}
+The $m=3$ inequality refutes the all-boundary identity of
+Proposition~\ref{cpsv-prop2to5}. If $M$ denotes the two-site block of $K$,
+\begin{align}
+	M_1(Y)=K_2(Y),\qquad M_2(Y)=K_4(Y),
+	\qquad M\text{ is not an RFP}.
+	\label{eq:M-block-id}
+\end{align}
+so $M$ is not an RFP. This also refutes Theorem~\ref{cpsv-thm:main-simple}(ii)$\Rightarrow$(v).
+The obstruction excludes every trace-preserving completely positive map,
+not only the proposed construction based on local factorizations. It makes no
+claim about every larger blocking or about Theorem~\ref{cpsv-thm:IV.13}.
 
 \subsection{Two points in the structural proof}
 
-The example also identifies two distinct problems in the proposed
-route to the channel. First, primitivity and traces of powers do
-not eliminate zero-eigenvalue Jordan blocks. The strictly positive
-matrix $T=Q+N_0$ above has one eigenvalue one and all other
-eigenvalues zero, yet is not rank one:
-\[
+The matrix $T$ also exhibits the missing Jordan-block issue in
+source Lemma~\ref{cpsv-SALZCL}:
+\begin{align}
+	T                      & =Q+N_0>0,\qquad N_0\ne0,\quad N_0^2=0,\nonumber     \\
+	\operatorname{spec}(T) & =\{0,1\},\qquad \tr T^n=1\quad(n\geq1),\nonumber    \\
 	T_{00}T_{11}-T_{01}T_{10}
-	=\frac{22\cdot23-19\cdot24}{10000}=\frac1{200}.
-\]
-The nonzero nilpotent term $N_0^2=0$ is invisible in
-$\tr T^N$. This invalidates the rank-one inference in source
-Lemma~\ref{cpsv-SALZCL}.
+	                       & =\frac{22\cdot23-19\cdot24}{10000}=\frac1{200}\ne0.
+	\label{eq:T-jordan}
+\end{align}
+Here $T>0$ means entrywise positivity. Primitivity and traces of
+powers do not imply rank one; the nilpotent part is invisible
+in those traces.
 
-Second, common-weight absorption after source
-Lemma~\ref{cpsv-lemmus} does not generally preserve normality:
-\[
-	\mc E_{\mu_j\mc K_j}=|\mu_j|^2\mc E_{\mc K_j}.
-\]
-A normal representative remains normal after this absorption only
-if $|\mu_j|=1$. In \cref{eq:ambient}, the first absorbed block
-has spectral radius $r<1$.
-These observations explain defects in the structural argument.
-The channel refutation above does not require a further universal
-claim about all possible physical-sector factorizations.
+Common-weight absorption after source Lemma~\ref{cpsv-lemmus}
+has a separate normalization problem:
+\begin{align}
+	\mc E_{\mu_j\mc K_j}=|\mu_j|^2\mc E_{\mc K_j},
+	\qquad
+	r(\mc E_{\mu_j\mc K_j})=|\mu_j|^2.
+	\label{eq:weight-absorption}
+\end{align}
+For a normal $\mc K_j$, absorption preserves normality only when
+$|\mu_j|=1$. In \cref{eq:ambient},
+$r(\mc E_{\mu\mc K_0})=r<1$.
+These are defects in the structural argument. The refutation of
+Proposition~\ref{cpsv-prop2to5} does not require a universal claim
+about all possible physical-sector factorizations.
 
 \section{Raw weights and peripheral phases}\label{sec:weights-phases}
 
 \subsection{Physical ZCL does not determine raw weights}
 
-For pure tensors, the source defines ZCL as local orthogonality of the
-BNT representatives together with correlations independent of distance
-(CID). This is a physical condition, distinct from the mixed-state
-transfer identity in Sec.~\ref{sec:scope}.
-For a pure tensor $A$, write
-$\mc E_A(H)=\sum_iA^iH(A^i)^\dagger$ and
-$\mathbb E_A=\sum_iA^i\otimes\overline{A^i}$ for its transfer map
-and matrix. In canonical coordinates, the copy block $(j,q;j',q')$ is
-\[
-	\mu_{j,q}\overline{\mu_{j',q'}}
-	\sum_iA_j^i\otimes\overline{A_{j'}^i}.
-\]
-The copy factors matter for literal idempotence.
+For pure tensors, the source uses correlations independent of
+distance (CID) and local orthogonality (LO):
+\begin{align}
+	 & \text{pure ZCL}\iff(\text{CID}\ \text{and}\ \text{LO}),\nonumber \\
+	 & \text{LO}:\ \sum_iA_j^i\otimes\overline{A_{j'}^i}=0
+	\quad(j\ne j').
+	\label{eq:pure-zcl-lo}
+\end{align}
+This differs from mixed ZCL, $B_K^2=B_K$.
+The pure transfer map and its canonical copy blocks are
+\begin{align}
+	\mc E_A(H) & =\sum_iA^iH(A^i)^\dagger,\qquad
+	\mathbb E_A=\sum_iA^i\otimes\overline{A^i},\nonumber \\
+	(\mathbb E_A)_{j,q;j',q'}
+	           & =\mu_{j,q}\overline{\mu_{j',q'}}
+	\sum_iA_j^i\otimes\overline{A_{j'}^i},
+	\label{eq:pure-transfer-blocks}
+\end{align}
+in canonical coordinates. Literal idempotence retains the copy factors.
 
-Take one physical letter and $A^0=\diag(1,1/2)$.
-This is in CF with one scalar normal BNT representative, two
-copies, and allowed weights $1,1/2$. Its periodic vector is
-\[
-	\ket{V^{(N)}(A)}=(1+2^{-N})\ket{0^N}.
-\]
-Local orthogonality is vacuous. Every physical observable is scalar,
-so correlations are independent of separation, even for unnormalized
-expectations at fixed $N$. Thus the printed physical ZCL condition
-holds. But for the matrix unit $e_{12}$,
-\[
+Take one physical letter:
+\begin{align}
+	A^0                   & =\diag(1,1/2),\qquad A_1^0=1,\nonumber \\
+	(\mu_{1,1},\mu_{1,2}) & =(1,1/2),\nonumber                     \\
+	\ket{V^{(N)}(A)}      & =(1+2^{-N})\ket{0^N}.
+	\label{eq:single-letter-A}
+\end{align}
+This tensor is in CF; LO is vacuous. All physical observables
+are scalar, so for observables $O_1,O_2$ on disjoint regions and
+every translation $\tau_\Delta$ allowed by CID,
+\begin{align}
+	\langle V^{(N)}|O_1O_2|V^{(N)}\rangle
+	=\langle V^{(N)}|O_1\tau_\Delta(O_2)|V^{(N)}\rangle.
+	\label{eq:cid-scalar}
+\end{align}
+CID holds even for unnormalized expectations at fixed $N$, but
+for the matrix unit $e_{12}$,
+\begin{align}
 	\mc E_A(e_{12})=\tfrac12e_{12},\qquad
 	\mc E_A^2(e_{12})=\tfrac14e_{12}.
-\]
-This refutes the ZCL-to-idempotence direction of source
-Theorem~\ref{cpsv-TheoremZCLPure}, and hence the unrestricted
-equivalence in Theorem~\ref{cpsv-thm:main-MPS}.
-Directly, the one-letter RFP equation would require
-$(A^0)^2=uA^0$, whose diagonal entries force $u=1$ and
-$1/4=1/2$.
+	\label{eq:transfer-non-idempotent}
+\end{align}
+Thus pure ZCL does not imply idempotence in source
+Theorem~\ref{cpsv-TheoremZCLPure}, or the unrestricted equivalence
+of Theorem~\ref{cpsv-thm:main-MPS}. Directly, the RFP equation gives
+\begin{align}
+	(A^0)^2=uA^0
+	\quad\Longrightarrow\quad u=1,\quad \tfrac14=\tfrac12,
+	\label{eq:rfp-pure-contradiction}
+\end{align}
+a contradiction.
 
-Regard the same matrix as an MPDO tensor
-$K^{00}=\diag(1,1/2)$. It gives an independent counterexample to
-Theorem~\ref{cpsv-thm:main-simple}(iv)$\Rightarrow$(v).
-It is simple and in biCF, has the required global weight normalization,
-and generates the positive scalar $1+2^{-N}$. Its sole normal
-representative is $1$, whose scalar physical-sector factorization
-has $\eta=1$ and $a=b=1$. Thus condition~(iv) holds in full.
-Nevertheless, trace preservation for the two-site-blocked tensor
-would require
-\[
-	(K^{00})^4=(K^{00})^2,
-	\qquad
+As an MPDO tensor, $K^{00}=\diag(1,1/2)$ independently refutes
+Theorem~\ref{cpsv-thm:main-simple}(iv)$\Rightarrow$(v):
+\begin{align}
+	 & \mc K_1^{00}=1,\qquad
+	\operatorname{span}\{\mc K_1^{00}\}=\mathbb C,\qquad
+	B_{\mc K_1}=1,\nonumber              \\
+	 & \max_q|\mu_{1,q}|=1,\qquad
+	\sigma^{(N)}(K)=1+2^{-N}>0,\nonumber \\
+	 & \eta=1,\quad a=b=1.
+	\label{eq:K00-props}
+\end{align}
+These are simplicity, biCF, global normalization, positivity,
+and the complete scalar factorization in condition~(iv).
+Trace preservation for its two-site block would require
+\begin{align}
+	(K^{00})^4=(K^{00})^2,\qquad
 	\diag(1,1/16)=\diag(1,1/4),
-\]
+	\label{eq:K00-four-two}
+\end{align}
 which is false. Condition~(iv) constrains normal representatives,
-not their raw copy weights. This independent example does not
-satisfy mixed-state literal ZCL and is not the counterexample to
-Proposition~\ref{cpsv-prop2to5}.
+not raw copy weights. Here $B_K^2\ne B_K$; this is not the
+counterexample to Proposition~\ref{cpsv-prop2to5}.
 
 \subsection{Peripheral phases and similarity under squaring}
 
 Let
-\[
+\begin{align}
 	\omega=e^{2\pi i/3},\qquad
 	A^0=\diag(1,\omega),\qquad
 	S=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
-\]
-Both scalar normal copies have unit-modulus weights. Nevertheless,
-\[
-	\mc E_A^{2^n}(e_{21})=\omega^{2^n}e_{21}.
-\]
-Since $2^{2m}\equiv1$ and $2^{2m+1}\equiv2\pmod3$, this
-sequence alternates between $\omega e_{21}$ and
-$\omega^2e_{21}$. The universal convergence assertion following
-source Theorem~\ref{cpsv-thm:renormalization-flow} and in
-Appendix~B is therefore false.
+	\label{eq:omega-A0}
+\end{align}
+Both scalar normal copies have unit-modulus weights, yet
+\begin{align}
+	\mc E_A^{2^n}(e_{21})
+	=\omega^{2^n}e_{21}
+	=\begin{cases}
+		 \omega e_{21},  & n\text{ even}, \\
+		 \omega^2e_{21}, & n\text{ odd}.
+	 \end{cases}
+	\label{eq:phase-cycle}
+\end{align}
+This refutes the universal CF convergence assertion following
+source Theorem~\ref{cpsv-thm:renormalization-flow} and in Appendix~B.
 
-The same example disproves the pure-state equivalence asserted after
-source Eq.~\eqref{cpsv-RFP-gauge}. Indeed,
-\begin{align*}
-	\omega S(A^0)^2S^{-1}
-	 & =\omega\diag(\omega^2,1)=A^0.
-\end{align*}
-For the pure MPDO tensor $M=A^0\otimes\overline{A^0}$ the phase
-cancels, so
-\[
-	M=(S\otimes\overline S)M^2(S\otimes\overline S)^{-1}.
-\]
-The one-dimensional physical algebras have identity channels, giving
-the source's blocking-up-to-virtual-gauge relations in both directions.
-The doubled tensor is itself in CF with scalar normal copies and
-weights $1,\overline\omega,\omega,1$, and generates the positive
-scalar $|1+\omega^N|^2$. But $M^2\ne M$, so it is not a literal
-channel RFP. Similarity under squaring permits nontrivial
-root-of-unity cycles; it does not force spectrum in $\{0,1\}$.
+It also refutes the pure-state equivalence asserted after source
+Eq.~\eqref{cpsv-RFP-gauge}:
+\begin{align}
+	\omega S(A^0)^2S^{-1} & =\omega\diag(\omega^2,1)=A^0,\nonumber               \\
+	M                     & =A^0\otimes\overline{A^0},\nonumber                  \\
+	M                     & =(S\otimes\overline S)M^2(S\otimes\overline S)^{-1},
+	\qquad M^2\ne M.
+	\label{eq:gauge-blocking-tensor}
+\end{align}
+The doubled tensor is in CF, with scalar normal copies and
+\begin{align}
+	(\mu_q)_q=(1,\overline\omega,\omega,1),
+	\qquad \rho^{(N)}(M)=|1+\omega^N|^2>0.
+	\label{eq:doubled-weights}
+\end{align}
+Identity maps on the one-dimensional physical algebras give
+blocking up to virtual gauge in both directions, but not an RFP
+in the sense of Definition~\ref{cpsv-RFPMixedTS}. Similarity under
+squaring allows root-of-unity cycles, not only spectrum in $\{0,1\}$.
 
-Source Theorem~\ref{cpsv-thm:renormalization-flow} itself survives
-as a limit characterization. If $\mc E^{2^n}\to F$, continuity
-of composition gives
-\[
-	F^2=\lim_n(\mc E^{2^n})^2
-	=\lim_n\mc E^{2^{n+1}}=F.
-\]
-Conversely an idempotent completely positive map has a constant
-squaring orbit. The correspondence between such maps and physical
-isometry classes of Kraus tensors gives the asserted fixed-point
-characterization. Existence of a limit for every CF initial tensor
-is a separate, false assertion.
+Theorem~\ref{cpsv-thm:renormalization-flow} itself survives as a
+limit characterization:
+\begin{align}
+	\mc E^{2^n}\longrightarrow F
+	      & \quad\Longrightarrow\quad
+	F^2=\lim_n\mc E^{2^{n+1}}=F,\nonumber        \\
+	F^2=F & \quad\Longrightarrow\quad F^{2^n}=F.
+	\label{eq:limit-characterization}
+\end{align}
+The correspondence between completely positive maps and physical
+isometry classes of Kraus tensors gives the stated characterization.
+It does not establish convergence for every CF initial tensor.
 
 \section{Finite-chain entropy and thermodynamic limits}\label{sec:entropy}
 
 \subsection{The inner thermodynamic limit}
 
-Consider
-\begin{align*}
-	M^{00} & =\diag(1,0,0),  &
-	M^{11} & =\diag(0,1,-1),                \\
-	M^{01} & =0,             & M^{10} & =0.
-\end{align*}
-Mixed physical words vanish; constant words give
-\begin{align*}
+Consider the CF tensor
+\begin{align}
+	M^{00} & =\diag(1,0,0),           &
+	M^{11} & =\diag(0,1,-1),\nonumber                \\
+	M^{01} & =0,                      & M^{10} & =0.
+	\label{eq:parity-M}
+\end{align}
+Its scalar normal copies have globally normalized weights $1,1,-1$.
+Mixed words vanish, giving
+\begin{align}
 	\rho^{(N)}
-	              & =\ketbra{0^N}{0^N}
-	+(1+(-1)^N)\ketbra{1^N}{1^N},      \\
+	              & =\ketbra{0^N}{0^N}+(1+(-1)^N)\ketbra{1^N}{1^N}\geq0,\nonumber \\
 	\tr\rho^{(N)} & =2+(-1)^N.
-\end{align*}
-Every positive-length operator is positive. The tensor is in CF
-with scalar normal copies and globally normalized weights $1,1,-1$.
-
-At odd $N$ the normalized state and all nonempty marginals are
-pure. At even $N$ they all have eigenvalues $1/3,2/3$.
-For every fixed $L\geq1$ and $N>L$,
-\[
+	\label{eq:rho-parity}
+\end{align}
+At odd length, the normalized state and all nonempty marginals
+are pure; at even length, their nonzero eigenvalues are $1/3,2/3$.
+With $h_2(p)=-p\log_2p-(1-p)\log_2(1-p)$,
+\begin{align}
 	I_L^{(N)}
 	=\begin{cases}
-		0,        & N\text{ odd},  \\
-		h_2(1/3), & N\text{ even},
-	\end{cases}
-\]
-where $h_2(p)=-p\log_2p-(1-p)\log_2(1-p)$.
-Since $h_2(1/3)>0$, the unrestricted inner limit in source
+		 0,        & N\text{ odd}, \\
+		 h_2(1/3), & N\text{ even}
+	 \end{cases}
+	\quad(N>L\geq1).
+	\label{eq:IL-parity}
+\end{align}
+Therefore
+\begin{align}
+	\liminf_{N\to\infty}I_L^{(N)}=0
+	<h_2(1/3)=\limsup_{N\to\infty}I_L^{(N)}
+	\qquad(L\geq1),
+	\label{eq:oscillation-limit}
+\end{align}
+so the unrestricted inner limit in source
 Proposition~\ref{cpsv-PropILILp1} does not exist.
 
-Finite-chain monotonicity remains valid for
-$1\leq L<\lfloor N/2\rfloor$. Strong subadditivity on
-consecutive regions of lengths $1,L,N-2L-1$, together with
-translation invariance, gives
-\begin{align*}
+The finite-chain statements remain separate. Strong subadditivity
+on consecutive lengths $1,L,N-2L-1$, with translation invariance,
+gives
+\begin{align}
 	S_L^{(N)}+S_{N-L}^{(N)}
-	          & \leq S_{L+1}^{(N)}+S_{N-L-1}^{(N)}, \\
-	I_L^{(N)} & \leq I_{L+1}^{(N)}.
-\end{align*}
-The finite-chain bound $I_L^{(N)}\leq4\log_2D$ quoted in the
-source proof is likewise separate from convergence.
-Monotonicity in $L$ and a uniform bound do not establish a
-limit in $N$. If the fixed-$L$ limits exist, these finite-chain
-properties do imply that their subsequent limit as $L\to\infty$
-exists and is bounded.
+	          & \leq S_{L+1}^{(N)}+S_{N-L-1}^{(N)},\nonumber \\
+	I_L^{(N)} & \leq I_{L+1}^{(N)}
+	\qquad(1\leq L<\lfloor N/2\rfloor).
+	\label{eq:finite-monotonicity}
+\end{align}
+The source proof also quotes $I_L^{(N)}\leq4\log_2D$.
+These bounds do not imply convergence in $N$. If the fixed-$L$
+limits exist, they do imply
+\begin{align}
+	J_L:=\lim_{N\to\infty}I_L^{(N)}
+	                     & \quad\Longrightarrow\quad
+	J_L\leq J_{L+1}\leq4\log_2D,\nonumber            \\
+	\lim_{L\to\infty}J_L & \leq4\log_2D.
+	\label{eq:JL-limits}
+\end{align}
 
 \subsection{The literal periodic state in Example~\ref{cpsv-ExSALnoZCL}}
 
-The neighboring operators in source
-Example~\ref{cpsv-ExSALnoZCL} place site $n$ in
-$\ket{k_n,k_n}$. Its nonzero spectrum is therefore the classical
-periodic distribution
-\begin{align*}
-	p_N(k_1,\ldots,k_N)
-	  & =\frac1{Z_N}\prod_{n=1}^NW_{k_nk_{n+1}},   \\
-	W & =\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix},
-	\qquad k_{N+1}=k_1.
-\end{align*}
-The spectral projectors
-$P_\pm=\frac12(\begin{smallmatrix}1&\pm1\\\pm1&1\end{smallmatrix})$
-give
-\begin{align*}
-	W^m & =(3/2)^mP_++(1/2)^mP_-,               \\
-	Z_N & =\tr W^N=(3^N+1)/2^N,                 \\
+In source Example~\ref{cpsv-ExSALnoZCL}, site $n$ is in
+$\ket{k_n,k_n}$. The nonzero spectrum is the periodic distribution
+\begin{align}
+	p_N(k_1,\ldots,k_N) & =\frac1{Z_N}\prod_{n=1}^NW_{k_nk_{n+1}},
+	\qquad k_{N+1}=k_1,\nonumber                                     \\
+	W                   & =\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}.
+	\label{eq:W-def}
+\end{align}
+With
+$P_\pm=\frac12(\begin{smallmatrix}1&\pm1\\\pm1&1\end{smallmatrix})$,
+\begin{align}
+	W^m & =(3/2)^mP_++(1/2)^mP_-,\nonumber       \\
+	Z_N & =\tr W^N=(3^N+1)/2^N,\nonumber         \\
 	p_{N,L}(k_1,\ldots,k_L)
 	    & =\frac{\prod_{n=1}^{L-1}W_{k_nk_{n+1}}
-			       (W^{N-L+1})_{k_Lk_1}}{Z_N}.
-\end{align*}
-The complementary path cannot be omitted on a finite ring.
+			       (W^{N-L+1})_{k_Lk_1}}{Z_N}\nonumber \\
+	    & \hspace{3em}(1\leq L<N).
+	\label{eq:W-marginals}
+\end{align}
+The complementary path is essential on a finite ring.
 
-At $N=4$, $Z_4=41/8$, and
-\[
-	W^2=\begin{pmatrix}5/4&1\\1&5/4\end{pmatrix},
-	\qquad
-	W^3=\begin{pmatrix}7/4&13/8\\13/8&7/4\end{pmatrix}.
-\]
-The two equal-bit pair probabilities are
-$(7/4)/(41/8)=14/41$; the two unequal-bit pair probabilities
-are $(1/2)(13/8)/(41/8)=13/82$.
-For three bits, zero, one, and two internal transitions give
-probabilities $10/41,4/41,5/82$, with multiplicities $2,4,2$.
-The one-bit marginal is uniform. Evaluating the entropies of these
-probabilities in $I_2-I_1=2S_2-S_1-S_3$ gives
-\[
-	I_2-I_1
-	=\frac1{82}\log_2
-	\frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}.
-\]
-
-Strict positivity admits a short proof without decimal evaluation
-or a large integer comparison. Translation invariance identifies
-this defect with $I(k_1:k_3\mid k_2)$.
-Conditioned on $k_2=0$, the joint table of $k_1,k_3$ is
-\[
-	q=\frac1{41}\begin{pmatrix}20&8\\8&5\end{pmatrix}.
-\]
-It is not a product distribution, since
-$q_{00}q_{11}-q_{01}q_{10}=(100-64)/41^2>0$.
-For positive probability distributions $q,p$,
-$-\ln x\geq1-x$ implies
-\[
+At $N=4$,
+\begin{align}
+	Z_4 & =\frac{41}{8},\qquad
+	W^2=\begin{pmatrix}5/4&1\\1&5/4\end{pmatrix},\nonumber \\
+	W^3 & =\begin{pmatrix}7/4&13/8\\13/8&7/4\end{pmatrix}.
+	\label{eq:W-powers}
+\end{align}
+The exact marginal probabilities are
+\begin{align}
+	p_{4,1}(0)=p_{4,1}(1)   & =\tfrac12,\nonumber      \\
+	p_{4,2}(00)=p_{4,2}(11) & =\frac{14}{41},\nonumber \\
+	p_{4,2}(01)=p_{4,2}(10) & =\frac{13}{82},
+	\label{eq:p41-p42}
+\end{align}
+\begin{align}
+	 & p_{4,3}(k_1,k_2,k_3)\nonumber                               \\
+	 & =\begin{cases}
+		    10/41, & 0\text{ internal transitions}\ (2\text{ words}), \\
+		    4/41,  & 1\text{ internal transition}\ (4\text{ words}),  \\
+		    5/82,  & 2\text{ internal transitions}\ (2\text{ words}).
+	    \end{cases}
+	\label{eq:p43}
+\end{align}
+Their entropies give
+\begin{align}
+	I_2-I_1 & =2S_2-S_1-S_3\nonumber \\
+	        & =\frac1{82}\log_2
+	\frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}>0.
+	\label{eq:I2-I1-defect}
+\end{align}
+Strictness has a short conditional-MI proof. Translation invariance
+identifies the defect with $I(k_1:k_3\mid k_2)$, and
+\begin{align}
+	q_{ab} & :=\Pr(k_1=a,k_3=b\mid k_2=0)\nonumber                  \\
+	       & =\frac1{41}\begin{pmatrix}20&8\\8&5\end{pmatrix}_{ab},
+	\qquad \det q=\frac{100-64}{41^2}>0.
+	\label{eq:q-conditional}
+\end{align}
+Thus $q$ is not the product $p$ of its marginals. For positive
+probability distributions,
+\begin{align}
 	\sum_aq_a\ln(q_a/p_a)
-	\geq\sum_a(q_a-p_a)=0,
-\]
-with equality only if $q=p$. Taking $p$ to be the product of
-the marginals proves strict conditional mutual information.
-Thus the literal four-ring fails SAL.
+	 & \geq\sum_a(q_a-p_a)=0,\nonumber \\
+	 & \text{equality iff }q=p,
+	\label{eq:kl-positivity}
+\end{align}
+by $-\ln x\geq1-x$. The conditional mutual information is
+strictly positive, so the literal four-ring fails SAL.
 
-Its non-ZCL claim remains correct. The two-bit probability of
-$00$ is $14/41$ on the four-ring, but on the three-ring it is
-\[
-	\frac{(W^2)_{00}}{\tr W^3}
-	=\frac{5/4}{7/2}=\frac5{14}.
-\]
-They differ because $196\ne205$. Literal physical-trace
-idempotence would identify the reduced closures and their
-normalizations. A common rescaling of $W$ changes neither
-probability nor entropy. This removes the printed finite-periodic
-SAL witness; it does not disprove the independence of SAL and ZCL.
+The non-ZCL claim remains correct:
+\begin{align}
+	p_{4,2}(00)=\frac{14}{41}
+	\ne\frac5{14}
+	=\frac{(W^2)_{00}}{\tr W^3}=p_{3,2}(00),
+	\quad 196\ne205.
+	\label{eq:non-zcl-check}
+\end{align}
+Literal physical-trace idempotence would identify these reduced
+closures and their normalizations. A common rescaling of $W$
+changes neither probabilities nor entropies. This removes the
+printed finite-periodic SAL witness, not the independence of SAL
+and ZCL.
 
 \section{A coefficient-separation argument for the fundamental theorem}\label{sec:matching}
 
-The matching step in the proof of source Theorem~\ref{cpsv-thm1}
-invokes independence of the $A$-family together with one $B$-sector,
-although the proportionality relation contains all $B$-sectors.
-The following coefficient-separation argument supplies this step and
-preserves the conclusions of that theorem and Corollary~\ref{cpsv-II_cor2}.
-Only active nonzero canonical sectors are retained: zero-weight blocks
-carry no information about dimensions.
+The proof of source Theorem~\ref{cpsv-thm1} compares one $B$-sector
+with the $A$-family, although the proportionality relation contains
+all $B$-sectors. Full-family coefficient comparison supplies the
+step and preserves that theorem and Corollary~\ref{cpsv-II_cor2}.
+Retain only active, nonzero canonical weights; zero-weight blocks
+carry no dimension information.
 
-The elementary fact needed twice is the following. If
-$z_1,\ldots,z_m$ are distinct and nonzero and
-$\sum_ac_az_a^N=0$ for every $N\geq N_0$, use the $m$ equations
-at $N_0,\ldots,N_0+m-1$. Their coefficient determinant is
-\[
-	\left(\prod_{a=1}^mz_a^{N_0}\right)
-	\prod_{a<b}(z_b-z_a)\ne0.
-\]
-Thus every $c_a=0$. In particular, a nonempty power sum of
-nonzero copy weights cannot vanish on an entire tail: after
-equal weights are grouped, its coefficients are positive integer
-multiplicities.
+For distinct nonzero $z_1,\ldots,z_m$,
+\begin{align}
+	 & \sum_{a=1}^mc_az_a^N=0\quad(N\geq N_0),\nonumber        \\
+	 & \det[z_a^{N_0+b}]_{\substack{0\leq b<m\\1\leq a\leq m}}
+	=\left(\prod_{a=1}^mz_a^{N_0}\right)
+	\prod_{a<b}(z_b-z_a)\ne0\nonumber                          \\
+	 & \quad\Longrightarrow\quad c_a=0\quad\forall a.
+	\label{eq:vandermonde}
+\end{align}
+After equal weights are grouped, a nonempty copy power sum has
+positive integer multiplicities. It therefore cannot vanish on
+an entire tail.
 
-For the proportional theorem, form the union of the two BNT
-families and identify representatives related by phase and gauge.
-The remaining distinct classes have asymptotically orthogonal
-normal MPVs by the source normal-tensor overlap lemma. Their
-Gram matrix tends to the identity, so they are jointly linearly
-independent at every sufficiently large length.
+Form the union of both BNT families, quotienting first by
+\begin{align}
+	C\sim D
+	 & \quad\Longleftrightarrow\quad
+	\exists\,\phi\in\mathbb R,\ X\text{ invertible}:\nonumber \\
+	 & D^i=e^{i\phi}XC^iX^{-1}\quad\forall i.
+	\label{eq:bnt-equivalence}
+\end{align}
+Choose one representative $C_u$ per class. The source normal-tensor
+overlap lemma gives
+\begin{align}
+	G_{uv}^{(N)}
+	 & :=\langle V^{(N)}(C_u)|V^{(N)}(C_v)\rangle
+	\longrightarrow\delta_{uv},\nonumber          \\
+	 & \det G^{(N)}\ne0\quad(N\geq N_0).
+	\label{eq:gram-matrix}
+\end{align}
+Hence the entire quotient family is jointly linearly independent
+on a tail.
 
-Suppose a sector of $A$ has no partner in $B$. In the identity
-\[
-	\ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)},\qquad c_N\ne0,
-\]
-express all matched sectors using the chosen union representatives.
-Coefficient comparison forces $\sum_q\mu_{j,q}^N=0$ for the
-unmatched sector on the whole tail, contrary to the determinant
-argument. Interchanging the two families excludes unmatched
-sectors of $B$. This gives bijective phase-gauge matching without
-a unit-weight assumption in each sector.
+Absorb the matching phases into the coefficients and write
+\begin{align}
+	\ket{V^{(N)}(A)} & =\sum_u a_u(N)\ket{V^{(N)}(C_u)},\nonumber \\
+	\ket{V^{(N)}(B)} & =\sum_u b_u(N)\ket{V^{(N)}(C_u)}.
+	\label{eq:mpv-expansion}
+\end{align}
+Then the proportionality hypothesis gives the full-family comparison
+\begin{align}
+	 & \ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)},\quad c_N\ne0\nonumber \\
+	 & \Longrightarrow\quad
+	a_u(N)=c_Nb_u(N)\quad\forall u,\ N\geq N_0.
+	\label{eq:proportional-expansion}
+\end{align}
+Choosing an unmatched $A$-sector as its class representative would give
+\begin{align}
+	b_u(N)=0,\qquad
+	a_u(N)=\sum_q\mu_{j,q}^N=0\quad(N\geq N_0),
+	\label{eq:unmatched-sector}
+\end{align}
+contradicting the determinant argument. Interchanging the families
+excludes unmatched $B$-sectors. Thus phase-gauge matching is
+bijective, without a unit-weight assumption in each sector.
 
-In the equal-MPV case, write the matched representatives as
-$B_j^i=e^{i\phi_j}Y_jA_j^iY_j^{-1}$.
-Coefficient comparison first gives only
-\[
+For equal MPVs, choose matched representatives
+$B_j^i=e^{i\phi_j}Y_jA_j^iY_j^{-1}$. Coefficient comparison gives
+\begin{align}
 	\sum_q\mu_{j,q}^N
-	=\sum_q(e^{i\phi_j}\nu_{j,q})^N
-	\qquad(N\geq N_0).
-\]
-Group the distinct nonzero weights from both sides and subtract.
-The same determinant makes every multiplicity difference zero.
-The multisets therefore agree, their power sums agree at all
-positive lengths, and matching the copies gives the global
-similarity in the corollary.
+	                & =\sum_q(e^{i\phi_j}\nu_{j,q})^N\qquad(N\geq N_0),\nonumber \\
+	\{\mu_{j,q}\}_q & =\{e^{i\phi_j}\nu_{j,q}\}_q
+	\quad\text{as multisets}.
+	\label{eq:multiset-matching}
+\end{align}
+The second line follows by grouping distinct nonzero weights and
+applying the determinant argument to their multiplicity differences.
+The sums then agree at every positive length; matching copies
+gives the global similarity in Corollary~\ref{cpsv-II_cor2}.
 
-For proportional families the common scalar $c_N$ remains in
-every sector identity. The argument then establishes only the
-sector matching asserted by the source theorem, not copy-weight recovery.
+For proportional families, $c_N$ remains in every sector identity.
+The conclusion is sector matching, not copy-weight recovery.
 
 \section{Local corrections}\label{sec:local}
 
 \subsection{CID requires positive complementary gaps}
 
-The forward implication from transfer idempotence to the printed
-CID definition has an independent adjacency obstruction.
-Take the normal tensor
-\[
+The forward implication from transfer idempotence to printed CID
+has an independent adjacency obstruction. Take
+\begin{align}
 	A^{(a,b)}=\frac1{\sqrt2}\ketbra{a}{b},
 	\qquad a,b\in\{0,1\}.
-\]
-Its matrices span $M_2$, and
-\begin{align*}
-	\mc E_A(H)
-	             & =\frac12\sum_{a,b}H_{bb}\ketbra{a}{a}
-	=\frac12\tr(H)\Id_2,                                 \\
-	\mc E_A^2(H) & =\frac12\tr(H)\Id_2.
-\end{align*}
-It is a single normal RFP, with no copy weights. Each physical
-site contains two qubits, and its periodic MPS is the product
-of Bell pairs between neighboring sites.
+	\label{eq:bell-tensor}
+\end{align}
+Then
+\begin{align}
+	\operatorname{span}\{A^{(a,b)}\} & =M_2(\mathbb C),\nonumber   \\
+	\mc E_A(H)                       & =\tfrac12\tr(H)\Id_2,\qquad
+	\mc E_A^2=\mc E_A.
+	\label{eq:bell-transfer}
+\end{align}
+This is a single normal RFP with no copy weights. Its periodic
+MPS is a product of Bell pairs between the right qubit of each
+site and the left qubit of the next.
 
-On a four-ring, place $Z$ on the right qubit of site one and
-the left qubit of site two. These qubits share
-$\ket{\varphi}=(\ket{00}+\ket{11})/\sqrt2$, so
-\[
-	\bra{\varphi}Z\otimes Z\ket{\varphi}
-	=\tfrac12(1+1)=1.
-\]
-Shift the second observable to site three, as permitted by the
-printed CID interval. The observables now act on different Bell
-pairs, and the expectation is $[\frac12(1-1)]^2=0$.
-Thus idempotence does not imply CID for arbitrary disjoint,
+On a four-ring, let $Z_{n,r}$ and $Z_{n,l}$ denote Pauli $Z$
+on the respective qubits of site $n$. With
+$\ket{\varphi}=(\ket{00}+\ket{11})/\sqrt2$,
+\begin{align}
+	\langle Z_{1,r}Z_{2,l}\rangle
+	 & =\bra{\varphi}Z\otimes Z\ket{\varphi}=1,\nonumber \\
+	\langle Z_{1,r}Z_{3,l}\rangle
+	 & =\left[\tfrac12(1-1)\right]^2=0.
+	\label{eq:bell-correlations}
+\end{align}
+The printed CID interval permits this translation. Thus
+idempotence does not imply CID for arbitrary disjoint,
 possibly adjacent regions.
 
-The correct forward statement requires at least one free site
-in each complementary gap, both before and after translation.
-Every intervening power then satisfies $\mathbb E^g=\mathbb E$.
-At adjacency, $g=0$ instead gives $\mathbb E^0=\Id$.
-This is a substantive positive-gap correction, not a copy-weight
-normalization.
+Let $g_1,g_2$ and $g'_1,g'_2$ be the complementary gap lengths
+before and after translation. The corrected forward statement
+requires
+\begin{align}
+	g_1,g_2,g'_1,g'_2\geq1,\quad \mathbb E^2=\mathbb E\nonumber \\
+	\Longrightarrow\quad
+	\mathbb E^{g_1}=\mathbb E^{g_2}
+	=\mathbb E^{g'_1}=\mathbb E^{g'_2}=\mathbb E.
+	\label{eq:positive-gaps}
+\end{align}
+At adjacency, $\mathbb E^0=\Id$ instead. This is a positive-gap
+correction, not a copy-weight normalization.
 
 \subsection{Square-root normalization}
 
 In source Theorem~\ref{cpsv-thm:charact-MPS} and
-Lemma~\ref{cpsv-lem:charact-NT-pure-RFP}, a trace-normalized
-diagonal fixed point $\Lambda$ requires the factor
-$\sqrt{\Lambda}$ rather than $\Lambda$.
-The printed pair-index isometry condition gives
-\begin{align*}
-	\left[\sum_iU^iH(U^i)^\dagger\right]_{aa'}
-	 & =\sum_{b,b'}H_{bb'}\delta_{aa'}\delta_{bb'} \\
-	 & =\delta_{aa'}\tr H.
-\end{align*}
-Hence $A^i=\sqrt{\Lambda}U^i$ gives
-$\mc E_A(H)=\Lambda\tr H$, whereas $A^i=\Lambda U^i$
-gives $\Lambda^2\tr H$, of spectral radius
-$\tr(\Lambda^2)$ rather than one.
-
-Equivalently, one may retain $\Lambda$ as the Schmidt-amplitude
-matrix but then require $\tr(\Lambda^2)=1$.
-If $\Lambda$ denotes the density fixed point, the bond state in
-the same theorem has amplitudes $\sqrt{\Lambda_{aa}}$.
-This correction does not remove the independent copy-phase
-obstruction.
+Lemma~\ref{cpsv-lem:charact-NT-pure-RFP}, the pair-index isometry
+condition implies
+\begin{align}
+	\sum_iU^i_{ab}\overline{U^i_{a'b'}}
+	=\delta_{aa'}\delta_{bb'}
+	\quad\Longrightarrow\quad
+	\sum_iU^iH(U^i)^\dagger=\Id\,\tr H.
+	\label{eq:isometry-trace}
+\end{align}
+For a trace-normalized diagonal density fixed point,
+\begin{align}
+	 & \Lambda>0,\quad\tr\Lambda=1,\nonumber       \\
+	 & \begin{cases}
+		   A^i=\sqrt\Lambda U^i
+		    & \Rightarrow\ \mc E_A(H)=\Lambda\tr H,   \\
+		   A^i=\Lambda U^i
+		    & \Rightarrow\ \mc E_A(H)=\Lambda^2\tr H.
+	   \end{cases}
+	\label{eq:sqrt-comparison}
+\end{align}
+The printed second form has spectral radius $\tr(\Lambda^2)$;
+for bond dimension $D>1$, positivity and $\tr\Lambda=1$ give
+$\tr(\Lambda^2)<1$. Including the gauge, the corrected forms are equivalently
+\begin{align}
+	A^i & =X\sqrt\Lambda U^iX^{-1},\quad\tr\Lambda=1,\nonumber \\
+	\text{or}\qquad
+	A^i & =X\Lambda U^iX^{-1},\quad\tr(\Lambda^2)=1.
+	\label{eq:sqrt-corrected}
+\end{align}
+In the first convention, the bond state has amplitudes
+$\sqrt{\Lambda_{aa}}$; in the second, $\Lambda$ is the
+Schmidt-amplitude matrix. Neither convention removes the
+independent copy-phase obstruction.
 
 \subsection{Indices, exponents, and endpoints}
 
-The component identity in source Eq.~\eqref{cpsv-AA=A} should be
-\[
+Source Eq.~\eqref{cpsv-AA=A} must leave $i_1,i_2$ free and sum
+only over $j$:
+\begin{align}
 	A^{i_1}A^{i_2}=\sum_jU_{(i_1,i_2),j}A^j.
-\]
-The indices $i_1,i_2$ remain free, and only $j$ is summed.
+	\label{eq:corrected-AA=A}
+\end{align}
 In ``Commuting parent Hamiltonians'', the length-$L$ support
-vectors likewise require
-\[
+vectors are
+\begin{align}
 	\ket{v_{\alpha,\beta}}
 	=\sum_{i_1,\ldots,i_L}
-	(A^{i_1}\cdots A^{i_L})_{\alpha,\beta}
+	 (A^{i_1}\cdots A^{i_L})_{\alpha,\beta}
 	\ket{i_1,\ldots,i_L}.
-\]
+	\label{eq:corrected-parent-support}
+\end{align}
 
-In Appendix~C's proof of Theorem~\ref{cpsv-thm:IV.13}, the
-identity
-$A_\gamma=(m_\gamma/n_\gamma)
-	U_\gamma M_\gamma U_\gamma^\dagger$
-contributes $L$ scalar factors to a length-$L$ operator.
-The first simultaneous blocked-operator representation must
-therefore have coefficient
-\[
+In the notation of Appendix~C's proof of
+Theorem~\ref{cpsv-thm:IV.13},
+\begin{align}
+	A_\gamma      & =\frac{m_\gamma}{n_\gamma}
+	U_\gamma M_\gamma U_\gamma^\dagger\nonumber \\
+	\Longrightarrow\quad
+	O_L(A_\gamma) & =
+	\left(\frac{m_\gamma}{n_\gamma}\right)^LO_L(M_\gamma).
+	\label{eq:corrected-OL-scaling}
+\end{align}
+Here $O_L$ is the vertically contracted length-$L$ operator,
+and $m_\gamma=\tr\mu_\gamma$, $n_\gamma=\tr\nu_\gamma$ are
+the traces of the one-site and blocked multiplicity matrices.
+Thus the first simultaneous blocked-operator representation has
+coefficient
+\begin{align}
 	\left(\frac{m_\gamma}{n_\gamma}\right)^L\tr(\nu_\gamma^L),
-\]
-not $m_\gamma^L\tr(\nu_\gamma^L)/n_\gamma$.
-This agrees with the later trace-power expression in that proof.
+	\qquad\text{not}\qquad
+	\frac{m_\gamma^L}{n_\gamma}\tr(\nu_\gamma^L),
+	\label{eq:corrected-coefficient}
+\end{align}
+as in the later trace-power expression of that proof.
 
-The entropy equality following the definition of SAL must read
-\[
+The entropy equality following SAL is
+\begin{align}
+	I_L=I_{L+1}
+	\quad\Longleftrightarrow\quad
 	S_L+S_{N-L}=S_{L+1}+S_{N-L-1}.
-\]
+	\label{eq:corrected-sal-entropy}
+\end{align}
 The closing proof of Theorem~\ref{cpsv-thm:main-simple}
-also cyclically interchanges the roles of conditions~(iii)
-and~(iv) in its proposition assignments.
-Proposition~\ref{cpsv-prop2to5} starts from condition~(ii).
-Correcting these labels does not repair the false implications
-established above.
+cyclically interchanges conditions~(iii) and~(iv) in its
+proposition assignments; Proposition~\ref{cpsv-prop2to5}
+starts from condition~(ii). Correct labels do not repair the
+false implications above.
 
-Finally, the conjugating operator in source
-Example~\ref{cpsv-ExZCLnoSAL} should act on the two different
-qubits of a site:
-\[
-	U_n=\sigma_x^{(n,l)}\otimes\sigma_x^{(n,r)}.
-\]
-The exception list for strict failure of SAL must also include
-$p=1$. At that endpoint the channel is deterministic on-site
-unitary conjugation. It preserves the entropies of the Bell-pair
-ring, which has two maximally mixed boundary qubits at each
-proper connected cut: $S_L=2$, $S_N=0$, and $I_L=4$.
-This endpoint correction leaves the non-SAL witness at $p=1/4$
-unaffected.
+Finally, source Example~\ref{cpsv-ExZCLnoSAL} requires
+\begin{align}
+	U_n=\sigma_x^{(n,l)}\otimes\sigma_x^{(n,r)},\qquad
+	\mc E_n(X)=pU_nXU_n^\dagger+(1-p)X.
+	\label{eq:corrected-En-qubits}
+\end{align}
+The exception list for strict failure of SAL must include $p=1$:
+\begin{align}
+	p=1\quad\Longrightarrow\quad
+	S_L=2\ (1\leq L<N),\qquad
+	S_N=0,\qquad I_L=4.
+	\label{eq:p1-exception}
+\end{align}
+Indeed, deterministic on-site unitary conjugation preserves the
+Bell-pair ring entropies, with two maximally mixed boundary qubits
+at every proper connected cut. The non-SAL witness at $p=1/4$
+is unaffected.
 
 % Keep the single reference in the current grid; the APS full-width
 % bibliography separator otherwise forces an orphan page.
