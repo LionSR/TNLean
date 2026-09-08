@@ -21,9 +21,20 @@ $K=\tilde L X$ and $J=L\tilde X$ satisfy $KJ=I_r$ and $JK=I_\ell$.
 We retain their rectangular index types, without transporting along $r=\ell$.
 
 Source: arXiv:2502.20257, `main.tex` lines 5432–5443. This is the algebraic
-invertible-comparison step only. The source writes an adjoint for the inverse
-before its subsequent unitarity argument. Here the inverse is kept as $J$;
-neither $J=K^\dagger$ nor unitarity nor an unweighted formula for $K$ is asserted.
+invertible-comparison step only.
+
+**Local fix (weighted comparison matrix):** the source prints
+$K=\tilde X^\dagger X=\tilde Y Y^\dagger$. Only $\tilde X^\dagger(I_d\otimes\rho)$
+is a left inverse of $\tilde X$, by the weighted normalization of
+arXiv:1703.09188, lines 480–500, so the first expression carries that weight
+here; the second holds as printed and is proved. Documented in
+`docs/paper-gaps/fbc25_inverse_compatible_comparison_matrix.tex`.
+
+**Scope restriction (inverse comparison):** the source pairs $K$ with
+$K^\dagger$, using the unitarity it establishes afterwards. Here the inverse is
+the separately constructed $J$, with $KJ=I_r$ and $JK=I_\ell$; neither
+$J=K^\dagger$ nor unitarity of $K$ is asserted. Documented in
+`docs/paper-gaps/fbc25_inverse_compatible_comparison_matrix.tex`.
 -/
 
 open scoped ComplexOrder Matrix
