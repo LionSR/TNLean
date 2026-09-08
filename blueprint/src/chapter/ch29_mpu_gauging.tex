@@ -3225,10 +3225,20 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     \end{align}
     Hence $A_N=P_{E_N}^\dagger\widehat U^{N+2}$.
     Theorem~\ref{thm:mpug_inverse_truncation_unitary} makes
-    $\widehat U^{N+2}$ unitary, and transport along the coordinate
-    bijection preserves both Gram identities. Therefore
-    $A_N^\dagger A_N=I_{\mathcal H_N}$ and
-    $A_NA_N^\dagger=I_{\mathcal R_N^{\mathrm{raw}}}$.
+    $\widehat U^{N+2}$ unitary. Since $E_N$ is a bijection, its permutation
+    matrix satisfies $P_{E_N}^\dagger P_{E_N}=I_{\mathcal R_N^{\mathrm{raw}}}$
+    and $P_{E_N}P_{E_N}^\dagger=I_{\mathcal R_N^{\mathrm{pkg}}}$, so both Gram
+    products collapse:
+    \begin{align}
+        A_N^\dagger A_N
+         & =(\widehat U^{N+2})^\dagger P_{E_N}P_{E_N}^\dagger\widehat U^{N+2}
+        =(\widehat U^{N+2})^\dagger\widehat U^{N+2}
+        =I_{\mathcal H_N},                                                    \\
+        A_NA_N^\dagger
+         & =P_{E_N}^\dagger\widehat U^{N+2}(\widehat U^{N+2})^\dagger P_{E_N}
+        =P_{E_N}^\dagger P_{E_N}
+        =I_{\mathcal R_N^{\mathrm{raw}}}.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Local cancellation with one phase]
