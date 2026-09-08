@@ -8529,6 +8529,129 @@ by the displayed matrices.
     bijections gives the Pauli and inverse coordinates.
 \end{proof}
 
+\subsection{Normalization of the displayed CZX comparison}
+
+\begin{definition}[Reflected candidates and the two displayed comparisons]
+    \label{def:mpug_czx_displayed_comparison}
+    \lean{MPOTensor.CZX.displayedReflectedX₁, MPOTensor.CZX.displayedReflectedY₁,
+        MPOTensor.CZX.displayedRawComparison,
+        MPOTensor.CZX.displayedWeightedComparison}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors, def:mpug_czx_dagger_gauge,
+        def:mpu_source_weight}
+    Let $Y$ be the Pauli adjoint gauge of
+    Definition~\ref{def:mpug_czx_dagger_gauge} and let
+    $X_1,Y_1,X_2,Y_2$ be the displayed factors of
+    Definition~\ref{def:mpug_czx_displayed_factors}, with $d=4$ and $D=2$.
+    Put $A=I_4\otimes\overline Y$ and $B=Y^{\mathsf T}\otimes I_4$, and
+    define the reflected candidates
+    \begin{align}
+        \widehat X_1 & =AY_2^\dagger,  \\
+        \widehat Y_1 & =X_2^\dagger B.
+    \end{align}
+    With $\rho=I_2/2$, define the raw and the density-weighted comparisons
+    \begin{align}
+        K_{\mathrm{raw}} & =X_1^\dagger\widehat X_1,                 \\
+        K_\rho           & =X_1^\dagger(I_4\otimes\rho)\widehat X_1.
+    \end{align}
+    These are the candidates and the comparison of
+    \cite[lines~5432--5441]{FrancoRubio2025MPUGauging} evaluated on the
+    explicit factors of lines~4559--4659.
+\end{definition}
+
+\begin{theorem}[The reflected candidates are the negatives of the displayed factors]
+    \label{thm:mpug_czx_reflected_neg}
+    \lean{MPOTensor.CZX.displayedReflected_eq_neg}
+    \leanok
+    \uses{def:mpug_czx_displayed_comparison, def:mpug_czx_displayed_factors}
+    For the maintained Pauli gauge,
+    \begin{align}
+        \widehat X_1 & =-X_1, \\
+        \widehat Y_1 & =-Y_1.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_dagger_gauge_laws, thm:mpug_czx_dagger_sign,
+        def:mpug_czx_displayed_factors, def:mpug_czx_displayed_comparison}
+    Theorem~\ref{thm:mpug_czx_dagger_sign} gives $\overline Y=-Y$, and
+    $Y^{\mathsf T}=\overline{Y^\dagger}=\overline Y=-Y$ by
+    Theorem~\ref{thm:mpug_czx_dagger_gauge_laws}. Expanding both entries
+    of the displayed factors against these two gauges gives the sign.
+\end{proof}
+
+\begin{theorem}[Coordinates of the two comparisons and the right overlap]
+    \label{thm:mpug_czx_comparison_coordinates}
+    \lean{MPOTensor.CZX.displayedComparison_coordinates,
+        MPOTensor.CZX.displayedRawComparison_gram,
+        MPOTensor.CZX.displayedRawComparison_not_isUnitaryBetween,
+        MPOTensor.CZX.displayedRawComparison_ne_rightOverlap}
+    \leanok
+    \uses{def:mpug_czx_displayed_comparison}
+    On the displayed factors,
+    \begin{align}
+        K_{\mathrm{raw}}        & =-2I_4,
+        \label{eq:mpug_czx_raw_comparison}      \\
+        K_\rho                  & =-I_4,
+        \label{eq:mpug_czx_weighted_comparison} \\
+        Y_1\widehat Y_1^\dagger & =-I_4.
+        \label{eq:mpug_czx_right_overlap}
+    \end{align}
+    Consequently $K_{\mathrm{raw}}^\dagger K_{\mathrm{raw}}=4I_4$, so
+    $K_{\mathrm{raw}}$ is not unitary, and
+    $K_{\mathrm{raw}}\neq Y_1\widehat Y_1^\dagger$: the unweighted left
+    overlap and the right overlap of
+    \cite[lines~5438--5441]{FrancoRubio2025MPUGauging} disagree on these
+    factors.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_reflected_neg, thm:mpug_czx_displayed_grams,
+        thm:mpug_czx_displayed_normalizations,
+        def:mpug_czx_displayed_comparison}
+    Substituting Theorem~\ref{thm:mpug_czx_reflected_neg} turns each
+    overlap into the negative of a Gram matrix of the displayed factors.
+    The unweighted Gram $X_1^\dagger X_1=2I_4$ of
+    Theorem~\ref{thm:mpug_czx_displayed_grams} gives
+    (\ref{eq:mpug_czx_raw_comparison}); the weighted normalization
+    $X_1^\dagger(I_4\otimes\rho)X_1=I_4$ of
+    Theorem~\ref{thm:mpug_czx_displayed_normalizations} gives
+    (\ref{eq:mpug_czx_weighted_comparison}); and $Y_1Y_1^\dagger=I_4$ gives
+    (\ref{eq:mpug_czx_right_overlap}). Squaring
+    (\ref{eq:mpug_czx_raw_comparison}) gives the Gram matrix $4I_4$, whose
+    diagonal entry $4$ differs from $1$, and comparing the diagonal entries
+    of (\ref{eq:mpug_czx_raw_comparison}) and
+    (\ref{eq:mpug_czx_right_overlap}) separates the two overlaps.
+\end{proof}
+
+\begin{theorem}[The weighted comparison is unitary and recovers both factors]
+    \label{thm:mpug_czx_weighted_comparison_spec}
+    \lean{MPOTensor.CZX.displayedWeightedComparison_spec}
+    \leanok
+    \uses{def:mpug_czx_displayed_comparison}
+    The weighted comparison $K_\rho$ is unitary, and
+    \begin{align}
+        X_1 & =\widehat X_1K_\rho^\dagger, \\
+        Y_1 & =K_\rho\widehat Y_1.
+    \end{align}
+    The weight is the one carried by the normalization of the first left
+    factor. This calculation concerns the explicit displayed witness of
+    Definition~\ref{def:mpug_czx_displayed_factors}, not choice-selected
+    factors, so the unequal overlaps of
+    Theorem~\ref{thm:mpug_czx_comparison_coordinates} diagnose the
+    intermediate formula of
+    \cite[lines~5438--5441]{FrancoRubio2025MPUGauging} on these factors
+    rather than contradicting the proposition being proved there. The
+    weighted comparison is the one retained in
+    \cite{gap:fbc25_inverse_compatible_tilde_omission}; no gauge phase is
+    changed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_comparison_coordinates, thm:mpug_czx_reflected_neg}
+    By (\ref{eq:mpug_czx_weighted_comparison}), $K_\rho=-I_4$, which is
+    unitary. Theorem~\ref{thm:mpug_czx_reflected_neg} then gives
+    $\widehat X_1K_\rho^\dagger=(-X_1)(-I_4)=X_1$ and
+    $K_\rho\widehat Y_1=(-I_4)(-Y_1)=Y_1$.
+\end{proof}
+
 \subsection{The blocked GHZ state and its CZX invariance}
 
 \begin{definition}[The GHZ tensor in the blocked CZX alphabet]

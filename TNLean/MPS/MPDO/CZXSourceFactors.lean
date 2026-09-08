@@ -61,10 +61,27 @@ theorem displayed_cuts :
       Fin.sum_univ_two, daggerGauge, SpinCover.pauli_one,
       Fin.divNat, Fin.modNat, Fin.rev, ZMod.val, Fin.reduceEq]
 
+/-- The displayed first left factor is the Pauli-gauge dressing of the adjoint
+of the second right factor. Source: arXiv:2502.20257, lines 4559–4659. -/
+theorem displayedX₁_eq_kronecker_mul :
+    displayedX₁ = ((1 : Matrix (Fin 4) (Fin 4) ℂ) ⊗ₖ daggerGauge) * displayedY₂ᴴ := by
+  ext ⟨i, β⟩ k
+  simp [displayedX₁, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
+    Matrix.conjTranspose_apply, Matrix.one_apply]
+
+/-- The displayed first right factor is the adjoint of the second left factor
+dressed by the Pauli gauge on the virtual leg. Source: arXiv:2502.20257,
+lines 4559–4659. -/
+theorem displayedY₁_eq_mul_kronecker :
+    displayedY₁ = displayedX₂ᴴ * (daggerGauge ⊗ₖ (1 : Matrix (Fin 4) (Fin 4) ℂ)) := by
+  ext k ⟨α, j⟩
+  simp [displayedY₁, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
+    Matrix.conjTranspose_apply, Matrix.one_apply]
+
 /-- The four Gram identities for the displayed factors in
 arXiv:2502.20257, lines 4559–4659, with unnormalized Hadamard weights.
-The Pauli-gauge identities `displayedX₁ = (1 ⊗ₖ daggerGauge) * displayedY₂ᴴ` and
-`displayedY₁ = displayedX₂ᴴ * (daggerGauge ⊗ₖ 1)` reduce the first and third
+The Pauli-gauge identities `displayedX₁_eq_kronecker_mul` and
+`displayedY₁_eq_mul_kronecker` reduce the first and third
 conjuncts to the second and fourth via unitarity of the dagger gauge. -/
 theorem displayed_grams :
     displayedX₁ᴴ * displayedX₁ = (2 : ℂ) • 1 ∧
@@ -91,14 +108,8 @@ theorem displayed_grams :
       (daggerGauge ⊗ₖ (1 : Matrix (Fin 4) (Fin 4) ℂ))ᴴ = 1 := by
     rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one, daggerGauge_conjTranspose,
       ← Matrix.mul_kronecker_mul, daggerGauge_mul_self, one_mul, Matrix.one_kronecker_one]
-  have hX₁ : displayedX₁ = ((1 : Matrix (Fin 4) (Fin 4) ℂ) ⊗ₖ daggerGauge) * displayedY₂ᴴ := by
-    ext ⟨i, β⟩ k
-    simp [displayedX₁, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
-      Matrix.conjTranspose_apply, Matrix.one_apply]
-  have hY₁ : displayedY₁ = displayedX₂ᴴ * (daggerGauge ⊗ₖ (1 : Matrix (Fin 4) (Fin 4) ℂ)) := by
-    ext k ⟨α, j⟩
-    simp [displayedY₁, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
-      Matrix.conjTranspose_apply, Matrix.one_apply]
+  have hX₁ := displayedX₁_eq_kronecker_mul
+  have hY₁ := displayedY₁_eq_mul_kronecker
   refine ⟨?_, hX₂, ?_, hY₂⟩
   · rw [hX₁, Matrix.conjTranspose_mul, Matrix.mul_assoc,
       ← Matrix.mul_assoc ((1 : Matrix (Fin 4) (Fin 4) ℂ) ⊗ₖ daggerGauge)ᴴ
