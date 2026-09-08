@@ -58,7 +58,7 @@ source's matrices.
 * Pérez-García--Verstraete--Wolf--Cirac 2007, arXiv:quant-ph/0608197, local
   TeX lines 374--387.
 * Cirac--Pérez-García--Schuch--Verstraete 2021, arXiv:2011.12127,
-  lines 2364--2371 (the tensor).
+  lines 2364--2369 (the tensor).
 -/
 
 open scoped Matrix BigOperators

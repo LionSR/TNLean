@@ -519,16 +519,15 @@ the comparison matrix $K$, or the full compatibility properties of
     Let $\mathcal U$ be a tensor of physical dimension $d$ and bond
     dimension $D$. Suppose that $T$ is unitary on $\C^D$ and that, for
     every physical pair $i,j$,
-    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$. Then, for every
+    $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$. Then, for every
     physical pair $i,j$,
-    $\mathcal U^{ij}=T(\mathcal U^\dagger)^{ij}T^\dagger$.
-    Here $\mathcal U^\dagger$ denotes physical
-    adjunction. This reverses the gauge relation used in
+    $\mathcal U^{ij}=T(\mathcal U^\sharp)^{ij}T^\dagger$.
+    This reverses the gauge relation used in
     \cite[lines~5391--5410]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 \begin{proof}\leanok
     Unitarity gives
-    $T(\mathcal U^\dagger)^{ij}T^\dagger
+    $T(\mathcal U^\sharp)^{ij}T^\dagger
         =(TT^\dagger)\mathcal U^{ij}(TT^\dagger)=\mathcal U^{ij}$.
 \end{proof}
 
@@ -540,7 +539,7 @@ the comparison matrix $K$, or the full compatibility properties of
         def:mpu_source_matrix_two, def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a tensor of physical dimension $d$ and bond
     dimension $D$. Suppose that $T$ is unitary and that, for every
-    physical pair $i,j$, $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$.
+    physical pair $i,j$, $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$.
     With $A=I_d\otimes\overline T$ and
     $B=T^{\mathsf T}\otimes I_d$, the source cuts satisfy
     $M_1(\mathcal U)=AM_2(\mathcal U)^\dagger B$. This is the cut
@@ -551,14 +550,14 @@ the comparison matrix $K$, or the full compatibility properties of
         thm:mpu_physical_adjoint_source_cuts, def:mpug_inverse_cut_gauges,
         def:mpu_source_matrix_one}
     Physical adjunction gives
-    $M_2(\mathcal U)^\dagger=M_1(\mathcal U^\dagger)$.
+    $M_2(\mathcal U)^\dagger=M_1(\mathcal U^\sharp)$.
     For physical indices $i,j$ and virtual indices $a,b$, expand the
     matrix product and apply Theorem~\ref{thm:mpug_inverse_cut_reverse_gauge}:
     \begin{align}
-        (AM_1(\mathcal U^\dagger)B)_{(i,b),(a,j)}
+        (AM_1(\mathcal U^\sharp)B)_{(i,b),(a,j)}
          & =\sum_{x,y=0}^{D-1}\overline{T_{bx}}
-        (\mathcal U^\dagger)^{ij}_{yx}T_{ay}           \\
-         & =(T(\mathcal U^\dagger)^{ij}T^\dagger)_{ab}
+        (\mathcal U^\sharp)^{ij}_{yx}T_{ay}           \\
+         & =(T(\mathcal U^\sharp)^{ij}T^\dagger)_{ab}
         =\mathcal U^{ij}_{ab}.
     \end{align}
 \end{proof}
@@ -571,7 +570,7 @@ the comparison matrix $K$, or the full compatibility properties of
         def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a tensor and $T$ a unitary virtual matrix such
     that, for every physical pair $i,j$,
-    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$. The candidates $X,Y$ of
+    $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$. The candidates $X,Y$ of
     Definition~\ref{def:mpug_inverse_cut_factors} satisfy
     $M_1(\mathcal U)=XY$. This is the candidate decomposition of
     \cite[line~5432]{FrancoRubio2025MPUGauging}.
@@ -647,7 +646,7 @@ the comparison matrix $K$, or the full compatibility properties of
     the chosen unitary gauge $T_g$ of
     Theorem~\ref{thm:mpug_dagger_inverse_gauge} satisfies, for every
     physical pair $i,j$,
-    $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
+    $(\mathcal U_g^\sharp)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
     This specializes the gauge relation
     of \cite[lines~1552--1557]{FrancoRubio2025MPUGauging} to the
     involutive case discussed in
@@ -657,7 +656,7 @@ the comparison matrix $K$, or the full compatibility properties of
     \uses{thm:mpug_dagger_inverse_gauge}
     The equality $g^{-1}=g$ identifies both the tensors and their bond
     spaces. Thus the chosen gauge satisfies
-    $(\mathcal U_g^\dagger)^{ij}
+    $(\mathcal U_g^\sharp)^{ij}
         =T_g^\dagger\mathcal U_{g^{-1}}^{ij}T_g
         =T_g^\dagger\mathcal U_g^{ij}T_g$.
 \end{proof}
@@ -691,7 +690,7 @@ the comparison matrix $K$, or the full compatibility properties of
         thm:mpug_inverse_cut_factorization, thm:mpug_inverse_cut_left_inverse,
         thm:mpug_inverse_cut_right_inverse}
     Theorem~\ref{thm:mpug_involutive_adjoint_gauge} gives
-    $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
+    $(\mathcal U_g^\sharp)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
     Theorem~\ref{thm:mpug_inverse_cut_factorization} therefore gives
     $M_1(\mathcal U_g)=XY$. Theorems~\ref{thm:mpug_inverse_cut_left_inverse}
     and~\ref{thm:mpug_inverse_cut_right_inverse} give
@@ -713,8 +712,8 @@ inverse-compatible decomposition is asserted.
     \uses{def:mpu_right_rank, def:mpu_left_rank, def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
     dimension $D$. Suppose that $T$ is unitary on $\C^D$ and
-    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
-    $0\leq i,j<d$, where $\mathcal U^\dagger$ denotes physical adjunction.
+    $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    $0\leq i,j<d$.
     Then its source-cut ranks satisfy
     $r=\operatorname{rank}M_1(\mathcal U)
         =\operatorname{rank}M_2(\mathcal U)=\ell$.
@@ -785,7 +784,7 @@ inverse-compatible decomposition is asserted.
         def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$, let $T$ be
     unitary on $\C^D$, and suppose that
-    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
     $0\leq i,j<d$. Let $\rho$ be positive definite on $\C^D$.
     Write $\widetilde X,\widetilde Y,\widetilde Z$ for the first
     source factors with weight $\rho$, and $X_2,Y_2,Z_2$ for the
@@ -973,7 +972,12 @@ inverse-compatible decomposition is asserted.
     \end{align}
     is unitary between these spaces: $K^\dagger K=I_\ell$ and
     $KK^\dagger=I_r$. This is the comparison-unitarity step of
-    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}.
+    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}. The comparison
+    carries the weight of the chosen normalization
+    \cite[lines~487--494]{Cirac2017MPU}, which the printed definition of
+    $K$ at \cite[lines~5436--5439]{FrancoRubio2025MPUGauging} omits; the
+    omission and its repair are recorded in
+    \cite{gap:fbc25_inverse_compatible_tilde_omission}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lemuisometry, ThmFund1, thm:mpug_inverse_cut_gate_identity,
@@ -8138,6 +8142,34 @@ block label, or physical gate is changed here.
     The physical index $3x$ encodes the two bits $(x,x)$.
 \end{definition}
 
+\begin{theorem}[Coordinates of the supported product letters]
+    \label{thm:mpug_czx_supported_letter_coordinates}
+    \lean{MPOTensor.CZX.mulTensor_diagonal_letter_coordinates}
+    \leanok
+    \uses{def:mpug_czx_fusion_action_letter}
+    The two supported product letters have coordinates
+    \begin{align}
+        B_0 & =\begin{pmatrix}
+                   0 & 0 & 0 & 0 \\-1&1&-1&1\\0&0&0&0\\0&0&0&0
+               \end{pmatrix}, \\
+        B_1 & =\begin{pmatrix}
+                   0 & 0 & 0 & 0 \\0&0&0&0\\-1&-1&1&1\\0&0&0&0
+               \end{pmatrix}.
+        \label{eq:mpug_czx_supported_letters}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpdo_operator_product}
+    The letter of $T\mathbin{\cdot}T$ at a physical pair $(i,i')$ vanishes
+    unless $i=i'$, because the blocked tensor complements the physical index
+    it carries. At $i=i'=3x$ the summation index of
+    Definition~\ref{def:mpug_czx_fusion_action_letter} retains the single
+    term $j=3(1-x)$, whose two factors force the left virtual pair
+    $(\alpha,\gamma)=(x,1-x)$, the row of index $x+1$. On that row the
+    surviving sign is $(-1)^{1+(1-x)\delta+x\beta}$, which is the row
+    displayed above.
+\end{proof}
+
 \begin{definition}[Literal fusion--action coefficient]
     \label{def:mpug_czx_fusion_action_coefficient}
     \lean{MPOTensor.CZX.fusionActionCoefficient}
@@ -8162,20 +8194,23 @@ block label, or physical gate is changed here.
     The literal coefficients satisfy $c_0=1$ and $c_1=-1$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpug_czx_fusion_action_letter,
+    \uses{thm:mpug_czx_supported_letter_coordinates,
         def:mpug_czx_sequential_action_bra, def:mpug_czx_printed_action_pair,
         def:mpug_czx_fusion_caps}
-    Expanding the two supported product letters gives
+    The printed rows are $P_0=(0,-i,0,0)$ and $P_1=(0,0,-i,0)$, and the
+    column is $W=\tfrac12(0,i,-i,0)^{\mathsf T}$. With $e_0,\dots,e_3$ the
+    standard basis of the product bond, the single nonzero row of each
+    supported letter of (\ref{eq:mpug_czx_supported_letters}) contracts with
+    $W$ as
     \begin{align}
-        B_0 & =\begin{pmatrix}
-                   0 & 0 & 0 & 0 \\-1&1&-1&1\\0&0&0&0\\0&0&0&0
-               \end{pmatrix}, &
-        B_1 & =\begin{pmatrix}
-                   0 & 0 & 0 & 0 \\0&0&0&0\\-1&-1&1&1\\0&0&0&0
-               \end{pmatrix}.
+        B_0W & =\tfrac12(i+i)e_1=ie_1,   \\
+        B_1W & =\tfrac12(-i-i)e_2=-ie_2,
     \end{align}
-    Substitute the printed rows and the column $W$ into $P_xB_xW$.
-    The two finite matrix products give the asserted values.
+    so the two finite matrix products are
+    \begin{align}
+        c_0 & =P_0B_0W=(0,-i,0,0)\,ie_1=1,     \\
+        c_1 & =P_1B_1W=(0,0,-i,0)\,(-ie_2)=-1.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Normalization, proportionality, and idempotence]
@@ -8192,15 +8227,30 @@ block label, or physical gate is changed here.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpug_czx_fusion_action_letter,
+    \uses{thm:mpug_czx_supported_letter_coordinates,
+        def:mpug_czx_fusion_action_letter,
         def:mpug_czx_sequential_action_bra, def:mpug_czx_sequential_action_ket,
         def:mpug_czx_printed_action_pair, def:mpug_czx_fusion_caps,
         def:mpug_czx_fusion_action_coefficient}
-    Expand the two supported letters and substitute the printed action
-    rows and columns and the cap $W$. For each of the two values of $x$,
-    finite matrix multiplication gives simultaneously the normalization,
-    proportionality with coefficient $1$ or $-1$, idempotence, and the
-    same value of $P_xB_xW$. Substitute this last value for $c_x$.
+    Substituting the printed action columns gives
+    $Q_0=\tfrac14(-i,i,-i,i)^{\mathsf T}$ and
+    $Q_1=\tfrac14(-i,-i,i,i)^{\mathsf T}$. With $e_0,\dots,e_3$ the standard
+    basis of the product bond, the two supported letters of
+    (\ref{eq:mpug_czx_supported_letters}) contract with these columns and
+    with the cap $W$ as
+    \begin{align}
+        B_0Q_0 & =ie_1,  \\
+        B_0W   & =ie_1,  \\
+        B_1Q_1 & =ie_2,  \\
+        B_1W   & =-ie_2.
+        \label{eq:mpug_czx_fusion_action_contractions}
+    \end{align}
+    The printed rows are $P_0=(0,-i,0,0)$ and $P_1=(0,0,-i,0)$, so applying
+    $P_x$ to (\ref{eq:mpug_czx_fusion_action_contractions}) gives
+    $P_xB_xQ_x=1$ and $P_xB_xW=c_x$, with $c_0=1$ and $c_1=-1$. Comparing
+    the two right-hand sides for each $x$ gives $B_xW=c_xB_xQ_x$. Each
+    matrix of (\ref{eq:mpug_czx_supported_letters}) has a single nonzero row,
+    whose entry in the supporting column is $1$, so $B_x^2=B_x$.
 \end{proof}
 
 \begin{theorem}[Positive repetitions of the supported letter]
@@ -9172,6 +9222,33 @@ Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
     hence is a unit vector.
 \end{proof}
 
+\begin{lemma}[Transported monomial operators on the computational basis]
+    \label{lem:mpug_czx_matter_monomial_action}
+    \lean{MPOTensor.CZX.matterKet,
+        MPOTensor.CZX.matterMatrix_monomial_mulVec_matterKet}
+    \leanok
+    \uses{def:mpug_monomial_matrix, def:mpug_czx_circuit_tuple,
+        def:mpug_czx_defect_vectors}
+    Write $\ket{x}$ for the computational basis vector of the two-site matter
+    space attached to $x\in\mathbb F_2^4$ by the qubit numbering of
+    Definition~\ref{def:mpug_czx_defect_vectors}. After transport to that
+    space a monomial four-qubit operator still acts on the computational basis
+    by its phase and its permutation, so that for every $x\in\mathbb F_2^4$
+    \begin{align}
+        M(\sigma,\varphi)\ket{x} & =\varphi(x)\ket{\sigma(x)}.
+        \label{eq:mpug_czx_matter_monomial_action}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_monomial_matrix_laws, def:mpug_czx_circuit_tuple}
+    Transport is the simultaneous relabelling of rows and columns along the
+    qubit numbering. It carries $M(\sigma,\varphi)$ to the monomial matrix of
+    the relabelled permutation and phase, and carries the basis vector of $x$
+    to $\ket{x}$, so reading (\ref{eq:mpug_monomial_matrix}) in the new labels
+    gives (\ref{eq:mpug_czx_matter_monomial_action}).
+\end{proof}
+
 \begin{theorem}[Unmodified CZX fusion contractions]
     \label{thm:mpug_czx_unmodified_fusion}
     \lean{MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_zero,
@@ -9198,18 +9275,22 @@ Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values}
-    The phase formula~(\ref{eq:mpug_czx_lambda_action}) gives the two
-    basis calculations
+    \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values,
+        lem:mpug_czx_matter_monomial_action}
+    The phase formula~(\ref{eq:mpug_czx_lambda_action}), read on the two-site
+    matter space through (\ref{eq:mpug_czx_matter_monomial_action}), gives
     \begin{align}
-        \lambda\ket{1100} & =-i\ket{0000}, \\
+        \lambda\ket{1100} & =-i\ket{0000},
+        \label{eq:mpug_czx_lambda_ket_even} \\
         \lambda\ket{0011} & =i\ket{1111},
+        \label{eq:mpug_czx_lambda_ket_odd}
     \end{align}
     since $h(1100)=0$ and $h(0011)=1$.
     By Theorem~\ref{thm:mpug_czx_defect_vector_values}, the input defect
     vectors are $-i\ket{1100}$ and $-i\ket{0011}$, while the target
-    vectors are $\ket{0000}$ and $\ket{1111}$. Multiplying the two
-    basis calculations by $-i$ gives the claimed signs.
+    vectors are $\ket{0000}$ and $\ket{1111}$. Multiplying
+    (\ref{eq:mpug_czx_lambda_ket_even}) and
+    (\ref{eq:mpug_czx_lambda_ket_odd}) by $-i$ gives the claimed signs.
 \end{proof}
 
 \begin{definition}[CZX defect domains]
