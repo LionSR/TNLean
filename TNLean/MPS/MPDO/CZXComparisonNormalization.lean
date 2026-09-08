@@ -65,14 +65,10 @@ theorem displayedReflected_eq_neg :
       _ = daggerGauge.map (starRingEnd ℂ) := rfl
       _ = -daggerGauge := daggerGauge_map_star
   constructor
-  · rw [displayedReflectedX₁, daggerGauge_map_star]
-    ext ⟨i, β⟩ k
-    simp [displayedX₁, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
-      Matrix.conjTranspose_apply, Matrix.one_apply]
-  · rw [displayedReflectedY₁, ht]
-    ext k ⟨α, j⟩
-    simp [displayedY₁, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
-      Matrix.conjTranspose_apply, Matrix.one_apply]
+  · rw [displayedReflectedX₁, daggerGauge_map_star, displayedX₁_eq_kronecker_mul,
+      ← neg_one_smul ℂ daggerGauge, Matrix.kronecker_smul, Matrix.smul_mul, neg_one_smul]
+  · rw [displayedReflectedY₁, ht, displayedY₁_eq_mul_kronecker,
+      ← neg_one_smul ℂ daggerGauge, Matrix.smul_kronecker, Matrix.mul_smul, neg_one_smul]
 
 /-- The raw left, weighted left, and raw right overlaps of the displayed
 factors. Source: arXiv:2502.20257, lines 5438–5441 and 4559–4659. -/
