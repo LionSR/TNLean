@@ -310,12 +310,19 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
          & = \mathcal G_{N,3}(A_{\mathrm{src}}).
         \notag
     \end{align}
-    This equality alone does not assert that the space is one-dimensional.
+    % Uniqueness for the source matrices remains part of issue #7810.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:cluster_source_ground_space_three_eigenspace, rem:cyclic_window_operators, def:chain_ground_space}
+    The three-site calculation in
+    Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace} identifies
+    $\mathcal G_3(A_{\mathrm{src}})$ with the $-1$ eigenspace of $K=ZXZ$.
+    The periodic ground space imposes this local condition at every position
+    around the ring. Each translated operator $K_i$ acts only on its three
+    sites, so we can apply the local calculation with the outside spins fixed.
+
     Fix a site $i$ and fix the spins outside $[i,i+2]$ to a configuration
     $\tau$. The remaining coefficients form a three-site vector
     $\psi|_{[i,i+2],\tau}$. The operator $K_i$ acts only on these three
@@ -332,9 +339,8 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     every coefficient of $K_i\psi+\psi$ occurs in one of these
     three-site vectors, so all its coefficients vanish.
 
-    By Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace},
-    the local $-1$ eigenspace is $\mathcal G_3(A_{\mathrm{src}})$.
-    Thus $K_i\psi=-\psi$ for every $i$ exactly when every three-site
+    Substituting the local ground-space identity, we obtain
+    $K_i\psi=-\psi$ for every $i$ exactly when every three-site
     restriction belongs to $\mathcal G_3(A_{\mathrm{src}})$, which is the
     defining condition for $\psi\in\mathcal G_{N,3}(A_{\mathrm{src}})$.
 \end{proof}
