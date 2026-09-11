@@ -298,6 +298,47 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     fixed by $K$ exactly when it lies in $\mathcal G_3(A_{\mathrm{cl}})$.
 \end{proof}
 
+\begin{theorem}[Periodic ground space for the source cluster matrices]
+    \label{thm:cluster_source_stabilizer_chain_ground_space}
+    \lean{MPSTensor.clusterSource_iInf_eigenspace_eq_chainGroundSpace}
+    \leanok
+    \uses{thm:cluster_source_ground_space_three_eigenspace, def:chain_ground_space, def:cluster_chain_stabilizer}
+    For $N\ge3$, the periodic three-site ground space of the source tensor is
+    the common $-1$ eigenspace of the translated stabilizers:
+    \begin{align}
+        \bigcap_i\{\psi : K_i\psi = -\psi\}
+         & = \mathcal G_{N,3}(A_{\mathrm{src}}).
+        \notag
+    \end{align}
+    This equality alone does not assert that the space is one-dimensional.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cluster_source_ground_space_three_eigenspace, rem:cyclic_window_operators, def:chain_ground_space}
+    Fix a site $i$ and fix the spins outside $[i,i+2]$ to a configuration
+    $\tau$. The remaining coefficients form a three-site vector
+    $\psi|_{[i,i+2],\tau}$. The operator $K_i$ acts only on these three
+    sites: it flips the middle spin and multiplies by the two endpoint
+    signs. Since $N\ge3$, these sites are distinct, and therefore
+    \begin{align}
+        K\bigl(\psi|_{[i,i+2],\tau}\bigr)
+         & = (K_i\psi)|_{[i,i+2],\tau}.
+        \notag
+    \end{align}
+    It follows that $K_i\psi=-\psi$ if and only if
+    $K\bigl(\psi|_{[i,i+2],\tau}\bigr)
+    =-\psi|_{[i,i+2],\tau}$ for every $\tau$. For the reverse implication,
+    every coefficient of $K_i\psi+\psi$ occurs in one of these
+    three-site vectors, so all its coefficients vanish.
+
+    By Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace},
+    the local $-1$ eigenspace is $\mathcal G_3(A_{\mathrm{src}})$.
+    Thus $K_i\psi=-\psi$ for every $i$ exactly when every three-site
+    restriction belongs to $\mathcal G_3(A_{\mathrm{src}})$, which is the
+    defining condition for $\psi\in\mathcal G_{N,3}(A_{\mathrm{src}})$.
+\end{proof}
+
 \begin{theorem}[The cluster state spans the common $+1$ eigenspace of the $ZXZ$ stabilizers]
     \label{thm:cluster_stabilizer_unique_gs}
     \lean{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.cluster_stabilizer_unique_gs}
