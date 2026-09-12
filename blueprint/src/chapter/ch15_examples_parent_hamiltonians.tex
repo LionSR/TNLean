@@ -325,6 +325,133 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     $\dim\mathcal G_{N,3}(A_{\mathrm{cl}}) = 1$.
 \end{proof}
 
+\begin{theorem}[Periodic ground space for the source cluster matrices]
+    \label{thm:cluster_source_stabilizer_chain_ground_space}
+    \lean{MPSTensor.clusterSource_iInf_eigenspace_eq_chainGroundSpace}
+    \leanok
+    \uses{thm:cluster_source_ground_space_three_eigenspace, def:chain_ground_space, def:cluster_chain_stabilizer}
+    For $N\ge3$, the periodic three-site ground space of the source tensor is
+    the common $-1$ eigenspace of the translated stabilizers:
+    \begin{align}
+        \bigcap_i\{\psi : K_i\psi = -\psi\}
+         & = \mathcal G_{N,3}(A_{\mathrm{src}}).\notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:cluster_source_ground_space_three_eigenspace, rem:cyclic_window_operators, def:chain_ground_space}
+    The three-site calculation in
+    Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace} identifies
+    $\mathcal G_3(A_{\mathrm{src}})$ with the $-1$ eigenspace of $K=ZXZ$.
+    The periodic ground space imposes this local condition at every position
+    around the ring. Each translated operator $K_i$ acts only on its three
+    sites, so we can apply the local calculation with the outside spins fixed.
+
+    Fix a site $i$ and fix the spins outside $[i,i+2]$ to a configuration
+    $\tau$. The remaining coefficients form a three-site vector
+    $\psi|_{[i,i+2],\tau}$. The operator $K_i$ acts only on these three
+    sites: it flips the middle spin and multiplies by the two endpoint
+    signs. Since $N\ge3$, these sites are distinct, and therefore
+    \begin{align}
+        K\bigl(\psi|_{[i,i+2],\tau}\bigr)
+         & = (K_i\psi)|_{[i,i+2],\tau}.\notag
+    \end{align}
+    It follows that $K_i\psi=-\psi$ if and only if
+    $K\bigl(\psi|_{[i,i+2],\tau}\bigr)
+    =-\psi|_{[i,i+2],\tau}$ for every $\tau$. For the reverse implication,
+    every coefficient of $K_i\psi+\psi$ occurs in one of these
+    three-site vectors, so all its coefficients vanish.
+
+    Substituting the local ground-space identity, we obtain
+    $K_i\psi=-\psi$ for every $i$ exactly when every three-site
+    restriction belongs to $\mathcal G_3(A_{\mathrm{src}})$, which is the
+    defining condition for $\psi\in\mathcal G_{N,3}(A_{\mathrm{src}})$.
+\end{proof}
+
+\begin{theorem}[Source cluster ground state]\label{thm:cluster_source_periodic_ground_state}
+    \lean{MPSTensor.clusterSource_mpv_eq_globalZ, MPSTensor.clusterSource_mpv_ne_zero, MPSTensor.clusterSource_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_stabilizer_unique_gs, MPSTensor.clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_energy_lower_bound}
+    \leanok
+    \uses{def:cluster_tensor, thm:cluster_source_ground_space_three_eigenspace, def:cluster_chain_stabilizer, def:mpv_submodule}
+    Let $N\ge3$ and put
+    $U=(\sigma^z)^{\otimes N}$ and $H=\sum_i K_i$. Then
+    \begin{align}
+        \ket{V^{(N)}(A_{\mathrm{src}})}
+         & =(\sqrt2)^N U\ket{V^{(N)}(A_{\mathrm{cl}})}\ne0.
+        \label{eq:cluster_source_vector}
+    \end{align}
+    The common $-1$ eigenspace of the $K_i$ and the ground eigenspace of $H$
+    are both $\C\ket{V^{(N)}(A_{\mathrm{src}})}$. More precisely, with the
+    usual inner product $\langle v,w\rangle=\sum_s\overline{v_s}w_s$, the
+    bound below holds for every vector $v$:
+    \begin{align}
+        \operatorname{Re}\langle v,Hv\rangle & \ge-N\|v\|^2,\notag                       \\
+        \ker(H+N\Id)                         & =\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
+    \end{align}
+    Thus the ground energy is $-N$, and the normalized ground state is unique
+    up to phase. This proves the periodic-chain claim for the matrices in
+    \cite{PerezGarcia2007Matrix}, for odd as well as
+    even $N\ge3$.
+    % Source location: Papers/quant-ph_0608197/MPSarchive.tex, lines 374--387.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cluster_stabilizer_unique_gs, thm:cluster_normal, thm:gauge_invariance, lem:mpv_smul}
+    Applying $\sigma^z$ at every site changes every stabilizer eigenvalue from
+    $+1$ to $-1$. We first relate the vector associated with the normalized
+    cluster tensor to the vector defined by the source matrices.
+
+    Put
+    \begin{align}
+        G=\begin{pmatrix}1&-1\\1&1\end{pmatrix},\qquad
+        G^{-1}=\frac12\begin{pmatrix}1&1\\-1&1\end{pmatrix}.\notag
+    \end{align}
+    Direct multiplication gives, for $t=0,1$,
+    \begin{align}
+        A_{\mathrm{src}}^t
+         & =\sqrt2\,(-1)^tG A_{\mathrm{cl}}^tG^{-1}.\notag
+    \end{align}
+    In a product of $N$ matrices, adjacent inverse factors cancel. Taking the
+    trace removes the remaining conjugation, so
+    \begin{align}
+        V^{(N)}(A_{\mathrm{src}})_s
+         & =(\sqrt2)^N(-1)^{\sum_j s_j}V^{(N)}(A_{\mathrm{cl}})_s.\notag
+    \end{align}
+    The parity factor is precisely the action of $U$ on the coefficient at
+    $s$. This proves (\ref{eq:cluster_source_vector}); nonvanishing follows
+    from the nonzero cluster vector, since $(\sqrt2)^N\ne0$ and $U^2=\Id$.
+
+    Conjugating by $\sigma^z$ fixes $\sigma^z$ and sends $\sigma^x$ to
+    $-\sigma^x$. The three sites in each $K_i$ are distinct, so $UK_iU=-K_i$.
+    If $K_iv=v$ for every $i$, then $K_i(Uv)=-Uv$ for every $i$.
+    Conversely, if $K_iw=-w$ for every $i$, then $K_i(Uw)=Uw$; applying $U$
+    again returns $w$. Thus $U$ maps the common $+1$ eigenspace bijectively
+    onto the common $-1$ eigenspace. By
+    Theorem~\ref{thm:cluster_stabilizer_unique_gs} and
+    (\ref{eq:cluster_source_vector}),
+    \begin{align}
+        \bigcap_i\{v:K_iv=-v\} & =\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
+    \end{align}
+    This space is one-dimensional.
+
+    Each $K_i$ is a product of Hermitian Pauli operators on distinct sites,
+    so $K_i$ and hence $H$ are Hermitian.
+    Each $K_i$ changes coefficient signs and permutes the computational basis,
+    so it preserves the norm. Expanding the squares gives
+    \begin{align}
+        \frac12\sum_i\|(\Id+K_i)v\|^2
+         & =N\|v\|^2+\operatorname{Re}\langle v,Hv\rangle\ge0.
+        \label{eq:cluster_source_energy}
+    \end{align}
+    Equality holds exactly when every $(\Id+K_i)v$ vanishes, that is, when
+    $v\in\C\ket{V^{(N)}(A_{\mathrm{src}})}$. Conversely, summing the equations
+    $K_i\ket{V^{(N)}(A_{\mathrm{src}})}=-\ket{V^{(N)}(A_{\mathrm{src}})}$
+    gives $H\ket{V^{(N)}(A_{\mathrm{src}})}=-N\ket{V^{(N)}(A_{\mathrm{src}})}$.
+    Together with (\ref{eq:cluster_source_energy}), this identifies $-N$ as
+    the attained ground energy and its eigenspace as
+    $\C\ket{V^{(N)}(A_{\mathrm{src}})}$.
+\end{proof}
+
 \begin{remark}[Cluster-state stabilizer convention]\label{rem:cluster_stabilizer_convention}
     The cluster tensor of Definition~\ref{def:cluster_tensor} is the reflected
     convention of the tensor displayed in
@@ -354,8 +481,10 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     $\bra{\pm}\sigma^x = \pm\bra{\pm}$ the states differ by $\sigma^z$ on
     every site, which conjugates each $K_i$ to $-K_i$ and exchanges the two
     Hamiltonians $\sum_i K_i$ and $-\sum_i K_i = \sum_i(\Id-K_i) - N\Id$.
-    The scope of what is established here for the printed cluster matrices, and
-    what is left aside, is recorded in
+    Theorem~\ref{thm:cluster_source_periodic_ground_state} proves this on-site
+    relation for the matrix product vectors and identifies the ground energy
+    and eigenspace for the printed matrices. The remaining operator-identity
+    and other example-level questions are recorded in
     \cite{gap:rmp_example_parent_hamiltonian_scope}.
 \end{remark}
 
