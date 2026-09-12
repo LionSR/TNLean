@@ -286,23 +286,22 @@ private lemma clusterStabilizer_cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (hN3 : 
   rw [← update_one_eq]
   exact (update_cyclicCfg hN hN3 i s τ 1 (s 1 + 1)).symm
 
-/-- A periodic vector is fixed by \(K_i\) exactly when all its cyclic windows at
-\(i\) are fixed by the three-site stabilizer. -/
+/-- A periodic vector has stabilizer eigenvalue \(\mu\) exactly when all its
+cyclic windows have that eigenvalue for the three-site stabilizer. -/
 private lemma mem_eigenspace_clusterChainStabilizer_iff {N : ℕ} (hN : 0 < N) (hN3 : 3 ≤ N)
-    (i : Fin N) (ψ : NSiteSpace 2 N) :
-    ψ ∈ Module.End.eigenspace (clusterChainStabilizer i) 1 ↔
+    (i : Fin N) (ψ : NSiteSpace 2 N) (μ : ℂ) :
+    ψ ∈ Module.End.eigenspace (clusterChainStabilizer i) μ ↔
       ∀ τ : Fin N → Fin 2,
-        cyclicRestrictₗ hN 3 i τ ψ ∈ Module.End.eigenspace clusterStabilizer 1 := by
-  simp only [Module.End.mem_eigenspace_iff, one_smul]
+        cyclicRestrictₗ hN 3 i τ ψ ∈ Module.End.eigenspace clusterStabilizer μ := by
+  simp only [Module.End.mem_eigenspace_iff]
   constructor
   · intro hψ τ
-    rw [clusterStabilizer_cyclicRestrictₗ hN hN3, hψ]
+    rw [clusterStabilizer_cyclicRestrictₗ hN hN3, hψ, map_smul]
   · intro hτ
     ext σ
     have hσ := congrFun (hτ σ) (extractWindow 3 i σ)
-    rw [clusterStabilizer_cyclicRestrictₗ hN hN3, cyclicRestrictₗ_apply, cyclicRestrictₗ_apply,
-      cyclicCfg_extractWindow hN hN3] at hσ
-    exact hσ
+    rw [clusterStabilizer_cyclicRestrictₗ hN hN3] at hσ
+    simpa only [Pi.smul_apply, cyclicRestrictₗ_apply, cyclicCfg_extractWindow hN hN3] using hσ
 
 /-- **The common \(+1\) eigenspace of the translated stabilizers is the periodic
 three-site chain ground space** of the cluster tensor, for \(N\ge3\). -/
@@ -314,7 +313,20 @@ theorem cluster_iInf_eigenspace_eq_chainGroundSpace {N : ℕ} (hN : 3 ≤ N) :
   ext ψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap,
     cluster_groundSpace_three_eq_eigenspace]
-  exact forall_congr' fun i => mem_eigenspace_clusterChainStabilizer_iff hNpos hN i ψ
+  exact forall_congr' fun i => mem_eigenspace_clusterChainStabilizer_iff hNpos hN i ψ 1
+
+/-- For the cluster matrices printed in Pérez-García--Verstraete--Wolf--Cirac
+2007 (arXiv:quant-ph/0608197, local TeX lines 374--387), the periodic three-site
+ground space is the common \(-1\) eigenspace of the translated stabilizers. -/
+theorem clusterSource_iInf_eigenspace_eq_chainGroundSpace {N : ℕ} (hN : 3 ≤ N) :
+    (⨅ i : Fin N, Module.End.eigenspace (clusterChainStabilizer i) (-1)) =
+      chainGroundSpace clusterSourceTensor 3 N := by
+  have hNpos : 0 < N := by omega
+  rw [chainGroundSpace, dite_eq_left ⟨hNpos, hN⟩]
+  ext ψ
+  simp only [Submodule.mem_iInf, Submodule.mem_comap,
+    clusterSource_groundSpace_three_eq_eigenspace_neg_one]
+  exact forall_congr' fun i => mem_eigenspace_clusterChainStabilizer_iff hNpos hN i ψ (-1)
 
 /-- **The cluster state spans the common \(+1\) eigenspace of the stabilizers**
 \(K_i = \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\): on a periodic chain of

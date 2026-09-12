@@ -242,8 +242,8 @@ statement.\footnote{Formal declaration:
 The AKLT target stated in the sources is now formalized, and the cluster target
 is formalized for the reflected convention
 (\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_zero})--(\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_one});
-for the two matrices displayed in the older review it is formalized on a single
-three-site window only. The
+for the two matrices displayed in the older review the periodic ground energy
+and one-dimensional ground eigenspace are also formalized for $N\ge3$. The
 two-site AKLT parent space is cut out by the five linear constraints
 $v_{11}=v_{22}=0$, $v_{01}+v_{10}=0$, $v_{02}+v_{20}=0$,
 $2v_{00}+v_{12}+v_{21}=0$; the three-site intersection
@@ -266,17 +266,26 @@ the sign printed in
 (\ref{eq:rmp_example_parent_hamiltonian_scope_cluster_three_body}) is correct
 for those matrices; the two states differ by $\sigma^z$ on every site, which
 conjugates each stabilizer to its negative and exchanges $\sum_i K_i$ with
-$-\sum_i K_i$. That last sentence is mathematical prose here and nothing more:
-no formal statement carries the periodic uniqueness result across the on-site
-$\sigma^z$ equivalence, so for the matrices displayed in the older review the
-formal content is the single-window identity
-$\mathcal G_3(A_{\mathrm{src}})=\{v : Kv=-v\}$ alone, and the review's own
-claim that those matrices give the unique ground state of $\sum_i K_i$ on a
-periodic chain is still open.\footnote{Formal declarations:
-\leanid{MPSTensor.clusterSourceTensor} and
-\leanid{MPSTensor.clusterSource_groundSpace_three_eq_eigenspace_neg_one} in
-\path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}. The periodic
-declarations listed below are all stated for the reflected convention.} The
+$-\sum_i K_i$. The matrix product vectors satisfy
+\begin{align}
+    \ket{V^{(N)}(A_{\mathrm{src}})}
+    &=(\sqrt2)^N(\sigma^z)^{\otimes N}\ket{V^{(N)}(A_{\mathrm{cl}})}.\notag
+\end{align}
+This identity transports nonvanishing and the common eigenspace. A
+sum-of-squares argument gives the real quadratic-form lower bound $-N$ and
+identifies its equality space with the source vector's span, proving the
+periodic uniqueness claim.\footnote{Formal declarations:
+\leanid{MPSTensor.clusterSource_mpv_eq_globalZ},
+\leanid{MPSTensor.clusterSource_mpv_ne_zero},
+\leanid{MPSTensor.clusterSource_iInf_eigenspace_eq_mpvSubmodule},
+\leanid{MPSTensor.clusterSource_stabilizer_unique_gs},
+\leanid{MPSTensor.clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule}, and
+\leanid{MPSTensor.clusterSource_energy_lower_bound} in
+\path{TNLean/MPS/Examples/ClusterSourceGroundState.lean}.}
+The periodic three-site parent ground space of the source tensor is exactly
+the same common $-1$ eigenspace, and hence is also one-dimensional.\footnote{
+\leanid{MPSTensor.clusterSource_iInf_eigenspace_eq_chainGroundSpace} in
+\path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.} The
 identification
 of the parent interaction with $\tfrac12(I-K)$ as an operator identity is not
 formalized; the formal statements are the eigenspace
@@ -287,12 +296,10 @@ identities.\footnote{Formal declarations:
 \leanid{MPSTensor.cluster_stabilizer_unique_gs} in
 \path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.}
 
-Four items remain outside the formal development: the identification of the
+Three items remain outside the formal development: the identification of the
 GHZ parent interaction with the ferromagnetic Ising interaction
 (\ref{eq:rmp_example_parent_hamiltonian_scope_ising_hamiltonian}) as an
-operator identity, the on-site $\sigma^z$ equivalence carrying the periodic
-unique-ground-state statement to the two matrices displayed in the older
-review, the polynomial AKLT Hamiltonian
+operator identity, the polynomial AKLT Hamiltonian
 (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) and its
 spin-$2$ projector form, and the open-boundary edge-mode degeneracy.
 
@@ -314,10 +321,10 @@ A source-faithful formalization of issue \#2315 should proceed as follows.
           index-shift equivalence. For the reflected convention both parts are
           done: the three-site parent space is the $ZXZ$ stabilizer
           eigenspace, and the general theorem gives the unique ground state on
-          $N\ge3$ periodic sites. For the matrices printed in the older review
-          only the three-site eigenspace identity is proved, with eigenvalue
-          $-1$; carrying the periodic statement to them is exactly the missing
-          on-site $\sigma^z$ equivalence.
+          $N\ge3$ periodic sites. For the matrices printed in the older review,
+          the on-site $\sigma^z$ relation now gives the common $-1$ eigenspace;
+          the sum-of-squares identity identifies it as the one-dimensional
+          ground eigenspace of the stabilizer sum, with energy $-N$.
 
     \item For AKLT, first use the two-site criterion
           (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_intersection}) and
@@ -338,10 +345,9 @@ stated in the review, explicit stabilizer or spin-projector formulas, and
 open-boundary edge-mode ground spaces. These are distinct mathematical
 statements with distinct source obligations. The first type is formalized, and
 so is the cluster stabilizer for the reflected convention, including its
-periodic unique-ground-state statement; for the two matrices printed in the
-older review only the three-site eigenspace identity is proved. The GHZ Ising
-operator identity, the on-site $\sigma^z$ equivalence that would carry the
-periodic cluster statement to those two matrices, the AKLT polynomial and
+periodic unique-ground-state statement. For the two matrices printed in the
+older review, the on-site equivalence, ground energy and periodic uniqueness
+are now proved for $N\ge3$. The GHZ Ising operator identity, the AKLT polynomial and
 spin-$2$ projector forms, and the open-boundary edge modes remain open.
 
 \bibliographystyle{alpha}
