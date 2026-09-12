@@ -376,7 +376,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     $U=(\sigma^z)^{\otimes N}$ and $H=\sum_i K_i$. Then
     \begin{align}
         \ket{V^{(N)}(A_{\mathrm{src}})}
-        &=(\sqrt2)^N U\ket{V^{(N)}(A_{\mathrm{cl}})}\ne0.
+         & =(\sqrt2)^N U\ket{V^{(N)}(A_{\mathrm{cl}})}\ne0.
         \label{eq:cluster_source_vector}
     \end{align}
     The common $-1$ eigenspace of the $K_i$ and the ground eigenspace of $H$
@@ -384,8 +384,8 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     usual inner product $\langle v,w\rangle=\sum_s\overline{v_s}w_s$, the
     bound below holds for every vector $v$:
     \begin{align}
-        \operatorname{Re}\langle v,Hv\rangle&\ge-N\|v\|^2,\notag\\
-        \ker(H+N\Id)&=\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
+        \operatorname{Re}\langle v,Hv\rangle & \ge-N\|v\|^2,\notag                       \\
+        \ker(H+N\Id)                         & =\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
     \end{align}
     Thus the ground energy is $-N$, and the normalized ground state is unique
     up to phase. This proves the periodic-chain claim for the matrices in
@@ -409,13 +409,13 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     Direct multiplication gives, for $t=0,1$,
     \begin{align}
         A_{\mathrm{src}}^t
-        &=\sqrt2\,(-1)^tG A_{\mathrm{cl}}^tG^{-1}.\notag
+         & =\sqrt2\,(-1)^tG A_{\mathrm{cl}}^tG^{-1}.\notag
     \end{align}
     In a product of $N$ matrices, adjacent inverse factors cancel. Taking the
     trace removes the remaining conjugation, so
     \begin{align}
         V^{(N)}(A_{\mathrm{src}})_s
-        &=(\sqrt2)^N(-1)^{\sum_j s_j}V^{(N)}(A_{\mathrm{cl}})_s.\notag
+         & =(\sqrt2)^N(-1)^{\sum_j s_j}V^{(N)}(A_{\mathrm{cl}})_s.\notag
     \end{align}
     The parity factor is precisely the action of $U$ on the coefficient at
     $s$. This proves (\ref{eq:cluster_source_vector}); nonvanishing follows
@@ -430,7 +430,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     Theorem~\ref{thm:cluster_stabilizer_unique_gs} and
     (\ref{eq:cluster_source_vector}),
     \begin{align}
-        \bigcap_i\{v:K_iv=-v\}&=\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
+        \bigcap_i\{v:K_iv=-v\} & =\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
     \end{align}
     This space is one-dimensional.
 
@@ -440,7 +440,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     so it preserves the norm. Expanding the squares gives
     \begin{align}
         \frac12\sum_i\|(\Id+K_i)v\|^2
-        &=N\|v\|^2+\operatorname{Re}\langle v,Hv\rangle\ge0.
+         & =N\|v\|^2+\operatorname{Re}\langle v,Hv\rangle\ge0.
         \label{eq:cluster_source_energy}
     \end{align}
     Equality holds exactly when every $(\Id+K_i)v$ vanishes, that is, when
