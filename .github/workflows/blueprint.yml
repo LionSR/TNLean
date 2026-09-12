@@ -101,6 +101,14 @@ jobs:
 
           leanblueprint pdf
 
+          # `leanblueprint pdf` finishes by copying print/print.bbl over
+          # src/web.bbl. The print build's bibtex run uses the `plain`
+          # style, whose `\bibitem{key}` carries no natbib optional label,
+          # and plasTeX then renders every citation as "??" (the reader-facing
+          # check below catches it). Regenerate the natbib-style web
+          # bibliography that web.tex needs after the PDF build has run.
+          texra-blueprint bbl
+
           # texra-blueprint web wraps leanblueprint web and fails when the
           # renderer meets a command it does not know (unrecognized
           # command/environment, default-renderer fallback) — the gate that
