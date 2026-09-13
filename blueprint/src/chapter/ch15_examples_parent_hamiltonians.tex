@@ -411,10 +411,21 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
         A_{\mathrm{src}}^t
          & =\sqrt2\,(-1)^tG A_{\mathrm{cl}}^tG^{-1}.\notag
     \end{align}
-    In a product of $N$ matrices, adjacent inverse factors cancel. Taking the
-    trace removes the remaining conjugation, so
+    For a configuration $s=(s_0,\ldots,s_{N-1})$, adjacent inverse factors
+    cancel in the ordered product:
+    \begin{align}
+        A_{\mathrm{src}}^{s_0}\cdots A_{\mathrm{src}}^{s_{N-1}}
+         & =(\sqrt2)^N(-1)^{\sum_j s_j}
+        G\bigl(A_{\mathrm{cl}}^{s_0}\cdots A_{\mathrm{cl}}^{s_{N-1}}\bigr)G^{-1}.
+        \label{eq:cluster_source_product}
+    \end{align}
+    Taking the trace in (\ref{eq:cluster_source_product}) and using
+    $\operatorname{tr}(GBG^{-1})=\operatorname{tr}(B)$ gives
     \begin{align}
         V^{(N)}(A_{\mathrm{src}})_s
+         & =\operatorname{tr}\bigl(A_{\mathrm{src}}^{s_0}\cdots A_{\mathrm{src}}^{s_{N-1}}\bigr)\notag \\
+         & =(\sqrt2)^N(-1)^{\sum_j s_j}
+        \operatorname{tr}\bigl(A_{\mathrm{cl}}^{s_0}\cdots A_{\mathrm{cl}}^{s_{N-1}}\bigr)\notag       \\
          & =(\sqrt2)^N(-1)^{\sum_j s_j}V^{(N)}(A_{\mathrm{cl}})_s.\notag
     \end{align}
     The parity factor is precisely the action of $U$ on the coefficient at
