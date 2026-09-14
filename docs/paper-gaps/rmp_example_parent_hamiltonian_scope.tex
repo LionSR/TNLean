@@ -91,7 +91,8 @@ Here $I$ denotes the identity on the two-site Hilbert space, and the second
 expression is stated up to an additive constant.\footnote{See
 \path{Papers/1210.6613/UncleHMPS.tex}:432--455.}
 
-For the one-dimensional cluster state, the review gives the MPS matrices
+For the one-dimensional cluster state, write
+$\ket{\pm}=(\ket{0}\pm\ket{1})/\sqrt2$. The review gives the MPS matrices
 \begin{align}
     A^0
         &=
@@ -126,8 +127,15 @@ of the three-body interactions
         \sigma_{i+2}^z,
     \label{eq:rmp_example_parent_hamiltonian_scope_cluster_three_body}
 \end{align}
-and supplies an explicit two-matrix MPS representation
-\cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}. The formal target
+and supplies the unnormalised matrices, indexed here by $0,1$,
+\cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}:
+\begin{align}
+    A_{\mathrm{src}}^0 &= \begin{pmatrix}0&0\\1&1\end{pmatrix},
+    \label{eq:rmp_example_parent_hamiltonian_scope_source_zero}\\
+    A_{\mathrm{src}}^1 &= \begin{pmatrix}1&-1\\0&0\end{pmatrix}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_source_one}
+\end{align}
+The formal target
 should therefore use the $ZXZ$ convention for the controlled-$Z$ cluster state
 unless it explicitly introduces a local-basis variant and proves the
 equivalence. The general normal-MPS parent-Hamiltonian theorem gives a unique
@@ -203,13 +211,14 @@ has the expected $\mathbb Z_2$ symmetry.\footnote{See
 \path{TNLean/MPS/Examples/GHZ.lean}:54--86 and the module summary at
 \path{TNLean/MPS/Examples/GHZ.lean}:21--29.}
 
-The cluster module uses the reflected one-dimensional convention
+The cluster module uses the reflected one-dimensional convention. Write
+$A_{\mathrm{cl}}$ for this tensor:
 \begin{align}
-    A^0
+    A_{\mathrm{cl}}^0
         &=
         \ketbra{+}{0},
     \label{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_zero}\\
-    A^1
+    A_{\mathrm{cl}}^1
         &=
         \ketbra{-}{1}.
     \label{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_one}
@@ -264,19 +273,35 @@ $N\ge3$ periodic sites is spanned by the cluster state. On the two matrices
 displayed in the older review the stabilizer has eigenvalue $-1$ instead, so
 the sign printed in
 (\ref{eq:rmp_example_parent_hamiltonian_scope_cluster_three_body}) is correct
-for those matrices; the two states differ by $\sigma^z$ on every site, which
-conjugates each stabilizer to its negative and exchanges $\sum_i K_i$ with
-$-\sum_i K_i$. The matrix product vectors satisfy
+for those matrices. For a periodic chain of $N\ge3$ qubits, set
+$K_i=\sigma_i^z\sigma_{i+1}^x\sigma_{i+2}^z$, with site indices modulo $N$.
+The two states differ by $\sigma^z$ on every site, which conjugates each
+stabilizer to its negative and exchanges $\sum_i K_i$ with $-\sum_i K_i$.
+For a pair of square matrices $A=(A^0,A^1)$ of the same size and a configuration
+$s\in\{0,1\}^N$, define its periodic matrix product vector by the
+computational-basis coefficients
+\begin{align}
+    V^{(N)}(A)_s &= \tr\bigl(A^{s_0}\cdots A^{s_{N-1}}\bigr),
+    \label{eq:rmp_example_parent_hamiltonian_scope_mpv_coefficients}
+\end{align}
+Thus
+$\ket{V^{(N)}(A)}=\sum_{s\in\{0,1\}^N}V^{(N)}(A)_s\ket{s}$.
+The source tensor
+(\ref{eq:rmp_example_parent_hamiltonian_scope_source_zero})--(\ref{eq:rmp_example_parent_hamiltonian_scope_source_one})
+and the reflected tensor
+(\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_zero})--(\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_one})
+satisfy
 \begin{align}
     \ket{V^{(N)}(A_{\mathrm{src}})}
     &=(\sqrt2)^N(\sigma^z)^{\otimes N}\ket{V^{(N)}(A_{\mathrm{cl}})}.
     \label{eq:rmp_example_parent_hamiltonian_scope_source_vector}
 \end{align}
 Equation~(\ref{eq:rmp_example_parent_hamiltonian_scope_source_vector})
-transports nonvanishing and the common eigenspace. A
-sum-of-squares argument gives the real quadratic-form lower bound $-N$ and
-identifies its equality space with the source vector's span, proving the
-periodic uniqueness claim.\footnote{Formal declarations:
+transports nonvanishing and the common eigenspace. For every vector $v$, a
+sum-of-squares argument gives
+$\operatorname{Re}\langle v,(\sum_i K_i)v\rangle\ge -N\|v\|^2$;
+equality holds precisely on the source vector's span. Thus the ground energy
+is $-N$ and its eigenspace is one-dimensional.\footnote{Formal declarations:
 \leanid{MPSTensor.clusterSource_mpv_eq_globalZ},
 \leanid{MPSTensor.clusterSource_mpv_ne_zero},
 \leanid{MPSTensor.clusterSource_iInf_eigenspace_eq_mpvSubmodule},
@@ -288,8 +313,10 @@ The periodic three-site parent ground space of the source tensor is exactly
 the same common $-1$ eigenspace, and hence is also one-dimensional.\footnote{
 \leanid{MPSTensor.clusterSource_iInf_eigenspace_eq_chainGroundSpace} in
 \path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.} The
-identification
-of the parent interaction with $\tfrac12(I-K)$ as an operator identity is not
+identification, for the reflected convention,
+of the parent interaction with $\tfrac12(I-K)$, where
+$K=\sigma^z\otimes\sigma^x\otimes\sigma^z$ and $I$ is the three-qubit identity,
+as an operator identity is not
 formalized; the formal statements are the eigenspace
 identities.\footnote{Formal declarations:
 \leanid{MPSTensor.cluster_groundSpace_three_eq_eigenspace},
