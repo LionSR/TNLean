@@ -225,12 +225,12 @@ noncomputable def extendMatched [DecidableEq ι] {S' : Finset ι} (F : FlagData 
         rw [F.label_bijective.1 (Sum.map_injective.2 ⟨hinj, fun _ _ h => h⟩ h)]
       · simp only [Fin.snoc_castSucc, Fin.snoc_last] at h
         rcases hk : F.label k with s | t <;> rw [hk] at h <;>
-          simp only [Sum.map_inl, Sum.map_inr, id_eq, Sum.inl.injEq, Sum.inr.injEq, reduceCtorEq,
+          simp only [Sum.map_inl, Sum.map_inr, id_eq, Sum.inl.injEq, reduceCtorEq,
             Subtype.mk.injEq] at h
         exact absurd (h ▸ s.2) hs₀
       · simp only [Fin.snoc_castSucc, Fin.snoc_last] at h
         rcases hk : F.label k' with s | t <;> rw [hk] at h <;>
-          simp only [Sum.map_inl, Sum.map_inr, id_eq, Sum.inl.injEq, Sum.inr.injEq, reduceCtorEq,
+          simp only [Sum.map_inl, Sum.map_inr, id_eq, Sum.inl.injEq, reduceCtorEq,
             Subtype.mk.injEq] at h
         exact absurd (h ▸ s.2) hs₀
       · rfl
