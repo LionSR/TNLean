@@ -222,7 +222,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 \end{proof}
 
 \begin{lemma}[The zero module is the only simple module with trivial
-    generator action]
+        generator action]
     \label{lem:asym_zero_module}
     \lean{WordAlgebra.finrank_eq_one_of_isSimpleModule_of_forall_smul_eq_zero}
     \leanok
@@ -257,7 +257,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 \end{proof}
 
 \begin{theorem}[Separating a simple module from a finite non-isomorphic
-    family]
+        family]
     \label{thm:asym_separation}
     \lean{WordAlgebra.exists_aug_eq_zero_smul_eq_self,
         WordAlgebra.exists_aug_eq_zero_smul_eq_self_smul_eq_zero,
@@ -279,7 +279,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     For the first claim, Burnside's theorem realizes, for a basis
     $\{b_j\}$ of $Q$ and a nonzero vector $x_i\cdot q_0$, the maps sending
     $x_i\cdot q_0\mapsto b_j$ and $q\mapsto(\text{coordinate }j\text{ of
-    }q)\cdot q_0$; assembling them into
+        }q)\cdot q_0$; assembling them into
     $u=\sum_j\alpha_jx_i\beta_j$ gives an element of $F_+$ acting as the
     identity on $Q$. For the pairwise separation, Schur's lemma shows every
     $F$-linear endomorphism of $Q\times T$ preserves the two
@@ -386,7 +386,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \uses{def:asym_word_module}
     Let $M$ be a finite-dimensional $F$-module, $S$ a finite set of target
     slots, and $C_s$, $s\in S$, a family of tensors. A \emph{labelled
-    invariant flag} of $M$ over $(S,C)$ is an invariant chain
+        invariant flag} of $M$ over $(S,C)$ is an invariant chain
     $0=H_0\leq H_1\leq\cdots\leq H_r=M$ together with a bijective labelling
     of the steps $\{1,\ldots,r\}$ by $S\sqcup\{1,\ldots,z\}$, for some
     $z\geq0$, such that a step labelled by $s\in S$ has subquotient
@@ -396,7 +396,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 \end{definition}
 
 \begin{lemma}[A family of normal blocks with zero total word trace is
-    empty]
+        empty]
     \label{lem:asym_flag_base_case}
     \lean{MPSTensor.finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero}
     \leanok
@@ -480,20 +480,20 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     $W_s:\C^{D_B}\to\C^{D_s}$, with the following properties.
     \begin{enumerate}[label=(\roman*)]
         \item Every $GB^iG^{-1}$ is block upper triangular for one common
-        decomposition into $r$ blocks.
+              decomposition into $r$ blocks.
         \item Exactly $|S|$ of the diagonal slots are matched with the
-        target slots: writing $j(s)$ for the position matched with $s$,
-        there is $X_s\in\GL_{D_s}(\C)$ with
-        $\bigl(GB^iG^{-1}\bigr)_{j(s),j(s)}=X_sC_s^iX_s^{-1}$.
+              target slots: writing $j(s)$ for the position matched with $s$,
+              there is $X_s\in\GL_{D_s}(\C)$ with
+              $\bigl(GB^iG^{-1}\bigr)_{j(s),j(s)}=X_sC_s^iX_s^{-1}$.
         \item The remaining $z$ diagonal slots are one-dimensional zero
-        tensors.
+              tensors.
         \item The compression pairs are mutually biorthogonal: $W_sV_t=
-        \id_{D_s}$ if $s=t$ and $0$ otherwise.
+                  \id_{D_s}$ if $s=t$ and $0$ otherwise.
         \item For every nonempty word $w$, $W_sB^wV_s=C_s^w$.
         \item Writing $\widehat C^i=\sum_{s\in S}V_sC_s^iW_s$ and
-        $R^i=B^i-\widehat C^i$, every product
-        $R^{i_1}R^{i_2}\cdots R^{i_r}=0$: the non-unital algebra generated
-        by the $R^i$ is nilpotent.
+              $R^i=B^i-\widehat C^i$, every product
+              $R^{i_1}R^{i_2}\cdots R^{i_r}=0$: the non-unital algebra generated
+              by the $R^i$ is nilpotent.
         \item $D_B=\sum_{s\in S}D_s+z$.
     \end{enumerate}
 \end{theorem}
@@ -506,7 +506,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     word-algebra module of $B$, whose word traces agree with the sum of
     those of the $C_s$ by hypothesis, $\C^{D_B}$ carries a labelled
     invariant flag over $(S,C)$: an invariant chain $0=H_0\leq\cdots\leq
-    H_r=\C^{D_B}$ whose subquotients are, in some order, the $C_s$ (each
+        H_r=\C^{D_B}$ whose subquotients are, in some order, the $C_s$ (each
     once) and $z=r-|S|$ copies of the zero module. This chain is in
     particular a composition series, so Lemma~\ref{lem:asym_composition_gauge}
     supplies $G\in\GL_{D_B}(\C)$ for which $T^i=GB^iG^{-1}$ is block upper
@@ -534,6 +534,9 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{theorem}[Weighted canonical-form compression]
     \label{thm:asym_weighted_compression}
+    \lean{MPSTensor.exists_weightedMultiBlockCompression_of_isNormal,
+        MPSTensor.MultiBlockCompression.left_mul_evalWord_mul_right_smul}
+    \leanok
     \uses{def:same_mpv2_pos, def:normal}
     Let $A=\bigoplus_{k=1}^g\bigoplus_{q=1}^{n_k}\mu_kA_{(k)}$ be a
     canonical target with each $A_{(k)}$ normal of bond dimension $D_k$
@@ -551,11 +554,12 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:asym_multiblock}
     Apply Theorem~\ref{thm:asym_multiblock} to the slots
     $C_{k,q}=\mu_kA_{(k)}$: for a word of length $N$,
     $C_{k,q}^{i_1}\cdots C_{k,q}^{i_N}=\mu_k^NA_{(k)}^{i_1}\cdots
-    A_{(k)}^{i_N}$, so clause (v) of Theorem~\ref{thm:asym_multiblock}
+        A_{(k)}^{i_N}$, so clause (v) of Theorem~\ref{thm:asym_multiblock}
     gives (\ref{eq:asym_weighted_compression}).
 \end{proof}
 
@@ -566,6 +570,41 @@ which is stronger than the printed clause above; the underlying
 construction already produces this normalization because the composition
 series identifies each matched subquotient with the block's own
 word-algebra module, not merely with an isomorphic copy.
+
+\section{Products of matrix product operators}%
+\label{sec:asym_mpo_product}
+
+Let $M_\alpha$ and $M_\beta$ be matrix product operator tensors. Their
+stacked product is the tensor $B^{ij}=\sum_m M_\alpha^{im}\otimes
+    M_\beta^{mj}$, where the pair $(i,j)$ is treated as one physical index, and
+$O_N(M)$ denotes the periodic operator of length $N$ generated by $M$.
+
+\begin{theorem}[Compression of a product of matrix product operators]
+    \label{thm:asym_mpo_product}
+    \lean{MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum,
+        MPOTensor.left_mul_evalWord_mul_right_smul}
+    \leanok
+    \uses{thm:asym_weighted_compression}
+    Suppose that normal matrix product operator tensors $M_\gamma$ of
+    positive bond dimension and nonzero scalars $\lambda_\gamma$ satisfy
+    $O_N(B)=\sum_\gamma\lambda_\gamma^NO_N(M_\gamma)$ for every $N\geq1$.
+    Then for every $\gamma$ there are maps $V_\gamma$ and $W_\gamma$ with
+    $W_\gamma V_\gamma=\id$ and
+    $W_\gamma B^{i_1j_1}\cdots B^{i_Nj_N}V_\gamma
+        =\lambda_\gamma^NM_\gamma^{i_1j_1}\cdots M_\gamma^{i_Nj_N}$
+    for every $N\geq1$ and every sequence of index pairs. The pairs may be
+    chosen mutually biorthogonal, and the remainder after all matched
+    sectors are removed is nilpotent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_weighted_compression}
+    Treat each pair $(i,j)$ as one letter. The operator identity is the
+    equality of the periodic vectors of $B$ and of $\bigoplus_\gamma
+        \lambda_\gamma M_\gamma$ on the pair alphabet, so
+    Theorem~\ref{thm:asym_weighted_compression} applies.
+\end{proof}
 
 \section{The single-block reduction of Molnár--Ge--Schuch--Cirac}%
 \label{sec:asym_single_block}
@@ -589,7 +628,7 @@ word-algebra module, not merely with an isomorphic copy.
     explicit bound
     \begin{align}
         R^{i_1}R^{i_2}\cdots R^{i_r} & =0,
-         & r & =D_B-D_A+1.
+                                     & r   & =D_B-D_A+1.
         \label{eq:asym_single_block_nilpotency}
     \end{align}
     In particular $D_B\geq D_A$.

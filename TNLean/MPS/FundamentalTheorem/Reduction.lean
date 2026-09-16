@@ -12,8 +12,10 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples
 import TNLean.MPS.FundamentalTheorem.Reduction.Flag
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
 import TNLean.MPS.FundamentalTheorem.Reduction.Identification
+import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 import TNLean.MPS.FundamentalTheorem.Reduction.SimpleSeparation
 import TNLean.MPS.FundamentalTheorem.Reduction.SingleBlock
+import TNLean.MPS.FundamentalTheorem.Reduction.WeightedMultiBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.WordModule
