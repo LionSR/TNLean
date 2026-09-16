@@ -358,6 +358,8 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{lemma}[Composition-series triangular gauge]
     \label{lem:asym_composition_gauge}
+    \lean{exists_linearEquiv_blockTriangular_of_flag}
+    \leanok
     \uses{def:asym_word_module}
     Let $B=(B^i)_i$ act on $\C^{D_B}$, and choose a composition series
     $0=H_0\subset H_1\subset\cdots\subset H_r=\C^{D_B}$ of its
@@ -369,6 +371,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Choose a basis of $H_1$ and extend it successively to bases of
     $H_2,\ldots,H_r$. In the resulting basis, every $H_k$ is a coordinate
     initial segment; since every $H_k$ is invariant under every $B^i$, all
@@ -457,6 +460,13 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{theorem}[Multi-block asymmetric compression theorem]
     \label{thm:asym_multiblock}
+    \lean{MPSTensor.MultiBlockCompression,
+        MPSTensor.exists_multiBlockCompression_of_isNormal,
+        MPSTensor.MultiBlockCompression.dim_eq,
+        MPSTensor.MultiBlockCompression.isReduction,
+        MPSTensor.MultiBlockCompression.left_mul_right_of_ne,
+        MPSTensor.MultiBlockCompression.evalWord_remainder_eq_zero}
+    \leanok
     \uses{def:same_mpv2_pos, def:normal}
     Let $A=\bigoplus_{s\in S}C_s$ be a finite direct sum of nonzero normal
     tensors $C_s=(C_s^i)_i$ of bond dimension $D_s$, with repetitions
@@ -489,6 +499,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:asym_flag_theorem, lem:asym_composition_gauge,
         lem:asym_triangular}
     By Theorem~\ref{thm:asym_flag_theorem}, applied with $M$ the
@@ -561,45 +572,56 @@ word-algebra module, not merely with an isomorphic copy.
 
 \begin{corollary}[Single-block case: the normal-target reduction]
     \label{cor:asym_single_block}
-    \uses{def:mpv, def:normal}
-    Let $A$ be a normal tensor of bond dimension $D_A$, let $B$ be an
-    arbitrary tensor of bond dimension $D_B$, and let $\lambda\in\C^\times$
-    satisfy $\ket{V^{(N)}(B)}=\lambda^N\ket{V^{(N)}(A)}$ for every $N\geq1$.
-    Then $D_B\geq D_A$, and there are maps $V:\C^{D_A}\to\C^{D_B}$ and
+    \lean{MPSTensor.exists_isReduction_and_nilpotent_of_isNormal}
+    \leanok
+    \uses{def:same_mpv2_pos, def:normal, def:mps_rectangular_reduction}
+    Let $A$ be a normal tensor of bond dimension $D_A\geq1$, let $B$ be an
+    arbitrary tensor of bond dimension $D_B$, and suppose that
+    $\ket{V^{(N)}(B)}=\ket{V^{(N)}(A)}$ for every $N\geq1$.
+    Then there are maps $V:\C^{D_A}\to\C^{D_B}$ and
     $W:\C^{D_B}\to\C^{D_A}$ with $WV=\id$ and
     \begin{align}
-        WB^{i_1}\cdots B^{i_N}V & =\lambda^NA^{i_1}\cdots A^{i_N}
+        WB^{i_1}\cdots B^{i_N}V & =A^{i_1}\cdots A^{i_N}
         \label{eq:asym_single_block_compression}
     \end{align}
-    for every $N\geq1$ and every word; equivalently, the rescaled tensor
-    $\lambda^{-1}B$ compresses exactly onto $A$. The remainder
-    $R^i=B^i-\lambda\,VA^iW$ generates a nilpotent non-unital algebra, with
-    the explicit bound
+    for every $N\geq0$ and every word, and the remainder
+    $R^i=B^i-VA^iW$ generates a nilpotent non-unital algebra, with the
+    explicit bound
     \begin{align}
         R^{i_1}R^{i_2}\cdots R^{i_r} & =0,
          & r & =D_B-D_A+1.
         \label{eq:asym_single_block_nilpotency}
     \end{align}
+    In particular $D_B\geq D_A$.
 \end{corollary}
 
 \begin{proof}
+    \leanok
     \uses{thm:asym_multiblock}
     Apply Theorem~\ref{thm:asym_multiblock} to the single-block target
-    $C=\lambda A$, which is normal because $\lambda\neq0$. Clauses (iv) and
-    (v) give the compression pair and (\ref{eq:asym_single_block_compression}),
-    clause (vii) gives $D_B=D_A+z\geq D_A$, and clause (vi) gives
+    $C=A$. Clauses (iv) and (v) give the compression pair and
+    (\ref{eq:asym_single_block_compression}), clause (vii) gives
+    $D_B=D_A+z\geq D_A$, and clause (vi) gives
     (\ref{eq:asym_single_block_nilpotency}) with $r=|S|+z=1+(D_B-D_A)$.
 \end{proof}
 
-Corollary~\ref{cor:asym_single_block} is Propositions~20 and~21 of
-\cite{Molnar2018SemiInjective} in the present notation (their $V,W$ are the
-present $W,V$), with three repairs and one strengthening. First, the
-hypothesis $\lambda\neq0$ is stated explicitly: it is absent from the
-printed Proposition~20, whose conclusion fails at $\lambda=0$, since the
-zero tensor $B=0$ satisfies the hypothesis while no compression onto a
-nonzero normal target exists. Second, the printed conclusion carries no
-scalar, because the source proof silently normalizes $\lambda=1$; the
-weighted form above makes the normalization explicit. Third, the remainder
+The proportional case, in which $\ket{V^{(N)}(B)}=\lambda^N\ket{V^{(N)}(A)}$
+for a scalar $\lambda\in\C^\times$, reduces to
+Corollary~\ref{cor:asym_single_block} by replacing $B$ with
+$\lambda^{-1}B$, and then $WB^{i_1}\cdots B^{i_N}V=\lambda^NA^{i_1}\cdots A^{i_N}$
+with remainder $R^i=B^i-\lambda\,VA^iW$; the compression pair of that case
+is recorded in Theorem~\ref{thm:mps_proportional_reduction_exists}.
+
+Corollary~\ref{cor:asym_single_block} with the proportional case is
+Propositions~20 and~21 of \cite{Molnar2018SemiInjective} in the present
+notation (their $V,W$ are the present $W,V$), with three repairs and one
+strengthening. First, the hypothesis $\lambda\neq0$ must be stated
+explicitly: it is absent from the printed Proposition~20, whose conclusion
+fails at $\lambda=0$, since the zero tensor $B=0$ satisfies the hypothesis
+while no compression onto a nonzero normal target exists. Second, the
+printed conclusion carries no scalar, because the source proof silently
+normalizes $\lambda=1$; the reduction to the equality case above makes the
+normalization explicit. Third, the remainder
 algebra is generated without the unit: the unital algebra containing the
 $R^i$ always contains the identity and is never nilpotent. These three
 repairs are recorded in
