@@ -36,7 +36,7 @@ on `Fin d`, so that the nonempty words are a basis.
 * `WordAlgebra.smul_eq_aug_smul`: when every generator acts as zero, the word algebra acts
   through the augmentation.
 * `WordAlgebra.finrank_eq_one_of_isSimpleModule_of_forall_smul_eq_zero`: a simple module on
-  which every generator acts as zero is one-dimensional (the module `𝟎` of the source).
+  which every generator acts as zero is one-dimensional (the module `0` of the source).
 -/
 
 /-- The word algebra on the alphabet `Fin d`: the monoid algebra of the free monoid, i.e. the
@@ -174,7 +174,7 @@ lemma smul_eq_aug_smul (h0 : ∀ (i : Fin d) (m : M), (ofWord [i] : WordAlgebra 
   simpa [Algebra.ofId_apply] using this
 
 /-- A simple module on which every generator acts as zero is one-dimensional over `ℂ`: it is
-the module `𝟎` of the source (Lemma 7.5 of the P5 note, final paragraph). -/
+the module `0` of the source (Lemma 7.5 of the P5 note, final paragraph). -/
 lemma finrank_eq_one_of_isSimpleModule_of_forall_smul_eq_zero
     [IsSimpleModule (WordAlgebra d) M]
     (h0 : ∀ (i : Fin d) (m : M), (ofWord [i] : WordAlgebra d) • m = 0) :
