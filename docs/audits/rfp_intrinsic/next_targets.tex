@@ -1,0 +1,877 @@
+% Build here: latexmk -pdf -outdir=../../../build/audits/rfp_intrinsic next_targets.tex
+\documentclass[aps,pra,reprint,nofootinbib,onecolumn]{revtex4-2}
+\input{preamble}
+\usepackage{cleveref}
+\begin{document}
+\title{Next tests for nonspectator length dependence in MPDO fixed points}
+\date{16 September 2026}
+\begin{abstract}
+	The construction target is a nonproduct matrix product density operator
+	renormalization fixed point with nontrivial fusion and length dependence
+	that is not an independent spectator. We derive an all-length spectral
+	diagnostic for the shifted Fibonacci family: distinct parameters cannot
+	share a parameter-independent density-operator core with independent
+	spectators in a fixed repeating cell, even under global unitaries.
+	This is a family obstruction, not intrinsic pointwise fusion weighting,
+	because a fixed regrouping already makes the raw fusion flat.
+	For construction, we formulate a physical-dimension-five,
+	bond-dimension-four ansatz with exact recovery channels and a local
+	purification. Trace idempotence and coefficient-kernel compatibility
+	provide inexpensive rejection tests. Three environment states suffice
+	for local sector compatibility, but not for the trace-one, full-span
+	stationary search considered here. A four-environment Pauli seed also
+	fails, by an explicit kernel mismatch. Finally, Reutter's theorem
+	excludes positive nonflat coherent weights on the rigid categorical
+	locus. The recommended next step is a bounded channel-feasibility
+	search, with spectral verification and a separate categorical
+	rigidity test.
+\end{abstract}
+\maketitle
+
+\section{Decision and meaning of nonseparation}
+\label{sec:decision}
+
+The boundary-theory discussion of Cirac, P\'erez-Garc\'ia, Schuch,
+and Verstraete (CPSV)~\cite{CPSV} motivates separating local spectral
+weights from global constraints. A constraint may disappear when even
+one boundary site is traced out. Independent weighted dimers do not
+address this mechanism. The target here is therefore a nonproduct
+matrix product density operator (MPDO) fixed point with nontrivial
+canonical fusion, followed by a test of whether its weights remain
+inseparable from that structure under specified physical operations.
+No new example meeting all these requirements is established below.
+
+Let $M^{ab}\in\End(\mc H)$ be physical operator letters, with horizontal
+indices $a,b=1,\ldots,D$. Define the periodic contraction and blocking by
+\begin{align}
+	\rho_N(M)
+	          & =\sum_{a_1,\ldots,a_N}
+	M^{a_1a_2}\otimes\cdots\otimes M^{a_Na_1},
+	\nonumber                                \\
+	(MM)^{ab} & =\sum_cM^{ac}\otimes M^{cb}.
+	\label{eq:definition}
+\end{align}
+A physical renormalization fixed point (RFP) requires completely
+positive, trace-preserving (CPTP) maps on the complete operator spaces,
+\begin{align}
+	\mc T(M^{ab})    & =(MM)^{ab}, &
+	\mc S((MM)^{ab}) & =M^{ab}.
+	\label{eq:rfp}
+\end{align}
+These are identities for every complex letter. Neither positivity of
+a few periodic contractions nor an associative coefficient table
+implies them. Canonical form must also be checked before applying the
+CPSV characterization.
+
+For vertical normal representatives $A_a$, that characterization uses
+positive active multiplicity operators $\chi_{abc}$ in isometric
+decompositions of $A_aA_b$. The vertical closures satisfy
+\begin{align}
+	[O_L(A)]_{\boldsymbol i,\boldsymbol j}
+	 & =\tr\left(A^{i_1j_1}\cdots A^{i_Lj_L}\right),
+	\nonumber                                        \\
+	O_L(A_a)O_L(A_b)
+	 & =\sum_c\tr(\chi_{abc}^{L})O_L(A_c).
+	\label{eq:vertical}
+\end{align}
+An eigenvalue $x$ of a multiplicity operator contributes $x^L$ because
+the same multiplicity coordinate passes through all $L$ factors.
+Tracing sums these powers. This power-sum law is not the issue under
+investigation. The issue is whether the weights can be separated
+physically from a nontrivial fusion structure.
+
+Three notions must remain distinct.
+\begin{description}
+	\item[Fixed-cut weighting.]
+	      Unequal positive eigenvalues within a fusion channel prevent flattening
+	      by compensated representative rescalings at that cut.
+	\item[Uniform-family separation.]
+	      Different parameter values admit the same sequence of density
+	      operators as a core, with parameter dependence confined to independent
+	      spectators.
+	\item[Pointwise intrinsic weighting.]
+	      At a fixed parameter, no allowed regrouping and bounded-depth unitary
+	      circuit removes the weighted fusion structure into spectators.
+\end{description}
+The spectral result in \cref{sec:spectral} excludes uniform-family
+separation for a precise spectator model. It does not establish
+pointwise intrinsic weighting.
+
+The spectators considered here are independent one-site or bond density
+operators in a fixed finite repeating cell. Blocking a common multiple
+of all cell and regrouping lengths makes each spectator moment
+geometric in the number of cells. Pure ancillas and arbitrary unitaries
+preserve nonzero spectra. Arbitrary site-dependent or length-dependent
+spectator assignments are outside this convention. No invariance under
+arbitrary quantum channels is claimed.
+
+Kato's exact compression and recovery construction~\cite{Kato} motivates
+the channel-first search: redundant density operators can be discarded
+and prepared within direct-sum sectors without changing the encoded
+state coordinates. Its algebraic RG construction additionally assumes
+compatible faithful representations of the minimal sufficient algebras
+at all block lengths and a block-length-independent inclusion map.
+A single recoverable encoding does not establish these assumptions.
+In particular, faithful representations alone do not guarantee positive
+periodic contractions.
+
+\section{A spectral test on the Fibonacci family}
+\label{sec:spectral}
+
+\subsection{Fusion data and all-length moments}
+
+Write $\tau^2=1+\tau$, $\phi=(1+\sqrt5)/2$, and $\phi^2=\phi+1$.
+The shifted family has raw multiplicities
+\begin{align}
+	Z         & =(\phi+2)(1+\phi t),\qquad 0<t<1,
+	\nonumber                                       \\
+	\eta_1    & =Z^{-1}\diag(1,\phi t),           &
+	\eta_\tau & =Z^{-1}\diag(\phi,t,\phi t).
+	\label{eq:eta}
+\end{align}
+The relevant reviewed tensor identities~\cite{Reviewed} are
+\begin{align}
+	C      & \simeq(\eta_1\otimes A_1)\oplus(\eta_\tau\otimes A_\tau),
+	\nonumber                                                          \\
+	A_aA_b & \simeq\bigoplus_c\Id_{N_{ab}^c}\otimes A_c.
+	\label{eq:fib-input}
+\end{align}
+Here $N_{ab}^c$ are the Fibonacci fusion coefficients. The symbol
+$\simeq$ denotes an isometric direct-sum identity, including zero
+operators on unused complements. The one-letter horizontal closures are
+\begin{align}
+	R_1    & =\begin{pmatrix}1&1\\1&2\end{pmatrix},    &
+	R_\tau & =\phi^{-2}\ket{\tau,\tau}\bra{\tau,\tau}.
+	\label{eq:fib-seeds}
+\end{align}
+Their nonzero eigenvalues are $\phi^2,\phi^{-2}$ and $\phi^{-2}$,
+respectively: the characteristic polynomial of $R_1$ is $z^2-3z+1$.
+
+For completeness, the base letters act on
+$\mc P_a=\operatorname{span}\{\ket{x,y}:N_{ax}^y=1\}$ and are
+\begin{align}
+	A_a^{(y',\rho,y),(x',\rho,x)}
+	 & =[F^{a x'\rho}_{y}]_{y'x}\ket{x',y'}\bra{x,y},
+	\nonumber                                         \\
+	F^{\tau\tau\tau}_\tau
+	 & =\begin{pmatrix}
+		    \phi^{-1}   & \phi^{-1/2} \\
+		    \phi^{-1/2} & -\phi^{-1}
+	    \end{pmatrix}.
+\end{align}
+Other admissible scalar associators are one, inadmissible entries
+vanish, and unequal external $\rho$ labels give zero letters.
+The full-space path-recoupling identity in Ref.~\cite{Reviewed}
+establishes \cref{eq:fib-input}; no positivity assumption about a
+generic representation is used.
+
+Repeated fusion gives the horizontal closure of any word:
+\begin{align}
+	R(a_1,\ldots,a_N)
+	 & \simeq\bigoplus_c
+	\Id_{N_{a_1\cdots a_N}^{c}}\otimes R_c.
+	\label{eq:word}
+\end{align}
+To see why the identity holds at every length, fuse the first two
+letters in \cref{eq:fib-input} and then fuse each output with the next
+letter. The recoupling isometries are independent of the contracted
+horizontal indices, so they pass through the finite contraction sums.
+Their ranges remain orthogonal. Since both seeds in
+\cref{eq:fib-seeds} are positive, this also proves positivity at every
+word length.
+
+For an integer $p\geq1$, the one-site multiplicity moments and seed
+moments are
+\begin{align}
+	a_p           & =\tr(\eta_1^p)=\frac{1+\phi^pt^p}{Z^p}, &
+	c_p           & =\tr(\eta_\tau^p)
+	=\frac{\phi^p+t^p+\phi^pt^p}{Z^p},
+	\nonumber                                                 \\
+	\ell_{1,p}    & =\phi^{2p}+\phi^{-2p},                  &
+	\ell_{\tau,p} & =\phi^{-2p}.
+	\label{eq:moment-data}
+\end{align}
+Orthogonal copies contribute their weights to the $p$th power.
+Writing $(a_p+c_p\tau)^N=u_{N,p}+v_{N,p}\tau$, multiplication by
+$a_p+c_p\tau$ gives
+\begin{align}
+	                          & (u+v\tau)(a_p+c_p\tau)
+	=a_pu+c_pu\tau+a_pv\tau+c_pv(1+\tau),
+	\nonumber                                                                         \\
+	\binom{u_{N+1,p}}{v_{N+1,p}}
+	                          & =\begin{pmatrix}a_p&c_p\\c_p&a_p+c_p\end{pmatrix}
+	\binom{u_{N,p}}{v_{N,p}}, &
+	\binom{u_{0,p}}{v_{0,p}}  & =\binom10,
+	\nonumber                                                                         \\
+	P_{N,p}:=\tr(\rho_N^p)
+	                          & =\begin{pmatrix}\ell_{1,p}&\ell_{\tau,p}\end{pmatrix}
+	\begin{pmatrix}a_p&c_p\\c_p&a_p+c_p\end{pmatrix}^{N}
+	\binom10.
+	\label{eq:moment-recurrence}
+\end{align}
+This is an all-length recurrence derived from the tensor decomposition.
+
+The two fusion-ring characters send $\tau$ to $\phi$ and
+$-\phi^{-1}$. Define $h_{p,+}=a_p+\phi c_p$ and
+$h_{p,-}=a_p-\phi^{-1}c_p$. Solving the two character equations gives
+\begin{align}
+	u_{N,p}+\phi v_{N,p}     & =h_{p,+}^{N},                                                &
+	u_{N,p}-\phi^{-1}v_{N,p} & =h_{p,-}^{N},
+	\nonumber                                                                                 \\
+	v_{N,p}                  & =\frac{h_{p,+}^{N}-h_{p,-}^{N}}{\sqrt5},                     &
+	u_{N,p}                  & =\frac{\phi^{-1}h_{p,+}^{N}+\phi h_{p,-}^{N}}{\sqrt5},
+	\nonumber                                                                                 \\
+	P_{N,p}
+	                         & =\frac{\phi^{-1}\ell_{1,p}+\ell_{\tau,p}}{\sqrt5}h_{p,+}^{N}
+	+\frac{\phi\ell_{1,p}-\ell_{\tau,p}}{\sqrt5}h_{p,-}^{N}.
+	\label{eq:moments}
+\end{align}
+Here $\phi+\phi^{-1}=\sqrt5$.
+
+The rings are already normalized. Indeed,
+$a_1=1/(\phi+2)$, $c_1=\phi/(\phi+2)$, and
+\begin{align}
+	(1+\phi\tau)^2
+	 & =1+2\phi\tau+\phi^2(1+\tau)
+	\nonumber                      \\
+	 & =(\phi+2)+(3\phi+1)\tau
+	=(\phi+2)(1+\phi\tau).
+\end{align}
+Thus their trace at every positive length equals the seed trace
+\begin{align}
+	\frac{\tr R_1+\phi\tr R_\tau}{\phi+2}
+	 & =\frac{3+\phi^{-1}}{\phi+2}=1.
+\end{align}
+
+\subsection{Purity and separation of distinct parameters}
+
+For $p=2$, $\ell_{1,2}=7$ and $\ell_{\tau,2}=\phi^{-4}=5-3\phi$.
+The two coefficients in \cref{eq:moments} reduce to
+\begin{align}
+	\frac{7\phi^{-1}+\phi^{-4}}{\sqrt5}
+	 & =\frac{7\phi-7+5-3\phi}{\sqrt5}=2,
+	\nonumber                             \\
+	\frac{7\phi-\phi^{-4}}{\sqrt5}
+	 & =\frac{7\phi-5+3\phi}{\sqrt5}=5.
+\end{align}
+Writing $h_\pm=h_{2,\pm}$, their numerators are
+\begin{align}
+	Z^2h_+
+	 & =1+\phi^2t^2+\phi^3+\phi t^2+\phi^3t^2
+	=2\phi^2(1+\phi t^2),
+	\nonumber                                  \\
+	Z^2h_-
+	 & =1+\phi^2t^2-\phi-\phi^{-1}t^2-\phi t^2
+	=-\phi^{-1}+\phi^{-2}t^2.
+\end{align}
+Consequently,
+\begin{align}
+	P_N(t):=\tr(\rho_N(t)^2)
+	 & =2h_+(t)^N+5h_-(t)^N,
+	\nonumber                                        \\
+	r(t):=\frac{h_-(t)}{h_+(t)}
+	 & =-\frac{1-\phi^{-1}t^2}{2\phi^3(1+\phi t^2)}.
+	\label{eq:purity}
+\end{align}
+The ratio lies in $(-1,0)$. With $x=t^2$, its derivative is
+\begin{align}
+	\frac{dr}{dx}
+	 & =\frac{\phi^{-1}(1+\phi x)+\phi(1-\phi^{-1}x)}
+	    {2\phi^3(1+\phi x)^2}
+	=\frac{\phi+\phi^{-1}}{2\phi^3(1+\phi x)^2}>0.
+	\label{eq:r-injective}
+\end{align}
+Thus distinct parameters have distinct $|r|$.
+
+To eliminate geometric spectator contributions, define the blocked
+purity curvature
+\begin{align}
+	K_n^{(k)}(t)
+	 & =\frac{P_{kn}(t)P_{k(n+2)}(t)}{P_{k(n+1)}(t)^2},
+	\qquad k,n\geq1.
+\end{align}
+Set $z=r(t)^k$ and $Q=5/2$. The geometric factor $h_+^{kn}$
+cancels, and direct expansion gives
+\begin{align}
+	K_n^{(k)}-1
+	                                    & =\frac{1+Qz^n+Qz^{n+2}+Q^2z^{2n+2}
+		                                       -1-2Qz^{n+1}-Q^2z^{2n+2}}
+	                                       {(1+Qz^{n+1})^2}
+	\nonumber                                                                  \\
+	                                    & =\frac{Qz^n(1-z)^2}{(1+Qz^{n+1})^2},
+	\nonumber                                                                  \\
+	\lim_{n\to\infty}
+	\frac{K_{n+1}^{(k)}-1}{K_n^{(k)}-1} & =z.
+	\label{eq:curvature}
+\end{align}
+The denominators are nonzero because the purities are positive.
+
+Suppose two parameter values $t,s$ shared a density-operator core
+$\omega_n$ after common blocking and finite-cell regrouping. Independent
+spectators would contribute purities $b_t^n,b_s^n$, so that
+\begin{align}
+	P_{kn}(t) & =\tr(\omega_n^2)b_t^n, &
+	P_{kn}(s) & =\tr(\omega_n^2)b_s^n.
+\end{align}
+Their curvature sequences would coincide. By \cref{eq:curvature},
+$r(t)^k=r(s)^k$. Both ratios are negative, and \cref{eq:r-injective}
+then implies $t=s$. This proves the claimed uniform-family obstruction.
+The argument allows global, parameter-dependent and length-dependent
+unitaries because it uses only spectra.
+
+The first finite benchmark is $K_1^{(1)}$ at $t=1/2$ and $t=2/3$,
+computed from \cref{eq:purity}. The exact script~\cite{Checks} checks
+that these values differ and verifies the recurrence through length
+six. Those finite tests do not replace the all-length argument or its
+common-blocking conclusion.
+
+This diagnostic does not discover intrinsic fusion weights.
+In \cref{eq:fib-input}, the raw fusion multiplicities are already
+identities. Normalizing the base tensors by $A_a/\phi$ introduces
+only the common factor $\phi^{-1}$ in populated fusion channels,
+removable by compensated representative rescaling. The parameter
+dependence is in $\eta_a$. Failure of a parameter-independent common
+core does not exclude a parameter-dependent pointwise core.
+
+\section{A channel-first finite-dimensional search}
+\label{sec:channels}
+
+\subsection{Encodings, full-space recovery, and stationarity}
+
+Choose the logical algebra and physical space
+\begin{align}
+	\mc A          & =M_2(\C)\oplus\C,           &
+	\mc H          & =(\C^2\otimes\C^2)\oplus\C, &
+	\tau           & =\diag(1/3,2/3),
+	\nonumber                                      \\
+	J_1(X\oplus z) & =(X\otimes\tau)\oplus z.
+	\label{eq:J1}
+\end{align}
+The trace on $\mc A$ is $\tr X+z$. If $P_0,P_1$ project onto the
+two physical summands, define
+\begin{align}
+	D_1(Y)
+	 & =\tr_{\mathrm{red}}(P_0YP_0)\oplus\bra4Y\ket4.
+\end{align}
+Pinching and partial trace are CP,
+$\tr D_1(Y)=\tr(P_0Y)+\tr(P_1Y)=\tr Y$, and
+$D_1J_1=\mathrm{id}_{\mc A}$ because $\tr\tau=1$.
+
+For integers $r,s\geq1$, $2r+s\leq25$, choose full-rank normalized
+states $\sigma_0\in M_r$, $\sigma_1\in M_s$, and an isometry
+\begin{align}
+	V:(\C^2\otimes\C^r)\oplus\C^s & \longrightarrow\mc H^{\otimes2},
+	\nonumber                                                                        \\
+	J_2(X\oplus z)
+	                              & =V[(X\otimes\sigma_0)\oplus z\sigma_1]V^\dagger.
+	\label{eq:J2}
+\end{align}
+Let $V_0,V_1$ be its restrictions and $P=VV^\dagger$.
+For a fixed density operator $\omega\in\mc A$, use the decoder
+\begin{align}
+	D_2(Y)
+	 & =\left[\tr_{\C^r}(V_0^\dagger YV_0)
+		    \oplus\tr(V_1^\dagger YV_1)\right]
+	+\tr((\Id-P)Y)\omega.
+	\label{eq:D2}
+\end{align}
+The last term is essential on the full input space. If
+$\omega=\sum_jp_j\ket j\bra j$ and $\{\ket z\}$ spans $\ker P$,
+it has Kraus operators $\sqrt{p_j}\ket j\bra z$ with squared sum
+$\Id-P$. The two compression branches have squared sum $P$.
+Hence $D_2$ is CPTP. Normalization of $\sigma_0,\sigma_1$ gives
+\begin{align}
+	D_2J_2(X\oplus z)
+	 & =(X\tr\sigma_0)\oplus(z\tr\sigma_1)=X\oplus z.
+\end{align}
+Both encodings are CP and preserve the direct-sum trace.
+
+Take sixteen coefficients $X_{\alpha\beta}\in\mc A$,
+$\alpha,\beta=0,\ldots,3$, spanning $\mc A$, and set
+$M^{\alpha\beta}=J_1(X_{\alpha\beta})$. The equation to solve is
+\begin{align}
+	G_{\alpha\beta}:=
+	\sum_{\gamma=0}^{3}
+	J_1(X_{\alpha\gamma})\otimes J_1(X_{\gamma\beta})
+	 & =J_2(X_{\alpha\beta}).
+	\label{eq:stationarity}
+\end{align}
+Recovery of arbitrary encoded states does not imply this equation.
+If it holds, however, the full-space channels
+\begin{align}
+	\mc T & =J_2D_1, & \mc S & =J_1D_2
+\end{align}
+give an exact fixed-point certificate:
+\begin{align}
+	\mc T(M^{\alpha\beta})
+	 & =J_2(X_{\alpha\beta})=G_{\alpha\beta},
+	\nonumber                                 \\
+	\mc S(G_{\alpha\beta})
+	 & =J_1(X_{\alpha\beta})=M^{\alpha\beta}.
+	\label{eq:certificate}
+\end{align}
+
+Stationarity supplies some, but not all, algebraic structure.
+For $\delta=(D_1\otimes D_1)J_2$, it implies
+\begin{align}
+	\delta(X_{\alpha\beta})
+	 & =\sum_\gamma X_{\alpha\gamma}\otimes X_{\gamma\beta},
+	\nonumber                                                \\
+	(\delta\otimes\mathrm{id})\delta(X_{\alpha\beta})
+	 & =\sum_{\gamma,\nu}
+	X_{\alpha\nu}\otimes X_{\nu\gamma}\otimes X_{\gamma\beta},
+	\nonumber                                                \\
+	(\mathrm{id}\otimes\delta)\delta(X_{\alpha\beta})
+	 & =\sum_{\gamma,\nu}
+	X_{\alpha\gamma}\otimes X_{\gamma\nu}\otimes X_{\nu\beta}.
+	\label{eq:state-coproduct}
+\end{align}
+Renaming the summation indices proves coassociativity on the spanning
+coefficients and hence on $\mc A$. Stationarity on the same spanning
+set also gives
+\begin{align}
+	J_2 & =(J_1\otimes J_1)\delta,     \\
+	\bigl[D_2(J_1\otimes J_1)\bigr]\delta
+	    & =D_2J_2=\mathrm{id}_{\mc A}.
+\end{align}
+Thus $\delta$ has a CPTP left inverse. These are state coordinates.
+There is no resulting proof that
+$\delta(XY)=\delta(X)\delta(Y)$. Even $J_1$ is not multiplicative:
+its two sides contain $XY\otimes\tau$ and $XY\otimes\tau^2$,
+respectively. Observable algebra inclusions and categorical naturality
+require additional reconstruction.
+
+\subsection{All-length positivity and the environment bound}
+
+Impose a bond-two local purification,
+\begin{align}
+	M^{(u,u'),(v,v')}
+	 & =\sum_{e=1}^{r_E}
+	\ket{a_{uv,e}}\bra{a_{u'v',e}},
+	\qquad u,v,u',v'\in\{0,1\}.
+	\label{eq:purification}
+\end{align}
+The horizontal MPDO bond dimension is $D=2^2=4$. For each environment
+string, define
+\begin{align}
+	\ket{\Psi_{\boldsymbol e}}
+	 & =\sum_{u_1,\ldots,u_N}
+	\bigotimes_{n=1}^{N}\ket{a_{u_nu_{n+1},e_n}},
+	\qquad u_{N+1}=u_1.
+\end{align}
+Substitution into \cref{eq:definition} gives
+\begin{align}
+	\rho_N
+	 & =\sum_{\boldsymbol e,\boldsymbol u,\boldsymbol u'}
+	\bigotimes_{n=1}^{N}
+	\ket{a_{u_nu_{n+1},e_n}}
+	\bra{a_{u'_nu'_{n+1},e_n}}
+	\nonumber                                             \\
+	 & =\sum_{\boldsymbol e}
+	\ket{\Psi_{\boldsymbol e}}\bra{\Psi_{\boldsymbol e}}\geq0.
+	\label{eq:all-positive}
+\end{align}
+Thus positivity holds at every length, independently of stationarity.
+
+Put $i=(u,v)$ and
+$\ket{\mathfrak a_e}=\sum_i\ket i\otimes\ket{a_{i,e}}$.
+The positive Gram operator
+$B=\sum_e\ket{\mathfrak a_e}\bra{\mathfrak a_e}$ has letters
+as its $(i,j)$ blocks, with $j=(u',v')$.
+Compatibility with $J_1(\mc A)$ requires, after ordering summands,
+\begin{align}
+	B & =(B_0\otimes\tau)\oplus B_1, & B_0 & \geq0, & B_1 & \geq0.
+	\label{eq:Gram}
+\end{align}
+The positivity conditions follow by compression and are also sufficient.
+Rank additivity gives
+\begin{align}
+	r_E\geq\rank B
+	 & =2\rank B_0+\rank B_1\geq3
+	\label{eq:env-bound}
+\end{align}
+when both sectors occur. Spectral factorization of $B$ attains its rank
+as the minimal environment size for the specified letters.
+
+At rank three both $B_0,B_1$ have rank one. Their factors can be written
+as $\sum_i\ket i\ket{v_i}$ and $\sum_i b_i\ket i$, giving
+\begin{align}
+	a_{i,1} & =\sqrt{1/3}\,v_i\otimes\ket0, &
+	a_{i,2} & =\sqrt{2/3}\,v_i\otimes\ket1, &
+	a_{i,3} & =b_i\ket4.
+	\label{eq:rank-three}
+\end{align}
+This proves local compatibility with three environment states,
+not existence of a stationary solution.
+
+\subsection{Trace, kernel, and a stronger rank-three rejection}
+
+For any proposed tensor define
+\begin{align}
+	T_{\alpha\beta} & =\tr M^{\alpha\beta},                               &
+	F_1(c)          & =\sum_{\alpha,\beta}c_{\alpha\beta}M^{\alpha\beta}, &
+	F_2(c)          & =\sum_{\alpha,\beta}c_{\alpha\beta}G_{\alpha\beta}.
+\end{align}
+Trace preservation and \cref{eq:rfp} imply
+\begin{align}
+	T_{\alpha\beta}
+	    & =\tr G_{\alpha\beta}
+	=\sum_\gamma T_{\alpha\gamma}T_{\gamma\beta},
+	    & T^2                  & =T,
+	\nonumber                                             \\
+	F_2 & =\mc T F_1,          & F_1        & =\mc S F_2,
+	    & \ker F_1             & =\ker F_2.
+	\label{eq:cheap}
+\end{align}
+Each kernel inclusion follows by applying one channel to zero.
+Equal ranks alone are weaker than equal kernels. In addition,
+\begin{align}
+	\tr\rho_N=\tr(T^N)=\tr T=\rank T.
+	\label{eq:trace-scale}
+\end{align}
+A trace-one tensor search therefore imposes $\rank T=1$.
+A nonzero tensor cannot be normalized by arbitrary positive rescaling:
+replacing $M$ by $sM$ would require $s^2T=sT$, hence $s=1$.
+
+There is a further inexpensive obstruction in the trace-one,
+rank-three purification stratum. Write
+$(A_j)_{uv}=(v_{uv})_j$ for $j=0,1$ and $B_{uv}=b_{uv}$.
+The trace matrix is the matrix of the CP map
+\begin{align}
+	\mc E(Y) & =A_0YA_0^\dagger+A_1YA_1^\dagger+BYB^\dagger.
+	\label{eq:trace-cp}
+\end{align}
+If $T^2=T$ and $\rank T=1$, positivity of this rank-one map gives
+\begin{align}
+	\mc E(Y) & =R\tr(LY), &
+	R,L      & \geq0,     & \tr(LR) & =1.
+\end{align}
+Indeed, the image of the positive cone is a ray generated by $R$; the coefficient
+functional is positive and therefore represented by $L\geq0$.
+Idempotence then gives $\tr(LR)=1$.
+
+In the output--input convention, its Choi matrix is
+$R\otimes L^{\mathsf T}$. The three Kraus operators in
+\cref{eq:trace-cp} imply
+\begin{align}
+	\rank R\,\rank L
+	 & =\rank(R\otimes L^{\mathsf T})\leq3.
+\end{align}
+Since $R,L$ are nonzero $2\times2$ matrices, at least one has rank one.
+If $\rank R=1$, every Kraus operator has a common one-dimensional
+output range and can be written $K_j=\ket r\bra{w_j}$.
+The horizontal coordinate matrices $K_j\otimes\overline{K_k}$
+then have a common one-dimensional output range and span at most
+four dimensions. If $\rank L=1$, every Kraus operator has a common
+one-dimensional input support; their tensor products have a common
+input support and again span at most four dimensions.
+Physical coordinates of $M$ are linear combinations of these matrices.
+Thus
+\begin{align}
+	\rank F_1\leq4,
+\end{align}
+contradicting the required five-dimensional span of $J_1(\mc A)$.
+
+Consequently, the trace-one full-span search can start at environment
+dimension four. This obstruction does not classify the other
+idempotent trace ranks. An unnormalized fixed-point family could have
+$\tr\rho_N=\rank T>1$ and be normalized at the state level by that
+constant. Such sectors are not excluded by the rank-one argument.
+
+\subsection{The Pauli seed and the next feasibility test}
+
+The first environment-four stratum has
+$\rank B_0=1$, $\rank B_1=2$. An explicit seed is
+\begin{align}
+	A_0 & =\Id/2,                                      & A_1 & =X/2, & C_0 & =Y/2, & C_1 & =Z/2,
+	\nonumber                                                                                    \\
+	X_{(u,u'),(v,v')}
+	    & =\sum_{j,k}(A_j)_{uv}\overline{(A_k)_{u'v'}}
+	\ket j\bra k
+	\ \oplus\
+	\sum_l(C_l)_{uv}\overline{(C_l)_{u'v'}}.
+	\label{eq:Pauli}
+\end{align}
+Here $X,Y,Z$ are the Pauli matrices. In virtual order
+$(00,01,10,11)$ its trace matrix is
+\begin{align}
+	T            & =\frac14\left(\Id\otimes\Id+X\otimes\overline X
+	+Y\otimes\overline Y+Z\otimes\overline Z\right)
+	=\frac12\ket{\Omega}\bra{\Omega},
+	\nonumber                                                        \\
+	\ket{\Omega} & =\ket{00}+\ket{11},                             &
+	T^2          & =T.
+\end{align}
+The physical coordinate matrices span
+\begin{align}
+	\Id\otimes\Id,\quad \Id\otimes X,\quad
+	X\otimes\Id,\quad X\otimes X,\quad
+	Q_0:=Y\otimes\overline Y+Z\otimes\overline Z.
+	\label{eq:span-one}
+\end{align}
+These five matrices are independent by Pauli orthogonality, so
+$\rank F_1=5$.
+
+Blocking introduces a sixth coordinate. The active--scalar coordinate
+with active indices $(0,1)$ is
+\begin{align}
+	H & =\sum_l A_0C_l\otimes\overline{A_1C_l}
+	\nonumber                                  \\
+	  & =\frac1{16}\left(Y\otimes\overline{iZ}
+	+Z\otimes\overline{-iY}\right)
+	=-\frac{i}{16}(Z\otimes Y+Y\otimes Z).
+	\label{eq:H}
+\end{align}
+The two active diagonal coordinates give $Q_0/16$; the reverse
+off-diagonal coordinate gives $H$. Scalar--active coordinates give
+the same span, with the off-diagonal sign reversed.
+Active--active coordinates remain in the first four directions of
+\cref{eq:span-one}. Finally,
+\begin{align}
+	\sum_{l,m}C_lC_m\otimes\overline{C_lC_m}
+	 & =\frac1{16}\left(\Id\otimes\Id+\Id\otimes\Id
+	+iX\otimes\overline{iX}
+	+(-iX)\otimes\overline{-iX}\right)
+	\nonumber                                       \\
+	 & =\frac18(\Id\otimes\Id+X\otimes X).
+\end{align}
+Thus the blocked span is exactly six-dimensional.
+
+A single-entry kernel witness is even cheaper.
+The one-site letters obey $M^{10}=M^{01}$.
+Order the physical basis as $(00,01,10,11,4)$ and flatten two-site
+indices lexicographically, starting at zero. Then
+\begin{align}
+	(G_{10}-G_{01})_{4,14}
+	 & =\frac13(H_{10}-H_{01})
+	=\frac13\left(\frac1{16}+\frac1{16}\right)
+	=\frac1{24}.
+	\label{eq:seed-reject}
+\end{align}
+No linear refinement exists for this seed. Positivity, full one-site
+span, and trace idempotence are not sufficient. The exact finite script
+in Ref.~\cite{Checks} reproduces these ranks and this witness.
+
+For a fixed surviving tensor, the next test is semidefinite channel
+feasibility. Search for the Choi matrices of $\mc T$ and $\mc S$,
+each of size $125\times125$, subject to positivity, their respective
+partial-trace identities, and all sixteen letter equations in
+\cref{eq:rfp}. These constraints are linear in the Choi entries.
+Certified infeasibility rejects the tensor. Numerical feasibility
+requires exact reconstruction before acceptance. To certify the
+specific ansatz, additionally recover $V,\sigma_0,\sigma_1$ and check
+\cref{eq:stationarity} entry by entry, including its zero complement.
+
+\section{The rigidity gate for higher multiplicities}
+\label{sec:rigidity}
+
+Consider the near-group shape with labels $g\in\Z_3$ and $x$:
+\begin{align}
+	gh & =g+h, & gx & =xg=x, & x^2 & =\sum_{g\in\Z_3}g+2x.
+\end{align}
+The unit is the group label $0$. The proposed weights are
+$\chi_{xx}^{x}=\diag(q,q^{-1})$, $q>1$, with identity weights
+elsewhere. For a triple fusion with output $d$, operator coherence is
+\begin{align}
+	F^{abc}_d\Lambda_L^{abc;d}
+	 & =\Lambda_R^{abc;d}F^{abc}_d,
+	\nonumber                                           \\
+	\Lambda_L^{abc;d}
+	 & =\bigoplus_e\chi_{ab}^{e}\otimes\chi_{ec}^{d}, &
+	\Lambda_R^{abc;d}
+	 & =\bigoplus_f\chi_{bc}^{f}\otimes\chi_{af}^{d}.
+	\label{eq:weight-coherence}
+\end{align}
+Matching weight spectra are necessary but do not solve the pentagon.
+
+The compatible block count follows directly from the fusion rules.
+There are $27$ triples with no $x$ and $27$ with one $x$, each
+with one scalar output. The nine triples with two $x$ each have
+three scalar outputs and one two-dimensional output. For three $x$,
+the three group outputs have dimension two, while output $x$ has
+dimension $3+2\cdot2=7$. Hence the counts are
+\begin{align}
+	27+27+9\cdot3 & =81
+	              &     & \text{scalar blocks},
+	\nonumber                                                                              \\
+	9+3           & =12
+	              &     & \text{two-dimensional blocks},
+	\nonumber                                                                              \\
+	1             &     &                                & \text{seven-dimensional block}.
+\end{align}
+The two-dimensional blocks have weights $q,q^{-1}$ and therefore
+allow only diagonal phases. The seven-dimensional block has weights
+$1,1,1,q^2,1,1,q^{-2}$, allowing
+$U(5)\times U(1)\times U(1)$. There are
+\begin{align}
+	81+12\cdot2+5^2+1+1=132
+\end{align}
+compatible complex entries before coherent vertex gauge. This is
+a count of permitted entries, not of pentagon solutions.
+
+The standard $\operatorname{Rep}(A_4)$ associator is already excluded
+for positive nonflat weights, including coherent multiplicity-basis
+changes~\cite{A4report}. More importantly, the entire rigid locus of
+the proposed coherent-weight construction is excluded.
+
+To state the scope precisely, reconstruct a skeletal semisimple
+category with objects $\bigoplus_a E_a\otimes a$ and morphisms
+$\bigoplus_a f_a\otimes\Id_a$. Extend each simple-pair weight by
+identities on the external multiplicity spaces. Naturality then follows
+from
+\begin{align}
+	(\Id_{E'_a\otimes E'_b}\otimes\chi_{ab})
+	(f_a\otimes g_b\otimes\Id)
+	 & =(f_a\otimes g_b)\otimes\chi_{ab}
+	\nonumber                            \\
+	 & =(f_a\otimes g_b\otimes\Id)
+	(\Id_{E_a\otimes E_b}\otimes\chi_{ab}).
+\end{align}
+With unit compatibility, \cref{eq:weight-coherence} makes these positive
+invertible operators a tensorator of the identity functor.
+
+Reutter's positive-auto-equivalence proposition~\cite{Reutter} applies
+if the reconstructed category is a unitary fusion category: it is
+rigid and semisimple, has finitely many simple objects and a simple
+unit, and its monoidal coherence is unitary.
+The positive tensorator is then a positive coboundary. A positive
+natural automorphism of the identity is scalar $\epsilon_a>0$ on
+each simple object. On every output channel this gives
+\begin{align}
+	\chi_{ab}^{c}
+	 & =\frac{\epsilon_a\epsilon_b}{\epsilon_c}
+	\Id_{N_{ab}^{c}}.
+	\label{eq:coboundary}
+\end{align}
+For the two-copy $xx\to x$ channel, this requires
+$q=\epsilon_x=q^{-1}$, hence $q=1$. Multiplicity two does not evade
+the rigid categorical obstruction.
+
+Two distinctions prevent overextending this conclusion.
+Naturality is automatic after the specified skeletal reconstruction;
+it is not an additional loophole there. In contrast, physical unary
+recovery maps do not by themselves provide a tensor product on all
+intertwiners or its naturality. In particular,
+\cref{eq:state-coproduct} does not establish such a reconstruction.
+Also, no assertion is made here that a bare unitary pentagon and this
+fusion table force rigidity.
+
+The first categorical computation should therefore test the vacuum
+channels. Choose maps
+$R:0\to\bar x\otimes x$ and
+$\bar R:0\to x\otimes\bar x$, where $\bar x=x$.
+With unitors understood, the conjugate equations are
+\begin{align}
+	(\bar R^\dagger\otimes\Id_x)\alpha^{-1}_{x,\bar x,x}
+	(\Id_x\otimes R)            & =\Id_x,
+	\nonumber                                    \\
+	(R^\dagger\otimes\Id_{\bar x})\alpha^{-1}_{\bar x,x,\bar x}
+	(\Id_{\bar x}\otimes\bar R) & =\Id_{\bar x}.
+	\label{eq:snakes}
+\end{align}
+Their contractions are scalars because $x$ is simple. Compute both,
+including their phases, and solve for compatible cup normalizations.
+Nonzero contractions alone should not replace this check.
+If the equations hold, the group objects have inverse duals and
+direct sums inherit duals; the solution is on the excluded rigid
+locus. If a contraction vanishes, retain that locus only for a bounded
+coherence test. Its existence is not evidence of a physical MPDO.
+
+The smaller backup $x^2=1+g+2x$ lacks a saturated positive integer
+dimension assignment with $d_1=d_g=1$:
+\begin{align}
+	n^2=2+2n
+	\quad\Longleftrightarrow\quad
+	(n-1)^2=3
+	\quad\Longrightarrow\quad n=1+\sqrt3.
+\end{align}
+This rejects a saturated Hilbert-space realization, not a physical
+isometric ansatz with zero complements. The latter requires
+$n^2\geq2+2n$, rather than equality.
+
+\section{Ranked next experiments and stopping rules}
+\label{sec:experiments}
+
+\begin{description}
+	\item[Priority A: channel-first construction.]
+	      Begin with environment dimension four,
+	      $\rank B_0=1$, $\rank B_1=2$.
+	      The data are eight complex active amplitudes
+	      $(v_{uv})_j$ and eight scalar amplitudes $b_{uv,l}$,
+	      with $j,l,u,v\in\{0,1\}$.
+	      Set
+	      \begin{align}
+		      a_{uv,1} & =\sqrt{1/3}\,v_{uv}\otimes\ket0, &
+		      a_{uv,2} & =\sqrt{2/3}\,v_{uv}\otimes\ket1,
+		      \nonumber                                     \\
+		      a_{uv,3} & =b_{uv,0}\ket4,                  &
+		      a_{uv,4} & =b_{uv,1}\ket4.
+	      \end{align}
+	      Impose span rank five, $T^2=T$, and $\rank T=1$.
+	      The first computation is exact kernel comparison in
+	      \cref{eq:cheap}, before optimizing $V$.
+	      A mismatch rejects the seed immediately. The Pauli seed is a
+	      regression test for this rejection, not a stationary starting point.
+
+	      For survivors, test Choi feasibility, then reconstruct the stronger
+	      encoding data in \cref{eq:J2}. Enumerate only
+	      $r,s\geq1$, $2r+s\leq25$ at this stage.
+	      Construction-stage success requires exact letters, a Gram
+	      factorization, full-space channels, and exact stationarity.
+	      Numerical failure alone does not justify increasing dimensions.
+	      The trace-one rank-three stratum is analytically excluded above;
+	      other integer trace ranks are a separate, explicitly deferred search.
+
+	      A certified RFP must next pass horizontal canonical analysis and
+	      vertical fusion extraction. Trivial fusion or an explicit dimer
+	      factorization rejects it for the present target. Nontrivial fusion
+	      with an elementary spectator recut remains a useful benchmark, but
+	      does not complete the intrinsic-weighting target.
+
+	\item[Priority B: spectral benchmark.]
+	      Compute the three purities entering $K_1^{(1)}$ at $t=1/2$ and
+	      $t=2/3$, and compare them with
+	      \cref{eq:purity,eq:curvature}. A mismatch rejects the implementation
+	      or its normalization. Agreement supplies a finite benchmark for the
+	      proved family obstruction.
+
+	      For any later candidate family, derive an all-length moment recurrence
+	      before interpreting curvature as an obstruction under fixed blocking.
+	      Stop this calculation once the common-core question is answered:
+	      further finite spectra do not establish pointwise intrinsic fusion
+	      weights.
+
+	\item[Priority C: categorical rigidity gate.]
+	      Use the compatible blocks counted in \cref{sec:rigidity}, one coherent
+	      basis per fusion space, and normalized unitors.
+	      First compute \cref{eq:snakes} together with pentagon equations
+	      involving vacuum channels.
+	      Every rigid solution is excluded by \cref{eq:coboundary}.
+	      Continue only on an explicitly specified remaining locus, with an
+	      exact reason why the rigidity argument does not apply.
+
+	      If that locus is empty, stop. If it survives, the next success
+	      criterion is an exact coherent associator there, followed by a
+	      separate physical realization with all-length positivity and
+	      full-space recovery. A compatible seven-dimensional block, or matching
+	      path-weight spectra, is not a success. An indiscriminate search over
+	      all 132 compatible entries is not recommended.
+\end{description}
+
+The practical recommendation is to pursue the environment-four,
+trace-one channel-feasibility problem while using the Fibonacci
+calculation as an exact spectral benchmark. The categorical proposal
+should receive only the bounded rigidity test before further
+construction effort.
+
+The established results are the specified uniform-family spectral
+separation, the conditional full-space channel certificate, the
+purification rank bound, the trace-one rank-three obstruction, and
+the Pauli rejection. They do not supply an intrinsically weighted
+example, a universal no-go theorem, invariance under arbitrary channels,
+or a new topological phase. For any successful tensor, pointwise
+separation under the stated bounded-depth physical refactorings remains
+a distinct final problem.
+
+\input{bibliography/next_targets}
+\end{document}
