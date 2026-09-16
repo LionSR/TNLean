@@ -2493,6 +2493,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   the all-word equation by absorbing the dressing into a nonempty acted word,
   not from per-letter data.
 
+### periodic vector of a doubled-index view at an arbitrary pair letter — candidate
+- **Pattern:** rewrite a periodic vector of `MPOTensor.toMPSTensor` at an arbitrary
+  configuration of the pair alphabet into a matrix entry of the periodic operator, by first
+  proving `(fun n => finProdFinEquiv ((ρ n).divNat, (ρ n).modNat)) = ρ` and then rewriting with
+  `MPSTensor.mpv_toMPSTensor_pairConfig`.
+- **Seen:** `MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_mulTensor` in
+  `TNLean/MPS/MPU/GroupRepresentation.lean`, `TNLean/MPS/MPU/DaggerInverse.lean`,
+  `TNLean/MPS/MPU/ReducedCanonicalRepresentative.lean`,
+  `TNLean/MPS/MPDO/NormalizedMPOProportionality.lean`,
+  `TNLean/MPS/MPDO/BNTLayerOrthogonality.lean`,
+  `TNLean/MPS/MPDO/FixedBondProductTensor.lean` (recorded 2026-09-17).
+- **Abstraction:** `MPOTensor.mpv_toMPSTensor` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean`, which states the identity for an
+  arbitrary pair configuration and needs no auxiliary equality of configurations.
+- **Notes:** above the rule of three, but the existing call sites all sit upstream of the
+  module where the general statement is first needed. Promoting means moving the statement
+  beside `MPOTensor.toMPSTensor` in `TNLean/MPS/MPDO/Defs.lean` and refactoring the six sites;
+  that rebuild is large enough to deserve its own change.
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected
