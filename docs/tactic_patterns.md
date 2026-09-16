@@ -1756,6 +1756,34 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### integer-matrix verification of an explicit compression datum — promoted
+- **Pattern:** define every matrix of a worked example as the entrywise
+  coercion of an integer matrix, push the coercion through the bond-space
+  product and through conjugation by the gauge, and discharge the resulting
+  finite identity with `decide` on integer matrices.
+
+  ```lean
+  rw [gauge_def, conjMatrix_gaugeOfMatrix, tensor_eq, ← complexOfInt_mul,
+    ← complexOfInt_mul, conj_int]
+  ```
+- **Seen:** three occurrences across three files (2026-09-17):
+  `CZXCompression.czxSquare_eq` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`,
+  `CZXCompression.czxSquare_conjMatrix` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXSquare.lean`, and
+  `CZXCompression.czxPlusIdentity_conjMatrix` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXPlusIdentity.lean`.
+- **Abstraction:** the `MPSTensor.complexOfInt` coercion with
+  `complexOfInt_mul`, `complexOfInt_one` and `complexOfInt_neg`, together with
+  `MPSTensor.gaugeOfMatrix` and `MPSTensor.conjMatrix_gaugeOfMatrix`, in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/ExplicitGauge.lean`.
+- **Notes:** the payoff is that block triangularity, the matched diagonal
+  blocks and the vanishing zero blocks of a nine-dimensional example all become
+  decidable statements about integer matrices, verified in seconds; without the
+  coercion the same checks are complex-number `simp` calls over several
+  thousand products. The coercion is stated for arbitrary index types so that
+  rectangular gauge rows and columns are covered as well.
+
 ### nested finite-sum binder permutation — promoted
 - **Pattern:** permute the binders of three to five nested finite sums over
   `Finset.univ` by folding them into one sum over an iterated product type,
