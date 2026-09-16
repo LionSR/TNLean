@@ -8,5 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.Reduction
 
+import TNLean.MPS.FundamentalTheorem.Reduction.Identification
 import TNLean.MPS.FundamentalTheorem.Reduction.SimpleSeparation
 import TNLean.MPS.FundamentalTheorem.Reduction.WordModule

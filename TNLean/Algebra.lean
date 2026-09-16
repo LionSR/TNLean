@@ -34,6 +34,7 @@ import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
+import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListOfFn
@@ -62,6 +63,7 @@ import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerTransition
 import TNLean.Algebra.SwapKronecker
 import TNLean.Algebra.SwapMatrix
+import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TwistedRegularRepresentation
 import TNLean.Algebra.UnitaryAdjointKronecker
 import TNLean.Algebra.UnitaryCompletionClass
