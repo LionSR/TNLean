@@ -1,0 +1,569 @@
+\section{Coefficient compatibility and feasibility}
+\label{sec:compatibility}
+
+\subsection{From coefficient kernels to a matrix-space condition}
+
+Set
+\begin{align}
+	W_0   & =P_{00},                                     &
+	W_1   & =P_{01},                                     &
+	W_2   & =P_{10},                                     &
+	W_3   & =P_{11},                                     &
+	W_4   & =T,
+	\nonumber                                              \\
+	\mc W & =\operatorname{span}\{W_0,W_1,W_2,W_3,W_4\}.
+	\label{eq:W}
+\end{align}
+The corresponding physical basis is
+\begin{align}
+	\mathsf B_0 & =J_1(E_{00}\oplus(-1)),
+	            &
+	\mathsf B_1 & =J_1(E_{01}\oplus0),
+	\nonumber                             \\
+	\mathsf B_2 & =J_1(E_{10}\oplus0),
+	            &
+	\mathsf B_3 & =J_1(E_{11}\oplus(-1)),
+	\nonumber                             \\
+	\mathsf B_4 & =J_1(0\oplus1).
+	\label{eq:B}
+\end{align}
+Using \cref{eq:Q}, the one-site and two-site letters become
+\begin{align}
+	M^{\alpha\beta}
+	 & =\sum_{a=0}^4(W_a)_{\alpha\beta}\mathsf B_a,
+	\nonumber                                                                 \\
+	G^{\alpha\beta}
+	 & =\sum_{\gamma,a,b}
+	    (W_a)_{\alpha\gamma}(W_b)_{\gamma\beta}\mathsf B_a\otimes \mathsf B_b
+	\nonumber                                                                 \\
+	 & =\sum_{a,b=0}^4(W_aW_b)_{\alpha\beta}\mathsf B_a\otimes \mathsf B_b.
+	\label{eq:blocked-coordinates}
+\end{align}
+The $\mathsf B_a$ are independent, as are their 25 tensor products.
+
+For complex coefficients $c_{\alpha\beta}$, define
+\begin{align}
+	F_1(c) & =\sum_{\alpha,\beta}c_{\alpha\beta}M^{\alpha\beta},
+	       &
+	F_2(c) & =\sum_{\alpha,\beta}c_{\alpha\beta}G^{\alpha\beta}.
+	\label{eq:coefficient-maps}
+\end{align}
+Write
+$\mc W^2=\operatorname{span}\{W_aW_b:0\leq a,b\leq4\}$.
+The kernels in \cref{eq:coefficient-maps} are the annihilators of
+$\mc W$ and $\mc W^2$ under the nondegenerate bilinear entry pairing.
+Taking annihilators reverses inclusions, so
+\begin{align}
+	\ker F_1\subseteq\ker F_2
+	 & \quad\Longleftrightarrow\quad
+	\mc W^2\subseteq\mc W,
+	\nonumber                        \\
+	\ker F_1=\ker F_2
+	 & \quad\Longleftrightarrow\quad
+	\mc W^2=\mc W.
+	\label{eq:kernel-criterion}
+\end{align}
+A linear refinement map on the letter span exists exactly when
+$\ker F_1\subseteq\ker F_2$: the assignment
+$F_1(c)\mapsto F_2(c)$ is well defined precisely under this inclusion.
+Thus closure of $\mc W$ under multiplication is necessary even
+before asking for an inverse map.
+
+For reference, these tests have fully explicit reduced coordinates.
+Let $h_{j,uv}=(H_j)_{uv}$ for $j=0,1$, and let
+$(j_a,k_a)$ run through $(0,0),(0,1),(1,0),(1,1)$ for $a=0,1,2,3$.
+Then
+\begin{align}
+	w_{a;(u,u'),(v,v')}
+	 & :=(W_a)_{(u,u'),(v,v')}
+	=\sqrt{p_up_{u'}}
+	h_{j_a,uv}\overline{h_{k_a,u'v'}},
+	\nonumber                        \\
+	w_{4;(u,u'),(v,v')}
+	 & =p_u\delta_{uu'}\delta_{vv'}.
+	\label{eq:entry-coordinates}
+\end{align}
+Every product coefficient is obtained by the four-term contraction
+\begin{align}
+	z_{ab;\alpha\beta}
+	 & :=(W_aW_b)_{\alpha\beta}
+	\nonumber                              \\
+	 & =w_{a;\alpha,00}w_{b;00,\beta}
+	+w_{a;\alpha,01}w_{b;01,\beta}
+	\nonumber                              \\
+	 & \quad+w_{a;\alpha,10}w_{b;10,\beta}
+	+w_{a;\alpha,11}w_{b;11,\beta}.
+	\label{eq:product-entries}
+\end{align}
+Closure would require each of these matrices to be a linear
+combination of the five $W_c$.
+
+The putative coefficients are determined, not independent.
+Define
+\begin{align}
+	\Gamma_{cd}
+	 & =\sum_{\alpha,\beta}
+	\overline{w_{c;\alpha\beta}}w_{d;\alpha\beta},
+	 &
+	b_{d;ab}
+	 & =\sum_{\alpha,\beta}
+	\overline{w_{d;\alpha\beta}}z_{ab;\alpha\beta}.
+\end{align}
+The Gram matrix $\Gamma$ is positive definite. Taking inner products
+of $W_aW_b=\sum_c\mu_{ab}^cW_c$ with $W_d$ gives
+$\sum_c\Gamma_{dc}\mu_{ab}^c=b_{d;ab}$, hence
+\begin{align}
+	\mu_{ab}^c
+	 & =\sum_{d=0}^4(\Gamma^{-1})_{cd}b_{d;ab},
+	\nonumber                                   \\
+	z_{ab;\alpha\beta}
+	 & \stackrel{\mathrm{closure}}{=}
+	\sum_{c=0}^4\mu_{ab}^cw_{c;\alpha\beta}.
+	\label{eq:closure-equations}
+\end{align}
+The following argument proves that these closure equations have no
+solution anywhere in \cref{eq:parameter-space}.
+
+\subsection{The rank-one transfer forces two-dimensional orbits}
+
+In the normalization \cref{eq:normal-form}, put
+\begin{align}
+	r                           & =\operatorname{vec}(R),
+	                            &
+	\ell\,\operatorname{vec}(Y) & =\tr Y.
+\end{align}
+Then $T=r\ell$ and $\ell r=1$.
+Define its left column orbit and right row orbit by
+\begin{align}
+	\mc U_{\mathrm{col}} & =\mc W r,
+	                     &
+	\mc U_{\mathrm{row}} & =\ell\mc W,
+	                     &
+	a                    & =\dim\mc U_{\mathrm{col}},
+	                     &
+	b                    & =\dim\mc U_{\mathrm{row}}.
+	\label{eq:orbits}
+\end{align}
+Under vectorization and trace duality, these are
+\begin{align}
+	\mc U_{\mathrm{col}}
+	 & \simeq\operatorname{span}
+	\{R,A_jRA_k^\dagger:j,k=0,1\},
+	\nonumber                    \\
+	\mc U_{\mathrm{row}}
+	 & \simeq\operatorname{span}
+	\{\Id_2,A_k^\dagger A_j:j,k=0,1\}.
+	\label{eq:orbit-matrices}
+\end{align}
+The second identification follows from
+$\tr(A_jYA_k^\dagger)=\tr(A_k^\dagger A_jY)$.
+
+\begin{lemma}
+	\label{lem:orbit}
+	If $\mc W$ is closed under multiplication, then $a=b=2$.
+\end{lemma}
+
+\begin{proof}
+	First, both dimensions are at least two. If $a=1$, all matrices
+	$A_jRA_k^\dagger$ are proportional to $R$.
+	Since $A_0\neq0$ and $R>0$, the identity
+	$A_0RA_0^\dagger=cR$ has $c>0$ and makes $A_0$ invertible.
+	Writing $A_0RA_1^\dagger=dR$ gives
+	\begin{align}
+		A_0^\dagger & =cR^{-1}A_0^{-1}R,
+		            &
+		A_1^\dagger & =dR^{-1}A_0^{-1}R,
+		\nonumber                        \\
+		A_1^\dagger & =(d/c)A_0^\dagger,
+	\end{align}
+	contrary to independence of $A_0,A_1$.
+
+	If $b=1$, there are scalars $c>0$ and $d$ such that
+	$A_0^\dagger A_0=c\Id_2$ and $A_0^\dagger A_1=d\Id_2$.
+	They imply
+	\begin{align}
+		A_0 & =c(A_0^\dagger)^{-1},
+		    &
+		A_1 & =d(A_0^\dagger)^{-1}
+		=(d/c)A_0,
+	\end{align}
+	which is the same contradiction.
+
+	Now assume closure. Since $T\in\mc W$, the space
+	\begin{align}
+		\mc I
+		 & :=\operatorname{span}\{XTY:X,Y\in\mc W\}
+		\nonumber                                   \\
+		 & =\operatorname{span}
+		\{(Xr)(\ell Y):X,Y\in\mc W\}
+		\label{eq:ideal}
+	\end{align}
+	is contained in $\mc W$.
+	Outer products of independent column and row bases are independent:
+	applying a dual functional to the columns first leaves a linear
+	combination of the independent rows, whose coefficients must then
+	vanish. Therefore
+	\begin{align}
+		ab=\dim\mc I\leq\dim\mc W=5.
+	\end{align}
+	The integers $a,b$ are both at least two, so $a=b=2$.
+\end{proof}
+
+Under the closure hypothesis, $\mc I$ would be a four-dimensional
+two-sided ideal. Indeed, for $Z,X,Y\in\mc W$,
+\begin{align}
+	Z(XTY) & =(ZX)TY\in\mc I,
+	       &
+	(XTY)Z & =XT(YZ)\in\mc I.
+\end{align}
+Thus the obstruction is already restricted to a five-dimensional
+algebra with a four-dimensional ideal. The next lemma determines
+the active pencil forced by its two orbit dimensions.
+
+\subsection{Structure of the active pencil}
+
+\begin{lemma}
+	\label{lem:pencil}
+	Let $R>0$, and let $A_0,A_1\in M_2(\C)$ be independent.
+	If both spaces in \cref{eq:orbit-matrices} have dimension two,
+	there are orthonormal bases $\{\ket{u_0},\ket{u_1}\}$ and
+	$\{\ket{v_0},\ket{v_1}\}$ such that
+	\begin{align}
+		\operatorname{span}\{A_0,A_1\}
+		 & =\operatorname{span}
+		\{\ket{u_0}\bra{v_0},\ket{u_1}\bra{v_1}\}.
+		\label{eq:pencil}
+	\end{align}
+	Moreover, $R$ is diagonal in both bases, with strictly positive
+	diagonal entries.
+\end{lemma}
+
+\begin{proof}
+	The two-dimensional space
+	\begin{align}
+		\mc B=\operatorname{span}
+		\{\Id_2,A_k^\dagger A_j:j,k=0,1\}
+	\end{align}
+	contains the identity and is closed under adjoints.
+	It therefore contains a nonscalar Hermitian matrix $H$.
+	To justify this choice, take any nonscalar element of $\mc B$;
+	at least one of its Hermitian real and imaginary parts is nonscalar.
+	Since $\dim\mc B=2$, we have
+	$\mc B=\operatorname{span}\{\Id_2,H\}$.
+	Choose an orthonormal eigenbasis $\{\ket{v_0},\ket{v_1}\}$ of $H$.
+	The eigenvalues are distinct, so every matrix in $\mc B$ is diagonal
+	in this basis.
+
+	Consequently, for all $j,k$,
+	\begin{align}
+		\langle A_kv_0,A_jv_1\rangle
+		 & =\bra{v_0}A_k^\dagger A_j\ket{v_1}=0.
+		\label{eq:column-orthogonality}
+	\end{align}
+	The column spaces
+	\begin{align}
+		\mc L_t=\operatorname{span}\{A_0\ket{v_t},A_1\ket{v_t}\},
+		\qquad t=0,1,
+	\end{align}
+	are therefore orthogonal.
+
+	Neither column space can vanish. Suppose, for example, that
+	$\mc L_1=0$. Then
+	$A_j=\ket{x_j}\bra{v_0}$, and independence of $A_0,A_1$ makes
+	$\ket{x_0},\ket{x_1}$ independent. Since $R>0$,
+	\begin{align}
+		A_jRA_k^\dagger
+		 & =\bra{v_0}R\ket{v_0}\ket{x_j}\bra{x_k}.
+	\end{align}
+	These four matrices span $M_2(\C)$, contradicting the
+	two-dimensional column orbit. The case $\mc L_0=0$ is identical
+	with the roles of the two columns exchanged.
+
+	The nonzero orthogonal spaces $\mc L_0,\mc L_1$ in $\C^2$ must
+	both be lines. Choose unit vectors $\ket{u_t}$ spanning them.
+	There are coefficients $d_{jt}$ such that
+	\begin{align}
+		A_j
+		 & =d_{j0}\ket{u_0}\bra{v_0}
+		+d_{j1}\ket{u_1}\bra{v_1}.
+		\label{eq:pencil-coefficients}
+	\end{align}
+	The $2\times2$ coefficient matrix $(d_{jt})$ is invertible because
+	the two $A_j$ are independent. Hence the two rank-one matrices
+	\begin{align}
+		K_t & =\ket{u_t}\bra{v_t},\qquad t=0,1,
+	\end{align}
+	form another basis of the active pencil.
+
+	An invertible change of active basis preserves the span of
+	$\{A_jRA_k^\dagger\}$. In the new basis its four generators are
+	\begin{align}
+		K_sRK_t^\dagger
+		 & =\bra{v_s}R\ket{v_t}\ket{u_s}\bra{u_t},
+		\qquad s,t=0,1.
+		\label{eq:pencil-orbit}
+	\end{align}
+	The two diagonal coefficients are strictly positive.
+	If the off-diagonal coefficient $\bra{v_0}R\ket{v_1}$ were nonzero,
+	its conjugate would also be nonzero. All four matrix units in the
+	$\ket{u_t}$ basis would then occur in \cref{eq:pencil-orbit}, giving
+	a four-dimensional span. This is excluded. Therefore
+	\begin{align}
+		\bra{v_0}R\ket{v_1}
+		 & =\bra{v_1}R\ket{v_0}=0.
+	\end{align}
+	The span in \cref{eq:pencil-orbit} is exactly the diagonal matrices
+	in the $\ket{u_t}$ basis. Since adjoining $R$ leaves its dimension
+	equal to two, $R$ belongs to that diagonal space as well.
+	Its diagonal entries in either basis are positive by faithfulness.
+\end{proof}
+
+The change from $A_j$ to $K_t$ in this proof is an algebraic change
+of basis in their span, not an additional physical gauge. It is
+used only to describe the same horizontal coordinate space.
+
+\subsection{Failure of closure on the remaining locus}
+
+\begin{theorem}
+	\label{thm:no-go}
+	Consider the locally purified tensor
+	\cref{eq:purification,eq:letters} with Gram ranks $(1,2)$.
+	Assume that its trace matrix is idempotent, its periodic operators
+	have trace one, and its one-site coefficient span has dimension five.
+	Then
+	\begin{align}
+		\ker F_1\not\subseteq\ker F_2.
+		\label{eq:no-kernel-inclusion}
+	\end{align}
+	In particular, the one-site and two-site coefficient kernels cannot
+	be equal. No complex-linear refinement map on the letter span exists,
+	and no full-space CPTP maps can satisfy \cref{eq:rfp}.
+\end{theorem}
+
+\begin{proof}
+	By \cref{prop:faithful}, both transfer weights are faithful.
+	Apply the virtual gauge reduction to obtain $\mc E(Y)=R\tr Y$.
+	All hypotheses and the kernel inclusion question are invariant
+	under this reduction.
+
+	Suppose, for contradiction, that
+	$\ker F_1\subseteq\ker F_2$.
+	By \cref{eq:kernel-criterion}, $\mc W$ is closed under multiplication.
+	By \cref{lem:orbit}, both orbit dimensions equal two.
+	Apply \cref{lem:pencil} and use
+	$K_t=\ket{u_t}\bra{v_t}$ as a basis of the active pencil.
+	Write
+	\begin{align}
+		R                       & =r_0^u\ket{u_0}\bra{u_0} +r_1^u\ket{u_1}\bra{u_1}
+		\nonumber                                                                    \\
+		                        & =r_0^v\ket{v_0}\bra{v_0} +r_1^v\ket{v_1}\bra{v_1},
+		                        &
+		r_0^u,r_1^u,r_0^v,r_1^v & >0.
+		\label{eq:two-diagonalizations}
+	\end{align}
+
+	Represent a superoperator as a matrix with output basis
+	$\ket{u_s}\otimes\overline{\ket{u_t}}$ and input basis
+	$\ket{v_s}\otimes\overline{\ket{v_t}}$, both ordered as
+	$00,01,10,11$. Denote its matrix in these two bases by a hat.
+	This is an invertible change of coordinates for matrix-space
+	membership; multiplication of hatted matrices is not assumed to
+	represent composition.
+
+	The four active products are
+	\begin{align}
+		K_s\otimes\overline{K_t}
+		 & =
+		\left(\ket{u_s}\otimes\overline{\ket{u_t}}\right)
+		\left(\bra{v_s}\otimes\overline{\bra{v_t}}\right).
+	\end{align}
+	Their hatted matrices are the four diagonal matrix units.
+	The hatted matrix of $T:Y\mapsto R\tr Y$ is
+	\begin{align}
+		\widehat T
+		 & =
+		\begin{pmatrix}
+			r_0^u & 0 & 0 & r_0^u \\
+			0     & 0 & 0 & 0     \\
+			0     & 0 & 0 & 0     \\
+			r_1^u & 0 & 0 & r_1^u
+		\end{pmatrix}.
+		\label{eq:T-mixed-bases}
+	\end{align}
+	Therefore
+	\begin{align}
+		\widehat{\mc W}
+		 & =\{\Lambda+c\widehat T:
+		\Lambda\ \text{diagonal},\ c\in\C\}.
+		\label{eq:W-mixed-bases}
+	\end{align}
+
+	The matrix $E=K_0\otimes\overline{K_0}$ belongs to $\mc W$.
+	Compute its composition with $T$ as a map before changing bases:
+	\begin{align}
+		(ET)\operatorname{vec}(Y)
+		 & =\operatorname{vec}(K_0RK_0^\dagger)\tr Y
+		\nonumber                                             \\
+		 & =r_0^v\operatorname{vec}(\ket{u_0}\bra{u_0})\tr Y.
+	\end{align}
+	Thus
+	\begin{align}
+		\widehat{ET}
+		 & =
+		\begin{pmatrix}
+			r_0^v & 0 & 0 & r_0^v \\
+			0     & 0 & 0 & 0     \\
+			0     & 0 & 0 & 0     \\
+			0     & 0 & 0 & 0
+		\end{pmatrix}.
+		\label{eq:ET-mixed-bases}
+	\end{align}
+	If $ET$ belonged to $\mc W$, then
+	$\widehat{ET}=\Lambda+c\widehat T$ for some diagonal $\Lambda$.
+	The off-diagonal entry with row $11$ and column $00$ would give
+	\begin{align}
+		0 & =c r_1^u,
+		  &
+		c & =0.
+	\end{align}
+	The off-diagonal entry with row $00$ and column $11$ would then give
+	\begin{align}
+		r_0^v & =c r_0^u=0,
+	\end{align}
+	contrary to $r_0^v>0$. Hence $ET\notin\mc W$, contradicting closure.
+
+	It follows that $\mc W^2\not\subseteq\mc W$, which proves
+	\cref{eq:no-kernel-inclusion}. Any linear refinement map would send
+	$F_1(c)=0$ to $F_2(c)=0$, so such a map cannot exist.
+	CPTP refinement maps are a special case.
+\end{proof}
+
+The proof distinguishes two exhaustive possibilities on the faithful
+parameter space. If either transfer orbit has dimension greater
+than two, the dimension bound in \cref{lem:orbit} excludes closure.
+If both have dimension two, \cref{lem:pencil} applies and the explicit
+product \cref{eq:ET-mixed-bases} excludes closure. There is no remaining
+coefficient-compatible locus within the stated domain.
+
+\subsection{Increasing only the scalar multiplicity does not help}
+
+\begin{corollary}
+	\label{cor:scalar-extension}
+	Keep the physical encoding, bond-two local purification, coefficient span
+	five, and rank-one idempotent trace transfer. If the active sector Gram
+	operator has rank one, no linear refinement exists, irrespective of the
+	rank of the scalar sector Gram operator.
+\end{corollary}
+\begin{proof}
+	Write an arbitrary scalar Gram factorization with matrices
+	$C_1,\ldots,C_s\in M_2(\C)$. The active sector still has two matrices
+	$A_0,A_1$, and the coordinate space remains
+	\begin{align}
+		\mc W & =\operatorname{span}\{A_i\otimes\overline{A_j},T:i,j=0,1\}, \\
+		T     & =\sum_i A_i\otimes\overline{A_i}
+		+\sum_{l=1}^{s}C_l\otimes\overline{C_l}.
+	\end{align}
+	The scalar contributions occur through one physical coordinate, not
+	through $s$ independent physical coordinates. If either factor in
+	$\mc E(X)=R\tr(LX)$ is singular, positivity of its Choi matrix forces
+	all Kraus matrices into a common input or output line. Their coordinate
+	span then has dimension at most four, a contradiction.
+	Otherwise the same virtual gauge gives $R>0$, $L=I$, and $\tr R=1$.
+	Full span five implies independence of $A_0,A_1$.
+	The orbit and pencil arguments and the final product contradiction in
+	\cref{thm:no-go} use only these properties and the displayed coordinate
+	space. They do not use the number of scalar Kraus matrices.
+	Thus $\mc W^2\not\subseteq\mc W$, excluding refinement.
+\end{proof}
+
+The orthonormal four-Kraus parameterization in \cref{sec:transfer}
+is not being extended to nonminimal Kraus families. Only the obstruction
+extends. In this encoding the scalar Gram operator acts on $\C^4$, so
+its rank is at most four. Consequently none of the pairs $(1,1)$,
+$(1,2)$, $(1,3)$, or $(1,4)$ can pass the trace-one, full-span test.
+Since the purification rank obeys
+\begin{align}
+	r_E\geq2\rank B_0+\rank B_1,
+\end{align}
+the first unexcluded pair is $(2,1)$, requiring $r_E\geq5$.
+This identifies a necessary change in the ansatz, not a feasible example.
+
+\subsection{Pauli regression and physical channel requirements}
+
+The accepted regression seed is
+\begin{align}
+	A_0=\Id_2/2,\qquad A_1=X/2,\qquad
+	C_0=Y/2,\qquad C_1=Z/2,
+	\label{eq:pauli}
+\end{align}
+where $X,Y,Z$ are the Pauli matrices.
+It has $R=\Id_2/2$ and active Hilbert--Schmidt plane
+$\operatorname{span}\{\Id_2,X\}$.
+Its one-site coordinates span
+\begin{align}
+	\Id_2\otimes\Id_2,\quad
+	\Id_2\otimes X,\quad
+	X\otimes\Id_2,\quad
+	X\otimes X,\quad
+	Q_0:=Y\otimes\overline Y+Z\otimes\overline Z.
+	\label{eq:pauli-span}
+\end{align}
+An active--scalar product produces
+\begin{align}
+	P_{01}Q
+	 & =\sum_{l=0}^1A_0C_l\otimes\overline{A_1C_l}
+	\nonumber                                      \\
+	 & =\frac1{16}\left(Y\otimes\overline{iZ}
+	+Z\otimes\overline{-iY}\right)
+	\nonumber                                      \\
+	 & =-\frac{i}{16}(Y\otimes Z+Z\otimes Y).
+	\label{eq:pauli-product}
+\end{align}
+The identities used here are $XY=iZ$, $XZ=-iY$,
+$\overline Y=-Y$, and $\overline Z=Z$.
+Pauli tensor orthogonality makes this nonzero coordinate independent
+of \cref{eq:pauli-span}. Thus closure fails directly.
+The exact regression script~\cite{Checks} verifies the stronger
+finite statement that the full blocked span is six-dimensional,
+whereas the one-site span is five-dimensional.
+The general theorem does not assume a numerical search result or
+infer a universal blocked rank from this example.
+
+The obstruction in \cref{thm:no-go} occurs before complete positivity.
+In general, equality of coefficient kernels would provide a linear
+isomorphism between letter spans, not a quantum channel on the full
+physical spaces. Such channels would require positive Choi matrices
+$J_{\mc T}$ and $J_{\mc S}$ obeying
+\begin{align}
+	J_{\mc T}                   & \geq0,
+	                            &
+	\tr_{\mathrm{out}}J_{\mc T} & =\Id_5,
+	\nonumber                                \\
+	J_{\mc S}                   & \geq0,
+	                            &
+	\tr_{\mathrm{out}}J_{\mc S} & =\Id_{25},
+	\label{eq:channel-constraints}
+\end{align}
+together with all letter equations in \cref{eq:rfp}.
+Both Choi matrices would have size $125\times125$.
+
+The stronger accepted encoding ansatz additionally asks for
+normalized faithful states $\sigma_0\in M_r$, $\sigma_1\in M_s$
+and an isometry
+$V:(\C^2\otimes\C^r)\oplus\C^s\to\mc H^{\otimes2}$ such that
+\begin{align}
+	J_2(X\oplus z)
+	    & =V[(X\otimes\sigma_0)\oplus z\sigma_1]V^\dagger,
+	\nonumber                                              \\
+	G^{\alpha\beta}
+	    & =J_2(X_{\alpha\beta}),
+	    &
+	r,s & \geq1,\qquad 2r+s\leq25.
+	\label{eq:stationarity}
+\end{align}
+Compression and preparation can provide full-space decoders for
+such encodings~\cite{Kato}, but they cannot establish the second
+line of \cref{eq:stationarity}. In the present stratum that line
+already fails as a linear assignment, by \cref{thm:no-go}.
+No choice of $r,s,V,\sigma_0,\sigma_1$ repairs the coefficient
+obstruction.

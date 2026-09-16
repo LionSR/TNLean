@@ -22,9 +22,10 @@
 	stationary search considered here. A four-environment Pauli seed also
 	fails, by an explicit kernel mismatch. Finally, Reutter's theorem
 	excludes positive nonflat coherent weights on the rigid categorical
-	locus. The recommended next step is a bounded channel-feasibility
-	search, with spectral verification and a separate categorical
-	rigidity test.
+	locus. A subsequent coefficient-space obstruction excludes the proposed
+	active-rank-one search, independently of scalar multiplicity. The
+	remaining same-encoding frontier begins at Gram ranks $(2,1)$ and
+	purification environment dimension at least five; its feasibility is open.
 \end{abstract}
 \maketitle
 
@@ -572,9 +573,10 @@ Thus
 \end{align}
 contradicting the required five-dimensional span of $J_1(\mc A)$.
 
-Consequently, the trace-one full-span search can start at environment
-dimension four. This obstruction does not classify the other
-idempotent trace ranks. An unnormalized fixed-point family could have
+This rank-three argument alone gives an environment lower bound of four.
+The companion obstruction~\cite{EnvironmentFour} strengthens it to five
+and requires active Gram rank at least two. Neither argument classifies
+idempotent trace ranks greater than one. An unnormalized fixed-point family could have
 $\tr\rho_N=\rank T>1$ and be normalized at the state level by that
 constant. Such sectors are not excluded by the rank-one argument.
 
@@ -792,8 +794,16 @@ $n^2\geq2+2n$, rather than equality.
 \section{Ranked next experiments and stopping rules}
 \label{sec:experiments}
 
+The originally proposed environment-four stratum is now excluded by
+an exact coefficient-space theorem~\cite{EnvironmentFour}. Under the
+same trace-one and full-span hypotheses, active Gram rank one is
+impossible for every scalar Gram rank. Priority A below records the
+excluded experiment and its regression tests, not an open optimization
+target. The first unexcluded pair is $(2,1)$, requiring environment
+dimension at least five. No candidate in that larger class is asserted.
+
 \begin{description}
-	\item[Priority A: channel-first construction.]
+	\item[Priority A: excluded channel-first stratum.]
 	      Begin with environment dimension four,
 	      $\rank B_0=1$, $\rank B_1=2$.
 	      The data are eight complex active amplitudes
@@ -813,9 +823,10 @@ $n^2\geq2+2n$, rather than equality.
 	      A mismatch rejects the seed immediately. The Pauli seed is a
 	      regression test for this rejection, not a stationary starting point.
 
-	      For survivors, test Choi feasibility, then reconstruct the stronger
-	      encoding data in \cref{eq:J2}. Enumerate only
-	      $r,s\geq1$, $2r+s\leq25$ at this stage.
+	      No survivors exist in this excluded stratum. For a revised,
+	      unexcluded ansatz, Choi feasibility and reconstruction of the
+	      encoding data in \cref{eq:J2} remain separate tests. The bounds
+	      $r,s\geq1$, $2r+s\leq25$ still apply at physical dimension five.
 	      Construction-stage success requires exact letters, a Gram
 	      factorization, full-space channels, and exact stationarity.
 	      Numerical failure alone does not justify increasing dimensions.
@@ -858,11 +869,12 @@ $n^2\geq2+2n$, rather than equality.
 	      all 132 compatible entries is not recommended.
 \end{description}
 
-The practical recommendation is to pursue the environment-four,
-trace-one channel-feasibility problem while using the Fibonacci
-calculation as an exact spectral benchmark. The categorical proposal
-should receive only the bounded rigidity test before further
-construction effort.
+Do not continue the excluded active-rank-one channel-feasibility
+search. A continuation with the same encoding must instead examine
+active Gram rank at least two, beginning with $(2,1)$, or explicitly
+change the trace hypothesis. The Fibonacci calculation remains an
+exact spectral benchmark. The categorical proposal should receive
+only the bounded rigidity test before further construction effort.
 
 The established results are the specified uniform-family spectral
 separation, the conditional full-space channel certificate, the
