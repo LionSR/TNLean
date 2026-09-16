@@ -1,0 +1,603 @@
+\section{Categorical fusion paths and regrouping}
+\label{sec:intrinsic-categories}
+
+In the categorical construction, the bond label carries a fusion-path
+space. It cannot be absorbed into a classical flag by the group
+substitution used above. Nevertheless, a fixed regrouping determines
+exactly where its weights enter the canonical tensor.
+
+\subsection{Base tensors and recoupling conventions}
+
+The Ising rules are
+\begin{align}
+	\psi^2     & =1,                 &
+	\psi\sigma & =\sigma\psi=\sigma, &
+	\sigma^2   & =1+\psi,
+\end{align}
+with dimensions $d_1=d_\psi=1$, $d_\sigma=\sqrt2$.
+The Fibonacci rules are
+\begin{align}
+	\tau^2 & =1+\tau,                  &
+	d_1    & =1,                       &
+	d_\tau & =\phi=\frac{1+\sqrt5}{2}.
+\end{align}
+Write $N_{ab}^c$ for the fusion coefficients and
+$\mc D^2=\sum_ad_a^2$, equal to $4$ and $\phi+2$, respectively.
+
+Use real associators $[F^{abc}_d]_{ef}$, zero unless
+$N_{ab}^eN_{ec}^dN_{bc}^fN_{af}^d=1$. The nontrivial entries are
+\begin{align}
+	F^{\sigma\sigma\sigma}_\sigma
+	 & =\frac1{\sqrt2}
+	\begin{pmatrix}1&1\\1&-1\end{pmatrix},             \\
+	[F^{\sigma\psi\sigma}_\psi]_{\sigma\sigma}
+	 & =[F^{\psi\sigma\psi}_\sigma]_{\sigma\sigma}=-1, \\
+	F^{\tau\tau\tau}_\tau
+	 & =\begin{pmatrix}
+		    \phi^{-1}   & \phi^{-1/2} \\
+		    \phi^{-1/2} & -\phi^{-1}
+	    \end{pmatrix}.
+	\label{eq:F-tables}
+\end{align}
+All other admissible scalar entries are one. These are the usual
+unitary fusion tables in the indicated gauge~\cite{Bultinck}.
+Their orthogonality uses
+$1/2+1/2=1$ and $\phi^{-2}+\phi^{-1}=1$.
+
+Define the orthonormal path bases
+\begin{align}
+	\mc P_a & =\operatorname{span}\{\ket{x,y}:N_{ax}^y=1\},  \\
+	\mc J   & =\{(x',\rho,x):N_{x'\rho}^x=1\},               \\
+	A_a^{(y',\rho,y),(x',\rho,x)}
+	        & =[F^{a x'\rho}_{y}]_{y'x}\ket{x',y'}\bra{x,y}.
+	\label{eq:base-A}
+\end{align}
+Unequal external labels $\rho$ give zero letters. All bases use
+lexicographic order with labels $(1,\psi,\sigma)$ or $(1,\tau)$.
+The dimensions of $\mc P_a$ are $(3,3,4)$ and $(2,3)$.
+
+On matching paths define
+\begin{align}
+	U_{ab}(\ket{z,y}_a\otimes\ket{x,z}_b)
+	 & =\sum_c[F^{abx}_y]_{cz}\ket{c;x,y},
+	\label{eq:path-U}
+\end{align}
+and set $U_{ab}=0$ on nonmatching paths.
+Orthogonality gives $U_{ab}U_{ab}^\dagger=\Id$ and
+$U_{ab}^\dagger U_{ab}=P_{ab}$, the matching-path projection.
+
+The recoupling equation in these coordinates is
+\begin{align}
+	 & \sum_{z',z}
+	   [F^{abx'}_{y'}]_{cz'}
+	   [F^{a z'\rho}_{y}]_{y'z}
+	   [F^{b x'\rho}_{z}]_{z'x}
+	   [F^{abx}_{y}]_{dz}
+	\nonumber                                      \\
+	 & \qquad=\delta_{cd}[F^{c x'\rho}_{y}]_{y'x}.
+	\label{eq:recoupling}
+\end{align}
+This is the pentagon change of parenthesization, with both output
+labels $c,d$ retained. It can also be checked directly from
+\cref{eq:F-tables}: use $t=\sqrt2$ and $t^2=2$ for Ising, and
+$t=\phi^{-1/2}$ and $t^4+t^2=1$ for Fibonacci. The admissible domain is
+\begin{align}
+	N_{ab}^{c}N_{ab}^{d}N_{x'\rho}^{x}N_{y'\rho}^{y}
+	N_{cx'}^{y'}N_{dx}^{y}=1.
+\end{align}
+There are $136$ Ising coordinates, including $12$ with $c\neq d$,
+and $50$ Fibonacci coordinates, including $10$ with $c\neq d$.
+Inserting the complete tables and reducing powers of $t$ makes
+each residual zero. For example, the off-diagonal Fibonacci
+coordinate with all six external nonunit labels equal to $\tau$
+and $(c,d)=(1,\tau)$ is
+\begin{align}
+	-t^5+t^3-t^7
+	 & =-t^5+t^3-(t^3-t^5)=0.
+\end{align}
+The zero-entry rule and the admissibility domain are essential;
+no permutation symmetry of the F indices is assumed.
+
+Expansion of the concatenated letters gives
+\begin{align}
+	(A_aA_b)^{hh'}
+	 & =\sum_{z',z}
+	    [F^{a z'\rho}_y]_{y'z}
+	    [F^{b x'\rho}_z]_{z'x}
+	\ket{z',y'}\ket{x',z'}
+	\bra{z,y}\bra{x,z}.
+\end{align}
+Every ket and bra is matching. Applying \cref{eq:path-U} and
+\cref{eq:recoupling} therefore proves the full-space identity
+\begin{align}
+	A_aA_b
+	 & =U_{ab}^\dagger
+	\left(\bigoplus_c\Id_{N_{ab}^c}\otimes A_c\right)U_{ab}.
+	\label{eq:base-fusion}
+\end{align}
+In particular, the complement is zero before compression.
+
+\subsection{All-length positivity and the weighted tensor}
+
+Let $R(a_1,\ldots,a_k)$ denote the horizontal periodic contraction
+of the indicated word. Direct substitution into \cref{eq:base-A}
+gives the one-letter closures
+\begin{align}
+	R_1^{\mathrm I}
+	                   & =\begin{pmatrix}1&1&1\\1&1&1\\1&1&2\end{pmatrix}, &
+	R_\psi^{\mathrm I} & =R_\sigma^{\mathrm I}=0,                            \\
+	R_1^{\mathrm F}
+	                   & =\begin{pmatrix}1&1\\1&2\end{pmatrix},            &
+	R_\tau^{\mathrm F}
+	                   & =\phi^{-2}\ket{\tau,\tau}\bra{\tau,\tau}.
+	\label{eq:seeds}
+\end{align}
+The nonzero Ising eigenvalues solve $(z-2)^2-2=0$ and are
+$2\pm\sqrt2$. The Fibonacci unit-sector eigenvalues solve
+$(z-1)(z-2)-1=0$ and are $\phi^2,\phi^{-2}$. All seeds are
+positive.
+
+Repeated application of \cref{eq:base-fusion} gives an isometry
+$J_{\boldsymbol a}$ with
+\begin{align}
+	R(\boldsymbol a)
+	 & =J_{\boldsymbol a}
+	\left(\bigoplus_c\Id_{N_{\boldsymbol a}^c}\otimes R_c\right)
+	J_{\boldsymbol a}^\dagger,            \\
+	\tr R(\boldsymbol a)
+	 & =\sum_cN_{\boldsymbol a}^c\tr R_c.
+	\label{eq:word-spectrum}
+\end{align}
+Here $N_{\boldsymbol a}^c$ counts successive fusion paths. Since
+the recoupling maps do not depend on the contracted horizontal
+indices, they pass through their finite sums. This proves positivity
+at every word length.
+
+Let $\mc L=\mc R=\C^4$. Choose mutually orthogonal isometries
+$\Phi_b:\mc P_b\to\mc R\otimes\mc L$ by assigning the ordered
+basis vectors successively to
+\begin{align}
+	\ket{\varphi_{u,v}}
+	 & =\frac12\sum_{r\in\Z_2^2}(-1)^{u\cdot r}\ket{r,r+v},
+\end{align}
+ordered first by $u$, then by $v$. Ten register vectors are used
+for Ising and five for Fibonacci; the unused dimensions are six
+and eleven.
+
+For $\lambda_b>0$, put
+\begin{align}
+	\Lambda & =\sum_b\lambda_bd_b,         &
+	w_f     & =\frac{d_f}{\mc D^2\Lambda}.
+\end{align}
+Writing $[Z]_{rs}=(\bra r\otimes\Id)Z(\ket s\otimes\Id)$,
+the register-crossing tensor is
+\begin{align}
+	B_f^{(h,r,s),(h',p,q)}
+	          & =\sum_{b,k}\lambda_b
+	                       [\Phi_bA_b^{hk}\Phi_b^\dagger]_{rs}
+	\otimes A_f^{kh'}\otimes\ket p\bra q,                      \\
+	M^\lambda & =\bigoplus_fw_fB_f.
+	\label{eq:crossing-category}
+\end{align}
+Its ring is a positive weighted sum of embedded words
+$R(b_1,f_1,\ldots,b_N,f_N)$ by \cref{eq:word-spectrum}.
+
+\subsection{Exact regrouping and canonical representatives}
+
+Regroup the factors into $(R_{n-1},L_n,\mc P_{f_n})$.
+The shifted tensor is
+\begin{align}
+	C^{hh'}
+	 & =\bigoplus_f\sum_{b,k}w_f\lambda_b
+	\Phi_bA_b^{hk}\Phi_b^\dagger\otimes A_f^{kh'}.
+	\label{eq:shift-category}
+\end{align}
+The identity
+$\sum_{r,s}\ket r\bra s\otimes[Z]_{rs}=Z$
+proves equality of the periodic families at every $N$ under this
+fixed regrouping.
+
+Let $J_{bf}^{c}$ be the column of $U_{bf}^\dagger$ associated
+with output $c$, and let
+$V_{bf}^{c}=(\Phi_b\otimes\Id)J_{bf}^{c}$, placed in physical
+sector $f$. Then
+\begin{align}
+	C^{hh'}
+	 & =\sum_{b,f,c}w_f\lambda_b
+	V_{bf}^{c}A_c^{hh'}(V_{bf}^{c})^\dagger,       \\
+	\eta_c
+	 & =\bigoplus_{b,f}w_f\lambda_b\Id_{N_{bf}^c}.
+	\label{eq:category-eta}
+\end{align}
+The ranges are orthogonal. Their complement consists of unused
+register states and nonmatching paths and is zero on every letter.
+
+The canonical status of the $A_c$ must be checked independently of
+this decomposition. Every nonzero letter in \cref{eq:base-A} is a
+scalar matrix unit, so its transfer map kills off-diagonal matrices.
+On diagonal matrices the transition matrix is
+\begin{align}
+	K_a[(x',y'),(x,y)]
+	 & =\sum_\rho\left|[F^{a x'\rho}_y]_{y'x}\right|^2.
+\end{align}
+The full matrices are
+\begin{align}
+	K_1^{\mathrm I}=K_\psi^{\mathrm I}
+	 & =\begin{pmatrix}1&1&1\\1&1&1\\1&1&2\end{pmatrix}, \\
+	K_\sigma^{\mathrm I}
+	 & =\begin{pmatrix}
+		    1   & 1   & 1 & 1 \\
+		    1   & 1   & 1 & 1 \\
+		    1/2 & 1/2 & 1 & 1 \\
+		    1/2 & 1/2 & 1 & 1
+	    \end{pmatrix},                               \\
+	K_1^{\mathrm F}
+	 & =\begin{pmatrix}1&1\\1&2\end{pmatrix},            \\
+	K_\tau^{\mathrm F}
+	 & =\begin{pmatrix}
+		    1         & 1 & 1           \\
+		    \phi^{-2} & 1 & \phi^{-1}   \\
+		    \phi^{-1} & 1 & 1+\phi^{-2}
+	    \end{pmatrix}.
+	\label{eq:base-transfer}
+\end{align}
+For example, the last entry is $1^2+(-\phi^{-1})^2$.
+Every entry is positive, so every physical matrix unit occurs among
+the letters. Each tuple is one-site injective and its transfer map
+is primitive.
+
+For Ising, vectors constant on the first two coordinates of $K_1$
+and $K_\psi$ give the restriction
+$\left(\begin{smallmatrix}2&1\\2&2\end{smallmatrix}\right)$.
+For $\sigma$, vectors constant on the first and last pairs give
+$\left(\begin{smallmatrix}2&2\\1&2\end{smallmatrix}\right)$.
+Both characteristic polynomials are $z^2-4z+2$, with positive
+Perron eigenvectors and root $2+\sqrt2$. For Fibonacci,
+\begin{align}
+	K_1^{\mathrm F}\binom1\phi
+	 & =\binom{1+\phi}{1+2\phi}
+	=\phi^2\binom1\phi,         \\
+	K_\tau^{\mathrm F}
+	\begin{pmatrix}\phi\\1\\ \phi\end{pmatrix}
+	 & =\begin{pmatrix}
+		    2\phi+1     \\
+		    \phi^{-1}+2 \\
+		    2+\phi+\phi^{-1}
+	    \end{pmatrix}
+	=\phi^2\begin{pmatrix}\phi\\1\\ \phi\end{pmatrix}.
+\end{align}
+Thus the common normalizations are
+\begin{align}
+	\kappa_{\mathrm I} & =\sqrt{2+\sqrt2}, &
+	\kappa_{\mathrm F} & =\phi,            &
+	\widehat A_c       & =A_c/\kappa.
+	\label{eq:kappa}
+\end{align}
+No unexamined off-diagonal transfer modes remain.
+
+The trace vectors distinguish all sectors. At
+$h=(a,1,a)$ and $h'=(1,1,1)$,
+\begin{align}
+	\tr A_c^{hh'} & =\delta_{ac},
+\end{align}
+because admissibility requires $c1=a$ and the unit associator is
+one. Hence no pair is related by similarity and a nonzero scalar.
+
+Horizontally, the external $\rho$ blocks have dimensions $(3,3,4)$
+or $(2,3)$. At fixed $\rho$, the nonzero F entries supply every
+horizontal matrix unit: the physical ket and bra determine both
+horizontal endpoints. The positive coefficients and orthogonal
+embeddings in \cref{eq:category-eta} preserve that span. The blocks
+are therefore injective. The equal-dimensional Ising blocks are
+inequivalent because the physical trace vanishes for $\rho=\psi$
+but not for $\rho=1$. The relevant cancellation is $1-1=0$.
+For Fibonacci, the nonunit block has cancellation
+$1-\phi\phi^{-1}=0$. All other pairs have different dimensions.
+In particular, the shifted tensor is horizontally canonical and
+nonsimple.
+
+\begin{proposition}[Canonical data after categorical regrouping]
+	\label{prop:category-shift}
+	For every strictly positive weight vector, the shifted tensor has
+	vertical BNT $\{\widehat A_c\}$ and data
+	\begin{align}
+		\mu_c^{\mathrm{sh}} & =\kappa\eta_c,              &
+		m_c^{\mathrm{sh}}   & =\kappa\frac{d_c}{\mc D^2},   \\
+		\chi_{abc}^{\mathrm{sh}}
+		                    & =\kappa^{-1}\Id_{N_{ab}^c}, &
+		c_{abc}^{\mathrm{sh}}(L)
+		                    & =N_{ab}^c\kappa^{-L}.
+		\label{eq:category-shift-data}
+	\end{align}
+	It generates positive trace-one rings and satisfies full-space RFP
+	identities. The raw representatives $A_c$ have constant integer
+	fusion coefficients.
+\end{proposition}
+
+\begin{proof}
+	Only the masses, normalization, and channel construction remain.
+	In the fusion ring, set $\mathsf d=\sum_ad_aa$. The explicit rules give
+	$b\mathsf d=d_b\mathsf d$ and $\mathsf d^2=\mc D^2\mathsf d$.
+	Consequently,
+	\begin{align}
+		\tr\eta_c
+		 & =\frac1{\mc D^2\Lambda}
+		\sum_{b,f}\lambda_bd_fN_{bf}^c \\
+		 & =\frac1{\mc D^2\Lambda}
+		\sum_b\lambda_bd_bd_c
+		=\frac{d_c}{\mc D^2}.
+		\label{eq:category-mass}
+	\end{align}
+	The blocked raw multiplicity is
+	$\zeta_c=\bigoplus_{a,b}\eta_a\otimes\eta_b
+		\otimes\Id_{N_{ab}^c}$, so
+	\begin{align}
+		\tr\zeta_c
+		 & =\frac1{\mc D^4}\sum_{a,b}d_ad_bN_{ab}^c
+		=\frac{d_c}{\mc D^2}
+		=\tr\eta_c.
+	\end{align}
+	Its embeddings are compositions of $V_{bf}^c$ and
+	$U_{ab}^\dagger$. The complete complements are the orthogonal
+	complements of these ranges. \Cref{lem:channels} supplies the
+	claimed CPTP maps, including their completion branches.
+
+	For the trace, put $\Theta=\sum_b\lambda_bb$ and
+	$W=\mathsf d/(\mc D^2\Lambda)$. Then
+	\begin{align}
+		\Theta W     & =\mathsf d/\mc D^2, &
+		(\Theta W)^N & =\mathsf d/\mc D^2.
+	\end{align}
+	Using $\ell(c)=\tr R_c$ and \cref{eq:word-spectrum},
+	\begin{align}
+		\tr\rho_N(C) & =\ell(\mathsf d)/\mc D^2.
+	\end{align}
+	For Ising, $\ell(\mathsf d)=4$. For Fibonacci,
+	$\ell(\mathsf d)=3+\phi\phi^{-2}=3+\phi^{-1}=\phi+2$.
+	Both traces equal one. Finally, division of
+	\cref{eq:base-fusion} by $\kappa^2$ gives
+	\cref{eq:category-shift-data}.
+\end{proof}
+
+\subsection{Multiplicity spectra and the fixed-cut comparison}
+
+The shifted raw multiplicities, including every copy, are
+\begin{align}
+	\eta_1^{\mathrm I}=\eta_\psi^{\mathrm I}
+	 & =\frac1{4\Lambda}
+	\diag(\lambda_1,\lambda_\psi,\sqrt2\lambda_\sigma), \\
+	\eta_\sigma^{\mathrm I}
+	 & =\frac1{4\Lambda}
+	\diag(\sqrt2\lambda_1,\sqrt2\lambda_\psi,
+	\lambda_\sigma,\lambda_\sigma),                     \\
+	\eta_1^{\mathrm F}
+	 & =\frac1{(\phi+2)\Lambda}
+	\diag(\lambda_1,\phi\lambda_\tau),                  \\
+	\eta_\tau^{\mathrm F}
+	 & =\frac1{(\phi+2)\Lambda}
+	\diag(\phi\lambda_1,\lambda_\tau,\phi\lambda_\tau).
+	\label{eq:category-spectra}
+\end{align}
+For example, the three Fibonacci copies of $\tau$ come from
+$(b,f)=(1,\tau),(\tau,1),(\tau,\tau)$. These spectra are not
+identical across sectors.
+
+For comparison, the original register-crossing construction has
+\begin{align}
+	B_fB_{f'}
+	 & \simeq\bigoplus_{b,c}\lambda_b
+	\Id_{N_{fbf'}^c}\otimes B_c,
+	\label{eq:crossing-fusion}
+\end{align}
+where $N_{fbf'}^c=\sum_eN_{fb}^eN_{ef'}^c$.
+The isometry first reads the inner register with $\Phi_b^\dagger$
+and then applies $U_{fb}$ and $U_{ef'}$. Unused register vectors
+and nonmatching paths give the zero complement.
+
+At
+\begin{align}
+	\lambda_{\mathrm I} & =(1/2,3/10,1/5), &
+	\lambda_{\mathrm F} & =(3/5,2/5),
+	\label{eq:certified-weights}
+\end{align}
+the crossing sectors are canonical, with common transfer radii
+\begin{align}
+	\nu_{\mathrm I}^2 & =\frac{40+\sqrt{802}}{50}, &
+	\nu_{\mathrm F}^2 & =\frac{47+5\sqrt{53}}{50}.
+	\label{eq:crossing-radii}
+\end{align}
+The distinction between these radii and \cref{eq:kappa} is
+essential: they normalize different tensors at different cuts.
+
+Here is a compact specification of the finite canonical checks
+behind this comparison. Define
+\begin{align}
+	X_f^{h,r,s,h'}
+	 & =\sum_{b,k}\lambda_b
+	              [\Phi_bA_b^{hk}\Phi_b^\dagger]_{rs}\otimes A_f^{kh'}, \\
+	B_f^{(h,r,s),(h',p,q)}
+	 & =X_f^{h,r,s,h'}\otimes\ket p\bra q.
+\end{align}
+For a basis index $i$ of $\mc P_b$, let $(u_{bi},v_{bi})$ be its
+assigned Bell label and put
+\begin{align}
+	\beta_{bi}(r,l)
+	 & =\tfrac12(-1)^{u_{bi}\cdot r}\delta_{l,r+v_{bi}}, \\
+	[X_f^{h,r,s,h'}]_{(l,i),(m,j)}
+	 & =\sum_{b,k,p,q}\lambda_b[A_b^{hk}]_{pq}
+	\beta_{bp}(r,l)\beta_{bq}(s,m)[A_f^{kh'}]_{ij}.
+	\label{eq:X-array}
+\end{align}
+This defines every entry. The ranks of the arrays of vectorized
+$X_f$ are $(144,144,256)$ and $(64,144)$, their full column
+dimensions. One nonzero maximal-minor certificate uses the field
+reductions
+\begin{align}
+	\sqrt2      & \longmapsto327535\pmod{999983}, \\
+	\phi^{-1/2} & \longmapsto441162\pmod{999809}.
+\end{align}
+Scanning lexicographic nonzero rows, retaining the first independent
+rows and the first available pivot column at each step, gives
+determinants
+\begin{align}
+	 & (266954,266954,254623)\pmod{999983}, \\
+	 & (755529,823417)\pmod{999809}.
+\end{align}
+The defining field polynomials vanish at these images and all
+denominators are invertible. Nonzero reduced determinants therefore
+certify nonzero characteristic-zero minors, not merely numerical
+ranks.
+
+The horizontal fibers at fixed $\rho,h'$ are obtained by treating
+$(f,i,j)$ as rows and $(h,r,s)$ as columns in \cref{eq:X-array}.
+Their full ranks are $48,48,64$ for Ising sectors and $32,48$
+for Fibonacci sectors. In lexicographic order of the global $h'$
+indices, the corresponding determinant residues are
+\begin{align}
+	\mathrm I,\ \rho=1      & : (48068,48068,48068),\nonumber    \\
+	\mathrm I,\ \rho=\psi   & : (731658,731658,731658),\nonumber \\
+	\mathrm I,\ \rho=\sigma & : (125935,125935,741185,741185),   \\
+	\mathrm F,\ \rho=1      & : (86291,86291),\nonumber          \\
+	\mathrm F,\ \rho=\tau   & : (142240,916912,25178).
+\end{align}
+The same row-selection rule applies. Independent right matrix units
+complete the horizontal and vertical spans. Trace-vector minors on
+coordinates $(H,H')=(0,0),(0,48),(0,96)$ for Ising and
+$(0,0),(0,32)$ for Fibonacci have residues $117748$ and $52490$,
+respectively, where $H=16h+4r+s$. Thus the vertical sectors are
+inequivalent.
+
+The radii in \cref{eq:crossing-radii} follow from positive
+two-dimensional invariant subspaces of the full transfer map.
+The restriction matrices are
+\begin{align}
+	T_{1,\psi}^{\mathrm I}
+	 & =\begin{pmatrix}19/25&21/50\\19/25&21/25\end{pmatrix}, &
+	T_\sigma^{\mathrm I}
+	 & =\begin{pmatrix}21/25&19/25\\21/50&19/25\end{pmatrix},   \\
+	T_1^{\mathrm F}
+	 & =\begin{pmatrix}13/25&17/25\\13/25&34/25\end{pmatrix}, &
+	T_\tau^{\mathrm F}
+	 & =\begin{pmatrix}34/25&13/25\\17/25&13/25\end{pmatrix}.
+\end{align}
+The subspaces consist of diagonal operators constant on path groups
+$(\{0,1\},\{2\})$, $(\{0,1\},\{2,3\})$,
+$(\{0\},\{1\})$, and $(\{0,2\},\{1\})$, respectively, tensored
+with identities on both register halves. Substitution into
+\cref{eq:X-array} verifies invariance on the full output, including
+zero off-diagonal entries. The characteristic polynomials are
+\begin{align}
+	z^2-\frac85z+\frac{399}{1250},\qquad
+	z^2-\frac{47}{25}z+\frac{221}{625}.
+\end{align}
+Their larger roots are \cref{eq:crossing-radii}. The restriction
+Perron vectors give strictly positive definite eigenmatrices of
+the full transfer maps. Conjugating by their square roots and
+dividing by the eigenvalue makes each map unital, which proves
+that these roots are the full spectral radii.
+
+Thus at \cref{eq:certified-weights}, the crossing BNT data are
+\begin{align}
+	A_f^{\mathrm{cross}}   & =B_f/\nu,                                    &
+	\mu_f^{\mathrm{cross}} & =\nu w_f,                                      \\
+	\chi_{ff'c}^{\mathrm{cross}}
+	                       & =\bigoplus_b(\lambda_b/\nu)\Id_{N_{fbf'}^c}.
+\end{align}
+The mass equation follows from
+$\sum_{f,f'}d_fd_{f'}N_{fbf'}^c=\mc D^2d_bd_c$:
+\begin{align}
+	\sum_{f,f'}m_fm_{f'}\tr\chi_{ff'c}
+	 & =\nu\sum_{f,f',b}w_fw_{f'}\lambda_bN_{fbf'}^c
+	=\nu w_c.
+\end{align}
+In particular,
+\begin{align}
+	\chi_{\sigma\sigma1}^{\mathrm{cross}}
+	 & =\nu^{-1}\diag(\lambda_1,\lambda_\psi),              \\
+	\chi_{\tau\tau1}^{\mathrm{cross}}
+	 & =\nu^{-1}\diag(\lambda_1,\lambda_\tau),              \\
+	\chi_{\tau\tau\tau}^{\mathrm{cross}}
+	 & =\nu^{-1}\diag(\lambda_1,\lambda_\tau,\lambda_\tau).
+\end{align}
+Their unequal eigenvalues prove the fixed-cut rescaling obstruction.
+The canonical comparison is made only at the certified weights.
+The all-positive-weight result in \cref{prop:category-shift} concerns
+the shifted tensor and does not extend these crossing certificates
+to every weight vector.
+
+\subsection{What the categorical obstructions establish}
+
+\begin{proposition}[Restricted spectator obstruction]
+	\label{prop:restricted-obstruction}
+	For strictly positive weights, the shifted categorical multiplicities
+	cannot have a common mixed tensor factor under a sector-preserving
+	one-site unitary. The periodic states are also not products of
+	identical independent bond states, even after fixed blocking and
+	unitary changes of coordinates.
+\end{proposition}
+
+\begin{proof}
+	Suppose the first factorization were
+	\begin{align}
+		\eta_c & \simeq\sigma\otimes\xi_c
+	\end{align}
+	for every sector, allowing arbitrary residual factors $\xi_c$.
+	Then $\rank\sigma$ divides every $\rank\eta_c$.
+	The ranks in \cref{eq:category-spectra} are $3,3,4$ for Ising
+	and $2,3$ for Fibonacci. Their greatest common divisor is one.
+	Thus $\rank\sigma=1$, excluding a common mixed factor.
+
+	For the second statement, positivity of the weights makes the ring
+	ranks independent of their values. The multiplicity-counting element
+	for Ising is $H=3+3\psi+4\sigma$. Only $R_1$ has nonzero rank,
+	equal to two. Evaluation at the three fusion-ring characters gives,
+	for $N\geq1$,
+	\begin{align}
+		\rank\rho_N^{\mathrm I}
+		 & =2[1]H^N                                \\
+		 & =\frac{(6+4\sqrt2)^N+(6-4\sqrt2)^N}{2}.
+		\label{eq:Ising-rank}
+	\end{align}
+	Indeed, the two characters with $\psi=1$ have
+	$\sigma=\pm\sqrt2$, and the character with $\psi=-1$ has
+	$\sigma=0$ and $H=0$.
+
+	For Fibonacci, write
+	$(2+3\tau)^N=p_N+q_N\tau$. Its two character evaluations are
+	\begin{align}
+		p_N+\phi q_N     & =(2+3\phi)^N,      \\
+		p_N-\phi^{-1}q_N & =(2-3\phi^{-1})^N.
+	\end{align}
+	Since $\rank R_1=2$, $\rank R_\tau=1$, and
+	$\phi-\phi^{-1}=1$,
+	\begin{align}
+		\rank\rho_N^{\mathrm F}
+		 & =2p_N+q_N                      \\
+		 & =(2+3\phi)^N+(2-3\phi^{-1})^N.
+		\label{eq:Fibonacci-rank}
+	\end{align}
+	An identical independent-bond product has geometric rank. For
+	$r_N=Aa^N+Bb^N$,
+	\begin{align}
+		r_Nr_{N+2}-r_{N+1}^2
+		 & =AB(ab)^N(a-b)^2.
+	\end{align}
+	This is nonzero in both cases. Replacing $a,b$ by $a^k,b^k$
+	preserves nonvanishing for every fixed blocking length $k$.
+	Unitary transformations and pure ancillas preserve rank.
+\end{proof}
+
+The scopes of these two statements are different. The rank sequences
+exclude an independent bond product, not a nonproduct core tensored
+with bonds. Coprime multiplicity ranks exclude a common mixed factor
+only in the stated one-site sector-preserving decomposition. Blocking
+changes multiplicity ranks, and circuits can redistribute sectors
+between sites. Neither argument excludes every bounded-depth
+spectator separation.
+
+The categorical regrouping therefore proves that the weight-dependent
+fusion spectra at the original cut can be moved into one-site
+multiplicities. It does not prove that those multiplicities decouple.
+This is precisely the distinction between a nontrivial canonical
+fusion example and a proved example of inseparable
+weight-intertwiner coupling.
