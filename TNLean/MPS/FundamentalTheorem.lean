@@ -14,6 +14,7 @@ import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.PositiveLinearExtension
 import TNLean.MPS.FundamentalTheorem.ProductAlgebra
 import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.FundamentalTheorem.Reduction
 import TNLean.MPS.FundamentalTheorem.SectorBNT
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.FundamentalTheorem.UnitaryGauge
