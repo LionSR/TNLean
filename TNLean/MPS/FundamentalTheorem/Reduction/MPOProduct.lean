@@ -17,7 +17,7 @@ physical indices is read as one letter.  This file records three consequences.
 * The stacked product `B^{ij} = ∑_m M_α^{im} ⊗ M_β^{mj}` of two MPO tensors, whose periodic
   operators decompose as `O_N(B) = ∑_{γ,μ} λ_{γμ}^N O_N(M_γ)` with normal `M_γ` and nonzero
   weights, compresses onto every weighted block
-  (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.8, Theorem 7.11,
+  (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.7, Theorem 7.12,
   `cor:p5-mpo-product`).
 * An MPO group representation `U_g U_h = U_{gh}` by injective tensors has fusion tensors that
   decompose the product of two tensors at every length, with a nilpotent off-diagonal
@@ -37,7 +37,7 @@ non-invertible case in which the acted state decomposes over several blocks.
 * `MPOTensor.left_mul_evalWord_mul_right_smul`: the compression identity
   `W B^{i₁j₁} ⋯ B^{i_Nj_N} V = λ^N M^{i₁j₁} ⋯ M^{i_Nj_N}`, the note's
   `eq:p5-mpo-product-compression`.
-* `MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum`: Theorem 7.11 itself.
+* `MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum`: Theorem 7.12 itself.
 * `MPOTensor.GroupFamily.IsRepresentation.exists_fusionTensors`: the fusion tensors of an MPO
   group representation, with the sharpened nilpotency length.
 * `MPOTensor.exists_isReduction_actTensor_of_isNormal`: the action tensors of a single target
@@ -67,7 +67,7 @@ theorem mpv_toMPSTensor {D : ℕ} (M : MPOTensor d D) {N : ℕ} (ρ : Fin N → 
 
 /-! ### Compression of a product of matrix product operators -/
 
-/-- **The compression identity for matrix product operators** (P5 note, Theorem 7.11,
+/-- **The compression identity for matrix product operators** (P5 note, Theorem 7.12,
 `eq:p5-mpo-product-compression`). Compressing a length-`N` pair word of an MPO tensor `B` onto
 the slot `s` of a multi-block compression whose blocks are the weighted doubled-index views
 `λ s • (C s)` returns the corresponding pair word of `C s` scaled by `λ s ^ N`. -/
@@ -83,7 +83,7 @@ theorem left_mul_evalWord_mul_right_smul {DB : ℕ} {Dγ : ι → ℕ} {B : MPOT
   rw [List.length_ofFn] at h
   simpa only [evalWord_toMPSTensor_pairConfig] using h
 
-/-- **Compression of an MPO product** (P5 note, Theorem 7.11, `cor:p5-mpo-product`). Let the
+/-- **Compression of an MPO product** (P5 note, Theorem 7.12, `cor:p5-mpo-product`). Let the
 periodic operators of the stacked product `B^{ij} = ∑_m M_α^{im} ⊗ M_β^{mj}` decompose as
 `O_N(B) = ∑_{s ∈ S} λ_s^N O_N(M_s)` at every positive length, with normal MPO tensors `M_s` of
 positive bond dimension and nonzero weights `λ_s`.  Then the stacked product admits a
@@ -149,9 +149,12 @@ compression theorem, and is the paper's `ℓ`, "of the order of the bond dimensi
 The result is the single-block asymmetric compression theorem of
 Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Proposition 20, applied on the pair alphabet;
 the paper cites exactly that reference at line 1002.  The weights are absent here because the
-representation law `U_g U_h = U_{gh}` is an exact operator identity; Example D of
-`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex` is the anomalous instance
-in which the associated three-cocycle is nontrivial. -/
+representation law `U_g U_h = U_{gh}` is an exact operator identity.  Example D of
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex` is the anomalous
+instance just outside this hypothesis: the CZX-type matrix product operator squares to
+`(-1)^L` times the identity rather than to the identity, so it is covered by the weighted
+theorem `MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum` with weight `-1`
+instead. -/
 theorem IsRepresentation.exists_fusionTensors (F : GroupFamily G d)
     (hF : F.IsRepresentation) (g h : G) :
     ∃ (V : Matrix (Fin (F.bondDim (g * h))) (Fin (F.bondDim g * F.bondDim h)) ℂ)

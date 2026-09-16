@@ -10,7 +10,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
 # Weighted multi-block compression from a periodic-vector hypothesis
 
 This file states the weighted form of the multi-block asymmetric compression theorem
-(`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.6, Theorem 7.8,
+(`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.8,
 `cor:p5-weighted-compression`): the blocks of the target carry nonzero weights `μ s`, the
 hypothesis is the equality of periodic vectors at every positive length,
 `V_N(B) = ∑_{s ∈ S} μ_s^N V_N(A_{(s)})`, and the compression of a word of `B` onto the slot `s`
