@@ -62,6 +62,7 @@ import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerTransition
+import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SwapKronecker
 import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.TraceInvariantSubmodule
