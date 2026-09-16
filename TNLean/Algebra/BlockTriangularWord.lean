@@ -18,6 +18,12 @@ each block form a biorthogonal system that reassembles a block-diagonal matrix. 
 with the nilpotency count underlying Theorem 7.7(vi): a product of as many strictly block
 upper-triangular matrices as there are blocks vanishes.
 
+Blocks are indexed by a type `o` which is ordered indirectly, through an injective labelling
+`b : o → α` into a linear order; the case `b = id` recovers the usual block-triangular
+statements for an ordered block index. The indirect form is what the asymmetric compression
+theorem needs, where the blocks are labelled by target slots and their order is a separate
+datum.
+
 Word evaluation on the `Σ k, Fin (n k)` index type is the generic `evalWord` of
 `QICLean.Kraus.MultiBlockWord` (unqualified, not `Kraus.evalWord`, which is specialized to
 `Fin D` indices).
@@ -47,14 +53,18 @@ open scoped Matrix
 
 namespace Matrix
 
-variable {o : Type*} [Fintype o] [DecidableEq o] [LinearOrder o] {n : o → ℕ} {d : ℕ}
+variable {o : Type*} [Fintype o] [DecidableEq o] {n : o → ℕ} {d : ℕ}
+
+section Order
+
+variable {α : Type*} [LinearOrder α] {b : o → α}
 
 omit [DecidableEq o] in
 /-- Diagonal blocks of a product of block upper-triangular matrices multiply
 (P5 note, Lemma 7.3). -/
-theorem blockDiag'_mul_of_blockTriangular
+theorem blockDiag'_mul_of_blockTriangular (hb : Function.Injective b)
     {X Y : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ}
-    (hX : X.BlockTriangular Sigma.fst) (hY : Y.BlockTriangular Sigma.fst) (k : o) :
+    (hX : X.BlockTriangular fun x => b x.1) (hY : Y.BlockTriangular fun x => b x.1) (k : o) :
     (X * Y).blockDiag' k = X.blockDiag' k * Y.blockDiag' k := by
   ext i j
   simp only [blockDiag'_apply, Matrix.mul_apply]
@@ -63,7 +73,7 @@ theorem blockDiag'_mul_of_blockTriangular
   · intro l _ hl
     apply Finset.sum_eq_zero
     intro i' _
-    rcases (lt_or_lt_iff_ne).mpr hl with hlt | hgt
+    rcases lt_or_lt_iff_ne.mpr (fun h : b l = b k => hl (hb h)) with hlt | hgt
     · have hX0 : X ⟨k, i⟩ ⟨l, i'⟩ = 0 := hX hlt
       rw [hX0, zero_mul]
     · have hY0 : Y ⟨l, i'⟩ ⟨k, j⟩ = 0 := hY hgt
@@ -74,24 +84,27 @@ theorem blockDiag'_mul_of_blockTriangular
 /-- Word evaluations of a block upper-triangular family stay block upper triangular. -/
 theorem blockTriangular_evalWord
     {T : Fin d → Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ}
-    (hT : ∀ i, (T i).BlockTriangular Sigma.fst) (w : List (Fin d)) :
-    (evalWord T w).BlockTriangular Sigma.fst := by
+    (hT : ∀ i, (T i).BlockTriangular fun x => b x.1) (w : List (Fin d)) :
+    (evalWord T w).BlockTriangular fun x => b x.1 := by
   induction w with
   | nil => simpa [evalWord] using blockTriangular_one
-  | cons i w ih =>
-      simpa only [evalWord] using (hT i).mul ih
+  | cons i w ih => simpa only [evalWord] using (hT i).mul ih
 
 /-- Diagonal blocks of a word evaluation are the word evaluations of the diagonal blocks
 (`eq:p5-triangular-word`). -/
-theorem blockDiag'_evalWord
+theorem blockDiag'_evalWord (hb : Function.Injective b)
     {T : Fin d → Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ}
-    (hT : ∀ i, (T i).BlockTriangular Sigma.fst) (w : List (Fin d)) (k : o) :
+    (hT : ∀ i, (T i).BlockTriangular fun x => b x.1) (w : List (Fin d)) (k : o) :
     (evalWord T w).blockDiag' k = evalWord (fun i => (T i).blockDiag' k) w := by
   induction w with
   | nil => simp [evalWord]
   | cons i w ih =>
       simp only [evalWord]
-      rw [blockDiag'_mul_of_blockTriangular (hT i) (blockTriangular_evalWord hT w) k, ih]
+      rw [blockDiag'_mul_of_blockTriangular hb (hT i) (blockTriangular_evalWord hT w) k, ih]
+
+end Order
+
+section Embed
 
 /-- Coordinate embedding of the `k`-th block (`eq:p5-block-biorthogonality`). -/
 def blockEmbed (n : o → ℕ) (k : o) : Matrix (Σ k, Fin (n k)) (Fin (n k)) ℂ :=
@@ -101,38 +114,37 @@ def blockEmbed (n : o → ℕ) (k : o) : Matrix (Σ k, Fin (n k)) (Fin (n k)) �
 def blockProj (n : o → ℕ) (k : o) : Matrix (Fin (n k)) (Σ k, Fin (n k)) ℂ :=
   (blockEmbed n k).transpose
 
-omit [Fintype o] [LinearOrder o] in
+omit [Fintype o] in
 /-- The block embedding vanishes away from its recorded coordinate. -/
 theorem blockEmbed_apply_of_ne {k : o} {x : Σ k, Fin (n k)} {j : Fin (n k)}
     (h : x ≠ (⟨k, j⟩ : Σ k, Fin (n k))) : blockEmbed n k x j = 0 := by
   simp [blockEmbed, Matrix.of_apply, h]
 
-omit [Fintype o] [LinearOrder o] in
+omit [Fintype o] in
 /-- The block embedding vanishes off its own block. -/
 theorem blockEmbed_apply_of_fst_ne {k : o} {x : Σ k, Fin (n k)} (h : x.1 ≠ k) (j : Fin (n k)) :
     blockEmbed n k x j = 0 :=
   blockEmbed_apply_of_ne fun heq => h (congrArg Sigma.fst heq)
 
-omit [Fintype o] [LinearOrder o] in
+omit [Fintype o] in
 /-- The block projection vanishes off its own block. -/
 theorem blockProj_apply_of_fst_ne {k : o} (i : Fin (n k)) {y : Σ k, Fin (n k)} (h : y.1 ≠ k) :
     blockProj n k i y = 0 := by
   simp only [blockProj, Matrix.transpose_apply]
   exact blockEmbed_apply_of_fst_ne h i
 
-omit [Fintype o] [LinearOrder o] in
+omit [Fintype o] in
 /-- The block embedding restricted to its own block is the identity indicator. -/
 theorem blockEmbed_apply_fst_eq (k : o) (i j : Fin (n k)) :
     blockEmbed n k (⟨k, i⟩ : Σ k, Fin (n k)) j = if i = j then 1 else 0 := by
   simp [blockEmbed, Matrix.of_apply, Sigma.mk.injEq]
 
-omit [Fintype o] [LinearOrder o] in
+omit [Fintype o] in
 /-- The block embedding restricted to its own block vanishes off the matching coordinate. -/
 theorem blockEmbed_apply_fst_eq_of_ne {k : o} {i j : Fin (n k)} (h : i ≠ j) :
     blockEmbed n k (⟨k, i⟩ : Σ k, Fin (n k)) j = 0 := by
   rw [blockEmbed_apply_fst_eq]; simp [h]
 
-omit [LinearOrder o] in
 theorem blockProj_mul_blockEmbed_self (k : o) : blockProj n k * blockEmbed n k = 1 := by
   ext i j
   simp only [Matrix.mul_apply, blockProj, Matrix.transpose_apply, Matrix.one_apply]
@@ -144,7 +156,6 @@ theorem blockProj_mul_blockEmbed_self (k : o) : blockProj n k * blockEmbed n k =
   · intro h
     exact absurd (Finset.mem_univ (⟨k, i⟩ : Σ k, Fin (n k))) h
 
-omit [LinearOrder o] in
 theorem blockProj_mul_blockEmbed_of_ne {k l : o} (h : k ≠ l) :
     blockProj n k * blockEmbed n l = 0 := by
   ext i j
@@ -156,7 +167,6 @@ theorem blockProj_mul_blockEmbed_of_ne {k l : o} (h : k ≠ l) :
     rw [blockEmbed_apply_of_fst_ne hxne, mul_zero]
   · rw [blockEmbed_apply_of_fst_ne hx, zero_mul]
 
-omit [LinearOrder o] in
 theorem blockProj_mul_mul_blockEmbed (M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ) (k : o) :
     blockProj n k * M * blockEmbed n k = M.blockDiag' k := by
   ext i j
@@ -174,7 +184,6 @@ theorem blockProj_mul_mul_blockEmbed (M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n
   · intro h
     exact absurd (Finset.mem_univ (⟨k, j⟩ : Σ k, Fin (n k))) h
 
-omit [LinearOrder o] in
 /-- Reassembling the diagonal blocks: `∑ k, P k * D k * Q k = blockDiagonal' D`. -/
 theorem sum_blockEmbed_mul_mul_blockProj (D : ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) :
     ∑ k, blockEmbed n k * D k * blockProj n k = Matrix.blockDiagonal' D := by
@@ -220,41 +229,59 @@ theorem sum_blockEmbed_mul_mul_blockProj (D : ∀ k, Matrix (Fin (n k)) (Fin (n 
     · have hne : kx ≠ k := hk
       simp [blockEmbed_apply_of_fst_ne (x := (⟨kx, ix⟩ : Σ k, Fin (n k))) hne]
 
-/-- Strictly block upper triangular: entries with row block `≥` column block vanish. -/
-def StrictBlockTriangular (M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ) : Prop :=
-  ∀ ⦃x y⦄, y.1 ≤ x.1 → M x y = 0
+end Embed
+
+section Strict
+
+variable {α : Type*} [LinearOrder α]
+
+/-- Strictly block upper triangular for the block labelling `b`: entries whose column block
+label is at most their row block label vanish. -/
+def StrictBlockTriangular (b : o → α) (M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ) : Prop :=
+  ∀ ⦃x y⦄, b y.1 ≤ b x.1 → M x y = 0
+
+variable {b : o → α}
 
 omit [Fintype o] [DecidableEq o] in
 theorem strictBlockTriangular_of_blockTriangular_of_blockDiag'_eq_zero
-    {M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ} (hM : M.BlockTriangular Sigma.fst)
-    (hd : ∀ k, M.blockDiag' k = 0) : StrictBlockTriangular M := by
+    (hb : Function.Injective b) {M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ}
+    (hM : M.BlockTriangular fun x => b x.1) (hd : ∀ k, M.blockDiag' k = 0) :
+    StrictBlockTriangular b M := by
   rintro ⟨kx, ix⟩ ⟨ky, iy⟩ hxy
   rcases hxy.lt_or_eq with hlt | heq
   · exact hM hlt
-  · subst heq
+  · obtain rfl : ky = kx := hb heq
     have h2 : M.blockDiag' ky ix iy = 0 := by rw [hd ky]; simp
     rwa [blockDiag'_apply] at h2
 
 omit [Fintype o] in
-theorem StrictBlockTriangular.sub_blockDiagonal'_blockDiag'
-    {M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ} (hM : M.BlockTriangular Sigma.fst) :
-    StrictBlockTriangular (M - Matrix.blockDiagonal' M.blockDiag') := by
-  apply strictBlockTriangular_of_blockTriangular_of_blockDiag'_eq_zero
-  · exact hM.sub (blockTriangular_blockDiagonal' M.blockDiag')
-  · intro k
-    simp
+theorem StrictBlockTriangular.sub_blockDiagonal'_blockDiag' (hb : Function.Injective b)
+    {M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ}
+    (hM : M.BlockTriangular fun x => b x.1) :
+    StrictBlockTriangular b (M - Matrix.blockDiagonal' M.blockDiag') := by
+  have hdiag : (Matrix.blockDiagonal' M.blockDiag').BlockTriangular fun x => b x.1 := by
+    rintro ⟨kx, ix⟩ ⟨ky, iy⟩ hlt
+    have hne : kx ≠ ky := by
+      rintro rfl
+      exact absurd hlt (lt_irrefl _)
+    exact Matrix.blockDiagonal'_apply_ne M.blockDiag' ix iy hne
+  refine strictBlockTriangular_of_blockTriangular_of_blockDiag'_eq_zero hb (hM.sub hdiag) ?_
+  intro k
+  simp
 
-end Matrix
+end Strict
 
-namespace Matrix
+section Nilpotency
+
+variable {r : ℕ} {b : o → Fin r}
 
 /-- Auxiliary entrywise bound for a word evaluation of strictly block upper-triangular
-matrices: `m` letters move the block index up by at least `m`. -/
-theorem entry_evalWord_eq_zero_of_lt {r : ℕ} {n : Fin r → ℕ} {d : ℕ}
-    {R : Fin d → Matrix (Σ k : Fin r, Fin (n k)) (Σ k : Fin r, Fin (n k)) ℂ}
-    (hR : ∀ i, StrictBlockTriangular (R i)) :
-    ∀ (w : List (Fin d)) (x y : Σ k : Fin r, Fin (n k)),
-      (y.1 : ℕ) < (x.1 : ℕ) + w.length → evalWord R w x y = 0 := by
+matrices: `m` letters move the block label up by at least `m`. -/
+theorem entry_evalWord_eq_zero_of_lt
+    {R : Fin d → Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ}
+    (hR : ∀ i, StrictBlockTriangular b (R i)) :
+    ∀ (w : List (Fin d)) (x y : Σ k, Fin (n k)),
+      (b y.1 : ℕ) < (b x.1 : ℕ) + w.length → evalWord R w x y = 0 := by
   intro w
   induction w with
   | nil =>
@@ -270,20 +297,22 @@ theorem entry_evalWord_eq_zero_of_lt {r : ℕ} {n : Fin r → ℕ} {d : ℕ}
       simp only [evalWord, Matrix.mul_apply]
       apply Finset.sum_eq_zero
       intro z _
-      by_cases hzx : z.1 ≤ x.1
+      by_cases hzx : b z.1 ≤ b x.1
       · rw [hR i hzx, zero_mul]
-      · have hzx' : (x.1 : ℕ) < (z.1 : ℕ) := not_le.mp hzx
-        have hzy : (y.1 : ℕ) < (z.1 : ℕ) + w'.length := by omega
+      · have hzx' : (b x.1 : ℕ) < (b z.1 : ℕ) := Fin.lt_def.mp (not_le.mp hzx)
+        have hzy : (b y.1 : ℕ) < (b z.1 : ℕ) + w'.length := by omega
         rw [ih z y hzy, mul_zero]
 
-/-- A product of `r` strictly block upper-triangular matrices with `r` blocks vanishes
-(`eq:p5-main-nilpotency`). -/
-theorem evalWord_eq_zero_of_strictBlockTriangular {r : ℕ} {n : Fin r → ℕ} {d : ℕ}
+/-- A product of `r` strictly block upper-triangular matrices whose block labels take at most
+`r` values vanishes (`eq:p5-main-nilpotency`). -/
+theorem evalWord_eq_zero_of_strictBlockTriangular
     {R : Fin d → Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ}
-    (hR : ∀ i, StrictBlockTriangular (R i)) (w : List (Fin d)) (hw : r ≤ w.length) :
+    (hR : ∀ i, StrictBlockTriangular b (R i)) (w : List (Fin d)) (hw : r ≤ w.length) :
     evalWord R w = 0 := by
   ext x y
-  have hy : (y.1 : ℕ) < r := y.1.isLt
+  have hy : (b y.1 : ℕ) < r := (b y.1).isLt
   exact entry_evalWord_eq_zero_of_lt hR w x y (by omega)
+
+end Nilpotency
 
 end Matrix
