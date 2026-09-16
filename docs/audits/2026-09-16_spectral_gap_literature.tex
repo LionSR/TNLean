@@ -1,0 +1,480 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[T1]{fontenc}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\newcommand{\id}{\mathbb I}
+\newcommand{\tr}{\operatorname{Tr}}
+\newcommand{\gap}{\operatorname{gap}}
+\title{Spectral-gap literature audit:\\open questions and tractable targets}
+\author{TNLean research audit}
+\date{16 September 2026}
+\begin{document}
+\maketitle
+
+\section{Decision}
+
+The strongest finding is a negative answer to the unrestricted
+\emph{value-convergence} question for the literal truncated,
+locally translation-invariant (LTI) spectral-gap hierarchy of Rai, Kull,
+Emonts, Tura, Schuch, and Baccari~\cite{LTI}.
+For the commuting ferromagnetic Ising interaction, every finite level has
+value one, whereas the periodic-boundary (PBC) chain gap is two:
+\begin{equation}
+  \delta_{\mathrm{LTI}}(n)=1,
+  \qquad \Delta_N^{\mathrm{PBC}}=2.
+  \label{eq:verdict}
+\end{equation}
+Section~\ref{sec:obstruction} proves this directly from the paper's
+certificate definition. The argument has been independently checked
+against the primary source and by finite exact enumeration. It is an
+internal audit deduction, not a Lean-checked result; prior publication
+of this observation has not been established or excluded.
+
+This does not contradict a proved theorem in the paper. The authors pose
+convergence as an open question. It also does not disprove eventual
+\emph{detection} of a positive gap: the example is certified positive at
+once. The recommended next research step is to settle the provenance and
+scope of this negative answer before developing a larger certificate
+method. A new method would have to address the discarded products of
+spatially separated excitations; increasing telescopic freedom alone
+cannot remove this obstruction.
+
+Two other results of the audit prevent redundant projects. First, eventual
+positive certification of standard gapped MPS parents follows from existing
+finite-size criteria under their open-boundary (OBC) chain hypotheses; it is not a new
+solution of general hierarchy completeness. Second, the July 2026 paper
+of Rozm\'an, Moln\'ar, and Schuch~\cite{RMS} already computes the relevant
+MPS ground-space angle through a fixed-dimensional virtual-space matrix.
+Efficient overlap computation and basic MPS-aware certification are
+therefore not unoccupied research directions.
+
+\section{Verified sources and search scope}
+\label{sec:sources}
+
+The version-pinned primary texts used for mathematical claims are:
+\begin{enumerate}
+  \item \textbf{Rai et al.}~\cite{LTI}, arXiv:2411.03680v3,
+  1 April 2026; published in \emph{Quantum} \textbf{10}, 2065,
+  13 April 2026. The arXiv history lists v1 on 6 November 2024 and v2
+  on 31 March 2026. All six authors, including Schuch, appear in the v1
+  PDF as well as v3. This is not a later author addition.
+  \item \textbf{Rozm\'an, Moln\'ar, and Schuch}~\cite{RMS},
+  \emph{Lower Bounds on Spectral Gaps of Parent Hamiltonians via Tensor
+  Networks}, arXiv:2607.19078v1, 21 July 2026. The identifier, title,
+  authors, and version were independently verified.
+  \item \textbf{Rao}~\cite{Rao}, arXiv:2510.08427. Its convergent
+  hierarchy concerns a fixed finite qubit system, not thermodynamic
+  completeness of the original LTI hierarchy. Its basic energy-gap
+  construction uses the two lowest eigenvalues counting multiplicity,
+  which must not be confused with the smallest positive eigenvalue
+  above a degenerate ground space.
+  \item \textbf{Xu et al.}~\cite{Xu}, arXiv:2606.03836v2,
+  revised 31 July 2026, establish convergent certified \emph{upper}
+  bounds on a bulk gap. Their introduction still describes completeness
+  of the frustration-free lower-bound hierarchy as open. Their
+  Supplementary Information, Definition 1.6, Remark 1.8, Proposition 1.9,
+  and Section 4.1, distinguish local GNS non-degeneracy from global
+  symmetry-breaking degeneracy. This is not a solution of LTI
+  lower-bound completeness.
+  \item \textbf{Lemm--Mozgunov}~\cite{LM} and
+  \textbf{Warzel--Young}~\cite{WY} provide boundary-sensitive
+  finite-size criteria and examples distinguishing boundary and bulk
+  energy scales. These are relevant to interpreting, not resolving,
+  the LTI completeness question.
+\end{enumerate}
+
+The search followed the Quantum cited-by list, relevant arXiv records,
+version-pinned primary texts, and references in the July paper. This is
+an audit as of 16 September 2026, not an exhaustive bibliometric search.
+The cited-by service warns of incomplete coverage; some searches returned
+no content and arXiv requests encountered rate limits. A failure to find a
+later solution or a prior Ising observation is not evidence that neither
+exists. Rendering dates on third-party HTML conversions were not treated
+as version dates.
+
+\paragraph{Targeted provenance check.}
+The inspected texts of Refs.~\cite{LTI,RMS,Rao,Xu} did not reveal this
+specific separated-Ising-wall obstruction. Public GitHub repository
+search for \texttt{2411.03680} returned no repositories; issue search
+returned a third-party survey, not an author discussion. No authoritative
+original implementation was located in the inspected paper or publication
+page. SciRate discussion was inaccessible. General-web queries combining
+\texttt{2411.03680}, \texttt{Ising}, \texttt{convergence},
+\texttt{LTI}, \texttt{domain walls}, and \texttt{counterexample}
+returned no usable content and are not counted as successful zero-hit
+searches. In particular, the public repository linked by Ref.~\cite{Xu}
+is not evidence about the implementation of Ref.~\cite{LTI}.
+The conclusion below concerns the published formulas, not uninspected code.
+
+\section{The two distinct completeness questions}
+\label{sec:questions}
+
+Let the single-site Hilbert space be $\mathbb C^d$. A positive interaction
+$h$ has range $k$ and translates $h_i$ on a periodic chain of $N$ sites.
+Assume that
+\begin{equation}
+  H_N=\sum_{i=1}^N h_i
+\end{equation}
+is frustration free with ground energy zero. Write $\Delta_N$ for its
+smallest strictly positive eigenvalue. These are the conventions in
+Ref.~\cite{LTI}, Section 2; ground-state uniqueness is not assumed.
+
+At an admissible support level $n$, using the sufficient condition
+$n\geq2k+1$ stated in the general-range construction, the paper discards
+sufficiently distant products from $H_N^2$. In the printed convention of its equations (4)--(9),
+write the resulting operator and local generating term as
+\begin{align}
+  [H_N^2]_n
+    &=\sum_i\left(h_i^2+
+      \sum_{1\leq s<n-k}\{h_i,h_{i+s}\}\right),
+      \label{eq:truncated}\\
+  g_n(\delta)
+    &=h_1^2+\sum_{1\leq s<n-k}\{h_1,h_{1+s}\}-\delta h_1,
+      \label{eq:generator}
+\end{align}
+where $\{A,B\}=AB+BA$ and site indices in the first line are cyclic.
+The local terms in $g_n$ are embedded into $n$ sites with identities on
+unused sites. The level value, Ref.~\cite{LTI}, equation (11), is
+\begin{equation}
+  \delta_{\mathrm{LTI}}(n)
+  =\sup\left\{\delta:\ \exists Y=Y^\dagger,\quad
+    g_n(\delta)+\id\otimes Y-Y\otimes\id\succeq0\right\},
+  \label{eq:lti}
+\end{equation}
+where $Y$ acts on $n-1$ sites. Supremum notation avoids an unnecessary
+attainment assumption; the example below attains its optimum.
+For sufficiently large rings, in particular $N\geq2n$ in the paper's
+stated regime, summing a feasible local certificate gives
+\begin{equation}
+  [H_N^2]_n-\delta H_N\succeq0.
+  \label{eq:global-certificate}
+\end{equation}
+The omitted products are positive, giving $H_N^2\succeq\delta H_N$.
+
+The discussion in Ref.~\cite{LTI}, Section 5, asks whether the hierarchy
+\begin{quote}
+``always detects a gap at some finite level''
+\end{quote}
+and whether its certified gap
+\begin{quote}
+``always converges to the true gap''.
+\end{quote}
+The second question also appears after equation (37) in Section 3.2.
+These are different assertions:
+\begin{align}
+  \inf_{N\geq N_0}\Delta_N>0
+    &\ \Longrightarrow\ \exists n:\delta_{\mathrm{LTI}}(n)>0,
+    \label{eq:detection}\\
+  \lim_{n\to\infty}\delta_{\mathrm{LTI}}(n)
+    &\ \stackrel{?}{=}\lim_{N\to\infty}\Delta_N,
+    \label{eq:value-convergence}
+\end{align}
+with existence of the right-hand limit required in
+\eqref{eq:value-convergence}. A finite-volume statement must not be silently
+replaced by a statement about an unspecified infinite-volume GNS
+representation.
+
+\section{A separated-domain-wall obstruction}
+\label{sec:obstruction}
+
+Let $Z=\operatorname{diag}(1,-1)$ be the Pauli matrix and set
+\begin{equation}
+  h_i=\frac{\id-Z_iZ_{i+1}}2.
+  \label{eq:ising}
+\end{equation}
+These are commuting positive projections on qubits. For a binary
+configuration $x=(x_1,\ldots,x_N)$, define its wall indicators by
+\begin{equation}
+  w_i(x)=\boldsymbol{1}_{\{x_i\neq x_{i+1}\}},
+  \qquad x_{N+1}=x_1.
+\end{equation}
+Then $H_N$ is diagonal and its eigenvalue on $|x\rangle$ is
+$\sum_iw_i(x)$.
+
+\begin{proposition}
+For every $N\geq3$, the periodic Hamiltonian with interaction
+\eqref{eq:ising} has gap $\Delta_N=2$. For every admissible finite
+level of \eqref{eq:lti}, its hierarchy value is exactly one.
+\end{proposition}
+\begin{proof}
+Every binary configuration on a ring has an even number of walls.
+There are two zero-wall configurations, and a nonconstant interval of
+ones in a background of zeros has exactly two walls. Consequently
+\begin{equation}
+  \ker H_N=\operatorname{span}\{|0^N\rangle,|1^N\rangle\},
+  \qquad \Delta_N=2.
+\end{equation}
+Since $h_1^2=h_1$ and products of commuting positive projections are
+positive,
+\begin{equation}
+  g_n(1)=2\sum_{1\leq s<n-k}h_1h_{1+s}\succeq0.
+\end{equation}
+Thus $\delta=1$, $Y=0$ is feasible.
+
+Conversely, fix $n$ and take $N=4n$ with configuration
+$x=0^{2n}1^{2n}$. Its two walls are separated by $2n$ in each cyclic
+direction, so none of the retained products contains both walls.
+Therefore
+\begin{equation}
+  H_N|x\rangle=2|x\rangle,
+  \qquad [H_N^2]_n|x\rangle=2|x\rangle.
+\end{equation}
+For any feasible $\delta,Y$, the telescopic terms cancel as operators
+when translated around the ring. Equation~\eqref{eq:global-certificate}
+then implies
+\begin{equation}
+  0\leq\langle x|([H_N^2]_n-\delta H_N)|x\rangle
+  =2-2\delta.
+\end{equation}
+Hence $\delta\leq1$, including for non-diagonal $Y$, and the feasible
+value one is optimal.
+\end{proof}
+
+The order of quantifiers matters: each fixed level must certify every
+sufficiently large ring, so a ring chosen as a function of that level is
+a valid obstruction. No interchange of limits is used. The example
+answers \eqref{eq:value-convergence} negatively for the literal hierarchy,
+but satisfies \eqref{eq:detection}. It is a two-sector, GHZ-type parent,
+not a single normal/injective-MPS parent.
+
+There is a cutoff discrepancy between the paper's general generating-term
+formula and its nearest-neighbor dual formula: the last included neighbor
+differs by one. The proof is unchanged under either convention, because
+the two walls are farther apart than the full support. Taking $n\geq5$
+also satisfies the conservative general condition $n\geq2k+1$ with $k=2$.
+
+\paragraph{Verification status.}
+Two independent source inspections checked the assumptions, periodic-size
+quantifier, and degeneracy convention. A separate exact enumeration of all
+binary configurations gave periodic gap two and minimum ratio
+$\langle[H_N^2]_n\rangle/\langle H_N\rangle=1$ for
+$(n,N)=(5,12)$ and $(6,14)$, among other sizes. An independent check also
+constructed feasible local dual marginals. These computations support,
+but do not replace, the all-level proof above. No Lean proof or full
+library build was performed.
+
+\section{What the newer literature already accomplishes}
+\label{sec:occupied}
+
+\paragraph{Known finite-size inclusion.}
+For nearest-neighbor projector interactions, Ref.~\cite{LTI}, equations
+(23), (34), and (36), and Appendix B.1, give same-level Knabe inclusion
+in the nearest-neighbor cutoff convention used there. With the strict
+literal cutoff in \eqref{eq:truncated}, the safe statement is shifted:
+\begin{equation}
+  \delta_{\mathrm{LTI}}(n+1)\geq
+  \frac{n-1}{n-2}\left(\epsilon_n-\frac1{n-1}\right),
+  \label{eq:knabe-inclusion}
+\end{equation}
+where $\epsilon_n$ is the open-chain gap on $n$ sites, with $n$ large
+enough for the stated criteria. Indeed, the conventional $n$-site
+certificate retains separations through $n-2$; tensoring it with one
+identity gives exactly the strict-cutoff $(n+1)$-site certificate.
+The corresponding telescopic variable is $Y\otimes\id$. A uniform positive
+lower bound on $\epsilon_n$ therefore already proves eventual detection.
+If open and periodic limiting gaps exist and coincide, the lower bound
+\eqref{eq:knabe-inclusion} and periodic certificate validity also give
+value convergence by squeezing. These are not new completeness targets.
+The martingale inclusion in Appendix B.3 is stated for a coarse-grained
+projector Hamiltonian; transfer back to the original interaction is a
+separate operator comparison.
+
+\paragraph{Ground-space-aware certificates are already present.}
+Ref.~\cite{LTI}, Appendix D, equations (115)--(117), restricts the auxiliary
+operator to $P_{n-1}^{\perp}YP_{n-1}^{\perp}$, where $P_{n-1}$ projects
+onto the open-chain ground space. The paper explicitly permits constructing
+this projector from the MPS ground-space representation. Such a restriction
+may lower the SDP optimum. Neither this ansatz nor basic numerical
+certificate repair should be proposed as new mathematics.
+
+\paragraph{The July 2026 improvement.}
+Ref.~\cite{RMS}, Lemmas 1 and 2 together with Theorems 3 and 4, obtains
+\begin{equation}
+  \Delta(H_N)\geq
+  (1-2\gamma_{p,q}) \Delta(\widetilde h),
+  \qquad \gamma_{p,q}=\sqrt{\lambda_2(\Xi)}.
+  \label{eq:rms-bound}
+\end{equation}
+Here $p,q$ specify overlapping blocks, $\widetilde h$ is the weighted
+blocked interaction on $r=2p+q$ sites, and $\Xi$ has virtual dimension
+$D^4$ for MPS bond dimension $D$. The symbol $\lambda_2$ denotes the
+largest eigenvalue distinct from the ground-space eigenvalue one.
+The paper already removes exponential physical-size dependence from this
+overlap calculation. Its remaining bottleneck is the local gap of
+$\widetilde h$, a $d^r\times d^r$ operator. The arithmetic estimates in
+Section 4 give full diagonalization cost $O(d^{3r})$; these estimates are
+not, by themselves, bit-complexity bounds for exact certification.
+
+Section 4.4 shows convergence of the resulting periodic lower bounds to
+an \emph{open-boundary} limiting value,
+$\limsup_m\Delta(H_m^{\mathrm{OBC}})$, under the specified asymmetric
+blocking. It does not prove convergence to the periodic gap. Section 6
+proposes extending reshuffling to ``a telescopic sum of arbitrary
+operators.'' That suggestion is not a conjecture, and telescopic
+optimization alone is already central to Ref.~\cite{LTI}.
+
+\paragraph{Published numerical benchmarks.}
+The following bounds must retain the interaction normalizations of their
+respective sources:
+\begin{center}
+\begin{tabular}{p{0.28\linewidth}p{0.30\linewidth}p{0.29\linewidth}}
+\toprule
+Model and source & Reported bound & Resource or scope \\
+\midrule
+AKLT, Ref.~\cite{LTI}, Section 4.1
+& $\Delta\geq0.34976$ & LTI support $n=6$ \\
+AKLT, Ref.~\cite{RMS}, (33)--(34)
+& PBC $0.2827$; OBC $0.2497$ & Best reported search through $r=14$ \\
+$\mathrm{SU}(3)$ adjoint $\mathbf8$, Ref.~\cite{RMS}, (46)--(47)
+& OBC $0.3809$; PBC $0.3917$ & Blocks through $r=6$ \\
+$\mathrm{SU}(3)$ $\mathbf{10}$, Ref.~\cite{RMS}, (54)--(55)
+& OBC $0.2158$; PBC $0.2204$ & Blocks through $r=6$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+The two $\mathrm{SU}(3)$ gappedness questions discussed in the July paper
+are solved there; they are not available conjectures. Improving the weaker
+July AKLT bound alone is not competitive with the earlier LTI result.
+Comparisons across methods also require the same boundary conditions,
+Hamiltonian normalization, and a declared cost model, not merely a matching
+support label.
+
+\section{Existing formal results and the missing mathematics}
+\label{sec:lean}
+
+Source inspection was performed at TNLean commit \texttt{4129cbabe} and
+its QICLean dependency. This is not a new compilation or an axiom audit.
+Paths below are relative to \path{TNLean/MPS/ParentHamiltonian/}.
+\begin{itemize}
+  \item \path{PrimitiveGaugeExistence.lean}, lines 232--254:
+  \path{exists_parentHamiltonianES_gap_of_isNormal} chooses an interaction
+  range and proves a uniform finite-volume periodic gap for a normal
+  tensor. It does not cover every prescribed range or general multiblock
+  tensors, and is not an infinite-volume GNS theorem.
+  \item \path{Martingale/OpenParentGap.lean}, lines 230--242:
+  \path{IsPrimitiveMPS.exists_openParentHamiltonianES_gap} chooses a range
+  $l+1$ and gives $\gamma=(1-\varepsilon\sqrt{l+1})^2$ for the open parent.
+  \item \path{Martingale/FiniteRangeKnabeGap.lean}, lines 47--57:
+  \path{parentHamiltonianES_gap_of_openParentHamiltonianES_gap} accepts a
+  prescribed range $R$ with $1\leq R\leq m$, an open-window gap $\gamma$
+  on $m+R-1$ sites, and $m\gamma>(R-1)^2$. It yields
+  \begin{equation}
+    \delta=\frac{m\gamma-(R-1)^2}{m-R+1}>0,
+    \qquad N\geq2m.
+  \end{equation}
+  \item \path{Martingale/BlockedGap.lean}, lines 412--431, proves a gap
+  $1/8$ for a suitably blocked range-two parent. The parent interaction
+  changes; $1/8$ is not a universal improvement for the original Hamiltonian.
+  \item \path{FNWGeometricDefect.lean}, lines 69--101, proves the conditional
+  overlap estimate, for $c\lambda^l<1$ and an overlap length $l$ at
+  least the supplied injectivity length,
+  \begin{equation}
+    \varepsilon_l\leq
+    \frac{c\lambda^l(1+c\lambda^l)}{1-c\lambda^l}.
+  \end{equation}
+  The decay prefactor $c$ and chosen threshold length are supplied
+  existentially. These are established FNW/Nachtergaele estimates,
+  not stronger new constants.
+\end{itemize}
+QICLean supplies semidefinite weak duality, positive-operator gap transfer,
+and finite-range Knabe inequalities. No implementation of the specific
+LTI hierarchy or its completeness theorem was found in the inspected
+sources. An exact formalization of Section~\ref{sec:obstruction} would
+mostly require the hierarchy definition, telescopic summation, and binary
+wall-counting, rather than more parent-Hamiltonian analytic estimates.
+
+For a quantitative improvement to \eqref{eq:rms-bound}, the missing
+mathematics is different: a stronger bound on the same local interaction,
+or a controlled reduction of the one-block gap computation. The existence
+of a small-bond-dimension ground state alone does not supply a complete
+low-energy representation or justify discarding excited sectors.
+
+\section{Ranked research decisions}
+\label{sec:targets}
+
+\paragraph{1. Preferred: resolve and contextualize the LTI convergence question.}
+The exact paper target is Ref.~\cite{LTI}, Section 5, value convergence.
+Section~\ref{sec:obstruction} gives a negative answer in its stated
+periodic, possibly degenerate setting. The next finite deliverable is a
+source-faithful, independently checkable statement of this obstruction,
+with provenance checked against the authors' code and later discussion.
+The current evidence supports the mathematics, not a claim of first
+publication. If the observation is already known, record it and do not
+repackage it as a new conjecture solution. A substantial extension would
+characterize what the truncated hierarchy converges to or change the
+certificate family to recover separated-excitation costs. Neither extension
+is established by this audit.
+
+\paragraph{2. Genuine open question, higher risk: eventual positivity.}
+The remaining question \eqref{eq:detection} is explicitly posed in
+Ref.~\cite{LTI}, Section 5. No resolution was found in the inspected
+follow-ups. Normal-MPS cases with uniform open-chain gaps are not the hard
+part, by \eqref{eq:knabe-inclusion}. A meaningful attack must address cases
+not covered by that implication or produce a counterexample to detection.
+The current TNLean capstones do not establish such a result. This is an
+important target, but not presently justified as a short project.
+
+\paragraph{3. Quantitative fallback: the original $\mathrm{SU}(3)$
+$\mathbf{10}$ interaction.}
+Fix the interaction of Ref.~\cite{RMS}, equation (52), its normalization,
+and periodic boundaries. With generators $J^a$ in the ten-dimensional
+representation normalized by $\sum_{a=1}^8(J^a)^2=6\id$, set
+\begin{equation}
+  X_i=\sum_{a=1}^8J_i^aJ_{i+1}^a,
+  \qquad H_N^{\circ}=\sum_i(X_i^2+5X_i+6\id).
+\end{equation}
+Do not substitute the spectrally flattened projector interaction when
+comparing gap values. The explicit benchmark is the bound $0.2204$ in
+equation (55), obtained using blocks through six sites. A worthwhile
+improvement must substantially exceed that bound under a comparable cost
+model, or recover comparable quality at substantially lower cost. A
+slightly larger decimal or another proof of gappedness would not meet that
+standard. Symmetry-reduced or recursively certified local gaps are possible
+approaches, not established improvements. No evidence in this audit yet
+shows that the available margin is large enough; benchmark reproduction
+and a short numerical test must precede extensive formalization.
+
+\paragraph{Excluded as immediate targets.}
+The generic two-block uncle $N^{-2}$ question in the local project notes
+is not, on the evidence inspected here, an explicitly located conjecture
+from the cited paper. The notes already establish inverse-square bounds
+for their scalar model. General two-dimensional PEPS gaps and general
+hierarchy completeness require new analysis beyond the existing
+one-dimensional formal interfaces. The five-site Heisenberg result in
+P3 concerns ground-energy lower bounds, not spectral gaps.
+
+\begin{thebibliography}{9}
+\bibitem{LTI}
+K.~S.~Rai, I.~Kull, P.~Emonts, J.~Tura, N.~Schuch, and F.~Baccari,
+\emph{A Hierarchy of Spectral Gap Certificates for Frustration-Free Spin Systems},
+Quantum \textbf{10}, 2065 (2026).
+\href{https://doi.org/10.22331/q-2026-04-13-2065}{doi:10.22331/q-2026-04-13-2065}.
+Primary text: \url{https://arxiv.org/html/2411.03680v3}.
+\bibitem{RMS}
+M.~\'A.~Rozm\'an, A.~Moln\'ar, and N.~Schuch,
+\emph{Lower Bounds on Spectral Gaps of Parent Hamiltonians via Tensor Networks},
+arXiv:2607.19078v1 (2026).
+\url{https://arxiv.org/html/2607.19078v1}.
+\bibitem{Rao}
+S.~Rao, \emph{A convergent hierarchy of spectral gap certificates for qubit
+Hamiltonians}, arXiv:2510.08427 (2025).
+\url{https://arxiv.org/abs/2510.08427}.
+\bibitem{Xu}
+X.~Xu, M.~Sch\"otz, J.~Wang, V.~Magron, I.~Klep, O.~Fawzi, and
+M.-O.~Renou, \emph{The bulk spectral gap is semi-decidable: a convergent
+family of certified upper bounds}, arXiv:2606.03836v2 (2026).
+\url{https://arxiv.org/abs/2606.03836v2}.
+\bibitem{LM}
+M.~Lemm and E.~Mozgunov, \emph{Spectral gaps of frustration-free spin systems
+with boundary}, J. Math. Phys. \textbf{60}, 051901 (2019).
+\url{https://arxiv.org/abs/1801.08915}.
+\bibitem{WY}
+S.~Warzel and A.~Young, \emph{The spectral gap of a fractional quantum
+Hall system on a thin torus}, J. Math. Phys. \textbf{63},
+041901 (2022). \url{https://arxiv.org/abs/2112.13764}.
+\end{thebibliography}
+\end{document}
