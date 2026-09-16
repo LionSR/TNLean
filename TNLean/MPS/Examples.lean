@@ -15,6 +15,7 @@ import TNLean.MPS.Examples.AKLTRotation
 import TNLean.MPS.Examples.AKLTStringOrder
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.ClusterParentHamiltonian
+import TNLean.MPS.Examples.ClusterSourceGroundState
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.GHZCluster
