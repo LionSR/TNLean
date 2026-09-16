@@ -29,6 +29,7 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupUnitaryAverage
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.FixedPointFreeInvolutionSign
+import TNLean.Algebra.FlagBlockTriangular
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
 import TNLean.Algebra.GeneralizeDecide

@@ -11,5 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.Reduction.Flag
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
 import TNLean.MPS.FundamentalTheorem.Reduction.Identification
+import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.SimpleSeparation
+import TNLean.MPS.FundamentalTheorem.Reduction.SingleBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.WordModule
