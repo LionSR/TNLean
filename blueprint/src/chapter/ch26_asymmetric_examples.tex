@@ -931,23 +931,26 @@ takes place in a quartic ring.
     \uses{def:asymex_golden_ring, def:mpo_tensor, def:mpdo_operator_product}
     Label the two objects of the category by $0$ for the trivial label and
     $1$ for $\tau$, and read a letter as the pair $(x',x)$ of the outgoing
-    and incoming labels. The $\tau$ tensor of bond dimension three carries
-    at the letter $p$ the row of the reduced vertex weight
+    and incoming labels. Write
     \begin{align}
-        \begin{pmatrix}
-            0 & \varphi^{-1}   & \varphi^{-1/2} \\
-            1 & 0              & 1              \\
-            1 & \varphi^{-1/2} & -\varphi^{-1}
-        \end{pmatrix}
-        \notag
+        F & =\begin{pmatrix}
+                 0 & \varphi^{-1}   & \varphi^{-1/2} \\
+                 1 & 0              & 1              \\
+                 1 & \varphi^{-1/2} & -\varphi^{-1}
+             \end{pmatrix}
+        \label{eq:asymex_fib_vertex}
     \end{align}
-    indexed by $p$, and vanishes at the letter $(0,0)$. The trivial tensor
-    of bond dimension two carries the admissibility matrix
+    for the reduced vertex weight. The $\tau$ tensor $B_\tau$ of bond
+    dimension three has, at the letters $(0,1)$, $(1,0)$ and $(1,1)$, the
+    matrix whose first, second and third row respectively is the
+    corresponding row of $F$ and whose other rows vanish; at the letter
+    $(0,0)$ it vanishes. The trivial tensor $B_1$ of bond dimension two
+    carries the admissibility matrix
     $\begin{pmatrix}0&1\\1&1\end{pmatrix}$ on its two diagonal letters and
     vanishes on the other two. The source is the stacked product
     $B^{x'x}=\sum_m(B_\tau)^{x'm}\otimes(B_\tau)^{mx}$ of bond dimension
-    nine, and the two targets are the trivial block and the $\tau$ block,
-    each with multiplicity one and weight one.
+    nine, and the two targets are $B_1$ and $B_\tau$, each with
+    multiplicity one and weight one.
 \end{definition}
 
 \begin{theorem}[The one-site matrices of the $\tau$ block]
@@ -956,11 +959,11 @@ takes place in a quartic ring.
         FibonacciCompression.fibTauMPS_apply_three}
     \leanok
     \uses{def:asymex_fib}
-    The letter $(0,1)$ of the $\tau$ block carries the first row
-    $(0,\varphi^{-1},\varphi^{-1/2})$ of the reduced vertex weight in its
-    first row and zero elsewhere, and the letter $(1,1)$ carries the third
-    row $(1,\varphi^{-1/2},-\varphi^{-1})$ in its third row and zero
-    elsewhere, with $\varphi^{-1/2}=\sqrt{(\sqrt5-1)/2}$.
+    The matrix of $B_\tau$ at the letter $(0,1)$ has the first row of
+    (\ref{eq:asymex_fib_vertex}) as its first row and zero elsewhere, and
+    its matrix at the letter $(1,1)$ has the third row of
+    (\ref{eq:asymex_fib_vertex}) as its third row and zero elsewhere, with
+    $\varphi^{-1/2}=\sqrt{(\sqrt5-1)/2}$.
 \end{theorem}
 
 \begin{proof}
@@ -983,11 +986,11 @@ takes place in a quartic ring.
 \begin{proof}
     \leanok
     \uses{thm:asymex_golden_ring}
-    For the $\tau$ block the word $(i+1,3,k+1)$ evaluates to a multiple of
-    the matrix built from the $i$-th coordinate vector and the $k$-th row of
-    the vertex weight; those rows are a basis, so each of the nine matrix
-    units is an explicit combination over $\Z[\sigma]$ of the nine such
-    words. For the trivial block four length-three words suffice. Both
+    For the $\tau$ block the word $(i+1,3,k+1)$, with $i$ and $k$ in
+    $\{0,1,2\}$, evaluates to a multiple of the matrix built from the $i$-th
+    coordinate vector and the $k$-th row of (\ref{eq:asymex_fib_vertex});
+    those rows are a basis, so each of the nine matrix units is an explicit
+    combination over $\Z[\sigma]$ of the nine such words. For the trivial block four length-three words suffice. Both
     families of coefficients are verified in $\Z[\sigma]$ and transported to
     the complex matrices by Theorem~\ref{thm:asymex_golden_ring}.
 \end{proof}
