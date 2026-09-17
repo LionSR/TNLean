@@ -15,4 +15,5 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Fibonacci
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ParityGraded
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RepeatedBlock
