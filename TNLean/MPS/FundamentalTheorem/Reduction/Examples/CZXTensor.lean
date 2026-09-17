@@ -40,14 +40,11 @@ between integer matrices.
   pair-alphabet view.
 * `CZXCompression.identityMPS`: the bond-one identity tensor `δ` in the pair-alphabet view.
 * `CZXCompression.negIdentityIntMPS`: the integer matrices of `-δ`.
-* `CZXCompression.mulIntTensor`: the bond-space product of two integer tensors.
 * `CZXCompression.czxSquareInt`, `CZXCompression.czxSquare`: the stacked product tensor
   `B^{ij} = ∑_m M^{im} ⊗ M^{mj}` of bond dimension four.
 
 ## Main results
 
-* `CZXCompression.mulTensor_complexOfInt`: the bond-space product commutes with the entrywise
-  coercion of integer matrices.
 * `CZXCompression.czxMPS_isNormal`: the bond-two tensor is normal, its length-two words
   spanning the full two-by-two matrix algebra.
 * `CZXCompression.czxSquare_eq`: the stacked product tensor is the coercion of an explicit
@@ -115,28 +112,6 @@ theorem negIdentityMPS_eq (a : Fin 4) :
     ((-1 : ℂ) • identityMPS) a = complexOfInt (negIdentityIntMPS a) := by
   rw [negIdentityIntMPS, complexOfInt_neg, ← identityMPS_eq]
   simp
-
-/-! ### The bond-space product over the integers -/
-
-variable {d D₁ D₂ : ℕ}
-
-/-- The bond-space product of two integer tensors,
-`(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`. -/
-def mulIntTensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
-    Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) ℤ :=
-  (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
-
-/-- The bond-space product commutes with the entrywise coercion of integer matrices. -/
-theorem mulTensor_complexOfInt (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
-    MPOTensor.mulTensor (fun i j => complexOfInt (M i j)) (fun i j => complexOfInt (N i j)) i k =
-      complexOfInt (mulIntTensor M N i k) := by
-  ext x y
-  simp only [MPOTensor.mulTensor_apply, mulIntTensor, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, complexOfInt_apply]
-  push_cast
-  rfl
 
 /-! ### Normality of the bond-two tensor -/
 

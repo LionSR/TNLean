@@ -17,5 +17,8 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannier
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannierAction
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.OneLabelCandidate
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ParityGraded
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RepeatedBlock
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimer

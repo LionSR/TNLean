@@ -182,24 +182,6 @@ theorem flipShiftMPS_isNormal : Kraus.IsNormal flipShiftTensor.toMPSTensor :=
 
 /-! ### The stacked tensor of the square of the duality -/
 
-/-- The bond-space product of two integer tensors, matching `MPOTensor.mulTensor` under
-`complexOfInt`. -/
-private def mulIntTensor {d D₁ D₂ : ℕ} (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
-    Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) ℤ :=
-  (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
-
-private theorem mulTensor_complexOfInt {d D₁ D₂ : ℕ}
-    (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
-    MPOTensor.mulTensor (fun i j => complexOfInt (M i j)) (fun i j => complexOfInt (N i j)) i k =
-      complexOfInt (mulIntTensor M N i k) := by
-  ext x y
-  simp only [MPOTensor.mulTensor_apply, mulIntTensor, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, complexOfInt_apply]
-  push_cast
-  rfl
-
 /-- The integer entries of the stacked product tensor `B^{s's} = ∑_m W^{s'm} ⊗ W^{ms}` of bond
 dimension four (P5 note, §1.3). -/
 def kwSquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
