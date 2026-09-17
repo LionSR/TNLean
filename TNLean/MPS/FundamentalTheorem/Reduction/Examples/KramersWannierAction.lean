@@ -18,7 +18,7 @@ on states"; verified numerically by `checks/p5_more_examples_verify.py`, Example
 KW-GHZ).
 
 On `L` qubits with periodic boundary conditions, the unnormalised Kramers–Wannier kernel
-`⟨s'|D̃|s⟩ = ∏_j (-1)^{s'_j (s_j + s_{j+1})}` is the periodic trace of the bond-two matrix
+`⟨s'|D~|s⟩ = ∏_j (-1)^{s'_j (s_j + s_{j+1})}` is the periodic trace of the bond-two matrix
 product operator `kwTensor` (data file §1.1). The physics reading of the two examples here is
 symmetry breaking of the non-invertible Kramers–Wannier symmetry: the duality maps the
 paramagnetic product state to the ferromagnetic Greenberger–Horne–Zeilinger pair (part (a)), and
@@ -113,7 +113,7 @@ theorem plusTensor_eq : plusTensor = fun j => complexOfInt (plusIntTensor j) := 
   funext j
   simp [plusTensor, plusIntTensor, complexOfInt_one]
 
-/-- The action tensor `Ãtilde = D̃ · |+⟩^L` of part (a) (data file §2.1). -/
+/-- The action tensor `Ãtilde = D~ · |+⟩^L` of part (a) (data file §2.1). -/
 def kwPlus : MPSTensor 2 2 := MPOTensor.actTensor kwTensor plusTensor
 
 /-- The integer matrices of `kwPlus`, `Ãtilde^0 = 2 P_+`, `Ãtilde^1 = 2 P_-` (data file §2.1). -/
@@ -332,7 +332,7 @@ theorem ghz_eq (i : Fin 2) : ghz i = complexOfInt (ghzIntTensor i) := by
   fin_cases i <;> ext p q <;> fin_cases p <;> fin_cases q <;>
     norm_num [ghz, ghzIntTensor, complexOfInt]
 
-/-- The action tensor `B̃ = D̃ · (|0…0⟩ + |1…1⟩)` of part (b) (data file §2.2). -/
+/-- The action tensor `B~ = D~ · (|0…0⟩ + |1…1⟩)` of part (b) (data file §2.2). -/
 def kwGHZ : MPSTensor 2 4 := MPOTensor.actTensor kwTensor ghz
 
 /-- The integer matrices of `kwGHZ` (data file §2.2). -/

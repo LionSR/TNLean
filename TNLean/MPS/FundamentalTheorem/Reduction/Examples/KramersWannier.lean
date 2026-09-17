@@ -10,7 +10,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 import TNLean.MPS.MPDO.OperatorProduct
 
 /-!
-# Kramers–Wannier fusion `D̃² = 2^L (1 + η) T` on the periodic Ising chain
+# Kramers–Wannier fusion `D~² = 2^L (1 + η) T` on the periodic Ising chain
 
 A machine-checked instance of the multi-block asymmetric compression theorem (P5 note,
 `Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`; the exact data is
@@ -19,14 +19,14 @@ recorded and checked in exact arithmetic by
 `Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §1).
 
 The Kramers–Wannier duality kernel on a periodic chain of `L` qubits,
-`⟨s'| D̃ |s⟩ = ∏_j (-1)^{s'_j (s_j + s_{j+1})}`, is the periodic trace of a bond-dimension-two
+`⟨s'| D~ |s⟩ = ∏_j (-1)^{s'_j (s_j + s_{j+1})}`, is the periodic trace of a bond-dimension-two
 matrix product operator `W` (`kwTensor`). Squaring the duality gives, at the level of the
-periodic operator, `D̃² = 2^L (1 + η) T` where `η = ∏_j X_j` is the global spin flip and `T` is
+periodic operator, `D~² = 2^L (1 + η) T` where `η = ∏_j X_j` is the global spin flip and `T` is
 the one-site left translation. Both `T` and `η T` are themselves bond-dimension-two matrix
 product operators whose four letters are literally the four matrix units of `M_2(ℂ)`
 (`shiftTensor`, `flipShiftTensor`), hence normal already at word length one.
 
-The stacked tensor `kwSquare` (bond dimension four, generating `D̃²`) compresses, after an
+The stacked tensor `kwSquare` (bond dimension four, generating `D~²`) compresses, after an
 explicit change of bond coordinates with a half-integer gauge matrix, onto the direct sum of
 `2 · shiftTensor` and `2 · flipShiftTensor`: the conjugated letters are block *diagonal*, so
 there are no left-over zero slots (`z = 0`) and the compression is genuinely split, with a
@@ -55,7 +55,7 @@ satisfies `D² = (1 + η) T`).
 * `KWExample.kwSquare_compression`: the multi-block asymmetric compression datum of Theorem 7.7,
   with `z = 0`.
 * `KWExample.kwSquare_trace_evalWord`: the word-trace identity
-  `tr(D̃²)^w = 2^{|w|} (tr(T^w) + tr((η T)^w))`.
+  `tr(D~²)^w = 2^{|w|} (tr(T^w) + tr((η T)^w))`.
 * `KWExample.kwSquare_isReduction`: biorthogonal compression onto each of the two slots.
 * `KWExample.kwSquare_dim_eq`: the dimension count `4 = 2 + 2 + 0`.
 * `KWExample.kwSquare_remainder_eq_zero`: the remainder of the compression vanishes identically
@@ -389,7 +389,7 @@ private theorem kwSquare_matched_int (a : Fin 4) (s : Fin 2) (p q : Fin (kwSquar
   fin_cases s <;> revert p q <;> decide
 
 /-- **The multi-block asymmetric compression datum of the Kramers–Wannier square** (P5 note,
-Theorem 7.7, clauses (i)–(iii)). There are no zero slots: `D̃²` is fully split into `2T` and
+Theorem 7.7, clauses (i)–(iii)). There are no zero slots: `D~²` is fully split into `2T` and
 `2ηT`. -/
 def kwSquare_compression : MultiBlockCompression kwSquare kwSquareSlots kwSquareTargets where
   z := 0
@@ -408,7 +408,7 @@ def kwSquare_compression : MultiBlockCompression kwSquare kwSquareSlots kwSquare
 
 /-! ### Consequences -/
 
-/-- **The word-trace identity `D̃² = 2^L (1 + η) T`** at the level of traces (P5 note, §1.3). -/
+/-- **The word-trace identity `D~² = 2^L (1 + η) T`** at the level of traces (P5 note, §1.3). -/
 theorem kwSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord kwSquare w) =
       (2 : ℂ) ^ w.length * (Matrix.trace (Kraus.evalWord shiftTensor.toMPSTensor w) +
@@ -542,7 +542,7 @@ private theorem kwSquareSlots_sum {M : Type*} [AddCommMonoid M]
   rfl
 
 /-- **The remainder of the compression vanishes identically.** The extension is fully split:
-`D̃²` is exactly the direct sum of `2T` and `2ηT` (P5 note, §1.3). -/
+`D~²` is exactly the direct sum of `2T` and `2ηT` (P5 note, §1.3). -/
 theorem kwSquare_remainder_eq_zero (a : Fin 4) : kwSquare_compression.remainder a = 0 := by
   have hsum : kwSquare_compression.remainder a =
       kwSquare a - (kwSquareRight0 * kwSquareTargets 0 a * kwSquareLeft0 +

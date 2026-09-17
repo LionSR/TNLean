@@ -11,7 +11,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
 A machine-checked instance of the multi-block asymmetric compression theorem (P5 note,
 `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) for the
-Fibonacci string-net matrix product operator algebra of Bultinck, Mariën, Williamson, Şahinoğlu,
+Fibonacci string-net matrix product operator algebra of Bultinck, Mariën, Williamson, Sahinoglu,
 Haegeman and Verstraete, *Anyons and matrix product operator algebras* (arXiv:1511.08090),
 Appendix D.1. The exact data and its verification in exact arithmetic are recorded in
 `Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §3, and
