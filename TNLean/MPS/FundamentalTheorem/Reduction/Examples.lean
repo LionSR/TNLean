@@ -14,6 +14,10 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Fibonacci
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
+<<<<<<< HEAD
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ParityGraded
+=======
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannier
+>>>>>>> origin/feat/asymmetric-ft-examples-kw
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RepeatedBlock
