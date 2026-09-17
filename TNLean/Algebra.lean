@@ -45,6 +45,7 @@ import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.Matrix
 import TNLean.Algebra.MatrixCyclicPathSum
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator
 import TNLean.Algebra.MonomialMatrix

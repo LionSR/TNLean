@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+import TNLean.MPS.MPDO.OperatorFromWordTrace
 
 /-!
 # Example F: the Fibonacci fusion `τ ⊗ τ = 1 ⊕ τ`
@@ -580,14 +581,9 @@ theorem fibonacci_fusion_rule (L : ℕ) (hL : 0 < L) :
       MPOTensor.mpo fibOne L + MPOTensor.mpo fibTau L := by
   rw [← MPOTensor.mpo_mulTensor]
   ext σ τ
-  have hw : (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) ≠ [] := by
-    simp only [ne_eq, List.ofFn_eq_nil_iff]
-    omega
-  have h := fibStack_trace_evalWord (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) hw
-  unfold fibStack fibOneMPS fibTauMPS at h
-  rw [MPOTensor.evalWord_toMPSTensor_pairConfig, MPOTensor.evalWord_toMPSTensor_pairConfig,
-    MPOTensor.evalWord_toMPSTensor_pairConfig] at h
-  simpa [MPOTensor.mpoMatrixEntry] using h
+  rw [Matrix.add_apply, MPOTensor.mpo_apply_toMPSTensor, MPOTensor.mpo_apply_toMPSTensor,
+    MPOTensor.mpo_apply_toMPSTensor]
+  exact fibStack_trace_evalWord _ (MPOTensor.ofFn_pairConfig_ne_nil hL σ τ)
 
 /-- The matrix-product-vector form of the fusion rule: at every positive system size the vector
 of the stacked tensor is the sum of the vectors of the two blocks. -/
