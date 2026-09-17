@@ -359,8 +359,7 @@ representations with a nontrivial three-cocycle.
     % and the horizontal virtual bonds within each row; the physical
     % legs $(i,j)$ remain open.
     % Boundary signature: (virtual-west=0 | virtual-east=0 |
-    % physical-up=3 | physical-down=3) on the left, collapsing to the
-    % pair alphabet on the right.
+    % physical-up=3 | physical-down=3) on both sides.
     \tenkzkernel
     \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
         \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{M} &
@@ -535,8 +534,7 @@ $\{+1,-1\}$.
     % and the horizontal virtual bonds within each row; the physical
     % legs $(i,j)$ remain open.
     % Boundary signature: (virtual-west=0 | virtual-east=0 |
-    % physical-up=3 | physical-down=3) on the left, collapsing to the
-    % pair alphabet on the right.
+    % physical-up=3 | physical-down=3) on both sides.
     \tenkzkernel
     \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
         \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{N} &
@@ -675,8 +673,7 @@ word length one.
     % and the horizontal virtual bonds within each row; the physical
     % legs $(s',s)$ remain open.
     % Boundary signature: (virtual-west=0 | virtual-east=0 |
-    % physical-up=3 | physical-down=3) on the left, collapsing to the
-    % pair alphabet on the right.
+    % physical-up=3 | physical-down=3) on both sides.
     \tenkzkernel
     \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
         \tn[skin=mpo, ports={90:physical:$s'_1$, 270:physical}]{W} &
@@ -827,18 +824,18 @@ word length one.
 \end{proof}
 
 \begin{center}
-    % Formula: B^{s's}V_1=V_1(2T)^{s's}, W_1B^{s's}=(2T)^{s's}W_1, and
-    % the analogous pair for the second slot, of
-    % Theorem~\ref{thm:asymex_kw_intertwiners}.
+    % Formula: the four sitewise identities of
+    % Theorem~\ref{thm:asymex_kw_intertwiners}: B^{s's}V_1=V_1(2T)^{s's},
+    % B^{s's}V_2=V_2(2\eta T)^{s's}, W_1B^{s's}=(2T)^{s's}W_1, and
+    % W_2B^{s's}=(2\eta T)^{s's}W_2.
     % Source: Theorem~\ref{thm:asymex_kw_intertwiners}.
     % Ink-to-index map: the ring is the compression map $V_1$, $W_1$,
     % $V_2$ or $W_2$; the square node is the source $B$ or its target
     % $2T$ or $2\eta T$.
     % Contraction set: the single virtual bond joining the ring to the
     % square node in each pair; the physical pair leg remains open.
-    % Boundary signature: (virtual-west=1 | virtual-east=0 |
-    % physical-up=1 | physical-down=0) for each pictured equality,
-    % reading left to right.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
     \tenkzkernel
     \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
         \tn[label pos=s, ports={90:physical:$s's$}]{B} & \tn[skin=ring]{V_1}
@@ -855,6 +852,23 @@ word length one.
     \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
         \tn[skin=ring]{V_2} &
         \tn[label pos=s, ports={90:physical:$s's$}]{2\eta T}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_1} & \tn[label pos=s, ports={90:physical:$s's$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$s's$}]{2T} & \tn[skin=ring]{W_1}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_2} & \tn[label pos=s, ports={90:physical:$s's$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$s's$}]{2\eta T} &
+        \tn[skin=ring]{W_2}
     \end{tenkz}
 \end{center}
 
@@ -1174,8 +1188,7 @@ takes place in a quartic ring.
     % and the horizontal virtual bonds within each row; the physical
     % legs $(x',x)$ remain open.
     % Boundary signature: (virtual-west=0 | virtual-east=0 |
-    % physical-up=3 | physical-down=3) on the left, collapsing to the
-    % pair alphabet on the right.
+    % physical-up=3 | physical-down=3) on both sides.
     \tenkzkernel
     \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
         \tn[skin=mpo, ports={90:physical:$x'_1$, 270:physical}]{B_\tau} &
@@ -1338,9 +1351,8 @@ takes place in a quartic ring.
     % Contraction set: the single virtual bond joining the ring to the
     % square node in each pair; the physical pair leg $(x',x)$ remains
     % open.
-    % Boundary signature: (virtual-west=1 | virtual-east=0 |
-    % physical-up=1 | physical-down=0) for each pictured equality,
-    % reading left to right.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
     \tenkzkernel
     \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
         \tn[label pos=s, ports={90:physical:$x'x$}]{B} & \tn[skin=ring]{V_s}
@@ -1674,13 +1686,15 @@ copies of one sector.
     % the spectral mechanism behind
     % Theorem~\ref{thm:asymex_one_label_compression}.
     % Source: \S\ref{sec:asymex_one_label}, introductory paragraph.
-    % Ink-to-index map: each node is the vertical tensor $M$; each ring
-    % between consecutive copies of $M$ is the inner-bond state
-    % $\sigma$; the upper legs carry the letters of the pair alphabet.
+    % Ink-to-index map: the two explicit dot nodes are the vertical
+    % tensor $M$, each carrying its physical leg of the pair alphabet;
+    % each ring is the inner-bond state $\sigma$, with no physical leg
+    % of its own; the trailing dots abbreviate the remaining alternating
+    % $M$-$\sigma$ pairs of the periodic ring.
     % Contraction set: every virtual bond, alternating $M$ and $\sigma$,
     % closed around the ring; no leg is left open.
     % Boundary signature: (virtual-west=0 | virtual-east=0 |
-    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    % physical-up=2 | physical-down=0) for the finite schematic shown.
     \tenkzkernel
     \begin{tenkz}[cols=6, boundary=periodic, physical=up]
         \tn[label pos=135, ports={90:physical:$a_1$}]{M} &
@@ -1752,9 +1766,8 @@ copies of one sector.
     % $\mu_sM$.
     % Contraction set: the single virtual bond joining the ring to the
     % square node in each pair; the physical pair leg $a$ remains open.
-    % Boundary signature: (virtual-west=1 | virtual-east=0 |
-    % physical-up=1 | physical-down=0) for each pictured equality,
-    % reading left to right.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
     \tenkzkernel
     \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
         \tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
@@ -1838,13 +1851,15 @@ different sectors, in contrast with Section~\ref{sec:asymex_one_label}.
     % \S\ref{sec:asymex_rfp_basis} that gives the weights $7/16$ and
     % $1/16$.
     % Source: \S\ref{sec:asymex_dimer}, introductory paragraph.
-    % Ink-to-index map: each node is the sector tensor $M_f$; each ring
-    % between consecutive copies of $M_f$ is the inner-bond state
-    % $\sigma$; the upper legs carry the letters of the pair alphabet.
+    % Ink-to-index map: the two explicit dot nodes are the sector tensor
+    % $M_f$, each carrying its physical leg of the pair alphabet; each
+    % ring is the inner-bond state $\sigma$, with no physical leg of its
+    % own; the trailing dots abbreviate the remaining alternating
+    % $M_f$-$\sigma$ pairs of the periodic ring.
     % Contraction set: every virtual bond, alternating $M_f$ and
     % $\sigma$, closed around the ring; no leg is left open.
     % Boundary signature: (virtual-west=0 | virtual-east=0 |
-    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    % physical-up=2 | physical-down=0) for the finite schematic shown.
     \tenkzkernel
     \begin{tenkz}[cols=6, boundary=periodic, physical=up]
         \tn[label pos=135, ports={90:physical:$a_1$}]{M_f} &
@@ -1922,9 +1937,8 @@ different sectors, in contrast with Section~\ref{sec:asymex_one_label}.
     % target $\mu_sM_s$.
     % Contraction set: the single virtual bond joining the ring to the
     % square node in each pair; the physical pair leg $a$ remains open.
-    % Boundary signature: (virtual-west=1 | virtual-east=0 |
-    % physical-up=1 | physical-down=0) for each pictured equality,
-    % reading left to right.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
     \tenkzkernel
     \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
         \tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
