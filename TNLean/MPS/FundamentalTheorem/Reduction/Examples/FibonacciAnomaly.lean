@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.NatSquarePlusOne
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciAction
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciUnit
 import TNLean.MPS.FundamentalTheorem.Reduction.IntegralRankOneAction
@@ -54,15 +55,6 @@ three-cocycle allows no invariant single-block state (data file §0, §6.5).
 noncomputable section
 
 open scoped Matrix
-
-/-- **No natural number satisfies `n² = n + 1`**: the Fibonacci fusion ring has no rank-one
-representation by nonnegative integer matrices (data file §5). -/
-theorem Nat.mul_self_ne_add_one (n : ℕ) : n * n ≠ n + 1 := by
-  rcases n with _ | _ | n
-  · decide
-  · decide
-  · intro h
-    nlinarith
 
 namespace FibonacciCompression
 
@@ -215,23 +207,19 @@ theorem not_exists_normal_fibonacci_symmetric :
           c • fun σ : Fin L → Fin 2 => mpv A σ) := by
   rintro ⟨D, A, c, hD, hA, hone, hτ⟩
   have : NeZero D := ⟨hD.ne'⟩
-  obtain ⟨m, rfl⟩ := exists_nat_eq_of_mpo_mulVec_mpv_eq_smul fibTau A hA c hτ
+  have hc0 : c = 0 := fibTau_eigenvalue_eq_zero A hA c hτ
   obtain ⟨ℓ, hℓ, hinj⟩ := hA
   have hLpos : 0 < ℓ + 1 := Nat.succ_pos ℓ
   have hv0 : (fun σ : Fin (ℓ + 1) → Fin 2 => mpv A σ) ≠ 0 :=
     mpv_ne_zero_of_isNBlkInjective hinj hℓ le_rfl
-  have hτ' := hτ (ℓ + 1) hLpos
+  have hτ0 : mpo fibTau (ℓ + 1) *ᵥ (fun τ : Fin (ℓ + 1) → Fin 2 => mpv A τ) = 0 := by
+    rw [hτ (ℓ + 1) hLpos, hc0, zero_smul]
   have hfus : (mpo fibTau (ℓ + 1) * mpo fibTau (ℓ + 1)) *ᵥ
         (fun τ : Fin (ℓ + 1) → Fin 2 => mpv A τ) =
       (mpo fibOne (ℓ + 1) + mpo fibTau (ℓ + 1)) *ᵥ fun τ : Fin (ℓ + 1) → Fin 2 => mpv A τ := by
     rw [fibonacci_fusion_rule (ℓ + 1) hLpos]
-  rw [← Matrix.mulVec_mulVec, Matrix.add_mulVec, hτ', Matrix.mulVec_smul, hτ',
-    hone (ℓ + 1) hLpos, smul_smul] at hfus
-  have hfus' : ((m : ℂ) * m) • (fun σ : Fin (ℓ + 1) → Fin 2 => mpv A σ) =
-      ((m : ℂ) + 1) • fun σ : Fin (ℓ + 1) → Fin 2 => mpv A σ := by
-    rw [add_smul, one_smul]
-    exact hfus.trans (add_comm _ _)
-  have hmm : (m : ℂ) * m = m + 1 := smul_left_injective ℂ hv0 hfus'
-  exact Nat.mul_self_ne_add_one m (by exact_mod_cast hmm)
+  rw [← Matrix.mulVec_mulVec, hτ0, Matrix.mulVec_zero, Matrix.add_mulVec, hτ0,
+    hone (ℓ + 1) hLpos, add_zero] at hfus
+  exact hv0 hfus.symm
 
 end FibonacciCompression

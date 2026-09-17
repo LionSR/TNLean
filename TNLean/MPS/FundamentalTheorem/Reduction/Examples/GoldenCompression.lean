@@ -93,7 +93,7 @@ theorem isNormal_of_golden_single {A : MPSTensor d D}
 
 /-! ### Compression data from a golden gauge -/
 
-variable {DB : ℕ} {ι : Type*} [DecidableEq ι] {Dι : ι → ℕ} {S : Finset ι}
+variable {DB : ℕ} {ι : Type*} [DecidableEq ι] {Dι : ι → ℕ} {S : Finset ι} {z : ℕ}
 
 /-- The gauge attached to a pair of mutually inverse matrices over `ℤ[σ]` and a labelling of
 the bond coordinates by the graded block space. -/

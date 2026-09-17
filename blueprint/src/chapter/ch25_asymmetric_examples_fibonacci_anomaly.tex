@@ -1,0 +1,254 @@
+%% =========================================================
+%% Section: the categorical anomaly of the Fibonacci symmetry as a
+%% rank-one no-go, continuing the fusion examples of
+%% chapter/ch25_asymmetric_examples.tex, Section~\ref{sec:asymex_fibonacci}.
+%% =========================================================
+
+\section{The Fibonacci categorical anomaly}%
+\label{sec:asymex_fib_anomaly}
+
+The Fibonacci fusion ring $\Z[\tau]/(\tau^2-\tau-1)$ has no ring
+homomorphism to $\Z$: its two characters, $\varphi=(1+\sqrt5)/2$ and
+$-1/\varphi$, are both irrational. On the lattice this obstruction reads as
+follows. In the theory of matrix product operator symmetries of
+\cite{GarreRubio2023MPOSym}, the multiplicities with which the blocks of a
+symmetric matrix product state reappear under a matrix product operator
+symmetry are nonnegative integers forming a representation of the fusion
+rules \cite[line~683]{GarreRubio2023MPOSym}, and for the Fibonacci symmetry
+the only invariant family of normal states consists of two blocks $x_1,x_\tau$
+with $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$
+\cite[lines~1991--1993]{GarreRubio2023MPOSym}. This section shows that this
+regular representation is realized, and that it is the only possible
+representation: no single normal matrix product state carries the Fibonacci
+symmetry, because the multiplicity would then be a rank-one representation
+of the fusion ring by a nonnegative integer, and the fusion ring has none.
+This is the non-invertible analogue of the statement that a non-trivial
+three-cocycle allows no invariant single-block state
+\cite[line~738]{GarreRubio2023MPOSym}.
+
+\begin{definition}[The Fibonacci nimrep data]%
+    \label{def:asymex_fib_anomaly_nim}
+    \lean{FibonacciCompression.fibFusionMatrix, FibonacciCompression.fibNim,
+        FibonacciCompression.fibBlock}
+    \leanok
+    \uses{def:asymex_fib}
+    Label the two objects of the category, as in Definition~\ref{def:asymex_fib},
+    by $0=1$ for the trivial object and $1=\tau$. The \emph{fusion matrix}
+    is
+    \begin{align}
+        N_\tau & =\begin{pmatrix}0&1\\1&1\end{pmatrix},
+        \label{eq:asymex_fib_anomaly_matrix}
+    \end{align}
+    the matrix of multiplication by $\tau$ in the basis $1,\tau$ of the
+    fusion ring. The \emph{structure-constant family} $N_a$, for
+    $a\in\{1,\tau\}$, is its regular representation: $N_1=\id_2$ and
+    $N_\tau$ is (\ref{eq:asymex_fib_anomaly_matrix}), so that
+    $N_{ab}^c$ is the $(b,c)$ entry of $N_a$. The corresponding family of
+    matrix product operator blocks assigns to the trivial label the
+    admissibility block $B_1$ and to $\tau$ the block $B_\tau$ of
+    Definition~\ref{def:asymex_fib}.
+\end{definition}
+
+\begin{theorem}[The fusion matrix squares to itself plus the identity]%
+    \label{thm:asymex_fib_anomaly_matrix_sq}
+    \lean{FibonacciCompression.fibFusionMatrix_sq}
+    \leanok
+    \uses{def:asymex_fib_anomaly_nim}
+    $N_\tau^2=N_\tau+\id_2$, as matrices with nonnegative integer entries.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A finite verification: $N_\tau^2=\begin{pmatrix}1&1\\1&2\end{pmatrix}
+        =N_\tau+\id_2$.
+\end{proof}
+
+\begin{theorem}[The fusion ring on the periodic operators]%
+    \label{thm:asymex_fib_anomaly_fusion_algebra}
+    \lean{FibonacciCompression.fibonacci_fusion_algebra}
+    \leanok
+    \uses{def:asymex_fib_anomaly_nim, thm:asymex_fib_fusion}
+    For every pair of labels $a,b\in\{1,\tau\}$ and every positive length
+    $L$, the periodic operators of the corresponding blocks compose
+    according to the structure constants,
+    \begin{align}
+        O_aO_b & =\sum_cN_{ab}^cO_c,
+        \label{eq:asymex_fib_anomaly_fusion_algebra}
+    \end{align}
+    that is, $O_1O_1=O_1$, $O_1O_\tau=O_\tau O_1=O_\tau$, and
+    $O_\tau O_\tau=O_1+O_\tau$.
+    \begin{center}
+        % Formula/source: the (tau,tau) and (1,tau) cases of
+        % (\ref{eq:asymex_fib_anomaly_fusion_algebra}), i.e.
+        % O_tau O_tau = O_1 + O_tau (already (\ref{eq:asymex_fib_fusion}))
+        % and O_1 O_tau = O_tau.
+        % Ink-to-index map: each row of L tensors is the periodic operator
+        % O_a(L), built from L copies of the block B_a; the top row's
+        % physical legs i_1,...,i_L are the free outgoing labels, the
+        % bottom row's physical legs j_1,...,j_L are the free incoming
+        % labels, and the unlabelled physical legs shared between the two
+        % rows are the L contracted intermediate labels of the
+        % composition O_a(L)*O_b(L).
+        % Contraction set: the L intermediate physical legs between the
+        % two rows, and, independently on each row, the periodic virtual
+        % bond of that row's block.
+        % Boundary signature: (virtual-west=0 | virtual-east=0 |
+        % physical-up=L | physical-down=L); no virtual legs remain open,
+        % both rows being closed by their own periodic trace.
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+            \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{B_\tau} &
+            \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{B_\tau} &
+            \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical}]{B_\tau} \\
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{B_\tau} &
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{B_\tau} &
+            \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_L$}]{B_\tau}
+        \end{tenkz}
+        \qquad\text{and}\qquad
+        \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+            \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{B_1} &
+            \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{B_1} &
+            \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical}]{B_1} \\
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{B_\tau} &
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{B_\tau} &
+            \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_L$}]{B_\tau}
+        \end{tenkz}
+    \end{center}
+    The first diagram, closed as a periodic chain of length $L$, is
+    $O_\tau(L)O_\tau(L)$; the second is $O_1(L)O_\tau(L)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The case $a=b=1$ is the admissibility projector composed with itself.
+    The cases $\{a,b\}=\{1,\tau\}$ are an explicit block-triangular
+    compression computation over $\Z[\sigma]$, transported to the complex
+    matrices as in Theorem~\ref{thm:asymex_golden_ring}, in the style of
+    Theorem~\ref{thm:asymex_fib_compression}. The case $a=b=\tau$ is
+    Theorem~\ref{thm:asymex_fib_fusion}.
+\end{proof}
+
+\begin{theorem}[The regular representation on the pair of normal states]%
+    \label{thm:asymex_fib_anomaly_nim_rep}
+    \lean{FibonacciCompression.fibonacci_nim_rep,
+        FibonacciCompression.mpo_fibOne_mulVec_chain}
+    \leanok
+    \uses{def:asymex_fib_anomaly_nim, thm:asymex_fib_anomaly_fusion_algebra,
+        cor:asym_action_tensors}
+    There is a pair of normal matrix product state tensors of positive
+    bond dimension, with periodic vectors $\Psi_1,\Psi_\tau$, realizing the
+    all-$\tau$ product state and its image under $O_\tau$
+    (Corollary~\ref{cor:asym_action_tensors}), such that at every positive
+    length $L$ the periodic operator of the block $a$ carries $\Psi_s$ to
+    the combination prescribed by the structure constants,
+    \begin{align}
+        O_a\Psi_s & =\sum_tN_{as}^t\Psi_t,
+        \label{eq:asymex_fib_anomaly_nim_rep}
+    \end{align}
+    that is, $O_\tau\Psi_1=\Psi_\tau$, $O_\tau\Psi_\tau=\Psi_1+\Psi_\tau$,
+    and $O_1$ fixes both $\Psi_1$ and $\Psi_\tau$. The multiplicities are
+    the rows of the fusion matrix (\ref{eq:asymex_fib_anomaly_matrix}).
+    \begin{center}
+        % Formula/source: the sitewise fusion tensors underlying
+        % (\ref{eq:asymex_fib_anomaly_nim_rep}), specializing
+        % Theorem~thm:asymex_fib_fusion_tensors to the slots s=1,tau; the
+        % remainder of the compression of Theorem~thm:asymex_fib_compression
+        % vanishes identically, so the intertwining identities below hold
+        % exactly, with no residual term.
+        % Ink-to-index map: B is the stacked source tensor of
+        % Definition~def:asymex_fib, with physical leg i; V_s is the
+        % column block of the adapted basis carrying the slot s, and W_s
+        % the matching row block of its inverse; C_s is the block of the
+        % target of label s.
+        % Contraction set: only the wire joining B (or C_s) to V_s (or
+        % W_s) is summed; no other index is contracted.
+        % Boundary signature: (virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0) on every wire.
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+            \tn[label pos=s, ports={90:physical:$i$}]{B} & \tn[skin=ring]{V_s}
+        \end{tenkz}
+        \quad $=$ \quad
+        \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+            \tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$i$}]{C_s}
+        \end{tenkz}
+        \\[2ex]
+        \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+            \tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$i$}]{B}
+        \end{tenkz}
+        \quad $=$ \quad
+        \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+            \tn[label pos=s, ports={90:physical:$i$}]{C_s} & \tn[skin=ring]{W_s}
+        \end{tenkz}
+    \end{center}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_fib_fusion_tensors}
+    The state $\Psi_1$ is the all-$\tau$ product state and $\Psi_\tau$ is
+    its image under the periodic operator of the $\tau$ block. The case
+    $a=\tau$ is the fusion-tensor identity of
+    Theorem~\ref{thm:asymex_fib_fusion_tensors} applied to the source
+    stacked square. The cases $a=1$ reduce, by an explicit compression
+    computation over $\Z[\sigma]$ analogous to
+    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra}, to the unit law
+    fixing each of $\Psi_1,\Psi_\tau$.
+\end{proof}
+
+\begin{theorem}[A nonzero length-independent eigenvalue is impossible]%
+    \label{thm:asymex_fib_anomaly_eigenvalue_zero}
+    \lean{FibonacciCompression.fibTau_eigenvalue_eq_zero}
+    \leanok
+    \uses{thm:asymex_fib_anomaly_fusion_algebra, cor:asym_action_tensors}
+    Let $A$ be a normal tensor of positive bond dimension, with periodic
+    vectors $\Psi_A$. If the periodic operator of the $\tau$ block acts on
+    $\Psi_A$ at every positive length by one length-independent scalar $c$,
+    $O_\tau\Psi_A=c\Psi_A$, then $c=0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Corollary~\ref{cor:asym_action_tensors}, applied to the action of
+    the $\tau$ block on $A$, $c$ is a nonnegative integer $m$. If $m\neq0$,
+    cancelling $m$ in the relation obtained by applying the unit law
+    $O_1O_\tau=O_\tau$ (Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra})
+    to $\Psi_A$ gives $O_1\Psi_A=\Psi_A$. The fusion rule
+    $O_\tau O_\tau=O_1+O_\tau$ applied to $\Psi_A$ then gives
+    $m^2\Psi_A=(m+1)\Psi_A$, so $m^2=m+1$ by injectivity of a
+    length-$(\ell+1)$ periodic vector of a normal tensor, where $\ell$ is
+    the injectivity length of $A$; no natural number satisfies this
+    equation, a contradiction. Hence $m=0$.
+\end{proof}
+
+\begin{theorem}[No normal matrix product state is Fibonacci symmetric]%
+    \label{thm:asymex_fib_anomaly_no_go}
+    \lean{FibonacciCompression.not_exists_normal_fibonacci_symmetric}
+    \leanok
+    \uses{thm:asymex_fib_anomaly_eigenvalue_zero, thm:asym_splitting,
+        cor:asym_anomaly_not_star}
+    There is no positive bond dimension $D$, normal tensor $A$ of bond
+    dimension $D$, and scalar $c$, such that at every positive length $L$
+    the periodic operators satisfy $O_1\Psi_A=\Psi_A$ and
+    $O_\tau\Psi_A=c\Psi_A$. Equivalently, no normal matrix product state of
+    positive bond dimension carries a one-dimensional representation of the
+    Fibonacci fusion algebra in which $O_1$ acts as the identity: the
+    lattice form of the absence of a fiber functor on the Fibonacci fusion
+    ring. The pair of normal states of
+    Theorem~\ref{thm:asymex_fib_anomaly_nim_rep} shows that two blocks
+    suffice, so the minimal number of blocks of a Fibonacci-symmetric
+    family of normal states is two.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If such $A$, $c$ existed, Theorem~\ref{thm:asymex_fib_anomaly_eigenvalue_zero}
+    would give $c=0$, so $O_\tau\Psi_A=0$; the fusion rule
+    $O_\tau O_\tau=O_1+O_\tau$ applied to $\Psi_A$ then gives
+    $0=O_1\Psi_A=\Psi_A$, contradicting that the periodic vector of a
+    normal tensor of positive bond dimension is nonzero.
+\end{proof}
