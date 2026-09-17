@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.GeneralizeDecide
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2
 
 /-!
@@ -64,8 +65,7 @@ def xXInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
   | _ => 0
 
 private theorem xX_int (b : Fin 16) : stackedInt xIntTensor xIntTensor b = xXInt b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 theorem xXStacked_eq (a : Fin 16) : xXStacked a = complexOfInt (xXInt a) := by
   rw [← xX_int]
@@ -164,8 +164,7 @@ def xXyInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
   | _ => 0
 
 private theorem xXy_int (b : Fin 16) : stackedInt xIntTensor xyIntTensor b = xXyInt b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 theorem xXyStacked_eq (a : Fin 16) : xXyStacked a = complexOfInt (xXyInt a) := by
   rw [← xXy_int]
@@ -261,8 +260,7 @@ def xyXInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
   | _ => 0
 
 private theorem xyX_int (b : Fin 16) : stackedInt xyIntTensor xIntTensor b = xyXInt b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 theorem xyXStacked_eq (a : Fin 16) : xyXStacked a = complexOfInt (xyXInt a) := by
   rw [← xyX_int]
@@ -357,8 +355,7 @@ def xyXyInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
   | _ => 0
 
 private theorem xyXy_int (b : Fin 16) : stackedInt xyIntTensor xyIntTensor b = xyXyInt b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 theorem xyXyStacked_eq (a : Fin 16) : xyXyStacked a = complexOfInt (xyXyInt a) := by
   rw [← xyXy_int]

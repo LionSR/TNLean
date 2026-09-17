@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.GeneralizeDecide
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2
 
 /-!
@@ -80,44 +81,34 @@ def xEStacked : MPSTensor 16 2 := (MPOTensor.mulTensor xTensor eTensor).toMPSTen
 def xyEStacked : MPSTensor 16 2 := (MPOTensor.mulTensor xyTensor eTensor).toMPSTensor
 
 private theorem eE_int (b : Fin 16) : stackedInt eIntTensor eIntTensor b = eIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem eY_int (b : Fin 16) : stackedInt eIntTensor yIntTensor b = yIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem eX_int (b : Fin 16) : stackedInt eIntTensor xIntTensor b = xIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem eXy_int (b : Fin 16) : stackedInt eIntTensor xyIntTensor b = xyIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem yE_int (b : Fin 16) : stackedInt yIntTensor eIntTensor b = yIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem yY_int (b : Fin 16) : stackedInt yIntTensor yIntTensor b = eIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem yX_int (b : Fin 16) : stackedInt yIntTensor xIntTensor b = xyIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem yXy_int (b : Fin 16) : stackedInt yIntTensor xyIntTensor b = xIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem xE_int (b : Fin 16) : stackedInt xIntTensor eIntTensor b = xIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem xyE_int (b : Fin 16) : stackedInt xyIntTensor eIntTensor b = xyIntMPS b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 /-- **`U_e U_e`**: the stacked tensor is the tensor of `U_e` (data file, Section 5). -/
 theorem eEStacked_eq (a : Fin 16) : eEStacked a = eMPS a := by
@@ -240,12 +231,10 @@ def xyYInt : Fin 16 → Matrix (Fin 2) (Fin 2) ℤ
   | _ => 0
 
 private theorem xY_int (b : Fin 16) : stackedInt xIntTensor yIntTensor b = xYInt b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 private theorem xyY_int (b : Fin 16) : stackedInt xyIntTensor yIntTensor b = xyYInt b := by
-  revert b
-  decide +kernel
+  revert_decide_kernel b
 
 theorem xYStacked_eq (a : Fin 16) : xYStacked a = complexOfInt (xYInt a) := by
   rw [← xY_int]

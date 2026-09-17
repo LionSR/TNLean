@@ -36,11 +36,14 @@ integer gauges, the vanishing remainders of the twelve split blocks and the non-
 extensions of the four blocks with two factors from `{x, xy}`, is the content of the per-pair
 data of the companion files.
 
+The word-trace identities that turn each pair-block compression datum into a periodic fusion
+rule (`MPOTensor.mpo_eq_of_trace_evalWord_toMPSTensor`,
+`MPOTensor.mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor`, and
+`MPSTensor.trace_evalWord_smul`) are general MPO/MPS infrastructure with no reference to this
+example, and live in `TNLean.MPS.MPDO.OperatorProduct`.
+
 ## Main results
 
-* `MPOTensor.mpo_eq_of_trace_evalWord_toMPSTensor`,
-  `MPOTensor.mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor`: word-trace identities over the
-  pair alphabet determine the periodic operators.
 * `Z2Z2Condensation.mpo_x_mul_y`, ...: the sixteen periodic fusion rules.
 * `Z2Z2Condensation.mpo_condensationTensor_sq`: `A_L² = (3 + (-1)^L) A_L`.
 * `Z2Z2Condensation.condensation_quarter_sq_eq_self_iff_even`: `A_L / 4` is a projector if and
@@ -54,58 +57,6 @@ data of the companion files.
 noncomputable section
 
 open scoped Matrix
-
-/-! ### Word traces over the pair alphabet determine the periodic operators -/
-
-namespace MPOTensor
-
-variable {d D D₁ D₂ : ℕ}
-
-/-- The trace of a word of the pair-alphabet view of a tensor is a matrix entry of its periodic
-operator. -/
-theorem trace_evalWord_toMPSTensor (M : MPOTensor d D) (w : List (Fin (d * d))) :
-    Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
-      mpo M w.length (fun k => (w.get k).divNat) (fun k => (w.get k).modNat) := by
-  conv_lhs => rw [← List.ofFn_get w]
-  rw [evalWord_toMPSTensor_ofFn]
-  rfl
-
-/-- Two tensors with the same positive-length word traces over the pair alphabet have the same
-periodic operators. -/
-theorem mpo_eq_of_trace_evalWord_toMPSTensor {M : MPOTensor d D₁} {N : MPOTensor d D₂}
-    (h : ∀ w : List (Fin (d * d)), w ≠ [] →
-      Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
-        Matrix.trace (Kraus.evalWord N.toMPSTensor w))
-    {L : ℕ} (hL : 0 < L) : mpo M L = mpo N L := by
-  ext σ τ
-  have hw := h (List.ofFn fun k => finProdFinEquiv (σ k, τ k))
-    (by rw [Ne, List.ofFn_eq_nil_iff]; omega)
-  rw [evalWord_toMPSTensor_pairConfig, evalWord_toMPSTensor_pairConfig] at hw
-  exact hw
-
-/-- A tensor whose positive-length word traces over the pair alphabet are those of a second
-tensor weighted by `c^L` has `c^L` times the periodic operator of the second tensor. -/
-theorem mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor {M : MPOTensor d D₁} {N : MPOTensor d D₂}
-    (c : ℂ) (h : ∀ w : List (Fin (d * d)), w ≠ [] →
-      Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
-        c ^ w.length * Matrix.trace (Kraus.evalWord N.toMPSTensor w))
-    {L : ℕ} (hL : 0 < L) : mpo M L = c ^ L • mpo N L := by
-  ext σ τ
-  have hw := h (List.ofFn fun k => finProdFinEquiv (σ k, τ k))
-    (by rw [Ne, List.ofFn_eq_nil_iff]; omega)
-  rw [evalWord_toMPSTensor_pairConfig, evalWord_toMPSTensor_pairConfig, List.length_ofFn] at hw
-  simpa only [mpo_apply, mpoMatrixEntry, Matrix.smul_apply, smul_eq_mul] using hw
-
-end MPOTensor
-
-namespace MPSTensor
-
-/-- The trace of a word of a rescaled tensor. -/
-theorem trace_evalWord_smul {d D : ℕ} (c : ℂ) (A : MPSTensor d D) (w : List (Fin d)) :
-    Matrix.trace (Kraus.evalWord (c • A) w) = c ^ w.length * Matrix.trace (Kraus.evalWord A w) := by
-  rw [show c • A = fun i => c • A i from rfl, Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
-
-end MPSTensor
 
 namespace Z2Z2Condensation
 
