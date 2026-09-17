@@ -41,6 +41,29 @@ composition series produces a labelled invariant flag
 (\S\ref{sec:asym_flag}), which a block-triangular coordinate change turns
 into the compression statement (\S\ref{sec:asym_main}).
 
+\begin{center}
+    % Formula: the periodic trace tr(B^w), generating the periodic
+    % vector V^{(N)}(B) compared against the target family throughout
+    % this chapter.
+    % Source: chapter introduction; the same picture as
+    % Definition~\ref{def:periodic_mps_vector} (Chapter~\ref{ch:mps}),
+    % drawn here for the arbitrary tensor B of the compression theorem.
+    % Ink-to-index map: each node is the same local tensor B; the upper
+    % legs carry the letters i_1,...,i_N of the word w, and the
+    % ellipsis and brace make the N-site ring schematic.
+    % Contraction set: the horizontal virtual legs are contracted around
+    % the ring, closing the trace; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$i_1$}]{B} &
+        \tn[label pos=135]{B} & \tn[skin=dots]{} &
+        \tn[label pos=135, ports={90:physical:$i_N$}]{B}
+        \tnmark[form=bracket]{(1,1) .. (1,4)}{$N\text{ sites}$}
+    \end{tenkz}
+\end{center}
+
 \section{Triangular word products}%
 \label{sec:asym_triangular}
 
@@ -516,6 +539,50 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \end{enumerate}
 \end{theorem}
 
+\begin{center}
+    % Formula: clause (v), W_sB^wV_s=C_s^w for every nonempty word w.
+    % Source: clauses (iv)-(v) of Theorem~\ref{thm:asym_multiblock}.
+    % Ink-to-index map: the two end rings are the compression maps $W_s$
+    % (left) and $V_s$ (right); the interior nodes are copies of $B$,
+    % with upper legs carrying the letters of $w$.
+    % Contraction set: every horizontal virtual bond between consecutive
+    % copies of $B$ and between each $B$ and its adjacent ring is
+    % contracted; the physical legs and the two outer virtual legs (the
+    % $D_s$-dimensional indices of the matrix $C_s^w$) remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=2 | physical-down=0) for the finite schematic shown,
+    % with the two explicit lettered nodes carrying the drawn physical
+    % ports.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=5, west=open, east=open]
+        \tn[skin=ring]{W_s} &
+        \tn[label pos=s, ports={90:physical:$i_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$i_N$}]{B} &
+        \tn[skin=ring]{V_s}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$i_1$}]{C_s} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$i_N$}]{C_s}
+    \end{tenkz}
+    \\[2ex]
+    % Formula: clause (iv), W_sV_t=\id_{D_s} if s=t and 0 otherwise.
+    % Source: clause (iv) of Theorem~\ref{thm:asym_multiblock}.
+    % Ink-to-index map: the two rings are the compression maps $W_s$ and
+    % $V_t$, joined with no intervening tensor; the two outer virtual
+    % legs are the $D_s$- and $D_t$-dimensional indices of the matrix
+    % $W_sV_t$.
+    % Contraction set: the single virtual bond between the two rings.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=0 | physical-down=0).
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_s} & \tn[skin=ring]{V_t}
+    \end{tenkz}
+    \quad $=\;\delta_{st}\,\id$
+\end{center}
+
 \begin{proof}
     \leanok
     \uses{thm:asym_flag_theorem, lem:asym_composition_gauge,
@@ -700,6 +767,40 @@ already determines an identity between their periodic operators.
     sectors are removed is nilpotent.
 \end{theorem}
 
+\begin{center}
+    % Formula: B^{ij}=\sum_mM_\alpha^{im}\otimes M_\beta^{mj}, the
+    % stacked product defined in the paragraph preceding this theorem.
+    % Source: \S\ref{sec:asym_mpo_product}, definition of the stacked
+    % product.
+    % Ink-to-index map: the upper row is $M_\alpha$ with physical legs
+    % $i$, the lower row is $M_\beta$ with physical legs $j$; the shared
+    % vertical pairleg at each site is the summed index $m$.
+    % Contraction set: the vertical pairlegs (index $m$) at every site
+    % and the horizontal virtual bonds within each row; the physical
+    % legs $(i,j)$ remain open, read together as one letter of the pair
+    % alphabet.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{M_\alpha} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{M_\alpha} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical}]{M_\alpha} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{M_\beta} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{M_\beta} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_N$}]{M_\beta}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical:$j_N$}]{B}
+    \end{tenkz}
+\end{center}
+
 \begin{proof}
     \leanok
     \uses{thm:asym_weighted_compression}
@@ -752,6 +853,33 @@ already determines an identity between their periodic operators.
     tensors, then $T\cdot A_x$ admits a multi-block compression onto the
     weighted blocks $\mu_sA_s$.
 \end{corollary}
+
+\begin{center}
+    % Formula: (T\cdot A_x)^i=\sum_jT^{ij}\otimes A_x^j, the tensor
+    % defined in the statement of this corollary, contracted into its
+    % periodic state.
+    % Source: Corollary~\ref{cor:asym_action_tensors}.
+    % Ink-to-index map: the upper row is the operator tensor $T$ with
+    % physical legs $i$, the lower row is the state tensor $A_x$; the
+    % shared vertical pairleg at each site is the summed index $j$.
+    % Contraction set: the vertical pairlegs (index $j$) at every site
+    % and the horizontal virtual bonds within each row, both closed by
+    % the periodic trace; only the upper physical legs of $T$ remain
+    % open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0).
+    \tenkzkernel
+    \begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$}]{T} &
+        \tn[skin=mpo, ports={90:physical:$i_2$}]{T} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$}]{T} \\
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_x} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_x} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_x}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}
     \leanok
@@ -855,6 +983,34 @@ Theorem~\ref{thm:asym_multiblock} do split into sitewise intertwiners.
     $W_sB^i=C_s^iW_s$ for every letter and every slot.
 \end{corollary}
 
+\begin{center}
+    % Formula: B^iV_s=V_sC_s^i and W_sB^i=C_s^iW_s for every letter i.
+    % Source: Corollary~\ref{cor:asym_fusion_tensors_star}.
+    % Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
+    % the square node is $B$ or its target $C_s$.
+    % Contraction set: the single virtual bond joining the ring to the
+    % square node in each pair; the physical leg $i$ and the two outer
+    % virtual legs remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$i$}]{B} & \tn[skin=ring]{V_s}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$i$}]{C_s}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$i$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$i$}]{C_s} & \tn[skin=ring]{W_s}
+    \end{tenkz}
+\end{center}
+
 \begin{proof}
     \leanok
     \uses{thm:asym_splitting}
@@ -921,6 +1077,38 @@ Theorem~\ref{thm:asym_multiblock} do split into sitewise intertwiners.
     \end{align}
     In particular $D_B\geq D_A$.
 \end{corollary}
+
+\begin{center}
+    % Formula: WB^{i_1}\cdots B^{i_N}V=A^{i_1}\cdots A^{i_N}
+    % (\ref{eq:asym_single_block_compression}).
+    % Source: Corollary~\ref{cor:asym_single_block}.
+    % Ink-to-index map: the two rings are the single compression maps
+    % $W$ (left) and $V$ (right), the special case of $W_s$, $V_s$ at
+    % the unique slot; the interior nodes are copies of $B$.
+    % Contraction set: every horizontal virtual bond between consecutive
+    % copies of $B$ and between each $B$ and its adjacent ring; the
+    % physical legs and the two outer virtual legs (the
+    % $D_A$-dimensional indices of the matrix $A^{i_1}\cdots A^{i_N}$)
+    % remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=2 | physical-down=0) for the finite schematic shown,
+    % with the two explicit lettered nodes carrying the drawn physical
+    % ports.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=5, west=open, east=open]
+        \tn[skin=ring]{W} &
+        \tn[label pos=s, ports={90:physical:$i_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$i_N$}]{B} &
+        \tn[skin=ring]{V}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$i_1$}]{A} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$i_N$}]{A}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}
     \leanok
