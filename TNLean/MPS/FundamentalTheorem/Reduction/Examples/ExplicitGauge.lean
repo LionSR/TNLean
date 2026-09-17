@@ -72,6 +72,11 @@ theorem complexOfInt_neg {m n : Type*} (X : Matrix m n ℤ) :
   ext i j
   simp only [complexOfInt_apply, Matrix.neg_apply, Int.cast_neg]
 
+/-- The coercion of the zero matrix is the zero matrix. -/
+theorem complexOfInt_zero {m n : Type*} : complexOfInt (0 : Matrix m n ℤ) = 0 := by
+  ext i j
+  simp [complexOfInt]
+
 theorem complexOfInt_add {m n : Type*} (X Y : Matrix m n ℤ) :
     complexOfInt (X + Y) = complexOfInt X + complexOfInt Y := by
   ext i j

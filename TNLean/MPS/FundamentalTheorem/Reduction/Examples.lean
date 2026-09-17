@@ -8,6 +8,10 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.Reduction.Examples
 
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Defect
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2NonSplit
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Split
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXPlusIdentity
@@ -31,6 +35,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingWeightedTwist
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannier
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannierAction
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.OneLabelCandidate
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.OneSlotGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ParityGraded
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RepeatedBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge

@@ -100,6 +100,79 @@ coordinates by slots and positions inside slots.
     leaves one row of $G$ and one column of $G^{-1}$.
 \end{proof}
 
+\begin{definition}[One-slot compression data]%
+    \label{def:asymex_one_slot}
+    \lean{MPSTensor.stackedInt, MPSTensor.oneSlot, MPSTensor.oneSlotMem,
+        MPSTensor.MultiBlockCompression.ofConjMatrix,
+        MPSTensor.MultiBlockCompression.ofConjInt,
+        MPSTensor.MultiBlockCompression.ofEq,
+        MPSTensor.MultiBlockCompression.ofScalarFlagFour}
+    \leanok
+    \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
+    For a stacked product of two integer matrix product operator tensors,
+    read over the pair alphabet, the letter at $a=do+i$ is
+    $(M\mathbin{\cdot}N)^{oi}$. A \emph{one-slot compression datum} for a
+    tensor $B$ onto a single target $C$ is the data of
+    Theorem~\ref{thm:asym_multiblock} for the one-element slot set: an
+    explicit gauge $(\tau,G)$ conjugating $B$ into a matrix that is block
+    upper triangular for a flag with $C$ at one diagonal position. Two
+    shapes recur in the examples below: a conjugation $GB^iG^{-1}=C^i$ for
+    an invertible $G$ gives such a datum with no zero slots ($z=0$); and,
+    for a four-dimensional $B$ and a one-dimensional $C$, an integer gauge
+    sending every letter to a matrix with $C$ at the third diagonal
+    position of a four-step flag and zero at the other three gives such a
+    datum with three zero slots ($z=3$).
+\end{definition}
+
+\begin{theorem}[The remainder of a conjugate datum vanishes; word traces
+        of a one-slot datum]%
+    \label{thm:asymex_one_slot}
+    \lean{MPSTensor.MultiBlockCompression.remainder_ofConjMatrix,
+        MPSTensor.MultiBlockCompression.remainder_ofEq,
+        MPSTensor.MultiBlockCompression.remainder_ofConjInt,
+        MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot,
+        MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot_smul}
+    \leanok
+    \uses{def:asymex_one_slot}
+    The remainder of a conjugate one-slot datum vanishes identically: the
+    compression is an exact change of coordinates. For every one-slot
+    datum, the trace of every nonempty word of $B$ equals the trace of the
+    corresponding word of $C$, or, if the target is carried with a scalar
+    weight $c$, that power of $c$ times the trace of the word of the
+    unweighted target.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
+    Immediate from Theorem~\ref{thm:asymex_explicit_gauge} and
+    Proposition~\ref{prop:asym_compression_trace}, specialized to a single
+    slot.
+\end{proof}
+
+\begin{theorem}[Integer certificates for normality and for vanishing
+        sitewise intertwiners]%
+    \label{thm:asymex_int_certificates}
+    \lean{MPSTensor.isNBlkInjective_two_of_int,
+        MPSTensor.right_intertwiner_eq_zero_of_int,
+        MPSTensor.left_intertwiner_eq_zero_of_int}
+    \leanok
+    \uses{def:normal}
+    If every matrix unit is, up to a common nonzero integer factor, an
+    integer combination of length-two words of an integer tensor, the
+    length-two words span the full matrix algebra. If the rows,
+    respectively columns, of the letters occurring in a sitewise
+    intertwiner system form an integer matrix with an integer left inverse
+    up to a nonzero factor, the only solution of that system is zero.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Clearing the nonzero integer factor by scalar division after coercion
+    to $\C$ reduces each statement to the corresponding identity between
+    integer matrices, a finite verification.
+\end{proof}
+
 \section{Hidden symmetry-broken sectors}%
 \label{sec:asymex_ghz}
 

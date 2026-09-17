@@ -29,6 +29,30 @@ is the original bond dimension, and the tensor product of physical spaces in
 the isometry statement of Theorem IV.13(iii) (lines 986--993) is the
 Kronecker product of the bond spaces in the vertical reading.
 
+Finally, this file records that the trace of a nonempty word of the
+doubled-index (pair-alphabet) view of an MPO tensor is a matrix entry of its
+periodic operator, so that a word-trace identity between two tensors at
+every positive length determines an operator identity between the two
+periodic operator families. This is the tool behind fusion identities such
+as `U_g U_h = λ(g,h)^L U_{gh}` for a periodic operator family indexed by a
+group, and is general MPO/MPS infrastructure with no reference to any
+particular example.
+
+## Main definitions
+
+* `MPOTensor.mulTensor`: the product tensor.
+
+## Main results
+
+* `MPOTensor.mpo_mulTensor`: multiplicativity of the operator family.
+* `MPOTensor.trace_evalWord_toMPSTensor`: the trace of a pair-alphabet word
+  is a matrix entry of the periodic operator.
+* `MPOTensor.mpo_eq_of_trace_evalWord_toMPSTensor`,
+  `MPOTensor.mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor`: word-trace
+  identities at every positive length determine (rescaled) operator
+  identities.
+* `MPSTensor.trace_evalWord_smul`: the word trace of a rescaled MPS tensor.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -244,6 +268,43 @@ theorem mpo_mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂) (L : ℕ) :
   rw [evalWord_mulTensor, Matrix.trace_submatrix_equiv, Matrix.trace_sum]
   simp_rw [Matrix.trace_kronecker]
 
+/-! ### Word traces determine the periodic operator -/
+
+/-- The trace of a word of the pair-alphabet view of a tensor is a matrix entry of its periodic
+operator. -/
+theorem trace_evalWord_toMPSTensor (M : MPOTensor d D) (w : List (Fin (d * d))) :
+    Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
+      mpo M w.length (fun k => (w.get k).divNat) (fun k => (w.get k).modNat) := by
+  conv_lhs => rw [← List.ofFn_get w]
+  rw [evalWord_toMPSTensor_ofFn]
+  rfl
+
+/-- Two tensors with the same positive-length word traces over the pair alphabet have the same
+periodic operators. -/
+theorem mpo_eq_of_trace_evalWord_toMPSTensor {M : MPOTensor d D₁} {N : MPOTensor d D₂}
+    (h : ∀ w : List (Fin (d * d)), w ≠ [] →
+      Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
+        Matrix.trace (Kraus.evalWord N.toMPSTensor w))
+    {L : ℕ} (hL : 0 < L) : mpo M L = mpo N L := by
+  ext σ τ
+  have hw := h (List.ofFn fun k => finProdFinEquiv (σ k, τ k))
+    (by rw [Ne, List.ofFn_eq_nil_iff]; omega)
+  rw [evalWord_toMPSTensor_pairConfig, evalWord_toMPSTensor_pairConfig] at hw
+  exact hw
+
+/-- A tensor whose positive-length word traces over the pair alphabet are those of a second
+tensor weighted by `c^L` has `c^L` times the periodic operator of the second tensor. -/
+theorem mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor {M : MPOTensor d D₁} {N : MPOTensor d D₂}
+    (c : ℂ) (h : ∀ w : List (Fin (d * d)), w ≠ [] →
+      Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
+        c ^ w.length * Matrix.trace (Kraus.evalWord N.toMPSTensor w))
+    {L : ℕ} (hL : 0 < L) : mpo M L = c ^ L • mpo N L := by
+  ext σ τ
+  have hw := h (List.ofFn fun k => finProdFinEquiv (σ k, τ k))
+    (by rw [Ne, List.ofFn_eq_nil_iff]; omega)
+  rw [evalWord_toMPSTensor_pairConfig, evalWord_toMPSTensor_pairConfig, List.length_ofFn] at hw
+  simpa only [mpo_apply, mpoMatrixEntry, Matrix.smul_apply, smul_eq_mul] using hw
+
 /-! ### Word products of conjugated and block-diagonal letters -/
 
 /-- The product of isometrically conjugated matrices telescopes: for a
@@ -306,3 +367,12 @@ theorem listProd_blockDiagonal'_kronecker {ι : Type*} [Fintype ι]
     rw [List.ofFn_succ (f := G γ), List.prod_cons]
 
 end MPOTensor
+
+namespace MPSTensor
+
+/-- The trace of a word of a rescaled tensor. -/
+theorem trace_evalWord_smul {d D : ℕ} (c : ℂ) (A : MPSTensor d D) (w : List (Fin d)) :
+    Matrix.trace (Kraus.evalWord (c • A) w) = c ^ w.length * Matrix.trace (Kraus.evalWord A w) := by
+  rw [show c • A = fun i => c • A i from rfl, Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
+
+end MPSTensor

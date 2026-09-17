@@ -1089,6 +1089,35 @@ abstracted — record why, so it is not re-proposed).
   sites now resolve the shared name through `open MPSTensor`, for a net loss of
   about thirty lines.
 
+### stacked-letter lookup-table identification by kernel decision — promoted
+- **Pattern:** identify the pair-alphabet stacked-letter function of two
+  integer tensors, `stackedInt A B`, with an explicit sixteen-entry lookup
+  table `C`, for a private `Fin 16`-indexed theorem `stackedInt A B b = C b`,
+  by reverting the index and deciding the resulting closed proposition by
+  kernel reduction:
+
+  ```lean
+  revert b
+  decide +kernel
+  ```
+
+- **Seen:** sixteen occurrences across two files (2026-09-17): `xX_int`,
+  `xXy_int`, `xyX_int`, `xyXy_int` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/AnomalousCondensationZ2Z2NonSplit.lean`,
+  and `eE_int`, `eY_int`, `eX_int`, `eXy_int`, `yE_int`, `yY_int`, `yX_int`,
+  `yXy_int`, `xE_int`, `xyE_int`, `xY_int`, `xyY_int` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/AnomalousCondensationZ2Z2Split.lean`.
+  Each theorem differs only in its statement, never in its proof.
+- **Abstraction:** the `revert_decide_kernel x₁, …, xₙ` tactic macro, in
+  `TNLean/Algebra/GeneralizeDecide.lean` beside the sibling `generalize_decide`
+  macro it is modeled on.
+- **Notes:** all sixteen call sites now read `revert_decide_kernel b`. The
+  macro is deliberately narrower than `generalize_decide`: it reverts a
+  named local hypothesis already in context (a bound table index) rather
+  than generalizing a term occurring inside the goal, and it decides with
+  the kernel evaluator, needed here because plain `decide` elaboration is
+  slow on the sixteen-entry tables.
+
 ## Completed refactors
 
 ### Appending a tuple endpoint under `List.ofFn`
