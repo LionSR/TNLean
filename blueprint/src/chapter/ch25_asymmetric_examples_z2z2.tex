@@ -350,7 +350,18 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
     slots, an explicit unimodular integer gauge, and a remainder that
     vanishes on every word of length at least four (the bound $1+z=4$ of
     Theorem~\ref{thm:asym_multiblock}); no shorter uniform bound is
-    claimed or needed.
+    claimed or needed. For the block $(x,x)$, whose target is
+    $\lambda(x,x)M_e=\delta$, the compression pair is
+    \begin{align}
+        W & =(0,0,0,1),
+          &
+        V & =(1,-1,-1,1)^{\mathsf T},
+        \notag
+    \end{align}
+    with $WV=1$ and $WB^{ij}V=\delta^{ij}$ for every letter, and the
+    remainder $R^{ij}=B^{ij}-V\delta^{ij}W$ satisfies
+    $R^{i_1j_1}R^{i_2j_2}R^{i_3j_3}R^{i_4j_4}=0$; the other three blocks
+    are worked out by the same construction, each with its own gauge.
 \end{theorem}
 
 \begin{proof}
@@ -391,7 +402,13 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
     a rank-one matrix with an explicit integer kernel and image;
     comparing the four coordinates of the two equations at those two
     letters forces every coordinate of $v$, respectively of $u$, to
-    vanish.
+    vanish. For the block $(x,x)$, whose nonzero letters are $(0,0)$ and
+    $(1,1)$, comparing the four coordinates of $B^{ij}v=v$ at $(0,0)$
+    gives $v_0=v_1=v_2=v_3$, and at $(1,1)$ gives $v_3=v_0$ and
+    $v_1=-v_3$, forcing $v_0=v_1=v_2=v_3=0$; the transposed comparison at
+    $(0,0)$ gives $u_1=u_2=u_3=0$, and at $(1,1)$ gives $u_0=0$. The
+    other three blocks eliminate coordinates in the same way, through
+    their own rank-one letters.
 \end{proof}
 
 \begin{remark}[The anomaly as a failure of conjugate closure, four more
