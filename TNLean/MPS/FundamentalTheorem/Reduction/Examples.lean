@@ -12,5 +12,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXPlusIdentity
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXSquare
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Fibonacci
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RepeatedBlock
