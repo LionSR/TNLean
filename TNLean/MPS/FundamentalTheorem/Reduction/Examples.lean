@@ -12,6 +12,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXPlusIdentity
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXSquare
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXTensor
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXUnitary
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Fibonacci
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciAction
@@ -20,6 +21,14 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciUnit
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingGauge
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorOne
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorPsi
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorSigmaAbelian
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorSigmaSigma
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingSectorAction
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingTensors
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingWeightedTwist
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannier
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannierAction
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.OneLabelCandidate
@@ -27,3 +36,8 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ParityGraded
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RepeatedBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimer
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairOneOne
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairOneZero
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairZeroOne
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairs
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Zsqrt2Ring
