@@ -8,6 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
 
+import TNLean.Algebra.BlockDiagonalGauge
+import TNLean.Algebra.BlockTriangularWord
 import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.CircleCohomology
@@ -28,12 +30,14 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupUnitaryAverage
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.FixedPointFreeInvolutionSign
+import TNLean.Algebra.FlagBlockTriangular
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
 import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
+import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListOfFn
@@ -60,8 +64,11 @@ import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerTransition
+import TNLean.Algebra.StarClosedSemisimple
+import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SwapKronecker
 import TNLean.Algebra.SwapMatrix
+import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TwistedRegularRepresentation
 import TNLean.Algebra.UnitaryAdjointKronecker
 import TNLean.Algebra.UnitaryCompletionClass
@@ -71,3 +78,4 @@ import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
 import TNLean.Algebra.UnitaryKronecker
 import TNLean.Algebra.UnitaryKroneckerComparison
+import TNLean.Algebra.WordAlgebra

@@ -160,11 +160,11 @@ equivalence.
 Source context: arXiv:1606.00608, the blocking and physical-basis
 identifications used at lines 317--345 and in Appendix C.4, lines 1951--1956. -/
 theorem linearIndependent_mpvState_of_configEquiv
-    {d₁ d₂ r N₁ N₂ : ℕ} {dim : Fin r → ℕ}
+    {d₁ d₂ N₁ N₂ : ℕ} {ι : Type*} {dim : ι → ℕ}
     (e : Cfg d₁ N₁ ≃ Cfg d₂ N₂)
-    (A : (j : Fin r) → MPSTensor d₁ (dim j))
-    (B : (j : Fin r) → MPSTensor d₂ (dim j))
-    (hAB : ∀ (j : Fin r) (σ : Cfg d₂ N₂),
+    (A : (j : ι) → MPSTensor d₁ (dim j))
+    (B : (j : ι) → MPSTensor d₂ (dim j))
+    (hAB : ∀ (j : ι) (σ : Cfg d₂ N₂),
       mpv (A j) (e.symm σ) = mpv (B j) σ)
     (hLI : LinearIndependent ℂ (fun j ↦ mpvState (B j) N₂)) :
     LinearIndependent ℂ (fun j ↦ mpvState (A j) N₁) := by
@@ -172,7 +172,7 @@ theorem linearIndependent_mpvState_of_configEquiv
     (EuclideanSpace.equiv (Cfg d₁ N₁) ℂ).toLinearEquiv |>.trans
       (LinearEquiv.piCongrLeft' ℂ (fun _ : Cfg d₁ N₁ ↦ ℂ) e) |>.trans
       (EuclideanSpace.equiv (Cfg d₂ N₂) ℂ).symm.toLinearEquiv
-  have hF : ∀ j : Fin r, F (mpvState (A j) N₁) = mpvState (B j) N₂ := by
+  have hF : ∀ j : ι, F (mpvState (A j) N₁) = mpvState (B j) N₂ := by
     intro j
     ext σ
     exact hAB j σ

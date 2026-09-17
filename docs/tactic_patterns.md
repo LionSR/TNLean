@@ -1022,6 +1022,29 @@ abstracted — record why, so it is not re-proposed).
   gauge half to identify the local MPS spaces of a tensor and of its
   normalized representative.
 
+### bond-space product of integer tensors — promoted
+- **Pattern:** an example defines the bond-space product of two integer matrix
+  product operator tensors,
+  `(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}` in the bond order of `finProdFinEquiv`,
+  and then reproves that it commutes with the entrywise coercion of integer
+  matrices, so that a stacked product tensor over the complexes reduces to a
+  decidable identity between integer matrices.
+- **Seen:** three occurrences (2026-09-17): a public copy in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, a private
+  copy in `TNLean/MPS/FundamentalTheorem/Reduction/Examples/KramersWannier.lean`,
+  and a third needed by the renormalization fixed points of
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/StackedPairGauge.lean`.
+- **Abstraction:** `MPSTensor.mulIntTensor` with
+  `MPSTensor.mulTensor_complexOfInt` and its rescaled form
+  `MPSTensor.mulTensor_smul_complexOfInt`, in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/ExplicitGauge.lean`
+  beside the entrywise coercion they belong to.
+- **Notes:** the rescaled form is what the P6 fixed points need, since their
+  tensors are integer matrices divided by a common denominator; the unscaled
+  form is the instance at one. Both former copies were deleted and their call
+  sites now resolve the shared name through `open MPSTensor`, for a net loss of
+  about thirty lines.
+
 ## Completed refactors
 
 ### Appending a tuple endpoint under `List.ofFn`
@@ -1755,6 +1778,34 @@ abstracted — record why, so it is not re-proposed).
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
+
+### integer-matrix verification of an explicit compression datum — promoted
+- **Pattern:** define every matrix of a worked example as the entrywise
+  coercion of an integer matrix, push the coercion through the bond-space
+  product and through conjugation by the gauge, and discharge the resulting
+  finite identity with `decide` on integer matrices.
+
+  ```lean
+  rw [gauge_def, conjMatrix_gaugeOfMatrix, tensor_eq, ← complexOfInt_mul,
+    ← complexOfInt_mul, conj_int]
+  ```
+- **Seen:** three occurrences across three files (2026-09-17):
+  `CZXCompression.czxSquare_eq` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`,
+  `CZXCompression.czxSquare_conjMatrix` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXSquare.lean`, and
+  `CZXCompression.czxPlusIdentity_conjMatrix` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXPlusIdentity.lean`.
+- **Abstraction:** the `MPSTensor.complexOfInt` coercion with
+  `complexOfInt_mul`, `complexOfInt_one` and `complexOfInt_neg`, together with
+  `MPSTensor.gaugeOfMatrix` and `MPSTensor.conjMatrix_gaugeOfMatrix`, in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/ExplicitGauge.lean`.
+- **Notes:** the payoff is that block triangularity, the matched diagonal
+  blocks and the vanishing zero blocks of a nine-dimensional example all become
+  decidable statements about integer matrices, verified in seconds; without the
+  coercion the same checks are complex-number `simp` calls over several
+  thousand products. The coercion is stated for arbitrary index types so that
+  rectangular gauge rows and columns are covered as well.
 
 ### nested finite-sum binder permutation — promoted
 - **Pattern:** permute the binders of three to five nested finite sums over
@@ -2492,6 +2543,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   (`TNLean/MPS/MPDO/CZXActionTensors.lean`) is not an occurrence: it obtains
   the all-word equation by absorbing the dressing into a nonempty acted word,
   not from per-letter data.
+
+### periodic vector of a doubled-index view at an arbitrary pair letter — candidate
+- **Pattern:** rewrite a periodic vector of `MPOTensor.toMPSTensor` at an arbitrary
+  configuration of the pair alphabet into a matrix entry of the periodic operator, by first
+  proving `(fun n => finProdFinEquiv ((ρ n).divNat, (ρ n).modNat)) = ρ` and then rewriting with
+  `MPSTensor.mpv_toMPSTensor_pairConfig`.
+- **Seen:** `MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_mulTensor` in
+  `TNLean/MPS/MPU/GroupRepresentation.lean`, `TNLean/MPS/MPU/DaggerInverse.lean`,
+  `TNLean/MPS/MPU/ReducedCanonicalRepresentative.lean`,
+  `TNLean/MPS/MPDO/NormalizedMPOProportionality.lean`,
+  `TNLean/MPS/MPDO/BNTLayerOrthogonality.lean`,
+  `TNLean/MPS/MPDO/FixedBondProductTensor.lean` (recorded 2026-09-17).
+- **Abstraction:** `MPOTensor.mpv_toMPSTensor` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean`, which states the identity for an
+  arbitrary pair configuration and needs no auxiliary equality of configurations.
+- **Notes:** above the rule of three, but the existing call sites all sit upstream of the
+  module where the general statement is first needed. Promoting means moving the statement
+  beside `MPOTensor.toMPSTensor` in `TNLean/MPS/MPDO/Defs.lean` and refactoring the six sites;
+  that rebuild is large enough to deserve its own change.
 
 ## Rejected
 

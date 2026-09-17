@@ -30,6 +30,7 @@ import TNLean.MPS.Core.ReductionResidual
 import TNLean.MPS.Core.ReductionResidual.Basic
 import TNLean.MPS.Core.ReductionUniqueness
 import TNLean.MPS.Core.RepeatedWord
+import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Core.TensorProduct
 import TNLean.MPS.Core.TensorProductSpan
