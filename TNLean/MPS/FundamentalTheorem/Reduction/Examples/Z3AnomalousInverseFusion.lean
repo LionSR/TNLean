@@ -294,8 +294,8 @@ theorem ud_evalWord_remainder_eq_zero (w : List (Fin 9)) (hw : 3 ≤ w.length) :
   rw [ud_remainder_eq, ud_remainder_eq, ud_remainder_eq, ← complexOfEisenstein_mul,
     ← complexOfEisenstein_mul, udRemainder_triple, complexOfEisenstein_zero]
 
-/-- The nilpotency order of the remainder of `U ⊗ U† → δ` is exactly three: the product of the
-remainder letters `0` and `4` does not vanish (data file §2.2). -/
+/-- The nilpotency order of the remainder of `U ⊗ U† → δ` is exactly three, as recorded in the data
+file (§2.2): the product of the remainder letters `0` and `4` does not vanish. -/
 theorem ud_remainder_mul_ne_zero :
     ud_compression.remainder 0 * ud_compression.remainder 4 ≠ 0 := by
   rw [ud_remainder_eq, ud_remainder_eq, ← complexOfEisenstein_mul]
@@ -558,8 +558,8 @@ theorem du_evalWord_remainder_eq_zero (w : List (Fin 9)) (hw : 3 ≤ w.length) :
   rw [du_remainder_eq, du_remainder_eq, du_remainder_eq, ← complexOfEisenstein_mul,
     ← complexOfEisenstein_mul, duRemainder_triple, complexOfEisenstein_zero]
 
-/-- The nilpotency order of the remainder of `U† ⊗ U → δ` is exactly three: the product of the
-remainder letters `0` and `0` does not vanish (data file §2.3). -/
+/-- The nilpotency order of the remainder of `U† ⊗ U → δ` is exactly three, as recorded in the data
+file (§2.3): the product of the remainder letters `0` and `0` does not vanish. -/
 theorem du_remainder_mul_ne_zero :
     du_compression.remainder 0 * du_compression.remainder 0 ≠ 0 := by
   rw [du_remainder_eq, ← complexOfEisenstein_mul]
