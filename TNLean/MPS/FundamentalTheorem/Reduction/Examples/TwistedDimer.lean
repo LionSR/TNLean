@@ -1,0 +1,332 @@
+/-
+Copyright (c) 2026 Sirui Lu. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Sirui Lu
+-/
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge
+import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+
+/-!
+# The graded quantum-dimer twist at `x = 7/8`
+
+A machine-checked instance of the multi-block asymmetric compression theorem
+(`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) for
+the two-sector graded quantum-dimer twist of the P6 work
+(`Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex`, the resolution
+`thm:p6-round44-z2`; strategy note
+`Notes/OpenProblemsTN/strategies/p6_round44_graded_dimer_twist.tex`; exact data in
+`Notes/OpenProblemsTN/checks/p6_examples_compression_data.md`, §1, verified by
+`checks/round44_p6_z2_twisted_dimer.py` at the rational point `x = 7/8`, `y = 1/8`).
+
+A horizontal bond index is a triple `(p, p', k)` of bits: the ket and bra of the left half-bond
+and a sector label. The vertical site space is `ℂ² ⊗ ℂ²`, and every letter of the sector-`f`
+tensor is a scaled matrix unit, the scale being `(1/2) C_k[p][p'] τ_k[f]` with
+`C_0 = x P₊ + y P₋`, `C_1 = x P₊ - y P₋`, `τ_0 = (1, 1)` and `τ_1 = (1, -1)`. Letters whose two
+bond indices carry different sector labels vanish.
+
+Fusing two sectors produces *two* weighted sectors: the stacked product of the tensors of `f`
+and `f'` compresses onto the tensor of `f + f'` with the weight `x/2 = 7/16` and onto the tensor
+of `f + f' + 1` with the weight `y/2 = 1/16`, with eight zero slots left over. The weights are
+the occupations of the two fusion channels, and the periodic coefficient
+`c^{(L)} = (7/16)^L + (1/16)^L` is their length-`L` power sum. Both targets are normal at
+blocking length one and are inequivalent, so the length dependence here comes from two genuinely
+different sectors rather than from a repeated one.
+
+The compression is carried out for the fusion of the zero sector with itself. The remaining
+three pairs of sectors satisfy the same identity, with the same gauge and the same weights, and
+are checked in the source script; they are omitted here only because each of them costs a
+separate exhaustive verification over the sixty-four letters.
+
+## Main definitions
+
+* `P6Compression.dimerM`: the sector-`f` tensor as a matrix product operator tensor.
+* `P6Compression.dimerTarget`: its view on the sixty-four-letter pair alphabet.
+* `P6Compression.dimerStacked`: the stacked product of two sectors, of bond dimension sixteen.
+
+## Main results
+
+* `P6Compression.dimerCompression`: the multi-block compression datum of Theorem 7.7 for the
+  fusion of the zero sector with itself.
+* `P6Compression.dimer_trace_evalWord`: the word-trace identity
+  `tr(B^w) = (7/16)^{|w|} tr(M₀^w) + (1/16)^{|w|} tr(M₁^w)`.
+* `P6Compression.dimer_remainder`: the remainder vanishes, so the extension splits.
+* `P6Compression.dimer_isReduction`, `P6Compression.dimer_mul_right_eq_right_mul`,
+  `P6Compression.dimer_left_mul_eq_mul_left`: the compression pair and the sitewise
+  intertwiners of each slot.
+* `P6Compression.dimer_dim_eq`: the dimension count `16 = 4 + 4 + 8`.
+* `P6Compression.dimerTarget_isNormal`: each sector is normal at blocking length one.
+-/
+
+open scoped Matrix Kronecker
+
+namespace P6Compression
+
+open MPSTensor
+
+/-! ### The sector tensors -/
+
+/-- The ket bit `p` of the horizontal bond index `a = 4 p + 2 p' + k`
+(`p6_examples_compression_data.md`, §1.1). -/
+def dimerKet (a : Fin 8) : Fin 2 := ⟨a.val / 4, by omega⟩
+
+/-- The bra bit `p'` of the horizontal bond index `a = 4 p + 2 p' + k`. -/
+def dimerBra (a : Fin 8) : Fin 2 := ⟨a.val / 2 % 2, by omega⟩
+
+/-- The sector label `k` of the horizontal bond index `a = 4 p + 2 p' + k`. -/
+def dimerFlag (a : Fin 8) : Fin 2 := ⟨a.val % 2, by omega⟩
+
+/-- The row `(p, q)` of the vertical site space `ℂ² ⊗ ℂ²` carried by a letter. -/
+def dimerRow (a b : Fin 8) : Fin 4 := ⟨2 * (dimerKet a).val + (dimerKet b).val, by omega⟩
+
+/-- The column `(p', q')` of the vertical site space `ℂ² ⊗ ℂ²` carried by a letter. -/
+def dimerCol (a b : Fin 8) : Fin 4 := ⟨2 * (dimerBra a).val + (dimerBra b).val, by omega⟩
+
+/-- Sixteen times the scale `(1/2) C_k[p][p'] τ_k[f]` of a letter of the sector-`f` tensor at
+`x = 7/8`, `y = 1/8` (`p6_examples_compression_data.md`, §1.1). -/
+def dimerScalarInt (f : Fin 2) (a : Fin 8) : ℤ :=
+  (if dimerFlag a = 0 then (if dimerKet a = dimerBra a then 4 else 3)
+    else if dimerKet a = dimerBra a then 3 else 4) *
+  (if dimerFlag a = 1 ∧ f = 1 then -1 else 1)
+
+/-- Sixteen times the sector-`f` tensor: a scaled matrix unit at each letter, vanishing when the
+two bond indices carry different sector labels. -/
+def dimerMInt (f : Fin 2) (a b : Fin 8) : Matrix (Fin 4) (Fin 4) ℤ :=
+  if dimerFlag a = dimerFlag b then
+    dimerScalarInt f a • Matrix.single (dimerRow a b) (dimerCol a b) 1
+  else 0
+
+/-- The sector-`f` tensor as a matrix product operator tensor. -/
+noncomputable def dimerM (f : Fin 2) : MPOTensor 8 4 :=
+  fun a b => (16 : ℂ)⁻¹ • complexOfInt (dimerMInt f a b)
+
+/-- The sector-`f` tensor on the sixty-four-letter pair alphabet. -/
+noncomputable def dimerTarget (f : Fin 2) : MPSTensor 64 4 := (dimerM f).toMPSTensor
+
+/-- The stacked product of the sector-`f` and sector-`f'` tensors, of bond dimension sixteen
+(`p6_examples_compression_data.md`, §1.2). -/
+noncomputable def dimerStacked (f f' : Fin 2) : MPSTensor 64 16 :=
+  (MPOTensor.mulTensor (dimerM f) (dimerM f')).toMPSTensor
+
+/-- Sixteen times the pair-alphabet sector-`f` tensor. -/
+def dimerTargetInt (f : Fin 2) (a : Fin 64) : Matrix (Fin 4) (Fin 4) ℤ :=
+  dimerMInt f (Fin.divNat (m := 8) (n := 8) a) (Fin.modNat (m := 8) (n := 8) a)
+
+/-- Two hundred and fifty-six times the stacked product. -/
+def dimerStackedInt (f f' : Fin 2) (a : Fin 64) : Matrix (Fin 16) (Fin 16) ℤ :=
+  mulIntTensor (dimerMInt f) (dimerMInt f') (Fin.divNat (m := 8) (n := 8) a)
+    (Fin.modNat (m := 8) (n := 8) a)
+
+theorem dimerTarget_eq (f : Fin 2) (a : Fin 64) :
+    dimerTarget f a = (16 : ℂ)⁻¹ • complexOfInt (dimerTargetInt f a) := rfl
+
+theorem dimerStacked_eq (f f' : Fin 2) (a : Fin 64) :
+    dimerStacked f f' a = ((16 : ℂ)⁻¹ * (16 : ℂ)⁻¹) • complexOfInt (dimerStackedInt f f' a) :=
+  mulTensor_smul_complexOfInt (16 : ℂ)⁻¹ (dimerMInt f) (dimerMInt f') _ _
+
+/-! ### The two fusion channels -/
+
+/-- The two target blocks of the fusion of the sectors `f` and `f'`: the sectors `f + f'` and
+`f + f' + 1` (`p6_examples_compression_data.md`, §1.2). -/
+noncomputable def dimerBlocks (f f' : Fin 2) : Fin 2 → MPSTensor 64 4 :=
+  fun s => dimerTarget (f + f' + s)
+
+/-- Sixteen times the two target blocks. -/
+def dimerBlockInt (f f' : Fin 2) : Fin 2 → Fin 64 → Matrix (Fin 4) (Fin 4) ℤ :=
+  fun s => dimerTargetInt (f + f' + s)
+
+/-- The two weights of the fusion, the channel occupations `x/2 = 7/16` and `y/2 = 1/16`
+(`p6_examples_compression_data.md`, §1.2). -/
+noncomputable def dimerWeights : Fin 2 → ℂ := ![7 / 16, 1 / 16]
+
+/-- Sixteen times the two weights, the integer coefficients of the letter identity. -/
+def dimerCoefInt : Fin 2 → ℤ := ![7, 1]
+
+/-! ### The letter identity -/
+
+private theorem dimerMInt_eq_zero (f : Fin 2) {a b : Fin 8} (h : dimerFlag a ≠ dimerFlag b) :
+    dimerMInt f a b = 0 := by
+  simp [dimerMInt, h]
+
+private theorem dimerStackedInt_eq_zero (f f' : Fin 2) {i k : Fin 8}
+    (h : dimerFlag i ≠ dimerFlag k) : mulIntTensor (dimerMInt f) (dimerMInt f') i k = 0 := by
+  have hj : ∀ j : Fin 8, dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
+    intro j
+    rcases eq_or_ne (dimerFlag i) (dimerFlag j) with hij | hij
+    · rw [dimerMInt_eq_zero f' fun hjk => h (hij.trans hjk), Matrix.kronecker_zero]
+    · rw [dimerMInt_eq_zero f hij, Matrix.zero_kronecker]
+  simp [mulIntTensor, hj]
+
+private theorem dimer_letter_int_of_flag_ne (f f' : Fin 2) (a : Fin 64)
+    (h : dimerFlag (Fin.divNat (m := 8) (n := 8) a) ≠
+      dimerFlag (Fin.modNat (m := 8) (n := 8) a)) :
+    (2 : ℤ) • dimerStackedInt f f' a =
+      ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt f f') s a := by
+  rw [dimerStackedInt, dimerStackedInt_eq_zero f f' h, smul_zero]
+  refine (Finset.sum_eq_zero fun s _ => ?_).symm
+  rw [pairBlockInt, dimerBlockInt, dimerTargetInt, dimerMInt_eq_zero _ h]
+  simp
+
+/-- The stacked product restricted to the four intermediate bond indices of sector label zero;
+the other four summands vanish. -/
+private def dimerStackEven (f f' : Fin 2) (i k : Fin 8) : Matrix (Fin 16) (Fin 16) ℤ :=
+  (dimerMInt f i 0 ⊗ₖ dimerMInt f' 0 k + dimerMInt f i 2 ⊗ₖ dimerMInt f' 2 k
+      + dimerMInt f i 4 ⊗ₖ dimerMInt f' 4 k + dimerMInt f i 6 ⊗ₖ dimerMInt f' 6 k).submatrix
+    (finProdFinEquiv (m := 4) (n := 4)).symm (finProdFinEquiv (m := 4) (n := 4)).symm
+
+/-- The stacked product restricted to the four intermediate bond indices of sector label one. -/
+private def dimerStackOdd (f f' : Fin 2) (i k : Fin 8) : Matrix (Fin 16) (Fin 16) ℤ :=
+  (dimerMInt f i 1 ⊗ₖ dimerMInt f' 1 k + dimerMInt f i 3 ⊗ₖ dimerMInt f' 3 k
+      + dimerMInt f i 5 ⊗ₖ dimerMInt f' 5 k + dimerMInt f i 7 ⊗ₖ dimerMInt f' 7 k).submatrix
+    (finProdFinEquiv (m := 4) (n := 4)).symm (finProdFinEquiv (m := 4) (n := 4)).symm
+
+private theorem dimerStackedInt_even (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag i = 0)
+    (k : Fin 8) : mulIntTensor (dimerMInt f) (dimerMInt f') i k = dimerStackEven f f' i k := by
+  have hz : ∀ j : Fin 8, dimerFlag j = 1 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
+    intro j hj
+    rw [dimerMInt_eq_zero f (by rw [hi, hj]; decide), Matrix.zero_kronecker]
+  rw [mulIntTensor, Fin.sum_univ_eight, hz 1 (by decide), hz 3 (by decide), hz 5 (by decide),
+    hz 7 (by decide)]
+  simp only [add_zero, dimerStackEven]
+
+private theorem dimerStackedInt_odd (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag i = 1)
+    (k : Fin 8) : mulIntTensor (dimerMInt f) (dimerMInt f') i k = dimerStackOdd f f' i k := by
+  have hz : ∀ j : Fin 8, dimerFlag j = 0 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
+    intro j hj
+    rw [dimerMInt_eq_zero f (by rw [hi, hj]; decide), Matrix.zero_kronecker]
+  rw [mulIntTensor, Fin.sum_univ_eight, hz 0 (by decide), hz 2 (by decide), hz 4 (by decide),
+    hz 6 (by decide)]
+  simp only [zero_add, add_zero, dimerStackOdd]
+
+private theorem dimer_letter_int_even : ∀ a : Fin 64,
+    dimerFlag (Fin.divNat (m := 8) (n := 8) a) = 0 →
+      dimerFlag (Fin.modNat (m := 8) (n := 8) a) = 0 →
+        (2 : ℤ) • dimerStackEven 0 0 (Fin.divNat (m := 8) (n := 8) a)
+            (Fin.modNat (m := 8) (n := 8) a) =
+          ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt 0 0) s a := by
+  decide +kernel
+
+private theorem dimer_letter_int_odd : ∀ a : Fin 64,
+    dimerFlag (Fin.divNat (m := 8) (n := 8) a) = 1 →
+      dimerFlag (Fin.modNat (m := 8) (n := 8) a) = 1 →
+        (2 : ℤ) • dimerStackOdd 0 0 (Fin.divNat (m := 8) (n := 8) a)
+            (Fin.modNat (m := 8) (n := 8) a) =
+          ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt 0 0) s a := by
+  decide +kernel
+
+private theorem dimer_letter_int (a : Fin 64) :
+    (2 : ℤ) • dimerStackedInt 0 0 a =
+      ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt 0 0) s a := by
+  have htwo : ∀ u : Fin 2, u = 0 ∨ u = 1 := by decide
+  rcases eq_or_ne (dimerFlag (Fin.divNat (m := 8) (n := 8) a))
+    (dimerFlag (Fin.modNat (m := 8) (n := 8) a)) with h | h
+  · rcases htwo (dimerFlag (Fin.divNat (m := 8) (n := 8) a)) with hi | hi
+    · rw [dimerStackedInt, dimerStackedInt_even 0 0 hi]
+      exact dimer_letter_int_even a hi (h.symm.trans hi)
+    · rw [dimerStackedInt, dimerStackedInt_odd 0 0 hi]
+      exact dimer_letter_int_odd a hi (h.symm.trans hi)
+  · exact dimer_letter_int_of_flag_ne 0 0 a h
+
+private theorem dimer_scalar (s : Fin 2) :
+    (((2 : ℤ) : ℂ)) * (dimerWeights s * ((2 : ℂ)⁻¹ * (16 : ℂ)⁻¹)) =
+      ((dimerCoefInt s : ℤ) : ℂ) * ((16 : ℂ)⁻¹ * (16 : ℂ)⁻¹) := by
+  fin_cases s <;> norm_num [dimerWeights, dimerCoefInt]
+
+private theorem dimer_hB (a : Fin 64) :
+    dimerStacked 0 0 a = (∑ s ∈ pairSlots, dimerWeights s •
+      (basisProj pairU pairUinv (pairJ s) ⊗ₖ dimerBlocks 0 0 s a)).submatrix
+        pairReorder.symm pairReorder.symm :=
+  stackedPair_letter_identity (by norm_num) (dimerStacked_eq 0 0)
+    (fun s a => dimerTarget_eq (0 + 0 + s) a) dimer_scalar dimer_letter_int a
+
+/-! ### The compression datum -/
+
+/-- **The multi-block asymmetric compression datum of the graded dimer twist** (P5 note,
+Theorem 7.7(i)–(iii)): two inequivalent normal sectors with the weights `7/16` and `1/16`, and
+eight zero slots. -/
+noncomputable def dimerCompression :
+    MultiBlockCompression (D := fun _ : Fin 2 => 4) (dimerStacked 0 0) pairSlots
+      fun s => dimerWeights s • dimerBlocks 0 0 s :=
+  MultiBlockCompression.ofProjectorSum (zz := 2) pairU_mul_pairUinv pairUinv_mul_pairU
+    pairRho pairReorder pairRho_inl dimer_hB
+
+/-- **The remainder of the dimer compression vanishes** (P5 note, Theorem 7.7(vi)): the
+conjugated tensor is block diagonal, so the extension splits. -/
+theorem dimer_remainder : dimerCompression.remainder = 0 :=
+  MultiBlockCompression.remainder_ofProjectorSum (zz := 2) pairU_mul_pairUinv pairUinv_mul_pairU
+    pairRho pairReorder pairRho_inl dimer_hB
+
+/-! ### Consequences -/
+
+/-- **The word-trace identity of the graded dimer twist**: the periodic coefficient
+`c^{(L)} = (7/16)^L + (1/16)^L` (`p6_examples_compression_data.md`, §1.4). -/
+theorem dimer_trace_evalWord (w : List (Fin 64)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord (dimerStacked 0 0) w) =
+      (7 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerTarget 0) w) +
+        (1 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerTarget 1) w) := by
+  have h := dimerCompression.trace_evalWord_eq_sum w hw
+  have hs : ∀ s : Fin 2,
+      Matrix.trace (Kraus.evalWord (dimerWeights s • dimerBlocks 0 0 s) w) =
+        dimerWeights s ^ w.length * Matrix.trace (Kraus.evalWord (dimerBlocks 0 0 s) w) := by
+    intro s
+    rw [show dimerWeights s • dimerBlocks 0 0 s =
+        fun i => dimerWeights s • dimerBlocks 0 0 s i from rfl,
+      Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
+  rw [h, show pairSlots = Finset.univ from rfl, Fin.sum_univ_two, hs 0, hs 1]
+  rfl
+
+/-- **Biorthogonal compression onto each fusion channel** (P5 note, Theorem 7.7(iv)–(v)). -/
+theorem dimer_isReduction (s : {s // s ∈ pairSlots}) :
+    IsReduction (dimerStacked 0 0) (dimerWeights s.1 • dimerBlocks 0 0 s.1)
+      (dimerCompression.left s) (dimerCompression.right s) :=
+  dimerCompression.isReduction s
+
+/-- Two distinct fusion channels are biorthogonal (P5 note, Theorem 7.7(iv)). -/
+theorem dimer_left_mul_right_of_ne {s t : {s // s ∈ pairSlots}} (h : s ≠ t) :
+    dimerCompression.left s * dimerCompression.right t = 0 :=
+  dimerCompression.left_mul_right_of_ne h
+
+/-- **The sitewise right intertwiner of each channel**: `B^a V_s = V_s (μ_s M_s^a)`
+(`p6_examples_compression_data.md`, §1.3). -/
+theorem dimer_mul_right_eq_right_mul (a : Fin 64) (s : {s // s ∈ pairSlots}) :
+    dimerStacked 0 0 a * dimerCompression.right s =
+      dimerCompression.right s * (dimerWeights s.1 • dimerBlocks 0 0 s.1) a :=
+  dimerCompression.mul_right_eq_right_mul dimer_remainder a s
+
+/-- **The sitewise left intertwiner of each channel**: `W_s B^a = (μ_s M_s^a) W_s`. -/
+theorem dimer_left_mul_eq_mul_left (a : Fin 64) (s : {s // s ∈ pairSlots}) :
+    dimerCompression.left s * dimerStacked 0 0 a =
+      (dimerWeights s.1 • dimerBlocks 0 0 s.1) a * dimerCompression.left s :=
+  dimerCompression.left_mul_eq_mul_left dimer_remainder a s
+
+/-- The dimer fusion has eight zero slots. -/
+theorem dimer_z_eq : dimerCompression.z = 8 := rfl
+
+/-- **The dimension count of the dimer fusion**: `16 = 4 + 4 + 8` (P5 note,
+Theorem 7.7(vii)). -/
+theorem dimer_dim_eq : (16 : ℕ) = ∑ _s ∈ pairSlots, 4 + 8 :=
+  dimerCompression.dim_eq
+
+/-! ### Normality of the sectors -/
+
+/-- The letter realising each matrix unit of the bond algebra of a sector. -/
+def dimerUnitLetter : Fin 4 → Fin 4 → Fin 64 :=
+  ![![0, 2, 16, 18], ![4, 6, 20, 22], ![32, 34, 48, 50], ![36, 38, 52, 54]]
+
+/-- The nonzero integer factor relating that letter to its matrix unit; the letters chosen all
+lie in the sector label zero, where the scale does not depend on `f`. -/
+def dimerUnitCoef : Fin 4 → Fin 4 → ℤ :=
+  ![![4, 4, 3, 3], ![4, 4, 3, 3], ![3, 3, 4, 4], ![3, 3, 4, 4]]
+
+private theorem dimerTargetInt_unit (f : Fin 2) (x y : Fin 4) :
+    dimerTargetInt f (dimerUnitLetter x y) = dimerUnitCoef x y • Matrix.single x y 1 := by
+  revert f x y
+  decide +kernel
+
+/-- **Each sector is normal at blocking length one**: its thirty-two nonzero letters are scaled
+matrix units covering every position, so they span the four-by-four matrix algebra
+(`p6_examples_compression_data.md`, §1.4). -/
+theorem dimerTarget_isNormal (f : Fin 2) : Kraus.IsNormal (dimerTarget f) :=
+  isNormal_of_single_eq_smul (dimerTargetInt f) (by norm_num) (dimerTarget_eq f)
+    dimerUnitLetter dimerUnitCoef (by decide) (dimerTargetInt_unit f)
+
+end P6Compression

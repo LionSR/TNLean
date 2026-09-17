@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
+import TNLean.MPS.MPDO.OperatorProduct
 
 /-!
 # Explicit gauges for multi-block compression data
@@ -24,11 +25,15 @@ between integer matrices.
 ## Main definitions
 
 * `MPSTensor.complexOfInt`: the entrywise coercion of an integer matrix.
+* `MPSTensor.mulIntTensor`: the bond-space product of two integer matrix product operator
+  tensors.
 * `MPSTensor.gaugeOfMatrix`: the gauge attached to a bijective labelling and an invertible
   matrix.
 
 ## Main results
 
+* `MPSTensor.mulTensor_complexOfInt`, `MPSTensor.mulTensor_smul_complexOfInt`: the bond-space
+  product of two (rescaled) integer tensors is the rescaled integer bond-space product.
 * `MPSTensor.conjMatrix_gaugeOfMatrix`: conjugation by such a gauge is matrix conjugation
   followed by the relabelling.
 * `MPSTensor.MultiBlockCompression.left_gaugeOfMatrix`,
@@ -36,7 +41,7 @@ between integer matrices.
   off the rows of the matrix and the columns of its inverse at the coordinates of that slot.
 -/
 
-open scoped Matrix
+open scoped Matrix Kronecker
 
 namespace MPSTensor
 
@@ -67,12 +72,68 @@ theorem complexOfInt_neg {m n : Type*} (X : Matrix m n ℤ) :
   ext i j
   simp only [complexOfInt_apply, Matrix.neg_apply, Int.cast_neg]
 
+theorem complexOfInt_add {m n : Type*} (X Y : Matrix m n ℤ) :
+    complexOfInt (X + Y) = complexOfInt X + complexOfInt Y := by
+  ext i j
+  simp [complexOfInt]
+
+theorem complexOfInt_zsmul {m n : Type*} (c : ℤ) (X : Matrix m n ℤ) :
+    complexOfInt (c • X) = (c : ℂ) • complexOfInt X := by
+  ext i j
+  simp [complexOfInt]
+
+theorem complexOfInt_sum {m n κ : Type*} (t : Finset κ) (f : κ → Matrix m n ℤ) :
+    complexOfInt (∑ x ∈ t, f x) = ∑ x ∈ t, complexOfInt (f x) := by
+  ext i j
+  simp [complexOfInt, Matrix.sum_apply]
+
+theorem complexOfInt_submatrix {m n m' n' : Type*} (X : Matrix m n ℤ) (f : m' → m)
+    (g : n' → n) : complexOfInt (X.submatrix f g) = (complexOfInt X).submatrix f g := rfl
+
+theorem complexOfInt_kronecker {m n m' n' : Type*} (X : Matrix m n ℤ) (Y : Matrix m' n' ℤ) :
+    complexOfInt (X ⊗ₖ Y) = complexOfInt X ⊗ₖ complexOfInt Y := by
+  ext i j
+  simp [complexOfInt]
+
 theorem complexOfInt_injective {m n : Type*} :
     Function.Injective (complexOfInt (m := m) (n := n)) := by
   intro X Y h
   ext i j
   have hij := congrFun (congrFun h i) j
   simpa only [complexOfInt_apply, Int.cast_inj] using hij
+
+/-! ### The bond-space product of integer tensors -/
+
+variable {d D₁ D₂ : ℕ}
+
+/-- The bond-space product of two integer tensors,
+`(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`. -/
+def mulIntTensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
+    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
+    Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) ℤ :=
+  (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
+
+/-- The bond-space product of two rescaled integer tensors is the integer bond-space product
+rescaled by the product of the two scalars. -/
+theorem mulTensor_smul_complexOfInt (c : ℂ)
+    (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
+    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
+    MPOTensor.mulTensor (fun i j => c • complexOfInt (M i j))
+        (fun i j => c • complexOfInt (N i j)) i k =
+      (c * c) • complexOfInt (mulIntTensor M N i k) := by
+  ext x y
+  simp only [MPOTensor.mulTensor_apply, mulIntTensor, Matrix.submatrix_apply, Matrix.sum_apply,
+    Matrix.smul_apply, Matrix.kroneckerMap_apply, complexOfInt_apply, smul_eq_mul]
+  push_cast
+  rw [Finset.mul_sum]
+  exact Finset.sum_congr rfl fun j _ => by ring
+
+/-- The bond-space product commutes with the entrywise coercion of integer matrices. -/
+theorem mulTensor_complexOfInt (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
+    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
+    MPOTensor.mulTensor (fun i j => complexOfInt (M i j)) (fun i j => complexOfInt (N i j)) i k =
+      complexOfInt (mulIntTensor M N i k) := by
+  simpa using mulTensor_smul_complexOfInt 1 M N i k
 
 /-! ### The gauge attached to an invertible matrix -/
 

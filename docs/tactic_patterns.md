@@ -1022,6 +1022,29 @@ abstracted — record why, so it is not re-proposed).
   gauge half to identify the local MPS spaces of a tensor and of its
   normalized representative.
 
+### bond-space product of integer tensors — promoted
+- **Pattern:** an example defines the bond-space product of two integer matrix
+  product operator tensors,
+  `(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}` in the bond order of `finProdFinEquiv`,
+  and then reproves that it commutes with the entrywise coercion of integer
+  matrices, so that a stacked product tensor over the complexes reduces to a
+  decidable identity between integer matrices.
+- **Seen:** three occurrences (2026-09-17): a public copy in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, a private
+  copy in `TNLean/MPS/FundamentalTheorem/Reduction/Examples/KramersWannier.lean`,
+  and a third needed by the renormalization fixed points of
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/StackedPairGauge.lean`.
+- **Abstraction:** `MPSTensor.mulIntTensor` with
+  `MPSTensor.mulTensor_complexOfInt` and its rescaled form
+  `MPSTensor.mulTensor_smul_complexOfInt`, in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/ExplicitGauge.lean`
+  beside the entrywise coercion they belong to.
+- **Notes:** the rescaled form is what the P6 fixed points need, since their
+  tensors are integer matrices divided by a common denominator; the unscaled
+  form is the instance at one. Both former copies were deleted and their call
+  sites now resolve the shared name through `open MPSTensor`, for a net loss of
+  about thirty lines.
+
 ## Completed refactors
 
 ### Appending a tuple endpoint under `List.ofFn`
