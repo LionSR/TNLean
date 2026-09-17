@@ -18,8 +18,12 @@ two checks for this pair of sectors and records the resulting compression datum.
 
 The stacked product compresses onto the sector `1` with the weight `x/2 = 7/16` and onto the
 sector `0` with the weight `y/2 = 1/16`, with eight zero slots left over and a vanishing
-remainder, exactly as for the fusion of the zero sector with itself (strategy note
-`Notes/OpenProblemsTN/strategies/p6_round44_graded_dimer_twist.tex`, `thm:p6-round44-z2`).
+remainder, exactly as for the fusion of the zero sector with itself: this is one case of the
+fusion rule `M_f M_{f'} = (x/2) M_{f+f'} ⊕ (y/2) M_{f+f'+1} ⊕ 0` of the strategy note
+(`Notes/OpenProblemsTN/strategies/p6_round44_graded_dimer_twist.tex`, `thm:p6-r44-z2`(v),
+`eq:p6-r44-z2-fusion`), which the P6 resolution `thm:p6-round44-z2` of
+`Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex` states in normalized
+form.
 
 ## Main results
 
@@ -28,8 +32,11 @@ remainder, exactly as for the fusion of the zero sector with itself (strategy no
   `P6Compression.dimerZeroOne_remainder` its vanishing remainder.
 * `P6Compression.dimerZeroOne_trace_evalWord`: the word-trace identity
   `tr(B^w) = (7/16)^{|w|} tr(M_1^w) + (1/16)^{|w|} tr(M_0^w)`.
-* `P6Compression.dimerZeroOne_mul_right_eq_right_mul`,
-  `P6Compression.dimerZeroOne_left_mul_eq_mul_left`: the sitewise intertwiners of each channel.
+
+The reduction pairs, the biorthogonality of the channels, the sitewise intertwiners and the
+dimension count of this datum are stated uniformly for every pair of sectors in
+`TwistedDimerPairs`, whose datum `dimerFusionCompression` specializes definitionally to the one
+recorded here.
 -/
 
 open scoped Matrix Kronecker
@@ -66,8 +73,9 @@ theorem dimerZeroOne_letter_int (a : Fin 64) :
 /-! ### The compression datum -/
 
 /-- **The multi-block asymmetric compression datum** (P5 note, Theorem 7.7(i)–(iii)) for the
-fusion of the zero sector with the one sector: the two inequivalent normal sectors `1` and `0` with
-the weights `7/16` and `1/16`, and eight zero slots. -/
+fusion of the zero sector with the one sector: the two normal sectors `1` and `0` (not gauge
+equivalent by `dimerBlocks_not_gaugeEquiv`) with the weights `7/16` and `1/16`, and eight zero
+slots. -/
 noncomputable def dimerZeroOneCompression :
     MultiBlockCompression (D := fun _ : Fin 2 => 4) (dimerStacked 0 1) pairSlots
       fun s => dimerWeights s • dimerBlocks 0 1 s :=
@@ -87,36 +95,5 @@ theorem dimerZeroOne_trace_evalWord (w : List (Fin 64)) (hw : w ≠ []) :
       (7 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerTarget 1) w) +
         (1 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerTarget 0) w) :=
   dimer_trace_evalWord_of_compression 0 1 dimerZeroOneCompression w hw
-
-/-- **Biorthogonal compression onto each fusion channel** (P5 note, Theorem 7.7(iv)–(v)). -/
-theorem dimerZeroOne_isReduction (s : {s // s ∈ pairSlots}) :
-    IsReduction (dimerStacked 0 1) (dimerWeights s.1 • dimerBlocks 0 1 s.1)
-      (dimerZeroOneCompression.left s) (dimerZeroOneCompression.right s) :=
-  dimerZeroOneCompression.isReduction s
-
-/-- Two distinct fusion channels are biorthogonal (P5 note, Theorem 7.7(iv)). -/
-theorem dimerZeroOne_left_mul_right_of_ne {s t : {s // s ∈ pairSlots}} (h : s ≠ t) :
-    dimerZeroOneCompression.left s * dimerZeroOneCompression.right t = 0 :=
-  dimerZeroOneCompression.left_mul_right_of_ne h
-
-/-- **The sitewise right intertwiner of each channel**: `B^a V_s = V_s (μ_s M_s^a)`
-(`p6_examples_compression_data.md`, §1.3). -/
-theorem dimerZeroOne_mul_right_eq_right_mul (a : Fin 64) (s : {s // s ∈ pairSlots}) :
-    dimerStacked 0 1 a * dimerZeroOneCompression.right s =
-      dimerZeroOneCompression.right s * (dimerWeights s.1 • dimerBlocks 0 1 s.1) a :=
-  dimerZeroOneCompression.mul_right_eq_right_mul dimerZeroOne_remainder a s
-
-/-- **The sitewise left intertwiner of each channel**: `W_s B^a = (μ_s M_s^a) W_s`. -/
-theorem dimerZeroOne_left_mul_eq_mul_left (a : Fin 64) (s : {s // s ∈ pairSlots}) :
-    dimerZeroOneCompression.left s * dimerStacked 0 1 a =
-      (dimerWeights s.1 • dimerBlocks 0 1 s.1) a * dimerZeroOneCompression.left s :=
-  dimerZeroOneCompression.left_mul_eq_mul_left dimerZeroOne_remainder a s
-
-/-- The fusion has eight zero slots. -/
-theorem dimerZeroOne_z_eq : dimerZeroOneCompression.z = 8 := rfl
-
-/-- **The dimension count of the fusion**: `16 = 4 + 4 + 8` (P5 note, Theorem 7.7(vii)). -/
-theorem dimerZeroOne_dim_eq : (16 : ℕ) = ∑ _s ∈ pairSlots, 4 + 8 :=
-  dimerZeroOneCompression.dim_eq
 
 end P6Compression

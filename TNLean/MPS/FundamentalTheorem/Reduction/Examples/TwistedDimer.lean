@@ -29,8 +29,8 @@ and `f'` compresses onto the tensor of `f + f'` with the weight `x/2 = 7/16` and
 of `f + f' + 1` with the weight `y/2 = 1/16`, with eight zero slots left over. The weights are
 the occupations of the two fusion channels, and the periodic coefficient
 `c^{(L)} = (7/16)^L + (1/16)^L` is their length-`L` power sum. Both targets are normal at
-blocking length one and are inequivalent, so the length dependence here comes from two genuinely
-different sectors rather than from a repeated one.
+blocking length one and are not gauge equivalent (their one-letter traces differ), so the length
+dependence here comes from two genuinely different sectors rather than from a repeated one.
 
 This file sets up the sector tensors, the pair-generic reduction of the letter identity to two
 exhaustive checks over the sixty-four letters, and the compression of the fusion of the zero
@@ -62,6 +62,8 @@ gauge and the same weights; their exhaustive checks live in the modules
   intertwiners of each slot.
 * `P6Compression.dimer_dim_eq`: the dimension count `16 = 4 + 4 + 8`.
 * `P6Compression.dimerTarget_isNormal`: each sector is normal at blocking length one.
+* `P6Compression.dimerTarget_not_gaugeEquiv`, `P6Compression.dimerBlocks_not_gaugeEquiv`: the two
+  sectors, hence the two targets of every fusion, are not gauge equivalent.
 -/
 
 open scoped Matrix Kronecker
@@ -170,7 +172,7 @@ private theorem dimerStackedInt_eq_zero (f f' : Fin 2) {i k : Fin 8}
 
 /-- The letter identity at a letter whose two bond indices carry different sector labels: both
 sides vanish. -/
-theorem dimer_letter_int_of_flag_ne (f f' : Fin 2) (a : Fin 64)
+private theorem dimer_letter_int_of_flag_ne (f f' : Fin 2) (a : Fin 64)
     (h : dimerFlag (Fin.divNat (m := 8) (n := 8) a) ≠
       dimerFlag (Fin.modNat (m := 8) (n := 8) a)) :
     (2 : ℤ) • dimerStackedInt f f' a =
@@ -195,7 +197,7 @@ def dimerStackOdd (f f' : Fin 2) (i k : Fin 8) : Matrix (Fin 16) (Fin 16) ℤ :=
     (finProdFinEquiv (m := 4) (n := 4)).symm (finProdFinEquiv (m := 4) (n := 4)).symm
 
 /-- On a left bond index of sector label zero the stacked product is its even restriction. -/
-theorem dimerStackedInt_even (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag i = 0)
+private theorem dimerStackedInt_even (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag i = 0)
     (k : Fin 8) : mulIntTensor (dimerMInt f) (dimerMInt f') i k = dimerStackEven f f' i k := by
   have hz : ∀ j : Fin 8, dimerFlag j = 1 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
     intro j hj
@@ -205,7 +207,7 @@ theorem dimerStackedInt_even (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag i = 0)
   simp only [add_zero, dimerStackEven]
 
 /-- On a left bond index of sector label one the stacked product is its odd restriction. -/
-theorem dimerStackedInt_odd (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag i = 1)
+private theorem dimerStackedInt_odd (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag i = 1)
     (k : Fin 8) : mulIntTensor (dimerMInt f) (dimerMInt f') i k = dimerStackOdd f f' i k := by
   have hz : ∀ j : Fin 8, dimerFlag j = 0 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
     intro j hj
@@ -251,7 +253,7 @@ private theorem dimer_scalar (s : Fin 2) :
 
 /-- **The projector-weighted decomposition of a stacked pair of sectors** from the integer letter
 identity (`p6_examples_compression_data.md`, §1.3). -/
-theorem dimer_hB_of_letter_int (f f' : Fin 2)
+private theorem dimer_hB_of_letter_int (f f' : Fin 2)
     (hint : ∀ a, (2 : ℤ) • dimerStackedInt f f' a =
       ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt f f') s a) (a : Fin 64) :
     dimerStacked f f' a = (∑ s ∈ pairSlots, dimerWeights s •
@@ -263,9 +265,9 @@ theorem dimer_hB_of_letter_int (f f' : Fin 2)
 /-! ### The compression datum of a pair of sectors -/
 
 /-- **The multi-block asymmetric compression datum of a fusion of two sectors** (P5 note,
-Theorem 7.7(i)–(iii)), from the integer letter identity of the pair: the two inequivalent
-normal sectors `f + f'` and `f + f' + 1` with the weights `7/16` and `1/16`, and eight zero
-slots (`p6_examples_compression_data.md`, §1.2–1.3). -/
+Theorem 7.7(i)–(iii)), from the integer letter identity of the pair: the two normal sectors
+`f + f'` and `f + f' + 1` (not gauge equivalent by `dimerBlocks_not_gaugeEquiv`) with the weights
+`7/16` and `1/16`, and eight zero slots (`p6_examples_compression_data.md`, §1.2–1.3). -/
 noncomputable def dimerCompressionOfLetterIdentity (f f' : Fin 2)
     (hint : ∀ a, (2 : ℤ) • dimerStackedInt f f' a =
       ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt f f') s a) :
@@ -286,8 +288,11 @@ theorem remainder_dimerCompressionOfLetterIdentity (f f' : Fin 2)
 /-- **The word-trace identity of a compressed pair of sectors**: any compression of the stacked
 product of the sectors `f` and `f'` onto the weighted sectors `f + f'` and `f + f' + 1` gives
 `tr(B^w) = (7/16)^{|w|} tr(M_{f+f'}^w) + (1/16)^{|w|} tr(M_{f+f'+1}^w)`, the periodic coefficient
-`c^{(L)} = (7/16)^L + (1/16)^L` (`p6_examples_compression_data.md`, §1.4; strategy note
-`p6_round44_graded_dimer_twist.tex`, `thm:p6-round44-z2`, `eq:p6-round44-algebra`). -/
+`c^{(L)} = (7/16)^L + (1/16)^L` (`p6_examples_compression_data.md`, §1.4). This is the fusion
+rule `M_f M_{f'} = (x/2) M_{f+f'} ⊕ (y/2) M_{f+f'+1} ⊕ 0` of the strategy note
+(`p6_round44_graded_dimer_twist.tex`, `thm:p6-r44-z2`(v), `eq:p6-r44-z2-fusion`) read on word
+traces; the P6 resolution (`p6_rfp_structure_constant_l_dependence.tex`, `thm:p6-round44-z2`)
+states it in the normalized form with the coefficients `α^L`, `β^L`. -/
 theorem dimer_trace_evalWord_of_compression (f f' : Fin 2)
     (P : MultiBlockCompression (D := fun _ : Fin 2 => 4) (dimerStacked f f') pairSlots
       fun s => dimerWeights s • dimerBlocks f f' s)
@@ -333,8 +338,9 @@ theorem dimer_letter_int (a : Fin 64) :
   dimer_letter_int_of_halves 0 0 dimer_letter_int_even dimer_letter_int_odd a
 
 /-- **The multi-block asymmetric compression datum of the graded dimer twist** (P5 note,
-Theorem 7.7(i)–(iii)) for the fusion of the zero sector with itself: two inequivalent normal
-sectors with the weights `7/16` and `1/16`, and eight zero slots. -/
+Theorem 7.7(i)–(iii)) for the fusion of the zero sector with itself: the two normal sectors `0`
+and `1` (not gauge equivalent by `dimerBlocks_not_gaugeEquiv`) with the weights `7/16` and
+`1/16`, and eight zero slots. -/
 noncomputable def dimerCompression :
     MultiBlockCompression (D := fun _ : Fin 2 => 4) (dimerStacked 0 0) pairSlots
       fun s => dimerWeights s • dimerBlocks 0 0 s :=
@@ -387,7 +393,7 @@ Theorem 7.7(vii)). -/
 theorem dimer_dim_eq : (16 : ℕ) = ∑ _s ∈ pairSlots, 4 + 8 :=
   dimerCompression.dim_eq
 
-/-! ### Normality of the sectors -/
+/-! ### Normality and inequivalence of the sectors -/
 
 /-- The letter realising each matrix unit of the bond algebra of a sector. -/
 def dimerUnitLetter : Fin 4 → Fin 4 → Fin 64 :=
@@ -409,5 +415,34 @@ matrix units covering every position, so they span the four-by-four matrix algeb
 theorem dimerTarget_isNormal (f : Fin 2) : Kraus.IsNormal (dimerTarget f) :=
   isNormal_of_single_eq_smul (dimerTargetInt f) (by norm_num) (dimerTarget_eq f)
     dimerUnitLetter dimerUnitCoef (by decide) (dimerTargetInt_unit f)
+
+private theorem trace_complexOfInt {n : Type*} [Fintype n] (X : Matrix n n ℤ) :
+    (complexOfInt X).trace = (X.trace : ℂ) := by
+  simp [Matrix.trace, complexOfInt]
+
+/-- The one-letter traces of the two sectors differ at the letter `9 = (1, 1)`, whose two bond
+indices carry the sector label one: the sign twist `τ_1` flips the trace. -/
+private theorem dimerTargetInt_trace_nine (f : Fin 2) :
+    (dimerTargetInt f 9).trace ≠ (dimerTargetInt (f + 1) 9).trace := by
+  revert f
+  decide +kernel
+
+/-- **The two sectors are not gauge equivalent**: no invertible gauge conjugates the sector `f`
+into the sector `f + 1`, since a gauge preserves one-letter traces and the sign twist `τ_1[f]`
+flips the trace of the letter `9` (`p6_examples_compression_data.md`, §1.2 and Notes for Lean). -/
+theorem dimerTarget_not_gaugeEquiv (f : Fin 2) :
+    ¬ GaugeEquiv (dimerTarget f) (dimerTarget (f + 1)) := by
+  rintro ⟨X, hX⟩
+  have h := congrArg Matrix.trace (hX 9)
+  rw [Matrix.trace_mul_cycle, Units.inv_mul, Matrix.one_mul, dimerTarget_eq, dimerTarget_eq,
+    Matrix.trace_smul, Matrix.trace_smul, trace_complexOfInt, trace_complexOfInt] at h
+  exact dimerTargetInt_trace_nine f
+    (by exact_mod_cast (smul_right_injective ℂ (by norm_num) h).symm)
+
+/-- **The two targets of every fusion are not gauge equivalent**: the sectors `f + f'` and
+`f + f' + 1` are the two distinct sectors, in some order. -/
+theorem dimerBlocks_not_gaugeEquiv (f f' : Fin 2) :
+    ¬ GaugeEquiv (dimerBlocks f f' 0) (dimerBlocks f f' 1) := by
+  simpa [dimerBlocks] using dimerTarget_not_gaugeEquiv (f + f')
 
 end P6Compression
