@@ -313,7 +313,7 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
         Z2Z2Condensation.xY_remainder_eq_zero,
         Z2Z2Condensation.xyY_remainder_eq_zero}
     \leanok
-    \uses{def:asymex_z2z2_pairs, thm:asymex_explicit_gauge}
+    \uses{def:asymex_z2z2_pairs, def:asymex_one_slot, thm:asymex_explicit_gauge}
     For each of the twelve pairs $(g,h)$ listed above, the block of
     $(g,h)$ in the stacked defect tensor has a one-slot compression datum
     with $z=0$: there is an invertible bond-space gauge, the identity for
@@ -324,7 +324,7 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_explicit_gauge}
+    \uses{def:asymex_one_slot, thm:asymex_one_slot, thm:asymex_explicit_gauge}
     Ten of the blocks are literally equal, letter by letter, to the
     entrywise coercion of their integer target, a finite verification.
     The remaining two are conjugate to their target by the sign gauge, by
@@ -342,7 +342,8 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
         Z2Z2Condensation.xyX_evalWord_remainder_eq_zero,
         Z2Z2Condensation.xyXy_evalWord_remainder_eq_zero}
     \leanok
-    \uses{def:asymex_z2z2_pairs, thm:asymex_explicit_gauge, thm:asym_multiblock}
+    \uses{def:asymex_z2z2_pairs, def:asymex_one_slot, thm:asymex_explicit_gauge,
+        thm:asym_multiblock}
     The four pairs $(g,h)$ with both $g,h\in\{x,xy\}$ -- the elements
     whose tensors carry the controlled-phase dressing -- do not split.
     Each has bond dimension four and admits a one-slot compression datum
@@ -398,12 +399,13 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
 
 \begin{proof}
     \leanok
-    Only two of the sixteen letters of each block are nonzero, and each is
-    a rank-one matrix with an explicit integer kernel and image;
-    comparing the four coordinates of the two equations at those two
-    letters forces every coordinate of $v$, respectively of $u$, to
-    vanish. For the block $(x,x)$, whose nonzero letters are $(0,0)$ and
-    $(1,1)$, comparing the four coordinates of $B^{ij}v=v$ at $(0,0)$
+    Four of the sixteen letters of each block are nonzero, taking only
+    two distinct values, and each distinct value is a rank-one matrix
+    with an explicit integer kernel and image; comparing the four
+    coordinates of the two independent equations forces every coordinate
+    of $v$, respectively of $u$, to vanish. For the block $(x,x)$, whose
+    nonzero letters are $(0,0)$ and $(1,1)$ (repeated at $(2,2)$ and
+    $(3,3)$), comparing the four coordinates of $B^{ij}v=v$ at $(0,0)$
     gives $v_0=v_1=v_2=v_3$, and at $(1,1)$ gives $v_3=v_0$ and
     $v_1=-v_3$, forcing $v_0=v_1=v_2=v_3=0$; the transposed comparison at
     $(0,0)$ gives $u_1=u_2=u_3=0$, and at $(1,1)$ gives $u_0=0$. The
