@@ -3,7 +3,6 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.CanonicalForm.TranslationInvariantUniqueness
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
@@ -365,11 +364,22 @@ theorem isNBlkInjective_two_of_int {D K : ℕ} {A : MPSTensor d D}
     simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using
       Submodule.smul_mem _ (X i j) (hunit i j)
 
-/-- Nonzero scalar multiplication preserves normality. -/
+/-- Nonzero scalar multiplication preserves normality: the words of `c • A` of length `N` are
+the words of `A` rescaled by `c ^ N`, so they span the same space. -/
 theorem isNormal_smul {D : ℕ} {A : MPSTensor d D} (hA : Kraus.IsNormal A) {c : ℂ}
     (hc : c ≠ 0) : Kraus.IsNormal (c • A) := by
   obtain ⟨N, hN, h⟩ := hA
-  exact ⟨N, hN, isNBlkInjective_smul c hc h⟩
+  refine ⟨N, hN, ?_⟩
+  rw [Kraus.IsNBlkInjective, Kraus.wordSpan, eq_top_iff] at h ⊢
+  refine le_trans h (Submodule.span_le.mpr ?_)
+  rintro _ ⟨σ, rfl⟩
+  have hσ : Kraus.evalWord A (List.ofFn σ) =
+      (c ^ N)⁻¹ • Kraus.evalWord (c • A) (List.ofFn σ) := by
+    rw [show c • A = fun i => c • A i from rfl, Kraus.evalWord_smul, List.length_ofFn, smul_smul,
+      inv_mul_cancel₀ (pow_ne_zero N hc), one_smul]
+  dsimp only
+  rw [hσ]
+  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨σ, rfl⟩)
 
 /-! ### Integer certificates for vanishing intertwiner spaces -/
 
