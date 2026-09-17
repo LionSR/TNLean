@@ -182,7 +182,7 @@ applied to a fusion-tree product state.
     %   below).
     % Ink-to-index map: the upper row of operator nodes is Theta_2, the
     %   lower row is sqrt2 A_sigma; the physical legs h_1,...,h_L of the top
-    %   row and h'_1,...,h'_L of the bottom row are open, and the shared
+    %   row and g_1,...,g_L of the bottom row are open, and the shared
     %   virtual wire between the two rows at every site is the summed middle
     %   label of the stacked product. On the right, the single row of B
     %   carries both physical labels at each site as one pair letter.
@@ -199,17 +199,17 @@ applied to a fusion-tree product state.
         \tn[skin=mpo, ports={90:physical:$h_2$, 270:physical}]{\Theta_2} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
         \tn[skin=mpo, ports={90:physical:$h_L$, 270:physical}]{\Theta_2} \\
-        \tn[skin=mpo, ports={90:physical, 270:physical:$h'_1$}]{\sqrt2A_\sigma} &
-        \tn[skin=mpo, ports={90:physical, 270:physical:$h'_2$}]{\sqrt2A_\sigma} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$g_1$}]{\sqrt2A_\sigma} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$g_2$}]{\sqrt2A_\sigma} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical, 270:physical:$h'_L$}]{\sqrt2A_\sigma}
+        \tn[skin=mpo, ports={90:physical, 270:physical:$g_L$}]{\sqrt2A_\sigma}
     \end{tenkz}
     \quad $=$ \quad
     \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$h_1$, 270:physical:$h'_1$}]{B} &
-        \tn[skin=mpo, ports={90:physical:$h_2$, 270:physical:$h'_2$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$h_1$, 270:physical:$g_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$h_2$, 270:physical:$g_2$}]{B} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$h_L$, 270:physical:$h'_L$}]{B}
+        \tn[skin=mpo, ports={90:physical:$h_L$, 270:physical:$g_L$}]{B}
     \end{tenkz}
 \end{center}
 
