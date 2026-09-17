@@ -39,7 +39,7 @@ verifications to decidable identities between integer matrices.
 
 * `MPSTensor.MultiBlockCompression.remainder_ofConjMatrix`: the remainder of a conjugate datum
   vanishes.
-* `MPSTensor.isNBlkInjective_two_of_int`, `MPSTensor.isNormal_smul`: normality certificates.
+* `MPSTensor.isNBlkInjective_two_of_int`: an integer certificate of injectivity at length two.
 * `MPSTensor.right_intertwiner_eq_zero_of_int`, `MPSTensor.left_intertwiner_eq_zero_of_int`:
   vanishing of a sitewise intertwiner space from an integer certificate.
 -/
@@ -363,23 +363,6 @@ theorem isNBlkInjective_two_of_int {D K : ℕ} {A : MPSTensor d D}
   exact Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => by
     simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using
       Submodule.smul_mem _ (X i j) (hunit i j)
-
-/-- Nonzero scalar multiplication preserves normality: the words of `c • A` of length `N` are
-the words of `A` rescaled by `c ^ N`, so they span the same space. -/
-theorem isNormal_smul {D : ℕ} {A : MPSTensor d D} (hA : Kraus.IsNormal A) {c : ℂ}
-    (hc : c ≠ 0) : Kraus.IsNormal (c • A) := by
-  obtain ⟨N, hN, h⟩ := hA
-  refine ⟨N, hN, ?_⟩
-  rw [Kraus.IsNBlkInjective, Kraus.wordSpan, eq_top_iff] at h ⊢
-  refine le_trans h (Submodule.span_le.mpr ?_)
-  rintro _ ⟨σ, rfl⟩
-  have hσ : Kraus.evalWord A (List.ofFn σ) =
-      (c ^ N)⁻¹ • Kraus.evalWord (c • A) (List.ofFn σ) := by
-    rw [show c • A = fun i => c • A i from rfl, Kraus.evalWord_smul, List.length_ofFn, smul_smul,
-      inv_mul_cancel₀ (pow_ne_zero N hc), one_smul]
-  dsimp only
-  rw [hσ]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨σ, rfl⟩)
 
 /-! ### Integer certificates for vanishing intertwiner spaces -/
 

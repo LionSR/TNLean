@@ -13,14 +13,18 @@ carry the controlled-`Z` dressing, are the blocks in which the anomaly of the `�
 symmetry shows (`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md`, Sections 4 and 5).
 Each has bond dimension four and compresses onto the one-dimensional target `λ(g,h) M_{gh}` with
 `z = 3` zero slots: the flag has two zero slots below the target and one above, the gauge is a
-unimodular integer matrix, the remainder is nonzero and nilpotent of order three, and both
-sitewise intertwiner spaces vanish, exactly as in Example D of the P5 note
+unimodular integer matrix, every product of four remainder letters vanishes, and both sitewise
+intertwiner spaces vanish, exactly as in Example D of the P5 note
 (`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, `ex:p5ft-czx`). The
 block `(x, x)` is the stacked CZX tensor of that example with its letters relabelled into the
 sixteen-letter pair alphabet.
 
 The targets are `M_e` for `(x, x)`, `-M_y` for `(x, xy)`, `M_y` for `(xy, x)` and `-M_e` for
 `(xy, xy)`, the signs being the periodic fusion signs `λ(g,h) = (-1)^{g_1 h_2}`.
+
+The data file (Section 4) records each of these remainders as nonzero and nilpotent of order
+three; only the vanishing of the remainder words of length at least four is stated here, which is
+the nilpotency clause of Theorem 7.7 with the bound `1 + z = 4`.
 
 ## Main results
 

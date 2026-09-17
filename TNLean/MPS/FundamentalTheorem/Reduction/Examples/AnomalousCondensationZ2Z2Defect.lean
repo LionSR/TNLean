@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2NonSplit
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Split
+import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.MPDO.DirectSum
 import TNLean.MPS.MPDO.OperatorProduct
 
@@ -19,8 +20,9 @@ the operator-level physics from the sixteen pair-block compression data of the c
 files:
 
 * the periodic fusion rules `U_g U_h = λ(g,h)^L U_{gh}` with the sign `λ(g,h) = (-1)^{g_1 h_2}`,
-  a nontrivial `ℤ/2`-valued two-cocycle, so that on odd rings the four operators form a
-  projective representation of `ℤ/2 × ℤ/2`;
+  so that on odd rings `U_x` and `U_y` anticommute and the four operators form a projective
+  representation of `ℤ/2 × ℤ/2` (the data file, Section 2, records `λ` as a `ℤ/2`-valued
+  two-cocycle of the Pauli class; no cocycle class is computed here);
 * the length-dependent operator identity `A_L² = (3 + (-1)^L) A_L`, so that `A_L / 4` is a
   projector exactly on even rings: on odd rings the anomalous symmetry cannot be condensed by
   its defect;
@@ -377,7 +379,7 @@ def pairTarget (p : Fin 4 × Fin 4) : MPSTensor 16 (pairDim p) :=
 
 /-- Every target of the assembled datum is normal. -/
 theorem pairTarget_isNormal (p : Fin 4 × Fin 4) : Kraus.IsNormal (pairTarget p) :=
-  isNormal_smul (symMPS_isNormal _) (fusionSign_ne_zero _ _)
+  (isNormal_smul_iff (fusionSign_ne_zero _ _) _).2 (symMPS_isNormal _)
 
 /-- **The word-trace identity of the stacked defect tensor** (data file, Section 4): the trace
 of every nonempty word of `N ⊗ N` is the sum over the sixteen pairs of `λ(g,h)^L` times the

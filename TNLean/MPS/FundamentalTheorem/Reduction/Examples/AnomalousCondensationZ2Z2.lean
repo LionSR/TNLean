@@ -30,7 +30,9 @@ and from the Else--Nayak associator of truncated operators (Section 3): its rest
 and to `y` is trivial and its restriction to `xy` is the CZX class. The periodic fusion rule of the
 four operators is `U_g U_h = λ(g,h)^L U_{gh}` with the sign `λ(g,h) = (-1)^{g_1 h_2}` (Section 2);
 these signs are the weights of the compression data in the companion files, not the
-three-cocycle itself.
+three-cocycle itself. No cocycle class is computed in this development: the statements below
+and in the companion files are the normality of the tensors, the fusion rules of the periodic
+operators, and the compression data, and the class is taken from the data file.
 
 Every matrix has entries in `{0, ±1}`, so the tensors are entrywise coercions of integer
 matrices, and every later verification is a decidable identity between integer matrices.
@@ -199,14 +201,14 @@ theorem negXYMPS_eq (a : Fin 16) : ((-1 : ℂ) • xyMPS) a = complexOfInt (negX
 /-! ### Normality -/
 
 /-- **The tensor of `U_e` is normal at length one**: its bond dimension is one and the letter
-`(0, 0)` acts by `1` (data file, Section 8). -/
+`(0, 0)` acts by `1` (data file, Section 1). -/
 theorem eMPS_isNormal : Kraus.IsNormal eMPS :=
   P6Compression.isNormal_of_single_eq_smul eIntMPS (c := 1) one_ne_zero
     (fun a => by rw [eMPS_eq, one_smul]) (fun _ _ => 0) (fun _ _ => 1) (fun _ _ => one_ne_zero)
     (by decide)
 
 /-- **The tensor of `U_y` is normal at length one**: its bond dimension is one and the letter
-`(0, 1)` acts by `1` (data file, Section 8). -/
+`(0, 1)` acts by `1` (data file, Section 1). -/
 theorem yMPS_isNormal : Kraus.IsNormal yMPS :=
   P6Compression.isNormal_of_single_eq_smul yIntMPS (c := 1) one_ne_zero
     (fun a => by rw [yMPS_eq, one_smul]) (fun _ _ => 1) (fun _ _ => 1) (fun _ _ => one_ne_zero)
@@ -221,7 +223,7 @@ def xSpanCoeff : Fin 2 → Fin 2 → Fin 4 → ℤ
   | 1, 1 => ![0, 0, 1, 1]
 
 /-- **The tensor of `U_x` is injective at blocking length two**: its length-two words span the
-full two-by-two matrix algebra (data file, Section 8). -/
+full two-by-two matrix algebra (data file, Section 1). -/
 theorem xMPS_isNBlkInjective_two : Kraus.IsNBlkInjective xMPS 2 :=
   isNBlkInjective_two_of_int xIntMPS xMPS_eq ![2, 7, 2, 7] ![2, 2, 7, 7] xSpanCoeff 2
     two_ne_zero (by decide)
@@ -234,7 +236,7 @@ def xySpanCoeff : Fin 2 → Fin 2 → Fin 4 → ℤ
   | 1, 0 => ![0, 0, -1, 1]
   | 1, 1 => ![1, 1, 0, 0]
 
-/-- **The tensor of `U_xy` is injective at blocking length two** (data file, Section 8). -/
+/-- **The tensor of `U_xy` is injective at blocking length two** (data file, Section 1). -/
 theorem xyMPS_isNBlkInjective_two : Kraus.IsNBlkInjective xyMPS 2 :=
   isNBlkInjective_two_of_int xyIntMPS xyMPS_eq ![3, 6, 3, 6] ![3, 3, 6, 6] xySpanCoeff 2
     two_ne_zero (by decide)
@@ -256,7 +258,7 @@ private theorem rowDifference_apply (X : Matrix (Fin 2) (Fin 2) ℂ) :
     rowDifference X = X 0 0 - X 1 0 := rfl
 
 /-- **The tensor of `U_x` is not injective at length one**: its four nonzero letters span only
-a two-dimensional space of matrices (data file, Section 8). -/
+a two-dimensional space of matrices (data file, Section 1). -/
 theorem xMPS_not_isNBlkInjective_one : ¬ Kraus.IsNBlkInjective xMPS 1 := by
   refine Kraus.not_isNBlkInjective_of_linearMap rowDifference (fun σ => ?_)
     (Matrix.single 0 0 1) (by simp [rowDifference_apply])
@@ -265,7 +267,7 @@ theorem xMPS_not_isNBlkInjective_one : ¬ Kraus.IsNBlkInjective xMPS 1 := by
   generalize σ 0 = a
   fin_cases a <;> simp [xMPS_eq, xIntMPS, complexOfInt]
 
-/-- **The tensor of `U_xy` is not injective at length one** (data file, Section 8). -/
+/-- **The tensor of `U_xy` is not injective at length one** (data file, Section 1). -/
 theorem xyMPS_not_isNBlkInjective_one : ¬ Kraus.IsNBlkInjective xyMPS 1 := by
   refine Kraus.not_isNBlkInjective_of_linearMap rowDifference (fun σ => ?_)
     (Matrix.single 0 0 1) (by simp [rowDifference_apply])
