@@ -50,10 +50,6 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-theorem complexOfInt_zero {m n : Type*} : complexOfInt (0 : Matrix m n ℤ) = 0 := by
-  ext i j
-  simp [complexOfInt]
-
 /-! ### Stacked products over the pair alphabet -/
 
 section Stacked
