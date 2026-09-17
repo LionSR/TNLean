@@ -250,22 +250,30 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$ of the $\psi$ line.
         IsingTwist.isingGaugeZ_mul_transpose, IsingTwist.isingGaugeZ_transpose_mul}
     \leanok
     \uses{def:asymex_ising_gauge}
-    Conjugating a matrix by a signed permutation matrix and its transpose
-    reads off the entries of the conjugated matrix at the permuted
-    coordinates, each carrying two signs. The Ising gauge $G$ satisfies
-    $GG^{\mathsf T}=G^{\mathsf T}G=\id$, so its transpose is its inverse.
+    Conjugating a matrix $M$ by a signed permutation matrix and its
+    transpose reads off the entries of $M$ at the permuted coordinates,
+    each carrying two signs: for a permutation $\pi$ and a sign vector $s$,
+    with the signed permutation matrix $G_{x,\pi(x)}=s(x)$ and zero
+    elsewhere,
+    \begin{align}
+        \bigl(GMG^{\mathsf T}\bigr)_{xy} & =s(x)\,M_{\pi(x)\pi(y)}\,s(y).
+        \label{eq:asymex_ising_gauge_conj}
+    \end{align}
+    The Ising gauge $G$ satisfies $GG^{\mathsf T}=G^{\mathsf T}G=\id$, so
+    its transpose is its inverse.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The conjugation formula is a direct expansion of the matrix product
-    against the two Kronecker deltas of the signed permutation matrices. For
-    the Ising gauge, both products with its transpose are the identity, a
-    finite verification over the twenty-four rows.
+    Identity~(\ref{eq:asymex_ising_gauge_conj}) is a direct expansion of the
+    matrix product against the two Kronecker deltas of the signed
+    permutation matrices. For the Ising gauge, both products with its
+    transpose are the identity, a finite verification over the twenty-four
+    rows.
 \end{proof}
 
-\begin{lemma}[The letter identity of the Ising bond-object twist]%
-    \label{lem:asymex_ising_letter_identity}
+\begin{theorem}[The letter identity of the Ising bond-object twist]%
+    \label{thm:asymex_ising_letter_identity}
     % Principal declaration: IsingTwist.isingGaugeZ_conj.
     \lean{IsingTwist.isingGaugeZ_conj, IsingTwist.isingBondObject_conjMatrix}
     \leanok
@@ -274,10 +282,11 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$ of the $\psi$ line.
     letter of the stacked tensor $B$ conjugated by the Ising gauge is block
     diagonal with the blocks $5(\sqrt2A_\sigma)^{(h,h')}$,
     $3(\sqrt2A_\sigma)^{(h,h')}$ and sixteen zeros.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_ising_sector_vanishing, thm:asymex_ising_gauge_unitary}
     A letter at a pair of labels with distinct middle labels vanishes by
     Theorem~\ref{thm:asymex_ising_sector_vanishing}, matching the zero
     conjugated block. For a pair of labels sharing a middle label, the
@@ -301,7 +310,7 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$ of the $\psi$ line.
         IsingTwist.isingBondObject_left_mul_right_of_ne,
         IsingTwist.isingBondObject_dim_eq, IsingTwist.isingBondObject_z_eq}
     \leanok
-    \uses{lem:asymex_ising_letter_identity, thm:asym_mpo_product}
+    \uses{thm:asymex_ising_letter_identity, thm:asym_mpo_product}
     The stacked tensor $B$ of Definition~\ref{def:asymex_ising_bond_object}
     carries the block triangular form of Theorem~\ref{thm:asym_multiblock} for
     the two weighted copies of $\sqrt2A_\sigma$, with weights $5$ and $3$, and
@@ -313,7 +322,7 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$ of the $\psi$ line.
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge, thm:asymex_zsqrt2_ring}
-    Lemma~\ref{lem:asymex_ising_letter_identity} gives the block-diagonal form
+    Theorem~\ref{thm:asymex_ising_letter_identity} gives the block-diagonal form
     of every conjugated letter over $\Z[\sqrt2]$, transported to the complex
     matrices by Theorem~\ref{thm:asymex_zsqrt2_ring}; block diagonality gives
     the triangularity condition and the identification of the two matched
@@ -339,9 +348,9 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$ of the $\psi$ line.
 
 \begin{proof}
     \leanok
-    \uses{lem:asymex_ising_letter_identity}
+    \uses{thm:asymex_ising_letter_identity}
     Every conjugated letter is already block diagonal by
-    Lemma~\ref{lem:asymex_ising_letter_identity}, so its off-diagonal blocks,
+    Theorem~\ref{thm:asymex_ising_letter_identity}, so its off-diagonal blocks,
     which form the conjugated remainder, vanish; the sitewise intertwiners are
     the block-diagonal identity read on the matched blocks.
 \end{proof}
@@ -542,7 +551,7 @@ product state, in the sense of Corollary~\ref{cor:asym_action_tensors}.
     \label{thm:asymex_ising_action_trace}
     \lean{IsingTwist.sectorAction_trace_evalWord, IsingTwist.thetaThree_mpo_sectorState}
     \leanok
-    \uses{thm:asymex_ising_action_split, prop:asym_compression_trace}
+    \uses{thm:asymex_ising_action_compression, prop:asym_compression_trace}
     For every nonempty word $w$,
     \begin{align}
         \tr\bigl((\Theta_3\cdot\psi_{\sigma1\sigma})^w\bigr)
