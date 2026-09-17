@@ -200,11 +200,54 @@ three-cocycle allows no invariant single-block state
     fixing each of $\Psi_1,\Psi_\tau$.
 \end{proof}
 
+\begin{theorem}[Word-trace relations against a normal tensor are integral]%
+    \label{thm:asymex_fib_anomaly_trace_integral}
+    \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
+    \leanok
+    \uses{def:normal}
+    Let $B$ be a matrix product state tensor and $A$ a normal tensor of
+    positive bond dimension, over the same alphabet. If every nonempty word
+    trace of $B$ is one scalar $c$ times the corresponding word trace of
+    $A$, $\tr(B^w)=c\,\tr(A^w)$ for every nonempty word $w$, then $c$ is a
+    nonnegative integer.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Normality writes a matrix unit of $A$ as a combination
+    $\sum_ux_uA^u$ of words of one positive length $\ell$; the same
+    combination $N=\sum_ux_uB^u$ of words of $B$ then satisfies
+    $\tr(N^k)=c\,\tr\bigl((\sum_ux_uA^u)^k\bigr)=c$ for every positive $k$,
+    and a scalar whose every positive power of one fixed matrix has this
+    constant trace is a nonnegative integer.
+\end{proof}
+
+\begin{theorem}[Rank-one actions on a normal tensor are integral]%
+    \label{thm:asymex_fib_anomaly_integral_action}
+    \lean{MPOTensor.exists_nat_eq_of_mpo_mulVec_mpv_eq_smul}
+    \leanok
+    \uses{thm:asymex_fib_anomaly_trace_integral, cor:asym_action_tensors}
+    Let $T$ be a matrix product operator tensor and $A$ a normal matrix
+    product state tensor of positive bond dimension. If at every positive
+    length the periodic operator of $T$ acts on the periodic vector of $A$
+    as multiplication by one length-independent scalar $c$, then $c$ is a
+    nonnegative integer.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The periodic-vector relation is the word-trace relation of
+    Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} for the action
+    tensor $T\cdot A$ of Corollary~\ref{cor:asym_action_tensors} against
+    $A$.
+\end{proof}
+
 \begin{theorem}[A nonzero length-independent eigenvalue is impossible]%
     \label{thm:asymex_fib_anomaly_eigenvalue_zero}
     \lean{FibonacciCompression.fibTau_eigenvalue_eq_zero}
     \leanok
-    \uses{thm:asymex_fib_anomaly_fusion_algebra, cor:asym_action_tensors}
+    \uses{thm:asymex_fib_anomaly_fusion_algebra,
+        thm:asymex_fib_anomaly_integral_action}
     Let $A$ be a normal tensor of positive bond dimension, with periodic
     vectors $\Psi_A$. If the periodic operator of the $\tau$ block acts on
     $\Psi_A$ at every positive length by one length-independent scalar $c$,
@@ -213,8 +256,9 @@ three-cocycle allows no invariant single-block state
 
 \begin{proof}
     \leanok
-    By Corollary~\ref{cor:asym_action_tensors}, applied to the action of
-    the $\tau$ block on $A$, $c$ is a nonnegative integer $m$. If $m\neq0$,
+    By Theorem~\ref{thm:asymex_fib_anomaly_integral_action}, applied to the
+    action of the $\tau$ block on $A$, $c$ is a nonnegative integer $m$. If
+    $m\neq0$,
     cancelling $m$ in the relation obtained by applying the unit law
     $O_1O_\tau=O_\tau$ (Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra})
     to $\Psi_A$ gives $O_1\Psi_A=\Psi_A$. The fusion rule
@@ -229,8 +273,7 @@ three-cocycle allows no invariant single-block state
     \label{thm:asymex_fib_anomaly_no_go}
     \lean{FibonacciCompression.not_exists_normal_fibonacci_symmetric}
     \leanok
-    \uses{thm:asymex_fib_anomaly_eigenvalue_zero, thm:asym_splitting,
-        cor:asym_anomaly_not_star}
+    \uses{thm:asymex_fib_anomaly_eigenvalue_zero, thm:asymex_fib_fusion}
     There is no positive bond dimension $D$, normal tensor $A$ of bond
     dimension $D$, and scalar $c$, such that at every positive length $L$
     the periodic operators satisfy $O_1\Psi_A=\Psi_A$ and
