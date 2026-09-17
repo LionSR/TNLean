@@ -494,23 +494,25 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     integer $z\geq0$, an integer $r=|S|+z$, an invertible matrix
     $G\in\GL_{D_B}(\C)$, and maps $V_s:\C^{D_s}\to\C^{D_B}$,
     $W_s:\C^{D_B}\to\C^{D_s}$, with the following properties.
-    \begin{enumerate}[label=(\roman*)]
-        \item Every $GB^iG^{-1}$ is block upper triangular for one common
+    % Plain enumerate with explicit tags: the kernel key-value list syntax
+    % [label=(\roman*)] requires LaTeX2e >= 2025, which CI does not have.
+    \begin{enumerate}
+        \item[(i)] Every $GB^iG^{-1}$ is block upper triangular for one common
               decomposition into $r$ blocks.
-        \item Exactly $|S|$ of the diagonal slots are matched with the
+        \item[(ii)] Exactly $|S|$ of the diagonal slots are matched with the
               target slots: writing $j(s)$ for the position matched with $s$,
               there is $X_s\in\GL_{D_s}(\C)$ with
               $\bigl(GB^iG^{-1}\bigr)_{j(s),j(s)}=X_sC_s^iX_s^{-1}$.
-        \item The remaining $z$ diagonal slots are one-dimensional zero
+        \item[(iii)] The remaining $z$ diagonal slots are one-dimensional zero
               tensors.
-        \item The compression pairs are mutually biorthogonal: $W_sV_t=
+        \item[(iv)] The compression pairs are mutually biorthogonal: $W_sV_t=
                   \id_{D_s}$ if $s=t$ and $0$ otherwise.
-        \item For every nonempty word $w$, $W_sB^wV_s=C_s^w$.
-        \item Writing $\widehat C^i=\sum_{s\in S}V_sC_s^iW_s$ and
+        \item[(v)] For every nonempty word $w$, $W_sB^wV_s=C_s^w$.
+        \item[(vi)] Writing $\widehat C^i=\sum_{s\in S}V_sC_s^iW_s$ and
               $R^i=B^i-\widehat C^i$, every product
               $R^{i_1}R^{i_2}\cdots R^{i_r}=0$: the non-unital algebra generated
               by the $R^i$ is nilpotent.
-        \item $D_B=\sum_{s\in S}D_s+z$.
+        \item[(vii)] $D_B=\sum_{s\in S}D_s+z$.
     \end{enumerate}
 \end{theorem}
 
