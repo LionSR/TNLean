@@ -56,8 +56,11 @@ Section~\ref{sec:asymex_ising_tensors}.
 
 \begin{proof}
     \leanok
-    Injectivity follows because a square root of two in $\Z[\sqrt2]$ would
-    give an integer square root of two. Multiplicativity of the entrywise
+    Injectivity follows from the uniqueness of the integer coordinates
+    $a,b$ presenting $a+b\sqrt2$: if $a+b\sqrt2=a'+b'\sqrt2$ as real
+    numbers, then $(b-b')\sqrt2=a'-a$ is an integer, and two is not the
+    square of an integer, so $\sqrt2$ is irrational and $b=b'$, whence
+    $a=a'$. Multiplicativity of the entrywise
     embedding is the fact that it is induced by a ring homomorphism, and the
     two compatibility statements follow by expanding the bond-space product and
     the bond-space action entrywise. Normality is the same normalization
@@ -278,13 +281,14 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$ of the $\psi$ line.
     A letter at a pair of labels with distinct middle labels vanishes by
     Theorem~\ref{thm:asymex_ising_sector_vanishing}, matching the zero
     conjugated block. For a pair of labels sharing a middle label, the
-    conjugated letter reduces, by Theorem~\ref{thm:asymex_ising_gauge_unitary},
-    to a sum over the middle labels of that one sector, and this reduced
-    identity is a finite verification over the entries of
-    Definitions~\ref{def:asymex_ising_tensors} and~\ref{def:asymex_ising_gauge},
-    split into three disjoint families of pair labels by the shared middle
-    label so that no single verification carries more than a few of the
-    conjugated matrices.
+    conjugation formula of Theorem~\ref{thm:asymex_ising_gauge_unitary} reads
+    the conjugated letter off at the permuted coordinates, the stacked
+    product at that pair restricts to a sum over the middle labels of the
+    shared sector, and the resulting identity is a finite verification over
+    the entries of Definitions~\ref{def:asymex_ising_tensors}
+    and~\ref{def:asymex_ising_gauge}, split into three disjoint families of
+    pair labels by the shared middle label so that no single verification
+    carries more than a few of the conjugated matrices.
 \end{proof}
 
 \section{Compression onto the $\sigma$ strand}%
