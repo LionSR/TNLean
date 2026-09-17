@@ -18,7 +18,8 @@ Theorem 7.7) reduce to finite decisions.
 * The sitewise intertwining equations `B^i X = X C^i` of a source with a block are a linear
   system in the entries of `X`. A selection of the equations whose coefficient matrix has an
   explicit left inverse up to a nonzero scalar forces `X = 0`. This is the form in which the
-  absence of sitewise intertwiners, the algebraic trace of an anomaly, is certified.
+  absence of sitewise intertwiners, that is, the failure of the extension of a compression to
+  split into sitewise fusion pairs, is certified.
 * A tensor whose letters are a common reindexing of block-diagonal matrices evaluates words
   block by block, so its word traces are the sums of the word traces of the blocks. This is
   how a condensation defect `⊕_g U_g` and its stacked square are assembled from their summands.

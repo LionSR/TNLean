@@ -18,9 +18,12 @@ The exact data and its verification in exact arithmetic over `ℤ[ω]` are recor
 
 On a periodic chain of `L` qutrits the symmetry is the phase-decorated shift
 `U = X^{⊗ L} ∏_k ω^{[s_k ≠ 0] s_{k+1}}`, where `X|s⟩ = |s + 1⟩` and `ω = e^{2πi/3}`: a matrix
-product unitary of bond dimension two with tensor `M^{s+1, s} = c_s e_{[s ≠ 0]}ᵀ`,
+product operator of bond dimension two with tensor `M^{s+1, s} = c_s e_{[s ≠ 0]}ᵀ`,
 `c_s = (1, ω^s)ᵀ`, that satisfies `U³ = 1` exactly at every length. Together with the identity
-and `U† = U²` it is an exact representation of `ℤ/3`. The representation is anomalous: the
+and the inverse `U† = U² = U⁻¹` it is an exact representation of `ℤ/3`. Unitarity of `U`, which
+would identify `U†` with the adjoint of `U`, is not formalized in these modules; throughout,
+`U†` denotes the group inverse, and the statements proved about it are `U U† = U† U = 1` and
+`U³ = 1` at every positive length. The representation is anomalous: the
 class of its restricted operators in `H³(ℤ/3, U(1)) = ℤ/3` is the generator `j = 1`, certified
 in the verification script in two independent exact ways (the Else–Nayak cocycle of the
 restricted operators, and the associator of the fusion tensors of the compression data), against

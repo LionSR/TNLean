@@ -41,7 +41,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/Fibonacci.lean`, `mpo_uu` and `mpo_dd` in
   `Examples/Z3AnomalousFusion.lean`, `mpo_ud` and `mpo_du` in
   `Examples/Z3AnomalousInverseFusion.lean`, `mpo_defect_mul_defect` in
-  `Examples/Z3AnomalousDefect.lean`.
+  `Examples/Z3AnomalousDefectCompression.lean`.
 - **Abstraction:** `MPOTensor.mpo_apply_toMPSTensor`, `MPOTensor.ofFn_pairConfig_ne_nil`,
   `MPOTensor.mpo_eq_of_trace_evalWord` and `MPOTensor.mpo_mul_eq_of_trace_evalWord` in
   `TNLean/MPS/MPDO/OperatorFromWordTrace.lean`.
