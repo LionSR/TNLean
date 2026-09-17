@@ -890,6 +890,34 @@ already determines an identity between their periodic operators.
     Theorem~\ref{thm:asym_weighted_compression} hold.
 \end{proof}
 
+\begin{corollary}[Periodic-operator readings of a compression]
+    \label{cor:asym_compression_periodic}
+    \lean{MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression,
+        MPOTensor.mpo_mulVec_mpv_eq_sum_of_multiBlockCompression}
+    \leanok
+    \uses{prop:asym_compression_trace}
+    Two readings of Proposition~\ref{prop:asym_compression_trace},
+    converse to Theorem~\ref{thm:asym_mpo_product} and
+    Corollary~\ref{cor:asym_action_tensors}. If the stacked product of
+    $M_\alpha$ and $M_\beta$ admits the block triangular form of
+    Theorem~\ref{thm:asym_multiblock} for a family $(C_s)_{s\in S}$ of
+    operator tensors, then $O_N(M_\alpha)O_N(M_\beta)=\sum_{s\in
+            S}O_N(C_s)$ for every $N\geq1$. If the action tensor $T\cdot A_x$
+    admits the same form for a family $(C_s)_{s\in S}$ of state tensors,
+    then $O_N(T)\ket{V^{(N)}(A_x)}=\sum_{s\in S}\ket{V^{(N)}(C_s)}$ for
+    every $N\geq1$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{prop:asym_compression_trace}
+    Both identities are the periodic-vector reading of
+    Proposition~\ref{prop:asym_compression_trace}, taken on the pair
+    alphabet of $(M_\alpha,M_\beta)$ for the product and on the alphabet of
+    $T\cdot A_x$ for the action, through the definitions of the periodic
+    operator and of the action tensor.
+\end{proof}
+
 \section{Length-dependent coefficients are power sums}%
 \label{sec:asym_power_sums}
 

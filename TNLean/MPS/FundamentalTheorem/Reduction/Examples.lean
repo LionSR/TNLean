@@ -22,7 +22,11 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.EisensteinCertificates
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.EisensteinRing
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Fibonacci
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciAction
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciAnomaly
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciUnit
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorOne
