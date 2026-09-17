@@ -618,7 +618,7 @@ $\{+1,-1\}$.
 The unnormalized Kramers--Wannier duality kernel on a periodic chain of $L$
 qubits is
 \begin{align}
-    \bra{s'}D\ket{s} & =\prod_{j=1}^{L}(-1)^{r_j(s_j+s_{j+1})},
+    \bra{s'}D\ket{s} & =\prod_{j=1}^{L}(-1)^{s'_j(s_j+s_{j+1})},
     \qquad s_{L+1}=s_1,
     \label{eq:asymex_kw_kernel}
 \end{align}
@@ -668,10 +668,12 @@ word length one.
     % of Definition~\ref{def:asymex_kw}.
     % Source: Definition~\ref{def:asymex_kw}.
     % Ink-to-index map: both rows are the duality tensor $W$; the shared
-    % vertical pairleg at each site is the summed index $m$.
+    % vertical pairleg at each site is the summed index $m$; the drawn
+    % upper-row label $r$ is the per-site component of the outgoing
+    % index $s'$.
     % Contraction set: the vertical pairlegs (index $m$) at every site
     % and the horizontal virtual bonds within each row; the physical
-    % legs $(s',s)$ remain open.
+    % legs $(r,s)$, the per-site components of $(s',s)$, remain open.
     % Boundary signature: (virtual-west=0 | virtual-east=0 |
     % physical-up=3 | physical-down=3) on both sides.
     \tenkzkernel
@@ -939,8 +941,9 @@ same under either reading.
     % product-state tensor $A_+$ (left) and at the Greenberger--Horne--
     % Zeilinger tensor $A_{\mathrm{GHZ}}$ (right).
     % Source: Definition~\ref{def:asymex_kw_action}.
-    % Ink-to-index map: the upper row is the duality tensor $W$ with
-    % physical legs $s'$, the lower row is the acted-on state tensor;
+    % Ink-to-index map: the upper row is the duality tensor $W$, whose
+    % drawn physical legs $r$ are the per-site components of the
+    % outgoing index $s'$; the lower row is the acted-on state tensor;
     % the shared vertical pairleg at each site is the summed index $s$.
     % Contraction set: the vertical pairlegs (index $s$) at every site
     % and the horizontal virtual bonds within each row, both closed by
@@ -1183,10 +1186,11 @@ takes place in a quartic ring.
     % Source: Definition~\ref{def:asymex_fib}.
     % Ink-to-index map: both rows are the $\tau$ tensor $B_\tau$; the
     % shared vertical pairleg at each site is the summed intermediate
-    % label $m$.
+    % label $m$; the drawn upper-row label $y$ is the per-site
+    % component of the outgoing index $x'$.
     % Contraction set: the vertical pairlegs (index $m$) at every site
     % and the horizontal virtual bonds within each row; the physical
-    % legs $(x',x)$ remain open.
+    % legs $(y,x)$, the per-site components of $(x',x)$, remain open.
     % Boundary signature: (virtual-west=0 | virtual-east=0 |
     % physical-up=3 | physical-down=3) on both sides.
     \tenkzkernel
