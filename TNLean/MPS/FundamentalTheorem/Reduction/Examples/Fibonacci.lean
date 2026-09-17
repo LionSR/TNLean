@@ -3,8 +3,10 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+import TNLean.MPS.MPDO.OperatorFromWordTrace
 
 /-!
 # Example F: the Fibonacci fusion `τ ⊗ τ = 1 ⊕ τ`
@@ -223,10 +225,7 @@ theorem fibTauMPS_isNormal : Kraus.IsNormal fibTauMPS := by
     refine Submodule.sum_mem _ fun k _ => ?_
     rw [complexOfGolden_smul, ← evalWord_complexOfGolden, ← fibTauMPS_eq_complexOfGolden]
     exact T.smul_mem _ (hword _ _ _)
-  refine top_unique fun X _ => ?_
-  rw [Matrix.matrix_eq_sum_single X]
-  refine Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => ?_
-  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using T.smul_mem (X i j) (hunit i j)
+  exact T.eq_top_of_forall_single_mem hunit
 
 /-- **The trivial block is normal.** Its length-three words span the full two-by-two matrix
 algebra (data file §3.2). -/
@@ -247,10 +246,7 @@ theorem fibOneMPS_isNormal : Kraus.IsNormal fibOneMPS := by
     refine T.smul_mem _ ?_
     fin_cases k
     exacts [hword 0 3 3, hword 0 3 0, hword 3 0 3, hword 3 3 0]
-  refine top_unique fun X _ => ?_
-  rw [Matrix.matrix_eq_sum_single X]
-  refine Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => ?_
-  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using T.smul_mem (X i j) (hunit i j)
+  exact T.eq_top_of_forall_single_mem hunit
 
 /-! ### The stacked tensor of the square -/
 
@@ -638,14 +634,9 @@ theorem fibonacci_fusion_rule (L : ℕ) (hL : 0 < L) :
       MPOTensor.mpo fibOne L + MPOTensor.mpo fibTau L := by
   rw [← MPOTensor.mpo_mulTensor]
   ext σ τ
-  have hw : (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) ≠ [] := by
-    simp only [ne_eq, List.ofFn_eq_nil_iff]
-    omega
-  have h := fibStack_trace_evalWord (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) hw
-  unfold fibStack fibOneMPS fibTauMPS at h
-  rw [MPOTensor.evalWord_toMPSTensor_pairConfig, MPOTensor.evalWord_toMPSTensor_pairConfig,
-    MPOTensor.evalWord_toMPSTensor_pairConfig] at h
-  simpa [MPOTensor.mpoMatrixEntry] using h
+  rw [Matrix.add_apply, MPOTensor.mpo_apply_toMPSTensor, MPOTensor.mpo_apply_toMPSTensor,
+    MPOTensor.mpo_apply_toMPSTensor]
+  exact fibStack_trace_evalWord _ (MPOTensor.ofFn_pairConfig_ne_nil hL σ τ)
 
 /-- The matrix-product-vector form of the fusion rule: at every positive system size the vector
 of the stacked tensor is the sum of the vectors of the two blocks. -/

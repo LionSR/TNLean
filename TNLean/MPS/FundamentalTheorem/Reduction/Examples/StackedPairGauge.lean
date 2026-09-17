@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import QICLean.Kraus.Injectivity
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
 
 /-!
@@ -189,7 +190,7 @@ theorem isNormal_of_single_eq_smul {D : ℕ} {A : MPSTensor d D}
     (w : Fin D → Fin D → ℤ) (hw : ∀ x y, w x y ≠ 0)
     (h : ∀ x y, AInt (ℓ x y) = w x y • Matrix.single x y 1) :
     Kraus.IsNormal A := by
-  refine Kraus.IsInjective.isNormal (top_unique fun X _ => ?_)
+  refine Kraus.IsInjective.isNormal ?_
   have hsingle : ∀ x y : Fin D,
       complexOfInt (Matrix.single x y (1 : ℤ)) = Matrix.single x y (1 : ℂ) := by
     intro x y
@@ -205,9 +206,6 @@ theorem isNormal_of_single_eq_smul {D : ℕ} {A : MPSTensor d D}
     have hmul := Submodule.smul_mem (Submodule.span ℂ (Set.range A)) (c * (w x y : ℂ))⁻¹
       (Submodule.subset_span (Set.mem_range_self (ℓ x y)))
     rwa [hAl, smul_smul, inv_mul_cancel₀ hne, one_smul] at hmul
-  rw [Matrix.matrix_eq_sum_single X]
-  refine Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => ?_
-  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using
-    Submodule.smul_mem _ (X i j) (hmem i j)
+  exact Submodule.eq_top_of_forall_single_mem _ hmem
 
 end P6Compression

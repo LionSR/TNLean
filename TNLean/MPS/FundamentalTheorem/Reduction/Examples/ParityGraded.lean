@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Matrix.Basis
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
@@ -154,10 +155,7 @@ theorem parA_isNormal : Kraus.IsNormal parA := by
     intro i j
     fin_cases i <;> fin_cases j
     exacts [m00, m01, m10, m11]
-  refine top_unique fun X _ => ?_
-  rw [Matrix.matrix_eq_sum_single X]
-  refine Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => ?_
-  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using T.smul_mem (X i j) (hunit i j)
+  exact T.eq_top_of_forall_single_mem hunit
 
 /-! ### The five-dimensional mixed-basis source -/
 
