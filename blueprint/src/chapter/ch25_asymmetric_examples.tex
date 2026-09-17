@@ -618,7 +618,7 @@ $\{+1,-1\}$.
 The unnormalized Kramers--Wannier duality kernel on a periodic chain of $L$
 qubits is
 \begin{align}
-    \bra{s'}D\ket{s} & =\prod_{j=1}^{L}(-1)^{s'_j(s_j+s_{j+1})},
+    \bra{s'}D\ket{s} & =\prod_{j=1}^{L}(-1)^{r_j(s_j+s_{j+1})},
     \qquad s_{L+1}=s_1,
     \label{eq:asymex_kw_kernel}
 \end{align}
@@ -676,10 +676,10 @@ word length one.
     % physical-up=3 | physical-down=3) on both sides.
     \tenkzkernel
     \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$s'_1$, 270:physical}]{W} &
-        \tn[skin=mpo, ports={90:physical:$s'_2$, 270:physical}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_1$, 270:physical}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_2$, 270:physical}]{W} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$s'_N$, 270:physical}]{W} \\
+        \tn[skin=mpo, ports={90:physical:$r_N$, 270:physical}]{W} \\
         \tn[skin=mpo, ports={90:physical, 270:physical:$s_1$}]{W} &
         \tn[skin=mpo, ports={90:physical, 270:physical:$s_2$}]{W} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
@@ -687,10 +687,10 @@ word length one.
     \end{tenkz}
     \quad $=$ \quad
     \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$s'_1$, 270:physical:$s_1$}]{B} &
-        \tn[skin=mpo, ports={90:physical:$s'_2$, 270:physical:$s_2$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$r_1$, 270:physical:$s_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$r_2$, 270:physical:$s_2$}]{B} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$s'_N$, 270:physical:$s_N$}]{B}
+        \tn[skin=mpo, ports={90:physical:$r_N$, 270:physical:$s_N$}]{B}
     \end{tenkz}
 \end{center}
 
@@ -950,10 +950,10 @@ same under either reading.
     % physical-up=3 | physical-down=0) for both pictures.
     \tenkzkernel
     \begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$s'_1$}]{W} &
-        \tn[skin=mpo, ports={90:physical:$s'_2$}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_1$}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_2$}]{W} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$s'_N$}]{W} \\
+        \tn[skin=mpo, ports={90:physical:$r_N$}]{W} \\
         \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+} &
         \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
@@ -961,10 +961,10 @@ same under either reading.
     \end{tenkz}
     \qquad
     \begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$s'_1$}]{W} &
-        \tn[skin=mpo, ports={90:physical:$s'_2$}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_1$}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_2$}]{W} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$s'_N$}]{W} \\
+        \tn[skin=mpo, ports={90:physical:$r_N$}]{W} \\
         \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}} &
         \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
@@ -1191,10 +1191,10 @@ takes place in a quartic ring.
     % physical-up=3 | physical-down=3) on both sides.
     \tenkzkernel
     \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$x'_1$, 270:physical}]{B_\tau} &
-        \tn[skin=mpo, ports={90:physical:$x'_2$, 270:physical}]{B_\tau} &
+        \tn[skin=mpo, ports={90:physical:$y_1$, 270:physical}]{B_\tau} &
+        \tn[skin=mpo, ports={90:physical:$y_2$, 270:physical}]{B_\tau} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$x'_N$, 270:physical}]{B_\tau} \\
+        \tn[skin=mpo, ports={90:physical:$y_N$, 270:physical}]{B_\tau} \\
         \tn[skin=mpo, ports={90:physical, 270:physical:$x_1$}]{B_\tau} &
         \tn[skin=mpo, ports={90:physical, 270:physical:$x_2$}]{B_\tau} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
@@ -1202,10 +1202,10 @@ takes place in a quartic ring.
     \end{tenkz}
     \quad $=$ \quad
     \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$x'_1$, 270:physical:$x_1$}]{B} &
-        \tn[skin=mpo, ports={90:physical:$x'_2$, 270:physical:$x_2$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$y_1$, 270:physical:$x_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$y_2$, 270:physical:$x_2$}]{B} &
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$x'_N$, 270:physical:$x_N$}]{B}
+        \tn[skin=mpo, ports={90:physical:$y_N$, 270:physical:$x_N$}]{B}
     \end{tenkz}
 \end{center}
 
