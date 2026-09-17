@@ -1045,6 +1045,48 @@ abstracted — record why, so it is not re-proposed).
   sites now resolve the shared name through `open MPSTensor`, for a net loss of
   about thirty lines.
 
+### golden compression datum from a decided gauge — promoted
+- **Pattern:** an example over `ℤ[σ]` records the letters of the source and of
+  the targets, a change of bond coordinates and its inverse, and the conjugated
+  letters as explicit matrices, decides `G G⁻¹ = 1`, `B^i G⁻¹ = G⁻¹ K^i` and the
+  block structure of every `K^i`, and then assembles the multi-block
+  compression datum by transporting each decided identity along
+  `complexOfGolden` in the three structure fields, and separately reproves that
+  the remainder vanishes from the block diagonality of the `K^i`.
+- **Seen:** seven occurrences (2026-09-17): the `τ ⊗ τ` datum of
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/Fibonacci.lean`, the three
+  unit laws of `Examples/FibonacciUnit.lean`, and the three action tensors of
+  `Examples/FibonacciAction.lean`.
+- **Abstraction:** `MPSTensor.goldenGauge`, `MPSTensor.conjMatrix_goldenGauge`,
+  `MPSTensor.MultiBlockCompression.ofGolden` and
+  `MPSTensor.MultiBlockCompression.remainder_eq_zero_of_goldenGauge` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/GoldenCompression.lean`,
+  with `MPSTensor.unitOrd` and `MPSTensor.unitCoord` for the block ordering
+  and bond coordinates of a datum with one target placed before the zero
+  slots.
+- **Notes:** each example now supplies only its matrices and five decided
+  identities; the matched clause is stated with the target indices quantified
+  before the letter (`revert i; revert p q; decide +kernel`), since with the
+  letter first the instance search for the decidability of the clause fails on
+  the first-order unification of the target family against a matrix. The
+  `τ ⊗ τ` datum lost its three field proofs and its remainder proof.
+
+### normality from a golden matrix-unit table — promoted
+- **Pattern:** a tensor over `ℤ[σ]` is shown normal by deciding, for every
+  matrix unit, a combination of words of one positive length with coefficients
+  in `ℤ[σ]`, transporting the identity along `complexOfGolden`, and closing the
+  span argument by `Matrix.matrix_eq_sum_single`.
+- **Seen:** four occurrences (2026-09-17): the two blocks of
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/Fibonacci.lean` and the two
+  normal states of `Examples/FibonacciAction.lean`.
+- **Abstraction:** `MPSTensor.isNormal_of_golden_single` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/GoldenCompression.lean`,
+  the golden analogue of `P6Compression.isNormal_of_single_eq_smul` for words
+  of positive length rather than single letters.
+- **Notes:** the words are given as functions `Fin ℓ → Fin d` so that the
+  length is fixed by the type; the two former proofs of the Fibonacci blocks
+  became one-line applications, for a net loss of about forty lines.
+
 ## Completed refactors
 
 ### Appending a tuple endpoint under `List.ofFn`

@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
 /-!
@@ -180,11 +180,11 @@ def fibTauUnitCoeff : Fin 3 → Fin 3 → Fin 3 → GoldenInt
 
 /-- The four length-three words of the trivial block used to span the two-by-two matrix
 algebra. -/
-def fibOneWord : Fin 4 → List (Fin 4)
-  | 0 => [0, 3, 3]
-  | 1 => [0, 3, 0]
-  | 2 => [3, 0, 3]
-  | 3 => [3, 3, 0]
+def fibOneWord : Fin 4 → Fin 3 → Fin 4
+  | 0 => ![0, 3, 3]
+  | 1 => ![0, 3, 0]
+  | 2 => ![3, 0, 3]
+  | 3 => ![3, 3, 0]
 
 /-- The coefficients expressing the matrix unit `E_{ij}` of the trivial block as a combination of
 the four words of `fibOneWord`. -/
@@ -194,63 +194,17 @@ def fibOneUnitCoeff : Fin 2 → Fin 2 → Fin 4 → GoldenInt
   | 1, 0 => ![0, 0, 1, -1]
   | 1, 1 => ![0, 0, 0, 1]
 
-private theorem fibTauGolden_single (i j : Fin 3) :
-    ∑ k : Fin 3, fibTauUnitCoeff i j k •
-        evalWordGolden fibTauGoldenMPS [i.succ, 3, k.succ] = Matrix.single i j 1 := by
-  revert i j
-  decide +kernel
-
-private theorem fibOneGolden_single (i j : Fin 2) :
-    ∑ k : Fin 4, fibOneUnitCoeff i j k • evalWordGolden fibOneGoldenMPS (fibOneWord k) =
-      Matrix.single i j 1 := by
-  revert i j
-  decide +kernel
-
 /-- **The `τ` block is normal.** Its length-three words span the full three-by-three matrix
 algebra (data file §3.2). -/
-theorem fibTauMPS_isNormal : Kraus.IsNormal fibTauMPS := by
-  refine ⟨3, by norm_num, ?_⟩
-  rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
-  set T := Submodule.span ℂ
-    (Set.range fun w : Fin 3 → Fin 4 => Kraus.evalWord fibTauMPS (List.ofFn w)) with hT
-  have hword : ∀ a b c : Fin 4, Kraus.evalWord fibTauMPS [a, b, c] ∈ T :=
-    fun a b c => Submodule.subset_span ⟨![a, b, c], by simp [Kraus.evalWord, List.ofFn_succ]⟩
-  have hunit : ∀ i j : Fin 3, Matrix.single i j (1 : ℂ) ∈ T := by
-    intro i j
-    have h := congrArg complexOfGolden (fibTauGolden_single i j)
-    rw [complexOfGolden_single, complexOfGolden_sum] at h
-    rw [← h]
-    refine Submodule.sum_mem _ fun k _ => ?_
-    rw [complexOfGolden_smul, ← evalWord_complexOfGolden, ← fibTauMPS_eq_complexOfGolden]
-    exact T.smul_mem _ (hword _ _ _)
-  refine top_unique fun X _ => ?_
-  rw [Matrix.matrix_eq_sum_single X]
-  refine Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => ?_
-  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using T.smul_mem (X i j) (hunit i j)
+theorem fibTauMPS_isNormal : Kraus.IsNormal fibTauMPS :=
+  isNormal_of_golden_single fibTauGoldenMPS fibTauMPS_eq (by norm_num : 0 < 3)
+    (fun i _ k => ![i.succ, 3, k.succ]) fibTauUnitCoeff (by decide +kernel)
 
 /-- **The trivial block is normal.** Its length-three words span the full two-by-two matrix
 algebra (data file §3.2). -/
-theorem fibOneMPS_isNormal : Kraus.IsNormal fibOneMPS := by
-  refine ⟨3, by norm_num, ?_⟩
-  rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
-  set T := Submodule.span ℂ
-    (Set.range fun w : Fin 3 → Fin 4 => Kraus.evalWord fibOneMPS (List.ofFn w)) with hT
-  have hword : ∀ a b c : Fin 4, Kraus.evalWord fibOneMPS [a, b, c] ∈ T :=
-    fun a b c => Submodule.subset_span ⟨![a, b, c], by simp [Kraus.evalWord, List.ofFn_succ]⟩
-  have hunit : ∀ i j : Fin 2, Matrix.single i j (1 : ℂ) ∈ T := by
-    intro i j
-    have h := congrArg complexOfGolden (fibOneGolden_single i j)
-    rw [complexOfGolden_single, complexOfGolden_sum] at h
-    rw [← h]
-    refine Submodule.sum_mem _ fun k _ => ?_
-    rw [complexOfGolden_smul, ← evalWord_complexOfGolden, ← fibOneMPS_eq_complexOfGolden]
-    refine T.smul_mem _ ?_
-    fin_cases k
-    exacts [hword 0 3 3, hword 0 3 0, hword 3 0 3, hword 3 3 0]
-  refine top_unique fun X _ => ?_
-  rw [Matrix.matrix_eq_sum_single X]
-  refine Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => ?_
-  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using T.smul_mem (X i j) (hunit i j)
+theorem fibOneMPS_isNormal : Kraus.IsNormal fibOneMPS :=
+  isNormal_of_golden_single fibOneGoldenMPS fibOneMPS_eq (by norm_num : 0 < 3)
+    (fun _ _ k => fibOneWord k) fibOneUnitCoeff (by decide +kernel)
 
 /-! ### The stacked tensor of the square -/
 
@@ -599,23 +553,11 @@ private theorem fibStack_unmatched_golden (i : Fin 4) (t : Fin 4) (p q : Fin 1) 
 /-- **The multi-block asymmetric compression datum of the Fibonacci fusion** (P5 note,
 Theorem 7.7, clauses (i)–(iii); data file §3.3). The stacked tensor of `τ ⊗ τ` compresses onto the
 trivial block and the `τ` block, with four one-dimensional zero slots left over. -/
-def fibonacci_compression : MultiBlockCompression fibStack fibSlots fibTargets where
-  z := 4
-  ord := fibOrd
-  gauge := fibGauge
-  triangular i x y h := by
-    rw [fibStack_conjMatrix, Matrix.submatrix_apply, complexOfGolden_apply,
-      fibStack_triangular_golden i x y h, map_zero]
-  matched i s := by
-    obtain ⟨s, hs⟩ := s
-    ext p q
-    rw [Matrix.blockDiag'_apply, fibStack_conjMatrix, Matrix.submatrix_apply,
-      complexOfGolden_apply, fibStack_matched_golden i s p q, fibTargets_eq,
-      complexOfGolden_apply]
-  unmatched i t := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, fibStack_conjMatrix, Matrix.submatrix_apply,
-      complexOfGolden_apply, fibStack_unmatched_golden i t p q, map_zero, Matrix.zero_apply]
+def fibonacci_compression : MultiBlockCompression fibStack fibSlots fibTargets :=
+  MultiBlockCompression.ofGolden 4 fibOrd fibCoord fibStackGolden fibStack_eq fibTargetsGolden
+    fibTargets_eq fibGaugeGolden fibGaugeInvGolden fibGauge_mul_inv fibGaugeInv_mul fibConjGolden
+    fibStack_mul_gaugeInv fibStack_triangular_golden
+    (fun i s _ p q => fibStack_matched_golden i s p q) fibStack_unmatched_golden
 
 /-! ### Consequences -/
 
@@ -686,21 +628,9 @@ private theorem fibStack_offDiagonal_golden (i : Fin 4)
 
 /-- **The remainder vanishes**: the conjugated letters are block diagonal, not merely block
 triangular, so the extension splits completely (data file §3.3). -/
-theorem fibonacci_remainder_eq_zero (i : Fin 4) : fibonacci_compression.remainder i = 0 := by
-  have h : conjMatrix fibGauge (fibonacci_compression.remainder i) =
-      conjMatrix fibGauge (fibStack i) -
-        Matrix.blockDiagonal' (conjMatrix fibGauge (fibStack i)).blockDiag' :=
-    fibonacci_compression.conjMatrix_remainder i
-  refine conjMatrix_injective fibGauge ?_
-  rw [h, conjMatrix_zero, sub_eq_zero]
-  ext x y
-  rcases eq_or_ne x.1 y.1 with hxy | hxy
-  · obtain ⟨k, a⟩ := x
-    obtain ⟨l, b⟩ := y
-    subst hxy
-    rw [Matrix.blockDiagonal'_apply_eq, Matrix.blockDiag'_apply]
-  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hxy, fibStack_conjMatrix, Matrix.submatrix_apply,
-      complexOfGolden_apply, fibStack_offDiagonal_golden i x y hxy, map_zero]
+theorem fibonacci_remainder_eq_zero (i : Fin 4) : fibonacci_compression.remainder i = 0 :=
+  fibonacci_compression.remainder_eq_zero_of_goldenGauge (hG := fibGauge_mul_inv)
+    (hG' := fibGaugeInv_mul) rfl fibStack_eq fibStack_mul_gaugeInv fibStack_offDiagonal_golden i
 
 /-! ### The fusion tensors -/
 
