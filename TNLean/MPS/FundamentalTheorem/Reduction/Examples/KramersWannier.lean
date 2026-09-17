@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import Mathlib.Data.Matrix.Basis
 import QICLean.Kraus.Injectivity
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 import TNLean.MPS.MPDO.OperatorProduct
@@ -140,11 +141,7 @@ private theorem isInjective_of_forall_mem_range_single
     {A : Fin 4 → Matrix (Fin 2) (Fin 2) ℂ}
     (h : ∀ p q : Fin 2, Matrix.single p q (1 : ℂ) ∈ Set.range A) :
     Kraus.IsInjective A := by
-  refine top_unique fun X _ => ?_
-  rw [Matrix.matrix_eq_sum_single X]
-  refine Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => ?_
-  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using
-    Submodule.smul_mem _ (X i j) (Submodule.subset_span (h i j))
+  exact Submodule.eq_top_of_forall_single_mem _ fun i j => Submodule.subset_span (h i j)
 
 private theorem shiftMPS_single_mem (p q : Fin 2) :
     Matrix.single p q (1 : ℂ) ∈ Set.range shiftTensor.toMPSTensor := by
