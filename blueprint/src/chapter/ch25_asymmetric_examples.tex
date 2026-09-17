@@ -100,6 +100,79 @@ coordinates by slots and positions inside slots.
     leaves one row of $G$ and one column of $G^{-1}$.
 \end{proof}
 
+\begin{definition}[One-slot compression data]%
+    \label{def:asymex_one_slot}
+    \lean{MPSTensor.stackedInt, MPSTensor.oneSlot, MPSTensor.oneSlotMem,
+        MPSTensor.MultiBlockCompression.ofConjMatrix,
+        MPSTensor.MultiBlockCompression.ofConjInt,
+        MPSTensor.MultiBlockCompression.ofEq,
+        MPSTensor.MultiBlockCompression.ofScalarFlagFour}
+    \leanok
+    \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
+    For a stacked product of two integer matrix product operator tensors,
+    read over the pair alphabet, the letter at $a=do+i$ is
+    $(M\mathbin{\cdot}N)^{oi}$. A \emph{one-slot compression datum} for a
+    tensor $B$ onto a single target $C$ is the data of
+    Theorem~\ref{thm:asym_multiblock} for the one-element slot set: an
+    explicit gauge $(\tau,G)$ conjugating $B$ into a matrix that is block
+    upper triangular for a flag with $C$ at one diagonal position. Two
+    shapes recur in the examples below: a conjugation $GB^iG^{-1}=C^i$ for
+    an invertible $G$ gives such a datum with no zero slots ($z=0$); and,
+    for a four-dimensional $B$ and a one-dimensional $C$, an integer gauge
+    sending every letter to a matrix with $C$ at the third diagonal
+    position of a four-step flag and zero at the other three gives such a
+    datum with three zero slots ($z=3$).
+\end{definition}
+
+\begin{theorem}[The remainder of a conjugate datum vanishes; word traces
+        of a one-slot datum]%
+    \label{thm:asymex_one_slot}
+    \lean{MPSTensor.MultiBlockCompression.remainder_ofConjMatrix,
+        MPSTensor.MultiBlockCompression.remainder_ofEq,
+        MPSTensor.MultiBlockCompression.remainder_ofConjInt,
+        MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot,
+        MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot_smul}
+    \leanok
+    \uses{def:asymex_one_slot}
+    The remainder of a conjugate one-slot datum vanishes identically: the
+    compression is an exact change of coordinates. For every one-slot
+    datum, the trace of every nonempty word of $B$ equals the trace of the
+    corresponding word of $C$, or, if the target is carried with a scalar
+    weight $c$, that power of $c$ times the trace of the word of the
+    unweighted target.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
+    Immediate from Theorem~\ref{thm:asymex_explicit_gauge} and
+    Proposition~\ref{prop:asym_compression_trace}, specialized to a single
+    slot.
+\end{proof}
+
+\begin{theorem}[Integer certificates for normality and for vanishing
+        sitewise intertwiners]%
+    \label{thm:asymex_int_certificates}
+    \lean{MPSTensor.isNBlkInjective_two_of_int,
+        MPSTensor.right_intertwiner_eq_zero_of_int,
+        MPSTensor.left_intertwiner_eq_zero_of_int}
+    \leanok
+    \uses{def:normal}
+    If every matrix unit is, up to a common nonzero integer factor, an
+    integer combination of length-two words of an integer tensor, the
+    length-two words span the full matrix algebra. If the rows,
+    respectively columns, of the letters occurring in a sitewise
+    intertwiner system form an integer matrix with an integer left inverse
+    up to a nonzero factor, the only solution of that system is zero.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Clearing the nonzero integer factor by scalar division after coercion
+    to $\C$ reduces each statement to the corresponding identity between
+    integer matrices, a finite verification.
+\end{proof}
+
 \section{Hidden symmetry-broken sectors}%
 \label{sec:asymex_ghz}
 
@@ -140,6 +213,24 @@ for the fusion examples below.
         \notag
     \end{align}
 \end{definition}
+
+\begin{center}
+    % Formula: the periodic trace tr(B^w) of the bond-dimension-four
+    % source of this section.
+    % Source: Definition~\ref{def:asymex_ghz}.
+    % Ink-to-index map: each node is the source tensor $B$; the upper
+    % legs carry the letters of the word.
+    % Contraction set: the horizontal virtual legs, closed around the
+    % ring by the trace; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$i_1$}]{B} &
+        \tn[label pos=135]{B} & \tn[skin=dots]{} &
+        \tn[label pos=135, ports={90:physical:$i_N$}]{B}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Compression of the two sectors]
     \label{thm:asymex_ghz_compression}
@@ -233,6 +324,24 @@ inapplicable.
     \end{align}
 \end{definition}
 
+\begin{center}
+    % Formula: the periodic trace tr(B^w) of the bond-dimension-two
+    % Jordan source of this section.
+    % Source: Definition~\ref{def:asymex_repeated}.
+    % Ink-to-index map: each node is the source tensor $B$; the upper
+    % legs carry the letters of the word.
+    % Contraction set: the horizontal virtual legs, closed around the
+    % ring by the trace; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$i_1$}]{B} &
+        \tn[label pos=135]{B} & \tn[skin=dots]{} &
+        \tn[label pos=135, ports={90:physical:$i_N$}]{B}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Compression onto the two copies]
     \label{thm:asymex_repeated_compression}
     % Principal declaration: MPSTensor.repeatedBlock_isReduction.
@@ -312,6 +421,37 @@ representations with a nontrivial three-cocycle.
     $B^{ij}=\sum_mM^{im}\otimes M^{mj}$ of bond dimension four, and the
     single target is $-\delta$.
 \end{definition}
+
+\begin{center}
+    % Formula: B^{ij}=\sum_mM^{im}\otimes M^{mj}, the stacked product of
+    % Definition~\ref{def:asymex_czx_tensors}.
+    % Source: Definition~\ref{def:asymex_czx_tensors}.
+    % Ink-to-index map: both rows are the bond-two symmetry tensor $M$;
+    % the shared vertical pairleg at each site is the summed index $m$.
+    % Contraction set: the vertical pairlegs (index $m$) at every site
+    % and the horizontal virtual bonds within each row; the physical
+    % legs $(i,j)$ remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{M} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{M} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical}]{M} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{M} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{M} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_N$}]{M}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical:$j_N$}]{B}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Normality of the symmetry tensor and of the target]
     \label{thm:asymex_czx_normal}
@@ -456,6 +596,38 @@ $\{+1,-1\}$.
     $1$, $1$, $2$ and $2$.
 \end{definition}
 
+\begin{center}
+    % Formula: B^{ij}=\sum_mN^{im}\otimes N^{mj}, the stacked product of
+    % Definition~\ref{def:asymex_czx_plus}.
+    % Source: Definition~\ref{def:asymex_czx_plus}.
+    % Ink-to-index map: both rows are the bond-three generating tensor
+    % $N=\delta\oplus M$; the shared vertical pairleg at each site is
+    % the summed index $m$.
+    % Contraction set: the vertical pairlegs (index $m$) at every site
+    % and the horizontal virtual bonds within each row; the physical
+    % legs $(i,j)$ remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{N} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{N} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical}]{N} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{N} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{N} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_N$}]{N}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical:$j_N$}]{B}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Compression of the squared non-simple family]
     \label{thm:asymex_czx_plus_compression}
     % Principal declaration: CZXCompression.czxPlusIdentity_isReduction.
@@ -563,6 +735,39 @@ word length one.
     source is the stacked product $B^{s's}=\sum_mW^{s'm}\otimes W^{ms}$ of
     bond dimension four, and the two targets are $2T$ and $2\eta T$.
 \end{definition}
+
+\begin{center}
+    % Formula: B^{s's}=\sum_mW^{s'm}\otimes W^{ms}, the stacked product
+    % of Definition~\ref{def:asymex_kw}.
+    % Source: Definition~\ref{def:asymex_kw}.
+    % Ink-to-index map: both rows are the duality tensor $W$; the shared
+    % vertical pairleg at each site is the summed index $m$; the drawn
+    % upper-row label $r$ is the per-site component of the outgoing
+    % index $s'$.
+    % Contraction set: the vertical pairlegs (index $m$) at every site
+    % and the horizontal virtual bonds within each row; the physical
+    % legs $(r,s)$, the per-site components of $(s',s)$, remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$r_1$, 270:physical}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_2$, 270:physical}]{W} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$r_N$, 270:physical}]{W} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$s_1$}]{W} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$s_2$}]{W} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$s_N$}]{W}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$r_1$, 270:physical:$s_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$r_2$, 270:physical:$s_2$}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$r_N$, 270:physical:$s_N$}]{B}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Normality of the two translation tensors]
     \label{thm:asymex_kw_normal}
@@ -693,6 +898,55 @@ word length one.
     Theorem~\ref{thm:asym_multiblock}.
 \end{proof}
 
+\begin{center}
+    % Formula: the four sitewise identities of
+    % Theorem~\ref{thm:asymex_kw_intertwiners}: B^{s's}V_1=V_1(2T)^{s's},
+    % B^{s's}V_2=V_2(2\eta T)^{s's}, W_1B^{s's}=(2T)^{s's}W_1, and
+    % W_2B^{s's}=(2\eta T)^{s's}W_2.
+    % Source: Theorem~\ref{thm:asymex_kw_intertwiners}.
+    % Ink-to-index map: the ring is the compression map $V_1$, $W_1$,
+    % $V_2$ or $W_2$; the square node is the source $B$ or its target
+    % $2T$ or $2\eta T$.
+    % Contraction set: the single virtual bond joining the ring to the
+    % square node in each pair; the physical pair leg remains open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$s's$}]{B} & \tn[skin=ring]{V_1}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{V_1} & \tn[label pos=s, ports={90:physical:$s's$}]{2T}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$s's$}]{B} & \tn[skin=ring]{V_2}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{V_2} &
+        \tn[label pos=s, ports={90:physical:$s's$}]{2\eta T}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_1} & \tn[label pos=s, ports={90:physical:$s's$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$s's$}]{2T} & \tn[skin=ring]{W_1}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_2} & \tn[label pos=s, ports={90:physical:$s's$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$s's$}]{2\eta T} &
+        \tn[skin=ring]{W_2}
+    \end{tenkz}
+\end{center}
+
 \section{Kramers--Wannier duality acting on ground states}%
 \label{sec:asymex_kw_action}
 
@@ -753,6 +1007,46 @@ same under either reading.
     in the second, with two unweighted copies of the product-state tensor as
     targets.
 \end{definition}
+
+\begin{center}
+    % Formula: (W\cdot A)^{s'}=\sum_sW^{s's}\otimes A^s, of
+    % Definition~\ref{def:asymex_kw_action}, evaluated at the
+    % product-state tensor $A_+$ (left) and at the Greenberger--Horne--
+    % Zeilinger tensor $A_{\mathrm{GHZ}}$ (right).
+    % Source: Definition~\ref{def:asymex_kw_action}.
+    % Ink-to-index map: the upper row is the duality tensor $W$, whose
+    % drawn physical legs $r$ are the per-site components of the
+    % outgoing index $s'$; the lower row is the acted-on state tensor;
+    % the shared vertical pairleg at each site is the summed index $s$.
+    % Contraction set: the vertical pairlegs (index $s$) at every site
+    % and the horizontal virtual bonds within each row, both closed by
+    % the periodic trace; only the upper physical legs of $W$ remain
+    % open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for both pictures.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$r_1$}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_2$}]{W} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$r_N$}]{W} \\
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+}
+    \end{tenkz}
+    \qquad
+    \begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$r_1$}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_2$}]{W} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$r_N$}]{W} \\
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[The duality on the product state splits]
     \label{thm:asymex_kw_plus}
@@ -956,6 +1250,42 @@ takes place in a quartic ring.
     multiplicity one and weight one.
 \end{definition}
 
+\begin{center}
+    % Formula: B^{x'x}=\sum_m(B_\tau)^{x'm}\otimes(B_\tau)^{mx}, the
+    % stacked product of Definition~\ref{def:asymex_fib}, realizing
+    % $\tau\otimes\tau$; Theorem~\ref{thm:asymex_fib_fusion} identifies
+    % its periodic trace with that of $B_1\oplus B_\tau$, the
+    % realization $1\oplus\tau$.
+    % Source: Definition~\ref{def:asymex_fib}.
+    % Ink-to-index map: both rows are the $\tau$ tensor $B_\tau$; the
+    % shared vertical pairleg at each site is the summed intermediate
+    % label $m$; the drawn upper-row label $y$ is the per-site
+    % component of the outgoing index $x'$.
+    % Contraction set: the vertical pairlegs (index $m$) at every site
+    % and the horizontal virtual bonds within each row; the physical
+    % legs $(y,x)$, the per-site components of $(x',x)$, remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$y_1$, 270:physical}]{B_\tau} &
+        \tn[skin=mpo, ports={90:physical:$y_2$, 270:physical}]{B_\tau} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$y_N$, 270:physical}]{B_\tau} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$x_1$}]{B_\tau} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$x_2$}]{B_\tau} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$x_N$}]{B_\tau}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$y_1$, 270:physical:$x_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$y_2$, 270:physical:$x_2$}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$y_N$, 270:physical:$x_N$}]{B}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[The one-site matrices of the $\tau$ block]
     \label{thm:asymex_fib_entries}
     \lean{FibonacciCompression.fibTauMPS_apply_one,
@@ -1088,6 +1418,36 @@ takes place in a quartic ring.
     Theorem~\ref{thm:asymex_golden_ring}.
 \end{proof}
 
+\begin{center}
+    % Formula: B^{x'x}V_s=V_sC_s^{x'x} and W_sB^{x'x}=C_s^{x'x}W_s of
+    % Theorem~\ref{thm:asymex_fib_fusion_tensors}, for $s\in\{1,\tau\}$.
+    % Source: Theorem~\ref{thm:asymex_fib_fusion_tensors}.
+    % Ink-to-index map: the ring is the fusion tensor $V_s$ or $W_s$;
+    % the square node is the stacked source $B$ or the target block
+    % $C_s\in\{B_1,B_\tau\}$.
+    % Contraction set: the single virtual bond joining the ring to the
+    % square node in each pair; the physical pair leg $(x',x)$ remains
+    % open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$x'x$}]{B} & \tn[skin=ring]{V_s}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$x'x$}]{C_s}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$x'x$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$x'x$}]{C_s} & \tn[skin=ring]{W_s}
+    \end{tenkz}
+\end{center}
+
 \section{Parity-graded sectors}%
 \label{sec:asymex_parity}
 
@@ -1135,6 +1495,28 @@ bound of the theorem is attained exactly.
         \notag
     \end{align}
 \end{definition}
+
+\begin{center}
+    % Formula: the periodic trace tr(B^w)=(1+(-1)^{|w|})tr(A^w) of
+    % Theorem~\ref{thm:asymex_parity_trace}; the source is not presented
+    % as a literal stack of $A$ and $-A$, so the ring carries $B$ with
+    % its coefficient, not a two-row stack.
+    % Source: Definition~\ref{def:asymex_parity}.
+    % Ink-to-index map: each node is the bond-dimension-five source
+    % tensor $B$; the upper legs carry the letters of the word.
+    % Contraction set: the horizontal virtual legs, closed around the
+    % ring by the trace; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$i_1$}]{B} &
+        \tn[label pos=135]{B} & \tn[skin=dots]{} &
+        \tn[label pos=135, ports={90:physical:$i_N$}]{B}
+    \end{tenkz}
+    \qquad $\tr(B^w)$, computed in
+    Theorem~\ref{thm:asymex_parity_trace}
+\end{center}
 
 \begin{theorem}[Normality of the graded block]
     \label{thm:asymex_parity_normal}
@@ -1373,6 +1755,34 @@ copies of one sector.
     vertical tensor carried with the weights $1$ and $7/25$.
 \end{definition}
 
+\begin{center}
+    % Formula: the periodic contraction of the vertical tensor $M$ with
+    % the inner-bond state $\sigma=\sum_b\lambda_b\Pi_b$ inserted on
+    % every bond, whose weights are the spectrum $\{1,7/25,0,0\}$ of
+    % $T=\sum_jA^j\otimes A^j$ (\S\ref{sec:asymex_rfp_basis}); this is
+    % the spectral mechanism behind
+    % Theorem~\ref{thm:asymex_one_label_compression}.
+    % Source: \S\ref{sec:asymex_one_label}, introductory paragraph.
+    % Ink-to-index map: the two explicit dot nodes are the vertical
+    % tensor $M$, each carrying its physical leg of the pair alphabet;
+    % each ring is the inner-bond state $\sigma$, with no physical leg
+    % of its own; the trailing dots abbreviate the remaining alternating
+    % $M$-$\sigma$ pairs of the periodic ring.
+    % Contraction set: every virtual bond, alternating $M$ and $\sigma$,
+    % closed around the ring; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=2 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=6, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$a_1$}]{M} &
+        \tn[skin=ring]{\sigma} &
+        \tn[label pos=135, ports={90:physical:$a_2$}]{M} &
+        \tn[skin=ring]{\sigma} &
+        \tn[skin=dots]{} & \tn[skin=ring]{\sigma}
+    \end{tenkz}
+    \qquad $\sigma=\sum_b\lambda_b\,\Pi_b$
+\end{center}
+
 \begin{theorem}[Normality of the one-label target]
     \label{thm:asymex_one_label_normal}
     \lean{P6Compression.oneLabelTarget_isNormal}
@@ -1422,6 +1832,36 @@ copies of one sector.
     supplies the compression datum, the vanishing remainder and the sitewise
     intertwiners, with $8=2\cdot4$ zero slots.
 \end{proof}
+
+\begin{center}
+    % Formula: B^aV_s=V_s(\mu_sM^a) and W_sB^a=(\mu_sM^a)W_s of
+    % Theorem~\ref{thm:asymex_one_label_compression}, for the weights
+    % $\mu_s\in\{1,7/25\}$.
+    % Source: Theorem~\ref{thm:asymex_one_label_compression}.
+    % Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
+    % the square node is the stacked source $B$ or the weighted target
+    % $\mu_sM$.
+    % Contraction set: the single virtual bond joining the ring to the
+    % square node in each pair; the physical pair leg $a$ remains open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$a$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM} & \tn[skin=ring]{W_s}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[The one-label structure constant]
     \label{thm:asymex_one_label_trace}
@@ -1481,6 +1921,33 @@ different sectors, in contrast with Section~\ref{sec:asymex_one_label}.
     $1/16$.
 \end{definition}
 
+\begin{center}
+    % Formula: the periodic contraction of the sector-$f$ tensor $M_f$
+    % with the inner-bond state $\sigma=\sum_b\lambda_b\Pi_b$ inserted
+    % on every bond, the same adapted-basis mechanism of
+    % \S\ref{sec:asymex_rfp_basis} that gives the weights $7/16$ and
+    % $1/16$.
+    % Source: \S\ref{sec:asymex_dimer}, introductory paragraph.
+    % Ink-to-index map: the two explicit dot nodes are the sector tensor
+    % $M_f$, each carrying its physical leg of the pair alphabet; each
+    % ring is the inner-bond state $\sigma$, with no physical leg of its
+    % own; the trailing dots abbreviate the remaining alternating
+    % $M_f$-$\sigma$ pairs of the periodic ring.
+    % Contraction set: every virtual bond, alternating $M_f$ and
+    % $\sigma$, closed around the ring; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=2 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=6, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$a_1$}]{M_f} &
+        \tn[skin=ring]{\sigma} &
+        \tn[label pos=135, ports={90:physical:$a_2$}]{M_f} &
+        \tn[skin=ring]{\sigma} &
+        \tn[skin=dots]{} & \tn[skin=ring]{\sigma}
+    \end{tenkz}
+    \qquad $\sigma=\sum_b\lambda_b\,\Pi_b$
+\end{center}
+
 \begin{theorem}[Normality of the sectors]
     \label{thm:asymex_dimer_normal}
     \lean{P6Compression.dimerTarget_isNormal}
@@ -1535,6 +2002,38 @@ different sectors, in contrast with Section~\ref{sec:asymex_one_label}.
     compression datum, the vanishing remainder and the sitewise
     intertwiners.
 \end{proof}
+
+\begin{center}
+    % Formula: the sitewise intertwiners B^aV_s=V_s(\mu_sM_s^a) and
+    % W_sB^a=(\mu_sM_s^a)W_s of Theorem~\ref{thm:asymex_dimer_compression},
+    % for the two weighted target sectors $s\in\{f+f',f+f'+1\}$ with
+    % weights $\mu_s\in\{7/16,1/16\}$.
+    % Source: Theorem~\ref{thm:asymex_dimer_compression}.
+    % Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
+    % the square node is the stacked source $B$ or the weighted sector
+    % target $\mu_sM_s$.
+    % Contraction set: the single virtual bond joining the ring to the
+    % square node in each pair; the physical pair leg $a$ remains open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{V_s} &
+        \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM_s}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$a$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM_s} & \tn[skin=ring]{W_s}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[The dimer structure constant]
     \label{thm:asymex_dimer_trace}

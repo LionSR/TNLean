@@ -66,6 +66,8 @@ NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
 SEMANTIC_EXCEPTIONS: dict[str, str] = {
     "TNLean/MPS/Examples/ZMod2.lean":
         "ZMod 2 is the mathematical coefficient group used by the example.",
+    "TNLean/MPS/FundamentalTheorem/Reduction/Examples/AnomalousCondensationZ2Z2.lean":
+        "Z2 x Z2 is the anomalous symmetry group whose condensation defect is formalized.",
     "TNLean/MPS/MPDO/GroupedFigure8.lean":
         "Figure 8 is the source-paper figure whose grouped construction is formalized.",
     "TNLean/MPS/ParentHamiltonian/Martingale/EmbeddedC2.lean":
