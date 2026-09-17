@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.Reduction.Examples
 
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXPlusIdentity
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXSquare
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXTensor

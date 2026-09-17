@@ -18,5 +18,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
 import TNLean.MPS.FundamentalTheorem.Reduction.SimpleSeparation
 import TNLean.MPS.FundamentalTheorem.Reduction.SingleBlock
+import TNLean.MPS.FundamentalTheorem.Reduction.Splitting
+import TNLean.MPS.FundamentalTheorem.Reduction.StarSemisimple
 import TNLean.MPS.FundamentalTheorem.Reduction.WeightedMultiBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.WordModule

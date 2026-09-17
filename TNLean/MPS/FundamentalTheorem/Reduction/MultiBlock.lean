@@ -31,6 +31,8 @@ common decomposition into `|S| + z` blocks, the block of the slot `s` is `C s`, 
 * `MPSTensor.MultiBlockCompression.left`, `MPSTensor.MultiBlockCompression.right`: the
   compression pair of a slot (the note's `W_s` and `V_s`).
 * `MPSTensor.MultiBlockCompression.remainder`: the remainder `R^i` of clause (vi).
+* `MPSTensor.FlagData.cflag`: the flag of a labelled invariant flag, read as a flag of complex
+  subspaces.
 
 ## Main results
 
@@ -41,6 +43,9 @@ common decomposition into `|S| + z` blocks, the block of the slot `s` is `C s`, 
   `MPSTensor.MultiBlockCompression.isReduction`: the compression identity, clause (v).
 * `MPSTensor.MultiBlockCompression.evalWord_remainder_eq_zero`: nilpotency of the remainder,
   clause (vi).
+* `MPSTensor.FlagData.exists_blockCoordinates`,
+  `MPSTensor.FlagData.exists_blockCoordinates_of_equiv`: coordinates on the steps of a labelled
+  invariant flag, turning the one-letter actions into the prescribed diagonal blocks.
 * `MPSTensor.exists_multiBlockCompression_of_isNormal`: the theorem itself, that a tensor whose
   positive-length word traces are the sums of the word traces of a finite family of normal
   blocks admits a multi-block compression onto that family.
@@ -287,6 +292,129 @@ def blockOf (D : ι → ℕ) {S : Finset ι} {z : ℕ} (C : ∀ s, MPSTensor d (
   Sum.rec (motive := fun b => Matrix (Fin (slotSize D b)) (Fin (slotSize D b)) ℂ)
     (fun s => C s.1 i) fun _ => 0
 
+section FlagCoordinates
+
+open WordAlgebra
+
+omit [DecidableEq ι]
+
+variable {M : Type*} [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M]
+  [IsScalarTower ℂ (WordAlgebra d) M] {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+
+/-- The flag of a labelled invariant flag, read as a flag of complex subspaces. -/
+noncomputable def FlagData.cflag (F : FlagData M S C) : Fin (F.r + 1) → Submodule ℂ M :=
+  fun k => (F.H k).restrictScalars ℂ
+
+theorem FlagData.cflag_zero (F : FlagData M S C) : F.cflag 0 = ⊥ := by
+  simp [FlagData.cflag, F.H_zero]
+
+theorem FlagData.cflag_last (F : FlagData M S C) : F.cflag (Fin.last F.r) = ⊤ := by
+  simp [FlagData.cflag, F.H_last]
+
+theorem FlagData.cflag_mono (F : FlagData M S C) : Monotone F.cflag :=
+  fun _ _ hab _ hx => F.H_mono hab hx
+
+/-- Every member of the flag is invariant under the action of a one-letter word. -/
+theorem FlagData.actAlgHom_mem_cflag (F : FlagData M S C) (i : Fin d) (k : Fin (F.r + 1)) :
+    ∀ x ∈ F.cflag k, actAlgHom M (ofWord [i]) x ∈ F.cflag k :=
+  fun _ hx => (F.H k).smul_mem _ hx
+
+variable [FiniteDimensional ℂ M]
+
+omit [FiniteDimensional ℂ M] in
+/-- **Coordinates on a module isomorphic to a step of a labelled invariant flag**, in which the
+one-letter actions become the prescribed diagonal blocks: the corresponding block on a matched
+step, the `1 x 1` zero matrix on an unmatched step (P5 note, Theorem 7.7, clauses (ii) and
+(iii)). -/
+theorem FlagData.exists_blockCoordinates_of_equiv (F : FlagData M S C) (k : Fin F.r)
+    {Q : Type*} [AddCommGroup Q] [Module ℂ Q] [Module (WordAlgebra d) Q]
+    [IsScalarTower ℂ (WordAlgebra d) Q] [FiniteDimensional ℂ Q]
+    (γ : Q ≃ₗ[WordAlgebra d] F.step k) :
+    ∃ ψ : Q ≃ₗ[ℂ] (Fin (slotSize D (F.label k)) → ℂ), ∀ i : Fin d,
+      LinearMap.toMatrix' (ψ.conj (actAlgHom Q (ofWord [i]))) = blockOf D C i (F.label k) := by
+  classical
+  rcases hk : F.label k with s | t
+  · obtain ⟨ε⟩ := F.matched k s hk
+    set δ : Q ≃ₗ[WordAlgebra d] (C s.1).WordModule := γ ≪≫ₗ ε with hδ
+    refine ⟨(δ.restrictScalars ℂ) ≪≫ₗ (C s.1).wordRep.asModuleEquiv, fun i => ?_⟩
+    have hstep : ∀ x : Q, (C s.1).wordRep.asModuleEquiv (δ ((ofWord [i] : WordAlgebra d) • x)) =
+        C s.1 i *ᵥ (C s.1).wordRep.asModuleEquiv (δ x) := by
+      intro x
+      rw [map_smul, MPSTensor.asModuleEquiv_ofWord_smul]
+      simp [Kraus.evalWord]
+    have hmap : ((δ.restrictScalars ℂ) ≪≫ₗ (C s.1).wordRep.asModuleEquiv).conj
+        (actAlgHom Q (ofWord [i])) = Matrix.toLin' (C s.1 i) := by
+      refine LinearMap.ext fun y => ?_
+      rw [LinearEquiv.conj_apply_apply, Matrix.toLin'_apply]
+      exact (hstep _).trans (congrArg (fun z => C s.1 i *ᵥ z)
+        (((δ.restrictScalars ℂ) ≪≫ₗ (C s.1).wordRep.asModuleEquiv).apply_symm_apply y))
+    rw [hmap, LinearMap.toMatrix'_toLin']
+    rfl
+  · have hdim : Module.finrank ℂ Q =
+        Module.finrank ℂ (Fin (slotSize D (Sum.inr t : BlockIndex S F.z)) → ℂ) := by
+      rw [(γ.restrictScalars ℂ).finrank_eq, F.unmatched_finrank k t hk,
+        Module.finrank_fintype_fun_eq_card]
+      simp
+    refine ⟨LinearEquiv.ofFinrankEq _ _ hdim, fun i => ?_⟩
+    have hzero : actAlgHom Q (ofWord [i]) = 0 := by
+      refine LinearMap.ext fun x => ?_
+      rw [actAlgHom_apply, LinearMap.zero_apply]
+      refine γ.injective ?_
+      rw [map_smul, F.unmatched_smul k t hk i (γ x), map_zero]
+    rw [hzero]
+    simp [blockOf]
+
+/-- **Coordinates on the steps of a labelled invariant flag**, in which the one-letter actions
+become the prescribed diagonal blocks: the corresponding block on a matched step, the `1 × 1`
+zero matrix on an unmatched step (P5 note, Theorem 7.7, clauses (ii) and (iii)). -/
+theorem FlagData.exists_blockCoordinates (F : FlagData M S C) (k : Fin F.r) :
+    ∃ ψ : Submodule.flagQuot F.cflag k ≃ₗ[ℂ] (Fin (slotSize D (F.label k)) → ℂ),
+      ∀ i : Fin d, LinearMap.toMatrix' (ψ.conj (LinearMap.flagQuotMap F.cflag
+        (actAlgHom M (ofWord [i])) (F.actAlgHom_mem_cflag i) k)) = blockOf D C i (F.label k) := by
+  classical
+  let β : Submodule.flagQuot F.cflag k ≃ₗ[ℂ] F.step k :=
+    Submodule.Quotient.restrictScalarsEquiv ℂ ((F.H k.castSucc).comap (F.H k.succ).subtype)
+  have hβ : ∀ (i : Fin d) (x : Submodule.flagQuot F.cflag k),
+      β (LinearMap.flagQuotMap F.cflag (actAlgHom M (ofWord [i])) (F.actAlgHom_mem_cflag i) k x) =
+        (ofWord [i] : WordAlgebra d) • β x := by
+    intro i x
+    refine Submodule.Quotient.induction_on _ x fun v => ?_
+    rfl
+  rcases hk : F.label k with s | t
+  · obtain ⟨ε⟩ := F.matched k s hk
+    refine ⟨β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv), fun i => ?_⟩
+    have hcomm : ∀ x : Submodule.flagQuot F.cflag k,
+        (C s.1).wordRep.asModuleEquiv (ε (β (LinearMap.flagQuotMap F.cflag
+            (actAlgHom M (ofWord [i])) (F.actAlgHom_mem_cflag i) k x))) =
+          Matrix.toLin' (C s.1 i) ((C s.1).wordRep.asModuleEquiv (ε (β x))) := by
+      intro x
+      rw [hβ i x, map_smul, MPSTensor.asModuleEquiv_ofWord_smul, Matrix.toLin'_apply]
+      simp [Kraus.evalWord]
+    have hmap : (β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv)).conj
+        (LinearMap.flagQuotMap F.cflag (actAlgHom M (ofWord [i])) (F.actAlgHom_mem_cflag i) k) =
+          Matrix.toLin' (C s.1 i) := by
+      refine LinearMap.ext fun y => ?_
+      rw [LinearEquiv.conj_apply_apply]
+      simpa using hcomm ((β.trans ((ε.restrictScalars ℂ).trans
+        (C s.1).wordRep.asModuleEquiv)).symm y)
+    rw [hmap, LinearMap.toMatrix'_toLin']
+    rfl
+  · have hdim : Module.finrank ℂ (Submodule.flagQuot F.cflag k) =
+        Module.finrank ℂ (Fin (slotSize D (Sum.inr t : BlockIndex S F.z)) → ℂ) := by
+      rw [β.finrank_eq, F.unmatched_finrank k t hk, Module.finrank_fintype_fun_eq_card]
+      simp
+    refine ⟨LinearEquiv.ofFinrankEq _ _ hdim, fun i => ?_⟩
+    have hzero : LinearMap.flagQuotMap F.cflag (actAlgHom M (ofWord [i]))
+        (F.actAlgHom_mem_cflag i) k = 0 := by
+      refine LinearMap.ext fun x => ?_
+      have hx := hβ i x
+      rw [F.unmatched_smul k t hk i (β x)] at hx
+      simpa using β.map_eq_zero_iff.1 hx
+    rw [hzero]
+    simp [blockOf]
+
+end FlagCoordinates
+
 open WordAlgebra in
 /-- **The multi-block asymmetric compression theorem** (P5 note, Theorem 7.7,
 `thm:p5-asymmetric-compression`, clauses (i)–(iii)). A tensor whose positive-length word traces
@@ -304,68 +432,22 @@ theorem exists_multiBlockCompression_of_isNormal (S : Finset ι) (C : ∀ s, MPS
   have hr : F.r = S.card + F.z := by
     simpa [Fintype.card_sum] using Fintype.card_congr lab
   set ord : BlockIndex S F.z ≃ Fin (S.card + F.z) := lab.symm.trans (finCongr hr) with hord
-  set H : Fin (F.r + 1) → Submodule ℂ B.WordModule := fun k => (F.H k).restrictScalars ℂ with hH
-  have h0 : H 0 = ⊥ := by simp [hH, F.H_zero]
-  have htop : H (Fin.last F.r) = ⊤ := by simp [hH, F.H_last]
-  have hmono : Monotone H := fun a b hab _ hx => F.H_mono hab hx
-  set f : Fin d → Module.End ℂ B.WordModule :=
-    fun i => actAlgHom B.WordModule (ofWord [i]) with hfdef
-  have hf : ∀ (i : Fin d) (k : Fin (F.r + 1)), ∀ x ∈ H k, f i x ∈ H k :=
-    fun i k _ hx => (F.H k).smul_mem _ hx
   -- Coordinates on each subquotient of the flag, matching the prescribed diagonal blocks.
-  have hψ : ∀ k : Fin F.r, ∃ ψ : Submodule.flagQuot H k ≃ₗ[ℂ] (Fin (slotSize D (F.label k)) → ℂ),
-      ∀ i : Fin d, LinearMap.toMatrix' (ψ.conj (LinearMap.flagQuotMap H (f i) (hf i) k)) =
-        blockOf D C i (F.label k) := by
-    intro k
-    let β : Submodule.flagQuot H k ≃ₗ[ℂ] F.step k :=
-      Submodule.Quotient.restrictScalarsEquiv ℂ ((F.H k.castSucc).comap (F.H k.succ).subtype)
-    have hβ : ∀ (i : Fin d) (x : Submodule.flagQuot H k),
-        β (LinearMap.flagQuotMap H (f i) (hf i) k x) = (ofWord [i] : WordAlgebra d) • β x := by
-      intro i x
-      refine Submodule.Quotient.induction_on _ x fun v => ?_
-      rfl
-    rcases hk : F.label k with s | t
-    · obtain ⟨ε⟩ := F.matched k s hk
-      refine ⟨β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv), fun i => ?_⟩
-      have hcomm : ∀ x : Submodule.flagQuot H k,
-          (C s.1).wordRep.asModuleEquiv (ε (β (LinearMap.flagQuotMap H (f i) (hf i) k x))) =
-            Matrix.toLin' (C s.1 i)
-              ((C s.1).wordRep.asModuleEquiv (ε (β x))) := by
-        intro x
-        rw [hβ i x, map_smul, MPSTensor.asModuleEquiv_ofWord_smul, Matrix.toLin'_apply]
-        simp [Kraus.evalWord]
-      have hmap : (β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv)).conj
-          (LinearMap.flagQuotMap H (f i) (hf i) k) = Matrix.toLin' (C s.1 i) := by
-        refine LinearMap.ext fun y => ?_
-        rw [LinearEquiv.conj_apply_apply]
-        simpa using hcomm ((β.trans ((ε.restrictScalars ℂ).trans
-          (C s.1).wordRep.asModuleEquiv)).symm y)
-      rw [hmap, LinearMap.toMatrix'_toLin']
-      rfl
-    · have hdim : Module.finrank ℂ (Submodule.flagQuot H k) =
-          Module.finrank ℂ (Fin (slotSize D (Sum.inr t : BlockIndex S F.z)) → ℂ) := by
-        rw [β.finrank_eq, F.unmatched_finrank k t hk, Module.finrank_fintype_fun_eq_card]
-        simp
-      refine ⟨LinearEquiv.ofFinrankEq _ _ hdim, fun i => ?_⟩
-      have hzero : LinearMap.flagQuotMap H (f i) (hf i) k = 0 := by
-        refine LinearMap.ext fun x => ?_
-        have hx := hβ i x
-        rw [F.unmatched_smul k t hk i (β x)] at hx
-        simpa using β.map_eq_zero_iff.1 hx
-      rw [hzero]
-      simp [blockOf]
-  choose ψ hψprop using hψ
-  obtain ⟨e, htri, hdiag, -, -⟩ := exists_linearEquiv_blockTriangular_of_flag H h0 htop hmono f hf
-    (fun k => slotSize D (F.label k)) ψ
+  choose ψ hψprop using F.exists_blockCoordinates
+  obtain ⟨e, htri, hdiag, -, -⟩ := exists_linearEquiv_blockTriangular_of_flag F.cflag
+    F.cflag_zero F.cflag_last F.cflag_mono (fun i => actAlgHom B.WordModule (ofWord [i]))
+    F.actAlgHom_mem_cflag (fun k => slotSize D (F.label k)) ψ
   set σ : ((k : Fin F.r) × Fin (slotSize D (F.label k))) ≃ BlockSpace D S F.z :=
     Equiv.sigmaCongrLeft (β := fun b : BlockIndex S F.z => Fin (slotSize D b)) lab with hσ
   set gauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S F.z → ℂ) :=
     (B.wordRep.asModuleEquiv.symm.trans e).trans (LinearEquiv.funCongrLeft ℂ ℂ σ.symm) with hgauge
   have hconj : ∀ i, conjMatrix gauge (B i) =
-      (LinearMap.toMatrix' (e.conj (f i))).submatrix σ.symm σ.symm := by
+      (LinearMap.toMatrix' (e.conj (actAlgHom B.WordModule (ofWord [i])))).submatrix
+        σ.symm σ.symm := by
     intro i
-    have hfi : B.wordRep.asModuleEquiv.symm.conj (Matrix.toLin' (B i)) = f i := by
-      simp only [hfdef, MPSTensor.actAlgHom_wordModule_ofWord B [i]]
+    have hfi : B.wordRep.asModuleEquiv.symm.conj (Matrix.toLin' (B i)) =
+        actAlgHom B.WordModule (ofWord [i]) := by
+      rw [MPSTensor.actAlgHom_wordModule_ofWord B [i]]
       simp [Kraus.evalWord]
     rw [conjMatrix_apply, hgauge,
       show ((B.wordRep.asModuleEquiv.symm.trans e).trans
