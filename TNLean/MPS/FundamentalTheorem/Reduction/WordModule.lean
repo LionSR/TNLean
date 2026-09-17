@@ -13,7 +13,7 @@ import TNLean.MPS.Defs
 
 A tensor `B : MPSTensor d D` defines a representation `ρ_B` of the word algebra on `ℂ^D` by
 `ρ_B(x_i) = B^i` (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.4).
-This file packages that module structure as `MPSTensor.WordModule B`, identifies the action of a
+This file represents that module structure as `MPSTensor.WordModule B`, identifies the action of a
 word with the word evaluation `Kraus.evalWord`, identifies the word traces with the periodic
 coefficients, and proves that normal tensors define simple modules (Lemma 7.4 of the note,
 `lem:p5-normal-simple`).
