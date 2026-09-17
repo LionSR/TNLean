@@ -24,6 +24,50 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### operator identity from a word-trace identity — promoted
+- **Pattern:**
+  ```lean
+  rw [← MPOTensor.mpo_mulTensor]
+  ext σ τ
+  have hw : (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) ≠ [] := by
+    simp only [ne_eq, List.ofFn_eq_nil_iff]
+    omega
+  have h := ‹trace identity› (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) hw
+  unfold ‹stack› ‹targets› at h
+  rw [MPOTensor.evalWord_toMPSTensor_pairConfig, ...] at h
+  simpa [MPOTensor.mpoMatrixEntry] using h
+  ```
+- **Seen:** six occurrences across four files (2026-09-17): `fibonacci_fusion_rule` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/Fibonacci.lean`, `mpo_uu` and `mpo_dd` in
+  `Examples/Z3AnomalousFusion.lean`, `mpo_ud` and `mpo_du` in
+  `Examples/Z3AnomalousInverseFusion.lean`, `mpo_defect_mul_defect` in
+  `Examples/Z3AnomalousDefect.lean`.
+- **Abstraction:** `MPOTensor.mpo_apply_toMPSTensor`, `MPOTensor.ofFn_pairConfig_ne_nil`,
+  `MPOTensor.mpo_eq_of_trace_evalWord` and `MPOTensor.mpo_mul_eq_of_trace_evalWord` in
+  `TNLean/MPS/MPDO/OperatorFromWordTrace.lean`.
+- **Notes:** a fusion rule with a single target is one application of
+  `mpo_mul_eq_of_trace_evalWord`; sums or scalar multiples of operators rewrite the matrix
+  elements with `mpo_apply_toMPSTensor` and apply the trace identity entrywise. All call sites
+  are refactored; each loses six to nine lines.
+
+### span of all matrix units is everything — promoted
+- **Pattern:**
+  ```lean
+  refine top_unique fun X _ => ?_
+  rw [Matrix.matrix_eq_sum_single X]
+  refine Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => ?_
+  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using T.smul_mem (X i j) (hunit i j)
+  ```
+- **Seen:** seven occurrences across six files (2026-09-17):
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, `Examples/Fibonacci.lean`
+  (twice), `Examples/ParityGraded.lean`, `Examples/KramersWannier.lean`,
+  `Examples/StackedPairGauge.lean`, `Examples/EisensteinCertificates.lean`.
+- **Abstraction:** `Submodule.eq_top_of_forall_single_mem` in
+  `TNLean/Algebra/MatrixSingleSpan.lean`.
+- **Notes:** the goal is `T = ⊤` for a submodule `T` of matrices, or `Kraus.IsInjective A`
+  unfolded to it; the hypothesis is membership of every matrix unit. All call sites are
+  refactored; each loses three lines.
+
 ### simplicity with the recorded canonical fixed pair — promoted
 - **Pattern:** specialize supplied-witness `simple2` to the canonical transfer
   power at `max (D * D - 1) 1`, deriving physical nonvanishing from canonical

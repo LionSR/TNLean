@@ -8,11 +8,14 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.Reduction.Examples
 
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXPlusIdentity
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXSquare
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXUnitary
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.EisensteinCertificates
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.EisensteinRing
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Fibonacci
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
@@ -24,3 +27,8 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ParityGraded
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RepeatedBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimer
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousDefect
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousDefectCompression
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousFusion
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousInverseFusion
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousTensor
