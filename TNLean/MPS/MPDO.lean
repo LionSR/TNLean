@@ -157,6 +157,7 @@ import TNLean.MPS.MPDO.CyclicProjector
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.DiagonalCutRank
 import TNLean.MPS.MPDO.DiagonalFiniteChain
+import TNLean.MPS.MPDO.DirectSum
 import TNLean.MPS.MPDO.EmbedLocalOperatorMonomial
 import TNLean.MPS.MPDO.EmbedLocalOperatorTwoSite
 import TNLean.MPS.MPDO.EtaPreparation
