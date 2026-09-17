@@ -24,3 +24,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ParityGraded
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RepeatedBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimer
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairOneOne
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairOneZero
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairZeroOne
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairs
