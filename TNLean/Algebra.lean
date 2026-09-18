@@ -71,6 +71,7 @@ import TNLean.Algebra.StarClosedSemisimple
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SwapKronecker
 import TNLean.Algebra.SwapMatrix
+import TNLean.Algebra.TailPowerSumUniqueness
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TwistedRegularRepresentation
 import TNLean.Algebra.UnitaryAdjointKronecker

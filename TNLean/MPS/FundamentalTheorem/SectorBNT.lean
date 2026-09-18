@@ -29,5 +29,6 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.SingleSector
 import TNLean.MPS.FundamentalTheorem.SectorBNT.StrongMatch
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier
 import TNLean.MPS.FundamentalTheorem.SectorBNT.SupplierNormalized
+import TNLean.MPS.FundamentalTheorem.SectorBNT.UnblockedPowerSumCoefficients
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Unitary
 import TNLean.MPS.FundamentalTheorem.SectorBNT.WeightEquiv
