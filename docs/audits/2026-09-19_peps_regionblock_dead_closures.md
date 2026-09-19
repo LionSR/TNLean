@@ -96,15 +96,22 @@ sentence is also more accurate than the one it replaces.
 
 ## What is retained and what is deferred
 
-`TNLean/PEPS/RegionBlock/ThreeBlockResonate2.lean` stays: it is live through
-`threeBlockComplCoeff` and the `UnionInjectivityGeneralBlue` consumers. Deleting
-the reconcile file does, however, strand a closure inside it —
-`threeBlockComplRow`, `regionInteriorBondProd_smul_threeBlockInsertedCoeff_eq`,
-`threeBlock_middle_strip`, `threeBlock_invert_blue`, `threeBlock_invert_red` and
-three helpers, roughly 250 to 300 lines. That slice is deferred: it touches a
-paper-gap citation in `docs/paper-gaps/peps_normal_ft_section3_route.tex` and a
-docstring pointer in `ThreeBlockResonate.lean`, so it deserves its own pass. It
-is recorded as the next S3 step in `docs/proof_debt_ledger.md`.
+`TNLean/PEPS/RegionBlock/ThreeBlockResonate2.lean` is retained here and deferred
+to a separate pass. The reconcile file was its last consumer, so after this
+deletion none of its fifteen declarations has a reference in code outside the
+file: every external match on those names is either a distinct
+`ThreeBlockGeometry`-namespaced declaration of `UnionInjectivityGeneralBlue` and
+`UnionInjectivityGeneral2` that happens to share the short name — including
+`threeBlockComplCoeff`, which is defined twice in the tree, once unnamespaced
+here and once as `ThreeBlockGeometry.threeBlockComplCoeff` — or a docstring
+mention. `UnionInjectivity.lean` still imports the module but uses only the
+namespaced general forms. The deferred slice is therefore the whole file, not
+the closure of about 250 to 300 lines an earlier count suggested; whether its
+import edge from `UnionInjectivity.lean` can also go is a question for that
+pass. It touches a paper-gap citation of `threeBlock_middle_strip` in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex` and a docstring pointer in
+`ThreeBlockResonate.lean`, and is recorded as the next S3 step in
+`docs/proof_debt_ledger.md`.
 
 The removals qualify for the no-deprecation path of `docs/project_conventions.md`:
 no non-Archive use survives, no `\lean{}` tag cites any removed name, and every

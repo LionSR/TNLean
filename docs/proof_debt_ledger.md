@@ -144,15 +144,17 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   aggregator as its only importer. All nine declarations had zero references
   outside the file and no blueprint tag, and the file is now deleted; see
   `docs/audits/2026-09-19_peps_regionblock_dead_closures.md`.
-- **Third slice (open, #7875)**: the deletion strands a closure inside
-  `ThreeBlockResonate2.lean` — `threeBlockComplRow`,
-  `regionInteriorBondProd_smul_threeBlockInsertedCoeff_eq`,
-  `threeBlock_middle_strip`, `threeBlock_invert_blue`, `threeBlock_invert_red`
-  and three unnamed helpers, roughly 250-300 lines. `ThreeBlockResonate2.lean`
-  itself stays live through `threeBlockComplCoeff` and the
-  `UnionInjectivityGeneralBlue` consumers, and the slice touches a paper-gap
-  citation in `docs/paper-gaps/peps_normal_ft_section3_route.tex` plus a
-  docstring pointer in `ThreeBlockResonate.lean`, so it is a separate step.
+- **Third slice (open, #7875)**: the reconcile file was the last consumer of
+  `ThreeBlockResonate2.lean` (709 lines), so none of its fifteen declarations now
+  has a reference in code outside the file. Every external match on those names
+  is either a distinct `ThreeBlockGeometry`-namespaced declaration of
+  `UnionInjectivityGeneralBlue`/`UnionInjectivityGeneral2` sharing the short name
+  — `threeBlockComplCoeff` is defined twice in the tree, once unnamespaced there
+  and once namespaced — or a docstring mention; `UnionInjectivity.lean` imports
+  the module but uses only the namespaced general forms. The slice touches a
+  paper-gap citation of `threeBlock_middle_strip` in
+  `docs/paper-gaps/peps_normal_ft_section3_route.tex` plus a docstring pointer in
+  `ThreeBlockResonate.lean`, so it is a separate step.
 
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#4564)
