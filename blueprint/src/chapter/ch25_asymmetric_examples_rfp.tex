@@ -15,11 +15,11 @@ $\ket{\Phi_\pm}=(\ket{00}\pm\ket{11})/\sqrt2$, with
 $P_\pm=\ketbra{\Phi_\pm}{\Phi_\pm}$.
 For an MPO tensor $M^{ij}\in\MN{D}$, its periodic physical operator is
 \begin{align}
-	\rho^{(N)}(M)
-	 & =\sum_{\boldsymbol i,\boldsymbol j}
-	\tr(M^{i_0j_0}\cdots M^{i_{N-1}j_{N-1}})
-	\ketbra{\boldsymbol i}{\boldsymbol j}.
-	\label{eq:asymex_physical_closure}
+    \rho^{(N)}(M)
+     & =\sum_{\boldsymbol i,\boldsymbol j}
+    \tr(M^{i_0j_0}\cdots M^{i_{N-1}j_{N-1}})
+    \ketbra{\boldsymbol i}{\boldsymbol j}.
+    \label{eq:asymex_physical_closure}
 \end{align}
 An MPDO requires positivity for every $N>0$; trace-one normalization is a
 separate condition. Throughout the physical state formulas below, $N>0$
@@ -33,61 +33,61 @@ On the incoming bond $(R_{n-1},L_n)$, put
 $\beta_R=(25/32)P_++(7/32)P_-$.
 Let $Q_N$ regroup sites into incoming bonds:
 \begin{align}
-	Q_N\bigotimes_{n=0}^{N-1}\ket{l_n,r_n}
-	 & =\bigotimes_{n=0}^{N-1}\ket{r_{n-1},l_n}.
-	\label{eq:asymex_R_regroup}
+    Q_N\bigotimes_{n=0}^{N-1}\ket{l_n,r_n}
+     & =\bigotimes_{n=0}^{N-1}\ket{r_{n-1},l_n}.
+    \label{eq:asymex_R_regroup}
 \end{align}
 Thus $Q_N^\dagger\beta_R^{\otimes N}Q_N$ is a normalized density operator
 of rank $2^N$.
 
 An MPO representation uses four real matrices:
 \begin{align}
-	A^0 & =\tfrac45E_{00}, \nonumber \\
-	A^1 & =\tfrac45E_{11}, \nonumber \\
-	A^2 & =\tfrac35E_{01}, \nonumber \\
-	A^3 & =\tfrac35E_{10}.
-	\label{eq:asymex_one_label_matrices}
+    A^0 & =\tfrac45E_{00}, \nonumber \\
+    A^1 & =\tfrac45E_{11}, \nonumber \\
+    A^2 & =\tfrac35E_{01}, \nonumber \\
+    A^3 & =\tfrac35E_{10}.
+    \label{eq:asymex_one_label_matrices}
 \end{align}
 The auxiliary indices $a,b\in\{0,1,2,3\}$ label these matrices; their
 ordering is not the physical pair ordering $2l+r$. Define
 \begin{align}
-	R^{(l,r),(l',r')}_{ab}
-	 & =\frac{25}{32}A^a_{ll'}A^b_{rr'}.
-	\label{eq:asymex_R_tensor}
+    R^{(l,r),(l',r')}_{ab}
+     & =\frac{25}{32}A^a_{ll'}A^b_{rr'}.
+    \label{eq:asymex_R_tensor}
 \end{align}
 To contract this tensor, introduce
 $w=\left(\begin{smallmatrix}16/25&9/25\\9/25&16/25\end{smallmatrix}\right)$.
 The matrix-unit entries give
 \begin{align}
-	\sum_a A^a_{uv}A^a_{xy} & =\delta_{ux}\delta_{vy}w_{uv}.
-	\label{eq:asymex_R_contraction}
+    \sum_a A^a_{uv}A^a_{xy} & =\delta_{ux}\delta_{vy}w_{uv}.
+    \label{eq:asymex_R_contraction}
 \end{align}
 For physical strings $p_n=(l_n,r_n)$ and $q_n=(l'_n,r'_n)$, the auxiliary
 trace pairs the right half of site $n-1$ with the left half of site $n$.
 Consequently,
 \begin{align}
-	\rho^{(N)}(R)_{p,q}
-	 & =\left(\frac{25}{32}\right)^N
-	\prod_{n=0}^{N-1}
-	\delta_{r_{n-1},l_n}\delta_{r'_{n-1},l'_n}w_{l_nl'_n}.
-	\label{eq:asymex_R_entries}
+    \rho^{(N)}(R)_{p,q}
+     & =\left(\frac{25}{32}\right)^N
+    \prod_{n=0}^{N-1}
+    \delta_{r_{n-1},l_n}\delta_{r'_{n-1},l'_n}w_{l_nl'_n}.
+    \label{eq:asymex_R_entries}
 \end{align}
 This also gives a support-isometry description. Define
 $B_N\ket{a_0,\ldots,a_{N-1}}=\bigotimes_n\ket{a_n,a_{n+1}}$.
 Distinct bit strings have distinct images, so $B_N^\dagger B_N=\Id$.
 Set $h=(25/32)w=
-	\left(\begin{smallmatrix}1/2&9/32\\9/32&1/2\end{smallmatrix}\right)$.
+    \left(\begin{smallmatrix}1/2&9/32\\9/32&1/2\end{smallmatrix}\right)$.
 Formula~(\ref{eq:asymex_R_entries}) becomes
 \begin{align}
-	\rho^{(N)}(R) & =B_Nh^{\otimes N}B_N^\dagger.
-	\label{eq:asymex_R_isometry}
+    \rho^{(N)}(R) & =B_Nh^{\otimes N}B_N^\dagger.
+    \label{eq:asymex_R_isometry}
 \end{align}
 The eigenvectors of $h$ are $(1,\pm1)/\sqrt2$, with eigenvalues $25/32$
 and $7/32$. For $J\ket a=\ket{a,a}$, one has
 $JhJ^\dagger=\beta_R$ and $Q_NB_N=J^{\otimes N}$. Hence
 \begin{align}
-	Q_N\rho^{(N)}(R)Q_N^\dagger & =\beta_R^{\otimes N}.
-	\label{eq:asymex_R_density}
+    Q_N\rho^{(N)}(R)Q_N^\dagger & =\beta_R^{\otimes N}.
+    \label{eq:asymex_R_density}
 \end{align}
 This proves positivity, trace one, and rank $2^N$ directly. At $N=1$ the
 bond closes within the site, giving $\rho^{(1)}(R)=\beta_R$. At $N\ge2$
@@ -102,12 +102,12 @@ $\mathcal H_T=\C^2_L\otimes\C^2_R\otimes\C^2_F$, with basis index
 $4l+2r+f$. Put $x=7/8$, $y=1/8$, and define the bond state
 $\sigma=xP_++yP_-$. The flag state is the classical even-parity mixture
 \begin{align}
-	\eta_N
-	 & =2^{-N}(\Id_2^{\otimes N}+Z^{\otimes N})
-	=2^{1-N}\sum_{\substack{\boldsymbol f\in\{0,1\}^N\\
-			        \sum_n f_n\equiv0\pmod2}}
-	\ketbra{\boldsymbol f}{\boldsymbol f},
-	\label{eq:asymex_even_flags}
+    \eta_N
+     & =2^{-N}(\Id_2^{\otimes N}+Z^{\otimes N})
+    =2^{1-N}\sum_{\substack{\boldsymbol f\in\{0,1\}^N \\
+            \sum_n f_n\equiv0\pmod2}}
+    \ketbra{\boldsymbol f}{\boldsymbol f},
+    \label{eq:asymex_even_flags}
 \end{align}
 where $Z=E_{00}-E_{11}$. There are $2^{N-1}$ even strings, so
 $\eta_N$ is positive and has trace one. For $N\ge2$ its rank is
@@ -116,15 +116,15 @@ $2^{N-1}$; it is not a pure GHZ state. At $N=1$ it is $\ketbra{0}{0}$.
 A cell consists of the incoming bond and its receiving flag. With
 $X_F=E_{01}+E_{10}$ on the flag, define
 \begin{align}
-	V & =(\Id_4-P_-)\otimes\Id_2+P_-\otimes X_F.
-	\label{eq:asymex_flag_gate}
+    V & =(\Id_4-P_-)\otimes\Id_2+P_-\otimes X_F.
+    \label{eq:asymex_flag_gate}
 \end{align}
 This gate fixes the flag outside the minus Bell sector and flips it
 inside that sector. Orthogonality of $P_-$ and $\Id_4-P_-$ gives
 $V^\dagger=V$ and $V^2=\Id_8$, including on the complement of the two
 Bell vectors. Let $\widetilde Q_N$ regroup sites into incoming cells by
 $\bigotimes_n\ket{l_n,r_n,f_n}\mapsto
-	\bigotimes_n\ket{(r_{n-1},l_n),f_n}$.
+    \bigotimes_n\ket{(r_{n-1},l_n),f_n}$.
 The physical state is obtained by applying $V$ on each cell to
 $\sigma^{\otimes N}\otimes\eta_N$. Here and below, the separated bond
 and flag factors are identified with cell coordinates by the canonical
@@ -133,81 +133,81 @@ permutation of tensor factors.
 For its MPO representation, set $\tau_k(f)=(-1)^{kf}$ and
 $C_k(u,v)=\tfrac12(x+(-1)^{k+u+v}y)$. Explicitly,
 \begin{align}
-	C_0 & =\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}, \nonumber \\
-	C_1 & =\begin{pmatrix}3/8&1/2\\1/2&3/8\end{pmatrix}.
-	\label{eq:asymex_dimer_C}
+    C_0 & =\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}, \nonumber \\
+    C_1 & =\begin{pmatrix}3/8&1/2\\1/2&3/8\end{pmatrix}.
+    \label{eq:asymex_dimer_C}
 \end{align}
 An auxiliary index is $(p,p',k)$, encoded as $4p+2p'+k$. Define
 \begin{align}
-	T^{(l,r,f),(l',r',g)}_{(p,p',k),(q,q',k')}
-	 & =\delta_{kk'}\delta_{fg}\delta_{lp}\delta_{l'p'}
-	\delta_{rq}\delta_{r'q'} \frac12C_k(p,p')\tau_k(f).
-	\label{eq:asymex_T_tensor}
+    T^{(l,r,f),(l',r',g)}_{(p,p',k),(q,q',k')}
+     & =\delta_{kk'}\delta_{fg}\delta_{lp}\delta_{l'p'}
+    \delta_{rq}\delta_{r'q'} \frac12C_k(p,p')\tau_k(f).
+    \label{eq:asymex_T_tensor}
 \end{align}
 Both the physical and auxiliary dimensions are eight.
 
 \begin{theorem}[Closed density of the twisted dimer]
-	\label{thm:asymex_T_density}
-	\lean{MPOTensor.TwistedDimer.mpo_eq_unitary_factorization,
-		MPOTensor.TwistedDimer.localV_conjTranspose,
-		MPOTensor.TwistedDimer.localV_mul_self,
-		MPOTensor.TwistedDimer.localV_conjugate,
-		MPOTensor.TwistedDimer.trace_mpo_T,
-		MPOTensor.TwistedDimer.sigma_posSemidef,
-		MPOTensor.TwistedDimer.trace_sigma,
-		MPOTensor.TwistedDimer.evenFlagState_posSemidef,
-		MPOTensor.TwistedDimer.trace_evenFlagState,
-		MPOTensor.TwistedDimer.decoratedState_posSemidef}
-	\leanok
-	For $N>0$, write $W_N=V^{\otimes N}$ in incoming-cell coordinates.
-	Then
-	\begin{align}
-		\widetilde Q_N\rho^{(N)}(T)\widetilde Q_N^\dagger
-		 & =W_N(\sigma^{\otimes N}\otimes\eta_N)W_N^\dagger.
-		\label{eq:asymex_T_density}
-	\end{align}
-	In particular, $\rho^{(N)}(T)$ is positive and has trace one.
+    \label{thm:asymex_T_density}
+    \lean{MPOTensor.TwistedDimer.mpo_eq_unitary_factorization,
+        MPOTensor.TwistedDimer.localV_conjTranspose,
+        MPOTensor.TwistedDimer.localV_mul_self,
+        MPOTensor.TwistedDimer.localV_conjugate,
+        MPOTensor.TwistedDimer.trace_mpo_T,
+        MPOTensor.TwistedDimer.sigma_posSemidef,
+        MPOTensor.TwistedDimer.trace_sigma,
+        MPOTensor.TwistedDimer.evenFlagState_posSemidef,
+        MPOTensor.TwistedDimer.trace_evenFlagState,
+        MPOTensor.TwistedDimer.decoratedState_posSemidef}
+    \leanok
+    For $N>0$, write $W_N=V^{\otimes N}$ in incoming-cell coordinates.
+    Then
+    \begin{align}
+        \widetilde Q_N\rho^{(N)}(T)\widetilde Q_N^\dagger
+         & =W_N(\sigma^{\otimes N}\otimes\eta_N)W_N^\dagger.
+        \label{eq:asymex_T_density}
+    \end{align}
+    In particular, $\rho^{(N)}(T)$ is positive and has trace one.
 \end{theorem}
 \begin{proof}
-	\leanok
-	Put $\sigma'=xP_+-yP_-$. The entries of
-	$xP_++(-1)^kyP_-$ on the matched bond subspace are $C_k(u,v)$.
-	In a positive-length auxiliary trace of~(\ref{eq:asymex_T_tensor}),
-	the label $k$ is constant around the ring. The remaining constraints
-	require matching neighboring half-bonds and equal ket and bra flags.
-	Therefore
-	\begin{align}
-		\widetilde Q_N\rho^{(N)}(T)\widetilde Q_N^\dagger
-		 & =2^{-N}\bigl[(\sigma\otimes\Id_2)^{\otimes N}
-			          +(\sigma'\otimes Z)^{\otimes N}\bigr].
-		\label{eq:asymex_T_contraction}
-	\end{align}
-	The gate fixes $\sigma\otimes\Id_2$ under conjugation and sends
-	$\sigma\otimes Z$ to $\sigma'\otimes Z$, since $X_FZX_F=-Z$.
-	Applying these identities in each cell proves~(\ref{eq:asymex_T_density}).
-	Positivity follows from the positive factor states; their traces are
-	$\tr\sigma=x+y=1$ and $\tr\eta_N=1$. Unitary conjugation preserves trace.
+    \leanok
+    Put $\sigma'=xP_+-yP_-$. The entries of
+    $xP_++(-1)^kyP_-$ on the matched bond subspace are $C_k(u,v)$.
+    In a positive-length auxiliary trace of~(\ref{eq:asymex_T_tensor}),
+    the label $k$ is constant around the ring. The remaining constraints
+    require matching neighboring half-bonds and equal ket and bra flags.
+    Therefore
+    \begin{align}
+        \widetilde Q_N\rho^{(N)}(T)\widetilde Q_N^\dagger
+         & =2^{-N}\bigl[(\sigma\otimes\Id_2)^{\otimes N}
+            +(\sigma'\otimes Z)^{\otimes N}\bigr].
+        \label{eq:asymex_T_contraction}
+    \end{align}
+    The gate fixes $\sigma\otimes\Id_2$ under conjugation and sends
+    $\sigma\otimes Z$ to $\sigma'\otimes Z$, since $X_FZX_F=-Z$.
+    Applying these identities in each cell proves~(\ref{eq:asymex_T_density}).
+    Positivity follows from the positive factor states; their traces are
+    $\tr\sigma=x+y=1$ and $\tr\eta_N=1$. Unitary conjugation preserves trace.
 \end{proof}
 
 \begin{theorem}[The flag factor as a normalized fixed-point state]
-	\label{thm:asymex_flag_rfp}
-	\lean{MPOTensor.TwistedDimer.evenFlagState_eq_mpo_Mhat,
-		MPOTensor.TwistedDimer.evenFlagState_has_rfpRepresentation}
-	\leanok
-	The flag family is represented by the density-normalized tensor
-	$\widehat M^{fg}=\tfrac12\delta_{fg}\diag(1,(-1)^f)$ of
-	Example~4.12 of Ref.~\cite{Cirac2016MPDO_arXiv}.
-	This tensor is an MPDO and satisfies the channel fixed-point
-	equations defined below.
+    \label{thm:asymex_flag_rfp}
+    \lean{MPOTensor.TwistedDimer.evenFlagState_eq_mpo_Mhat,
+        MPOTensor.TwistedDimer.evenFlagState_has_rfpRepresentation}
+    \leanok
+    The flag family is represented by the density-normalized tensor
+    $\widehat M^{fg}=\tfrac12\delta_{fg}\diag(1,(-1)^f)$ of
+    Example~4.12 of Ref.~\cite{Cirac2016MPDO_arXiv}.
+    This tensor is an MPDO and satisfies the channel fixed-point
+    equations defined below.
 \end{theorem}
 \begin{proof}
-	\leanok
-	The two diagonal auxiliary sectors contribute
-	$2^{-N}\Id_2^{\otimes N}$ and $2^{-N}Z^{\otimes N}$, respectively.
-	Their sum is~(\ref{eq:asymex_even_flags}). The channel fixed-point
-	property is that of the normalized example. The normalization
-	includes a factor $1/2$ in every local tensor, absent from the
-	unnormalized tensor printed in the example.
+    \leanok
+    The two diagonal auxiliary sectors contribute
+    $2^{-N}\Id_2^{\otimes N}$ and $2^{-N}Z^{\otimes N}$, respectively.
+    Their sum is~(\ref{eq:asymex_even_flags}). The channel fixed-point
+    property is that of the normalized example. The normalization
+    includes a factor $1/2$ in every local tensor, absent from the
+    unnormalized tensor printed in the example.
 \end{proof}
 
 The factorization~(\ref{eq:asymex_T_density}) is an identity of closed
@@ -222,91 +222,91 @@ give $1$ and $2$.
 For a tensor $M$ and an auxiliary boundary matrix $X$, define the
 one-site and two-site physical closures by
 \begin{align}
-	M_1(X) & =\sum_{i,j}\tr(M^{ij}X)E_{ij}, \nonumber               \\
-	M_2(X) & =\sum_{i,j,k,l}\tr(M^{ij}M^{kl}X)E_{ij}\otimes E_{kl}.
-	\label{eq:asymex_boundary_closures}
+    M_1(X) & =\sum_{i,j}\tr(M^{ij}X)E_{ij}, \nonumber               \\
+    M_2(X) & =\sum_{i,j,k,l}\tr(M^{ij}M^{kl}X)E_{ij}\otimes E_{kl}.
+    \label{eq:asymex_boundary_closures}
 \end{align}
 The channel fixed-point condition of
 Ref.~\cite[Definition~4.1]{Cirac2016MPDO_arXiv} requires trace-preserving
 completely positive maps, abbreviated tpCPMs, $\mathcal S$ and
 $\mathcal T$ such that, for every $X$,
 \begin{align}
-	\mathcal S(M_2(X)) & =M_1(X), \nonumber \\
-	\mathcal T(M_1(X)) & =M_2(X).
-	\label{eq:asymex_channel_equations}
+    \mathcal S(M_2(X)) & =M_1(X), \nonumber \\
+    \mathcal T(M_1(X)) & =M_2(X).
+    \label{eq:asymex_channel_equations}
 \end{align}
 The symbol $T$ denotes the physical dimer tensor, whereas $\mathcal T$
 denotes a refinement channel. Closed density factorizations alone do
 not establish these equations for arbitrary boundary matrices.
 
 \begin{theorem}[Channel fixed points of the two physical tensors]
-	\label{thm:asymex_physical_rfp}
-	\lean{MPOTensor.RescalingStableLengthDependentRFP.isRFPViaTS_R,
-		MPOTensor.TwistedDimer.isRFPViaTS_T}
-	\leanok
-	Both $R$ and $T$ satisfy~(\ref{eq:asymex_channel_equations}) with tpCPMs
-	on the full physical matrix spaces.
+    \label{thm:asymex_physical_rfp}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.isRFPViaTS_R,
+        MPOTensor.TwistedDimer.isRFPViaTS_T}
+    \leanok
+    Both $R$ and $T$ satisfy~(\ref{eq:asymex_channel_equations}) with tpCPMs
+    on the full physical matrix spaces.
 \end{theorem}
 \begin{proof}
-	\leanok
-	For $R$, set $h=(25/32)w$. Its spectral probabilities are
-	$p_0=25/32$ and $p_1=7/32$. The refinement Kraus operators act by
-	\begin{align}
-		K_s\ket{l,r}
-		 & =\sqrt{\frac{p_s}{2}}\sum_{b=0}^1(-1)^{sb}
-		\ket{l,b}\otimes\ket{b,r}.
-		\label{eq:asymex_R_refine}
-	\end{align}
-	Thus $\sum_sK_s^\dagger K_s=\Id_4$. Direct contraction of
-	(\ref{eq:asymex_R_tensor}) gives, for every boundary matrix $X$,
-	\begin{align}
-		R_2(X)_{(l,b),(c,r);(l',b'),(c',r')}
-		 & =\delta_{bc}\delta_{b'c'}h_{bb'}R_1(X)_{(l,r),(l',r')}.
-		\label{eq:asymex_R_boundary}
-	\end{align}
-	The spectral identity
-	$\sum_s(p_s/2)(-1)^{s(b+b')}=h_{bb'}$ proves refinement.
-	Coarse-graining contracts the inner bond against the four
-	orthonormal vectors $\Phi_+,\Phi_-,01,10$, retaining the outer bits.
-	The four Kraus operators resolve the identity on the full two-site
-	space. The last two annihilate~(\ref{eq:asymex_R_boundary}); summing
-	the first two returns $R_1(X)$ because $\tr h=1$.
+    \leanok
+    For $R$, set $h=(25/32)w$. Its spectral probabilities are
+    $p_0=25/32$ and $p_1=7/32$. The refinement Kraus operators act by
+    \begin{align}
+        K_s\ket{l,r}
+         & =\sqrt{\frac{p_s}{2}}\sum_{b=0}^1(-1)^{sb}
+        \ket{l,b}\otimes\ket{b,r}.
+        \label{eq:asymex_R_refine}
+    \end{align}
+    Thus $\sum_sK_s^\dagger K_s=\Id_4$. Direct contraction of
+    (\ref{eq:asymex_R_tensor}) gives, for every boundary matrix $X$,
+    \begin{align}
+        R_2(X)_{(l,b),(c,r);(l',b'),(c',r')}
+         & =\delta_{bc}\delta_{b'c'}h_{bb'}R_1(X)_{(l,r),(l',r')}.
+        \label{eq:asymex_R_boundary}
+    \end{align}
+    The spectral identity
+    $\sum_s(p_s/2)(-1)^{s(b+b')}=h_{bb'}$ proves refinement.
+    Coarse-graining contracts the inner bond against the four
+    orthonormal vectors $\Phi_+,\Phi_-,01,10$, retaining the outer bits.
+    The four Kraus operators resolve the identity on the full two-site
+    space. The last two annihilate~(\ref{eq:asymex_R_boundary}); summing
+    the first two returns $R_1(X)$ because $\tr h=1$.
 
-	For $T$, coarse-graining reads the flags $f_1,f_2$ and measures the
-	inner bond in the basis $\Phi_+,\Phi_-,01,10$. It retains the outer
-	qubits and outputs $f_1+f_2+s$ modulo two, where $s=1$ only for
-	outcome $\Phi_-$. Completeness of the bond basis gives the Kraus
-	resolution. On the matched support, the two Bell outcomes have
-	weights $x$ and $(-1)^ky$ in block $k$. Their flag shifts therefore
-	yield the required factor $\tau_k(f_1+f_2+s)$, and $x+y=1$ gives
-	the coarse-graining equation.
+    For $T$, coarse-graining reads the flags $f_1,f_2$ and measures the
+    inner bond in the basis $\Phi_+,\Phi_-,01,10$. It retains the outer
+    qubits and outputs $f_1+f_2+s$ modulo two, where $s=1$ only for
+    outcome $\Phi_-$. Completeness of the bond basis gives the Kraus
+    resolution. On the matched support, the two Bell outcomes have
+    weights $x$ and $(-1)^ky$ in block $k$. Their flag shifts therefore
+    yield the required factor $\tau_k(f_1+f_2+s)$, and $x+y=1$ gives
+    the coarse-graining equation.
 
-	Refinement inserts $\Phi_+$ or $\Phi_-$ with probabilities $x,y$.
-	For outcome $s$, it splits an input flag $f$ uniformly among the
-	two pairs satisfying $f_1+f_2+s=f$. Its boundary equation follows
-	from
-	\begin{align}
-		xP_++(-1)^kyP_- & =JC_kJ^\dagger.
-		\label{eq:asymex_T_refine_identity}
-	\end{align}
-	Each inserted Bell vector is normalized, and the two flag choices
-	each have half the outcome probability, so refinement is trace
-	preserving. These are the coarse-graining and refinement
-	constructions for the respective tensors.
+    Refinement inserts $\Phi_+$ or $\Phi_-$ with probabilities $x,y$.
+    For outcome $s$, it splits an input flag $f$ uniformly among the
+    two pairs satisfying $f_1+f_2+s=f$. Its boundary equation follows
+    from
+    \begin{align}
+        xP_++(-1)^kyP_- & =JC_kJ^\dagger.
+        \label{eq:asymex_T_refine_identity}
+    \end{align}
+    Each inserted Bell vector is normalized, and the two flag choices
+    each have half the outcome probability, so refinement is trace
+    preserving. These are the coarse-graining and refinement
+    constructions for the respective tensors.
 \end{proof}
 
 \begin{theorem}[A necessary physical-trace identity]
-	\label{thm:asymex_trace_obstruction}
-	\lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}
-	\leanok
-	If $M$ satisfies~(\ref{eq:asymex_channel_equations}), then
-	$F_M=\sum_iM^{ii}$ satisfies $F_M^2=F_M$.
+    \label{thm:asymex_trace_obstruction}
+    \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}
+    \leanok
+    If $M$ satisfies~(\ref{eq:asymex_channel_equations}), then
+    $F_M=\sum_iM^{ii}$ satisfies $F_M^2=F_M$.
 \end{theorem}
 \begin{proof}
-	\leanok
-	Trace preservation of $\mathcal T$ gives
-	$\tr(F_M^2X)=\tr M_2(X)=\tr M_1(X)=\tr(F_MX)$ for every $X$.
-	Nondegeneracy of the matrix trace pairing gives $F_M^2=F_M$.
+    \leanok
+    Trace preservation of $\mathcal T$ gives
+    $\tr(F_M^2X)=\tr M_2(X)=\tr M_1(X)=\tr(F_MX)$ for every $X$.
+    Nondegeneracy of the matrix trace pairing gives $F_M^2=F_M$.
 \end{proof}
 
 This is a statement about the physical-trace transfer matrix $F_M$,
@@ -322,11 +322,11 @@ Rotation exchanges the physical and auxiliary pairs:
 $\mathcal V(M)^{ab}_{ij}=M^{ij}_{ab}$.
 For a vertical component $K$, its periodic operator at length $L>0$ is
 \begin{align}
-	O_L(K)
-	 & =\sum_{\boldsymbol a,\boldsymbol b}
-	\tr(K^{a_0b_0}\cdots K^{a_{L-1}b_{L-1}})
-	\ketbra{\boldsymbol a}{\boldsymbol b}.
-	\label{eq:asymex_vertical_closure}
+    O_L(K)
+     & =\sum_{\boldsymbol a,\boldsymbol b}
+    \tr(K^{a_0b_0}\cdots K^{a_{L-1}b_{L-1}})
+    \ketbra{\boldsymbol a}{\boldsymbol b}.
+    \label{eq:asymex_vertical_closure}
 \end{align}
 It acts on strings of the original auxiliary indices, rather than on
 the original physical chain.
@@ -337,11 +337,11 @@ $\mathcal V(R)=(25/32)K$. This rotation and scalar factor are essential:
 $K$ is not the physical tensor $R$. If its indices $a,b$ are instead
 treated as physical indices, then
 \begin{align}
-	F_K & =\sum_aA^a\otimes A^a
-	=\frac1{25}\begin{pmatrix}
-		           16 & 0 & 0 & 9 \\0&0&0&0\\0&0&0&0\\9&0&0&16
-	           \end{pmatrix}.
-	\label{eq:asymex_K_transfer}
+    F_K & =\sum_aA^a\otimes A^a
+    =\frac1{25}\begin{pmatrix}
+                   16 & 0 & 0 & 9 \\0&0&0&0\\0&0&0&0\\9&0&0&16
+               \end{pmatrix}.
+    \label{eq:asymex_K_transfer}
 \end{align}
 Its $(00,00)$ entry satisfies
 $(F_K^2-F_K)_{00,00}=(337-400)/625=-63/625$.
@@ -349,15 +349,15 @@ Theorem~\ref{thm:asymex_trace_obstruction} therefore excludes the
 channel fixed-point property for $K$ in this physical reading.
 
 Writing $\ket{\psi_L}=\sum_{\boldsymbol a}
-	\tr(A^{a_0}\cdots A^{a_{L-1}})\ket{\boldsymbol a}$ gives
+    \tr(A^{a_0}\cdots A^{a_{L-1}})\ket{\boldsymbol a}$ gives
 $O_L(K)=\ketbra{\psi_L}{\psi_L}$.
 A nonzero cyclic product of the matrix-unit letters specifies a cyclic
 bit path, and its squared amplitude is the product of the corresponding
 entries of $w$. Thus $\braket{\psi_L}{\psi_L}=\tr(w^L)$, and
 \begin{align}
-	O_L(K)^2 & =\tr(w^L)O_L(K)
-	=\left(1+\left(\frac7{25}\right)^L\right)O_L(K).
-	\label{eq:asymex_K_product}
+    O_L(K)^2 & =\tr(w^L)O_L(K)
+    =\left(1+\left(\frac7{25}\right)^L\right)O_L(K).
+    \label{eq:asymex_K_product}
 \end{align}
 The eigenvalue $7/25$ controls vertical multiplication; it is not the
 physical Bell probability $7/32$.
@@ -365,18 +365,18 @@ physical Bell probability $7/32$.
 For $T$, restrict the physical ket and bra flags to the same value $f$.
 The unnormalized vertical component $D_f$ is defined by
 \begin{align}
-	(D_f^{ab})_{(l,r),(l',r')}
-	 & =T^{(l,r,f),(l',r',f)}_{ab}.
-	\label{eq:asymex_dimer_dictionary}
+    (D_f^{ab})_{(l,r),(l',r')}
+     & =T^{(l,r,f),(l',r',f)}_{ab}.
+    \label{eq:asymex_dimer_dictionary}
 \end{align}
 It satisfies $D_f=\nu\widehat K_f$, where $\widehat K_f$ is the
 normalized flag component, $\nu=5/8$, and
 $\nu^2=(x^2+y^2)/2=25/64$.
 For $a=(p,p',k)$ and $b=(q,q',k')$, its normalized letter is
 \begin{align}
- \widehat K_f^{ab}&=\frac{\delta_{kk'}C_k(p,p')\tau_k(f)}{2\nu}
- (E_{pp'}\otimes E_{qq'}).
- \notag
+    \widehat K_f^{ab} & =\frac{\delta_{kk'}C_k(p,p')\tau_k(f)}{2\nu}
+    (E_{pp'}\otimes E_{qq'}).
+    \notag
 \end{align}
 The nonzero coefficient magnitudes of $D_f$ are $1/4,3/16$,
 whereas those of $\widehat K_f$ are $2/5,3/10$.
@@ -390,17 +390,17 @@ Set $m_\alpha=\tr\mu_\alpha$ and
 $c_{\alpha,\beta,\gamma}^{(L)}=\tr(\chi_{\alpha,\beta,\gamma}^L)$.
 The required multiplication identities, for every $L>0$, are
 \begin{align}
-	O_L(K_\alpha)O_L(K_\beta)
-	 & =\sum_\gamma c_{\alpha,\beta,\gamma}^{(L)}O_L(K_\gamma).
-	\label{eq:asymex_vertical_product}
+    O_L(K_\alpha)O_L(K_\beta)
+     & =\sum_\gamma c_{\alpha,\beta,\gamma}^{(L)}O_L(K_\gamma).
+    \label{eq:asymex_vertical_product}
 \end{align}
 The vector $m$ is an idempotent for the multiplication induced by
 $c^{(1)}$:
 \begin{align}
-	m_\gamma
-	 & =\sum_{\alpha,\beta}
-	c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta.
-	\label{eq:asymex_weight_idempotent}
+    m_\gamma
+     & =\sum_{\alpha,\beta}
+    c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta.
+    \label{eq:asymex_weight_idempotent}
 \end{align}
 For $R$, $\mu_0=(25/32)$ and $\chi_{000}=\diag(1,7/25)$;
 indeed $(32/25)(25/32)^2=25/32$.
@@ -412,36 +412,36 @@ in~(\ref{eq:asymex_weight_idempotent}), giving
 $2(7/10+1/10)(5/8)^2=5/8$.
 
 \begin{theorem}[Fixed points and vertical multiplication]
-	\label{thm:asymex_rfp_equivalence}
-	\lean{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause,
-		MPOTensor.isRFPViaTS_iff_hasBNTFusionTensorClause}
-	\leanok
-	\uses{thm:mpdo_cpsv_bnt_rfp_equivalence}
-	Let $M$ generate MPDOs and suppose its doubled-physical-index tensor
-	is in CPSV canonical form (CF), with normalized normal tensor blocks.
-	The channel equations~(\ref{eq:asymex_channel_equations}) are equivalent
-	to the existence of a vertical canonical decomposition of $M$ whose
-	basis of normal tensors (BNT) satisfies
-	(\ref{eq:asymex_vertical_product}) and
-	(\ref{eq:asymex_weight_idempotent}) with positive diagonal $\chi$.
-	They are also equivalent to the existence of active-sector fusion
-	coisometries with exact reconstruction and the same idempotent relation,
-	as specified in Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence}.
-	The first equivalence is Ref.~\cite[Theorem~4.14(i)--(ii)]{Cirac2016MPDO_arXiv};
-	the second is the corrected active-support form of its fusion equivalence.
-	Neither multiplication nor the idempotent relation follows from a
-	vertical decomposition alone.
+    \label{thm:asymex_rfp_equivalence}
+    \lean{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause,
+        MPOTensor.isRFPViaTS_iff_hasBNTFusionTensorClause}
+    \leanok
+    \uses{thm:mpdo_cpsv_bnt_rfp_equivalence}
+    Let $M$ generate MPDOs and suppose its doubled-physical-index tensor
+    is in CPSV canonical form (CF), with normalized normal tensor blocks.
+    The channel equations~(\ref{eq:asymex_channel_equations}) are equivalent
+    to the existence of a vertical canonical decomposition of $M$ whose
+    basis of normal tensors (BNT) satisfies
+    (\ref{eq:asymex_vertical_product}) and
+    (\ref{eq:asymex_weight_idempotent}) with positive diagonal $\chi$.
+    They are also equivalent to the existence of active-sector fusion
+    coisometries with exact reconstruction and the same idempotent relation,
+    as specified in Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence}.
+    The first equivalence is Ref.~\cite[Theorem~4.14(i)--(ii)]{Cirac2016MPDO_arXiv};
+    the second is the corrected active-support form of its fusion equivalence.
+    Neither multiplication nor the idempotent relation follows from a
+    vertical decomposition alone.
 \end{theorem}
 \begin{proof}
-	\leanok
-	The fixed-point channels give an active-sector fusion decomposition,
-	which implies the operator product identities and the idempotent relation.
-	Conversely, these relations for the vertical components of $M$ yield
-	coarse-graining and refinement channels by
-	Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence}.
-	The comparison uses both one-site and two-site prefixes, and the
-	physical maps are completed on discarded complements. These implications
-	also prove the equivalence with the active-sector fusion description.
+    \leanok
+    The fixed-point channels give an active-sector fusion decomposition,
+    which implies the operator product identities and the idempotent relation.
+    Conversely, these relations for the vertical components of $M$ yield
+    coarse-graining and refinement channels by
+    Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence}.
+    The comparison uses both one-site and two-site prefixes, and the
+    physical maps are completed on discarded complements. These implications
+    also prove the equivalence with the active-sector fusion description.
 \end{proof}
 
 The equivalences require the stated CF and MPDO hypotheses. The direct
@@ -466,93 +466,93 @@ The results below establish tensor decompositions and periodic trace
 identities, not a classification of length-dependent RFPs.
 
 \begin{definition}[The idempotents of an adapted basis]
-	\label{def:asymex_basis_proj}
-	\lean{MPSTensor.basisProj, P6Compression.pairReorder, P6Compression.pairU,
-		P6Compression.pairUinv, P6Compression.pairProjInt,
-		P6Compression.pairBlockInt}
-	\leanok
-	\uses{prop:asym_projector_weighted_sum}
-	For mutually inverse matrices $U$ and $U^{-1}$, define
-	$\Pi_j=U^{-1}E_{jj}U$, the product of the $j$-th column of $U^{-1}$
-	with the $j$-th row of $U$.
-	Reorder a stacked bond quadruple into its two middle bits and its
-	two outer bits. On the inner bond choose the adapted basis with
-	first two vectors $(1,0,0,\pm1)$ and last two vectors the remaining
-	coordinate vectors. The Bell idempotents carry the weighted targets.
-	Their tensor products with target matrices are expressed in the
-	original stacked coordinates by undoing the reordering.
+    \label{def:asymex_basis_proj}
+    \lean{MPSTensor.basisProj, P6Compression.pairReorder, P6Compression.pairU,
+        P6Compression.pairUinv, P6Compression.pairProjInt,
+        P6Compression.pairBlockInt}
+    \leanok
+    \uses{prop:asym_projector_weighted_sum}
+    For mutually inverse matrices $U$ and $U^{-1}$, define
+    $\Pi_j=U^{-1}E_{jj}U$, the product of the $j$-th column of $U^{-1}$
+    with the $j$-th row of $U$.
+    Reorder a stacked bond quadruple into its two middle bits and its
+    two outer bits. On the inner bond choose the adapted basis with
+    first two vectors $(1,0,0,\pm1)$ and last two vectors the remaining
+    coordinate vectors. The Bell idempotents carry the weighted targets.
+    Their tensor products with target matrices are expressed in the
+    original stacked coordinates by undoing the reordering.
 \end{definition}
 
 \begin{theorem}[The idempotents of an adapted basis are mutually orthogonal]
-	\label{lem:asymex_basis_proj}
-	\lean{MPSTensor.basisProj_mul_basisProj_self,
-		MPSTensor.basisProj_mul_basisProj_of_ne, MPSTensor.mul_basisProj_mul}
-	\leanok
-	\uses{def:asymex_basis_proj}
-	The idempotents satisfy $\Pi_j^2=\Pi_j$,
-	$\Pi_j\Pi_k=0$ for $j\ne k$, and $U\Pi_jU^{-1}=E_{jj}$.
+    \label{lem:asymex_basis_proj}
+    \lean{MPSTensor.basisProj_mul_basisProj_self,
+        MPSTensor.basisProj_mul_basisProj_of_ne, MPSTensor.mul_basisProj_mul}
+    \leanok
+    \uses{def:asymex_basis_proj}
+    The idempotents satisfy $\Pi_j^2=\Pi_j$,
+    $\Pi_j\Pi_k=0$ for $j\ne k$, and $U\Pi_jU^{-1}=E_{jj}$.
 \end{theorem}
 \begin{proof}
-	\leanok
-	Conjugation by $U$ returns $E_{jj}$, and products reduce to
-	$E_{jj}E_{kk}=\delta_{jk}E_{jj}$.
+    \leanok
+    Conjugation by $U$ returns $E_{jj}$, and products reduce to
+    $E_{jj}E_{kk}=\delta_{jk}E_{jj}$.
 \end{proof}
 
 \begin{theorem}[From an integer matrix identity to a weighted direct sum]
-	\label{thm:asymex_stacked_pair}
-	\lean{P6Compression.stackedPair_letter_identity}
-	\leanok
-	\uses{def:asymex_basis_proj, prop:asym_projector_weighted_sum}
-	Suppose $B=c_B\widehat B$ and $C_s=c_C\widehat C_s$, where the
-	tensors with hats have integer entries and $s\in\{0,1\}$.
-	Suppose a nonzero integer $n$ and integers $k_s$ satisfy, for each
-	$s$ and each physical index $a$,
-	\begin{align}
-		n\,\mu_s\,\frac{c_C}{2} & =k_s\,c_B,
-		\label{eq:asymex_stacked_pair_scalar}
-	\end{align}
-	\begin{align}
-		n\,\widehat B^a & =\sum_sk_s\,(\widehat\Pi_s\otimes\widehat C_s^a),
-		\label{eq:asymex_stacked_pair_letters}
-	\end{align}
-	where $\widehat\Pi_s=2\Pi_s$ and the right-hand side
-	of~(\ref{eq:asymex_stacked_pair_letters}) is in stacked bond
-	coordinates. Then $B^a=\sum_s\mu_s(\Pi_s\otimes C_s^a)$ in those
-	coordinates, the hypothesis of
-	Proposition~\ref{prop:asym_projector_weighted_sum}.
-	Here $\mu_s$ denotes a scalar fusion weight, not a vertical
-	multiplicity matrix.
+    \label{thm:asymex_stacked_pair}
+    \lean{P6Compression.stackedPair_letter_identity}
+    \leanok
+    \uses{def:asymex_basis_proj, prop:asym_projector_weighted_sum}
+    Suppose $B=c_B\widehat B$ and $C_s=c_C\widehat C_s$, where the
+    tensors with hats have integer entries and $s\in\{0,1\}$.
+    Suppose a nonzero integer $n$ and integers $k_s$ satisfy, for each
+    $s$ and each physical index $a$,
+    \begin{align}
+        n\,\mu_s\,\frac{c_C}{2} & =k_s\,c_B,
+        \label{eq:asymex_stacked_pair_scalar}
+    \end{align}
+    \begin{align}
+        n\,\widehat B^a & =\sum_sk_s\,(\widehat\Pi_s\otimes\widehat C_s^a),
+        \label{eq:asymex_stacked_pair_letters}
+    \end{align}
+    where $\widehat\Pi_s=2\Pi_s$ and the right-hand side
+    of~(\ref{eq:asymex_stacked_pair_letters}) is in stacked bond
+    coordinates. Then $B^a=\sum_s\mu_s(\Pi_s\otimes C_s^a)$ in those
+    coordinates, the hypothesis of
+    Proposition~\ref{prop:asym_projector_weighted_sum}.
+    Here $\mu_s$ denotes a scalar fusion weight, not a vertical
+    multiplicity matrix.
 \end{theorem}
 \begin{proof}
-	\leanok
-	\uses{lem:asymex_basis_proj}
-	Using the idempotents of Theorem~\ref{lem:asymex_basis_proj}, the
-	$s$-th summand is
-	$\mu_sc_C(\widehat\Pi_s\otimes\widehat C_s^a)/2$.
-	Multiplication by $n$ and
-	substitution of~(\ref{eq:asymex_stacked_pair_scalar})
-	and~(\ref{eq:asymex_stacked_pair_letters}) give $nB^a$.
-	Cancel the nonzero scalar $n$.
+    \leanok
+    \uses{lem:asymex_basis_proj}
+    Using the idempotents of Theorem~\ref{lem:asymex_basis_proj}, the
+    $s$-th summand is
+    $\mu_sc_C(\widehat\Pi_s\otimes\widehat C_s^a)/2$.
+    Multiplication by $n$ and
+    substitution of~(\ref{eq:asymex_stacked_pair_scalar})
+    and~(\ref{eq:asymex_stacked_pair_letters}) give $nB^a$.
+    Cancel the nonzero scalar $n$.
 \end{proof}
 
 \begin{theorem}[Normality from scaled matrix units]
-	\label{thm:asymex_normal_units}
-	\lean{P6Compression.isNormal_of_single_eq_smul}
-	\leanok
-	\uses{def:normal}
-	Let a tensor be one nonzero scalar times an integer tensor. Suppose
-	that for every bond position $(x,y)$ a letter of the integer tensor
-	is a nonzero integer multiple of $E_{xy}$. Then its one-site
-	matrices span the full bond matrix algebra, so it is normal at
-	blocking length one in the sense of Definition~\ref{def:normal}.
-	This establishes injectivity, not transfer spectral-radius
-	normalization; a normal tensor (NT) in the RFP canonical form
-	additionally requires that normalization.
+    \label{thm:asymex_normal_units}
+    \lean{P6Compression.isNormal_of_single_eq_smul}
+    \leanok
+    \uses{def:normal}
+    Let a tensor be one nonzero scalar times an integer tensor. Suppose
+    that for every bond position $(x,y)$ a letter of the integer tensor
+    is a nonzero integer multiple of $E_{xy}$. Then its one-site
+    matrices span the full bond matrix algebra, so it is normal at
+    blocking length one in the sense of Definition~\ref{def:normal}.
+    This establishes injectivity, not transfer spectral-radius
+    normalization; a normal tensor (NT) in the RFP canonical form
+    additionally requires that normalization.
 \end{theorem}
 \begin{proof}
-	\leanok
-	Dividing each designated letter by its nonzero factor exhibits every
-	matrix unit in the one-site span.
+    \leanok
+    Dividing each designated letter by its nonzero factor exhibits every
+    matrix unit in the one-site span.
 \end{proof}
 
 \section{The one-label fixed point}%
@@ -569,17 +569,17 @@ target, not two inequivalent targets. In this section write $M=K$;
 it remains a vertical component, not the physical tensor $R$.
 
 \begin{definition}[The one-label tensors]
-	\label{def:asymex_one_label}
-	\lean{P6Compression.oneLabelM, P6Compression.oneLabelTarget,
-		P6Compression.oneLabelStacked, P6Compression.oneLabelBlocks,
-		P6Compression.oneLabelWeights}
-	\leanok
-	\uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
-	Set $M^{(i,j)}=A^i\otimes A^j$, of bond dimension four.
-	Its sixteen-letter MPS reading is the target tensor.
-	Let $B^{(i,k)}=\sum_jM^{(i,j)}\otimes M^{(j,k)}$ be the stacked
-	product, of bond dimension sixteen. The two targets are copies
-	of $M$ with scalar weights $\mu_0=1$ and $\mu_1=7/25$.
+    \label{def:asymex_one_label}
+    \lean{P6Compression.oneLabelM, P6Compression.oneLabelTarget,
+        P6Compression.oneLabelStacked, P6Compression.oneLabelBlocks,
+        P6Compression.oneLabelWeights}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+    Set $M^{(i,j)}=A^i\otimes A^j$, of bond dimension four.
+    Its sixteen-letter MPS reading is the target tensor.
+    Let $B^{(i,k)}=\sum_jM^{(i,j)}\otimes M^{(j,k)}$ be the stacked
+    product, of bond dimension sixteen. The two targets are copies
+    of $M$ with scalar weights $\mu_0=1$ and $\mu_1=7/25$.
 \end{definition}
 
 The following schematic records the inner spectral factors. Its
@@ -592,131 +592,131 @@ $\sigma\otimes\Id_4$, both on the full bond space. Their product is
 $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
 
 \begin{center}
-	% Formula: the periodic contraction of the vertical tensor $M$ with
-	% the inner-bond state $\sigma=\sum_b\lambda_b\Pi_b$ inserted on
-	% every bond, whose weights are the spectrum $\{1,7/25,0,0\}$ of
-	% $T=\sum_jA^j\otimes A^j$ (\S\ref{sec:asymex_rfp_basis}); this is
-	% the spectral mechanism behind
-	% Theorem~\ref{thm:asymex_one_label_compression}.
-	% Source: \S\ref{sec:asymex_one_label}, introductory paragraph.
-	% Ink-to-index map: the two explicit dot nodes are the vertical
-	% tensor $M$, each carrying its physical leg of the pair alphabet;
-	% each ring is the inner-bond state $\sigma$, with no physical leg
-	% of its own; the trailing dots abbreviate the remaining alternating
-	% $M$-$\sigma$ pairs of the periodic ring.
-	% Contraction set: every virtual bond, alternating $M$ and $\sigma$,
-	% closed around the ring; no leg is left open.
-	% Boundary signature: (virtual-west=0 | virtual-east=0 |
-	% physical-up=2 | physical-down=0) for the finite schematic shown.
-	% Qualification: M and sigma act on separate outer and inner factors.
-	% Only virtual legs are closed; the physical pair legs remain open.
-	\tenkzkernel
-	\begin{tenkz}[cols=6, boundary=periodic, physical=up]
-		\tn[label pos=135, ports={90:physical:$a_1$}]{M} &
-		\tn[skin=ring]{\sigma} &
-		\tn[label pos=135, ports={90:physical:$a_2$}]{M} &
-		\tn[skin=ring]{\sigma} &
-		\tn[skin=dots]{} & \tn[skin=ring]{\sigma}
-	\end{tenkz}
-	\qquad $\sigma=\sum_b\lambda_b\,\Pi_b$
+    % Formula: the periodic contraction of the vertical tensor $M$ with
+    % the inner-bond state $\sigma=\sum_b\lambda_b\Pi_b$ inserted on
+    % every bond, whose weights are the spectrum $\{1,7/25,0,0\}$ of
+    % $T=\sum_jA^j\otimes A^j$ (\S\ref{sec:asymex_rfp_basis}); this is
+    % the spectral mechanism behind
+    % Theorem~\ref{thm:asymex_one_label_compression}.
+    % Source: \S\ref{sec:asymex_one_label}, introductory paragraph.
+    % Ink-to-index map: the two explicit dot nodes are the vertical
+    % tensor $M$, each carrying its physical leg of the pair alphabet;
+    % each ring is the inner-bond state $\sigma$, with no physical leg
+    % of its own; the trailing dots abbreviate the remaining alternating
+    % $M$-$\sigma$ pairs of the periodic ring.
+    % Contraction set: every virtual bond, alternating $M$ and $\sigma$,
+    % closed around the ring; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=2 | physical-down=0) for the finite schematic shown.
+    % Qualification: M and sigma act on separate outer and inner factors.
+    % Only virtual legs are closed; the physical pair legs remain open.
+    \tenkzkernel
+    \begin{tenkz}[cols=6, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$a_1$}]{M} &
+        \tn[skin=ring]{\sigma} &
+        \tn[label pos=135, ports={90:physical:$a_2$}]{M} &
+        \tn[skin=ring]{\sigma} &
+        \tn[skin=dots]{} & \tn[skin=ring]{\sigma}
+    \end{tenkz}
+    \qquad $\sigma=\sum_b\lambda_b\,\Pi_b$
 \end{center}
 
 \begin{theorem}[Normality of the one-label target]
-	\label{thm:asymex_one_label_normal}
-	\lean{P6Compression.oneLabelTarget_isNormal}
-	\leanok
-	\uses{def:asymex_one_label, def:normal}
-	The vertical tensor is normal at blocking length one in the sense
-	of Definition~\ref{def:normal}: its sixteen matrices are scaled
-	matrix units covering every position of $\MN{4}$.
+    \label{thm:asymex_one_label_normal}
+    \lean{P6Compression.oneLabelTarget_isNormal}
+    \leanok
+    \uses{def:asymex_one_label, def:normal}
+    The vertical tensor is normal at blocking length one in the sense
+    of Definition~\ref{def:normal}: its sixteen matrices are scaled
+    matrix units covering every position of $\MN{4}$.
 \end{theorem}
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_normal_units}
-	Each position is realized by one of the sixteen letters with a
-	nonzero integer factor. Theorem~\ref{thm:asymex_normal_units}
-	gives normality.
+    \leanok
+    \uses{thm:asymex_normal_units}
+    Each position is realized by one of the sixteen letters with a
+    nonzero integer factor. Theorem~\ref{thm:asymex_normal_units}
+    gives normality.
 \end{proof}
 
 \begin{theorem}[Split compression of the one-label fixed point]
-	\label{thm:asymex_one_label_compression}
-	% Principal declaration: P6Compression.oneLabel_isReduction.
-	\lean{P6Compression.oneLabelCompression, P6Compression.oneLabel_isReduction,
-		P6Compression.oneLabel_left_mul_right_of_ne, P6Compression.oneLabel_z_eq,
-		P6Compression.oneLabel_dim_eq, P6Compression.oneLabel_remainder,
-		P6Compression.oneLabel_mul_right_eq_right_mul,
-		P6Compression.oneLabel_left_mul_eq_mul_left}
-	\leanok
-	\uses{def:asymex_one_label, thm:asym_multiblock}
-	The stacked tensor $B$ has the block triangular form of
-	Theorem~\ref{thm:asym_multiblock} for $C_s=\mu_sM$, with an
-	eight-dimensional zero complement, $z=8$, and $16=4+4+8$.
-	Its compression pairs $W_s,V_s$ are mutually biorthogonal and
-	satisfy $W_sB^wV_s=C_s^w$ for every word.
-	The remainder vanishes identically, and
-	$B^aV_s=V_s(\mu_sM^a)$ and $W_sB^a=(\mu_sM^a)W_s$.
+    \label{thm:asymex_one_label_compression}
+    % Principal declaration: P6Compression.oneLabel_isReduction.
+    \lean{P6Compression.oneLabelCompression, P6Compression.oneLabel_isReduction,
+        P6Compression.oneLabel_left_mul_right_of_ne, P6Compression.oneLabel_z_eq,
+        P6Compression.oneLabel_dim_eq, P6Compression.oneLabel_remainder,
+        P6Compression.oneLabel_mul_right_eq_right_mul,
+        P6Compression.oneLabel_left_mul_eq_mul_left}
+    \leanok
+    \uses{def:asymex_one_label, thm:asym_multiblock}
+    The stacked tensor $B$ has the block triangular form of
+    Theorem~\ref{thm:asym_multiblock} for $C_s=\mu_sM$, with an
+    eight-dimensional zero complement, $z=8$, and $16=4+4+8$.
+    Its compression pairs $W_s,V_s$ are mutually biorthogonal and
+    satisfy $W_sB^wV_s=C_s^w$ for every word.
+    The remainder vanishes identically, and
+    $B^aV_s=V_s(\mu_sM^a)$ and $W_sB^a=(\mu_sM^a)W_s$.
 \end{theorem}
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_stacked_pair, prop:asym_projector_weighted_sum}
-	For the integer tensors, twice the stacked letter is the sum
-	of the two adapted-basis blocks with coefficients $25$ and $7$.
-	This is the integer identity of
-	Theorem~\ref{thm:asymex_stacked_pair}, verified over the sixteen
-	physical indices. The scalar identity uses weights $1,7/25$.
-	Proposition~\ref{prop:asym_projector_weighted_sum} supplies the
-	compression maps, vanishing remainder, and one-site intertwiners,
-	with zero complement of dimension $2\cdot4=8$.
+    \leanok
+    \uses{thm:asymex_stacked_pair, prop:asym_projector_weighted_sum}
+    For the integer tensors, twice the stacked letter is the sum
+    of the two adapted-basis blocks with coefficients $25$ and $7$.
+    This is the integer identity of
+    Theorem~\ref{thm:asymex_stacked_pair}, verified over the sixteen
+    physical indices. The scalar identity uses weights $1,7/25$.
+    Proposition~\ref{prop:asym_projector_weighted_sum} supplies the
+    compression maps, vanishing remainder, and one-site intertwiners,
+    with zero complement of dimension $2\cdot4=8$.
 \end{proof}
 
 \begin{center}
-	% Formula: B^aV_s=V_s(\mu_sM^a) and W_sB^a=(\mu_sM^a)W_s of
-	% Theorem~\ref{thm:asymex_one_label_compression}, for the weights
-	% $\mu_s\in\{1,7/25\}$.
-	% Source: Theorem~\ref{thm:asymex_one_label_compression}.
-	% Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
-	% the square node is the stacked source $B$ or the weighted target
-	% $\mu_sM$.
-	% Contraction set: the single virtual bond joining the ring to the
-	% square node in each pair; the physical pair leg $a$ remains open.
-	% Boundary signature: (virtual-west=1 | virtual-east=1 |
-	% physical-up=1 | physical-down=0) for each pictured equality.
-	\tenkzkernel
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
-	\end{tenkz}
-	\quad $=$ \quad
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM}
-	\end{tenkz}
-	\\
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$a$}]{B}
-	\end{tenkz}
-	\quad $=$ \quad
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[label pos=s, ports={90:physical:$a$}]{\mu_sM} & \tn[skin=ring]{W_s}
-	\end{tenkz}
+    % Formula: B^aV_s=V_s(\mu_sM^a) and W_sB^a=(\mu_sM^a)W_s of
+    % Theorem~\ref{thm:asymex_one_label_compression}, for the weights
+    % $\mu_s\in\{1,7/25\}$.
+    % Source: Theorem~\ref{thm:asymex_one_label_compression}.
+    % Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
+    % the square node is the stacked source $B$ or the weighted target
+    % $\mu_sM$.
+    % Contraction set: the single virtual bond joining the ring to the
+    % square node in each pair; the physical pair leg $a$ remains open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM}
+    \end{tenkz}
+    \\
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$a$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM} & \tn[skin=ring]{W_s}
+    \end{tenkz}
 \end{center}
 
 \begin{theorem}[The one-label structure coefficient]
-	\label{thm:asymex_one_label_trace}
-	\lean{P6Compression.oneLabel_trace_evalWord}
-	\leanok
-	\uses{def:asymex_one_label}
-	For every nonempty word $w$ over the sixteen-letter alphabet,
-	\begin{align}
-		\tr(B^w) & =\left(1+(\tfrac7{25})^{|w|}\right)\tr(M^w).
-		\label{eq:asymex_one_label_trace}
-	\end{align}
+    \label{thm:asymex_one_label_trace}
+    \lean{P6Compression.oneLabel_trace_evalWord}
+    \leanok
+    \uses{def:asymex_one_label}
+    For every nonempty word $w$ over the sixteen-letter alphabet,
+    \begin{align}
+        \tr(B^w) & =\left(1+(\tfrac7{25})^{|w|}\right)\tr(M^w).
+        \label{eq:asymex_one_label_trace}
+    \end{align}
 \end{theorem}
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_one_label_compression, prop:asym_compression_trace}
-	Proposition~\ref{prop:asym_compression_trace} applied to
-	Theorem~\ref{thm:asymex_one_label_compression} gives the two
-	weighted target traces. Scalar word evaluation contributes
-	$1$ and $(7/25)^{|w|}$.
+    \leanok
+    \uses{thm:asymex_one_label_compression, prop:asym_compression_trace}
+    Proposition~\ref{prop:asym_compression_trace} applied to
+    Theorem~\ref{thm:asymex_one_label_compression} gives the two
+    weighted target traces. Scalar word evaluation contributes
+    $1$ and $(7/25)^{|w|}$.
 \end{proof}
 
 \section{The graded quantum-dimer twist}%
@@ -740,42 +740,42 @@ The normalized BNT coefficients instead use $7/10,1/10$, as explained
 in Section~\ref{sec:asymex_vertical_dictionary}.
 
 \begin{definition}[The sector tensors and their stacked product]
-	\label{def:asymex_dimer}
-	\lean{P6Compression.dimerM, P6Compression.dimerTarget,
-		P6Compression.dimerStacked, P6Compression.dimerBlocks,
-		P6Compression.dimerWeights}
-	\leanok
-	\uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
-	For $a=(p,p',k)$ and $b=(q,q',k')$, define
-	\begin{align}
-		M_f^{ab} & =\delta_{kk'} \frac12C_k(p,p')\tau_k(f)
-		(E_{pp'}\otimes E_{qq'}).
-		\label{eq:asymex_dimer_letters}
-	\end{align}
-	The sixty-four-letter reading is the target tensor, of bond
-	dimension four. The stacked product
-	$B_{f,f'}^{ab}=\sum_cM_f^{ac}\otimes M_{f'}^{cb}$ has bond
-	dimension sixteen. Its target tensors are $M_{f+f'}$ and
-	$M_{f+f'+1}$, with weights $7/16$ and $1/16$.
+    \label{def:asymex_dimer}
+    \lean{P6Compression.dimerM, P6Compression.dimerTarget,
+        P6Compression.dimerStacked, P6Compression.dimerBlocks,
+        P6Compression.dimerWeights}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+    For $a=(p,p',k)$ and $b=(q,q',k')$, define
+    \begin{align}
+        M_f^{ab} & =\delta_{kk'} \frac12C_k(p,p')\tau_k(f)
+        (E_{pp'}\otimes E_{qq'}).
+        \label{eq:asymex_dimer_letters}
+    \end{align}
+    The sixty-four-letter reading is the target tensor, of bond
+    dimension four. The stacked product
+    $B_{f,f'}^{ab}=\sum_cM_f^{ac}\otimes M_{f'}^{cb}$ has bond
+    dimension sixteen. Its target tensors are $M_{f+f'}$ and
+    $M_{f+f'+1}$, with weights $7/16$ and $1/16$.
 \end{definition}
 
 The inner idempotents select different outer target sectors.
 The exact reordered letter identity is
 \begin{align}
-	B_{f,f'}^a
-	 & =\frac7{16}\Pi_0\otimes M_{f+f'}^a
-	+\frac1{16}\Pi_1\otimes M_{f+f'+1}^a.
-	\label{eq:asymex_dimer_split}
+    B_{f,f'}^a
+     & =\frac7{16}\Pi_0\otimes M_{f+f'}^a
+    +\frac1{16}\Pi_1\otimes M_{f+f'+1}^a.
+    \label{eq:asymex_dimer_split}
 \end{align}
 
 For fixed $f,f'$, define matrices on the full inner--outer bond space by
 \begin{align}
- \mathcal M^a&=\sum_{s=0}^1\Pi_s\otimes M_{f+f'+s}^a.
- \notag
+    \mathcal M^a & =\sum_{s=0}^1\Pi_s\otimes M_{f+f'+s}^a.
+    \notag
 \end{align}
 \begin{align}
- \Sigma&=\left(\frac7{16}\Pi_0+\frac1{16}\Pi_1\right)\otimes\Id_4.
- \notag
+    \Sigma & =\left(\frac7{16}\Pi_0+\frac1{16}\Pi_1\right)\otimes\Id_4.
+    \notag
 \end{align}
 Orthogonality of the idempotents gives
 $B_{f,f'}^a=\mathcal M^a\Sigma=\Sigma\mathcal M^a$.
@@ -783,147 +783,147 @@ The alternating ring therefore represents the periodic contraction of
 these stacked letters. Its spectral factor $\Sigma$ is not the physical
 Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
 \begin{center}
-	% Formula: B_{f,f'}^a = mathcal M^a Sigma, as in
-	% (\ref{eq:asymex_dimer_split}) and \S\ref{sec:asymex_rfp_basis}.
-	% Source: \S\ref{sec:asymex_dimer}.
-	% Ink-to-index map: each mathcal M node selects the outer tensor
-	% through the inner idempotent; each Sigma ring supplies its weight.
-	% Both act on the full inner--outer bond space.
-	% Contraction set: all virtual legs are closed; physical pair legs
-	% remain open. The dots abbreviate additional pairs of matrices.
-	% Boundary signature: (virtual-west=0 | virtual-east=0 |
-	% physical-up=2 | physical-down=0) for the finite schematic shown.
-	\tenkzkernel
-	\begin{tenkz}[cols=6, boundary=periodic, physical=up]
-		\tn[label pos=135, ports={90:physical:$a_1$}]{\mathcal M} &
-		\tn[skin=ring]{\Sigma} &
-		\tn[label pos=135, ports={90:physical:$a_2$}]{\mathcal M} &
-		\tn[skin=ring]{\Sigma} &
-		\tn[skin=dots]{} & \tn[skin=ring]{\Sigma}
-	\end{tenkz}
+    % Formula: B_{f,f'}^a = mathcal M^a Sigma, as in
+    % (\ref{eq:asymex_dimer_split}) and \S\ref{sec:asymex_rfp_basis}.
+    % Source: \S\ref{sec:asymex_dimer}.
+    % Ink-to-index map: each mathcal M node selects the outer tensor
+    % through the inner idempotent; each Sigma ring supplies its weight.
+    % Both act on the full inner--outer bond space.
+    % Contraction set: all virtual legs are closed; physical pair legs
+    % remain open. The dots abbreviate additional pairs of matrices.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=2 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=6, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$a_1$}]{\mathcal M} &
+        \tn[skin=ring]{\Sigma} &
+        \tn[label pos=135, ports={90:physical:$a_2$}]{\mathcal M} &
+        \tn[skin=ring]{\Sigma} &
+        \tn[skin=dots]{} & \tn[skin=ring]{\Sigma}
+    \end{tenkz}
 \end{center}
 
 \begin{theorem}[Normality of the sectors]
-	\label{thm:asymex_dimer_normal}
-	\lean{P6Compression.dimerTarget_isNormal}
-	\leanok
-	\uses{def:asymex_dimer, def:normal}
-	Each sector is normal at blocking length one in the sense of
-	Definition~\ref{def:normal}: its thirty-two nonzero letters are
-	scaled matrix units covering every position of $\MN{4}$.
+    \label{thm:asymex_dimer_normal}
+    \lean{P6Compression.dimerTarget_isNormal}
+    \leanok
+    \uses{def:asymex_dimer, def:normal}
+    Each sector is normal at blocking length one in the sense of
+    Definition~\ref{def:normal}: its thirty-two nonzero letters are
+    scaled matrix units covering every position of $\MN{4}$.
 \end{theorem}
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_normal_units}
-	The sixteen letters with common label $k=0$ realize all matrix
-	positions with nonzero integer factors independent of $f$.
-	Apply Theorem~\ref{thm:asymex_normal_units}.
+    \leanok
+    \uses{thm:asymex_normal_units}
+    The sixteen letters with common label $k=0$ realize all matrix
+    positions with nonzero integer factors independent of $f$.
+    Apply Theorem~\ref{thm:asymex_normal_units}.
 \end{proof}
 
 \begin{theorem}[Split compression of the dimer fusion]
-	\label{thm:asymex_dimer_compression}
-	% Principal declaration: P6Compression.dimer_isReduction.
-	\lean{P6Compression.dimerCompression, P6Compression.dimer_isReduction,
-		P6Compression.dimer_left_mul_right_of_ne, P6Compression.dimer_z_eq,
-		P6Compression.dimer_dim_eq, P6Compression.dimer_remainder,
-		P6Compression.dimer_mul_right_eq_right_mul,
-		P6Compression.dimer_left_mul_eq_mul_left}
-	\leanok
-	\uses{def:asymex_dimer, thm:asym_multiblock}
-	For sector zero multiplied by itself, let $B=B_{0,0}$.
-	It has the block triangular form of
-	Theorem~\ref{thm:asym_multiblock} for $C_s=\mu_sM_s$, where
-	$\mu_0=7/16$ and $\mu_1=1/16$ are scalar fusion weights, with an
-	eight-dimensional zero complement, $z=8$, and $16=4+4+8$.
-	The compression pairs are mutually biorthogonal and satisfy
-	$W_sB^wV_s=C_s^w$ for every word. The remainder vanishes
-	identically, and the compression maps intertwine the letters in
-	both directions.
+    \label{thm:asymex_dimer_compression}
+    % Principal declaration: P6Compression.dimer_isReduction.
+    \lean{P6Compression.dimerCompression, P6Compression.dimer_isReduction,
+        P6Compression.dimer_left_mul_right_of_ne, P6Compression.dimer_z_eq,
+        P6Compression.dimer_dim_eq, P6Compression.dimer_remainder,
+        P6Compression.dimer_mul_right_eq_right_mul,
+        P6Compression.dimer_left_mul_eq_mul_left}
+    \leanok
+    \uses{def:asymex_dimer, thm:asym_multiblock}
+    For sector zero multiplied by itself, let $B=B_{0,0}$.
+    It has the block triangular form of
+    Theorem~\ref{thm:asym_multiblock} for $C_s=\mu_sM_s$, where
+    $\mu_0=7/16$ and $\mu_1=1/16$ are scalar fusion weights, with an
+    eight-dimensional zero complement, $z=8$, and $16=4+4+8$.
+    The compression pairs are mutually biorthogonal and satisfy
+    $W_sB^wV_s=C_s^w$ for every word. The remainder vanishes
+    identically, and the compression maps intertwine the letters in
+    both directions.
 \end{theorem}
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_stacked_pair, prop:asym_projector_weighted_sum}
-	A stacked letter vanishes unless its outer auxiliary indices have
-	the same label $k$. For a matching pair, the intermediate sum runs
-	over the four auxiliary indices with that label.
-	Twice the integer stacked letter decomposes in the adapted basis
-	with coefficients $7,1$, giving the hypotheses of
-	Theorem~\ref{thm:asymex_stacked_pair}. This identity is checked over
-	the sixty-four letters; the scalar identity uses $7/16,1/16$.
-	Proposition~\ref{prop:asym_projector_weighted_sum} then gives the
-	compression maps, vanishing remainder, and both intertwiners.
+    \leanok
+    \uses{thm:asymex_stacked_pair, prop:asym_projector_weighted_sum}
+    A stacked letter vanishes unless its outer auxiliary indices have
+    the same label $k$. For a matching pair, the intermediate sum runs
+    over the four auxiliary indices with that label.
+    Twice the integer stacked letter decomposes in the adapted basis
+    with coefficients $7,1$, giving the hypotheses of
+    Theorem~\ref{thm:asymex_stacked_pair}. This identity is checked over
+    the sixty-four letters; the scalar identity uses $7/16,1/16$.
+    Proposition~\ref{prop:asym_projector_weighted_sum} then gives the
+    compression maps, vanishing remainder, and both intertwiners.
 \end{proof}
 
 \begin{center}
-	% Formula: the sitewise intertwiners B^aV_s=V_s(\mu_sM_s^a) and
-	% W_sB^a=(\mu_sM_s^a)W_s of Theorem~\ref{thm:asymex_dimer_compression},
-	% for the two weighted target sectors $s\in\{f+f',f+f'+1\}$ with
-	% weights $\mu_s\in\{7/16,1/16\}$.
-	% Source: Theorem~\ref{thm:asymex_dimer_compression}.
-	% Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
-	% the square node is the stacked source $B$ or the weighted sector
-	% target $\mu_sM_s$.
-	% Contraction set: the single virtual bond joining the ring to the
-	% square node in each pair; the physical pair leg $a$ remains open.
-	% Boundary signature: (virtual-west=1 | virtual-east=1 |
-	% physical-up=1 | physical-down=0) for each pictured equality.
-	\tenkzkernel
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
-	\end{tenkz}
-	\quad $=$ \quad
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[skin=ring]{V_s} &
-		\tn[label pos=s, ports={90:physical:$a$}]{\mu_sM_s}
-	\end{tenkz}
-	\\
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$a$}]{B}
-	\end{tenkz}
-	\quad $=$ \quad
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[label pos=s, ports={90:physical:$a$}]{\mu_sM_s} & \tn[skin=ring]{W_s}
-	\end{tenkz}
+    % Formula: the sitewise intertwiners B^aV_s=V_s(\mu_sM_s^a) and
+    % W_sB^a=(\mu_sM_s^a)W_s of Theorem~\ref{thm:asymex_dimer_compression},
+    % for the two weighted target sectors $s\in\{f+f',f+f'+1\}$ with
+    % weights $\mu_s\in\{7/16,1/16\}$.
+    % Source: Theorem~\ref{thm:asymex_dimer_compression}.
+    % Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
+    % the square node is the stacked source $B$ or the weighted sector
+    % target $\mu_sM_s$.
+    % Contraction set: the single virtual bond joining the ring to the
+    % square node in each pair; the physical pair leg $a$ remains open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{V_s} &
+        \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM_s}
+    \end{tenkz}
+    \\
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$a$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM_s} & \tn[skin=ring]{W_s}
+    \end{tenkz}
 \end{center}
 
 \begin{theorem}[The dimer structure coefficients]
-	\label{thm:asymex_dimer_trace}
-	\lean{P6Compression.dimer_trace_evalWord}
-	\leanok
-	\uses{def:asymex_dimer}
-	For sector zero multiplied by itself and every nonempty word $w$
-	over the sixty-four-letter alphabet,
-	\begin{align}
-		\tr(B^w) & =(\tfrac7{16})^{|w|}\tr(M_0^w)
-		                               +(\tfrac1{16})^{|w|}\tr(M_1^w),
-		\label{eq:asymex_dimer_trace}
-	\end{align}
-	where $M_0,M_1$ are the unnormalized sector tensors.
+    \label{thm:asymex_dimer_trace}
+    \lean{P6Compression.dimer_trace_evalWord}
+    \leanok
+    \uses{def:asymex_dimer}
+    For sector zero multiplied by itself and every nonempty word $w$
+    over the sixty-four-letter alphabet,
+    \begin{align}
+        \tr(B^w) & =(\tfrac7{16})^{|w|}\tr(M_0^w)
+        +(\tfrac1{16})^{|w|}\tr(M_1^w),
+        \label{eq:asymex_dimer_trace}
+    \end{align}
+    where $M_0,M_1$ are the unnormalized sector tensors.
 \end{theorem}
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_dimer_compression, prop:asym_compression_trace}
-	Proposition~\ref{prop:asym_compression_trace} applied to
-	Theorem~\ref{thm:asymex_dimer_compression} gives the two weighted
-	target traces. Scalar word evaluation gives the factors
-	$(7/16)^{|w|}$ and $(1/16)^{|w|}$
-	in~(\ref{eq:asymex_dimer_trace}).
+    \leanok
+    \uses{thm:asymex_dimer_compression, prop:asym_compression_trace}
+    Proposition~\ref{prop:asym_compression_trace} applied to
+    Theorem~\ref{thm:asymex_dimer_compression} gives the two weighted
+    target traces. Scalar word evaluation gives the factors
+    $(7/16)^{|w|}$ and $(1/16)^{|w|}$
+    in~(\ref{eq:asymex_dimer_trace}).
 \end{proof}
 
 \begin{remark}[Scope of the dimer fusion identities]
-	\label{rem:asymex_dimer_scope}
-	Theorems~\ref{thm:asymex_dimer_compression}
-	and~\ref{thm:asymex_dimer_trace} state the sector-zero case.
-	The letter decomposition~(\ref{eq:asymex_dimer_split}) holds for
-	every pair $f,f'$, with the same adapted basis and weights and
-	targets $M_{f+f'}$, $M_{f+f'+1}$.
-	Indeed, in a nonzero contraction the common auxiliary label is $k$,
-	and $\tau_k(f)\tau_k(f')=\tau_k(f+f')$. Multiplying the sector-zero
-	identity by this sign changes its targets exactly as stated.
-	Thus, for every pair and every $L>0$,
-	\begin{align}
-		O_L(M_f)O_L(M_{f'})
-		 & =\left(\frac7{16}\right)^LO_L(M_{f+f'})
-		+\left(\frac1{16}\right)^LO_L(M_{f+f'+1}).
-	\end{align}
+    \label{rem:asymex_dimer_scope}
+    Theorems~\ref{thm:asymex_dimer_compression}
+    and~\ref{thm:asymex_dimer_trace} state the sector-zero case.
+    The letter decomposition~(\ref{eq:asymex_dimer_split}) holds for
+    every pair $f,f'$, with the same adapted basis and weights and
+    targets $M_{f+f'}$, $M_{f+f'+1}$.
+    Indeed, in a nonzero contraction the common auxiliary label is $k$,
+    and $\tau_k(f)\tau_k(f')=\tau_k(f+f')$. Multiplying the sector-zero
+    identity by this sign changes its targets exactly as stated.
+    Thus, for every pair and every $L>0$,
+    \begin{align}
+        O_L(M_f)O_L(M_{f'})
+         & =\left(\frac7{16}\right)^LO_L(M_{f+f'})
+        +\left(\frac1{16}\right)^LO_L(M_{f+f'+1}).
+    \end{align}
 \end{remark}
