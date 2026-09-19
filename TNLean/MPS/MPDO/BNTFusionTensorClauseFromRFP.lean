@@ -378,18 +378,7 @@ theorem of_verticalDecompositions_of_unitaryBlockEquiv
     D₁ D₂ sigma chi U hChiPos hCoisometry hFusion hReconstruction
     hRepresentations
   exact ⟨{
-    labelCount := D₁.labelCount
-    bondDim := D₁.bondDim
-    multiplicity := D₁.multiplicity
-    weight := D₁.weight
-    tensor := D₁.tensor
-    verticalCoisometry := D₁.verticalCoisometry
-    multiplicity_pos := D₁.multiplicity_pos
-    weight_pos := D₁.weight_pos
-    coisometry := D₁.coisometry
-    isCPSVBNT := D₁.isCPSVBNT
-    forward := D₁.forward
-    reconstruction := D₁.reconstruction
+    toCPSVVerticalDecomposition := D₁
     chi := chi
     chi_pos := hChiPos
     fusionCoisometry := U
