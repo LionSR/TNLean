@@ -33,21 +33,16 @@ def cyclicTranslateState {N : ℕ} (s : Fin N) :
     ext
     simp
 
-private theorem cyclic_offset_eq_sub {N : ℕ} (k i : Fin N) :
-    ((k.val + N - i.val) % N) = (k - i).val := by
-  let : NeZero N := ⟨(Fin.pos k).ne'⟩
-  have h := offset_mod_eq i.isLt (k - i).isLt
-  have hadd : i + (k - i) = k := by
-    abel
-  have hval := congrArg Fin.val hadd
-  simp only [Fin.add_def] at hval
-  rwa [hval] at h
-
 private theorem cyclic_offset_translate {N : ℕ} (k i s : Fin N) :
     (((k + s).val + N - i.val) % N) =
       ((k.val + N - (i - s).val) % N) := by
   let : NeZero N := ⟨(Fin.pos k).ne'⟩
-  rw [cyclic_offset_eq_sub, cyclic_offset_eq_sub]
+  have hsub : ∀ a b : Fin N, ((a.val + N - b.val) % N) = (a - b).val := by
+    intro a b
+    rw [Fin.val_sub]
+    congr 1
+    omega
+  rw [hsub, hsub]
   have hFin : k + s - i = k - (i - s) := by
     abel
   exact congrArg Fin.val hFin
