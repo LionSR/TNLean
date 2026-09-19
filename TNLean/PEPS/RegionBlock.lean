@@ -60,8 +60,6 @@ import TNLean.PEPS.RegionBlock.UnionInjectivity
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneralBlue
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap2
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3b
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap6
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlapBridge
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlapSetup
