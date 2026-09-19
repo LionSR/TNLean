@@ -319,9 +319,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         renormalization maps]
     \label{thm:kato_deformed_mpdo_fixed_tensor_obstruction}
     \lean{MPOTensor.KatoDeformedRFPObstruction.pauliZ,
-        MPOTensor.siteSign,
         MPOTensor.KatoDeformedRFPObstruction.tensor,
-        MPOTensor.configurationSign,
         MPOTensor.KatoDeformedRFPObstruction.mpo_tensor_eq_diagonal,
         MPOTensor.KatoDeformedRFPObstruction.tensor_isMPDO,
         MPOTensor.KatoDeformedRFPObstruction.trace_mpo_tensor,
@@ -341,7 +339,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         physClose1_obstructionBoundary_not_posSemidef,
         MPOTensor.KatoDeformedRFPObstruction.tensor_not_isRFPViaTS}
     \leanok
-    \uses{def:mpdo, def:phys_close, def:mpo_physical_trace_transfer, def:is_rfp_via_ts}
+    \uses{def:mpdo, def:phys_close, def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:cpsv_example412_site_sign, def:cpsv_example412_configuration_sign}
     Let $Z=\operatorname{diag}(1,-1)$ and let $K$ be the bond-two MPO tensor
     whose nonzero physical letters are
     \begin{align}

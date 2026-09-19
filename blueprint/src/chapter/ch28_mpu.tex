@@ -2059,9 +2059,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Independent tensor product of matrix product operator tensors]
     \label{def:mpu_independent_tensor_product}
-    \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply, finTupleProdEquiv}
+    \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply}
     \leanok
-    \uses{def:mpo_tensor}
+    \uses{def:mpo_tensor, def:mps_independent_tensor_product}
     Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d,e$ and
     auxiliary dimensions $D,E$, respectively. Their independent tensor
     product $\mathcal U\boxtimes\mathcal V$ has dimensions $de$ and $DE$ and
@@ -3727,7 +3727,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Left-canonical normalization under blocking and relabeling]
     \label{thm:mpu_left_canonical_blocking_reindexing}
-    \lean{MPSTensor.leftCanonical_reindexPhysical_equiv}
     \leanok
     \uses{def:blocked_tensor, def:left_canonical_tensor, thm:left_canonical_blocking}
     Suppose that an MPS tensor $A$ is left-canonical:
@@ -3750,7 +3749,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:blocked_tensor, def:left_canonical_tensor, thm:left_canonical_blocking}
+    \uses{def:blocked_tensor, def:left_canonical_tensor, thm:left_canonical_blocking, thm:cpsv_physical_reindexing}
     Expand~(\ref{eq:mpu_left_canonical_blocking}) as a sum over
     length-$L$ words and sum one letter at a time, repeatedly applying the
     one-site left-canonical identity. For $L=0$, the unique empty word
@@ -13536,11 +13535,10 @@ left/right order below agrees with the adjacent-pair convention in
 
 \begin{lemma}[Geometry of consecutive pair images]
     \label{lem:qca_consecutive_pair_geometry}
-    \lean{SpinChain.disjoint_leftPair_rightPair,
-        SpinChain.disjoint_leftPair_union_rightPair_rightPair_add_one,
+    \lean{SpinChain.disjoint_leftPair_union_rightPair_rightPair_add_one,
         SpinChain.leftPair_union_rightPair_union_rightPair_add_one}
     \leanok
-    \uses{def:qca_nearest_neighbor_pair_regions}
+    \uses{def:qca_nearest_neighbor_pair_regions, lem:qca_nearest_neighbor_pair_geometry}
     Let $T_x=(L_x\cup P_x)\cup P_{x+1}$. The three regions
     $L_x,P_x,P_{x+1}$ are pairwise disjoint, and
     \begin{align}

@@ -163,6 +163,7 @@ chains, one tensor per site, which is the setting of
     $V^{(n)}(A)_\sigma = \tr\!(A^{i_1} \cdots A^{i_n})$.
 \end{lemma}
 \begin{proof}\leanok
+    \uses{thm:trace_eval_word_eq_sum_cyclic}
     An entry of a word product is a sum over paths of bond indices pinned at
     the two ends of products of matrix entries read along the path, by
     induction on the word; closing the two pinned ends into a loop, the trace
@@ -419,7 +420,6 @@ to $n \ge 2L + 1$.
 
 \begin{lemma}[Block injectivity extends to longer blocks]%
     \label{lem:isNBlkInjective_of_le}
-    \lean{MPSTensor.isNBlkInjective_of_le}
     \leanok
     \uses{def:l_blk_injective}
     Let $A$ be a tensor of $D \times D$ matrices over physical dimension
@@ -430,7 +430,7 @@ to $n \ge 2L + 1$.
     alternative proof'') from its union lemma.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:eval_word}
+    \uses{def:eval_word, thm:wordspan_blk_inj_succ}
     It suffices to pass from length $m$ to $m + 1$. Write the identity as
     a combination of length-$L$ word products and peel the leading letter
     of each: any matrix $P$ becomes a combination of terms
