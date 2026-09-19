@@ -116,19 +116,6 @@ theorem exists_multiBlockCompression_mulTensor_of_mpo_eq_sum {Dα Dβ : ℕ} {D�
 
 /-! ### Fusion tensors of a matrix product operator group representation -/
 
-/-- A rectangular reduction between the doubled-index views of two MPO tensors intertwines
-every pair word.
-
-Source: arXiv:2203.12563, equation `fusiontensorG2`, lines 1002--1026. -/
-theorem isReduction_evalWord {DB DA : ℕ} {B : MPOTensor d DB} {A : MPOTensor d DA}
-    {V : Matrix (Fin DA) (Fin DB) ℂ} {W : Matrix (Fin DB) (Fin DA) ℂ}
-    (h : MPSTensor.IsReduction B.toMPSTensor A.toMPSTensor V W) {N : ℕ}
-    (σ τ : Fin N → Fin d) :
-    V * evalWord B (List.ofFn σ) (List.ofFn τ) * W =
-      evalWord A (List.ofFn σ) (List.ofFn τ) := by
-  simpa only [evalWord_toMPSTensor_pairConfig] using
-    h.evalWord (List.ofFn fun k => finProdFinEquiv (σ k, τ k))
-
 namespace GroupFamily
 
 universe u

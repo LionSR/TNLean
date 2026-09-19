@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.CanonicalForm.SectorComparison.TPPrimitiveReduction
-import TNLean.MPS.Chain.BlockedChainFT
 import TNLean.Wielandt.Inequality.Bounds
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
