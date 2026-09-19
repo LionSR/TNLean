@@ -45,6 +45,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.OneLabelCandidate
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.OneSlotGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ParityGraded
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RepeatedBlock
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RingEmbedding
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimer
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairOneOne

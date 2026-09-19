@@ -40,8 +40,8 @@ tensor (NT) in the CPSV convention.
     \label{thm:asymex_zsqrt2_ring}
     % Principal declaration: MPSTensor.complexOfZsqrt2_mul.
     \lean{zsqrt2ToComplex_injective, zsqrt2ToComplex_ne_zero,
-        MPSTensor.complexOfZsqrt2_mul, MPSTensor.mulTensor_complexOfZsqrt2,
-        MPSTensor.actTensor_complexOfZsqrt2,
+        MPSTensor.complexOfZsqrt2_mul, MPSTensor.mulTensor_complexOfRing,
+        MPSTensor.actTensor_complexOfRing,
         MPSTensor.isNormal_of_single_eq_smul_zsqrt2}
     \leanok
     \uses{def:asymex_zsqrt2_ring}
@@ -290,8 +290,8 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
     conjugation by the Ising gauge gives, for every pair $(h,h')$,
     \begin{align}
         GB^{(h,h')}G^{-1}
-        &=5(\sqrt2A_\sigma)^{(h,h')}
-          \oplus3(\sqrt2A_\sigma)^{(h,h')}\oplus0_{16}.
+         & =5(\sqrt2A_\sigma)^{(h,h')}
+        \oplus3(\sqrt2A_\sigma)^{(h,h')}\oplus0_{16}.
     \end{align}
 \end{theorem}
 
@@ -356,8 +356,8 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
     Thus the extension splits, and each nonzero block has local
     intertwiners in both directions. For every pair $(h,h')$,
     \begin{align}
-        B^{(h,h')}V_s&=V_s(\mu_s\sqrt2A_\sigma)^{(h,h')},\\
-        W_sB^{(h,h')}&=(\mu_s\sqrt2A_\sigma)^{(h,h')}W_s.
+        B^{(h,h')}V_s & =V_s(\mu_s\sqrt2A_\sigma)^{(h,h')}, \\
+        W_sB^{(h,h')} & =(\mu_s\sqrt2A_\sigma)^{(h,h')}W_s.
     \end{align}
 \end{theorem}
 
@@ -582,8 +582,8 @@ of Section~\ref{sec:asymex_ising_bond_object}.
     For every nonempty word $w$ over the ten fusion-tree labels,
     \begin{align}
         \tr((\Theta_3\cdot\psi_{\sigma1\sigma})^w)
-         & =(5^{|w|}+3^{|w|})\tr((\psi_{\sigma1\sigma})^w) \notag\\
-         &\quad +2^{|w|}\left(\tr((\psi_{111})^w)+\tr((\psi_{\psi1\psi})^w)\right),
+         & =(5^{|w|}+3^{|w|})\tr((\psi_{\sigma1\sigma})^w) \notag                    \\
+         & \quad +2^{|w|}\left(\tr((\psi_{111})^w)+\tr((\psi_{\psi1\psi})^w)\right),
         \notag
     \end{align}
     where $\psi_{h_0}$ is the product-state tensor at $h_0$ and

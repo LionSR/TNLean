@@ -140,7 +140,7 @@ def kwSquare : MPSTensor 4 4 := (MPOTensor.mulTensor kwTensor kwTensor).toMPSTen
 theorem kwSquare_eq (a : Fin 4) : kwSquare a = complexOfInt (kwSquareInt a) := by
   have h : kwSquare a = complexOfInt (mulIntTensor kwIntTensor kwIntTensor
       (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfInt kwIntTensor kwIntTensor _ _
+    mulTensor_complexOfRing _ kwIntTensor kwIntTensor _ _
   have hint : ∀ b : Fin 4, mulIntTensor kwIntTensor kwIntTensor
       (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) = kwSquareInt b := by
     decide
@@ -437,13 +437,6 @@ theorem kwSquareRight1_eq :
     complexOfInt_apply]
   fin_cases j <;> fin_cases x <;>
     exact_mod_cast (by decide)
-
-private theorem complexOfInt_add {m n : Type*} (X Y : Matrix m n ℤ) :
-    complexOfInt (X + Y) = complexOfInt X + complexOfInt Y := by
-  ext i j
-  simp only [complexOfInt_apply, Matrix.add_apply]
-  push_cast
-  rfl
 
 private theorem kwSquare_remainder_int (a : Fin 4) :
     (2 : ℤ) • kwSquareInt a =

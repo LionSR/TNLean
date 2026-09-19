@@ -119,13 +119,13 @@ noncomputable def isingCompression :
     rw [isingBondObject_conjMatrix, complexOfZsqrt2_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hxy,
       map_zero]
   matched a s := by
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2, Matrix.blockDiag'_map,
+    rw [isingBondObject_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
       Matrix.blockDiag'_blockDiagonal']
     ext p q
     simp [isingBlockZ, isingTargets, isingSigma, MPOTensor.toMPSTensor,
       zsqrt2ToComplex_isingWeightsZ]
   unmatched a t := by
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2, Matrix.blockDiag'_map,
+    rw [isingBondObject_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
       Matrix.blockDiag'_blockDiagonal']
     ext p q
     simp [isingBlockZ]
@@ -140,7 +140,8 @@ theorem isingBondObject_remainder : isingCompression.remainder = 0 := by
         Matrix.blockDiagonal' (conjMatrix isingGauge (isingBondObject a)).blockDiag' :=
     isingCompression.conjMatrix_remainder a
   refine conjMatrix_injective isingGauge ?_
-  rw [h, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, isingBondObject_conjMatrix, complexOfZsqrt2,
+  rw [h, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, isingBondObject_conjMatrix,
+    complexOfZsqrt2, complexOfRing,
     Matrix.blockDiagonal'_map _ _ (map_zero _), Matrix.blockDiag'_blockDiagonal']
 
 /-! ### Consequences -/

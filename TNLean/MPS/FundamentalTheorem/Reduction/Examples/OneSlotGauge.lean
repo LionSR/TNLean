@@ -69,7 +69,7 @@ theorem toMPSTensor_mulTensor_complexOfInt (M : Fin d → Fin d → Matrix (Fin 
     (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (a : Fin (d * d)) :
     (MPOTensor.mulTensor (fun i j => complexOfInt (M i j))
       (fun i j => complexOfInt (N i j))).toMPSTensor a = complexOfInt (stackedInt M N a) :=
-  mulTensor_complexOfInt M N _ _
+  mulTensor_complexOfRing _ M N _ _
 
 end Stacked
 
