@@ -9,7 +9,8 @@ then greps the Lean source tree for matching declarations.  Reports:
   2. \leanok tags on items whose declaration is missing from the Lean source.
   3. lean_decls entries that don't appear in any .tex file (stale entries).
   4. \lean{} refs that are not listed in lean_decls (missing entries).
-  5. Summary statistics (formalization progress per chapter).
+  5. Declarations carrying a \lean{} tag in more than one blueprint entry.
+  6. Summary statistics (formalization progress per chapter).
 
 Exit code 0  → everything in sync (or --ci not passed).
 Exit code 1  → mismatches found AND --ci flag is active.
@@ -188,6 +189,13 @@ class SyncReport:
     leanok_but_missing: list[BlueprintEntry] = field(default_factory=list)
     stale_lean_decls: list[str] = field(default_factory=list)
     missing_from_lean_decls_file: list[str] = field(default_factory=list)
+    duplicate_lean_tags: list[tuple[str, list[BlueprintEntry]]] = field(
+        default_factory=list
+    )
+    # Whether duplicate ownership tags count as a failure.  The ownership
+    # convention is recorded in
+    # docs/audits/2026-08-20_blueprint_declaration_ownership.md.
+    duplicate_tags_are_errors: bool = False
 
     @property
     def ok(self) -> bool:
@@ -196,6 +204,7 @@ class SyncReport:
             or self.leanok_but_missing
             or self.stale_lean_decls
             or self.missing_from_lean_decls_file
+            or (self.duplicate_tags_are_errors and self.duplicate_lean_tags)
         )
 
 
@@ -382,6 +391,31 @@ def collect_blueprint_lean_refs(blueprint_src: Path) -> list[BlueprintEntry]:
                     proof_has_leanok=False,
                 ))
     return refs
+
+
+def find_duplicate_lean_tags(
+    refs: list[BlueprintEntry],
+) -> list[tuple[str, list[BlueprintEntry]]]:
+    """Return declarations whose ``\\lean{...}`` tag occurs in several entries.
+
+    The blueprint convention gives every Lean declaration exactly one owning
+    entry; any further entry mentioning the same declaration cites the owner
+    through ``\\uses`` instead of repeating the ownership tag.  Two tags for one
+    declaration make the owning entry ambiguous, so they are reported here.
+
+    Every ``\\lean{...}`` tag counts, including one written inside a proof body:
+    the convention has a proof cite the owning entry through ``\\uses``, so a
+    proof-body tag repeating an owned declaration is itself a second anchor on
+    that declaration rather than a citation of the owner.
+    """
+    occurrences: dict[str, list[BlueprintEntry]] = {}
+    for ref in refs:
+        occurrences.setdefault(ref.lean_decl, []).append(ref)
+    return [
+        (decl, entries)
+        for decl, entries in sorted(occurrences.items())
+        if len(entries) > 1
+    ]
 
 
 def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
@@ -775,6 +809,7 @@ def run_sync(
     *,
     report_file: Path | None = None,
     update_lean_decls: bool = False,
+    report_duplicate_tags: bool = False,
 ) -> SyncReport:
     lean_root = root / "TNLean"
     blueprint_src = root / "blueprint" / "src"
@@ -785,7 +820,7 @@ def run_sync(
     if not blueprint_src.is_dir():
         raise FileNotFoundError(f"Blueprint source directory not found: {blueprint_src}")
 
-    report = SyncReport()
+    report = SyncReport(duplicate_tags_are_errors=report_duplicate_tags)
 
     # 1. Collect Lean declarations, including the qiclean dependency's own
     # source: a blueprint entry may legitimately cite a declaration that
@@ -813,6 +848,7 @@ def run_sync(
     all_blueprint_refs = collect_blueprint_lean_refs(blueprint_src)
     all_blueprint_decl_names = {ref.lean_decl for ref in all_blueprint_refs}
     report.blueprint_entries = collect_blueprint_entries(blueprint_src)
+    report.duplicate_lean_tags = find_duplicate_lean_tags(all_blueprint_refs)
     print(f"  Found {len(all_blueprint_decl_names)} unique \\lean{{}} references in blueprint")
     print(f"  Found {len(report.blueprint_entries)} theorem-like blueprint entries")
 
@@ -954,6 +990,19 @@ def _print_report(report: SyncReport, root: Path) -> None:
         for name in report.missing_from_lean_decls_file:
             print(f"  + {name}")
 
+    # Duplicate ownership tags
+    if report.duplicate_lean_tags:
+        print()
+        marker = "✗" if report.duplicate_tags_are_errors else "⚠"
+        print(
+            "Declarations tagged in more than one blueprint entry "
+            f"({len(report.duplicate_lean_tags)}):"
+        )
+        for decl, entries in report.duplicate_lean_tags:
+            print(f"  {marker} {decl}")
+            for entry in entries:
+                print(f"    {entry.file}:{entry.line}")
+
     # Summary
     print()
     if report.ok:
@@ -964,6 +1013,8 @@ def _print_report(report: SyncReport, root: Path) -> None:
             + len(report.stale_lean_decls)
             + len(report.missing_from_lean_decls_file)
         )
+        if report.duplicate_tags_are_errors:
+            problems += len(report.duplicate_lean_tags)
         print(f"✗ Found {problems} sync issue(s). See details above.")
     print()
 
@@ -980,6 +1031,13 @@ def _write_json_report(report: SyncReport, path: Path, root: Path) -> None:
         "leanok_but_missing": [
             {"decl": e.lean_decl, "file": e.file, "line": e.line}
             for e in report.leanok_but_missing
+        ],
+        "duplicate_lean_tags": [
+            {
+                "decl": decl,
+                "entries": [{"file": e.file, "line": e.line} for e in entries],
+            }
+            for decl, entries in report.duplicate_lean_tags
         ],
         "stale_lean_decls": report.stale_lean_decls,
         "missing_from_lean_decls_file": report.missing_from_lean_decls_file,
@@ -1020,6 +1078,14 @@ def main() -> None:
         help="Exit with code 1 on mismatches (for CI)",
     )
     parser.add_argument(
+        "--report-duplicate-tags",
+        action="store_true",
+        help=(
+            "Treat a declaration tagged in more than one blueprint entry as a "
+            "mismatch; without this flag such declarations are only listed"
+        ),
+    )
+    parser.add_argument(
         "--warn-missing-blueprint",
         action="store_true",
         help=(
@@ -1057,6 +1123,7 @@ def main() -> None:
             args.root,
             report_file=args.report,
             update_lean_decls=args.update_lean_decls,
+            report_duplicate_tags=args.report_duplicate_tags,
         )
         if args.ci and not report.ok:
             sys.exit(1)

@@ -10,9 +10,9 @@ open chain. We record both fixed-length constructions and distinguish their
 boundary conventions.
 
 \begin{definition}[Periodic non-TI chain data]\label{def:non_ti_chain}
-    \lean{MPSChainTensor, MPSChainTensor.coeff, MPSChainTensor.SameState, MPSChainTensor.IsInjective, MPSChainTensor.GaugeEquiv}
+    \lean{MPSChainTensor.coeff, MPSChainTensor.IsInjective}
     \leanok
-    \uses{def:mps_tensor, def:injective}
+    \uses{def:mps_tensor, def:injective, def:periodic_mps_tensor, def:periodic_relations}
     Fix a chain length $n$.
     A \emph{non-translation-invariant periodic MPS chain} consists of sitewise
     tensors $A_k=\{A_k^i\}_{i=0}^{d-1}$, where $k=0,\ldots,n-1$ and each

@@ -12,8 +12,8 @@ states the correspondence for tensor network states on a general graph; here it
 is formalized for matrix product states on the periodic chain.
 
 \begin{definition}[Physical rotation of a tensor]\label{def:physical_rotation}
-    \lean{MPSTensor.rotatePhysical}
     \leanok
+    \uses{def:rotate_physical}
     For a matrix $\Lambda\in\MN{d}$ and a tensor $A=(A^i)_{i=0}^{d-1}$, the
     \emph{physically rotated tensor} $\Lambda A$ has matrices
     \begin{align}
@@ -104,7 +104,6 @@ is formalized for matrix product states on the periodic chain.
 
 \begin{lemma}[State and boundary map of the rotated tensor]\label{lem:physical_rotation_state}
     \lean{MPSTensor.evalWord_rotatePhysical_ofFn}
-    \lean{MPSTensor.mpv_rotatePhysical}
     \lean{MPSTensor.mpv_rotatePhysical_eq_toLin'}
     \lean{MPSTensor.groundSpaceMap_rotatePhysical}
     \leanok
@@ -122,6 +121,7 @@ is formalized for matrix product states on the periodic chain.
 
 \begin{proof}
     \leanok
+    \uses{lem:mpv_rotate_physical}
     Expand each factor of $(\Lambda A)^{\sigma_1}\cdots(\Lambda A)^{\sigma_N}$ by
     (\ref{eq:physical_rotation}) and collect the coefficient of $A^{\tau}$, by
     induction on $N$. Taking the trace against $X$ gives the boundary-map
