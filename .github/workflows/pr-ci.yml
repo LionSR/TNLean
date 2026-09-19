@@ -302,6 +302,17 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/OperatorClosurePowerSum.lean
 
+      - name: Test structure coefficients, cocycles, and boundary examples
+        timeout-minutes: 5
+        run: |
+          set -e
+          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
       - name: Check changed Lean compilation times
         id: compilation-time
         if: github.event_name == 'pull_request'

@@ -36,6 +36,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorSigmaSi
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingSectorAction
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingTensors
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingWeightedTwist
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.JordanBoundary
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannier
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannierAction
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.OneLabelCandidate

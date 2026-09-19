@@ -33,6 +33,7 @@ import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTBoundaryDecomposition
 import TNLean.MPS.MPDO.BNTChannelComposition
 import TNLean.MPS.MPDO.BNTClosingSelection
+import TNLean.MPS.MPDO.BNTCoefficientRescaling
 import TNLean.MPS.MPDO.BNTCoefficients
 import TNLean.MPS.MPDO.BNTFactorizationChannels
 import TNLean.MPS.MPDO.BNTFinalSectorFusion

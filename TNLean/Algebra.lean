@@ -39,6 +39,7 @@ import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IsNilpotentOfTracePow
+import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListOfFn
@@ -62,6 +63,7 @@ import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.RestrictedScalarGauge
 import TNLean.Algebra.ScalarThreeCocycle
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
+import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.StabilizerCocycleExtension
