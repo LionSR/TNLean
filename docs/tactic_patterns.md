@@ -1395,6 +1395,22 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** three copies in the homogeneous, cumulative, and all-word pair-span
   criteria now reduce to generator membership facts. Public theorem statements and
   trace-pairing order are unchanged.
+- **Update (2026-09-19):** the representation step is no longer proved from matrix
+  units. `exists_trace_repr` is now the inverse of the linear equivalence with the
+  dual space induced by the nondegenerate trace form
+  (`Matrix.traceBilinForm`, `Matrix.traceBilinForm_nondegenerate`, and Mathlib's
+  `LinearMap.BilinForm.toDual`), and the pi- and pair-indexed corollaries are
+  three-line consequences of it. The separation step itself still runs by hand,
+  because no nondegeneracy statement exists yet for the pi-indexed or product trace
+  form; once one does, `matrix_pi_span_top_of_trace_separating` and
+  `pair_matrix_span_top_of_pair_trace_separating` become one-line consequences.
+- **Candidate (2026-09-19):** "a trace pairing that vanishes on a generating set
+  vanishes on its span" now appears twice as `Submodule.span_le` into the kernel of
+  the trace functional: `pair_trace_zero_on_span` in
+  `TNLean/MPS/MPDO/BiCFDerivation/Core.lean` and
+  `block_matrices_eq_zero_of_wordTupleSpanTop_trace` in
+  `TNLean/MPS/SharedInfra/WordTupleGauge.lean`. A third occurrence should be
+  abstracted into a single lemma over an indexed family of trace forms.
 
 ### Martingale coefficient upper bound
 - **Pattern:** prove `((1 : ℝ) / (4 * (L : ℝ))) ≤ 1` from `hL : 1 < L` by
