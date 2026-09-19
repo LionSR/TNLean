@@ -822,18 +822,21 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
 
 \begin{theorem}[Split compression of the dimer fusion]
     \label{thm:asymex_dimer_compression}
-    % Principal declaration: P6Compression.dimer_isReduction.
-    \lean{P6Compression.dimerCompression, P6Compression.dimer_isReduction,
-        P6Compression.dimer_left_mul_right_of_ne, P6Compression.dimer_z_eq,
-        P6Compression.dimer_dim_eq, P6Compression.dimer_remainder,
-        P6Compression.dimer_mul_right_eq_right_mul,
-        P6Compression.dimer_left_mul_eq_mul_left}
+    % Principal declaration: P6Compression.dimerFusion_isReduction.
+    \lean{P6Compression.dimerFusionCompression,
+        P6Compression.dimerFusion_isReduction,
+        P6Compression.dimerFusion_left_mul_right_of_ne,
+        P6Compression.dimerFusion_z_eq, P6Compression.dimerFusion_dim_eq,
+        P6Compression.dimerFusion_remainder,
+        P6Compression.dimerFusion_mul_right_eq_right_mul,
+        P6Compression.dimerFusion_left_mul_eq_mul_left}
     \leanok
     \uses{def:asymex_dimer, thm:asym_multiblock}
-    For sector zero multiplied by itself, let $B=B_{0,0}$.
+    For every pair of sectors $f,f'$, let $B=B_{f,f'}$.
     It has the block triangular form of
-    Theorem~\ref{thm:asym_multiblock} for $C_s=\mu_sM_s$, where
-    $\mu_0=7/16$ and $\mu_1=1/16$ are scalar fusion weights, with an
+    Theorem~\ref{thm:asym_multiblock} for $C_s=\mu_sM_{f+f'+s}$, where
+    $\mu_0=7/16$ and $\mu_1=1/16$ are scalar fusion weights and sector
+    addition is modulo two, with an
     eight-dimensional zero complement, $z=8$, and $16=4+4+8$.
     The compression pairs are mutually biorthogonal and satisfy
     $W_sB^wV_s=C_s^w$ for every word. The remainder vanishes
@@ -847,9 +850,11 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     the same label $k$. For a matching pair, the intermediate sum runs
     over the four auxiliary indices with that label.
     Twice the integer stacked letter decomposes in the adapted basis
-    with coefficients $7,1$, giving the hypotheses of
+    with coefficients $7,1$, the integer form
+    of~(\ref{eq:asymex_dimer_split}), giving the hypotheses of
     Theorem~\ref{thm:asymex_stacked_pair}. This identity is checked over
-    the sixty-four letters; the scalar identity uses $7/16,1/16$.
+    the sixty-four letters, for each of the four pairs of sectors;
+    the scalar identity uses $7/16,1/16$.
     Proposition~\ref{prop:asym_projector_weighted_sum} then gives the
     compression maps, vanishing remainder, and both intertwiners.
 \end{proof}
@@ -888,17 +893,18 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
 
 \begin{theorem}[The dimer structure coefficients]
     \label{thm:asymex_dimer_trace}
-    \lean{P6Compression.dimer_trace_evalWord}
+    \lean{P6Compression.dimerFusion_trace_evalWord}
     \leanok
     \uses{def:asymex_dimer}
-    For sector zero multiplied by itself and every nonempty word $w$
+    For every pair of sectors $f,f'$ and every nonempty word $w$
     over the sixty-four-letter alphabet,
     \begin{align}
-        \tr(B^w) & =(\tfrac7{16})^{|w|}\tr(M_0^w)
-        +(\tfrac1{16})^{|w|}\tr(M_1^w),
+        \tr(B^w) & =(\tfrac7{16})^{|w|}\tr(M_{f+f'}^w)
+        +(\tfrac1{16})^{|w|}\tr(M_{f+f'+1}^w),
         \label{eq:asymex_dimer_trace}
     \end{align}
-    where $M_0,M_1$ are the unnormalized sector tensors.
+    where $M_{f+f'},M_{f+f'+1}$ are the unnormalized target sectors of
+    the pair and sector addition is modulo two.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -909,21 +915,3 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     $(7/16)^{|w|}$ and $(1/16)^{|w|}$
     in~(\ref{eq:asymex_dimer_trace}).
 \end{proof}
-
-\begin{remark}[Scope of the dimer fusion identities]
-    \label{rem:asymex_dimer_scope}
-    Theorems~\ref{thm:asymex_dimer_compression}
-    and~\ref{thm:asymex_dimer_trace} state the sector-zero case.
-    The letter decomposition~(\ref{eq:asymex_dimer_split}) holds for
-    every pair $f,f'$, with the same adapted basis and weights and
-    targets $M_{f+f'}$, $M_{f+f'+1}$.
-    Indeed, in a nonzero contraction the common auxiliary label is $k$,
-    and $\tau_k(f)\tau_k(f')=\tau_k(f+f')$. Multiplying the sector-zero
-    identity by this sign changes its targets exactly as stated.
-    Thus, for every pair and every $L>0$,
-    \begin{align}
-        O_L(M_f)O_L(M_{f'})
-         & =\left(\frac7{16}\right)^LO_L(M_{f+f'})
-        +\left(\frac1{16}\right)^LO_L(M_{f+f'+1}).
-    \end{align}
-\end{remark}

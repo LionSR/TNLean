@@ -8,125 +8,125 @@ invertible matrix together with an explicit labelling of the bond
 coordinates by slots and positions inside slots.
 
 \begin{definition}[Explicit gauge and entrywise integer coercion]
-	\label{def:asymex_explicit_gauge}
-	\lean{MPSTensor.complexOfInt, MPSTensor.mulIntTensor, MPSTensor.gaugeOfMatrix}
-	\leanok
-	\uses{def:mps_tensor, def:mpdo_operator_product}
-	Let $\tau$ be a bijection between the graded coordinate space of a slot
-	family and the bond index set $\{0,\ldots,D_B-1\}$, and let $G$ and
-	$G^{-1}$ be mutually inverse matrices in $\MN{D_B}$. The \emph{explicit
-		gauge} attached to $(\tau,G)$ is the invertible map sending a bond
-	vector $v$ to the graded vector $b\mapsto(Gv)(\tau b)$. For an integer
-	matrix $X$, its \emph{entrywise coercion} is the complex matrix with the
-	same entries; for integer matrix product operator tensors $M$ and $N$,
-	their integer bond-space product is
-	$(M\mathbin{\cdot}N)^{ik}=\sum_jM^{ij}\otimes N^{jk}$.
+    \label{def:asymex_explicit_gauge}
+    \lean{MPSTensor.complexOfInt, MPSTensor.mulIntTensor, MPSTensor.gaugeOfMatrix}
+    \leanok
+    \uses{def:mps_tensor, def:mpdo_operator_product}
+    Let $\tau$ be a bijection between the graded coordinate space of a slot
+    family and the bond index set $\{0,\ldots,D_B-1\}$, and let $G$ and
+    $G^{-1}$ be mutually inverse matrices in $\MN{D_B}$. The \emph{explicit
+        gauge} attached to $(\tau,G)$ is the invertible map sending a bond
+    vector $v$ to the graded vector $b\mapsto(Gv)(\tau b)$. For an integer
+    matrix $X$, its \emph{entrywise coercion} is the complex matrix with the
+    same entries; for integer matrix product operator tensors $M$ and $N$,
+    their integer bond-space product is
+    $(M\mathbin{\cdot}N)^{ik}=\sum_jM^{ij}\otimes N^{jk}$.
 \end{definition}
 
 \begin{theorem}[Conjugation, coercion and the compression pairs of a slot]
-	\label{thm:asymex_explicit_gauge}
-	% Principal declaration: MPSTensor.conjMatrix_gaugeOfMatrix.
-	\lean{MPSTensor.conjMatrix_gaugeOfMatrix, MPSTensor.complexOfInt_mul,
-		MPSTensor.mulTensor_complexOfInt, MPSTensor.mulTensor_smul_complexOfInt,
-		MPSTensor.MultiBlockCompression.left_gaugeOfMatrix,
-		MPSTensor.MultiBlockCompression.right_gaugeOfMatrix}
-	\leanok
-	\uses{def:asymex_explicit_gauge, thm:asym_multiblock}
-	Conjugation by the explicit gauge attached to $(\tau,G)$ sends a bond
-	matrix $A$ to the matrix $GAG^{-1}$ relabelled along $\tau$. The
-	entrywise coercion is multiplicative, and the bond-space product of two
-	integer tensors each rescaled by one scalar $c$ is $c^2$ times the
-	entrywise coercion of their integer bond-space product. If a compression
-	datum uses the explicit gauge attached to $(\tau,G)$, then the
-	compression map $W_s$ out of the bond space consists of the rows of $G$
-	at the coordinates of the slot $s$, and the compression map $V_s$ into
-	the bond space consists of the columns of $G^{-1}$ at those same
-	coordinates.
+    \label{thm:asymex_explicit_gauge}
+    % Principal declaration: MPSTensor.conjMatrix_gaugeOfMatrix.
+    \lean{MPSTensor.conjMatrix_gaugeOfMatrix, MPSTensor.complexOfInt_mul,
+        MPSTensor.mulTensor_complexOfInt, MPSTensor.mulTensor_smul_complexOfInt,
+        MPSTensor.MultiBlockCompression.left_gaugeOfMatrix,
+        MPSTensor.MultiBlockCompression.right_gaugeOfMatrix}
+    \leanok
+    \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
+    Conjugation by the explicit gauge attached to $(\tau,G)$ sends a bond
+    matrix $A$ to the matrix $GAG^{-1}$ relabelled along $\tau$. The
+    entrywise coercion is multiplicative, and the bond-space product of two
+    integer tensors each rescaled by one scalar $c$ is $c^2$ times the
+    entrywise coercion of their integer bond-space product. If a compression
+    datum uses the explicit gauge attached to $(\tau,G)$, then the
+    compression map $W_s$ out of the bond space consists of the rows of $G$
+    at the coordinates of the slot $s$, and the compression map $V_s$ into
+    the bond space consists of the columns of $G^{-1}$ at those same
+    coordinates.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	The matrix of the explicit gauge is $G$ relabelled along $\tau$ in its
-	rows, and the matrix of its inverse is $G^{-1}$ relabelled along $\tau$
-	in its columns, so conjugation is the stated matrix conjugation followed
-	by the relabelling. Multiplicativity of the coercion is the fact that a
-	sum of products of integers is the same computed in $\Z$ or in $\C$, and
-	the statement about the bond-space product follows by expanding both
-	sides entrywise. The two compression maps are the composites of the
-	coordinate embedding and projection of the slot with the gauge and its
-	inverse; evaluating the matrix products at a single graded coordinate
-	leaves one row of $G$ and one column of $G^{-1}$.
+    \leanok
+    The matrix of the explicit gauge is $G$ relabelled along $\tau$ in its
+    rows, and the matrix of its inverse is $G^{-1}$ relabelled along $\tau$
+    in its columns, so conjugation is the stated matrix conjugation followed
+    by the relabelling. Multiplicativity of the coercion is the fact that a
+    sum of products of integers is the same computed in $\Z$ or in $\C$, and
+    the statement about the bond-space product follows by expanding both
+    sides entrywise. The two compression maps are the composites of the
+    coordinate embedding and projection of the slot with the gauge and its
+    inverse; evaluating the matrix products at a single graded coordinate
+    leaves one row of $G$ and one column of $G^{-1}$.
 \end{proof}
 
 \begin{definition}[One-slot compression data]%
-	\label{def:asymex_one_slot}
-	\lean{MPSTensor.stackedInt, MPSTensor.oneSlot, MPSTensor.oneSlotMem,
-		MPSTensor.MultiBlockCompression.ofConjMatrix,
-		MPSTensor.MultiBlockCompression.ofConjInt,
-		MPSTensor.MultiBlockCompression.ofEq,
-		MPSTensor.MultiBlockCompression.ofScalarFlagFour}
-	\leanok
-	\uses{def:asymex_explicit_gauge, thm:asym_multiblock}
-	For a stacked product of two integer matrix product operator tensors,
-	read over the pair alphabet, the letter at $a=do+i$ is
-	$(M\mathbin{\cdot}N)^{oi}$. A \emph{one-slot compression datum} for a
-	tensor $B$ onto a single target $C$ is the data of
-	Theorem~\ref{thm:asym_multiblock} for the one-element slot set: an
-	explicit gauge $(\tau,G)$ conjugating $B$ into a matrix that is block
-	upper triangular for a flag with $C$ at one diagonal position. Two
-	shapes recur in the examples below: a conjugation $GB^iG^{-1}=C^i$ for
-	an invertible $G$ gives such a datum with no zero slots ($z=0$); and,
-	for a four-dimensional $B$ and a one-dimensional $C$, an integer gauge
-	sending every letter to a matrix with $C$ at the third diagonal
-	position of a four-step flag and zero at the other three gives such a
-	datum with three zero slots ($z=3$).
+    \label{def:asymex_one_slot}
+    \lean{MPSTensor.stackedInt, MPSTensor.oneSlot, MPSTensor.oneSlotMem,
+        MPSTensor.MultiBlockCompression.ofConjMatrix,
+        MPSTensor.MultiBlockCompression.ofConjInt,
+        MPSTensor.MultiBlockCompression.ofEq,
+        MPSTensor.MultiBlockCompression.ofScalarFlagFour}
+    \leanok
+    \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
+    For a stacked product of two integer matrix product operator tensors,
+    read over the pair alphabet, the letter at $a=do+i$ is
+    $(M\mathbin{\cdot}N)^{oi}$. A \emph{one-slot compression datum} for a
+    tensor $B$ onto a single target $C$ is the data of
+    Theorem~\ref{thm:asym_multiblock} for the one-element slot set: an
+    explicit gauge $(\tau,G)$ conjugating $B$ into a matrix that is block
+    upper triangular for a flag with $C$ at one diagonal position. Two
+    shapes recur in the examples below: a conjugation $GB^iG^{-1}=C^i$ for
+    an invertible $G$ gives such a datum with no zero slots ($z=0$); and,
+    for a four-dimensional $B$ and a one-dimensional $C$, an integer gauge
+    sending every letter to a matrix with $C$ at the third diagonal
+    position of a four-step flag and zero at the other three gives such a
+    datum with three zero slots ($z=3$).
 \end{definition}
 
 \begin{theorem}[The remainder of a conjugate datum vanishes; word traces
-		of a one-slot datum]%
-	\label{thm:asymex_one_slot}
-	\lean{MPSTensor.MultiBlockCompression.remainder_ofConjMatrix,
-		MPSTensor.MultiBlockCompression.remainder_ofEq,
-		MPSTensor.MultiBlockCompression.remainder_ofConjInt,
-		MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot,
-		MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot_smul}
-	\leanok
-	\uses{def:asymex_one_slot}
-	The remainder of a conjugate one-slot datum vanishes identically: the
-	compression is an exact change of coordinates. For every one-slot
-	datum, the trace of every nonempty word of $B$ equals the trace of the
-	corresponding word of $C$, or, if the target is carried with a scalar
-	weight $c$, that power of $c$ times the trace of the word of the
-	unweighted target.
+        of a one-slot datum]%
+    \label{thm:asymex_one_slot}
+    \lean{MPSTensor.MultiBlockCompression.remainder_ofConjMatrix,
+        MPSTensor.MultiBlockCompression.remainder_ofEq,
+        MPSTensor.MultiBlockCompression.remainder_ofConjInt,
+        MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot,
+        MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot_smul}
+    \leanok
+    \uses{def:asymex_one_slot}
+    The remainder of a conjugate one-slot datum vanishes identically: the
+    compression is an exact change of coordinates. For every one-slot
+    datum, the trace of every nonempty word of $B$ equals the trace of the
+    corresponding word of $C$, or, if the target is carried with a scalar
+    weight $c$, that power of $c$ times the trace of the word of the
+    unweighted target.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
-	Immediate from Theorem~\ref{thm:asymex_explicit_gauge} and
-	Proposition~\ref{prop:asym_compression_trace}, specialized to a single
-	slot.
+    \leanok
+    \uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
+    Immediate from Theorem~\ref{thm:asymex_explicit_gauge} and
+    Proposition~\ref{prop:asym_compression_trace}, specialized to a single
+    slot.
 \end{proof}
 
 \begin{theorem}[Integer certificates for normality and for vanishing
-		sitewise intertwiners]%
-	\label{thm:asymex_int_certificates}
-	\lean{MPSTensor.isNBlkInjective_two_of_int,
-		MPSTensor.right_intertwiner_eq_zero_of_int,
-		MPSTensor.left_intertwiner_eq_zero_of_int}
-	\leanok
-	\uses{def:normal}
-	If every matrix unit is, up to a common nonzero integer factor, an
-	integer combination of length-two words of an integer tensor, the
-	length-two words span the full matrix algebra. If the rows,
-	respectively columns, of the letters occurring in a sitewise
-	intertwiner system form an integer matrix with an integer left inverse
-	up to a nonzero factor, the only solution of that system is zero.
+        sitewise intertwiners]%
+    \label{thm:asymex_int_certificates}
+    \lean{MPSTensor.isNBlkInjective_two_of_int,
+        MPSTensor.right_intertwiner_eq_zero_of_int,
+        MPSTensor.left_intertwiner_eq_zero_of_int}
+    \leanok
+    \uses{def:normal}
+    If every matrix unit is, up to a common nonzero integer factor, an
+    integer combination of length-two words of an integer tensor, the
+    length-two words span the full matrix algebra. If the rows,
+    respectively columns, of the letters occurring in a sitewise
+    intertwiner system form an integer matrix with an integer left inverse
+    up to a nonzero factor, the only solution of that system is zero.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	Clearing the nonzero integer factor by scalar division after coercion
-	to $\C$ reduces each statement to the corresponding identity between
-	integer matrices, a finite verification.
+    \leanok
+    Clearing the nonzero integer factor by scalar division after coercion
+    to $\C$ reduces each statement to the corresponding identity between
+    integer matrices, a finite verification.
 \end{proof}

@@ -10,10 +10,10 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.TwistedDimerPairOneOne
 /-!
 # The fusion rule of the graded quantum-dimer twist
 
-The four pairwise compressions of the graded quantum-dimer twist at `x = 7/8` (`TwistedDimer`
-for the fusion of the zero sector with itself and `TwistedDimerPairZeroOne`,
-`TwistedDimerPairOneZero`, `TwistedDimerPairOneOne` for the other three pairs) assembled into one
-statement about every pair of sectors: the stacked product of the sectors `f` and `f'` is the
+The four pairwise letter identities of the graded quantum-dimer twist at `x = 7/8`
+(`TwistedDimer` for the fusion of the zero sector with itself and `TwistedDimerPairZeroOne`,
+`TwistedDimerPairOneZero`, `TwistedDimerPairOneOne` for the other three pairs) assembled into
+one statement about every pair of sectors: the stacked product of the sectors `f` and `f'` is the
 multi-block asymmetric compression
 (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) onto
 the sector `f + f'` with the weight `x/2 = 7/16` and the sector `f + f' + 1` with the weight
@@ -34,9 +34,9 @@ the periodic coefficients `c^{(L)} = (7/16)^L + (1/16)^L` of every pair.
   `tr((M_f M_{f'})^w) = (7/16)^{|w|} tr(M_{f+f'}^w) + (1/16)^{|w|} tr(M_{f+f'+1}^w)`.
 * `P6Compression.dimerFusion_isReduction`, `P6Compression.dimerFusion_left_mul_right_of_ne`,
   `P6Compression.dimerFusion_mul_right_eq_right_mul`,
-  `P6Compression.dimerFusion_left_mul_eq_mul_left`, `P6Compression.dimerFusion_dim_eq`: the
-  reduction pairs, their biorthogonality, the sitewise intertwiners and the dimension count of
-  every pair.
+  `P6Compression.dimerFusion_left_mul_eq_mul_left`, `P6Compression.dimerFusion_z_eq`,
+  `P6Compression.dimerFusion_dim_eq`: the reduction pairs, their biorthogonality, the sitewise
+  intertwiners, the eight zero slots and the dimension count of every pair.
 -/
 
 open scoped Matrix Kronecker
