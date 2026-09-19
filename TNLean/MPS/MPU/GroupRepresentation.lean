@@ -29,6 +29,8 @@ operators act on nonempty chains.
 * `MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_mulTensor`: the tensor
   product representing multiplication generates exactly the same positive-length
   MPV family as the tensor indexed by the product.
+* `MPOTensor.GroupFamily.IsRawRepresentation.block`: positive blocking preserves
+  the raw representation laws and injectivity.
 * `MPOTensor.GroupFamily.IsRepresentation.block`: positive blocking preserves
   the representation, simplicity, and injectivity.
 * `MPOTensor.GroupFamily.IsRawRepresentation.block_common`: for a finite group,
@@ -87,6 +89,14 @@ variable {G : Type u} {d : ℕ}
 instance (F : GroupFamily G d) (g : G) : NeZero (F.bondDim g) :=
   ⟨Nat.ne_of_gt (F.bondDim_pos g)⟩
 
+/-- An exact positive-length MPU representation before simplicity is imposed. -/
+structure IsRawRepresentation [Group G] (F : GroupFamily G d) : Prop where
+  isMPUPos : ∀ g, IsMPUPos (F.tensor g)
+  isInjective : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor
+  operator_one : ∀ N, 0 < N → mpo (F.tensor 1) N = 1
+  operator_mul : ∀ g h N, 0 < N →
+    mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N
+
 /-- An exact positive-length MPU representation by simple injective tensors.
 The operator identities are literal matrix equalities, with no scalar freedom.
 
@@ -94,13 +104,9 @@ The multiplication law comes from arXiv:2502.20257, lines 1403--1407. The
 identity law is a standard consequence retained explicitly in this bounded
 positive-length interface; it is compatible with the stronger bond-one identity
 tensor convention at lines 1933--1937. -/
-structure IsRepresentation [Group G] (F : GroupFamily G d) : Prop where
-  isMPUPos : ∀ g, IsMPUPos (F.tensor g)
+structure IsRepresentation [Group G] (F : GroupFamily G d) : Prop extends
+    IsRawRepresentation F where
   isSimple : ∀ g, IsMPUSimple (F.tensor g)
-  isInjective : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor
-  operator_one : ∀ N, 0 < N → mpo (F.tensor 1) N = 1
-  operator_mul : ∀ g h N, 0 < N →
-    mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N
 
 /-- The represented operator preserves natural powers on every nonempty chain.
 
@@ -200,24 +206,23 @@ private theorem operator_mul_block [Group G] (F : GroupFamily G d)
         (mpo (F.tensor (g * h)) (N * L))
   rw [← map_mul, hMul g h (N * L) (Nat.mul_pos hN hL)]
 
-/-- Positive physical blocking preserves exact representation laws, unitarity,
-simplicity, and injectivity. -/
-theorem IsRepresentation.block [Group G] (F : GroupFamily G d)
-    (hF : F.IsRepresentation) (L : ℕ) (hL : 0 < L) :
-    (F.block L).IsRepresentation where
+/-- Positive physical blocking preserves the exact raw representation laws,
+unitarity, and injectivity. -/
+theorem IsRawRepresentation.block [Group G] (F : GroupFamily G d)
+    (hF : F.IsRawRepresentation) (L : ℕ) (hL : 0 < L) :
+    (F.block L).IsRawRepresentation where
   isMPUPos g := (hF.isMPUPos g).blockTensor L hL
-  isSimple g := (hF.isSimple g).blockTensor L hL
   isInjective g := injective_blockTensor F g hL (hF.isInjective g)
   operator_one N hN := operator_one_block F hF.operator_one hL N hN
   operator_mul g h N hN := operator_mul_block F hF.operator_mul hL g h N hN
 
-/-- An exact positive-length MPU representation before simplicity is imposed. -/
-structure IsRawRepresentation [Group G] (F : GroupFamily G d) : Prop where
-  isMPUPos : ∀ g, IsMPUPos (F.tensor g)
-  isInjective : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor
-  operator_one : ∀ N, 0 < N → mpo (F.tensor 1) N = 1
-  operator_mul : ∀ g h N, 0 < N →
-    mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N
+/-- Positive physical blocking preserves exact representation laws, unitarity,
+simplicity, and injectivity. -/
+theorem IsRepresentation.block [Group G] (F : GroupFamily G d)
+    (hF : F.IsRepresentation) (L : ℕ) (hL : 0 < L) :
+    (F.block L).IsRepresentation :=
+  { hF.toIsRawRepresentation.block F L hL with
+    isSimple := fun g ↦ (hF.isSimple g).blockTensor L hL }
 
 /-- An explicit common blocking length for a finite group-indexed family. -/
 noncomputable def commonSimpleLength [Fintype G] (F : GroupFamily G d) : ℕ :=
@@ -244,18 +249,12 @@ theorem commonSimpleLength_pos [Group G] [Fintype G] (F : GroupFamily G d) :
 positive length `∑ g, (bondDim g)^4` makes every representing tensor simple. -/
 theorem IsRawRepresentation.block_common [Group G] [Fintype G] [NeZero d]
     (F : GroupFamily G d) (hF : F.IsRawRepresentation) :
-    (F.block F.commonSimpleLength).IsRepresentation where
-  isMPUPos g := (hF.isMPUPos g).blockTensor _ F.commonSimpleLength_pos
-  isSimple g :=
-    (hF.isMPUPos g).isMPU.blockTensor_isMPUSimple_of_le
-      (pow_pos (F.bondDim_pos g) 4) (F.bond_pow_le_commonSimpleLength g)
-      ((hF.isMPUPos g).isMPU.blockTensor_pow_four_isMPUSimple)
-  isInjective g :=
-    injective_blockTensor F g F.commonSimpleLength_pos (hF.isInjective g)
-  operator_one N hN :=
-    operator_one_block F hF.operator_one F.commonSimpleLength_pos N hN
-  operator_mul g h N hN :=
-    operator_mul_block F hF.operator_mul F.commonSimpleLength_pos g h N hN
+    (F.block F.commonSimpleLength).IsRepresentation :=
+  { hF.block F F.commonSimpleLength F.commonSimpleLength_pos with
+    isSimple := fun g ↦
+      (hF.isMPUPos g).isMPU.blockTensor_isMPUSimple_of_le
+        (pow_pos (F.bondDim_pos g) 4) (F.bond_pow_le_commonSimpleLength g)
+        ((hF.isMPUPos g).isMPU.blockTensor_pow_four_isMPUSimple) }
 
 /-- After the explicit common simplicity block, every further positive physical
 blocking remains an exact simple injective MPU representation. -/
