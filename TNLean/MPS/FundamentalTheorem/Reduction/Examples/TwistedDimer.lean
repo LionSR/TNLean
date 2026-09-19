@@ -130,7 +130,7 @@ theorem dimerTarget_eq (f : Fin 2) (a : Fin 64) :
 
 theorem dimerStacked_eq (f f' : Fin 2) (a : Fin 64) :
     dimerStacked f f' a = ((16 : ℂ)⁻¹ * (16 : ℂ)⁻¹) • complexOfInt (dimerStackedInt f f' a) :=
-  mulTensor_smul_complexOfInt (16 : ℂ)⁻¹ (dimerMInt f) (dimerMInt f') _ _
+  mulTensor_smul_complexOfRing _ (16 : ℂ)⁻¹ (dimerMInt f) (dimerMInt f') _ _
 
 /-! ### The two fusion channels -/
 
@@ -168,7 +168,7 @@ private theorem dimerStackedInt_eq_zero (f f' : Fin 2) {i k : Fin 8}
     rcases eq_or_ne (dimerFlag i) (dimerFlag j) with hij | hij
     · rw [dimerMInt_eq_zero f' fun hjk => h (hij.trans hjk), Matrix.kronecker_zero]
     · rw [dimerMInt_eq_zero f hij, Matrix.zero_kronecker]
-  simp [mulIntTensor, hj]
+  simp [mulIntTensor, mulTensorR, hj]
 
 /-- The letter identity at a letter whose two bond indices carry different sector labels: both
 sides vanish. -/
@@ -202,8 +202,8 @@ private theorem dimerStackedInt_even (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag 
   have hz : ∀ j : Fin 8, dimerFlag j = 1 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
     intro j hj
     rw [dimerMInt_eq_zero f (by rw [hi, hj]; decide), Matrix.zero_kronecker]
-  rw [mulIntTensor, Fin.sum_univ_eight, hz 1 (by decide), hz 3 (by decide), hz 5 (by decide),
-    hz 7 (by decide)]
+  rw [mulIntTensor, mulTensorR, Fin.sum_univ_eight, hz 1 (by decide), hz 3 (by decide),
+    hz 5 (by decide), hz 7 (by decide)]
   simp only [add_zero, dimerStackEven]
 
 /-- On a left bond index of sector label one the stacked product is its odd restriction. -/
@@ -212,8 +212,8 @@ private theorem dimerStackedInt_odd (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag i
   have hz : ∀ j : Fin 8, dimerFlag j = 0 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
     intro j hj
     rw [dimerMInt_eq_zero f (by rw [hi, hj]; decide), Matrix.zero_kronecker]
-  rw [mulIntTensor, Fin.sum_univ_eight, hz 0 (by decide), hz 2 (by decide), hz 4 (by decide),
-    hz 6 (by decide)]
+  rw [mulIntTensor, mulTensorR, Fin.sum_univ_eight, hz 0 (by decide), hz 2 (by decide),
+    hz 4 (by decide), hz 6 (by decide)]
   simp only [zero_add, add_zero, dimerStackOdd]
 
 /-- **The letter identity from its two halves.** The integer letter identity of the fusion of

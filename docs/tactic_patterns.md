@@ -1066,28 +1066,37 @@ abstracted — record why, so it is not re-proposed).
   gauge half to identify the local MPS spaces of a tensor and of its
   normalized representative.
 
-### bond-space product of integer tensors — promoted
-- **Pattern:** an example defines the bond-space product of two integer matrix
-  product operator tensors,
+### bond-space product and action of tensors over a ring — promoted
+- **Pattern:** an example defines the bond-space product of two matrix product
+  operator tensors over an exact ring,
   `(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}` in the bond order of `finProdFinEquiv`,
-  and then reproves that it commutes with the entrywise coercion of integer
-  matrices, so that a stacked product tensor over the complexes reduces to a
-  decidable identity between integer matrices.
-- **Seen:** three occurrences (2026-09-17): a public copy in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, a private
-  copy in `TNLean/MPS/FundamentalTheorem/Reduction/Examples/KramersWannier.lean`,
-  and a third needed by the renormalization fixed points of
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/StackedPairGauge.lean`.
-- **Abstraction:** `MPSTensor.mulIntTensor` with
-  `MPSTensor.mulTensor_complexOfInt` and its rescaled form
-  `MPSTensor.mulTensor_smul_complexOfInt`, in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/ExplicitGauge.lean`
-  beside the entrywise coercion they belong to.
+  or the bond-space action `(M · A)^i = ∑_j M^{ij} ⊗ A^j`, and then reproves
+  that it commutes with the entrywise image of the ring in the complex numbers,
+  so that a stacked product tensor over the complexes reduces to a decidable
+  identity between matrices over that ring.
+- **Seen:** first three occurrences over the integers (2026-09-17): a public
+  copy in `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, a
+  private copy in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/KramersWannier.lean`, and a
+  third needed by the renormalization fixed points of
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/StackedPairGauge.lean`; then
+  one copy per example ring, over the integers, over `ℤ√2`, over `ℤ[σ]` and over
+  `ℤ[ω]`, each with its own product, action and compatibility lemma.
+- **Abstraction:** `MPSTensor.mulTensorR` and `MPSTensor.actTensorR` over an
+  arbitrary commutative ring, with `MPSTensor.mulTensor_complexOfRing`, its
+  rescaled form `MPSTensor.mulTensor_smul_complexOfRing` and
+  `MPSTensor.actTensor_complexOfRing`, in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/RingEmbedding.lean`, beside
+  the entrywise image `MPSTensor.complexOfRing` of
+  `TNLean/Algebra/ComplexOfRing.lean` that they belong to.
 - **Notes:** the rescaled form is what the P6 fixed points need, since their
   tensors are integer matrices divided by a common denominator; the unscaled
-  form is the instance at one. Both former copies were deleted and their call
-  sites now resolve the shared name through `open MPSTensor`, for a net loss of
-  about thirty lines.
+  form is the instance at one. Each ring keeps only a one-line abbreviation of
+  the general product or action, and the compatibility lemmas are used in their
+  general form, since their left sides are headed by the complex product and
+  action rather than by the entrywise image. A new example ring therefore
+  contributes its ring homomorphism, two abbreviations and the one-line
+  instantiations of the arithmetic lemmas its proofs rewrite with.
 
 ### golden compression datum from a decided gauge — promoted
 - **Pattern:** an example over `ℤ[σ]` records the letters of the source and of
@@ -1910,16 +1919,23 @@ current counts and full location lists).
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXSquare.lean`, and
   `CZXCompression.czxPlusIdentity_conjMatrix` in
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXPlusIdentity.lean`.
-- **Abstraction:** the `MPSTensor.complexOfInt` coercion with
-  `complexOfInt_mul`, `complexOfInt_one` and `complexOfInt_neg`, together with
-  `MPSTensor.gaugeOfMatrix` and `MPSTensor.conjMatrix_gaugeOfMatrix`, in
+- **Abstraction:** the entrywise image `MPSTensor.complexOfRing` along a ring
+  homomorphism into the complex numbers, with `complexOfRing_mul`,
+  `complexOfRing_one` and `complexOfRing_neg` in
+  `TNLean/Algebra/ComplexOfRing.lean`, whose instantiation at the integer cast
+  is the coercion `MPSTensor.complexOfInt` of
+  `TNLean/Algebra/ComplexOfInt.lean` with its one-line `complexOfInt_mul`,
+  `complexOfInt_one` and `complexOfInt_neg`, together with
+  `MPSTensor.gaugeOfMatrix` and `MPSTensor.conjMatrix_gaugeOfMatrix` in
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/ExplicitGauge.lean`.
 - **Notes:** the payoff is that block triangularity, the matched diagonal
   blocks and the vanishing zero blocks of a nine-dimensional example all become
   decidable statements about integer matrices, verified in seconds; without the
   coercion the same checks are complex-number `simp` calls over several
-  thousand products. The coercion is stated for arbitrary index types so that
-  rectangular gauge rows and columns are covered as well.
+  thousand products. The image is stated for arbitrary index types so that
+  rectangular gauge rows and columns are covered as well, and for an arbitrary
+  ring so that the exact arithmetic of an example in `ℤ√2`, `ℤ[σ]` or `ℤ[ω]`
+  uses the same lemmas as the integer examples.
 
 ### nested finite-sum binder permutation — promoted
 - **Pattern:** permute the binders of three to five nested finite sums over
