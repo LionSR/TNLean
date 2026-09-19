@@ -11,7 +11,7 @@ scalar, not only a unit-modulus phase.
 \begin{theorem}[Uniqueness of nonzero weights from tail power sums]
     \label{thm:asym_tail_weights}
     \lean{Multiset.eq_of_notMem_zero_of_forall_sum_map_pow_eq,
-      Multiset.eq_zero_of_notMem_zero_of_forall_sum_map_pow_eq_zero}
+        Multiset.eq_zero_of_notMem_zero_of_forall_sum_map_pow_eq_zero}
     \leanok
     Let $\Lambda$ and $\Lambda'$ be finite multisets in $\C\setminus\{0\}$.
     If their power sums agree for all sufficiently large integers $N$, then
@@ -25,7 +25,7 @@ scalar, not only a unit-modulus phase.
     $z_0,\ldots,z_{r-1}$, and let $b_j$ be the difference of their
     multiplicities. For a threshold $N_0$ and each $0\leq i<r$,
     \begin{align}
-        \sum_{j=0}^{r-1}(b_jz_j^{N_0})z_j^i &= 0.
+        \sum_{j=0}^{r-1}(b_jz_j^{N_0})z_j^i & = 0.
     \end{align}
     The Vandermonde matrix is invertible, so $b_jz_j^{N_0}=0$.
     Since $z_j\neq0$, all multiplicities agree. Comparison with the empty
@@ -35,7 +35,7 @@ scalar, not only a unit-modulus phase.
 \begin{theorem}[Power-sum coefficients without blocking]
     \label{thm:asym_unblocked_coefficients}
     \lean{MPSTensor.exists_unblocked_powerSum_coeff_unique,
-      MPSTensor.exists_unblocked_powerSum_coeff}
+        MPSTensor.exists_unblocked_powerSum_coeff}
     \leanok
     \uses{def:normal}
     Let $B$ be an MPS tensor of bond dimension $D_B$, and let
@@ -48,8 +48,8 @@ scalar, not only a unit-modulus phase.
     satisfying
     \begin{align}
         \ket{V^{(N)}(B)}
-        &=\sum_{\gamma\in\Gamma}c_\gamma^{(N)}
-          \ket{V^{(N)}(M_\gamma)}.
+         & =\sum_{\gamma\in\Gamma}c_\gamma^{(N)}
+        \ket{V^{(N)}(M_\gamma)}.
         \label{eq:asym_unblocked_span}
     \end{align}
     Then there are integers $n_\gamma\geq0$ and nonzero complex weights
@@ -57,10 +57,10 @@ scalar, not only a unit-modulus phase.
     $N>0$,
     \begin{align}
         \ket{V^{(N)}(B)}
-        &=\sum_{\gamma\in\Gamma}
-          \left(\sum_{k=0}^{n_\gamma-1}\mu_{\gamma k}^{N}\right)
-          \ket{V^{(N)}(M_\gamma)}.
-          \label{eq:asym_unblocked_expansion}
+         & =\sum_{\gamma\in\Gamma}
+        \left(\sum_{k=0}^{n_\gamma-1}\mu_{\gamma k}^{N}\right)
+        \ket{V^{(N)}(M_\gamma)}.
+        \label{eq:asym_unblocked_expansion}
     \end{align}
     The multiplicities satisfy $\sum_{\gamma\in\Gamma}n_\gamma D_\gamma\leq D_B$.
     There is a positive threshold $N_0$ such that, for every $N\geq N_0$,
@@ -75,7 +75,7 @@ scalar, not only a unit-modulus phase.
 \begin{proof}
     \leanok
     \uses{thm:irred_decomp,thm:periodic_overlap_dichotomy,
-      thm:periodic_basis_eventually_li,thm:asym_tail_weights}
+        thm:periodic_basis_eventually_li,thm:asym_tail_weights}
     Apply Theorem~\ref{thm:irred_decomp}, normalize each nonzero irreducible
     factor to a periodic tensor, and group factors whose periodic vectors
     are proportional by a fixed nonzero scalar raised to the length.
@@ -85,9 +85,9 @@ scalar, not only a unit-modulus phase.
     $r_j$, and nonzero weights $a_{jq}$ such that, for every $N>0$,
     \begin{align}
         \ket{V^{(N)}(B)}
-        &=\sum_j\left(\sum_{q=0}^{r_j-1}a_{jq}^{N}\right)
-          \ket{V^{(N)}(A_j)}, \label{eq:asym_periodic_expansion}\\
-        \sum_j r_jd_j&\leq D_B.
+                      & =\sum_j\left(\sum_{q=0}^{r_j-1}a_{jq}^{N}\right)
+        \ket{V^{(N)}(A_j)}, \label{eq:asym_periodic_expansion}           \\
+        \sum_j r_jd_j & \leq D_B.
     \end{align}
     Grouping preserves the dimension count. Indeed, if periodic tensors
     $A,A'$ of periods $m,m'$ have such proportional vectors, then
@@ -111,7 +111,7 @@ scalar, not only a unit-modulus phase.
 
     Choose its matching label $\gamma(j)$ and a nonzero $\theta_j$ so that
     $\ket{V^{(N)}(M_{\gamma(j)})}
-      =\theta_j^N\ket{V^{(N)}(A_j)}$.
+        =\theta_j^N\ket{V^{(N)}(A_j)}$.
     For each target, collect the weights $a_{jq}/\theta_j$ over its
     matching representatives. This proves~(\ref{eq:asym_unblocked_expansion}).
     Since $d_j=D_{\gamma(j)}$, the dimension bound follows.
@@ -142,15 +142,15 @@ scalar, not only a unit-modulus phase.
     for every $L>0$,
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=\sum_{\gamma\in\Gamma}
-          \tr(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
-          \label{eq:asym_operator_expansion}
+         & =\sum_{\gamma\in\Gamma}
+        \tr(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
+        \label{eq:asym_operator_expansion}
     \end{align}
     Their sizes satisfy $\sum_{\gamma\in\Gamma}n_\gamma D_\gamma
-      \leq D_\alpha D_\beta$.
+        \leq D_\alpha D_\beta$.
     Beyond a positive threshold, any coefficients of this operator
     expansion equal $c_{\alpha,\beta,\gamma}^{(L)}
-      =\tr(\chi_{\alpha,\beta,\gamma}^{L})$.
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L})$.
     Any other finite families of nonzero diagonal entries giving such an
     expansion at all sufficiently large lengths agree target by target,
     including multiplicities.
