@@ -173,8 +173,6 @@ import TNLean.MPS.MPDO.FixedBondProductEtaTensor
 import TNLean.MPS.MPDO.FixedBondProductTensor
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov
-import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.ExampleFourCycleObstruction
-import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.FourCycle
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.GSNNCHSectorRescaling
 import TNLean.MPS.MPDO.GSNNCHSectorSum

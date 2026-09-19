@@ -8,24 +8,34 @@
 \section{The anomalous \texorpdfstring{$\Z_3$}{Z3} symmetry and its condensation defect}%
 \label{sec:asymex_z3anomalous}
 
-On a periodic chain of $L>0$ qutrits, write $X\ket{s}=\ket{s+1}$ for the cyclic shift and
-$\omega=e^{2\pi i/3}$. The phase-decorated shift acts on a basis vector by
+Let $\omega=(-1+\mathrm{i}\sqrt{3})/2$ be the primitive cube root of unity.
+Thus $\omega^2+\omega+1=0$, $\omega^3=1$, and
+$\overline{\omega}=\omega^{-1}=\omega^2$. On a periodic chain of $N>0$
+qutrits, use basis vectors $\ket{t}$ indexed by
+$t=(t_0,\ldots,t_{N-1})\in\{0,1,2\}^N$. Set $\chi(a)=[a\neq0]$ and
 \begin{align}
-    U\ket{s_1,\ldots,s_L}
-    & =\left(\prod_{k=1}^{L}\omega^{[s_k\neq0]\,s_{k+1}}\right)
-    X^{\otimes L}\ket{s_1,\ldots,s_L},
+    F(t) & =\sum_{j=0}^{N-1}\chi(t_j)t_{j+1},
+    \label{eq:asymex_z3_phase}
+\end{align}
+where $t_N=t_0$ and the exponent uses the integer representatives
+$0,1,2$. Write $X\ket{a}=\ket{a+1}$, with addition modulo three, and
+$(Xt)_j=t_j+1$. The phase-decorated shift acts by
+\begin{align}
+    U_N\ket{t}
+     & =\omega^{F(t)}\ket{Xt}.
     \label{eq:asymex_z3anomalous_operator}
 \end{align}
-where $s_{L+1}=s_1$, addition is modulo three, and $[s_k\neq0]$ is the indicator of
-$s_k\neq0$. This operator has a matrix product representation of bond dimension two and
-satisfies $U^3=\id$ at every positive length. Together with the identity and its inverse,
-it therefore gives a representation of $\Z_3$. The anomaly class belongs to
-$H^3(\Z_3,U(1))=\Z_3$ and is determined by the associator of the fusion tensors, as in
-Garre-Rubio and Schuch~\cite{GarreRubioSchuch2024DomainWall}. Its computation is separate
-from the compression and intertwiner calculations below. These calculations give the
-group law, the absence of nonzero sitewise intertwiners for the four products of
-nonidentity tensors, and the periodic identity $O_L(A)^2=3O_L(A)$ for the condensation
-defect $A=\delta\oplus M\oplus M^\dagger$.
+The diagonal phase acts first, followed by $X^{\otimes N}$. Every cyclic
+bond is included: at $N=1$ there is a self-loop, and at $N=2$ both
+oriented bonds contribute.
+
+The bond-two tensor below is a project construction, not a tensor
+printed in Garre-Rubio and Schuch~\cite{GarreRubioSchuch2024DomainWall}.
+That source supplies the group-cocycle context for anomalous symmetries.
+We first derive the physical operators and their group law directly from
+the tensor entries. The subsequent compression results describe their
+stacked products. Neither the physical group law nor the compression
+identities alone determine an associator class in $H^3(\Z_3,U(1))$.
 
 \begin{definition}[The tensors of the representation]
     \label{def:asymex_z3anomalous_tensors}
@@ -33,26 +43,41 @@ defect $A=\delta\oplus M\oplus M^\dagger$.
         Z3Anomalous.uMPS, Z3Anomalous.uDagMPS, Z3Anomalous.identityMPS}
     \leanok
     \uses{def:mpo_tensor, def:mpo_to_mps, def:mpo_family}
-    The tensor $M$ of $U$ has bond dimension two, with
+    The tensor $M$ has bond dimension two, with
     \begin{align}
         M^{1,0} & =\begin{pmatrix}1&0\\1&0\end{pmatrix},        &
         M^{2,1} & =\begin{pmatrix}0&1\\0&\omega\end{pmatrix},   &
         M^{0,2} & =\begin{pmatrix}0&1\\0&\omega^2\end{pmatrix},
         \notag
     \end{align}
-    and all other matrices zero. The tensor denoted by $M^\dagger$ has bond dimension two,
-    with
+    and all other matrices zero. The independently specified tensor
+    denoted by $M^\dagger$ has bond dimension two, with
     \begin{align}
         (M^\dagger)^{0,1} & =\begin{pmatrix}1&0\\1&0\end{pmatrix},        &
         (M^\dagger)^{1,2} & =\begin{pmatrix}0&1\\0&\omega^2\end{pmatrix}, &
         (M^\dagger)^{2,0} & =\begin{pmatrix}0&1\\0&\omega\end{pmatrix},
         \notag
     \end{align}
-    and all other matrices zero. The identity tensor $\delta$ has scalar matrices
-    $\delta^{ij}$. Read over the alphabet of index pairs, $M$, $M^\dagger$ and $\delta$
-    are matrix product state tensors of physical dimension nine, with matrices $M^{ij}$,
-    $(M^\dagger)^{ij}$, $\delta^{ij}$ at the letter $3i+j$.
-    Diagrammatically, $U=O_L(M)$ is the periodic operator
+    and all other matrices zero. The first physical index is the output
+    and the second is the input. The identity tensor $\delta$ has bond
+    dimension one and scalar matrices $\delta^{o,i}=\delta_{o,i}$,
+    where $\delta_{o,i}$ is the Kronecker delta.
+    Read over the alphabet of index pairs, $M$, $M^\dagger$ and $\delta$
+    are matrix product state tensors of physical dimension nine, with
+    the matrix at $(o,i)$ assigned to the letter $3o+i$.
+
+    For any such tensor $T$, its periodic operator uses the ordinary,
+    unnormalized trace:
+    \begin{align}
+        O_N(T)(s,t)
+         & =\tr(T^{s_0,t_0}\cdots T^{s_{N-1},t_{N-1}}).
+        \label{eq:asymex_z3_periodic_kernel}
+    \end{align}
+    Set $U_N=O_N(M)$ and $V_N=O_N(M^\dagger)$. The next lemma verifies
+    that this definition of $U_N$ gives
+    (\ref{eq:asymex_z3anomalous_operator}).
+    The contraction below represents $U_L$ on a ring drawn with $L$
+    sites and physical input labels $s_1,\ldots,s_L$.
     \begin{center}
         % Formula: U = X^{\otimes L} \prod_k \omega^{[s_k \neq 0] s_{k+1}}, the periodic
         % operator O_L(M) generated by the tensor M above.
@@ -71,17 +96,116 @@ defect $A=\delta\oplus M\oplus M^\dagger$.
             \tn[skin=mpo, ports={90:physical:$s_L{+}1$, 270:physical:$s_L$}]{M}
         \end{tenkz}
     \end{center}
-    generated by $M$.
 \end{definition}
+
+\begin{theorem}[Physical kernels and unitarity]
+    \label{lem:asymex_z3_physical_kernels}
+    \lean{Z3Anomalous.mpo_uTensor_apply,
+        Z3Anomalous.mpo_uDagTensor_apply_zpow,
+        Z3Anomalous.mpo_uTensor_mulVec_single,
+        Z3Anomalous.mpo_uDagTensor_mulVec_single,
+        Z3Anomalous.mpo_uTensor_mem_unitaryGroup,
+        Z3Anomalous.mpo_uDagTensor_mem_unitaryGroup,
+        Z3Anomalous.mpo_uDagTensor_eq_conjTranspose,
+        Z3Anomalous.uTensor_isMPUPos,
+        Z3Anomalous.uDagTensor_isMPUPos}
+    \leanok
+
+    For every $N>0$, the two bond-two tensors have kernels
+    \begin{align}
+        U_N(s,t) & =\delta_{s,Xt}\omega^{F(t)},             \\
+        V_N(s,t) & =\delta_{s,X^{-1}t}\omega^{-F(X^{-1}t)}.
+        \label{eq:asymex_z3_inverse_kernel}
+    \end{align}
+    Both operators are unitary, and $V_N=U_N^\dagger=U_N^{-1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For physical labels $o,i\in\{0,1,2\}$ and bond labels
+    $\alpha,\beta\in\{0,1\}$, the defining entries give
+    \begin{align}
+        M^{o,i}_{\alpha,\beta}
+         & =\delta_{o,i+1}\delta_{\beta,\chi(i)}\omega^{\alpha i},  \\
+        (M^\dagger)^{o,i}_{\alpha,\beta}
+         & =\delta_{i,o+1}\delta_{\beta,\chi(o)}\omega^{-\alpha o}.
+        \label{eq:asymex_z3_local_entries}
+    \end{align}
+    The physical equalities in the Kronecker deltas are modulo three.
+    Expanding the trace in~(\ref{eq:asymex_z3_periodic_kernel}) gives
+    \begin{align}
+        U_N(s,t)
+         & =\sum_{g_0,\ldots,g_{N-1}\in\{0,1\}}
+        \prod_{j=0}^{N-1}M^{s_j,t_j}_{g_j,g_{j+1}},
+        \label{eq:asymex_z3_cyclic_trace}
+    \end{align}
+    with $g_N=g_0$. A nonzero summand requires $s=Xt$.
+    The bond constraints then force $g_{j+1}=\chi(t_j)$, so there is
+    exactly one surviving bond configuration. Its weight is
+    $\omega^{\sum_j\chi(t_{j-1})t_j}=\omega^{F(t)}$, by cyclic
+    reindexing.
+
+    For $M^\dagger$, the physical constraint forces $s=q=X^{-1}t$,
+    and the bonds are $g_{j+1}=\chi(q_j)$. The surviving weight is
+    $\omega^{-\sum_j\chi(q_{j-1})q_j}=\omega^{-F(q)}$, proving
+    (\ref{eq:asymex_z3_inverse_kernel}).
+
+    Since $X$ permutes configurations and $|\omega|=1$, $U_N$ maps an
+    orthonormal basis to an orthonormal basis. The same argument applies
+    to $V_N$. Conjugate transposition of the physical kernel yields
+    \begin{align}
+        U_N^\dagger(s,t)
+         & =\overline{U_N(t,s)}
+        =\delta_{t,Xs}\omega^{-F(s)}
+        =\delta_{s,X^{-1}t}\omega^{-F(X^{-1}t)}
+        =V_N(s,t).
+    \end{align}
+    Thus $V_N$ is also the inverse of $U_N$.
+\end{proof}
+
+\begin{lemma}[The cube of the phase-decorated shift]
+    \label{lem:asymex_z3_physical_cube}
+    For every $N>0$, $U_N^3=\Id$ and $V_N=U_N^2$.
+\end{lemma}
+
+\begin{proof}
+    For $a,b\in\{0,1,2\}$, direct evaluation gives
+    \begin{align}
+        \left[\sum_{r=0}^{2}\chi(a+r\bmod3)(b+r\bmod3)\right]_{a,b=0}^{2}
+         & =\begin{pmatrix}3&2&1\\1&3&2\\2&1&3\end{pmatrix}.
+    \end{align}
+    The $(a,b)$ entry is congruent to $a-b$ modulo three.
+    Summing over cyclic bonds therefore gives
+    \begin{align}
+        F(t)+F(Xt)+F(X^2t)
+         & \equiv\sum_{j=0}^{N-1}(t_j-t_{j+1})
+        =0\pmod3.
+        \label{eq:asymex_z3_phase_telescope}
+    \end{align}
+    Applying~(\ref{eq:asymex_z3anomalous_operator}) three times and using
+    (\ref{eq:asymex_z3_phase_telescope}) gives
+    $U_N^3\ket{t}=\ket{t}$. Since $V_N=U_N^{-1}$, it follows that
+    $V_N=U_N^2$.
+\end{proof}
 
 \begin{remark}[Notation for the group inverse]
     \label{rem:asymex_z3anomalous_notation}
-    The symbol $M^\dagger$ denotes the independently specified tensor in
-    Definition~\ref{def:asymex_z3anomalous_tensors}, not the conjugate transpose of each
-    bond matrix of $M$. The results below establish
-    $O_L(M)O_L(M^\dagger)=O_L(M^\dagger)O_L(M)=\id$ and $O_L(M)^3=\id$ for $L>0$.
-    Thus $O_L(M^\dagger)=U^{-1}=U^2$. Identifying this inverse with the operator adjoint
-    also uses the unitarity of the phase-decorated shift.
+    The symbol $M^\dagger$ denotes the tensor in
+    Definition~\ref{def:asymex_z3anomalous_tensors}, not the conjugate
+    transpose of each bond matrix of $M$. Its entries satisfy
+    $(M^\dagger)^{o,i}=\overline{M^{i,o}}$: the physical indices are
+    exchanged, while the bond matrices are conjugated without
+    transposition. Lemmas~\ref{lem:asymex_z3_physical_kernels}
+    and~\ref{lem:asymex_z3_physical_cube} show that its periodic operator
+    is $U_N^\dagger=U_N^{-1}=U_N^2$ for $N>0$.
+
+    At $N=1$, the self-loop gives $F(t)=t_0$, so
+    $U_1\ket{a}=\omega^a\ket{a+1}$.
+    At $N=2$, $F(t)=\chi(t_0)t_1+\chi(t_1)t_0$.
+    These short rings obey the same unitary group law. At $N=0$, however,
+    the trace of the empty bond product gives
+    $O_0(M)=O_0(M^\dagger)=[2]$ and $O_0(\delta)=[1]$.
+    The positive-length hypothesis cannot be omitted.
 \end{remark}
 
 \begin{theorem}[Normality of the three blocks up to normalization]
@@ -98,24 +222,39 @@ defect $A=\delta\oplus M\oplus M^\dagger$.
 
 \begin{proof}
     \leanok
-    For $M$, four length-two words in the two letters $(0,2)$ and $(1,0)$ combine, with
-    coefficients in the Eisenstein integers $\Z[\omega]$, to $(\omega-1)$ times each matrix unit
-    of $\MN{2}$; since $\omega-1\neq0$, the length-two words already span $\MN{2}$, which is a
-    finite verification over $\Z[\omega]$. The same holds for $M^\dagger$ with the letters
-    $(0,1)$ and $(1,2)$. For the identity tensor, a diagonal physical index pair gives the
-    nonzero scalar $1$.
+    For $M$, four length-two words in the two letters $(0,2)$ and $(1,0)$
+    combine, with coefficients in the Eisenstein integers $\Z[\omega]$,
+    to $(\omega-1)$ times each matrix unit of $\MN{2}$.
+    Since $\omega-1\neq0$, these words span $\MN{2}$ over $\C$.
+    The same calculation holds for $M^\dagger$ with the letters
+    $(0,1)$ and $(1,2)$. For the identity tensor, a diagonal physical
+    index pair gives the nonzero scalar $1$. These spanning identities
+    establish injectivity after blocking, independently of any
+    normalization of the transfer spectral radius.
 \end{proof}
 
 \section{Fusion of the anomalous representation}%
 \label{sec:asymex_z3anomalous_fusion}
 
-The stacked product of two matrix product operator tensors $M_g$, $M_h$ is
-$B^{ij}=\sum_kM_g^{ik}\otimes M_h^{kj}$, of bond dimension the product of the two bond
-dimensions (Theorem~\ref{thm:asym_mpo_product}). Write $M_0=\delta$, $M_1=M$ and
-$M_2=M^\dagger$, with group indices added modulo three. For the representation of
-Definition~\ref{def:asymex_z3anomalous_tensors}, the periodic operator of the stacked
-product $M_g\cdot M_h$ equals $O_L(M_{g+h})$ for $L>0$. In particular, stacking $M$ over
-$M$ gives $U^2=O_L(M^\dagger)$:
+Write $M_0=\delta$, $M_1=M$ and $M_2=M^\dagger$, with group indices
+added modulo three. The physical calculations give
+$O_N(M_g)O_N(M_h)=O_N(M_{g+h})$ for every $N>0$.
+The stacked product tensor has entries
+\begin{align}
+    (M_g\cdot M_h)^{o,i}
+     & =\sum_{k=0}^{2}M_g^{o,k}\otimes M_h^{k,i}.
+    \label{eq:asymex_z3_stacked_product}
+\end{align}
+Its bond dimension is the product of the two bond dimensions, and its
+periodic operator is the physical product
+(Theorem~\ref{thm:asym_mpo_product}). Consequently, the group law gives
+equality of nonempty-word traces before any compression pair is chosen.
+We now describe the asymmetric reductions realizing these equalities
+on the virtual spaces. In the formulas and diagrams below, $L$ denotes
+the ring length, as $N$ did above.
+
+In particular, stacking $M$ over $M$ gives
+$U_L^2=O_L(M^\dagger)$:
 \begin{center}
     % Formula: O_L(U)O_L(U) = O_L(U^\dagger) (Theorem~\ref{thm:asymex_z3anomalous_uu_trace}),
     % the stacked product B=M\cdot M contracted with the periodic-operator identity.
@@ -166,26 +305,40 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
         W & =\begin{pmatrix}0&0&0&-1\\0&0&-\omega&0\end{pmatrix},
         \notag
     \end{align}
-    with $WV=\id$ and $WB^wV=(M^\dagger)^w$ for every word, and the remainder
-    $R^{ij}=B^{ij}-V(M^\dagger)^{ij}W$ is nilpotent of order exactly three: some product of two
-    of its letters is nonzero, but every product of three vanishes. The stacked tensor
-    $M^\dagger\cdot M^\dagger$ has the analogous block triangular form for the single
-    target $M$, again with $z=2$ one-dimensional zero diagonal blocks and a remainder
-    of order exactly three.
+    with $WV=\Id$ and $WB^wV=(M^\dagger)^w$ for every word.
+    The symbol $V$ here denotes a virtual compression matrix, not the
+    physical operator $V_L$.
+    The remainder $R^{ij}=B^{ij}-V(M^\dagger)^{ij}W$ is nilpotent of
+    order exactly three: some product of two letters is nonzero, but
+    every product of three vanishes.
+
+    The stacked tensor $M^\dagger\cdot M^\dagger$ has the analogous block
+    triangular form for the single target $M$, again with $z=2$
+    one-dimensional zero diagonal blocks and a remainder of order exactly three.
+    Its compression pair is
+    \begin{align}
+        V_{22} & =\begin{pmatrix}0&0\\0&-1\\0&-\omega\\1+\omega&0\end{pmatrix}, &
+        W_{22} & =\begin{pmatrix}0&0&0&-\omega\\0&0&1+\omega&0\end{pmatrix}.
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge}
-    Conjugating the letters of $B$ by the change of bond coordinates whose columns are, in the
-    order of the flag, the common kernel of every letter, an adapted basis of the common image
-    modulo that kernel, and a completion, makes every letter block upper triangular with
-    $M^\dagger$ on the matched diagonal block; this is a finite verification over $\Z[\omega]$,
-    transported to the complex numbers along the entrywise embedding, exactly as in
-    Theorem~\ref{thm:asymex_explicit_gauge}. The compression pair and the sharp nilpotency order
-    follow by reading off the corresponding rows and columns of the gauge and checking the two
-    remaining finite identities. The block for $M^\dagger\cdot M^\dagger$ is the same
-    computation with the roles of $M$ and $M^\dagger$ exchanged.
+    Choose bond coordinates adapted to the common kernel, the common image
+    modulo that kernel, and a completion. Conjugation by this change of
+    coordinates makes every letter block upper triangular with $M^\dagger$
+    on the matched diagonal block. The entries and the inverse change of
+    coordinates are checked over $\Z[\omega]$, as in
+    Theorem~\ref{thm:asymex_explicit_gauge}.
+    The rows and columns belonging to the matched block give $W$ and $V$.
+    Multiplication of upper triangular block matrices gives
+    $WB^wV=(M^\dagger)^w$, including $WV=\Id$ for the empty word.
+    The remainder identities are
+    $R^aR^bR^c=0$ for all letters $a,b,c$ and $R^1R^5\neq0$,
+    using the pair-alphabet encoding $a=3o+i$.
+    For $M^\dagger\cdot M^\dagger$, the corresponding calculation has
+    target $M$ and gives $(R^2)^2\neq0$, with all triple products zero.
 \end{proof}
 
 \begin{theorem}[Periodic fusion \texorpdfstring{$U\cdot U=U^\dagger$ and $U^\dagger\cdot U^\dagger=U$}{of the nonidentity group elements}]
@@ -221,17 +374,28 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
     The stacked tensor $B=M\cdot M^\dagger$ has the block triangular form of
     Theorem~\ref{thm:asym_multiblock} for the single target $\delta$ with $z=3$
     one-dimensional zero diagonal blocks, $4=1+3$. The compression pair satisfies
-    $WV=\id$ and $WB^wV=\delta^w$ for every word, and the remainder is nilpotent of
-    order exactly three, one short of the general bound $|S|+z=4$. The stacked tensor
-    $M^\dagger\cdot M$ has the analogous block triangular form for the same target $\delta$.
+    $WV=\Id$ and $WB^wV=\delta^w$ for every word, and the remainder is nilpotent of
+    order exactly three, one short of the general bound $|S|+z=4$.
+    Here $|S|=1$ is the number of target slots.
+    The stacked tensor $M^\dagger\cdot M$ has the analogous block triangular
+    form for the same target $\delta$. Both products use the compression pair
+    \begin{align}
+        V & =\begin{pmatrix}1\\0\\0\\1\end{pmatrix}, &
+        W & =\begin{pmatrix}0&0&0&1\end{pmatrix}.
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge}
-    Use the same conjugation argument as in
-    Theorem~\ref{thm:asymex_z3anomalous_uu_compression}, over $\Z[\omega]$, with the flag
-    now containing two one-dimensional zero diagonal blocks before the target and one after.
+    Use the conjugation argument of
+    Theorem~\ref{thm:asymex_z3anomalous_uu_compression}, over $\Z[\omega]$,
+    with two one-dimensional zero diagonal blocks before the target and
+    one after. The target rows and columns give $WV=\Id$ and
+    $WB^wV=\delta^w$. Direct multiplication gives zero for every triple
+    product of remainder letters. The products $R^0R^4$ for
+    $M\cdot M^\dagger$ and $R^0R^0$ for $M^\dagger\cdot M$ are nonzero,
+    proving that the order is exactly three in both cases.
 \end{proof}
 
 \begin{theorem}[The exact \texorpdfstring{$\Z_3$}{Z3} representation]
@@ -243,19 +407,24 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
     \uses{thm:asymex_z3anomalous_ud_compression, thm:asymex_z3anomalous_uu_trace,
         prop:asym_compression_trace, thm:asym_mpo_product}
     The periodic operator of the identity tensor is the identity map at every length,
-    $O_L(\delta)=\id$. For every nonempty word $w$, both
+    $O_L(\delta)=\Id$. For every nonempty word $w$, both
     $\tr((M\cdot M^\dagger)^w)$ and $\tr((M^\dagger\cdot M)^w)$ equal $\tr(\delta^w)$.
-    Thus $O_L(M)O_L(M^\dagger)=O_L(M^\dagger)O_L(M)=\id$ at every positive length.
-    Together with $O_L(M)O_L(M)=O_L(M^\dagger)$, this gives $O_L(M)^3=\id$:
+    Thus $O_L(M)O_L(M^\dagger)=O_L(M^\dagger)O_L(M)=\Id$ at every positive length.
+    Together with $O_L(M)O_L(M)=O_L(M^\dagger)$, this gives $O_L(M)^3=\Id$:
     the symmetry gives a representation of $\Z_3$ without any length-dependent phase.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    $O_L(M)O_L(M^\dagger)=\id$ and $O_L(M^\dagger)O_L(M)=\id$ follow as in the proof of
-    Theorem~\ref{thm:asymex_z3anomalous_uu_trace}, from
-    Theorem~\ref{thm:asymex_z3anomalous_ud_compression} together with $O_L(\delta)=\id$. Then
-    $O_L(M)^3=O_L(M)^2O_L(M)=O_L(M^\dagger)O_L(M)=\id$.
+    The word evaluation of $\delta$ is the scalar $1$ when the input and
+    output configurations agree, and $0$ otherwise. Hence $O_L(\delta)=\Id$,
+    including at length zero. Proposition~\ref{prop:asym_compression_trace}
+    applied to Theorem~\ref{thm:asymex_z3anomalous_ud_compression} gives the
+    nonempty-word trace identities. By Theorem~\ref{thm:asym_mpo_product},
+    they imply $O_L(M)O_L(M^\dagger)=\Id$ and
+    $O_L(M^\dagger)O_L(M)=\Id$. Finally,
+    Theorem~\ref{thm:asymex_z3anomalous_uu_trace} gives
+    $O_L(M)^3=O_L(M)^2O_L(M)=O_L(M^\dagger)O_L(M)=\Id$.
 \end{proof}
 
 \begin{theorem}[Both sitewise intertwiner spaces vanish on every nontrivial block]
@@ -269,29 +438,35 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
     For each of the four stacked products $M\cdot M$, $M\cdot M^\dagger$,
     $M^\dagger\cdot M$, $M^\dagger\cdot M^\dagger$, let $B$ denote the stacked tensor
     and let $C$ denote its respective target $M^\dagger$, $\delta$, $\delta$, $M$.
-    There is no nonzero $X$ with $B^iX=XC^i$ for every letter $i$, and no nonzero $Y$
-    with $YB^i=C^iY$ for every letter $i$. In particular, the compression identities
-    $WB^wV=C^w$ do not give sitewise intertwiners.
+    There is no nonzero matrix $X$ with $B^aX=XC^a$ for every letter $a$,
+    and no nonzero matrix $Y$ with $YB^a=C^aY$ for every letter $a$.
+    In particular, the compression identities $WB^wV=C^w$ do not give
+    sitewise intertwiners.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    For each block, a selected set of eight sitewise equations has a coefficient matrix over
-    $\Z[\omega]$ with an explicit left inverse up to a nonzero scalar; this forces every
-    coordinate of $X$, respectively $Y$, to vanish. Each inverse is a finite verification over
-    $\Z[\omega]$.
+    Select eight scalar equations for the equal-factor products and
+    four for the inverse-factor products. Write the selected sitewise
+    intertwining equations as $Kx=0$, where $x$ lists
+    the entries of $X$ or $Y$. The coefficient matrix $K$ has entries in
+    $\Z[\omega]$ and admits a matrix $H$ with $HK=c\Id$ for a nonzero
+    scalar $c$. These identities are verified over $\Z[\omega]$.
+    Consequently $cx=HKx=0$, and all entries of the intertwiner vanish.
 \end{proof}
 
 \begin{remark}[Failure of closure under conjugate transposition]
     \label{rem:asymex_z3anomalous_anomaly}
     \uses{cor:asym_anomaly_not_star}
-    By Corollary~\ref{cor:asym_anomaly_not_star}, Theorem~\ref{thm:asymex_z3anomalous_no_intertwiner}
-    shows that the algebra generated by the matrices of each of the four stacked products is not
-    closed under conjugate transposition. This conclusion does not calculate the anomaly
-    class. Determining that class requires a separate computation of the $3$-cocycle
-    associator of the fusion tensors, as in Garre-Rubio and Schuch
-    \cite{GarreRubioSchuch2024DomainWall}; neither the absence of sitewise intertwiners nor
-    the nilpotent remainder alone determines an element of $H^3(\Z_3,U(1))$.
+    By Corollary~\ref{cor:asym_anomaly_not_star},
+    Theorem~\ref{thm:asymex_z3anomalous_no_intertwiner} shows that the
+    algebra generated by each stacked tensor is not closed under
+    conjugate transposition. This concerns its virtual matrices, not
+    the unitarity of its periodic physical operator.
+    It does not calculate the anomaly class. That requires coherent
+    fusion or restricted-operator data and a separate $3$-cocycle
+    calculation, as in Garre-Rubio and
+    Schuch~\cite{GarreRubioSchuch2024DomainWall}.
 \end{remark}
 
 \section{The condensation defect}%
@@ -303,9 +478,11 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
         Z3Anomalous.defectMPS}
     \leanok
     \uses{def:asymex_z3anomalous_tensors, def:mpdo_operator_product}
-    The condensation defect is the block-diagonal tensor $A=\delta\oplus M\oplus M^\dagger$
-    of bond dimension five, with the identity tensor, the tensor of $U$ and the tensor of
-    $U^\dagger$ on its diagonal, in that order.
+    The condensation defect is the block-diagonal tensor
+    $A=\delta\oplus M\oplus M^\dagger$ of bond dimension five.
+    Its three diagonal blocks have bond dimensions one, two and two
+    and represent $\Id$, $U_L$ and $U_L^\dagger$, respectively,
+    at positive ring length $L$.
 \end{definition}
 
 \begin{theorem}[The defect is the sum of the three group elements]
@@ -319,22 +496,57 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
 
 \begin{proof}
     \leanok
-    The trace of a block-diagonal matrix is the sum of the traces of its diagonal blocks, and
-    $A$ is block diagonal with the three summands as its blocks at every letter.
+    Products of block-diagonal matrices remain block diagonal, so
+    $A^w=\delta^w\oplus M^w\oplus(M^\dagger)^w$.
+    Taking the trace gives the word identity and hence the periodic
+    operator identity.
 \end{proof}
 
-\begin{proposition}[Block decomposition of the stacked square]
+\begin{lemma}[The normalized defect projects onto invariant states]
+    \label{lem:asymex_z3_defect_projector}
+    For $L>0$, the operator
+    $P_L=O_L(A)/3=(\Id+U_L+U_L^2)/3$ is the orthogonal projector onto
+    $\{\psi:U_L\psi=\psi\}$. Its basis action is
+    \begin{align}
+        P_L\ket{t}
+         & =\frac{1}{3}\left(\ket{t}+\omega^{F(t)}\ket{Xt}
+        +\omega^{-F(X^{-1}t)}\ket{X^{-1}t}\right).
+    \end{align}
+    In particular, $O_L(A)^2=3O_L(A)$ and $\rank P_L=3^{L-1}$.
+\end{lemma}
+
+\begin{proof}
+    Theorem~\ref{thm:asymex_z3anomalous_defect_sum} and
+    Lemmas~\ref{lem:asymex_z3_physical_kernels}
+    and~\ref{lem:asymex_z3_physical_cube} give the formula for $P_L$.
+    Since $U_L^3=\Id$, each power $\Id,U_L,U_L^2$ occurs three times
+    in $(\Id+U_L+U_L^2)^2$, so $P_L^2=P_L$.
+    Also $U_L^\dagger=U_L^2$, hence $P_L^\dagger=P_L$.
+    The identities $U_LP_L=P_L$ and
+    $P_L\psi=\psi$ whenever $U_L\psi=\psi$ identify its range.
+    Neither $X$ nor $X^2$ fixes a configuration when $L>0$.
+    Thus $\tr U_L=\tr U_L^2=0$, and
+    $\rank P_L=\tr P_L=3^L/3$.
+\end{proof}
+
+The physical identity has a corresponding virtual decomposition.
+The stacked square has nine pair blocks, each reducing to one of the
+three group tensors. The asymmetric compression records these nine
+targets separately.
+
+\begin{theorem}[Block decomposition of the stacked square]
     \label{prop:asymex_z3anomalous_defect_square_blocks}
     \lean{Z3Anomalous.defectSquare, Z3Anomalous.defectSquareEis_eq, Z3Anomalous.pairStackEis,
         Z3Anomalous.squareBond}
     \leanok
     \uses{def:asymex_z3anomalous_defect, def:mpdo_operator_product}
-    Write $M_0=\delta$, $M_1=M$, $M_2=M^\dagger$, and $B_{gh}=(M_g\cdot M_h)^a$ for the
-    pair block at a fixed letter $a$ of the pair alphabet. After reindexing the bond
-    coordinate $p=5p_1+p_2$ by the summand pair and its internal coordinates, the stacked
-    tensor $A\cdot A$ of bond dimension twenty-five is block diagonal over the nine pairs
-    $(g,h)\in\{0,1,2\}^2$, with $(g,h)$ block $M_g\cdot M_h$. In these coordinates,
-    for every letter $a$,
+    Write $M_0=\delta$, $M_1=M$, $M_2=M^\dagger$, and
+    $B_{gh}=(M_g\cdot M_h)^a$ for the pair block at a fixed letter $a$.
+    Reindex the bond coordinate $p=5p_1+p_2$ by the summand pair and its
+    internal coordinates. The stacked tensor $A\cdot A$ of bond dimension
+    twenty-five is then block diagonal over the nine pairs
+    $(g,h)\in\{0,1,2\}^2$, with $(g,h)$ block $M_g\cdot M_h$.
+    In these coordinates, for every letter $a$,
     \begin{align}
         (A\cdot A)^{a} & =
         \begin{pmatrix}
@@ -351,13 +563,17 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
         \label{eq:asymex_z3anomalous_defect_square_blocks}
     \end{align}
     with all off-diagonal blocks zero.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    Both sides are the same reindexing, along the bijection labelling the twenty-five bond
-    coordinates by the nine pairs of coordinates of the summands, of the same finite family of
-    matrices; this is a finite verification over $\Z[\omega]$.
+    Each letter of $A$ preserves its three summands. The tensor product
+    of two such letters therefore preserves each of the nine summand
+    pairs. In the pair coordinates, its restriction is
+    $M_g^{o,k}\otimes M_h^{k,i}$. Summing over $k$ gives
+    $(M_g\cdot M_h)^{o,i}$, as in
+    (\ref{eq:asymex_z3_stacked_product}). The specified reindexing and
+    the resulting entry identities are verified over $\Z[\omega]$.
 \end{proof}
 
 \begin{theorem}[The defect squares to three times itself]
@@ -372,15 +588,21 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
 
 \begin{proof}
     \leanok
-    By Proposition~\ref{prop:asymex_z3anomalous_defect_square_blocks}, the trace of
-    $(A\cdot A)^w$ is the sum, over the nine pairs $(g,h)$, of the trace of $(M_g\cdot M_h)^w$;
-    each of the nine summands equals the trace of $M_{g+h}^w$, by
-    Theorem~\ref{thm:asymex_z3anomalous_uu_trace} and
-    Theorem~\ref{thm:asymex_z3anomalous_group_law} on the four nontrivial pairs and trivially on
-    the five pairs with $g=0$ or $h=0$, and $\delta$, $M$, $M^\dagger$ each occur as $M_{g+h}$
-    for exactly three of the nine pairs. Summing gives the stated trace identity, and the
-    operator-level argument of Theorem~\ref{thm:asymex_z3anomalous_uu_trace} gives the periodic
-    operator identity.
+    By Theorem~\ref{prop:asymex_z3anomalous_defect_square_blocks},
+    the trace of $(A\cdot A)^w$ is the sum of the nine pair-block
+    traces. Theorems~\ref{thm:asymex_z3anomalous_uu_trace}
+    and~\ref{thm:asymex_z3anomalous_group_law} give
+    $\tr((M_g\cdot M_h)^w)=\tr(M_{g+h}^w)$ on the four nontrivial
+    pairs. For $g=0$ or $h=0$, the pair block equals the target under
+    the natural bond identification.
+    Each group element occurs as $g+h$ exactly three times, so
+    \begin{align}
+        \tr((A\cdot A)^w)
+         & =\sum_{g,h=0}^{2}\tr(M_{g+h}^w)
+        =3\sum_{k=0}^{2}\tr(M_k^w).
+    \end{align}
+    Theorem~\ref{thm:asym_mpo_product} converts this trace identity into
+    the periodic operator identity.
 \end{proof}
 
 \begin{theorem}[Compression of the stacked square]
@@ -394,24 +616,37 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
         thm:asymex_z3anomalous_uu_compression, thm:asymex_z3anomalous_ud_compression,
         thm:asymex_explicit_gauge}
     The stacked tensor $A\cdot A$ has the block triangular form of
-    Theorem~\ref{thm:asym_multiblock} for the nine targets $M_{g+h}$, $(g,h)\in\{0,1,2\}^2$,
-    with $z=10$ one-dimensional zero diagonal blocks and $25=15+10$. The nine compression
-    pairs are mutually biorthogonal, and the remainder is nilpotent of order at most nineteen.
+    Theorem~\ref{thm:asym_multiblock} for the nine targets $M_{g+h}$,
+    $(g,h)\in\{0,1,2\}^2$, with $z=10$ one-dimensional zero diagonal
+    blocks and $25=15+10$. The nine compression pairs are mutually
+    biorthogonal, and the remainder is nilpotent of order at most nineteen.
+    Explicitly, writing $s=(g,h)$ and $C_s=M_{g+h}$, the pairs satisfy
+    $W_s(A\cdot A)^wV_s=C_s^w$ for every word and $W_sV_t=0$ for $s\neq t$.
+    The remainder is
+    \begin{align}
+        R^a & =(A\cdot A)^a-\sum_s V_sC_s^aW_s,
+    \end{align}
+    and $R^w=0$ whenever $|w|\geq19$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge}
-    On the five pairs with $g=0$ or $h=0$, the pair block already equals the target with no
-    zero diagonal block. On the four remaining pairs, apply the gauge of
+    On the five pairs with $g=0$ or $h=0$, the pair block equals its
+    target under the natural bond identification and requires no zero
+    diagonal block. On the other four pairs, use the gauges of
     Theorem~\ref{thm:asymex_z3anomalous_uu_compression} or
-    Theorem~\ref{thm:asymex_z3anomalous_ud_compression}. The direct sum of these five identity
-    gauges and four block gauges, transported along the labelling of
-    Proposition~\ref{prop:asymex_z3anomalous_defect_square_blocks}, is the gauge required by
-    Theorem~\ref{thm:asym_multiblock}; the dimension count adds
-    $1{+}2{+}2{+}2{+}4{+}4{+}2{+}4{+}4=25$ against target sizes
-    $1{+}2{+}2{+}2{+}2{+}1{+}2{+}1{+}2=15$ and
-    $0{+}0{+}0{+}0{+}2{+}3{+}0{+}3{+}2=10$ one-dimensional zero diagonal blocks.
-    Clause (vi) of Theorem~\ref{thm:asym_multiblock} bounds the nilpotency order by
-    $|S|+z=9+10=19$.
+    Theorem~\ref{thm:asymex_z3anomalous_ud_compression}.
+    Their direct sum, transported along the bond reindexing of
+    Theorem~\ref{prop:asymex_z3anomalous_defect_square_blocks}, gives
+    the required triangular form. Distinct pair blocks have disjoint
+    coordinates, which gives $W_sV_t=0$ for $s\neq t$.
+
+    The original block dimensions sum to
+    $1+2+2+2+4+4+2+4+4=25$.
+    The target dimensions sum to $1+2+2+2+2+1+2+1+2=15$,
+    and the zero diagonal blocks number $0+0+0+0+2+3+0+3+2=10$.
+    Clause~(vi) of Theorem~\ref{thm:asym_multiblock} bounds the
+    nilpotency order by $|S|+z=9+10=19$, where $S$ is the set of
+    nine target slots.
 \end{proof}
