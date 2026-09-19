@@ -1499,19 +1499,21 @@ from a single-window span or an assumed coarse frame.
 
 \subsection{The foundation that lands}
 
-The reusable multiplicativity is exposed as
-\leanid{TNLean.PEPS.coeffTransferMap\_mul\_of\_coherentFrames}
-(\path{TNLean/PEPS/RegionBlock/CoarseThreeSiteMul.lean}): two coherent coarse blocking
+The multiplicativity is carried by the gauge assembly
+\leanid{TNLean.PEPS.exists\_regionEdgeGauge\_of\_coherentFrames}
+(\path{TNLean/PEPS/RegionBlock/CoarseThreeSite11.lean}): two coherent coarse blocking
 frames over the two tensors sharing the three regions, the bond dimensions, and the
 single-crossing edge make the chosen forward transfer over the red block
-multiplicative, with no single-vertex injectivity. This is the $\text{\path{hmul}}$ field
-extracted from the bundled gauge assembly
-\leanid{TNLean.PEPS.exists\_regionEdgeGauge\_of\_coherentFrames}, so a consumer holding
-only the coefficient transfer can obtain the multiplicativity from a frame. It makes
-the verdict auditable in Lean: the window route's $\text{\path{hmul}}$ is one application of
-this theorem with $\mathrm{red}=W$, and the unmet hypothesis is exactly the frame's
-$\text{\path{complement\_injective}}$ at $\mathrm{univ}\setminus S$, the documented
-obstruction.  This theorem remains available for any future coherent frame, but the
+multiplicative, with no single-vertex injectivity. Its $\text{\path{hmul}}$ step is the
+identification of the chosen forward transfer with the concrete single-edge transfer,
+\leanid{TNLean.PEPS.coeffTransferMap\_eq\_regionEdgeTransfer}, followed by the concrete
+transfer's multiplication law \leanid{TNLean.PEPS.regionEdgeTransfer\_mul}; a consumer
+holding only the coefficient transfer obtains the multiplicativity from that pair in
+three rewrites. It makes the verdict auditable in Lean: the window route's
+$\text{\path{hmul}}$ is one application of that pair with $\mathrm{red}=W$, and the unmet
+hypothesis is exactly the frame's $\text{\path{complement\_injective}}$ at
+$\mathrm{univ}\setminus S$, the documented obstruction.  The pair remains available for
+any future coherent frame, but the
 fixed-edge common-state family below does not require such a frame.  The remaining local
 work is the cross-tensor identification that feeds the direct end-composition
 laws into the coefficient transfer; the back-half assembly is the subsequent
@@ -1599,7 +1601,7 @@ only conditional alternatives.  The first reads a bond operation from a
 single vertex and requires single-vertex injectivity.  The second proves
 multiplicativity from a coherent three-region blocking frame.\footnote{Formal
     declaration:
-    \leanid{TNLean.PEPS.coeffTransferMap\_mul\_of\_coherentFrames}.}  Neither
+    \leanid{TNLean.PEPS.exists\_regionEdgeGauge\_of\_coherentFrames}.}  Neither
 hypothesis occurs in the corollary, and neither is needed for the forward
 fixed-edge family proved above.
 
