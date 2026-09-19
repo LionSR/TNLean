@@ -13538,7 +13538,7 @@ left/right order below agrees with the adjacent-pair convention in
     \lean{SpinChain.disjoint_leftPair_union_rightPair_rightPair_add_one,
         SpinChain.leftPair_union_rightPair_union_rightPair_add_one}
     \leanok
-    \uses{def:qca_nearest_neighbor_pair_regions, lem:qca_nearest_neighbor_pair_geometry}
+    \uses{def:qca_nearest_neighbor_pair_regions}
     Let $T_x=(L_x\cup P_x)\cup P_{x+1}$. The three regions
     $L_x,P_x,P_{x+1}$ are pairwise disjoint, and
     \begin{align}
@@ -13547,7 +13547,7 @@ left/right order below agrees with the adjacent-pair convention in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_nearest_neighbor_pair_regions}
+    \uses{def:qca_nearest_neighbor_pair_regions, lem:qca_nearest_neighbor_pair_geometry}
     Substitute the three pair definitions and compare their six sites.
 \end{proof}
 

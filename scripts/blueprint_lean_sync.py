@@ -402,6 +402,11 @@ def find_duplicate_lean_tags(
     entry; any further entry mentioning the same declaration cites the owner
     through ``\\uses`` instead of repeating the ownership tag.  Two tags for one
     declaration make the owning entry ambiguous, so they are reported here.
+
+    Every ``\\lean{...}`` tag counts, including one written inside a proof body:
+    the convention has a proof cite the owning entry through ``\\uses``, so a
+    proof-body tag repeating an owned declaration is itself a second anchor on
+    that declaration rather than a citation of the owner.
     """
     occurrences: dict[str, list[BlueprintEntry]] = {}
     for ref in refs:
