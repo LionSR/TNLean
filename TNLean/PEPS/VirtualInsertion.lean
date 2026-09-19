@@ -32,7 +32,6 @@ endomorphisms as physical linear maps on the local physical space.
   on one incident edge.
 - `physRealizeLocalOpAt`: realization of a virtual endomorphism from a chosen
   left inverse at one injective vertex.
-- `physRealizeLocalOp`: the same realization packaged from `IsVertexInjective`.
 - `physRealizeLocalOpAt_spec`: the realized physical map agrees with the
   virtual operator on the image of `localTensorMap`.
 

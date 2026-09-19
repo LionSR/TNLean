@@ -14,9 +14,9 @@ The two-dimensional strengthening of the normal PEPS Fundamental Theorem
 shape: every contiguous `L × K` region of the torus, one orientation only, with
 the sizes `n ≥ 2L + 1` and `m ≥ 2K + 1`.  This file is the geometry layer of
 that horizontal-window route, scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`;
-the complementary vertical single-crossing blocking result is
-`TNLean.PEPS.isCrossingEdge_torusVerticalEdge` in
-`TNLean/PEPS/TorusEdgeBlockingCrossing.lean`:
+the complementary vertical route now uses the faithful reference-blocking
+theorem `TNLean.PEPS.isCrossingEdge_torusVerticalRectangleBlockingDatum` in
+`TNLean/PEPS/TorusRectangleReferenceData.lean`:
 
 * a larger rectangle exhibited as a sliding union of contiguous `L × K`
   windows (`contiguousRectangle_eq_biUnion_window`);
