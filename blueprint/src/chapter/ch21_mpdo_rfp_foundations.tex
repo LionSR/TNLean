@@ -607,15 +607,15 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     as in \cite[line~751]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[Global-family purification RFP witness]
+\begin{definition}[Existence of a purifying fixed-point tensor]
     \label{def:mpdo_purification_rfp_witness}
     \lean{MPOTensor.HasPurificationRFPWitness}
     \leanok
     \uses{def:mpdo_global_purification_equation, def:mps_transfer_idempotence}
-    An MPO tensor $M$ has a global-family purification RFP witness if, for some
-    purifying spin--ancilla tensor $A$, it satisfies the positive-length global
-    purification equation and $\widehat A$ is a pure-state renormalization fixed
-    point. This auxiliary condition records the density-operator equation at
+    For an MPO tensor $M$, require the existence of a spin--ancilla tensor $A$
+    such that $\rho^{(N)}(M)=\rho^{(N)}_p(A)$ for every $N>0$ and
+    $\widehat A$ is a pure-state renormalization fixed point.
+    This auxiliary condition records the density-operator equation at
     \cite[line~751]{Cirac2016MPDO_arXiv}. It does not assert the one-site
     ancillary-contraction presentation in Definition~\ref{def:mpdo_is_prfp}.
 \end{definition}
@@ -734,12 +734,12 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     physical-trace condition.
 \end{proof}
 
-\begin{lemma}[Physical-trace transfer of the maximally mixed witness]
+\begin{lemma}[Physical-trace transfer of the maximally mixed tensor]
     \label{lem:phys_trace_transfer_witnessM}
     \lean{MPOTensor.physTraceTransfer_witnessM}
     \leanok
     \uses{def:mpo_physical_trace_transfer}
-    For the maximally mixed witness $M_{\mathrm w}$, closing the ket and bra
+    For the maximally mixed tensor $M_{\mathrm w}$, closing the ket and bra
     physical legs gives
     $\mathcal T_{M_{\mathrm w}}
         =M_{\mathrm w}^{00}+M_{\mathrm w}^{11}
@@ -749,16 +749,16 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \begin{proof}
     \leanok
     This is the direct computation of the two nonzero diagonal entries of the
-    witness tensor.
+    tensor.
 \end{proof}
 
-\begin{theorem}[The maximally mixed witness satisfies the nonzero
+\begin{theorem}[The maximally mixed tensor satisfies the nonzero
         physical-trace relation]
     \label{thm:witness_source_zcl}
     \lean{MPOTensor.isSourceZCL_witnessM}
     \leanok
     \uses{def:mpo_source_zcl, thm:prfp_not_doubled_index_zcl}
-    The maximally mixed witness $M_{\mathrm w}$ satisfies the nonzero
+    The maximally mixed tensor $M_{\mathrm w}$ satisfies the nonzero
     up-to-scalar physical-trace relation.
 \end{theorem}
 \begin{proof}\leanok
@@ -969,13 +969,14 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     length, so no positive-length restriction is needed.
 \end{proof}
 
-\begin{theorem}[A purification RFP supplies a global-family witness]
+\begin{theorem}[A local purification gives the global purification equation]
     \label{thm:prfp_has_purification_rfp_witness}
     \lean{MPOTensor.IsPRFP.hasPurificationRFPWitness}
     \leanok
     \uses{def:mpdo_is_prfp, def:mpdo_purification_rfp_witness}
-    Every purification renormalization fixed point has a global-family
-    purification RFP witness with the same purifying tensor.
+    For every purification renormalization fixed point $M$, its purifying
+    tensor $A$ satisfies $\rho^{(N)}(M)=\rho^{(N)}_p(A)$ for every $N>0$,
+    and $\widehat A$ is a pure-state renormalization fixed point.
 \end{theorem}
 
 \begin{proof}\leanok

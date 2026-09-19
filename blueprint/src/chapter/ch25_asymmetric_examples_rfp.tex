@@ -1,0 +1,495 @@
+\section{Renormalization fixed points: a shared adapted basis}%
+\label{sec:asymex_rfp_basis}
+
+The two examples considered below use stacked products of matrix product
+operator tensors whose bond spaces are tensor squares. Reordering the
+stacked bond coordinates separates a four-dimensional inner bond from
+the outer bond space. The inner bond consists of the two half-bonds
+joined by summing over the intermediate physical index. Both examples
+use the same adapted basis: two Bell vectors and the two coordinate
+vectors orthogonal to them.
+
+The length dependence comes from powers of the weights attached to
+rank-one idempotents. In the notation of the RFP algebra, the structure
+coefficients are
+$c_{\alpha,\beta,\gamma}^{(L)}
+=\tr(\chi_{\alpha,\beta,\gamma}^L)$.
+Each weighted copy of a target contributes its weight to the power $L$;
+weights are summed when they multiply the same target. This is the
+power-sum mechanism of
+Theorem~\ref{thm:asym_power_sum_coefficients}.
+The results below establish the tensor decompositions and periodic trace
+identities for these examples, rather than a classification of
+length-dependent RFPs.
+
+\begin{definition}[The idempotents of an adapted basis]
+	\label{def:asymex_basis_proj}
+	\lean{MPSTensor.basisProj, P6Compression.pairReorder, P6Compression.pairU,
+		P6Compression.pairUinv, P6Compression.pairProjInt,
+		P6Compression.pairBlockInt}
+	\leanok
+	\uses{prop:asym_projector_weighted_sum}
+	For mutually inverse matrices $U$ and $U^{-1}$, define
+	$\Pi_j=U^{-1}E_{jj}U$. This is the product of the $j$-th column of
+	$U^{-1}$ with the $j$-th row of $U$.
+	In both examples below, a stacked bond coordinate is a quadruple of
+	bits. Reorder it into the inner bond formed by the two middle bits
+	and the outer bond formed by the two outer bits. Choose the adapted
+	basis of the inner bond whose first two vectors are
+	$(1,0,0,\pm1)$ and whose last two vectors are the remaining coordinate
+	vectors. The two idempotents associated with the Bell vectors carry
+	the weighted target tensors. Tensor products of these idempotents
+	with the target matrices are then expressed in the original stacked
+	bond coordinates.
+\end{definition}
+
+\begin{lemma}[The idempotents of an adapted basis are mutually orthogonal]
+	\label{lem:asymex_basis_proj}
+	\lean{MPSTensor.basisProj_mul_basisProj_self,
+		MPSTensor.basisProj_mul_basisProj_of_ne, MPSTensor.mul_basisProj_mul}
+	\leanok
+	\uses{def:asymex_basis_proj}
+	The idempotents satisfy $\Pi_j^2=\Pi_j$,
+	$\Pi_j\Pi_k=0$ for $j\ne k$, and $U\Pi_jU^{-1}=E_{jj}$.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	The idempotent is $U^{-1}E_{jj}U$, so conjugation by $U$ returns
+	$E_{jj}$, and the products reduce to $E_{jj}E_{kk}$, which is $E_{jj}$
+	for $j=k$ and zero otherwise.
+\end{proof}
+
+\begin{theorem}[From an integer matrix identity to a weighted direct sum]
+	\label{thm:asymex_stacked_pair}
+	\lean{P6Compression.stackedPair_letter_identity}
+	\leanok
+	\uses{def:asymex_basis_proj, prop:asym_projector_weighted_sum}
+	Suppose the stacked tensor is $c_B$ times an integer tensor
+	$\widehat B$, and each target tensor $C_s$ is $c_C$ times an integer
+	tensor $\widehat C_s$, with $s\in\{0,1\}$. Suppose there are a nonzero
+	integer $n$ and integers $k_s$ such that, for every $s$ and every
+	physical index $a$,
+	\begin{align}
+		n\,\mu_s\,\frac{c_C}{2} & =k_s\,c_B,
+		\label{eq:asymex_stacked_pair_scalar}                            \\
+		n\,\widehat B^a         & =\sum_sk_s\,\bigl(\widehat\Pi_s\otimes
+		\widehat C_s^a\bigr),
+		\label{eq:asymex_stacked_pair_letters}
+	\end{align}
+	where $\widehat\Pi_s=2\Pi_s$ and the right-hand side of
+	(\ref{eq:asymex_stacked_pair_letters}) is expressed in the stacked
+	bond coordinates. Then
+	$B^a=\sum_s\mu_s(\Pi_s\otimes C_s^a)$ in those coordinates, which is
+	the hypothesis of Proposition~\ref{prop:asym_projector_weighted_sum}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:asymex_basis_proj}
+	Expand the right-hand side entrywise using the idempotents of
+	Lemma~\ref{lem:asymex_basis_proj}. Since
+	$\Pi_s=\widehat\Pi_s/2$ and $C_s^a=c_C\widehat C_s^a$,
+	its $s$-th summand is
+	$\mu_sc_C(\widehat\Pi_s\otimes\widehat C_s^a)/2$.
+	Multiplying by $n$ and applying
+	(\ref{eq:asymex_stacked_pair_scalar}) and
+	(\ref{eq:asymex_stacked_pair_letters}) gives
+	$c_Bn\widehat B^a=nB^a$. Cancel the nonzero scalar $n$.
+\end{proof}
+
+\begin{theorem}[Normality from scaled matrix units]
+	\label{thm:asymex_normal_units}
+	\lean{P6Compression.isNormal_of_single_eq_smul}
+	\leanok
+	\uses{def:normal}
+	Let a tensor be one nonzero scalar times an integer tensor, and suppose
+	that for every position $(x,y)$ of its bond algebra some matrix of the
+	integer tensor is a nonzero integer multiple of $E_{xy}$. Then the
+	one-site matrices of the original tensor span the full matrix algebra
+	of the bond space, so the tensor is normal at blocking length one in
+	the sense of Definition~\ref{def:normal}.
+	This conclusion does not impose spectral-radius normalization;
+	the term NT in the RFP canonical form additionally requires that
+	normalization.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Dividing the designated letter by its nonzero scalar factor exhibits
+	each matrix unit in the span of the one-site matrices, and the matrix
+	units span the whole algebra.
+\end{proof}
+
+\section{The one-label fixed point}%
+\label{sec:asymex_one_label}
+
+The first example has four one-site matrices:
+\begin{align}
+	A^0 & =\tfrac45E_{00},
+	\label{eq:asymex_one_label_matrices} \\
+	A^1 & =\tfrac45E_{11}, \\
+	A^2 & =\tfrac35E_{01}, \\
+	A^3 & =\tfrac35E_{10}.
+\end{align}
+The squared scales are $(1\pm\lambda)/2$ for $\lambda=7/25$.
+Reading the tensor in the vertical direction gives
+$M^{(i,j)}=A^i\otimes A^j$, with sixteen physical index pairs.
+Its stacked product factorizes as $A^i\otimes T\otimes A^k$, where
+$T=\sum_jA^j\otimes A^j$ acts on the inner bond and has spectrum
+$\{1,7/25,0,0\}$. Here $T$ denotes this matrix, not a tpCPM in the
+definition of an RFP. Its spectral decomposition gives two weighted
+copies of the same target tensor, with weights $1$ and $7/25$.
+Thus the associated periodic structure coefficient is
+$c^{(L)}=\tr(\chi^L)=1+(7/25)^L$ with
+$\chi=\diag(1,7/25)$, rather than a sum of contributions from
+inequivalent target tensors.
+
+\begin{definition}[The one-label tensors]
+	\label{def:asymex_one_label}
+	\lean{P6Compression.oneLabelM, P6Compression.oneLabelTarget,
+		P6Compression.oneLabelStacked, P6Compression.oneLabelBlocks,
+		P6Compression.oneLabelWeights}
+	\leanok
+	\uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+	The tensor read in the vertical direction is
+	$M^{(i,j)}=A^i\otimes A^j$, with the matrices
+	(\ref{eq:asymex_one_label_matrices}), of bond dimension four.
+	Viewed as a matrix product tensor over the sixteen physical index
+	pairs, it is the target tensor. Let $B$ be its stacked product with
+	itself, of bond dimension sixteen. The two target tensors are copies
+	of $M$ with weights $\mu_0=1$ and $\mu_1=7/25$.
+\end{definition}
+
+\begin{center}
+	% Formula: the periodic contraction of the vertical tensor $M$ with
+	% the inner-bond state $\sigma=\sum_b\lambda_b\Pi_b$ inserted on
+	% every bond, whose weights are the spectrum $\{1,7/25,0,0\}$ of
+	% $T=\sum_jA^j\otimes A^j$ (\S\ref{sec:asymex_rfp_basis}); this is
+	% the spectral mechanism behind
+	% Theorem~\ref{thm:asymex_one_label_compression}.
+	% Source: \S\ref{sec:asymex_one_label}, introductory paragraph.
+	% Ink-to-index map: the two explicit dot nodes are the vertical
+	% tensor $M$, each carrying its physical leg of the pair alphabet;
+	% each ring is the inner-bond state $\sigma$, with no physical leg
+	% of its own; the trailing dots abbreviate the remaining alternating
+	% $M$-$\sigma$ pairs of the periodic ring.
+	% Contraction set: every virtual bond, alternating $M$ and $\sigma$,
+	% closed around the ring; no leg is left open.
+	% Boundary signature: (virtual-west=0 | virtual-east=0 |
+	% physical-up=2 | physical-down=0) for the finite schematic shown.
+	\tenkzkernel
+	\begin{tenkz}[cols=6, boundary=periodic, physical=up]
+		\tn[label pos=135, ports={90:physical:$a_1$}]{M} &
+		\tn[skin=ring]{\sigma} &
+		\tn[label pos=135, ports={90:physical:$a_2$}]{M} &
+		\tn[skin=ring]{\sigma} &
+		\tn[skin=dots]{} & \tn[skin=ring]{\sigma}
+	\end{tenkz}
+	\qquad $\sigma=\sum_b\lambda_b\,\Pi_b$
+\end{center}
+
+\begin{theorem}[Normality of the one-label target]
+	\label{thm:asymex_one_label_normal}
+	\lean{P6Compression.oneLabelTarget_isNormal}
+	\leanok
+	\uses{def:asymex_one_label, def:normal}
+	The vertical tensor is normal at blocking length one in the sense of
+	Definition~\ref{def:normal}: its sixteen matrices are scaled matrix
+	units covering every position of the four-by-four matrix algebra.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_normal_units}
+	Each of the sixteen positions is realized by one of the sixteen letters
+	with a nonzero integer factor, a finite verification over integer
+	matrices; Theorem~\ref{thm:asymex_normal_units} then gives normality.
+\end{proof}
+
+\begin{theorem}[Split compression of the one-label fixed point]
+	\label{thm:asymex_one_label_compression}
+	% Principal declaration: P6Compression.oneLabel_isReduction.
+	\lean{P6Compression.oneLabelCompression, P6Compression.oneLabel_isReduction,
+		P6Compression.oneLabel_left_mul_right_of_ne, P6Compression.oneLabel_z_eq,
+		P6Compression.oneLabel_dim_eq, P6Compression.oneLabel_remainder,
+		P6Compression.oneLabel_mul_right_eq_right_mul,
+		P6Compression.oneLabel_left_mul_eq_mul_left}
+	\leanok
+	\uses{def:asymex_one_label, thm:asym_multiblock}
+	The stacked tensor $B$ of Definition~\ref{def:asymex_one_label} has the
+	block triangular form of Theorem~\ref{thm:asym_multiblock} for the two
+	weighted copies $C_s=\mu_sM$, with an eight-dimensional zero
+	complement, $z=8$, and $16=4+4+8$. The compression pairs are mutually
+	biorthogonal and satisfy $W_sB^wV_s=C_s^w$ for every word.
+	The remainder vanishes identically, and the compression maps
+	intertwine the one-site matrices in both directions:
+	$B^aV_s=V_s(\mu_sM^a)$ and $W_sB^a=(\mu_sM^a)W_s$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_stacked_pair, prop:asym_projector_weighted_sum}
+	Multiplying the stacked tensor by two and expanding it in the adapted
+	basis of Section~\ref{sec:asymex_rfp_basis} gives the integer matrix
+	identity of Theorem~\ref{thm:asymex_stacked_pair} with the integer
+	coefficients $25$ and $7$, a finite verification over the sixteen
+	physical indices. The matching scalar identity holds because the two
+	weights are $1$ and $7/25$.
+	Proposition~\ref{prop:asym_projector_weighted_sum} then supplies the
+	compression maps, the vanishing remainder and the one-site
+	intertwining identities, with a zero complement of dimension
+	$8=2\cdot4$.
+\end{proof}
+
+\begin{center}
+	% Formula: B^aV_s=V_s(\mu_sM^a) and W_sB^a=(\mu_sM^a)W_s of
+	% Theorem~\ref{thm:asymex_one_label_compression}, for the weights
+	% $\mu_s\in\{1,7/25\}$.
+	% Source: Theorem~\ref{thm:asymex_one_label_compression}.
+	% Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
+	% the square node is the stacked source $B$ or the weighted target
+	% $\mu_sM$.
+	% Contraction set: the single virtual bond joining the ring to the
+	% square node in each pair; the physical pair leg $a$ remains open.
+	% Boundary signature: (virtual-west=1 | virtual-east=1 |
+	% physical-up=1 | physical-down=0) for each pictured equality.
+	\tenkzkernel
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$a$}]{\mu_sM}
+	\end{tenkz}
+	\\[2ex]
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$a$}]{B}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$a$}]{\mu_sM} & \tn[skin=ring]{W_s}
+	\end{tenkz}
+\end{center}
+
+\begin{theorem}[The one-label structure coefficient]
+	\label{thm:asymex_one_label_trace}
+	\lean{P6Compression.oneLabel_trace_evalWord}
+	\leanok
+	\uses{def:asymex_one_label}
+	For every nonempty word $w$ over the sixteen-letter alphabet,
+	\begin{align}
+		\tr(B^w) & =\left(1+(\tfrac{7}{25})^{|w|}\right)\tr(M^w).
+		\label{eq:asymex_one_label_trace}
+	\end{align}
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_one_label_compression, prop:asym_compression_trace}
+	Proposition~\ref{prop:asym_compression_trace} applied to the compression
+	in Theorem~\ref{thm:asymex_one_label_compression} gives the sum of the
+	two weighted target traces. Pulling each weight out of its word
+	evaluation contributes $1$ and $(7/25)^{|w|}$.
+\end{proof}
+
+\section{The graded quantum-dimer twist}%
+\label{sec:asymex_dimer}
+
+In the two-sector graded quantum-dimer twist, a horizontal bond index is a
+triple $(p,p',k)$ of bits: the ket and bra indices of the left half-bond
+and a sector label. The vertical site space is $\C^2\otimes\C^2$.
+Each nonzero matrix of the sector-$f$ tensor is a scaled matrix unit
+with scale $\tfrac12C_k[p][p']\tau_k[f]$, where
+$C_0=xP_++yP_-$, $C_1=xP_+-yP_-$,
+$\tau_0=(1,1)$ and $\tau_1=(1,-1)$.
+Matrices whose two horizontal bond indices have different sector labels
+vanish.
+
+The target tensors for the stacked product of sectors $f$ and $f'$ are
+the sectors $f+f'$ and $f+f'+1$, with addition modulo two, and their
+weights are $x/2$ and $y/2$. At $x=7/8$, $y=1/8$, these weights are
+$7/16$ and $1/16$. Unlike the one-label example, the two contributions
+multiply different target tensors. For the product of sector zero with
+itself, the periodic structure coefficients are
+$c_{0,0,0}^{(L)}=(7/16)^L$ and
+$c_{0,0,1}^{(L)}=(1/16)^L$, the power sums of the one-dimensional
+positive diagonal matrices $\chi_{0,0,0}=(7/16)$ and
+$\chi_{0,0,1}=(1/16)$, respectively.
+The compression and trace theorems below concern this pair of sectors.
+
+\begin{definition}[The sector tensors and their stacked product]
+	\label{def:asymex_dimer}
+	\lean{P6Compression.dimerM, P6Compression.dimerTarget,
+		P6Compression.dimerStacked, P6Compression.dimerBlocks,
+		P6Compression.dimerWeights}
+	\leanok
+	\uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+	At $x=7/8$ and $y=1/8$, the sector-$f$ tensor has, at the index pair
+	$(a,b)$ of horizontal bonds, the scaled matrix unit whose row is the
+	pair of ket bits of $a$ and $b$, whose column is the pair of bra bits,
+	and whose scale is $\tfrac12C_k[p][p']\tau_k[f]$ for their common
+	sector label $k$. It vanishes when the two sector labels differ.
+	Read in the vertical direction, over the sixty-four index pairs,
+	this gives the target tensor $M_f$.
+	The stacked product of the sector-$f$ and sector-$f'$ tensors has
+	bond dimension sixteen. The two target tensors are $M_{f+f'}$ and
+	$M_{f+f'+1}$ with weights $7/16$ and $1/16$, respectively, where
+	sector addition is modulo two.
+\end{definition}
+
+\begin{center}
+	% Formula: the periodic contraction of the sector-$f$ tensor $M_f$
+	% with the inner-bond state $\sigma=\sum_b\lambda_b\Pi_b$ inserted
+	% on every bond, the same adapted-basis mechanism of
+	% \S\ref{sec:asymex_rfp_basis} that gives the weights $7/16$ and
+	% $1/16$.
+	% Source: \S\ref{sec:asymex_dimer}, introductory paragraph.
+	% Ink-to-index map: the two explicit dot nodes are the sector tensor
+	% $M_f$, each carrying its physical leg of the pair alphabet; each
+	% ring is the inner-bond state $\sigma$, with no physical leg of its
+	% own; the trailing dots abbreviate the remaining alternating
+	% $M_f$-$\sigma$ pairs of the periodic ring.
+	% Contraction set: every virtual bond, alternating $M_f$ and
+	% $\sigma$, closed around the ring; no leg is left open.
+	% Boundary signature: (virtual-west=0 | virtual-east=0 |
+	% physical-up=2 | physical-down=0) for the finite schematic shown.
+	\tenkzkernel
+	\begin{tenkz}[cols=6, boundary=periodic, physical=up]
+		\tn[label pos=135, ports={90:physical:$a_1$}]{M_f} &
+		\tn[skin=ring]{\sigma} &
+		\tn[label pos=135, ports={90:physical:$a_2$}]{M_f} &
+		\tn[skin=ring]{\sigma} &
+		\tn[skin=dots]{} & \tn[skin=ring]{\sigma}
+	\end{tenkz}
+	\qquad $\sigma=\sum_b\lambda_b\,\Pi_b$
+\end{center}
+
+\begin{theorem}[Normality of the sectors]
+	\label{thm:asymex_dimer_normal}
+	\lean{P6Compression.dimerTarget_isNormal}
+	\leanok
+	\uses{def:asymex_dimer, def:normal}
+	Each sector tensor is normal at blocking length one in the sense of
+	Definition~\ref{def:normal}: its thirty-two nonzero matrices are
+	scaled matrix units covering every position of the four-by-four
+	matrix algebra.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_normal_units}
+	Sixteen letters lying in the sector label zero, where the scale does
+	not depend on $f$, realize the sixteen positions with nonzero integer
+	factors, a finite verification over integer matrices;
+	Theorem~\ref{thm:asymex_normal_units} then gives normality.
+\end{proof}
+
+\begin{theorem}[Split compression of the dimer fusion]
+	\label{thm:asymex_dimer_compression}
+	% Principal declaration: P6Compression.dimer_isReduction.
+	\lean{P6Compression.dimerCompression, P6Compression.dimer_isReduction,
+		P6Compression.dimer_left_mul_right_of_ne, P6Compression.dimer_z_eq,
+		P6Compression.dimer_dim_eq, P6Compression.dimer_remainder,
+		P6Compression.dimer_mul_right_eq_right_mul,
+		P6Compression.dimer_left_mul_eq_mul_left}
+	\leanok
+	\uses{def:asymex_dimer, thm:asym_multiblock}
+	For the product of sector zero with itself, let $B$ be the stacked
+	tensor of Definition~\ref{def:asymex_dimer}.
+	It has the block triangular form of
+	Theorem~\ref{thm:asym_multiblock} for the two weighted target tensors
+	$C_s=\mu_sM_s$, where $\mu_0=7/16$ and $\mu_1=1/16$, with an
+	eight-dimensional zero complement, $z=8$, and $16=4+4+8$.
+	The compression pairs are mutually biorthogonal and satisfy
+	$W_sB^wV_s=C_s^w$ for every word. The remainder vanishes identically,
+	and the compression maps intertwine the one-site matrices in both
+	directions.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_stacked_pair, prop:asym_projector_weighted_sum}
+	A matrix of the stacked tensor vanishes unless its two outer
+	horizontal bond indices carry the same sector label. For a matching
+	pair, the sum over the intermediate index runs over the four bond
+	indices of that label. Multiplying the resulting matrix by two and
+	expanding it in the adapted basis of
+	Section~\ref{sec:asymex_rfp_basis} gives the integer matrix identity
+	of Theorem~\ref{thm:asymex_stacked_pair} with coefficients $7$ and
+	$1$, a finite verification over the sixty-four physical indices in
+	each of the two sector-label cases. The matching scalar identity
+	holds because the weights are $7/16$ and $1/16$.
+	Proposition~\ref{prop:asym_projector_weighted_sum} then supplies the
+	compression maps, the vanishing remainder and the one-site
+	intertwining identities.
+\end{proof}
+
+\begin{center}
+	% Formula: the sitewise intertwiners B^aV_s=V_s(\mu_sM_s^a) and
+	% W_sB^a=(\mu_sM_s^a)W_s of Theorem~\ref{thm:asymex_dimer_compression},
+	% for the two weighted target sectors $s\in\{f+f',f+f'+1\}$ with
+	% weights $\mu_s\in\{7/16,1/16\}$.
+	% Source: Theorem~\ref{thm:asymex_dimer_compression}.
+	% Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
+	% the square node is the stacked source $B$ or the weighted sector
+	% target $\mu_sM_s$.
+	% Contraction set: the single virtual bond joining the ring to the
+	% square node in each pair; the physical pair leg $a$ remains open.
+	% Boundary signature: (virtual-west=1 | virtual-east=1 |
+	% physical-up=1 | physical-down=0) for each pictured equality.
+	\tenkzkernel
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$a$}]{B} & \tn[skin=ring]{V_s}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{V_s} &
+		\tn[label pos=s, ports={90:physical:$a$}]{\mu_sM_s}
+	\end{tenkz}
+	\\[2ex]
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$a$}]{B}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$a$}]{\mu_sM_s} & \tn[skin=ring]{W_s}
+	\end{tenkz}
+\end{center}
+
+\begin{theorem}[The dimer structure coefficients]
+	\label{thm:asymex_dimer_trace}
+	\lean{P6Compression.dimer_trace_evalWord}
+	\leanok
+	\uses{def:asymex_dimer}
+	For the product of sector zero with itself and every nonempty word
+	$w$ over the sixty-four-letter alphabet,
+	\begin{align}
+		\tr(B^w)
+		 & =(\tfrac{7}{16})^{|w|}\tr(M_0^w)
+		+(\tfrac{1}{16})^{|w|}\tr(M_1^w),
+		\label{eq:asymex_dimer_trace}
+	\end{align}
+	where $M_0$ and $M_1$ are the two sector tensors.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_dimer_compression, prop:asym_compression_trace}
+	Proposition~\ref{prop:asym_compression_trace} applied to the compression
+	in Theorem~\ref{thm:asymex_dimer_compression} gives the sum of the two
+	weighted target traces. Pulling each weight out of its word
+	evaluation gives the factors $(7/16)^{|w|}$ and $(1/16)^{|w|}$ in
+	(\ref{eq:asymex_dimer_trace}).
+\end{proof}
+
+\begin{remark}[Scope of the dimer fusion identities]
+	\label{rem:asymex_dimer_scope}
+	Theorems~\ref{thm:asymex_dimer_compression}
+	and~\ref{thm:asymex_dimer_trace} concern the product of sector zero
+	with itself. The remaining three pairs of sectors satisfy the same
+	one-site matrix identity, with the same adapted basis and weights,
+	and with targets $M_{f+f'}$ and $M_{f+f'+1}$. For each pair this
+	requires a separate verification over the sixty-four physical
+	indices, which is not carried out here.
+\end{remark}

@@ -1,0 +1,178 @@
+\section{Structure coefficients at every positive length}
+\label{sec:asym_unblocked_coefficients}
+
+Theorem~\ref{thm:asym_power_sum_coefficients} concerns blocked lengths and
+eventual coefficients. The result below gives a power-sum expansion at every
+positive original length, without blocking. Normality means injectivity after
+some blocking, as in Definition~\ref{def:normal}; the tensors need not be
+normalized. Separation excludes gauge equivalence up to any nonzero complex
+scalar, not only a unit-modulus phase.
+
+\begin{theorem}[Uniqueness of nonzero weights from tail power sums]
+    \label{thm:asym_tail_weights}
+    \lean{Multiset.eq_of_notMem_zero_of_forall_sum_map_pow_eq,
+      Multiset.eq_zero_of_notMem_zero_of_forall_sum_map_pow_eq_zero}
+    \leanok
+    Let $\Lambda$ and $\Lambda'$ be finite multisets in $\C\setminus\{0\}$.
+    If their power sums agree for all sufficiently large integers $N$, then
+    $\Lambda=\Lambda'$, including multiplicities. In particular, if the
+    power sums of $\Lambda$ vanish for all sufficiently large $N$, then
+    $\Lambda$ is empty.
+\end{theorem}
+\begin{proof}
+    \leanok
+    List the distinct entries of the two multisets as
+    $z_0,\ldots,z_{r-1}$, and let $b_j$ be the difference of their
+    multiplicities. For a threshold $N_0$ and each $0\leq i<r$,
+    \begin{align}
+        \sum_{j=0}^{r-1}(b_jz_j^{N_0})z_j^i &= 0.
+    \end{align}
+    The Vandermonde matrix is invertible, so $b_jz_j^{N_0}=0$.
+    Since $z_j\neq0$, all multiplicities agree. Comparison with the empty
+    multiset proves the vanishing assertion.
+\end{proof}
+
+\begin{theorem}[Power-sum coefficients without blocking]
+    \label{thm:asym_unblocked_coefficients}
+    \lean{MPSTensor.exists_unblocked_powerSum_coeff_unique,
+      MPSTensor.exists_unblocked_powerSum_coeff}
+    \leanok
+    \uses{def:normal}
+    Let $B$ be an MPS tensor of bond dimension $D_B$, and let
+    $\{M_\gamma\}_{\gamma\in\Gamma}$ be a finite family of normal MPS
+    tensors on the same physical alphabet, with $D_\gamma>0$.
+    For distinct $\gamma,\delta$ of equal bond dimension, assume there
+    are no $X\in\GL(D_\gamma,\C)$ and $z\in\C\setminus\{0\}$ such that
+    $M_\delta^i=zXM_\gamma^iX^{-1}$ for every physical index $i$.
+    Suppose that for every $N>0$ there are coefficients $c_\gamma^{(N)}$
+    satisfying
+    \begin{align}
+        \ket{V^{(N)}(B)}
+        &=\sum_{\gamma\in\Gamma}c_\gamma^{(N)}
+          \ket{V^{(N)}(M_\gamma)}.
+        \label{eq:asym_unblocked_span}
+    \end{align}
+    Then there are integers $n_\gamma\geq0$ and nonzero complex weights
+    $\mu_{\gamma k}$, indexed by $0\leq k<n_\gamma$, such that for every
+    $N>0$,
+    \begin{align}
+        \ket{V^{(N)}(B)}
+        &=\sum_{\gamma\in\Gamma}
+          \left(\sum_{k=0}^{n_\gamma-1}\mu_{\gamma k}^{N}\right)
+          \ket{V^{(N)}(M_\gamma)}.
+          \label{eq:asym_unblocked_expansion}
+    \end{align}
+    The multiplicities satisfy $\sum_{\gamma\in\Gamma}n_\gamma D_\gamma\leq D_B$.
+    There is a positive threshold $N_0$ such that, for every $N\geq N_0$,
+    any coefficients satisfying~(\ref{eq:asym_unblocked_span}) obey
+    $c_\gamma^{(N)}=\sum_{k=0}^{n_\gamma-1}\mu_{\gamma k}^{N}$.
+    The weight multisets are unique: any finite families of nonzero
+    weights giving an expansion of the form~(\ref{eq:asym_unblocked_expansion})
+    at all sufficiently large lengths have, for each $\gamma$, exactly
+    the same entries with the same multiplicities. Empty weight
+    multisets are allowed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:irred_decomp,thm:periodic_overlap_dichotomy,
+      thm:periodic_basis_eventually_li,thm:asym_tail_weights}
+    Apply Theorem~\ref{thm:irred_decomp}, normalize each nonzero irreducible
+    factor to a periodic tensor, and group factors whose periodic vectors
+    are proportional by a fixed nonzero scalar raised to the length.
+    The irreducible-form framework is described in
+    Ref.~\cite{DeLasCuevas2017Irreducible}. This gives separated periodic
+    representatives $A_j$ of dimensions $d_j$, positive multiplicities
+    $r_j$, and nonzero weights $a_{jq}$ such that, for every $N>0$,
+    \begin{align}
+        \ket{V^{(N)}(B)}
+        &=\sum_j\left(\sum_{q=0}^{r_j-1}a_{jq}^{N}\right)
+          \ket{V^{(N)}(A_j)}, \label{eq:asym_periodic_expansion}\\
+        \sum_j r_jd_j&\leq D_B.
+    \end{align}
+    Grouping preserves the dimension count. Indeed, if periodic tensors
+    $A,A'$ of periods $m,m'$ have such proportional vectors, then
+    $|O_{AA'}(N)|^2=O_{AA}(N)O_{A'A'}(N)$.
+    Different dimensions would force the left side to tend to zero by
+    Theorem~\ref{thm:periodic_overlap_dichotomy}, whereas along common
+    multiples of the periods the right side tends to $mm'>0$.
+
+    Normalize the targets to period-one tensors $C_\gamma$ and combine
+    them with the representatives not related to any target by an invertible gauge
+    and a nonzero scalar.
+    The combined family has no repeated blocks. On sufficiently large
+    multiples $pn$ of a common period, it is linearly independent by
+    Theorem~\ref{thm:periodic_basis_eventually_li}.
+    Subtracting~(\ref{eq:asym_unblocked_span}) from
+    (\ref{eq:asym_periodic_expansion}), after absorbing matched terms
+    into the targets, forces every unmatched representative to satisfy
+    $\sum_{q=0}^{r_j-1}(a_{jq}^{p})^n=0$ for all sufficiently large $n$.
+    Theorem~\ref{thm:asym_tail_weights} contradicts $r_j>0$.
+    Thus every representative matches a target.
+
+    Choose its matching label $\gamma(j)$ and a nonzero $\theta_j$ so that
+    $\ket{V^{(N)}(M_{\gamma(j)})}
+      =\theta_j^N\ket{V^{(N)}(A_j)}$.
+    For each target, collect the weights $a_{jq}/\theta_j$ over its
+    matching representatives. This proves~(\ref{eq:asym_unblocked_expansion}).
+    Since $d_j=D_{\gamma(j)}$, the dimension bound follows.
+    Normalize the normal targets and use their eventual linear independence
+    to compare arbitrary expansion coefficients with these power sums.
+    The nonzero normalization scalars can be cancelled, giving a positive
+    threshold for coefficient uniqueness. Theorem~\ref{thm:asym_tail_weights}, applied to each
+    target, then proves uniqueness against any tail expansion.
+\end{proof}
+
+\begin{theorem}[Power-sum structure coefficients for operator closure]
+    \label{thm:asym_operator_coefficients}
+    \lean{MPOTensor.exists_operatorProduct_powerSum_coeff_unique}
+    \leanok
+    \uses{def:normal}
+    Let $\{M_\gamma\}_{\gamma\in\Gamma}$ be a finite family of MPO
+    tensors of common physical dimension $d$, with $D_\gamma>0$. Regard the pair of physical indices
+    $(i,j)$ as one MPS index. Assume these MPS tensors are normal and,
+    for distinct labels of equal bond dimension, are not related by
+    $M_\delta^{ij}=zXM_\gamma^{ij}X^{-1}$ for all $i,j$, with $z\neq0$
+    and $X$ invertible. Fix $\alpha,\beta\in\Gamma$ and write $O_L(M)$
+    for the periodic operator generated by $M$. Suppose
+    $O_L(M_\alpha)O_L(M_\beta)$ belongs to
+    $\spn_{\C}\{O_L(M_\gamma):\gamma\in\Gamma\}$ for every $L>0$.
+
+    There are complex diagonal matrices $\chi_{\alpha,\beta,\gamma}$
+    of sizes $n_\gamma\geq0$, with nonzero diagonal entries, such that
+    for every $L>0$,
+    \begin{align}
+        O_L(M_\alpha)O_L(M_\beta)
+        &=\sum_{\gamma\in\Gamma}
+          \tr(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
+          \label{eq:asym_operator_expansion}
+    \end{align}
+    Their sizes satisfy $\sum_{\gamma\in\Gamma}n_\gamma D_\gamma
+      \leq D_\alpha D_\beta$.
+    Beyond a positive threshold, any coefficients of this operator
+    expansion equal $c_{\alpha,\beta,\gamma}^{(L)}
+      =\tr(\chi_{\alpha,\beta,\gamma}^{L})$.
+    Any other finite families of nonzero diagonal entries giving such an
+    expansion at all sufficiently large lengths agree target by target,
+    including multiplicities.
+
+    This uses the structure-coefficient notation of
+    Ref.~\cite[Section~4.5]{Cirac2016MPDO_arXiv}, but asserts neither
+    positive weights nor the idempotent condition from that source.
+    No renormalization fixed-point channels or anomaly conclusion are inferred.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_operator_product_mpo,thm:asym_unblocked_coefficients}
+    Form the product tensor $P^{ij}=\sum_s M_\alpha^{is}\otimes M_\beta^{sj}$,
+    of bond dimension $D_\alpha D_\beta$.
+    Theorem~\ref{thm:mpdo_operator_product_mpo} gives
+    $O_L(P)=O_L(M_\alpha)O_L(M_\beta)$.
+    Equality of operators is equivalent, entry by entry, to equality of
+    MPS coefficients on the combined physical alphabet.
+    Apply Theorem~\ref{thm:asym_unblocked_coefficients} to $P$ and take
+    $\chi_{\alpha,\beta,\gamma}$ to have diagonal entries
+    $\{\mu_{\gamma k}\}_{k=0}^{n_\gamma-1}$.
+    The same entrywise equivalence transfers the expansion, eventual
+    coefficient uniqueness, dimension bound, and uniqueness of nonzero
+    entries to operators.
+\end{proof}

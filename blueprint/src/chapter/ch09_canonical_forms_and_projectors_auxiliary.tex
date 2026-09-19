@@ -1,12 +1,12 @@
 \section{Translation-invariant canonical form}
 
-\begin{definition}[Unnormalized positive-length PGVWC07 witness]%
+\begin{definition}[Unnormalized PGVWC07 canonical decomposition at positive lengths]%
     \label{def:pgvwc07_positive_length_witness}
     \lean{MPSTensor.PGVWC07PositiveLengthWitness}
     \leanok
-    An unnormalized positive-length PGVWC07 witness for a tensor~$A$ consists
-    of finitely many blocks $(A_k)_{k=1}^r$ of positive bond dimensions and
-    positive real weights $(a_k)_{k=1}^r$. Each block is unital, has only scalar
+    Consider a decomposition of a tensor~$A$ into finitely many blocks
+    $(A_k)_{k=1}^r$ of positive bond dimensions and positive real weights
+    $(a_k)_{k=1}^r$. Each block is unital, has only scalar
     transfer-map fixed points, and has a diagonal positive-definite fixed point
     $\Lambda_k$ for the adjoint transfer map. Moreover,
     \begin{align}
@@ -19,7 +19,7 @@
     and the retained bond dimensions satisfy $\sum_k\dim(A_k)\le D$.
 \end{definition}
 
-\begin{theorem}[Construction of the positive-length PGVWC07 witness]%
+\begin{theorem}[Existence of the PGVWC07 canonical decomposition]%
     \label{thm:pgvwc07_positive_length_witness}
     \lean{MPSTensor.isIrreducibleTensor_smul}
     \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
@@ -28,7 +28,8 @@
     \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
     \leanok
     \uses{def:pgvwc07_positive_length_witness, thm:nonzero_irreducible_block_decomposition, thm:unital_data_irreducible, thm:irreducible_tensor_to_action, lem:irreducible_action_to_tensor, thm:irreducible_unital_scalar_fixed_point, thm:pgvwc07_dual_diag_unital}
-    Every MPS tensor has an unnormalized positive-length PGVWC07 witness.
+    Every MPS tensor admits a decomposition satisfying
+    Definition~\ref{def:pgvwc07_positive_length_witness}.
     More precisely, the construction has four stages. First, a nonzero
     irreducible block remains irreducible under nonzero scalar rescaling and can
     be put in a unital gauge with scalar fixed-point space and a diagonal
@@ -36,7 +37,7 @@
     each member of a finite nonzero irreducible block family. Third, the
     nonzero irreducible decomposition of an arbitrary tensor supplies that
     family and the total bond-dimension bound. Finally, these blocks, weights,
-    and fixed points form a witness in the sense of
+    and fixed points satisfy
     Definition~\ref{def:pgvwc07_positive_length_witness}.
 \end{theorem}
 
@@ -81,18 +82,19 @@
     invariance preserves every positive-length MPV coefficient, and the block
     dimensions are unchanged. Combining this blockwise result with the initial
     decomposition yields the arbitrary-input unnormalized form and its bound
-    $\sum_k\dim(A_k)\le D$. Together these conclusions give the structured witness.
+    $\sum_k\dim(A_k)\le D$.
 \end{proof}
 
-\begin{theorem}[Finite normalization of a nonempty PGVWC07 witness]%
+\begin{theorem}[Normalization of a nonempty PGVWC07 decomposition]%
     \label{thm:pgvwc07_positive_length_weight_normalization}
     \lean{MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv}
     \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
     \leanok
     \uses{def:pgvwc07_positive_length_witness}
-    Let $W$ be an unnormalized positive-length witness with positive weights
-    $a_k$. If some positive-length MPV coefficient of the original tensor is
-    nonzero, then $W$ has at least one block. For any nonempty witness, define
+    Let $A_k,a_k$ satisfy Definition~\ref{def:pgvwc07_positive_length_witness}.
+    If some positive-length MPV coefficient of the original tensor is
+    nonzero, then the decomposition has at least one block. For a nonempty
+    block family, define
     \begin{align}
         s
          & :=\max_{1\le k\le r}a_k,
@@ -113,8 +115,8 @@
 
 \begin{proof}\leanok
     \uses{def:pgvwc07_positive_length_witness}
-    If the witness had no blocks, its weighted block tensor would have zero MPV
-    coefficients at every positive length, contrary to the assumed nonzero
+    If the decomposition had no blocks, its weighted block tensor would have
+    zero MPV coefficients at every positive length, contrary to the assumed nonzero
     coefficient. Thus $r>0$. Since the finite family $(a_k)$ is nonempty and
     every $a_k>0$, its maximum $s$ is positive. The definition
     $\nu_k=a_k/s$ gives $0<\nu_k\le1$, and any maximizing index has
@@ -150,7 +152,7 @@
 
 \begin{proof}\leanok
     \uses{thm:pgvwc07_positive_length_witness, thm:pgvwc07_positive_length_weight_normalization}
-    Choose the structured witness from
+    Choose the blocks and weights from
     Theorem~\ref{thm:pgvwc07_positive_length_witness}. The assumed nonzero
     coefficient makes its block family nonempty, so
     Theorem~\ref{thm:pgvwc07_positive_length_weight_normalization} supplies
@@ -162,8 +164,8 @@
         =V^{(N)}\!\left(\bigoplus_k\mu_kA_k\right)_\sigma.
         \notag
     \end{align}
-    The witness satisfies all required block conditions and the bond-dimension
-    bound.
+    The decomposition satisfies all required block conditions and the
+    bond-dimension bound.
 \end{proof}
 
 \begin{theorem}[Zero/nonzero alternative for the normalized exact form]%

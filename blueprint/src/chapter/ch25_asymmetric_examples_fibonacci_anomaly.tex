@@ -7,60 +7,61 @@
 \section{The Fibonacci categorical anomaly}%
 \label{sec:asymex_fib_anomaly}
 
-The Fibonacci fusion ring $\Z[\tau]/(\tau^2-\tau-1)$ has no ring
-homomorphism to $\Z$: its two characters, $\varphi=(1+\sqrt5)/2$ and
-$-1/\varphi$, are both irrational. On the lattice this obstruction reads as
-follows. In the theory of matrix product operator symmetries of
-\cite{GarreRubio2023MPOSym}, the multiplicities with which the blocks of a
-symmetric matrix product state reappear under a matrix product operator
-symmetry are nonnegative integers forming a representation of the fusion
-rules \cite[line~683]{GarreRubio2023MPOSym}, and for the Fibonacci symmetry
-the only invariant family of normal states consists of two blocks $x_1,x_\tau$
-with $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$
-\cite[lines~1991--1993]{GarreRubio2023MPOSym}. This section shows that this
-regular representation is realized, and that it is the only possible
-representation: no single normal matrix product state carries the Fibonacci
-symmetry, because the multiplicity would then be a rank-one representation
-of the fusion ring by a nonnegative integer, and the fusion ring has none.
-This is the non-invertible analogue of the statement that a non-trivial
-three-cocycle allows no invariant single-block state
-\cite[line~738]{GarreRubio2023MPOSym}.
+The Fibonacci fusion ring $\Z[\tau]/(\tau^2-\tau-1)$ has no unital ring
+homomorphism to $\Z$: the two possible images of $\tau$ over $\C$,
+$\varphi=(1+\sqrt5)/2$ and $-1/\varphi$, are both irrational.
+In the theory of matrix product operator symmetries of
+Ref.~\cite{GarreRubio2023MPOSym}, the multiplicities with which the normal
+blocks of a symmetric matrix product state reappear under the symmetry
+are nonnegative integers forming a representation of the fusion
+rules~\cite[line~683]{GarreRubio2023MPOSym}. The Fibonacci example has two
+blocks $x_1,x_\tau$ with $\tau\cdot x_1=x_\tau$ and
+$\tau\cdot x_\tau=x_1+x_\tau$~\cite[lines~1991--1993]{GarreRubio2023MPOSym}.
+This section realizes that regular representation and proves that no
+single normal tensor of positive bond dimension can carry the symmetry
+with length-independent scalar action and with the unit acting as the
+identity. The scalar would have to be a nonnegative integer satisfying
+$m^2=m+1$. This obstruction does not classify representations with more
+than one block; in particular, it does not exclude direct sums of the
+regular representation. It is a non-invertible analogue of the obstruction
+to an invariant single-block state from a non-trivial
+three-cocycle~\cite[line~738]{GarreRubio2023MPOSym}, not a computation of a
+three-cocycle associator.
 
-\begin{definition}[The Fibonacci nimrep data]%
+\begin{definition}[The Fibonacci fusion matrices]%
     \label{def:asymex_fib_anomaly_nim}
     \lean{FibonacciCompression.fibFusionMatrix, FibonacciCompression.fibNim,
         FibonacciCompression.fibBlock}
     \leanok
     \uses{def:asymex_fib}
-    Label the two objects of the category, as in Definition~\ref{def:asymex_fib},
-    by $0=1$ for the trivial object and $1=\tau$. The \emph{fusion matrix}
-    is
+    Index the two simple objects of Definition~\ref{def:asymex_fib} by
+    $0$ and $1$, corresponding respectively to the trivial object $1$
+    and the object $\tau$. The fusion matrix
     \begin{align}
-        N_\tau & =\begin{pmatrix}0&1\\1&1\end{pmatrix},
+        N_\tau & =\begin{pmatrix}0&1\\1&1\end{pmatrix}
         \label{eq:asymex_fib_anomaly_matrix}
     \end{align}
-    the matrix of multiplication by $\tau$ in the basis $1,\tau$ of the
-    fusion ring. The \emph{structure-constant family} $N_a$, for
-    $a\in\{1,\tau\}$, is its regular representation: $N_1=\id_2$ and
-    $N_\tau$ is (\ref{eq:asymex_fib_anomaly_matrix}), so that
-    $N_{ab}^c$ is the $(b,c)$ entry of $N_a$. The corresponding family of
-    matrix product operator blocks assigns to the trivial label the
-    admissibility block $B_1$ and to $\tau$ the block $B_\tau$ of
+    represents multiplication by $\tau$ in the basis $1,\tau$ of the
+    fusion ring. Together with $N_1=\Id_2$, it gives the regular
+    representation by matrices with nonnegative integer entries.
+    For $a,b,c\in\{1,\tau\}$, let $N_{ab}^c$ be the $(b,c)$ entry of
+    $N_a$. The corresponding matrix product operator tensors are the
+    admissibility block $B_1$ and the block $B_\tau$ of
     Definition~\ref{def:asymex_fib}.
 \end{definition}
 
-\begin{theorem}[The fusion matrix squares to itself plus the identity]%
+\begin{theorem}[The Fibonacci relation for the fusion matrix]%
     \label{thm:asymex_fib_anomaly_matrix_sq}
     \lean{FibonacciCompression.fibFusionMatrix_sq}
     \leanok
     \uses{def:asymex_fib_anomaly_nim}
-    $N_\tau^2=N_\tau+\id_2$, as matrices with nonnegative integer entries.
+    $N_\tau^2=N_\tau+\Id_2$, as matrices with nonnegative integer entries.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    A finite verification: $N_\tau^2=\begin{pmatrix}1&1\\1&2\end{pmatrix}
-        =N_\tau+\id_2$.
+    Direct multiplication gives
+    $N_\tau^2=\begin{pmatrix}1&1\\1&2\end{pmatrix}=N_\tau+\Id_2$.
 \end{proof}
 
 \begin{theorem}[The fusion ring on the periodic operators]%
@@ -69,8 +70,7 @@ three-cocycle allows no invariant single-block state
     \leanok
     \uses{def:asymex_fib_anomaly_nim, thm:asymex_fib_fusion}
     For every pair of labels $a,b\in\{1,\tau\}$ and every positive length
-    $L$, the periodic operators of the corresponding blocks compose
-    according to the structure constants,
+    $L$, the periodic operators $O_a=O_a(L)=O_L(B_a)$ satisfy
     \begin{align}
         O_aO_b & =\sum_cN_{ab}^cO_c,
         \label{eq:asymex_fib_anomaly_fusion_algebra}
@@ -132,7 +132,7 @@ three-cocycle allows no invariant single-block state
     Theorem~\ref{thm:asymex_fib_fusion}.
 \end{proof}
 
-\begin{theorem}[The regular representation on the pair of normal states]%
+\begin{theorem}[The regular representation on a pair of normal states]%
     \label{thm:asymex_fib_anomaly_nim_rep}
     \lean{FibonacciCompression.fibonacci_nim_rep,
         FibonacciCompression.mpo_fibOne_mulVec_chain}
@@ -143,14 +143,14 @@ three-cocycle allows no invariant single-block state
     bond dimension, with periodic vectors $\Psi_1,\Psi_\tau$, realizing the
     all-$\tau$ product state and its image under $O_\tau$
     (Corollary~\ref{cor:asym_action_tensors}), such that at every positive
-    length $L$ the periodic operator of the block $a$ carries $\Psi_s$ to
-    the combination prescribed by the structure constants,
+    length $L$,
     \begin{align}
         O_a\Psi_s & =\sum_tN_{as}^t\Psi_t,
         \label{eq:asymex_fib_anomaly_nim_rep}
     \end{align}
     that is, $O_\tau\Psi_1=\Psi_\tau$, $O_\tau\Psi_\tau=\Psi_1+\Psi_\tau$,
-    and $O_1$ fixes both $\Psi_1$ and $\Psi_\tau$. The multiplicities are
+    and $O_1$ fixes both $\Psi_1$ and $\Psi_\tau$. Here the dependence of
+    the periodic vectors on $L$ is suppressed. The multiplicities are
     the rows of the fusion matrix (\ref{eq:asymex_fib_anomaly_matrix}).
     \begin{center}
         % Formula/source: the sitewise fusion tensors underlying
@@ -206,20 +206,19 @@ three-cocycle allows no invariant single-block state
     \leanok
     \uses{def:normal}
     Let $B$ be a matrix product state tensor and $A$ a normal tensor of
-    positive bond dimension, over the same alphabet. If every nonempty word
-    trace of $B$ is one scalar $c$ times the corresponding word trace of
-    $A$, $\tr(B^w)=c\,\tr(A^w)$ for every nonempty word $w$, then $c$ is a
-    nonnegative integer.
+    positive bond dimension, over the same alphabet. If a scalar $c$
+    satisfies $\tr(B^w)=c\,\tr(A^w)$ for every nonempty word $w$, then $c$
+    is a nonnegative integer.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Normality writes a matrix unit of $A$ as a combination
-    $\sum_ux_uA^u$ of words of one positive length $\ell$; the same
-    combination $N=\sum_ux_uB^u$ of words of $B$ then satisfies
-    $\tr(N^k)=c\,\tr\bigl((\sum_ux_uA^u)^k\bigr)=c$ for every positive $k$,
-    and a scalar whose every positive power of one fixed matrix has this
-    constant trace is a nonnegative integer.
+    Normality writes a diagonal matrix unit of $A$ as a combination
+    $\sum_ux_uA^u$ of words of one positive length $\ell$. The same
+    combination $Q=\sum_ux_uB^u$ then satisfies
+    $\tr(Q^k)=c\,\tr((\sum_ux_uA^u)^k)=c$ for every positive $k$.
+    A constant trace of all positive powers of a fixed matrix is a
+    nonnegative integer.
 \end{proof}
 
 \begin{theorem}[Rank-one actions on a normal tensor are integral]%
@@ -249,9 +248,9 @@ three-cocycle allows no invariant single-block state
     \uses{thm:asymex_fib_anomaly_fusion_algebra,
         thm:asymex_fib_anomaly_integral_action}
     Let $A$ be a normal tensor of positive bond dimension, with periodic
-    vectors $\Psi_A$. If the periodic operator of the $\tau$ block acts on
-    $\Psi_A$ at every positive length by one length-independent scalar $c$,
-    $O_\tau\Psi_A=c\Psi_A$, then $c=0$.
+    vectors $\Psi_A=\ket{V^{(L)}(A)}$. If the periodic operator of the
+    $\tau$ block acts on $\Psi_A$ at every positive length by one
+    length-independent scalar $c$, $O_\tau\Psi_A=c\Psi_A$, then $c=0$.
 \end{theorem}
 
 \begin{proof}
@@ -263,10 +262,10 @@ three-cocycle allows no invariant single-block state
     $O_1O_\tau=O_\tau$ (Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra})
     to $\Psi_A$ gives $O_1\Psi_A=\Psi_A$. The fusion rule
     $O_\tau O_\tau=O_1+O_\tau$ applied to $\Psi_A$ then gives
-    $m^2\Psi_A=(m+1)\Psi_A$, so $m^2=m+1$ by injectivity of a
-    length-$(\ell+1)$ periodic vector of a normal tensor, where $\ell$ is
-    the injectivity length of $A$; no natural number satisfies this
-    equation, a contradiction. Hence $m=0$.
+    $m^2\Psi_A=(m+1)\Psi_A$. At length $\ell+1$, where $\ell$ is an
+    injectivity length of $A$, injectivity ensures that the periodic
+    vector is nonzero. Hence $m^2=m+1$, which no nonnegative integer
+    satisfies. Therefore $m=0$.
 \end{proof}
 
 \begin{theorem}[No normal matrix product state is Fibonacci symmetric]%
@@ -277,21 +276,23 @@ three-cocycle allows no invariant single-block state
     There is no positive bond dimension $D$, normal tensor $A$ of bond
     dimension $D$, and scalar $c$, such that at every positive length $L$
     the periodic operators satisfy $O_1\Psi_A=\Psi_A$ and
-    $O_\tau\Psi_A=c\Psi_A$. Equivalently, no normal matrix product state of
-    positive bond dimension carries a one-dimensional representation of the
-    Fibonacci fusion algebra in which $O_1$ acts as the identity: the
-    lattice form of the absence of a fiber functor on the Fibonacci fusion
-    ring. The pair of normal states of
+    $O_\tau\Psi_A=c\Psi_A$. Thus no normal matrix product state of
+    positive bond dimension realizes a one-dimensional representation of
+    the Fibonacci fusion algebra with length-independent scalar action
+    and with $O_1$ acting as the identity. The obstruction is the absence
+    of a nonnegative integer $m$ satisfying $m^2=m+1$.
+    The pair of normal states of
     Theorem~\ref{thm:asymex_fib_anomaly_nim_rep} shows that two blocks
     suffice, so the minimal number of blocks of a Fibonacci-symmetric
-    family of normal states is two.
+    family of normal states with length-independent multiplicities is two.
 \end{theorem}
 
 \begin{proof}
     \leanok
     If such $A$, $c$ existed, Theorem~\ref{thm:asymex_fib_anomaly_eigenvalue_zero}
-    would give $c=0$, so $O_\tau\Psi_A=0$; the fusion rule
-    $O_\tau O_\tau=O_1+O_\tau$ applied to $\Psi_A$ then gives
-    $0=O_1\Psi_A=\Psi_A$, contradicting that the periodic vector of a
-    normal tensor of positive bond dimension is nonzero.
+    would give $c=0$, so $O_\tau\Psi_A=0$. The fusion rule
+    $O_\tau O_\tau=O_1+O_\tau$ applied to $\Psi_A$ would then give
+    $0=O_1\Psi_A=\Psi_A$ at every positive length. This contradicts the
+    nonvanishing of the periodic vectors of a normal tensor of positive
+    bond dimension at sufficiently large lengths.
 \end{proof}

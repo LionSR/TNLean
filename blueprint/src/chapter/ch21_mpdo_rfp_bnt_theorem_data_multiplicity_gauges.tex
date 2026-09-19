@@ -1,0 +1,492 @@
+\begin{definition}[BNT multiplicity-spectrum comparison]%
+	\label{def:mpdo_bnt_multiplicity_spectrum_comparison}
+	\lean{MPOTensor.BNTMultiplicitySpectrumComparison}
+	\leanok
+	\uses{def:mpdo_diagonal_chi_family, def:mpdo_bnt_label_trace_scalar_family}
+	Let $\mu_\alpha$ and $\nu_\gamma$ be diagonal matrices with complex
+	entries, representing one-site and two-site multiplicities, respectively.
+	A multiplicity-spectrum comparison requires
+	$\tr(\mu_\alpha)=m_\alpha$ and, for every $\gamma$, equality with
+	multiplicity between the entries of $\nu_\gamma$ and the products
+	$\mu_{\alpha,i}\mu_{\beta,j}\chi_{\alpha,\beta,\gamma,k}$.
+	For the positive diagonal matrices in the vertical canonical
+	decompositions, this is the conclusion of the BNT comparison and positive
+	power-sum argument in
+	\cite[Appendix~C.4, lines~2048--2058]{Cirac2016MPDO_arXiv}.
+	The definition itself does not require positivity or a realization by
+	an MPDO tensor.
+\end{definition}
+
+\begin{definition}[Two-site multiplicity spectrum]%
+	\label{def:mpdo_bnt_two_site_multiplicity_spectrum}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum}
+	\leanok
+	\uses{def:mpdo_bnt_algebra_tensor_clause}
+	Let $M$ have a vertical decomposition
+	$\widetilde M=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$
+	with a BNT $\{M_\alpha\}_\alpha$ and positive diagonal matrices
+	$\mu_\alpha$, satisfying the BNT algebra condition.
+	A two-site multiplicity spectrum consists of a vertical canonical
+	decomposition
+	\begin{align}
+		\widetilde{M^{(2)}}
+		 & =\bigoplus_\delta \nu_\delta\otimes A_\delta,
+		\notag
+	\end{align}
+	a bijection $\sigma$ from the one-site sectors to the two-site sectors such
+	that $M_\gamma$ and $A_{\sigma(\gamma)}$ generate the same matrix product
+	vectors at every positive length, and, for every $\gamma$, the multiset
+	equality
+	\begin{align}
+		\bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
+		 & =
+		\bigl\{\mu_{\alpha,i}\mu_{\beta,j}
+		\chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}.
+		\notag
+	\end{align}
+	This is the decomposition and comparison used in
+	\cite[Appendix~C.4, lines~2046--2058]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Exact invertible gauges for the two-site sectors]%
+	\label{def:mpdo_bnt_two_site_exact_sector_gauge}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge}
+	\leanok
+	\uses{def:mpdo_bnt_two_site_multiplicity_spectrum}
+	Exact invertible gauges for a two-site multiplicity spectrum require,
+	for every one-site sector $\gamma$, equality
+	of the paired bond dimensions $d_\gamma=d_{\sigma(\gamma)}$ and an
+	invertible matrix $Z_\gamma\in\GL(d_\gamma,\C)$ such that, for every
+	physical index $i$ of the vertical tensor,
+	\begin{align}
+		A_{\sigma(\gamma)}^i
+		 & =Z_\gamma M_\gamma^i Z_\gamma^{-1}.
+		\notag
+	\end{align}
+	Thus the matched normal tensors have no residual scalar phase. This is the
+	exact invertible conjugacy in
+	\cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
+	The definition does not require $Z_\gamma$ to be unitary.
+\end{definition}
+
+\begin{theorem}[Two-site multiplicity spectrum from the BNT algebra
+		condition]%
+	\label{thm:mpdo_bnt_algebra_tensor_clause_spectrum}
+	\lean{MPOTensor.BNTAlgebraTensorClause.%
+		toTwoSiteExactSectorGauge}
+	\lean{MPOTensor.BNTAlgebraTensorClause.%
+		toTwoSiteMultiplicitySpectrum}
+	\leanok
+	\uses{def:cpsv_canonical_form, def:mpdo, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_two_site_multiplicity_spectrum, def:mpdo_bnt_two_site_exact_sector_gauge, def:mpdo_bnt_multiplicity_spectrum_comparison, def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
+	Let $M$ generate MPDOs, and suppose that its MPS tensor obtained by
+	pairing the physical indices is in CF. Suppose also that $M$ has a
+	vertical decomposition
+	$\widetilde M=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha$
+	satisfying the BNT algebra condition.
+	There is a vertical canonical decomposition of the two-site blocking,
+	\begin{align}
+		\widetilde{M^{(2)}}
+		 & =\bigoplus_\delta \nu_\delta\otimes A_\delta.
+		\notag
+	\end{align}
+	Its normal-tensor sectors are in bijection, via $\sigma$, with the sectors
+	of the one-site product expansion, in which every sector occurs.
+	The tensors $M_\gamma$ and $A_{\sigma(\gamma)}$ generate the same matrix
+	product vectors at every positive length and, for every $\gamma$,
+	\begin{align}
+		\bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
+		 & =
+		\bigl\{\mu_{\alpha,i}\mu_{\beta,j}
+		\chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}
+		\label{eq:rfp_multiplicity_spectrum}
+	\end{align}
+	as multisets. This is the multiplicity-spectrum comparison of
+	Appendix~C.4, lines~2046--2058
+	of~\cite{Cirac2016MPDO_arXiv}. The paired bond dimensions agree,
+	and there are invertible matrices $Z_\gamma$ satisfying, for every
+	physical index $i$ of the vertical tensor,
+	\begin{align}
+		A_{\sigma(\gamma)}^i
+		 & =Z_\gamma M_\gamma^i Z_\gamma^{-1}.
+		\label{eq:rfp_sector_conjugacy}
+	\end{align}
+	This statement asserts exact invertible conjugacy, without requiring
+	the matrices $Z_\gamma$ to be unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:mpdo_literal_cpsv_vertical_decomposition_block_two}
+	Multiplying the two one-site decompositions and using the BNT algebra law
+	expresses the two-site closed chain in terms of $O_L(M_\gamma)$, with
+	coefficient
+	\begin{align}
+		\sum_{\alpha,\beta,i,j,k}
+		\bigl(\mu_{\alpha,i}\mu_{\beta,j}
+		\chi_{\alpha,\beta,\gamma,k}\bigr)^L.
+		\notag
+	\end{align}
+	All these coefficients are positive. Hence every basis sector occurs,
+	and the characterization of bases of normal tensors matches these sectors
+	bijectively with those of the two-site vertical canonical decomposition.
+	Normalization makes each matching scalar have modulus one, while
+	positivity of two consecutive coefficients makes it positive; it is
+	therefore one. The normal-tensor matching theorem also supplies equality
+	of the paired bond dimensions and an invertible gauge; after the scalar is
+	one, its gauge-phase relation is precisely the exact conjugacy
+	in~(\ref{eq:rfp_sector_conjugacy}).
+	Eventual linear independence of the basis vectors gives the corresponding
+	equality of power sums. The finite positive power-sum identity then gives
+	the multiset equality~(\ref{eq:rfp_multiplicity_spectrum}).
+\end{proof}
+
+\begin{theorem}[Physical compression onto a conjugate two-site sector]
+	\label{thm:mpdo_bnt_exact_sector_gauge_blocked_corner}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		exists_blockTwo_gauge_sector_corner}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		markedChainCoefficient_gauge_eq_reflectedAdjoint}
+	\leanok
+	\uses{def:mpdo, def:mpdo_bnt_two_site_exact_sector_gauge}
+	Suppose that the one-site and two-site sectors are related by the exact
+	invertible gauges above. Let $\gamma$ be a one-site sector matched with a
+	two-site sector by the bijection $\sigma$, and identify their bond
+	dimensions. There are an
+	isometry $V_\gamma$ from the sector bond space into the blocked physical
+	space and a scalar $c_\gamma>0$ such that, for every vertical letter $v$,
+	\begin{align}
+		V_\gamma^\dagger\widetilde{M^{(2)}}^vV_\gamma
+		 & =c_\gamma Z_\gamma M_\gamma^vZ_\gamma^{-1}.
+		\label{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}
+	\end{align}
+	If, in addition, $M$ generates matrix product density operators, then for
+	every pair of open bond indices and every pair of two-site tail words, the
+	marked-chain coefficient of
+	\begin{align}
+		(Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+			                                    (Z_\gamma^\dagger Z_\gamma)^{-1}
+		\notag
+	\end{align}
+	equals the corresponding reflected-adjoint marked-chain coefficient in
+	the adjoint two-site blocking. This is one of the two marked comparisons
+	in Figures~7--8 of
+	\cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}, applied
+	to the sector matching of Appendix~C.4, lines~2048--2057.
+
+	The compression in~(\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner})
+	selects a conjugate of $M_\gamma$, not $M_\gamma$ itself. It does not
+	provide an isometric compression onto a positive multiple of $M_\gamma$
+	or establish the Gram identity
+	\begin{align}
+		(Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+			                                    (Z_\gamma^\dagger Z_\gamma)^{-1}
+		 & =M_\gamma^v.
+		\notag
+	\end{align}
+	This distinction is documented in
+	\cite{gap:cpsv16_two_site_sector_unitary_gauge_gap}.
+	The comparison with a common unblocked tail below proves the Gram
+	identity without requiring such a compression of the two-site blocking.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:mpdo_blocked_reference_corners, thm:mpdo_gram_dressed_reflected_marked_chain}
+	Choose the first positive-weight copy of the matched two-site sector.
+	Its inclusion is isometric and its compression selects the
+	corresponding weighted normal tensor. Substituting the exact sector
+	conjugacy gives
+	(\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}), with the selected
+	weight as $c_\gamma$. The reflected marked-chain identity for this
+	compression, conjugated on its open indices by $Z_\gamma^\dagger$ and
+	$(Z_\gamma^{-1})^\dagger$, gives the stated equality of marked-chain
+	coefficients; the gauge factors cancel on the reflected side.
+\end{proof}
+
+\begin{theorem}[Physical compression onto a matched one-site sector]
+	\label{thm:mpdo_bnt_exact_sector_one_site_raw_corner}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		exists_oneSite_raw_sector_corner}
+	\leanok
+	\uses{def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_two_site_exact_sector_gauge}
+	In the setting above, each sector $\gamma$ admits an isometry
+	$W_\gamma\colon\C^{d_\gamma}\to\C^d$ and a scalar
+	$a_\gamma>0$ such that, for every vertical letter $v$,
+	\begin{align}
+		W_\gamma^\dagger\widetilde M^vW_\gamma
+		 & =a_\gamma M_\gamma^v.
+		\label{eq:mpdo_bnt_exact_sector_one_site_raw_corner}
+	\end{align}
+	Here the bond space of $M_\gamma$ is
+	identified with that of its matched two-site sector. This compression
+	selects a positive-weight copy in the one-site vertical decomposition of
+	\cite[Proposition~4.13, statement lines~943--951, and Appendix~C.4,
+		lines~2046--2057]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:mpdo_retained_product_spectral_family_exists}
+	Select the first copy of $M_\gamma$ in the one-site vertical direct sum.
+	Its inclusion is isometric. Compressing the reconstruction identity by
+	this inclusion gives
+	(\ref{eq:mpdo_bnt_exact_sector_one_site_raw_corner}), with
+	$a_\gamma$ equal to the positive multiplicity weight of the selected
+	copy. Identify the paired bond spaces using equality of their dimensions.
+\end{proof}
+
+\begin{theorem}[Reflected marked chains with a two-site initial block]
+	\label{thm:mpdo_two_site_prefix_gram_reflected_marked_chain}
+	\lean{MPOTensor.IsMPDO.%
+		markedChainCoefficient_blockTwoPrefix_gramDressing_eq_reflectedAdjoint}
+	\leanok
+	\uses{def:mpdo, def:vertical_tensor_mpdo, def:mpdo_two_site_blocking}
+	Let $M$ generate matrix product density operators, let $A$ be a vertical
+	tensor, and suppose that an isometry $V$ selects from the two-site
+	blocking a positive multiple of an invertible conjugate of $A$.
+	For some scalar $b>0$, this means that, for every vertical letter $v$,
+	\begin{align}
+		V^\dagger\widetilde{M^{(2)}}^vV
+		 & =b\,X A^vX^{-1}.
+		\label{eq:mpdo_two_site_prefix_gauge_corner}
+	\end{align}
+	For every pair of open bond indices and every pair of equal-length words
+	in the original physical alphabet, the marked-chain coefficient of
+	\begin{align}
+		(X^\dagger X)A^v(X^\dagger X)^{-1}
+		\notag
+	\end{align}
+	followed by the corresponding unblocked tail of $M$ equals the
+	reflected-adjoint marked-chain coefficient of $A$ followed by the
+	reversed tail of $M^\dagger$. Thus the first two sites are compressed
+	jointly, while all later sites remain unblocked.
+
+	Keeping the tail unblocked supplies the common comparison needed when
+	\cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv} is invoked
+	in~\cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}.
+	This correction to the direct two-site comparison is recorded in
+	\cite{gap:cpsv16_two_site_sector_unitary_gauge_gap}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:mpdo_reflected_marked_chain}
+	Compress the first two physical sites of the density operator of length
+	$N+2$ by $V$. Hermiticity exchanges the open bond indices and the two
+	physical words. Taking adjoints reverses only the remaining $N$ one-site
+	factors. Finally conjugate the open indices by $X^\dagger$ and
+	$(X^{-1})^\dagger$. The left side becomes conjugation by $X^\dagger X$,
+	while the gauge factors cancel on the reflected side.
+\end{proof}
+
+\begin{theorem}[Two-sided compression onto a matched two-site sector]
+	\label{thm:mpdo_bnt_exact_sector_identity_oblique_physical_span}
+	\lean{MPOTensor.twoSidedCompressionCoefficients}
+	\lean{MPOTensor.linearMarkedTensor_twoSidedCompressionCoefficients}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		exists_blockTwo_identity_oblique_compression}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		exists_identity_physical_letter_coefficients}
+	\leanok
+	\uses{thm:mpdo_bnt_exact_sector_gauge_blocked_corner}
+	For a matched two-site sector, choose $V_\gamma$ and
+	$c_\gamma>0$ as in
+	(\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}), and set
+	\begin{align}
+		L_\gamma
+		 & =V_\gamma(Z_\gamma^{-1})^\dagger,
+		\label{eq:mpdo_bnt_identity_oblique_maps} \\
+		R_\gamma
+		 & =V_\gamma Z_\gamma.
+		\notag
+	\end{align}
+	Then, for every vertical letter $v$,
+	\begin{align}
+		L_\gamma^\dagger\widetilde{M^{(2)}}^vR_\gamma
+		 & =c_\gamma M_\gamma^v,
+		\label{eq:mpdo_bnt_identity_oblique_compression} \\
+		R_\gamma^\dagger\widetilde{M^{(2)}}^vL_\gamma
+		 & =c_\gamma
+		(Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+			                                    (Z_\gamma^\dagger Z_\gamma)^{-1}.
+		\label{eq:mpdo_bnt_identity_oblique_opposite}
+	\end{align}
+	Write $\mc{R}(M_\gamma)^{rs}$ for the horizontal slice
+	$v\mapsto(M_\gamma^v)_{rs}$. For open bond indices $r,s$ and blocked
+	physical indices $i,j$, define
+	\begin{align}
+		f^\gamma_{(r,s),(i,j)}
+		 & =c_\gamma^{-1}
+		\overline{(L_\gamma)_{ir}}(R_\gamma)_{js}.
+		\label{eq:mpdo_bnt_identity_physical_coefficients}
+	\end{align}
+	These coefficients express every horizontal slice of $M_\gamma$ as a
+	linear combination of the physical letters of the two-site blocking:
+	\begin{align}
+		\sum_{i,j}f^\gamma_{(r,s),(i,j)}(M^{[2]})^{ij}
+		 & =\mc{R}(M_\gamma)^{rs}.
+		\label{eq:mpdo_bnt_identity_physical_span}
+	\end{align}
+	This gives the inclusion in the physical-letter span used to compare
+	the two vertical forms in
+	\cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}.
+
+	In general $L_\gamma\ne R_\gamma$, so
+	(\ref{eq:mpdo_bnt_identity_oblique_compression}) is not an isometric
+	compression onto a positive multiple of $M_\gamma$.
+	At the marked-chain level, adjoint reflection exchanges
+	the two maps together with the bond-pair and tail reversal. The reflected
+	orientation is therefore governed by
+	(\ref{eq:mpdo_bnt_identity_oblique_opposite}), rather than by a second copy
+	of $M_\gamma$. The linear-span identity alone gives neither a common
+	reflected tensor nor the Gram identity
+	\begin{align}
+		(Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+			                                    (Z_\gamma^\dagger Z_\gamma)^{-1}
+		 & =M_\gamma^v.
+		\notag
+	\end{align}
+	This prevents the direct two-site comparison from proving the Gram
+	identity. The theorem below instead compares the one-site compression
+	onto $M_\gamma$ with the two-site compression onto
+	$Z_\gamma M_\gamma Z_\gamma^{-1}$, keeping the same unblocked tail.
+\end{theorem}
+
+\begin{proof}\leanok
+	Taking adjoints in the left factor of
+	(\ref{eq:mpdo_bnt_identity_oblique_maps}) and substituting
+	(\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}) gives
+	\begin{align}
+		L_\gamma^\dagger\widetilde{M^{(2)}}^vR_\gamma
+		 & =Z_\gamma^{-1}
+		(V_\gamma^\dagger\widetilde{M^{(2)}}^vV_\gamma)
+		Z_\gamma
+		=c_\gamma M_\gamma^v.
+		\notag
+	\end{align}
+	Reversing the two maps instead gives
+	(\ref{eq:mpdo_bnt_identity_oblique_opposite}). Finally, taking the
+	$(r,s)$ matrix entry of a general two-sided compression yields
+	\begin{align}
+		[L^\dagger\widetilde{M^{(2)}}^vR]_{rs}
+		 & =\sum_{i,j}\overline{L_{ir}}R_{js}(M^{[2]})^{ij}_v.
+		\notag
+	\end{align}
+	Divide by $c_\gamma$ and use
+	(\ref{eq:mpdo_bnt_identity_oblique_compression}) to obtain
+	(\ref{eq:mpdo_bnt_identity_physical_span}).
+\end{proof}
+
+\begin{theorem}[Normalization of conjugation by a scalar Gram matrix]
+	\label{thm:normalized_conjugation_of_scalar_gram}
+	\lean{Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one}
+	\leanok
+	If an invertible matrix $Z$ satisfies
+	$Z^\dagger Z=\omega\Id$ with $\omega>0$, then conjugation by
+	$\omega^{-1/2}Z$ equals conjugation by $Z$.
+\end{theorem}
+
+\begin{proof}\leanok
+	The Gram identity identifies $Z^{-1}$ with
+	$\omega^{-1}Z^\dagger$; hence, for every matrix $B$ of the same size,
+	$(\omega^{-1/2}Z)B(\omega^{-1/2}Z)^\dagger
+	=ZBZ^{-1}$.
+\end{proof}
+
+\begin{theorem}[Unitary sector conjugacy from a positive scalar Gram matrix]
+	\label{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one}
+	\leanok
+	\uses{def:mpdo_bnt_two_site_exact_sector_gauge}
+	Let $Z_\gamma$ be an exact invertible sector gauge and suppose
+	$Z_\gamma^\dagger Z_\gamma=\omega_\gamma\Id$ with
+	$\omega_\gamma>0$. Define $U_\gamma=\omega_\gamma^{-1/2}Z_\gamma$.
+	Then $U_\gamma$ is unitary and, for every vertical letter $v$,
+	\begin{align}
+		A_{\sigma(\gamma)}^v
+		 & =U_\gamma M_\gamma^v U_\gamma^\dagger.
+		\label{eq:mpdo_bnt_conditional_unitary_conjugacy}
+	\end{align}
+	This is the inverse-square-root normalization used in
+	\cite[Proposition~4.13, lines~1903--1908]{Cirac2016MPDO_arXiv}, applied
+	at Appendix~C.4, lines~2053--2057.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:normalize_scalar_gram_matrix, thm:normalized_conjugation_of_scalar_gram}
+	The positive scalar Gram identity gives
+	$U_\gamma^\dagger U_\gamma=\Id$ and
+	$Z_\gamma^{-1}=\omega_\gamma^{-1}Z_\gamma^\dagger$.
+	Consequently
+	$U_\gamma M_\gamma^vU_\gamma^\dagger
+	=Z_\gamma M_\gamma^vZ_\gamma^{-1}$.
+	The exact sector conjugacy then gives
+	(\ref{eq:mpdo_bnt_conditional_unitary_conjugacy}).
+\end{proof}
+
+\begin{theorem}[Gram identity and unitary sector conjugacy]
+	\label{thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		gramDressing_gauge_eq_one}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		gauge_gram_eq_pos_smul_one}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		exists_unitary_sector_conjugacy}
+	\lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+		UnitarySectorConjugacy.ofAlgebraTensorClause}
+	\leanok
+	\uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_bnt_two_site_exact_sector_gauge}
+	Let $M$ generate MPDOs, and suppose that its MPS tensor obtained by
+	pairing the physical indices is in CF. Let the one-site and two-site
+	sectors be paired by the exact gauges $Z_\gamma$ above.
+	Then, for every sector $\gamma$ and every vertical letter $v$,
+	\begin{align}
+		(Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+			                                    (Z_\gamma^\dagger Z_\gamma)^{-1}
+		 & =M_\gamma^v.
+		\label{eq:mpdo_bnt_mixed_prefix_gram_identity}
+	\end{align}
+	Consequently there is a real number $\omega_\gamma>0$ such that
+	\begin{align}
+		Z_\gamma^\dagger Z_\gamma
+		 & =\omega_\gamma\Id,
+		\label{eq:mpdo_bnt_mixed_prefix_scalar_gram}
+	\end{align}
+	and there is a unitary $U_\gamma$ satisfying
+	\begin{align}
+		A_{\sigma(\gamma)}^v
+		 & =U_\gamma M_\gamma^vU_\gamma^\dagger.
+		\label{eq:mpdo_bnt_mixed_prefix_unitary_conjugacy}
+	\end{align}
+
+	The proof compares a one-site compression onto $M_\gamma$ with a
+	two-site compression onto $Z_\gamma M_\gamma Z_\gamma^{-1}$,
+	keeping the same unblocked tail. This supplies the common comparison
+	missing from the direct application of
+	\cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}
+	in~\cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}.
+	The correction to the direct two-site argument is recorded in
+	\cite{gap:cpsv16_two_site_sector_unitary_gauge_gap}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:mpdo_bnt_exact_sector_one_site_raw_corner, thm:mpdo_bnt_exact_sector_gauge_blocked_corner, thm:mpdo_bnt_exact_sector_identity_oblique_physical_span, thm:mpdo_two_site_prefix_gram_reflected_marked_chain, thm:mpdo_reflected_marked_chain, thm:cpsv_original_coordinate_marked_lemma_l, thm:normal_tensor_gram_rigidity, thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
+	Put $G_\gamma=Z_\gamma^\dagger Z_\gamma$. The two-site initial-block
+	identity applied to the compression onto
+	$Z_\gamma M_\gamma Z_\gamma^{-1}$ identifies the marked chains of
+	$G_\gamma M_\gamma G_\gamma^{-1}$ with the reflected-adjoint chains of
+	$M_\gamma$, followed by an arbitrary unblocked tail of $M^\dagger$.
+	The ordinary one-site reflected identity applied to the compression onto
+	$M_\gamma$ gives the same reflected-adjoint chains.
+
+	Both marked tensors are linear combinations of the one-site physical
+	letters. Indeed, the mark $M_\gamma$ is obtained from the pair
+	$(W_\gamma,W_\gamma)$, whereas the mark
+	$G_\gamma M_\gamma G_\gamma^{-1}$ is obtained from the pair
+	$(W_\gamma G_\gamma^\dagger,W_\gamma G_\gamma^{-1})$.
+	Their marked traces agree against every positive-length tail. The
+	original-coordinate form of Lemma~L therefore identifies the two marked
+	tensors and proves
+	(\ref{eq:mpdo_bnt_mixed_prefix_gram_identity}). Normality of
+	$M_\gamma$ gives
+	(\ref{eq:mpdo_bnt_mixed_prefix_scalar_gram}), and normalizing
+	$Z_\gamma$ by $\omega_\gamma^{-1/2}$ gives the unitary in
+	(\ref{eq:mpdo_bnt_mixed_prefix_unitary_conjugacy}).
+\end{proof}

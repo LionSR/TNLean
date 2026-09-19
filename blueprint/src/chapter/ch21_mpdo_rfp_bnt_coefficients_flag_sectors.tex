@@ -1,0 +1,626 @@
+\begin{theorem}[Two-label structure coefficients whose length dependence survives positive rescaling]%
+	\label{thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+	\lean{MPOTensor.TwistedDimer.IsSameChannel}
+	\lean{MPOTensor.TwistedDimer.alpha}
+	\lean{MPOTensor.TwistedDimer.beta}
+	\lean{MPOTensor.TwistedDimer.twoLabelChi}
+	\lean{MPOTensor.TwistedDimer.twoLabelChi_posEntries}
+	\lean{MPOTensor.TwistedDimer.twoLabelCoeffs}
+	\lean{MPOTensor.TwistedDimer.twoLabelCoeffs_coeff}
+	\lean{MPOTensor.TwistedDimer.twoLabelCoeffs_not_lengthIndependent}
+	\lean{MPOTensor.TwistedDimer.twoLabelChiScaled}
+	\lean{MPOTensor.TwistedDimer.rescaledCoeffs}
+	\lean{MPOTensor.TwistedDimer.rescaledCoeffs_coeff}
+	\lean{MPOTensor.TwistedDimer.%
+		twoLabelCoeffs_rescaling_stable_not_lengthIndependent}
+	\leanok
+	\uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent}
+	Let the labels be $\{0,1\}$, with addition modulo two, and define
+	positive diagonal matrices of size one, identified with their entries, by
+	\begin{align}
+		\chi_{ff',\,f+f'} & =\alpha=\frac{7}{10},
+		\notag\\
+		\chi_{ff',\,f+f'+1} & =\beta=\frac1{10}.
+		\notag
+	\end{align}
+	Then $c^{(L)}_{ff'g}=\tr(\chi_{ff'g}^L)$ equals $\alpha^L$ when
+	$g=f+f'$ and $\beta^L$ otherwise. These coefficients are not length
+	independent. For every pair of positive rescalings $(s_0,s_1)$,
+	replacing $\chi_{ff'g}$ by $(s_fs_{f'}/s_g)\chi_{ff'g}$ still gives
+	coefficients that are not length independent. Unlike the
+	one-label families of
+	Theorems~\ref{thm:mpdo_length_dependent_rfp_example} and
+	\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}, the
+	obstruction here is not a diagonal matrix with two distinct entries but
+	the inconsistency of the equations
+	$s_fs_{f'}\chi_{ff'g}=s_g$ over the eight triples of labels.
+	This statement concerns the coefficients alone.
+	Theorem~\ref{thm:mpdo_twisted_dimer_flag_sector_product_law} identifies
+	them as the structure coefficients for the closed operators of the flag
+	sectors of the twisted quantum dimer.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent}
+	If the powers of a positive real number $t$ agree at lengths one and
+	two, then $t=t^2$, hence $t=1$. The triples $(0,0,0)$ and
+	$(0,1,0)$ give $s_0\alpha=1$ and $s_1\beta=1$; the triple $(0,0,1)$ then
+	gives $s_0^2\beta/s_1=\beta^2/\alpha^2=1$, contradicting
+	$\alpha\ne\beta$.
+\end{proof}
+
+\begin{definition}[Flag sectors of the twisted quantum dimer]%
+	\label{def:mpdo_twisted_dimer_flag_sectors}
+	\lean{MPOTensor.TwistedDimer.mu}
+	\lean{MPOTensor.TwistedDimer.flagWeight}
+	\lean{MPOTensor.TwistedDimer.flagWeight_physIdx}
+	\lean{MPOTensor.TwistedDimer.flagCoef}
+	\lean{MPOTensor.TwistedDimer.unitTensor}
+	\lean{MPOTensor.TwistedDimer.block_eq_unitTensor}
+	\lean{MPOTensor.TwistedDimer.flagMPO}
+	\lean{MPOTensor.TwistedDimer.flagMPO_apply_eq_T}
+	\lean{MPOTensor.TwistedDimer.flagFamily}
+	\lean{MPOTensor.TwistedDimer.verticalBNTMPO_flagFamily}
+	\lean{MPOTensor.TwistedDimer.flagOperatorFamily}
+	\lean{MPOTensor.TwistedDimer.flagOperatorFamily_operator}
+	\leanok
+	\uses{def:mpdo_twisted_dimer_tensor, def:mpdo_bnt_label_operator_family}
+	The matrices of the twisted quantum dimer of
+	Definition~\ref{def:mpdo_twisted_dimer_tensor} are diagonal in the flag
+	qubit. Viewed vertically, the tensor therefore splits along the flag
+	value $f\in\{0,1\}$ into two tensors $M_f$ acting on the two-qubit
+	space of $L$ and $R$, with matrices indexed by pairs of horizontal bond
+	indices. Write $\mu=\frac58$, so that $\mu^2=(x^2+y^2)/2$ at
+	$x=\frac78$, $y=\frac18$. The rescaled sector $\widehat M_f=M_f/\mu$
+	has, at the bond pair $((p,p',k),(q,q',k'))$, the matrix
+	\begin{align}
+		\widehat M_f^{(p,p',k),(q,q',k')}
+		 & =[k=k']\,\frac1{2\mu}\,C_k[p,p']\,(\tau_k)_{ff}
+		E_{pp'}\otimes E_{qq'},
+		\notag
+	\end{align}
+	where $[k=k']$ is one when $k=k'$ and zero otherwise.
+	The matrix unit has row $(p,q)$ and column $(p',q')$.
+	The entry of this matrix between the qubit configurations $(l,r)$ and
+	$(l',r')$ is $\mu^{-1}$ times the bond-matrix entry of the twisted
+	dimer at the physical indices $((l,r,f),(l',r',f))$ carrying the common
+	flag value $f$. The horizontal blocks of
+	Definition~\ref{def:mpdo_twisted_dimer_tensor} and the two vertical flag
+	sectors are all matrix-unit tensors of this form, differing only in their
+	one-site coefficients. The closed operators $O_L(\widehat M_f)$ on a ring
+	of $L$ sites give the operators indexed by these two labels in
+	Definition~\ref{def:mpdo_bnt_label_operator_family}. Their BNT properties
+	are proved below, rather than assumed in this definition.
+	This tensor is an example motivated by the question of
+	\cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a
+	tensor stated there.
+\end{definition}
+
+\begin{lemma}[Cyclic path expansion of a trace]%
+	\label{lem:matrix_cyclic_path_sum}
+	\lean{Matrix.sum_fin_cons}
+	\lean{Matrix.ofFn_prod_mulVec_apply}
+	\lean{Matrix.trace_ofFn_prod_eq_sum_cyclic}
+	\leanok
+	Let $M_0,\ldots,M_{L-1}$ be square matrices of the same finite size over a
+	commutative semiring, with $L\ge1$. Applying the ordered product
+	$M_0\cdots M_{L-1}$ to a vector $v$ and reading the entry at $a$ sums,
+	over all paths $(t_0,\ldots,t_L)$ with $t_0=a$, the product of the
+	entries $(M_n)_{t_n t_{n+1}}$ along the path times $v_{t_L}$.
+	Consequently,
+	\begin{align}
+		\tr(M_0\cdots M_{L-1})
+		 & =\sum_{t_0,\ldots,t_{L-1}}\prod_{n=0}^{L-1}(M_n)_{t_n t_{n+1}},
+		\notag
+	\end{align}
+	with the cyclic convention $t_L=t_0$.
+\end{lemma}
+\begin{proof}\leanok
+	The open expansion is an induction on $L$: splitting a path into its first
+	step and the remaining path gives
+	$(M_0(M_1\cdots M_{L-1})v)_a
+	=\sum_c(M_0)_{ac}((M_1\cdots M_{L-1})v)_c$.
+	For the trace, separate the last factor $M_{L-1}$ and apply the open
+	expansion to the vector $c\mapsto(M_{L-1})_{ca}$, using the empty
+	product when $L=1$. Splitting a cyclic assignment into its first entry
+	$a$ and the remaining entries identifies the two sides term by term,
+	with the last factor closing the cycle back to $a$.
+\end{proof}
+
+\begin{lemma}[Closed operators of the flag sectors]%
+	\label{lem:mpdo_twisted_dimer_flag_sector_operators}
+	\lean{MPOTensor.TwistedDimer.unitTensor_mul_single}
+	\lean{MPOTensor.TwistedDimer.evalWord_unitTensor_ofFn}
+	\lean{MPOTensor.TwistedDimer.mpo_unitTensor_apply}
+	\lean{MPOTensor.TwistedDimer.prod_flagCoef}
+	\lean{MPOTensor.TwistedDimer.mpo_flagMPO_apply}
+	\leanok
+	\uses{def:mpdo_twisted_dimer_flag_sectors, def:mpdo}
+	For a matrix-unit tensor with one-site coefficients $c$, the ordered
+	product along a nonempty pair of words vanishes unless both words
+	satisfy the open bond-matching condition. When they do, the product is
+	the matrix unit whose row is given by the left bits of the first indices
+	and whose column is given by the right bits of the last indices,
+	multiplied by the product of the coefficients. On a ring of positive
+	length the closed operator therefore has entries
+	$\Id[\text{cyclic bond match}](\sigma,\tau)
+	\prod_n c(\sigma_n,\tau_n)$, where the first factor is the indicator
+	that both words satisfy the cyclic bond-matching condition.
+	In particular, for a positive length $L$ and words
+	$\sigma_n=(p_n,p'_n,k_n)$, $\tau_n=(q_n,q'_n,k'_n)$ of
+	horizontal bond indices,
+	\begin{align}
+		O_L(\widehat M_f)_{\sigma\tau}
+		 & =\Id[\text{cyclic bond match}](\sigma,\tau)
+		\prod_n[k_n=k'_n]
+		\prod_n\frac{C_{k_n}[p_n,p'_n]\,(\tau_{k_n})_{ff}}{2\mu}.
+		\notag
+	\end{align}
+\end{lemma}
+\begin{proof}\leanok
+	\uses{def:mpdo_twisted_dimer_flag_sectors}
+	A matrix unit multiplied on the left by a tensor matrix is a matrix unit
+	or zero according to whether the right bits of that matrix match the row
+	of the unit. The open-chain formula follows by induction on the length
+	of the words, as for the twisted dimer itself in
+	Theorem~\ref{thm:mpdo_twisted_dimer_ismpdo}. Taking the trace imposes the
+	cyclic bond match. For a flag sector, the coefficient at a bond pair is
+	the one-site weight of the first index when the block labels agree and
+	zero otherwise. Thus the product of coefficients along the ring is the
+	product of the weights of the first word if the two label strings agree,
+	and zero otherwise.
+\end{proof}
+
+\begin{theorem}[Product law for the closed operators of the flag sectors]%
+	\label{thm:mpdo_twisted_dimer_flag_sector_product_law}
+	\lean{MPOTensor.TwistedDimer.tau_one_mul_self}
+	\lean{MPOTensor.TwistedDimer.tau_add}
+	\lean{MPOTensor.TwistedDimer.Cmat_eq_signs}
+	\lean{MPOTensor.TwistedDimer.Cc}
+	\lean{MPOTensor.TwistedDimer.ofFn_Cc_prod_apply}
+	\lean{MPOTensor.TwistedDimer.trace_ofFn_Cc_prod}
+	\lean{MPOTensor.TwistedDimer.sum_cyclic_Cmat}
+	\lean{MPOTensor.TwistedDimer.prod_flagWeight_physIdx}
+	\lean{MPOTensor.TwistedDimer.sum_sector}
+	\lean{MPOTensor.TwistedDimer.flagWeight_add}
+	\lean{MPOTensor.TwistedDimer.alpha_eq_x_div}
+	\lean{MPOTensor.TwistedDimer.beta_eq_y_div}
+	\lean{MPOTensor.TwistedDimer.mpo_flagMPO_mul}
+	\lean{MPOTensor.TwistedDimer.flagOperatorFamily_hasSameLengthProductForm}
+	\leanok
+	\uses{def:mpdo_twisted_dimer_flag_sectors, def:mpdo_bnt_label_same_length_product_form, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+	For every positive length $L$ and all flag values $f,f'\in\{0,1\}$, the
+	closed operators of the two rescaled flag sectors satisfy
+	\begin{align}
+		O_L(\widehat M_f)\,O_L(\widehat M_{f'})
+		 & =\alpha^L\,O_L(\widehat M_{f+f'})
+		+\beta^L\,O_L(\widehat M_{f+f'+1}),
+		\notag
+	\end{align}
+	where $\alpha=\frac{7}{10}$, $\beta=\frac1{10}$, and the flag values are
+	added modulo two. Thus the operators of
+	Definition~\ref{def:mpdo_twisted_dimer_flag_sectors} satisfy the
+	product law of
+	Definition~\ref{def:mpdo_bnt_label_same_length_product_form}, in the form
+	of \cite[Theorem~4.14(ii), lines~972--985]{Cirac2016MPDO_arXiv}, with the
+	structure coefficients of
+	Theorem~\ref{thm:mpdo_twisted_dimer_two_label_rescaling_stable}.
+	These coefficients depend on $L$, and no positive rescaling of the two
+	sectors makes them length independent. This product law alone does not
+	identify the sectors as a BNT; that assertion is proved below.
+	The tensor is an example motivated by the question of
+	\cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+	there.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{lem:mpdo_twisted_dimer_flag_sector_operators, lem:matrix_cyclic_path_sum, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+	Fix cyclically bond-matched words $\sigma$, $\tau$ with the common block
+	labels $k_n$ and left bits $p_n$ of $\sigma$; all other entries of both
+	sides vanish by Lemma~\ref{lem:mpdo_twisted_dimer_flag_sector_operators}.
+	The entry of the product is a sum over a middle word $\rho$, which must be
+	cyclically bond matched with the same labels $k_n$, hence of the form
+	$\rho_n=(t_n,t_{n+1},k_n)$ for a bit string $t$. Its contribution factors
+	as the weight of $\sigma$ in the sector $f$ times
+	$(2\mu)^{-L}\prod_n(\tau_{k_n})_{f'f'}\prod_n C_{k_n}[t_n,t_{n+1}]$.
+	By Lemma~\ref{lem:matrix_cyclic_path_sum}, the sum over $t$ of the last
+	product is $\tr(C_{k_0}\cdots C_{k_{L-1}})$. Since
+	$C_k=xP_++(-1)^kyP_-$ with orthogonal rank-one idempotents $P_\pm$, the
+	ordered product is $x^LP_++(-1)^{\sum_n k_n}y^LP_-$, with trace
+	$x^L+(-1)^{\sum_n k_n}y^L$; this is verified entrywise through the sign
+	expansion $C_k[p,q]=\frac12(x+(-1)^{k+p+q}y)$. The flag signs multiply
+	as $(\tau_k)_{ff}(\tau_k)_{f'f'}=(\tau_k)_{gg}$ with $g=f+f'$, and the
+	sign $(-1)^{\sum_n k_n}=\prod_n(\tau_{k_n})_{11}$ of the second summand
+	shifts the label to $g+1$. With $x/(2\mu)=\frac{7}{10}$ and
+	$y/(2\mu)=\frac1{10}$, the two summands are $\alpha^L$ and $\beta^L$ times
+	the entries of $O_L(\widehat M_{f+f'})$ and $O_L(\widehat M_{f+f'+1})$.
+	These are precisely the coefficients for $g=f+f'$ and $g=f+f'+1$ in
+	Theorem~\ref{thm:mpdo_twisted_dimer_two_label_rescaling_stable}.
+\end{proof}
+
+\begin{theorem}[Horizontal canonical form of the twisted quantum dimer]%
+	\label{thm:mpdo_twisted_dimer_horizontal_cf}
+	\lean{MPOTensor.TwistedDimer.normalizedBlock}
+	\lean{MPOTensor.TwistedDimer.normalizedBlock_apply}
+	\lean{MPOTensor.TwistedDimer.toMPSTensor_apply_finProdFinEquiv}
+	\lean{MPOTensor.TwistedDimer.coef_flag_zero_ne_zero}
+	\lean{MPOTensor.TwistedDimer.block_toMPSTensor_isInjective}
+	\lean{MPOTensor.TwistedDimer.normalizedBlock_toMPSTensor_isInjective}
+	\lean{MPOTensor.TwistedDimer.star_coef}
+	\lean{MPOTensor.TwistedDimer.conjTranspose_mul_self_normalizedBlock}
+	\lean{MPOTensor.TwistedDimer.rightBitEquiv}
+	\lean{MPOTensor.TwistedDimer.sum_single_eq_single_sum}
+	\lean{MPOTensor.TwistedDimer.sum_normalizedCoef_sq}
+	\lean{MPOTensor.TwistedDimer.normalizedBlock_isLeftCanonical}
+	\lean{MPOTensor.TwistedDimer.normalizedBlock_isNormalTensor}
+	\lean{MPOTensor.TwistedDimer.physTraceTransfer_normalizedBlock_one}
+	\lean{MPOTensor.TwistedDimer.exists_eq_physIdx}
+	\lean{MPOTensor.TwistedDimer.blockBondEquiv}
+	\lean{MPOTensor.TwistedDimer.retainedBondEquiv}
+	\lean{MPOTensor.TwistedDimer.ambientCoisometry}
+	\lean{MPOTensor.TwistedDimer.conjTranspose_toMatrix_toPEquiv}
+	\lean{MPOTensor.TwistedDimer.ambientCoisometry_mul_conjTranspose}
+	\lean{MPOTensor.TwistedDimer.conjTranspose_mul_mul_ambientCoisometry}
+	\lean{MPOTensor.TwistedDimer.finSigmaFinEquiv_symm_retainedBondEquiv_symm}
+	\lean{MPOTensor.TwistedDimer.toMPSTensor_T_reconstruct}
+	\lean{MPOTensor.TwistedDimer.canonicalFormData}
+	\lean{MPOTensor.TwistedDimer.T_toMPSTensor_isCPSVCanonicalForm}
+	\leanok
+	\uses{def:mpdo_twisted_dimer_tensor, def:cpsv_canonical_form, def:nt_cpsv, def:left_canonical_tensor}
+	Let $B_0$, $B_1$ denote the two horizontal blocks of the twisted quantum
+	dimer $M$ of Definition~\ref{def:mpdo_twisted_dimer_tensor}, read as
+	tensors with the doubled physical index $((l,r,f),(l',r',f'))$ and bond
+	dimension four, and let $\widehat B_k=\frac85\,B_k$.
+	The matrices of each $\widehat B_k$ span the full algebra of
+	$4\times4$ matrices, and
+	$\sum_{i,j}(\widehat B_k^{ij})^\dagger\widehat B_k^{ij}=\Id$.
+	Hence each $\widehat B_k$ is a normal tensor with spectral radius one.
+	The doubled-index tensor is in CF in the sense of
+	Definition~\ref{def:cpsv_canonical_form}: with the permutation $U$ of the
+	bond index $(p,p',k)$ into the block label $k$ followed by the block bond
+	index $(p,p')$,
+	\begin{align}
+		M^{ij} & =U^\dagger\Bigl(\tfrac58\,\widehat B_0^{ij}\oplus
+		\tfrac58\,\widehat B_1^{ij}\Bigr)U.
+		\notag
+	\end{align}
+	The physical-trace transfer of $\widehat B_1$ vanishes. The tensor is an
+	example motivated by the question of
+	\cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+	there.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:mpdo_twisted_dimer_closures, thm:is_normal_tensor_of_is_normal_left_canonical}
+	The matrix of $B_k$ at the physical pair $((p,q,0),(p',q',0))$ is the
+	matrix unit at the bond pair $((p,p'),(q,q'))$ with the nonzero
+	coefficient $\frac12 C_k[p,p']$, so these matrices span the bond algebra.
+	The product $(\widehat B_k^{ij})^\dagger\widehat B_k^{ij}$ is the
+	diagonal matrix unit at the right bits $(r,r')$ of $i$ and $j$, with
+	coefficient $\frac{64}{25}$ times the squared coefficient of the tensor
+	matrix. Grouping by the right bits, the coefficients at fixed
+	$(r,r')$ sum to
+	$\frac{64}{25}\cdot2\cdot\frac14(2C_k[0,0]^2+2C_k[0,1]^2)=1$,
+	so the sum of the products is the identity.
+	Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} gives
+	normality with spectral radius one. The reconstruction is the block
+	decomposition of Definition~\ref{def:mpdo_twisted_dimer_tensor} entry by
+	entry, with $\frac58\cdot\frac85=1$ restoring the original blocks.
+	The matrix $U$ is a permutation matrix, hence a coisometry.
+	The physical-trace transfer of $\widehat B_1$ is $\frac85$ times that of
+	$B_1$, which vanishes by
+	Theorem~\ref{thm:mpdo_twisted_dimer_closures}.
+\end{proof}
+
+\begin{lemma}[Blocking raises the physical-trace transfer to a power]%
+	\label{lem:mpdo_phys_trace_transfer_blocking}
+	\lean{MPOTensor.physTraceTransfer_blockTensor}
+	\leanok
+	\uses{def:mpdo_physical_blocking, def:mpo_physical_trace_transfer}
+	For every tensor $M$ and every blocking length $L$, the physical-trace
+	transfer of the $L$-site blocking of $M$ is the $L$-th power of the
+	physical-trace transfer of $M$.
+\end{lemma}
+\begin{proof}\leanok
+	\uses{lem:mpdo_trace_loop_chain}
+	The physical-trace transfer of the blocking is the sum over all
+	length-$L$ configurations of the diagonal word evaluations, which is the
+	$L$-th power of the one-site loop by
+	Lemma~\ref{lem:mpdo_trace_loop_chain}.
+\end{proof}
+
+\begin{theorem}[The twisted quantum dimer is not simple]%
+	\label{thm:mpdo_twisted_dimer_not_simple}
+	\lean{MPOTensor.TwistedDimer.blockedCanonicalFormData}
+	\lean{MPOTensor.TwistedDimer.blockedCanonicalFormData_blocks}
+	\lean{MPOTensor.TwistedDimer.%
+		doubledPhysTraceTransfer_blockedCanonicalFormData_blocks_one}
+	\lean{MPOTensor.TwistedDimer.T_not_isSimple}
+	\leanok
+	\uses{def:mpdo_simple_tensor, def:mpdo_twisted_dimer_tensor}
+	The twisted quantum dimer of Definition~\ref{def:mpdo_twisted_dimer_tensor}
+	is not simple in the sense of Definition~\ref{def:mpdo_simple_tensor}: for
+	every positive blocking length $L$ and every BNT sector presentation of
+	the doubled-index tensor of the $L$-site blocking, some representative
+	has nilpotent physical-trace transfer. The tensor is an example
+	motivated by the question of
+	\cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+	there.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:mpdo_twisted_dimer_horizontal_cf, thm:cpsv_literal_canonical_form_positive_blocking, thm:cpsv_physical_reindexing, thm:mpdo_blocking_doubled_index, thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_representative_sector_decomposition, thm:mpdo_bnt_nonnilpotency_independent, thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_phys_trace_transfer_blocking}
+	Fix $L>0$ and a presentation $P$. Blocking the canonical form of
+	Theorem~\ref{thm:mpdo_twisted_dimer_horizontal_cf} by $L$ sites
+	(Theorem~\ref{thm:cpsv_literal_canonical_form_positive_blocking}) and
+	relabeling the doubled alphabet along the pairing of the blocked ket and
+	bra words (Theorems~\ref{thm:cpsv_physical_reindexing}
+	and~\ref{thm:mpdo_blocking_doubled_index}) gives a canonical form of the
+	blocked doubled-index tensor whose retained blocks are the $L$-site
+	blockings of $\widehat B_0$ and $\widehat B_1$. Its BNT refinement
+	(Theorem~\ref{thm:cpsv_canonical_form_bnt_refinement}) is a BNT sector
+	presentation $Q$
+	(Theorem~\ref{thm:cpsv_representative_sector_decomposition}) in which
+	every retained block is related to the representative of its phase class
+	by a similarity transformation and a phase.
+	The blocked $\widehat B_1$ has vanishing physical-trace
+	transfer by Lemma~\ref{lem:mpdo_phys_trace_transfer_blocking} together
+	with Lemma~\ref{lem:mpdo_doubled_phys_trace_transfer_to_mps}, so by
+	Theorem~\ref{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase} the
+	representative of its phase class has nilpotent physical-trace transfer.
+	Theorem~\ref{thm:mpdo_bnt_nonnilpotency_independent} transfers this to
+	$P$.
+\end{proof}
+
+\begin{theorem}[Vertical canonical form of the twisted quantum dimer]%
+	\label{thm:mpdo_twisted_dimer_vertical_cf}
+	\lean{MPOTensor.TwistedDimer.sectorDim}
+	\lean{MPOTensor.TwistedDimer.sectorMult}
+	\lean{MPOTensor.TwistedDimer.sectorWeight}
+	\lean{MPOTensor.TwistedDimer.RetainedCoordinate}
+	\lean{MPOTensor.TwistedDimer.sectorCoord}
+	\lean{MPOTensor.TwistedDimer.sectorCoord_apply}
+	\lean{MPOTensor.TwistedDimer.physCoordEquiv}
+	\lean{MPOTensor.TwistedDimer.physCoordEquiv_sectorCoord}
+	\lean{MPOTensor.TwistedDimer.verticalCoisometry}
+	\lean{MPOTensor.TwistedDimer.verticalCoisometry_apply}
+	\lean{MPOTensor.TwistedDimer.verticalCoisometry_mul_conjTranspose}
+	\lean{MPOTensor.TwistedDimer.conjTranspose_mul_verticalCoisometry}
+	\lean{MPOTensor.TwistedDimer.verticalCoisometry_conj}
+	\lean{MPOTensor.TwistedDimer.T_apply_eq_zero_of_bitF_ne}
+	\lean{MPOTensor.TwistedDimer.flagFamily_finProdFinEquiv}
+	\lean{MPOTensor.TwistedDimer.verticalCoisometry_conj_verticalTensor}
+	\lean{MPOTensor.TwistedDimer.verticalTensor_T_eq_conjTranspose_mul}
+	\lean{MPOTensor.TwistedDimer.mpv_verticalTensor_T}
+	\lean{MPOTensor.TwistedDimer.Cmat_ne_zero}
+	\lean{MPOTensor.TwistedDimer.flagWeight_physIdx_zero_ne_zero}
+	\lean{MPOTensor.TwistedDimer.exists_flagFamily_eq_smul_single}
+	\lean{MPOTensor.TwistedDimer.flagFamily_isInjective}
+	\lean{MPOTensor.TwistedDimer.flagFamily_isNormal}
+	\lean{MPOTensor.TwistedDimer.flagWeight_physIdx_zero_zero_zero}
+	\lean{MPOTensor.TwistedDimer.flagWeight_physIdx_zero_zero_one}
+	\lean{MPOTensor.TwistedDimer.linearIndependent_mpvState_flagFamily}
+	\lean{MPOTensor.TwistedDimer.flagFamily_isBNT}
+	\lean{MPOTensor.TwistedDimer.T_isVerticalCF}
+	\leanok
+	\uses{def:mpdo_twisted_dimer_flag_sectors, def:vertical_cf_mpdo, def:vertical_tensor_mpdo, def:bnt}
+	The twisted quantum dimer $M$ of
+	Definition~\ref{def:mpdo_twisted_dimer_tensor} has a vertical
+	decomposition in the sense of
+	Definition~\ref{def:vertical_cf_mpdo}, with the two rescaled flag
+	sectors $\widehat M_0$, $\widehat M_1$ of
+	Definition~\ref{def:mpdo_twisted_dimer_flag_sectors}, multiplicity one
+	each, and weight $\mu=\frac58$. Let $U$ be the permutation matrix
+	reordering the original physical index
+	$(l,r,f)\mapsto(f,(l,r))$, so that $U$ maps $\C^8$ onto the direct sum
+	of the two flag subspaces, each isomorphic to $\C^4$.
+	Writing $\widetilde M_{ab}$ for the matrices in the vertical direction,
+	we have $UU^\dagger=U^\dagger U=\Id$ and, for every horizontal bond pair
+	$(a,b)$,
+	\begin{align}
+		U\,\widetilde M_{ab}\,U^\dagger
+		 & =\mu\,\widehat M_0^{ab}\oplus\mu\,\widehat M_1^{ab},
+		\notag\\
+		\widetilde M_{ab}
+		 & =U^\dagger(\mu\,\widehat M_0^{ab}\oplus\mu\,\widehat M_1^{ab})U.
+		\notag
+	\end{align}
+	Each flag sector is injective at one site and therefore proportional to
+	a normal tensor with spectral radius one. At every positive length $N$,
+	the matrix product vector of the vertically viewed tensor is
+	$\mu^N$ times the sum of those of the two sectors, and the matrix product
+	vectors of the two sectors are linearly independent. The fact that these
+	sectors already have the normalization required of NT in the CPSV sense
+	is verified below.
+	The tensor is an example motivated by the
+	question of \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a
+	tensor stated there.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{def:mpdo_twisted_dimer_flag_sectors, lem:mpdo_twisted_dimer_flag_sector_operators, def:vertical_cf_mpdo}
+	The matrix of the twisted dimer between two physical indices with
+	different flag values vanishes, because its coefficient contains
+	$\delta_{ff'}$. Between two indices with common flag value $f$, it is
+	$\mu$ times the matrix of $\widehat M_f$ by
+	Definition~\ref{def:mpdo_twisted_dimer_flag_sectors}. Conjugating by the
+	permutation matrix therefore places the two sectors on the diagonal
+	blocks, and the reconstruction follows from $U^\dagger U=\Id$.
+	Traces of products are unchanged by conjugation, so
+	$\ket{V^{(N)}(\widetilde M)}
+	=\mu^N\bigl(\ket{V^{(N)}(\widehat M_0)}
+	+\ket{V^{(N)}(\widehat M_1)}\bigr)$.
+
+	For every matrix unit $E_{(p,q),(p',q')}$ of the two-qubit space, the
+	matrix of $\widehat M_f$ at the bond pair $((p,p',0),(q,q',0))$ is
+	$C_0[p,p']/(2\mu)$ times that matrix unit, with
+	$C_0[p,p']\in\{\frac12,\frac38\}$ nonzero. Hence the matrices of each
+	sector span the full matrix algebra, giving one-site injectivity.
+	For linear independence, evaluate the closed
+	sector operators of Lemma~\ref{lem:mpdo_twisted_dimer_flag_sector_operators}
+	on two cyclically bond-matched words: on the constant word of bond index
+	$(0,0,0)$ both sectors give $(2/5)^N$, since the one-site weight is
+	$C_0[0,0]/(2\mu)=\frac25$; on the word with bond index $(0,0,1)$ at
+	the first site and $(0,0,0)$ elsewhere, the sector $f$ gives
+	$(\tau_1)_{ff}\frac{3}{10}(2/5)^{N-1}$, since
+	$C_1[0,0]/(2\mu)=\frac3{10}$, and the two flag signs are opposite.
+	A vanishing linear combination
+	$g_0\ket{V^{(N)}(\widehat M_0)}
+	+g_1\ket{V^{(N)}(\widehat M_1)}=0$
+	thus forces $g_0+g_1=0$ and $g_0-g_1=0$.
+\end{proof}
+
+\begin{theorem}[Vertical BNT algebra of the twisted quantum dimer]%
+	\label{thm:mpdo_twisted_dimer_bnt_algebra_tensor_clause}
+	\lean{MPOTensor.TwistedDimer.conjTranspose_flagMPO_mul_self}
+	\lean{MPOTensor.TwistedDimer.star_flagCoef_mul_self}
+	\lean{MPOTensor.TwistedDimer.flagFamily_isLeftCanonical}
+	\lean{MPOTensor.TwistedDimer.flagFamily_isNormalTensor}
+	\lean{MPOTensor.TwistedDimer.flagFamily_isCPSVBasisOfNormalTensors}
+	\lean{MPOTensor.TwistedDimer.twoLabelChiTracePowerForm}
+	\lean{MPOTensor.TwistedDimer.sectorWeight_hasIdempotentCoefficientForm}
+	\lean{MPOTensor.TwistedDimer.flagAlgebraClause}
+	\lean{MPOTensor.TwistedDimer.T_bntAlgebraTensorClause}
+	\lean{MPOTensor.TwistedDimer.T_hasBNTAlgebraTensorClause}
+	\leanok
+	\uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_twisted_dimer_vertical_cf, thm:mpdo_twisted_dimer_flag_sector_product_law, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+	The vertical sectors of the twisted quantum dimer of
+	Definition~\ref{def:mpdo_twisted_dimer_tensor} satisfy the algebra and
+	idempotent conditions of
+	Definition~\ref{def:mpdo_bnt_algebra_tensor_clause}, using the
+	decomposition of Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf} and
+	the structure coefficients of
+	Theorem~\ref{thm:mpdo_twisted_dimer_two_label_rescaling_stable}.
+	The two flag sectors are NT in the sense of
+	\cite[lines~231--235]{Cirac2016MPDO_arXiv}: each is injective at one site
+	and left-canonical,
+	\begin{align}
+		\sum_{a,b}(\widehat M_f^{ab})^\dagger\widehat M_f^{ab}
+		 & =\Id,
+		\notag
+	\end{align}
+	so its transfer map has spectral radius one. Together with the spanning
+	and linear independence already proved, this gives a BNT of the
+	vertically viewed tensor, as in
+	\cite[Proposition~4.13, lines~945--959]{Cirac2016MPDO_arXiv}.
+	The positive diagonal matrices
+	$\chi_{ff',f+f'}=\alpha$, $\chi_{ff',f+f'+1}=\beta$ give
+	$c^{(L)}_{ff'g}=\tr(\chi_{ff'g}^L)$, and the closed operators satisfy
+	the product law of
+	Theorem~\ref{thm:mpdo_twisted_dimer_flag_sector_product_law}.
+	The multiplicity matrices are $\mu_0=\mu_1=[\mu]$, so
+	$m_0=m_1=\tr([\mu])=\frac58$. The vector $m$ is an idempotent for the
+	multiplication induced by $c^{(1)}$, since
+	\begin{align}
+		m_g & =\sum_{f,f'}c^{(1)}_{ff'g}\,m_fm_{f'}
+		=2(\alpha+\beta)\mu^2=\frac85\cdot\frac{25}{64}=\frac58.
+		\notag
+	\end{align}
+	No positive rescaling of these two sectors makes the structure
+	coefficients length independent. No comparison with a blocked BNT,
+	fusion isometry, or renormalization map is asserted.
+	The tensor is an example motivated by the question of
+	\cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
+	there.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:mpdo_twisted_dimer_vertical_cf, thm:mpdo_twisted_dimer_flag_sector_product_law, thm:is_normal_tensor_of_is_normal_left_canonical}
+	The adjoint of a sector matrix times that matrix is the diagonal matrix
+	unit at the right bits $(p',q')$ of the bond pair with the squared modulus
+	of the coefficient, and the flag sign squares to one. Summing over the
+	bond pairs $((p,p',k),(q,q',k))$ with the right bits fixed gives, at each
+	diagonal entry,
+	\begin{align}
+		\frac{1}{(2\mu)^2}\sum_{k}\sum_{p,q}C_k[p,p']^2
+		 & =\frac{2\cdot2\cdot(\tfrac14+\tfrac9{64})}{4\cdot\tfrac{25}{64}}
+		=1,
+		\notag
+	\end{align}
+	and the off-diagonal entries vanish. Together with one-site injectivity
+	from Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf}, this makes each
+	sector a normal tensor with spectral radius one by
+	Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}.
+	The spanning and linear independence are those of
+	Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf}. The product law is
+	Theorem~\ref{thm:mpdo_twisted_dimer_flag_sector_product_law}.
+	For each output label $g$, two pairs $(f,f')$ contribute $\alpha$ and
+	two contribute $\beta$, so
+	$\sum_{f,f'}c^{(1)}_{ff'g}m_fm_{f'}=2(\alpha+\beta)\mu^2=\mu=m_g$.
+\end{proof}
+
+\begin{lemma}[Doubled-index matrices and their rank-one factorization]
+	\label{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.toMPSTensor_R_apply}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.R_eq_vecMulVec}
+	\leanok
+	\uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	Identify each physical index $p\in\{0,1,2,3\}$ with a pair
+	$(p_1,p_2)\in\{0,1\}^2$, and similarly write $q=(q_1,q_2)$. The
+	doubled-index matrix at the paired index $(p,q)$ is the MPO matrix $R^{pq}$.
+	This bond matrix has the outer-product factorization
+	\begin{align}
+		R^{pq}_{ab}
+		 & =\frac{25}{32}A^a_{p_1q_1}A^b_{p_2q_2},
+		\notag
+	\end{align}
+	or equivalently $R^{pq}=\frac{25}{32}u_{pq}v_{pq}^{\mathsf T}$, where
+	$u_{pq}(a)=A^a_{p_1q_1}$ and $v_{pq}(b)=A^b_{p_2q_2}$.
+\end{lemma}
+
+\begin{proof}\leanok
+	The doubled-index reading gives $R^{pq}$ by definition. Expanding the
+	Kronecker-product definition of $R$ and using that the entries of the
+	four matrices $A^a$ are real gives
+	$R^{pq}=\frac{25}{32}u_{pq}v_{pq}^{\mathsf T}$.
+\end{proof}
+
+\begin{lemma}[Rank-one form of the dimer transfer map]
+	\label{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		transferMap_R_toMPSTensor_eq}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.cFun_fixedDiag}
+	\leanok
+	\uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	Set $s=(\frac45,\frac45,\frac35,\frac35)$,
+	$F=\diag(s_0^2,s_1^2,s_2^2,s_3^2)$, and
+	\begin{align}
+		\lambda(X) & =\left(\frac{25}{32}\right)^2
+		\sum_{b=0}^3s_b^2X_{bb}.
+		\notag
+	\end{align}
+	Then the transfer map of $R$ has rank-one form
+	\begin{align}
+		\E_R(X) & =\lambda(X)F,
+		\notag\\
+		\lambda(F) & =\frac{337}{512}.
+		\notag
+	\end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
+	By
+	Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization},
+	the doubled-index matrices are
+	$R^{pq}=\frac{25}{32}u_{pq}v_{pq}^{\mathsf T}$.
+	Substituting these factors into the transfer-map sum and summing over
+	the physical indices gives $\E_R(X)=\lambda(X)F$.
+	Substituting $X=F$ and evaluating the four diagonal entries gives
+	$\lambda(F)=337/512$.
+\end{proof}
+
+\begin{lemma}[One-site transfer quasi-idempotence of the dimer tensor]
+	\label{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		transferMap_R_toMPSTensor_idem}
+	\leanok
+	\uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	The transfer map of the dimer tensor $R$ satisfies
+	$\E_R^2=\frac{337}{512}\E_R$.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one}
+	By Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one},
+	\begin{align}
+		\E_R(\E_R(X))
+		 & =\lambda(X)\lambda(F)F
+		=\frac{337}{512}\E_R(X).
+		\notag
+	\end{align}
+\end{proof}

@@ -1,0 +1,364 @@
+\section{Structure coefficients and boundary matrices}
+\label{sec:asymex_coefficients_boundaries}
+
+\subsection{Representative rescaling}
+
+We use the structure coefficients
+$c_{\alpha,\beta,\gamma}^{(L)}=\tr(\chi_{\alpha,\beta,\gamma}^{L})$
+and trace scalars $m_\alpha$ of
+\cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
+The following identities concern these coefficients, not the construction
+of a renormalization fixed point.
+
+\begin{definition}[Rescaling the structure coefficients]
+    \label{def:asymex_rescaling}
+    \lean{MPOTensor.DiagonalChiFamily.rescale,
+    MPOTensor.DiagonalChiFamily.rescale_dim,
+    MPOTensor.DiagonalChiFamily.rescale_entry,
+    MPOTensor.BNTLabelCoefficientFamily.rescale,
+    MPOTensor.BNTLabelCoefficientFamily.rescale_coeff,
+    MPOTensor.BNTLabelTraceScalarFamily.rescale,
+    MPOTensor.BNTLabelTraceScalarFamily.rescale_traceScalar}
+    \leanok
+    \uses{def:mpdo_diagonal_chi_family,
+    def:mpdo_bnt_label_coefficient_family,
+    def:mpdo_bnt_label_trace_scalar_family}
+    Let $\Lambda$ be a label set and let $s_\alpha\in\C$
+    for every $\alpha\in\Lambda$. In the algebraic formulas below,
+    division is extended by $z/0=0$. Their interpretation as changes
+    of tensor representatives requires all scales to be nonzero.
+    Rescale the diagonal entries, coefficients, and trace scalars by
+    \begin{align}
+        \chi'_{\alpha,\beta,\gamma,k}
+        &=\frac{s_\alpha s_\beta}{s_\gamma}
+          \chi_{\alpha,\beta,\gamma,k},
+        \label{eq:asymex_chi_rescale}\\
+        c'{}_{\alpha,\beta,\gamma}^{(L)}
+        &=\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+          c_{\alpha,\beta,\gamma}^{(L)},
+        \label{eq:asymex_c_rescale}\\
+        m'_\alpha&=\frac{m_\alpha}{s_\alpha}.
+        \label{eq:asymex_m_rescale}
+    \end{align}
+    The multiplicity $r_{\alpha,\beta,\gamma}$ is unchanged, and
+    $0\leq k<r_{\alpha,\beta,\gamma}$.
+\end{definition}
+
+\begin{theorem}[Trace powers and positivity under rescaling]
+    \label{thm:asymex_rescale_trace}
+    \lean{MPOTensor.DiagonalChiFamily.tracePowerCoeff_rescale,
+    MPOTensor.BNTLabelCoefficientFamily.ofChi_rescale,
+    MPOTensor.DiagonalChiFamily.PosEntries.rescale}
+    \leanok
+    \uses{def:asymex_rescaling}
+    Taking trace-power coefficients commutes with rescaling: for every
+    $L\in\N$, including $L=0$,
+    \begin{align}
+        \tr((\chi'_{\alpha,\beta,\gamma})^L)
+        &=
+        \left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        \tr(\chi_{\alpha,\beta,\gamma}^L).
+    \end{align}
+    If the original diagonal entries are positive real numbers and
+    every $s_\alpha$ is positive real, the rescaled entries are positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_rescaling}
+    Expand the trace as the sum of the $L$th powers of the diagonal
+    entries. Each summand acquires the factor
+    $(s_\alpha s_\beta/s_\gamma)^L$, which factors out of the finite
+    sum. For positive real scales, the ratio
+    $s_\alpha s_\beta/s_\gamma$ is positive, so multiplication by it
+    preserves positivity.
+\end{proof}
+
+\begin{theorem}[Preservation of the idempotent coefficient equation]
+    \label{thm:asymex_rescale_idempotent}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily.hasIdempotentCoefficientForm_rescale_iff,
+    MPOTensor.BNTLabelTraceScalarFamily.rescale_coefficient_sum}
+    \leanok
+    \uses{def:asymex_rescaling,
+    def:mpdo_bnt_label_idempotent_coefficient_form}
+    Suppose $\Lambda$ is finite and every $s_\alpha$ is nonzero.
+    The vector $m'$ is idempotent for $c'{}^{(1)}$ if and only if
+    $m$ is idempotent for $c^{(1)}$. Explicitly, the equations
+    \begin{align}
+        m'_\gamma
+        &=\sum_{\alpha,\beta}
+          c'{}_{\alpha,\beta,\gamma}^{(1)}m'_\alpha m'_\beta,
+        \\
+        m_\gamma
+        &=\sum_{\alpha,\beta}
+          c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta
+    \end{align}
+    are equivalent when imposed for every $\gamma\in\Lambda$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_rescaling,
+    def:mpdo_bnt_label_idempotent_coefficient_form}
+    Substituting~(\ref{eq:asymex_c_rescale})
+    and~(\ref{eq:asymex_m_rescale}) and cancelling the nonzero
+    scales in each summand gives
+    \begin{align}
+        \sum_{\alpha,\beta}
+        c'{}_{\alpha,\beta,\gamma}^{(1)}m'_\alpha m'_\beta
+        &=
+        \frac{1}{s_\gamma}
+        \sum_{\alpha,\beta}
+        c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta.
+    \end{align}
+    The left side of the idempotent equation is
+    $m'_\gamma=m_\gamma/s_\gamma$. Cancellation of $s_\gamma$
+    proves both implications.
+\end{proof}
+
+Multiplying a normalized normal-tensor representative by a positive
+scalar different from one leaves the spectral-radius-one convention.
+These coefficient identities neither construct normalized
+representatives nor establish a new renormalization fixed point.
+
+\subsection{Coefficients from the Ising fusion rules}
+
+\begin{definition}[Structure coefficients from the Ising fusion rules]
+    \label{def:asymex_ising_coefficients}
+    \lean{TNLean.Algebra.IsingCrossing.Label,
+    TNLean.Algebra.IsingCrossing.fusionMultiplicity,
+    TNLean.Algebra.IsingCrossing.coefficient}
+    \leanok
+    Let the labels be $1,\psi,\sigma$, and let $N_{ab}^{c}\in\N$
+    be the multiplicity of $c$ in the Ising fusion rules. For each
+    label $a$, these rules are
+    \begin{align}
+        1\times a&=a\times 1=a,\\
+        \psi\times\psi&=1,\\
+        \psi\times\sigma&=\sigma\times\psi=\sigma,\\
+        \sigma\times\sigma&=1+\psi.
+    \end{align}
+    For arbitrary weights $w_a\in\C$ and $L\in\N$, define
+    \begin{align}
+        c_{a,b,c}^{(L)}
+        &=\sum_r\sum_t w_r^L N_{ar}^{t}N_{tb}^{c}.
+        \label{eq:asymex_ising_coeff}
+    \end{align}
+    Both sums run over $\{1,\psi,\sigma\}$.
+    The definition includes $L=0$ and imposes no positivity or
+    nonvanishing condition on the weights.
+\end{definition}
+
+\begin{theorem}[The three outputs for two sigma labels]
+    \label{thm:asymex_ising_sigma}
+    \lean{TNLean.Algebra.IsingCrossing.coefficient_sigma_sigma_one,
+    TNLean.Algebra.IsingCrossing.coefficient_sigma_sigma_psi,
+    TNLean.Algebra.IsingCrossing.coefficient_sigma_sigma_sigma,
+    TNLean.Algebra.IsingCrossing.fusionMultiplicity_sigma_sigma_sigma}
+    \leanok
+    \uses{def:asymex_ising_coefficients}
+    For every choice of complex weights and every $L\in\N$,
+    \begin{align}
+        c_{\sigma,\sigma,1}^{(L)}&=w_1^L+w_\psi^L,\\
+        c_{\sigma,\sigma,\psi}^{(L)}&=w_1^L+w_\psi^L,\\
+        c_{\sigma,\sigma,\sigma}^{(L)}&=2w_\sigma^L.
+    \end{align}
+    In contrast, the base fusion multiplicity is
+    $N_{\sigma\sigma}^{\sigma}=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_ising_coefficients}
+    Expand both three-element sums in~(\ref{eq:asymex_ising_coeff})
+    and substitute the fusion table. For output $1$ or $\psi$, the
+    surviving inserted labels are $1$ and $\psi$. For output $\sigma$,
+    the inserted label $\sigma$ contributes through both intermediate
+    labels $1$ and $\psi$.
+\end{proof}
+
+\begin{theorem}[Associativity of the structure coefficients]
+    \label{thm:asymex_ising_assoc}
+    \lean{TNLean.Algebra.IsingCrossing.coefficient_assoc}
+    \leanok
+    \uses{def:asymex_ising_coefficients}
+    For arbitrary complex weights, every $L\in\N$, and all labels
+    $a,b,c,d$,
+    \begin{align}
+        \sum_e c_{a,b,e}^{(L)}c_{e,c,d}^{(L)}
+        &=\sum_f c_{b,c,f}^{(L)}c_{a,f,d}^{(L)}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_ising_coefficients}
+    Consider the $3^4$ choices of $a,b,c,d$. In each case, expand
+    the finite sums and substitute the fusion multiplicities.
+    The resulting expressions agree as polynomials in
+    $w_1^L,w_\psi^L,w_\sigma^L$.
+\end{proof}
+
+These examples use the structure-coefficient notation of
+\cite{Cirac2016MPDO_arXiv}. They do not give a tensor realization,
+comparison matrices, or a classification for fixed $F$-symbols.
+
+\subsection{Explicit scalar three-cocycles on the group of order two}
+
+We use the three-cocycle and fusion-gauge conventions of
+\cite{GarreRubioSchuch2024DomainWall}. These concern scalar associators,
+rather than the structure coefficients of the preceding subsections.
+
+\begin{definition}[Two scalar three-cochains]
+    \label{def:asymex_z2_cocycles}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle,
+    TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_generator,
+    TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_zero}
+    \leanok
+    \uses{def:mpug_three_cocycle}
+    Write $\Z_2=\{e,s\}$ multiplicatively, with $s^2=e$.
+    Identify $e,s$ with the bits $0,1$ only in exponents.
+    For $p\in\{0,1\}$, define
+    \begin{align}
+        \omega_p(a,b,c)&=(-1)^{pabc}.
+    \end{align}
+    Thus $\omega_p(s,s,s)=(-1)^p$, all other values are one,
+    and $\omega_0$ is the constant cochain one.
+\end{definition}
+
+\begin{theorem}[Normalization, cocycle equation, and unit modulus]
+    \label{thm:asymex_z2_properties}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isNormalized,
+    TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isCocycle,
+    TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_norm}
+    \leanok
+    \uses{def:asymex_z2_cocycles}
+    Each $\omega_p$ is normalized, has unit modulus, and satisfies,
+    for all $a,b,c,d\in\Z_2$,
+    \begin{align}
+        \omega_p(a,b,c)\omega_p(a,bc,d)\omega_p(b,c,d)
+        &=\omega_p(ab,c,d)\omega_p(a,b,cd).
+    \end{align}
+    Normalization means that its value is one whenever any argument is $e$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_z2_cocycles}
+    An identity argument excludes the triple $(s,s,s)$, proving
+    normalization. For the cocycle equation, check the two choices
+    for each of $a,b,c,d$ and for $p$, using $s^2=e$.
+    Every value is either one or a power of $-1$, so its modulus is one.
+\end{proof}
+
+\begin{theorem}[Distinct scalar gauge classes]
+    \label{thm:asymex_z2_classes}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_cohomologousTo_iff,
+    TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_one_not_isTrivialGaugeClass,
+    TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_sigma_generator,
+    TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_fusionGauge_generator}
+    \leanok
+    \uses{def:asymex_z2_cocycles,def:mpug_cohomologous_to,def:mpug_inversion_cochains}
+    The cochains $\omega_p$ and $\omega_q$ are cohomologous if and
+    only if $p=q$, even when the scalar two-cochain implementing the
+    gauge change is not required to be normalized.
+    The inversion scalar $\sigma_\omega(g)=\omega(g,g^{-1},g)$
+    therefore satisfies $\sigma_{\omega_p}(s)=(-1)^p$.
+    For a normalized scalar two-cochain $\beta$, the fusion-gauge
+    transform satisfies
+    \begin{align}
+        (\beta\cdot\omega_p)(s,s,s)&=(-1)^p,
+    \end{align}
+    where the convention is
+    \begin{align}
+        (\beta\cdot\omega)(a,b,c)
+        &=\frac{\beta(b,c)\beta(a,bc)}
+                {\beta(a,b)\beta(ab,c)}\omega(a,b,c).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_z2_cocycles,thm:asymex_z2_properties,
+    def:mpug_cohomologous_to,thm:mpug_z2_trivial_scalar_class}
+    Since $s^{-1}=s$, the inversion scalar equals
+    $\omega_p(s,s,s)$. The criterion in Theorem~\ref{thm:mpug_z2_trivial_scalar_class}
+    identifies triviality of the scalar gauge
+    class with $\sigma_\omega(s)=1$. Hence $\omega_1$ is not
+    gauge trivial. If $p\neq q$, one representative is $\omega_0=1$
+    and the other is $\omega_1$; cohomology, using symmetry when
+    needed, would contradict this nontriviality.
+    If $p=q$, use reflexivity.
+    Finally, substitute $s^2=e$ in the fusion-gauge coboundary
+    factor and use $\beta(e,s)=\beta(s,e)=1$.
+\end{proof}
+
+No physical MPU or realization of an anomaly is constructed here.
+
+\subsection{A Jordan extension detected by a boundary}
+
+\begin{definition}[Jordan extension and split tensor]
+    \label{def:asymex_jordan}
+    \lean{MPSTensor.JordanBoundary.blocks,
+    MPSTensor.JordanBoundary.tensor,
+    MPSTensor.JordanBoundary.splitTensor,
+    MPSTensor.JordanBoundary.boundary}
+    \leanok
+    Let $A=\{A^i\}_{i=0}^{d-1}$ be any tensor with $A^i\in\MN{D}$.
+    In the standard two-block coordinates on $\C^{D+D}$, set
+    \begin{align}
+        B^i&=\begin{pmatrix}A^i&A^i\\0&A^i\end{pmatrix},\\
+        C^i&=\begin{pmatrix}A^i&0\\0&A^i\end{pmatrix},\\
+        Q&=\begin{pmatrix}0&0\\\Id&0\end{pmatrix}.
+    \end{align}
+    Thus $C=A\oplus A$. For any word $w$, write $A^w$ for its
+    ordered matrix product, with $A^\varnothing=\Id$.
+\end{definition}
+
+\begin{theorem}[Word products and boundary traces]
+    \label{thm:asymex_jordan_traces}
+    \lean{MPSTensor.JordanBoundary.evalWord_tensor,
+    MPSTensor.JordanBoundary.evalWord_splitTensor,
+    MPSTensor.JordanBoundary.trace_evalWord_tensor,
+    MPSTensor.JordanBoundary.periodic_trace_eq,
+    MPSTensor.JordanBoundary.boundary_trace_tensor,
+    MPSTensor.JordanBoundary.boundary_trace_splitTensor}
+    \leanok
+    \uses{def:asymex_jordan}
+    Every word $w$, including the empty word, satisfies
+    \begin{align}
+        B^w&=\begin{pmatrix}A^w&|w|A^w\\0&A^w\end{pmatrix},\\
+        C^w&=\begin{pmatrix}A^w&0\\0&A^w\end{pmatrix},\\
+        \tr(B^w)&=\tr(C^w)=2\tr(A^w),\\
+        \tr(QB^w)&=|w|\tr(A^w),\\
+        \tr(QC^w)&=0.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_jordan}
+    Induct on $w$. The empty word gives the identity matrix.
+    Prepending a letter $i$ changes the upper-right block of $B^w$
+    to $A^i(|w|A^w)+A^iA^w=(|w|+1)A^iA^w$.
+    The split product retains zero off-diagonal blocks.
+    Taking the sum of the diagonal-block traces proves the periodic
+    formulas. Multiplication by $Q$ puts the upper-right word block
+    in the lower-right block, giving the two boundary formulas.
+\end{proof}
+
+\begin{theorem}[Equal periodic traces and different boundary families]
+    \label{thm:asymex_jordan_detection}
+    \lean{MPSTensor.JordanBoundary.periodic_eq_boundary_ne,
+    MPSTensor.JordanBoundary.boundary_trace_ne}
+    \leanok
+    \uses{def:asymex_jordan}
+    Suppose there is a nonempty word $w$ with $\tr(A^w)\neq0$.
+    Then $B$ and $C$ have equal periodic traces for every word,
+    but the functions $v\mapsto\tr(QB^v)$ and
+    $v\mapsto\tr(QC^v)$ differ.
+    No normality assumption on $A$ is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_jordan_traces}
+    The periodic traces agree by
+    Theorem~\ref{thm:asymex_jordan_traces}.
+    At the specified word $w$, the boundary traces are
+    $|w|\tr(A^w)\neq0$ and zero, respectively.
+    Equality of the boundary functions would imply equality at $w$,
+    a contradiction.
+\end{proof}

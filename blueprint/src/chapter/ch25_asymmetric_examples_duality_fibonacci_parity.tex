@@ -1,0 +1,919 @@
+\section{Kramers--Wannier duality squared}%
+\label{sec:asymex_kw}
+
+The unnormalized Kramers--Wannier duality kernel on a periodic chain of $L$
+qubits is
+\begin{align}
+	\bra{s'}D\ket{s} & =\prod_{j=1}^{L}(-1)^{s'_j(s_j+s_{j+1})},
+	\qquad s_{L+1}=s_1,
+	\label{eq:asymex_kw_kernel}
+\end{align}
+the periodic operator of a matrix product operator of bond dimension two.
+Squaring the duality gives
+\begin{align}
+	D^2 & =2^L(1+\eta)\,T,
+	\label{eq:asymex_kw_fusion}
+\end{align}
+where $\eta=\prod_jX_j$ is the global spin flip and $T$ is the one-site
+left translation. This is the lattice form of the duality-defect fusion
+rule of the Ising model \cite{Aasen2016Topological}, in the normalization in
+which the analogous Majorana-chain defect satisfies $D^2=(1+\eta)T$
+\cite{Seiberg2024Majorana}. It is a fusion rule of a non-invertible
+symmetry whose right-hand side contains a space-time symmetry, so it lies
+outside every fusion-category algebra of matrix product operators. Both
+$T$ and $\eta T$ are bond-dimension-two matrix product operators whose four
+matrices are the four matrix units of $\MN{2}$, hence normal already at
+word length one.
+
+\begin{definition}[The duality kernel and the two translation tensors]
+	\label{def:asymex_kw}
+	\lean{KWExample.kwTensor, KWExample.shiftTensor, KWExample.flipShiftTensor,
+		KWExample.kwSquare, KWExample.kwSquareTargets}
+	\leanok
+	\uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+	With the outgoing label $s'$ written first, the duality tensor is
+	\begin{align}
+		W^{00} & =\begin{pmatrix}1&1\\0&0\end{pmatrix},
+		       &
+		W^{01} & =\begin{pmatrix}0&0\\1&1\end{pmatrix},
+		       &
+		W^{10} & =\begin{pmatrix}1&-1\\0&0\end{pmatrix},
+		       &
+		W^{11} & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}.
+		\notag
+	\end{align}
+	The translation tensor is $T^{s's}=E_{s,s'}$ and the flipped
+	translation tensor is $(\eta T)^{s's}=E_{s,1-s'}$, where $E_{pq}$ is
+	the matrix unit with a single entry $1$ in row $p$ and column $q$. The
+	source is the stacked product $B^{s's}=\sum_mW^{s'm}\otimes W^{ms}$ of
+	bond dimension four, and the two targets are $2T$ and $2\eta T$.
+\end{definition}
+
+\begin{center}
+	% Formula: B^{s's}=\sum_mW^{s'm}\otimes W^{ms}, the stacked product
+	% of Definition~\ref{def:asymex_kw}.
+	% Source: Definition~\ref{def:asymex_kw}.
+	% Ink-to-index map: both rows are the duality tensor $W$; the shared
+	% vertical pairleg at each site is the summed index $m$; the drawn
+	% upper-row label $r$ is the per-site component of the outgoing
+	% index $s'$.
+	% Contraction set: the vertical pairlegs (index $m$) at every site
+	% and the horizontal virtual bonds within each row; the physical
+	% legs $(r,s)$, the per-site components of $(s',s)$, remain open.
+	% Boundary signature: (virtual-west=0 | virtual-east=0 |
+	% physical-up=3 | physical-down=3) on both sides.
+	\tenkzkernel
+	\begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$r_1$, 270:physical}]{W} &
+		\tn[skin=mpo, ports={90:physical:$r_2$, 270:physical}]{W} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$r_N$, 270:physical}]{W} \\
+		\tn[skin=mpo, ports={90:physical, 270:physical:$s_1$}]{W} &
+		\tn[skin=mpo, ports={90:physical, 270:physical:$s_2$}]{W} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical, 270:physical:$s_N$}]{W}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$r_1$, 270:physical:$s_1$}]{B} &
+		\tn[skin=mpo, ports={90:physical:$r_2$, 270:physical:$s_2$}]{B} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$r_N$, 270:physical:$s_N$}]{B}
+	\end{tenkz}
+\end{center}
+
+\begin{theorem}[Normality of the two translation tensors]
+	\label{thm:asymex_kw_normal}
+	\lean{KWExample.shiftMPS_isNormal, KWExample.flipShiftMPS_isNormal}
+	\leanok
+	\uses{def:asymex_kw, def:normal}
+	The translation tensor and the flipped translation tensor are normal:
+	the four matrices of each are the four matrix units of $\MN{2}$, which
+	already span $\MN{2}$ at word length one.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Every matrix unit occurs among the four matrices of each tensor, and
+	the matrix units span $\MN{2}$.
+\end{proof}
+
+\begin{theorem}[Split compression of the squared duality]
+	\label{thm:asymex_kw_compression}
+	% Principal declaration: KWExample.kwSquare_isReduction.
+	\lean{KWExample.kwSquare_compression, KWExample.kwSquare_isReduction,
+		KWExample.kwSquare_left_mul_right_of_ne, KWExample.kwSquare_dim_eq,
+		KWExample.kwSquare_remainder_eq_zero}
+	\leanok
+	\uses{def:asymex_kw, thm:asym_multiblock}
+	The source of Definition~\ref{def:asymex_kw} carries the block
+	triangular form of Theorem~\ref{thm:asym_multiblock} for the two slots
+	$2T$ and $2\eta T$ with no zero slots, $4=2+2$. The compression pairs
+	are mutually biorthogonal and satisfy $W_sB^wV_s=C_s^w$ for every word,
+	and the remainder $R^{s's}=B^{s's}-\sum_sV_sC_s^{s's}W_s$ vanishes
+	identically: the extension splits.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge}
+	The change of bond coordinates is
+	\begin{align}
+		G & =\frac12\begin{pmatrix}
+			            1 & 0 & 1  & 0  \\
+			            0 & 1 & 0  & -1 \\
+			            1 & 0 & -1 & 0  \\
+			            0 & 1 & 0  & 1
+		            \end{pmatrix},
+		\label{eq:asymex_kw_gauge}
+	\end{align}
+	whose inverse has integer entries. Conjugating each of the four letters
+	by $G$ produces the block diagonal matrix with the blocks $2T$ and
+	$2\eta T$, which after clearing the denominator is a finite verification
+	over integer matrices. Block diagonality gives both the triangularity
+	condition and the vanishing of the remainder, and the dimension count is
+	clause (vii) of Theorem~\ref{thm:asym_multiblock}.
+\end{proof}
+
+\begin{theorem}[Periodic data of the squared duality]
+	\label{thm:asymex_kw_trace}
+	\lean{KWExample.kwSquare_trace_evalWord}
+	\leanok
+	\uses{def:asymex_kw}
+	For every nonempty word $w$ over the alphabet of index pairs,
+	\begin{align}
+		\tr(B^w) & =2^{|w|}\bigl(\tr(T^w)+\tr((\eta T)^w)\bigr),
+		\label{eq:asymex_kw_trace}
+	\end{align}
+	which is (\ref{eq:asymex_kw_fusion}) at the level of periodic
+	coefficients.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_kw_compression, prop:asym_compression_trace}
+	Proposition~\ref{prop:asym_compression_trace} applied to the datum of
+	Theorem~\ref{thm:asymex_kw_compression} gives
+	$\tr(B^w)=\tr((2T)^w)+\tr((2\eta T)^w)$, and pulling the weight $2$ out
+	of each word evaluation contributes the factor $2^{|w|}$.
+\end{proof}
+
+\begin{theorem}[The sitewise intertwiners of the split case]
+	\label{thm:asymex_kw_intertwiners}
+	% Principal declaration: KWExample.kwSquare_mul_right0_eq.
+	\lean{KWExample.kwSquareLeft0, KWExample.kwSquareLeft1,
+		KWExample.kwSquareRight0, KWExample.kwSquareRight1,
+		KWExample.kwSquare_mul_right0_eq, KWExample.kwSquare_mul_right1_eq,
+		KWExample.left0_mul_kwSquare_eq, KWExample.left1_mul_kwSquare_eq,
+		KWExample.kwSquareLeft0_mul_right0, KWExample.kwSquareLeft1_mul_right1}
+	\leanok
+	\uses{def:asymex_kw, thm:asymex_kw_compression}
+	Write
+	\begin{align}
+		V_1 & =\begin{pmatrix}
+			       1 & 0  \\
+			       0 & 1  \\
+			       1 & 0  \\
+			       0 & -1
+		       \end{pmatrix},
+		    & V_2
+		    & =\begin{pmatrix}
+			       1  & 0 \\
+			       0  & 1 \\
+			       -1 & 0 \\
+			       0  & 1
+		       \end{pmatrix},
+		    & W_1
+		    & =\frac12\begin{pmatrix}
+			              1 & 0 & 1 & 0  \\
+			              0 & 1 & 0 & -1
+		              \end{pmatrix},
+		    & W_2
+		    & =\frac12\begin{pmatrix}
+			              1 & 0 & -1 & 0 \\
+			              0 & 1 & 0  & 1
+		              \end{pmatrix}.
+		\notag
+	\end{align}
+	Then $W_1V_1=W_2V_2=\id$, and for every index pair,
+	$B^{s's}V_1=V_1(2T)^{s's}$, $B^{s's}V_2=V_2(2\eta T)^{s's}$,
+	$W_1B^{s's}=(2T)^{s's}W_1$ and $W_2B^{s's}=(2\eta T)^{s's}W_2$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge}
+	These four matrices are the rows of $G$ and the columns of $G^{-1}$ at
+	the coordinates of the two slots, by
+	Theorem~\ref{thm:asymex_explicit_gauge}. Each of the four intertwining
+	identities is an equality between products of integer matrices after
+	clearing the denominator, and the two normalizations are clause (iv) of
+	Theorem~\ref{thm:asym_multiblock}.
+\end{proof}
+
+\begin{center}
+	% Formula: the four sitewise identities of
+	% Theorem~\ref{thm:asymex_kw_intertwiners}: B^{s's}V_1=V_1(2T)^{s's},
+	% B^{s's}V_2=V_2(2\eta T)^{s's}, W_1B^{s's}=(2T)^{s's}W_1, and
+	% W_2B^{s's}=(2\eta T)^{s's}W_2.
+	% Source: Theorem~\ref{thm:asymex_kw_intertwiners}.
+	% Ink-to-index map: the ring is the compression map $V_1$, $W_1$,
+	% $V_2$ or $W_2$; the square node is the source $B$ or its target
+	% $2T$ or $2\eta T$.
+	% Contraction set: the single virtual bond joining the ring to the
+	% square node in each pair; the physical pair leg remains open.
+	% Boundary signature: (virtual-west=1 | virtual-east=1 |
+	% physical-up=1 | physical-down=0) for each pictured equality.
+	\tenkzkernel
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$s's$}]{B} & \tn[skin=ring]{V_1}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{V_1} & \tn[label pos=s, ports={90:physical:$s's$}]{2T}
+	\end{tenkz}
+	\\[2ex]
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$s's$}]{B} & \tn[skin=ring]{V_2}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{V_2} &
+		\tn[label pos=s, ports={90:physical:$s's$}]{2\eta T}
+	\end{tenkz}
+	\\[2ex]
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{W_1} & \tn[label pos=s, ports={90:physical:$s's$}]{B}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$s's$}]{2T} & \tn[skin=ring]{W_1}
+	\end{tenkz}
+	\\[2ex]
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{W_2} & \tn[label pos=s, ports={90:physical:$s's$}]{B}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$s's$}]{2\eta T} &
+		\tn[skin=ring]{W_2}
+	\end{tenkz}
+\end{center}
+
+\section{Kramers--Wannier duality acting on ground states}%
+\label{sec:asymex_kw_action}
+
+The same duality kernel may be applied to a state rather than to itself.
+Both parts below read as symmetry breaking of the non-invertible
+Kramers--Wannier symmetry: the duality maps the paramagnetic product state
+to the pair of ferromagnetic sectors, and it maps both ferromagnetic
+sectors to the paramagnet, merged with multiplicity two. When the acted
+state is written as a multiple of a normalized state, a factor $2^{L/2}$
+appears; that factor is a norm of the unnormalized periodic vector and not
+a weight of the target, and the weighted tensor seen by the theorem is the
+same under either reading.
+
+\begin{definition}[The two action tensors]
+	\label{def:asymex_kw_action}
+	\lean{KWExample.plusTensor, KWExample.ghz0, KWExample.ghz1,
+		KWExample.kwPlus, KWExample.plusTarget, KWExample.ghz,
+		KWExample.kwGHZ, KWExample.kwGHZTarget}
+	\leanok
+	\uses{def:asymex_kw, def:mps_tensor}
+	The product-state tensor is the bond-dimension-one tensor with both
+	matrices equal to $(1)$, generating $\sum_s\ket{s}$ at every site; the
+	two ferromagnetic sectors are the bond-dimension-one tensors
+	$C_0=\bigl((1),(0)\bigr)$ and $C_1=\bigl((0),(1)\bigr)$, and their direct
+	sum is the Greenberger--Horne--Zeilinger tensor $\diag(1,0)$,
+	$\diag(0,1)$.
+	The two action tensors are
+	$(W\cdot A)^{s'}=\sum_sW^{s's}\otimes A^s$ applied to the product-state
+	tensor and to the Greenberger--Horne--Zeilinger tensor; explicitly
+	\begin{align}
+		(W\cdot A)^0
+		 & =\begin{pmatrix}1&1\\1&1\end{pmatrix},
+		 &
+		(W\cdot A)^1
+		 & =\begin{pmatrix}1&-1\\-1&1\end{pmatrix}
+		\notag
+	\end{align}
+	in the first case, with targets the two sectors carried with weight $2$,
+	and
+	\begin{align}
+		(W\cdot A)^0
+		 & =\begin{pmatrix}
+			    1 & 0 & 1 & 0 \\
+			    0 & 0 & 0 & 0 \\
+			    0 & 0 & 0 & 0 \\
+			    0 & 1 & 0 & 1
+		    \end{pmatrix},
+		 &
+		(W\cdot A)^1
+		 & =\begin{pmatrix}
+			    1 & 0  & -1 & 0 \\
+			    0 & 0  & 0  & 0 \\
+			    0 & 0  & 0  & 0 \\
+			    0 & -1 & 0  & 1
+		    \end{pmatrix}
+		\notag
+	\end{align}
+	in the second, with two unweighted copies of the product-state tensor as
+	targets.
+\end{definition}
+
+\begin{center}
+	% Formula: (W\cdot A)^{s'}=\sum_sW^{s's}\otimes A^s, of
+	% Definition~\ref{def:asymex_kw_action}, evaluated at the
+	% product-state tensor $A_+$ (left) and at the Greenberger--Horne--
+	% Zeilinger tensor $A_{\mathrm{GHZ}}$ (right).
+	% Source: Definition~\ref{def:asymex_kw_action}.
+	% Ink-to-index map: the upper row is the duality tensor $W$, whose
+	% drawn physical legs $r$ are the per-site components of the
+	% outgoing index $s'$; the lower row is the acted-on state tensor;
+	% the shared vertical pairleg at each site is the summed index $s$.
+	% Contraction set: the vertical pairlegs (index $s$) at every site
+	% and the horizontal virtual bonds within each row, both closed by
+	% the periodic trace; only the upper physical legs of $W$ remain
+	% open.
+	% Boundary signature: (virtual-west=0 | virtual-east=0 |
+	% physical-up=3 | physical-down=0) for both pictures.
+	\tenkzkernel
+	\begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$r_1$}]{W} &
+		\tn[skin=mpo, ports={90:physical:$r_2$}]{W} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$r_N$}]{W} \\
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+} &
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+}
+	\end{tenkz}
+	\qquad
+	\begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$r_1$}]{W} &
+		\tn[skin=mpo, ports={90:physical:$r_2$}]{W} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$r_N$}]{W} \\
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}} &
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}}
+	\end{tenkz}
+\end{center}
+
+\begin{theorem}[The duality on the product state splits]
+	\label{thm:asymex_kw_plus}
+	% Principal declaration: KWExample.plus_isReduction.
+	\lean{KWExample.plusCompression, KWExample.plus_isReduction,
+		KWExample.plus_dim_eq, KWExample.plus_remainder_eq_zero,
+		KWExample.kwPlus_trace_evalWord_eq_sum}
+	\leanok
+	\uses{def:asymex_kw_action, thm:asym_multiblock}
+	The first action tensor of Definition~\ref{def:asymex_kw_action} carries
+	the block triangular form of Theorem~\ref{thm:asym_multiblock} for the
+	two sectors carried with weight $2$, with no zero slots and $2=1+1$;
+	the compression pair of each sector satisfies $W_sV_s=\id$ and
+	$W_sB^wV_s=C_s^w$ for every word; the remainder vanishes identically;
+	and for every nonempty word $w$,
+	$\tr(B^w)=\tr((2C_0)^w)+\tr((2C_1)^w)$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
+	Conjugating the two letters by the matrix
+	$\begin{pmatrix}1&1\\1&-1\end{pmatrix}$, whose inverse is half of
+	itself, produces $\diag(2,0)$ and $\diag(0,2)$, a finite verification
+	over integer matrices. Diagonality gives the triangularity condition,
+	the identification of the matched blocks and the vanishing of the
+	remainder; the trace identity is
+	Proposition~\ref{prop:asym_compression_trace}.
+\end{proof}
+
+\begin{theorem}[The duality on the ferromagnetic state does not split]
+	\label{thm:asymex_kw_ghz}
+	% Principal declaration: KWExample.kwGHZ_isReduction.
+	\lean{KWExample.kwGHZCompression, KWExample.kwGHZ_isReduction,
+		KWExample.kwGHZ_dim_eq, KWExample.kwGHZ_evalWord_remainder_eq_zero,
+		KWExample.kwGHZRemainder_eq, KWExample.kwGHZ_remainder_mul_remainder,
+		KWExample.kwGHZ_trace_evalWord_eq_two}
+	\leanok
+	\uses{def:asymex_kw_action, thm:asym_multiblock}
+	The second action tensor of Definition~\ref{def:asymex_kw_action}
+	carries the block triangular form of Theorem~\ref{thm:asym_multiblock}
+	for two unweighted copies of the product-state tensor with $z=2$ zero
+	slots and $4=1+1+2$; the compression pair of each copy satisfies
+	$W_sV_s=\id$ and $W_sB^wV_s=C_s^w$ for every word;
+	$\tr(B^w)=2$ for every nonempty word $w$; a product of four remainder
+	matrices vanishes; and in fact
+	\begin{align}
+		R^0 & =\begin{pmatrix}
+			       0 & 0 & 1 & 0 \\
+			       0 & 0 & 0 & 0 \\
+			       0 & 0 & 0 & 0 \\
+			       0 & 1 & 0 & 0
+		       \end{pmatrix},
+		    & R^1
+		    & =\begin{pmatrix}
+			       0 & 0  & -1 & 0 \\
+			       0 & 0  & 0  & 0 \\
+			       0 & 0  & 0  & 0 \\
+			       0 & -1 & 0  & 0
+		       \end{pmatrix},
+		\notag
+	\end{align}
+	and $R^iR^j=0$ for all letters $i$ and $j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
+	The gauge is the coordinate permutation placing the two copies at the
+	first and fourth bond coordinates and the two zero slots at the second
+	and third; in these coordinates the two letters are block upper
+	triangular with the scalar $1$ on both matched diagonal positions, a
+	finite verification over integer matrices. Every word evaluation of the
+	product-state tensor is $1$, so the trace identity of
+	Proposition~\ref{prop:asym_compression_trace} reads $\tr(B^w)=2$. The
+	remainder is the conjugated letter off the diagonal of the block
+	decomposition, which gives the two displayed matrices, and their
+	pairwise products vanish by direct multiplication; the generic bound of
+	clause (vi) of Theorem~\ref{thm:asym_multiblock} is $|S|+z=4$.
+\end{proof}
+
+\begin{theorem}[One-sided sitewise intertwiners for the merged target]
+	\label{thm:asymex_kw_ghz_intertwiner}
+	\lean{KWExample.kwGHZ_left_intertwiner_eq_zero,
+		KWExample.kwGHZ_right_intertwiner,
+		KWExample.kwGHZ_right_intertwiner_ne_zero}
+	\leanok
+	\uses{def:asymex_kw_action}
+	If $u\in\C^4$ satisfies $uB^i=u$ for both letters $i$, then $u=0$: no
+	nonzero sitewise left intertwiner exists for the product-state target.
+	A nonzero sitewise right intertwiner does exist, namely the first
+	coordinate vector, which satisfies $B^ie_0=e_0$ for both letters.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Both matrices of the product-state target are the scalar $1$, so the
+	two conditions read $uB^i=u$ and $B^iv=v$. Comparing the second and
+	third coordinates of the two equations $uB^0=u$ and $uB^1=u$ gives in
+	turn $u_3=u_1=u_0=u_2=0$. For the right-hand side, the first column of
+	each of the two letters is the first coordinate vector.
+\end{proof}
+
+\section{Fibonacci fusion}%
+\label{sec:asymex_fibonacci}
+
+The simplest non-invertible fusion of matrix product operators is the
+Fibonacci string-net algebra of \cite[Appendix~D.1]{Bultinck2017Anyons},
+whose two operator families obey
+\begin{align}
+	O_\tau O_\tau & =O_1+O_\tau,
+	\label{eq:asymex_fib_fusion}
+\end{align}
+the realization of $\tau\otimes\tau=1\oplus\tau$. The unit of the algebra
+is not the identity operator: $O_1$ is the projector onto the admissible
+configurations of the chain, those with no two neighbouring trivial labels,
+and it is a matrix product operator of bond dimension two. The $\tau$
+family has bond dimension three, so the stacked tensor of the square has
+bond dimension nine: two directions carry the trivial block, three carry
+the $\tau$ block, and the remaining four are annihilated by every letter,
+being the inadmissible configurations killed by the vertex weights.
+
+The entries of these tensors are not rational, so the exact arithmetic
+takes place in a quartic ring.
+
+\begin{definition}[The ring of golden integers]
+	\label{def:asymex_golden_ring}
+	\lean{GoldenInt, GoldenInt.sigma, goldenPoly, goldenSigmaReal,
+		goldenToComplex, MPSTensor.complexOfGolden, MPSTensor.evalWordGolden,
+		MPSTensor.mulGoldenTensor}
+	\leanok
+	Let $\sigma=\varphi^{-1/2}$ be the inverse square root of the golden
+	ratio, the positive real root of $X^4+X^2-1$, so that
+	$\sigma=\sqrt{(\sqrt5-1)/2}$. The ring of \emph{golden integers} is
+	$\Z[\sigma]$, presented by the four integer coordinates of
+	$c_0+c_1\sigma+c_2\sigma^2+c_3\sigma^3$ with the multiplication obtained
+	from $\sigma^4=1-\sigma^2$. It embeds into $\C$ through the quotient
+	$\mathbb{Q}[X]/(X^4+X^2-1)$ evaluated at that real root; a matrix over
+	$\Z[\sigma]$ becomes a complex matrix by applying that embedding
+	entrywise, and word evaluation and the bond-space product of tensors
+	over $\Z[\sigma]$ are defined by the same formulas as over $\C$.
+\end{definition}
+
+\begin{theorem}[Exact arithmetic in the ring of golden integers]
+	\label{thm:asymex_golden_ring}
+	% Principal declaration: goldenMulRule.
+	\lean{GoldenInt.sigma_quartic, goldenMulRule, goldenSigmaReal_quartic,
+		MPSTensor.complexOfGolden_mul, MPSTensor.evalWord_complexOfGolden,
+		MPSTensor.mulTensor_complexOfGolden}
+	\leanok
+	\uses{def:asymex_golden_ring}
+	The generator satisfies $\sigma^4+\sigma^2-1=0$ in $\Z[\sigma]$, and so
+	does the real number $\sqrt{(\sqrt5-1)/2}$. In any commutative ring
+	carrying a root $s$ of $X^4+X^2-1$, the product of two integer
+	combinations of $1,s,s^2,s^3$ is the combination prescribed by the
+	multiplication of $\Z[\sigma]$. The entrywise embedding of matrices
+	over $\Z[\sigma]$ into the complex matrices is multiplicative, and it
+	commutes with word evaluation and with the bond-space product of
+	tensors.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Squaring $\sigma^2=(\sqrt5-1)/2$ gives the quartic for the real root.
+	The multiplication rule is the reduction of a product of two
+	polynomials of degree at most three modulo $X^4+X^2-1$, which is a
+	polynomial identity in the eight coefficients. Multiplicativity of the
+	entrywise embedding is the fact that it is induced by a ring
+	homomorphism, and the two compatibility statements follow by induction
+	on the word and by expanding the bond-space product entrywise.
+\end{proof}
+
+\begin{definition}[The two Fibonacci blocks and the stacked square]
+	\label{def:asymex_fib}
+	\lean{FibonacciCompression.fibTau, FibonacciCompression.fibOne,
+		FibonacciCompression.fibTauMPS, FibonacciCompression.fibOneMPS,
+		FibonacciCompression.fibStack, FibonacciCompression.fibTargets}
+	\leanok
+	\uses{def:asymex_golden_ring, def:mpo_tensor, def:mpdo_operator_product}
+	Label the two objects of the category by $0$ for the trivial label and
+	$1$ for $\tau$, and read a letter as the pair $(x',x)$ of the outgoing
+	and incoming labels. Write
+	\begin{align}
+		F & =\begin{pmatrix}
+			     0 & \varphi^{-1}   & \varphi^{-1/2} \\
+			     1 & 0              & 1              \\
+			     1 & \varphi^{-1/2} & -\varphi^{-1}
+		     \end{pmatrix}
+		\label{eq:asymex_fib_vertex}
+	\end{align}
+	for the reduced vertex weight. The $\tau$ tensor $B_\tau$ of bond
+	dimension three has, at the letters $(0,1)$, $(1,0)$ and $(1,1)$, the
+	matrix whose first, second and third row respectively is the
+	corresponding row of $F$ and whose other rows vanish; at the letter
+	$(0,0)$ it vanishes. The trivial tensor $B_1$ of bond dimension two
+	carries the admissibility matrix
+	$\begin{pmatrix}0&1\\1&1\end{pmatrix}$ on its two diagonal letters and
+	vanishes on the other two. The source is the stacked product
+	$B^{x'x}=\sum_m(B_\tau)^{x'm}\otimes(B_\tau)^{mx}$ of bond dimension
+	nine, and the two targets are $B_1$ and $B_\tau$, each with
+	multiplicity one and weight one.
+\end{definition}
+
+\begin{center}
+	% Formula: B^{x'x}=\sum_m(B_\tau)^{x'm}\otimes(B_\tau)^{mx}, the
+	% stacked product of Definition~\ref{def:asymex_fib}, realizing
+	% $\tau\otimes\tau$; Theorem~\ref{thm:asymex_fib_fusion} identifies
+	% its periodic trace with that of $B_1\oplus B_\tau$, the
+	% realization $1\oplus\tau$.
+	% Source: Definition~\ref{def:asymex_fib}.
+	% Ink-to-index map: both rows are the $\tau$ tensor $B_\tau$; the
+	% shared vertical pairleg at each site is the summed intermediate
+	% label $m$; the drawn upper-row label $y$ is the per-site
+	% component of the outgoing index $x'$.
+	% Contraction set: the vertical pairlegs (index $m$) at every site
+	% and the horizontal virtual bonds within each row; the physical
+	% legs $(y,x)$, the per-site components of $(x',x)$, remain open.
+	% Boundary signature: (virtual-west=0 | virtual-east=0 |
+	% physical-up=3 | physical-down=3) on both sides.
+	\tenkzkernel
+	\begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$y_1$, 270:physical}]{B_\tau} &
+		\tn[skin=mpo, ports={90:physical:$y_2$, 270:physical}]{B_\tau} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$y_N$, 270:physical}]{B_\tau} \\
+		\tn[skin=mpo, ports={90:physical, 270:physical:$x_1$}]{B_\tau} &
+		\tn[skin=mpo, ports={90:physical, 270:physical:$x_2$}]{B_\tau} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical, 270:physical:$x_N$}]{B_\tau}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$y_1$, 270:physical:$x_1$}]{B} &
+		\tn[skin=mpo, ports={90:physical:$y_2$, 270:physical:$x_2$}]{B} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$y_N$, 270:physical:$x_N$}]{B}
+	\end{tenkz}
+\end{center}
+
+\begin{theorem}[The one-site matrices of the $\tau$ block]
+	\label{thm:asymex_fib_entries}
+	\lean{FibonacciCompression.fibTauMPS_apply_one,
+		FibonacciCompression.fibTauMPS_apply_three}
+	\leanok
+	\uses{def:asymex_fib}
+	The matrix of $B_\tau$ at the letter $(0,1)$ has the first row of
+	(\ref{eq:asymex_fib_vertex}) as its first row and zero elsewhere, and
+	its matrix at the letter $(1,1)$ has the third row of
+	(\ref{eq:asymex_fib_vertex}) as its third row and zero elsewhere, with
+	$\varphi^{-1/2}=\sqrt{(\sqrt5-1)/2}$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_golden_ring}
+	Both are the entrywise embedding of the corresponding matrix over
+	$\Z[\sigma]$, evaluated coordinate by coordinate.
+\end{proof}
+
+\begin{theorem}[Normality of the two Fibonacci blocks]
+	\label{thm:asymex_fib_normal}
+	\lean{FibonacciCompression.fibOneMPS_isNormal,
+		FibonacciCompression.fibTauMPS_isNormal}
+	\leanok
+	\uses{def:asymex_fib, def:normal}
+	Both blocks are normal, their length-three words spanning the full
+	matrix algebra of their bond space.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_golden_ring}
+	For the $\tau$ block the word $(i+1,3,k+1)$, with $i$ and $k$ in
+	$\{0,1,2\}$, evaluates to a multiple of the matrix built from the $i$-th
+	coordinate vector and the $k$-th row of (\ref{eq:asymex_fib_vertex});
+	those rows are a basis, so each of the nine matrix units is an explicit
+	combination over $\Z[\sigma]$ of the nine such words. For the trivial block four length-three words suffice. Both
+	families of coefficients are verified in $\Z[\sigma]$ and transported to
+	the complex matrices by Theorem~\ref{thm:asymex_golden_ring}.
+\end{proof}
+
+\begin{theorem}[Split compression of the Fibonacci square]
+	\label{thm:asymex_fib_compression}
+	% Principal declaration: FibonacciCompression.fibonacci_isReduction.
+	\lean{FibonacciCompression.fibonacci_compression,
+		FibonacciCompression.fibonacci_isReduction,
+		FibonacciCompression.fibonacci_left_mul_right_of_ne,
+		FibonacciCompression.fibonacci_dim_eq,
+		FibonacciCompression.fibonacci_evalWord_remainder_eq_zero,
+		FibonacciCompression.fibonacci_remainder_eq_zero}
+	\leanok
+	\uses{def:asymex_fib, thm:asym_multiblock}
+	The source of Definition~\ref{def:asymex_fib} carries the block
+	triangular form of Theorem~\ref{thm:asym_multiblock} for the trivial
+	block and the $\tau$ block with $z=4$ zero slots and $9=2+3+4$. The
+	compression pairs are mutually biorthogonal and satisfy
+	$W_sB^wV_s=C_s^w$ for every word; a product of six remainder matrices
+	vanishes; and in fact the remainder vanishes identically, so the
+	extension splits.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge, thm:asymex_golden_ring}
+	The change of bond coordinates has as its columns the two fusion
+	tensors of the blocks followed by a basis of the four-dimensional
+	subspace annihilated by every letter. In these coordinates every letter
+	of the stacked tensor is block diagonal with the trivial block, the
+	$\tau$ block and four one-dimensional zero blocks on the diagonal, which
+	is a finite verification over matrices with entries in $\Z[\sigma]$.
+	Block diagonality gives the triangularity condition, the identification
+	of the diagonal blocks and the vanishing of the remainder; the generic
+	nilpotency bound of clause (vi) of Theorem~\ref{thm:asym_multiblock} is
+	$|S|+z=6$, and the dimension count is clause (vii).
+\end{proof}
+
+\begin{theorem}[The fusion rule]
+	\label{thm:asymex_fib_fusion}
+	% Principal declaration: FibonacciCompression.fibonacci_fusion_rule.
+	\lean{FibonacciCompression.fibStack_trace_evalWord,
+		FibonacciCompression.fibonacci_fusion_rule,
+		FibonacciCompression.fibStack_mpv}
+	\leanok
+	\uses{def:asymex_fib, def:mpo_family}
+	For every nonempty word $w$ over the alphabet of label pairs,
+	$\tr(B^w)=\tr(B_1^w)+\tr(B_\tau^w)$; equivalently, at every positive
+	system size $L$ the periodic operators satisfy
+	(\ref{eq:asymex_fib_fusion}), and the periodic vector of the stacked
+	tensor is the sum of the periodic vectors of the two blocks at every
+	positive size.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_fib_compression, prop:asym_compression_trace}
+	The word-trace identity is
+	Proposition~\ref{prop:asym_compression_trace} applied to the datum of
+	Theorem~\ref{thm:asymex_fib_compression}. Each matrix element of a
+	periodic operator at size $L$ is the word trace at the word of length
+	$L$ formed by the corresponding pairs of labels, and the periodic
+	operator of the stacked tensor is the product of the two periodic
+	operators, so the identity of periodic operators follows entry by entry;
+	the statement for periodic vectors is the same computation.
+\end{proof}
+
+\begin{theorem}[The fusion tensors]
+	\label{thm:asymex_fib_fusion_tensors}
+	% Principal declaration: FibonacciCompression.fibStack_mul_fusionRight.
+	\lean{FibonacciCompression.fibFusionRight, FibonacciCompression.fibFusionLeft,
+		FibonacciCompression.fibonacci_right_eq, FibonacciCompression.fibonacci_left_eq,
+		FibonacciCompression.fibStack_mul_fusionRight,
+		FibonacciCompression.fusionLeft_mul_fibStack}
+	\leanok
+	\uses{def:asymex_fib, thm:asymex_fib_compression}
+	The compression maps of the two slots are the fusion tensors of the
+	Fibonacci algebra: $V_s$ is the column block of the adapted basis
+	carrying the slot $s$, $W_s$ is the matching row block of its inverse,
+	and for every letter and every slot,
+	$B^{x'x}V_s=V_sC_s^{x'x}$ and $W_sB^{x'x}=C_s^{x'x}W_s$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge}
+	The identification of the two maps with the row and column blocks of
+	the adapted basis is Theorem~\ref{thm:asymex_explicit_gauge}, and each
+	of the two intertwining identities is an equality between products of
+	matrices over $\Z[\sigma]$, transported to the complex matrices by
+	Theorem~\ref{thm:asymex_golden_ring}.
+\end{proof}
+
+\begin{center}
+	% Formula: B^{x'x}V_s=V_sC_s^{x'x} and W_sB^{x'x}=C_s^{x'x}W_s of
+	% Theorem~\ref{thm:asymex_fib_fusion_tensors}, for $s\in\{1,\tau\}$.
+	% Source: Theorem~\ref{thm:asymex_fib_fusion_tensors}.
+	% Ink-to-index map: the ring is the fusion tensor $V_s$ or $W_s$;
+	% the square node is the stacked source $B$ or the target block
+	% $C_s\in\{B_1,B_\tau\}$.
+	% Contraction set: the single virtual bond joining the ring to the
+	% square node in each pair; the physical pair leg $(x',x)$ remains
+	% open.
+	% Boundary signature: (virtual-west=1 | virtual-east=1 |
+	% physical-up=1 | physical-down=0) for each pictured equality.
+	\tenkzkernel
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$x'x$}]{B} & \tn[skin=ring]{V_s}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$x'x$}]{C_s}
+	\end{tenkz}
+	\\[2ex]
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$x'x$}]{B}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$x'x$}]{C_s} & \tn[skin=ring]{W_s}
+	\end{tenkz}
+\end{center}
+
+\section{Parity-graded sectors}%
+\label{sec:asymex_parity}
+
+A bond-two normal tensor paired with its own copy of weight $-1$ has the
+length-$L$ coefficient $1+(-1)^L$, the power sum of the weight multiset
+$\{+1,-1\}$; in the Kitaev chain this grading is the fermion-parity sign
+picked up under parity-twisted boundary conditions. The point of the
+example is that the source is presented in a mixing integer basis in which
+neither of its two matrices has a zero row or a zero column, so the
+invariant flag is not visible on the nose, and that the generic nilpotency
+bound of the theorem is attained exactly.
+
+\begin{definition}[The graded pair and the five-dimensional source]
+	\label{def:asymex_parity}
+	\lean{ParityGraded.parA, ParityGraded.parTargets, ParityGraded.parB}
+	\leanok
+	\uses{def:mps_tensor}
+	The block is the bond-two tensor
+	\begin{align}
+		A^0 & =\begin{pmatrix}1&0\\0&0\end{pmatrix},
+		    &
+		A^1 & =\begin{pmatrix}0&1\\1&0\end{pmatrix},
+		\notag
+	\end{align}
+	and the two targets are $A$ and $-A$. The source is the
+	bond-dimension-five tensor
+	\begin{align}
+		B^0
+		 & =\begin{pmatrix}
+			    -1 & 1 & -1 & 1  & 3 \\
+			    2  & 2 & -2 & -1 & 0 \\
+			    1  & 2 & -2 & 0  & 2 \\
+			    1  & 3 & -3 & -1 & 2 \\
+			    -1 & 0 & 0  & 1  & 2
+		    \end{pmatrix},
+		 &
+		B^1
+		 & =\begin{pmatrix}
+			    3  & 1 & 0  & -2 & -3 \\
+			    -3 & 1 & -1 & 2  & 5  \\
+			    -1 & 2 & -1 & 1  & 3  \\
+			    0  & 1 & -1 & -1 & 1  \\
+			    2  & 1 & 0  & -1 & -2
+		    \end{pmatrix}.
+		\notag
+	\end{align}
+\end{definition}
+
+\begin{center}
+	% Formula: the periodic trace tr(B^w)=(1+(-1)^{|w|})tr(A^w) of
+	% Theorem~\ref{thm:asymex_parity_trace}; the source is not presented
+	% as a literal stack of $A$ and $-A$, so the ring carries $B$ with
+	% its coefficient, not a two-row stack.
+	% Source: Definition~\ref{def:asymex_parity}.
+	% Ink-to-index map: each node is the bond-dimension-five source
+	% tensor $B$; the upper legs carry the letters of the word.
+	% Contraction set: the horizontal virtual legs, closed around the
+	% ring by the trace; no leg is left open.
+	% Boundary signature: (virtual-west=0 | virtual-east=0 |
+	% physical-up=3 | physical-down=0) for the finite schematic shown.
+	\tenkzkernel
+	\begin{tenkz}[cols=4, boundary=periodic, physical=up]
+		\tn[label pos=135, ports={90:physical:$i_1$}]{B} &
+		\tn[label pos=135]{B} & \tn[skin=dots]{} &
+		\tn[label pos=135, ports={90:physical:$i_N$}]{B}
+	\end{tenkz}
+	\qquad $\tr(B^w)$, computed in
+	Theorem~\ref{thm:asymex_parity_trace}
+\end{center}
+
+\begin{theorem}[Normality of the graded block]
+	\label{thm:asymex_parity_normal}
+	\lean{ParityGraded.parA_isNormal}
+	\leanok
+	\uses{def:asymex_parity, def:normal}
+	The block $A$ is normal: its length-two words span $\MN{2}$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Three of the four matrix units are directly the products $A^0A^0$,
+	$A^0A^1$ and $A^1A^0$, and the fourth is $A^1A^1-A^0A^0$; all four
+	identities are finite verifications over integer matrices.
+\end{proof}
+
+\begin{theorem}[Compression of the graded pair]
+	\label{thm:asymex_parity_compression}
+	% Principal declaration: ParityGraded.parityGraded_isReduction.
+	\lean{ParityGraded.parityGraded_compression,
+		ParityGraded.parityGraded_isReduction,
+		ParityGraded.parityGraded_left_mul_right_of_ne,
+		ParityGraded.parityGraded_dim_eq,
+		ParityGraded.parityGraded_evalWord_remainder_eq_zero,
+		ParityGraded.parityGraded_remainder_sq_ne_zero}
+	\leanok
+	\uses{def:asymex_parity, thm:asym_multiblock}
+	The source of Definition~\ref{def:asymex_parity} carries the block
+	triangular form of Theorem~\ref{thm:asym_multiblock} for the two slots
+	$A$ and $-A$ with $z=1$ zero slot and $5=2+2+1$. The compression pairs
+	are mutually biorthogonal and satisfy $W_sB^wV_s=C_s^w$ for every word,
+	a product of three remainder matrices vanishes, and the square of the
+	remainder at the letter $0$ is nonzero, so the bound $|S|+z=3$ of
+	clause (vi) is attained.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge}
+	Conjugating the two letters by an explicit integer matrix with integer
+	inverse produces block upper triangular matrices carrying $A$ on the
+	first diagonal block, $-A$ on the second, and zero on the third, a
+	finite verification over integer matrices. The compression pairs are
+	then the rows and columns of that matrix and its inverse at the
+	coordinates of the two slots, by
+	Theorem~\ref{thm:asymex_explicit_gauge}, and computing the remainder
+	from them exhibits a nonzero entry in its square.
+\end{proof}
+
+\begin{theorem}[The graded structure constant]
+	\label{thm:asymex_parity_trace}
+	\lean{ParityGraded.parityGraded_trace_evalWord}
+	\leanok
+	\uses{def:asymex_parity}
+	For every nonempty word $w$,
+	$\tr(B^w)=\bigl(1+(-1)^{|w|}\bigr)\tr(A^w)$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_parity_compression, prop:asym_compression_trace}
+	Proposition~\ref{prop:asym_compression_trace} applied to the datum of
+	Theorem~\ref{thm:asymex_parity_compression} gives
+	$\tr(B^w)=\tr(A^w)+\tr((-A)^w)$, and pulling the weight $-1$ out of the
+	second word evaluation contributes $(-1)^{|w|}\tr(A^w)$.
+\end{proof}
+
+\begin{theorem}[The weight $-1$ block has no sitewise intertwiner]
+	\label{thm:asymex_parity_no_intertwiner}
+	\lean{ParityGraded.parNeg_right_intertwiner_eq_zero,
+		ParityGraded.parNeg_left_intertwiner_eq_zero}
+	\leanok
+	\uses{def:asymex_parity}
+	If $V\in\C^{5\times2}$ satisfies $B^iV=V(-A^i)$ for both letters, then
+	$V=0$; if $W\in\C^{2\times5}$ satisfies $WB^i=(-A^i)W$ for both
+	letters, then $W=0$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Each of the two conditions is a linear system in the ten unknown
+	entries. Ten of its coordinate equations, combined with explicit
+	rational coefficients, determine the five entries of the first column or
+	row, and each entry of the remaining one is then read off a further
+	equation; both systems have only the zero solution.
+\end{proof}
+

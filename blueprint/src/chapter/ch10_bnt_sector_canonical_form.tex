@@ -4,7 +4,7 @@
 % Source: Cirac2016MPDO_arXiv \S~II lines 287--301; Cirac2021Matrix
 % Definition~4.2, Proposition~4.3, lines 1864--1884.
 This section introduces the BNT canonical-form conditions of
-\cite[Section~2]{Cirac2016MPDO_arXiv}, defined on a sector decomposition with raw
+\cite[Section~2]{Cirac2016MPDO_arXiv}, defined on a sector decomposition with
 sector weights $\mu_{j,q}$ and coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$;
 no equal-modulus factorization is assumed.
 
@@ -27,7 +27,7 @@ here determine the BNT canonical-form conditions below.
     $r_j > 0$, nonzero weights $\mu_{j,q}$ for
     $q \in \{1,\ldots,r_j\}$, and the sector coefficients
     \begin{align}
-        c_{S,j}^{(N)}
+        c_N^{(j)}
          & :=
         \sum_{q=1}^{r_j} \mu_{j,q}^N.
         \label{eq:bnt_sector_coeff_def}
@@ -95,7 +95,7 @@ here determine the BNT canonical-form conditions below.
     \begin{align}
         V^{(N)}(A_{\mathrm{tot}})_\sigma
          & =
-        \sum_{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma.
+        \sum_{j=1}^{g} c_N^{(j)} V^{(N)}(A_j)_\sigma.
         \label{eq:bnt_sector_decomp}
     \end{align}
 \end{lemma}
@@ -533,7 +533,7 @@ single family.
     \end{align}
 \end{proof}
 
-\begin{lemma}[Unit-modulus weight witness from the canonical-form normalization]%
+\begin{lemma}[Existence of a unit-modulus weight from the canonical-form normalization]%
     \label{lem:sector_bnt_weight_unit_exists}
     \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists}
     \leanok
@@ -854,8 +854,8 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
     give gauge-phase-distinct representatives. The collapsed phase-class
     construction supplies the eventual linear independence and retains every
     original block as one copy. Its phase multipliers have unit modulus, so the
-    adjusted weights preserve the assumed bounds and unit witness. These are
-    precisely the fields of Definition~\ref{def:sector_bnt_cf}.
+    adjusted weights still have modulus at most one, and at least one has
+    modulus one. Thus Definition~\ref{def:sector_bnt_cf} holds.
 \end{proof}
 
 \begin{theorem}[BNT from normal blocks with normalized weights]%
@@ -872,7 +872,7 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
         \item \textbf{irreducibility:} each $B_k$ is irreducible,
         \item \textbf{nonzero weights:} $\mu_k \neq 0$ for all $k$,
         \item \textbf{bounded weights:} $|\mu_k| \le 1$ for all $k$,
-        \item \textbf{global unit witness:} $|\mu_k| = 1$ for some $k$.
+        \item at least one weight has modulus one: $|\mu_k| = 1$ for some $k$.
     \end{enumerate}
     Then there exists a sector decomposition $P$ such that $P$ and
     $\bigoplus_{k=1}^{r} \mu_k B_k$ generate the same MPV family at every

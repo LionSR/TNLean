@@ -1,0 +1,287 @@
+\begin{definition}[Algebra conditions for a basis of normal tensors]%
+	\label{def:mpdo_bnt_algebra_clause}
+	\lean{MPOTensor.BNTAlgebraClause}
+	\leanok
+	\uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_operator_family, def:mpdo_bnt_label_trace_scalar_family, def:mpdo_diagonal_chi_family, def:mpdo_positive_bnt_label_chi_trace_power_form, def:mpdo_bnt_label_same_length_product_form, def:mpdo_bnt_label_idempotent_coefficient_form}
+	Fix structure coefficients $c^{(L)}_{\alpha,\beta,\gamma}$,
+	operators $O_L(M_\alpha)$, and scalars $m_\alpha=\tr(\mu_\alpha)$.
+	The algebra conditions require a length-independent family of
+	positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ such that, for
+	every $L>0$,
+	$c^{(L)}_{\alpha,\beta,\gamma}
+		=\tr(\chi_{\alpha,\beta,\gamma}^{L})$ and
+	\begin{align}
+		O_L(M_\alpha)O_L(M_\beta)
+		 & =\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+		\notag
+	\end{align}
+	together with
+	\begin{align}
+		m_\gamma
+		 & =\sum_{\alpha,\beta}
+		c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+		\notag
+	\end{align}
+	Thus the vector $m=(m_\alpha)_\alpha$ is an idempotent for the
+	multiplication induced by $c^{(1)}$. These are the algebra conditions in
+	\cite[Theorem~4.14(ii), labelled IV.13 in the source,
+		lines~972--985]{Cirac2016MPDO_arXiv}, without an additional comparison
+	with a chosen blocked basis.
+\end{definition}
+
+\begin{definition}[Algebra conditions for a vertical canonical decomposition]%
+	\label{def:mpdo_bnt_algebra_tensor_clause}
+	\lean{MPOTensor.verticalBNTMPO}
+	\lean{MPOTensor.verticalBNTOperatorFamily}
+	\lean{MPOTensor.verticalBNTTraceScalarFamily}
+	\lean{MPOTensor.BNTAlgebraTensorClause}
+	\lean{MPOTensor.HasBNTAlgebraTensorClause}
+	\leanok
+	\uses{def:vertical_cf_mpdo, def:mpdo_bnt_algebra_clause}
+	Choose a vertical canonical decomposition
+	\begin{align}
+		U\widetilde M U^\dagger
+		 & =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha,
+		\notag                                                          \\
+		\mu_\alpha
+		 & =\diag(\omega_{\alpha,0},\ldots,\omega_{\alpha,r_\alpha-1}).
+		\notag
+	\end{align}
+	Here the $\mu_\alpha$ are positive diagonal matrices with nonempty
+	multiplicity spaces, and $U$ is a coisometry onto the retained sectors,
+	so $UU^\dagger=\Id$. The decomposition also requires exact
+	reconstruction:
+	\begin{align}
+		\widetilde M
+		 & =U^\dagger
+		\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)U.
+		\notag
+	\end{align}
+	These tensor identities hold for every vertical physical index.
+	In particular, any complementary sector is zero.
+	Separating the two factors of the doubled physical index of
+	$M_\alpha$ gives an MPO tensor $\widehat M_\alpha$. Define
+	\begin{align}
+		O_L(M_\alpha)
+		 & =\operatorname{mpo}(\widehat M_\alpha,L),
+		\notag                                       \\
+		m_\alpha
+		 & =\sum_q\omega_{\alpha,q}=\tr(\mu_\alpha).
+		\notag
+	\end{align}
+	The chosen decomposition satisfies the algebra conditions when the
+	tensors $M_\alpha$ form a BNT of the vertical tensor and the conditions
+	of Definition~\ref{def:mpdo_bnt_algebra_clause} hold for these operators
+	and scalars. These are the objects and equations in
+	\cite[Theorem~4.14(ii), lines~972--993, and Appendix~C.4,
+		lines~2046--2064]{Cirac2016MPDO_arXiv}; a comparison with a two-site
+	vertical canonical decomposition is an additional requirement.
+\end{definition}
+
+\begin{theorem}[Positivity of the physical trace in a retained vertical sector]%
+	\label{thm:mpdo_algebra_clause_terminal_transfer_positivity}
+	\lean{MPOTensor.BNTAlgebraTensorClause.%
+		physTraceTransfer_verticalBNTMPO_posSemidef}
+	\leanok
+	\uses{def:mpdo, def:mpdo_bnt_algebra_tensor_clause, def:mpo_physical_trace_transfer, lem:mpdo_sitewise_physical_coordinate_congruence}
+	Let $M$ generate a family of MPDOs with physical dimension $d$
+	and bond dimension $D$, and choose a vertical canonical decomposition
+	satisfying the algebra conditions of
+	Definition~\ref{def:mpdo_bnt_algebra_tensor_clause}.
+	Let $M_\gamma$ be any retained normal tensor. Separating its
+	doubled physical index gives two physical legs of dimension $D$,
+	corresponding to the original auxiliary indices of $M$.
+	Closing these legs gives the bond matrix
+	\begin{align}
+		T_\gamma
+		 & =\sum_{a=0}^{D-1}M_\gamma^{(a,a)}.
+		\label{eq:rfp_algebra_terminal_transfer}
+	\end{align}
+	Then $T_\gamma\succeq0$. This follows from the chosen decomposition
+	and positivity of the one-site operator $\rho^{(1)}(M)$; it does
+	not require fusion maps or an RFP hypothesis.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{lem:mpdo_sitewise_physical_coordinate_congruence}
+	Apply the retained physical coisometry to the positive one-site operator.
+	For a positive diagonal coordinate $q$ of the multiplicity matrix
+	$\mu_\gamma$, the corresponding principal submatrix is
+	$(\mu_\gamma)_{q,q}T_\gamma$. Principal submatrices remain positive
+	semidefinite, and $(\mu_\gamma)_{q,q}>0$; division by this scalar proves
+	$T_\gamma\succeq0$.
+\end{proof}
+
+\begin{lemma}[Physical traces of a nonunitary similarity pair]%
+	\label{lem:mpdo_nonunitary_pair_terminal_transfers}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+		physTraceTransfer_tensor}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+		physTraceTransfer_gaugedTensor}
+	\leanok
+	\uses{def:mpo_physical_trace_transfer}
+	Let $A$ have letters $\Id,E_{00},E_{01},E_{10}$, let
+	$X=\diag(2,1)$, and set $B^v=XA^vX^{-1}$. After separating the doubled
+	physical index, closing the physical legs gives
+	\begin{align}
+		T_A & =\begin{pmatrix}1&0\\1&1\end{pmatrix},
+		\notag                                              \\
+		T_B & =\begin{pmatrix}1&0\\\tfrac12&1\end{pmatrix}.
+		\notag
+	\end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+	Sum the two diagonal physical letters $A^{(0,0)}+A^{(1,1)}$ and then use
+	$B^v=XA^vX^{-1}$ with $X=\diag(2,1)$.
+\end{proof}
+
+\begin{lemma}[The physical traces of the nonunitary similarity pair are not positive semidefinite]%
+	\label{lem:mpdo_nonunitary_pair_terminal_not_positive}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+		physTraceTransfer_tensor_not_posSemidef}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+		physTraceTransfer_gaugedTensor_not_posSemidef}
+	\leanok
+	\uses{lem:mpdo_nonunitary_pair_terminal_transfers}
+	Neither $T_A$ nor $T_B$ in
+	Lemma~\ref{lem:mpdo_nonunitary_pair_terminal_transfers} is positive
+	semidefinite.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:mpdo_nonunitary_pair_terminal_transfers}
+	A positive semidefinite matrix is Hermitian. In both matrices the
+	$(0,1)$ entry is zero, whereas the $(1,0)$ entry is respectively $1$ and
+	$1/2$. Hence neither matrix is Hermitian.
+\end{proof}
+
+\begin{theorem}[The nonunitary similarity pair is excluded from retained positive sectors]%
+	\label{thm:mpdo_nonunitary_pair_not_retained_positive_sector}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+		tensor_not_retained_positive_sector}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+		gaugedTensor_not_retained_positive_sector}
+	\leanok
+	\uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_algebra_clause_terminal_transfer_positivity, lem:mpdo_nonunitary_pair_terminal_not_positive}
+	Neither $A$ nor $B$ can occur, up to the bond-dimension identification,
+	as a retained sector of bond dimension two in a vertical canonical
+	decomposition of an MPDO tensor satisfying
+	Definition~\ref{def:mpdo_bnt_algebra_tensor_clause}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:mpdo_algebra_clause_terminal_transfer_positivity, lem:mpdo_nonunitary_pair_terminal_not_positive}
+	For any such retained sector, closing the physical legs gives a positive
+	semidefinite matrix by
+	Theorem~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity}.
+	Lemma~\ref{lem:mpdo_nonunitary_pair_terminal_not_positive} gives the
+	contradiction for both tensors.
+\end{proof}
+
+\begin{lemma}[The nonunitary similarity pair has no positive isometric realization]%
+	\label{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+		no_positive_isometric_realization}
+	\leanok
+	Let $A$ have letters $\Id,E_{00},E_{01},E_{10}$, let
+	$X=\diag(2,1)$, and set $B^i=XA^iX^{-1}$. There are no $c>0$ and
+	$V\in\MN{2}$ satisfying $V^\dagger V=\Id$ and
+	$V^\dagger B^iV=cA^i$ for every letter~$i$.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{thm:normal_tensor_gram_rigidity}
+	The identity letter forces $c=1$. The matrix $S=V^\dagger X$ then
+	commutes with all four letters of $A$, which span $\MN{2}$, and hence
+	$S$ is scalar. Together with $V^\dagger V=\Id$, this would make
+	$X^\dagger X=\diag(4,1)$ scalar, a contradiction.
+\end{proof}
+
+\begin{definition}[Linear extension on each virtual block]%
+	\label{def:mpdo_virtual_perBlockLinearExtension}
+	\leanok
+	\uses{def:injective, def:same_mpv}
+	For injective families $A_k$ and $B_k$ with the same closed matrix
+	product vectors, the linear extension on block $k$ is the unique linear map
+	$T_k:\MN{D_k}\to\MN{D_k}$ satisfying $T_k(A_k^i)=B_k^i$ for every
+	letter~$i$.
+\end{definition}
+
+\begin{theorem}[Multiplicativity of the linear extension on each virtual block]%
+	\label{thm:mpdo_virtual_perBlockLinearExtension_mul}
+	\leanok
+	\uses{def:mpdo_virtual_perBlockLinearExtension}
+	The linear extension on block $k$ satisfies $T_k(MN)=T_k(M)T_k(N)$ for all
+	$M,N\in\MN{D_k}$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:mpdo_virtual_perBlockLinearExtension, thm:linear_ext_mul}
+	The letters of $A_k$ span $\MN{D_k}$, and equality of the closed matrix
+	product vectors gives the identity on products of spanning letters.
+\end{proof}
+
+\begin{theorem}[Bijectivity of the linear extension on each virtual block]%
+	\label{thm:mpdo_virtual_perBlockLinearExtension_bijective}
+	\leanok
+	\uses{def:mpdo_virtual_perBlockLinearExtension}
+	The linear extension $T_k$ on block $k$ is bijective.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:simplicity, lem:trace_ne_zero}
+	Multiplicativity makes the kernel an ideal of the simple matrix algebra.
+	The map is nonzero: otherwise every letter of $B_k$ would vanish,
+	contradicting the nonvanishing trace pairing for the injective family.
+	Thus the kernel is zero, and finite dimensionality gives surjectivity.
+\end{proof}
+
+\begin{theorem}[Positive linear extensions on virtual blocks are unitarily implemented]%
+	\label{thm:mpdo_positive_perBlockLinearExtension_unitary}
+	\leanok
+	\uses{def:mpdo_virtual_perBlockLinearExtension}
+	If $T_k$ is positive, then there is a unitary matrix $U_k$ such that
+	$T_k(M)=U_kMU_k^\dagger$ for every $M\in\MN{D_k}$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:mpdo_virtual_perBlockLinearExtension_bijective}
+	The map on each block is a bijective algebra endomorphism. Positivity makes it
+	preserve adjoints, so unitary Skolem--Noether implements it by conjugation
+	with a unitary matrix.
+\end{proof}
+
+\begin{theorem}[Closed matrix product vectors do not force a positive virtual extension]%
+	\label{thm:mpdo_closed_mpv_not_force_positive_virtual_extension}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+		perBlockLinearExtension_not_positive}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.tensorFamily}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.gaugedTensorFamily}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.tensorFamily_isInjective}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.gaugedTensor_isInjective}
+	\lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+		tensorFamily_sameMPV_gaugedTensorFamily}
+	\leanok
+	\discussion{5284}
+	\uses{def:injective, def:same_mpv, def:mpdo_virtual_perBlockLinearExtension, lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+	Regard the tensors $A$ and $B$ of
+	Lemma~\ref{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+	as one-block families. They are injective and have equal closed matrix
+	product vectors at every length, but the linear extension on their
+	virtual block is not positive. This concerns the virtual map determined
+	by the closed vectors. It does not rule out a comparison of positive
+	physical sector realizations, nor does it decide whether an additional
+	comparison of chosen vertical decompositions, with specified insertions,
+	admits a realization with positive coefficients and identity factors.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:mpdo_virtual_perBlockLinearExtension, thm:mpdo_positive_perBlockLinearExtension_unitary, lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+	If the linear extension were positive, its unitary-implementation
+	theorem would give a unitary $U$ satisfying
+	$B^i=UA^iU^\dagger$ for every letter~$i$.
+	Hence $U^\dagger B^iU=A^i$, giving the forbidden realization with
+	$c=1$ in
+	Lemma~\ref{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}.
+\end{proof}

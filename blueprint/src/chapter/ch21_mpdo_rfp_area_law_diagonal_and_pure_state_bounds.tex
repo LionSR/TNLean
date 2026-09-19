@@ -109,13 +109,13 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \end{align}
 \end{definition}
 
-\begin{lemma}[Diagonal coefficient mass and trace]
+\begin{lemma}[Sum of diagonal coefficients and trace]
     \label{lem:mpo_diagonal_cut_mass_trace}
     \lean{MPOTensor.diagonalCutMass_eq_trace_re}
     \leanok
     \uses{def:mpo_normalized_diagonal_cut_distribution}
-    For every MPO tensor $M$ and cut lengths $L,R$, the total diagonal
-    coefficient mass satisfies $Z=\re\tr\rho^{(L+R)}(M)$.
+    For every MPO tensor $M$ and cut lengths $L,R$, the sum of the real parts
+    of the diagonal coefficients satisfies $Z=\re\tr\rho^{(L+R)}(M)$.
 \end{lemma}
 \begin{proof}\leanok
     Pairing each configuration $\sigma$ on $L+R$ sites with its unique block
@@ -544,7 +544,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}
     bounds by $2\log D$ the classical mutual information of the normalized
     diagonal coefficients whenever the finite-chain operator is diagonal and
-    positive semidefinite and has positive total mass.
+    positive semidefinite and has positive trace.
 
     The same example as
     Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit} makes the iterated

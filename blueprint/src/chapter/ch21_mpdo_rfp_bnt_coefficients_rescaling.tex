@@ -1,0 +1,487 @@
+\begin{theorem}[Positivity of the rescaling-stable MPDO]%
+	\label{thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.mpo_R_entry_formula}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.R_isMPDO}
+	\leanok
+	\uses{def:mpdo, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	The operator $\rho^{(N)}(R)$ is positive semidefinite for every
+	positive chain length $N$, so $R$ generates MPDOs. Writing each bond matrix
+	$R^{pq}$ as a rank-one product scaled by $25/32$, the closed-chain trace
+	of a length-$N$ configuration $(\sigma,\tau)$ gives
+	\begin{align}
+		\rho^{(N)}(R)_{\sigma\tau}
+		 & =\left(\frac{25}{32}\right)^N
+		\mathbb{1}[\text{cyclic bond match}](\sigma,\tau)
+		\prod_n W(\sigma_n,\tau_n),
+		\notag
+	\end{align}
+	where the indicator is one exactly when both $\sigma$ and $\tau$
+	satisfy the cyclic bond-matching condition: consecutive letters share
+	their bond bit around the ring. In the product, $W$ is evaluated on
+	the corresponding bond bits. It is the local factor from
+	Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence},
+	with eigenvalues $\{1,7/25\}$. Thus $\rho^{(N)}(R)$ is $(25/32)^N$ times
+	the Hadamard product of the rank-one bond-matching indicator with the
+	pullback of the $N$-fold Kronecker power of $W$.
+\end{theorem}
+\begin{proof}\leanok
+	The entrywise factorization follows by induction on the chain
+	length, using the rank-one contraction identity
+	\begin{align}
+		\tr((u_1v_1^{\mathsf T})\cdots(u_Nv_N^{\mathsf T}))
+		 & =(v_N^{\mathsf T}u_1)\prod_{n=1}^{N-1}(v_n^{\mathsf T}u_{n+1}),
+		\notag
+	\end{align}
+	where $u_n,v_n$ are the column vectors in the rank-one factorization
+	of the $n$-th bond matrix. Closing the trace produces the cyclic
+	bond-matching condition. The bond-matching indicator is positive
+	semidefinite because it is an outer product. The pullback of the
+	Kronecker power of $W$ is positive semidefinite by congruence.
+	The Schur product theorem and the positive scalar $(25/32)^N$
+	therefore give positivity.
+\end{proof}
+
+\begin{theorem}[Unitality of the transfer map]%
+	\label{thm:mpdo_rescaling_transfer_unital}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_one}
+	\leanok
+	\uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	For the explicit four-letter tensor $A$, the transfer map
+	$\E_A(Y)=\sum_a A^aY(A^a)^\dagger$ satisfies $\E_A(\Id)=\Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Evaluate the four matrix entries of $\E_A(\Id)$ from the
+	matrices $A^a$. The diagonal entries are one and the off-diagonal entries
+	vanish.
+\end{proof}
+
+\begin{theorem}[Traceless diagonal eigenvector of the transfer map]%
+	\label{thm:mpdo_rescaling_transfer_diag_alt}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_diag_alt}
+	\leanok
+	\uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	For $Z=\diag(1,-1)$, the transfer map satisfies
+	$\E_A(Z)=\frac{7}{25}Z$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Evaluate $\sum_a A^aZ(A^a)^\dagger$ entrywise. Its off-diagonal entries
+	vanish, while its diagonal entries are $7/25$ and $-7/25$.
+\end{proof}
+
+\begin{theorem}[Annihilation of the first off-diagonal matrix unit]%
+	\label{thm:mpdo_rescaling_transfer_single_zero_one}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_single01}
+	\leanok
+	\uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	For the matrix unit $E_{01}$, the transfer map satisfies
+	$\E_A(E_{01})=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitution of the four matrices $A^a$ shows that every entry of
+	$\sum_a A^aE_{01}(A^a)^\dagger$ is zero.
+\end{proof}
+
+\begin{theorem}[Annihilation of the second off-diagonal matrix unit]%
+	\label{thm:mpdo_rescaling_transfer_single_one_zero}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_single10}
+	\leanok
+	\uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	For the matrix unit $E_{10}$, the transfer map satisfies
+	$\E_A(E_{10})=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitution of the four matrices $A^a$ shows that every entry of
+	$\sum_a A^aE_{10}(A^a)^\dagger$ is zero.
+\end{proof}
+
+\begin{theorem}[Spectra of the local factor and the transfer map]%
+	\label{thm:mpdo_bnt_label_rescaling_stable_spectral}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		wMat_eigenvalue_eq_oneLabelChi_entry}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_eigen}
+	\leanok
+	\uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	The two diagonal entries of $\chi$ are eigenvalues of the local
+	factor $W$: the uniform vector has eigenvalue $1$, and
+	the alternating vector has eigenvalue $7/25$. The transfer map
+	$\E_A(Y)=\sum_a A^aY(A^a)^\dagger$ has eigenvalues $1,7/25,0,0$,
+	counted with multiplicity.
+	The identity is fixed, the traceless diagonal matrix
+	$\diag(1,-1)$ has eigenvalue $7/25$, and the
+	off-diagonal matrix units are annihilated. Thus the entries of $\chi$
+	are also the nonzero eigenvalues of $\E_A$.
+	% The explicit one-label tensor-attached clause below uses these two
+	% eigenvalues as the diagonal entries of its chi matrix.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:mpdo_rescaling_transfer_unital, thm:mpdo_rescaling_transfer_diag_alt, thm:mpdo_rescaling_transfer_single_zero_one, thm:mpdo_rescaling_transfer_single_one_zero}
+	The uniform and alternating vectors are eigenvectors of the explicit
+	$2\times2$ matrix $W$:
+	\begin{align}
+		W\begin{pmatrix}1\\1\end{pmatrix}
+		 & =\begin{pmatrix}1\\1\end{pmatrix},
+		\notag\\
+		W\begin{pmatrix}1\\-1\end{pmatrix}
+		 & =\frac{7}{25}\begin{pmatrix}1\\-1\end{pmatrix}.
+		\notag
+	\end{align}
+	Direct expansion of the letter matrices gives the action on a basis
+	of $\MN{2}$:
+	\begin{align}
+		\E_A(\Id) & =\Id,
+		\notag\\
+		\E_A(\diag(1,-1)) & =\frac{7}{25}\diag(1,-1),
+		\notag\\
+		\E_A(E_{01}) & =0,
+		\notag\\
+		\E_A(E_{10}) & =0.
+		\notag
+	\end{align}
+\end{proof}
+
+\begin{lemma}[Injectivity of \texorpdfstring{$R^{\bullet\bullet}$}{the doubled-index tensor}]%
+	\label{lem:mpdo_bnt_label_rescaling_stable_injective}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isInjective}
+	\leanok
+	\uses{def:injective, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	The $16$ letters $R^{pq}$ of the doubled-index tensor
+	$R^{\bullet\bullet}$ span the full bond matrix algebra $\MN{4}$.
+\end{lemma}
+
+\begin{proof}\leanok
+	Each letter $R^{pq}$ is, up to a nonzero scalar, one of the $16$
+	matrix units of $\MN{4}$. Indeed, the outer-product
+	structure of $R^{pq}$ gives a single matrix unit because
+	each factor $A^a$, $A^b$ of the vertical letters
+	$B^{ab}=A^a\otimes\overline{A^b}$ is a scaled matrix unit of $\MN{2}$.
+	Hence the standard matrix-unit basis lies in the span of the letters.
+\end{proof}
+
+\begin{theorem}[Canonical form of \texorpdfstring{$R$}{R}]%
+	\label{thm:mpdo_bnt_label_rescaling_stable_cf}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isCPSVCanonicalForm}
+	\leanok
+	\uses{def:cpsv_canonical_form, def:nt_cpsv, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	The doubled-index tensor $R^{\bullet\bullet}$, with bond dimension $4$
+	and $16$ letters $R^{pq}$ for $p,q\in\{0,\ldots,3\}$, is in CF as in
+	Definition~\ref{def:cpsv_canonical_form}
+	(\ref{eq:cpsv_canonical_form}).
+	It consists of a single normal block occupying the full bond
+	space ($r=1$, $D_1=4$, $U=\Id$), with weight
+	$\mu=\sqrt{337/512}$. This is the unique positive weight for which
+	the normalized block $\mu^{-1}R^{\bullet\bullet}$ has an idempotent
+	transfer map, and hence spectral radius one.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{lem:mpdo_bnt_label_rescaling_stable_injective}
+	By Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_injective}, the $16$
+	letters span the full bond matrix algebra. Thus
+	$R^{\bullet\bullet}$ is injective, and no nontrivial invariant orthogonal
+	projection exists.
+
+	The transfer map
+	$\E_{R^{\bullet\bullet}}(X)=\sum_{p,q}R^{pq}X(R^{pq})^\dagger$
+	has rank one: every image is a scalar multiple of a fixed diagonal
+	matrix, and the scalar evaluated at that matrix is $337/512$.
+	Rescaling the tensor by $\mu^{-1}=\sqrt{512/337}$ makes its transfer map
+	idempotent. Together with injectivity, this gives a primitive transfer
+	map with spectral radius one; all its other eigenvalues are zero.
+	Thus $\mu^{-1}R^{\bullet\bullet}$ is an NT with the required
+	normalization. The equality
+	$R^{\bullet\bullet}=\mu(\mu^{-1}R^{\bullet\bullet})$ gives exact
+	reconstruction with the identity coisometry.
+\end{proof}
+
+\begin{theorem}[Non-nilpotency of the retained horizontal block]%
+	\label{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		physTraceTransfer_R_not_isNilpotent}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		doubledPhysTraceTransfer_retainedBlock}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		doubledPhysTraceTransfer_retainedBlock_not_isNilpotent}
+	\leanok
+	\uses{def:mpdo_doubled_phys_trace_transfer, def:mpdo_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
+	Let $\widehat R=\mu^{-1}R^{\bullet\bullet}$ be the single normal
+	block in this CF, where $\mu=\sqrt{337/512}$. Then
+	\begin{align}
+		\mathcal T_{\widehat R} & =\mu^{-1}\mathcal T_R,
+		\notag\\
+		\mathcal T_R^2 & =\mathcal T_R,
+		\notag\\
+		(\mathcal T_R)_{00} & =\frac12.
+		\notag
+	\end{align}
+	Consequently neither $\mathcal T_R$ nor
+	$\mathcal T_{\widehat R}$ is nilpotent. Thus the retained BNT element
+	satisfies the non-nilpotency condition in the definition of simplicity.
+
+	This conclusion concerns that condition for this one-block
+	presentation only, not other presentations or blockings.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{def:mpdo_doubled_phys_trace_transfer, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
+	A nilpotent idempotent is zero, but the $(0,0)$ entry of
+	$\mathcal T_R$ is
+	\begin{align}
+		\frac{25}{32}\tr(A^0)^2
+		& =\frac{25}{32}\left(\frac45\right)^2
+		=\frac12,
+		\notag
+	\end{align}
+	so $\mathcal T_R$ is not nilpotent. The diagonal physical contraction is
+	linear in the tensor, which gives
+	$\mathcal T_{\widehat R}=\mu^{-1}\mathcal T_R$. Since $\mu>0$, a
+	nilpotent $\mathcal T_{\widehat R}$ would remain nilpotent after
+	multiplication by $\mu$, forcing $\mathcal T_R$ to be nilpotent.
+\end{proof}
+
+\begin{theorem}[Simplicity of the rescaling-stable dimer]
+	\label{thm:mpdo_bnt_label_rescaling_stable_simple}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.oneSiteDoubledEquiv}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		oneSiteDoubledEquiv_diagonal}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		toMPSTensor_blockTensor_R_one}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.R_isSimple}
+	\leanok
+	\uses{def:mpdo_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	The dimer tensor $R$ is simple, with blocking length $L=1$.
+	After the canonical relabeling of the doubled physical alphabet,
+	the BNT has one member, $\widehat R$, and its physical-trace
+	transfer is non-nilpotent.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:cpsv_representative_sector_decomposition, thm:mpdo_bnt_label_rescaling_stable_ismpdo, thm:mpdo_bnt_label_rescaling_stable_cf, thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
+	Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} gives the MPDO
+	condition. Choose the one-site blocking. Its doubled-index tensor is the
+	canonical physical relabeling of $R^{\bullet\bullet}$. Refine the CF
+	from Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_cf} to its
+	BNT sector presentation. The only representative is $\widehat R$, whose
+	physical-trace transfer is non-nilpotent by
+	Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}.
+\end{proof}
+
+\begin{theorem}[The rescaling-stable tensor is a renormalization fixed
+		point]%
+	\label{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.isRFPViaTS_R}
+	\leanok
+	\uses{def:is_rfp_via_ts, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	The tensor $R$ of
+	Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence} is an
+	RFP in the sense of Definition~\ref{def:is_rfp_via_ts}.
+	The tpCPM $T$ from one site to two sites has
+	two Kraus operators built from the eigenvectors of $W$, with amplitude
+	$5/8$ on the uniform eigenvector and $\sqrt7/8$ on the alternating
+	eigenvector. The tpCPM $S$ from two sites to one site has four Kraus
+	operators. Two use the amplitude $1/\sqrt2$ and the eigenvectors of
+	$W$ on physical-index pairs satisfying the bond-matching condition.
+	The other two assign the pairs that fail this condition deterministically,
+	so that the four Kraus operators resolve the identity.
+	These maps satisfy $T[M_1(X)]=M_2(X)$ and $S[M_2(X)]=M_1(X)$
+	for every boundary matrix $X$, with $M=R$.
+\end{theorem}
+\begin{proof}\leanok
+	Identify each physical index $p\in\{0,1,2,3\}$ with a pair of bits
+	$(p',p'')\in\{0,1\}^2$, and write $i_1\ast i_2:=(i_1',i_2'')$
+	for the physical index obtained from the first bit of $i_1$ and the second
+	bit of $i_2$. For $M=R$, the two-site physical operator satisfies
+	\begin{align}
+		M_2(X)_{(i_1,i_2)(j_1,j_2)}
+		 & =\frac{25}{32}
+		\mathbb{1}[i_1''=i_2']\,\mathbb{1}[j_1''=j_2']
+		W(i_1'',j_1'')\,M_1(X)_{i_1\ast i_2,\,j_1\ast j_2},
+		\notag
+	\end{align}
+	and therefore vanishes whenever either bond match fails.
+	Write $e_0=(1,1)$ and $e_1=(1,-1)$ for the eigenvectors of $W$,
+	with eigenvalues $\lambda_0=1$ and $\lambda_1=7/25$
+	(Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_spectral}).
+	The two Kraus operators of $T$ have amplitudes
+	$\sqrt{25\lambda_s/64}$ on $e_s$. For $b,b'\in\{0,1\}$,
+	the eigendecomposition of $W$ gives
+	\begin{align}
+		\sum_{s\in\{0,1\}}\frac{25}{64}\lambda_s e_s(b)e_s(b')
+		 & =\frac{25}{32}W(b,b').
+		\notag
+	\end{align}
+	This reproduces the coefficient in $M_2(X)$, so $T[M_1(X)]=M_2(X)$.
+
+	The two Kraus operators of $S$ supported on bond-matching pairs have
+	amplitude $1/\sqrt2$ on $e_0,e_1$. For $b,b'\in\{0,1\}$,
+	\begin{align}
+		\frac12\sum_{s\in\{0,1\}}e_s(b)e_s(b')
+		 & =\begin{cases}1,&b=b',\\0,&b\ne b'.\end{cases}
+		\notag
+	\end{align}
+	The diagonal case gives the resolution of the identity on the
+	bond-matching subspace, and the off-diagonal case gives cancellation
+	between these two Kraus operators. The other two Kraus operators
+	assign the bond-mismatched pairs deterministically.
+	They do not contribute to $S[M_2(X)]$, because $M_2(X)$ vanishes
+	on these pairs. Together the four Kraus operators resolve the identity
+	on the full two-site domain and give $S[M_2(X)]=M_1(X)$.
+\end{proof}
+
+% Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--985,
+% and Appendix C.4, lines 1929--1947 and 2011--2029.
+\begin{theorem}[Vertical BNT and algebra structure for \texorpdfstring{$R$}{R}]%
+	\label{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		R_oneLabelBNTAlgebraTensorClause}
+	\leanok
+	\uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+	The tensor $R$ has a vertical BNT with one element $M_0$.
+	This component has $16$ physical letters, bond dimension $4$, and
+	\begin{align}
+		M_0^{(a,b)} & =A^a\otimes\overline{A^b}.
+		\notag
+	\end{align}
+	The positive diagonal multiplicity and coefficient matrices are
+	\begin{align}
+		\mu_0 & =\begin{pmatrix}\frac{25}{32}\end{pmatrix},
+		\notag\\
+		\chi_{0,0,0} & =\diag\!\left(1,\frac{7}{25}\right).
+		\notag
+	\end{align}
+	The vertical tensor is reconstructed exactly as
+	\begin{align}
+		\operatorname{vertical}(R) & =\frac{25}{32}M_0.
+		\notag
+	\end{align}
+	For every $L>0$, the vertical operator satisfies
+	\begin{align}
+		O_L(M_0)^2
+		 & =\left(1+\left(\frac{7}{25}\right)^L\right)O_L(M_0)
+		=\tr\!\left(\chi_{0,0,0}^L\right)O_L(M_0).
+		\notag
+	\end{align}
+	At length one, $m_0=\tr(\mu_0)=25/32$ and
+	$c^{(1)}_{0,0,0}=32/25$. Thus the vector $m=(m_0)$ is an idempotent
+	for the multiplication induced by $c^{(1)}$, since
+	$m_0=c^{(1)}_{0,0,0}m_0^2$:
+	\begin{align}
+		\frac{25}{32}
+		 & =\frac{32}{25}\left(\frac{25}{32}\right)^2.
+		\notag
+	\end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:is_normal_tensor_of_is_normal_left_canonical, lem:mpo_doubled, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
+	Each letter of $M_0$ is a nonzero multiple of a matrix unit, so the letters
+	span $\MN{4}$. The tensor $A$ is left-canonical; hence $M_0$ is
+	left-canonical and algebraically normal, and therefore is an NT.
+	The identity coisometry gives both the vertical decomposition and
+	its exact reconstruction.
+
+	The vertical operator of $M_0=A\otimes\overline A$ is
+	$\ketbra{V^{(L)}(A)}{V^{(L)}(A)}$. Its square is its self-overlap times
+	itself. A direct transfer-map computation gives
+	$\braket{V^{(L)}(A)}{V^{(L)}(A)}=\tr(W^L)$, while
+	Walsh--Hadamard diagonalization gives
+	$\tr(W^L)=\tr(\chi_{0,0,0}^L)=1+(7/25)^L$.
+	Finally, $c^{(1)}_{0,0,0}m_0^2=(32/25)(25/32)^2=m_0$.
+\end{proof}
+
+\begin{remark}[Vertical and horizontal contractions]
+	Let $\operatorname{rot}(\operatorname{vertical}(R))$ denote the MPO obtained
+	by separating the $16$-valued physical index of the vertical tensor into
+	two four-valued indices. Then
+	\begin{align}
+		\rho^{(L)} \left(\operatorname{rot}(\operatorname{vertical}(R))\right)
+		 & =\left(\frac{25}{32}\right)^L O_L(M_0).
+		\notag
+	\end{align}
+	This is a rotated vertical contraction, not the original horizontal tensor
+	$R$, even though both physical and bond dimensions equal $4$. At length one,
+	$\rho^{(1)}(R)$ has rank two, whereas $O_1(M_0)$ has rank one, so these
+	operators are not proportional. In particular, no identity
+	$\rho^{(L)}(R)=(25/32)^L O_L(M_0)$ is asserted.
+\end{remark}
+
+\begin{theorem}[Closed-operator factorization and local diagonalization for \texorpdfstring{$R$}{R}]%
+	\label{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		mpo_R_eq_B_mul_wN_mul_transpose}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.B_transpose_mul_B}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		wMat_eq_conj_diagonal_oneLabelChi}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		hadamard2_mul_diagonal_oneLabelChi_mul_hadamard2}
+	\leanok
+	\uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+	For every positive chain length $N$, the horizontal operator factors as
+	\begin{align}
+		\rho^{(N)}(R) & =\left(\frac{25}{32}\right)^N B\,W_N\,B^{\mathsf T},
+		\notag
+	\end{align}
+	where $B$ sends each bit-string basis vector to the basis vector of the
+	unique cyclic-bond-matching physical-index string with those first bits,
+	and $B^{\mathsf T}B=\Id$. Here
+	$W_N(a,b)=\prod_n W(a_n,b_n)$ is the $N$-fold Kronecker power of $W$.
+	For the Walsh--Hadamard matrix
+	$H=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$ and
+	$\chi=\diag(1,\tfrac{7}{25})$, one has $H\chi H=2W$.
+	Thus the entries of $\chi$ are the eigenvalues of the local factor $W$.
+	Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+	identifies this same matrix as the coefficient matrix
+	$\chi_{0,0,0}$ of a vertical BNT with one element.
+	The factorization here concerns the original horizontal operator
+	$\rho^{(N)}(R)$, not the rotated vertical contraction.
+\end{theorem}
+\begin{proof}\leanok
+	Let $\phi$ read the first bits of a cyclic-bond-matching string.
+	Given a bit string $a$, each adjacent pair of entries of $a$ determines
+	one physical index around the ring. This gives the unique matching
+	string whose image under $\phi$ is $a$, and defines $B$.
+	Injectivity gives $B^{\mathsf T}B=\Id$. Rewriting the entrywise formula
+	of Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} through this
+	embedding gives
+	$\rho^{(N)}(R)=(25/32)^N B W_N B^{\mathsf T}$.
+	The identity $H\chi H=2W$ follows by direct $2\times2$ computation.
+\end{proof}
+
+\begin{theorem}[Trace-power formula for the structure coefficients]%
+	\label{thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiTracePowerForm}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		wMat_pow_trace_eq_oneLabelChi_matrix_pow_trace}
+	\lean{MPOTensor.RescalingStableLengthDependentRFP.%
+		oneLabelCoeffs_coeff_eq_wMat_pow_trace}
+	\leanok
+	\uses{def:mpdo_positive_bnt_label_chi_trace_power_form, lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
+	The coefficients $c^{(L)}_{0,0,0}$ have a trace-power representation
+	with the fixed positive diagonal matrix
+	$\chi=\diag(1,\tfrac{7}{25})$, as in
+	Definition~\ref{def:mpdo_positive_bnt_label_chi_trace_power_form}.
+	For every $L>0$,
+	\begin{align}
+		c^{(L)}_{0,0,0} & =\tr(\chi^L)=\tr(W^L)=1+(7/25)^L.
+		\notag
+	\end{align}
+	The equality of traces follows from the diagonalization in
+	Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}.
+	Here $W^L$ is the ordinary matrix power of the fixed $2\times2$
+	matrix $W$, not the Kronecker power $W_L$ in $\rho^{(L)}(R)$.
+	Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+	identifies these coefficients with the structure coefficients of the
+	vertical BNT $\{M_0\}$. It does not identify $O_L(M_0)$ with the
+	original horizontal operator $\rho^{(L)}(R)$.
+\end{theorem}
+\begin{proof}\leanok
+	The coefficients are defined by the diagonal entries of $\chi$.
+	Since these entries are positive,
+	Lemma~\ref{lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+	gives $c^{(L)}_{0,0,0}=\tr(\chi^L)$ for every $L>0$.
+	The Walsh--Hadamard identity $H\chi H=2W$ and $HH=2\Id$ give
+	$H\chi=WH$. Induction then gives $H\chi^L=W^L H$.
+	Conjugating by $H$, whose inverse is $H/2$, and using cyclicity
+	of the trace yields $\tr(W^L)=\tr(\chi^L)$ for every $L$.
+\end{proof}

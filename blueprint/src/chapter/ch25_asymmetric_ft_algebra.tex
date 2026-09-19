@@ -1,0 +1,645 @@
+\section{Triangular word products}%
+\label{sec:asym_triangular}
+
+The distinction between a word-level compression and a sitewise
+intertwiner is already visible in elementary block matrix multiplication.
+
+\begin{lemma}[Diagonal blocks of block-triangular products]
+	\label{lem:asym_triangular}
+	\lean{Matrix.blockDiag'_mul_of_blockTriangular, Matrix.blockTriangular_evalWord,
+		Matrix.blockDiag'_evalWord, Matrix.blockProj_mul_blockEmbed_self,
+		Matrix.blockProj_mul_blockEmbed_of_ne, Matrix.blockProj_mul_mul_blockEmbed}
+	\leanok
+	\uses{def:eval_word}
+	Let $o$ be a finite index set with block sizes $n_k$, $k\in o$, and let
+	$T^1,\ldots,T^d$ be block upper triangular for the resulting
+	decomposition of $\MN{\sum_k n_k}$. Write $T^i_{kk}$ for the $k$-th
+	diagonal block of $T^i$. Then $T^w$ is block upper triangular for every
+	word $w$, and its $k$-th diagonal block is the word evaluation of the
+	diagonal blocks,
+	\begin{align}
+		(T^w)_{kk} & =T^{i_1}_{kk}T^{i_2}_{kk}\cdots T^{i_N}_{kk}
+		\label{eq:asym_triangular_word}
+	\end{align}
+	for $w=(i_1,\ldots,i_N)$. If $P_k$ is the coordinate embedding of the
+	$k$-th block and $Q_k$ the coordinate projection onto it, then for every
+	matrix $M$ on the same space, $Q_kMP_k=M_{kk}$, and
+	\begin{align}
+		Q_kP_l & =\begin{cases}\id, & k=l,\\0, & k\ne l.\end{cases}
+		\label{eq:asym_block_biorthogonality}
+	\end{align}
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	For two block upper-triangular matrices $X,Y$,
+	$(XY)_{kk}=\sum_l X_{kl}Y_{lk}$; the terms with $l<k$ vanish because
+	$X_{kl}=0$, and those with $l>k$ vanish because $Y_{lk}=0$, leaving
+	$(XY)_{kk}=X_{kk}Y_{kk}$. Induction on the word length gives
+	(\ref{eq:asym_triangular_word}) and the persistence of block
+	triangularity. The identity $Q_kMP_k=M_{kk}$ and
+	(\ref{eq:asym_block_biorthogonality}) are direct computations from the
+	coordinate description of $P_k$ and $Q_k=P_k^{\mathsf T}$.
+\end{proof}
+
+\begin{remark}[Periodic equality does not imply a sitewise intertwiner]
+	\label{rem:asym_zipper}
+	Take the one-dimensional normal tensor $A^1=(1)$, $A^2=(2)$, and the
+	bond-dimension-three tensor
+	\begin{align}
+		B^1
+		 & =\begin{pmatrix}0&1&0\\0&1&0\\0&0&0\end{pmatrix},
+		 &
+		B^2
+		 & =\begin{pmatrix}0&0&0\\0&2&1\\0&0&0\end{pmatrix}.
+		\notag
+	\end{align}
+	Both matrices are upper triangular with diagonal blocks $0$, $A^i$, $0$.
+	With $P=e_2$ and $Q=e_2^{\mathsf T}$, Lemma~\ref{lem:asym_triangular}
+	gives $QB^wP=A^w$ and $QP=1$ for every nonempty word $w$, so
+	$\tr(B^w)=A^w=\tr(A^w)$: the periodic vectors of $A$ and $B$ agree at
+	every positive length.
+
+	There is nevertheless no nonzero right sitewise intertwiner: a vector
+	$v=(x,y,z)^{\mathsf T}$ with $B^1v=v$ and $B^2v=2v$ would need $x=y$,
+	$z=0$ from the first equation and $x=0$ from the first coordinate of the
+	second, forcing $v=0$. Symmetrically, no nonzero left intertwiner
+	$uB^1=u$, $uB^2=2u$ exists: the first equation gives $u_1=u_3=0$ while
+	the third coordinate of the second gives $u_2=2u_3=0$. Periodic equality
+	can therefore force a multiplicative subquotient while admitting neither
+	one-sided sitewise intertwiner, so it cannot imply a biorthogonal zipper
+	pair. This is why the theorem below is stated as a compression
+	$W_sB^wV_s=C_s^w$ rather than as an eigenvector relation.
+\end{remark}
+
+\section{The word algebra and normal tensors as simple modules}%
+\label{sec:asym_word_algebra}
+
+\begin{definition}[Word algebra and positive ideal]
+	\label{def:asym_word_algebra}
+	\lean{WordAlgebra, WordAlgebra.aug}
+	\leanok
+	Fix $d\geq1$. The \emph{word algebra} is the free unital associative
+	algebra $F=\C\langle x_1,\ldots,x_d\rangle$, realized as the algebra of
+	finite $\C$-linear combinations of words in the $d$ letters under
+	concatenation, so that the words form a basis. The \emph{augmentation}
+	$\mathrm{aug}:F\to\C$ is the algebra map sending every generator to
+	zero; on a basis word $w$, $\mathrm{aug}(w)=1$ if $w$ is empty and $0$
+	otherwise. The \emph{positive ideal} is the two-sided ideal
+	$F_+=\ker(\mathrm{aug})$ of elements with zero constant term.
+\end{definition}
+
+\begin{definition}[Word-algebra module of a tensor]
+	\label{def:asym_word_module}
+	\lean{MPSTensor.WordModule}
+	\leanok
+	\uses{def:asym_word_algebra, def:mps_tensor, def:eval_word}
+	A tensor $C=(C^i)_{i=0}^{d-1}$ on $\C^D$ defines an $F$-module structure
+	on $\C^D$ through the representation $\rho_C(x_i)=C^i$, extended
+	multiplicatively so that a word $w$ acts by $\rho_C(w)=C^w$.
+\end{definition}
+
+\begin{definition}[Word traces]
+	\label{def:asym_word_traces}
+	\lean{WordAlgebra.traceChar, WordAlgebra.traceWord}
+	\leanok
+	\uses{def:asym_word_algebra}
+	For a finite-dimensional $F$-module $M$, the \emph{trace character} is
+	the linear functional $p\mapsto\tr(\rho_M(p))$ on $F$, and the
+	\emph{word trace} of a word $w$ is $\tr(\rho_M(w))$.
+\end{definition}
+
+\begin{lemma}[Word traces of a tensor]
+	\label{lem:asym_word_traces_tensor}
+	\lean{MPSTensor.traceWord_wordModule}
+	\leanok
+	\uses{def:asym_word_traces, def:asym_word_module}
+	On the word-algebra module of a tensor $C$, the word trace of $w$ is
+	the periodic coefficient $\tr(C^w)$.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	\uses{def:asym_word_module}
+	The action of $w$ is conjugate to the matrix $C^w$ under the
+	identification of the module with $\C^D$, and the trace of a linear
+	map is the trace of its matrix.
+\end{proof}
+
+\begin{lemma}[Normal tensors define simple modules]
+	\label{lem:asym_normal_simple}
+	\lean{MPSTensor.isSimpleModule_wordModule_of_isNormal}
+	\leanok
+	\uses{def:asym_word_module, def:normal}
+	If $C$ is normal on $\C^D$ with $D>0$, its word-algebra module is
+	simple.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	Let $K\subseteq\C^D$ be a nonzero invariant subspace and $u\in K$
+	nonzero. Normality gives a length $L$ for which the span of the
+	length-$L$ word evaluations is all of $\MN{D}$; since $K$ is invariant
+	under every such word and hence under their span, $Xu\in K$ for every
+	$X\in\MN{D}$. Every vector is $Xu$ for a suitable $X$ because $u\neq0$,
+	so $K=\C^D$.
+\end{proof}
+
+Multiplying every matrix of a tensor by a nonzero scalar does not change its
+invariant subspaces, so a weighted block $\mu_kA_{(k)}$ built from a normal
+tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
+
+\section{Separating simple modules}%
+\label{sec:asym_separation}
+
+\begin{lemma}[Positive-word character lemma]
+	\label{lem:asym_character}
+	\notready
+	\uses{def:asym_word_module}
+	Let $U,V$ be finite-dimensional $F$-modules with
+	$\tr(\rho_U(p))=\tr(\rho_V(p))$ for every $p\in F_+$. Then the
+	semisimplifications of $U$ and $V$ contain every simple $F$-module with
+	the same multiplicity, except possibly the one-dimensional module
+	$\mathbf0$ on which every generator acts as zero: there are integers
+	$a,b\geq0$ and a semisimple module $M$ without a $\mathbf0$ summand such
+	that $U^{\mathrm{ss}}\cong M\oplus\mathbf0^{\oplus a}$ and
+	$V^{\mathrm{ss}}\cong M\oplus\mathbf0^{\oplus b}$.
+
+	The source proof decomposes the finite-dimensional image algebra
+	$R=(\rho_U\oplus\rho_V)(F)$ modulo its Jacobson radical by
+	Artin--Wedderburn and compares traces of central idempotents. The
+	formalized development below proves the statements the main theorem
+	actually uses by a different, equivalent route: Burnside's theorem and
+	the Jacobson density theorem applied directly to each simple factor as
+	it is peeled off by an induction on dimension
+	(\S\ref{sec:asym_flag}), rather than by a single global
+	Artin--Wedderburn decomposition.
+\end{lemma}
+
+\begin{lemma}[Positive-ideal separation of linear functionals]
+	\label{lem:asym_ker_aug_separation}
+	\lean{WordAlgebra.linearMap_eq_on_ker_aug}
+	\leanok
+	\uses{def:asym_word_algebra}
+	Two $\C$-linear functionals on $F$ agreeing on every nonempty word
+	agree on the positive ideal $F_+$.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	Their difference agrees with $(\chi_1(1)-\chi_2(1))\cdot\mathrm{aug}$ on
+	every basis word, by induction on the monoid-algebra presentation, hence
+	on all of $F$ by linearity; on $F_+$ the augmentation vanishes, so the
+	two functionals agree there.
+\end{proof}
+
+\begin{lemma}[The zero module is the only simple module with trivial
+		generator action]
+	\label{lem:asym_zero_module}
+	\lean{WordAlgebra.finrank_eq_one_of_isSimpleModule_of_forall_smul_eq_zero}
+	\leanok
+	\uses{def:asym_word_algebra}
+	A finite-dimensional simple $F$-module on which every generator acts as
+	zero is one-dimensional. It is the module $\mathbf0$ of
+	Lemma~\ref{lem:asym_character}.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	If every generator acts as zero, $F$ acts through the augmentation, so
+	the $F$-submodules and the $\C$-subspaces coincide; simplicity as a
+	$\C$-vector space forces dimension one.
+\end{proof}
+
+\begin{theorem}[Burnside's theorem at module level]
+	\label{thm:asym_burnside}
+	\lean{WordAlgebra.exists_smul_eq_of_isSimpleModule}
+	\leanok
+	\uses{def:asym_word_module}
+	Every $\C$-linear endomorphism of a finite-dimensional simple
+	$F$-module $Q$ is the action of some element of $F$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	By Schur's lemma over the algebraically closed field $\C$, the
+	commutant $\End_F(Q)$ consists of scalars, so $Q$ is finite-dimensional
+	over its commutant. The Jacobson density theorem then makes the action
+	map $F\to\End_{\C}(Q)$ surjective.
+\end{proof}
+
+\begin{theorem}[Separating a simple module from a finite non-isomorphic
+		family]
+	\label{thm:asym_separation}
+	\lean{WordAlgebra.exists_aug_eq_zero_smul_eq_self,
+		WordAlgebra.exists_aug_eq_zero_smul_eq_self_smul_eq_zero,
+		MPSTensor.exists_aug_eq_zero_of_forall_isEmpty_linearEquiv}
+	\leanok
+	\uses{def:asym_word_module, def:asym_word_algebra}
+	Let $Q$ be a finite-dimensional simple $F$-module on which some
+	generator acts nonzero. There is $u\in F_+$ acting as the identity on
+	$Q$. If $T$ is a finite-dimensional simple module not isomorphic to
+	$Q$, there is $p\in F_+$ acting as the identity on $Q$ and as zero on
+	$T$. More generally, if $C_s$, $s\in S$, is a finite family of
+	word-algebra modules of tensors, each simple and none isomorphic to
+	$Q$, there is $p\in F_+$ acting as the identity on $Q$ and as zero on
+	every $C_s$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asym_burnside}
+	For the first claim, Burnside's theorem realizes, for a basis
+	$\{b_j\}$ of $Q$ and a nonzero vector $x_i\cdot q_0$, the maps sending
+	$x_i\cdot q_0\mapsto b_j$ and $q\mapsto(\text{coordinate }j\text{ of
+		}q)\cdot q_0$; assembling them into
+	$u=\sum_j\alpha_jx_i\beta_j$ gives an element of $F_+$ acting as the
+	identity on $Q$. For the pairwise separation, Schur's lemma shows every
+	$F$-linear endomorphism of $Q\times T$ preserves the two
+	non-isomorphic simple factors, so $Q\times T$ is finite-dimensional
+	over its (scalar) commutant; Jacobson density on $Q\times T$ produces
+	$a\in F$ acting as the identity on the first factor and zero on the
+	second, and $p=au$ acts as the identity on $Q$ and as zero on $T$. The
+	finite-family statement follows by induction on $S$, multiplying the
+	separators for the successive members.
+\end{proof}
+
+\begin{lemma}[Trace additivity over an invariant submodule]
+	\label{lem:asym_trace_additivity}
+	\lean{WordAlgebra.traceWord_eq_add_quotient}
+	\leanok
+	\uses{def:asym_word_traces}
+	For a finite-dimensional $F$-module $M$ and a submodule $K\leq M$, the
+	word trace of $M$ is the sum of the word traces of $K$ and of $M/K$.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	This is the additivity of the ordinary trace of an endomorphism over an
+	invariant subspace, applied to the action of each word on $M$.
+\end{proof}
+
+\begin{theorem}[Nilpotency from vanishing trace powers]
+	\label{thm:asym_nilpotent_trace_powers}
+	\lean{LinearMap.isNilpotent_of_forall_trace_pow_eq_zero}
+	\leanok
+	An endomorphism of a finite-dimensional complex vector space, all of
+	whose positive powers have vanishing trace, is nilpotent.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	The characteristic polynomial is determined by the power sums of its
+	roots (Newton's identities), so vanishing trace powers force it to
+	equal $X^{\dim}$; the Cayley--Hamilton theorem then gives nilpotency.
+\end{proof}
+
+\begin{theorem}[Identification of a simple quotient with a target block]
+	\label{thm:asym_identification}
+	\lean{MPSTensor.exists_linearEquiv_wordModule_of_isSimpleModule_quotient}
+	\leanok
+	\uses{def:asym_word_traces, def:asym_word_module}
+	Let $M$ be a finite-dimensional $F$-module whose word traces are, on
+	every nonempty word, the sum of the word traces of a finite family of
+	simple tensor modules $C_s$, $s\in S$. Let $K\leq M$ have simple
+	quotient $M/K$ on which some generator acts nontrivially. Then $M/K$ is
+	isomorphic to $C_s$ for some $s\in S$.
+
+	This identification is the formalized counterpart of the use made of
+	the positive-word character lemma (Lemma~\ref{lem:asym_character}) in
+	the proof of the main theorem below.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asym_separation, lem:asym_ker_aug_separation,
+		thm:asym_nilpotent_trace_powers}
+	If $M/K$ were isomorphic to no $C_s$, Theorem~\ref{thm:asym_separation}
+	supplies $p\in F_+$ acting as the identity on $M/K$ and as zero on
+	every $C_s$. Since the word trace of $M$ agrees with the sum of the
+	word traces of the $C_s$ on every nonempty word, and $p\in F_+$,
+	Lemma~\ref{lem:asym_ker_aug_separation} shows that every positive power
+	of the action of $p$ on $M$ has vanishing trace, so this action is
+	nilpotent by Theorem~\ref{thm:asym_nilpotent_trace_powers}. A nilpotent
+	action of $p$ on $M$ descends to a nilpotent action on the quotient
+	$M/K$, contradicting that $p$ acts there as the identity on a nonzero
+	module.
+\end{proof}
+
+\section{The composition-series flag}%
+\label{sec:asym_flag}
+
+\begin{lemma}[Composition-series triangular gauge]
+	\label{lem:asym_composition_gauge}
+	\lean{exists_linearEquiv_blockTriangular_of_flag}
+	\leanok
+	\uses{def:asym_word_module}
+	Let $B=(B^i)_i$ act on $\C^{D_B}$, and choose a composition series
+	$0=H_0\subset H_1\subset\cdots\subset H_r=\C^{D_B}$ of its
+	word-algebra module. There is $G\in\GL_{D_B}(\C)$ such that every
+	$T^i=GB^iG^{-1}$ is block upper triangular for the resulting
+	decomposition into $r$ blocks, and the $k$-th diagonal block of $T^i$
+	is the action induced by $B^i$ on the simple subquotient
+	$H_k/H_{k-1}$.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	Choose a basis of $H_1$ and extend it successively to bases of
+	$H_2,\ldots,H_r$. In the resulting basis, every $H_k$ is a coordinate
+	initial segment; since every $H_k$ is invariant under every $B^i$, all
+	matrices $B^i$ are block upper triangular in this basis, with $k$-th
+	diagonal block the induced action on $H_k/H_{k-1}$.
+\end{proof}
+
+\begin{definition}[Labelled invariant flag]
+	\label{def:asym_flag_data}
+	\lean{MPSTensor.FlagData}
+	\leanok
+	\uses{def:asym_word_module}
+	Let $M$ be a finite-dimensional $F$-module, $S$ a finite set of target
+	slots, and $C_s$, $s\in S$, a family of tensors. A \emph{labelled
+		invariant flag} of $M$ over $(S,C)$ is an invariant chain
+	$0=H_0\leq H_1\leq\cdots\leq H_r=M$ together with a bijective labelling
+	of the steps $\{1,\ldots,r\}$ by $S\sqcup\{1,\ldots,z\}$, for some
+	$z\geq0$, such that a step labelled by $s\in S$ has subquotient
+	$H_k/H_{k-1}$ isomorphic to the word-algebra module of $C_s$, and a
+	step labelled by an index in $\{1,\ldots,z\}$ has one-dimensional
+	subquotient on which every generator acts as zero.
+\end{definition}
+
+\begin{lemma}[A family of normal blocks with zero total word trace is
+		empty]
+	\label{lem:asym_flag_base_case}
+	\lean{MPSTensor.finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero}
+	\leanok
+	\uses{def:normal, def:asym_word_traces}
+	If the word traces of a finite family of normal tensors of positive
+	bond dimension sum to zero on every nonempty word, the family is
+	empty.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asym_separation, thm:asym_nilpotent_trace_powers}
+	Otherwise Theorem~\ref{thm:asym_separation} applied to one member $C_{s_0}$
+	of the family supplies $u\in F_+$ acting as the identity on $C_{s_0}$;
+	vanishing total word trace forces every positive power of the action of
+	$u$ on the product of the modules in the family to have trace zero, so
+	this action is nilpotent by Theorem~\ref{thm:asym_nilpotent_trace_powers}.
+	A nilpotent action of $u$ contradicts its action as the identity on the
+	nonzero summand $C_{s_0}$.
+\end{proof}
+
+\begin{theorem}[The flag theorem]
+	\label{thm:asym_flag_theorem}
+	\lean{MPSTensor.exists_flagData}
+	\leanok
+	\uses{def:asym_flag_data, def:normal, def:asym_word_traces}
+	Let $C_s$, $s\in S$, be a finite family of normal tensors of positive
+	bond dimension, and let $M$ be a finite-dimensional $F$-module whose
+	word traces agree, on every nonempty word, with the sum of the word
+	traces of the $C_s$. Then $M$ carries a labelled invariant flag over
+	$(S,C)$.
+
+	This is the module-theoretic core of clauses (i)--(iii) and (vii) of
+	the main theorem below.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:asym_flag_base_case, lem:asym_zero_module,
+		thm:asym_identification, lem:asym_trace_additivity}
+	Induction on $\dim M$. If $M=0$, Lemma~\ref{lem:asym_flag_base_case}
+	forces $S=\emptyset$, and the empty chain is the required flag. If
+	$M\neq0$, choose a maximal proper invariant submodule $K\leq M$ (a
+	coatom of the invariant-submodule lattice, which exists because $M$ is
+	finite-dimensional), so $M/K$ is simple. If some generator acts
+	nontrivially on $M/K$, Theorem~\ref{thm:asym_identification} identifies
+	$M/K$ with some block $C_{s_0}$; Lemma~\ref{lem:asym_trace_additivity}
+	shows the word trace of $K$ agrees with the sum over the remaining
+	blocks $S\setminus\{s_0\}$, and the induction hypothesis (applied to
+	$K$, of strictly smaller dimension) supplies a flag of $K$, extended by
+	the matched final step $K\subset M$ labelled $s_0$. If instead every
+	generator acts as zero on $M/K$, Lemma~\ref{lem:asym_zero_module} shows
+	$M/K$ is one-dimensional; Lemma~\ref{lem:asym_trace_additivity} shows
+	the word trace of $K$ already agrees with the sum over all of $S$, and
+	the induction hypothesis supplies a flag of $K$, extended by the
+	unmatched final step $K\subset M$.
+\end{proof}
+
+\section{The multi-block asymmetric compression theorem}%
+\label{sec:asym_main}
+
+\begin{theorem}[Multi-block asymmetric compression theorem]
+	\label{thm:asym_multiblock}
+	\lean{MPSTensor.MultiBlockCompression,
+		MPSTensor.exists_multiBlockCompression_of_isNormal,
+		MPSTensor.MultiBlockCompression.dim_eq,
+		MPSTensor.MultiBlockCompression.isReduction,
+		MPSTensor.MultiBlockCompression.left_mul_right_of_ne,
+		MPSTensor.MultiBlockCompression.evalWord_remainder_eq_zero}
+	\leanok
+	\uses{def:same_mpv2_pos, def:normal}
+	Let $A=\bigoplus_{s\in S}C_s$ be a finite direct sum of nonzero normal
+	tensors $C_s=(C_s^i)_i$ of bond dimension $D_s$, with repetitions
+	allowed, and let $B=(B^i)_i$ be an arbitrary tensor of bond dimension
+	$D_B$. Assume that the periodic vectors of $A$ and $B$ agree at every
+	positive length,
+	$\ket{V^{(N)}(B)}=\ket{V^{(N)}(A)}$ for every $N>0$; equivalently,
+	$\tr(B^w)=\tr(A^w)$ for every nonempty word $w$. Then there are an
+	integer $z\geq0$, an integer $r=|S|+z$, an invertible matrix
+	$G\in\GL_{D_B}(\C)$, and maps $V_s:\C^{D_s}\to\C^{D_B}$,
+	$W_s:\C^{D_B}\to\C^{D_s}$, with the following properties.
+	% Plain enumerate with explicit tags: the kernel key-value list syntax
+	% [label=(\roman*)] requires LaTeX2e >= 2025, which CI does not have.
+	\begin{enumerate}
+		\item[(i)] Every $GB^iG^{-1}$ is block upper triangular for one common
+		      decomposition into $r$ blocks.
+		\item[(ii)] Exactly $|S|$ of the diagonal slots are matched with the
+		      target slots: writing $j(s)$ for the position matched with $s$,
+		      there is $X_s\in\GL_{D_s}(\C)$ with
+		      $\bigl(GB^iG^{-1}\bigr)_{j(s),j(s)}=X_sC_s^iX_s^{-1}$.
+		\item[(iii)] The remaining $z$ diagonal slots are one-dimensional zero
+		      tensors.
+		\item[(iv)] The compression pairs are mutually biorthogonal: $W_sV_t=
+			      \id_{D_s}$ if $s=t$ and $0$ otherwise.
+		\item[(v)] For every nonempty word $w$, $W_sB^wV_s=C_s^w$.
+		\item[(vi)] Writing $\widehat C^i=\sum_{s\in S}V_sC_s^iW_s$ and
+		      $R^i=B^i-\widehat C^i$, every product
+		      $R^{i_1}R^{i_2}\cdots R^{i_r}=0$: the non-unital algebra generated
+		      by the $R^i$ is nilpotent.
+		\item[(vii)] $D_B=\sum_{s\in S}D_s+z$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{center}
+	% Formula: clause (v), W_sB^wV_s=C_s^w for every nonempty word w.
+	% Source: clauses (iv)-(v) of Theorem~\ref{thm:asym_multiblock}.
+	% Ink-to-index map: the two end rings are the compression maps $W_s$
+	% (left) and $V_s$ (right); the interior nodes are copies of $B$,
+	% with upper legs carrying the letters of $w$.
+	% Contraction set: every horizontal virtual bond between consecutive
+	% copies of $B$ and between each $B$ and its adjacent ring is
+	% contracted; the physical legs and the two outer virtual legs (the
+	% $D_s$-dimensional indices of the matrix $C_s^w$) remain open.
+	% Boundary signature: (virtual-west=1 | virtual-east=1 |
+	% physical-up=2 | physical-down=0) for the finite schematic shown,
+	% with the two explicit lettered nodes carrying the drawn physical
+	% ports.
+	\tenkzkernel
+	\begin{tenkz}[rows={wire}, cols=5, west=open, east=open]
+		\tn[skin=ring]{W_s} &
+		\tn[label pos=s, ports={90:physical:$i_1$}]{B} &
+		\tn[skin=dots]{} &
+		\tn[label pos=s, ports={90:physical:$i_N$}]{B} &
+		\tn[skin=ring]{V_s}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$i_1$}]{C_s} &
+		\tn[skin=dots]{} &
+		\tn[label pos=s, ports={90:physical:$i_N$}]{C_s}
+	\end{tenkz}
+	\\[2ex]
+	% Formula: clause (iv), W_sV_t=\id_{D_s} if s=t and 0 otherwise.
+	% Source: clause (iv) of Theorem~\ref{thm:asym_multiblock}.
+	% Ink-to-index map: the two rings are the compression maps $W_s$ and
+	% $V_t$, joined with no intervening tensor; the two outer virtual
+	% legs are the $D_s$- and $D_t$-dimensional indices of the matrix
+	% $W_sV_t$.
+	% Contraction set: the single virtual bond between the two rings.
+	% Boundary signature: (virtual-west=1 | virtual-east=1 |
+	% physical-up=0 | physical-down=0).
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{W_s} & \tn[skin=ring]{V_t}
+	\end{tenkz}
+	\quad $=\;\delta_{st}\,\id$
+\end{center}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asym_flag_theorem, lem:asym_composition_gauge,
+		lem:asym_triangular}
+	By Theorem~\ref{thm:asym_flag_theorem}, applied with $M$ the
+	word-algebra module of $B$, whose word traces agree with the sum of
+	those of the $C_s$ by hypothesis, $\C^{D_B}$ carries a labelled
+	invariant flag over $(S,C)$: an invariant chain $0=H_0\leq\cdots\leq
+		H_r=\C^{D_B}$ whose subquotients are, in some order, the $C_s$ (each
+	once) and $z=r-|S|$ copies of the zero module. This chain is in
+	particular a composition series, so Lemma~\ref{lem:asym_composition_gauge}
+	supplies $G\in\GL_{D_B}(\C)$ for which $T^i=GB^iG^{-1}$ is block upper
+	triangular with these subquotients as diagonal blocks, proving (i)--(iii).
+
+	Let $P_{j(s)}$, $Q_{j(s)}$ be the coordinate embedding and projection
+	of the matched slot and set $V_s=G^{-1}P_{j(s)}X_s$,
+	$W_s=X_s^{-1}Q_{j(s)}G$. Then $W_sV_t=X_s^{-1}Q_{j(s)}P_{j(t)}X_t$, and
+	(\ref{eq:asym_block_biorthogonality}) gives (iv). For a nonempty word
+	$w$, $B^w=G^{-1}T^wG$, and Lemma~\ref{lem:asym_triangular} gives
+	$Q_{j(s)}T^wP_{j(s)}=X_sC_s^wX_s^{-1}$, so
+	$W_sB^wV_s=X_s^{-1}Q_{j(s)}T^wP_{j(s)}X_s=C_s^w$, proving (v).
+
+	For the remainder, $G\widehat C^iG^{-1}=\sum_{s\in S}P_{j(s)}X_sC_s^iX_s^{-1}Q_{j(s)}$
+	is the block-diagonal matrix agreeing with $T^i$ on every matched
+	diagonal block; every unmatched diagonal block of $T^i$ is already
+	zero, so $GR^iG^{-1}=T^i-G\widehat C^iG^{-1}$ is strictly block upper
+	triangular for the $r$-block decomposition. A nonzero entry of a
+	product of $r$ strictly block upper-triangular $r$-block matrices would
+	need a strictly increasing chain of $r+1$ block indices, which does not
+	exist among $r$ positions; hence $GR^{i_1}\cdots R^{i_r}G^{-1}=0$,
+	proving (vi). Finally, dimensions add along the composition series, and
+	each zero-module step contributes dimension one, giving (vii).
+\end{proof}
+
+\begin{theorem}[Weighted canonical-form compression]
+	\label{thm:asym_weighted_compression}
+	\lean{MPSTensor.exists_weightedMultiBlockCompression_of_isNormal,
+		MPSTensor.MultiBlockCompression.left_mul_evalWord_mul_right_smul}
+	\leanok
+	\uses{def:same_mpv2_pos, def:normal}
+	Let $A=\bigoplus_{k=1}^g\bigoplus_{q=1}^{n_k}\mu_kA_{(k)}$ be a
+	canonical target with each $A_{(k)}$ normal of bond dimension $D_k$
+	and $\mu_k\in\C^\times$, and suppose
+	$\ket{V^{(N)}(B)}=\ket{V^{(N)}(A)}$ for every $N>0$. For every block
+	label $k$ and copy $q\in\{1,\ldots,n_k\}$, there are maps
+	$V_{k,q}:\C^{D_k}\to\C^{D_B}$ and $W_{k,q}:\C^{D_B}\to\C^{D_k}$,
+	mutually biorthogonal, with
+	\begin{align}
+		W_{k,q}B^{i_1}\cdots B^{i_N}V_{k,q}
+		 & =\mu_k^NA_{(k)}^{i_1}\cdots A_{(k)}^{i_N}
+		\label{eq:asym_weighted_compression}
+	\end{align}
+	for every $N\geq1$ and every word.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asym_multiblock}
+	Apply Theorem~\ref{thm:asym_multiblock} to the slots
+	$C_{k,q}=\mu_kA_{(k)}$: for a word of length $N$,
+	$C_{k,q}^{i_1}\cdots C_{k,q}^{i_N}=\mu_k^NA_{(k)}^{i_1}\cdots
+		A_{(k)}^{i_N}$, so clause (v) of Theorem~\ref{thm:asym_multiblock}
+	gives (\ref{eq:asym_weighted_compression}).
+\end{proof}
+
+% The Lean formalization of Theorem~\ref{thm:asym_multiblock} takes the
+% hypothesis in the word-trace form $\tr(B^w)=\tr(A^w)$, and its conclusion
+% chooses every matching isomorphism $X_s$ in clause (ii) to be the identity,
+% which is stronger than the printed clause above; the underlying
+% construction already produces this normalization because the composition
+% series identifies each matched subquotient with the block's own
+% word-algebra module, not merely with an isomorphic copy.
+
+\begin{proposition}[Periodic data of a compression]
+	\label{prop:asym_compression_trace}
+	\lean{MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum,
+		MPSTensor.MultiBlockCompression.mpv_eq_sum}
+	\leanok
+	\uses{thm:asym_multiblock, lem:asym_triangular}
+	Conversely, whenever a tensor $B$ admits the block triangular form of
+	Theorem~\ref{thm:asym_multiblock}, clauses (i)--(iii), for a family
+	$(C_s)_{s\in S}$, its periodic data are those of the direct sum:
+	$\tr(B^w)=\sum_{s\in S}\tr(C_s^w)$ for every nonempty word $w$, that
+	is, $\ket{V^{(N)}(B)}=\ket{V^{(N)}(\bigoplus_sC_s)}$ for every $N\geq1$.
+\end{proposition}
+
+\begin{proof}
+	\leanok
+	\uses{lem:asym_triangular}
+	The trace is invariant under the change of basis and is the sum of the
+	traces of the diagonal blocks; by Lemma~\ref{lem:asym_triangular} the
+	diagonal blocks of $B^w$ are the words of the diagonal blocks, which are
+	the $C_s^w$ on the matched slots and $0$ on the one-dimensional zero
+	slots.
+\end{proof}
+
+\begin{proposition}[Projector-weighted direct sums]
+	\label{prop:asym_projector_weighted_sum}
+	\lean{MPSTensor.MultiBlockCompression.ofProjectorSum,
+		MPSTensor.MultiBlockCompression.remainder_ofProjectorSum,
+		MPSTensor.MultiBlockCompression.mul_right_eq_right_mul,
+		MPSTensor.MultiBlockCompression.left_mul_eq_mul_left}
+	\leanok
+	\uses{thm:asym_multiblock, lem:asym_triangular}
+	Let the bond space of $B$ be $\C^m\otimes\C^{D}$ and let $\Pi_1,\ldots$
+	be mutually orthogonal rank-one idempotents of $\C^m$ cut out by an
+	invertible matrix $U$ (the idempotents $U^{-1}E_{jj}U$). If every
+	letter has the form
+	$B^i=\sum_{s\in S}\mu_s\,\Pi_{j(s)}\otimes C_s^i$ with distinct
+	positions $j(s)$, then $B$ admits the block triangular form of
+	Theorem~\ref{thm:asym_multiblock} onto the weighted blocks $\mu_sC_s$,
+	with $z=(m-|S|)D$ zero factors, the remainder $R^i=0$, and sitewise
+	intertwiners $B^iV_s=V_s\,\mu_sC_s^i$ and $W_sB^i=\mu_sC_s^iW_s$ for
+	every slot: the extension splits.
+\end{proposition}
+
+\begin{proof}
+	\leanok
+	\uses{lem:asym_triangular}
+	Conjugating by $U\otimes\id$ turns each $\Pi_{j(s)}$ into a matrix
+	unit, so every letter becomes block diagonal with the blocks
+	$\mu_sC_s^i$ at the positions $j(s)$ and zero blocks elsewhere; block
+	diagonality gives the triangular form, the vanishing remainder, and the
+	intertwining relations.
+\end{proof}
+

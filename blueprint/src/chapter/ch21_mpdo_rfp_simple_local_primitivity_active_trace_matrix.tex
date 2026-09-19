@@ -280,7 +280,7 @@
     apply Theorem~\ref{thm:matrix_primitive_of_two_three_returns}.
 \end{proof}
 
-\begin{theorem}[Retained witnesses for the active inverse-map factorization]
+\begin{theorem}[Existence of a positive factorization with full active span]
     \label{thm:mpdo_inverse_map_active_sector_witnesses}
     \lean{MPOTensor.zeroWeightReparameterized_sectorVirtualMatrix_eq_zero}
     \lean{MPOTensor.%
@@ -558,7 +558,7 @@
 % the completed ambient counterexample
 % thm:mpdo_sal_zcl_bnt_sector_structure, which refutes the source-context
 % absorbed-representative assertion.
-\begin{theorem}[A one-sector factorization of the four-sector witness]
+\begin{theorem}[A one-sector factorization of the four-sector tensor]
     \label{thm:mpdo_active_trace_witness_one_sector_factorization}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.oneSectorEquiv,
         MPOTensor.ActiveSectorSpanningCounterexample.oneSectorSign,
@@ -1379,7 +1379,7 @@
     \end{align}
     The reparameterization makes the right tensor of an inactive source sector
     zero, while its left tensor is already zero. Thus this is a statement about
-    the retained reparameterized and rephased witness, not about the raw
+    the chosen reparameterized and rephased factorization, not about the raw
     inverse-map factorization.
 \end{theorem}
 
@@ -1396,7 +1396,7 @@
     \(p_h=0\), the left tensor vanishes and again \(\eta_{k,h}=0\).
 \end{proof}
 
-\begin{theorem}[Rephased inverse-map Case-I coefficient witness]
+\begin{theorem}[Existence of normalized Case-I rank-one coefficients]
     \label{thm:mpdo_casei_rephased_inverse_map_coefficient_witness}
     \lean{MPOTensor.exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses}
     \leanok
@@ -1437,7 +1437,7 @@
     the four-site Hayashi decomposition, while the normalized four-site tail
     gives nonzero outer indices and the required three-site closure. Choose the
     coherently rephased zero-weight-reparameterized inverse-map factorization.
-    Its active-sector witnesses give the normalized rank-one equations, and
+    Its active trace matrix admits the normalized rank-one factorization, and
     Theorem~\ref{thm:mpdo_rephased_zero_weight_incident_vanish} gives the final
     incident-vanishing clause for the same factorization.
 \end{proof}
@@ -1475,8 +1475,8 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_casei_rephased_inverse_map_coefficient_witness}
-    Extend the coupled witness's active coefficient families by zero. In the chosen
-    zero-weight-reparameterized and rephased factorization, $p_k=0$ makes
+    Extend the active coefficient families of this factorization by zero.
+    In the chosen zero-weight-reparameterized and rephased factorization, $p_k=0$ makes
     every neighboring operator incident to $k$ vanish. Therefore the trace
     factorization is zero whenever either index is inactive, while it is the
     active factorization otherwise. Filtering the full diagonal sum to the

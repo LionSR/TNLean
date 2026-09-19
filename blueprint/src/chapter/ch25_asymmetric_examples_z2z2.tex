@@ -5,39 +5,38 @@
 %% Covers Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md.
 %% =========================================================
 
-\section{The anomalous $\Z_2\times\Z_2$ symmetry with a mixed three-cocycle}%
+\section{The \texorpdfstring{$\Z_2\times\Z_2$}{Z2 x Z2} symmetry example}%
 \label{sec:asymex_z2z2}
 
 On a periodic chain of $L$ sites, each carrying two qubits with label
-$a=(a_1,a_2)$, four commuting-square matrix product operators
-$U_e=\id$, $U_x$, $U_y$, $U_{xy}$ represent the group $\Z_2\times\Z_2$ up
-to phases: $U_gU_h=\lambda(g,h)^LU_{gh}$ with
-$\lambda(g,h)=(-1)^{g_1h_2}$. The tensor of $U_g$ is
+$a=(a_1,a_2)$, four matrix product operators
+$U_e=\id$, $U_x$, $U_y$, $U_{xy}$ satisfy
+$U_gU_h=\lambda(g,h)^LU_{gh}$ for $L\geq1$, where
+$\lambda(g,h)=(-1)^{g_1h_2}$. Here $x=(1,0)$, $y=(0,1)$, and addition
+of qubit labels is modulo two. The tensor of $U_g$ is
 \begin{align}
     M_g^{(o,i)}[\alpha,\beta]
-     & =\delta_{o,g+i}\,\delta_{\beta,\pi_g(i)}\,f_g(\alpha,i),
+     & =\delta_{o,g+i} \delta_{\beta,\pi_g(i)}\,f_g(\alpha,i),
     \label{eq:asymex_z2z2_tensor}
 \end{align}
-with bond label $\pi_g(i)=i_2$ and phase $f_g(\alpha,i)=(-1)^{\alpha
-            i_2}$ for $g\in\{x,xy\}$, and with bond dimension one and no phase for
-$g\in\{e,y\}$. Every entry lies in $\{0,\pm1\}$, so each tensor is the
-entrywise coercion of an integer matrix family. Restricted to the second
-qubit, $M_x$ is exactly the bond-two symmetry tensor of
-Section~\ref{sec:asymex_czx}, and $M_{xy}$ is $M_x$ after the letter
-relabelling $o\mapsto o+y$.
+where $\pi_g(i)=i_2$ and $f_g(\alpha,i)=(-1)^{\alpha i_2}$ for
+$g\in\{x,xy\}$. For $g\in\{e,y\}$, the bond dimension is one,
+$\pi_g(i)=0$, and $f_g(\alpha,i)=1$.
+Every entry lies in $\{0,\pm1\}$.
+The dependence of $M_x$ on the bond indices and the second input
+qubit uses the two matrices of the bond-two symmetry tensor in
+Section~\ref{sec:asymex_czx}; $M_{xy}$ is obtained from $M_x$ by
+relabeling the outgoing physical index as $o\mapsto o+y$.
 
-This presentation carries the mixed class of $H^3(\Z_2\times\Z_2,U(1))$:
-its restriction to $x$ and to $y$ is trivial and its restriction to the
-diagonal element $xy$ is the class of Section~\ref{sec:asymex_czx}. No
-cocycle class is computed in this development. What is formalized below is
-the normality of the four tensors, the periodic fusion table of the four
-operators, the length-dependent operator identity for their sum, and the
-compression data of the sixteen pair blocks of the stacked square of that
-sum; the three-cocycle itself, and the classification of which of the
-sixteen pair blocks is not split, are read off from these compression data
-without invoking any cohomological computation
-(\texttt{Notes/OpenProblemsTN/checks/asym\_z2z2\_typeIII\_data.md},
-Sections~1--3).
+The results below concern the word spans of these tensors, their
+periodic multiplication law, and the compression of the sixteen pair
+blocks in the square of their direct sum. A three-cocycle class requires
+a separate comparison of the two orders of fusion of three tensors.
+Neither the periodic multiplication law nor the absence of a nonzero
+sitewise intertwiner alone computes that class.
+% The mixed-class interpretation and its restrictions to x, y, and xy
+% are external data in Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md,
+% Sections 1--3; no three-cocycle class is computed by the declarations below.
 
 \begin{center}
     \tenkzkernel
@@ -66,17 +65,19 @@ Sections~1--3).
         Z2Z2Condensation.xyMPS}
     \leanok
     \uses{def:mpo_tensor, def:mpo_to_mps}
-    The tensors of $U_e$ and $U_y$ have bond dimension one and the four
-    nonzero letters $\delta_{o,i}$ and $\delta_{o,y+i}$; the tensors of
-    $U_x$ and $U_{xy}$ have bond dimension two and the four nonzero letters
-    of (\ref{eq:asymex_z2z2_tensor}), each equal to
+    The tensors of $U_e$ and $U_y$ have bond dimension one, with entries
+    $\delta_{o,i}$ and $\delta_{o,y+i}$, respectively. Each has four
+    nonzero physical-index pairs. The tensors of $U_x$ and $U_{xy}$ have
+    bond dimension two and the four nonzero matrices
+    specified by~(\ref{eq:asymex_z2z2_tensor}), each equal to
     $\begin{pmatrix}1&0\\1&0\end{pmatrix}$ or
-    $\begin{pmatrix}0&1\\0&-1\end{pmatrix}$ according to $i_2$. Every
-    tensor is also recorded over the sixteen-letter pair alphabet
-    $a=4o+i$.
+    $\begin{pmatrix}0&1\\0&-1\end{pmatrix}$ according to $i_2$.
+    Identifying the two-qubit labels with $\{0,1,2,3\}$ and pairing the
+    physical indices gives an MPS tensor on the sixteen-letter
+    alphabet indexed by $4o+i$.
 \end{definition}
 
-\begin{theorem}[Normality of the four symmetry tensors]%
+\begin{theorem}[Injectivity after blocking of the four symmetry tensors]%
     \label{thm:asymex_z2z2_normal}
     \lean{Z2Z2Condensation.eMPS_isNormal, Z2Z2Condensation.yMPS_isNormal,
         Z2Z2Condensation.xMPS_isNormal, Z2Z2Condensation.xyMPS_isNormal,
@@ -86,32 +87,36 @@ Sections~1--3).
         Z2Z2Condensation.xyMPS_not_isNBlkInjective_one}
     \leanok
     \uses{def:asymex_z2z2_tensors, def:normal}
-    The bond-one tensors of $U_e$ and $U_y$ are normal at blocking length
-    one: their single nonzero letter at the diagonal or antidiagonal
-    coordinate already acts by the nonzero scalar $1$. The bond-two
-    tensors of $U_x$ and $U_{xy}$ are not normal at length one, since their
-    four nonzero letters span only a two-dimensional space of matrices,
-    but are normal at blocking length two: their length-two words span the
-    full two-by-two matrix algebra.
+    The bond-one tensors of $U_e$ and $U_y$ are injective without
+    blocking: a nonzero matrix is the scalar $1$ and spans
+    $\MN{1}$. The bond-two tensors of $U_x$ and $U_{xy}$ are not
+    injective without blocking, since their four nonzero matrices span
+    only a two-dimensional space. Their length-two words span
+    $\MN{2}$, so they are injective after blocking two sites.
+    These assertions concern word spans. The tensors are proportional
+    to normal tensors (NT); the spectral-radius normalization required
+    for NT is imposed separately.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    For the bond-one tensors, a single nonzero scalar letter already
-    witnesses normality at length one. For the bond-two tensors, an
-    explicit integer linear combination of four length-two words gives
-    each of the four matrix units, a finite verification over integer
-    matrices; a linear functional vanishing on both nonzero letters at
-    length one shows the length-one span is only two-dimensional.
+    For each bond-one tensor, a nonzero scalar matrix spans $\MN{1}$.
+    For each bond-two tensor, explicit integer linear combinations of
+    four length-two words give the four matrix units. At length one,
+    the two distinct nonzero matrices are linearly independent, and
+    a nonzero linear functional vanishing on both shows that they do
+    not span $\MN{2}$.
 \end{proof}
 
 \section{The condensation defect and its periodic fusion table}%
 \label{sec:asymex_z2z2_defect}
 
-The \emph{condensation defect} of the anomalous symmetry is the sum of the
-four periodic operators, $A=U_e+U_x+U_y+U_{xy}$. It is generated by the
-direct-sum tensor $N=M_e\oplus M_x\oplus M_y\oplus M_{xy}$ of
-Definition~\ref{def:mpo_direct_sum}, of bond dimension six.
+The \emph{condensation defect} is the sum of the four periodic operators,
+$A=U_e+U_x+U_y+U_{xy}$. It is generated by the direct-sum tensor
+$N=M_e\oplus M_x\oplus M_y\oplus M_{xy}$ of
+Definition~\ref{def:mpo_direct_sum}, with bond dimension six.
+In this example, $N$ denotes the direct-sum tensor and $L$ denotes
+the chain length.
 
 \begin{center}
     \tenkzkernel
@@ -145,8 +150,8 @@ Definition~\ref{def:mpo_direct_sum}, of bond dimension six.
 \begin{proof}
     \leanok
     \uses{thm:mpo_direct_sum_additive}
-    Three applications of the additivity of
-    Theorem~\ref{thm:mpo_direct_sum_additive}.
+    Apply the additivity of
+    Theorem~\ref{thm:mpo_direct_sum_additive} three times.
 \end{proof}
 
 \begin{theorem}[The periodic fusion table]%
@@ -157,35 +162,36 @@ Definition~\ref{def:mpo_direct_sum}, of bond dimension six.
         Z2Z2Condensation.mpo_x_mul_y_eq_neg_of_odd}
     \leanok
     \uses{def:asymex_z2z2_tensors, lem:asym_mpo_trace_eq}
-    Writing $T_g$ for the tensor of $U_g$ indexed by $g\in\Z_2\times\Z_2$
-    with group law $gh$, and $\lambda(g,h)=(-1)^{g_1h_2}$, the periodic
-    operators satisfy $\rho^{(L)}(T_g)\rho^{(L)}(T_h)=\lambda(g,h)^L
-        \rho^{(L)}(T_{gh})$ for every $L\geq1$ and every pair $g,h$, with
+    For every $L\geq1$ and every $g,h\in\Z_2\times\Z_2$, the periodic
+    operators satisfy
+    $\rho^{(L)}(M_g)\rho^{(L)}(M_h)=\lambda(g,h)^L
+        \rho^{(L)}(M_{gh})$, where
     \begin{align}
         \lambda(g,h)
          & =\begin{cases}
                 -1 & \text{if }g\in\{x,xy\}\text{ and }h\in\{y,xy\}, \\
-                +1 & \text{otherwise.}
+                +1 & \text{otherwise}.
             \end{cases}
         \notag
     \end{align}
     On odd rings, $\lambda(x,y)\lambda(y,x)=-1$, so
-    $\rho^{(L)}(T_x)\rho^{(L)}(T_y)=-\rho^{(L)}(T_y)\rho^{(L)}(T_x)$: the
-    four operators form a projective representation of
-    $\Z_2\times\Z_2$; on even rings the representation is linear.
+    $\rho^{(L)}(M_x)\rho^{(L)}(M_y)=-\rho^{(L)}(M_y)\rho^{(L)}(M_x)$.
+    The four operators form a projective representation of
+    $\Z_2\times\Z_2$ on odd rings and a linear representation on even
+    rings.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{lem:asym_mpo_trace_eq}
-    For each of the sixteen pairs, an explicit finite check (over integer
-    matrices, after clearing the pair-alphabet stacked tensor to a
-    lookup table) identifies the positive-length word traces of the
-    stacked product $T_g\cdot T_h$ with $\lambda(g,h)^{|w|}$ times those
-    of $T_{gh}$; Lemma~\ref{lem:asym_mpo_trace_eq} converts this into the
-    stated operator identity for every $L\geq1$. The odd-ring
-    anticommutation follows by substituting $\lambda(x,y)=-1$ and
-    $\lambda(y,x)=-1$ and using $(-1)^L=-1$.
+    For each of the sixteen pairs, a finite calculation with the integer
+    matrices of the stacked tensor gives
+    $\tr((M_g\cdot M_h)^w)=\lambda(g,h)^{|w|}\tr(M_{gh}^w)$
+    for every nonempty word $w$.
+    Lemma~\ref{lem:asym_mpo_trace_eq} converts this trace identity into
+    the stated operator identity for every $L\geq1$.
+    The odd-ring anticommutation follows by substituting
+    $\lambda(x,y)=-1$ and $\lambda(y,x)=+1$ and using $(-1)^L=-1$.
 \end{proof}
 
 \begin{theorem}[The condensation defect squares to a length-dependent
@@ -197,33 +203,35 @@ Definition~\ref{def:mpo_direct_sum}, of bond dimension six.
         Z2Z2Condensation.condensation_quarter_sq_eq_self_iff_even}
     \leanok
     \uses{def:asymex_z2z2_defect, thm:asymex_z2z2_fusion}
-    For every $L\geq1$, $\rho^{(L)}(N)^2=\bigl(3+(-1)^L\bigr)\rho^{(L)}(N)$,
-    and $\rho^{(L)}(N)\neq0$. Consequently $\tfrac14\rho^{(L)}(N)$ is a
-    projector if and only if $L$ is even: on odd rings the anomalous
-    symmetry cannot be condensed by its defect.
+    For every $L\geq1$, $\rho^{(L)}(N)^2=(3+(-1)^L)\rho^{(L)}(N)$,
+    and $\rho^{(L)}(N)\neq0$. Consequently
+    $(\tfrac14\rho^{(L)}(N))^2=\tfrac14\rho^{(L)}(N)$
+    if and only if $L$ is even. Thus the normalization by $\tfrac14$
+    is not idempotent on odd rings.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_z2z2_fusion}
     Expanding the square by Theorem~\ref{thm:asymex_z2z2_fusion}, each of
-    the four operators $\rho^{(L)}(T_k)$ receives the four weights
+    the four operators $\rho^{(L)}(M_k)$ receives the four weights
     $\lambda(g,h)^L$ from the four pairs $(g,h)$ with $gh=k$, three of
     which are $+1$ and one of which is $(-1)^L$, giving the stated
     coefficient. The all-zero diagonal entry of $\rho^{(L)}(N)$ equals
-    $1$, since only the identity letter contributes to it, so
-    $\rho^{(L)}(N)\neq0$. The projector equivalence follows by comparing
-    the coefficient $\tfrac1{16}\bigl(3+(-1)^L\bigr)$ against $\tfrac14$
-    on the nonzero operator.
+    $1$, since only the identity tensor contributes to it, so
+    $\rho^{(L)}(N)\neq0$. The idempotence equivalence follows by comparing
+    the coefficient $\tfrac1{16}(3+(-1)^L)$ with $\tfrac14$
+    on this nonzero operator.
 \end{proof}
 
 \section{The sixteen pair blocks of the stacked defect}%
 \label{sec:asymex_z2z2_pairs}
 
-The stacked product $B=N\cdot N$ of the condensation defect tensor with
-itself, of bond dimension thirty-six, is block diagonal over the sixteen
-pairs $(g,h)\in(\Z_2\times\Z_2)^2$, the block of $(g,h)$ being the stacked
-tensor $T_g\cdot T_h$ of the product $U_gU_h$.
+The stacked product $B=N\cdot N$ has bond dimension thirty-six.
+After grouping the bond indices by
+$(g,h)\in(\Z_2\times\Z_2)^2$, it is block diagonal with sixteen blocks.
+The block indexed by $(g,h)$ is $M_g\cdot M_h$, the stacked tensor
+generating $U_gU_h$.
 
 \begin{center}
     \tenkzkernel
@@ -253,25 +261,28 @@ tensor $T_g\cdot T_h$ of the product $U_gU_h$.
     \end{tenkz}
 \end{center}
 
-\begin{definition}[The stacked defect tensor and its sixteen targets]%
+\begin{definition}[The stacked defect tensor and its sixteen target tensors]%
     \label{def:asymex_z2z2_pairs}
     \lean{Z2Z2Condensation.condensationSquare, Z2Z2Condensation.pairSlots,
         Z2Z2Condensation.pairDim, Z2Z2Condensation.pairTarget}
     \leanok
     \uses{def:asymex_z2z2_defect, def:mpdo_operator_product}
-    The stacked defect tensor is the doubled-index view of $N\cdot N$,
-    over the pair alphabet on $16$ letters. The sixteen slots are the
-    pairs $(g,h)$, and the target of the slot $(g,h)$ is the tensor of
-    $U_{gh}$ carried with the fusion weight $\lambda(g,h)$.
+    Pairing the physical indices of $N\cdot N$ gives an MPS tensor
+    on $16$ letters. Its sixteen target tensors are
+    $C_{(g,h)}=\lambda(g,h)M_{gh}$, indexed by the pairs $(g,h)$.
+    Their bond dimensions are those of $M_{gh}$.
 \end{definition}
 
-Twelve of the sixteen pairs \emph{split}: the stacked tensor is
-literally conjugate, by an integer gauge with no zero slots, to its
-target. Ten of them, with at most one factor from $\{x,xy\}$ and with
-$\lambda=+1$, are equal to their targets outright; the two pairs
-$(x,y)$ and $(xy,y)$ carry the weight $-1$ and are conjugate to
-$-M_{xy}$ and $-M_x$ by the sign gauge
+For twelve of the sixteen pairs, the stacked tensor is conjugate to
+its target by an invertible integer matrix, with no additional zero
+diagonal blocks. These are the split pairs.
+Ten of them, with at most one factor from $\{x,xy\}$ and with
+$\lambda(g,h)=+1$, are equal to their targets.
+The two pairs $(x,y)$ and $(xy,y)$ have weight $-1$ and are conjugate
+to $-M_{xy}$ and $-M_x$, respectively, by
 $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
+In the following diagram, $B$ denotes one such pair block and
+$s=(g,h)$.
 
 \begin{center}
     \tenkzkernel
@@ -314,23 +325,25 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
         Z2Z2Condensation.xyY_remainder_eq_zero}
     \leanok
     \uses{def:asymex_z2z2_pairs, def:asymex_one_slot, thm:asymex_explicit_gauge}
-    For each of the twelve pairs $(g,h)$ listed above, the block of
-    $(g,h)$ in the stacked defect tensor has a one-slot compression datum
-    with $z=0$: there is an invertible bond-space gauge, the identity for
-    ten pairs and the sign gauge for $(x,y)$ and $(xy,y)$, that conjugates
-    the block exactly onto its target $\lambda(g,h)M_{gh}$, with
-    vanishing remainder.
+    For each of the twelve split pairs $(g,h)$, the corresponding block
+    of the stacked defect tensor admits a compression onto the single
+    target $\lambda(g,h)M_{gh}$ with $z=0$.
+    An invertible bond-space gauge conjugates the block exactly to this
+    target, with vanishing remainder. The gauge is the identity for ten
+    pairs and $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$ for $(x,y)$ and
+    $(xy,y)$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:asymex_one_slot, thm:asymex_one_slot, thm:asymex_explicit_gauge}
-    Ten of the blocks are literally equal, letter by letter, to the
-    entrywise coercion of their integer target, a finite verification.
-    The remaining two are conjugate to their target by the sign gauge, by
-    Theorem~\ref{thm:asymex_explicit_gauge}; since the gauge covers the
-    entire bond space with no zero slots, the remainder of the resulting
-    one-slot compression datum is identically zero.
+    A finite calculation shows that ten of the blocks equal their
+    targets at every physical-index pair.
+    The remaining two are conjugate to their targets by the stated
+    gauge, by Theorem~\ref{thm:asymex_explicit_gauge}.
+    The gauge acts on the entire bond space, so the resulting
+    compression has no zero diagonal blocks and its remainder is
+    identically zero.
 \end{proof}
 
 \begin{theorem}[The four non-split pair blocks]%
@@ -344,38 +357,41 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
     \leanok
     \uses{def:asymex_z2z2_pairs, def:asymex_one_slot, thm:asymex_explicit_gauge,
         thm:asym_multiblock}
-    The four pairs $(g,h)$ with both $g,h\in\{x,xy\}$ -- the elements
-    whose tensors carry the controlled-phase dressing -- do not split.
-    Each has bond dimension four and admits a one-slot compression datum
-    onto its one-dimensional target $\lambda(g,h)M_{gh}$ with $z=3$ zero
-    slots, an explicit unimodular integer gauge, and a remainder that
-    vanishes on every word of length at least four (the bound $1+z=4$ of
-    Theorem~\ref{thm:asym_multiblock}); no shorter uniform bound is
-    claimed or needed. For the block $(x,x)$, whose target is
+    The four pairs $(g,h)$ with both $g,h\in\{x,xy\}$ do not split.
+    Each has bond dimension four and admits a compression onto its
+    one-dimensional target $\lambda(g,h)M_{gh}$ with $z=3$ zero
+    diagonal entries, an explicit unimodular integer gauge, and a
+    remainder that vanishes on every word of length at least four.
+    This is the bound $1+z=4$ of
+    Theorem~\ref{thm:asym_multiblock}.
+    For the block $(x,x)$, whose target is
     $\lambda(x,x)M_e=\delta$, the compression pair is
     \begin{align}
-        W & =(0,0,0,1),
-          &
+        W & =(0,0,0,1), \notag\\
         V & =(1,-1,-1,1)^{\mathsf T},
         \notag
     \end{align}
-    with $WV=1$ and $WB^{ij}V=\delta^{ij}$ for every letter, and the
-    remainder $R^{ij}=B^{ij}-V\delta^{ij}W$ satisfies
-    $R^{i_1j_1}R^{i_2j_2}R^{i_3j_3}R^{i_4j_4}=0$; the other three blocks
-    are worked out by the same construction, each with its own gauge.
+    with $WV=1$ and $WB^{ij}V=\delta^{ij}$ for every physical-index
+    pair. The remainder $R^{ij}=B^{ij}-V\delta^{ij}W$ satisfies
+    $R^{i_1j_1}R^{i_2j_2}R^{i_3j_3}R^{i_4j_4}=0$.
+    The other three blocks admit the same construction, each with its
+    own gauge.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge}
-    For each of the four pairs, an explicit integer gauge, verified
-    mutually inverse to its recorded inverse by a finite check, conjugates
-    every letter of the stacked tensor into a matrix that is block upper
-    triangular for the flag with the target in the third diagonal position
-    and zero elsewhere off that position; Theorem~\ref{thm:asymex_explicit_gauge}
-    reads off the compression pair from the gauge, and the nilpotency
-    clause of Theorem~\ref{thm:asym_multiblock} with $|S|+z=4$ gives the
-    stated vanishing.
+    For each of the four pairs, a finite calculation verifies an
+    integer gauge and its inverse. This gauge puts every matrix of
+    the stacked tensor in upper triangular form, with the target
+    in the third diagonal position and zero in the other diagonal
+    positions.
+    Theorem~\ref{thm:asymex_explicit_gauge} gives the compression pair
+    from this gauge. The nilpotency clause of
+    Theorem~\ref{thm:asym_multiblock}, with $|S|+z=4$, gives the stated
+    vanishing. The absence of a splitting follows from the
+    intertwiner calculation in
+    Theorem~\ref{thm:asymex_z2z2_no_intertwiner}.
 \end{proof}
 
 \begin{theorem}[Both sitewise intertwiner spaces vanish for the four
@@ -391,46 +407,51 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
         Z2Z2Condensation.xyXy_left_intertwiner_eq_zero}
     \leanok
     \uses{thm:asymex_z2z2_nonsplit}
-    For each of the four non-split pairs $(g,h)$, if $v$ satisfies
-    $B^{oi}v=\lambda(g,h)(M_{gh})_{00}v$ for every letter of the block $B$
-    of $(g,h)$, then $v=0$; likewise if $u$ satisfies
-    $uB^{oi}=\lambda(g,h)(M_{gh})_{00}u$ for every letter, then $u=0$.
+    For each of the four non-split pairs $(g,h)$, let $B$ denote its
+    stacked block and set $C^{oi}=\lambda(g,h)(M_{gh}^{oi})_{00}$.
+    If a column vector $v\in\C^4$ satisfies $B^{oi}v=C^{oi}v$ for
+    every physical-index pair, then $v=0$.
+    Likewise, if a row vector $u$ satisfies $uB^{oi}=C^{oi}u$ for
+    every physical-index pair, then $u=0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Four of the sixteen letters of each block are nonzero, taking only
-    two distinct values, and each distinct value is a rank-one matrix
-    with an explicit integer kernel and image; comparing the four
-    coordinates of the two independent equations forces every coordinate
-    of $v$, respectively of $u$, to vanish. For the block $(x,x)$, whose
-    nonzero letters are $(0,0)$ and $(1,1)$ (repeated at $(2,2)$ and
-    $(3,3)$), comparing the four coordinates of $B^{ij}v=v$ at $(0,0)$
-    gives $v_0=v_1=v_2=v_3$, and at $(1,1)$ gives $v_3=v_0$ and
-    $v_1=-v_3$, forcing $v_0=v_1=v_2=v_3=0$; the transposed comparison at
-    $(0,0)$ gives $u_1=u_2=u_3=0$, and at $(1,1)$ gives $u_0=0$. The
-    other three blocks eliminate coordinates in the same way, through
-    their own rank-one letters.
+    Four of the sixteen matrices of each block are nonzero, taking
+    only two distinct values. Each distinct value has rank one, with
+    an explicit integer kernel and image.
+    Comparing the four coordinates of the two independent equations
+    forces every coordinate of $v$, respectively of $u$, to vanish.
+    For the block $(x,x)$, the nonzero physical-index pairs are
+    $(0,0)$ and $(1,1)$, repeated at $(2,2)$ and $(3,3)$.
+    Comparing the coordinates of $B^{ij}v=v$ at $(0,0)$ gives
+    $v_0=v_1=v_2=v_3$, and at $(1,1)$ gives $v_3=v_0$ and
+    $v_1=-v_3$, forcing $v_0=v_1=v_2=v_3=0$.
+    The row-vector comparison at $(0,0)$ gives $u_1=u_2=u_3=0$,
+    and at $(1,1)$ gives $u_0=0$.
+    The other three blocks eliminate coordinates in the same way,
+    using their respective rank-one matrices.
 \end{proof}
 
-\begin{remark}[The anomaly as a failure of conjugate closure, four more
-        instances]%
+\begin{remark}[Failure of closure under conjugate transposition]%
     \label{rem:asymex_z2z2_anomaly}
     \uses{cor:asym_anomaly_not_star, thm:asymex_z2z2_no_intertwiner}
-    Theorem~\ref{thm:asymex_z2z2_no_intertwiner} exhibits four further
-    instances of the phenomenon named in
-    Corollary~\ref{cor:asym_anomaly_not_star}: the stacked product of the
-    anomalous symmetry with itself, at each of the four pairs drawn from
-    $\{x,xy\}$, generates an algebra that is not closed under conjugate
-    transposition, exactly as for the single squared CZX tensor of
-    Section~\ref{sec:asymex_czx}. Physically, the obstruction to a
-    sitewise fusion pair shows precisely at the four fusions involving two
-    of the controlled-phase-dressed elements, while the twelve split
-    pairs of Theorem~\ref{thm:asymex_z2z2_split} have one-dimensional
+    By Theorem~\ref{thm:asymex_z2z2_no_intertwiner} and
+    Corollary~\ref{cor:asym_anomaly_not_star}, the algebra generated
+    by the matrices of each stacked pair block with
+    $g,h\in\{x,xy\}$ is not closed under conjugate transposition.
+    This is the same algebraic obstruction as for the squared CZX
+    tensor in Section~\ref{sec:asymex_czx}.
+    For each of these four blocks, there is no nonzero sitewise
+    intertwiner with the specified target in either direction.
+    In contrast, the twelve split pairs of
+    Theorem~\ref{thm:asymex_z2z2_split} have one-dimensional
     sitewise intertwiner spaces in both directions.
+    These conclusions concern the pair blocks and their target
+    tensors, not the three-cocycle associator.
 \end{remark}
 
-\begin{theorem}[The assembled compression datum of the stacked defect]%
+\begin{theorem}[Compression of the stacked defect tensor]%
     \label{thm:asymex_z2z2_assembled}
     \lean{Z2Z2Condensation.condensationSquare_trace_evalWord,
         Z2Z2Condensation.exists_condensationSquare_compression,
@@ -438,41 +459,49 @@ $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$.
     \leanok
     \uses{def:asymex_z2z2_pairs, thm:asym_multiblock,
         thm:asymex_z2z2_split, thm:asymex_z2z2_nonsplit}
-    The trace of every nonempty word of the stacked defect tensor is the
-    sum over the sixteen pairs of $\lambda(g,h)^{|w|}$ times the trace of
-    the word of $M_{gh}$. Consequently the stacked defect tensor admits a
-    multi-block compression, in the sense of
-    Theorem~\ref{thm:asym_multiblock}, onto the sixteen weighted targets
-    $\lambda(g,h)M_{gh}$, with exactly $z=12$ zero slots: the bond
-    dimension count is $36=4(1+2+1+2)+12$, all twelve zero slots coming
-    from the four non-split blocks of
-    Theorem~\ref{thm:asymex_z2z2_nonsplit}, which alone need $z=3$ each.
+    For every nonempty word $w$, the stacked defect tensor $B=N\cdot N$
+    satisfies
+    \begin{align}
+        \tr(B^w)
+        &=\sum_{g,h\in\Z_2\times\Z_2}
+            \lambda(g,h)^{|w|}\tr(M_{gh}^w).
+        \notag
+    \end{align}
+    Consequently $B$ admits a multi-block compression, in the sense of
+    Theorem~\ref{thm:asym_multiblock}, onto the sixteen weighted
+    targets $\lambda(g,h)M_{gh}$.
+    Every such compression has exactly $z=12$ zero diagonal entries,
+    since $36=4(1+2+1+2)+12$.
+    In the pair-block construction, these twelve entries come from
+    the four non-split blocks of
+    Theorem~\ref{thm:asymex_z2z2_nonsplit}, each of which has $z=3$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asym_multiblock}
-    Summing the word-trace identity of Theorem~\ref{thm:asymex_z2z2_fusion}
-    over the sixteen pairs and applying
-    Lemma~\ref{lem:asym_mpo_trace_eq} identifies the word traces of the
-    stacked defect tensor with the stated sum; Theorem~\ref{thm:asym_multiblock}
-    then supplies the compression datum, and the dimension count follows
-    from clause (vii) together with the bond dimensions recorded in
-    Theorems~\ref{thm:asymex_z2z2_split} and
-    \ref{thm:asymex_z2z2_nonsplit}.
+    Sum the word-trace identities underlying
+    Theorem~\ref{thm:asymex_z2z2_fusion} over the sixteen pairs.
+    Together with Lemma~\ref{lem:asym_mpo_trace_eq}, this identifies
+    the word traces of the stacked defect tensor with the stated
+    sum.
+    Theorem~\ref{thm:asym_multiblock} then supplies the compression.
+    The dimension count follows from clause (vii) and the bond
+    dimensions in Theorems~\ref{thm:asymex_z2z2_split}
+    and~\ref{thm:asymex_z2z2_nonsplit}.
 \end{proof}
 
-\begin{remark}[What is and is not proved here]%
+\begin{remark}[Scope of the compression results]%
     \label{rem:asymex_z2z2_scope}
-    No element of $H^3(\Z_2\times\Z_2,U(1))$ is computed anywhere in this
-    development: the class attached to this presentation is external
-    data, recorded only in
-    \texttt{Notes/OpenProblemsTN/checks/asym\_z2z2\_typeIII\_data.md}. What
-    is formalized is exactly the statements above: normality of the four
-    tensors, the periodic fusion table, the length-dependent identity for
-    the condensation defect, and, for the stacked defect tensor, that the
-    remainders of the four non-split pair blocks vanish on every word of
-    length at least four while the remainders of the twelve split pair
-    blocks vanish identically. Neither a shorter nilpotency bound for the
-    non-split blocks nor any cohomological invariant is claimed.
+    The periodic fusion table, the length-dependent identity for the
+    condensation defect, and the compression results do not determine
+    an element of $H^3(\Z_2\times\Z_2,U(1))$.
+    The four non-split pair blocks have remainders that vanish on
+    every word of length at least four; the twelve split pair blocks
+    have identically vanishing remainders.
+    The bound four is not asserted to be optimal, and these
+    nilpotent remainders are not identified with a cohomological
+    invariant.
+    % The class attached to this presentation is external data in
+    % Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md.
 \end{remark}

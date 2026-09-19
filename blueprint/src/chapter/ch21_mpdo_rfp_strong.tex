@@ -104,7 +104,7 @@ change of basis. The matrix is not assumed to have trace one.
     $Y_{(i,u),(j,v)}P_{p,q}$.
 \end{proof}
 
-\begin{theorem}[Global operator identity for fixed strong fixed-point witnesses]
+\begin{theorem}[Global operator identity for a fixed choice of the defining matrices]
     \label{thm:mpdo_strong_rfp_global_operator_identity}
     \lean{MPOTensor.strongRFP_physCloseN_eq_localized_preparation,
         MPOTensor.strongRFP_physCloseN_eq_reindex_singleKrausMap_kronecker,
@@ -112,7 +112,7 @@ change of basis. The matrix is not assumed to have trace one.
         MPOTensor.strongRFP_mpo_eq_reindex_singleKrausMap_kronecker}
     \leanok
     \uses{thm:mpdo_strong_rfp_phys_close, thm:mpdo_global_renormalization_maps, def:finite_tuple_regroupings, def:mpdo_first_site_preparation_shuffle, lem:mpdo_localized_first_site_preparation, lem:phys_close_identity}
-    Fix witnesses $P$ and $U$ in
+    Fix matrices $P$ and $U$ satisfying
     (\ref{eq:mpdo_strong_rfp_closure}). For every $N\geq0$ and every virtual
     matrix $X$, write $R_1$ and $R_2$ for the initial-coordinate regroupings
     of lengths $N+1$ and $N+2$. Then

@@ -592,7 +592,7 @@ strong subadditivity for a normalized three-site reduced state.
     orthogonality, mutual disjointness, and resolution of the active support.
 \end{proof}
 
-\begin{definition}[Sitewise physical action and absorbed BNT representatives]
+\begin{definition}[Sitewise physical action and BNT coefficients]
     \label{def:mpdo_sitewise_physical_matrix}
     \lean{MPOTensor.sitewisePhysicalMatrix}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor}
@@ -605,8 +605,7 @@ strong subadditivity for a normalized three-site reduced state.
         \notag
     \end{align}
     If the copies of the $j$-th normal tensor have common coefficient
-    $\mu_j$, let $\mathcal K_j=\mu_j A_j$ denote the representative with this
-    coefficient absorbed into its local tensor.
+    $\mu_j$, set $\mathcal K_j=\mu_j A_j$.
 \end{definition}
 
 \begin{theorem}[Local selection by the BNT projectors]
@@ -1042,8 +1041,7 @@ strong subadditivity for a normalized three-site reduced state.
     BNT label are copy-independent,
     $\mu_{s,q}=\mu_{s,q'}$, and that $K$ saturates the area law and satisfies
     literal zero correlation length, $\mathcal T_K^2=\mathcal T_K$. For every
-    BNT label $s$, let $\mathcal K_s=\mu_sA_s$ be the absorbed BNT
-    representative. Then
+    BNT label $s$, set $\mathcal K_s=\mu_sA_s$. Then
     $\mathcal K_s$ is one-site injective, generates positive semidefinite
     operators on every nonempty periodic chain, saturates the area law, and
     satisfies

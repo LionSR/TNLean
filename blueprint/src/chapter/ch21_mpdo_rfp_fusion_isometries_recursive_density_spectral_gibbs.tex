@@ -1,0 +1,621 @@
+\begin{definition}[Terminal spectral refinement of a fusion decomposition]%
+	\label{def:mpdo_fusion_clause_terminal_spectral_refinement}
+	\lean{MPOTensor.BNTFusionTensorClause.terminalMatrix}
+	\lean{MPOTensor.BNTFusionTensorClause.TerminalSpectralIndex}
+	\lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue}
+	\lean{MPOTensor.BNTFusionTensorClause.terminalEigenProjection}
+	\lean{MPOTensor.BNTFusionTensorClause.terminalEigenProjectionFamily}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		recursiveTerminalEigenProjectorQ}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		topologicalSpectralProjectorSucc}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		HasTerminalSpectralProjectorRefinement}
+	\leanok
+	\uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator, def:mpdo_topological_projector_recursion, thm:mpdo_terminal_transfer_positivity}
+	Let $M$ generate MPDOs, and fix a fusion decomposition of its vertical
+	BNT $\{M_\alpha\}_\alpha$ with positive diagonal matrices
+	$\chi_{\alpha,\beta,\gamma}$. For every terminal label $\gamma$, close the
+	horizontal operator leg of $M_\gamma$ to obtain a positive semidefinite
+	bond matrix $K_\gamma$. Choose an orthonormal eigenbasis of each
+	$K_\gamma$. Its spectral indices are pairs $s=(\gamma,k)$; write
+	$\lambda_s$ for the corresponding eigenvalue and $E_s$ for the rank-one
+	orthogonal projection onto the chosen eigenvector. Recursively transport
+	this family through every fusion history and the adjoint sequential
+	coisometry. Denote the resulting operator, assembled over all labels and
+	multiplicities at positive length $N$, by $P_s^{(N)}$.
+
+	Only nonzero product sectors occur in the fusion decomposition. A normal
+	label absent from a fixed product pair has zero fusion multiplicity. See
+	\cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+
+	The fixed-pair decomposition in Figure~11 requires a support correction:
+	a fixed product pair may have no nonzero sectors. See
+	\cite{gap:cpsv16_figure11_per_pair_support}.
+
+	The fusion map restricted to the retained rows is a coisometry onto the
+	direct sum of nonzero sectors, and its adjoint gives exact reconstruction.
+	This corrects the fusion-map convention in Figure~11. See
+	\cite{gap:cpsv16_figure11_fusion_coisometry}.
+\end{definition}
+
+\begin{definition}[Terminal spectral refinement for an RFP MPDO]%
+	\label{def:mpdo_terminal_spectral_refinement}
+	\lean{MPOTensor.rfpBNTFusionTensorClause}
+	\leanok
+	\uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_fusion_clause_terminal_spectral_refinement, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
+	For an MPDO in normalized BNT-refined horizontal form satisfying the
+	RFP condition, fix the fusion decomposition supplied by that
+	construction. For every terminal label $\gamma$, close the horizontal
+	operator leg of $M_\gamma$ to obtain a matrix $K_\gamma$ on its bond
+	space. Choose an orthonormal eigenbasis of each $K_\gamma$, with spectral
+	indices $s=(\gamma,k)$ satisfying $0\leq k<D_\gamma$.
+	Write $\lambda_s$ for the corresponding eigenvalue and $E_s$ for the
+	rank-one orthogonal projection onto the chosen eigenvector, extended by
+	zero on terminal labels different from~$\gamma$. Recursively transport
+	this terminal family through every fusion history, then through the
+	adjoint sequential fusion coisometry, and take the direct sum over all
+	sitewise label and multiplicity configurations. Denote the resulting
+	operator at positive chain length $N$ by $P_s^{(N)}$.
+
+	The normalized BNT-refined horizontal hypothesis is stronger than CF
+	as defined by CPSV.
+	% Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+\end{definition}
+
+\begin{theorem}[Terminal spectral projectors from a fusion decomposition]%
+	\label{thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
+	\lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue_nonneg}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		topologicalSpectralProjectorSucc_isOrthogonalProjection}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		topologicalSpectralProjectorSucc_mul_eq_zero}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		sum_terminalEigenvalue_smul_topologicalSpectralProjectorSucc}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		topologicalMultiplicityWeightFactorSucc_commutes_spectralProjector}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		topologicalDensityOperatorSucc_eq_sum_terminalSpectralProjector}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		hasTerminalSpectralProjectorRefinement}
+	\leanok
+	\uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_fusion_clause_terminal_spectral_refinement, thm:mpdo_fusion_clause_topological_density_decomposition, cor:mpdo_fusion_clause_topological_density_factor_commutator}
+	Let $M$ generate MPDOs, fix a fusion decomposition on the nonzero product
+	sectors, and suppose that its structure coefficients
+	$c_{\alpha,\beta,\gamma}^{(L)}
+	=\tr(\chi_{\alpha,\beta,\gamma}^{L})$ are independent of $L$ for all
+	positive lengths, with $\chi_{\alpha,\beta,\gamma}$ positive diagonal.
+	Then every terminal eigenvalue $\lambda_s$ is non-negative. For every
+	$N>0$, the operators $P_s^{(N)}$ are pairwise orthogonal projections and
+	\begin{align}
+		T_N          & =\sum_s\lambda_sP_s^{(N)},
+		\notag                                       \\
+		A_NP_s^{(N)} & =P_s^{(N)}A_N,
+		\notag                                       \\
+		R_N          & =\sum_s\lambda_sA_NP_s^{(N)}.
+		\notag
+	\end{align}
+	This is the terminal spectral decomposition of
+	\cite[lines~1003--1012]{Cirac2016MPDO_arXiv}; it makes no Hamiltonian or
+	Gibbs-state assertion.
+
+	Only nonzero product sectors occur in the fusion decomposition. A normal
+	label absent from a fixed product pair has zero fusion multiplicity. See
+	\cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+
+	The fixed-pair decomposition in Figure~11 requires a support correction:
+	a fixed product pair may have no nonzero sectors. See
+	\cite{gap:cpsv16_figure11_per_pair_support}.
+
+	The fusion map restricted to the retained rows is a coisometry onto the
+	direct sum of nonzero sectors, and its adjoint gives exact reconstruction.
+	This corrects the fusion-map convention in Figure~11. See
+	\cite{gap:cpsv16_figure11_fusion_coisometry}.
+\end{theorem}
+\begin{proof}\leanok
+	Positivity of the physical density operator makes each terminal bond
+	matrix positive semidefinite. Its spectral theorem supplies the
+	non-negative eigenvalues and orthogonal rank-one projections. Length
+	independence makes every retained diagonal entry of
+	$\chi_{\alpha,\beta,\gamma}$ equal to one, so recursive coisometric
+	transport preserves orthogonality and the spectral sum. The
+	density-factor commutator gives the final two identities.
+\end{proof}
+
+\begin{theorem}[Terminal spectral projectors for an RFP MPDO with
+		length-independent structure coefficients]%
+	\label{thm:mpdo_terminal_spectral_projector_refinement}
+	\lean{MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS}
+	\leanok
+	\uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_terminal_spectral_refinement, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
+	Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
+	and satisfy the RFP condition. Fix the fusion decomposition supplied by
+	that construction, and suppose that its structure coefficients
+	$c_{\alpha,\beta,\gamma}^{(L)}
+	=\tr(\chi_{\alpha,\beta,\gamma}^{L})$, with positive diagonal
+	$\chi_{\alpha,\beta,\gamma}$, are independent of $L$ for all positive
+	lengths.
+	Then $K_\gamma$ is positive semidefinite for every terminal label, so
+	$\lambda_s\geq0$. Write the positive chain length as $N=n+1$,
+	where $n\in\N$. For every $N>0$,
+	\begin{align}
+		(P_s^{(N)})^\dagger
+		 & =P_s^{(N)},
+		\notag         \\
+		(P_s^{(N)})^2
+		 & =P_s^{(N)}.
+		\notag
+	\end{align}
+	For distinct spectral indices $s$ and $t$, $P_s^{(N)}P_t^{(N)}=0$.
+	The recursive factor and multiplicity weights satisfy
+	\begin{align}
+		T_N
+		 & =\sum_s\lambda_s P_s^{(N)},
+		\label{eq:rfp_terminal_spectral_sum} \\
+		A_NP_s^{(N)}
+		 & =P_s^{(N)}A_N.
+		\label{eq:rfp_spectral_commutation}
+	\end{align}
+	Consequently,
+	\begin{align}
+		R_N
+		 & =\sum_s\lambda_s A_NP_s^{(N)}.
+		\label{eq:rfp_density_spectral_sum}
+	\end{align}
+	Length independence is assumed for the coefficients of the fixed fusion
+	decomposition supplied by the RFP construction, not for an arbitrary
+	fusion decomposition.
+
+	The normalized BNT-refined horizontal hypothesis is stronger than CF
+	as defined by CPSV.
+	% Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+
+	This theorem gives the spectral decomposition in
+	\cite[lines~1003--1012]{Cirac2016MPDO_arXiv}; it does not assert the
+	commuting nearest-neighbor Hamiltonian or Gibbs-state conclusion beginning
+	at line~1013.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:mpdo_topological_projector_recursion, thm:mpdo_topological_density_decomposition, cor:mpdo_topological_density_factor_commutator}
+	Positivity of the one-site density operator passes to every fixed BNT
+	block; division by its strictly positive multiplicity weight shows that
+	each $K_\gamma$ is positive semidefinite. Apply the finite-dimensional
+	spectral theorem to obtain the non-negative eigenvalues and rank-one
+	orthogonal projections. Length independence makes every retained diagonal
+	entry of $\chi_{\alpha,\beta,\gamma}$ equal to one, so the recursive
+	direct sum preserves idempotence and pairwise orthogonality. Write
+	$Q_{N,c,s}$ for the recursive spectral block in copy
+	configuration~$c$. The coisometry identity
+	$W_{N,c}W_{N,c}^\dagger=\Id$ gives
+	\begin{align}
+		(W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^\dagger
+		 & =W_{N,c}^\dagger Q_{N,c,s}W_{N,c},
+		\notag                                \\
+		(W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^2
+		 & =W_{N,c}^\dagger Q_{N,c,s}W_{N,c}.
+		\notag
+	\end{align}
+	Thus transport through the adjoint sequential coisometry preserves the
+	projector identities. Linearity gives
+	(\ref{eq:rfp_terminal_spectral_sum}). Finally, $A_N$ is scalar on every
+	copy-configuration block, hence it commutes with each $P_s^{(N)}$ and
+	gives (\ref{eq:rfp_density_spectral_sum}).
+\end{proof}
+
+\begin{definition}[Commuting Gibbs form on the retained vertical space for
+		chains of at least two sites]%
+	\label{def:mpdo_topological_gibbs_data_at_least_two}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		terminalSpectralIndex_card_le_physicalDim}
+	\lean{MPOTensor.BNTFusionTensorClause.terminalSpectralEmbedding}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		physicalIndexedTerminalEigenvalue}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		physicalIndexedTopologicalSpectralProjectorSucc}
+	\lean{MPOTensor.BNTFusionTensorClause.retainedMultiplicityWeightEntry}
+	\lean{MPOTensor.BNTFusionTensorClause.retainedMultiplicityEnergyEntry}
+	\lean{MPOTensor.BNTFusionTensorClause.topologicalGibbsLocalTerm}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		topologicalGibbsHamiltonianSuccSucc}
+	\lean{MPOTensor.BNTFusionTensorClause.HasTopologicalGibbsDecomposition}
+	\leanok
+	\uses{def:mpdo_fusion_clause_terminal_spectral_refinement}
+	Let $M$ generate MPDOs, fix a fusion decomposition on the nonzero product
+	sectors, and let $\mu$ be its strictly positive diagonal multiplicity
+	matrix on the retained one-site space. Define
+	$h=(-\log\mu)\otimes\Id$ on two adjacent sites, where $\log\mu$ is the
+	diagonal matrix obtained by taking the logarithm of each diagonal entry.
+	For a chain of length $L=N+2$, with $N\in\N$, let
+	$H_L=\sum_{i=0}^{L-1}h_{i,i+1}$, with periodic indices.
+
+	The terminal spectral family has cardinality at most the physical
+	one-site dimension $d$. Fix an injection of its indices into
+	$\{0,\ldots,d-1\}$ and extend the eigenvalues and projectors by zero
+	outside the image.
+
+	The Hamiltonian and projectors in this definition act on the retained
+	nonzero vertical sectors. Applying the adjoint of the coisometry
+	restricted to the retained rows reconstructs the physical density
+	operator; this reconstruction alone does not specify a Hamiltonian or
+	projectors on the original physical space. The distinction is recorded in
+	\cite{gap:cpsv16_topological_gibbs_physical_complement}.
+
+	The local interaction is defined on two spins, so this definition applies
+	to lengths $L=N+2$. The length-one boundary is recorded in
+	\cite{gap:cpsv16_topological_gibbs_length_one}.
+\end{definition}
+
+\begin{theorem}[Fusion decomposition gives a commuting Gibbs decomposition
+		on the retained vertical space for chains of at least two sites]%
+	\label{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		topologicalGibbsLocalTerm_isHermitian}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		topologicalGibbsBondSuccSucc_commute}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		exp_neg_topologicalGibbsHamiltonianSuccSucc}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		physicalIndexedTopologicalSpectralProjectorSucc_isOrthogonalProjection}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		physicalIndexedTopologicalSpectralProjectorSucc_commutes_gibbsFactor}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		topologicalDensityOperatorSucc_eq_sum_physicalIndexedProjector_mul_gibbsFactor}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		singleKrausMap_physicalIndexedGibbsDecomposition_eq_mpo}
+	\lean{MPOTensor.BNTFusionTensorClause.hasTopologicalGibbsDecomposition}
+	\leanok
+	\uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_gibbs_data_at_least_two, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
+	Let $M$ generate MPDOs, and fix a fusion decomposition on the nonzero
+	product sectors of a vertical canonical decomposition of $M$.
+	Suppose that the structure coefficients
+	$c_{\alpha,\beta,\gamma}^{(L)}
+	=\tr(\chi_{\alpha,\beta,\gamma}^{L})$, with positive diagonal
+	$\chi_{\alpha,\beta,\gamma}$, are independent of $L$ for all positive
+	lengths.
+	There are non-negative numbers $\lambda_0,\ldots,\lambda_{d-1}$,
+	independent of the chain length. The two-site matrix $h$ is Hermitian,
+	and for every $L\geq2$ its periodic translates commute pairwise and satisfy
+	\begin{align}
+		H_L
+		 & =\sum_{j=0}^{L-1}h_{j,j+1},
+		\label{eq:rfp_gibbs_hamiltonian} \\
+		e^{-H_L}
+		 & =\mu^{\otimes L}.
+		\label{eq:rfp_gibbs_factor}
+	\end{align}
+	There are orthogonal projections
+	$P_0^{(L)},\ldots,P_{d-1}^{(L)}$ such that
+	\begin{align}
+		[P_i^{(L)},e^{-H_L}]
+		 & =0,
+		\label{eq:rfp_gibbs_projector_commutation}    \\
+		R_L
+		 & =\sum_{i=0}^{d-1}\lambda_iP_i^{(L)}e^{-H_L}.
+		\label{eq:rfp_retained_gibbs_sum}
+	\end{align}
+	Applying the adjoint of the coisometry restricted to the retained rows
+	at every site reconstructs $\rho^{(L)}(M)$ from the right-hand side of
+	(\ref{eq:rfp_retained_gibbs_sum}).
+
+	Only nonzero product sectors occur in the fusion decomposition. A normal
+	label absent from a fixed product pair has zero fusion multiplicity. See
+	\cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+
+	The fixed-pair decomposition in Figure~11 requires a support correction:
+	a fixed product pair may have no nonzero sectors, and no unsupported
+	normal sector is inserted. See
+	\cite{gap:cpsv16_figure11_per_pair_support}.
+
+	The fusion map restricted to the retained rows is a coisometry onto the
+	direct sum of nonzero sectors, and its adjoint gives exact reconstruction
+	of the product tensor. This corrects the fusion-map convention in
+	Figure~11. See
+	\cite{gap:cpsv16_figure11_fusion_coisometry}.
+
+	The formula is an equality for $R_L$ on the retained vertical space, not
+	the physical-space equality asserted in
+	\cite[lines~1013--1016]{Cirac2016MPDO_arXiv}. Exact reconstruction by the
+	adjoint coisometry alone does not establish the existence of physical
+	projectors and a finite physical Hamiltonian. See
+	\cite{gap:cpsv16_topological_gibbs_physical_complement}.
+
+	The conclusion holds for $L=N+2$, with $N\in\N$. The definition of the
+	local interaction in \cite{Cirac2016MPDO_arXiv} uses two spins but does
+	not state a length-one convention; see
+	\cite{gap:cpsv16_topological_gibbs_length_one}.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:mpdo_fusion_clause_topological_density_decomposition, cor:mpdo_fusion_clause_topological_density_factor_commutator, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
+	Each diagonal entry of $\mu$ is strictly positive, so its negative
+	logarithm is real. The translated terms are diagonal, and each site
+	contributes once to their sum. Exponentiating gives
+	(\ref{eq:rfp_gibbs_factor}).
+
+	Positivity of the multiplicities embeds one terminal mode for every
+	terminal spectral index into the retained coordinates. The rank of the
+	coisometry restricted to the retained rows is at most $d$, so the terminal
+	family has at most $d$ members. Extend the eigenvalues and spectral
+	projectors by zero along an injection into $\{0,\ldots,d-1\}$. The added
+	zero projectors preserve self-adjointness, idempotence, commutation, and
+	the spectral sum. Combine that sum with (\ref{eq:rfp_gibbs_factor}) and
+	the exact adjoint reconstruction of the retained density operator.
+\end{proof}
+
+\begin{theorem}[Commuting Gibbs decomposition on the retained vertical space
+		for chains of at least two sites]%
+	\label{thm:mpdo_topological_gibbs_at_least_two}
+	\lean{MPOTensor.topologicalGibbsDecomposition_of_isRFPViaTS}
+	\leanok
+	\uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+	Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
+	and satisfy the RFP condition. Select the fusion decomposition on the
+	nonzero product sectors supplied by that condition, and suppose that the
+	structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}
+	=\tr(\chi_{\alpha,\beta,\gamma}^{L})$ of this same decomposition are
+	independent of $L$ for all positive lengths. Then the commuting Gibbs
+	decomposition on the retained vertical space in
+	Theorem~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+	holds for every $L=N+2$, with $N\in\N$.
+
+	The normalized BNT-refined horizontal hypothesis is stronger than CF
+	as defined by CPSV.
+
+	The Hamiltonian and projectors act on the retained nonzero vertical
+	sectors. Applying the adjoint of the coisometry restricted to the
+	retained rows reconstructs the physical density operator; this
+	reconstruction alone does not specify a Hamiltonian or projectors on the
+	original physical space. See
+	\cite{gap:cpsv16_topological_gibbs_physical_complement}.
+
+	The conclusion holds for $L=N+2$; no length-one convention for the
+	two-site interaction is asserted. See
+	\cite{gap:cpsv16_topological_gibbs_length_one}.
+\end{theorem}
+\begin{proof}\leanok
+	Select the fusion decomposition on the nonzero product sectors supplied
+	by the RFP condition and apply
+	Theorem~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+	with the assumed length independence of its structure coefficients.
+\end{proof}
+
+\begin{theorem}[Fusion decomposition gives a physical commuting Gibbs
+		decomposition for chains of at least two sites]%
+	\label{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+	\lean{MPOTensor.BNTFusionTensorClause.%
+		hasPhysicalTopologicalGibbsDecomposition}
+	\leanok
+	\uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_gibbs_data_at_least_two, thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+	Let $M$ generate MPDOs, and fix a fusion decomposition on the nonzero
+	product sectors of a vertical canonical decomposition of $M$.
+	Suppose that the structure coefficients
+	$c_{\alpha,\beta,\gamma}^{(L)}
+	=\tr(\chi_{\alpha,\beta,\gamma}^{L})$, with positive diagonal
+	$\chi_{\alpha,\beta,\gamma}$, are independent of $L$ for all positive
+	lengths. There are non-negative numbers $\lambda_0,\ldots,\lambda_{d-1}$
+	and one fixed Hermitian two-site matrix $\widehat h$, all independent
+	of the chain length. For every $L\geq2$, let
+	$\widehat H_L=\sum_{j=0}^{L-1}\widehat h_{j,j+1}$, with periodic indices.
+	The translates of $\widehat h$ commute pairwise, and there are orthogonal
+	projections $\widehat P_0^{(L)},\ldots,\widehat P_{d-1}^{(L)}$ on the
+	physical chain such that
+	\begin{align}
+		[\widehat h_{j-1,j},\widehat h_{j,j+1}]
+		 & =0,
+		\notag                                        \\
+		[\widehat P_i^{(L)},e^{-\widehat H_L}]
+		 & =0,
+		\notag                                        \\
+		\rho^{(L)}(M)
+		 & =\sum_{i=0}^{d-1}\lambda_i\widehat P_i^{(L)}
+		e^{-\widehat H_L}.
+		\label{eq:rfp_physical_gibbs_sum}
+	\end{align}
+	This is the implication from the fusion decomposition in the proof of
+	\cite[lines~999--1016]{Cirac2016MPDO_arXiv}.
+
+	Only nonzero product sectors occur in the fusion decomposition. A normal
+	label absent from a fixed product pair has zero fusion multiplicity. See
+	\cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+
+	The fixed-pair decomposition in Figure~11 requires a support correction:
+	a fixed product pair may have no nonzero sectors, and no unsupported
+	normal sector is inserted. See
+	\cite{gap:cpsv16_figure11_per_pair_support}.
+
+	The fusion map restricted to the retained rows is a coisometry onto the
+	direct sum of nonzero sectors, and its adjoint gives exact reconstruction
+	of the product tensor. This corrects the fusion-map convention in
+	Figure~11. See
+	\cite{gap:cpsv16_figure11_fusion_coisometry}.
+
+	To define the operators on the full physical space, transport the retained
+	one-site energy through the adjoint coisometry and extend it by zero
+	energy on the orthogonal complement. Transport the retained projectors
+	through the adjoint sitewise coisometry. This supplies the physical
+	complement correction described in
+	\cite{gap:cpsv16_topological_gibbs_physical_complement}.
+
+	The conclusion holds for $L=N+2$, with $N\in\N$. The definition of the
+	local interaction in \cite{Cirac2016MPDO_arXiv} uses two spins but gives
+	no length-one convention. See
+	\cite{gap:cpsv16_topological_gibbs_length_one}.
+\end{theorem}
+\begin{proof}\leanok
+	Let $V$ be the coisometry restricted to the retained rows and let $k$ be
+	the retained logarithmic multiplicity energy. The physical energy
+	$K=V^\dagger kV$ is Hermitian and
+	\begin{align}
+		e^{-K}
+		 & =V^\dagger e^{-k}V+(\Id-V^\dagger V).
+		\label{eq:rfp_physical_weight}
+	\end{align}
+	Taking the fixed two-site term $K\otimes\Id$, its periodic translates act
+	on separate one-site factors, hence commute, and their exponential is the
+	tensor power of (\ref{eq:rfp_physical_weight}).
+
+	For the sitewise coisometry $W=V^{\otimes L}$, transport each retained
+	projector by $\widehat P_i^{(L)}=W^\dagger P_i^{(L)}W$. The identity
+	$WW^\dagger=\Id$ preserves self-adjointness, idempotence, and pairwise
+	orthogonality. The one-site intertwining identities transport the
+	retained commutator to the physical Gibbs factor. Applying the same
+	identities term by term to (\ref{eq:rfp_retained_gibbs_sum}), and then
+	using exact adjoint reconstruction, gives
+	(\ref{eq:rfp_physical_gibbs_sum}).
+\end{proof}
+
+\begin{theorem}[Physical commuting Gibbs decomposition for chains of at least
+		two sites]%
+	\label{thm:mpdo_physical_coordinate_gibbs_at_least_two}
+	\lean{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
+	\leanok
+	\uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+	Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
+	and satisfy the RFP condition. Select the fusion decomposition on the
+	nonzero product sectors supplied by that condition, and suppose that the
+	structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}
+	=\tr(\chi_{\alpha,\beta,\gamma}^{L})$ of this same decomposition are
+	independent of $L$ for all positive lengths. Then the physical commuting
+	Gibbs decomposition of
+	Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+	holds for every $L=N+2$, with $N\in\N$.
+
+	The normalized BNT-refined horizontal hypothesis is stronger than CF
+	as defined by CPSV.
+
+	The retained one-site energy is transported through the adjoint
+	coisometry and extended by zero energy on the orthogonal complement.
+	The retained projectors are transported through the adjoint sitewise
+	coisometry. This supplies the physical complement correction described in
+	\cite{gap:cpsv16_topological_gibbs_physical_complement}.
+
+	The conclusion holds for $L=N+2$; no length-one convention for the
+	two-site interaction is asserted. See
+	\cite{gap:cpsv16_topological_gibbs_length_one}.
+\end{theorem}
+\begin{proof}\leanok
+	Select the fusion decomposition on the nonzero product sectors supplied
+	by the RFP condition and apply
+	Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+	with the assumed length independence of its structure coefficients.
+\end{proof}
+
+\begin{definition}[Fusion decomposition for an RFP tensor in CPSV canonical
+		form]%
+	\label{def:mpdo_literal_cpsv_rfp_bnt_fusion_tensor_clause}
+	\lean{MPOTensor.cpsvRFPBNTFusionTensorClause}
+	\leanok
+	\uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}
+	Let $M$ generate MPDOs, suppose that its MPS tensor with paired physical
+	indices is in CF as defined by CPSV, and suppose that $M$ satisfies the
+	RFP condition. Choose one fusion decomposition of the vertical BNT on
+	the nonzero product sectors furnished by these hypotheses and denote it
+	by $\mathcal F_{\mathrm{CPSV}}(M)$.
+
+	Only nonzero product sectors occur in the selected fusion decomposition.
+	A normal label absent from a fixed product pair has zero fusion
+	multiplicity. See
+	\cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+
+	The fixed-pair decomposition in Figure~11 requires a support correction:
+	a fixed product pair may have no nonzero sectors, and no unsupported
+	normal sector is inserted. See
+	\cite{gap:cpsv16_figure11_per_pair_support}.
+
+	The fusion map restricted to the retained rows is a coisometry onto the
+	direct sum of nonzero sectors, and its adjoint gives exact reconstruction
+	of the product tensor. This corrects the fusion-map convention in
+	Figure~11. See
+	\cite{gap:cpsv16_figure11_fusion_coisometry}.
+\end{definition}
+
+\begin{theorem}[Physical commuting Gibbs decomposition in CPSV canonical form
+		for chains of at least two sites]%
+	\label{thm:mpdo_literal_cpsv_physical_coordinate_gibbs_at_least_two}
+	\lean{MPOTensor.%
+		physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}
+	\leanok
+	\uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_literal_cpsv_rfp_bnt_fusion_tensor_clause, def:mpdo_topological_gibbs_data_at_least_two, thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+	Let $M$ generate MPDOs, suppose that its MPS tensor with paired physical
+	indices is in CF as defined by CPSV, and suppose that $M$ satisfies the
+	RFP condition. Select the fusion decomposition on the nonzero product
+	sectors supplied by these three hypotheses, and assume that the structure
+	coefficients $c_{\alpha,\beta,\gamma}^{(L)}
+	=\tr(\chi_{\alpha,\beta,\gamma}^{L})$ of this same decomposition are
+	independent of $L$ for all positive lengths.
+
+	There are non-negative numbers
+	$\lambda_0,\ldots,\lambda_{d-1}$ and one fixed Hermitian two-site matrix
+	$\widehat h$, all independent of the chain length. For every $L=N+2$,
+	with $N\in\N$, let
+	$\widehat H_L=\sum_{j=0}^{L-1}\widehat h_{j,j+1}$, with periodic indices.
+	The translates of $\widehat h$ commute pairwise, and there are pairwise
+	orthogonal projections
+	$\widehat P_0^{(L)},\ldots,\widehat P_{d-1}^{(L)}$ on the physical chain
+	such that
+	\begin{align}
+		[\widehat h_{j-1,j},\widehat h_{j,j+1}]
+		 & =0,
+		\notag                                        \\
+		[\widehat P_i^{(L)},e^{-\widehat H_L}]
+		 & =0,
+		\notag                                        \\
+		\rho^{(L)}(M)
+		 & =\sum_{i=0}^{d-1}\lambda_i\widehat P_i^{(L)}
+		e^{-\widehat H_L}.
+		\notag
+	\end{align}
+	This is the physical-space conclusion of
+	\cite[lines~1013--1016]{Cirac2016MPDO_arXiv}, under the CF and RFP
+	hypotheses of
+	\cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}.
+
+	Only nonzero product sectors occur in the selected fusion decomposition.
+	A normal label absent from a fixed product pair has zero fusion
+	multiplicity. See
+	\cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+
+	The fixed-pair decomposition in Figure~11 requires a support correction:
+	a fixed product pair may have no nonzero sectors, and no unsupported
+	normal sector is inserted. See
+	\cite{gap:cpsv16_figure11_per_pair_support}.
+
+	The fusion map restricted to the retained rows is a coisometry onto the
+	direct sum of nonzero sectors, and its adjoint gives exact reconstruction
+	of the product tensor. This corrects the fusion-map convention in
+	Figure~11. See
+	\cite{gap:cpsv16_figure11_fusion_coisometry}.
+
+	The retained one-site energy is transported through the adjoint
+	coisometry and extended by zero energy on the orthogonal complement.
+	The retained projectors are transported through the adjoint sitewise
+	coisometry. This supplies the physical complement correction described in
+	\cite{gap:cpsv16_topological_gibbs_physical_complement}.
+
+	The conclusion holds for $L=N+2$. The definition of the local interaction
+	in \cite{Cirac2016MPDO_arXiv} uses two spins but gives no length-one
+	convention. See
+	\cite{gap:cpsv16_topological_gibbs_length_one}.
+\end{theorem}
+\begin{proof}\leanok
+	Choose the fusion decomposition on the nonzero product sectors supplied by
+	Theorem~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}. Its
+	structure coefficients are length independent by hypothesis. Apply
+	Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}.
+\end{proof}
+
+\begin{remark}[Length-one boundary of the two-site construction]%
+	\label{rem:mpdo_topological_gibbs_length_one_boundary}
+	The local-interaction definition in \cite{Cirac2016MPDO_arXiv} lets a
+	local operator act on the first two spins and translates it around the
+	periodic chain. Thus its construction has domain $L\geq2$. Periodic
+	identification of site labels supplies neither a map from two-site
+	operators to one-site operators nor a multiplicity for the coincident
+	edge.
+
+	The source states its Gibbs-decomposition theorem without an explicit
+	lower bound on $L$. Its $L=1$ instance requires an additional convention.
+	The physical-space result here establishes the decomposition for
+	$L\geq2$; no length-one statement is asserted.
+	% See docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex
+	% and docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex.
+\end{remark}
