@@ -3,22 +3,23 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.GroupedFigure8
+import QICLean.Algebra.MatrixGramUnitary
 import TNLean.MPS.MPDO.GroupedSectorGram
 
 /-!
-# Gram and unitary normalization of grouped vertical sectors
+# Unitary normalization of grouped vertical sectors
 
-This file applies normal-tensor rigidity to the grouped Figure 8 comparison
-constructed from normalized BNT-refined horizontal form, which is stronger
-than literal CPSV canonical form.
+The grouped-corner Gram-dressing hypothesis makes the Gram matrix of every
+grouped gauge a positive multiple of the identity. Dividing the gauge by the
+square root of that scalar makes it unitary. The argument uses no
+canonical-form hypothesis: literal CPSV canonical form and normalized
+BNT-refined horizontal form each supply the Gram dressing independently.
 
-## Main results
+## Main result
 
-* `IsMPDO.grouped_sector_gram_eq_pos_smul_one`: each grouped gauge has Gram
-  matrix equal to a positive real multiple of the identity.
-* `IsMPDO.grouped_sector_exists_unitary_normalization`: rescaling the grouped
-  gauge by the inverse square root of that scalar makes it unitary.
+* `MPOTensor.grouped_sector_exists_unitary_normalization_of_dressing`:
+  rescaling a grouped gauge by the inverse square root of its Gram scalar
+  makes it unitary.
 
 ## References
 
@@ -39,63 +40,22 @@ variable (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
 
 local notation "C" => MPSTensor.mpvPhaseClassData blocks
 
-/-- The Gram matrix of an actual grouped vertical-sector gauge is a positive
-real multiple of the identity.
+/-- Every grouped vertical-sector gauge becomes unitary after division by the
+square root of its positive Gram scalar.
 
-All hypotheses are clauses furnished by
-`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.
-
-Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
-theorem IsMPDO.grouped_sector_gram_eq_pos_smul_one
-    {M : MPOTensor d D} (hM : IsMPDO M)
-    (hHorizontal : IsHorizontalCF M)
-    (μ : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
-    (_hDimPos : ∀ k, 0 < dim k)
-    (hNormal : ∀ k, MPSTensor.IsNormalTensor (blocks k))
-    (hdim : ∀ j q, dim ((C).repr j) = dim ((C).enum j q))
-    (X : (j : Fin (C).g) → (q : Fin ((C).copies j)) →
-      GL (Fin (dim ((C).enum j q))) ℂ)
-    (ζ : (j : Fin (C).g) → Fin ((C).copies j) → ℂ)
-    (hXDist : ∀ j, X j ⟨0, (C).copies_pos j⟩ = 1)
-    (hCoeffPos : ∀ j q, (0 : ℂ) < μ ((C).enum j q) * ζ j q)
-    (hCorner : ∀ j q v,
-      (μ ((C).enum j q) * ζ j q) •
-          ((X j q : Matrix (Fin (dim ((C).enum j q)))
-              (Fin (dim ((C).enum j q))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (hdim j q))
-              (blocks ((C).repr j))) v *
-            (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
-              (Fin (dim ((C).enum j q))) ℂ)) =
-        (V ((C).enum j q))ᴴ * verticalTensor M v * V ((C).enum j q))
-    (j : Fin (C).g) (q : Fin ((C).copies j)) :
-    ∃ ω : ℝ, 0 < ω ∧
-      (X j q : Matrix (Fin (dim ((C).enum j q)))
-        (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q = (ω : ℂ) • 1 := by
-  apply grouped_sector_gram_eq_pos_smul_one_of_dressing blocks
-    (M := M) (μ := μ) (V := V) (_hDimPos := _hDimPos) (hdim := hdim)
-      (X := X) (ζ := ζ) (hXDist := hXDist) (hCoeffPos := hCoeffPos)
-      (hCorner := hCorner)
-  · intro n A VX VY X' Y cX cY hcX hcY hcornerX hcornerY
-    exact hHorizontal.gramDressing_eq_of_two_grouped_corners M hM
-      A VX VY X' Y cX cY hcX hcY hcornerX hcornerY
-  · intro l p
-    exact ((MPSTensor.isNormalTensor_cast_iff (hdim l p)
-      (blocks ((C).repr l))).2 (hNormal ((C).repr l))).isNormal
-
-/-- Every actual grouped vertical-sector gauge becomes unitary after division
-by the square root of its positive Gram scalar.
-
-All hypotheses are clauses furnished by
-`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.
+The hypotheses are those of
+`grouped_sector_gram_eq_pos_smul_one_of_dressing`: the grouped-corner Gram
+dressing together with the clauses of `HasVerticalBNTGroupingWithIsometry`.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
-theorem IsMPDO.grouped_sector_exists_unitary_normalization
-    {M : MPOTensor d D} (hM : IsMPDO M)
-    (hHorizontal : IsHorizontalCF M)
+theorem grouped_sector_exists_unitary_normalization_of_dressing
+    {M : MPOTensor d D} (hDressing : HasGroupedCornerGramDressing M)
     (μ : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (hDimPos : ∀ k, 0 < dim k)
-    (hNormal : ∀ k, MPSTensor.IsNormalTensor (blocks k))
     (hdim : ∀ j q, dim ((C).repr j) = dim ((C).enum j q))
+    (hNormal : ∀ j q, Kraus.IsNormal
+      (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+        (blocks ((C).repr j))))
     (X : (j : Fin (C).g) → (q : Fin ((C).copies j)) →
       GL (Fin (dim ((C).enum j q))) ℂ)
     (ζ : (j : Fin (C).g) → Fin ((C).copies j) → ℂ)
@@ -117,8 +77,8 @@ theorem IsMPDO.grouped_sector_exists_unitary_normalization
             (Fin (dim ((C).enum j q))) ℂ) ∈
         Matrix.unitaryGroup (Fin (dim ((C).enum j q))) ℂ := by
   obtain ⟨ω, hω, hGram⟩ :=
-    IsMPDO.grouped_sector_gram_eq_pos_smul_one blocks hM hHorizontal μ V
-      hDimPos hNormal hdim X ζ hXDist hCoeffPos hCorner j q
+    grouped_sector_gram_eq_pos_smul_one_of_dressing blocks hDressing μ V
+      hDimPos hdim hNormal X ζ hXDist hCoeffPos hCorner j q
   exact ⟨ω, hω,
     Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
       hω hGram⟩

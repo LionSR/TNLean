@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.RFPViaTS
+import TNLean.MPS.MPDO.VerticalBNTGrouping
 import TNLean.MPS.MPDO.VerticalProductFusionDecomposition
 
 /-!
@@ -224,7 +225,8 @@ theorem IsHorizontalCF.exists_cpsvVerticalDecomposition
       (fun j ↦ ⟨dim (C.repr j), blocks (C.repr j)⟩) :=
     hSpectralBNT.of_sameMPV₂Pos hSame.symm
   obtain ⟨_, W, _, hWIso, hWOrth, hWInter, hWReconstruct⟩ :=
-    hM.exists_normalized_grouped_sector_maps blocks hHorizontal mu V hDimPos
+    exists_normalized_grouped_sector_maps_of_dressing blocks
+      (hHorizontal.hasGroupedCornerGramDressing M hM) mu V hDimPos
       hNormal hdim X zeta hXDist hCoeffPos hGroupedIso hGroupedOrth
       hGroupedInter hGroupedCorner hGroupedReconstruct
   have hWReconstructFlat : ∀ ab, verticalTensor M ab =

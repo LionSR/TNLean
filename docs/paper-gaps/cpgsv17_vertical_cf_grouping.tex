@@ -343,11 +343,15 @@ These results are formalized in \path{TNLean/MPS/MPDO/VerticalBNT.lean},
 The pairwise Gram-conjugation identity corresponding to the second displayed
 diagram at source lines~1914--1919 is proved in
 \path{TNLean/MPS/MPDO/FigureEightPairwise.lean}. Its dependent identification
-with the actual grouped sector and distinguished copy is proved under the
-normalized BNT-refined hypothesis in
-\path{TNLean/MPS/MPDO/GroupedFigure8.lean}, and under literal CPSV canonical
-form in \path{TNLean/MPS/MPDO/CPSVGroupedFigureEight.lean}. Neither proof
-identifies either corner separately with the raw reflected adjoint.
+with the actual grouped sector and distinguished copy is proved once, for any
+tensor with the grouped-corner Gram-dressing property, in
+\path{TNLean/MPS/MPDO/GroupedSectorGram.lean}. Normalized BNT-refined
+horizontal form and literal CPSV canonical form each supply that property
+independently, by
+\path{MPOTensor.IsHorizontalCF.hasGroupedCornerGramDressing} and
+\path{MPSTensor.IsCPSVCanonicalForm.hasGroupedCornerGramDressing} in
+\path{TNLean/MPS/MPDO/VerticalBNTGrouping.lean}. Neither proof identifies
+either corner separately with the raw reflected adjoint.
 
 The scalar-commutant theorem
 \leanid{Kraus.IsNormal.eq_smul_one_of_commute} for the normal tensor
@@ -375,24 +379,24 @@ The grouping theorem exposes the normalization
         &=\Id.
     \label{eq:cpgsv17_vertical_cf_grouping_distinguished_gauge}
 \end{align}
-Under the normalized BNT-refined hypothesis, the formal results are
-\path{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one} and
-\path{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization} in
-\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}. Their literal-CPSV
-counterparts are
-\path{MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_eq_pos_smul_one} and
-\path{MPSTensor.IsCPSVCanonicalForm.grouped_sector_exists_unitary_normalization}
-in \path{TNLean/MPS/MPDO/CPSVGroupedGramNormalization.lean}.
+The formal results hold for any tensor with the grouped-corner Gram-dressing
+property: \path{MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing} in
+\path{TNLean/MPS/MPDO/GroupedSectorGram.lean} and
+\path{MPOTensor.grouped_sector_exists_unitary_normalization_of_dressing} in
+\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}. Both the normalized
+BNT-refined hypothesis and literal CPSV canonical form furnish that property,
+so each gives these identities without any implication between the two
+canonical-form predicates.
 
 The reflected marked-chain argument, two-sector separation, and dependent
 dimension identification at source lines~1909--1919 are therefore complete.
 So are the positive scalar Gram identity and the unitary normalization of
-every grouped gauge. Under the normalized BNT-refined hypothesis, the
-normalized gauges are composed with the physical sector isometries in
-\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}. The literal theorem
-\path{MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps} is
-proved in \path{TNLean/MPS/MPDO/CPSVNormalizedGroupedSectors.lean}. In both
-cases, the maps $W_{\alpha,q}$ have mutually orthogonal isometric ranges,
+every grouped gauge. The normalized gauges are composed with the physical
+sector isometries by
+\path{MPOTensor.exists_normalized_grouped_sector_maps_of_dressing} in
+\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}, again from the
+Gram-dressing property alone, so both hypotheses reach it. In either case, the
+maps $W_{\alpha,q}$ have mutually orthogonal isometric ranges,
 satisfy the representative intertwining identities, and reconstruct every
 vertical letter exactly.
 
@@ -609,7 +613,8 @@ the source's positive similarity equations.
 
 Literal Proposition~4.13 is therefore complete. The normalized physical-sector
 maps are supplied by
-\path{MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps}, and
+\path{MPOTensor.exists_normalized_grouped_sector_maps_of_dressing} applied to
+the literal Gram dressing, and
 \path{MPOTensor.verticalCF_of_cpsvCanonicalForm} constructs the final vertical
 canonical form. Its rectangular map satisfies
 Eq.~\ref{eq:cpgsv17_vertical_cf_grouping_source_coisometry}, not in general
