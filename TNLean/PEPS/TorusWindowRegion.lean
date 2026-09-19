@@ -24,6 +24,9 @@ theorem `TNLean.PEPS.isCrossingEdge_torusVerticalRectangleBlockingDatum` in
   edge: two diagonally offset `L × K` windows whose only joining lattice edge
   is the distinguished edge itself (`isCrossingEdge_horizontalStaircase`).
 
+This file is intentionally horizontal-only; the vertical comparison now goes
+through the reference-blocking route cited above.
+
 The single-crossing geometry of the end pair is the reason the bond operator
 extracted by the window chain lives on one edge; it is consumed by the same
 single-boundary-edge comparison machinery as the landed three-block route.
