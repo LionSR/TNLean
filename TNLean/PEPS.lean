@@ -32,8 +32,6 @@ import TNLean.PEPS.Defs
 import TNLean.PEPS.EdgeGaugeExtraction
 import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.EdgeMiddlePhysical
-import TNLean.PEPS.EdgeMiddlePhysical.Basic
-import TNLean.PEPS.EdgeMiddlePhysical.KernelDescent
 import TNLean.PEPS.EdgeScalarSolve
 import TNLean.PEPS.FiniteKernelDescent
 import TNLean.PEPS.FundamentalTheorem
@@ -127,13 +125,6 @@ import TNLean.PEPS.TorusWindowFamily
 import TNLean.PEPS.TorusWindowFamilyCrossing
 import TNLean.PEPS.TorusWindowMult
 import TNLean.PEPS.TorusWindowPeeling
-import TNLean.PEPS.TorusWindowPeeling.BondInsertedRegion
-import TNLean.PEPS.TorusWindowPeeling.BoundaryGeometry
-import TNLean.PEPS.TorusWindowPeeling.EndOperation
-import TNLean.PEPS.TorusWindowPeeling.EndPhysicalOperation
-import TNLean.PEPS.TorusWindowPeeling.EndWindowCoupling
-import TNLean.PEPS.TorusWindowPeeling.SingleBond
-import TNLean.PEPS.TorusWindowPeeling.WindowIndependence
 import TNLean.PEPS.TorusWindowRealizes
 import TNLean.PEPS.TorusWindowRegion
 import TNLean.PEPS.TorusWindowSingleCrossingObstruction

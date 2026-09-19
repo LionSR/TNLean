@@ -321,7 +321,7 @@ mathematical obstruction.
 
 ### Positivity is necessary in the martingale spectral step
 
-- Location: `TNLean/MPS/ParentHamiltonian/Martingale.lean`
+- Location: `TNLean/MPS/ParentHamiltonian/Martingale/AbstractCriterion.lean`
 - Statement refuted: the quadratic-form inequality `H^2 >= gamma H` alone gives
   the norm lower bound on the orthogonal complement of `ker H`.
 - Witness: `H = -Id` satisfies the inequality vacuously for positive `gamma`
