@@ -1,10 +1,11 @@
 # Promoted-pattern hygiene: matrix-unit spans, square-root inverses, explicit gauge inverses (2026-09-19)
 
-Three proof-body cleanups. No theorem statement changes, no blueprint `\lean{}`
-tag is redirected, and only two private declarations are removed. The removals
-follow the direct-removal policy in `docs/project_conventions.md`: both are
-private, both had a single use, and neither name encoded misleading
-terminology.
+Three proof-body cleanups. One new shared helper is added,
+`Complex.ofReal_sqrt_inv_mul_self` in `TNLean/Algebra/ComplexSqrt.lean`; no
+existing statement changes, no blueprint `\lean{}` tag is redirected, and only
+two private declarations are removed. The removals follow the direct-removal
+policy in `docs/project_conventions.md`: both are private, both had a single
+use, and neither name encoded misleading terminology.
 
 ## 1. Nine inline copies of the promoted matrix-unit span helper
 
