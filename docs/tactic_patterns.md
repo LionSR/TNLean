@@ -2786,34 +2786,37 @@ spectral split → block extraction → MPV calculation → strict bounds
   files rather than a tactic abstraction, and is recorded here so it is not
   confused with this pattern.
 
-### red/blue window membership case split — candidate
+### red/blue window membership case split — promoted
 - **Pattern:**
   ```lean
   rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
     rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
     (simp only [not_and, not_lt] at hrn hbn; omega)
   ```
-- **Seen:** twenty-four occurrences before the 2026-09-19 torus edge-coordinate
-  cleanup (twelve in `TNLean/PEPS/TorusEdgeBlockingCrossing.lean`, ten in
+  with a second form that adds `⊢` to the `simp only` location list, for a goal that is
+  itself a conjunction of coordinate bounds.
+- **Seen:** twenty-four occurrences before the 2026-09-19 torus edge-coordinate cleanup
+  (twelve in `TNLean/PEPS/TorusEdgeBlockingCrossing.lean`, ten in
   `TNLean/PEPS/TorusWindowRegion.lean`, two in
-  `TNLean/PEPS/NormalEdgeSingleCrossing.lean`); seven afterwards (four, one and
-  two respectively), since the per-step copies inside the coordinate-pinning
-  blocks collapsed into one call each and the unused vertical staircase pair
-  was removed.
-- **Abstraction:** none yet. The proposed one is a macro taking the two
-  boundary-membership hypotheses as arguments, splitting both, normalizing the
-  two negated memberships to implications, and closing the arithmetic goal,
-  with a second form that also normalizes the goal, as the two window-bound
-  steps do with `simp only [not_and, not_lt] at hrn hbn ⊢`.
-- **Notes:** the goal shape is always a conjunction of coordinate-value
-  equalities or inequalities over `ℕ`, and the four branches differ only in
-  which endpoint lies in which block, so a single closing call suffices after
-  the split. Against promotion: with seven sites in two forms, the two macro
-  declarations and their documentation cost about as many lines as the five
-  they would save, so the abstraction does not yet make the proof text grow
-  more slowly than the mathematics; and the seven sites are the genuine
-  geometric case distinction of a boundary edge, not a copied arithmetic
-  argument. Revisit when a third crossing family is added.
+  `TNLean/PEPS/NormalEdgeSingleCrossing.lean`); five afterwards, once the per-step copies
+  inside the coordinate-pinning blocks collapsed into one call each and the unused vertical
+  staircase pair was removed. Three of the five were the first form, verbatim, across two
+  files, and two were the goal-normalizing form.
+- **Abstraction:** the tactic `crossing_blocks hRed hBlue`, with the form
+  `crossing_blocks hRed hBlue ⊢` for the goal-normalizing variant, in
+  `TNLean/PEPS/TorusEdgeBlockingCrossing.lean`. All five sites are refactored. Net Lean
+  delta of the promotion itself: +31 / -15, since the five sites lose two lines each while
+  the two forms with their documentation and section note cost about twenty-five; the
+  duplication rather than the line count is what it removes.
+- **Notes:** the two membership hypotheses are passed as arguments, since the hypotheses
+  introduced inside a macro are not the caller's; the four branches differ only in which
+  endpoint lies in which block, and `omega` reads the coordinate ranges of the blocks from
+  the context, so one closing call serves every branch. The tactic sits beside the crossing
+  arguments whose hypothesis shapes it is written for rather than in a general tactic
+  module. The two occurrences in `TNLean/PEPS/NormalEdgeSingleCrossing.lean` are a
+  different shape — the open-lattice memberships need no negation normalization and the
+  branches close by `omega` alone — and are left as they are.
+
 
 ## Retired
 

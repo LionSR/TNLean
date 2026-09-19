@@ -2,7 +2,8 @@
 
 This audit records two duplication removals inside PEPS proof bodies, together
 with the removal of an unused pair of declarations that carried a third copy of
-one of them. Three declarations are added.
+one of them, and the promotion of the case split they all shared to a tactic. Three
+declarations and one tactic are added.
 
 ## Torus edge-coordinate pinning
 
@@ -62,6 +63,19 @@ in `docs/audits/2026-08-26_peps_vertical_staircase_mirror_deletion.md` was about
 the coordinate convention it uses, not about a consumer; the vertical bond
 transport results named there are untouched.
 
+## The block-membership split
+
+What every one of those pinning proofs ends with, and what the window-bound step at the
+head of each of them also does, is the same split: each of the two boundary-membership
+hypotheses says that one endpoint of the edge lies in the block and the other does not, and
+all four assignments of the endpoints to the red and the blue block are decided by the
+coordinate ranges. Five sites remained after the pinning cleanup, three of them textually
+identical, so the split is promoted to the tactic `crossing_blocks`, defined beside the
+crossing arguments whose hypothesis shapes it is written for; the form
+`crossing_blocks hRed hBlue ⊢` also normalizes a goal that is itself a conjunction of
+coordinate bounds. The ledger entry in `docs/tactic_patterns.md` is marked promoted and
+records the net delta.
+
 ## The per-vertex scalar product argument
 
 `prod_perVertexScalar_eq_one` (`TNLean/PEPS/FundamentalTheorem.lean`) and
@@ -107,5 +121,6 @@ new generic statement is weaker than both.
 * Relocation of the region-injective corollary next to
   `exists_stateCoeff_ne_zero_of_regionInjective` and removal of the resulting
   one-declaration file.
-* Abstraction of the block-membership case split recorded as a candidate in
-  `docs/tactic_patterns.md`.
+* The two occurrences of a related but differently shaped split in
+  `TNLean/PEPS/NormalEdgeSingleCrossing.lean`, whose open-lattice memberships need no
+  negation normalization; they are left as they are and noted in the ledger entry.

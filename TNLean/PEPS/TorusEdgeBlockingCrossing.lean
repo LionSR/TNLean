@@ -140,6 +140,32 @@ theorem torusEdge_val_cases (g : Edge (torusGraph width height)) :
     · have hwrap : g.1.2.2.val + 1 = height := by have := ZMod.val_lt g.1.2.2; omega
       exact Or.inr (Or.inr (Or.inr ⟨hwrap, torus_vertical_step_val_wrap hstep hwrap⟩))
 
+/-! ### The red-to-blue membership split
+
+Every crossing argument below closes the same way: the two boundary-membership
+hypotheses of the edge each say that one endpoint lies in the block and the other does
+not, and all four resulting assignments of the endpoints to the two blocks are decided by
+the coordinate ranges of the blocks. -/
+
+/-- Split the two boundary-membership hypotheses of a crossing edge into the four
+assignments of its endpoints to the red and the blue block, turn the two non-membership
+hypotheses into coordinate implications, and close every branch by linear arithmetic over
+the coordinate values.  The form `crossing_blocks hRed hBlue ⊢` also normalizes the goal,
+for a goal that is itself a conjunction of coordinate bounds. -/
+syntax "crossing_blocks " ident ident (" ⊢")? : tactic
+
+macro_rules
+  | `(tactic| crossing_blocks $hR:ident $hB:ident) =>
+    `(tactic|
+      (rcases $hR:ident with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
+        rcases $hB:ident with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
+        (simp only [not_and, not_lt] at hrn hbn; omega)))
+  | `(tactic| crossing_blocks $hR:ident $hB:ident ⊢) =>
+    `(tactic|
+      (rcases $hR:ident with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
+        rcases $hB:ident with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
+        (simp only [not_and, not_lt] at hrn hbn ⊢; omega)))
+
 /-! ### The reference horizontal and vertical edges -/
 
 /-- The distinguished horizontal edge of the blocking at offset `(xStart, yStart)`: the edge from
@@ -239,9 +265,7 @@ theorem isCrossingEdge_torusHorizontalEdge
     -- below `xStart + 5 ≤ width` and `yStart + 5 ≤ height`.
     have hwin : g.1.1.1.val < xStart + 5 ∧ g.1.2.1.val < xStart + 5 ∧
         g.1.1.2.val < yStart + 5 ∧ g.1.2.2.val < yStart + 5 := by
-      rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-        rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-        (simp only [not_and, not_lt] at hrn hbn ⊢; omega)
+      crossing_blocks hRed hBlue ⊢
     obtain ⟨hw1, hw2, hw3, hw4⟩ := hwin
     -- The ordered-endpoint convention `g.1.1 < g.1.2` in coordinate-value form.
     have hlt := torusEdge_val_lt g
@@ -250,9 +274,7 @@ theorem isCrossingEdge_torusHorizontalEdge
     have hcoord : g.1.1.1.val = xStart + 1 ∧ g.1.1.2.val = yStart + 2 ∧
         g.1.2.1.val = xStart + 2 ∧ g.1.2.2.val = yStart + 2 := by
       rcases torusEdge_val_cases g with ⟨hpar, hstep⟩ | ⟨hpar, hstep⟩ <;>
-        rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-        rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-        (simp only [not_and, not_lt] at hrn hbn; omega)
+        crossing_blocks hRed hBlue
     obtain ⟨hc1, hc2, hc3, hc4⟩ := hcoord
     -- The reference edge's endpoint coordinate values.
     obtain ⟨hr11, hr12, hr21, hr22⟩ := horizontalReferenceEdge_val
@@ -324,17 +346,13 @@ theorem isCrossingEdge_torusVerticalEdge
       at hRed hBlue
     have hwin : g.1.1.1.val < xStart + 5 ∧ g.1.2.1.val < xStart + 5 ∧
         g.1.1.2.val < yStart + 5 ∧ g.1.2.2.val < yStart + 5 := by
-      rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-        rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-        (simp only [not_and, not_lt] at hrn hbn ⊢; omega)
+      crossing_blocks hRed hBlue ⊢
     obtain ⟨hw1, hw2, hw3, hw4⟩ := hwin
     have hlt := torusEdge_val_lt g
     have hcoord : g.1.1.1.val = xStart + 2 ∧ g.1.1.2.val = yStart + 1 ∧
         g.1.2.1.val = xStart + 2 ∧ g.1.2.2.val = yStart + 2 := by
       rcases torusEdge_val_cases g with ⟨hpar, hstep⟩ | ⟨hpar, hstep⟩ <;>
-        rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-        rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-        (simp only [not_and, not_lt] at hrn hbn; omega)
+        crossing_blocks hRed hBlue
     obtain ⟨hc1, hc2, hc3, hc4⟩ := hcoord
     obtain ⟨hr11, hr12, hr21, hr22⟩ := verticalReferenceEdge_val
       (width := width) (height := height) (xStart := xStart) (yStart := yStart)

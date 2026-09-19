@@ -141,9 +141,7 @@ theorem isCrossingEdge_horizontalStaircase {d : ℕ}
     have hcoord : g.1.1.1.val = a + L - 1 ∧ g.1.1.2.val = b + K - 1 ∧
         g.1.2.1.val = a + L ∧ g.1.2.2.val = b + K - 1 := by
       rcases torusEdge_val_cases g with ⟨hpar, hstep⟩ | ⟨hpar, hstep⟩ <;>
-        rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-        rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-        (simp only [not_and, not_lt] at hrn hbn; omega)
+        crossing_blocks hRed hBlue
     obtain ⟨hc1, hc2, hc3, hc4⟩ := hcoord
     obtain ⟨hr11, hr12, hr21, hr22⟩ := horizontalStaircaseEdge_val
       (width := width) (height := height) (L := L) (K := K) (a := a) (b := b)
