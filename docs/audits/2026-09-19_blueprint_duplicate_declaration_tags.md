@@ -126,6 +126,11 @@ bundles it with others.
 - Every label added to a `\uses` list resolves to exactly one `\label` in the
   sources reachable from `content.tex`, and none of the 24 added edges closes a
   cycle in the dependency graph.
+- `texra-blueprint bbl` and `texra-blueprint web` complete locally with exit
+  status 0, no `ERROR:` line, and no unresolved-label or missing-file warning.
+  This is run locally because the blueprint job stops earlier, at a formatting
+  failure inherited from the base commit and unrelated to these sources.
+- `chktex` and `scripts/latexindent` are clean on all sixteen changed sources.
 - `git diff --check` passes.
 
 ## Enforcement and what is deferred
