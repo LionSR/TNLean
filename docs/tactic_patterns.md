@@ -2488,7 +2488,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   translated-edge version of the target statement.
 - **Seen:** 2 occurrences (2026-07-24):
   `TNLean/PEPS/NormalSquareInteriorAbsorbedFamily.lean:84-104` (absorbing gauge),
-  `TNLean/PEPS/NormalSquareFundamentalTheorem2.lean:118-190` (per-edge bond-dimension equality).
+  `TNLean/PEPS/NormalSquareUnconditionalFundamentalTheorem.lean:118-190` (per-edge bond-dimension equality).
 - **Abstraction (proposed):** a lemma of shape
   `NormalSquareInteriorEdgeDatum.translatedDispatch` taking the horizontal and vertical
   continuations, or a helper that rewrites the edge and exposes the translated-coordinate

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap2
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlapSetup
 
 /-!
 # The overlapping union lemma: the P₀-outer bridge and the closure
@@ -13,10 +13,9 @@ lemma of the normal PEPS Fundamental Theorem (arXiv:1804.04964, Section 3, Lemma
 `injective_union`, lines 1324--1400 of `Papers/1804.04964/paper_normal.tex`) and assembles
 the full overlapping union theorem `regionBlockedTensorInjective_union_overlap`.
 
-The companions `TNLean.PEPS.RegionBlock.UnionInjectivityOverlap` and
-`TNLean.PEPS.RegionBlock.UnionInjectivityOverlap2` land the two host three-block geometries
-(`overlapLeftGeometry`, `overlapRightGeometry`), the first inverse application
-`overlap_firstStrip`, and the rebuild step
+The companion `TNLean.PEPS.RegionBlock.UnionInjectivityOverlapSetup` lands the two host
+three-block geometries (`overlapLeftGeometry`, `overlapRightGeometry`), the first inverse
+application `overlap_firstStrip`, and the rebuild step
 `overlapRight_bondProd_smul_hostWeight_combination_eq_zero`.
 
 With the four parts `P₀ = R₁ \ R₂`, `P₁ = R₁ ∩ R₂`, `P₂ = R₂ \ R₁`, both the left geometry's
