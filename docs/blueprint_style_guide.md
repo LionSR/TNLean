@@ -337,6 +337,13 @@ numbered entry for every declaration. Apply the following hierarchy.
 5. Keep a separately numbered final formula only when later mathematics
    cites the formula itself. Such a direct consequence should normally be a
    lemma or corollary, not a theorem.
+6. A worked-example entry tags the data and the statements that carry
+   example-specific content: the example's compression datum, its remainder
+   theorem, and its numeric slot and dimension counts. It does not tag a
+   per-example restatement of a generic field lemma, and the example module
+   does not state one. The clauses that hold of every example are carried by
+   the `\uses` edge to the general theorem whose field lemmas prove them, so a
+   new example adds no declaration that only projects a field of its own datum.
 
 Before removing an entry, search all `\uses` and `\ref` occurrences of its
 label. Redirect genuine dependencies to the retained parent result, and keep

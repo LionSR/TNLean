@@ -1,480 +1,480 @@
 \begin{definition}[One fusion layer of the topological projector]%
-	\label{def:mpdo_topological_projector_one_fusion}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.%
-		fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.conjugatedProjectorQBlock}
-	\leanok
-	\uses{def:mpdo_bnt_fusion_coisometry_family}
-	Let $P_\gamma$ be operators on the bond space of the vertically read
-	tensor $M_\gamma$. Define one fusion layer of the recursive operator $Q$
-	by
-	\begin{align}
-		Q_{\alpha,\beta}
-		 & =\bigoplus_\gamma
-		\chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
-		\label{eq:rfp_one_fusion}
-	\end{align}
-	In the source construction, the terminal matrices are
-	$P_\gamma=\tr(M_\gamma)$, with spectral refinement used to obtain
-	projections. Here the trace closes the horizontal operator leg and
-	leaves the bond indices of the vertically read tensor open.
-	Before spectral refinement, the fusion identity implies
-	\begin{align}
-		U_{\alpha,\beta}\tr(M_\alpha M_\beta)
-		U_{\alpha,\beta}^{\dagger}
-		 & =\bigoplus_\gamma
-		\chi_{\alpha,\beta,\gamma}\otimes
-		\tr(M_\gamma).
-		\label{eq:rfp_terminal_trace}
-	\end{align}
-	Indeed, summing the forward fusion identity over equal horizontal
-	operator indices and distributing matrix multiplication over this finite
-	sum gives~(\ref{eq:rfp_terminal_trace}).
-	This is one pairwise step in the recursion of
-	\cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
+    \label{def:mpdo_topological_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.conjugatedProjectorQBlock}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_coisometry_family}
+    Let $P_\gamma$ be operators on the bond space of the vertically read
+    tensor $M_\gamma$. Define one fusion layer of the recursive operator $Q$
+    by
+    \begin{align}
+        Q_{\alpha,\beta}
+         & =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
+        \label{eq:rfp_one_fusion}
+    \end{align}
+    In the source construction, the terminal matrices are
+    $P_\gamma=\tr(M_\gamma)$, with spectral refinement used to obtain
+    projections. Here the trace closes the horizontal operator leg and
+    leaves the bond indices of the vertically read tensor open.
+    Before spectral refinement, the fusion identity implies
+    \begin{align}
+        U_{\alpha,\beta}\tr(M_\alpha M_\beta)
+        U_{\alpha,\beta}^{\dagger}
+         & =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes
+        \tr(M_\gamma).
+        \label{eq:rfp_terminal_trace}
+    \end{align}
+    Indeed, summing the forward fusion identity over equal horizontal
+    operator indices and distributing matrix multiplication over this finite
+    sum gives~(\ref{eq:rfp_terminal_trace}).
+    This is one pairwise step in the recursion of
+    \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
 
-	This definition describes one fusion layer. The arbitrary-chain
-	recursion, the density decomposition, and the physical commuting Gibbs
-	decomposition for $N\geq2$ are given in
-	Theorems~\ref{thm:mpdo_topological_projector_recursion},
-	\ref{thm:mpdo_topological_density_decomposition}, and
-	\ref{thm:mpdo_physical_coordinate_gibbs_at_least_two}, respectively.
-	The source boundary at $N=1$ is recorded in
-	Remark~\ref{rem:mpdo_topological_gibbs_length_one_boundary}.
+    This definition describes one fusion layer. The arbitrary-chain
+    recursion, the density decomposition, and the physical commuting Gibbs
+    decomposition for $N\geq2$ are given in
+    Theorems~\ref{thm:mpdo_topological_projector_recursion},
+    \ref{thm:mpdo_topological_density_decomposition}, and
+    \ref{thm:mpdo_physical_coordinate_gibbs_at_least_two}, respectively.
+    The source boundary at $N=1$ is recorded in
+    Remark~\ref{rem:mpdo_topological_gibbs_length_one_boundary}.
 \end{definition}
 
 \begin{theorem}[Projection property of one fusion layer]%
-	\label{thm:mpdo_topological_projector_one_fusion}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_eq_unweighted}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_isStarProjection}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.%
-		conjugatedProjectorQBlock_isOrthogonalProjection}
-	\leanok
-	\uses{def:mpdo_topological_projector_one_fusion, thm:mpdo_bnt_length_independent_zipper}
-	Let $P_\gamma$ be self-adjoint idempotents on the terminal bond space of
-	$M_\gamma$. Suppose that the matrices $\chi_{\alpha,\beta,\gamma}$ are
-	diagonal with strictly positive entries, and that the structure
-	coefficients
-	$c_{\alpha,\beta,\gamma}^{(L)}
-	=\tr(\chi_{\alpha,\beta,\gamma}^{L})$ are independent of $L$ for every
-	positive length $L$. Then
-	\begin{align}
-		Q_{\alpha,\beta}
-		 & =\bigoplus_\gamma
-		              \Id_{r_{\alpha,\beta}^{\gamma}}\otimes P_\gamma
-		\notag
-	\end{align}
-	is self-adjoint and idempotent, where $r_{\alpha,\beta}^{\gamma}$ is
-	the dimension of $\chi_{\alpha,\beta,\gamma}$.
-	This is the single recursive fusion step in
-	\cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
-	Since the fusion map onto the nonzero sectors satisfies
-	$U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=\Id$, the operator
-	$U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is also an
-	orthogonal projection on the product bond space.
+    \label{thm:mpdo_topological_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_eq_unweighted}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        conjugatedProjectorQBlock_isOrthogonalProjection}
+    \leanok
+    \uses{def:mpdo_topological_projector_one_fusion, thm:mpdo_bnt_length_independent_zipper}
+    Let $P_\gamma$ be self-adjoint idempotents on the terminal bond space of
+    $M_\gamma$. Suppose that the matrices $\chi_{\alpha,\beta,\gamma}$ are
+    diagonal with strictly positive entries, and that the structure
+    coefficients
+    $c_{\alpha,\beta,\gamma}^{(L)}
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L})$ are independent of $L$ for every
+    positive length $L$. Then
+    \begin{align}
+        Q_{\alpha,\beta}
+         & =\bigoplus_\gamma
+        \Id_{r_{\alpha,\beta}^{\gamma}}\otimes P_\gamma
+        \notag
+    \end{align}
+    is self-adjoint and idempotent, where $r_{\alpha,\beta}^{\gamma}$ is
+    the dimension of $\chi_{\alpha,\beta,\gamma}$.
+    This is the single recursive fusion step in
+    \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
+    Since the fusion map onto the nonzero sectors satisfies
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=\Id$, the operator
+    $U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is also an
+    orthogonal projection on the product bond space.
 \end{theorem}
 \begin{proof}\leanok
-	The trace-power hypothesis and length independence force every diagonal
-	entry of $\chi_{\alpha,\beta,\gamma}$ to equal one. Thus
-	$\chi_{\alpha,\beta,\gamma}=\Id$, while
-	$c_{\alpha,\beta,\gamma}^{(L)}=r_{\alpha,\beta}^{\gamma}$ need not equal
-	one. Hence
-	\begin{align}
-		Q_{\alpha,\beta}^{\dagger}
-		 & =\bigoplus_\gamma(\Id\otimes P_\gamma^{\dagger})
-		=Q_{\alpha,\beta},
-		\notag                                            \\
-		Q_{\alpha,\beta}^{2}
-		 & =\bigoplus_\gamma(\Id\otimes P_\gamma^{2})
-		=Q_{\alpha,\beta}.
-		\notag
-	\end{align}
-	Finally, the coisometry identity
-	$U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=\Id$ and
-	Theorem~\cite[``Coisometric transport of a star projection'']{QICLean2026Blueprint} show that
-	$U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is an
-	orthogonal projection.
+    The trace-power hypothesis and length independence force every diagonal
+    entry of $\chi_{\alpha,\beta,\gamma}$ to equal one. Thus
+    $\chi_{\alpha,\beta,\gamma}=\Id$, while
+    $c_{\alpha,\beta,\gamma}^{(L)}=r_{\alpha,\beta}^{\gamma}$ need not equal
+    one. Hence
+    \begin{align}
+        Q_{\alpha,\beta}^{\dagger}
+         & =\bigoplus_\gamma(\Id\otimes P_\gamma^{\dagger})
+        =Q_{\alpha,\beta},
+        \notag                                              \\
+        Q_{\alpha,\beta}^{2}
+         & =\bigoplus_\gamma(\Id\otimes P_\gamma^{2})
+        =Q_{\alpha,\beta}.
+        \notag
+    \end{align}
+    Finally, the coisometry identity
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=\Id$ and
+    Theorem~\cite[``Coisometric transport of a star projection'']{QICLean2026Blueprint} show that
+    $U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is an
+    orthogonal projection.
 \end{proof}
 
 \begin{definition}[Recursive fusion histories and their sequential circuit]%
-	\label{def:mpdo_topological_projector_recursion}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.FusionHistoryData}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.fusionChainTensor}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.fusionHistoryWeight}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.recursiveProjectorQ}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.sequentialFusionCoisometry}
-	\leanok
-	\uses{def:mpdo_bnt_fusion_coisometry_family}
-	Fix an initial label $\alpha$ and append labels successively along a
-	finite chain. For total chain length $N\geq1$, the appended-label list
-	has length $N-1$; the symbols $W_N$ and $Q_N$ below refer to this total
-	chain length. A fusion history records, at every step, the preceding
-	final label, the new final label, and an index in the corresponding
-	multiplicity space. If $h$ ends at $\gamma(h)$, let
-	\begin{align}
-		w(h)
-		 & =\prod_r
-		    (\chi_{\gamma_{r-1},\beta_r,\gamma_r})_{k_r,k_r}.
-		\label{eq:rfp_history_weight}
-	\end{align}
-	For terminal bond operators $P_\gamma$, define
-	\begin{align}
-		Q_N(P)
-		 & =\bigoplus_h w(h)P_{\gamma(h)}.
-		\label{eq:rfp_recursive_q}
-	\end{align}
-	The sequential map $W_N$ is obtained by tensoring the preceding
-	map with the identity on the newly appended bond and then applying the
-	pairwise fusion coisometry onto the nonzero sectors in each
-	preceding-history block.
-	This gives the recursive operator and sequential circuit in
-	\cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
+    \label{def:mpdo_topological_projector_recursion}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.FusionHistoryData}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.fusionChainTensor}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.fusionHistoryWeight}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.recursiveProjectorQ}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.sequentialFusionCoisometry}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_coisometry_family}
+    Fix an initial label $\alpha$ and append labels successively along a
+    finite chain. For total chain length $N\geq1$, the appended-label list
+    has length $N-1$; the symbols $W_N$ and $Q_N$ below refer to this total
+    chain length. A fusion history records, at every step, the preceding
+    final label, the new final label, and an index in the corresponding
+    multiplicity space. If $h$ ends at $\gamma(h)$, let
+    \begin{align}
+        w(h)
+         & =\prod_r
+        (\chi_{\gamma_{r-1},\beta_r,\gamma_r})_{k_r,k_r}.
+        \label{eq:rfp_history_weight}
+    \end{align}
+    For terminal bond operators $P_\gamma$, define
+    \begin{align}
+        Q_N(P)
+         & =\bigoplus_h w(h)P_{\gamma(h)}.
+        \label{eq:rfp_recursive_q}
+    \end{align}
+    The sequential map $W_N$ is obtained by tensoring the preceding
+    map with the identity on the newly appended bond and then applying the
+    pairwise fusion coisometry onto the nonzero sectors in each
+    preceding-history block.
+    This gives the recursive operator and sequential circuit in
+    \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Fixed-label recursive fusion identity]%
-	\label{thm:mpdo_topological_projector_recursion}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.%
-		sequentialFusionCoisometry_mul_conjTranspose}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.%
-		sequentialFusionCoisometry_mul_fusionChainTensor_mul_conjTranspose}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.%
-		sequentialFusionCoisometry_mul_physTraceTransfer_mul_conjTranspose}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.%
-		fusionChainTensor_eq_conjTranspose_mul_recursiveProjectorQ_mul}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.%
-		physTraceTransfer_fusionChainTensor_eq_conjTranspose_mul_recursiveProjectorQ_mul}
-	\lean{MPOTensor.BNTFusionCoisometryFamily.recursiveProjectorQ_isStarProjection}
-	\leanok
-	\uses{def:mpdo_topological_projector_recursion, def:mpo_physical_trace_transfer}
-	For every initial label and every finite list of appended labels, let
-	$N\geq1$ be one plus the length of that list, and let
-	$M_{\alpha,\boldsymbol\beta}$ denote the left-associated product tensor.
-	The sequential fusion map $W_N$ is a coisometry onto the retained direct
-	sum, so $W_NW_N^\dagger=\Id$. For every pair of horizontal operator
-	indices $i,j$, it carries the product tensor to the recursive direct sum:
-	\begin{align}
-		W_N M_{\alpha,\boldsymbol\beta}^{i,j}W_N^\dagger
-		 & =Q_N((M_\gamma^{i,j})_\gamma).
-		\label{eq:rfp_recursive_fusion}
-	\end{align}
-	Consequently, after closing the horizontal operator index,
-	\begin{align}
-		W_N\tr(M_{\alpha,\boldsymbol\beta})W_N^\dagger
-		 & =Q_N((\tr(M_\gamma))_\gamma).
-		\label{eq:rfp_recursive_trace}
-	\end{align}
-	Exact reconstruction gives the reverse identities
-	\begin{align}
-		M_{\alpha,\boldsymbol\beta}^{i,j}
-		 & =W_N^\dagger
-		Q_N((M_\gamma^{i,j})_\gamma)
-		W_N,
-		\label{eq:rfp_reverse_fusion} \\
-		\tr(M_{\alpha,\boldsymbol\beta})
-		 & =W_N^\dagger
-		Q_N((\tr(M_\gamma))_\gamma)
-		W_N.
-		\label{eq:rfp_reverse_trace}
-	\end{align}
-	If the diagonal matrices $\chi_{\alpha,\beta,\gamma}$ have strictly
-	positive entries and give structure coefficients
-	$c_{\alpha,\beta,\gamma}^{(L)}
-	=\tr(\chi_{\alpha,\beta,\gamma}^{L})$ independent of every positive
-	length $L$, then $Q_N(P)$ is self-adjoint and idempotent whenever
-	every terminal matrix $P_\gamma$ is self-adjoint and idempotent.
+    \label{thm:mpdo_topological_projector_recursion}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        sequentialFusionCoisometry_mul_conjTranspose}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        sequentialFusionCoisometry_mul_fusionChainTensor_mul_conjTranspose}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        sequentialFusionCoisometry_mul_physTraceTransfer_mul_conjTranspose}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        fusionChainTensor_eq_conjTranspose_mul_recursiveProjectorQ_mul}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        physTraceTransfer_fusionChainTensor_eq_conjTranspose_mul_recursiveProjectorQ_mul}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.recursiveProjectorQ_isStarProjection}
+    \leanok
+    \uses{def:mpdo_topological_projector_recursion, def:mpo_physical_trace_transfer}
+    For every initial label and every finite list of appended labels, let
+    $N\geq1$ be one plus the length of that list, and let
+    $M_{\alpha,\boldsymbol\beta}$ denote the left-associated product tensor.
+    The sequential fusion map $W_N$ is a coisometry onto the retained direct
+    sum, so $W_NW_N^\dagger=\Id$. For every pair of horizontal operator
+    indices $i,j$, it carries the product tensor to the recursive direct sum:
+    \begin{align}
+        W_N M_{\alpha,\boldsymbol\beta}^{i,j}W_N^\dagger
+         & =Q_N((M_\gamma^{i,j})_\gamma).
+        \label{eq:rfp_recursive_fusion}
+    \end{align}
+    Consequently, after closing the horizontal operator index,
+    \begin{align}
+        W_N\tr(M_{\alpha,\boldsymbol\beta})W_N^\dagger
+         & =Q_N((\tr(M_\gamma))_\gamma).
+        \label{eq:rfp_recursive_trace}
+    \end{align}
+    Exact reconstruction gives the reverse identities
+    \begin{align}
+        M_{\alpha,\boldsymbol\beta}^{i,j}
+         & =W_N^\dagger
+        Q_N((M_\gamma^{i,j})_\gamma)
+        W_N,
+        \label{eq:rfp_reverse_fusion} \\
+        \tr(M_{\alpha,\boldsymbol\beta})
+         & =W_N^\dagger
+        Q_N((\tr(M_\gamma))_\gamma)
+        W_N.
+        \label{eq:rfp_reverse_trace}
+    \end{align}
+    If the diagonal matrices $\chi_{\alpha,\beta,\gamma}$ have strictly
+    positive entries and give structure coefficients
+    $c_{\alpha,\beta,\gamma}^{(L)}
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L})$ independent of every positive
+    length $L$, then $Q_N(P)$ is self-adjoint and idempotent whenever
+    every terminal matrix $P_\gamma$ is self-adjoint and idempotent.
 
-	The source embedding $\widetilde U_N$ is $W_N^\dagger$.
-	The correction to the source fusion map is to use a coisometry onto the
-	nonzero sectors; exact reverse fusion also requires reconstruction from
-	those sectors, not merely the coisometry identity. See
-	\cite{gap:cpsv16_figure11_fusion_coisometry}.
+    The source embedding $\widetilde U_N$ is $W_N^\dagger$.
+    The correction to the source fusion map is to use a coisometry onto the
+    nonzero sectors; exact reverse fusion also requires reconstruction from
+    those sectors, not merely the coisometry identity. See
+    \cite{gap:cpsv16_figure11_fusion_coisometry}.
 
-	This theorem fixes the initial label and the list of appended labels.
-	The density decomposition below takes the direct sum over all labels and
-	multiplicity coordinates. The commutator is a separate assertion; see
-	\cite{gap:cpsv16_topological_projector_recursion}.
+    This theorem fixes the initial label and the list of appended labels.
+    The density decomposition below takes the direct sum over all labels and
+    multiplicity coordinates. The commutator is a separate assertion; see
+    \cite{gap:cpsv16_topological_projector_recursion}.
 \end{theorem}
 \begin{proof}\leanok\uses{thm:mpdo_bnt_length_independent_zipper}
-	The base case has no appended labels and represents the one-site chain;
-	its fusion history is unique. For the induction step, tensor the
-	preceding coisometry with the identity on the new bond, apply the
-	induction hypothesis, and then apply the pairwise fusion
-	identity in each history block. Reindexing the nested direct sum adjoins
-	the new final label and multiplicity coordinate to the preceding history.
-	Summing~(\ref{eq:rfp_recursive_fusion}) over equal horizontal operator
-	indices gives~(\ref{eq:rfp_recursive_trace}). Under length independence
-	every accumulated coefficient $w(h)$ is one, so self-adjointness and
-	idempotence hold block by block.
+    The base case has no appended labels and represents the one-site chain;
+    its fusion history is unique. For the induction step, tensor the
+    preceding coisometry with the identity on the new bond, apply the
+    induction hypothesis, and then apply the pairwise fusion
+    identity in each history block. Reindexing the nested direct sum adjoins
+    the new final label and multiplicity coordinate to the preceding history.
+    Summing~(\ref{eq:rfp_recursive_fusion}) over equal horizontal operator
+    indices gives~(\ref{eq:rfp_recursive_trace}). Under length independence
+    every accumulated coefficient $w(h)$ is one, so self-adjointness and
+    idempotence hold block by block.
 \end{proof}
 
 \begin{lemma}[Sitewise change of physical coordinates]%
-	\label{lem:mpdo_sitewise_physical_coordinate_congruence}
-	\lean{MPOTensor.singleKrausMap_sitewisePhysicalMatrix_mpo}
-	\leanok
-	\uses{def:mpo_family, def:mpdo_sitewise_physical_matrix}
-	Let $V$ be a one-site matrix, not necessarily square. The operator
-	$V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger$ is generated by
-	the tensor obtained by applying $X\mapsto VXV^\dagger$ to the
-	one-site physical matrices of $M$.
+    \label{lem:mpdo_sitewise_physical_coordinate_congruence}
+    \lean{MPOTensor.singleKrausMap_sitewisePhysicalMatrix_mpo}
+    \leanok
+    \uses{def:mpo_family, def:mpdo_sitewise_physical_matrix}
+    Let $V$ be a one-site matrix, not necessarily square. The operator
+    $V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger$ is generated by
+    the tensor obtained by applying $X\mapsto VXV^\dagger$ to the
+    one-site physical matrices of $M$.
 \end{lemma}
 \begin{proof}\leanok
-	Expand a matrix entry as a sum over the original ket and bra
-	configurations. The coefficient factors site by site, and the remaining
-	virtual product is the word evaluation of the original tensor.
+    Expand a matrix entry as a sum over the original ket and bra
+    configurations. The coefficient factors site by site, and the remaining
+    virtual product is the word evaluation of the original tensor.
 \end{proof}
 
 \begin{theorem}[Positivity of the terminal transfer matrices]%
-	\label{thm:mpdo_terminal_transfer_positivity}
-	\lean{MPOTensor.BNTFusionTensorClause.%
-		physTraceTransfer_verticalBNTMPO_posSemidef}
-	\leanok
-	\uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpo_physical_trace_transfer, thm:mpdo_algebra_clause_terminal_transfer_positivity}
-	Let $M$ generate MPDOs, and choose a vertical canonical decomposition
-	with BNT $\{M_\gamma\}_\gamma$ and positive diagonal multiplicity
-	matrices $\mu_\gamma$. Then every terminal transfer matrix
-	$T_\gamma=\tr(M_\gamma)$ is positive semidefinite.
-	This supplies the positivity needed for the spectral decomposition invoked
-	in \cite[lines~1010--1016]{Cirac2016MPDO_arXiv}; it does not assert that
-	$T_\gamma$ is a projection or give the subsequent spectral, Hamiltonian,
-	or Gibbs decomposition.
+    \label{thm:mpdo_terminal_transfer_positivity}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        physTraceTransfer_verticalBNTMPO_posSemidef}
+    \leanok
+    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpo_physical_trace_transfer, thm:mpdo_algebra_clause_terminal_transfer_positivity}
+    Let $M$ generate MPDOs, and choose a vertical canonical decomposition
+    with BNT $\{M_\gamma\}_\gamma$ and positive diagonal multiplicity
+    matrices $\mu_\gamma$. Then every terminal transfer matrix
+    $T_\gamma=\tr(M_\gamma)$ is positive semidefinite.
+    This supplies the positivity needed for the spectral decomposition invoked
+    in \cite[lines~1010--1016]{Cirac2016MPDO_arXiv}; it does not assert that
+    $T_\gamma$ is a projection or give the subsequent spectral, Hamiltonian,
+    or Gibbs decomposition.
 
-	The trace orientation is essential: it closes the horizontal operator
-	leg and leaves the two bond indices of the vertically read tensor
-	$M_\gamma$ open. See
-	\cite{gap:cpsv16_topological_projector_recursion}.
+    The trace orientation is essential: it closes the horizontal operator
+    leg and leaves the two bond indices of the vertically read tensor
+    $M_\gamma$ open. See
+    \cite{gap:cpsv16_topological_projector_recursion}.
 \end{theorem}
 \begin{proof}\leanok
-	\uses{thm:mpdo_algebra_clause_terminal_transfer_positivity}
-	The fusion identities imply the algebra identities for the same
-	vertical decomposition. Apply
-	Theorem~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity}.
+    \uses{thm:mpdo_algebra_clause_terminal_transfer_positivity}
+    The fusion identities imply the algebra identities for the same
+    vertical decomposition. Apply
+    Theorem~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity}.
 \end{proof}
 
 \begin{definition}[Recursive density operator summed over all labels]%
-	\label{def:mpdo_topological_density_operator}
-	\lean{MPOTensor.BNTFusionTensorClause.verticalMultiplicityChainWeight}
-	\lean{MPOTensor.BNTFusionTensorClause.verticalCopyChainFusionCoisometry}
-	\lean{MPOTensor.BNTFusionTensorClause.verticalCopyChainProjectorQ}
-	\lean{MPOTensor.BNTFusionTensorClause.topologicalDensityBlock}
-	\lean{MPOTensor.BNTFusionTensorClause.topologicalDensityOperatorSucc}
-	\lean{MPOTensor.BNTFusionTensorClause.%
-		topologicalMultiplicityWeightFactorSucc}
-	\lean{MPOTensor.BNTFusionTensorClause.topologicalRecursiveFactorSucc}
-	\leanok
-	\uses{def:mpdo_topological_projector_recursion, def:mpdo_bnt_fusion_tensor_clause, def:mpo_physical_trace_transfer}
-	For a chain of positive length $N$, choose at every site a BNT label
-	$\alpha_j$ and a diagonal coordinate $q_j$ of $\mu_{\alpha_j}$.
-	There are $N-1$ appended labels after the initial site. Define
-	\begin{align}
-		m(\boldsymbol\alpha,\boldsymbol q)
-		 & =\prod_{j=0}^{N-1}(\mu_{\alpha_j})_{q_j,q_j}.
-		\label{eq:rfp_multiplicity_weight}
-	\end{align}
-	The first label is the initial label of the recursive fusion, while the
-	remaining labels are appended in the physical order
-	$\alpha_1,\ldots,\alpha_{N-1}$. The recursive specification records this
-	sequence in the reverse order
-	$(\alpha_{N-1},\ldots,\alpha_1)$, so removing its first entry removes the
-	final physical site. This reversal affects only the recursive notation:
-	the tensor product and the sequential fusion coisometry remain in the
-	physical order $\alpha_0,\ldots,\alpha_{N-1}$. Let
-	$c=(\boldsymbol\alpha,\boldsymbol q)$ denote the configuration,
-	let $W_{N,c}$ be its sequential coisometry onto the retained direct sum,
-	and set $Q_{N,c}=Q_N((\tr(M_\gamma))_\gamma)$.
-	The corresponding density block is
-	$m(\boldsymbol\alpha,\boldsymbol q)
-		W_{N,c}^\dagger Q_{N,c}W_{N,c}$.
-	Thus the embedding $\widetilde U$ in the source formula is
-	$W_{N,c}^\dagger$ on this block.
-	The recursive density operator $R_N$ is the direct sum of these blocks
-	over all sitewise labels and diagonal coordinates.
-	On the same direct-sum coordinates, define
-	\begin{align}
-		A_N
-		 & =\bigoplus_c m(c)\Id_c,
-		\notag                                           \\
-		T_N
-		 & =\bigoplus_c W_{N,c}^{\dagger}Q_{N,c}W_{N,c},
-		\notag                                           \\
-		R_N
-		 & =A_NT_N.
-		\label{eq:rfp_density_factors}
-	\end{align}
-	Here $\Id_c$ is the identity on the product bond space for
-	configuration $c$.
-	The scalar coefficients of $A_N$ are the selected diagonal coefficients
-	of the factor $\mu^{\otimes N}$ in
-	\cite[line~999]{Cirac2016MPDO_arXiv}; the identities mentioned there act on
-	the complementary tensor factors of each block.
+    \label{def:mpdo_topological_density_operator}
+    \lean{MPOTensor.BNTFusionTensorClause.verticalMultiplicityChainWeight}
+    \lean{MPOTensor.BNTFusionTensorClause.verticalCopyChainFusionCoisometry}
+    \lean{MPOTensor.BNTFusionTensorClause.verticalCopyChainProjectorQ}
+    \lean{MPOTensor.BNTFusionTensorClause.topologicalDensityBlock}
+    \lean{MPOTensor.BNTFusionTensorClause.topologicalDensityOperatorSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalMultiplicityWeightFactorSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.topologicalRecursiveFactorSucc}
+    \leanok
+    \uses{def:mpdo_topological_projector_recursion, def:mpdo_bnt_fusion_tensor_clause, def:mpo_physical_trace_transfer}
+    For a chain of positive length $N$, choose at every site a BNT label
+    $\alpha_j$ and a diagonal coordinate $q_j$ of $\mu_{\alpha_j}$.
+    There are $N-1$ appended labels after the initial site. Define
+    \begin{align}
+        m(\boldsymbol\alpha,\boldsymbol q)
+         & =\prod_{j=0}^{N-1}(\mu_{\alpha_j})_{q_j,q_j}.
+        \label{eq:rfp_multiplicity_weight}
+    \end{align}
+    The first label is the initial label of the recursive fusion, while the
+    remaining labels are appended in the physical order
+    $\alpha_1,\ldots,\alpha_{N-1}$. The recursive specification records this
+    sequence in the reverse order
+    $(\alpha_{N-1},\ldots,\alpha_1)$, so removing its first entry removes the
+    final physical site. This reversal affects only the recursive notation:
+    the tensor product and the sequential fusion coisometry remain in the
+    physical order $\alpha_0,\ldots,\alpha_{N-1}$. Let
+    $c=(\boldsymbol\alpha,\boldsymbol q)$ denote the configuration,
+    let $W_{N,c}$ be its sequential coisometry onto the retained direct sum,
+    and set $Q_{N,c}=Q_N((\tr(M_\gamma))_\gamma)$.
+    The corresponding density block is
+    $m(\boldsymbol\alpha,\boldsymbol q)
+        W_{N,c}^\dagger Q_{N,c}W_{N,c}$.
+    Thus the embedding $\widetilde U$ in the source formula is
+    $W_{N,c}^\dagger$ on this block.
+    The recursive density operator $R_N$ is the direct sum of these blocks
+    over all sitewise labels and diagonal coordinates.
+    On the same direct-sum coordinates, define
+    \begin{align}
+        A_N
+         & =\bigoplus_c m(c)\Id_c,
+        \notag                                           \\
+        T_N
+         & =\bigoplus_c W_{N,c}^{\dagger}Q_{N,c}W_{N,c},
+        \notag                                           \\
+        R_N
+         & =A_NT_N.
+        \label{eq:rfp_density_factors}
+    \end{align}
+    Here $\Id_c$ is the identity on the product bond space for
+    configuration $c$.
+    The scalar coefficients of $A_N$ are the selected diagonal coefficients
+    of the factor $\mu^{\otimes N}$ in
+    \cite[line~999]{Cirac2016MPDO_arXiv}; the identities mentioned there act on
+    the complementary tensor factors of each block.
 \end{definition}
 
 \begin{theorem}[Density decomposition from fusion on the nonzero sectors]%
-	\label{thm:mpdo_fusion_clause_topological_density_decomposition}
-	\lean{MPOTensor.BNTFusionTensorClause.%
-		singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc}
-	\lean{MPOTensor.BNTFusionTensorClause.%
-		singleKrausMap_conjTranspose_verticalCoisometry_topologicalDensityOperatorSucc_eq_mpo}
-	\lean{MPOTensor.BNTFusionTensorClause.HasTopologicalDensityDecomposition}
-	\lean{MPOTensor.BNTFusionTensorClause.hasTopologicalDensityDecomposition}
-	\leanok
-	\uses{def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator, def:mpdo_sitewise_physical_matrix}
-	Fix a vertical canonical decomposition of $M$ with fusion coisometries
-	onto the nonzero product sectors and exact reconstruction.
-	For every $N>0$, its vertical coisometry $V$ and
-	recursive density operator $R_N$ satisfy
-	\begin{align}
-		V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger
-		 & =R_N,
-		\notag             \\
-		((V^\dagger)^{\otimes N})R_NV^{\otimes N}
-		 & =\rho^{(N)}(M).
-		\notag
-	\end{align}
+    \label{thm:mpdo_fusion_clause_topological_density_decomposition}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        singleKrausMap_conjTranspose_verticalCoisometry_topologicalDensityOperatorSucc_eq_mpo}
+    \lean{MPOTensor.BNTFusionTensorClause.HasTopologicalDensityDecomposition}
+    \lean{MPOTensor.BNTFusionTensorClause.hasTopologicalDensityDecomposition}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator, def:mpdo_sitewise_physical_matrix}
+    Fix a vertical canonical decomposition of $M$ with fusion coisometries
+    onto the nonzero product sectors and exact reconstruction.
+    For every $N>0$, its vertical coisometry $V$ and
+    recursive density operator $R_N$ satisfy
+    \begin{align}
+        V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger
+         & =R_N,
+        \notag             \\
+        ((V^\dagger)^{\otimes N})R_NV^{\otimes N}
+         & =\rho^{(N)}(M).
+        \notag
+    \end{align}
 
-	Only nonzero product sectors enter the fusion decomposition. A normal
-	label absent from a fixed product pair has zero fusion multiplicity. See
-	\cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+    Only nonzero product sectors enter the fusion decomposition. A normal
+    label absent from a fixed product pair has zero fusion multiplicity. See
+    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
 
-	The source fixed-pair decomposition requires a support correction:
-	a fixed product pair may have no nonzero sectors. See
-	\cite{gap:cpsv16_figure11_per_pair_support}.
+    The source fixed-pair decomposition requires a support correction:
+    a fixed product pair may have no nonzero sectors. See
+    \cite{gap:cpsv16_figure11_per_pair_support}.
 
-	The fusion map is correspondingly a coisometry onto the direct sum of
-	nonzero sectors, and its adjoint gives exact reconstruction. See
-	\cite{gap:cpsv16_figure11_fusion_coisometry}.
+    The fusion map is correspondingly a coisometry onto the direct sum of
+    nonzero sectors, and its adjoint gives exact reconstruction. See
+    \cite{gap:cpsv16_figure11_fusion_coisometry}.
 
-	The vertical map may also be rectangular. The reverse equality uses
-	exact reconstruction from the retained sectors rather than a
-	square-unitary identity. See
-	\cite{gap:cpgsv17_vertical_isometry_zero_sector}.
+    The vertical map may also be rectangular. The reverse equality uses
+    exact reconstruction from the retained sectors rather than a
+    square-unitary identity. See
+    \cite{gap:cpgsv17_vertical_isometry_zero_sector}.
 \end{theorem}
 \begin{proof}\leanok
-	\uses{def:mpdo_topological_projector_recursion, lem:mpdo_sitewise_physical_coordinate_congruence}
-	In retained coordinates, the one-site entries are block diagonal in the
-	label and multiplicity coordinates. Within each configuration, multiply
-	the scalar weights and apply the forward and adjoint recursive fusion
-	identities. Summing over all configurations gives the forward equality;
-	exact sitewise reconstruction from the retained sectors gives the reverse
-	equality.
+    \uses{def:mpdo_topological_projector_recursion, lem:mpdo_sitewise_physical_coordinate_congruence}
+    In retained coordinates, the one-site entries are block diagonal in the
+    label and multiplicity coordinates. Within each configuration, multiply
+    the scalar weights and apply the forward and adjoint recursive fusion
+    identities. Summing over all configurations gives the forward equality;
+    exact sitewise reconstruction from the retained sectors gives the reverse
+    equality.
 \end{proof}
 
 \begin{theorem}[Density decomposition of an RFP MPDO]%
-	\label{thm:mpdo_topological_density_decomposition}
-	\lean{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}
-	\leanok
-	\uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator, def:mpdo_sitewise_physical_matrix, thm:mpdo_fusion_clause_topological_density_decomposition}
-	Let $M$ generate MPDOs and be in normalized BNT-refined horizontal
-	form. Suppose that $M$ is an RFP.
-	There is one vertical canonical decomposition and one compatible family of
-	fusion coisometries such that, for every $N>0$, the rectangular vertical
-	coisometry $V$ satisfies
-	\begin{align}
-		V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger
-		 & =R_N,
-		\label{eq:rfp_density_forward} \\
-		((V^\dagger)^{\otimes N})R_NV^{\otimes N}
-		 & =\rho^{(N)}(M).
-		\label{eq:rfp_density_reverse}
-	\end{align}
-	No additional compatibility hypothesis is imposed. The statement applies
-	to positive lengths; the commutator, length independence, and the
-	subsequent spectral and Gibbs decompositions are separate assertions.
+    \label{thm:mpdo_topological_density_decomposition}
+    \lean{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator, def:mpdo_sitewise_physical_matrix, thm:mpdo_fusion_clause_topological_density_decomposition}
+    Let $M$ generate MPDOs and be in normalized BNT-refined horizontal
+    form. Suppose that $M$ is an RFP.
+    There is one vertical canonical decomposition and one compatible family of
+    fusion coisometries such that, for every $N>0$, the rectangular vertical
+    coisometry $V$ satisfies
+    \begin{align}
+        V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger
+         & =R_N,
+        \label{eq:rfp_density_forward} \\
+        ((V^\dagger)^{\otimes N})R_NV^{\otimes N}
+         & =\rho^{(N)}(M).
+        \label{eq:rfp_density_reverse}
+    \end{align}
+    No additional compatibility hypothesis is imposed. The statement applies
+    to positive lengths; the commutator, length independence, and the
+    subsequent spectral and Gibbs decompositions are separate assertions.
 
-	The normalized BNT-refined horizontal hypothesis is stronger than
-	the source CF hypothesis.
-	% This is not the literal Proposition 4.13 route; see
-	% docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+    The normalized BNT-refined horizontal hypothesis is stronger than
+    the source CF hypothesis.
+    % This is not the literal Proposition 4.13 route; see
+    % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 
-	The correction for a rectangular vertical map is essential:
-	(\ref{eq:rfp_density_reverse}) uses exact reconstruction from the
-	retained nonzero sectors, not a square-unitary identity. See
-	\cite{gap:cpgsv17_vertical_isometry_zero_sector}.
+    The correction for a rectangular vertical map is essential:
+    (\ref{eq:rfp_density_reverse}) uses exact reconstruction from the
+    retained nonzero sectors, not a square-unitary identity. See
+    \cite{gap:cpgsv17_vertical_isometry_zero_sector}.
 \end{theorem}
 \begin{proof}\leanok
-	\uses{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_topological_projector_recursion, lem:mpdo_sitewise_physical_coordinate_congruence}
-	Under the normalized BNT-refined horizontal hypothesis, the vertical
-	canonical-form theorem gives a rectangular coisometry onto the retained
-	nonzero vertical sectors, together with exact reconstruction from those
-	sectors.
-	In the retained coordinates, one-site matrix entries are block diagonal in
-	the label and multiplicity coordinates. Hence a closed chain vanishes
-	between different sitewise configurations. Within one configuration, the
-	scalar entries multiply to
-	$m(\boldsymbol\alpha,\boldsymbol q)$, while the remaining horizontal
-	matrices form the fixed-label product tensor. Apply
-	(\ref{eq:rfp_recursive_fusion}) and~(\ref{eq:rfp_reverse_fusion}), then sum
-	over all configurations. The local reconstruction identity, applied at
-	every site, gives~(\ref{eq:rfp_density_reverse}).
+    \uses{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_topological_projector_recursion, lem:mpdo_sitewise_physical_coordinate_congruence}
+    Under the normalized BNT-refined horizontal hypothesis, the vertical
+    canonical-form theorem gives a rectangular coisometry onto the retained
+    nonzero vertical sectors, together with exact reconstruction from those
+    sectors.
+    In the retained coordinates, one-site matrix entries are block diagonal in
+    the label and multiplicity coordinates. Hence a closed chain vanishes
+    between different sitewise configurations. Within one configuration, the
+    scalar entries multiply to
+    $m(\boldsymbol\alpha,\boldsymbol q)$, while the remaining horizontal
+    matrices form the fixed-label product tensor. Apply
+    (\ref{eq:rfp_recursive_fusion}) and~(\ref{eq:rfp_reverse_fusion}), then sum
+    over all configurations. The local reconstruction identity, applied at
+    every site, gives~(\ref{eq:rfp_density_reverse}).
 \end{proof}
 
 \begin{corollary}[Commuting density factors from fusion on the nonzero sectors]%
-	\label{cor:mpdo_fusion_clause_topological_density_factor_commutator}
-	\lean{MPOTensor.BNTFusionTensorClause.%
-		topologicalDensityOperatorSucc_eq_multiplicityWeight_mul_recursiveFactor}
-	\lean{MPOTensor.BNTFusionTensorClause.%
-		topologicalMultiplicityWeightFactorSucc_commutes_recursiveFactor}
-	\lean{MPOTensor.BNTFusionTensorClause.%
-		HasTopologicalDensityFactorCommutator}
-	\lean{MPOTensor.BNTFusionTensorClause.%
-		hasTopologicalDensityFactorCommutator}
-	\leanok
-	\uses{def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator}
-	For any vertical canonical decomposition with fusion coisometries onto
-	the nonzero product sectors and exact reconstruction, the recursive
-	density operator satisfies, for every $N>0$,
-	\begin{align}
-		R_N    & =A_NT_N,
-		\notag            \\
-		A_NT_N & =T_NA_N.
-		\notag
-	\end{align}
-	Thus the multiplicity factor commutes with the reconstructed
-	recursive factor. No length-independence or spectral hypothesis is used.
+    \label{cor:mpdo_fusion_clause_topological_density_factor_commutator}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalDensityOperatorSucc_eq_multiplicityWeight_mul_recursiveFactor}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalMultiplicityWeightFactorSucc_commutes_recursiveFactor}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        HasTopologicalDensityFactorCommutator}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        hasTopologicalDensityFactorCommutator}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator}
+    For any vertical canonical decomposition with fusion coisometries onto
+    the nonzero product sectors and exact reconstruction, the recursive
+    density operator satisfies, for every $N>0$,
+    \begin{align}
+        R_N    & =A_NT_N,
+        \notag            \\
+        A_NT_N & =T_NA_N.
+        \notag
+    \end{align}
+    Thus the multiplicity factor commutes with the reconstructed
+    recursive factor. No length-independence or spectral hypothesis is used.
 \end{corollary}
 \begin{proof}\leanok
-	In every sitewise label and multiplicity configuration, $A_N$ is a scalar
-	multiple of the identity on the corresponding product bond space, so it
-	commutes with the reconstructed recursive factor. Taking the direct sum
-	gives both identities.
+    In every sitewise label and multiplicity configuration, $A_N$ is a scalar
+    multiple of the identity on the corresponding product bond space, so it
+    commutes with the reconstructed recursive factor. Taking the direct sum
+    gives both identities.
 \end{proof}
 
 \begin{corollary}[Commuting density factors of an RFP MPDO]%
-	\label{cor:mpdo_topological_density_factor_commutator}
-	\lean{MPOTensor.exists_topologicalDensityDecomposition_and_factorCommutator_of_isRFPViaTS}
-	\leanok
-	\uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_topological_density_operator, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, cor:mpdo_fusion_clause_topological_density_factor_commutator}
-	Let $M$ generate MPDOs and be in normalized BNT-refined horizontal
-	form. Suppose that $M$ is an RFP.
-	One choice of the vertical canonical decomposition and fusion
-	coisometries gives the density decomposition and, for every $N>0$,
-	satisfies
-	\begin{align}
-		R_N
-		 & =A_NT_N,
-		\label{eq:rfp_factorization} \\
-		A_NT_N
-		 & =T_NA_N.
-		\label{eq:rfp_factor_commutation}
-	\end{align}
-	Equivalently, $[A_N,T_N]=0$, as asserted in
-	\cite[lines~1000--1002]{Cirac2016MPDO_arXiv}. No additional compatibility
-	hypothesis is imposed. This statement makes no length-independence,
-	terminal spectral, projection, Hamiltonian, or Gibbs-state assertion.
+    \label{cor:mpdo_topological_density_factor_commutator}
+    \lean{MPOTensor.exists_topologicalDensityDecomposition_and_factorCommutator_of_isRFPViaTS}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_topological_density_operator, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, cor:mpdo_fusion_clause_topological_density_factor_commutator}
+    Let $M$ generate MPDOs and be in normalized BNT-refined horizontal
+    form. Suppose that $M$ is an RFP.
+    One choice of the vertical canonical decomposition and fusion
+    coisometries gives the density decomposition and, for every $N>0$,
+    satisfies
+    \begin{align}
+        R_N
+         & =A_NT_N,
+        \label{eq:rfp_factorization} \\
+        A_NT_N
+         & =T_NA_N.
+        \label{eq:rfp_factor_commutation}
+    \end{align}
+    Equivalently, $[A_N,T_N]=0$, as asserted in
+    \cite[lines~1000--1002]{Cirac2016MPDO_arXiv}. No additional compatibility
+    hypothesis is imposed. This statement makes no length-independence,
+    terminal spectral, projection, Hamiltonian, or Gibbs-state assertion.
 
-	The normalized BNT-refined horizontal hypothesis is stronger than
-	the source CF hypothesis.
-	% Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+    The normalized BNT-refined horizontal hypothesis is stronger than
+    the source CF hypothesis.
+    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \end{corollary}
 \begin{proof}\leanok
-	\uses{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
-	In every sitewise label and multiplicity configuration, the factor $A_N$
-	is the scalar $m(c)$ times the identity on the corresponding product
-	bond space.
-	It therefore commutes with
-	$W_{N,c}^{\dagger}Q_{N,c}W_{N,c}$. Multiplication of the two direct sums
-	proves~(\ref{eq:rfp_factorization}) and
-	(\ref{eq:rfp_factor_commutation}). The renormalization fixed-point
-	condition supplies the same fusion family used in the density
-	decomposition.
+    \uses{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
+    In every sitewise label and multiplicity configuration, the factor $A_N$
+    is the scalar $m(c)$ times the identity on the corresponding product
+    bond space.
+    It therefore commutes with
+    $W_{N,c}^{\dagger}Q_{N,c}W_{N,c}$. Multiplication of the two direct sums
+    proves~(\ref{eq:rfp_factorization}) and
+    (\ref{eq:rfp_factor_commutation}). The renormalization fixed-point
+    condition supplies the same fusion family used in the density
+    decomposition.
 \end{proof}

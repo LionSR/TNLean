@@ -285,13 +285,6 @@ theorem thetaThree_mpo_sectorState (L : ℕ) (hL : 0 < L) :
     Matrix.head_cons, Matrix.tail_cons]
   ring
 
-/-- **Biorthogonal compression onto each weighted product state** (P5 note,
-Theorem 7.7(iv)–(v)). -/
-theorem sectorAction_isReduction (s : {s // s ∈ sectorSlots}) :
-    IsReduction sectorAction (sectorTargets s.1) (sectorCompression.left s)
-      (sectorCompression.right s) :=
-  sectorCompression.isReduction s
-
 /-- The weighted Verlinde action has six zero slots. -/
 theorem sectorAction_z_eq : sectorCompression.z = 6 := rfl
 

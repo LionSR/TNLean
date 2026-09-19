@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
-import TNLean.MPS.CanonicalForm.CommonPeriodCyclicSectors
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
