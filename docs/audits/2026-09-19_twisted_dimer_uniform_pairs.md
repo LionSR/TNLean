@@ -92,8 +92,8 @@ Nothing referenced the deleted label.
 
 Exact-name searches over the repository found no Lean consumer of any of the
 eighteen names outside the files that defined them, in `Archive/` or elsewhere,
-and no reference in `docs/`.  The only references were the two Blueprint nodes
-above.  The surviving name `dimer_letter_int`, used as a control, was found at
+and no reference under `docs/` apart from the table of this note.  The only
+references outside the removed code itself were the two Blueprint nodes above.  The surviving name `dimer_letter_int`, used as a control, was found at
 its consumer in `TwistedDimerPairs.lean`.  No compatibility alias is retained,
 since TNLean does not promise a stable public Lean interface and every
 retirement condition is met.
