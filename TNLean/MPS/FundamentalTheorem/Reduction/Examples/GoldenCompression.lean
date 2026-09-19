@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
 import TNLean.MPS.MPDO.ActionTensor
 
@@ -86,10 +87,7 @@ theorem isNormal_of_golden_single {A : MPSTensor d D}
     refine Submodule.sum_mem _ fun k _ => ?_
     rw [complexOfGolden_smul, ← evalWord_complexOfGolden, ← hA']
     exact T.smul_mem _ (Submodule.subset_span ⟨word i j k, rfl⟩)
-  refine top_unique fun X _ => ?_
-  rw [Matrix.matrix_eq_sum_single X]
-  refine Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => ?_
-  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using T.smul_mem (X i j) (hunit i j)
+  exact Submodule.eq_top_of_forall_single_mem T hunit
 
 /-! ### Compression data from a golden gauge -/
 

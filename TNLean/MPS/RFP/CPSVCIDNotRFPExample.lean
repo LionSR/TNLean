@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.RFP.ZeroCorrelationLength
 
 /-!
@@ -225,12 +226,8 @@ theorem cpsvExample34_isPhysicalCID :
 
 private theorem cpsvExample34_invSqrtTwo_sq :
     cpsvExample34InvSqrtTwo ^ 2 = (1 / 2 : ℂ) := by
-  have hsqrt_ne : Real.sqrt 2 ≠ 0 := Real.sqrt_ne_zero'.mpr (by norm_num)
-  have hreal : (1 / Real.sqrt 2) ^ 2 = (1 / 2 : ℝ) := by
-    field_simp [hsqrt_ne]
-    rw [Real.sq_sqrt (by norm_num)]
-  rw [cpsvExample34InvSqrtTwo, ← Complex.ofReal_pow]
-  exact (congrArg (fun x : ℝ => (x : ℂ)) hreal).trans (by norm_num)
+  simpa [cpsvExample34InvSqrtTwo, pow_two, one_div] using
+    Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)
 
 private theorem cpsvExample34_invSqrtTwo_ne_half :
     cpsvExample34InvSqrtTwo ≠ (1 / 2 : ℂ) := by

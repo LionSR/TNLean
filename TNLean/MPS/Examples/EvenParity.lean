@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Examples.GHZ
@@ -62,10 +63,7 @@ noncomputable def evenParityTensor : MPSTensor 2 2 := fun i =>
 
 private lemma inv_sqrt2_mul_self :
     (1 / (↑(Real.sqrt 2) : ℂ)) * (1 / ↑(Real.sqrt 2)) = 1 / 2 := by
-  rw [div_mul_div_comm, one_mul]
-  congr 1
-  push_cast [← Complex.ofReal_mul]
-  exact_mod_cast Real.mul_self_sqrt (show (2 : ℝ) ≥ 0 by norm_num)
+  simpa [one_div] using Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)
 
 /-- The transfer map of the even-parity tensor symmetrises diagonal and off-diagonal:
 `E(X)ᵢⱼ = c²(Xᵢⱼ + X₍₁₋ᵢ₎₍₁₋ⱼ₎)` where `c = 1/√2`. -/

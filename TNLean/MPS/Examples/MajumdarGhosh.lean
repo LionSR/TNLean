@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.Defs
 import QICLean.Kraus.Transfer
 
@@ -124,8 +125,7 @@ lemma majumdarGhoshTensor_one :
 
 private lemma inv_ofReal_sqrt2_mul_self :
     (↑(Real.sqrt 2) : ℂ)⁻¹ * (↑(Real.sqrt 2) : ℂ)⁻¹ = 1 / 2 := by
-  rw [← mul_inv, ← Complex.ofReal_mul, Real.mul_self_sqrt (by positivity)]
-  norm_num
+  simpa [one_div] using Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)
 
 /-! ### Conjugate transposes -/
 

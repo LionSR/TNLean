@@ -61,12 +61,22 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** seven occurrences across six files (2026-09-17):
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, `Examples/Fibonacci.lean`
   (twice), `Examples/ParityGraded.lean`, `Examples/KramersWannier.lean`,
-  `Examples/StackedPairGauge.lean`, `Examples/EisensteinCertificates.lean`.
+  `Examples/StackedPairGauge.lean`, `Examples/EisensteinCertificates.lean`.  A later sweep
+  (2026-09-19) found nine further occurrences outside the `Reduction/Examples` directory that
+  the promotion had missed: `Examples/Zsqrt2Ring.lean`, `Examples/GoldenCompression.lean`,
+  `Examples/OneSlotGauge.lean`, `TNLean/MPS/MPDO/CZXTensorInjectivity.lean`,
+  `TNLean/MPS/MPDO/BondTwoSingletonGramBoundary.lean`,
+  `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean`,
+  `TNLean/MPS/MPDO/PositiveMinimalRealizationCounterexample.lean`,
+  `TNLean/MPS/RFP/BellPairCIDObstruction.lean` and
+  `TNLean/PEPS/TorusRowColumnReductionObstruction.lean`.
 - **Abstraction:** `Submodule.eq_top_of_forall_single_mem` in
   `TNLean/Algebra/MatrixSingleSpan.lean`.
 - **Notes:** the goal is `T = ⊤` for a submodule `T` of matrices, or `Kraus.IsInjective A`
-  unfolded to it; the hypothesis is membership of every matrix unit. All call sites are
-  refactored; each loses three lines.
+  unfolded to it; the hypothesis is membership of every matrix unit.  The 2026-09-17 entry
+  claimed that every call site had been refactored, which was wrong for the nine sites listed
+  above; those were refactored on 2026-09-19, after which the claim holds.  A site loses
+  between three and nine lines.
 
 ### simplicity with the recorded canonical fixed pair — promoted
 - **Pattern:** specialize supplied-witness `simple2` to the canonical transfer
@@ -1874,6 +1884,21 @@ abstracted — record why, so it is not re-proposed).
   and spectrum proofs, together with the two older AKLT helpers, now reuse the
   same lemma.
 
+### Complex inverse squares of real square roots
+- **Pattern:** small example modules each proved the scalar identity
+  $((\sqrt{x}:\mathbb R):\mathbb C)^{-1}\cdot((\sqrt{x}:\mathbb R):\mathbb C)^{-1}
+  = (x:\mathbb C)^{-1}$ at $x = 2$, in six different spellings of $1/\sqrt 2$.
+- **Reuse:** the layer-0 lemma `Complex.ofReal_sqrt_inv_mul_self` owns the
+  identity; each spelling is one `simpa [one_div]` away from it.
+- **Result:** the six private lemmas in `Cluster.lean`, `EvenParity.lean`,
+  `MajumdarGhosh.lean`, `LocalPurificationRFP.lean`,
+  `CaseIIAbsorptionCounterexample.lean` and `CPSVCIDNotRFPExample.lean` now have
+  one- or two-line bodies.  The three private constants naming $1/\sqrt 2$ and
+  the general-`d` `sourceSqrt` cancellations of
+  `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` are retained: they have
+  different carriers or fixed associativity shapes and are consumed as rewrite
+  rules in their own spellings.
+
 ### Scalar identity matrix positivity and trace
 - **Pattern:** proofs repeatedly derived positivity or positive-definiteness of
   `c • (1 : Matrix n n R)` from the corresponding scalar order hypothesis and
@@ -2130,6 +2155,26 @@ current counts and full location lists).
 - **Notes:** Promotion would require editing established MPDO code outside the
   narrow CFII review-fix scope. Record the repeated goal now and refactor the
   complete set in one low-level follow-up rather than adding a leaf-local helper.
+
+### concrete numeric gauge with an explicit inverse — candidate
+- **Pattern:** a concrete invertible numeric matrix is packaged as an element of
+  `GL n ℂ` through `Matrix.GeneralLinearGroup.mkOfDetNeZero`, after which the
+  inverse coordinate is recovered by building a second `mkOfDetNeZero` for the
+  inverse, proving the product is one through `Units.ext`, and rewriting with
+  `inv_eq_of_mul_eq_one_right`.
+- **Seen:** 2 occurrences (2026-09-19), in
+  `TNLean/MPS/MPDO/BondTwoSingletonGramBoundary.lean` and
+  `TNLean/MPS/MPDO/PositiveMinimalRealizationCounterexample.lean`; both now use
+  the structure form below.  Seven further `mkOfDetNeZero` gauges in
+  `TNLean/MPS/Examples/` keep their present form, where the saving is at most one
+  or two lines.
+- **Abstraction (proposed):** no new declaration is needed.  Supply the inverse
+  directly, `where val := M; inv := N; val_inv := h; inv_val := mul_eq_one_comm.mp h`,
+  after which both coordinate lemmas are `rfl` and no determinant lemma is
+  required.
+- **Notes:** scoped to concrete numeric gauges.  Where the matrix is abstract and
+  only its determinant is known, as in the renormalization fixed-point modules,
+  `mkOfDetNeZero` remains the only available construction.
 
 ### diagonal normalized-ancilla sum collapse — candidate
 - **Pattern:** collapse the doubled sum for `normalizedDiagonalLift` by using

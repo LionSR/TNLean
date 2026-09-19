@@ -8,6 +8,7 @@ import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.ZMod2
+import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.MatrixScalarIdentity
 
@@ -83,10 +84,7 @@ lemma clusterTensor_one :
 
 private lemma inv_sqrt2_sq :
     (↑(1 / Real.sqrt 2) : ℂ) * ↑(1 / Real.sqrt 2) = 1 / 2 := by
-  rw [← Complex.ofReal_mul]
-  rw [show (1 / Real.sqrt 2) * (1 / Real.sqrt 2) = 1 / 2 from by
-    rw [div_mul_div_comm, one_mul, Real.mul_self_sqrt (by norm_num : (0 : ℝ) ≤ 2)]]
-  norm_num
+  simpa [one_div] using Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)
 
 /-! ### Non-injectivity -/
 

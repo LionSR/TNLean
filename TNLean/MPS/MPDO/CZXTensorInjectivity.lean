@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.Basis
+import TNLean.Algebra.MatrixSingleSpan
 import QICLean.Kraus.Injectivity
 import TNLean.MPS.MPDO.CZXTensor
 
@@ -59,14 +60,6 @@ theorem tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor := by
   have hunit (i j : Fin 2) : Matrix.single i j (1 : ℂ) ∈ S := by
     rw [single_eq_tensor_combination]
     exact S.add_mem (S.smul_mem _ (hletter _ _)) (S.smul_mem _ (hletter _ _))
-  apply top_unique
-  intro M _
-  rw [Matrix.matrix_eq_sum_single M]
-  apply Submodule.sum_mem
-  intro i _
-  apply Submodule.sum_mem
-  intro j _
-  simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using
-    S.smul_mem (M i j) (hunit i j)
+  exact Submodule.eq_top_of_forall_single_mem S hunit
 
 end MPOTensor.CZX
