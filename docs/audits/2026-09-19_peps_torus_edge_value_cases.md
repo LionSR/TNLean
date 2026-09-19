@@ -1,7 +1,8 @@
 # PEPS torus edge-coordinate pinning and the per-vertex scalar argument
 
-This audit records two duplication removals inside PEPS proof bodies. No
-declaration is removed; two are put under dated deprecation and three are added.
+This audit records two duplication removals inside PEPS proof bodies, together
+with the removal of an unused pair of declarations that carried a third copy of
+one of them. Three declarations are added.
 
 ## Torus edge-coordinate pinning
 
@@ -38,19 +39,28 @@ the single-step lemmas they are assembled from, rather than beside
 would either move the six single-step lemmas as well or duplicate their content,
 and would rebuild the whole torus development for a fact used in two files.
 
-## Dated deprecation of the vertical staircase end pair
+## Removal of the vertical staircase end pair
 
 `isCrossingEdge_verticalStaircase` and its feeder `verticalStaircaseEdge_val`
-(`TNLean/PEPS/TorusWindowRegion.lean`) have no consumer: no module, no
-`\lean{...}` tag and no paper-gap note names them, and they have had no consumer
-since they were written. The overlapping-window chain around an edge runs
-through the horizontal end pair. They are therefore not deduplicated but marked
-`@[deprecated ... (since := "2026-09-19")]`, which is why their pinning proofs
-still carry the copied case analysis; the deprecated theorem keeps calling its
-deprecated feeder under a local linter option. Their removal is deferred to the
-dead-weight pass. The description of them as live development in
-`docs/audits/2026-08-26_peps_vertical_staircase_mirror_deletion.md` was about the
-coordinate convention they use, not about a consumer.
+(`TNLean/PEPS/TorusWindowRegion.lean`) had no consumer: no module, no
+`\lean{...}` tag and no paper-gap note names them, and they had none since they
+were written. The overlapping-window chain around an edge runs through the
+horizontal end pair. Under the repository-local style rule
+(`docs/project_conventions.md` §Style) they are removed rather than retained
+under deprecation, so the third copy of the pinning case analysis goes with
+them.
+
+| Removed declaration | Replacement |
+|---|---|
+| `verticalStaircaseEdge_val` | none needed — zero consumers; the horizontal end pair `horizontalStaircaseEdge_val` carries the window-chain geometry |
+| `isCrossingEdge_verticalStaircase` | none needed — zero consumers; the chain around an edge is run through `isCrossingEdge_horizontalStaircase` |
+
+The transposed statement is recoverable from the horizontal one by the same
+argument, now three lines rather than forty given `torusEdge_val_cases`, should
+the vertical route ever need it. The description of the pair as live development
+in `docs/audits/2026-08-26_peps_vertical_staircase_mirror_deletion.md` was about
+the coordinate convention it uses, not about a consumer; the vertical bond
+transport results named there are untouched.
 
 ## The per-vertex scalar product argument
 
@@ -88,11 +98,12 @@ new generic statement is weaker than both.
 * `TNLean/PEPS/RegionScalarCondition.lean` already imported
   `TNLean/PEPS/FundamentalTheorem.lean` transitively, so hosting the generic
   statement there adds no import and closes no cycle.
+* After the removal, no file, tag, paper-gap note or audit other than this one
+  and `docs/audits/2026-08-26_peps_vertical_staircase_mirror_deletion.md` names
+  the two removed declarations.
 
 ## Deferred
 
-* Removal of the deprecated vertical staircase pair, with the copied pinning
-  proof it still contains.
 * Relocation of the region-injective corollary next to
   `exists_stateCoeff_ne_zero_of_regionInjective` and removal of the resulting
   one-declaration file.

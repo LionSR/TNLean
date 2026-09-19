@@ -10,6 +10,12 @@ At the audited head neither file had a non-`Archive` consumer: no module under
 `\lean{...}` tag under `blueprint/src/` names any of the declarations below, and
 neither `docs/glossary.md` nor `docs/paper-gaps/` cites them.
 
+**Update (2026-09-19).** The two `TorusWindowRegion` declarations named below
+as live vertical-staircase development, `verticalStaircaseEdge_val` and
+`isCrossingEdge_verticalStaircase`, were themselves removed as consumer-free;
+see `docs/audits/2026-09-19_peps_torus_edge_value_cases.md`. The vertical bond
+transport results named below are untouched.
+
 This closes the leftover of ledger entry D10 (closed 2026-07-23, PR #4634): the
 transport re-derivation landed, but the mirror shells themselves were never
 retired. The live vertical-staircase development —
