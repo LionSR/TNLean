@@ -1,0 +1,904 @@
+\section{Kramers--Wannier duality squared}%
+\label{sec:asymex_kw}
+
+Consider $N\geq1$ qubits on a periodic chain, with sites
+$I_N=\{0,\ldots,N-1\}$ and all site indices understood modulo $N$.
+The Hilbert space $\mathcal H_N=(\C^2)^{\otimes N}$ has computational
+basis $\{\ket{b}:b\in\{0,1\}^{I_N}\}$. Write $\bar b$ for the
+componentwise complement of $b$, and $b\oplus e_j$ for the configuration
+obtained by flipping its bit at site $j$. The Pauli operators act by
+\begin{align}
+	X_j\ket{b} & =\ket{b\oplus e_j},
+	\notag                           \\
+	Z_j\ket{b} & =(-1)^{b_j}\ket{b}.
+	\label{eq:asymex_kw_pauli}
+\end{align}
+They are self-adjoint involutions, satisfy $X_jZ_j=-Z_jX_j$, and commute
+at distinct sites. Define global spin flip $\eta$ and one-site left
+translation $T$ by
+\begin{align}
+	\eta\ket{b} & =\ket{\bar b},
+	\notag                       \\
+	T\ket{b}    & =\ket{\tau b},
+	\qquad (\tau b)_j=b_{j+1}.
+	\label{eq:asymex_kw_translation}
+\end{align}
+Thus $\eta=\prod_jX_j$, $\eta^2=\Id$, $T^N=\Id$,
+$T^\dagger=T^{-1}$, and $T\eta=\eta T$. In this convention,
+$TX_jT^{-1}=X_{j-1}$ and $TZ_jT^{-1}=Z_{j-1}$.
+
+For real couplings $J,h$, the periodic transverse-field Ising Hamiltonian is
+\begin{align}
+	H_N(J,h) & =-J\sum_{j\in I_N}Z_jZ_{j+1}-h\sum_{j\in I_N}X_j.
+	\label{eq:asymex_kw_ising}
+\end{align}
+The sum includes one bond per site. In particular, the bond at $N=1$
+is $Z_0^2=\Id$, and at $N=2$ the two bond terms both equal $Z_0Z_1$.
+Kramers--Wannier duality exchanges these bond and field terms. On a
+periodic spin chain it is a noninvertible operator, rather than a
+unitary change of variables on the full Hilbert space
+\cite{Aasen2016Topological, Seiberg2024Majorana}. Its matrix product
+representation gives a concrete example of the noninvertible MPO
+symmetries discussed in Ref.~\cite{Cirac2021Matrix}.
+
+\begin{definition}[The duality kernel and the two translation tensors]
+	\label{def:asymex_kw}
+	\lean{KWExample.kwTensor, KWExample.shiftTensor, KWExample.flipShiftTensor,
+		KWExample.kwSquare, KWExample.kwSquareTargets}
+	\leanok
+	\uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+	With the outgoing label $s'$ written first, the duality tensor is
+	\begin{align}
+		W^{00} & =\begin{pmatrix}1&1\\0&0\end{pmatrix},
+		       &
+		W^{01} & =\begin{pmatrix}0&0\\1&1\end{pmatrix},
+		\notag                                           \\
+		W^{10} & =\begin{pmatrix}1&-1\\0&0\end{pmatrix},
+		       &
+		W^{11} & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}.
+		\notag
+	\end{align}
+	The translation tensor is $T^{s's}=E_{s,s'}$ and the flipped
+	translation tensor is $(\eta T)^{s's}=E_{s,1-s'}$, where $E_{pq}$ is
+	the matrix unit with a single entry $1$ in row $p$ and column $q$.
+	The same symbols $T$ and $\eta T$ denote their periodic operators.
+	The stacked product tensor is
+	$B^{s's}=\sum_{m=0}^1W^{s'm}\otimes W^{ms}$, of bond dimension four.
+	Its two target tensors are $2T$ and $2\eta T$.
+\end{definition}
+
+Define the raw periodic operator $K_N$ by the ordinary virtual trace,
+without dividing by the bond dimension:
+\begin{align}
+	(K_N)_{ab}
+	 & =\tr(W^{a_0b_0}\cdots W^{a_{N-1}b_{N-1}}).
+	\label{eq:asymex_kw_periodic}
+\end{align}
+We also write $D=K_N$ for this raw operator, retaining $D$ in the
+square identity below. The normalized operators will be denoted
+$\mathcal D_N$ and $U_N$, not $D$.
+
+\begin{theorem}[Periodic kernel]
+	\label{lem:asymex_kw_kernel}
+	\lean{KWExample.kwTensor_apply,
+		KWExample.kwTensor_mpo_eq_prod,
+		KWExample.kwTensor_mpo_eq_pow_sum}
+	\leanok
+
+	For all configurations $s',s$,
+	\begin{align}
+		\bra{s'}D\ket{s}
+		 & =\prod_{j\in I_N}(-1)^{s'_j(s_j+s_{j+1})}.
+		\label{eq:asymex_kw_kernel}
+	\end{align}
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	The local entries are $(W^{ab})_{uv}=\delta_{u,b}(-1)^{a(b+v)}$.
+	Expanding the trace over closed virtual configurations $g$ gives
+	\begin{align}
+		(K_N)_{ab}
+		 & =\sum_{g\in\{0,1\}^{I_N}}
+		\prod_{j\in I_N}\delta_{g_j,b_j}
+		                (-1)^{a_j(b_j+g_{j+1})}
+		=\prod_{j\in I_N}(-1)^{a_j(b_j+b_{j+1})}.
+		\notag
+	\end{align}
+	Only the configuration $g=b$ contributes.
+\end{proof}
+
+For subsequent calculations, put $q(a,b)=\sum_j a_j(b_j+b_{j+1})$,
+so $(K_N)_{ab}=(-1)^{q(a,b)}$. Exponents may be calculated modulo two.
+Unless indicated otherwise, site sums and products run over $I_N$.
+
+\begin{theorem}[Spin-flip absorption and noninvertibility]
+	\label{thm:asymex_kw_absorption}
+	\lean{KWExample.kwTensor_mpo_flip_input,
+		KWExample.kwTensor_mpo_flip_output,
+		KWExample.kwTensor_mpo_mul_spinFlip,
+		KWExample.spinFlip_mul_kwTensor_mpo,
+		KWExample.kwTensor_mpo_mulVec_eq_zero_of_odd,
+		KWExample.kwTensor_mpo_not_isUnit}
+	\leanok
+	\uses{lem:asymex_kw_kernel}
+	For every $N>0$, the raw operator satisfies
+	$K_N\eta=\eta K_N=K_N$. If $\eta v=-v$, then $K_Nv=0$.
+	In particular, $K_N$ is not invertible.
+\end{theorem}
+\begin{proof}
+	\leanok
+	Complementing either input or output leaves the kernel unchanged:
+	$q(a,\bar b)\equiv q(\bar a,b)\equiv q(a,b)\pmod2$.
+	This proves both absorption identities. For an odd vector,
+	$K_Nv=K_N\eta v=-K_Nv$, so $K_Nv=0$.
+	The nonzero vector $\ket{0}^{\otimes N}-\ket{1}^{\otimes N}$
+	has odd spin flip and witnesses noninvertibility.
+\end{proof}
+
+\begin{lemma}[Local duality and coupling exchange]
+	\label{lem:asymex_kw_local}
+	For every site $j$,
+	\begin{align}
+		K_NX_j        & =Z_{j-1}Z_jK_N,
+		\notag                          \\
+		K_NZ_jZ_{j+1} & =X_jK_N.
+		\label{eq:asymex_kw_local}
+	\end{align}
+	Consequently, the Hamiltonians with exchanged couplings satisfy
+	\begin{align}
+		K_NH_N(J,h) & =H_N(h,J)K_N.
+		\label{eq:asymex_kw_exchange}
+	\end{align}
+	In particular, $K_N$ commutes with $H_N(J,J)$.
+\end{lemma}
+
+\begin{proof}
+	Flipping one input or output bit gives
+	\begin{align}
+		q(a,b\oplus e_j) & \equiv q(a,b)+a_{j-1}+a_j\pmod2,
+		\notag                                              \\
+		q(a\oplus e_j,b) & \equiv q(a,b)+b_j+b_{j+1}\pmod2.
+		\notag
+	\end{align}
+	These congruences prove~(\ref{eq:asymex_kw_local}) entrywise.
+	They remain valid when the two indicated sites coincide.
+	Summing the local relations and reindexing the bonds yields
+	\begin{align}
+		K_NH_N(J,h)
+		 & =\left(-J\sum_jX_j-h\sum_jZ_{j-1}Z_j\right)K_N
+		=H_N(h,J)K_N.
+		\notag
+	\end{align}
+\end{proof}
+
+The local identities also exchange strings and endpoint operators.
+For consecutive sites $j_r=j_0+r$ and $1\leq m\leq N$,
+\begin{align}
+	K_N\prod_{r=0}^{m-1}X_{j_r}
+	 & =Z_{j_0-1}Z_{j_{m-1}}K_N,
+	\notag                                        \\
+	K_NZ_{j_0}Z_{j_m}
+	 & =\left(\prod_{r=0}^{m-1}X_{j_r}\right)K_N.
+	\label{eq:asymex_kw_strings}
+\end{align}
+Indeed, iterating~(\ref{eq:asymex_kw_local}) cancels every interior
+factor $Z_j^2$. At $m=N$ the endpoints coincide, and these relations
+give $K_N\eta=\eta K_N=K_N$. They are intertwining identities; no
+inverse of $K_N$ is involved.
+
+\begin{lemma}[Adjoint and Gram matrices]
+	\label{lem:asymex_kw_gram}
+	The raw operator satisfies
+	\begin{align}
+		TK_N        & =K_NT,
+		\notag                    \\
+		K_N^\dagger & =T^{-1}K_N,
+		\label{eq:asymex_kw_adjoint}
+	\end{align}
+	and
+	\begin{align}
+		K_N^\dagger K_N=K_NK_N^\dagger & =2^N(\Id+\eta).
+		\label{eq:asymex_kw_gram}
+	\end{align}
+\end{lemma}
+
+\begin{proof}
+	Cyclic reindexing gives $q(\tau a,\tau b)=q(a,b)$ and
+	$q(b,a)=q(\tau a,b)$. Since the kernel is real, these identities
+	imply~(\ref{eq:asymex_kw_adjoint}).
+
+	For a binary configuration $c$, the character sum factors as
+	\begin{align}
+		\sum_a(-1)^{\sum_ja_jc_j}
+		 & =\prod_j(1+(-1)^{c_j})
+		=\begin{cases}
+			 2^N, & c=\mathbf0,    \\
+			 0,   & c\neq\mathbf0.
+		 \end{cases}
+		\label{eq:asymex_kw_character}
+	\end{align}
+	Here $\mathbf0$ and $\mathbf1$ denote the two constant configurations.
+	For input configurations $b,c$, put $d=b\oplus c$. Then
+	\begin{align}
+		(K_N^\dagger K_N)_{bc}
+		 & =\sum_a(-1)^{\sum_ja_j(d_j+d_{j+1})}
+		=2^N(\delta_{b,c}+\delta_{b,\bar c}).
+		\notag
+	\end{align}
+	Equation~(\ref{eq:asymex_kw_character}) imposes $d_j=d_{j+1}$ at
+	every site. Such a configuration is constant on the cycle, and
+	the two constant configurations are distinct because $N\geq1$.
+	For the other Gram matrix, put $d=a\oplus c$ and sum over inputs:
+	\begin{align}
+		(K_NK_N^\dagger)_{ac}
+		 & =\sum_b(-1)^{\sum_jb_j(d_j+d_{j-1})}
+		=2^N(\delta_{a,c}+\delta_{a,\bar c}).
+		\notag
+	\end{align}
+	This proves~(\ref{eq:asymex_kw_gram}).
+\end{proof}
+
+Define the spin-flip sectors $\mathcal H_N^\pm=\{v:\eta v=\pm v\}$ and
+their orthogonal projections $P_\pm=(\Id\pm\eta)/2$. Two useful
+normalizations of the duality operator are
+\begin{align}
+	\mathcal D_N & =2^{-N/2}K_N,
+	\notag                                               \\
+	U_N          & =2^{-(N+1)/2}K_N=\mathcal D_N/\sqrt2.
+	\label{eq:asymex_kw_normalizations}
+\end{align}
+
+\begin{lemma}[Kernel, image, and partial isometry]
+	\label{lem:asymex_kw_sectors}
+	The kernel and image of the raw duality operator are
+	\begin{align}
+		\ker K_N  & =\mathcal H_N^-,
+		\notag                       \\
+		\ran K_N  & =\mathcal H_N^+,
+		\notag                       \\
+		\rank K_N & =2^{N-1}.
+		\label{eq:asymex_kw_sectors}
+	\end{align}
+	The normalized operators satisfy
+	\begin{align}
+		\mathcal D_N^\dagger\mathcal D_N
+		=\mathcal D_N\mathcal D_N^\dagger & =2P_+,
+		\notag                                     \\
+		U_N^\dagger U_N=U_NU_N^\dagger    & =P_+.
+		\label{eq:asymex_kw_partial}
+	\end{align}
+	Thus $U_N$ is a partial isometry with initial and final projection
+	$P_+$. It vanishes on $\mathcal H_N^-$ and restricts to a unitary
+	operator on $\mathcal H_N^+$.
+\end{lemma}
+
+\begin{proof}
+	Equation~(\ref{eq:asymex_kw_gram}) gives
+	$\|K_Nv\|^2=2^{N+1}\|P_+v\|^2$, which identifies the kernel.
+	The absorption relation $\eta K_N=K_N$ puts the image in
+	$\mathcal H_N^+$. Conversely, for $y=P_+y$,
+	$K_N(2^{-(N+1)}K_N^\dagger y)=y$, so every vector in that sector
+	is in the image. For configurations with $b_0=0$, the vectors
+	$(\ket{b}\pm\ket{\bar b})/\sqrt2$ form orthonormal bases of the
+	two sectors. Each sector therefore has dimension $2^{N-1}$.
+	Rescaling~(\ref{eq:asymex_kw_gram}) proves
+	(\ref{eq:asymex_kw_partial}).
+\end{proof}
+
+Each $H_N(J,h)$ preserves both spin-flip sectors: the field terms
+commute with $\eta$, and the two signs acquired by a bond term cancel.
+Thus $U_N$ implements a unitary equivalence between $H_N(J,h)$ and
+$H_N(h,J)$ on $\mathcal H_N^+$, but not on the full Hilbert space.
+
+The product state and the Greenberger--Horne--Zeilinger (GHZ) state
+give elementary finite-chain examples of the action. Use the
+unnormalized vectors
+\begin{align}
+	p_N & =(\ket{0}+\ket{1})^{\otimes N}=\sum_b\ket{b},
+	\notag                                              \\
+	g_N & =\ket{\mathbf0}+\ket{\mathbf1}.
+	\label{eq:asymex_kw_states}
+\end{align}
+For $h>0$, $p_N$ is proportional to the unique ground state of
+$H_N(0,h)$. For $J>0$ and $N\geq2$, the ground space of $H_N(J,0)$ is
+$\spn_{\C}\{\ket{\mathbf0},\ket{\mathbf1}\}$, and $g_N$ spans its
+spin-flip-even subspace. These facts follow respectively by minimizing
+each field term $-hX_j$ and each diagonal bond term $-JZ_jZ_{j+1}$.
+They do not require a thermodynamic limit.
+
+\begin{lemma}[Product-state and GHZ actions]
+	\label{lem:asymex_kw_states}
+	For every $N\geq1$,
+	\begin{align}
+		K_Np_N                              & =2^Ng_N,
+		\notag                                         \\
+		K_N\ket{\mathbf0}=K_N\ket{\mathbf1} & =p_N,
+		\notag                                         \\
+		K_Ng_N                              & =2p_N.
+		\label{eq:asymex_kw_state_actions}
+	\end{align}
+	Writing $\widehat p_N=2^{-N/2}p_N$ and
+	$\widehat g_N=2^{-1/2}g_N$, one has
+	$U_N\widehat p_N=\widehat g_N$ and
+	$U_N\widehat g_N=\widehat p_N$.
+\end{lemma}
+
+\begin{proof}
+	Reindexing the exponent and using~(\ref{eq:asymex_kw_character})
+	gives
+	\begin{align}
+		(K_Np_N)_a
+		 & =\sum_b(-1)^{\sum_jb_j(a_j+a_{j-1})}
+		=2^N(\delta_{a,\mathbf0}+\delta_{a,\mathbf1}).
+		\notag
+	\end{align}
+	Both constant inputs have phase one against every output
+	configuration, so each maps to $p_N$. Finally,
+	$\|p_N\|^2=2^N$ and $\|g_N\|^2=2$ give the normalized statements.
+\end{proof}
+
+In particular, the antisymmetric combination
+$\ket{\mathbf0}-\ket{\mathbf1}$ is annihilated. These finite-chain
+identities alone assert neither spontaneous symmetry breaking nor a
+thermodynamic spectral-gap property.
+
+The square follows already from the adjoint and Gram identities.
+With $D=K_N$ as above,
+\begin{align}
+	D^2 & =2^N(\Id+\eta)T.
+	\label{eq:asymex_kw_fusion}
+\end{align}
+Indeed, $T^{-1}K_N^2=K_N^\dagger K_N$ by
+(\ref{eq:asymex_kw_adjoint}), and
+(\ref{eq:asymex_kw_gram}) gives the result. The corresponding normalized
+identities are
+\begin{align}
+	\mathcal D_N^2 & =(\Id+\eta)T,
+	\notag                         \\
+	U_N^2          & =P_+T,
+	\notag                         \\
+	U_N^{2N}       & =P_+.
+	\label{eq:asymex_kw_normalized_square}
+\end{align}
+The last identity uses $P_+T=TP_+$ and $T^N=\Id$.
+The two summands $T$ and $\eta T$ act on the same Hilbert space.
+On $\mathcal H_N^+$ they add, giving $K_N^2=2^{N+1}T$; on
+$\mathcal H_N^-$ they cancel. The negative sector is annihilated,
+not mapped by flipped translation.
+
+The translation factor depends on identifying the dual lattice with
+the original one. In Ref.~\cite{Aasen2016Topological}, identify the
+input spin $h_j$ with $b_j$ and the dual spin
+$\hat h_{j+1/2}$ with $a_j$. Its primal-to-dual kernel is then
+$\mathcal D_N$, since
+\begin{align}
+	\sum_j(\hat h_{j-1/2}h_j+h_j\hat h_{j+1/2})
+	 & =\sum_j(a_{j-1}b_j+b_ja_j)=q(a,b).
+	\notag
+\end{align}
+Returning by the transpose map gives
+$\mathcal D_N^\dagger\mathcal D_N=\Id+\eta$; repeating the same
+identified endomorphism gives
+$\mathcal D_N^2=(\Id+\eta)T$.
+The partial-isometry convention of Ref.~\cite{Seiberg2024Majorana}
+has the scale of $U_N$. After exchanging its Pauli $X$ and $Z$,
+its displayed intertwining direction is that of $U_N^\dagger$ here:
+\begin{align}
+	U_N^\dagger X_j        & =Z_jZ_{j+1}U_N^\dagger,
+	\notag                                           \\
+	U_N^\dagger Z_jZ_{j+1} & =X_{j+1}U_N^\dagger.
+	\notag
+\end{align}
+Accordingly, its translation corresponds to $T^{-1}$ in our
+convention, with $(U_N^\dagger)^2=P_+T^{-1}$.
+This compares the operator relations and normalization, not an overall
+phase in a circuit representation. The noninvertibility here concerns
+the periodic bosonic spin chain, not fermionic Majorana translation.
+The translation in~(\ref{eq:asymex_kw_fusion}) must be retained when
+comparing this lattice relation with a size-independent fusion algebra.
+
+Positive length is essential in these calculations. At $N=1$,
+$K_1=\Id+X_0$ and $U_1=P_+$, consistently with the self-bond convention.
+The empty virtual word instead has trace $\tr\Id_2=2$, so extending
+the raw trace definition to $N=0$ would give $K_0=2$. Its square
+would be $4$, whereas the right-hand side of
+(\ref{eq:asymex_kw_fusion}) would be $2$.
+
+We now describe the virtual decomposition underlying the square.
+For the matrix-unit tensors of Definition~\ref{def:asymex_kw},
+expanding the cyclic trace gives
+\begin{align}
+	\tr(T^{a_0b_0}\cdots T^{a_{N-1}b_{N-1}})
+	 & =\prod_j\delta_{a_j,b_{j+1}}=T_{ab},
+	\notag                                           \\
+	\tr((\eta T)^{a_0b_0}\cdots(\eta T)^{a_{N-1}b_{N-1}})
+	 & =\prod_j\delta_{a_j,1-b_{j+1}}=(\eta T)_{ab}.
+	\notag
+\end{align}
+The stacked tensor $B$ generates $K_N^2$: multiplication of periodic
+operators sums the intermediate physical index at every site.
+
+\begin{center}
+	% Formula: B^{s's}=\sum_mW^{s'm}\otimes W^{ms}, the stacked product
+	% of Definition~\ref{def:asymex_kw}.
+	% Source: Definition~\ref{def:asymex_kw}.
+	% Ink-to-index map: both rows are the duality tensor $W$; the shared
+	% vertical pairleg at each site is the summed index $m$; the drawn
+	% upper-row label $r$ is the per-site component of the outgoing
+	% index $s'$.
+	% Contraction set: the vertical pairlegs (index $m$) at every site
+	% and the horizontal virtual bonds within each row; the physical
+	% legs $(r,s)$, the per-site components of $(s',s)$, remain open.
+	% Boundary signature: (virtual-west=0 | virtual-east=0 |
+	% physical-up=3 | physical-down=3) on both sides.
+	\tenkzkernel
+	\begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$r_1$, 270:physical}]{W} &
+		\tn[skin=mpo, ports={90:physical:$r_2$, 270:physical}]{W} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$r_N$, 270:physical}]{W} \\
+		\tn[skin=mpo, ports={90:physical, 270:physical:$s_1$}]{W} &
+		\tn[skin=mpo, ports={90:physical, 270:physical:$s_2$}]{W} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical, 270:physical:$s_N$}]{W}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$r_1$, 270:physical:$s_1$}]{B} &
+		\tn[skin=mpo, ports={90:physical:$r_2$, 270:physical:$s_2$}]{B} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$r_N$, 270:physical:$s_N$}]{B}
+	\end{tenkz}
+\end{center}
+
+The site labels in the diagrams run from $1$ to $N$, a cyclic relabeling
+of $I_N$. Normality of a tensor below means that words of some fixed
+positive length span its virtual matrix algebra. This differs from
+operator normality in~(\ref{eq:asymex_kw_gram}) and does not impose a
+normalization on the spectral radius of a transfer map.
+
+\begin{theorem}[Normality of the two translation tensors]
+	\label{thm:asymex_kw_normal}
+	\lean{KWExample.shiftMPS_isNormal, KWExample.flipShiftMPS_isNormal}
+	\leanok
+	\uses{def:asymex_kw, def:normal}
+	The translation tensor and the flipped translation tensor are normal:
+	the four matrices of each are the four matrix units of $\MN{2}$, which
+	already span $\MN{2}$ at word length one.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Every matrix unit occurs among the four matrices of each tensor, and
+	the matrix units span $\MN{2}$. Each tensor is therefore injective
+	and hence normal.
+\end{proof}
+
+\begin{theorem}[Split compression of the squared duality]
+	\label{thm:asymex_kw_compression}
+	% Principal declaration: KWExample.kwSquare_isReduction.
+	\lean{KWExample.kwSquare_compression, KWExample.kwSquare_isReduction,
+		KWExample.kwSquare_left_mul_right_of_ne, KWExample.kwSquare_dim_eq,
+		KWExample.kwSquare_remainder_eq_zero}
+	\leanok
+	\uses{def:asymex_kw, thm:asym_multiblock}
+	The stacked tensor of Definition~\ref{def:asymex_kw} has the block
+	triangular form of Theorem~\ref{thm:asym_multiblock} for the two
+	targets $C_1=2T$ and $C_2=2\eta T$, with no zero slots and $4=2+2$.
+	There are compression maps $W_s:\C^4\to\C^2$ and
+	$V_s:\C^2\to\C^4$, indexed here by $s=1,2$, such that
+	$W_sV_t=\delta_{st}\Id_2$ and $W_sB^wV_s=C_s^w$ for every word $w$.
+	The remainder vanishes:
+	\begin{align}
+		R^{ab} & =B^{ab}-\sum_{s=1}^2V_sC_s^{ab}W_s=0.
+		\notag
+	\end{align}
+	Thus the extension splits.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge}
+	The change of bond coordinates is
+	\begin{align}
+		G & =\frac12\begin{pmatrix}
+			            1 & 0 & 1  & 0  \\
+			            0 & 1 & 0  & -1 \\
+			            1 & 0 & -1 & 0  \\
+			            0 & 1 & 0  & 1
+		            \end{pmatrix},
+		\label{eq:asymex_kw_gauge}
+	\end{align}
+	whose inverse has integer entries. For each physical pair $(a,b)$,
+	direct multiplication gives
+	\begin{align}
+		GB^{ab}G^{-1} & =(2T^{ab})\oplus(2(\eta T)^{ab}).
+		\notag
+	\end{align}
+	After clearing the denominator, these are equalities of integer
+	matrices. Block diagonality gives the triangularity condition and
+	the vanishing remainder. The coordinate projections and inclusions
+	give the compression pairs by
+	Theorem~\ref{thm:asymex_explicit_gauge}; the dimension count is
+	clause (vii) of Theorem~\ref{thm:asym_multiblock}.
+\end{proof}
+
+\begin{theorem}[Periodic data of the squared duality]
+	\label{thm:asymex_kw_trace}
+	\lean{KWExample.kwSquare_trace_evalWord}
+	\leanok
+	\uses{def:asymex_kw}
+	For every nonempty word $w$ over the alphabet of index pairs,
+	\begin{align}
+		\tr(B^w) & =2^{|w|}(\tr(T^w)+\tr((\eta T)^w)).
+		\label{eq:asymex_kw_trace}
+	\end{align}
+	This is~(\ref{eq:asymex_kw_fusion}) at the level of periodic
+	coefficients.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_kw_compression, prop:asym_compression_trace}
+	Proposition~\ref{prop:asym_compression_trace} applied to the
+	compression of Theorem~\ref{thm:asymex_kw_compression} gives
+	$\tr(B^w)=\tr((2T)^w)+\tr((2\eta T)^w)$. Pulling the weight $2$ out
+	of each word evaluation contributes the factor $2^{|w|}$.
+\end{proof}
+
+\begin{theorem}[The sitewise intertwiners of the split case]
+	\label{thm:asymex_kw_intertwiners}
+	% Principal declaration: KWExample.kwSquare_mul_right0_eq.
+	\lean{KWExample.kwSquareLeft0, KWExample.kwSquareLeft1,
+		KWExample.kwSquareRight0, KWExample.kwSquareRight1,
+		KWExample.kwSquare_mul_right0_eq, KWExample.kwSquare_mul_right1_eq,
+		KWExample.left0_mul_kwSquare_eq, KWExample.left1_mul_kwSquare_eq,
+		KWExample.kwSquareLeft0_mul_right0, KWExample.kwSquareLeft1_mul_right1}
+	\leanok
+	\uses{def:asymex_kw, thm:asymex_kw_compression}
+	Write
+	\begin{align}
+		V_1 & =\begin{pmatrix}
+			       1 & 0  \\
+			       0 & 1  \\
+			       1 & 0  \\
+			       0 & -1
+		       \end{pmatrix},
+		    & V_2
+		    & =\begin{pmatrix}
+			       1  & 0 \\
+			       0  & 1 \\
+			       -1 & 0 \\
+			       0  & 1
+		       \end{pmatrix},
+		\notag                        \\
+		W_1 & =\frac12\begin{pmatrix}
+			              1 & 0 & 1 & 0  \\
+			              0 & 1 & 0 & -1
+		              \end{pmatrix},
+		    & W_2
+		    & =\frac12\begin{pmatrix}
+			              1 & 0 & -1 & 0 \\
+			              0 & 1 & 0  & 1
+		              \end{pmatrix}.
+		\notag
+	\end{align}
+	Then $W_1V_1=W_2V_2=\Id_2$, and for every index pair,
+	$B^{s's}V_1=V_1(2T)^{s's}$, $B^{s's}V_2=V_2(2\eta T)^{s's}$,
+	$W_1B^{s's}=(2T)^{s's}W_1$ and $W_2B^{s's}=(2\eta T)^{s's}W_2$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge}
+	The matrices $W_1,W_2$ are the two row blocks of $G$, and $V_1,V_2$
+	are the corresponding column blocks of $G^{-1}$, as in
+	Theorem~\ref{thm:asymex_explicit_gauge}. Each intertwining identity
+	is verified by multiplying the explicit matrices and clearing the
+	denominator. The two normalizations also follow from clause (iv) of
+	Theorem~\ref{thm:asym_multiblock}.
+\end{proof}
+
+\begin{center}
+	% Formula: the four sitewise identities of
+	% Theorem~\ref{thm:asymex_kw_intertwiners}: B^{s's}V_1=V_1(2T)^{s's},
+	% B^{s's}V_2=V_2(2\eta T)^{s's}, W_1B^{s's}=(2T)^{s's}W_1, and
+	% W_2B^{s's}=(2\eta T)^{s's}W_2.
+	% Source: Theorem~\ref{thm:asymex_kw_intertwiners}.
+	% Ink-to-index map: the ring is the compression map $V_1$, $W_1$,
+	% $V_2$ or $W_2$; the square node is the source $B$ or its target
+	% $2T$ or $2\eta T$.
+	% Contraction set: the single virtual bond joining the ring to the
+	% square node in each pair; the physical pair leg remains open.
+	% Boundary signature: (virtual-west=1 | virtual-east=1 |
+	% physical-up=1 | physical-down=0) for each pictured equality.
+	\tenkzkernel
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$s's$}]{B} & \tn[skin=ring]{V_1}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{V_1} & \tn[label pos=s, ports={90:physical:$s's$}]{2T}
+	\end{tenkz}
+	\\
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$s's$}]{B} & \tn[skin=ring]{V_2}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{V_2} &
+		\tn[label pos=s, ports={90:physical:$s's$}]{2\eta T}
+	\end{tenkz}
+	\\
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{W_1} & \tn[label pos=s, ports={90:physical:$s's$}]{B}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$s's$}]{2T} & \tn[skin=ring]{W_1}
+	\end{tenkz}
+	\\
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[skin=ring]{W_2} & \tn[label pos=s, ports={90:physical:$s's$}]{B}
+	\end{tenkz}
+	\quad $=$ \quad
+	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+		\tn[label pos=s, ports={90:physical:$s's$}]{2\eta T} &
+		\tn[skin=ring]{W_2}
+	\end{tenkz}
+\end{center}
+
+\section{Kramers--Wannier duality acting on ground states}%
+\label{sec:asymex_kw_action}
+
+The finite-chain actions in~(\ref{eq:asymex_kw_state_actions}) have
+different virtual decompositions. The product-state action splits into
+the two GHZ sectors with a local weight $2$. The GHZ action has two
+unweighted copies of the same product-state target, together with a
+nonzero remainder. Product and GHZ tensors are elementary MPS examples
+in Ref.~\cite{Cirac2021Matrix}; here their explicit matrices allow the
+asymmetric compression and its sitewise intertwiners to be compared
+directly.
+
+\begin{definition}[The two action tensors]
+	\label{def:asymex_kw_action}
+	\lean{KWExample.plusTensor, KWExample.ghz0, KWExample.ghz1,
+		KWExample.kwPlus, KWExample.plusTarget, KWExample.ghz,
+		KWExample.kwGHZ, KWExample.kwGHZTarget}
+	\leanok
+	\uses{def:asymex_kw, def:mps_tensor}
+	The product-state tensor $A_+$ has bond dimension one and
+	$A_+^0=A_+^1=(1)$. Its periodic vector is $p_N$.
+	The two ferromagnetic-sector tensors have
+	$C_0^i=(\delta_{i,0})$ and $C_1^i=(\delta_{i,1})$.
+	Their direct sum is the GHZ tensor
+	$A_{\mathrm{GHZ}}^0=\diag(1,0)$,
+	$A_{\mathrm{GHZ}}^1=\diag(0,1)$, whose periodic vector is $g_N$.
+
+	For either input tensor $A$, the action tensor is
+	$(W\cdot A)^{s'}=\sum_sW^{s's}\otimes A^s$.
+	For $A=A_+$ its matrices are
+	\begin{align}
+		(W\cdot A)^0
+		 & =\begin{pmatrix}1&1\\1&1\end{pmatrix},
+		 &
+		(W\cdot A)^1
+		 & =\begin{pmatrix}1&-1\\-1&1\end{pmatrix},
+		\notag
+	\end{align}
+	with targets $2C_0$ and $2C_1$. For $A=A_{\mathrm{GHZ}}$ they are
+	\begin{align}
+		(W\cdot A)^0
+		 & =\begin{pmatrix}
+			    1 & 0 & 1 & 0 \\
+			    0 & 0 & 0 & 0 \\
+			    0 & 0 & 0 & 0 \\
+			    0 & 1 & 0 & 1
+		    \end{pmatrix},
+		 &
+		(W\cdot A)^1
+		 & =\begin{pmatrix}
+			    1 & 0  & -1 & 0 \\
+			    0 & 0  & 0  & 0 \\
+			    0 & 0  & 0  & 0 \\
+			    0 & -1 & 0  & 1
+		    \end{pmatrix},
+		\notag
+	\end{align}
+	with two unweighted copies of $A_+$ as targets.
+\end{definition}
+
+\begin{center}
+	% Formula: (W\cdot A)^{s'}=\sum_sW^{s's}\otimes A^s, of
+	% Definition~\ref{def:asymex_kw_action}, evaluated at the
+	% product-state tensor $A_+$ (left) and at the Greenberger--Horne--
+	% Zeilinger tensor $A_{\mathrm{GHZ}}$ (right).
+	% Source: Definition~\ref{def:asymex_kw_action}.
+	% Ink-to-index map: the upper row is the duality tensor $W$, whose
+	% drawn physical legs $r$ are the per-site components of the
+	% outgoing index $s'$; the lower row is the acted-on state tensor;
+	% the shared vertical pairleg at each site is the summed index $s$.
+	% Contraction set: the vertical pairlegs (index $s$) at every site
+	% and the horizontal virtual bonds within each row, both closed by
+	% the periodic trace; only the upper physical legs of $W$ remain
+	% open.
+	% Boundary signature: (virtual-west=0 | virtual-east=0 |
+	% physical-up=3 | physical-down=0) for both pictures.
+	\tenkzkernel
+	\begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$r_1$}]{W} &
+		\tn[skin=mpo, ports={90:physical:$r_2$}]{W} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$r_N$}]{W} \\
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+} &
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_+}
+	\end{tenkz}
+	\qquad
+	\begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+		\tn[skin=mpo, ports={90:physical:$r_1$}]{W} &
+		\tn[skin=mpo, ports={90:physical:$r_2$}]{W} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[skin=mpo, ports={90:physical:$r_N$}]{W} \\
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}} &
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}} &
+		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+		\tn[label pos=s, ports={180:virtual, 0:virtual}]{A_{\mathrm{GHZ}}}
+	\end{tenkz}
+\end{center}
+
+For the product-state action, the matrices are $2Q_+$ and $2Q_-$,
+where
+\begin{align}
+	Q_\pm & =\frac12\begin{pmatrix}1&\pm1\\\pm1&1\end{pmatrix}.
+	\notag
+\end{align}
+They satisfy $Q_\pm^2=Q_\pm$, $Q_+Q_-=Q_-Q_+=0$ and $\tr Q_\pm=1$.
+Hence a nonempty word of length $N$ has trace $2^N$ when all letters
+agree and trace zero otherwise. This recovers $K_Np_N=2^Ng_N$ and
+identifies the factor $2$ as a local tensor weight. By contrast, the
+factor $2$ in $K_Ng_N=2p_N$ is the multiplicity of two unweighted
+targets. Replacing $p_N$ or $g_N$ by a normalized vector changes the
+global scalar as in Lemma~\ref{lem:asymex_kw_states}; it does not
+change the weights of these fixed tensors.
+
+In the following two results, $B$ denotes the relevant action tensor,
+rather than the stacked square tensor of the preceding section.
+
+\begin{theorem}[The duality on the product state splits]
+	\label{thm:asymex_kw_plus}
+	% Principal declaration: KWExample.plus_isReduction.
+	\lean{KWExample.plusCompression, KWExample.plus_isReduction,
+		KWExample.plus_dim_eq, KWExample.plus_remainder_eq_zero,
+		KWExample.kwPlus_trace_evalWord_eq_sum}
+	\leanok
+	\uses{def:asymex_kw_action, thm:asym_multiblock}
+	The first action tensor of Definition~\ref{def:asymex_kw_action} has
+	the block triangular form of Theorem~\ref{thm:asym_multiblock} for
+	the weighted targets $\widehat C_s=2C_s$, $s=0,1$, with no zero
+	slots and $2=1+1$. Its compression pairs satisfy $W_sV_s=\Id_1$
+	and $W_sB^wV_s=\widehat C_s^w$ for every word $w$.
+	The remainder vanishes identically, and for every nonempty word,
+	\begin{align}
+		\tr(B^w) & =\tr((2C_0)^w)+\tr((2C_1)^w).
+		\notag
+	\end{align}
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
+	Let $F=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$, so
+	$F^{-1}=F/2$. Direct multiplication gives
+	\begin{align}
+		FB^0F^{-1} & =\diag(2,0),
+		\notag                    \\
+		FB^1F^{-1} & =\diag(0,2).
+		\notag
+	\end{align}
+	Diagonality gives the triangularity condition, identifies the
+	matched blocks, and makes the remainder zero. The coordinate
+	compression pairs satisfy the stated word identities by
+	Theorem~\ref{thm:asymex_explicit_gauge}. The trace identity follows
+	from Proposition~\ref{prop:asym_compression_trace}.
+\end{proof}
+
+\begin{theorem}[The duality on the ferromagnetic state does not split]
+	\label{thm:asymex_kw_ghz}
+	% Principal declaration: KWExample.kwGHZ_isReduction.
+	\lean{KWExample.kwGHZCompression, KWExample.kwGHZ_isReduction,
+		KWExample.kwGHZ_dim_eq, KWExample.kwGHZ_evalWord_remainder_eq_zero,
+		KWExample.kwGHZRemainder_eq, KWExample.kwGHZ_remainder_mul_remainder,
+		KWExample.kwGHZ_trace_evalWord_eq_two}
+	\leanok
+	\uses{def:asymex_kw_action, thm:asym_multiblock}
+	The second action tensor of Definition~\ref{def:asymex_kw_action}
+	has the block triangular form of Theorem~\ref{thm:asym_multiblock}
+	for two unweighted copies $C_s=A_+$ of the product-state tensor,
+	with $z=2$ zero slots and $4=1+1+2$. The compression pair of each
+	copy satisfies $W_sV_s=\Id_1$ and $W_sB^wV_s=C_s^w$ for every word.
+	For every nonempty word, $\tr(B^w)=2$.
+	Every remainder word of length at least four vanishes; in fact,
+	\begin{align}
+		R^0 & =\begin{pmatrix}
+			       0 & 0 & 1 & 0 \\
+			       0 & 0 & 0 & 0 \\
+			       0 & 0 & 0 & 0 \\
+			       0 & 1 & 0 & 0
+		       \end{pmatrix},
+		    & R^1
+		    & =\begin{pmatrix}
+			       0 & 0  & -1 & 0 \\
+			       0 & 0  & 0  & 0 \\
+			       0 & 0  & 0  & 0 \\
+			       0 & -1 & 0  & 0
+		       \end{pmatrix},
+		\notag
+	\end{align}
+	and $R^iR^j=0$ for all letters $i,j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
+	The two copies occupy the first and fourth bond coordinates, and
+	the zero slots occupy the second and third. Ordering the coordinates
+	as $(0,3,1,2)$ makes both letters upper triangular, with diagonal
+	$(1,1,0,0)$. Thus the matched blocks are both $A_+$, and the
+	coordinate compression pairs give the asserted reductions.
+	Every word evaluation of $A_+$ is $1$, so
+	Proposition~\ref{prop:asym_compression_trace} gives
+	$\tr(B^w)=1+1=2$ for nonempty $w$.
+
+	Subtracting the matched diagonal contributions in the original
+	coordinates gives the displayed remainder matrices. Their only
+	nonzero entries lie in positions $(0,2)$ and $(3,1)$, so direct
+	multiplication gives $R^iR^j=0$. The general bound in clause (vi)
+	of Theorem~\ref{thm:asym_multiblock} also gives vanishing at lengths
+	at least $|S|+z=4$, where $S$ is the set of two matched slots.
+	The obstruction to a sitewise splitting is established in
+	Theorem~\ref{thm:asymex_kw_ghz_intertwiner}.
+\end{proof}
+
+A word reduction need not provide a pair of sitewise intertwiners.
+Here the periodic coefficients have merged into two copies of the same
+product state, but the virtual action still has a one-sided obstruction.
+
+\begin{theorem}[One-sided sitewise intertwiners for the merged target]
+	\label{thm:asymex_kw_ghz_intertwiner}
+	\lean{KWExample.kwGHZ_left_intertwiner_eq_zero,
+		KWExample.kwGHZ_right_intertwiner,
+		KWExample.kwGHZ_right_intertwiner_ne_zero}
+	\leanok
+	\uses{def:asymex_kw_action}
+	Let $B=W\cdot A_{\mathrm{GHZ}}$. If a row vector $u\in\C^4$
+	satisfies $uB^i=u$ for both letters $i$, then $u=0$.
+	Thus no nonzero sitewise left intertwiner exists for the
+	product-state target. A nonzero sitewise right intertwiner does
+	exist: the first coordinate vector satisfies $B^ie_0=e_0$ for both
+	letters.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Both target matrices are the scalar $1$. In coordinates
+	$u=(u_0,u_1,u_2,u_3)$, the left-intertwiner equations are
+	\begin{align}
+		uB^0 & =(u_0,u_3,u_0,u_3)=u,
+		\notag                         \\
+		uB^1 & =(u_0,-u_3,-u_0,u_3)=u.
+		\notag
+	\end{align}
+	The second coordinates give $u_3=u_1=0$, and the third give
+	$u_0=u_2=0$. For the right intertwiner, the first column of each
+	matrix is $e_0$, which is nonzero.
+\end{proof}
+
+This obstruction rules out a sitewise split copy of the product-state
+target: such a splitting would require a nonzero left intertwiner.
+It does not obstruct the word reductions or the periodic trace formula
+in Theorem~\ref{thm:asymex_kw_ghz}. Those statements retain the
+finite-chain action $K_Ng_N=2p_N$ while distinguishing it from a split
+virtual direct sum.
