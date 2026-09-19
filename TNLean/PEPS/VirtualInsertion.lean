@@ -35,6 +35,8 @@ endomorphisms as physical linear maps on the local physical space.
 - `physRealizeLocalOp`: the same realization packaged from `IsVertexInjective`.
 - `physRealizeLocalOpAt_spec`: the realized physical map agrees with the
   virtual operator on the image of `localTensorMap`.
+- `physRealizeLocalOp_spec`: the packaged realization satisfies the same
+  image-agreement formula.
 
 ## References
 
