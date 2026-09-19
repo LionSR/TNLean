@@ -92,9 +92,6 @@ import TNLean.MPS.MPDO.CPSVExample412NormalizedGSNNCH
 import TNLean.MPS.MPDO.CPSVExample412NormalizedRFP
 import TNLean.MPS.MPDO.CPSVExamples410411Arithmetic
 import TNLean.MPS.MPDO.CPSVFigureEight
-import TNLean.MPS.MPDO.CPSVGroupedFigureEight
-import TNLean.MPS.MPDO.CPSVGroupedGramNormalization
-import TNLean.MPS.MPDO.CPSVNormalizedGroupedSectors
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.CPSVRepresentativeGroupedLemmaL
@@ -178,7 +175,6 @@ import TNLean.MPS.MPDO.GSNNCHSectorRescaling
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GaugeInvariantSubspace
 import TNLean.MPS.MPDO.GaussProjectorPlacement
-import TNLean.MPS.MPDO.GroupedFigure8
 import TNLean.MPS.MPDO.GroupedGramNormalization
 import TNLean.MPS.MPDO.GroupedReferenceCorner
 import TNLean.MPS.MPDO.GroupedSectorGram
@@ -361,6 +357,7 @@ import TNLean.MPS.MPDO.TwoSitePrefixReflectedMarkedChain
 import TNLean.MPS.MPDO.TwoSiteVerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalBNT
 import TNLean.MPS.MPDO.VerticalBNTConstruction
+import TNLean.MPS.MPDO.VerticalBNTGrouping
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
 import TNLean.MPS.MPDO.VerticalBoundaryContraction
 import TNLean.MPS.MPDO.VerticalCF

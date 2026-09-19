@@ -45,18 +45,18 @@ injectivity survives deletion of every off-diagonal physical matrix.
 
 The stronger diagonal-restriction assertion is false under the stated
 horizontal canonical-form hypotheses.\footnote{The correction is tracked in
-\href{https://github.com/LionSR/TNLean/issues/2537}{issue 2537}.}
+    \href{https://github.com/LionSR/TNLean/issues/2537}{issue 2537}.}
 Let $E_{ab}\in M_2(\mathbb C)$ denote the matrix units for
 $a,b\in\{0,1\}$. Define
 \begin{align}
     A^{(a,b)}
-        &=c_aE_{ab},
-    &
-    c_0&=\frac{3}{5},
-    &
-    c_1&=\frac{4}{5},
-    &
-    a,b&\in\{0,1\}.
+        & =c_aE_{ab},
+        &
+    c_0 & =\frac{3}{5},
+        &
+    c_1 & =\frac{4}{5},
+        &
+    a,b & \in\{0,1\}.
     \label{eq:cpgsv17_vertical_diagonal_restriction_matrix_units}
 \end{align}
 The four matrices in
@@ -65,10 +65,10 @@ scalar multiples of the matrix units and therefore span $M_2(\mathbb C)$.
 They also satisfy
 \begin{align}
     \sum_{a,b}
-        (A^{(a,b)})^*A^{(a,b)}
-        &=
-        (c_0^2+c_1^2)I
-        =I.
+    (A^{(a,b)})^*A^{(a,b)}
+     & =
+    (c_0^2+c_1^2)I
+    =I.
     \label{eq:cpgsv17_vertical_diagonal_restriction_left_canonical}
 \end{align}
 With one horizontal block, simultaneous block separation is ordinary
@@ -79,10 +79,10 @@ per-copy \texttt{HorizontalCFData} structure.
 Its diagonal restriction is
 \begin{align}
     A^{\mathrm{diag}}(0)
-        &=\frac{3}{5}E_{00},
-    \label{eq:cpgsv17_vertical_diagonal_restriction_diag_zero}\\
+     & =\frac{3}{5}E_{00},
+    \label{eq:cpgsv17_vertical_diagonal_restriction_diag_zero} \\
     A^{\mathrm{diag}}(1)
-        &=\frac{4}{5}E_{11}.
+     & =\frac{4}{5}E_{11}.
     \label{eq:cpgsv17_vertical_diagonal_restriction_diag_one}
 \end{align}
 Every word in the matrices from
@@ -105,23 +105,23 @@ tensors rather than reusing diagonal restrictions of the horizontal basis.
 The literal theorem now assumes the CPSV canonical form of Proposition~4.13
 together with the MPDO positivity hypothesis, and it concludes vertical
 canonical form.\footnote{Formal declaration:
-\leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm} in
-\doclink{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm}.}
+    \leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm} in
+    \doclink{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm}.}
 A separate theorem retains the normalized BNT-refined horizontal hypothesis
 \path{MPOTensor.IsHorizontalCF} for arguments that already use this stronger
 form.\footnote{Formal declaration:
-\leanid{MPOTensor.verticalCF\_of\_horizontalCF} in
-\doclink{TNLean/MPS/MPDO/VerticalCanonicalForm}.}
+    \leanid{MPOTensor.verticalCF\_of\_horizontalCF} in
+    \doclink{TNLean/MPS/MPDO/VerticalCanonicalForm}.}
 
 The proof follows the three stages of Proposition~4.13 in
 Ref.~\cite{Cirac2016MPDO_arXiv}:
 \begin{enumerate}
     \item positivity and the first-site insertion lemma exclude one-sided
-    invariant projections in the vertical direction;
+          invariant projections in the vertical direction;
     \item positivity excludes nontrivial vertical periods;
     \item an independent vertical canonical-form decomposition supplies the
-    vertical blocks, after which the proof establishes positivity of the
-    multiplicity coefficients and unitary normalization of the sector gauges.
+          vertical blocks, after which the proof establishes positivity of the
+          multiplicity coefficients and unitary normalization of the sector gauges.
 \end{enumerate}
 
 The target is the vertically viewed tensor. Its letters are indexed by
@@ -145,25 +145,25 @@ Ref.~\cite{Cirac2016MPDO_arXiv} is formalized. If $H\geq0$, $P=P^*$, and
 $PH=PHP$, then
 \begin{align}
     HP
-        &=(PH)^*
-        =(PHP)^*
-        =PHP,
-    \label{eq:cpgsv17_vertical_diagonal_restriction_positive_corner_adjoint}\\
+     & =(PH)^*
+    =(PHP)^*
+    =PHP,
+    \label{eq:cpgsv17_vertical_diagonal_restriction_positive_corner_adjoint} \\
     (I-P)HP
-        &=0.
+     & =0.
     \label{eq:cpgsv17_vertical_diagonal_restriction_positive_corner_vanishes}
 \end{align}
 For doubled indices $p=(a,b)$ and $q=(c,e)$, define the three first-site
 contractions by
 \begin{align}
     (Y_L)_{p,q}
-        &=P_{a,c}\delta_{b,e},
-    \label{eq:cpgsv17_vertical_diagonal_restriction_left_insertion}\\
+     & =P_{a,c}\delta_{b,e},
+    \label{eq:cpgsv17_vertical_diagonal_restriction_left_insertion}  \\
     (Y_R)_{p,q}
-        &=\delta_{a,c}P_{e,b},
-    \label{eq:cpgsv17_vertical_diagonal_restriction_right_insertion}\\
+     & =\delta_{a,c}P_{e,b},
+    \label{eq:cpgsv17_vertical_diagonal_restriction_right_insertion} \\
     (Y_C)_{p,q}
-        &=P_{a,c}P_{e,b}.
+     & =P_{a,c}P_{e,b}.
     \label{eq:cpgsv17_vertical_diagonal_restriction_corner_insertion}
 \end{align}
 Their contractions with the horizontal matrix product vector are respectively
@@ -176,14 +176,14 @@ The first stage is complete. Let $P_1$ act as $P$ on the first site and as the
 identity on all remaining sites:
 \begin{align}
     P_1
-        &=P\otimes I^{\otimes(N-1)}.
+     & =P\otimes I^{\otimes(N-1)}.
     \label{eq:cpgsv17_vertical_diagonal_restriction_first_site_projection}
 \end{align}
 The vertically viewed relation $PM=PMP$ gives
 \begin{align}
     P_1H^{(N)}
-        &=P_1H^{(N)}P_1
-        =H^{(N)}P_1.
+     & =P_1H^{(N)}P_1
+    =H^{(N)}P_1.
     \label{eq:cpgsv17_vertical_diagonal_restriction_first_site_reduction}
 \end{align}
 The representative-grouped Lemma~L transfers
@@ -192,10 +192,10 @@ through every repeated weighted sector and through the direct sum of the copy
 gauges. Thus the original tensor satisfies
 \begin{align}
     MP
-        &=PMP,
-    \label{eq:cpgsv17_vertical_diagonal_restriction_opposite_corner_identity}\\
+     & =PMP,
+    \label{eq:cpgsv17_vertical_diagonal_restriction_opposite_corner_identity} \\
     (I-P)MP
-        &=0.
+     & =0.
     \label{eq:cpgsv17_vertical_diagonal_restriction_opposite_corner_vanishes}
 \end{align}
 The formal theorem assumes only $P=P^*$; the source specializes $P$ to an
@@ -205,7 +205,7 @@ The final positive-operator implication needed for the periodic-sector stage
 is also formalized:
 \begin{align}
     Q[H^{(N)}]^p
-        &=[H^{(N)}]^pQ
+     & =[H^{(N)}]^pQ
     \quad\Longrightarrow\quad
     QH^{(N)}=H^{(N)}Q.
     \label{eq:cpgsv17_vertical_diagonal_restriction_power_commutation}
@@ -232,7 +232,7 @@ The positive-weight part of the third stage is also complete. For each grouped
 sector $\alpha$, define
 \begin{align}
     (E_\alpha)_{ab}
-        &=\tr(M_\alpha^{(a,b)}).
+     & =\tr(M_\alpha^{(a,b)}).
     \label{eq:cpgsv17_vertical_diagonal_restriction_sector_trace_matrix}
 \end{align}
 The physical range projector of each grouped sector satisfies the required
@@ -241,10 +241,10 @@ trace is the sector weight $\mu_{\alpha,k}$ multiplied by a sector trace
 $d_\alpha$. Under the normalization $\mu_{\alpha,1}>0$, MPDO positivity forces
 \begin{align}
     d_\alpha
-        &>0,
-    \label{eq:cpgsv17_vertical_diagonal_restriction_positive_sector_trace}\\
+     & >0,
+    \label{eq:cpgsv17_vertical_diagonal_restriction_positive_sector_trace} \\
     \mu_{\alpha,k}
-        &>0.
+     & >0.
     \label{eq:cpgsv17_vertical_diagonal_restriction_positive_sector_weight}
 \end{align}
 These results are contained in
@@ -255,12 +255,13 @@ The pairwise Gram-conjugation identity represented by the second diagram at
 lines~1914--1919 of Ref.~\cite{Cirac2016MPDO_arXiv} is proved in
 \path{TNLean/MPS/MPDO/FigureEightPairwise.lean}. Its dependent transport to
 the grouped sectors is proved in
-\path{TNLean/MPS/MPDO/GroupedFigure8.lean}. Normal-tensor rigidity then gives
+\path{TNLean/MPS/MPDO/GroupedSectorGram.lean}. Normal-tensor rigidity then
+gives
 \begin{align}
     X_{\alpha,k}^\dagger X_{\alpha,k}
-        &=
-        \omega_{\alpha,k}
-        X_{\alpha,1}^\dagger X_{\alpha,1}.
+     & =
+    \omega_{\alpha,k}
+    X_{\alpha,1}^\dagger X_{\alpha,1}.
     \label{eq:cpgsv17_vertical_diagonal_restriction_sector_gram_scaling}
 \end{align}
 Here $\omega_{\alpha,k}>0$. Hence the relative gauge

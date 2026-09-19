@@ -1557,9 +1557,12 @@ abstracted — record why, so it is not re-proposed).
   `grouped_sector_gram_eq_pos_smul_one_of_dressing` in
   `TNLean/MPS/MPDO/GroupedSectorGram.lean` isolate the predicate-neutral Figure Eight and
   Gram-rigidity steps.
-- **Result:** both Figure Eight and Gram-normalization theorem families keep their exact public
-  statements and independently supply their literal-CPSV or horizontal Gram-dressing theorem.
-  No implication between the two canonical-form predicates is used.
+- **Result:** the Figure Eight and Gram-normalization steps are stated once, over the
+  Gram-dressing property, and each canonical form supplies that property through
+  `MPOTensor.IsHorizontalCF.hasGroupedCornerGramDressing` or
+  `MPSTensor.IsCPSVCanonicalForm.hasGroupedCornerGramDressing` in
+  `TNLean/MPS/MPDO/VerticalBNTGrouping.lean`. No implication between the two canonical-form
+  predicates is used.
 
 ### Positive-Gram provider for normalized grouped sectors
 - **Pattern:** the horizontal BNT-refined and literal CPSV grouped-sector theorems
@@ -1568,10 +1571,9 @@ abstracted — record why, so it is not re-proposed).
 - **Reuse:** `MPOTensor.exists_normalized_grouped_sector_maps_of_gram` takes this
   positive-Gram provider as its sole canonical-form-specific input and proves the
   common isometry, orthogonality, intertwining, and exact reconstruction clauses.
-- **Result:** `MPOTensor.IsMPDO.exists_normalized_grouped_sector_maps` and
-  `MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps` remain
-  separate public wrappers, each supplying its own Gram theorem without adapting
-  one canonical-form hypothesis to the other.
+- **Result:** `MPOTensor.exists_normalized_grouped_sector_maps_of_dressing` is the single
+  public statement; it takes the Gram-dressing property, which each canonical form supplies
+  on its own, so neither canonical-form hypothesis is adapted to the other.
 
 ### Vertical canonical form from grouped sectors
 - **Pattern:** the literal CPSV and horizontal capstones both unpacked the same grouped BNT
@@ -1582,8 +1584,10 @@ abstracted — record why, so it is not re-proposed).
   `HasVerticalBNTGroupingWithIsometry M` and `HasGroupedCornerGramDressing M`; it does not require
   an unused `IsMPDO M` hypothesis.
 - **Result:** `verticalCF_of_cpsvCanonicalForm` and `verticalCF_of_horizontalCF` are thin,
-  source-facing wrappers. Each independently supplies its own grouping theorem and pairwise
-  Figure Eight theorem, preserving the strict separation of their canonical-form predicates.
+  source-facing wrappers over `MPOTensor.HasVerticalBNTGroupingInputs`, the pair of grouping
+  and Gram-dressing inputs defined in `TNLean/MPS/MPDO/VerticalBNTGrouping.lean`. Each
+  canonical form proves that pair from its own grouping theorem and pairwise Figure Eight
+  theorem, preserving the strict separation of their canonical-form predicates.
 
 ### Canonical-form sector-compression separation
 - **Pattern:** the horizontal BNT-refined and literal CPSV surfaces separately turned

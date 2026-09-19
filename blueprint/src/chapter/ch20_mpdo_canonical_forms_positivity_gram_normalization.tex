@@ -614,68 +614,6 @@
     (\ref{eq:grouped_sector_gram_conj_of_dressing}).
 \end{proof}
 
-\begin{theorem}[Gram conjugation for an actual grouped sector]
-    \label{thm:mpdo_grouped_sector_gram_conjugation}
-    \lean{MPOTensor.IsMPDO.grouped_sector_gram_conj_eq}
-    \leanok
-    \uses{thm:mpdo_pairwise_vertical_gram_conjugation, thm:mpdo_vertical_bnt_grouping_with_isometries}
-    Consider the grouped vertical decomposition furnished by
-    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}. For a
-    phase class $\alpha$ and a copy $q$, transport its representative tensor
-    to the bond space of that copy. If $X_{\alpha,q}$ is the corresponding
-    gauge, then for every vertical letter $v$,
-    \begin{align}
-        (X_{\alpha,q}^\dagger X_{\alpha,q})
-        A_{\alpha,q}^v
-        (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-         & =A_{\alpha,q}^v.
-        \label{eq:mpdo_grouped_gram_conj}
-    \end{align}
-    This is Figure~8 for the actual witnesses of the grouped decomposition.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:grouped_sector_gram_conj_of_dressing, thm:mpdo_pairwise_vertical_gram_conjugation, thm:mpdo_vertical_bnt_grouping_with_isometries}
-    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} supplies
-    the grouped-corner Gram-dressing property. Apply
-    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} to the grouped
-    vertical decomposition.
-\end{proof}
-
-\begin{theorem}[Literal Gram conjugation for an actual grouped sector]
-    \label{thm:cpsv_literal_grouped_sector_gram_conjugation}
-    \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_conj_eq}
-    \leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation, thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    Consider the actual phase-class grouping furnished under literal CPSV
-    canonical form.  For a class $\alpha$ and copy $q$, identify its normal
-    representative with the bond space of that copy using the equality of
-    dimensions. Then for every vertical letter $v$,
-    \begin{align}
-        (X_{\alpha,q}^\dagger X_{\alpha,q})
-        A_{\alpha,q}^v
-        (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-         & =A_{\alpha,q}^v.
-        \label{eq:cpsv_literal_grouped_gram_conj}
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:grouped_sector_gram_conj_of_dressing, thm:cpsv_literal_pairwise_vertical_gram_conjugation, thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    The literal pairwise Figure~8 theorem supplies the grouped-corner
-    Gram-dressing property. Apply
-    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} to the literal
-    phase-class grouping. This gives
-    \begin{align}
-        (X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
-        (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-         & =A_{\alpha,q}^v.
-        \label{eq:cpsv_prop_4_13_gram_conjugation}
-    \end{align}
-\end{proof}
-
 \begin{theorem}[Gram conjugation from the adjoint dressing]
     \label{thm:gram_conj_of_dressed_adjoint}
     \lean{Matrix.gram_conj_eq_of_dressed_target}
@@ -770,7 +708,7 @@
     \lean{Kraus.IsNormal.smul_mul_nonsing_inv_mem_unitaryGroup_of_common_dressed_target}
     \lean{Matrix.smul_mul_nonsing_inv_mem_unitaryGroup_of_gram_eq_smul}
     \leanok
-    \uses{def:normal, thm:gram_conj_of_dressed_adjoint, thm:mpdo_pairwise_vertical_gram_conjugation, thm:mpdo_grouped_sector_gram_conjugation, thm:normal_tensor_gram_rigidity}
+    \uses{def:normal, thm:gram_conj_of_dressed_adjoint, thm:mpdo_pairwise_vertical_gram_conjugation, thm:grouped_sector_gram_conj_of_dressing, thm:normal_tensor_gram_rigidity}
     Let $M_\alpha$ be a normal tensor, and let $X$ and $Y$ be invertible
     gauges whose Gram matrices induce the same conjugation on each letter
     $M_\alpha^v$. Then there is a positive real number $\omega$ such that
@@ -804,9 +742,10 @@
     $\sqrt{\omega}$ makes it unitary.
 \end{proof}
 
-\begin{theorem}[Positive scalar Gram matrix from grouped-corner dressing]
+\begin{theorem}[Positive scalar Gram matrix and unitary normalization from grouped-corner dressing]
     \label{thm:grouped_sector_gram_scalar_of_dressing}
     \lean{MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing}
+    \lean{MPOTensor.grouped_sector_exists_unitary_normalization_of_dressing}
     \leanok
     \uses{def:normal, thm:grouped_sector_gram_conj_of_dressing}
     Under the hypotheses of
@@ -819,6 +758,11 @@
          & =\omega_{\alpha,q}\Id.
         \label{eq:grouped_sector_gram_scalar_of_dressing}
     \end{align}
+    Consequently $U_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ is
+    unitary. This is the gauge normalization of
+    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}. Literal
+    CPSV canonical form and normalized BNT-refined horizontal form each supply
+    the Gram-dressing hypothesis on their own.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -828,83 +772,9 @@
     the normal representative. Apply the identity-gauge specialization of
     Theorem~\ref{thm:eq3_of_dressed_adjoint}; it gives a real number
     $\omega_{\alpha,q}>0$ with
-    $X_{\alpha,q}^\dagger X_{\alpha,q}=\omega_{\alpha,q}\Id$.
-\end{proof}
-
-\begin{theorem}[Normalization of the grouped vertical gauges]
-    \label{thm:mpdo_grouped_sector_unitary_normalization}
-    \lean{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one}
-    \lean{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization}
-    \leanok
-    \uses{thm:mpdo_pairwise_vertical_gram_conjugation, thm:mpdo_vertical_bnt_grouping_with_isometries}
-    In the grouped vertical decomposition of a matrix-product density
-    operator in normalized BNT-refined horizontal form, let $X_{\alpha,k}$ be
-    the gauge of a copy of the normal representative $M_\alpha$. Fix the
-    distinguished gauge to $X_{\alpha,0}=\Id$. Then there is a positive real
-    number $\omega_{\alpha,k}$ such that
-    \begin{align}
-        X_{\alpha,k}^\dagger X_{\alpha,k}
-         & =\omega_{\alpha,k}\Id,
-        \notag                                    \\
-        U_{\alpha,k}
-         & =\omega_{\alpha,k}^{-1/2}X_{\alpha,k},
-        \notag
-    \end{align}
-    and $U_{\alpha,k}$ is unitary. This is the normalization in
-    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}.
-
-    \textbf{Scope restriction (BNT-refined horizontal form):}
-    the normalized BNT-refined horizontal hypothesis is stronger than the
-    literal CPSV canonical-form hypothesis.
-    % The literal canonical-form refinement gap is recorded in
-    % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:grouped_sector_gram_scalar_of_dressing, thm:mpdo_pairwise_vertical_gram_conjugation, thm:mpdo_vertical_bnt_grouping_with_isometries, thm:normal_tensor_gram_rigidity}
-    The pairwise Figure~8 theorem supplies the grouped-corner
-    Gram-dressing property. Apply
-    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} to the grouped
-    vertical decomposition, then divide each gauge by the positive square
-    root of its Gram scalar.
-\end{proof}
-
-\begin{theorem}[Literal normalization of the actual grouped vertical gauges]
-    \label{thm:cpsv_literal_grouped_sector_unitary_normalization}
-    \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_eq_pos_smul_one}
-    \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_exists_unitary_normalization}
-    \leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation, thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    In the actual phase-class grouping under literal CPSV canonical form,
-    every gauge $X_{\alpha,q}$ has a positive real Gram scalar
-    $\omega_{\alpha,q}$ such that
-    \begin{align}
-        X_{\alpha,q}^\dagger X_{\alpha,q}
-         & =\omega_{\alpha,q}\Id.
-        \label{eq:cpsv_literal_grouped_gram_scalar}
-    \end{align}
-    Consequently
-    $U_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ is unitary.
-    This proves the gauge-normalization step of
-    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv} and supplies
-    the positive Gram scalars used to normalize the physical sector maps.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:grouped_sector_gram_scalar_of_dressing, thm:cpsv_literal_pairwise_vertical_gram_conjugation, thm:cpsv_literal_vertical_bnt_grouping_with_isometries, thm:normal_tensor_gram_rigidity}
-    The literal pairwise Figure~8 theorem supplies the grouped-corner
-    Gram-dressing property. Apply
-    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} to the literal
-    phase-class grouping to obtain
-    \begin{align}
-        X_{\alpha,q}^\dagger X_{\alpha,q}
-         & =\omega_{\alpha,q}\Id.
-        \label{eq:cpsv_prop_4_13_gram}
-    \end{align}
-    Dividing each gauge by the positive square root of its Gram scalar gives
-    the unitary normalization.
+    $X_{\alpha,q}^\dagger X_{\alpha,q}=\omega_{\alpha,q}\Id$. Dividing each
+    gauge by the positive square root of its Gram scalar gives the unitary
+    normalization.
 \end{proof}
 
 \begin{definition}[Normalized grouped-sector map]
@@ -1011,12 +881,16 @@
     (\ref{eq:normalized_grouped_sector_maps_of_gram}).
 \end{proof}
 
-\begin{theorem}[Normalized physical maps of the grouped vertical sectors]
-    \label{thm:mpdo_normalized_grouped_sector_maps}
-    \lean{MPOTensor.IsMPDO.exists_normalized_grouped_sector_maps}
+\begin{theorem}[Normalized grouped-sector maps from grouped-corner dressing]
+    \label{thm:normalized_grouped_sector_maps_of_dressing}
+    \lean{MPOTensor.exists_normalized_grouped_sector_maps_of_dressing}
     \leanok
-    \uses{thm:mpdo_grouped_sector_unitary_normalization, thm:mpdo_vertical_bnt_grouping_with_isometries}
-    In the grouped vertical decomposition, put
+    \uses{def:grouped_corner_gram_dressing, def:normalized_grouped_sector_map, thm:normalized_grouped_sector_maps_of_gram, thm:grouped_sector_gram_scalar_of_dressing}
+    Let a phase-class grouping have gauges $X_{\alpha,q}$, physical maps
+    $V_{\alpha,q}$, and positive effective coefficients $c_{\alpha,q}$, with
+    the distinguished gauge of every class equal to the identity. Assume that
+    each representative is a normal tensor and that $M$ has the
+    grouped-corner Gram-dressing property. Put
     \begin{align}
         Q_{\alpha,q}
          & =\omega_{\alpha,q}^{-1/2}X_{\alpha,q},
@@ -1025,55 +899,8 @@
          & =V_{\alpha,q}Q_{\alpha,q},
         \notag
     \end{align}
-    and identify the bond space of each copy with that of its chosen
+    after identifying the bond space of each copy with that of its chosen
     representative. Then
-    \begin{align}
-        W_{\alpha,q}^\dagger W_{\alpha,q}
-         & =\Id,
-        \notag   \\
-        W_{\alpha,q}^\dagger W_{\beta,p}
-         & =0
-        \quad((\alpha,q)\ne(\beta,p)).
-        \notag
-    \end{align}
-    Writing $c_{\alpha,q}=\nu_{\alpha,q}\zeta_{\alpha,q}>0$, the normalized
-    maps satisfy
-    \begin{align}
-        \widetilde M_vW_{\alpha,q}
-         & =W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
-        \notag
-    \end{align}
-    and retain the literal reconstruction
-    \begin{align}
-        \widetilde M_v
-         & =\sum_\alpha\sum_q
-        W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)
-        W_{\alpha,q}^\dagger.
-        \label{eq:mpdo_normalized_reconstruction}
-    \end{align}
-    These are the normalized sector identities in
-    \cite[Proposition~4.13, lines~1895--1921]{Cirac2016MPDO_arXiv}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:normalized_grouped_sector_maps_of_gram, thm:mpdo_grouped_sector_unitary_normalization, thm:mpdo_vertical_bnt_grouping_with_isometries}
-    Theorem~\ref{thm:mpdo_grouped_sector_unitary_normalization}
-    supplies the positive Gram scalars. Apply
-    Theorem~\ref{thm:normalized_grouped_sector_maps_of_gram} to the grouped
-    vertical decomposition.
-\end{proof}
-
-
-\begin{theorem}[Literal normalized physical maps of the grouped vertical sectors]
-    \label{thm:cpsv_literal_normalized_grouped_sector_maps}
-    \lean{MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps}
-    \leanok
-    \uses{thm:cpsv_literal_grouped_sector_unitary_normalization, thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    In the phase-class grouping obtained from literal CPSV canonical form, let
-    $Q_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ and
-    $W_{\alpha,q}=V_{\alpha,q}Q_{\alpha,q}$, after identifying the bond space
-    of each copy with that of its representative. Then
     \begin{align}
         W_{\alpha,q}^\dagger W_{\alpha,q} & =\Id,
         \notag                                                                     \\
@@ -1084,24 +911,26 @@
                                           & =W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
         \notag
     \end{align}
-    where $c_{\alpha,q}=\nu_{\alpha,q}\zeta_{\alpha,q}>0$. Moreover, every
-    vertical letter is reconstructed exactly:
+    and every vertical letter is reconstructed exactly:
     \begin{align}
         \widetilde M_v
          & =\sum_\alpha\sum_q
         W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)
         W_{\alpha,q}^\dagger.
-        \label{eq:cpsv_literal_normalized_reconstruction}
+        \label{eq:normalized_grouped_sector_maps_of_dressing}
     \end{align}
+    These are the normalized sector identities in
+    \cite[Proposition~4.13, lines~1895--1921]{Cirac2016MPDO_arXiv}. Literal
+    CPSV canonical form and normalized BNT-refined horizontal form each supply
+    the Gram-dressing hypothesis on their own.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:normalized_grouped_sector_maps_of_gram, thm:cpsv_literal_grouped_sector_unitary_normalization, thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    Theorem~\ref{thm:cpsv_literal_grouped_sector_unitary_normalization}
-    supplies the positive Gram scalars. Apply
-    Theorem~\ref{thm:normalized_grouped_sector_maps_of_gram} to the literal
-    phase-class grouping. Its corner identity preserves the original grouped
-    reconstruction and gives
-    (\ref{eq:cpsv_literal_normalized_reconstruction}).
+    \uses{thm:normalized_grouped_sector_maps_of_gram, thm:grouped_sector_gram_scalar_of_dressing}
+    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} supplies the
+    positive Gram scalars. Apply
+    Theorem~\ref{thm:normalized_grouped_sector_maps_of_gram} to the phase-class
+    grouping. Its corner identity preserves the grouped reconstruction and
+    gives (\ref{eq:normalized_grouped_sector_maps_of_dressing}).
 \end{proof}
