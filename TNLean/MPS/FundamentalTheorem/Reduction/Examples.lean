@@ -41,7 +41,6 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingWeightedTwist
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.JordanBoundary
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannier
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannierAction
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannierPhysical
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.OneLabelCandidate
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.OneSlotGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ParityGraded
