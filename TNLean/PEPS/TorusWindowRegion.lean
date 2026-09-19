@@ -13,7 +13,9 @@ The two-dimensional strengthening of the normal PEPS Fundamental Theorem
 `Papers/1804.04964/paper_normal.tex`) assumes injectivity of a single rectangle
 shape: every contiguous `L × K` region of the torus, one orientation only, with
 the sizes `n ≥ 2L + 1` and `m ≥ 2K + 1`.  This file is the geometry layer of
-that route, scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`:
+that horizontal-window route, scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`;
+the complementary vertical single-crossing blocking result lives in
+`TNLean/PEPS/TorusEdgeBlockingCrossing.lean`:
 
 * a larger rectangle exhibited as a sliding union of contiguous `L × K`
   windows (`contiguousRectangle_eq_biUnion_window`);
