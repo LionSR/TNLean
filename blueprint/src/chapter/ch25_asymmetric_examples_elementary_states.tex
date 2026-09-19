@@ -4,22 +4,22 @@
 For $N>0$, the unnormalized Greenberger--Horne--Zeilinger (GHZ) state on
 $(\C^2)^{\otimes N}$ is
 \begin{align}
-	\ket{\mathrm{GHZ}_N}
-	 & =\ket{0}^{\otimes N}+\ket{1}^{\otimes N}.
-	\notag
+    \ket{\mathrm{GHZ}_N}
+     & =\ket{0}^{\otimes N}+\ket{1}^{\otimes N}.
+    \notag
 \end{align}
 Here $\ket{0},\ket{1}$ form the orthonormal local basis. We use the
 product-state and GHZ conventions of Ref.~\cite[Appendix~A]{Cirac2021Matrix}.
 For a tensor $T=\{T^i\}_{i=0}^1$ of bond dimension $D$, the periodic trace
 boundary defines
 \begin{align}
-	V^{(N)}(T)_\sigma
-	 & =\tr(T^{\sigma(0)}\cdots T^{\sigma(N-1)}),
-	\label{eq:asymex_periodic_amplitude}          \\
-	\ket{V^{(N)}(T)}
-	 & =\sum_{\sigma:\Fin{N}\to\{0,1\}}
-	V^{(N)}(T)_\sigma\ket{\sigma},
-	\notag
+    V^{(N)}(T)_\sigma
+     & =\tr(T^{\sigma(0)}\cdots T^{\sigma(N-1)}),
+    \label{eq:asymex_periodic_amplitude}          \\
+    \ket{V^{(N)}(T)}
+     & =\sum_{\sigma:\Fin{N}\to\{0,1\}}
+    V^{(N)}(T)_\sigma\ket{\sigma},
+    \notag
 \end{align}
 where $\Fin{N}=\{0,\ldots,N-1\}$ for $N>0$, $\Fin{0}=\varnothing$,
 and $\ket{\sigma}=\bigotimes_{n=0}^{N-1}\ket{\sigma(n)}$.
@@ -35,214 +35,214 @@ generate the constant product configurations. These finite-length
 identities make no claim about thermodynamic symmetry breaking.
 
 \begin{definition}[The two sectors and the four-dimensional source]
-	\label{def:asymex_ghz}
-	\lean{MPSTensor.ghzC, MPSTensor.ghzB}
-	\leanok
-	\uses{def:mps_tensor}
-	On the alphabet $\{0,1\}$, define the scalar tensors $C_0,C_1$ and
-	the standard GHZ tensor $G$ by
-	\begin{align}
-		C_0^0 & =(1),        & C_0^1 & =(0), \notag \\
-		C_1^0 & =(0),        & C_1^1 & =(1), \notag \\
-		G^0   & =\diag(1,0), & G^1   & =\diag(0,1).
-		\notag
-	\end{align}
-	Thus $G^i=C_0^i\oplus C_1^i$, and both scalar tensors are normal.
-	The constructed source is the bond-dimension-four tensor
-	\begin{align}
-		B^0
-		 & =\begin{pmatrix}
-			    0 & 1 & 2 & 0 \\
-			    0 & 0 & 1 & 1 \\
-			    0 & 0 & 1 & 3 \\
-			    0 & 0 & 0 & 0
-		    \end{pmatrix},
-		 &
-		B^1
-		 & =\begin{pmatrix}
-			    1 & 1 & 0 & 2 \\
-			    0 & 0 & 2 & 0 \\
-			    0 & 0 & 0 & 1 \\
-			    0 & 0 & 0 & 0
-		    \end{pmatrix}.
-		\notag
-	\end{align}
+    \label{def:asymex_ghz}
+    \lean{MPSTensor.ghzC, MPSTensor.ghzB}
+    \leanok
+    \uses{def:mps_tensor}
+    On the alphabet $\{0,1\}$, define the scalar tensors $C_0,C_1$ and
+    the standard GHZ tensor $G$ by
+    \begin{align}
+        C_0^0 & =(1),        & C_0^1 & =(0), \notag \\
+        C_1^0 & =(0),        & C_1^1 & =(1), \notag \\
+        G^0   & =\diag(1,0), & G^1   & =\diag(0,1).
+        \notag
+    \end{align}
+    Thus $G^i=C_0^i\oplus C_1^i$, and both scalar tensors are normal.
+    The constructed source is the bond-dimension-four tensor
+    \begin{align}
+        B^0
+         & =\begin{pmatrix}
+                0 & 1 & 2 & 0 \\
+                0 & 0 & 1 & 1 \\
+                0 & 0 & 1 & 3 \\
+                0 & 0 & 0 & 0
+            \end{pmatrix},
+         &
+        B^1
+         & =\begin{pmatrix}
+                1 & 1 & 0 & 2 \\
+                0 & 0 & 2 & 0 \\
+                0 & 0 & 0 & 1 \\
+                0 & 0 & 0 & 0
+            \end{pmatrix}.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{center}
-	% Formula: the periodic trace tr(B^w) of the bond-dimension-four
-	% source of this section.
-	% Source: Definition~\ref{def:asymex_ghz}.
-	% Ink-to-index map: each node is the source tensor $B$; the upper
-	% legs carry the letters of the word.
-	% Contraction set: the horizontal virtual legs, closed around the
-	% ring by the trace; no leg is left open.
-	% Boundary signature: (virtual-west=0 | virtual-east=0 |
-	% physical-up=3 | physical-down=0) for the finite schematic shown.
-	\tenkzkernel
-	\begin{tenkz}[cols=4, boundary=periodic, physical=up]
-		\tn[label pos=135, ports={90:physical:$i_1$}]{B} &
-		\tn[label pos=135]{B} & \tn[skin=dots]{} &
-		\tn[label pos=135, ports={90:physical:$i_N$}]{B}
-	\end{tenkz}
+    % Formula: the periodic trace tr(B^w) of the bond-dimension-four
+    % source of this section.
+    % Source: Definition~\ref{def:asymex_ghz}.
+    % Ink-to-index map: each node is the source tensor $B$; the upper
+    % legs carry the letters of the word.
+    % Contraction set: the horizontal virtual legs, closed around the
+    % ring by the trace; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$i_1$}]{B} &
+        \tn[label pos=135]{B} & \tn[skin=dots]{} &
+        \tn[label pos=135, ports={90:physical:$i_N$}]{B}
+    \end{tenkz}
 \end{center}
 
 \begin{theorem}[GHZ amplitudes and periodic vectors]
-	\label{thm:asymex_ghz_state}
-	\lean{MPSTensor.ghzC_eq_ghzSectorTensor, MPSTensor.ghzC_mpv,
-		MPSTensor.ghzTensor_mpv, MPSTensor.ghzB_mpv,
-		MPSTensor.ghzB_sameMPV₂Pos_ghzTensor, MPSTensor.ghzB_mpvState_eq}
-	\leanok
-	\uses{def:asymex_ghz}
-	For $x\in\{0,1\}$, $C_x$ is the standard scalar GHZ sector,
-	with $C_x^i=(\delta_{i,x})$. For every $N\geq0$ and configuration
-	$\sigma:\Fin{N}\to\{0,1\}$,
-	\begin{align}
-		V^{(N)}(C_x)_\sigma
-		 & =\begin{cases}
-			    1, & \sigma(n)=x\text{ for every }n\in\Fin{N}, \\
-			    0, & \text{otherwise},
-		    \end{cases}
-		\notag                                              \\
-		V^{(N)}(G)_\sigma
-		 & =V^{(N)}(C_0)_\sigma+V^{(N)}(C_1)_\sigma.
-		\notag
-	\end{align}
-	For $N>0$, the source has the same amplitudes and vector:
-	\begin{align}
-		V^{(N)}(B)_\sigma
-		 & =V^{(N)}(G)_\sigma
-		=\delta_{\sigma,0^N}+\delta_{\sigma,1^N},
-		\label{eq:asymex_ghz_amplitude}            \\
-		\ket{V^{(N)}(B)}
-		 & =\ket{V^{(N)}(G)}=\ket{\mathrm{GHZ}_N}.
-		\notag
-	\end{align}
-	Here $x^N$ denotes the constant configuration with value $x$, and
-	$\delta$ is the Kronecker delta.
+    \label{thm:asymex_ghz_state}
+    \lean{MPSTensor.ghzC_eq_ghzSectorTensor, MPSTensor.ghzC_mpv,
+        MPSTensor.ghzTensor_mpv, MPSTensor.ghzB_mpv,
+        MPSTensor.ghzB_sameMPV₂Pos_ghzTensor, MPSTensor.ghzB_mpvState_eq}
+    \leanok
+    \uses{def:asymex_ghz}
+    For $x\in\{0,1\}$, $C_x$ is the standard scalar GHZ sector,
+    with $C_x^i=(\delta_{i,x})$. For every $N\geq0$ and configuration
+    $\sigma:\Fin{N}\to\{0,1\}$,
+    \begin{align}
+        V^{(N)}(C_x)_\sigma
+         & =\begin{cases}
+                1, & \sigma(n)=x\text{ for every }n\in\Fin{N}, \\
+                0, & \text{otherwise},
+            \end{cases}
+        \notag                                             \\
+        V^{(N)}(G)_\sigma
+         & =V^{(N)}(C_0)_\sigma+V^{(N)}(C_1)_\sigma.
+        \notag
+    \end{align}
+    For $N>0$, the source has the same amplitudes and vector:
+    \begin{align}
+        V^{(N)}(B)_\sigma
+         & =V^{(N)}(G)_\sigma
+        =\delta_{\sigma,0^N}+\delta_{\sigma,1^N},
+        \label{eq:asymex_ghz_amplitude}            \\
+        \ket{V^{(N)}(B)}
+         & =\ket{V^{(N)}(G)}=\ket{\mathrm{GHZ}_N}.
+        \notag
+    \end{align}
+    Here $x^N$ denotes the constant configuration with value $x$, and
+    $\delta$ is the Kronecker delta.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_ghz_compression}
-	For a scalar tensor $T$ with $T^i=(t_i)$, induction on $N$ gives
-	$V^{(N)}(T)_\sigma=\prod_{n=0}^{N-1}t_{\sigma(n)}$.
-	Applying this to $C_x$ gives $\prod_n\delta_{\sigma(n),x}$.
-	For $G$, induction on $N$ gives
-	\begin{align}
-		G^{\sigma(0)}\cdots G^{\sigma(N-1)}
-		 & =\diag\left(\prod_n\delta_{\sigma(n),0},
-		\prod_n\delta_{\sigma(n),1}\right).
-		\notag
-	\end{align}
-	Taking the trace proves the formula for $G$. For $N>0$, the
-	compression datum in Theorem~\ref{thm:asymex_ghz_compression} gives
-	$V^{(N)}(B)_\sigma=\sum_{x=0}^1V^{(N)}(C_x)_\sigma$.
-	Equality of every coefficient gives equality of the vectors.
+    \leanok
+    \uses{thm:asymex_ghz_compression}
+    For a scalar tensor $T$ with $T^i=(t_i)$, induction on $N$ gives
+    $V^{(N)}(T)_\sigma=\prod_{n=0}^{N-1}t_{\sigma(n)}$.
+    Applying this to $C_x$ gives $\prod_n\delta_{\sigma(n),x}$.
+    For $G$, induction on $N$ gives
+    \begin{align}
+        G^{\sigma(0)}\cdots G^{\sigma(N-1)}
+         & =\diag\left(\prod_n\delta_{\sigma(n),0},
+        \prod_n\delta_{\sigma(n),1}\right).
+        \notag
+    \end{align}
+    Taking the trace proves the formula for $G$. For $N>0$, the
+    compression datum in Theorem~\ref{thm:asymex_ghz_compression} gives
+    $V^{(N)}(B)_\sigma=\sum_{x=0}^1V^{(N)}(C_x)_\sigma$.
+    Equality of every coefficient gives equality of the vectors.
 \end{proof}
 
 \begin{theorem}[GHZ norm and the empty-length exception]
-	\label{thm:asymex_ghz_norm}
-	\lean{MPSTensor.ghzB_mpvState_norm_sq,
-		MPSTensor.ghzB_not_sameMPV₂_ghzTensor}
-	\leanok
-	\uses{def:asymex_ghz}
-	For every $N>0$,
-	\begin{align}
-		\left\|\ket{V^{(N)}(B)}\right\|^2 & =2.
-		\notag
-	\end{align}
-	Thus the normalized vector is
-	$2^{-1/2}(\ket{0}^{\otimes N}+\ket{1}^{\otimes N})$.
-	The source and standard GHZ tensor do not generate equal vectors at
-	all lengths: their empty-length coefficients are
-	$V^{(0)}(B)_\varnothing=4$ and $V^{(0)}(G)_\varnothing=2$.
+    \label{thm:asymex_ghz_norm}
+    \lean{MPSTensor.ghzB_mpvState_norm_sq,
+        MPSTensor.ghzB_not_sameMPV₂_ghzTensor}
+    \leanok
+    \uses{def:asymex_ghz}
+    For every $N>0$,
+    \begin{align}
+        \left\|\ket{V^{(N)}(B)}\right\|^2 & =2.
+        \notag
+    \end{align}
+    Thus the normalized vector is
+    $2^{-1/2}(\ket{0}^{\otimes N}+\ket{1}^{\otimes N})$.
+    The source and standard GHZ tensor do not generate equal vectors at
+    all lengths: their empty-length coefficients are
+    $V^{(0)}(B)_\varnothing=4$ and $V^{(0)}(G)_\varnothing=2$.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_ghz_state}
-	For $N>0$, the configurations $0^N$ and $1^N$ are distinct.
-	By~(\ref{eq:asymex_ghz_amplitude}),
-	\begin{align}
-		\left\|\ket{V^{(N)}(B)}\right\|^2
-		 & =\sum_\sigma\left|V^{(N)}(B)_\sigma\right|^2
-		=\sum_\sigma(\delta_{\sigma,0^N}+\delta_{\sigma,1^N})
-		=2.
-		\notag
-	\end{align}
-	At length zero, the traces are $\tr(\Id_4)=4$ and
-	$\tr(\Id_2)=2$, which rules out equality at every length.
+    \leanok
+    \uses{thm:asymex_ghz_state}
+    For $N>0$, the configurations $0^N$ and $1^N$ are distinct.
+    By~(\ref{eq:asymex_ghz_amplitude}),
+    \begin{align}
+        \left\|\ket{V^{(N)}(B)}\right\|^2
+         & =\sum_\sigma\left|V^{(N)}(B)_\sigma\right|^2
+        =\sum_\sigma(\delta_{\sigma,0^N}+\delta_{\sigma,1^N})
+        =2.
+        \notag
+    \end{align}
+    At length zero, the traces are $\tr(\Id_4)=4$ and
+    $\tr(\Id_2)=2$, which rules out equality at every length.
 \end{proof}
 
 \begin{theorem}[Compression of the two sectors]
-	\label{thm:asymex_ghz_compression}
-	% Principal declaration: MPSTensor.ghzSectors_isReduction.
-	\lean{MPSTensor.ghzSectors_compression, MPSTensor.ghzSectors_isReduction,
-		MPSTensor.ghzSectors_dim_eq}
-	\leanok
-	\uses{def:asymex_ghz, thm:asym_multiblock}
-	The source of Definition~\ref{def:asymex_ghz} carries the block
-	triangular form of Theorem~\ref{thm:asym_multiblock} for the slot family
-	$(C_0,C_1)$ with $z=2$ zero slots, the four diagonal positions carrying,
-	in order, the sector $C_1$, a zero slot, the sector $C_0$ and a second
-	zero slot. The compression pair of each sector satisfies $W_sV_s=\id$
-	and $W_sB^wV_s=C_s^w$ for every word, and $4=1+1+2$.
-	Here $V_s:\C\to\C^4$ and $W_s:\C^4\to\C$ are the coordinate
-	inclusion and projection at position $2$ for $s=0$ and position $0$
-	for $s=1$, with coordinates numbered from zero.
+    \label{thm:asymex_ghz_compression}
+    % Principal declaration: MPSTensor.ghzSectors_isReduction.
+    \lean{MPSTensor.ghzSectors_compression, MPSTensor.ghzSectors_isReduction,
+        MPSTensor.ghzSectors_dim_eq}
+    \leanok
+    \uses{def:asymex_ghz, thm:asym_multiblock}
+    The source of Definition~\ref{def:asymex_ghz} carries the block
+    triangular form of Theorem~\ref{thm:asym_multiblock} for the slot family
+    $(C_0,C_1)$ with $z=2$ zero slots, the four diagonal positions carrying,
+    in order, the sector $C_1$, a zero slot, the sector $C_0$ and a second
+    zero slot. The compression pair of each sector satisfies $W_sV_s=\id$
+    and $W_sB^wV_s=C_s^w$ for every word, and $4=1+1+2$.
+    Here $V_s:\C\to\C^4$ and $W_s:\C^4\to\C$ are the coordinate
+    inclusion and projection at position $2$ for $s=0$ and position $0$
+    for $s=1$, with coordinates numbered from zero.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_explicit_gauge}
-	The gauge is the relabelling of the four bond coordinates by the four
-	slots, with no change of basis. The three matrix conditions of the
-	compression datum, block triangularity and the identification of the
-	matched and unmatched diagonal blocks, follow by checking the entries
-	of $B^0$ and $B^1$. The compression pairs and
-	the dimension count are clauses (iv), (v) and (vii) of
-	Theorem~\ref{thm:asym_multiblock}.
+    \leanok
+    \uses{thm:asymex_explicit_gauge}
+    The gauge is the relabelling of the four bond coordinates by the four
+    slots, with no change of basis. The three matrix conditions of the
+    compression datum, block triangularity and the identification of the
+    matched and unmatched diagonal blocks, follow by checking the entries
+    of $B^0$ and $B^1$. The compression pairs and
+    the dimension count are clauses (iv), (v) and (vii) of
+    Theorem~\ref{thm:asym_multiblock}.
 \end{proof}
 
 \begin{theorem}[Periodic traces of the source]
-	\label{thm:asymex_ghz_trace}
-	\lean{MPSTensor.ghzB_trace_evalWord_eq_sum}
-	\leanok
-	\uses{def:asymex_ghz}
-	For every nonempty word $w$, $\tr(B^w)=\tr(C_0^w)+\tr(C_1^w)$.
+    \label{thm:asymex_ghz_trace}
+    \lean{MPSTensor.ghzB_trace_evalWord_eq_sum}
+    \leanok
+    \uses{def:asymex_ghz}
+    For every nonempty word $w$, $\tr(B^w)=\tr(C_0^w)+\tr(C_1^w)$.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_ghz_compression, prop:asym_compression_trace}
-	This is Proposition~\ref{prop:asym_compression_trace} applied to the
-	compression datum of Theorem~\ref{thm:asymex_ghz_compression}, whose
-	slot set has two members.
+    \leanok
+    \uses{thm:asymex_ghz_compression, prop:asym_compression_trace}
+    This is Proposition~\ref{prop:asym_compression_trace} applied to the
+    compression datum of Theorem~\ref{thm:asymex_ghz_compression}, whose
+    slot set has two members.
 \end{proof}
 
 \begin{theorem}[The first sector has no sitewise intertwiner]
-	\label{thm:asymex_ghz_no_intertwiner}
-	\lean{MPSTensor.ghzC0_right_intertwiner_eq_zero,
-		MPSTensor.ghzC0_left_intertwiner_eq_zero}
-	\leanok
-	\uses{def:asymex_ghz}
-	If a column vector $v\in\C^4$ satisfies $B^0v=v$ and $B^1v=0$,
-	then $v=0$; if a row vector $u\in\C^4$ satisfies $uB^0=u$ and
-	$uB^1=0$, then $u=0$. Both sitewise intertwiner spaces for the sector
-	$C_0$ therefore vanish. In particular, the word-level compression of
-	Theorem~\ref{thm:asymex_ghz_compression} does not give a nonzero
-	sitewise intertwiner in either direction.
+    \label{thm:asymex_ghz_no_intertwiner}
+    \lean{MPSTensor.ghzC0_right_intertwiner_eq_zero,
+        MPSTensor.ghzC0_left_intertwiner_eq_zero}
+    \leanok
+    \uses{def:asymex_ghz}
+    If a column vector $v\in\C^4$ satisfies $B^0v=v$ and $B^1v=0$,
+    then $v=0$; if a row vector $u\in\C^4$ satisfies $uB^0=u$ and
+    $uB^1=0$, then $u=0$. Both sitewise intertwiner spaces for the sector
+    $C_0$ therefore vanish. In particular, the word-level compression of
+    Theorem~\ref{thm:asymex_ghz_compression} does not give a nonzero
+    sitewise intertwiner in either direction.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	The last row of $B^0$ vanishes, so the last coordinate of $B^0v=v$
-	gives $v_3=0$; the second coordinate of $B^1v=0$ gives $v_2=0$; and the
-	second and first coordinates of $B^0v=v$ then force $v_1=0$ and
-	$v_0=0$. For the covector, the first and third coordinates of $uB^1=0$
-	give $u_0=0$ and $u_1=0$, its last coordinate gives $u_2=0$, and the
-	last coordinate of $uB^0=u$ gives $u_3=0$.
+    \leanok
+    The last row of $B^0$ vanishes, so the last coordinate of $B^0v=v$
+    gives $v_3=0$; the second coordinate of $B^1v=0$ gives $v_2=0$; and the
+    second and first coordinates of $B^0v=v$ then force $v_1=0$ and
+    $v_0=0$. For the covector, the first and third coordinates of $uB^1=0$
+    give $u_0=0$ and $u_1=0$, its last coordinate gives $u_2=0$, and the
+    last coordinate of $uB^0=u$ gives $u_3=0$.
 \end{proof}
 
 \section{A product state from a repeated block}%
@@ -255,120 +255,120 @@ Ref.~\cite[Appendix~A]{Cirac2021Matrix}. Repeating that scalar block twice
 multiplies every periodic coefficient by two. The upper-triangular
 source below generates the same vector as this repeated target:
 \begin{align}
-	\ket{V^{(N)}(B)}
-	 & =2\ket{\phi}^{\otimes N}
-	=2(\ket{0}+2\ket{1})^{\otimes N}.
-	\notag
+    \ket{V^{(N)}(B)}
+     & =2\ket{\phi}^{\otimes N}
+    =2(\ket{0}+2\ket{1})^{\otimes N}.
+    \notag
 \end{align}
 In this section, $A$ and $B$ denote the tensors defined below, and
 the trace boundary is again~(\ref{eq:asymex_periodic_amplitude}).
 The tensor power at $N=0$ is the scalar $1$.
 
 \begin{definition}[The scalar block and its Jordan extension]
-	\label{def:asymex_repeated}
-	\lean{MPSTensor.repA, MPSTensor.repC, MPSTensor.repB}
-	\leanok
-	\uses{def:mps_tensor}
-	The target is the scalar normal tensor $A^0=(1)$, $A^1=(2)$, taken
-	twice as $C_s=A$ for $s\in\{0,1\}$, and the source is
-	\begin{align}
-		B^0
-		 & =\begin{pmatrix}1&1\\0&1\end{pmatrix},
-		 &
-		B^1
-		 & =\begin{pmatrix}2&0\\0&2\end{pmatrix}.
-		\notag
-	\end{align}
+    \label{def:asymex_repeated}
+    \lean{MPSTensor.repA, MPSTensor.repC, MPSTensor.repB}
+    \leanok
+    \uses{def:mps_tensor}
+    The target is the scalar normal tensor $A^0=(1)$, $A^1=(2)$, taken
+    twice as $C_s=A$ for $s\in\{0,1\}$, and the source is
+    \begin{align}
+        B^0
+         & =\begin{pmatrix}1&1\\0&1\end{pmatrix},
+         &
+        B^1
+         & =\begin{pmatrix}2&0\\0&2\end{pmatrix}.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{center}
-	% Formula: the periodic trace tr(B^w) of the bond-dimension-two
-	% Jordan source of this section.
-	% Source: Definition~\ref{def:asymex_repeated}.
-	% Ink-to-index map: each node is the source tensor $B$; the upper
-	% legs carry the letters of the word.
-	% Contraction set: the horizontal virtual legs, closed around the
-	% ring by the trace; no leg is left open.
-	% Boundary signature: (virtual-west=0 | virtual-east=0 |
-	% physical-up=3 | physical-down=0) for the finite schematic shown.
-	\tenkzkernel
-	\begin{tenkz}[cols=4, boundary=periodic, physical=up]
-		\tn[label pos=135, ports={90:physical:$i_1$}]{B} &
-		\tn[label pos=135]{B} & \tn[skin=dots]{} &
-		\tn[label pos=135, ports={90:physical:$i_N$}]{B}
-	\end{tenkz}
+    % Formula: the periodic trace tr(B^w) of the bond-dimension-two
+    % Jordan source of this section.
+    % Source: Definition~\ref{def:asymex_repeated}.
+    % Ink-to-index map: each node is the source tensor $B$; the upper
+    % legs carry the letters of the word.
+    % Contraction set: the horizontal virtual legs, closed around the
+    % ring by the trace; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$i_1$}]{B} &
+        \tn[label pos=135]{B} & \tn[skin=dots]{} &
+        \tn[label pos=135, ports={90:physical:$i_N$}]{B}
+    \end{tenkz}
 \end{center}
 
 \begin{theorem}[Product-state amplitudes and multiplicity]
-	\label{thm:asymex_repeated_state}
-	\lean{MPSTensor.repA_mpv, MPSTensor.repB_mpv_eq_two_mul,
-		MPSTensor.repB_mpv, MPSTensor.repB_mpvState_eq}
-	\leanok
-	\uses{def:asymex_repeated}
-	Set $a_0=1$ and $a_1=2$. For every $N\geq0$ and
-	$\sigma:\Fin{N}\to\{0,1\}$,
-	\begin{align}
-		V^{(N)}(A)_\sigma
-		 & =\prod_{n=0}^{N-1}a_{\sigma(n)}, \notag \\
-		V^{(N)}(B)_\sigma
-		 & =2V^{(N)}(A)_\sigma
-		=2\prod_{n=0}^{N-1}a_{\sigma(n)}.
-		\label{eq:asymex_repeated_amplitude}
-	\end{align}
-	Consequently,
-	\begin{align}
-		\ket{V^{(N)}(A)}
-		 & =(\ket{0}+2\ket{1})^{\otimes N}, \notag \\
-		\ket{V^{(N)}(B)}
-		 & =2\ket{V^{(N)}(A)}.
-		\notag
-	\end{align}
-	The factor two also holds at $N=0$, where the coefficients of $A$
-	and $B$ are $1$ and $2$, respectively.
+    \label{thm:asymex_repeated_state}
+    \lean{MPSTensor.repA_mpv, MPSTensor.repB_mpv_eq_two_mul,
+        MPSTensor.repB_mpv, MPSTensor.repB_mpvState_eq}
+    \leanok
+    \uses{def:asymex_repeated}
+    Set $a_0=1$ and $a_1=2$. For every $N\geq0$ and
+    $\sigma:\Fin{N}\to\{0,1\}$,
+    \begin{align}
+        V^{(N)}(A)_\sigma
+         & =\prod_{n=0}^{N-1}a_{\sigma(n)}, \notag \\
+        V^{(N)}(B)_\sigma
+         & =2V^{(N)}(A)_\sigma
+        =2\prod_{n=0}^{N-1}a_{\sigma(n)}.
+        \label{eq:asymex_repeated_amplitude}
+    \end{align}
+    Consequently,
+    \begin{align}
+        \ket{V^{(N)}(A)}
+         & =(\ket{0}+2\ket{1})^{\otimes N}, \notag \\
+        \ket{V^{(N)}(B)}
+         & =2\ket{V^{(N)}(A)}.
+        \notag
+    \end{align}
+    The factor two also holds at $N=0$, where the coefficients of $A$
+    and $B$ are $1$ and $2$, respectively.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_repeated_compression}
-	Induction on $N$ expresses the coefficient of the scalar tensor $A$
-	as the product of its scalar entries. Substituting $A^0=(1)$ and
-	$A^1=(2)$ gives the local amplitudes $a_0,a_1$. If $N>0$, the trace
-	identity in Theorem~\ref{thm:asymex_repeated_compression} gives
-	$V^{(N)}(B)_\sigma=2V^{(N)}(A)_\sigma$.
-	For $N=0$, this follows from $\tr(\Id_2)=2\tr(\Id_1)$.
-	Equality of the coefficients gives the vector identity.
+    \leanok
+    \uses{thm:asymex_repeated_compression}
+    Induction on $N$ expresses the coefficient of the scalar tensor $A$
+    as the product of its scalar entries. Substituting $A^0=(1)$ and
+    $A^1=(2)$ gives the local amplitudes $a_0,a_1$. If $N>0$, the trace
+    identity in Theorem~\ref{thm:asymex_repeated_compression} gives
+    $V^{(N)}(B)_\sigma=2V^{(N)}(A)_\sigma$.
+    For $N=0$, this follows from $\tr(\Id_2)=2\tr(\Id_1)$.
+    Equality of the coefficients gives the vector identity.
 \end{proof}
 
 \begin{theorem}[Product-state norms]
-	\label{thm:asymex_repeated_norm}
-	\lean{MPSTensor.repA_mpvState_norm_sq, MPSTensor.repB_mpvState_norm_sq}
-	\leanok
-	\uses{def:asymex_repeated}
-	For every $N\geq0$,
-	\begin{align}
-		\left\|\ket{V^{(N)}(A)}\right\|^2 & =5^N, \notag \\
-		\left\|\ket{V^{(N)}(B)}\right\|^2 & =4\,5^N.
-		\notag
-	\end{align}
-	Both tensors therefore give the same normalized product vector,
-	$((\ket{0}+2\ket{1})/\sqrt{5})^{\otimes N}$.
+    \label{thm:asymex_repeated_norm}
+    \lean{MPSTensor.repA_mpvState_norm_sq, MPSTensor.repB_mpvState_norm_sq}
+    \leanok
+    \uses{def:asymex_repeated}
+    For every $N\geq0$,
+    \begin{align}
+        \left\|\ket{V^{(N)}(A)}\right\|^2 & =5^N, \notag \\
+        \left\|\ket{V^{(N)}(B)}\right\|^2 & =4\,5^N.
+        \notag
+    \end{align}
+    Both tensors therefore give the same normalized product vector,
+    $((\ket{0}+2\ket{1})/\sqrt{5})^{\otimes N}$.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_repeated_state}
-	Using the amplitudes $a_0=1$ and $a_1=2$
-	in~(\ref{eq:asymex_repeated_amplitude}), expand the squared norm
-	in the configuration basis and factor the finite sum:
-	\begin{align}
-		\left\|\ket{V^{(N)}(A)}\right\|^2
-		 & =\sum_\sigma\prod_{n=0}^{N-1}|a_{\sigma(n)}|^2
-		=\prod_{n=0}^{N-1}(|a_0|^2+|a_1|^2)
-		=5^N.
-		\notag
-	\end{align}
-	The vector identity in Theorem~\ref{thm:asymex_repeated_state}
-	multiplies the squared norm by $|2|^2=4$.
+    \leanok
+    \uses{thm:asymex_repeated_state}
+    Using the amplitudes $a_0=1$ and $a_1=2$
+    in~(\ref{eq:asymex_repeated_amplitude}), expand the squared norm
+    in the configuration basis and factor the finite sum:
+    \begin{align}
+        \left\|\ket{V^{(N)}(A)}\right\|^2
+         & =\sum_\sigma\prod_{n=0}^{N-1}|a_{\sigma(n)}|^2
+        =\prod_{n=0}^{N-1}(|a_0|^2+|a_1|^2)
+        =5^N.
+        \notag
+    \end{align}
+    The vector identity in Theorem~\ref{thm:asymex_repeated_state}
+    multiplies the squared norm by $|2|^2=4$.
 \end{proof}
 
 The source and the direct sum $A\oplus A$ have the same periodic
@@ -378,44 +378,44 @@ does not contribute to any periodic word trace, but prevents conjugation
 to the repeated target.
 
 \begin{theorem}[Compression onto the two copies]
-	\label{thm:asymex_repeated_compression}
-	% Principal declaration: MPSTensor.repeatedBlock_isReduction.
-	\lean{MPSTensor.repeatedBlock_compression, MPSTensor.repeatedBlock_isReduction,
-		MPSTensor.repB_trace_evalWord_eq_two_mul}
-	\leanok
-	\uses{def:asymex_repeated, thm:asym_multiblock}
-	The source of Definition~\ref{def:asymex_repeated} carries the block
-	triangular form of Theorem~\ref{thm:asym_multiblock} for the two copies
-	of $A$ with no zero slots. For $s\in\{0,1\}$, let $V_s:\C\to\C^2$
-	and $W_s:\C^2\to\C$ be the inclusion and projection of coordinate $s$.
-	Each coordinate pair compresses its copy:
-	$W_sV_s=\id$ and $W_sB^wV_s=A^w$ for every word.
-	Also, $\tr(B^w)=2\tr(A^w)$ for every nonempty word.
+    \label{thm:asymex_repeated_compression}
+    % Principal declaration: MPSTensor.repeatedBlock_isReduction.
+    \lean{MPSTensor.repeatedBlock_compression, MPSTensor.repeatedBlock_isReduction,
+        MPSTensor.repB_trace_evalWord_eq_two_mul}
+    \leanok
+    \uses{def:asymex_repeated, thm:asym_multiblock}
+    The source of Definition~\ref{def:asymex_repeated} carries the block
+    triangular form of Theorem~\ref{thm:asym_multiblock} for the two copies
+    of $A$ with no zero slots. For $s\in\{0,1\}$, let $V_s:\C\to\C^2$
+    and $W_s:\C^2\to\C$ be the inclusion and projection of coordinate $s$.
+    Each coordinate pair compresses its copy:
+    $W_sV_s=\id$ and $W_sB^wV_s=A^w$ for every word.
+    Also, $\tr(B^w)=2\tr(A^w)$ for every nonempty word.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{prop:asym_compression_trace}
-	Both matrices are upper triangular with both diagonal entries equal to
-	the corresponding scalar of $A$, which verifies the three
-	matrix conditions. The compression pairs are clauses (iv) and (v) of
-	Theorem~\ref{thm:asym_multiblock}, and the trace identity is
-	Proposition~\ref{prop:asym_compression_trace} with two equal slots.
+    \leanok
+    \uses{prop:asym_compression_trace}
+    Both matrices are upper triangular with both diagonal entries equal to
+    the corresponding scalar of $A$, which verifies the three
+    matrix conditions. The compression pairs are clauses (iv) and (v) of
+    Theorem~\ref{thm:asym_multiblock}, and the trace identity is
+    Proposition~\ref{prop:asym_compression_trace} with two equal slots.
 \end{proof}
 
 \begin{theorem}[No invertible gauge onto the repeated target]
-	\label{thm:asymex_repeated_not_gauge}
-	\lean{MPSTensor.not_gaugeEquiv_directSum_repA}
-	\leanok
-	\uses{def:asymex_repeated, def:gauge_equiv}
-	There is no invertible $X\in\GL_2(\C)$ with
-	$B^i=X\diag(A^i,A^i)X^{-1}$ for both letters $i$.
-	Here $\diag(A^i,A^i)=A^i\oplus A^i$ is the repeated target matrix.
+    \label{thm:asymex_repeated_not_gauge}
+    \lean{MPSTensor.not_gaugeEquiv_directSum_repA}
+    \leanok
+    \uses{def:asymex_repeated, def:gauge_equiv}
+    There is no invertible $X\in\GL_2(\C)$ with
+    $B^i=X\diag(A^i,A^i)X^{-1}$ for both letters $i$.
+    Here $\diag(A^i,A^i)=A^i\oplus A^i$ is the repeated target matrix.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	For $i=0$ the matrix $\diag(A^0,A^0)$ is the identity, so any such
-	conjugation would give $B^0=\Id_2$, contradicting the nonzero
-	off-diagonal entry of $B^0$.
+    \leanok
+    For $i=0$ the matrix $\diag(A^0,A^0)$ is the identity, so any such
+    conjugation would give $B^0=\Id_2$, contradicting the nonzero
+    off-diagonal entry of $B^0$.
 \end{proof}
