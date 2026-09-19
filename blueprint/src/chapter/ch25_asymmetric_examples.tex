@@ -15,14 +15,14 @@ Matrix product states and operators describe periodic spin chains by
 contracting local tensors around a ring~\cite{Cirac2021Matrix}. At every
 positive chain length $N$, an MPS tensor $A$ and an MPO tensor $M$ give
 \begin{align}
-	\ket{V^{(N)}(A)}
-	 & =\sum_{i_1,\ldots,i_N}\tr(A^{i_1}\cdots A^{i_N})
-	\ket{i_1,\ldots,i_N}, \notag                        \\
-	O_N(M)
-	 & =\sum_{i_1,\ldots,i_N}\sum_{j_1,\ldots,j_N}
-	\tr(M^{i_1j_1}\cdots M^{i_Nj_N})
-	\ket{i_1,\ldots,i_N}\bra{j_1,\ldots,j_N}.
-	\notag
+    \ket{V^{(N)}(A)}
+     & =\sum_{i_1,\ldots,i_N}\tr(A^{i_1}\cdots A^{i_N})
+    \ket{i_1,\ldots,i_N}, \notag                        \\
+    O_N(M)
+     & =\sum_{i_1,\ldots,i_N}\sum_{j_1,\ldots,j_N}
+    \tr(M^{i_1j_1}\cdots M^{i_Nj_N})
+    \ket{i_1,\ldots,i_N}\bra{j_1,\ldots,j_N}.
+    \notag
 \end{align}
 The physical indices $i,j$ range over $\{0,\ldots,d-1\}$.
 Each local matrix acts on its tensor's virtual bond space, with rows
