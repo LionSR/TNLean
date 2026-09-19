@@ -42,12 +42,14 @@ namespace MPOTensor
 /-- The active-support fusion clause of Theorem 4.14(iii), attached to a chosen
 vertical canonical decomposition of the MPO tensor \(M\).
 
-The tensors in the fusion identity are precisely the basis of normal tensors
-\(M_\alpha\) in
+The underlying `CPSVVerticalDecomposition M` records the vertical canonical
+form
 \[
   U\widetilde M U^\dagger
-    = \bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+    = \bigoplus_\alpha \mu_\alpha\otimes M_\alpha,
 \]
+and the tensors in the fusion identity are precisely its basis of normal
+tensors \(M_\alpha\).
 The same positive diagonal matrices \(\chi_{\alpha,\beta,\gamma}\) occur in
 the fusion identity and in the length-one idempotent law for
 \(m_\alpha=\operatorname{tr}(\mu_\alpha)\).
@@ -61,54 +63,8 @@ orientation of Proposition 4.13. Thus the fusion map satisfies
 $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$, while exact reconstruction
 records that the discarded common corner is zero. Documented in
 `docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
-structure BNTFusionTensorClause (M : MPOTensor d D) where
-  /-- Number of BNT labels in the chosen vertical decomposition. -/
-  labelCount : ℕ
-  /-- Bond dimension of each vertical BNT tensor. -/
-  bondDim : Fin labelCount → ℕ
-  /-- Dimension of the positive diagonal matrix \(\mu_\alpha\). -/
-  multiplicity : Fin labelCount → ℕ
-  /-- Positive diagonal entries of \(\mu_\alpha\). -/
-  weight : (α : Fin labelCount) → Fin (multiplicity α) → ℂ
-  /-- The chosen vertical basis of normal tensors \(M_\alpha\). -/
-  tensor : (α : Fin labelCount) → MPSTensor (D * D) (bondDim α)
-  /-- The coisometry from the original physical space onto the retained
-  vertical sectors. -/
-  verticalCoisometry :
-    Matrix
-      (Fin (∑ q : Fin (∑ α : Fin labelCount, multiplicity α),
-        verticalCopyDim bondDim multiplicity q)) (Fin d) ℂ
-  /-- Every BNT label occurs with a nonempty multiplicity space.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  multiplicity_pos : ∀ α, 0 < multiplicity α
-  /-- Every diagonal entry of \(\mu_\alpha\) is positive.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  weight_pos : ∀ α q, (0 : ℂ) < weight α q
-  /-- The vertical change of basis is a coisometry onto the retained sectors.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  coisometry : verticalCoisometry * (verticalCoisometry)ᴴ = 1
-  /-- The chosen tensors form a CPSV16 basis of normal tensors of the vertical tensor.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  isCPSVBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
-    (fun α ↦ ⟨bondDim α, tensor α⟩)
-  /-- Conjugating the vertical tensor gives the weighted BNT direct sum.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  forward : ∀ v : Fin (D * D),
-    verticalCoisometry * verticalTensor M v * (verticalCoisometry)ᴴ =
-      verticalAssembledTensor bondDim multiplicity weight tensor v
-  /-- The weighted BNT direct sum reconstructs the vertical tensor, including
-  the possible zero-sector complement.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  reconstruction : ∀ v : Fin (D * D),
-    verticalTensor M v = (verticalCoisometry)ᴴ *
-      verticalAssembledTensor bondDim multiplicity weight tensor v *
-        verticalCoisometry
+structure BNTFusionTensorClause (M : MPOTensor d D)
+    extends CPSVVerticalDecomposition M where
   /-- The positive diagonal matrices \(\chi_{\alpha,\beta,\gamma}\).
 
   Source: arXiv:1606.00608, Theorem 4.14(ii)--(iii), lines 976--993. -/
@@ -162,12 +118,6 @@ namespace BNTFusionTensorClause
 
 variable {M : MPOTensor d D}
 
-/-- The source BNT predicate in the fusion clause entails the algebraic BNT
-predicate for its chosen vertical decomposition. -/
-theorem isBNT (H : BNTFusionTensorClause M) :
-    MPSTensor.IsBNT (verticalTensor M) H.labelCount H.bondDim H.tensor :=
-  H.isCPSVBNT.isBNT
-
 /-- The active-support fusion family carried by a tensor-attached clause. -/
 def toBNTFusionCoisometryFamily (H : BNTFusionTensorClause M) :
     BNTFusionCoisometryFamily (Fin H.labelCount) D where
@@ -196,18 +146,7 @@ Appendix C.4, lines 1929--1947 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def toBNTAlgebraTensorClause (H : BNTFusionTensorClause M) :
     BNTAlgebraTensorClause M where
-  labelCount := H.labelCount
-  bondDim := H.bondDim
-  multiplicity := H.multiplicity
-  weight := H.weight
-  tensor := H.tensor
-  verticalCoisometry := H.verticalCoisometry
-  multiplicity_pos := H.multiplicity_pos
-  weight_pos := H.weight_pos
-  coisometry := H.coisometry
-  isCPSVBNT := H.isCPSVBNT
-  forward := H.forward
-  reconstruction := H.reconstruction
+  toCPSVVerticalDecomposition := H.toCPSVVerticalDecomposition
   coeffs := BNTLabelCoefficientFamily.ofChi H.chi
   algebraClause := H.toBNTFusionCoisometryFamily.toBNTAlgebraClause
     (verticalBNTTraceScalarFamily H.weight) H.idempotent
