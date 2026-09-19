@@ -144,7 +144,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   aggregator as its only importer. All nine declarations had zero references
   outside the file and no blueprint tag, and the file is now deleted; see
   `docs/audits/2026-09-19_peps_regionblock_dead_closures.md`.
-- **Third slice (open)**: the deletion strands a closure inside
+- **Third slice (open, #7875)**: the deletion strands a closure inside
   `ThreeBlockResonate2.lean` — `threeBlockComplRow`,
   `regionInteriorBondProd_smul_threeBlockInsertedCoeff_eq`,
   `threeBlock_middle_strip`, `threeBlock_invert_blue`, `threeBlock_invert_red`
