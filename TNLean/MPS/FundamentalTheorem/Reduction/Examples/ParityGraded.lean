@@ -9,20 +9,25 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
 /-!
-# Example PAR: fermion-parity-graded sectors
+# A concrete parity-weighted tensor example
 
-A machine-checked instance of the multi-block asymmetric compression theorem (P5 note,
-`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §4, and verified numerically by
-`checks/p5_more_examples_verify.py`, "Example PAR").
+The bond-two tensor `A^0 = [[1,0],[0,0]]`, `A^1 = [[0,1],[1,0]]` is normal at word
+length two. Its copies with weights `+1` and `-1` have total periodic coefficient
+`tr(A^w) + tr((-A)^w) = (1 + (-1)^L) tr(A^w)` for a word of length `L > 0`.
+This factor selects even chain lengths: it is `2` for even `L` and `0` for odd `L`.
+It is not a proof of a physical occupation-parity projection. No Kitaev Hamiltonian,
+canonical anticommutation relations, or fermion-parity boundary condition is defined here.
 
-The bond-two tensor `A` (fermion-parity-graded, in the style of the Kitaev chain: sectors are
-weighted by a parity sign under fermion-parity-twisted boundary conditions) is normal at word
-length two. Pairing it with its own weight-`-1` copy `-A` gives a target whose length-`L`
-coefficient is the `L`-th power sum of the weight multiset `{+1, -1}`, namely `1 + (-1)^L`. The
-five-dimensional source `parB` realizes this compression in a mixing integer basis in which no
-row or column of `parB` is zero, so the flag produced by the theorem is not visible on the nose;
-one zero factor (`z = 1`) is required, and the theorem's nilpotency bound `r = |S| + z = 3` is
-attained exactly: the residual is nonzero already at word length two.
+The explicit construction is recorded in
+`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §4.
+The five-dimensional source `parB` is given directly as two integer matrices, not as
+a stacked MPO product. A change of bond coordinates puts its diagonal blocks in the
+form `A, -A, 0`. The residual has zero products at length three but a nonzero product
+at length two. The weight-`-1` target has no nonzero sitewise intertwiner in either
+direction, despite the word-level compression.
+
+The compression theorem cited below is Theorem 7.7 of
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`.
 
 ## Main definitions
 
@@ -54,14 +59,14 @@ namespace ParityGraded
 
 open MPSTensor
 
-/-! ### The bond-two tensor and its parity-graded target -/
+/-! ### The bond-two tensor and its sign-weighted targets -/
 
-/-- The integer matrices of the bond-two tensor of Example PAR (P5 note, §4). -/
+/-- The integer matrices of the bond-two tensor of Example PAR (construction note, §4). -/
 def parAInt : Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 0 => !![1, 0; 0, 0]
   | 1 => !![0, 1; 1, 0]
 
-/-- **The bond-two tensor of Example PAR.** Normal at word length two (P5 note, §4). -/
+/-- **The bond-two tensor of Example PAR.** Normal at word length two (construction note, §4). -/
 def parA : MPSTensor 2 2 := fun i => complexOfInt (parAInt i)
 
 theorem parA_eq (i : Fin 2) : parA i = complexOfInt (parAInt i) := rfl
@@ -77,7 +82,7 @@ def parTargetsInt : (s : Fin 2) → Fin 2 → Matrix (Fin (parDim s)) (Fin (parD
   | 1 => fun i => -(parAInt i)
 
 /-- **The two target blocks of Example PAR**: `parA` with weight `+1`, and `parA` with weight
-`-1` (P5 note, §4). These are inequivalent simple modules, since `tr(A^0) = 1 ≠ -1 = tr((-A)^0)`,
+`-1` (construction note, §4). These are inequivalent simple modules, since `tr(A^0) = 1 ≠ -1 = tr((-A)^0)`,
 so no gauge can relate them. -/
 def parTargets : (s : Fin 2) → MPSTensor 2 (parDim s)
   | 0 => parA
@@ -132,7 +137,7 @@ private theorem parA_single_11 :
   rw [parA_mul_11, parA_mul_00]; ext a b; fin_cases a <;> fin_cases b <;>
     norm_num [Matrix.single_apply, complexOfInt]
 
-/-- **`parA` is normal at word length two** (P5 note, §4): its length-two words span the full
+/-- **`parA` is normal at word length two** (construction note, §4): its length-two words span the full
 two-by-two matrix algebra. -/
 theorem parA_isNormal : Kraus.IsNormal parA := by
   refine ⟨2, two_pos, ?_⟩
@@ -161,7 +166,7 @@ theorem parA_isNormal : Kraus.IsNormal parA := by
 
 /-- The integer matrices of the five-dimensional mixed-basis source of Example PAR, presented
 in an integer basis in which neither letter has a zero row or column, so the flag produced by
-the theorem is invisible on the nose (P5 note, §4). -/
+the theorem is invisible on the nose (construction note, §4). -/
 def parBInt : Fin 2 → Matrix (Fin 5) (Fin 5) ℤ
   | 0 => !![-1, 1, -1, 1, 3;
              2, 2, -2, -1, 0;
@@ -174,7 +179,7 @@ def parBInt : Fin 2 → Matrix (Fin 5) (Fin 5) ℤ
             0, 1, -1, -1, 1;
             2, 1, 0, -1, -2]
 
-/-- **The five-dimensional mixed-basis source of Example PAR** (P5 note, §4). -/
+/-- **The five-dimensional mixed-basis source of Example PAR** (construction note, §4). -/
 def parB : MPSTensor 2 5 := fun i => complexOfInt (parBInt i)
 
 theorem parB_eq (i : Fin 2) : parB i = complexOfInt (parBInt i) := rfl
@@ -182,7 +187,7 @@ theorem parB_eq (i : Fin 2) : parB i = complexOfInt (parBInt i) := rfl
 /-! ### The gauge and the flag -/
 
 /-- The change of bond coordinates of Example PAR, recorded as `G = S⁻¹` for the mixing
-integer matrix `S` of the note (P5 note, §4). -/
+integer matrix `S` of the note (construction note, §4). -/
 def parGaugeInt : Matrix (Fin 5) (Fin 5) ℤ :=
   !![0, -1, 1, 0, 0;
      1, 1, 0, -1, -1;
@@ -253,7 +258,7 @@ def parGauge : (Fin 5 → ℂ) ≃ₗ[ℂ] (BlockSpace parDim parSlots 1 → ℂ
 
 /-- The letters of Example PAR in the block coordinates: block upper triangular, with `parA`
 carried at weight `+1` on the first diagonal block, at weight `-1` on the second, and zero on
-the third (P5 note, §4). -/
+the third (construction note, §4). -/
 def parConjInt : Fin 2 → Matrix (Fin 5) (Fin 5) ℤ
   | 0 => !![1, 0, 1, 0, 1;
             0, 0, 0, 1, 0;
@@ -291,7 +296,7 @@ private theorem parB_unmatched_int (i : Fin 2) (t : Fin 1) (p q : Fin 1) :
     parConjInt i (parTau ⟨Sum.inr t, p⟩) (parTau ⟨Sum.inr t, q⟩) = 0 := by
   revert i t p q; decide
 
-/-- **The multi-block asymmetric compression datum of Example PAR** (P5 note, Theorem 7.7,
+/-- **The multi-block asymmetric compression datum of Example PAR** (construction note, Theorem 7.7,
 clauses (i)–(iii), §4). -/
 def parityGraded_compression : MultiBlockCompression parB parSlots parTargets where
   z := 1
@@ -314,9 +319,9 @@ def parityGraded_compression : MultiBlockCompression parB parSlots parTargets wh
 
 /-! ### Consequences -/
 
-/-- **The word-trace identity of Example PAR**: at every positive length the stacked tensor has
-the word traces of `(1 + (-1)^L) A` (P5 note, §4): the coefficient is the power sum of the
-weight multiset `{+1, -1}`. -/
+/-- At positive word length `L`, the trace of the source word is
+`(1 + (-1)^L) tr(A^w)`. The coefficient is the power sum of the weights `{+1, -1}`,
+not a per-letter rescaling by `1 + (-1)^L` (data note, §4). -/
 theorem parityGraded_trace_evalWord (w : List (Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord parB w) =
       (1 + (-1 : ℂ) ^ w.length) * Matrix.trace (Kraus.evalWord parA w) := by
@@ -330,23 +335,23 @@ theorem parityGraded_trace_evalWord (w : List (Fin 2)) (hw : w ≠ []) :
     rw [Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
   rw [h, h0, h1]; ring
 
-/-- **Biorthogonal compression onto each of the two slots of Example PAR** (P5 note,
+/-- **Biorthogonal compression onto each of the two slots of Example PAR** (construction note,
 Theorem 7.7(iv)–(v)). -/
 theorem parityGraded_isReduction (s : {s // s ∈ parSlots}) :
     IsReduction parB (parTargets s.1) (parityGraded_compression.left s)
       (parityGraded_compression.right s) :=
   parityGraded_compression.isReduction s
 
-/-- Two distinct slots of Example PAR are biorthogonal (P5 note, Theorem 7.7(iv)). -/
+/-- Two distinct slots of Example PAR are biorthogonal (construction note, Theorem 7.7(iv)). -/
 theorem parityGraded_left_mul_right_of_ne {s t : {s // s ∈ parSlots}} (h : s ≠ t) :
     parityGraded_compression.left s * parityGraded_compression.right t = 0 :=
   parityGraded_compression.left_mul_right_of_ne h
 
-/-- **The dimension count of Example PAR**: `5 = 2 + 2 + 1` (P5 note, Theorem 7.7(vii)). -/
+/-- **The dimension count of Example PAR**: `5 = 2 + 2 + 1` (construction note, Theorem 7.7(vii)). -/
 theorem parityGraded_dim_eq : (5 : ℕ) = ∑ s ∈ parSlots, parDim s + 1 :=
   parityGraded_compression.dim_eq
 
-/-- **Nilpotency of the remainder of Example PAR** (P5 note, Theorem 7.7(vi)): the bound
+/-- **Nilpotency of the remainder of Example PAR** (construction note, Theorem 7.7(vi)): the bound
 `r = |S| + z = 3` of the theorem. -/
 theorem parityGraded_evalWord_remainder_eq_zero (w : List (Fin 2)) (hw : 3 ≤ w.length) :
     Kraus.evalWord parityGraded_compression.remainder w = 0 := by
@@ -442,7 +447,7 @@ theorem parityGraded_remainder_eq (i : Fin 2) :
           Matrix.sub_apply, Matrix.add_apply, Fin.sum_univ_two, Fin.sum_univ_five]
 
 /-- **Sharpness of the nilpotency bound of Example PAR**: the residual is already nonzero at
-word length two, so the bound `r = |S| + z = 3` of the theorem is attained (P5 note, §4). -/
+word length two, so the bound `r = |S| + z = 3` of the theorem is attained (construction note, §4). -/
 theorem parityGraded_remainder_sq_ne_zero :
     Kraus.evalWord parityGraded_compression.remainder [0, 0] ≠ 0 := by
   simp only [Kraus.evalWord, mul_one]
@@ -481,7 +486,7 @@ private theorem parB_apply1 :
   rw [parB_eq]; ext a b; fin_cases a <;> fin_cases b <;> norm_num [parBInt, complexOfInt]
 
 /-- **No nonzero right sitewise intertwiner for the weight `-1` block of Example PAR**
-(P5 note, §4): the sitewise compression of the theorem is the strongest local relation
+(construction note, §4): the sitewise compression of the theorem is the strongest local relation
 available for this block. -/
 theorem parNeg_right_intertwiner_eq_zero (V : Matrix (Fin 5) (Fin 2) ℂ)
     (h : ∀ i, parB i * V = V * parTargets 1 i) : V = 0 := by
@@ -537,7 +542,7 @@ theorem parNeg_right_intertwiner_eq_zero (V : Matrix (Fin 5) (Fin 2) ℂ)
   exacts [hx0, hy0, hx1, hy1, hx2, hy2, hx3, hy3, hx4, hy4]
 
 /-- **No nonzero left sitewise intertwiner for the weight `-1` block of Example PAR**
-(P5 note, §4). -/
+(construction note, §4). -/
 theorem parNeg_left_intertwiner_eq_zero (W : Matrix (Fin 2) (Fin 5) ℂ)
     (h : ∀ i, W * parB i = parTargets 1 i * W) : W = 0 := by
   have h0 := h 0

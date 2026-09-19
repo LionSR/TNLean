@@ -10,29 +10,28 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.MPDO.OperatorProduct
 
 /-!
-# The anomalous `ℤ/2` matrix product operator of CZX type
+# The undecorated CZX matrix product operator
 
-This file sets up the tensor behind Examples D and E of the multi-block asymmetric compression
-theorem (P5 note, `Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`,
-`ex:p5ft-czx` and `ex:p5ft-oscillating`). On a periodic chain of `L` qubits the operator
-family is the CZX symmetry
-`U_L = (∏_i CZ_{i,i+1}) X^{⊗ L}`,
-a matrix product operator of bond dimension two with tensor `M^{ij} = δ_{i,1 ⊕ j} T_j`, where
-`T_0` has the single column `(1,1)ᵀ` in position zero and `T_1` has the single column
-`(1,-1)ᵀ` in position one.
+On a periodic chain of `L > 0` qubits, let
+`D_L |t⟩ = (-1)^{∑_j t_j t_{j+1}} |t⟩`, with indices modulo `L`.
+The tensor below generates `U_L = X^{⊗ L} D_L`, so
+`U_L |t⟩ = (-1)^{∑_j t_j t_{j+1}} |1-t⟩` in the computational basis.
+Its bond dimension is two, with `M^{ij} = δ_{i,1 ⊕ j} T_j`,
+`T_0 = [[1,0],[1,0]]` and `T_1 = [[0,1],[0,-1]]`.
+The cyclic convention includes the self-loop `D_1 = Z` and counts the two-site edge twice,
+giving `D_2 = I`. The operator is unitary and satisfies `U_L² = (-1)^L I` at every
+positive length, as proved in `CZXUnitary`; no even-length restriction is imposed.
 
-The same symmetry appears in `TNLean.MPS.MPDO.CZXTensor` in the convention of
-arXiv:2502.20257, where each site carries an output `Z` gate and two qubits are blocked into
-one site. The two conventions are different tensors and their squares differ: the decorated
-family squares to the identity at every length, which is why the product of that tensor with
-itself compresses to the bond-one identity tensor
-(`MPOTensor.CZX.fusion_isReduction`), whereas the undecorated family used here squares to
-`(-1)^L` times the identity. The sign is exactly what makes the compression example
-interesting, so the undecorated convention of the note is the one formalized here.
+The review arXiv:2011.12127 displays the reverse gate order `D_L X^{⊗ L}`, which differs
+from this tensor's operator by `(-1)^L`. The decorated, two-qubit-blocked convention of
+arXiv:2502.20257 in `TNLean.MPS.MPDO.CZXTensor` is a different tensor whose square is the
+identity. Here the stacked square has the word traces of the bond-one target `-δ`.
+The explicit construction is recorded in
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`,
+`ex:p5ft-czx` and `ex:p5ft-oscillating`.
 
-Every matrix of both examples has integer entries, so the tensors are defined as entrywise
-coercions of integer matrices. All later verifications then reduce to decidable identities
-between integer matrices.
+The entries are integers. The length-two words span `M_2(ℂ)`, proving normality, and the
+stacked product has an explicit bond-four integer tensor.
 
 ## Main definitions
 
@@ -63,7 +62,7 @@ open MPSTensor
 /-! ### The bond-two tensor of the note -/
 
 /-- The integer tensor `M^{ij} = δ_{i,1 ⊕ j} T_j` of the CZX symmetry
-(P5 note, `ex:p5ft-czx`). -/
+(construction note, `ex:p5ft-czx`). -/
 def czxIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 0, 1 => !![0, 1; 0, -1]
   | 1, 0 => !![1, 0; 1, 0]
@@ -166,7 +165,7 @@ private theorem single_one_one : Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ)
   fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt]
 
 /-- **The bond-two tensor of the note is normal.** Its length-two words span the full
-two-by-two matrix algebra (P5 note, `ex:p5ft-czx`). -/
+two-by-two matrix algebra (construction note, `ex:p5ft-czx`). -/
 theorem czxMPS_isNormal : Kraus.IsNormal czxMPS := by
   refine ⟨2, two_pos, ?_⟩
   rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
@@ -198,7 +197,7 @@ theorem czxMPS_isNormal : Kraus.IsNormal czxMPS := by
 /-! ### The stacked product tensor of Example D -/
 
 /-- The integer matrices of the stacked product tensor
-`B^{ij} = ∑_m M^{im} ⊗ M^{mj}` of bond dimension four (P5 note, `ex:p5ft-czx`). -/
+`B^{ij} = ∑_m M^{im} ⊗ M^{mj}` of bond dimension four (construction note, `ex:p5ft-czx`). -/
 def czxSquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
   | 0 => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
   | 1 => 0

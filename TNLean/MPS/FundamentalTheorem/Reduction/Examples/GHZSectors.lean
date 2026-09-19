@@ -6,20 +6,21 @@ Authors: Sirui Lu
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
 /-!
-# Example B: hidden symmetry-broken sectors
+# GHZ sectors in an upper-triangular tensor
 
-A machine-checked instance of the multi-block asymmetric compression theorem (P5 note,
-`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, Example B, lines
-938–962; verified numerically by `checks/p5_examples_verify.py`, section B).
+For positive length, the two bond-one tensors `ghzC 0` and `ghzC 1` generate
+`|0…0⟩` and `|1…1⟩`, respectively, using the physical alphabet `Fin 2`.
+The bond-four tensor `ghzB` has diagonal blocks in the order
+`ghzC 1, 0, ghzC 0, 0`, with nonzero upper-triangular couplings.
+Consequently its periodic word traces generate the unnormalised GHZ state
+`|0…0⟩ + |1…1⟩`, not either product state separately.
 
-The Greenberger–Horne–Zeilinger target consists of two inequivalent one-dimensional normal
-blocks, `ghzC 0` (the all-ones sector) and `ghzC 1` (the all-twos sector). They are embedded in
-a four-dimensional source tensor `ghzB` with arbitrarily chosen coupling blocks, whose diagonal
-blocks are, in order, the all-twos sector, a zero block, the all-ones sector, and a zero block.
-Neither sector alone generates the same matrix-product-vector family as `ghzB`; only their sum
-does, so the single-block asymmetric compression theorem does not apply to either sector, and
-the symmetric fundamental theorem does not apply either (`ghzB` is not in canonical form, and
-its bond dimension differs from the target's).
+The explicit construction is Example B of
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, `ex:p5ft-ghz`.
+The compression retains both sectors and two zero slots. Although the word-level
+reductions exist, the all-zero sector has no nonzero sitewise intertwiner in either
+direction. Thus equality of the periodic states does not supply a sitewise splitting
+of this upper-triangular representation.
 
 ## Main results
 
@@ -30,7 +31,7 @@ its bond dimension differs from the target's).
 * `MPSTensor.ghzSectors_isReduction`: the biorthogonal compression pair for each sector.
 * `MPSTensor.ghzSectors_dim_eq`: the dimension count `4 = 1 + 1 + 2`.
 * `MPSTensor.ghzC0_right_intertwiner_eq_zero`, `MPSTensor.ghzC0_left_intertwiner_eq_zero`: the
-  all-ones sector has no nonzero sitewise intertwiner in either direction.
+  all-zeros sector has no nonzero sitewise intertwiner in either direction.
 -/
 
 open scoped Matrix
@@ -46,18 +47,18 @@ private abbrev GHZS : Finset GHZIx := Finset.univ
 /-- The bond dimension of each target slot: both sectors are one-dimensional. -/
 private abbrev GHZD : GHZIx → ℕ := fun _ => 1
 
-/-- The two symmetry-broken sectors of the GHZ family: `ghzC 0` is the all-ones sector, and
-`ghzC 1` is the all-twos sector (P5 note, Example B, `ex:p5ft-ghz`). -/
+/-- The two symmetry-broken sectors of the GHZ family: `ghzC 0` is the all-zeros sector, and
+`ghzC 1` is the all-ones sector (construction note, Example B, `ex:p5ft-ghz`). -/
 def ghzC : (s : GHZIx) → MPSTensor 2 (GHZD s) := ![![!![1], !![0]], ![!![0], !![1]]]
 
 /-- The source tensor of Example B: a four-dimensional tensor embedding the two GHZ sectors
-with arbitrarily chosen coupling blocks (P5 note, Example B, `ex:p5ft-ghz`). -/
+with arbitrarily chosen coupling blocks (construction note, Example B, `ex:p5ft-ghz`). -/
 def ghzB : MPSTensor 2 4 :=
   ![!![0, 1, 2, 0; 0, 0, 1, 1; 0, 0, 1, 3; 0, 0, 0, 0],
     !![1, 1, 0, 2; 0, 0, 2, 0; 0, 0, 0, 1; 0, 0, 0, 0]]
 
-/-- The block ordering of Example B: the all-twos sector at position `0`, a zero slot at
-position `1`, the all-ones sector at position `2`, and a zero slot at position `3`, matching
+/-- The block ordering of Example B: the all-ones sector at position `0`, a zero slot at
+position `1`, the all-zeros sector at position `2`, and a zero slot at position `3`, matching
 the diagonal blocks of `ghzB` in order. -/
 def ghzOrd : BlockIndex GHZS 2 ≃ Fin 4 where
   toFun
@@ -134,8 +135,8 @@ theorem ghzSectors_isReduction (s : {s // s ∈ GHZS}) :
 theorem ghzSectors_dim_eq : (4 : ℕ) = ∑ s ∈ GHZS, GHZD s + 2 :=
   ghzSectors_compression.dim_eq
 
-/-- No nonzero right sitewise intertwiner for the all-ones sector: there is no `v ≠ 0` with
-`ghzB 0 *ᵥ v = v` and `ghzB 1 *ᵥ v = 0` (P5 note, Example B). -/
+/-- No nonzero right sitewise intertwiner for the all-zeros sector: there is no `v ≠ 0` with
+`ghzB 0 *ᵥ v = v` and `ghzB 1 *ᵥ v = 0` (construction note, Example B). -/
 theorem ghzC0_right_intertwiner_eq_zero (v : Fin 4 → ℂ) (h0 : ghzB 0 *ᵥ v = v)
     (h1 : ghzB 1 *ᵥ v = 0) : v = 0 := by
   have e0 := congrFun h0 0
@@ -157,8 +158,8 @@ theorem ghzC0_right_intertwiner_eq_zero (v : Fin 4 → ℂ) (h0 : ghzB 0 *ᵥ v 
   · exact hv2
   · exact hv3
 
-/-- No nonzero left sitewise intertwiner for the all-ones sector: there is no `u ≠ 0` with
-`u ᵥ* ghzB 0 = u` and `u ᵥ* ghzB 1 = 0` (P5 note, Example B). -/
+/-- No nonzero left sitewise intertwiner for the all-zeros sector: there is no `u ≠ 0` with
+`u ᵥ* ghzB 0 = u` and `u ᵥ* ghzB 1 = 0` (construction note, Example B). -/
 theorem ghzC0_left_intertwiner_eq_zero (u : Fin 4 → ℂ) (h0 : u ᵥ* ghzB 0 = u)
     (h1 : u ᵥ* ghzB 1 = 0) : u = 0 := by
   have e3 := congrFun h0 3

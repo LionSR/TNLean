@@ -9,41 +9,30 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 import TNLean.MPS.MPDO.ActionTensor
 
 /-!
-# Kramers–Wannier duality acting on ground states
+# Kramers–Wannier duality on product and GHZ states
 
-Two machine-checked instances of the multi-block asymmetric compression theorem for the
-Kramers–Wannier duality kernel of the periodic Ising chain acting on states, rather than on
-itself (P5 note, `Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §2, "The duality acting
-on states"; verified numerically by `checks/p5_more_examples_verify.py`, Examples KW-plus and
-KW-GHZ).
+For `L > 0`, the unnormalised periodic Ising kernel
+`⟨s'|D~|s⟩ = ∏_j (-1)^{s'_j (s_j + s_{j+1})}` acts on the unnormalised states
+`P_L = (|0⟩ + |1⟩)^{⊗ L}` and `G_L = |0…0⟩ + |1…1⟩` by
+`D~ P_L = 2^L G_L` and `D~ G_L = 2 P_L`.
+The word-trace identities below establish these coefficient formulas. Since
+`P_L = 2^{L/2} |+⟩^{⊗ L}` for normalized `|+⟩`, converting the latter formula to
+normalized product-state notation introduces a norm factor, not a new tensor weight.
 
-On `L` qubits with periodic boundary conditions, the unnormalised Kramers–Wannier kernel
-`⟨s'|D~|s⟩ = ∏_j (-1)^{s'_j (s_j + s_{j+1})}` is the periodic trace of the bond-two matrix
-product operator `kwTensor` (data file §1.1). The physics reading of the two examples here is
-symmetry breaking of the non-invertible Kramers–Wannier symmetry: the duality maps the
-paramagnetic product state to the ferromagnetic Greenberger–Horne–Zeilinger pair (part (a)), and
-both ferromagnetic sectors of the Greenberger–Horne–Zeilinger state to the paramagnet, merged
-with multiplicity two (part (b)). The factor `2^{L/2}` appearing when the acted state is written
-as a multiple of the *normalised* state `|+⟩^{⊗ L}` is a norm, not a weight, of the unnormalised
-product vector; the weighted tensor the theorem sees is the same in both readings (data file
-§2.2, "Weight bookkeeping, and a correction to the naive expectation").
+These are the product-state and symmetry-broken GHZ examples of Ising duality.
+Aasen–Mong–Fendley, arXiv:1601.07185, discuss the ordered/disordered interpretation;
+their defect kernel has an additional factor `2^{-L/2}`. The explicit action tensors
+and gauges here are recorded in `Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §2.
+`kwTensor` is imported from `KramersWannier` with the raw normalization above.
 
-Part (a) (`kwPlus`, Example KW-plus) is a **split** occurrence: the residual vanishes, and the
-sitewise compression pair for each Greenberger–Horne–Zeilinger sector is a genuine intertwiner
-in both directions. Part (b) (`kwGHZ`, Example KW-GHZ) is **not split**: the sitewise *left*
-intertwiner space for the paramagnetic target vanishes, although a sitewise *right* intertwiner
-exists, so the word-level compression of the theorem is the strongest local relation available.
-
-`kwTensor` is defined locally in this file rather than imported from a companion file, following
-the family plan `Notes/OpenProblemsTN/checks/p5_examples_plan_2026-09-17.md` §E2: at the time of
-writing, the sibling Example KW (`Examples/KramersWannier.lean`, §E1) had not landed on
-`origin`, so this file carries its own copy under `namespace KWExample` to avoid a name clash on
-a later merge.
+For the action on `P_L`, the two GHZ targets each carry weight `2`, the remainder
+vanishes, and both compression pairs are sitewise intertwiners. For the action on `G_L`,
+the target is two unweighted copies of the product-state tensor. A nonzero right
+intertwiner exists, but every left intertwiner vanishes, ruling out a biorthogonal
+sitewise pair. The word-level compression still holds.
 
 ## Main definitions
 
-* `KWExample.kwTensor`: the unnormalised Kramers–Wannier duality kernel as a bond-two matrix
-  product operator tensor.
 * `KWExample.plusTensor`, `KWExample.ghz0`, `KWExample.ghz1`: the product-state tensor and the
   two Greenberger–Horne–Zeilinger sectors.
 * `KWExample.kwPlus`, `KWExample.kwGHZ`: the two action tensors.
@@ -113,7 +102,7 @@ theorem plusTensor_eq : plusTensor = fun j => complexOfInt (plusIntTensor j) := 
   funext j
   simp [plusTensor, plusIntTensor, complexOfInt_one]
 
-/-- The action tensor `Ãtilde = D~ · |+⟩^L` of part (a) (data file §2.1). -/
+/-- The action tensor `Ãtilde = D~ · P_L` of part (a) (data file §2.1). -/
 def kwPlus : MPSTensor 2 2 := MPOTensor.actTensor kwTensor plusTensor
 
 /-- The integer matrices of `kwPlus`, `Ãtilde^0 = 2 P_+`, `Ãtilde^1 = 2 P_-` (data file §2.1). -/
@@ -450,7 +439,7 @@ theorem plusTensor_evalWord (w : List (Fin 2)) : Kraus.evalWord plusTensor w = 1
   | cons i w ih => rw [Kraus.evalWord, plusTensor, ih, Matrix.one_mul]
 
 /-- **The word-trace identity of part (b)**: the generated coefficient family is constant
-(data file §2.2, "a correction to the naive expectation"). -/
+(data file §2.2). -/
 theorem kwGHZ_trace_evalWord_eq_two (w : List (Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord kwGHZ w) = 2 := by
   have h := kwGHZCompression.trace_evalWord_eq_sum w hw

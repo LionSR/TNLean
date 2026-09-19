@@ -13,12 +13,6 @@ import TNLean.MPS.MPDO.OperatorProduct
 /-!
 # Kramers–Wannier fusion `D~² = 2^L (1 + η) T` on the periodic Ising chain
 
-A machine-checked instance of the multi-block asymmetric compression theorem (P5 note,
-`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`; the exact data is
-recorded and checked in exact arithmetic by
-`Notes/OpenProblemsTN/checks/p5_more_examples_verify.py`, and written up in
-`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §1).
-
 The Kramers–Wannier duality kernel on a periodic chain of `L` qubits,
 `⟨s'| D~ |s⟩ = ∏_j (-1)^{s'_j (s_j + s_{j+1})}`, is the periodic trace of a bond-dimension-two
 matrix product operator `W` (`kwTensor`). Squaring the duality gives, at the level of the
@@ -33,12 +27,23 @@ explicit change of bond coordinates with a half-integer gauge matrix, onto the d
 there are no left-over zero slots (`z = 0`) and the compression is genuinely split, with a
 biorthogonal sitewise intertwiner pair for each of the two blocks.
 
-Physically this is the statement that Kramers–Wannier duality squares to (twice) translation
-by one site on the symmetric sector and translation composed with the spin flip on the
-antisymmetric sector — the lattice incarnation of the duality defect fusion rule of Ising
-topological field theory (Aasen–Mong–Fendley, arXiv:1601.07185, and the non-invertible-symmetry
-account of Seiberg–Shao, arXiv:2307.02534, where the analogous Majorana-chain duality defect
-satisfies `D² = (1 + η) T`).
+For `L > 0`, the raw square acts as `2^{L+1} T` on the spin-flip-even subspace and
+as zero on the spin-flip-odd subspace. The two virtual targets are translation and
+flipped translation, not the physical even and odd subspaces.
+
+Aasen–Mong–Fendley, arXiv:1601.07185, use a kernel with a factor `2^{-L/2}` and retain
+the primal and dual lattices; their defect fusion is `D_σ² = I + D_ψ`.
+With the single-lattice translation convention here, rescaling the raw kernel by
+`2^{-L/2}` gives square `(I + η) T`. Seiberg–Shao, arXiv:2307.02534,
+Eq. `noninvfusion`, instead use the partial-isometry normalization
+`D² = (I + η) T / 2`, corresponding at the level of this square relation to rescaling
+the raw kernel by `2^{-(L+1)/2}`. Their underlying Majorana translations are invertible;
+the non-invertible operator in that equation acts on the bosonic Ising chain.
+The explicit tensor and gauge data used here are recorded in
+`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §1.
+
+The compression theorem cited below is Theorem 7.7 of
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`.
 
 ## Main definitions
 
@@ -76,7 +81,7 @@ open MPSTensor
 
 /-! ### The duality kernel and the two shift tensors -/
 
-/-- The integer entries of the duality kernel `W^{s' s}` of the note (P5 note,
+/-- The integer entries of the duality kernel `W^{s' s}` of the note (construction note,
 `Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §1.1). The first argument is the
 outgoing physical label `s'` and the second the incoming label `s`, matching the convention of
 `MPOTensor`. -/
@@ -86,10 +91,10 @@ def kwIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 1, 0 => !![1, -1; 0, 0]
   | 1, 1 => !![0, 0; -1, 1]
 
-/-- The Kramers–Wannier duality kernel `W` as a matrix product operator tensor (P5 note, §1.1). -/
+/-- The Kramers–Wannier duality kernel `W` as a matrix product operator tensor (construction note, §1.1). -/
 def kwTensor : MPOTensor 2 2 := fun i j => complexOfInt (kwIntTensor i j)
 
-/-- The integer entries of the one-site left-translation tensor `T^{s' s} = E_{s, s'}` (P5 note,
+/-- The integer entries of the one-site left-translation tensor `T^{s' s} = E_{s, s'}` (construction note,
 §1.2): the matrix unit with a `1` in row `s`, column `s'`. -/
 def shiftIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 0, 0 => !![1, 0; 0, 0]
@@ -97,18 +102,18 @@ def shiftIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 1, 0 => !![0, 1; 0, 0]
   | 1, 1 => !![0, 0; 0, 1]
 
-/-- The one-site left-translation tensor `T`, of bond dimension two (P5 note, §1.2). -/
+/-- The one-site left-translation tensor `T`, of bond dimension two (construction note, §1.2). -/
 def shiftTensor : MPOTensor 2 2 := fun i j => complexOfInt (shiftIntTensor i j)
 
 /-- The integer entries of the flipped translation tensor `(η T)^{s' s} = E_{s, 1 - s'}`
-(P5 note, §1.2). -/
+(construction note, §1.2). -/
 def flipShiftIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 0, 0 => !![0, 1; 0, 0]
   | 0, 1 => !![0, 0; 0, 1]
   | 1, 0 => !![1, 0; 0, 0]
   | 1, 1 => !![0, 0; 1, 0]
 
-/-- The flipped-translation tensor `η T`, of bond dimension two (P5 note, §1.2). -/
+/-- The flipped-translation tensor `η T`, of bond dimension two (construction note, §1.2). -/
 def flipShiftTensor : MPOTensor 2 2 := fun i j => complexOfInt (flipShiftIntTensor i j)
 
 /-- The pair-alphabet integer entries of `shiftTensor.toMPSTensor`, in the letter order
@@ -168,26 +173,26 @@ private theorem flipShiftMPS_single_mem (p q : Fin 2) :
       norm_num [flipShiftIntMPS, complexOfInt, Matrix.single_apply]⟩
 
 /-- **The translation tensor is normal.** Its four letters are already the four matrix units of
-`M_2(ℂ)` (P5 note, §1.2). -/
+`M_2(ℂ)` (construction note, §1.2). -/
 theorem shiftMPS_isNormal : Kraus.IsNormal shiftTensor.toMPSTensor :=
   Kraus.IsInjective.isNormal (isInjective_of_forall_mem_range_single shiftMPS_single_mem)
 
 /-- **The flipped-translation tensor is normal.** Its four letters are already the four matrix
-units of `M_2(ℂ)` (P5 note, §1.2). -/
+units of `M_2(ℂ)` (construction note, §1.2). -/
 theorem flipShiftMPS_isNormal : Kraus.IsNormal flipShiftTensor.toMPSTensor :=
   Kraus.IsInjective.isNormal (isInjective_of_forall_mem_range_single flipShiftMPS_single_mem)
 
 /-! ### The stacked tensor of the square of the duality -/
 
 /-- The integer entries of the stacked product tensor `B^{s's} = ∑_m W^{s'm} ⊗ W^{ms}` of bond
-dimension four (P5 note, §1.3). -/
+dimension four (construction note, §1.3). -/
 def kwSquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
   | 0 => !![1, 1, 1, 1; 0, 0, 0, 0; 1, -1, 1, -1; 0, 0, 0, 0]
   | 1 => !![0, 0, 0, 0; 1, 1, 1, 1; 0, 0, 0, 0; -1, 1, -1, 1]
   | 2 => !![1, 1, -1, -1; 0, 0, 0, 0; -1, 1, 1, -1; 0, 0, 0, 0]
   | 3 => !![0, 0, 0, 0; 1, 1, -1, -1; 0, 0, 0, 0; 1, -1, -1, 1]
 
-/-- The stacked product tensor of `Dtilde^2`, of bond dimension four (P5 note, §1.3). -/
+/-- The stacked product tensor of `Dtilde^2`, of bond dimension four (construction note, §1.3). -/
 def kwSquare : MPSTensor 4 4 := (MPOTensor.mulTensor kwTensor kwTensor).toMPSTensor
 
 theorem kwSquare_eq (a : Fin 4) : kwSquare a = complexOfInt (kwSquareInt a) := by
@@ -201,14 +206,14 @@ theorem kwSquare_eq (a : Fin 4) : kwSquare a = complexOfInt (kwSquareInt a) := b
 
 /-! ### The two target blocks and the flag -/
 
-/-- The slots of the compression: the symmetric and antisymmetric sectors. -/
+/-- The slots of the compression: the translation and flipped-translation targets. -/
 abbrev kwSquareSlots : Finset (Fin 2) := Finset.univ
 
 /-- The bond dimension of each of the two slots. -/
 abbrev kwSquareBlockDim : Fin 2 → ℕ := fun _ => 2
 
 /-- The two target blocks: twice the translation tensor, and twice the flipped-translation
-tensor (P5 note, §1.3: `C_1 = 2T`, `C_2 = 2ηT`). -/
+tensor (construction note, §1.3: `C_1 = 2T`, `C_2 = 2ηT`). -/
 def kwSquareTargets : (s : Fin 2) → MPSTensor 4 (kwSquareBlockDim s)
   | 0 => (2 : ℂ) • shiftTensor.toMPSTensor
   | 1 => (2 : ℂ) • flipShiftTensor.toMPSTensor
@@ -237,11 +242,11 @@ theorem kwSquareTargets_eq (s : Fin 2) (a : Fin 4) :
     exact (complexOfInt_two_smul _).symm
 
 /-- The change of bond coordinates of the note: `2G` is integral and `G^{-1}` is integral
-(P5 note, §1.3). This is the numerator `2G`. -/
+(construction note, §1.3). This is the numerator `2G`. -/
 def kwSquareGaugeInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![1, 0, 1, 0; 0, 1, 0, -1; 1, 0, -1, 0; 0, 1, 0, 1]
 
-/-- The inverse change of bond coordinates, which is integral (P5 note, §1.3). -/
+/-- The inverse change of bond coordinates, which is integral (construction note, §1.3). -/
 def kwSquareGaugeInvInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![1, 0, 1, 0; 0, 1, 0, 1; 1, 0, -1, 0; 0, -1, 0, 1]
 
@@ -254,7 +259,7 @@ theorem kwSquareGaugeInv_mul_int :
       !![2, 0, 0, 0; 0, 2, 0, 0; 0, 0, 2, 0; 0, 0, 0, 2] := by decide
 
 /-- The gauge matrix `G = (1/2)[[1,0,1,0],[0,1,0,-1],[1,0,-1,0],[0,1,0,1]]` of the note
-(P5 note, §1.3). -/
+(construction note, §1.3). -/
 def kwSquareGaugeMat : Matrix (Fin 4) (Fin 4) ℂ := (1 / 2 : ℂ) • complexOfInt kwSquareGaugeInt
 
 /-- The inverse gauge matrix `G^{-1}` of the note, which is integral. -/
@@ -312,7 +317,7 @@ def kwSquareGauge : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace kwSquareBlockDim kwS
     kwSquareGaugeInvMat_mul
 
 /-- The raw conjugated letters `2G B^{s's} G^{-1}` before the factor `1/2` built into the gauge
-is divided out (P5 note, §1.3: `G B G^{-1} = diag(2T, 2ηT)`, doubled here since `kwSquareGaugeInt`
+is divided out (construction note, §1.3: `G B G^{-1} = diag(2T, 2ηT)`, doubled here since `kwSquareGaugeInt`
 is `2G`). -/
 def kwSquareConjRawInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
   | 0 => !![4, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 4; 0, 0, 0, 0]
@@ -326,7 +331,7 @@ theorem kwSquareConj_raw_int (a : Fin 4) :
   decide
 
 /-- The letters of the compression in the block coordinates: block diagonal, with the two
-target blocks `2T` and `2ηT` (P5 note, §1.3). -/
+target blocks `2T` and `2ηT` (construction note, §1.3). -/
 def kwSquareConjInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
   | 0 => !![2, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 2; 0, 0, 0, 0]
   | 1 => !![0, 0, 0, 0; 2, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 2]
@@ -367,7 +372,7 @@ private theorem kwSquare_matched_int (a : Fin 4) (s : Fin 2) (p q : Fin (kwSquar
   revert a
   fin_cases s <;> revert p q <;> decide
 
-/-- **The multi-block asymmetric compression datum of the Kramers–Wannier square** (P5 note,
+/-- **The multi-block asymmetric compression datum of the Kramers–Wannier square** (construction note,
 Theorem 7.7, clauses (i)–(iii)). There are no zero slots: `D~²` is fully split into `2T` and
 `2ηT`. -/
 def kwSquare_compression : MultiBlockCompression kwSquare kwSquareSlots kwSquareTargets where
@@ -387,7 +392,7 @@ def kwSquare_compression : MultiBlockCompression kwSquare kwSquareSlots kwSquare
 
 /-! ### Consequences -/
 
-/-- **The word-trace identity `D~² = 2^L (1 + η) T`** at the level of traces (P5 note, §1.3). -/
+/-- **The word-trace identity `D~² = 2^L (1 + η) T`** at the level of traces (construction note, §1.3). -/
 theorem kwSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord kwSquare w) =
       (2 : ℂ) ^ w.length * (Matrix.trace (Kraus.evalWord shiftTensor.toMPSTensor w) +
@@ -408,36 +413,36 @@ theorem kwSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
   rw [h, h0, h1]
   ring
 
-/-- **Biorthogonal compression onto each of the two slots** (P5 note, Theorem 7.7(iv)–(v)). -/
+/-- **Biorthogonal compression onto each of the two slots** (construction note, Theorem 7.7(iv)–(v)). -/
 theorem kwSquare_isReduction (s : {s // s ∈ kwSquareSlots}) :
     IsReduction kwSquare (kwSquareTargets s.1) (kwSquare_compression.left s)
       (kwSquare_compression.right s) :=
   kwSquare_compression.isReduction s
 
-/-- Two distinct slots are biorthogonal (P5 note, Theorem 7.7(iv)). -/
+/-- Two distinct slots are biorthogonal (construction note, Theorem 7.7(iv)). -/
 theorem kwSquare_left_mul_right_of_ne {s t : {s // s ∈ kwSquareSlots}} (h : s ≠ t) :
     kwSquare_compression.left s * kwSquare_compression.right t = 0 :=
   kwSquare_compression.left_mul_right_of_ne h
 
-/-- **The dimension count**: `4 = 2 + 2 + 0` (P5 note, Theorem 7.7(vii)). -/
+/-- **The dimension count**: `4 = 2 + 2 + 0` (construction note, Theorem 7.7(vii)). -/
 theorem kwSquare_dim_eq : (4 : ℕ) = ∑ s ∈ kwSquareSlots, kwSquareBlockDim s + 0 :=
   kwSquare_compression.dim_eq
 
 /-! ### The explicit compression pair and the vanishing remainder -/
 
-/-- The left compression witness `W_1 = (1/2)[[1,0,1,0],[0,1,0,-1]]` of the note (P5 note,
+/-- The left compression witness `W_1 = (1/2)[[1,0,1,0],[0,1,0,-1]]` of the note (construction note,
 §1.3). -/
 def kwSquareLeft0Int : Matrix (Fin 2) (Fin 4) ℤ := !![1, 0, 1, 0; 0, 1, 0, -1]
 
-/-- The left compression witness `W_2 = (1/2)[[1,0,-1,0],[0,1,0,1]]` of the note (P5 note,
+/-- The left compression witness `W_2 = (1/2)[[1,0,-1,0],[0,1,0,1]]` of the note (construction note,
 §1.3). -/
 def kwSquareLeft1Int : Matrix (Fin 2) (Fin 4) ℤ := !![1, 0, -1, 0; 0, 1, 0, 1]
 
-/-- The right compression witness `V_1 = [[1,0],[0,1],[1,0],[0,-1]]` of the note (P5 note,
+/-- The right compression witness `V_1 = [[1,0],[0,1],[1,0],[0,-1]]` of the note (construction note,
 §1.3). -/
 def kwSquareRight0Int : Matrix (Fin 4) (Fin 2) ℤ := !![1, 0; 0, 1; 1, 0; 0, -1]
 
-/-- The right compression witness `V_2 = [[1,0],[0,1],[-1,0],[0,1]]` of the note (P5 note,
+/-- The right compression witness `V_2 = [[1,0],[0,1],[-1,0],[0,1]]` of the note (construction note,
 §1.3). -/
 def kwSquareRight1Int : Matrix (Fin 4) (Fin 2) ℤ := !![1, 0; 0, 1; -1, 0; 0, 1]
 
@@ -521,7 +526,7 @@ private theorem kwSquareSlots_sum {M : Type*} [AddCommMonoid M]
   rfl
 
 /-- **The remainder of the compression vanishes identically.** The extension is fully split:
-`D~²` is exactly the direct sum of `2T` and `2ηT` (P5 note, §1.3). -/
+the stacked tensor is gauge equivalent to the direct sum of `2T` and `2ηT` (construction note, §1.3). -/
 theorem kwSquare_remainder_eq_zero (a : Fin 4) : kwSquare_compression.remainder a = 0 := by
   have hsum : kwSquare_compression.remainder a =
       kwSquare a - (kwSquareRight0 * kwSquareTargets 0 a * kwSquareLeft0 +
@@ -556,41 +561,41 @@ private theorem left1_mul_kwSquare_int (a : Fin 4) :
   revert a
   decide
 
-/-- **The right sitewise intertwiner for the symmetric block** (P5 note, §1.3):
+/-- **The right sitewise intertwiner for the translation block** (construction note, §1.3):
 `B^{s's} V_1 = V_1 (2T)^{s's}`. -/
 theorem kwSquare_mul_right0_eq (a : Fin 4) :
     kwSquare a * kwSquareRight0 = kwSquareRight0 * kwSquareTargets 0 a := by
   rw [kwSquareTargets_eq, kwSquareRight0, kwSquare_eq, ← complexOfInt_mul, ← complexOfInt_mul,
     kwSquare_mul_right0_int]
 
-/-- **The right sitewise intertwiner for the antisymmetric block** (P5 note, §1.3):
+/-- **The right sitewise intertwiner for the flipped-translation block** (construction note, §1.3):
 `B^{s's} V_2 = V_2 (2ηT)^{s's}`. -/
 theorem kwSquare_mul_right1_eq (a : Fin 4) :
     kwSquare a * kwSquareRight1 = kwSquareRight1 * kwSquareTargets 1 a := by
   rw [kwSquareTargets_eq, kwSquareRight1, kwSquare_eq, ← complexOfInt_mul, ← complexOfInt_mul,
     kwSquare_mul_right1_int]
 
-/-- **The left sitewise intertwiner for the symmetric block** (P5 note, §1.3):
+/-- **The left sitewise intertwiner for the translation block** (construction note, §1.3):
 `W_1 B^{s's} = (2T)^{s's} W_1`. -/
 theorem left0_mul_kwSquare_eq (a : Fin 4) :
     kwSquareLeft0 * kwSquare a = kwSquareTargets 0 a * kwSquareLeft0 := by
   rw [kwSquareTargets_eq, kwSquareLeft0, kwSquare_eq, Matrix.smul_mul, Matrix.mul_smul,
     ← complexOfInt_mul, ← complexOfInt_mul, left0_mul_kwSquare_int]
 
-/-- **The left sitewise intertwiner for the antisymmetric block** (P5 note, §1.3):
+/-- **The left sitewise intertwiner for the flipped-translation block** (construction note, §1.3):
 `W_2 B^{s's} = (2ηT)^{s's} W_2`. -/
 theorem left1_mul_kwSquare_eq (a : Fin 4) :
     kwSquareLeft1 * kwSquare a = kwSquareTargets 1 a * kwSquareLeft1 := by
   rw [kwSquareTargets_eq, kwSquareLeft1, kwSquare_eq, Matrix.smul_mul, Matrix.mul_smul,
     ← complexOfInt_mul, ← complexOfInt_mul, left1_mul_kwSquare_int]
 
-/-- `W_1 V_1 = 1`: the biorthogonal normalisation of the symmetric sitewise intertwiner
+/-- `W_1 V_1 = 1`: the biorthogonal normalisation of the translation sitewise intertwiner
 pair. -/
 theorem kwSquareLeft0_mul_right0 : kwSquareLeft0 * kwSquareRight0 = 1 :=
   kwSquareLeft0_eq ▸ kwSquareRight0_eq ▸ kwSquare_compression.left_mul_right_self
     ⟨0, Finset.mem_univ 0⟩
 
-/-- `W_2 V_2 = 1`: the biorthogonal normalisation of the antisymmetric sitewise intertwiner
+/-- `W_2 V_2 = 1`: the biorthogonal normalisation of the flipped-translation sitewise intertwiner
 pair. -/
 theorem kwSquareLeft1_mul_right1 : kwSquareLeft1 * kwSquareRight1 = 1 :=
   kwSquareLeft1_eq ▸ kwSquareRight1_eq ▸ kwSquare_compression.left_mul_right_self

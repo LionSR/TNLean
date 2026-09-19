@@ -17,12 +17,17 @@ example of the multi-block asymmetric compression theorem
 generators and `a = (a_1, a_2)` for a site label with basis index `2 a_1 + a_2`, the four
 periodic operators on `L` sites are
 `U_x = (∏_k CZ(2_k, 2_{k+1})) ∏_k X_k^{(1)}`, `U_y = ∏_k X_k^{(2)}`,
-`U_xy = (∏_k CZ(2_k, 2_{k+1})) ∏_k X_k^{(1)} X_k^{(2)}` and `U_e = id`, where `CZ(2_k, 2_{k+1})`
+`U_xy = (∏_k X_k^{(1)} X_k^{(2)}) (∏_k CZ(2_k, 2_{k+1}))` and `U_e = id`, where `CZ(2_k, 2_{k+1})`
 couples the second qubits of neighbouring sites. Each is the periodic trace of the tensor
 `M_g^{(o,i)}[α, β] = δ_{o, g + i} δ_{β, π_g(i)} f_g(α, i)` with bond label `π_g(i) = i_2`
 and phase `f_g(α, i) = (-1)^{α i_2}` for `g ∈ {x, xy}`, and with bond dimension one and no
-phase for `g ∈ {e, y}`. The restriction of `M_x` to the second qubit is the CZX tensor of
-`TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXTensor`.
+phase for `g ∈ {e, y}`. For `L > 0`, in the computational basis this means
+`U_g |i⟩ = (-1)^{g_1 ∑_k i_{k,2} i_{k+1,2}} |i+g⟩`.
+In particular the phase is evaluated on the input second bits, before either bit is flipped.
+Writing that diagonal phase as `D_{2,L}`, we have `U_xy = (X_1 X_2)^{⊗ L} D_{2,L}`;
+reversing these factors changes the sign by `(-1)^L`.
+The bond matrices `T_j` are the same as in `CZXTensor`, but `M_x` flips only the first
+qubit, not the second, so it is not a restriction of the CZX spin-flip tensor.
 
 The symmetry carries the mixed (type-II) class `(-1)^{a_1 b_2 c_2}` of
 `H^3(ℤ/2 × ℤ/2, U(1))`, computed in the data file both from the fusion phases of the tensors
@@ -91,7 +96,7 @@ def xIntTensor : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ
   | 3, 1 => !![0, 1; 0, -1]
   | _, _ => 0
 
-/-- The integer tensor of `U_xy = (∏_k CZ(2_k, 2_{k+1})) ∏_k X_k^{(1)} X_k^{(2)}`, of bond
+/-- The integer tensor of `U_xy = (∏_k X_k^{(1)} X_k^{(2)}) (∏_k CZ(2_k, 2_{k+1}))`, of bond
 dimension two: `M_xy^{(o,i)} = δ_{o, xy + i} T_{i_2}` (data file, Section 1). -/
 def xyIntTensor : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ
   | 1, 2 => !![1, 0; 1, 0]

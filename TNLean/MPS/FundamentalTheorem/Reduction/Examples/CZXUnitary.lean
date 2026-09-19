@@ -11,29 +11,27 @@ import TNLean.MPS.MPU.GroupRepresentation
 /-!
 # Unitarity of the undecorated CZX matrix product operator
 
-The bond-two tensor `M^{ij} = δ_{i,1 ⊕ j} T_j` of
-`TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXTensor` generates, on a periodic chain of
-`L` qubits, the `ℤ/2` symmetry `U_L = (∏_i CZ_{i,i+1}) X^{⊗ L}` of CZX type
-(P5 note, `Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`,
-`ex:p5ft-czx`, lines 997--1014). The tensor and the operator are those of the note; the CZX
-symmetry of arXiv:2405.00439, Section III.D, `U_CZX = ∏_i Z_i CZ_{i,i+1} ∏_i X_i`, carries an
-additional product of Pauli `Z` factors and is cited for the name only. This file computes the
-periodic operator entrywise: the closed-chain contraction of the tensor is a monomial matrix, the
-global spin flip `X^{⊗ L}` with the sign `(-1)^{∑_n t_n t_{n+1}}` read off the input
-configuration `t`, that is, the operator `X^{⊗ L} ∏_i CZ_{i,i+1}`. In the convention of the
-library the first physical index of a matrix product operator tensor is the row index, and in
-that convention the operator differs from the note's `U_L = (∏_i CZ_{i,i+1}) X^{⊗ L}` by the
-global sign `(-1)^L`; reading the first index as the column index gives the note's operator.
-Neither unitarity nor the square identity `U_L^2 = (-1)^L` depends on this choice. A monomial
-matrix with unimodular phases is unitary, so the operator family is a matrix product unitary
-at every positive length, including length one.
+For every periodic chain of `L > 0` qubits, the tensor
+`M^{ij} = δ_{i,1 ⊕ j} T_j` generates the computational-basis action
+`U_L |t⟩ = (-1)^{∑_j t_j t_{j+1}} |1-t⟩`.
+Thus `U_L = X^{⊗ L} D_L`, where `D_L` is the diagonal cyclic controlled-`Z` phase.
+The first physical index is the output row and the second is the input column.
+The cyclic sum gives `D_1 = Z` and `D_2 = I` (the two-site edge is counted twice).
+The monomial-matrix formula proves unitarity and `U_L² = (-1)^L I` for all positive
+lengths, without an even-length restriction.
 
-Together with the failure of star closure proved in
-`TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly`, this records the algebraic
-trace of the anomaly in a single statement: the physical operator is unitary at every length,
-while the virtual algebra of its stacked square is not closed under conjugate transposition.
-The anomaly index itself (the phase `ω = -1` of arXiv:2405.00439, Section III.D, or the class
-of the three-cocycle of arXiv:2203.12563) is not computed here.
+The review arXiv:2011.12127 displays `D_L X^{⊗ L}`, differing by `(-1)^L`.
+The CZX operator of arXiv:2405.00439, Section III.D, also carries Pauli `Z` factors;
+it is not the undecorated operator used here. The explicit tensor and compression data
+are recorded in `Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`,
+`ex:p5ft-czx`.
+
+The stacked square has a word-level compression onto `-δ`, but its sitewise intertwiner
+spaces vanish. `CZXAnomaly` uses this nonsplitting obstruction to prove failure of star
+closure for the virtual algebra in these coordinates. The conjunction with physical
+unitarity below does not identify star-closure failure with an anomaly invariant.
+An anomaly class requires a separate fusion-associator three-cocycle calculation,
+such as that discussed in arXiv:2405.00439, Section III.D; none is computed here.
 
 ## Main definitions
 
@@ -52,7 +50,7 @@ of the three-cocycle of arXiv:2203.12563) is not computed here.
   on every periodic chain of positive length.
 * `CZXCompression.czxTensor_isMPUPos_and_czxSquare_not_starClosed`: the operator is unitary
   although the virtual algebra of the stacked square is not closed under conjugate
-  transposition, the algebraic trace of the anomaly.
+  transposition.
 -/
 
 noncomputable section
@@ -65,9 +63,8 @@ open MPSTensor
 
 /-! ### The entrywise form of the tensor -/
 
-/-- The displayed bond-two coordinates of the undecorated CZX tensor: the ket index is the
-flipped bra index, the outgoing bond carries the bra index, and the incoming bond `l` produces
-the controlled-`Z` sign `(-1)^{l j}` (P5 note, `ex:p5ft-czx`). -/
+/-- The bond-two coordinates: output `i` is the flip of input `j`, the outgoing bond
+carries `j`, and the incoming bond `l` contributes `(-1)^{l j}`. -/
 theorem czxTensor_apply (i j l r : Fin 2) :
     czxTensor i j l r = if i = j.rev ∧ r = j then (-1 : ℂ) ^ (l.val * j.val) else 0 := by
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
@@ -97,7 +94,7 @@ def czExponent (t : Fin N → Fin 2) : ℕ :=
 /-- **The periodic CZX operator entrywise**: the entry at `(s, t)` vanishes unless `s` is the
 spin flip of `t`, and then equals the controlled-`Z` sign of `t`. This is the closed-chain
 contraction of the tensor along the unique bond configuration `g_n = t_{n-1}` that survives
-(P5 note, `ex:p5ft-czx`). -/
+(construction note, `ex:p5ft-czx`). -/
 theorem mpo_czxTensor_apply (s t : Fin N → Fin 2) :
     MPOTensor.mpo czxTensor N s t =
       if s = spinFlip N t then (-1 : ℂ) ^ czExponent t else 0 := by
@@ -137,7 +134,7 @@ theorem mpo_czxTensor_apply (s t : Fin N → Fin 2) :
     simpa [g0] using h.2
 
 /-- **The periodic CZX operator is a monomial matrix**: the global spin flip with the
-controlled-`Z` sign attached to the input configuration (P5 note, `ex:p5ft-czx`). -/
+controlled-`Z` sign attached to the input configuration (construction note, `ex:p5ft-czx`). -/
 theorem mpo_czxTensor :
     MPOTensor.mpo czxTensor N =
       Matrix.monomial (spinFlip N) fun t ↦ (-1 : ℂ) ^ czExponent t := by
@@ -176,7 +173,7 @@ theorem neg_one_pow_czExponent_spinFlip_mul (t : Fin N → Fin 2) :
   simp
 
 /-- **The periodic CZX operator squares to `(-1)^N`** at every positive length; this is the
-operator form of the word-trace identity of Example D (P5 note, `ex:p5ft-czx`). -/
+operator form of the word-trace identity of Example D (construction note, `ex:p5ft-czx`). -/
 theorem mpo_czxTensor_mul_self :
     MPOTensor.mpo czxTensor N * MPOTensor.mpo czxTensor N = ((-1 : ℂ) ^ N) • 1 := by
   rw [mpo_czxTensor, Matrix.monomial_mul_monomial, spinFlip_mul_self, ← Matrix.monomial_one,
@@ -187,7 +184,7 @@ theorem mpo_czxTensor_mul_self :
   exact neg_one_pow_czExponent_spinFlip_mul t
 
 /-- **The stacked square of the undecorated CZX tensor is `(-1)^N` times the identity** as an
-operator at every positive length (P5 note, `ex:p5ft-czx`). -/
+operator at every positive length (construction note, `ex:p5ft-czx`). -/
 theorem mpo_mulTensor_czxTensor :
     MPOTensor.mpo (MPOTensor.mulTensor czxTensor czxTensor) N = ((-1 : ℂ) ^ N) • 1 := by
   rw [MPOTensor.mpo_mulTensor, mpo_czxTensor_mul_self]
@@ -195,7 +192,7 @@ theorem mpo_mulTensor_czxTensor :
 /-! ### The matrix product unitary -/
 
 /-- **The undecorated CZX tensor is a matrix product unitary on every periodic chain of
-positive length** (P5 note, `ex:p5ft-czx`; the symmetry of CZX type is that of
+positive length** (construction note, `ex:p5ft-czx`; the symmetry of CZX type is that of
 arXiv:2405.00439, Section III.D, without its additional product of Pauli `Z` factors). -/
 theorem czxTensor_isMPUPos : MPOTensor.IsMPUPos czxTensor := by
   intro N hN
@@ -206,11 +203,10 @@ theorem czxTensor_isMPUPos : MPOTensor.IsMPUPos czxTensor := by
 theorem czxTensor_isMPU : MPOTensor.IsMPU czxTensor :=
   czxTensor_isMPUPos.isMPU
 
-/-- **The algebraic trace of the anomaly of the CZX symmetry in one statement**: the periodic
-operator of the undecorated CZX tensor is unitary at every positive length, and yet the
-virtual algebra of its stacked square is not closed under conjugate transposition (P5 note,
-`ex:p5ft-czx`). This is not a computation of the anomaly index `ω = -1` of arXiv:2405.00439,
-Section III.D. -/
+/-- Physical unitarity at every positive length together with failure of star closure of
+the stacked-square virtual algebra in these coordinates. The second property follows from
+the absence of sitewise intertwiners with the target `-δ`, not from a three-cocycle
+calculation, and is not asserted to be an anomaly invariant. -/
 theorem czxTensor_isMPUPos_and_czxSquare_not_starClosed :
     MPOTensor.IsMPUPos czxTensor ∧
       ¬ ∀ i, (czxSquare i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czxSquare) :=

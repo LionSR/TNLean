@@ -313,6 +313,17 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Test asymmetric example physical states and operators
+        timeout-minutes: 5
+        run: |
+          set -e
+          for example in ElementaryStates AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
       - name: Check changed Lean compilation times
         id: compilation-time
         if: github.event_name == 'pull_request'
