@@ -16,7 +16,4 @@ import TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumUniqueness
 import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization
-import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization.Algebra
-import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization.BurnsideJacobson
-import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization.Span
 import TNLean.MPS.MPDO.BiCFDerivation.Selectors
