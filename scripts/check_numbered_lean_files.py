@@ -25,7 +25,6 @@ ARCHIVE_ROOT = "TNLean/Archive/"
 NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
     {
         "TNLean/PEPS/CoherentFrameInstance2.lean",
-        "TNLean/PEPS/NormalSquareFundamentalTheorem2.lean",
         "TNLean/PEPS/RegionBlock/CoarseThreeSite10.lean",
         "TNLean/PEPS/RegionBlock/CoarseThreeSite11.lean",
         "TNLean/PEPS/RegionBlock/CoarseThreeSite2.lean",
@@ -49,11 +48,7 @@ NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
         "TNLean/PEPS/RegionBlock/Recovery9.lean",
         "TNLean/PEPS/RegionBlock/ThreeBlockResonate2.lean",
         "TNLean/PEPS/RegionBlock/UnionInjectivityGeneral2.lean",
-        "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap2.lean",
         "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3.lean",
-        "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3b.lean",
-        "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap6.lean",
-        "TNLean/PEPS/TorusFundamentalTheorem2.lean",
         "TNLean/PEPS/TorusWindowChain2.lean",
         "TNLean/PEPS/TorusWindowChain4.lean",
         "TNLean/PEPS/TorusWindowChain5.lean",

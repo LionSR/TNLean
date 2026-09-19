@@ -466,8 +466,8 @@ description of current `main`.
   `PEPS/CycleMPSChainOverlapInsertion.lean:33` states it "mirrors the
   site-independent file" — 2,916 lines across 6 `*Overlap*` files. `hbond`
   is derived internally at `NormalGeneralFundamentalTheorem.lean:163` yet
-  assumed at `NormalSquareFundamentalTheorem2.lean:111` and
-  `TorusFundamentalTheorem2.lean:180`. `SameStateBridgeHyp`
+  assumed at `NormalSquareUnconditionalFundamentalTheorem.lean:111`
+  and `TorusUnconditionalFundamentalTheorem.lean:180`. `SameStateBridgeHyp`
   (`MPS/Chain/SameStateBridge.lean:30`) has hypothesis uses but zero
   constructions repo-wide, leaving the PiAlgebra capstone conditional on an
   unproven structure (verified 2026-07-20).
