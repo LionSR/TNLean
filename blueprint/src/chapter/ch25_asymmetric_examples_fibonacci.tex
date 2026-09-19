@@ -23,85 +23,85 @@ $\sigma^4+\sigma^2=1$.
 For an MPO tensor $T^{yx}$, the first physical index is the output
 index. Its periodic operator is defined by
 \begin{align}
-	\bra{y}O_N(T)\ket{x}
-	 & =\tr(T^{y_0x_0}\cdots T^{y_{N-1}x_{N-1}}).
-	\label{eq:asymex_fib_periodic}
+    \bra{y}O_N(T)\ket{x}
+     & =\tr(T^{y_0x_0}\cdots T^{y_{N-1}x_{N-1}}).
+    \label{eq:asymex_fib_periodic}
 \end{align}
 For the tensors $B_1$ and $B_\tau$ defined below, write
 $O_1=O_N(B_1)$ and $O_\tau=O_N(B_\tau)$ when $N$ is fixed.
 Their non-invertible fusion relation is
 \begin{align}
-	O_\tau O_\tau & =O_1+O_\tau,
-	\label{eq:asymex_fib_fusion}
+    O_\tau O_\tau & =O_1+O_\tau,
+    \label{eq:asymex_fib_fusion}
 \end{align}
 as proved below for every positive system size. The vacuum operator
 $O_1$ is a projection onto admissible configurations, not the identity
 on $\mc H_N$.
 
 \begin{definition}[The two Fibonacci blocks and the stacked square]
-	\label{def:asymex_fib}
-	\lean{FibonacciCompression.fibTau, FibonacciCompression.fibOne,
-		FibonacciCompression.fibTauMPS, FibonacciCompression.fibOneMPS,
-		FibonacciCompression.fibStack, FibonacciCompression.fibTargets}
-	\leanok
-	\uses{def:asymex_golden_ring, def:mpo_tensor, def:mpdo_operator_product}
-	Read a physical letter as the pair $(x',x)$ of outgoing and incoming
-	labels, ordered as $(0,0),(0,1),(1,0),(1,1)$. The reduced vertex
-	weight is
-	\begin{align}
-		F & =\begin{pmatrix}
-			     0 & \varphi^{-1}   & \varphi^{-1/2} \\
-			     1 & 0              & 1              \\
-			     1 & \varphi^{-1/2} & -\varphi^{-1}
-		     \end{pmatrix}.
-		\label{eq:asymex_fib_vertex}
-	\end{align}
-	The $\tau$ tensor $B_\tau$ has bond dimension three and letters
-	\begin{align}
-		B_\tau^{00} & =0.
-		\label{eq:asymex_fib_tau_zero}
-	\end{align}
-	\begin{align}
-		B_\tau^{01} & =\begin{pmatrix}
-			               0 & \sigma^2 & \sigma \\0&0&0\\0&0&0
-		               \end{pmatrix}.
-		\label{eq:asymex_fib_tau_01}
-	\end{align}
-	\begin{align}
-		B_\tau^{10} & =\begin{pmatrix}
-			               0 & 0 & 0 \\1&0&1\\0&0&0
-		               \end{pmatrix}.
-		\label{eq:asymex_fib_tau_10}
-	\end{align}
-	\begin{align}
-		B_\tau^{11} & =\begin{pmatrix}
-			               0 & 0 & 0 \\0&0&0\\1&\sigma&-\sigma^2
-		               \end{pmatrix}.
-		\label{eq:asymex_fib_tau_11}
-	\end{align}
-	Thus each nonzero letter carries one row of
-	(\ref{eq:asymex_fib_vertex}), with the other rows zero.
-	The vacuum tensor $B_1$ has bond dimension two and letters
-	\begin{align}
-		B_1^{00} & =\begin{pmatrix}0&1\\0&0\end{pmatrix}.
-		\label{eq:asymex_fib_one_00}
-	\end{align}
-	\begin{align}
-		B_1^{11} & =\begin{pmatrix}0&0\\1&1\end{pmatrix}.
-		\label{eq:asymex_fib_one_11}
-	\end{align}
-	\begin{align}
-		B_1^{01} & =B_1^{10}=0.
-		\label{eq:asymex_fib_one_off}
-	\end{align}
-	The stacked square has bond dimension nine:
-	\begin{align}
-		B^{x'x} & =\sum_{m=0}^1 B_\tau^{x'm}\otimes B_\tau^{mx}.
-		\label{eq:asymex_fib_stack}
-	\end{align}
-	Viewed as MPS tensors over the four-letter pair alphabet, its two
-	target blocks are $B_1$ and $B_\tau$, each with multiplicity one
-	and weight one.
+    \label{def:asymex_fib}
+    \lean{FibonacciCompression.fibTau, FibonacciCompression.fibOne,
+        FibonacciCompression.fibTauMPS, FibonacciCompression.fibOneMPS,
+        FibonacciCompression.fibStack, FibonacciCompression.fibTargets}
+    \leanok
+    \uses{def:asymex_golden_ring, def:mpo_tensor, def:mpdo_operator_product}
+    Read a physical letter as the pair $(x',x)$ of outgoing and incoming
+    labels, ordered as $(0,0),(0,1),(1,0),(1,1)$. The reduced vertex
+    weight is
+    \begin{align}
+        F & =\begin{pmatrix}
+                 0 & \varphi^{-1}   & \varphi^{-1/2} \\
+                 1 & 0              & 1              \\
+                 1 & \varphi^{-1/2} & -\varphi^{-1}
+             \end{pmatrix}.
+        \label{eq:asymex_fib_vertex}
+    \end{align}
+    The $\tau$ tensor $B_\tau$ has bond dimension three and letters
+    \begin{align}
+        B_\tau^{00} & =0.
+        \label{eq:asymex_fib_tau_zero}
+    \end{align}
+    \begin{align}
+        B_\tau^{01} & =\begin{pmatrix}
+                           0 & \sigma^2 & \sigma \\0&0&0\\0&0&0
+                       \end{pmatrix}.
+        \label{eq:asymex_fib_tau_01}
+    \end{align}
+    \begin{align}
+        B_\tau^{10} & =\begin{pmatrix}
+                           0 & 0 & 0 \\1&0&1\\0&0&0
+                       \end{pmatrix}.
+        \label{eq:asymex_fib_tau_10}
+    \end{align}
+    \begin{align}
+        B_\tau^{11} & =\begin{pmatrix}
+                           0 & 0 & 0 \\0&0&0\\1&\sigma&-\sigma^2
+                       \end{pmatrix}.
+        \label{eq:asymex_fib_tau_11}
+    \end{align}
+    Thus each nonzero letter carries one row of
+    (\ref{eq:asymex_fib_vertex}), with the other rows zero.
+    The vacuum tensor $B_1$ has bond dimension two and letters
+    \begin{align}
+        B_1^{00} & =\begin{pmatrix}0&1\\0&0\end{pmatrix}.
+        \label{eq:asymex_fib_one_00}
+    \end{align}
+    \begin{align}
+        B_1^{11} & =\begin{pmatrix}0&0\\1&1\end{pmatrix}.
+        \label{eq:asymex_fib_one_11}
+    \end{align}
+    \begin{align}
+        B_1^{01} & =B_1^{10}=0.
+        \label{eq:asymex_fib_one_off}
+    \end{align}
+    The stacked square has bond dimension nine:
+    \begin{align}
+        B^{x'x} & =\sum_{m=0}^1 B_\tau^{x'm}\otimes B_\tau^{mx}.
+        \label{eq:asymex_fib_stack}
+    \end{align}
+    Viewed as MPS tensors over the four-letter pair alphabet, its two
+    target blocks are $B_1$ and $B_\tau$, each with multiplicity one
+    and weight one.
 \end{definition}
 
 The physical alphabet here has dimension two. It is not the full
@@ -112,26 +112,26 @@ $\sigma=\varphi^{-1/2}$ in these letters must not be replaced by
 $\varphi^{-1}$.
 
 \begin{theorem}[The one-site matrices of the $\tau$ block]
-	\label{thm:asymex_fib_entries}
-	\lean{FibonacciCompression.fibTauMPS_apply_one,
-		FibonacciCompression.fibTauMPS_apply_three}
-	\leanok
-	\uses{def:asymex_fib}
-	The matrix of $B_\tau$ at the letter $(0,1)$ has the first row of
-	(\ref{eq:asymex_fib_vertex}) as its first row and zero elsewhere, and
-	its matrix at the letter $(1,1)$ has the third row of
-	(\ref{eq:asymex_fib_vertex}) as its third row and zero elsewhere, with
-	$\varphi^{-1/2}=\sqrt{(\sqrt5-1)/2}$.
+    \label{thm:asymex_fib_entries}
+    \lean{FibonacciCompression.fibTauMPS_apply_one,
+        FibonacciCompression.fibTauMPS_apply_three}
+    \leanok
+    \uses{def:asymex_fib}
+    The matrix of $B_\tau$ at the letter $(0,1)$ has the first row of
+    (\ref{eq:asymex_fib_vertex}) as its first row and zero elsewhere, and
+    its matrix at the letter $(1,1)$ has the third row of
+    (\ref{eq:asymex_fib_vertex}) as its third row and zero elsewhere, with
+    $\varphi^{-1/2}=\sqrt{(\sqrt5-1)/2}$.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_golden_ring}
-	Both matrices are obtained by embedding their coefficients in
-	$\Z[\sigma]$ into $\C$ entrywise. Substitution of
-	$\sigma=\sqrt{(\sqrt5-1)/2}$ gives
-	(\ref{eq:asymex_fib_tau_01}) and
-	(\ref{eq:asymex_fib_tau_11}).
+    \leanok
+    \uses{thm:asymex_golden_ring}
+    Both matrices are obtained by embedding their coefficients in
+    $\Z[\sigma]$ into $\C$ entrywise. Substitution of
+    $\sigma=\sqrt{(\sqrt5-1)/2}$ gives
+    (\ref{eq:asymex_fib_tau_01}) and
+    (\ref{eq:asymex_fib_tau_11}).
 \end{proof}
 
 \subsection{Admissible configurations and the vacuum operator}
@@ -139,98 +139,98 @@ $\varphi^{-1}$.
 Define the adjacency matrix $K=\begin{pmatrix}0&1\\1&1\end{pmatrix}$
 and, for a cyclic word $x\in\{0,1\}^N$, set
 \begin{align}
-	p_N(x) & =\prod_{v=0}^{N-1}K_{x_vx_{v+1}}.
-	\label{eq:asymex_fib_admissibility}
+    p_N(x) & =\prod_{v=0}^{N-1}K_{x_vx_{v+1}}.
+    \label{eq:asymex_fib_admissibility}
 \end{align}
 A word is admissible if $p_N(x)=1$, equivalently if it has no cyclic
 neighboring pair $00$. This includes the last-to-first pair.
 At $N=1$, the condition excludes the single label $0$.
 
 \begin{lemma}[Vacuum projection and its kernel]
-	\label{lem:asymex_fib_vacuum}
-	For $N\geq1$, the vacuum operator $P_N=O_N(B_1)$ has matrix elements
-	\begin{align}
-		\bra{y}P_N\ket{x} & =\delta_{yx}p_N(x).
-		\label{eq:asymex_fib_vacuum_kernel}
-	\end{align}
-	Thus $P_N\ket{x}=p_N(x)\ket{x}$. It is the orthogonal projection
-	onto the admissible subspace:
-	\begin{align}
-		\ran P_N & =\spn_{\C}\{\ket{x}:p_N(x)=1\}.
-		\label{eq:asymex_fib_vacuum_range}
-	\end{align}
-	\begin{align}
-		\ker P_N & =\spn_{\C}\{\ket{x}:p_N(x)=0\}.
-		\label{eq:asymex_fib_vacuum_null}
-	\end{align}
-	In particular, $P_N^2=P_N=P_N^\dagger$, but $P_N\neq\Id_{\mc H_N}$.
+    \label{lem:asymex_fib_vacuum}
+    For $N\geq1$, the vacuum operator $P_N=O_N(B_1)$ has matrix elements
+    \begin{align}
+        \bra{y}P_N\ket{x} & =\delta_{yx}p_N(x).
+        \label{eq:asymex_fib_vacuum_kernel}
+    \end{align}
+    Thus $P_N\ket{x}=p_N(x)\ket{x}$. It is the orthogonal projection
+    onto the admissible subspace:
+    \begin{align}
+        \ran P_N & =\spn_{\C}\{\ket{x}:p_N(x)=1\}.
+        \label{eq:asymex_fib_vacuum_range}
+    \end{align}
+    \begin{align}
+        \ker P_N & =\spn_{\C}\{\ket{x}:p_N(x)=0\}.
+        \label{eq:asymex_fib_vacuum_null}
+    \end{align}
+    In particular, $P_N^2=P_N=P_N^\dagger$, but $P_N\neq\Id_{\mc H_N}$.
 \end{lemma}
 
 \begin{proof}
-	The vacuum letters satisfy
-	$(B_1^{yx})_{ab}=\delta_{yx}\delta_{ax}K_{xb}$.
-	Expanding the periodic trace over bond labels
-	$g=(g_0,\ldots,g_{N-1})$, with $g_N=g_0$, gives
-	\begin{align}
-		\bra{y}P_N\ket{x}
-		 & =\sum_g\prod_{v=0}^{N-1}
-		\delta_{y_vx_v}\delta_{g_vx_v}K_{x_vg_{v+1}}
-		=\delta_{yx}\prod_{v=0}^{N-1}K_{x_vx_{v+1}}.
-	\end{align}
-	Only $g=x$ contributes. Since $p_N(x)\in\{0,1\}$,
-	the operator is diagonal with real idempotent entries.
-	This proves the projection, range, and kernel statements.
-	The nonzero vector $\ket{0,\ldots,0}$ lies in its kernel,
-	so it is not the ambient identity. At one site,
-	$P_1=\diag(0,1)$.
+    The vacuum letters satisfy
+    $(B_1^{yx})_{ab}=\delta_{yx}\delta_{ax}K_{xb}$.
+    Expanding the periodic trace over bond labels
+    $g=(g_0,\ldots,g_{N-1})$, with $g_N=g_0$, gives
+    \begin{align}
+        \bra{y}P_N\ket{x}
+         & =\sum_g\prod_{v=0}^{N-1}
+        \delta_{y_vx_v}\delta_{g_vx_v}K_{x_vg_{v+1}}
+        =\delta_{yx}\prod_{v=0}^{N-1}K_{x_vx_{v+1}}.
+    \end{align}
+    Only $g=x$ contributes. Since $p_N(x)\in\{0,1\}$,
+    the operator is diagonal with real idempotent entries.
+    This proves the projection, range, and kernel statements.
+    The nonzero vector $\ket{0,\ldots,0}$ lies in its kernel,
+    so it is not the ambient identity. At one site,
+    $P_1=\diag(0,1)$.
 \end{proof}
 
 \begin{theorem}[Vacuum unit laws]
-	\label{thm:asymex_fib_unit}
-	\lean{FibonacciCompression.fibOne_mul_fibOne,
-		FibonacciCompression.fibOne_mul_fibTau,
-		FibonacciCompression.fibTau_mul_fibOne}
-	\leanok
-	\uses{def:asymex_fib, def:mpo_family}
-	For every $N\geq1$, the periodic operators satisfy
-	\begin{align}
-		O_N(B_1)^2 & =O_N(B_1).
-		\label{eq:asymex_fib_unit_square}
-	\end{align}
-	\begin{align}
-		O_N(B_1)O_N(B_\tau) & =O_N(B_\tau).
-		\label{eq:asymex_fib_unit_left}
-	\end{align}
-	\begin{align}
-		O_N(B_\tau)O_N(B_1) & =O_N(B_\tau).
-		\label{eq:asymex_fib_unit_right}
-	\end{align}
+    \label{thm:asymex_fib_unit}
+    \lean{FibonacciCompression.fibOne_mul_fibOne,
+        FibonacciCompression.fibOne_mul_fibTau,
+        FibonacciCompression.fibTau_mul_fibOne}
+    \leanok
+    \uses{def:asymex_fib, def:mpo_family}
+    For every $N\geq1$, the periodic operators satisfy
+    \begin{align}
+        O_N(B_1)^2 & =O_N(B_1).
+        \label{eq:asymex_fib_unit_square}
+    \end{align}
+    \begin{align}
+        O_N(B_1)O_N(B_\tau) & =O_N(B_\tau).
+        \label{eq:asymex_fib_unit_left}
+    \end{align}
+    \begin{align}
+        O_N(B_\tau)O_N(B_1) & =O_N(B_\tau).
+        \label{eq:asymex_fib_unit_right}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	For MPO tensors $T$ and $U$, denote their stacked product by
-	$(TU)^{yx}=\sum_mT^{ym}\otimes U^{mx}$.
-	Write $0_r$ for the tensor whose letters are zero $r\times r$
-	matrices, and $\sim$ for simultaneous similarity of all letters.
-	The three stacked products admit the decompositions
-	\begin{align}
-		B_1B_1 & \sim B_1\oplus0_2.
-		\label{eq:asymex_fib_unit_blocks}
-	\end{align}
-	\begin{align}
-		B_1B_\tau & \sim B_\tau\oplus0_3.
-	\end{align}
-	\begin{align}
-		B_\tau B_1 & \sim B_\tau\oplus0_3.
-	\end{align}
-	The changes of bond coordinates and their inverses have entries
-	in $\Z[\sigma]$. The decompositions, of dimensions $4=2+2$ and
-	$6=3+3$, are verified by matrix multiplication with coefficients
-	reduced using $\sigma^4=1-\sigma^2$.
-	The periodic product formula for a multi-block compression gives
-	the trace of the single nonzero target block. Since $N>0$, every
-	zero block contributes zero, proving the three identities.
+    \leanok
+    For MPO tensors $T$ and $U$, denote their stacked product by
+    $(TU)^{yx}=\sum_mT^{ym}\otimes U^{mx}$.
+    Write $0_r$ for the tensor whose letters are zero $r\times r$
+    matrices, and $\sim$ for simultaneous similarity of all letters.
+    The three stacked products admit the decompositions
+    \begin{align}
+        B_1B_1 & \sim B_1\oplus0_2.
+        \label{eq:asymex_fib_unit_blocks}
+    \end{align}
+    \begin{align}
+        B_1B_\tau & \sim B_\tau\oplus0_3.
+    \end{align}
+    \begin{align}
+        B_\tau B_1 & \sim B_\tau\oplus0_3.
+    \end{align}
+    The changes of bond coordinates and their inverses have entries
+    in $\Z[\sigma]$. The decompositions, of dimensions $4=2+2$ and
+    $6=3+3$, are verified by matrix multiplication with coefficients
+    reduced using $\sigma^4=1-\sigma^2$.
+    The periodic product formula for a multi-block compression gives
+    the trace of the single nonzero target block. Since $N>0$, every
+    zero block contributes zero, proving the three identities.
 \end{proof}
 
 By~(\ref{eq:asymex_fib_unit_left}), the range of $O_N(B_\tau)$ lies in
@@ -253,66 +253,66 @@ $\ket{V^{(N)}(D)}=\sum_x\tr(D^{x_0}\cdots D^{x_{N-1}})\ket{x}$.
 These vectors are not normalized unless this is stated explicitly.
 
 \begin{definition}[The all-$\tau$ and chain tensors]
-	\label{def:asymex_fib_states}
-	\lean{FibonacciCompression.fibAllTau,
-		FibonacciCompression.fibChain}
-	\leanok
-	The all-$\tau$ tensor $A$ has bond dimension one, with
-	$A^0=(0)$ and
-	\begin{align}
-		A^1 & =(1).
-		\label{eq:asymex_fib_product_tensor}
-	\end{align}
-	The chain tensor $C$ has bond dimension two:
-	\begin{align}
-		C^0 & =\begin{pmatrix}0&\sigma\\0&0\end{pmatrix}.
-		\label{eq:asymex_fib_chain_zero}
-	\end{align}
-	\begin{align}
-		C^1 & =\begin{pmatrix}0&0\\1&-\sigma^2\end{pmatrix}.
-		\label{eq:asymex_fib_chain_one}
-	\end{align}
+    \label{def:asymex_fib_states}
+    \lean{FibonacciCompression.fibAllTau,
+        FibonacciCompression.fibChain}
+    \leanok
+    The all-$\tau$ tensor $A$ has bond dimension one, with
+    $A^0=(0)$ and
+    \begin{align}
+        A^1 & =(1).
+        \label{eq:asymex_fib_product_tensor}
+    \end{align}
+    The chain tensor $C$ has bond dimension two:
+    \begin{align}
+        C^0 & =\begin{pmatrix}0&\sigma\\0&0\end{pmatrix}.
+        \label{eq:asymex_fib_chain_zero}
+    \end{align}
+    \begin{align}
+        C^1 & =\begin{pmatrix}0&0\\1&-\sigma^2\end{pmatrix}.
+        \label{eq:asymex_fib_chain_one}
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Amplitudes and norms]
-	\label{lem:asymex_fib_amplitudes}
-	Let $N\geq1$. The product tensor gives
-	$\ket{V^{(N)}(A)}=\ket{1,\ldots,1}$, of norm one.
-	For a word $x$, let $n_0(x)$ count its zeros and let $n_{11}(x)$
-	count its cyclic neighboring pairs $11$. Then
-	\begin{align}
-		V^{(N)}(C)_x
-		 & =p_N(x)\sigma^{n_0(x)}(-\sigma^2)^{n_{11}(x)}.
-		\label{eq:asymex_fib_chain_amplitude}
-	\end{align}
-	Both vectors are fixed by $P_N$. The chain norm is
-	\begin{align}
-		\bigl\|\ket{V^{(N)}(C)}\bigr\|^2
-		 & =\sum_{x\in\{0,1\}^N}
-		p_N(x)\sigma^{2n_0(x)+4n_{11}(x)}.
-		\label{eq:asymex_fib_chain_norm}
-	\end{align}
-	This norm is positive.
+    \label{lem:asymex_fib_amplitudes}
+    Let $N\geq1$. The product tensor gives
+    $\ket{V^{(N)}(A)}=\ket{1,\ldots,1}$, of norm one.
+    For a word $x$, let $n_0(x)$ count its zeros and let $n_{11}(x)$
+    count its cyclic neighboring pairs $11$. Then
+    \begin{align}
+        V^{(N)}(C)_x
+         & =p_N(x)\sigma^{n_0(x)}(-\sigma^2)^{n_{11}(x)}.
+        \label{eq:asymex_fib_chain_amplitude}
+    \end{align}
+    Both vectors are fixed by $P_N$. The chain norm is
+    \begin{align}
+        \bigl\|\ket{V^{(N)}(C)}\bigr\|^2
+         & =\sum_{x\in\{0,1\}^N}
+        p_N(x)\sigma^{2n_0(x)+4n_{11}(x)}.
+        \label{eq:asymex_fib_chain_norm}
+    \end{align}
+    This norm is positive.
 \end{lemma}
 
 \begin{proof}
-	The bond-one trace is $\prod_v\delta_{x_v1}$.
-	For the chain, put
-	$H=\begin{pmatrix}0&\sigma\\1&-\sigma^2\end{pmatrix}$.
-	Since $(C^x)_{ab}=\delta_{ax}H_{xb}$, the cyclic contraction gives
-	\begin{align}
-		V^{(N)}(C)_x
-		 & =\sum_g\prod_v\delta_{g_vx_v}H_{x_vg_{v+1}}
-		=\prod_vH_{x_vx_{v+1}}.
-	\end{align}
-	A pair $00$ makes the product zero. In an admissible word, every
-	zero is followed by a one, giving $n_0(x)$ factors of $\sigma$.
-	Each pair $10$ contributes $1$, and each pair $11$ contributes
-	$-\sigma^2$. This proves~(\ref{eq:asymex_fib_chain_amplitude}).
-	Both vectors have admissible support, so
-	Lemma~\ref{lem:asymex_fib_vacuum} shows that $P_N$ fixes them.
-	Summing squared amplitudes proves~(\ref{eq:asymex_fib_chain_norm}).
-	The all-one amplitude is $(-\sigma^2)^N\neq0$.
+    The bond-one trace is $\prod_v\delta_{x_v1}$.
+    For the chain, put
+    $H=\begin{pmatrix}0&\sigma\\1&-\sigma^2\end{pmatrix}$.
+    Since $(C^x)_{ab}=\delta_{ax}H_{xb}$, the cyclic contraction gives
+    \begin{align}
+        V^{(N)}(C)_x
+         & =\sum_g\prod_v\delta_{g_vx_v}H_{x_vg_{v+1}}
+        =\prod_vH_{x_vx_{v+1}}.
+    \end{align}
+    A pair $00$ makes the product zero. In an admissible word, every
+    zero is followed by a one, giving $n_0(x)$ factors of $\sigma$.
+    Each pair $10$ contributes $1$, and each pair $11$ contributes
+    $-\sigma^2$. This proves~(\ref{eq:asymex_fib_chain_amplitude}).
+    Both vectors have admissible support, so
+    Lemma~\ref{lem:asymex_fib_vacuum} shows that $P_N$ fixes them.
+    Summing squared amplitudes proves~(\ref{eq:asymex_fib_chain_norm}).
+    The all-one amplitude is $(-\sigma^2)^N\neq0$.
 \end{proof}
 
 The normalized chain vector is obtained by dividing by the positive
@@ -322,116 +322,116 @@ In particular, the two periodic vectors are not independent at every
 length.
 
 \begin{theorem}[Normality of the two state tensors]
-	\label{thm:asymex_fib_states_normal}
-	\lean{FibonacciCompression.fibAllTau_isNormal,
-		FibonacciCompression.fibChain_isNormal}
-	\leanok
-	\uses{def:asymex_fib_states, def:normal}
-	The length-one words of $A$ span $\MN{1}$, and the length-three
-	words of $C$ span $\MN{2}$. Thus both tensors are normal.
+    \label{thm:asymex_fib_states_normal}
+    \lean{FibonacciCompression.fibAllTau_isNormal,
+        FibonacciCompression.fibChain_isNormal}
+    \leanok
+    \uses{def:asymex_fib_states, def:normal}
+    The length-one words of $A$ span $\MN{1}$, and the length-three
+    words of $C$ span $\MN{2}$. Thus both tensors are normal.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	The letter $A^1$ spans $\MN{1}$. For $C$, write $E_{ab}$ for
-	the matrix units of $\MN{2}$. Direct multiplication gives
-	\begin{align}
-		C^0C^1C^0 & =\sigma^2E_{01}.
-	\end{align}
-	\begin{align}
-		C^0C^1C^1 & =-\sigma^3E_{00}+\sigma^5E_{01}.
-	\end{align}
-	\begin{align}
-		C^1C^0C^1 & =\sigma C^1.
-	\end{align}
-	\begin{align}
-		C^1C^1C^0 & =-\sigma^3E_{11}.
-	\end{align}
-	These four words span all four matrix units, since $\sigma\neq0$.
-	The coefficients expressing the units in their span can all be
-	chosen in $\Z[\sigma]$, using
-	$\sigma^{-1}=\sigma+\sigma^3$.
-	Embedding these identities into $\C$ proves the required
-	word-spanning property. No normalization of the transfer-map
-	spectral radius is asserted.
+    \leanok
+    The letter $A^1$ spans $\MN{1}$. For $C$, write $E_{ab}$ for
+    the matrix units of $\MN{2}$. Direct multiplication gives
+    \begin{align}
+        C^0C^1C^0 & =\sigma^2E_{01}.
+    \end{align}
+    \begin{align}
+        C^0C^1C^1 & =-\sigma^3E_{00}+\sigma^5E_{01}.
+    \end{align}
+    \begin{align}
+        C^1C^0C^1 & =\sigma C^1.
+    \end{align}
+    \begin{align}
+        C^1C^1C^0 & =-\sigma^3E_{11}.
+    \end{align}
+    These four words span all four matrix units, since $\sigma\neq0$.
+    The coefficients expressing the units in their span can all be
+    chosen in $\Z[\sigma]$, using
+    $\sigma^{-1}=\sigma+\sigma^3$.
+    Embedding these identities into $\C$ proves the required
+    word-spanning property. No normalization of the transfer-map
+    spectral radius is asserted.
 \end{proof}
 
 \begin{theorem}[Action on the two periodic states]
-	\label{thm:asymex_fib_state_action}
-	\lean{FibonacciCompression.mpo_fibOne_mulVec_allTau,
-		FibonacciCompression.mpo_fibTau_mulVec_allTau,
-		FibonacciCompression.mpo_fibTau_mulVec_chain}
-	\leanok
-	\uses{def:asymex_fib, def:asymex_fib_states, def:mpo_family}
-	For every $N\geq1$,
-	\begin{align}
-		O_N(B_1)\ket{V^{(N)}(A)}
-		 & =\ket{V^{(N)}(A)}.
-		\label{eq:asymex_fib_action_unit}
-	\end{align}
-	\begin{align}
-		O_N(B_\tau)\ket{V^{(N)}(A)}
-		 & =\ket{V^{(N)}(C)}.
-		\label{eq:asymex_fib_action_product}
-	\end{align}
-	\begin{align}
-		O_N(B_\tau)\ket{V^{(N)}(C)}
-		 & =\ket{V^{(N)}(A)}+\ket{V^{(N)}(C)}.
-		\label{eq:asymex_fib_action_chain}
-	\end{align}
+    \label{thm:asymex_fib_state_action}
+    \lean{FibonacciCompression.mpo_fibOne_mulVec_allTau,
+        FibonacciCompression.mpo_fibTau_mulVec_allTau,
+        FibonacciCompression.mpo_fibTau_mulVec_chain}
+    \leanok
+    \uses{def:asymex_fib, def:asymex_fib_states, def:mpo_family}
+    For every $N\geq1$,
+    \begin{align}
+        O_N(B_1)\ket{V^{(N)}(A)}
+         & =\ket{V^{(N)}(A)}.
+        \label{eq:asymex_fib_action_unit}
+    \end{align}
+    \begin{align}
+        O_N(B_\tau)\ket{V^{(N)}(A)}
+         & =\ket{V^{(N)}(C)}.
+        \label{eq:asymex_fib_action_product}
+    \end{align}
+    \begin{align}
+        O_N(B_\tau)\ket{V^{(N)}(C)}
+         & =\ket{V^{(N)}(A)}+\ket{V^{(N)}(C)}.
+        \label{eq:asymex_fib_action_chain}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	For an MPO tensor $T$ and MPS tensor $D$, their action tensor
-	has letters $(T\cdot D)^y=\sum_xT^{yx}\otimes D^x$.
-	As in the proof of Theorem~\ref{thm:asymex_fib_unit}, let $\sim$
-	denote simultaneous similarity of letters and let $0_r$ denote
-	a zero tensor of bond dimension $r$.
-	The three action tensors have block decompositions
-	\begin{align}
-		B_1\cdot A & \sim A\oplus0_1.
-		\label{eq:asymex_fib_action_blocks_unit}
-	\end{align}
-	\begin{align}
-		B_\tau\cdot A & \sim C\oplus0_1.
-		\label{eq:asymex_fib_action_blocks_product}
-	\end{align}
-	\begin{align}
-		B_\tau\cdot C & \sim A\oplus C\oplus0_3.
-		\label{eq:asymex_fib_action_blocks_chain}
-	\end{align}
-	In lexicographic order on the product bond indices, matrices whose
-	columns give these adapted bases are respectively
-	\begin{align}
-		Q_2 & =\begin{pmatrix}0&1\\1&-1\end{pmatrix}.
-	\end{align}
-	\begin{align}
-		Q_3 & =\begin{pmatrix}1&0&1\\0&0&-\sigma\\0&1&\sigma^2\end{pmatrix}.
-	\end{align}
-	\begin{align}
-		Q_6 & =\begin{pmatrix}
-			       0               & 0 & 0         & 0          & 1        & 1         \\
-			       0               & 1 & 0         & 0          & 0        & \sigma^2  \\
-			       1               & 0 & \sigma    & 1          & -\sigma  & -\sigma^3 \\
-			       0               & 0 & 0         & 1+\sigma^2 & 0        & 0         \\
-			       0               & 0 & 0         & 0          & \sigma^2 & 0         \\
-			       \sigma+\sigma^3 & 0 & -\sigma^2 & 0          & 0        & -\sigma^2
-		       \end{pmatrix}.
-	\end{align}
-	They are invertible, with inverses over $\Z[\sigma]$.
-	For each action tensor, let $D_{\mathrm{blk}}$ denote the
-	corresponding block tensor in
-	(\ref{eq:asymex_fib_action_blocks_unit}),
-	(\ref{eq:asymex_fib_action_blocks_product}), or
-	(\ref{eq:asymex_fib_action_blocks_chain}).
-	Matrix multiplication verifies
-	$(T\cdot D)^yQ=QD_{\mathrm{blk}}^y$.
-	All off-diagonal blocks vanish, giving the three multi-block
-	compressions. The periodic action formula for each compression
-	sums its target vectors. The zero blocks contribute nothing
-	because $N>0$. The first two sums have one target each, and the
-	third has the targets $A$ and $C$.
+    \leanok
+    For an MPO tensor $T$ and MPS tensor $D$, their action tensor
+    has letters $(T\cdot D)^y=\sum_xT^{yx}\otimes D^x$.
+    As in the proof of Theorem~\ref{thm:asymex_fib_unit}, let $\sim$
+    denote simultaneous similarity of letters and let $0_r$ denote
+    a zero tensor of bond dimension $r$.
+    The three action tensors have block decompositions
+    \begin{align}
+        B_1\cdot A & \sim A\oplus0_1.
+        \label{eq:asymex_fib_action_blocks_unit}
+    \end{align}
+    \begin{align}
+        B_\tau\cdot A & \sim C\oplus0_1.
+        \label{eq:asymex_fib_action_blocks_product}
+    \end{align}
+    \begin{align}
+        B_\tau\cdot C & \sim A\oplus C\oplus0_3.
+        \label{eq:asymex_fib_action_blocks_chain}
+    \end{align}
+    In lexicographic order on the product bond indices, matrices whose
+    columns give these adapted bases are respectively
+    \begin{align}
+        Q_2 & =\begin{pmatrix}0&1\\1&-1\end{pmatrix}.
+    \end{align}
+    \begin{align}
+        Q_3 & =\begin{pmatrix}1&0&1\\0&0&-\sigma\\0&1&\sigma^2\end{pmatrix}.
+    \end{align}
+    \begin{align}
+        Q_6 & =\begin{pmatrix}
+                   0               & 0 & 0         & 0          & 1        & 1         \\
+                   0               & 1 & 0         & 0          & 0        & \sigma^2  \\
+                   1               & 0 & \sigma    & 1          & -\sigma  & -\sigma^3 \\
+                   0               & 0 & 0         & 1+\sigma^2 & 0        & 0         \\
+                   0               & 0 & 0         & 0          & \sigma^2 & 0         \\
+                   \sigma+\sigma^3 & 0 & -\sigma^2 & 0          & 0        & -\sigma^2
+               \end{pmatrix}.
+    \end{align}
+    They are invertible, with inverses over $\Z[\sigma]$.
+    For each action tensor, let $D_{\mathrm{blk}}$ denote the
+    corresponding block tensor in
+    (\ref{eq:asymex_fib_action_blocks_unit}),
+    (\ref{eq:asymex_fib_action_blocks_product}), or
+    (\ref{eq:asymex_fib_action_blocks_chain}).
+    Matrix multiplication verifies
+    $(T\cdot D)^yQ=QD_{\mathrm{blk}}^y$.
+    All off-diagonal blocks vanish, giving the three multi-block
+    compressions. The periodic action formula for each compression
+    sums its target vectors. The zero blocks contribute nothing
+    because $N>0$. The first two sums have one target each, and the
+    third has the targets $A$ and $C$.
 \end{proof}
 
 The first nontrivial action also has a direct contraction proof.
@@ -440,9 +440,9 @@ $B_\tau^{11}$. Both have zero row $1$, so a cyclic bond configuration
 using that coordinate contributes zero. Restricting to the ordered
 coordinates $(0,2)$ gives exactly $C^0$ and $C^1$. Hence
 \begin{align}
-	\bra{x}O_N(B_\tau)\ket{1,\ldots,1}
-	 & =\tr(B_\tau^{x_0 1}\cdots B_\tau^{x_{N-1}1})
-	=\tr(C^{x_0}\cdots C^{x_{N-1}}).
+    \bra{x}O_N(B_\tau)\ket{1,\ldots,1}
+     & =\tr(B_\tau^{x_0 1}\cdots B_\tau^{x_{N-1}1})
+    =\tr(C^{x_0}\cdots C^{x_{N-1}}).
 \end{align}
 There is no additional normalization factor.
 
@@ -464,83 +464,83 @@ matrix calculations. Their coefficients belong to a quartic ring,
 which also contains the compression maps for the stacked square.
 
 \begin{definition}[The ring of golden integers]
-	\label{def:asymex_golden_ring}
-	\lean{GoldenInt, GoldenInt.sigma, goldenPoly, goldenSigmaReal,
-		goldenToComplex, MPSTensor.complexOfGolden, MPSTensor.evalWordGolden,
-		MPSTensor.mulGoldenTensor}
-	\leanok
-	The ring of \emph{golden integers} is $\Z[\sigma]$, where
-	$\sigma=\varphi^{-1/2}=\sqrt{(\sqrt5-1)/2}$ is the positive real
-	root of $X^4+X^2-1$. It is presented by the four integer
-	coordinates of $c_0+c_1\sigma+c_2\sigma^2+c_3\sigma^3$,
-	with multiplication reduced using $\sigma^4=1-\sigma^2$.
-	It embeds into $\C$ through the quotient
-	$\mathbb{Q}[X]/(X^4+X^2-1)$ evaluated at this real root.
-	For matrices, the embedding is applied entrywise.
-	Word evaluation and the bond-space product of tensors over
-	$\Z[\sigma]$ use the same formulas as over $\C$.
+    \label{def:asymex_golden_ring}
+    \lean{GoldenInt, GoldenInt.sigma, goldenPoly, goldenSigmaReal,
+        goldenToComplex, MPSTensor.complexOfGolden, MPSTensor.evalWordGolden,
+        MPSTensor.mulGoldenTensor}
+    \leanok
+    The ring of \emph{golden integers} is $\Z[\sigma]$, where
+    $\sigma=\varphi^{-1/2}=\sqrt{(\sqrt5-1)/2}$ is the positive real
+    root of $X^4+X^2-1$. It is presented by the four integer
+    coordinates of $c_0+c_1\sigma+c_2\sigma^2+c_3\sigma^3$,
+    with multiplication reduced using $\sigma^4=1-\sigma^2$.
+    It embeds into $\C$ through the quotient
+    $\mathbb{Q}[X]/(X^4+X^2-1)$ evaluated at this real root.
+    For matrices, the embedding is applied entrywise.
+    Word evaluation and the bond-space product of tensors over
+    $\Z[\sigma]$ use the same formulas as over $\C$.
 \end{definition}
 
 \begin{theorem}[Exact arithmetic in the ring of golden integers]
-	\label{thm:asymex_golden_ring}
-	% Principal declaration: goldenMulRule.
-	\lean{GoldenInt.sigma_quartic, goldenMulRule, goldenSigmaReal_quartic,
-		MPSTensor.complexOfGolden_mul, MPSTensor.evalWord_complexOfGolden,
-		MPSTensor.mulTensor_complexOfGolden}
-	\leanok
-	\uses{def:asymex_golden_ring}
-	The generator satisfies $\sigma^4+\sigma^2-1=0$ in $\Z[\sigma]$, and so
-	does the real number $\sqrt{(\sqrt5-1)/2}$. In any commutative ring
-	carrying a root $s$ of $X^4+X^2-1$, the product of two integer
-	combinations of $1,s,s^2,s^3$ is the combination prescribed by the
-	multiplication of $\Z[\sigma]$. The entrywise embedding of matrices
-	over $\Z[\sigma]$ into the complex matrices is multiplicative, and it
-	commutes with word evaluation and with the bond-space product of
-	tensors.
+    \label{thm:asymex_golden_ring}
+    % Principal declaration: goldenMulRule.
+    \lean{GoldenInt.sigma_quartic, goldenMulRule, goldenSigmaReal_quartic,
+        MPSTensor.complexOfGolden_mul, MPSTensor.evalWord_complexOfGolden,
+        MPSTensor.mulTensor_complexOfGolden}
+    \leanok
+    \uses{def:asymex_golden_ring}
+    The generator satisfies $\sigma^4+\sigma^2-1=0$ in $\Z[\sigma]$, and so
+    does the real number $\sqrt{(\sqrt5-1)/2}$. In any commutative ring
+    carrying a root $s$ of $X^4+X^2-1$, the product of two integer
+    combinations of $1,s,s^2,s^3$ is the combination prescribed by the
+    multiplication of $\Z[\sigma]$. The entrywise embedding of matrices
+    over $\Z[\sigma]$ into the complex matrices is multiplicative, and it
+    commutes with word evaluation and with the bond-space product of
+    tensors.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	Squaring $\sigma^2=(\sqrt5-1)/2$ gives the quartic for the real root.
-	The multiplication rule is the reduction of a product of two
-	polynomials of degree at most three modulo $X^4+X^2-1$.
-	It is a polynomial identity in their eight integer coefficients.
-	The entrywise embedding is induced by a ring homomorphism, so
-	expansion of a matrix product proves its multiplicativity.
-	Induction on the word proves compatibility with word evaluation.
-	Expansion of the bond-space product proves the remaining
-	compatibility statement.
+    \leanok
+    Squaring $\sigma^2=(\sqrt5-1)/2$ gives the quartic for the real root.
+    The multiplication rule is the reduction of a product of two
+    polynomials of degree at most three modulo $X^4+X^2-1$.
+    It is a polynomial identity in their eight integer coefficients.
+    The entrywise embedding is induced by a ring homomorphism, so
+    expansion of a matrix product proves its multiplicativity.
+    Induction on the word proves compatibility with word evaluation.
+    Expansion of the bond-space product proves the remaining
+    compatibility statement.
 \end{proof}
 
 \begin{theorem}[Normality of the two Fibonacci blocks]
-	\label{thm:asymex_fib_normal}
-	\lean{FibonacciCompression.fibOneMPS_isNormal,
-		FibonacciCompression.fibTauMPS_isNormal}
-	\leanok
-	\uses{def:asymex_fib, def:normal}
-	Both blocks are normal: their length-three words span the full
-	matrix algebra of their bond space.
+    \label{thm:asymex_fib_normal}
+    \lean{FibonacciCompression.fibOneMPS_isNormal,
+        FibonacciCompression.fibTauMPS_isNormal}
+    \leanok
+    \uses{def:asymex_fib, def:normal}
+    Both blocks are normal: their length-three words span the full
+    matrix algebra of their bond space.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_golden_ring}
-	For the $\tau$ block, let $e_i$ be the $i$-th coordinate column
-	vector and $f_i$ the $i$-th row of
-	(\ref{eq:asymex_fib_vertex}). In this proof, superscripts
-	$0,1,2,3$ enumerate the ordered pair alphabet. Thus
-	$B_\tau^{i+1}=e_i f_i$ for $i\in\{0,1,2\}$, and
-	\begin{align}
-		B_\tau^{i+1}B_\tau^3B_\tau^{k+1}
-		 & =F_{i2}F_{2k}\,e_i f_k.
-	\end{align}
-	All factors $F_{i2}F_{2k}$ are nonzero, and the rows $f_k$
-	form a basis. Each of the nine matrix units is an explicit
-	combination over $\Z[\sigma]$ of these nine words.
-	For the vacuum block, four length-three words suffice.
-	Both families of coefficients are verified in $\Z[\sigma]$
-	and transported to complex matrices by
-	Theorem~\ref{thm:asymex_golden_ring}.
+    \leanok
+    \uses{thm:asymex_golden_ring}
+    For the $\tau$ block, let $e_i$ be the $i$-th coordinate column
+    vector and $f_i$ the $i$-th row of
+    (\ref{eq:asymex_fib_vertex}). In this proof, superscripts
+    $0,1,2,3$ enumerate the ordered pair alphabet. Thus
+    $B_\tau^{i+1}=e_i f_i$ for $i\in\{0,1,2\}$, and
+    \begin{align}
+        B_\tau^{i+1}B_\tau^3B_\tau^{k+1}
+         & =F_{i2}F_{2k}\,e_i f_k.
+    \end{align}
+    All factors $F_{i2}F_{2k}$ are nonzero, and the rows $f_k$
+    form a basis. Each of the nine matrix units is an explicit
+    combination over $\Z[\sigma]$ of these nine words.
+    For the vacuum block, four length-three words suffice.
+    Both families of coefficients are verified in $\Z[\sigma]$
+    and transported to complex matrices by
+    Theorem~\ref{thm:asymex_golden_ring}.
 \end{proof}
 
 The stacked square in~(\ref{eq:asymex_fib_stack}) contracts the physical
@@ -549,133 +549,133 @@ indices. Its periodic operator is therefore the square of
 $O_N(B_\tau)$.
 
 \begin{center}
-	% Formula: B^{x'x}=\sum_m(B_\tau)^{x'm}\otimes(B_\tau)^{mx}, the
-	% stacked product of Definition~\ref{def:asymex_fib}, realizing
-	% $\tau\otimes\tau$; Theorem~\ref{thm:asymex_fib_fusion} identifies
-	% its periodic trace with that of $B_1\oplus B_\tau$, the
-	% realization $1\oplus\tau$.
-	% Source: Definition~\ref{def:asymex_fib}.
-	% Ink-to-index map: both rows are the $\tau$ tensor $B_\tau$; the
-	% shared vertical pairleg at each site is the summed intermediate
-	% label $m$; the drawn upper-row label $y$ is the per-site
-	% component of the outgoing index $x'$.
-	% Contraction set: the vertical pairlegs (index $m$) at every site
-	% and the horizontal virtual bonds within each row; the physical
-	% legs $(y,x)$, the per-site components of $(x',x)$, remain open.
-	% Boundary signature: (virtual-west=0 | virtual-east=0 |
-	% physical-up=3 | physical-down=3) on both sides.
-	\tenkzkernel
-	\begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
-		\tn[skin=mpo, ports={90:physical:$y_1$, 270:physical}]{B_\tau} &
-		\tn[skin=mpo, ports={90:physical:$y_2$, 270:physical}]{B_\tau} &
-		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-		\tn[skin=mpo, ports={90:physical:$y_N$, 270:physical}]{B_\tau} \\
-		\tn[skin=mpo, ports={90:physical, 270:physical:$x_1$}]{B_\tau} &
-		\tn[skin=mpo, ports={90:physical, 270:physical:$x_2$}]{B_\tau} &
-		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-		\tn[skin=mpo, ports={90:physical, 270:physical:$x_N$}]{B_\tau}
-	\end{tenkz}
-	\quad $=$ \quad
-	\begin{tenkz}[rows={op}, cols=4, boundary=periodic]
-		\tn[skin=mpo, ports={90:physical:$y_1$, 270:physical:$x_1$}]{B} &
-		\tn[skin=mpo, ports={90:physical:$y_2$, 270:physical:$x_2$}]{B} &
-		\tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-		\tn[skin=mpo, ports={90:physical:$y_N$, 270:physical:$x_N$}]{B}
-	\end{tenkz}
+    % Formula: B^{x'x}=\sum_m(B_\tau)^{x'm}\otimes(B_\tau)^{mx}, the
+    % stacked product of Definition~\ref{def:asymex_fib}, realizing
+    % $\tau\otimes\tau$; Theorem~\ref{thm:asymex_fib_fusion} identifies
+    % its periodic trace with that of $B_1\oplus B_\tau$, the
+    % realization $1\oplus\tau$.
+    % Source: Definition~\ref{def:asymex_fib}.
+    % Ink-to-index map: both rows are the $\tau$ tensor $B_\tau$; the
+    % shared vertical pairleg at each site is the summed intermediate
+    % label $m$; the drawn upper-row label $y$ is the per-site
+    % component of the outgoing index $x'$.
+    % Contraction set: the vertical pairlegs (index $m$) at every site
+    % and the horizontal virtual bonds within each row; the physical
+    % legs $(y,x)$, the per-site components of $(x',x)$, remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$y_1$, 270:physical}]{B_\tau} &
+        \tn[skin=mpo, ports={90:physical:$y_2$, 270:physical}]{B_\tau} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$y_N$, 270:physical}]{B_\tau} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$x_1$}]{B_\tau} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$x_2$}]{B_\tau} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$x_N$}]{B_\tau}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$y_1$, 270:physical:$x_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$y_2$, 270:physical:$x_2$}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$y_N$, 270:physical:$x_N$}]{B}
+    \end{tenkz}
 \end{center}
 
 \begin{theorem}[Split compression of the Fibonacci square]
-	\label{thm:asymex_fib_compression}
-	% Principal declaration: FibonacciCompression.fibonacci_isReduction.
-	\lean{FibonacciCompression.fibonacci_compression,
-		FibonacciCompression.fibonacci_isReduction,
-		FibonacciCompression.fibonacci_left_mul_right_of_ne,
-		FibonacciCompression.fibonacci_dim_eq,
-		FibonacciCompression.fibonacci_evalWord_remainder_eq_zero,
-		FibonacciCompression.fibonacci_remainder_eq_zero}
-	\leanok
-	\uses{def:asymex_fib, thm:asym_multiblock}
-	The source of Definition~\ref{def:asymex_fib} carries the block
-	triangular form of Theorem~\ref{thm:asym_multiblock}, with target
-	blocks $C_1=B_1$ and $C_\tau=B_\tau$, and $z=4$ zero slots.
-	The dimension count is $9=2+3+4$. Here the indexed tensors $C_s$
-	denote the MPO target blocks, not the chain tensor $C$.
-	There are compression maps
-	$V_s:\C^{D_s}\to\C^9$ and $W_s:\C^9\to\C^{D_s}$,
-	where $D_1=2$ and $D_\tau=3$, such that
-	$W_sV_s=\Id_{D_s}$ and $W_sV_t=0$ for $s\neq t$.
-	For every word $w$ over the pair alphabet,
-	\begin{align}
-		W_sB^wV_s & =C_s^w.
-		\label{eq:asymex_fib_reduction}
-	\end{align}
-	Every remainder word of length at least six vanishes.
-	In fact, each remainder letter is zero, so the extension splits.
+    \label{thm:asymex_fib_compression}
+    % Principal declaration: FibonacciCompression.fibonacci_isReduction.
+    \lean{FibonacciCompression.fibonacci_compression,
+        FibonacciCompression.fibonacci_isReduction,
+        FibonacciCompression.fibonacci_left_mul_right_of_ne,
+        FibonacciCompression.fibonacci_dim_eq,
+        FibonacciCompression.fibonacci_evalWord_remainder_eq_zero,
+        FibonacciCompression.fibonacci_remainder_eq_zero}
+    \leanok
+    \uses{def:asymex_fib, thm:asym_multiblock}
+    The source of Definition~\ref{def:asymex_fib} carries the block
+    triangular form of Theorem~\ref{thm:asym_multiblock}, with target
+    blocks $C_1=B_1$ and $C_\tau=B_\tau$, and $z=4$ zero slots.
+    The dimension count is $9=2+3+4$. Here the indexed tensors $C_s$
+    denote the MPO target blocks, not the chain tensor $C$.
+    There are compression maps
+    $V_s:\C^{D_s}\to\C^9$ and $W_s:\C^9\to\C^{D_s}$,
+    where $D_1=2$ and $D_\tau=3$, such that
+    $W_sV_s=\Id_{D_s}$ and $W_sV_t=0$ for $s\neq t$.
+    For every word $w$ over the pair alphabet,
+    \begin{align}
+        W_sB^wV_s & =C_s^w.
+        \label{eq:asymex_fib_reduction}
+    \end{align}
+    Every remainder word of length at least six vanishes.
+    In fact, each remainder letter is zero, so the extension splits.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_explicit_gauge, thm:asymex_golden_ring}
-	The adapted basis has as its first columns the two fusion tensors,
-	followed by a basis of the four-dimensional subspace annihilated
-	by every source letter. Writing $Q$ for this basis matrix,
-	the finite matrix calculation over $\Z[\sigma]$ gives
-	\begin{align}
-		Q^{-1}B^{x'x}Q
-		 & =B_1^{x'x}\oplus B_\tau^{x'x}\oplus0_4.
-		\label{eq:asymex_fib_split_letters}
-	\end{align}
-	The corresponding column blocks of $Q$ and row blocks of $Q^{-1}$
-	give $V_s$ and $W_s$. Their products give biorthogonality, and
-	multiplication of~(\ref{eq:asymex_fib_split_letters}) along a word
-	gives~(\ref{eq:asymex_fib_reduction}).
-	Block diagonality supplies triangularity, the target diagonal
-	blocks, and the vanishing remainder. The generic nilpotency
-	bound of clause (vi) of Theorem~\ref{thm:asym_multiblock} is
-	$|S|+z=6$, where $S$ is the two-element set of target blocks;
-	the dimension count is clause (vii).
-	The four zero directions are virtual bond directions, not
-	physical configurations of the chain.
+    \leanok
+    \uses{thm:asymex_explicit_gauge, thm:asymex_golden_ring}
+    The adapted basis has as its first columns the two fusion tensors,
+    followed by a basis of the four-dimensional subspace annihilated
+    by every source letter. Writing $Q$ for this basis matrix,
+    the finite matrix calculation over $\Z[\sigma]$ gives
+    \begin{align}
+        Q^{-1}B^{x'x}Q
+         & =B_1^{x'x}\oplus B_\tau^{x'x}\oplus0_4.
+        \label{eq:asymex_fib_split_letters}
+    \end{align}
+    The corresponding column blocks of $Q$ and row blocks of $Q^{-1}$
+    give $V_s$ and $W_s$. Their products give biorthogonality, and
+    multiplication of~(\ref{eq:asymex_fib_split_letters}) along a word
+    gives~(\ref{eq:asymex_fib_reduction}).
+    Block diagonality supplies triangularity, the target diagonal
+    blocks, and the vanishing remainder. The generic nilpotency
+    bound of clause (vi) of Theorem~\ref{thm:asym_multiblock} is
+    $|S|+z=6$, where $S$ is the two-element set of target blocks;
+    the dimension count is clause (vii).
+    The four zero directions are virtual bond directions, not
+    physical configurations of the chain.
 \end{proof}
 
 \begin{theorem}[The fusion rule]
-	\label{thm:asymex_fib_fusion}
-	% Principal declaration: FibonacciCompression.fibonacci_fusion_rule.
-	\lean{FibonacciCompression.fibStack_trace_evalWord,
-		FibonacciCompression.fibonacci_fusion_rule,
-		FibonacciCompression.fibStack_mpv}
-	\leanok
-	\uses{def:asymex_fib, def:mpo_family}
-	For every nonempty word $w$ over the alphabet of label pairs,
-	\begin{align}
-		\tr(B^w) & =\tr(B_1^w)+\tr(B_\tau^w).
-		\label{eq:asymex_fib_trace}
-	\end{align}
-	Thus at every positive system size $N$ the periodic operators
-	satisfy~(\ref{eq:asymex_fib_fusion}), and the periodic vector
-	of the stacked tensor is the sum of the periodic vectors of
-	the two target blocks.
+    \label{thm:asymex_fib_fusion}
+    % Principal declaration: FibonacciCompression.fibonacci_fusion_rule.
+    \lean{FibonacciCompression.fibStack_trace_evalWord,
+        FibonacciCompression.fibonacci_fusion_rule,
+        FibonacciCompression.fibStack_mpv}
+    \leanok
+    \uses{def:asymex_fib, def:mpo_family}
+    For every nonempty word $w$ over the alphabet of label pairs,
+    \begin{align}
+        \tr(B^w) & =\tr(B_1^w)+\tr(B_\tau^w).
+        \label{eq:asymex_fib_trace}
+    \end{align}
+    Thus at every positive system size $N$ the periodic operators
+    satisfy~(\ref{eq:asymex_fib_fusion}), and the periodic vector
+    of the stacked tensor is the sum of the periodic vectors of
+    the two target blocks.
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_fib_compression, prop:asym_compression_trace}
-	Apply Proposition~\ref{prop:asym_compression_trace} to
-	Theorem~\ref{thm:asymex_fib_compression}. This gives
-	(\ref{eq:asymex_fib_trace}).
-	For output and input words $y,x$, the periodic product contracts
-	as
-	\begin{align}
-		\bra{y}O_N(B_\tau)^2\ket{x}
-		 & =\sum_{m\in\{0,1\}^N}
-		\tr(B_\tau^{y_0m_0}\cdots B_\tau^{y_{N-1}m_{N-1}})
-		\tr(B_\tau^{m_0x_0}\cdots B_\tau^{m_{N-1}x_{N-1}})
-		\nonumber                                     \\
-		 & =\tr(B^{y_0x_0}\cdots B^{y_{N-1}x_{N-1}}).
-	\end{align}
-	Substitution of~(\ref{eq:asymex_fib_trace}) proves the operator
-	identity entry by entry. The periodic-vector statement is the
-	same trace identity read over the pair alphabet.
+    \leanok
+    \uses{thm:asymex_fib_compression, prop:asym_compression_trace}
+    Apply Proposition~\ref{prop:asym_compression_trace} to
+    Theorem~\ref{thm:asymex_fib_compression}. This gives
+    (\ref{eq:asymex_fib_trace}).
+    For output and input words $y,x$, the periodic product contracts
+    as
+    \begin{align}
+        \bra{y}O_N(B_\tau)^2\ket{x}
+         & =\sum_{m\in\{0,1\}^N}
+        \tr(B_\tau^{y_0m_0}\cdots B_\tau^{y_{N-1}m_{N-1}})
+        \tr(B_\tau^{m_0x_0}\cdots B_\tau^{m_{N-1}x_{N-1}})
+        \nonumber                                     \\
+         & =\tr(B^{y_0x_0}\cdots B^{y_{N-1}x_{N-1}}).
+    \end{align}
+    Substitution of~(\ref{eq:asymex_fib_trace}) proves the operator
+    identity entry by entry. The periodic-vector statement is the
+    same trace identity read over the pair alphabet.
 \end{proof}
 
 At length zero, the traces of the stacked tensor and the two targets
@@ -685,68 +685,68 @@ traces vanish. This explains the positive-length restriction in the
 fusion rule without changing the trace convention.
 
 \begin{theorem}[The fusion tensors]
-	\label{thm:asymex_fib_fusion_tensors}
-	% Principal declaration: FibonacciCompression.fibStack_mul_fusionRight.
-	\lean{FibonacciCompression.fibFusionRight, FibonacciCompression.fibFusionLeft,
-		FibonacciCompression.fibonacci_right_eq, FibonacciCompression.fibonacci_left_eq,
-		FibonacciCompression.fibStack_mul_fusionRight,
-		FibonacciCompression.fusionLeft_mul_fibStack}
-	\leanok
-	\uses{def:asymex_fib, thm:asymex_fib_compression}
-	The compression maps of the two target blocks are the fusion tensors
-	of the Fibonacci algebra. The map $V_s$ is the column block of the
-	adapted basis carrying $s$, and $W_s$ is the matching row block of
-	its inverse. For every physical letter and $s\in\{1,\tau\}$,
-	\begin{align}
-		B^{x'x}V_s & =V_sC_s^{x'x}.
-		\label{eq:asymex_fib_right_intertwiner}
-	\end{align}
-	\begin{align}
-		W_sB^{x'x} & =C_s^{x'x}W_s.
-		\label{eq:asymex_fib_left_intertwiner}
-	\end{align}
+    \label{thm:asymex_fib_fusion_tensors}
+    % Principal declaration: FibonacciCompression.fibStack_mul_fusionRight.
+    \lean{FibonacciCompression.fibFusionRight, FibonacciCompression.fibFusionLeft,
+        FibonacciCompression.fibonacci_right_eq, FibonacciCompression.fibonacci_left_eq,
+        FibonacciCompression.fibStack_mul_fusionRight,
+        FibonacciCompression.fusionLeft_mul_fibStack}
+    \leanok
+    \uses{def:asymex_fib, thm:asymex_fib_compression}
+    The compression maps of the two target blocks are the fusion tensors
+    of the Fibonacci algebra. The map $V_s$ is the column block of the
+    adapted basis carrying $s$, and $W_s$ is the matching row block of
+    its inverse. For every physical letter and $s\in\{1,\tau\}$,
+    \begin{align}
+        B^{x'x}V_s & =V_sC_s^{x'x}.
+        \label{eq:asymex_fib_right_intertwiner}
+    \end{align}
+    \begin{align}
+        W_sB^{x'x} & =C_s^{x'x}W_s.
+        \label{eq:asymex_fib_left_intertwiner}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:asymex_explicit_gauge}
-	Theorem~\ref{thm:asymex_explicit_gauge} identifies the maps with
-	the row and column blocks of the adapted basis.
-	Each intertwining relation is verified by multiplication over
-	$\Z[\sigma]$ and transported to complex matrices by
-	Theorem~\ref{thm:asymex_golden_ring}.
-	Equivalently, taking the corresponding column or row block
-	of~(\ref{eq:asymex_fib_split_letters}) gives
-	(\ref{eq:asymex_fib_right_intertwiner}) or
-	(\ref{eq:asymex_fib_left_intertwiner}).
+    \leanok
+    \uses{thm:asymex_explicit_gauge}
+    Theorem~\ref{thm:asymex_explicit_gauge} identifies the maps with
+    the row and column blocks of the adapted basis.
+    Each intertwining relation is verified by multiplication over
+    $\Z[\sigma]$ and transported to complex matrices by
+    Theorem~\ref{thm:asymex_golden_ring}.
+    Equivalently, taking the corresponding column or row block
+    of~(\ref{eq:asymex_fib_split_letters}) gives
+    (\ref{eq:asymex_fib_right_intertwiner}) or
+    (\ref{eq:asymex_fib_left_intertwiner}).
 \end{proof}
 
 \begin{center}
-	% Formula: B^{x'x}V_s=V_sC_s^{x'x} and W_sB^{x'x}=C_s^{x'x}W_s of
-	% Theorem~\ref{thm:asymex_fib_fusion_tensors}, for $s\in\{1,\tau\}$.
-	% Source: Theorem~\ref{thm:asymex_fib_fusion_tensors}.
-	% Ink-to-index map: the ring is the fusion tensor $V_s$ or $W_s$;
-	% the square node is the stacked source $B$ or the target block
-	% $C_s\in\{B_1,B_\tau\}$.
-	% Contraction set: the single virtual bond joining the ring to the
-	% square node in each pair; the physical pair leg $(x',x)$ remains
-	% open.
-	% Boundary signature: (virtual-west=1 | virtual-east=1 |
-	% physical-up=1 | physical-down=0) for each pictured equality.
-	\tenkzkernel
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[label pos=s, ports={90:physical:$x'x$}]{B} & \tn[skin=ring]{V_s}
-	\end{tenkz}
-	\quad $=$ \quad
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$x'x$}]{C_s}
-	\end{tenkz}
-	\\
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$x'x$}]{B}
-	\end{tenkz}
-	\quad $=$ \quad
-	\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
-		\tn[label pos=s, ports={90:physical:$x'x$}]{C_s} & \tn[skin=ring]{W_s}
-	\end{tenkz}
+    % Formula: B^{x'x}V_s=V_sC_s^{x'x} and W_sB^{x'x}=C_s^{x'x}W_s of
+    % Theorem~\ref{thm:asymex_fib_fusion_tensors}, for $s\in\{1,\tau\}$.
+    % Source: Theorem~\ref{thm:asymex_fib_fusion_tensors}.
+    % Ink-to-index map: the ring is the fusion tensor $V_s$ or $W_s$;
+    % the square node is the stacked source $B$ or the target block
+    % $C_s\in\{B_1,B_\tau\}$.
+    % Contraction set: the single virtual bond joining the ring to the
+    % square node in each pair; the physical pair leg $(x',x)$ remains
+    % open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each pictured equality.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$x'x$}]{B} & \tn[skin=ring]{V_s}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{V_s} & \tn[label pos=s, ports={90:physical:$x'x$}]{C_s}
+    \end{tenkz}
+    \\
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=ring]{W_s} & \tn[label pos=s, ports={90:physical:$x'x$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$x'x$}]{C_s} & \tn[skin=ring]{W_s}
+    \end{tenkz}
 \end{center}
