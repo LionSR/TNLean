@@ -201,7 +201,7 @@
 \begin{definition}[Linear extension on each virtual block]%
     \label{def:mpdo_virtual_perBlockLinearExtension}
     \leanok
-    \uses{def:injective, def:same_mpv}
+    \uses{def:injective, def:same_mpv, def:perBlockLinearExtension}
     For injective families $A_k$ and $B_k$ with the same closed matrix
     product vectors, the linear extension on block $k$ is the unique linear map
     $T_k:\MN{D_k}\to\MN{D_k}$ satisfying $T_k(A_k^i)=B_k^i$ for every
@@ -217,7 +217,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_virtual_perBlockLinearExtension, thm:linear_ext_mul}
+    \uses{def:mpdo_virtual_perBlockLinearExtension, thm:linear_ext_mul, lem:perBlockLinearExtension_mul}
     The letters of $A_k$ span $\MN{D_k}$, and equality of the closed matrix
     product vectors gives the identity on products of spanning letters.
 \end{proof}
@@ -230,7 +230,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:simplicity, lem:trace_ne_zero}
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:simplicity, lem:trace_ne_zero, lem:perBlockLinearExtension_bijective}
     Multiplicativity makes the kernel an ideal of the simple matrix algebra.
     The map is nonzero: otherwise every letter of $B_k$ would vanish,
     contradicting the nonvanishing trace pairing for the injective family.
@@ -246,7 +246,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:mpdo_virtual_perBlockLinearExtension_bijective}
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:mpdo_virtual_perBlockLinearExtension_bijective, thm:positive_perBlockLinearExtension_unitary}
     The map on each block is a bijective algebra endomorphism. Positivity makes it
     preserve adjoints, so unitary Skolem--Noether implements it by conjugation
     with a unitary matrix.
