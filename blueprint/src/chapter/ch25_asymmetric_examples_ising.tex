@@ -316,11 +316,11 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
 \begin{theorem}[Compression of the Ising product tensor]%
     \label{thm:asymex_ising_compression}
     % Principal declaration: IsingTwist.isingCompression.
-    \lean{IsingTwist.isingCompression, IsingTwist.isingBondObject_isReduction,
-        IsingTwist.isingBondObject_left_mul_right_of_ne,
+    \lean{IsingTwist.isingCompression,
         IsingTwist.isingBondObject_dim_eq, IsingTwist.isingBondObject_z_eq}
     \leanok
-    \uses{thm:asymex_ising_letter_identity, thm:asym_mpo_product}
+    \uses{thm:asymex_ising_letter_identity, thm:asym_mpo_product,
+        thm:asym_multiblock}
     The tensor $B$ of Definition~\ref{def:asymex_ising_bond_object}
     has the block triangular form of Theorem~\ref{thm:asym_multiblock}
     with two weighted copies of $\sqrt2A_\sigma$, of weights $5$ and
@@ -346,11 +346,9 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
 \begin{theorem}[The extension splits]%
     \label{thm:asymex_ising_split}
     % Principal declaration: IsingTwist.isingBondObject_remainder.
-    \lean{IsingTwist.isingBondObject_remainder,
-        IsingTwist.isingBondObject_mul_right_eq_right_mul,
-        IsingTwist.isingBondObject_left_mul_eq_mul_left}
+    \lean{IsingTwist.isingBondObject_remainder}
     \leanok
-    \uses{thm:asymex_ising_compression}
+    \uses{thm:asymex_ising_compression, prop:asym_projector_weighted_sum}
     The remainder of the compression in
     Theorem~\ref{thm:asymex_ising_compression} vanishes identically.
     Thus the extension splits, and each nonzero block has local
@@ -531,10 +529,9 @@ of Section~\ref{sec:asymex_ising_bond_object}.
     % Principal declaration: IsingTwist.sectorCompression.
     \lean{IsingTwist.sectorSlots, IsingTwist.sectorLabel, IsingTwist.sectorWeights,
         IsingTwist.sectorTargets, IsingTwist.sectorGauge, IsingTwist.sectorCompression,
-        IsingTwist.sectorAction_isReduction, IsingTwist.sectorAction_z_eq,
-        IsingTwist.sectorAction_dim_eq}
+        IsingTwist.sectorAction_z_eq, IsingTwist.sectorAction_dim_eq}
     \leanok
-    \uses{thm:asymex_ising_action_diagonal}
+    \uses{thm:asymex_ising_action_diagonal, thm:asym_multiblock}
     The action tensor of Theorem~\ref{thm:asymex_ising_action_diagonal}
     has the block triangular form of Theorem~\ref{thm:asym_multiblock}
     with four weighted bond-dimension-one product-state tensors.
