@@ -2335,9 +2335,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   · rcases Finset.mem_union.mp hrb with hr | hbl
   · exact absurd hr hwnotred
   ```
-- **Seen:** 9 occurrences in `TNLean/PEPS/RegionBlock/`
-  (`CoarseThreeSite3.lean:89`, `ThreeBlockReconcile.lean:244`,
-  `ThreeBlockResonate.lean:96`, +6).
+- **Seen:** 8 occurrences in `TNLean/PEPS/RegionBlock/`
+  (`CoarseThreeSite3.lean:89`, `ThreeBlockResonate.lean:97`,
+  `UnionInjectivityGeneral.lean:95`, +5).
 - **Abstraction (proposed):** a case-elimination lemma on the three-region
   cover (membership in red/blue/crossing regions) stated once in the
   RegionBlock development.

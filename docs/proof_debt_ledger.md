@@ -125,7 +125,7 @@ verification (23-58%), and two required real re-scoping to avoid deleting
 live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/4529).
 
 ### S3. Delete the superseded edge-centred three-block union-injectivity route — net 3,180 lines, risk 3/10
-- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Next slice (2026-09-19 survey, #7849): `ThreeBlockReconcile.lean` is a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag); deleting it strands a further 250-300 lines in `ThreeBlockResonate2.lean`, one `\leanid`-cited in `section3_route.tex`.
+- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted; it strands a further 250-300 lines in `ThreeBlockResonate2.lean`, one `\leanid`-cited in `section3_route.tex`, which is the next slice.
 - **What**: `PEPS/RegionBlock/{ThreeBlockResonate,ThreeBlockResonate2,ThreeBlockReconcile,UnionInjectivity,ThreeBlockTransfer,BondLocalFromReconcile}.lean`
   (3,438 gross lines). `BondLocalFromReconcile.lean` (176 ln) has zero
   importers anywhere and is pure dead weight.
@@ -138,6 +138,21 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   blue := S, complement := T, red := univ \ (S ∪ T).
 - **First PR**: delete `BondLocalFromReconcile.lean` outright (176 ln,
   confirmed zero importers, zero migration cost).
+- **Second slice (done 2026-09-19)**: `ThreeBlockReconcile.lean` (371 ln) had
+  become a fully dead nine-declaration closure once the 2026-08-27 unused-import
+  sweep removed the `ThreeBlockTransfer` import edge, leaving the generated
+  aggregator as its only importer. All nine declarations had zero references
+  outside the file and no blueprint tag, and the file is now deleted; see
+  `docs/audits/2026-09-19_peps_regionblock_dead_closures.md`.
+- **Third slice (open)**: the deletion strands a closure inside
+  `ThreeBlockResonate2.lean` — `threeBlockComplRow`,
+  `regionInteriorBondProd_smul_threeBlockInsertedCoeff_eq`,
+  `threeBlock_middle_strip`, `threeBlock_invert_blue`, `threeBlock_invert_red`
+  and three unnamed helpers, roughly 250-300 lines. `ThreeBlockResonate2.lean`
+  itself stays live through `threeBlockComplCoeff` and the
+  `UnionInjectivityGeneralBlue` consumers, and the slice touches a paper-gap
+  citation in `docs/paper-gaps/peps_normal_ft_section3_route.tex` plus a
+  docstring pointer in `ThreeBlockResonate.lean`, so it is a separate step.
 
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#4564)
@@ -375,7 +390,12 @@ neither broad-brush attempt survived verification, and both defaulted to
   `isBondLocalTransferKernel_of_coherentFrames`, `redBundleInsertedCoeff_add`,
   `redBundleInsertedCoeff_smul`, `sameAwayFromRBBundle_hostMerge`; their only
   intended consumer (#5457) was closed as not planned on 2026-08-23. The chain
-  itself stays live.
+  itself stays live. Closed out the same day: all five were removed (244 lines
+  as measured on the deleted blocks), the standalone multiplicativity being
+  three rewrites away from the retained `coeffTransferMap_eq_regionEdgeTransfer`
+  and `regionEdgeTransfer_mul`, and the paper-gap sentences were repointed at
+  the survivors; see
+  `docs/audits/2026-09-19_peps_regionblock_dead_closures.md`.
 - **S11** — mirror-lemma transport (blue/complement, left/right): mixed —
   ~365 of a claimed 750 lines survive; the largest named target
   (`CompleteZipperFusionSupport.lean`) is blueprint-cited, load-bearing,

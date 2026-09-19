@@ -1283,10 +1283,13 @@ The remaining obligations are the following.
           (\leanid{TNLean.PEPS.redBundleInsertedCoeff}): a doubled red-boundary sum coupling
           the two configurations through their red-to-blue crossing labels
           (\leanid{TNLean.PEPS.redBoundaryRBCrossing}) while the red-to-complement crossings
-          are contracted diagonally (\leanid{TNLean.PEPS.SameAwayFromRBBundle}). This
-          coefficient is additive and homogeneous in the inserted matrix
-          (\leanid{TNLean.PEPS.redBundleInsertedCoeff_add},
-          \leanid{TNLean.PEPS.redBundleInsertedCoeff_smul}). The relaxed crossing agreement
+          are contracted diagonally (\leanid{TNLean.PEPS.SameAwayFromRBBundle}). Under the
+          single-crossing hypothesis this coefficient is read as the ordinary single-edge
+          region-inserted coefficient, and against a bond-model-conjugated matrix it expands
+          as a configuration sum
+          (\leanid{TNLean.PEPS.redBundleInsertedCoeff_singleton},
+          \leanid{TNLean.PEPS.redBundleInsertedCoeff_bondModelMatrix_eq_configSum}).
+          The relaxed crossing agreement
           of a triple under the inserted matrix --- agreeing on the red-to-complement and
           blue-to-complement crossings, with the red-to-blue crossings left free for the
           matrix to couple --- is recorded by
@@ -1363,9 +1366,10 @@ The remaining obligations are the following.
           read with the fused blue/complement physical leg, is the complement product against
           the blue product (\leanid{TNLean.PEPS.hostProd_hostMerge_eq}); the two boundary labels
           and the matrix coupling are identified by
-          \leanid{TNLean.PEPS.sameAwayFromRBBundle_hostMerge},
-          \leanid{TNLean.PEPS.redBoundaryRBCrossing_hostMerge}, and
-          \leanid{TNLean.PEPS.crossingLabel_eq_redBoundaryRBCrossing}. The host side collapses
+          \leanid{TNLean.PEPS.redBoundaryRBCrossing_hostMerge} and
+          \leanid{TNLean.PEPS.crossingLabel_eq_redBoundaryRBCrossing}, while the agreement
+          of the red boundary labels away from the red-to-blue crossings is characterized
+          by \leanid{TNLean.PEPS.sameAwayFromRBBundle_regionBoundaryLabel_iff}. The host side collapses
           through the host-merge fiber count
           \leanid{TNLean.PEPS.hostMergeFiber_card}: the relaxed pairs agreeing on the
           blue-to-complement crossings whose merge is a fixed configuration biject with the free
@@ -1394,7 +1398,7 @@ The remaining obligations are the following.
           (\leanid{TNLean.PEPS.exists_regionInsertedCoeff_eq_sharedRegion},
           \leanid{TNLean.PEPS.exists_regionInsertedCoeff_eq_sharedRegion_symm}), hence the
           two bond-local transfer kernels
-          (\leanid{TNLean.PEPS.isBondLocalTransferKernel_of_coherentFrames}). The forward
+          (\leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer}). The forward
           multiplicativity is the concrete single-edge transfer's multiplicativity, the
           coarse edge transfer matrix conjugated by the two bond models
           (\leanid{TNLean.PEPS.regionEdgeTransfer},
@@ -2190,7 +2194,7 @@ region-inserted coefficient, and the shared positive fiber multiplicity cancels.
 result is the block-framed coefficient transfer in both directions
 (\path{exists_regionInsertedCoeff_eq_sharedRegion},
 \path{exists_regionInsertedCoeff_eq_sharedRegion_symm}), the two bond-local transfer
-kernels (\path{isBondLocalTransferKernel_of_coherentFrames}), the forward
+kernels (\path{bondLocal_iff_coeffTransfer}), the forward
 multiplicativity (\path{regionEdgeTransfer_mul}), and hence the per-edge gauge
 (\path{exists_regionEdgeGauge_of_coherentFrames}), for two coherent frames sharing
 the three regions, the bond dimensions, and the single distinguished crossing edge.
