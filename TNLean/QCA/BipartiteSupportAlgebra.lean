@@ -224,14 +224,6 @@ def kroneckerSubmodule (S : Submodule ℂ (Matrix m m ℂ))
     Submodule ℂ (Matrix (m × n) (m × n) ℂ) :=
   Submodule.map₂ Matrix.kroneckerBilinear S T
 
-private theorem eq_sum_smul_single (B : Matrix n n ℂ) :
-    B = ∑ i : n, ∑ j : n, B i j • Matrix.single i j 1 := by
-  apply Matrix.ext
-  intro i j
-  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Matrix.single_apply]
-  simp_rw [ite_and]
-  simp
-
 omit [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n] in
 private theorem matrix_of_operatorBlock_apply_mem [Finite n]
     (S : Submodule ℂ (Matrix m m ℂ)) (X : Matrix (m × n) (m × n) ℂ)
@@ -245,7 +237,10 @@ private theorem matrix_of_operatorBlock_apply_mem [Finite n]
     apply Matrix.ext
     intro p q
     change g (operatorBlock X p q) = _
-    rw [eq_sum_smul_single (operatorBlock X p q), map_sum]
+    have hsingle : operatorBlock X p q
+        = ∑ i : n, ∑ j : n, operatorBlock X p q i j • Matrix.single i j 1 := by
+      simpa [Matrix.smul_single] using Matrix.matrix_eq_sum_single (operatorBlock X p q)
+    rw [hsingle, map_sum]
     simp only [map_sum, LinearMap.map_smul, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
     congr 1
     ext i

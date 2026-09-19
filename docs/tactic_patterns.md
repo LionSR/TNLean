@@ -1880,7 +1880,7 @@ abstracted — record why, so it is not re-proposed).
   computed its trace by rewriting `Matrix.trace_smul` and `Matrix.trace_one`.
 - **Reuse:** the generic lemmas `Matrix.PosSemidef.smul_one`,
   `Matrix.PosDef.smul_one`, and `Matrix.trace_smul_one` in
-  `TNLean/Algebra/Matrix/ScalarIdentity.lean` own these arguments under the
+  `TNLean/Algebra/MatrixScalarIdentity.lean` own these arguments under the
   weakest assumptions used by the underlying Mathlib results.
 - **Result:** the repeated proofs in `Theorem49RepeatedCopyCounterexample.lean`,
   `AKLTStringOrder.lean`, `Cluster.lean`, and

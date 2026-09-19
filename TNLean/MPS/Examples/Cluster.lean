@@ -9,7 +9,7 @@ import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.ZMod2
 import TNLean.Algebra.CocycleCohomology
-import TNLean.Algebra.Matrix.ScalarIdentity
+import TNLean.Algebra.MatrixScalarIdentity
 
 /-!
 # Cluster state as a Matrix Product State

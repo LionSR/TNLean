@@ -8839,10 +8839,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The swap satisfies $\mathbb S^\dagger=\mathbb S$ and
-    $\mathbb S^2=\Id$. Kronecker products preserve isometries, and a square
-    isometry is unitary. Thus both factors are unitary. Closure of the unitary
-    matrices under multiplication gives the two ordered products.
+    \uses{thm:mpu_swap_matrix_unitary}
+    The swap is unitary by Theorem~\ref{thm:mpu_swap_matrix_unitary}. Kronecker
+    products preserve isometries, and a square isometry is unitary. Thus both
+    factors are unitary. Closure of the unitary matrices under multiplication
+    gives the two ordered products.
 \end{proof}
 
 \begin{theorem}[Supplied paper gates for $U_1$]
