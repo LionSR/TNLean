@@ -24,7 +24,6 @@ import TNLean.PEPS.RegionBlock.CoarseThreeSite6
 import TNLean.PEPS.RegionBlock.CoarseThreeSite7
 import TNLean.PEPS.RegionBlock.CoarseThreeSite8
 import TNLean.PEPS.RegionBlock.CoarseThreeSite9
-import TNLean.PEPS.RegionBlock.CoarseThreeSiteMul
 import TNLean.PEPS.RegionBlock.GaugeBridge
 import TNLean.PEPS.RegionBlock.GaugeBridgeExpansion
 import TNLean.PEPS.RegionBlock.GaugeInjectivity
@@ -51,7 +50,6 @@ import TNLean.PEPS.RegionBlock.Recovery9
 import TNLean.PEPS.RegionBlock.RegionReconcile
 import TNLean.PEPS.RegionBlock.ReindexInjectivity
 import TNLean.PEPS.RegionBlock.ScalarExtraction
-import TNLean.PEPS.RegionBlock.ThreeBlockReconcile
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate2
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
