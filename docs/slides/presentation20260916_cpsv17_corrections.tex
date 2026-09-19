@@ -1,0 +1,751 @@
+% Compile from docs/slides: latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir=build presentation20260916_cpsv17_corrections.tex
+% Primary source: ../paper-gaps/cpsv17_corrections.tex, sections I--VI.
+% Source numbering checked against arXiv:1606.00608v4 and its local auxiliary file.
+\documentclass[aspectratio=169,14pt]{beamer}
+\usetheme{metropolis}
+\input{preamble}
+\geometry{paperwidth=220mm,paperheight=123.75mm}
+\metroset{sectionpage=none}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{\usebeamercolor[fg]{footline}\insertsectionhead\hfill\insertframenumber\,/\,\inserttotalframenumber}
+\newcommand{\E}{\mathcal E}
+\newcommand{\Id}{\mathbf 1}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\kb}[2]{\lvert#1\rangle\langle#2\rvert}
+\newcommand{\why}[1]{\textcolor{amber}{\textbf{Why this matters.}} #1\par\medskip}
+\newcommand{\source}[1]{\par\smallskip{\fontsize{10}{12}\selectfont\color{dimwhite}#1\par}}
+\newcommand{\verified}{\textcolor{mintgreen}{Formalized result.}}
+\newcommand{\calculated}{\textcolor{amber}{Calculation in the corrections note.}}
+\tikzset{storybox/.style={draw=leanblue,fill=cardbg,rounded corners,minimum width=22mm,minimum height=12mm,text=white,font=\normalsize},storyarrow/.style={-{Stealth},thick,draw=mintgreen}}
+\title{When tensor-network fixed-point criteria separate}
+\subtitle{Physical motivations, counterexamples, and corrected statements}
+\author{Cirac--P\'erez-Garc\'ia--Schuch--Verstraete revisited}
+\date{September 16, 2026}
+\begin{document}
+\section{Purpose and definitions}
+\begin{frame}{When tensor-network fixed-point criteria separate}
+\textbf{Physical motivations, counterexamples, and corrected statements}\par\medskip
+Physical correlations, entropy, and exact local channels probe different data.
+\begin{block}{Question for this talk}
+When do simple physical diagnostics guarantee an exact fixed-point tensor?
+\end{block}
+Counterexamples and proof repairs motivated by formalization.\par
+CPSV: Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete.\par
+Based on \emph{Annals of Physics} 378 (2017), 100--149, and the corrections note. All source numbers refer to arXiv:1606.00608v4. \cite{Cirac2017Annals}
+\end{frame}
+\begin{frame}{Why classify coarse-graining fixed points?}
+\why{A fixed point isolates structure that persists when microscopic sites are grouped.}
+\begin{center}
+\begin{tikzpicture}
+\node[storybox] (a) at (0,0) {two sites};
+\node[storybox] (b) at (4,0) {one effective site};
+\node[storybox] (c) at (9,0) {same local rule};
+\draw[storyarrow] (a)--node[above,text=white]{block}(b);
+\draw[storyarrow] (b)--node[above,text=white]{compare}(c);
+\end{tikzpicture}
+\end{center}
+\begin{itemize}
+\item Correlations ask whether separation still carries information.
+\item Entropy asks how much information crosses a spatial cut.
+\item A local channel asks whether sites can be removed and restored exactly, including their coupling to the rest.
+\end{itemize}
+\alert{The third demand is stronger than inspecting one periodic state.}
+\end{frame}
+\begin{frame}{Matrix product states: physical and virtual indices}
+A site has Hilbert space $\mathbb C^d$, with basis $\ket{i}$, $0\leq i<d$.
+An MPS tensor is a family $A^i\in M_D(\mathbb C)$, the space of $D\times D$ complex matrices.
+\[
+ \ket{V_N(A)}=\sum_{i_1,\ldots,i_N}\tr(A^{i_1}\cdots A^{i_N})\ket{i_1\cdots i_N}.
+\]
+\begin{itemize}
+\item $N$: number of sites; $D$: virtual bond dimension.
+\item Matrix indices $\alpha,\beta\in\{1,\ldots,D\}$ are contracted along the chain. The trace closes a periodic ring.
+\item $V_N$ is an unnormalized matrix product vector. Its normalization gives a pure matrix product state (MPS), when $V_N\ne0$.
+\end{itemize}
+Blocking $b$ sites replaces $A^i$ by $A^{i_1}\cdots A^{i_b}$, with physical dimension $d^b$ and unchanged $D$.
+\end{frame}
+\begin{frame}{Operators and boundaries: which object is fixed?}
+An MPO (matrix product operator) has slices $K^{ij}\in M_D(\mathbb C)$, with ket index $i$ and bra index $j$.
+\[
+ K_N(X)=\sum_{\boldsymbol i,\boldsymbol j}
+ \tr(XK^{i_1j_1}\cdots K^{i_Nj_N})\kb{\boldsymbol i}{\boldsymbol j}.
+\]
+Here $X\in M_D(\mathbb C)$ is a virtual boundary; bold indices denote $N$ physical indices.
+\[
+ \sigma_N=K_N(\Id_D),\qquad \widehat\sigma_N=\sigma_N/\tr\sigma_N.
+\]
+An MPDO (matrix product density operator) has $\sigma_N\geq0$ at every positive length; normalization requires $\tr\sigma_N>0$.
+\begin{block}{Keep these separate}
+A normalized state, a raw periodic operator, and the family $K_N(X)$ for all boundaries are not interchangeable.
+\end{block}
+\end{frame}
+\begin{frame}{Three transfer objects, three different jobs}
+For a virtual matrix $H\in M_D(\mathbb C)$:
+\begin{align*}
+ \E_A(H)&=\sum_i A^iH(A^i)^\dagger
+ &&\text{pure-state transfer},\\
+ B_K&=\sum_iK^{ii}
+ &&\text{physical-trace matrix},\\
+ \E_K(H)&=\sum_{i,j}K^{ij}H(K^{ij})^\dagger
+ &&\text{MPO normality transfer}.
+\end{align*}
+$\dagger$ denotes adjoint. The doubled pure transfer matrix is
+$\mathbb E_A=\sum_i A^i\otimes\overline{A^i}$.
+\begin{block}{Mixed zero correlation length (ZCL)}
+The source definition is the literal identity $B_K^2=B_K$.
+It is not the statement $\E_K^2=\E_K$.
+\end{block}
+\source{Corrections note, I. Pure-state ZCL will be defined separately.}
+\end{frame}
+\begin{frame}{Why entropy enters: information across a cut}
+For a normalized state $\rho$, let $S(\rho)=-\tr(\rho\log_2\rho)$, in bits.
+Let $S_L^{(N)}$ be the entropy of a connected $L$-site marginal of $\widehat\sigma_N$.
+\[
+ I_L^{(N)}=S_L^{(N)}+S_{N-L}^{(N)}-S_N^{(N)}.
+\]
+This is mutual information between a block and its complement.
+\begin{block}{Saturation of the area law (SAL)}
+$I_L^{(N)}=I_1^{(N)}$ for every $1\leq L\leq\lfloor N/2\rfloor$.
+\end{block}
+\why{At saturation, enlarging the block adds no mutual information. This suggests that local recovery might be possible.}
+Exact SAL is stronger than a bound independent of $L$. It is tested at fixed finite $N$.
+\end{frame}
+\begin{frame}{An exact fixed point must work in every environment}
+A quantum channel $\Phi$ is completely positive and trace preserving:
+$\Phi\otimes\mathrm{id}_m$ preserves positivity for every ancilla dimension $m$,
+and $\tr\Phi(Z)=\tr Z$.
+\begin{block}{Mixed renormalization fixed point (RFP), Definition 4.1}
+There are channels $\mathcal T:M_d\to M_{d^2}$ and
+$\mathcal S:M_{d^2}\to M_d$ such that
+\[
+ \mathcal T[K_1(X)]=K_2(X),\qquad
+ \mathcal S[K_2(X)]=K_1(X)\quad\text{for every }X.
+\]
+\end{block}
+Here $M_n$ abbreviates $M_n(\mathbb C)$. A blocked tensor $K^{[b]}$ obeys
+$K^{[b]}_N(X)=K_{bN}(X)$.
+\alert{Normalizing $K_N(\Id)$ separately at each length cannot repair a raw all-boundary channel identity.}
+\end{frame}
+\begin{frame}{Canonical form retains sectors and their copy weights}
+Up to an invertible virtual change of basis, canonical form (CF) is
+\[
+ K^{ij}=\bigoplus_{a=1}^{g}\bigoplus_{q=1}^{r_a}\mu_{a,q}\cK_a^{ij},
+ \qquad 0<|\mu_{a,q}|\leq1,\quad\max_{a,q}|\mu_{a,q}|=1.
+\]
+\begin{itemize}
+\item $g$ counts normal representatives; $r_a$ counts copies of representative $a$, of bond dimension $D_a$. Thus $D=\sum_a r_aD_a$.
+\item Normal means irreducible slices and transfer spectral radius one, with $1$ the only unit-modulus eigenvalue. Irreducible means no common nontrivial invariant subspace.
+\item The basis of normal tensors (BNT) chooses representatives distinct up to phase and virtual similarity.
+\end{itemize}
+\alert{Unit modulus is required globally, not in every sector.}
+The spectral radius $r(\E)$ is the largest modulus of an eigenvalue of $\E$.
+\end{frame}
+\begin{frame}{What a formalization can and cannot establish}
+\begin{description}
+\item[Counterexample.] A concrete tensor satisfies the stated hypotheses and violates the conclusion.
+\item[Proof gap.] A step is missing, but an additional argument may establish the intended theorem.
+\item[Convention.] A normalization, boundary choice, or active-sector convention must be stated.
+\item[Formalization limitation.] A restricted theorem is not a proof or disproof of the unrestricted statement.
+\end{description}
+\begin{block}{Evidence labels in this talk}
+\verified\ means the corrections note reports a machine-checked theorem with the specified hypotheses.\par
+\calculated\ identifies arguments not included in that verification claim.
+\end{block}
+\alert{Failure to formalize alone does not prove a claim false.}
+\end{frame}
+\section{A channel obstruction}
+\begin{frame}{Can SAL and ZCL guarantee local recovery?}
+\why{Theorem 4.9 aims to connect information-theoretic tests to exact coarse-graining channels.}
+Standing assumptions: $K$ generates positive periodic operators and is simple in block-injective canonical form (biCF).
+\begin{align*}
+ \text{biCF: }&\operatorname{span}_{i,j}\{\bigoplus_a\cK_a^{ij}\}
+                 =\bigoplus_a M_{D_a}(\mathbb C),\\
+ \text{simple: }&B_{\cK_a}\text{ is not nilpotent for every }a.
+\end{align*}
+Nilpotent means some positive power vanishes. For a single block, the span condition is called injectivity.
+\begin{block}{Claims tested}
+Proposition C.15: SAL + ZCL gives channels $K_2(X)\leftrightarrow K_3(X)$ for every $X$.\par
+Theorem 4.9(ii)$\Rightarrow$(v): $K^{[2]}$ is an RFP, requiring $K_2(X)\to K_4(X)$.
+\end{block}
+\end{frame}
+\begin{frame}{A classical four-letter construction}
+\why{Diagonal physical operators make positivity and entropy directly visible as probabilities.}
+For $i=0,1,2,3$, define a bond-two tensor $F$:
+\begin{align*}
+ t&=(1,2,-7,4)^{\mathsf T},\qquad s=(-3,-1,1,3)^{\mathsf T},\\
+ l_i&=(1,t_i)^{\mathsf T},\quad r_i=(1/4,s_i/100),\quad
+ F_i:=F^{ii}=l_ir_i,\quad F^{ij}=0\ (i\ne j).
+\end{align*}
+The transition matrix $T_{ij}=r_il_j=1/4+s_it_j/100$ is strictly positive and doubly stochastic. With $Q_{ij}=1/4$,
+\[
+ T^2=Q,\qquad T^m=Q\ (m\geq2),\qquad B_F=\diag(1,0)=B_F^2.
+\]
+Periodic probabilities are $p_N(i_1,\ldots,i_N)=\prod_{a=1}^NT_{i_ai_{a+1}}$, with $i_{N+1}=i_1$ and total probability one.
+\source{Corrections note, II.A. Exact matrices and hypothesis checks in backup.}
+\end{frame}
+\begin{frame}{Its finite-ring entropy saturates exactly}
+For a proper block, the traced-out path has at least two edges:
+\begin{align*}
+ p_{N,L}(i_1,\ldots,i_L)
+ &=\left(\prod_{a=1}^{L-1}T_{i_ai_{a+1}}\right)(T^{N-L+1})_{i_Li_1}\\
+ &=\frac14\prod_{a=1}^{L-1}T_{i_ai_{a+1}}\qquad(1\leq L<N).
+\end{align*}
+Let $h=-\frac14\sum_{i,j}T_{ij}\log_2T_{ij}$ be the mean transition entropy.
+\[
+ S_L^{(N)}=2+(L-1)h,\qquad S_N^{(N)}=Nh\quad(N\geq3).
+\]
+\begin{block}{The cut size cancels}
+$I_L^{(N)}=4-2h$ for every proper connected cut, $N\geq3$.
+At $N=2$, SAL has only one cut size to compare.
+\end{block}
+
+\end{frame}
+\begin{frame}{The counterexample also meets canonical hypotheses}
+The normality transfer of $F$ has spectral radius $r$ with $0<r<1$.
+There is an invertible $G$ such that
+\[
+ \mu=\sqrt r,\qquad \cK_0^{ii}=\mu^{-1}GF_iG^{-1}
+\]
+is normal. Add a fifth physical letter with bond-one tensor $\cK_1^{44}=1$:
+\[
+ K=(\mu\cK_0)\oplus\cK_1,\qquad d=5,\quad D=3.
+\]
+\begin{itemize}
+\item Weights $(\mu,1)$ satisfy global normalization. Both sectors are simple, with simultaneous one-site span.
+\item On orthogonal physical supports, $\sigma_N(K)=\sigma_N(F)\oplus\kb{4^N}{4^N}$, with trace two.
+\item $I_L^{(N)}(K)=1+\tfrac12 I_L^{(N)}(F)$ and $B_K^2=B_K$.
+\end{itemize}
+\alert{All standing hypotheses hold simultaneously.} \verified
+\source{The direct-sum notation embeds the four-letter state into five letters.}
+\end{frame}
+\begin{frame}{One boundary rules out both required channels}
+Take $X=\left(\begin{smallmatrix}-1&2/5\\-5&0\end{smallmatrix}\right)$ and
+$Y=(GXG^{-1})\oplus0$. The physical operators $K_N(Y)$ are Hermitian.
+\[
+ \boxed{\ \|K_2(Y)\|_1=\frac{337}{250}
+ <\frac{27}{20}=\|K_3(Y)\|_1=\|K_4(Y)\|_1\ }
+\]
+Here $\|Z\|_1=\tr\sqrt{Z^\dagger Z}$ is the trace norm.
+For Hermitian $Z=Z_+-Z_-$, with positive parts $Z_\pm$,
+\[
+ \|\Phi(Z)\|_1\leq\tr\Phi(Z_+)+\tr\Phi(Z_-)=\|Z\|_1.
+\]
+\begin{block}{Consequence}
+No channel maps $K_2(Y)$ to $K_3(Y)$ or $K_4(Y)$.
+Proposition C.15 and Theorem 4.9(ii)$\Rightarrow$(v) fail as printed.
+\end{block}
+\verified\ Additional sufficient hypotheses are needed; no general replacement criterion is established here.
+\end{frame}
+\begin{frame}{Why the structural proof does not close the gap}
+\why{Trace powers see eigenvalues, but not nilpotent Jordan blocks.}
+For the same transition matrix, let $N_0=st^{\mathsf T}/100$:
+\[
+ T=Q+N_0,\qquad N_0\ne0,\quad N_0^2=QN_0=N_0Q=0.
+\]
+Then $\tr T^n=1$ for all $n\geq1$, yet $\rank T=2$.
+Thus the rank-one inference in Lemma C.5 is invalid.
+\begin{block}{What survives, and where it stops}
+For a single injective normal tensor with SAL and literal ZCL, the neighboring-trace matrix has rank one (defined in B6).\par
+Absorbing a weight does not extend that argument:
+\[
+ r(\E_{\mu\cK})=|\mu|^2r(\E_{\cK})=|\mu|^2.
+\]
+If $|\mu|<1$, the absorbed tensor is no longer normal.
+\end{block}
+\end{frame}
+\section{Weights, pure states, and phases}
+\begin{frame}{Normal representatives do not determine raw weights}
+\why{A structural theorem about representatives must still control the tensor assembled from their copies.}
+Test Theorem 4.9(iv)$\Rightarrow$(v) with $d=1$:
+\[
+ K^{00}=\diag(1,1/2),\qquad \cK_1^{00}=1,\qquad
+ \sigma_N=1+2^{-N}>0.
+\]
+The single scalar representative satisfies the factorization in (iv): its neighboring positive operator and factorization scalars are all one.
+But trace preservation for the two-site block would require
+\[
+ (K^{00})^4=(K^{00})^2,\qquad
+ \diag(1,1/16)\ne\diag(1,1/4).
+\]
+\verified\ A sufficient repair retains the physical-sector factorization and orthogonality hypotheses and sets every copy weight to one. The precise weighted hypotheses and factorization are in B4--B6.
+\end{frame}
+\begin{frame}{Which translations count as distance-independent correlations?}
+For $\ket{V_N}=\ket{V_N(A)}\ne0$, define the normalized expectation of an observable $O$ by
+\[
+ \langle O\rangle_N=\frac{\langle V_N|O|V_N\rangle}{\langle V_N|V_N\rangle}.
+\]
+Correlations independent of distance (CID) means that, for observables $O_1,O_2$ on disjoint regions,
+\[
+ \langle O_1O_2\rangle_N=\langle O_1\tau_\Delta(O_2)\rangle_N.
+\]
+Here $\tau_\Delta$ translates the second observable by $\Delta$ sites on the fixed ring.
+\begin{block}{The printed condition includes adjacency}
+Allowed translations preserve disjoint supports, but need not leave a site between the regions. The later positive-gap correction is a restriction of this condition.
+\end{block}
+\source{CPSV pure-state CID, used in Theorems 3.8 and 3.10.}
+\end{frame}
+\begin{frame}{Pure-state ZCL and pure-state RFP are different tests}
+For distinct BNT representatives $A_a,A_b$, local orthogonality (LO) means
+\[
+ \sum_i A_a^i\otimes\overline{A_b^i}=0\quad(a\ne b).
+\]
+The source defines pure ZCL as CID + LO. This is not mixed ZCL, $B_K^2=B_K$.
+\begin{block}{Pure RFP}
+There is a physical isometry $U:\mathbb C^d\to\mathbb C^{d^2}$,
+$U^\dagger U=\Id$, such that
+\[
+ A^{i_1}A^{i_2}=\sum_j U_{(i_1,i_2),j}A^j.
+\]
+\end{block}
+\why{A physical correlation criterion and an exact tensor identity need not retain the same information.}
+\source{Theorems 3.8 and 3.10 claim equivalence with transfer idempotence.}
+\end{frame}
+\begin{frame}{The normalized pure state can hide nonfixed copies}
+\why{A state-level test can miss length-dependent virtual coefficients.}
+For one physical letter,
+\[
+ A^0=\diag(1,1/2),\qquad \ket{V_N(A)}=(1+2^{-N})\ket{0^N}.
+\]
+CID holds; LO is vacuous. Write $e_{ab}=\kb{a}{b}$ for virtual matrix units:
+\[
+ \E_A(e_{12})=\tfrac12e_{12},\qquad \E_A^2(e_{12})=\tfrac14e_{12}.
+\]
+The pure RFP equation $(A^0)^2=uA^0$ also fails: the first diagonal entry forces $u=1$, the second gives $1/4=1/2$.
+\begin{block}{Corrected scope}
+For one unit-weight copy per BNT representative: positive-gap CID + LO $\Longleftrightarrow\mathbb E_A^2=\mathbb E_A$.
+\end{block}
+\verified\ This changes the tensor and can change its normalized state. Positive gaps contain at least one intervening site on each side.
+\end{frame}
+\begin{frame}{Zero range does not mean no adjacent correlations}
+\why{Coarse-graining fixed points may retain entanglement across a single bond.}
+Take $A^{(a,b)}=\kb{a}{b}/\sqrt2$, $a,b\in\{0,1\}$, with $d=4,D=2$.
+Its ring is a product of Bell pairs joining neighboring sites, and
+\[
+ \E_A(H)=\tfrac12\tr(H)\Id_2,\qquad \E_A^2=\E_A.
+\]
+Writing $Z_{n,r}$ and $Z_{n,l}$ for Pauli $Z$ on the right and left qubits of site $n$, on a four-ring:
+\[
+ \langle Z_{1,r}Z_{2,l}\rangle=1,\qquad
+ \langle Z_{1,r}Z_{3,l}\rangle=0.
+\]
+\begin{block}{Adjacency correction}
+Both complementary gaps must contain at least one site, before and after translation. Then $\mathbb E_A^g=\mathbb E_A$; at adjacency, $\mathbb E_A^0=\Id$ instead.
+\end{block}
+\verified\ Counterexample and positive-gap implication.
+\end{frame}
+\begin{frame}{Blocking can cycle instead of converge}
+\why{A fixed-point classification does not itself prove that every coarse-graining trajectory converges.}
+Let $\omega=e^{2\pi i/3}$ and $A^0=\diag(1,\omega)$, in CF.
+\[
+ \E_A^{2^n}(e_{21})=\omega^{2^n}e_{21}
+ =\begin{cases}\omega e_{21},&n\text{ even},\\\omega^2e_{21},&n\text{ odd}.\end{cases}
+\]
+\verified\ This refutes universal dyadic convergence asserted after Theorem 3.1 and in Appendix B.
+\begin{block}{The limit characterization survives}
+If $\E^{2^n}\to F$, continuity of composition gives $F^2=F$.
+Conversely, an idempotent map is already fixed under squaring.
+\end{block}
+A sufficient convergence condition is a common phase for all unit-modulus copies within each normal representative. \calculated
+\end{frame}
+\begin{frame}{Fixed up to gauge need not mean literally fixed}
+\why{A gauge comparison may permute a peripheral cycle rather than eliminate it.}
+For the same $A^0$, let $S=\left(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\right)$ and define the one-letter MPO matrix $M=A^0\otimes\overline{A^0}$.
+\begin{align*}
+ \omega S(A^0)^2S^{-1}&=A^0,\\
+ M&=(S\otimes\overline S)M^2(S\otimes\overline S)^{-1},\qquad M^2\ne M.
+\end{align*}
+Its periodic scalar is $\tr M^N=|1+\omega^N|^2>0$.
+Identity physical channels satisfy the gauge-modified equations in Appendix D, but not the ordinary RFP equations.
+\begin{block}{Consequence after Eq. (D.1)}
+Similarity under squaring does not imply idempotence. An exclusion of peripheral cycles is missing; no replacement equivalence is proved here.
+\end{block}
+\verified
+\end{frame}
+\section{Entropy and finite rings}
+\begin{frame}{A bounded entropy sequence need not have a limit}
+\why{A thermodynamic statement must control how the state changes with total ring length, not just with cut size.}
+Take $M^{00}=\diag(1,0,0)$, $M^{11}=\diag(0,1,-1)$ and zero off-diagonal slices.
+\[
+ \rho_N=\kb{0^N}{0^N}+(1+(-1)^N)\kb{1^N}{1^N}.
+\]
+Define $h_2(p)=-p\log_2p-(1-p)\log_2(1-p)$. For every fixed $L\geq1$ and $N>L$,
+\[
+ I_L^{(N)}=\begin{cases}0,&N\text{ odd},\\h_2(1/3),&N\text{ even}.\end{cases}
+\]
+\verified\ The inner limit in Proposition 4.5 fails.
+Finite-chain monotonicity $I_L^{(N)}\leq I_{L+1}^{(N)}$ survives. Given the quoted bond-dimension bound, using a limsup instead gives an outer limit in $L$. \calculated
+\end{frame}
+\begin{frame}{A finite ring remembers the complementary path}
+\why{A nearest-neighbor classical form need not have exact SAL on a closed ring.}
+Example 4.11 uses letters $k_n\in\{0,1\}$, each encoded as $\ket{k_n,k_n}$, and
+\[
+ p_N(\boldsymbol k)=\frac{\prod_nW_{k_nk_{n+1}}}{Z_N},\quad
+ W=\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix},\quad Z_N=\tr W^N.
+\]
+On four sites, define $q_{ab}=\Pr(k_1=a,k_3=b\mid k_2=0)$:
+\[
+ q=\frac1{41}\begin{pmatrix}20&8\\8&5\end{pmatrix},\qquad\det q=\frac{36}{41^2}>0.
+\]
+Thus the endpoints are not conditionally independent. The conditional mutual information, $I(X:Z\mid Y)=S(XY)+S(YZ)-S(Y)-S(XYZ)$, gives
+\[
+ I_2^{(4)}-I_1^{(4)}=I(k_1:k_3\mid k_2)>0.
+\]
+\verified\ SAL fails for the original tensor; its non-ZCL claim remains true.
+\end{frame}
+\begin{frame}{The intended SAL-without-ZCL example can be replaced}
+Choose a real $0<c<1$ and diagonal physical slices
+\[
+ K^{00}=\diag(1,0),\qquad K^{11}=\diag(0,c),\qquad K^{01}=K^{10}=0.
+\]
+Then
+\[
+ \sigma_N=\kb{0^N}{0^N}+c^N\kb{1^N}{1^N}.
+\]
+Every proper marginal and the normalized full state have eigenvalues $1/(1+c^N)$ and $c^N/(1+c^N)$.
+\[
+ I_L^{(N)}=h_2\!\left(\frac{c^N}{1+c^N}\right)\quad(1\leq L<N).
+\]
+\begin{block}{What survives}
+Exact SAL holds across all cuts, but $B_K=\diag(1,c)$ is not idempotent. SAL and mixed ZCL really are different requirements.
+\end{block}
+\calculated\ No formalization claim for this replacement.
+\end{frame}
+\section{Proof completion and conclusions}
+\begin{frame}{Why the fundamental theorem matters here}
+\why{To classify physical states by local tensors, one must know precisely when different tensors describe the same family.}
+For CF tensors $A,B$, Theorem 2.10 assumes
+\[
+ \ket{V_N(A)}=c_N\ket{V_N(B)},\qquad c_N\ne0\quad(N\geq1).
+\]
+It concludes that the BNT sectors match up to phase and invertible similarity. If $c_N=1$, Corollary 2.11 gives a global similarity of the full tensors.
+\begin{block}{Missing step, not a false theorem}
+The relation contains both complete BNT families. Comparing one sector with only part of that family does not justify coefficient extraction.
+\end{block}
+An asymptotic argument also cannot discard decaying weights: $2^{-N}\to0$ does not mean the coefficient is zero.
+\end{frame}
+\begin{frame}{Exact coefficient comparison completes the proof}
+Choose representatives $C_u$ for the union of both BNTs modulo phase and similarity. Their Gram matrix obeys
+\[
+ G_{uv}^{(N)}=\langle V_N(C_u)|V_N(C_v)\rangle\longrightarrow\delta_{uv}.
+\]
+So the whole family is linearly independent for sufficiently large $N$.
+Writing the two expansions with coefficients $a_u(N),b_u(N)$ gives
+\[
+ a_u(N)=c_Nb_u(N)\quad\text{for every class }u.
+\]
+An unmatched class would force its nonempty copy sum $\sum_q\mu_q^N$ to vanish on an entire tail. A Vandermonde determinant excludes this.
+\begin{block}{What is established}
+All sectors match, including decaying sectors. For equal families, eventual exact power-sum identities recover the weight multisets and then a global similarity.
+\end{block}
+\verified\ No per-sector unit-weight assumption is needed.
+\end{frame}
+\begin{frame}{A local normalization fix with physical content}
+\why{Schmidt probabilities and Schmidt amplitudes differ by a square root. Confusing them changes the transfer spectrum.}
+Let $\Lambda>0$ be diagonal with $\tr\Lambda=1$. Let $U^i$ obey pair-index orthonormality,
+$\sum_i U^i_{ab}\overline{U^i_{a'b'}}=\delta_{aa'}\delta_{bb'}$.
+\begin{align*}
+ A^i=\sqrt\Lambda U^i&\quad\Rightarrow\quad\E_A(H)=\Lambda\tr H,\\
+ A^i=\Lambda U^i&\quad\Rightarrow\quad\E_A(H)=\Lambda^2\tr H.
+\end{align*}
+\begin{block}{Theorem 3.11 and Lemma B.1}
+Use $\sqrt\Lambda$ with $\tr\Lambda=1$, or call $\Lambda$ the amplitude matrix and require $\tr(\Lambda^2)=1$.
+\end{block}
+Otherwise, for $D>1$ the spectral radius is $\tr(\Lambda^2)<1$, not one. Backup slides cover the remaining index, exponent, and endpoint corrections.
+\end{frame}
+\begin{frame}{The distinctions that a corrected classification needs}
+\begin{itemize}
+\item \textbf{Environment:} periodic SAL + ZCL does not ensure an all-boundary recovery channel.
+\item \textbf{Representation:} normalized physical data do not fix canonical copy weights or relative phases.
+\item \textbf{Geometry and limits:} adjacency differs from positive gaps; finite rings differ from infinite chains; boundedness differs from convergence.
+\item \textbf{Proof method:} compare complete families and exact coefficients before taking limits.
+\end{itemize}
+\begin{block}{The constructive outcome}
+The fundamental theorem survives with a completed proof. Restricted fixed-point statements and local corrections remain useful, with their hypotheses explicit.
+\end{block}
+The general additional criterion needed for SAL + ZCL to imply the claimed channels is not supplied by these counterexamples.
+\end{frame}
+\appendix
+\setbeamertemplate{footline}{\begin{beamercolorbox}[wd=\paperwidth,ht=5mm,dp=3mm,leftskip=8mm,rightskip=8mm]{footline}Backup calculations\hfill B\insertframenumber\,/\,18\end{beamercolorbox}}
+\section{Backup: calculations and corrected hypotheses}
+\begin{frame}{B1. The exact transition matrix and its nilpotent part}
+For the four-letter example,
+\[
+ T=\frac1{100}\begin{pmatrix}22&19&46&13\\24&23&32&21\\26&27&18&29\\28&31&4&37\end{pmatrix}.
+\]
+With $\boldsymbol1=(1,1,1,1)^{\mathsf T}$, $Q=\boldsymbol1\boldsymbol1^{\mathsf T}/4$ and $N_0=st^{\mathsf T}/100$,
+\[
+ \boldsymbol1^{\mathsf T}s=t^{\mathsf T}\boldsymbol1=t^{\mathsf T}s=0
+ \quad\Rightarrow\quad QN_0=N_0Q=N_0^2=0.
+\]
+All entries of $T$ are positive, but
+\[
+ T_{00}T_{11}-T_{01}T_{10}=\frac{22\cdot23-19\cdot24}{10000}=\frac1{200}\ne0.
+\]
+Thus $\tr T^n=1$ is compatible with rank two. A zero-eigenvalue Jordan block is invisible to every trace power.
+\source{Corrections note, II.A and II.E; Lemma C.5.}
+\end{frame}
+\begin{frame}{B2. Why the four-letter tensor admits a normal representative}
+The coordinate rows of $F_i$ in matrix-entry order $(11,12,21,22)$ are
+\[
+ (1/4,\ s_i/100,\ t_i/4,\ s_it_i/100),\qquad\det=-3/2000\ne0.
+\]
+Hence the slices span $M_2(\mathbb C)$ and $\E_F$ is strictly positive. Perron theory gives $\rho,H_*>0$ and $r>0$ such that
+\[
+ \E_F(\rho)=r\rho,\qquad\E_F^*(H_*)=rH_*.
+\]
+Here $\E_F^*$ is the trace adjoint. For $H=\diag(20,1)$,
+\[
+ H-\E_F^*(H)=\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0.
+\]
+Pairing with $\rho$ proves $(1-r)\tr(H\rho)>0$, so $r<1$.
+Taking $G=H_*^{1/2}$ and $\mu=\sqrt r$ gives
+$\sum_i(\mu^{-1}GF_iG^{-1})^\dagger(\mu^{-1}GF_iG^{-1})=\Id$.
+\end{frame}
+\begin{frame}{B3. The norm obstruction is an exact rational calculation}
+For the boundary $X$ on slide 14, define endpoint coefficients
+\[
+ D_{ij}=r_jXl_i=-\tfrac14+\tfrac{t_i}{10}-\tfrac{s_j}{20}.
+\]
+Here $D_{ij}$ are endpoint coefficients, not the bond dimension.
+\[
+ [D_{ij}]=\begin{pmatrix}0&-1/10&-1/5&-3/10\\1/10&0&-1/10&-1/5\\-4/5&-9/10&-1&-11/10\\3/10&1/5&1/10&0\end{pmatrix}.
+\]
+All internal transitions are positive, so summing absolute diagonal entries gives
+\[
+ \|F_N(X)\|_1=\sum_{i,j}|D_{ij}|(T^{N-1})_{ij}.
+\]
+$N=2$ uses $T$; $N=3,4$ use $Q$. Their difference is exactly $1/500$. The ambient gauge and physical inclusion preserve these norms.
+\end{frame}
+\begin{frame}{B4. A precise sufficient theorem: the assembled tensor}
+Let $s=1,\ldots,g$ label normal representatives $\cK_s$ of bond dimensions $D_s$, with $r_s\geq1$ copies. Assume copy-independent nonzero weights $\mu_{s,q}=\mu_s$ and an invertible virtual matrix $G$ such that
+\[
+ K^{ij}=G\left[\bigoplus_{s=1}^g\bigoplus_{q=1}^{r_s}\mu_s\cK_s^{ij}\right]G^{-1}.
+\]
+Assume simultaneous one-site span:
+\[
+ \operatorname{span}_{i,j}\{\bigoplus_s\cK_s^{ij}\}=\bigoplus_s M_{D_s}(\mathbb C).
+\]
+Put $C_s^{ij}=\mu_s\cK_s^{ij}$. At fixed virtual indices $\alpha,\beta=1,\ldots,D_s$, define the physical matrix
+\[
+ \kappa^s_{\beta\alpha}=\sum_{i,j=0}^{d-1}(C_s^{ij})_{\beta\alpha}\kb{i}{j}.
+\]
+\source{Corrections note, III.A; sufficient coefficient-absorbed channel theorem.}
+\end{frame}
+\begin{frame}{B5. A precise sufficient theorem: physical sectors}
+Require layer orthogonality, in both orders, for distinct representatives:
+\[
+ \kappa^t_{\delta\gamma}\kappa^s_{\beta\alpha}=0
+ \quad(s\ne t;\ \text{all virtual indices}).
+\]
+For each $s$, identify the physical space by a unitary $U_s$ with
+$\bigoplus_{k=1}^{m_s}(\mathcal H^L_{s,k}\otimes\mathcal H^R_{s,k})$.
+Here $m_s$ counts physical sectors, and both factor spaces have positive dimension.
+\begin{block}{Required physical-sector factorization}
+For every $\beta,\alpha$,
+\[
+ U_s\kappa^s_{\beta\alpha}U_s^\dagger
+   =\bigoplus_{k=1}^{m_s} l^s_{k,\beta}\otimes r^s_{k,\alpha}.
+\]
+$l^s_{k,\beta}$ is an operator on $\mathcal H^L_{s,k}$;
+$r^s_{k,\alpha}$ is an operator on $\mathcal H^R_{s,k}$.
+\end{block}
+Individual factors need not be positive; their neighboring contractions must be (B6).
+\source{CPSV Appendix C.2 physical-slice factorization, as used in the corrected sufficient theorem.}
+\end{frame}
+\begin{frame}{B6. Neighboring positivity and the rank-one trace matrix}
+For each representative $s$ and physical sectors $k,h=1,\ldots,m_s$, define
+\[
+ \eta^s_{kh}=\sum_{\alpha=1}^{D_s}r^s_{k,\alpha}\otimes l^s_{h,\alpha}
+ \quad\text{on }\mathcal H^R_{s,k}\otimes\mathcal H^L_{s,h}.
+\]
+Require $\eta^s_{kh}\geq0$ and real numbers $a^s_k,b^s_h$ satisfying
+\[
+ R^s_{kh}:=\tr\eta^s_{kh}=a^s_kb^s_h,\qquad
+ \sum_{k=1}^{m_s}a^s_kb^s_k=1.
+\]
+Thus $R^s$ is the rank-one neighboring-trace matrix.
+\begin{block}{Sufficient conclusion}
+Under B4--B6, $K^{[2]}$ is an RFP for every virtual boundary.
+\end{block}
+\verified\ These hypotheses are not consequences of general SAL + ZCL.
+\end{frame}
+\begin{frame}{B7. How phases enter the doubled pure transfer}
+For $A^i=\bigoplus_{a,q}\mu_{a,q}A_a^i$, the block between virtual copies $(a,q)$ and $(b,p)$ is
+\[
+ (\mathbb E_A)_{a,q;b,p}=\mu_{a,q}\overline{\mu_{b,p}}
+           \sum_iA_a^i\otimes\overline{A_b^i}.
+\]
+\begin{itemize}
+\item Distinct normal representatives have decaying mixed transfer powers.
+\item A factor with $|\mu_{a,q}\overline{\mu_{b,p}}|<1$ decays.
+\item Within one representative, unit-modulus copies can leave nontrivial relative phases.
+\end{itemize}
+If all unit-modulus copies within each representative share one phase, the surviving relative factors are one, and the powers converge.
+\calculated\ A sufficient condition, not a claimed necessary condition. The explicit cube-root phase cycle is formalized.
+\end{frame}
+\begin{frame}{B8. Finite entropy monotonicity versus an iterated limit}
+Strong subadditivity and translation invariance imply
+\[
+ S_L^{(N)}+S_{N-L}^{(N)}\leq S_{L+1}^{(N)}+S_{N-L-1}^{(N)}
+\]
+for $1\leq L<\lfloor N/2\rfloor$. Thus $I_L^{(N)}\leq I_{L+1}^{(N)}$.
+Using the source's quoted bound $I_L^{(N)}\leq4\log_2D$:
+\begin{itemize}
+\item If every $J_L=\lim_{N\to\infty}I_L^{(N)}$ exists, then $J_L$ is bounded and monotone, hence has an outer limit.
+\item Without that premise, set $J_L^+=\limsup_{N\to\infty}I_L^{(N)}$. This sequence is also bounded and monotone in $L$.
+\end{itemize}
+\calculated\ The limsup amendment is not a proof that the original inner limits exist. The parity counterexample refutes their unrestricted existence.
+\source{Corrections note, IV.A; Proposition 4.5.}
+\end{frame}
+\begin{frame}{B9. Four-ring probabilities in Example 4.11}
+With $P_\pm=\frac12\left(\begin{smallmatrix}1&\pm1\\\pm1&1\end{smallmatrix}\right)$,
+\[
+ W^m=(3/2)^mP_++(1/2)^mP_-,\qquad Z_N=(3^N+1)/2^N.
+\]
+A proper marginal contains the complementary path:
+\[
+ p_{N,L}(\boldsymbol k)=\frac{\prod_{n=1}^{L-1}W_{k_nk_{n+1}}(W^{N-L+1})_{k_Lk_1}}{Z_N}.
+\]
+At $N=4$, single letters have probability $1/2$, and
+\[
+ p_{4,2}(00)=p_{4,2}(11)=14/41,\quad
+ p_{4,2}(01)=p_{4,2}(10)=13/82.
+\]
+Three-letter words with zero, one, or two internal transitions have probabilities $10/41$, $4/41$, or $5/82$, with multiplicities two, four, and two.
+\source{Corrections note, IV.B. These probabilities give the conditional matrix on slide 24.}
+\end{frame}
+\begin{frame}{B10. Entropy defect and non-ZCL in the original example}
+Suppressing the superscript $N=4$, the probabilities give
+\[
+ I_2-I_1=2S_2-S_1-S_3
+ =\frac1{82}\log_2\frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}>0.
+\]
+The determinant argument on slide 24 proves strictness without numerical rounding: conditional independence would require the positive $2\times2$ probability matrix to have rank one.
+\begin{block}{The non-ZCL conclusion survives}
+\[
+ p_{4,2}(00)=\frac{14}{41}\ne\frac5{14}=p_{3,2}(00).
+\]
+Literal physical-trace idempotence would identify these reduced closures and their normalizations.
+\end{block}
+\verified\ Both failures, SAL and physical-trace idempotence, are established for the original two-qubit-site tensor.
+\end{frame}
+\begin{frame}{B11. Why eventual exact identities recover all weights}
+Let $z_1,\ldots,z_m$ be distinct nonzero complex numbers and $c_1,\ldots,c_m$ complex coefficients. If
+\[
+ \sum_{a=1}^m c_az_a^N=0\quad\text{for every }N\geq N_0,
+\]
+take $m$ consecutive lengths. Their coefficient matrix has determinant
+\[
+ \det[z_a^{N_0+b}]_{\substack{0\leq b<m\\1\leq a\leq m}}
+ =\left(\prod_a z_a^{N_0}\right)\prod_{a<b}(z_b-z_a)\ne0.
+\]
+Thus all $c_a=0$. For copy power sums, these coefficients are multiplicities or their differences.
+\begin{block}{Exactness is essential}
+$1+2^{-N}-(1+3^{-N})\to0$ does not identify the weight multisets.
+An exact identity on a tail does.
+\end{block}
+\verified\ This recovers decaying weights as well as unit-modulus weights.
+\end{frame}
+\begin{frame}{B12. What proportional families do not determine}
+\why{Equality of physical rays is weaker than equality of unnormalized vectors.}
+The proportional theorem allows a separate nonzero scalar $c_N$ at every positive length. It need not have the form $c^N$ for one constant $c$.
+For a single physical letter,
+\[
+ A^0=\diag(1,1/2),\quad B^0=1,\qquad V_N(A)=(1+2^{-N})V_N(B).
+\]
+The BNT has one scalar representative on both sides, but the raw copy multiplicities differ.
+\begin{block}{Correct conclusions}
+Proportional families give phase-gauge matching of BNT representatives. Equal families additionally give matching copy weights and global similarity of the full tensors.
+\end{block}
+Zero-weight summands are omitted by convention; isolated-length cancellations are allowed. For example, $1+(-1)^N=0$ on odd lengths, not on an entire tail.
+\end{frame}
+\begin{frame}{B13. Free indices and support-vector lengths}
+\why{Local identities must retain their external indices, and parent terms must use the intended support length.}
+In source Eq. (29), $i_1,i_2$ remain free:
+\[
+ A^{i_1}A^{i_2}=\sum_j U_{(i_1,i_2),j}A^j.
+\]
+For the length-$L$ local support in ``Commuting parent Hamiltonians'', virtual endpoints $\alpha,\beta$ label
+\[
+ \ket{v_{\alpha,\beta}}=\sum_{i_1,\ldots,i_L}
+ (A^{i_1}\cdots A^{i_L})_{\alpha,\beta}\ket{i_1\cdots i_L}.
+\]
+The local parent interaction penalizes the orthogonal complement of the span of these vectors. Exactly $L$ matrices are needed for $L$ physical sites.
+\source{Local corrections, not new counterexamples to the parent-Hamiltonian classification. Corrections note, VI.C.}
+\end{frame}
+\begin{frame}{B14. A scalar acquired at each site is raised to length}
+\why{Blocking changes multiplicity factors; a one-site normalization must be multiplied once per site.}
+In the proof of Theorem 4.14, $\gamma$ labels a sector, $\mu_\gamma,\nu_\gamma$ are one-site and blocked multiplicity matrices, and
+$m_\gamma=\tr\mu_\gamma$, $n_\gamma=\tr\nu_\gamma\ne0$.
+For the unitary identification $U_\gamma$ and sector tensors $A_\gamma,M_\gamma$,
+\[
+ A_\gamma=\frac{m_\gamma}{n_\gamma}U_\gamma M_\gamma U_\gamma^\dagger
+ \quad\Rightarrow\quad
+ O_L(A_\gamma)=\left(\frac{m_\gamma}{n_\gamma}\right)^L O_L(M_\gamma).
+\]
+$O_L$ is the vertically contracted length-$L$ operator, in the identified coordinates.
+\begin{block}{Correct coefficient in the simultaneous representation}
+$(m_\gamma/n_\gamma)^L\tr(\nu_\gamma^L)$, not
+$(m_\gamma^L/n_\gamma)\tr(\nu_\gamma^L)$.
+\end{block}
+\source{Corrections note, VI.C; Appendix C, proof of Theorem 4.14.}
+\end{frame}
+\begin{frame}{B15. Entropy indices, implication labels, and endpoints}
+\why{A valid argument can still fail at an endpoint or be attached to the wrong condition.}
+At fixed $N$, the entropy equality equivalent to SAL is
+\[
+ I_L=I_{L+1}\quad\Longleftrightarrow\quad
+ S_L+S_{N-L}=S_{L+1}+S_{N-L-1}.
+\]
+The closing proof of Theorem 4.9 interchanges labels (iii) and (iv) in its proposition assignments. Proposition C.15 starts from (ii), SAL + ZCL.
+\begin{block}{Example 4.10}
+The on-site unitary is $U_n=\sigma_x^{(n,l)}\otimes\sigma_x^{(n,r)}$, acting on the two different qubits. Its channel is
+$\E_n(Z)=pU_nZU_n^\dagger+(1-p)Z$, $0\leq p\leq1$.
+\end{block}
+At $p=1$, on-site conjugation preserves the Bell-pair ring entropies: $S_L=2$, $S_N=0$, $I_L=4$ for proper cuts. Exclude $p=1$ from strict non-SAL; the $p=1/4$ witness remains.
+\end{frame}
+\begin{frame}{B16. Verification scope and source guide}
+\verified\ As reported in the corrections note:
+\begin{itemize}
+\item All-hypothesis channel obstruction; copy-weight obstructions; phase-cycle and gauge-blocking counterexamples.
+\item Pure positive-gap repair; single-normal-tensor rank-one repair; sufficient coefficient-sensitive channel theorem.
+\item Entropy parity obstruction; original Example 4.11 failures; completed fundamental theorem.
+\end{itemize}
+\calculated\ Same-phase sufficient convergence, limsup amendment, and replacement SAL-without-ZCL example.
+The square-root, index, exponent, and endpoint calculations are presented as local corrections, without adding a blanket formalization claim.
+\source{Primary companion: Corrections to matrix product density operator fixed-point statements, sections I--VI. Theorem numbers throughout this deck use source v4, not the numbering of the companion note.}
+\end{frame}
+\begin{frame}{B17. The Bell-pair ring retains bond entanglement}
+Each physical site contains left and right qubits. Every green link is the state
+$\ket{\varphi}=(\ket{00}+\ket{11})/\sqrt2$.
+\begin{center}
+\begin{tikzpicture}[x=1.5cm,y=1cm]
+\foreach \n/\x in {1/0,2/3,3/6,4/9}{
+ \draw[leanblue,rounded corners] (\x-1,-.55) rectangle (\x+1,.6);
+ \node[text=white] at (\x,1) {site $\n$};
+ \fill[mintgreen] (\x-.5,0) circle (2.5pt);
+ \fill[mintgreen] (\x+.5,0) circle (2.5pt);
+ \node[text=white,above] at (\x-.5,.06) {$l$};
+ \node[text=white,above] at (\x+.5,.06) {$r$};
+}
+\draw[mintgreen,very thick] (.5,0)--(2.5,0);
+\draw[mintgreen,very thick] (3.5,0)--(5.5,0);
+\draw[mintgreen,very thick] (6.5,0)--(8.5,0);
+\draw[mintgreen,very thick,rounded corners] (9.5,0)--(10.3,0)--(10.3,-1.2)--(-1.3,-1.2)--(-1.3,0)--(-.5,0);
+\end{tikzpicture}
+\end{center}
+The observables $Z_{1,r}$ and $Z_{2,l}$ act on one Bell pair, giving correlation one.
+Translating the second observable to $Z_{3,l}$ puts it on a different pair, giving zero.
+\begin{block}{Why the positive-gap condition is physical}
+An idempotent transfer removes dependence on positive separation. It does not remove the entanglement shared by adjacent sites.
+\end{block}
+\source{Corrections note, VI.A. The topology matches the tensor $A^{(a,b)}=|a\rangle\langle b|/\sqrt2$.}
+\end{frame}
+\begin{frame}{B18. Reference}
+\bibliography{references}
+\textbf{Companion corrections note}\par
+\emph{Corrections to matrix product density operator fixed-point statements}.\par
+Sections II--VI supply the counterexamples and corrected statements used here.
+Source numbering was checked against the local arXiv:1606.00608v4 source and the companion note's resolved references.
+\end{frame}
+\end{document}

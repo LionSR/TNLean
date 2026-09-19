@@ -1,0 +1,58 @@
+\section{Reproducible numerical controls}
+\label{sec:numerics}
+
+A deterministic finite search and exact structured regressions were run
+independently of the obstruction proof. The implementation is
+\path{docs/audits/rfp_intrinsic/checks/environment_four_search.py}.
+Its seed is $20260916$. The script saves its bounds, versions, initial
+and final parameters, Kraus matrices, singular values, and reconstruction
+checks. It does not use a channel solver or infer a no-go from optimization.
+
+The searches used
+\begin{align}
+	K_\mu=\sum_{a,b}U_{\mu,ab}\sqrt R E_{ab}\sqrt L,
+	\qquad \tr(LR)=1,
+\end{align}
+with the first two Kraus matrices active. Twelve initial trials used
+$R=I$, $L=\diag(p,1-p)$ and $0.1\leq p\leq0.5$; four used independently
+parameterized faithful input and output weights. Finite Grassmann charts
+around seeded unitary frames do not assert global numerical coverage.
+Eight recentered sensitivity refinements completed the saved set of
+24 endpoints. For the physical Hilbert--Schmidt coefficient matrices,
+the forward residual was
+\begin{align}
+	\epsilon_{\rm fwd}
+	=\frac{\|F_2(I-F_1^+F_1)\|_{\rm F}}{\|F_2\|_{\rm F}},
+\end{align}
+where $+$ is the Moore--Penrose inverse and $\|\cdot\|_{\rm F}$ is the
+Frobenius norm. Active coordinates include the factor $\|\tau\|_{\rm F}$.
+This metric is recorded because it need not be invariant under arbitrary
+nonunitary virtual similarities.
+
+The best initial canonical-weight residual was $0.0326371963671$,
+with smallest-to-largest one-site singular-value ratio $0.0823107997208$.
+The smaller residual $0.0262344347885$ in the independent-weight runs
+had span ratio $0.0498860484088$, below the prescribed $0.05$ floor,
+and was rejected. Soft conditioning penalties were not treated as
+hard feasibility certificates. Separately well-conditioned $R$ and $L$
+also need not make $\sqrt R L\sqrt R$ comparably well conditioned;
+validation records that canonical spectrum explicitly.
+No endpoint passed the survivor tests. Independent reconstruction of
+all 24 endpoints gave physical-coordinate and purification errors below
+$4\times10^{-16}$, Kraus-frame unitarity error below $1.2\times10^{-14}$,
+and normalized trace-idempotence error below $1.1\times10^{-15}$.
+A fresh replay reproduced all 24 forward residuals exactly at the
+stored floating-point precision.
+
+Exact rational controls reproduce the Pauli kernel witness $1/24$.
+For diagonal active pencils, common-output pencils, and common-input
+pencils, respectively, they give
+\begin{align}
+	(a,b,\dim\mc W,\dim(\mc W+\mc W^2))
+	=(2,2,5,6),\ (2,4,5,8),\ (4,2,5,8),
+\end{align}
+where $a,b$ are the orbit dimensions in \cref{eq:orbits}.
+These checks illustrate the mechanism. In particular, an ideal dimension
+of four does not by itself imply that the ideal is contained in $\mc W$.
+Neither the finite residuals nor the structured examples prove universal
+nonexistence; that conclusion comes from \cref{thm:no-go,cor:scalar-extension}.

@@ -1,0 +1,203 @@
+\section{Anomalous boundaries and independent multiplicities}
+\label{sec:intrinsic-anomaly}
+
+The CZX construction provides a different comparison: an anomalous
+core survives even though the added weights separate exactly.
+
+\subsection{Raw blocks and integer fusion}
+
+Use a two-qubit cell with parity embeddings
+$I_f\ket t=\ket{t,t\oplus f}$. Binary addition is denoted by
+$\oplus$. The raw vertical blocks act on $\C^2$:
+\begin{align}
+	B_f^{00} & =\Id,                                 \\
+	B_f^{t+1,u+1}
+	         & =(-1)^{(t+f)u+t(1-f)}\ket t\bra{1-t},
+	\qquad t,u\in\{0,1\}.
+	\label{eq:CZX-B}
+\end{align}
+Cross-block letters vanish. The physical unweighted cell is
+$\bigoplus_fB_f/4$, not $\bigoplus_fB_f$.
+
+The transfer map is
+\begin{align}
+	\mc E_{B_f}
+	\begin{pmatrix}a&b\\c&d\end{pmatrix}
+	 & =\begin{pmatrix}a+2d&b\\c&d+2a\end{pmatrix}.
+\end{align}
+Its eigenvalues on $\Id,Z,E_{01},E_{10}$ are $3,-1,1,1$.
+Thus $\widehat B_f=B_f/\sqrt3$ are normal. Products of two
+letters span all matrix units. The identity letter fixes any
+equivalence phase to one, while the $(1,1)$ and $(1,2)$ letters
+would require the same $E_{01}$ both to retain and to reverse
+sign. Hence the two sectors are inequivalent.
+
+For binary $f,g,c$, define
+\begin{align}
+	h(f,g,c) & =(f+1+g)(c+g)\pmod2,                        \\
+	J_{fg}^c\ket t
+	         & =(-1)^{h(f,g,c)t}\ket{t,t\oplus c\oplus g}.
+\end{align}
+The two ranges partition $\C^2\otimes\C^2$. Substitution gives
+\begin{align}
+	B_fB_g & =\sum_cJ_{fg}^cB_c(J_{fg}^c)^\dagger.
+	\label{eq:CZX-fusion}
+\end{align}
+For the nonidentity letters, put $v=t\oplus c\oplus g$.
+The exponent difference between the concatenated coefficient and
+the target coefficient is
+\begin{align}
+	 & (t+f)v+t(1-f)+(v+g)u+v(1-g)
+	-(t+c)u-t(1-c)\nonumber        \\
+	 & \qquad=(f+1+g)(c+g)\pmod2,
+\end{align}
+which is the conjugation sign of $J_{fg}^c$.
+
+The raw algebra has $ff'=e+o$ for every pair. With
+$p=(e+o)/4$ and $x=e-o$,
+\begin{align}
+	p^2 & =p, & px & =xp=0, & x^2 & =0.
+\end{align}
+There is no identity: $ue=(u_e+u_o)(e+o)$ cannot equal $e$.
+On the independent formal symbols $e,o$, this algebra is two-dimensional.
+Its closed-operator representation need not be faithful at short lengths:
+$O_1(B_0)=O_1(B_1)$. The formal algebra has a one-dimensional nilpotent
+ideal, and is not a fusion ring with a tensor unit. Horizontal
+positivity is compatible with this because the vertical span is
+not assumed to be closed under the physical adjoint.
+
+\subsection{Exact shifted-cell factorization}
+
+Define the complete Bell embeddings
+\begin{align}
+	\Phi_b\ket j
+	        & =2^{-1/2}\sum_{r=0}^1(-1)^{jr}\ket{r,r\oplus b},   \\
+	\Lambda & =\lambda_0+\lambda_1,                            &
+	w       & =\frac1{8\Lambda},
+	\qquad \lambda_0,\lambda_1>0.
+\end{align}
+After regrouping the complete register into one site, the tensor is
+\begin{align}
+	C^{\alpha\beta}
+	 & =w\sum_{b,f,\gamma}\lambda_b
+	\Phi_bB_b^{\alpha\gamma}\Phi_b^\dagger
+	\otimes I_fB_f^{\gamma\beta}I_f^\dagger.
+\end{align}
+The embeddings $V_{bf}^c=(\Phi_b\otimes I_f)J_{bf}^c$ have
+eight two-dimensional ranges exhausting the physical site.
+Therefore
+\begin{align}
+	C^{\alpha\beta}
+	          & =\sum_{b,f,c}w\lambda_b
+	V_{bf}^cB_c^{\alpha\beta}(V_{bf}^c)^\dagger,                  \\
+	\eta_c
+	          & =w\diag(\lambda_0,\lambda_0,\lambda_1,\lambda_1), \\
+	\tr\eta_c & =2w\Lambda=\frac14.
+	\label{eq:CZX-eta}
+\end{align}
+Unlike \cref{eq:category-spectra}, these multiplicities are
+identical for both output sectors.
+
+\begin{proposition}[CZX spectator separation]
+	\label{prop:CZX-separation}
+	Let
+	\begin{align}
+		\sigma_\lambda
+		 & =\frac1{2\Lambda}
+		\diag(\lambda_0,\lambda_0,\lambda_1,\lambda_1).
+	\end{align}
+	There is a fixed on-site unitary $W$, following the regrouping,
+	such that
+	\begin{align}
+		WC^{\alpha\beta}W^\dagger
+		 & =\sigma_\lambda\otimes
+		\left(\frac14\sum_c I_cB_c^{\alpha\beta}I_c^\dagger\right), \\
+		W^{\otimes N}\rho_N(C)(W^\dagger)^{\otimes N}
+		 & =\sigma_\lambda^{\otimes N}
+		\otimes\rho_{\mathrm{CZX}}^{(2N)}
+		\qquad(N\geq1).
+		\label{eq:CZX-separation}
+	\end{align}
+\end{proposition}
+
+\begin{proof}
+	The sector coordinates must be converted to physical qubits by the
+	permutation $P\ket{c,t}=I_c\ket t=\ket{t,t\oplus c}$.
+	Define $W V_{bf}^c\ket t=\ket{b,f}\otimes I_c\ket t$.
+	Completeness of the ranges and unitarity of $P$ make $W$ unitary.
+	Each coefficient in
+	\cref{eq:CZX-eta} becomes
+	$w\lambda_b=(\lambda_b/(2\Lambda))(1/4)$, proving the letter
+	identity. Horizontal contraction proves the all-length statement.
+\end{proof}
+
+The normalized BNT data are
+\begin{align}
+	\mu_c      & =\sqrt3\,\eta_c,   &
+	m_c        & =\frac{\sqrt3}{4},   \\
+	\chi_{fgc} & =\frac1{\sqrt3},   &
+	c_{fgc}(L) & =3^{-L/2}.
+\end{align}
+The raw and normalized mass equations are, respectively,
+\begin{align}
+	\sum_{f,g}\frac14\frac14        & =\frac14,          \\
+	\sum_{f,g}\frac1{\sqrt3}
+	\left(\frac{\sqrt3}{4}\right)^2 & =\frac{\sqrt3}{4}.
+\end{align}
+The embeddings are complete, so \cref{lem:channels} gives full-space
+RFP channels with no complement branch.
+
+Horizontally, the identity block is scalar. The spin-flip block has
+dimension two; its blocked letters are nonzero multiples of
+$\ket t(1,(-1)^u)$ and span all two-by-two matrices. Its
+physical-trace matrix vanishes. The two blocks have disjoint diagonal
+and off-diagonal physical supports, and positive register weights
+preserve their spans. The shifted tensor is therefore canonical and
+nonsimple for every positive weight pair.
+
+This factorization uses a regrouped cell and changes the canonical
+multiplicities. It is therefore stronger than testing positive rescalings
+at the original register-crossing cut, and is not contradicted by
+length-dependent coefficients in that presentation. No crossing-cut
+normalization is needed for the shifted tensor or its
+all-positive-weight factorization.
+
+\subsection{Anomaly and bulk interpretation}
+
+For an even ring of $m$ qubits,
+\begin{align}
+	U_m & =\left(\prod_{j=1}^mCZ_{j,j+1}\right)X^{\otimes m}, \\
+	\rho_{\mathrm{CZX}}^{(m)}
+	    & =2^{-m}(\Id+U_m).
+\end{align}
+Bit complementation changes $\sum_jt_jt_{j+1}$ by
+$m-2\sum_jt_j$. Hence
+\begin{align}
+	U_m^2       & =(-1)^m\Id, &
+	U_m^\dagger & =(-1)^mU_m.
+\end{align}
+At even $m$, the operator is a Hermitian involution and is traceless,
+so the displayed density operator is positive and trace one.
+The two-qubit cell is necessary for an all-length MPDO statement.
+
+On an interval of $m\geq2$ qubits, retaining only its $m-1$ internal
+controlled-$Z$ gates gives
+\begin{align}
+	U_I^2                  & =(-1)^{m-1}Z_1Z_m, \\
+	U_IZ_1U_I^{-1}         & =-Z_1,             \\
+	Z_1U_IZ_1^{-1}U_I^{-1} & =-\Id.
+\end{align}
+This endpoint sign expresses the nontrivial symmetry obstruction of
+the CZX boundary~\cite{CZX}. The separation in
+\cref{prop:CZX-separation} does not remove the anomalous core.
+Nor does it prove that the separating circuit preserves an
+independently specified symmetry action. That stronger assertion
+requires compatibility of the gates with that action.
+
+Encodings of unweighted CZX or CZY boundaries into double-semion
+descriptions do not automatically construct a bulk tensor for every
+weighted presentation. A positive filter commuting with a boundary
+projector is not generally trace preserving on arbitrary inputs.
+Neither the fixed-cut coefficients nor the spectator state establish
+a new two-dimensional phase or an equivalence in a prescribed
+symmetry-preserving class.

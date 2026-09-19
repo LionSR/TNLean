@@ -1,0 +1,42 @@
+\section{Outcome and precise remaining scope}
+\label{sec:outcome}
+
+The trace-one, full-span search with physical dimension five,
+horizontal bond dimension four, and Gram ranks $(1,2)$ is
+analytically excluded. The exclusion is stronger than a failure of
+full-space channel feasibility: every tensor in the stratum has a
+one-site coefficient relation that fails after blocking. Hence even
+a complex-linear refinement on the encoded letter span is impossible.
+
+The reduction treats all transfer weights and all Kraus choices.
+Rank-deficient input or output weights cannot support coefficient
+span five. Faithful weights admit the exhaustive normal form
+\cref{eq:frame-param,eq:parameter-space}; no restriction to a Pauli
+frame or a generic subspace is made. On that entire domain,
+closure forces two-dimensional transfer orbits. Their matrix-pencil
+structure then gives the incompatible off-diagonal entries in
+\cref{eq:T-mixed-bases,eq:ET-mixed-bases}. The argument also includes
+the degenerate output state $R=\Id_2/2$.
+
+This provides a verified stopping point for Priority A at the stated
+dimensions and hypotheses. There is no surviving coefficient locus
+for a subsequent Choi search or stationary-encoding reconstruction
+within this stratum. The positive periodic operators supplied by
+local purification remain valid states after the imposed trace-one
+normalization, but they cannot satisfy the required tensor refinement
+identities.
+
+The scope of the result is limited. Trace one was used together with
+trace idempotence to obtain a rank-one transfer; it was not imposed
+by arbitrary scalar rescaling. Idempotent transfers of rank greater
+than one require a different analysis. Increasing only the scalar Gram rank does not help, by
+\cref{cor:scalar-extension}. Active Gram rank at least two, trace ranks
+greater than one, and different physical encodings require separate
+analysis. The first unexcluded same-encoding pair is $(2,1)$, with
+purification environment dimension at least five. Blocking can change
+the active Gram rank and physical encoding, so no all-blocking exclusion
+is claimed. Nor does the proof establish a statement about all MPDO
+fixed points or about intrinsic fusion weighting.
+For any construction outside this excluded stratum, complete
+positivity, full-space recovery, canonical form, nonproduct structure,
+and vertical fusion data remain separate requirements.

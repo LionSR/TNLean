@@ -1,0 +1,179 @@
+\section{What a stronger example must establish}
+\label{sec:intrinsic-frontier}
+
+\subsection{Conclusions for the existing families}
+
+The finite-group examples have exact RFP channels, nonproduct
+ordered constraints, and literal length-dependent canonical
+coefficients. Nevertheless, \cref{prop:group-separation} separates
+every weight into independent bonds by an explicit bounded-range
+circuit.
+
+The Ising and Fibonacci examples have canonical categorical fusion
+and states that are not identical independent-bond products. At their
+certified register-crossing points, their length dependence survives
+every positive representative rescaling. The fixed regrouping gives
+exactly the normal representatives in \cref{eq:kappa}, with the
+sector-dependent multiplicities in \cref{eq:category-spectra}.
+Their shifted full-space RFP channels exist for all positive
+weights. Coprime multiplicity ranks exclude a common mixed factor
+within the stated sector-preserving one-site decomposition.
+They do not exclude a more general bounded-depth separation.
+
+The CZX example retains a nonunital vertical algebra and anomalous
+horizontal symmetry. Its shifted multiplicities are identical, so
+its positive weights separate at the tensor level. Anomaly alone
+does not protect inseparable fusion weights.
+
+Thus nontrivial algebra, nonproduct states, and inseparable
+weight-intertwiner coupling are different properties. The first two
+are established. The third has not been established by these
+constructions under the stronger equivalence convention of
+\cref{sec:intrinsic-question}.
+
+\subsection{Necessary algebraic constraints and conditional obstructions}
+
+Associativity supplies an exact necessary test. For sufficiently
+large $L$, BNT independence gives
+\begin{align}
+	\sum_d c_{abd}(L)c_{dce}(L)
+	 & =\sum_d c_{bcd}(L)c_{ade}(L).
+	\label{eq:associativity}
+\end{align}
+Let $X_{abc}$ be the multiset of positive eigenvalues of
+$\chi_{abc}$. Products of power sums are power sums of pairwise
+products, so
+\begin{align}
+	\biguplus_dX_{abd}\cdot X_{dce}
+	 & =\biguplus_dX_{bcd}\cdot X_{ade}.
+	\label{eq:multiset}
+\end{align}
+Here the dot includes every pairwise product with multiplicity.
+To justify the implication, subtract the two power sums and list
+their distinct positive bases as $y_1>\cdots>y_k$. If
+$\sum_ja_jy_j^L=0$ for all sufficiently large $L$, division by
+$y_1^L$ and passage to the limit gives $a_1=0$. Iteration gives
+$a_j=0$ for every $j$. Zero eigenvalues, invisible to positive-length
+power sums, have already been omitted.
+
+This constraint is not a realization theorem. It does not construct
+fusion isometries, establish horizontal positivity, or provide
+physical recovery channels.
+
+There is also a conditional categorical obstruction. Suppose the
+positive fusion data arise from a coherent natural tensorator of a
+monoidal equivalence of finite unitary categories, and its positive
+part is trivialized by a positive natural automorphism $\eta$.
+This is the setting of categorical unitarization results, not an
+automatic consequence of RFP~\cite{Reutter}. On a simple object,
+$\eta_a=C_a\Id$ with $C_a>0$. For every copy inclusion
+$v_{c,q}:c\to a\otimes b$, naturality gives
+\begin{align}
+	\eta_{a\otimes b}v_{c,q}
+	 & =v_{c,q}\eta_c=C_cv_{c,q},     \\
+	v_{d,r}^\dagger\eta_{a\otimes b}v_{c,q}
+	 & =C_c\delta_{cd}\delta_{rq}\Id.
+\end{align}
+After absorbing the unitary tensorator into the fusion maps, the
+positive component is therefore
+\begin{align}
+	\chi_{abc} & =\frac{C_aC_b}{C_c}\Id.
+\end{align}
+The rescaling $A_a\mapsto C_a^{-1}A_a$ removes it.
+Naturality on every copy inclusion is what excludes a nonscalar
+positive multiplicity operator. The argument additionally requires
+the coherent tensorator and its categorical trivialization.
+Recoverability of physical letter spaces does not supply these
+hypotheses by itself.
+
+A separate conditional obstruction applies to canonical-element
+reconstructions. If $\{e_I\}$ and $\{e^I\}$ are dual bases and a
+multiplicative dual representation $\psi$ is used in
+$\widetilde A_a=\sum_I\phi_a(e_I)\otimes\psi(e^I)$, then
+\begin{align}
+	e^Ie^J & =\sum_K\Delta_K^{IJ}e^K,                  \\
+	\widetilde A_a\widetilde A_b
+	       & =\sum_K[(\phi_a\otimes\phi_b)\Delta(e_K)]
+	\otimes\psi(e^K).
+\end{align}
+An isometric representation decomposition places the identity on
+each multiplicity space. Subsequent positive sector normalization
+again produces only a scalar ratio. This deduction assumes the
+stated reconstruction and decomposition; it is not a classification
+of arbitrary MPDO RFPs.
+
+Unitless systems, nonnatural positive data, and other reconstruction
+mechanisms may fall outside these arguments. Falling outside a
+conditional theorem is necessary for some proposed mechanisms, but
+is not evidence that a stronger example exists.
+
+\subsection{A newer construction tested}
+
+Correlated idempotent states provide a concrete test beyond independently
+weighted bonds. Le-Nestour, P\'erez-Garc\'ia, and Ruiz-de-Alarc\'on
+construct fixed tensors from such states with a Haar marginal and derive
+a quantum Goursat reconstruction~\cite{Goursat}. On the reconstructed
+Hopf supports, the induced dual representation is multiplicative and
+faithful. The positive physical weight commutes with the represented
+algebra; it need not be central in that algebra. Decomposing its
+representations still gives
+\begin{align}
+ \chi_{ab}^{c}=\frac{s_as_b}{s_c}\Id_{N_{ab}^{c}},\qquad s_a>0.
+\end{align}
+Thus this route does not evade the fixed-rescaling obstruction just
+described. A companion derivation, \emph{Correlated idempotent states and
+removable length dependence in MPDO fixed points}, proves the channel and
+canonical statements and checks the subgroup
+$\{((a,b),(a,c)):a,b,c\in\Z_2\}\subset(\Z_2^2)^2$ explicitly.
+Its density operator is an even-parity boundary tensored with independent
+maximally mixed qubits. General faithful representations alone do not
+ensure positive periodic contractions; the explicit example satisfies
+that extra condition.
+
+Likewise, the canonical-element construction of Liu et al. has scalar
+ratio weights explicitly in its fixed-point proof~\cite{Bialgebra}.
+These exclusions concern specified constructions, not every RFP.
+Kato's exact-flow structure theorem instead retains positive matrices
+conditioned on sectors and fusion paths~\cite{Kato}. Its common,
+scale-independent coproduct is an assumption, and membership of the
+positive factor in a commutant is not a proof of independent-register
+factorization. This is a useful formulation of the remaining question,
+not an existing intrinsically length-dependent example.
+
+\subsection{The remaining gap}
+
+Sector-dependent multiplicities are a meaningful unresolved case.
+The categorical examples show that such multiplicities need not
+possess a common mixed factor in their canonical one-site
+decomposition. What is missing is an obstruction stable under the
+specified blocking and bounded-depth circuits, rather than another
+fixed-cut eigenvalue calculation.
+
+Another possible source of stronger behavior is an operator
+recoupling system whose positive multiplicities cannot be
+simultaneously assigned to independent registers in all fusion
+trees. Such a system must satisfy the full recoupling equations,
+including off-diagonal output sectors. The spectral condition
+\cref{eq:multiset} cannot by itself detect that coupling. Nonunital
+or nonrigid systems remain relevant, but the CZX separation shows
+that these properties alone are insufficient.
+
+Any stronger claim consequently needs several distinct certificates.
+The physical tensor must generate positive rings at every length
+at one fixed raw scale. Its canonical representatives must be
+normal and inequivalent in the relevant orientation, with every
+transfer factor and multiplicity included. Fusion identities must
+specify their support projections and zero complements. Recovery
+maps must be trace preserving on complete physical spaces. Finally,
+nonseparation must be proved against a clearly quantified class of
+local operations. A symmetry-preserving version needs
+symmetry-compatible operations; a bulk interpretation needs a
+separate bulk tensor and a controlled boundary map.
+
+These requirements do not demand a new bulk phase. They distinguish
+a boundary spectral decoration from positive data that remain tied
+to its intertwiner structure. The present assessment supports the
+modest conclusion that length-dependent RFPs with genuinely
+nontrivial canonical algebra and nonproduct states exist, while
+inseparable weight-intertwiner coupling under bounded local
+refactoring remains unproved for the examples considered here.
