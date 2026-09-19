@@ -97,7 +97,7 @@ theorem oneLabelTarget_eq (a : Fin 16) :
 
 theorem oneLabelStacked_eq (a : Fin 16) :
     oneLabelStacked a = ((25 : ℂ)⁻¹ * (25 : ℂ)⁻¹) • complexOfInt (oneLabelStackedInt a) :=
-  mulTensor_smul_complexOfInt (25 : ℂ)⁻¹ oneLabelMInt oneLabelMInt _ _
+  mulTensor_smul_complexOfRing _ (25 : ℂ)⁻¹ oneLabelMInt oneLabelMInt _ _
 
 /-! ### The two weighted slots -/
 

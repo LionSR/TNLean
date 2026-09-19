@@ -68,27 +68,6 @@ open MPSTensor
 
 /-! The Kramers–Wannier tensor `kwTensor` is defined in `Examples/KramersWannier.lean`. -/
 
-/-! ### Integer action tensors -/
-
-/-- The bond-space action of an integer matrix product operator tensor on an integer matrix
-product state tensor, `(M · A)^i = ∑_j M^{ij} ⊗ A^j`, in the bond order of `finProdFinEquiv`,
-matching `MPOTensor.actTensor`. -/
-def actIntTensor {d D₁ D₂ : ℕ} (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (A : Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i : Fin d) :
-    Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) ℤ :=
-  (∑ j : Fin d, (M i j) ⊗ₖ (A j)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
-
-/-- The bond-space action commutes with the entrywise coercion of integer matrices. -/
-theorem actTensor_complexOfInt {d D₁ D₂ : ℕ} (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (A : Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i : Fin d) :
-    MPOTensor.actTensor (fun i j => complexOfInt (M i j)) (fun j => complexOfInt (A j)) i =
-      complexOfInt (actIntTensor M A i) := by
-  ext x y
-  simp only [MPOTensor.actTensor_apply, actIntTensor, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, complexOfInt_apply]
-  push_cast
-  rfl
-
 /-! ### Part (a): the duality on the product state -/
 
 /-- The integer matrices of the bond-one product-state tensor `A^{s'} = 1`. -/
@@ -111,10 +90,10 @@ def kwPlusInt : Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 1 => !![1, -1; -1, 1]
 
 theorem kwPlus_eq (i : Fin 2) : kwPlus i = complexOfInt (kwPlusInt i) := by
-  have hi : actIntTensor kwIntTensor plusIntTensor i = kwPlusInt i := by revert i; decide
+  have hi : actTensorR kwIntTensor plusIntTensor i = kwPlusInt i := by revert i; decide
   change MPOTensor.actTensor kwTensor plusTensor i = _
   unfold kwTensor
-  rw [plusTensor_eq, actTensor_complexOfInt kwIntTensor plusIntTensor i, hi]
+  rw [plusTensor_eq, actTensor_complexOfRing _ kwIntTensor plusIntTensor i, hi]
 
 /-- The all-zero Greenberger–Horne–Zeilinger sector, `A_0^{s'} = δ_{s',0}` (data file §2.1). -/
 def ghz0 : MPSTensor 2 1 := ![!![1], !![0]]
@@ -280,7 +259,7 @@ theorem plusRight0_isIntertwiner (i : Fin 2) :
   ext p q
   fin_cases i <;> fin_cases p <;> fin_cases q <;>
     simp [plusRight0, plusTarget, ghz0, kwPlusInt, complexOfInt, Matrix.mul_apply,
-      Matrix.map_apply, Fin.sum_univ_two] <;> norm_num
+      Fin.sum_univ_two] <;> norm_num
 
 theorem plusLeft0_isIntertwiner (i : Fin 2) :
     plusLeft0 * kwPlus i = plusTarget 0 i * plusLeft0 := by
@@ -288,7 +267,7 @@ theorem plusLeft0_isIntertwiner (i : Fin 2) :
   ext p q
   fin_cases i <;> fin_cases p <;> fin_cases q <;>
     simp [plusLeft0, plusTarget, ghz0, kwPlusInt, complexOfInt, Matrix.mul_apply,
-      Matrix.map_apply, Fin.sum_univ_two] <;> norm_num
+      Fin.sum_univ_two] <;> norm_num
 
 theorem plusRight1_isIntertwiner (i : Fin 2) :
     kwPlus i * plusRight1 = plusRight1 * plusTarget 1 i := by
@@ -296,7 +275,7 @@ theorem plusRight1_isIntertwiner (i : Fin 2) :
   ext p q
   fin_cases i <;> fin_cases p <;> fin_cases q <;>
     simp [plusRight1, plusTarget, ghz1, kwPlusInt, complexOfInt, Matrix.mul_apply,
-      Matrix.map_apply, Fin.sum_univ_two] <;> norm_num
+      Fin.sum_univ_two] <;> norm_num
 
 theorem plusLeft1_isIntertwiner (i : Fin 2) :
     plusLeft1 * kwPlus i = plusTarget 1 i * plusLeft1 := by
@@ -304,7 +283,7 @@ theorem plusLeft1_isIntertwiner (i : Fin 2) :
   ext p q
   fin_cases i <;> fin_cases p <;> fin_cases q <;>
     simp [plusLeft1, plusTarget, ghz1, kwPlusInt, complexOfInt, Matrix.mul_apply,
-      Matrix.map_apply, Fin.sum_univ_two] <;> norm_num
+      Fin.sum_univ_two] <;> norm_num
 
 /-! ### Part (b): the duality on the Greenberger–Horne–Zeilinger state -/
 
@@ -330,11 +309,11 @@ def kwGHZInt : Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
   | 1 => !![1, 0, -1, 0; 0, 0, 0, 0; 0, 0, 0, 0; 0, -1, 0, 1]
 
 theorem kwGHZ_eq (i : Fin 2) : kwGHZ i = complexOfInt (kwGHZInt i) := by
-  have hi : actIntTensor kwIntTensor ghzIntTensor i = kwGHZInt i := by revert i; decide
+  have hi : actTensorR kwIntTensor ghzIntTensor i = kwGHZInt i := by revert i; decide
   change MPOTensor.actTensor kwTensor ghz i = _
   unfold kwTensor
   rw [show ghz = fun j => complexOfInt (ghzIntTensor j) from funext ghz_eq,
-    actTensor_complexOfInt kwIntTensor ghzIntTensor i, hi]
+    actTensor_complexOfRing _ kwIntTensor ghzIntTensor i, hi]
 
 /-- The target slots of part (b): two copies of the same paramagnetic product-state target
 (data file §2.2, "multiplicity two"). -/
