@@ -61,12 +61,22 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** seven occurrences across six files (2026-09-17):
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, `Examples/Fibonacci.lean`
   (twice), `Examples/ParityGraded.lean`, `Examples/KramersWannier.lean`,
-  `Examples/StackedPairGauge.lean`, `Examples/EisensteinCertificates.lean`.
+  `Examples/StackedPairGauge.lean`, `Examples/EisensteinCertificates.lean`.  A later sweep
+  (2026-09-19) found nine further occurrences outside the `Reduction/Examples` directory that
+  the promotion had missed: `Examples/Zsqrt2Ring.lean`, `Examples/GoldenCompression.lean`,
+  `Examples/OneSlotGauge.lean`, `TNLean/MPS/MPDO/CZXTensorInjectivity.lean`,
+  `TNLean/MPS/MPDO/BondTwoSingletonGramBoundary.lean`,
+  `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean`,
+  `TNLean/MPS/MPDO/PositiveMinimalRealizationCounterexample.lean`,
+  `TNLean/MPS/RFP/BellPairCIDObstruction.lean` and
+  `TNLean/PEPS/TorusRowColumnReductionObstruction.lean`.
 - **Abstraction:** `Submodule.eq_top_of_forall_single_mem` in
   `TNLean/Algebra/MatrixSingleSpan.lean`.
 - **Notes:** the goal is `T = ⊤` for a submodule `T` of matrices, or `Kraus.IsInjective A`
-  unfolded to it; the hypothesis is membership of every matrix unit. All call sites are
-  refactored; each loses three lines.
+  unfolded to it; the hypothesis is membership of every matrix unit.  The 2026-09-17 entry
+  claimed that every call site had been refactored, which was wrong for the nine sites listed
+  above; those were refactored on 2026-09-19, after which the claim holds.  A site loses
+  between three and nine lines.
 
 ### simplicity with the recorded canonical fixed pair — promoted
 - **Pattern:** specialize supplied-witness `simple2` to the canonical transfer
@@ -1066,28 +1076,37 @@ abstracted — record why, so it is not re-proposed).
   gauge half to identify the local MPS spaces of a tensor and of its
   normalized representative.
 
-### bond-space product of integer tensors — promoted
-- **Pattern:** an example defines the bond-space product of two integer matrix
-  product operator tensors,
+### bond-space product and action of tensors over a ring — promoted
+- **Pattern:** an example defines the bond-space product of two matrix product
+  operator tensors over an exact ring,
   `(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}` in the bond order of `finProdFinEquiv`,
-  and then reproves that it commutes with the entrywise coercion of integer
-  matrices, so that a stacked product tensor over the complexes reduces to a
-  decidable identity between integer matrices.
-- **Seen:** three occurrences (2026-09-17): a public copy in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, a private
-  copy in `TNLean/MPS/FundamentalTheorem/Reduction/Examples/KramersWannier.lean`,
-  and a third needed by the renormalization fixed points of
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/StackedPairGauge.lean`.
-- **Abstraction:** `MPSTensor.mulIntTensor` with
-  `MPSTensor.mulTensor_complexOfInt` and its rescaled form
-  `MPSTensor.mulTensor_smul_complexOfInt`, in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/ExplicitGauge.lean`
-  beside the entrywise coercion they belong to.
+  or the bond-space action `(M · A)^i = ∑_j M^{ij} ⊗ A^j`, and then reproves
+  that it commutes with the entrywise image of the ring in the complex numbers,
+  so that a stacked product tensor over the complexes reduces to a decidable
+  identity between matrices over that ring.
+- **Seen:** first three occurrences over the integers (2026-09-17): a public
+  copy in `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, a
+  private copy in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/KramersWannier.lean`, and a
+  third needed by the renormalization fixed points of
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/StackedPairGauge.lean`; then
+  one copy per example ring, over the integers, over `ℤ√2`, over `ℤ[σ]` and over
+  `ℤ[ω]`, each with its own product, action and compatibility lemma.
+- **Abstraction:** `MPSTensor.mulTensorR` and `MPSTensor.actTensorR` over an
+  arbitrary commutative ring, with `MPSTensor.mulTensor_complexOfRing`, its
+  rescaled form `MPSTensor.mulTensor_smul_complexOfRing` and
+  `MPSTensor.actTensor_complexOfRing`, in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/RingEmbedding.lean`, beside
+  the entrywise image `MPSTensor.complexOfRing` of
+  `TNLean/Algebra/ComplexOfRing.lean` that they belong to.
 - **Notes:** the rescaled form is what the P6 fixed points need, since their
   tensors are integer matrices divided by a common denominator; the unscaled
-  form is the instance at one. Both former copies were deleted and their call
-  sites now resolve the shared name through `open MPSTensor`, for a net loss of
-  about thirty lines.
+  form is the instance at one. Each ring keeps only a one-line abbreviation of
+  the general product or action, and the compatibility lemmas are used in their
+  general form, since their left sides are headed by the complex product and
+  action rather than by the entrywise image. A new example ring therefore
+  contributes its ring homomorphism, two abbreviations and the one-line
+  instantiations of the arithmetic lemmas its proofs rewrite with.
 
 ### golden compression datum from a decided gauge — promoted
 - **Pattern:** an example over `ℤ[σ]` records the letters of the source and of
@@ -1395,6 +1414,22 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** three copies in the homogeneous, cumulative, and all-word pair-span
   criteria now reduce to generator membership facts. Public theorem statements and
   trace-pairing order are unchanged.
+- **Update (2026-09-19):** the representation step is no longer proved from matrix
+  units. `exists_trace_repr` is now the inverse of the linear equivalence with the
+  dual space induced by the nondegenerate trace form
+  (`Matrix.traceBilinForm`, `Matrix.traceBilinForm_nondegenerate`, and Mathlib's
+  `LinearMap.BilinForm.toDual`), and the pi- and pair-indexed corollaries are
+  three-line consequences of it. The separation step itself still runs by hand,
+  because no nondegeneracy statement exists yet for the pi-indexed or product trace
+  form; once one does, `matrix_pi_span_top_of_trace_separating` and
+  `pair_matrix_span_top_of_pair_trace_separating` become one-line consequences.
+- **Candidate (2026-09-19):** "a trace pairing that vanishes on a generating set
+  vanishes on its span" now appears twice as `Submodule.span_le` into the kernel of
+  the trace functional: `pair_trace_zero_on_span` in
+  `TNLean/MPS/MPDO/BiCFDerivation/Core.lean` and
+  `block_matrices_eq_zero_of_wordTupleSpanTop_trace` in
+  `TNLean/MPS/SharedInfra/WordTupleGauge.lean`. A third occurrence should be
+  abstracted into a single lemma over an indexed family of trace forms.
 
 ### Martingale coefficient upper bound
 - **Pattern:** prove `((1 : ℝ) / (4 * (L : ℝ))) ≤ 1` from `hL : 1 < L` by
@@ -1522,9 +1557,12 @@ abstracted — record why, so it is not re-proposed).
   `grouped_sector_gram_eq_pos_smul_one_of_dressing` in
   `TNLean/MPS/MPDO/GroupedSectorGram.lean` isolate the predicate-neutral Figure Eight and
   Gram-rigidity steps.
-- **Result:** both Figure Eight and Gram-normalization theorem families keep their exact public
-  statements and independently supply their literal-CPSV or horizontal Gram-dressing theorem.
-  No implication between the two canonical-form predicates is used.
+- **Result:** the Figure Eight and Gram-normalization steps are stated once, over the
+  Gram-dressing property, and each canonical form supplies that property through
+  `MPOTensor.IsHorizontalCF.hasGroupedCornerGramDressing` or
+  `MPSTensor.IsCPSVCanonicalForm.hasGroupedCornerGramDressing` in
+  `TNLean/MPS/MPDO/VerticalBNTGrouping.lean`. No implication between the two canonical-form
+  predicates is used.
 
 ### Positive-Gram provider for normalized grouped sectors
 - **Pattern:** the horizontal BNT-refined and literal CPSV grouped-sector theorems
@@ -1533,10 +1571,9 @@ abstracted — record why, so it is not re-proposed).
 - **Reuse:** `MPOTensor.exists_normalized_grouped_sector_maps_of_gram` takes this
   positive-Gram provider as its sole canonical-form-specific input and proves the
   common isometry, orthogonality, intertwining, and exact reconstruction clauses.
-- **Result:** `MPOTensor.IsMPDO.exists_normalized_grouped_sector_maps` and
-  `MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps` remain
-  separate public wrappers, each supplying its own Gram theorem without adapting
-  one canonical-form hypothesis to the other.
+- **Result:** `MPOTensor.exists_normalized_grouped_sector_maps_of_dressing` is the single
+  public statement; it takes the Gram-dressing property, which each canonical form supplies
+  on its own, so neither canonical-form hypothesis is adapted to the other.
 
 ### Vertical canonical form from grouped sectors
 - **Pattern:** the literal CPSV and horizontal capstones both unpacked the same grouped BNT
@@ -1547,8 +1584,10 @@ abstracted — record why, so it is not re-proposed).
   `HasVerticalBNTGroupingWithIsometry M` and `HasGroupedCornerGramDressing M`; it does not require
   an unused `IsMPDO M` hypothesis.
 - **Result:** `verticalCF_of_cpsvCanonicalForm` and `verticalCF_of_horizontalCF` are thin,
-  source-facing wrappers. Each independently supplies its own grouping theorem and pairwise
-  Figure Eight theorem, preserving the strict separation of their canonical-form predicates.
+  source-facing wrappers over `MPOTensor.HasVerticalBNTGroupingInputs`, the pair of grouping
+  and Gram-dressing inputs defined in `TNLean/MPS/MPDO/VerticalBNTGrouping.lean`. Each
+  canonical form proves that pair from its own grouping theorem and pairwise Figure Eight
+  theorem, preserving the strict separation of their canonical-form predicates.
 
 ### Canonical-form sector-compression separation
 - **Pattern:** the horizontal BNT-refined and literal CPSV surfaces separately turned
@@ -1874,13 +1913,28 @@ abstracted — record why, so it is not re-proposed).
   and spectrum proofs, together with the two older AKLT helpers, now reuse the
   same lemma.
 
+### Complex inverse squares of real square roots
+- **Pattern:** small example modules each proved the scalar identity
+  $((\sqrt{x}:\mathbb R):\mathbb C)^{-1}\cdot((\sqrt{x}:\mathbb R):\mathbb C)^{-1}
+  = (x:\mathbb C)^{-1}$ at $x = 2$, in six different spellings of $1/\sqrt 2$.
+- **Reuse:** the layer-0 lemma `Complex.ofReal_sqrt_inv_mul_self` owns the
+  identity; each spelling is one `simpa [one_div]` away from it.
+- **Result:** the six private lemmas in `Cluster.lean`, `EvenParity.lean`,
+  `MajumdarGhosh.lean`, `LocalPurificationRFP.lean`,
+  `CaseIIAbsorptionCounterexample.lean` and `CPSVCIDNotRFPExample.lean` now have
+  one- or two-line bodies.  The three private constants naming $1/\sqrt 2$ and
+  the general-`d` `sourceSqrt` cancellations of
+  `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` are retained: they have
+  different carriers or fixed associativity shapes and are consumed as rewrite
+  rules in their own spellings.
+
 ### Scalar identity matrix positivity and trace
 - **Pattern:** proofs repeatedly derived positivity or positive-definiteness of
   `c • (1 : Matrix n n R)` from the corresponding scalar order hypothesis and
   computed its trace by rewriting `Matrix.trace_smul` and `Matrix.trace_one`.
 - **Reuse:** the generic lemmas `Matrix.PosSemidef.smul_one`,
   `Matrix.PosDef.smul_one`, and `Matrix.trace_smul_one` in
-  `TNLean/Algebra/Matrix/ScalarIdentity.lean` own these arguments under the
+  `TNLean/Algebra/MatrixScalarIdentity.lean` own these arguments under the
   weakest assumptions used by the underlying Mathlib results.
 - **Result:** the repeated proofs in `Theorem49RepeatedCopyCounterexample.lean`,
   `AKLTStringOrder.lean`, `Cluster.lean`, and
@@ -1910,16 +1964,23 @@ current counts and full location lists).
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXSquare.lean`, and
   `CZXCompression.czxPlusIdentity_conjMatrix` in
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXPlusIdentity.lean`.
-- **Abstraction:** the `MPSTensor.complexOfInt` coercion with
-  `complexOfInt_mul`, `complexOfInt_one` and `complexOfInt_neg`, together with
-  `MPSTensor.gaugeOfMatrix` and `MPSTensor.conjMatrix_gaugeOfMatrix`, in
+- **Abstraction:** the entrywise image `MPSTensor.complexOfRing` along a ring
+  homomorphism into the complex numbers, with `complexOfRing_mul`,
+  `complexOfRing_one` and `complexOfRing_neg` in
+  `TNLean/Algebra/ComplexOfRing.lean`, whose instantiation at the integer cast
+  is the coercion `MPSTensor.complexOfInt` of
+  `TNLean/Algebra/ComplexOfInt.lean` with its one-line `complexOfInt_mul`,
+  `complexOfInt_one` and `complexOfInt_neg`, together with
+  `MPSTensor.gaugeOfMatrix` and `MPSTensor.conjMatrix_gaugeOfMatrix` in
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/ExplicitGauge.lean`.
 - **Notes:** the payoff is that block triangularity, the matched diagonal
   blocks and the vanishing zero blocks of a nine-dimensional example all become
   decidable statements about integer matrices, verified in seconds; without the
   coercion the same checks are complex-number `simp` calls over several
-  thousand products. The coercion is stated for arbitrary index types so that
-  rectangular gauge rows and columns are covered as well.
+  thousand products. The image is stated for arbitrary index types so that
+  rectangular gauge rows and columns are covered as well, and for an arbitrary
+  ring so that the exact arithmetic of an example in `ℤ√2`, `ℤ[σ]` or `ℤ[ω]`
+  uses the same lemmas as the integer examples.
 
 ### nested finite-sum binder permutation — promoted
 - **Pattern:** permute the binders of three to five nested finite sums over
@@ -2131,6 +2192,26 @@ current counts and full location lists).
   narrow CFII review-fix scope. Record the repeated goal now and refactor the
   complete set in one low-level follow-up rather than adding a leaf-local helper.
 
+### concrete numeric gauge with an explicit inverse — candidate
+- **Pattern:** a concrete invertible numeric matrix is packaged as an element of
+  `GL n ℂ` through `Matrix.GeneralLinearGroup.mkOfDetNeZero`, after which the
+  inverse coordinate is recovered by building a second `mkOfDetNeZero` for the
+  inverse, proving the product is one through `Units.ext`, and rewriting with
+  `inv_eq_of_mul_eq_one_right`.
+- **Seen:** 2 occurrences (2026-09-19), in
+  `TNLean/MPS/MPDO/BondTwoSingletonGramBoundary.lean` and
+  `TNLean/MPS/MPDO/PositiveMinimalRealizationCounterexample.lean`; both now use
+  the structure form below.  Seven further `mkOfDetNeZero` gauges in
+  `TNLean/MPS/Examples/` keep their present form, where the saving is at most one
+  or two lines.
+- **Abstraction (proposed):** no new declaration is needed.  Supply the inverse
+  directly, `where val := M; inv := N; val_inv := h; inv_val := mul_eq_one_comm.mp h`,
+  after which both coordinate lemmas are `rfl` and no determinant lemma is
+  required.
+- **Notes:** scoped to concrete numeric gauges.  Where the matrix is abstract and
+  only its determinant is known, as in the renormalization fixed-point modules,
+  `mkOfDetNeZero` remains the only available construction.
+
 ### diagonal normalized-ancilla sum collapse — candidate
 - **Pattern:** collapse the doubled sum for `normalizedDiagonalLift` by using
   `Finset.sum_eq_single` to retain the diagonal ancilla letter `(a, a)`, then
@@ -2335,9 +2416,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   · rcases Finset.mem_union.mp hrb with hr | hbl
   · exact absurd hr hwnotred
   ```
-- **Seen:** 9 occurrences in `TNLean/PEPS/RegionBlock/`
-  (`CoarseThreeSite3.lean:89`, `ThreeBlockReconcile.lean:244`,
-  `ThreeBlockResonate.lean:96`, +6).
+- **Seen:** 8 occurrences in `TNLean/PEPS/RegionBlock/`
+  (`CoarseThreeSite3.lean:89`, `ThreeBlockResonate.lean:97`,
+  `UnionInjectivityGeneral.lean:95`, +5).
 - **Abstraction (proposed):** a case-elimination lemma on the three-region
   cover (membership in red/blue/crossing regions) stated once in the
   RegionBlock development.
@@ -2407,7 +2488,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   translated-edge version of the target statement.
 - **Seen:** 2 occurrences (2026-07-24):
   `TNLean/PEPS/NormalSquareInteriorAbsorbedFamily.lean:84-104` (absorbing gauge),
-  `TNLean/PEPS/NormalSquareFundamentalTheorem2.lean:118-190` (per-edge bond-dimension equality).
+  `TNLean/PEPS/NormalSquareUnconditionalFundamentalTheorem.lean:118-190` (per-edge bond-dimension equality).
 - **Abstraction (proposed):** a lemma of shape
   `NormalSquareInteriorEdgeDatum.translatedDispatch` taking the horizontal and vertical
   continuations, or a helper that rewrites the edge and exposes the translated-coordinate
@@ -2785,6 +2866,38 @@ spectral split → block extraction → MPV calculation → strict bounds
   `ZMod.val_one`. Replacing it is a Mathlib-reuse cleanup across the three CZX
   files rather than a tactic abstraction, and is recorded here so it is not
   confused with this pattern.
+
+### red/blue window membership case split — promoted
+- **Pattern:**
+  ```lean
+  rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
+    rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
+    (simp only [not_and, not_lt] at hrn hbn; omega)
+  ```
+  with a second form that adds `⊢` to the `simp only` location list, for a goal that is
+  itself a conjunction of coordinate bounds.
+- **Seen:** twenty-four occurrences before the 2026-09-19 torus edge-coordinate cleanup
+  (twelve in `TNLean/PEPS/TorusEdgeBlockingCrossing.lean`, ten in
+  `TNLean/PEPS/TorusWindowRegion.lean`, two in
+  `TNLean/PEPS/NormalEdgeSingleCrossing.lean`); five afterwards, once the per-step copies
+  inside the coordinate-pinning blocks collapsed into one call each and the unused vertical
+  staircase pair was removed. Three of the five were the first form, verbatim, across two
+  files, and two were the goal-normalizing form.
+- **Abstraction:** the tactic `crossing_blocks hRed hBlue`, with the form
+  `crossing_blocks hRed hBlue ⊢` for the goal-normalizing variant, in
+  `TNLean/PEPS/TorusEdgeBlockingCrossing.lean`. All five sites are refactored. Net Lean
+  delta of the promotion itself: +31 / -15, since the five sites lose two lines each while
+  the two forms with their documentation and section note cost about twenty-five; the
+  duplication rather than the line count is what it removes.
+- **Notes:** the two membership hypotheses are passed as arguments, since the hypotheses
+  introduced inside a macro are not the caller's; the four branches differ only in which
+  endpoint lies in which block, and `omega` reads the coordinate ranges of the blocks from
+  the context, so one closing call serves every branch. The tactic sits beside the crossing
+  arguments whose hypothesis shapes it is written for rather than in a general tactic
+  module. The two occurrences in `TNLean/PEPS/NormalEdgeSingleCrossing.lean` are a
+  different shape — the open-lattice memberships need no negation normalization and the
+  branches close by `omega` alone — and are left as they are.
+
 
 ## Retired
 

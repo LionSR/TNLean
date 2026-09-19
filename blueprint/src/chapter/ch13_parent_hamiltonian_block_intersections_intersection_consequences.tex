@@ -392,7 +392,6 @@ direct.
 
 \begin{theorem}[Tensor irreducibility implies transfer-map irreducibility]
     \label{thm:irreducible_tensor_to_transfer_map}
-    \lean{Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily}
     \leanok
     \uses{def:irreducible_tensor}
     If an MPS tensor is irreducible, then its transfer map has no nontrivial
@@ -401,6 +400,7 @@ direct.
 
 \begin{proof}
     \leanok
+    \uses{thm:transfer_map_irreducible_of_tensor}
     Tensor irreducibility is the absence of a nontrivial invariant matrix
     projection, which is precisely the corresponding irreducibility condition
     for the transfer map.

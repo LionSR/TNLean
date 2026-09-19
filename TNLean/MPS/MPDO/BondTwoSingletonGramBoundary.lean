@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.Tactic.Basic
@@ -64,19 +65,10 @@ lemma singletonTensor_diagonal (a b : I) :
 
 /-- The four diagonal letters span the full bond-two matrix algebra. -/
 lemma singletonTensor_isInjective : Kraus.IsInjective singletonTensor := by
-  rw [Kraus.IsInjective, eq_top_iff]
-  intro M _
-  have hsingle : ∀ a b : I, Matrix.single a b (1 : ℂ) ∈
-      Submodule.span ℂ (Set.range singletonTensor) := by
-    intro a b
-    rw [← singletonTensor_diagonal a b]
-    exact Submodule.subset_span ⟨_, rfl⟩
-  rw [Matrix.matrix_eq_sum_single M]
-  refine Submodule.sum_mem _ (fun a _ ↦ Submodule.sum_mem _ (fun b _ ↦ ?_))
-  rw [show Matrix.single a b (M a b) =
-      M a b • Matrix.single a b (1 : ℂ) by
-    rw [Matrix.smul_single, smul_eq_mul, mul_one]]
-  exact Submodule.smul_mem _ _ (hsingle a b)
+  rw [Kraus.IsInjective]
+  refine Submodule.eq_top_of_forall_single_mem _ fun a b ↦ ?_
+  rw [← singletonTensor_diagonal a b]
+  exact Submodule.subset_span ⟨_, rfl⟩
 
 /-- The singleton retained tensor is normal at word length one. -/
 lemma singletonTensor_isNormal : Kraus.IsNormal singletonTensor :=
@@ -195,30 +187,24 @@ theorem posDef_eq_pos_smul_one_of_commutes_terminalJ_of_bellCross
 def gaugeMatrix : Matrix I I ℂ :=
   !![3 / 2, 1 / 2; 1 / 2, 3 / 2]
 
-private lemma gaugeMatrix_det_ne_zero : gaugeMatrix.det ≠ 0 := by
-  norm_num [gaugeMatrix, Matrix.det_fin_two]
+private lemma gaugeMatrix_mul_inv :
+    gaugeMatrix * !![3 / 4, -1 / 4; -1 / 4, 3 / 4] = 1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    norm_num [gaugeMatrix, Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The concrete matrix as an invertible bond-two gauge. -/
-def gauge : GL I ℂ :=
-  Matrix.GeneralLinearGroup.mkOfDetNeZero gaugeMatrix gaugeMatrix_det_ne_zero
+def gauge : GL I ℂ where
+  val := gaugeMatrix
+  inv := !![3 / 4, -1 / 4; -1 / 4, 3 / 4]
+  val_inv := gaugeMatrix_mul_inv
+  inv_val := mul_eq_one_comm.mp gaugeMatrix_mul_inv
 
-@[simp] lemma gauge_val : (gauge : Matrix I I ℂ) = gaugeMatrix :=
-  Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
+@[simp] lemma gauge_val : (gauge : Matrix I I ℂ) = gaugeMatrix := rfl
 
 @[simp] lemma gauge_inv_val :
     ((gauge⁻¹ : GL I ℂ) : Matrix I I ℂ) =
-      !![3 / 4, -1 / 4; -1 / 4, 3 / 4] := by
-  have h : gauge * Matrix.GeneralLinearGroup.mkOfDetNeZero
-      (!![3 / 4, -1 / 4; -1 / 4, 3 / 4] : Matrix I I ℂ)
-      (by norm_num [Matrix.det_fin_two]) = 1 := by
-    apply Units.ext
-    ext i j
-    fin_cases i <;> fin_cases j <;>
-      norm_num [gaugeMatrix, Matrix.mul_apply, Fin.sum_univ_two]
-  rw [show gauge⁻¹ = Matrix.GeneralLinearGroup.mkOfDetNeZero
-      (!![3 / 4, -1 / 4; -1 / 4, 3 / 4] : Matrix I I ℂ)
-      (by norm_num [Matrix.det_fin_two]) from inv_eq_of_mul_eq_one_right h]
-  exact Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
+      !![3 / 4, -1 / 4; -1 / 4, 3 / 4] := rfl
 
 /-- The concrete gauge is not unitary. -/
 lemma gauge_gram_ne_one :

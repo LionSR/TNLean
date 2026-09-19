@@ -4,7 +4,12 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from blueprint_lean_sync import collect_file_lean_decls, split_tex_lean_decls
+from blueprint_lean_sync import (
+    BlueprintEntry,
+    collect_file_lean_decls,
+    find_duplicate_lean_tags,
+    split_tex_lean_decls,
+)
 
 
 def test_split_tex_lean_decls_handles_continuations_and_top_level_commas() -> None:
@@ -60,7 +65,34 @@ end Example
         assert "Example.after" in decls
 
 
+def test_duplicate_lean_tags_are_reported_once_per_declaration() -> None:
+    def entry(file: str, line: int, decl: str) -> BlueprintEntry:
+        return BlueprintEntry(
+            file=file,
+            line=line,
+            env_type="lean-tag",
+            label=None,
+            lean_decl=decl,
+            has_leanok=False,
+            proof_has_leanok=False,
+        )
+
+    refs = [
+        entry("src/chapter/ch01.tex", 3, "Owner.decl"),
+        entry("src/chapter/ch02.tex", 7, "Owner.decl"),
+        entry("src/chapter/ch01.tex", 9, "Unique.decl"),
+    ]
+    duplicates = find_duplicate_lean_tags(refs)
+    assert [decl for decl, _ in duplicates] == ["Owner.decl"]
+    assert [(e.file, e.line) for e in duplicates[0][1]] == [
+        ("src/chapter/ch01.tex", 3),
+        ("src/chapter/ch02.tex", 7),
+    ]
+    assert find_duplicate_lean_tags(refs[1:]) == []
+
+
 if __name__ == "__main__":
     test_split_tex_lean_decls_handles_continuations_and_top_level_commas()
     test_structure_fields_are_declarations()
+    test_duplicate_lean_tags_are_reported_once_per_declaration()
     print("Blueprint declaration scanner tests passed.")

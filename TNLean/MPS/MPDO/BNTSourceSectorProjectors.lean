@@ -66,6 +66,37 @@ theorem exists_etaStructure_reducedBlockState_four_reindex_of_isSAL
   rw [reducedBlockState_four_reindex_eq_submatrix]
   exact exists_etaStructure_reducedBlockState_of_isSAL M hSAL
 
+/-- The data comparing the two descriptions of the normalized three-site
+marginal of a four-site tensor that saturates the area law.
+
+The marginal is at once a basis-of-normal-tensors family closure with nonzero
+closing matrices and a Hayashi--Markov decomposition, and a simultaneous left
+inverse of the one-site slices of the representatives compares the two.  These
+four data determine the BNT sector projections, and the sector-projector
+theorems below assert their joint existence.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1646--1676. -/
+structure ThreeSiteClosureWitness (M : MPOTensor d D)
+    (S : MPSTensor.SectorDecomposition (d * d)) where
+  /-- A simultaneous left inverse of the one-site slices of the BNT
+  representatives. -/
+  C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ
+  /-- The left inverse relation between `C` and the one-site slices. -/
+  hC : MPSTensor.IsMPOBlockLeftInverse (fun j ↦ S.basisMPOTensor j) C
+  /-- The normalized three-site marginal is a family closure of the BNT
+  representatives with the normalized three-site closing matrices. -/
+  hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j)
+    (S.normalizedThreeSiteClosingMatrix M 1)
+    (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
+      (_root_.finThreeArrowEquiv (Fin d))
+      (M.reducedBlockState 4 3 (by omega)))
+  /-- Every normalized three-site closing matrix is nonzero. -/
+  hR : ∀ j : Fin S.basisCount, S.normalizedThreeSiteClosingMatrix M 1 j ≠ 0
+  /-- A Hayashi--Markov decomposition of the normalized three-site marginal. -/
+  hη : EtaStructure (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
+    (_root_.finThreeArrowEquiv (Fin d))
+    (M.reducedBlockState 4 3 (by omega)))
+
 /-- For the normalized four-site SAL marginal, every positive-weight
 Hayashi--Markov sector has a unique BNT label.  The resulting BNT-labelled
 sums of Hayashi projections are orthogonal, mutually disjoint, and resolve the
@@ -96,48 +127,29 @@ theorem exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
       ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) :
-    let ρ := Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
-      (_root_.finThreeArrowEquiv (Fin d))
-      (M.reducedBlockState 4 3 (by omega))
-    ∃ (C : Matrix (MPSTensor.BlockEntryIndex S.basisDim)
-        (Fin d × Fin d) ℂ),
-      ∃ hC : MPSTensor.IsMPOBlockLeftInverse
-          (fun j ↦ S.basisMPOTensor j) C,
-        ∃ hη : EtaStructure ρ,
-          let hρ : IsThreeSiteFamilyClosure
-              (fun j ↦ S.basisMPOTensor j)
-              (S.normalizedThreeSiteClosingMatrix M 1) ρ :=
-            (reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-              M S hM hWeight hnonNil hSAL).1
-          let hR : ∀ j : Fin S.basisCount,
-              S.normalizedThreeSiteClosingMatrix M 1 j ≠ 0 :=
-            (reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-              M S hM hWeight hnonNil hSAL).2
-          (∀ k : {k : Fin hη.m // hη.p k ≠ 0},
-              ∃! s : Fin S.basisCount,
-                BNTMarkovBlockNonzero (S.basisMPOTensor s) hη k) ∧
-            (∀ s : Fin S.basisCount,
-              IsOrthogonalProjection
-                (bntSectorProjection hC hρ hη hR s)) ∧
-            (∀ s t : Fin S.basisCount, s ≠ t →
-              bntSectorProjection hC hρ hη hR s *
-                bntSectorProjection hC hρ hη hR t = 0) ∧
-            (∑ s : Fin S.basisCount,
-              bntSectorProjection hC hρ hη hR s) =
-                activeMarkovProjection hη := by
-  dsimp only
+    ∃ W : ThreeSiteClosureWitness M S,
+      (∀ k : {k : Fin W.hη.m // W.hη.p k ≠ 0},
+          ∃! s : Fin S.basisCount,
+            BNTMarkovBlockNonzero (S.basisMPOTensor s) W.hη k) ∧
+        (∀ s : Fin S.basisCount,
+          IsOrthogonalProjection
+            (bntSectorProjection W.hC W.hρ W.hη W.hR s)) ∧
+        (∀ s t : Fin S.basisCount, s ≠ t →
+          bntSectorProjection W.hC W.hρ W.hη W.hR s *
+            bntSectorProjection W.hC W.hρ W.hη W.hR t = 0) ∧
+        (∑ s : Fin S.basisCount,
+          bntSectorProjection W.hC W.hρ W.hη W.hR s) =
+            activeMarkovProjection W.hη := by
   have hSpan' : MPSTensor.WordTupleSpanTop
       (fun j ↦ (S.basisMPOTensor j).toMPSTensor) 1 := by
     simpa using hSpan
   obtain ⟨C, hC⟩ := hSpan'.exists_mpo_block_left_inverse
   obtain ⟨hη⟩ :=
     exists_etaStructure_reducedBlockState_four_reindex_of_isSAL M hSAL
-  let hClosure :=
+  obtain ⟨hρ, hR⟩ :=
     reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
       M S hM hWeight hnonNil hSAL
-  let hρ := hClosure.1
-  let hR := hClosure.2
-  refine ⟨C, hC, hη, ?_, ?_, ?_, ?_⟩
+  refine ⟨⟨C, hC, hρ, hR, hη⟩, ?_, ?_, ?_, ?_⟩
   · intro k
     exact existsUnique_bntMarkovBlockNonzero_of_probability_ne_zero
       hC hρ hη hR k k.property
