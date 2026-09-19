@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
@@ -332,8 +333,7 @@ theorem isNBlkInjective_two_of_int {D K : ℕ} {A : MPSTensor d D}
     (a b : Fin K → Fin d) (T : Fin D → Fin D → Fin K → ℤ) (m : ℤ) (hm : m ≠ 0)
     (h : ∀ x y, ∑ k, T x y k • (AInt (a k) * AInt (b k)) = m • Matrix.single x y 1) :
     Kraus.IsNBlkInjective A 2 := by
-  rw [Kraus.IsNBlkInjective, eq_top_iff]
-  intro X _
+  rw [Kraus.IsNBlkInjective]
   have hword : ∀ k, A (a k) * A (b k) ∈ Kraus.wordSpan A 2 := fun k => by
     simpa [Kraus.evalWord] using Kraus.evalWord_mem_wordSpan A [a k, b k]
   have hsingle : ∀ x y : Fin D,
@@ -355,10 +355,7 @@ theorem isNBlkInjective_two_of_int {D K : ℕ} {A : MPSTensor d D}
     rw [hsum] at hmem
     have hinv := Submodule.smul_mem _ (m : ℂ)⁻¹ hmem
     rwa [smul_smul, inv_mul_cancel₀ (Int.cast_ne_zero.mpr hm), one_smul] at hinv
-  rw [Matrix.matrix_eq_sum_single X]
-  exact Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun j _ => by
-    simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using
-      Submodule.smul_mem _ (X i j) (hunit i j)
+  exact Submodule.eq_top_of_forall_single_mem _ hunit
 
 /-! ### Integer certificates for vanishing intertwiner spaces -/
 

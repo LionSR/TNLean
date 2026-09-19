@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.Core.TransferMatrix
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.MPDO.LPDO
@@ -127,8 +128,7 @@ noncomputable def witnessM : MPOTensor 2 1 :=
 
 private lemma sqrt2_inv_mul_self :
     ((Real.sqrt 2 : ℂ))⁻¹ * ((Real.sqrt 2 : ℂ))⁻¹ = (2⁻¹ : ℂ) := by
-  rw [← mul_inv, ← Complex.ofReal_mul, Real.mul_self_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
-  norm_num
+  simpa using Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)
 
 /-- The single entry of the contracted MPO tensor: `M^{ij} = ½` if `i = j`, else `0`. -/
 lemma witnessM_entry (i j : Fin 2) :
