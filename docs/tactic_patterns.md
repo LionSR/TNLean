@@ -2786,6 +2786,38 @@ spectral split → block extraction → MPV calculation → strict bounds
   files rather than a tactic abstraction, and is recorded here so it is not
   confused with this pattern.
 
+### red/blue window membership case split — promoted
+- **Pattern:**
+  ```lean
+  rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
+    rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
+    (simp only [not_and, not_lt] at hrn hbn; omega)
+  ```
+  with a second form that adds `⊢` to the `simp only` location list, for a goal that is
+  itself a conjunction of coordinate bounds.
+- **Seen:** twenty-four occurrences before the 2026-09-19 torus edge-coordinate cleanup
+  (twelve in `TNLean/PEPS/TorusEdgeBlockingCrossing.lean`, ten in
+  `TNLean/PEPS/TorusWindowRegion.lean`, two in
+  `TNLean/PEPS/NormalEdgeSingleCrossing.lean`); five afterwards, once the per-step copies
+  inside the coordinate-pinning blocks collapsed into one call each and the unused vertical
+  staircase pair was removed. Three of the five were the first form, verbatim, across two
+  files, and two were the goal-normalizing form.
+- **Abstraction:** the tactic `crossing_blocks hRed hBlue`, with the form
+  `crossing_blocks hRed hBlue ⊢` for the goal-normalizing variant, in
+  `TNLean/PEPS/TorusEdgeBlockingCrossing.lean`. All five sites are refactored. Net Lean
+  delta of the promotion itself: +31 / -15, since the five sites lose two lines each while
+  the two forms with their documentation and section note cost about twenty-five; the
+  duplication rather than the line count is what it removes.
+- **Notes:** the two membership hypotheses are passed as arguments, since the hypotheses
+  introduced inside a macro are not the caller's; the four branches differ only in which
+  endpoint lies in which block, and `omega` reads the coordinate ranges of the blocks from
+  the context, so one closing call serves every branch. The tactic sits beside the crossing
+  arguments whose hypothesis shapes it is written for rather than in a general tactic
+  module. The two occurrences in `TNLean/PEPS/NormalEdgeSingleCrossing.lean` are a
+  different shape — the open-lattice memberships need no negation normalization and the
+  branches close by `omega` alone — and are left as they are.
+
+
 ## Retired
 
 ### block_words — retired
