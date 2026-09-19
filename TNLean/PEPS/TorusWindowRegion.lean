@@ -137,52 +137,14 @@ theorem isCrossingEdge_horizontalStaircase {d : ℕ}
   · rintro ⟨hRed, hBlue⟩
     simp only [IsRegionBoundaryEdge, mem_torusContiguousRectangle] at hRed hBlue
     -- The ordered-endpoint convention `g.1.1 < g.1.2` in coordinate-value form.
-    have hlt : g.1.1.1.val < g.1.2.1.val ∨
-        (g.1.1.1.val = g.1.2.1.val ∧ g.1.1.2.val < g.1.2.2.val) := by
-      have hlex : (g.1.1 : TorusVertex width height) < g.1.2 := g.2.1
-      change toLex (g.1.1.1.val, g.1.1.2.val) < toLex (g.1.2.1.val, g.1.2.2.val) at hlex
-      rw [Prod.Lex.toLex_lt_toLex] at hlex
-      exact hlex
-    -- The adjacency of `g`, a horizontal or vertical cyclic step.
-    have hadj := g.2.2
-    rw [torusGraph_adj, torusHorizontalNeighbor, torusVerticalNeighbor] at hadj
+    have hlt := torusEdge_val_lt g
     -- Pin the four coordinate values of `g` to the distinguished edge's coordinates.
     have hcoord : g.1.1.1.val = a + L - 1 ∧ g.1.1.2.val = b + K - 1 ∧
         g.1.2.1.val = a + L ∧ g.1.2.2.val = b + K - 1 := by
-      rcases hadj with ⟨hrow, hcol⟩ | ⟨hcol, hrow⟩
-      · -- Horizontal step: same vertical coordinate, adjacent horizontal coordinates.
-        have hrow' := torus_eq_snd_val hrow
-        rcases hcol with hstep | hstep
-        · by_cases hnowrap : g.1.1.1.val + 1 < width
-          · have hxstep := torus_horizontal_step_val hstep hnowrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-          · have hwrap : g.1.1.1.val + 1 = width := by
-              have := ZMod.val_lt g.1.1.1
-              omega
-            have hxstep := torus_horizontal_step_val_wrap hstep hwrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-        · by_cases hnowrap : g.1.2.1.val + 1 < width
-          · have hxstep := torus_horizontal_step_val hstep hnowrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-          · have hwrap : g.1.2.1.val + 1 = width := by
-              have := ZMod.val_lt g.1.2.1
-              omega
-            have hxstep := torus_horizontal_step_val_wrap hstep hwrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-      · -- Vertical step: same horizontal coordinate, but the column ranges are disjoint.
-        exfalso
-        have hcol' := torus_eq_fst_val hcol
+      rcases torusEdge_val_cases g with ⟨hpar, hstep⟩ | ⟨hpar, hstep⟩ <;>
         rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-          rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-          (simp only [not_and, not_lt] at hrn hbn; omega)
+        rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
+        (simp only [not_and, not_lt] at hrn hbn; omega)
     obtain ⟨hc1, hc2, hc3, hc4⟩ := hcoord
     obtain ⟨hr11, hr12, hr21, hr22⟩ := horizontalStaircaseEdge_val
       (width := width) (height := height) (L := L) (K := K) (a := a) (b := b)
@@ -213,6 +175,10 @@ its bottom-left corner. -/
 /-- The four endpoint coordinate values of the distinguished edge of the
 vertical staircase pair: the up edge at `(a + L - 1, b + K - 1)`, when the
 coordinates avoid wraparound. -/
+@[deprecated "Feeds only the vertical staircase single-crossing theorem, itself \
+deprecated; the overlapping-window chain is carried by the horizontal pair \
+`horizontalStaircaseEdge_val` and `isCrossingEdge_horizontalStaircase`."
+  (since := "2026-09-19")]
 theorem verticalStaircaseEdge_val {L K a b : ℕ} (hK : 0 < K)
     (hxw : a + L - 1 < width) (hyh : b + K < height) :
     (torusUpEdge (((a + L - 1 : ℕ) : ZMod width), ((b + K - 1 : ℕ) : ZMod height)) :
@@ -240,6 +206,8 @@ theorem verticalStaircaseEdge_val {L K a b : ℕ} (hK : 0 < K)
       rw [← Nat.cast_add_one]; congr 1; omega]
     exact ZMod.val_cast_of_lt (by omega)
 
+-- The proof calls the deprecated `verticalStaircaseEdge_val`, which exists only for it.
+set_option linter.deprecated false in
 /-- **The single crossing of the vertical staircase pair.**
 
 The transposed counterpart of `isCrossingEdge_horizontalStaircase`: the lower
@@ -253,6 +221,10 @@ wrapping the seam lands in the zero row, below both windows since `1 ≤ b`.
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex` (the comparison of the first and the last
 window); scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
+@[deprecated "The transposed end pair is unused: the overlapping-window chain around an \
+edge is run through `isCrossingEdge_horizontalStaircase`, whose window pair already covers \
+the geometry needed for the bond operator."
+  (since := "2026-09-19")]
 theorem isCrossingEdge_verticalStaircase {d : ℕ}
     (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
     (hL : 0 < L) (hK : 0 < K) (hb0 : 1 ≤ b)

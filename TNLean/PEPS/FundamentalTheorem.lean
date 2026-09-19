@@ -366,18 +366,21 @@ theorem exists_stateCoeff_ne_zero (A : Tensor G d)
     rw [Fintype.sum_unique, hone]
     exact one_ne_zero
 
-/-- **Obligation: the per-vertex scalars multiply to one.** If the vertex
-scalars `c` relate `A` to the absorbed second tensor family
-(`A_v = c_v · gaugeVertex B Z v`), then the nonvanishing state equality forces
-`∏_v c_v = 1`. The proof substitutes the per-vertex relation into the state
+/-- **Obligation: the per-vertex scalars multiply to one, from one nonvanishing state
+coefficient.** If the vertex scalars `c` relate `A` to the absorbed second tensor family
+(`A_v = c_v · gaugeVertex B Z v`) and some state coefficient of `A` is nonzero, then the state
+equality forces `∏_v c_v = 1`. The proof substitutes the per-vertex relation into the state
 contraction, factors out `∏_v c_v`, and cancels using gauge-state invariance
-(`applyGauge_stateCoeff`) together with a nonzero state coefficient
-(`exists_stateCoeff_ne_zero`).
+(`applyGauge_stateCoeff`) against that nonzero coefficient.
+
+The nonvanishing coefficient is the source's standing assumption that the state is not the zero
+vector. The injective form below and the region-injective form of
+`TNLean/PEPS/RegionScalarCondition.lean` differ only in how they supply it, and share this
+argument.
 
 Source: arXiv:1804.04964, Section 3, the passage after `eq:inj_equal_edge`. -/
-theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
-    (hA : IsVertexInjective A)
-    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+theorem prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero (A B : Tensor G d)
+    (hne : ∃ σ : V → Fin d, stateCoeff A σ ≠ 0)
     (hAB : SameState A B)
     (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
     (hbd : A.bondDim = B.bondDim)
@@ -413,7 +416,7 @@ theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
       refine Finset.prod_congr rfl (fun v _ => ?_)
       rfl
     rw [hsum]
-  obtain ⟨σ, hσ⟩ := exists_stateCoeff_ne_zero A hA hpos
+  obtain ⟨σ, hσ⟩ := hne
   have hBσ : stateCoeff (applyGauge B Z) σ = stateCoeff A σ := by
     rw [applyGauge_stateCoeff B Z σ, ← hAB σ]
   have h1 : stateCoeff A σ = (∏ v, c v) * stateCoeff A σ :=
@@ -421,6 +424,28 @@ theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
   have h2 : (∏ v, c v) * stateCoeff A σ = 1 * stateCoeff A σ := by
     rw [one_mul]; exact h1.symm
   exact mul_right_cancel₀ hσ h2
+
+/-- **Obligation: the per-vertex scalars multiply to one.** If the vertex
+scalars `c` relate `A` to the absorbed second tensor family
+(`A_v = c_v · gaugeVertex B Z v`), then the nonvanishing state equality forces
+`∏_v c_v = 1`. Vertex injectivity supplies the nonzero state coefficient
+(`exists_stateCoeff_ne_zero`) that
+`prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero` runs on.
+
+Source: arXiv:1804.04964, Section 3, the passage after `eq:inj_equal_edge`. -/
+theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
+    (hA : IsVertexInjective A)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hAB : SameState A B)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (hbd : A.bondDim = B.bondDim)
+    (c : V → ℂ)
+    (hPV : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+      A.component v η σ =
+        c v * gaugeVertex B Z v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ) :
+    (∏ v, c v) = 1 :=
+  prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero A B
+    (exists_stateCoeff_ne_zero A hA hpos) hAB Z hbd c hPV
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- On a connected graph with more than one vertex, every vertex has a nonempty

@@ -2786,6 +2786,32 @@ spectral split → block extraction → MPV calculation → strict bounds
   files rather than a tactic abstraction, and is recorded here so it is not
   confused with this pattern.
 
+### red/blue window membership case split — candidate
+- **Pattern:**
+  ```lean
+  rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
+    rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
+    (simp only [not_and, not_lt] at hrn hbn; omega)
+  ```
+- **Seen:** twenty-four occurrences before the 2026-09-19 torus edge-coordinate
+  cleanup (twelve in `TNLean/PEPS/TorusEdgeBlockingCrossing.lean`, ten in
+  `TNLean/PEPS/TorusWindowRegion.lean`, two in
+  `TNLean/PEPS/NormalEdgeSingleCrossing.lean`); twelve afterwards, since the
+  per-step copies inside the coordinate-pinning blocks collapsed into one call
+  each.
+- **Abstraction:** none yet. The proposed one is a macro that takes the two
+  boundary-membership hypotheses, splits both, normalizes the two negated
+  memberships to implications, and closes the arithmetic goal; a variant must
+  also normalize the goal, as the window-bound steps do with
+  `simp only [not_and, not_lt] at hrn hbn ⊢`.
+- **Notes:** the goal shape is always a conjunction of coordinate-value
+  equalities or inequalities over `ℕ`, and the four branches differ only in
+  which endpoint lies in which block, so a single closing call suffices after
+  the split. The abstraction is worth writing only together with the two
+  hypothesis names, which are uniform across the three files; the remaining
+  twelve sites are the genuine geometric case distinction of a boundary edge,
+  not a copied arithmetic argument.
+
 ## Retired
 
 ### block_words — retired
