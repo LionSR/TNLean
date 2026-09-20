@@ -1938,7 +1938,10 @@ of the chosen first right inverse, or the complete set of pleasant properties.
 
 \begin{theorem}[Common blocking preserves the representation laws]
     \label{thm:mpug_common_blocking_representation}
-    \lean{MPOTensor.GroupFamily.IsRepresentation.block}
+    \lean{MPOTensor.GroupFamily.IsRawRepresentation.block,
+        MPOTensor.GroupFamily.IsRepresentation.block,
+        MPOTensor.mpo_blockTensor_eq_reindex,
+        MPOTensor.blockTensor_mulTensor}
     \leanok
     \uses{def:mpug_common_blocking}
     Let $L>0$. The commonly blocked family
