@@ -401,17 +401,18 @@ sections.
 
 \begin{definition}[Local left inverse]%
     \label{def:peps_localLeftInverse}
-    \lean{TNLean.PEPS.localLeftInverse}
+    \lean{TNLean.PEPS.localLeftInverseAt}
     \leanok
-    \uses{def:peps_localTensorMap, def:IsVertexInjective}
-    If $A$ is vertex-injective, one may choose a linear map $\Psi_v$ from
-    $\C^d$ to the coefficient space on local virtual configurations at $v$
-    such that $\Psi_v\circ\Phi_v=\Id$.
+    \uses{def:peps_localTensorMap}
+    If the family of local physical vectors $(A_v(\eta,\cdot))_{\eta}$ indexed
+    by the virtual configurations $\eta$ at $v$ is linearly independent, one may
+    choose a linear map $\Psi_v$ from $\C^d$ to the coefficient space on local
+    virtual configurations at $v$ such that $\Psi_v\circ\Phi_v=\Id$.
 \end{definition}
 
 \begin{definition}[Physical realization of a local virtual operator]%
     \label{def:peps_physRealizeLocalOp}
-    \lean{TNLean.PEPS.physRealizeLocalOp}
+    \lean{TNLean.PEPS.physRealizeLocalOpAt}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
     For an endomorphism $T$ of the coefficient space on local virtual
@@ -421,7 +422,7 @@ sections.
 
 \begin{theorem}[Local virtual operations on the image]%
     \label{thm:peps_physRealizeLocalOp_spec}
-    \lean{TNLean.PEPS.physRealizeLocalOp_spec}
+    \lean{TNLean.PEPS.physRealizeLocalOpAt_spec}
     \leanok
     \uses{def:peps_physRealizeLocalOp}
     For every coefficient function $c$ on the local virtual configurations at
@@ -433,20 +434,21 @@ sections.
 
 \begin{theorem}[Injectivity of local physical realization]%
     \label{thm:peps_physRealizeLocalOp_injective}
-    \lean{TNLean.PEPS.physRealizeLocalOp_injective}
+    \lean{TNLean.PEPS.physRealizeLocalOpAt_injective}
     \leanok
-    \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, def:IsVertexInjective}
-    If two virtual operations have the same canonical physical realization,
-    then they agree.
+    \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, def:peps_localTensorMap}
+    Suppose the family of local physical vectors at $v$ is linearly
+    independent. If two virtual operations at $v$ have the same canonical
+    physical realization, then they agree.
 \end{theorem}
 \begin{proof}\leanok
     Evaluate both physical realizations on vectors in the image of the local
-    tensor map and use vertex injectivity.
+    tensor map, where linear independence makes that map injective.
 \end{proof}
 
 \begin{definition}[Local projector]%
     \label{def:peps_localProjector}
-    \lean{TNLean.PEPS.localProjector}
+    \lean{TNLean.PEPS.localProjectorAt}
     \leanok
     \uses{def:peps_physRealizeLocalOp}
     The local projector is the physical realization of the identity virtual
@@ -455,7 +457,7 @@ sections.
 
 \begin{definition}[Virtual pullback of a local physical operator]%
     \label{def:peps_localVirtualOpOfPhysicalOp}
-    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
     For a physical operator $O$ on the local physical space at $v$, define
@@ -467,7 +469,7 @@ sections.
 
 \begin{theorem}[Virtual pullback realizes the projected physical action]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_spec}
-    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_spec}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_spec}
     \leanok
     \uses{def:peps_localVirtualOpOfPhysicalOp, def:peps_physRealizeLocalOp, def:peps_localProjector}
     For every coefficient function $c$, applying the local tensor map after
@@ -481,7 +483,7 @@ sections.
 
 \begin{theorem}[Virtual pullback for image-preserving physical actions]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
-    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_realizes_of_projector}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_realizes_of_projector}
     \leanok
     \uses{thm:peps_localVirtualOpOfPhysicalOp_spec}
     If $O$ sends every vector in the image of $\Phi_v$ back into that image,
@@ -494,26 +496,28 @@ sections.
 
 \begin{theorem}[Recovery of a virtual operation from a physical realization]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
-    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_of_realizes}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_of_realizes}
     \leanok
-    \uses{def:IsVertexInjective, thm:peps_localVirtualOpOfPhysicalOp_spec}
-    If a physical operator $O$ realizes a virtual operation $T$ on every
-    vector in the image of $\Phi_v$, then pulling back $O$ recovers $T$.
+    \uses{def:peps_localTensorMap, thm:peps_localVirtualOpOfPhysicalOp_spec}
+    Suppose the family of local physical vectors at $v$ is linearly
+    independent. If a physical operator $O$ realizes a virtual operation $T$ on
+    every vector in the image of $\Phi_v$, then pulling back $O$ recovers $T$.
 \end{theorem}
 \begin{proof}\leanok
     After applying the local tensor map, both virtual operations have the same
-    image. Vertex injectivity makes the local tensor map injective, so the
+    image. Linear independence makes the local tensor map injective, so the
     virtual operations agree.
 \end{proof}
 
 \begin{theorem}[Extensionality of physical-to-virtual pullback]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_action_eq}
-    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_iff_projected_action_eq}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_iff_projected_action_eq}
     \leanok
-    \uses{def:IsVertexInjective, thm:peps_localVirtualOpOfPhysicalOp_spec}
-    Two physical endpoint operations have the same virtual pullback exactly when
-    their projected actions agree on every vector in the image of the local
-    tensor map. For every coefficient function $c$,
+    \uses{def:peps_localTensorMap, thm:peps_localVirtualOpOfPhysicalOp_spec}
+    Suppose the family of local physical vectors at $v$ is linearly
+    independent. Two physical endpoint operations then have the same virtual
+    pullback exactly when their projected actions agree on every vector in the
+    image of the local tensor map. For every coefficient function $c$,
     \begin{align}
         T_O=T_{O'}
         \quad\Longleftrightarrow\quad
@@ -523,13 +527,14 @@ sections.
 \end{theorem}
 \begin{proof}\leanok
     Apply the local tensor map to the two virtual pullbacks and use the
-    pullback specification. The converse follows from vertex injectivity; the
-    forward direction is obtained by rewriting the two virtual pullbacks.
+    pullback specification. The converse follows from injectivity of the local
+    tensor map; the forward direction is obtained by rewriting the two virtual
+    pullbacks.
 \end{proof}
 
 \begin{theorem}[Pullback of the canonical physical realization]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_physRealizeLocalOp}
-    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_physRealizeLocalOp}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_physRealizeLocalOpAt}
     \leanok
     \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
     Pulling back the canonical physical realization of a virtual operation
@@ -542,7 +547,7 @@ sections.
 
 \begin{theorem}[Physical realization of a pulled-back physical operator]%
     \label{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
-    \lean{TNLean.PEPS.physRealizeLocalOp_localVirtualOpOfPhysicalOp}
+    \lean{TNLean.PEPS.physRealizeLocalOpAt_localVirtualOpOfPhysicalOpAt}
     \leanok
     \uses{def:peps_physRealizeLocalOp, def:peps_localVirtualOpOfPhysicalOp, def:peps_localProjector}
     Let $P_v=\Phi_v\circ\Psi_v$ be the local projector, and let
@@ -557,7 +562,7 @@ sections.
 
 \begin{theorem}[Projected local recovery]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
-    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_of_projected_realization_eq}
     \leanok
     \uses{thm:peps_physRealizeLocalOp_injective, thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
     Suppose that the compressed physical action $P_vOP_v$ agrees with the
@@ -573,7 +578,7 @@ sections.
 
 \begin{theorem}[Projected local recovery equivalence]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
-    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_iff_projected_realization_eq}
     \leanok
     \uses{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp, thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     The compressed physical action $P_vOP_v$ is the canonical physical
@@ -629,11 +634,12 @@ sections.
 
 \begin{theorem}[Physical realization of one-edge virtual matrix action]%
     \label{thm:peps_localIncidentMatrixOp_physicalRealization}
-    \lean{TNLean.PEPS.localIncidentMatrixOp_physicalRealization}
+    \lean{TNLean.PEPS.localIncidentMatrixOp_physicalRealizationAt}
     \leanok
     \uses{def:peps_localIncidentMatrixOp, def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec}
-    If $A$ is vertex-injective, then a matrix acting on one edge incident to
-    $v$ is realized by a physical operator on the physical space at $v$.
+    If the family of local physical vectors at $v$ is linearly independent,
+    then a matrix acting on one edge incident to $v$ is realized by a physical
+    operator on the physical space at $v$.
 \end{theorem}
 \begin{proof}\leanok
     Apply the physical realization of local virtual operations to the

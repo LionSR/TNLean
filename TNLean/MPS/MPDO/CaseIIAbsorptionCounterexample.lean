@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.SupportCompletion
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.SimpleTensor
 
@@ -38,11 +39,7 @@ private lemma norm_invSqrtTwo : ‖invSqrtTwo‖ = (Real.sqrt 2)⁻¹ := by
   exact Real.sqrt_pos.2 (by norm_num)
 
 private lemma invSqrtTwo_mul_self : invSqrtTwo * invSqrtTwo = (1 / 2 : ℂ) := by
-  rw [← pow_two, invSqrtTwo]
-  change ((↑((Real.sqrt 2)⁻¹) : ℂ) ^ 2) = 1 / 2
-  rw [← Complex.ofReal_pow, inv_pow,
-    Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
-  norm_num
+  simpa [invSqrtTwo, one_div] using Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)
 
 private lemma star_invSqrtTwo : starRingEnd ℂ invSqrtTwo = invSqrtTwo := by
   simp [invSqrtTwo]

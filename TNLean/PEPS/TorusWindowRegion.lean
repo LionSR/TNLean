@@ -13,14 +13,19 @@ The two-dimensional strengthening of the normal PEPS Fundamental Theorem
 `Papers/1804.04964/paper_normal.tex`) assumes injectivity of a single rectangle
 shape: every contiguous `L × K` region of the torus, one orientation only, with
 the sizes `n ≥ 2L + 1` and `m ≥ 2K + 1`.  This file is the geometry layer of
-that route, scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`:
+that horizontal-window route, scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`;
+the complementary vertical route now runs through the imported crossing theorem
+`TNLean.PEPS.isCrossingEdge_torusVerticalEdge`, which feeds the packaged
+reference datum `TNLean.PEPS.isCrossingEdge_torusVerticalRectangleBlockingDatum`:
 
 * a larger rectangle exhibited as a sliding union of contiguous `L × K`
   windows (`contiguousRectangle_eq_biUnion_window`);
-* the staircase end pair of the overlapping-window chain around an edge: two
-  diagonally offset `L × K` windows whose only joining lattice edge is the
-  distinguished edge itself (`isCrossingEdge_horizontalStaircase`,
-  `isCrossingEdge_verticalStaircase`).
+* the staircase end pair of the overlapping-window chain around a horizontal
+  edge: two diagonally offset `L × K` windows whose only joining lattice edge
+  is the distinguished edge itself (`isCrossingEdge_horizontalStaircase`).
+
+This file is intentionally horizontal-only; the vertical comparison now goes
+through the reference-blocking route cited above.
 
 The single-crossing geometry of the end pair is the reason the bond operator
 extracted by the window chain lives on one edge; it is consumed by the same
@@ -137,52 +142,12 @@ theorem isCrossingEdge_horizontalStaircase {d : ℕ}
   · rintro ⟨hRed, hBlue⟩
     simp only [IsRegionBoundaryEdge, mem_torusContiguousRectangle] at hRed hBlue
     -- The ordered-endpoint convention `g.1.1 < g.1.2` in coordinate-value form.
-    have hlt : g.1.1.1.val < g.1.2.1.val ∨
-        (g.1.1.1.val = g.1.2.1.val ∧ g.1.1.2.val < g.1.2.2.val) := by
-      have hlex : (g.1.1 : TorusVertex width height) < g.1.2 := g.2.1
-      change toLex (g.1.1.1.val, g.1.1.2.val) < toLex (g.1.2.1.val, g.1.2.2.val) at hlex
-      rw [Prod.Lex.toLex_lt_toLex] at hlex
-      exact hlex
-    -- The adjacency of `g`, a horizontal or vertical cyclic step.
-    have hadj := g.2.2
-    rw [torusGraph_adj, torusHorizontalNeighbor, torusVerticalNeighbor] at hadj
+    have hlt := torusEdge_val_lt g
     -- Pin the four coordinate values of `g` to the distinguished edge's coordinates.
     have hcoord : g.1.1.1.val = a + L - 1 ∧ g.1.1.2.val = b + K - 1 ∧
         g.1.2.1.val = a + L ∧ g.1.2.2.val = b + K - 1 := by
-      rcases hadj with ⟨hrow, hcol⟩ | ⟨hcol, hrow⟩
-      · -- Horizontal step: same vertical coordinate, adjacent horizontal coordinates.
-        have hrow' := torus_eq_snd_val hrow
-        rcases hcol with hstep | hstep
-        · by_cases hnowrap : g.1.1.1.val + 1 < width
-          · have hxstep := torus_horizontal_step_val hstep hnowrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-          · have hwrap : g.1.1.1.val + 1 = width := by
-              have := ZMod.val_lt g.1.1.1
-              omega
-            have hxstep := torus_horizontal_step_val_wrap hstep hwrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-        · by_cases hnowrap : g.1.2.1.val + 1 < width
-          · have hxstep := torus_horizontal_step_val hstep hnowrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-          · have hwrap : g.1.2.1.val + 1 = width := by
-              have := ZMod.val_lt g.1.2.1
-              omega
-            have hxstep := torus_horizontal_step_val_wrap hstep hwrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-      · -- Vertical step: same horizontal coordinate, but the column ranges are disjoint.
-        exfalso
-        have hcol' := torus_eq_fst_val hcol
-        rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-          rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-          (simp only [not_and, not_lt] at hrn hbn; omega)
+      rcases torusEdge_val_cases g with ⟨hpar, hstep⟩ | ⟨hpar, hstep⟩ <;>
+        crossing_blocks hRed hBlue
     obtain ⟨hc1, hc2, hc3, hc4⟩ := hcoord
     obtain ⟨hr11, hr12, hr21, hr22⟩ := horizontalStaircaseEdge_val
       (width := width) (height := height) (L := L) (K := K) (a := a) (b := b)
@@ -205,10 +170,9 @@ theorem isCrossingEdge_horizontalStaircase {d : ℕ}
 
 /-! ### The staircase end pair around a vertical edge
 
-The transposed pair: the lower window `[a, a + L) × [b, b + K)`, containing
-the lower endpoint of the edge at its top-right corner, and the upper window
-`[a + L - 1, a + 2L - 1) × [b + K, b + 2K)`, containing the upper endpoint at
-its bottom-left corner. -/
+These compatibility wrappers keep the former vertical-staircase API available
+to importers of this module while the underlying route now factors through the
+vertical reference-blocking geometry imported above. -/
 
 /-- The four endpoint coordinate values of the distinguished edge of the
 vertical staircase pair: the up edge at `(a + L - 1, b + K - 1)`, when the
@@ -277,14 +241,12 @@ theorem isCrossingEdge_verticalStaircase {d : ℕ}
     have hcoord : g.1.1.1.val = a + L - 1 ∧ g.1.1.2.val = b + K - 1 ∧
         g.1.2.1.val = a + L - 1 ∧ g.1.2.2.val = b + K := by
       rcases hadj with ⟨hrow, hcol⟩ | ⟨hcol, hrow⟩
-      · -- Horizontal step: same vertical coordinate, but the row ranges are disjoint.
-        exfalso
+      · exfalso
         have hrow' := torus_eq_snd_val hrow
         rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
           rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
           (simp only [not_and, not_lt] at hrn hbn; omega)
-      · -- Vertical step: same horizontal coordinate, adjacent vertical coordinates.
-        have hcol' := torus_eq_fst_val hcol
+      · have hcol' := torus_eq_fst_val hcol
         rcases hrow with hstep | hstep
         · by_cases hnowrap : g.1.1.2.val + 1 < height
           · have hystep := torus_vertical_step_val hstep hnowrap

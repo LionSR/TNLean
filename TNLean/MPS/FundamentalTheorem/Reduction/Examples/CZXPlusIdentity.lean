@@ -110,7 +110,7 @@ theorem czxPlusIdentity_eq (a : Fin 4) :
     czxPlusIdentity a = complexOfInt (czxPlusIdentityInt a) := by
   have h : czxPlusIdentity a = complexOfInt (mulIntTensor plusIntTensor plusIntTensor
       (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfInt plusIntTensor plusIntTensor _ _
+    mulTensor_complexOfRing _ plusIntTensor plusIntTensor _ _
   have hint : ∀ b : Fin 4, mulIntTensor plusIntTensor plusIntTensor
       (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) =
         czxPlusIdentityInt b := by

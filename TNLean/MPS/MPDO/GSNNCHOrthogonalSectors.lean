@@ -169,16 +169,12 @@ normalization scalar one.
 
 Source: arXiv:1606.00608, equation `ApprhoNComm`, lines 1641--1665. -/
 noncomputable def toProportional (F : OrthogonalCommutingSectorFamily K) :
-    ProportionalOrthogonalCommutingSectorFamily K where
-  projection := F.projection
-  projection_isOrthogonal := F.projection_isOrthogonal
-  projection_orthogonal := fun hst ↦ F.projection_orthogonal hst
-  bondData := F.bondData
-  bond_supported := F.bond_supported
-  realizes_mpo := by
-    intro s N hN
-    refine ⟨1, zero_lt_one, ?_⟩
-    simpa using F.realizes_mpo s N hN
+    ProportionalOrthogonalCommutingSectorFamily K :=
+  { F with
+    realizes_mpo := by
+      intro s N hN
+      refine ⟨1, zero_lt_one, ?_⟩
+      simpa using F.realizes_mpo s N hN }
 
 /-- The finite-chain GSNNCH decomposition determined by orthogonally supported
 commuting sector bonds and their natural multiplicities.

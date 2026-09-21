@@ -134,10 +134,10 @@ theorem edgeVirtualInsertionPhysicalRealization (A : Tensor G d)
           localTensorMap A e.1.2
             (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c)) := by
   constructor
-  · exact localIncidentMatrixOp_physicalRealization
-      (A := A) hA (edgeLeftIncident (G := G) e) M
-  · exact localIncidentMatrixOp_physicalRealization
-      (A := A) hA (edgeRightIncident (G := G) e) M
+  · exact localIncidentMatrixOp_physicalRealizationAt
+      (A := A) (hA e.1.1) (edgeLeftIncident (G := G) e) M
+  · exact localIncidentMatrixOp_physicalRealizationAt
+      (A := A) (hA e.1.2) (edgeRightIncident (G := G) e) M
 
 /-- Projected recovery at the left endpoint of an edge.
 
@@ -154,7 +154,7 @@ theorem edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
       (localProjector A hA e.1.1).comp (O₁.comp (localProjector A hA e.1.1)) =
         physRealizeLocalOp A hA e.1.1
           (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose) :=
-  localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq A hA e.1.1 O₁
+  localVirtualOpOfPhysicalOpAt_eq_iff_projected_realization_eq A (hA e.1.1) O₁
     (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose)
 
 /-- Projected recovery at the right endpoint of an edge.
@@ -172,7 +172,7 @@ theorem edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
       (localProjector A hA e.1.2).comp (O₂.comp (localProjector A hA e.1.2)) =
         physRealizeLocalOp A hA e.1.2
           (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M) :=
-  localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq A hA e.1.2 O₂
+  localVirtualOpOfPhysicalOpAt_eq_iff_projected_realization_eq A (hA e.1.2) O₂
     (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)
 
 /-- Projected recovery at the left endpoint of an edge, under linear
@@ -291,13 +291,19 @@ theorem edgePhysicalToVirtualInsertion_of_projected_realization_eq
       A hA e O₁ O₂ M hO₁ hO₂
   constructor
   · intro c
-    have hrealize :=
-      localVirtualOpOfPhysicalOp_realizes_of_projector A hA e.1.1 O₁ hO₁_image c
+    have hrealize :
+        localTensorMap A e.1.1 (localVirtualOpOfPhysicalOp A hA e.1.1 O₁ c) =
+          O₁ (localTensorMap A e.1.1 c) :=
+      localVirtualOpOfPhysicalOpAt_realizes_of_projector A (hA e.1.1) O₁
+        hO₁_image c
     rw [hLeft] at hrealize
     exact hrealize.symm
   · intro c
-    have hrealize :=
-      localVirtualOpOfPhysicalOp_realizes_of_projector A hA e.1.2 O₂ hO₂_image c
+    have hrealize :
+        localTensorMap A e.1.2 (localVirtualOpOfPhysicalOp A hA e.1.2 O₂ c) =
+          O₂ (localTensorMap A e.1.2 c) :=
+      localVirtualOpOfPhysicalOpAt_realizes_of_projector A (hA e.1.2) O₂
+        hO₂_image c
     rw [hRight] at hrealize
     exact hrealize.symm
 

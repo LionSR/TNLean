@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.NormalCommutant
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.BNTAlgebraTensorClausePositivity
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.Tactic.Basic
@@ -52,35 +53,26 @@ def tensor : MPSTensor 4 2 :=
 def gaugeMatrix : Matrix (Fin 2) (Fin 2) ℂ :=
   !![2, 0; 0, 1]
 
-private lemma gaugeMatrix_det_ne_zero : gaugeMatrix.det ≠ 0 := by
-  norm_num [gaugeMatrix, Matrix.det_fin_two]
+private lemma gaugeMatrix_mul_inv :
+    gaugeMatrix * !![1 / 2, 0; 0, 1] = 1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    norm_num [gaugeMatrix, Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The invertible matrix represented by \(\operatorname{diag}(2,1)\). -/
-def gauge : GL (Fin 2) ℂ :=
-  Matrix.GeneralLinearGroup.mkOfDetNeZero gaugeMatrix gaugeMatrix_det_ne_zero
+def gauge : GL (Fin 2) ℂ where
+  val := gaugeMatrix
+  inv := !![1 / 2, 0; 0, 1]
+  val_inv := gaugeMatrix_mul_inv
+  inv_val := mul_eq_one_comm.mp gaugeMatrix_mul_inv
 
 @[simp]
-lemma gauge_val : (gauge : Matrix (Fin 2) (Fin 2) ℂ) = gaugeMatrix :=
-  Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
+lemma gauge_val : (gauge : Matrix (Fin 2) (Fin 2) ℂ) = gaugeMatrix := rfl
 
 @[simp]
 lemma gauge_inv_val :
     ((gauge⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) =
-      !![1 / 2, 0; 0, 1] := by
-  have h : gauge * (Matrix.GeneralLinearGroup.mkOfDetNeZero
-      (!![1 / 2, 0; 0, 1] : Matrix (Fin 2) (Fin 2) ℂ) (by
-        norm_num [Matrix.det_fin_two])) = 1 := by
-    apply Units.ext
-    simp only [Units.val_mul, gauge_val, gaugeMatrix, Units.val_one,
-      Matrix.GeneralLinearGroup.val_mkOfDetNeZero]
-    ext i j
-    fin_cases i <;> fin_cases j <;>
-      norm_num [Matrix.mul_apply, Fin.sum_univ_two]
-  rw [show gauge⁻¹ = Matrix.GeneralLinearGroup.mkOfDetNeZero
-      (!![1 / 2, 0; 0, 1] : Matrix (Fin 2) (Fin 2) ℂ) (by
-        norm_num [Matrix.det_fin_two]) from
-    inv_eq_of_mul_eq_one_right h]
-  exact Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
+      !![1 / 2, 0; 0, 1] := rfl
 
 /-- The tensor obtained by conjugating every letter by
 \(\operatorname{diag}(2,1)\). -/
@@ -91,36 +83,25 @@ def gaugedTensor : MPSTensor 4 2 :=
 
 /-- The four displayed matrices span the full two-by-two matrix algebra. -/
 lemma tensor_isInjective : Kraus.IsInjective tensor := by
-  rw [Kraus.IsInjective, eq_top_iff]
-  intro M _
+  rw [Kraus.IsInjective]
   have mem : ∀ i : Fin 4, tensor i ∈ Submodule.span ℂ (Set.range tensor) :=
     fun i ↦ Submodule.subset_span ⟨i, rfl⟩
-  have hspan : ∀ p q : Fin 2, Matrix.single p q (1 : ℂ) ∈
-      Submodule.span ℂ (Set.range tensor) := by
-    intro p q
-    fin_cases p <;> fin_cases q
-    · exact (show tensor 1 = Matrix.single (0 : Fin 2) 0 (1 : ℂ) by
-        ext i j
-        fin_cases i <;> fin_cases j <;> simp [tensor, Matrix.single]) ▸ mem 1
-    · exact (show tensor 2 = Matrix.single (0 : Fin 2) 1 (1 : ℂ) by
-        ext i j
-        fin_cases i <;> fin_cases j <;> simp [tensor, Matrix.single]) ▸ mem 2
-    · exact (show tensor 3 = Matrix.single (1 : Fin 2) 0 (1 : ℂ) by
-        ext i j
-        fin_cases i <;> fin_cases j <;> simp [tensor, Matrix.single]) ▸ mem 3
-    · refine (show Matrix.single (1 : Fin 2) 1 (1 : ℂ) = tensor 0 - tensor 1 from ?_) ▸
-        Submodule.sub_mem _ (mem 0) (mem 1)
+  refine Submodule.eq_top_of_forall_single_mem _ fun p q ↦ ?_
+  fin_cases p <;> fin_cases q
+  · exact (show tensor 1 = Matrix.single (0 : Fin 2) 0 (1 : ℂ) by
       ext i j
-      fin_cases i <;> fin_cases j <;>
-        simp [tensor, Matrix.single, Matrix.sub_apply]
-  have hM : M = M 0 0 • Matrix.single 0 0 1 + M 0 1 • Matrix.single 0 1 1 +
-      M 1 0 • Matrix.single 1 0 1 + M 1 1 • Matrix.single 1 1 1 := by
+      fin_cases i <;> fin_cases j <;> simp [tensor, Matrix.single]) ▸ mem 1
+  · exact (show tensor 2 = Matrix.single (0 : Fin 2) 1 (1 : ℂ) by
+      ext i j
+      fin_cases i <;> fin_cases j <;> simp [tensor, Matrix.single]) ▸ mem 2
+  · exact (show tensor 3 = Matrix.single (1 : Fin 2) 0 (1 : ℂ) by
+      ext i j
+      fin_cases i <;> fin_cases j <;> simp [tensor, Matrix.single]) ▸ mem 3
+  · refine (show Matrix.single (1 : Fin 2) 1 (1 : ℂ) = tensor 0 - tensor 1 from ?_) ▸
+      Submodule.sub_mem _ (mem 0) (mem 1)
     ext i j
-    fin_cases i <;> fin_cases j <;> simp [Matrix.single]
-  rw [hM]
-  exact Submodule.add_mem _ (Submodule.add_mem _ (Submodule.add_mem _
-    (Submodule.smul_mem _ _ (hspan 0 0)) (Submodule.smul_mem _ _ (hspan 0 1)))
-    (Submodule.smul_mem _ _ (hspan 1 0))) (Submodule.smul_mem _ _ (hspan 1 1))
+    fin_cases i <;> fin_cases j <;>
+      simp [tensor, Matrix.single, Matrix.sub_apply]
 
 /-- The source tensor is normal already at word length one. -/
 lemma tensor_isNormal : Kraus.IsNormal tensor :=

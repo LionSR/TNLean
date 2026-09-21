@@ -258,25 +258,10 @@ self-adjointness or identify these maps with the source projectors on
 \(\mathcal H_X\otimes\mathcal H_B\). -/
 structure HasAppendixD2ParentCommutingHamiltonian
     (KAXB : Submodule ℂ (NSiteSpace d 3))
-    (QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) : Prop where
-  left_idempotent : QAX * QAX = QAX
-  right_idempotent : QXB * QXB = QXB
-  commute_lifts :
-    leftPairLift QAX * rightPairLift QXB =
-      rightPairLift QXB * leftPairLift QAX
+    (QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) : Prop extends
+    HasOverlappingTwoSiteCommutation QAX QXB where
   kernel_intersection :
     KAXB = LinearMap.ker (leftPairLift QAX) ⊓ LinearMap.ker (rightPairLift QXB)
-
-/-- Forgetting the kernel-intersection part of arXiv:1606.00608, Definition D.2,
-leaves the algebraic overlapping two-site commutation predicate. -/
-theorem HasAppendixD2ParentCommutingHamiltonian.to_overlapping
-    {KAXB : Submodule ℂ (NSiteSpace d 3)}
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
-    (h : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB) :
-    HasOverlappingTwoSiteCommutation (d := d) QAX QXB where
-  left_idempotent := h.left_idempotent
-  right_idempotent := h.right_idempotent
-  commute_lifts := h.commute_lifts
 
 /-- The left complementary projector in arXiv:1606.00608, Appendix D.2, is
 idempotent. -/
@@ -367,7 +352,7 @@ theorem localTerm_two_three_zero_one_commute_of_appendixD2
     localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
       localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
   localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors A
-    h.to_overlapping hAX hXB
+    h.toHasOverlappingTwoSiteCommutation hAX hXB
 
 /-- If the two-site parent interaction is identified with the complementary
 Appendix D.2 projectors \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\), then the
@@ -400,7 +385,7 @@ theorem localTerm_two_three_zero_one_commute_of_appendixD2_complement
     localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
       localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
   localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement A
-    h.to_overlapping hAX hXB
+    h.toHasOverlappingTwoSiteCommutation hAX hXB
 
 /-! ### Adjacent cyclic two-site supports -/
 

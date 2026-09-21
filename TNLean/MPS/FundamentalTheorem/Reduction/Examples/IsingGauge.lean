@@ -102,7 +102,7 @@ def isingBondObjectZ (a : Fin 100) : Matrix (Fin 24) (Fin 24) (ℤ√2) :=
 
 theorem isingBondObject_eq (a : Fin 100) :
     isingBondObject a = complexOfZsqrt2 (isingBondObjectZ a) :=
-  mulTensor_complexOfZsqrt2 thetaTwoZ isingSigmaZ _ _
+  mulTensor_complexOfRing _ thetaTwoZ isingSigmaZ _ _
 
 /-! ### The gauge
 
@@ -228,7 +228,7 @@ theorem thetaTwoZ_eq_zero_of_rho_ne {h h' : Fin 10} (hne : isingRho h ≠ isingR
 
 theorem stack_eq_sector (h h' : Fin 10) :
     mulZsqrt2Tensor thetaTwoZ isingSigmaZ h h' = stackSector (isingRho h) h h' := by
-  unfold mulZsqrt2Tensor stackSector
+  unfold mulZsqrt2Tensor mulTensorR stackSector
   congr 1
   refine Finset.sum_congr rfl fun j _ => ?_
   split_ifs with hj
@@ -237,7 +237,7 @@ theorem stack_eq_sector (h h' : Fin 10) :
 
 theorem stack_eq_zero_of_rho_ne {h h' : Fin 10} (hne : isingRho h ≠ isingRho h') :
     mulZsqrt2Tensor thetaTwoZ isingSigmaZ h h' = 0 := by
-  unfold mulZsqrt2Tensor
+  unfold mulZsqrt2Tensor mulTensorR
   rw [Finset.sum_eq_zero fun j _ => ?_]
   · simp
   rcases eq_or_ne (isingRho h) (isingRho j) with hj | hj
