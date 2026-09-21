@@ -19,7 +19,7 @@ and recovers this one as a special case.
 
 | Removed declaration | Replacement |
 |---|---|
-| `TNLean.PEPS.threeBlock_reconcile` | `TNLean.PEPS.bondLocal_iff_coeffTransfer` (`TNLean/PEPS/RegionBlock/ThreeBlockTransfer.lean`), which delivers the source's `V = W` step over an arbitrary partition through `UnionInjectivityGeneral*` and fixes no distinguished edge |
+| `TNLean.PEPS.threeBlock_reconcile` | none needed: the reconcile was already dead, with no reference outside its own file. No surviving declaration restates it. The nearest live statement, `TNLean.PEPS.bondLocal_iff_coeffTransfer` (`TNLean/PEPS/RegionBlock/ThreeBlockTransfer.lean`), is a different result: it characterizes a bond-local transfer kernel between two tensors, quantified over a matrix on the second tensor, and yields no row equality; it is proved from the block-frame coefficient transfer of `BlockCoeffTransfer.lean`, a path that does not pass through `UnionInjectivityGeneral*` |
 | `TNLean.PEPS.threeBlockInsertedCoeff_eq_iff_regionInsertedCoeff_eq` | none needed: it existed only to read the reconcile's hypothesis as the three-block resonate equality |
 | `TNLean.PEPS.threeBlock_middle_strip_descent` | none needed: a proof step of the reconcile |
 | `TNLean.PEPS.threeBlock_red_readoff_eq_of_coeff_eq` | none needed: a proof step of the reconcile |
