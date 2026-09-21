@@ -47,6 +47,14 @@ Combining these gives
   = span τ {regionPartialState B R τ} = range (regionBlockedTensorMap B R)`,
 the block analogue of `range_localTensorMap_eq_of_sameState`.
 
+The same region cut also produces a nonvanishing closed state coefficient
+(`exists_stateCoeff_ne_zero_of_regionInjective`), and the file closes with the
+region-injective form of the per-vertex scalar condition of the Fundamental
+Theorem (arXiv:1804.04964, Section 3, Theorem 3, the passage after
+`eq:inj_equal_edge`, lines 1453--1471 of `Papers/1804.04964/paper_normal.tex`),
+which is that existence lemma fed into the scalar-product argument stated once in
+`TNLean/PEPS/FundamentalTheorem.lean`.
+
 ## References
 
 - [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled
@@ -520,6 +528,45 @@ theorem exists_stateCoeff_ne_zero_of_regionInjective (A : Tensor G d) (R : Finse
   have := congrFun (hcompZero τ₀) μ₀
   rw [hμ₀, Pi.zero_apply] at this
   exact hτ₀ this
+
+/-! ### The per-vertex scalar condition in the region-injective frame
+
+The nonvanishing closed state coefficient just produced is exactly what the
+per-vertex scalar argument of the Fundamental Theorem consumes, so the
+region-injective form of that argument is recorded here, beside its supplying
+lemma. -/
+
+/-- **The per-vertex scalars multiply to one (region-injective form).**
+
+If the per-vertex scalars `c` relate `A` to the gauge action of the second tensor
+family at every vertex (`A_v = c_v · gaugeVertex B Z v`), then under
+`SameState A B`, positive bonds, and a single region `R` whose block and complement
+block are both blocked-tensor injective, the nonvanishing closed state equality
+forces `∏_v c_v = 1`.
+
+This is the region-injective analogue of `prod_perVertexScalar_eq_one`: the
+nonvanishing state coefficient comes from region injectivity of `R` and its set
+complement (`exists_stateCoeff_ne_zero_of_regionInjective`) rather than from vertex
+injectivity. The remaining argument depends on neither injectivity hypothesis and is
+run once in `prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero`.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3, the passage after
+`eq:inj_equal_edge`, lines 1453--1471 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem prod_perVertexScalar_eq_one_of_regionInjective (A B : Tensor G d)
+    (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hAB : SameState A B)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (hbd : A.bondDim = B.bondDim)
+    (c : V → ℂ)
+    (hPV : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+      A.component v η σ =
+        c v * gaugeVertex B Z v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ) :
+    (∏ v, c v) = 1 :=
+  prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero A B
+    (exists_stateCoeff_ne_zero_of_regionInjective A R hRA hCA hpos) hAB Z hbd c hPV
 
 end PEPS
 end TNLean
