@@ -9,11 +9,11 @@ import TNLean.PEPS.RegionBlock.BlockCoeffTransfer
 /-!
 # The block-frame coefficient transfer and per-edge gauge for the normal PEPS theorem
 
-This file wires the three-block engine (`TNLean.PEPS.RegionBlock.ThreeBlockReconcile`),
-the union injectivity of the host block (`TNLean.PEPS.RegionBlock.UnionInjectivity`),
-and the two-block backbone (`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`) into the
-per-edge gauge of `TNLean.PEPS.RegionBlock.RegionReconcile`, for two tensors blocked
-around the same edge into the same red/blue/complement triple.
+This file wires the union injectivity of the host block
+(`TNLean.PEPS.RegionBlock.UnionInjectivity`) and the two-block backbone
+(`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`) into the three-block transfer
+engine and per-edge gauge of `TNLean.PEPS.RegionBlock.RegionReconcile`, for two
+tensors blocked around the same edge into the same red/blue/complement triple.
 
 The union lemma `regionBlockedTensorInjective_compl_red`
 (`TNLean.PEPS.RegionBlock.UnionInjectivity`) supplies the host-block injectivity

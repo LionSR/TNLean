@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Algebra.ComplexOfInt
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.RingEmbedding
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
-import TNLean.MPS.MPDO.OperatorProduct
 
 /-!
 # Explicit gauges for multi-block compression data
@@ -23,7 +23,6 @@ reduces their verification to decidable identities between integer matrices.
 
 ## Main definitions
 
-* `MPSTensor.complexOfInt`: the entrywise coercion of an integer matrix.
 * `MPSTensor.mulIntTensor`: the bond-space product of two integer matrix product operator
   tensors.
 * `MPSTensor.gaugeOfMatrix`: the gauge attached to a bijective labelling and an invertible
@@ -31,8 +30,6 @@ reduces their verification to decidable identities between integer matrices.
 
 ## Main results
 
-* `MPSTensor.mulTensor_complexOfInt`, `MPSTensor.mulTensor_smul_complexOfInt`: the bond-space
-  product of two (rescaled) integer tensors is the rescaled integer bond-space product.
 * `MPSTensor.conjMatrix_gaugeOfMatrix`: conjugation by such a gauge is matrix conjugation
   followed by the relabelling.
 * `MPSTensor.MultiBlockCompression.left_gaugeOfMatrix`,
@@ -50,32 +47,10 @@ variable {d D₁ D₂ : ℕ}
 
 /-- The bond-space product of two integer tensors,
 `(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`. -/
-def mulIntTensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
+abbrev mulIntTensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
     (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) ℤ :=
-  (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
-
-/-- The bond-space product of two rescaled integer tensors is the integer bond-space product
-rescaled by the product of the two scalars. -/
-theorem mulTensor_smul_complexOfInt (c : ℂ)
-    (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
-    MPOTensor.mulTensor (fun i j => c • complexOfInt (M i j))
-        (fun i j => c • complexOfInt (N i j)) i k =
-      (c * c) • complexOfInt (mulIntTensor M N i k) := by
-  ext x y
-  simp only [MPOTensor.mulTensor_apply, mulIntTensor, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.smul_apply, Matrix.kroneckerMap_apply, complexOfInt_apply, smul_eq_mul]
-  push_cast
-  rw [Finset.mul_sum]
-  exact Finset.sum_congr rfl fun j _ => by ring
-
-/-- The bond-space product commutes with the entrywise coercion of integer matrices. -/
-theorem mulTensor_complexOfInt (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
-    MPOTensor.mulTensor (fun i j => complexOfInt (M i j)) (fun i j => complexOfInt (N i j)) i k =
-      complexOfInt (mulIntTensor M N i k) := by
-  simpa using mulTensor_smul_complexOfInt 1 M N i k
+  mulTensorR M N i k
 
 /-! ### The gauge attached to an invertible matrix -/
 

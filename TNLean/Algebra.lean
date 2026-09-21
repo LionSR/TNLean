@@ -20,6 +20,7 @@ import TNLean.Algebra.CommonFixedSubmodule
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CommutingStarSubalgebraProduct
 import TNLean.Algebra.ComplexOfInt
+import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.DirectedWalkCoboundary
@@ -45,8 +46,8 @@ import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
-import TNLean.Algebra.Matrix
 import TNLean.Algebra.MatrixCyclicPathSum
+import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator

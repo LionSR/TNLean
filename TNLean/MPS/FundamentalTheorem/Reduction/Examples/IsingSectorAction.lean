@@ -117,7 +117,7 @@ private theorem actZsqrt2Tensor_thetaThreeZ :
 
 theorem sectorAction_eq (h : Fin 10) : sectorAction h = complexOfZsqrt2 (sectorActionZ h) := by
   rw [← actZsqrt2Tensor_thetaThreeZ]
-  exact actTensor_complexOfZsqrt2 thetaThreeZ (productStateZ 6) h
+  exact actTensor_complexOfRing _ thetaThreeZ (productStateZ 6) h
 
 /-! ### The slots and the block coordinates -/
 
@@ -215,12 +215,12 @@ noncomputable def sectorCompression :
     rw [sectorAction_conjMatrix, complexOfZsqrt2_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hxy,
       map_zero]
   matched h s := by
-    rw [sectorAction_conjMatrix, complexOfZsqrt2, Matrix.blockDiag'_map,
+    rw [sectorAction_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
       Matrix.blockDiag'_blockDiagonal']
     ext p q
     simp [sectorBlockZ, sectorTargets, productState, zsqrt2ToComplex_sectorWeightsZ]
   unmatched h t := by
-    rw [sectorAction_conjMatrix, complexOfZsqrt2, Matrix.blockDiag'_map,
+    rw [sectorAction_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
       Matrix.blockDiag'_blockDiagonal']
     ext p q
     simp [sectorBlockZ]
@@ -234,7 +234,8 @@ theorem sectorAction_remainder : sectorCompression.remainder = 0 := by
         Matrix.blockDiagonal' (conjMatrix sectorGauge (sectorAction h)).blockDiag' :=
     sectorCompression.conjMatrix_remainder h
   refine conjMatrix_injective sectorGauge ?_
-  rw [hc, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, sectorAction_conjMatrix, complexOfZsqrt2,
+  rw [hc, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, sectorAction_conjMatrix,
+    complexOfZsqrt2, complexOfRing,
     Matrix.blockDiagonal'_map _ _ (map_zero _), Matrix.blockDiag'_blockDiagonal']
 
 /-! ### Consequences -/
@@ -284,13 +285,6 @@ theorem thetaThree_mpo_sectorState (L : ℕ) (hL : 0 < L) :
     Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three,
     Matrix.head_cons, Matrix.tail_cons]
   ring
-
-/-- **Biorthogonal compression onto each weighted product state** (P5 note,
-Theorem 7.7(iv)–(v)). -/
-theorem sectorAction_isReduction (s : {s // s ∈ sectorSlots}) :
-    IsReduction sectorAction (sectorTargets s.1) (sectorCompression.left s)
-      (sectorCompression.right s) :=
-  sectorCompression.isReduction s
 
 /-- The weighted Verlinde action has six zero slots. -/
 theorem sectorAction_z_eq : sectorCompression.z = 6 := rfl

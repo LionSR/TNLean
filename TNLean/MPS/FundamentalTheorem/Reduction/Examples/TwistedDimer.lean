@@ -32,12 +32,14 @@ the occupations of the two fusion channels, and the periodic coefficient
 blocking length one and are not gauge equivalent (their one-letter traces differ), so the length
 dependence here comes from two genuinely different sectors rather than from a repeated one.
 
-This file sets up the sector tensors, the pair-generic reduction of the letter identity to two
-exhaustive checks over the sixty-four letters, and the compression of the fusion of the zero
+This file sets up the sector tensors, the compression datum of a fusion whose stacked letters
+satisfy the integer letter identity, the pair-generic reduction of that identity to two
+exhaustive checks over the sixty-four letters, and the two checks for the fusion of the zero
 sector with itself. The remaining three pairs of sectors satisfy the same identity with the same
 gauge and the same weights; their exhaustive checks live in the modules
 `TwistedDimerPairZeroOne`, `TwistedDimerPairOneZero` and `TwistedDimerPairOneOne`, and
-`TwistedDimerPairs` assembles the four cases into the fusion rule for every pair of sectors.
+`TwistedDimerPairs` assembles the four cases into the fusion rule for every pair of sectors,
+with its compression datum, its consequences and its word-trace identity.
 
 ## Main definitions
 
@@ -52,15 +54,8 @@ gauge and the same weights; their exhaustive checks live in the modules
   `P6Compression.dimer_trace_evalWord_of_compression`, the word-trace identity it implies.
 * `P6Compression.dimer_letter_int_of_halves`: the letter identity of a pair of sectors follows
   from its restrictions to the two sector labels, the two exhaustive checks.
-* `P6Compression.dimerCompression`: the multi-block compression datum of Theorem 7.7 for the
-  fusion of the zero sector with itself.
-* `P6Compression.dimer_trace_evalWord`: the word-trace identity
-  `tr(B^w) = (7/16)^{|w|} tr(M₀^w) + (1/16)^{|w|} tr(M₁^w)`.
-* `P6Compression.dimer_remainder`: the remainder vanishes, so the extension splits.
-* `P6Compression.dimer_isReduction`, `P6Compression.dimer_mul_right_eq_right_mul`,
-  `P6Compression.dimer_left_mul_eq_mul_left`: the compression pair and the sitewise
-  intertwiners of each slot.
-* `P6Compression.dimer_dim_eq`: the dimension count `16 = 4 + 4 + 8`.
+* `P6Compression.dimer_letter_int`: the integer letter identity of the fusion of the zero sector
+  with itself, its two exhaustive checks carried out.
 * `P6Compression.dimerTarget_isNormal`: each sector is normal at blocking length one.
 * `P6Compression.dimerTarget_not_gaugeEquiv`, `P6Compression.dimerBlocks_not_gaugeEquiv`: the two
   sectors, hence the two targets of every fusion, are not gauge equivalent.
@@ -130,7 +125,7 @@ theorem dimerTarget_eq (f : Fin 2) (a : Fin 64) :
 
 theorem dimerStacked_eq (f f' : Fin 2) (a : Fin 64) :
     dimerStacked f f' a = ((16 : ℂ)⁻¹ * (16 : ℂ)⁻¹) • complexOfInt (dimerStackedInt f f' a) :=
-  mulTensor_smul_complexOfInt (16 : ℂ)⁻¹ (dimerMInt f) (dimerMInt f') _ _
+  mulTensor_smul_complexOfRing _ (16 : ℂ)⁻¹ (dimerMInt f) (dimerMInt f') _ _
 
 /-! ### The two fusion channels -/
 
@@ -168,7 +163,7 @@ private theorem dimerStackedInt_eq_zero (f f' : Fin 2) {i k : Fin 8}
     rcases eq_or_ne (dimerFlag i) (dimerFlag j) with hij | hij
     · rw [dimerMInt_eq_zero f' fun hjk => h (hij.trans hjk), Matrix.kronecker_zero]
     · rw [dimerMInt_eq_zero f hij, Matrix.zero_kronecker]
-  simp [mulIntTensor, hj]
+  simp [mulIntTensor, mulTensorR, hj]
 
 /-- The letter identity at a letter whose two bond indices carry different sector labels: both
 sides vanish. -/
@@ -202,8 +197,8 @@ private theorem dimerStackedInt_even (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag 
   have hz : ∀ j : Fin 8, dimerFlag j = 1 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
     intro j hj
     rw [dimerMInt_eq_zero f (by rw [hi, hj]; decide), Matrix.zero_kronecker]
-  rw [mulIntTensor, Fin.sum_univ_eight, hz 1 (by decide), hz 3 (by decide), hz 5 (by decide),
-    hz 7 (by decide)]
+  rw [mulIntTensor, mulTensorR, Fin.sum_univ_eight, hz 1 (by decide), hz 3 (by decide),
+    hz 5 (by decide), hz 7 (by decide)]
   simp only [add_zero, dimerStackEven]
 
 /-- On a left bond index of sector label one the stacked product is its odd restriction. -/
@@ -212,8 +207,8 @@ private theorem dimerStackedInt_odd (f f' : Fin 2) {i : Fin 8} (hi : dimerFlag i
   have hz : ∀ j : Fin 8, dimerFlag j = 0 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
     intro j hj
     rw [dimerMInt_eq_zero f (by rw [hi, hj]; decide), Matrix.zero_kronecker]
-  rw [mulIntTensor, Fin.sum_univ_eight, hz 0 (by decide), hz 2 (by decide), hz 4 (by decide),
-    hz 6 (by decide)]
+  rw [mulIntTensor, mulTensorR, Fin.sum_univ_eight, hz 0 (by decide), hz 2 (by decide),
+    hz 4 (by decide), hz 6 (by decide)]
   simp only [zero_add, add_zero, dimerStackOdd]
 
 /-- **The letter identity from its two halves.** The integer letter identity of the fusion of
@@ -312,7 +307,7 @@ theorem dimer_trace_evalWord_of_compression (f f' : Fin 2)
   simp only [dimerWeights, dimerBlocks, add_zero]
   rfl
 
-/-! ### The fusion of the zero sector with itself -/
+/-! ### The letter identity of the fusion of the zero sector with itself -/
 
 private theorem dimer_letter_int_even : ∀ a : Fin 64,
     dimerFlag (Fin.divNat (m := 8) (n := 8) a) = 0 →
@@ -336,62 +331,6 @@ theorem dimer_letter_int (a : Fin 64) :
     (2 : ℤ) • dimerStackedInt 0 0 a =
       ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt 0 0) s a :=
   dimer_letter_int_of_halves 0 0 dimer_letter_int_even dimer_letter_int_odd a
-
-/-- **The multi-block asymmetric compression datum of the graded dimer twist** (P5 note,
-Theorem 7.7(i)–(iii)) for the fusion of the zero sector with itself: the two normal sectors `0`
-and `1` (not gauge equivalent by `dimerBlocks_not_gaugeEquiv`) with the weights `7/16` and
-`1/16`, and eight zero slots. -/
-noncomputable def dimerCompression :
-    MultiBlockCompression (D := fun _ : Fin 2 => 4) (dimerStacked 0 0) pairSlots
-      fun s => dimerWeights s • dimerBlocks 0 0 s :=
-  dimerCompressionOfLetterIdentity 0 0 dimer_letter_int
-
-/-- **The remainder of the dimer compression vanishes** (P5 note, Theorem 7.7(vi)): the
-conjugated tensor is block diagonal, so the extension splits. -/
-theorem dimer_remainder : dimerCompression.remainder = 0 :=
-  remainder_dimerCompressionOfLetterIdentity 0 0 dimer_letter_int
-
-/-! ### Consequences -/
-
-/-- **The word-trace identity of the graded dimer twist**: the periodic coefficient
-`c^{(L)} = (7/16)^L + (1/16)^L` (`p6_examples_compression_data.md`, §1.4). -/
-theorem dimer_trace_evalWord (w : List (Fin 64)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord (dimerStacked 0 0) w) =
-      (7 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerTarget 0) w) +
-        (1 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerTarget 1) w) :=
-  dimer_trace_evalWord_of_compression 0 0 dimerCompression w hw
-
-/-- **Biorthogonal compression onto each fusion channel** (P5 note, Theorem 7.7(iv)–(v)). -/
-theorem dimer_isReduction (s : {s // s ∈ pairSlots}) :
-    IsReduction (dimerStacked 0 0) (dimerWeights s.1 • dimerBlocks 0 0 s.1)
-      (dimerCompression.left s) (dimerCompression.right s) :=
-  dimerCompression.isReduction s
-
-/-- Two distinct fusion channels are biorthogonal (P5 note, Theorem 7.7(iv)). -/
-theorem dimer_left_mul_right_of_ne {s t : {s // s ∈ pairSlots}} (h : s ≠ t) :
-    dimerCompression.left s * dimerCompression.right t = 0 :=
-  dimerCompression.left_mul_right_of_ne h
-
-/-- **The sitewise right intertwiner of each channel**: `B^a V_s = V_s (μ_s M_s^a)`
-(`p6_examples_compression_data.md`, §1.3). -/
-theorem dimer_mul_right_eq_right_mul (a : Fin 64) (s : {s // s ∈ pairSlots}) :
-    dimerStacked 0 0 a * dimerCompression.right s =
-      dimerCompression.right s * (dimerWeights s.1 • dimerBlocks 0 0 s.1) a :=
-  dimerCompression.mul_right_eq_right_mul dimer_remainder a s
-
-/-- **The sitewise left intertwiner of each channel**: `W_s B^a = (μ_s M_s^a) W_s`. -/
-theorem dimer_left_mul_eq_mul_left (a : Fin 64) (s : {s // s ∈ pairSlots}) :
-    dimerCompression.left s * dimerStacked 0 0 a =
-      (dimerWeights s.1 • dimerBlocks 0 0 s.1) a * dimerCompression.left s :=
-  dimerCompression.left_mul_eq_mul_left dimer_remainder a s
-
-/-- The dimer fusion has eight zero slots. -/
-theorem dimer_z_eq : dimerCompression.z = 8 := rfl
-
-/-- **The dimension count of the dimer fusion**: `16 = 4 + 4 + 8` (P5 note,
-Theorem 7.7(vii)). -/
-theorem dimer_dim_eq : (16 : ℕ) = ∑ _s ∈ pairSlots, 4 + 8 :=
-  dimerCompression.dim_eq
 
 /-! ### Normality and inequivalence of the sectors -/
 

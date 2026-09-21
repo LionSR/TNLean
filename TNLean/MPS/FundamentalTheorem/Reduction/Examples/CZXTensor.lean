@@ -210,7 +210,7 @@ def czxSquare : MPSTensor 4 4 := (MPOTensor.mulTensor czxTensor czxTensor).toMPS
 theorem czxSquare_eq (a : Fin 4) : czxSquare a = complexOfInt (czxSquareInt a) := by
   have h : czxSquare a = complexOfInt (mulIntTensor czxIntTensor czxIntTensor
       (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfInt czxIntTensor czxIntTensor _ _
+    mulTensor_complexOfRing _ czxIntTensor czxIntTensor _ _
   have hint : ∀ b : Fin 4, mulIntTensor czxIntTensor czxIntTensor
       (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) = czxSquareInt b := by
     decide

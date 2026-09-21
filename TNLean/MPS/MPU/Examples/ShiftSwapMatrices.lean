@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixIsometryKronecker
+import TNLean.Algebra.SwapMatrix
 import TNLean.MPS.MPU.Examples.ShiftSourceFactors
 
 /-!
@@ -35,12 +36,6 @@ private theorem one_isUnitaryBetween (d : ℕ) :
     (1 : Matrix (Fin d) (Fin d) ℂ).IsUnitaryBetween :=
   ⟨by simp [Matrix.IsIsometry], by simp [Matrix.IsCoisometry]⟩
 
-private theorem swapMatrix_isUnitaryBetween (d : ℕ) :
-    (Matrix.swapMatrix d).IsUnitaryBetween := by
-  constructor <;>
-    simp [Matrix.IsIsometry, Matrix.IsCoisometry,
-      Matrix.swapMatrix_conjTranspose, Matrix.swapMatrix_mul_self]
-
 /-- The displayed matrix $\Id\otimes\mathbb S\otimes\Id$ is unitary.
 
 Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
@@ -48,7 +43,7 @@ Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
 theorem identitySwapIdentityMatrix_isUnitaryBetween (d : ℕ) :
     (identitySwapIdentityMatrix d).IsUnitaryBetween := by
   have hOne := one_isUnitaryBetween d
-  have hSwap := swapMatrix_isUnitaryBetween d
+  have hSwap := Matrix.swapMatrix_isUnitaryBetween d
   have hFirst :
       ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ Matrix.swapMatrix d).IsIsometry :=
     Matrix.IsIsometry.kronecker _ _ hOne.1 hSwap.1
@@ -72,7 +67,7 @@ Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
 (lines 2018--2034). -/
 theorem swapTensorSwapMatrix_isUnitaryBetween (d : ℕ) :
     (swapTensorSwapMatrix d).IsUnitaryBetween := by
-  have hSwap := swapMatrix_isUnitaryBetween d
+  have hSwap := Matrix.swapMatrix_isUnitaryBetween d
   have hIso : (swapTensorSwapMatrix d).IsIsometry :=
     Matrix.IsIsometry.kronecker _ _ hSwap.1 hSwap.1
   exact hIso.isUnitaryBetween_of_card_eq _ rfl

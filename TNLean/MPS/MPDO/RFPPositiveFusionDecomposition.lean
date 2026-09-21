@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.RFPViaTS
+import TNLean.MPS.MPDO.VerticalBNTGrouping
 import TNLean.MPS.MPDO.VerticalProductFusionDecomposition
 
 /-!
@@ -35,6 +36,55 @@ open scoped Matrix BigOperators ComplexOrder Kronecker
 noncomputable section
 
 namespace MPOTensor
+
+/-- The Appendix C.4 vertical-sector hypotheses assembled from a one-site and a
+two-site vertical canonical decomposition of the same tensor together with the
+two trace-preserving completely positive maps of the renormalization
+fixed-point condition and their intertwining identities.
+
+Source: arXiv:1606.00608, Definition 4.1 and Appendix C.4,
+lines 1955--1995. -/
+def VerticalSectorHypotheses.ofDecompositions {d D : ℕ} {M : MPOTensor d D}
+    (D₁ : CPSVVerticalDecomposition M)
+    (D₂ : CPSVVerticalDecomposition (blockTwo M))
+    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+    (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d) (Fin d) ℂ)
+    (hTCPTP : IsKrausCPTP T) (hSCPTP : IsKrausCPTP S)
+    (hTphys : ∀ X, T (physClose1 M X) = physClose2 M X)
+    (hSphys : ∀ X, S (physClose2 M X) = physClose1 M X) :
+    VerticalSectorHypotheses (g₁ := D₁.labelCount) (g₂ := D₂.labelCount)
+      (d := d) (D := D) :=
+  { dim₁ := D₁.bondDim
+    mult₁ := D₁.multiplicity
+    weight₁ := D₁.weight
+    dim₂ := D₂.bondDim
+    mult₂ := D₂.multiplicity
+    weight₂ := D₂.weight
+    hMult₁ := D₁.multiplicity_pos
+    hWeight₁ := D₁.weight_pos
+    hMult₂ := D₂.multiplicity_pos
+    hWeight₂ := D₂.weight_pos
+    M := M
+    A₁ := D₁.tensor
+    A₂ := D₂.tensor
+    U₁ := D₁.verticalCoisometry
+    U₂ := D₂.verticalCoisometry
+    T := T
+    S := S
+    hForward₁ := D₁.forward
+    hReconstruct₁ := D₁.reconstruction
+    hForward₂ := D₂.forward
+    hReconstruct₂ := D₂.reconstruction
+    hTphys := hTphys
+    hSphys := hSphys
+    hBNT₁ := D₁.isCPSVBNT
+    hBNT₂ := D₂.isCPSVBNT
+    hU₁ := D₁.coisometry
+    hU₂ := D₂.coisometry
+    hTCPTP := hTCPTP
+    hSCPTP := hSCPTP }
 
 /-- Orthogonal grouped vertical sectors assemble into a vertical canonical
 decomposition while retaining the CPSV16 basis predicate.
@@ -184,7 +234,8 @@ theorem IsHorizontalCF.exists_cpsvVerticalDecomposition
       (fun j ↦ ⟨dim (C.repr j), blocks (C.repr j)⟩) :=
     hSpectralBNT.of_sameMPV₂Pos hSame.symm
   obtain ⟨_, W, _, hWIso, hWOrth, hWInter, hWReconstruct⟩ :=
-    hM.exists_normalized_grouped_sector_maps blocks hHorizontal mu V hDimPos
+    exists_normalized_grouped_sector_maps_of_dressing blocks
+      (hHorizontal.hasGroupedCornerGramDressing M hM) mu V hDimPos
       hNormal hdim X zeta hXDist hCoeffPos hGroupedIso hGroupedOrth
       hGroupedInter hGroupedCorner hGroupedReconstruct
   have hWReconstructFlat : ∀ ab, verticalTensor M ab =
@@ -264,14 +315,7 @@ theorem exists_positiveFusionDecomposition_of_isRFPViaTS
   obtain ⟨Smap, T, hSCPTP, hTCPTP, hSphys, hTphys⟩ := hRFP
   refine ⟨D₁.labelCount, D₁.bondDim, D₁.tensor, D₁.isCPSVBNT, ?_⟩
   exact transportedVerticalSector_exists_positiveFusionDecomposition
-    D₁.bondDim D₁.multiplicity D₁.weight
-    D₂.bondDim D₂.multiplicity D₂.weight
-    D₁.multiplicity_pos D₁.weight_pos
-    D₂.multiplicity_pos D₂.weight_pos
-    M D₁.tensor D₂.tensor D₁.isCPSVBNT D₂.isCPSVBNT
-    D₁.verticalCoisometry D₂.verticalCoisometry
-    D₁.coisometry D₂.coisometry T Smap hTCPTP hSCPTP
-    D₁.forward D₁.reconstruction D₂.forward D₂.reconstruction
-    hTphys hSphys hHorizontal hM
+    (VerticalSectorHypotheses.ofDecompositions D₁ D₂ T Smap hTCPTP hSCPTP
+      hTphys hSphys) hHorizontal hM
 
 end MPOTensor

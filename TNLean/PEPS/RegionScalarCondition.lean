@@ -20,9 +20,9 @@ assumes injectivity only *after blocking*, so vertex injectivity is unavailable.
 Here the nonvanishing state coefficient is supplied instead by the region-injective
 existence lemma `exists_stateCoeff_ne_zero_of_regionInjective`: a single region `R`
 together with its set complement, both blocked-tensor injective, with positive
-bonds, already forces a nonzero closed state coefficient. The rest of the argument
-(substituting the per-vertex relation, factoring out the scalar product, and
-cancelling with `applyGauge_stateCoeff`) is identical to the injective case.
+bonds, already forces a nonzero closed state coefficient. The scalar-product
+argument itself is the one stated for a nonvanishing state coefficient in
+`TNLean/PEPS/FundamentalTheorem.lean`.
 
 ## References
 
@@ -51,9 +51,8 @@ forces `∏_v c_v = 1`.
 This is the region-injective analogue of `prod_perVertexScalar_eq_one`: the
 nonvanishing state coefficient comes from region injectivity of `R` and its set
 complement (`exists_stateCoeff_ne_zero_of_regionInjective`) rather than from vertex
-injectivity. The substitution of the per-vertex relation into the state contraction,
-the factoring of `∏_v c_v`, and the cancellation against
-`applyGauge_stateCoeff B Z` are the same as in the injective case.
+injectivity. The remaining argument depends on neither injectivity hypothesis and is
+run once in `prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero`.
 
 Source: arXiv:1804.04964, Section 3, Theorem 3, the passage after
 `eq:inj_equal_edge`, lines 1453--1471 of `Papers/1804.04964/paper_normal.tex`. -/
@@ -69,42 +68,9 @@ theorem prod_perVertexScalar_eq_one_of_regionInjective (A B : Tensor G d)
     (hPV : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
       A.component v η σ =
         c v * gaugeVertex B Z v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ) :
-    (∏ v, c v) = 1 := by
-  classical
-  have hkey : ∀ σ : V → Fin d,
-      stateCoeff A σ = (∏ v, c v) * stateCoeff (applyGauge B Z) σ := by
-    intro σ
-    have hAcoeff : stateCoeff A σ
-        = ∑ η : VirtualConfig A,
-            (∏ v, c v) * ∏ v, gaugeVertex B Z v
-              (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v) := by
-      unfold stateCoeff
-      refine Finset.sum_congr rfl (fun η _ => ?_)
-      rw [← Finset.prod_mul_distrib]
-      refine Finset.prod_congr rfl (fun v _ => ?_)
-      exact hPV v (fun ie => η ie.1) (σ v)
-    rw [hAcoeff, ← Finset.mul_sum]
-    have hsum : (∑ η : VirtualConfig A, ∏ v, gaugeVertex B Z v
-            (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v))
-        = stateCoeff (applyGauge B Z) σ := by
-      unfold stateCoeff
-      refine Fintype.sum_equiv
-        (Equiv.piCongrRight (fun e => finCongr (congr_fun hbd e)))
-        (fun η : VirtualConfig A => ∏ v, gaugeVertex B Z v
-            (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v))
-        (fun ηB => ∏ v, (applyGauge B Z).component v (fun ie => ηB ie.1) (σ v))
-        (fun η => ?_)
-      refine Finset.prod_congr rfl (fun v _ => ?_)
-      rfl
-    rw [hsum]
-  obtain ⟨σ, hσ⟩ := exists_stateCoeff_ne_zero_of_regionInjective A R hRA hCA hpos
-  have hBσ : stateCoeff (applyGauge B Z) σ = stateCoeff A σ := by
-    rw [applyGauge_stateCoeff B Z σ, ← hAB σ]
-  have h1 : stateCoeff A σ = (∏ v, c v) * stateCoeff A σ :=
-    (hkey σ).trans (by rw [hBσ])
-  have h2 : (∏ v, c v) * stateCoeff A σ = 1 * stateCoeff A σ := by
-    rw [one_mul]; exact h1.symm
-  exact mul_right_cancel₀ hσ h2
+    (∏ v, c v) = 1 :=
+  prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero A B
+    (exists_stateCoeff_ne_zero_of_regionInjective A R hRA hCA hpos) hAB Z hbd c hPV
 
 end PEPS
 end TNLean

@@ -125,7 +125,7 @@ verification (23-58%), and two required real re-scoping to avoid deleting
 live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/4529).
 
 ### S3. Delete the superseded edge-centred three-block union-injectivity route — net 3,180 lines, risk 3/10
-- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563)
+- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted; it strands a further 250-300 lines in `ThreeBlockResonate2.lean`, one `\leanid`-cited in `section3_route.tex`, which is the next slice.
 - **What**: `PEPS/RegionBlock/{ThreeBlockResonate,ThreeBlockResonate2,ThreeBlockReconcile,UnionInjectivity,ThreeBlockTransfer,BondLocalFromReconcile}.lean`
   (3,438 gross lines). `BondLocalFromReconcile.lean` (176 ln) has zero
   importers anywhere and is pure dead weight.
@@ -138,6 +138,23 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   blue := S, complement := T, red := univ \ (S ∪ T).
 - **First PR**: delete `BondLocalFromReconcile.lean` outright (176 ln,
   confirmed zero importers, zero migration cost).
+- **Second slice (done 2026-09-19)**: `ThreeBlockReconcile.lean` (371 ln) had
+  become a fully dead nine-declaration closure once the 2026-08-27 unused-import
+  sweep removed the `ThreeBlockTransfer` import edge, leaving the generated
+  aggregator as its only importer. All nine declarations had zero references
+  outside the file and no blueprint tag, and the file is now deleted; see
+  `docs/audits/2026-09-19_peps_regionblock_dead_closures.md`.
+- **Third slice (open, #7875)**: the reconcile file was the last consumer of
+  `ThreeBlockResonate2.lean` (709 lines), so none of its fifteen declarations now
+  has a reference in code outside the file. Every external match on those names
+  is either a distinct `ThreeBlockGeometry`-namespaced declaration of
+  `UnionInjectivityGeneralBlue`/`UnionInjectivityGeneral2` sharing the short name
+  — `threeBlockComplCoeff` is defined twice in the tree, once unnamespaced there
+  and once namespaced — or a docstring mention; `UnionInjectivity.lean` imports
+  the module but uses only the namespaced general forms. The slice touches a
+  paper-gap citation of `threeBlock_middle_strip` in
+  `docs/paper-gaps/peps_normal_ft_section3_route.tex` plus a docstring pointer in
+  `ThreeBlockResonate.lean`, so it is a separate step.
 
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#4564)
@@ -251,6 +268,27 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   present files are approximately 399 and 160 lines, respectively, rather
   than the 728- and 433-line versions measured by the original audit.
 
+### S17. Delete the blocked power-sum coefficient route superseded by the unblocked theorem — net 440 lines, risk 3/10
+- **Status**: open ([#7848](https://github.com/LionSR/TNLean/issues/7848); 2026-09-19 architectural survey)
+- **What**: `MPS/FundamentalTheorem/SectorBNT/PowerSumCoefficients.lean:148-619`
+  minus one live helper: `exists_blocking_powerSum_coeff`,
+  `exists_blocking_powerSum_weights`, `exists_matching_data_of_isBNTCanonicalForm`,
+  `exists_blocked_representatives_of_isNormal_distinct`,
+  `exists_eventually_linearIndependent_blockTensor_of_normalTensor_distinct`,
+  `not_gaugePhaseEquiv_of_exists_eventually_linearIndependent`,
+  `mpv_span_congr_length`, and four helpers only they use.
+- **Why it's excess**: `exists_unblocked_powerSum_coeff`
+  (`UnblockedPowerSumCoefficients.lean:584`, landed 2026-09-18) has the same
+  hypotheses and a strictly stronger conclusion (every positive length, with
+  the dimension bound); the blocked statement is its `p := 1` instance, its
+  proof uses none of the blocked stage, and `OperatorClosurePowerSum.lean:83`
+  already consumes the unblocked theorem. The source theorem is the unblocked
+  statement, so restating `thm:asym_power_sum_coefficients` and retagging it is
+  a faithful redirect. Zero consumers of the route outside itself.
+- **First PR**: after an owner check (the files are deliberately staged and
+  two days old): restate and retag the node, delete the closure, prune imports
+  build-checked, keep the file path (cited by a docstring and a paper-gap note).
+
 ### S7. Delete the confirmed-dead half of the UnionInjectivityOverlap chain — completed
 - **Status**: burned down (#4567, #4625, follow-up #7232)
 - **What**: all scattered dead spans in files 1/2/3/6 are gone. PR #4625
@@ -348,6 +386,18 @@ neither broad-brush attempt survived verification, and both defaulted to
   declaration-by-declaration documented in an issue-tracked paper-gap note
   as live formalization of an open theorem; only ~150 of a claimed ~800
   lines are genuinely uncited dead code.
+  2026-09-19 update (#7849): the dead residue is 242 lines with named
+  declarations — `CoarseThreeSiteMul.lean` (121 lines, one theorem whose proof
+  the capstone `exists_regionEdgeGauge_of_coherentFrames` already contains),
+  `isBondLocalTransferKernel_of_coherentFrames`, `redBundleInsertedCoeff_add`,
+  `redBundleInsertedCoeff_smul`, `sameAwayFromRBBundle_hostMerge`; their only
+  intended consumer (#5457) was closed as not planned on 2026-08-23. The chain
+  itself stays live. Closed out the same day: all five were removed (244 lines
+  as measured on the deleted blocks), the standalone multiplicativity being
+  three rewrites away from the retained `coeffTransferMap_eq_regionEdgeTransfer`
+  and `regionEdgeTransfer_mul`, and the paper-gap sentences were repointed at
+  the survivors; see
+  `docs/audits/2026-09-19_peps_regionblock_dead_closures.md`.
 - **S11** — mirror-lemma transport (blue/complement, left/right): mixed —
   ~365 of a claimed 750 lines survive; the largest named target
   (`CompleteZipperFusionSupport.lean`) is blueprint-cited, load-bearing,
@@ -367,6 +417,19 @@ neither broad-brush attempt survived verification, and both defaulted to
   single peripheral caller claimed; needs re-scoping as capstone-adjacent
   surgery.
 
+### Rejected by the 2026-09-19 architectural survey (do not re-propose without new evidence)
+
+Full reasons in `docs/audits/2026-09-19_architectural_simplification_survey.md`:
+generic block-ordering bijection constructors (noncomputable inverse breaks
+`decide +kernel`); `MPOTensor.directSum` through `toTensorFromBlocks` (tagged,
+different carrier); `PGVWC07CanonicalFormData` as a D15 client (reindexing
+versus coisometry carriers); shift-example source gates (generic lemma already
+exists); two-site ambient-sector maps (the reindexing composition is content);
+"177 tagged forwarders" (count collapses to 79 and the nodes are the
+paper-labelled statements); layer-table relocation (net −2, pure churn); the
+graded dimer twist carried twice (bridge not decidable, net positive); the
+ℕ-modular cyclic window offset (a tagged convention).
+
 ## Metrics
 
 Weekly snapshot from `python3 scripts/loc_report.py` (see the shrink rhythm
@@ -375,6 +438,7 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
 | Date | Total lines | Dup 10-line windows | Sequel files (lines) | Cap-riding | Degenerate sites | Sorries |
 |------|-------------|---------------------|----------------------|------------|------------------|---------|
 | 2026-07-20 | 319,850 | 1,260 | 48 (20,500) | 29 | 1,934 | 4 |
+| 2026-09-19 | 369,316 | 982 | 40 (17,963) | 15 | 2,190 | 1 |
 
 ## Ranked debts (tournament order)
 
@@ -383,7 +447,10 @@ are an archival record of the 2026-07-20 tournament baseline, not a
 description of current `main`.
 
 ## D1. Unbundled hypothesis telescopes and giant anonymous existentials at the MPDO/ParentHamiltonian frontier — abstraction-gap, impact 6/10, effort 6/10
-- **Status**: closed 2026-07-22
+- **Status**: closed 2026-07-22; residue recorded 2026-09-19 on #6855 §1
+  (four `transportedVerticalSector_exists_*` theorems still spell the
+  `VerticalSectorHypotheses` field list and one repacks it in its own proof;
+  the periodic sector-match core repeats at seven sites; about −295 lines)
   ([#4517](https://github.com/LionSR/TNLean/issues/4517),
   [PR #4618](https://github.com/LionSR/TNLean/pull/4618))
 - **Evidence**: a 40-line byte-identical hypothesis telescope heads three
@@ -421,8 +488,8 @@ description of current `main`.
   `PEPS/CycleMPSChainOverlapInsertion.lean:33` states it "mirrors the
   site-independent file" — 2,916 lines across 6 `*Overlap*` files. `hbond`
   is derived internally at `NormalGeneralFundamentalTheorem.lean:163` yet
-  assumed at `NormalSquareFundamentalTheorem2.lean:111` and
-  `TorusFundamentalTheorem2.lean:180`. `SameStateBridgeHyp`
+  assumed at `NormalSquareUnconditionalFundamentalTheorem.lean:111`
+  and `TorusUnconditionalFundamentalTheorem.lean:180`. `SameStateBridgeHyp`
   (`MPS/Chain/SameStateBridge.lean:30`) has hypothesis uses but zero
   constructions repo-wide, leaving the PiAlgebra capstone conditional on an
   unproven structure (verified 2026-07-20).
@@ -903,6 +970,56 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   form" created in the same PR for the zero-coefficient convention. Update the
   `def:mpu_canonical_form` blueprint statement in the same PR. No one-block
   theorem or consumer changes yet.
+
+## D16. Ring-homomorphism transport of exact-arithmetic example tensors written four times  —  duplication, impact 7/10, effort 5/10
+- **Status**: open ([#7846](https://github.com/LionSR/TNLean/issues/7846); 2026-09-19 architectural survey)
+- **Evidence**: `MPS/FundamentalTheorem/Reduction/Examples/{ExplicitGauge,Zsqrt2Ring,GoldenRing,EisensteinRing}.lean`
+  each define `complexOfR X := X.map f` for a ring homomorphism `f : R →+* ℂ`
+  and re-prove the same 8–14-lemma ladder (`_mul`, `_one`, `_zero`, `_add`,
+  `_sub`, `_smul`, `_sum`, `_single`, `_submatrix`, `_transpose`,
+  `_kronecker`, `_injective`, `_blockDiagonal'`), every member an instance of
+  Mathlib's `Matrix.map_*` family, plus per-ring bond products, actions and
+  word evaluation (`ExplicitGauge.lean:51-140`, `Zsqrt2Ring.lean:67-150`,
+  `GoldenRing.lean:227-304`, `EisensteinRing.lean:207-314`,
+  `KramersWannierAction.lean:85-100`, `GoldenCompression.lean:45-60`).
+  Consumers: 377/173/110/68 hits across 17 files; about 200 ladder call
+  sites. A Mathlib-only probe elaborates the generic ladder, generic
+  `mulTensorR`/`evalWordR` with one `map` lemma each, `push_cast`
+  compatibility of a same-name `abbrev`, and `decide +kernel` reduction at ℤ
+  and ℤ√2. `RingHom.mapMatrix` is square-only, so the survivor is the
+  rectangular `X.map f`. The normality certificates and the
+  `ofGolden`/`ofEisenstein`/`ofConjInt` constructors are three designs, not one
+  statement, and are excluded (`thm:asymex_normal_units` must not be redirected
+  to a no-prefactor certificate).
+- **Remediation**: one generic module with `complexOfRing (f : R →+* ℂ)`,
+  its ladder closed by the Mathlib lemmas, generic bond product, action and
+  word evaluation; the four heads become same-name `abbrev`s so definition
+  tags stay; lemma tags redirect to the strictly more general lemmas; rewrite
+  `docs/tactic_patterns.md:1081-1131, 1913-1918`. Net about −215.
+- **First PR**: convert `ExplicitGauge.lean` and `Zsqrt2Ring.lean` only,
+  rename their ≈90 call sites, redirect `thm:asymex_explicit_gauge` and
+  `thm:asymex_zsqrt2_ring`, root build, checkdecls; golden and Eisenstein after
+  #7838 and #7833 land.
+
+## D17. Three MPDO carriers restate the twelve vertical-decomposition fields instead of extending one  —  duplication, impact 5/10, effort 4/10
+- **Status**: open ([#7847](https://github.com/LionSR/TNLean/issues/7847); 2026-09-19 architectural survey)
+- **Evidence**: `MPOTensor.CPSVVerticalDecomposition`
+  (`MPS/MPDO/RFPPositiveFusionDecomposition.lean:48-79`, twelve fields) is
+  restated field by field, docstrings included, as the first twelve fields of
+  `BNTAlgebraTensorClause` (`BNTAlgebraTensorClause.lean:119-165`) and
+  `BNTFusionTensorClause` (`BNTFusionTensorClause.lean:66-112`); the copy
+  bridges `toBNTAlgebraTensorClause` (`:197-213`) and
+  `BNTFusionTensorClauseFromRFP.lean:380-392` transcribe the fields by hand;
+  two `isBNT` pass-throughs have zero consumers. No positional constructor,
+  anonymous-constructor destructuring, `mk.injEq` or numeric projection on any
+  of the three carriers exists, so `extends` changes no call site. The parent
+  must relocate into `BNTAlgebraTensorClause.lean` because of the import
+  direction. 89 + 51 tags keep their names; the parent carries none.
+- **Remediation**: relocate the parent, make both clause structures
+  `extends CPSVVerticalDecomposition M`, rewrite the two bridges with `with`
+  syntax, delete both `isBNT` pass-throughs. Net about −115.
+- **First PR**: the whole change in one pull request, root build over the
+  ≈44 importers, checkdecls.
 
 ## Honorable mentions (ranks 11-12)
 

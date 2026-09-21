@@ -81,6 +81,91 @@ omit [NeZero width] [NeZero height] [Fact (1 < width)] [Fact (1 < height)] in
 theorem torus_eq_snd_val {v w : TorusVertex width height} (h : v.2 = w.2) :
     v.2.val = w.2.val := by rw [h]
 
+/-! ### Coordinate values of a torus edge
+
+The two facts every crossing argument below starts from: the ordered-endpoint
+convention in coordinate-value form, and the case list of a cyclic step. -/
+
+/-- The ordered endpoints of a torus edge in coordinate-value form: the first endpoint has the
+smaller horizontal coordinate, or the two horizontal coordinates agree and the first endpoint has
+the smaller vertical coordinate. -/
+theorem torusEdge_val_lt (g : Edge (torusGraph width height)) :
+    g.1.1.1.val < g.1.2.1.val ∨
+      (g.1.1.1.val = g.1.2.1.val ∧ g.1.1.2.val < g.1.2.2.val) := by
+  have hlex : (g.1.1 : TorusVertex width height) < g.1.2 := g.2.1
+  change toLex (g.1.1.1.val, g.1.1.2.val) < toLex (g.1.2.1.val, g.1.2.2.val) at hlex
+  rw [Prod.Lex.toLex_lt_toLex] at hlex
+  exact hlex
+
+/-- **The coordinate values of the two endpoints of a torus edge.**
+
+A torus edge is a horizontal or a vertical cyclic step, so its four endpoint coordinate values
+satisfy one of eight arithmetic alternatives: the two endpoints share a row and their columns
+differ by one in either orientation, or one of the two wraps the seam, that is steps from the last
+column to the zero column; and the transposed statement for a vertical step.  This is the
+disjunctive assembly of the single-step lemmas above over the adjacency of the torus graph, and it
+is the only form of the adjacency the crossing arguments below use: each of them pins the four
+coordinate values by discharging the alternatives against the coordinate ranges of the two blocks.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem torusEdge_val_cases (g : Edge (torusGraph width height)) :
+    (g.1.1.2.val = g.1.2.2.val ∧
+        (g.1.2.1.val = g.1.1.1.val + 1 ∨ (g.1.1.1.val + 1 = width ∧ g.1.2.1.val = 0) ∨
+          g.1.1.1.val = g.1.2.1.val + 1 ∨ (g.1.2.1.val + 1 = width ∧ g.1.1.1.val = 0))) ∨
+      (g.1.1.1.val = g.1.2.1.val ∧
+        (g.1.2.2.val = g.1.1.2.val + 1 ∨ (g.1.1.2.val + 1 = height ∧ g.1.2.2.val = 0) ∨
+          g.1.1.2.val = g.1.2.2.val + 1 ∨ (g.1.2.2.val + 1 = height ∧ g.1.1.2.val = 0))) := by
+  have hadj := g.2.2
+  rw [torusGraph_adj, torusHorizontalNeighbor, torusVerticalNeighbor] at hadj
+  rcases hadj with ⟨hrow, hstep | hstep⟩ | ⟨hcol, hstep | hstep⟩
+  · refine Or.inl ⟨torus_eq_snd_val hrow, ?_⟩
+    by_cases hnowrap : g.1.1.1.val + 1 < width
+    · exact Or.inl (torus_horizontal_step_val hstep hnowrap)
+    · have hwrap : g.1.1.1.val + 1 = width := by have := ZMod.val_lt g.1.1.1; omega
+      exact Or.inr (Or.inl ⟨hwrap, torus_horizontal_step_val_wrap hstep hwrap⟩)
+  · refine Or.inl ⟨torus_eq_snd_val hrow, ?_⟩
+    by_cases hnowrap : g.1.2.1.val + 1 < width
+    · exact Or.inr (Or.inr (Or.inl (torus_horizontal_step_val hstep hnowrap)))
+    · have hwrap : g.1.2.1.val + 1 = width := by have := ZMod.val_lt g.1.2.1; omega
+      exact Or.inr (Or.inr (Or.inr ⟨hwrap, torus_horizontal_step_val_wrap hstep hwrap⟩))
+  · refine Or.inr ⟨torus_eq_fst_val hcol, ?_⟩
+    by_cases hnowrap : g.1.1.2.val + 1 < height
+    · exact Or.inl (torus_vertical_step_val hstep hnowrap)
+    · have hwrap : g.1.1.2.val + 1 = height := by have := ZMod.val_lt g.1.1.2; omega
+      exact Or.inr (Or.inl ⟨hwrap, torus_vertical_step_val_wrap hstep hwrap⟩)
+  · refine Or.inr ⟨torus_eq_fst_val hcol, ?_⟩
+    by_cases hnowrap : g.1.2.2.val + 1 < height
+    · exact Or.inr (Or.inr (Or.inl (torus_vertical_step_val hstep hnowrap)))
+    · have hwrap : g.1.2.2.val + 1 = height := by have := ZMod.val_lt g.1.2.2; omega
+      exact Or.inr (Or.inr (Or.inr ⟨hwrap, torus_vertical_step_val_wrap hstep hwrap⟩))
+
+/-! ### The red-to-blue membership split
+
+Every crossing argument below closes the same way: the two boundary-membership
+hypotheses of the edge each say that one endpoint lies in the block and the other does
+not, and all four resulting assignments of the endpoints to the two blocks are decided by
+the coordinate ranges of the blocks. -/
+
+/-- Split the two boundary-membership hypotheses of a crossing edge into the four
+assignments of its endpoints to the red and the blue block, turn the two non-membership
+hypotheses into coordinate implications, and close every branch by linear arithmetic over
+the coordinate values.  The form `crossing_blocks hRed hBlue ⊢` also normalizes the goal,
+for a goal that is itself a conjunction of coordinate bounds. -/
+syntax "crossing_blocks " ident ident (" ⊢")? : tactic
+
+macro_rules
+  | `(tactic| crossing_blocks $hR:ident $hB:ident) =>
+    `(tactic|
+      (rcases $hR:ident with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
+        rcases $hB:ident with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
+        (simp only [not_and, not_lt] at hrn hbn; omega)))
+  | `(tactic| crossing_blocks $hR:ident $hB:ident ⊢) =>
+    `(tactic|
+      (rcases $hR:ident with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
+        rcases $hB:ident with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
+        (simp only [not_and, not_lt] at hrn hbn ⊢; omega)))
+
 /-! ### The reference horizontal and vertical edges -/
 
 /-- The distinguished horizontal edge of the blocking at offset `(xStart, yStart)`: the edge from
@@ -180,58 +265,16 @@ theorem isCrossingEdge_torusHorizontalEdge
     -- below `xStart + 5 ≤ width` and `yStart + 5 ≤ height`.
     have hwin : g.1.1.1.val < xStart + 5 ∧ g.1.2.1.val < xStart + 5 ∧
         g.1.1.2.val < yStart + 5 ∧ g.1.2.2.val < yStart + 5 := by
-      rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-        rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-        (simp only [not_and, not_lt] at hrn hbn ⊢; omega)
+      crossing_blocks hRed hBlue ⊢
     obtain ⟨hw1, hw2, hw3, hw4⟩ := hwin
     -- The ordered-endpoint convention `g.1.1 < g.1.2` in coordinate-value form.
-    have hlt : g.1.1.1.val < g.1.2.1.val ∨
-        (g.1.1.1.val = g.1.2.1.val ∧ g.1.1.2.val < g.1.2.2.val) := by
-      have hlex : (g.1.1 : TorusVertex width height) < g.1.2 := g.2.1
-      change toLex (g.1.1.1.val, g.1.1.2.val) < toLex (g.1.2.1.val, g.1.2.2.val) at hlex
-      rw [Prod.Lex.toLex_lt_toLex] at hlex
-      exact hlex
-    -- The adjacency of `g`, a horizontal or vertical cyclic step.
-    have hadj := g.2.2
-    rw [torusGraph_adj, torusHorizontalNeighbor, torusVerticalNeighbor] at hadj
+    have hlt := torusEdge_val_lt g
     -- Pin the four coordinate values of `g` to the distinguished edge's coordinates.  A
     -- horizontal step wrapping the seam lands in the zero column, left of both blocks.
     have hcoord : g.1.1.1.val = xStart + 1 ∧ g.1.1.2.val = yStart + 2 ∧
         g.1.2.1.val = xStart + 2 ∧ g.1.2.2.val = yStart + 2 := by
-      rcases hadj with ⟨hrow, hcol⟩ | ⟨hcol, hrow⟩
-      · -- Horizontal step: same vertical coordinate, adjacent horizontal coordinates.
-        have hrow' := torus_eq_snd_val hrow
-        rcases hcol with hstep | hstep
-        · by_cases hnowrap : g.1.1.1.val + 1 < width
-          · have hxstep := torus_horizontal_step_val hstep hnowrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-          · have hwrap : g.1.1.1.val + 1 = width := by
-              have := ZMod.val_lt g.1.1.1
-              omega
-            have hxstep := torus_horizontal_step_val_wrap hstep hwrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-        · by_cases hnowrap : g.1.2.1.val + 1 < width
-          · have hxstep := torus_horizontal_step_val hstep hnowrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-          · have hwrap : g.1.2.1.val + 1 = width := by
-              have := ZMod.val_lt g.1.2.1
-              omega
-            have hxstep := torus_horizontal_step_val_wrap hstep hwrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-      · -- Vertical step: same horizontal coordinate, but red and blue columns are disjoint.
-        exfalso
-        have hcol' := torus_eq_fst_val hcol
-        rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-          rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-          (simp only [not_and, not_lt] at hrn hbn; omega)
+      rcases torusEdge_val_cases g with ⟨hpar, hstep⟩ | ⟨hpar, hstep⟩ <;>
+        crossing_blocks hRed hBlue
     obtain ⟨hc1, hc2, hc3, hc4⟩ := hcoord
     -- The reference edge's endpoint coordinate values.
     obtain ⟨hr11, hr12, hr21, hr22⟩ := horizontalReferenceEdge_val
@@ -303,55 +346,13 @@ theorem isCrossingEdge_torusVerticalEdge
       at hRed hBlue
     have hwin : g.1.1.1.val < xStart + 5 ∧ g.1.2.1.val < xStart + 5 ∧
         g.1.1.2.val < yStart + 5 ∧ g.1.2.2.val < yStart + 5 := by
-      rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-        rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-        (simp only [not_and, not_lt] at hrn hbn ⊢; omega)
+      crossing_blocks hRed hBlue ⊢
     obtain ⟨hw1, hw2, hw3, hw4⟩ := hwin
-    have hlt : g.1.1.1.val < g.1.2.1.val ∨
-        (g.1.1.1.val = g.1.2.1.val ∧ g.1.1.2.val < g.1.2.2.val) := by
-      have hlex : (g.1.1 : TorusVertex width height) < g.1.2 := g.2.1
-      change toLex (g.1.1.1.val, g.1.1.2.val) < toLex (g.1.2.1.val, g.1.2.2.val) at hlex
-      rw [Prod.Lex.toLex_lt_toLex] at hlex
-      exact hlex
-    have hadj := g.2.2
-    rw [torusGraph_adj, torusHorizontalNeighbor, torusVerticalNeighbor] at hadj
+    have hlt := torusEdge_val_lt g
     have hcoord : g.1.1.1.val = xStart + 2 ∧ g.1.1.2.val = yStart + 1 ∧
         g.1.2.1.val = xStart + 2 ∧ g.1.2.2.val = yStart + 2 := by
-      rcases hadj with ⟨hrow, -⟩ | ⟨hcol, hrow⟩
-      · -- Horizontal step: same vertical coordinate, but red and blue rows are disjoint.
-        exfalso
-        have hrow' := torus_eq_snd_val hrow
-        rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-          rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-          (simp only [not_and, not_lt] at hrn hbn; omega)
-      · -- Vertical step: same horizontal coordinate, adjacent vertical coordinates.  A step
-        -- wrapping the seam lands in the zero row, below both blocks.
-        have hcol' := torus_eq_fst_val hcol
-        rcases hrow with hstep | hstep
-        · by_cases hnowrap : g.1.1.2.val + 1 < height
-          · have hystep := torus_vertical_step_val hstep hnowrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-          · have hwrap : g.1.1.2.val + 1 = height := by
-              have := ZMod.val_lt g.1.1.2
-              omega
-            have hystep := torus_vertical_step_val_wrap hstep hwrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-        · by_cases hnowrap : g.1.2.2.val + 1 < height
-          · have hystep := torus_vertical_step_val hstep hnowrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
-          · have hwrap : g.1.2.2.val + 1 = height := by
-              have := ZMod.val_lt g.1.2.2
-              omega
-            have hystep := torus_vertical_step_val_wrap hstep hwrap
-            rcases hRed with ⟨hr, hrn⟩ | ⟨hrn, hr⟩ <;>
-              rcases hBlue with ⟨hb, hbn⟩ | ⟨hbn, hb⟩ <;>
-              (simp only [not_and, not_lt] at hrn hbn; omega)
+      rcases torusEdge_val_cases g with ⟨hpar, hstep⟩ | ⟨hpar, hstep⟩ <;>
+        crossing_blocks hRed hBlue
     obtain ⟨hc1, hc2, hc3, hc4⟩ := hcoord
     obtain ⟨hr11, hr12, hr21, hr22⟩ := verticalReferenceEdge_val
       (width := width) (height := height) (xStart := xStart) (yStart := yStart)

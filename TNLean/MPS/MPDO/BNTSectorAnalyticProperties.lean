@@ -259,14 +259,11 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) (s : Fin S.basisCount) :
     IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
-  obtain ⟨C, hC, hη, _hlocal, _hcompression⟩ :=
+  obtain ⟨W, _hlocal, _hcompression⟩ :=
     exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL
-  let hClosure :=
-    reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-      M S hM hWeight hnonNil hSAL
   exact commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
-    M S hM hWeight hC hClosure.1 hη hClosure.2 (Classical.choose hSAL) s
+    M S hM hWeight W.hC W.hρ W.hη W.hR (Classical.choose hSAL) s
 
 /-- Every absorbed BNT representative has strictly positive trace on each
 nonempty chain.  Positivity comes from the projector compression, while

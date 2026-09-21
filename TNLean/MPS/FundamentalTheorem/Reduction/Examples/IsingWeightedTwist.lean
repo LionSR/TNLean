@@ -119,13 +119,13 @@ noncomputable def isingCompression :
     rw [isingBondObject_conjMatrix, complexOfZsqrt2_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hxy,
       map_zero]
   matched a s := by
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2, Matrix.blockDiag'_map,
+    rw [isingBondObject_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
       Matrix.blockDiag'_blockDiagonal']
     ext p q
     simp [isingBlockZ, isingTargets, isingSigma, MPOTensor.toMPSTensor,
       zsqrt2ToComplex_isingWeightsZ]
   unmatched a t := by
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2, Matrix.blockDiag'_map,
+    rw [isingBondObject_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
       Matrix.blockDiag'_blockDiagonal']
     ext p q
     simp [isingBlockZ]
@@ -140,7 +140,8 @@ theorem isingBondObject_remainder : isingCompression.remainder = 0 := by
         Matrix.blockDiagonal' (conjMatrix isingGauge (isingBondObject a)).blockDiag' :=
     isingCompression.conjMatrix_remainder a
   refine conjMatrix_injective isingGauge ?_
-  rw [h, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, isingBondObject_conjMatrix, complexOfZsqrt2,
+  rw [h, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, isingBondObject_conjMatrix,
+    complexOfZsqrt2, complexOfRing,
     Matrix.blockDiagonal'_map _ _ (map_zero _), Matrix.blockDiag'_blockDiagonal']
 
 /-! ### Consequences -/
@@ -182,31 +183,6 @@ theorem isingTwist_mpo (L : ℕ) (hL : 0 < L) :
   unfold isingBondObject at h
   rw [MPOTensor.evalWord_toMPSTensor_pairConfig, MPOTensor.evalWord_toMPSTensor_pairConfig] at h
   simpa [MPOTensor.mpoMatrixEntry] using h
-
-/-- **Biorthogonal compression onto each weighted slot** (P5 note, Theorem 7.7(iv)–(v)). -/
-theorem isingBondObject_isReduction (s : {s // s ∈ isingSlots}) :
-    IsReduction isingBondObject (isingTargets s.1) (isingCompression.left s)
-      (isingCompression.right s) :=
-  isingCompression.isReduction s
-
-/-- The two weighted slots are biorthogonal (P5 note, Theorem 7.7(iv)). -/
-theorem isingBondObject_left_mul_right_of_ne {s t : {s // s ∈ isingSlots}} (h : s ≠ t) :
-    isingCompression.left s * isingCompression.right t = 0 :=
-  isingCompression.left_mul_right_of_ne h
-
-/-- **The sitewise right intertwiner of each slot**: `B^a V_s = V_s (μ_s (√2 A_σ)^a)`
-(data file §1.3, check T2-G4). -/
-theorem isingBondObject_mul_right_eq_right_mul (a : Fin 100) (s : {s // s ∈ isingSlots}) :
-    isingBondObject a * isingCompression.right s =
-      isingCompression.right s * isingTargets s.1 a :=
-  isingCompression.mul_right_eq_right_mul isingBondObject_remainder a s
-
-/-- **The sitewise left intertwiner of each slot**: `W_s B^a = (μ_s (√2 A_σ)^a) W_s`
-(data file §1.3, check T2-G4). -/
-theorem isingBondObject_left_mul_eq_mul_left (a : Fin 100) (s : {s // s ∈ isingSlots}) :
-    isingCompression.left s * isingBondObject a =
-      isingTargets s.1 a * isingCompression.left s :=
-  isingCompression.left_mul_eq_mul_left isingBondObject_remainder a s
 
 /-- The Ising bond-object compression has sixteen zero slots. -/
 theorem isingBondObject_z_eq : isingCompression.z = 16 := rfl
