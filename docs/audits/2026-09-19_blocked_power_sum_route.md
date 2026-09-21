@@ -101,8 +101,12 @@ against the blocked one.
 ## What was checked
 
 * Every removed declaration was searched for across `TNLean`, `TNLeanTest`,
-  `blueprint/src`, `docs` and `Notes`: the only references were inside the
-  removed route itself and the removed blueprint node.
+  `blueprint/src`, `docs` and `Notes`. The only production references were
+  inside the removed route itself and in the removed blueprint node. The
+  remaining hits are citations that name the removed declarations on purpose:
+  this note, and the ledger entry for the removal, which
+  `docs/project_conventions.md` §Style requires to name each removed
+  declaration. Neither is a consumer, and both survive the removal by design.
 * The unblocked file references none of the removed declarations; its uses of
   `PowerSumCoefficients.lean` are exactly the four retained helpers.
 * The edited module, the unblocked module, the sector-basis aggregator, the
@@ -114,3 +118,9 @@ against the blocked one.
 
 Nothing. The removed route has no remaining consumer and no source statement of
 its own.
+
+One consequence was handled here rather than deferred: the opening paragraph of
+`UnblockedPowerSumCoefficients.lean` described `PowerSumCoefficients.lean` as
+proving the blocked stage of the question, which is the theorem this removal
+deletes. That paragraph was rewritten to state the unblocked result directly and
+to describe the retained file by what it now supplies.
