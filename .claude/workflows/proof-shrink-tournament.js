@@ -37,9 +37,14 @@ verified these facts you can build on without re-deriving:
 - Mirror files: 84 exact vertical<->horizontal rename pairs; TorusWindowFamilyVertical.lean
   (413 ln) is a declared hand-transpose; UnionInjectivityGeneralBlue.lean (415 ln) a declared
   blue mirror. Generic transport exists (PEPS/IsoTransport.lean) but is barely used.
-- ~50 numbered-sequel files / ~22.9k lines (CoarseThreeSite x11, Recovery x11,
-  UnionInjectivityOverlap x7, TorusWindowChain x6, TorusWindowPeel x4); TorusWindowPeel3.lean
-  is dead; UnionInjectivity.lean vs UnionInjectivityGeneral2.lean share 485 identical lines.
+- 29 numbered-sequel files / ~14.3k lines remain (CoarseThreeSite2..11, Recovery2..11,
+  TorusWindowChain2/4/5/6, UnionInjectivityOverlap3, UnionInjectivityGeneral2,
+  CoherentFrameInstance2, ThreeBlockResonate2, GaugeInjectivity2; the authoritative list is
+  NUMBERED_DEBT_ALLOWLIST in scripts/check_numbered_lean_files.py). The torus window peeling
+  chain and most of the overlapping-union chain have since been renamed to concept names
+  (TorusWindowPeeling.lean and TorusWindowPeeling/, UnionInjectivityOverlapSetup.lean,
+  UnionInjectivityOverlapBridge.lean).
+  UnionInjectivity.lean vs UnionInjectivityGeneral2.lean share 485 identical lines.
 - Three BNT carrier generations (IsCPSVBasisOfNormalTensors 18 files, IsBNT 10,
   IsBNTCanonicalForm 33) plus superseded IsNormalCanonicalFormBNT (3 files).
 
@@ -190,9 +195,10 @@ Estimate net deletable lines repo-wide per convention, and the migration cost ho
   { key: 'superseded-routes', prompt: `Lens: SUPERSEDED ROUTES STILL IN THE TREE. Find whole developments kept alive although a
 newer or more general route now proves the same or stronger results. Known suspects to verify
 and extend: UnionInjectivity.lean vs UnionInjectivityGeneral2.lean (485 shared lines — which
-is live?); TorusFundamentalTheorem.lean vs TorusFundamentalTheorem2.lean;
-NormalSquareFundamentalTheorem2.lean vs NormalGeneralFundamentalTheorem.lean (the general one
-derives hbond internally — does anything still need the square-specific route?);
+is live?); TorusFundamentalTheorem.lean vs TorusUnconditionalFundamentalTheorem.lean;
+NormalSquareUnconditionalFundamentalTheorem.lean vs NormalGeneralFundamentalTheorem.lean (the
+general one derives hbond internally, the square capstone still assumes it — does anything
+still need the square-specific route?);
 CoherentFrameInstance.lean vs 2; ThreeBlockResonate vs 2; the edge insertion stack
 (InsertionAlgebra.lean etc., 2,126 ln) vs the RegionBlock generalization; superseded BNT
 carriers (IsNormalCanonicalFormBNT, MultiBlock.CanonicalForm). For each: who still imports
@@ -209,10 +215,11 @@ derivable from the other and how many lines the derivation costs vs deletes. Als
 dimension-specific or lattice-specific theorems whose general version exists. Report net
 deletable per pair and the exact corollary statement that replaces the fork.` },
   { key: 'scaffolding-collapse', prompt: `Lens: SCAFFOLDING CHAINS AFTER THE CAPSTONE. The numbered-sequel chains (CoarseThreeSite
-1-11, RegionBlock/Recovery 1-11, UnionInjectivityOverlap 1-7, TorusWindowChain 1-6,
-TorusWindowPeel 1-4, and any others you find) were staged exploration toward a capstone that
-now exists. For each chain: inventory which intermediate declarations have consumers OUTSIDE
-the chain (compute with rg over the repo); measure how much of the chain is chain-internal
+1-11, RegionBlock/Recovery 1-11, TorusWindowChain 1/2/4-6, the overlapping-union chain
+(UnionInjectivityOverlapSetup, UnionInjectivityOverlap3, UnionInjectivityOverlapBridge), the
+TorusWindowPeeling/ directory, and any others you find) were staged exploration toward a
+capstone that now exists. For each chain: inventory which intermediate declarations have
+consumers OUTSIDE the chain (compute with rg over the repo); measure how much of the chain is chain-internal
 plumbing that a direct, shorter proof of the capstone would obviate now that the argument is
 known. Distinguish honest scaffolding (mathematically necessary intermediate results) from
 route debris (lemmas about a formulation that was later abandoned mid-chain). Estimate a

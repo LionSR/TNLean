@@ -126,9 +126,12 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 
 ### S3. Delete the superseded edge-centred three-block union-injectivity route — net 3,180 lines, risk 3/10
 - **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted; it strands a further 250-300 lines in `ThreeBlockResonate2.lean`, one `\leanid`-cited in `section3_route.tex`, which is the next slice.
-- **What**: `PEPS/RegionBlock/{ThreeBlockResonate,ThreeBlockResonate2,ThreeBlockReconcile,UnionInjectivity,ThreeBlockTransfer,BondLocalFromReconcile}.lean`
-  (3,438 gross lines). `BondLocalFromReconcile.lean` (176 ln) has zero
-  importers anywhere and is pure dead weight.
+- **What**: the four surviving modules
+  `PEPS/RegionBlock/{ThreeBlockResonate,ThreeBlockResonate2,UnionInjectivity,ThreeBlockTransfer}.lean`
+  (2,087 gross lines). The route originally also covered
+  `BondLocalFromReconcile.lean` (176 ln, zero importers anywhere) and
+  `ThreeBlockReconcile.lean` (371 ln); both are deleted, in the first PR and the
+  second slice respectively.
 - **Why it's excess**: proves the paper's `injective_union` lemma
   (arXiv:1804.04964) only for an edge-centred red/blue/complement triple
   with a distinguished-edge restriction the source does not have — a
@@ -136,8 +139,8 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   (`UnionInjectivityGeneral*`) already proves the source statement over an
   arbitrary partition and recovers this route as the special case
   blue := S, complement := T, red := univ \ (S ∪ T).
-- **First PR**: delete `BondLocalFromReconcile.lean` outright (176 ln,
-  confirmed zero importers, zero migration cost).
+- **First PR (done)**: `BondLocalFromReconcile.lean` was deleted outright
+  (176 ln, confirmed zero importers, zero migration cost).
 - **Second slice (done 2026-09-19)**: `ThreeBlockReconcile.lean` (371 ln) had
   become a fully dead nine-declaration closure once the 2026-08-27 unused-import
   sweep removed the `ThreeBlockTransfer` import edge, leaving the generated
@@ -487,9 +490,13 @@ description of current `main`.
   `Channel/Determinant/UnitaryCharacterization.lean:196`, + 2 partials);
   `PEPS/CycleMPSChainOverlapInsertion.lean:33` states it "mirrors the
   site-independent file" — 2,916 lines across 6 `*Overlap*` files. `hbond`
-  is derived internally at `NormalGeneralFundamentalTheorem.lean:163` yet
-  assumed at `NormalSquareUnconditionalFundamentalTheorem.lean:111`
-  and `TorusUnconditionalFundamentalTheorem.lean:180`. `SameStateBridgeHyp`
+  is derived internally by `fundamentalTheorem_normalPEPS`
+  (`NormalGeneralFundamentalTheorem.lean:163`) and by
+  `fundamentalTheorem_normalTorusPEPS_unconditional`
+  (`TorusUnconditionalFundamentalTheorem.lean:333`, which returns it
+  existentially in its conclusion), yet is still an explicit hypothesis of
+  `fundamentalTheorem_normalSquarePEPS_unconditional`
+  (`NormalSquareUnconditionalFundamentalTheorem.lean:430`). `SameStateBridgeHyp`
   (`MPS/Chain/SameStateBridge.lean:30`) has hypothesis uses but zero
   constructions repo-wide, leaving the PiAlgebra capstone conditional on an
   unproven structure (verified 2026-07-20).
