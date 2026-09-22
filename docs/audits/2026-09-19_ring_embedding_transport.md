@@ -78,10 +78,12 @@ duplication to remove yet.
 The definition nodes are untouched, and so are the multiplicativity entries, whose per-ring
 lemmas survive. Four tags naming deleted lemmas now name the general ones:
 
-- `thm:asymex_explicit_gauge` (`ch25_asymmetric_examples_basic_czx.tex:29`):
+- `thm:asymex_explicit_gauge`, the theorem "Conjugation, coercion and the compression pairs of
+  a slot" in `blueprint/src/chapter/ch25_asymmetric_examples_coordinate_calculations.tex`:
   `mulTensor_complexOfInt` and `mulTensor_smul_complexOfInt` become
   `MPSTensor.mulTensor_complexOfRing` and `MPSTensor.mulTensor_smul_complexOfRing`.
-- `thm:asymex_zsqrt2_ring` (`ch25_asymmetric_examples_ising.tex:41`):
+- `thm:asymex_zsqrt2_ring`, the theorem "Exact arithmetic in `ℤ[√2]`" in
+  `blueprint/src/chapter/ch25_asymmetric_examples_ising.tex`:
   `mulTensor_complexOfZsqrt2` and `actTensor_complexOfZsqrt2` become
   `MPSTensor.mulTensor_complexOfRing` and `MPSTensor.actTensor_complexOfRing`.
 
