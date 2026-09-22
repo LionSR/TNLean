@@ -14,7 +14,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
-from plasTeX.Renderers.HTML5 import Renderer
+from plasTeX.Renderers.HTML5 import Renderer, addConfig
 from plasTeX.TeX import TeX
 from playwright.sync_api import sync_playwright
 
@@ -74,6 +74,12 @@ def check_inline_layout() -> None:
         root = Path(directory)
         tex = TeX()
         document = tex.ownerDocument
+        # Load the shipped stylesheet with the document, as the web build does.
+        # Injecting it after navigation first lays out center as a flex column,
+        # then changes the formatting context underneath its line-break nodes.
+        addConfig(document.config)
+        document.config["html5"]["extra-css"] = ["extra_styles.css"]
+        document.userdata["working-dir"] = str(ROOT / "blueprint/src")
         document.config["general"]["extra-templates"] = [
             str(ROOT / "blueprint/src/plastex_templates")
         ]
@@ -94,7 +100,6 @@ def check_inline_layout() -> None:
             page = browser.new_page()
             page.route("https://**", lambda route: route.abort())
             page.goto((root / "index.html").as_uri())
-            page.add_style_tag(path=str(ROOT / "blueprint/src/extra_styles.css"))
             page.wait_for_function(
                 "() => [...document.images].every(i => i.complete && i.naturalWidth > 0)"
             )
@@ -154,6 +159,10 @@ def check_inline_layout() -> None:
                         """element => ({
                             html: element.innerHTML,
                             display: getComputedStyle(element).display,
+                            breaks: [...element.querySelectorAll('br')].map(br => ({
+                                rect: br.getBoundingClientRect().toJSON(),
+                                display: getComputedStyle(br).display,
+                            })),
                             images: [...element.querySelectorAll('img')].map(image => ({
                                 rect: image.getBoundingClientRect().toJSON(),
                                 display: getComputedStyle(image).display,
