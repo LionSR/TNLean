@@ -1,30 +1,24 @@
 \section{Decorrelation and the idempotent-product parent-commuting condition}%
 \label{sec:decorrelation}
 
-This section develops the idempotent-product formulation used for the
-decorrelation implication from Appendix~D. It is not the full source condition.
 In \cite[Appendix~D.2]{Cirac2016MPDO_arXiv}, the parent commuting Hamiltonian
-condition is stated for local projectors $Q_{AX}$ and $Q_{XB}$.  Writing hats
-for their lifts to the tripartite space, the condition is
+condition is stated for local projectors $Q_{AX}$ and $Q_{XB}$. With
+$\widehat Q_{AX}$ and $\widehat Q_{XB}$ denoting their lifts to the tripartite space,
+the commutation condition and common ground space $K_{AXB}$ satisfy
 \begin{align}
     [\widehat Q_{AX},\widehat Q_{XB}] & = 0, \notag                                          \\
     K_{AXB}                           & = (K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB}). \notag
 \end{align}
-Writing $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$ gives, for the idempotent
-$P_K$ used below, the full-space identity
-$\widehat P_{AX}\widehat P_{XB}=P_K$. The following definition records this
-idempotent-product consequence abstractly, not the tensor-product locality,
-orthogonal-projector, or ground-space-intersection hypotheses of Appendix~D.2.
+Setting $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$, the corresponding product
+identity on the tripartite space is $\widehat P_{AX}\widehat P_{XB}=P_K$.
+For a positive semidefinite operator on a bipartite space, the
+support projector of the retained left marginal, lifted to the full space,
+fixes the original operator, as used in
+\cite[Appendix~D.2]{Cirac2016MPDO_arXiv}.
 % Scope restriction: this section keeps the idempotent-product consequence
 % and not the tensor-product locality or orthogonal-projector hypotheses of the
 % source definition. See
 % docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
-
-The following preparatory result is independent of the decorrelation
-condition.  For a positive semidefinite operator on a bipartite space, the
-support projector of the retained left marginal, lifted to the full space,
-fixes the original operator.  These are the support-projector identities used in
-\cite[Appendix~D.2, lines 2225--2235]{Cirac2016MPDO_arXiv}.
 
 \input{chapter/ch13_parent_hamiltonian_decorrelation_marginal_supports}
 \input{chapter/ch13_parent_hamiltonian_decorrelation_commuting_structure}

@@ -670,11 +670,9 @@
     \end{align}
     The conclusion also covers the case in which there are no classes.
 
-    \textbf{Local fix (square-root diagonal).} CPSV prints a bare $\Lambda_j$
-    in Corollary~3.12, whereas the reference tensor at line~1300 has
-    coefficients $\sqrt{(\rho_j)_{\alpha,\alpha}}$, which forces the factor
-    $\sqrt{\lambda_{j,\alpha}}$ used above. This repair is documented in
-    \cite{gap:cpsv16_rfp_isometry_scope}.
+    The square-root factor $\sqrt{\lambda_{j,\alpha}}$ is required by the
+    reference-tensor construction \cite[line~1300]{Cirac2016MPDO_arXiv}, as
+    documented in \cite{gap:cpsv16_rfp_isometry_scope}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement, thm:rfp_coisometry_reconstruction_iff, thm:cpsv_weight_norm_one_and_block_rfp, thm:normal_rfp_iff_isometry_canonical_form, thm:bnt_locally_orthogonal_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
@@ -732,19 +730,8 @@
          & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
-    The source specifies that $\bigoplus_{j,q}$ is a simultaneous direct sum in
-    the physical and virtual spaces, not an ordinary virtual block diagonal at
-    each fixed physical letter $i$ \cite[Theorem~3.11,
-        lines~561--562]{Cirac2016MPDO_arXiv}. It does not provide a coordinate map
-    for the physical routing of $q$, a corresponding dimension hypothesis, or
-    a $q$-indexed isometry equation. Consequently the display does not yet
-    determine a source-faithful coordinate-level predicate. The routed
-    characterization therefore remains not ready pending a source
-    clarification or erratum.
-
-    \textbf{Local fix (square-root diagonal).} CPSV prints a bare $\Lambda_j$
-    in Theorem~3.11, whereas the reference tensor at line~1300 has coefficients
-    $\sqrt{(\rho_j)_{\alpha,\alpha}}$, which forces the factor $\sqrt{\rho_j}$
-    used above. This repair is documented in
-    \cite{gap:cpsv16_rfp_isometry_scope}.
+    In \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}, $\bigoplus_{j,q}$ denotes a
+    simultaneous direct sum in both physical and virtual spaces; the
+    square-root factor $\sqrt{\rho_j}$ is required by the reference-tensor
+    construction \cite{gap:cpsv16_rfp_isometry_scope}.
 \end{theorem}

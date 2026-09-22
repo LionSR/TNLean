@@ -94,10 +94,12 @@ coordinates by slots and positions inside slots.
     \uses{def:asymex_one_slot}
     The remainder of a conjugate one-slot datum vanishes identically: the
     compression is an exact change of coordinates. For every one-slot
-    datum, the trace of every nonempty word of $B$ equals the trace of the
-    corresponding word of $C$, or, if the target is carried with a scalar
-    weight $c$, that power of $c$ times the trace of the word of the
-    unweighted target.
+    datum with target tensor $C$ and nonempty word $w \ne \emptyset$,
+    \begin{equation}
+        \tr(B^w) = \tr(C^w),
+    \end{equation}
+    or $\tr(B^w) = c^{|w|}\tr(C^w)$ when the target is carried with scalar
+    weight $c$.
 \end{theorem}
 
 \begin{proof}
@@ -116,17 +118,29 @@ coordinates by slots and positions inside slots.
         MPSTensor.left_intertwiner_eq_zero_of_int}
     \leanok
     \uses{def:normal}
-    If every matrix unit is, up to a common nonzero integer factor, an
-    integer combination of length-two words of an integer tensor, the
-    length-two words span the full matrix algebra. If the rows,
-    respectively columns, of the letters occurring in a sitewise
-    intertwiner system form an integer matrix with an integer left inverse
-    up to a nonzero factor, the only solution of that system is zero.
+    Let $A \in (\MN{D})^d$ have integer entries $A_i \in \mathrm{M}_D(\Z)$.
+    If there exist index pairs $(a_k, b_k)$, integer coefficients
+    $T_{xyk} \in \Z$, and a nonzero integer $m \ne 0$ such that for all matrix
+    units $E_{xy}$,
+    \begin{equation}
+        \sum_k T_{xyk} A_{a_k} A_{b_k} = m E_{xy},
+    \end{equation}
+    then $\spn_\C\{A_i A_j : i,j \in \{1,\dots,d\}\} = \MN{D}$.
+    Similarly, let $B \in (\mathrm{M}_D(\Z))^d$ and $c \in (\mathrm{M}_1(\Z))^d$.
+    If a selection of rows from the matrices $B_i - c_i \Id_D$ forms an
+    integer matrix $K \in \mathrm{M}_D(\Z)$ admitting an integer left inverse
+    $K' K = m \Id_D$ with $m \ne 0$, then every $v \in \C^D$ satisfying
+    $B_i v = c_i v$ for all $i$ satisfies $v = 0$.
+    Likewise, if a selection of columns from $B_i - c_i \Id_D$ admits an
+    integer left inverse up to $m \ne 0$, then every $u \in \C^D$ with
+    $u B_i = c_i u$ satisfies $u = 0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Clearing the nonzero integer factor by scalar division after coercion
-    to $\C$ reduces each statement to the corresponding identity between
-    integer matrices, a finite verification.
+    Dividing the linear combination by $m \ne 0$ exhibits each matrix unit
+    $E_{xy}$ in the span of length-two words of $A$, showing they span
+    $\MN{D}$. For the sitewise intertwiner, $B_i v = c_i v$ implies $K v = 0$,
+    whence $m v = K' K v = 0$, so $v = 0$ since $m \ne 0$ in $\C$. The column
+    argument for $u$ is identical.
 \end{proof}

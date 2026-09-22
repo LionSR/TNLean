@@ -1,10 +1,9 @@
 \section{Injectivity-length reduction for the closure property}\label{sec:block_word_stripping}
 
-This section implements the inverting-and-growing-back reduction from
-\cite[Section~IV.C]{Cirac2021Matrix}: a commutation or annihilation relation
-for length-$m$ word products is reduced to the injectivity length $L_0$, then
-used in the periodic-boundary closure-property step. Throughout,
-$A^w := A^{i_1}\cdots A^{i_L}$ denotes the product along a word
+Following \cite[Section~IV.C]{Cirac2021Matrix}, commutation or annihilation
+relations for length-$m$ word products can be reduced to the injectivity
+length $L_0$ by word-spanning arguments.
+Throughout, $A^w := A^{i_1}\cdots A^{i_L}$ denotes the product along a word
 $w = (i_1,\ldots,i_L)$, $\Gamma_N$ sends a boundary matrix to its open-chain
 vector, and $A$ being \emph{$L_0$-block-injective} means
 $\spn\{A^u : |u|=L_0\} = \MN{D}$, so a relation valid on every length-$L_0$

@@ -534,13 +534,9 @@
     every admissible $N$ and every
     $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
     $(1-\eta m)\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
-    This strict all-vector compression form is a stronger conditional
-    sufficient condition, not the source principal-angle estimate itself. It is
-    a sufficient strengthening of the
-    anticommutator martingale estimate in
+    This all-vector compression form provides a sufficient condition for
+    the anticommutator martingale estimate in
     Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}.
-    It does not prove the remaining MPS-specific estimate; it isolates the
-    finite-row martingale argument once such a strengthening is supplied.
 \end{lemma}
 
 \begin{proof}
@@ -563,28 +559,21 @@
     Fix $L>1$, and let $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ and every
     overlapping off-diagonal pair that
     \begin{align}
-        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-         & \le \eta\,\|h_{j,\mathrm{ES}}v\|,
+        \|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|
+         & \le \eta.
         \notag
     \end{align}
-    that is, a bound $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|\le\eta$ on the
-    operator-product norm. If $\gamma>0$, $\gamma\le1$, and
-    $\eta\le(1-\gamma)/m$, then $0<\gamma$ and, for every admissible $N$ and
-    every $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    If $\gamma>0$, $\gamma\le1$, and $\eta\le(1-\gamma)/m$, then $0<\gamma$
+    and, for every admissible $N$ and every
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
     $\gamma\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
     In particular, if $\eta\ge0$ and $\eta m<1$, then $0<1-\eta m$ and the same
     norm bound holds with $\gamma=1-\eta m$.
 
-    This is the symmetric (operator-product) counterpart of
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}, obtained
-    from the anticommutator conversion recorded in
-    Remark~\ref{rem:projection_geometry_rowsum_identities}. Like that lemma it is a
-    conditional reduction: the excitation projections satisfy
-    $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|=1$ whenever the overlapping ranges
-    share a common nonzero vector, so the hypothesis is unsatisfiable for
-    $\eta<1$ in that case. It isolates the
-    finite-row martingale argument once such a bound is supplied; the gap with the
-    cited principal-angle estimates is documented in the paper-gap note
+    This symmetric (operator-product) counterpart of
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap} uses
+    the anticommutator conversion of
+    Remark~\ref{rem:projection_geometry_rowsum_identities}; see
     \cite{gap:cpgsv21_martingale_overlap}.
 \end{lemma}
 

@@ -3,25 +3,17 @@
 For a translation-invariant matrix product state with tensor $A$, the
 \emph{parent Hamiltonian} is the translation-invariant sum of local terms, each
 the orthogonal projector onto the complement of the length-$L$ local space
-$G_L(A)=\operatorname{im}(\Gamma_L)$. This is the space $\mathcal G_L^A$ of
-\cite{PerezGarcia2007Matrix}; we write
-$\Gamma_L(X)(\sigma)=\tr(A^\sigma X)$, which agrees with the source convention
-$\tr(XA^\sigma)$ by cyclicity of the trace. Following
-\cite{PerezGarcia2007Matrix,Cirac2021Matrix}, we identify the $N$-site space
-with functions $\{0,\ldots,d{-}1\}^N\to\C$ on the computational basis.
+$G_L(A)=\operatorname{im}(\Gamma_L)$, where
+$\Gamma_L(X)(\sigma)=\tr(A^\sigma X)$~\cite{PerezGarcia2007Matrix,Cirac2021Matrix}.
+We identify the $N$-site space with functions
+$\{0,\ldots,d{-}1\}^N\to\C$ on the computational basis.
 
-The first part proves the intersection property for the local spaces and uses it
-to identify the periodic ground space of an injective tensor. For $N\ge2$ and
-$1<L\le N$, the parent Hamiltonian is frustration-free and the periodic matrix
-product vector $V^{(N)}(A)$ is its unique ground state. The periodic-boundary
-comparison reduces an arbitrary boundary matrix to the commutant of the tensor.
-
-For a normal tensor, injectivity is available after a finite blocking length.
-The remaining sections develop the inverting-and-growing-back argument at
-this length and the closure property needed to pass from open intervals to the
-periodic ring, including the comparison in both directions. The next two
-chapters study commutation and spectral gaps, followed by the degenerate
-ground spaces arising from several normal blocks.
+This chapter establishes the intersection property of local ground spaces
+and the uniqueness of the periodic ground state $V^{(N)}(A)$ for injective and
+normal matrix product states. For $N\ge2$ and $1<L\le N$, the parent Hamiltonian
+is frustration-free with unique ground state $V^{(N)}(A)$. For normal tensors,
+word-span injectivity after blocking determines the boundary-closure
+identities that match open-interval restrictions to the periodic chain.
 
 \input{chapter/ch13_parent_hamiltonian_injective_ground_spaces}
 \input{chapter/ch13_parent_hamiltonian_blocking_transport}

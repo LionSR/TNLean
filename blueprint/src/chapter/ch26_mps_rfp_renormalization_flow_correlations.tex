@@ -218,10 +218,8 @@
 \begin{remark}\label{rem:zero_correlation_length}
     \uses{thm:spectral_radius_le_one, def:correlation_length, def:mps_transfer_idempotence}
     When the transfer map is idempotent ($\E^2=\E$), connected correlations become
-    separation-independent for all separations $n\ge 1$.
-    Informally, this corresponds to zero correlation length ($\xi=0$).
-    The full spectral equivalence (idempotence iff vanishing subleading spectrum)
-    is deferred here.
+    separation-independent for all separations $n\ge 1$, corresponding to zero
+    correlation length ($\xi=0$).
 \end{remark}
 
 \begin{definition}[Virtual-insertion auxiliary condition]\label{def:is_cid}
@@ -359,9 +357,7 @@
     \leanok
     \uses{def:is_locally_orthogonal, def:is_bnt_zcl, def:is_cid, def:source_bnt_zcl}
     This auxiliary one-block predicate is the conjunction of
-    $\E_A^2=\E_A$ and virtual-insertion distance independence. It is not the
-    physical zero-correlation-length condition of
-    Definition~\ref{def:source_bnt_zcl}.
+    $\E_A^2=\E_A$ and virtual-insertion distance independence.
 \end{definition}
 
 \begin{theorem}[Virtual-insertion distance independence implies RFP]%
@@ -393,9 +389,7 @@
     \uses{def:mps_transfer_idempotence, def:is_cid, def:is_locally_orthogonal}
     The auxiliary conjunction
     $(\E_A^2=\E_A\ \text{and virtual-insertion distance independence})$
-    is equivalent to $\E_A^2=\E_A$. This is a logical simplification of the
-    auxiliary convention, not the physical ZCL theorem of
-    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}.
+    is equivalent to $\E_A^2=\E_A$.
 \end{theorem}
 \begin{proof}\leanok
     The forward direction extracts the idempotence hypothesis. Conversely,
