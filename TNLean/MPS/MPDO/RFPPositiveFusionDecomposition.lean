@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.VerticalBNTGrouping
 import TNLean.MPS.MPDO.VerticalProductFusionDecomposition
@@ -17,10 +18,10 @@ positivity.
 
 ## Main results
 
-* `CPSVVerticalDecomposition`: a vertical canonical decomposition retaining
-  the source basis-of-normal-tensors predicate.
-* `IsHorizontalCF.exists_cpsvVerticalDecomposition`: construction of this
-  decomposition from normalized BNT-refined horizontal form and positivity.
+* `IsHorizontalCF.exists_cpsvVerticalDecomposition`: construction of a
+  vertical canonical decomposition retaining the source
+  basis-of-normal-tensors predicate, from normalized BNT-refined horizontal
+  form and positivity.
 * `exists_positiveFusionDecomposition_of_isRFPViaTS`: the BNT-refined positive
   fusion theorem corresponding to CPSV16, Appendix C.4, lines 2020--2029.
 
@@ -35,48 +36,6 @@ open scoped Matrix BigOperators ComplexOrder Kronecker
 noncomputable section
 
 namespace MPOTensor
-
-/-- A vertical canonical decomposition which retains the CPSV16
-basis-of-normal-tensors predicate.
-
-The ordinary predicate `IsVerticalCF` records the algebraic BNT predicate used
-elsewhere in the project.  The comparison of the one-site and two-site
-decompositions in CPSV16, Appendix C.4, additionally uses the literal CPSV16
-basis predicate.  This structure retains that assertion together with the
-positive diagonal weights and both coisometric decomposition identities.
-
-Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
-structure CPSVVerticalDecomposition (M : MPOTensor d D) where
-  /-- Number of vertical BNT labels. -/
-  labelCount : ℕ
-  /-- Bond dimension of each vertical BNT representative. -/
-  bondDim : Fin labelCount → ℕ
-  /-- Multiplicity of each representative. -/
-  multiplicity : Fin labelCount → ℕ
-  /-- Positive entries of the diagonal multiplicity matrices. -/
-  weight : (α : Fin labelCount) → Fin (multiplicity α) → ℂ
-  /-- The vertical BNT representatives. -/
-  tensor : (α : Fin labelCount) → MPSTensor (D * D) (bondDim α)
-  /-- Coisometry from the original physical space onto the retained sectors. -/
-  verticalCoisometry : Matrix
-    (Fin (∑ q : Fin (∑ α : Fin labelCount, multiplicity α),
-      verticalCopyDim bondDim multiplicity q)) (Fin d) ℂ
-  /-- Every BNT representative has at least one retained copy. -/
-  multiplicity_pos : ∀ α, 0 < multiplicity α
-  /-- Every retained diagonal weight is positive. -/
-  weight_pos : ∀ α q, (0 : ℂ) < weight α q
-  /-- The vertical representatives form a CPSV16 basis of normal tensors. -/
-  isCPSVBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
-    (fun α ↦ ⟨bondDim α, tensor α⟩)
-  /-- The vertical change of basis is a coisometry. -/
-  coisometry : verticalCoisometry * verticalCoisometryᴴ = 1
-  /-- Forward conjugation gives the weighted direct sum. -/
-  forward : ∀ ab, verticalCoisometry * verticalTensor M ab * verticalCoisometryᴴ =
-    verticalAssembledTensor bondDim multiplicity weight tensor ab
-  /-- The weighted direct sum reconstructs every vertical letter. -/
-  reconstruction : ∀ ab, verticalTensor M ab = verticalCoisometryᴴ *
-    verticalAssembledTensor bondDim multiplicity weight tensor ab * verticalCoisometry
-
 
 /-- The Appendix C.4 vertical-sector hypotheses assembled from a one-site and a
 two-site vertical canonical decomposition of the same tensor together with the

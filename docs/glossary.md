@@ -509,6 +509,30 @@ model different levels of data and different sources.
   Reconstruction still permits an omitted all-zero complement because `Uᴴ * U`
   is the retained-support projection; see
   `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
+- `MPOTensor.HasVerticalBNTGroupingInputs` in
+  `TNLean/MPS/MPDO/VerticalBNTGrouping.lean` is the pair of
+  canonical-form-specific inputs that the grouped vertical construction of
+  arXiv:1606.00608, Proposition 4.13, lines 1863--1921 consumes: the
+  phase-class grouping of the normal vertical sectors together with their
+  physical reducing isometries (`MPOTensor.HasVerticalBNTGroupingWithIsometry`
+  in `TNLean/MPS/MPDO/VerticalBNT.lean`), and the pairwise Figure 8 comparison
+  of the Gram dressings of two positive vertical corners of a common
+  representative (`MPOTensor.HasGroupedCornerGramDressing` in
+  `TNLean/MPS/MPDO/GroupedSectorGram.lean`, sourced to the proof of
+  Proposition 4.13, Figures 7--8 and lines 1909--1919). Its sanctioned bridge
+  forward is `MPOTensor.HasVerticalBNTGroupingInputs.verticalCF`, which gives
+  `MPOTensor.IsVerticalCF`; there is no bridge back, and neither input is
+  recovered from vertical canonical form.
+- The bundle has two independent suppliers, each assuming the matrix product
+  density operator condition `MPOTensor.IsMPDO` alongside its own canonical
+  form: `MPOTensor.IsHorizontalCF.hasVerticalBNTGroupingInputs` from
+  normalized BNT-refined horizontal form, and
+  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTGroupingInputs` from literal
+  CPSV canonical form. Each proves both inputs from its own grouping and
+  Figure 8 theorems. No implication between `MPOTensor.IsHorizontalCF` and
+  `MPSTensor.IsCPSVCanonicalForm` is proved or used in either direction, and
+  none may be assumed: the bundle is the only point at which the two surfaces
+  meet, and supplying it from one of them says nothing about the other.
 - `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
   the normalized fixed-representative predicate of Appendix C.2: it adds the
   MPDO and nonnilpotent-sector conditions to horizontal canonical form. Its
