@@ -39,12 +39,11 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \label{subsec:ft_block_sum_corollaries}
 
 \begin{remark}
-    See Definition~\ref{def:block_diagonal_tensor} for the
-    block-diagonal tensor construction. The results in this subsection assume
-    that the block correspondence has already been fixed; they do not prove
-    \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}. They are same-index
-    direct-sum corollaries, not BNT preparation steps in the source proof
-    or in the after-blocking canonical-form reduction.
+    See Definition~\ref{def:block_diagonal_tensor} for the block-diagonal tensor
+    construction. This subsection records the direct-sum corollaries where the
+    pairing between blocks is already fixed; the derivation of the block
+    permutation from the global same-MPV condition appears in
+    \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}.
 \end{remark}
 
 \begin{lemma}[Per-block application of the single-block theorem]\label{lem:multi_block_ft}
@@ -63,14 +62,6 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     Apply the single-block Fundamental Theorem
     (Theorem~\ref{thm:ft_single}) to each block independently.
 \end{proof}
-
-\begin{remark}[Per-block restatement, not the multi-block paper theorem]
-    This is a block-sum reformulation of the per-block injective single-block FT:
-    the block pairing $(A_k, B_k)$ is assumed already given and the blocks already
-    matched. It is not the multi-block Fundamental Theorem of
-    \cite[Theorem~2.10, lines~349--352]{Cirac2016MPDO_arXiv}, which derives the
-    block matching and permutation from only the global same-MPV hypothesis.
-\end{remark}
 
 \begin{lemma}[Per-block same MPV implies global same MPV]\label{lem:block_to_global_mpv}
     \lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}

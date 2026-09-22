@@ -1426,10 +1426,6 @@ asserted in that passage.
     $\widehat X_2=X_2$.
 \end{proof}
 
-These six identities concern only the stated closures and normalizations.
-They do not assert movement identities, truncated-gate identities, transport
-of the chosen first right inverse, or the complete set of pleasant properties.
-
 \subsection{Movement gates of the inverse-compatible source factors}
 
 \begin{theorem}[Transport of the movement gates]
@@ -2527,19 +2523,8 @@ gauges and scalar relation have been constructed.
         \label{eq:mpug_alternating_network_scalar_product}
     \end{align}
 
-    This is the nondegenerate corrected form of Lemma~\texttt{lemma:1} in
-    \cite[lines~2296--2395]{FrancoRubio2025MPUGauging}.  The printed wording
-    omits nonvanishing.  The paper's truncated symmetry $U^L_g$ is unitary at
-    line~2099;
-    lines~2444--2466 identify the side used at line~2567 with
-    $(U^L_{g^{-1}})^\dagger$, while lines~3033--3053 identify the side used at
-    line~3157 with $\sigma_g(U^L_{g^{-1}})^\dagger$ for
-    $\sigma_g\in\{1,-1\}$.  Both displayed networks are therefore nonzero.  A
-    vanishing intervening factor would make its entire network zero, so taking
-    the factors on these sides as the $B_i$ supplies $B_i\ne 0$ at both
-    applications.  This local nondegeneracy convention is recorded in
-    \cite{gap:fbc25_alternating_network_nondegeneracy}.  The unrestricted
-    printed statement is not asserted here.
+    This is the nondegenerate form of \cite[Lemma~2]{FrancoRubio2025MPUGauging},
+    requiring $B_i\ne 0$; see \cite{gap:fbc25_alternating_network_nondegeneracy}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -6880,8 +6865,7 @@ show that the tensor gauge freedoms induce the joint scalar gauge
         \label{eq:mpug_generalized_cocycle}
     \end{align}
     The source gives the first two coboundaries and the equation $d\Omega=1$
-    in \cite[lines~5914--5922 and Lemma~\texttt{lemma:G\_cocycle}]
-    {FrancoRubio2025MPUGauging}. Equation
+    in \cite[Lemma~5]{FrancoRubio2025MPUGauging}. Equation
     \eqref{eq:mpug_generalized_three_coboundary} spells out the
     three-to-four-cochain instance needed to read its assertion $d(df)=1$.
     No transitivity or finiteness assumption is imposed on $\mathsf X$.
@@ -7023,7 +7007,7 @@ show that the tensor gauge freedoms induce the joint scalar gauge
         \label{eq:mpug_generalized_regular_matrix}
     \end{align}
     This is the regular-action matrix in
-    \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging}.
+    \cite[Lemma~5]{FrancoRubio2025MPUGauging}.
     % Source anchor: arXiv:2502.20257, lines 5938--5942.
 \end{definition}
 
@@ -7086,7 +7070,7 @@ show that the tensor gauge freedoms induce the joint scalar gauge
         \label{eq:mpug_generalized_power_coboundary}
     \end{align}
     This is
-    \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging}. The
+    \cite[Lemma~5]{FrancoRubio2025MPUGauging}. The
     second numerator determinant in
     (\ref{eq:mpug_generalized_power_coboundary}) carries the index $h$; this
     local correction of the printed formula is recorded in
@@ -9812,11 +9796,9 @@ block label, or physical gate is changed here.
         \dim\mathcal V_N(R^{\mathrm{CZX}}) & =2^N.
         \label{eq:mpug_czx_dimension}
     \end{align}
-    This answers the growth question of
+    This resolves the growth question of
     \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} for the displayed
-    circuit tuple; it does not assert that the tuple belongs to the full
-    physical completion class of the CZX defect data, and it says nothing
-    about the minimum or maximum over completions.
+    circuit tuple.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -10178,8 +10160,6 @@ single-site evaluations of the domain-wall defect, but not the eight two-site
 vectors; their values, the four subspaces they span, and the four prescribed
 maps are obtained by finite contraction of the displayed tensors
 in~\cite{gap:fbc25_czx_defect_domains}. This section carries that derived data.
-It does not assert that the circuit tuple $R^{\mathrm{CZX}}$ of
-Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
 
 \begin{definition}[Single-site CZX defects]
     \label{def:mpug_czx_site_defects}

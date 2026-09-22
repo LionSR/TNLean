@@ -283,8 +283,9 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \label{thm:asym_nilpotent_trace_powers}
     \lean{LinearMap.isNilpotent_of_forall_trace_pow_eq_zero}
     \leanok
-    An endomorphism of a finite-dimensional complex vector space, all of
-    whose positive powers have vanishing trace, is nilpotent.
+    Let $V$ be a finite-dimensional complex vector space and let
+    $u\in\operatorname{End}(V)$. If $\tr(u^k)=0$ for all $k\ge 1$, then $u$ is
+    nilpotent.
 \end{theorem}
 
 \begin{proof}
@@ -304,10 +305,8 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     simple tensor modules $C_s$, $s\in S$. Let $K\leq M$ have simple
     quotient $M/K$ on which some generator acts nontrivially. Then $M/K$ is
     isomorphic to $C_s$ for some $s\in S$.
-
-    This identification is the formalized counterpart of the use made of
-    the positive-word character lemma (Lemma~\ref{lem:asym_character}) in
-    the proof of the main theorem below.
+    This provides the quotient identification used with the
+    positive-word character lemma (Lemma~\ref{lem:asym_character}) below.
 \end{theorem}
 
 \begin{proof}
@@ -374,9 +373,12 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \lean{MPSTensor.finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero}
     \leanok
     \uses{def:normal, def:asym_word_traces}
-    If the word traces of a finite family of normal tensors of positive
-    bond dimension sum to zero on every nonempty word, the family is
-    empty.
+    Let $\{C_s\}_{s\in S}$ be a finite family of normal tensors of positive
+    bond dimensions. If for every nonempty word $w\ne\emptyset$,
+    \begin{equation}
+        \sum_{s\in S}\tr(C_s^w)=0,
+    \end{equation}
+    then $S=\emptyset$.
 \end{lemma}
 
 \begin{proof}

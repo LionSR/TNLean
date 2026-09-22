@@ -448,10 +448,9 @@ There is no additional normalization factor.
 
 Relative to the ordered pair of these unnormalized state families,
 the action coefficients are the Fibonacci matrix
-$N_\tau=\begin{pmatrix}0&1\\1&1\end{pmatrix}$.
-This realizes the nonnegative-integer action discussed
-in~\cite{GarreRubio2023MPOSym}; it does not assert that the two vectors
-form a basis at each $N$. The positive-length hypothesis is essential:
+$N_\tau=\begin{pmatrix}0&1\\1&1\end{pmatrix}$, realizing the nonnegative-integer
+action discussed in~\cite{GarreRubio2023MPOSym}.
+The positive-length hypothesis is essential:
 at $N=0$ the periodic trace is the bond dimension, so
 $O_0(B_1)=2$, $O_0(B_\tau)=3$, and the empty amplitudes of $A$ and
 $C$ are $1$ and $2$. Neither the vacuum projection identity nor
@@ -518,8 +517,9 @@ which also contains the compression maps for the stacked square.
         FibonacciCompression.fibTauMPS_isNormal}
     \leanok
     \uses{def:asymex_fib, def:normal}
-    Both blocks are normal: their length-three words span the full
-    matrix algebra of their bond space.
+    Both blocks $B_1$ and $B_\tau$ are normal: their length-three words
+    satisfy $\spn_\C\{B_1^w : |w|=3\} = \MN{1}$ and
+    $\spn_\C\{B_\tau^w : |w|=3\} = \MN{2}$.
 \end{theorem}
 
 \begin{proof}

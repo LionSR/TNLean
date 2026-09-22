@@ -272,105 +272,18 @@
     \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
     \leanok
     \uses{def:peps_threeLegLeftIdentityForm, def:peps_threeLegRightIdentityForm, def:peps_threeLegMiddleIdentityForm}
-    \emph{Local fix (nonzero virtual legs).} The residual forms are defined
-    for arbitrary leg index sets, whereas the scalar recovery below assumes
-    that each of $\alpha,\beta,\gamma$ is nonzero. In coordinates the two
-    compatibility conditions read
-    \begin{align}
-        \delta_{aa'}Z_{bc,b'c'}
-         & =
-        U_{ab,a'b'}\delta_{cc'},
-        \qquad
-        \delta_{aa'}Z_{bc,b'c'}
-        =
-        W_{ac,a'c'}\delta_{bb'},
-        \notag
-    \end{align}
-    quantified over $a,a'\in\alpha$, $b,b'\in\beta$, $c,c'\in\gamma$. If one of
-    the three index sets is empty, then so is $\alpha\times\beta\times\gamma$,
-    both conditions are equalities of functions on an empty index set, and they
-    hold for arbitrary $Z,U,W$: with $\alpha$ empty, $\beta$ a one-point set
-    and $\gamma$ a two-point set, the operator $Z=\operatorname{diag}(1,2)$ on
-    $\beta\times\gamma$ satisfies both conditions while being no multiple of
-    the identity. The assumption records the
-    nonzero-dimensional virtual bond spaces of
-    \cite[Section~3]{Molnar2018NormalPEPS} and does not follow from
-    injectivity; the counterexample above is recorded in
-    \cite{gap:peps_injective_ft_section3_route}.
-
-    In the proof of the generalized two-injective-tensor comparison, applying
-    the inverse of the second injective tensor leaves three possible virtual
-    operators on the exposed legs of the first tensor:
-    % Formula (paper_normal.tex:1157--1193): A_1 equals B_1 with a two-leg
-    % residual Z, equals B_1 with U on the complementary pair, and equals B_1
-    % with W on the first and third legs.  Ink-to-index: each operator box has
-    % two incoming and two outgoing virtual ports; the untouched third index is
-    % the remaining direct wire.  The north leg is the common physical index.
-    % Boundary signature: every panel has (V,P)=(3,1).  Source verdict: exact
-    % four-panel scalar-reduction identity in house style.
-    \begin{center}
-        \tenkzkernel
-        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-            \tn[name=scalarA, label pos=w,
-                ports={35:virtual, 0:virtual, -35:virtual,
-                        90:physical}]{A_1}
-        \end{tenkz}
-        $ = $
-        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
-            \tn[name=scalarBZ, label pos=w,
-                ports={35:virtual, 0:virtual, -35:virtual,
-                        90:physical}]{B_1}
-            \tn[at=0.4 s of 1.2 e of scalarBZ, name=scalarZ, skin=box,
-                species=operator,
-                ports={160:virtual, 200:virtual, 20:virtual,
-                        -20:virtual}]{Z}
-            \tnwire{scalarBZ.0}{scalarZ.160}
-            \tnwire{scalarBZ.-35}{scalarZ.200}
-        \end{tenkz}
-        $ = $
-        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
-            \tn[name=scalarBU, label pos=w,
-                ports={35:virtual, 0:virtual, -35:virtual,
-                        90:physical}]{B_1}
-            \tn[at=0.4 n of 1.2 e of scalarBU, name=scalarU, skin=box,
-                species=operator,
-                ports={160:virtual, 200:virtual, 20:virtual,
-                        -20:virtual}]{U}
-            \tnwire{scalarBU.35}{scalarU.160}
-            \tnwire{scalarBU.0}{scalarU.200}
-        \end{tenkz}
-        $ = $
-        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
-            \tn[name=scalarBW, label pos=w,
-                ports={35:virtual, 0:virtual, -35:virtual,
-                        90:physical}]{B_1}
-            \tn[at=0.7 n of 1.2 e of scalarBW, name=scalarW, skin=box,
-                species=operator,
-                ports={160:virtual, 200:virtual, 20:virtual,
-                        -20:virtual}]{W}
-            \tnwire{scalarBW.35}{scalarW.160}
-            \tnwire{scalarBW.-35}{scalarW.200}
-        \end{tenkz}
-    \end{center}
-    Inverting the first injective tensor then shows that the corresponding
-    residual operator on the three exposed virtual legs has the three
-    decompositions
-    \begin{align}
-        \sum_i \Id\otimes Z_i^{(1)}\otimes Z_i^{(2)}
-         & =
-        \sum_i U_i^{(1)}\otimes U_i^{(2)}\otimes\Id
-        =
-        \sum_i W_i^{(1)}\otimes\Id\otimes W_i^{(2)}.
-        \notag
-    \end{align}
-    Equivalently, for nonzero virtual leg spaces $\alpha,\beta,\gamma$, if one
+    For nonzero virtual leg spaces $\alpha,\beta,\gamma$, if an
     endomorphism of $\alpha\otimes\beta\otimes\gamma$ lies simultaneously in
     the three subspaces $\Id_\alpha\otimes\End(\beta\otimes\gamma)$,
-    $\End(\alpha\otimes\beta)\otimes\Id_\gamma$, and the analogous
-    subspace with $\Id_\beta$ in the middle leg, then it is a scalar multiple of
-    the identity. Thus the residual virtual operators are scalar multiples of
-    the identity. This is the scalar step in the proof of
-    \cite[Section~3]{Molnar2018NormalPEPS}.
+    $\End(\alpha\otimes\beta)\otimes\Id_\gamma$, and
+    $\End(\alpha\otimes\gamma)\otimes\Id_\beta$, then it is a scalar multiple of
+    the identity: there exists $\lambda\in\C$ such that
+    \begin{align}
+        T = \lambda\,\Id_{\alpha\otimes\beta\otimes\gamma}.
+        \notag
+    \end{align}
+    Following \cite[Section~3]{Molnar2018NormalPEPS}, this establishes the scalar
+    reduction of residual virtual operators across exposed legs \cite{gap:peps_injective_ft_section3_route}.
 \end{theorem}
 \begin{proof}\leanok
     Write the common operator as $T$. The equality

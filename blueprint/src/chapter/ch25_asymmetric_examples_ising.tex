@@ -123,8 +123,9 @@ $N\geq1$, and site indices are cyclic.
         IsingTwist.isingSigmaZ_eq_zero_of_rho_ne}
     \leanok
     \uses{def:asymex_ising_tensors}
-    For each of the three tensors, the local matrix at a pair of labels
-    with distinct middle labels vanishes.
+    For each tensor $A \in \{A_1, A_\psi, \widehat A_\sigma\}$ and each pair
+    of fusion-tree labels $(k,h)$, if $\rho(k) \ne \rho(h)$ then
+    $A(k,h) = 0$.
 \end{theorem}
 
 \begin{proof}
@@ -759,9 +760,8 @@ not from a length-independent normalization.
     \lean{IsingTwist.productState_isNormal}
     \leanok
     \uses{def:asymex_ising_action, def:normal}
-    Every fusion-tree product-state tensor is injective at one site:
-    its auxiliary matrix algebra is one-dimensional and one local
-    matrix is nonzero.
+    Every fusion-tree product-state tensor $T$ has auxiliary dimension
+    $D=1$ and satisfies $\spn_\C\{T(i) : i\} = \MN{1}$.
 \end{theorem}
 
 \begin{proof}

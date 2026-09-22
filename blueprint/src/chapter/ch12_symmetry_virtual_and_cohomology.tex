@@ -537,10 +537,8 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     \lean{TNLean.Algebra.ProjectivelyEquivalent}
     \leanok
     \uses{def:projective_rep, def:cohomologous_to}
-    The relation called projective equivalence holds precisely when
-    the two factor systems are cohomologous.  It compares their classes in
-    $H^2(G,\C^\times)$; it does not assert an intertwining equivalence between
-    the underlying representation spaces.
+    Two projective representations are projectively equivalent when their
+    factor systems are cohomologous in $H^2(G,\C^\times)$.
 \end{definition}
 
 \begin{theorem}[Factor-system class agreement]%
@@ -565,16 +563,16 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
 \subsection{Non-triviality via the commutator phase}
 
 For an abelian symmetry group, the antisymmetric commutator phase is invariant
-under a change of cocycle representative. A value not equal to $1$ therefore
-witnesses non-triviality; no converse is asserted here.
+under a change of cocycle representative, so a value different from $1$
+witnesses non-triviality of the class.
 
 \begin{definition}[Commutator phase]\label{def:comm_phase}
     \lean{TNLean.Algebra.ScalarCocycle.commPhase}
     \leanok
     \uses{def:scalar_cocycle}
     The \emph{commutator phase} of a $2$-cochain $\omega$ at a pair $g,h$ is
-    $\beta_\omega(g,h):=\omega(g,h) \omega(h,g)^{-1}$. It is defined for any
-    $\C^{\times}$-valued $2$-cochain; the cocycle condition is not needed.
+    $\beta_\omega(g,h):=\omega(g,h) \omega(h,g)^{-1}$, defined for any
+    $\C^{\times}$-valued $2$-cochain.
 \end{definition}
 
 \begin{theorem}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}

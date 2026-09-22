@@ -33,15 +33,15 @@ coordinates by slots and positions inside slots.
     \leanok
     \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
     Conjugation by the explicit gauge attached to $(\tau,G)$ sends a bond
-    matrix $A$ to the matrix $GAG^{-1}$ relabelled along $\tau$. The
-    entrywise coercion is multiplicative, and the bond-space product of two
-    integer tensors each rescaled by one scalar $c$ is $c^2$ times the
-    entrywise coercion of their integer bond-space product. If a compression
-    datum uses the explicit gauge attached to $(\tau,G)$, then the
-    compression map $W_s$ out of the bond space consists of the rows of $G$
-    at the coordinates of the slot $s$, and the compression map $V_s$ into
-    the bond space consists of the columns of $G^{-1}$ at those same
-    coordinates.
+    matrix $A$ to the matrix $GAG^{-1}$ relabelled along $\tau$. Entrywise
+    coercion is multiplicative, and for integer tensors $M, N$ and $c \in \C$,
+    \begin{equation}
+        (cM) \mathbin{\cdot} (cN) = c^2 (M \mathbin{\cdot} N).
+    \end{equation}
+    If a compression datum uses the explicit gauge $(\tau,G)$, then the
+    compression maps for slot $s$ are given in coordinates by
+    $W_s = \pi_s G$ and $V_s = G^{-1} \iota_s$, where $\pi_s$ selects the rows
+    and $\iota_s$ embeds the columns belonging to slot $s$.
 \end{theorem}
 
 \begin{proof}
