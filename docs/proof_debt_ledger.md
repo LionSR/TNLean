@@ -271,26 +271,35 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   present files are approximately 399 and 160 lines, respectively, rather
   than the 728- and 433-line versions measured by the original audit.
 
-### S17. Delete the blocked power-sum coefficient route superseded by the unblocked theorem — net 440 lines, risk 3/10
-- **Status**: open ([#7848](https://github.com/LionSR/TNLean/issues/7848); 2026-09-19 architectural survey)
+### S17. Delete the blocked power-sum coefficient route superseded by the unblocked theorem — completed
+- **Status**: burned down ([#7848](https://github.com/LionSR/TNLean/issues/7848); 2026-09-19 architectural survey)
 - **What**: `MPS/FundamentalTheorem/SectorBNT/PowerSumCoefficients.lean:148-619`
   minus one live helper: `exists_blocking_powerSum_coeff`,
   `exists_blocking_powerSum_weights`, `exists_matching_data_of_isBNTCanonicalForm`,
   `exists_blocked_representatives_of_isNormal_distinct`,
   `exists_eventually_linearIndependent_blockTensor_of_normalTensor_distinct`,
   `not_gaugePhaseEquiv_of_exists_eventually_linearIndependent`,
-  `mpv_span_congr_length`, and four helpers only they use.
+  `mpv_span_congr_length`, and `exists_fin_weights_of_sum_pow`, the one helper
+  used nowhere else. The survey counted four such helpers; the other three are
+  consumed by the unblocked file and are retained.
 - **Why it's excess**: `exists_unblocked_powerSum_coeff`
   (`UnblockedPowerSumCoefficients.lean:584`, landed 2026-09-18) has the same
   hypotheses and a strictly stronger conclusion (every positive length, with
   the dimension bound); the blocked statement is its `p := 1` instance, its
   proof uses none of the blocked stage, and `OperatorClosurePowerSum.lean:83`
   already consumes the unblocked theorem. The source theorem is the unblocked
-  statement, so restating `thm:asym_power_sum_coefficients` and retagging it is
-  a faithful redirect. Zero consumers of the route outside itself.
-- **First PR**: after an owner check (the files are deliberately staged and
-  two days old): restate and retag the node, delete the closure, prune imports
-  build-checked, keep the file path (cited by a docstring and a paper-gap note).
+  statement. Zero consumers of the route outside itself.
+- **Outcome**: the route, `exists_fin_weights_of_sum_pow` and five now-unused
+  imports were removed, leaving four helpers that the unblocked development
+  consumes, under the original file path. `thm:asym_power_sum_coefficients` and
+  its section were deleted rather than retagged: the following section already
+  states the source theorem as `thm:asym_unblocked_coefficients`, with the same
+  hypotheses, the stronger conclusion, the dimension bound and uniqueness, and
+  tags both unblocked theorems. `exists_blocking_powerSum_weights` states
+  spanning-free rigidity that no consumer, node or source asks for, and was
+  dropped as unused rather than migrated. Recorded in
+  `docs/audits/2026-09-19_blocked_power_sum_route.md`; net 466 Lean lines and
+  47 blueprint lines.
 
 ### S7. Delete the confirmed-dead half of the UnionInjectivityOverlap chain — completed
 - **Status**: burned down (#4567, #4625, follow-up #7232)
