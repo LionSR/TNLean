@@ -126,9 +126,12 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 
 ### S3. Delete the superseded edge-centred three-block union-injectivity route — net 3,180 lines, risk 3/10
 - **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted; it strands a further 250-300 lines in `ThreeBlockResonate2.lean`, one `\leanid`-cited in `section3_route.tex`, which is the next slice.
-- **What**: `PEPS/RegionBlock/{ThreeBlockResonate,ThreeBlockResonate2,ThreeBlockReconcile,UnionInjectivity,ThreeBlockTransfer,BondLocalFromReconcile}.lean`
-  (3,438 gross lines). `BondLocalFromReconcile.lean` (176 ln) has zero
-  importers anywhere and is pure dead weight.
+- **What**: the four surviving modules
+  `PEPS/RegionBlock/{ThreeBlockResonate,ThreeBlockResonate2,UnionInjectivity,ThreeBlockTransfer}.lean`
+  (2,087 gross lines). The route originally also covered
+  `BondLocalFromReconcile.lean` (176 ln, zero importers anywhere) and
+  `ThreeBlockReconcile.lean` (371 ln); both are deleted, in the first PR and the
+  second slice respectively.
 - **Why it's excess**: proves the paper's `injective_union` lemma
   (arXiv:1804.04964) only for an edge-centred red/blue/complement triple
   with a distinguished-edge restriction the source does not have — a
@@ -136,8 +139,8 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   (`UnionInjectivityGeneral*`) already proves the source statement over an
   arbitrary partition and recovers this route as the special case
   blue := S, complement := T, red := univ \ (S ∪ T).
-- **First PR**: delete `BondLocalFromReconcile.lean` outright (176 ln,
-  confirmed zero importers, zero migration cost).
+- **First PR (done)**: `BondLocalFromReconcile.lean` was deleted outright
+  (176 ln, confirmed zero importers, zero migration cost).
 - **Second slice (done 2026-09-19)**: `ThreeBlockReconcile.lean` (371 ln) had
   become a fully dead nine-declaration closure once the 2026-08-27 unused-import
   sweep removed the `ThreeBlockTransfer` import edge, leaving the generated
@@ -268,26 +271,35 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   present files are approximately 399 and 160 lines, respectively, rather
   than the 728- and 433-line versions measured by the original audit.
 
-### S17. Delete the blocked power-sum coefficient route superseded by the unblocked theorem — net 440 lines, risk 3/10
-- **Status**: open ([#7848](https://github.com/LionSR/TNLean/issues/7848); 2026-09-19 architectural survey)
+### S17. Delete the blocked power-sum coefficient route superseded by the unblocked theorem — completed
+- **Status**: burned down ([#7848](https://github.com/LionSR/TNLean/issues/7848); 2026-09-19 architectural survey)
 - **What**: `MPS/FundamentalTheorem/SectorBNT/PowerSumCoefficients.lean:148-619`
   minus one live helper: `exists_blocking_powerSum_coeff`,
   `exists_blocking_powerSum_weights`, `exists_matching_data_of_isBNTCanonicalForm`,
   `exists_blocked_representatives_of_isNormal_distinct`,
   `exists_eventually_linearIndependent_blockTensor_of_normalTensor_distinct`,
   `not_gaugePhaseEquiv_of_exists_eventually_linearIndependent`,
-  `mpv_span_congr_length`, and four helpers only they use.
+  `mpv_span_congr_length`, and `exists_fin_weights_of_sum_pow`, the one helper
+  used nowhere else. The survey counted four such helpers; the other three are
+  consumed by the unblocked file and are retained.
 - **Why it's excess**: `exists_unblocked_powerSum_coeff`
   (`UnblockedPowerSumCoefficients.lean:584`, landed 2026-09-18) has the same
   hypotheses and a strictly stronger conclusion (every positive length, with
   the dimension bound); the blocked statement is its `p := 1` instance, its
   proof uses none of the blocked stage, and `OperatorClosurePowerSum.lean:83`
   already consumes the unblocked theorem. The source theorem is the unblocked
-  statement, so restating `thm:asym_power_sum_coefficients` and retagging it is
-  a faithful redirect. Zero consumers of the route outside itself.
-- **First PR**: after an owner check (the files are deliberately staged and
-  two days old): restate and retag the node, delete the closure, prune imports
-  build-checked, keep the file path (cited by a docstring and a paper-gap note).
+  statement. Zero consumers of the route outside itself.
+- **Outcome**: the route, `exists_fin_weights_of_sum_pow` and five now-unused
+  imports were removed, leaving four helpers that the unblocked development
+  consumes, under the original file path. `thm:asym_power_sum_coefficients` and
+  its section were deleted rather than retagged: the following section already
+  states the source theorem as `thm:asym_unblocked_coefficients`, with the same
+  hypotheses, the stronger conclusion, the dimension bound and uniqueness, and
+  tags both unblocked theorems. `exists_blocking_powerSum_weights` states
+  spanning-free rigidity that no consumer, node or source asks for, and was
+  dropped as unused rather than migrated. Recorded in
+  `docs/audits/2026-09-19_blocked_power_sum_route.md`; net 466 Lean lines and
+  47 blueprint lines.
 
 ### S7. Delete the confirmed-dead half of the UnionInjectivityOverlap chain — completed
 - **Status**: burned down (#4567, #4625, follow-up #7232)
@@ -487,9 +499,13 @@ description of current `main`.
   `Channel/Determinant/UnitaryCharacterization.lean:196`, + 2 partials);
   `PEPS/CycleMPSChainOverlapInsertion.lean:33` states it "mirrors the
   site-independent file" — 2,916 lines across 6 `*Overlap*` files. `hbond`
-  is derived internally at `NormalGeneralFundamentalTheorem.lean:163` yet
-  assumed at `NormalSquareUnconditionalFundamentalTheorem.lean:111`
-  and `TorusUnconditionalFundamentalTheorem.lean:180`. `SameStateBridgeHyp`
+  is derived internally by `fundamentalTheorem_normalPEPS`
+  (`NormalGeneralFundamentalTheorem.lean:163`) and by
+  `fundamentalTheorem_normalTorusPEPS_unconditional`
+  (`TorusUnconditionalFundamentalTheorem.lean:333`, which returns it
+  existentially in its conclusion), yet is still an explicit hypothesis of
+  `fundamentalTheorem_normalSquarePEPS_unconditional`
+  (`NormalSquareUnconditionalFundamentalTheorem.lean:430`). `SameStateBridgeHyp`
   (`MPS/Chain/SameStateBridge.lean:30`) has hypothesis uses but zero
   constructions repo-wide, leaving the PiAlgebra capstone conditional on an
   unproven structure (verified 2026-07-20).

@@ -13,13 +13,13 @@ import TNLean.MPS.Periodic.ScaledNormalization
 /-!
 # Power-sum structure of length-dependent coefficients, without blocking
 
-`PowerSumCoefficients.lean` proves the blocked stage of the power-sum
-coefficient question: along the lengths of one fixed physical blocking, the
-coefficients of an expansion of a tensor's periodic vectors in a separated
-family of normal tensors are the power sums of finite nonzero weight
-multisets.  This file proves the stronger, unblocked statement: the same
-canonical power-sum expansion holds at *every* positive original length, with
-no blocking, and the expansion coefficients are eventually rigid.
+This file answers the power-sum coefficient question.  Whenever the periodic
+vectors of a tensor lie, at every positive length, in the span of the periodic
+vectors of a separated family of normal tensors, the coefficients of that
+expansion are the power sums of finite nonzero weight multisets.  The
+expansion holds at *every* positive length, with no blocking, and the
+coefficients are eventually rigid.  `PowerSumCoefficients.lean` supplies the
+normalization and independence steps this argument uses.
 
 Source: `Notes/OpenProblemsTN/followup/asymmetric_mpoa/sections/t1_unblocked.tex`
 ("Power-sum coefficients without blocking").  The
