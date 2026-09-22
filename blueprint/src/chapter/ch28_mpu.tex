@@ -9659,31 +9659,11 @@ right operator block are the matrices
 \end{align}
 For a star-subalgebra $\mathcal D\subseteq M_K(\mathbb C)$, write
 $\mathcal D'=\{Y\in M_K(\mathbb C)\mid [Y,Z]=0\text{ for every }Z\in\mathcal D\}$
-for its commutant.  The construction below is the full complex matrix-algebra
-specialization of the coefficient construction in
-\cite[Section~4.3]{SchumacherWerner2004QCA} and of the leastness and commutant
-statements in \cite[Lemma~7]{Gross2012IndexTheory}.
-
-\textbf{Local fix (star-closed input):}
-The printed statement of Lemma~7 says only that $\mathcal A$ is a
-subalgebra.  Its coefficient-generated support and leastness clauses remain
-valid for arbitrary algebra input, but its commutant characterization fails
-unless $\mathcal A$ is closed under the involution.  For instance, the algebra
-$\operatorname{span}\{\mathbf 1,E_{12}\}\subset M_2(\mathbb C)$ gives a
-counterexample to the printed commutant clause if involution closure is
-omitted.  Schumacher and Werner first define the ordinary algebra generated
-by the coefficient support and then derive its adjoint closure from adjoint
-closure of the observable-algebra input
-\cite[lines~1161--1171]{SchumacherWerner2004QCA}.  Accordingly, the statements
-below use a star-subalgebra.  This is a necessary correction to the printed
-hypothesis.  In the QCA application the input is the image of a local
-observable algebra under a star-automorphism
-\cite[Section~7.2]{Gross2012IndexTheory}.  The MPU application likewise takes
-the image of a local star-algebra under a star-automorphism
-\cite[lines~2300--2306]{Cirac2017MPU}.  This correction, including the
-counterexample without involution closure and the exact application ranges,
-is recorded in \cite{gap:gnvw12_support_algebra_star_closure}.
-
+for its commutant. The construction below adapts the coefficient construction of
+\cite[Section~4.3]{SchumacherWerner2004QCA} and the leastness and commutant
+statements of \cite[Lemma~7]{Gross2012IndexTheory}, requiring $\mathcal A$ to be
+a star-subalgebra for involution closure of the commutant; see
+\cite{gap:gnvw12_support_algebra_star_closure}.
 Full matrix factors $\mathcal B_1=M_I(\mathbb C)$ and
 $\mathcal B_2=M_J(\mathbb C)$ suffice for the MPU spin chain because every
 one-site algebra is isomorphic to $M_d(\mathbb C)$
@@ -10128,22 +10108,11 @@ one-site algebra is isomorphic to $M_d(\mathbb C)$
         L\in\operatorname{Spp}_{\mathrm L}(\mathcal A_2).
         \label{eq:qca_overlapping_support_conclusion}
     \end{align}
-    This is the full complex matrix-algebra specialization of
-    Schumacher--Werner Lemma \texttt{sppcomm}
-    \cite[lines~1174--1194]{SchumacherWerner2004QCA} and GNVW Lemma
-    \texttt{sppcomm}
-    \cite[Section~7.1, lines~1221--1246]{Gross2012IndexTheory}.
-
-    \textbf{Local fixes.}
-    For the generated $C^*$-algebras, the input must be closed under the
-    involution; see \cite{gap:gnvw12_support_algebra_star_closure}.  In both
-    printed coefficient proofs, the basis element $e'_\nu$ belongs to the
-    third factor, rather than the second factor as printed; see
-    \cite{gap:gnvw12_support_algebra_outer_factor_basis}.
-
-    Full complex matrix algebra factors suffice for the MPU application in
-    \cite[lines~2300--2306 and 2313--2334]{Cirac2017MPU}; see
-    \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
+    This specializes the commuting support lemma of
+    \cite[lines~1174--1194]{SchumacherWerner2004QCA} and
+    \cite[Section~7.1, lines~1221--1246]{Gross2012IndexTheory} to full complex matrix factors,
+    using star-subalgebra inputs and third-factor basis elements as in
+    \cite{gap:gnvw12_support_algebra_star_closure, gap:gnvw12_support_algebra_outer_factor_basis, gap:gnvw12_support_algebra_full_matrix_scope}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -13616,14 +13585,12 @@ left/right order below agrees with the adjacent-pair convention in
               & X\in\widehat{\mathcal R}_y,\quad
         Y\in\widehat{\mathcal R}_z,\quad y\ne z.
     \end{align}
-    This is the homogeneous fixed-$d$ specialization of the
+    This establishes the homogeneous fixed-$d$ case of the
     consecutive/disjoint argument in
-    \cite[lines~1270--1274]{Gross2012IndexTheory}, using Lemma
-    \texttt{sppcomm} from lines~1221--1246; compare
-    \cite[lines~1174--1194]{SchumacherWerner2004QCA}.  Cirac et al. provide the
-    homogeneous four-site localization at
-    \cite[lines~2313--2329]{Cirac2017MPU}, but do not state this commutation
-    result.  The site-dependent GNVW statement is not claimed; see
+    \cite[lines~1270--1274]{Gross2012IndexTheory} and
+    \cite[lines~1174--1194]{SchumacherWerner2004QCA} for the
+    homogeneous four-site localization in
+    \cite[lines~2313--2329]{Cirac2017MPU}; see
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{theorem}
 

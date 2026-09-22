@@ -48,36 +48,18 @@ blockwise similarity of \cite[eq.~\emph{unital},
     Setting $Z=\bigoplus_j Z_j\otimes\Id_{D_j}$ one has
     $Z^{\operatorname{lcm}_jm_j}=\Id$, $[A^i,Z]=0$ for every $i$,
     $\mc{V}^+(A)=\mc{V}^+(ZA)$, and there is an invertible matrix $Y$ with
-    $ZA^i=YB^iY^{-1}$ for all $i$.
+    $ZA^i=YB^iY^{-1}$ for all $i$.\end{theorem}
 
-    \noindent\emph{Remark on the length range.}
-    The source writes both matrix-product-vector identities over all lengths.
-    They are taken here at positive lengths only, following the convention of
-    this development that the empty word is not a physical chain. This
-    strengthens the theorem and costs nothing. On the hypothesis, equality at
-    positive lengths is the weaker assumption. On the conclusion, nothing is
-    lost either: $Z$ acts on the bond space of $A$, so $ZA$ has the bond
-    dimension of $A$, and the empty-word coefficient of a tensor is its bond
-    dimension, whence $\mc{V}^+(A)=\mc{V}^+(ZA)$ already extends to length
-    zero.
-
-    \noindent\emph{Remark on the periods.}
-    The period $m_j$ of a block is not a hypothesis. It is produced by
-    Theorem~\ref{thm:spectral_periodic_period_existence} from irreducibility
-    and spectral radius one alone, as the source produces it at
-    \cite[lines~257--258]{DeLasCuevas2017Irreducible}, and the periods so
-    produced are the ones occurring in every clause of the conclusion.
-
-    \noindent\emph{Remark on the scalars $\xi_j$.}
-    The source writes the two clauses of the last display without the
-    $\xi_j$, having absorbed each of them into $S_{\pi(j)}$ at
-    \cite[lines~667--671]{DeLasCuevas2017Irreducible}. They are displayed here
-    instead, in both places at once, so that the statement speaks about the
-    given multiplicity matrices rather than about rescaled ones. The scalars
-    are genuinely present: for $m_j=1$ and $B_j=e^{i\theta}A_j$ the ratio
-    between the two multiplicity families is $e^{i\theta}$, which is not a root
-    of unity in general.
-\end{theorem}
+\begin{remark}
+    The matrix-product-vector identities are stated at positive chain
+    lengths $L \ge 1$. The periods $m_j$ are produced from irreducibility
+    and spectral radius one by
+    Theorem~\ref{thm:spectral_periodic_period_existence}, matching
+    \cite[lines~257--258]{DeLasCuevas2017Irreducible}. The scalars $\xi_j$
+    are made explicit rather than absorbed into $S_{\pi(j)}$
+    \cite[lines~667--671]{DeLasCuevas2017Irreducible}, keeping the
+    multiplicity matrices $R_j$ and $S_k$ unscaled.
+\end{remark}
 \begin{proof}
     \leanok
     \uses{thm:spectral_periodic_period_existence,
@@ -95,16 +77,10 @@ blockwise similarity of \cite[eq.~\emph{unital},
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
     \leanok
     \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
-        def:scalar_gauge_equiv}
-    Theorem~\ref{thm:periodic_ft} with the periods $m_j$ and $n_k$ given
+    Theorem~\ref{thm:periodic_ft} with the periods $m_j$ and $n_k$ supplied
     alongside the two block families, together with witnesses that each block is
     spectrally periodic of the given period in the sense of
-    Definition~\ref{def:spectral_periodic_tensor}. Everything else, hypotheses
-    and conclusion alike, is as stated there. This is the working form of the
-    theorem; the periods it receives are supplied by
-    Theorem~\ref{thm:spectral_periodic_period_existence} in the proof of
-    Theorem~\ref{thm:periodic_ft} above, so the source statement no longer
-    depends on them being given.
+    Definition~\ref{def:spectral_periodic_tensor}.
 \end{theorem}
 
 \begin{proof}\leanok
