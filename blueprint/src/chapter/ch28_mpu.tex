@@ -1321,9 +1321,8 @@ nonzero spectrum as a set.
     \begin{align}
         \sigma(A)\setminus\{0\} & =\{1\}.
     \end{align}
-    Thus $1$ occurs and every nonzero spectral value equals $1$. This is the
-    set-spectrum consequence of \cite[Proposition~III.1]{Cirac2017MPU}; set
-    equality alone does not assert algebraic multiplicity.
+    Thus $1\in\sigma(A)$ and every nonzero spectral value equals
+    $1$~\cite[Proposition~III.1]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4237,10 +4236,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The diagonal matrix is the block matrix $\Lambda_k$ in the canonical-form-II
     fixed-point equations in
     \cite[equations~(6a)--(6b)]{Cirac2017MPU}; its ambient transport
-    $\rho$ need not be diagonal. This is a statement about the chosen reduced
-    representative and the blocking step in
-    \cite[proof of Proposition~III.2(ii)]{Cirac2017MPU}; it does not assert
-    that every ambient MPU tensor is itself in canonical form II.
+    $\rho$ need not be diagonal, corresponding to the reduced representative in
+    \cite[proof of Proposition~III.2(ii)]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4311,8 +4308,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         W^{ij}W^{k\ell}
          & =W^{ij}\lvert\rho')(\Phi'\rvert W^{k\ell}.
     \end{align}
-    This theorem asserts only the two simple contractions. It does not assert a
-    source-cut factorization or source-$v$ isometry.
     % Source lines: paper_v2.tex 397--427, 550--556, 589, and 592.
 \end{theorem}
 
@@ -4428,10 +4423,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
     This is the full-support representative form of
     \cite[Proposition~III.1]{Cirac2017MPU}. The full-support hypothesis is
-    essential for this ambient representative: adjoining a zero virtual
-    direct summand preserves every periodic operator but introduces a
-    nontrivial invariant projection. Thus the theorem does not assert that an
-    arbitrary, possibly nonminimal MPU representative is normal.
+    required because adjoining a zero virtual direct summand preserves
+    periodic operators while introducing a nontrivial invariant projection.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4571,9 +4564,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     For $D>1$, this states the fixed-pair convention in
     \cite[equations labelled~\texttt{Erightleft} and~\texttt{II\_UTransfer}, and
         proof of Proposition~III.2(ii)]{Cirac2017MPU}. The $D=1$ branch is the direct
-    one-dimensional specialization. This definition does not assert that an
-    arbitrary representative with $D>1$ admits the required canonical-form-II
-    data and does not replace $\mathcal U$ by another tensor.
+    one-dimensional specialization.
     % Source lines: paper_v2.tex 269--280 and 397--405.
 \end{definition}
 
@@ -7540,9 +7531,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     paths carry continuously varying reduced full-support source data. These
     families arise from the actual blocked path $\mathcal W(p)_m$ in an
     admissible equivalence datum of common length $m$; the blocked path itself is
-    the length-one admissible witness for the displayed endpoint families. When
-    $m>1$, this criterion does not assert strict equivalence of the unblocked
-    families $U_1^{(N)}$ and $U_2^{(N)}$. This is the reduced-source form of
+    the length-one admissible witness for the displayed endpoint families,
+    corresponding to
     \cite[Lemma following the symmetry-equivalence definitions]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1366--1380.
 \end{lemma}
@@ -8613,11 +8603,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
             & (X_2')^\dagger X_2'                    & =\Id,
             & Y_i'Z_i'                               & =\Id.
     \end{align}
-    This is the normalization of
+    This gives the source-factor metric normalization of
     \cite[equations~\texttt{Erightleft}, \texttt{X1X2b}, and
-        \texttt{YZ=1}]{Cirac2017MPU} for the right shift. This definition
-    concerns the source-factor metric; it does not assert a transfer
-    fixed-point equation.
+        \texttt{YZ=1}]{Cirac2017MPU} for the right shift.
 \end{definition}
 
 \begin{theorem}[The paper source tensor $u$ for the right shift]
@@ -9681,37 +9669,17 @@ specialization of the coefficient construction in
 \cite[Section~4.3]{SchumacherWerner2004QCA} and of the leastness and commutant
 statements in \cite[Lemma~7]{Gross2012IndexTheory}.
 
-\textbf{Local fix (star-closed input):}
-The printed statement of Lemma~7 says only that $\mathcal A$ is a
-subalgebra.  Its coefficient-generated support and leastness clauses remain
-valid for arbitrary algebra input, but its commutant characterization fails
-unless $\mathcal A$ is closed under the involution.  For instance, the algebra
-$\operatorname{span}\{\mathbf 1,E_{12}\}\subset M_2(\mathbb C)$ gives a
-counterexample to the printed commutant clause if involution closure is
-omitted.  Schumacher and Werner first define the ordinary algebra generated
-by the coefficient support and then derive its adjoint closure from adjoint
-closure of the observable-algebra input
-\cite[lines~1161--1171]{SchumacherWerner2004QCA}.  Accordingly, the statements
-below use a star-subalgebra.  This is a necessary correction to the printed
-hypothesis.  In the QCA application the input is the image of a local
-observable algebra under a star-automorphism
-\cite[Section~7.2]{Gross2012IndexTheory}.  The MPU application likewise takes
-the image of a local star-algebra under a star-automorphism
-\cite[lines~2300--2306]{Cirac2017MPU}.  This correction, including the
-counterexample without involution closure and the exact application ranges,
-is recorded in \cite{gap:gnvw12_support_algebra_star_closure}.
-
-\textbf{Scope restriction (full matrix factors):}
-After this correction, Lemma~7 permits arbitrary finite-dimensional
-$C^*$-algebras $\mathcal B_1$ and $\mathcal B_2$, whereas the statements below
-take $\mathcal B_1=M_I(\mathbb C)$ and $\mathcal B_2=M_J(\mathbb C)$.
-Full matrix factors suffice for the MPU spin chain because every one-site
-algebra is isomorphic to $M_d(\mathbb C)$
-\cite[lines~2320--2334]{Cirac2017MPU}.  The general-factor result is not
-claimed here; see \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
-
-No full-matrix structure theorem, dimension formula, Margolus gate, depth-two
-circuit, MPU standard form, or index comparison is asserted here.
+The printed statement of \cite[Lemma~7]{Gross2012IndexTheory} states only that
+$\mathcal A$ is a subalgebra; however, the commutant characterization requires
+$\mathcal A$ to be closed under the involution, as in Schumacher and Werner
+\cite[lines~1161--1171]{SchumacherWerner2004QCA}. We therefore formulate the
+result for a star-subalgebra; see the paper-gap
+note~\cite{gap:gnvw12_support_algebra_star_closure}. Furthermore, while Lemma~7
+treats arbitrary finite-dimensional $C^*$-algebras, the statements below take
+full matrix factors $\mathcal B_1=M_I(\mathbb C)$ and $\mathcal B_2=M_J(\mathbb
+C)$, which suffice for the MPU spin chain where each one-site algebra is
+isomorphic to $M_d(\mathbb C)$ \cite[lines~2320--2334]{Cirac2017MPU}; see
+\cite{gap:gnvw12_support_algebra_full_matrix_scope}.
 
 \begin{theorem}[Adjoint of a right coefficient block]
     \label{thm:qca_operator_block_adjoint}
@@ -10157,19 +10125,12 @@ circuit, MPU standard form, or index comparison is asserted here.
     \texttt{sppcomm}
     \cite[Section~7.1, lines~1221--1246]{Gross2012IndexTheory}.
 
-    \textbf{Local fixes.}
-    For the generated $C^*$-algebras, the input must be closed under the
-    involution; see \cite{gap:gnvw12_support_algebra_star_closure}.  In both
-    printed coefficient proofs, the basis element $e'_\nu$ belongs to the
-    third factor, rather than the second factor as printed; see
-    \cite{gap:gnvw12_support_algebra_outer_factor_basis}.
-
-    \textbf{Scope restriction (full matrix factors).}
-    The cited lemmas permit arbitrary finite-dimensional $C^*$-algebra
-    factors, whereas the statement above treats full complex matrix algebras.
-    This restriction suffices for the MPU application in
-    \cite[lines~2300--2306 and 2313--2334]{Cirac2017MPU}; the general-factor
-    statement remains open as recorded in
+    The input star-subalgebra must be closed under involution, and the basis
+    element belongs to the third factor; see the notes
+    \cite{gap:gnvw12_support_algebra_star_closure} and
+    \cite{gap:gnvw12_support_algebra_outer_factor_basis}. The statement treats
+    full complex matrix algebras, which suffices for the MPU application
+    \cite[lines~2300--2306, 2313--2334]{Cirac2017MPU}; see
     \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
 \end{theorem}
 
@@ -10282,16 +10243,11 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
          & =(pq)^2.
         \label{eq:qca_commuting_full_matrix_product}
     \end{align}
-    \textbf{Scope restriction (full matrix, single block):}
     This is the unital single-block specialization of Schumacher--Werner
     Proposition~\texttt{Cscom}
     \cite[lines~2119--2138]{SchumacherWerner2004QCA}, used for the adjacent
-    support algebras in
-    \cite[lines~1270--1308]{Gross2012IndexTheory}.  It does not assert the
-    direct-sum block-pair theorem or the multiplicity equation of
-    Proposition~\texttt{Cscom}, nor that the displayed matrix algebra fills
-    the ambient algebra.  The omitted statement and its elimination plan are
-    recorded in \cite{gap:gnvw12_cscom_single_block_scope}.
+    support algebras in Gross et al.~\cite[lines~1270--1308]{Gross2012IndexTheory};
+    see \cite{gap:gnvw12_cscom_single_block_scope}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -10848,11 +10804,8 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
         \bigl(\Gamma\cap\Lambda=\varnothing\ \land\
         Y\in\iota_\Gamma(\mathcal A_\Gamma)\bigr)\Longrightarrow XY=YX.
     \end{align}
-    This is an algebraic-local statement. It does not assert the corresponding
-    characterization in the norm completion and is not stated by
-    Schumacher--Werner. Their Theorem~6 gives the generalized Margolus structure,
-    and Corollary~7 says that the inverse of a nearest-neighbor QCA exists and is a
-    nearest-neighbor QCA.
+    This characterizes locally supported observables on the inductive limit
+    algebra.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -11596,8 +11549,6 @@ scalar-center theorem.
         \{z\in\mathcal A\mid za=az\text{ for every }a\in\mathcal A\}
          & =\mathbb C\mathbf 1.
     \end{align}
-    This statement concerns the fixed on-site dimension $d$; it does not assert
-    the site-dependent extension used in GNVW.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -11987,9 +11938,8 @@ $\omega^{-1}$.
     \end{align}
     Every $z\in\widehat\Lambda_L$ has unique block coordinates $(x,r)$ with
     $x\in\Lambda$ and $0\leq r<L$.  Increasing $r$ gives the consecutive-site
-    order within the block.  This is the finite-region site grouping used in
-    \cite[lines~2308 and 2313--2320]{Cirac2017MPU}; it does not assert the
-    QCA-to-MPU converse stated at line~2308.
+    order within the block, matching the finite-region site grouping in
+    \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.
 \end{definition}
 
 \begin{theorem}[Coordinates and monotonicity of expanded regions]
@@ -12248,11 +12198,8 @@ $\omega^{-1}$.
         \mathcal A_{\mathrm{loc}}^{(d^L)}
          & \simeq \mathcal A_{\mathrm{loc}}^{(d)}.
     \end{align}
-    This formalizes only the algebraic-local change of site grouping used at
-    lines~2308 and 2313--2320 of \cite{Cirac2017MPU}.  It does not assert the
-    QCA-to-MPU converse at line~2308, extend blocking to the quasi-local
-    completion, intertwine translations, provide a propagation estimate or a
-    circuit representation, or transport a quantum cellular automaton.
+    This corresponds to the algebraic-local change of site grouping in
+    \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.
 \end{definition}
 
 \begin{proof}\leanok
@@ -13205,10 +13152,8 @@ left/right order below agrees with the adjacent-pair convention in
     \cite[lines~2322--2328]{Cirac2017MPU}; the odd factor and unified family
     are supplied by the GNVW construction.
 
-    \textbf{Scope restriction (homogeneous chain):}
-    GNVW allow the cell size $d(y)$ to depend on $y$, whereas the present
-    definition fixes one positive size $d$.  The site-dependent statement is
-    not claimed here; see
+    While GNVW allow the cell size $d(y)$ to depend on $y$, the present
+    definition treats a homogeneous chain with fixed size $d$; see
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{definition}
 
@@ -13470,11 +13415,9 @@ left/right order below agrees with the adjacent-pair convention in
     $\mathcal R_y$ are said to generate an algebra containing
     $\alpha(\mathcal A(\mathbb Z))$, which equals $\mathcal A(\mathbb Z)$
     because $\alpha$ is an automorphism.  Here this generation statement is
-    made precise by the norm-closure equality
-    (\ref{eq:qca_support_algebra_topological_generation}), without asserting
-    that the algebraic join itself is proper or non-closed.  This is reusable
-    homogeneous fixed-$d$ infrastructure and does not assert the
-    site-dependent statement of the source; see
+    expressed by the norm-closure equality
+    (\ref{eq:qca_support_algebra_topological_generation}) in the homogeneous
+    fixed-$d$ setting; see
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{theorem}
 
@@ -13811,13 +13754,10 @@ left/right order below agrees with the adjacent-pair convention in
         \label{eq:qca_two_site_covariance_parities}
     \end{align}
     The displacement is two sites of the original chain, that is, one blocked
-    cell.  The corresponding one-site formula
-    $\tau_1(\widehat{\mathcal R}_y)=\widehat{\mathcal R}_{y+1}$ is false in
-    general and is not asserted, because translation by one does not preserve
-    the even pairing $E_x$.  For the shift automorphism at
-    \cite[lines~1267--1268]{Gross2012IndexTheory} the even algebra is a
-    two-site full matrix algebra while the odd algebra is the scalars, and no
-    translation carries one onto the other.
+    cell; translation by one does not preserve the even pairing $E_x$, as
+    illustrated by the shift automorphism at
+    \cite[lines~1267--1268]{Gross2012IndexTheory} where the even and odd
+    support algebras have different dimensions.
 
     Covariance of the support algebras under translation is the identity
     displayed at
@@ -13828,16 +13768,8 @@ left/right order below agrees with the adjacent-pair convention in
     fixed-$d$ setting is that of
     \cite[lines~2292--2298]{Cirac2017MPU}.
 
-    \textbf{Scope restriction (one-dimensional homogeneous automorphism):}
-    Schumacher--Werner state the translated-support identity for a
-    translation-commuting homomorphism on the cube lattice in arbitrary
-    dimension with the cubic nearest-neighbour scheme,
-    \cite[lines~309--318 and 920--941]{SchumacherWerner2004QCA}.  The statement
-    above treats the one-dimensional invertible case, as recorded in
-    \cite{gap:sw04_support_covariance_scope}.  GNVW allow
-    site-dependent cell sizes and assume no translation covariance, so
-    (\ref{eq:qca_two_site_covariance}) is not a theorem of that paper; the
-    fixed-$d$ restriction of the family $\mathcal R_y$ is recorded in
+    The statement treats the one-dimensional translation-invariant setting
+    \cite{gap:sw04_support_covariance_scope}, with homogeneous cell size $d$
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{theorem}
 

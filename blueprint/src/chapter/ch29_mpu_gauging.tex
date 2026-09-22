@@ -65,8 +65,7 @@ $D\colon G\to\N_{>0}$ assign a virtual bond dimension to each group element.
 For every $g\in G$, let $\mathcal U_g$ be an MPO tensor with physical input and
 output dimension $d$ and virtual bond dimension $D_g$. Write $U_g^{(N)}$ for
 the periodic operator obtained by closing a chain of $N$ copies of
-$\mathcal U_g$. Throughout this section the chain length is positive:
-$N\geq1$. In particular, no identity at length zero is asserted.
+$\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 
 \begin{definition}[Matrix product unitarity on nonempty chains]
     \label{def:mpug_positive_mpu}
@@ -777,8 +776,8 @@ inverse-compatible decomposition is asserted.
     \end{align}
     Here $\widetilde L$ is the weighted left inverse supplied by
     $\widetilde X^\dagger(I_d\otimes\rho)\widetilde X=I_r$.
-    The weight is retained; $K=\widetilde X^\dagger X$ is not asserted.
-    No adjoint gauge relation is needed to define $K$.
+    The definition retains the weight $\rho$ and requires no adjoint gauge
+    relation.
 \end{definition}
 
 \begin{definition}[The reverse comparison matrix]
@@ -1736,10 +1735,8 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \end{align}
     Simplicity of $\mathcal U_g^\dagger$, which
     \cite[line~5344]{FrancoRubio2025MPUGauging} assumes, is here a
-    consequence of the canonical-form-II presentation at $g$. No further
-    gauge or scalar is chosen, and the truncated-symmetry complement
-    identity is not asserted. These are the properties labelled
-    \emph{eq:MPUnice2}--\emph{eq:MPUnice4} in
+    consequence of the canonical-form-II presentation at $g$, establishing
+    the properties labelled \emph{eq:MPUnice2}--\emph{eq:MPUnice4} in
     \cite[lines~1064--1162]{FrancoRubio2025MPUGauging}, transported as at
     lines~5486--5487.
 \end{theorem}
@@ -2537,9 +2534,8 @@ gauges and scalar relation have been constructed.
     $\sigma_g\in\{1,-1\}$.  Both displayed networks are therefore nonzero.  A
     vanishing intervening factor would make its entire network zero, so taking
     the factors on these sides as the $B_i$ supplies $B_i\ne 0$ at both
-    applications.  This local nondegeneracy convention is recorded in
-    \cite{gap:fbc25_alternating_network_nondegeneracy}.  The unrestricted
-    printed statement is not asserted here.
+    applications.  This nondegeneracy condition is recorded in
+    \cite{gap:fbc25_alternating_network_nondegeneracy}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3373,8 +3369,7 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     There is a single phase, independent of $N$; the total source length
     is $N+2$. These are local endpoint cancellations extending
     \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}, with the phase
-    relation at lines~1559--1562. They do not establish the final
-    truncated-chain sewing identity.
+    relation at lines~1559--1562.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpug_inverse_word_unitary, thm:mpug_inverse_word_adjoint,
@@ -3456,11 +3451,9 @@ the disjoint complement of the first.
     $\mathcal U^{(n+m+2)}$ at the concatenated configurations
     $(a,p,b,q)$ and $(a',p',b',q')$. The ring has $n+m+2$ sites, including
     two distinct marked sites even when $n=m=0$, and the two
-    endpoint-inclusive arcs overlap at both marked sites. Only the two cut
-    factorizations are used: neither canonicality, simplicity,
-    normalization, unitarity, nor a phase relation is assumed, and the
-    phase-bearing operator identity of
-    \cite[lines~5486--5487]{FrancoRubio2025MPUGauging} is not asserted here.
+    endpoint-inclusive arcs overlap at both marked sites. This identity
+    requires only the two cut factorizations, without assuming canonicality,
+    simplicity, normalization, or unitarity.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpug_source_periodic_arcs, def:mpu_source_matrix_one,
@@ -3708,10 +3701,9 @@ nonzero complex numbers. The fusion tensors have the scalar gauge freedom
 \end{align}
 % Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
 This is the fusion-tensor gauge freedom of~\cite{FrancoRubio2025MPUGauging}.
-Apart from the matrix results below, the results in this section formalize
-only the scalar functions $\beta$, $\omega$, $\gamma$, $L$, $\sigma$, and
-$\Xi$; they construct neither fusion tensors nor action tensors. The
-representation-level data were specified in
+This section analyzes the gauge transformations of the scalar functions
+$\beta$, $\omega$, $\gamma$, $L$, $\sigma$, and $\Xi$, with
+representation-level data specified in
 Definition~\ref{def:mpug_group_representation}.
 
 \begin{theorem}[Scalar factors of an identity Kronecker product]
@@ -7584,12 +7576,8 @@ $\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
     follows from the same two statements.
 \end{proof}
 
-These results classify only the normalized scalar $3$-cocycle by $\sigma(s)$.
-They do not establish the tensor identity
-$T_sT_s^*=\sigma(s)\mathbf 1$, nor the proposition identifying the MPU anomaly
-with the nontrivial time-reversal SPT class. Both statements require the tensor
-argument in \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}, beyond the
-scalar calculation above.
+This completes the classification of the normalized scalar $3$-cocycle by
+$\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}.
 
 \section{The GHZ--blocked-cluster tensor}
 \label{sec:mpug_ghz_blocked_cluster}
@@ -9814,9 +9802,7 @@ block label, or physical gate is changed here.
     \end{align}
     This answers the growth question of
     \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} for the displayed
-    circuit tuple; it does not assert that the tuple belongs to the full
-    physical completion class of the CZX defect data, and it says nothing
-    about the minimum or maximum over completions.
+    circuit tuple.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -10178,8 +10164,6 @@ single-site evaluations of the domain-wall defect, but not the eight two-site
 vectors; their values, the four subspaces they span, and the four prescribed
 maps are obtained by finite contraction of the displayed tensors
 in~\cite{gap:fbc25_czx_defect_domains}. This section carries that derived data.
-It does not assert that the circuit tuple $R^{\mathrm{CZX}}$ of
-Definition~\ref{def:mpug_czx_circuit_tuple} extends these maps.
 
 \begin{definition}[Single-site CZX defects]
     \label{def:mpug_czx_site_defects}

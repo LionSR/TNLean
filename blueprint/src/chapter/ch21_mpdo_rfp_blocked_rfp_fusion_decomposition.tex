@@ -128,10 +128,10 @@
     These are the two representations in
     \cite[Appendix~C.4, lines~2011--2018]{Cirac2016MPDO_arXiv}.
 
-    \textbf{Local fix (blocked coefficient exponent):} CPSV16 Appendix C.4,
-    line~2013 prints $m_\gamma^L/n_\gamma$. The line-2008 tensor scaling and
-    line~2040 give $(m_\gamma/n_\gamma)^L$. This is documented in
-    \cite{gap:cpsv16_blocked_operator_trace_ratio_exponent}.
+    In \cite[Appendix~C.4, line~2013]{Cirac2016MPDO_arXiv}, the exponent is
+    printed as $m_\gamma^L/n_\gamma$; the tensor scaling requires
+    $(m_\gamma/n_\gamma)^L$ (see
+    \cite{gap:cpsv16_blocked_operator_trace_ratio_exponent}).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -415,20 +415,11 @@
          & =\zeta_jX_jA^{(2),i}_{\gamma(j)}X_j^{-1}.
         \notag
     \end{align}
-    The choices may be made simultaneously. No converse coverage or
-    surjectivity of $j\mapsto\gamma(j)$ is asserted.
-
-    \textbf{Scope restriction (active product BNT):} The conclusion gives
-    only one-way coverage of active product corners. It does not assert that
-    every blocked BNT label occurs. This is documented in
-    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
-
-    \textbf{Local fix (per-pair support):} Appendix~C.4, lines~2011--2029 of
-    \cite{Cirac2016MPDO_arXiv} compares a sum over all retained copy pairs and
-    does not isolate a fixed pair. Here fixed-pair support follows from the
-    exact squared reconstruction and the canonical direct-sum corner; a zero
-    pair contributes an empty active family. See
-    \cite{gap:cpsv16_figure11_per_pair_support}.
+    The choices may be made simultaneously, giving one-way coverage of the
+    active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+    Here fixed-pair support follows from exact squared reconstruction and the
+    canonical direct-sum corner, with a zero pair contributing an empty active
+    family \cite{gap:cpsv16_figure11_per_pair_support}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -606,9 +597,7 @@
     positive multiple of its original BNT representative, and the resulting
     corners reconstruct every tensor letter exactly.
 
-    \textbf{Local fix (Figure-11 fixed-pair support):} A copy pair with no
-    active corner is represented by an empty family; no unsupported corner is
-    inserted. See
+    A copy pair with no active corner is represented by an empty family
     \cite{gap:cpsv16_figure11_per_pair_support}.
 \end{definition}
 
@@ -635,10 +624,9 @@
     positive multiples of the original BNT representatives, and reconstruct
     every raw product letter exactly.
 
-    \textbf{Local fix (Figure-11 fixed-pair support):} Empty active families
-    remain empty. Exact weighted reconstruction and positivity of the outer
-    copy weight imply that the corresponding raw product vanishes. See
-    \cite{gap:cpsv16_figure11_per_pair_support}.
+    For copy pairs with empty active support, exact weighted reconstruction and
+    positivity of the outer copy weight imply that the corresponding raw
+    product vanishes \cite{gap:cpsv16_figure11_per_pair_support}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -691,21 +679,12 @@
         U_{\alpha,\beta}.
         \notag
     \end{align}
-    Empty label fibers contribute zero-dimensional diagonal blocks.
-    This is the decomposition of CPSV16, Appendix C.4, lines 2020--2029.
-
-    \textbf{Scope restriction (active product BNT):} Only active product
-    corners are retained. A label absent from the distinguished copy pair
-    has zero fusion multiplicity. See
-    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
-
-    \textbf{Local fix (Figure-11 fixed-pair support):} The distinguished copy
-    pair may have an empty active family; no unsupported corner is inserted.
-    See \cite{gap:cpsv16_figure11_per_pair_support}.
-
-    \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
-    a coisometry onto the active direct sum. Exact reconstruction includes
-    any common zero corner discarded by the forward map. See
+    Empty label fibers contribute zero-dimensional diagonal blocks, yielding
+    the decomposition of \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}.
+    Here only active product corners are retained
+    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}, with fixed-pair support
+    handled by empty families \cite{gap:cpsv16_figure11_per_pair_support}
+    and the retained-row map acting as a coisometry onto the active direct sum
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
@@ -733,21 +712,11 @@
     matrices $\chi_{\alpha,\beta,\gamma}$ and coisometries
     $U_{\alpha,\beta}$ satisfying the forward fusion identity and exact
     reconstruction for every product tensor $M_\alpha M_\beta$. This is the
-    active-corner construction in
-    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}.
-
-    \textbf{Scope restriction (active product BNT):} Only active product
-    corners occur. A label absent from a fixed product pair has zero fusion
-    multiplicity. See
-    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
-
-    \textbf{Local fix (Figure-11 fixed-pair support):} A fixed product pair
-    may have no active corner, and no unsupported sector is inserted. See
-    \cite{gap:cpsv16_figure11_per_pair_support}.
-
-    \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
-    a coisometry onto the active direct sum, and its adjoint gives the exact
-    reconstruction. See
+    active-corner construction of
+    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, retaining only
+    active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient},
+    accounting for fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
+    and using coisometric fusion onto the active sum
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
@@ -788,21 +757,11 @@
         U_{\alpha,\beta}.
         \notag
     \end{align}
-    This is the positive fusion decomposition of CPSV16, Appendix C.4,
-    lines 2020--2029.
-
-    \textbf{Scope restriction (active product BNT):} Only active product
-    corners occur. A label absent from a fixed product pair has zero fusion
-    multiplicity. See
-    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
-
-    \textbf{Local fix (Figure-11 fixed-pair support):} A fixed product pair
-    may have no active corner, and no unsupported sector is inserted. See
-    \cite{gap:cpsv16_figure11_per_pair_support}.
-
-    \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
-    a coisometry onto the active direct sum, and its adjoint gives the exact
-    reconstruction. See
+    This establishes the positive fusion decomposition of
+    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, retaining only
+    active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient},
+    accounting for fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
+    and using coisometric fusion onto the active sum
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
@@ -847,21 +806,11 @@
         \notag
     \end{align}
     Every diagonal entry of $\chi_{\alpha,\beta,\gamma}$ is positive.
-    This is the positive fusion decomposition in
-    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}.
-
-    \textbf{Scope restriction (active product BNT):} Only active product
-    corners occur. A label absent from a fixed product pair has zero fusion
-    multiplicity. See
-    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
-
-    \textbf{Local fix (Figure-11 fixed-pair support):} A fixed product pair
-    may have no active corner, and no unsupported sector is inserted. See
-    \cite{gap:cpsv16_figure11_per_pair_support}.
-
-    \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
-    a coisometry onto the active direct sum, and its adjoint gives the exact
-    reconstruction. See
+    This establishes the positive fusion decomposition of
+    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, retaining only
+    active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient},
+    accounting for fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
+    and using coisometric fusion onto the active sum
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
@@ -948,21 +897,11 @@
     \end{align}
     Thus the renormalization fixed-point and matrix-product-density-operator
     assumptions, together with normalized BNT-refined horizontal form, imply
-    the positive fusion decomposition of CPSV16, Appendix C.4, lines
-    2020--2029.
-
-    \textbf{Scope restriction (active product BNT):} Only active product
-    corners occur. A label absent from a fixed product pair has zero fusion
-    multiplicity. See
-    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
-
-    \textbf{Local fix (Figure-11 fixed-pair support):} A fixed product pair
-    may have no active corner, and no unsupported sector is inserted. See
-    \cite{gap:cpsv16_figure11_per_pair_support}.
-
-    \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
-    a coisometry onto the active direct sum, and its adjoint gives the exact
-    reconstruction. See
+    the positive fusion decomposition of
+    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, retaining only
+    active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient},
+    accounting for fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
+    and using coisometric fusion onto the active sum
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
