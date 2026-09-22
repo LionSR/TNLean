@@ -145,7 +145,22 @@ def check_inline_layout() -> None:
                 }"""
                 )
                 assert facts.pop("rows") == 5, facts
-                assert all(facts.values()), (width, facts)
+                assert all(facts.values()), (
+                    width,
+                    facts,
+                    page.locator(".main-text .centered")
+                    .nth(2)
+                    .evaluate(
+                        """element => ({
+                            html: element.innerHTML,
+                            display: getComputedStyle(element).display,
+                            images: [...element.querySelectorAll('img')].map(image => ({
+                                rect: image.getBoundingClientRect().toJSON(),
+                                display: getComputedStyle(image).display,
+                            })),
+                        })"""
+                    ),
+                )
             browser.close()
     print(
         "Inline tenkz/tikzcd layout: paragraphs, glue, explicit breaks and equation rows pass."
