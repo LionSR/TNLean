@@ -197,24 +197,7 @@ jobs:
               - 'scripts/test_seed_lake_build.sh'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
-            inline-layout:
-    name: Check inline diagram semantics
-    needs: changes
-    if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true')"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-      - name: Install parser and browser
-        run: |
-          python3 -m pip install plasTeX==3.1 playwright==1.55.0
-          python3 -m playwright install --with-deps chromium
-      - name: Test inline picture semantics
-        run: python3 scripts/test_tenkz_inline_web.py
-
-  blueprint:
+            blueprint:
               - 'blueprint/src/**'
               - 'texra-blueprint.toml'
               - 'tenkz.toml'
@@ -521,6 +504,23 @@ jobs:
           python3 scripts/check_numbered_lean_files.py
           --root .
           --base-ref HEAD^
+
+  inline-layout:
+    name: Check inline diagram semantics
+    needs: changes
+    if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install parser and browser
+        run: |
+          python3 -m pip install plasTeX==3.1 playwright==1.55.0
+          python3 -m playwright install --with-deps chromium
+      - name: Test inline picture semantics
+        run: python3 scripts/test_tenkz_inline_web.py
 
   blueprint:
     name: Check blueprint compiles without errors
