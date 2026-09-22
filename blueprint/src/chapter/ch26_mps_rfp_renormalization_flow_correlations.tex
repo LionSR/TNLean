@@ -90,7 +90,7 @@
     Both physical matrix algebras are one-dimensional, so every physical
     unitary-conjugation channel in the diagram is the identity. Similarity is
     symmetric and hence gives both directions of the diagram in
-    \cite[Appendix~D, equation~\texttt{RFP-gauge}]{Cirac2016MPDO_arXiv}.
+    \cite[Appendix~D, lines~2100--2107]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[One-letter MPS blocking witness]
@@ -135,8 +135,12 @@
     \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
     \leanok
     \uses{def:one_letter_mpdo_virtual_gauge_rfp, def:blocked_gauge_phase_fixed_point}
-    Every one-letter MPS blocking witness induces the exact doubled-MPO
-    virtual-gauge condition.
+    If $A = \zeta X A^{[2]} X^{-1}$ is a one-letter MPS blocking witness with $|\zeta|=1$, then the doubled tensor $M = A \otimes \overline{A}$ satisfies
+    \begin{align}
+        M & = (X \otimes \overline{X}) M^{[2]} (X \otimes \overline{X})^{-1},
+        \notag
+    \end{align}
+    inducing the doubled-MPO virtual-gauge condition.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -175,8 +179,8 @@
     satisfying the source normalization convention. It also satisfies the literal
     one-letter virtual-gauge condition in the source diagram, but its transfer
     map is not idempotent. Hence the canonical-restricted pure-state
-    equivalence claimed after
-    \cite[Appendix~D, equation~\texttt{RFP-gauge}]{Cirac2016MPDO_arXiv} is false.
+    equivalence claimed in
+    \cite[Appendix~D, lines~2100--2107]{Cirac2016MPDO_arXiv} is false.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -322,8 +326,14 @@
     \lean{MPSTensor.isPositiveGapPhysicalCID_of_isPhysicalCID}
     \leanok
     \uses{def:source_physical_cid, def:is_positive_gap_physical_cid}
-    Correlations independent of distance for all disjoint physical regions are
-    independent of distance when both complementary gaps are positive.
+    If an MPS tensor satisfies physical distance independence for all nonnegative gaps,
+    then it satisfies the positive-gap condition: for any positive $n_1, n_2, m_1, m_2 > 0$ with $n_1 + n_2 = m_1 + m_2$,
+    \begin{align}
+        \Tr\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
+         & =
+        \Tr\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     Restrict the four gap lengths to positive integers.

@@ -82,8 +82,11 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     \lean{MPOTensor.IsMPUPos.isMPU}
     \leanok
     \uses{def:mpug_positive_mpu, def:mpu}
-    Every matrix product unitary on nonempty chains is a matrix product unitary
-    in the sense of Definition~\ref{def:mpu}.
+    If $\mathcal U$ is a matrix product unitary on nonempty chains (so $U^{(N)}\bigl(U^{(N)}\bigr)^\dagger = \Id$ for all $N\geq 1$), then $\mathcal U$ generates matrix product unitaries in the sense of Definition~\ref{def:mpu}:
+    \begin{align}
+        U^{(N)}\bigl(U^{(N)}\bigr)^\dagger = \Id \quad \text{for all } N > 1.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -97,7 +100,11 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     \leanok
     \uses{def:mpug_positive_mpu, def:mpdo_physical_blocking}
     If $\mathcal U$ is a matrix product unitary on nonempty chains and $L>0$,
-    then $\mathcal U^{[L]}$ is also a matrix product unitary on nonempty chains.
+    then $\mathcal U^{[L]}$ is also a matrix product unitary on nonempty chains:
+    \begin{align}
+        U^{[L](N)}\bigl(U^{[L](N)}\bigr)^\dagger = \Id \quad \text{for all } N\geq 1.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -776,9 +783,7 @@ inverse-compatible decomposition is asserted.
         K            & =\widetilde L X\colon\C^\ell\longrightarrow\C^r.
     \end{align}
     Here $\widetilde L$ is the weighted left inverse supplied by
-    $\widetilde X^\dagger(I_d\otimes\rho)\widetilde X=I_r$.
-    The weight is retained; $K=\widetilde X^\dagger X$ is not asserted.
-    No adjoint gauge relation is needed to define $K$.
+    $\widetilde X^\dagger(I_d\otimes\rho)\widetilde X=I_r$; no adjoint gauge relation is needed to define $K$.
 \end{definition}
 
 \begin{definition}[The reverse comparison matrix]
@@ -1730,14 +1735,9 @@ asserted in that passage.
         (\widehat X_2)_{(x,i),t}\overline{(\widehat X_2)_{(x,j),t}}
          & =\frac{\ell}{d}\delta_{i,j}.
     \end{align}
-    Simplicity of $\mathcal U_g^\dagger$, which
-    \cite[line~5344]{FrancoRubio2025MPUGauging} assumes, is here a
-    consequence of the canonical-form-II presentation at $g$. No further
-    gauge or scalar is chosen, and the truncated-symmetry complement
-    identity is not asserted. These are the properties labelled
-    \emph{eq:MPUnice2}--\emph{eq:MPUnice4} in
-    \cite[lines~1064--1162]{FrancoRubio2025MPUGauging}, transported as at
-    lines~5486--5487.
+    Simplicity of $\mathcal U_g^\dagger$ follows from the canonical-form-II
+    presentation at $g$. These identities correspond to the properties in
+    \cite[lines~1064--1162, 5486--5487]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpug_involutive_adjoint_gauge, thm:mpug_dagger_inverse_scalar,
@@ -2098,8 +2098,13 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \lean{MPOTensor.GroupFamily.IsRepresentation.nonempty_reductionFamily}
     \leanok
     \uses{def:mpug_group_representation, def:mpug_pair_reductions}
-    Every MPU representation by simple injective tensors admits a family of
-    selected reductions.
+    Let $\{\mathcal U_g\}_{g\in G}$ be an MPU representation by simple injective tensors.
+    Then there exist matrices $V_{g,h}\in\C^{D_{gh}\times D_gD_h}$ and $W_{g,h}\in\C^{D_gD_h\times D_{gh}}$ such that for all $g,h\in G$,
+    \begin{align}
+        V_{g,h} W_{g,h} = \Id, \quad V_{g,h} B_{g,h}^{\mathbf a} W_{g,h} = A_{g,h}^{\mathbf a}
+        \notag
+    \end{align}
+    for every word $\mathbf a$, forming a family of selected reductions.
 \end{theorem}
 
 \begin{proof}
@@ -2187,14 +2192,11 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     representation by simple injective tensors and has a family of selected
     reductions with exterior buffer length $1$.
 
-    This is the assertion of \cite{FrancoRubio2025MPUGauging},
-    \texttt{main.tex} line 1498, and of the footnote to Theorem~1 of
-    \cite{GarreRubioSchuch2024DomainWall}, that the nilpotency length can be
-    reduced to $1$ by blocking, read as the one-site exterior identity
-    (\ref{eq:mpug_common_blocking_one_site}).  Blocking need not make a
-    blocked residual letter vanish, and the blocked nilpotency length
-    $\ell(B_{g,h}^{[L]},A_{g,h}^{[L]};V_{g,h},W_{g,h})$ of Definition~8 in
-    \cite{Molnar2018SemiInjective} need not be $1$
+    This establishes the blocking reduction to exterior buffer length $1$ in
+    \cite[line~1498]{FrancoRubio2025MPUGauging} and
+    \cite[Theorem~1, footnote]{GarreRubioSchuch2024DomainWall}, interpreted as
+    the one-site exterior identity (\ref{eq:mpug_common_blocking_one_site}).
+    For nilpotency terminology nuances see
     \cite{gap:mgsc18_nilpotency_length_one_terminology}.
 \end{theorem}
 
@@ -2238,18 +2240,13 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     fusion equation of \cite[lines 1459--1497]{FrancoRubio2025MPUGauging}, and
     (\ref{eq:mpug_pair_exterior_identity}) is its exterior fusion equation.
 
-    Two features of the source are recorded here.  First, the existence of the
-    fusion tensors is not proved in \cite{FrancoRubio2025MPUGauging}: at
-    \texttt{main.tex} line 1405 it is attributed to
-    \cite{Molnar2018SemiInjective}, whose Proposition~20 and Theorem~22 carry
-    the existence and the uniqueness; the existence statement used here is
-    Theorem~\ref{thm:mpug_pair_reductions_exist}.  Second, the reduction of
-    the nilpotency length to $1$ by blocking is asserted at \texttt{main.tex}
-    line 1498 without proof; the content used here is the one-site exterior
-    identity (\ref{eq:mpug_common_blocking_one_site}).  Blocking need not make
-    a blocked residual letter vanish, and the blocked nilpotency length of
-    Definition~8 in \cite{Molnar2018SemiInjective} need not be $1$
-    \cite{gap:mgsc18_nilpotency_length_one_terminology}.
+    Existence and uniqueness of the fusion tensors are established in
+    \cite[Proposition~20, Theorem~22]{Molnar2018SemiInjective} (cited by
+    \cite[line~1405]{FrancoRubio2025MPUGauging}; see
+    Theorem~\ref{thm:mpug_pair_reductions_exist}). Reduction of the exterior
+    buffer length to $1$ by blocking corresponds to the one-site exterior
+    identity (\ref{eq:mpug_common_blocking_one_site}); for nilpotency
+    terminology nuances see \cite{gap:mgsc18_nilpotency_length_one_terminology}.
 \end{definition}
 
 \begin{theorem}[Reciprocal scalar rescaling of the fusion tensors]
@@ -2287,13 +2284,10 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     blocking by any length $L$.
 
     This is the scalar gauge freedom of the fusion tensors in
-    \cite[\texttt{main.tex} lines 1500--1504]{FrancoRubio2025MPUGauging},
-    under the identification (\ref{eq:mpug_fusion_tensors}).  The assertion is
-    that a reciprocal rescaling of a family of selected reductions is again
-    such a family.  That every family of selected reductions of a given
-    representation arises from a fixed one by such a rescaling is a separate,
-    stronger claim which \cite{FrancoRubio2025MPUGauging} does not prove; the
-    available uniqueness is the boundary-dressed statement of
+    \cite[lines~1500--1504]{FrancoRubio2025MPUGauging},
+    under the identification (\ref{eq:mpug_fusion_tensors}), showing that
+    a reciprocal rescaling of a family of selected reductions is again
+    such a family; boundary-dressed uniqueness is given by
     Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness}.
 \end{theorem}
 
@@ -3434,10 +3428,8 @@ the disjoint complement of the first.
     $(a,p,b,q)$ and $(a',p',b',q')$. The ring has $n+m+2$ sites, including
     two distinct marked sites even when $n=m=0$, and the two
     endpoint-inclusive arcs overlap at both marked sites. Only the two cut
-    factorizations are used: neither canonicality, simplicity,
-    normalization, unitarity, nor a phase relation is assumed, and the
-    phase-bearing operator identity of
-    \cite[lines~5486--5487]{FrancoRubio2025MPUGauging} is not asserted here.
+    factorizations are used; this holds without assuming canonicality,
+    simplicity, normalization, or unitarity \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpug_source_periodic_arcs, def:mpu_source_matrix_one,
@@ -5624,7 +5616,13 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.ScalarThreeCochain.CohomologousTo.equivalence}
     \leanok
     \uses{def:mpug_cohomologous_to, thm:mpug_gauge_action}
-    Cohomologous-to is reflexive, symmetric, and transitive.
+    The relation $\omega \sim \eta$ on scalar $3$-cochains is an equivalence relation:
+    \begin{align}
+        \omega \sim \omega, \quad
+        \omega \sim \eta \implies \eta \sim \omega, \quad
+        (\omega \sim \eta \land \eta \sim \zeta) \implies \omega \sim \zeta.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok

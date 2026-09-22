@@ -328,7 +328,10 @@ transformation that leaves the generated state unchanged.
     \lean{TNLean.PEPS.GaugeEquiv.sameState}
     \leanok
     \uses{def:GaugeEquivPEPS, def:peps_same_state, thm:applyGauge_stateCoeff}
-    Gauge equivalence implies that the two PEPS tensors represent the same state.
+    If $A \sim B$ are gauge-equivalent PEPS tensors, then they represent the same state:
+    \begin{align}
+        \operatorname{state}(A) & = \operatorname{state}(B).
+    \end{align}
 \end{theorem}
 
 \subsection{Vertex injectivity and the local inverse}

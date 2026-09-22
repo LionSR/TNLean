@@ -57,9 +57,11 @@
     \lean{MPSTensor.isPositiveGapBNTZCL_iff}
     \leanok
     \uses{def:is_positive_gap_bnt_zcl}
-    The positive-gap restriction is equivalent to the conjunction
-    of the BNT relation, positive-gap physical distance independence, and BNT
-    local orthogonality.
+    A tensor $A$ satisfies positive-gap zero correlation length if and only if
+    \begin{align}
+        \operatorname{IsBNT}(A) \land \operatorname{IsPositiveGapPhysicalCID}(A) \land \operatorname{IsBNTLocallyOrthogonal}(A).
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     This is the defining conjunction.
@@ -274,8 +276,11 @@
     \lean{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}
     \leanok
     \uses{def:source_bnt_zcl, def:is_positive_gap_bnt_zcl}
-    If a BNT family has zero correlation length for all disjoint physical
-    regions, then it has positive-gap BNT zero correlation length.
+    If a BNT family $A$ has zero correlation length for all disjoint physical regions, then
+    \begin{align}
+        \operatorname{IsPhysicalBNTZCL}(A) \implies \operatorname{IsPositiveGapBNTZCL}(A).
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:is_positive_gap_physical_cid_of_physical_cid}

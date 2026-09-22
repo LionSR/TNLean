@@ -344,8 +344,11 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.SameState.edgeBlockedCoeff_eq}
     \leanok
     \uses{def:peps_same_state, thm:peps_edgeBlockedCoeff_eq_stateCoeff}
-    If two PEPS tensors have the same state, then their edge-blocked
-    coefficients agree at every edge and every physical configuration.
+    If two PEPS tensors $A$ and $B$ represent the same state, then their edge-blocked
+    coefficients agree at every edge $e$ and every physical configuration $\sigma$:
+    \begin{align}
+        C_A(e;\sigma) & = C_B(e;\sigma).
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     For every physical configuration $\sigma$,
@@ -357,8 +360,11 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.SameState.edgeInsertedCoeff_identity_eq}
     \leanok
     \uses{def:peps_same_state, thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff}
-    If two PEPS tensors have the same state, then their edge-centered identity
-    insertions agree at every edge and every physical configuration.
+    If two PEPS tensors $A$ and $B$ represent the same state, then their edge-centered identity
+    insertions agree at every edge $e$ and every physical configuration $\sigma$:
+    \begin{align}
+        C_A(e,\Id;\sigma) & = C_B(e,\Id;\sigma).
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     For every physical configuration $\sigma$,
@@ -524,8 +530,11 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
     \leanok
     \uses{def:IsVertexInjective}
-    If the original PEPS tensor is vertex-injective, then the two endpoint
-    tensor maps in the edge-blocked three-site chain are injective.
+    If the original PEPS tensor $A$ is vertex-injective, then for each edge $e=(u,v)$,
+    the two endpoint tensor maps in the edge-blocked three-site chain are injective:
+    \begin{align}
+        \inj(T_{A,u}) \quad\text{and}\quad \inj(T_{A,v}).
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     If $e=(u,v)$, vertex injectivity gives
@@ -538,9 +547,11 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all}
     \leanok
     \uses{def:IsVertexInjective, thm:peps_edgeBlockedEndpointTensorMaps_injective}
-    If the original PEPS tensor is vertex-injective, then the two endpoint
-    tensor maps in the edge-blocked three-site chain are injective at every
-    edge.
+    If the original PEPS tensor $A$ is vertex-injective, then the two endpoint
+    tensor maps in the edge-blocked three-site chain are injective at every edge $e=(u,v)$:
+    \begin{align}
+        \forall e=(u,v),\quad \inj(T_{A,u}) \quad\text{and}\quad \inj(T_{A,v}).
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     For each $e=(u,v)$,
@@ -553,9 +564,13 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle}
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeMiddleTensorFamily}
-    For a vertex-injective PEPS tensor, injectivity of the edge-blocked middle
+    For a vertex-injective PEPS tensor $A$, injectivity of the edge-blocked middle
     tensor gives the full injectivity statement for the edge-blocked three-site
-    chain.
+    chain at $e=(u,v)$:
+    \begin{align}
+        \inj(T_{A,u}) \wedge \inj(T_{A,M_e}) \wedge \inj(T_{A,v}),
+    \end{align}
+    where $M_e = V\setminus\{u,v\}$.
 \end{theorem}
 \begin{proof}\leanok
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The endpoint theorem supplies
@@ -570,7 +585,10 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeMiddleTensorFamily, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     If every edge-middle tensor is injective, then a vertex-injective PEPS
-    tensor gives an injective edge-blocked three-site chain at every edge.
+    tensor $A$ gives an injective edge-blocked three-site chain at every edge $e=(u,v)$:
+    \begin{align}
+        \forall e=(u,v),\quad \inj(T_{A,u}) \wedge \inj(T_{A,M_e}) \wedge \inj(T_{A,v}).
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     For each $e=(u,v)$, put $M_e=V\setminus\{u,v\}$. Vertex injectivity gives

@@ -203,9 +203,8 @@ closing a chain of $N$ copies of $\mathcal U$.
     \end{align}
     The bond space of $\mathcal W$ is the product of the two original bond
     spaces.  The physical adjoint exchanges and conjugates the physical
-    indices without reversing the order of the virtual chain, exactly as in
-    the barred upper layer of Figures~\texttt{II\_Simple1.png} and
-    \texttt{II\_Simple2.png} of \cite{Cirac2017MPU}.
+    indices without reversing the order of the virtual chain, as in the upper
+    layer of the double-layer diagrams in \cite[Section~II]{Cirac2017MPU}.
 \end{definition}
 
 \begin{theorem}[Closed double layer]
@@ -326,8 +325,12 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.IsMPUSimple.isMPU}
     \leanok
     \uses{def:mpu, def:mpu_simple}
-    Every simple tensor generates matrix product unitaries.
-    This is \cite[Proposition~III.3(i)]{Cirac2017MPU}.
+    If $\mathcal U$ is simple, then for every integer $N > 1$, the periodic operator $U^{(N)}$ is unitary:
+    \begin{align}
+        \bigl(U^{(N)}\bigr)^\dagger U^{(N)} = \Id, \quad U^{(N)} \bigl(U^{(N)}\bigr)^\dagger = \Id.
+        \notag
+    \end{align}
+    In particular, $\mathcal U$ generates matrix product unitaries \cite[Proposition~III.3(i)]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -465,8 +468,8 @@ closing a chain of $N$ copies of $\mathcal U$.
         \left(\mathcal W,
         X-\frac{\tr(X)}d\Id\right),
     \end{align}
-    where the second physical argument is traceless.  This is equation
-    \texttt{WIsom} in \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
+    where the second physical argument is traceless.  This is the
+    decomposition in \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -513,8 +516,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     Let $\mathcal U$ be an MPU with physical dimension $d>0$.  Every closed
     product of positive length that contains at least one residual coefficient
     has zero trace.  In particular, this includes a single residual
-    coefficient.  This is the mixed-trace assertion preceding equation
-    \texttt{ESE=0} in
+    coefficient.  This is the mixed-trace property in
     \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
 \end{theorem}
 
@@ -620,9 +622,8 @@ closing a chain of $N$ copies of $\mathcal U$.
     \begin{align}
         S_{\alpha_1}\cdots S_{\alpha_{D^2}} & =0.
     \end{align}
-    This is equation \texttt{Sprime=0} in
-    \cite[Proposition~III.3(ii)]{Cirac2017MPU}, with the corrected exact length
-    $D^2$ in place of the unsupported strict intermediate bound.
+    This establishes the vanishing of long residual products in
+    \cite[Proposition~III.3(ii)]{Cirac2017MPU}, with the exact length $D^2$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -648,8 +649,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         +\operatorname{span}\{AE:A\in\mathfrak S\}                     \\
                       & +\operatorname{span}\{AEB:A,B\in\mathfrak S\}.
     \end{align}
-    This is the basis-independent sum of the three forms in equation
-    \texttt{sprimeforms} of
+    This is the basis-independent sum of the three forms in
     \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
 \end{definition}
 
@@ -973,9 +973,6 @@ closing a chain of $N$ copies of $\mathcal U$.
     $\delta_{p,q}$.  Summing over the $d^K$ tails and multiplying by $d^{-K}$
     leaves the same Kronecker delta.
 \end{proof}
-
-% Formalization scope: identifying this normalized scalar with
-% $(\texttt{sourceU})^\dagger\texttt{sourceU}$ is treated separately.
 
 
 \begin{theorem}[Simplicity at every later direct blocking]
@@ -2138,9 +2135,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.IsMPU.tensorProduct}
     \leanok
     \uses{def:mpu, def:mpu_independent_tensor_product}
-    The independent tensor product of two matrix product unitary tensors is a
-    matrix product unitary tensor. This is the tensoring operation in the proof
-    of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+    If $\mathcal U$ and $\mathcal V$ generate matrix product unitaries, then their independent tensor product $\mathcal U\boxtimes\mathcal V$ generates matrix product unitaries: for every $N > 1$,
+    \begin{align}
+        (\mathcal U\boxtimes\mathcal V)^{(N)} \bigl((\mathcal U\boxtimes\mathcal V)^{(N)}\bigr)^\dagger = \Id.
+        \notag
+    \end{align}
+    This is the tensoring operation in the proof of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2377,7 +2377,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         W_\rho & =\Id_d\otimes\rho.
     \end{align}
     This is the source weight in
-    \cite[equation labelled~\texttt{Y1Y1X1X1}]{Cirac2017MPU}.
+    \cite[Section~III.C, lines~479--487]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 479--487.
 \end{definition}
 
@@ -2666,8 +2666,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     Thus $u:\C^{d^2}\to\C^{\ell r}$ has source order $\ell\times r$,
     while $v:\C^{r\ell}\to\C^{d^2}$ has source order $r\times\ell$.
-    These are the literal triangle contractions in
-    \cite[Section~III, equations~\texttt{uuvv}--\texttt{vdagger}]{Cirac2017MPU}.
+    These are the triangle contractions in
+    \cite[Section~III]{Cirac2017MPU}.
 \end{definition}
 
 \begin{theorem}[Paper-gate two-site factorization]
@@ -2685,9 +2685,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     where $\operatorname{swap}_{r,\ell}$ reorders the source index of $u$ from
     $\ell\times r$ to the $r\times\ell$ order carried by the columns of $v$ and
-    reverses the two physical input coordinates. This is the exact two-site
-    factorization through the paper gates $u$ and $v$ of CPSV17
-    \texttt{SVDforms2}--\texttt{uuvv}.
+    reverses the two physical input coordinates. This is the two-site
+    factorization through the gates $u$ and $v$ in \cite[Section~III]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2778,8 +2777,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         =\tr\!\left[W^{p_1q_1}W^{p_2q_2}E^K\right].
     \end{align}
     Thus $p$ labels the starred input and $q$ the unstarred input. This is
-    the closed input-tail expression occurring on the right-hand side of
-    \cite[equation~\texttt{uUnitary} and lines~550--556]{Cirac2017MPU}.
+    the closed input-tail expression in \cite[lines~550--556]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3283,8 +3281,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical}
     \leanok
     \uses{def:mpu_full_support, thm:cpsv_physical_reindexing}
-    A bijective relabeling of the physical alphabet preserves full
-    support of canonical-form data.
+    Suppose that canonical-form data have full support, $\sum_{k=1}^r D_k = D$.
+    Then for any bijection $\pi \colon \{1,\dots,d'\} \to \{1,\dots,d\}$, the relabeled data also satisfy full support:
+    \begin{align}
+        \sum_{k=1}^r D_k = D.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3324,8 +3326,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_r_eq_one_of_fullSupport}
     \leanok
     \uses{def:mpu_full_support}
-    Canonical-form data with one block and full support reconstruct
-    an irreducible ambient tensor.
+    Let canonical-form data have $r=1$ block and full support $\sum_{k=1}^r D_k = D$.
+    Then the block bond dimension satisfies $D_1 = D$, and the reconstructed ambient tensor $A$ is irreducible.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3344,9 +3346,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPSTensor.CPSVCanonicalFormData.isNormalTensor_of_r_eq_one_of_fullSupport}
     \leanok
     \uses{def:mpu_full_support}
-    Suppose that canonical-form data have one block and full
-    support.  If the transfer map has spectral radius one and is primitive,
-    then the ambient tensor is a normal tensor.
+    Let canonical-form data have $r=1$ block and full support $\sum_{k=1}^r D_k = D$.
+    If the transfer map $\E_A$ has spectral radius $\rho(\E_A) = 1$ and is primitive,
+    then the ambient tensor $A$ is normal.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4583,9 +4585,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \mathcal U^{j_2}_{q_1,\gamma,\alpha'}.
     \end{align}
     The $p$ entries are starred and the $q$ entries are unstarred. This is
-    precisely the staggered reflected--direct four-tensor expression obtained
-    from $u=Y_2\mathbin{-}Y_1$ and the two identities in
-    \cite[equations~\texttt{X1X2b} and~\texttt{uUnitary}]{Cirac2017MPU}.
+    the four-tensor expression obtained from $u=Y_2\mathbin{-}Y_1$ and the
+    identities in \cite[Section~III.C]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4784,10 +4785,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     for all $i,j,k,\ell$. The source gate and source factors use the same
     weight $\rho$ throughout. The transpose occurs only in the inserted
     column-stacking vector. In the source, $\rho$ is diagonal, so this vector
-    equals $\lvert\rho)$ and the displayed equivalence is exactly
-    \cite[equation~\texttt{vUnitary} and proof of Theorem~III.8]{Cirac2017MPU}.
-    % Source lines: paper_v2.tex 577--600. The weight orientation is recorded
-    % in docs/paper-gaps/mpu_source_cut_orientation.tex.
+    equals $\lvert\rho)$ and the displayed equivalence is the identity in the
+    proof of \cite[Theorem~III.8]{Cirac2017MPU}; see \cite{gap:mpu_source_cut_orientation}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -5044,10 +5043,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $E^{J}=\lvert\rho)(\Phi\rvert$; it becomes a canonical-form-II
     presentation exactly when that weight is the ambient fixed matrix of the
     convention, and the passage from the supplied datum to the presentation
-    is the open step recorded in
-    \texttt{docs/paper-gaps/mpu\_canonical\_form\_full\_support.tex}. Until
-    that step is available, this implication is the reason the present
-    theorem is not ready.
+    is documented in \cite{gap:mpu_canonical_form_full_support}.
 
     If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
     Theorem~\ref{thm:mpu_source_gates_two_site_factorization} gives the exact
@@ -5064,8 +5060,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \,\operatorname{swap}_{r,\ell}(u)^\dagger.
     \end{align}
     Thus $v$ is a product of unitaries and is unitary. This step uses the
-    corrected source-cut orientation recorded in
-    \texttt{docs/paper-gaps/mpu\_source\_cut\_orientation.tex}.
+    corrected source-cut orientation \cite{gap:mpu_source_cut_orientation}.
 
     Finally, suppose that $v$ is unitary. Then $v^\dagger v=\Id$, and
     Theorem~\ref{thm:mpu_simple_of_source_v_isometry} shows that
@@ -6427,8 +6422,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =C\bigl(\mathcal W,E(\mathcal W)\bigr).
         \label{eq:mpu_factor_free_sandwich}
     \end{align}
-    This is the contraction shown in Figure~\texttt{IV\_index4.png} of
-    \cite[Proposition~IV.5]{Cirac2017MPU}.
+    This is the contraction in \cite[Proposition~IV.5]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 807--812.
 \end{definition}
 
@@ -6667,15 +6661,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notready
     \discussion{6023}
     \uses{def:index, index-well-defined, lem:mpu_index_tensor, lem:mpu_index_composition, prop:continuity-index, def:equivalent-tensors}
-    For MPU tensors under the source's standing canonical-form convention, take
-    the index defined from any simple blocking. This index has the following
-    properties.
+    For MPU tensors under the standing canonical-form convention, the index $\operatorname{ind}(\mathcal U) = \log(r/\ell)$ defined from any simple blocking satisfies:
     \begin{enumerate}
-        \item It does not change under blocking.
-        \item It is additive under tensor products and composition.
-        \item It is constant under continuous deformations through MPU tensors.
-        \item Two MPU tensors have the same index if and only if they are
-              equivalent.
+        \item Invariance under blocking: $\operatorname{ind}(\mathcal U^{[L]}) = \operatorname{ind}(\mathcal U)$ for all $L \ge 1$.
+        \item Additivity: $\operatorname{ind}(\mathcal U\boxtimes\mathcal V) = \operatorname{ind}(\mathcal U) + \operatorname{ind}(\mathcal V)$, and $\operatorname{ind}(\mathcal W) = \operatorname{ind}(\mathcal U) + \operatorname{ind}(\mathcal U')$ for composition.
+        \item Continuity: $\operatorname{ind}(\mathcal W(0)) = \operatorname{ind}(\mathcal W(1))$ along any continuous path $p \mapsto \mathcal W(p)$ of MPU tensors.
+        \item Classification: $\operatorname{ind}(\mathcal U) = \operatorname{ind}(\mathcal V) \iff \mathcal U \sim \mathcal V$.
     \end{enumerate}
     This is the unrestricted statement of
     \cite[Theorem~IV.6]{Cirac2017MPU}.
@@ -7393,7 +7384,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.StrictlyEquivalentUnderSymmetry.toStrictlyEquivalent}
     \leanok
     \uses{def:strictly-equivalent-symmetry, def:strictly-equivalent-tensors}
-    Strict equivalence under a symmetry implies strict equivalence.
+    If $\mathcal U$ and $\mathcal V$ are strictly equivalent under a symmetry $\mathcal S$ via a continuous path $\mathcal W(p)$, then they are strictly equivalent via the same path:
+    \begin{align}
+        \mathcal W(0) = \operatorname{reind}(\mathcal U), \quad \mathcal W(1) = \mathcal V.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -7466,8 +7461,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:mpu_coherent_family_equivalent_symmetry, def:equivalent-tensors,
         lem:mpu_strict_symmetry_equivalence_forget}
-    Fixed-bond equivalence under a coherent symmetry family implies ordinary
-    equivalence after the same ancillas and blocking.
+    Fixed-bond equivalence under a coherent symmetry family implies ordinary equivalence:
+    \begin{align}
+        \mathcal U \sim_{\mathcal S} \mathcal V \implies \mathcal U \sim \mathcal V.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -8533,8 +8531,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \rho_{d^2} & =(d^2)^{-1}\Id_{d^2}.
     \end{align}
     These are the scalar identity choices compatible with the source weight in
-    \cite[equation labelled~\texttt{Y1Y1X1X1}]{Cirac2017MPU}. No transfer-map
-    fixed-point equation is asserted here.
+    \cite[Section~III.C, lines~479--487]{Cirac2017MPU}.
 
     The supplied source-factor witnesses below instead use
     $\rho_{\mathrm{aux}}=\Id_d$ for each constituent shift and
@@ -8598,9 +8595,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
             & (X_2')^\dagger X_2'                    & =\Id,
             & Y_i'Z_i'                               & =\Id.
     \end{align}
-    This is the normalization of
-    \cite[equations~\texttt{Erightleft}, \texttt{X1X2b}, and
-        \texttt{YZ=1}]{Cirac2017MPU} for the right shift.
+    This is the normalization in
+    \cite[Section~III.C]{Cirac2017MPU} for the right shift.
 \end{definition}
 
 \begin{theorem}[The paper source tensor $u$ for the right shift]
@@ -8625,8 +8621,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & u^\dagger u    & =\Id.
     \end{align}
     This fixes the order and normalization of the two triangles in
-    \cite[equations~\texttt{uu} and~\texttt{uUnitary}]{Cirac2017MPU} for this
-    basic MPU. It is the explicit normalization and orientation regression for
+    \cite[Section~III]{Cirac2017MPU} for this basic MPU. It is the explicit
+    normalization and orientation regression for
     Theorem~\ref{thm:mpu_source_u_retained_interior} and
     Lemma~\ref{lem:mpu_admissible_source_u_isometry}.
 \end{theorem}
@@ -8703,9 +8699,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.shiftExampleU₃_isMPU}
     \leanok
     \uses{threeMPU, thm:mpu_shift_tensor_formulas, thm:mpu_finite_tensor_product, thm:mpu_tensor_product, def:mpu}
-    The three tensors generate the operators displayed in
-    Definition~\ref{threeMPU} on every nonempty chain, and each tensor is a
-    matrix product unitary.
+    For every chain length $N \ge 1$, the periodic operators generated by $\mathcal U_1, \mathcal U_2, \mathcal U_3$ satisfy:
+    \begin{align}
+        U_1^{(N)} & = (\Id\otimes\Id)^{\otimes N}, \notag       \\
+        U_2^{(N)} & \cong T^{(N)\dagger}\otimes T^{(N)}, \notag \\
+        U_3^{(N)} & \cong T^{(N)}\otimes T^{(N)\dagger}. \notag
+    \end{align}
+    Moreover, each tensor is a matrix product unitary: $(U_a^{(N)})^\dagger U_a^{(N)} = \Id$ for all $N > 1$ and $a \in \{1, 2, 3\}$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -10224,8 +10224,8 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
          & =(pq)^2.
         \label{eq:qca_commuting_full_matrix_product}
     \end{align}
-    This is the unital single-block specialization of Schumacher--Werner
-    Proposition~\texttt{Cscom} \cite[lines~2119--2138]{SchumacherWerner2004QCA},
+    This is the unital single-block specialization of
+    \cite[lines~2119--2138]{SchumacherWerner2004QCA},
     used for the adjacent support algebras in
     \cite[lines~1270--1308]{Gross2012IndexTheory}; see
     \cite{gap:gnvw12_cscom_single_block_scope}.
@@ -11064,8 +11064,11 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     \lean{UniformSpace.Completion.denseRange_toComplStarAlgHom}
     \leanok
     \uses{def:completion_cstar_algebra}
-    The canonical star-algebra homomorphism from a normed star algebra into its
-    completion has dense range.
+    Let $A$ be a normed star algebra, and let $j \colon A \to \widehat{A}$ be the canonical star-algebra homomorphism into its completion. Then $j$ has dense range:
+    \begin{align}
+        \overline{j(A)} = \widehat{A}.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -11989,9 +11992,7 @@ $\omega^{-1}$.
          & \simeq \mathcal A^{(d)}_{\widehat\Lambda_L}.
     \end{align}
     This is the finite-region equivalence underlying the algebraic-local
-    blocking construction below.  No quasi-local completion, compatibility
-    with translations, propagation statement, circuit representation, or
-    transport of quantum cellular automata is asserted here.
+    blocking construction below.
 \end{definition}
 
 \begin{theorem}[Finite local-algebra blocking formulas]
@@ -12000,9 +12001,12 @@ $\omega^{-1}$.
         SpinChain.localBlocking_isometry}
     \leanok
     \uses{def:qca_local_blocking}
-    Matrix entries are transported by applying the inverse configuration
-    equivalence to both indices.  The blocking equivalence preserves the
-    operator norm and is an isometry.
+    For any matrix $M$, the blocked matrix entries satisfy
+    \begin{align}
+        (\Phi(M))_{i,j} = M_{\varphi^{-1}(i),\varphi^{-1}(j)},
+        \notag
+    \end{align}
+    and the blocking map preserves the operator norm: $\|\Phi(M)\| = \|M\|$. In particular, $\Phi$ is an isometry.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -12706,12 +12710,9 @@ the converse theorem.
     Lemma~\ref{lem:qca_translation_covariant_blocked}, respectively.
 \end{proof}
 
-Line~2308 of \cite{Cirac2017MPU} invokes the external
-Schumacher--Werner structure theorem to obtain support algebras, a depth-two
-nearest-neighbor circuit, and an MPU in standard form.  The next statements
-establish only the elementary normalization of a finite propagation
-neighborhood to $[-1,1]\cap\mathbb Z$ by regrouping sites.  They do not prove
-any part of that external structure theorem beyond this change of grouping.
+By regrouping sites into blocks of size $L$, a finite propagation
+neighborhood is normalized to nearest-neighbor interaction $[-1,1]\cap\mathbb Z$
+(see \cite[Section~3]{Cirac2017MPU}).
 
 \begin{lemma}[Nearest-neighbor carries from a strict displacement bound]
     \label{lem:qca_blocked_neighborhood_subset_nearest_neighbor}
@@ -13047,8 +13048,7 @@ left/right order below agrees with the adjacent-pair convention in
         P_x & =\{2x+1,2x+2\}.
         \label{eq:qca_pair_regions}
     \end{align}
-    The order $L_x,P_x$ is the left--right factor order in equation
-    \texttt{RR2x} of
+    The order $L_x,P_x$ is the left--right factor order in
     \cite[lines~1251--1266]{Gross2012IndexTheory}.  The same four-site
     localization occurs in
     \cite[lines~2313--2318]{Cirac2017MPU}.
@@ -13127,7 +13127,7 @@ left/right order below agrees with the adjacent-pair convention in
     Under this identification, the canonical local inclusion in
     \cite[lines~2292--2298]{Cirac2017MPU} is exactly the displayed
     composition.
-    Formula (\ref{eq:qca_RR2x}) is equation \texttt{RR2x} in
+    Formula (\ref{eq:qca_RR2x}) corresponds to the support algebra decomposition in
     \cite[lines~1261--1266]{Gross2012IndexTheory}.  Cirac et al. use the
     homogeneous even factor in
     \cite[lines~2322--2328]{Cirac2017MPU}; the odd factor and unified family
@@ -13184,8 +13184,7 @@ left/right order below agrees with the adjacent-pair convention in
     \end{align}
     More generally, the canonical image of any matrix on a finite region
     $\Lambda$ is supported in $\Lambda$.
-    This is the homogeneous specialization of the localization accompanying
-    equation \texttt{RR2x} in
+    This is the homogeneous specialization of the localization in
     \cite[lines~1261--1274]{Gross2012IndexTheory}; see
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{theorem}
@@ -13729,20 +13728,16 @@ left/right order below agrees with the adjacent-pair convention in
          & =\widehat{\mathcal R}_{2x+3}.
         \label{eq:qca_two_site_covariance_parities}
     \end{align}
-    The displacement is two sites of the original chain, that is, one blocked
-    cell.  The corresponding one-site formula
-    $\tau_1(\widehat{\mathcal R}_y)=\widehat{\mathcal R}_{y+1}$ is false in
-    general and is not asserted, because translation by one does not preserve
-    the even pairing $E_x$.  For the shift automorphism at
-    \cite[lines~1267--1268]{Gross2012IndexTheory} the even algebra is a
-    two-site full matrix algebra while the odd algebra is the scalars, and no
-    translation carries one onto the other.
+    The displacement is two sites of the original chain, corresponding to one blocked cell.
+    In general, one-site translation $\tau_1$ interchanges the even and odd pairings rather than preserving them;
+    for instance, for the unilateral shift automorphism \cite[lines~1267--1268]{Gross2012IndexTheory},
+    the even support algebra is a two-site full matrix algebra while the odd support algebra reduces to the scalars.
 
     Covariance of the support algebras under translation is the identity
     displayed at
     \cite[lines~1218--1226]{SchumacherWerner2004QCA} for the algebras defined
     at \cite[lines~1199--1206]{SchumacherWerner2004QCA}, and the ordered even
-    and odd factors are equation \texttt{RR2x} at
+    and odd factors are defined as in
     \cite[lines~1251--1266]{Gross2012IndexTheory}.  The translation-covariant
     fixed-$d$ setting is that of
     \cite[lines~2292--2298]{Cirac2017MPU}.
