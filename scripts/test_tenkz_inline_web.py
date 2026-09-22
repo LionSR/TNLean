@@ -161,7 +161,10 @@ def check_inline_layout() -> None:
                             display: getComputedStyle(element).display,
                             breaks: [...element.querySelectorAll('br')].map(br => ({
                                 rect: br.getBoundingClientRect().toJSON(),
-                                display: getComputedStyle(br).display,
+                                constructor: br.constructor.name,
+                                namespace: br.namespaceURI,
+                                styles: Object.fromEntries([...getComputedStyle(br)]
+                                    .map(key => [key, getComputedStyle(br).getPropertyValue(key)])),
                             })),
                             images: [...element.querySelectorAll('img')].map(image => ({
                                 rect: image.getBoundingClientRect().toJSON(),
