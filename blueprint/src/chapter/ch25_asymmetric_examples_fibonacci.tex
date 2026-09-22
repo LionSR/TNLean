@@ -2,13 +2,12 @@
 \label{sec:asymex_fibonacci}
 
 The Fibonacci fusion rules have two labels, the vacuum $1$ and $\tau$,
-with $\tau\otimes\tau=1\oplus\tau$. The string-net construction
-of~\cite[Appendix~D.1]{Bultinck2017Anyons} gives MPO blocks of bond
-dimensions two and three. We describe their concrete two-label
-realization, its action on periodic states, and its asymmetric
-compressions. As in the presentation of MPS examples and MPO symmetries
-in~\cite{Cirac2021Matrix}, we begin with the local tensors and their
-physical contractions.
+with $\tau\otimes\tau=1\oplus\tau$. The fusion rules and F-symbols
+used here are those of the string-net construction
+in~\cite[Appendix~D.1]{Bultinck2017Anyons}. We construct the displayed
+MPOs on a two-label physical space from these data and verify their
+periodic fusion and state-action identities directly.
+
 
 The physical space at each site is $\C^2$, with computational labels
 $0$ for the vacuum and $1$ for $\tau$. At system size $N\geq1$, write
@@ -104,12 +103,10 @@ on $\mc H_N$.
     and weight one.
 \end{definition}
 
-The physical alphabet here has dimension two. It is not the full
+The physical alphabet here has dimension two, rather than the full
 triple-index alphabet of the categorical string-net construction.
-Identifying operators on those different physical spaces requires an
-explicit map between the spaces. In particular, the convention
-$\sigma=\varphi^{-1/2}$ in these letters must not be replaced by
-$\varphi^{-1}$.
+In particular, the convention $\sigma=\varphi^{-1/2}$ in these letters must
+not be replaced by $\varphi^{-1}$.
 
 \begin{theorem}[The one-site matrices of the $\tau$ block]
     \label{thm:asymex_fib_entries}

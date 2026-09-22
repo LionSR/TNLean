@@ -8,6 +8,10 @@
 \section{The \texorpdfstring{$\Z_2\times\Z_2$}{Z2 x Z2} symmetry example}%
 \label{sec:asymex_z2z2}
 
+The phase-then-shift tensors below realize group MPO symmetries
+in the setting of Refs.~\cite{GarreRubio2023MPOSym,GarreRubioSchuch2024DomainWall}.
+
+
 On a periodic chain of $L>0$ two-qubit sites, define
 \begin{align}
     U_{g,L}\ket{t}
@@ -217,15 +221,9 @@ Thus $\lambda(g,h)=(-1)^{g_1h_2}$ supplies a length-dependent
 scalar factor. The tensor proof of this law, through word traces,
 is given in Theorem~\ref{thm:asymex_z2z2_fusion}.
 
-The results below concern the word spans of these tensors, their
+The results below determine the word spans of these tensors, their
 periodic multiplication law, and the compression of the sixteen pair
-blocks in the square of their direct sum. A three-cocycle class requires
-a separate comparison of the two orders of fusion of three tensors.
-Neither the periodic multiplication law nor the absence of a nonzero
-sitewise intertwiner alone computes that class.
-% The mixed-class interpretation and its restrictions to x, y, and xy
-% are external data in Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md,
-% Sections 1--3; no three-cocycle class is computed by the declarations below.
+blocks in the square of their direct sum.
 
 \begin{theorem}[Injectivity after blocking of the four symmetry tensors]%
     \label{thm:asymex_z2z2_normal}
@@ -443,10 +441,6 @@ the chain length.
     $A_L^\dagger-A_L=-2U_{xy,L}\neq0$ because $U_{xy,L}$ is unitary.
 \end{proof}
 
-These conclusions concern the specified defect and its normalization.
-Failure of $A_L/4$ to be idempotent on odd rings does not, by itself,
-give a general obstruction to condensation or compute an anomaly
-class.
 
 \section{The sixteen pair blocks of the stacked defect}%
 \label{sec:asymex_z2z2_pairs}
@@ -710,8 +704,6 @@ $s=(g,h)$.
     Indeed, conjugation identifies these spaces with the commutant
     of the target matrices, and injectivity after blocking makes
     that commutant consist only of scalar matrices.
-    These conclusions concern the pair blocks and their target
-    tensors, not the three-cocycle associator.
 \end{remark}
 
 \begin{theorem}[Compression of the stacked defect tensor]%
@@ -770,17 +762,9 @@ $s=(g,h)$.
     split block.
 \end{proof}
 
-\begin{remark}[Scope of the compression results]%
+\begin{remark}[Nilpotency of the stacked defect remainders]%
     \label{rem:asymex_z2z2_scope}
-    The periodic fusion table, the length-dependent identity for the
-    condensation defect, and the compression results do not determine
-    an element of $H^3(\Z_2\times\Z_2,U(1))$.
     The four non-split pair blocks have remainders that vanish on
     every word of length at least four; the twelve split pair blocks
     have identically vanishing remainders.
-    The bound four is not asserted to be optimal, and these
-    nilpotent remainders are not identified with a cohomological
-    invariant.
-    % The class attached to this presentation is external data in
-    % Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md.
 \end{remark}
