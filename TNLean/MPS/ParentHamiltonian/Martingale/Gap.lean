@@ -8,21 +8,14 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 /-!
 # Uniform spectral gap for the MPS parent Hamiltonian
 
-**Root-only.** This file contains conditional spectral-gap theorems for the
-MPS parent Hamiltonian. The source anticommutator estimate remains an explicit
-hypothesis. All-vector cyclic-window norm and operator-product estimates for the
-excitation projections are recorded only as stronger conditional sufficient
-hypotheses; they are not the source principal-angle estimate for the local
-ground spaces.
+**Root-only.** This file contains the conditional spectral-gap theorem for the
+MPS parent Hamiltonian. The source anticommutator estimate for overlapping
+cyclic windows remains an explicit hypothesis.
 
 ## Main results
 
-* `parentHamiltonian_gapped` — conditional uniform spectral gap for MPS parent
-  Hamiltonians under the explicit norm-compression input.
 * `parentHamiltonian_gapped_of_anticommutator` — conditional uniform spectral
   gap under the source anticommutator estimate.
-* `parentHamiltonian_gapped_of_overlap_norm_constant` — the corresponding
-  uniform spectral gap from a strict uniform compression coefficient.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -32,56 +25,6 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
-
-/--
-**Conditional spectral gap from an explicit norm-compression estimate.**
-
-For an MPS tensor \(A\) and interaction range \(L > 1\), the overlapping-window
-norm-compression estimate implies the existence of a uniform gap \(γ > 0\)
-(independent of system size \(N\)). For all \(N ≥ 2L\), every vector in the
-orthogonal complement of the ground space satisfies
-\(γ ‖v‖ ≤ ‖H_{\mathrm{ES}} v‖\).
-
-The orthogonal complement is computed in the `EuclideanSpace` structure
-on `NSiteSpace d N ≃ Cfg d N → ℂ`.
-
-**Conditional proof boundary.** This theorem assumes the all-vector
-excitation-projection estimate displayed in its statement. That estimate is
-strictly stronger than the source anticommutator condition and is not supplied
-merely by the intersection property or by the cited reduced ground-space
-principal-angle estimate. Once assumed, it gives the anticommutator inequality
-\[
-  h_i h_j + h_j h_i \geq -c_{ij}(1-\gamma)(h_i+h_j)
-\]
-with uniformly summable rows. Since at most \(2(L-1)\) local terms overlap a
-length-\(L\) cyclic window, combining this estimate with \(h_i^2=h_i\) yields
-\(H^2\geq\gamma H\). The spectral theorem then gives
-\(\gamma\lVert v\rVert\leq\lVert Hv\rVert\) on \((\ker H)^\perp\).
-
-Despite its historical short name, this declaration is conditional. The
-source-matching conditional theorem is
-`parentHamiltonian_gapped_of_anticommutator`.
-
-This theorem records the stronger norm-compression route. Its proof invokes
-`parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound`, which
-combines the already formalized martingale reductions after the
-overlapping-window estimate is given. -/
-theorem parentHamiltonian_gapped
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
-    (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
-        ∀ v : EuclideanSpace ℂ (Cfg d N),
-          ‖localTermES A L i (localTermES A L j v)‖ ≤
-            ((1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
-              (((2 * (L - 1) : ℕ) : ℝ)⁻¹)) * ‖localTermES A L i v‖) :
-    ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
-      (v : EuclideanSpace ℂ (Cfg d N)),
-      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
-        γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  obtain ⟨hγ, hgap⟩ :=
-    parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound A L hL
-      hOverlapNorm
-  exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hgap⟩
 
 /--
 **Conditional spectral gap from the source anticommutator estimate.**
@@ -116,74 +59,5 @@ theorem parentHamiltonian_gapped_of_anticommutator
   obtain ⟨hγ, hgap⟩ :=
     parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator A L hL hAnti
   exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hgap⟩
-
-/--
-**Conditional spectral gap from a strict overlapping-window compression
-coefficient.**
-
-For an MPS tensor \(A\) and interaction range \(L > 1\), any uniform
-overlapping cyclic-window estimate
-\(‖p_i p_j v‖ ≤ η ‖p_i v‖\) with \(0 ≤ η\) and \(η · 2(L-1) < 1\) gives a uniform
-positive lower bound on the parent Hamiltonian, independent of the chain length.
-
-This is the version of `parentHamiltonian_gapped` with an arbitrary compression
-constant. It assumes a stronger sufficient estimate, not the source
-principal-angle estimate: the cited estimates concern the reduced local
-ground-space projections, whereas this theorem assumes an all-vector estimate
-for the excitation projections. -/
-theorem parentHamiltonian_gapped_of_overlap_norm_constant
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
-    (hηnonneg : 0 ≤ η)
-    (hηlt : η * (((2 * (L - 1) : ℕ) : ℝ)) < 1)
-    (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
-        ∀ v : EuclideanSpace ℂ (Cfg d N),
-          ‖localTermES A L i (localTermES A L j v)‖ ≤
-            η * ‖localTermES A L i v‖) :
-    ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
-      (v : EuclideanSpace ℂ (Cfg d N)),
-      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
-        γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  obtain ⟨hγ, hgap⟩ :=
-    parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
-      A L hL hηnonneg hηlt hOverlapNorm
-  exact ⟨1 - η * (((2 * (L - 1) : ℕ) : ℝ)), hγ, hgap⟩
-
-/--
-**Conditional spectral gap from a strict overlapping-window operator-product
-coefficient.**
-
-For an MPS tensor \(A\) and interaction range \(L > 1\), any uniform overlapping
-cyclic-window estimate \(\|p_i (p_j v)\| \le \eta\,\|p_j v\|\) (a bound on
-\(\|p_i p_j\|\)) with \(0 \le \eta\) and \(\eta \cdot 2(L-1) < 1\) gives a uniform
-positive lower bound on the parent Hamiltonian, independent of the chain length.
-
-This is the operator-product (symmetric) analogue of
-`parentHamiltonian_gapped_of_overlap_norm_constant`.  Its proof passes through
-the anticommutator estimate of arXiv:2011.12127, Section IV.C, lines 2176-2179,
-with coefficient \(\eta\), before applying the finite-overlap martingale
-reduction.  Like
-`parentHamiltonian_gapped_of_overlap_norm_constant`, it is a conditional
-reduction whose hypothesis is unsatisfiable when the overlapping excitation
-ranges have a common nonzero vector, since then \(\|p_i p_j\| = 1\).  It is not
-an achievable MPS target in such cases; see
-`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
-theorem parentHamiltonian_gapped_of_overlap_operator_norm_constant
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
-    (hηnonneg : 0 ≤ η)
-    (hηlt : η * (((2 * (L - 1) : ℕ) : ℝ)) < 1)
-    (hOpNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
-        ∀ v : EuclideanSpace ℂ (Cfg d N),
-          ‖localTermES A L i (localTermES A L j v)‖ ≤
-            η * ‖localTermES A L j v‖) :
-    ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
-      (v : EuclideanSpace ℂ (Cfg d N)),
-      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
-        γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  obtain ⟨hγ, hgap⟩ :=
-    parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt
-      A L hL hηnonneg hηlt hOpNorm
-  exact ⟨1 - η * (((2 * (L - 1) : ℕ) : ℝ)), hγ, hgap⟩
 
 end MPSTensor
