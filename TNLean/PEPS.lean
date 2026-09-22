@@ -77,7 +77,6 @@ import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.PositivityCounterexamples
 import TNLean.PEPS.RegionBlock
 import TNLean.PEPS.RegionComplementComparison
-import TNLean.PEPS.RegionScalarCondition
 import TNLean.PEPS.RegionTransferCovariance
 import TNLean.PEPS.RegionTransport
 import TNLean.PEPS.RegionTransportData
