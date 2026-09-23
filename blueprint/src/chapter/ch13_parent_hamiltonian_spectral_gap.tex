@@ -1,19 +1,17 @@
 
 \section{Spectral gap}\label{sec:spectral_gap}
 
-A frustration-free Hamiltonian is \emph{gapped} if the smallest nonzero
-eigenvalue, equivalently the gap above the ground space, is bounded away from
+A frustration-free Hamiltonian is \emph{gapped} if its smallest nonzero
+eigenvalue, or the spectral gap above the ground-state space, is bounded away from
 zero uniformly in the chain length $N$.
-For MPS parent Hamiltonians, the martingale method of
-Fannes--Nachtergaele--Werner and
-Nachtergaele~\cite{Fannes1992Finitely, Nachtergaele1996Spectral}, as recalled
-by Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
-and in the later formulation of Kastoryano and
-Lucia~\cite{Kastoryano2018Martingale}, reduces a uniform gap to an
-anticommutator estimate for overlapping local terms. Principal angles between
-the corresponding local ground spaces give the geometric interpretation of this
-estimate. The anticommutator criterion for cyclic-window local terms and cyclic
-norm-compression bounds provide uniform spectral gap bounds below.
+For parent Hamiltonians of matrix product states, the martingale method of
+Fannes, Nachtergaele, and Werner~\cite{Fannes1992Finitely, Nachtergaele1996Spectral},
+as formulated by Cirac et al.~\cite[Section~IV.C]{Cirac2021Matrix}
+and Kastoryano and Lucia~\cite{Kastoryano2018Martingale}, reduces a uniform
+spectral gap to an anticommutator estimate for overlapping local terms.
+Principal angles between local ground spaces provide a geometric interpretation
+of this criterion, and norm-compression bounds for cyclic-window local terms
+yield uniform spectral gap lower bounds on periodic chains.
 
 \input{chapter/ch13_parent_hamiltonian_spectral_gap_hilbert_space_rowsum}
 \input{chapter/ch13_parent_hamiltonian_spectral_gap_martingale_cyclic_overlap}

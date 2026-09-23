@@ -100,6 +100,12 @@ Every tag redirected here points at a declaration that exists, by
 non-`Archive` Lean file mentions a removed name. The PEPS aggregator, which
 imports every module that imports the three edited files, builds clean.
 
+The eleven statements were restored on 2026-09-19 as a merge artefact of an
+unrelated branch and retired again on 2026-09-23; the re-retirement and its
+checks are recorded in
+`docs/audits/2026-09-23_peps_restored_layer_retirement.md` and re-establish
+the clearance above.
+
 ## Deferred
 
 `TNLean/PEPS/InsertionRealization.lean` repeats the same shape one level up:

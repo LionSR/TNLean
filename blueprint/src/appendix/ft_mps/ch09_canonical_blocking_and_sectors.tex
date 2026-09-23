@@ -2,7 +2,9 @@
 \section{Blocking identities and primitive stability}
 \label{sec:app_canonical_blocking}
 
-These identities control transfer-map powers, weighted direct sums, and positive-length MPV equalities under repeated blocking. They are used in the common-length reduction of Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}.
+Transfer-map powers, weighted direct sums, and matrix product vectors commute
+with blocking, enabling the common-length reduction of
+Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}.
 
 Blocking by a length~$p$ commutes with weighted direct sums up to the $p$th power
 of each weight: for nonzero weights $(\mu_k)$ and blocks $(B_k)$,
@@ -341,7 +343,8 @@ through its own period agrees with the directly $p$-blocked block.
 \section{Support compression and cyclic-sector families}
 \label{sec:app_canonical_cyclic_sectors}
 
-Support isometries first realize the cyclic corners. The remaining results place finitely many cyclic-sector families over one blocked alphabet and identify their weighted nonzero parts.
+Support isometries project a blocked tensor onto its cyclic corners, embedding
+multiple cyclic-sector families into a single common blocked alphabet.
 
 \begin{theorem}[Supported corner compression with a support isometry]%
     \label{thm:supported_corner_compression_isometry}
@@ -577,7 +580,10 @@ Support isometries first realize the cyclic corners. The remaining results place
 \section{Prepared normal-form consequences}
 \label{sec:app_canonical_prepared_consequences}
 
-The first theorem derives the overlap condition from a prepared primitive family. The second does not construct primitive blocks from an arbitrary tensor: it only orders a family that already satisfies all primitive, irreducible, trace-preserving, nonzero-weight, and positive-dimension hypotheses.
+For families of irreducible, trace-preserving, primitive blocks with non-zero
+weights and positive bond dimensions, the asymptotic overlap condition
+$O_{A_kA_k}(N)\to1$ is a derived consequence, and ordering the blocks by
+non-increasing weight modulus produces a normal canonical form.
 
 \begin{theorem}[Self-overlap is derived in normal canonical form]%
     \label{thm:ncf_overlap_tendsto_one}
@@ -625,11 +631,10 @@ The first theorem derives the overlap condition from a prepared primitive family
 \end{proof}
 
 \begin{remark}[Scope of Theorem~\ref{thm:exists_normal_canonical_form}]
-    Theorem~\ref{thm:exists_normal_canonical_form} assumes all six block
-    hypotheses in advance and produces the normal canonical form by reordering.
-    It is not the arbitrary-input existence theorem
-    of~\cite[Section~2.3]{Cirac2016MPDO_arXiv}; that primitive-block reduction,
-    including its structural bond-dimension bound, is
+    Theorem~\ref{thm:exists_normal_canonical_form} reorganizes an already
+    reduced family of primitive, irreducible blocks into normal canonical form
+    by sorting their weight moduli. The reduction from an arbitrary MPS tensor,
+    including the structural bond-dimension bound, is established by
     Theorem~\ref{thm:tp_primitive_blockdecomp} in
-    Section~\ref{sec:reduction_to_normal_form}.
+    Section~\ref{sec:reduction_to_normal_form} following~\cite[Section~2.3]{Cirac2016MPDO_arXiv}.
 \end{remark}

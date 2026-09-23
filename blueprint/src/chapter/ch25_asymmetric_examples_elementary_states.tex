@@ -8,7 +8,7 @@ $(\C^2)^{\otimes N}$ is
      & =\ket{0}^{\otimes N}+\ket{1}^{\otimes N}.
     \notag
 \end{align}
-Here $\ket{0},\ket{1}$ form the orthonormal local basis. We use the
+Here $\ket{0},\ket{1}$ form the orthonormal local basis, following the
 product-state and GHZ conventions of Ref.~\cite[Appendix~A]{Cirac2021Matrix}.
 For a tensor $T=\{T^i\}_{i=0}^1$ of bond dimension $D$, the periodic trace
 boundary defines
@@ -30,9 +30,8 @@ $T^w=T^{i_1}\cdots T^{i_{|w|}}$, with $T^\varnothing=\Id_D$.
 
 The standard GHZ tensor has bond dimension two. The construction below
 instead uses a nonminimal bond-dimension-four upper-triangular tensor
-with the same positive-length states. Its two scalar diagonal sectors
-generate the constant product configurations. These finite-length
-identities make no claim about thermodynamic symmetry breaking.
+with the same positive-length states, whose two scalar diagonal sectors
+generate the constant product configurations.
 
 \begin{definition}[The two sectors and the four-dimensional source]
     \label{def:asymex_ghz}
@@ -230,8 +229,8 @@ identities make no claim about thermodynamic symmetry breaking.
     If a column vector $v\in\C^4$ satisfies $B^0v=v$ and $B^1v=0$,
     then $v=0$; if a row vector $u\in\C^4$ satisfies $uB^0=u$ and
     $uB^1=0$, then $u=0$. Both sitewise intertwiner spaces for the sector
-    $C_0$ therefore vanish. In particular, the word-level compression of
-    Theorem~\ref{thm:asymex_ghz_compression} does not give a nonzero
+    $C_0$ therefore vanish, so the word-level compression of
+    Theorem~\ref{thm:asymex_ghz_compression} yields no nonzero
     sitewise intertwiner in either direction.
 \end{theorem}
 
@@ -253,16 +252,17 @@ $\ket{\phi}^{\otimes N}$ has a bond-one presentation with local
 amplitudes $(1,2)$, as in the product-state construction of
 Ref.~\cite[Appendix~A]{Cirac2021Matrix}. Repeating that scalar block twice
 multiplies every periodic coefficient by two. The upper-triangular
-source below generates the same vector as this repeated target:
+source $B$ in Definition~\ref{def:asymex_repeated} generates the same vector as
+this repeated target:
 \begin{align}
     \ket{V^{(N)}(B)}
      & =2\ket{\phi}^{\otimes N}
     =2(\ket{0}+2\ket{1})^{\otimes N}.
     \notag
 \end{align}
-In this section, $A$ and $B$ denote the tensors defined below, and
-the trace boundary is again~(\ref{eq:asymex_periodic_amplitude}).
-The tensor power at $N=0$ is the scalar $1$.
+The tensors $A$ and $B$ in Definition~\ref{def:asymex_repeated} generate these
+states via the trace boundary~(\ref{eq:asymex_periodic_amplitude}); at $N=0$
+the tensor power is the scalar $1$.
 
 \begin{definition}[The scalar block and its Jordan extension]
     \label{def:asymex_repeated}
@@ -371,11 +371,11 @@ The tensor power at $N=0$ is the scalar $1$.
     multiplies the squared norm by $|2|^2=4$.
 \end{proof}
 
-The source and the direct sum $A\oplus A$ have the same periodic
-vectors, including at length zero. Their equality does not imply an
-invertible gauge between the tensors: the off-diagonal entry of $B^0$
-does not contribute to any periodic word trace, but prevents conjugation
-to the repeated target.
+The source and the direct sum $A\oplus A$ generate the same periodic
+vectors at all lengths, including $N=0$. However, they are not gauge
+equivalent: the off-diagonal entry of $B^0$ contributes nothing to any
+periodic word trace, but prevents conjugation to the diagonal target
+(Theorem~\ref{thm:asymex_repeated_not_gauge}).
 
 \begin{theorem}[Compression onto the two copies]
     \label{thm:asymex_repeated_compression}

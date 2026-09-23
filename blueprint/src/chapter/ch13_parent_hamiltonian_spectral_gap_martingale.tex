@@ -604,11 +604,8 @@
 \subsection{Spectator-indexed boundary maps}\label{subsec:spectator_boundary_maps}
 
 The tail and left boundary maps embed virtual-space data into a common
-ambient $(K+L)$-site Hilbert space.  This places the overlapping ground
-spaces as ranges of linear maps on the same ambient space, a necessary
-step before their projectors can be compared in the martingale condition.
-All statements are exact algebraic identities; no FNW contraction or
-norm estimate is derived here.
+$(K+L)$-site Hilbert space, expressing overlapping ground spaces as ranges of
+linear maps on the same ambient space to compare their orthogonal projectors.
 
 \begin{definition}[Prefix restriction]\label{def:prefix_restrict}
     \lean{MPSTensor.prefixRestrictₗ, MPSTensor.prefixRestrictₗ_apply}
@@ -960,7 +957,7 @@ norm estimate is derived here.
     product and flatten the finite family of fibers into a Euclidean space.
     The resulting continuous tail and left boundary maps have ranges
     $\mathcal V_{K,L}(A)$ and, at suffix length one, $\mathcal U_K(A)$.
-    Moreover, if $J^{\mathrm{tail}}_K(X)_u=XA^u$ and
+    If $J^{\mathrm{tail}}_K(X)_u=XA^u$ and
     $J^{\mathrm{left}}_L(X)_\tau=A^\tau X$, then
     \begin{align}
         \Gamma^{\mathrm{tail}}_{K,L}J^{\mathrm{tail}}_K & =\Gamma_{K+L}, &
@@ -1054,7 +1051,7 @@ norm estimate is derived here.
     \uses{thm:spectator_boundary_hilbert_factorization}
     Apply the common-factorization projector identity to the two spectator
     boundary maps, the full boundary map, and their tail and left virtual maps.
-    The preceding range equalities identify the three physical ranges.
+    These range equalities identify the three physical ranges.
 \end{proof}
 
 \begin{theorem}[Arbitrary-increment mixed Gram of the overlapping spectator boundary maps]%
@@ -1083,11 +1080,9 @@ norm estimate is derived here.
     fixed by
     $\tr(A^{\tau,j}X_u)=\tr(A^\tau(A^jX_u))$ and
     $\tr(A^{u,\tau}Z_j)=\tr(A^\tau(Z_jA^u))$.
-    The one-site identity is the specialization $q=1$.  This is the exact
-    algebraic whole-increment identity relevant to condition C3$'$ in
-    \cite[Equation~(2.5)]{Nachtergaele1996Spectral}; it does not prove the
-    norm estimate, uniformity in $q$, or any numerical contraction required
-    there.
+    The one-site identity is the specialization $q=1$.  This identity expresses
+    the algebraic form of condition (C3$'$) in
+    \cite[Equation~(2.5)]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1113,7 +1108,7 @@ norm estimate is derived here.
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered}
     \leanok
     \uses{thm:spectator_boundary_mixed_gram, thm:fixed_point_gram_metric_exact}
-    Specialize the preceding theorem to $q=1$.  Let
+    Specialize Theorem~\ref{thm:spectator_boundary_mixed_gram} to $q=1$.  Let
     $X=(X_u)_{u\in\Fin d^K}$ and
     $Z=(Z_j)_{j\in\Fin d^1}$ be the resulting boundary families.  If
     $\rho\in\MN{D}$ has nonzero trace and
@@ -1850,20 +1845,17 @@ norm estimate is derived here.
 \subsection{The compatible open-chain Hamiltonian}%
 \label{subsec:compatible_open_chain_hamiltonian}
 
-For an interval, the finite-volume Hamiltonian contains only translates whose
-supports remain inside the interval. This is the compatible open chain of
-Nachtergaele~\cite[Equation~(3.12)]{Nachtergaele1996Spectral}, whose
-zero-energy space is identified in Equation~(3.13). Equations~(3.14)--(3.16)
-continue with comparison of compatible interactions, approximate commutation
-of ground-state projectors, and a uniform gap. Theorem~2.1(i) of the same
-source obtains a gap from its three stated hypotheses. Every compatible
-Hamiltonian below is positive because it is a sum of orthogonal projections.
-The statements below verify C1 and C2 on the full martingale range.  Before
-one complete interaction window fits, the suffix Hamiltonian vanishes.  At the
-remaining indices it is the orthogonal projection onto the local excited
-space.  Together with the fixed-volume form of C3, these identities specialize
+For an interval, the open-chain parent Hamiltonian contains only local terms
+whose supports lie entirely within the
+interval~\cite[Equation~(3.12)]{Nachtergaele1996Spectral}. The corresponding
+zero-energy space coincides with the open-chain ground space. Each compatible
+open Hamiltonian is positive as a sum of orthogonal projections. Conditions
+(C1) and (C2) hold across the full martingale range: before a complete
+interaction window fits, the suffix Hamiltonian vanishes, and on larger
+intervals it equals the orthogonal projection onto the local excited space.
+Combined with condition (C3), these identities specialize
 Theorem~\ref{thm:nachtergaele_c1_c3_full_range_norm_gap} with
-$d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
+$d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{definition}[Compatible open-chain parent Hamiltonian]
     \label{def:open_parent_hamiltonian_es}
@@ -2111,8 +2103,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     \uses{thm:open_parent_hamiltonian_es_c1,
         thm:open_suffix_parent_hamiltonian_range_shift,
         lem:fixed-volume-hamiltonians-positive}
-    Equation~(\ref{eq:open_suffix_parent_hamiltonian_range_shift}) changes the
-    sum to the interval $L\leq n\leq N$.  Apply
+    The shift identity (\ref{eq:open_suffix_parent_hamiltonian_range_shift}) rewrites the
+    sum over the interval $L\leq n\leq N$.  Apply
     Theorem~\ref{thm:open_parent_hamiltonian_es_c1} with suffix length $L$.
     Each interaction then occurs once, since $L-L+1=1$.  Positivity of the
     suffix Hamiltonians gives the lower bound.
@@ -2209,7 +2201,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
          & \leq m.
     \end{align}
     Hence $i=m-L$, which proves
-    Equation~\eqref{eq:open_suffix_parent_hamiltonian_unique_term}. The sole
+    (\ref{eq:open_suffix_parent_hamiltonian_unique_term}). The sole
     local term is an orthogonal projection. For any orthogonal projection $H$,
     \begin{align}
         \operatorname{ran}H
@@ -2221,7 +2213,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
          & =\operatorname{Proj}_{(\ker H)^\perp}
         =I-\operatorname{Proj}_{\ker H}.
     \end{align}
-    This gives Equation~\eqref{eq:open_suffix_parent_hamiltonian_id_sub_kernel}.
+    This gives (\ref{eq:open_suffix_parent_hamiltonian_id_sub_kernel}).
     The Loewner and quadratic-form inequalities are equalities. On
     $(\ker H)^\perp=\operatorname{ran}H$, idempotence gives $Hv=v$, and hence
     exact norm preservation and the unit lower bound. Condition C1 at suffix
@@ -2415,8 +2407,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 \begin{proof}
     \leanok
     \uses{thm:open_ground_space_le_hamiltonian_kernel, thm:open_hamiltonian_kernel_le_ground_space}
-    The two preceding inclusions identify each space as a subspace of the
-    other, so antisymmetry gives the equality.
+    Combine the mutual inclusions
+    Theorem~\ref{thm:open_ground_space_le_hamiltonian_kernel} and
+    Theorem~\ref{thm:open_hamiltonian_kernel_le_ground_space}.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, equation En, lines 1060--1073.
@@ -2569,7 +2562,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 \begin{proof}
     \leanok
     \uses{thm:geometric_bound_of_spectral_radius_lt_one, thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
-    Reconstruct the norm infrastructure from the exact adjoint--self identity
+    The operator norm is controlled using the adjoint identity
     \begin{align}
         J_K^\dagger J_K U(X)
          & =U\!\left(X\,\mathcal E_A^K(\mathbf 1)\right).
@@ -2763,7 +2756,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     \leanok
     \uses{def:reassociated_tail_boundary_map, def:whole_increment_physical_reassociation, thm:spectator_boundary_mixed_gram}
     Expand the reassociated tail map.  Its adjoint introduces
-    $\mathscr A_{K,L,Q}^{-1}$, so the preceding coordinate formula applies.
+    $\mathscr A_{K,L,Q}^{-1}$, so the coordinate formula of
+    Theorem~\ref{thm:spectator_boundary_mixed_gram} applies.
 \end{proof}
 
 \begin{theorem}[Centered whole-increment mixed Gram]
@@ -2935,8 +2929,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 \begin{proof}
     \leanok
     \uses{thm:whole_increment_centered_residual_bound, thm:whole_increment_left_virtual_norm}
-    Substitute $\lVert J_Q^{\mathrm{left}}\rVert\leq1$ into the preceding
-    estimate.
+    Substitute $\lVert J_Q^{\mathrm{left}}\rVert\leq1$ from
+    Theorem~\ref{thm:whole_increment_left_virtual_norm} into
+    Theorem~\ref{thm:whole_increment_centered_residual_bound}.
 \end{proof}
 
 \begin{theorem}[Primitive whole-increment centered residual bound]
@@ -3026,10 +3021,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
         \mathcal K_{K+L}^{\oplus\Omega_Q}
         (\mathcal K_{K+L}^{-1})^{\oplus\Omega_Q}
         (\Gamma_{K+L,Q}^{\mathrm{left}})^\dagger
-         & =(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger.
-    \end{align}
-    Moreover,
-    \begin{align}
+         & =(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger, \\
         (J_K^{\mathrm{tail}})^\dagger
         \mathcal K_{L+Q}^{\oplus\Omega_K}
         (\mathcal K_{L+Q}^{-1})^{\oplus\Omega_K}
@@ -3041,9 +3033,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 \begin{proof}
     \leanok
     \uses{thm:left_finite_gram_cancellation, thm:reassociated_tail_boundary_factorization, thm:inverse_gram_identities}
-    The left identity is the preceding finite-Gram cancellation at length
-    $K+L$.  For the tail identity, cancel the fiberwise Gram with its inverse
-    and take the adjoint of the reassociated tail factorization.
+    The left identity is the finite-Gram cancellation of
+    Theorem~\ref{thm:left_finite_gram_cancellation} at length $K+L$.  For the
+    tail identity, cancel the fiberwise Gram with its inverse and take the
+    adjoint of the reassociated tail factorization.
 \end{proof}
 
 \begin{definition}[Whole-increment tail finite-Gram correction]
@@ -3802,9 +3795,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
     statement. It applies the full-range estimate with
     $d_{l+1}=\gamma_{l+1}=1$ and retains the coefficient of Theorem~2.1(i) in
     \cite{Nachtergaele1996Spectral}. It is not a formulation of the
-    unrestricted source theorem. The primitive existential theorem below
-    supplies the full-range C3 hypothesis from the physical open-chain
-    estimates.
+    unrestricted source theorem.
+    Theorem~\ref{thm:primitive_open_parent_hamiltonian_gap} supplies the
+    full-range C3 hypothesis from the physical open-chain estimates.
 \end{theorem}
 
 \begin{proof}
@@ -4526,16 +4519,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 
 \section{The normalized primitive gauge of a normal tensor}
 
-A normal tensor need not carry the trace-preserving normalization, nor need its
-transfer map have spectral radius one; normality alone forces neither.  Both
-normalizations are supplied without loss of generality by the sources:
-\cite[equations~(3.1)--(3.2b), lines~1394--1435]{Nachtergaele1996Spectral}
-rewrites the generalized valence-bond construction so that the two
-normalizations hold, and
-\cite[Theorem~4, lines~742--770]{PerezGarcia2007Matrix} opens its proof by
-assuming that the transfer map has spectral radius one and gauging by the
-square root of a positive fixed point.  This section carries out that step and
-uses it to state the finite-range gap for an arbitrary normal tensor.
+A normal tensor need not be trace-preserving or have spectral radius one.
+Standard treatments normalize the tensor by scaling the spectral radius of the
+transfer map to one and applying a gauge transformation by the square root of a
+positive fixed point~\cite{Nachtergaele1996Spectral,PerezGarcia2007Matrix}. This
+gauge reduction extends the finite-range spectral gap to arbitrary normal
+tensors.
 
 \begin{theorem}[Rescaling invariance of block injectivity and normality]
     \label{thm:normality_rescaling_invariance}

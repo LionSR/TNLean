@@ -10,7 +10,7 @@ matched $P$-data on that index are the weight and tensor
      &
     \widetilde P_{k,q}
      & =P_{\beta(k)},
-    \notag
+    \label{eq:matched_p_weight_tensor}
 \end{align}
 where the second expression is read after the matched bond-dimension
 identification. The block gauge repeats $X_k$ on every copy $q$.
@@ -22,8 +22,8 @@ identification. The block gauge repeats $X_k$ on every copy $q$.
         MPSTensor.matched_block_gauge}
     \leanok
     The matched flattened data are the functions
-    $\widetilde\mu$, $\widetilde P$, and $(k,q)\mapsto X_k$ defined above on
-    the flattened copy coordinates of $Q$.
+    $\widetilde\mu$, $\widetilde P$, and $(k,q)\mapsto X_k$ defined in
+    (\ref{eq:matched_p_weight_tensor}) on the flattened copy coordinates of $Q$.
 \end{definition}
 
 \begin{lemma}[Equality of the matched total bond dimensions]
@@ -90,10 +90,8 @@ identification. The block gauge repeats $X_k$ on every copy $q$.
 \section{Permutation gauges and literal coordinates}
 \label{sec:app_ft_permutation_gauges}
 
-The matched $P$-tensor has the correct blocks but lists them in $Q$-order. A
-permutation matrix restores the literal order of $P$. We record its invertible
-and unitary forms before proving the coordinate conversion used in
-Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
+A permutation matrix relates the matched-coordinate ordering to the literal
+block ordering of $P$ in Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
 
 \begin{definition}[Invertible permutation gauge]
     \label{def:ft_perm_gl}
@@ -155,23 +153,19 @@ $G_\rho^\dagger=G_\rho^{-1}$, so the permutation gauge is unitary.
     column $j$. The two selections give the displayed submatrix.
 \end{proof}
 
-The coordinate equivalence of Definition~\ref{def:ft_sector_flat_equiv}
-induces the required permutation $\rho$ after the total-dimension
-identification. A convention with inverse indices merely replaces the chosen
-permutation by $\rho^{-1}$; we use the convention in
-(\ref{eq:app_ft_perm_conjugation}) to match the formal coordinate identity.
-Applying that identity to $P_{\mathrm{tot}}^i$ gives the matched-coordinate
-tensor. Composing $G_\rho$ with the block-diagonal gauge therefore gives the
-literal gauge of Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
-This also explains why the total-dimension cast and the sector permutation must
-occur in that order.
+The coordinate equivalence of Definition~\ref{def:ft_sector_flat_equiv} induces
+the permutation $\rho$ on the total bond space. Applying
+(\ref{eq:app_ft_perm_conjugation}) to $P_{\mathrm{tot}}^i$ produces the
+matched-coordinate tensor, and composing $G_\rho$ with the block-diagonal gauge
+yields the literal gauge transformation of
+Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
 
 \section{Unitary witness refinements}
 \label{sec:app_ft_unitary_witnesses}
 
-The main text proves that a specified gauge between left-canonical irreducible
-sectors can be replaced by a unitary without changing its phase. We record the
-existential form and then repeat the construction over every matched copy.
+Between left-canonical irreducible sectors, any gauge-phase equivalence can be
+refined to a unitary gauge with the same phase, extending across all copies in a
+sector.
 
 \begin{lemma}[Unitary gauge for left-canonical irreducible tensors]
     \label{lem:left_canonical_irreducible_unitary_gauge}
@@ -218,7 +212,7 @@ existential form and then repeat the construction over every matched copy.
     \end{align}
     The matched sectors and copies have equal bond dimensions and
     multiplicities. If $P_{\mathrm{match}}$ denotes the corresponding
-    reordered block assembly, then
+    reordered block tensor, then
     $Q_{\mathrm{flat}}^i=XP_{\mathrm{match}}^iX^{-1}$.
 \end{lemma}
 \begin{proof}\leanok

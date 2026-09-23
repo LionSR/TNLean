@@ -1,22 +1,19 @@
 \chapter{Peripheral Channel Structure and Transfer-Operator Gaps: Supporting Results}
 \label{ch:spectral_supporting_results}
 
-This appendix supports Chapter~\ref{ch:spectral}. It proves the algebraic
-mixed-transfer identities, an auxiliary trace-positivity result, the
-peripheral intertwiners behind the gauge-rigidity theorems, the Banach-algebra
-convergence facts behind the overlap-decay theorems, the rank-one Perron
-projection behind the primitive overlap limit, and the cyclic-decomposition
-machinery that removes peripheral periodicity.
+The spectral theory of MPS transfer maps in Chapter~\ref{ch:spectral} relies on
+several structural steps: algebraic mixed-transfer identities, peripheral
+intertwiners for gauge rigidity, Banach-algebra decay bounds for overlaps, the
+rank-one Perron projection for primitive channels, and cyclic-sector
+decompositions.
 
 \section{Mixed-transfer powers and overlap traces}
 \label{sec:app_spectral_mixed_trace}
 
-This section proves the self-transfer identity, the word expansion of the
-mixed transfer operator, and the trace identities used in
-Theorem~\ref{thm:overlap_trace} and Theorem~\ref{thm:overlap_trace_rect}.
-Recall the mixed transfer operator $F_{AB}$ of
-Definition~\ref{def:mixed_transfer} and its rectangular form
-$F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
+The mixed transfer operator $F_{AB}$ of Definition~\ref{def:mixed_transfer}
+and its rectangular form $F_{AB}^{\mathrm{rect}}$ of
+Definition~\ref{def:mixed_transfer_rect} satisfy exact word expansions and trace
+identities.
 
 \begin{theorem}[Self-transfer]\label{thm:mixed_self}
     \lean{Kraus.mixedMapLM_self}
@@ -98,12 +95,11 @@ statement, so it needs no separate expansion.
 \section{Peripheral intertwiners and gauge rigidity}
 \label{sec:app_spectral_rigidity}
 
-This section proves the intertwining relations behind
+Transporting a modulus-one mixed-transfer eigenvector through separate unital
+gauges produces Kraus-level intertwiners that force equal bond dimension once
+invertible, establishing the gauge rigidity of
 Theorem~\ref{thm:modulus_one_gauge_irr_tp} and
-Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}: transporting a
-modulus-one mixed-transfer eigenvector through separate unital gauges
-produces Kraus-level intertwiners, and these intertwiners force equal bond
-dimension once they are invertible.
+Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}.
 
 \begin{lemma}[Gauged peripheral eigenvector yields Kraus intertwining]%
     \label{thm:gauged_intertwining_core}
@@ -233,9 +229,9 @@ Theorem~\ref{thm:transfer_operator_gap_rect}.
 \section{Spectral-radius decay and overlap limits}
 \label{sec:app_spectral_decay}
 
-This section collects the Banach-algebra convergence facts underlying
-Theorem~\ref{thm:transfer_pow_zero}, Theorem~\ref{thm:overlap_decay}, and
-the block-separation consequences of the transfer-operator gap.
+The spectral-radius gap $\rho_{\spec}(F_{AB}) < 1$ translates into
+operator-norm decay and asymptotic orthogonality of matrix product vectors
+through standard Banach-algebra convergence.
 
 
 Theorem~\ref{thm:rectangular_transfer_pow_zero} applies
@@ -284,10 +280,9 @@ Theorem~\ref{thm:overlap_decay}.
 \section{Rank-one Perron projection}
 \label{sec:app_spectral_perron_projection}
 
-This section proves the rank-one Perron limit
-(Theorem~\ref{thm:trace_pow_one}) underlying the primitive overlap
-convergence (Theorem~\ref{thm:primitive_overlap}). Let $E:\MN{D}\to\MN{D}$
-be trace-preserving with a fixed point $\rho\neq0$, $\tr(\rho)\neq0$. Write
+Let $E:\MN{D}\to\MN{D}$ be a trace-preserving linear map with a fixed point
+$\rho\neq0$, $\tr(\rho)\neq0$, underlying the primitive overlap convergence in
+Theorem~\ref{thm:primitive_overlap}. Write
 $P:=P_\rho$ for the fixed-point projection of
 the corresponding definition in the companion quantum-channel volume~\cite[``Fixed-point projection'']{QICLean2026Blueprint},
 \begin{align}
@@ -349,12 +344,10 @@ primitive normalized MPS tensor.
 \section{Periodicity removal}
 \label{sec:app_spectral_periodicity}
 
-This section proves the cyclic-decomposition machinery of
-Theorem~\cite[``Cyclic decomposition for irreducible finite Kraus maps'']{QICLean2026Blueprint} and the
-divisibility statements of Theorem~\cite[``Transfer-map peripheral eigenvalues form a cyclic group'']{QICLean2026Blueprint} and
-Theorem~\cite[``Transfer-map period divides bond dimension'']{QICLean2026Blueprint}: normalizing a peripheral
-eigenvector to a unitary, forming its discrete Fourier (cyclic) spectral
-projections, and tracking how the channel shifts the resulting corners.
+The cyclic decomposition for irreducible finite Kraus maps proceeds by
+normalizing a peripheral eigenvector to a unitary, forming its discrete Fourier
+spectral projections, and tracking the cyclic shift of the resulting corners
+under the channel.
 
 
 Combining these lemmas proves Theorem~\cite[``Cyclic decomposition for irreducible finite Kraus maps'']{QICLean2026Blueprint}:
