@@ -44,9 +44,13 @@ for the all-vector estimate exists anywhere in the development.
   and `..._of_lt`, replaced by
   `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator`.
 
-All ten had zero consumers outside the removed branch. The all-vector
-estimate hypothesis occurred outside `Gap.lean`/`Reduction.lean` only as an
-exact identity in `Transport.lean`, never as a discharged instance.
+All ten had zero consumers outside the removed branch. The only appearance of
+the compressed product `localTermES A L i (localTermES A L j v)` outside
+`Gap.lean`/`Reduction.lean` is the pointwise commutation identity
+`MPSTensor.localTermES_commute_of_cyclic_windows_disjoint` in
+`Transport.lean`, an exact identity on site-disjoint cyclic windows, not a
+discharged instance of the all-vector norm estimate; no discharger of that
+estimate exists anywhere in the development.
 
 ## Blueprint nodes removed
 
