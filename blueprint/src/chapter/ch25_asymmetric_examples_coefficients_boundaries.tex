@@ -3,7 +3,7 @@
 
 \subsection{Representative rescaling}
 
-We use the structure coefficients
+Consider the structure coefficients
 $c_{\alpha,\beta,\gamma}^{(L)}=\tr(\chi_{\alpha,\beta,\gamma}^{L})$
 and trace scalars $m_\alpha$ of
 \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
@@ -279,8 +279,6 @@ We use the three-cocycle and fusion-gauge conventions of
     factor and use $\beta(e,s)=\beta(s,e)=1$.
 \end{proof}
 
-No physical MPU or realization of an anomaly is constructed here.
-
 \subsection{A Jordan extension detected by a boundary}
 
 \begin{definition}[Jordan extension and split tensor]
@@ -338,11 +336,10 @@ No physical MPU or realization of an anomaly is constructed here.
         MPSTensor.JordanBoundary.boundary_trace_ne}
     \leanok
     \uses{def:asymex_jordan}
-    Suppose there is a nonempty word $w$ with $\tr(A^w)\neq0$.
-    Then $B$ and $C$ have equal periodic traces for every word,
-    but the functions $v\mapsto\tr(QB^v)$ and
+    Suppose there is a nonempty word $w$ with $\tr(A^w)\neq0$, for an
+    arbitrary tensor $A$. Then $B$ and $C$ have equal periodic traces for
+    every word, but the functions $v\mapsto\tr(QB^v)$ and
     $v\mapsto\tr(QC^v)$ differ.
-    No normality assumption on $A$ is required.
 \end{theorem}
 \begin{proof}
     \leanok

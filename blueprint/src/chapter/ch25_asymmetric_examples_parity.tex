@@ -68,8 +68,8 @@ $n_1(x)=\sum_{v=0}^{N-1}x_v$, the physical parity operator has basis action
     (\ref{eq:asymex_parity_invariance}).
 \end{proof}
 
-Occupation parity does not completely determine the support of the
-state. The positions of the zeros impose an additional restriction.
+The support of the state is further constrained by the relative positions of the
+zeros.
 
 \begin{lemma}[Amplitudes from cyclic runs]
     \label{lem:asymex_parity_runs}
@@ -109,11 +109,7 @@ Thus a word containing a zero has amplitude one exactly when every
 cyclic run of ones has even length. For example, $0101$ has even
 occupation but zero amplitude, since both runs have length one.
 The all-zero word has amplitude one at every positive length, so
-$\ket{V^{(N)}(A)}$ is always nonzero. These statements describe
-occupation parity in the specified computational basis. No
-Hamiltonian or operators satisfying the canonical anticommutation
-relations have been specified, so they do not identify this state
-with a Kitaev-chain state.
+$\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
 
 \begin{theorem}[Normality of the graded block]
     \label{thm:asymex_parity_normal}
@@ -132,9 +128,8 @@ with a Kitaev-chain state.
     matrix units lie in the length-two word span.
 \end{proof}
 
-This is word normality, established by spanning the virtual matrix
-algebra. It makes no assertion that the transfer map has been
-normalized to spectral radius one.
+This establishes word normality by spanning the full virtual matrix algebra
+$\MN{2}$.
 
 \subsection{Sign-weighted blocks and the five-dimensional source}
 
@@ -361,13 +356,11 @@ gives, for $N\geq1$,
     =(1+(-1)^N)\ket{V^{(N)}(A)}.
     \label{eq:asymex_parity_length}
 \end{align}
-Thus the source produces the zero vector at odd length and twice
-the unnormalized $A$ state at even length. This is a length filter,
-not an occupation-parity projection on a fixed physical space.
-At odd length, for instance, the all-zero amplitude of $A$ is one,
-but its amplitude in $B$ vanishes. At even length, every amplitude
-is doubled, and the run restrictions of
-Lemma~\ref{lem:asymex_parity_runs} remain unchanged.
+The source acts as a length filter: at odd length the periodic vector
+vanishes, while at even length every amplitude of $A$ is doubled.
+For instance, at odd length the all-zero amplitude of $A$ is one but its
+amplitude in $B$ vanishes; at even length the run restrictions of
+Lemma~\ref{lem:asymex_parity_runs} apply with doubled amplitudes.
 
 The positive-length hypothesis is necessary. The empty-word
 traces are $\tr(\Id_5)=5$ and $\tr(\Id_2)=2$, whereas substituting
