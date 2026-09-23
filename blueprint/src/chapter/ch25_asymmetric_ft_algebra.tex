@@ -164,16 +164,9 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     $a,b\geq0$ and a semisimple module $M$ without a $\mathbf0$ summand such
     that $U^{\mathrm{ss}}\cong M\oplus\mathbf0^{\oplus a}$ and
     $V^{\mathrm{ss}}\cong M\oplus\mathbf0^{\oplus b}$.
-
-    The source proof decomposes the finite-dimensional image algebra
-    $R=(\rho_U\oplus\rho_V)(F)$ modulo its Jacobson radical by
-    Artin--Wedderburn and compares traces of central idempotents. The
-    formalized development below proves the statements the main theorem
-    actually uses by a different, equivalent route: Burnside's theorem and
-    the Jacobson density theorem applied directly to each simple factor as
-    it is peeled off by an induction on dimension
-    (\S\ref{sec:asym_flag}), rather than by a single global
-    Artin--Wedderburn decomposition.
+    % The source proof decomposes the finite-dimensional image algebra
+    % modulo its Jacobson radical by Artin--Wedderburn and compares
+    % traces of central idempotents.
 \end{lemma}
 
 \begin{lemma}[Positive-ideal separation of linear functionals]
@@ -304,10 +297,6 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     simple tensor modules $C_s$, $s\in S$. Let $K\leq M$ have simple
     quotient $M/K$ on which some generator acts nontrivially. Then $M/K$ is
     isomorphic to $C_s$ for some $s\in S$.
-
-    This identification is the formalized counterpart of the use made of
-    the positive-word character lemma (Lemma~\ref{lem:asym_character}) in
-    the proof of the main theorem below.
 \end{theorem}
 
 \begin{proof}
@@ -401,9 +390,6 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     word traces agree, on every nonempty word, with the sum of the word
     traces of the $C_s$. Then $M$ carries a labelled invariant flag over
     $(S,C)$.
-
-    This is the module-theoretic core of clauses (i)--(iii) and (vii) of
-    the main theorem below.
 \end{theorem}
 
 \begin{proof}
