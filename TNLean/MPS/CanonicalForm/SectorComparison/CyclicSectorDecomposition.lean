@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorRelation
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily
 import QICLean.Channel.Peripheral.Conjugation
-import TNLean.MPS.Periodic.SectorIrreducibility
+import TNLean.MPS.Periodic.SectorIrreducibility.HLift
 import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
 import QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 

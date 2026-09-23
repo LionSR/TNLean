@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusEdgeBlockingRegion
 import TNLean.PEPS.TorusTranslationInvariant
-import TNLean.PEPS.RegionBlock.CoarseThreeSite2
+import TNLean.PEPS.RegionBlock.CoarseThreeSiteCoherentFrame
 
 /-!
 # The single red-to-blue crossing of the torus edge blocking

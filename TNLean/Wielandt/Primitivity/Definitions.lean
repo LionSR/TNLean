@@ -41,7 +41,7 @@ There are four distinct primitivity predicates in the codebase:
   peripheral-spectrum predicate for an arbitrary linear map `E`, defined by
   `peripheralEigenvalues E = {1}`.
 * `MPSTensor.HasPrimitiveFixedPoint A` in
-  `TNLean/MPS/Structure/PrimitivityBridge.lean`: the existential statement
+  `TNLean/MPS/Structure/PrimitiveFixedPoint.lean`: the existential statement
   `∃ ρ, IsPrimitiveMPS A ρ`, encoding the complementary transfer-map gap
   formulation used in the MPS proof route.
 * `IsPrimitivePaper A` in this file: the uniform spreading condition from

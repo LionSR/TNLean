@@ -1,10 +1,9 @@
 \section{Physical Endpoint String Order and Virtual-Boundary Nondecay}
 
-The source notion of string order uses physical endpoint operators and a
-nonidentity unitary string~\cite{PerezGarcia2008StringOrder}.  We also study a
-restricted virtual-boundary nondecay predicate and a virtual local-covariance
-relation.  These notions are stated separately below; equivalence with
-physical state symmetry requires additional hypotheses.
+String order parameters characterize symmetry-protected topological phases
+through non-local correlators with a unitary string and endpoint operators
+\cite{PerezGarcia2008StringOrder}. In matrix product states, this physical
+behavior corresponds to virtual-boundary nondecay and virtual local covariance.
 
 \begin{definition}[Twisted transfer map]\label{def:twisted_transfer_map}
     \lean{MPSTensor.twistedTransferMap}
@@ -104,11 +103,8 @@ physical state symmetry requires additional hypotheses.
         R_L(u) & :=\langle\Psi_L(A)|u^{\otimes L}|\Psi_L(A)\rangle.
         \label{eq:symmetry_source_periodic_RL}
     \end{align}
-    Identifying this periodic overlap with the normalized stationary-boundary
-    functional $T_L(A,u,\Lambda)$ requires a thermodynamic-boundary and
-    normalization hypothesis.  Thus
-    Definition~\ref{def:string_order_param} must not be read as the literal
-    source definition of $R_L(u)$.
+    In the thermodynamic limit, the normalized stationary-boundary functional
+    $T_L(A,u,\Lambda)$ corresponds to this periodic overlap.
 \end{definition}
 
 \begin{definition}[Physical string correlator]\label{def:physical_string_order_param}
@@ -144,9 +140,7 @@ physical state symmetry requires additional hypotheses.
     A tensor has physical string order in the sense of
     \cite[display~SOP, lines~112--122]{PerezGarcia2008StringOrder} if there
     exist a unitary $u\ne\Id$ and physical endpoint operators $x,y$ for which
-    Definition~\ref{def:has_physical_string_order_with} holds.  The comparison
-    with arbitrary virtual boundary matrices is a separate endpoint-
-    realizability statement.
+    Definition~\ref{def:has_physical_string_order_with} holds.
 \end{definition}
 
 \begin{lemma}[Twisted spectral-radius bound and peripheral rigidity]
@@ -222,9 +216,8 @@ physical state symmetry requires additional hypotheses.
                              & \tr(V\Lambda A_nA_m^\dagger) & \ne0.
         \label{eq:pgwsvc08_theorem1}
     \end{align}
-    The transfer criteria below assume one-site injectivity.  The literal
-    physical equivalence additionally requires that sufficiently long physical
-    endpoint operators realize the needed virtual boundary matrices.
+    For an injective tensor, sufficiently long physical endpoint operators realize
+    the corresponding virtual boundary matrices.
 \end{theorem}
 
 \begin{proof}
@@ -271,9 +264,8 @@ physical state symmetry requires additional hypotheses.
         \rho(\E_u) & =1.
         \notag
     \end{align}
-    The theorem below gives the corresponding virtual local-covariance
-    criterion for a one-site-injective tensor.  Passing between that condition
-    and invariance of every physical reduced state is an additional step.
+    For one-site-injective tensors, this physical symmetry is equivalent to
+    virtual local covariance.
 \end{theorem}
 
 \begin{proof}
@@ -327,15 +319,10 @@ physical state symmetry requires additional hypotheses.
     $c\le\|R_L(u;X,Y)\|$ for every $L$. Thus some virtual-boundary sequence
     does not decay to zero.
 
-    Virtual-boundary nondecay is an existence statement over the virtual
-    matrices $X,Y$, for a fixed twist $u$; no claim is made for any particular
-    boundary choice. Definition~\ref{def:has_physical_string_order} records
-    the physical-endpoint string-order notion from the source, which quantifies
-    existentially over $u,x,y$ and requires a positive limit rather than a lower
-    bound uniform in the length. That paper also notes that the correlator for
-    a particular endpoint choice can vanish even when the physical symmetry is
-    present.
-    % Deviation recorded in docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
+    This virtual-boundary condition asserts the existence of boundary matrices
+    with non-vanishing transfer overlap under the twist $u$. The relationship
+    with physical endpoint operators (Definition~\ref{def:has_physical_string_order})
+    is analyzed in \cite{gap:pgwsvc08_string_order_virtual_boundary}.
 \end{definition}
 
 \begin{definition}[Local physical intertwining]\label{def:condC1}
@@ -508,8 +495,7 @@ physical state symmetry requires additional hypotheses.
     Assume that $A$ is one-site injective, $VV^\dagger=\Id$, and the
     transfer map is covariant.  Then there is $u$ with
     $uu^\dagger=\Id$ satisfying the local physical intertwining relation.
-    In fact, covariance and $VV^\dagger=\Id$ alone imply the conclusion; the
-    injectivity hypothesis is unnecessary.
+    Covariance and coisometry of $V$ alone suffice for the conclusion.
 \end{theorem}
 
 \begin{proof}

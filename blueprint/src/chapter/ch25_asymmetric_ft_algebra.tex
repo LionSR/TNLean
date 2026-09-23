@@ -164,16 +164,9 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     $a,b\geq0$ and a semisimple module $M$ without a $\mathbf0$ summand such
     that $U^{\mathrm{ss}}\cong M\oplus\mathbf0^{\oplus a}$ and
     $V^{\mathrm{ss}}\cong M\oplus\mathbf0^{\oplus b}$.
-
-    The source proof decomposes the finite-dimensional image algebra
-    $R=(\rho_U\oplus\rho_V)(F)$ modulo its Jacobson radical by
-    Artin--Wedderburn and compares traces of central idempotents. The
-    formalized development below proves the statements the main theorem
-    actually uses by a different, equivalent route: Burnside's theorem and
-    the Jacobson density theorem applied directly to each simple factor as
-    it is peeled off by an induction on dimension
-    (\S\ref{sec:asym_flag}), rather than by a single global
-    Artin--Wedderburn decomposition.
+    % The source proof decomposes the finite-dimensional image algebra
+    % modulo its Jacobson radical by Artin--Wedderburn and compares
+    % traces of central idempotents.
 \end{lemma}
 
 \begin{lemma}[Positive-ideal separation of linear functionals]
@@ -304,10 +297,6 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     simple tensor modules $C_s$, $s\in S$. Let $K\leq M$ have simple
     quotient $M/K$ on which some generator acts nontrivially. Then $M/K$ is
     isomorphic to $C_s$ for some $s\in S$.
-
-    This identification is the formalized counterpart of the use made of
-    the positive-word character lemma (Lemma~\ref{lem:asym_character}) in
-    the proof of the main theorem below.
 \end{theorem}
 
 \begin{proof}
@@ -401,9 +390,6 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     word traces agree, on every nonempty word, with the sum of the word
     traces of the $C_s$. Then $M$ carries a labelled invariant flag over
     $(S,C)$.
-
-    This is the module-theoretic core of clauses (i)--(iii) and (vii) of
-    the main theorem below.
 \end{theorem}
 
 \begin{proof}
@@ -613,12 +599,33 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     slots.
 \end{proof}
 
+\begin{proposition}[A vanishing remainder gives sitewise intertwiners]
+    \label{prop:asym_split_intertwiners}
+    \lean{MPSTensor.MultiBlockCompression.mul_right_eq_right_mul,
+        MPSTensor.MultiBlockCompression.left_mul_eq_mul_left}
+    \leanok
+    \uses{thm:asym_multiblock}
+    In the setting of Theorem~\ref{thm:asym_multiblock}, suppose that the
+    remainder vanishes, $R^i=0$ for every physical index $i$. Then for
+    every $i$ and every $s\in S$,
+    \begin{align}
+        B^iV_s & =V_sC_s^i, &
+        W_sB^i & =C_s^iW_s.
+    \end{align}
+\end{proposition}
+
+\begin{proof}
+    \leanok
+    Since $R^i=0$, $B^i=\sum_{t\in S}V_tC_t^iW_t$. Multiplying on the
+    right by $V_s$, or on the left by $W_s$, and using the
+    biorthogonality $W_tV_s=\delta_{ts}\id_{D_s}$ of clause (iv) leaves
+    only the term $t=s$.
+\end{proof}
+
 \begin{proposition}[Projector-weighted direct sums]
     \label{prop:asym_projector_weighted_sum}
     \lean{MPSTensor.MultiBlockCompression.ofProjectorSum,
-        MPSTensor.MultiBlockCompression.remainder_ofProjectorSum,
-        MPSTensor.MultiBlockCompression.mul_right_eq_right_mul,
-        MPSTensor.MultiBlockCompression.left_mul_eq_mul_left}
+        MPSTensor.MultiBlockCompression.remainder_ofProjectorSum}
     \leanok
     \uses{thm:asym_multiblock, lem:asym_triangular}
     Let the bond space of $B$ be $\C^m\otimes\C^{D}$ and let $\Pi_1,\ldots$
@@ -635,11 +642,12 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
-    \uses{lem:asym_triangular}
+    \uses{lem:asym_triangular, prop:asym_split_intertwiners}
     Conjugating by $U\otimes\id$ turns each $\Pi_{j(s)}$ into a matrix
     unit, so every letter becomes block diagonal with the blocks
     $\mu_sC_s^i$ at the positions $j(s)$ and zero blocks elsewhere; block
-    diagonality gives the triangular form, the vanishing remainder, and the
-    intertwining relations.
+    diagonality gives the triangular form and the vanishing remainder, and
+    Proposition~\ref{prop:asym_split_intertwiners} gives the intertwining
+    relations.
 \end{proof}
 

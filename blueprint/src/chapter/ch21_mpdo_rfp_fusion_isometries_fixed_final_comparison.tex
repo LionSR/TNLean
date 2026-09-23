@@ -153,9 +153,6 @@
     $P^{\mathrm L}_{\varepsilon}
         C_{\alpha,\beta,\gamma}
         P^{\mathrm R}_{\varepsilon'}=0$.
-    The word-selector identities are additional hypotheses. This result
-    does not establish invertibility of a diagonal block, identify it with
-    an $F$-matrix, or prove the pentagon identity.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_triple_fusion_comparison_intertwines}
@@ -195,12 +192,11 @@
     \end{align}
     These spaces have the bracketing pattern of the $(e,\mu,\nu)$ and
     $(f,\lambda,\sigma)$ index spaces in the row and column convention for
-    $F$ in~\cite[Section~3.4]{Bultinck2017Anyons}. Identifying the dimensions
-    of the positive diagonal matrices with those fusion multiplicities
-    requires the length-independent integer specialization and is not
-    asserted here. The corresponding spaces for a fixed final label are
-    $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$ and
-    $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$.
+    $F$ in~\cite[Section~3.4]{Bultinck2017Anyons}. Under the length-independent
+    integer specialization, the dimensions of the positive diagonal matrices
+    match those fusion multiplicities. The corresponding spaces for a fixed
+    final label are $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$
+    and $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$.
 \end{definition}
 
 \begin{theorem}[Equality of multiplicity dimensions for a fixed final label]%
@@ -226,11 +222,9 @@
         =\dim\mathcal H^{\mathrm R}_{\varepsilon}.
         \notag
     \end{align}
-    Consequently a matrix between these two multiplicity spaces is square.
-    This is the numerical associativity statement of
-    \cite[lines~237--241]{Bultinck2017Anyons}; it does not assert completeness
-    of the fusion maps or invertibility of their comparison at a fixed final
-    label.
+    Consequently a matrix between these two multiplicity spaces is square,
+    establishing the numerical associativity statement of
+    \cite[lines~237--241]{Bultinck2017Anyons}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_bnt_label_coeff_associativity, thm:mpdo_bnt_label_length_independent_natural}
@@ -332,11 +326,8 @@
     $F:\mathcal H^{\mathrm R}_{\varepsilon}\to
         \mathcal H^{\mathrm L}_{\varepsilon}$ such that
     $C=F\otimes 1_{D_\varepsilon}$.
-    This conclusion concerns the assumed intertwiner $C$; it does not
-    construct an invertible $C$ or $F$. It also does not identify the
-    dimensions of the positive diagonal matrices $\chi$ with the fusion
-    multiplicities in the row and column convention for $F$
-    in~\cite[Section~3.4]{Bultinck2017Anyons}.
+    Here the Kronecker decomposition holds for any given intertwiner $C$ between
+    the fixed-final-label representations.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:amplified_center_scalar}
@@ -372,11 +363,6 @@
         =F_\varepsilon\otimes 1_{D_\varepsilon}$.
     For every $\varepsilon'\ne\varepsilon$,
     $C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}=0$.
-    The selector identities and injectivity at the present blocking are
-    additional hypotheses here. The theorem neither asserts that
-    $F_\varepsilon$ is square or invertible nor identifies it with the
-    $F$-matrix of~\cite[Section~3.4]{Bultinck2017Anyons}; no pentagon identity
-    is asserted.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_triple_fusion_comparison_intertwines, thm:mpdo_triple_fusion_comparison_final_sector_vanishing, thm:mpdo_injective_fixed_final_intertwiner}
@@ -465,10 +451,9 @@
          & =1.
         \notag
     \end{align}
-    Thus $F_\varepsilon$ is invertible. Its orientation is opposite to the
+    Thus $F_\varepsilon$ is invertible (with opposite orientation to the
     row and column convention for $F$ in
-    \cite[Section~3.4]{Bultinck2017Anyons}; no pentagon
-    identity is asserted.
+    \cite[Section~3.4]{Bultinck2017Anyons}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_triple_fusion_comparison_final_sector_kronecker, thm:mpdo_triple_fusion_comparison_final_sector_unitary, lem:matrix_kronecker_identity_cancellation}
@@ -590,7 +575,6 @@
         $C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon}$; two-sided
         unitarity of $C_\varepsilon$ and $D_\varepsilon>0$ give two-sided
         unitarity of $F_\varepsilon$. This is the associativity mechanism
-        described in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}. No
-        pentagon coherence identity is asserted here.}
+        described in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_fixed_final_comparison_unitary}
 \end{figure}

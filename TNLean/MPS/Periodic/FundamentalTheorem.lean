@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.Periodic.Defs
 import QICLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.Overlap.Basic
-import TNLean.MPS.Periodic.Overlap
+import TNLean.MPS.Periodic.Overlap.Dichotomy
+import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.Tactic.Basic

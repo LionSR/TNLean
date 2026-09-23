@@ -274,13 +274,12 @@ ambient bond space.
         A^i & =X\sqrt{\rho}\,U^iX^{-1}.
         \notag
     \end{align}
-    \textbf{Local fix (square-root diagonal).} The display at line~1278 uses
-    the bare diagonal $\Lambda$, while lines~1281--1283 impose a unit
-    pair-index isometry and line~1300 constructs the reference tensor with
-    coefficients $\sqrt{\Lambda_\alpha}$. These equations force the repaired
-    form $A^i=X\sqrt{\rho}\,U^iX^{-1}$ used in this definition. The correction
-    is documented in
-    \cite{gap:cpsv16_rfp_isometry_scope}.
+    \textbf{Local fix (square-root factor in canonical form):}
+    The definition uses the square-root diagonal $\sqrt{\rho}$ rather than the
+    bare diagonal printed in \cite[line~1278]{Cirac2016MPDO_arXiv}, as required
+    by the unit pair-index isometry and reference-tensor construction; documented
+    in \cite{gap:cpsv16_rfp_isometry_scope}
+    (\texttt{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}).
 
     Explicitly, the reference tensor is
     \begin{align}
@@ -299,8 +298,7 @@ ambient bond space.
     \lean{MPSTensor.GaugeEquiv.isIsometryCanonicalForm_iff}
     \leanok
     \uses{def:gauge_equiv, def:is_isometry_canonical_form}
-    Gauge-equivalent tensors have the square-root fixed-point form
-    simultaneously.
+    If $A \sim_{\mathrm{gauge}} B$ (so $B^i = Y A^i Y^{-1}$ for invertible $Y$), then $A$ has the square-root fixed-point form if and only if $B$ does.
 \end{lemma}
 \begin{proof}\leanok
     Write $A^i=X\sqrt\rho\,U^iX^{-1}$ and
@@ -414,10 +412,12 @@ ambient bond space.
     \lean{MPSTensor.isTransferIdempotent_of_isIsometryCanonicalForm}
     \leanok
     \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence}
-    A tensor in the square-root fixed-point form is a renormalization fixed point. This is
-    the backward direction of the structural characterization of pure-state
-    renormalization fixed points in \cite[Section~3]{Cirac2016MPDO_arXiv}, which
-    the source states as immediate.
+    If an MPS tensor $A$ has the square-root fixed-point form, then its transfer map $\E_A$ is idempotent:
+    \begin{align}
+        \E_A^2 = \E_A.
+        \notag
+    \end{align}
+    In particular, $A$ is a renormalization fixed point \cite[Section~3]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:unit_pair_isometry_transfer}
@@ -443,11 +443,12 @@ ambient bond space.
     \lean{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
     \leanok
     \uses{def:nt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, thm:cpsv_normal_bond_dim_pos}
-    A normal tensor is a renormalization fixed point if and only if it has the
-    square-root fixed-point form of
-    Definition~\ref{def:is_isometry_canonical_form}. Its bond dimension is
-    necessarily positive, rather than subject to an additional hypothesis, and
-    no left-canonical hypothesis is imposed on the original tensor. This is the
+    Let $A$ be a normal tensor. Then its transfer map satisfies $\E_A^2 = \E_A$ if and only if $A$ has the square-root fixed-point form
+    \begin{align}
+        A^i = X\sqrt\rho\, U^i X^{-1}.
+        \notag
+    \end{align}
+    Its bond dimension is necessarily positive. This is the
     corrected form of Lemma~B.1 in
     \cite[Appendix~B, lines~1274--1301]{Cirac2016MPDO_arXiv}.
 \end{theorem}

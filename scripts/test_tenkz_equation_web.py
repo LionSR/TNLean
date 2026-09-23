@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Browser regression for top-level tenkz equation rows in the blueprint."""
+"""Browser regression for inline diagrams and equation rows across the blueprint."""
 
 from __future__ import annotations
 
@@ -40,7 +40,7 @@ def _tenkzequation_bodies(source: str) -> list[str]:
             start = match.end()
         else:
             assert start is not None, "tenkzequation closes without opening"
-            bodies.append(source[start:match.start()])
+            bodies.append(source[start : match.start()])
             start = None
     assert start is None, "tenkzequation remains unclosed"
     return bodies
@@ -93,8 +93,7 @@ def _assert_source_linked_groups(repo_root: Path) -> None:
     assert r"\qquad$=$\qquad" in blocked_bodies[0]
 
     channels = _read_tex_tree(
-        source_root
-        / "chapter/ch21_mpdo_rfp_simple_local_refinement_channels.tex",
+        source_root / "chapter/ch21_mpdo_rfp_simple_local_refinement_channels.tex",
         source_root,
     )
     channel_bodies = _tenkzequation_bodies(channels)
@@ -122,6 +121,9 @@ class ReusableTCPServer(socketserver.ThreadingTCPServer):
     # behind one another, stalling DOMContentLoaded on a loaded runner.
     allow_reuse_address = True
     daemon_threads = True
+    # Chromium opens several connections while loading chapter assets. The
+    # socketserver default of five can drop bursts and mimic missing SVGs.
+    request_queue_size = 128
 
 
 @contextlib.contextmanager
@@ -147,9 +149,7 @@ class _GeneratedStructureParser(HTMLParser):
         self.events: list[tuple[str, str]] = []
         self.wrapper_count = 0
 
-    def handle_starttag(
-        self, tag: str, attrs: list[tuple[str, str | None]]
-    ) -> None:
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         if tag == "p":
             assert not self.in_paragraph, "generated source contains nested paragraphs"
             self.in_paragraph = True
@@ -157,9 +157,9 @@ class _GeneratedStructureParser(HTMLParser):
         if tag == "div":
             classes = dict(attrs).get("class", "") or ""
             if "tenkz-equation" in classes.split():
-                assert not self.in_paragraph, (
-                    "generated source places a tenkz equation inside a paragraph"
-                )
+                assert (
+                    not self.in_paragraph
+                ), "generated source places a tenkz equation inside a paragraph"
                 self.wrapper_count += 1
                 self.events.append(("wrapper", ""))
 
@@ -186,7 +186,7 @@ def _cdn_fetch(url: str) -> tuple[bytes, str]:
         except (OSError, http.client.IncompleteRead):
             if attempt == 2:
                 raise
-            time.sleep(2 ** attempt)
+            time.sleep(2**attempt)
     raise AssertionError("unreachable")
 
 
@@ -197,7 +197,8 @@ def _mathjax_bundle(root: Path) -> tuple[str, bytes, str]:
     for filename in PAGES:
         source = (root / filename).read_text(encoding="utf-8")
         script_sources.update(
-            src for src in script_pattern.findall(source)
+            src
+            for src in script_pattern.findall(source)
             if re.search(r"mathjax|tex-(?:chtml|mml|svg)", src, re.I)
         )
     assert len(script_sources) == 1, script_sources
@@ -206,18 +207,19 @@ def _mathjax_bundle(root: Path) -> tuple[str, bytes, str]:
     return url, body, content_type
 
 
-def _assert_generated_blocks(root: Path) -> None:
+def _assert_generated_blocks(root: Path, filenames: tuple[str, ...] = PAGES) -> None:
     """Check raw renderer output before a browser can repair invalid HTML."""
     parsers: dict[str, _GeneratedStructureParser] = {}
-    for filename in PAGES:
+    for filename in filenames:
         parser = _GeneratedStructureParser()
         parser.feed((root / filename).read_text(encoding="utf-8"))
         parser.close()
         assert not parser.in_paragraph, f"{filename} leaves a paragraph open"
-        assert parser.wrapper_count == EXPECTED_WRAPPER_COUNTS[filename], (
-            filename,
-            parser.wrapper_count,
-        )
+        if filename in EXPECTED_WRAPPER_COUNTS:
+            assert parser.wrapper_count == EXPECTED_WRAPPER_COUNTS[filename], (
+                filename,
+                parser.wrapper_count,
+            )
         parsers[filename] = parser
 
     events = parsers["ch-mpdo_rfp.html"].events
@@ -244,7 +246,7 @@ def _assert_generated_blocks(root: Path) -> None:
         )
         assert any(
             event[0] == "wrapper"
-            for event in events[preceding_index + 1:following_index]
+            for event in events[preceding_index + 1 : following_index]
         ), (preceding, following)
 
 
@@ -347,9 +349,7 @@ def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
     assert all(fact["contained"] for fact in facts), facts
     assert not any(fact["figureScroll"] for fact in facts), facts
     assert all(
-        fact["localScroll"]
-        or fact["allVisibleAtStart"]
-        for fact in facts
+        fact["localScroll"] or fact["allVisibleAtStart"] for fact in facts
     ), facts
     assert all(
         fact["firstReachable"] and fact["lastReachable"]
@@ -363,7 +363,9 @@ def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
           clientWidth: document.documentElement.clientWidth,
         })"""
     )
-    assert document_facts["scrollWidth"] <= document_facts["clientWidth"] + 1, document_facts
+    assert (
+        document_facts["scrollWidth"] <= document_facts["clientWidth"] + 1
+    ), document_facts
     return facts
 
 
@@ -385,6 +387,106 @@ def _assert_font_relative_reading_width(page: Page) -> None:
     assert 1.95 <= ratio <= 2.05, widths
 
 
+def _assert_chapter_picture_layout(page: Page, filename: str) -> dict[str, int]:
+    """Check every diagram and every fitting group, including nested boxes.
+
+    Explicit breaks and block paragraphs delimit rows. A group wider than its
+    container may wrap; a group that fits must not be split by block styling.
+    Oversized diagrams must remain inside a local horizontal scroller.
+    """
+    facts = page.evaluate(
+        r"""() => {
+      const pictures = [...document.querySelectorAll('.tenkz-pic')];
+      const isPictureBox = node => node.nodeType === Node.ELEMENT_NODE && (
+        node.matches('.tenkz-pic') ||
+        (node.matches('table.tabular, .minipage') && node.querySelector('.tenkz-pic'))
+      );
+      const containers = new Set(pictures.map(image => image.parentElement));
+      for (const box of document.querySelectorAll('table.tabular, .minipage')) {
+        if (box.querySelector('.tenkz-pic')) containers.add(box.parentElement);
+      }
+      const canvas = document.createElement('canvas').getContext('2d');
+      const issues = [], groups = [];
+      const checkGroup = (container, nodes) => {
+        const boxes = nodes.filter(isPictureBox);
+        if (boxes.length < 2) return;
+        const style = getComputedStyle(container);
+        const available = container.clientWidth
+          - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+        let needed = 0;
+        for (const node of nodes) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            canvas.font = style.font;
+            // Collapse only the whitespace CSS collapses: `\s` would also turn
+            // the em and thin spaces of `\quad` and `\,` into ordinary spaces.
+            needed += canvas.measureText(
+              node.textContent.replace(/[ \t\n\f\r]+/g, ' ')).width;
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            const childStyle = getComputedStyle(node);
+            needed += node.getBoundingClientRect().width
+              + (parseFloat(childStyle.marginLeft) || 0)
+              + (parseFloat(childStyle.marginRight) || 0);
+          }
+        }
+        const rects = boxes.map(box => box.getBoundingClientRect());
+        const sameRow = rects.every((rect, index) => index === 0 || (
+          rect.left >= rects[index - 1].right - 1 &&
+          Math.min(rect.bottom, rects[index - 1].bottom)
+            > Math.max(rect.top, rects[index - 1].top)
+        ));
+        const anchor = container.closest('[id]')?.id;
+        groups.push({anchor, boxes: boxes.length, needed, available, sameRow});
+        if (needed <= available - 2 && !sameRow) {
+          issues.push({kind: 'unnecessary-break', anchor, needed, available,
+            html: container.outerHTML.slice(0, 4000),
+            rects: rects.map(rect => rect.toJSON())});
+        }
+      };
+      for (const container of containers) {
+        let nodes = [];
+        for (const node of container.childNodes) {
+          const boundary = node.nodeType === Node.ELEMENT_NODE && (
+            node.tagName === 'BR' || (!isPictureBox(node) &&
+              ['block', 'flex', 'table'].includes(getComputedStyle(node).display))
+          );
+          if (boundary) {
+            checkGroup(container, nodes);
+            nodes = [];
+          } else {
+            nodes.push(node);
+          }
+        }
+        checkGroup(container, nodes);
+      }
+      for (const image of pictures) {
+        const rect = image.getBoundingClientRect();
+        const src = image.getAttribute('src');
+        if (!image.naturalWidth || !rect.width || !rect.height) {
+          issues.push({kind: image.naturalWidth ? 'hidden' : 'missing-image', src});
+          continue;
+        }
+        let localScroll = false;
+        for (let ancestor = image.parentElement;
+             ancestor && !ancestor.matches('.main-text, .content-wrapper, .content');
+             ancestor = ancestor.parentElement) {
+          if (['auto', 'scroll'].includes(getComputedStyle(ancestor).overflowX)) {
+            localScroll = true;
+            break;
+          }
+        }
+        const content = image.closest('.content-wrapper').getBoundingClientRect();
+        if (!localScroll && (rect.left < content.left - 1 || rect.right > content.right + 1)) {
+          issues.push({kind: 'overflow', anchor: image.closest('[id]')?.id, src,
+            left: rect.left, right: rect.right, bounds: [content.left, content.right]});
+        }
+      }
+      return {pictures: pictures.length, groups, issues};
+    }"""
+    )
+    assert not facts["issues"], (filename, facts["issues"])
+    return {"pictures": facts["pictures"], "groups": len(facts["groups"])}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--web-root", type=Path, default=Path("blueprint/web"))
@@ -398,7 +500,15 @@ def main() -> int:
             parser.error(f"missing generated blueprint page: {root / filename}")
     if args.screenshot_dir:
         args.screenshot_dir.mkdir(parents=True, exist_ok=True)
-    _assert_generated_blocks(root)
+    # Discover every chapter with pictures; the named fixtures above retain
+    # their stronger source-linked expectations and original ordering.
+    chapters = PAGES + tuple(
+        path.name
+        for path in sorted(root.glob("ch-*.html"))
+        if path.name not in PAGES
+        and 'class="tenkz-pic ' in path.read_text(encoding="utf-8")
+    )
+    _assert_generated_blocks(root, chapters)
 
     mathjax_url, mathjax_bundle, mathjax_content_type = _mathjax_bundle(root)
     # MathJax lazily loads extensions (e.g. boldsymbol) from the same CDN tree
@@ -423,11 +533,12 @@ def main() -> int:
 
     collected: list[dict[str, object]] = []
     mobile: list[dict[str, object]] = []
+    chapter_coverage: dict[str, dict[str, int]] = {}
     with serve(root) as base_url, sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         page.route(mathjax_cdn_glob, _fulfill_mathjax)
-        for filename in PAGES:
+        for filename in chapters:
             # The MPDO-RFP page is large; do not wait for every unrelated asset.
             # The fixture pictures have their own readiness check below. Reaching
             # DOMContentLoaded on these large pages can itself take minutes on a
@@ -456,28 +567,37 @@ def main() -> int:
                 timeout=300_000,
             )
             equations = page.locator(".tenkz-equation")
-            # Ignore unrelated chapter pictures: only these fixtures contribute
-            # to the row geometry checked below.
-            page.wait_for_function("""() =>
-              [...document.querySelectorAll('.tenkz-equation .tenkz-pic')]
+            # Every chapter picture contributes to the layout audit below.
+            page.wait_for_function(
+                """() =>
+              [...document.querySelectorAll('.tenkz-pic')]
                 .every(image => image.complete)
-            """)
+            """
+            )
             # Exercise the shipped layout, not a test-only width override.
             page.wait_for_function("() => typeof window.showmore_update === 'function'")
             page.evaluate("showmore_update(2)")
-            visibility = equations.evaluate_all("""nodes => nodes.map(node => ({
+            visibility = equations.evaluate_all(
+                """nodes => nodes.map(node => ({
               width: node.offsetWidth,
               height: node.offsetHeight,
-            }))""")
-            assert all(fact["width"] > 0 and fact["height"] > 0 for fact in visibility), (
+            }))"""
+            )
+            assert all(
+                fact["width"] > 0 and fact["height"] > 0 for fact in visibility
+            ), (
                 filename,
                 visibility,
             )
-            assert equations.count() == EXPECTED_WRAPPER_COUNTS[filename]
-            collected.extend(_equation_facts(page))
+            if filename in EXPECTED_WRAPPER_COUNTS:
+                assert equations.count() == EXPECTED_WRAPPER_COUNTS[filename]
+                collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)
+            chapter_coverage[filename] = _assert_chapter_picture_layout(page, filename)
             if args.screenshot_dir:
-                for index, wrapper in enumerate(page.locator(".tenkz-equation").all(), 1):
+                for index, wrapper in enumerate(
+                    page.locator(".tenkz-equation").all(), 1
+                ):
                     wrapper.screenshot(
                         path=args.screenshot_dir
                         / f"{Path(filename).stem}-{index}-desktop.png"
@@ -485,8 +605,11 @@ def main() -> int:
 
             page.set_viewport_size({"width": 360, "height": 800})
             mobile.extend(_assert_mobile_scroll(page))
+            _assert_chapter_picture_layout(page, filename)
             if args.screenshot_dir:
-                for index, wrapper in enumerate(page.locator(".tenkz-equation").all(), 1):
+                for index, wrapper in enumerate(
+                    page.locator(".tenkz-equation").all(), 1
+                ):
                     wrapper.screenshot(
                         path=args.screenshot_dir
                         / f"{Path(filename).stem}-{index}-mobile.png"
@@ -499,11 +622,16 @@ def main() -> int:
     assert all(fact["directChildren"] for fact in collected), collected
     assert not any(fact["insideMathJax"] for fact in collected), collected
     assert not any(fact["visibleRawSource"] for fact in collected), collected
-    print(json.dumps({
-        "equations": len(collected),
-        "picture_counts": picture_counts,
-        "mobile": mobile,
-    }))
+    print(
+        json.dumps(
+            {
+                "chapters": chapter_coverage,
+                "equations": len(collected),
+                "picture_counts": picture_counts,
+                "mobile": mobile,
+            }
+        )
+    )
     return 0
 
 

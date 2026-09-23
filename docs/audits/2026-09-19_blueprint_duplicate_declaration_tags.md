@@ -155,3 +155,28 @@ The conjunction-entry pairs remain evidence for the multi-anchor discussion unde
 issue #7726, which decides whether such entries should carry a machine-readable
 link of their own; if it introduces one, the eleven entries listed above are its
 first consumers.
+
+## Closure (issue #7890)
+
+The follow-up resolved the 17 recap pairs and three pairs that arrived later,
+20 in all, and the blueprint job now passes `--report-duplicate-tags`.
+
+- The five recap entries of `ch25_asymmetric_examples_rfp.tex` relinquished
+  their tags and keep `\leanok`. The closed-density, flag-factor, and physical
+  fixed-point recaps cite their Chapter 21 twisted-dimer and rescaling owners
+  at proof level. The fusion-equivalence recap already cited
+  `thm:mpdo_cpsv_bnt_rfp_equivalence` at statement level and now also cites it
+  at proof level. The physical-trace recap cites
+  `thm:rfp_via_ts_physical_trace_idempotent`, which states the idempotence
+  without the nonvanishing-trace hypothesis of the tag owner
+  `thm:mpdo_rfp_implies_zcl_and_sal`.
+- `thm:mpug_common_blocking_representation` in `ch29_mpu_gauging.tex` again
+  relinquished `MPOTensor.blockTensor_mulTensor` and
+  `MPOTensor.mpo_blockTensor_eq_reindex`; its proof already cites both owners.
+- `MPSTensor.mulTensor_complexOfRing` is owned by `thm:asymex_zsqrt2_ring`,
+  whose statement asserts that the entrywise embedding commutes with the local
+  product. `thm:asymex_explicit_gauge` states only the scalar form and needs no
+  edge.
+
+`python3 scripts/blueprint_lean_sync.py --report-duplicate-tags` now reports
+no duplicated declarations.

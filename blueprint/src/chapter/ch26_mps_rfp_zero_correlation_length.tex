@@ -56,13 +56,17 @@
     \label{lem:is_positive_gap_bnt_zcl_iff}
     \lean{MPSTensor.isPositiveGapBNTZCL_iff}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl}
-    The positive-gap restriction is equivalent to the conjunction
-    of the BNT relation, positive-gap physical distance independence, and BNT
-    local orthogonality.
+    \uses{def:is_positive_gap_bnt_zcl, def:bnt_cpsv, def:is_positive_gap_physical_cid, def:is_bnt_locally_orthogonal}
+    A family $(A_j)_j$ has positive-gap BNT zero correlation length for $A$ if
+    and only if $(A_j)_j$ is a basis of normal tensors for $A$
+    (Definition~\ref{def:bnt_cpsv}), the physical correlations of $A$ are
+    independent of separation whenever both complementary gaps are positive
+    (Definition~\ref{def:is_positive_gap_physical_cid}), and the components
+    $(A_j)_j$ are locally orthogonal
+    (Definition~\ref{def:is_bnt_locally_orthogonal}).
 \end{lemma}
 \begin{proof}\leanok
-    This is the defining conjunction.
+    This is the defining conjunction of Definition~\ref{def:is_positive_gap_bnt_zcl}.
 \end{proof}
 
 \begin{definition}[Physical BNT zero correlation length]%
@@ -128,19 +132,17 @@
     for the unrestricted quantification over disjoint regions, regardless of
     the commuting-parent condition.
 
-    \textbf{Source gap (adjacent regions).} The printed forward argument uses
-    $\E_A^n=\E_A$, which follows from idempotence only for $n\geq1$. Adjacent
-    regions insert $\E_A^0=\Id$ and are included in the source definition. This
-    gap and its scope are recorded in
-    \cite{gap:cpsv16_pure_zcl_adjacent_gap_cid_scope}.
-    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp} proves the repaired
-    forward implication when both complementary gaps are positive. It does not
-    prove the unrestricted biconditional of
-    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv} or the unrestricted three-way
-    equivalence of \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}. The converse and
-    equivalence results below require their stated unit-weight,
-    multiplicity-one, or spectral hypotheses. The printed statements are
-    recorded here as refuted, not as theorems awaiting proof.
+    \textbf{Local fix (false source claim for adjacent regions):}
+    The printed forward implication in \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}
+    asserts correlation independence for all disjoint regions, including adjacent
+    ones. However, the Bell-pair counterexample (Theorem~\ref{thm:bell_pair_chain_not_cid})
+    shows that transfer idempotence does not imply correlation independence for adjacent
+    regions; the source derivation uses $\E_A^n=\E_A$, which holds only for $n\ge1$,
+    whereas adjacent regions insert $\E_A^0=\Id$. Documented in
+    \cite{gap:cpsv16_pure_zcl_adjacent_gap_cid_scope}
+    (\texttt{docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex}).
+    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp} establishes the
+    forward implication when both complementary gaps are positive.
 \end{theorem}
 \begin{proof}
     \uses{thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid}
@@ -282,8 +284,13 @@
     \lean{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}
     \leanok
     \uses{def:source_bnt_zcl, def:is_positive_gap_bnt_zcl}
-    If a BNT family has zero correlation length for all disjoint physical
-    regions, then it has positive-gap BNT zero correlation length.
+    If a BNT family $(A_j)_j$ for $A$ has zero correlation length for all
+    disjoint physical regions ($\mathrm{ZCL}_{\mathrm{phys}}$), then it satisfies
+    the positive-gap zero correlation length condition ($\mathrm{ZCL}_+$):
+    \begin{align}
+        \mathrm{ZCL}_{\mathrm{phys}}((A_j)_j, A) \implies \mathrm{ZCL}_+((A_j)_j, A).
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:is_positive_gap_physical_cid_of_physical_cid}
@@ -723,7 +730,7 @@
     \begin{align}
         A\text{ has positive-gap BNT zero correlation length}
         \quad\Longleftrightarrow\quad
-        A\text{ has all-chain commuting parent ground spaces spanned by }(A_j)_j.
+        A\text{ has all-chain commuting parent ground spaces spanned by }(A_j)_j. \notag
     \end{align}
     This statement concerns one unit-weight copy of each distinct sector and
     positive complementary gaps. It does not include repeated copies,
@@ -746,15 +753,11 @@
     canonical-form equations (1252) and (1256) also contain all repeated-copy
     pairs and their
     raw weight powers; the theorem above does not realize those weighted
-    insertions. Moreover, the preceding claim that $\E_j^2\ne\E_j$ yields a
-    nonzero eigenvalue $\lambda$ with $|\lambda|<1$ is not valid for a
-    non-idempotent operator with a nilpotent Jordan part at eigenvalue zero.
-    Hence the printed argument does not prove the unconditional converse in
-    Theorem~3.8. At multiplicity one,
-    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} repairs the
-    argument by arbitrary trace probes, without deriving the nonzero
-    subleading left and right eigenvectors used at lines 1260--1268.
-    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid} remains the formal
-    record of the printed spectral argument, taking the normalized nonzero
-    subleading pair as an explicit hypothesis.
+    insertions.  Moreover, the claim that $\E_j^2\ne\E_j$ yields a nonzero eigenvalue
+    $\lambda$ with $|\lambda|<1$ omits non-idempotent operators with nilpotent
+    Jordan parts at eigenvalue zero. At multiplicity one,
+    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} establishes the
+    converse using arbitrary trace probes, while
+    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid} analyzes the spectral
+    case under the explicit hypothesis of a nonzero subleading eigenpair.
 \end{remark}

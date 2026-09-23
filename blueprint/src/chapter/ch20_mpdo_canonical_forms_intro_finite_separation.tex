@@ -37,13 +37,11 @@
          & =\bigoplus_{j,q}X_{j,q}.
         \notag
     \end{align}
-    This is a strengthened representative-grouped form of the canonical
-    decomposition in \cite[Section~2.3]{Cirac2016MPDO_arXiv}. In contrast with
-    Definition~\ref{def:cpsv_canonical_form}, the retained direct sum has the
-    full bond dimension, every copy weight is nonzero and normalized, and
-    gauge-equivalent normal blocks are grouped over a BNT representative with
-    a separate gauge for each copy. It is therefore not the literal CPSV
-    canonical-form hypothesis.
+    This gives the representative-grouped canonical decomposition
+    of \cite[Section~2.3]{Cirac2016MPDO_arXiv}: the direct sum exhausts the
+    full bond dimension $D$, each copy weight is nonzero and normalized, and
+    gauge-equivalent normal blocks are grouped over a minimal BNT representative
+    with an independent gauge for each copy.
     % Source anchors: CPSV16 lines 214--246 for literal CF and lines 281--301
     % for the BNT representative decomposition.
 \end{definition}
@@ -303,17 +301,15 @@
         f\bigl((M_k)_k\bigr) & =\sum_k\tr(\Delta_kM_k), \notag
     \end{align}
     for some tuple $(\Delta_k)_k$, contradicting separation. This finite-word
-    property is not the literal one-letter
-    simultaneous span in the source definition of block-injective canonical
-    form.
+    property generalizes the one-letter simultaneous span in the source
+    definition of block-injective canonical form to length-$L$ words.
 
     The spanning hypothesis has an equivalent entrywise form. For a block
     index $k$ and matrix entry $(a,b)$, let
     $w\longmapsto(A_k^w)_{a,b}$
     be the corresponding scalar word family, indexed jointly by the triple
-    $(k,a,b)$. Linear independence of this scalar family already implies
-    the spanning condition, hence the separation property, and hence the
-    older per-copy trace-separation hypotheses directly.
+    $(k,a,b)$. Linear independence of this scalar family implies the
+    product-algebra spanning condition, and hence trace separation.
 
     The block-injectivity proposition of
     \cite[lines~340--345]{Cirac2016MPDO_arXiv} gives a concrete sufficient
@@ -331,8 +327,8 @@
         \notag
     \end{align}
     Concatenating the injective prefix with this finite selector family
-    produces the spanning condition at length $L+S$, hence the separation
-    property and the older per-copy trace-separation hypotheses.
+    produces the spanning condition at length $L+S$, hence the product-algebra
+    spanning and trace-separation properties.
 \end{remark}
 
 The inverse tensor of a block-injective canonical form satisfies

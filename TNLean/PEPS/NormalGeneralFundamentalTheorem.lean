@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.NormalBondDimension
 import TNLean.PEPS.NormalComparisonScalar
-import TNLean.PEPS.RegionScalarCondition
 import TNLean.PEPS.TorusGaugeUniqueness
 
 /-!

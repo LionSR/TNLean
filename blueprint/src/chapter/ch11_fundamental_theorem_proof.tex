@@ -2,27 +2,26 @@
 
 For BNT canonical forms $P$ and $Q$, write the weighted direct sums over
 normal-tensor sectors as $P^i=\bigoplus_{j,q}\mu_{j,q}P_j^i$ and
-$Q^i=\bigoplus_{k,q}\nu_{k,q}Q_k^i$. The proportional theorem matches the
-normal sectors by a bijection $\beta$, unit phases $\zeta_k$, and invertible
-matrices $X_k$ satisfying
+$Q^i=\bigoplus_{k,q}\nu_{k,q}Q_k^i$. When the generated matrix product vectors
+are proportional, the normal sectors are matched by a bijection $\beta$, unit
+phases $\zeta_k$, and invertible matrices $X_k$ satisfying
 \begin{align}
     Q_k^i
      & =\zeta_kX_kP_{\beta(k)}^iX_k^{-1}.
     \notag
 \end{align}
-It does not determine the copy weights. In the equal-MPV case, eventual linear
-independence gives
+In the equal-MPV case, eventual linear independence yields the coefficient
+identities
 \begin{align}
     c_N^{(\beta(k))}(P)
      & =\zeta_k^N c_N^{(k)}(Q).
     \notag
 \end{align}
-Finite power-sum comparison then gives
-$\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$. Thus the sector phases do
-not become equal: each phase cancels against the inverse phase in its matched
-copy weight. The remaining block conjugacies assemble into
-$X=\bigoplus_k(\mathbf 1_{r_k}\otimes X_k)$, and a sector-coordinate
-permutation yields the literal global gauge.
+Finite power-sum comparison determines the copy weights,
+$\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$ for a copy permutation
+$\tau_k$. Each sector phase cancels against the inverse phase in its matched
+copy weight, and the block conjugacies combine into
+$X=\bigoplus_k(\mathbf 1_{r_k}\otimes X_k)$, giving global gauge equivalence.
 
 Throughout, ``eventually'' means ``for all sufficiently large $N$''. At a
 fixed length in that range, BNT linear independence detects exact coefficient

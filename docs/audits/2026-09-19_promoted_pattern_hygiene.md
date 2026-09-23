@@ -100,11 +100,13 @@ The whole library builds. Every edited module and its importers elaborate under
 the package linter options. No `sorry`, `axiom` or `native_decide` is
 introduced. No blueprint tag names a removed declaration.
 
-## Deferred
+## Deferred (both landed 2026-09-23)
 
 `MPOTensor.sourceSqrt_mul_inv` and `MPOTensor.sourceSqrt_inv_mul`
-(`TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean`) are pure pass-throughs of
-`mul_inv_cancel₀` with one use each; retiring them belongs with a wider pass
-over that file. The two copies of the normalized-ancilla cancellation in
-`TNLean/MPS/MPU/PhysicalAncilla.lean` remain below the promotion threshold and
-stay recorded as a candidate.
+(`TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean`) were pure pass-throughs of
+`mul_inv_cancel₀` with one use each; they were retired in the 2026-09-23
+second pass together with the wider attribute sweep over that file, and the
+two copies of the normalized-ancilla cancellation in
+`TNLean/MPS/MPU/PhysicalAncilla.lean` now route through
+`Complex.ofReal_sqrt_inv_mul_self`. Recorded in
+`docs/audits/2026-09-23_hygiene_second_pass.md`.

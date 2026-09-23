@@ -47,13 +47,11 @@
     (\ref{eq:cpsv_literal_first_site_inserted}) gives the opposite one-sided
     identity on the original bond space.
 
-    This is the representative-indexed conclusion of the invariant-projection
-    step in
-    \cite[Proposition~4.13, lines~1873--1887]{Cirac2016MPDO_arXiv}.
-    Copies with a common normal representative are grouped before separation,
-    exactly as in Appendix~C.3, Lemma~L.
-    The source assumes that $Q$ is an orthogonal projector; this implication
-    only uses its Hermiticity.
+    This is the invariant-projection step of
+    \cite[Proposition~4.13, lines~1873--1887]{Cirac2016MPDO_arXiv}, grouping
+    copies over each normal representative as in Lemma~L
+    \cite[Appendix~C.3]{Cirac2016MPDO_arXiv}; Hermiticity of $Q$ suffices for the
+    implication.
 \end{theorem}
 
 \begin{proof}
@@ -112,13 +110,9 @@
     $Y_1V^{(N)}(A)=Z_1V^{(N)}(A)$ for every $N\geq1$, then
     $YA_k=ZA_k$ for every block $k$.
 
-    \textbf{Scope restriction (per-block separation).} The source's Lemma~L
-    separates blockwise contributions at the level of a minimal basis of
-    normal tensors, grouping gauge-equivalent copies of one representative
-    before the trace-separation step; the block-injective hypothesis stated
-    here instead demands trace separation simultaneously across every block,
-    including gauge-equivalent copies, and so excludes decompositions with
-    repeated normal tensors. Documented in
+    \textbf{Scope restriction (block-injective specialization):}
+    The block-injective hypothesis excludes gauge-equivalent repeated blocks,
+    specializing the source lemma \cite[Lemma~L]{Cirac2016MPDO_arXiv}; documented in
     \cite{gap:cpgsv17_bicf_block_separation}.
 \end{lemma}
 
@@ -286,10 +280,8 @@ the proof of Lemma~L,
          & =(Y_R)_1V^{(N)}(A),
         \notag
     \end{align}
-    then $Y_RA_j=Y_CA_j$ for every minimal representative $A_j$. This is the
-    representative-grouped application of Lemma~L and anticipates the
-    concrete instantiation with $Y_L,Y_C,Y_R$ the physical-index insertions
-    of $P$, $PHP$, $HP$ in
+    then $Y_RA_j=Y_CA_j$ for every minimal representative $A_j$. This application of
+    Lemma~L specializes to the physical-index insertions of $P$, $PHP$, and $HP$ in
     Theorem~\ref{thm:blockwise_opposite_insert_rotated_mpo}.
 \end{theorem}
 

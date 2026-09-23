@@ -1,10 +1,9 @@
 \section{One-step padding and exact word spans}\label{sec:cumspan_to_wordspan}
 
-Cumulative spanning, $T_N(A)=\MN{D}$, is weaker than exact-length spanning
-$S_L(A)=\MN{D}$. If $\Id\in S_1(A)$, shorter words can be padded to a
-common length. Section~\ref{sec:app_wielandt_identity_in_span} proves this
-conversion and records a counterexample without the one-step padding
-condition.
+Cumulative spanning $T_N(A)=\MN{D}$ is weaker than exact-length spanning
+$S_L(A)=\MN{D}$. When $\Id\in S_1(A)$, products of shorter words pad directly to a
+common length. Supporting proofs appear in
+Section~\ref{sec:app_wielandt_identity_in_span}.
 
 \begin{theorem}[Homogeneous word-span propagation under normalization]%
     \label{thm:wordspan_propagation_unital}
@@ -57,19 +56,12 @@ condition.
     Apply Theorem~\ref{thm:cumspan_to_normal}.
 \end{proof}
 
-\begin{remark}[Normal canonical form avoids one-step padding]\label{rem:d1_bypasses_aperiodicity}
-    The identity-in-the-one-step-span results in
-    Section~\ref{sec:app_wielandt_identity_in_span} are needed only when
-    cumulative spanning is upgraded to exact-length spanning.
-    The normal-canonical theory used later in
-    Chapters~\ref{ch:canonical}--\ref{ch:bnt} does not pass through this
-    step: it works directly with irreducible TP-normalized blocks whose
-    blocked transfer maps are primitive and, once the corresponding weighted
-    block data are available, places them in normal canonical form in the
-    sense of~\cite{Cirac2016MPDO_arXiv}.
-    There are analogous cumulative-span lemmas for blocked irreducible tensors
-    and eigenvector-spreading arguments, but they are not needed for the
-    implication stated below.
+\begin{remark}[Normal canonical form and blocked primitivity]\label{rem:d1_bypasses_aperiodicity}
+    The normal-canonical form developed in
+    Chapters~\ref{ch:canonical}--\ref{ch:bnt} operates directly on irreducible
+    trace-preserving blocks whose blocked transfer maps are primitive, following
+    Cirac et al.~\cite{Cirac2016MPDO_arXiv}, without requiring an identity element
+    in the single-site word span.
 \end{remark}
 
 \section{Block injectivity from TP/primitive/irreducible blocks}%

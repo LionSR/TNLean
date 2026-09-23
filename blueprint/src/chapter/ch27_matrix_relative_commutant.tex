@@ -1,44 +1,40 @@
 %% ==================================================
-%% Chapter: Relative commutants of full matrix algebras
+%% Appendix: Relative commutants of full matrix algebras
 %% Finite-dimensional prerequisite for the index argument of the matrix
 %% product unitary and cellular automaton chapter.
 %% ==================================================
 
-\chapter{Relative Commutants of Full Matrix Algebras}%
+\chapter{Relative Commutants of Full Matrix Algebras: Supporting Results}%
 \label{ch:matrix_relative_commutant}
 
-Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of complex
-algebras with $\Phi(\Id_p)=\Id_q$.  Its \emph{relative commutant} is the
-algebra
+This appendix supports Chapter~\ref{ch:mpu}.  It isolates the
+finite-dimensional prerequisite behind the index argument for matrix product
+unitaries and cellular automata.
+
+Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a unital homomorphism of complex
+algebras.  Its \emph{relative commutant} is the subalgebra
 \begin{align}
     \Phi(\MN{p})^{\prime}\cap\MN{q}
      & =\{T\in\MN{q}:\
     T\Phi(A)=\Phi(A)T\ \ \forall A\in\MN{p}\},
     \label{eq:matalg_relative_commutant}
 \end{align}
-which always contains the scalar matrices $\C\Id_q$.  This is not the
-centre of the image: the centre requires $T\in\Phi(\MN{p})$, whereas the
-relative commutant allows every $T\in\MN{q}$.  In particular, a scalar
-centre of the image alone does not imply surjectivity.  This chapter shows
-that equality in
-$\C\Id_q\subseteq\Phi(\MN{p})^{\prime}\cap\MN{q}$ forces $\Phi$ to be
-onto, and records the contrapositive witness.  Injectivity of $\Phi$ is
-not assumed; it follows from simplicity of $\MN{p}$.
+which contains the scalar matrices $\C\Id_q$.
+When this relative commutant reduces to the scalars, $\Phi$ is an isomorphism;
+simplicity of $\MN{p}$ ensures injectivity, while representation theory forces $p=q$
+and surjectivity.
 
-These are general statements about finite-dimensional complex matrix
-algebras.  Neither \cite{SchumacherWerner2004QCA} nor
-\cite{Gross2012IndexTheory} states them separately, and on their own they
-close no theorem of either source.  They isolate the finite-dimensional step
-behind two passages of \cite{Gross2012IndexTheory}: the inclusion
+These results isolate the finite-dimensional matrix-algebra steps in \cite{Gross2012IndexTheory}
+for Chapter~\ref{ch:mpu}: the inclusion
 $\alpha(\mathcal A_{2x}\otimes\mathcal A_{2x+1})\subseteq
     \mathcal R_{2x}\otimes\mathcal R_{2x+1}$
-at \cite[lines~1276--1287]{Gross2012IndexTheory} is not strict, because a
-strict inclusion would produce an element of the relative commutant, and the
+\cite[lines~1276--1287]{Gross2012IndexTheory} is not strict because a
+strict inclusion would produce a non-scalar element of the relative commutant, and the
 inclusion
 $\mathcal R_{2x+1}\otimes\mathcal R_{2x+2}\subseteq
     \mathcal A_{2x+1}\otimes\mathcal A_{2x+2}$
-at \cite[lines~1306--1315]{Gross2012IndexTheory} is not strict, because
-otherwise the automorphism $\alpha$ would fail to be onto.
+\cite[lines~1306--1315]{Gross2012IndexTheory} is not strict because
+$\alpha$ is surjective.
 
 \begin{lemma}[Simplicity of the defining module]
     \label{lem:matalg_defining_module_simple}

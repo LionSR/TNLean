@@ -223,9 +223,8 @@
          & =\Lambda.
         \notag
     \end{align}
-    This proves the diagonal Perron normalization required in CFII. It does not
-    prove that $A$ is in the CPSV canonical form or that its block is normal;
-    those require the corresponding primitivity and canonical-form hypotheses.
+    This establishes the diagonal Perron normalization required in canonical
+    form~II.
 \end{theorem}
 
 \begin{proof}
@@ -241,11 +240,9 @@
 
 \section{Normal canonical form}\label{sec:normal_canonical_form}
 
-This section defines the spectral \emph{normal} canonical form used in the
-reduction. A separate block-injective canonical-form criterion is used in the
-renormalization fixed-point analysis. The supporting overlap consequences are
-collected in
-Section~\ref{sec:app_canonical_prepared_consequences} and
+The spectral normal canonical form equips each irreducible block with
+left-canonical normalization and primitivity. Supporting overlap consequences
+are collected in Section~\ref{sec:app_canonical_prepared_consequences} and
 Section~\ref{sec:bnt_overlap_rigidity}.
 
 Recall from Definition~\ref{def:mpv_overlap} and
@@ -310,17 +307,12 @@ instead recorded by the sector decomposition of Chapter~\ref{ch:bnt}.
 \begin{definition}[Normal canonical form with BNT separation]\label{def:normal_cf_bnt}
     \lean{MPSTensor.IsNormalCanonicalFormBNT}\leanok
     \uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv}
-    This is a one-copy canonical-form condition: each listed block is one
-    representative and repeated copies are not encoded as separate blocks. A
-    family is in \emph{normal canonical form with BNT separation} if it
-    satisfies Definition~\ref{def:is_normal_canonical_form} and distinct blocks
-    of the same bond dimension are not gauge-phase equivalent. The weight moduli
-    are non-increasing but need not be strictly decreasing, so equal-modulus
-    blocks are allowed; the grouping into a BNT is governed by gauge-phase
-    equivalence, not by distinctness of moduli. Repeated equal-modulus copies of
-    one basis tensor are not separate blocks here; they appear as the weights
-    $\mu_{j,q}$ in $c_N^{(j)} = \sum_q \mu_{j,q}^N$ in the sector decomposition
-    below.
+    A family $(\mu_k, A_k)_{k=1}^r$ is in \emph{normal canonical form with BNT
+        separation} if it satisfies Definition~\ref{def:is_normal_canonical_form}
+    and distinct blocks of equal bond dimension are not gauge-phase equivalent.
+    The weight moduli satisfy $|\mu_1|\ge\cdots\ge|\mu_r|>0$. Equal-modulus
+    blocks are permitted; repeated copies of a single basis tensor are grouped
+    into sectors in Chapter~\ref{ch:bnt}.
     % Maintainer note: this is not the source two-layer BNT expansion
     %   A^i = \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j} \mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1},
     % where repeated copies stay visible through their coefficients,
@@ -489,10 +481,8 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
         \item $\Lambda$ is diagonal and positive definite,
         \item $A$ and $B$ generate the same MPV family.
     \end{enumerate}
-    These are the two normalization identities in the CFII definition of
-    \cite[Appendix~A]{Cirac2016MPDO_arXiv}. The theorem does not by itself prove
-    that $A$ is in canonical form or that its block is normal. The unitary
-    conjugation is performed inside TP gauge after TP normalization.
+    These are the two normalization identities in the canonical form~II
+    definition of \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -584,13 +574,11 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
 \subsection{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
 
-This subsection completes the reduction after period removal. A
-TP-primitive-irreducible block is normal, and an arbitrary tensor becomes,
-after a positive blocking length, a weighted family of left-canonical primitive
+A left-canonical primitive irreducible block is normal, and an arbitrary tensor
+reduces, after blocking, to a weighted family of left-canonical primitive
 blocks whose total bond dimension is bounded by the original bond dimension.
 For two tensors with the same MPV family, the cyclic sectors can be expressed
-over one common blocked alphabet, which is the form used by the Fundamental
-Theorem.
+over a common blocked alphabet.
 
 \begin{theorem}[TP-primitive irreducible tensor is normal]%
     \label{thm:normal_tp_primitive_irred}

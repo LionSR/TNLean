@@ -9,8 +9,8 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS
 
 import TNLean.PEPS.Blocking
+import TNLean.PEPS.BlockingDataEdgeGauge
 import TNLean.PEPS.CoherentFrameInstance
-import TNLean.PEPS.CoherentFrameInstance2
 import TNLean.PEPS.ConfigurationCalculus
 import TNLean.PEPS.CycleArcRegion
 import TNLean.PEPS.CycleBlockingData
@@ -77,7 +77,6 @@ import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.PositivityCounterexamples
 import TNLean.PEPS.RegionBlock
 import TNLean.PEPS.RegionComplementComparison
-import TNLean.PEPS.RegionScalarCondition
 import TNLean.PEPS.RegionTransferCovariance
 import TNLean.PEPS.RegionTransport
 import TNLean.PEPS.RegionTransportData

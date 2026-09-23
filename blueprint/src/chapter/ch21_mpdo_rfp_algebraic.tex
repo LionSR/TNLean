@@ -14,26 +14,11 @@ algebraic characterization identifies the diagonal $\chi$-matrices governing
 the structure coefficients and the decomposition involving the maps
 $U_{\alpha,\beta}$.
 
-\section{Recall of the vertical canonical form and closed-chain operators}
+\section{Closed-chain operators}
 
-The general case begins with the vertical canonical form of
-\cite[Proposition~4.13]{Cirac2016MPDO_arXiv}. In the notation of
-Definition~\ref{def:vertical_cf_mpdo}, there is a coisometry $U$ from the
-original physical space onto the retained nonzero sector space. Writing
-$B=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, it satisfies
-\begin{align}
-    UU^\dagger              & = \Id, \notag           \\
-    U\widetilde M U^\dagger & = B, \notag             \\
-    \widetilde M            & = U^\dagger B U, \notag
-\end{align}
-where the matrices $\mu_\alpha$ are positive and diagonal and the tensors
-$\{M_\alpha\}_\alpha$ form a basis of normal tensors. The matrix
-$U^\dagger U$ is the support projection in the original physical space; the
-reconstruction identity retains the zero-sector complement allowed by the
-source. This result was established in
-Theorem~\ref{thm:vertical_cf_of_horizontal_cf}.
+Following \cite[Section~4]{Cirac2016MPDO_arXiv}, the general mixed-state analysis proceeds from the vertical canonical form $\widetilde M = U^\dagger B U$ with $B=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ (Theorem~\ref{thm:vertical_cf_of_horizontal_cf}).
 
-The source next defines $O_L(M_\alpha)$ by contracting cyclically the BNT bond
+The closed-chain operators $O_L(M_\alpha)$ contract cyclically the BNT bond
 indices of $L$ copies in the vertical reading. Write the vertical physical
 label as a pair $(a,b)$ of horizontal bond indices and set
 $\widehat M_\alpha^{ab}=M_\alpha^{(a,b)}$. For
@@ -48,9 +33,8 @@ $\mathbf b=(b_1,\ldots,b_L)$, the contraction is
 \end{align}
 Thus $O_L(M_\alpha)=\rho^{(L)}(\widehat M_\alpha)$, where the trace is over the
 BNT bond space and the remaining row and column indices are the horizontal
-bond strings $\mathbf a$ and $\mathbf b$. These are the operators entering the
-operator algebra of
-\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
+bond strings $\mathbf a$ and $\mathbf b$. These operators enter the
+operator algebra of \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
 
 \input{chapter/ch21_mpdo_rfp_algebra_structure}
 \input{chapter/ch21_mpdo_rfp_fusion_isometries}

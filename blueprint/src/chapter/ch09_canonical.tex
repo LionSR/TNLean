@@ -1,22 +1,15 @@
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
-This is the first of three chapters that together prove the Fundamental Theorem
-of matrix product states. Here an arbitrary translation-invariant MPS tensor is
-reduced to a weighted family of primitive blocks; Chapter~\ref{ch:bnt} constructs
-the basis of normal tensors carried by those blocks and compares their
-coefficients, and Chapter~\ref{ch:ft_proof} proves the theorem itself. The
-reduction follows~\cite{PerezGarcia2007Matrix}, \cite{Cirac2016MPDO_arXiv},
-\cite{Cirac2021Matrix}, and~\cite[Chapter~6]{Wolf2012Quantum}. Its goal is to expose the primitive blocks
-inside the tensor. The transfer operator of an arbitrary tensor can be reducible and periodic.
-The reduction first splits invariant subspaces. For each irreducible
-trace-preserving block, it then powers the transfer map, extracts the
-adjoint-fixed cyclic projections, compresses to their corners, and proves that
-each corner is primitive and tensor-irreducible. The blocks are returned in a
-fixed gauge. The periodic decomposition theorem
-of~\cite[Theorem~5]{PerezGarcia2007Matrix} gives $p$ translated
-$p$-periodic state summands when $p\mid N$ and a zero state otherwise. We state
-this fixed-length decomposition below before using its blocked cyclic-sector
-counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
+The reduction of a translation-invariant matrix product state tensor to a
+weighted direct sum of primitive blocks follows~\cite{PerezGarcia2007Matrix},
+\cite{Cirac2016MPDO_arXiv}, \cite{Cirac2021Matrix}, and~\cite[Chapter~6]{Wolf2012Quantum}.
+The transfer map of an arbitrary tensor may be reducible and periodic.
+The reduction decomposes the bond space into irreducible subspaces. For each
+irreducible block in left-canonical form, powering the transfer map collapses the
+peripheral spectrum to roots of unity, whose cyclic projections decompose the
+tensor into primitive, tensor-irreducible corners. When the transfer map has
+period $p$, \cite[Theorem~5]{PerezGarcia2007Matrix} expresses the state vector
+for $p\mid N$ as a sum of $p$ cyclic component chains, and gives zero when $p\nmid N$.
 
 \begin{definition}[Periodic projector-component chain]
     \label{def:pgvwc07_projector_component_chain}
@@ -58,17 +51,14 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
          & =\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
         \label{eq:pgvwc07_boundary_coefficient_decomposition}
     \end{align}
-    If $N>0$, then $\tr F_u(\sigma)$ is the coefficient of the explicit
-    component chain from Definition~\ref{def:pgvwc07_projector_component_chain}.
+    If $N>0$, then $\tr F_u(\sigma)$ is the coefficient of the component chain
+    $B_u$ from Definition~\ref{def:pgvwc07_projector_component_chain}.
     At $N=0$, the boundary product is $F_u(\varnothing)=Q_u$, so
     \begin{align}
         \tr(\Id)
          & =\sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
         \label{eq:pgvwc07_empty_boundary_decomposition}
     \end{align}
-    This is not the sum of the ordinary empty component-chain coefficients:
-    an empty chain evaluates to $\Id$ and does not retain its starting
-    projection.
 \end{theorem}
 
 \begin{proof}
@@ -119,11 +109,9 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
     \end{align}
     Each $B_u$ is a $p$-periodic MPS of bond dimension $D$ with local matrices
     given by (\ref{eq:pgvwc07_projector_component_chain}). At $N=0$,
-    (\ref{eq:pgvwc07_periodic_boundary_decomposition}) instead uses the boundary
-    traces $\tr(Q_u)$ from
-    (\ref{eq:pgvwc07_empty_boundary_decomposition}); it does not identify them
-    with ordinary empty-chain coefficients. If $p\nmid N$, then
-    $\ket{V^{(N)}(A)}=0$.
+    (\ref{eq:pgvwc07_periodic_boundary_decomposition}) reduces to the boundary
+    traces $\tr(Q_u)$ from (\ref{eq:pgvwc07_empty_boundary_decomposition}). If
+    $p\nmid N$, then $\ket{V^{(N)}(A)}=0$.
 \end{theorem}
 
 \begin{proof}

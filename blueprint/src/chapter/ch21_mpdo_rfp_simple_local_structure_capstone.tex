@@ -429,8 +429,8 @@
         (\mathcal K_x)^{kj}_{\beta_x\alpha_x} & =0.
         \notag
     \end{align}
-    The factor order is exactly $\mathcal K_y\mathcal K_x$; no adjoint occurs.
-    This is equation \texttt{AppKxKy=0} in
+    The factor order is $\mathcal K_y\mathcal K_x$ without adjoints.
+    This is the orthogonality relation in
     \cite[Appendix~C.2, lines~1634--1639]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -709,12 +709,13 @@
          & =1.
         \notag
     \end{align}
-    The identities being preserved are those of CPSV16 Theorem~4.9(iv),
-    equations \texttt{tralktrrk} and \texttt{PsiPhi}, lines~864--889
-    \cite{Cirac2016MPDO_arXiv}.  Their transport through the active physical
-    support compression is an auxiliary construction, not an assertion of
-    that source theorem; see
-    \cite{gap:cpsv16_active_physical_support_compression}.
+    \textbf{Scope restriction (active physical support compression):}
+    The identities being preserved correspond to
+    \cite[Theorem~4.9(iv), lines~864--889]{Cirac2016MPDO_arXiv}. Their
+    transport through active physical support compression is an auxiliary
+    construction rather than an assertion of that source theorem; documented in
+    \cite{gap:cpsv16_active_physical_support_compression}
+    (\texttt{docs/paper-gaps/cpsv16_active_physical_support_compression.tex}).
 \end{theorem}
 
 \begin{proof}

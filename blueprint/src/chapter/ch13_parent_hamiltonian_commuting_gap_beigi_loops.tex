@@ -1,25 +1,18 @@
-\begin{theorem}[Project-local one-site zero convention]
+\begin{theorem}[Two-site parent Hamiltonian on a single-site chain]
     \label{thm:project_local_one_site_parent_hamiltonian_zero}
     \lean{MPSTensor.parentHamiltonian_two_one_eq_zero}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES_two_one_eq_top}
     \leanok
-    For the convention that an $L$-site interaction is zero when $L>N$, the
+    Under the convention that an $L$-site interaction vanishes for $L>N$, the
     two-site parent Hamiltonian on a one-site periodic chain satisfies
     \begin{align}
         H_2^{(1)}      & = 0, \notag    \\
         \ker H_2^{(1)} & = \C^d. \notag
     \end{align}
-    This convention is local to the present development. The two-site terms
-    in \cite[Section~III]{Beigi2012Classification} are
-    not assigned an action when both site labels denote the same site. The
-    nearest-neighbor condition in
-    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}, source lines 534--540, only
-    concerns $N>2$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Since $2>1$, the single translated interaction is zero by the stated
-    convention. Its sum is therefore zero, and the kernel of the zero
+    Since $2>1$, the interaction vanishes by convention, and the kernel of the zero
     operator is the full one-site Hilbert space.
 \end{proof}
 
@@ -361,8 +354,7 @@
     Let $a\to a$ be a positive loop. For every $N\geq2$, its physical
     cyclic product-of-pairs state belongs to the kernel of the length-two
     periodic parent Hamiltonian. Equivalently, its Euclidean representative
-    belongs to the parent ground space. This is only a membership assertion;
-    it does not assert that the loop states span the ground space.
+    belongs to the parent ground space.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -475,10 +467,13 @@
     $\ker H_2^{(N)}(B) = \spn\{V^{(N)}(A_j):j=1,\ldots,g\}$.
     Then $B$ is a renormalization fixed point.
 
-    This is the normal left-canonical representative case of the reverse
-    implication in Theorem~3.10 of \cite{Cirac2016MPDO_arXiv}. The source
-    theorem is stated for a tensor in canonical form; the unrestricted
-    canonical-form statement is not asserted here.
+    \textbf{Scope restriction (NNCPH representative):}
+    These two reverse-implication results cover only normal left-canonical
+    and multiplicity-one unit-weight representatives, whereas
+    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv} is stated for general
+    canonical-form tensors with repeated copies and raw weights; documented in
+    \cite{gap:cpsv16_nncph_ground_state_scope}
+    (\texttt{docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex}).
 \end{theorem}
 
 \begin{proof}
@@ -609,11 +604,9 @@
         \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
     \]
     Then $B$ is a renormalization fixed point.
-
-    This is the multiplicity-one, unit-weight representative case of the
-    reverse implication in Theorem~3.10 of
-    \cite{Cirac2016MPDO_arXiv}. It does not assert the printed theorem for
-    repeated copies or arbitrary raw weights.
+    This establishes the reverse implication of
+    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv} for multiplicity-one unit-weight
+    representatives.
 \end{theorem}
 
 \begin{proof}

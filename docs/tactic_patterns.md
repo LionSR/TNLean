@@ -1922,11 +1922,16 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** the six private lemmas in `Cluster.lean`, `EvenParity.lean`,
   `MajumdarGhosh.lean`, `LocalPurificationRFP.lean`,
   `CaseIIAbsorptionCounterexample.lean` and `CPSVCIDNotRFPExample.lean` now have
-  one- or two-line bodies.  The three private constants naming $1/\sqrt 2$ and
-  the general-`d` `sourceSqrt` cancellations of
+  one- or two-line bodies, and the two normalized-ancilla cancellations of
+  `TNLean/MPS/MPU/PhysicalAncilla.lean` route through the owner lemma as of
+  2026-09-23.  The three private constants naming $1/\sqrt 2$ and the
+  general-`d` `sourceSqrt` cancellations of
   `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` are retained: they have
   different carriers or fixed associativity shapes and are consumed as rewrite
-  rules in their own spellings.
+  rules in their own spellings.  The two pass-throughs
+  `sourceSqrt_mul_inv`/`sourceSqrt_inv_mul` of that family, plain
+  `mul_inv_cancel₀` wrappers outside the owner lemma's shape, were retired on
+  2026-09-23.
 
 ### Scalar identity matrix positivity and trace
 - **Pattern:** proofs repeatedly derived positivity or positive-definiteness of
@@ -2216,7 +2221,8 @@ current counts and full location lists).
 - **Pattern:** collapse the doubled sum for `normalizedDiagonalLift` by using
   `Finset.sum_eq_single` to retain the diagonal ancilla letter `(a, a)`, then
   cancel the resulting normalization with
-  `(x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1` for `0 < x`.
+  `(x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1` for `0 < x`,
+  closed by `Complex.ofReal_sqrt_inv_mul_self` since 2026-09-23.
 - **Seen:** 2 occurrences in `TNLean/MPS/MPU/PhysicalAncilla.lean`:
   `MPOTensor.transferMap_normalizedDiagonalLift` (lines 160--182), for
   `A ij * X * (A ij)ᴴ`, and
@@ -2388,9 +2394,10 @@ spectral split → block extraction → MPV calculation → strict bounds
     rw [Finset.mem_filter] at hη
     rw [if_neg hη.2, smul_zero]
   ```
-- **Seen:** 5 occurrences in `TNLean/PEPS/RegionBlock/`
-  (`ThreeBlockResonate.lean:682`, `ThreeBlockResonate2.lean:452`,
-  `UnionInjectivityGeneral.lean:505`, +2).
+- **Seen:** 4 occurrences in `TNLean/PEPS/`
+  (`RegionBlock/ThreeBlockResonate.lean:670`,
+  `RegionBlock/UnionInjectivityGeneral.lean:492`,
+  `TorusWindowChain4.lean:242`, +1).
 - **Abstraction (proposed):** a lemma of the shape
   `∑ η in s.filter p, (if p η then f η else 0) • g η = ...` — scout
   Mathlib's `Finset.sum_filter` / `Finset.sum_ite_of_true` family first.
@@ -2417,7 +2424,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   · exact absurd hr hwnotred
   ```
 - **Seen:** 8 occurrences in `TNLean/PEPS/RegionBlock/`
-  (`CoarseThreeSite3.lean:89`, `ThreeBlockResonate.lean:97`,
+  (`CoarseThreeSiteCoherentFrame.lean:381`,
+  `ThreeBlockResonate.lean:97`,
   `UnionInjectivityGeneral.lean:95`, +5).
 - **Abstraction (proposed):** a case-elimination lemma on the three-region
   cover (membership in red/blue/crossing regions) stated once in the

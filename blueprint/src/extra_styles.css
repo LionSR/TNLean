@@ -32,13 +32,33 @@ div.proof_content {
 	border-left: .08rem solid grey;
 }
 
-/* tenkz pictures (Packages/tenkz_pic.py): one <img> per verbatim unit,
- * centered on its own line; the SVG scales down to the column. */
+/* TikZ pictures are inline boxes. Paragraphs and center environments, rather
+ * than individual SVGs, determine where an equation starts and ends. */
 .tenkz-pic {
-	display: block;
-	margin: .6rem auto;
-	max-width: 100%;
+	display: inline-block;
+	vertical-align: middle;
+	margin: .6rem .2rem;
+	max-width: calc(100% - .4rem);
 	height: auto;
+}
+
+/* TeX centering changes alignment within normal paragraph flow. Its template
+ * uses a separate class so the theme's flex container never owns these rows. */
+.tex-center {
+	text-align: center;
+}
+
+/* A LaTeX tabular is an inline box, including when its rows stack diagrams
+ * on one side of an equation. Its surrounding table/figure owns the display. */
+table.tabular {
+	display: inline-table;
+	vertical-align: middle;
+}
+
+/* Equal stretchable glue at both ends centers a TeX paragraph. Preserve its
+ * markers in HTML so this also works outside a center environment. */
+p:has(> .tex-hfil:first-child):has(> .tex-hfil:last-child) {
+	text-align: center;
 }
 
 /* Give the reading column a stable, font-relative width basis. Using em rather

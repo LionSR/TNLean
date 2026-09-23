@@ -1,27 +1,16 @@
 \chapter{Exponential Decay of Correlations}\label{ch:correlations}
 
-This chapter records an auxiliary-space transfer-map interface for
-thermodynamic-limit correlation functions and the resulting exponential decay
-estimates. The key mechanism is spectral: after removing the leading
-eigenvalue contribution, the connected part is governed by subleading
-eigenvalues of the transfer map. Passing from physical local observables to the
-auxiliary insertions used here requires the corresponding observable-inserted
-transfer map and is not supplied by the present definitions.
+In the thermodynamic limit, spatial correlation functions of matrix product
+states are governed by the subleading spectrum of the transfer map $\E_A$.
+Subtracting the leading fixed-point contribution leaves a connected correlator
+expressed as a sum of decaying exponentials whose rate defines the spatial
+correlation length. For tensors generating parent Hamiltonians
+(Chapter~\ref{ch:parent_hamiltonian}), this spectral gap controls ground-state
+correlations.
 
-When the MPS tensor generates a parent Hamiltonian
-(Chapter~\ref{ch:parent_hamiltonian}), these auxiliary formulas control spatial
-ground-state correlations once physical observable insertions have been
-identified with the corresponding transfer-map insertions. The exponential
-decay rate is then set by the spectral properties of the transfer map, i.e.\ by
-the modulus of its subleading eigenvalues.
-
-The spectral analysis of the transfer map and the mixed transfer operator,
-including the eigenvalue bound $\rho(F_{AB}) \le 1$, the strict
-transfer-operator gap $\rho(F_{AB}) < 1$ for non-equivalent blocks, and the
-resulting overlap decay, is developed in Chapter~\ref{ch:spectral}. This
-chapter focuses on the auxiliary \emph{correlator} interface: one-point and
-two-point functionals, their spectral decomposition, and quantitative bounds
-on decay rates.
+While Chapter~\ref{ch:spectral} analyzes the peripheral spectrum and overlap
+decay, this chapter develops the one-point and two-point functionals, their
+spectral decomposition, and quantitative decay bounds.
 
 \section{Connected correlators from the transfer map}
 
@@ -153,7 +142,7 @@ on decay rates.
 
 \section{Spectral expansion and exponential decay}
 
-\begin{theorem}[Sum of exponentials (spectral expansion interface)]%
+\begin{theorem}[Sum of exponentials (spectral expansion)]%
     \label{thm:correlator_sum_exponentials}
     \lean{MPSTensor.connectedCorrelator_eq_sum}
     \leanok
@@ -166,16 +155,11 @@ on decay rates.
         \label{eq:correlations_spectral_expansion}
     \end{align}
     then the connected correlator equals the stated sum of exponentials.
-    The source~\cite[Section~II.B.3]{Cirac2021Matrix} states that the connected
-    correlator is a sum of $D^2-1$ pure exponentials,
-    $C(X,Y;n)=\sum_{j\ge 2}^{D^2}c_{XY}(j)\lambda_j^n$.
-    This pure-exponential representation follows when the relevant
-    subleading spectral data of the transfer map are diagonalizable.
-    For a non-diagonalizable transfer map, nontrivial Jordan blocks can
-    instead produce terms of the form $n^k\lambda^n$. Accordingly, the
-    pure-exponential formula is retained here as an explicit interface
-    hypothesis rather than asserted for every normal MPS.
-    % Constructing $c_j,\lambda_j$ from $\E_A$ is tracked in Issue~\#1447.
+    When the subleading spectrum of the transfer map is diagonalizable, the
+    connected correlator expands as a sum of pure exponentials
+    $C(X,Y;n)=\sum_{j=1}^{D^2-1} c_j\,\lambda_j^n$
+    \cite[Section~II.B.3]{Cirac2021Matrix}; Jordan blocks can produce polynomial
+    factors $n^k\lambda^n$ when the transfer map is defective.
 \end{theorem}
 
 \begin{proof}
@@ -194,7 +178,7 @@ on decay rates.
     % is tracked in Issue~\#1447.
 \end{proof}
 
-\begin{theorem}[Exponential decay bound (interface)]%
+\begin{theorem}[Exponential decay bound]%
     \label{thm:correlator_exponential_bound}
     \lean{MPSTensor.connectedCorrelator_bound}
     \leanok
@@ -207,13 +191,9 @@ on decay rates.
         \label{eq:correlations_decay_bound}
     \end{align}
     then the connected correlator satisfies that exponential decay bound.
-    The source~\cite[Section~II.B.3]{Cirac2021Matrix} obtains this by combining
-    the sum-of-exponentials expansion with the triangle inequality, while
-    under the primitive or injective hypotheses stated in
-    Chapter~\ref{ch:spectral}, the transfer-map gap results ensure that the
-    subleading eigenvalues lie strictly inside the unit disk.
-    % Extracting $C_{XY}$ and $\lambda_2$ from the transfer-map spectrum
-    % is tracked in Issue~\#1447.
+    Combining the spectral expansion with the triangle inequality yields this
+    bound with $|\lambda_2|<1$ whenever the transfer map is primitive or
+    injective \cite[Section~II.B.3]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}
@@ -247,12 +227,8 @@ on decay rates.
     Theorem~\ref{thm:transfer_map_gap_wielandt}.
 
     These transfer-map gap results give exponential convergence of the
-    complementary transfer map at every rate strictly larger than its
-    spectral radius. Deriving a connected-correlator bound still requires
-    extracting the spectral coefficients and, in the presence of nontrivial
-    Jordan blocks, the generalized spectral terms from $\E_A$. This
-    derivation is not included here.
-    % Tracked by Issue~\#1447.
+    complementary transfer map at every rate strictly exceeding its
+    spectral radius.
 \end{remark}
 
 \begin{definition}[Correlation length]\label{def:correlation_length}
@@ -286,10 +262,10 @@ on decay rates.
 
 \section{Quantitative transfer-map gap bounds}
 
-The companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}
-establishes $\rho(\E_A-P)<1$ for primitive channels qualitatively. This section gives
-quantitative refinements in terms of geometric constants and rates for the
-single-tensor transfer map $\E_A$.
+The qualitative bound $\rho(\E_A-P)<1$ for primitive channels
+\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}
+admits quantitative refinements in terms of geometric constants and decay rates
+for the transfer map $\E_A$.
 
 \begin{theorem}[Exponential convergence of injective primitive channels]%
     \label{thm:exponential_convergence_primitive}

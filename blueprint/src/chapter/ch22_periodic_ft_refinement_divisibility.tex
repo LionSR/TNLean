@@ -98,22 +98,8 @@
     then one can construct a tensor $\widetilde A$ with
     $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
     $\E_C = \E_{\widetilde A^{[p]}}$.
-    This channel-level hypothesis is the transfer-map reading of the
-    construction in
-    \cite[lines~765--810]{DeLasCuevas2017Irreducible}: for each periodic block
-    $A_j$, the scalars $c_{j,\alpha}$ define matrices $A'_j$, and then
-    $\widetilde A = U^\dagger A'U$.
-    This source description is the intended irreducible-form subcase of the
-    hypothesis; the definition above keeps the construction as a conditional
-    input and does not assert these block scalars $c_{j,\alpha}$ and matrices
-    $A'_j$ for arbitrary $A$.
-    The cited source moreover obtains the blocked-tensor identity
-    $\widetilde A^{[p]} = C$, whereas the formal hypothesis above records only
-    its channel-level consequence
-    $\E_C = \E_{\widetilde A^{[p]}}$
-    (equality of $p$-blocked transfer maps). This conditional input is therefore
-    the transfer-map weakening of the source construction, not the full blocked
-    tensor equality.
+    This channel-level condition provides the transfer-map formulation of the
+    construction in \cite[lines~765--810]{DeLasCuevas2017Irreducible}.
 \end{definition}
 
 \begin{definition}[Construction of $\widetilde A$ after the equal-case theorem]
@@ -246,12 +232,9 @@ additional constructions used below.
 \begin{remark}[Trace preservation in the forward direction]
     \label{rem:thm_4_1_forward_trace_preservation}
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel, def:peripheral_equalcase_root_from_zgauge, def:peripheral_equalcase_periodicFT_sameMPV, def:peripheral_equalcase_root_channel_from_zgauge}
-    The construction assumed in
-    Theorem~\ref{thm:thm_4_1_p_refinement_forward} does not follow from
-    irreducible form~II alone, and the printed forward implication of
-    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} omits the trace
-    preservation of $\E_B$ that its notion of $p$-divisibility presupposes.
-    Let $p \ge 1$, let $B_0$ be $p$-refinable with witness $(A_0, W)$ and in
+    In \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}, $p$-divisibility presupposes
+    trace preservation of $\E_B$, which is explicit in the hypotheses here.
+    Without trace preservation, let $p \ge 1$, let $B_0$ be $p$-refinable with witness $(A_0, W)$ and in
     irreducible form~II with every multiplicity equal to one, and let
     $\lambda > 1$. Set
     \begin{align}

@@ -149,8 +149,7 @@
         \notag
     \end{align}
     This construction realizes implication (iii)$\Rightarrow$(ii) of
-    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}; it does not assert either of the
-    implications involving the renormalization fixed-point condition.
+    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Active-sector fusion for a vertical canonical decomposition]%
@@ -336,8 +335,6 @@
     statement (ii) of
     \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}, with the
     active-support interpretation of (iii).
-    No assertion concerning the renormalization fixed-point condition is
-    made here.
 \end{theorem}
 \begin{proof}\leanok
     Iterating the fusion identity along $L$ sites and taking the closed trace
@@ -406,11 +403,9 @@
         \textnormal{(i)} & \iff\textnormal{(iii}_{\mathrm{act}}\textnormal{)}.
         \label{eq:mpdo_cpsv_bnt_rfp_equivalence}
     \end{align}
-    The first equivalence is the equivalence of (i) and (ii) in
-    \cite[Theorem~4.14, lines~972--985]{Cirac2016MPDO_arXiv}. The second is
-    the corrected active-support form corresponding to the printed
-    conditions (i) and (iii), rather than an assertion of the unrestricted
-    printed condition (iii).
+    The first equivalence matches (i)$\iff$(ii) of
+    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}, while the second gives the
+    active-support form (iii$_{\mathrm{act}}$).
 
     Only nonzero product corners occur in (iii$_{\mathrm{act}}$);
     a sector absent from a fixed product pair has zero fusion multiplicity.
@@ -745,11 +740,9 @@ Restriction of that comparison to a fixed final label is a separate step.
     Here $A_{D_\alpha,D_\beta,D_\gamma}$ is the permutation matrix identifying
     the two bracketings of the product bond space.
     Both intermediate labels and the final label remain in the direct sums.
-    This definition does not select a fixed final label and makes no
-    invertibility assertion. Its orientation is from the right-associated
-    sum to the left-associated sum; consequently it has the orientation of
-    the adjoint of the $F$-matrix in the row/column convention used here for
-    \cite[Section~3.4]{Bultinck2017Anyons}.
+    The comparison is oriented from the right-associated sum to the
+    left-associated sum, matching the adjoint orientation of the $F$-matrix
+    convention in \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{definition}
 
 \begin{lemma}[Left range projection of the full triple-fusion comparison]%
@@ -766,10 +759,8 @@ Restriction of that comparison to a fixed final label is a separate step.
         (U^{\mathrm L}_{\alpha,\beta,\gamma})^{\dagger}.
         \notag
     \end{align}
-    The right side is not asserted to be the identity. Surjectivity of the
-    left iterated fusion map requires completeness of the fusion
-    decomposition, corresponding to the invertible total fusion matrix in
-    \cite[lines~181--191]{Bultinck2017Anyons}.
+    Surjectivity of the left iterated fusion map corresponds to completeness
+    of the fusion decomposition in \cite[lines~181--191]{Bultinck2017Anyons}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_right_fusion_isometry_isometry, def:mpdo_operator_product_associator}
@@ -793,9 +784,8 @@ Restriction of that comparison to a fixed final label is a separate step.
         (U^{\mathrm R}_{\alpha,\beta,\gamma})^{\dagger}.
         \notag
     \end{align}
-    The right side is not asserted to be the identity. Surjectivity of the
-    right iterated fusion map likewise requires completeness of the fusion
-    decomposition.
+    Surjectivity of the right iterated fusion map likewise corresponds to
+    completeness of the fusion decomposition.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_left_fusion_isometry_isometry, def:mpdo_operator_product_associator}

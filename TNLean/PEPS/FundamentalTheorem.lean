@@ -375,8 +375,8 @@ contraction, factors out `∏_v c_v`, and cancels using gauge-state invariance
 
 The nonvanishing coefficient is the source's standing assumption that the state is not the zero
 vector. The injective form below and the region-injective form of
-`TNLean/PEPS/RegionScalarCondition.lean` differ only in how they supply it, and share this
-argument.
+`TNLean/PEPS/RegionBlock/BlockRangeCoincidence.lean` differ only in how they supply it, and
+share this argument.
 
 Source: arXiv:1804.04964, Section 3, the passage after `eq:inj_equal_edge`. -/
 theorem prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero (A B : Tensor G d)

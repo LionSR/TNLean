@@ -44,11 +44,10 @@ In canonical form one writes
      & = \bigoplus_{k=1}^{h} \nu_k B_k^i.
     \label{eq:intro_canonical_form_b}
 \end{align}
-The blocks in equations~\ref{eq:intro_canonical_form_a}
-and~\ref{eq:intro_canonical_form_b} are normal tensors. If
-$\ket{V^{(N)}(A)}=\ket{V^{(N)}(B)}$ for every positive chain length~$N$, then
-the bases of normal tensors have the same size. After relabelling the blocks
-of $B$, each matched pair satisfies
+The blocks in (\ref{eq:intro_canonical_form_a}) and (\ref{eq:intro_canonical_form_b})
+are normal tensors. If $\ket{V^{(N)}(A)}=\ket{V^{(N)}(B)}$ for every positive chain
+length~$N$, then the bases of normal tensors have the same size. After relabelling the
+blocks of $B$, each matched pair satisfies
 \begin{align}
     B_j^i
      & = \zeta_j X_j A_j^i X_j^{-1},
@@ -56,21 +55,21 @@ of $B$, each matched pair satisfies
 \end{align}
 for some invertible matrix $X_j$ and nonzero scalar $\zeta_j$, and the equal
 case compares the coefficient power sums attached to the relabelled bases. The
-block gauges in equation~\ref{eq:intro_matched_pair_gauge} and the weight
+block gauges in (\ref{eq:intro_matched_pair_gauge}) and the weight
 comparison then combine into a single gauge conjugacy of the two weighted
-block-diagonal tensors in equations~\ref{eq:intro_canonical_form_a}
-and~\ref{eq:intro_canonical_form_b}. For a single injective block this
-reduces to the familiar conclusion $B^i = X A^i X^{-1}$ for all physical
+block-diagonal tensors in (\ref{eq:intro_canonical_form_a})
+and (\ref{eq:intro_canonical_form_b}). For a single injective block this
+reduces to the conclusion $B^i = X A^i X^{-1}$ for all physical
 indices $i$, the single-block specialization of
-equation~\ref{eq:intro_matched_pair_gauge}.
+(\ref{eq:intro_matched_pair_gauge}).
 
 Chapters~\ref{ch:mps}--\ref{ch:ft_proof} carry out this argument.
 Chapter~\ref{ch:mps} fixes the matrix product vector notation, word
 evaluations, transfer maps, gauge equivalence, injectivity, blocking, and
 site-periodic tensor families. Chapter~\ref{ch:single} proves the
 single-block theorem by trace pairings, linear extension, simplicity of matrix
-algebras, and Skolem--Noether. Chapters~\ref{ch:channels}, \ref{ch:qpf},
-and~\ref{ch:spectral} develop the transfer-map, Perron--Frobenius, and
+algebras, and Skolem--Noether. Chapters~\ref{ch:qpf}
+and~\ref{ch:spectral} develop the Perron--Frobenius and
 overlap-decay tools used to control normal blocks. The general theory of
 Schwarz inequalities and multiplicative domains is developed in the companion
 quantum-channel volume~\cite[Chapter ``Schwarz Inequalities and Multiplicative
@@ -79,39 +78,26 @@ supply the blocking, primitivity, irreducibility, and canonical-form reductions.
 Chapter~\ref{ch:canonical} includes the invariant-projection splitting.
 Chapter~\ref{ch:bnt} supplies bases of normal tensors and the
 power-sum comparison.
-% Maintainer note: the same-index direct-sum lemmas used after a block
-% correspondence has already been fixed are collected later in
-% the algebraic-FT draft chapter, because they are facts about block-diagonal
-% gauges, not part of the canonical-form reduction or of the BNT block-matching
-% proof. The remaining BNT matching and fixed-length span inputs are kept as
-% explicit hypotheses until the corresponding source steps are supplied. Paper-gap
-% note: docs/paper-gaps/rmp_conditional_after_blocking_ft_statement.tex.
 
 Chapter~\ref{ch:symmetry} uses the Fundamental Theorem to obtain virtual
 symmetry gauges, projective bond representations, and string-order criteria;
 its Kraus-mixing step uses the rectangular Kraus-freedom theorem from the
 companion quantum-channel volume~\cite[``Rectangular Kraus
-    freedom'']{QICLean2026Blueprint}, not any additional input for the Fundamental
-Theorem.
+    freedom'']{QICLean2026Blueprint}.
 
-Beyond Chapter~\ref{ch:symmetry}, the later chapters develop
-parent-Hamiltonian consequences, correlation estimates, tensor-network
-examples, matrix product operators and density operators, renormalization
-fixed points, and periodic tensor families. They also retain the
-matrix-product-specific normal-form and asymptotic results needed for these
-applications. General quantum-channel representations, positive-map examples, dynamical
+Beyond Chapter~\ref{ch:symmetry}, subsequent chapters develop
+parent Hamiltonians (Chapter~\ref{ch:parent_hamiltonian}),
+correlation decay (Chapter~\ref{ch:correlations}),
+concrete examples (Chapter~\ref{ch:examples}),
+matrix product density operators (Chapter~\ref{ch:mpdo}),
+renormalization fixed points (Chapters~\ref{ch:mps_rfp} and~\ref{ch:mpdo_rfp}),
+matrix product unitaries (Chapter~\ref{ch:mpu}),
+periodic tensors (Chapter~\ref{ch:periodic_ft_apps}),
+the algebraic Fundamental Theorem (Chapter~\ref{ch:algebraic_ft}),
+two-dimensional tensor networks (PEPS, Chapter~\ref{ch:peps_ft}),
+and the asymmetric Fundamental Theorem (Chapter~\ref{ch:asymmetric_ft}).
+General quantum-channel representations, positive-map examples, dynamical
 semigroups, operator convexity, and entropy are developed in the companion
 quantum-channel volume~\cite[Chapters ``Quantum Channels and Positive Maps,'' ``Channel Representations and Normal Forms,'' ``Positive but Not
     Completely Positive Maps,'' ``Operator Convexity and Jensen Inequalities,''
     ``Quantum Dynamical Semigroups,'' and ``Quantum Entropy'']{QICLean2026Blueprint}.
-% Draft chapters also treat the direct Fundamental Theorem for periodically
-% repeated tensors in irreducible form, together with compatibility theorems
-% for physical-index rotation (Definition~\ref{def:rotate_physical} in
-% Chapter~\ref{ch:symmetry}).
-% Maintainer note: the rotation definition is internal bookkeeping for the
-% periodic MPS material, not an external-paper input or part of the Molnar
-% algebraic-FT chapter.
-% The periodic, algebraic, and PEPS chapters remain in the repository but are
-% omitted from the generated blueprint while their statements are being
-% stabilized. These topics use the Fundamental Theorem, or develop later
-% finite-dimensional channel theory, rather than enter its proof.

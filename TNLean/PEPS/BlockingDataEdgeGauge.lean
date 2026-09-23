@@ -14,8 +14,8 @@ of a tensor (`regionInjectivityDataOf A`), and then assembles the per-edge gauge
 two such data through the coherent-frame interface
 `TNLean.PEPS.exists_regionEdgeGauge_of_coherentFrames`.
 
-It is the continuation of `TNLean.PEPS.CoherentFrameInstance`, split off to keep both
-files within the source-line budget.
+The coherent-frame interface it feeds, and the blocking datum whose regions it
+reads, are set up in `TNLean.PEPS.CoherentFrameInstance`.
 
 The three regions and their blocked-tensor injectivities come directly from the
 datum; the partition geometry (pairwise disjointness and coverage) comes from the
