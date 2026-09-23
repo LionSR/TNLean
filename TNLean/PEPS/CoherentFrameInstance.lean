@@ -52,7 +52,7 @@ variable {A : Tensor G d}
 /-! ### Enumeration of the incident super-edges
 
 Each coarse super-site has exactly two incident super-edges
-(`TNLean.PEPS.RegionBlock.CoarseThreeSite3`).  The case lemmas below name them and
+(`TNLean.PEPS.RegionBlock.CoarseThreeSiteCoherentFrame`).  The case lemmas below name them and
 support the leg-pair equivalences that split a per-super-site leg assignment into
 its two incident super-bond values. -/
 
@@ -260,7 +260,7 @@ The crossing classification of a region boundary edge depends only on the three
 regions' disjointness and coverage, not on the leg identifications of a frame.  The
 region-level statements below let the frame constructor build its boundary splits
 before the frame exists.  Their proofs are the partition geometry of
-`TNLean.PEPS.RegionBlock.CoarseThreeSite3` read off a placeholder frame whose leg
+`TNLean.PEPS.RegionBlock.CoarseThreeSiteCoherentFrame` read off a placeholder frame whose leg
 identifications are immaterial. -/
 
 variable {red blue complement : Finset V}

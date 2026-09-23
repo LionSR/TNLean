@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.NormalEdgeBlockingInterior
 import TNLean.PEPS.NormalEdgeSingleCrossing
 import TNLean.PEPS.SquareLatticeCoordinateSwap
-import TNLean.PEPS.CoherentFrameInstance2
+import TNLean.PEPS.BlockingDataEdgeGauge
 import QICLean.Algebra.ScalarCommutant
 
 /-!

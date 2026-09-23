@@ -9,7 +9,7 @@ import TNLean.PEPS.NormalSquareInjectivity
 import TNLean.PEPS.RegionBlock.ScalarExtraction
 import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed
 import TNLean.PEPS.RegionBlock.ReindexInjectivity
-import TNLean.PEPS.RegionBlock.GaugeInjectivity2
+import TNLean.PEPS.RegionBlock.GaugeInjectivityBoundaryCoupling
 import TNLean.PEPS.NormalBondDimension
 
 /-!

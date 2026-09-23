@@ -22,7 +22,7 @@ The region port of `physical_to_virtual_insertion`
 (`TNLean.PEPS.InsertionRealization`). The two "endpoints" are the blocked regions
 `R` and `univ \ R`, joined by the single boundary edge `f`; there is no middle
 block (the region/complement split has empty interior). The inversion tool is the
-blocked-region left inverse `regionBlockedLeftInverse` (`Recovery5`) applied to
+blocked-region left inverse `regionBlockedLeftInverse` (`RecoveryOutRegionEndpoint`) applied to
 each block, not the per-vertex split of the edge proof.
 
 ## References
