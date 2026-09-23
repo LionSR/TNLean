@@ -27,14 +27,18 @@ organization, unpromoted tactic patterns, over-specialized statements, dead weig
 
 Known signals from an initial scout (verify and go deeper, do not just repeat these):
 - PEPS/ is a nearly flat directory with numbered-sequel files: TorusWindowChain2/4/5/6,
-  CoherentFrameInstance2, ThreeBlockResonate2, UnionInjectivityGeneral2,
-  UnionInjectivityOverlap3, plus RegionBlock/CoarseThreeSite2..11, RegionBlock/Recovery2..11
-  and RegionBlock/GaugeInjectivity2 (29 files, ~14.3k lines; the authoritative list is
+  UnionInjectivityGeneral2, UnionInjectivityOverlap3, plus
+  RegionBlock/CoarseThreeSite4..11 and RegionBlock/Recovery2..4/7..9
+  (20 files, ~11.0k lines; the authoritative list is
   NUMBERED_DEBT_ALLOWLIST in scripts/check_numbered_lean_files.py). Other stages of the same
   chains have already been given concept names: TorusUnconditionalFundamentalTheorem.lean,
   NormalSquareUnconditionalFundamentalTheorem.lean, UnionInjectivityOverlapSetup.lean,
-  UnionInjectivityOverlapBridge.lean, and TorusWindowPeeling.lean with its
-  TorusWindowPeeling/ directory.
+  UnionInjectivityOverlapBridge.lean, TorusWindowPeeling.lean with its
+  TorusWindowPeeling/ directory, BlockingDataEdgeGauge.lean,
+  RegionBlock/GaugeInjectivityBoundaryCoupling.lean,
+  RegionBlock/RecoveryOutRegionEndpoint.lean,
+  RegionBlock/RecoveryCoefficientTransfer.lean, and
+  RegionBlock/CoarseThreeSiteCoherentFrame.lean.
 - Duplicate top-level theorem/def names across files (rg on '^(theorem|lemma) NAME'):
   AppendixBStructuralData x55, NeighboringTraceFactorization x46, ThreeBlockGeometry x34,
   PosSemidef x33, IsPositiveMap x31, sameMPV x18, GaugeEquiv x18, IsHorizontalCF x14.
@@ -159,8 +163,8 @@ repeated across files. Start from the duplicate-name signal (AppendixBStructural
 NeighboringTraceFactorization x46, ThreeBlockGeometry x34, sameMPV x18...): open several of the
 files, diff the statements, and determine whether these are genuinely re-stated/re-proved
 per-file (real debt) or distinct namespaced content (not debt). Also hunt for numbered-sequel
-file families (TorusWindowChain2/4/5/6, CoarseThreeSite2..11, Recovery2..11,
-ThreeBlockResonate/2, UnionInjectivityGeneral/2, CoherentFrameInstance/2): read pairs and
+file families (TorusWindowChain2/4/5/6, CoarseThreeSite4..11, Recovery2..4/7..9,
+UnionInjectivityGeneral/2): read pairs and
 estimate the fraction of duplicated content. Quantify: how many lines exist N times.` },
   { key: 'architecture', prompt: `Lens: FILE & MODULE ORGANIZATION. Assess directory structure and layering. PEPS/ is a
 ~120-file flat directory — is there a coherent grouping (Cycle*, Torus*, Normal*, Region*)

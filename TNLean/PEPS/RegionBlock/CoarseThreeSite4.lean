@@ -3,18 +3,18 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.RegionBlock.CoarseThreeSite3
+import TNLean.PEPS.RegionBlock.CoarseThreeSiteCoherentFrame
 
 /-!
 # The global fiber-collapse bijection for the normal PEPS theorem
 
 The coarse three-site tensor of `TNLean.PEPS.RegionBlock.CoarseThreeSite` has its
 closed-state coefficient written, through the coherent bond models of
-`TNLean.PEPS.RegionBlock.CoarseThreeSite2`, as a sum over coarse virtual
+`TNLean.PEPS.RegionBlock.CoarseThreeSiteCoherentFrame`, as a sum over coarse virtual
 configurations of a product of three original blocked-region weights
 (`stateCoeff_coarseTensor_eq_threeRegionSum`), and the region boundary
 configurations induced by a coarse configuration are read off the bond models
-(`TNLean.PEPS.RegionBlock.CoarseThreeSite3`). This file collapses that triple sum
+(`TNLean.PEPS.RegionBlock.CoarseThreeSiteCoherentFrame`). This file collapses that triple sum
 to a constant times the original closed-state coefficient.
 
 The route mirrors the landed two-block collapse

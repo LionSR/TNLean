@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.NormalPairBlocking
-import TNLean.PEPS.CoherentFrameInstance2
+import TNLean.PEPS.BlockingDataEdgeGauge
 import TNLean.PEPS.NormalEdgeGaugeFamily
 import TNLean.PEPS.NormalSquareInjectivity
 import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed
