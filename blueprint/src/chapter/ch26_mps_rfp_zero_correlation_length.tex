@@ -56,19 +56,17 @@
     \label{lem:is_positive_gap_bnt_zcl_iff}
     \lean{MPSTensor.isPositiveGapBNTZCL_iff}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl}
+    \uses{def:is_positive_gap_bnt_zcl, def:bnt_cpsv, def:is_positive_gap_physical_cid, def:is_bnt_locally_orthogonal}
     A family $(A_j)_j$ has positive-gap BNT zero correlation length for $A$ if
-    and only if $(A_j)_j$ is a basis of normal tensors for $A$, the physical
-    correlations of $A$ are independent of separation whenever both
-    complementary gaps are positive, and the components $(A_j)_j$ are locally
-    orthogonal:
-    \begin{align}
-        \mathrm{BNT}((A_j)_j, A) \land \mathrm{CID}_+(A) \land \mathrm{LocOrtho}((A_j)_j).
-        \notag
-    \end{align}
+    and only if $(A_j)_j$ is a basis of normal tensors for $A$
+    (Definition~\ref{def:bnt_cpsv}), the physical correlations of $A$ are
+    independent of separation whenever both complementary gaps are positive
+    (Definition~\ref{def:is_positive_gap_physical_cid}), and the components
+    $(A_j)_j$ are locally orthogonal
+    (Definition~\ref{def:is_bnt_locally_orthogonal}).
 \end{lemma}
 \begin{proof}\leanok
-    This is the defining conjunction.
+    This is the defining conjunction of Definition~\ref{def:is_positive_gap_bnt_zcl}.
 \end{proof}
 
 \begin{definition}[Physical BNT zero correlation length]%
