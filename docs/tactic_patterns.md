@@ -2388,9 +2388,10 @@ spectral split → block extraction → MPV calculation → strict bounds
     rw [Finset.mem_filter] at hη
     rw [if_neg hη.2, smul_zero]
   ```
-- **Seen:** 5 occurrences in `TNLean/PEPS/RegionBlock/`
-  (`ThreeBlockResonate.lean:682`, `ThreeBlockResonate2.lean:452`,
-  `UnionInjectivityGeneral.lean:505`, +2).
+- **Seen:** 4 occurrences in `TNLean/PEPS/`
+  (`RegionBlock/ThreeBlockResonate.lean:670`,
+  `RegionBlock/UnionInjectivityGeneral.lean:492`,
+  `TorusWindowChain4.lean:242`, +1).
 - **Abstraction (proposed):** a lemma of the shape
   `∑ η in s.filter p, (if p η then f η else 0) • g η = ...` — scout
   Mathlib's `Finset.sum_filter` / `Finset.sum_ite_of_true` family first.
