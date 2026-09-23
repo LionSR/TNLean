@@ -19,8 +19,6 @@ from pathlib import Path
 
 from playwright.sync_api import Page, Route, sync_playwright
 
-from test_tenkz_inline_web import check_inline_layout
-
 
 EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3] + [2, 3, 2, 5, 1, 3, 3]
 PAGES = ("ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html")
@@ -489,7 +487,6 @@ def main() -> int:
     parser.add_argument("--web-root", type=Path, default=Path("blueprint/web"))
     parser.add_argument("--screenshot-dir", type=Path)
     args = parser.parse_args()
-    check_inline_layout()
     root = args.web_root.resolve()
     repo_root = Path(__file__).resolve().parent.parent
     _assert_source_linked_groups(repo_root)
