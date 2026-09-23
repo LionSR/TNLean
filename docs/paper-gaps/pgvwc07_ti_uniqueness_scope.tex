@@ -113,11 +113,12 @@ formalized separately, as recorded below.
 
 A mathematically corrected theorem must quantify over two
 translation-invariant canonical $D$-MPS representations of the same nonzero
-finite-ring state. It must assume
+finite-ring state. It may assume
 (\ref{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}), uniqueness of the
 OBC canonical representation, and
-(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}). Its conclusion must
-provide a unitary $U$ and an $N$th-root phase $\xi$ satisfying
+(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}), which are the
+printed hypotheses; the formal route below needs only the first and the last.
+Its conclusion must provide a unitary $U$ and an $N$th-root phase $\xi$ satisfying
 (\ref{eq:pgvwc07_ti_uniqueness_scope_unit_phase})--
 (\ref{eq:pgvwc07_ti_uniqueness_scope_corrected_unitary_intertwiner}). Exact
 unitary conjugacy holds only after the explicit rephasing
@@ -240,11 +241,12 @@ theorem.
 
 Blueprint statements that invoke Chapter~9 block separation must state the
 strict weight-modulus hypothesis whenever the corresponding \Lean{}
-declaration requires it. Downstream CPSV16 uses must not cite these statements
-as PGVWC07 canonical-form uniqueness unless a separate formal theorem
-establishes finite injectivity, OBC uniqueness, the finite-size bound
-(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}), and the corrected
-unitary-phase conclusion
+declaration requires it. Downstream CPSV16 uses must not cite these
+same-structure statements as PGVWC07 canonical-form uniqueness. A use that
+needs that uniqueness cites the corrected theorem of the previous section,
+which assumes finite injectivity and the finite-size bound
+(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}), does not assume OBC
+uniqueness, and yields the corrected unitary-phase conclusion
 (\ref{eq:pgvwc07_ti_uniqueness_scope_corrected_unitary_intertwiner}).
 
 \bibliographystyle{alpha}

@@ -199,7 +199,7 @@ Estimate net deletable lines repo-wide per convention, and the migration cost ho
   { key: 'superseded-routes', prompt: `Lens: SUPERSEDED ROUTES STILL IN THE TREE. Find whole developments kept alive although a
 newer or more general route now proves the same or stronger results. Known suspects to verify
 and extend: UnionInjectivity.lean vs UnionInjectivityGeneral2.lean (485 shared lines — which
-is live?); TorusFundamentalTheorem.lean vs TorusUnconditionalFundamentalTheorem.lean;
+is live?);
 NormalSquareUnconditionalFundamentalTheorem.lean vs NormalGeneralFundamentalTheorem.lean (the
 general one derives hbond internally, the square capstone still assumes it — does anything
 still need the square-specific route?);

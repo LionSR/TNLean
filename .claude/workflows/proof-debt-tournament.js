@@ -164,7 +164,8 @@ NeighboringTraceFactorization x46, ThreeBlockGeometry x34, sameMPV x18...): open
 files, diff the statements, and determine whether these are genuinely re-stated/re-proved
 per-file (real debt) or distinct namespaced content (not debt). Also hunt for numbered-sequel
 file families (TorusWindowChain2/4/5/6, CoarseThreeSite4..11, Recovery2..4/7..9,
-UnionInjectivityGeneral/2): read pairs and
+UnionInjectivityGeneral/2, UnionInjectivityOverlap3; the authoritative list is
+NUMBERED_DEBT_ALLOWLIST in scripts/check_numbered_lean_files.py): read pairs and
 estimate the fraction of duplicated content. Quantify: how many lines exist N times.` },
   { key: 'architecture', prompt: `Lens: FILE & MODULE ORGANIZATION. Assess directory structure and layering. PEPS/ is a
 ~120-file flat directory — is there a coherent grouping (Cycle*, Torus*, Normal*, Region*)

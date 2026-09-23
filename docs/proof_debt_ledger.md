@@ -505,12 +505,21 @@ description of current `main`.
   `PEPS/CycleMPSChainOverlapInsertion.lean:33` states it "mirrors the
   site-independent file" — 2,916 lines across 6 `*Overlap*` files. `hbond`
   is derived internally by `fundamentalTheorem_normalPEPS`
-  (`NormalGeneralFundamentalTheorem.lean:163`) and by
+  (`NormalGeneralFundamentalTheorem.lean:162`, from its blocking and
+  single-crossing data) and by
   `fundamentalTheorem_normalTorusPEPS_unconditional`
-  (`TorusUnconditionalFundamentalTheorem.lean:333`, which returns it
-  existentially in its conclusion), yet is still an explicit hypothesis of
+  (`TorusUnconditionalFundamentalTheorem.lean:333`, from translation
+  invariance and the torus rectangle data; it returns `hbond` existentially
+  in its conclusion). The square capstone
   `fundamentalTheorem_normalSquarePEPS_unconditional`
-  (`NormalSquareUnconditionalFundamentalTheorem.lean:430`). `SameStateBridgeHyp`
+  (`NormalSquareUnconditionalFundamentalTheorem.lean:424`) still takes
+  `hbond` as a hypothesis, and this is not parallel unfinished work: its
+  conclusion is typed through `hbond`, and the only bond-dimension lemma of
+  the square development, `bondDim_apply_eq_of_normalSquareInteriorEdge`,
+  gives equality only on edges with interior margins. Equality on the
+  boundary edges is not reached from the square capstone's present
+  hypotheses by that route; removing `hbond` there likely needs additional
+  boundary-edge data. `SameStateBridgeHyp`
   (`MPS/Chain/SameStateBridge.lean:30`) has hypothesis uses but zero
   constructions repo-wide, leaving the PiAlgebra capstone conditional on an
   unproven structure (verified 2026-07-20).

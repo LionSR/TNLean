@@ -34,7 +34,12 @@ here; the second holds as printed and is proved. Documented in
 $K^\dagger$, using the unitarity it establishes afterwards. Here the inverse is
 the separately constructed $J$, with $KJ=I_r$ and $JK=I_\ell$; neither
 $J=K^\dagger$ nor unitarity of $K$ is asserted. Documented in
-`docs/paper-gaps/fbc25_inverse_compatible_comparison_matrix.tex`.
+`docs/paper-gaps/fbc25_inverse_compatible_comparison_matrix.tex`. The
+restriction is lifted in `TNLean/MPS/MPU/InverseCompatibleComparisonUnitarity.lean`:
+for a simple tensor in canonical form II whose physical adjoint is carried by a
+unitary gauge $T$ with $T\overline T=\sigma I$,
+`inverseCompatibleComparisonK_isUnitaryBetween` proves $K$ unitary and
+`inverseCompatibleComparisonJ_eq_conjTranspose` proves $J=K^\dagger$.
 -/
 
 open scoped ComplexOrder Matrix
