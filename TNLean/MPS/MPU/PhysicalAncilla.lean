@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPU.CanonicalForm
 
@@ -138,8 +139,7 @@ theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
   intro ij _
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   have hscale : (x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1 := by
-    have hxR : (0 : ℝ) ≤ x := by positivity
-    rw [mul_assoc, ← mul_inv, ← Complex.ofReal_mul, Real.mul_self_sqrt hxR]
+    rw [mul_assoc, Complex.ofReal_sqrt_inv_mul_self (x : ℝ) (by positivity)]
     simp [hx.ne']
   have hinner (a : Fin x) :
       (∑ b : Fin x,
@@ -202,8 +202,7 @@ theorem leftCanonical_normalizedDiagonalLift
   apply Eq.trans (Finset.sum_congr rfl fun ij _ ↦ ?_) hA
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   have hscale : (x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1 := by
-    have hxR : (0 : ℝ) ≤ x := by positivity
-    rw [mul_assoc, ← mul_inv, ← Complex.ofReal_mul, Real.mul_self_sqrt hxR]
+    rw [mul_assoc, Complex.ofReal_sqrt_inv_mul_self (x : ℝ) (by positivity)]
     simp [hx.ne']
   have hinner (a : Fin x) :
       (∑ b : Fin x,

@@ -82,9 +82,11 @@ declarations `Matrix.PosSemidef.smul_one`, `Matrix.PosDef.smul_one`, and
   rewrites about thirty occurrences inside the flag module and its multi-block
   consumer, both of which are under active development, so the rewrite is left
   for a separate change.
-- The private range-indexed two-sided multiplication lemma in
-  `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean` restates the set-indexed
-  lemma of `TNLean/PEPS/CycleMPSOverlapCapstone.lean`. The chain module does
-  not import the other capstone, so the surviving statement has to move to an
-  earlier module before the duplicate can go; that relocation is left for a
-  separate change.
+- (Landed 2026-09-23.) The private range-indexed two-sided multiplication
+  lemma in `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean` restated the
+  set-indexed lemma of `TNLean/PEPS/CycleMPSOverlapCapstone.lean`. The chain
+  module does not import the other capstone, so the surviving statement had
+  to move to an earlier module before the duplicate could go. The set-indexed
+  `TNLean.PEPS.conj_eq_conj_of_span` now lives in the chain module under its
+  original name and the duplicate is deleted; recorded in
+  `docs/audits/2026-09-23_hygiene_second_pass.md`.
