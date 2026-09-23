@@ -43,9 +43,12 @@ div.proof_content {
 }
 
 /* The theme's flex column breaks center's inline content into separate rows.
- * Normal block flow preserves TeX paragraphs and explicit line breaks. */
+ * Normal block flow preserves TeX paragraphs and explicit line breaks. The
+ * theme's own `div.centered` rule is loaded after this stylesheet at equal
+ * specificity, so the block context is asserted with `!important` to survive
+ * the cascade order the web build uses. */
 div.centered {
-	display: block;
+	display: block !important;
 	text-align: center;
 }
 
