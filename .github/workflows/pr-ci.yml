@@ -522,6 +522,14 @@ jobs:
       - name: Test inline picture semantics
         run: python3 scripts/test_tenkz_inline_web.py
 
+      - name: Diagnose TeX font environment
+        run: |
+          fc-match 'Times New Roman'
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-texgyre fonts-croscore fonts-lmodern
+          fc-match 'Times New Roman'
+          python3 scripts/test_tenkz_inline_web.py
+
   blueprint:
     name: Check blueprint compiles without errors
     needs: changes
