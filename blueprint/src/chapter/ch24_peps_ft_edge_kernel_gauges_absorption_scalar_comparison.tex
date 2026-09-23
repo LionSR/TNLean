@@ -272,17 +272,19 @@
     \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
     \leanok
     \uses{def:peps_threeLegLeftIdentityForm, def:peps_threeLegRightIdentityForm, def:peps_threeLegMiddleIdentityForm}
-    For nonzero virtual leg spaces $\alpha,\beta,\gamma$, if an
-    endomorphism of $\alpha\otimes\beta\otimes\gamma$ lies simultaneously in
-    the three residual subspaces $\Id_\alpha\otimes\End(\beta\otimes\gamma)$,
-    $\End(\alpha\otimes\beta)\otimes\Id_\gamma$, and the middle-identity space
-    of operators acting as $\Id_\beta$ on the middle leg and as an endomorphism
-    of $\alpha\otimes\gamma$ on the outer legs
-    (Definition~\ref{def:peps_threeLegMiddleIdentityForm}), then it is a scalar
-    multiple of the identity: there exists $\lambda\in\C$ such that
+    For nonzero virtual leg spaces $\alpha,\beta,\gamma$, let
+    $Z\in\End(\beta\otimes\gamma)$, $U\in\End(\alpha\otimes\beta)$, and
+    $W\in\End(\alpha\otimes\gamma)$ have equal induced three-leg residual forms
+    (Definitions~\ref{def:peps_threeLegLeftIdentityForm}--\ref{def:peps_threeLegMiddleIdentityForm})
+    on $\alpha\otimes\beta\otimes\gamma$:
     \begin{align}
-        T = \lambda\,\Id_{\alpha\otimes\beta\otimes\gamma}.
-        \notag
+        \Id_\alpha\otimes Z = U\otimes\Id_\gamma = \iota_{\alpha\gamma}(W)\otimes\Id_\beta. \notag
+    \end{align}
+    Then there exists $\lambda\in\C$ such that all three residual matrices are scalar:
+    \begin{align}
+        Z = \lambda\,\Id_{\beta\otimes\gamma}, \qquad
+        U = \lambda\,\Id_{\alpha\otimes\beta}, \qquad
+        W = \lambda\,\Id_{\alpha\otimes\gamma}. \notag
     \end{align}
     \textbf{Local fix (nonzero virtual legs):}
     The scalar reduction requires that each virtual leg space $\alpha,\beta,\gamma$

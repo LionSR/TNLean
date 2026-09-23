@@ -15,10 +15,14 @@ For a positive semidefinite operator on a bipartite space, the
 support projector of the retained left marginal, lifted to the full space,
 fixes the original operator, as used in
 \cite[Appendix~D.2]{Cirac2016MPDO_arXiv}.
-% Scope restriction: this section keeps the idempotent-product consequence
-% and not the tensor-product locality or orthogonal-projector hypotheses of the
-% source definition. See
-% docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
+
+\textbf{Scope restriction (abstract idempotent-product condition):}
+The subsequent formal predicate retains only abstract commuting idempotents and
+their product identity; unlike \cite[Appendix~D.2]{Cirac2016MPDO_arXiv}, it omits
+tensor-product locality, orthogonal projectors, and the ground-space
+intersection, and admits the tautological choice $P_{AX}=P_{XB}=P_K$.
+Documented in \cite{gap:cpsv16_parent_commuting_hamiltonian_scope}
+(\texttt{docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex}).
 
 \input{chapter/ch13_parent_hamiltonian_decorrelation_marginal_supports}
 \input{chapter/ch13_parent_hamiltonian_decorrelation_commuting_structure}
