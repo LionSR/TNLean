@@ -126,25 +126,23 @@ the translationally invariant square-lattice theorem. The connected-graph
 normal theorem and the normal-MPS corollaries are cited as results of
 \cite[Section~4]{Molnar2018NormalPEPS}.
 
-The chapter builds these results in stages.
-Section~\ref{sec:peps_foundations} fixes the tensors, the generated state, the
-bond gauges, and vertex injectivity, together with the local inverse used
-throughout.
-Section~\ref{sec:peps_edge_middle} reduces a single edge to a three-site
-contraction by blocking its complementary middle region.
-Section~\ref{sec:peps_edge_kernel_gauges} turns a virtual insertion on an edge
-into a physical operation at an endpoint and extracts the per-edge gauge.
-Section~\ref{sec:peps_ft} transports the edge gauges to all regions and proves
+We begin in Section~\ref{sec:peps_foundations} with the core setting of PEPS
+on finite graphs, fixing conventions for contractions, the generated state,
+bond gauges, and vertex injectivity.
+Section~\ref{sec:peps_edge_middle} reduces a single edge to an effective
+three-site chain by blocking its complementary middle region.
+Section~\ref{sec:peps_edge_kernel_gauges} turns virtual insertions into physical
+operations at an endpoint and extracts the per-edge gauge.
+Section~\ref{sec:peps_ft} develops region transfer operators and proves
 the Fundamental Theorem for injective PEPS.
-Section~\ref{sec:peps_normal_union} shows that injective regions are closed
-under unions, the step that lifts local injectivity to the larger regions a
-normal PEPS requires.
+Section~\ref{sec:peps_normal_union} establishes that injective regions are closed
+under finite unions when bond dimensions are positive.
 Sections~\ref{sec:peps_normal_square} and~\ref{sec:peps_torus} supply the
-square-lattice and torus geometries.
-Section~\ref{sec:peps_normal_capstone} proves the Fundamental Theorem for
+square-lattice and torus geometries, respectively.
+Section~\ref{sec:peps_normal_capstone} presents the Fundamental Theorem for
 normal PEPS, Section~\ref{sec:peps_normal_mps} specializes it to matrix product
-states on the closed chain, and Section~\ref{sec:peps_balanced_edge_scalars}
-records the scalar freedom that remains in the edge gauges.
+states on closed chains, and Section~\ref{sec:peps_balanced_edge_scalars}
+characterizes the residual gauge freedom modulo balanced edge scalars.
 
 \input{chapter/ch24_peps_ft_foundations}
 \input{chapter/ch24_peps_ft_edge_middle}

@@ -35,11 +35,10 @@ Section~\ref{sec:app_spectral_mixed_trace}.
 
 \section{MPV overlap as transfer trace}
 
-Recall from (\ref{eq:mps_overlap}) that
-$O_{AB}(N)=\sum_{\sigma\in\{0,\ldots,d{-}1\}^N}
-    V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}$.
-This section rewrites that scalar as the operator trace of the mixed
-transfer power.
+The overlap $O_{AB}(N)=\sum_{\sigma\in\{0,\ldots,d{-}1\}^N}
+    V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}$ (\ref{eq:mps_overlap})
+coincides with the operator trace of the $N$-th power of the mixed transfer
+operator.
 
 \begin{lemma}[Overlap equals transfer trace]\label{thm:overlap_trace}
     \lean{MPSTensor.trace_mixedMapLM_pow_eq_mpvOverlap}
@@ -92,15 +91,10 @@ transfer power.
 
 \section{Eigenvalue bound and transfer-operator gap}
 
-The rectangular eigenvalue bound is the MPS formulation of the generic
-bound for trace-preserving mixed Kraus maps.  Under the identification of
-the rectangular mixed transfer with the mixed Kraus map, the two tensor
-normalizations are precisely the trace-preserving conditions.  For the
-rigidity theorem, one gauges $A$ and $B$ separately using positive fixed
-points of their transfer maps to obtain unital Kraus families, and then
-applies the Kadison--Schwarz equality argument
-(\cite[Theorem~5.3]{Wolf2012Quantum}) to a block embedding of a
-mixed-transfer eigenvector.
+For trace-preserving Kraus maps, every eigenvalue of the rectangular mixed
+transfer operator has modulus at most $1$. When the spectral radius reaches $1$,
+Kadison--Schwarz rigidity (\cite[Theorem~5.3]{Wolf2012Quantum}) applied to a block
+embedding of the eigenvector forces gauge-phase equivalence between the two tensors.
 
 \begin{theorem}[Eigenvalue bound]\label{thm:eigenvalue_bound}
     \lean{Kraus.eigenvalue_norm_le_one}
@@ -368,9 +362,8 @@ mixed-transfer eigenvector.
 
 \section{MPV overlap decay}
 
-We first record two spectral-radius identities for complex normed algebras.
-They will also control the scalar weights of normal fixed-point blocks in
-Chapter~\ref{ch:mps_rfp}.
+The spectral radius on complex Banach algebras satisfies two standard
+identities used in the overlap and fixed-point analysis.
 
 \begin{theorem}[Spectral radius under nonzero scaling]%
     \label{thm:spectral_radius_smul}
@@ -469,20 +462,19 @@ proved in Section~\ref{sec:app_spectral_decay}.
     Since the sum is finite, $O_{AB}(N)\to0$.
 \end{proof}
 
-The block-separation consequences of this gap --- cross-correlation decay
-between distinct blocks and the persistence of self-correlation at a fixed
-point --- used in the canonical-form separation of Chapter~\ref{ch:canonical},
-are recorded in Section~\ref{sec:app_spectral_decay}.
+Cross-correlation decay between distinct blocks and the persistence of
+self-correlation at a fixed point, used in the canonical-form separation of
+Chapter~\ref{ch:canonical}, are established in
+Section~\ref{sec:app_spectral_decay}.
 
 \section{Transfer-operator gap under irreducible-TP hypotheses}
 
-The preceding transfer-operator gap results require \emph{injectivity} of both
-tensors. The following variants weaken this to \emph{irreducibility} together
-with the trace-preserving normalization (\ref{eq:spec_tp_normalization}),
-following Cirac et al.~\cite{Cirac2016MPDO_arXiv} and the irreducibility theory
-of~\cite[Section~6.2]{Wolf2012Quantum}. The argument replaces the
-Kraus-commutation step with a Cauchy--Schwarz rigidity argument for the
-Perron--Frobenius fixed point.
+Under the trace-preserving normalization (\ref{eq:spec_tp_normalization}), the
+transfer-operator gap and overlap-decay theorems extend from injective tensors
+to irreducible tensors, following Cirac et al.~\cite{Cirac2016MPDO_arXiv} and
+Wolf~\cite[Section~6.2]{Wolf2012Quantum}. In place of the full matrix algebra
+span, the argument uses the strict positive definiteness of the Perron--Frobenius
+fixed point.
 
 \begin{theorem}[Gauge-equivalence from irreducible-TP spectral radius]
     \label{thm:modulus_one_gauge_irr_tp}
@@ -591,8 +583,8 @@ Perron--Frobenius fixed point.
 \section{Overlap rigidity for normal blocks}
 \label{sec:bnt_overlap_rigidity}
 
-The BNT matching argument ultimately turns a non-decaying mixed overlap into
-a gauge-phase match. The following two results isolate that spectral step.
+A non-decaying overlap between irreducible tensors forces unit spectral radius
+for their mixed transfer operator, establishing gauge-phase equivalence.
 
 \begin{lemma}[Mixed-transfer spectral radius from unit-modulus overlap]%
     \label{lem:overlap_norm_one_implies_spectral_radius_ge_one}

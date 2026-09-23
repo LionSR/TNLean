@@ -30,15 +30,6 @@
     \uses{def:pgvwc07_positive_length_witness, thm:nonzero_irreducible_block_decomposition, thm:unital_data_irreducible, thm:irreducible_tensor_to_action, lem:irreducible_action_to_tensor, thm:irreducible_unital_scalar_fixed_point, thm:pgvwc07_dual_diag_unital}
     Every MPS tensor admits a decomposition satisfying
     Definition~\ref{def:pgvwc07_positive_length_witness}.
-    More precisely, the construction has four stages. First, a nonzero
-    irreducible block remains irreducible under nonzero scalar rescaling and can
-    be put in a unital gauge with scalar fixed-point space and a diagonal
-    positive-definite dual fixed point. Second, this construction is applied to
-    each member of a finite nonzero irreducible block family. Third, the
-    nonzero irreducible decomposition of an arbitrary tensor supplies that
-    family and the total bond-dimension bound. Finally, these blocks, weights,
-    and fixed points satisfy
-    Definition~\ref{def:pgvwc07_positive_length_witness}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -271,22 +262,18 @@
 
 \section{Normal tensors and canonical forms}\label{sec:cpsv_canonical_defs}
 
-This section records the CPSV definitions of \emph{normal tensor} and
-\emph{canonical form} from~\cite{Cirac2016MPDO_arXiv}. The basis of normal
-tensors is stated in Chapter~\ref{ch:bnt}. Write
+The definitions of \emph{normal tensor} and \emph{canonical form}
+follow~\cite{Cirac2016MPDO_arXiv}. For a transfer map $\E$ with spectral radius
+$r(\E)$, write
 \begin{align}
     \sigma_\partial(\E)
      & =
     \{\lambda\in\sigma(\E):|\lambda|=r(\E)\}
     \label{eq:canonical_peripheral_spectrum}
 \end{align}
-for the peripheral spectrum of a transfer map $\E$, where $r(\E)$ is its
-spectral radius. The stronger conditions used later
-(Definition~\ref{def:is_normal_canonical_form} and the canonical-form conditions
-of Chapter~\ref{ch:bnt}) add left-canonical normalization and spectral
-primitivity. The weight moduli are taken non-increasing, not strictly
-decreasing; equal-modulus and repeated-copy sectors are retained and compared by
-the coefficient argument of Chapter~\ref{ch:bnt}.
+for its peripheral spectrum. The weight moduli are ordered non-increasingly,
+$|\mu_1|\ge|\mu_2|\ge\cdots\ge|\mu_r|>0$; equal-modulus and repeated sectors are
+retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
 
 \begin{definition}[CPSV normal tensor (NT)]\label{def:nt_cpsv}
     \lean{MPSTensor.IsNormalTensor}
@@ -724,10 +711,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
          & =V^{(N)}(B)_\sigma.
         \label{eq:cpsv_canonical_form_representative_after_blocking}
     \end{align}
-    Here $B$ is another tensor generating the same positive-length MPV family.
-    The assertion $B\in\mathrm{CF}$ is literal in the bond coordinates of $B$;
-    no assertion is made that $A^{[p]}$ itself is literally in canonical form
-    in its original bond coordinates.
+    Here $B$ generates the same positive-length MPV family and satisfies the
+    canonical-form condition in its own bond coordinates.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -751,10 +736,10 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
          & :=\bigoplus_k\mu_kC_k
         \label{eq:cpsv_after_blocking_representative}
     \end{align}
-    satisfies the literal block-diagonal equation~\eqref{eq:cpsv_canonical_form},
-    so $B\in\mathrm{CF}$. Equation~\eqref{eq:cpsv_after_blocking_direct_sum}
+    satisfies the block-diagonal identity~(\ref{eq:cpsv_canonical_form}),
+    so $B\in\mathrm{CF}$. Equation~(\ref{eq:cpsv_after_blocking_direct_sum})
     gives the second part of
-    \eqref{eq:cpsv_canonical_form_representative_after_blocking}.
+    (\ref{eq:cpsv_canonical_form_representative_after_blocking}).
 \end{proof}
 
 \begin{theorem}[Closed-chain expansion of CPSV canonical form]
@@ -840,25 +825,15 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     (\ref{eq:cpsv_cf_bnt_characterization}).
 \end{proof}
 
-The projector-closure result in
-Theorem~\ref{thm:projector_closure_canonical_form} gives normal blocks and
-orthogonal ambient embeddings under the source hypotheses. Combining these
-embeddings into one coisometry gives
-Definition~\ref{def:cpsv_canonical_form}.
+Combining the orthogonal ambient embeddings from
+Theorem~\ref{thm:projector_closure_canonical_form} into a single coisometry
+yields Definition~\ref{def:cpsv_canonical_form}.
 
-This source definition is distinct from the stronger normal-canonical-form
-conditions below. The renormalization fixed-point analysis uses a separate
-block-injective canonical-form criterion; it is not the CPSV canonical-form
-definition.
-
-\begin{remark}[Relation to the stronger conditions]
-    A tensor $A$ which is irreducible
-    (Definition~\ref{def:irreducible_tensor}), has transfer map of spectral
-    radius one, and has primitive transfer map is normal in the sense of
-    Definition~\ref{def:nt_cpsv}. The reverse implications from the stronger
-    conditions of Definition~\ref{def:is_normal_canonical_form} and of
-    Chapter~\ref{ch:bnt} require the fundamental-theorem step or the
-    algebraic-to-spectral normality equivalence, established later.
+\begin{remark}[Relation to stronger normality conditions]
+    An irreducible tensor whose transfer map has spectral radius one and is
+    primitive is normal in the sense of Definition~\ref{def:nt_cpsv}. The
+    equivalence with algebraic normality (Definition~\ref{def:normal}) is
+    established in Chapter~\ref{ch:bnt} and Chapter~\ref{ch:wielandt}.
 \end{remark}
 
 \subsection{Normalization conventions}\label{sec:transfer_map_normalization}

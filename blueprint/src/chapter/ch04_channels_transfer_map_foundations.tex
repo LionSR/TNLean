@@ -82,15 +82,16 @@
     \lean{Kraus.trace_mul_mapLM_adjoint}
     \leanok
     \uses{def:transfer_map}
-    The trace-adjoint identity of
-    Theorem~\cite[``Trace adjointness of a Kraus map'']{QICLean2026Blueprint}
-    holds when the Kraus family is the family of matrices of an MPS tensor and
-    the two Kraus maps are written as transfer maps.
+    For an MPS tensor $A$ and bond matrices $\sigma, \rho\in\MN{D}$,
+    \begin{align}
+        \tr(\sigma\,\E_A(\rho)) & = \tr(\E_{A^\dagger}(\sigma)\,\rho),
+        \notag
+    \end{align}
+    where $\E_{A^\dagger}$ is the transfer map with Kraus operators $(A^i)^\dagger$.
 \end{lemma}
 
 \begin{proof}\leanok
-
-    Identify the two Kraus maps with the corresponding transfer maps.
+    Apply trace adjointness for Kraus maps~\cite[``Trace adjointness of a Kraus map'']{QICLean2026Blueprint} to the Kraus family $\{A^i\}$.
 \end{proof}
 
 \begin{lemma}[Transfer map under scalar multiplication]

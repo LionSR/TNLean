@@ -3,21 +3,18 @@
 
 % Source: copy-weight recovery, Cirac2016MPDO_arXiv Appendix MPV proof,
 % lines 1184--1188.
-The exact matching of Section~\ref{sec:sector_bnt_strong_match} produces, on each
-matched pair, a coefficient identity. This section turns that identity into
-equality of the per-copy weight multisets \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
-No analytic non-decay estimate enters: the fixed-length linear independence
-isolates each sector coefficient exactly.
+The exact matching of Section~\ref{sec:sector_bnt_strong_match} produces a
+coefficient identity on each matched pair. By Newton--Girard power-sum
+recovery, this identity determines the per-copy weight multisets with
+multiplicity \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \subsection{Matched-sector weight multiset equality}
 
-Given a matched pair $(j_0, \tilde k_0)$ and a nonzero scalar $\zeta$ with
-$c_N^{(j_0)}(P) = \zeta^N c_N^{(\tilde k_0)}(Q)$ past a threshold $N_0$, this
-section records two conclusions: the multiset equality of the per-copy weights
-from power-sum recovery (Theorem~\ref{thm:power_sum_multiset}), and its upgrade
-to an explicit per-copy permutation. Together they give the
-$\mu_{j,q} = \nu_{j,q}\, e^{i\varphi_j}$ recovery of
-\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+For a matched pair of sectors with
+$c_N^{(j_0)}(P) = \zeta^N c_N^{(\tilde k_0)}(Q)$ for all $N > N_0$ and
+$\zeta\ne0$, power-sum recovery yields multiset equality of the per-copy
+weights, inducing an explicit copy permutation that realizes
+$\mu_{j,q} = \nu_{j,q}\, e^{i\varphi_j}$ \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 % Source: matched normal sectors at Cirac2016MPDO_arXiv line 1182; equal-MPV
 % coefficient comparison at lines 1184--1188; global-gauge construction at
 % lines 1189--1192.
@@ -101,23 +98,20 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
 \section{Strong existential matching by exact linear independence}
 \label{sec:sector_bnt_strong_match}
 
-The exact matching reads \cite[Appendix~A]{Cirac2016MPDO_arXiv} as a statement
-at fixed length: equal MPV families force each basis sector of one form to pair
-with a basis sector of the other. The non-vanishing of the sector coefficients
-isolates the matched sector exactly, with no limit of a single-sector
-projection.
+The exact matching shows that equal MPV families force each basis sector
+of one canonical form to pair with a unique basis sector of the other
+\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{theorem}[Exact single-sector matching]
     \label{thm:sector_bnt_exact_block_match}
     \lean{MPSTensor.exists_block_match_exact}
     \leanok
     \uses{def:sector_bnt_cf, def:same_mpv2_pos, thm:sector_bnt_proportional_exact_match}
-    Let $P, Q$ be two BNT canonical forms with the same MPV family (at all
-    positive lengths). For every sector $j$ of $P$ there exist a sector $k$ of
+    Let $P, Q$ be two BNT canonical forms with the same MPV family at all
+    positive lengths. For every sector $j$ of $P$ there exist a sector $k$ of
     $Q$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
     equivalence after identifying the matched bond dimensions, and a
-    non-decaying cross-overlap. No per-sector unit-modulus hypothesis is
-    required.
+    non-decaying cross-overlap.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -148,10 +142,9 @@ projection.
 \subsection{Bijective matching by symmetry}
 \label{subsec:sector_bnt_strong_match_bijective_symmetry}
 
-Applying the exact matching once more with $P$ and $Q$ swapped gives the reverse
-direction; the basis-distinctness clause forces injectivity both ways, so
-$g_a = g_b$ and the source relabelling
-$B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ holds on the full basis
+Applying the matching in both directions yields a bijection between the basis
+sectors: the basis-distinctness clause ensures injectivity both ways, so
+$g_a = g_b$ and $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ on the full basis
 \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{theorem}[Bijective matching by symmetry]

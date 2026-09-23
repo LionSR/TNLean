@@ -1,18 +1,14 @@
 \chapter{Perron--Frobenius Theory for Channels and Transfer Maps}\label{ch:qpf}
 
-This chapter establishes elementary fixed-point existence for quantum channels
-and the Perron--Frobenius theory: existence, positive definiteness, and uniqueness
-of fixed points for injective and irreducible transfer maps, canonical
-gauge constructions, and the
-spectral-radius identification of Perron eigenvalues.
-The ergodicity of irreducible channels and the CP-map irreducibility
-criterion modeled on Wolf's spectral characterization are developed in the
-companion quantum-channel volume~\cite[``Ces\`aro convergence for
-    irreducible channels'' and ``Irreducibility iff the restricted CP spectral
-    properties hold'']{QICLean2026Blueprint}.
-The conceptual source is Wolf's treatment of irreducible positive
-maps~\cite[Chapter~6, especially Theorems~6.2--6.5 and Corollary~6.3]{Wolf2012Quantum}
-and~\cite{Evans1978Spectral}.
+Quantum Perron--Frobenius theory governs the fixed points and spectral structure
+of positive and completely positive maps. For injective and irreducible transfer
+maps, positive fixed points are unique up to scaling and strictly positive
+definite, determining the canonical gauges. The ergodicity of irreducible
+channels and the spectral characterization of irreducibility are treated in the
+companion volume~\cite[``Ces\`aro convergence for irreducible channels'' and
+    ``Irreducibility iff the restricted CP spectral
+    properties hold'']{QICLean2026Blueprint}, following
+Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 
 
 \section{Positive definiteness}
@@ -241,25 +237,23 @@ and~\cite{Evans1978Spectral}.
 
 
 \begin{remark}\leanok
-    The right-canonical gauge of Theorem~\cite[``Right-canonical (unital) gauge'']{QICLean2026Blueprint}
-    and the left-canonical gauge of Theorem~\ref{thm:left_canonical_gauge}
-    are generally different similarity transforms: one is built from a fixed point
-    of $\E_A$, the other from a fixed point of the adjoint transfer map.
-    This section does not claim that a single gauge makes the transfer map
-    simultaneously unital and trace-preserving.
+    The right-canonical (unital) gauge and the left-canonical (trace-preserving)
+    gauge arise from different similarity transformations: the former uses a fixed
+    point of the transfer map $\E_A$, whereas the latter uses a fixed point of the
+    adjoint map $\E_A^\dagger$. In general, a transfer map cannot be brought into
+    simultaneously unital and trace-preserving form by a single similarity transform.
 \end{remark}
 
 
 \section{Perron--Frobenius eigenvector existence}%
 \label{sec:pf_eigenvector}
 
-This section establishes the existence of a positive definite
-eigenvector for the adjoint transfer map of an irreducible MPS
-tensor, and uses it to construct a TP-gauge normalization.
-The PSD-eigenvector step corresponds to~\cite[Theorem~6.5]{Wolf2012Quantum}
-(general positive maps) and~\cite{Evans1978Spectral}; the upgrade to positive
-definiteness uses the irreducible-map theory of~\cite[Theorem~6.3]{Wolf2012Quantum}.
-The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+Every irreducible MPS tensor admits a positive definite eigenvector for its
+adjoint transfer map with positive eigenvalue, which yields a trace-preserving
+(left-canonical) gauge. The underlying fixed-point and positive-definiteness
+theorems follow Wolf~\cite[Theorems~6.3 and 6.5]{Wolf2012Quantum} and
+Evans~\cite{Evans1978Spectral}; the gauge construction follows
+Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 
 \begin{theorem}[Irreducibility of the transfer map of an irreducible tensor]%
@@ -328,9 +322,8 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \end{align}
     and $\sum_i (B^i)^\dagger B^i = \Id$.
 
-    This is the ``spectral rescaling $+$ TP gauge'' step of
-    \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
-    The similarity is generally non-unitary.
+    This corresponds to the spectral rescaling and trace-preserving gauge
+    construction of \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -364,9 +357,8 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \end{align}
     and $\sum_i B^i(B^i)^\dagger = \Id$.
 
-    This is the Perron--Frobenius unital-gauge orientation used in
-    \cite[Theorem~4, lines~765--770]{PerezGarcia2007Matrix},
-    stated for one irreducible nonzero block.
+    This corresponds to the Perron--Frobenius unital gauge of
+    \cite[Theorem~4]{PerezGarcia2007Matrix} for an irreducible block.
 \end{theorem}
 
 \begin{proof}\leanok

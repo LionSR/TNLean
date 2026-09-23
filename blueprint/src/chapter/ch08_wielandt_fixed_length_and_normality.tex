@@ -1,15 +1,12 @@
 \section{Fixed-length matrix spanning}\label{sec:lemma2b}
 
-The preceding sections establish the cumulative-spanning part of the
-Lemma~2(a) argument from~\cite{Sanz2010Quantum}:
-eigenvector spreading gives a cumulative vector span
-$K_{D-1}(A,\varphi)=\C^D$.
-The next stage is to pass to a span at one fixed length,
-namely to find $n_0$ such that $S_{n_0}(A)=\MN{D}$
-(i.e.\ word products of \emph{exactly} one length span all matrices).
-The product-span facts used here are proved in
-Section~\ref{sec:app_wielandt_exact_word_support}; the blocked fixed-length
-construction is in Section~\ref{sec:app_wielandt_blocking_support}.
+Eigenvector spreading establishes the cumulative vector span
+$K_{D-1}(A,\varphi)=\C^D$ (\cite[Lemma~2(a)]{Sanz2010Quantum}).
+To obtain block injectivity, this cumulative span is promoted to an exact
+fixed-length matrix span $S_{n_0}(A)=\MN{D}$.
+Supporting word-product results appear in
+Section~\ref{sec:app_wielandt_exact_word_support}, and the blocked fixed-length
+construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{lemma}[Eigenvector padding]\label{lem:eigenvector_padding}
     \lean{Kraus.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector}
@@ -214,14 +211,9 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     separated normal-canonical families whose blocks have positive virtual bond
     dimension.
 
-    \textbf{Scope restriction (one-copy representative family):}
-    Here the family is a basis of normal-canonical representatives in the sense
-    of Definition~\ref{def:normal_cf_bnt}, with distinct blocks and
-    non-increasing weight moduli. The representative family is assumed to have
-    been selected; this statement does not reconstruct the full CPSV sector
-    decomposition with repeated copies inside one sector. Documented in
-    \cite{gap:cpsv16_ft_one_copy_scope_restriction}
-    (\texttt{docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex}).
+    Here the family $(A_x)_{x\in X}$ is a basis of normal-canonical
+    representatives (Definition~\ref{def:normal_cf_bnt}) with distinct blocks;
+    see \cite{gap:cpsv16_ft_one_copy_scope_restriction}.
 \end{corollary}
 
 \begin{proof}
@@ -232,29 +224,22 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     under positive further blocking.
 \end{proof}
 
-\begin{remark}[Quantitative and blocked rank-one arguments]
+\begin{remark}[Rank-one extraction and fixed-length spanning]
     \label{rem:lemma2b_status}\leanok
-    The quantitative rank-one statement of
-    \cite[Lemma~2(b)]{Sanz2010Quantum} is
-    Theorem~\ref{thm:rank_one_noninvertible_eigenvector_primitive}.
-    Theorem~\ref{thm:lemma2b_assembly} turns that rank-one conclusion and
-    fixed-length vector spreading into matrix spanning.
-    Section~\ref{sec:app_wielandt_blocking_support} also proves a separate
-    blocked construction, Theorem~\ref{thm:wielandt_lemma2b}, which first
-    extracts a rank-one operator in a blocked tensor and then applies the
-    fixed-length matrix-spanning argument; its fixed-length conclusion is a
-    consequence of its normality hypothesis, not the quantitative statement of
-    source Lemma~2(b).
+    The quantitative rank-one result of Sanz et al.~\cite[Lemma~2(b)]{Sanz2010Quantum}
+    is Theorem~\ref{thm:rank_one_noninvertible_eigenvector_primitive}. Combined with
+    fixed-length vector spreading, it yields matrix spanning via
+    Theorem~\ref{thm:lemma2b_assembly}. Alternatively, the blocked construction in
+    Theorem~\ref{thm:wielandt_lemma2b} extracts a rank-one operator directly from
+    normality without tracking explicit exponents.
 \end{remark}
 
-\begin{remark}[Use of the quantum Wielandt theorem in the Fundamental Theorem]
-    The cumulative estimate
-    $T_{D^2}(A)=\MN{D}$ in Theorem~\ref{thm:wielandt_bound} supports the proof
-    of Lemma~1; it is not a conclusion of source Theorem~1.
-    The source theorem instead bounds the first positive $N$ for which
-    $S_N(A)=\MN{D}$. This exact-length statement matches injectivity of
-    $\Gamma_N$ and passes through blocking by
-    Lemma~\ref{lem:blocking_transfer}.
+\begin{remark}[Exact-length spanning and block injectivity]
+    The cumulative bound $T_{D^2}(A)=\MN{D}$ (Theorem~\ref{thm:wielandt_bound})
+    provides the bridge to the exact-length bound $S_N(A)=\MN{D}$ of
+    \cite[Theorem~1]{Sanz2010Quantum}. This exact-length spanning is equivalent
+    to injectivity of $\Gamma_N$ and one-site injectivity of the blocked tensor
+    $A^{[N]}$ (Lemma~\ref{lem:blocking_transfer}).
 \end{remark}
 
 The blocked normality and rank-one constructions used below are proved in
@@ -282,11 +267,10 @@ Section~\ref{sec:app_wielandt_blocking_support}.
     When the choice of $\rho$ is irrelevant, we simply say that $A$
     is a primitive MPS tensor.
     This condition combines a complementary spectral gap with a nonzero
-    positive semidefinite fixed point. It is not the paper definition
-    in Definition~\ref{def:paper_primitive}, which is the uniform spreading
-    condition~(\ref{eq:wld_paper_primitive_spread}). With the additional
-    hypothesis $\rho>0$, the complementary-gap condition implies strong
-    irreducibility and hence paper primitivity by
+    This condition combines a complementary spectral gap with a nonzero
+    positive semidefinite fixed point. When $\rho>0$, this implies strong
+    irreducibility and uniform vector spreading
+    (Definition~\ref{def:paper_primitive}) by
     Theorem~\ref{thm:wielandt_proposition_three}.
 \end{definition}
 
@@ -336,20 +320,15 @@ The primitivity condition of Definition~\ref{def:primitive_mps}
 combines TP normalization, a nonzero PSD fixed point, and a complementary
 transfer-map gap. It is connected to normality through the following results.
 
-\begin{remark}[Complementary-gap and paper primitivity]%
+\begin{remark}[Complementary gap and uniform spreading]%
     \label{rem:prim_definition_mismatch}\leanok
-    Definition~\ref{def:primitive_mps} assumes TP normalization, a nonzero
-    positive semidefinite fixed point $\rho$, and
-    $\rho_{\spec}(\E_A-P_\rho)<1$. Without $\rho>0$, these hypotheses do not
-    imply irreducibility or normality; for example, a fixed point supported on
-    $\diag(1,0)$ need not see the complementary invariant subspace.
-
-    If $\rho>0$, the transfer map is irreducible and the complementary gap
-    gives peripheral spectrum $\{1\}$. Thus the tensor is strongly irreducible
-    in the sense of Definition~\ref{def:strongly_irreducible_paper}.
-    Proposition~3 then gives uniform spreading and eventual full Kraus rank.
-    This implication compares the two notions; it does not identify
-    Definition~\ref{def:primitive_mps} with the paper definition.
+    When the fixed point $\rho$ in Definition~\ref{def:primitive_mps} is strictly
+    positive definite, irreducibility holds and the peripheral spectrum is
+    $\{1\}$, so the tensor is strongly irreducible
+    (Definition~\ref{def:strongly_irreducible_paper}). By
+    Theorem~\ref{thm:wielandt_proposition_three}, this is equivalent to uniform
+    vector spreading (Definition~\ref{def:paper_primitive}) and eventual full Kraus
+    rank.
 \end{remark}
 
 \subsection{Primitive implies irreducible}\label{subsec:prim_implies_irred}
@@ -464,22 +443,17 @@ For Burnside-style arguments it is more natural to work with invariant
 \end{proof}
 
 \begin{remark}\leanok
-    This Burnside/Jacobson-density step is a substantial external algebraic
-    ingredient in the chapter. We use it here as the finite-dimensional complex
-    Burnside theorem, namely the statement that an irreducible matrix algebra
-    action already generates the full endomorphism algebra.
+    Burnside's theorem ensures that every irreducible subalgebra of $\MN{D}$
+    coincides with the full matrix algebra $\End_{\C}(\C^D)$, providing the
+    algebraic foundation for matrix spanning.
 \end{remark}
 
 \subsection{From primitivity to strong irreducibility and normality}%
 \label{subsec:prim_normality_connection}
 
-The results in this subsection remove the one-step padding assumption
-from the normality conclusions.
-They connect primitivity in Definition~\ref{def:primitive_mps},
-formulated via a complementary transfer-map gap, directly to normality
-(eventually full Kraus rank),
-using the convergence of the transfer-map iterates to the
-projection onto the fixed-point subspace.
+The complementary transfer-map gap of Definition~\ref{def:primitive_mps} implies
+normality (eventual full Kraus rank) via the convergence of transfer-map iterates
+to the fixed-point projection, without requiring an identity element in $S_1(A)$.
 
 \begin{theorem}[Positive definiteness of the fixed point under map irreducibility]%
     \label{thm:primitive_fixed_point_posdef_of_irreducible_map}
@@ -558,13 +532,8 @@ projection onto the fixed-point subspace.
     \lean{MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef}
     \leanok
     \uses{def:primitive_mps, def:normal}
-    If $A$ is a primitive MPS tensor with positive-definite fixed
-    point~$\rho$, then $A$ is normal
-    (has eventually full Kraus rank).
-    No identity-in-the-one-step-span condition is needed.
-
-    This connects the complementary-gap condition in
-    Definition~\ref{def:primitive_mps} directly to normality.
+    If $A$ is a primitive MPS tensor with positive-definite fixed point~$\rho$,
+    then $A$ is normal (eventually full Kraus rank).
 \end{theorem}
 
 \begin{proof}

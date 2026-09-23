@@ -101,11 +101,9 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \end{proof}
 
 \begin{remark}[Block-diagonal gauge from matched blocks]
-    This combines per-block gauges into a block-diagonal gauge for the global
-    tensor, given pre-matched same-index blocks. It is not the FT
-    block-matching theorem: it does not derive the block pairing or permutation
-    from a global same-MPV hypothesis; the block correspondence is assumed in
-    advance.
+    This lemma constructs a block-diagonal gauge from pre-matched blockwise gauge
+    equivalences, whereas the full Fundamental Theorem for direct sums derives
+    the block correspondence and permutation from the global state.
 \end{remark}
 
 \begin{lemma}[Gauge equivalence of direct sums from per-block MPV equality]%
@@ -189,9 +187,9 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{lemma}[MPV invariance under block permutation]\label{lem:mpv_perm_blocks}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_perm}\leanok
     \uses{def:block_diagonal_tensor, def:same_mpv2}
-    Permuting the block index set and transporting the weights
-    correspondingly does not change the $\mathrm{SameMPV}_2$ family of the
-    weighted block-diagonal tensor.
+    The $\mathrm{SameMPV}_2$ family of a weighted block-diagonal tensor is
+    invariant under permuting the block index set and transporting the weights
+    correspondingly.
 \end{lemma}
 
 \begin{proof}\leanok

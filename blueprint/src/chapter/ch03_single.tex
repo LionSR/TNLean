@@ -35,9 +35,8 @@ proved in the companion quantum-channel volume~\cite[``Nondegeneracy of the trac
     $\tr(A^w) = \tr(B^w)$.
 \end{proof}
 
-The trace conditions constrain every product of the matrices~$A^i$. To bring the
-algebra structure of~$\MN{D}$ to bear, record how a matrix pairs against the
-family $\{A^i\}$ under the trace.
+The trace pairing against the family $\{A^i\}$ connects word traces to the
+algebra structure of $\MN{D}$.
 
 \begin{definition}[Trace pairing map]\label{def:trace_pairing_map}
     \lean{MPSTensor.traceMulRightPi}
@@ -150,11 +149,9 @@ family $\{A^i\}$ under the trace.
 
 \section{Inner automorphism and the single-block theorem}
 
-The rigidity of the full matrix algebra now finishes the proof. A nonzero
-multiplicative map on~$\MN{D}$ is forced to be bijective (simplicity),
-unit-preserving (surjectivity), and conjugation by a single invertible matrix
-(Skolem--Noether). The next four results establish these steps and the
-nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
+A nonzero multiplicative linear map on $\MN{D}$ is bijective by simplicity,
+preserves the unit by surjectivity, and is given by conjugation by an
+invertible matrix by the Skolem--Noether theorem.
 
 \begin{theorem}[A nonzero multiplicative endomorphism of $\MN{D}$ is bijective]%
     \label{thm:simplicity}
@@ -240,7 +237,8 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
     multiplicative. It is nonzero: otherwise $B^i = 0$ for all~$i$, against
     Lemma~\ref{lem:trace_ne_zero}. By Theorem~\ref{thm:simplicity}, $T$ is
     bijective, and by Lemma~\ref{lem:linear_map_to_alg} it fixes~$\Id$, so $T$
-    is a $\C$-algebra automorphism. Theorem~\cite[``Skolem--Noether'']{QICLean2026Blueprint} gives
+    is a $\C$-algebra automorphism. The Skolem--Noether theorem
+    \cite[``Skolem--Noether'']{QICLean2026Blueprint} gives
     $X \in \GL_D(\C)$ with $T(M) = X M X^{-1}$; evaluating at $M = A^i$
     gives $B^i = X A^i X^{-1}$.
 \end{proof}

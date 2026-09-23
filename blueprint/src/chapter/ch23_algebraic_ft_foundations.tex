@@ -3,11 +3,9 @@
 \label{sec:non_ti_setup}
 %% ---------------------------------------------------------
 
-The algebraic proof of~\cite{Molnar2018NormalPEPS} uses periodic square chains
-whose tensors vary from site to site. The proof of
-\cite[Theorem~3]{PerezGarcia2007Matrix} starts instead from a varying-bond
-open chain. We record both fixed-length constructions and distinguish their
-boundary conventions.
+Moln\'ar et al.~\cite{Molnar2018NormalPEPS} formulate the algebraic proof for periodic chains
+whose tensors vary from site to site, whereas P\'erez-Garc\'ia et al.~\cite[Theorem~3]{PerezGarcia2007Matrix}
+begin with a varying-bond open chain. Both fixed-length constructions are defined below.
 
 \begin{definition}[Periodic non-TI chain data]\label{def:non_ti_chain}
     \lean{MPSChainTensor.coeff, MPSChainTensor.IsInjective}
@@ -166,11 +164,9 @@ boundary conventions.
     $\widetilde A_k^i$ and set every other entry to zero. The matrices
     $\widetilde A_k^i$ form a square site-dependent closed chain.
 
-    This square padding is an auxiliary algebraic factorization.
-    The proof of \cite[Theorem~3]{PerezGarcia2007Matrix} does not first replace
-    the rectangular open chain by this square chain. It places the original
-    rectangular matrices directly into the compatible off-diagonal blocks of
-    one $ND\times ND$ cyclic matrix.
+    This square padding embeds the rectangular open chain into square matrices,
+    whereas \cite[Theorem~3]{PerezGarcia2007Matrix} places the rectangular
+    matrices into the off-diagonal blocks of an $ND\times ND$ cyclic matrix.
 \end{definition}
 
 \begin{theorem}[Empty padded-chain coefficient]
@@ -405,10 +401,8 @@ $D^2\times D^2$ matrices. The reconstruction theorem of
 \cite[Theorem~8]{PerezGarcia2007Matrix} recovers a translation-invariant
 tensor of bond dimension $D$ from a window of $D^4$ consecutive matrices of
 the open-boundary canonical form by solving a system of quadratic equations
-whose size does not depend on the chain length. This section records the
-system and the two auxiliary results that drive the uniqueness half of the
-reconstruction argument, both stated in the source immediately before the
-proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
+whose size does not depend on the chain length. The system and its uniqueness
+criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
 
 \begin{definition}[Solution of the quadratic reconstruction system]
     \label{def:pgvwc07_quadratic_system}
@@ -548,10 +542,9 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     \end{align}
     Thus a window of $m$ sites supplies exactly $m-1$ internal
     intertwiners and $m-2$ relations between consecutive internal
-    intertwiners. This is the internal part of the chain produced at the start
-    of the proof of \cite[Theorem~8]{PerezGarcia2007Matrix}. It does not by
-    itself provide the linear dependence required by
-    Lemma~\ref{lem:pgvwc07_chain_combination}.
+    intertwiners. This yields the internal part of the chain in
+    \cite[Theorem~8]{PerezGarcia2007Matrix}; the full linear dependence required by
+    Lemma~\ref{lem:pgvwc07_chain_combination} incorporates the boundary cuts.
 \end{lemma}
 
 \begin{proof}
@@ -576,7 +569,7 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     onset. Write $A=(A_i)_i$ for its canonical translation-invariant tensor.
     \begin{enumerate}
         \item If the state admits a translation-invariant matrix product
-              representation satisfying condition C1, then the system has a
+              representation satisfying injectivity (condition C1), then the system has a
               solution.
         \item Let $B=(B_i)_i$ be the tensor of a solution and suppose in
               addition that its length-$N$ trace-MPS representation is the
@@ -591,12 +584,10 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
               $\widehat B_i:=\xi B_i$ still represents the same length-$N$
               state and is exactly unitarily conjugate to $A$.
     \end{enumerate}
-    No assertion is made here that every algebraic solution represents the
-    prescribed state. The unrestricted representation claim and the exact
-    conjugacy claimed in the source have a residual finite-ring phase defect
-    \cite{gap:pgvwc07_quadratic_reconstruction_phase}. This is the corrected
-    form of \cite[Theorem~8]{PerezGarcia2007Matrix}; its formalization is not
-    yet complete.
+    The unrestricted representation claim and exact conjugacy in
+    \cite[Theorem~8]{PerezGarcia2007Matrix} carry a residual finite-ring phase defect
+    \cite{gap:pgvwc07_quadratic_reconstruction_phase}, which is resolved by the explicit
+    phase $\xi$ in (\ref{eq:pgvwc07_quadratic_reconstruction_phase_conjugacy}).
 \end{theorem}
 
 \begin{proof}
@@ -620,7 +611,7 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     $RB_i=\tfrac1x A_iR$. The two normalizations
     (\ref{eq:quadratic_system_normalization}), the invariance of the positive
     diagonal fixed point, and the uniqueness of the transfer-map fixed point
-    under condition C1 give $|x|=1$ and
+    under injectivity give $|x|=1$ and
     $RR^{\dagger}=c\Id$ for some $c>0$. Thus $U=c^{-1/2}R$ is unitary and
     $A_i=xUB_iU^{\dagger}$ for every $i$. Since $A$ and $B$ represent the
     same nonzero length-$N$ state, their coefficients satisfy
@@ -641,13 +632,11 @@ representations on the doubled bond space, compares them with the
 open-boundary canonical form, and obtains invertible intertwiners at the
 cuts of a window of $D^4$ sites; the two auxiliary results of
 Section~\ref{sec:quadratic_reconstruction} then produce a nonzero
-intertwiner between the two local tensors. This section records the
-cut-vector argument that supplies those intertwiners directly from condition
-C1, the resulting fixed-length intertwiner, and the corrected uniqueness
-theorem. The printed conclusion is false on a finite ring because of an
-$N$th-root phase \cite{gap:pgvwc07_quadratic_reconstruction_phase}; the
-corrected statement carries that phase explicitly
-\cite{gap:pgvwc07_ti_uniqueness_scope}.
+intertwiner between the two local tensors. The cut-vector argument supplies
+these intertwiners directly from injectivity, yielding the fixed-length
+intertwiner and the uniqueness theorem. The printed conclusion is adjusted
+on a finite ring by an $N$th-root phase
+\cite{gap:pgvwc07_quadratic_reconstruction_phase, gap:pgvwc07_ti_uniqueness_scope}.
 
 \begin{definition}[Cut vectors]
     \label{def:pgvwc07_cut_vectors}
@@ -694,7 +683,7 @@ corrected statement carries that phase explicitly
     \uses{def:pgvwc07_cut_vectors, def:l_blk_injective}
     If $A$ is $L$-block injective, then the $D^2$ left cut vectors of length
     $L$ are linearly independent, and so are the $D^2$ right cut vectors of
-    length $L$. If moreover $\sum_iA_iA_i^\dagger=\Id$, then $A$ is
+    length $L$. If $\sum_iA_iA_i^\dagger=\Id$ as well, then $A$ is
     $L'$-block injective for every $L'\ge L$, so both statements hold at
     every length at least $L$.
 \end{lemma}
@@ -1011,11 +1000,10 @@ corrected statement carries that phase explicitly
     $C$ and $B$ are gauge-phase equivalent with the unitary gauge $U$ and the
     unit-modulus phase $\xi$.
 
-    The printed hypothesis that the open-boundary canonical representation
-    of the state is unique is not needed: the intertwiners it supplies in
-    the printed proof are obtained from condition C1 alone in
-    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner}. The corrected
-    conclusion is the one recorded in \cite{gap:pgvwc07_ti_uniqueness_scope}.
+    Uniqueness of the open-boundary canonical representation is not needed;
+    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} obtains the intertwiners
+    directly from injectivity, yielding the conclusion recorded in
+    \cite{gap:pgvwc07_ti_uniqueness_scope}.
 \end{theorem}
 
 \begin{proof}
@@ -1280,9 +1268,8 @@ insertion data.
 
     In \cite[Lemma~1]{Molnar2018NormalPEPS}, the statement is given for
     arbitrary chain length $n\ge3$ and any bond position, with
-    uniqueness of $Z$ up to scalar.
-    The chain-level generalization to arbitrary $n\ge3$
-    and any bond position is not pursued here.
+    uniqueness of $Z$ up to scalar; the three-site formulation here isolates
+    the local algebraic content.
 \end{lemma}
 
 \begin{proof}

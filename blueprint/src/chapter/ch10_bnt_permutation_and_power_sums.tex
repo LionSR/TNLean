@@ -6,9 +6,6 @@ and per-block gauge phases. The argument turns the eventual equality of spans
 into an invertible change-of-basis matrix, then analyses its asymptotics through
 the overlaps.
 
-The change-of-basis matrix is now used to match the blocks. We first treat
-equal block counts, then remove that restriction.
-
 \begin{theorem}[Permutation rigidity for equal block counts]
     \label{thm:bnt_perm_same_card}
     \lean{MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho}
@@ -84,16 +81,14 @@ equal block counts, then remove that restriction.
     permutation conclusion.
 \end{proof}
 
-The two preceding results obtain the block matching from the asymptotic
-orthonormality of the overlaps. The same matching is obtained by the exact
-sector comparison of Section~\ref{sec:sector_bnt_strong_match}, which pairs the
-sectors of two canonical forms through a bijection fixed by their bond
-dimensions and gauge-phase equivalences. The proof of the Fundamental Theorem
-in Chapter~\ref{ch:ft_proof} proceeds through the sector comparison.
+The asymptotic orthonormality of overlaps matches the blocks up to a
+permutation and gauge phases. Section~\ref{sec:sector_bnt_strong_match}
+establishes the exact sector counterpart used in the Fundamental Theorem
+(Chapter~\ref{ch:ft_proof}).
 
-The same overlap dichotomy also shows that the MPV states of distinct normal
-blocks are non-proportional at arbitrarily large lengths; this is an input to
-the exact sector matching later in the chapter.
+The overlap dichotomy also shows that the MPV states of distinct normal
+blocks are non-proportional at arbitrarily large lengths, which enters the
+exact sector matching.
 
 \begin{theorem}[Non-equivalent irreducible TP blocks are eventually non-proportional]
     \label{thm:not_gauge_phase_eventually_not_proportional}

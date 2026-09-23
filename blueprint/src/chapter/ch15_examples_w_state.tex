@@ -121,15 +121,12 @@ left and a right boundary vector rather than by a trace.
 \begin{remark}[No fixed-bond translation-invariant family]%
     \label{rem:w_state_ti_bound}
     \uses{def:w_tensor}
-    The open-boundary representation above is not translation invariant: the
-    chain is closed by boundary vectors, not by a trace. The review observes
-    that there is no translation-invariant representation whose bond dimension
-    is bounded independently of $N$: any translation-invariant matrix product
-    state equal to $\ket{W_N}$ must have bond dimension growing with $N$,
-    satisfying a bound of the form $D^3\log D=\Omega(N)$. The review obtains
-    this by combining the matrix product state representation theory of
-    \cite{PerezGarcia2007Matrix} with the quantitative quantum Wielandt
-    inequality. That asymptotic lower bound is not used in the present example.
+    The open-boundary representation in Definition~\ref{def:w_tensor} uses
+    boundary vectors. Any translation-invariant matrix product state
+    representing $\ket{W_N}$ with periodic boundary conditions requires a bond
+    dimension growing with system size, $D^3\log D=\Omega(N)$, by the
+    representation theory of \cite{PerezGarcia2007Matrix} and the quantum
+    Wielandt inequality \cite{Cirac2021Matrix}.
     % Paper-gap note: docs/paper-gaps/rmp_w_state_ti_bound.tex.
 \end{remark}
 
