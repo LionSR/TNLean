@@ -26,6 +26,7 @@ CmdLine
   -n 39  # Double-space heuristic.
   -n 26  # Space-before-punctuation heuristic; false positive on tenkz range syntax `..`.
   -n 27  # Input-following ("Could not execute LaTeX command"): the chapter aggregators use `\input{chapter/...}` paths that only resolve when a parent is linted first, so linting a chapter file standalone floods this non-actionable warning depending on file order.
+  -n 33  # Quote-closing heuristic; false positive on backtick markup in TeX sources.
   -n 40  # Punctuation around inline math heuristic.
   -n 45  # Display-math delimiter heuristic.
 }
