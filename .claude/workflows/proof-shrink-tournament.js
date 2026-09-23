@@ -37,13 +37,17 @@ verified these facts you can build on without re-deriving:
 - Mirror files: 84 exact vertical<->horizontal rename pairs; TorusWindowFamilyVertical.lean
   (413 ln) is a declared hand-transpose; UnionInjectivityGeneralBlue.lean (415 ln) a declared
   blue mirror. Generic transport exists (PEPS/IsoTransport.lean) but is barely used.
-- 29 numbered-sequel files / ~14.3k lines remain (CoarseThreeSite2..11, Recovery2..11,
-  TorusWindowChain2/4/5/6, UnionInjectivityOverlap3, UnionInjectivityGeneral2,
-  CoherentFrameInstance2, ThreeBlockResonate2, GaugeInjectivity2; the authoritative list is
-  NUMBERED_DEBT_ALLOWLIST in scripts/check_numbered_lean_files.py). The torus window peeling
-  chain and most of the overlapping-union chain have since been renamed to concept names
+- 20 numbered-sequel files / ~11.0k lines remain (CoarseThreeSite4..11, Recovery2..4/7..9,
+  TorusWindowChain2/4/5/6, UnionInjectivityOverlap3, UnionInjectivityGeneral2;
+  the authoritative list is NUMBERED_DEBT_ALLOWLIST in scripts/check_numbered_lean_files.py).
+  The torus window peeling chain, coarse-three-site coherent frame, recovery endpoints/transfer,
+  and overlapping-union chain have since been renamed to concept names
   (TorusWindowPeeling.lean and TorusWindowPeeling/, UnionInjectivityOverlapSetup.lean,
-  UnionInjectivityOverlapBridge.lean).
+  UnionInjectivityOverlapBridge.lean, BlockingDataEdgeGauge.lean,
+  RegionBlock/GaugeInjectivityBoundaryCoupling.lean,
+  RegionBlock/RecoveryOutRegionEndpoint.lean,
+  RegionBlock/RecoveryCoefficientTransfer.lean,
+  RegionBlock/CoarseThreeSiteCoherentFrame.lean).
   UnionInjectivity.lean vs UnionInjectivityGeneral2.lean share 485 identical lines.
 - Three BNT carrier generations (IsCPSVBasisOfNormalTensors 18 files, IsBNT 10,
   IsBNTCanonicalForm 33) plus superseded IsNormalCanonicalFormBNT (3 files).
