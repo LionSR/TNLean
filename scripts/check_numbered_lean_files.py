@@ -38,7 +38,6 @@ NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
         "TNLean/PEPS/RegionBlock/Recovery7.lean",
         "TNLean/PEPS/RegionBlock/Recovery8.lean",
         "TNLean/PEPS/RegionBlock/Recovery9.lean",
-        "TNLean/PEPS/RegionBlock/ThreeBlockResonate2.lean",
         "TNLean/PEPS/RegionBlock/UnionInjectivityGeneral2.lean",
         "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3.lean",
         "TNLean/PEPS/TorusWindowChain2.lean",
