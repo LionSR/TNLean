@@ -2423,7 +2423,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   · exact absurd hr hwnotred
   ```
 - **Seen:** 8 occurrences in `TNLean/PEPS/RegionBlock/`
-  (`CoarseThreeSite3.lean:89`, `ThreeBlockResonate.lean:97`,
+  (`CoarseThreeSiteCoherentFrame.lean:381`,
+  `ThreeBlockResonate.lean:97`,
   `UnionInjectivityGeneral.lean:95`, +5).
 - **Abstraction (proposed):** a case-elimination lemma on the three-region
   cover (membership in red/blue/crossing regions) stated once in the

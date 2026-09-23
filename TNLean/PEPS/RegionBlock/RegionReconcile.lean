@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.RegionBlock.Recovery11
+import TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer
 
 /-!
 # Region physical-to-virtual recovery: the block-endpoint inversion (region-injective)
@@ -33,7 +33,8 @@ The contributions here are non-circular and use only blocked-region injectivity:
   in-region endpoint. It uses no single-vertex spanning.
 
 These are the region-injective replacements for the steps that
-`TNLean.PEPS.RegionBlock.Recovery9`/`Recovery10`/`Recovery11` performed with the
+`TNLean.PEPS.RegionBlock.Recovery9` and
+`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer` performed with the
 single-vertex realization (which needs `IsVertexInjective` through the spanning
 `span_stateOpenCoeff_eq_top`).
 
@@ -63,7 +64,7 @@ weights. The inner-sum realization `region_innerSum_eq_realized`
 in-region endpoint operator of `N.transpose`, applied to the second tensor's region
 weight vector at the reindexed boundary configuration, evaluated at the endpoint
 leg. This is the second-tensor counterpart of the v-side row `vSideRow`
-(`TNLean.PEPS.RegionBlock.Recovery10`), which reads the *first* tensor's operator on
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`), which reads the *first* tensor's operator on
 the same weight vectors; matching the two rows is the coefficient transfer. -/
 
 /-- **The complement row as the second tensor's in-region endpoint operator.** At a
@@ -76,7 +77,7 @@ This is `region_innerSum_eq_realized` (`TNLean.PEPS.RegionBlock.Recovery2`)
 specialized to the second tensor with the boundary configuration
 `(regionComplementBoundaryConfigEquiv B R).symm w`. It exposes the complement row of
 `regionComplementRow` (`TNLean.PEPS.RegionBlock.Recovery7`) in the same form as the
-v-side row `vSideRow` (`TNLean.PEPS.RegionBlock.Recovery10`), so the coefficient
+v-side row `vSideRow` (`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`), so the coefficient
 transfer becomes the agreement of the two operators on the same weight vectors.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
@@ -101,7 +102,7 @@ theorem regionComplementRow_eq_regionInsertionOp (B : Tensor G d) (R : Finset V)
 /-! ### The coefficient transfer from agreement of the two endpoint operators
 
 The v-side factorization `regionInsertedCoeff_eq_complement_blockedMap_vSideRow`
-(`TNLean.PEPS.RegionBlock.Recovery10`) writes the first tensor's region-inserted
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`) writes the first tensor's region-inserted
 coefficient of `M`, as a function of the complement physical configuration, as the
 second tensor's complement blocked tensor map of the v-side row `vSideRow`. The
 B-side factorization `regionInsertedCoeff_eq_complement_blockedMap`
@@ -144,7 +145,7 @@ and the explicit complement row `regionComplementRow B R f N σ` (read by
 `regionComplementRow_eq_regionInsertionOp` as the second tensor's operator on the
 same weight vectors). The hypothesis matches them, so `hCB` injectivity forces the
 coefficients equal through `regionInsertedCoeff_eq_of_complementRow_eq`
-(`TNLean.PEPS.RegionBlock.Recovery10`). The argument is region-injective: it inverts
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`). The argument is region-injective: it inverts
 only the second tensor's complement block, never the single vertex `v`.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
@@ -178,11 +179,11 @@ theorem coeffTransfer_of_endpointOp_eq (A B : Tensor G d) (R : Finset V)
 /-! ### The symmetric reduction: coefficient transfer through the region block
 
 The σ-side mirror of `regionInsertedCoeff_eq_of_complementRow_eq`
-(`TNLean.PEPS.RegionBlock.Recovery10`). Fixing the complement physical
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`). Fixing the complement physical
 configuration `τ`, the first tensor's region-inserted coefficient of `M` factors, as
 a function of the region physical configuration `σ`, through the second tensor's
 region blocked tensor map with row `complSideRow A B R f hvAout M τ`
-(`regionInsertedCoeff_eq_region_blockedMap_B`, `Recovery10`); the second tensor's
+(`regionInsertedCoeff_eq_region_blockedMap_B`, `RecoveryCoefficientTransfer`); the second tensor's
 region-inserted coefficient of `N` factors through the *same* map with the explicit
 region row `regionRegionRow B R f N τ` (`regionInsertedCoeff_eq_region_blockedMap`,
 `Recovery7`). Region-block injectivity (`hRB`) forces the coefficients equal when the
@@ -197,7 +198,7 @@ equals that of `N` in the second at every physical configuration.
 
 Both rows are rows of the same injective region blocked tensor map of `B` (`hRB`):
 the first tensor's coefficient is its map of `complSideRow` by
-`regionInsertedCoeff_eq_region_blockedMap_B` (`Recovery10`), the second tensor's of
+`regionInsertedCoeff_eq_region_blockedMap_B` (`RecoveryCoefficientTransfer`), the second tensor's of
 `regionRegionRow` by `regionInsertedCoeff_eq_region_blockedMap` (`Recovery7`). This
 is the σ-side mirror of `regionInsertedCoeff_eq_of_complementRow_eq`; it inverts only
 the second tensor's region block.
@@ -311,7 +312,7 @@ single-vertex injectivity.
 **Scope (multiplicativity hypothesis):** the datum is parametric in the
 forward-transfer multiplicativity `hmul`. The hypothesis is discharged by the
 coherent-frame route: `exists_regionEdgeGauge_of_blockingData`
-(`TNLean.PEPS.CoherentFrameInstance2`) derives both coefficient transfers and the
+(`TNLean.PEPS.BlockingDataEdgeGauge`) derives both coefficient transfers and the
 forward multiplicativity existentially from one-edge blocking data, with no
 single-vertex injectivity of the original tensors. The
 block-endpoint inversions above (`coeffTransfer_of_endpointOp_eq`,

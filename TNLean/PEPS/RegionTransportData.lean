@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionTransport
-import TNLean.PEPS.RegionBlock.CoarseThreeSite2
+import TNLean.PEPS.RegionBlock.CoarseThreeSiteCoherentFrame
 
 /-!
 # Transport of one-edge blocking data along a graph isomorphism

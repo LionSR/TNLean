@@ -611,7 +611,7 @@ left inverse reads the complement coupling coefficient `threeBlockComplCoeff` of
 the blue inversion, at a fixed complement physical leg. This is the region analogue
 of `resonate_invert_right_endpoint` (`TNLean.PEPS.InsertionRealization`) and the
 single-block analogue of `transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow`
-(`TNLean.PEPS.RegionBlock.Recovery11`), now at the blue endpoint block. -/
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`), now at the blue endpoint block. -/
 
 open scoped Classical in
 /-- **The fused host weight through the blue blocked map.** The blue interior bond
