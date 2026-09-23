@@ -236,7 +236,7 @@ coefficient functions, independent of any state-dependent boundary inner product
 \begin{lemma}[Ambient-space dimension]\label{lem:nsite_space_finrank}
     \lean{MPSTensor.nSiteSpace_finrank}
     \leanok
-    The above coefficient space satisfies
+    The ambient space of $L$-site tensors satisfies
     $\dim(\Fin{d}^{L}\to\C)=d^L$.
 \end{lemma}
 
@@ -688,8 +688,10 @@ conventions.
 \begin{proof}
     \leanok
     \uses{thm:fnw_limit_map_projection, thm:fnw_transfer_absorbs_limit, thm:fnw_limit_absorbs_transfer}
-    Write $E=E_{\mathrm{FNW},A}$ and $P=E_\infty^\rho$. The three preceding
-    identities give
+    Write $E=E_{\mathrm{FNW},A}$ and $P=E_\infty^\rho$. The identities of
+    Theorem~\ref{thm:fnw_limit_map_projection},
+    Theorem~\ref{thm:fnw_transfer_absorbs_limit}, and
+    Theorem~\ref{thm:fnw_limit_absorbs_transfer} give
     $EP=PE=P^2=P$, and hence $E^mP=P$ for every $m\geq0$. The case $n=1$ is
     immediate. If $(E-P)^n=E^n-P$, then
     \begin{align}
@@ -1173,6 +1175,8 @@ product.
     $E_{\mathrm{FNW},A}^n-E_\infty^\rho$.  Multiply by $c_\rho>0$ and take
     $C_\lambda=c_\rho C_0$.
 \end{proof}
+
+The theorem does not identify $C_\lambda$ with $k^2$ or identify the FNW auxiliary dimension $k$ with the chosen bond dimension $D$.
 
 \subsection{The weighted FNW boundary estimate}
 \label{subsec:fnw_weighted_boundary_estimate}
@@ -2299,8 +2303,8 @@ space.
 
 \section{The geometric form of the FNW projector estimate}
 
-Nachtergaele imports the projector estimate of the previous section in the
-rational geometric form
+Nachtergaele imports the projector estimate of
+Theorem~\ref{thm:primitive_fnw_projector_defect} in the rational geometric form
 \begin{align}
     \left\lVert
     G_{\Lambda_n}G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}
@@ -2311,10 +2315,9 @@ rational geometric form
 \end{align}
 stated in \cite[lines~1180--1194]{Nachtergaele1996Spectral} and again for the
 best overlap constant $A^\alpha_m$ in
-\cite[Equation~(6.1)]{Nachtergaele1996Spectral}.  The results below derive
-this bound from the FNW coefficient $a(m)(1+a(m))/a_-(m)$, the
-lower-boundary inequality $1-a(m)\leq a_-(m)$, and the prescribed-rate estimate
-$a(m)\leq c\lambda^m$.
+\cite[Equation~(6.1)]{Nachtergaele1996Spectral}.  This bound follows from the
+FNW coefficient $a(m)(1+a(m))/a_-(m)$, the lower-boundary inequality
+$1-a(m)\leq a_-(m)$, and the prescribed-rate estimate $a(m)\leq c\lambda^m$.
 
 \textbf{Scope restriction (FNW overlap bound rate and prefactor):}
 Two features of the source's display are not reproduced, and the statements
@@ -2935,9 +2938,12 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \uses{thm:primitive_ground_space_gram_geometric_inverse_bounds, thm:inverse_gram_identities}
     Invertibility of
     $(\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}}=\mathcal K_n$
-    implies injectivity of $\Gamma_n^{\mathrm{ES}}$.  The inverse-Gram
-    identities identify $S_{\Gamma_n^{\mathrm{ES}}}$ with
-    $\mathcal K_n^{-1}$, so the preceding pointwise bounds apply unchanged.
+    implies injectivity of $\Gamma_n^{\mathrm{ES}}$. The inverse-Gram
+    identities of Theorem~\ref{thm:inverse_gram_identities}
+    identify $S_{\Gamma_n^{\mathrm{ES}}}$ with $\mathcal K_n^{-1}$, so the
+    pointwise bounds of
+    Theorem~\ref{thm:primitive_ground_space_gram_geometric_inverse_bounds} apply
+    unchanged.
 \end{proof}
 
 \begin{theorem}[Geometric smallness at the C3 correction lengths]
@@ -3035,9 +3041,10 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \uses{thm:primitive_ground_space_gram_eventual_inverse_bound, thm:inverse_gram_identities}
     Eventual invertibility of
     $(\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}}$ implies eventual
-    injectivity of $\Gamma_n^{\mathrm{ES}}$.  The inverse-Gram identities then
-    identify $S_{\Gamma_n^{\mathrm{ES}}}$ with $\mathcal K_n^{-1}$, and the
-    preceding estimate applies.
+    injectivity of $\Gamma_n^{\mathrm{ES}}$.  The inverse-Gram identities of
+    Theorem~\ref{thm:inverse_gram_identities} then identify
+    $S_{\Gamma_n^{\mathrm{ES}}}$ with $\mathcal K_n^{-1}$, and the estimate of
+    Theorem~\ref{thm:primitive_ground_space_gram_eventual_inverse_bound} applies.
 \end{proof}
 
 \begin{definition}[Injective range-projector candidate]
