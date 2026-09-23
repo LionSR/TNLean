@@ -465,7 +465,8 @@
 \begin{proof}
     \uses{thm:repeated_blocks_phase_power_mpv, thm:gauge_phase_mpv_scaling}
     \leanok
-    Take $\xi$ to be the reciprocal of the phase of the preceding theorem, which
+    Take $\xi$ to be the reciprocal of the phase from
+    Theorem~\ref{thm:repeated_blocks_phase_power_mpv}, which
     is nonzero because it has modulus one.  Rescaling every matrix of a block
     by $\xi$ multiplies its length-$N$ vector by $\xi^{N}$, and the two powers
     cancel.
@@ -527,7 +528,7 @@
     \uses{thm:roots_of_unity_determine_period}
     \leanok
     The two spectra are respectively the sets of $m$-th and $n$-th roots of
-    unity, so the preceding theorem applies.
+    unity, so Theorem~\ref{thm:roots_of_unity_determine_period} applies.
 \end{proof}
 
 \begin{theorem}[Repeated periodic blocks have the same period]
@@ -542,8 +543,10 @@
     \uses{thm:repeated_blocks_peripheral_spectrum, %
         thm:spectral_period_eq_of_peripheral_spectrum}
     \leanok
-    Repeated blocks have the same peripheral spectrum. The preceding theorem
-    then identifies their periods.
+    Repeated blocks have the same peripheral spectrum by
+    Theorem~\ref{thm:repeated_blocks_peripheral_spectrum}.
+    Theorem~\ref{thm:spectral_period_eq_of_peripheral_spectrum} then
+    identifies their periods.
 \end{proof}
 
 \begin{lemma}[Pure similarities preserve periodic overlap hypotheses]
@@ -714,11 +717,12 @@
     to block-diagonal tensors with a single scalar weight per block.
 \end{theorem}
 \begin{proof}\leanok
-    Repeat the coefficient argument above with the singleton coefficients
-    $\mu_j^N$ and $\nu_k^N$.  Their nonvanishing at every length replaces the
-    geometric-extrapolation step.  Equality with the two scalar-weight direct
-    sums transports the positive-length proportionality relation to the
-    corresponding block-diagonal tensors.
+    Repeat the argument of
+    Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} with the
+    singleton coefficients $\mu_j^N$ and $\nu_k^N$.  Their nonvanishing at
+    every length replaces the geometric-extrapolation step.  Equality with the
+    two scalar-weight direct sums transports the positive-length
+    proportionality relation to the corresponding block-diagonal tensors.
 \end{proof}
 
 \begin{theorem}[Finite matching from the periodic overlap dichotomy]

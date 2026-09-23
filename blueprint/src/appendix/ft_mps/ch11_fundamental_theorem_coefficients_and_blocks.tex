@@ -107,8 +107,11 @@ coefficient identification from the linear independence of the BNT basis.
 \section{The scalar-threaded proportional identity}
 \label{sec:app_ft_proportional_scalar}
 
-For proportional total MPVs, coefficient extraction carries a global
-length-dependent scalar $c_N$ relating the two MPV families across all sectors.
+For proportional total MPVs, coefficient extraction retains the single scalar
+that relates the two total vectors at each length. This identity is exact, but
+it does not imply the scalar-free identity needed to recover copy weights; the
+counterexample in Remark~\ref{rem:proportional_length_scalar_gap} shows that no
+such implication is possible.
 
 \begin{lemma}[Proportional matched-phase coefficient identity, scalar-threaded]%
     \label{lem:sector_bnt_coeff_identity_via_matched_mpv_phase_proportional}
@@ -237,10 +240,10 @@ transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}
 \section{Additional proportional consequences}
 \label{sec:app_ft_conditional_proportional}
 
-When copy weights or coefficients satisfy explicit matching relations beyond
-proportionality, global direct-sum gauges can be constructed directly (see
-Remark~\ref{rem:proportional_length_scalar_gap} regarding the general
-proportional setting).
+The following implications are useful when copy weights satisfy extra
+relations. They are not conclusions of CPSV16 Theorem~2.10. In particular,
+their additional hypotheses fail for the proportional BNT forms in
+Remark~\ref{rem:proportional_length_scalar_gap}.
 
 \begin{theorem}[Additional proportional global gauge under copy-weight matching]%
     \label{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}

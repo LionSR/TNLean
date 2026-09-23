@@ -1,12 +1,10 @@
 \section{Direct-sum separation and prepared-family bookkeeping}
 \label{sec:app_bnt_separation_supplier}
 
-This section establishes the direct-sum separation and block-injectivity results
-for Chapter~\ref{ch:bnt}. Following Pérez-García et
-al.~\cite{PerezGarcia2007Matrix}, disjoint local MPS spaces yield pair-trace
-selectors whose products isolate individual BNT blocks. Grouping
-phase-equivalent blocks into sectors preserves total bond dimension and allows
-projective weight normalization.
+Following Pérez-García et al.~\cite{PerezGarcia2007Matrix}, disjoint local MPS
+spaces yield pair-trace selectors whose products isolate individual BNT blocks.
+Grouping phase-equivalent blocks into sectors preserves total bond dimension and
+allows projective weight normalization.
 
 \begin{lemma}[Three-block separation of distinct BNT representatives]
     \label{lem:bnt_direct_sum_injective_prefix_word_span}
@@ -63,7 +61,7 @@ projective weight normalization.
         \label{eq:app_bnt_common_three_block_vector}
     \end{align}
     Injectivity at $S$ gives $X\ne0$ and $Y\ne0$. Split every length-$S$ word
-    as $uvw$ with $|u|=|v|=|w|=L$. Equality~(\ref{eq:app_bnt_common_three_block_vector})
+    as $uvw$ with $|u|=|v|=|w|=L$. Relation (\ref{eq:app_bnt_common_three_block_vector})
     gives
     \begin{align}
         \tr(XA^k_uA^k_vA^k_w)
@@ -289,10 +287,10 @@ projective weight normalization.
 
 \begin{proof}\leanok\uses{lem:collapsed_bnt_sector_decomp_total_dim, lem:prepared_phase_class_dim_eq}
     Every assigned summand shares the bond dimension of its representative, by
-    the equal-dimension fact above. The displayed regrouping identity in
-    Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim} then identifies the
-    collapsed sum over pairs $(j,q)$ with $\sum_{k=1}^{r}D_k$, the original
-    direct-sum dimension.
+    Lemma~\ref{lem:prepared_phase_class_dim_eq}. The displayed regrouping
+    identity in Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim} then
+    identifies the collapsed sum over pairs $(j,q)$ with $\sum_{k=1}^{r}D_k$,
+    the original direct-sum dimension.
 \end{proof}
 
 \begin{theorem}[Projective weight normalization]%

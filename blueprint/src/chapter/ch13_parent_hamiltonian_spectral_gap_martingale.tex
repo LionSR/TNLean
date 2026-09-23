@@ -1051,7 +1051,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \uses{thm:spectator_boundary_hilbert_factorization}
     Apply the common-factorization projector identity to the two spectator
     boundary maps, the full boundary map, and their tail and left virtual maps.
-    The preceding range equalities identify the three physical ranges.
+    These range equalities identify the three physical ranges.
 \end{proof}
 
 \begin{theorem}[Arbitrary-increment mixed Gram of the overlapping spectator boundary maps]%
@@ -1108,7 +1108,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered}
     \leanok
     \uses{thm:spectator_boundary_mixed_gram, thm:fixed_point_gram_metric_exact}
-    Specialize the preceding theorem to $q=1$.  Let
+    Specialize Theorem~\ref{thm:spectator_boundary_mixed_gram} to $q=1$.  Let
     $X=(X_u)_{u\in\Fin d^K}$ and
     $Z=(Z_j)_{j\in\Fin d^1}$ be the resulting boundary families.  If
     $\rho\in\MN{D}$ has nonzero trace and
@@ -2407,8 +2407,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:open_ground_space_le_hamiltonian_kernel, thm:open_hamiltonian_kernel_le_ground_space}
-    The two preceding inclusions identify each space as a subspace of the
-    other, so antisymmetry gives the equality.
+    Combine the mutual inclusions
+    Theorem~\ref{thm:open_ground_space_le_hamiltonian_kernel} and
+    Theorem~\ref{thm:open_hamiltonian_kernel_le_ground_space}.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, equation En, lines 1060--1073.
@@ -2755,7 +2756,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{def:reassociated_tail_boundary_map, def:whole_increment_physical_reassociation, thm:spectator_boundary_mixed_gram}
     Expand the reassociated tail map.  Its adjoint introduces
-    $\mathscr A_{K,L,Q}^{-1}$, so the preceding coordinate formula applies.
+    $\mathscr A_{K,L,Q}^{-1}$, so the coordinate formula of
+    Theorem~\ref{thm:spectator_boundary_mixed_gram} applies.
 \end{proof}
 
 \begin{theorem}[Centered whole-increment mixed Gram]
@@ -2927,8 +2929,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:whole_increment_centered_residual_bound, thm:whole_increment_left_virtual_norm}
-    Substitute $\lVert J_Q^{\mathrm{left}}\rVert\leq1$ into the preceding
-    estimate.
+    Substitute $\lVert J_Q^{\mathrm{left}}\rVert\leq1$ from
+    Theorem~\ref{thm:whole_increment_left_virtual_norm} into
+    Theorem~\ref{thm:whole_increment_centered_residual_bound}.
 \end{proof}
 
 \begin{theorem}[Primitive whole-increment centered residual bound]
@@ -3030,9 +3033,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:left_finite_gram_cancellation, thm:reassociated_tail_boundary_factorization, thm:inverse_gram_identities}
-    The left identity is the preceding finite-Gram cancellation at length
-    $K+L$.  For the tail identity, cancel the fiberwise Gram with its inverse
-    and take the adjoint of the reassociated tail factorization.
+    The left identity is the finite-Gram cancellation of
+    Theorem~\ref{thm:left_finite_gram_cancellation} at length $K+L$.  For the
+    tail identity, cancel the fiberwise Gram with its inverse and take the
+    adjoint of the reassociated tail factorization.
 \end{proof}
 
 \begin{definition}[Whole-increment tail finite-Gram correction]
@@ -3791,9 +3795,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     statement. It applies the full-range estimate with
     $d_{l+1}=\gamma_{l+1}=1$ and retains the coefficient of Theorem~2.1(i) in
     \cite{Nachtergaele1996Spectral}. It is not a formulation of the
-    unrestricted source theorem. The primitive existential theorem below
-    supplies the full-range C3 hypothesis from the physical open-chain
-    estimates.
+    unrestricted source theorem.
+    Theorem~\ref{thm:primitive_open_parent_hamiltonian_gap} supplies the
+    full-range C3 hypothesis from the physical open-chain estimates.
 \end{theorem}
 
 \begin{proof}
