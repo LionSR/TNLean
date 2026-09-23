@@ -56,6 +56,8 @@
          & =\operatorname{unvec}(z)\,(\sqrt\rho)^{-1}.
     \end{align}
     Thus the weighted matrix space has complex Hilbert dimension $D^2$.
+    This Euclidean realization is not asserted as a result of Fannes,
+    Nachtergaele, and Werner.
 \end{definition}
 
 \subsection{Nested ground projections and martingale differences}%
@@ -605,6 +607,8 @@ The tail and left boundary maps embed virtual-space data into a common
 ambient $(K+L)$-site Hilbert space.  This places the overlapping ground
 spaces as ranges of linear maps on the same ambient space, a necessary
 step before their projectors can be compared in the martingale condition.
+All statements are exact algebraic identities; no FNW contraction or
+norm estimate is derived here.
 
 \begin{definition}[Prefix restriction]\label{def:prefix_restrict}
     \lean{MPSTensor.prefixRestrictₗ, MPSTensor.prefixRestrictₗ_apply}
@@ -1079,9 +1083,11 @@ step before their projectors can be compared in the martingale condition.
     fixed by
     $\tr(A^{\tau,j}X_u)=\tr(A^\tau(A^jX_u))$ and
     $\tr(A^{u,\tau}Z_j)=\tr(A^\tau(Z_jA^u))$.
-    The one-site identity is the specialization $q=1$.  This provides the
-    algebraic whole-increment identity of condition C3$'$ in
-    \cite[Equation~(2.5)]{Nachtergaele1996Spectral}.
+    The one-site identity is the specialization $q=1$.  This is the exact
+    algebraic whole-increment identity relevant to condition C3$'$ in
+    \cite[Equation~(2.5)]{Nachtergaele1996Spectral}; it does not prove the
+    norm estimate, uniformity in $q$, or any numerical contraction required
+    there.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -3667,7 +3673,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094.
-\begin{theorem}[Open-chain martingale condition C3]
+\begin{theorem}[Literal open-chain martingale condition C3]
     \label{thm:literal_open_chain_martingale_c3}
     \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold}
     \leanok
@@ -3711,7 +3717,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
 % proof of Theorem 2.1(i), lines 1178--1259.
-\begin{theorem}[Fixed-final-volume martingale condition C3]
+\begin{theorem}[Literal fixed-final-volume martingale condition C3]
     \label{thm:literal_fixed_volume_martingale_c3}
     \lean{MPSTensor.fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator,
@@ -4146,6 +4152,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
         \delta\operatorname{Re}\langle Hv,v\rangle
          & \leq\operatorname{Re}\langle Hv,Hv\rangle.
     \end{align}
+    The coefficient for general $R$ is derived here and is not attributed to
+    the cited papers.
     % Its source comparison is recorded in
     % docs/paper-gaps/knabe88_finite_range_coefficient.tex.
 \end{theorem}
@@ -4518,11 +4526,16 @@ $d_{l+1}=\gamma_{l+1}=1$ and the same $\epsilon_l$ as in the source.
 
 \section{The normalized primitive gauge of a normal tensor}
 
-Gauging by the square root of a positive fixed point of the transfer map and
-rescaling its spectral radius to one puts a normal tensor into normalized primitive
-form, following \cite[Theorem~4]{PerezGarcia2007Matrix} and
-\cite[Section~3]{Nachtergaele1996Spectral}, yielding the finite-range spectral
-gap for general normal tensors.
+A normal tensor need not carry the trace-preserving normalization, nor need its
+transfer map have spectral radius one; normality alone forces neither.  Both
+normalizations are supplied without loss of generality by the sources:
+\cite[equations~(3.1)--(3.2b), lines~1394--1435]{Nachtergaele1996Spectral}
+rewrites the generalized valence-bond construction so that the two
+normalizations hold, and
+\cite[Theorem~4, lines~742--770]{PerezGarcia2007Matrix} opens its proof by
+assuming that the transfer map has spectral radius one and gauging by the
+square root of a positive fixed point.  This section carries out that step and
+uses it to state the finite-range gap for an arbitrary normal tensor.
 
 \begin{theorem}[Rescaling invariance of block injectivity and normality]
     \label{thm:normality_rescaling_invariance}
@@ -4785,8 +4798,8 @@ gap for general normal tensors.
     Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap} to
     $B$.  Since $G_L(A)=G_L(B)$ for every $L$,
     Theorem~\ref{thm:parent_hamiltonian_from_ground_space} makes the two
-    parent Hamiltonians equal, so both the kernel and the norm bound coincide.
-    Block injectivity of $B$ at length $l$ passes to $\zeta A$ by
+    parent Hamiltonians equal, so both the kernel and the norm bound transfer
+    verbatim.  Block injectivity of $B$ at length $l$ passes to $\zeta A$ by
     Lemma~\ref{lem:gauge_invariance_block_injective} applied to the inverse
     gauge, and from $\zeta A$ to $A$ by
     Theorem~\ref{thm:normality_rescaling_invariance}.
@@ -4843,7 +4856,7 @@ gap for general normal tensors.
     equivalently $(\sum_{i\in I}w_iP_i)v=0$ exactly when $P_iv=0$ for
     every $i\in I$.  For the empty family both sums are zero and all three
     kernels are the full space.  This is the analytic kernel step of the
-    blocked-sum comparison of
+    blocked-sum comparison in Lemma~\texttt{block-obc} of
     Rozmán--Molnár--Schuch\footnote{arXiv:2607.19078v1.}, in which the
     blocked parent Hamiltonian is a weighted sum $\sum_i\gamma_ih_i$ of
     positive local terms with $\gamma_i>0$.
@@ -4966,60 +4979,6 @@ gap for general normal tensors.
     the ground-space complement and a uniform positive constant.
 \end{proof}
 
-\begin{theorem}[Gap bound from cyclic overlap compression]
-    \label{thm:overlap_norm_gap_bound}
-    \leanok
-    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es, thm:parent_ground_space_es_kernel, rem:euclidean_local_projector_ingredients, lem:local_term_es_average, lem:transported_es_positive, lem:transported_es_local_projections, lem:transported_es_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction, lem:parent_hamiltonian_ordered_rowsum_gap, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap, lem:parent_hamiltonian_cyclic_overlap_norm_gap, thm:overlap_norm_gap_bound_constant}
-    Let $A$ be a tensor and let $L>1$. Suppose that, for every $N\ge2L$ and
-    every overlapping off-diagonal pair of cyclic length-$L$ windows,
-    \begin{align}
-        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-         & \le
-        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
-        \|h_{i,\mathrm{ES}}v\|.
-        \notag
-    \end{align}
-    Then the parent Hamiltonian has the explicit gap constant
-    $\gamma_L:=1/(4L)>0$.
-    Concretely, if $N\ge2L$ and
-    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$, then
-    $\gamma_L\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The local averaging, positivity, and symmetric-projection statements are now
-    established in Lemmas~\ref{lem:local_term_es_average},
-    \ref{lem:transported_es_positive},
-    and~\ref{lem:transported_es_local_projections}.
-    Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
-    theorem to the remaining MPS-specific task: deriving the uniform
-    quadratic-form estimate. Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
-    establishes the finite-sum algebra from ordered cross-term row bounds, while
-    Lemma~\ref{lem:parent_hamiltonian_anticommutator_rowsum_gap} records the
-    source anticommutator martingale condition.
-    Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic}
-    and~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap} state
-    the common finite-overlap ordered-cross-term specialization with
-    $m=2(L-1)$.
-    Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
-    positivity statement for site-disjoint windows, and
-    Lemma~\ref{lem:cyclic_window_nonoverlap_positive} translates this to the
-    concrete support-disjoint cyclic windows.
-    Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the finite-overlap
-    row-cardinality bound.
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}
-    combines these results with the finite-overlap reduction, so the only
-    additional input is the ordered anticommutator or cross-term estimate for
-    overlapping cyclic windows.
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a
-    sufficient norm-compression formulation. It is the constant-compression
-    statement of Theorem~\ref{thm:overlap_norm_gap_bound_constant} at
-    $\eta = \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}$.
-    Since $1-\eta\,2(L-1)=1/(4L)$, the displayed hypothesis gives the stated
-    lower bound with $\gamma_L=1/(4L)$.
-\end{proof}
-
 \begin{theorem}[Gap bound from a cyclic anticommutator estimate]
     \label{thm:anticommutator_gap_bound}
     \leanok
@@ -5050,95 +5009,14 @@ gap for general normal tensors.
     and the anticommutator inequality is retained as an explicit hypothesis.
 \end{proof}
 
-\begin{theorem}[Gap bound from a strict cyclic compression constant]
-    \label{thm:overlap_norm_gap_bound_constant}
-    \leanok
-    \uses{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
-    Let $L>1$. Put $m=2(L-1)$. Suppose that there is a constant $\eta\ge0$
-    such that $\eta m<1$, and suppose that, for every $N\ge2L$ and every
-    overlapping off-diagonal pair of cyclic length-$L$ windows,
-    \begin{align}
-        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-         & \le
-        \eta\,\|h_{i,\mathrm{ES}}v\|.
-        \notag
-    \end{align}
-    Then the parent Hamiltonian has the gap constant $1-\eta m>0$. Concretely,
-    if $N\ge2L$ and $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$, then
-    $(1-\eta m)\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The cyclic-window compression reduction applies with $\gamma=1-\eta m$ to
-    the displayed hypothesis
-    \begin{align}
-        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-         & \le
-        \eta\,\|h_{i,\mathrm{ES}}v\|.
-        \notag
-    \end{align}
-    Since $\eta m<1$ the gap constant $1-\eta m$ is positive, and the
-    quadratic-form criterion converts the compression estimate into the stated
-    norm lower bound. The preceding fixed-coefficient theorem is the
-    specialization $\eta=(1-1/(4L))/(2(L-1))$.
-\end{proof}
-
-\begin{theorem}[Gap bound from a cyclic operator-product norm constant]
-    \label{thm:overlap_operator_norm_gap_bound_constant}
-    \leanok
-    \uses{lem:parent_hamiltonian_cyclic_overlap_operator_norm_constant_gap}
-    Let $L>1$. Put $m=2(L-1)$. Suppose there is a constant $\eta\ge0$ with
-    $\eta m<1$ and that, for every $N\ge2L$ and every overlapping off-diagonal
-    pair of cyclic length-$L$ windows,
-    \begin{align}
-        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-         & \le
-        \eta\,\|h_{j,\mathrm{ES}}v\|,
-        \notag
-    \end{align}
-    that is, a bound $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|\le\eta$ on the
-    operator-product norm rather than the directional bound of
-    Theorem~\ref{thm:overlap_norm_gap_bound_constant}. Then the parent
-    Hamiltonian has the gap constant $1-\eta m>0$. Concretely, if $N\ge2L$
-    and $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$, then
-    $(1-\eta m)\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
-    This is a conditional reduction. The local terms
-    $h_{i,\mathrm{ES}}=p_i$ are the \emph{excitation} projections. If their
-    overlapping ranges have a common nonzero vector, then
-    $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|=1$, so the hypothesis is
-    unsatisfiable for $\eta<1$ in that case. In degenerate cases, such as a
-    zero excitation projection, the operator-product norm can be smaller. In
-    any case this is not the quantity controlled by the cited principal-angle
-    estimates. The comparison is documented in
-    \cite{gap:cpgsv21_martingale_overlap}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    For every overlapping pair, the symmetric anticommutator reduction turns
-    the operator-product norm bound into
-    \begin{align}
-         & \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-        +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle   \\
-         & \qquad\ge -\eta\bigl(
-        \re\langle h_{i,\mathrm{ES}}v,v\rangle
-        +\re\langle h_{j,\mathrm{ES}}v,v\rangle\bigr).
-    \end{align}
-    The assumption $\eta m<1$ makes $\gamma=1-\eta m$ positive, and the
-    cyclic-window row-sum bounds then give the stated norm lower bound.
-\end{proof}
-
 \begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
     \label{thm:parent_hamiltonian_gapped}
-    \lean{MPSTensor.parentHamiltonian_gapped}
     \lean{MPSTensor.parentHamiltonian_gapped_of_anticommutator}
     \leanok
-    \uses{thm:anticommutator_gap_bound, thm:overlap_norm_gap_bound}
-    For a tensor $A$ and a range $L>1$, assume either the cyclic-window
-    anticommutator estimate of Theorem~\ref{thm:anticommutator_gap_bound} or
-    the stronger overlapping cyclic-window norm-compression estimate of
-    Theorem~\ref{thm:overlap_norm_gap_bound}. Then there exists $\gamma>0$
+    \uses{thm:anticommutator_gap_bound}
+    For a tensor $A$ and a range $L>1$, assume the cyclic-window
+    anticommutator estimate of Theorem~\ref{thm:anticommutator_gap_bound}.
+    Then there exists $\gamma>0$
     such that for every $N\ge2L$ and every vector
     $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$ one has
     $\gamma\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
@@ -5150,55 +5028,4 @@ gap for general normal tensors.
     \leanok
     This follows immediately from the corresponding explicit theorem by taking
     $\gamma$ to be the constant produced there.
-\end{proof}
-
-\begin{theorem}[Conditional spectral gap from a strict cyclic compression constant]
-    \label{thm:parent_hamiltonian_gapped_constant}
-    \lean{MPSTensor.parentHamiltonian_gapped_of_overlap_norm_constant}
-    \leanok
-    \uses{thm:overlap_norm_gap_bound_constant}
-    For a tensor $A$ and a range $L>1$, suppose there is a constant
-    $\eta\ge0$ such that $\eta\,2(L-1)<1$ and, for every $N\ge2L$ and every
-    overlapping off-diagonal pair of cyclic length-$L$ windows,
-    \begin{align}
-        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-         & \le
-        \eta\,\|h_{i,\mathrm{ES}}v\|.
-        \notag
-    \end{align}
-    Then there exists $\gamma>0$ such that, for every $N\ge2L$ and every
-    vector $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
-    $\gamma\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    This follows from Theorem~\ref{thm:overlap_norm_gap_bound_constant} by
-    taking $\gamma=1-\eta\,2(L-1)$.
-\end{proof}
-
-\begin{theorem}[Conditional spectral gap from an operator-product norm constant]
-    \label{thm:parent_hamiltonian_gapped_operator_norm_constant}
-    \lean{MPSTensor.parentHamiltonian_gapped_of_overlap_operator_norm_constant}
-    \leanok
-    \uses{thm:overlap_operator_norm_gap_bound_constant}
-    For a tensor $A$ and a range $L>1$, suppose there is a constant
-    $\eta\ge0$ such that $\eta\,2(L-1)<1$ and, for every $N\ge2L$ and every
-    overlapping off-diagonal pair of cyclic length-$L$ windows,
-    \begin{align}
-        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-         & \le
-        \eta\,\|h_{j,\mathrm{ES}}v\|.
-        \notag
-    \end{align}
-    Then there exists $\gamma>0$ such that, for every $N\ge2L$ and every
-    vector $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
-    $\gamma\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    This follows from
-    Theorem~\ref{thm:overlap_operator_norm_gap_bound_constant} by taking
-    $\gamma=1-\eta\,2(L-1)$.
 \end{proof}

@@ -32,9 +32,9 @@ state-equality `eq:resonate` is read three ways:
 
 The middle block `B₃` is the new structural ingredient: it is a third, separately
 invertible block disjoint from both endpoints. The two-block frame (region `R`
-against its set complement `univ \ R`) cannot state the middle-strip step
-(`threeBlock_middle_strip`), which strips the middle block while keeping the red
-and blue endpoint residual configurations quantified independently.
+against its set complement `univ \ R`) cannot state the middle-strip step, which
+strips the middle block while keeping the red and blue endpoint residual
+configurations quantified independently.
 
 ## Structure
 
