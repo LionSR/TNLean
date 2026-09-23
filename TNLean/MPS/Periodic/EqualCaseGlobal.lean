@@ -679,8 +679,10 @@ weaker than the source's irreducible form II, which additionally requires the
 unique fixed point to be diagonal. The source theorem assumes only irreducible
 form and asserts at lines 330--332 that one passes between the forms by a
 block-diagonal similarity; that passage is carried out in
-`fundamentalTheorem_periodic_equalCase_irreducibleForm`, which is the source
-statement itself. The present statement is the normalized half of that pair,
+`fundamentalTheorem_periodic_equalCase_irreducibleForm`, which receives the
+periods of the blocks as input, and of which the present statement is the
+normalized half. The source statement itself, with the periods derived, is
+`fundamentalTheorem_periodic_equalCase_derivedPeriods`. The normalized half is
 isolated because the periodic overlap dichotomy and the vanishing of an
 off-period block are available in the normalized orientation. -/
 theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition

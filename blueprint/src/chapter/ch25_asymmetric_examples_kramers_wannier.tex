@@ -81,11 +81,12 @@ square identity below. The normalized operators will be denoted
 $\mathcal D_N$ and $U_N$, not $D$.
 
 \begin{theorem}[Periodic kernel]
-    \label{lem:asymex_kw_kernel}
+    \label{thm:asymex_kw_kernel}
     \lean{KWExample.kwTensor_apply,
         KWExample.kwTensor_mpo_eq_prod,
         KWExample.kwTensor_mpo_eq_pow_sum}
     \leanok
+    \uses{def:asymex_kw}
 
     For all configurations $s',s$,
     \begin{align}
@@ -123,7 +124,7 @@ Unless indicated otherwise, site sums and products run over $I_N$.
         KWExample.kwTensor_mpo_mulVec_eq_zero_of_odd,
         KWExample.kwTensor_mpo_not_isUnit}
     \leanok
-    \uses{lem:asymex_kw_kernel}
+    \uses{thm:asymex_kw_kernel}
     For every $N>0$, the raw operator satisfies
     $K_N\eta=\eta K_N=K_N$. If $\eta v=-v$, then $K_Nv=0$.
     In particular, $K_N$ is not invertible.

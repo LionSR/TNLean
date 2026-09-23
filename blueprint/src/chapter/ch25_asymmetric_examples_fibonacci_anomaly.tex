@@ -75,7 +75,7 @@ Ref.~\cite{GarreRubio2023MPOSym}.
     \label{thm:asymex_fib_anomaly_fusion_algebra}
     \lean{FibonacciCompression.fibonacci_fusion_algebra}
     \leanok
-    \uses{def:asymex_fib_anomaly_nim, thm:asymex_fib_fusion}
+    \uses{def:asymex_fib_anomaly_nim}
     For every pair of labels $a,b\in\{1,\tau\}$ and every positive system
     size $N$, the periodic operators $O_a=O_a(N)=O_N(B_a)$ satisfy
     \begin{align}
@@ -132,6 +132,7 @@ Ref.~\cite{GarreRubio2023MPOSym}.
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_fib_fusion}
     The case $a=b=1$ is the admissibility projector composed with itself.
     The cases $\{a,b\}=\{1,\tau\}$ are the two unit laws, obtained by
     block-triangular compression over $\Z[\sigma]$ and transport to
@@ -146,8 +147,7 @@ Ref.~\cite{GarreRubio2023MPOSym}.
     \lean{FibonacciCompression.fibonacci_nim_rep,
         FibonacciCompression.mpo_fibOne_mulVec_chain}
     \leanok
-    \uses{def:asymex_fib_anomaly_nim, thm:asymex_fib_anomaly_fusion_algebra,
-        cor:asym_action_tensors}
+    \uses{def:asymex_fib_anomaly_nim, cor:asym_action_tensors}
     Set $s=\varphi^{-1/2}$, the scalar denoted by $\sigma$ in
     Definition~\ref{def:asymex_golden_ring}. On the physical alphabet
     $\{0,1\}$, with $0$ representing the trivial label and $1$
@@ -351,8 +351,7 @@ length zero.
     \label{thm:asymex_fib_anomaly_eigenvalue_zero}
     \lean{FibonacciCompression.fibTau_eigenvalue_eq_zero}
     \leanok
-    \uses{thm:asymex_fib_anomaly_fusion_algebra,
-        thm:asymex_fib_anomaly_integral_action}
+    \uses{def:asymex_fib, def:normal}
     Let $A$ be a word-normal tensor of physical dimension two and
     positive bond dimension, and set
     $\Psi_A(N)=\ket{V^{(N)}(A)}$. If a single scalar $c\in\C$ satisfies
@@ -362,6 +361,8 @@ length zero.
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_fib_anomaly_fusion_algebra,
+        thm:asymex_fib_anomaly_integral_action}
     By Theorem~\ref{thm:asymex_fib_anomaly_integral_action},
     $c=m$ for some $m\in\N$. Suppose $m\neq0$. Choose a positive
     injectivity length $\ell$ of $A$ and set $N=\ell+1$.

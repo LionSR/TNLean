@@ -599,12 +599,33 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     slots.
 \end{proof}
 
+\begin{proposition}[A vanishing remainder gives sitewise intertwiners]
+    \label{prop:asym_split_intertwiners}
+    \lean{MPSTensor.MultiBlockCompression.mul_right_eq_right_mul,
+        MPSTensor.MultiBlockCompression.left_mul_eq_mul_left}
+    \leanok
+    \uses{thm:asym_multiblock}
+    In the setting of Theorem~\ref{thm:asym_multiblock}, suppose that the
+    remainder vanishes, $R^i=0$ for every physical index $i$. Then for
+    every $i$ and every $s\in S$,
+    \begin{align}
+        B^iV_s & =V_sC_s^i, &
+        W_sB^i & =C_s^iW_s.
+    \end{align}
+\end{proposition}
+
+\begin{proof}
+    \leanok
+    Since $R^i=0$, $B^i=\sum_{t\in S}V_tC_t^iW_t$. Multiplying on the
+    right by $V_s$, or on the left by $W_s$, and using the
+    biorthogonality $W_tV_s=\delta_{ts}\id_{D_s}$ of clause (iv) leaves
+    only the term $t=s$.
+\end{proof}
+
 \begin{proposition}[Projector-weighted direct sums]
     \label{prop:asym_projector_weighted_sum}
     \lean{MPSTensor.MultiBlockCompression.ofProjectorSum,
-        MPSTensor.MultiBlockCompression.remainder_ofProjectorSum,
-        MPSTensor.MultiBlockCompression.mul_right_eq_right_mul,
-        MPSTensor.MultiBlockCompression.left_mul_eq_mul_left}
+        MPSTensor.MultiBlockCompression.remainder_ofProjectorSum}
     \leanok
     \uses{thm:asym_multiblock, lem:asym_triangular}
     Let the bond space of $B$ be $\C^m\otimes\C^{D}$ and let $\Pi_1,\ldots$
@@ -621,11 +642,12 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
-    \uses{lem:asym_triangular}
+    \uses{lem:asym_triangular, prop:asym_split_intertwiners}
     Conjugating by $U\otimes\id$ turns each $\Pi_{j(s)}$ into a matrix
     unit, so every letter becomes block diagonal with the blocks
     $\mu_sC_s^i$ at the positions $j(s)$ and zero blocks elsewhere; block
-    diagonality gives the triangular form, the vanishing remainder, and the
-    intertwining relations.
+    diagonality gives the triangular form and the vanishing remainder, and
+    Proposition~\ref{prop:asym_split_intertwiners} gives the intertwining
+    relations.
 \end{proof}
 

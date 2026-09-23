@@ -97,7 +97,7 @@ tensor entries, and determine the compression of their stacked products.
 \end{definition}
 
 \begin{theorem}[Physical kernels and unitarity]
-    \label{lem:asymex_z3_physical_kernels}
+    \label{thm:asymex_z3_physical_kernels}
     \lean{Z3Anomalous.mpo_uTensor_apply,
         Z3Anomalous.mpo_uDagTensor_apply_zpow,
         Z3Anomalous.mpo_uTensor_mulVec_single,
@@ -108,6 +108,7 @@ tensor entries, and determine the compression of their stacked products.
         Z3Anomalous.uTensor_isMPUPos,
         Z3Anomalous.uDagTensor_isMPUPos}
     \leanok
+    \uses{def:asymex_z3anomalous_tensors}
 
     For every $N>0$, the two bond-two tensors have kernels
     \begin{align}
@@ -193,8 +194,8 @@ tensor entries, and determine the compression of their stacked products.
     transpose of each bond matrix of $M$. Its entries satisfy
     $(M^\dagger)^{o,i}=\overline{M^{i,o}}$: the physical indices are
     exchanged, while the bond matrices are conjugated without
-    transposition. Lemmas~\ref{lem:asymex_z3_physical_kernels}
-    and~\ref{lem:asymex_z3_physical_cube} show that its periodic operator
+    transposition. Theorem~\ref{thm:asymex_z3_physical_kernels}
+    and Lemma~\ref{lem:asymex_z3_physical_cube} show that its periodic operator
     is $U_N^\dagger=U_N^{-1}=U_N^2$ for $N>0$.
 
     At $N=1$, the self-loop gives $F(t)=t_0$, so
@@ -511,8 +512,8 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
 
 \begin{proof}
     Theorem~\ref{thm:asymex_z3anomalous_defect_sum} and
-    Lemmas~\ref{lem:asymex_z3_physical_kernels}
-    and~\ref{lem:asymex_z3_physical_cube} give the formula for $P_L$.
+    Theorem~\ref{thm:asymex_z3_physical_kernels}
+    and Lemma~\ref{lem:asymex_z3_physical_cube} give the formula for $P_L$.
     Since $U_L^3=\Id$, each power $\Id,U_L,U_L^2$ occurs three times
     in $(\Id+U_L+U_L^2)^2$, so $P_L^2=P_L$.
     Also $U_L^\dagger=U_L^2$, hence $P_L^\dagger=P_L$.
