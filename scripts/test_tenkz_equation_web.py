@@ -434,7 +434,9 @@ def _assert_chapter_picture_layout(page: Page, filename: str) -> dict[str, int]:
         const anchor = container.closest('[id]')?.id;
         groups.push({anchor, boxes: boxes.length, needed, available, sameRow});
         if (needed <= available - 2 && !sameRow) {
-          issues.push({kind: 'unnecessary-break', anchor, needed, available});
+          issues.push({kind: 'unnecessary-break', anchor, needed, available,
+            html: container.outerHTML.slice(0, 4000),
+            rects: rects.map(rect => rect.toJSON())});
         }
       };
       for (const container of containers) {

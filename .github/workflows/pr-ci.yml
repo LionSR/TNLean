@@ -714,6 +714,14 @@ jobs:
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
 
+      - name: Preserve failed blueprint render
+        if: failure() && env.TEX_CHANGED == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: blueprint-render-failure
+          path: blueprint/web
+          retention-days: 3
+
       # A zero exit status says the build ran, not that the pages read. This
       # opens every generated page and measures what a reader would meet.
       - name: Test generated blueprint pages
