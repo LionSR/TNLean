@@ -33,7 +33,7 @@ since they are used without being named.
 | `TNLean/MPS/Periodic/SectorIrreducibility/ProjectionOrtho.lean` | `CanonicalForm.CyclicSectors` | `CanonicalForm.CyclicSectors.FixedAdjoint` (provides `commutes_letters_of_adjoint_fixed_projection`) |
 | `TNLean/MPS/Periodic/ProjectiveRep.lean` | `Periodic.Symmetry` | `MPS.Symmetry.Defs` (provides `twistedTensor`; the file never names a `Periodic.Symmetry` leaf) |
 | `TNLean/PEPS/InsertionAlgebra.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic`, `PEPS.EdgeMiddlePhysical.KernelDescent` |
-| `TNLean/PEPS/InsertionRealization.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic`, `PEPS.EdgeMiddlePhysical.KernelDescent` |
+| `TNLean/PEPS/InsertionRealization.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic` |
 
 ## Deviations from the survey table
 
@@ -46,16 +46,23 @@ handled on the evidence of the scan rather than the table.
   but that match is inside a comment, not a use. `Consequences` itself imports
   `Contraction`, so the single-leaf replacement the table gives is correct and
   is what was applied.
-- The two `PEPS` files. The table lists both `EdgeMiddlePhysical.Basic` and
-  `EdgeMiddlePhysical.KernelDescent` for each file. Neither file names any
-  `KernelDescent` declaration, so a name scan alone would justify `Basic`
-  only. `KernelDescent` was nonetheless retained per the table, on the
-  conservative reading that its `Decidable (IsIncidentTo …)` instance and its
-  `@[simp]` lemma (`edgeComplementValue_edgeComplementConfigSplitAt_symm`) are
-  the kind of invisible use a name scan misses. Both files build with the
-  linter enabled and no unused-import warning fires; if a later root build
-  proves `KernelDescent` dead in either file, dropping it is a one-line
-  follow-up.
+- The two `PEPS` files diverge, and the divergence is the trap the survey
+  warned about. Neither file names any `KernelDescent` declaration, so a name
+  scan alone would put `Basic` only in both. That is wrong for
+  `InsertionAlgebra.lean`: its importer `TNLean/PEPS/EdgeGaugeFamily.lean`
+  projects `hA.edgeBlockedThreeSiteInjective` and
+  `hB.edgeBlockedThreeSiteInjective` off `IsVertexInjective` hypotheses, and
+  that dot-notation resolves to the declaration
+  `IsVertexInjective.edgeBlockedThreeSiteInjective` in
+  `EdgeMiddlePhysical/KernelDescent.lean`. Dropping the leaf from
+  `InsertionAlgebra.lean` breaks `EdgeGaugeFamily.lean` with "Invalid field
+  `edgeBlockedThreeSiteInjective`", which a module-target build of
+  `InsertionAlgebra.lean` alone does not reveal. `InsertionAlgebra.lean`
+  therefore keeps both leaves. `InsertionRealization.lean` has no such
+  importer — neither `InsertionCoefficientRealization.lean` nor
+  `PhysicalToVirtualCounterexample.lean` uses any `KernelDescent` declaration
+  or the dot-projection — so it takes `Basic` only, with the root build as the
+  proof that the leaf is dead there.
 
 `Periodic/ProjectiveRep.lean` was the one line the survey flagged as not a
 plain leaf re-pointing: the aggregator import was the file's only route to
@@ -83,6 +90,8 @@ elaborate, and the root build on the pull request is the remaining witness.
 
 The generated aggregators themselves are unchanged; only handwritten importers
 moved. No declaration was added, removed or renamed, so no blueprint `\lean{}`
-tag moved and the faithfulness rule is not engaged. The `KernelDescent`
-instance and `simp` lemma noted above are left in place for a later root-build
-check rather than dropped unverified.
+tag moved and the faithfulness rule is not engaged. The `KernelDescent` import
+is kept in `InsertionAlgebra.lean` because its importer
+`EdgeGaugeFamily.lean` uses the `IsVertexInjective.edgeBlockedThreeSiteInjective`
+dot-projection that the leaf supplies; it is dropped from
+`InsertionRealization.lean`, where no importer needs it.
