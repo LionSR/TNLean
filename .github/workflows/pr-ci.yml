@@ -517,7 +517,7 @@ jobs:
           python-version: '3.12'
       - name: Install parser and browser
         run: |
-          python3 -m pip install plasTeX==3.1 playwright==1.55.0
+          python3 -m pip install plasTeX==3.1 playwright==1.56.0
           python3 -m playwright install --with-deps chromium
       - name: Test inline picture semantics
         run: python3 scripts/test_tenkz_inline_web.py
@@ -725,7 +725,7 @@ jobs:
       - name: Test tenkz equation web layout
         if: env.TEX_CHANGED == 'true'
         run: |
-          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          python3 -m pip install --disable-pip-version-check playwright==1.56.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
 

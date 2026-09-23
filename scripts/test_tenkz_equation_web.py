@@ -417,7 +417,10 @@ def _assert_chapter_picture_layout(page: Page, filename: str) -> dict[str, int]:
         for (const node of nodes) {
           if (node.nodeType === Node.TEXT_NODE) {
             canvas.font = style.font;
-            needed += canvas.measureText(node.textContent.replace(/\s+/g, ' ')).width;
+            // Collapse only the whitespace CSS collapses: `\s` would also turn
+            // the em and thin spaces of `\quad` and `\,` into ordinary spaces.
+            needed += canvas.measureText(
+              node.textContent.replace(/[ \t\n\f\r]+/g, ' ')).width;
           } else if (node.nodeType === Node.ELEMENT_NODE) {
             const childStyle = getComputedStyle(node);
             needed += node.getBoundingClientRect().width
