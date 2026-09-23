@@ -125,13 +125,14 @@ verification (23-58%), and two required real re-scoping to avoid deleting
 live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/4529).
 
 ### S3. Delete the superseded edge-centred three-block union-injectivity route — net 3,180 lines, risk 3/10
-- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted; it strands a further 250-300 lines in `ThreeBlockResonate2.lean`, one `\leanid`-cited in `section3_route.tex`, which is the next slice.
-- **What**: the four surviving modules
-  `PEPS/RegionBlock/{ThreeBlockResonate,ThreeBlockResonate2,UnionInjectivity,ThreeBlockTransfer}.lean`
-  (2,087 gross lines). The route originally also covered
-  `BondLocalFromReconcile.lean` (176 ln, zero importers anywhere) and
-  `ThreeBlockReconcile.lean` (371 ln); both are deleted, in the first PR and the
-  second slice respectively.
+- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted. Third slice (#7875) done: `ThreeBlockResonate2.lean` (709 lines, fifteen declarations) is deleted whole, its last import edge retargeted at `ThreeBlockResonate`; see `docs/audits/2026-09-21_peps_three_block_resonate2.md`. Remaining: `ThreeBlockResonate.lean`, `UnionInjectivity.lean` and `ThreeBlockTransfer.lean`, all with live consumers.
+- **What**: the three surviving modules
+  `PEPS/RegionBlock/{ThreeBlockResonate,UnionInjectivity,ThreeBlockTransfer}.lean`
+  (1,377 gross lines). The route originally also covered
+  `BondLocalFromReconcile.lean` (176 ln, zero importers anywhere),
+  `ThreeBlockReconcile.lean` (371 ln) and `ThreeBlockResonate2.lean` (709 ln);
+  all three are deleted, in the first PR, the second slice and the third slice
+  respectively.
 - **Why it's excess**: proves the paper's `injective_union` lemma
   (arXiv:1804.04964) only for an edge-centred red/blue/complement triple
   with a distinguished-edge restriction the source does not have — a
@@ -147,17 +148,21 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   aggregator as its only importer. All nine declarations had zero references
   outside the file and no blueprint tag, and the file is now deleted; see
   `docs/audits/2026-09-19_peps_regionblock_dead_closures.md`.
-- **Third slice (open, #7875)**: the reconcile file was the last consumer of
-  `ThreeBlockResonate2.lean` (709 lines), so none of its fifteen declarations now
-  has a reference in code outside the file. Every external match on those names
-  is either a distinct `ThreeBlockGeometry`-namespaced declaration of
-  `UnionInjectivityGeneralBlue`/`UnionInjectivityGeneral2` sharing the short name
-  — `threeBlockComplCoeff` is defined twice in the tree, once unnamespaced there
-  and once namespaced — or a docstring mention; `UnionInjectivity.lean` imports
-  the module but uses only the namespaced general forms. The slice touches a
-  paper-gap citation of `threeBlock_middle_strip` in
-  `docs/paper-gaps/peps_normal_ft_section3_route.tex` plus a docstring pointer in
-  `ThreeBlockResonate.lean`, so it is a separate step.
+- **Third slice (done 2026-09-21, #7875)**: the reconcile file was the last
+  consumer of `ThreeBlockResonate2.lean` (709 lines), so none of its fifteen
+  declarations had a reference in code outside the file, and the file is now
+  deleted whole. Every external match on those names was either a distinct
+  `ThreeBlockGeometry`-namespaced declaration of `UnionInjectivityGeneralBlue`
+  sharing the short name — seven of the fifteen, including `threeBlockComplCoeff`,
+  which was defined twice in the tree, once unnamespaced there and once
+  namespaced — or a prose pointer. `UnionInjectivity.lean` imported the module
+  but used only the general forms and two injectivity facts declared one module
+  earlier, so its import line is retargeted at `ThreeBlockResonate`. The one
+  `\leanid` citation of a removed name in
+  `docs/paper-gaps/peps_normal_ft_section3_route.tex` is the blue
+  smul-factorization, not the middle-strip step an earlier note recorded; it is
+  repointed at the geometry-native form the cited step actually calls. See
+  `docs/audits/2026-09-21_peps_three_block_resonate2.md`.
 
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#4564)
