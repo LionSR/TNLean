@@ -874,9 +874,10 @@ closing a chain of $N$ copies of $\mathcal U$.
 \begin{proof}\leanok
     \uses{lem:mpu_iterated_physical_blocking, thm:mpu_normalized_transfer_stabilization, thm:mpu_normalized_transfer_fin_one, thm:mpu_second_block_simple, def:mpu_physical_reindexing}
     At the stabilization exponent $J$, the normalized double-layer diagonal
-    is the rank-one fixed projector $|\rho)(\Phi|$.  The preceding theorem
-    makes the subsequent length-$D^2$ block simple.  If $e$ is the canonical
-    grouping bijection, the two blocking stages satisfy
+    is the rank-one fixed projector $|\rho)(\Phi|$.
+    Theorem~\ref{thm:mpu_second_block_simple} makes the subsequent length-$D^2$
+    block simple.  If $e$ is the canonical grouping bijection, the two blocking
+    stages satisfy
     \begin{align}
         e^*((\mathcal U_J)_{D^2})=\mathcal U_{JD^2}.
     \end{align}
@@ -1160,7 +1161,8 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.doubleLayerTensor_mul_eq_normalizedDiagonal_tail_of_simple2}
     \leanok
     \uses{def:mpu_double_layer, thm:mpu_rank_one_insertion_diagonal_tail}
-    In the setting of the preceding theorem, suppose in addition that the
+    In the setting of Theorem~\ref{thm:mpu_rank_one_insertion_diagonal_tail},
+    suppose in addition that the
     same fixed pair satisfies the supplied two-letter contraction
     \begin{align}
         W^{ij}W^{k\ell}
@@ -12794,7 +12796,8 @@ $[-1,1]\cap\mathbb Z$, setting up the depth-two circuit representation in
 
 \begin{proof}\leanok
     \uses{lem:qca_blocked, thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
-    Apply the preceding theorem to the finite propagation of $\omega$, using
+    Apply Theorem~\ref{thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
+    to the finite propagation of $\omega$, using
     the canonical positive block length.  At the same length, site blocking
     preserves both finite propagation and translation covariance, hence the
     QCA property.
