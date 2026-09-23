@@ -622,30 +622,6 @@ theorem ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_three
     g.threeBlockDoubleSum_eq_blueCoeff_sum bdry σblue σcompl]
   refine Finset.sum_congr rfl (fun bc' _ => ?_)
   rw [smul_eq_mul, mul_comm]
-open scoped Classical in
-/-- **The core three-block smul-factorization (as functions of `σcompl`).** The
-complement interior bond multiple of the fused host weight, read as a function of the
-complement physical leg, is the blue-coupling combination of the complement
-blocked-region weights. This is the function-level form of the pointwise factorization,
-ready for the divide-out into the complement block image.
-
-Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockComplWeight_eq
-    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
-    (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue) :
-    (regionInteriorBondProd (G := G) A g.complement : ℂ) •
-        (fun σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement =>
-          regionBlockedWeight (G := G) A (Finset.univ \ g.red) bdry
-            (g.complPhysical σblue σcompl)) =
-      ∑ bc' : RegionBoundaryConfig (G := G) A g.complement,
-        g.threeBlockBlueCoeff bdry σblue bc' •
-          regionBlockedWeight (G := G) A g.complement bc' := by
-  funext σcompl
-  rw [Pi.smul_apply, Finset.sum_apply,
-    g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical bdry σblue σcompl]
-  refine Finset.sum_congr rfl (fun bc' _ => ?_)
-  rw [Pi.smul_apply]
 
 /-! ### Surjectivity of the fused complement physical leg
 
