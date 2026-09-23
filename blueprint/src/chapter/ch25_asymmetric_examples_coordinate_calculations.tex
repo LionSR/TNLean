@@ -33,15 +33,15 @@ coordinates by slots and positions inside slots.
     \leanok
     \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
     Conjugation by the explicit gauge attached to $(\tau,G)$ sends a bond
-    matrix $A$ to the matrix $GAG^{-1}$ relabelled along $\tau$. The
-    entrywise coercion is multiplicative, and the bond-space product of two
-    integer tensors each rescaled by one scalar $c$ is $c^2$ times the
-    entrywise coercion of their integer bond-space product. If a compression
-    datum uses the explicit gauge attached to $(\tau,G)$, then the
-    compression map $W_s$ out of the bond space consists of the rows of $G$
-    at the coordinates of the slot $s$, and the compression map $V_s$ into
-    the bond space consists of the columns of $G^{-1}$ at those same
-    coordinates.
+    matrix $A$ to the matrix $GAG^{-1}$ relabelled along $\tau$. Entrywise
+    coercion is multiplicative, and for integer tensors $M, N$ and $c \in \C$,
+    \begin{align}
+        (cM) \mathbin{\cdot} (cN) = c^2 (M \mathbin{\cdot} N). \notag
+    \end{align}
+    If a compression datum uses the explicit gauge $(\tau,G)$, then the
+    compression maps for slot $s$ are given in coordinates by
+    $W_s = \pi_s G$ and $V_s = G^{-1} \iota_s$, where $\pi_s$ selects the rows
+    and $\iota_s$ embeds the columns belonging to slot $s$.
 \end{theorem}
 
 \begin{proof}
@@ -94,18 +94,24 @@ coordinates by slots and positions inside slots.
     \uses{def:asymex_one_slot}
     The remainder of a conjugate one-slot datum vanishes identically: the
     compression is an exact change of coordinates. For every one-slot
-    datum, the trace of every nonempty word of $B$ equals the trace of the
-    corresponding word of $C$, or, if the target is carried with a scalar
-    weight $c$, that power of $c$ times the trace of the word of the
-    unweighted target.
+    datum with target tensor $C$ and nonempty word $w \ne \emptyset$,
+    \begin{align}
+        \tr(B^w) = \tr(C^w), \notag
+    \end{align}
+    or $\tr(B^w) = c^{|w|}\tr(C^w)$ when the target is carried with scalar
+    weight $c$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
-    Immediate from Theorem~\ref{thm:asymex_explicit_gauge} and
-    Proposition~\ref{prop:asym_compression_trace}, specialized to a single
-    slot.
+    \uses{prop:asym_compression_trace}
+    Conjugation preserves the trace, which decomposes as the sum of traces of
+    the diagonal blocks. For the upper block-triangular gauge, the diagonal
+    blocks of a word product are the word products of the individual diagonal
+    blocks; the zero-slot diagonal block is strictly upper triangular (or zero)
+    and therefore has vanishing trace on any nonempty word $w \ne \emptyset$,
+    leaving only the contribution of the target block $C$. The scalar factor
+    carries across words by the length $|w|$.
 \end{proof}
 
 \begin{theorem}[Integer certificates for normality and for vanishing
@@ -116,17 +122,29 @@ coordinates by slots and positions inside slots.
         MPSTensor.left_intertwiner_eq_zero_of_int}
     \leanok
     \uses{def:normal}
-    If every matrix unit is, up to a common nonzero integer factor, an
-    integer combination of length-two words of an integer tensor, the
-    length-two words span the full matrix algebra. If the rows,
-    respectively columns, of the letters occurring in a sitewise
-    intertwiner system form an integer matrix with an integer left inverse
-    up to a nonzero factor, the only solution of that system is zero.
+    Let $A \in (\MN{D})^d$ have integer entries $A_i \in \mathrm{M}_D(\Z)$.
+    If there exist index pairs $(a_k, b_k)$, integer coefficients
+    $T_{xyk} \in \Z$, and a nonzero integer $m \ne 0$ such that for all matrix
+    units $E_{xy}$,
+    \begin{align}
+        \sum_k T_{xyk} A_{a_k} A_{b_k} = m E_{xy}, \notag
+    \end{align}
+    then $\spn_\C\{A_i A_j : i,j \in \{0,\dots,d-1\}\} = \MN{D}$.
+    Similarly, let $B \in (\mathrm{M}_D(\Z))^d$ and $c \in (\mathrm{M}_1(\Z))^d$.
+    If a selection of rows from the matrices $B_i - c_i \Id_D$ forms an
+    integer matrix $K \in \mathrm{M}_D(\Z)$ admitting an integer left inverse
+    $K' K = m \Id_D$ with $m \ne 0$, then every $v \in \C^D$ satisfying
+    $B_i v = c_i v$ for all $i$ satisfies $v = 0$.
+    Likewise, if a selection of columns from $B_i - c_i \Id_D$ admits an
+    integer left inverse up to $m \ne 0$, then every $u \in \C^D$ with
+    $u B_i = c_i u$ satisfies $u = 0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Clearing the nonzero integer factor by scalar division after coercion
-    to $\C$ reduces each statement to the corresponding identity between
-    integer matrices, a finite verification.
+    Dividing the linear combination by $m \ne 0$ exhibits each matrix unit
+    $E_{xy}$ in the span of length-two words of $A$, showing they span
+    $\MN{D}$. For the sitewise intertwiner, $B_i v = c_i v$ implies $K v = 0$,
+    whence $m v = K' K v = 0$, so $v = 0$ since $m \ne 0$ in $\C$. The column
+    argument for $u$ is identical.
 \end{proof}

@@ -174,8 +174,11 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_torus_translation_invariant,
         def:peps_torus_state_translation_invariant}
-    A translation-invariant torus tensor represents a translation-invariant
-    state.
+    A translation-invariant torus tensor $A$ represents a translation-invariant
+    state: for every lattice translation $\tau_{a,b}$ and physical configuration $\sigma$,
+    \begin{align}
+        \Coeff_A(\sigma\circ\tau_{a,b}) & = \Coeff_A(\sigma). \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_stateCoeff_translationInvariant}

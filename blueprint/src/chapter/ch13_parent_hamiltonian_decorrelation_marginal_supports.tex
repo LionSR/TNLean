@@ -17,16 +17,13 @@
 \end{proof}
 
 
-Left and right absorption by the marginal support projector — for $\rho$
-positive semidefinite on $H_L\otimes H_R$ with $P_L$ the orthogonal
-projector onto the support of $\tr_R\rho$, the identities
-$(P_L\otimes\Id_R)\rho=\rho$ and $\rho(P_L\otimes\Id_R)=\rho$, which for
-$H_L=H_A\otimes H_X$ and $H_R=H_B$ are precisely the $P_{AX}$
-support-projector identities in \cite[Appendix~D.2, lines
-    2228--2235]{Cirac2016MPDO_arXiv} — are pure bipartite-operator facts with no
-tensor-network content, proved in the companion quantum-channel volume~\cite[``Left absorption by the marginal support projector'', ``Right absorption by the marginal support projector'', ``Partial trace over the left factor'']{QICLean2026Blueprint}. The
-partial trace over the left factor that they and the absorption theorems
-below are stated against is defined there as well.
+For $\rho \ge 0$ on $H_L\otimes H_R$ with $P_L$ the orthogonal projector
+onto the support of $\tr_R\rho$, the identities
+$(P_L\otimes\Id_R)\rho=\rho$ and $\rho(P_L\otimes\Id_R)=\rho$ provide
+the $P_{AX}$ support-projector identities in
+\cite[Appendix~D.2]{Cirac2016MPDO_arXiv} upon setting
+$H_L=H_A\otimes H_X$ and $H_R=H_B$, as developed in
+\cite{QICLean2026Blueprint}.
 
 \begin{theorem}[Hermiticity of the left partial trace]
     \label{thm:partial_trace_left_hermitian}
@@ -47,12 +44,8 @@ below are stated against is defined there as well.
 \end{proof}
 
 
-Left and right absorption by the right marginal support — for $\rho\geq0$
-and $P_R$ the support projector of $\tr_L\rho$, the identities
-$(\Id_L\otimes P_R)\rho=\rho$ and $\rho(\Id_L\otimes P_R)=\rho$ — are the
-same kind of generic bipartite-operator fact, proved in the companion
-quantum-channel volume~\cite[``Left absorption by the right marginal support'', ``Right absorption by the right marginal support'']{QICLean2026Blueprint} alongside the
-left-marginal absorption theorems above.
+Similarly, for the support projector $P_R$ of $\tr_L\rho$, one has
+$(\Id_L\otimes P_R)\rho=\rho$ and $\rho(\Id_L\otimes P_R)=\rho$.
 
 We now use the explicit tripartite indexing
 $H_A\otimes(H_X\otimes H_B)$. Reassociation identifies it with

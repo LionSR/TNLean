@@ -1,27 +1,13 @@
 \section{Commuting Local Terms for Parent Hamiltonians}\label{sec:commuting_parent_ham}
 
 This section concerns the commutation equation for local terms in a
-periodic chain. For normal tensors it relates renormalization fixed points to
-the tensors whose length-two local terms commute,
-$h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2)$; the implication from commuting terms back
-to a renormalization fixed point uses a left-canonical normalization.
-
-The nearest-neighbor commuting parent Hamiltonian condition in
-\cite[Definition~3.9 and Theorem~3.10]{Cirac2016MPDO_arXiv} is distinct from
-the parent commuting Hamiltonian condition of
-\cite[Appendix~D.2]{Cirac2016MPDO_arXiv}, which is stated for local projectors
-$Q_{AX}$ and $Q_{XB}$. The latter appears in the decorrelation section that
-follows. In \cite[Definition~3.9]{Cirac2016MPDO_arXiv} the parent-Hamiltonian
-condition also says that, for $N>L$, the ground space is spanned by the
-periodic MPS vectors associated to the BNT components; nearest-neighbor means
-the specialization $L=2$.
-
-The proof of the forward implication in
-\cite[Theorem~3.10]{Cirac2016MPDO_arXiv} is the single sentence at source
-lines 1305--1307 saying that it follows immediately from the structural
-characterization in Theorem~3.11.  It does not invoke Definition~D.2.  The
-three-site kernel intersection proved below is instead a separate local
-specialization of that Appendix~D definition.
+periodic chain, relating renormalization fixed points to
+tensors with commuting nearest-neighbor terms,
+$h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2)$~\cite[Definition~3.9 and Theorem~3.10]{Cirac2016MPDO_arXiv}.
+The reverse implication from commuting local terms to a renormalization
+fixed point is proved for normal left-canonical BNT representatives assuming
+the all-chain ground-space condition (zero energy and kernel spanned by the
+periodic MPS vectors for every $N>2$).
 
 \input{chapter/ch13_parent_hamiltonian_commuting_gap_local_terms}
 \input{chapter/ch13_parent_hamiltonian_commuting_gap_rfp_ground_spaces}
