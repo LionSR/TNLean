@@ -510,6 +510,11 @@ else:
         Python; the TeX library is the single grammar authority.
         """
 
+        # TikZ pictures are inline boxes. Verbatim capture protects their
+        # syntax, but VerbatimEnvironment's block default would split one
+        # TeX paragraph into separate picture/operator paragraphs.
+        blockType = False
+
         def tenkzUnitSource(self) -> str:
             name = self.nodeName
             return rf"\begin{{{name}}}{self.textContent}\end{{{name}}}"

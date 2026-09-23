@@ -70,6 +70,7 @@ on:
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_web.py'
+      - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
   pull_request:
@@ -134,6 +135,7 @@ on:
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_web.py'
+      - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
   workflow_dispatch:
@@ -215,6 +217,7 @@ jobs:
               - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_pic.py'
               - 'scripts/test_tenkz_equation_web.py'
+              - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_index_routing.py'
             # Everything the paper-gap reference check reads: the notes,
@@ -502,6 +505,38 @@ jobs:
           --root .
           --base-ref HEAD^
 
+  inline-layout:
+    name: Check inline diagram semantics
+    needs: changes
+    if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install parser and browser
+        run: |
+          python3 -m pip install plasTeX==3.1 playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+      - name: Test inline picture semantics
+        run: python3 scripts/test_tenkz_inline_web.py
+
+      - name: Diagnose full TeX system environment
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          extra-packages: texlive-fonts-extra texlive-publishers
+      - name: Check layout with TeX system dependencies
+        run: |
+          fc-match 'Times New Roman'
+          python3 scripts/test_tenkz_inline_web.py
+      - name: Diagnose full blueprint Python environment
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+        with:
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
+      - name: Check layout with blueprint Python dependencies
+        run: python3 scripts/test_tenkz_inline_web.py
+
   blueprint:
     name: Check blueprint compiles without errors
     needs: changes
@@ -690,9 +725,17 @@ jobs:
       - name: Test tenkz equation web layout
         if: env.TEX_CHANGED == 'true'
         run: |
-          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          python3 -m pip install --disable-pip-version-check playwright==1.56.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
+
+      - name: Preserve failed blueprint render
+        if: failure() && env.TEX_CHANGED == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: blueprint-render-failure
+          path: blueprint/web
+          retention-days: 3
 
       # A zero exit status says the build ran, not that the pages read. This
       # opens every generated page and measures what a reader would meet.

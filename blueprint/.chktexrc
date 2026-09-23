@@ -21,6 +21,9 @@ CmdLine
   -n 18  # Quote-style heuristic.
   -n 24  # Page-reference spacing heuristic.
   -n 25  # Brace-insertion heuristic.
+  -n 27  # "Could not execute LaTeX command"; fires on the extensionless modular
+         # \input{chapter/...} includes, which chktex cannot resolve when
+         # linting files individually even though they exist and compile.
   -n 36  # Space-before-parenthesis heuristic.
   -n 38  # Punctuation-before-quotes heuristic.
   -n 39  # Double-space heuristic.
