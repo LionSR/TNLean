@@ -42,23 +42,10 @@ div.proof_content {
 	height: auto;
 }
 
-/* The theme's flex column breaks center's inline content into separate rows.
- * Normal block flow preserves TeX paragraphs and explicit line breaks. The
- * theme's own `div.centered` rule is loaded after this stylesheet, so the block
- * context is asserted with `!important` to survive the cascade order the web
- * build uses. */
-div.centered {
-	display: block !important;
+/* TeX centering changes alignment within normal paragraph flow. Its template
+ * uses a separate class so the theme's flex container never owns these rows. */
+.tex-center {
 	text-align: center;
-}
-
-/* Under the full theme a plain inline `<br>` collapses to zero size and stops
- * breaking the row, so stacked `\\` diagrams land side by side. Make the break
- * block-level so an explicit line break always separates them. */
-div.centered br {
-	display: block !important;
-	content: "";
-	clear: both;
 }
 
 /* A LaTeX tabular is an inline box, including when its rows stack diagrams

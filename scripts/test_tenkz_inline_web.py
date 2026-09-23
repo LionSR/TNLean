@@ -75,8 +75,6 @@ def check_inline_layout() -> None:
         tex = TeX()
         document = tex.ownerDocument
         # Load the shipped stylesheet with the document, as the web build does.
-        # Injecting it after navigation first lays out center as a flex column,
-        # then changes the formatting context underneath its line-break nodes.
         addConfig(document.config)
         document.config["html5"]["extra-css"] = ["extra_styles.css"]
         document.userdata["working-dir"] = str(ROOT / "blueprint/src")
@@ -108,7 +106,7 @@ def check_inline_layout() -> None:
                 facts = page.evaluate(
                     """() => {
                     const main = document.querySelector('.main-text');
-                    const centered = main.querySelectorAll('.centered');
+                    const centered = main.querySelectorAll('.tex-center');
                     const glue = main.querySelector('p:has(> .tex-hfil)');
                     const rows = [glue, centered[0], ...centered[1].querySelectorAll('p'),
                         main.querySelector('.tenkz-equation-row')];
@@ -153,7 +151,7 @@ def check_inline_layout() -> None:
                 assert all(facts.values()), (
                     width,
                     facts,
-                    page.locator(".main-text .centered")
+                    page.locator(".main-text .tex-center")
                     .nth(2)
                     .evaluate(
                         """element => ({
