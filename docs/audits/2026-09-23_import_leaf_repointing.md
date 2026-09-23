@@ -32,7 +32,7 @@ since they are used without being named.
 | `TNLean/MPS/Periodic/Overlap/SelfOverlapSetup.lean` | `Periodic.SectorIrreducibility` | none (closure-neutral; the `HLift` cone is reached through `CommonSectorData`) |
 | `TNLean/MPS/Periodic/SectorIrreducibility/ProjectionOrtho.lean` | `CanonicalForm.CyclicSectors` | `CanonicalForm.CyclicSectors.FixedAdjoint` (provides `commutes_letters_of_adjoint_fixed_projection`) |
 | `TNLean/MPS/Periodic/ProjectiveRep.lean` | `Periodic.Symmetry` | `MPS.Symmetry.Defs` (provides `twistedTensor`; the file never names a `Periodic.Symmetry` leaf) |
-| `TNLean/PEPS/InsertionAlgebra.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic`, `PEPS.EdgeMiddlePhysical.KernelDescent` |
+| `TNLean/PEPS/InsertionAlgebra.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic` |
 | `TNLean/PEPS/InsertionRealization.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic` |
 
 ## Deviations from the survey table
@@ -46,23 +46,16 @@ handled on the evidence of the scan rather than the table.
   but that match is inside a comment, not a use. `Consequences` itself imports
   `Contraction`, so the single-leaf replacement the table gives is correct and
   is what was applied.
-- The two `PEPS` files diverge, and the divergence is the trap the survey
-  warned about. Neither file names any `KernelDescent` declaration, so a name
-  scan alone would put `Basic` only in both. That is wrong for
-  `InsertionAlgebra.lean`: its importer `TNLean/PEPS/EdgeGaugeFamily.lean`
-  projects `hA.edgeBlockedThreeSiteInjective` and
-  `hB.edgeBlockedThreeSiteInjective` off `IsVertexInjective` hypotheses, and
-  that dot-notation resolves to the declaration
-  `IsVertexInjective.edgeBlockedThreeSiteInjective` in
-  `EdgeMiddlePhysical/KernelDescent.lean`. Dropping the leaf from
-  `InsertionAlgebra.lean` breaks `EdgeGaugeFamily.lean` with "Invalid field
-  `edgeBlockedThreeSiteInjective`", which a module-target build of
-  `InsertionAlgebra.lean` alone does not reveal. `InsertionAlgebra.lean`
-  therefore keeps both leaves. `InsertionRealization.lean` has no such
-  importer — neither `InsertionCoefficientRealization.lean` nor
-  `PhysicalToVirtualCounterexample.lean` uses any `KernelDescent` declaration
-  or the dot-projection — so it takes `Basic` only, with the root build as the
-  proof that the leaf is dead there.
+- The two `PEPS` files both take `Basic` only. Neither file names any
+  `KernelDescent` declaration. `TNLean/PEPS/EdgeGaugeFamily.lean` projects
+  `hA.edgeBlockedThreeSiteInjective` and `hB.edgeBlockedThreeSiteInjective` off
+  `IsVertexInjective` hypotheses, and that dot-notation resolves to the
+  declaration `IsVertexInjective.edgeBlockedThreeSiteInjective` in
+  `EdgeMiddlePhysical/KernelDescent.lean`. Instead of retaining the full
+  `KernelDescent` import in `InsertionAlgebra.lean` as a transitive route,
+  `EdgeGaugeFamily.lean` imports `EdgeMiddlePhysical.KernelDescent` directly.
+  Both `InsertionAlgebra.lean` and `InsertionRealization.lean` are thus pruned
+  to `Basic` alone.
 
 `Periodic/ProjectiveRep.lean` was the one line the survey flagged as not a
 plain leaf re-pointing: the aggregator import was the file's only route to
@@ -90,8 +83,7 @@ elaborate, and the root build on the pull request is the remaining witness.
 
 The generated aggregators themselves are unchanged; only handwritten importers
 moved. No declaration was added, removed or renamed, so no blueprint `\lean{}`
-tag moved and the faithfulness rule is not engaged. The `KernelDescent` import
-is kept in `InsertionAlgebra.lean` because its importer
-`EdgeGaugeFamily.lean` uses the `IsVertexInjective.edgeBlockedThreeSiteInjective`
-dot-projection that the leaf supplies; it is dropped from
-`InsertionRealization.lean`, where no importer needs it.
+tag moved and the faithfulness rule is not engaged. Both `InsertionAlgebra.lean`
+and `InsertionRealization.lean` drop `KernelDescent` in favor of `Basic` alone,
+with `EdgeGaugeFamily.lean` importing `KernelDescent` directly for its
+`IsVertexInjective.edgeBlockedThreeSiteInjective` dot-projection.
