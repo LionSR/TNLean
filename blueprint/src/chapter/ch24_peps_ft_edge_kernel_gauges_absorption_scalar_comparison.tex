@@ -263,8 +263,9 @@
     \leanok
     For an endomorphism $W$ of $\alpha\otimes\gamma$, define the induced
     endomorphism of $\alpha\otimes\beta\otimes\gamma$ by acting as $W$ on the
-    outer two legs and as the identity on the middle $\beta$ leg. This is the
-    third residual form in \cite[Section~3]{Molnar2018NormalPEPS}.
+    outer two legs and as the identity on the middle $\beta$ leg, with matrix entries
+    $\delta_{bb'}W_{ac,a'c'}$ for $(a,b,c),(a',b',c')\in\alpha\times\beta\times\gamma$.
+    This is the third residual form in \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
 \begin{theorem}[Scalar reduction of the residual two-tensor gauges]%
@@ -276,10 +277,11 @@
     $Z\in\End(\beta\otimes\gamma)$, $U\in\End(\alpha\otimes\beta)$, and
     $W\in\End(\alpha\otimes\gamma)$ have equal induced three-leg residual forms
     (Definitions~\ref{def:peps_threeLegLeftIdentityForm}--\ref{def:peps_threeLegMiddleIdentityForm})
-    on $\alpha\otimes\beta\otimes\gamma$:
+    on $\alpha\otimes\beta\otimes\gamma$, so that
     \begin{align}
-        \Id_\alpha\otimes Z = U\otimes\Id_\gamma = \iota_{\alpha\gamma}(W)\otimes\Id_\beta. \notag
+        \delta_{aa'}Z_{bc,b'c'} = U_{ab,a'b'}\delta_{cc'} = W_{ac,a'c'}\delta_{bb'} \notag
     \end{align}
+    for all $a,a'\in\alpha$, $b,b'\in\beta$, $c,c'\in\gamma$.
     Then there exists $\lambda\in\C$ such that all three residual matrices are scalar:
     \begin{align}
         Z = \lambda\,\Id_{\beta\otimes\gamma}, \qquad
@@ -297,31 +299,20 @@
 \end{theorem}
 \begin{proof}\leanok
     Write the common operator as $T$. The equality
-    $T=\Id_\alpha\otimes Z=U\otimes\Id_\gamma$ gives
-    $\delta_{aa'}Z_{bc,b'c'}=U_{ab,a'b'}\delta_{cc'}$ for all indices.
-    If $c\neq c'$, the right hand side is zero; choosing $a=a'$ gives
-    $Z_{bc,b'c'}=0$. Hence $Z$ is diagonal in the $\gamma$-index. Similarly,
-    the equality $T=\Id_\alpha\otimes Z=W_{\alpha\gamma}\otimes\Id_\beta$
-    gives
-    $\delta_{aa'}Z_{bc,b'c'}=W_{ac,a'c'}\delta_{bb'}$,
-    so $Z_{bc,b'c'}=0$ whenever $b\neq b'$. Thus $Z_{bc,b'c'}=0$ unless
+    $\delta_{aa'}Z_{bc,b'c'}=U_{ab,a'b'}\delta_{cc'}$ gives
+    $Z_{bc,b'c'}=0$ whenever $c\neq c'$ (by taking $a=a'$). Hence $Z$ is
+    diagonal in the $\gamma$-index. Similarly, the equality
+    $\delta_{aa'}Z_{bc,b'c'}=W_{ac,a'c'}\delta_{bb'}$ gives
+    $Z_{bc,b'c'}=0$ whenever $b\neq b'$. Thus $Z_{bc,b'c'}=0$ unless
     $b=b'$ and $c=c'$.
 
     It remains to compare the surviving diagonal entries. From
     $\delta_{aa'}Z_{bc,bc}=U_{ab,a'b}$, the value
     $Z_{bc,bc}$ is independent of $c$. From the middle-identity equality it is
     also independent of $b$. Therefore
-    $Z=\lambda\Id_{\beta\otimes\gamma}$. Substitution into
-    \begin{align}
-        \Id_\alpha\otimes Z
-         & =
-        U\otimes\Id_\gamma
-        =
-        W_{\alpha\gamma}\otimes\Id_\beta
-        \notag
-    \end{align}
-    gives $U=\lambda\Id_{\alpha\otimes\beta}$ and
-    $W_{\alpha\gamma}=\lambda\Id_{\alpha\otimes\gamma}$.
+    $Z=\lambda\Id_{\beta\otimes\gamma}$. Substitution into the compatibility
+    equalities gives $U=\lambda\Id_{\alpha\otimes\beta}$ and
+    $W=\lambda\Id_{\alpha\otimes\gamma}$.
 \end{proof}
 
 \begin{theorem}[Many-leg scalar extraction]%
@@ -588,11 +579,8 @@
     \end{align}
     Here $\rho^{b\to p}$ replaces the value of $\rho$ at $b$ by $p$. This is the
     bond-wise form of the residual identity of
-    \cite[Section~3]{Molnar2018NormalPEPS}, where it is packaged as the equality
-    $\Id_\alpha\otimes Z
-        =U\otimes\Id_\gamma
-        =W_{\alpha\gamma}\otimes\Id_\beta$ of the
-    three residual gauges $Z$, $U$, $W$
+    \cite[Section~3]{Molnar2018NormalPEPS}, where it is packaged as the
+    compatibility of the three residual gauges $Z$, $U$, $W$
     (Theorem~\ref{thm:peps_twoInjectiveGaugeScalarReduction}). Reading
     (\ref{eq:peps_residual_equality}) at the two endpoint choices shows that $g$
     vanishes whenever two configurations differ at a bond and that its diagonal

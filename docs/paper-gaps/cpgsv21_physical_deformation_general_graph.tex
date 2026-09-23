@@ -22,7 +22,7 @@ considers an invertible map $\Lambda$ acting on the physical space $\C^d$ of a
 tensor network state $\ket\psi$ defined on a general graph $G=(V,E)$. Under the
 action of $\Lambda^{\otimes V}$, the deformed state $\ket{\psi'}=\Lambda^{\otimes V}\ket\psi$
 has deformed local parent interactions
-\begin{align}
+\begin{align}\label{eq:cpgsv21_physical_deformation_general_graph_interaction}
     h'_e & = ({\Lambda^{-1}}^\dagger)^{\otimes \partial e}\,h_e\,(\Lambda^{-1})^{\otimes \partial e},
 \end{align}
 where $\partial e$ is the support of the interaction term. The source asserts
@@ -35,12 +35,25 @@ The formal development in \texttt{TNLean/MPS/ParentHamiltonian/PhysicalDeformati
 and Chapter~13 of the blueprint formalizes this correspondence specifically for
 one-dimensional matrix product states on a periodic chain with $N$ sites,
 establishing
-\begin{align}
+\begin{align}\label{eq:cpgsv21_physical_deformation_general_graph_ground_space}
     \mathcal G_{N,L}(\Lambda A) & = \Lambda^{\otimes N}\,\mathcal G_{N,L}(A)
 \end{align}
 and $\ker H_N(\Lambda A) = \Lambda^{\otimes N}\ker H_N(A)$ for an invertible matrix
-$\Lambda\in\mathrm{M}_d(\C)$. The general-graph formulation of Section~IV.C of
-Ref.~\cite{Cirac2021Matrix} is not formalized.
+$\Lambda\in\mathrm{M}_d(\C)$ in the finite-chain range $0 < N$ and $L\le N$
+(\leanid{ker_parentHamiltonian_rotatePhysical}). The general-graph formulation of
+Section~IV.C of Ref.~\cite{Cirac2021Matrix} is not formalized.
+
+\section{Elimination plan}
+
+Closing the scope restriction requires formalizing tensor network states and their
+parent Hamiltonians on an arbitrary finite graph $G=(V,E)$, with interaction terms
+supported on neighbourhoods $\partial e$ of edges $e\in E$. For an invertible on-site
+operator $\Lambda$, the corresponding graph-level physical deformation
+$\Lambda^{\otimes V}$ must be shown to transform each local interaction term according
+to~(\ref{eq:cpgsv21_physical_deformation_general_graph_interaction}) and to map the kernel
+intersection $\bigcap_{e\in E} \ker h_e$ onto $\bigcap_{e\in E} \ker h'_e$. The present
+periodic-chain theorem follows by specializing the general-graph statement to a cycle
+graph $C_N$ with contiguous edge windows of length $L$.
 
 \begin{thebibliography}{1}
     \bibitem{Cirac2021Matrix}
