@@ -35,9 +35,9 @@ coordinates by slots and positions inside slots.
     Conjugation by the explicit gauge attached to $(\tau,G)$ sends a bond
     matrix $A$ to the matrix $GAG^{-1}$ relabelled along $\tau$. Entrywise
     coercion is multiplicative, and for integer tensors $M, N$ and $c \in \C$,
-    \begin{equation}
-        (cM) \mathbin{\cdot} (cN) = c^2 (M \mathbin{\cdot} N).
-    \end{equation}
+    \begin{align}
+        (cM) \mathbin{\cdot} (cN) = c^2 (M \mathbin{\cdot} N). \notag
+    \end{align}
     If a compression datum uses the explicit gauge $(\tau,G)$, then the
     compression maps for slot $s$ are given in coordinates by
     $W_s = \pi_s G$ and $V_s = G^{-1} \iota_s$, where $\pi_s$ selects the rows
@@ -95,19 +95,19 @@ coordinates by slots and positions inside slots.
     The remainder of a conjugate one-slot datum vanishes identically: the
     compression is an exact change of coordinates. For every one-slot
     datum with target tensor $C$ and nonempty word $w \ne \emptyset$,
-    \begin{equation}
-        \tr(B^w) = \tr(C^w),
-    \end{equation}
+    \begin{align}
+        \tr(B^w) = \tr(C^w), \notag
+    \end{align}
     or $\tr(B^w) = c^{|w|}\tr(C^w)$ when the target is carried with scalar
     weight $c$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
-    Immediate from Theorem~\ref{thm:asymex_explicit_gauge} and
-    Proposition~\ref{prop:asym_compression_trace}, specialized to a single
-    slot.
+    Equality of traces is preserved by conjugation and restricts to the
+    diagonal slot because off-diagonal blocks vanish when taking powers
+    along words in a flag basis. The scalar factor carries across words by
+    the length $|w|$.
 \end{proof}
 
 \begin{theorem}[Integer certificates for normality and for vanishing
@@ -122,10 +122,10 @@ coordinates by slots and positions inside slots.
     If there exist index pairs $(a_k, b_k)$, integer coefficients
     $T_{xyk} \in \Z$, and a nonzero integer $m \ne 0$ such that for all matrix
     units $E_{xy}$,
-    \begin{equation}
-        \sum_k T_{xyk} A_{a_k} A_{b_k} = m E_{xy},
-    \end{equation}
-    then $\spn_\C\{A_i A_j : i,j \in \{1,\dots,d\}\} = \MN{D}$.
+    \begin{align}
+        \sum_k T_{xyk} A_{a_k} A_{b_k} = m E_{xy}, \notag
+    \end{align}
+    then $\spn_\C\{A_i A_j : i,j \in \{0,\dots,d-1\}\} = \MN{D}$.
     Similarly, let $B \in (\mathrm{M}_D(\Z))^d$ and $c \in (\mathrm{M}_1(\Z))^d$.
     If a selection of rows from the matrices $B_i - c_i \Id_D$ forms an
     integer matrix $K \in \mathrm{M}_D(\Z)$ admitting an integer left inverse

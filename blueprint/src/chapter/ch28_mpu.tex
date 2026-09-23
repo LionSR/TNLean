@@ -9663,12 +9663,13 @@ for its commutant. The construction below adapts the coefficient construction of
 \cite[Section~4.3]{SchumacherWerner2004QCA} and the leastness and commutant
 statements of \cite[Lemma~7]{Gross2012IndexTheory}, requiring $\mathcal A$ to be
 a star-subalgebra for involution closure of the commutant; see
-\cite{gap:gnvw12_support_algebra_star_closure}.
-Full matrix factors $\mathcal B_1=M_I(\mathbb C)$ and
-$\mathcal B_2=M_J(\mathbb C)$ suffice for the MPU spin chain because every
-one-site algebra is isomorphic to $M_d(\mathbb C)$
-\cite[lines~2320--2334]{Cirac2017MPU}; see
-\cite{gap:gnvw12_support_algebra_full_matrix_scope}.
+**Scope restriction (full matrix factors):**
+The support-algebra results in \cite[Lemma~7]{Gross2012IndexTheory} allow arbitrary
+finite-dimensional $C^*$-algebras $\mathcal B_1$ and $\mathcal B_2$, whereas the
+formalization treats full matrix factors $\mathcal B_1=M_I(\mathbb C)$ and
+$\mathcal B_2=M_J(\mathbb C)$. This restriction suffices for the MPU spin chain
+where every single-site algebra is $M_d(\mathbb C)$ \cite[lines~2320--2334]{Cirac2017MPU};
+documented in `docs/paper-gaps/gnvw12_support_algebra_full_matrix_scope.tex` \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
 
 \begin{theorem}[Adjoint of a right coefficient block]
     \label{thm:qca_operator_block_adjoint}
