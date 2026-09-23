@@ -75,6 +75,15 @@ anticommutator hypothesis alone under
 `\uses`/`\ref` edge that pointed at a removed node was removed with it;
 `thm:anticommutator_gap_bound` and `thm:martingale_criterion` are unchanged.
 
+### Blueprint-owner sign-off
+
+Per the requirement in #7857, repository and blueprint owner Sirui Lu
+(@LionSR) signed off on deleting the eight named blueprint nodes (and the
+duplicate `lem:parent_hamiltonian_cyclic_overlap_norm_gap`) outright rather than
+redirecting them to a normal/primitive capstone, because the norm-compression
+and operator-norm hypotheses are non-source and unsatisfiable when overlapping
+excitation ranges intersect.
+
 ## What was checked
 
 * Linter-bearing builds of `TNLean.MPS.ParentHamiltonian.Martingale.Gap`,
