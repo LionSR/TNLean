@@ -125,8 +125,11 @@
         \notag
     \end{align}
     These are the two representations in
-    \cite[Appendix~C.4, lines~2011--2018]{Cirac2016MPDO_arXiv}, with the
-    exponent $(m_\gamma/n_\gamma)^L$ as in
+    \cite[Appendix~C.4, lines~2011--2018]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Local fix (blocked trace ratio exponent):} The exponent
+    $(m_\gamma/n_\gamma)^L$ deliberately corrects the source's printed
+    $m_\gamma^L/n_\gamma$ in \cite[line~2013]{Cirac2016MPDO_arXiv}; documented in
     \cite{gap:cpsv16_blocked_operator_trace_ratio_exponent}.
 \end{theorem}
 
@@ -411,9 +414,19 @@
          & =\zeta_jX_jA^{(2),i}_{\gamma(j)}X_j^{-1}.
         \notag
     \end{align}
-    The choices may be made simultaneously. Active product corner coverage
-    and per-pair support are documented in
-    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient, gap:cpsv16_figure11_per_pair_support}.
+    The choices may be made simultaneously.
+
+    \textbf{Scope restriction (active product BNT):} The conclusion gives
+    only one-way coverage of active product corners and does not assert that
+    every blocked BNT label occurs; documented in
+    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+
+    \textbf{Local fix (Figure-11 fixed-pair support and fusion coisometry):}
+    Fixed-pair support follows from exact squared reconstruction and the canonical
+    direct-sum corner; a zero pair contributes an empty active family. The
+    retained-row map is a coisometry onto the active direct sum. Documented in
+    \cite{gap:cpsv16_figure11_per_pair_support} and
+    \cite{gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -832,13 +845,13 @@
     every $\gamma$, the two positive power sums
     \begin{align}
         \tr\!\left[
-            \left(\frac{m_\gamma}{n_{\sigma(\gamma)}}
-            \nu_{\sigma(\gamma)}\right)^L\right]
+                 \left(\frac{m_\gamma}{n_{\sigma(\gamma)}}
+                 \nu_{\sigma(\gamma)}\right)^L\right]
          & =
         \sum_{\alpha,\beta}
         \tr\!\left[
-            \left(\mu_\alpha\otimes\mu_\beta\otimes
-            \chi_{\alpha,\beta,\gamma}\right)^L\right].
+                 \left(\mu_\alpha\otimes\mu_\beta\otimes
+                 \chi_{\alpha,\beta,\gamma}\right)^L\right].
         \notag
     \end{align}
     The eventual power-sum comparison identifies the two multisets of positive
