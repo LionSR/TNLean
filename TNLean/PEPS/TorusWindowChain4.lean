@@ -355,17 +355,7 @@ theorem threeBlockBlueCoeff_comp {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆
       refine Finset.sum_congr rfl (fun η _ => ?_)
       exact regionProd_split (A := A) (B₁ := S \ R) (B₂ := P \ S)
         (Finset.disjoint_sdiff.mono_left Finset.sdiff_subset)
-        (by
-          ext w
-          simp only [Finset.mem_union, Finset.mem_sdiff]
-          constructor
-          · rintro (⟨hwS, hwR⟩ | ⟨hwP, hwS⟩)
-            · exact ⟨hSP hwS, hwR⟩
-            · exact ⟨hwP, fun hwR => hwS (hRS hwR)⟩
-          · rintro ⟨hwP, hwR⟩
-            by_cases hwS : w ∈ S
-            · exact Or.inl ⟨hwS, hwR⟩
-            · exact Or.inr ⟨hwP, hwS⟩) η σ
+        ((Finset.union_comm _ _).trans (Finset.sdiff_union_sdiff_cancel hSP hRS)) η σ
         (Finset.sdiff_subset_sdiff_left _ hSP) (Finset.sdiff_subset_sdiff_right _ hRS)]
   -- Transform the LHS: unfold the two blue couplings and reindex the `ν'` sum.
   rw [show (∑ ν' : RegionBoundaryConfig (G := G) A S,
