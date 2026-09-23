@@ -57,9 +57,13 @@
     \lean{MPSTensor.isPositiveGapBNTZCL_iff}
     \leanok
     \uses{def:is_positive_gap_bnt_zcl}
-    A tensor $A$ satisfies positive-gap zero correlation length if and only if
+    A family $(A_j)_j$ has positive-gap BNT zero correlation length for $A$ if
+    and only if $(A_j)_j$ is a basis of normal tensors for $A$, the physical
+    correlations of $A$ are independent of separation whenever both
+    complementary gaps are positive, and the components $(A_j)_j$ are locally
+    orthogonal:
     \begin{align}
-        \operatorname{IsBNT}(A) \land \operatorname{IsPositiveGapPhysicalCID}(A) \land \operatorname{IsBNTLocallyOrthogonal}(A).
+        \mathrm{BNT}((A_j)_j, A) \land \mathrm{CID}_+(A) \land \mathrm{LocOrtho}((A_j)_j).
         \notag
     \end{align}
 \end{lemma}
@@ -130,9 +134,15 @@
     for the unrestricted quantification over disjoint regions, regardless of
     the commuting-parent condition.
 
-    The source derivation of the forward implication uses $\E_A^n=\E_A$, which
-    requires $n\geq1$; adjacent regions insert $\E_A^0=\Id$, creating the gap
-    documented in \cite{gap:cpsv16_pure_zcl_adjacent_gap_cid_scope}.
+    \textbf{Local fix (false source claim for adjacent regions):}
+    The printed forward implication in \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}
+    asserts correlation independence for all disjoint regions, including adjacent
+    ones. However, the Bell-pair counterexample (Theorem~\ref{thm:bell_pair_chain_not_cid})
+    shows that transfer idempotence does not imply correlation independence for adjacent
+    regions; the source derivation uses $\E_A^n=\E_A$, which holds only for $n\ge1$,
+    whereas adjacent regions insert $\E_A^0=\Id$. Documented in
+    \cite{gap:cpsv16_pure_zcl_adjacent_gap_cid_scope}
+    (\texttt{docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex}).
     Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp} establishes the
     forward implication when both complementary gaps are positive.
 \end{theorem}
@@ -276,9 +286,11 @@
     \lean{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}
     \leanok
     \uses{def:source_bnt_zcl, def:is_positive_gap_bnt_zcl}
-    If a BNT family $A$ has zero correlation length for all disjoint physical regions, then
+    If a BNT family $(A_j)_j$ for $A$ has zero correlation length for all
+    disjoint physical regions ($\mathrm{ZCL}_{\mathrm{phys}}$), then it satisfies
+    the positive-gap zero correlation length condition ($\mathrm{ZCL}_+$):
     \begin{align}
-        \operatorname{IsPhysicalBNTZCL}(A) \implies \operatorname{IsPositiveGapBNTZCL}(A).
+        \mathrm{ZCL}_{\mathrm{phys}}((A_j)_j, A) \implies \mathrm{ZCL}_+((A_j)_j, A).
         \notag
     \end{align}
 \end{lemma}

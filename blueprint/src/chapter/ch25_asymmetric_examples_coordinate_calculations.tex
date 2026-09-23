@@ -104,10 +104,13 @@ coordinates by slots and positions inside slots.
 
 \begin{proof}
     \leanok
-    Equality of traces is preserved by conjugation and restricts to the
-    diagonal slot because off-diagonal blocks vanish when taking powers
-    along words in a flag basis. The scalar factor carries across words by
-    the length $|w|$.
+    Conjugation preserves the trace, which decomposes as the sum of traces of
+    the diagonal blocks. For the upper block-triangular gauge, the diagonal
+    blocks of a word product are the word products of the individual diagonal
+    blocks; the zero-slot diagonal block is strictly upper triangular (or zero)
+    and therefore has vanishing trace on any nonempty word $w \ne \emptyset$,
+    leaving only the contribution of the target block $C$. The scalar factor
+    carries across words by the length $|w|$.
 \end{proof}
 
 \begin{theorem}[Integer certificates for normality and for vanishing

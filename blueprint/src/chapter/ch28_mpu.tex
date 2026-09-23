@@ -3282,7 +3282,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \leanok
     \uses{def:mpu_full_support, thm:cpsv_physical_reindexing}
     Suppose that canonical-form data have full support, $\sum_{k=1}^r D_k = D$.
-    Then for any bijection $\pi \colon \{1,\dots,d'\} \to \{1,\dots,d\}$, the relabeled data also satisfy full support:
+    Then for any bijection $\pi \colon \{0,\dots,d'-1\} \to \{0,\dots,d-1\}$, the relabeled data also satisfy full support:
     \begin{align}
         \sum_{k=1}^r D_k = D.
         \notag
@@ -7384,9 +7384,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.StrictlyEquivalentUnderSymmetry.toStrictlyEquivalent}
     \leanok
     \uses{def:strictly-equivalent-symmetry, def:strictly-equivalent-tensors}
-    If $\mathcal U$ and $\mathcal V$ are strictly equivalent under a symmetry $\mathcal S$ via a continuous path $\mathcal W(p)$, then they are strictly equivalent via the same path:
+    If $\mathcal U$ and $\mathcal V$ are strictly equivalent under a symmetry
+    $\mathcal S$ via a continuous path $\mathcal W(p)$ with respect to
+    $h\colon d_a=d_b$, then they are strictly equivalent via the same path:
     \begin{align}
-        \mathcal W(0) = \operatorname{reind}(\mathcal U), \quad \mathcal W(1) = \mathcal V.
+        \mathcal W(0) = \operatorname{reind}_{h^{-1}}(\mathcal U), \quad \mathcal W(1) = \mathcal V.
         \notag
     \end{align}
 \end{lemma}
@@ -10111,9 +10113,24 @@ for the MPU spin chain because every one-site algebra is isomorphic to $M_d(\mat
     \end{align}
     This specializes the commuting support lemma of
     \cite[lines~1174--1194]{SchumacherWerner2004QCA} and
-    \cite[Section~7.1, lines~1221--1246]{Gross2012IndexTheory} to full complex matrix factors,
-    using star-subalgebra inputs and third-factor basis elements as in
-    \cite{gap:gnvw12_support_algebra_star_closure, gap:gnvw12_support_algebra_outer_factor_basis, gap:gnvw12_support_algebra_full_matrix_scope}.
+    \cite[Section~7.1, lines~1221--1246]{Gross2012IndexTheory} to full complex matrix factors.
+
+    \textbf{Local fix (star-closure and outer factor basis corrections):}
+    For the generated $C^*$-algebras, the input must be closed under the
+    involution; documented in \cite{gap:gnvw12_support_algebra_star_closure}
+    (\texttt{docs/paper-gaps/gnvw12_support_algebra_star_closure.tex}).
+    In both printed coefficient proofs, the basis element $e'_\nu$ belongs to the
+    third factor, rather than the second factor as printed; documented in
+    \cite{gap:gnvw12_support_algebra_outer_factor_basis}
+    (\texttt{docs/paper-gaps/gnvw12_support_algebra_outer_factor_basis.tex}).
+
+    \textbf{Scope restriction (full matrix factors):}
+    The cited lemmas permit arbitrary finite-dimensional $C^*$-algebra
+    factors, whereas the statement above treats full complex matrix algebras.
+    This restriction suffices for the MPU application in
+    \cite[lines~2300--2306 and 2313--2334]{Cirac2017MPU}; documented in
+    \cite{gap:gnvw12_support_algebra_full_matrix_scope}
+    (\texttt{docs/paper-gaps/gnvw12_support_algebra_full_matrix_scope.tex}).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -13134,8 +13151,12 @@ left/right order below agrees with the adjacent-pair convention in
     \cite[lines~2322--2328]{Cirac2017MPU}; the odd factor and unified family
     are supplied by the GNVW construction.
 
-    For the MPU spin chain, the cell size is taken to be homogeneous; see
-    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+    \textbf{Scope restriction (homogeneous chain):}
+    GNVW allow the cell size $d(y)$ to depend on $y$, whereas the present
+    definition fixes one positive size $d$. The site-dependent statement is
+    not claimed here; documented in
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}
+    (\texttt{docs/paper-gaps/gnvw12_site_dependent_adjacent_generation_scope.tex}).
 \end{definition}
 
 \begin{theorem}[Adjacent-pair support containment]

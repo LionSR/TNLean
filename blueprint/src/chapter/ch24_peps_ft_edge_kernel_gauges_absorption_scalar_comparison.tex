@@ -274,10 +274,12 @@
     \uses{def:peps_threeLegLeftIdentityForm, def:peps_threeLegRightIdentityForm, def:peps_threeLegMiddleIdentityForm}
     For nonzero virtual leg spaces $\alpha,\beta,\gamma$, if an
     endomorphism of $\alpha\otimes\beta\otimes\gamma$ lies simultaneously in
-    the three subspaces $\Id_\alpha\otimes\End(\beta\otimes\gamma)$,
-    $\End(\alpha\otimes\beta)\otimes\Id_\gamma$, and
-    $\End(\alpha\otimes\gamma)\otimes\Id_\beta$, then it is a scalar multiple of
-    the identity: there exists $\lambda\in\C$ such that
+    the three residual subspaces $\Id_\alpha\otimes\End(\beta\otimes\gamma)$,
+    $\End(\alpha\otimes\beta)\otimes\Id_\gamma$, and the middle-identity space
+    of operators acting as $\Id_\beta$ on the middle leg and as an endomorphism
+    of $\alpha\otimes\gamma$ on the outer legs
+    (Definition~\ref{def:peps_threeLegMiddleIdentityForm}), then it is a scalar
+    multiple of the identity: there exists $\lambda\in\C$ such that
     \begin{align}
         T = \lambda\,\Id_{\alpha\otimes\beta\otimes\gamma}.
         \notag
@@ -288,7 +290,8 @@
     and admit non-scalar solutions (such as $Z=\diag(1,2)$ when $\alpha=\varnothing$,
     $|\beta|=1$, $|\gamma|=2$). This models the nonzero-dimensional virtual bond
     spaces of \cite[Section~3]{Molnar2018NormalPEPS}; documented in
-    \cite{gap:peps_injective_ft_section3_route}.
+    \cite{gap:peps_injective_ft_section3_route}
+    (\texttt{docs/paper-gaps/peps_injective_ft_section3_route.tex}).
 \end{theorem}
 \begin{proof}\leanok
     Write the common operator as $T$. The equality
