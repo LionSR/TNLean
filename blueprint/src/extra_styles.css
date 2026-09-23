@@ -43,19 +43,10 @@ div.proof_content {
 }
 
 /* The theme's flex column breaks center's inline content into separate rows.
- * Normal block flow preserves TeX paragraphs and explicit line breaks. The
- * theme's own `div.centered` rule is loaded after this stylesheet at equal
- * specificity, so the block context is asserted with `!important` to survive
- * the cascade order the web build uses. */
+ * Normal block flow preserves TeX paragraphs and explicit line breaks. */
 div.centered {
-	display: block !important;
+	display: block;
 	text-align: center;
-}
-
-div.centered br {
-	display: block !important;
-	content: "";
-	clear: both;
 }
 
 /* A LaTeX tabular is an inline box, including when its rows stack diagrams

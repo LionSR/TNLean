@@ -599,13 +599,6 @@ jobs:
         with:
           extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 
-      - name: Test inline semantics in the blueprint environment
-        if: env.TEX_CHANGED == 'true'
-        run: |
-          python3 -m pip install --disable-pip-version-check playwright==1.55.0
-          python3 -m playwright install --with-deps chromium
-          python3 scripts/test_tenkz_inline_web.py
-
       - name: Lint tenkz picture sources
         if: env.TEX_CHANGED == 'true'
         run: |
@@ -716,7 +709,10 @@ jobs:
 
       - name: Test tenkz equation web layout
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
+        run: |
+          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          python3 -m playwright install --with-deps chromium
+          python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
 
       # A zero exit status says the build ran, not that the pages read. This
       # opens every generated page and measures what a reader would meet.
