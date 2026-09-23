@@ -538,8 +538,7 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
     \lean{IsingTwist.isingCompression,
         IsingTwist.isingBondObject_dim_eq, IsingTwist.isingBondObject_z_eq}
     \leanok
-    \uses{thm:asymex_ising_letter_identity, thm:asym_mpo_product,
-        thm:asym_multiblock}
+    \uses{thm:asymex_ising_letter_identity, thm:asym_multiblock}
     The tensor $B$ of Definition~\ref{def:asymex_ising_bond_object}
     has the block triangular form of Theorem~\ref{thm:asym_multiblock}
     with two weighted copies of $\sqrt2A_\sigma$, of weights $5$ and
@@ -575,7 +574,7 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
     % Principal declaration: IsingTwist.isingBondObject_remainder.
     \lean{IsingTwist.isingBondObject_remainder}
     \leanok
-    \uses{thm:asymex_ising_compression, prop:asym_projector_weighted_sum}
+    \uses{thm:asymex_ising_compression}
     The remainder of the compression in
     Theorem~\ref{thm:asymex_ising_compression} vanishes identically.
     Thus the extension splits, and each nonzero block has local
@@ -588,12 +587,12 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_ising_letter_identity}
+    \uses{thm:asymex_ising_letter_identity, prop:asym_split_intertwiners}
     Every conjugated local matrix is block diagonal by
     Theorem~\ref{thm:asymex_ising_letter_identity}. Its off-diagonal
     blocks, which form the conjugated remainder, therefore vanish.
-    Restricting~(\ref{eq:asymex_ising_local_blocks}) to each nonzero
-    block gives the two intertwining identities.
+    Proposition~\ref{prop:asym_split_intertwiners} then gives the two
+    intertwining identities.
 \end{proof}
 
 In the following diagram, $C_s=\mu_s\sqrt2A_\sigma$, and $h$ denotes
@@ -637,7 +636,8 @@ $T^w=T^{i_1}\cdots T^{i_{|w|}}$.
     \label{thm:asymex_ising_trace}
     \lean{IsingTwist.isingBondObject_trace_evalWord, IsingTwist.isingTwist_mpo}
     \leanok
-    \uses{thm:asymex_ising_compression, prop:asym_compression_trace}
+    \uses{thm:asymex_ising_compression, prop:asym_compression_trace,
+        def:mpo_family}
     For every nonempty word $w$ over the alphabet of pair labels,
     \begin{align}
         \tr(B^w) & =(5^{|w|}+3^{|w|})\tr((\sqrt2A_\sigma)^w).
@@ -652,6 +652,7 @@ $T^w=T^{i_1}\cdots T^{i_{|w|}}$.
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_ising_compression, prop:asym_compression_trace}
     Proposition~\ref{prop:asym_compression_trace} applied to the
     compression in Theorem~\ref{thm:asymex_ising_compression} gives
     $\tr(B^w)$ as the sum of the two weighted block traces.
@@ -730,9 +731,9 @@ Corollary~\ref{cor:asym_action_tensors} describes its local compression.
 \begin{definition}[The full weighted direct sum and the fusion-tree product states]%
     \label{def:asymex_ising_action}
     \lean{IsingTwist.thetaThreeZ, IsingTwist.thetaThree, IsingTwist.productStateZ,
-        IsingTwist.productState, IsingTwist.sectorState}
+        IsingTwist.productState, IsingTwist.sectorState, IsingTwist.sectorAction}
     \leanok
-    \uses{def:asymex_ising_tensors, def:mps_tensor}
+    \uses{def:asymex_ising_tensors, def:mps_tensor, cor:asym_action_tensors}
     Set $\Theta_3=5A_1\oplus3A_\psi\oplus2A_\sigma$, with auxiliary space
     $\C^{10}=P_1\oplus P_\psi\oplus P_\sigma$.
     Its sigma summand is $2A_\sigma=\sqrt2\widehat A_\sigma$.
@@ -743,6 +744,10 @@ Corollary~\ref{cor:asym_action_tensors} describes its local compression.
     $\ket{\sigma1\sigma}^{\otimes N}$, the fusion tree of the trivial
     anyon chain. We also write $\psi_{111}=\psi_0$ and
     $\psi_{\psi1\psi}=\psi_3$.
+    The action tensor $\Theta_3\cdot\psi_{\sigma1\sigma}$ is the tensor
+    of Corollary~\ref{cor:asym_action_tensors}, with one-site matrices
+    $(\Theta_3\cdot\psi_{\sigma1\sigma})^h
+        =\sum_{h'}\Theta_3^{hh'}\otimes\psi_{\sigma1\sigma}^{h'}$.
 \end{definition}
 
 Both $Q_N$ and $S_N$ fix $\ket{6}^{\otimes N}$: label $6$ is closed,
@@ -885,6 +890,7 @@ not from a length-independent normalization.
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_ising_action_compression, prop:asym_compression_trace}
     Proposition~\ref{prop:asym_compression_trace} applied to the
     compression in Theorem~\ref{thm:asymex_ising_action_compression}
     gives the sum of the four weighted block traces.
