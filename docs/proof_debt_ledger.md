@@ -157,10 +157,10 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   which was defined twice in the tree, once unnamespaced there and once
   namespaced — or a prose pointer. `UnionInjectivity.lean` imported the module
   but used only the general forms and two injectivity facts declared one module
-  earlier, so its import line is retargeted at `ThreeBlockResonate`. The one
-  `\leanid` citation of a removed name in
-  `docs/paper-gaps/peps_normal_ft_section3_route.tex` is the blue
-  smul-factorization, not the middle-strip step an earlier note recorded; it is
+  earlier, so its import line is retargeted at `ThreeBlockResonate`. The two
+  `\leanid` citations of a removed name in
+  `docs/paper-gaps/peps_normal_ft_section3_route.tex` (lines 546 and 564) are the blue
+  smul-factorization, not the middle-strip step an earlier note recorded; both are
   repointed at the geometry-native form the cited step actually calls. See
   `docs/audits/2026-09-21_peps_three_block_resonate2.md`.
 

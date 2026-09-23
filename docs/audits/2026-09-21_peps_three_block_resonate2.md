@@ -32,10 +32,12 @@ The remaining eight names have no match at all outside the file except two prose
 pointers, corrected below. No removed name carries an attribute or an instance
 declaration.
 
-No Blueprint `\lean{...}` tag cites a removed name. The one Blueprint occurrence
-of the short name `threeBlockComplCoeff`, in
-`blueprint/src/chapter/ch24_peps_ft_torus_single_bond_peeling.tex`, tags the
-`ThreeBlockGeometry`-namespaced declaration, so `checkdecls` is unaffected.
+No Blueprint `\lean{...}` tag cites a removed name. The Blueprint occurrence of
+`threeBlockComplCoeff`, in
+`blueprint/src/chapter/ch24_peps_ft_torus_single_bond_peeling.tex` (line 344),
+is part of the compound name
+`TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff`,
+which tags a different surviving declaration, so `checkdecls` is unaffected.
 
 ## Removed declarations and their replacements
 
