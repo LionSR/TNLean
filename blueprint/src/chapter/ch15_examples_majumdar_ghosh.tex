@@ -2,13 +2,17 @@
 %% ===================================================================
 
 The Majumdar--Ghosh state is the exact dimer ground state of the spin-$\tfrac12$
-chain
+antiferromagnetic Heisenberg chain with next-nearest-neighbour coupling at the
+Majumdar--Ghosh point $J_2 = J_1 / 2$~\cite{MajumdarGhosh1969,MajumdarGhosh1969II}:
 $H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1}
     +\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$.
 On an even periodic chain it is the symmetric superposition of the two
 nearest-neighbour singlet coverings $(1,2)(3,4)\cdots$ and
-$(2,3)(4,5)\cdots(N,1)$, the one-dimensional analog of a
-resonating valence-bond state.
+$(2,3)(4,5)\cdots(N,1)$, forming the one-dimensional prototype of a
+resonating valence-bond state. In tensor network
+representations~\cite{PerezGarcia2007Matrix,Cirac2021Matrix}, it exemplifies
+a non-normal, non-injective tensor with a two-fold degenerate periodic ground
+space.
 
 \begin{definition}[Majumdar--Ghosh tensor]\label{def:majumdar_ghosh_tensor}
     \lean{MPSTensor.majumdarGhoshTensor}
