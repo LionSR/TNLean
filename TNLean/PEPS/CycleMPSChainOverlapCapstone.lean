@@ -58,6 +58,30 @@ bond dimension `D`.  Documented in
 open scoped Matrix
 open scoped Fin.NatCast
 
+namespace TNLean
+namespace PEPS
+
+/-! ### Linear extension of two-sided multiplication -/
+
+/-- Two two-sided multiplication maps that agree on a spanning set of the
+matrix algebra agree on every matrix. -/
+theorem conj_eq_conj_of_span {D : ℕ} {S : Set (Matrix (Fin D) (Fin D) ℂ)}
+    (hS : Submodule.span ℂ S = ⊤) {P Q P' Q' : Matrix (Fin D) (Fin D) ℂ}
+    (h : ∀ M ∈ S, P * M * Q = P' * M * Q') (M : Matrix (Fin D) (Fin D) ℂ) :
+    P * M * Q = P' * M * Q' := by
+  have hmaps :
+      (LinearMap.mulRight ℂ Q).comp (LinearMap.mulLeft ℂ P) =
+        (LinearMap.mulRight ℂ Q').comp (LinearMap.mulLeft ℂ P') := by
+    apply LinearMap.ext_on hS
+    intro N hN
+    simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+      using h N hN
+  simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+    using congrArg (fun f => f M) hmaps
+
+end PEPS
+end TNLean
+
 namespace MPSChainTensor
 
 variable {d D n : ℕ}
@@ -82,24 +106,6 @@ private theorem isUnit_of_mul_span {ι : Type*} {X : Matrix (Fin D) (Fin D) ℂ}
   obtain ⟨M, hM⟩ := h1
   rw [LinearMap.mulLeft_apply] at hM
   exact IsUnit.of_mul_eq_one M hM
-
-/-- Two two-sided multiplications agreeing on a spanning family agree on
-every matrix. -/
-private theorem conj_eq_conj_of_span_range {ι : Sort*}
-    {F : ι → Matrix (Fin D) (Fin D) ℂ}
-    (hF : Submodule.span ℂ (Set.range F) = ⊤)
-    {P Q P' Q' : Matrix (Fin D) (Fin D) ℂ}
-    (h : ∀ i, P * F i * Q = P' * F i * Q') (M : Matrix (Fin D) (Fin D) ℂ) :
-    P * M * Q = P' * M * Q' := by
-  have hmaps :
-      (LinearMap.mulRight ℂ Q).comp (LinearMap.mulLeft ℂ P) =
-        (LinearMap.mulRight ℂ Q').comp (LinearMap.mulLeft ℂ P') := by
-    apply LinearMap.ext_on_range (v := F) hF
-    intro i
-    simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
-      using h i
-  simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
-    using congrArg (fun f => f M) hmaps
 
 /-- Some arc product of a spanning arc family is nonzero. -/
 private theorem exists_arcEval_ne_zero [NeZero n] {A : MPSChainTensor d D n}
@@ -317,7 +323,8 @@ private theorem exists_window_covariance [NeZero n] {A B : MPSChainTensor d D n}
           ((Xu : (Matrix (Fin D) (Fin D) ℂ)ˣ) : Matrix (Fin D) (Fin D) ℂ) =
         (Z (p + m) : Matrix (Fin D) (Fin D) ℂ) * M *
           (((Z (p + m))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
-    conj_eq_conj_of_span_range hAspan_pair (fun vu => hconj_fam vu.1 vu.2)
+    TNLean.PEPS.conj_eq_conj_of_span hAspan_pair
+      (by rintro _ ⟨vu, rfl⟩; exact hconj_fam vu.1 vu.2)
   -- The bond operator times the far gauge is central, hence a scalar.
   have hcomm : ∀ M : Matrix (Fin D) (Fin D) ℂ,
       Commute M (((Xu : (Matrix (Fin D) (Fin D) ℂ)ˣ) : Matrix (Fin D) (Fin D) ℂ) *

@@ -269,12 +269,7 @@
     \end{align}
     satisfies $\ker\Phi_N=\{0\}$.
 
-    \textbf{Scope restriction (linear independence without spanning):}
-    This theorem establishes eventual linear independence along the common-period
-    subsequence without proving that these periodic vectors span the full periodic MPS space
-    asserted in \cite[lines~589--609]{DeLasCuevas2017Irreducible}; documented in
-    \cite{gap:dccsp17_periodic_overlap_route_alignment}
-    (\texttt{docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex}).
+    Following \cite[lines~589--609]{DeLasCuevas2017Irreducible}, this establishes linear independence of the periodic vectors without asserting spanning of the ambient vector \cite{gap:dccsp17_periodic_overlap_route_alignment}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -722,8 +717,8 @@
     mixed overlap does not tend to zero.  Every such non-decaying pair has
     equal bond dimension and differs by an invertible similarity and a
     unit-modulus scalar.
-    This specializes \cite[Theorem~3.4]{DeLasCuevas2017Irreducible} to one
-    positive scalar per listed block and direct-sum equality at all lengths.
+
+    This formulation specializes the preceding multiplicity-bearing theorem to scalar weights per block.
 \end{theorem}
 \begin{proof}\leanok
     Repeat the coefficient argument above with the singleton coefficients
@@ -743,8 +738,8 @@
     such non-decaying pair is repeated. Then there is a bijection
     $\pi\colon J\to K$ such that $A_j$ and $B_{\pi(j)}$ are repeated for every
     $j\in J$.
-    This isolates the finite matching step deduced from the overlap dichotomy
-    in \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
+
+    This establishes the finite matching step of \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 \begin{proof}\leanok
     Choose a non-decaying partner $f(j)\in K$ for every $j\in J$. If

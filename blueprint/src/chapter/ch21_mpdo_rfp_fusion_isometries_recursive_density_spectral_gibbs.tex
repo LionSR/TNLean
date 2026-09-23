@@ -95,9 +95,8 @@
         R_N          & =\sum_s\lambda_sA_NP_s^{(N)}.
         \notag
     \end{align}
-    This is the terminal spectral decomposition of
-    \cite[lines~1003--1012]{Cirac2016MPDO_arXiv}; it makes no Hamiltonian or
-    Gibbs-state assertion.
+    This establishes the terminal spectral decomposition of
+    \cite[lines~1003--1012]{Cirac2016MPDO_arXiv}.
 
     Only nonzero product sectors occur in the fusion decomposition. A normal
     label absent from a fixed product pair has zero fusion multiplicity. See
@@ -170,7 +169,7 @@
     as defined by CPSV.
     % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 
-    This theorem gives the spectral decomposition of
+    This establishes the spectral decomposition of
     \cite[lines~1003--1012]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
@@ -232,11 +231,8 @@
     outside the image.
 
     The Hamiltonian and projectors in this definition act on the retained
-    nonzero vertical sectors. Applying the adjoint of the coisometry
-    restricted to the retained rows reconstructs the physical density
-    operator; this reconstruction alone does not specify a Hamiltonian or
-    projectors on the original physical space. The distinction is recorded in
-    \cite{gap:cpsv16_topological_gibbs_physical_complement}.
+    nonzero vertical sectors, with reconstruction onto the physical space
+    treated in \cite{gap:cpsv16_topological_gibbs_physical_complement}.
 
     The local interaction is defined on two spins, so this definition applies
     to lengths $L=N+2$. The length-one boundary is recorded in
@@ -310,11 +306,8 @@
     Figure~11. See
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 
-    The formula is an equality for $R_L$ on the retained vertical space, not
-    the physical-space equality asserted in
-    \cite[lines~1013--1016]{Cirac2016MPDO_arXiv}. Exact reconstruction by the
-    adjoint coisometry alone does not establish the existence of physical
-    projectors and a finite physical Hamiltonian. See
+    The formula holds for $R_L$ on the retained vertical space; the extension to
+    the physical space is analyzed in
     \cite{gap:cpsv16_topological_gibbs_physical_complement}.
 
     The conclusion holds for $L=N+2$, with $N\in\N$. The definition of the
@@ -355,19 +348,11 @@
     Theorem~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
     holds for every $L=N+2$, with $N\in\N$.
 
-    The normalized BNT-refined horizontal hypothesis is stronger than CF
-    as defined by CPSV.
-
     The Hamiltonian and projectors act on the retained nonzero vertical
-    sectors. Applying the adjoint of the coisometry restricted to the
-    retained rows reconstructs the physical density operator; this
-    reconstruction alone does not specify a Hamiltonian or projectors on the
-    original physical space. See
+    sectors, with the physical-space extension treated in
     \cite{gap:cpsv16_topological_gibbs_physical_complement}.
-
-    The conclusion holds for $L=N+2$; no length-one convention for the
-    two-site interaction is asserted. See
-    \cite{gap:cpsv16_topological_gibbs_length_one}.
+    The conclusion holds for $L=N+2$ (see
+    \cite{gap:cpsv16_topological_gibbs_length_one} regarding length one).
 \end{theorem}
 \begin{proof}\leanok
     Select the fusion decomposition on the nonzero product sectors supplied
@@ -477,18 +462,13 @@
     Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     holds for every $L=N+2$, with $N\in\N$.
 
-    The normalized BNT-refined horizontal hypothesis is stronger than CF
-    as defined by CPSV.
-
     The retained one-site energy is transported through the adjoint
     coisometry and extended by zero energy on the orthogonal complement.
     The retained projectors are transported through the adjoint sitewise
-    coisometry. This supplies the physical complement correction described in
+    coisometry, supplying the physical complement correction described in
     \cite{gap:cpsv16_topological_gibbs_physical_complement}.
-
-    The conclusion holds for $L=N+2$; no length-one convention for the
-    two-site interaction is asserted. See
-    \cite{gap:cpsv16_topological_gibbs_length_one}.
+    The conclusion holds for $L=N+2$ (see
+    \cite{gap:cpsv16_topological_gibbs_length_one} regarding length one).
 \end{theorem}
 \begin{proof}\leanok
     Select the fusion decomposition on the nonzero product sectors supplied
@@ -611,9 +591,7 @@
     edge.
 
     The source states its Gibbs-decomposition theorem without an explicit
-    lower bound on $L$. Its $L=1$ instance requires an additional convention.
-    The physical-space result here establishes the decomposition for
-    $L\geq2$; no length-one statement is asserted.
-    % See docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex
-    % and docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex.
+    lower bound on $L$, whereas the two-site interaction convention requires
+    $L\geq2$ (see \cite{gap:cpsv16_topological_gibbs_length_one}).
+    % See also docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex.
 \end{remark}

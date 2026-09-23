@@ -5,10 +5,8 @@ The two models below are mixed states built from Bell bonds. In the first,
 each site contains two qubits, and neighboring half-bonds form independent
 mixed Bell states. In the second, each site also contains a classical flag;
 a controlled flag flip couples the Bell sectors to an even-parity flag
-state. These are explicit constructions motivated by the question of
-length-dependent multiplication coefficients following
-Theorem~4.14 of Ref.~\cite{Cirac2016MPDO_arXiv}, not tensors stated in that
-source.
+state~\cite{Cirac2016MPDO_arXiv, Kato2024Exact}.
+
 
 Write $E_{ij}=\ketbra{i}{j}$ and
 $\ket{\Phi_\pm}=(\ket{00}\pm\ket{11})/\sqrt2$, with
@@ -429,8 +427,6 @@ $2(7/10+1/10)(5/8)^2=5/8$.
     as specified in Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence}.
     The first equivalence is Ref.~\cite[Theorem~4.14(i)--(ii)]{Cirac2016MPDO_arXiv};
     the second is the corrected active-support form of its fusion equivalence.
-    Neither multiplication nor the idempotent relation follows from a
-    vertical decomposition alone.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -443,10 +439,6 @@ $2(7/10+1/10)(5/8)^2=5/8$.
     physical maps are completed on discarded complements. These implications
     also prove the equivalence with the active-sector fusion description.
 \end{proof}
-
-The equivalences require the stated CF and MPDO hypotheses. The direct
-channel constructions of Theorem~\ref{thm:asymex_physical_rfp} do not
-infer those hypotheses merely from a closed-chain factorization.
 
 \section{Renormalization fixed points: a shared adapted basis}%
 \label{sec:asymex_rfp_basis}

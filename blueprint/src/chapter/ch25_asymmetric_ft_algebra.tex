@@ -164,16 +164,9 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     $a,b\geq0$ and a semisimple module $M$ without a $\mathbf0$ summand such
     that $U^{\mathrm{ss}}\cong M\oplus\mathbf0^{\oplus a}$ and
     $V^{\mathrm{ss}}\cong M\oplus\mathbf0^{\oplus b}$.
-
-    The source proof decomposes the finite-dimensional image algebra
-    $R=(\rho_U\oplus\rho_V)(F)$ modulo its Jacobson radical by
-    Artin--Wedderburn and compares traces of central idempotents. The
-    formalized development below proves the statements the main theorem
-    actually uses by a different, equivalent route: Burnside's theorem and
-    the Jacobson density theorem applied directly to each simple factor as
-    it is peeled off by an induction on dimension
-    (\S\ref{sec:asym_flag}), rather than by a single global
-    Artin--Wedderburn decomposition.
+    % The source proof decomposes the finite-dimensional image algebra
+    % modulo its Jacobson radical by Artin--Wedderburn and compares
+    % traces of central idempotents.
 \end{lemma}
 
 \begin{lemma}[Positive-ideal separation of linear functionals]
@@ -283,9 +276,8 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \label{thm:asym_nilpotent_trace_powers}
     \lean{LinearMap.isNilpotent_of_forall_trace_pow_eq_zero}
     \leanok
-    Let $V$ be a finite-dimensional complex vector space and let
-    $u\in\operatorname{End}(V)$. If $\tr(u^k)=0$ for all $k\ge 1$, then $u$ is
-    nilpotent.
+    An endomorphism of a finite-dimensional complex vector space, all of
+    whose positive powers have vanishing trace, is nilpotent.
 \end{theorem}
 
 \begin{proof}
@@ -305,8 +297,6 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     simple tensor modules $C_s$, $s\in S$. Let $K\leq M$ have simple
     quotient $M/K$ on which some generator acts nontrivially. Then $M/K$ is
     isomorphic to $C_s$ for some $s\in S$.
-    This provides the quotient identification used with the
-    positive-word character lemma (Lemma~\ref{lem:asym_character}) below.
 \end{theorem}
 
 \begin{proof}
@@ -373,13 +363,9 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \lean{MPSTensor.finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero}
     \leanok
     \uses{def:normal, def:asym_word_traces}
-    Let $\{C_s\}_{s\in S}$ be a finite family of normal tensors of positive
-    bond dimensions. If for every nonempty word $w\ne\emptyset$,
-    \begin{align}
-        \sum_{s\in S}\tr(C_s^w)=0,
-        \notag
-    \end{align}
-    then $S=\emptyset$.
+    If the word traces of a finite family of normal tensors of positive
+    bond dimension sum to zero on every nonempty word, the family is
+    empty.
 \end{lemma}
 
 \begin{proof}
@@ -404,9 +390,6 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     word traces agree, on every nonempty word, with the sum of the word
     traces of the $C_s$. Then $M$ carries a labelled invariant flag over
     $(S,C)$.
-
-    This is the module-theoretic core of clauses (i)--(iii) and (vii) of
-    the main theorem below.
 \end{theorem}
 
 \begin{proof}

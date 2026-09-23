@@ -509,27 +509,12 @@ end MPSTensor
 namespace TNLean
 namespace PEPS
 
-/-! ### Linear extension and centralizer auxiliary lemmas
+/-! ### Centralizer auxiliary lemma
 
-Two-sided multiplication maps agreeing on a spanning set agree everywhere,
-and two invertible matrices inducing the same two-sided conjugation of the
-full matrix algebra are proportional. -/
-
-/-- Two two-sided multiplication maps that agree on a spanning set of the
-matrix algebra agree on every matrix. -/
-theorem conj_eq_conj_of_span {D : ℕ} {S : Set (Matrix (Fin D) (Fin D) ℂ)}
-    (hS : Submodule.span ℂ S = ⊤) {P Q P' Q' : Matrix (Fin D) (Fin D) ℂ}
-    (h : ∀ M ∈ S, P * M * Q = P' * M * Q') (M : Matrix (Fin D) (Fin D) ℂ) :
-    P * M * Q = P' * M * Q' := by
-  have hmaps :
-      (LinearMap.mulRight ℂ Q).comp (LinearMap.mulLeft ℂ P) =
-        (LinearMap.mulRight ℂ Q').comp (LinearMap.mulLeft ℂ P') := by
-    apply LinearMap.ext_on hS
-    intro N hN
-    simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
-      using h N hN
-  simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
-    using congrArg (fun f => f M) hmaps
+Two invertible matrices inducing the same two-sided conjugation of the full
+matrix algebra are proportional.  The linear extension of two-sided
+multiplication from a spanning set, `conj_eq_conj_of_span`, is stated in
+`TNLean.PEPS.CycleMPSChainOverlapCapstone`. -/
 
 /-- **Proportionality from a shared two-sided conjugation.**  Two invertible
 matrices `Z`, `Z'` with `Z⁻¹ W Z = Z'⁻¹ W Z'` for every matrix `W` differ by

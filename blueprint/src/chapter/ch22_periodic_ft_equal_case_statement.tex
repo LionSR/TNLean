@@ -48,18 +48,9 @@ blockwise similarity of \cite[eq.~\emph{unital},
     Setting $Z=\bigoplus_j Z_j\otimes\Id_{D_j}$ one has
     $Z^{\operatorname{lcm}_jm_j}=\Id$, $[A^i,Z]=0$ for every $i$,
     $\mc{V}^+(A)=\mc{V}^+(ZA)$, and there is an invertible matrix $Y$ with
-    $ZA^i=YB^iY^{-1}$ for all $i$.\end{theorem}
+    $ZA^i=YB^iY^{-1}$ for all $i$.
 
-\begin{remark}
-    The matrix-product-vector identities are stated at positive chain
-    lengths $L \ge 1$. The periods $m_j$ are produced from irreducibility
-    and spectral radius one by
-    Theorem~\ref{thm:spectral_periodic_period_existence}, matching
-    \cite[lines~257--258]{DeLasCuevas2017Irreducible}. The scalars $\xi_j$
-    are made explicit rather than absorbed into $S_{\pi(j)}$
-    \cite[lines~667--671]{DeLasCuevas2017Irreducible}, keeping the
-    multiplicity matrices $R_j$ and $S_k$ unscaled.
-\end{remark}
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:spectral_periodic_period_existence,
@@ -72,16 +63,25 @@ blockwise similarity of \cite[eq.~\emph{unital},
     about are the produced ones.
 \end{proof}
 
+\begin{remark}[Conventions on length range and scalars]
+    The matrix-product-vector identities are taken at positive lengths, following the convention that the empty word is not a physical chain; this extends to length zero since the empty-word coefficient equals the bond dimension. The scalars $\xi_j$ are made explicit rather than absorbed into $S_{\pi(j)}$ as in \cite[lines~667--671]{DeLasCuevas2017Irreducible}, allowing the statement to speak directly about the given multiplicity matrices.
+\end{remark}
+
 \begin{theorem}[Periodic Fundamental Theorem, periods supplied]%
     \label{thm:periodic_ft_supplied_periods}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
     \leanok
     \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
         def:scalar_gauge_equiv}
-    Theorem~\ref{thm:periodic_ft} with the periods $m_j$ and $n_k$ supplied
+    Theorem~\ref{thm:periodic_ft} with the periods $m_j$ and $n_k$ given
     alongside the two block families, together with witnesses that each block is
     spectrally periodic of the given period in the sense of
-    Definition~\ref{def:spectral_periodic_tensor}.
+    Definition~\ref{def:spectral_periodic_tensor}. Everything else, hypotheses
+    and conclusion alike, is as stated there. This is the working form of the
+    theorem; the periods it receives are supplied by
+    Theorem~\ref{thm:spectral_periodic_period_existence} in the proof of
+    Theorem~\ref{thm:periodic_ft} above, so the source statement no longer
+    depends on them being given.
 \end{theorem}
 
 \begin{proof}\leanok
