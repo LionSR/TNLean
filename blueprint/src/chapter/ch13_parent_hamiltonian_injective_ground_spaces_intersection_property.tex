@@ -160,9 +160,9 @@
          & = \psi\!\left(\rho^{[s,s+M-1]\leftarrow\omega}\right).
         \notag
     \end{align}
-    The listed identities are the equations for $s=0$, $M=N$, for deleting the
-    first or last site, and for first fixing $K$ sites and then restricting to
-    $[s+K,s+K+L-1]$.
+    These identities include the boundary cases $s=0$ and $M=N$, the deletion
+    of the first or last site, and the composition of fixing $K$ prefix sites
+    followed by restricting to $[s+K,s+K+L-1]$.
 \end{remark}
 
 \begin{remark}[Cyclic interval restrictions]\label{rem:cyclic_window_operators}
@@ -213,15 +213,15 @@
         \notag
     \end{align}
     For every $r<L$, the inserted word is recovered as
-    $\rho^{\mathrm{cyc}}_{i,L,\omega}(i+r)=\omega(r)$. Here site labels are
-    taken modulo $N$. Reassembling a configuration around itself returns it:
+    $\rho^{\mathrm{cyc}}_{i,L,\omega}(i+r)=\omega(r)$ with site labels taken modulo $N$.
+    Reconstructing a configuration from its local restriction returns the original configuration:
     taking $\rho=\sigma$ and $\omega(r)=\sigma(i+r)$ for $r<L$,
     \begin{align}
         \sigma^{\mathrm{cyc}}_{i,L,\omega}
          & = \sigma.
         \notag
     \end{align}
-    Changing one inserted value commutes with the assembly: for $r<L$ and a
+    Modifying a single inserted site commutes with the cyclic extension: for $r<L$ and a
     letter $x$, writing $\omega[r\mapsto x]$ for the word $\omega$ with its
     value at $r$ replaced by $x$,
     \begin{align}
@@ -229,11 +229,10 @@
          & = \rho^{\mathrm{cyc}}_{i,L,\omega[r\mapsto x]}.
         \notag
     \end{align}
-    The remaining listed identities say that deleting the
-    final site of an $(L+1)$-interval gives the $L$-interval beginning at $i$;
-    if $L+1\le N$, deleting the first site gives the $L$-interval beginning at
-    $i+1$; and the cyclic formula agrees with the contiguous formula when the
-    interval does not wrap around the ring.
+    Deleting the final site of an $(L+1)$-interval gives the $L$-interval
+    beginning at $i$; for $L+1\le N$, deleting the first site gives the
+    $L$-interval beginning at $i+1$; and the cyclic formula agrees with the
+    contiguous restriction when the interval does not wrap around the ring.
 \end{remark}
 
 \begin{theorem}[One-site restrictions of cyclic-window boundary conditions]
@@ -263,9 +262,8 @@
     Consequently, for a finite chain of adjacent overlaps indexed by
     $0\le r<n$, satisfying $Y_rA^{a_r}=A^{b_r}Y_{r+1}$, one has
     $Y_0A^{a_0}\cdots A^{a_{n-1}} = A^{b_0}\cdots A^{b_{n-1}}Y_n$.
-    In particular, if the two endpoint words are named by the equations
-    $a_r=\rho(i_0+r)$ and $b_r=\rho(i_0+r+L+1)$, with site labels read modulo
-    $N$, then the same transport identity is written as $Y_0A^a=A^bY_n$.
+    In particular, when the boundary words are given by $a_r=\rho(i_0+r)$ and
+    $b_r=\rho(i_0+r+L+1)$ modulo $N$, this identity reads $Y_0A^a=A^bY_n$.
 \end{theorem}
 
 \begin{proof}

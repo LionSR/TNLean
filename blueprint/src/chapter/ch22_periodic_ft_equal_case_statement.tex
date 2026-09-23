@@ -1,10 +1,9 @@
-The following is the equal-case theorem of
-\cite[lines~643--656]{DeLasCuevas2017Irreducible}, stated for tensors in
+Theorem~\ref{thm:periodic_ft} formalizes the equal-case Fundamental Theorem of
+\cite[lines~643--656]{DeLasCuevas2017Irreducible} for tensors in
 irreducible form. Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving}
-below is the same statement for blocks whose maps are trace preserving; the
-passage to that normalization, asserted by the source at lines 330--332, is the
-blockwise similarity of \cite[eq.~\emph{unital},
-    line~316]{DeLasCuevas2017Irreducible} and is carried out in the proof.
+handles the case where each block's transfer map is trace-preserving; the
+reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital},
+    line~316]{DeLasCuevas2017Irreducible}) is carried out in the proof.
 
 \begin{theorem}[Periodic Fundamental Theorem]
     \label{thm:periodic_ft}
@@ -21,14 +20,12 @@ blockwise similarity of \cite[eq.~\emph{unital},
     non-repeated bases of periodic tensors, $R_j$ and $S_k$ are diagonal
     multiplicity matrices of sizes $r_j\times r_j$ and $s_k\times s_k$ with
     nonzero diagonal entries, and $A_j^i$ and $B_k^i$ act on bond spaces of
-    dimensions $D_j$ and $D_k$. The blocks are required only to have
-    irreducible transfer maps of spectral radius one, which is the source's
-    irreducible form at
-    \cite[lines~248--261]{DeLasCuevas2017Irreducible}; in particular no
-    trace-preserving normalization is imposed, and the periodicity $m_j$ of a
-    block is the derived one of
-    \cite[lines~257--258]{DeLasCuevas2017Irreducible} rather than a further
-    hypothesis.
+    dimensions $D_j$ and $D_k$. The blocks need only have irreducible transfer
+    maps of spectral radius one
+    (\cite[lines~248--261]{DeLasCuevas2017Irreducible}); no trace-preserving
+    normalization is imposed, and the periodicity $m_j$ of each block is
+    derived from the peripheral spectrum
+    (\cite[lines~257--258]{DeLasCuevas2017Irreducible}).
     Suppose that $\mc{V}^+(A)=\mc{V}^+(B)$.
 
     Then $|J|=|K|$ and there is a bijection $\pi:J\to K$
@@ -55,12 +52,10 @@ blockwise similarity of \cite[eq.~\emph{unital},
     \leanok
     \uses{thm:spectral_periodic_period_existence,
         thm:periodic_ft_supplied_periods}
-    Theorem~\ref{thm:spectral_periodic_period_existence} produces, for each
-    block of either family, a positive period for which that block is
-    spectrally periodic; irreducibility and spectral radius one are all it
-    needs. Theorem~\ref{thm:periodic_ft_supplied_periods}, applied to those
-    periods, gives every clause of the conclusion, and the periods it speaks
-    about are the produced ones.
+    Theorem~\ref{thm:spectral_periodic_period_existence} yields a positive
+    period $m_j$ for each block of $A$ and $B$. Applying
+    Theorem~\ref{thm:periodic_ft_supplied_periods} with these derived periods
+    gives every conclusion.
 \end{proof}
 
 \begin{remark}[Conventions on length range and scalars]
@@ -73,15 +68,11 @@ blockwise similarity of \cite[eq.~\emph{unital},
     \leanok
     \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
         def:scalar_gauge_equiv}
-    Theorem~\ref{thm:periodic_ft} with the periods $m_j$ and $n_k$ given
-    alongside the two block families, together with witnesses that each block is
-    spectrally periodic of the given period in the sense of
-    Definition~\ref{def:spectral_periodic_tensor}. Everything else, hypotheses
-    and conclusion alike, is as stated there. This is the working form of the
-    theorem; the periods it receives are supplied by
-    Theorem~\ref{thm:spectral_periodic_period_existence} in the proof of
-    Theorem~\ref{thm:periodic_ft} above, so the source statement no longer
-    depends on them being given.
+    Under the hypotheses of Theorem~\ref{thm:periodic_ft}, suppose in addition
+    that positive integers $m_j$ and $n_k$ are given such that each $A_j$ is
+    spectrally $m_j$-periodic and each $B_k$ is spectrally $n_k$-periodic
+    (Definition~\ref{def:spectral_periodic_tensor}). Then the conclusions of
+    Theorem~\ref{thm:periodic_ft} hold for these specified periods.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -95,7 +86,7 @@ blockwise similarity of \cite[eq.~\emph{unital},
     representatives are periodic with trace-preserving block maps and are
     blockwise similar to the originals, so the multiplicities and their power
     sums are unchanged, the non-repetition of the two bases is preserved, and
-    the two assembled tensors generate the same matrix-product vectors as
+    the two direct-sum tensors generate the same matrix-product vectors as
     before. Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving} applies
     to the normalized pair.
 
@@ -412,10 +403,10 @@ blockwise similarity of \cite[eq.~\emph{unital},
     $[A^i,Z]=0$ for every $i$, $\mc{V}^+(A)=\mc{V}^+(ZA)$, and there is an
     invertible $Y$ with $ZA^i=YB^iY^{-1}$ for every $i$.
 
-    This is the assembly of
+    This establishes the global intertwining relation of
     \cite[lines~689--690]{DeLasCuevas2017Irreducible}, with $Y$ the direct sum
-    $\bigoplus_jT_j\otimes Y_j$ of the copy reorderings and the blockwise
-    similarities.
+    $\bigoplus_{j\in J} T_j\otimes Y_j$ of the copy reorderings and the
+    blockwise similarities.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -426,7 +417,7 @@ blockwise similarity of \cite[eq.~\emph{unital},
     multiplicity entries by the $z_{j,l}$, and the hypothesis on the
     $z_{j,l}$ makes the rescaled entries equal to the matched entries of $B$.
     The matched blocks are therefore related copy by copy, so the two
-    assembled tensors are related by the permutation of the matched copies
+    direct-sum tensors are related by the permutation of the matched copies
     followed by the direct sum of the blockwise similarities. For the
     matrix-product vectors, a copy whose period divides the length contributes
     the factor $z_{j,l}^N=1$, and a copy whose period does not divide the
@@ -494,22 +485,16 @@ blockwise similarity of \cite[eq.~\emph{unital},
     scalar of the similarity between the matched blocks, and the entries of
     $Z_j$ are $m_j$-th roots of unity against the rescaled multiplicity matrix
     $\xi_jR_j$. That is what the source means at lines 667--671 by absorbing
-    the phase into $S_j$; the scalar is genuinely present, as the period-one
-    pair $B_j=e^{i\theta}A_j$ shows.
+    the phase into $S_j$; the scalar is present, as the period-one pair
+    $B_j=e^{i\theta}A_j$ shows.
 
-    This is
+    This establishes
     \cite[Theorem~3.8, lines~643--693]{DeLasCuevas2017Irreducible} for tensors
-    whose block maps are trace preserving, the normalization of
-    \cite[eq.~\emph{unital}, line~316]{DeLasCuevas2017Irreducible}. That is
-    less than the source's irreducible form II, which asks in addition for a
-    diagonal fixed point, and more than the source's irreducible form, which
-    asks only for irreducibility and spectral radius one. The passage from
-    irreducible form to this normalization, asserted by the source at lines
-    330--332, is carried out in Theorem~\ref{thm:periodic_ft}, which is the
-    source statement itself. The present statement is the normalized half of
-    that pair, isolated because the periodic overlap dichotomy and the
-    vanishing of an off-period block are available in the normalized
-    orientation.
+    whose block maps are trace preserving
+    (\cite[eq.~\emph{unital}, line~316]{DeLasCuevas2017Irreducible}). The
+    periodic overlap dichotomy and the vanishing of off-period blocks apply
+    directly in this trace-preserving setting, from which
+    Theorem~\ref{thm:periodic_ft} is deduced.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -535,6 +520,6 @@ blockwise similarity of \cite[eq.~\emph{unital},
     $\nu_{\pi(j),\tau_j(l)}^{m_j}=(\xi_j\mu_{j,l})^{m_j}$. The ratios
     $z_{j,l}=\nu_{\pi(j),\tau_j(l)}/(\xi_j\mu_{j,l})$ are therefore $m_j$-th
     roots of unity; they are collected into the diagonal $Z_j$, and
-    Theorem~\ref{thm:periodic_equalcase_global_zgauge} assembles them into the
+    Theorem~\ref{thm:periodic_equalcase_global_zgauge} constructs the
     global $Z$ and the similarity $Y$.
 \end{proof}

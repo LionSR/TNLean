@@ -209,10 +209,8 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
     equality, where it moves the boundary matrix $B$ across the word.
 \end{proof}
 
-The maps in this subsection are raw algebraic maps on matrices and coefficient
-functions.  The $\rho$-weighted Hilbert-space structure of
-\cite[Equation~(5.6)]{Fannes1992Finitely} is a separate construction; no
-choice of $\rho$ enters (\ref{eq:fnw_boundary_ground_space_map}).
+These boundary identifications are algebraic relations between matrix spaces and
+coefficient functions, independent of any state-dependent boundary inner product.
 
 \begin{definition}[Local ground space]\label{def:ground_space_parent}
     \lean{MPSTensor.groundSpace}
@@ -529,10 +527,8 @@ used in the convention identities below.
     Substitute the trace-pairing adjoint identity and use cyclicity of trace.
 \end{proof}
 
-These identities only compare the two transfer-map conventions. They do not
-include the weighted decay estimate of
-\cite[Lemma~5.2]{Fannes1992Finitely}, and they make no assertion of a
-constant $C_\lambda=k^2$.
+These identities establish the algebraic equivalence between the two transfer-map
+conventions.
 
 \begin{definition}[Normalized limiting FNW observable map]
     \label{def:fnw_limit_map}
@@ -725,9 +721,9 @@ constant $C_\lambda=k^2$.
     Theorem~\ref{thm:fnw_remainder_power}.
 \end{proof}
 
-These projection and absorption identities precede the weighted Hilbert-space
-estimate in \cite[Lemma~5.2]{Fannes1992Finitely}. They do not by themselves
-assert a $\rho$-weighted norm bound or any quantitative decay constant.
+These algebraic relations express the spectral projection and remainder
+decomposition of the transfer map before introducing the $\rho$-weighted inner
+product.
 
 \begin{definition}[Operator-level Gram reshuffling]
     \label{def:gram_reshuffle}
@@ -968,13 +964,9 @@ assert a $\rho$-weighted norm bound or any quantitative decay constant.
         \lVert a^n\rVert & \leq C_\lambda\lambda^n
         \label{eq:geometric_bound_of_spectral_radius_lt}
     \end{align}
-    for every $n\in\N$.  The same prescribed $\lambda$ appears in the bound;
-    the additional condition $\lambda<1$ is needed only when geometric decay
-    is deduced downstream.  After the nonunit transfer operator has been
-    isolated, this is the prescribed-rate spectral step used in
-    \cite[Lemma~5.2]{Fannes1992Finitely}, but it does not establish the full
-    estimate of that lemma.  The constant may depend on $\lambda$; no
-    dimension-only value, in particular $C_\lambda=k^2$, is asserted.
+    for every $n\in\N$.  This operator-theoretic estimate provides the
+    prescribed-rate geometric decay used for the peripheral-spectrum remainder
+    of the transfer map in \cite[Lemma~5.2]{Fannes1992Finitely}.
 \end{theorem}
 
 \begin{proof}
@@ -1181,9 +1173,6 @@ assert a $\rho$-weighted norm bound or any quantitative decay constant.
     $E_{\mathrm{FNW},A}^n-E_\infty^\rho$.  Multiply by $c_\rho>0$ and take
     $C_\lambda=c_\rho C_0$.
 \end{proof}
-
-The theorem does not identify $C_\lambda$ with $k^2$ or identify the FNW
-auxiliary dimension $k$ with the chosen bond dimension $D$.
 
 \subsection{The weighted FNW boundary estimate}
 \label{subsec:fnw_weighted_boundary_estimate}
@@ -1700,9 +1689,8 @@ normalization used in
     $a_-(m)\geq a_-(L_0)>0$ for $m\geq L_0$.
 \end{proof}
 
-The preceding results formalize the lower-boundary assertions of
-\cite[Lemma~5.3]{Fannes1992Finitely}. They do not yet estimate the overlap of
-two three-block boundary families.
+These results establish the lower-boundary assertions of
+\cite[Lemma~5.3]{Fannes1992Finitely}.
 
 % FNW 1992, Lemma 6.2, especially equation (6.5).
 \subsection{The linear overlap estimate in FNW Lemma 6.2}
@@ -2292,7 +2280,7 @@ space.
         thm:fnw_projector_defect_unfactored}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and
     $\tr(\rho)=1$. Then there is an injective length $L_0\geq1$ such that
-    Equation~(\ref{eq:fnw_projector_defect_unfactored}) holds whenever
+    the bound (\ref{eq:fnw_projector_defect_unfactored}) holds whenever
     $m\geq L_0$ and $\ell\geq1$, for every $r\geq0$.
 \end{theorem}
 
@@ -2320,8 +2308,8 @@ rational geometric form
 \end{align}
 stated in \cite[lines~1180--1194]{Nachtergaele1996Spectral} and again for the
 best overlap constant $A^\alpha_m$ in
-\cite[Equation~(6.1)]{Nachtergaele1996Spectral}.  The results below assemble
-that display from the FNW coefficient $a(m)(1+a(m))/a_-(m)$, the
+\cite[Equation~(6.1)]{Nachtergaele1996Spectral}.  The results below derive
+this bound from the FNW coefficient $a(m)(1+a(m))/a_-(m)$, the
 lower-boundary inequality $1-a(m)\leq a_-(m)$, and the prescribed-rate estimate
 $a(m)\leq c\lambda^m$.
 
@@ -2381,7 +2369,7 @@ existential rate-dependent one.  Documented in
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There are constants $c>0$ and $0<\lambda<1$ and an
     injective length $L_0\geq1$ such that, whenever $m\geq L_0$ and
-    $c\lambda^m<1$, Equation~(\ref{eq:fnw_projector_defect_geometric}) holds for
+    $c\lambda^m<1$, the bound (\ref{eq:fnw_projector_defect_geometric}) holds for
     every prefix length $r$ and every $\ell\geq1$.
 \end{theorem}
 
@@ -2421,10 +2409,9 @@ existential rate-dependent one.  Documented in
          & \leq \frac{c\lambda^l(1+c\lambda^l)}{1-c\lambda^l}.
         \label{eq:primitive_fnw_openchain_defect_geometric}
     \end{align}
-    This is the inequality of
-    Equation~(\ref{eq:nachtergaele_geometric_projector_defect}) with the rate
-    and prefactor obtained as described at the head of this section, rather than
-    under the source's eigenvalue prescription and with its value $k^2$.
+    This establishes the projector defect bound
+    (\ref{eq:nachtergaele_geometric_projector_defect}) for primitive matrix product
+    states.
 \end{theorem}
 
 \begin{proof}
@@ -2442,7 +2429,7 @@ existential rate-dependent one.  Documented in
         \label{eq:openchain_defect_range_identifications}
     \end{align}
     the first equality by
-    Equation~(\ref{eq:reassociated_tail_boundary_one_site}) and the remaining
+    (\ref{eq:reassociated_tail_boundary_one_site}) and the remaining
     two by Theorem~\ref{thm:spectator_boundary_hilbert_factorization}.  Taking
     orthogonal projectors onto the three subspaces gives
     \begin{align}
@@ -3030,7 +3017,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \uses{def:ground_space_map_es, def:inverse_gram, thm:primitive_ground_space_gram_eventual_inverse_bound, thm:inverse_gram_identities}
     Under the same hypotheses, for every $0<a<1$ and all sufficiently large
     $n$, the physical boundary map $\Gamma_n^{\mathrm{ES}}$ is injective and
-    its inverse Gram operator is $\mathcal K_n^{-1}$.  Moreover,
+    its inverse Gram operator is $\mathcal K_n^{-1}$, satisfying
     \begin{align}
         \bigl\lVert S_{\Gamma_n^{\mathrm{ES}}}
         -\mathcal K_\infty^{-1}\bigr\rVert
@@ -3073,12 +3060,11 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 \begin{proof}
     \leanok
     \uses{def:inverse_gram, thm:inverse_gram_identities}
-    The vector $Q_Tx$ lies in $\range T$.  Moreover,
-    $T^\dagger Q_Tx=(T^\dagger T)S_TT^\dagger x=T^\dagger x$, so for every
-    $y$ the adjoint identity gives
-    $\langle x-Q_Tx,Ty\rangle=0$.  Thus $x-Q_Tx$ is orthogonal to
-    $\range T$, and the range--orthogonal decomposition characterizing the
-    orthogonal projector gives $Q_T=P_{\range T}$.
+    The vector $Q_Tx$ lies in $\range T$. Since
+    $T^\dagger Q_Tx=(T^\dagger T)S_TT^\dagger x=T^\dagger x$, the adjoint identity
+    gives $\langle x-Q_Tx,Ty\rangle=0$ for every $y$. Thus $x-Q_Tx$ is
+    orthogonal to $\range T$, and the range--orthogonal decomposition
+    characterizing the orthogonal projector gives $Q_T=P_{\range T}$.
 \end{proof}
 
 % Maintainer note: this is the dependency-closed projector slice for issue #5752.

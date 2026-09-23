@@ -1,9 +1,10 @@
 \section{Physical Endpoint String Order and Virtual-Boundary Nondecay}
 
-String order parameters characterize symmetry-protected topological phases
-through non-local correlators with a unitary string and endpoint operators
-\cite{PerezGarcia2008StringOrder}. In matrix product states, this physical
-behavior corresponds to virtual-boundary nondecay and virtual local covariance.
+String order parameters probe symmetry-protected topological phases through
+non-local correlators with a unitary string and endpoint operators
+\cite{PerezGarcia2008StringOrder}. For injective canonical matrix product
+states, this physical behavior provides a diagnostic correspondence with
+virtual-boundary nondecay and virtual local covariance.
 
 \begin{definition}[Twisted transfer map]\label{def:twisted_transfer_map}
     \lean{MPSTensor.twistedTransferMap}
@@ -103,8 +104,9 @@ behavior corresponds to virtual-boundary nondecay and virtual local covariance.
         R_L(u) & :=\langle\Psi_L(A)|u^{\otimes L}|\Psi_L(A)\rangle.
         \label{eq:symmetry_source_periodic_RL}
     \end{align}
-    In the thermodynamic limit, the normalized stationary-boundary functional
-    $T_L(A,u,\Lambda)$ corresponds to this periodic overlap.
+    Under thermodynamic-boundary and normalization hypotheses, the normalized
+    stationary-boundary functional $T_L(A,u,\Lambda)$ corresponds to this
+    periodic overlap.
 \end{definition}
 
 \begin{definition}[Physical string correlator]\label{def:physical_string_order_param}

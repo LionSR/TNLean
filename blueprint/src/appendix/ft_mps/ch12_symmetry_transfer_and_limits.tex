@@ -2,10 +2,10 @@
 \label{sec:app_symmetry_stationary_twists}
 
 Fix an MPS tensor $A=(A^i)_{i=0}^{d-1}$, a physical matrix $u$, and a
-stationary boundary matrix $\Lambda\in\MN{D}$.  The twisted transfer map
-$\E_u$ is Definition~\ref{def:twisted_transfer_map}.  The next constructions
-are virtual-boundary functionals; they should not be confused with the
-physical endpoint correlator of Definition~\ref{def:physical_string_order_param}.
+stationary boundary matrix $\Lambda\in\MN{D}$. The twisted transfer map
+$\E_u$ (Definition~\ref{def:twisted_transfer_map}) acts on virtual-boundary
+functionals, complementing the physical endpoint correlators of
+Definition~\ref{def:physical_string_order_param}.
 
 \begin{definition}[Twisted companion tensor]\label{def:twisted_mixed_companion}
     \lean{MPSTensor.twistedMixedCompanion}
@@ -53,7 +53,7 @@ physical endpoint correlator of Definition~\ref{def:physical_string_order_param}
 \end{lemma}
 
 \begin{proof}\leanok
-    the corresponding theorem in the companion quantum-channel volume~\cite[``Unitary freedom in Kraus operators'']{QICLean2026Blueprint} applies to the
+    The corresponding theorem in the companion quantum-channel volume~\cite[``Unitary freedom in Kraus operators'']{QICLean2026Blueprint} applies to the
     unitary combination defining $B_u$. Equivalently, expand
     $B_u^n=\sum_{n'}\overline{u_{n'n}}A^{n'}$. The coefficient of
     $A^jX(A^k)^\dagger$ in $\E_{B_u}(X)$ is
@@ -111,8 +111,8 @@ physical endpoint correlator of Definition~\ref{def:physical_string_order_param}
 \section{Kraus mixing, transfer expansions, and a common TP gauge}
 \label{sec:app_symmetry_common_tp_gauge}
 
-The spectral estimates in the main chapter compare $A$ with $B_u$.  They are
-placed in one trace-preserving gauge obtained from their common transfer map.
+Because $A$ and its companion $B_u$ share the same transfer map, they admit a
+common trace-preserving gauge.
 
 \begin{lemma}[Unitary Kraus mixing]\label{lem:unitary_kraus_mixing}
     \lean{MPSTensor.unitary_kraus_mixing}
@@ -238,11 +238,11 @@ placed in one trace-preserving gauge obtained from their common transfer map.
     $Z \mapsto \tr(\Lambda X Z)$ gives the stated scalar convergence.
 \end{proof}
 
-\section{Routine universality corollary}
+\section{Universality of virtual-boundary nondecay}
 \label{sec:app_symmetry_universality}
 
-The following consequence uses only the virtual MPV-family symmetry predicate
-and the canonical fixed-point hypotheses from the main chapter.
+For injective on-site symmetric tensors with canonical normalizations,
+virtual-boundary nondecay is invariant under symmetry-preserving equivalences.
 
 \begin{theorem}[Virtual-boundary nondecay agrees for two injective MPV-symmetric tensors]%
     \label{thm:has_string_order_iff_of_symmetric_injective}

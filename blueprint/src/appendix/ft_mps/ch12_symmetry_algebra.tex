@@ -1,9 +1,7 @@
-The physical index set is $I=\{0,\ldots,d-1\}$, the bond algebra is
-$\MN{D}$, and $G$ denotes a group.  All sums below are finite.  The first
-section treats permutation actions on $I$; the second isolates scalar
-uniqueness for two gauges of the same injective tensor; the third records the
-elementary factor-system bookkeeping used in the cohomology discussion of
-Chapter~\ref{ch:symmetry}.
+Let $I=\{0,\ldots,d-1\}$ be the physical index set, $\MN{D}$ the bond algebra,
+and $G$ a group. All sums below are finite. This section addresses permutation
+symmetries on $I$, gauge scalar uniqueness for injective tensors, and
+factor-system cocycle relations in Chapter~\ref{ch:symmetry}.
 
 \section{Permutation reindexing and identity bookkeeping}
 \label{sec:app_symmetry_permutations}
@@ -187,10 +185,8 @@ The same bookkeeping applies to a general matrix acting on the physical index.
 \section{Gauge ratios and scalar uniqueness}
 \label{sec:app_symmetry_gauge_ratios}
 
-The virtual representation theorem
-(Theorem~\ref{thm:virtual_rep_injective}) relies on the fact that
-composing two gauge transformations yields another gauge up to a
-scalar factor.
+For injective tensors, any two similarity transformations yielding the same
+target tensor differ by a scalar multiple.
 
 \begin{lemma}[Gauge ratio commutes with tensor matrices]%
     \label{lem:gauge_ratio_commutes}
@@ -248,8 +244,6 @@ scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok\uses{lem:gauge_ratio_commutes, lem:center_scalar}
-    The same two-gauge picture shows that the ratio $Y^{-1}X$ acts
-    invisibly on the local tensor.
     By Lemma~\ref{lem:gauge_ratio_commutes}, $Y^{-1}X$ commutes with
     all $A^i$.
     Since $\{A^i\}$ spans $\MN{D}$, the matrix $Y^{-1}X$ commutes
@@ -268,9 +262,9 @@ scalar factor.
     $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
     Then for all $g, h \in G$, there exists $c(g,h) \in \C$ such that
     $X(h)\, X(g) = c(g,h)\, X(g \cdot h)$.
-    In fact $c(g,h) \ne 0$ since both sides are invertible, so
-    $c(g,h) \in \C^{\times}$. Diagrammatically, the two candidate gauges
-    are competing local replacements for the same twisted tensor:
+    Invertibility of both sides forces $c(g,h) \in \C^{\times}$.
+    Diagrammatically, both candidate gauges realize the twisted tensor
+    $\widetilde{A}_{gh}^i$:
     \begin{center}
         \tenkzkernel
         % (X(h)X(g)) A^i (X(h)X(g))^{-1}

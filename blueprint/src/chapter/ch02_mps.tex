@@ -182,6 +182,12 @@ boundary conditions (PBC).
     by the trace.
 \end{definition}
 
+\section{Transfer maps and quantum-channel interfaces}\label{ch:channels}
+
+Transfer maps connect matrix product states to completely positive maps and
+quantum channels. The underlying channel theory is developed in the companion
+volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
+
 \begin{definition}[Transfer map]\label{def:transfer_map}
     \lean{Kraus.transferMap}
     \leanok
@@ -218,6 +224,141 @@ boundary conditions (PBC).
     positive semidefinite. The abstract framework is developed in the companion quantum-channel
     volume~\cite[``Positive map'']{QICLean2026Blueprint}.
 \end{remark}
+
+\begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
+    \lean{Kraus.transferMap_isCPMap}
+    \leanok
+    \uses{def:transfer_map}
+    The transfer map $\E_A(X)=\sum_i A^iX(A^i)^\dagger$
+    is completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    It is already written in the Kraus form
+    (established in the companion quantum-channel volume~\cite[``Completely positive map'']{QICLean2026Blueprint}), with Kraus operators
+    $\{A^i\}$.
+\end{proof}
+
+\begin{theorem}[Transfer matrix of an MPS transfer map]
+    \label{thm:mps_transfer_matrix_kraus_sum}
+    \lean{MPSTensor.transferMatrix_eq}
+    \leanok
+    \uses{def:transfer_map}
+    For an MPS tensor $A=\{A^i\}_{i=0}^{d-1}$, the matrix representing
+    $\E_A$ under vectorization is
+    \begin{align}
+        K_A & =\sum_{i=0}^{d-1}\overline{A^i}\otimes A^i.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the standard vectorization identity
+    $\operatorname{vec}(AXB)=(B^{\mathsf T}\otimes A)\operatorname{vec}(X)$
+    to each summand $A^iX(A^i)^\dagger$ and sum over the physical index.
+\end{proof}
+
+\begin{lemma}[Trace adjointness of a transfer map]
+    \label{lem:trace_mul_transfer_map_adjoint}
+    \lean{Kraus.trace_mul_mapLM_adjoint}
+    \leanok
+    \uses{def:transfer_map}
+    For an MPS tensor $A$ and bond matrices $\sigma, \rho\in\MN{D}$,
+    \begin{align}
+        \tr(\sigma\,\E_A(\rho)) & = \tr(\E_{A^\dagger}(\sigma)\,\rho),
+        \notag
+    \end{align}
+    where $\E_{A^\dagger}$ is the transfer map with Kraus operators $(A^i)^\dagger$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply trace adjointness for Kraus maps~\cite[``Trace adjointness of a Kraus map'']{QICLean2026Blueprint} to the Kraus family $\{A^i\}$.
+\end{proof}
+
+\begin{lemma}[Transfer map under scalar multiplication]
+    \label{lem:transfer_map_smul}
+    \lean{MPSTensor.transferMap_smul}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A$ be an MPS tensor and let $w\in\C$. Then, for every bond matrix $X$,
+    \begin{align}
+        \E_{wA}(X) & =w\overline w\,\E_A(X).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the transfer map and pull the scalar $w$ and its conjugate out of
+    each summand.
+\end{proof}
+
+\begin{lemma}[Left-canonical transfer maps preserve trace]
+    \label{lem:trace_transfer_map_left_canonical}
+    \lean{Kraus.isTracePreservingMap_mapLM_of_isTP}
+    \leanok
+    \uses{def:transfer_map, def:left_canonical_tensor}
+    If $A$ is left canonical, then, for every bond matrix $X$,
+    \begin{align}
+        \tr(\E_A(X)) & =\tr(X).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:trace_mul_transfer_map_adjoint}
+    Cyclicity of trace gives
+    \begin{align}
+        \tr(\E_A(X))
+         & =\tr\!\left(\left(\sum_i(A^i)^\dagger A^i\right)X\right)
+        =\tr(X),
+        \notag
+    \end{align}
+    since left canonicity makes the sum in parentheses equal to the identity.
+\end{proof}
+
+\begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
+    \lean{Kraus.isChannel_mapLM}
+    \leanok
+    \uses{def:transfer_map}
+    If $\sum_i(A^i)^\dagger A^i=\Id$, then the transfer map
+    $\E_A(X)=\sum_i A^iX(A^i)^\dagger$ is a quantum channel (CPTP).
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:transfer_cp}
+    Complete positivity is Theorem~\ref{thm:transfer_cp}. Trace preservation
+    follows by cyclicity and the normalization hypothesis:
+    \begin{align}
+        \tr(\E_A(X))
+         & =\sum_i\tr(A^iX(A^i)^\dagger)
+        =\tr\!\left(\left(\sum_i(A^i)^\dagger A^i\right)X\right)
+        =\tr(X).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Positive-definite transport by a coisometry]
+    \label{thm:matrix_posdef_coisometric_transport}
+    \lean{Matrix.PosDef.mul_mul_conjTranspose_of_mul_conjTranspose_eq_one}
+    \leanok
+    Let $A>0$ be a square complex matrix and let $V$ be a possibly rectangular
+    matrix satisfying $VV^\dagger=\Id$. Then
+    \begin{align}
+        VAV^\dagger & >0.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    For a row vector $x$, one has
+    \begin{align}
+        x(VAV^\dagger)x^\dagger & =(xV)A(xV)^\dagger.
+    \end{align}
+    Moreover, $xV=0$ implies
+    \begin{align}
+        x & =x(VV^\dagger)=0.
+    \end{align}
+    Thus every nonzero $x$ gives $xV\ne0$, and positive definiteness of $A$
+    makes the displayed quadratic form strictly positive.
+\end{proof}
 
 \section{Site-periodic tensor families}
 
@@ -599,213 +740,20 @@ boundary conditions (PBC).
     $\spn_{\C}\{A^i : i = 0,\ldots,d{-}1\} = \MN{D}$.
 \end{definition}
 
-\begin{definition}[Coefficient-dual inverse and reduction cross matrix]
-    \label{def:mps_reduction_cross_matrix}
-    \lean{MPSTensor.coefficientDualInverse,
-        MPSTensor.reductionCrossMatrix}
+
+\begin{theorem}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
+    \lean{Kraus.injective_implies_irreducibleCP}
     \leanok
-    \uses{def:mps_tensor, def:injective}
-    Let $\widetilde A=(\widetilde A^i)_i$ be injective, with bond dimension
-    $D_A$, and choose the coefficient dual $C=(C^i)_i$ from a right inverse
-    to the linear-combination map of $\widetilde A$.  Thus
-    $C^i_{a'a}$ is the coefficient of $\widetilde A^i$ in the chosen
-    expansion of the matrix unit $\lvert a\rangle\!\langle a'\rvert$.
-    For a tensor $\widetilde B$ of bond dimension $D_B$, define the
-    mixed-bond matrix on $\C^{D_B}\otimes\C^{D_A}$ by
-    \begin{align}
-        K(\widetilde B,C)
-         & =\sum_i \widetilde B^i\otimes(C^i)^T.
-        \notag
-    \end{align}
-    The superscript $T$ is the ordinary transpose, not the conjugate
-    transpose.  This is the matrix drawn in
-    \cite[proof of Proposition~20, lines~3817--3838]{Molnar2018SemiInjective}.
-\end{definition}
-
-\begin{lemma}[Coefficient dual and reversed-word power formulas]
-    \label{lem:mps_reduction_cross_matrix_power}
-    \lean{MPSTensor.coefficientDualInverse_sum_entry,
-        MPSTensor.reductionCrossMatrix_apply,
-        MPSTensor.reductionCrossMatrix_pow_eq_sum,
-        MPSTensor.reductionCrossMatrix_pow_apply,
-        MPSTensor.reductionCrossMatrix_coefficientDualInverse}
-    \leanok
-    \uses{def:mps_reduction_cross_matrix}
-    The coefficient dual obeys the exact matrix-unit identity
-    \begin{align}
-        \sum_i \widetilde A^i_{xy}C^i_{a'a}
-         & =\delta_{x,a}\delta_{y,a'}.
-        \notag
-    \end{align}
-    Consequently,
-    \begin{align}
-        (K(\widetilde B,C)^n)_{(b,a),(b',a')}
-         & =\sum_{i_1,\ldots,i_n}
-        (\widetilde B^{i_1}\cdots\widetilde B^{i_n})_{bb'}
-        (C^{i_n}\cdots C^{i_1})_{a'a}.
-        \notag
-    \end{align}
-    In particular, pairing $\widetilde A$ with its own dual gives the
-    rank-one matrix whose entry is
-    $\delta_{x,a}\delta_{y,a'}$.  The reversed order
-    $C^{i_n}\cdots C^{i_1}$ is forced by the transpose and records the
-    upper-leg orientation in \cite[lines~3817--3865]{Molnar2018SemiInjective}.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:mps_reduction_cross_matrix}
-    The coefficient identity follows by applying the chosen right inverse to a
-    matrix unit.  Expanding the power of the finite sum defining $K$,
-    multiplicativity of the Kronecker product collects the lower factors in
-    site order.  Transposing the upper product reverses its factors, which gives
-    the displayed entry formula.  Specializing the lower tensor to
-    $\widetilde A$ and applying the coefficient identity gives the stated
-    rank-one matrix.
-\end{proof}
-
-\begin{theorem}[Cross trace powers and source open-boundary contraction]
-    \label{thm:mps_reduction_cross_trace_open}
-    \lean{MPSTensor.SameMPV₂Pos.trace_evalWord,
-        MPSTensor.trace_reductionCrossMatrix_pow_of_sameMPV₂Pos,
-        MPSTensor.reductionOpenBoundaryMatrixContraction,
-        MPSTensor.reductionOpenBoundaryContraction,
-        MPSTensor.reductionOpenBoundaryMatrixContraction_eq_cross_sum,
-        MPSTensor.reductionOpenBoundaryMatrixContraction_self,
-        MPSTensor.reductionOpenBoundaryContraction_self,
-        MPSTensor.reductionOpenBoundaryContraction_of_sameMPV₂Pos,
-        MPSTensor.reductionOpenBoundaryMatrixContraction_blockTensor_of_sameMPV₂Pos}
-    \leanok
-    \uses{def:same_mpv2_pos, def:injective,
-        def:mps_reduction_cross_matrix, thm:same_mpv2_pos_block_tensor}
-    Suppose $\widetilde A$ and $\widetilde B$ have equal positive-length
-    MPV coefficients and $\widetilde A$ is injective.  This equality hypothesis
-    is the $\lambda=1$ specialization of the proportional premise printed in
-    Proposition~20; the unrestricted unscaled conclusion is false
-    \cite{gap:mgsc18_reduction_proportionality_scalar}.  Equality transports
-    the trace of every nonempty word.  For every $n>0$,
-    \begin{align}
-        \tr K(\widetilde B,C)^n
-         & =D_A^n.
-        \notag
-    \end{align}
-
-    For arbitrary tensors $B_0,C_0$, every $n\geq0$, and every boundary matrix
-    $X$, define
-    \begin{align}
-        \mathcal O_n(B_0,C_0;X)_{a'a}
-         & =\sum_{i_1,\ldots,i_n}
-        \tr\!\left(B_0^{i_1}\cdots B_0^{i_n}X\right)
-        (C_0^{i_n}\cdots C_0^{i_1})_{a'a}.
-        \notag
-    \end{align}
-    If $B_0$ has bond dimension $D_B$ and $C_0$ has bond dimension $D_A$,
-    its exact cross-sum expansion is
-    \begin{align}
-        \mathcal O_n(B_0,C_0;X)_{a'a}
-         & =\sum_{x,y}K(B_0,C_0)^n_{(x,a),(y,a')}X_{yx}.
-        \notag
-    \end{align}
-    For $n>0$, if $B_0=\widetilde A$, $C_0=C$, and
-    $X\in\C^{D_A\times D_A}$, then
-    \begin{align}
-        \mathcal O_n(\widetilde A,C;X)_{a'a}
-         & =D_A^{n-1}X_{a'a}.
-        \notag
-    \end{align}
-    The same-alphabet open-boundary contraction is the specialization
-    $X=B_0^w$.  Thus $X=\widetilde A^w$ gives the target self-evaluation, while
-    equality of the positive-length MPV coefficients gives
-    \begin{align}
-        \mathcal O_n(\widetilde B,C;\widetilde B^w)_{a'a}
-         & =D_A^{n-1}(\widetilde A^w)_{a'a}.
-        \notag
-    \end{align}
-
-    For the padded blocked contraction, suppose additionally that the original
-    tensors $A$ and $B$ have equal positive-length MPV coefficients.  If
-    $\widetilde A$ and $\widetilde B$ are obtained by blocking $p>0$ original
-    sites, then for every unblocked lower tail word $w$,
-    \begin{align}
-        \mathcal O_n(\widetilde B,C;B^w)_{a'a}
-         & =D_A^{n-1}(A^w)_{a'a}.
-        \notag
-    \end{align}
-    The trace-power identity is the closed contraction at
-    \cite[proof of Proposition~20, lines~3839--3865]{Molnar2018SemiInjective},
-    and the open-boundary identity is the padded contraction at lines 3866--3887.
-    The source next uses a rank-one rewrite and comparison to derive
-    $VB^{i_1}\cdots B^{i_m}W=A^{i_1}\cdots A^{i_m}$ at lines 3888--3938.
+    \uses{def:injective, def:transfer_map}
+    If $A$ is an injective MPS tensor, then its transfer map $\E_A$
+    is irreducible.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:mps_reduction_cross_matrix_power, lem:eval_word_block}
-    Expand $K^n$ by Lemma~\ref{lem:mps_reduction_cross_matrix_power} and use
-    the trace formula for a Kronecker product.  Positive-length MPV equality
-    replaces the trace of each nonempty $\widetilde B$ word by the
-    corresponding $\widetilde A$ trace.  The resulting scalar sum is therefore
-    the trace of the target cross matrix power.  The coefficient-dual identity
-    gives that target cross matrix its rank-one form, whose $n$th trace is
-    $D_A^n$.
-
-    Expanding the lower trace into matrix entries gives the cross-sum formula
-    for arbitrary $X$.  For the target tensor, the rank-one form of
-    $K(\widetilde A,C)$ evaluates this sum as $D_A^{n-1}X_{a'a}$.
-    Specializing $X$ to a word evaluation gives the self-evaluation formula.
-
-    For blocked tensors, Lemma~\ref{lem:eval_word_block} identifies each
-    blocked word with the evaluation of its flattened word.  Since $n,p>0$,
-    this flattened word is nonempty.  Append the unblocked tail $w$, apply
-    positive-length MPV equality to the resulting original-site word, and use
-    the target self-evaluation with $X=A^w$.
-\end{proof}
-
-\begin{theorem}[Rank-one factorizations]
-    \label{thm:rank_one_factorizations}
-    \lean{LinearMap.exists_smulRight_of_finrank_range_eq_one,
-        Matrix.exists_eq_vecMulVec_of_rank_eq_one,
-        Matrix.exists_rectangular_factors_of_rank_eq_one}
-    \leanok
-    Let $f\colon X\to Y$ be a linear map over a division ring $K$ whose range
-    has dimension one.  Then there are a nonzero linear functional
-    $\varphi\colon X\to K$, a nonzero vector $y\in Y$, and a vector $x\in X$
-    such that
-    \begin{align}
-        \varphi(x) & =1, & f(x) & =y, & f(z) & =\varphi(z)y
-        \quad\text{for every }z\in X.
-        \notag
-    \end{align}
-    Consequently, if $I$ and $J$ are finite index sets, then every rank-one
-    matrix $M\in K^{I\times J}$ over a field is an outer product of two
-    nonzero vectors: there are $w\in K^I$ and $v\in K^J$ such that
-    \begin{align}
-        M_{ij} & =w_i v_j.
-        \notag
-    \end{align}
-    In particular, if both indices of $M$ are the product
-    $D_B\times D_A$, then there are nonzero rectangular matrices
-    $W\in K^{D_B\times D_A}$ and $V\in K^{D_A\times D_B}$ such that
-    \begin{align}
-        M_{(b,a),(b',a')}
-         & =W_{ba}V_{a'b'}.
-        \notag
-    \end{align}
-    This is the rank-one factorization used in
-    \cite[proof of Proposition~20, lines~3866--3936]{Molnar2018SemiInjective}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Choose an isomorphism from the scalar division ring to the one-dimensional
-    range of $f$.  Composing its inverse with $f$ gives $\varphi$, while the
-    image of $1$ gives $y$.  Choose a preimage $x$ of $y$; the construction gives
-    $\varphi(x)=1$, $f(x)=y$, and the stated factorization of $f$.
-
-    In standard bases this factorization is an outer product of two nonzero
-    coordinate vectors.  For the product-index specialization, reshape the
-    left vector as a $D_B\times D_A$ matrix and the right vector as a
-    $D_A\times D_B$ matrix, preserving the displayed index order.
+    If $P$ is an invariant projection for $\E_A$, then
+    $(\Id-P)A^iP=0$ for all~$i$. Since the $\{A^i\}$ span $\MN{D}$,
+    $(\Id-P)MP=0$ for all~$M$, so $P=0$ or $P=\Id$.
 \end{proof}
 
 The inverse-tensor characterization of injectivity says that $A$ is
@@ -864,870 +812,6 @@ $A^{-1}A=\Id$. This is the identity used in
     if there exists a positive integer $L_0$ such that $A$ is $L_0$-block
     injective.
 \end{definition}
-
-\begin{theorem}[Equality-case existence of rectangular reductions]
-    \label{thm:mps_equality_reduction_exists}
-    \lean{MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos,
-        MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos}
-    \leanok
-    \uses{def:mps_rectangular_reduction, def:same_mpv2_pos, def:injective,
-        def:normal}
-    Let $A$ and $B$ have the same physical alphabet and positive target bond
-    dimension $D_A>0$.  Suppose that
-    $\ket{V^{(N)}(B)}=\ket{V^{(N)}(A)}$ for every $N>0$.
-    If $A$ is injective, then there exist
-    $V\in\C^{D_A\times D_B}$ and $W\in\C^{D_B\times D_A}$ forming a
-    reduction from $B$ to $A$.  The same conclusion holds when $A$ is normal.
-
-    This is the $\lambda=1$ equality case of
-    \cite[Proposition~20, lines~3815--3938]{Molnar2018SemiInjective}.  The unrestricted
-    proportional premise does not imply the unscaled conclusion
-    \cite{gap:mgsc18_reduction_proportionality_scalar}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{lem:one_block_injective_of_injective,
-        lem:isNBlkInjective_iff_blockTensor_isInjective,
-        thm:same_mpv2_pos_block_tensor,
-        thm:mps_reduction_cross_trace_open,
-        thm:mpu_semisimple_scaled_trace_rank_one,
-        thm:rank_one_factorizations}
-    First suppose that $A$ is injective; equivalently, use blocking length one.
-    More generally, choose any positive blocking length $p$ for which the
-    blocked target $\widetilde A=A^{[p]}$ is injective, and put
-    $\widetilde B=B^{[p]}$.  Positive blocking preserves equality of the MPV
-    families.  Let $C$ be the coefficient dual of $\widetilde A$ and set
-    \begin{align}
-        K
-         & =\sum_i \widetilde B^i\otimes(C^i)^{\mathsf T}.
-        \notag
-    \end{align}
-    Regard $K$ as an endomorphism and take its Jordan--Chevalley decomposition
-    $K=N+S$, where $N$ is nilpotent, $S$ is semisimple, and both belong to the
-    algebra generated by $K$.  Their membership in this commutative generated
-    algebra implies $NS=SN$.  The commuting nilpotent part does not change
-    traces of powers.  Since $\tr K^n=D_A^n$ for every $n>0$, the semisimple
-    endomorphism $D_A^{-1}S$ has trace one at every power above one.  The
-    semisimple trace-power theorem gives $\rank S=1$; commutation and
-    nilpotence then imply $NS=SN=0$ and
-    \begin{align}
-        K^J
-         & =S^J
-        \notag
-    \end{align}
-    for some $J>0$.
-
-    Factor the matrix of $S$ with the mixed-bond orientation
-    \begin{align}
-        S_{(b,a),(b',a')}
-         & =W_{ba}V_{a'b'}.
-        \notag
-    \end{align}
-    Its first trace is $D_A$, so multiplication of outer products gives
-    \begin{align}
-        S^J
-         & =D_A^{J-1}S.
-        \notag
-    \end{align}
-    Apply the padded open-boundary identity with an arbitrary original-scale
-    word $w$.  Rewriting its cross sum with the preceding factorization yields
-    \begin{align}
-        D_A^{J-1}(VB^wW)_{a'a}
-         & =D_A^{J-1}(A^w)_{a'a}.
-        \notag
-    \end{align}
-    Since $D_A>0$, cancel the nonzero scalar and conclude
-    $VB^wW=A^w$ for every word $w$.  The empty word gives $VW=1_{D_A}$.
-    For normal $A$, choose the positive injective blocking supplied by
-    normality and repeat the same padded argument; the lower tail remains the
-    unblocked word $w$, so the conclusion is already at the original physical
-    scale.
-\end{proof}
-
-\begin{lemma}[Scalar covariance of rectangular reductions]
-    \label{lem:mps_reduction_scalar_covariance}
-    \lean{MPSTensor.IsReduction.smul,
-        MPSTensor.IsReduction.evalWord_smul_target}
-    \leanok
-    \uses{def:mps_rectangular_reduction}
-    If $V,W$ form a reduction from $B$ to $A$, then they also form a reduction
-    from $cB$ to $cA$ for every $c\in\C$.  If instead they form a reduction
-    from $B$ to $cA$, then
-    \begin{align}
-        VW & =1_{D_A},
-           & VB^wW     & =c^{|w|}A^w
-        \qquad\text{for every word }w.
-        \label{eq:mps_reduction_scalar_covariance}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:eval_word_smul}
-    Scaling both tensors multiplies each length-$|w|$ word by the same factor
-    $c^{|w|}$, so the reduction identities are preserved.  For a reduction to
-    $cA$, expand $(cA)^w=c^{|w|}A^w$ in the defining word identity.  The
-    retraction $VW=1_{D_A}$ is unchanged.
-\end{proof}
-
-\begin{theorem}[Nonzero proportional existence of rectangular reductions]
-    \label{thm:mps_proportional_reduction_exists}
-    \lean{MPSTensor.exists_isReduction_smul_of_isInjective_of_mpv_eq_pow_mul,
-        MPSTensor.exists_isReduction_smul_of_isNormal_of_mpv_eq_pow_mul}
-    \leanok
-    \uses{def:mpv, def:injective, def:normal,
-        def:mps_rectangular_reduction}
-    Let $A$ and $B$ have the same physical alphabet and positive target bond
-    dimension $D_A>0$.  Let $c\in\C$ be nonzero, and suppose that
-    \begin{align}
-        V^{(N)}(B)_\sigma
-         & =c^N V^{(N)}(A)_\sigma
-        \qquad\text{for every }N>0\text{ and every configuration }\sigma.
-        \label{eq:mps_proportional_reduction_hypothesis}
-    \end{align}
-    If $A$ is injective, then there exist
-    $V\in\C^{D_A\times D_B}$ and $W\in\C^{D_B\times D_A}$ such that
-    \begin{align}
-        VW & =1_{D_A},
-           & VB^wW     & =c^{|w|}A^w
-        \qquad\text{for every word }w.
-        \label{eq:mps_proportional_reduction_word_relation}
-    \end{align}
-    The same conclusion holds when $A$ is normal.
-
-    This is the corrected nonzero-scalar form of
-    \cite[Proposition~20]{Molnar2018SemiInjective}.  The unscaled conclusion
-    printed there is false for unrestricted $c\ne1$, and the case $c=0$ does
-    not admit this rescaling argument
-    \cite{gap:mgsc18_reduction_proportionality_scalar}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{lem:eval_word_smul, thm:mps_equality_reduction_exists,
-        lem:mps_reduction_scalar_covariance}
-    Set $\widetilde B=c^{-1}B$.  Expand its word evaluations with
-    Lemma~\ref{lem:eval_word_smul}, take the trace, and use
-    (\ref{eq:mps_proportional_reduction_hypothesis}).  The positive-length MPV
-    families of $\widetilde B$ and $A$ are equal.  Apply
-    Theorem~\ref{thm:mps_equality_reduction_exists} to obtain a reduction from
-    $\widetilde B$ to $A$.  Scale both tensors by $c$ to obtain a reduction
-    from $B$ to $cA$, and then apply
-    Lemma~\ref{lem:mps_reduction_scalar_covariance} to get
-    (\ref{eq:mps_proportional_reduction_word_relation}).
-\end{proof}
-
-\begin{lemma}[Nonempty products in a generated subsemigroup]
-    \label{lem:subsemigroup_closure_nonempty_product}
-    \lean{Subsemigroup.exists_nonempty_list_prod_of_mem_closure}
-    \leanok
-    Let $M$ be a monoid and let $S\subseteq M$.  Every element
-    $x\in\langle S\rangle_{\mathrm{sg}}$ of the subsemigroup generated by
-    $S$ admits a factorization
-    \begin{align}
-        x & =a_1\cdots a_n,
-          & n               & \geq 1,
-          & a_j             & \in S\quad(1\leq j\leq n).
-        \notag
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    A generator has the required one-factor expression.  The product of two
-    such expressions is represented by their concatenation, which is again
-    nonempty and has every factor in $S$.
-\end{proof}
-
-
-\begin{definition}[Residual algebra of a selected reduction]
-    \label{def:mps_reduction_residual_algebra}
-    \lean{MPSTensor.reductionResidual,
-        MPSTensor.reductionResidualGeneratorSet,
-        MPSTensor.reductionResidualAlgebra}
-    \leanok
-    \uses{def:mps_rectangular_reduction}
-    Let $(V,W)$ be a reduction from $B$ to $A$.  For each physical letter
-    $i$, define
-    \begin{align}
-        N^i & = B^i-WA^iV.
-        \label{eq:mps_reduction_residual_letter}
-    \end{align}
-    The \emph{residual algebra} $\mathcal R(B,A;V,W)$ is the nonunital
-    subalgebra of $\MN{D_B}$ generated by the matrices $N^i$.
-    This is the residual algebra of Proposition~21 in
-    \cite{Molnar2018SemiInjective}.
-\end{definition}
-
-\begin{theorem}[Residual letters belong to the residual algebra]
-    \label{thm:mps_reduction_residual_mem_algebra}
-    \lean{MPSTensor.reductionResidual_mem_reductionResidualAlgebra}
-    \leanok
-    \uses{def:mps_reduction_residual_algebra}
-    For every physical letter $i$, one has
-    $N^i\in\mathcal R(B,A;V,W)$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Each residual letter is one of the generators of the residual algebra.
-\end{proof}
-
-\begin{definition}[Residual nilpotency length]
-    \label{def:mps_reduction_residual_nilpotency_length}
-    \lean{MPSTensor.IsReductionResidualNilpotencyBound,
-        MPSTensor.reductionResidualNilpotencyLength}
-    \leanok
-    \uses{def:mps_reduction_residual_algebra}
-    A natural number $L$ is a \emph{residual-word nilpotency bound} if
-    every word $N^{i_1}\cdots N^{i_L}$ of exactly $L$ residual letters is
-    zero.  The residual nilpotency length $\ell(B,A;V,W)$ is the infimum
-    of the set of exact-length bounds.  Definition~8 of
-    \cite{Molnar2018SemiInjective} instead asks that every residual word of
-    every length $n\geq L$ vanish; the passage from an exact-length bound to
-    this consequence is stated separately in
-    Theorem~\ref{thm:mps_reduction_residual_bound_consequences}.
-\end{definition}
-
-\begin{theorem}[Exterior-word strengthening of the residual sandwich]
-    \label{thm:mps_reduction_residual_exterior_sandwich}
-    \lean{MPSTensor.IsReduction.evalWord_mul_reductionResidual_mul_evalWord_eq_zero}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
-    Let $(V,W)$ be a reduction from $B$ to $A$.  For arbitrary exterior words
-    $\mathbf p,\mathbf q$ and every nonempty word $\mathbf u$,
-    \begin{align}
-        VB^{\mathbf p}N^{\mathbf u}B^{\mathbf q}W & =0.
-        \label{eq:mps_reduction_residual_exterior_sandwich}
-    \end{align}
-    This strengthens the sandwiched residual identity below by allowing
-    arbitrary exterior $B$-words.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_rectangular_reduction_identities}
-    Apply $VB^{\mathbf w}W=A^{\mathbf w}$ to $\mathbf p$, $\mathbf q$, and
-    $\mathbf p\,i\,\mathbf q$.  The two expressions for
-    $A^{\mathbf p}A^iA^{\mathbf q}$ give
-    \begin{align}
-        VB^{\mathbf p}N^iB^{\mathbf q}W & =0.
-        \notag
-    \end{align}
-    Induction on the nonempty residual word $\mathbf u$ proves
-    (\ref{eq:mps_reduction_residual_exterior_sandwich}).
-\end{proof}
-
-\begin{theorem}[Positive residual words vanish under the reduction]
-    \label{thm:mps_reduction_residual_sandwich}
-    \lean{MPSTensor.IsReduction.evalWord_reductionResidual_sandwich_eq_zero}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
-    Let $(V,W)$ be a reduction from $B$ to $A$.  For every nonempty word
-    $\mathbf u$,
-    \begin{align}
-        VN^{\mathbf u}W & =0
-        \qquad (|\mathbf u|>0).
-        \label{eq:mps_reduction_residual_sandwich}
-    \end{align}
-    No equality of closed chains is required.
-    This is the sandwiched residual identity of
-    \cite{Molnar2018SemiInjective}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_reduction_residual_exterior_sandwich}
-    Take both exterior words empty in
-    (\ref{eq:mps_reduction_residual_exterior_sandwich}).
-\end{proof}
-
-\begin{definition}[Strict residual-window sums]
-    \label{def:mps_reduction_strict_window_sums}
-    \lean{MPSTensor.reductionInitialWindowSum,
-        MPSTensor.reductionStrictWindowSum,
-        MPSTensor.reductionInitialWindowRangeSum,
-        MPSTensor.reductionStrictWindowRangeSum}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra, def:eval_word}
-    Let $(V,W)$ be a reduction from $B$ to $A$.  For a word $\mathbf w$, set
-    $\mathcal I(\varnothing)=\mathcal W(\varnothing)=0$ and define
-    recursively
-    \begin{align}
-        \mathcal I(i\mathbf w)
-         & =WA^iV\bigl(N^{\mathbf w}+\mathcal I(\mathbf w)\bigr),
-        \label{eq:mps_reduction_initial_window_recursion}         \\
-        \mathcal W(i\mathbf w)
-         & =\mathcal I(i\mathbf w)+N^i\mathcal W(\mathbf w).
-        \label{eq:mps_reduction_strict_window_recursion}
-    \end{align}
-    For $\mathbf i=(i_1,\ldots,i_n)$, also set
-    \begin{align}
-        \widehat{\mathcal I}(\mathbf i)
-         & =\sum_{m=1}^{n}
-        W A^{i_1}\cdots A^{i_m}V
-        N^{i_{m+1}}\cdots N^{i_n},           \\
-        \widehat{\mathcal W}(\mathbf i)
-         & =\sum_{r=0}^{n-1}\sum_{m=1}^{n-r}
-        N^{i_1}\cdots N^{i_r}
-        W A^{i_{r+1}}\cdots A^{i_{r+m}}V
-        N^{i_{r+m+1}}\cdots N^{i_n}.
-        \label{eq:mps_reduction_strict_window_sum}
-    \end{align}
-    The substitution $s=r+m$ identifies the second indexing set with
-    $0\leq r<s\leq n$.  Thus the central $A$-word is nonempty, and
-    $\widehat{\mathcal I}$ is the part with $r=0$.
-\end{definition}
-
-\begin{theorem}[Recursive residual expansion]
-    \label{thm:mps_reduction_recursive_residual_expansion}
-    \lean{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowSum}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_strict_window_sums}
-    Under the reduction hypothesis, every word satisfies
-    \begin{align}
-        B^{\mathbf i}=N^{\mathbf i}+\mathcal W(\mathbf i).
-        \label{eq:mps_reduction_recursive_residual_expansion}
-    \end{align}
-    Combining this recursion with the explicit window sum below gives the
-    corrected residual expansion.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_reduction_residual_sandwich,
-        thm:mps_rectangular_reduction_identities}
-    Induct on the word and split the first letter as $B^i=N^i+WA^iV$.
-    The induction hypothesis supplies the recursive windows in the remaining
-    word.  By (\ref{eq:mps_reduction_residual_sandwich}),
-    $VN^{\mathbf u}W=0$ for every nonempty $\mathbf u$, so prefixing by $V$
-    collapses $\mathcal W(\mathbf w)$ to $\mathcal I(\mathbf w)$; adjacent
-    selected blocks combine by $VW=1$.
-\end{proof}
-
-\begin{theorem}[All-cut contracted residual identities]
-    \label{thm:mps_reduction_all_cut_contracted}
-    \lean{MPSTensor.reductionLeftContractedAllCutSum,
-        MPSTensor.reductionRightContractedAllCutSum,
-        MPSTensor.reductionLeftContractedSum,
-        MPSTensor.reductionRightContractedSum,
-        MPSTensor.reductionLeftContractedSum_eq_allCutSum,
-        MPSTensor.reductionRightContractedSum_eq_allCutSum,
-        MPSTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedSum,
-        MPSTensor.IsReduction.evalWord_mul_eq_reductionRightContractedSum}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
-    Let $(V,W)$ be a reduction from $B$ to $A$, and write
-    $\mathbf i=(i_1,\ldots,i_n)$.  Then
-    \begin{align}
-        VB^{i_1}\cdots B^{i_n}
-         & =\sum_{s=0}^{n}
-        A^{i_1}\cdots A^{i_s}V
-        N^{i_{s+1}}\cdots N^{i_n},
-        \label{eq:mps_reduction_left_all_cut} \\
-        B^{i_1}\cdots B^{i_n}W
-         & =\sum_{r=0}^{n}
-        N^{i_1}\cdots N^{i_r}W
-        A^{i_{r+1}}\cdots A^{i_n}.
-        \label{eq:mps_reduction_right_all_cut}
-    \end{align}
-    These identities require only the reduction.  They are precursors to the
-    bound-truncated formulas in
-    Theorem~\ref{thm:mps_reduction_contracted_expansions}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_rectangular_reduction_identities,
-        thm:mps_reduction_residual_sandwich,
-        thm:mps_reduction_recursive_residual_expansion}
-    Prove both identities by induction on the word.  For the left contraction,
-    decompose the first letter and apply
-    (\ref{eq:mps_reduction_recursive_residual_expansion}) to the tail; the
-    sandwiched terms $VN^{\mathbf u}W$ vanish by
-    (\ref{eq:mps_reduction_residual_sandwich}), and $VW=1$ merges adjacent
-    selected blocks.  For the right contraction, decompose the first letter
-    and apply the reduction identity to the tail.
-\end{proof}
-
-\begin{theorem}[Recursive and explicit strict-window sums]
-    \label{thm:mps_reduction_strict_window_range}
-    \lean{MPSTensor.IsReduction.reductionStrictWindowSum_eq_reductionStrictWindowRangeSum}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_strict_window_sums}
-    Under the reduction hypothesis, for every word $\mathbf i$,
-    \begin{align}
-        \mathcal W(\mathbf i)=\widehat{\mathcal W}(\mathbf i).
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_reduction_all_cut_contracted,
-        thm:mps_reduction_recursive_residual_expansion,
-        thm:mps_reduction_residual_sandwich}
-    Induct on the length of the word.  The summands with $r=0$ constitute
-    $\widehat{\mathcal I}$.  By the left all-cut identity,
-    \begin{align}
-        \widehat{\mathcal I}(i_1,\ldots,i_n)
-        =WA^{i_1}VB^{i_2}\cdots B^{i_n}
-        =\mathcal I(i_1,\ldots,i_n),
-    \end{align}
-    where the last equality is the initial-window case of the recursive
-    expansion.  Deleting the first letter identifies the summands with $r>0$
-    with $N^{i_1}\widehat{\mathcal W}(i_2,\ldots,i_n)$.
-\end{proof}
-
-\begin{theorem}[Corrected strict-window residual expansion]
-    \label{thm:mps_reduction_residual_expansion}
-    \lean{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowRangeSum}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_strict_window_sums}
-    Let $(V,W)$ be a reduction from $B$ to $A$.  For every word
-    $\mathbf i=(i_1,\ldots,i_n)$,
-    \begin{align}
-        B^{i_1}\cdots B^{i_n}
-         & =N^{i_1}\cdots N^{i_n}
-        +\sum_{0\leq r<s\leq n}
-        N^{i_1}\cdots N^{i_r}
-        W A^{i_{r+1}}\cdots A^{i_s}V
-        N^{i_{s+1}}\cdots N^{i_n}.
-        \label{eq:mps_reduction_residual_expansion}
-    \end{align}
-    This statement requires only the reduction. The range $0\leq r<s\leq n$
-    ensures nonempty central words; see
-    \cite{gap:mgsc18_residual_expansion_empty_word_error}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_reduction_recursive_residual_expansion,
-        thm:mps_reduction_strict_window_range}
-    Substitute
-    $\mathcal W(\mathbf i)=\widehat{\mathcal W}(\mathbf i)$ into
-    (\ref{eq:mps_reduction_recursive_residual_expansion}), and then reindex
-    the positive central length by $s=r+m$.
-\end{proof}
-
-\begin{theorem}[Residual trace vanishing and elementwise nilpotence]
-    \label{thm:mps_reduction_residual_algebra_nilpotent}
-    \lean{MPSTensor.IsReduction.trace_evalWord_eq_trace_evalWord_add_trace_reductionResidual,
-        MPSTensor.IsReduction.trace_evalWord_reductionResidual_eq_zero,
-        MPSTensor.IsReduction.trace_eq_zero_of_mem_reductionResidualAlgebra,
-        MPSTensor.IsReduction.isNilpotent_of_mem_reductionResidualAlgebra}
-    \leanok
-    \uses{def:same_mpv2_pos, def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
-    Let $(V,W)$ be a reduction from $B$ to $A$, and assume
-    $\mc{V}^+(B)=\mc{V}^+(A)$.  Then every nonempty residual word has trace
-    zero, every element of $\mathcal R(B,A;V,W)$ has trace zero, and every
-    element of this algebra is nilpotent.
-
-    This establishes the nil-algebra step of
-    \cite[Proposition~21]{Molnar2018SemiInjective} in the equality case
-    $\lambda=1$; see \cite{gap:mgsc18_reduction_proportionality_scalar}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_reduction_residual_expansion,
-        thm:mps_reduction_residual_exterior_sandwich,
-        thm:mps_reduction_residual_sandwich,
-        thm:mps_reduction_strict_window_range,
-        thm:mps_rectangular_reduction_identities,
-        thm:mps_reduction_cross_trace_open,
-        lem:subsemigroup_closure_nonempty_product,
-        thm:mpu_shifted_zero_trace_power_nilpotent}
-    Take the trace of the corrected residual expansion.  For a mixed term in
-    the explicit strict-window sum, cyclicity gives
-    \begin{align}
-        \tr\!\left(
-        N^{\mathbf p}WA^{\mathbf a}VN^{\mathbf q}\right)
-         & =\tr\!\left(
-        \left(VN^{\mathbf q}N^{\mathbf p}W\right)A^{\mathbf a}\right)
-        =0,
-        \notag
-    \end{align}
-    by (\ref{eq:mps_reduction_residual_sandwich}).  In the recursive sum, the
-    corresponding step is
-    \begin{align}
-        \tr\!\left(N^{\mathbf u}WA^iVB^{\mathbf w}\right)
-         & =\tr\!\left(
-        \left(VB^{\mathbf w}N^{\mathbf u}W\right)A^i\right)
-        =0,
-        \notag
-    \end{align}
-    by (\ref{eq:mps_reduction_residual_exterior_sandwich}), for every
-    nonempty residual word $\mathbf u$.  The unique term with no residual
-    letters is $WA^{\mathbf i}V$, whose trace is $\tr(A^{\mathbf i})$ because
-    $VW=1$.  Thus
-    \begin{align}
-        \tr(B^{\mathbf i})
-         & =\tr(A^{\mathbf i})+\tr(N^{\mathbf i}).
-        \label{eq:mps_reduction_residual_trace_decomposition}
-    \end{align}
-    Equality of the two closed chains now gives
-    $\tr(N^{\mathbf i})=0$.  Linearity extends this identity to the generated
-    nonunital algebra.  Vanishing traces of positive powers make each algebra
-    element nilpotent.
-\end{proof}
-
-\begin{theorem}[Dimension bound for the residual nilpotency length]
-    \label{thm:mps_reduction_residual_dimension_bound}
-    \lean{MPSTensor.IsReduction.reductionResidualAlgebra_list_prod_eq_zero,
-        MPSTensor.IsReduction.bondDim_isReductionResidualNilpotencyBound,
-        MPSTensor.IsReduction.reductionResidualNilpotencyLength_isBound,
-        MPSTensor.IsReduction.reductionResidualNilpotencyLength_le_bondDim,
-        MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bondDim_le_length}
-    \leanok
-    \uses{def:same_mpv2_pos, def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra,
-        def:mps_reduction_residual_nilpotency_length}
-    Let $(V,W)$ be a reduction from $B$ to $A$, and assume
-    $\mc{V}^+(B)=\mc{V}^+(A)$.  Then every mixed product of $D_B$ elements of
-    $\mathcal R(B,A;V,W)$ vanishes.  Consequently $D_B$ is a residual-word
-    nilpotency bound.  The least bound exists, is itself a bound, and satisfies
-    \begin{align}
-        \ell(B,A;V,W) & \leq D_B.
-        \label{eq:mps_reduction_residual_nilpotency_length_bound}
-    \end{align}
-    In particular, $N^{\mathbf i}=0$ whenever $|\mathbf i|\geq D_B$.
-    The resulting vanishing of all sufficiently long mixed products is the
-    nilpotency conclusion of Proposition~21 in
-    \cite{Molnar2018SemiInjective}.  The specific numerical estimate by $D_B$
-    follows from the finite-dimensional nil-matrix theorem.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_reduction_residual_algebra_nilpotent,
-        thm:mps_reduction_residual_mem_algebra,
-        thm:mps_reduction_residual_bound_consequences,
-        thm:mpu_nil_matrices}
-    Apply the finite-dimensional nil-matrix theorem to the residual algebra.
-    Its dimension-sharp matrix form makes every product of $D_B$ algebra
-    elements zero.  Residual letters lie in this algebra, so $D_B$ is a bound.
-    Well-ordering gives the least bound, and prefix factorization gives
-    vanishing for all longer residual words.
-\end{proof}
-
-\begin{theorem}[Consequences of an arbitrary residual bound]
-    \label{thm:mps_reduction_residual_bound_consequences}
-    \lean{MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bound_le_length}
-    \leanok
-    \uses{def:mps_reduction_residual_nilpotency_length}
-    If $L$ is a residual-word nilpotency bound and
-    $|\mathbf i|\geq L$, then
-    \begin{align}
-        N^{\mathbf i} & =0.
-        \label{eq:mps_reduction_residual_bound_word}
-    \end{align}
-    This conclusion uses only the assumed bound; it does not require equality
-    of closed chains.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Split the residual word after its first $L$ letters.  The prefix is zero
-    by the bound, so the full word is zero.
-\end{proof}
-
-\begin{theorem}[Bound-truncated contracted residual expansions]
-    \label{thm:mps_reduction_contracted_expansions}
-    \lean{MPSTensor.reductionLeftContractedRangeSum,
-        MPSTensor.reductionRightContractedRangeSum,
-        MPSTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedRangeSum,
-        MPSTensor.IsReduction.evalWord_mul_eq_reductionRightContractedRangeSum}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_nilpotency_length}
-    Let $(V,W)$ be a reduction from $B$ to $A$, let $L$ be any residual-word
-    nilpotency bound, and write
-    $\mathbf i=(i_1,\ldots,i_n)$.  Then
-    \begin{align}
-        VB^{i_1}\cdots B^{i_n}
-         & =\sum_{n-L\leq s\leq n}
-        A^{i_1}\cdots A^{i_s}V
-        N^{i_{s+1}}\cdots N^{i_n},
-        \label{eq:mps_reduction_left_contracted_expansion} \\
-        B^{i_1}\cdots B^{i_n}W
-         & =\sum_{0\leq r\leq\min(L,n)}
-        N^{i_1}\cdots N^{i_r}W
-        A^{i_{r+1}}\cdots A^{i_n}.
-        \label{eq:mps_reduction_right_contracted_expansion}
-    \end{align}
-    Here $n-L$ denotes truncated subtraction, equivalently
-    $\max(0,n-L)$ in integer notation.  The endpoints with a residual word of
-    length exactly $L$ are retained as zero terms.  These are the two
-    contracted formulas of \cite{Molnar2018SemiInjective}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_reduction_all_cut_contracted,
-        thm:mps_reduction_residual_bound_consequences}
-    Start from (\ref{eq:mps_reduction_left_all_cut}) and
-    (\ref{eq:mps_reduction_right_all_cut}).  In the left sum, every omitted
-    term has residual suffix length at least $L$.  In the right sum, every
-    omitted term has residual prefix length at least $L$, so
-    (\ref{eq:mps_reduction_residual_bound_word}) makes all these terms zero.
-\end{proof}
-
-\begin{theorem}[Exterior-buffer identity]
-    \label{thm:mps_reduction_exterior_buffer}
-    \lean{MPSTensor.IsReduction.evalWord_mul_reduced_exterior_eq_evalWord_append}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_nilpotency_length}
-    Let $(V,W)$ be a reduction from $B$ to $A$, and let $L$ be any
-    residual-word nilpotency bound.  If the central word
-    $\mathbf c$ is nonempty and the exterior words $\mathbf p,\mathbf q$
-    satisfy
-    \begin{align}
-        L & \leq |\mathbf p|+1,
-          & L                   & \leq |\mathbf q|+1,
-        \label{eq:mps_reduction_exterior_buffer_bounds}
-    \end{align}
-    then
-    \begin{align}
-        B^{\mathbf p}WA^{\mathbf c}VB^{\mathbf q}
-         & =B^{\mathbf p\mathbf c\mathbf q}.
-        \label{eq:mps_reduction_exterior_buffer}
-    \end{align}
-    No closed-chain equality is assumed: only the reduction and the supplied
-    residual bound enter this identity.  It follows from the corrected
-    residual expansion by eliminating every term with a sufficiently long
-    residual buffer.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_rectangular_reduction_identities,
-        thm:mps_reduction_residual_exterior_sandwich,
-        thm:mps_reduction_recursive_residual_expansion,
-        thm:mps_reduction_residual_bound_consequences}
-    First use induction along the right exterior word to show that a positive
-    residual block preceded by $V$ vanishes once its length together with the
-    right buffer reaches $L$.  Expand only the left exterior word
-    $B^{\mathbf p}$ by
-    Theorem~\ref{thm:mps_reduction_recursive_residual_expansion}.  The left
-    buffer bound removes the pure residual term, while the preceding induction
-    and (\ref{eq:mps_reduction_residual_exterior_sandwich}) remove the
-    strict-window terms.
-    Hence
-    $B^{\mathbf p}N^iB^{\mathbf q}=0$ under the two buffer bounds.
-
-    Separately, induction on a word $\mathbf a$ gives
-    $VB^{\mathbf a\mathbf q}=A^{\mathbf a}VB^{\mathbf q}$ from the right
-    buffer bound.  Write the nonempty central word as
-    $\mathbf c=i\mathbf a$ and decompose the corresponding letter as
-    $B^i=N^i+WA^iV$.  The residual term is zero by the first step, and the
-    second induction identifies the remaining term with
-    (\ref{eq:mps_reduction_exterior_buffer}).
-\end{proof}
-
-\begin{definition}[Exterior buffer length of a reduction]
-    \label{def:mps_reduction_exterior_buffer_length}
-    \lean{MPSTensor.IsReductionExteriorBufferLength,
-        MPSTensor.IsReductionExteriorBufferLength.mono}
-    \leanok
-    \uses{def:mps_rectangular_reduction}
-    Let $(V,W)$ be a reduction from $B$ to $A$.  A natural number $m$ is an
-    \emph{exterior buffer length} for $(V,W)$ if
-    \begin{align}
-        B^{\mathbf p}WA^{\mathbf c}VB^{\mathbf q}
-         & =B^{\mathbf p\mathbf c\mathbf q}
-        \label{eq:mps_reduction_exterior_buffer_length}
-    \end{align}
-    for every nonempty word $\mathbf c$ and all words $\mathbf p,\mathbf q$
-    with $|\mathbf p|\geq m$ and $|\mathbf q|\geq m$.  Every $m'\geq m$ is
-    then also an exterior buffer length.  This is the exterior fusion
-    equation of \cite[lines~1409--1498]{FrancoRubio2025MPUGauging}, with
-    exterior length $m\geq\ell$ and central length $|\mathbf c|=n+1$, $n\geq0$.
-\end{definition}
-
-\begin{theorem}[Reductions and exterior buffers under blocking]
-    \label{thm:mps_reduction_blocking}
-    \lean{MPSTensor.IsReduction.isReductionExteriorBufferLength_of_bound,
-        MPSTensor.IsReduction.isReductionExteriorBufferLength_nilpotencyLength,
-        MPSTensor.IsReduction.blockTensor,
-        MPSTensor.IsReduction.reindexPhysical,
-        MPSTensor.IsReductionExteriorBufferLength.blockTensor,
-        MPSTensor.IsReductionExteriorBufferLength.reindexPhysical}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_exterior_buffer_length,
-        def:mps_reduction_residual_nilpotency_length,
-        def:same_mpv2_pos, def:blocked_tensor}
-    Let $(V,W)$ be a reduction from $B$ to $A$.  If $N$ is a residual-word
-    nilpotency bound, then $N-1$ is an exterior buffer length; in particular,
-    if $\mc{V}^+(B)=\mc{V}^+(A)$, then $\ell(B,A;V,W)-1$ is an exterior
-    buffer length.
-
-    For every $L$, the same pair $(V,W)$ is a reduction from $B^{[L]}$ to
-    $A^{[L]}$, and for every map $f$ between physical alphabets it is a
-    reduction from $B\circ f$ to $A\circ f$.  If $m$ is an exterior buffer
-    length for $(V,W)$, $L>0$, and $m\leq kL$, then $k$ is an exterior buffer
-    length for $(V,W)$ as a reduction from $B^{[L]}$ to $A^{[L]}$; reindexing
-    both tensors by the same map $f$ also preserves exterior buffer lengths.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_reduction_exterior_buffer,
-        thm:mps_reduction_residual_dimension_bound,
-        lem:eval_word_block}
-    The bounds $N\leq|\mathbf p|+1$ and $N\leq|\mathbf q|+1$ in
-    Theorem~\ref{thm:mps_reduction_exterior_buffer} read
-    $N-1\leq|\mathbf p|$ and $N-1\leq|\mathbf q|$, and
-    Theorem~\ref{thm:mps_reduction_residual_dimension_bound} makes the least
-    length a bound under equality of the positive-length closed chains.
-    Word evaluation of $B^{[L]}$ on a blocked word is evaluation of $B$ on
-    the flattened word, and evaluation of $B\circ f$ on a word is evaluation
-    of $B$ on the mapped word, so the reduction identities transfer.  For the
-    exterior identity, the flattened exterior words have length at least
-    $kL\geq m$ and the flattened central word has positive length $|\mathbf c|L$.
-\end{proof}
-
-\begin{definition}[Common buffer length of a finite family]
-    \label{def:common_buffer_length}
-    \lean{commonBufferLength, commonBufferLength_pos,
-        le_commonBufferLength_add_one, commonBufferLength_le}
-    \leanok
-    For a finite family of natural numbers $(N_i)_{i\in I}$, the
-    \emph{common buffer length} is
-    \begin{align}
-        L & =\max\Bigl(1,\max_{i\in I}(N_i-1)\Bigr),
-        \label{eq:common_buffer_length}
-    \end{align}
-    with $N_i-1$ read as $0$ when $N_i=0$.  It is positive, satisfies
-    $N_i\leq L+1$ for every $i\in I$, and is the least positive integer with
-    this property.
-\end{definition}
-
-\begin{theorem}[Common blocking of a finite family of reductions]
-    \label{thm:mps_reduction_common_blocking}
-    \lean{MPSTensor.IsReduction.blockTensor_commonBufferLength_one}
-    \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_exterior_buffer_length,
-        def:mps_reduction_residual_nilpotency_length,
-        def:common_buffer_length, def:blocked_tensor}
-    Let $(N_i)_{i\in I}$ be a finite family of natural numbers with common
-    buffer length $L$, and let $(V,W)$ be a reduction from $B$ to $A$ for
-    which $N_i$ is a residual-word nilpotency bound for some $i\in I$.  Then
-    $1$ is an exterior buffer length for $(V,W)$ as a reduction from
-    $B^{[L]}$ to $A^{[L]}$: (\ref{eq:mps_reduction_exterior_buffer_length})
-    holds for the blocked tensors whenever the blocked words
-    $\mathbf p,\mathbf c,\mathbf q$ are nonempty.
-
-    This formalizes the reduction of the buffer length to $1$ by blocking in
-    \cite{FrancoRubio2025MPUGauging} and
-    \cite[Theorem~1 footnote]{GarreRubioSchuch2024DomainWall}; see
-    \cite{gap:mgsc18_nilpotency_length_one_terminology}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_reduction_blocking}
-    By Theorem~\ref{thm:mps_reduction_blocking}, $N_i-1$ is an exterior
-    buffer length, and $N_i-1\leq L=1\cdot L$ with $L>0$ by
-    (\ref{eq:common_buffer_length}).  The blocking statement of the same
-    theorem with $k=1$ gives the conclusion.
-\end{proof}
-
-\begin{theorem}[Boundary-dressed uniqueness of rectangular reductions]
-    \label{thm:mps_reduction_boundary_dressed_uniqueness}
-    \lean{MPSTensor.IsReduction.exists_boundary_dressed_proportional,
-        MPSTensor.IsReduction.exists_boundary_dressed_proportional_of_nilpotencyLength_le}
-    \leanok
-    \discussion{7395}
-    \uses{def:same_mpv2_pos, def:mps_rectangular_reduction,
-        def:mps_reduction_residual_nilpotency_length, def:normal}
-    Let $A$ be normal, let $B$ have the same physical alphabet, and let
-    $(V,W)$ and $(\widetilde V,\widetilde W)$ be two reductions from $B$ to
-    $A$.  Suppose that $N_0\in\mathbb N$ is a residual-word nilpotency bound
-    for both reductions: every word of length $N_0$ in either residual tensor
-    vanishes.  Then there exists a single scalar $\lambda\in\C$ with
-    $\lambda\ne0$ such
-    that, for every word $\mathbf a$ satisfying
-    \begin{align}
-        |\mathbf a| & > 2N_0,
-        \label{eq:mps_reduction_boundary_dressed_length}
-    \end{align}
-    one has
-    \begin{align}
-        VB^{\mathbf a}
-         & =\lambda\,\widetilde V B^{\mathbf a},
-        \label{eq:mps_reduction_boundary_dressed_left} \\
-        B^{\mathbf a}W
-         & =\lambda^{-1}B^{\mathbf a}\widetilde W.
-        \label{eq:mps_reduction_boundary_dressed_right}
-    \end{align}
-    If $A$ and $B$ have the same positive-length closed-chain coefficients and
-    the two least residual nilpotency lengths are at most $N_0$, then $N_0$ is
-    such a common bound and the same conclusion follows.  The direct-bound
-    statement itself requires no equality of closed-chain coefficients.
-
-    Following \cite[Theorem~22]{Molnar2018SemiInjective}, these boundary-dressed
-    identities hold for $|\mathbf a|>2N_0$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mps_rectangular_reduction_identities,
-        thm:mps_reduction_residual_dimension_bound,
-        thm:mps_reduction_residual_bound_consequences,
-        thm:mps_reduction_exterior_buffer, def:l_blk_injective,
-        thm:exact_block_injectivity_positive_multiple}
-    If the target bond dimension is zero, both dressed identities hold
-    entrywise for $\lambda=1$ because the relevant target row or column index is
-    empty.  Hence assume that the target bond dimension is positive.
-
-    Choose $L>0$ such that $A$ is $L$-block injective.  For exterior words
-    $\mathbf p,\mathbf q$ satisfying the $N_0$ buffer inequalities, compare the
-    two exterior-buffer expansions of the mixed contraction
-    $VB^{\mathbf p}\widetilde W$.  Inserting a nonempty central $A$-word gives
-    \begin{align}
-        (VB^{\mathbf p}\widetilde W)A^{\mathbf c}A^{\mathbf q}
-        =A^{\mathbf p}A^{\mathbf c}(VB^{\mathbf q}\widetilde W).
-        \notag
-    \end{align}
-    Since the length-$L$ words span the full target matrix algebra, linearity
-    replaces $A^{\mathbf c}$ by an arbitrary matrix.  Insert matrix units and
-    choose a nonzero target word at a positive multiple of $L$.  Entrywise
-    cancellation then yields one scalar $\lambda$ with
-    $VB^{\mathbf p}\widetilde W=\lambda A^{\mathbf p}$ for every sufficiently
-    buffered $\mathbf p$.  Reversing the two reductions gives a scalar $\mu$
-    for the opposite mixed boundary.
-
-    Choose a longer nonzero target word, split it into two buffered exterior
-    pieces and a nonempty injective central block, and apply the exterior-buffer
-    identity once more.  The two mixed-boundary formulas give
-    $(\lambda\mu)A^{\mathbf a}=A^{\mathbf a}$; nonvanishing of the chosen word
-    implies $\lambda\mu=1$, so in particular $\lambda\ne0$.
-
-    Finally, if $|\mathbf a|>2N_0$, split $\mathbf a$ into exterior words of
-    length $N_0$ and a nonempty center.  Substitution of the two mixed-boundary
-    formulas into the corresponding exterior-buffer identities gives
-    (\ref{eq:mps_reduction_boundary_dressed_left}) and first gives
-    $B^{\mathbf a}\widetilde W=\lambda B^{\mathbf a}W$ on the right.
-    Multiplication by $\lambda^{-1}$ yields
-    (\ref{eq:mps_reduction_boundary_dressed_right}).
-
-    For the least-length corollary, positive-length closed-chain equality makes
-    each least residual nilpotency length an actual bound.  Prefix
-    factorization propagates vanishing from that least length to $N_0$, so the
-    direct-bound theorem applies.
-\end{proof}
 
 \begin{lemma}[Gauge invariance of block injectivity]
     \label{lem:gauge_invariance_block_injective}

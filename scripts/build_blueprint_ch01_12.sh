@@ -33,7 +33,6 @@ echo "==> Checking the FT--MPS chapter router..."
 expected="ch01_intro
 ch02_mps
 ch03_single
-ch04_channels
 ch06_qpf
 ch07_spectral
 ch08_wielandt
