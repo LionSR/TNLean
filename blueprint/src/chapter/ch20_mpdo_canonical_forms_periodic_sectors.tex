@@ -62,9 +62,9 @@
     argument. The projector, its word invariance, and its single-letter
     displacement are constructed from the cyclic decomposition of the
     peripheral spectrum
-    (Theorem~\ref{thm:mpdo_displaced_invariant_projector}); the passage
-    from the displacement to the all-length non-commutation family is not
-    needed for the periodic-sector contradiction below.
+    (Theorem~\ref{thm:mpdo_displaced_invariant_projector}); the single
+    non-commutation instance suffices for the periodic-sector contradiction
+    below.
     % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
 \end{definition}
 
@@ -313,10 +313,9 @@
         Q_1H^{(N+1)} & \ne H^{(N+1)}Q_1.
         \label{eq:cpsv_literal_displaced_noncommutation}
     \end{align}
-    Thus a displaced idempotent has a noncommuting chain length. The
-    proof of \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv}
-    only requires this existential conclusion, not noncommutation at every
-    length.
+    This existential non-commutation statement supplies the single length
+    needed for the contradiction in
+    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -414,10 +413,9 @@
     $Q_1[H^{(N+1)}]^p=[H^{(N+1)}]^pQ_1$.
     Positive semidefiniteness and
     Theorem~\ref{thm:psd_commute_of_commute_pow} imply that $Q_1$ commutes
-    with $H^{(N+1)}$, which is the required contradiction. This uses the
-    pointwise contradiction in
-    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv}; the
-    stronger all-length inequality printed there is unnecessary.
+    with $H^{(N+1)}$, which yields the contradiction in
+    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} using a
+    single noncommuting length.
 \end{proof}
 
 \begin{theorem}[Commutation at chain length two forces letter invariance, for

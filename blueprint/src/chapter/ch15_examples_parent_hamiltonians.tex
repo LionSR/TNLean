@@ -1,8 +1,9 @@
 \section{Parent Hamiltonian statements for the examples}\label{sec:example_parent_hamiltonians}
 %% ===================================================================
 
-The parent-Hamiltonian construction of \cite[lines~1988--2000]{Cirac2021Matrix},
-reviewed in Chapter~\ref{ch:parent_hamiltonian}, is recorded here in the form
+Following the parent-Hamiltonian construction of
+\cite[lines~1988--2000]{Cirac2021Matrix} reviewed in
+Chapter~\ref{ch:parent_hamiltonian}, the range-$L$ local parent space is
 \begin{align}
     \mathcal G_L(A)
      & =
@@ -12,13 +13,9 @@ reviewed in Chapter~\ref{ch:parent_hamiltonian}, is recorded here in the form
     : X\in \MN{D}\right\}.
     \notag
 \end{align}
-Thus
-\begin{align}
-    \ker h_L  & = \mathcal G_L(A), \notag \\
-    H_N^{(L)} & = \sum_i (h_L)_i.
-    \notag
-\end{align}
-We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
+Then $\ker h_L = \mathcal G_L(A)$, the range-$L$ parent Hamiltonian is
+$H_N^{(L)} = \sum_i (h_L)_i$, and $\GS(H)=\ker(H-E_0(H)\Id)$ denotes the ground
+eigenspace.
 
 \begin{theorem}[GHZ two-site parent space]\label{thm:ghz_ground_space_two}
     \lean{MPSTensor.ghz_groundSpace_two_eq_span}
@@ -494,8 +491,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     Hamiltonians $\sum_i K_i$ and $-\sum_i K_i = \sum_i(\Id-K_i) - N\Id$.
     Theorem~\ref{thm:cluster_source_periodic_ground_state} proves this on-site
     relation for the matrix product vectors and identifies the ground energy
-    and eigenspace for the printed matrices. The remaining operator-identity
-    and other example-level questions are recorded in
+    and eigenspace for the printed matrices; see
     \cite{gap:rmp_example_parent_hamiltonian_scope}.
 \end{remark}
 
@@ -684,8 +680,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
          & = 1
         \notag
     \end{align}
-    \cite[lines~1169--1174]{Cirac2021Matrix}. Which of the review's AKLT
-    statements are established here, and which are left aside, is recorded in
+    \cite[lines~1169--1174]{Cirac2021Matrix}; see
     \cite{gap:rmp_example_parent_hamiltonian_scope}.
     % Neither the polynomial form nor the open-boundary degeneracy is
     % formalized; the periodic two-site uniqueness is

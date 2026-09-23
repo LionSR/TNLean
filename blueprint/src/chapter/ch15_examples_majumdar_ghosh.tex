@@ -32,12 +32,9 @@ resonating valence-bond state.
         \end{pmatrix}.
         \notag
     \end{align}
-    The three bond levels are the two spin-$\tfrac12$ values of an open singlet
-    partner together with the closed inter-dimer link; the relative sign
-    $-\tfrac1{\sqrt2}$ is the antisymmetry of the singlet. The equality between
-    the matrix product vectors of these matrices and the even-ring dimer
-    superposition, with normalization and cyclic convention fixed, is a separate
-    verification, not part of this definition.
+    The three bond levels represent the two spin-$\tfrac12$ values of an open
+    singlet partner together with the closed inter-dimer link; the relative sign
+    $-\tfrac1{\sqrt2}$ reflects the antisymmetry of the singlet.
 \end{definition}
 
 \begin{theorem}[Majumdar--Ghosh tensor is in left-canonical form]%
@@ -127,30 +124,15 @@ resonating valence-bond state.
 \end{proof}
 
 \begin{remark}\label{rem:majumdar_ghosh_bond_dimension}
-    The review writes the tensor in the valence-bond shorthand
-    $A = [\ket0((02|+(20|) + \ket1((12|+(21|)]\otimes Y$ with the singlet
-    $Y = \left(\begin{smallmatrix}0 & -1 \\ 1 & 0\end{smallmatrix}\right)$.
-    Read literally as $(ab| = \ketbra{a}{b}$ on a separate three-level factor
-    tensored with the two-level singlet space, that shorthand would describe a
-    six-dimensional bond. Its two-site contractions do not have the singlet-pair
-    support pattern: same-letter traces can be nonzero while opposite-letter
-    traces vanish. The shorthand is therefore treated here as a schematic of the
-    valence-bond construction: contracting the singlet $Y$ leaves a matrix
-    product operator on a three-dimensional bond, with the antisymmetry of $Y$
-    supplying the relative sign. The contracted tensor is the $D = 3$
-    representative in Definition~\ref{def:majumdar_ghosh_tensor}. The
-    source-notation gap and the missing matrix-product-vector identification are
-    recorded in \cite{gap:rmp_majumdar_ghosh_tensor_gap}.
+    Contracting the valence-bond shorthand of \cite{Cirac2021Matrix} with the
+    singlet matrix $Y$ yields the $D = 3$ representation in
+    Definition~\ref{def:majumdar_ghosh_tensor}; see
+    \cite{gap:rmp_majumdar_ghosh_tensor_gap}.
 \end{remark}
 
-The remaining target for the Majumdar--Ghosh example is the ground-space
-description of its parent Hamiltonian. Because the tensor is non-normal
+Because the Majumdar--Ghosh tensor is non-normal
 (Theorem~\ref{thm:majumdar_ghosh_not_normal}) with a two-periodic bond grading,
-its periodic ground space is governed by the block-diagonal boundary-condition
-machinery for non-normal tensors
-(Section~\ref{sec:block_diagonal_boundary_closing}) rather than by the injective
-single-state result. Thus the relevant target is the following range-three
-periodic ground-space statement.
+its periodic ground space exhibits dimer degeneracy.
 
 \begin{theorem}[Two-fold dimer degeneracy of the Majumdar--Ghosh ground space]%
     \label{thm:majumdar_ghosh_ground_space}

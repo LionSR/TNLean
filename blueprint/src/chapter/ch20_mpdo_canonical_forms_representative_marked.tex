@@ -150,12 +150,8 @@
     representative word-tuple separation, agreement for every marked index
     and every positive-length unmarked word implies $C_j=E_j$ for every $j$.
 
-    Lemma~L is stated for marks induced by physical operators on the first
-    site. After its closed-chain identity has been expanded, the separation
-    calculation uses only the matrices in the marked slot. The theorem is
-    the resulting algebraic extension of
-    \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}; it is not
-    attributed to the paper as a separately stated arbitrary-mark theorem.
+    This extends the argument of \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}
+    from first-site physical marks to general marked matrices in the marked slot.
 \end{theorem}
 
 \begin{proof}
@@ -294,8 +290,7 @@
         \tr(CA^w) & =\tr(EB^w).
         \label{eq:cpsv_original_marked_trace}
     \end{align}
-    The marked matrix makes the closed chain nonempty; no equality of
-    unmarked empty-word matrix product vectors is asserted.
+    The inserted marked matrix ensures that the closed chain is nonempty.
 
     For a linear physical mark $f$, the linear marking of
     $T_{\mathrm{grp}}$ is exactly its full grouped marked tensor. Each
@@ -311,11 +306,10 @@
     for every marked letter $u$ and every word $w$ of positive length, then
     $F_A=G_A$ on the original bond space.
 
-    Thus the separation conclusion does not require the marked trace identity
-    for the empty tail word. This is the positive-tail form of the argument in
-    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}: the source
-    assumes first-site agreement at every positive system size, while its
-    proof separates the representatives at a suitable nonzero tail length.
+    This positive-tail formulation corresponds to the argument in
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}: first-site agreement
+    at positive system sizes suffices to separate representatives at a nonzero tail
+    length without requiring empty-word data.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -359,10 +353,9 @@
     \lean{MPSTensor.insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq}
     \leanok
     \uses{def:first_site_action_physical_blocking, def:blocked_tensor, def:l_blk_injective}
-    This auxiliary statement supplies the identity needed to combine the
-    block-injectivity argument
-    \cite[lines~318--345]{Cirac2016MPDO_arXiv} with Appendix~C.3, Lemma~L
-    \cite[lines~1835--1858]{Cirac2016MPDO_arXiv}.
+    This identity connects the block-injectivity argument
+    \cite[lines~318--345]{Cirac2016MPDO_arXiv} with Lemma~L
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}.
 
     Let $A$ be a tensor, and let $Y^{[L+1]}$ be the physical-block action
     induced by $Y\in\MN{d}$. For $I=(i_0,\ldots,i_L)$, its insertion into
@@ -561,13 +554,10 @@
     If $\tr(C^uM^w)=\tr(E^uM^w)$ for every marked index $u$ and every word
     $w$ of positive length, then $C^u=E^u$ for every $u$.
 
-    The marks are required to lie in the span of the physical letters. No
-    assertion is made for arbitrary bond-space matrices, since off-diagonal
-    matrices between repeated sectors are invisible to closed chains. The
-    corollary is the physical-insertion consequence of
-    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv} used in the
-    contractions of
-    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+    Restricting the marks to the span of the physical letters isolates the
+    physical-insertion consequence of
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv} needed for the
+    contractions in \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
 \end{corollary}
 
 \begin{proof}

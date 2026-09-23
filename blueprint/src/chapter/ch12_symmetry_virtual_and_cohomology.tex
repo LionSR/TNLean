@@ -1,9 +1,8 @@
 \section{Virtual Local Covariance and Projective Bond Actions}
 \label{sec:injective_symmetry_cocycle}
 
-With a full group of on-site symmetries (rather than just a single
-unitary), the resulting gauges determine a projective representation
-on the bond space.
+When an MPS is invariant under an on-site group action, the resulting virtual
+gauge transformations form a projective representation on the bond space.
 
 \begin{definition}[Twisted tensor]\label{def:twisted_tensor}
     \lean{MPSTensor.twistedTensor}
@@ -23,13 +22,10 @@ on the bond space.
     \lean{MPSTensor.IsOnSiteSymmetric}
     \leanok
     \uses{def:twisted_tensor, def:same_mpv}
-    The predicate called on-site symmetry requires
-    $\mc{V}(A)=\mc{V}(\widetilde A_g)$ for every $g\in G$, where
-    $U:G\to\GL_d(\C)$ acts on the physical index.  This is equality of
-    periodic MPV families and is the hypothesis used to construct virtual
-    local gauges.  It is not, by itself, the source notion that every reduced
-    density operator of an infinite physical state is invariant under
-    $U(g)^{\otimes N}$.
+    An MPS tensor $A$ has \emph{on-site symmetry} under a representation
+    $U:G\to\GL_d(\C)$ if $\mc{V}(A)=\mc{V}(\widetilde A_g)$ for every $g\in G$.
+    This equality of periodic MPV families provides the condition for constructing
+    virtual symmetry gauges.
 \end{definition}
 
 \begin{lemma}[Functoriality of twisting]\label{lem:twisted_tensor_mul}
@@ -134,17 +130,14 @@ on the bond space.
     equivalence.
 \end{proof}
 
-\begin{remark}[Fundamental-Theorem route for injective symmetry]%
+\begin{remark}[Virtual representation via the Fundamental Theorem]%
     \label{rem:injective_symmetry_ft_route}
     \uses{thm:ft_single, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul, thm:virtual_rep_injective}
-    The injective virtual-representation theorem is not proved from
-    virtual-boundary nondecay. The on-site symmetry condition first identifies
-    $A$ and $\widetilde{A}_g$ as the same MPV family; the single-block
-    Fundamental Theorem gives the gauge in
-    Lemma~\ref{lem:gauge_equiv_twisted}. Gauge uniqueness and the twist
-    composition law then give Theorem~\ref{thm:virtual_rep_injective}. The
-    virtual-boundary nondecay results later in this chapter use this virtual
-    representation as an input.
+    On-site symmetry identifies $A$ and $\widetilde{A}_g$ as defining the same MPV
+    family. The single-block Fundamental Theorem yields the gauge matrices in
+    Lemma~\ref{lem:gauge_equiv_twisted}; gauge uniqueness and twist functoriality
+    then establish the projective representation of
+    Theorem~\ref{thm:virtual_rep_injective}.
 \end{remark}
 
 \begin{theorem}[Virtual symmetry equation]\label{thm:virtual_symmetry_eq}
@@ -385,9 +378,8 @@ on the bond space.
 
 \section{Cohomology Classes of Virtual Symmetry Cocycles}
 
-Two cocycles may differ by a coboundary yet represent the same
-projective-representation class. The following definitions and results
-make this precise and establish the quotient $H^2(G,\C^{\times})$.
+Projective representations are classified up to projective equivalence by the
+second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 
 \begin{definition}[Coboundary]\label{def:is_coboundary}
     \lean{TNLean.Algebra.ScalarCocycle.IsCoboundary}
@@ -537,10 +529,8 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     \lean{TNLean.Algebra.ProjectivelyEquivalent}
     \leanok
     \uses{def:projective_rep, def:cohomologous_to}
-    Two projective representations are projectively equivalent when their
-    factor systems are cohomologous. This relation compares only their classes
-    in $H^2(G,\C^\times)$ and does not assert an intertwining equivalence
-    between the underlying representation spaces.
+    Two projective representations are \emph{projectively equivalent} when their
+    factor systems are cohomologous in $H^2(G,\C^\times)$.
 \end{definition}
 
 \begin{theorem}[Factor-system class agreement]%

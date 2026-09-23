@@ -1,8 +1,6 @@
 \chapter{Matrix Product Vectors}\label{ch:mps}
 
 Fix a physical dimension $d$ and a bond dimension $D$.
-This chapter studies the tensors that generate matrix product vector
-(MPV) families.
 All tensors here are translation-invariant with periodic
 boundary conditions (PBC).
 
@@ -365,10 +363,8 @@ boundary conditions (PBC).
 \end{proof}
 
 \begin{remark}\leanok
-    Definition~\ref{def:same_mpv} is the same-bond-dimension
-    specialization of Definition~\ref{def:same_mpv2}.
-    We keep both because later results use both the
-    same-dimension and different-dimension forms.
+    Definition~\ref{def:same_mpv} specializes Definition~\ref{def:same_mpv2}
+    to equal bond dimensions $D_1=D_2=D$.
 \end{remark}
 
 \begin{definition}[Nonzero proportional MPV]\label{def:nonzero_proportional_mpv}
@@ -1013,13 +1009,13 @@ $A^{-1}A=\Id$. This is the identity used in
         lem:mps_reduction_scalar_covariance}
     Set $\widetilde B=c^{-1}B$.  Expand its word evaluations with
     Lemma~\ref{lem:eval_word_smul}, take the trace, and use
-    Eq.~\ref{eq:mps_proportional_reduction_hypothesis}.  The positive-length MPV
+    (\ref{eq:mps_proportional_reduction_hypothesis}).  The positive-length MPV
     families of $\widetilde B$ and $A$ are equal.  Apply
     Theorem~\ref{thm:mps_equality_reduction_exists} to obtain a reduction from
     $\widetilde B$ to $A$.  Scale both tensors by $c$ to obtain a reduction
     from $B$ to $cA$, and then apply
     Lemma~\ref{lem:mps_reduction_scalar_covariance} to get
-    Eq.~\ref{eq:mps_proportional_reduction_word_relation}.
+    (\ref{eq:mps_proportional_reduction_word_relation}).
 \end{proof}
 
 \begin{lemma}[Nonempty products in a generated subsemigroup]
@@ -1306,11 +1302,9 @@ $A^{-1}A=\Id$. This is the identity used in
         N^{i_{s+1}}\cdots N^{i_n}.
         \label{eq:mps_reduction_residual_expansion}
     \end{align}
-    This statement requires only the reduction.  The weak range $r\leq s$
-    printed in \cite{Molnar2018SemiInjective} is false: it introduces empty
-    central words and omits the pure residual term.  Formula
-    (\ref{eq:mps_reduction_residual_expansion}) is the corrected identity
-    established in \cite{gap:mgsc18_residual_expansion_empty_word_error}.
+    This statement requires only the reduction. The range $0\leq r<s\leq n$
+    ensures nonempty central words; see
+    \cite{gap:mgsc18_residual_expansion_empty_word_error}.
 \end{theorem}
 
 \begin{proof}
@@ -1337,12 +1331,9 @@ $A^{-1}A=\Id$. This is the identity used in
     zero, every element of $\mathcal R(B,A;V,W)$ has trace zero, and every
     element of this algebra is nilpotent.
 
-    This is the nil-algebra step in the proof of Proposition~21 of
-    \cite{Molnar2018SemiInjective}.  The positive-length closed-chain
-    equality is essential; a reduction alone does not imply nilpotency.  This
-    is the $\lambda=1$ scope of the source argument; the dropped
-    proportionality scalar is recorded in
-    \cite{gap:mgsc18_reduction_proportionality_scalar}.
+    This establishes the nil-algebra step of
+    \cite[Proposition~21]{Molnar2018SemiInjective} in the equality case
+    $\lambda=1$; see \cite{gap:mgsc18_reduction_proportionality_scalar}.
 \end{theorem}
 
 \begin{proof}
@@ -1486,7 +1477,7 @@ $A^{-1}A=\Id$. This is the identity used in
     Start from (\ref{eq:mps_reduction_left_all_cut}) and
     (\ref{eq:mps_reduction_right_all_cut}).  In the left sum, every omitted
     term has residual suffix length at least $L$.  In the right sum, every
-    omitted term has residual prefix length at least $L$.  Equation
+    omitted term has residual prefix length at least $L$, so
     (\ref{eq:mps_reduction_residual_bound_word}) makes all these terms zero.
 \end{proof}
 
@@ -1638,11 +1629,9 @@ $A^{-1}A=\Id$. This is the identity used in
     holds for the blocked tensors whenever the blocked words
     $\mathbf p,\mathbf c,\mathbf q$ are nonempty.
 
-    This is the sentence in \cite{FrancoRubio2025MPUGauging} and in the
-    footnote to Theorem~1 of \cite{GarreRubioSchuch2024DomainWall} that the
-    nilpotency length can be reduced to $1$ by blocking.  The blocked
-    residual letters need not vanish, and the blocked nilpotency length of
-    Definition~8 in \cite{Molnar2018SemiInjective} need not be $1$
+    This formalizes the reduction of the buffer length to $1$ by blocking in
+    \cite{FrancoRubio2025MPUGauging} and
+    \cite[Theorem~1 footnote]{GarreRubioSchuch2024DomainWall}; see
     \cite{gap:mgsc18_nilpotency_length_one_terminology}.
 \end{theorem}
 
@@ -1774,22 +1763,14 @@ $A^{-1}A=\Id$. This is the identity used in
 \begin{remark}\leanok
     \uses{lem:primitive_implies_irreducible, thm:burnside_matrix, thm:normal_from_primitive_posdef, thm:algspan_to_normal, thm:blocking_primitivity}
     The algebraic characterization of normality in
-    Definition~\ref{def:normal} --- eventual full matrix span,
-    equivalently eventual block injectivity --- is equivalent to the
-    spectral characterization used in
-    \cite[Definition~IV.1]{Cirac2021Matrix}: after TP normalization, the
-    transfer map $\E_A$ is a primitive channel, equivalently irreducible
-    with trivial peripheral spectrum. This equivalence is proved in
-    \cite[Proposition~3]{Sanz2010Quantum}. In what follows, the
-    directions of the equivalence are supplied by
-    Lemma~\ref{lem:primitive_implies_irreducible},
-    Theorem~\ref{thm:normal_from_primitive_posdef} for primitive normalized
-    tensors with positive-definite fixed point, the Burnside route through
-    Theorem~\ref{thm:algspan_to_normal} for the aperiodic algebraic
-    criterion, and Theorem~\ref{thm:blocking_primitivity}. In particular, every
-    subsequent use of ``normal'' here refers to this single notion;
-    Definition~\ref{def:is_normal_canonical_form} employs the spectral
-    formulation, but it describes the same class of tensors.
+    Definition~\ref{def:normal} (eventual block injectivity) is equivalent to
+    the spectral characterization of \cite[Definition~IV.1]{Cirac2021Matrix}
+    (primitivity of the trace-preserving normalized transfer map $\E_A$); see
+    \cite[Proposition~3]{Sanz2010Quantum}. In this development, the equivalence
+    is established by Lemma~\ref{lem:primitive_implies_irreducible},
+    Theorem~\ref{thm:normal_from_primitive_posdef},
+    Theorem~\ref{thm:algspan_to_normal}, and
+    Theorem~\ref{thm:blocking_primitivity}.
 \end{remark}
 
 \section{Canonical form}
@@ -1820,17 +1801,11 @@ $A^{-1}A=\Id$. This is the identity used in
 \end{definition}
 
 \begin{remark}\label{rem:cf_injective_vs_normal}\leanok
-    Here we use the block-injective canonical form:
-    each block is injective in the sense of
-    Definition~\ref{def:injective}.
-    This is stronger than the NT-block canonical form of
-    \cite{Cirac2021Matrix}, where the blocks are only normal in the
-    spectral sense.
-    Chapter~\ref{ch:canonical} treats the normal canonical form needed
-    for the blocking-based multi-block theory, while
-    the periodic irreducible-form extension is kept separate. This section
-    isolates the stronger block-injective form used in the injective and
-    block-injective arguments.
+    The block-injective canonical form requires each block to be injective
+    (Definition~\ref{def:injective}), which is stronger than the normal
+    canonical form of \cite{Cirac2021Matrix} where blocks are normal in the
+    spectral sense. Chapter~\ref{ch:canonical} develops the normal canonical
+    form used in the multi-block theory.
 \end{remark}
 
 \begin{definition}[Block projection]\label{def:block_projection}

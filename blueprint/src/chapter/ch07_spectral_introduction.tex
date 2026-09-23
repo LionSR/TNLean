@@ -1,59 +1,56 @@
 \chapter{Peripheral Channel Structure and Transfer-Operator Gaps}\label{ch:spectral}
 
-This chapter studies two spectral phenomena for finite-dimensional quantum
-channels and MPS transfer maps, following~\cite{PerezGarcia2007Matrix} and
-\cite{Wolf2012Quantum}.
+The spectral theory of finite-dimensional quantum channels and MPS transfer maps
+rests on two principal structures, following Pérez-García et
+al.~\cite{PerezGarcia2007Matrix} and Wolf~\cite{Wolf2012Quantum}: the peripheral
+spectrum and the mixed transfer operator.
 
-The first is \emph{peripheral} structure: for an irreducible unital Schwarz
-map with a faithful adjoint fixed point, the eigenvalues on the unit circle
-form a finite cyclic group (the corresponding theorem in the companion quantum-channel volume~\cite[``Peripheral eigenvalues: cyclic structure for Kraus maps'']{QICLean2026Blueprint}),
-and under trace preservation the order of this group divides the bond
-dimension~$D$ (Theorem~\cite[``Transfer-map peripheral eigenvalues form a cyclic group'']{QICLean2026Blueprint}). Removing this
-period by unitary conjugation and cyclic corner projections produces the
-periodicity-free cyclic-sector decomposition
-(Theorem~\cite[``Cyclic decomposition for irreducible finite Kraus maps'']{QICLean2026Blueprint}) used by the
+First, for an irreducible unital Schwarz map with a faithful adjoint fixed
+point, the peripheral eigenvalues on the unit circle form a finite cyclic group
+(Theorem~\cite[``Peripheral eigenvalues: cyclic structure for Kraus
+    maps'']{QICLean2026Blueprint}). Under trace preservation, the order of this
+group divides the bond dimension~$D$ (Theorem~\cite[``Transfer-map peripheral
+    eigenvalues form a cyclic group'']{QICLean2026Blueprint}). Unitary
+conjugation and cyclic corner projections yield the periodicity-free
+cyclic-sector decomposition (Theorem~\cite[``Cyclic decomposition for
+    irreducible finite Kraus maps'']{QICLean2026Blueprint}) used in the
 canonical-form reduction of Chapter~\ref{ch:canonical}.
 
-The second is the \emph{mixed transfer operator} $F_{AB}$ of two MPS tensors
-$A$ and $B$, and its spectral radius $\rho_{\spec}(F_{AB})$. We show that
-$\rho_{\spec}(F_{AB})\leq1$ under trace-preserving normalization
-(Theorem~\ref{thm:eigenvalue_bound}), that equality forces $A$ and $B$ to be
-gauge-phase equivalent (Theorem~\ref{thm:modulus_one_gauge}), and that
-mismatched bond dimensions always force a strict gap
-(Theorem~\ref{thm:transfer_operator_gap_rect}). Since the MPV overlap
+Second, the \emph{mixed transfer operator} $F_{AB}$ of two MPS tensors $A$ and
+$B$ governs the asymptotic overlap of matrix product vectors. Under
+trace-preserving normalization, the spectral radius satisfies
+$\rho_{\spec}(F_{AB})\leq1$ (Theorem~\ref{thm:eigenvalue_bound}); equality
+$\rho_{\spec}(F_{AB})=1$ forces $A$ and $B$ to be gauge-phase equivalent
+(Theorem~\ref{thm:modulus_one_gauge}), while unequal bond dimensions force a
+strict gap $\rho_{\spec}(F_{AB})<1$
+(Theorem~\ref{thm:transfer_operator_gap_rect}). Because the MPV overlap
 $O_{AB}(N)$ equals the operator trace $\Tr(F_{AB}^N)$
-(Theorem~\ref{thm:overlap_trace}), these gaps translate directly into the
-overlap-decay theorems (Theorem~\ref{thm:overlap_decay} and its rectangular
-and irreducible-trace-preserving variants) used throughout the fundamental
-theorem. The complementary case --- a single tensor whose transfer map has a
-trivial peripheral spectrum away from the fixed-point projection --- gives
-the rank-one Perron limit $\Tr(\E_A^n)\to1$
-(Theorem~\ref{thm:trace_pow_one}) and hence primitive self-overlap
+(Theorem~\ref{thm:overlap_trace}), these spectral gaps imply the overlap-decay
+theorems (Theorem~\ref{thm:overlap_decay} and its rectangular and
+irreducible-trace-preserving variants). For a single primitive tensor whose
+transfer map has trivial peripheral spectrum away from the fixed-point
+projection, the complementary gap yields the rank-one Perron limit
+$\Tr(\E_A^n)\to1$ (Theorem~\ref{thm:trace_pow_one}) and primitive self-overlap
 convergence $O_{AA}(N)\to1$ (Theorem~\ref{thm:primitive_overlap}).
 
 Throughout, $\rho_{\spec}(\cdot)$ denotes the spectral radius of a linear
-endomorphism of a finite-dimensional matrix space:
-$\rho_{\spec}(F_{AB})<1$ for a mixed transfer operator and
-$\rho_{\spec}(\E_A-P)<1$ for a transfer map after removing its fixed-point
-projection $P$. The unqualified phrase \emph{spectral gap} is reserved for
-the energy gap of a many-body Hamiltonian, discussed later in the full
-blueprint.
+endomorphism of a finite-dimensional matrix space: $\rho_{\spec}(F_{AB})<1$ for
+a mixed transfer operator and $\rho_{\spec}(\E_A-P)<1$ for a transfer map after
+subtracting its fixed-point projection $P$. The unqualified phrase \emph{spectral
+    gap} is reserved for the energy gap of a many-body Hamiltonian.
 
-The algebraic mixed-transfer identities in the first two sections do not use
-normalization. Starting with the spectral-radius estimates, we assume the
-trace-preserving normalization
+The algebraic mixed-transfer identities hold without normalization. The
+subsequent spectral-radius estimates assume the trace-preserving normalization
 \begin{align}
     \sum_i (A^i)^\dagger A^i
      & =\Id.
     \label{eq:spec_tp_normalization}
 \end{align}
 Right-canonical (unital) and left-canonical (trace-preserving) gauges are
-generally different similarity transforms of the same tensor, recorded in
-Remark~\ref{rem:gauge_conventions}; both are used below, depending on which
-fixed point --- of the transfer map or of its adjoint --- drives the gauge.
+distinct similarity transformations of a tensor (Remark~\ref{rem:gauge_conventions}),
+used according to whether the fixed point of the transfer map or that of its adjoint
+governs the transformation.
 
-The proofs of the technical mixed-transfer identities, Frobenius-norm
-estimates, gauge-rigidity intertwiners, spectral-radius decay estimates, the
-rank-one Perron projection, and the cyclic-decomposition machinery removing
-peripheral periodicity are collected in
+Supporting proofs for the mixed-transfer identities, operator-norm estimates,
+gauge intertwiners, and cyclic-decomposition details appear in
 Appendix~\ref{ch:spectral_supporting_results}.

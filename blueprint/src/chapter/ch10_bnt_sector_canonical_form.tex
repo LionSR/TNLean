@@ -3,16 +3,12 @@
 
 % Source: Cirac2016MPDO_arXiv \S~II lines 287--301; Cirac2021Matrix
 % Definition~4.2, Proposition~4.3, lines 1864--1884.
-This section introduces the BNT canonical-form conditions of
-\cite[Section~2]{Cirac2016MPDO_arXiv}, defined on a sector decomposition with
-sector weights $\mu_{j,q}$ and coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$;
-no equal-modulus factorization is assumed.
+The basis-of-normal-tensors canonical form of
+\cite[Section~2]{Cirac2016MPDO_arXiv} is defined on a sector decomposition with
+sector weights $\mu_{j,q}$ and coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$.
 
 \subsection{Sector decompositions and phase matching}
 \label{sec:bnt_sector_decompositions}
-
-The sector decomposition and the MPV phase-equivalence relations introduced
-here determine the BNT canonical-form conditions below.
 
 \begin{definition}[Sector weights and sector decomposition]%
     \label{def:sector_weight_data}
@@ -414,26 +410,23 @@ single family.
     \lean{MPSTensor.IsBNTCanonicalForm}
     \leanok
     \uses{def:sector_weight_data, def:bnt, def:bnt_cpsv}
-    Given a sector decomposition $P$, these conditions define the normalized,
-    left-canonical, aperiodic BNT surface used below. This is stronger than the
-    abstract BNT of Definition~\ref{def:bnt} and the literal coefficient-form
-    BNT of Definition~\ref{def:bnt_cpsv}: besides spanning and eventual linear
-    independence, it fixes irreducible left-canonical representatives, their
-    self-overlap normalization, gauge-phase separation, and the canonical-form
-    weight normalization. It imposes no equal-modulus factorization or strict
-    ordering on the raw weights. Explicitly, each basis block has positive bond
-    dimension, is irreducible, and is left-canonical; the normalized self-overlap of every basis block
-    converges to $1$; the basis MPV family is eventually linearly
-    independent; distinct same-dimension basis blocks are not gauge-phase
-    equivalent after identifying equal bond dimensions; and the
-    \cite[Section~2.3]{Cirac2016MPDO_arXiv} canonical-form normalization holds,
+    Let $P$ be a sector decomposition. In addition to spanning and eventual
+    linear independence, the canonical form specifies irreducible
+    left-canonical representatives, self-overlap normalization, pairwise
+    gauge-phase separation, and weight normalization. Explicitly, each basis
+    block has positive bond dimension, is irreducible, and is left-canonical;
+    the normalized self-overlap of every basis block converges to $1$; the
+    basis MPV family is eventually linearly independent; distinct
+    same-dimension basis blocks are not gauge-phase equivalent after identifying
+    equal bond dimensions; and the \cite[Section~2.3]{Cirac2016MPDO_arXiv}
+    canonical-form normalization holds:
     \begin{align}
         \forall (j,q),\quad       & |\mu_{j,q}| \le 1,
         \notag                                           \\
         \exists\, (j_*,q_*),\quad & |\mu_{j_*,q_*}| = 1.
         \notag
     \end{align}
-    The MPV expansion takes the raw two-layer form
+    The MPV expansion takes the two-layer form
     \begin{align}
         V^{(N)}(P)_\sigma
          & =
@@ -445,11 +438,9 @@ single family.
     % Source: Cirac2016MPDO_arXiv \S~II.C lines 271--301; Cirac2021Matrix
     % Definition~4.2, Proposition~4.3, lines 1864--1884.
     matching \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
-    \cite[Definition~IV.2]{Cirac2021Matrix}.
-    The canonical-form normalization admits every example of the source paper
-    (in particular $C \oplus D$, $C \oplus (-C)$,
-    $C \oplus (1/2) C$, and $C \oplus (-C) \oplus (1/2) C$) and is
-    not derivable from the per-block normality hypotheses alone.
+    \cite[Definition~IV.2]{Cirac2021Matrix}. The canonical-form normalization
+    accommodates equal-modulus and repeated-copy sectors, such as
+    $C \oplus (-C)$ and $C \oplus (1/2) C$.
 \end{definition}
 
 \begin{theorem}[Physical relabeling preserves BNT canonical form]
@@ -569,8 +560,7 @@ single family.
     \leanok
     \uses{def:bnt, def:sector_bnt_cf, cor:sector_bnt_cf_basis_normal}
     If $P$ is in BNT canonical form, then its basis blocks form an algebraic
-    basis of normal tensors for the total tensor associated with $P$. Only
-    this implication from canonical form to algebraic BNT is asserted.
+    basis of normal tensors for the total tensor associated with $P$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -620,8 +610,6 @@ single family.
     \uses{def:bnt_cpsv, def:blocked_tensor, thm:cpsv_normal_tensor_positive_blocking}
     If $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$ and $p\geq1$,
     then $(A_j^{[p]})_{j=1}^{g}$ is a basis of normal tensors for $A^{[p]}$.
-    This transport statement is derived from the definitions; it is not a
-    separately stated theorem of CPSV16.
 \end{theorem}
 
 \begin{proof}
@@ -790,17 +778,16 @@ and the combined-family linear independence.
 
 \subsection{Single-copy sector decompositions}
 
-A weighted block sum is the one-copy case of the sector decomposition used
-below. Equal or repeated sectors require the full coefficient formalism.
+When each sector contains a single copy ($r_j = 1$), the sector decomposition
+reduces to a weighted direct sum.
 
 \subsection{Prepared-block construction of BNT canonical forms}%
 \label{subsec:paperbnt_supplier}
 
-The construction below separates the after-blocking preparation of suitable
-blocks from the normalized-weight BNT construction: the prepared blocks are
-trace-preserving, primitive, irreducible, and injective; normalized weights then
-quotient gauge-phase-equivalent blocks into sectors to produce the canonical
-form of Definition~\ref{def:sector_bnt_cf}.
+After blocking, an MPS tensor reduces to a direct sum of trace-preserving,
+primitive, irreducible, and injective blocks. Quotienting gauge-phase-equivalent
+blocks into sectors and normalizing weights produces the canonical form of
+Definition~\ref{def:sector_bnt_cf}.
 
 \begin{theorem}[Prepared BNT blocks after blocking]%
     \label{thm:prepared_bnt_blocks_after_blocking}
@@ -816,7 +803,6 @@ form of Definition~\ref{def:sector_bnt_cf}.
         \item $A^{[p]}$ and $\bigoplus_k \mu_k B_k$ generate the same MPV family
               at every positive length.
     \end{enumerate}
-    No weight-modulus normalization is asserted at this stage.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -926,7 +912,6 @@ give $O_{YX}(N)\to 0$, a contradiction.
     bond dimensions. If their matrix-product-vector families differ by a
     nonzero scalar power, then their bond dimensions are equal and, after
     identifying the bond spaces, $X$ and $Y$ are gauge-phase equivalent.
-    Neither positivity of the scalar nor unitarity of the gauge is asserted.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1125,9 +1110,8 @@ give $O_{YX}(N)\to 0$, a contradiction.
                     & =\sum_{k=1}^{r}D_k.
         \label{eq:cpsv_active_sector_total_dim}
     \end{align}
-    Thus the dimension is the total dimension of the blocks, not the
-    ambient bond dimension $D$. This statement records positive-length MPV
-    equality; the exact coisometric reconstruction is stated next.
+    The total dimension $D_{\mathrm{tot}}(P)$ equals the sum of the retained
+    block dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1216,9 +1200,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
         B^i & =GA^iG^{-1}.
         \label{eq:cpsv_equal_ambient_gauge}
     \end{align}
-    Unused ambient coordinates are allowed. The
-    conclusion requires the common ambient dimension $D$ and makes no claim for
-    canonical forms with different ambient bond dimensions.
+    The result applies to tensors sharing the ambient bond dimension $D$.
 \end{theorem}
 
 The cited sources supply the retained canonical-form comparison. The passage back

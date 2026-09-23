@@ -1,11 +1,10 @@
 \section{SPT Phase Labels and Virtual-Boundary Nondecay}
 %% ---------------------------------------------------------
 
-The predicate in Definition~\ref{def:is_same_spt_phase} compares virtual
-cocycle labels. The source classification below concerns symmetric paths that
-remain within the MPS and corresponding parent-Hamiltonian framework, with the
-endpoint representations embedded into a common physical space as
-in~\cite{Schuch2011Phases}.
+Symmetry-protected topological (SPT) phases of one-dimensional gapped systems
+are classified by the second cohomology group $H^2(G,\mathrm{U}(1))$ of the
+symmetry group \cite{Schuch2011Phases}. In matrix product states, this phase
+label manifests as the cohomology class of the virtual projective representation.
 
 \begin{definition}[Equality of virtual cocycle labels]
     \label{def:is_same_spt_phase}
@@ -24,25 +23,17 @@ in~\cite{Schuch2011Phases}.
          & =\rho_B(g^{-1})B^i\rho_B(g^{-1})^{-1},
         \notag
     \end{align}
-    exactly, and $\omega_A\sim\omega_B$.  Thus the predicate is equality of
-    virtual factor-system classes.  It neither quantifies over Hamiltonian
-    paths nor states physical phase equivalence.
+    and $\omega_A\sim\omega_B$.
 \end{definition}
 
-\begin{remark}[Scalar and character conventions]
+\begin{remark}[Cohomology with $\C^\times$ and $\mathrm{U}(1)$ coefficients]
     \label{rem:spt_scalar_character_conventions}
     \uses{def:is_same_spt_phase, def:h2_cx,
         thm:mpug_circle_complex_units_h2}
-    These factor systems take values in $\C^\times$.  For finite $G$,
-    Theorem~\ref{thm:mpug_circle_complex_units_h2} gives unit-modulus
-    representatives and identifies their classes with
-    $H^2(G,\mathrm U(1))$; this comparison is not an equality
-    $\C^\times=\mathrm U(1)$.  Moreover,
-    Definition~\ref{def:is_same_spt_phase} requires exact tensor equations.
-    A physical state symmetry may instead act on an MPS vector by a
-    one-dimensional character $\chi(g)$, producing a scalar factor in the
-    local tensor equation.  Exact MPV-family equality and such a character are
-    distinct hypotheses.
+    While factor systems here take values in $\C^\times$, for finite groups $G$
+    every class admits a unit-modulus representative, identifying
+    $H^2(G,\C^\times)$ with $H^2(G,\mathrm U(1))$
+    (Theorem~\ref{thm:mpug_circle_complex_units_h2}).
 \end{remark}
 
 \begin{theorem}[Classification along symmetric MPS parent-Hamiltonian paths]

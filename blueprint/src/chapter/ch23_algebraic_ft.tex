@@ -7,31 +7,24 @@
 \chapter{The Algebraic Fundamental Theorem}%
 \label{ch:algebraic_ft}
 
-This chapter develops the one-dimensional MPS results
-of~\cite{Molnar2018NormalPEPS}: the Fundamental Theorem for injective
-and normal MPS on a finite periodic chain of fixed length.
-The argument is purely algebraic, working directly inside $\MN{D}$.
-Two lemmas carry the whole fixed-length argument: the virtual bond gauge
+This chapter presents the algebraic Fundamental Theorem for injective and normal
+matrix product states on a finite periodic chain of fixed length, following
+Moln\'ar et al.~\cite{Molnar2018NormalPEPS}.
+The argument works directly in the matrix algebra $\MN{D}$.
+The fixed-length development rests on two lemmas: the virtual bond gauge
 (Lemma~\ref{lem:virtual_bond_gauge}) and the proportionality lemma
-(Lemma~\ref{lem:tensor_proportional}). From them follow the main chain
-theorem and its corollaries for translation-invariant chains,
-non-translation-invariant descriptions of translation-invariant states,
-and blocked chains. A second, parallel development treats block-diagonal
-tensors through a product-algebra automorphism and its block-permutation
-decomposition, leading to the direct-sum gauge-equivalence statements and
-the equal-case block matching with differing bond dimensions.
-Appendix~A of~\cite{Molnar2018NormalPEPS} sharpens the normal-MPS bound from
-$n \ge 3L$ to $n \ge 2L + 1$ by a more refined blocking argument. The same two
-lemmas (Lemma~\ref{lem:virtual_bond_gauge} and
-Lemma~\ref{lem:tensor_proportional}) underlie the injective PEPS theorem of
-Chapter~\ref{ch:peps_ft} and the normal PEPS theorem on arbitrary graphs, where
-the graph geometry enters only through the blocking step that reduces to a
-three-site chain.
+(Lemma~\ref{lem:tensor_proportional}).
+These yield the main chain theorem and its corollaries for translation-invariant
+chains, site-dependent descriptions of translation-invariant states, and blocked
+chains.
+Block-diagonal tensors are treated through product-algebra automorphisms and
+their block-permutation decompositions, yielding gauge equivalence for direct sums
+and block matching in the equal-vector case with differing bond dimensions.
+The same foundational lemmas also underpin the injective PEPS development in
+Chapter~\ref{ch:peps_ft}.
 
-Throughout, $D$ is the bond dimension and $d$ is the physical dimension
+Throughout, $D$ denotes the bond dimension and $d$ the physical dimension
 with $d \ge D^2$.
-The extensions to injective and normal PEPS on arbitrary graphs and the
-improved system-size bound ($2L+1$ in place of $3L$) are not pursued here.
 
 \input{chapter/ch23_algebraic_ft_foundations}
 
