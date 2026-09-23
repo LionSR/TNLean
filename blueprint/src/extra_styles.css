@@ -52,6 +52,12 @@ div.centered {
 	text-align: center;
 }
 
+div.centered br {
+	display: block !important;
+	content: "";
+	clear: both;
+}
+
 /* A LaTeX tabular is an inline box, including when its rows stack diagrams
  * on one side of an equation. Its surrounding table/figure owns the display. */
 table.tabular {
