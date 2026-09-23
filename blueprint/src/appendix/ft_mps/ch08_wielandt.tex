@@ -1,17 +1,15 @@
 \chapter{Wielandt Bound: Supporting Results}
 \label{ch:wielandt_supporting_results}
 
-This appendix supports Chapter~\ref{ch:wielandt}. It collects exact-word,
-cumulative-span, augmentation, blocking, complementary-gap, and one-step
-padding results used by the main quantitative argument.
+The quantitative Wielandt argument of Chapter~\ref{ch:wielandt} rests on
+structural properties of exact-word spans, cumulative spans, one-step
+augmentations, blocking, and complementary transfer-map gaps.
 
 \section{Exact-word and block-injectivity support}
 \label{sec:app_wielandt_exact_word_support}
 
-This section proves the exact-word identities and low-dimensional facts used in
-Lemma~\ref{lem:wordspan_blk_inj}, Theorem~\ref{thm:wordspan_blk_inj_succ},
-Theorem~\ref{thm:lemma2b_assembly}, and
-Theorem~\ref{thm:tp_primitive_irred_block_injective}.
+Exact-word products satisfy direct concatenation factorizations and dimension
+bounds in low dimensions.
 
 \begin{lemma}[Word span products]\label{lem:word_span_mul}
     \lean{Kraus.wordSpan_mul_le}
@@ -99,10 +97,8 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
 \section{Cumulative-span and spectral linear algebra}
 \label{sec:app_wielandt_cumulative_support}
 
-This section supplies the finite-dimensional stabilization and spectral facts
-used in Theorem~\ref{thm:cumulative_span_sharp},
-Theorem~\ref{thm:eigenvector_spreading}, and
-Theorem~\ref{thm:wielandt_general}.
+Cumulative word spans form an ascending chain of subspaces whose stabilization
+is governed by finite dimensionality and Burnside's theorem.
 
 The next two lemmas connect irreducible matrix actions with the cumulative word
 span used throughout Chapter~\ref{ch:wielandt}.
@@ -243,9 +239,9 @@ span used throughout Chapter~\ref{ch:wielandt}.
 \section{One-step augmentation}
 \label{sec:app_wielandt_augmentation}
 
-This section proves the one-step augmentation results used in
-Theorem~\ref{thm:wielandt_case2_one_step_span} and
-Theorem~\ref{thm:wielandt_case3_one_step_span}.
+Augmenting a Kraus family by a matrix already in its one-step span preserves all
+exact word spans while allowing the adjunction of an invertible generator or an
+eigenvector.
 
 \begin{definition}[One-step augmentation]\label{def:one_step_augment}
     \lean{Kraus.oneStepAugment}
@@ -408,10 +404,8 @@ Theorem~\ref{thm:wielandt_case3_one_step_span}.
 \label{sec:app_wielandt_blocking_support}
 \label{sec:rectangular_span}
 
-This section proves the blocking and fixed-length constructions used in
-Theorem~\ref{thm:wielandt_general},
-Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical}, and
-Theorem~\ref{thm:tp_primitive_irred_block_injective}.
+Blocking preserves tensor normality and embeds exact word spans, allowing word
+eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 
 \begin{theorem}[Blocking preserves normality]\label{thm:isNormal_blockTensor}
     \lean{MPSTensor.isNormal_blockTensor_of_isNormal}
@@ -592,10 +586,9 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
 \section{Complementary-gap consequences}
 \label{sec:app_wielandt_complementary_gap}
 
-This section proves the complementary-gap consequences used in
-Lemma~\ref{lem:primitive_implies_irreducible},
-Lemma~\ref{lem:strongly_irred_from_primitive}, and
-Theorem~\ref{thm:normal_from_primitive_posdef}.
+A strict spectral-radius bound on the complementary transfer map implies
+overlap convergence, non-vanishing of iterated transfer maps, and fixed-point
+uniqueness.
 
 \begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
     \lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
@@ -705,13 +698,6 @@ Theorem~\ref{thm:normal_from_primitive_posdef}.
     \uses{def:primitive_mps}
     If $A$ is a primitive MPS tensor with positive-definite fixed
     point~$\rho$, then the transfer map $\E_A$ is irreducible.
-
-    The proof uses fixed-point uniqueness
-    (Lemma~\ref{lem:fixedpoint_unique_spectral}):
-    every PSD fixed point is proportional to $\rho$,
-    so Wolf's criterion for irreducibility
-    (a positive-definite fixed point together with uniqueness of positive
-    fixed points implies irreducibility) applies directly.
 \end{lemma}
 
 \begin{proof}
@@ -727,17 +713,15 @@ Theorem~\ref{thm:normal_from_primitive_posdef}.
 \section{Identity in the one-step span}
 \label{sec:app_wielandt_identity_in_span}
 
-This section proves the one-step padding conversions used in
-Theorem~\ref{thm:algspan_to_normal}. It also records why cumulative spanning
-alone does not imply normality.
+When the identity matrix lies in the one-step span $S_1(A)$, exact word spans
+grow monotonically and coincide with cumulative spans.
 
 \begin{remark}[Identity-in-the-one-step-span condition]
     \label{rem:aperiodicity}\leanok
     The \emph{one-step padding condition} is $\Id\in S_1(A)$: the identity
-    matrix lies in the span of the Kraus operators
-    $\{A^i\}_{i=0}^{d-1}$. This is an additional hypothesis. The
-    normalization $\sum_i(A^i)^\dagger A^i=\Id$ gives a quadratic identity
-    and does not imply $\Id\in S_1(A)$.
+    matrix lies in the span of the Kraus operators $\{A^i\}_{i=0}^{d-1}$. While
+    tensor normalization $\sum_i(A^i)^\dagger A^i=\Id$ is quadratic, the
+    one-step condition $\Id\in S_1(A)$ is linear in the Kraus operators.
     Theorem~\ref{thm:normal_from_primitive_posdef} obtains normality from
     a positive-definite fixed point and a complementary gap without this
     padding condition.

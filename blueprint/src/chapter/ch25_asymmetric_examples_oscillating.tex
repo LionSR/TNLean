@@ -1,9 +1,9 @@
 \section{A non-simple symmetry family with an oscillating coefficient}%
 \label{sec:asymex_czx_plus}
 
-Let $N>0$ be the number of qubits on a periodic chain. We use the
-bond-two tensor $M$ of Definition~\ref{def:asymex_czx_tensors}, with the
-first physical index denoting the output. For a bit configuration
+On a periodic chain of $N>0$ qubits, let $M$ be the bond-two tensor of
+Definition~\ref{def:asymex_czx_tensors}, with the first physical index denoting
+the output. For a bit configuration
 $t=(t_0,\ldots,t_{N-1})$, write $\bar t_n=1-t_n$ and
 $E(t)=\sum_{n=0}^{N-1}t_nt_{n+1}$, with cyclic subscripts. The periodic
 operator defined by these tensor entries acts as
@@ -89,11 +89,10 @@ The identity coefficient is two on even rings and zero on odd rings.
     \end{align}
 \end{proof}
 
-All these physical statements concern positive lengths. With the ordinary,
-unnormalized trace boundary, the bond-two tensor has empty-ring value
-$U_0=[2]$, and its direct sum with the bond-one identity has value
-$O_0=[3]$. The square law~(\ref{eq:asymex_plus_unitary}) is not asserted
-at length zero.
+At length zero, the unnormalized trace boundary assigns the scalar value
+$U_0=[2]$ to the bond-two tensor and $O_0=[3]$ to its direct sum with the
+bond-one identity, so the square law~(\ref{eq:asymex_plus_unitary}) holds only
+for positive lengths.
 
 \begin{definition}[The non-simple family and its square]
     \label{def:asymex_czx_plus}
@@ -256,12 +255,9 @@ asymmetric fundamental theorem.
 
 Taking $|w|=N>0$, (\ref{eq:asymex_plus_contraction}) identifies
 (\ref{eq:asymex_czx_plus_trace}) with the physical square
-law~(\ref{eq:asymex_czx_plus_square}). The compression resolves its
-oscillating integer coefficient into the two weights $+1$ and $-1$:
+law~(\ref{eq:asymex_czx_plus_square}). The compression resolves the
+oscillating integer coefficient into the signed weights $+1$ and $-1$:
 the coefficient $1+(-1)^N$ is their length-$N$ power sum, as in
 Theorem~\ref{thm:asym_unblocked_coefficients}. The two copies of $M$
-each have unit weight and contribute the constant coefficient two.
-This is the general power-sum mechanism, not an instance of the positive
-diagonal matrices in the CPSV characterization of MPDO renormalization
-fixed points. In particular, the even-ring projector property does not
-establish an MPDO renormalization-fixed-point condition.
+each have unit weight and contribute the constant coefficient two,
+illustrating structure coefficients with signed scalar weights.

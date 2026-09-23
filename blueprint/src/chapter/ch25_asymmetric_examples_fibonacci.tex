@@ -2,11 +2,10 @@
 \label{sec:asymex_fibonacci}
 
 The Fibonacci fusion rules have two labels, the vacuum $1$ and $\tau$,
-with $\tau\otimes\tau=1\oplus\tau$. The fusion rules and F-symbols
-used here are those of the string-net construction
-in~\cite[Appendix~D.1]{Bultinck2017Anyons}. We construct the displayed
-MPOs on a two-label physical space from these data and verify their
-periodic fusion and state-action identities directly.
+with $\tau\otimes\tau=1\oplus\tau$, with fusion rules and $F$-symbols
+following the string-net construction in~\cite[Appendix~D.1]{Bultinck2017Anyons}.
+From these data, one obtains MPOs on a two-label physical space whose
+periodic fusion and state-action identities can be verified directly.
 
 
 The physical space at each site is $\C^2$, with computational labels
@@ -104,9 +103,8 @@ on $\mc H_N$.
 \end{definition}
 
 The physical alphabet here has dimension two, rather than the full
-triple-index alphabet of the categorical string-net construction.
-In particular, the convention $\sigma=\varphi^{-1/2}$ in these letters must
-not be replaced by $\varphi^{-1}$.
+triple-index alphabet of the categorical string-net construction,
+with $\sigma=\varphi^{-1/2}$.
 
 \begin{theorem}[The one-site matrices of the $\tau$ block]
     \label{thm:asymex_fib_entries}
@@ -237,11 +235,9 @@ as the identity on the admissible subspace and is the unit of the
 algebra generated there by $O_N(B_\tau)$.
 
 This vacuum block is distinct from the weighted string-net projector
-construction of~\cite[Appendix~D.1]{Bultinck2017Anyons}, which combines
-the vacuum and $\tau$ blocks with weights
-$w_1=1/(1+\varphi^2)$ and $w_\tau=\varphi/(1+\varphi^2)$.
-The single vacuum block considered here should not be identified with
-that weighted construction.
+of~\cite[Appendix~D.1]{Bultinck2017Anyons}, which combines the vacuum and
+$\tau$ blocks with weights $w_1=1/(1+\varphi^2)$ and
+$w_\tau=\varphi/(1+\varphi^2)$.
 
 \subsection{Two periodic states and the Fibonacci action}
 
@@ -348,9 +344,8 @@ length.
     The coefficients expressing the units in their span can all be
     chosen in $\Z[\sigma]$, using
     $\sigma^{-1}=\sigma+\sigma^3$.
-    Embedding these identities into $\C$ proves the required
-    word-spanning property. No normalization of the transfer-map
-    spectral radius is asserted.
+    Embedding these identities into $\C$ proves that the words span the
+    matrix algebra.
 \end{proof}
 
 \begin{theorem}[Action on the two periodic states]
@@ -447,11 +442,9 @@ Relative to the ordered pair of these unnormalized state families,
 the action coefficients are the Fibonacci matrix
 $N_\tau=\begin{pmatrix}0&1\\1&1\end{pmatrix}$, realizing the nonnegative-integer
 action discussed in~\cite{GarreRubio2023MPOSym}.
-The positive-length hypothesis is essential:
-at $N=0$ the periodic trace is the bond dimension, so
-$O_0(B_1)=2$, $O_0(B_\tau)=3$, and the empty amplitudes of $A$ and
-$C$ are $1$ and $2$. Neither the vacuum projection identity nor
-(\ref{eq:asymex_fib_action_product}) extends to that length.
+The positive-length hypothesis is essential: at $N=0$ the periodic trace is the
+bond dimension, yielding $O_0(B_1)=2$, $O_0(B_\tau)=3$, and empty amplitudes
+$1$ and $2$ for $A$ and $C$.
 
 \subsection{Exact arithmetic and asymmetric compression}
 

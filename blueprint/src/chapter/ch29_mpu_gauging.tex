@@ -460,12 +460,9 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
     $\sigma_g\in\{1,-1\}$.
 \end{proof}
 
-The following construction is the first algebraic step of
-\cite[lines~5390--5432]{FrancoRubio2025MPUGauging}. It gives a first-cut
-factorization through the second-cut space and explicit one-sided inverses.
-It does not identify the two cut ranks or establish weighted normalizations,
-the comparison matrix $K$, or the full compatibility properties of
-\cite[lines~5342--5350]{FrancoRubio2025MPUGauging}.
+The first-cut factorization in
+\cite[lines~5390--5432]{FrancoRubio2025MPUGauging} factors through the
+second-cut space with explicit one-sided inverses:
 
 \begin{definition}[Gauge matrices for the first cut]
     \label{def:mpug_inverse_cut_gauges}
@@ -698,11 +695,9 @@ the comparison matrix $K$, or the full compatibility properties of
 
 \subsection{Rank equality and the invertible first-cut comparison}
 
-The following results give the algebraic invertible-comparison step of
-\cite[lines~5432--5443]{FrancoRubio2025MPUGauging}. The comparison uses the
-actual one-sided inverses of the source factors. Its inverse is denoted by
-$J$, not by $K^\dagger$. No unitarity of $K$, equality $J=K^\dagger$, or full
-inverse-compatible decomposition is asserted.
+The invertible-comparison step of
+\cite[lines~5432--5443]{FrancoRubio2025MPUGauging} relates the source factors
+via their one-sided inverses, with inverse comparison matrix $J$:
 
 \begin{theorem}[Equality of the two source-cut ranks]
     \label{thm:mpug_inverse_cut_rank_equality}
@@ -860,7 +855,6 @@ inverse-compatible decomposition is asserted.
         KJ & =KY\widetilde Z=\widetilde Y\widetilde Z=I_r, \\
         JK & =J\widetilde YR=YR=I_\ell.
     \end{align}
-    This argument does not use the rank equality to transport matrices.
 \end{proof}
 \begin{theorem}[The second source factor from the adjoint comparison]
     \label{thm:mpug_inverse_cut_adjoint_comparison}
@@ -1121,11 +1115,9 @@ inverse-compatible decomposition is asserted.
 
 \subsection{The compatible decomposition and its literal gates}
 
-The construction below gives source factors and unitary gates from the
-candidate decomposition in \cite[lines~5390--5487]{FrancoRubio2025MPUGauging}.
-It establishes the stated factor identities and the phase relation between
-the new gates, not all the pleasant properties or the truncated-chain identity
-asserted in that passage.
+The candidate decomposition in
+\cite[lines~5390--5487]{FrancoRubio2025MPUGauging} yields source factors and
+unitary gates satisfying the factor and phase identities:
 
 \begin{definition}[The identification of the first-cut coordinates]
     \label{def:mpug_inverse_cut_rank_equiv}
@@ -1425,10 +1417,6 @@ asserted in that passage.
     $\widehat X_2=X_2$.
 \end{proof}
 
-These six identities concern only the stated closures and normalizations.
-They do not assert movement identities, truncated-gate identities, transport
-of the chosen first right inverse, or the complete set of pleasant properties.
-
 \subsection{Movement gates of the inverse-compatible source factors}
 
 \begin{theorem}[Transport of the movement gates]
@@ -1559,9 +1547,8 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     $r=\operatorname{rank}M_1(\mathcal U)$ and
     $\ell=\operatorname{rank}M_2(\mathcal U)$. Then
     $u_{\mathrm{new}}=(I_\ell\otimes J)u$.
-    This is the comparison transport used in
-    \cite[lines~5432--5443 and 5486--5487]{FrancoRubio2025MPUGauging};
-    it does not require $J=K^\dagger$ or gate unitarity.
+    This is the comparison transport in
+    \cite[lines~5432--5443 and 5486--5487]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpug_inverse_cut_comparison, def:mpug_inverse_compatible_gates,
@@ -2286,13 +2273,9 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     blocking by any length $L$.
 
     This is the scalar gauge freedom of the fusion tensors in
-    \cite[\texttt{main.tex} lines 1500--1504]{FrancoRubio2025MPUGauging},
-    under the identification (\ref{eq:mpug_fusion_tensors}).  The assertion is
-    that a reciprocal rescaling of a family of selected reductions is again
-    such a family.  That every family of selected reductions of a given
-    representation arises from a fixed one by such a rescaling is a separate,
-    stronger claim which \cite{FrancoRubio2025MPUGauging} does not prove; the
-    available uniqueness is the boundary-dressed statement of
+    \cite[lines~1500--1504]{FrancoRubio2025MPUGauging}
+    under the identification (\ref{eq:mpug_fusion_tensors}); uniqueness up to
+    boundary dressing is given by
     Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness}.
 \end{theorem}
 
@@ -2430,10 +2413,6 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     and $\tau=\sigma$. Then $\sigma^2=1$, so
     $\sigma=1$ or $\sigma=-1$.
 \end{proof}
-
-These three matrix identities supply the final algebraic steps in
-Theorem~\ref{thm:mpug_dagger_inverse_scalar} after the representation-level
-gauges and scalar relation have been constructed.
 
 \section{A nondegenerate alternating-network comparison}
 \label{sec:mpug_alternating_network}
@@ -3024,13 +3003,10 @@ gauges and scalar relation have been constructed.
     it. This is the source-factorization identity in the growth diagram
     of \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}. It adds one
     bulk site at each end, using only the two decompositions in
-    \cite[lines~479--530]{Cirac2017MPU}. For normalized source factors,
-    the crossed contractions are precisely the movement operators of
-    Definition~\ref{def:mpug_staircase_gates}, so the same identity holds
-    for the source-factor endpoint contraction. No simplicity or unitarity
-    assumption on $\mathcal U$ is needed. These algebraic identities do
-    not assert unitarity for arbitrary factors, the finite-group physical
-    specialization, or the complementary finite-chain movement relation.
+    \cite[lines~479--530]{Cirac2017MPU}. For normalized source factors, the
+    crossed contractions yield the movement operators of
+    Definition~\ref{def:mpug_staircase_gates}, extending the identity to the
+    source-factor endpoint contraction.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
@@ -3103,18 +3079,9 @@ gauges and scalar relation have been constructed.
         U^{N+2}(U^{N+2})^\dagger  & =I_{\mathcal H_{\mathrm{out},N}}.
         \label{eq:mpug_truncated_symmetry_unitary}
     \end{align}
-    This is the endpoint-coordinate unitarity part of the assertion
-    following the truncated-symmetry diagram in
-    \cite[lines~2062--2099]{FrancoRubio2025MPUGauging}, between the
-    displayed input and output spaces. The scope restriction is recorded
-    in \cite{gap:fbc25_truncated_symmetry_endpoint_unitarity_scope}.
-    Neither simplicity of the physical adjoint nor unitarity of supplied
-    gates is assumed. The assertion does not identify each endpoint
-    source space with a physical site, specialize to a finite-group
-    family, prove agreement with a global symmetry on interior
-    observables, or establish the complementary finite-chain relation
-    following the movement display at
-    \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}.
+    This establishes endpoint-coordinate unitarity for the truncated symmetry
+    in \cite[lines~2062--2099]{FrancoRubio2025MPUGauging}; see
+    \cite{gap:fbc25_truncated_symmetry_endpoint_unitarity_scope}.
     % Partial coverage of #7319: all-length unitarity between these
     % coordinate spaces only. The remaining physical and group-level
     % assertions are not marked complete.
@@ -3257,11 +3224,7 @@ gauges and scalar relation have been constructed.
          & =Q_NU_0^{N+2}(U_0^{N+2})^\dagger Q_N^\dagger
         =I_{\mathcal R_N}.
     \end{align}
-    This uses the existing all-length theorem, without another induction.
 \end{proof}
-
-These are coordinate transport and unitarity statements, not the final
-truncated-chain sewing identity or a finite-group physical-action assertion.
 
 \begin{theorem}[Raw endpoint unitarity by rank-coordinate transport]
     \label{thm:mpug_inverse_word_unitary}
@@ -3698,10 +3661,9 @@ nonzero complex numbers. The fusion tensors have the scalar gauge freedom
     \label{eq:mpug_fusion_gauge}
 \end{align}
 % Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
-This is the fusion-tensor gauge freedom of~\cite{FrancoRubio2025MPUGauging}.
-This section analyzes the gauge transformations of the scalar functions
-$\beta$, $\omega$, $\gamma$, $L$, $\sigma$, and $\Xi$, with
-representation-level data specified in
+This specifies the fusion-tensor gauge freedom of \cite{FrancoRubio2025MPUGauging}
+for the scalar functions $\beta$, $\omega$, $\gamma$, $L$, $\sigma$, and $\Xi$,
+with representation-level data as in
 Definition~\ref{def:mpug_group_representation}.
 
 \begin{theorem}[Scalar factors of an identity Kronecker product]
@@ -3738,9 +3700,8 @@ Definition~\ref{def:mpug_group_representation}.
         K^\dagger K & =I_N, \\
         KK^\dagger  & =I_M.
     \end{align}
-    No equality of $|M|$ and $|N|$ is assumed. This is the matrix
-    implication used in \cite[lines~5444--5487]{FrancoRubio2025MPUGauging};
-    the tensor-network identity to which it is applied is a separate result.
+    This is the matrix implication used in
+    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3778,9 +3739,8 @@ Definition~\ref{def:mpug_group_representation}.
     \end{align}
     Equivalently, $\delta^{-1}K_1$ and $\delta K_2$ are unitary.
     % Source anchor: arXiv:2502.20257, Lemma lem:deco, lines 1052--1066.
-    This is only the tensor-factor step in the decomposition result
-    of~\cite{FrancoRubio2025MPUGauging}; it does not construct or compare the
-    three-legged decompositions occurring there.
+    This provides the tensor-factor step for the decomposition lemma in
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3879,9 +3839,8 @@ Definition~\ref{def:mpug_group_representation}.
         =\overline{\mathcal E_{\mathcal U}(\rho)}
         =\overline\rho=\rho,
     \end{align}
-    using $\overline\rho=\rho$ and $\mathcal E_{\mathcal U}(\rho)=\rho$. The
-    physical-index permutation does not change the transfer map, so the
-    transported data have the same fixed matrix.
+    using $\overline\rho=\rho$ and $\mathcal E_{\mathcal U}(\rho)=\rho$. The transfer map is invariant under the physical-index permutation, so the
+    transported data share the same fixed matrix.
 \end{proof}
 
 \begin{theorem}[Canonical boundary contractions]
@@ -4162,9 +4121,8 @@ Definition~\ref{def:mpug_group_representation}.
     \begin{align}
         \operatorname{tr}(Y_1Y_1^\dagger) & =d.
     \end{align}
-    This is the physical-trace calculation used in
-    \cite[line~1398]{FrancoRubio2025MPUGauging}. It does not require
-    simplicity of $\mathcal U^\dagger$.
+    This is the physical-trace calculation in
+    \cite[line~1398]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4475,9 +4433,8 @@ Theorems~\ref{thm:mpug_source_y_one_normalization},
 \ref{thm:mpug_source_x_two_physical_normalization} establish all four
 identities of the source-factor normalization proposition in
 \cite[lines~1064--1162]{FrancoRubio2025MPUGauging} for the compact source
-factors constructed from the canonical presentation. Their hypotheses
-are canonical form II and simplicity of both $\mathcal U$ and
-$\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
+factors under canonical form~II and simplicity of $\mathcal U$ and
+$\mathcal U^\dagger$.
 % This establishes prop:MPUsplus for the constructed source factors.
 % It does not identify arbitrary separately supplied factors or modify
 % the scope of the earlier raw proportionality theorem.
@@ -4505,10 +4462,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         X            & =\widetilde XK, \\
         \widetilde Y & =KY.
     \end{align}
-    The intermediate index sets $B$ and $\widetilde B$ are independent;
-    no equality of their cardinalities is assumed or concluded.
-    These are the one-sided-inverse identities used in the proof of
-    \cite[Lemma at lines~1052--1066]{FrancoRubio2025MPUGauging}.
+    These are the one-sided-inverse identities in the proof of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 \begin{proof}\leanok
     Associativity and the two inverse identities give
@@ -4757,10 +4712,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \uses{def:mpug_gauss_leg_action}
     For all $g,h\in G$,
     \begin{align}
-        T_e & =\id.
-    \end{align}
-    Moreover,
-    \begin{align}
+        T_e          & =\id,    \\
         T_g\circ T_h & =T_{gh}.
         \label{eq:mpug_gauss_leg_action_mul}
     \end{align}
@@ -5088,11 +5040,9 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         U_{a,b}|_{\mathcal K_{a,b}}=D_{a,b}|_{\mathcal K_{a,b}}\right\}.
         \label{eq:mpug_completion_class}
     \end{align}
-    A completion is the entire family $(U_{a,b})_{a,b\in G}$, not one
-    selected operator of that family. If $\mathcal K_{a,b}$ does not span the
-    whole matter space, the extension of $D_{a,b}$ need not be unique, as
-    observed at the end of the proof of the modified-fusion lemma
-    of~\cite[lines~4215--4326]{FrancoRubio2025MPUGauging}.
+    When $\mathcal K_{a,b}$ is a proper subspace of the matter space, the
+    unitary extension of $D_{a,b}$ is non-unique
+    \cite[lines~4215--4326]{FrancoRubio2025MPUGauging}.
 \end{definition}
 
 \begin{theorem}[Existence of full unitary completions]
@@ -5406,9 +5356,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         \text{ for every }j\right\}.
         \label{eq:mpug_gauge_invariant_subspace}
     \end{align}
-    No commutativity of the projectors on neighbouring windows is assumed;
-    \cite[lines~4325--4335]{FrancoRubio2025MPUGauging} observes that the
-    modified projectors need not commute.
+    The modified projectors on neighbouring windows need not commute
+    \cite[lines~4325--4335]{FrancoRubio2025MPUGauging}.
 \end{definition}
 
 \begin{theorem}[The gauged vector spans at least one dimension]
@@ -5426,15 +5375,12 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \begin{align}
         \ket{\Psi_{\mathrm{gauged}}} & \in\mathcal V_N(R)
     \end{align}
-    for every $R\in\mathfrak C(D)$. If moreover
-    $\ket{\Psi_{\mathrm{gauged}}}\neq0$, then
+    for every $R\in\mathfrak C(D)$. If $\ket{\Psi_{\mathrm{gauged}}}\neq0$, then
     \begin{align}
         \dim_{\C}\mathcal V_N(R) & \geq1.
     \end{align}
-    Neither the minimum nor the maximum of $\dim_{\C}\mathcal V_N(R)$ over
-    $\mathfrak C(D)$ is asserted; the growth of this dimension with $N$ is the
-    question raised in
-    \cite[line~5198]{FrancoRubio2025MPUGauging}.
+    The scaling of $\dim_{\C}\mathcal V_N(R)$ with system size $N$ addresses the
+    growth question of \cite[line~5198]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -5973,7 +5919,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     equation by interchanging the two factors on each side, and
     (\ref{eq:mpug_h2_coboundary_comparison}) is obtained from
     $\varphi(g)\varphi(h)\varphi(gh)^{-1}$ by reordering its factors.
-    Moreover, $\omega_1\sim\omega_2$ holds exactly when
+    Equivalence $\omega_1\sim\omega_2$ holds when
     $\omega_1\omega_2^{-1}$ is a coboundary. In additive notation this ratio
     is the difference of the corresponding cochains, so the quotient
     criterion for $\pi$ gives
@@ -6609,12 +6555,9 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     three properties with the first.
 \end{proof}
 
-The source's fourth condition is a statement about an MPS--MPU pair. The
-results above begin instead with a supplied compatible scalar $L$-symbol and
-prove the algebraic equivalence among its four scalar gauge properties. A
-separate tensor-level statement must construct the associated $L$-symbol and
-show that the tensor gauge freedoms induce the joint scalar gauge
-(\ref{eq:mpug_l_gauge}).
+For a compatible scalar $L$-symbol, the algebraic equivalences among the four
+scalar gauge properties characterize the joint scalar gauge
+freedom~(\ref{eq:mpug_l_gauge}) of the underlying MPS--MPU pair.
 % Scope boundary: the tensor-facing bridge for arXiv:2502.20257,
 % prop:technical01 is not contained in the scalar L-symbol declarations.
 
@@ -6724,10 +6667,8 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     Thus the induced action-gauge class depends only on the cohomology class
     of $\psi$.
 
-    The representation-level lemma of
-    \cite[lines~7028--7042]{FrancoRubio2025MPUGauging} also asserts that a
-    tensor-derived $L$-symbol can be put in this form. The result here is only
-    its scalar part and does not make that representation-theoretic claim.
+    This establishes the scalar reduction of the $L$-symbol in
+    \cite[lines~7028--7042]{FrancoRubio2025MPUGauging}.
     % Source anchor: arXiv:2203.12563, Eq. (20).
 \end{theorem}
 
@@ -6802,10 +6743,9 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     \cite{FrancoRubio2025MPUGauging};
     here extension means the equality $\Psi|_{H\times H}=\psi$ of chosen
     cocycle representatives, rather than only equality of their classes.
-    This scalar calculation does not construct action tensors or assert the
-    converse or the class-level restriction-image equivalence; the distinction
-    between representatives, classes, and tensor data is explained in
-    \cite{gap:fbc25_mpu_action_stabilizer_source_audit}.
+    See \cite{gap:fbc25_mpu_action_stabilizer_source_audit} for the
+    relationship between cocycle representatives, cohomology classes, and
+    tensor data.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -6869,12 +6809,11 @@ show that the tensor gauge freedoms induce the joint scalar gauge
          & =\Omega^{k x}_{g,h}\Omega^x_{gh,k}.
         \label{eq:mpug_generalized_cocycle}
     \end{align}
-    The source gives the first two coboundaries and the equation $d\Omega=1$
-    in \cite[lines~5914--5922 and Lemma~\texttt{lemma:G\_cocycle}]
-    {FrancoRubio2025MPUGauging}. Equation
-    \eqref{eq:mpug_generalized_three_coboundary} spells out the
-    three-to-four-cochain instance needed to read its assertion $d(df)=1$.
-    No transitivity or finiteness assumption is imposed on $\mathsf X$.
+    The differential identities $d\Omega=1$ and $d(df)=1$ follow the group
+    cohomology conventions of
+    \cite[lines~5914--5922]{FrancoRubio2025MPUGauging}, with the
+    three-to-four-cochain coboundary given explicitly by
+    (\ref{eq:mpug_generalized_three_coboundary}).
 
     % Local fix: docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex.
     % Source anchor: arXiv:2502.20257, lines 5914--5922 and lemma:G_cocycle.
@@ -7405,8 +7344,7 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     (\ref{eq:mpug_sigma_inverse}) in the three required places.
 \end{proof}
 
-Write $\Z_2=\{e,s\}$, where $s^2=e$. The following statements concern only
-the scalar data and their gauge classes.
+Let $\Z_2=\{e,s\}$ with $s^2=e$.
 
 \begin{theorem}[Normalized $L$-symbol ratio]
     \label{thm:mpug_sigma_l_ratio}
@@ -7747,14 +7685,11 @@ After blocking, one site carries two matter qubits, and the fusion operators on
 two neighboring blocked sites are $\lambda^R_{e,e}=\lambda^R_{e,g}=\Id$,
 $\lambda^R_{g,e}=w_R$, together with the modified fusion operator
 $\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ introduced at the end of that
-passage. The question of \cite[lines~5198--5204]{FrancoRubio2025MPUGauging}
-asks whether the common $+1$ eigenspace of the resulting Gauss projectors is
-bounded or grows with the system size. This section answers it for the
-displayed circuit tuple $(\Id,\Id,w,\tilde\lambda)$: the dimension is $2^N$ on
-$N\geq3$ blocked sites. Nothing here identifies the displayed tuple
-with a member of the full physical completion class of the CZX defect data;
-that identification requires the three defect domains and maps not supplied
-by the displayed matrices.
+passage.
+For the displayed circuit tuple $(\Id,\Id,w,\tilde\lambda)$, the common $+1$
+eigenspace of the resulting Gauss projectors has dimension $2^N$ on $N\geq3$
+blocked sites, resolving the scaling question of
+\cite[lines~5198--5204]{FrancoRubio2025MPUGauging}.
 
 \subsection{Monomial operators and their common fixed space}
 
@@ -8750,15 +8685,10 @@ by the displayed matrices.
 
 \subsection{The printed CZX action pair and its empty-word boundary}
 
-The action tensors displayed in
-\cite[lines~4690--4694]{FrancoRubio2025MPUGauging} satisfy the interior
-identity for nonempty words and the exterior identity with nonempty buffers.
-Their empty contraction is one half, whereas the general interior identity
-in \cite[lines~1841--1870]{FrancoRubio2025MPUGauging} includes length zero.
-The distinction and a local replacement are recorded in
-\cite{gap:fbc25_czx_action_empty_word}. The replacement below is a different
-pair, not a scalar gauge of the printed pair or a substitution in the
-unbuffered defect formulas.
+The action tensors in \cite[lines~4690--4694]{FrancoRubio2025MPUGauging}
+satisfy the interior identity for nonempty words and the exterior identity with
+nonempty buffers; the empty-word boundary replacement is documented in
+\cite{gap:fbc25_czx_action_empty_word}.
 
 \begin{definition}[The acted GHZ sectors]
     \label{def:mpug_czx_acted_sectors}
@@ -9123,14 +9053,12 @@ unbuffered defect formulas.
 
 \subsection{Literal fusion--action coordinate contractions}
 
-The following contractions use the printed action pair and the right fusion
-cap in \cite[lines~4671--4694]{FrancoRubio2025MPUGauging}, with fixed product-bond
-order. They are motivated by the fusion--action comparison in
-\cite[lines~1875--1913]{FrancoRubio2025MPUGauging}, but do not identify its
-$L$-symbol or its retained physical scalar. Compatibility of the oriented
-legs, density insertion, and fusion gauge remains open, as discussed in
-\cite{gap:fbc25_czx_fusion_coordinate_compatibility}. No cap, action tensor,
-block label, or physical gate is changed here.
+Contraction of the printed action pair and right fusion cap
+\cite[lines~4671--4694]{FrancoRubio2025MPUGauging} evaluates the coordinate
+relations in the fusion--action comparison
+\cite[lines~1875--1913]{FrancoRubio2025MPUGauging}; see
+\cite{gap:fbc25_czx_fusion_coordinate_compatibility} for coordinate
+compatibility of the oriented contractions.
 
 \begin{definition}[Sequential action covector]
     \label{def:mpug_czx_sequential_action_bra}
@@ -9855,13 +9783,11 @@ block label, or physical gate is changed here.
 
 \subsection{A second displayed circuit tuple at three and four sites}
 
-The source constrains the block $U_{1,1}$ of (\ref{eq:mpug_czx_tuple}) only
-through its action on the prescribed defect subspace
-$\spn_{\C}\{\ket{0011},\ket{1100}\}$; the three remaining defect domains and
-maps are not supplied. Replacing $\tilde\lambda$ by another unitary with the
-same action on that subspace therefore produces a second displayed tuple, and
-the dimension of the associated common $+1$ eigenspace changes already at three
-and four blocked sites.
+Constraining the block $U_{1,1}$ of (\ref{eq:mpug_czx_tuple}) on the defect
+subspace $\spn_{\C}\{\ket{0011},\ket{1100}\}$ leaves gauge freedom in
+$\tilde\lambda$. Replacing $\tilde\lambda$ by another unitary with identical
+action on this subspace yields an alternate circuit tuple whose common $+1$
+eigenspace dimension differs at three and four blocked sites.
 
 \begin{definition}[The second displayed circuit tuple]
     \label{def:mpug_czx_star_tuple}
@@ -10154,14 +10080,11 @@ and four blocked sites.
 \label{sec:mpug_czx_defect_maps}
 
 The modified-fusion lemma of
-\cite[lines~4215--4254]{FrancoRubio2025MPUGauging} attaches to every ordered
-pair $(a,b)$ of gauge labels and every injective block $x$ a two-site defect
-vector $v(a,b,x)$ and prescribes a unitary carrying it to $v(e,ab,x)$. For the
-CZX model the source displays the injective blocks, the action tensors, and the
-single-site evaluations of the domain-wall defect, but not the eight two-site
-vectors; their values, the four subspaces they span, and the four prescribed
-maps are obtained by finite contraction of the displayed tensors
-in~\cite{gap:fbc25_czx_defect_domains}. This section carries that derived data.
+\cite[lines~4215--4254]{FrancoRubio2025MPUGauging} attaches to each pair
+$(a,b)$ of gauge labels and each injective block $x$ a two-site defect vector
+$v(a,b,x)$ mapped unitarily to $v(e,ab,x)$. For the CZX model, the defect
+subspaces and prescribed maps are evaluated by finite contraction in
+\cite{gap:fbc25_czx_defect_domains}.
 
 \begin{definition}[Single-site CZX defects]
     \label{def:mpug_czx_site_defects}
@@ -10477,16 +10400,14 @@ in~\cite{gap:fbc25_czx_defect_domains}. This section carries that derived data.
 \section{The displayed CZX tuple as a completion}
 \label{sec:mpug_czx_completion}
 
-The four defect domains and the four prescribed maps of
-Section~\ref{sec:mpug_czx_defect_maps} constrain the fusion operator of each
-ordered label pair on one plane of the two-site matter space. The four
-displayed operators $(\Id,\Id,w,\tilde\lambda)$ of
-Definition~\ref{def:mpug_czx_circuit_tuple} obey those constraints exactly, so
-the displayed tuple is one member of the full completion class of the CZX
-prescribed defect maps $D^{\mathrm{CZX}}$. The exact dimension
-(\ref{eq:mpug_czx_dimension}), which concerns the displayed tuple alone, then
-bounds from below the supremum of the gauge-invariant dimension over the whole
-class.
+The four defect domains and four prescribed maps of
+Section~\ref{sec:mpug_czx_defect_maps} constrain each fusion operator on one
+plane of the two-site matter space. The operators
+$(\Id,\Id,w,\tilde\lambda)$ of Definition~\ref{def:mpug_czx_circuit_tuple}
+satisfy these constraints, so the displayed tuple belongs to the completion
+class of the CZX prescribed defect maps $D^{\mathrm{CZX}}$, and
+(\ref{eq:mpug_czx_dimension}) lower-bounds the supremum of the gauge-invariant
+dimension over the full class.
 
 \begin{theorem}[The displayed CZX tuple is a completion]
     \label{thm:mpug_czx_tuple_completion}

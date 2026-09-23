@@ -267,9 +267,9 @@
         \sum_{j\in J}c_j\ket{V^{(pN)}(A_j)}
         \notag
     \end{align}
-    satisfies $\ker\Phi_N=\{0\}$.
-
-    Following \cite[lines~589--609]{DeLasCuevas2017Irreducible}, this establishes linear independence of the periodic vectors without asserting spanning of the ambient vector \cite{gap:dccsp17_periodic_overlap_route_alignment}.
+    Following \cite[lines~589--609]{DeLasCuevas2017Irreducible}, this
+    establishes linear independence of the periodic vectors
+    (\cite{gap:dccsp17_periodic_overlap_route_alignment}).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -459,8 +459,8 @@
     \end{align}
     The phase belongs to the matched pair $A,B$; distinct matched pairs of two
     bases of periodic tensors may require distinct phases, so no single phase
-    is asserted for the assembled tensors
-    \cite[lines~286--305, 625--627]{DeLasCuevas2017Irreducible}.
+    is asserted for the direct-sum tensors
+    (\cite[lines~286--305, 625--627]{DeLasCuevas2017Irreducible}).
 \end{theorem}
 \begin{proof}
     \uses{thm:repeated_blocks_phase_power_mpv, thm:gauge_phase_mpv_scaling}
@@ -605,20 +605,12 @@
         \notag
     \end{align}
 
-    \emph{Normalization boundary.} The source initially assumes that the transfer
-    maps of the basis tensors are irreducible and have spectral radius one,
-    and then obtains the trace-preserving normalization by a block-diagonal
-    similarity
-    \cite[lines~313--332]{DeLasCuevas2017Irreducible}.  The present theorem
-    starts with the normalized basis tensors.  The multiplicity matrices are
-    otherwise arbitrary diagonal matrices with nonzero complex entries, the
-    displayed direct sums are literal, and proportionality is assumed only at
-    positive lengths.  Theorem~\ref{thm:spectral_periodic_normalization}
-    constructs each normalizing similarity, while
-    Theorem~\ref{thm:spectral_periodic_sector_normalization} assembles them
-    without changing the multiplicity matrices.  Theorem~\ref{thm:%
-        periodic_spectral_multiplicity_nondecaying_overlap} below applies the
-    present result and returns its conclusion to the unnormalized blocks.
+    \emph{Normalization.} In \cite[lines~313--332]{DeLasCuevas2017Irreducible},
+    the trace-preserving normalization is obtained via a block-diagonal
+    similarity from irreducible transfer maps of spectral radius one. Here,
+    the basis tensors are taken to be normalized in advance;
+    Theorem~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap} transfers
+    the result to unnormalized spectrally periodic blocks.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:finite_coefficient_isolation, lem:nonzero_proportional_mpv_basic, thm:gauge_phase_mpv_scaling, thm:mpv_decomposition, thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy, lem:sector_decomposition_coeff_not_eventually_zero}
@@ -689,7 +681,7 @@
 \begin{proof}
     \uses{lem:periodic_overlap_hypothesis_gauge_transport, lem:pure_gauge_het_repeated_blocks, thm:gauge_invariance, thm:periodic_multiplicity_nondecaying_overlap, thm:spectral_periodic_sector_normalization}
     \leanok
-    Normalize all representatives by their pure Perron gauges and assemble
+    Normalize all representatives by their pure Perron gauges and combine
     the gauges block diagonally.  The multiplicity matrices and their grouped
     coefficients remain unchanged.  Pure similarity preserves the total
     positive-length proportionality and pairwise non-repetition, so
@@ -718,7 +710,8 @@
     equal bond dimension and differs by an invertible similarity and a
     unit-modulus scalar.
 
-    This formulation specializes the preceding multiplicity-bearing theorem to scalar weights per block.
+    This specializes Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap}
+    to block-diagonal tensors with a single scalar weight per block.
 \end{theorem}
 \begin{proof}\leanok
     Repeat the coefficient argument above with the singleton coefficients
@@ -739,7 +732,8 @@
     $\pi\colon J\to K$ such that $A_j$ and $B_{\pi(j)}$ are repeated for every
     $j\in J$.
 
-    This establishes the finite matching step of \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
+    This is the finite matching step of
+    \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 \begin{proof}\leanok
     Choose a non-decaying partner $f(j)\in K$ for every $j\in J$. If
@@ -780,10 +774,10 @@
     Each $B_k$ occurs for exactly one $j$. This is
     \cite[Theorem~3.4, lines~613--623]{DeLasCuevas2017Irreducible}.
 
-    The theorem relates the two bases of periodic tensors but makes no
-    assertion relating their multiplicity matrices. The periods are produced,
-    not assumed, exactly as at
-    \cite[lines~257--258]{DeLasCuevas2017Irreducible}.
+    This theorem matches the bases of periodic tensors, leaving the
+    multiplicity matrices unconstrained. The periods $m_j$ and $n_k$ are
+    derived from the transfer maps
+    (\cite[lines~257--258]{DeLasCuevas2017Irreducible}).
 \end{theorem}
 \begin{proof}
     \uses{thm:spectral_periodic_period_existence,
@@ -800,12 +794,11 @@
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
     \leanok
     \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
-    Theorem~\ref{thm:periodic_ft_proportional} with the periods $m_j$ and $n_k$
-    given alongside the two block families, together with witnesses that each
-    block is spectrally periodic of the given period in the sense of
-    Definition~\ref{def:spectral_periodic_tensor}. Everything else, hypotheses
-    and conclusion alike, is as stated there. This is the working form of the
-    theorem.
+    Under the hypotheses of Theorem~\ref{thm:periodic_ft_proportional}, suppose
+    in addition that positive integers $m_j$ and $n_k$ are given such that each
+    $A_j$ is spectrally $m_j$-periodic and each $B_k$ is spectrally $n_k$-periodic
+    (Definition~\ref{def:spectral_periodic_tensor}). Then the conclusions of
+    Theorem~\ref{thm:periodic_ft_proportional} hold for these specified periods.
 \end{theorem}
 \begin{proof}
     \uses{thm:repeated_blocks_period_eq, thm:periodic_conditional_block_matching, thm:periodic_spectral_multiplicity_nondecaying_overlap}

@@ -1,15 +1,14 @@
 \begin{theorem}[Conditional group-action $Z$-gauge reformulation of the symmetry corollary]%
     \label{cor:cor_4_1_physical_symmetry_zgauge}
     \lean{MPSTensor.cor_4_1_physical_symmetry_zgauge}
+    \lean{MPSTensor.PeriodicEqualCaseFT}
     \leanok
     \uses{def:irreducible_form, def:z_gauge_equiv, def:on_site_symmetric, def:twisted_tensor, thm:periodic_ft}
     Let $A$ be an MPS tensor in irreducible form~II and let
     $U : G \to \GL_d(\C)$ be a representation of a group $G$ on the
     physical leg, acting unitarily ($U(g)\, U(g)^{\dagger} = \Id$).
-    Assume moreover the periodic equal-case Fundamental Theorem of MPS
-    (Theorem~\ref{thm:periodic_ft}) as an explicit hypothesis on the
-    pair $(d, D)$, expressed by the hypothesis
-    \lean{MPSTensor.PeriodicEqualCaseFT}\,$d\,D$.
+    Assume the periodic equal-case Fundamental Theorem
+    (Theorem~\ref{thm:periodic_ft}) for the dimensions $(d, D)$.
     If $A$ is on-site symmetric under~$U$ --- that is, the twisted tensor
     $\widetilde{A}_g$ has the same MPV family as~$A$ for every $g \in G$
     --- then for each $g \in G$ there exists a positive period $m_g$ and
@@ -72,7 +71,7 @@
     additional assumptions: after proving the symmetry corollary, the source
     paper says that its consequences will be explored elsewhere. The injective
     case reduces this coherence to scalar uniqueness of gauges
-    (cf.~\S\ref{sec:injective_symmetry_cocycle}); in the genuinely periodic
+    (cf.~\S\ref{sec:injective_symmetry_cocycle}); in the periodic
     setting there is a non-trivial $\Z_m$-gauge ambiguity, so coherence of the
     factor system $u$ is an independent analytic assumption.
 \end{definition}
@@ -97,8 +96,8 @@
 
 \begin{proof}\leanok
     \uses{def:periodic_projective_rigidity}
-    Unpack the rigidity hypothesis to extract the family $(Y, u)$ together
-    with the pointwise $Z$-gauge intertwiners. Set
+    By Definition~\ref{def:periodic_projective_rigidity}, let $(Y, u)$ be the
+    virtual gauge family and factor system. Set
     $X(g) := Y(g^{-1})$ and $\omega(g, h) := u(h^{-1}, g^{-1})$. The
     projective multiplication law $X(g)X(h) = \omega(g,h)X(gh)$
     is then exactly the $(h^{-1}, g^{-1})$-instance of the factor-system
@@ -129,13 +128,10 @@
     \end{align}
     Since $(gh)k = g(hk)$, both sides of
     (\ref{eq:pft_assoc_scalar_multiple}) are scalar multiples of the
-    same matrix $X((gh)k)$. The matrix lies in $\GL_D(\C)$ and is
-    therefore invertible, but the scalar cancellation leading from an
-    equality of scalar multiples of a matrix to equality of the scalar
-    coefficients additionally requires $D>0$ so that the underlying
-    index set is inhabited. Cancelling then yields
-    $\omega(g,h)\omega(gh,k) = \omega(g,hk)\omega(h,k)$
-    in $\C^{\times}$, hence in $\mathrm{Units}(\C)$.
+    same matrix $X((gh)k)$. Since $X((gh)k) \in \GL_D(\C)$ and $D>0$,
+    the matrix $X((gh)k)$ is nonzero. Cancelling $X((gh)k)$ from both sides of
+    (\ref{eq:pft_assoc_scalar_multiple}) yields
+    $\omega(g,h)\omega(gh,k) = \omega(g,hk)\omega(h,k)$ in $\C^{\times}$.
 \end{proof}
 
 \begin{remark}[External cohomological interpretation]%
@@ -150,10 +146,8 @@
     \lean{MPSTensor.projectiveRep_of_symmetry}
     \leanok
     \uses{thm:cor_4_1_projective_rep, thm:cor_4_1_projective_rep_cocycle}
-    Theorems~\ref{thm:cor_4_1_projective_rep}
-    and~\ref{thm:cor_4_1_projective_rep_cocycle} combine into a
-    single statement: from the periodic projective-rigidity
-    hypothesis (Definition~\ref{def:periodic_projective_rigidity}), one
-    obtains a projective representation of $G$ on the bond space whose
-    factor system is a genuine $2$-cocycle whenever $D>0$.
+    Under the periodic projective-rigidity hypothesis
+    (Definition~\ref{def:periodic_projective_rigidity}), if $D>0$, then the
+    virtual gauge family defines a projective representation of $G$ on the bond
+    space whose factor system is a $2$-cocycle.
 \end{theorem}

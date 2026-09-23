@@ -20,12 +20,10 @@
     \leanok
     \uses{def:spectral_periodic_tensor}
     Let $A$ be an MPS tensor whose transfer map is irreducible with spectral
-    radius one; these are the two conditions imposed on a block of the
-    irreducible form of \cite[lines~248--261]{DeLasCuevas2017Irreducible}. Then
-    there is a positive integer $m$ for which $A$ is spectrally $m$-periodic,
-    that is, for which the eigenvalues of $\E_A$ of modulus one are exactly the
-    $m$-th roots of unity. This is the derived periodicity of
-    \cite[lines~257--258]{DeLasCuevas2017Irreducible}.
+    radius one (\cite[lines~248--261]{DeLasCuevas2017Irreducible}). Then
+    there exists a positive integer $m$ such that $A$ is spectrally $m$-periodic,
+    so that the peripheral eigenvalues of $\E_A$ are precisely the
+    $m$-th roots of unity (\cite[lines~257--258]{DeLasCuevas2017Irreducible}).
 \end{theorem}
 \begin{proof}
     \uses{thm:pure_perron_tp_gauge, thm:cpsv_spectral_radius_similarity, lem:peripheral_spectrum_similarity, lem:irreducible_transfer_perron_pair, thm:transfer_map_irreducible_of_tensor}
@@ -151,7 +149,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Assembly of representative similarities]
+\begin{theorem}[Similarity of sector-decomposed tensors]
     \label{thm:periodic_sector_basis_replacement_gauge}
     \lean{MPSTensor.SectorDecomposition.gaugeEquiv_toTensor_replaceBasis}
     \leanok
@@ -191,8 +189,8 @@
 \begin{proof}
     \uses{thm:spectral_periodic_normalization, thm:periodic_sector_basis_replacement_gauge}
     \leanok
-    Apply the positive Perron gauge separately to every representative and
-    assemble these gauges with
+    Apply the positive Perron gauge to each representative and
+    combine them via
     Theorem~\ref{thm:periodic_sector_basis_replacement_gauge}.  Since every
     spectral radius is already one, no representative is rescaled.
 \end{proof}
@@ -261,15 +259,12 @@
 \begin{remark}[Irreducible form allows higher periods]
     \label{rem:irreducible_form_higher_periods}
     \notready
-    The converse containment is not part of the implication above.
-    Irreducible form permits periodic blocks with period larger than~$1$; for
-    instance, the antiferromagnetic example has period~$2$.
+    Irreducible forms permit periodic blocks with period $m > 1$; for
+    example, the antiferromagnetic state has period~$2$.
 \end{remark}
 
-Physical-index rotation and its MPV expansion are recorded in
-Section~\ref{sec:app_symmetry_permutations}.  The compatibility results below
-supply the physical action used in the periodic analysis
-of~\cite{DeLasCuevas2017Irreducible}.
+Physical-index rotations act on periodic tensors and their transfer maps as
+follows.
 
 \begin{theorem}[Transfer map preserved by physical rotation]%
     \label{thm:transfer_map_rotate_physical}
@@ -329,8 +324,10 @@ of~\cite{DeLasCuevas2017Irreducible}.
 
 \begin{proof}\leanok
     \uses{thm:transfer_map_rotate_physical, thm:left_canonical_rotate_physical, thm:irreducible_tensor_rotate_physical}
-    Assembles transfer-map invariance, left-canonical preservation, and
-    irreducibility preservation.
+    This combines transfer-map invariance
+    (Theorem~\ref{thm:transfer_map_rotate_physical}), left-canonical preservation
+    (Theorem~\ref{thm:left_canonical_rotate_physical}), and irreducibility
+    (Theorem~\ref{thm:irreducible_tensor_rotate_physical}).
 \end{proof}
 
 \begin{theorem}[Equality of MPV families preserved by physical rotation]%
@@ -400,8 +397,7 @@ of~\cite{DeLasCuevas2017Irreducible}.
         [Z,A^i] & =0, & Z^m & =\Id_D, & ZA^i & =YB^iY^{-1}.
         \notag
     \end{align}
-    Thus $A$ and $B$ are related by a genuine $\mathbb Z_m$ virtual gauge,
-    not merely by a scalar root of unity.
+    Hence $A$ and $B$ are related by a $\mathbb Z_m$ virtual gauge.
 \end{corollary}
 
 \begin{proof}\leanok
