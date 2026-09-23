@@ -48,6 +48,15 @@ div.proof_content {
 	text-align: center;
 }
 
+/* Under the full theme a plain inline `<br>` collapses to zero size and stops
+ * breaking the row, so `\\`-stacked diagrams land side by side. Make the break
+ * block-level so an explicit line break always separates them. */
+.tex-center br {
+	display: block !important;
+	content: "";
+	clear: both;
+}
+
 /* A LaTeX tabular is an inline box, including when its rows stack diagrams
  * on one side of an equation. Its surrounding table/figure owns the display. */
 table.tabular {
