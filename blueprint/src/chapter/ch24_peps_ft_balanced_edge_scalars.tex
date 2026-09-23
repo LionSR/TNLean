@@ -167,12 +167,10 @@ constant.
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.trans}
     \leanok
     \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_mul, thm:edgeScalarAt_mul}
-    If $X \sim_c Y$ and $Y \sim_d Z$ are gauge families related by balanced
-    edge-scalar families $c$ and $d$, then $X \sim_{cd} Z$ with balanced
-    product scalar family
-    \begin{align}
-        (cd)_e & = c_e d_e.
-    \end{align}
+    If $c$ and $d$ witness the equivalences of $X$ with $Y$ and of $Y$ with $Z$
+    modulo balanced edge scalars, then their pointwise product scalar family
+    $(cd)_e = c_e d_e$ witnesses that $X$ is equivalent to $Z$ modulo balanced
+    edge scalars.
 \end{theorem}
 
 \begin{proof}\leanok
