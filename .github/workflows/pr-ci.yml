@@ -522,13 +522,20 @@ jobs:
       - name: Test inline picture semantics
         run: python3 scripts/test_tenkz_inline_web.py
 
-      - name: Diagnose TeX font environment
+      - name: Diagnose full TeX system environment
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          extra-packages: texlive-fonts-extra texlive-publishers
+      - name: Check layout with TeX system dependencies
         run: |
           fc-match 'Times New Roman'
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends fonts-texgyre fonts-croscore fonts-lmodern
-          fc-match 'Times New Roman'
           python3 scripts/test_tenkz_inline_web.py
+      - name: Diagnose full blueprint Python environment
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+        with:
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
+      - name: Check layout with blueprint Python dependencies
+        run: python3 scripts/test_tenkz_inline_web.py
 
   blueprint:
     name: Check blueprint compiles without errors
