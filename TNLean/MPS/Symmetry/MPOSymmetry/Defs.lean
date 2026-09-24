@@ -11,9 +11,11 @@ import TNLean.MPS.MPDO.ActionTensor
 **Source.** Garre-Rubio, Lootens, Molnár 2023 (arXiv:2203.12563), Sections 2–3,
 `Papers/2203.12563/REsubmission.tex` lines 321–361 (matrix product operator algebras and the
 fusion rules `O_a O_b = ∑_c N_{ab}^c O_c`), lines 429–460 (matrix product states symmetric under
-such an algebra, the action tensors and the multiplicities `M_{a,x}^y`), lines 660–683 (unit,
-inverses and the representation `M_{gh,x}^y = ∑_z M_{g,z}^y M_{h,x}^z` in the group case) and
-lines 994–997 (the periodic-boundary weakening of both conditions).
+such an algebra, the action tensors and the multiplicities `M_{a,x}^y`), lines 564–565 (the
+relation `∑_c N_{ab}^c M_{c,x}^y = ∑_z M_{a,z}^y M_{b,x}^z` between the multiplicities),
+lines 567–568 (the periodic-boundary form `O_a ψ_{A_x} = ∑_y M_{a,x}^y ψ_{A_y}` of the
+invariance, restated at line 1801), and lines 660–683 (unit, inverses and the representation
+`M_{gh,x}^y = ∑_z M_{g,z}^y M_{h,x}^z` in the group case).
 
 **Formalized here.** The periodic-boundary layer of the non-invertible symmetry theory,
 parallel to the invertible on-site layer of `TNLean/MPS/Symmetry/`: finite families of matrix
@@ -25,9 +27,10 @@ produce.
 
 **Scope restriction (periodic boundary):** the source defines symmetry by invariance of the
 arbitrary-boundary subspace `𝒮_A^n` under the arbitrary-boundary algebra `𝒜_T^n` (lines
-431–434); this file records only the periodic-boundary consequence, where both boundaries are
-identities in each block (the weakening of line 997), which is what the fusion-ring statements
-of the source use. Documented in `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
+431–434); this file records only the consequence the source evaluates at lines 567–568 (and
+recalls at line 1801), where both boundaries are identities. The arbitrary-boundary invariance
+and the action tensors it produces are not formalized. Documented in
+`docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
 
 ## Main definitions
 
@@ -83,10 +86,11 @@ def IsInvertibleLabel [DecidableEq ι] (N : ι → ι → ι → ℕ) (e a : ι)
 
 /-- **A family of matrix product states symmetric under a matrix product operator algebra.**
 
-Source: arXiv:2203.12563, lines 431–460 and line 997. The block vectors `ψ_x` of the family are
-carried by every periodic operator `O_a` to a combination `∑_y M_{a,x}^y ψ_y` of block vectors
-with coefficients independent of the system size: the periodic-boundary form of the invariance
-`𝒜_T · 𝒮_A ⊂ 𝒮_A` (line 431) in which both boundaries are identities in each block (line 997).
+Source: arXiv:2203.12563, lines 567–568 (restated at line 1801): evaluating the invariance
+`𝒜_T · 𝒮_A ⊂ 𝒮_A` of lines 431–434 with periodic boundaries gives
+`O_a ψ_{A_x} = ∑_y M_{a,x}^y ψ_{A_y}`, the block vectors `ψ_x` being carried by every periodic
+operator `O_a` to a combination of block vectors with coefficients independent of the system
+size.
 The coefficients are a priori complex; that they are the nonnegative integer multiplicities
 `M_{a,x}^y` of line 460 is a theorem (`MPOTensor.exists_nat_eq_of_isMPOSymmetricFamily`). -/
 def IsMPOSymmetricFamily {χ : ι → ℕ} {D : κ → ℕ} (O : ∀ a, MPOTensor d (χ a))
@@ -97,28 +101,32 @@ def IsMPOSymmetricFamily {χ : ι → ℕ} {D : κ → ℕ} (O : ∀ a, MPOTenso
 
 /-- **A single matrix product state symmetric under a matrix product operator algebra.**
 
-Source: arXiv:2203.12563, lines 607–613: the single-block case of
-`MPOTensor.IsMPOSymmetricFamily`, where the periodic vector is a common eigenvector of the
-periodic operators, `O_a ψ = c_a ψ` with `c_a` independent of the system size. -/
+Source: arXiv:2203.12563, lines 567–568 with a single block `x` (the setting of line 610): the
+periodic vector is a common eigenvector of the periodic operators, `O_a ψ = c_a ψ` with `c_a`
+independent of the system size (compare the form `O_a ψ = r_a ψ` of line 1797). The source's
+single-block subsection additionally assumes `M_{a,x}^x = 1`; that hypothesis is not part of
+this definition. -/
 def IsMPOSymmetric {χ : ι → ℕ} {D : ℕ} (O : ∀ a, MPOTensor d (χ a)) (A : MPSTensor d D)
     (c : ι → ℂ) : Prop :=
   ∀ a, ∀ L : ℕ, 0 < L →
     mpo (O a) L *ᵥ (fun τ : Fin L → Fin d => MPSTensor.mpv A τ) =
       c a • fun σ : Fin L → Fin d => MPSTensor.mpv A σ
 
-/-- **Fusion character.** A one-dimensional representation of the fusion ring: the unit goes
-to `1` and `χ_a χ_b = ∑_c N_{ab}^c χ_c`. A fusion ring with a fusion character in `ℕ` has a ring
-homomorphism to `ℤ`; the Fibonacci ring has none (arXiv:2203.12563, line 1993). -/
+/-- **Fusion character.**
+
+Project result: a one-dimensional representation of the fusion ring: the unit goes to `1` and
+`χ_a χ_b = ∑_c N_{ab}^c χ_c`. A fusion ring with a fusion character in `ℕ` has a ring
+homomorphism to `ℤ`; the Fibonacci ring has none. The source does not use this notion. -/
 def IsFusionCharacter {R : Type*} [Semiring R] (N : ι → ι → ι → ℕ) (e : ι) (χ : ι → R) :
     Prop :=
   χ e = 1 ∧ ∀ a b : ι, χ a * χ b = ∑ c, (N a b c : R) * χ c
 
 /-- **Nonnegative integer representation of a fusion ring on block labels.**
 
-Source: arXiv:2203.12563, lines 491–492 and line 683: the multiplicities `M_{a,x}^y` of the
-block `y` in the action of `a` on the block `x` satisfy the associativity
-`(a × b) · x = a · (b · x)`, that is `∑_c N_{ab}^c M_{c,x}^y = ∑_z M_{b,x}^z M_{a,z}^y`
-(for groups, `M_{gh,x}^y = ∑_z M_{g,z}^y M_{h,x}^z`). -/
+Source: arXiv:2203.12563, lines 564–565: the multiplicities `M_{a,x}^y` of the block `y` in the
+action of `a` on the block `x` satisfy `∑_c N_{ab}^c M_{c,x}^y = ∑_z M_{a,z}^y M_{b,x}^z`, a
+consequence of the associativity `(a × b) · x = a · (b · x)` of lines 491–492 (for groups, line
+683: `M_{gh,x}^y = ∑_z M_{g,z}^y M_{h,x}^z`). -/
 def IsNIMRep (N : ι → ι → ι → ℕ) (M : ι → κ → κ → ℕ) : Prop :=
   ∀ a b : ι, ∀ x y : κ, ∑ c, N a b c * M c x y = ∑ z, M b x z * M a z y
 

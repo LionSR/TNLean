@@ -20,21 +20,35 @@ The Fibonacci operators follow Bultinck et al. (arXiv:1511.08090), Appendix D.1.
 **Formalized here.** The Fibonacci periodic operators of
 `FibonacciCompression.fibBlock` form a fusion algebra with unit `1`; the pair of normal states
 of the source is a symmetric family whose action is the regular representation, a nonnegative
-integer representation; the Fibonacci ring has no fusion character in `ℕ`, so no single normal
-tensor is symmetric, recovering `FibonacciCompression.not_exists_normal_fibonacci_symmetric`
-(with the unit acting trivially) as an instance of the general no-go. The anomalous `ℤ/3`
-operators `1, U, U†` of `Z3AnomalousTensor.lean` form a group-like fusion algebra, so every
-symmetric normal tensor is invariant under `U`. The anomaly itself, a three-cocycle, is invisible
-to the fusion ring and is not used here.
+integer representation. The Fibonacci ring has no fusion character in `ℕ`, and the single-block
+no-go `FibonacciCompression.not_exists_normal_fibonacci_symmetric` (no normal tensor with
+`O_1 ψ = ψ` and `O_τ ψ = c ψ`) is derived from the general obstruction
+`MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter`. The anomalous `ℤ/3` operators
+`1, U, U†` of `Z3AnomalousTensor.lean` form a group-like fusion algebra in which every label is
+invertible.
+
+Not instances. The undecorated CZX operator of `CZXUnitary.lean` squares to `(-1)^L` times the
+identity (`CZXCompression.mpo_czxTensor_mul_self`), so the pair `1, U_CZX` obeys the `ℤ/2`
+fusion rules only at even lengths and is not a fusion algebra in the sense used here, which
+requires the rules at every positive length. The Kramers–Wannier square of
+`KramersWannier.lean` has the word traces `2^L (1 + η)` times those of a translation
+(`KWExample.kwSquare_trace_evalWord`), a length-dependent coefficient, so it does not have
+length-independent nonnegative integer structure constants either.
+
+## Provenance
+
+The anomalous `ℤ/3` tensor is not printed in any source. It is the phase-decorated shift built
+in `Z3AnomalousTensor.lean` from the `ℤ/n` three-cocycle formula of arXiv:2405.00439; its exact
+data were first recorded in `Notes/OpenProblemsTN/checks/asym_z3_anomalous_data.md`, a
+verification record, not a source.
 
 ## Main results
 
 * `FibonacciCompression.isMPOFusionAlgebra_fibBlock`, `FibonacciCompression.isFusionUnit_fibFusion`,
   `FibonacciCompression.isMPOSymmetricFamily_fibNimTargets`,
   `FibonacciCompression.isNIMRep_fibFusion`, `FibonacciCompression.not_isFusionCharacter_fibFusion`,
-  `FibonacciCompression.not_isMPOSymmetric_fibBlock`.
-* `Z3Anomalous.isMPOFusionAlgebra_z3Block`, `Z3Anomalous.isInvertibleLabel_z3Fusion`,
-  `Z3Anomalous.mpo_uTensor_mulVec_eq`.
+  `FibonacciCompression.not_exists_normal_fibonacci_symmetric`.
+* `Z3Anomalous.isMPOFusionAlgebra_z3Block`, `Z3Anomalous.isInvertibleLabel_z3Fusion`.
 
 ## References
 - [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
@@ -43,6 +57,8 @@ to the fusion ring and is not used here.
 - [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
   D. J. Williamson, M. B. Şahinoğlu, J. Haegeman, F. Verstraete, *Anyons and matrix product
   operator algebras*
+- [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- the `ℤ/n` three-cocycle formula from
+  which the anomalous `ℤ/3` tensor is built
 -/
 
 open scoped Matrix
@@ -51,7 +67,8 @@ open MPOTensor MPSTensor
 
 namespace FibonacciCompression
 
-/-- The structure constants of the Fibonacci fusion ring as a function of three labels. -/
+/-- Bridge: the structure constants `fibNim` of the Fibonacci fusion ring as a function of three
+labels. -/
 abbrev fibFusion (a b c : Fin 2) : ℕ := fibNim a b c
 
 /-- Source: arXiv:1511.08090, App. D.1; arXiv:2203.12563, line 1993. The Fibonacci periodic
@@ -59,7 +76,8 @@ operators form a matrix product operator fusion algebra. -/
 theorem isMPOFusionAlgebra_fibBlock : IsMPOFusionAlgebra fibBlock fibFusion :=
   fun a b L hL => fibonacci_fusion_algebra a b L hL
 
-/-- The trivial label is the unit of the Fibonacci fusion ring. -/
+/-- Source: arXiv:2203.12563, line 1993: the trivial label `1` is the unit of the Fibonacci
+fusion ring `{1, τ; τ × τ = 1 + τ}`. -/
 theorem isFusionUnit_fibFusion : IsFusionUnit fibFusion 0 := by
   intro b c
   fin_cases b <;> fin_cases c <;> simp [fibFusion, fibNim, fibFusionMatrix, Matrix.one_apply]
@@ -70,27 +88,43 @@ theorem isMPOSymmetricFamily_fibNimTargets :
     IsMPOSymmetricFamily fibBlock fibNimTargets fun a s t => (fibNim a s t : ℂ) :=
   fun a s L hL => fibonacci_nim_rep a s L hL
 
-/-- The regular representation of the Fibonacci fusion ring is a nonnegative integer
-representation (arXiv:2203.12563, line 1993). -/
+/-- Source: arXiv:2203.12563, line 1993: the action `τ · x_1 = x_τ`, `τ · x_τ = x_1 + x_τ`, the
+regular representation of the Fibonacci fusion ring, is a nonnegative integer representation. -/
 theorem isNIMRep_fibFusion : IsNIMRep fibFusion fibFusion := by
   intro a b x y
   fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;>
     simp [fibFusion, fibNim, fibFusionMatrix, Matrix.one_apply, Fin.sum_univ_two]
 
-/-- The Fibonacci fusion ring has no fusion character in `ℕ`: `m_τ² = 1 + m_τ` has no natural
-solution. -/
+/-- Project result: the Fibonacci fusion ring has no fusion character in `ℕ`, since
+`m_τ² = 1 + m_τ` has no natural solution. -/
 theorem not_isFusionCharacter_fibFusion (m : Fin 2 → ℕ) : ¬ IsFusionCharacter fibFusion 0 m := by
   rintro ⟨h0, hmul⟩
   have h := hmul 1 1
   simp [fibFusion, fibNim, fibFusionMatrix, Fin.sum_univ_two, h0] at h
   exact Nat.mul_self_ne_add_one (m 1) (by omega)
 
-/-- **No normal tensor is symmetric under the Fibonacci algebra**, as an instance of
-`MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter` (arXiv:2203.12563, line 1993). -/
-theorem not_isMPOSymmetric_fibBlock {D : ℕ} [NeZero D] {A : MPSTensor 2 D}
-    (hA : Kraus.IsNormal A) {c : Fin 2 → ℂ} (h0 : c 0 = 1) : ¬ IsMPOSymmetric fibBlock A c :=
-  not_isMPOSymmetric_of_forall_not_isFusionCharacter isMPOFusionAlgebra_fibBlock
-    not_isFusionCharacter_fibFusion hA h0
+/-- **No normal matrix product state is symmetric under the Fibonacci algebra.**
+
+Project result, the single-block counterpart of arXiv:2203.12563, line 1993 (the only invariant
+family has two blocks): there is no normal tensor of positive bond dimension whose periodic
+vectors are fixed by the admissibility projector `O_1` and are eigenvectors of the `τ` family
+with one length-independent eigenvalue. It is the instance of the general obstruction
+`MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter` for the Fibonacci ring, which has
+no fusion character in `ℕ`. -/
+theorem not_exists_normal_fibonacci_symmetric :
+    ¬ ∃ (D : ℕ) (A : MPSTensor 2 D) (c : ℂ), 0 < D ∧ Kraus.IsNormal A ∧
+      (∀ L : ℕ, 0 < L →
+        mpo fibOne L *ᵥ (fun τ : Fin L → Fin 2 => mpv A τ) = fun σ : Fin L → Fin 2 => mpv A σ) ∧
+      (∀ L : ℕ, 0 < L →
+        mpo fibTau L *ᵥ (fun τ : Fin L → Fin 2 => mpv A τ) =
+          c • fun σ : Fin L → Fin 2 => mpv A σ) := by
+  rintro ⟨D, A, c, hD, hA, hone, hτ⟩
+  have : NeZero D := ⟨hD.ne'⟩
+  refine not_isMPOSymmetric_of_forall_not_isFusionCharacter (c := ![1, c])
+    isMPOFusionAlgebra_fibBlock not_isFusionCharacter_fibFusion hA rfl fun a L hL => ?_
+  match a with
+  | 0 => exact (hone L hL).trans (one_smul ℂ _).symm
+  | 1 => exact hτ L hL
 
 end FibonacciCompression
 
@@ -110,10 +144,13 @@ def z3Block : (a : Fin 3) → MPOTensor 3 (z3Dim a)
   | 1 => uTensor
   | 2 => uDagTensor
 
-/-- The group fusion ring of `ℤ/3`: `N_{ab}^c = δ_{c, a + b}`. -/
+/-- Source: arXiv:2203.12563, line 660: the fusion ring of a group, here `ℤ/3`, with
+`O_g O_h = O_{gh}`, that is `N_{ab}^c = δ_{c, a + b}`. -/
 def z3Fusion (a b c : Fin 3) : ℕ := if c = a + b then 1 else 0
 
-/-- The anomalous `ℤ/3` periodic operators form a group-like fusion algebra. -/
+/-- Bridge: the periodic operators `1, U, U†` of the anomalous `ℤ/3` tensor of
+`Z3AnomalousTensor.lean` (built from the three-cocycle formula of arXiv:2405.00439) obey the group
+fusion rule `O_g O_h = O_{gh}` of arXiv:2203.12563, line 660, at every positive length. -/
 theorem isMPOFusionAlgebra_z3Block : IsMPOFusionAlgebra z3Block z3Fusion := by
   intro a b L hL
   have hI : MPOTensor.mpo identityTensor L = 1 := mpo_identityTensor L
@@ -137,18 +174,10 @@ theorem isMPOFusionAlgebra_z3Block : IsMPOFusionAlgebra z3Block z3Fusion := by
   | 1, 2 => exact mpo_ud L hL
   | 2, 1 => exact mpo_du L hL
 
-/-- Every label of the `ℤ/3` fusion ring is invertible, with inverse `-a`. -/
+/-- Source: arXiv:2203.12563, line 660: every label of the `ℤ/3` fusion ring is invertible, with
+inverse `-a`. -/
 theorem isInvertibleLabel_z3Fusion (a : Fin 3) : IsInvertibleLabel z3Fusion 0 a :=
   ⟨-a, fun c => by simp [z3Fusion]⟩
-
-/-- A normal tensor whose periodic vectors are eigenvectors of the anomalous `ℤ/3` symmetry with
-length-independent eigenvalue is invariant. -/
-theorem mpo_uTensor_mulVec_eq {D : ℕ} [NeZero D] {A : MPSTensor 3 D} (hA : Kraus.IsNormal A)
-    {c : Fin 3 → ℂ} (hsym : IsMPOSymmetric z3Block A c) (h0 : c 0 = 1) (L : ℕ) (hL : 0 < L) :
-    MPOTensor.mpo uTensor L *ᵥ (fun τ : Fin L → Fin 3 => mpv A τ) =
-      fun σ : Fin L → Fin 3 => mpv A σ :=
-  mpo_mulVec_eq_of_isInvertibleLabel isMPOFusionAlgebra_z3Block hA hsym h0
-    (isInvertibleLabel_z3Fusion 1) L hL
 
 end Z3Anomalous
 
