@@ -14,10 +14,11 @@ two-qubit sites. Each shifts the computational basis by an element of
 $\Z_2\times\Z_2$, and the two elements with nonzero first bit also
 apply a controlled phase between neighboring second qubits. The
 construction targets the mixed three-cocycle of type II whose exponent
-$(-1)^{a_1b_2c_2}$ couples the first factor of the group to the second;
-the identification of the anomaly class is not proved here. Matrix
-product operator symmetries of this kind are reviewed
-in~\cite[Section~III.A.6]{Cirac2021Matrix}. The local tensors are
+$(-1)^{a_1b_2c_2}$ couples the first factor of the group to the second,
+motivated by anomalous $\Z_2\times\Z_2$ symmetry-protected topological
+phases~\cite{ChenGuWen2011}; the identification of the anomaly class is
+not proved here. Matrix product operator symmetries of this kind are
+reviewed in~\cite[Section~III.A.6]{Cirac2021Matrix}. The local tensors are
 assembled from the letters of the CZX matrix product
 unitary~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix}, whose
 symmetry-protected context is~\cite[Section~III.B.1]{Cirac2021Matrix}.
@@ -243,7 +244,9 @@ The basis action also determines multiplication. For $g,h\in G$,
 The last equality uses~(\ref{eq:asymex_z2z2_flip_phase}) and the
 fact that the parity of $g_1+h_1$ is the first bit of $gh$.
 Thus $\lambda(g,h)=(-1)^{g_1h_2}$ supplies a length-dependent
-scalar factor. The tensor proof of this law, through word traces,
+scalar factor, reflecting the non-trivial projective 2-cocycle class of
+$\Z_2\times\Z_2$~\cite{ChenGuWen2011,GarreRubio2023MPOSym}.
+The tensor proof of this law, through word traces,
 is given in Theorem~\ref{thm:asymex_z2z2_fusion}.
 
 The second property concerns the word spans of the four tensors,
