@@ -245,7 +245,8 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 derives this factorization and positivity of the neighboring operators from
 SAL. The theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` supplies that
 factorization and the complete positive commuting product form from injectivity
-and SAL; the present theorem records only the conditional product identity. -/
+and SAL; the present theorem records only the conditional product identity.
+Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 private theorem mpo_eq_product_physicalBond_of_three_le
     (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N] (hN : 3 ≤ N) :
     mpo K N =
@@ -412,7 +413,8 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 derives this factorization and positivity of the neighboring operators from
 SAL. The theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` supplies that
 factorization and the complete positive commuting product form from injectivity
-and SAL; the present theorem records only the conditional product identity. -/
+and SAL; the present theorem records only the conditional product identity.
+Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem mpo_eq_product_physicalBond
     (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 2 ≤ N) :
     mpo K N =
@@ -434,7 +436,8 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 derives this factorization and positivity of the neighboring operators from
 SAL. The theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` supplies that
 factorization and the complete positive commuting product form from injectivity
-and SAL; the present theorem records only the conditional scalar formulation. -/
+and SAL; the present theorem records only the conditional scalar formulation.
+Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem exists_positive_scalar_mpo_eq_product_physicalBond
     (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 2 ≤ N) :
     ∃ c : ℝ, 0 < c ∧
