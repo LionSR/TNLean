@@ -19,7 +19,10 @@ For the MPU index of arXiv:1703.09188:
   correspondence remains open under #7738. The note also records that the
   bra-ket display of the CZX tensor in arXiv:2011.12127, Appendix A, repeats
   the normalized tensor, while the matrices printed there are its unnormalized
-  rescaling, for which the claims of that passage hold.
+  rescaling, for which the claims of that passage hold; that the printed
+  matrices give the gate order opposite to the verbal description, a global
+  sign `(-1)^N`; and that the second printed projector `Q` of that passage is
+  the complement `Q₁ = 1 - P₁` of the projector onto the invariant subspace.
 
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and

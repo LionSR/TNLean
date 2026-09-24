@@ -15,9 +15,10 @@ annihilating the kernel of `V W` (on the right). Then compressing each letter to
 
 This is the linear-algebra step of the canonical-form construction of the review
 arXiv:2011.12127, Section IV, "Canonical form and normal tensors",
-`Papers/2011.12127/TN-Review-main.tex` lines 1769–1785: when the letters satisfy
-`B^i P = P B^i P` for an orthogonal projection `P`, replacing `B^i` by its diagonal blocks does
-not change any trace. The special cases proved here are those in which one of the two diagonal
+`Papers/2011.12127/TN-Review-main.tex`: when the letters satisfy the invariance condition
+`B^i P₁ = P₁ B^i P₁`, `Q₁ B^i = Q₁ B^i Q₁` of lines 1784–1787 for an orthogonal projection `P₁`
+with `Q₁ = 1 - P₁`, the replacement `B^i → P₁ B^i P₁ + Q₁ B^i Q₁` of lines 1793–1797 does not
+change any trace. The special cases proved here are those in which one of the two diagonal
 blocks vanishes, so that the trace is carried by a single block: with `P = V W`, the condition
 `P B^i = B^i` says that the complementary block and the off-diagonal block below it vanish.
 
@@ -55,7 +56,7 @@ theorem evalWord_mul_of_right_absorb (h : ∀ i, B i * (V * W) = B i) :
 compressed letters `W B^i V` multiply out to the compression of the product: every nonempty
 word satisfies `W B^{i₁} V ⋯ W B^{iₙ} V = W B^{i₁} ⋯ B^{iₙ} V`.
 
-Source: arXiv:2011.12127, Section IV, `Papers/2011.12127/TN-Review-main.tex` lines 1769–1785
+Source: arXiv:2011.12127, Section IV, `Papers/2011.12127/TN-Review-main.tex` lines 1793–1797
 (the block replacement of the canonical-form construction, in the case where one diagonal block
 carries the whole word). -/
 theorem evalWord_compress_of_left_absorb (h : ∀ i, V * W * B i = B i) :
@@ -75,7 +76,7 @@ theorem evalWord_compress_of_left_absorb (h : ∀ i, V * W * B i = B i) :
 letter, then every nonempty word of the compressed letters `W B^i V` has the trace of the
 corresponding word of `B`.
 
-Source: arXiv:2011.12127, Section IV, `Papers/2011.12127/TN-Review-main.tex` lines 1769–1785. -/
+Source: arXiv:2011.12127, Section IV, `Papers/2011.12127/TN-Review-main.tex` lines 1793–1797. -/
 theorem trace_evalWord_compress_of_left_absorb (h : ∀ i, V * W * B i = B i)
     (w : List (Fin d)) (hw : w ≠ []) :
     Matrix.trace (evalWord (fun i => W * B i * V) w) = Matrix.trace (evalWord B w) := by
@@ -85,7 +86,7 @@ theorem trace_evalWord_compress_of_left_absorb (h : ∀ i, V * W * B i = B i)
 /-- **Compression onto a right-absorbing corner.** If `B^i V W = B^i` for every letter, then
 every nonempty word satisfies `W B^{i₁} V ⋯ W B^{iₙ} V = W B^{i₁} ⋯ B^{iₙ} V`.
 
-Source: arXiv:2011.12127, Section IV, `Papers/2011.12127/TN-Review-main.tex` lines 1769–1785. -/
+Source: arXiv:2011.12127, Section IV, `Papers/2011.12127/TN-Review-main.tex` lines 1793–1797. -/
 theorem evalWord_compress_of_right_absorb (h : ∀ i, B i * (V * W) = B i) :
     ∀ (w : List (Fin d)), w ≠ [] →
       evalWord (fun i => W * B i * V) w = W * evalWord B w * V
@@ -102,7 +103,7 @@ theorem evalWord_compress_of_right_absorb (h : ∀ i, B i * (V * W) = B i) :
 letter, then every nonempty word of the compressed letters `W B^i V` has the trace of the
 corresponding word of `B`.
 
-Source: arXiv:2011.12127, Section IV, `Papers/2011.12127/TN-Review-main.tex` lines 1769–1785. -/
+Source: arXiv:2011.12127, Section IV, `Papers/2011.12127/TN-Review-main.tex` lines 1793–1797. -/
 theorem trace_evalWord_compress_of_right_absorb (h : ∀ i, B i * (V * W) = B i)
     (w : List (Fin d)) (hw : w ≠ []) :
     Matrix.trace (evalWord (fun i => W * B i * V) w) = Matrix.trace (evalWord B w) := by

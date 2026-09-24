@@ -6,6 +6,9 @@ Authors: Sirui Lu
 import QICLean.Algebra.OrthogonalProjection
 import TNLean.MPS.FundamentalTheorem.Reduction.AbsorbingCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXReviewTensor
+import TNLean.MPS.MPDO.OperatorFromWordTrace
+import TNLean.MPS.MPDO.SimpleScaling
+import TNLean.MPS.MPDO.StackedLayers
 
 /-!
 # The CZX matrix product unitary of the review: canonical form of its square
@@ -13,23 +16,29 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXReviewTensor
 **Source.** Cirac, Pérez-García, Schuch, Verstraete 2021 (arXiv:2011.12127), Appendix A,
 "The CZX MPU", `Papers/2011.12127/TN-Review-main.tex` lines 2596–2601: the bond-four square
 `B` of the CZX operator has the invariant subspace of the projector `P = diag(0,1,1,0)`; the
-canonical-form construction of Section IV (lines 1769–1785) replaces `B` by the block
-`B^{00} = [[-1,1],[0,0]]`, `B^{11} = [[0,0],[1,-1]]`; this block has the invariant subspace of
-`Q = ½ [[1,-1],[-1,1]]`, and a second step gives the canonical form `B^{ij} = (-1) δ_{ij}`,
-"which globally means `O(A)^2 = (-1)^N I`".
+canonical-form construction of Section IV replaces `B` by the block
+`B^{00} = [[-1,1],[0,0]]`, `B^{11} = [[0,0],[1,-1]]`; for this block the review names the
+projector `Q = ½ [[1,-1],[-1,1]]`, and a second step gives the canonical form
+`B^{ij} = (-1) δ_{ij}`, "which globally means `O(A)^2 = (-1)^N I`".
+The construction of Section IV is at lines 1784–1797: an invariant subspace `S₁` with
+orthogonal projector `P₁` and `Q₁ = 1 - P₁` satisfies `B^i P₁ = P₁ B^i P₁`,
+`Q₁ B^i = Q₁ B^i Q₁` (lines 1784–1787), and `B^i` is replaced by `P₁ B^i P₁ + Q₁ B^i Q₁`
+(lines 1793–1797).
 Review: arXiv:2011.12127, Appendix A, "The CZX MPU".
 
-**Formalized here.** Both projections, the invariance of their ranges, the printed block and
-the printed canonical form, and the equality of all word traces along the two reduction steps,
-which assembles into the trace identity for `O(A)^2` and, at the operator level, into
-`O(A)^2 = (-1)^N I`.
+**Formalized here.** Both projections, the Section IV relations for each of them, the printed
+block and the printed canonical form, the equality of all word traces along the two reduction
+steps, and the operator identity `O(A)^2 = (-1)^N I` at every positive length, obtained from
+these word traces.
 
-The review states that each projector gives "an invariant subspace" without naming the side.
-For `P`, `P B^{ij} = B^{ij}`: the range of `P` contains the range of every letter, so it is
-invariant, and the complementary diagonal block vanishes. For `Q`, `B^{ij} Q = B^{ij}`: every
-letter annihilates the range of `1 - Q`, which is therefore invariant, and the trace is carried
-by the compression to the range of `Q`. In the notation of the review's Section IV,
-`B P = P B P` holds for `P` and for `1 - Q`.
+For `P` the relations are those of `P₁`: `P B^{ij} = B^{ij}`, so the range of `P` contains the
+range of every letter and is invariant, and the complementary diagonal block vanishes.
+
+**Local fix (second projector):** the range of the printed `Q` is not invariant under the block,
+`B^{00} (1,-1)ᵀ = (-2,0)ᵀ`; the range of `1 - Q` is, since `B^{ij} Q = B^{ij}`. The printed `Q`
+satisfies the relation `Q B^{ij} = Q B^{ij} Q` of `Q₁` and is read here as `Q₁`, with
+`P₁ = 1 - Q`; the block on the range of `P₁` vanishes and the block on the range of `Q` is the
+printed canonical form. Documented in `docs/paper-gaps/mpu_czx_tensor_normalization.tex`.
 
 ## Main definitions
 
@@ -39,6 +48,7 @@ by the compression to the range of `Q`. In the notation of the review's Section 
 ## Main results
 
 * `CZXCompression.reviewCZXSquare_mul_reviewP`: the range of `P` is invariant.
+* `CZXCompression.reviewQ_mul_reviewBlock`: `Q` satisfies the relation of `Q₁`.
 * `CZXCompression.trace_evalWord_reviewCZXSquare_eq_reviewBlock`: the square and the block have
   the same word traces.
 * `CZXCompression.reviewQ_conj_reviewBlock`: the canonical form `Q B^{ij} Q = (-1) δ_{ij} Q`.
@@ -96,7 +106,7 @@ theorem reviewP_mul_reviewCZXSquare (a : Fin 4) :
 /-- **The range of `P` is invariant under every letter of the square**, `B^{ij} P = P B^{ij} P`.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2596–2597, in the form
-of the invariance condition at lines 1782–1784. -/
+of the invariance condition at lines 1784–1787. -/
 theorem reviewCZXSquare_mul_reviewP (a : Fin 4) :
     reviewCZXSquare a * reviewP = reviewP * reviewCZXSquare a * reviewP := by
   rw [reviewP_mul_reviewCZXSquare]
@@ -160,7 +170,7 @@ theorem reviewBlock_eq_compress (a : Fin 4) :
 canonical-form reduction.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2598–2599, by the block
-replacement of lines 1769–1785. -/
+replacement of lines 1793–1797. -/
 theorem trace_evalWord_reviewCZXSquare_eq_reviewBlock (w : List (Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord reviewCZXSquare w) =
       Matrix.trace (Kraus.evalWord reviewBlock w) := by
@@ -192,11 +202,13 @@ theorem reviewBlock_mul_reviewQ (a : Fin 4) : reviewBlock a * reviewQ = reviewBl
     norm_num [reviewBlock, reviewBlockInt, reviewQ, complexOfInt, Matrix.mul_apply,
       Fin.sum_univ_two]
 
-/-- **The range of `Q` is invariant under left multiplication by the letters of the block**,
-`Q B^{ij} = Q B^{ij} Q`; equivalently, the range of `1 - Q` is invariant under the letters.
-The review states only that `Q` gives an invariant subspace; the side is the one displayed here.
+/-- **`Q` satisfies the relation of `Q₁`**, `Q B^{ij} = Q B^{ij} Q`: the range of `1 - Q` is
+invariant under the letters of the block. In the notation of the review's Section IV, the
+printed `Q` is `Q₁ = 1 - P₁`, with `P₁ = 1 - Q` the projector onto the invariant subspace; the
+range of `Q` itself is not invariant (Local fix of the module docstring).
 
-Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2600. -/
+Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2600, read with the
+relations at lines 1784–1787. -/
 theorem reviewQ_mul_reviewBlock (a : Fin 4) :
     reviewQ * reviewBlock a = reviewQ * reviewBlock a * reviewQ := by
   rw [Matrix.mul_assoc, reviewBlock_mul_reviewQ]
@@ -257,13 +269,23 @@ theorem reviewCZXSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
       (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityMPS w) := by
   rw [trace_evalWord_reviewCZXSquare_eq_reviewBlock w hw, trace_evalWord_reviewBlock w hw]
 
-/-- **`O(A)^2 = (-1)^N I`** as the operator of the bond-four square, at every positive length.
+/-- **`O(A)^2 = (-1)^N I`** as the operator of the bond-four square, at every positive length,
+obtained from the word traces of the canonical form `(-1) δ_{ij}`.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2601 ("which globally
 means `O(A)^2 = (-1)^N I`"). -/
 theorem mpo_mulTensor_reviewCZXTensor {N : ℕ} [NeZero N] :
     MPOTensor.mpo (MPOTensor.mulTensor reviewCZXTensor reviewCZXTensor) N =
       ((-1 : ℂ) ^ N) • 1 := by
-  rw [MPOTensor.mpo_mulTensor, mpo_reviewCZXTensor_mul_self]
+  have hid : identityTensor = MPOTensor.idTensor 2 := by
+    funext i j
+    ext p q
+    fin_cases i <;> fin_cases j <;>
+      simp [identityTensor, identityIntTensor, MPOTensor.idTensor, Matrix.one_apply]
+  have hneg : ((-1 : ℂ) • identityTensor).toMPSTensor = fun a => (-1 : ℂ) • identityMPS a := rfl
+  rw [MPOTensor.mpo_eq_of_trace_evalWord _ ((-1 : ℂ) • identityTensor) (fun w hw => ?_) N
+    (NeZero.pos N), MPOTensor.mpo_smul, hid, MPOTensor.mpo_idTensor]
+  rw [hneg, Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
+  exact reviewCZXSquare_trace_evalWord w hw
 
 end CZXCompression

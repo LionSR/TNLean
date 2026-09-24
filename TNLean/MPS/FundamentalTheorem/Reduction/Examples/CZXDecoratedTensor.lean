@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXReviewTensor
+import TNLean.MPS.MPDO.CZXTensor
 
 /-!
 # The decorated CZX matrix product unitary: the tensor and its operator
@@ -18,7 +19,12 @@ drawn at lines 1164–1180: the input passes through `X`, is copied to the left 
 **Formalized here.** The printed tensor, its periodic operator
 `U |t⟩ = (-1)^{∑_n s_n s_{n+1} + ∑_n s_n} |s⟩` with `s` the spin flip of `t`, the identity
 `U = Z^{⊗ N} · D_N X^{⊗ N}` relating it to the CZX operator of the review arXiv:2011.12127,
-the order-two relation `U^2 = 1` at every positive length, and unitarity.
+the order-two relation `U^2 = 1` at every positive length, unitarity, and normality of the
+tensor (line 1181: "this tensor becomes injective when blocking two sites").
+
+The same Z-decorated one-site tensor, with its two bonds exchanged, is
+`MPOTensor.CZX.decoratedSiteTensor` of `TNLean.MPS.MPDO.CZXTensor` (arXiv:2502.20257); that
+tensor is the review's tensor with a Pauli `Z` on the output.
 
 ## Main definitions
 
@@ -34,6 +40,10 @@ the order-two relation `U^2 = 1` at every positive length, and unitarity.
   operator.
 * `CZXCompression.mpo_czxDecoratedTensor_mul_self`: `U^2 = 1` at every positive length.
 * `CZXCompression.czxDecoratedTensor_isMPUPos`: the tensor is a matrix product unitary.
+* `CZXCompression.czxDecoratedMPS_isNormal`: the tensor is normal.
+* `CZXCompression.czxDecoratedTensor_eq_transpose`,
+  `CZXCompression.decoratedSiteTensor_eq_smul_reviewCZXTensor`: the relations to
+  `MPOTensor.CZX.decoratedSiteTensor`.
 
 ## References
 
@@ -83,6 +93,63 @@ theorem czxDecoratedTensor_apply (i j l r : Fin 2) :
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
     simp [czxDecoratedTensor, czxDecoratedIntTensor, complexOfInt, Fin.rev]
 
+/-- Bridge: the decorated tensor is the one-site tensor `MPOTensor.CZX.decoratedSiteTensor`
+of arXiv:2502.20257 with every matrix transposed, that is, with its two bonds exchanged. -/
+theorem czxDecoratedTensor_eq_transpose (i j : Fin 2) :
+    czxDecoratedTensor i j = (MPOTensor.CZX.decoratedSiteTensor i j)ᵀ := by
+  ext l r
+  rw [Matrix.transpose_apply, czxDecoratedTensor_apply]
+  fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
+    simp [MPOTensor.CZX.decoratedSiteTensor, Fin.rev]
+
+/-- Bridge: `MPOTensor.CZX.decoratedSiteTensor` is the review's CZX tensor with a Pauli `Z` on
+the output, `(-1)^i` times the letter at output `i`. -/
+theorem decoratedSiteTensor_eq_smul_reviewCZXTensor (i j : Fin 2) :
+    MPOTensor.CZX.decoratedSiteTensor i j = ((-1 : ℂ) ^ i.val) • reviewCZXTensor i j := by
+  ext l r
+  rw [Matrix.smul_apply, reviewCZXTensor_apply]
+  fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
+    simp [MPOTensor.CZX.decoratedSiteTensor, Fin.rev]
+
+/-! ### Normality -/
+
+private theorem czxDecoratedMPS_one :
+    czxDecoratedTensor.toMPSTensor 1 = complexOfInt !![1, 0; 1, 0] := rfl
+
+private theorem czxDecoratedMPS_two :
+    czxDecoratedTensor.toMPSTensor 2 = complexOfInt !![0, -1; 0, 1] := rfl
+
+/-- Each matrix unit is a half-sum or a half-difference of two length-two words. -/
+private theorem czxDecorated_single (i j : Fin 2) :
+    ∃ a b c e : Fin 4, ∃ u v : ℂ, Matrix.single i j (1 : ℂ) =
+      u • (czxDecoratedTensor.toMPSTensor a * czxDecoratedTensor.toMPSTensor b) +
+        v • (czxDecoratedTensor.toMPSTensor c * czxDecoratedTensor.toMPSTensor e) := by
+  fin_cases i <;> fin_cases j
+  · refine ⟨1, 1, 2, 1, 1 / 2, -1 / 2, ?_⟩
+    rw [czxDecoratedMPS_one, czxDecoratedMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
+    ext a b
+    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
+  · refine ⟨1, 2, 2, 2, -1 / 2, -1 / 2, ?_⟩
+    rw [czxDecoratedMPS_one, czxDecoratedMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
+    ext a b
+    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
+  · refine ⟨1, 1, 2, 1, 1 / 2, 1 / 2, ?_⟩
+    rw [czxDecoratedMPS_one, czxDecoratedMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
+    ext a b
+    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
+  · refine ⟨2, 2, 1, 2, 1 / 2, -1 / 2, ?_⟩
+    rw [czxDecoratedMPS_one, czxDecoratedMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
+    ext a b
+    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
+
+/-- **The decorated CZX tensor is normal**: its length-two words span the full two-by-two
+matrix algebra. This is the source's statement that the tensor "becomes injective when blocking
+two sites".
+
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 1181. -/
+theorem czxDecoratedMPS_isNormal : Kraus.IsNormal czxDecoratedTensor.toMPSTensor :=
+  isNormal_of_single_eq_two_words _ czxDecorated_single
+
 /-! ### The periodic operator -/
 
 /-- The number of ones of a configuration, the exponent of the sign of `Z^{⊗ N}`. -/
@@ -110,42 +177,32 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1128–1129 and 1
 theorem mpo_czxDecoratedTensor_apply (s t : Fin N → Fin 2) :
     MPOTensor.mpo czxDecoratedTensor N s t =
       if s = spinFlip N t then (-1 : ℂ) ^ (czExponent s + spinParity s) else 0 := by
-  rw [MPOTensor.mpo_apply, MPOTensor.mpoMatrixEntry, MPOTensor.evalWord_ofFn]
-  have h := MPSTensor.trace_evalWord_eq_sum_cyclic czxDecoratedTensor.toMPSTensor
-    (fun n ↦ finProdFinEquiv (s n, t n))
-  rw [MPSTensor.evalWord_ofFn_eq_prod] at h
-  have h' : (List.ofFn fun n ↦ czxDecoratedTensor (s n) (t n)).prod.trace =
-      ∑ g : Fin N → Fin 2, ∏ v : Fin N, czxDecoratedTensor (s v) (t v) (g v) (g (v + 1)) := by
-    simpa only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat] using h
-  rw [h']
   let g0 : Fin N → Fin 2 := fun n ↦ s (n - 1)
-  rw [Fintype.sum_eq_single g0]
-  · by_cases hst : s = spinFlip N t
-    · have hp : ∀ n, s n = (t n).rev := fun n ↦ congrFun hst n
-      rw [ite_eq_left hst]
-      calc
-        _ = ∏ n, (-1 : ℂ) ^ ((s (n - 1)).val * (s n).val + (s n).val) := by
-          refine Finset.prod_congr rfl fun n _ ↦ ?_
-          rw [czxDecoratedTensor_apply, ite_eq_left ⟨hp n, by simp [g0]⟩]
-        _ = (-1 : ℂ) ^ ∑ n, ((s (n - 1)).val * (s n).val + (s n).val) :=
-          Finset.prod_pow_eq_pow_sum _ _ _
-        _ = _ := by
-          rw [Finset.sum_add_distrib, czExponent, spinParity]
-          congr 2
-          exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun n ↦ by simp
-    · rw [ite_eq_right hst]
-      obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
-      refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
-      rw [czxDecoratedTensor_apply, ite_eq_right]
-      exact fun h ↦ hn h.1
-  · intro g hg
+  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond czxDecoratedTensor s t g0 fun g hg ↦ by
     obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
-    refine Finset.prod_eq_zero (Finset.mem_univ (n - 1)) ?_
+    refine ⟨n - 1, ?_⟩
     rw [czxDecoratedTensor_apply, ite_eq_right]
     intro h
     apply hn
-    simpa [g0] using h.2
+    simpa [g0] using h.2]
+  by_cases hst : s = spinFlip N t
+  · have hp : ∀ n, s n = (t n).rev := fun n ↦ congrFun hst n
+    rw [ite_eq_left hst]
+    calc
+      _ = ∏ n, (-1 : ℂ) ^ ((s (n - 1)).val * (s n).val + (s n).val) := by
+        refine Finset.prod_congr rfl fun n _ ↦ ?_
+        rw [czxDecoratedTensor_apply, ite_eq_left ⟨hp n, by simp [g0]⟩]
+      _ = (-1 : ℂ) ^ ∑ n, ((s (n - 1)).val * (s n).val + (s n).val) :=
+        Finset.prod_pow_eq_pow_sum _ _ _
+      _ = _ := by
+        rw [Finset.sum_add_distrib, czExponent, spinParity]
+        congr 2
+        exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun n ↦ by simp
+  · rw [ite_eq_right hst]
+    obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
+    refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
+    rw [czxDecoratedTensor_apply, ite_eq_right]
+    exact fun h ↦ hn h.1
 
 /-- The periodic operator of the decorated tensor is the monomial matrix of the global spin flip
 whose phase at the input `t` is the sign `(-1)^{∑_n s_n s_{n+1} + ∑_n s_n}` of the output. -/

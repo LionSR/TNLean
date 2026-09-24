@@ -15,8 +15,11 @@ ways of fusing three layers differ by a sign `ω` (`eq:Uanomal`). Section III.D,
 1136–1244, computes the fusion tensors of the decorated CZX tensor,
 `V = -|−̂⟩ ⊗ |+̂⟩` and `V̂ = ⟨1| ⊗ ⟨0|` with `|±̂⟩ = |0⟩ ± |1⟩`, and states `ω = -1`.
 
-**Formalized here.** With the printed fusion tensors: both equations of `eq:Ured` for every
-number of intermediate sites, and `eq:Uanomal` on three sites with `ω = -1`. The layers are
+**Formalized here.** With the printed fusion tensors: both equations of `eq:Ured`, and
+`eq:Uanomal` on three sites with `ω = -1`. The first equation of `eq:Ured` is printed with
+`m + 1 ≥ 1` intermediate sites between the two double-layer end sites (the overbrace at line
+429); it is proved here for every number `k ≥ 0` of intermediate sites, the case `k = 0` being
+a strengthening that the source does not state. The layers are
 ordered by the matrix product of operators: the first factor of `MPOTensor.mulTensor` is the
 upper layer of the source's figures, and a bond of two layers is ordered (upper, lower).
 The fusion tensor `V` is contracted with the right bonds of a double-layer site and `V̂` with
@@ -119,16 +122,16 @@ private theorem czxFusionInt_contract_letter (a : Fin 4) :
 
 /-- The case of no site of the second equation of `eq:Ured`: `V̂ V = 1`.
 
-Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 426–477 (`m = 0`). -/
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 455–477 (`m = 0`). -/
 theorem czxFusionVHat_mul_czxFusionV : czxFusionVHat * czxFusionV = 1 := by
   rw [czxFusionVHat, czxFusionV, ← complexOfInt_mul, ← complexOfInt_one]
   congr 1
   decide
 
-/-- The case of no intermediate site of the first equation of `eq:Ured`: two neighboring
-double-layer sites factor through the fusion tensors, `S^a S^b = S^a V V̂ S^b`.
-
-Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 426–477 (`m = 0`). -/
+/-- Project result: two neighboring double-layer sites already factor through the fusion
+tensors, `S^a S^b = S^a V V̂ S^b`. This is the first equation of `eq:Ured` with no intermediate
+site, a case the source does not state: its first equation has `m + 1 ≥ 1` intermediate sites
+(`Papers/2405.00439/MPU-DW.tex` lines 426–446, overbrace at line 429). -/
 theorem czxDecoratedSquare_mul (a b : Fin 4) :
     czxDecoratedSquare a * czxDecoratedSquare b =
       czxDecoratedSquare a * czxFusionV * czxFusionVHat * czxDecoratedSquare b := by
@@ -146,8 +149,8 @@ theorem czxFusion_contract_letter (a : Fin 4) :
 double-layer word is the identity operator, `V̂ S^{(s₁,t₁)} ⋯ S^{(s_m,t_m)} V = ∏_k δ_{s_k t_k}`,
 for every `m ≥ 0`.
 
-Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 426–477, with the fusion
-tensors of lines 1225–1244. -/
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 455–477 (overbrace `m` at
+line 457), with the fusion tensors of lines 1225–1244. -/
 theorem czxFusion_contract (w : List (Fin 4)) :
     czxFusionVHat * Kraus.evalWord czxDecoratedSquare w * czxFusionV =
       (w.map pairDelta).prod • 1 := by
@@ -166,12 +169,14 @@ theorem czxFusion_contract (w : List (Fin 4)) :
       rw [key, ih, czxFusion_contract_letter, smul_mul_smul_comm, Matrix.one_mul]
       simp
 
-/-- **The first equation of `eq:Ured`**: a double-layer word of `m + 2` sites factors through
-the fusion tensors at its two ends, the `m` intermediate sites acting as the identity,
-`S^a S^{(s₁,t₁)} ⋯ S^{(s_m,t_m)} S^b = (∏_k δ_{s_k t_k}) S^a V V̂ S^b`, for every `m ≥ 0`.
+/-- **The first equation of `eq:Ured`**: a double-layer word of `k + 2` sites factors through
+the fusion tensors at its two ends, the `k` intermediate sites acting as the identity,
+`S^a S^{(s₁,t₁)} ⋯ S^{(s_k,t_k)} S^b = (∏_j δ_{s_j t_j}) S^a V V̂ S^b`, for every `k ≥ 0`.
+The source prints the cases `k = m + 1` with `m ≥ 0`; the case `k = 0` is a strengthening
+(`czxDecoratedSquare_mul`).
 
-Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 426–477, with the fusion
-tensors of lines 1225–1244. -/
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 426–446 (overbrace `m + 1` at
+line 429), with the fusion tensors of lines 1225–1244. -/
 theorem czxFusion_split (a b : Fin 4) (w : List (Fin 4)) :
     Kraus.evalWord czxDecoratedSquare (a :: (w ++ [b])) =
       (w.map pairDelta).prod •
