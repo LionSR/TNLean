@@ -1,0 +1,712 @@
+%% ==================================================
+%% Appendix: supporting results for the physics examples of the
+%% multi-block compression theorem: explicit gauges, adapted bases,
+%% and a sign-weighted pair used as a test construction.
+%% ==================================================
+
+\chapter{Physics Examples of the Multi-Block Compression Theorem: Supporting Results}%
+\label{ch:asymmetric_examples_supporting}
+
+This appendix supports Chapter~\ref{ch:asymmetric_examples}. It collects the
+explicit gauges and the integer arithmetic behind the compression theorems of
+the examples there that are treated in explicit bond coordinates, the adapted
+bases and scaled matrix units behind the normality certificates and behind the
+compression of the Bell-bond fixed points, and a sign-weighted pair of blocks
+constructed in this development to test the sharpness of the compression
+theorem.
+
+\section{Explicit gauges and exact arithmetic}%
+\label{sec:asymex_explicit_gauge}
+
+This section supplies the change of bond coordinates and the integer
+certificates used by the compression theorems of the examples in
+Chapter~\ref{ch:asymmetric_examples} that are treated in explicit bond
+coordinates: the symmetry and fusion operators, the elementary states, and
+the sign-weighted pair of Section~\ref{sec:asymex_parity}.
+Theorem~\ref{thm:asymex_czx_compression} and
+Theorem~\ref{thm:asymex_ising_compression}, for the CZX operator and the
+Ising fusion operators of the review~\cite{Cirac2021Matrix}, invoke it
+directly; the Bell-bond fixed points rest on
+Section~\ref{sec:asymex_rfp_basis} instead.
+The compression datum of Theorem~\ref{thm:asym_multiblock}
+carries its change of bond coordinates as an invertible map onto a graded
+coordinate space, one summand per slot. In each worked example that map is
+an explicit invertible matrix together with an explicit labelling of the
+bond coordinates by slots and positions inside slots.
+Theorem~\ref{thm:asymex_explicit_gauge} reads the compression pairs of a
+slot off that matrix, Theorem~\ref{thm:asymex_one_slot} treats the
+recurring one-slot shape, and Theorem~\ref{thm:asymex_int_certificates}
+turns integer identities into certificates of normality and of vanishing
+sitewise intertwiners.
+
+\begin{definition}[Explicit gauge and entrywise integer coercion]
+    \label{def:asymex_explicit_gauge}
+    \lean{MPSTensor.complexOfInt, MPSTensor.mulIntTensor, MPSTensor.gaugeOfMatrix}
+    \leanok
+    \uses{def:mps_tensor, def:mpdo_operator_product}
+    Let $\tau$ be a bijection between the graded coordinate space of a slot
+    family and the bond index set $\{0,\ldots,D_B-1\}$, and let $G$ and
+    $G^{-1}$ be mutually inverse matrices in $\MN{D_B}$. The \emph{explicit
+        gauge} attached to $(\tau,G)$ is the invertible map sending a bond
+    vector $v$ to the graded vector $b\mapsto(Gv)(\tau b)$. For an integer
+    matrix $X$, its \emph{entrywise coercion} is the complex matrix with the
+    same entries; for integer matrix product operator tensors $M$ and $N$,
+    their integer bond-space product is
+    $(M\mathbin{\cdot}N)^{ik}=\sum_jM^{ij}\otimes N^{jk}$.
+\end{definition}
+
+\begin{theorem}[Conjugation, coercion and the compression pairs of a slot]
+    \label{thm:asymex_explicit_gauge}
+    % Principal declaration: MPSTensor.conjMatrix_gaugeOfMatrix.
+    \lean{MPSTensor.conjMatrix_gaugeOfMatrix, MPSTensor.complexOfInt_mul,
+        MPSTensor.mulTensor_smul_complexOfRing,
+        MPSTensor.MultiBlockCompression.left_gaugeOfMatrix,
+        MPSTensor.MultiBlockCompression.right_gaugeOfMatrix}
+    \leanok
+    \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
+    Conjugation by the explicit gauge attached to $(\tau,G)$ sends a bond
+    matrix $A$ to the matrix $GAG^{-1}$ relabelled along $\tau$. Entrywise
+    coercion is multiplicative, and for integer tensors $M, N$ and $c \in \C$,
+    \begin{align}
+        (cM) \mathbin{\cdot} (cN) = c^2 (M \mathbin{\cdot} N). \notag
+    \end{align}
+    If a compression datum uses the explicit gauge $(\tau,G)$, then the
+    compression maps for slot $s$ are given in coordinates by
+    $W_s = \pi_s G$ and $V_s = G^{-1} \iota_s$, where $\pi_s$ selects the rows
+    and $\iota_s$ embeds the columns belonging to slot $s$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The matrix of the explicit gauge is $G$ relabelled along $\tau$ in its
+    rows, and the matrix of its inverse is $G^{-1}$ relabelled along $\tau$
+    in its columns, so conjugation is the stated matrix conjugation followed
+    by the relabelling. Multiplicativity of the coercion is the fact that a
+    sum of products of integers is the same computed in $\Z$ or in $\C$, and
+    the statement about the bond-space product follows by expanding both
+    sides entrywise. The two compression maps are the composites of the
+    coordinate embedding and projection of the slot with the gauge and its
+    inverse; evaluating the matrix products at a single graded coordinate
+    leaves one row of $G$ and one column of $G^{-1}$.
+\end{proof}
+
+\begin{definition}[One-slot compression data]%
+    \label{def:asymex_one_slot}
+    \lean{MPSTensor.stackedInt, MPSTensor.oneSlot, MPSTensor.oneSlotMem,
+        MPSTensor.MultiBlockCompression.ofConjMatrix,
+        MPSTensor.MultiBlockCompression.ofConjInt,
+        MPSTensor.MultiBlockCompression.ofEq,
+        MPSTensor.MultiBlockCompression.ofScalarFlagFour}
+    \leanok
+    \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
+    For a stacked product of two integer matrix product operator tensors,
+    read over the pair alphabet, the letter at $a=do+i$ is
+    $(M\mathbin{\cdot}N)^{oi}$. A \emph{one-slot compression datum} for a
+    tensor $B$ onto a single target $C$ is the data of
+    Theorem~\ref{thm:asym_multiblock} for the one-element slot set: an
+    explicit gauge $(\tau,G)$ conjugating $B$ into a matrix that is block
+    upper triangular for a flag with $C$ at one diagonal position. Two
+    shapes recur in the examples below: a conjugation $GB^iG^{-1}=C^i$ for
+    an invertible $G$ gives such a datum with no zero slots ($z=0$); and,
+    for a four-dimensional $B$ and a one-dimensional $C$, an integer gauge
+    sending every letter to a matrix with $C$ at the third diagonal
+    position of a four-step flag and zero at the other three gives such a
+    datum with three zero slots ($z=3$).
+\end{definition}
+
+\begin{theorem}[The remainder of a conjugate datum vanishes; word traces
+        of a one-slot datum]%
+    \label{thm:asymex_one_slot}
+    \lean{MPSTensor.MultiBlockCompression.remainder_ofConjMatrix,
+        MPSTensor.MultiBlockCompression.remainder_ofEq,
+        MPSTensor.MultiBlockCompression.remainder_ofConjInt,
+        MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot,
+        MPSTensor.MultiBlockCompression.trace_evalWord_oneSlot_smul}
+    \leanok
+    \uses{def:asymex_one_slot}
+    The remainder of a conjugate one-slot datum vanishes identically: the
+    compression is an exact change of coordinates. For every one-slot
+    datum with target tensor $C$ and nonempty word $w \ne \emptyset$,
+    \begin{align}
+        \tr(B^w) = \tr(C^w), \notag
+    \end{align}
+    or $\tr(B^w) = c^{|w|}\tr(C^w)$ when the target is carried with scalar
+    weight $c$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{prop:asym_compression_trace}
+    Conjugation preserves the trace, which decomposes as the sum of traces of
+    the diagonal blocks. For the upper block-triangular gauge, the diagonal
+    blocks of a word product are the word products of the individual diagonal
+    blocks; the zero-slot diagonal block is strictly upper triangular (or zero)
+    and therefore has vanishing trace on any nonempty word $w \ne \emptyset$,
+    leaving only the contribution of the target block $C$. The scalar factor
+    carries across words by the length $|w|$.
+\end{proof}
+
+\begin{theorem}[Integer certificates for normality and for vanishing
+        sitewise intertwiners]%
+    \label{thm:asymex_int_certificates}
+    \lean{MPSTensor.isNBlkInjective_two_of_int,
+        MPSTensor.right_intertwiner_eq_zero_of_int,
+        MPSTensor.left_intertwiner_eq_zero_of_int}
+    \leanok
+    \uses{def:normal}
+    Let $A \in (\MN{D})^d$ have integer entries $A_i \in \mathrm{M}_D(\Z)$.
+    If there exist index pairs $(a_k, b_k)$, integer coefficients
+    $T_{xyk} \in \Z$, and a nonzero integer $m \ne 0$ such that for all matrix
+    units $E_{xy}$,
+    \begin{align}
+        \sum_k T_{xyk} A_{a_k} A_{b_k} = m E_{xy}, \notag
+    \end{align}
+    then $\spn_\C\{A_i A_j : i,j \in \{0,\dots,d-1\}\} = \MN{D}$.
+    Similarly, let $B \in (\mathrm{M}_D(\Z))^d$ and $c \in (\mathrm{M}_1(\Z))^d$.
+    If a selection of rows from the matrices $B_i - c_i \Id_D$ forms an
+    integer matrix $K \in \mathrm{M}_D(\Z)$ admitting an integer left inverse
+    $K' K = m \Id_D$ with $m \ne 0$, then every $v \in \C^D$ satisfying
+    $B_i v = c_i v$ for all $i$ satisfies $v = 0$.
+    Likewise, if a selection of columns from $B_i - c_i \Id_D$ admits an
+    integer left inverse up to $m \ne 0$, then every $u \in \C^D$ with
+    $u B_i = c_i u$ satisfies $u = 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Dividing the linear combination by $m \ne 0$ exhibits each matrix unit
+    $E_{xy}$ in the span of length-two words of $A$, showing they span
+    $\MN{D}$. For the sitewise intertwiner, $B_i v = c_i v$ implies $K v = 0$,
+    whence $m v = K' K v = 0$, so $v = 0$ since $m \ne 0$ in $\C$. The column
+    argument for $u$ is identical.
+\end{proof}
+
+\section{Adapted bases and scaled matrix units}%
+\label{sec:asymex_rfp_basis}
+
+This section supplies two tools. Theorem~\ref{thm:asymex_normal_units}
+certifies normality of a tensor whose letters contain a scaled copy of
+every matrix unit; it is invoked in the CZX and Ising sections of
+Chapter~\ref{ch:asymmetric_examples} and in the fixed-point section
+there. Theorem~\ref{thm:asymex_stacked_pair} converts an integer matrix
+identity, written in an adapted basis of the inner bond, into the weighted
+direct-sum hypothesis of Proposition~\ref{prop:asym_projector_weighted_sum};
+it is the form in which the vertical components of the renormalization
+fixed points of Chapter~\ref{ch:asymmetric_examples} enter the compression
+theorem.
+
+The stacked bond spaces of those vertical components are tensor squares.
+Reordering the four bond bits separates the two middle bits, which form
+the inner bond, from the two outer bits, and the intermediate
+physical-index sum acts on the inner bond. The Bell vectors together with
+the two remaining coordinate vectors form the adapted basis used
+throughout. Each weighted copy of a target contributes its weight raised
+to the number of sites $N$, and weights are summed when they multiply the
+same target; this is the power-sum mechanism of
+Theorem~\ref{thm:asym_unblocked_coefficients}. The results below
+establish tensor decompositions and periodic trace identities, not a
+classification of length-dependent renormalization fixed points.
+
+\begin{definition}[The idempotents of an adapted basis]
+    \label{def:asymex_basis_proj}
+    \lean{MPSTensor.basisProj, P6Compression.pairReorder, P6Compression.pairU,
+        P6Compression.pairUinv, P6Compression.pairProjInt,
+        P6Compression.pairBlockInt}
+    \leanok
+    \uses{prop:asym_projector_weighted_sum}
+    For mutually inverse matrices $U$ and $U^{-1}$, define
+    $\Pi_j=U^{-1}E_{jj}U$, the product of the $j$-th column of $U^{-1}$
+    with the $j$-th row of $U$.
+    Reorder a stacked bond quadruple into its two middle bits and its
+    two outer bits. On the inner bond choose the adapted basis with
+    first two vectors $(1,0,0,\pm1)$ and last two vectors the remaining
+    coordinate vectors. The Bell idempotents carry the weighted targets.
+    Their tensor products with target matrices are expressed in the
+    original stacked coordinates by undoing the reordering.
+\end{definition}
+
+\begin{theorem}[The idempotents of an adapted basis are mutually orthogonal]
+    \label{thm:asymex_basis_proj}
+    \lean{MPSTensor.basisProj_mul_basisProj_self,
+        MPSTensor.basisProj_mul_basisProj_of_ne, MPSTensor.mul_basisProj_mul}
+    \leanok
+    \uses{def:asymex_basis_proj}
+    The idempotents satisfy $\Pi_j^2=\Pi_j$,
+    $\Pi_j\Pi_k=0$ for $j\ne k$, and $U\Pi_jU^{-1}=E_{jj}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Conjugation by $U$ returns $E_{jj}$, and products reduce to
+    $E_{jj}E_{kk}=\delta_{jk}E_{jj}$.
+\end{proof}
+
+\begin{theorem}[From an integer matrix identity to a weighted direct sum]
+    \label{thm:asymex_stacked_pair}
+    \lean{P6Compression.stackedPair_letter_identity}
+    \leanok
+    \uses{def:asymex_basis_proj, prop:asym_projector_weighted_sum}
+    Suppose $B=c_B\widehat B$ and $C_s=c_C\widehat C_s$, where the
+    tensors with hats have integer entries and $s\in\{0,1\}$.
+    Suppose a nonzero integer $n$ and integers $k_s$ satisfy, for each
+    $s$ and each physical index $a$,
+    \begin{align}
+        n\,\mu_s\,\frac{c_C}{2} & =k_s\,c_B,
+        \label{eq:asymex_stacked_pair_scalar}
+    \end{align}
+    \begin{align}
+        n\,\widehat B^a & =\sum_sk_s\,(\widehat\Pi_s\otimes\widehat C_s^a),
+        \label{eq:asymex_stacked_pair_letters}
+    \end{align}
+    where $\widehat\Pi_s=2\Pi_s$ and the right-hand side
+    of~(\ref{eq:asymex_stacked_pair_letters}) is in stacked bond
+    coordinates. Then $B^a=\sum_s\mu_s(\Pi_s\otimes C_s^a)$ in those
+    coordinates, the hypothesis of
+    Proposition~\ref{prop:asym_projector_weighted_sum}.
+    Here $\mu_s$ denotes a scalar fusion weight, not a vertical
+    multiplicity matrix.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_basis_proj}
+    Using the idempotents of Theorem~\ref{thm:asymex_basis_proj}, the
+    $s$-th summand is
+    $\mu_sc_C(\widehat\Pi_s\otimes\widehat C_s^a)/2$.
+    Multiplication by $n$ and
+    substitution of~(\ref{eq:asymex_stacked_pair_scalar})
+    and~(\ref{eq:asymex_stacked_pair_letters}) give $nB^a$.
+    Cancel the nonzero scalar $n$.
+\end{proof}
+
+\begin{theorem}[Normality from scaled matrix units]
+    \label{thm:asymex_normal_units}
+    \lean{P6Compression.isNormal_of_single_eq_smul}
+    \leanok
+    \uses{def:normal}
+    Let a tensor be one nonzero scalar times an integer tensor. Suppose
+    that for every bond position $(x,y)$ a letter of the integer tensor
+    is a nonzero integer multiple of $E_{xy}$. Then its one-site
+    matrices span the full bond matrix algebra, so it is normal at
+    blocking length one in the sense of Definition~\ref{def:normal}.
+    This establishes injectivity, not transfer spectral-radius
+    normalization; a normal tensor (NT) in the RFP canonical form
+    additionally requires that normalization.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Dividing each designated letter by its nonzero factor exhibits every
+    matrix unit in the one-site span.
+\end{proof}
+
+\section{A sign-weighted pair with a non-split extension}%
+\label{sec:asymex_parity}
+
+The tensors of this section are a construction of this development with
+no literature source: a bond-dimension-two tensor $A$, the sign-weighted
+pair of targets $(A,-A)$, and a bond-dimension-five source that carries
+both targets together with a one-dimensional zero slot, in coordinates
+where no direct-sum structure is visible. The construction tests three
+features of Theorem~\ref{thm:asym_multiblock} on explicit data: the
+remainder bound is attained
+(Theorem~\ref{thm:asymex_parity_compression}), the periodic trace
+identity acts as a length filter
+(Theorem~\ref{thm:asymex_parity_trace}), and a word-level compression
+need not come from sitewise intertwiners
+(Theorem~\ref{thm:asymex_parity_no_intertwiner}).
+
+Consider a two-state physical site with basis $\{\ket{0},\ket{1}\}$.
+Define the bond-two MPS tensor by
+\begin{align}
+    A^0=P=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+    \qquad
+    A^1=X=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
+    \label{eq:asymex_parity_letters}
+\end{align}
+For $N\geq1$, write its periodic amplitudes as
+\begin{align}
+    a_N(x)=\tr(A^{x_0}\cdots A^{x_{N-1}})
+    \qquad (x\in\{0,1\}^N).
+    \label{eq:asymex_parity_amplitudes}
+\end{align}
+The associated unnormalized state is
+\begin{align}
+    \ket{V^{(N)}(A)}
+    =\sum_{x\in\{0,1\}^N}a_N(x)\ket{x},
+    \label{eq:asymex_parity_state}
+\end{align}
+where $\ket{x}=\ket{x_0}\otimes\cdots\otimes\ket{x_{N-1}}$.
+The state can be read off directly from its two letters: the matrix $P$
+selects virtual coordinate $0$, while $X$ exchanges the two virtual
+coordinates.
+
+Multiplying both letters of $A$ by $-1$ gives one minus sign per
+site, whatever the physical labels. For a word
+$w=(i_1,\ldots,i_{|w|})$, write
+$A^w=A^{i_1}\cdots A^{i_{|w|}}$, with the identity matrix as the
+empty product. Then
+\begin{align}
+    (-A)^w=(-1)^{|w|}A^w.
+    \label{eq:asymex_parity_weight}
+\end{align}
+The two weights $+1$ and $-1$ therefore produce a factor
+$1+(-1)^N$ in the sum of their periodic amplitudes. The following
+five-dimensional tensor realizes that sum without being a direct
+sum in its displayed coordinates.
+
+\begin{definition}[The graded pair and the five-dimensional source]
+    \label{def:asymex_parity}
+    \lean{ParityGraded.parA, ParityGraded.parTargets, ParityGraded.parB}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A$ be the tensor in~(\ref{eq:asymex_parity_letters}).
+    The two target tensors are $C_+=A$ and $C_-=-A$.
+    The source is the bond-dimension-five tensor with letters
+    \begin{align}
+        B^0
+         & =\begin{pmatrix}
+                -1 & 1 & -1 & 1  & 3 \\
+                2  & 2 & -2 & -1 & 0 \\
+                1  & 2 & -2 & 0  & 2 \\
+                1  & 3 & -3 & -1 & 2 \\
+                -1 & 0 & 0  & 1  & 2
+            \end{pmatrix}
+        \label{eq:asymex_parity_source_zero}
+    \end{align}
+    and
+    \begin{align}
+        B^1
+         & =\begin{pmatrix}
+                3  & 1 & 0  & -2 & -3 \\
+                -3 & 1 & -1 & 2  & 5  \\
+                -1 & 2 & -1 & 1  & 3  \\
+                0  & 1 & -1 & -1 & 1  \\
+                2  & 1 & 0  & -1 & -2
+            \end{pmatrix}.
+        \label{eq:asymex_parity_source_one}
+    \end{align}
+\end{definition}
+
+Neither source letter has a zero row or a zero column. Nevertheless,
+a simultaneous change of bond coordinates reveals diagonal blocks
+$A$, $-A$, and a one-dimensional zero block. The latter contributes
+nothing to positive-length traces.
+
+\begin{center}
+    % Formula: the periodic trace tr(B^w)=(1+(-1)^{|w|})tr(A^w) of
+    % Theorem~\ref{thm:asymex_parity_trace}; the source is not presented
+    % as a literal stack of $A$ and $-A$, so the ring carries $B$ with
+    % its coefficient, not a two-row stack.
+    % Source: Definition~\ref{def:asymex_parity}.
+    % Ink-to-index map: each node is the bond-dimension-five source
+    % tensor $B$; the upper legs carry the letters of the word.
+    % Contraction set: the horizontal virtual legs, closed around the
+    % ring by the trace; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    % The physical legs remain open for the state; fixing their labels
+    % gives the scalar coefficient tr(B^w). No virtual leg remains open.
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$i_1$}]{B} &
+        \tn[label pos=135]{B} & \tn[skin=dots]{} &
+        \tn[label pos=135, ports={90:physical:$i_N$}]{B}
+    \end{tenkz}
+    \qquad $\tr(B^w)$, computed in
+    Theorem~\ref{thm:asymex_parity_trace}
+\end{center}
+
+\begin{theorem}[Normality of the graded block]
+    \label{thm:asymex_parity_normal}
+    \lean{ParityGraded.parA_isNormal}
+    \leanok
+    \uses{def:asymex_parity, def:normal}
+    The block $A$ is normal: its length-two words span $\MN{2}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $E_{ab}$ denote the matrix unit with its sole nonzero entry
+    equal to one in row $a$, column $b$. Direct multiplication gives
+    $E_{00}=A^0A^0$, $E_{01}=A^0A^1$, and $E_{10}=A^1A^0$.
+    The remaining unit is $E_{11}=A^1A^1-A^0A^0$, so all four
+    matrix units lie in the length-two word span.
+\end{proof}
+
+\subsection{Occupation parity and periodic amplitudes}
+
+Call $n_1(x)=\sum_{v=0}^{N-1}x_v$ the occupation of the configuration $x$.
+Let $z=\diag(1,-1)$ act on the physical site, and let
+$Z=\diag(1,-1)$ act on the bond space. Although their matrices are
+equal, these operators act on different spaces. The physical parity
+operator has basis action
+\begin{align}
+    z^{\otimes N}\ket{x}=(-1)^{n_1(x)}\ket{x}.
+    \label{eq:asymex_parity_basis}
+\end{align}
+
+\begin{lemma}[Occupation parity]
+    \label{lem:asymex_parity_occupation}
+    For each physical label $i\in\{0,1\}$, the tensor satisfies
+    \begin{align}
+        ZA^iZ=(-1)^iA^i.
+        \label{eq:asymex_parity_covariance}
+    \end{align}
+    Consequently, $a_N(x)=0$ whenever $n_1(x)$ is odd, and
+    \begin{align}
+        z^{\otimes N}\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}.
+        \label{eq:asymex_parity_invariance}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    Direct multiplication gives $ZPZ=P$ and $ZXZ=-X$.
+    Since $Z^2=\Id_2$, multiplying~(\ref{eq:asymex_parity_covariance})
+    along the word yields
+    \begin{align}
+        Z(A^{x_0}\cdots A^{x_{N-1}})Z
+        =(-1)^{n_1(x)}A^{x_0}\cdots A^{x_{N-1}}.
+        \notag
+    \end{align}
+    Taking the trace and using cyclicity gives
+    $a_N(x)=(-1)^{n_1(x)}a_N(x)$. Thus odd occupation forces
+    $a_N(x)=0$. Applying~(\ref{eq:asymex_parity_basis}) to the
+    expansion~(\ref{eq:asymex_parity_state}) proves
+    (\ref{eq:asymex_parity_invariance}).
+\end{proof}
+
+The support of the state is further constrained by the relative positions of the
+zeros.
+
+\begin{lemma}[Amplitudes from cyclic runs]
+    \label{lem:asymex_parity_runs}
+    Suppose $x$ contains $m\geq1$ zeros. Read the sites cyclically, and
+    let $r_1,\ldots,r_m$ be the numbers of ones between successive
+    zeros. Define $b(r)=1$ for even $r$ and $b(r)=0$ for odd $r$.
+    Then
+    \begin{align}
+        a_N(x)=\prod_{j=1}^{m}b(r_j).
+        \label{eq:asymex_parity_runs}
+    \end{align}
+    For the word with no zeros,
+    \begin{align}
+        a_N(1,\ldots,1)=1+(-1)^N.
+        \label{eq:asymex_parity_all_one}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    The identities $X^2=\Id_2$ and $PXP=0$ imply
+    $PX^rP=b(r)P$ and $\tr(PX^r)=b(r)$. Rotate the word to
+    start at a zero, using cyclicity of the trace. Successive
+    contractions give
+    \begin{align}
+        a_N(x)
+         & =\tr(PX^{r_1}PX^{r_2}\cdots PX^{r_m}) \notag       \\
+         & =\left(\prod_{j=1}^{m-1}b(r_j)\right)\tr(PX^{r_m})
+        =\prod_{j=1}^{m}b(r_j).
+        \notag
+    \end{align}
+    For the all-one word, $X^N=\Id_2$ when $N$ is even and
+    $X^N=X$ when $N$ is odd. Their traces are $2$ and $0$,
+    respectively, which proves~(\ref{eq:asymex_parity_all_one}).
+\end{proof}
+
+Thus a word containing a zero has amplitude one exactly when every
+cyclic run of ones has even length. For example, $0101$ has even
+occupation but zero amplitude, since both runs have length one.
+The all-zero word has amplitude one at every positive length, so
+$\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
+
+\subsection{Asymmetric compression and length cancellation}
+
+\begin{theorem}[Compression of the graded pair]
+    \label{thm:asymex_parity_compression}
+    % Principal declaration: ParityGraded.parityGraded_isReduction.
+    \lean{ParityGraded.parityGraded_compression,
+        ParityGraded.parityGraded_isReduction,
+        ParityGraded.parityGraded_left_mul_right_of_ne,
+        ParityGraded.parityGraded_dim_eq,
+        ParityGraded.parityGraded_evalWord_remainder_eq_zero,
+        ParityGraded.parityGraded_remainder_sq_ne_zero}
+    \leanok
+    \uses{def:asymex_parity, thm:asym_multiblock}
+    The source of Definition~\ref{def:asymex_parity} carries the block
+    triangular form of Theorem~\ref{thm:asym_multiblock} for
+    $S=\{+,-\}$, with targets $C_+=A$, $C_-=-A$, one zero slot
+    $z=1$, and dimension count $5=2+2+1$.
+    There are compression maps $V_s\in\C^{5\times2}$ and
+    $W_s\in\C^{2\times5}$ such that, for every $s,t\in S$,
+    \begin{align}
+        W_sV_t=\delta_{st}\Id_2.
+        \label{eq:asymex_parity_biorthogonal}
+    \end{align}
+    For every word $w$ and each $s\in S$,
+    \begin{align}
+        W_sB^wV_s=C_s^w.
+        \label{eq:asymex_parity_reduction}
+    \end{align}
+    Define the remainder letters by
+    \begin{align}
+        R^i=B^i-V_+A^iW_+-V_-(-A^i)W_-.
+        \label{eq:asymex_parity_remainder}
+    \end{align}
+    Every product $R^w$ with $|w|\geq3$ vanishes, whereas
+    $R^0R^0\neq0$. Thus the bound $|S|+z=3$ in clause (vi) of
+    Theorem~\ref{thm:asym_multiblock} is attained.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_explicit_gauge}
+    Use the integer change of coordinates
+    \begin{align}
+        G=\begin{pmatrix}
+              0  & -1 & 1  & 0  & 0  \\
+              1  & 1  & 0  & -1 & -1 \\
+              -1 & 0  & 0  & 1  & 1  \\
+              1  & 0  & 0  & 0  & -1 \\
+              0  & 1  & -1 & 0  & 1
+          \end{pmatrix}.
+        \label{eq:asymex_parity_gauge}
+    \end{align}
+    Its inverse is
+    \begin{align}
+        G^{-1}=\begin{pmatrix}
+                   1 & 0 & 0 & 1 & 1 \\
+                   0 & 1 & 1 & 0 & 0 \\
+                   1 & 1 & 1 & 0 & 0 \\
+                   0 & 0 & 1 & 1 & 0 \\
+                   1 & 0 & 0 & 0 & 1
+               \end{pmatrix}.
+        \label{eq:asymex_parity_gauge_inv}
+    \end{align}
+    Direct multiplication verifies both inverse identities and gives
+    \begin{align}
+        GB^0G^{-1}
+        =\begin{pmatrix}
+             1 & 0 & 1  & 0 & 1 \\
+             0 & 0 & 0  & 1 & 0 \\
+             0 & 0 & -1 & 0 & 2 \\
+             0 & 0 & 0  & 0 & 1 \\
+             0 & 0 & 0  & 0 & 0
+         \end{pmatrix}.
+        \label{eq:asymex_parity_conj_zero}
+    \end{align}
+    For the second letter,
+    \begin{align}
+        GB^1G^{-1}
+        =\begin{pmatrix}
+             0 & 1 & 0  & 1  & 0 \\
+             1 & 0 & 2  & 0  & 1 \\
+             0 & 0 & 0  & -1 & 1 \\
+             0 & 0 & -1 & 0  & 0 \\
+             0 & 0 & 0  & 0  & 0
+         \end{pmatrix}.
+        \label{eq:asymex_parity_conj_one}
+    \end{align}
+    With block sizes $(2,2,1)$, the matrices in
+    (\ref{eq:asymex_parity_conj_zero}) and
+    (\ref{eq:asymex_parity_conj_one}) are block upper triangular,
+    with diagonal blocks $A^i$, $-A^i$, and $0$.
+    As in Theorem~\ref{thm:asymex_explicit_gauge}, take $W_+$ and
+    $W_-$ to be rows $(0,1)$ and $(2,3)$ of $G$, respectively,
+    and $V_+$ and $V_-$ to be the corresponding columns of $G^{-1}$.
+    The inverse identities give~(\ref{eq:asymex_parity_biorthogonal}).
+    Diagonal blocks multiply under word evaluation, giving
+    (\ref{eq:asymex_parity_reduction}).
+
+    Subtracting the two diagonal target blocks leaves a strictly
+    upper triangular three-block remainder in these coordinates.
+    The compression remainder bound therefore gives $R^w=0$
+    for $|w|\geq3$. To check sharpness in the original coordinates,
+    substitution into~(\ref{eq:asymex_parity_remainder}) gives
+    \begin{align}
+        R^0=\begin{pmatrix}
+                -1 & 2 & -2 & 1 & 3 \\
+                1  & 2 & -2 & 0 & 1 \\
+                0  & 3 & -3 & 1 & 3 \\
+                0  & 3 & -3 & 0 & 3 \\
+                -1 & 1 & -1 & 1 & 2
+            \end{pmatrix}.
+        \notag
+    \end{align}
+    Its square has $(0,1)$ entry $2$, so $R^0R^0\neq0$.
+\end{proof}
+
+\begin{theorem}[Periodic trace of the sign-weighted pair]
+    \label{thm:asymex_parity_trace}
+    \lean{ParityGraded.parityGraded_trace_evalWord}
+    \leanok
+    \uses{def:asymex_parity}
+    For every nonempty word $w$,
+    \begin{align}
+        \tr(B^w)=(1+(-1)^{|w|})\tr(A^w).
+        \label{eq:asymex_parity_trace}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_parity_compression, prop:asym_compression_trace}
+    Proposition~\ref{prop:asym_compression_trace} applied to the datum of
+    Theorem~\ref{thm:asymex_parity_compression} gives
+    $\tr(B^w)=\tr(A^w)+\tr((-A)^w)$. By
+    (\ref{eq:asymex_parity_weight}), the second summand is
+    $(-1)^{|w|}\tr(A^w)$, proving~(\ref{eq:asymex_parity_trace}).
+\end{proof}
+
+Define $\ket{V^{(N)}(B)}$ by the same periodic contraction as
+in~(\ref{eq:asymex_parity_state}), with $A$ replaced by $B$.
+Applying~(\ref{eq:asymex_parity_trace}) to each basis coefficient
+gives, for $N\geq1$,
+\begin{align}
+    \ket{V^{(N)}(B)}
+    =(1+(-1)^N)\ket{V^{(N)}(A)}.
+    \label{eq:asymex_parity_length}
+\end{align}
+The source acts as a length filter: at odd length the periodic vector
+vanishes, while at even length every amplitude of $A$ is doubled.
+For instance, at odd length the all-zero amplitude of $A$ is one but its
+amplitude in $B$ vanishes; at even length the run restrictions of
+Lemma~\ref{lem:asymex_parity_runs} apply with doubled amplitudes.
+
+The positive-length hypothesis is necessary. The empty-word
+traces are $\tr(\Id_5)=5$ and $\tr(\Id_2)=2$, whereas substituting
+$|w|=0$ into~(\ref{eq:asymex_parity_trace}) would give $5=4$.
+The missing contribution is the empty trace of the
+one-dimensional zero block, which is one; its traces vanish only
+at positive length.
+
+\begin{theorem}[The weight $-1$ block has no sitewise intertwiner]
+    \label{thm:asymex_parity_no_intertwiner}
+    \lean{ParityGraded.parNeg_right_intertwiner_eq_zero,
+        ParityGraded.parNeg_left_intertwiner_eq_zero}
+    \leanok
+    \uses{def:asymex_parity}
+    If $V\in\C^{5\times2}$ satisfies $B^iV=V(-A^i)$ for both letters, then
+    $V=0$; if $W\in\C^{2\times5}$ satisfies $WB^i=(-A^i)W$ for both
+    letters, then $W=0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each condition is a homogeneous linear system in ten unknown
+    entries. For the right intertwiner, select entries
+    $(3,0)$, $(4,0)$, $(2,1)$, $(3,1)$, and $(4,1)$ of
+    $B^0V=V(-A^0)$, and all five entries of column $0$ of
+    $B^1V=V(-A^1)$. Rational linear combinations of these ten
+    equations force all entries of column $0$ of $V$ to vanish.
+    The selected equations for letter $1$ then force column $1$
+    to vanish.
+
+    For the left intertwiner, select entries $(0,4)$, $(1,0)$,
+    $(1,2)$, $(1,3)$, and $(1,4)$ of $WB^0=(-A^0)W$, and all
+    five entries of row $0$ of $WB^1=(-A^1)W$. Rational linear
+    combinations force row $0$ of $W$ to vanish, after which the
+    letter-$1$ equations force row $1$ to vanish.
+\end{proof}
+
+The nonzero maps $W_-$ and $V_-$ in
+(\ref{eq:asymex_parity_reduction}) therefore give a word-level
+compression onto $-A$ without either map being a sitewise
+intertwiner. The trace identity and the sharp remainder bound
+hold despite this obstruction.

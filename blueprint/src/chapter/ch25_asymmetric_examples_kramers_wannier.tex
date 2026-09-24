@@ -1,5 +1,25 @@
-\section{Kramers--Wannier duality squared}%
+\section{Kramers--Wannier duality}%
 \label{sec:asymex_kw}
+
+Kramers--Wannier duality originates in the two-dimensional classical
+Ising model, where it relates the high- and low-temperature
+regimes~\cite{KramersWannier1941}; in the quantum transverse-field
+Ising chain it exchanges the bond and field terms of the Hamiltonian.
+On a periodic chain the duality is a noninvertible operator, rather than
+a unitary change of variables on the full Hilbert space. Aasen, Mong and
+Fendley realize it as a lattice defect~\cite{Aasen2016Topological};
+Seiberg and Shao place it in a noninvertible symmetry algebra together
+with translation and the spin flip~\cite{Seiberg2024Majorana}; Lootens,
+Delcamp, Ortiz and Verstraete write it as a matrix product operator
+intertwiner between the two Hamiltonians~\cite{Lootens2023Dualities}.
+The review discusses this operator among its matrix product operator
+symmetries~\cite[Section~III.A.6]{Cirac2021Matrix}. Here the duality is
+built from an explicit two-by-two tensor whose periodic operator is
+unnormalized; it reproduces the primal-to-dual kernel
+of~\cite{Aasen2016Topological} up to the factor $2^{N/2}$. Its square is
+computed twice, as an operator identity and as an asymmetric compression
+of the stacked tensor, and its action on two ground states is treated in
+the same way.
 
 Consider $N\geq1$ qubits on a periodic chain, with sites
 $I_N=\{0,\ldots,N-1\}$ and all site indices understood modulo $N$.
@@ -34,14 +54,9 @@ For real couplings $J,h$, the periodic transverse-field Ising Hamiltonian is
 \end{align}
 The sum includes one bond per site. In particular, the bond at $N=1$
 is $Z_0^2=\Id$, and at $N=2$ the two bond terms both equal $Z_0Z_1$.
-Kramers--Wannier duality originates in the two-dimensional Ising
-model~\cite{KramersWannier1941}; in the quantum chain it exchanges
-these bond and field terms. On a
-periodic spin chain it is a noninvertible operator, rather than a
-unitary change of variables on the full Hilbert space
-\cite{Aasen2016Topological, Seiberg2024Majorana}. Its matrix product
-representation gives a concrete example of the noninvertible MPO
-symmetries discussed in Ref.~\cite{Cirac2021Matrix}.
+The duality exchanges the bond terms with the field terms.
+
+\subsection{The duality kernel and its square}
 
 \begin{definition}[The duality kernel and the two translation tensors]
     \label{def:asymex_kw}
@@ -68,6 +83,49 @@ symmetries discussed in Ref.~\cite{Cirac2021Matrix}.
     $B^{s's}=\sum_{m=0}^1W^{s'm}\otimes W^{ms}$, of bond dimension four.
     Its two target tensors are $2T$ and $2\eta T$.
 \end{definition}
+
+The translation tensor is the shift matrix product unitary
+of~\cite[Appendix~A, ``The shift MPU'']{Cirac2021Matrix}, taken with
+the opposite direction of translation, and the flipped translation
+tensor composes it with the global spin flip.
+
+\begin{center}
+    % Formula: B^{s's}=\sum_mW^{s'm}\otimes W^{ms}, the stacked product
+    % of Definition~\ref{def:asymex_kw}.
+    % Source: Definition~\ref{def:asymex_kw}.
+    % Ink-to-index map: both rows are the duality tensor $W$; the shared
+    % vertical pairleg at each site is the summed index $m$; the drawn
+    % upper-row label $r$ is the per-site component of the outgoing
+    % index $s'$.
+    % Contraction set: the vertical pairlegs (index $m$) at every site
+    % and the horizontal virtual bonds within each row; the physical
+    % legs $(r,s)$, the per-site components of $(s',s)$, remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$r_1$, 270:physical}]{W} &
+        \tn[skin=mpo, ports={90:physical:$r_2$, 270:physical}]{W} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$r_N$, 270:physical}]{W} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$s_1$}]{W} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$s_2$}]{W} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$s_N$}]{W}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$r_1$, 270:physical:$s_1$}]{B} &
+        \tn[skin=mpo, ports={90:physical:$r_2$, 270:physical:$s_2$}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$r_N$, 270:physical:$s_N$}]{B}
+    \end{tenkz}
+\end{center}
+
+The site labels in the diagrams run from $1$ to $N$, a cyclic relabeling
+of $I_N$.
+
+\subsubsection{Operator identities}
 
 Define the raw periodic operator $K_N$ by the ordinary virtual trace,
 without dividing by the bond dimension:
@@ -294,58 +352,6 @@ commute with $\eta$, and the two signs acquired by a bond term cancel.
 Thus $U_N$ implements a unitary equivalence between $H_N(J,h)$ and
 $H_N(h,J)$ on $\mathcal H_N^+$, but not on the full Hilbert space.
 
-The product state and the Greenberger--Horne--Zeilinger (GHZ) state
-give elementary finite-chain examples of the action. Use the
-unnormalized vectors
-\begin{align}
-    p_N & =(\ket{0}+\ket{1})^{\otimes N}=\sum_b\ket{b},
-    \notag                                              \\
-    g_N & =\ket{\mathbf0}+\ket{\mathbf1}.
-    \label{eq:asymex_kw_states}
-\end{align}
-For $h>0$, $p_N$ is proportional to the unique ground state of
-$H_N(0,h)$. For $J>0$ and $N\geq2$, the ground space of $H_N(J,0)$ is
-$\spn_{\C}\{\ket{\mathbf0},\ket{\mathbf1}\}$, and $g_N$ spans its
-spin-flip-even subspace. These facts follow respectively by minimizing
-each field term $-hX_j$ and each diagonal bond term $-JZ_jZ_{j+1}$.
-They do not require a thermodynamic limit.
-
-\begin{lemma}[Product-state and GHZ actions]
-    \label{lem:asymex_kw_states}
-    For every $N\geq1$,
-    \begin{align}
-        K_Np_N                              & =2^Ng_N,
-        \notag                                         \\
-        K_N\ket{\mathbf0}=K_N\ket{\mathbf1} & =p_N,
-        \notag                                         \\
-        K_Ng_N                              & =2p_N.
-        \label{eq:asymex_kw_state_actions}
-    \end{align}
-    Writing $\widehat p_N=2^{-N/2}p_N$ and
-    $\widehat g_N=2^{-1/2}g_N$, one has
-    $U_N\widehat p_N=\widehat g_N$ and
-    $U_N\widehat g_N=\widehat p_N$.
-\end{lemma}
-
-\begin{proof}
-    Reindexing the exponent and using~(\ref{eq:asymex_kw_character})
-    gives
-    \begin{align}
-        (K_Np_N)_a
-         & =\sum_b(-1)^{\sum_jb_j(a_j+a_{j-1})}
-        =2^N(\delta_{a,\mathbf0}+\delta_{a,\mathbf1}).
-        \notag
-    \end{align}
-    Both constant inputs have phase one against every output
-    configuration, so each maps to $p_N$. Finally,
-    $\|p_N\|^2=2^N$ and $\|g_N\|^2=2$ give the normalized statements.
-\end{proof}
-
-In particular, the antisymmetric combination
-$\ket{\mathbf0}-\ket{\mathbf1}$ is annihilated. These finite-chain
-identities alone assert neither spontaneous symmetry breaking nor a
-thermodynamic spectral-gap property.
-
 The square follows already from the adjoint and Gram identities.
 With $D=K_N$ as above,
 \begin{align}
@@ -408,9 +414,13 @@ the raw trace definition to $N=0$ would give $K_0=2$. Its square
 would be $4$, whereas the right-hand side of
 (\ref{eq:asymex_kw_fusion}) would be $2$.
 
-We now describe the virtual decomposition underlying the square.
-For the matrix-unit tensors of Definition~\ref{def:asymex_kw},
-expanding the cyclic trace gives
+\subsubsection{Asymmetric compression}
+
+The square identity~(\ref{eq:asymex_kw_fusion}) has a virtual
+decomposition, obtained by applying the multi-block compression
+theorem to the stacked tensor $B$ of Definition~\ref{def:asymex_kw}.
+For the matrix-unit tensors of that definition, expanding the cyclic
+trace gives
 \begin{align}
     \tr(T^{a_0b_0}\cdots T^{a_{N-1}b_{N-1}})
      & =\prod_j\delta_{a_j,b_{j+1}}=T_{ab},
@@ -422,41 +432,7 @@ expanding the cyclic trace gives
 The stacked tensor $B$ generates $K_N^2$: multiplication of periodic
 operators sums the intermediate physical index at every site.
 
-\begin{center}
-    % Formula: B^{s's}=\sum_mW^{s'm}\otimes W^{ms}, the stacked product
-    % of Definition~\ref{def:asymex_kw}.
-    % Source: Definition~\ref{def:asymex_kw}.
-    % Ink-to-index map: both rows are the duality tensor $W$; the shared
-    % vertical pairleg at each site is the summed index $m$; the drawn
-    % upper-row label $r$ is the per-site component of the outgoing
-    % index $s'$.
-    % Contraction set: the vertical pairlegs (index $m$) at every site
-    % and the horizontal virtual bonds within each row; the physical
-    % legs $(r,s)$, the per-site components of $(s',s)$, remain open.
-    % Boundary signature: (virtual-west=0 | virtual-east=0 |
-    % physical-up=3 | physical-down=3) on both sides.
-    \tenkzkernel
-    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$r_1$, 270:physical}]{W} &
-        \tn[skin=mpo, ports={90:physical:$r_2$, 270:physical}]{W} &
-        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$r_N$, 270:physical}]{W} \\
-        \tn[skin=mpo, ports={90:physical, 270:physical:$s_1$}]{W} &
-        \tn[skin=mpo, ports={90:physical, 270:physical:$s_2$}]{W} &
-        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical, 270:physical:$s_N$}]{W}
-    \end{tenkz}
-    \quad $=$ \quad
-    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$r_1$, 270:physical:$s_1$}]{B} &
-        \tn[skin=mpo, ports={90:physical:$r_2$, 270:physical:$s_2$}]{B} &
-        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$r_N$, 270:physical:$s_N$}]{B}
-    \end{tenkz}
-\end{center}
-
-The site labels in the diagrams run from $1$ to $N$, a cyclic relabeling
-of $I_N$. Normality of a tensor below means that words of some fixed
+Normality of a tensor below means that words of some fixed
 positive length span its virtual matrix algebra. This differs from
 operator normality in~(\ref{eq:asymex_kw_gram}) and does not impose a
 normalization on the spectral radius of a transfer map.
@@ -652,17 +628,70 @@ normalization on the spectral radius of a transfer map.
     \end{tenkz}
 \end{center}
 
-\section{Kramers--Wannier duality acting on ground states}%
+\subsection{Action on ground states}%
 \label{sec:asymex_kw_action}
+
+The product state and the Greenberger--Horne--Zeilinger (GHZ)
+state~\cite{GreenbergerHorneZeilinger1989,Greenberger1990Bell} give
+elementary finite-chain examples of the action. Use the unnormalized
+vectors
+\begin{align}
+    p_N & =(\ket{0}+\ket{1})^{\otimes N}=\sum_b\ket{b},
+    \notag                                              \\
+    g_N & =\ket{\mathbf0}+\ket{\mathbf1}.
+    \label{eq:asymex_kw_states}
+\end{align}
+For $h>0$, $p_N$ is proportional to the unique ground state of
+$H_N(0,h)$. For $J>0$ and $N\geq2$, the ground space of $H_N(J,0)$ is
+$\spn_{\C}\{\ket{\mathbf0},\ket{\mathbf1}\}$, and $g_N$ spans its
+spin-flip-even subspace. These facts follow respectively by minimizing
+each field term $-hX_j$ and each diagonal bond term $-JZ_jZ_{j+1}$.
+They do not require a thermodynamic limit.
+
+\begin{lemma}[Product-state and GHZ actions]
+    \label{lem:asymex_kw_states}
+    For every $N\geq1$,
+    \begin{align}
+        K_Np_N                              & =2^Ng_N,
+        \notag                                         \\
+        K_N\ket{\mathbf0}=K_N\ket{\mathbf1} & =p_N,
+        \notag                                         \\
+        K_Ng_N                              & =2p_N.
+        \label{eq:asymex_kw_state_actions}
+    \end{align}
+    Writing $\widehat p_N=2^{-N/2}p_N$ and
+    $\widehat g_N=2^{-1/2}g_N$, one has
+    $U_N\widehat p_N=\widehat g_N$ and
+    $U_N\widehat g_N=\widehat p_N$.
+\end{lemma}
+
+\begin{proof}
+    Reindexing the exponent and using~(\ref{eq:asymex_kw_character})
+    gives
+    \begin{align}
+        (K_Np_N)_a
+         & =\sum_b(-1)^{\sum_jb_j(a_j+a_{j-1})}
+        =2^N(\delta_{a,\mathbf0}+\delta_{a,\mathbf1}).
+        \notag
+    \end{align}
+    Both constant inputs have phase one against every output
+    configuration, so each maps to $p_N$. Finally,
+    $\|p_N\|^2=2^N$ and $\|g_N\|^2=2$ give the normalized statements.
+\end{proof}
+
+In particular, the antisymmetric combination
+$\ket{\mathbf0}-\ket{\mathbf1}$ is annihilated. These finite-chain
+identities alone assert neither spontaneous symmetry breaking nor a
+thermodynamic spectral-gap property.
 
 The finite-chain actions in~(\ref{eq:asymex_kw_state_actions}) have
 different virtual decompositions. The product-state action splits into
 the two GHZ sectors with a local weight $2$. The GHZ action has two
 unweighted copies of the same product-state target, together with a
-nonzero remainder. Product and GHZ tensors are elementary MPS examples
-in Ref.~\cite{Cirac2021Matrix}; here their explicit matrices allow the
-asymmetric compression and its sitewise intertwiners to be compared
-directly.
+nonzero remainder. The product-state and GHZ tensors are the elementary
+matrix product state examples of~\cite[Appendix~A]{Cirac2021Matrix};
+here their explicit matrices allow the asymmetric compression and its
+sitewise intertwiners to be compared directly.
 
 \begin{definition}[The two action tensors]
     \label{def:asymex_kw_action}
@@ -768,7 +797,7 @@ global scalar as in Lemma~\ref{lem:asymex_kw_states}; it does not
 change the weights of these fixed tensors.
 
 In the following two results, $B$ denotes the relevant action tensor,
-rather than the stacked square tensor of the preceding section.
+rather than the stacked square tensor of the preceding subsection.
 
 \begin{theorem}[The duality on the product state splits]
     \label{thm:asymex_kw_plus}
