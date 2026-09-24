@@ -9,7 +9,9 @@
 \label{sec:asymex_z2z2}
 
 The phase-then-shift tensors below realize group MPO symmetries
-in the setting of Refs.~\cite{GarreRubio2023MPOSym,GarreRubioSchuch2024DomainWall}.
+in the setting of Refs.~\cite{GarreRubio2023MPOSym,GarreRubioSchuch2024DomainWall},
+corresponding to anomalous $\Z_2\times\Z_2$ symmetry-protected topological
+phases~\cite{ChenGuWen2011}.
 
 
 On a periodic chain of $L>0$ two-qubit sites, define
@@ -173,7 +175,7 @@ There are no open boundary vectors.
     \begin{align}
         \rho^{(L)}(M_g)_{s,t}
          & =\delta_{s,g\oplus t}
-        (-1)^{g_1\sum_n t_{n,2}t_{n+1,2}}.
+            (-1)^{g_1\sum_n t_{n,2}t_{n+1,2}}.
         \label{eq:asymex_z2z2_kernel}
     \end{align}
     This is~(\ref{eq:asymex_z2z2_action}), including its self-loop
@@ -219,7 +221,9 @@ The basis action also determines multiplication. For $g,h\in G$,
 The last equality uses~(\ref{eq:asymex_z2z2_flip_phase}) and the
 fact that the parity of $g_1+h_1$ is the first bit of $gh$.
 Thus $\lambda(g,h)=(-1)^{g_1h_2}$ supplies a length-dependent
-scalar factor. The tensor proof of this law, through word traces,
+scalar factor, reflecting the non-trivial group 3-cocycle class of
+$\Z_2\times\Z_2$ in Dijkgraaf--Witten theory~\cite{ChenGuWen2011,GarreRubio2023MPOSym}.
+The tensor proof of this law, through word traces,
 is given in Theorem~\ref{thm:asymex_z2z2_fusion}.
 
 The results below determine the word spans of these tensors, their
