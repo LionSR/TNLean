@@ -119,6 +119,44 @@ physical change of representative, rather than assert literal equality.
 No classification signs, action data, defect tensors, or completion
 certificates are supplied here. This audit does not establish the two
 original CZX classification claims.
+\section{The 2020 review repeats the printed tensor}
+Appendix A, ``The CZX MPU'', of \cite{Cirac2021Matrix} writes the CZX
+matrix product unitary as
+$\lvert 0\rangle\langle 1\rvert\otimes|0)(+| +
+    \lvert 1\rangle\langle 0\rvert\otimes|1)(-|$, with the normalized
+vectors $(\pm|=2^{-1/2}\bigl((0|\pm(1|\bigr)$ on the virtual level. Its two
+nonzero matrices are $2^{-1/2}A^{01}$ and $2^{-1/2}A^{10}$, where
+\begin{align}
+    A^{01} & =\begin{pmatrix}1&1\\0&0\end{pmatrix}, &
+    A^{10} & =\begin{pmatrix}0&0\\1&-1\end{pmatrix}
+    \label{eq:czx_review_matrices}
+\end{align}
+are the matrices the review prints two displays later. The bra-ket display
+is exactly the tensor (\ref{eq:czx_printed_tensor}), and the printed
+matrices (\ref{eq:czx_review_matrices}) are its rescaling
+$A=\sqrt{2}P$.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2582--2601.
+    Witnesses: \leanid{CZXCompression.reviewCZXTensor} and
+    \leanid{CZXCompression.printed2017Tensor_eq_smul_reviewCZXTensor}.}
+
+Every later claim of the passage holds for the matrices
+(\ref{eq:czx_review_matrices}): the operator $O(A)$ is unitary and normal
+after blocking two sites, its square has the displayed bond-four matrices
+with integer entries, the invariant subspaces of the projectors $P$ and $Q$
+lead to the canonical form $B^{ij}=(-1)\delta_{ij}$, and
+$O(A)^2=(-1)^NI$.\footnote{Results:
+    \leanid{CZXCompression.reviewCZXTensor_isMPUPos},
+    \leanid{CZXCompression.reviewCZXMPS_isNormal},
+    \leanid{CZXCompression.reviewCZXSquare_apply_zero},
+    \leanid{CZXCompression.reviewQ_conj_reviewBlock} and
+    \leanid{CZXCompression.mpo_reviewCZXTensor_mul_self}.}
+For the normalized tensor of the bra-ket display the periodic operator is
+$2^{-N/2}O(A)$, so its square is $2^{-N}(-1)^NI$ and the global identity
+fails by the factor $2^{-N}$, as in (\ref{eq:czx_periodic_contraction}).
+The formalization takes the printed matrices (\ref{eq:czx_review_matrices})
+as the source tensor of the review and records the bra-ket display as this
+normalization slip.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
