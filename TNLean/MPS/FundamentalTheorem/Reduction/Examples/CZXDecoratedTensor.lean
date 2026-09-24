@@ -12,9 +12,9 @@ import TNLean.MPS.MPDO.CZXTensor
 **Source.** Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section III.D, "The simplest example",
 `Papers/2405.00439/MPU-DW.tex` lines 1128–1180: the CZX symmetry
 `U_{CZX} = ∏_i Z_i CZ_{i,i+1} ∏_i X_i` of Chen, Liu and Wen (arXiv:1106.4752), written with
-delta tensors and the unnormalized Hadamard matrix `Ĥ = [[1,1],[1,-1]]` as the bond-two tensor
+delta tensors and the unnormalized Hadamard matrix `H = [[1,1],[1,-1]]` as the bond-two tensor
 drawn at lines 1164–1180: the input passes through `X`, is copied to the left bond through
-`Ĥ` and to the right bond, and leaves through `Z`.
+`H` and to the right bond, and leaves through `Z`.
 
 **Formalized here.** The printed tensor, its periodic operator
 `U |t⟩ = (-1)^{∑_n s_n s_{n+1} + ∑_n s_n} |s⟩` with `s` the spin flip of `t`, the identity
@@ -69,7 +69,7 @@ open MPSTensor
 output.
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1164–1180: at input `j` the
-Pauli `X` gives `x = 1 - j`, the left bond `l` contributes `Ĥ_{l x} = (-1)^{l x}`, the right
+Pauli `X` gives `x = 1 - j`, the left bond `l` contributes `H_{l x} = (-1)^{l x}`, the right
 bond carries `x`, and the Pauli `Z` gives the output `x` with the sign `(-1)^x`. -/
 def czxDecoratedIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 0, 1 => !![1, 0; 1, 0]
