@@ -539,3 +539,11 @@ For the MPU action on injective MPS blocks in arXiv:2502.20257:
   conventions (including the swapped-order prose typo preceding Equation
   (20)), and explains the stabilizer/coset and
   $H^2(H,\mathbb C^\times)$-torsor meanings of the notation $(H,\psi)$.
+
+For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
+
+- `bmwshv17_ising_boundary_tensor_normalization.tex` records that the formal
+  tensors omit the factors `v_e v_f` of the `G`-symbols and store the `σ`
+  tensor multiplied by `√2`, so that all entries lie in `ℤ[√2]`; states the
+  fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
+  leaves open whether omitting the factors `v` changes the periodic operators.

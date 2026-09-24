@@ -35,6 +35,11 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciUnit
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebra
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebraOnePsi
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebraOneSigma
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebraPsiSigma
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebraSigma
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorOne
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorPsi
@@ -63,4 +68,5 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousFusion
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousInverseFusion
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousUnitary
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Zsqrt2OperatorFusion
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Zsqrt2Ring
