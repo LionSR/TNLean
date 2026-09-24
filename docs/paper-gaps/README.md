@@ -11,12 +11,25 @@ the current formal boundary.
   and the remaining reduction from a full-rank fixed point to an explicitly
   chosen positive-definite invariant weight.
 
+For the Fibonacci string-net example of arXiv:1511.08090:
+
+- `bmwshv17_fibonacci_block_entries_provenance.tex` records that the source
+  prints the Fibonacci F-symbols but no numeric entries of the two operator
+  blocks, the placement of the F-symbols used for the blocks, and that the
+  checked fusion rules and projector identity concern the bare F-symbols.
+
 For the MPU index of arXiv:1703.09188:
 
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
   normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
   tensors and physical Z gates of the 2025 diagram. The shared-tensor
-  correspondence remains open under #7738.
+  correspondence remains open under #7738. The note also records that the
+  bra-ket display of the CZX tensor in arXiv:2011.12127, Appendix A, repeats
+  the normalized tensor, while the matrices printed there are its unnormalized
+  rescaling, for which the claims of that passage hold; that the printed
+  matrices give the gate order opposite to the verbal description, a global
+  sign `(-1)^N`; and that the second printed projector `Q` of that passage is
+  the complement `Q₁ = 1 - P₁` of the projector onto the invariant subspace.
 
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
@@ -502,6 +515,15 @@ note.
   argument.
 - `dccsp17_root_kraus_rank_thm41.tex` records the Kraus-rank step that the
   converse implication of Theorem 4.1 uses without proof.
+
+For the matrix product operator symmetries of arXiv:2203.12563:
+
+- `glm23_mpo_symmetric_mps_scope.tex` records that the formal layer of fusion
+  algebras, symmetric families, and nonnegative integer representations uses
+  only the periodic-boundary form of the source's arbitrary-boundary
+  invariance, derives integrality of the action coefficients from it, and
+  formalizes the single-block obstruction only in its fusion-ring form, not
+  the cohomological form of the source.
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 

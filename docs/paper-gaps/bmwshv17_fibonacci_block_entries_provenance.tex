@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Fibonacci String-Net: Entries of the Two Operator Blocks}
+\author{}
+\date{2026-09-24}
+\begin{document}
+\maketitle
+\gapnote{clarification}{resolved}
+
+\section{What the source prints}
+Appendix D.1.1 of \cite{Bultinck2017Anyons} gives the categorical data of the
+Fibonacci theory: labels $1,\tau$ with
+$N_{11}^1=N_{\tau1}^\tau=N_{1\tau}^\tau=N_{\tau\tau}^1=N_{\tau\tau}^\tau=1$,
+quantum dimensions $d_1=1$, $d_\tau=\phi=(1+\sqrt5)/2$, the F-symbols
+\begin{align}
+    [F^{abc}_d]_e^f & =\delta_{abe}\delta_{cde}\delta_{adf}\delta_{bcf}\,F^{abc}_{def},
+    \qquad
+    [F^{\tau\tau\tau}_\tau]
+    =\begin{pmatrix}1/\phi & 1/\sqrt\phi\\ 1/\sqrt\phi & -1/\phi\end{pmatrix},
+    \label{eq:fib_f}
+\end{align}
+all other admissible components being $1$, and the G-symbols
+$G^{abc}_{def}=F^{abc}_{def}/(v_ev_f)$ with $v_i=\sqrt{d_i}$. The operator
+tensor itself is given only as a diagram. The text then states that, after the
+zero rows and columns are removed, the projector matrix product operator has
+bond dimension $5$ and consists of two blocks $B_1,B_\tau$ of dimensions $2$
+and $3$ that satisfy the Fibonacci fusion rules, with weights
+$w_1=1/(1+\phi^2)$ and $w_\tau=\phi/(1+\phi^2)$.\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 1240--1269.}
+No numeric entry of $B_1$ or $B_\tau$ is printed.
+
+\section{The entries used}
+Write a physical letter as a pair $(x',x)$ of an outgoing and an incoming label
+and let the bond index at site $j$ run over the admissible letters
+$(x'_j,x_j)\in\{(1,\tau),(\tau,1),(\tau,\tau)\}$. The $\tau$ block used in the
+formalization is
+\begin{align}
+    (B_\tau^{(x',x)})_{(x'_j,x_j),(x'_{j+1},x_{j+1})}
+     & =\delta_{(x'_j,x_j),(x',x)}\,
+    [F^{\tau x\tau}_{x'_{j+1}}]_{x'}^{x_{j+1}},
+    \label{eq:fib_block}
+\end{align}
+with the bare F-symbols of (\ref{eq:fib_f}) and without the closed-loop factors
+$v_a$. The trivial block $B_1$ is the admissibility projector of bond
+dimension $2$, carrying the matrix $\begin{pmatrix}0&1\\1&1\end{pmatrix}$ on its
+diagonal letters. The placement (\ref{eq:fib_block}) was fixed by an
+exhaustive search over the assignments of the six F-symbol slots to the
+available labels, keeping those for which the fusion rules hold at lengths
+$2,3,4$.\footnote{Verification record:
+    \path{Notes/OpenProblemsTN/checks/p5_more_examples_data.md}, \S3.1. It is
+    a record of the search, not a source.}
+
+\section{What is checked}
+Every entry of the $\tau$ block equals the corresponding F-symbol of
+(\ref{eq:fib_f}); the blocks have the recorded dimensions $2$ and $3$; their
+periodic operators satisfy $O_1^2=O_1$, $O_1O_\tau=O_\tau O_1=O_\tau$ and
+$O_\tau^2=O_1+O_\tau$ at every positive length; and
+the trace of the bond-five tensor $B_1\oplus B_\tau$ against
+$\Delta=w_1 I_2\oplus w_\tau I_3$ with the printed weights is
+$P_L=w_1O_1+w_\tau O_\tau$, which is idempotent at every positive length.\footnote{Results:
+    \leanid{FibonacciCompression.fibTauGolden_eq_fSymbol},
+    \leanid{FibonacciCompression.fibonacci_fusion_algebra},
+    \leanid{FibonacciCompression.fibProjector_eq_trace_fibDelta},
+    \leanid{FibonacciCompression.fibProjector_mul_self}.}
+The review \cite{Cirac2021Matrix} writes the operator tensor with an
+additional prefactor $1/\sqrt{d_Ad_D}$ and the source includes closed-loop
+factors $v_a$; both fix a normalization of the unprinted tensor. The checked
+statements concern the bare F-symbols (\ref{eq:fib_block}), and no operator
+statement is made for a rescaled tensor. This is a choice of normalization for
+an unprinted tensor, not an error in the source.\footnote{Review traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2613--2625.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

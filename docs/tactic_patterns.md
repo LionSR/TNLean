@@ -359,6 +359,30 @@ abstracted — record why, so it is not re-proposed).
   differ only in the two coordinate equivalences and the isometry, so the
   blocking convention stays explicit at each call site.
 
+### periodic operator entry along a forced bond configuration — promoted
+- **Pattern:**
+  ```lean
+  rw [MPOTensor.mpo_apply, MPOTensor.mpoMatrixEntry, MPOTensor.evalWord_ofFn]
+  have h := MPSTensor.trace_evalWord_eq_sum_cyclic M.toMPSTensor
+    (fun n ↦ finProdFinEquiv (s n, t n))
+  rw [MPSTensor.evalWord_ofFn_eq_prod] at h
+  have h' : ... := by simpa only [MPOTensor.toMPSTensor, ...] using h
+  rw [h', Fintype.sum_eq_single g0]
+  ...
+  · intro g hg
+    obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
+    refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
+  ```
+- **Seen:** three occurrences across three files (2026-09-24): `mpo_czxTensor_apply` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXUnitary.lean`,
+  `mpo_reviewCZXTensor_apply` in `Examples/CZXReviewTensor.lean`, and
+  `mpo_czxDecoratedTensor_apply` in `Examples/CZXDecoratedTensor.lean`.
+- **Abstraction:** `MPOTensor.mpo_apply_eq_sum_cyclic` and
+  `MPOTensor.mpo_apply_eq_prod_of_forced_bond` in `TNLean/MPS/MPDO/OperatorCyclicSum.lean`.
+- **Notes:** the caller supplies the surviving bond configuration `g₀` and, for every other
+  configuration, one site with a vanishing entry. All three call sites are refactored; each
+  loses about ten lines.
+
 ### SAL nonvanishing of the physical-trace transfer — promoted
 - **Pattern:** contradict the positive-length trace clause in `IsSAL` at one
   site by rewriting the periodic trace as the trace of the vertical loop and

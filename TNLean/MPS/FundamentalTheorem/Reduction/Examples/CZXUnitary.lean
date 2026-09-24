@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Algebra.MonomialMatrix
-import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly
 import TNLean.MPS.MPU.GroupRepresentation
 
@@ -98,40 +98,30 @@ contraction of the tensor along the unique bond configuration `g_n = t_{n-1}` th
 theorem mpo_czxTensor_apply (s t : Fin N → Fin 2) :
     MPOTensor.mpo czxTensor N s t =
       if s = spinFlip N t then (-1 : ℂ) ^ czExponent t else 0 := by
-  rw [MPOTensor.mpo_apply, MPOTensor.mpoMatrixEntry, MPOTensor.evalWord_ofFn]
-  have h := MPSTensor.trace_evalWord_eq_sum_cyclic czxTensor.toMPSTensor
-    (fun n ↦ finProdFinEquiv (s n, t n))
-  rw [MPSTensor.evalWord_ofFn_eq_prod] at h
-  have h' : (List.ofFn fun n ↦ czxTensor (s n) (t n)).prod.trace =
-      ∑ g : Fin N → Fin 2, ∏ v : Fin N, czxTensor (s v) (t v) (g v) (g (v + 1)) := by
-    simpa only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat] using h
-  rw [h']
   let g0 : Fin N → Fin 2 := fun n ↦ t (n - 1)
-  rw [Fintype.sum_eq_single g0]
-  · by_cases hst : s = spinFlip N t
-    · have hp : ∀ n, s n = (t n).rev := fun n ↦ congrFun hst n
-      rw [ite_eq_left hst]
-      calc
-        _ = ∏ n, (-1 : ℂ) ^ ((t (n - 1)).val * (t n).val) := by
-          refine Finset.prod_congr rfl fun n _ ↦ ?_
-          rw [czxTensor_apply, ite_eq_left ⟨hp n, by simp [g0]⟩]
-        _ = (-1 : ℂ) ^ ∑ n, (t (n - 1)).val * (t n).val := Finset.prod_pow_eq_pow_sum _ _ _
-        _ = _ := by
-          congr 1
-          exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun n ↦ by simp
-    · rw [ite_eq_right hst]
-      obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
-      refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
-      rw [czxTensor_apply, ite_eq_right]
-      exact fun h ↦ hn h.1
-  · intro g hg
+  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond czxTensor s t g0 fun g hg ↦ by
     obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
-    refine Finset.prod_eq_zero (Finset.mem_univ (n - 1)) ?_
+    refine ⟨n - 1, ?_⟩
     rw [czxTensor_apply, ite_eq_right]
     intro h
     apply hn
-    simpa [g0] using h.2
+    simpa [g0] using h.2]
+  by_cases hst : s = spinFlip N t
+  · have hp : ∀ n, s n = (t n).rev := fun n ↦ congrFun hst n
+    rw [ite_eq_left hst]
+    calc
+      _ = ∏ n, (-1 : ℂ) ^ ((t (n - 1)).val * (t n).val) := by
+        refine Finset.prod_congr rfl fun n _ ↦ ?_
+        rw [czxTensor_apply, ite_eq_left ⟨hp n, by simp [g0]⟩]
+      _ = (-1 : ℂ) ^ ∑ n, (t (n - 1)).val * (t n).val := Finset.prod_pow_eq_pow_sum _ _ _
+      _ = _ := by
+        congr 1
+        exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun n ↦ by simp
+  · rw [ite_eq_right hst]
+    obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
+    refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
+    rw [czxTensor_apply, ite_eq_right]
+    exact fun h ↦ hn h.1
 
 /-- **The periodic CZX operator is a monomial matrix**: the global spin flip with the
 controlled-`Z` sign attached to the input configuration (construction note, `ex:p5ft-czx`). -/
