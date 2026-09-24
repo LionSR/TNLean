@@ -55,7 +55,7 @@ verification record, not a source.
   A. Molnár, *Classifying phases protected by matrix product operator symmetries using matrix
   product states*
 - [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
-  D. J. Williamson, M. B. Şahinoğlu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
   operator algebras*
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- the `ℤ/n` three-cocycle formula from
   which the anomalous `ℤ/3` tensor is built
