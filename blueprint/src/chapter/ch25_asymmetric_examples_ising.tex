@@ -5,25 +5,42 @@
 %% verified by checks/asym_ising_action_verify.py, and the P6
 %% renormalization-fixed-point twist of
 %% Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex.
+%% The structure coefficients built from the fusion rules were
+%% moved here from a deleted machinery file.
 %% =========================================================
 
-\section{The three topological-symmetry tensors of the Ising anyon chain}%
+\section{The Ising anyon chain}%
 \label{sec:asymex_ising_tensors}
 
-The Ising fusion category has three simple objects: the vacuum $1$, the
-fermion $\psi$, and the non-Abelian anyon $\sigma$. Their quantum dimensions
-are $1,1,\sqrt2$, respectively. For every simple object $a$, the vacuum
+The Ising fusion category has three simple objects, the vacuum $1$, the
+fermion $\psi$, and the non-Abelian anyon $\sigma$; its F-symbols define
+the string-net operators of Bultinck et
+al.~\cite[Appendix~D.2]{Bultinck2017Anyons}. Chains of interacting anyons were
+introduced for Fibonacci anyons by Feiguin et
+al.~\cite{Feiguin2007GoldenChain}, and the
+algebra of topological defects of the Ising chain is described by Aasen,
+Mong, and Fendley~\cite{Aasen2016Topological}. Matrix product operators
+realize the corresponding topological symmetries of anyon chains, as
+reviewed in Ref.~\cite[Section~III.A.6]{Cirac2021Matrix}. This section
+takes one matrix product operator tensor for each simple object, written
+in the F-symbol convention of
+Ref.~\cite[Appendix~D.2]{Bultinck2017Anyons}; the sigma tensor is scaled
+by $\sqrt2$ so that every entry lies in $\Z[\sqrt2]$ and all local
+computations are exact. The weighted direct sums of these tensors and
+the weighted Verlinde action on a fusion-tree product state are
+constructions of this development, motivated by the question of whether
+the structure coefficients of a renormalization fixed point can depend on
+the chain length~\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
+
+The quantum dimensions of $1$, $\psi$, and $\sigma$ are $1,1,\sqrt2$,
+respectively. For every simple object $a$, the vacuum
 satisfies $1\otimes a=a\otimes1=a$. The remaining fusion rules are
 \begin{align}
     \psi\otimes\psi     & =1,                        \\
     \sigma\otimes\psi   & =\psi\otimes\sigma=\sigma, \\
     \sigma\otimes\sigma & =1\oplus\psi.
 \end{align}
-Matrix product operators describe the corresponding topological
-symmetries of anyon chains, as discussed in
-Ref.~\cite[Section~III]{Cirac2021Matrix}. We use the Ising F-symbol
-convention of Ref.~\cite[Appendix~D.2]{Bultinck2017Anyons}. With rows and columns
-ordered as $(1,\psi)$, the nontrivial F-symbols are
+With rows and columns ordered as $(1,\psi)$, the nontrivial F-symbols are
 \begin{align}
     F^{\sigma\sigma\sigma}_{\sigma}
                                                     & =\frac{1}{\sqrt2}
@@ -48,6 +65,57 @@ and its periodic contraction is
 Here $h$ and $k$ are words of length $N$, and $\ket{h}$ denotes the
 corresponding tensor-product basis vector. Unless stated otherwise,
 $N\geq1$, and site indices are cyclic.
+
+The entries of the three tensors lie in the ring $\Z[\sqrt2]$, so their
+local products and changes of auxiliary coordinates can be calculated in
+this ring before embedding into $\C$. We fix the ring and its embedding
+before writing down the tensors.
+
+\begin{definition}[The ring of \texorpdfstring{$\sqrt2$}{sqrt(2)}-integers and its complex embedding]%
+    \label{def:asymex_zsqrt2_ring}
+    \lean{zsqrt2ToComplex, MPSTensor.complexOfZsqrt2, MPSTensor.mulZsqrt2Tensor,
+        MPSTensor.actZsqrt2Tensor}
+    \leanok
+    The ring $\Z[\sqrt2]$ consists of the numbers $a+b\sqrt2$ with
+    $a,b\in\Z$, with multiplication determined by $(\sqrt2)^2=2$.
+    It embeds into $\C$ by sending $\sqrt2$ to the positive real square
+    root of two. Applying this embedding entrywise gives a complex matrix
+    from a matrix over $\Z[\sqrt2]$. For matrix product operator tensors
+    $M$ and $N$ over $\Z[\sqrt2]$, their local product is
+    $(M\mathbin{\cdot}N)^{ik}=\sum_jM^{ij}\otimes N^{jk}$.
+    For a matrix product operator tensor $M$ and a state tensor $A$,
+    the local action is $(M\cdot A)^i=\sum_jM^{ij}\otimes A^j$.
+\end{definition}
+
+\begin{theorem}[Exact arithmetic in \texorpdfstring{$\Z[\sqrt2]$}{Z[sqrt(2)]}]%
+    \label{thm:asymex_zsqrt2_ring}
+    % Principal declaration: MPSTensor.complexOfZsqrt2_mul.
+    \lean{zsqrt2ToComplex_injective, zsqrt2ToComplex_ne_zero,
+        MPSTensor.complexOfZsqrt2_mul, MPSTensor.mulTensor_complexOfRing,
+        MPSTensor.actTensor_complexOfRing,
+        MPSTensor.isNormal_of_single_eq_smul_zsqrt2}
+    \leanok
+    \uses{def:asymex_zsqrt2_ring}
+    The embedding of $\Z[\sqrt2]$ into $\C$ is injective and sends every
+    nonzero element to a nonzero complex number. The entrywise embedding
+    of matrices is multiplicative and commutes with the local product
+    and local action of tensors over $\Z[\sqrt2]$.
+    If the one-site matrices of a tensor over $\Z[\sqrt2]$ include a
+    nonzero $\Z[\sqrt2]$-multiple of every matrix unit, its complex
+    embedding is injective at one site.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $a+b\sqrt2=a'+b'\sqrt2$ as real numbers, then
+    $(b-b')\sqrt2=a'-a$. Irrationality of $\sqrt2$ gives $b=b'$,
+    whence $a=a'$. Multiplicativity of the entrywise embedding follows
+    because it is induced by a ring homomorphism. Expanding the finite
+    sums and tensor products proves compatibility with local products
+    and actions. Finally, dividing each designated one-site matrix by
+    its nonzero scalar factor exhibits every matrix unit in the complex
+    span, as in Theorem~\ref{thm:asymex_normal_units}.
+\end{proof}
 
 \begin{definition}[The three tensors \texorpdfstring{$A_1$, $A_\psi$, $A_\sigma$}{A1, Apsi, Asigma}]%
     \label{def:asymex_ising_tensors}
@@ -134,7 +202,13 @@ $N\geq1$, and site indices are cyclic.
     has $\rho(k)=\rho(h)$, as inspection of the tables shows.
 \end{proof}
 
-\subsection{Closed paths and the vacuum and fermion operators}
+\subsection{The periodic operators of the three tensors}
+
+The vacuum and fermion tensors are evaluated on closed paths first,
+where their periodic operators become projections, and the rescaled
+sigma tensor is evaluated on a product state second.
+
+\subsubsection{Closed paths and the vacuum and fermion operators}
 
 Local admissibility does not impose compatibility between neighboring
 vertices. A word $h$ is a closed path when
@@ -234,7 +308,7 @@ Thus the vacuum label acts as the identity on closed paths, not on
 the entire physical space. These identities follow from the concrete
 tensor letters rather than from the abstract fusion rules alone.
 
-\subsection{The sigma normalization and a product-state action}
+\subsubsection{The sigma normalization and a product-state action}
 
 The rescaling $\widehat A_\sigma=\sqrt2A_\sigma$ occurs at every site.
 By multilinearity of the periodic contraction,
@@ -280,63 +354,15 @@ $O_0(\widehat A_\sigma)=4$, as operators on a one-dimensional
 physical space. The projection and product-state identities above
 do not extend to that case.
 
-\section{The Ising anyon chain: exact arithmetic in \texorpdfstring{$\Z[\sqrt2]$}{Z[sqrt(2)]}}%
+\subsection{One-site injectivity by exact arithmetic}%
 \label{sec:asymex_ising_ring}
 
-The entries of $A_1$, $A_\psi$, and $\widehat A_\sigma$ lie in
-$\Z[\sqrt2]$. Their local products and changes of auxiliary coordinates
-can therefore be calculated in this ring before embedding into $\C$.
-The embedding also preserves the matrix-unit spanning criterion of
-Theorem~\ref{thm:asymex_normal_units}.
+The embedding of $\Z[\sqrt2]$ into $\C$ from
+Theorem~\ref{thm:asymex_zsqrt2_ring} preserves the matrix-unit spanning
+criterion of Theorem~\ref{thm:asymex_normal_units}.
 Here that criterion establishes one-site injectivity, not the
 spectral-radius-one normalization required of a normal tensor (NT)
 in the CPSV convention.
-
-\begin{definition}[The ring of \texorpdfstring{$\sqrt2$}{sqrt(2)}-integers and its complex embedding]%
-    \label{def:asymex_zsqrt2_ring}
-    \lean{zsqrt2ToComplex, MPSTensor.complexOfZsqrt2, MPSTensor.mulZsqrt2Tensor,
-        MPSTensor.actZsqrt2Tensor}
-    \leanok
-    The ring $\Z[\sqrt2]$ consists of the numbers $a+b\sqrt2$ with
-    $a,b\in\Z$, with multiplication determined by $(\sqrt2)^2=2$.
-    It embeds into $\C$ by sending $\sqrt2$ to the positive real square
-    root of two. Applying this embedding entrywise gives a complex matrix
-    from a matrix over $\Z[\sqrt2]$. For matrix product operator tensors
-    $M$ and $N$ over $\Z[\sqrt2]$, their local product is
-    $(M\mathbin{\cdot}N)^{ik}=\sum_jM^{ij}\otimes N^{jk}$.
-    For a matrix product operator tensor $M$ and a state tensor $A$,
-    the local action is $(M\cdot A)^i=\sum_jM^{ij}\otimes A^j$.
-\end{definition}
-
-\begin{theorem}[Exact arithmetic in \texorpdfstring{$\Z[\sqrt2]$}{Z[sqrt(2)]}]%
-    \label{thm:asymex_zsqrt2_ring}
-    % Principal declaration: MPSTensor.complexOfZsqrt2_mul.
-    \lean{zsqrt2ToComplex_injective, zsqrt2ToComplex_ne_zero,
-        MPSTensor.complexOfZsqrt2_mul, MPSTensor.mulTensor_complexOfRing,
-        MPSTensor.actTensor_complexOfRing,
-        MPSTensor.isNormal_of_single_eq_smul_zsqrt2}
-    \leanok
-    \uses{def:asymex_zsqrt2_ring}
-    The embedding of $\Z[\sqrt2]$ into $\C$ is injective and sends every
-    nonzero element to a nonzero complex number. The entrywise embedding
-    of matrices is multiplicative and commutes with the local product
-    and local action of tensors over $\Z[\sqrt2]$.
-    If the one-site matrices of a tensor over $\Z[\sqrt2]$ include a
-    nonzero $\Z[\sqrt2]$-multiple of every matrix unit, its complex
-    embedding is injective at one site.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    If $a+b\sqrt2=a'+b'\sqrt2$ as real numbers, then
-    $(b-b')\sqrt2=a'-a$. Irrationality of $\sqrt2$ gives $b=b'$,
-    whence $a=a'$. Multiplicativity of the entrywise embedding follows
-    because it is induced by a ring homomorphism. Expanding the finite
-    sums and tensor products proves compatibility with local products
-    and actions. Finally, dividing each designated one-site matrix by
-    its nonzero scalar factor exhibits every matrix unit in the complex
-    span, as in Theorem~\ref{thm:asymex_normal_units}.
-\end{proof}
 
 \begin{theorem}[One-site injectivity of the three tensors]%
     \label{thm:asymex_ising_normal}
@@ -360,7 +386,7 @@ in the CPSV convention.
     over $\C$.
 \end{proof}
 
-\section{The weighted direct sum and its local product}%
+\subsection{The weighted direct sum and its local product}%
 \label{sec:asymex_ising_bond_object}
 
 We now apply asymmetric compression to products of these operators.
@@ -443,7 +469,7 @@ In the periodic diagrams below, $L$ denotes the number of sites.
     \end{tenkz}
 \end{center}
 
-\section{The gauge and the block decomposition}%
+\subsection{The gauge and the block decomposition}%
 \label{sec:asymex_ising_gauge}
 
 The change of auxiliary coordinates is a signed permutation of the
@@ -529,7 +555,7 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
     middle-label sectors.
 \end{proof}
 
-\section{Compression onto the \texorpdfstring{$\sigma$}{sigma} tensor}%
+\subsection{Compression onto the \texorpdfstring{$\sigma$}{sigma} tensor}%
 \label{sec:asymex_ising_compression}
 
 \begin{theorem}[Compression of the Ising product tensor]%
@@ -626,7 +652,7 @@ a single letter of the pair alphabet.
     \end{tenkz}
 \end{center}
 
-\section{The length-dependent product coefficient}%
+\subsection{The length-dependent product coefficient}%
 \label{sec:asymex_ising_trace}
 
 For a tensor $T$ and a word $w=(i_1,\ldots,i_{|w|})$, write
@@ -717,7 +743,89 @@ One weight insertion per site therefore gives
     \qquad $\Theta=5\,\Pi_1+3\,\Pi_\psi$
 \end{center}
 
-\section{Action on a fusion-tree product state}%
+\subsection{Coefficients from the Ising fusion rules}
+
+The power sum $5^N+3^N$ is one value of a family of structure
+coefficients built from the Ising fusion multiplicities and one
+inserted weighted label, which we now define in general. The
+definition and the theorems of this subsection write $L$ for the
+chain length that the surrounding prose calls $N$.
+
+\begin{definition}[Structure coefficients from the Ising fusion rules]
+    \label{def:asymex_ising_coefficients}
+    \lean{TNLean.Algebra.IsingCrossing.Label,
+        TNLean.Algebra.IsingCrossing.fusionMultiplicity,
+        TNLean.Algebra.IsingCrossing.coefficient}
+    \leanok
+    Let the labels be $1,\psi,\sigma$, and let $N_{ab}^{c}\in\N$
+    be the multiplicity of $c$ in the Ising fusion rules. For each
+    label $a$, these rules are
+    \begin{align}
+        1\times a          & =a\times 1=a,             \\
+        \psi\times\psi     & =1,                       \\
+        \psi\times\sigma   & =\sigma\times\psi=\sigma, \\
+        \sigma\times\sigma & =1+\psi.
+    \end{align}
+    For arbitrary weights $w_a\in\C$ and $L\in\N$, define
+    \begin{align}
+        c_{a,b,c}^{(L)}
+         & =\sum_r\sum_t w_r^L N_{ar}^{t}N_{tb}^{c}.
+        \label{eq:asymex_ising_coeff}
+    \end{align}
+    Both sums run over $\{1,\psi,\sigma\}$.
+    The definition includes $L=0$ and imposes no positivity or
+    nonvanishing condition on the weights.
+\end{definition}
+
+\begin{theorem}[The three outputs for two sigma labels]
+    \label{thm:asymex_ising_sigma}
+    \lean{TNLean.Algebra.IsingCrossing.coefficient_sigma_sigma_one,
+        TNLean.Algebra.IsingCrossing.coefficient_sigma_sigma_psi,
+        TNLean.Algebra.IsingCrossing.coefficient_sigma_sigma_sigma,
+        TNLean.Algebra.IsingCrossing.fusionMultiplicity_sigma_sigma_sigma}
+    \leanok
+    \uses{def:asymex_ising_coefficients}
+    For every choice of complex weights and every $L\in\N$,
+    \begin{align}
+        c_{\sigma,\sigma,1}^{(L)}      & =w_1^L+w_\psi^L, \\
+        c_{\sigma,\sigma,\psi}^{(L)}   & =w_1^L+w_\psi^L, \\
+        c_{\sigma,\sigma,\sigma}^{(L)} & =2w_\sigma^L.
+    \end{align}
+    In contrast, the base fusion multiplicity is
+    $N_{\sigma\sigma}^{\sigma}=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_ising_coefficients}
+    Expand both three-element sums in~(\ref{eq:asymex_ising_coeff})
+    and substitute the fusion table. For output $1$ or $\psi$, the
+    surviving inserted labels are $1$ and $\psi$. For output $\sigma$,
+    the inserted label $\sigma$ contributes through both intermediate
+    labels $1$ and $\psi$.
+\end{proof}
+
+\begin{theorem}[Associativity of the structure coefficients]
+    \label{thm:asymex_ising_assoc}
+    \lean{TNLean.Algebra.IsingCrossing.coefficient_assoc}
+    \leanok
+    \uses{def:asymex_ising_coefficients}
+    For arbitrary complex weights, every $L\in\N$, and all labels
+    $a,b,c,d$,
+    \begin{align}
+        \sum_e c_{a,b,e}^{(L)}c_{e,c,d}^{(L)}
+         & =\sum_f c_{b,c,f}^{(L)}c_{a,f,d}^{(L)}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_ising_coefficients}
+    Consider the $3^4$ choices of $a,b,c,d$. In each case, expand
+    the finite sums and substitute the fusion multiplicities.
+    The resulting expressions agree as polynomials in
+    $w_1^L,w_\psi^L,w_\sigma^L$.
+\end{proof}
+
+\subsection{Action on a fusion-tree product state}%
 \label{sec:asymex_ising_action}
 
 We next apply the full weighted direct sum

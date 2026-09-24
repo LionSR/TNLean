@@ -1,11 +1,19 @@
 %% =========================================================
 %% Chapter: Physics examples of the multi-block asymmetric
 %% compression theorem.
-%% Covers Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex,
-%% Examples A--E, the further physics examples of
-%% Notes/OpenProblemsTN/checks/p5_more_examples_data.md, and the
-%% renormalization fixed points of
-%% Notes/OpenProblemsTN/checks/p6_examples_compression_data.md.
+%% Structure: a chapter heading and conventions paragraph, an
+%% overview naming each example with its sources, then eight
+%% physical examples (elementary states, CZX, Kramers--Wannier,
+%% Fibonacci, Ising, Z2 x Z2, Z3, and Bell-bond fixed points),
+%% each in its own file holding one \section with its definition,
+%% properties, compression results, and remarks. The Fibonacci
+%% anomaly file is input right after the Fibonacci file and
+%% supplies the closing \subsection of that section.
+%% Provenance (not sources): the worked data were first
+%% assembled in Notes/OpenProblemsTN/strategies/
+%% p5_asymmetric_compression_theorem.tex, Examples A--E, and in
+%% Notes/OpenProblemsTN/checks/p5_more_examples_data.md and
+%% p6_examples_compression_data.md.
 %% =========================================================
 
 \chapter{Physics Examples of the Multi-Block Compression Theorem}%
@@ -37,11 +45,32 @@ trace.
 
 Physical examples of matrix product operators, topological symmetries, and
 fixed points illustrate the multi-block asymmetric compression theorem
-(Theorem~\ref{thm:asym_multiblock}).
+(Theorem~\ref{thm:asym_multiblock}). The cases treated here, in chapter
+order, are the GHZ and product
+states~\cite{GreenbergerHorneZeilinger1989,Greenberger1990Bell} in the
+conventions of Ref.~\cite[Appendix~A]{Cirac2021Matrix};
+the CZX symmetry of Chen, Liu, and Wen~\cite{ChenLiuWen2011CZX}, whose
+matrix product unitary is displayed in
+Ref.~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix};
+Kramers--Wannier
+duality~\cite{KramersWannier1941,Aasen2016Topological,Seiberg2024Majorana,Lootens2023Dualities};
+the Fibonacci~\cite[Appendix~D.1]{Bultinck2017Anyons} and
+Ising~\cite[Appendix~D.2]{Bultinck2017Anyons} fusion categories and their
+anyon chains~\cite{Feiguin2007GoldenChain}, together with the review's
+Fibonacci operator~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix};
+the anomalous $\Z_2\times\Z_2$ and $\Z_3$ symmetries and their condensation
+defects, constructions motivated by the anomalous classes discussed
+in Refs.~\cite{GarreRubio2023MPOSym,GarreRubioSchuch2024DomainWall,Roumpedakis2023Condensation};
+and mixed Bell-bond fixed points addressing the length-dependence question
+of Ref.~\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
 
 
-\input{chapter/ch25_asymmetric_examples_basic_czx.tex}%
-\input{chapter/ch25_asymmetric_examples_duality_fibonacci_parity.tex}%
+\input{chapter/ch25_asymmetric_examples_elementary_states.tex}%
+\input{chapter/ch25_asymmetric_examples_czx.tex}%
+\input{chapter/ch25_asymmetric_examples_kramers_wannier.tex}%
+\input{chapter/ch25_asymmetric_examples_fibonacci.tex}%
+\input{chapter/ch25_asymmetric_examples_fibonacci_anomaly.tex}%
+\input{chapter/ch25_asymmetric_examples_ising.tex}%
+\input{chapter/ch25_asymmetric_examples_z2z2.tex}%
+\input{chapter/ch25_asymmetric_examples_z3.tex}%
 \input{chapter/ch25_asymmetric_examples_rfp.tex}%
-
-\input{chapter/ch25_asymmetric_examples_coefficients_boundaries.tex}%
