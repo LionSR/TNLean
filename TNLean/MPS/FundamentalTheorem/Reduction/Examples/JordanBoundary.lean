@@ -18,8 +18,22 @@ For any tensor `A`, put `Bⁱ = [[Aⁱ, Aⁱ], [0, Aⁱ]]` and
 boundary trace is zero. A nonempty word with nonzero trace therefore
 separates the two boundary families. No normality assumption is needed.
 
-Source: *The asymmetric fundamental theorem and boundary matrices*, in
-`Notes/OpenProblemsTN/followup/asymmetric_mpoa/sections/rfp_symmetry_bridge.tex`.
+**Source.** Project construction; it is not a tensor printed in a published
+source, and it is not a renormalization fixed point. What is proved
+(`periodic_eq_boundary_ne`) is that the Jordan tensor $B$ and the split tensor
+$A\oplus A$ have equal periodic word traces while their $Q$-boundary traces
+differ. Project commentary, not proved here: for a matrix product operator
+tensor, periodic word traces are the data of the operators $O_L$ of Cirac,
+Pérez-García, Schuch, Verstraete 2017 (arXiv:1606.00608,
+`Papers/1606.00608/MPDO-22-12-17-2.tex` lines 962--967), so the example
+indicates that such periodic data alone do not fix boundary traces.
+
+## Provenance
+
+The example was first recorded in the subsection *The asymmetric fundamental
+theorem and boundary matrices* (label `bridge:asymmetric`) of
+`Notes/OpenProblemsTN/followup/asymmetric_mpoa/sections/rfp_symmetry_bridge.tex`;
+that note is a verification record, not the source.
 -/
 
 open scoped Matrix
