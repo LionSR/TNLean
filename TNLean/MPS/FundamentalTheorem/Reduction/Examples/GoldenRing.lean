@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Analysis.Real.Sqrt
+import Mathlib.NumberTheory.Real.GoldenRatio
 import Mathlib.RingTheory.AdjoinRoot
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.MPDO.OperatorProduct
@@ -48,6 +49,8 @@ decision over `ℤ[σ]` transport to the complex matrices.
 
 * `GoldenInt.sigma_quartic`, `adjoinSigma_quartic`, `goldenSigmaReal_quartic`: the quartic
   relation in the three models.
+* `goldenSigmaReal_sq`, `goldenSigmaReal_eq_inv_sqrt_goldenRatio`: `σ² = φ⁻¹` and `σ = 1/√φ`
+  for the golden ratio `φ`.
 * `goldenMulRule`: the multiplication rule of `ℤ[σ]` in any commutative ring carrying a root of
   the quartic.
 * `MPSTensor.complexOfGolden_mul`, `MPSTensor.complexOfGolden_one`: the embedding of matrices is
@@ -198,6 +201,20 @@ theorem goldenSigmaReal_quartic : goldenSigmaReal ^ 4 + goldenSigmaReal ^ 2 - 1 
   have h4 : goldenSigmaReal ^ 4 = (goldenSigmaReal ^ 2) ^ 2 := by ring
   rw [h4, hsq]
   nlinarith [h5]
+
+/-- `σ² = (√5 - 1)/2` is the inverse of the golden ratio. -/
+theorem goldenSigmaReal_sq : goldenSigmaReal ^ 2 = Real.goldenRatio⁻¹ := by
+  have h5 : (1 : ℝ) ≤ Real.sqrt 5 := by
+    rw [show (1 : ℝ) = Real.sqrt 1 by simp]
+    exact Real.sqrt_le_sqrt (by norm_num)
+  rw [goldenSigmaReal, Real.sq_sqrt (by linarith), Real.inv_goldenRatio]
+  ring
+
+/-- `σ = 1/√φ` for the golden ratio `φ`. -/
+theorem goldenSigmaReal_eq_inv_sqrt_goldenRatio :
+    goldenSigmaReal = (Real.sqrt Real.goldenRatio)⁻¹ := by
+  have h0 : 0 ≤ goldenSigmaReal := Real.sqrt_nonneg _
+  rw [← Real.sqrt_inv, ← goldenSigmaReal_sq, Real.sqrt_sq h0]
 
 /-- The number `σ = φ^{-1/2}` as a complex number. -/
 noncomputable def goldenSigmaComplex : ℂ := (goldenSigmaReal : ℂ)

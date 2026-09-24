@@ -10,13 +10,30 @@ import TNLean.MPS.MPDO.OperatorFromWordTrace
 /-!
 # Example F: the Fibonacci fusion `τ ⊗ τ = 1 ⊕ τ`
 
+**Source.** Bultinck, Mariën, Williamson, Sahinoglu, Haegeman and Verstraete 2017
+(arXiv:1511.08090), Appendix D.1.1, `References/1511.08090/AnyonsPEPS.tex` lines 1240–1269: the
+Fibonacci F-symbols, and a projector matrix product operator of bond dimension `5` made of two
+blocks `B_1`, `B_τ` of dimensions `2` and `3` that satisfy the Fibonacci fusion rules.
+Review: arXiv:2011.12127, Appendix A, "The MPO for the Fibonacci model"
+(`Papers/2011.12127/TN-Review-main.tex` lines 2613–2625). Garre-Rubio, Lootens and Molnár
+(arXiv:2203.12563), `Papers/2203.12563/REsubmission.tex` line 1993, record the pair of normal
+states invariant under this symmetry.
+
+**Formalized here.** The source's claim that the two blocks `B_1`, `B_τ` satisfy the Fibonacci
+fusion rules, in the form `O_τ O_τ = O_1 + O_τ` at every positive length, for the blocks with the
+entries of the Local fix below, via the multi-block compression theorem. The identification of
+the entries of the `τ` block with the source's F-symbols is `Examples/FibonacciFSymbol.lean`.
+
+**Local fix (provenance):** the source draws the operator tensor only as a diagram and prints no
+numeric entries of `B_1`, `B_τ`; the `τ` block here places the bare F-symbol
+`[F^{τ x τ}_{x'_{j+1}}]_{x'_j}^{x_{j+1}}` at the physical letter `(x', x)` and the bond letters
+`(x'_j, x_j)`, `(x'_{j+1}, x_{j+1})`, without the source's closed-loop factors, and `B_1` is the
+admissibility projector of bond dimension two; documented in
+`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
+
 A machine-checked instance of the multi-block asymmetric compression theorem (P5 note,
 `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) for the
-Fibonacci string-net matrix product operator algebra of Bultinck, Mariën, Williamson, Sahinoglu,
-Haegeman and Verstraete, *Anyons and matrix product operator algebras* (arXiv:1511.08090),
-Appendix D.1. The exact data and its verification in exact arithmetic are recorded in
-`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §3, and
-`Notes/OpenProblemsTN/checks/p5_more_examples_verify.py`.
+Fibonacci string-net matrix product operator algebra of arXiv:1511.08090, Appendix D.1.
 
 This is the simplest fusion of matrix product operators that is not invertible: the two operator
 families `O_1` and `O_τ` of the Fibonacci category obey `O_τ O_τ = O_1 + O_τ`, so the square of
@@ -68,6 +85,26 @@ exact arithmetic over that ring and then transported to the complex matrices alo
 * `FibonacciCompression.fibStack_mul_fusionRight`,
   `FibonacciCompression.fusionLeft_mul_fibStack`: the fusion tensors intertwine the stacked
   tensor with each block site by site.
+
+## References
+
+- [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  operator algebras*
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+- [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
+  A. Molnár, *Classifying phases protected by matrix product operator symmetries using matrix
+  product states*
+
+## Provenance
+
+The placement of the F-symbols in the `τ` block was fixed by the search recorded in
+`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §3.1; the two tensors, the compression
+datum and its exact-arithmetic verification are recorded in §3.2–§3.3 of that file and in
+`Notes/OpenProblemsTN/checks/p5_more_examples_verify.py`. These are verification records, not the
+source.
 -/
 
 noncomputable section
@@ -81,10 +118,11 @@ open GoldenInt MPSTensor
 /-! ### The two blocks of the Fibonacci algebra -/
 
 /-- The `τ` tensor of the Fibonacci string-net matrix product operator, of bond dimension three
-(arXiv:1511.08090, App. D.1; data file §3.2). Its letters are the pairs `(x', x)` of outgoing and
-incoming labels, `0` being the trivial label and `1` being `τ`, and its one-site matrix at the
-letter `p` carries the row of the reduced vertex weight
-`[[0, φ⁻¹, σ], [1, 0, 1], [1, σ, -φ⁻¹]]` indexed by `p`. -/
+(arXiv:1511.08090, App. D.1; entries recorded in the data file, §3.2). Its letters are the pairs
+`(x', x)` of outgoing and incoming labels, `0` being the trivial label and `1` being `τ`, and its
+one-site matrix at the letter `p` carries the row of the reduced vertex weight
+`[[0, φ⁻¹, σ], [1, 0, 1], [1, σ, -φ⁻¹]]` indexed by `p`. The placement of these entries is the
+Local fix (provenance) of the module header. -/
 def fibTauGolden : Fin 2 → Fin 2 → Matrix (Fin 3) (Fin 3) GoldenInt
   | 0, 1 => !![0, sigma ^ 2, sigma; 0, 0, 0; 0, 0, 0]
   | 1, 0 => !![0, 0, 0; 1, 0, 1; 0, 0, 0]

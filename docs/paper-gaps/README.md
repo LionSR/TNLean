@@ -11,6 +11,13 @@ the current formal boundary.
   and the remaining reduction from a full-rank fixed point to an explicitly
   chosen positive-definite invariant weight.
 
+For the Fibonacci string-net example of arXiv:1511.08090:
+
+- `bmwshv17_fibonacci_block_entries_provenance.tex` records that the source
+  prints the Fibonacci F-symbols but no numeric entries of the two operator
+  blocks, the placement of the F-symbols used for the blocks, and that the
+  checked fusion rules and projector identity concern the bare F-symbols.
+
 For the MPU index of arXiv:1703.09188:
 
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
