@@ -108,7 +108,7 @@ def czxDecorated (N : ℕ) [NeZero N] : Matrix (Fin N → Fin 2) (Fin N → Fin 
       ∑ i, (CZXCompression.spinFlip N t i).val)
 
 /-- On the flipped pair, the gate sign `(−1)^{kl + l}` of the input bits equals the sign
-`(−1)^{k̄ l̄ + k̄}` of the flipped bits. -/
+`(−1)^{(rev k)(rev l) + rev k}` of the flipped bits. -/
 private theorem site_rev (k l : Fin 2) :
     (-1 : ℂ) ^ (k.val * l.val) * (-1) ^ l.val =
       (-1) ^ (k.rev.val * l.rev.val) * (-1) ^ k.rev.val := by
