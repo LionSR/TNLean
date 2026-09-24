@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.RingTheory.RootsOfUnity.Complex
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXUnitary
 import TNLean.MPS.MPU.GroupCocycleMPO
 
 /-!
@@ -12,21 +13,24 @@ import TNLean.MPS.MPU.GroupCocycleMPO
 
 **Source.** Garre-Rubio, Lootens, Molnár 2023 (arXiv:2203.12563), subsubsection "Periodic
 boundary condition case", `Papers/2203.12563/REsubmission.tex` line 2224: for the nontrivial
-three-cocycle of `ℤ₂` the periodic operator is `U_g = ∏ CZ_{i,i+1} Z_i ∏ X_i`; line 2072:
+three-cocycle of `ℤ₂` the periodic operator is `U_g = ∏ CZ_{i,i+1} Z_i ∏ X_i`; line 2070:
 `W_g = CZ (1 ⊗ Z)` and `L_g = X`. Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.C,
-`Papers/2405.00439/MPU-DW.tex` lines 2041–2042: the three-cocycles
+`Papers/2405.00439/MPU-DW.tex` line 2040: the three-cocycles
 `ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` of `ℤ_n`, with `[b + c] = b + c mod n`.
 
 **Formalized here.** The periodic operators of the construction in `GroupCocycleMPO` for
 three groups: for `ℤ₂` with the cocycle `ω(g,g,g) = −1`, the operator of the generator
 equals `∏ CZ_{i,i+1} Z_i ∏ X_i` as a matrix, and the gate is `W_g = CZ (1 ⊗ Z)`; for `ℤ_n`
 with `ω_j`, the functions `ω_j` are normalized unit-modulus three-cocycles for every `n` and
-`j`, so the construction is a matrix product unitary representation, with an explicit
-kernel; for `ℤ₂ × ℤ₂` with `ω(a,b,c) = (−1)^{a₁ b₂ c₂}` the same holds. The last cocycle is
-a standard representative, not taken from the sources on disk.
+`j`, so the construction satisfies the operator laws of a matrix product unitary
+representation, with an explicit kernel; for `ℤ₂ × ℤ₂` with `ω(a,b,c) = (−1)^{a₁ b₂ c₂}`
+the same holds. The last cocycle is a standard representative, not taken from the sources on
+disk.
 
 Residues are represented by their values in `{0, …, n − 1}`, the source's convention.
-The groups are written multiplicatively as `Multiplicative (ZMod n)`.
+The groups are written multiplicatively as `Multiplicative (ZMod n)`. The kernels of the
+periodic operators are derived from the contraction `mpo_tensor_apply`; the sources do not
+print them.
 
 ## Main definitions
 
@@ -41,7 +45,8 @@ The groups are written multiplicatively as `Multiplicative (ZMod n)`.
 * `MPOTensor.GroupCocycle.cyclicCocycle_isCocycle`,
   `MPOTensor.GroupCocycle.cyclicCocycle_isNormalized`,
   `MPOTensor.GroupCocycle.cyclicCocycle_norm`: `ω_j` is a normalized unit-modulus cocycle.
-* `MPOTensor.GroupCocycle.mpo_tensor_cyclic_apply`: the kernel for `ℤ_n` and `ω_j`.
+* `MPOTensor.GroupCocycle.mpo_tensor_cyclic_apply`, `MPOTensor.GroupCocycle.cyclic_operator_laws`:
+  the kernel and the operator laws for `ℤ_n` and `ω_j`.
 * `MPOTensor.GroupCocycle.kleinCocycle_isCocycle`,
   `MPOTensor.GroupCocycle.mpo_tensor_klein_apply`: the `ℤ₂ × ℤ₂` instance.
 
@@ -50,7 +55,7 @@ The groups are written multiplicatively as `Multiplicative (ZMod n)`.
   *Classifying phases protected by matrix product operator symmetries using matrix product
   states*
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
-  *Interplay of anomalies and domain walls in matrix product unitary symmetries*
+  *Fractional domain wall statistics in spin chains with anomalous symmetries*
 -/
 
 noncomputable section
@@ -79,7 +84,7 @@ private theorem cyclicTwo_site (k l : Fin 2) :
 
 /-- **`W_g = CZ (1 ⊗ Z)`** for the generator of `ℤ₂` and the cocycle `ω(g,g,g) = −1`.
 
-Source: arXiv:2203.12563, line 2072. -/
+Source: arXiv:2203.12563, line 2070. -/
 theorem wGate_cyclicTwo :
     wGate (cyclicTwoCocycle 1) s₂ =
       Matrix.diagonal fun kl : Multiplicative (ZMod 2) × Multiplicative (ZMod 2) ↦
@@ -90,16 +95,17 @@ theorem wGate_cyclicTwo :
   simpa using cyclicTwo_site (bitEquiv kl.1) (bitEquiv kl.2)
 
 /-- The operator `∏ CZ_{i,i+1} Z_i ∏ X_i` on a periodic chain of `N` qubits: all spins are
-flipped, then each controlled-`Z` and each `Z` contributes its sign on the flipped
-configuration `s`. Its entry at `(s, t)` is `(−1)^{∑ s_i s_{i+1} + ∑ s_i}` when `s` is the
-flip of `t`, and zero otherwise.
+flipped by `CZXCompression.spinFlip`, then each controlled-`Z` and each `Z` contributes its
+sign on the flipped configuration `s`. Its entry at `(s, t)` is
+`(−1)^{∑ s_i s_{i+1} + ∑ s_i}` when `s` is the flip of `t`, and zero otherwise. Without the
+factors `Z_i` this is the operator `CZXCompression.mpo_czxTensor` of the undecorated CZX
+tensor, whose sign is taken on the input configuration instead.
 
 Source: arXiv:2203.12563, line 2224. -/
 def czxDecorated (N : ℕ) [NeZero N] : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
-  Matrix.of fun s t ↦
-    if s = fun i ↦ (t i).rev then
-      (-1 : ℂ) ^ (∑ i, (s i).val * (s (i + 1)).val + ∑ i, (s i).val)
-    else 0
+  Matrix.monomial (CZXCompression.spinFlip N) fun t ↦
+    (-1 : ℂ) ^ (CZXCompression.czExponent (CZXCompression.spinFlip N t) +
+      ∑ i, (CZXCompression.spinFlip N t i).val)
 
 /-- On the flipped pair, the gate sign `(−1)^{kl + l}` of the input bits equals the sign
 `(−1)^{k̄ l̄ + k̄}` of the flipped bits. -/
@@ -115,17 +121,16 @@ Source: arXiv:2203.12563, line 2224. -/
 theorem mpo_tensor_cyclicTwo (N : ℕ) [NeZero N] :
     mpo (tensor bitEquiv (cyclicTwoCocycle 1) s₂) N = czxDecorated N := by
   ext s t
-  have hshift : shift bitEquiv s₂ N t = fun i ↦ (t i).rev := by
+  have hshift : shift bitEquiv s₂ N t = CZXCompression.spinFlip N t := by
     funext i
-    rw [shift_apply]
+    rw [shift_apply, CZXCompression.spinFlip_apply]
     generalize t i = a
     revert a
     decide
-  rw [mpo_tensor_apply, czxDecorated, Matrix.of_apply, hshift]
+  rw [mpo_tensor_apply, czxDecorated, Matrix.monomial_apply, hshift]
   split_ifs with hs
-  · subst hs
-    simp only [cyclicTwo_site, site_rev, Finset.prod_mul_distrib, pow_add,
-      Finset.prod_pow_eq_pow_sum]
+  · simp only [CZXCompression.czExponent, CZXCompression.spinFlip_apply, cyclicTwo_site,
+      site_rev, Finset.prod_mul_distrib, pow_add, Finset.prod_pow_eq_pow_sum]
   · rfl
 
 /-! ### The cyclic groups `ℤ_n` -/
@@ -133,7 +138,7 @@ theorem mpo_tensor_cyclicTwo (N : ℕ) [NeZero N] :
 /-- The three-cocycle `ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` of `ℤ_n`, with
 residues represented in `{0, …, n − 1}`.
 
-Source: arXiv:2405.00439, lines 2041–2042. -/
+Source: arXiv:2405.00439, line 2040. -/
 def cyclicCocycle (n j : ℕ) [NeZero n] : ScalarThreeCochain (Multiplicative (ZMod n)) :=
   fun a b c ↦ Units.mk0
     (Complex.exp (2 * Real.pi * Complex.I * j * (Multiplicative.toAdd a).val *
@@ -149,10 +154,7 @@ theorem rootOfUnity_pow (n : ℕ) [NeZero n] : rootOfUnity n ^ n = 1 :=
 
 private theorem pow_eq_pow_of_modEq {n A B : ℕ} {ζ : ℂ} (h : ζ ^ n = 1)
     (hAB : A ≡ B [MOD n]) : ζ ^ A = ζ ^ B := by
-  have key : ∀ C, ζ ^ C = ζ ^ (C % n) := fun C ↦ by
-    conv_lhs => rw [← Nat.mod_add_div C n]
-    rw [pow_add, pow_mul, h, one_pow, mul_one]
-  rw [key A, key B, show A % n = B % n from hAB]
+  rw [pow_eq_pow_mod A h, pow_eq_pow_mod B h, hAB]
 
 /-- **The value of `ω_j`**: `ω_j(a,b,c) = ζ^{j a ⌊(b + c)/n⌋}` with `ζ = exp(2πi/n)`, since
 `b + c − [b + c] = n ⌊(b + c)/n⌋`. -/
@@ -188,7 +190,7 @@ private theorem carry_add (n h k l : ℕ) (hn : 0 < n) :
 
 /-- **`ω_j` is a three-cocycle** of `ℤ_n` for every `n` and `j`.
 
-Source: arXiv:2405.00439, lines 2041–2042. -/
+Source: arXiv:2405.00439, line 2040. -/
 theorem cyclicCocycle_isCocycle (n j : ℕ) [NeZero n] : IsCocycle (cyclicCocycle n j) := by
   intro g h k l
   apply Units.ext
@@ -230,7 +232,8 @@ def residueEquiv (m : ℕ) : Multiplicative (ZMod (m + 1)) ≃ Fin (m + 1) := Mu
 `s_i = g + t_i` at every site, and then equals `∏_i ζ^{j g ⌊(t_{i+1} + [t_i − t_{i+1}])/n⌋}`
 with `n = m + 1` and `ζ = exp(2πi/n)`.
 
-Source: arXiv:2203.12563, lines 2211–2213; arXiv:2405.00439, lines 2041–2042. -/
+Source: arXiv:2203.12563, lines 2204–2222; arXiv:2405.00439, line 2040. The kernel is
+derived from `mpo_tensor_apply`; the sources do not print it. -/
 theorem mpo_tensor_cyclic_apply (m j : ℕ) (g : Multiplicative (ZMod (m + 1)))
     {N : ℕ} [NeZero N] (s t : Fin N → Fin (m + 1)) :
     mpo (tensor (residueEquiv m) (cyclicCocycle (m + 1) j) g) N s t =
@@ -243,6 +246,21 @@ theorem mpo_tensor_cyclic_apply (m j : ℕ) (g : Multiplicative (ZMod (m + 1)))
   refine Finset.prod_congr rfl fun i _ ↦ ?_
   rw [cyclicCocycle_val, toAdd_mul, toAdd_inv, neg_add_eq_sub]
   rfl
+
+/-- The four operator laws for `ℤ_n` with the cocycle `ω_j`, for every `n = m + 1` and `j`.
+
+Source: arXiv:2203.12563, lines 2204–2222; arXiv:2405.00439, lines 1684 and 2040. -/
+theorem cyclic_operator_laws (m j : ℕ) :
+    (∀ g, IsMPUPos ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor g)) ∧
+      (∀ N, 0 < N → mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor 1) N = 1) ∧
+      (∀ g h N, 0 < N →
+        mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor g) N *
+            mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor h) N =
+          mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor (g * h)) N) ∧
+      (∀ g N, 0 < N → (mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor g) N)ᴴ =
+          mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor g⁻¹) N) :=
+  family_operator_laws (residueEquiv m) (cyclicCocycle_isCocycle (m + 1) j)
+    (cyclicCocycle_isNormalized (m + 1) j) (cyclicCocycle_norm (m + 1) j)
 
 /-! ### The Klein four-group `ℤ₂ × ℤ₂` -/
 
@@ -283,7 +301,8 @@ def kleinEquiv : Multiplicative (ZMod 2 × ZMod 2) ≃ Fin 4 :=
 configuration `t`, the entry at `(s, t)` vanishes unless `s` is the shift of `t` by `g`, and
 then equals `(−1)^{∑_i g₁ x_{i+1,2} (x_{i,2} − x_{i+1,2})}`.
 
-Source: arXiv:2203.12563, lines 2211–2213. -/
+Source: arXiv:2203.12563, lines 2204–2222. The kernel is derived from `mpo_tensor_apply`; the
+sources do not print it. -/
 theorem mpo_tensor_klein_apply (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ} [NeZero N]
     (s t : Fin N → Fin 4) :
     mpo (tensor kleinEquiv kleinCocycle g) N s t =
