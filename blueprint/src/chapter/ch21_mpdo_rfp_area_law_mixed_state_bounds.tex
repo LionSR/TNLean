@@ -134,16 +134,15 @@
     \label{thm:cpsv_prop45_printed_status}
     \notready
     \uses{prop:mutual_info_monotone, thm:mpdo_finite_chain_mutual_information_four_log, thm:cpsv_prop45_limit_counterexample}
-    According to \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}, one has
-    $I_L\le I_{L+1}$ for $L<\lfloor N/2\rfloor$, the mutual information is
-    bounded in terms of the bond dimension, and the indicated iterated
-    thermodynamic limit exists and is finite.
+    Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} asserts that
+    $I_L\le I_{L+1}$ for $L<\lfloor N/2\rfloor$, that mutual information is
+    bounded by $4\log D$, and that an iterated thermodynamic limit exists.
 
-    The monotonicity and finite-chain bound hold.  The limit assertion is false
-    without an additional convergence hypothesis.  For the parity-sensitive
-    positive MPDO of Theorem~\ref{thm:cpsv_prop45_limit_counterexample}, the
-    mutual information is $0$ at odd chain lengths and $h_2(1/3)>0$ at even
-    chain lengths, so the inner limit does not exist.
+    While monotonicity and the finite-chain bound hold, the thermodynamic-limit
+    clause fails without additional convergence hypotheses: for the
+    parity-sensitive MPDO in Theorem~\ref{thm:cpsv_prop45_limit_counterexample},
+    $I_L^{(N)}$ alternates between $0$ (odd $N$) and $h_2(1/3)>0$ (even $N$), so
+    the limit as $N\to\infty$ does not exist.
 \end{theorem}
 
 \begin{proposition}[Monotonicity of the mutual information]
@@ -153,10 +152,9 @@
     \uses{def:mutual_info_chain}
     Let $M$ generate an MPDO whose finite-chain operator $\rho^{(N)}(M)$ is
     positive semidefinite with nonzero trace. For every block length $L$ with
-    $2L+1\le N$, one has $I_L\le I_{L+1}$. The implication
-    $1\le L<\lfloor N/2\rfloor\Longrightarrow 2L+1\le N$
-    shows that this contains the range of
-    \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}.
+    $2L+1\le N$, $I_L\le I_{L+1}$.
+    Since $1\le L<\lfloor N/2\rfloor$ implies $2L+1\le N$, this contains the
+    range in \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}.
 \end{proposition}
 \begin{proof}\leanok
     \uses{def:block_entropy, thm:mpdo_tripartite_block_entropy_identifications}
@@ -212,7 +210,7 @@
 
     Thus normalized periodic marginals need not converge under the hypotheses
     of \cite[Proposition~4.5, lines~801--806]{Cirac2016MPDO_arXiv}. The mutual
-    information of this same family is computed in
+    information for this family is analyzed in
     \cite{gap:cpgsv17_mpdo_mutual_information_bound}.
 \end{theorem}
 
@@ -285,19 +283,18 @@
     \lean{MPOTensor.ThermodynamicLimitCounterexample.proposition45_limit_counterexample}
     \leanok
     \uses{thm:parity_mpdo_no_thermodynamic_limit, thm:parity_mpdo_no_mutual_info_limit}
-    The parity-sensitive tensor is an MPDO, and for every fixed $L\geq1$ the
-    sequence $K\mapsto I_L^{(L+K+1)}$ has no real limit.  Thus the unrestricted
-    thermodynamic-limit clause of
-    \cite[Proposition~4.5]{Cirac2016MPDO_arXiv} is false.  An aperiodicity or
-    convergence condition that excludes the parity oscillation is a genuine
-    boundary condition, not a hypothesis of the printed proposition.
+    The parity-sensitive tensor generates an MPDO for which the sequence
+    $K\mapsto I_L^{(L+K+1)}$ has no limit for any fixed $L\geq1$, refuting the
+    unrestricted thermodynamic-limit clause of
+    \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
     The MPDO property follows from positivity of every positive-length
-    periodic operator.  The preceding odd- and even-length formulas give two
-    subsequences with the distinct values $0$ and $h_2(1/3)>0$ at every fixed
-    nonempty cut, so no real limit exists.
+    periodic operator. The formulas of
+    Theorem~\ref{thm:parity_mpdo_no_mutual_info_limit} yield two subsequences
+    with distinct values $0$ and $h_2(1/3)>0$ at every fixed cut $L\ge 1$, so no
+    limit exists.
 \end{proof}
 
 
@@ -414,10 +411,8 @@ The corresponding generic result is proved in the companion quantum-channel volu
     positive semidefinite and has nonzero trace, then
     $I(\sigma^{(N)}_{a+1:b+2})
         =I(\sigma^{(N)}_{a+2:b+1})$.
-    This is the channel calculation in
-    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}. It depends only
-    on positivity, nonzero trace, and the local renormalization equations; no
-    horizontal decomposition enters the calculation.
+    This formalizes the channel calculation in
+    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -458,9 +453,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     the area law:
     $I_L(M)=I_{L+1}(M)$ whenever
     $1\leq L<\lfloor N/2\rfloor$.
-    Nonvanishing is the normalization boundary implicit in the density-operator
-    language of \cite{Cirac2016MPDO_arXiv}. Positive semidefiniteness alone
-    admits the zero family.
+    The nonvanishing trace condition ensures normalized states are well-defined.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -496,11 +489,9 @@ The corresponding generic result is proved in the companion quantum-channel volu
     Let $M$ generate positive semidefinite ring operators with
     $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$. If $M$ satisfies the local
     renormalization fixed-point equations of Definition~4.1, then
-    $\mathcal T_M^2=\mathcal T_M$ and $M$ saturates the area law. This is the
-    literal ZCL and SAL forward implication proved in
-    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}, at the
-    normalization boundary implicit in its density-operator language. Positive
-    semidefiniteness alone admits the zero family.
+    $\mathcal T_M^2=\mathcal T_M$ and $M$ saturates the area law. This proves the
+    ZCL and SAL forward implications of
+    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -743,9 +734,9 @@ The corresponding generic result is proved in the companion quantum-channel volu
     This identity also holds when the common trace vanishes, in which case both
     normalized-form operators are zero.
 
-    This is the finite-chain channel identity from the purification preceding
-    equation~(4) of \cite{Wolf2008AreaLaws}, under the explicit local
-    purification of \cite[Section~4.3]{Cirac2016MPDO_arXiv}.
+    This formalizes the finite-chain channel identity from the purification in
+    \cite[equation~(4)]{Wolf2008AreaLaws} for the local purifications of
+    \cite[Section~4.3]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok

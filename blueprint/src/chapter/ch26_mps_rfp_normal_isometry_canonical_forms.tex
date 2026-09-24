@@ -3,12 +3,10 @@
 \subsection{Auxiliary block-family hypotheses}
 \label{subsec:rfp_project_canonical_form}
 
-The next predicate is an auxiliary hypothesis on an indexed block family. It is
-not the literal CPSV canonical form of Definition~\ref{def:cpsv_canonical_form}
-or canonical form~II of Definition~\ref{def:cpsv_cfii}. In particular, it
-starts from injective left-canonical blocks, orders nonzero weights, and imposes
-a self-overlap limit; it does not reconstruct a tensor from normal blocks in an
-ambient bond space.
+Definition~\ref{def:is_canonical_form} formulates an auxiliary condition for
+a family of injective left-canonical blocks with non-increasing nonzero weights
+and converging self-overlap, distinguishing it from the ambient canonical forms
+of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
 
 \begin{definition}[Auxiliary injective block-family hypotheses]\label{def:is_canonical_form}
     \lean{MPSTensor.IsCanonicalForm}
@@ -28,17 +26,11 @@ ambient bond space.
         \item the self-overlap converges: $O_{A_kA_k}(N)\to1$
               for each~$k$.
     \end{enumerate}
-    Only this one-sided normalization is assumed;
-    no unital condition is assumed here.
-    Condition~(6) is a primitivity hypothesis:
-    for a primitive channel
-    (\cite[Theorem~6.7(3)]{Wolf2012Quantum}),
-    $T^n(\rho)\to\rho_\infty$ for every initial state,
-    which forces the self-overlap to converge to~$1$.
-    See also~\cite[Theorem~6.8]{Wolf2012Quantum}
-    for the completely-positive characterisation
-    and Chapter~\ref{ch:spectral} for the transfer-operator gap
-    proof.
+    Condition~(6) corresponds to channel primitivity: for a primitive channel
+    $T$, $T^n(\rho)\to\rho_\infty$ for every state $\rho$
+    \cite[Theorem~6.7(3)]{Wolf2012Quantum}, which implies convergence of the
+    self-overlap to $1$ (see also \cite[Theorem~6.8]{Wolf2012Quantum} and
+    Chapter~\ref{ch:spectral}).
 \end{definition}
 
 \begin{theorem}[Auxiliary block-family hypotheses from peripheral primitivity]%
@@ -60,8 +52,8 @@ ambient bond space.
     The injectivity, left-canonical identity, weight ordering, and
     nonzero-weight clauses are exactly the hypotheses. For each block,
     peripheral primitivity gives the complementary spectral gap
-    $\rho_{\spec}(\E_{A_k}-P)<1$ by
-    the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}.
+    $\rho_{\spec}(\E_{A_k}-P)<1$ by the complementary transfer-map gap for
+    primitive maps~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}.
     Theorem~\ref{thm:primitive_overlap} then yields
     $O_{A_kA_k}(N)\to1$.
 \end{proof}
@@ -80,11 +72,11 @@ ambient bond space.
          & =\sum_j V_{i_1i_2,j}A^j.
         \notag
     \end{align}
-    Induction on the word length therefore gives
+    Induction on the word length gives
     $A^{i_1}\cdots A^{i_n}\in\spn\{A^j:0\le j<d\}$ for $n\ge 1$.
-    By normality, the words of some positive length $N$ span $\MN{D}$.
-    The preceding inclusion therefore shows that the one-site span is already
-    $\MN{D}$.
+    Normality implies that products of some length $N$ span $\MN{D}$, so
+    the one-site matrices $\{A^j\}_{j=0}^{d-1}$ already span $\MN{D}$,
+    establishing injectivity.
 \end{proof}
 
 \begin{theorem}[Left-canonical normal RFP tensor is injective]%
@@ -100,10 +92,7 @@ ambient bond space.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_injective}
-    The conclusion follows immediately from
-    Theorem~\ref{thm:rfp_nt_injective}. Normality already supplies a positive
-    block-injectivity length, so this implication does not require the
-    additional normalization.
+    Follows from Theorem~\ref{thm:rfp_nt_injective}.
 \end{proof}
 
 \begin{theorem}[Unitary diagonal fixed point for a left-canonical normal RFP]%
@@ -121,12 +110,12 @@ ambient bond space.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible, thm:form_II}
-    By Theorem~\ref{thm:rfp_nt_structural_of_left_canonical}, the tensor $A$
-    is injective. By Theorem~\ref{thm:injective_irreducible}, its transfer map
-    $\E_A$ is irreducible, and hence $A$ is irreducible as a tensor. Applying
-    Theorem~\ref{thm:form_II} gives a unitary conjugate $B$ for which the
-    trace-preserving normalization remains valid and a diagonal positive
-    definite matrix $\Lambda$ with $\E_B(\Lambda) = \Lambda$.
+    By Theorem~\ref{thm:rfp_nt_structural_of_left_canonical}, $A$ is
+    injective. By Theorem~\ref{thm:injective_irreducible}, its transfer map
+    $\E_A$ is irreducible. Applying canonical form~II (Theorem~\ref{thm:form_II})
+    yields a unitary matrix $U$ preserving the left-canonical condition and a
+    diagonal positive-definite matrix $\Lambda$ satisfying
+    $\E_B(\Lambda) = \Lambda$ for $B^i = U^\dagger A^i U$.
 \end{proof}
 
 \begin{theorem}[Rank-one classification for RFP transfer maps]%
@@ -141,13 +130,12 @@ ambient bond space.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:exponential_convergence_primitive}
-    The exponential convergence bound gives
-    $\lVert \E_A^n(X) - P_\rho(X)\rVert
-        \le C(1-\delta)^n\lVert X\rVert$.
-    Idempotence of $\E_A$ implies $\E_A^{n+1} = \E_A$ for all $n \ge 0$,
-    so $\lVert \E_A(X) - P_\rho(X)\rVert
-        \le C(1-\delta)^{n+1}\lVert X\rVert$ for all $n$. Taking
-    $n \to \infty$ gives $\E_A = P_\rho$.
+    Exponential convergence of primitive channels
+    (Theorem~\ref{thm:exponential_convergence_primitive}) gives
+    $\lVert \E_A^n(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$.
+    Transfer map idempotence implies $\E_A^n = \E_A$ for all $n \ge 1$, so
+    $\lVert \E_A(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$ for all
+    $n\ge 1$. Taking $n \to \infty$ yields $\E_A = P_\rho$.
 \end{proof}
 
 \begin{theorem}[Diagonal Kraus form for a normal fixed point]%
@@ -211,21 +199,14 @@ ambient bond space.
     \lean{MPSTensor.rfp_nt_structural_full_sqSum}
     \leanok
     \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
-    The decomposition in Theorem~\ref{thm:rfp_nt_structural_full} additionally records that the
-    diagonal weights satisfy $\sum_\alpha \Lambda_\alpha^2 = D$. This square-sum
-    identity is the trace-normalization seed: the explicit weights are
-    $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, and
-    $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ for the diagonal fixed point
-    $\rho$.
+    In the decomposition of Theorem~\ref{thm:rfp_nt_structural_full}, the
+    diagonal weights satisfy $\sum_\alpha \Lambda_\alpha^2 = D$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
-    The diagonal fixed-point reduction and the rank-one classification of
-    injective left-canonical renormalization fixed points produce the diagonal
-    weights $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, so
-    $\Lambda_\alpha^2 = D\,\rho_{\alpha,\alpha}/\tr\rho$. Summing over $\alpha$
-    and using $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ gives
-    $\sum_\alpha \Lambda_\alpha^2 = D$.
+    From $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, squaring
+    and summing over $\alpha$ gives
+    $\sum_\alpha \Lambda_\alpha^2 = \frac{D}{\tr\rho}\sum_\alpha \rho_{\alpha,\alpha} = D$.
 \end{proof}
 
 \begin{theorem}[Unit pair-index form for a normal fixed point]%
@@ -244,8 +225,7 @@ ambient bond space.
         \notag
     \end{align}
     This is the unit pair-index convention of
-    \cite[Section~3]{Cirac2016MPDO_arXiv}. The statement still does not impose
-    the trace-normalization $\tr(\Lambda)=1$.
+    \cite[Section~3]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:isometry_canonical_form_of_rfp_nt}
@@ -262,11 +242,11 @@ ambient bond space.
     \leanok
     Let $\lambda_\alpha>0$ satisfy $\sum_\alpha\lambda_\alpha=1$, and set
     $\rho=\diag(\lambda_\alpha)$. A normal tensor $A$ has the
-    \emph{square-root fixed-point form} when there are an invertible matrix
+    \emph{square-root fixed-point form} if there exist an invertible matrix
     $X$ and a tensor $U$ satisfying the unit pair-index isometry
     \begin{align}
         \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
-         & = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+         & = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
         \notag
     \end{align}
     such that
@@ -316,30 +296,31 @@ ambient bond space.
     \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}
     \leanok
     \uses{def:is_isometry_canonical_form, thm:rfp_nt_structural_full_sq_sum}
-    A normal left-canonical renormalization fixed-point tensor has the
-    square-root fixed-point form. With
-    $\lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and
-    $\rho_0=\diag(\lambda_\alpha)$, it admits
-    $A^i=X\sqrt{\rho_0}\,U^iX^{-1}$, where $\rho_0$ is positive and
-    trace-normalized and $U$ is a unit pair-index isometry. Trace normalization
-    is the identity $\sum_\alpha \rho_{\alpha,\alpha}=\tr\rho$. This is the
-    normal-tensor statement corresponding to lines~1278 and~1281--1283,
-    with the square-root correction dictated by the reference tensor at
-    line~1300 \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
+    Every normal left-canonical renormalization fixed-point tensor has the
+    square-root fixed-point form (Definition~\ref{def:is_isometry_canonical_form}):
+    setting $\lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and
+    $\rho_0=\diag(\lambda_\alpha)$, there exist an invertible matrix $X$ and
+    a unit pair-index isometry $U$ such that
+    \begin{align}
+        A^i & =X\sqrt{\rho_0}\,U^iX^{-1}.
+        \notag
+    \end{align}
+    This is the normal-tensor characterization of
+    \cite[Appendix~B, lines~1278--1300]{Cirac2016MPDO_arXiv}, incorporating the
+    square-root weight correction.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_full_sq_sum}
-    The structural form with the square-sum identity
-    (Theorem~\ref{thm:rfp_nt_structural_full_sq_sum}) supplies a positive
-    diagonal weight $\widetilde\Lambda$ with
+    By Theorem~\ref{thm:rfp_nt_structural_full_sq_sum}, $A$ admits a
+    decomposition $A^i = X\widetilde\Lambda U_{\mathrm{raw}}^i X^{-1}$ with
     $\sum_\alpha \widetilde\Lambda_\alpha^2 = D$. Rescaling to the unit
-    pair-index convention by $U^i\mapsto\sqrt D\,U^i$, set
+    pair-index convention via $U^i = \sqrt{D}\,U_{\mathrm{raw}}^i$ and setting
     \begin{align}
         \rho_0
-         & =\diag\left(\left(\frac{\widetilde\Lambda_\alpha}{\sqrt D}\right)^2\right).
+         & =\diag\left(\left(\frac{\widetilde\Lambda_\alpha}{\sqrt D}\right)^2\right),
         \notag
     \end{align}
-    Then
+    one has
     $\tr(\rho_0)
         = D^{-1}\sum_\alpha \widetilde\Lambda_\alpha^2
         = D^{-1}\cdot D = 1$, while
@@ -448,9 +429,8 @@ ambient bond space.
         A^i = X\sqrt\rho\, U^i X^{-1}.
         \notag
     \end{align}
-    Its bond dimension is necessarily positive. This is the
-    corrected form of Lemma~B.1 in
-    \cite[Appendix~B, lines~1274--1301]{Cirac2016MPDO_arXiv}.
+    In particular, the bond dimension of $A$ is positive. This establishes the
+    corrected form of \cite[Lemma~B.1, lines~1274--1301]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_bond_dim_pos, thm:cpsv_normal_tp_gauge, thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal, lem:rfp_parent_gauge_invariance, lem:isometry_canonical_form_gauge_invariant, thm:isometry_canonical_form_of_rfp_nt, thm:is_rfp_of_isometry_canonical_form}
@@ -558,12 +538,8 @@ representation.
         \cite[Section~3.4, lines~543--563]{Cirac2016MPDO_arXiv}.}
     \label{fig:rfp_block_multiplicity_routing}
 \end{figure}
-Here $j$ labels the normal-tensor block and $q$ its repeated representation;
-the isometries in
-\cite[Section~3.4, lines~543--561]{Cirac2016MPDO_arXiv} also satisfy
-cross-block physical orthogonality. Those additional equations are not part of
-the single-block square-root form of
-Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}, which is what applies to
-each block here.
+Here $j$ indexes the distinct normal blocks and $q$ their repeated copies.
+The joint isometry condition across distinct blocks is established in
+Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum}.
 % Scope restriction: cross-block orthogonality omitted here; see
 % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.

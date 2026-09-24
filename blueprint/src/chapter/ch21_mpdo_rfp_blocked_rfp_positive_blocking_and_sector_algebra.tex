@@ -361,7 +361,8 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    The preceding blocking results show that $K^{[2]}$ is in normalized
+    By Theorem~\ref{thm:mpdo_block_two_as_positive_blocking} and
+    Lemma~\ref{lem:mpdo_horizontal_cf_block_two}, $K^{[2]}$ is in normalized
     BNT-refined horizontal form and generates matrix product density operators. Apply
     Theorem~\ref{thm:vertical_cf_of_horizontal_cf} first to $K$ and then to
     $K^{[2]}$.
@@ -657,8 +658,8 @@ physical indices, as in
     positive,
     $m_\alpha
         =\sum_{q=0}^{\mult(\alpha)-1}\mu_{\alpha,q}>0$.
-    Apply the preceding theorem to the nonzero family
-    $c_\alpha=m_\alpha=\tr(\mu_\alpha)$.
+    Apply Theorem~\ref{thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+    to the nonzero family $c_\alpha=m_\alpha=\tr(\mu_\alpha)$.
 \end{proof}
 
 \begin{theorem}[Fixed spanning contraction products determine an endomorphism]
@@ -828,11 +829,8 @@ physical indices, as in
     Then there is a fixed family $\rho=(\rho_\alpha)_\alpha$ such that every
     $\rho_\alpha$ is positive definite.
 
-    This is a local finite-product consequence used to formalize the
-    fixed-point argument in
-    \cite[Appendix~C.4, lines~1980--1993]{Cirac2016MPDO_arXiv}; CPSV16 applies
-    Wolf's density-block description directly rather than stating this
-    intermediate result.
+    This provides the intermediate step for the fixed-point argument in
+    \cite[Appendix~C.4, lines~1980--1993]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -879,6 +877,6 @@ physical indices, as in
     gives
     $\dim C_L(\mathcal F)\leq\dim\mathcal F$, where
     $\mathcal F=\Fix(F)$.
-    Since $C_L(V_c)=\mathcal A$ and $V_c(X)\in\mathcal F$, the preceding
-    theorem gives $F=\id_{\mathcal A}$.
+    Since $C_L(V_c)=\mathcal A$ and $V_c(X)\in\mathcal F$,
+    Theorem~\ref{thm:mpdo_fixed_contractions_product_dimension} gives $F=\id_{\mathcal A}$.
 \end{proof}

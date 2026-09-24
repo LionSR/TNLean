@@ -4,24 +4,24 @@
     \label{def:physical_blocking_isometry}
     \lean{MPSTensor.HasPhysicalBlockingIsometry}
     \leanok
-    An MPS tensor $A$ is a \emph{renormalization fixed point} if there is an
-    isometry $V\colon \C^d\to\C^{d^2}$, with coefficients
-    $V_{(i_1,i_2),j}$ and $V^\dagger V=\Id$, such that, for all physical indices
-    $i_1,i_2$,
+    An MPS tensor $A$ is a \emph{renormalization fixed point} if there exists an
+    isometry $V\colon \C^d\to\C^{d^2}$ with coefficients $V_{(i_1,i_2),j}$
+    satisfying $V^\dagger V=\Id$ such that for all physical indices
+    $i_1,i_2\in\{0,\ldots,d-1\}$,
     \begin{align}
         A^{i_1}A^{i_2}
          & =\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j.
         \label{eq:corr_physical_blocking_isometry}
     \end{align}
-    This is the relation $AA=A$ in
+    This expresses the physical two-site blocking relation $AA=A$ of
     \cite[Definition~3.2]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[Idempotent transfer-map criterion]\label{def:mps_transfer_idempotence}
+\begin{definition}[Idempotent transfer map]\label{def:mps_transfer_idempotence}
     \lean{MPSTensor.IsTransferIdempotent}
     \leanok
     \uses{def:transfer_map}
-    The transfer map of $A$ satisfies the idempotence criterion when
+    The transfer map $\E_A$ of an MPS tensor $A$ satisfies \emph{transfer map idempotence} when
     $\E_A\circ\E_A=\E_A$.
 \end{definition}
 
@@ -58,7 +58,6 @@
         =\E_A(X).
         \notag
     \end{align}
-    Hence $\E_A^2=\E_A$.
 \end{proof}
 
 \begin{theorem}[Kraus-isometry criterion for transfer idempotence]%
@@ -87,7 +86,7 @@
          & =\sum_jA^jX(A^j)^\dagger.
         \notag
     \end{align}
-    the corresponding theorem in the companion quantum-channel volume~\cite[``Rectangular Kraus freedom with general finite index types'']{QICLean2026Blueprint} then supplies the isometry $V$
+    Rectangular Kraus freedom~\cite[``Rectangular Kraus freedom with general finite index types'']{QICLean2026Blueprint} then supplies the isometry $V$
     relating the two Kraus families.
 \end{proof}
 
@@ -104,9 +103,8 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:kraus_isometry_iff_transfer_idempotence}
-    This is Theorem~\ref{thm:kraus_isometry_iff_transfer_idempotence}, with the
-    physical blocking relation written as
-    Definition~\ref{def:physical_blocking_isometry}.
+    Follows from Theorem~\ref{thm:kraus_isometry_iff_transfer_idempotence}
+    and Definition~\ref{def:physical_blocking_isometry}.
 \end{proof}
 
 \begin{definition}[Limit of the renormalization flow]
@@ -114,10 +112,10 @@
     \lean{MPSTensor.AppearsAsRenormalizationFlowLimit}
     \leanok
     \uses{def:transfer_map}
-    Let $A=(A^i)_{i=0}^{d-1}$ have bond dimension $D$. Its physical-isometry
-    class \emph{appears as a limit of the renormalization flow} if there are a
-    physical dimension $e$ and a tensor
-    $B=(B^a)_{a=0}^{e-1}$ of the same bond dimension $D$ such that
+    Let $A=(A^i)_{i=0}^{d-1}$ be an MPS tensor with bond dimension $D$. The
+    physical-isometry class of $A$ \emph{appears as a limit of the
+        renormalization flow} if there exist a physical dimension $e$ and an MPS
+    tensor $B=(B^a)_{a=0}^{e-1}$ of bond dimension $D$ such that
     \begin{align}
         \widehat{\E}_B^{\,2^n}
          & \longrightarrow \widehat{\E}_A.
@@ -125,9 +123,9 @@
     \end{align}
     Here $\widehat{\E}_A$ and $\widehat{\E}_B$ are the transfer matrices, and
     convergence is taken in the standard topology on the finite-dimensional
-    matrix space $\MN{D^2}$. The physical dimension is quantified because
-    blocking changes it, whereas the bond dimension remains fixed. Transfer
-    matrices represent the quotient by physical isometries described in
+    matrix space $\MN{D^2}$. The physical dimension may change under blocking,
+    while the bond dimension $D$ is preserved. Transfer matrices represent the
+    quotient by physical isometries
     \cite[lines~382--394 and 1205--1209]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -176,11 +174,12 @@
     If $\widehat{\E}_B^{\,2^n}\to\widehat{\E}_A$, then
     Theorem~\ref{thm:dyadic_power_limit_idempotent} gives
     $\widehat{\E}_A^2=\widehat{\E}_A$. Since the transfer-matrix
-    representation is injective, $\E_A^2=\E_A$. Theorem~
-    \ref{thm:physical_blocking_isometry_iff_transfer_idempotence} supplies the
-    physical isometry. Conversely, if $A$ has such an isometry, its transfer
-    map is idempotent. Taking $B=A$ makes the dyadic orbit constant:
-    $\widehat{\E}_A^{\,2^n}=\widehat{\E}_A$ for every $n$.
+    representation is injective, $\E_A^2=\E_A$. Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}
+    supplies the physical blocking isometry. Conversely, if $A$ has such an
+    isometry, its transfer map is idempotent by
+    Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}.
+    Setting $B=A$ makes the dyadic orbit constant:
+    $\widehat{\E}_A^{\,2^n}=\widehat{\E}_A\to\widehat{\E}_A$.
 \end{proof}
 
 \begin{figure}[ht]

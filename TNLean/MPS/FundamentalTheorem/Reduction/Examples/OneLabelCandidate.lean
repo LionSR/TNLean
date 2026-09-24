@@ -9,6 +9,17 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 /-!
 # The one-label renormalization fixed point at `λ = 7/25`
 
+**Source.** Project construction; it is not a tensor printed in Cirac,
+Pérez-García, Schuch, Verstraete 2017 (arXiv:1606.00608). It addresses the
+open question at `Papers/1606.00608/MPDO-22-12-17-2.tex` line 995, whether an
+RFP can have structure coefficients $c^{(L)}$ of Theorem 4.14 (lines 972--993)
+that depend on $L$. The one-site matrices below are the letters
+`MPOTensor.RescalingStableLengthDependentRFP.A`; the MPDO property, the
+fixed-point channels of Definition 4.1 (lines 657--660), and the failure of
+length independence of $1+(7/25)^L$ under positive rescaling are proved in the
+`MPOTensor.RescalingStableLengthDependentRFP` modules, not here. This module
+proves only the compression statement described next.
+
 A machine-checked instance of the multi-block asymmetric compression theorem
 (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) for
 the one-label candidate of the P6 work
@@ -29,6 +40,13 @@ This is the answer, at this example, to the question of what produces a length-d
 structure constant: not two inequivalent sectors, but two *weighted copies of one sector*, the
 same normal tensor carried with the weights `1` and `7/25`. The periodic coefficient
 `c^{(L)} = 1 + (7/25)^L` is the length-`L` power sum of that weight multiset.
+
+## Provenance
+
+The compression datum and exact-arithmetic certificates were first recorded in
+`Notes/OpenProblemsTN/checks/p6_examples_compression_data.md`, §4, and the
+candidate in `Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex`;
+they are verification records, not the source.
 
 ## Main definitions
 

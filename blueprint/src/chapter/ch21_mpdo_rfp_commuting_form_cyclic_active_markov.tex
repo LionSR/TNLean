@@ -700,9 +700,10 @@
         selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_selected_fixed_product_reduced_states, thm:mpdo_source_zcl_iterated_marginal_stability}
-    Under the preceding hypotheses, for every $L>0$, the normalized
-    $L$-site reduced states of the selected fixed-product tensor obtained
-    from chain lengths $L+3$ and $L+1$ are equal.
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_selected_fixed_product_adjacent_marginals}, for every
+    $L>0$, the normalized $L$-site reduced states of the selected fixed-product
+    tensor obtained from chain lengths $L+3$ and $L+1$ are equal.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -990,8 +991,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Set the left sector tensor equal to zero outside $C$. The preceding span
-    argument shows that this does not change the physical tensor, and the
+    Set the left sector tensor equal to zero outside $C$. The span
+    argument of Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive} shows
+    that this does not change the physical tensor, and the
     neighboring operators with both indices in $C$ are unchanged. The
     source zero-correlation-length relation, transported through this
     restricted factorization, gives
@@ -1201,7 +1203,8 @@
 \begin{proof}\leanok
     Positivity of the neighboring operators makes every nonempty
     sector-coordinate chain operator positive. Source zero correlation
-    length makes its trace nonzero. Apply the preceding theorem with
+    length makes its trace nonzero. Apply
+    Theorem~\ref{thm:mpdo_cyclic_active_markov_all_cuts} with
     $A=m-1$ and $C=N-m-1$ at every admissible cut, then use the all-cut
     Markov criterion. Finally transport saturation through the physical
     isometry of $F$.
@@ -1329,6 +1332,6 @@
     Theorem~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}. Given the
     physical-sector factorization, the all-length product identity is
     Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}.
-    The doubled-index transfer condition enters only in the subsequent RFP and
-    single-bond branch conclusions.
+    The doubled-index transfer condition enters only in the subsequent
+    renormalization fixed point and single-bond branch conclusions.
 \end{remark}

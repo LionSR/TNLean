@@ -1,9 +1,9 @@
 \section{The unnormalized strong fixed-point relation}
 
-Appendix~D of \cite[lines~2109--2116]{Cirac2016MPDO_arXiv} considers a
-stronger local relation in which the two-site tensor is obtained by adjoining
-a positive physical matrix to one copy of the tensor and applying a unitary
-change of basis. The matrix is not assumed to have trace one.
+In the Strong-RFP condition \cite[Appendix~D, lines~2109--2116]{Cirac2016MPDO_arXiv},
+the two-site tensor is obtained by coupling a positive physical matrix to one
+site followed by a two-site unitary change of basis, without requiring unit
+trace.
 
 \begin{definition}[Strong renormalization fixed-point relation]
     \label{def:mpdo_strong_rfp}
@@ -20,10 +20,9 @@ change of basis. The matrix is not assumed to have trace one.
         U_{i,a}P_{a_2b_2}\overline{U_{j,b}}\,M^{a_1b_1}.
         \label{eq:mpdo_strong_rfp_tensor}
     \end{align}
-    Equivalently, the literal orientation of the source diagram is
-    $M_2=U(M_1\otimes P)U^\dagger$, with $M$ on the left physical site and
-    $P$ on the right. There is no virtual change of basis and no scalar
-    proportionality. This is the relation labelled \emph{Strong-RFP} in
+    This identity expresses $M_2=U(M_1\otimes P)U^\dagger$ with $M$ on the left
+    site and $P$ on the right, with no virtual change of basis or scalar
+    proportionality, labelled \emph{Strong-RFP} in
     \cite[Appendix~D, lines~2109--2113]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -57,10 +56,10 @@ change of basis. The matrix is not assumed to have trace one.
         \notag
     \end{align}
     which is (\ref{eq:mpdo_strong_rfp_closure}). Conversely, subtract the
-    right-hand side of (\ref{eq:mpdo_strong_rfp_tensor}). Equation
-    (\ref{eq:mpdo_strong_rfp_closure}) says that its product with every $X$
-    has trace zero. Nondegeneracy of the matrix trace pairing makes the
-    difference zero.
+    right-hand side of (\ref{eq:mpdo_strong_rfp_tensor}). By
+    (\ref{eq:mpdo_strong_rfp_closure}), the trace of the product with every
+    $X$ vanishes, so nondegeneracy of the trace pairing makes the difference
+    zero.
 \end{proof}
 
 \begin{definition}[First-site preparation shuffle]
@@ -123,10 +122,8 @@ change of basis. The matrix is not assumed to have trace one.
         (U^\dagger\otimes\Id).
         \label{eq:mpdo_strong_rfp_global_closure}
     \end{align}
-    Equivalently, applying $R_2^{-1}$ to the right-hand side gives the
-    $(N+2)$-site closure in its original physical coordinates. The same
-    formula with $M_k(X)$ replaced by the ordinary periodic operator
-    $\rho^{(k)}(M)$ holds after closing the virtual indices with the identity.
+    Closing the virtual indices with the identity yields the corresponding
+    formula for the periodic operators $\rho^{(k)}(M)$.
 \end{theorem}
 
 \begin{proof}
@@ -177,9 +174,8 @@ change of basis. The matrix is not assumed to have trace one.
         \label{eq:mpdo_strong_rfp_rank_geometric}
     \end{align}
     Consequently every strong fixed point admits a single positive witness
-    $P$ whose matrix rank is the factor in both formulas. No normalization of
-    $P$ and no positivity or normalization assumption on the periodic
-    operators is required.
+    $P$ whose matrix rank is the factor in both formulas, without assuming
+    normalization of $P$ or positivity of the periodic operators.
 \end{theorem}
 
 \begin{proof}

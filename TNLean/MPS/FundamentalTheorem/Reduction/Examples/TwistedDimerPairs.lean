@@ -25,6 +25,11 @@ the sector `f + f'` with the weight `x/2 = 7/16` and the sector `f + f' + 1` wit
 `Notes/OpenProblemsTN/checks/p6_examples_compression_data.md`, §1.2–1.4); its word traces give
 the periodic coefficients `c^{(L)} = (7/16)^L + (1/16)^L` of every pair.
 
+**Source.** Project construction, not printed in Cirac, Pérez-García, Schuch, Verstraete 2017
+(arXiv:1606.00608); it bears on the open question at `Papers/1606.00608/MPDO-22-12-17-2.tex`
+line 995 on structure coefficients of Theorem 4.14 (lines 972--993) that depend on the length
+`L`. The full source discussion and its scope are in the header of `TwistedDimer`.
+
 ## Main results
 
 * `P6Compression.dimerFusion_letter_int`: the integer letter identity of every pair of sectors.
@@ -37,6 +42,11 @@ the periodic coefficients `c^{(L)} = (7/16)^L + (1/16)^L` of every pair.
   `P6Compression.dimerFusion_left_mul_eq_mul_left`, `P6Compression.dimerFusion_z_eq`,
   `P6Compression.dimerFusion_dim_eq`: the reduction pairs, their biorthogonality, the sitewise
   intertwiners, the eight zero slots and the dimension count of every pair.
+
+## Provenance
+
+The fusion rule and its exact data were first recorded in the notes cited above under
+`Notes/OpenProblemsTN/`; they are verification records, not the source.
 -/
 
 open scoped Matrix Kronecker

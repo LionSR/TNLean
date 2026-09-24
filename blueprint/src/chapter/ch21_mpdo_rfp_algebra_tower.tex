@@ -26,13 +26,14 @@
     \leanok
     \uses{def:mpdo_algebra_structure_data, def:mpo_tensor}
     An MPO tensor $M$ has a family of algebras of blocked adjoint fixed points
-    if there exist support algebras and maps as above such that, for every
-    positive blocking size $n$,
+    if there exists a family of support algebras with blocking and inclusion
+    maps as in Definition~\ref{def:mpdo_algebra_structure_data} such that, for
+    every positive blocking size $n$,
     \begin{align}
         \mathcal{A}_n & = \Fix(E_n^{\dagger}),
         \notag
     \end{align}
-    where $E_n$ is the blocked transfer map. We call this equality
+    where $E_n$ is the blocked transfer map. This equality is termed
     compatibility with $M$. This condition concerns adjoint fixed points;
     it is not the algebra condition of
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, which requires a common
@@ -110,7 +111,8 @@ the weighted direct sums of these contractions are fixed by compositions
 of the reduced tpCPM. Products of these fixed operators are then used to
 prove that the compositions are identities on the corresponding direct sums
 of matrix algebras. This argument concerns the vertical canonical forms,
-not the algebras $\Fix(E_n^\dagger)$ defined above.
+not the fixed-point algebras $\Fix(E_n^\dagger)$ of
+Definition~\ref{def:mpdo_blocked_fixed_point_algebra_tower}.
 
 \begin{theorem}[Stabilized blocked adjoint fixed points yield support algebras]%
     \label{thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
@@ -483,8 +485,8 @@ coefficients.
     positive diagonal matrices satisfying
     (\ref{eq:mpdo_chi_product_law}) and
     (\ref{eq:mpdo_idempotent_trace_identity}). Relating these objects to the
-    one-site and two-site vertical canonical forms is essential to the maps
-    in~(\ref{eq:mpdo_reconstruction_maps}); it does not follow from a choice
+    one-site and two-site vertical canonical forms is required for the maps
+    in (\ref{eq:mpdo_reconstruction_maps}); it does not follow from a choice
     of bases in the support algebras. In particular,
     Theorem~\ref{thm:mpdo_algebra_tower_not_imply_zcl} rules out deriving
     idempotence of the doubled-tensor transfer map from compatibility alone.
@@ -496,9 +498,10 @@ coefficients.
 
 In \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, the structure coefficients
 of the length-$L$ operator algebra are traces of powers of positive diagonal
-matrices $\chi_{\alpha,\beta,\gamma}$. The definitions below allow arbitrary
-complex diagonal entries. They describe the trace-power identity alone;
-positivity and the product law for $O_L(M_\alpha)$ are separate conditions.
+matrices $\chi_{\alpha,\beta,\gamma}$. In
+Definition~\ref{def:mpdo_diagonal_chi_family}, arbitrary complex diagonal
+entries are permitted to separate the scalar trace-power identity from
+positivity and operator multiplication.
 
 \begin{definition}[Diagonal \texorpdfstring{$\chi$}{chi} matrices]%
     \label{def:mpdo_diagonal_chi_family}

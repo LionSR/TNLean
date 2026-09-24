@@ -254,13 +254,15 @@
     Let $(A_j)_j$ be a family of distinct irreducible left-canonical blocks, no
     two of which are gauge-phase equivalent, and suppose the direct sum
     $\bigoplus_j A_j$ is a renormalization fixed point. Then for every pair of
-    distinct components the mixed transfer operator vanishes,
-    $\E_{j,j'}=\sum_iA_j^i\otimes\overline{A_{j'}^i}=0$.
-    This is the cross-block ($\delta_{j,j'}$) content of the isometry condition
-    of \cite[Theorem~3.11 and Corollary~3.12]{Cirac2016MPDO_arXiv} at the level of
-    the normal-tensor blocks. The passage to the residual tensors $U_j$ is given
-    by Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum}.
-    % The U-level conversion is recorded in docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+    distinct components $j\ne j'$, the mixed transfer operator vanishes:
+    \begin{align}
+        \E_{j,j'}=\sum_i A_j^i\otimes\overline{A_{j'}^i}=0.
+        \notag
+    \end{align}
+    This establishes the cross-block ($\delta_{j,j'}$) orthogonality of
+    \cite[Theorem~3.11 and Corollary~3.12]{Cirac2016MPDO_arXiv}.
+    The passage to the residual tensors $U_j$ is given by
+    Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:block_diagonal_transfer_sum_to_block, thm:transfer_operator_gap_irr_tp, thm:transfer_operator_gap_rect_irr_tp, lem:idempotent_spectral_radius_zero}
@@ -287,17 +289,16 @@
     \label{def:is_residual_isometry_family}
     \lean{MPSTensor.IsResidualIsometryFamily}
     \leanok
-    A family $(U_j)_j$ satisfies the \emph{joint isometry condition} when
+    A family $(U_j)_j$ satisfies the \emph{joint isometry condition} if
     \begin{align}
         \sum_i(U_j^i)_{\alpha,\beta}
         \overline{(U_{j'}^i)_{\alpha',\beta'}}
          & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
-    Each block satisfies the within-block pair-index orthonormality, and the
-    cross-block sums between distinct blocks vanish. This is the isometry
-    condition of \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}, split into its $j=j'$
-    and $j\ne j'$ cases.
+    Each block satisfies unit pair-index orthonormality ($j=j'$), and the
+    cross-block sums between distinct blocks vanish ($j\ne j'$), as in
+    \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[One-letter Gram matrix under the joint isometry condition]%
@@ -393,18 +394,19 @@
     \lean{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}
     \leanok
     \uses{def:is_residual_isometry_family, def:mps_transfer_idempotence, def:is_isometry_canonical_form}
-    Let $(A_j)_j$ be a family of normal, irreducible, left-canonical blocks, no
-    two of which are gauge-phase equivalent, with $\dim_j\ge1$ for all $j$, and
-    suppose the direct sum $\bigoplus_j A_j$ is a renormalization fixed point.
-    Then there are invertible matrices $X_j$, trace-one positive diagonal
+    Let $(A_j)_j$ be a family of normal, irreducible, left-canonical blocks with
+    bond dimensions $D_j\ge1$, no two of which are gauge-phase equivalent. If
+    the direct sum $\bigoplus_j A_j$ is a renormalization fixed point, then
+    there exist invertible matrices $X_j$, trace-one positive diagonal
     matrices $\rho_j=\diag(\lambda_{j,\alpha})$, and tensors $U_j$ with
     \begin{align}
         A_j^i & =X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
         \notag
     \end{align}
-    such that $(U_j)_j$ satisfies the joint isometry condition. These are the
-    isometry equations of \cite[Corollary~3.12]{Cirac2016MPDO_arXiv} for the
-    direct sum of distinct normal-tensor blocks.
+    such that $(U_j)_j$ satisfies the joint isometry condition
+    (Definition~\ref{def:is_residual_isometry_family}). This formalizes the
+    isometry equations of \cite[Corollary~3.12]{Cirac2016MPDO_arXiv} for
+    distinct normal blocks.
     % Scope restriction: the Lean theorem takes the per-block normality,
     % irreducibility, left-canonical condition, and gauge-phase distinctness as
     % explicit hypotheses; extracting these from a single canonical-form RFP
@@ -433,15 +435,12 @@
     \lean{MPSTensor.isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm}
     \leanok
     \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence, def:mixed_transfer_rect}
-    Let $(B_k)_k$ be a family of tensors, each in the square-root fixed-point
-    form, whose cross-block mixed transfer operators vanish,
-    $\E_{j,j'}=0$ for $j\ne j'$. Then
-    the direct sum $\bigoplus_k B_k$ is a renormalization fixed point. This is the
-    backward direction of the structural characterization of pure-state
-    renormalization fixed points \cite[Section~3]{Cirac2016MPDO_arXiv}, in the
-    distinct-blocks case where each normal tensor appears once; the cross-block
-    vanishing is the $j\ne j'$ part of the isometry condition of that
-    characterization, so it is part of the source joint isometry condition.
+    Let $(B_k)_k$ be a family of tensors in square-root fixed-point form whose
+    cross-block mixed transfer operators vanish ($\E_{j,j'}=0$ for all
+    $j\ne j'$). Then the direct sum $\bigoplus_k B_k$ is a renormalization
+    fixed point. This establishes the converse direction of the pure-state
+    fixed-point characterization \cite[Section~3]{Cirac2016MPDO_arXiv} for
+    distinct blocks.
     % Scope restriction (multiplicity-one): the source canonical form allows each
     % normal tensor to repeat with a multiplicity and a phase; this is the
     % single-copy case (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
@@ -473,22 +472,20 @@
     \leanok
     \uses{def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:mixed_transfer_rect, def:normal, def:irreducible_tensor, def:gauge_phase_equiv}
     Let $(B_k)_k$ be a family of normal, irreducible, left-canonical blocks with
-    $\dim_k\ge1$ for all $k$, no two of which are gauge-phase equivalent. Then
+    $D_k\ge1$ for all $k$, no two of which are gauge-phase equivalent. Then
     the direct sum $\bigoplus_k B_k$ is a renormalization fixed point if and only
-    if each block is in the square-root fixed-point form and the mixed transfer
-    operators between distinct blocks vanish:
+    if each block has the square-root fixed-point form and all cross-block mixed
+    transfer operators vanish:
     \begin{align}
-        \left(\bigoplus_k B_k\text{ is a RFP}\right)
+        \left(\bigoplus_k B_k\text{ is an RFP}\right)
          & \iff
         \left(\forall k,\ B_k\text{ in square-root form}\right)
         \wedge
         \left(\forall j\ne j',\ \E_{j,j'}=0\right).
         \notag
     \end{align}
-    This is the distinct-blocks (multiplicity-one, phase-one) case of the
-    structural characterization of pure-state renormalization fixed points
-    \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}, combining its forward and backward
-    directions.
+    This is the distinct-block characterization of pure-state renormalization
+    fixed points \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}.
     % Scope restriction (multiplicity-one): the source canonical form
     % A^i = \oplus_j \oplus_q mu_{j,q} X_{j,q} Lambda_j U^i_j X_{j,q}^{-1} allows
     % each normal tensor to repeat with multiplicity r_j and a unit-modulus phase
@@ -516,20 +513,15 @@
     \leanok
     \uses{def:sector_bnt_cf, def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:mixed_transfer_rect, def:is_residual_isometry_family}
     Let $P$ satisfy the auxiliary BNT sector hypotheses, with distinct basis tensors $(B_j)_j$.
-    Then the direct sum containing one copy of each basis tensor is a
+    Then the multiplicity-one direct sum $\bigoplus_j B_j$ is a
     renormalization fixed point if and only if every $B_j$ has the square-root
-    fixed-point form and $\E_{j,j'}=0$ for $j\ne j'$.
-    This is the multiplicity-one, phase-one specialization of
-    \cite[Theorem~3.11 and Corollary~3.12]{Cirac2016MPDO_arXiv}. It concerns
-    the direct sum of the basis representatives, not the repeated-copy tensor
-    carrying the weights $\mu_{j,q}$.
+    fixed-point form and $\E_{j,j'}=0$ for all $j\ne j'$.
 
-    If the basis direct sum is a renormalization fixed point, there are also
-    invertible matrices $X_j$, trace-one positive diagonal matrices
-    $\rho_j=\diag(\lambda_{j,\alpha})$, and tensors $U_j$ such that
-    $B_j^i=X_j\sqrt{\rho_j}\,U_j^iX_j^{-1}$, and the family $(U_j)_j$
-    satisfies the joint isometry condition, including the cross-block
-    equations for $j\ne j'$.
+    In this case, there exist invertible matrices $X_j$, trace-one positive
+    diagonal matrices $\rho_j=\diag(\lambda_{j,\alpha})$, and tensors $U_j$
+    such that $B_j^i=X_j\sqrt{\rho_j}\,U_j^iX_j^{-1}$, where $(U_j)_j$
+    satisfies the joint isometry condition
+    (Definition~\ref{def:is_residual_isometry_family}).
     % The physical-space construction of the repeated-copy index is recorded in
     % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{corollary}
@@ -634,10 +626,10 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_coisometry_reconstruction_iff, lem:isrfp_block_of_rfp_direct_sum, thm:normal_scaled_rfp}
-    Theorem~\ref{thm:rfp_coisometry_reconstruction_iff} makes the retained
-    direct sum $\bigoplus_k\mu_kA_k$ a renormalization fixed point.
-    Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum} then makes each scaled block
-    $\mu_kA_k$ a renormalization fixed point. Since $\mu_k\ne0$,
+    By Theorem~\ref{thm:rfp_coisometry_reconstruction_iff}, the direct sum
+    $\bigoplus_k\mu_kA_k$ is a renormalization fixed point.
+    Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum} implies that each block
+    $\mu_kA_k$ is also a renormalization fixed point. Since $\mu_k\ne0$,
     Theorem~\ref{thm:normal_scaled_rfp} gives both conclusions.
 \end{proof}
 
@@ -668,7 +660,7 @@
          & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
-    The conclusion also covers the case in which there are no classes.
+    If no classes are present, the statement holds vacuously.
 
     \textbf{Local fix (square-root factor in canonical form):}
     The formula uses the square-root weights $\sqrt{\lambda_{j,\alpha}}$ rather
@@ -681,27 +673,23 @@
     \uses{thm:cpsv_canonical_form_bnt_refinement, thm:rfp_coisometry_reconstruction_iff, thm:cpsv_weight_norm_one_and_block_rfp, thm:normal_rfp_iff_isometry_canonical_form, thm:bnt_locally_orthogonal_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
     The retained weighted direct sum is a renormalization fixed point. For each
     representative, Theorem~\ref{thm:cpsv_weight_norm_one_and_block_rfp}
+    gives $|\mu_j|=1$ and $\E_{C_j}^2=\E_{C_j}$. By
+    Theorem~\ref{thm:normal_rfp_iff_isometry_canonical_form}, each normal fixed
+    point $C_j$ admits the displayed square-root form. Putting the
+    representatives independently in left-canonical gauge, distinct phase-class
+    representatives are not gauge-phase equivalent. Since the direct sum is a
+    fixed point, Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     gives
-    \begin{align}
-        |\mu_j| & =1,
-                & \E_{C_j}^2 & =\E_{C_j}.
-        \notag
-    \end{align}
-    The normal-tensor characterization supplies the displayed square-root form.
-    Put the representatives independently in left-canonical gauge and retain
-    the unit-modulus factors $\mu_j$. Distinct phase-class representatives are
-    not gauge-phase equivalent, while idempotence of the retained direct sum
-    restricts to every mixed pair. Hence
-    Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum} gives
     \begin{align}
         \E_{\mu_jC_j,\mu_{j'}C_{j'}} & =0
         \qquad (j\ne j').
         \notag
     \end{align}
-    Cancelling the nonzero scalar factors and the invertible gauges yields
+    Cancelling the unit-modulus scalars and gauge transformations yields
     $\E_{C_j,C_{j'}}=0$. Removing the positive diagonal factors and evaluating
-    at matrix units gives the off-diagonal residual equation. Together with
-    the within-block orthonormality, this is the joint isometry condition.
+    on matrix units gives the off-diagonal residual orthogonality. Combined
+    with the within-block orthonormality of each $U_j$, this yields the joint
+    isometry condition.
 \end{proof}
 
 % CPSV16 Theorem 3.11 (`thm:charact-MPS`), lines 543--562.
@@ -717,8 +705,9 @@
     \label{thm:cpsv_charact_mps_status}
     \notready
     \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:is_residual_isometry_family}
-    CPSV asserts that a tensor $A$ in canonical form is a renormalization fixed
-    point if and only if it can be written as
+    Cirac et al.~\cite[Theorem~3.11]{Cirac2016MPDO_arXiv} assert that a tensor $A$
+    in canonical form is a renormalization fixed point if and only if it can be
+    written as
     \begin{align}
         A^i
          & =\bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
@@ -734,14 +723,11 @@
         \notag
     \end{align}
     The source specifies that $\bigoplus_{j,q}$ is a simultaneous direct sum in
-    the physical and virtual spaces, not an ordinary virtual block diagonal at
-    each fixed physical letter $i$ \cite[Theorem~3.11,
-        lines~561--562]{Cirac2016MPDO_arXiv}. It does not provide a coordinate map
-    for the physical routing of $q$, a corresponding dimension hypothesis, or
-    a $q$-indexed isometry equation. Consequently the display does not yet
-    determine a source-faithful coordinate-level predicate. The routed
-    characterization therefore remains not ready pending a source
-    clarification or erratum.
+    both the physical and virtual spaces \cite[lines~561--562]{Cirac2016MPDO_arXiv}.
+    However, it does not provide an explicit coordinate embedding for the physical
+    routing of $q$, a dimension constraint, or a $q$-indexed isometry equation.
+    Consequently, this statement remains unformalized pending clarification of the
+    coordinate-level routing in the source.
 
     \textbf{Local fix (square-root factor in canonical form):}
     CPSV prints a bare $\Lambda_j$ in Theorem~3.11, whereas the reference tensor

@@ -22,6 +22,8 @@ multiplicativity of `MPOTensor.mulTensor`.
 
 * `MPOTensor.evalWord_directSum`: word evaluation of the direct sum is the block-diagonal sum of
   the word evaluations.
+* `MPOTensor.trace_fromBlocks_submatrix_finSumFinEquiv`: the trace of a block-diagonal matrix is
+  the sum of the traces of its blocks.
 * `MPOTensor.mpo_directSum`: the operator family of the direct sum is the sum of the operator
   families.
 -/
@@ -56,19 +58,23 @@ theorem evalWord_directSum (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
       Matrix.submatrix_mul_equiv, Matrix.fromBlocks_multiply]
     simp only [Matrix.mul_zero, Matrix.zero_mul, add_zero, zero_add]
 
+/-- The trace of a block-diagonal matrix on `Fin (D₁ + D₂)` is the sum of the traces of its
+two diagonal blocks. -/
+theorem trace_fromBlocks_submatrix_finSumFinEquiv {R : Type*} [AddCommMonoid R]
+    (X : Matrix (Fin D₁) (Fin D₁) R) (Y : Matrix (Fin D₂) (Fin D₂) R) :
+    Matrix.trace ((Matrix.fromBlocks X 0 0 Y).submatrix finSumFinEquiv.symm
+      finSumFinEquiv.symm) = Matrix.trace X + Matrix.trace Y := by
+  simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
+  rw [finSumFinEquiv.symm.sum_comp fun j => Matrix.fromBlocks X 0 0 Y j j,
+    Fintype.sum_sum_type]
+  simp only [Matrix.fromBlocks_apply₁₁, Matrix.fromBlocks_apply₂₂]
+
 /-- **Additivity of the operator family**: the operator of the direct sum is the sum of the two
 operators, at every system size. -/
 theorem mpo_directSum (M : MPOTensor d D₁) (N : MPOTensor d D₂) (L : ℕ) :
     mpo (directSum M N) L = mpo M L + mpo N L := by
-  have htr : ∀ (X : Matrix (Fin D₁) (Fin D₁) ℂ) (Y : Matrix (Fin D₂) (Fin D₂) ℂ),
-      Matrix.trace ((Matrix.fromBlocks X 0 0 Y).submatrix finSumFinEquiv.symm
-        finSumFinEquiv.symm) = Matrix.trace X + Matrix.trace Y := by
-    intro X Y
-    simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
-    rw [finSumFinEquiv.symm.sum_comp fun j => Matrix.fromBlocks X 0 0 Y j j,
-      Fintype.sum_sum_type]
-    simp only [Matrix.fromBlocks_apply₁₁, Matrix.fromBlocks_apply₂₂]
   ext σ τ
-  simp only [mpo_apply, mpoMatrixEntry, Matrix.add_apply, evalWord_directSum, htr]
+  simp only [mpo_apply, mpoMatrixEntry, Matrix.add_apply, evalWord_directSum,
+    trace_fromBlocks_submatrix_finSumFinEquiv]
 
 end MPOTensor

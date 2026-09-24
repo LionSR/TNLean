@@ -8,6 +8,20 @@
 \section{The anomalous \texorpdfstring{$\Z_3$}{Z3} symmetry and its condensation defect}%
 \label{sec:asymex_z3anomalous}
 
+A finite group acting on a spin chain by matrix product operators may be
+anomalous: the obstruction to gauging it is a three-cocycle, and for a
+cyclic group Garre-Rubio and Schuch~\cite{GarreRubioSchuch2024DomainWall}
+give the cocycle in closed form together with the interchange statistics
+of the domain walls it governs. That source prints no local tensor: the
+phase-decorated shift defined below is a construction of this development
+motivated by their cocycle formula for $\Z_3$, and no identification of
+its anomaly class is made here. The general construction of a matrix
+product operator representation from a finite group is given in Garre-Rubio,
+Lootens and Molnár~\cite{GarreRubio2023MPOSym}, and matrix product operator
+symmetries are reviewed in~\cite[Section~III.A.6]{Cirac2021Matrix}. The sum of the
+three group operators is a condensation defect in the terminology of
+Roumpedakis, Seifnashri and Shao~\cite{Roumpedakis2023Condensation}.
+
 Let $\omega=(-1+\mathrm{i}\sqrt{3})/2$ be the primitive cube root of unity.
 Thus $\omega^2+\omega+1=0$, $\omega^3=1$, and
 $\overline{\omega}=\omega^{-1}=\omega^2$. On a periodic chain of $N>0$
@@ -30,10 +44,11 @@ bond is included: at $N=1$ there is a self-loop, and at $N=2$ both
 oriented bonds contribute.
 
 The group-cocycle context for anomalous symmetries is discussed in
-Garre-Rubio and Schuch~\cite{GarreRubioSchuch2024DomainWall}.
-We derive the physical operators and their group law directly from the
-tensor entries, and determine the compression of their stacked products.
-
+Garre-Rubio and Schuch~\cite{GarreRubioSchuch2024DomainWall}; see also
+Sun~\cite{Sun2025Anomalous}.
+The physical operators and their group law are derived directly from the
+tensor entries, and the compression of their stacked products is
+determined afterwards.
 
 \begin{definition}[The tensors of the representation]
     \label{def:asymex_z3anomalous_tensors}
@@ -187,26 +202,6 @@ tensor entries, and determine the compression of their stacked products.
     $V_N=U_N^2$.
 \end{proof}
 
-\begin{remark}[Notation for the group inverse]
-    \label{rem:asymex_z3anomalous_notation}
-    The symbol $M^\dagger$ denotes the tensor in
-    Definition~\ref{def:asymex_z3anomalous_tensors}, not the conjugate
-    transpose of each bond matrix of $M$. Its entries satisfy
-    $(M^\dagger)^{o,i}=\overline{M^{i,o}}$: the physical indices are
-    exchanged, while the bond matrices are conjugated without
-    transposition. Theorem~\ref{thm:asymex_z3_physical_kernels}
-    and Lemma~\ref{lem:asymex_z3_physical_cube} show that its periodic operator
-    is $U_N^\dagger=U_N^{-1}=U_N^2$ for $N>0$.
-
-    At $N=1$, the self-loop gives $F(t)=t_0$, so
-    $U_1\ket{a}=\omega^a\ket{a+1}$.
-    At $N=2$, $F(t)=\chi(t_0)t_1+\chi(t_1)t_0$.
-    These short rings obey the same unitary group law. At $N=0$, however,
-    the trace of the empty bond product gives
-    $O_0(M)=O_0(M^\dagger)=[2]$ and $O_0(\delta)=[1]$.
-    The positive-length hypothesis cannot be omitted.
-\end{remark}
-
 \begin{theorem}[Normality of the three blocks up to normalization]
     \label{thm:asymex_z3anomalous_normal}
     \lean{Z3Anomalous.uMPS_isNormal, Z3Anomalous.uDagMPS_isNormal,
@@ -232,7 +227,27 @@ tensor entries, and determine the compression of their stacked products.
     normalization of the transfer spectral radius.
 \end{proof}
 
-\section{Fusion of the anomalous representation}%
+\begin{remark}[Notation for the group inverse]
+    \label{rem:asymex_z3anomalous_notation}
+    The symbol $M^\dagger$ denotes the tensor in
+    Definition~\ref{def:asymex_z3anomalous_tensors}, not the conjugate
+    transpose of each bond matrix of $M$. Its entries satisfy
+    $(M^\dagger)^{o,i}=\overline{M^{i,o}}$: the physical indices are
+    exchanged, while the bond matrices are conjugated without
+    transposition. Theorem~\ref{thm:asymex_z3_physical_kernels}
+    and Lemma~\ref{lem:asymex_z3_physical_cube} show that its periodic operator
+    is $U_N^\dagger=U_N^{-1}=U_N^2$ for $N>0$.
+
+    At $N=1$, the self-loop gives $F(t)=t_0$, so
+    $U_1\ket{a}=\omega^a\ket{a+1}$.
+    At $N=2$, $F(t)=\chi(t_0)t_1+\chi(t_1)t_0$.
+    These short rings obey the same unitary group law. At $N=0$, however,
+    the trace of the empty bond product gives
+    $O_0(M)=O_0(M^\dagger)=[2]$ and $O_0(\delta)=[1]$.
+    The positive-length hypothesis cannot be omitted.
+\end{remark}
+
+\subsection{Fusion of the anomalous representation}%
 \label{sec:asymex_z3anomalous_fusion}
 
 Write $M_0=\delta$, $M_1=M$ and $M_2=M^\dagger$, with group indices
@@ -248,43 +263,14 @@ Its bond dimension is the product of the two bond dimensions, and its
 periodic operator is the physical product
 (Theorem~\ref{thm:asym_mpo_product}). Consequently, the group law gives
 equality of nonempty-word traces before any compression pair is chosen.
-We now describe the asymmetric reductions realizing these equalities
-on the virtual spaces. In the formulas and diagrams below, $L$ denotes
-the ring length, as $N$ did above.
+The asymmetric reductions realizing these equalities on the virtual
+spaces are described next. In the statements and diagrams below, $L$
+denotes the ring length, as $N$ did above.
 
-In particular, stacking $M$ over $M$ gives
-$U_L^2=O_L(M^\dagger)$:
-\begin{center}
-    % Formula: O_L(U)O_L(U) = O_L(U^\dagger) (Theorem~\ref{thm:asymex_z3anomalous_uu_trace}),
-    % the stacked product B=M\cdot M contracted with the periodic-operator identity.
-    % Ink-to-index map: on the left, the upper row is M with ket index i_k and bra index m_k,
-    % the lower row is M with ket index m_k and bra index j_k; the shared leg m_k is contracted.
-    % On the right, the single row is M^\dagger with ket index i_k and bra index j_k.
-    % Contraction set: every vertical physical pair m_k, every horizontal virtual bond of each
-    % row, and the periodic return bonds of both rings.
-    % Boundary signature: both sides (0,0,L,L); the drawn three-site representative emits
-    % (0,0,3,3).
-    \tenkzkernel
-    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{M} &
-        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{M} &
-        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical}]{M} \\
-        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{M} &
-        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{M} &
-        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
-        \tn[skin=mpo, ports={90:physical, 270:physical:$j_L$}]{M}
-    \end{tenkz}
-    \quad$=$\quad
-    \begin{tenkz}[rows={wire}, cols=4, boundary=periodic]
-        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{M^\dagger} &
-        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{M^\dagger} &
-        \tn[skin=dots]{} &
-        \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical:$j_L$}]{M^\dagger}
-    \end{tenkz}
-\end{center}
-The other nontrivial products have targets $\delta$ for $M\cdot M^\dagger$ and
-$M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
+The four nontrivial products have targets $M^\dagger$ for $M\cdot M$,
+$\delta$ for $M\cdot M^\dagger$ and $M^\dagger\cdot M$, and $M$ for
+$M^\dagger\cdot M^\dagger$. The compressions come first, and the periodic
+fusion rules follow from them.
 
 \begin{theorem}[Compression of \texorpdfstring{$M\cdot M$ and $M^\dagger\cdot M^\dagger$}{the two equal-factor products}]
     \label{thm:asymex_z3anomalous_uu_compression}
@@ -340,6 +326,37 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
     target $M$ and gives $(R^2)^2\neq0$, with all triple products zero.
 \end{proof}
 
+Stacking $M$ over $M$ and compressing gives the first fusion rule,
+$U_L^2=O_L(M^\dagger)$:
+\begin{center}
+    % Formula: O_L(U)O_L(U) = O_L(U^\dagger) (Theorem~\ref{thm:asymex_z3anomalous_uu_trace}),
+    % the stacked product B=M\cdot M contracted with the periodic-operator identity.
+    % Ink-to-index map: on the left, the upper row is M with ket index i_k and bra index m_k,
+    % the lower row is M with ket index m_k and bra index j_k; the shared leg m_k is contracted.
+    % On the right, the single row is M^\dagger with ket index i_k and bra index j_k.
+    % Contraction set: every vertical physical pair m_k, every horizontal virtual bond of each
+    % row, and the periodic return bonds of both rings.
+    % Boundary signature: both sides (0,0,L,L); the drawn three-site representative emits
+    % (0,0,3,3).
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{M} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{M} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical}]{M} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{M} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{M} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_L$}]{M}
+    \end{tenkz}
+    \quad$=$\quad
+    \begin{tenkz}[rows={wire}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{M^\dagger} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{M^\dagger} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical:$j_L$}]{M^\dagger}
+    \end{tenkz}
+\end{center}
 \begin{theorem}[Periodic fusion \texorpdfstring{$U\cdot U=U^\dagger$ and $U^\dagger\cdot U^\dagger=U$}{of the nonidentity group elements}]
     \label{thm:asymex_z3anomalous_uu_trace}
     \lean{Z3Anomalous.uu_trace_evalWord, Z3Anomalous.dd_trace_evalWord, Z3Anomalous.mpo_uu,
@@ -464,8 +481,15 @@ $M^\dagger\cdot M$, and $M$ for $M^\dagger\cdot M^\dagger$.
     the physical operator or a $3$-cocycle associator.
 \end{remark}
 
-\section{The condensation defect}%
+\subsection{The condensation defect}%
 \label{sec:asymex_z3anomalous_defect}
+
+The condensation defect of the anomalous symmetry is the sum of its three
+group operators, $\Id+U_N+U_N^\dagger$, in the terminology
+of~\cite{Roumpedakis2023Condensation}. It is realized by the direct sum
+of the three tensors. On the physical side the defect squares to three
+times itself; on the virtual side the stacked square splits into nine
+pair blocks, each compressing onto one group tensor.
 
 \begin{definition}[The condensation defect]
     \label{def:asymex_z3anomalous_defect}
@@ -530,7 +554,7 @@ three group tensors. The asymmetric compression records these nine
 targets separately.
 
 \begin{theorem}[Block decomposition of the stacked square]
-    \label{prop:asymex_z3anomalous_defect_square_blocks}
+    \label{thm:asymex_z3anomalous_defect_square_blocks}
     \lean{Z3Anomalous.defectSquare, Z3Anomalous.defectSquareEis_eq, Z3Anomalous.pairStackEis,
         Z3Anomalous.squareBond}
     \leanok
@@ -575,7 +599,7 @@ targets separately.
     \label{thm:asymex_z3anomalous_defect_square}
     \lean{Z3Anomalous.defectSquare_trace_evalWord, Z3Anomalous.mpo_defect_mul_defect}
     \leanok
-    \uses{prop:asymex_z3anomalous_defect_square_blocks, thm:asymex_z3anomalous_defect_sum,
+    \uses{thm:asymex_z3anomalous_defect_square_blocks, thm:asymex_z3anomalous_defect_sum,
         prop:asym_compression_trace}
     For every nonempty word $w$, $\tr((A\cdot A)^w)=3\bigl(\tr(\delta^w)+\tr(M^w)+
         \tr((M^\dagger)^w)\bigr)$; that is, $O_L(A)O_L(A)=3\,O_L(A)$ at every positive length $L$.
@@ -583,7 +607,7 @@ targets separately.
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{prop:asymex_z3anomalous_defect_square_blocks},
+    By Theorem~\ref{thm:asymex_z3anomalous_defect_square_blocks},
     the trace of $(A\cdot A)^w$ is the sum of the nine pair-block
     traces. Theorems~\ref{thm:asymex_z3anomalous_uu_trace}
     and~\ref{thm:asymex_z3anomalous_group_law} give
@@ -607,7 +631,7 @@ targets separately.
         Z3Anomalous.defectSquare_dim_eq, Z3Anomalous.defectSquare_evalWord_remainder_eq_zero,
         Z3Anomalous.sum_pairTargetDim}
     \leanok
-    \uses{prop:asymex_z3anomalous_defect_square_blocks, thm:asym_multiblock,
+    \uses{thm:asymex_z3anomalous_defect_square_blocks, thm:asym_multiblock,
         thm:asymex_z3anomalous_uu_compression, thm:asymex_z3anomalous_ud_compression,
         thm:asymex_explicit_gauge}
     The stacked tensor $A\cdot A$ has the block triangular form of
@@ -633,7 +657,7 @@ targets separately.
     Theorem~\ref{thm:asymex_z3anomalous_uu_compression} or
     Theorem~\ref{thm:asymex_z3anomalous_ud_compression}.
     Their direct sum, transported along the bond reindexing of
-    Theorem~\ref{prop:asymex_z3anomalous_defect_square_blocks}, gives
+    Theorem~\ref{thm:asymex_z3anomalous_defect_square_blocks}, gives
     the required triangular form. Distinct pair blocks have disjoint
     coordinates, which gives $W_sV_t=0$ for $s\neq t$.
 

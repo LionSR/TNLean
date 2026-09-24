@@ -198,7 +198,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    Applying the preceding lemma to the block form
+    Applying Lemma~\ref{lem:mpdo_bond_contraction_block_sum} to the block form
     $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of the assembled tensor gives
     \begin{align}
         \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
@@ -494,12 +494,9 @@
         \notag
     \end{align}
     The partial trace and diagonal-summand extraction define these maps on the
-    full matrix algebras. Their agreement with the normalized maps in
-    \cite[Appendix~C.4, lines~1972--1979]{Cirac2016MPDO_arXiv} is asserted on
-    the weighted block-diagonal image. At this stage there is no assertion
-    that the image is preserved, that the two maps are inverse, completely
-    positive, or trace preserving, or that the sector labels have been
-    matched. The final renormalization fixed-point conclusion is separate.
+    full matrix algebras; on the weighted block-diagonal image they match the
+    normalized maps in
+    \cite[Appendix~C.4, lines~1972--1979]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Positive vertical-sector families and total trace]
@@ -679,8 +676,9 @@
 \begin{proof}\leanok
     Positivity follows successively from the normalized embedding, expansion
     by an adjoint, the physical map, relabelling, and partial trace. The trace
-    identities follow from the preceding two lemmas and trace preservation of
-    the physical maps.
+    identities follow from Lemma~\ref{lem:mpdo_coisometric_compression_trace},
+    Lemma~\ref{lem:mpdo_vertical_sector_precompression_positive_trace}, and
+    trace preservation of the physical maps.
 \end{proof}
 
 % Local fix (zero-sector complement): the transported maps come from
@@ -721,10 +719,8 @@
     \end{align}
     respectively.
 
-    This result concerns positivity and trace on positive elements. It does
-    not assert a complete-positivity structure for the finite products, a
-    trace-preserving extension to their full ambient matrix spaces, or an
-    inverse relation between the two transported maps.
+    The condition on vanishing trace loss characterizes when the transported
+    maps preserve the total sector trace.
 \end{theorem}
 
 \begin{proof}\leanok

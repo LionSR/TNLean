@@ -1,13 +1,29 @@
-\section{Mixed Bell bonds and physical fixed-point tensors}
+\section{Mixed Bell bonds and renormalization fixed points}%
 \label{sec:asymex_physical_models}
 
-The two models below are mixed states built from Bell bonds. In the first,
-each site contains two qubits, and neighboring half-bonds form independent
-mixed Bell states. In the second, each site also contains a classical flag;
-a controlled flag flip couples the Bell sectors to an even-parity flag state,
-providing an explicit project construction motivated by the length-dependence
-question following Theorem~4.14 of \cite{Cirac2016MPDO_arXiv}.
-
+A renormalization fixed point of a matrix product density operator is a
+tensor whose one-site and two-site closures with an arbitrary boundary
+matrix are carried into each other by trace-preserving completely
+positive maps, in both
+directions~\cite[Definition~4.1, Example~4.12, Proposition~4.13,
+    Theorem~4.14]{Cirac2016MPDO_arXiv}. The characterization there expresses
+the products of the vertical components of such a tensor through
+structure coefficients, and the question left open after its
+Theorem~4.14 is whether these coefficients can depend on the length of
+the chain. The mixed Bell-bond tensor, the flagged tensor, the one-label
+tensor and the dimer twist of this section are constructions of this
+development addressing that question. Only the flag factor of the
+flagged tensor comes from the literature: it is the normalized tensor of
+\cite[Example~4.12]{Cirac2016MPDO_arXiv}. The first two are mixed states
+built from Bell bonds. In the first, each site carries two qubits, and
+neighboring half-bonds form independent mixed Bell states. In the second,
+each site also carries a classical flag, and a controlled flag flip
+couples the Bell sectors to an even-parity flag state. The vertical
+components of these two tensors supply the one-label tensor and the dimer
+twist, whose structure coefficients are computed explicitly by the
+multi-block compression theorem. The results of this section establish
+tensor decompositions and periodic trace identities for these examples,
+not a classification of length-dependent fixed points.
 
 Write $E_{ij}=\ketbra{i}{j}$ and
 $\ket{\Phi_\pm}=(\ket{00}\pm\ket{11})/\sqrt2$, with
@@ -219,7 +235,7 @@ one-site and two-site physical closures by
     \label{eq:asymex_boundary_closures}
 \end{align}
 The channel fixed-point condition of
-Ref.~\cite[Definition~4.1]{Cirac2016MPDO_arXiv} requires trace-preserving
+\cite[Definition~4.1]{Cirac2016MPDO_arXiv} requires trace-preserving
 completely positive maps, abbreviated tpCPMs, $\mathcal S$ and
 $\mathcal T$ such that, for every $X$,
 \begin{align}
@@ -307,7 +323,7 @@ For $R$, the identity also follows directly from
 $F_R=(25/32)tt^{\mathsf T}$, where
 $t=(4/5,4/5,0,0)^{\mathsf T}$ and $t^{\mathsf T}t=32/25$.
 
-\section{Vertical components and their multiplication}
+\subsection{Vertical components and their multiplication}%
 \label{sec:asymex_vertical_dictionary}
 
 Rotation exchanges the physical and auxiliary pairs:
@@ -442,115 +458,137 @@ $2(7/10+1/10)(5/8)^2=5/8$.
     also prove the equivalence with the active-sector fusion description.
 \end{proof}
 
-\section{Renormalization fixed points: a shared adapted basis}%
-\label{sec:asymex_rfp_basis}
+\subsection{Representative rescaling}%
+\label{sec:asymex_rescaling}
 
-We now apply the asymmetric fundamental theorem to the vertical
-components. Their stacked bond spaces are tensor squares. Reordering
-the four bond bits separates the two middle bits, which form the inner
-bond, from the two outer bits. The intermediate physical-index sum acts
-on the inner bond. Both examples use the Bell vectors and the two
-remaining coordinate vectors as an adapted basis.
+Scalar rescalings of the normal tensors in a basis change the structure
+coefficients by geometric factors, so the length-dependence question
+must be posed modulo this freedom; the entries below record the
+rescaling rule for the structure coefficients of
+\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
 
-Each weighted copy of a target contributes its weight to the power $L$;
-weights are summed when they multiply the same target. This is the
-power-sum mechanism of
-Theorem~\ref{thm:asym_unblocked_coefficients}.
-The results below establish tensor decompositions and periodic trace
-identities, not a classification of length-dependent RFPs.
-
-\begin{definition}[The idempotents of an adapted basis]
-    \label{def:asymex_basis_proj}
-    \lean{MPSTensor.basisProj, P6Compression.pairReorder, P6Compression.pairU,
-        P6Compression.pairUinv, P6Compression.pairProjInt,
-        P6Compression.pairBlockInt}
+Consider the structure coefficients
+$c_{\alpha,\beta,\gamma}^{(L)}=\tr(\chi_{\alpha,\beta,\gamma}^{L})$
+and trace scalars $m_\alpha$ of
+\cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
+\begin{definition}[Rescaling the structure coefficients]
+    \label{def:asymex_rescaling}
+    \lean{MPOTensor.DiagonalChiFamily.rescale,
+        MPOTensor.DiagonalChiFamily.rescale_dim,
+        MPOTensor.DiagonalChiFamily.rescale_entry,
+        MPOTensor.BNTLabelCoefficientFamily.rescale,
+        MPOTensor.BNTLabelCoefficientFamily.rescale_coeff,
+        MPOTensor.BNTLabelTraceScalarFamily.rescale,
+        MPOTensor.BNTLabelTraceScalarFamily.rescale_traceScalar}
     \leanok
-    \uses{prop:asym_projector_weighted_sum}
-    For mutually inverse matrices $U$ and $U^{-1}$, define
-    $\Pi_j=U^{-1}E_{jj}U$, the product of the $j$-th column of $U^{-1}$
-    with the $j$-th row of $U$.
-    Reorder a stacked bond quadruple into its two middle bits and its
-    two outer bits. On the inner bond choose the adapted basis with
-    first two vectors $(1,0,0,\pm1)$ and last two vectors the remaining
-    coordinate vectors. The Bell idempotents carry the weighted targets.
-    Their tensor products with target matrices are expressed in the
-    original stacked coordinates by undoing the reordering.
+    \uses{def:mpdo_diagonal_chi_family,
+        def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_bnt_label_trace_scalar_family}
+    Let $\Lambda$ be a label set and let $s_\alpha\in\C$
+    for every $\alpha\in\Lambda$. In the algebraic formulas below,
+    division is extended by $z/0=0$. Their interpretation as changes
+    of tensor representatives requires all scales to be nonzero.
+    Rescale the diagonal entries, coefficients, and trace scalars by
+    \begin{align}
+        \chi'_{\alpha,\beta,\gamma,k}
+                  & =\frac{s_\alpha s_\beta}{s_\gamma}
+        \chi_{\alpha,\beta,\gamma,k},
+        \label{eq:asymex_chi_rescale}                                 \\
+        c'{}_{\alpha,\beta,\gamma}^{(L)}
+                  & =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        c_{\alpha,\beta,\gamma}^{(L)},
+        \label{eq:asymex_c_rescale}                                   \\
+        m'_\alpha & =\frac{m_\alpha}{s_\alpha}.
+        \label{eq:asymex_m_rescale}
+    \end{align}
+    The multiplicity $r_{\alpha,\beta,\gamma}$ is unchanged, and
+    $0\leq k<r_{\alpha,\beta,\gamma}$.
 \end{definition}
 
-\begin{theorem}[The idempotents of an adapted basis are mutually orthogonal]
-    \label{lem:asymex_basis_proj}
-    \lean{MPSTensor.basisProj_mul_basisProj_self,
-        MPSTensor.basisProj_mul_basisProj_of_ne, MPSTensor.mul_basisProj_mul}
+\begin{theorem}[Trace powers and positivity under rescaling]
+    \label{thm:asymex_rescale_trace}
+    \lean{MPOTensor.DiagonalChiFamily.tracePowerCoeff_rescale,
+        MPOTensor.BNTLabelCoefficientFamily.ofChi_rescale,
+        MPOTensor.DiagonalChiFamily.PosEntries.rescale}
     \leanok
-    \uses{def:asymex_basis_proj}
-    The idempotents satisfy $\Pi_j^2=\Pi_j$,
-    $\Pi_j\Pi_k=0$ for $j\ne k$, and $U\Pi_jU^{-1}=E_{jj}$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Conjugation by $U$ returns $E_{jj}$, and products reduce to
-    $E_{jj}E_{kk}=\delta_{jk}E_{jj}$.
-\end{proof}
-
-\begin{theorem}[From an integer matrix identity to a weighted direct sum]
-    \label{thm:asymex_stacked_pair}
-    \lean{P6Compression.stackedPair_letter_identity}
-    \leanok
-    \uses{def:asymex_basis_proj, prop:asym_projector_weighted_sum}
-    Suppose $B=c_B\widehat B$ and $C_s=c_C\widehat C_s$, where the
-    tensors with hats have integer entries and $s\in\{0,1\}$.
-    Suppose a nonzero integer $n$ and integers $k_s$ satisfy, for each
-    $s$ and each physical index $a$,
+    \uses{def:asymex_rescaling}
+    Taking trace-power coefficients commutes with rescaling: for every
+    $L\in\N$, including $L=0$,
     \begin{align}
-        n\,\mu_s\,\frac{c_C}{2} & =k_s\,c_B,
-        \label{eq:asymex_stacked_pair_scalar}
+        \tr((\chi'_{\alpha,\beta,\gamma})^L)
+         & =
+        \left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        \tr(\chi_{\alpha,\beta,\gamma}^L).
     \end{align}
+    If the original diagonal entries are positive real numbers and
+    every $s_\alpha$ is positive real, the rescaled entries are positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:asymex_rescaling}
+    Expand the trace as the sum of the $L$th powers of the diagonal
+    entries. Each summand acquires the factor
+    $(s_\alpha s_\beta/s_\gamma)^L$, which factors out of the finite
+    sum. For positive real scales, the ratio
+    $s_\alpha s_\beta/s_\gamma$ is positive, so multiplication by it
+    preserves positivity.
+\end{proof}
+
+\begin{theorem}[Preservation of the idempotent coefficient equation]
+    \label{thm:asymex_rescale_idempotent}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily.hasIdempotentCoefficientForm_rescale_iff,
+        MPOTensor.BNTLabelTraceScalarFamily.rescale_coefficient_sum}
+    \leanok
+    \uses{def:asymex_rescaling,
+        def:mpdo_bnt_label_idempotent_coefficient_form}
+    Suppose $\Lambda$ is finite and every $s_\alpha$ is nonzero.
+    The vector $m'$ is idempotent for $c'{}^{(1)}$ if and only if
+    $m$ is idempotent for $c^{(1)}$. Explicitly, the equations
     \begin{align}
-        n\,\widehat B^a & =\sum_sk_s\,(\widehat\Pi_s\otimes\widehat C_s^a),
-        \label{eq:asymex_stacked_pair_letters}
+        m'_\gamma
+         & =\sum_{\alpha,\beta}
+        c'{}_{\alpha,\beta,\gamma}^{(1)}m'_\alpha m'_\beta,
+        \\
+        m_\gamma
+         & =\sum_{\alpha,\beta}
+        c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta
     \end{align}
-    where $\widehat\Pi_s=2\Pi_s$ and the right-hand side
-    of~(\ref{eq:asymex_stacked_pair_letters}) is in stacked bond
-    coordinates. Then $B^a=\sum_s\mu_s(\Pi_s\otimes C_s^a)$ in those
-    coordinates, the hypothesis of
-    Proposition~\ref{prop:asym_projector_weighted_sum}.
-    Here $\mu_s$ denotes a scalar fusion weight, not a vertical
-    multiplicity matrix.
+    are equivalent when imposed for every $\gamma\in\Lambda$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:asymex_basis_proj}
-    Using the idempotents of Theorem~\ref{lem:asymex_basis_proj}, the
-    $s$-th summand is
-    $\mu_sc_C(\widehat\Pi_s\otimes\widehat C_s^a)/2$.
-    Multiplication by $n$ and
-    substitution of~(\ref{eq:asymex_stacked_pair_scalar})
-    and~(\ref{eq:asymex_stacked_pair_letters}) give $nB^a$.
-    Cancel the nonzero scalar $n$.
+    \uses{def:asymex_rescaling,
+        def:mpdo_bnt_label_idempotent_coefficient_form}
+    Substituting~(\ref{eq:asymex_c_rescale})
+    and~(\ref{eq:asymex_m_rescale}) and cancelling the nonzero
+    scales in each summand gives
+    \begin{align}
+        \sum_{\alpha,\beta}
+        c'{}_{\alpha,\beta,\gamma}^{(1)}m'_\alpha m'_\beta
+         & =
+        \frac{1}{s_\gamma}
+        \sum_{\alpha,\beta}
+        c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta.
+    \end{align}
+    The left side of the idempotent equation is
+    $m'_\gamma=m_\gamma/s_\gamma$. Cancellation of $s_\gamma$
+    proves both implications.
 \end{proof}
 
-\begin{theorem}[Normality from scaled matrix units]
-    \label{thm:asymex_normal_units}
-    \lean{P6Compression.isNormal_of_single_eq_smul}
-    \leanok
-    \uses{def:normal}
-    Let a tensor be one nonzero scalar times an integer tensor. Suppose
-    that for every bond position $(x,y)$ a letter of the integer tensor
-    is a nonzero integer multiple of $E_{xy}$. Then its one-site
-    matrices span the full bond matrix algebra, so it is normal at
-    blocking length one in the sense of Definition~\ref{def:normal}.
-    This establishes injectivity, not transfer spectral-radius
-    normalization; a normal tensor (NT) in the RFP canonical form
-    additionally requires that normalization.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Dividing each designated letter by its nonzero factor exhibits every
-    matrix unit in the one-site span.
-\end{proof}
+Scaling a normal-tensor representative by a positive factor $c \ne 1$
+alters the transfer map's spectral radius to $c^2$, though the rescaled
+idempotent coefficient equations remain preserved.
 
-\section{The one-label fixed point}%
+\subsection{The one-label fixed point}%
 \label{sec:asymex_one_label}
+
+The two remaining subsections apply the multi-block compression theorem
+to the vertical components of $R$ and $T$, in the unnormalized
+representatives fixed above. The adapted basis of the inner bond and the
+reordering behind the factorization $B^a=\sigma\otimes M^a$ used below
+are set out in Section~\ref{sec:asymex_rfp_basis}, together with the two
+supporting results the proofs invoke,
+Theorems~\ref{thm:asymex_stacked_pair} and~\ref{thm:asymex_normal_units}.
 
 The vertical component $K$ of $R$ has letters
 $K^{ij}=A^i\otimes A^j$, with $A$ given
@@ -559,7 +597,7 @@ letters $A^i\otimes F_K\otimes A^k$. The inner matrix
 $F_K=\sum_jA^j\otimes A^j$ has eigenvalues $1,7/25,0,0$,
 with eigenvectors $\Phi_+,\Phi_-,01,10$.
 Thus the stacked tensor contains two weighted copies of the same
-target, not two inequivalent targets. In this section write $M=K$;
+target, not two inequivalent targets. In this subsection write $M=K$;
 it remains a vertical component, not the physical tensor $R$.
 
 \begin{definition}[The one-label tensors]
@@ -713,7 +751,7 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
     $1$ and $(7/25)^{|w|}$.
 \end{proof}
 
-\section{The graded quantum-dimer twist}%
+\subsection{The graded quantum-dimer twist}%
 \label{sec:asymex_dimer}
 
 For the dimer, write $M_f=D_f$ for the unnormalized vertical
@@ -731,7 +769,7 @@ $c_{000}^{(L)}=(7/16)^L$ and $c_{001}^{(L)}=(1/16)^L$ in this
 unnormalized component convention. These are the trace powers of
 $\chi_{000}=(7/16)$ and $\chi_{001}=(1/16)$.
 The normalized BNT coefficients instead use $7/10,1/10$, as explained
-in Section~\ref{sec:asymex_vertical_dictionary}.
+in Subsection~\ref{sec:asymex_vertical_dictionary}.
 
 \begin{definition}[The sector tensors and their stacked product]
     \label{def:asymex_dimer}

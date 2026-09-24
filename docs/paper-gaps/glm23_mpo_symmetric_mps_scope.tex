@@ -1,0 +1,101 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\title{Matrix Product Operator Symmetric States: the Periodic-Boundary Layer}
+\author{}
+\date{2026-09-24}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source definitions}
+Garre-Rubio, Lootens and Moln\'ar define a matrix product operator
+algebra through the closedness of the arbitrary-boundary operators
+$\mathcal A_T^n=\{O^n_{T,B}: B\in\mathcal M_\chi\}$ under multiplication,
+and a symmetric matrix product state through the invariance
+$\mathcal A_T\cdot\mathcal S_A\subset\mathcal S_A$ of the arbitrary-boundary
+subspace $\mathcal S_A^n=\{\lvert\psi^n_{A,X}\rangle: X\in\mathcal M_D\}$ for every
+system size~$n$~\cite{GarreRubio2023MPOSym}.\footnote{Source traceability:
+    \path{Papers/2203.12563/REsubmission.tex}, lines 311--345 (the subspace
+    $\mathcal S_A^n$ and the closedness condition) and lines 431--434
+    (the definition of a symmetric state).}
+The periodic operators $O_a=O_{T_a,\mathbb 1}$ of the blocks $a$ then
+satisfy
+\begin{align}
+    O_aO_b & =\sum_c N_{ab}^c O_c
+    \label{eq:glm23_fusion}
+\end{align}
+for every system size, with $N_{ab}^c\in\mathbb N$, and the action of a block
+$a$ on a block $x$ of the state decomposes into blocks $y$ with multiplicities
+$M_{a,x}^y\in\mathbb N$ through the action tensors. Associativity of the action
+gives
+\begin{align}
+    \sum_c N_{ab}^c M_{c,x}^y & =\sum_z M_{b,x}^z M_{a,z}^y .
+    \label{eq:glm23_nimrep}
+\end{align}
+\footnote{Source traceability: line 361 for
+    (\ref{eq:glm23_fusion}); lines 458--460 for the multiplicities; lines
+    491--492 for associativity; lines 564--565 for
+    (\ref{eq:glm23_nimrep}); line 683 for the group case
+    $M_{gh,x}^y=\sum_z M_{g,z}^y M_{h,x}^z$.}
+Evaluating the invariance with periodic boundaries, the source obtains
+\begin{align}
+    O_a\lvert\psi_{A_x}\rangle & =\sum_y M_{a,x}^y\lvert\psi_{A_y}\rangle
+    \label{eq:glm23_periodic_symmetry}
+\end{align}
+for general fusion rules, and recalls this form when it constructs boundary
+states.\footnote{Source traceability: lines 567--568 and line 1801.}
+For groups the source also formulates a weaker, periodic-boundary version
+of both conditions, in which the boundaries are proportional to the identity
+in each block.\footnote{Source traceability: lines 994--1000 and 1062--1064.}
+
+\section{What is formalized}
+The formal layer records only periodic-boundary data, for arbitrary finite
+fusion rules. The fusion hypothesis is (\ref{eq:glm23_fusion}) at every
+positive length. The symmetry hypothesis on a family of tensors $A_x$ is
+(\ref{eq:glm23_periodic_symmetry}) at every positive length, with complex
+coefficients independent of the length. The source derives
+(\ref{eq:glm23_periodic_symmetry}) from its definition, so the formal
+hypothesis is weaker than the source's. From it the formal results derive, for
+normal blocks, that each $M_{a,x}^y$ is a nonnegative integer and that
+(\ref{eq:glm23_nimrep}) holds; the source takes integrality from the action
+tensors instead.\footnote{Formal definitions:
+    \leanid{MPOTensor.IsMPOFusionAlgebra},
+    \leanid{MPOTensor.IsMPOSymmetricFamily}, \leanid{MPOTensor.IsMPOSymmetric}.
+    Results: \leanid{MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily} and
+    \leanid{MPOTensor.exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel}.}
+
+The source's standing assumption that the blocks are injective and
+orthogonal to each other in the thermodynamic limit (line 317) is used in
+the form that the periodic vectors of the blocks are linearly independent at
+one positive length. Asymptotic orthogonality implies this at every
+sufficiently large length. It is the same reading as the eventual linear
+independence clause of the formal basis of normal tensors.
+
+\section{Boundary}
+Not formalized: the arbitrary-boundary algebra $\mathcal A_T^n$, the
+subspace $\mathcal S_A^n$ and the invariance $\mathcal A_T\cdot\mathcal
+S_A\subset\mathcal S_A$; the fusion and action tensors; the $F$- and
+$L$-symbols and the pentagon equations. Consequently the single-block
+obstruction of the source's subsection ``Injective MPSs cannot be invariant
+under non-trivial MPOs'', which shows that the $F$-symbols
+are trivial for an injective invariant state without
+multiplicity, $M_{a,x}^x=1$,\footnote{Source traceability: lines 610--636 and line 738.}
+is not formalized. What is formalized is a different, fusion-ring
+obstruction: a single normal symmetric block on
+which the unit acts trivially gives a ring homomorphism from the fusion ring to
+$\mathbb Z$ that is nonnegative on the labels. This excludes the Fibonacci
+algebra, but it does not exclude group-like algebras with a nontrivial
+three-cocycle.
+
+Elimination plan: define the arbitrary-boundary algebra and subspace,
+prove that the source's invariance implies
+(\ref{eq:glm23_periodic_symmetry}), and state the cohomological single-block
+obstruction through the action tensors of the multi-block compression
+theorem.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

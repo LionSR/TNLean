@@ -8,6 +8,12 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 /-!
 # Example C: a repeated block with a nontrivial extension
 
+**Source.** Project construction for the multi-block asymmetric compression
+theorem of this development; it is not a tensor printed in a published source,
+and it is not a renormalization fixed point. It shows that the gauge conclusion
+of the symmetric fundamental theorem fails once the target carries a repeated
+normal block, even though the word traces agree with those of the direct sum.
+
 A machine-checked instance of the multi-block asymmetric compression theorem (P5 note,
 `Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, Example C, lines
 970–983; verified numerically by `checks/p5_examples_verify.py`, section C).
@@ -17,6 +23,13 @@ source tensor `repB` compresses biorthogonally onto both copies and has the same
 family as the repeated target, `A ⊕ A`, but `repB 0` is a nontrivial Jordan block: no invertible
 gauge relates `repB` to `A ⊕ A`, so the conclusion of the symmetric fundamental theorem is false
 for `repB`, not merely inapplicable.
+
+## Provenance
+
+The example and its numerical check were first recorded in
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`,
+Example C (label `ex:p5ft-jordan`); they are verification records, not the
+source.
 
 ## Main results
 

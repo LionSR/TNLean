@@ -1,21 +1,19 @@
 \section{Transfer retracts and fusion coisometries}
 
-A linear factorization of the doubled-index blocked transfer map $E_n$
-through a subspace, with the retract identities stated below, exists
+A linear factorization of the doubled-index blocked transfer map $E_n$ through
+a subspace with the retract identities of (\ref{eq:rfp_transfer_retract}) exists
 precisely when $E_n$ is idempotent. Requiring such a factorization at every
-positive blocked size is equivalent to idempotence of $E_1$. This condition
-is distinct from the physical renormalization fixed-point condition in
-Definition~\ref{def:is_rfp_via_ts} and
-\cite[Definition~4.1, lines 638--660]{Cirac2016MPDO_arXiv}. For a tensor $M$
-in CF generating MPDOs, the latter requires tpCPMs $S,T$ on the physical
-indices with $S[M_2(X)]=M_1(X)$ and $T[M_1(X)]=M_2(X)$ for every boundary
-matrix $X$. The physical maps constructed in the source proof likewise act
-on physical indices
-\cite[lines 1974--2085]{Cirac2016MPDO_arXiv}. The fusion maps in
-\cite[Theorem~4.14(ii)--(iii), lines 972--991]{Cirac2016MPDO_arXiv}
-concern the vertically read tensors. Below, their support restrictions and
-exact reconstruction are stated explicitly, separately from the stronger
-condition that the maps are isometries on the whole product bond space.
+positive blocked size is equivalent to idempotence of $E_1$. This
+transfer-retract condition is distinct from the physical renormalization
+fixed-point condition in Definition~\ref{def:is_rfp_via_ts} and
+\cite[Definition~4.1, lines~638--660]{Cirac2016MPDO_arXiv}. For an MPDO tensor
+$M$ in CF, the latter requires tpCPMs $S,T$ on the physical indices satisfying
+$S[M_2(X)]=M_1(X)$ and $T[M_1(X)]=M_2(X)$ for every boundary matrix $X$, acting
+on physical indices as in \cite[lines~1974--2085]{Cirac2016MPDO_arXiv}. By
+contrast, the fusion maps in
+\cite[Theorem~4.14(ii)--(iii), lines~972--991]{Cirac2016MPDO_arXiv} act on the
+vertically read tensors, distinguishing support restrictions and exact
+reconstruction from full-support isometries.
 
 \begin{definition}[Transfer-retract datum]%
     \label{def:mpdo_fusion_isometry}
@@ -48,7 +46,7 @@ condition that the maps are isometries on the whole product bond space.
     idempotence.
 \end{theorem}
 \begin{proof}\leanok
-    By~(\ref{eq:rfp_transfer_retract}),
+    By (\ref{eq:rfp_transfer_retract}),
     \begin{align}
         E_1^2
          & =S_1T_1S_1T_1
@@ -57,8 +55,6 @@ condition that the maps are isometries on the whole product bond space.
         =E_1.
         \notag
     \end{align}
-    Since $E_1$ is the original transfer map, this is exactly doubled-index
-    transfer-map idempotence.
 \end{proof}
 
 \begin{theorem}[One-site transfer-retract criterion]%
@@ -180,7 +176,7 @@ condition that the maps are isometries on the whole product bond space.
     $O_L(M\mathbin{\cdot}N)=O_L(M)O_L(N)$.
 \end{theorem}
 \begin{proof}\leanok
-    Take traces in~(\ref{eq:rfp_product_word}): the trace of a tensor
+    Take traces in (\ref{eq:rfp_product_word}): the trace of a tensor
     product is the product of the traces, and the sum over middle
     configurations is the entrywise form of the operator product.
 \end{proof}
@@ -438,7 +434,7 @@ With $G_{\alpha,\beta}^{ij}$ denoting the retained direct-sum letter,
     $F$-move.
 \end{theorem}
 \begin{proof}\leanok
-    Multiply the fusion identity~(\ref{eq:rfp_fusion_identity}) on the right
+    Multiply the fusion identity (\ref{eq:rfp_fusion_identity}) on the right
     by $U_{\alpha,\beta}$ and on the left by
     $U_{\alpha,\beta}^\dagger$, respectively, and use
     $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$.
@@ -497,7 +493,7 @@ With $G_{\alpha,\beta}^{ij}$ denoting the retained direct-sum letter,
     Theorem~\ref{thm:mpdo_bnt_weighted_zipper}. For reconstruction, insert
     $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ on both sides of the product
     letter and apply the fusion identity between the two inserted factors,
-    yielding~(\ref{eq:rfp_unweighted_reconstruction}).
+    yielding (\ref{eq:rfp_unweighted_reconstruction}).
 \end{proof}
 
 \begin{theorem}[Common positive blocking of BNT fusion isometries]
@@ -575,12 +571,12 @@ With $G_{\alpha,\beta}^{ij}$ denoting the retained direct-sum letter,
     replaces every $\chi_{\alpha,\beta,\gamma}$ by the identity on its
     multiplicity space. The two zipper identities and reconstruction then
     follow by multiplying the blocked fusion
-    identity~(\ref{eq:rfp_blocked_fusion}) by
+    identity (\ref{eq:rfp_blocked_fusion}) by
     $U_{\alpha,\beta}$ or $U_{\alpha,\beta}^\dagger$ on the appropriate side.
 \end{proof}
 
-The three rows below are, respectively, the two unweighted zipper identities
-and their local reconstruction consequence. The symbol
+The three displayed diagrams represent, respectively, the two unweighted
+zipper identities and their local reconstruction consequence. The symbol
 $H$ denotes $H_{\alpha,\beta}^{ij}$, and the open physical legs carry the
 indices $i,j$. The reconstruction relies directly on the isometry condition
 $U_{\alpha,\beta}^{\dagger}U_{\alpha,\beta}=1$. The zipper orientation is that of
