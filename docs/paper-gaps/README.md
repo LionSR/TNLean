@@ -510,6 +510,15 @@ note.
 - `dccsp17_root_kraus_rank_thm41.tex` records the Kraus-rank step that the
   converse implication of Theorem 4.1 uses without proof.
 
+For the matrix product operator symmetries of arXiv:2203.12563:
+
+- `glm23_mpo_symmetric_mps_scope.tex` records that the formal layer of fusion
+  algebras, symmetric families, and nonnegative integer representations uses
+  only the periodic-boundary form of the source's arbitrary-boundary
+  invariance, derives integrality of the action coefficients from it, and
+  formalizes the single-block obstruction only in its fusion-ring form, not
+  the cohomological form of the source.
+
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
 - `fbc25_circle_complex_units_cohomology.tex` distinguishes the source
