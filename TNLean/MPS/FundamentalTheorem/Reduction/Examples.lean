@@ -26,6 +26,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Fibonacci
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciAction
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciAnomaly
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciFSymbol
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciUnit
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenCompression
