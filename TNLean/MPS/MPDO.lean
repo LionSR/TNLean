@@ -214,6 +214,7 @@ import TNLean.MPS.MPDO.NormalizedGroupedSectorMaps
 import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.NormalizedMPOProportionality
 import TNLean.MPS.MPDO.OperatorClosurePowerSum
+import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPDO.OperatorFromWordTrace
 import TNLean.MPS.MPDO.OperatorProduct
 import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw

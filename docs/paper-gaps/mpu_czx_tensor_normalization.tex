@@ -119,6 +119,83 @@ physical change of representative, rather than assert literal equality.
 No classification signs, action data, defect tensors, or completion
 certificates are supplied here. This audit does not establish the two
 original CZX classification claims.
+\section{The 2020 review repeats the printed tensor}
+Appendix A, ``The CZX MPU'', of \cite{Cirac2021Matrix} writes the CZX
+matrix product unitary as
+$\lvert 0\rangle\langle 1\rvert\otimes|0)(+| +
+    \lvert 1\rangle\langle 0\rvert\otimes|1)(-|$, with the normalized
+vectors $(\pm|=2^{-1/2}\bigl((0|\pm(1|\bigr)$ on the virtual level. Its two
+nonzero matrices are $2^{-1/2}A^{01}$ and $2^{-1/2}A^{10}$, where
+\begin{align}
+    A^{01} & =\begin{pmatrix}1&1\\0&0\end{pmatrix}, &
+    A^{10} & =\begin{pmatrix}0&0\\1&-1\end{pmatrix}
+    \label{eq:czx_review_matrices}
+\end{align}
+are the matrices the review prints two displays later. The bra-ket display
+is exactly the tensor (\ref{eq:czx_printed_tensor}), and the printed
+matrices (\ref{eq:czx_review_matrices}) are its rescaling
+$A=\sqrt{2}P$.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2582--2601.
+    Witnesses: \leanid{CZXCompression.reviewCZXTensor} and
+    \leanid{CZXCompression.printed2017Tensor_eq_smul_reviewCZXTensor}.}
+
+Every later claim of the passage holds for the matrices
+(\ref{eq:czx_review_matrices}): the operator $O(A)$ is unitary and normal
+after blocking two sites, its square has the displayed bond-four matrices
+with integer entries, the invariant subspace of the projector $P$ and the
+second reduction step with the projector $Q$ (read as below) lead to the
+canonical form $B^{ij}=(-1)\delta_{ij}$, and
+$O(A)^2=(-1)^NI$.\footnote{Results:
+    \leanid{CZXCompression.reviewCZXTensor_isMPUPos},
+    \leanid{CZXCompression.reviewCZXMPS_isNormal},
+    \leanid{CZXCompression.reviewCZXSquare_apply_zero},
+    \leanid{CZXCompression.reviewQ_conj_reviewBlock} and
+    \leanid{CZXCompression.mpo_reviewCZXTensor_mul_self}.}
+For the normalized tensor of the bra-ket display the periodic operator is
+$2^{-N/2}O(A)$, so its square is $2^{-N}(-1)^NI$ and the global identity
+fails by the factor $2^{-N}$, as in (\ref{eq:czx_periodic_contraction}).
+The formalization takes the printed matrices (\ref{eq:czx_review_matrices})
+as the source tensor of the review and records the bra-ket display as this
+normalization slip.
+
+Two smaller discrepancies of the same passage are recorded here.
+
+\emph{Gate order.} The review describes the operator in words as
+controlled-$Z$ gates between all adjacent sites ``followed by a Pauli $X$ on
+all sites'', which in time order is $X^{\otimes N}D_N$, where $D_N$ is the
+diagonal operator with entries $(-1)^{\sum_n s_ns_{n+1}}$ on a ring of $N$
+sites; this is also the order $U_{CZX}=U_XU_{CZ}$ of \cite{ChenLiuWen2011CZX}.
+The printed matrices (\ref{eq:czx_review_matrices}) contract instead to
+$O(A)=D_NX^{\otimes N}$. Since $D_NX^{\otimes N}=(-1)^NX^{\otimes N}D_N$,
+the two readings differ by the global sign $(-1)^N$. Both square to
+$(-1)^NI$, so none of the later claims of the passage depends on the
+choice; the formalization follows the printed matrices.\footnote{Source
+    traceability: \path{Papers/2011.12127/TN-Review-main.tex}, lines
+    2586--2591; \path{References/1106.4752/source/dDSPTmodel.tex},
+    line 287. Results: \leanid{CZXCompression.mpo_reviewCZXTensor_apply} and
+    \leanid{CZXCompression.mpo_reviewCZXTensor_eq_smul}.}
+
+\emph{The second projector.} Section IV of the review fixes the convention
+for the canonical-form construction: an invariant subspace
+$\mathcal S_1$ satisfies $B^i\mathcal S_1\subset\mathcal S_1$, $P_1$ is the
+orthogonal projector onto $\mathcal S_1$ and $Q_1=\mathbb 1-P_1$, so that
+$B^iP_1=P_1B^iP_1$ and $Q_1B^iQ_1=Q_1B^i$. The first projector
+$P=\operatorname{diag}(0,1,1,0)$ of the appendix follows this convention.
+The second projector $Q=\tfrac12\begin{pmatrix}1&-1\\-1&1\end{pmatrix}$ is
+said to give an invariant subspace of the block
+$B^{00}=\begin{pmatrix}-1&1\\0&0\end{pmatrix}$,
+$B^{11}=\begin{pmatrix}0&0\\1&-1\end{pmatrix}$, but its range is not
+invariant: $B^{00}(1,-1)^{T}=(-2,0)^{T}$. The range of $\mathbb 1-Q$, spanned
+by $(1,1)^{T}$, is invariant, since both letters annihilate it. Thus the
+printed $Q$ plays the role of $Q_1$, with $P_1=\mathbb 1-Q$. The block on
+the range of $P_1$ vanishes and the block on the range of $Q$ is
+$QB^{ij}Q=(-1)\delta_{ij}Q$, which is the canonical form the review states.
+The formalization reads $Q$ as $Q_1$.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 1784--1797 and
+    2598--2601. Results: \leanid{CZXCompression.reviewQ_mul_reviewBlock},
+    \leanid{CZXCompression.reviewBlock_mul_reviewQ} and
+    \leanid{CZXCompression.reviewQ_conj_reviewBlock}.}
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
