@@ -18,8 +18,20 @@ For any tensor `A`, put `Bⁱ = [[Aⁱ, Aⁱ], [0, Aⁱ]]` and
 boundary trace is zero. A nonempty word with nonzero trace therefore
 separates the two boundary families. No normality assumption is needed.
 
-Source: *The asymmetric fundamental theorem and boundary matrices*, in
-`Notes/OpenProblemsTN/followup/asymmetric_mpoa/sections/rfp_symmetry_bridge.tex`.
+**Source.** Project construction; it is not a tensor printed in a published
+source, and it is not a renormalization fixed point. It illustrates that the
+periodic operators $O_L$ of Cirac, Pérez-García, Schuch, Verstraete 2017
+(arXiv:1606.00608, `Papers/1606.00608/MPDO-22-12-17-2.tex` lines 962--967),
+which carry the structure coefficients of Theorem 4.14 (lines 972--993), do not
+determine the boundary traces of a tensor, so equality of periodic operators
+alone does not give the local decomposition of that theorem's clause (iii).
+
+## Provenance
+
+The example was first recorded in the subsection *The asymmetric fundamental
+theorem and boundary matrices* (label `bridge:asymmetric`) of
+`Notes/OpenProblemsTN/followup/asymmetric_mpoa/sections/rfp_symmetry_bridge.tex`;
+that note is a verification record, not the source.
 -/
 
 open scoped Matrix
