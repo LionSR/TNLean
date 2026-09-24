@@ -1,0 +1,334 @@
+%% =========================================================
+%% Example: group matrix product operators from a normalized
+%% three-cocycle on periodic chains, with the instances for the
+%% group of order two (the decorated CZX operator), the cyclic
+%% groups with their standard cocycles, and Z2 x Z2 with the
+%% mixed cocycle of type II.
+%% =========================================================
+
+\section{Group matrix product operators from a three-cocycle}%
+\label{sec:asymex_group_cocycle_mpo}
+
+Garre-Rubio, Lootens and Molnár~\cite{GarreRubio2023MPOSym} build, from a
+finite group $G$ and a three-cocycle $\omega$, a matrix product operator
+representation of $G$ on a periodic chain whose sites carry the regular
+representation $\C[G]$. Each operator is a left shift by $g$ on every site,
+decorated by a diagonal two-site phase gate determined by $\omega$. For the
+cyclic groups, Garre-Rubio and Schuch~\cite{GarreRubioSchuch2024DomainWall}
+give one explicit cocycle in each cohomology class. This section states the
+periodic construction for an arbitrary normalized three-cocycle and then
+evaluates it for three groups.
+
+The periodic display of~\cite{GarreRubio2023MPOSym} places two left shifts
+on each pair of neighboring sites, which read literally acts on every site
+by the shift by $g^2$. The local tensor of that construction, and its
+example for the group of order two, carry one left shift per site; the
+operator below follows the tensor, as recorded
+in~\cite{gap:glm23_pbc_group_mpo_single_shift}.
+
+\begin{definition}[The tensor of a three-cochain]
+    \label{def:asymex_group_cocycle_tensor}
+    \lean{MPOTensor.GroupCocycle.wGate,
+        MPOTensor.GroupCocycle.leftShift,
+        MPOTensor.GroupCocycle.leftShift_apply,
+        MPOTensor.GroupCocycle.siteShift,
+        MPOTensor.GroupCocycle.siteShift_apply,
+        MPOTensor.GroupCocycle.tensor,
+        MPOTensor.GroupCocycle.tensor_apply,
+        MPOTensor.GroupCocycle.family,
+        MPOTensor.GroupCocycle.shift,
+        MPOTensor.GroupCocycle.shift_apply,
+        MPOTensor.GroupCocycle.phase}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_family, def:mpug_scalar_cochains}
+    Let $G$ be a finite group and let
+    $\omega\colon G^3\to\C^\times$ be a scalar three-cochain. On
+    $\C[G]\otimes\C[G]$ define the diagonal gate and the left shift by
+    \begin{align}
+        W_g\ket{k,l} & =\omega(g,l,l^{-1}k)\ket{k,l}, &
+        L_g\ket{k}   & =\ket{gk}.
+        \notag
+    \end{align}
+    The tensor $\hat T_g$ has physical and bond indices in $G$, with
+    \begin{align}
+        (\hat T_g^{\,a,b})_{l,r}
+         & =\delta_{a,gb}\,\delta_{r,b}\,\omega(g,b,b^{-1}l),
+        \label{eq:asymex_group_cocycle_tensor}
+    \end{align}
+    where $a$ is the output, $b$ the input, and $l,r$ the incoming and
+    outgoing bonds. For a configuration $t=(t_0,\ldots,t_{N-1})\in G^N$
+    on a periodic chain of $N>0$ sites, with $t_N=t_0$, write
+    $gt=(gt_0,\ldots,gt_{N-1})$ and
+    \begin{align}
+        \phi_g(t)
+         & =\prod_{i=0}^{N-1}\omega(g,t_{i+1},t_{i+1}^{-1}t_i).
+        \label{eq:asymex_group_cocycle_phase}
+    \end{align}
+    The group elements are identified with the basis labels
+    $\{0,\ldots,|G|-1\}$ by a fixed bijection, and $U_g=O_N(\hat T_g)$
+    denotes the periodic operator.
+\end{definition}
+
+\begin{theorem}[The periodic operator is monomial]
+    \label{thm:asymex_group_cocycle_kernel}
+    \lean{MPOTensor.GroupCocycle.mpo_tensor_apply,
+        MPOTensor.GroupCocycle.mpo_tensor,
+        MPOTensor.GroupCocycle.mpo_tensor_apply_eq_leftShift_wGate}
+    \leanok
+    \uses{def:asymex_group_cocycle_tensor}
+    For every scalar three-cochain $\omega$, every $g\in G$, every $N>0$,
+    and all $s,t\in G^N$,
+    \begin{align}
+        U_g(s,t) & =\delta_{s,gt}\,\phi_g(t).
+        \notag
+    \end{align}
+    Equivalently,
+    $U_g=\bigl(\bigotimes_iL_g\bigr)\prod_iW_g^{i,i+1}$, the gates acting on
+    the neighboring pairs $(t_i,t_{i+1})$ before the shifts.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand the trace over cyclic bond configurations $b$. The factor
+    $\delta_{r,b}$ in~(\ref{eq:asymex_group_cocycle_tensor}) forces
+    $b_{i+1}=t_i$, so only $b_i=t_{i-1}$ contributes. Its contribution
+    vanishes unless $s_i=gt_i$ at every site, and otherwise equals
+    $\prod_i\omega(g,t_i,t_i^{-1}t_{i-1})$, which is $\phi_g(t)$ after the
+    cyclic reindexing $i\mapsto i+1$. The gates are diagonal, so the entry
+    of $\bigl(\bigotimes_iL_g\bigr)\prod_iW_g^{i,i+1}$ at $(s,t)$ is the
+    same product.
+\end{proof}
+
+\begin{theorem}[Product law]
+    \label{thm:asymex_group_cocycle_mul}
+    \lean{MPOTensor.GroupCocycle.mpo_tensor_mul,
+        MPOTensor.GroupCocycle.phase_mul,
+        MPOTensor.GroupCocycle.shift_mul}
+    \leanok
+    \uses{thm:asymex_group_cocycle_kernel, def:mpug_three_cocycle}
+    If $\omega$ is a three-cocycle, then $U_gU_h=U_{gh}$ for all
+    $g,h\in G$ and every $N>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both sides are monomial with the shift by $gh$, so it suffices that
+    $\phi_g(ht)\phi_h(t)=\phi_{gh}(t)$. The cocycle
+    equation~(\ref{eq:mpug_three_cocycle}) at $(g,h,a,a^{-1}x)$ gives, at
+    each site,
+    \begin{align}
+        \omega(g,ha,a^{-1}x)\,\omega(h,a,a^{-1}x)
+         & =\omega(gh,a,a^{-1}x)\,
+        \frac{\omega(g,h,x)}{\omega(g,h,a)}.
+        \notag
+    \end{align}
+    With $a=t_{i+1}$ and $x=t_i$ the correction factors telescope around
+    the ring.
+\end{proof}
+
+\begin{theorem}[Unit law]
+    \label{thm:asymex_group_cocycle_one}
+    \lean{MPOTensor.GroupCocycle.mpo_tensor_one,
+        MPOTensor.GroupCocycle.wGate_one,
+        MPOTensor.GroupCocycle.shift_one}
+    \leanok
+    \uses{thm:asymex_group_cocycle_kernel, def:mpug_scalar_cochains}
+    If $\omega$ is normalized, then $W_e=1$ and $U_e=1$ for every $N>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Normalization in the first argument makes every factor of $W_e$ and of
+    $\phi_e(t)$ equal to one, and the shift by $e$ is the identity.
+\end{proof}
+
+\begin{theorem}[Unitarity and the adjoint law]
+    \label{thm:asymex_group_cocycle_unitary}
+    \lean{MPOTensor.GroupCocycle.mpo_tensor_mem_unitaryGroup,
+        MPOTensor.GroupCocycle.star_phase_mul_phase,
+        MPOTensor.GroupCocycle.isMPUPos,
+        MPOTensor.GroupCocycle.mpo_tensor_conjTranspose,
+        MPOTensor.GroupCocycle.family_operator_laws}
+    \leanok
+    \uses{thm:asymex_group_cocycle_kernel, thm:asymex_group_cocycle_mul,
+        thm:asymex_group_cocycle_one, def:mpug_positive_mpu}
+    If every value of $\omega$ has modulus one, then $U_g$ is unitary for
+    every $g\in G$ and every $N>0$, so $\hat T_g$ is a matrix product
+    unitary on nonempty chains. If moreover $\omega$ is a normalized
+    three-cocycle, then $U_g^\dagger=U_{g^{-1}}$ for every $N>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A monomial matrix whose nonzero entries have modulus one is unitary.
+    For the adjoint law, $U_g^\dagger=U_g^\dagger U_gU_{g^{-1}}=U_{g^{-1}}$
+    by Theorems~\ref{thm:asymex_group_cocycle_mul}
+    and~\ref{thm:asymex_group_cocycle_one}.
+\end{proof}
+
+The single-site tensors are not injective: their $|G|^2$ physical matrices
+span a space of dimension at most $|G|$. The operator laws above are
+therefore stated directly rather than through an injective representation.
+
+\subsection{The group of order two and the decorated CZX operator}
+
+For $G=\Z_2=\{e,s\}$ with the nontrivial cocycle $\omega_1$ of
+Definition~\ref{def:asymex_z2_cocycles}, the source identifies the gate as
+$CZ(1\otimes Z)$, the shift as $X$, and the operator as
+$\prod_iCZ_{i,i+1}Z_i\prod_iX_i$~\cite{GarreRubio2023MPOSym}. Identify
+$e,s$ with the qubit labels $0,1$ and write $\bar t$ for the bitwise
+complement of $t\in\{0,1\}^N$ and $q(s)=\sum_is_is_{i+1}$.
+
+\begin{theorem}[The decorated CZX operator]
+    \label{thm:asymex_group_cocycle_z2}
+    \lean{MPOTensor.GroupCocycle.bitEquiv,
+        MPOTensor.GroupCocycle.czxDecorated,
+        MPOTensor.GroupCocycle.wGate_cyclicTwo,
+        MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo}
+    \leanok
+    \uses{def:asymex_z2_cocycles, thm:asymex_group_cocycle_kernel}
+    For $\omega=\omega_1$ and $g=s$, the gate is
+    $W_s\ket{k,l}=(-1)^{kl+l}\ket{k,l}$, which is $CZ(1\otimes Z)$. For
+    every $N>0$,
+    \begin{align}
+        U_s(u,t) & =\delta_{u,\bar t}\,(-1)^{q(u)+\sum_iu_i},
+        \notag
+    \end{align}
+    so that $U_s=\prod_iCZ_{i,i+1}Z_i\prod_iX_i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    On bits, $\omega_1(s,l,l^{-1}k)=(-1)^{kl+l}$, checked on the four
+    pairs $(k,l)$. By Theorem~\ref{thm:asymex_group_cocycle_kernel} the
+    kernel is supported on $u=\bar t$ with phase
+    $\prod_i(-1)^{t_it_{i+1}+t_{i+1}}$. On complemented bits,
+    $(-1)^{kl+l}=(-1)^{\bar k\bar l+\bar k}$, and the product becomes
+    $(-1)^{q(u)+\sum_iu_i}$ after reindexing the second factor.
+\end{proof}
+
+\subsection{The cyclic groups}
+
+For $n\geq1$ and $j\in\N$, Garre-Rubio and
+Schuch~\cite[Section~IV.C]{GarreRubioSchuch2024DomainWall} write the
+three-cocycles of $\Z_n$ as $\omega_j$ below, with $j=0,\ldots,n-1$
+labelling the cohomology classes.
+
+\begin{definition}[The cocycles of the cyclic groups]
+    \label{def:asymex_group_cocycle_cyclic}
+    \lean{MPOTensor.GroupCocycle.cyclicCocycle,
+        MPOTensor.GroupCocycle.rootOfUnity,
+        MPOTensor.GroupCocycle.rootOfUnity_pow,
+        MPOTensor.GroupCocycle.residueEquiv}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    Represent residues of $\Z_n$ by $\{0,\ldots,n-1\}$ and write
+    $[b+c]$ for the representative of $b+c$. Define
+    \begin{align}
+        \omega_j(a,b,c)
+         & =\exp\Bigl\{\frac{2\pi\mathrm{i}\,j}{n^2}\,a\bigl(b+c-[b+c]\bigr)\Bigr\},
+        \notag
+    \end{align}
+    and let $\zeta=e^{2\pi\mathrm{i}/n}$.
+\end{definition}
+
+\begin{theorem}[The cyclic instances]
+    \label{thm:asymex_group_cocycle_cyclic}
+    \lean{MPOTensor.GroupCocycle.cyclicCocycle_val,
+        MPOTensor.GroupCocycle.cyclicCocycle_isCocycle,
+        MPOTensor.GroupCocycle.cyclicCocycle_isNormalized,
+        MPOTensor.GroupCocycle.cyclicCocycle_norm,
+        MPOTensor.GroupCocycle.mpo_tensor_cyclic_apply,
+        MPOTensor.GroupCocycle.cyclic_operator_laws}
+    \leanok
+    \uses{def:asymex_group_cocycle_cyclic, def:mpug_three_cocycle,
+        thm:asymex_group_cocycle_kernel, thm:asymex_group_cocycle_mul,
+        thm:asymex_group_cocycle_one, thm:asymex_group_cocycle_unitary}
+    For every $n\geq1$ and $j\in\N$, the value is
+    $\omega_j(a,b,c)=\zeta^{ja\lfloor(b+c)/n\rfloor}$, and $\omega_j$ is a
+    normalized three-cocycle of $\Z_n$ with values of modulus one. For every
+    $g\in\Z_n$, every $N>0$ and all $s,t\in\Z_n^N$,
+    \begin{align}
+        U_g(s,t)
+         & =\delta_{s,g+t}\prod_{i=0}^{N-1}
+        \zeta^{jg\lfloor(t_{i+1}+[t_i-t_{i+1}])/n\rfloor}.
+        \notag
+    \end{align}
+    Every $\hat T_g$ is a matrix product unitary on nonempty chains, and
+    $U_0=1$, $U_gU_h=U_{g+h}$ and $U_g^\dagger=U_{-g}$ for every $N>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $b+c-[b+c]=n\lfloor(b+c)/n\rfloor$, the exponential is the stated
+    power of $\zeta$. The cocycle equation reduces modulo $n$ to the carry
+    identity
+    \begin{align}
+        \Bigl\lfloor\frac{k+l}{n}\Bigr\rfloor
+        +\Bigl\lfloor\frac{h+[k+l]}{n}\Bigr\rfloor
+         & =\Bigl\lfloor\frac{h+k}{n}\Bigr\rfloor
+        +\Bigl\lfloor\frac{[h+k]+l}{n}\Bigr\rfloor,
+        \notag
+    \end{align}
+    both sides counting the multiples of $n$ in $h+k+l$. An identity
+    argument makes the exponent zero, and every power of $\zeta$ has
+    modulus one. The kernel is
+    Theorem~\ref{thm:asymex_group_cocycle_kernel} evaluated on these
+    values, and the operator laws are
+    Theorems~\ref{thm:asymex_group_cocycle_mul},
+    \ref{thm:asymex_group_cocycle_one}
+    and~\ref{thm:asymex_group_cocycle_unitary}.
+\end{proof}
+
+\subsection{The group \texorpdfstring{$\Z_2\times\Z_2$}{Z2 x Z2}}
+
+For $\Z_2\times\Z_2$ the construction is applied to the mixed three-cocycle
+of type II whose exponent couples the first factor to the second, the
+cocycle targeted in Section~\ref{sec:asymex_z2z2}. It is a standard
+representative and is not taken
+from~\cite{GarreRubio2023MPOSym,GarreRubioSchuch2024DomainWall}.
+
+\begin{definition}[The mixed cocycle of type II]
+    \label{def:asymex_group_cocycle_klein}
+    \lean{MPOTensor.GroupCocycle.kleinCocycle,
+        MPOTensor.GroupCocycle.kleinEquiv}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For $a=(a_1,a_2)$, $b=(b_1,b_2)$ and $c=(c_1,c_2)$ in $\Z_2\times\Z_2$,
+    define $\omega(a,b,c)=(-1)^{a_1b_2c_2}$.
+\end{definition}
+
+\begin{theorem}[The instance for the group of order four]
+    \label{thm:asymex_group_cocycle_klein}
+    \lean{MPOTensor.GroupCocycle.kleinCocycle_isCocycle,
+        MPOTensor.GroupCocycle.kleinCocycle_isNormalized,
+        MPOTensor.GroupCocycle.kleinCocycle_norm,
+        MPOTensor.GroupCocycle.mpo_tensor_klein_apply,
+        MPOTensor.GroupCocycle.klein_operator_laws}
+    \leanok
+    \uses{def:asymex_group_cocycle_klein, def:mpug_three_cocycle,
+        thm:asymex_group_cocycle_kernel, thm:asymex_group_cocycle_mul,
+        thm:asymex_group_cocycle_one, thm:asymex_group_cocycle_unitary}
+    The function $\omega$ is a normalized three-cocycle with values $\pm1$.
+    Write $t_i=(x_{i,1},x_{i,2})$. For every $g\in\Z_2\times\Z_2$, every
+    $N>0$ and all $s,t$,
+    \begin{align}
+        U_g(s,t)
+         & =\delta_{s,g+t}\,
+        (-1)^{\sum_ig_1x_{i+1,2}(x_{i,2}-x_{i+1,2})}.
+        \notag
+    \end{align}
+    Every $\hat T_g$ is a matrix product unitary on nonempty chains, and
+    $U_0=1$, $U_gU_h=U_{g+h}$ and $U_g^\dagger=U_{-g}$ for every $N>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The exponent $a_1b_2c_2$ is trilinear over $\Z_2$, hence an additive
+    three-cocycle, and it vanishes when any argument is zero. The kernel is
+    Theorem~\ref{thm:asymex_group_cocycle_kernel} with
+    $t_{i+1}^{-1}t_i=t_i-t_{i+1}$, and the operator laws are
+    Theorems~\ref{thm:asymex_group_cocycle_mul},
+    \ref{thm:asymex_group_cocycle_one}
+    and~\ref{thm:asymex_group_cocycle_unitary}.
+\end{proof}
