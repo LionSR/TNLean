@@ -42,7 +42,7 @@
     \leanok
     \uses{def:mpdo_doubled_phys_trace_transfer}
     For a sector decomposition with basis elements $A_{j}$ and weights
-    $\mu_{j,q}$, the physical-trace transfer of the assembled tensor is the
+    $\mu_{j,q}$, the physical-trace transfer of the direct-sum tensor is the
     block direct sum of the weighted transfers of the copies:
     \begin{align}
         \mathcal T
@@ -370,15 +370,11 @@
     horizontal-canonical-form data of the already-blocked tensor $K$ fixed
     in~\cite[Appendix~C.2, line~1628]{Cirac2016MPDO_arXiv}.
 
-    The definition concerns this fixed representative. Its witness includes
-    the global unit-weight convention
-    of~\cite[line~246]{Cirac2016MPDO_arXiv}, whereas the non-nilpotency
-    condition
-    itself is unchanged by nonzero scalar rescaling. It supplies the
-    Appendix~C.2 hypothesis on the already-blocked tensor and is not the
-    simplicity predicate of Definition~\ref{def:mpdo_simple_tensor},
-    which quantifies over blocking lengths and presentations. No invariance
-    under rescaling or replacement of the canonical presentation is asserted.
+    This definition fixes the canonical representative and incorporates the
+    global unit-weight convention of~\cite[line~246]{Cirac2016MPDO_arXiv}. It
+    instantiates the Appendix~C.2 hypothesis on the already-blocked tensor, in
+    contrast to Definition~\ref{def:mpdo_simple_tensor} which quantifies over
+    blocking lengths and presentations.
 \end{definition}
 % Note for maintainers: this predicate does not include the biCF
 % (bidirectional canonical form) hypothesis imposed on K at line 1628.  That
@@ -390,15 +386,13 @@
     \lean{MPOTensor.IsSimpleCanonicalForm.isHorizontalCF}
     \leanok
     \uses{def:mpdo_simple_cf_tensor, def:horizontal_cf_mpdo}
-    A tensor satisfying normalized simplicity in the chosen blocked
-    canonical-form setting is in horizontal canonical form.
+    A tensor in normalized simple canonical form is in horizontal canonical form.
 \end{lemma}
 
 \begin{proof}\leanok
-    The canonical-form data in the simplicity hypothesis---the sector
-    decomposition, its basis-of-normal-tensors property, and the
-    block-diagonal gauge---give a horizontal canonical form. Positivity and
-    non-nilpotency are not needed for this conclusion.
+    The sector decomposition, its basis-of-normal-tensors property, and the
+    block-diagonal gauge directly satisfy the requirements of a horizontal
+    canonical form.
 \end{proof}
 
 \begin{theorem}[Normalized simple canonical forms are simple]
@@ -406,8 +400,7 @@
     \lean{MPOTensor.IsSimpleCanonicalForm.isSimple}
     \leanok
     \uses{def:mpdo_simple_cf_tensor, def:mpdo_simple_tensor}
-    Every tensor satisfying normalized simplicity in the chosen blocked
-    canonical-form setting is simple in the sense of
+    Every tensor in normalized simple canonical form is simple in the sense of
     Definition~\ref{def:mpdo_simple_tensor}.
 \end{theorem}
 

@@ -81,7 +81,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     Theorem~\ref{thm:matrix_rank_scalar_extension}; hence
     Theorem~\ref{thm:mpo_diagonal_cut_rank} gives
     $\rank_{\R}P\leq D^2$.
-    Theorem~\cite[``Classical mutual information is bounded by ordinary rank'']{QICLean2026Blueprint} gives
+    Applying \cite[``Classical mutual information is bounded by ordinary rank'']{QICLean2026Blueprint} gives
     $I(X:Y)_P\leq\log\rank_{\R}P$, and monotonicity of the
     logarithm gives the result.
 \end{proof}
@@ -219,15 +219,9 @@ The corresponding generic result is proved in the companion quantum-channel volu
          & =\bigl(M^{y_0y'_0}\cdots M^{y_{K-1}y'_{K-1}}\bigr)_{ba}.
         \notag
     \end{align}
-    This is the identity
-    $\tr(AB)=\sum_{a,b}A_{ab}B_{ba}$, with the normalization scalar
-    absorbed into the left factor. The algebraic decomposition does not use
-    positivity. Since $0^{-1}=0$, it also remains valid when the trace
-    vanishes; a nonzero trace is needed only to interpret
-    $\sigma^{(N)}_{L:K}$ as the normalized physical state.
-
-    This is the two-virtual-boundary algebraic step for the
-    mutual-information estimate in
+    This decomposes $\sigma^{(N)}_{L:K}$ via the trace identity
+    $\tr(AB)=\sum_{a,b}A_{ab}B_{ba}$ with the normalization scalar absorbed into
+    the left factor, formalizing the two-virtual-boundary factorization in
     \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
@@ -345,11 +339,9 @@ The corresponding generic result is proved in the companion quantum-channel volu
 
 \section{Rectangular Choi matrices and a range-dimension estimate}
 
-The following construction is the unnormalized, different-dimension form of
-the Choi correspondence \cite[Proposition~2.1]{Wolf2012Quantum}. The resulting
-estimate bounds the order-two Choi functional of a Hilbert--Schmidt contraction
-by the dimension of its range. It is used below to bound mutual information in
-terms of operator-Schmidt rank.
+The rectangular Choi correspondence \cite[Proposition~2.1]{Wolf2012Quantum}
+bounds the order-two Choi functional of a Hilbert--Schmidt contraction by its
+range dimension, bounding mutual information in terms of operator-Schmidt rank.
 
 
 The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Matrix of a linear map in matrix-unit bases'']{QICLean2026Blueprint}.
@@ -411,17 +403,13 @@ The corresponding generic result is proved in the companion quantum-channel volu
 The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Marginal-support whitening bound'']{QICLean2026Blueprint}.
 
 
-The sandwiched R\'enyi comparison also uses the following unnormalized
-trace term.  For trace-one $\rho$ and $\alpha>1$, it is the quantity inside the
-logarithm of the sandwiched R\'enyi divergence
+For trace-one $\rho$ and $\alpha>1$, the total sandwiched R\'enyi trace is the
+quantity inside the logarithm of the sandwiched R\'enyi divergence
 \cite[Equation~(3)]{Beigi2013Sandwiched}
-\cite[Definition~2]{MullerLennert2013Renyi} whenever
-$\rho,\omega\geq0$ and $\ker\omega\subseteq\ker\rho$.  This includes singular
-$\omega$, with negative powers interpreted as the generalized inverse on its
-support.  In this regime, finiteness of the divergence requires the support
-inclusion.  The present application uses $1<\alpha\leq2$; the order-one case is
-the Umegaki endpoint.  The statements below concern this algebraic expression in the regime
-$1<\alpha\leq2$.
+\cite[Definition~2]{MullerLennert2013Renyi} for $\rho,\omega\geq0$ with
+$\ker\omega\subseteq\ker\rho$. For singular $\omega$, negative powers denote
+the generalized inverse on $\supp\omega$. The regime $1<\alpha\leq2$ connects
+the Umegaki relative entropy at $\alpha\to 1$ to the order-two functional.
 
 
 The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Total sandwiched R\'enyi trace'']{QICLean2026Blueprint}.
@@ -455,9 +443,8 @@ The corresponding generic result is proved in the companion quantum-channel volu
         I_L^{(N)} & \leq 2\log D.
         \notag
     \end{align}
-    No global positivity, local purification, canonical form, or separate
-    positive-bond-dimension hypothesis is required. The cuts $L=0$ and $L=N$
-    are included.
+    The bound holds for all cuts $0\leq L\leq N$ without assuming local
+    purification or canonical form.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -488,9 +475,8 @@ The corresponding generic result is proved in the companion quantum-channel volu
         I_L^{(N)} & \leq 4\log D.
         \notag
     \end{align}
-    This is the finite-chain estimate invoked in the proof of
-    Proposition~4.5 of \cite{Cirac2016MPDO_arXiv}. The nonzero-trace hypothesis
-    states explicitly the normalization convention preceding that proposition.
+    This establishes the finite-chain mutual-information bound invoked in
+    \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -501,52 +487,40 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $0\leq\log D$ and $2\log D\leq4\log D$.
 \end{proof}
 
-\begin{remark}[Boundedness of the mutual information]
-    The proof of Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} invokes the
-    uniform estimate $I_L\leq4\log D$ for every MPDO. Its cited argument,
-    however, treats mixed tensor-network states obtained from local completely
-    positive maps \cite{Wolf2008AreaLaws}. After purifying those maps, data
-    processing and the pure-state boundary estimate give
+\begin{remark}[Boundedness of mutual information]
+    The proof of \cite[Proposition~4.5]{Cirac2016MPDO_arXiv} invokes the
+    uniform estimate $I_L\leq4\log D$ for every MPDO, referencing the
+    purification of local completely positive maps \cite{Wolf2008AreaLaws}.
+    For such maps, data processing and the pure-state boundary estimate yield
     \begin{align}
         I(A:B)_{\rho}
          & \leq I(A:B)_{\ketbra{\Psi}{\Psi}}
         =2S(A)_{\ketbra{\Psi}{\Psi}}
-        \leq2\lvert\partial A\rvert\log D.
+        \leq2\lvert\partial A\rvert\log D = 4\log D.
         \notag
     \end{align}
-    A periodic one-dimensional interval has two boundary bonds, and hence the
-    last expression is $4\log D$. A general positive MPO need not admit this
-    local purification.
+    General positive MPOs need not admit such a local purification.
 
-    By Theorem~\cite[``Coefficient-space characterization of operator-Schmidt rank'']{QICLean2026Blueprint}, the two virtual
-    bonds give an operator-Schmidt decomposition with at most $D^2$ terms, but
-    they do not bound the ordinary rank of either marginal.
-    For example, a bond-one tensor can generate $q^{\otimes N}$ for a full-rank
-    one-site density matrix $q$. Thus its $L$-site marginal has rank
-    $\rank(q)^L$, although its mutual information vanishes.
+    The two virtual bonds bound the operator-Schmidt rank by $D^2$
+    \cite[``Coefficient-space characterization of operator-Schmidt rank'']{QICLean2026Blueprint},
+    even though the ordinary rank of a marginal can grow exponentially (for
+    instance, a product of full-rank single-site density matrices has
+    $\rank(\rho_L)=(\rank q)^L$ while $I_L=0$).
 
-    Theorem~\ref{thm:mpdo_finite_chain_mutual_information_two_log} gives the
-    stronger estimate
-    \begin{align}
-        I_L^{(N)}\leq\log D^2=2\log D
-        \notag
-    \end{align}
-    whenever the finite-chain operator is positive and has positive trace.
-    Thus no classical or genuinely quantum counterexample exists.
-    The diagonal argument gives an independent special-case proof. Indeed,
+    Theorem~\ref{thm:mpdo_finite_chain_mutual_information_two_log} provides the
+    uniform bound $I_L^{(N)}\leq2\log D$ whenever the finite-chain operator is
+    positive semidefinite with positive trace. For diagonal states,
     Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}
-    bounds by $2\log D$ the classical mutual information of the normalized
-    diagonal coefficients whenever the finite-chain operator is diagonal and
-    positive semidefinite and has positive trace.
+    gives an independent verification.
 
-    The same example as
-    Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit} makes the iterated
-    mutual-information limit false; see
-    \cite{gap:cpgsv17_mpdo_mutual_information_bound}. The
-    channel-image implication is
-    Theorem~\ref{thm:local_channel_image_mutual_info_bound}, and the pure-state
-    instance is Proposition~\ref{prop:pure_mutual_info_bound} below. The
-    locally purified case is Theorem~\ref{thm:lpdo_mutual_info_bound}.
+    While the finite-chain bound $I_L^{(N)}\leq 2\log D$ holds uniformly, the
+    iterated thermodynamic limit in \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}
+    can fail, as demonstrated by Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit}
+    and documented in \cite{gap:cpgsv17_mpdo_mutual_information_bound}.
+    The channel-image case is treated in
+    Theorem~\ref{thm:local_channel_image_mutual_info_bound}, pure states in
+    Proposition~\ref{prop:pure_mutual_info_bound}, and locally purified states
+    in Theorem~\ref{thm:lpdo_mutual_info_bound}.
 \end{remark}
 
 \begin{definition}[Block entropy and area-law saturation for pure states]
@@ -833,10 +807,9 @@ The corresponding generic result is proved in the companion quantum-channel volu
     area law: for every chain length $N$ and every block length
     $1\le L<\lfloor N/2\rfloor$, the pure-state block entropy is constant in the
     block size, $S_L^{(N)}(A)=S_{L+1}^{(N)}(A)$.
-    The source statement is
-    \cite[Proposition~3.14, lines~606--608]{Cirac2016MPDO_arXiv}.
-    It assumes canonical form; the theorem above is the stronger pure-state
-    implication obtained from transfer-map idempotence alone.
+    This strengthens \cite[Proposition~3.14, lines~606--608]{Cirac2016MPDO_arXiv}
+    by deducing area-law saturation from transfer-map idempotence alone, without
+    assuming canonical form.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:pure_block_entropy_env_charpoly, lem:rfp_schmidt_gram_collapse}
@@ -852,8 +825,8 @@ The corresponding generic result is proved in the companion quantum-channel volu
         \notag
     \end{align}
     Since $1\le L<\lfloor N/2\rfloor$, the four lengths
-    $L$, $L+1$, $N-L$, and $N-(L+1)$ are positive. The RFP Gram-collapse lemma
-    gives
+    $L$, $L+1$, $N-L$, and $N-(L+1)$ are positive.
+    Lemma~\ref{lem:rfp_schmidt_gram_collapse} gives
     \begin{align}
         L_L^\dagger L_L
          & =L_1^\dagger L_1,
@@ -897,9 +870,8 @@ The corresponding generic result is proved in the companion quantum-channel volu
         =S_{\lfloor N/2\rfloor}^{(N)}(A).
         \notag
     \end{align}
-    This is the explicit constant-entropy chain of the area-law saturation
-    \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv}, under the fixed-point
-    hypothesis.
+    This formalizes the constant-entropy consequence of area-law saturation
+    \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv} for fixed points.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}

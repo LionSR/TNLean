@@ -33,17 +33,14 @@
         B^{(x)} & \geq0,
         \notag
     \end{align}
-    with commuting neighboring translates. The orthogonal sum and the
-    multiplicities are part of the definition. Definition~4.8 decomposes the
-    global Hilbert space into the uniform product sectors and requires the
-    associated one-site spaces to be mutually orthogonal; it does not impose a
-    resolution of a larger one-site identity by the sector projections.
+    with commuting neighboring translates. The orthogonal direct sum decomposes the
+    global Hilbert space into mutually orthogonal uniform product sectors
+    \cite[Definition~4.8, lines~829--850]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-The following auxiliary single-bond presentation does not make the sector
-labels or multiplicities explicit. Its bond acts on the full two-site space.
-It gives the one-sector case of
-Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
+When restricted to a single sector with trivial multiplicity, the two-site bond
+in Definition~\ref{def:mpdo_source_gsnnch} acts on the full two-site space
+without sector projections.
 
 \begin{definition}[Single-bond commuting-form data for an MPDO]
     \label{def:mpdo_commuting_form_data}
@@ -70,11 +67,10 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
          & =c\prod_{i=0}^{N-1}B_{i,i+1}.
         \notag
     \end{align}
-    The bond in this chainwise condition may depend on $N$. It is therefore
-    weaker than the single translation-invariant bond family used in the
-    proposition at
-    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
-    % See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+    Allowing the bond $B$ to depend on $N$ formalizes a chainwise version of the
+    single translation-invariant bond in
+    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}; see
+    \cite{gap:cpsv16_commuting_form_to_sal}.
 \end{definition}
 
 \begin{theorem}[A commuting-form realization gives one GSNNCH sector]
@@ -369,10 +365,10 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \leanok
     \uses{thm:mpdo_physical_support_restriction_sal}
     Let $K=V K_P V^*$ be a physical support restriction of an MPO tensor
-    satisfying SAL. Proposition~C.8 applied to the injective tensor $K_P$
-    gives a positive two-site bond $B_P$ whose cyclic translates commute
-    pairwise on every periodic chain of length $N\geq 2$. Its lift
-    $B=V^{\otimes 2}B_P(V^{\otimes 2})^*$ is positive, its cyclic translates
+    satisfying SAL. Applying \cite[Proposition~C.8]{Cirac2016MPDO_arXiv} to the
+    injective tensor $K_P$ gives a positive two-site bond $B_P$ whose cyclic
+    translates commute pairwise on every periodic chain of length $N\geq 2$. Its
+    lift $B=V^{\otimes 2}B_P(V^{\otimes 2})^*$ is positive, its cyclic translates
     commute pairwise on every such ambient chain, and
     $(P\otimes P)B(P\otimes P)=B$.
     Moreover, for every $N\geq2$ one has the exact identity
@@ -384,9 +380,10 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{theorem}
 
 \begin{proof}\leanok
-    The preceding theorem gives SAL for the injective restricted tensor, so
-    Proposition~C.8 supplies its positive bond. Since $V^*V=\Id$, positivity
-    is preserved under conjugation by $V^{\otimes 2}$. Also,
+    Theorem~\ref{thm:mpdo_physical_support_restriction_sal} gives SAL for the
+    injective restricted tensor, so
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv} supplies its positive bond. Since
+    $V^*V=\Id$, positivity is preserved under conjugation by $V^{\otimes 2}$. Also,
     $V^{\otimes 2}(V^{\otimes 2})^*=P\otimes P$; multiplying the lifted bond
     by this projection on either side therefore leaves it unchanged.
 
@@ -571,8 +568,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 
 \begin{proof}\leanok
     Restrict $\mathcal K_x$ isometrically to the range of $P_x$. The
-    restricted tensor is injective and satisfies SAL, so Proposition~C.8
-    gives its positive commuting bond product. Apply
+    restricted tensor is injective and satisfies SAL, so
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv} gives its positive commuting
+    bond product. Apply
     Theorem~\ref{thm:mpdo_physical_support_restriction_bond} in every sector.
     The lifted bond is supported on $P_x\otimes P_x$ and realizes
     $\mathcal K_x$ exactly. The BNT projector construction gives
@@ -745,12 +743,10 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \end{align}
     If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
 
-    This is the conditional last inference in the proposition at
-    \cite[Appendix~C.2, lines~1801--1808]{Cirac2016MPDO_arXiv}. It assumes
-    sectorwise SAL. The printed proposition states the conclusion from the
-    GSNNCH form alone, but its proof invokes the single-sector proposition at
-    lines~1597--1619, whose hypotheses include ZCL. The theorem here does not
-    supply that omitted sectorwise implication.
+    This formalizes the conditional final inference in
+    \cite[Appendix~C.2, lines~1801--1808]{Cirac2016MPDO_arXiv}, where
+    sectorwise SAL is assumed explicitly; see
+    \cite{gap:cpsv16_commuting_form_to_sal}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -844,8 +840,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
         \bigl(\widehat\rho_{x,N,N}\bigr).
         \notag
     \end{align}
-    The first-site action commutes with this partial trace. The preceding
-    theorem therefore gives
+    The first-site action commutes with this partial trace. Therefore
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_normalized_support}
+    yields
     \begin{align}
          & (P_x\otimes\Id^{\otimes(L-1)})\widehat\rho_{x,N,L}
         \notag                                                \\
@@ -883,7 +880,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 
 \begin{proof}\leanok
     \uses{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
-    Apply the preceding theorem with $a_{x,N}=1$.
+    Apply Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
+    with $a_{x,N}=1$.
 \end{proof}
 
 \begin{theorem}[Proportional orthogonal commuting sector sums preserve SAL]
@@ -904,9 +902,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{theorem}
 
 \begin{proof}\leanok
-    The proportional sector-product support lemma supplies the support of
-    every nonempty marginal. Apply
-    Theorem~\ref{thm:mpdo_proportional_local_orthogonal_sum_sal}; its
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
+    supplies the support of every nonempty marginal. Applying
+    Theorem~\ref{thm:mpdo_proportional_local_orthogonal_sum_sal}, its
     sector weights contain the outer scalar $c_N$, while the inner scalars
     $a_{x,N}$ have already disappeared under sector normalization.
 \end{proof}
@@ -972,7 +970,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \uses{thm:mpdo_translation_invariant_commuting_form_zcl_sal, thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
     For each $x$, the fixed bond $B^{(x)}$ and the positive proportional
     product identities form the single-sector commuting-bond hypothesis.
-    The single-sector theorem therefore gives SAL for every $K_x$.
+    Theorem~\ref{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
+    gives SAL for every $K_x$.
     Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
     then gives SAL for $M$.
 \end{proof}
@@ -1001,12 +1000,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     $\rho^{(1)}(K_x)$ is positive semidefinite. If $M$ has source zero
     correlation length, then $M$ satisfies SAL.
 
-    This is \cite[Proposition~C.14]{Cirac2016MPDO_arXiv} with the ambient
-    zero-correlation-length and one-site positivity hypotheses made explicit:
-    the printed proposition omits the ambient hypothesis that its proof uses,
-    through Proposition~C.9, to obtain sectorwise zero correlation length, and
-    its commuting-bond realization is unambiguous only from length two onward,
-    so positivity of $\rho^{(1)}(K_x)$ is the sharp additional boundary.
+    This establishes \cite[Proposition~C.14]{Cirac2016MPDO_arXiv} with the
+    ambient zero-correlation-length and one-site positivity hypotheses made
+    explicit; see \cite{gap:cpsv16_commuting_form_to_sal}.
 \end{theorem}
 
 \begin{proof}\leanok

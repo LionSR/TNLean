@@ -5,7 +5,7 @@
     \lean{MPOTensor.TranslationInvariantBondData}
     \leanok
     \uses{def:mpdo_commuting_form_data}
-    This records one positive semidefinite two-site bond $B\ge0$ whose
+    A positive semidefinite two-site bond $B\ge0$ whose
     translated copies commute pairwise on the periodic $N$-site chain at
     every chain length $N\ge2$: $[B_{i,i+1},B_{j,j+1}]=0$.
 \end{definition}
@@ -15,8 +15,8 @@
     \lean{MPOTensor.EtaLocalStructureData}
     \leanok
     \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_has_commuting_form}
-    This defines the one-bond eta-local form constructed in
-    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}:
+    The one-bond $\eta$-local form constructed in
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} consists of
     a two-site bond $B$ as in
     Definition~\ref{def:mpdo_translation_invariant_bond_data} together with,
     for every chain length $N\ge2$, a constant $c>0$ such that
@@ -484,7 +484,8 @@
         sectorCoordinateBond_etaPair_decomposition}
     \leanok
     \uses{thm:mpdo_eta_fixed_bond_product_tensor}
-    Let $C$ be the selected fixed tensor of the preceding theorem. There are
+    Let $C$ be the selected fixed tensor of
+    Theorem~\ref{thm:mpdo_eta_fixed_bond_product_tensor}. There are
     physical sectors
     $\C^d\cong\bigoplus_{q=0}^{K-1}H_q^L\otimes H_q^R$,
     a unitary $U$, and matrices $L_\beta(q)$ and $R_\alpha(q)$ such that,

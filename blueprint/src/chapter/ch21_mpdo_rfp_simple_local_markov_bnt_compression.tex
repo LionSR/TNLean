@@ -167,10 +167,9 @@ strong subadditivity for a normalized three-site reduced state.
     Here
     $\kappa^{(s)}_{\beta_1,\alpha_3}(i,j)
         ={(\mathcal K_s^{ij})}_{\beta_1,\alpha_3}$.
-    Thus both the normal-sector and Markov-sector off-diagonal entries are
-    retained in the statement, rather than being suppressed by a prior
-    choice of equal labels. This is the full entrywise identity used
-    in~\cite[Appendix~C.2, lines~1719--1732]{Cirac2016MPDO_arXiv}.
+    This is the entrywise identity used
+    in~\cite[Appendix~C.2, lines~1719--1732]{Cirac2016MPDO_arXiv}, retaining
+    both the normal-sector and Markov-sector off-diagonal entries.
 
     The closing entry ${(R_s)}_{\beta_3,\alpha_1}$ is the corrected tail-index
     orientation of the display at lines~1422--1438, recorded in
@@ -397,14 +396,11 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    This is the forward implication of the Hayashi equality
-    characterization. The product-reference raw Petz formula, including its
-    singular-support compression, is given by
-    the corresponding theorem in the companion quantum-channel volume~\cite[``Raw Petz factorization for a product reference'']{QICLean2026Blueprint}. The singular-support
-    equality-to-recovery theorem is still separate. Beyond it, the remaining
-    structural ingredient is the family-level Koashi--Imoto decomposition and
-    the induced action of the middle-system channel on its common direct-sum
-    factors.
+    This follows from the characterization of states saturating strong
+    subadditivity~\cite{Hayden2004Structure}. Petz recovery with a product
+    reference and the Koashi--Imoto decomposition yield the direct-sum
+    decomposition into tensor products on the middle system, giving the local
+    $\eta$-structure of Definition~\ref{def:mpdo_eta_structure}.
 \end{proof}
 
 \begin{lemma}[Partial trace along a right tensor factor]

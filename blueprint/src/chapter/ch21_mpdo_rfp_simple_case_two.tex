@@ -7,8 +7,8 @@
     \leanok
     \uses{def:mpo_physical_trace_idempotence, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
     Suppose a tensor satisfying the literal zero-correlation-length equation
-    is gauge-equivalent, through block-diagonal copy gauges, to an assembled
-    sector decomposition. Every copy satisfies
+    is gauge equivalent, through block-diagonal copy gauges, to a sector
+    decomposition. Every copy satisfies
     \begin{align}
         (\mu_{j,q}\mathcal T_{A_j})^2
          & =\mu_{j,q}\mathcal T_{A_j}.
@@ -32,10 +32,10 @@
     \leanok
     \uses{def:mpo_physical_trace_idempotence, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise, lem:mpdo_simple_blockwise_zcl_equation}
     Let a tensor satisfying the literal zero-correlation-length equation be
-    gauge-equivalent, through
-    block-diagonal copy gauges, to an assembled sector decomposition whose
-    basis elements all have non-nilpotent physical-trace transfer. Then the
-    weights do not depend on the copy index: $\mu_{j,q}=\mu_{j}$
+    gauge equivalent, through block-diagonal copy gauges, to a sector
+    decomposition whose basis elements all have non-nilpotent physical-trace
+    transfer. Then the weights do not depend on the copy index:
+    $\mu_{j,q}=\mu_{j}$
     \cite[Appendix~C.2, lines~1646--1661]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
@@ -43,8 +43,8 @@
     Literal zero correlation length states
     $\mathcal T_M^{2}=\mathcal T_M$. If
     $\mathcal T_M=X\mathcal T_SX^{-1}$ is the block-diagonal gauge to the
-    transfer of the assembled sector decomposition, then cancellation of
-    $X$ and $X^{-1}$ gives $\mathcal T_S^{2}=\mathcal T_S$.
+    transfer of the sector decomposition, then conjugation gives
+    $\mathcal T_S^{2}=\mathcal T_S$.
     By
     Lemmas~\ref{lem:mpdo_doubled_phys_trace_transfer_to_mps}
     and~\ref{lem:mpdo_doubled_phys_trace_transfer_blockwise}, the identity
@@ -87,8 +87,8 @@
     \leanok
     \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
     Suppose a tensor with scale-invariant source zero correlation length is
-    gauge-equivalent, through block-diagonal copy gauges, to an assembled
-    sector decomposition. There is a scalar $\lambda>0$ such that every copy
+    gauge equivalent, through block-diagonal copy gauges, to a sector
+    decomposition. There is a scalar $\lambda>0$ such that every copy
     satisfies
     \begin{align}
         (\mu_{j,q}\mathcal T_{A_j})^2
@@ -114,9 +114,8 @@
         \notag
     \end{align}
     Under the same canonical-form and non-nilpotency conditions, the weights
-    remain independent of the copy index, generalizing
-    Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to arbitrary
-    positive scaling factors $\lambda$.
+    remain independent of the copy index for every positive scaling factor
+    $\lambda$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -257,7 +256,7 @@
     \leanok
     \uses{def:mpdo_common_sector_weight_absorption, lem:paper_decomp_formula, lem:mpv_smul, thm:mpdo_common_weight_coefficient}
     After absorbing the common weight, the matrix product vector of the
-    assembled tensor is
+    direct-sum tensor is
     \begin{align}
         \mathcal V_N(S) & =\sum_j r_j\mathcal V_N(\mathcal K_j).
         \notag
@@ -269,7 +268,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the assembled tensor by representatives, use
+    Expand the direct-sum tensor by representatives, use
     Theorem~\ref{thm:mpdo_common_weight_coefficient}, and absorb
     $\mu_j^N$ into the length-$N$ matrix product vector of $A_j$.
 \end{proof}

@@ -23,20 +23,21 @@
         exists_isRFPViaTS_not_lengthIndependent_bntCoefficients}
     \leanok
     \uses{def:mpdo_bnt_label_length_independent, thm:mpdo_bond_two_singleton_normalized_algebra, thm:mpdo_bnt_algebra_tensor_to_rfp}
-    There is a tensor $M$ in CF that generates MPDOs, is an RFP, and
-    has a vertical BNT presentation with one element and structure
+    There is a tensor $M$ in canonical form that generates matrix product
+    density operators, is a renormalization fixed point, and
+    has a vertical basis-of-normal-tensors presentation with one element and structure
     coefficient $c^{(L)}=(\sqrt{1/2})^L$.
     In particular, $c^{(1)}\ne c^{(2)}$, so these structure coefficients
     for the exhibited presentation depend on the length.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_bond_two_singleton_ambient_ghz, thm:mpdo_bond_two_singleton_cpsv_form, thm:mpdo_bond_two_singleton_normalized_algebra, thm:mpdo_bond_two_singleton_tensor_clause, thm:mpdo_bnt_algebra_tensor_to_rfp}
-    The bond-dimension-two tensor with a one-element vertical BNT
-    generates positive operators on every nonempty chain, is in CF, and
-    satisfies the displayed BNT multiplication law and the corresponding
+    The bond-dimension-two tensor with a one-element vertical basis of normal tensors
+    generates positive operators on every nonempty chain, is in canonical form, and
+    satisfies the displayed multiplication law and the corresponding
     tensor decomposition. The reverse implication of
     Theorem~\ref{thm:mpdo_bnt_algebra_tensor_to_rfp} supplies the two
-    tpCPMs required for an RFP. Finally,
+    trace-preserving completely positive maps required for a renormalization fixed point. Finally,
     $\sqrt{1/2}\ne1/2=(\sqrt{1/2})^2$, which proves the length dependence.
 \end{proof}
 
@@ -113,14 +114,9 @@
     matrix of Theorem~\ref{thm:mpdo_length_dependent_rfp_example}, no
     uniform positive rescaling makes both diagonal entries equal to one.
 
-    This conclusion concerns the displayed trace powers and every uniform
-    positive rescaling of $\chi$. The unscaled coefficients are identified
-    below as the structure coefficients of an explicit one-element vertical
-    BNT presentation of $R$. No such realization is asserted here for the
-    arbitrary rescaled coefficients. Positivity, CF, and the RFP property
-    of $R$ are proved separately. This example is motivated by the
-    discussion in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not
-    stated there.
+    The unscaled coefficients are the structure coefficients of an explicit
+    one-element vertical basis-of-normal-tensors presentation of $R$,
+    motivated by the discussion in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpo_physical_trace_transfer, def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent}
@@ -415,14 +411,9 @@
     Theorem~\ref{thm:mpdo_twisted_dimer_ismpdo}.
 \end{proof}
 
-This factorization concerns the closed operators of the present example;
-it is not a result stated in \cite{Cirac2016MPDO_arXiv}. Its gates act on
-an incoming bond and its receiving flag, and hence cross neighboring
-physical sites. It asserts neither an on-site tensor factorization nor a
-virtual gauge equivalence. This theorem alone gives neither a
-circuit-depth bound nor a classification of the factors as RFP tensors.
-Positive length is necessary: the empty closed operator equals $8$,
-while the empty product expression equals $2$.
+The gates in this factorization act on an incoming bond and its receiving
+flag across neighboring physical sites. After the unitary conjugation by $U_N$,
+the bond and flag factors decouple, yielding the state-level product form.
 
 % Project issue #7782; CPSV16 Example 4.12, source lines 932--939,
 % with the density normalization already specified in the cited theorem.
@@ -481,11 +472,9 @@ while the empty product expression equals $2$.
     Theorem~\ref{thm:mpdo_twisted_dimer_unitary_factorization}.
 \end{proof}
 
-The flag identification uses the density-normalized tensor $\widehat M$,
-not its unnormalized counterpart. It does not classify the structure
-coefficients of a normalized vertical BNT presentation. In particular,
-constant multiplication coefficients for the unnormalized representatives
-$\Id,Z$ should not be confused with those for the spectrally normalized
+The flag factor is identified using the density-normalized tensor
+$\widehat M$; the constant multiplication coefficients for the unnormalized
+matrices $\Id,Z$ differ by scaling from those for the spectrally normalized
 representatives $\Id/\sqrt2,Z/\sqrt2$.
 
 % Project issue #7783; round44 construction note, lines 162--193,
@@ -597,7 +586,8 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
     \leanok
     \uses{def:mpdo_twisted_dimer_bond_channels, def:is_rfp_via_ts}
     The maps $\mathcal T_Q$ and $\mathcal S_Q$ of
-    Definition~\ref{def:mpdo_twisted_dimer_bond_channels} are tpCPMs.
+    Definition~\ref{def:mpdo_twisted_dimer_bond_channels} are trace-preserving
+    completely positive maps.
     For every one-site operator $Y$,
     $\mathcal S_Q(\mathcal T_Q(Y))=Y$.
     For every virtual boundary matrix $X\in\MN{4}$, the
@@ -608,13 +598,14 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
         \mathcal S_Q(Q_2(X)) & =Q_1(X).
         \notag
     \end{align}
-    Thus $Q$ is an RFP in the sense of
+    Thus $Q$ is a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_twisted_dimer_factor_normalization, def:mpdo_twisted_dimer_bond_tensor, lem:mpdo_twisted_dimer_bond_state_entries}
     Preparation of the positive trace-one state $\sigma$, permutation
-    of basis coordinates, and partial trace are tpCPMs.
+    of basis coordinates, and partial trace are trace-preserving completely
+    positive maps.
     Tracing out the prepared state proves
     $\mathcal S_Q(\mathcal T_Q(Y))=Y$.
     For the refinement equation, fix independent ket and bra indices
@@ -650,11 +641,9 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
     Applying $\mathcal S_Q\mathcal T_Q=\id$ gives the coarse-graining equation.
 \end{proof}
 
-These channel equations prove that the mixed-Bell bond dimer is an RFP;
-this does not follow merely from its closed-operator factorization.
-The nonzero bond-state eigenvalues are $7/8$ and $1/8$.
-No simplicity, CF normalization, or structure-coefficient formula for
-a vertical BNT presentation of $Q$ is asserted here.
+These channel equations establish that the mixed-Bell bond dimer is a
+renormalization fixed point, with nonzero bond-state eigenvalues $7/8$
+and $1/8$.
 
 \begin{definition}[On-site separation of bond qubits and flags]%
     \label{def:mpdo_twisted_dimer_onsite_split}
@@ -708,11 +697,9 @@ a vertical BNT presentation of $Q$ is asserted here.
     in the cited theorems.
 \end{proof}
 
-The separation $H_N$ is on-site, but the conjugating operator $U_N$ acts
-across neighboring sites. These factorizations therefore do not
-assert an on-site or virtual-gauge equivalence of the original tensors.
-At $N=0$, $D_0=2$, whereas the product of the two empty MPOs is
-$4\cdot2=8$, so the factorization requires positive length.
+The separation $H_N$ is on-site, while the conjugating operator $U_N$ couples
+neighboring sites; at positive chain length $N \ge 1$, this decouples the bond
+qubits from the site flags.
 
 \begin{theorem}[The twisted quantum dimer is a renormalization fixed point]%
     \label{thm:mpdo_twisted_dimer_is_rfp_via_ts}
@@ -726,16 +713,18 @@ $4\cdot2=8$, so the factorization requires positive length.
     \leanok
     \uses{def:is_rfp_via_ts, def:mpdo_twisted_dimer_tensor}
     The twisted quantum dimer of
-    Definition~\ref{def:mpdo_twisted_dimer_tensor} is an RFP in the sense of
-    Definition~\ref{def:is_rfp_via_ts}. The refinement tpCPM $\mathcal T$
-    has eight Kraus operators, labelled by the two prepared site flags
+    Definition~\ref{def:mpdo_twisted_dimer_tensor} is a renormalization fixed
+    point in the sense of Definition~\ref{def:is_rfp_via_ts}.
+    The refinement map $\mathcal T$ is completely positive and trace preserving,
+    with eight Kraus operators, labelled by the two prepared site flags
     $f_1,f_2$ and a bond label $\varepsilon$. It prepares those two flags
     on the output sites together with the bond state
     $(\ket{00}+(-1)^\varepsilon\ket{11})/\sqrt2$ on their shared bond,
     with weight $x$ for $\varepsilon=0$ and $y$ for $\varepsilon=1$,
     and is supported on the incoming flag $f=f_1+f_2+\varepsilon$.
-    Flag addition is modulo two. The coarse-graining tpCPM $\mathcal S$
-    has sixteen Kraus operators, labelled by a member of the orthonormal
+    Flag addition is modulo two.
+    The coarse-graining map $\mathcal S$ is completely positive and trace
+    preserving, with sixteen Kraus operators, labelled by a member of the orthonormal
     bond basis $(\ket{00}\pm\ket{11})/\sqrt2$, $\ket{01}$, $\ket{10}$
     together with the two site flags. It measures the shared bond pair
     in that basis, reads the two flags, and returns the outer site qubits
@@ -744,7 +733,7 @@ $4\cdot2=8$, so the factorization requires positive length.
     $\mathcal T[M_1(X)]=M_2(X)$ and $\mathcal S[M_2(X)]=M_1(X)$
     for every bond matrix $X$.
     This example is motivated by the question of
-    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not stated there.
+    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_twisted_dimer_tensor, thm:mpdo_twisted_dimer_closures}

@@ -142,7 +142,7 @@
         coeff_eq_of_explicitVerticalTransport}
     \leanok
     \uses{def:mpdo_bnt_algebra_tensor_clause, def:mpdo_vertical_bnt_explicit_transport, def:mpdo_bnt_label_linear_independent, thm:mpdo_vertical_bnt_coefficient_covariance_abstract}
-    Suppose that two vertical BNT decompositions of tensors satisfy the
+    Suppose that two vertical basis-of-normal-tensors decompositions of tensors satisfy the
     algebra condition and are related by a change of vertical representatives.
     At every positive length $L$ at which the operators of the second
     decomposition are linearly independent, their structure coefficients satisfy
@@ -157,7 +157,7 @@
     cannot replace the specified relation between vertical representatives.
 \end{theorem}
 \begin{proof}\leanok
-    The algebra conditions for the two vertical BNT decompositions give the
+    The algebra conditions for the two vertical basis-of-normal-tensors decompositions give the
     product laws required by the covariance theorem for operator families.
     Hence
     \begin{align}
@@ -201,7 +201,7 @@
         =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}$.
 \end{theorem}
 \begin{proof}\leanok
-    For the vertical BNT decompositions, the covariance formula gives
+    For the vertical basis-of-normal-tensors decompositions, the covariance formula gives
     \begin{align}
         {c'}^{(L)}_{\alpha,\beta,\gamma}
          & =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
@@ -235,7 +235,7 @@
     \end{align}
     Define MPO tensors with one-dimensional physical space by
     $M_P^{00}=P$ and $M_Q^{00}=Q$. Equip them with single-element vertical
-    BNT decompositions whose normalized representatives and positive
+    basis-of-normal-tensors decompositions whose normalized representatives and positive
     multiplicity weights are
     \begin{align}
         A_P & =P,
@@ -270,7 +270,7 @@
     For every positive length $N$, their unnormalized periodic operators
     satisfy $\rho^{(N)}(M_P)=\rho^{(N)}(M_Q)$.
     In particular, both tensors generate matrix product density operators.
-    Their chosen vertical BNT decompositions nevertheless have structure
+    Their chosen vertical basis-of-normal-tensors decompositions nevertheless have structure
     coefficients
     \begin{align}
         c_P^{(L)} & =1,
@@ -287,17 +287,10 @@
     \end{align}
     Indeed, the two sides at length one are $4/5$ and $1$.
 
-    Proposition~4.13 and Theorem~4.14 of
-    \cite{Cirac2016MPDO_arXiv} instead start with one horizontally canonical
-    tensor generating MPDOs and choose its vertical decomposition.
-    The tensor $M_Q$ is not asserted to be a horizontal canonical
-    representative. Thus this counterexample excludes a conclusion about
-    distinct vertical decompositions based on periodic equality alone; it
-    does not alter the source's characterization for a fixed decomposition.
-    It also leaves
-    Theorem~\ref{thm:mpdo_bnt_label_coeff_unique} unchanged, since that theorem
-    compares two systems of structure coefficients for the same vertical
-    operator family.
+    While Theorem~\ref{thm:mpdo_bnt_label_coeff_unique} guarantees uniqueness of
+    structure coefficients for a fixed operator family, this counterexample shows
+    that periodic operator equality alone does not constrain the structure coefficients
+    of independent vertical decompositions across nonunitary gauge changes.
 \end{theorem}
 \begin{proof}\leanok
     The identities $P^2=P$, $Q^2=Q$, and
@@ -415,8 +408,8 @@
     In \cite[Section~4.5]{Cirac2016MPDO_arXiv}, these restrictions in the
     positive diagonal setting, together with the isometry statement, lead
     to a pentagon-like equation for the fusion isometries. Solutions
-    constructed from unitary fusion categories give the family of RFP MPDOs
-    described there.
+    constructed from unitary fusion categories give the family of
+    renormalization fixed point MPDOs described there.
 \end{theorem}
 \begin{proof}\leanok
     Substitute the trace-power form of the coefficients into the
@@ -430,29 +423,31 @@
     \leanok
     \uses{def:cpsv_canonical_form, def:mpdo, def:is_rfp_via_ts, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_label_length_independent}
     There is a tensor $M$ generating MPDOs that has the direct-sum form
-    $M^i=\bigoplus_k\mu_k M_k^i$ with normalized NT $M_k$, is a
-    renormalization fixed point, and has a vertical BNT decomposition
+    $M^i=\bigoplus_k\mu_k M_k^i$ with normalized normal tensor blocks $M_k$, is a
+    renormalization fixed point, and has a vertical basis-of-normal-tensors decomposition
     satisfying the algebra condition whose structure coefficients depend on
-    the positive length $L$. One may take $M=R$ and the single-element BNT
-    decomposition already constructed, for which
+    the positive length $L$. One may take $M=R$ and the single-element
+    basis-of-normal-tensors decomposition already constructed, for which
     \begin{align}
         c^{(L)}_{0,0,0} & =1+\left(\frac{7}{25}\right)^L.
         \notag
     \end{align}
     This exhibits length-dependent structure coefficients for the chosen
     vertical decomposition of $R$, addressing the question following
-    Theorem~4.14 of \cite{Cirac2016MPDO_arXiv} without requiring the source
-    normalization that every canonical weight has modulus at most one with at
-    least one weight reaching one.
-    % Scope note: docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex
+    Theorem~4.14 of \cite{Cirac2016MPDO_arXiv} without requiring the unit-weight
+    normalization of \cite{gap:cpsv16_unit_weight_rfp_scale_tension}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf, thm:mpdo_bnt_label_rescaling_stable_ismpdo, thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts, thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
-    The preceding results show that $R$ generates MPDOs and has the
-    direct-sum form with normalized NT blocks. They construct the tpCPM
-    $S,T$ satisfying $S[R_2(X)]=R_1(X)$ and $T[R_1(X)]=R_2(X)$ for all
-    $X$, together with its single-element vertical BNT decomposition
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} and
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_cf} show that $R$ generates
+    MPDOs and has the direct-sum form with normalized normal tensor blocks.
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts} constructs
+    the completely positive trace-preserving maps $S,T$ satisfying
+    $S[R_2(X)]=R_1(X)$ and $T[R_1(X)]=R_2(X)$ for all $X$, while
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    provides its single-element vertical basis-of-normal-tensors decomposition
     satisfying the algebra condition. Its structure coefficients are
     $c^{(L)}_{0,0,0}=1+(7/25)^L$. The values at lengths one and two differ,
     so these coefficients are not length independent.

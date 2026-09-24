@@ -167,8 +167,8 @@
     \leanok
     \uses{def:cpsv_canonical_form, def:nt_cpsv, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The doubled-index tensor $R^{\bullet\bullet}$, with bond dimension $4$
-    and $16$ letters $R^{pq}$ for $p,q\in\{0,\ldots,3\}$, is in CF as in
-    Definition~\ref{def:cpsv_canonical_form}
+    and $16$ letters $R^{pq}$ for $p,q\in\{0,\ldots,3\}$, is in canonical form
+    as in Definition~\ref{def:cpsv_canonical_form}
     (\ref{eq:cpsv_canonical_form}).
     It consists of a single normal block occupying the full bond
     space ($r=1$, $D_1=4$, $U=\Id$), with weight
@@ -190,7 +190,7 @@
     Rescaling the tensor by $\mu^{-1}=\sqrt{512/337}$ makes its transfer map
     idempotent. Together with injectivity, this gives a primitive transfer
     map with spectral radius one; all its other eigenvalues are zero.
-    Thus $\mu^{-1}R^{\bullet\bullet}$ is an NT with the required
+    Thus $\mu^{-1}R^{\bullet\bullet}$ is a normal tensor with the required
     normalization. The equality
     $R^{\bullet\bullet}=\mu(\mu^{-1}R^{\bullet\bullet})$ gives exact
     reconstruction with the identity coisometry.
@@ -207,7 +207,7 @@
     \leanok
     \uses{def:mpdo_doubled_phys_trace_transfer, def:mpdo_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
     Let $\widehat R=\mu^{-1}R^{\bullet\bullet}$ be the single normal
-    block in this CF, where $\mu=\sqrt{337/512}$. Then
+    block in this canonical form, where $\mu=\sqrt{337/512}$. Then
     \begin{align}
         \mathcal T_{\widehat R} & =\mu^{-1}\mathcal T_R,
         \notag                                           \\
@@ -217,11 +217,8 @@
         \notag
     \end{align}
     Consequently neither $\mathcal T_R$ nor
-    $\mathcal T_{\widehat R}$ is nilpotent. Thus the retained BNT element
+    $\mathcal T_{\widehat R}$ is nilpotent. Thus the retained basis element
     satisfies the non-nilpotency condition in the definition of simplicity.
-
-    This conclusion concerns that condition for this one-block
-    presentation only, not other presentations or blockings.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_doubled_phys_trace_transfer, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
@@ -252,7 +249,7 @@
     \uses{def:mpdo_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The dimer tensor $R$ is simple, with blocking length $L=1$.
     After the canonical relabeling of the doubled physical alphabet,
-    the BNT has one member, $\widehat R$, and its physical-trace
+    the basis of normal tensors has one member, $\widehat R$, and its physical-trace
     transfer is non-nilpotent.
 \end{theorem}
 
@@ -260,9 +257,9 @@
     \uses{thm:cpsv_representative_sector_decomposition, thm:mpdo_bnt_label_rescaling_stable_ismpdo, thm:mpdo_bnt_label_rescaling_stable_cf, thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} gives the MPDO
     condition. Choose the one-site blocking. Its doubled-index tensor is the
-    canonical physical relabeling of $R^{\bullet\bullet}$. Refine the CF
+    canonical physical relabeling of $R^{\bullet\bullet}$. Refine the canonical form
     from Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_cf} to its
-    BNT sector presentation. The only representative is $\widehat R$, whose
+    basis-of-normal-tensors sector presentation. The only representative is $\widehat R$, whose
     physical-trace transfer is non-nilpotent by
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}.
 \end{proof}
@@ -274,12 +271,14 @@
     \leanok
     \uses{def:is_rfp_via_ts, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The tensor $R$ of
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence} is an
-    RFP in the sense of Definition~\ref{def:is_rfp_via_ts}.
-    The tpCPM $T$ from one site to two sites has
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence} is a
+    renormalization fixed point in the sense of Definition~\ref{def:is_rfp_via_ts}.
+    The refinement map $T$ from one site to two sites is completely positive
+    and trace preserving, with
     two Kraus operators built from the eigenvectors of $W$, with amplitude
     $5/8$ on the uniform eigenvector and $\sqrt7/8$ on the alternating
-    eigenvector. The tpCPM $S$ from two sites to one site has four Kraus
+    eigenvector. The coarse-graining map $S$ from two sites to one site is completely positive
+    and trace preserving, with four Kraus
     operators. Two use the amplitude $1/\sqrt2$ and the eigenvectors of
     $W$ on physical-index pairs satisfying the bond-matching condition.
     The other two assign the pairs that fail this condition deterministically,
@@ -337,7 +336,7 @@
         R_oneLabelBNTAlgebraTensorClause}
     \leanok
     \uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
-    The tensor $R$ has a vertical BNT with one element $M_0$.
+    The tensor $R$ has a vertical basis of normal tensors with one element $M_0$.
     This component has $16$ physical letters, bond dimension $4$, and
     \begin{align}
         M_0^{(a,b)} & =A^a\otimes\overline{A^b}.
@@ -377,7 +376,7 @@
     \uses{thm:is_normal_tensor_of_is_normal_left_canonical, lem:mpo_doubled, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
     Each letter of $M_0$ is a nonzero multiple of a matrix unit, so the letters
     span $\MN{4}$. The tensor $A$ is left-canonical; hence $M_0$ is
-    left-canonical and algebraically normal, and therefore is an NT.
+    left-canonical and algebraically normal, and therefore is a normal tensor.
     The identity coisometry gives both the vertical decomposition and
     its exact reconstruction.
 
@@ -431,10 +430,8 @@
     $\chi=\diag(1,\tfrac{7}{25})$, one has $H\chi H=2W$.
     Thus the entries of $\chi$ are the eigenvalues of the local factor $W$.
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
-    identifies this same matrix as the coefficient matrix
-    $\chi_{0,0,0}$ of a vertical BNT with one element.
-    The factorization here concerns the original horizontal operator
-    $\rho^{(N)}(R)$, not the rotated vertical contraction.
+    identifies this matrix as the coefficient matrix
+    $\chi_{0,0,0}$ of a vertical basis of normal tensors with one element.
 \end{theorem}
 \begin{proof}\leanok
     Let $\phi$ read the first bits of a cyclic-bond-matching string.
@@ -472,8 +469,7 @@
     matrix $W$, not the Kronecker power $W_L$ in $\rho^{(L)}(R)$.
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
     identifies these coefficients with the structure coefficients of the
-    vertical BNT $\{M_0\}$. It does not identify $O_L(M_0)$ with the
-    original horizontal operator $\rho^{(L)}(R)$.
+    vertical basis of normal tensors $\{M_0\}$.
 \end{theorem}
 \begin{proof}\leanok
     The coefficients are defined by the diagonal entries of $\chi$.

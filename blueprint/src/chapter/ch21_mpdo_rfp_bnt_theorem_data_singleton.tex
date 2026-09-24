@@ -59,7 +59,7 @@
     \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedCompanionBell_not_isHermitian}
     \leanok
     \uses{def:mpdo_bond_two_singleton_deformation}
-    The tensor $A$ is injective and proportional to an NT. The matrix $X$
+    The tensor $A$ is injective and proportional to a normal tensor. The matrix $X$
     is invertible but not unitary, and $A$ and $B$ generate the same matrix
     product vectors at every positive length. Their physical traces satisfy
     \begin{align}
@@ -338,8 +338,8 @@
     \leanok
     \uses{def:mpdo_bond_two_singleton_base_mpo}
     As an MPS with four doubled physical symbols, $M$ is the direct sum of
-    four bond-one NTs, one supported on each symbol, all with weight one.
-    Hence $M$ itself is in CF, without a change of basis or blocking.
+    four bond-one normal tensors, one supported on each symbol, all with weight one.
+    Hence $M$ itself is in canonical form, without a change of basis or blocking.
 \end{theorem}
 \begin{proof}\leanok
     Each block has identity transfer map, and their direct sum is the diagonal
@@ -415,8 +415,8 @@
     \leanok
     \uses{thm:mpdo_bond_two_singleton_retained_projection}
     Put $s=2^{-1/2}$ and $\widehat A=sA$. The tensor $\widehat A$ is
-    left-canonical and is an NT with transfer spectral radius one.
-    A vertical BNT consists of the single tensor $M_0=\widehat A$.
+    left-canonical and is a normal tensor with transfer spectral radius one.
+    A vertical basis of normal tensors consists of the single tensor $M_0=\widehat A$.
     With one copy, take the positive diagonal matrices
     $\mu_0=(s^{-1})$ and $\chi_{0,0,0}=(s)$. The structure coefficient is
     $c_{0,0,0}^{(L)}=\tr(\chi_{0,0,0}^L)=s^L$. For $L\geq1$,
@@ -474,7 +474,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseMPO_hasBNTAlgebraTensorClause}
     \leanok
     \uses{thm:mpdo_bond_two_singleton_vertical_identity, thm:mpdo_bond_two_singleton_normalized_algebra, thm:mpdo_bond_two_singleton_coisometry}
-    The physical tensor $M$ has a vertical BNT with one label, one copy,
+    The physical tensor $M$ has a vertical basis of normal tensors with one label, one copy,
     and bond dimension two. Its normalized representative is
     $M_0=\widehat A$, its multiplicity matrix is $\mu_0=(s^{-1})$, and
     $\chi_{0,0,0}=(s)$ gives the structure coefficient

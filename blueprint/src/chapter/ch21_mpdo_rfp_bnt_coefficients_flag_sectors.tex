@@ -88,11 +88,10 @@
     sectors are all matrix-unit tensors of this form, differing only in their
     one-site coefficients. The closed operators $O_L(\widehat M_f)$ on a ring
     of $L$ sites give the operators indexed by these two labels in
-    Definition~\ref{def:mpdo_bnt_label_operator_family}. Their BNT properties
-    are proved below, rather than assumed in this definition.
-    This tensor is an example motivated by the question of
-    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a
-    tensor stated there.
+    Definition~\ref{def:mpdo_bnt_label_operator_family}. Their
+    basis-of-normal-tensors properties are proved below, rather than assumed in
+    this definition. This tensor is motivated by the question of
+    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{lemma}[Cyclic path expansion of a trace]%
@@ -206,10 +205,8 @@
     Theorem~\ref{thm:mpdo_twisted_dimer_two_label_rescaling_stable}.
     These coefficients depend on $L$, and no positive rescaling of the two
     sectors makes them length independent. This product law alone does not
-    identify the sectors as a BNT; that assertion is proved below.
-    The tensor is an example motivated by the question of
-    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
-    there.
+    identify the sectors as a basis of normal tensors; that property is
+    established below.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:mpdo_twisted_dimer_flag_sector_operators, lem:matrix_cyclic_path_sum, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
@@ -273,7 +270,7 @@
     $4\times4$ matrices, and
     $\sum_{i,j}(\widehat B_k^{ij})^\dagger\widehat B_k^{ij}=\Id$.
     Hence each $\widehat B_k$ is a normal tensor with spectral radius one.
-    The doubled-index tensor is in CF in the sense of
+    The doubled-index tensor is in canonical form in the sense of
     Definition~\ref{def:cpsv_canonical_form}: with the permutation $U$ of the
     bond index $(p,p',k)$ into the block label $k$ followed by the block bond
     index $(p,p')$,
@@ -282,10 +279,7 @@
         \tfrac58\,\widehat B_1^{ij}\Bigr)U.
         \notag
     \end{align}
-    The physical-trace transfer of $\widehat B_1$ vanishes. The tensor is an
-    example motivated by the question of
-    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
-    there.
+    The physical-trace transfer of $\widehat B_1$ vanishes.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_twisted_dimer_closures, thm:is_normal_tensor_of_is_normal_left_canonical}
@@ -337,12 +331,9 @@
     \uses{def:mpdo_simple_tensor, def:mpdo_twisted_dimer_tensor}
     The twisted quantum dimer of Definition~\ref{def:mpdo_twisted_dimer_tensor}
     is not simple in the sense of Definition~\ref{def:mpdo_simple_tensor}: for
-    every positive blocking length $L$ and every BNT sector presentation of
+    every positive blocking length $L$ and every basis-of-normal-tensors sector presentation of
     the doubled-index tensor of the $L$-site blocking, some representative
-    has nilpotent physical-trace transfer. The tensor is an example
-    motivated by the question of
-    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
-    there.
+    has nilpotent physical-trace transfer.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_twisted_dimer_horizontal_cf, thm:cpsv_literal_canonical_form_positive_blocking, thm:cpsv_physical_reindexing, thm:mpdo_blocking_doubled_index, thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_representative_sector_decomposition, thm:mpdo_bnt_nonnilpotency_independent, thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_phys_trace_transfer_blocking}
@@ -353,8 +344,10 @@
     bra words (Theorems~\ref{thm:cpsv_physical_reindexing}
     and~\ref{thm:mpdo_blocking_doubled_index}) gives a canonical form of the
     blocked doubled-index tensor whose retained blocks are the $L$-site
-    blockings of $\widehat B_0$ and $\widehat B_1$. Its BNT refinement
-    (Theorem~\ref{thm:cpsv_canonical_form_bnt_refinement}) is a BNT sector
+    blockings of $\widehat B_0$ and $\widehat B_1$. Its
+    basis-of-normal-tensors refinement
+    (Theorem~\ref{thm:cpsv_canonical_form_bnt_refinement}) is a
+    basis-of-normal-tensors sector
     presentation $Q$
     (Theorem~\ref{thm:cpsv_representative_sector_decomposition}) in which
     every retained block is related to the representative of its phase class
@@ -426,11 +419,8 @@
     the matrix product vector of the vertically viewed tensor is
     $\mu^N$ times the sum of those of the two sectors, and the matrix product
     vectors of the two sectors are linearly independent. The fact that these
-    sectors already have the normalization required of NT in the CPSV sense
-    is verified below.
-    The tensor is an example motivated by the
-    question of \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a
-    tensor stated there.
+    sectors already have the normalization required of normal tensors in the
+    CPSV sense is verified below.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_twisted_dimer_flag_sectors, lem:mpdo_twisted_dimer_flag_sector_operators, def:vertical_cf_mpdo}
@@ -486,7 +476,7 @@
     decomposition of Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf} and
     the structure coefficients of
     Theorem~\ref{thm:mpdo_twisted_dimer_two_label_rescaling_stable}.
-    The two flag sectors are NT in the sense of
+    The two flag sectors are normal tensors in the sense of
     \cite[lines~231--235]{Cirac2016MPDO_arXiv}: each is injective at one site
     and left-canonical,
     \begin{align}
@@ -495,8 +485,8 @@
         \notag
     \end{align}
     so its transfer map has spectral radius one. Together with the spanning
-    and linear independence already proved, this gives a BNT of the
-    vertically viewed tensor, as in
+    and linear independence already proved, this gives a basis of normal
+    tensors of the vertically viewed tensor, as in
     \cite[Proposition~4.13, lines~945--959]{Cirac2016MPDO_arXiv}.
     The positive diagonal matrices
     $\chi_{ff',f+f'}=\alpha$, $\chi_{ff',f+f'+1}=\beta$ give
@@ -512,11 +502,7 @@
         \notag
     \end{align}
     No positive rescaling of these two sectors makes the structure
-    coefficients length independent. No comparison with a blocked BNT,
-    fusion isometry, or renormalization map is asserted.
-    The tensor is an example motivated by the question of
-    \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a tensor stated
-    there.
+    coefficients length independent.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_twisted_dimer_vertical_cf, thm:mpdo_twisted_dimer_flag_sector_product_law, thm:is_normal_tensor_of_is_normal_left_canonical}
