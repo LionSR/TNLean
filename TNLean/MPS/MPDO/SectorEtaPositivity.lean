@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPDO.SectorEtaOperator
 
 /-!
@@ -46,17 +47,6 @@ variable {d D : ℕ}
 variable {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
 
 /-! ### The conjugated chain is a congruence of the original chain -/
-
-/-- The closed-chain matrix entry as a cyclic sum over bond configurations. -/
-private theorem mpo_apply_eq_sum_cyclic (M : MPOTensor d D) {N : ℕ}
-    [NeZero N] (σ τ : Fin N → Fin d) :
-    mpo M N σ τ =
-      ∑ g : Fin N → Fin D, ∏ n : Fin N, M (σ n) (τ n) (g n) (g (n + 1)) := by
-  have h := MPSTensor.trace_evalWord_eq_sum_cyclic
-    (fun n : Fin N => M (σ n) (τ n)) id
-  rw [MPSTensor.evalWord_ofFn_eq_prod] at h
-  rw [mpo_apply, mpoMatrixEntry, MPOTensor.evalWord_ofFn]
-  simpa only [id_eq] using h
 
 /-- Expansion of one basis-conjugated local entry over the physical indices. -/
 private theorem conjugatePhysical_entry_expand (K : MPOTensor d D)

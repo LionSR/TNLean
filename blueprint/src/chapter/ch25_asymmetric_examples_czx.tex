@@ -12,8 +12,9 @@ symmetry-protected context is \cite[Section~III.B.1]{Cirac2021Matrix}. The
 decorated representative with additional Pauli $Z$ factors
 in~\cite[Section~III.D]{GarreRubioSchuch2024DomainWall} is a different
 tensor. This section treats the undecorated periodic operator on a ring of
-$N$ qubits, the asymmetric compression of its square, and a non-simple
-family built from it.
+$N$ qubits, the tensor printed in the review and the reduction of its square
+to canonical form, the decorated representative and its associator sign, the
+asymmetric compression of the square, and a non-simple family built from it.
 
 \subsection{The bond-two tensor and the periodic operator}
 
@@ -238,6 +239,519 @@ therefore retain their positive-length or nonempty-word hypotheses.
     Chapter~\ref{ch:mpu}. It is not a compression example and is not
     treated in this chapter.
 \end{remark}
+
+\subsection{The tensor printed in the review}%
+\label{sec:asymex_czx_review}
+
+The review~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix} prints the
+CZX matrix product unitary through its two nonzero matrices and reduces its
+square to canonical form in two steps, following the construction of the
+canonical form in~\cite[Section~IV]{Cirac2021Matrix}. This subsection
+formalizes that passage in the review's own coordinates. Throughout, the
+first physical index is the output, and for a configuration
+$s\in\{0,1\}^N$ the exponent $q(s)$ is~(\ref{eq:asymex_czx_exponent}).
+
+\begin{definition}[The CZX matrix product unitary of the review]
+    \label{def:asymex_czx_review_tensor}
+    \lean{CZXCompression.reviewCZXIntTensor, CZXCompression.reviewCZXTensor,
+        CZXCompression.reviewCZXTensor_apply,
+        CZXCompression.reviewCZXTensor_eq_transpose,
+        CZXCompression.printed2017Tensor_eq_smul_reviewCZXTensor}
+    \leanok
+    \uses{def:mpo_tensor, def:asymex_czx_tensors}
+    The CZX tensor of the review is the bond-two tensor $A$ with
+    \begin{align}
+        A^{01} & =\begin{pmatrix}1&1\\0&0\end{pmatrix},
+        \notag
+    \end{align}
+    \begin{align}
+        A^{10} & =\begin{pmatrix}0&0\\1&-1\end{pmatrix},
+        \notag
+    \end{align}
+    and $A^{00}=A^{11}=0$. Its entries are
+    $A^{ij}_{\alpha\beta}=\delta_{i,1-j}\delta_{\alpha,i}(-1)^{i\beta}$.
+    It is obtained from the bond-two tensor of
+    Definition~\ref{def:asymex_czx_tensors} by transposing every matrix
+    and exchanging the two physical indices: $A^{ij}=(M^{ji})^{\mathsf T}$.
+    The bra-ket form of the same tensor in the review uses normalized
+    virtual vectors and equals $2^{-1/2}A$; its periodic operator is not
+    unitary, and the matrices displayed above are taken as the source
+    tensor~\cite{gap:mpu_czx_tensor_normalization}.
+\end{definition}
+
+\begin{theorem}[Periodic kernel of the review's tensor]
+    \label{thm:asymex_czx_review_kernel}
+    \lean{CZXCompression.mpo_reviewCZXTensor_apply,
+        CZXCompression.mpo_reviewCZXTensor,
+        CZXCompression.mpo_reviewCZXTensor_eq_smul}
+    \leanok
+    \uses{def:asymex_czx_review_tensor, def:asymex_czx_tensors}
+    For every $N>0$ and every $s,t\in\{0,1\}^N$, the periodic operator
+    $O_N(A)$ of the review's tensor satisfies
+    \begin{align}
+        O_N(A)(s,t) & =\delta_{s,\bar t}(-1)^{q(s)}.
+        \label{eq:asymex_czx_review_kernel}
+    \end{align}
+    Thus $O_N(A)=D_NX^{\otimes N}$, and
+    \begin{align}
+        O_N(A) & =(-1)^NU_N,
+        \label{eq:asymex_czx_review_sign}
+    \end{align}
+    where $U_N$ is the periodic operator of
+    Definition~\ref{def:asymex_czx_tensors}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_kernel}
+    Expand the trace over cyclic bond configurations $g$. The factor
+    $\delta_{g_n,s_n}$ of the entries forces $g=s$, so exactly one bond
+    configuration contributes. Its contribution vanishes unless $s=\bar t$
+    and otherwise equals $\prod_n(-1)^{s_ns_{n+1}}=(-1)^{q(s)}$. Comparing
+    with Theorem~\ref{thm:asymex_czx_kernel}, the two kernels have the same
+    support and their phases differ by
+    $(-1)^{q(\bar t)}(-1)^{q(t)}=(-1)^N$,
+    by~(\ref{eq:asymex_czx_phase_square}).
+\end{proof}
+
+The review describes the operator in words as controlled-$Z$ gates
+followed by a Pauli $X$ on every site, which is $X^{\otimes N}D_N=U_N$;
+by~(\ref{eq:asymex_czx_review_sign}) the two readings differ by the global
+sign $(-1)^N$~\cite{gap:mpu_czx_tensor_normalization}.
+
+\begin{theorem}[Unitarity of the review's operator]
+    \label{thm:asymex_czx_review_unitarity}
+    \lean{CZXCompression.mpo_reviewCZXTensor_mem_unitaryGroup,
+        CZXCompression.reviewCZXTensor_isMPUPos}
+    \leanok
+    \uses{def:asymex_czx_review_tensor, def:mpug_positive_mpu}
+    The operator $O_N(A)$ is unitary for every $N>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_review_kernel}
+    By~(\ref{eq:asymex_czx_review_kernel}), $O_N(A)$ is the monomial matrix
+    of the permutation $t\mapsto\bar t$ with phases of modulus one.
+\end{proof}
+
+\begin{theorem}[Square law of the review's operator]
+    \label{thm:asymex_czx_review_square}
+    \lean{CZXCompression.mpo_reviewCZXTensor_mul_self}
+    \leanok
+    \uses{def:asymex_czx_review_tensor}
+    For every $N>0$,
+    \begin{align}
+        O_N(A)^2 & =(-1)^N\Id.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_review_kernel, thm:asymex_czx_square_operator}
+    By~(\ref{eq:asymex_czx_review_sign}),
+    $O_N(A)^2=(-1)^{2N}U_N^2=U_N^2$, and
+    Theorem~\ref{thm:asymex_czx_square_operator} gives $U_N^2=(-1)^N\Id$.
+\end{proof}
+
+\begin{theorem}[Normality of the review's tensor]
+    \label{thm:asymex_czx_review_normal}
+    \lean{CZXCompression.reviewCZXMPS_isNormal}
+    \leanok
+    \uses{def:asymex_czx_review_tensor, def:normal}
+    Read over the alphabet of index pairs, the review's tensor is normal:
+    its words of length two span $\MN{2}$. This is the review's statement
+    that $O(A)$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $E_{ab}$ denote the matrix units of $\MN{2}$. Direct multiplication
+    gives
+    \begin{align}
+        E_{00} & =\tfrac12(A^{01}A^{01}+A^{01}A^{10}).
+        \notag
+    \end{align}
+    \begin{align}
+        E_{01} & =\tfrac12(A^{01}A^{01}-A^{01}A^{10}).
+        \notag
+    \end{align}
+    \begin{align}
+        E_{10} & =\tfrac12(A^{10}A^{01}-A^{10}A^{10}).
+        \notag
+    \end{align}
+    \begin{align}
+        E_{11} & =\tfrac12(A^{10}A^{01}+A^{10}A^{10}).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The bond-four square of the review]
+    \label{thm:asymex_czx_review_square_tensor}
+    \lean{CZXCompression.reviewCZXSquareInt, CZXCompression.reviewCZXSquare,
+        CZXCompression.reviewCZXSquare_eq,
+        CZXCompression.mulTensor_reviewCZX_zero_zero,
+        CZXCompression.mulTensor_reviewCZX_one_one,
+        CZXCompression.reviewCZXSquare_apply_zero,
+        CZXCompression.reviewCZXSquare_apply_three,
+        CZXCompression.reviewCZXSquare_apply_one,
+        CZXCompression.reviewCZXSquare_apply_two,
+        CZXCompression.reviewCZXSquare_apply_zero_row,
+        CZXCompression.reviewCZXSquare_not_isNormal}
+    \leanok
+    \uses{def:asymex_czx_review_tensor, def:mpdo_operator_product, def:normal}
+    Let $B^{ij}=\sum_{m=0}^1A^{im}\otimes A^{mj}$ be the stacked product of
+    the review's tensor with itself, with the bond pair $(\alpha,\alpha')$
+    encoded as $2\alpha+\alpha'$. Then $B^{00}=A^{01}\otimes A^{10}$,
+    $B^{11}=A^{10}\otimes A^{01}$, $B^{01}=B^{10}=0$, and
+    \begin{align}
+        B^{00} & =\begin{pmatrix}
+                      0 & 0  & 0 & 0  \\
+                      1 & -1 & 1 & -1 \\
+                      0 & 0  & 0 & 0  \\
+                      0 & 0  & 0 & 0
+                  \end{pmatrix}.
+        \label{eq:asymex_czx_review_bzero}
+    \end{align}
+    \begin{align}
+        B^{11} & =\begin{pmatrix}
+                      0 & 0 & 0  & 0  \\
+                      0 & 0 & 0  & 0  \\
+                      1 & 1 & -1 & -1 \\
+                      0 & 0 & 0  & 0
+                  \end{pmatrix}.
+        \label{eq:asymex_czx_review_bone}
+    \end{align}
+    Read over the alphabet of index pairs, $B$ is not normal.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The two vanishing letters and the two Kronecker products follow from
+    $A^{00}=A^{11}=0$, and the displayed matrices are the Kronecker
+    products computed entrywise. Every letter has vanishing first row, so
+    every nonempty word does too. Hence no span of words of a fixed
+    positive length contains the matrix unit $E_{00}$.
+\end{proof}
+
+\begin{theorem}[The invariant projector and the restricted block]
+    \label{thm:asymex_czx_review_first_step}
+    \lean{CZXCompression.reviewPInt, CZXCompression.reviewP,
+        CZXCompression.reviewP_eq,
+        CZXCompression.reviewP_isOrthogonalProjection,
+        CZXCompression.reviewP_mul_reviewCZXSquare,
+        CZXCompression.reviewCZXSquare_mul_reviewP,
+        CZXCompression.reviewCZXSquare_complement_block,
+        CZXCompression.reviewBlockInt, CZXCompression.reviewBlock,
+        CZXCompression.reviewCZXSquare_submatrix,
+        CZXCompression.reviewW₁Int, CZXCompression.reviewW₁,
+        CZXCompression.reviewV₁, CZXCompression.reviewV₁_mul_reviewW₁,
+        CZXCompression.reviewBlock_eq_compress,
+        CZXCompression.trace_evalWord_reviewCZXSquare_eq_reviewBlock}
+    \leanok
+    \uses{thm:asymex_czx_review_square_tensor}
+    The matrix $P=\operatorname{diag}(0,1,1,0)$ is an orthogonal projector
+    with $PB^{ij}=B^{ij}$ for every index pair. Consequently
+    $B^{ij}P=PB^{ij}P$, so the range of $P$ is invariant, and
+    $(\Id-P)B^{ij}(\Id-P)=0$. The restriction of $B$ to the coordinates
+    $1,2$ spanning the range of $P$ is the bond-two tensor $b$ with
+    \begin{align}
+        b^{00} & =\begin{pmatrix}-1&1\\0&0\end{pmatrix},
+        \notag
+    \end{align}
+    \begin{align}
+        b^{11} & =\begin{pmatrix}0&0\\1&-1\end{pmatrix},
+        \notag
+    \end{align}
+    and $b^{01}=b^{10}=0$. For every nonempty word $w$ over the alphabet of
+    index pairs, $\tr(B^w)=\tr(b^w)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:asymex_absorbing_compression}
+    The identity $PB^{ij}=B^{ij}$ says that only the rows $1$ and $2$ of
+    $B^{00}$ and $B^{11}$ are nonzero, which is visible
+    in~(\ref{eq:asymex_czx_review_bzero})
+    and~(\ref{eq:asymex_czx_review_bone}); the other two identities follow
+    by multiplying on the right by $P$ and by $\Id-P$. Let
+    $W_1\in\mathrm{M}_{2\times4}$ select the coordinates $1,2$ and
+    $V_1=W_1^{\mathsf T}$. Then $V_1W_1=P$ and $b^{ij}=W_1B^{ij}V_1$, and
+    Lemma~\ref{lem:asymex_absorbing_compression} gives the equality of
+    traces.
+\end{proof}
+
+\begin{theorem}[The second projector and the canonical form]
+    \label{thm:asymex_czx_review_canonical_form}
+    \lean{CZXCompression.reviewQ,
+        CZXCompression.reviewQ_isOrthogonalProjection,
+        CZXCompression.reviewBlock_mul_reviewQ,
+        CZXCompression.reviewQ_mul_reviewBlock,
+        CZXCompression.reviewQ_conj_reviewBlock,
+        CZXCompression.reviewW₂, CZXCompression.reviewV₂,
+        CZXCompression.reviewV₂_mul_reviewW₂,
+        CZXCompression.reviewBlock_compress,
+        CZXCompression.trace_evalWord_reviewBlock,
+        CZXCompression.reviewCZXSquare_trace_evalWord}
+    \leanok
+    \uses{thm:asymex_czx_review_first_step, def:asymex_czx_tensors}
+    The matrix
+    \begin{align}
+        Q & =\frac12\begin{pmatrix}1&-1\\-1&1\end{pmatrix}
+        \notag
+    \end{align}
+    is an orthogonal projector with $b^{ij}Q=b^{ij}$ for every index pair.
+    Consequently $Qb^{ij}=Qb^{ij}Q$, so the range of $\Id-Q$ is invariant,
+    and
+    \begin{align}
+        Qb^{ij}Q & =(-1)\delta_{ij}Q.
+        \label{eq:asymex_czx_review_canonical}
+    \end{align}
+    For every nonempty word $w$ over the alphabet of index pairs,
+    \begin{align}
+        \tr(b^w) & =(-1)^{|w|}\tr(\delta^w),
+        \notag
+    \end{align}
+    and hence $\tr(B^w)=(-1)^{|w|}\tr(\delta^w)$, where $\delta$ is the
+    bond-one identity tensor of Definition~\ref{def:asymex_czx_tensors}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:asymex_absorbing_compression}
+    Both nonzero letters annihilate $(1,1)^{\mathsf T}$, which spans the
+    range of $\Id-Q$; this gives $b^{ij}Q=b^{ij}$, and multiplying on the
+    left by $Q$ gives the second identity.
+    Identity~(\ref{eq:asymex_czx_review_canonical}) is a direct
+    computation. Let $W_2=\tfrac12(1,-1)$ and $V_2=(1,-1)^{\mathsf T}$.
+    Then $V_2W_2=Q$ and $W_2b^{ij}V_2=-\delta_{ij}$, and
+    Lemma~\ref{lem:asymex_absorbing_compression} gives
+    $\tr(b^w)=\tr((-\delta)^w)=(-1)^{|w|}\tr(\delta^w)$. The last claim
+    combines this with Theorem~\ref{thm:asymex_czx_review_first_step}.
+\end{proof}
+
+The review states that the range of $Q$ is invariant. It is the range of
+$\Id-Q$ that is invariant, since $b^{00}(1,-1)^{\mathsf T}=(-2,0)^{\mathsf T}$;
+the projector $Q$ therefore plays the role of the complement of the
+invariant projector in the construction of the canonical form, and the
+block it cuts out is the canonical form $(-1)\delta_{ij}$ that the review
+states~\cite{gap:mpu_czx_tensor_normalization}.
+
+\begin{theorem}[The global square law from the canonical form]
+    \label{thm:asymex_czx_review_global_square}
+    \lean{CZXCompression.mpo_mulTensor_reviewCZXTensor}
+    \leanok
+    \uses{thm:asymex_czx_review_square_tensor, def:mpo_family}
+    For every $N>0$, the periodic operator generated by the stacked
+    tensor $B$ is $(-1)^N\Id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_review_canonical_form, lem:asym_mpo_trace_eq}
+    By Theorem~\ref{thm:asymex_czx_review_canonical_form}, every word trace
+    of $B$ of positive length $N$ is $(-1)^N$ times the corresponding word
+    trace of $\delta$. Lemma~\ref{lem:asym_mpo_trace_eq} converts this into
+    the equality of periodic operators, and $\delta$ generates the identity.
+\end{proof}
+
+This is the review's conclusion that the canonical form $(-1)\delta_{ij}$
+globally means $O(A)^2=(-1)^N\Id$: the stacked product generates the
+square of the generated operators, so the statement agrees with
+Theorem~\ref{thm:asymex_czx_review_square}, reached here through the two
+reduction steps instead of the explicit kernel.
+
+\subsection{The decorated representative}%
+\label{sec:asymex_czx_decorated}
+
+Garre-Rubio and Schuch~\cite[Section~III.D]{GarreRubioSchuch2024DomainWall}
+write the CZX symmetry with an additional Pauli $Z$ on every site,
+$U=\prod_iZ_i\prod_i\mathrm{CZ}_{i,i+1}\prod_iX_i$, as a bond-two tensor built
+from delta tensors and the unnormalized Hadamard matrix. This
+representative has order two. Its fusion tensors reduce two stacked
+layers to one, and the two ways of fusing three layers differ by the sign
+$\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
+
+\begin{definition}[The decorated CZX tensor]
+    \label{def:asymex_czx_decorated_tensor}
+    \lean{CZXCompression.czxDecoratedIntTensor,
+        CZXCompression.czxDecoratedTensor,
+        CZXCompression.czxDecoratedTensor_apply,
+        CZXCompression.czxDecoratedTensor_eq_transpose,
+        CZXCompression.decoratedSiteTensor_eq_smul_reviewCZXTensor,
+        CZXCompression.spinParity, CZXCompression.globalZ}
+    \leanok
+    \uses{def:mpo_tensor, def:asymex_czx_review_tensor,
+        def:mpug_czx_exact_tensor}
+    The decorated CZX tensor is the bond-two tensor $T$ with
+    \begin{align}
+        T^{01} & =\begin{pmatrix}1&0\\1&0\end{pmatrix},
+        \notag
+    \end{align}
+    \begin{align}
+        T^{10} & =\begin{pmatrix}0&-1\\0&1\end{pmatrix},
+        \notag
+    \end{align}
+    and $T^{00}=T^{11}=0$. Its entries are
+    $T^{ij}_{\ell r}=\delta_{i,1-j}\delta_{r,i}(-1)^{\ell i+i}$. Its
+    matrices are the transposes of those of the bond-two tensor $C$ of
+    Definition~\ref{def:mpug_czx_exact_tensor}, and
+    $C^{ij}=(-1)^iA^{ij}$ with $A$ the tensor of
+    Definition~\ref{def:asymex_czx_review_tensor}. For a configuration
+    $s\in\{0,1\}^N$ write $|s|=\sum_ns_n$, and let $Z^{\otimes N}$ be the
+    diagonal operator with entries $(-1)^{|s|}$.
+\end{definition}
+
+\begin{theorem}[The decorated operator has order two]
+    \label{thm:asymex_czx_decorated_operator}
+    \lean{CZXCompression.mpo_czxDecoratedTensor_apply,
+        CZXCompression.mpo_czxDecoratedTensor,
+        CZXCompression.spinParity_spinFlip_add,
+        CZXCompression.mpo_czxDecoratedTensor_eq,
+        CZXCompression.mpo_czxDecoratedTensor_mul_self,
+        CZXCompression.mpo_czxDecoratedTensor_mem_unitaryGroup,
+        CZXCompression.czxDecoratedTensor_isMPUPos}
+    \leanok
+    \uses{def:asymex_czx_decorated_tensor, def:mpug_positive_mpu}
+    For every $N>0$ and every $s,t\in\{0,1\}^N$, the periodic operator
+    $O_N(T)$ satisfies
+    \begin{align}
+        O_N(T)(s,t) & =\delta_{s,\bar t}(-1)^{q(s)+|s|}.
+        \notag
+    \end{align}
+    Thus $O_N(T)=Z^{\otimes N}O_N(A)$. Moreover $O_N(T)$ is unitary and
+    \begin{align}
+        O_N(T)^2 & =\Id.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_review_kernel, thm:asymex_czx_square_operator}
+    The factor $\delta_{r,i}$ forces the bond configuration $g_n=s_{n-1}$,
+    and the surviving product is
+    $\prod_n(-1)^{s_{n-1}s_n+s_n}=(-1)^{q(s)+|s|}$ when $s=\bar t$.
+    Comparison with~(\ref{eq:asymex_czx_review_kernel}) gives
+    $O_N(T)=Z^{\otimes N}O_N(A)$. The operator is a monomial matrix with
+    phases of modulus one, hence unitary. For the square, the phase at $t$
+    is $(-1)^{q(\bar t)+q(t)}(-1)^{|\bar t|+|t|}$; the first factor is
+    $(-1)^N$ by~(\ref{eq:asymex_czx_phase_square}), and the second is
+    $(-1)^N$ because $|\bar t|+|t|=N$.
+\end{proof}
+
+\begin{theorem}[Normality of the decorated tensor]
+    \label{thm:asymex_czx_decorated_normal}
+    \lean{CZXCompression.czxDecoratedMPS_isNormal}
+    \leanok
+    \uses{def:asymex_czx_decorated_tensor, def:normal}
+    Read over the alphabet of index pairs, the decorated tensor is normal:
+    its words of length two span $\MN{2}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Direct multiplication gives
+    \begin{align}
+        E_{00} & =\tfrac12(T^{01}T^{01}-T^{10}T^{01}).
+        \notag
+    \end{align}
+    \begin{align}
+        E_{01} & =-\tfrac12(T^{01}T^{10}+T^{10}T^{10}).
+        \notag
+    \end{align}
+    \begin{align}
+        E_{10} & =\tfrac12(T^{01}T^{01}+T^{10}T^{01}).
+        \notag
+    \end{align}
+    \begin{align}
+        E_{11} & =\tfrac12(T^{10}T^{10}-T^{01}T^{10}).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{definition}[Stacked layers and fusion tensors of the decorated tensor]
+    \label{def:asymex_czx_decorated_fusion}
+    \lean{CZXCompression.czxDecoratedSquareInt,
+        CZXCompression.czxDecoratedSquare, CZXCompression.czxDecoratedSquare_eq,
+        CZXCompression.czxFusionVInt, CZXCompression.czxFusionVHatInt,
+        CZXCompression.czxFusionV, CZXCompression.czxFusionVHat,
+        CZXCompression.pairDeltaInt, CZXCompression.pairDelta,
+        CZXCompression.czxDecoratedCube, CZXCompression.czxDecoratedCubeInt,
+        CZXCompression.czxDecoratedCube_eq,
+        CZXCompression.czxAssocLeftInt, CZXCompression.czxAssocRightInt,
+        CZXCompression.czxAssocLeft, CZXCompression.czxAssocRight,
+        CZXCompression.czxAssocLeft_eq, CZXCompression.czxAssocRight_eq}
+    \leanok
+    \uses{def:asymex_czx_decorated_tensor, def:mpdo_operator_product}
+    Let $S^{ij}=\sum_mT^{im}\otimes T^{mj}$ be the stacked product of two
+    layers, the first factor being the upper layer and a bond pair being
+    ordered (upper, lower), and let
+    $R^{ij}=\sum_{m,m'}T^{im}\otimes T^{mm'}\otimes T^{m'j}$ be the stacked
+    product of three layers. With $\ket{\hat\pm}=\ket0\pm\ket1$, the fusion
+    tensors are the column $V=-\ket{\hat-}\otimes\ket{\hat+}$, contracted
+    with the right bonds of two layers, and the row
+    $\hat V=\bra1\otimes\bra0$, contracted with the left bonds. The two
+    partial fusions of three layers are $\hat V\otimes\Id$, fusing the left
+    bonds of the upper two layers, and $\Id\otimes V$, fusing the right bonds
+    of the lower two layers.
+\end{definition}
+
+\begin{theorem}[Reduction of two layers by the fusion tensors]
+    \label{thm:asymex_czx_decorated_reduction}
+    \lean{CZXCompression.czxFusionVHat_mul_czxFusionV,
+        CZXCompression.czxDecoratedSquare_mul,
+        CZXCompression.czxFusion_contract_letter,
+        CZXCompression.czxFusion_contract, CZXCompression.czxFusion_split}
+    \leanok
+    \uses{def:asymex_czx_decorated_fusion}
+    For every word $w=((s_1,t_1),\ldots,(s_k,t_k))$ with $k\geq0$ and all
+    index pairs $a,b$,
+    \begin{align}
+        \hat VS^wV & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)\Id_1,
+        \notag
+    \end{align}
+    \begin{align}
+        S^aS^wS^b & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)S^aV\hat VS^b.
+        \notag
+    \end{align}
+    In particular $\hat VV=1$ and $S^aS^b=S^aV\hat VS^b$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The identities $S^aS^b=S^aV\hat VS^b$ and
+    $\hat VS^{(s,t)}V=\delta_{st}$ are finite integer computations. The
+    first displayed identity follows by induction on $k$: inserting
+    $V\hat V$ between the first two letters splits off the factor
+    $\hat VS^{(s_1,t_1)}V$. The second follows by the same induction,
+    contracting one intermediate letter at a time.
+\end{proof}
+
+The source states the second identity with at least one intermediate site;
+the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
+
+\begin{theorem}[The associator sign of the decorated tensor]
+    \label{thm:asymex_czx_decorated_associator}
+    \lean{CZXCompression.czxDecorated_associator_eq_neg_one}
+    \leanok
+    \uses{def:asymex_czx_decorated_fusion}
+    For all index pairs $(i_0,j_0),(i_1,j_1),(i_2,j_2)$,
+    \begin{align}
+        (\hat V\otimes\Id)R^{i_0j_0}R^{i_1j_1}R^{i_2j_2}(\Id\otimes V)
+         & =-T^{i_0j_0}T^{i_1j_1}T^{i_2j_2}.
+        \notag
+    \end{align}
+    That is, the two ways of fusing three layers on three sites differ by
+    the sign $\omega=-1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    All matrices involved have integer entries, and the identity is checked
+    over the integers for each of the $2^6$ choices of indices.
+\end{proof}
 
 \subsection{Asymmetric compression of the square}
 
