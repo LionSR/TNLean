@@ -451,11 +451,6 @@ theorem star_kwTensor_mpo_apply [NeZero N] (a b : Fin N → Fin 2) :
   rw [kwTensor_mpo_eq_prod_bitSign, star_prod]
   exact Finset.prod_congr rfl fun j _ => star_bitSign _ _
 
-theorem kwTensor_mpo_conjTranspose [NeZero N] :
-    (kwTensor.mpo N)ᴴ = (kwTensor.mpo N)ᵀ := by
-  ext b a
-  rw [Matrix.conjTranspose_apply, Matrix.transpose_apply, star_kwTensor_mpo_apply]
-
 /-- **Two duality defects fuse to `1 + D_ψ`**, in the unnormalized form: returning from the
 dual lattice with the transposed kernel gives `Kᵀ K = 2^N (1 + η)`. The sum over the dual
 variable imposes the constraint `h_j + h'_j + h_{j+1} + h'_{j+1} = 0` of the source.
