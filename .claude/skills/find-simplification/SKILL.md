@@ -101,8 +101,11 @@ deliberately deferred.
   and friends) is QICLean's, so a TNLean copy of it is a deletion candidate.
   The left/right families in `MPS/MPU` are *not* mirrors: they are the two
   source cuts of a single tensor, both stated by the source paper.
-- Numbered sequels: ~50 files / ~23k lines at the last count; the suffix
-  ladders look like `foo_c1_pgvwc07_of_dualFixedPoint`.
+- Numbered sequels: digit-suffixed files (~50 files / ~23k lines at the last
+  count, policed by `scripts/check_numbered_lean_files.py`), and separately,
+  hypothesis-strength suffix ladders on declaration names (e.g.
+  `foo_c1_pgvwc07_of_dualFixedPoint`), which are file-invisible and found by
+  searching for suffix ladders rather than digits.
 - Superseded routes: the retired ch23 route's never-instantiated
   `SameStateBridgeHyp` (ledger entry S5) is the precedent for a hypothesis
   that condemns its whole route.
@@ -129,8 +132,9 @@ deliberately deferred.
   the theorem, and `\notready` nodes beside a `\leanok` twin.
 
 Rank by `python3 scripts/loc_report.py` (size) and by build cost:
-`scripts/lake_build_locked.sh 2>&1 | tee /tmp/build.log`, then
-`python3 scripts/lake_build_hotspots.py /tmp/build.log`.
+run the canonical build command from `CLAUDE.md` (`scripts/lake_build_locked.sh`
+on macOS, or cache-fetch plus `lake build` on Linux) piped to `tee /tmp/build.log`,
+then run `python3 scripts/lake_build_hotspots.py /tmp/build.log`.
 
 ## Consumer corpus and blueprint density
 
@@ -148,9 +152,10 @@ Rank by `python3 scripts/loc_report.py` (size) and by build cost:
 
 - Record-only work (ledger, issue, audit note): `git diff --check` and the
   prose rules of the lean-conventions skill.
-- Build only through `scripts/lake_build_locked.sh` (see `CLAUDE.md`): it
-  fetches the prebuilt Mathlib cache first. The dead-code verdict needs the
-  root build, not a module target.
+- Build only through the canonical build commands in `CLAUDE.md`: on macOS,
+  route through `scripts/lake_build_locked.sh`; on Linux, fetch and verify the
+  cache first before running `lake build`. The dead-code verdict needs the root
+  build, not a module target.
 - `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls`
   after a `\lean{}` redirect; without the fetch the check fails for missing
   setup and that reads like a clean "no tag" verdict.
