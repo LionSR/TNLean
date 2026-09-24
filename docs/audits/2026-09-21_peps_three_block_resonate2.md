@@ -111,3 +111,16 @@ The removal qualifies for the no-deprecation path of
 `docs/project_conventions.md`: no non-Archive use survives, no `\lean{}` tag
 cites any removed name, and every removed declaration is named above with its
 replacement.
+
+## Update (2026-09-23): the deferred resonate file is deleted as well
+
+The fourth S3 slice (#7902) executes the deletion this note deferred.
+`ThreeBlockResonate.lean` (874 lines, twenty-three declarations) is removed in
+full. The two blocked-tensor injectivity facts this note said
+`UnionInjectivity.lean` consumes, together with the red-block fact read off the
+same datum, relocate byte-identical into `UnionInjectivity.lean`; the import
+edge at `ThreeBlockResonate` is dropped entirely, since the import closure of
+`UnionInjectivity.lean` already reaches `UnionClosure` and
+`NormalEdgeBlockingData` through `UnionInjectivityGeneral2`. The remaining
+twenty declarations have no code consumer outside the file. See
+`docs/audits/2026-09-23_peps_three_block_resonate_delete.md`.

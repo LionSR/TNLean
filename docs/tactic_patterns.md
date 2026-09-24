@@ -2394,9 +2394,8 @@ spectral split → block extraction → MPV calculation → strict bounds
     rw [Finset.mem_filter] at hη
     rw [if_neg hη.2, smul_zero]
   ```
-- **Seen:** 4 occurrences in `TNLean/PEPS/`
-  (`RegionBlock/ThreeBlockResonate.lean:670`,
-  `RegionBlock/UnionInjectivityGeneral.lean:492`,
+- **Seen:** 3 occurrences in `TNLean/PEPS/`
+  (`RegionBlock/UnionInjectivityGeneral.lean:492`,
   `TorusWindowChain4.lean:242`, +1).
 - **Abstraction (proposed):** a lemma of the shape
   `∑ η in s.filter p, (if p η then f η else 0) • g η = ...` — scout
@@ -2423,9 +2422,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   · rcases Finset.mem_union.mp hrb with hr | hbl
   · exact absurd hr hwnotred
   ```
-- **Seen:** 8 occurrences in `TNLean/PEPS/RegionBlock/`
-  (`CoarseThreeSite3.lean:89`, `ThreeBlockResonate.lean:97`,
-  `UnionInjectivityGeneral.lean:95`, +5).
+- **Seen:** 5 occurrences in `TNLean/PEPS/RegionBlock/`
+  (`CoarseThreeSite3.lean:89`,
+  `UnionInjectivityGeneral.lean:95`, +3).
 - **Abstraction (proposed):** a case-elimination lemma on the three-region
   cover (membership in red/blue/crossing regions) stated once in the
   RegionBlock development.

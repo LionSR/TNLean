@@ -116,3 +116,16 @@ pass. It touches a paper-gap citation of `threeBlock_middle_strip` in
 The removals qualify for the no-deprecation path of `docs/project_conventions.md`:
 no non-Archive use survives, no `\lean{}` tag cites any removed name, and every
 removed declaration is named here with its replacement.
+
+## Update (2026-09-23)
+
+The deferral recorded above executed in two passes. First #7875 (merged as
+#7924) deleted `ThreeBlockResonate2.lean` and retargeted the
+`UnionInjectivity.lean` import edge at `ThreeBlockResonate`, correcting this
+note's premise that the file used only the namespaced general forms: the union
+lemma consumes the two unnamespaced injectivity facts declared one module
+earlier. Then #7902 deleted `ThreeBlockResonate.lean` itself (874 lines,
+twenty-three declarations) after relocating its three live injectivity lemmas
+into `UnionInjectivity.lean`. See
+`docs/audits/2026-09-21_peps_three_block_resonate2.md` and
+`docs/audits/2026-09-23_peps_three_block_resonate_delete.md`.

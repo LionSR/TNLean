@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.RegionBlock.ThreeBlockResonate
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2
 
 /-!
@@ -19,18 +18,21 @@ instance is the union of the blue and complement blocks of a
 blocked-tensor injective, which this file supplies from injectivity of the blue and
 complement blocks individually.
 
-The proof is the source's two-step inverse application. Suppose a coefficient
-family `c` annihilates the blocked-region weight family of `univ \ red`. Reading the
-physical leg of `univ \ red` as a fused blue/complement pair
-(`threeBlockComplPhysical`, a bijection onto `univ \ red` legs), the core
-factorization `regionInteriorBondProd_smul_threeBlockComplWeight_eq` rewrites the
-annihilation as a complement-block combination whose coefficients are the
-`c`-weighted blue coupling coefficients. Injectivity of the complement block removes
-the complement part, leaving `c`-weighted blue coupling coefficients that vanish for
-every complement boundary configuration. The blue coupling coefficient, read as a
-function of the blue physical leg, factors through the blue block's blocked-region
-weights; injectivity of the blue block then removes the remaining part, forcing
-`c = 0`.
+The union lemma is proved once over a bare `ThreeBlockGeometry` in
+`TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2`, as the source's two-step inverse
+application: a coefficient family `c` annihilating the blocked-region weight family
+of the host `univ \ red` is first stripped of the blue block
+(`ThreeBlockGeometry.complCoeff_combination_eq_zero`); the surviving complement
+coupling coefficients are then read as a complement-blocked combination
+(`ThreeBlockGeometry.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq`), and
+injectivity of the complement block forces every realized host residual coefficient
+to vanish. Surjectivity of the host boundary label
+(`ThreeBlockGeometry.exists_regionBoundaryLabel_host_eq`) makes every host residual
+realized, forcing `c = 0`. This file packages the lemma for the load-bearing
+`NormalEdgeBlockingData` instance: the three blocks are viewed as a bare geometry via
+`NormalEdgeBlockingData.toThreeBlockGeometry`, and their blocked-tensor injectivity,
+proved below from the injectivity witnesses of the blocking datum, feeds the general
+union lemma.
 
 ## References
 
@@ -81,6 +83,46 @@ def NormalEdgeBlockingData.toThreeBlockGeometry
   red_disjoint_complement := D.red_disjoint_complement
   blue_disjoint_complement := D.blue_disjoint_complement
   cover_univ := D.cover_univ
+
+/-! ### The three blocked-tensor injectivity engines
+
+Each block of a `NormalEdgeBlockingData` is blocked-tensor injective under the
+concrete region-injectivity predicate `regionInjectivityDataOf A`: the injectivity
+witness recorded in the blocking datum is, by definition, injectivity of the
+block's blocked-region tensor family. The union lemma below consumes the blue and
+complement facts; the red fact feeds the three-block gauge chain. -/
+
+/-- The red block `B₁` of a `NormalEdgeBlockingData` is blocked-tensor injective.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_red
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    RegionBlockedTensorInjective (G := G) A D.red := by
+  have h := D.red_injective
+  rwa [regionInjectivityDataOf_isInjective] at h
+
+/-- The blue block `B₂` of a `NormalEdgeBlockingData` is blocked-tensor injective.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_blue
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    RegionBlockedTensorInjective (G := G) A D.blue := by
+  have h := D.blue_injective
+  rwa [regionInjectivityDataOf_isInjective] at h
+
+/-- The complement block `B₃` of a `NormalEdgeBlockingData` is blocked-tensor
+injective. This is the separately invertible middle block disjoint from both edge
+endpoints, the structural ingredient the two-block frame lacks.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_complement
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    RegionBlockedTensorInjective (G := G) A D.complement := by
+  have h := D.complement_injective
+  rwa [regionInjectivityDataOf_isInjective] at h
 
 /-! ### The union of the blue and complement blocks is injective
 

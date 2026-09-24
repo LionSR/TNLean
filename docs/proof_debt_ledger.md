@@ -125,10 +125,9 @@ verification (23-58%), and two required real re-scoping to avoid deleting
 live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/4529).
 
 ### S3. Delete the superseded edge-centred three-block union-injectivity route — net 3,180 lines, risk 3/10
-- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted. Third slice (#7875) done: `ThreeBlockResonate2.lean` (709 lines, fifteen declarations) is deleted whole, its last import edge retargeted at `ThreeBlockResonate`; see `docs/audits/2026-09-21_peps_three_block_resonate2.md`. Remaining: `ThreeBlockResonate.lean`, `UnionInjectivity.lean` and `ThreeBlockTransfer.lean`, all with live consumers.
-- **What**: the three surviving modules
-  `PEPS/RegionBlock/{ThreeBlockResonate,UnionInjectivity,ThreeBlockTransfer}.lean`
-  (1,377 gross lines). The route originally also covered
+- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted. Third slice (#7875) done: `ThreeBlockResonate2.lean` (709 lines, fifteen declarations) is deleted whole, its last import edge retargeted at `ThreeBlockResonate`; see `docs/audits/2026-09-21_peps_three_block_resonate2.md`. Fourth slice (done 2026-09-23, #7902): `ThreeBlockResonate.lean` (874 lines, twenty-three declarations) is deleted whole; its three live blocked-tensor-injectivity lemmas relocate byte-identical into `UnionInjectivity.lean`. Remaining: `UnionInjectivity.lean` and `ThreeBlockTransfer.lean`, both with live consumers.
+- **What**: the surviving modules
+  `PEPS/RegionBlock/{UnionInjectivity,ThreeBlockTransfer}.lean`. The route originally also covered
   `BondLocalFromReconcile.lean` (176 ln, zero importers anywhere),
   `ThreeBlockReconcile.lean` (371 ln) and `ThreeBlockResonate2.lean` (709 ln);
   all three are deleted, in the first PR, the second slice and the third slice
@@ -163,6 +162,19 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   smul-factorization, not the middle-strip step an earlier note recorded; both are
   repointed at the geometry-native form the cited step actually calls. See
   `docs/audits/2026-09-21_peps_three_block_resonate2.md`.
+- **Fourth slice (done 2026-09-23, #7902)**: the consumer census was
+  re-verified at the post-#7924 tree. Only `regionBlockedTensorInjective_red`
+  (six live consumers) and `regionBlockedTensorInjective_blue` /
+  `regionBlockedTensorInjective_complement` (the union lemma of
+  `UnionInjectivity.lean`) had code consumers among the file's twenty-three
+  declarations. The three lemmas relocate byte-identical, docstrings included,
+  into `UnionInjectivity.lean` — its import closure already reaches
+  `UnionClosure` and `NormalEdgeBlockingData`, so no new leaf module is needed —
+  and the remaining twenty declarations of `ThreeBlockResonate.lean`
+  (874 lines), including its three attribute-bearing lemmas, are deleted with
+  the file. No blueprint `\lean{}` tag cited any of the twenty-three names;
+  `docs/paper-gaps` cites only `ThreeBlockGeometry.*` forms. See
+  `docs/audits/2026-09-23_peps_three_block_resonate_delete.md`.
 
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#4564)

@@ -50,7 +50,6 @@ import TNLean.PEPS.RegionBlock.Recovery9
 import TNLean.PEPS.RegionBlock.RegionReconcile
 import TNLean.PEPS.RegionBlock.ReindexInjectivity
 import TNLean.PEPS.RegionBlock.ScalarExtraction
-import TNLean.PEPS.RegionBlock.ThreeBlockResonate
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
 import TNLean.PEPS.RegionBlock.UnionClosure
 import TNLean.PEPS.RegionBlock.UnionInjectivity
