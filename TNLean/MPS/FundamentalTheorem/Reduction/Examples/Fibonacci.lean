@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.OperatorFromWordTrace
 /-!
 # Example F: the Fibonacci fusion `τ ⊗ τ = 1 ⊕ τ`
 
-**Source.** Bultinck, Mariën, Williamson, Şahinoğlu, Haegeman and Verstraete 2017
+**Source.** Bultinck, Mariën, Williamson, Sahinoglu, Haegeman and Verstraete 2017
 (arXiv:1511.08090), Appendix D.1.1, `References/1511.08090/AnyonsPEPS.tex` lines 1240–1269: the
 Fibonacci F-symbols, and a projector matrix product operator of bond dimension `5` made of two
 blocks `B_1`, `B_τ` of dimensions `2` and `3` that satisfy the Fibonacci fusion rules.
@@ -89,7 +89,7 @@ exact arithmetic over that ring and then transported to the complex matrices alo
 ## References
 
 - [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
-  D. J. Williamson, M. B. Şahinoğlu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
   operator algebras*
 - [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
   N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:

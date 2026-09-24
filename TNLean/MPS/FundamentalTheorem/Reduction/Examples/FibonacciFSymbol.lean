@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.DirectSum
 /-!
 # Fibonacci string-net: the operator tensor from the F-symbols
 
-**Source.** Bultinck, Mariën, Williamson, Şahinoğlu, Haegeman and Verstraete 2017
+**Source.** Bultinck, Mariën, Williamson, Sahinoglu, Haegeman and Verstraete 2017
 (arXiv:1511.08090), Appendix D.1.1, `References/1511.08090/AnyonsPEPS.tex` lines 1240–1269:
 the Fibonacci fusion rules, the quantum dimensions `d_1 = 1`, `d_τ = φ`, the F-symbols with the
 admissibility deltas `δ_{abe} δ_{cde} δ_{adf} δ_{bcf}` and the nontrivial block
@@ -64,7 +64,7 @@ no operator statement is made for a rescaled tensor. Documented in
 ## References
 
 - [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
-  D. J. Williamson, M. B. Şahinoğlu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
   operator algebras*
 - [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
   N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
