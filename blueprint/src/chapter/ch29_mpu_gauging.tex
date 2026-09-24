@@ -462,7 +462,11 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
 
 The first-cut factorization in
 \cite[lines~5390--5432]{FrancoRubio2025MPUGauging} factors through the
-second-cut space with explicit one-sided inverses:
+second-cut space with explicit one-sided inverses.
+This construction does not identify the two cut ranks, establish weighted
+normalizations, or construct the comparison matrix $K$ and full compatibility
+properties of \cite[lines~5342--5350]{FrancoRubio2025MPUGauging}.
+
 
 \begin{definition}[Gauge matrices for the first cut]
     \label{def:mpug_inverse_cut_gauges}
@@ -697,7 +701,10 @@ second-cut space with explicit one-sided inverses:
 
 The invertible-comparison step of
 \cite[lines~5432--5443]{FrancoRubio2025MPUGauging} relates the source factors
-via their one-sided inverses, with inverse comparison matrix $J$:
+via their one-sided inverses, with inverse comparison matrix $J$.
+No unitarity of $K$, equality $J=K^\dagger$, or full inverse-compatible
+decomposition is asserted here.
+
 
 \begin{theorem}[Equality of the two source-cut ranks]
     \label{thm:mpug_inverse_cut_rank_equality}
@@ -1117,7 +1124,11 @@ via their one-sided inverses, with inverse comparison matrix $J$:
 
 The candidate decomposition in
 \cite[lines~5390--5487]{FrancoRubio2025MPUGauging} yields source factors and
-unitary gates satisfying the factor and phase identities:
+unitary gates satisfying the factor and phase identities.
+This construction establishes the algebraic factor identities and the phase
+relation between the new gates, but does not establish the full collection of
+pleasant properties or the truncated-chain identity asserted in that passage.
+
 
 \begin{definition}[The identification of the first-cut coordinates]
     \label{def:mpug_inverse_cut_rank_equiv}
@@ -1417,7 +1428,12 @@ unitary gates satisfying the factor and phase identities:
     $\widehat X_2=X_2$.
 \end{proof}
 
+These six identities concern only the stated closures and normalizations.
+They do not assert movement identities, truncated-gate identities, transport
+of the chosen first right inverse, or the complete set of pleasant properties.
+
 \subsection{Movement gates of the inverse-compatible source factors}
+
 
 \begin{theorem}[Transport of the movement gates]
     \label{thm:mpug_inverse_movement_transport}
@@ -1548,7 +1564,8 @@ unitary gates satisfying the factor and phase identities:
     $\ell=\operatorname{rank}M_2(\mathcal U)$. Then
     $u_{\mathrm{new}}=(I_\ell\otimes J)u$.
     This is the comparison transport in
-    \cite[lines~5432--5443 and 5486--5487]{FrancoRubio2025MPUGauging}.
+    \cite[lines~5432--5443 and 5486--5487]{FrancoRubio2025MPUGauging};
+    it does not require $J=K^\dagger$ or gate unitarity.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpug_inverse_cut_comparison, def:mpug_inverse_compatible_gates,
@@ -3007,6 +3024,10 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     crossed contractions yield the movement operators of
     Definition~\ref{def:mpug_staircase_gates}, extending the identity to the
     source-factor endpoint contraction.
+    No simplicity or unitarity assumption on $\mathcal U$ is needed. These
+    algebraic identities do not assert unitarity for arbitrary factors, the
+    finite-group physical specialization, or the complementary finite-chain
+    movement relation.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
@@ -3079,9 +3100,18 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         U^{N+2}(U^{N+2})^\dagger  & =I_{\mathcal H_{\mathrm{out},N}}.
         \label{eq:mpug_truncated_symmetry_unitary}
     \end{align}
-    This establishes endpoint-coordinate unitarity for the truncated symmetry
-    in \cite[lines~2062--2099]{FrancoRubio2025MPUGauging}; see
-    \cite{gap:fbc25_truncated_symmetry_endpoint_unitarity_scope}.
+    This is the endpoint-coordinate unitarity part of the assertion
+    following the truncated-symmetry diagram in
+    \cite[lines~2062--2099]{FrancoRubio2025MPUGauging}, between the
+    displayed input and output spaces. The scope restriction is recorded
+    in \cite{gap:fbc25_truncated_symmetry_endpoint_unitarity_scope}.
+    Neither simplicity of the physical adjoint nor unitarity of supplied
+    gates is assumed. The assertion does not identify each endpoint
+    source space with a physical site, specialize to a finite-group
+    family, prove agreement with a global symmetry on interior
+    observables, or establish the complementary finite-chain relation
+    following the movement display at
+    \cite[lines~2101--2174]{FrancoRubio2025MPUGauging}.
     % Partial coverage of #7319: all-length unitarity between these
     % coordinate spaces only. The remaining physical and group-level
     % assertions are not marked complete.
@@ -3225,6 +3255,9 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         =I_{\mathcal R_N}.
     \end{align}
 \end{proof}
+
+These are coordinate transport and unitarity statements, not the final
+truncated-chain sewing identity or a finite-group physical-action assertion.
 
 \begin{theorem}[Raw endpoint unitarity by rank-coordinate transport]
     \label{thm:mpug_inverse_word_unitary}
@@ -3700,8 +3733,9 @@ Definition~\ref{def:mpug_group_representation}.
         K^\dagger K & =I_N, \\
         KK^\dagger  & =I_M.
     \end{align}
-    This is the matrix implication used in
-    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}.
+    No equality of $|M|$ and $|N|$ is assumed. This is the matrix
+    implication used in \cite[lines~5444--5487]{FrancoRubio2025MPUGauging};
+    the tensor-network identity to which it is applied is a separate result.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3739,8 +3773,9 @@ Definition~\ref{def:mpug_group_representation}.
     \end{align}
     Equivalently, $\delta^{-1}K_1$ and $\delta K_2$ are unitary.
     % Source anchor: arXiv:2502.20257, Lemma lem:deco, lines 1052--1066.
-    This provides the tensor-factor step for the decomposition lemma in
-    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}.
+    This is only the tensor-factor step in the decomposition result
+    of~\cite{FrancoRubio2025MPUGauging}; it does not construct or compare the
+    three-legged decompositions occurring there.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4122,7 +4157,8 @@ Definition~\ref{def:mpug_group_representation}.
         \operatorname{tr}(Y_1Y_1^\dagger) & =d.
     \end{align}
     This is the physical-trace calculation in
-    \cite[line~1398]{FrancoRubio2025MPUGauging}.
+    \cite[line~1398]{FrancoRubio2025MPUGauging}; it does not require
+    simplicity of $\mathcal U^\dagger$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4434,7 +4470,7 @@ Theorems~\ref{thm:mpug_source_y_one_normalization},
 identities of the source-factor normalization proposition in
 \cite[lines~1064--1162]{FrancoRubio2025MPUGauging} for the compact source
 factors under canonical form~II and simplicity of $\mathcal U$ and
-$\mathcal U^\dagger$.
+$\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 % This establishes prop:MPUsplus for the constructed source factors.
 % It does not identify arbitrary separately supplied factors or modify
 % the scope of the earlier raw proportionality theorem.
@@ -4462,6 +4498,8 @@ $\mathcal U^\dagger$.
         X            & =\widetilde XK, \\
         \widetilde Y & =KY.
     \end{align}
+    The intermediate index sets $B$ and $\widetilde B$ are independent;
+    no equality of their cardinalities is assumed or concluded.
     These are the one-sided-inverse identities in the proof of
     \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}.
 \end{theorem}
@@ -5379,8 +5417,9 @@ $\mathcal U^\dagger$.
     \begin{align}
         \dim_{\C}\mathcal V_N(R) & \geq1.
     \end{align}
-    The scaling of $\dim_{\C}\mathcal V_N(R)$ with system size $N$ addresses the
-    growth question of \cite[line~5198]{FrancoRubio2025MPUGauging}.
+    Neither the minimum nor the maximum of $\dim_{\C}\mathcal V_N(R)$ over
+    $\mathfrak C(D)$ is asserted; the growth of this dimension with $N$ is the
+    question raised in \cite[line~5198]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -6817,6 +6856,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     \cite[lines~5914--5922]{FrancoRubio2025MPUGauging}, with the
     three-to-four-cochain coboundary given explicitly by
     (\ref{eq:mpug_generalized_three_coboundary}).
+    No transitivity or finiteness assumption is imposed on $\mathsf X$.
 
     % Local fix: docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex.
     % Source anchor: arXiv:2502.20257, lines 5914--5922 and lemma:G_cocycle.
@@ -7689,10 +7729,14 @@ two neighboring blocked sites are $\lambda^R_{e,e}=\lambda^R_{e,g}=\Id$,
 $\lambda^R_{g,e}=w_R$, together with the modified fusion operator
 $\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ introduced at the end of that
 passage.
-For the displayed circuit tuple $(\Id,\Id,w,\tilde\lambda)$, the common $+1$
-eigenspace of the resulting Gauss projectors has dimension $2^N$ on $N\geq3$
-blocked sites, resolving the scaling question of
-\cite[lines~5198--5204]{FrancoRubio2025MPUGauging}.
+The question of \cite[lines~5198--5204]{FrancoRubio2025MPUGauging}
+asks whether the common $+1$ eigenspace of the resulting Gauss projectors is
+bounded or grows with the system size. This section answers it for the
+displayed circuit tuple $(\Id,\Id,w,\tilde\lambda)$: the dimension is $2^N$ on
+$N\geq3$ blocked sites. Nothing here identifies the displayed tuple
+with a member of the full physical completion class of the CZX defect data;
+that identification requires the three defect domains and maps not supplied
+by the displayed matrices.
 
 \subsection{Monomial operators and their common fixed space}
 
@@ -8688,10 +8732,15 @@ blocked sites, resolving the scaling question of
 
 \subsection{The printed CZX action pair and its empty-word boundary}
 
-The action tensors in \cite[lines~4690--4694]{FrancoRubio2025MPUGauging}
-satisfy the interior identity for nonempty words and the exterior identity with
-nonempty buffers; the empty-word boundary replacement is documented in
-\cite{gap:fbc25_czx_action_empty_word}.
+The action tensors displayed in
+\cite[lines~4690--4694]{FrancoRubio2025MPUGauging} satisfy the interior
+identity for nonempty words and the exterior identity with nonempty buffers.
+Their empty contraction is one half, whereas the general interior identity
+in \cite[lines~1841--1870]{FrancoRubio2025MPUGauging} includes length zero.
+The distinction and a local replacement are recorded in
+\cite{gap:fbc25_czx_action_empty_word}. The replacement below is a different
+pair, not a scalar gauge of the printed pair or a substitution in the
+unbuffered defect formulas.
 
 \begin{definition}[The acted GHZ sectors]
     \label{def:mpug_czx_acted_sectors}
@@ -9056,12 +9105,14 @@ nonempty buffers; the empty-word boundary replacement is documented in
 
 \subsection{Literal fusion--action coordinate contractions}
 
-Contraction of the printed action pair and right fusion cap
-\cite[lines~4671--4694]{FrancoRubio2025MPUGauging} evaluates the coordinate
-relations in the fusion--action comparison
-\cite[lines~1875--1913]{FrancoRubio2025MPUGauging}; see
-\cite{gap:fbc25_czx_fusion_coordinate_compatibility} for coordinate
-compatibility of the oriented contractions.
+The following contractions use the printed action pair and the right fusion
+cap in \cite[lines~4671--4694]{FrancoRubio2025MPUGauging}, with fixed product-bond
+order. They are motivated by the fusion--action comparison in
+\cite[lines~1875--1913]{FrancoRubio2025MPUGauging}, but do not identify its
+$L$-symbol or its retained physical scalar. Compatibility of the oriented
+legs, density insertion, and fusion gauge remains open, as discussed in
+\cite{gap:fbc25_czx_fusion_coordinate_compatibility}. No cap, action tensor,
+block label, or physical gate is changed here.
 
 \begin{definition}[Sequential action covector]
     \label{def:mpug_czx_sequential_action_bra}
