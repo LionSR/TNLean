@@ -213,14 +213,10 @@
     Hence the canonical full-matrix representatives of $\widetilde R_1$ and
     $\widetilde R_2$ are trace-preserving completely positive maps.
 
-    The inequalities in
-    (\ref{eq:mpdo_bnt_ambient_sector_trace_loss}) may be strict.  Indeed,
-    $W_i^\dagger W_i$ is the projection onto the retained nonzero sectors and
-    need not be the identity on the ambient space.  A positive matrix supported
-    on the discarded orthogonal complement is annihilated by the corresponding
-    compression.  Thus $R_1$ and $R_2$ are not asserted to preserve the trace
-    on all ambient positive matrices, and no term acting on the discarded
-    complement is included.
+    The inequalities in (\ref{eq:mpdo_bnt_ambient_sector_trace_loss}) may be
+    strict: $W_i^\dagger W_i$ projects onto the retained nonzero sectors, so
+    positive elements supported on the discarded orthogonal complement lose
+    trace under the compression.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -241,7 +237,7 @@
     $W_i W_i^\dagger=I$ gives
     $\tr(W_i^\dagger BW_i)=\tr(B)$.  This proves
     (\ref{eq:mpdo_bnt_ambient_sector_embedding_trace}); complete positivity is
-    supplied by the preceding theorem.
+    supplied by Theorem~\ref{thm:mpdo_bnt_ambient_sector_maps_cp}.
 \end{proof}
 
 \begin{theorem}[Retraction identities for the ambient sector maps]
@@ -262,8 +258,6 @@
          & =\id_{\mathcal A_2^\sigma}.
         \label{eq:mpdo_bnt_ambient_sector_retractions}
     \end{align}
-    No identity is asserted for either reverse composite on the full ambient
-    matrix algebra.
 \end{theorem}
 
 \begin{proof}\leanok

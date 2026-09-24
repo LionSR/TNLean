@@ -594,7 +594,7 @@
     isometries.
 \end{proof}
 
-\begin{theorem}[Canonical restriction assembled from the active sector factors]
+\begin{theorem}[Canonical restriction constructed from the active sector factors]
     \label{thm:mpdo_active_physical_sector_restriction}
     \lean{MPOTensor.PhysicalSectorFactorization.ActiveFactorSupportData,
         MPOTensor.PhysicalSectorFactorization.physicalSupportInclusion,
@@ -1107,7 +1107,7 @@ This is the calculation in
 % The IsHorizontalCF conclusion uses the normalized BNT-refined notion; its
 % scope relative to the literal source grouping is documented in
 % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
-\begin{theorem}[Normal BNT representatives, biCF, exact assembly, and
+\begin{theorem}[Normal BNT representatives, biCF, exact direct sum, and
         nonnilpotence in the Case-II example]
     \label{thm:mpdo_caseii_absorption_algebraic_data}
     \lean{MPOTensor.CaseIIAbsorptionCounterexample.basis_isNormalTensor,
@@ -1186,7 +1186,7 @@ This is the calculation in
     \uses{def:nt_cpsv, def:mpdo_common_sector_weight_absorption, def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:is_sal, def:mpdo_simple_cf_tensor, thm:mpdo_caseii_absorption_algebraic_data, thm:mpdo_rfp_implies_sal}
     Let $A_0$ have scalar entries $1/\sqrt2$ on doubled symbols $(0,0)$ and
     $(1,1)$, let $A_1$ have scalar entry $1$ only on $(2,2)$, and take
-    $(\mu_0,\mu_1)=(1/\sqrt2,1)$. Their weighted bond-diagonal assembly has
+    $(\mu_0,\mu_1)=(1/\sqrt2,1)$. Their weighted direct sum has
     \begin{align}
         K^{00}=K^{11} & =\operatorname{diag}(1/2,0),
                       & K^{22}                       & =\operatorname{diag}(0,1).                    \label{eq:caseii-ambient-slices}
@@ -1229,10 +1229,10 @@ This is the calculation in
         \omega_P & =\frac14(P\otimes P),
                  & \omega_Q                     & =Q\otimes Q.                                  \label{eq:caseii-pq-states}
     \end{align}
-    Equations~\eqref{eq:caseii-ambient-slices} and
-    \eqref{eq:caseii-ambient-mpo} follow by multiplying the diagonal slices.
+    Equations~(\ref{eq:caseii-ambient-slices}) and
+    (\ref{eq:caseii-ambient-mpo}) follow by multiplying the diagonal slices.
     There are $2^N$ binary strings and one terminal string, which gives
-    \eqref{eq:caseii-ambient-trace}. For a virtual matrix $X$, the one-site and
+    (\ref{eq:caseii-ambient-trace}). For a virtual matrix $X$, the one-site and
     two-site physical closures are
     \begin{align}
         M_1(X) & =\frac{X_{00}}2P+X_{11}Q,
@@ -1251,8 +1251,8 @@ This is the calculation in
     \end{align}
     These are the channel equations of Definition~4.1
     \cite[lines~638--660]{Cirac2016MPDO_arXiv}; with
-    \eqref{eq:caseii-ambient-trace}, they imply saturation of the area law. Summing
-    the diagonal slices gives \eqref{eq:caseii-ambient-zcl}, the literal
+    (\ref{eq:caseii-ambient-trace}), they imply saturation of the area law. Summing
+    the diagonal slices gives (\ref{eq:caseii-ambient-zcl}), the literal
     diagram of Definition~4.2
     \cite[lines~735--739]{Cirac2016MPDO_arXiv}.
 
@@ -1274,7 +1274,7 @@ This is the calculation in
         \notag
     \end{align}
     A normal tensor has transfer spectral radius one, proving
-    \eqref{eq:caseii-absorbed-radius} and the failure of the printed inference.
+    (\ref{eq:caseii-absorbed-radius}) and the failure of the printed inference.
 \end{proof}
 
 % The declaration below packages explicit component witnesses for every

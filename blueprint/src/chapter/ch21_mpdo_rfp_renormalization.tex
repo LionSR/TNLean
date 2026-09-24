@@ -1,9 +1,8 @@
 \section{Preliminaries for physical renormalization}
 
-We first collect the transfer-map, channel, and physical-closure notions used
-to state the mixed-state renormalization condition. The renormalization fixed
-point of \cite[Definition~4.1]{Cirac2016MPDO_arXiv} is stated in the next
-section.
+The physical renormalization of matrix product density operators rests on
+channel extensions, projector-controlled positive sums, and physical closures of
+virtual contractions.
 
 
 % The concrete dependent-sum equivalences for T_0, S_0, T_2, and S_2 are
@@ -44,8 +43,7 @@ section.
     \end{align}
     where $\mathcal R_\tau$ denotes reindexing both matrix coordinates along
     $\tau$. Both reindexing maps are trace-preserving and completely positive,
-    so closure under composition proves the claim. No choice of Kraus family
-    is needed for this preservation statement.
+    so closure under composition proves the claim.
 \end{proof}
 
 
@@ -90,19 +88,14 @@ section.
     projection give $\tr(P_iXP_i)=\tr(P_iX)$.
 \end{proof}
 
-% Classification: conditional helper.
-% This is a project-derived abstraction of the projection-first channel
-% assembly in CPSV16, Appendix C.2, lines 1810--1817, not a theorem stated
-% there in this general form.
+% Projection-first channel construction in CPSV16, Appendix C.2, lines 1810--1817.
 
 
-The state-preparation map $\mathcal P_\rho(X)=X\otimes\rho$ from matrices on
-$A$ to matrices on $A\otimes B$, the elementary preparation operation used
-in the maps $\mathcal T_1$ and $\mathcal S_1$ of
+The state-preparation map $\mathcal P_\rho(X)=X\otimes\rho$ from operators on
+$A$ to operators on $A\otimes B$, used in the maps $\mathcal T_1$ and
+$\mathcal S_1$ of
 \cite[Appendix~C.2, lines~1527--1533 and~1551--1555]{Cirac2016MPDO_arXiv},
-is a fully generic construction with no MPDO-specific content, stated as
-Definition~\cite[``State-preparation map'']{QICLean2026Blueprint} in the
-companion quantum-channel volume.
+is stated in \cite[``State-preparation map'']{QICLean2026Blueprint}.
 
 
 \begin{definition}[Physical closure maps]
@@ -196,32 +189,27 @@ companion quantum-channel volume.
 
 \section{Renormalization fixed points}
 
-The following is the mixed-state fixed-point condition of
-\cite[Definition~4.1]{Cirac2016MPDO_arXiv}. Its two local channels extend to
-every longer periodic chain by acting on the first one or two sites and leaving
-the remaining sites unchanged.
+In the mixed-state renormalization fixed point of
+\cite[Definition~4.1]{Cirac2016MPDO_arXiv}, two local channels extend to
+periodic chains of arbitrary length by acting on the first one or two sites and
+leaving the remaining sites unchanged.
 
 \begin{definition}[Renormalization fixed point via trace-preserving maps]
     \label{def:is_rfp_via_ts}
     \lean{MPOTensor.IsRFPViaTS}
     \leanok
     \uses{def:mpo_tensor, def:phys_close}
-    An MPO tensor $M$ is a \emph{renormalization fixed point} if there exist two
+    An MPO tensor $M$ is a \emph{renormalization fixed point} (RFP) if there exist
     trace-preserving completely positive maps $\mathcal{S}, \mathcal{T}$ on the
     physical indices such that $\mathcal{S}[M_2(X)]=M_1(X)$ and
     $\mathcal{T}[M_1(X)]=M_2(X)$ for every virtual operator $X$, where
     $M_1(X)_{ij}=\tr(M^{ij}X)$ and
-    $M_2(X)_{(i_1i_2)(j_1j_2)}
-        =\tr(M^{i_1j_1}M^{i_2j_2}X)$ are the one-
-    and two-site physical operators obtained by closing one or two tensors with
-    $X$. This condition is distinct from idempotence of the doubled-index
-    transfer map for general mixed states. Its source zero-correlation-length
-    consequence concerns the physical-trace transfer and is proved below.
-    In \cite[Definition~4.1, lines~638--660]{Cirac2016MPDO_arXiv}, this local
-    condition is imposed on a tensor already in canonical form and generating
-    matrix product density operators. The definition above isolates the two
-    channel equations; results that use the source's standing hypotheses state
-    them separately.
+    $M_2(X)_{(i_1i_2)(j_1j_2)}=\tr(M^{i_1j_1}M^{i_2j_2}X)$ are the one- and
+    two-site physical operators obtained by closing one or two tensors with $X$.
+    In \cite[Definition~4.1]{Cirac2016MPDO_arXiv}, this condition is formulated
+    for tensors in canonical form; the zero-correlation-length consequence
+    concerns the physical-trace transfer (\ref{def:mpo_physical_trace_transfer})
+    rather than idempotence of the doubled-index transfer map.
     On the open coefficient tensors the two maps have types:
     % Formula: for every pair of virtual indices \alpha,\beta, set
     % (M_{\alpha\beta})_{ij}=M^{ij}_{\alpha\beta} and
@@ -283,7 +271,7 @@ the remaining sites unchanged.
         \notag
     \end{align}
     More explicitly, if $V\colon\C^d\to\C^{d^2}$ is the blocking isometry,
-    the refinement channel has the orientation
+    the refinement channel is given by
     \begin{align}
         \mathcal T(X) & =VXV^\dagger.
         \notag
@@ -352,9 +340,9 @@ the remaining sites unchanged.
         MPSTensor.FibonacciBoundary.canonicalTensor}
     \leanok
     \uses{def:mps_tensor}
-    This is the concrete tensor in
-    \cite[Appendix~D, lines~2116--2121]{Cirac2016MPDO_arXiv}.  Its physical
-    labels are triples $i,j,k\in\{0,1\}$ and its virtual labels are
+    The Fibonacci vacuum-sector support tensor
+    \cite[Appendix~D, lines~2116--2121]{Cirac2016MPDO_arXiv} has physical labels
+    given by triples $i,j,k\in\{0,1\}$ and virtual labels
     $\alpha,\beta\in\{0,1\}$.  The fusion weights satisfy
     \begin{align}
         N_{ijk}=0
@@ -742,9 +730,8 @@ the remaining sites unchanged.
         \notag
     \end{align}
     In particular, these identities hold for every periodic MPO operator.
-    Hence the two maps supplied by a renormalization fixed point act on rings
-    of every length as required in the proof of
-    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.
+    Thus the renormalization channels act on periodic rings of arbitrary
+    length \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}

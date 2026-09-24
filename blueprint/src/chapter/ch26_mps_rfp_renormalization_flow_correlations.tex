@@ -6,26 +6,22 @@
     \leanok
     \uses{def:is_canonical_form, def:transfer_map, thm:exponential_convergence_primitive}
     Fix one block $A_k$ in a family satisfying
-    Definition~\ref{def:is_canonical_form}. Then the primitive transfer map of
-    that block satisfies: $\E_{A_k}^{2^n}$ converges pointwise to an idempotent
-    linear map $\E_{k,\infty}$ as $n\to\infty$.
-    Thus there exists $\E_{k,\infty}$ with
-    $\E_{k,\infty}^2=\E_{k,\infty}$ such that
-    $\E_{A_k}^{2^n}(\rho)\to\E_{k,\infty}(\rho)$ for every bond matrix $\rho$.
-    This is the per-block primitive convergence used in the Appendix~B
-    discussion, not convergence of the full weighted canonical-family transfer
-    matrix \cite[Appendix~B, lines~1211--1244]{Cirac2016MPDO_arXiv}.
+    Definition~\ref{def:is_canonical_form}. Then the dyadic powers of its
+    transfer map converge pointwise to an idempotent linear map: there exists
+    $\E_{k,\infty}$ with $\E_{k,\infty}^2=\E_{k,\infty}$ such that
+    $\E_{A_k}^{2^n}(\rho)\to\E_{k,\infty}(\rho)$ as $n\to\infty$ for every
+    virtual matrix $\rho$.
+    This formalizes the per-block primitive convergence of
+    \cite[Appendix~B, lines~1211--1244]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     Each block is injective and left-canonical, so its transfer map is a
     primitive channel with a unique positive-definite fixed point $\rho_0$.
     The exponential convergence bound
     $\lVert \E^n(X)-P(X)\rVert\le C(1-\delta)^n\lVert X\rVert$
-    (Theorem~\ref{thm:exponential_convergence_primitive}) then gives
-    pointwise convergence $\E^n(X)\to P(X)$, and composing with the
-    subsequence $2^n\to\infty$ yields the result.
-    The witness $\E_{k,\infty}=P_k$ is the rank-one fixed-point projection,
-    which is idempotent.
+    (Theorem~\ref{thm:exponential_convergence_primitive}) yields pointwise
+    convergence $\E^n(X)\to P(X)$, and restricting to the dyadic subsequence
+    $2^n\to\infty$ yields the claim with idempotent projection $\E_{k,\infty}=P_k$.
 \end{proof}
 
 % Source-gap record:
@@ -54,20 +50,20 @@
          & =\omega^{2^n}e_{21}.
         \notag
     \end{align}
-    The right-hand side alternates between
-    $\omega e_{21}$ and $\omega^2 e_{21}$. Hence the dyadic
-    renormalization flow does not converge. This refutes the unrestricted
-    canonical-form convergence assertion in
+    The right-hand side alternates between $\omega e_{21}$ and
+    $\omega^2 e_{21}$, so the dyadic renormalization flow does not converge.
+    This refutes the unrestricted canonical-form convergence assertion of
     \cite[lines~417 and 1211--1244]{Cirac2016MPDO_arXiv}; it does not affect the
-    primitive single-component convergence above.
+    single-component convergence of
+    Theorem~\ref{thm:rg_flow_converges_of_cf}.
 \end{theorem}
 \begin{proof}
     \leanok
     The two one-dimensional components are normal and both weights have
-    modulus one. Direct multiplication gives
-    $\E_A(e_{21})=\omega e_{21}$. Since $2^n$ is congruent alternately
-    to $1$ and $2$ modulo $3$, the displayed sequence has the two distinct
-    values claimed.
+    modulus one. Direct calculation gives $\E_A(e_{21})=\omega e_{21}$. Since
+    $2^n$ is congruent alternately to $1$ and $2$ modulo $3$, the sequence
+    alternates between $\omega e_{21}$ and $\omega^2 e_{21}$, precluding
+    convergence.
 \end{proof}
 
 % Source-status record for CPSV16 Appendix D, equation `RFP-gauge`,
@@ -79,17 +75,16 @@
     \lean{MPSTensor.IsPureOneLetterRFPViaTSUpToVirtualGauge}
     \leanok
     \uses{def:mpdo_two_site_blocking, def:gauge_equiv, def:doubled_tensor}
-    For an MPO tensor $M$ with one physical component, the Appendix~D
-    blocking diagram holds up to virtual gauge if $M^{[2]}$ and $M$ are related
-    by simultaneous similarity on the virtual indices. For a pure tensor $A$,
-    this condition is imposed on the doubled tensor
+    For an MPO tensor $M$ with one physical component, the Appendix~D blocking
+    diagram holds up to virtual gauge if $M^{[2]}$ and $M$ are related by
+    similarity on the virtual indices. For a pure tensor $A$, this condition is
+    imposed on the doubled tensor
     \begin{align}
         M & =A\otimes\overline A.
         \notag
     \end{align}
-    Both physical matrix algebras are one-dimensional, so every physical
-    unitary-conjugation channel in the diagram is the identity. Similarity is
-    symmetric and hence gives both directions of the diagram in
+    Since the physical algebra is one-dimensional, every physical unitary
+    channel in the diagram is trivial, recovering the relation in
     \cite[Appendix~D, lines~2100--2107]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -99,7 +94,7 @@
     \leanok
     \uses{def:blocked_tensor, def:unit_gauge_phase_equiv}
     A tensor $A$ with one physical component has a blocking witness if there
-    are an invertible matrix $X$ and a scalar $\zeta$ with $|\zeta|=1$ such
+    exist an invertible matrix $X$ and a scalar $\zeta$ with $|\zeta|=1$ such
     that
     \begin{align}
         A & =\zeta X A^{[2]}X^{-1}.
@@ -140,14 +135,15 @@
         M & = (X \otimes \overline{X}) M^{[2]} (X \otimes \overline{X})^{-1},
         \notag
     \end{align}
-    inducing the doubled-MPO virtual-gauge condition.
+    satisfying the doubled-MPO virtual-gauge condition
+    (Definition~\ref{def:one_letter_mpdo_virtual_gauge_rfp}).
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:doubled_virtual_gauge}
-    Tensor the identity $A=\zeta X A^{[2]}X^{-1}$ with its complex conjugate.
-    The virtual matrices combine to $X\otimes\overline X$, while the amplitude
-    factor is $\zeta\overline\zeta=|\zeta|^2=1$.
+    Tensoring $A=\zeta X A^{[2]}X^{-1}$ with its complex conjugate yields
+    $(X\otimes\overline X) M^{[2]} (X\otimes\overline X)^{-1}$, with scalar
+    factor $\zeta\overline\zeta=|\zeta|^2=1$.
 \end{proof}
 
 \begin{theorem}[The printed pure blocking-up-to-gauge equivalence is false]
@@ -176,9 +172,9 @@
     \end{align}
     The doubled MPO tensor generates positive semidefinite operators on every
     nonempty chain, is in CPSV canonical form, and has four scalar-block weights
-    satisfying the source normalization convention. It also satisfies the literal
-    one-letter virtual-gauge condition in the source diagram, but its transfer
-    map is not idempotent. Hence the canonical-restricted pure-state
+    satisfying the source normalization convention. It also satisfies the
+    literal one-letter virtual-gauge condition in the source diagram, but its
+    transfer map is not idempotent. Hence the canonical-restricted pure-state
     equivalence claimed in
     \cite[Appendix~D, lines~2100--2107]{Cirac2016MPDO_arXiv} is false.
 \end{theorem}
@@ -192,31 +188,25 @@
     Each block is normal and every weight has modulus one, proving both the CPSV
     canonical-form condition and its normalization.
 
-    Swapping the two virtual coordinates changes
+    Swapping the two virtual coordinates transforms
     $\operatorname{diag}(1,\omega^2)$ into
     $\operatorname{diag}(\omega^2,1)$; multiplication by $\omega$ gives $A$.
-    Writing $M=A\otimes\overline A$, doubling cancels the phase through
+    Writing $M=A\otimes\overline A$, doubling cancels the phase:
     \begin{align}
         (\omega S A^{[2]}S^{-1})\otimes
         (\overline\omega\,\overline S\,\overline{A^{[2]}}\,\overline S^{-1})
-         & =(S\otimes\overline S)M^{[2]}(S\otimes\overline S)^{-1},
+         & =(S\otimes\overline S)M^{[2]}(S\otimes\overline S)^{-1}.
         \notag
     \end{align}
-    since $\omega\overline\omega=1$. For every $n\geq0$, idempotence would imply
-    \begin{align}
-        \E_A^2=\E_A
-         & \Longrightarrow \E_A^{2^n}=\E_A.
-        \notag
-    \end{align}
-    The dyadic powers would therefore form a constant, hence convergent,
-    sequence. This contradicts the preceding phase-obstruction theorem, which
-    shows that the dyadic orbit of $e_{21}$ alternates between the distinct
-    factors $\omega$ and $\omega^2$.
+    However, idempotence $\E_A^2=\E_A$ would imply $\E_A^{2^n}=\E_A$ for all
+    $n\geq0$, contradicting the non-convergent alternating dyadic orbit of
+    Theorem~\ref{thm:cpsv_canonical_form_flow_phase_obstruction}.
 \end{proof}
 
 \begin{remark}
-    The counterexample refutes the printed pure equivalence. It does not decide
-    the mixed-state continuation in the following source paragraph.
+    Theorem~\ref{thm:cpsv_pure_rfp_gauge_status} refutes the pure-state
+    equivalence assertion of \cite[Appendix~D]{Cirac2016MPDO_arXiv}; the
+    general mixed-state case is treated separately in MPO theory.
 \end{remark}
 
 \begin{remark}\label{rem:zero_correlation_length}
@@ -232,10 +222,10 @@
     \lean{MPSTensor.IsCID}
     \leanok
     \uses{def:connected_correlator}
-    For every positive-definite right fixed point $\rho^R>0$, every pair of
-    virtual bond matrices $X,Y$, and all separations $n,m\geq1$, the
-    virtual-insertion expression is independent of distance:
-    $C(X,Y;n)=C(X,Y;m)$.
+    An MPS tensor satisfies virtual-insertion distance independence if for every
+    positive-definite right fixed point $\rho^R>0$, every pair of virtual bond
+    matrices $X,Y$, and all separations $n,m\geq1$, the connected correlator
+    satisfies $C(X,Y;n)=C(X,Y;m)$.
 \end{definition}
 
 \begin{definition}[Physical observable transfer]
@@ -279,18 +269,17 @@
     \uses{def:physical_two_point_expectation}
     Let $O_1,O_2$ act on two disjoint contiguous regions of positive lengths
     $L_1,L_2\geq1$ in a periodic chain, with complementary gap lengths
-    $n_1,n_2\geq0$. Physical correlations are independent of distance when, for
-    every $m_1,m_2\geq0$ satisfying
-    $n_1+n_2=m_1+m_2$, one has
+    $n_1,n_2\geq0$. Physical correlations are independent of distance if, for
+    all $m_1,m_2\geq0$ satisfying $n_1+n_2=m_1+m_2$,
     \begin{align}
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
          & =
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
         \notag
     \end{align}
-    Thus either region may be translated without crossing the other. Zero
-    gaps, corresponding to adjacent regions, are included. This is
-    \cite[Definition~3.3 and lines~490--496]{Cirac2016MPDO_arXiv}.
+    This allows either region to be translated along the chain without crossing
+    the other, including adjacent regions ($n_i=0$)
+    \cite[Definition~3.3]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Positive-gap restriction of physical distance independence]%
@@ -298,29 +287,20 @@
     \lean{MPSTensor.IsPositiveGapPhysicalCID}
     \leanok
     \uses{def:physical_observable_transfer, def:physical_two_point_expectation}
-    For an observable $O$ on a block of $L$ physical spins, write
-    \begin{align}
-        \E_O(X)
-         & =\sum_{\boldsymbol i,\boldsymbol j}
-        \bra{\boldsymbol j}O\ket{\boldsymbol i}
-        A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
-        \notag
-    \end{align}
-    Place two observables $O_1,O_2$ on nonempty finite blocks of a periodic
-    chain, with positive complementary gap lengths $n_1,n_2$. The tensor has
-    \emph{positive-gap physical correlations independent of distance} when the expectation
-    is unchanged upon replacing these gaps by positive $m_1,m_2$ satisfying
-    $n_1+n_2=m_1+m_2$:
+    Let $O_1,O_2$ be observables on disjoint blocks of a periodic chain, with
+    observable transfer maps $\E_{O_1},\E_{O_2}$
+    (Definition~\ref{def:physical_observable_transfer}). The tensor has
+    \emph{positive-gap physical correlations independent of distance} if for
+    all positive complementary gaps $n_1,n_2,m_1,m_2>0$ satisfying
+    $n_1+n_2=m_1+m_2$,
     \begin{align}
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
          & =
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
         \notag
     \end{align}
-    This positive-gap restriction is the transfer-matrix form of
-    \cite[Definition~3.3 and the correlation formula preceding
-        Theorem~3.8]{Cirac2016MPDO_arXiv}, restricted to positive complementary
-    gaps. It excludes adjacent regions.
+    This restricts Definition~\ref{def:source_physical_cid} to strictly positive
+    gaps, excluding adjacent regions \cite[Definition~3.3]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{lemma}[Physical CID implies positive-gap physical CID]%
@@ -328,17 +308,14 @@
     \lean{MPSTensor.isPositiveGapPhysicalCID_of_isPhysicalCID}
     \leanok
     \uses{def:source_physical_cid, def:is_positive_gap_physical_cid}
-    If an MPS tensor satisfies physical distance independence for all nonnegative gaps,
-    then it satisfies the positive-gap condition: for any positive $n_1, n_2, m_1, m_2 > 0$ with $n_1 + n_2 = m_1 + m_2$,
-    \begin{align}
-        \Tr\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
-         & =
-        \Tr\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
-        \notag
-    \end{align}
+    If an MPS tensor satisfies physical distance independence
+    (Definition~\ref{def:source_physical_cid}), then it satisfies the
+    positive-gap condition
+    (Definition~\ref{def:is_positive_gap_physical_cid}).
 \end{lemma}
 \begin{proof}\leanok
-    Restrict the four gap lengths to positive integers.
+    Restrict the gap lengths in Definition~\ref{def:source_physical_cid} to
+    strictly positive integers.
 \end{proof}
 
 \begin{theorem}[Idempotent transfer implies positive-gap physical CID]%
@@ -346,13 +323,13 @@
     \lean{MPSTensor.isPositiveGapPhysicalCID_of_isTransferIdempotent}
     \leanok
     \uses{def:mps_transfer_idempotence, def:is_positive_gap_physical_cid}
-    If $\E_A^2=\E_A$, then physical correlations are independent of distance
-    whenever both complementary gaps are positive.
+    If $\E_A^2=\E_A$, then $A$ satisfies positive-gap physical distance
+    independence (Definition~\ref{def:is_positive_gap_physical_cid}).
 \end{theorem}
 \begin{proof}\leanok
-    Idempotence gives $\E_A^n=\E_A$ for every $n\geq1$. Substituting
-    $\E_A^{n_1}=\E_A^{n_2}=\E_A^{m_1}=\E_A^{m_2}=\E_A$ in the two-observable
-    transfer formula gives
+    Idempotence yields $\E_A^n=\E_A$ for all $n\ge1$. Since
+    $n_1,n_2,m_1,m_2\ge1$, substituting $\E_A$ for each power in the periodic
+    expectation gives
     \begin{align}
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
          & =
@@ -364,12 +341,13 @@
     \end{align}
 \end{proof}
 
-\begin{definition}[Virtual-insertion one-block auxiliary condition]\label{def:is_zcl}
+\begin{definition}[Virtual-insertion zero correlation length]\label{def:is_zcl}
     \lean{MPSTensor.IsZCL}
     \leanok
     \uses{def:is_locally_orthogonal, def:is_bnt_zcl, def:is_cid, def:source_bnt_zcl}
-    This auxiliary one-block predicate is the conjunction of
-    $\E_A^2=\E_A$ and virtual-insertion distance independence.
+    A tensor $A$ satisfies the virtual-insertion zero-correlation-length
+    condition if its transfer map is idempotent ($\E_A^2=\E_A$) and it satisfies
+    virtual-insertion distance independence (Definition~\ref{def:is_cid}).
 \end{definition}
 
 \begin{theorem}[Virtual-insertion distance independence implies RFP]%
@@ -377,21 +355,24 @@
     \lean{MPSTensor.isCID_implies_isTransferIdempotent}
     \leanok
     \uses{def:is_cid, def:mps_transfer_idempotence, def:transfer_map}
-    Suppose $\rho^R>0$ is a right fixed point of the transfer map. If the
-    virtual-insertion condition holds for every positive-definite right fixed
-    point, then the transfer map is idempotent.
+    If the virtual-insertion condition (Definition~\ref{def:is_cid}) holds for
+    every positive-definite right fixed point $\rho^R>0$ of the transfer map,
+    then $\E_A^2=\E_A$.
     % The reverse direction of Theorem 3.8 in arXiv:1606.00608 additionally
     % fails for raw repeated-copy weights. A corrected restricted theorem would
     % additionally require realizing virtual insertions by physical observables.
 \end{theorem}
 \begin{proof}\leanok
-    Let $\rho>0$ be the fixed point. For every matrix $Z$, invertibility gives
-    $Z=(Z\rho^{-1})\rho$. Apply distance independence with
-    $X=Z\rho^{-1}$, the second insertion $N$, and separations $2$ and $1$.
-    The identical disconnected terms cancel. Thus, for every $N$,
-    $\tr\!\left(N\E_A^2(Z)\right)=\tr\!\left(N\E_A(Z)\right)$.
-    Nondegeneracy of the trace pairing yields
-    $\E_A^2(Z)=\E_A(Z)$ for every $Z$, hence $\E_A^2=\E_A$.
+    Let $\rho>0$ be a right fixed point. For any virtual matrix $Z$, set
+    $X=Z\rho^{-1}$, so that $X\rho=Z$. Applying distance independence with
+    virtual insertions $X$ and $Y$ at separations $n=2$ and $m=1$, the
+    disconnected terms cancel, yielding
+    \begin{align}
+        \tr\!\left(Y\E_A^2(Z)\right) = \tr\!\left(Y\E_A(Z)\right)
+        \notag
+    \end{align}
+    for all $Y$. Nondegeneracy of the trace pairing gives $\E_A^2(Z)=\E_A(Z)$
+    for all $Z$, concluding $\E_A^2=\E_A$.
 \end{proof}
 
 \begin{theorem}[Redundancy of the one-block auxiliary condition]%
@@ -399,15 +380,19 @@
     \lean{MPSTensor.zcl_iff_idempotent_transfer}
     \leanok
     \uses{def:mps_transfer_idempotence, def:is_cid, def:is_locally_orthogonal}
-    The auxiliary conjunction
-    $(\E_A^2=\E_A\ \text{and virtual-insertion distance independence})$
-    is equivalent to $\E_A^2=\E_A$.
+    A tensor satisfies the virtual-insertion zero-correlation-length condition
+    (Definition~\ref{def:is_zcl}) if and only if its transfer map is
+    idempotent:
+    \begin{align}
+        \text{IsZCL}(A) \iff \E_A^2 = \E_A.
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The forward direction extracts the idempotence hypothesis. Conversely,
-    idempotence gives $\E_A^n=\E_A$ for every $n\geq 1$. Hence, for every
-    positive-definite right fixed point $\rho^R$, every pair of virtual
-    matrices $X,Y$, and every $n\geq 1$,
+    The forward direction is immediate from Definition~\ref{def:is_zcl}.
+    Conversely, idempotence gives $\E_A^n=\E_A$ for all $n\ge1$. For every
+    positive-definite right fixed point $\rho^R$, all virtual matrices $X,Y$,
+    and all $n\ge1$,
     \begin{align}
         C(X,Y;n)
          & =\tr\!\left(Y\E_A^n(X\rho^R)\right)
@@ -419,6 +404,5 @@
          & =C(X,Y;1).
         \notag
     \end{align}
-    Thus the connected correlator is independent of every positive
-    separation.
+    Hence connected correlators are independent of distance.
 \end{proof}

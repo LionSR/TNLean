@@ -40,7 +40,9 @@
     \uses{lem:cpsv_bnt_block_dimensions_positive, thm:mpdo_transported_vertical_sector_composites_trace_preserving, thm:mpdo_transported_vertical_sector_composites_schwarz, thm:mpdo_transported_vertical_sector_composites_identity}
     The two basis-of-normal-tensors decompositions have positive matrix
     dimensions. The transported maps are completely positive and preserve
-    the total block trace, and the preceding theorem gives both inverse laws.
+    the total block trace, and
+    Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_identity}
+    gives both inverse laws.
     Apply Theorem~\cite[``Unitary action of an invertible CPTP map'']{QICLean2026Blueprint} to this
     pair. Its equivalence of summands, dimension equalities, and unitary
     matrices give the two displayed formulas without changing the chosen
@@ -140,8 +142,8 @@
     $O_L(B)=\sum_\delta\tr(\nu_\delta^L)
         O_L(A^{(2)}_\delta)$.
     Reindex this sum by $\delta=\sigma(\alpha)$. The tensor-letter identity
-    from the preceding theorem multiplies every letter of
-    $A^{(1)}_\alpha$ by
+    from Theorem~\ref{thm:mpdo_transported_vertical_sector_coefficient_comparison}
+    multiplies every letter of $A^{(1)}_\alpha$ by
     $m_\alpha/n_{\sigma(\alpha)}$. Along a chain of length $L$ this scalar
     therefore occurs to the power $L$; unitary conjugation and the bond-index
     identification leave the closing trace unchanged. This proves the first
@@ -226,7 +228,8 @@
 
 \begin{proof}\leanok
     Apply the canonical-form sufficient condition to the invariant-projector
-    closure and periodic-exclusion properties of the preceding theorem. Its
+    closure and periodic-exclusion properties of
+    Theorem~\ref{thm:mpdo_weighted_vertical_product_block_canonical_hypotheses}. Its
     spectral construction discards precisely the corners on which every
     letter vanishes and retains the isometry of every nonzero corner.
 \end{proof}
@@ -502,8 +505,9 @@
 
 \begin{proof}\leanok
     Normalized BNT-refined horizontal form separates every nonzero
-    range-projection corner at some finite chain length. Apply the preceding
-    theorem with this separation property.
+    range-projection corner at some finite chain length. Apply
+    Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
+    with this separation property.
 \end{proof}
 
 \begin{theorem}[Literal positivity of active product coefficients]
@@ -533,8 +537,9 @@
         exists_unitaryNormalization}
     \leanok
     \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_retained_product_spectral_family_exists, lem:mpdo_horizontal_cf_block_two, thm:mpdo_block_two_as_positive_blocking, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_blocked_reference_corners, thm:mpdo_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
-    Under the hypotheses of the preceding positivity theorem, for every
-    active product corner $j$ there is a real number $\omega_j>0$ such that
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos},
+    for every active product corner $j$ there is a real number $\omega_j>0$ such that
     \begin{align}
         X_j^\dagger X_j
          & =\omega_j\Id,
@@ -562,8 +567,9 @@
         exists_unitaryNormalization_of_cpsvCanonicalForm}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos, thm:cpsv_literal_positive_relative_gram_scalar}
-    Under the hypotheses of the preceding literal positivity theorem, for
-    every active product corner $j$ there is a real number $\omega_j>0$ such
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos},
+    for every active product corner $j$ there is a real number $\omega_j>0$ such
     that
     \begin{align}
         X_j^\dagger X_j
@@ -577,8 +583,9 @@
 
 \begin{proof}\leanok
     Compress the blocked vertical tensor to the active corner and to the
-    distinguished blocked reference corner. Their coefficients are positive
-    by the preceding theorem and by positivity of the blocked multiplicity
+    distinguished blocked reference corner. Their coefficients are positive by
+    Theorem~\ref{thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos}
+    and by positivity of the blocked multiplicity
     weight. The literal Figure~8 comparison gives
     $X_j^\dagger X_j=\omega_j\Id$ with $\omega_j>0$; division by
     $\sqrt{\omega_j}$ gives a unitary matrix.
@@ -711,18 +718,19 @@
     one-site and two-site vertical sectors, there are positive diagonal
     matrices $\chi_{\alpha,\beta,\gamma}$ and coisometries
     $U_{\alpha,\beta}$ satisfying the forward fusion identity and exact
-    reconstruction for every product tensor $M_\alpha M_\beta$. This is the
+    reconstruction for every product tensor $M_\alpha M_\beta$. This yields the
     active-corner construction of
-    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, retaining only
+    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, retaining
     active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient},
-    accounting for fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
-    and using coisometric fusion onto the active sum
+    handling fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
+    and using coisometric fusion onto the active subspace
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
 \begin{proof}\leanok
     The positive coefficients and normalized gauges give an original-label
-    corner family. Apply the preceding block-row construction to its
+    corner family. Apply the block-row construction of
+    Theorem~\ref{thm:mpdo_original_corner_family_to_fusion_coisometry} to its
     orthogonal isometric inclusions.
 \end{proof}
 
@@ -758,11 +766,10 @@
         \notag
     \end{align}
     This establishes the positive fusion decomposition of
-    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, retaining only
+    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, accounting for
     active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient},
-    accounting for fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
-    and using coisometric fusion onto the active sum
-    \cite{gap:cpsv16_figure11_fusion_coisometry}.
+    fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support}, and
+    coisometric fusion \cite{gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -807,11 +814,10 @@
     \end{align}
     Every diagonal entry of $\chi_{\alpha,\beta,\gamma}$ is positive.
     This establishes the positive fusion decomposition of
-    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, retaining only
-    active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient},
-    accounting for fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
-    and using coisometric fusion onto the active sum
-    \cite{gap:cpsv16_figure11_fusion_coisometry}.
+    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, with active
+    corners and coisometric fusion following
+    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient,
+        gap:cpsv16_figure11_per_pair_support, gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -898,11 +904,9 @@
     Thus the renormalization fixed-point and matrix-product-density-operator
     assumptions, together with normalized BNT-refined horizontal form, imply
     the positive fusion decomposition of
-    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, retaining only
-    active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient},
-    accounting for fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
-    and using coisometric fusion onto the active sum
-    \cite{gap:cpsv16_figure11_fusion_coisometry}.
+    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv} on the active
+    corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient,
+        gap:cpsv16_figure11_per_pair_support, gap:cpsv16_figure11_fusion_coisometry}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -911,8 +915,9 @@
     the CPSV basis-of-normal-tensors assertion, the positive multiplicity
     matrices, and both coisometric decomposition identities.
     Unpack the two completely positive, trace-preserving maps in the
-    renormalization fixed-point condition. The preceding transported-sector
-    theorem then supplies the positive diagonal family, the row
+    renormalization fixed-point condition.
+    Theorem~\ref{thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
+    then supplies the positive diagonal family, the row
     coisometries, the forward fusion identity, and exact reconstruction for
     the chosen one-site vertical basis.
 \end{proof}
