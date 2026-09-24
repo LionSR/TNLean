@@ -30,8 +30,9 @@ zero.
 displayed operator formula at every positive length, entrywise
 (`rho_eq_diagonal`) and as a sum of two finite Kronecker powers
 (`rho_eq_finKronecker`); positivity (`M_isMPDO`) and the trace $2^N$
-(`trace_rho`); the loss of the $\sigma_z^{\otimes N}$ part under any nonempty
-partial trace (`reducedBlockState_M_eq_scaled_one`); and saturation of the area
+(`trace_rho`); the loss of the $\sigma_z^{\otimes N}$ part when the last
+$N-L\ge 1$ sites of the normalized state are traced out, keeping $L\ge 1$ sites
+(`reducedBlockState_M_eq_scaled_one`); and saturation of the area
 law (`M_isSAL`). The failure of the commuting form is
 `MPOTensor.CPSVExample412Literal.M_not_isGSNNCH` in
 `TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.ExampleFourCycleObstruction`. The
@@ -43,8 +44,9 @@ Definition 4.1, is `MPOTensor.CPSVExample412NormalizedRFP.Mhat` in
 **Local fix (normalization):** the printed tensor has physical-trace transfer
 $I+\sigma_z$, whose square is twice itself, so it satisfies the ZCL
 idempotence of Definition 4.2 only up to the scale $2$ (`M_isSourceZCL`) and is
-not an RFP via trace-preserving maps (`M_not_isRFPViaTS`); the source's ZCL and
-RFP claims hold for $\tfrac12 M$. Documented in
+not an RFP via trace-preserving maps (`M_not_isRFPViaTS`); the source's RFP
+claim is proved for $\tfrac12 M$ (`CPSVExample412NormalizedRFP.Mhat_isRFPViaTS`).
+Documented in
 `docs/paper-gaps/cpsv16_example_4_12_normalization.tex`, whose complete text is
 <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 

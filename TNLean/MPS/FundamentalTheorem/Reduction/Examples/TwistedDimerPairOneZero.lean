@@ -26,6 +26,11 @@ fusion rule `M_f M_{f'} = (x/2) M_{f+f'} ⊕ (y/2) M_{f+f'+1} ⊕ 0` of the stra
 `Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex` states in normalized
 form and `TwistedDimerPairs` records uniformly for every pair of sectors.
 
+**Source.** Project construction, not printed in Cirac, Pérez-García, Schuch, Verstraete 2017
+(arXiv:1606.00608); it bears on the open question at `Papers/1606.00608/MPDO-22-12-17-2.tex`
+line 995 on structure coefficients of Theorem 4.14 (lines 972--993) that depend on the length
+`L`. The full source discussion and its scope are in the header of `TwistedDimer`.
+
 ## Main results
 
 * `P6Compression.dimerOneZero_letter_int`: the integer letter identity of the pair.
@@ -33,6 +38,11 @@ form and `TwistedDimerPairs` records uniformly for every pair of sectors.
 The compression datum of this pair, its vanishing remainder, its reduction pairs, their
 biorthogonality, the sitewise intertwiners, the dimension count and the word-trace identity
 are stated uniformly for every pair of sectors in `TwistedDimerPairs`.
+
+## Provenance
+
+The fusion rule and its exact data were first recorded in the notes cited above under
+`Notes/OpenProblemsTN/`; they are verification records, not the source.
 -/
 
 open scoped Matrix Kronecker

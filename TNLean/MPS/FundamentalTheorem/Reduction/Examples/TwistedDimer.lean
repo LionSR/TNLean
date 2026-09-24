@@ -11,12 +11,21 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
 A machine-checked instance of the multi-block asymmetric compression theorem
 (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) for
-the two-sector graded quantum-dimer twist of the P6 work
-(`Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex`, the resolution
-`thm:p6-round44-z2`; strategy note
-`Notes/OpenProblemsTN/strategies/p6_round44_graded_dimer_twist.tex`; exact data in
-`Notes/OpenProblemsTN/checks/p6_examples_compression_data.md`, §1, verified by
-`checks/round44_p6_z2_twisted_dimer.py` at the rational point `x = 7/8`, `y = 1/8`).
+the two-sector graded quantum-dimer twist at the rational point `x = 7/8`, `y = 1/8`.
+
+**Source.** Project construction; the sector tensors are not printed in Cirac,
+Pérez-García, Schuch, Verstraete 2017 (arXiv:1606.00608). The construction
+addresses the open question at `Papers/1606.00608/MPDO-22-12-17-2.tex` line 995:
+whether there are renormalization fixed points whose structure coefficients
+$c^{(L)}_{\alpha,\beta,\gamma}=\operatorname{tr}(\chi^L_{\alpha,\beta,\gamma})$ in the
+algebra relation of Theorem 4.14 (lines 972--993) depend on $L$. The word-trace
+identity of the fusion (`P6Compression.dimerFusion_trace_evalWord` in
+`TwistedDimerPairs`) carries the length-dependent weights $(7/16)^{|w|}$ and
+$(1/16)^{|w|}$. These modules prove the compression and its word-trace identity
+only; the fixed-point property of the twisted dimer is
+proved separately for the operator of `TNLean.MPS.MPDO.TwistedDimer`
+(`MPOTensor.TwistedDimer.isRFPViaTS_T`), and no formal identification of that
+operator's tensor with the sector tensors here is asserted.
 
 A horizontal bond index is a triple `(p, p', k)` of bits: the ket and bra of the left half-bond
 and a sector label. The vertical site space is `ℂ² ⊗ ℂ²`, and every letter of the sector-`f`
@@ -59,6 +68,15 @@ with its compression datum, its consequences and its word-trace identity.
 * `P6Compression.dimerTarget_isNormal`: each sector is normal at blocking length one.
 * `P6Compression.dimerTarget_not_gaugeEquiv`, `P6Compression.dimerBlocks_not_gaugeEquiv`: the two
   sectors, hence the two targets of every fusion, are not gauge equivalent.
+
+## Provenance
+
+The construction and its exact data were first recorded in
+`Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex` (the resolution
+`thm:p6-round44-z2`), the strategy note
+`Notes/OpenProblemsTN/strategies/p6_round44_graded_dimer_twist.tex`, and
+`Notes/OpenProblemsTN/checks/p6_examples_compression_data.md`, §1, with the exact-arithmetic
+check `checks/round44_p6_z2_twisted_dimer.py`; they are verification records, not the source.
 -/
 
 open scoped Matrix Kronecker
