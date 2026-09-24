@@ -24,6 +24,7 @@ import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.Core.ProjectionTriangularTrace
 import TNLean.MPS.Core.Reduction
 import TNLean.MPS.Core.ReductionBlocking
+import TNLean.MPS.Core.ReductionComposition
 import TNLean.MPS.Core.ReductionCrossMatrix
 import TNLean.MPS.Core.ReductionExistence
 import TNLean.MPS.Core.ReductionResidual
