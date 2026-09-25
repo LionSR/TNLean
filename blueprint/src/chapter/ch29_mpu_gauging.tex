@@ -4233,7 +4233,10 @@ of $T$ applied to those of $B$.
     onto $Y\cdot B$. The letters satisfy
     $((MN)\cdot A)^i\,\mathsf a=\mathsf a\,(M\cdot(N\cdot A))^i$, so
     reductions transport between the two bracketings as in
-    Lemma~\ref{thm:mpug_reduction_composition}. Finally, a relation
+    Lemma~\ref{thm:mpug_reduction_composition}. If $P$ intertwines the
+    letters of two operator tensors, $X'^{ij}P=PX^{ij}$ for all $i,j$, then
+    $(X'\cdot B)^i\,(P\otimes\mathbf 1)=(P\otimes\mathbf 1)\,(X\cdot B)^i$.
+    Finally, a relation
     $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all long words lifts to
     $(\mathbf 1\otimes V)(T\cdot B)^{\mathbf w}
         =z\,(\mathbf 1\otimes V')(T\cdot B)^{\mathbf w}$, and the analogous
@@ -4244,9 +4247,25 @@ of $T$ applied to those of $B$.
 \begin{proof}\leanok
     A word of $T\cdot B$ is a sum over the contracted physical
     configurations of Kronecker products of a word of $T$ and a word of $B$
-    of the same length. The boundaries act on one factor only, so each claim
-    reduces to the corresponding statement for that factor. The letter
-    identity is the reassociation of Kronecker products.
+    of the same length:
+    \begin{align}
+        (T\cdot B)^{\sigma}
+         & =\sum_\tau T^{\sigma\tau}\otimes B^{\tau}.
+        \notag
+    \end{align}
+    The boundaries act on one factor only, so each claim reduces to the
+    corresponding statement for that factor; for the intertwiner,
+    $(X'^{ij}\otimes B^j)(P\otimes\mathbf 1)=X'^{ij}P\otimes B^j
+        =PX^{ij}\otimes B^j=(P\otimes\mathbf 1)(X^{ij}\otimes B^j)$.
+    The letter identity is the reassociation of Kronecker products:
+    \begin{align}
+        ((MN)\cdot A)^i
+         & =\sum_{j,k}(M^{ij}\otimes N^{jk})\otimes A^k
+        =\mathsf a\,\Bigl(\sum_{j,k}M^{ij}\otimes(N^{jk}\otimes A^k)\Bigr)
+        \,\mathsf a^{-1}
+        =\mathsf a\,(M\cdot(N\cdot A))^i\,\mathsf a^{-1}.
+        \notag
+    \end{align}
 \end{proof}
 
 \subsection{An anomaly obstructs invariant normal states}
