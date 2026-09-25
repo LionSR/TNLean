@@ -1,0 +1,58 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Fibonacci String-Net: the Projector Identity at Positive Length}
+\author{}
+\date{2026-09-25}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{What the source prints}
+Section~3.2 of \cite{Bultinck2017Anyons} writes the projector matrix product
+operator on a ring of $L$ sites as $P_L=\sum_a w_aO_a^L$, where
+$O_a^L=\sum_{i,j}\tr(B_a^{i_1j_1}\cdots B_a^{i_Lj_L})\ket{i_1\cdots i_L}\bra{j_1\cdots j_L}$,
+and requires
+\begin{align}
+    P_L^2=\sum_{a,b}w_aw_bO_a^LO_b^L=\sum_aw_aO_a^L=P_L,
+    \label{eq:fib_proj}
+\end{align}
+which ``has to hold for all $L$''.\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 143--156.}
+No lower bound on $L$ is stated. For the Fibonacci theory, Appendix~D.1.1
+gives two blocks $B_1,B_\tau$ of bond dimensions $2$ and $3$ with weights
+$w_1=1/(1+\phi^2)$ and $w_\tau=\phi/(1+\phi^2)$, where
+$\phi=(1+\sqrt5)/2$.\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 1257--1269.}
+
+\section{The empty chain}
+At $L=0$ the Hilbert space of the chain is one-dimensional and each $O_a^0$ is
+the trace of the empty product, the bond dimension $\chi_a$ of the block:
+$O_1^0=2$ and $O_\tau^0=3$. Using $\phi^2=\phi+1$,
+\begin{align}
+    P_0
+     & =2w_1+3w_\tau
+    =\frac{2+3\phi}{1+\phi^2}
+    =\frac{2+3\phi}{2+\phi}\approx1.894,
+    \label{eq:fib_empty}
+\end{align}
+which is neither $0$ nor $1$, so $P_0^2\neq P_0$. The fusion rules
+$O_a^LO_b^L=\sum_cN_{ab}^cO_c^L$ also fail at $L=0$: they would give
+$O_\tau^0O_\tau^0=9$ against $O_1^0+O_\tau^0=5$. The identity
+(\ref{eq:fib_proj}) is a statement about rings with at least one site, and the
+empty chain carries no physical content.
+
+\section{The reading adopted}
+The empty chain is read as a degenerate case the source does not intend, and
+idempotence, like the fusion rules, is stated for every positive length
+$L\geq1$.\footnote{Result:
+    \leanid{FibonacciCompression.fibProjector_mul_self}.}
+This is a convention, not an error in the source: at every $L\geq1$ the
+statement is the source's (\ref{eq:fib_proj}) with the source's weights, and
+no further hypothesis is added.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
