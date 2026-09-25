@@ -27,8 +27,9 @@ Section IV.A, `Papers/2405.00439/MPU-DW.tex` line 1684.
 length `N`, the periodic operator of `T̂_g` is the monomial matrix of the left shift by `g`
 with phase `∏_i ω(g, t_{i+1}, t_{i+1}⁻¹ t_i)` on the input configuration `t`; it satisfies
 `U_g U_h = U_{gh}` and `U_e = 1`, and, when `ω` takes unit-modulus values, `U_g` is unitary
-and `U_g† = U_{g⁻¹}`. Entrywise, the operator is `(⨂_i L_g) · ∏_i W_g^{i,i+1}`, built from
-the gates `W_g` and the shifts `L_g` of the source. The site set is `Fin N` with cyclic
+and `U_g† = U_{g⁻¹}` (these last two are project results for the periodic operators).
+Entrywise, the operator is `(⨂_i L_g) · ∏_i W_g^{i,i+1}`, built from the gates `W_g` and the
+shifts `L_g` of the source. The site set is `Fin N` with cyclic
 successor `i + 1`, and the group is transported to the bond and physical index `Fin n` by an
 explicit bijection `e`.
 
@@ -135,7 +136,8 @@ theorem tensor_apply (ω : ScalarThreeCochain G) (g : G) (i j l r : Fin n) :
       if i = siteShift e g j ∧ r = j then (ω g (e.symm j) ((e.symm j)⁻¹ * e.symm l) : ℂ)
       else 0 := rfl
 
-/-- The group-indexed family of the tensors `T̂_g`, with bond dimension `|G|`. -/
+/-- Bridge: the tensors `T̂_g` of arXiv:2203.12563, lines 2206–2222, packaged as a
+`MPOTensor.GroupFamily` with bond dimension `|G|`. -/
 def family (ω : ScalarThreeCochain G) : GroupFamily G n where
   bondDim _ := n
   bondDim_pos _ := (e 1).pos
@@ -288,10 +290,10 @@ theorem star_phase_mul_phase {ω : ScalarThreeCochain G} (hω : ∀ a b c, ‖(�
   rw [Complex.star_def, Complex.conj_mul', phase, Units.coe_prod, norm_prod]
   simp [hω]
 
-/-- `U_g` is unitary on every nonempty periodic chain when `ω` takes unit-modulus values.
-
-Source: arXiv:2405.00439, line 1684 (matrix product unitary representations), applied to the
-operators of arXiv:2203.12563, lines 2204–2205. -/
+/-- Project result: `U_g` is unitary on every nonempty periodic chain when `ω` takes
+unit-modulus values. The sources call the operators of arXiv:2203.12563, lines 2204–2205, a
+representation of `G` but do not state unitarity; it follows here because `U_g` is a
+permutation times a unit-modulus phase. -/
 theorem mpo_tensor_mem_unitaryGroup {ω : ScalarThreeCochain G}
     (hω : ∀ a b c, ‖(ω a b c : ℂ)‖ = 1) (g : G) :
     mpo (tensor e ω g) N ∈ Matrix.unitaryGroup (Fin N → Fin n) ℂ := by
@@ -323,10 +325,8 @@ open TNLean.Algebra
 
 variable {G : Type*} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
-/-- **`T̂_g` is a matrix product unitary** on every nonempty periodic chain when `ω` takes
-unit-modulus values.
-
-Source: arXiv:2203.12563, lines 2204–2222; arXiv:2405.00439, line 1684. -/
+/-- Project result: **`T̂_g` is a matrix product unitary** on every nonempty periodic chain
+when `ω` takes unit-modulus values (see `mpo_tensor_mem_unitaryGroup`). -/
 theorem isMPUPos {ω : ScalarThreeCochain G} (hω : ∀ a b c, ‖(ω a b c : ℂ)‖ = 1) (g : G) :
     IsMPUPos (tensor e ω g) := by
   intro N hN
@@ -335,9 +335,12 @@ theorem isMPUPos {ω : ScalarThreeCochain G} (hω : ∀ a b c, ‖(ω a b c : �
 
 /-- The operator laws of a periodic matrix product unitary representation, stated for the
 positive chain lengths of `MPOTensor.GroupFamily.IsRawRepresentation` without its one-site
-injectivity clause: `U_e = 1`, `U_g U_h = U_{gh}`, and `U_g† = U_{g⁻¹}`.
+injectivity clause: unitarity, `U_e = 1`, `U_g U_h = U_{gh}`, and `U_g† = U_{g⁻¹}`.
 
-Source: arXiv:2203.12563, lines 2204–2222 and 2096; arXiv:2405.00439, line 1684. -/
+Source: arXiv:2203.12563, lines 2204–2205 for `U_e = 1` and `U_g U_h = U_{gh}`.
+Project result: unitarity and `U_g† = U_{g⁻¹}` for unit-modulus `ω`, which the periodic
+passage does not state (`O_g† = O_{g⁻¹}` is printed at line 2096 only for the
+arbitrary-boundary operators). -/
 theorem family_operator_laws {ω : ScalarThreeCochain G}
     (hc : ScalarThreeCochain.IsCocycle ω) (hn : ScalarThreeCochain.IsNormalized ω)
     (hω : ∀ a b c, ‖(ω a b c : ℂ)‖ = 1) :
