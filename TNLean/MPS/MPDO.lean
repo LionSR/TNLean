@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPDO
 
 import TNLean.MPS.MPDO.ActionTensor
+import TNLean.MPS.MPDO.ActionTensorReduction
 import TNLean.MPS.MPDO.ActiveSectorInverseMapProvenance
 import TNLean.MPS.MPDO.ActiveSectorSpanningAreaLaw
 import TNLean.MPS.MPDO.ActiveSectorSpanningCounterexample

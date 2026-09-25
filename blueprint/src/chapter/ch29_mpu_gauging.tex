@@ -4205,6 +4205,141 @@ $(MN)P$ into $M(NP)$.
     Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
 \end{proof}
 
+\subsection{Reductions through action tensors}
+
+For a matrix product operator tensor $T$ and a matrix product state tensor
+$B$, write $T\cdot B$ for the action tensor with letters
+$\sum_jT^{ij}\otimes B^j$, whose periodic vectors are the periodic operators
+of $T$ applied to those of $B$.
+
+\begin{lemma}[Reductions through action tensors]
+    \label{thm:mpug_action_tensor_reductions}
+    \lean{MPSTensor.IsReduction.actTensor_idKron,
+        MPSTensor.IsReduction.actTensor_kronId,
+        MPOTensor.actTensor_mulTensor,
+        MPOTensor.actTensor_mulTensor_mul_assocMatrix,
+        MPOTensor.assocInvMatrix_mul_actTensor_mulTensor,
+        MPSTensor.IsReduction.actTensor_assoc_left,
+        MPSTensor.IsReduction.actTensor_assoc_right,
+        MPOTensor.actTensor_mul_kronId_of_intertwine,
+        MPSTensor.IsDressedProportional.actTensor_idKron,
+        MPSTensor.IsDressedProportional.actTensor_kronId}
+    \leanok
+    \uses{thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    If $(V,W)$ reduces $B$ onto $A$, then
+    $(\mathbf 1\otimes V,\mathbf 1\otimes W)$ reduces $T\cdot B$ onto
+    $T\cdot A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
+    of $Y$, then $(V\otimes\mathbf 1,W\otimes\mathbf 1)$ reduces $X\cdot B$
+    onto $Y\cdot B$. The letters satisfy
+    $((MN)\cdot A)^i\,\mathsf a=\mathsf a\,(M\cdot(N\cdot A))^i$, so
+    reductions transport between the two bracketings as in
+    Lemma~\ref{thm:mpug_reduction_composition}. Finally, a relation
+    $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all long words lifts to
+    $(\mathbf 1\otimes V)(T\cdot B)^{\mathbf w}
+        =z\,(\mathbf 1\otimes V')(T\cdot B)^{\mathbf w}$, and the analogous
+    relation for the doubled-index tensor of $X$ lifts through
+    $V\otimes\mathbf 1$ to $X\cdot B$.
+\end{lemma}
+
+\begin{proof}\leanok
+    A word of $T\cdot B$ is a sum over the contracted physical
+    configurations of Kronecker products of a word of $T$ and a word of $B$
+    of the same length. The boundaries act on one factor only, so each claim
+    reduces to the corresponding statement for that factor. The letter
+    identity is the reassociation of Kronecker products.
+\end{proof}
+
+\subsection{An anomaly obstructs invariant normal states}
+
+\begin{definition}[L-symbol of an invariant normal state]
+    \label{def:mpug_single_block_l_symbol}
+    \lean{MPOTensor.GroupFamily.FixesMPV,
+        MPOTensor.GroupFamily.ActionData,
+        MPOTensor.GroupFamily.nonempty_actionData,
+        MPOTensor.GroupFamily.ActionData.actV,
+        MPOTensor.GroupFamily.ActionData.fuseV,
+        MPOTensor.GroupFamily.ActionData.lSymbol,
+        MPOTensor.GroupFamily.ActionData.isDressedProportional_lSymbol}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_action_tensor_reductions,
+        def:mpug_l_symbols}
+    Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain},
+    and let $A$ be a normal matrix product state tensor of positive bond
+    dimension with $O_g|V_N(A)\rangle=|V_N(A)\rangle$ for every $g$ and every
+    $N\geq1$. Action tensors $(V_g,W_g)$ reducing $O_g\cdot A$ onto $A$ exist
+    \cite[lines~1064--1090]{GarreRubio2023MPOSym}. The stacked action
+    $(O_gO_h)\cdot A$ reduces onto $A$ along two trees, with left boundaries
+    \begin{align}
+        V_g(\mathbf 1\otimes V_h)\,\mathsf a^{-1}, &  &
+        V_{gh}(F^<_{g,h}\otimes\mathbf 1),
+    \end{align}
+    and $L_{g,h}\in\C^\times$ is the unique scalar with
+    $V_g(\mathbf 1\otimes V_h)\mathsf a^{-1}B^{\mathbf w}
+        =L_{g,h}\,V_{gh}(F^<_{g,h}\otimes\mathbf 1)B^{\mathbf w}$ for all long
+    words $\mathbf w$ of $B=(O_gO_h)\cdot A$. This is the $L$-symbol of a
+    single invariant block \cite{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Compatibility of the L-symbol with the anomaly]
+    \label{thm:mpug_single_block_l_compatibility}
+    \lean{MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol}
+    \leanok
+    \uses{def:mpug_single_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
+    In the setting of Definition~\ref{def:mpug_single_block_l_symbol}, for
+    all $g,h,k\in G$,
+    \begin{align}
+        L_{g,hk}L_{h,k}
+         & =\omega(g,h,k)\,L_{g,h}L_{gh,k}.
+    \end{align}
+    This is (\ref{eq:mpug_l_compatibility}) for a one-point set of blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_action_tensor_reductions}
+    Consider the triple action $B=((O_gO_h)O_k)\cdot A$. Acting first with
+    $k$, then with the pair $(g,h)$, reduces $B$ onto $(O_gO_h)\cdot A$;
+    fusing $g$ with $h$ reduces $B$ onto $(O_{gh}O_k)\cdot A$; fusing $h$
+    with $k$ reduces $B$ onto $(O_gO_{hk})\cdot A$. Pulling the defining
+    relations of $L_{g,h}$, $L_{gh,k}$ and $L_{g,hk}$ back along these
+    reductions (Lemma~\ref{thm:mpug_dressed_proportionality}), lifting the
+    relation of $L_{h,k}$ inside the action of $g$ and the relation of
+    $\omega(g,h,k)$ through the action on $A$
+    (Lemma~\ref{thm:mpug_action_tensor_reductions}), and identifying the
+    boundaries by the naturality and pentagon identities of $\mathsf a$,
+    one obtains two chains of scalars between the same pair of boundaries:
+    $L_{h,k}L_{g,hk}$ along one and $L_{g,h}L_{gh,k}\,\omega(g,h,k)$ along
+    the other. Both boundaries belong to reductions onto the normal tensor
+    $A$, so they are nonzero against arbitrarily long words, and the two
+    scalars agree.
+\end{proof}
+
+\begin{theorem}[An anomaly obstructs invariant normal states]
+    \label{thm:mpug_anomaly_obstruction}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant,
+        MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass}
+    \leanok
+    \uses{thm:mpug_single_block_l_compatibility,
+        thm:mpug_fixed_block_trivializes, def:mpug_trivial_gauge_class}
+    Let $\{O_g\}$ be matrix product operator tensors with normal
+    doubled-index tensors and $O_gO_h=O_{gh}$ on every nonempty chain. If a
+    normal matrix product state tensor of positive bond dimension satisfies
+    $O_g|V_N(A)\rangle=|V_N(A)\rangle$ for every $g$ and every $N\geq1$, then
+    the anomaly three-cocycle has trivial gauge class. Equivalently, a group
+    with nontrivial anomaly has no invariant normal matrix product state.
+    This is the statement that an anomalous representation cannot have an
+    invariant injective matrix product state
+    \cite[line~1545]{FrancoRubio2025MPUGauging},
+    \cite[line~738]{GarreRubio2023MPOSym}, with normal in place of injective
+    and without unitarity or simplicity of the operators.
+\end{theorem}
+
+\begin{proof}\leanok
+    Action tensors exist, so Theorem~\ref{thm:mpug_single_block_l_compatibility}
+    applies, and Theorem~\ref{thm:mpug_fixed_block_trivializes} for the
+    single block gives $\omega=dL$.
+\end{proof}
+
 \subsection{Normalization of the first source factor}
 
 \begin{theorem}[The raw first-cut contraction]
@@ -5851,7 +5986,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge}
+    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
     By (\ref{eq:mpug_coboundary}),
     \begin{align}
         (d\beta)(g,g^k,g)
@@ -5885,7 +6021,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass.comap}
     \leanok
     \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
-        def:mpug_fusion_gauge, def:mpug_trivial_gauge_class}
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        def:mpug_trivial_gauge_class}
     Restriction along $f$ sends $3$-cocycles to $3$-cocycles and satisfies
     $f^*(\beta\mathbin{\triangleright}\omega)
         =(f^*\beta)\mathbin{\triangleright}f^*\omega$, where
@@ -5895,9 +6032,29 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_cochain_restriction, def:mpug_fusion_gauge}
-    Since $f$ is multiplicative, each identity is the corresponding identity
-    on $G$ evaluated at $f(a),f(b),f(c)$, and $f(d)$ where needed.
+    \uses{def:mpug_cochain_restriction, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    Since $f(ab)=f(a)f(b)$, for all $a,b,c,d\in H$
+    \begin{align}
+        (f^*\omega)(ab,c,d)\,(f^*\omega)(a,b,cd)
+         & =\omega\bigl(f(a)f(b),f(c),f(d)\bigr)\,
+        \omega\bigl(f(a),f(b),f(c)f(d)\bigr),
+        \notag                                                              \\
+        (d f^*\beta)(a,b,c)
+         & =\frac{\beta\bigl(f(a),f(b)f(c)\bigr)\beta\bigl(f(b),f(c)\bigr)}
+        {\beta\bigl(f(a),f(b)\bigr)\beta\bigl(f(a)f(b),f(c)\bigr)}
+        =(d\beta)\bigl(f(a),f(b),f(c)\bigr).
+        \notag
+    \end{align}
+    The first line and the corresponding expansion of the right-hand side
+    of (\ref{eq:mpug_three_cocycle}) turn the cocycle relation for $f^*\omega$
+    into (\ref{eq:mpug_three_cocycle}) at $f(a),f(b),f(c),f(d)$. The second
+    line, which is (\ref{eq:mpug_coboundary}) evaluated at $f(a),f(b),f(c)$,
+    gives $d(f^*\beta)=f^*(d\beta)$, hence
+    $f^*(\beta\mathbin{\triangleright}\omega)
+        =(f^*\beta)\mathbin{\triangleright}f^*\omega$. The last two claims
+    follow from Definitions~\ref{def:mpug_cohomologous_to}
+    and~\ref{def:mpug_trivial_gauge_class}.
 \end{proof}
 
 \begin{definition}[L-symbols and compatibility]
@@ -6127,7 +6284,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_l_symbols, def:mpug_fusion_gauge}
+    \uses{def:mpug_l_symbols, def:mpug_fusion_gauge,
+        def:mpug_cochain_restriction, def:mpug_trivial_gauge_class}
     For $a,b,c\in H$ put $g=f(a)$, $h=f(b)$, $k=f(c)$. Since $kx=x$,
     (\ref{eq:mpug_l_compatibility}) reads
     \begin{align}
