@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.CZX.CZXAnomalyClass
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
 
 /-!
@@ -59,12 +60,6 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1138--1140. -/
 def czxBlock (x : Multiplicative (Fin 2)) : MPSTensor 2 (czxBlockDim x) :=
   ghzSectorTensor x.toAdd
 
-private theorem forall_z2' {P : Multiplicative (Fin 2) → Prop}
-    (h0 : P (Multiplicative.ofAdd 0)) (h1 : P (Multiplicative.ofAdd 1)) : ∀ x, P x := by
-  intro x
-  fin_cases x
-  exacts [h0, h1]
-
 /-- **The CZX representation permutes the two product states**: the identity fixes them and
 `U` exchanges them, with phase one, at every positive length.
 
@@ -75,7 +70,7 @@ theorem czx_carriesMPV (g x : Multiplicative (Fin 2)) :
   intro N hN
   have : NeZero N := ⟨by omega⟩
   revert g x
-  refine forall_z2' ?_ ?_ <;> refine forall_z2' ?_ ?_
+  refine Multiplicative.forall_zmod_two ?_ ?_ <;> refine Multiplicative.forall_zmod_two ?_ ?_
   all_goals
     first
     | (change mpo (MPOTensor.idTensor 2) N *ᵥ _ = _
@@ -157,7 +152,7 @@ def czxBlockActionData : BlockActionData czxFamily czxBlock where
   V g x := czxActV g.toAdd x.toAdd
   W g x := czxActW g.toAdd x.toAdd
   isReduction := by
-    refine forall_z2' (forall_z2' ?_ ?_) (forall_z2' ?_ ?_)
+    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_) (Multiplicative.forall_zmod_two ?_ ?_)
     · exact isReduction_one 0
     · exact isReduction_one 1
     · exact isReduction_gen 0
