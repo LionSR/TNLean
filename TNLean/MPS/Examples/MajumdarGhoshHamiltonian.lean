@@ -220,13 +220,8 @@ claim. -/
 theorem majumdarGhosh_groundSpace_three_eq_eigenspace :
     groundSpace majumdarGhoshTensor 3 =
       Module.End.eigenspace majumdarGhoshTerm (-3 / 8 : ℂ) := by
-  have hX : (↑((Real.sqrt 2)⁻¹) : ℂ) * ↑(Real.sqrt 2) = 1 := by
-    push_cast
-    exact inv_mul_cancel₀ (Complex.ofReal_ne_zero.mpr (by positivity))
-  have hX2 : (↑((Real.sqrt 2)⁻¹) : ℂ) ^ 2 = 1 / 2 := by
-    push_cast
-    rw [inv_pow, Complex.ofReal_sqrt_sq 2 (by norm_num)]
-    norm_num
+  have hX := Complex.invSqrtTwo_mul_sqrtTwo
+  have hX2 := Complex.invSqrtTwo_sq
   ext v
   rw [Module.End.mem_eigenspace_iff, majumdarGhoshTerm_eigen_iff_coords]
   constructor
@@ -249,8 +244,7 @@ theorem majumdarGhosh_groundSpace_three_eq_eigenspace :
       simp only [Fin.zero_eta, Fin.mk_one, majumdarGhoshTensor, Matrix.trace_fin_three,
         Matrix.mul_apply, Fin.sum_univ_three, Matrix.of_apply, Matrix.cons_val',
         Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.empty_val',
-        Matrix.cons_val_fin_one, Matrix.head_cons, Matrix.head_fin_const, Matrix.tail_cons,
-        one_div]
+        Matrix.cons_val_fin_one, Matrix.head_cons, Matrix.head_fin_const, Matrix.tail_cons]
     · linear_combination -h000
     · linear_combination 2 * v ![0, 0, 1] * hX2
     · linear_combination -(v ![1, 0, 0]) * hX - 2 * v ![0, 0, 1] * hX2 - h1

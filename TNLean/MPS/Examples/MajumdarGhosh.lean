@@ -111,36 +111,30 @@ A^1 =
 The relative sign in \(A^1\) is the antisymmetry of the singlet \(Y\). -/
 def majumdarGhoshTensor : MPSTensor 2 3 := fun i =>
   match i with
-  | 0 => !![0, 1, 0; 0, 0, 0; (↑(1 / Real.sqrt 2) : ℂ), 0, 0]
-  | 1 => !![0, 0, 1; -(↑(1 / Real.sqrt 2) : ℂ), 0, 0; 0, 0, 0]
+  | 0 => !![0, 1, 0; 0, 0, 0; Complex.invSqrtTwo, 0, 0]
+  | 1 => !![0, 0, 1; -Complex.invSqrtTwo, 0, 0; 0, 0, 0]
 
 @[simp]
 lemma majumdarGhoshTensor_zero :
-    majumdarGhoshTensor 0 = !![0, 1, 0; 0, 0, 0; (↑(1 / Real.sqrt 2) : ℂ), 0, 0] := rfl
+    majumdarGhoshTensor 0 = !![0, 1, 0; 0, 0, 0; Complex.invSqrtTwo, 0, 0] := rfl
 
 @[simp]
 lemma majumdarGhoshTensor_one :
-    majumdarGhoshTensor 1 = !![0, 0, 1; -(↑(1 / Real.sqrt 2) : ℂ), 0, 0; 0, 0, 0] := rfl
-
-/-! ### Scalar arithmetic -/
-
-private lemma inv_ofReal_sqrt2_mul_self :
-    (↑(Real.sqrt 2) : ℂ)⁻¹ * (↑(Real.sqrt 2) : ℂ)⁻¹ = 1 / 2 := by
-  simpa [one_div] using Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)
+    majumdarGhoshTensor 1 = !![0, 0, 1; -Complex.invSqrtTwo, 0, 0; 0, 0, 0] := rfl
 
 /-! ### Conjugate transposes -/
 
 @[simp]
 lemma majumdarGhoshTensor_zero_conjTranspose :
-    (majumdarGhoshTensor 0)ᴴ = !![0, 0, (↑(1 / Real.sqrt 2) : ℂ); 1, 0, 0; 0, 0, 0] := by
+    (majumdarGhoshTensor 0)ᴴ = !![0, 0, Complex.invSqrtTwo; 1, 0, 0; 0, 0, 0] := by
   ext a b; fin_cases a <;> fin_cases b <;>
-    simp [majumdarGhoshTensor, Matrix.conjTranspose_apply, Complex.conj_ofReal]
+    simp [majumdarGhoshTensor, Matrix.conjTranspose_apply]
 
 @[simp]
 lemma majumdarGhoshTensor_one_conjTranspose :
-    (majumdarGhoshTensor 1)ᴴ = !![0, -(↑(1 / Real.sqrt 2) : ℂ), 0; 0, 0, 0; 1, 0, 0] := by
+    (majumdarGhoshTensor 1)ᴴ = !![0, -Complex.invSqrtTwo, 0; 0, 0, 0; 1, 0, 0] := by
   ext a b; fin_cases a <;> fin_cases b <;>
-    simp [majumdarGhoshTensor, Matrix.conjTranspose_apply, Complex.conj_ofReal]
+    simp [majumdarGhoshTensor, Matrix.conjTranspose_apply]
 
 /-! ### Canonical form and transfer map -/
 
@@ -152,7 +146,7 @@ theorem majumdarGhosh_left_canonical :
   ext a b
   fin_cases a <;> fin_cases b <;>
     simp [majumdarGhoshTensor, Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Fin.sum_univ_three, Complex.conj_ofReal, inv_ofReal_sqrt2_mul_self]
+      Fin.sum_univ_three, Complex.invSqrtTwo_mul_self]
   all_goals norm_num
 
 /-- The transfer map of the Majumdar-Ghosh tensor sends the identity to
@@ -164,7 +158,7 @@ theorem majumdarGhosh_transferMap_one :
   simp only [Kraus.transferMap_apply, Fin.sum_univ_two, Matrix.mul_one, Matrix.add_apply]
   fin_cases a <;> fin_cases b <;>
     simp [majumdarGhoshTensor, Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Fin.sum_univ_three, Complex.conj_ofReal, inv_ofReal_sqrt2_mul_self]
+      Fin.sum_univ_three, Complex.invSqrtTwo_mul_self]
   all_goals norm_num
 
 /-! ### Non-injectivity -/

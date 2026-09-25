@@ -263,7 +263,7 @@ lemma majumdarGhoshSingletY_pow_two_mul (m : ℕ) :
 /-- The normalized singlet amplitude \(Y_{ab}/\sqrt2\): the coefficient of
 \(|ab\rangle\) in \((|10\rangle-|01\rangle)/\sqrt2\). -/
 def majumdarGhoshSinglet (a b : Fin 2) : ℂ :=
-  (↑(1 / Real.sqrt 2) : ℂ) * majumdarGhoshSingletY a b
+  Complex.invSqrtTwo * majumdarGhoshSingletY a b
 
 /-! ### The bond-dimension-three tensor -/
 
@@ -450,12 +450,10 @@ theorem majumdarGhoshBondSinglet_mpv_eq_smul {N : ℕ} (hN : Even N) (hNpos : 0 
       (↑(Real.sqrt 2) : ℂ) ^ (N / 2) * mpv majumdarGhoshTensor σ := by
   rw [majumdarGhoshBondSinglet_mpv_eq_pairCovering hN hNpos,
     majumdarGhosh_mpv_eq_pairCovering hN hNpos]
-  have h2 : (↑(Real.sqrt 2) : ℂ) * (↑(1 / Real.sqrt 2) : ℂ) = 1 := by
-    rw [← Complex.ofReal_mul, mul_one_div_cancel (by positivity), Complex.ofReal_one]
   simp only [pairCoveringEven, pairCoveringOdd, majumdarGhoshSinglet, Finset.prod_mul_distrib,
-    Finset.prod_const,
-    Finset.card_univ, Fintype.card_fin]
-  rw [mul_add, ← mul_assoc, ← mul_assoc, ← mul_pow, h2, one_pow, one_mul, one_mul]
+    Finset.prod_const, Finset.card_univ, Fintype.card_fin]
+  rw [mul_add, ← mul_assoc, ← mul_assoc, ← mul_pow, Complex.sqrtTwo_mul_invSqrtTwo, one_pow,
+    one_mul, one_mul]
 
 end MPSTensor
 
