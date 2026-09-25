@@ -357,7 +357,7 @@ built for the blocked tensors.  Documented in
 
 Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 156--200 and 269--277; arXiv:2203.12563,
 `REsubmission.tex`, lines 361--362 (the fusion rules). -/
-noncomputable def ofStarBlocked (hT : ∀ c, Kraus.IsInjective (T c).toMPSTensor)
+noncomputable def ofStarBlocked (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor)
     (hD : ∀ c, 0 < D c)
     (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor)
     (htr : ∀ a b, ∀ w : List (Fin (p * p)), w ≠ [] →
@@ -367,12 +367,16 @@ noncomputable def ofStarBlocked (hT : ∀ c, Kraus.IsInjective (T c).toMPSTensor
     (hstar : ∀ a b, ∀ i, ((mulTensor (T a) (T b)).toMPSTensor i)ᴴ ∈
       Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)).toMPSTensor)) :
     CompleteZipperFusionFamily (Fin g)
-      (MPSTensor.blockPhysDim p (jointBlockLength T (fun c => (hT c).isNormal) hD hne)) :=
-  ofCompressionBlocked (fun c => (hT c).isNormal) hD hne
-    (fun a b => (exists_pairCompression_remainder_eq_zero_of_star hD hT a b
-      (htr a b) (hstar a b)).choose)
-    (fun a b => (exists_pairCompression_remainder_eq_zero_of_star hD hT a b
-      (htr a b) (hstar a b)).choose_spec)
+      (MPSTensor.blockPhysDim p (jointBlockLength T hT hD hne)) :=
+  ofCompressionBlocked hT hD hne
+    (fun a b => (MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
+      (D := fun s : (c : Fin g) × Fin (N a b c) => D s.1) Finset.univ
+      (fun s : (c : Fin g) × Fin (N a b c) => (T s.1).toMPSTensor)
+      (fun s _ => hT s.1) (fun s _ => hD s.1) _ (htr a b) (hstar a b)).choose)
+    (fun a b => (MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
+      (D := fun s : (c : Fin g) × Fin (N a b c) => D s.1) Finset.univ
+      (fun s : (c : Fin g) × Fin (N a b c) => (T s.1).toMPSTensor)
+      (fun s _ => hT s.1) (fun s _ => hD s.1) _ (htr a b) (hstar a b)).choose_spec)
 
 end CompleteZipperFusionFamily
 
