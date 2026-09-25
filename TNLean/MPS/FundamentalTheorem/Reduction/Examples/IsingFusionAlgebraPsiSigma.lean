@@ -19,8 +19,8 @@ only the fusion rules of the category, so the operator identities here are the I
 line 1268, implied but not printed.
 
 **Formalized here.** At every positive length, `O_ψ O_σ = O_σ O_ψ = O_σ` for the periodic
-operator `O_σ` of `√2 A_σ`; both sides are linear in `O_σ`, so the identities hold for every
-rescaling of the `σ` tensor.
+operator `O_σ` of `√2 A_σ`, and hence, since both sides are linear in `O_σ`, for the periodic
+operator of the unscaled tensor `A_σ = (√2)⁻¹ (√2 A_σ)`.
 
 **Local fix (sigma scaling):** the tensors omit the factors `v_e v_f` of the `G`-symbols
 (lines 1257–1260) and store the `σ` tensor multiplied by `√2`; the identities are proved for
@@ -33,6 +33,9 @@ permutation gauge of `IsingFusionAlgebra`; the letter identities are decided ove
 ## Main results
 
 * `IsingTwist.isingPsi_mul_isingSigma`, `IsingTwist.isingSigma_mul_isingPsi`.
+* `IsingTwist.isingPsi_mul_isingSigma_normalized`,
+  `IsingTwist.isingSigma_normalized_mul_isingPsi`: the same identities for the unscaled
+  tensor `A_σ`.
 
 ## References
 - [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
@@ -83,5 +86,21 @@ theorem isingSigma_mul_isingPsi {N : ℕ} (hN : 0 < N) :
       rw [isingSigmaZ_eq_smul_single i j, padZsqrt2_smul_single]
       revert i j
       decide +kernel) hN
+
+/-- **`O_ψ O_σ = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and
+1323, as in `isingPsi_mul_isingSigma`: for the rescaled tensor `(√2)⁻¹ • isingSigma`, which is `A_σ`
+without the factor `√2`, the fusion rule `ψ × σ = σ` holds at every positive length. -/
+theorem isingPsi_mul_isingSigma_normalized {N : ℕ} (hN : 0 < N) :
+    MPOTensor.mpo isingPsi N * MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N =
+      MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N := by
+  rw [MPOTensor.mpo_smul, Matrix.mul_smul, isingPsi_mul_isingSigma hN]
+
+/-- **`O_σ O_ψ = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and
+1323, as in `isingSigma_mul_isingPsi`: for the rescaled tensor `(√2)⁻¹ • isingSigma`, which is `A_σ`
+without the factor `√2`, the fusion rule `σ × ψ = σ` holds at every positive length. -/
+theorem isingSigma_normalized_mul_isingPsi {N : ℕ} (hN : 0 < N) :
+    MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N * MPOTensor.mpo isingPsi N =
+      MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N := by
+  rw [MPOTensor.mpo_smul, Matrix.smul_mul, isingSigma_mul_isingPsi hN]
 
 end IsingTwist
