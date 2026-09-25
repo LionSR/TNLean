@@ -28,9 +28,8 @@ $\bigoplus_c Y_c$: no dressing by long words is needed.  This is the converse di
 gauge freedom of arXiv:1511.08090, lines 164--166, argued at lines 191--200, and the gauge
 freedom of fusion and action tensors of arXiv:2203.12563, lines 415--424 and 595--602.
 
-The family `c ↦ Y_c` is, for one pair of labels `(a, b)`, the component of a fusion gauge in
-the sense of `MPOTensor.CompleteZipperFusionFamily.FusionGauge` (arXiv:1511.08090,
-lines 164--166).  The complete zipper fusion families carry isometric fusion tensors and
+The family `c ↦ Y_c` is, for one pair of labels `(a, b)`, the component of the fusion gauge of
+the complete-zipper family, planned in #7985 (arXiv:1511.08090, lines 164--166).  The complete zipper fusion families carry isometric fusion tensors and
 their own bookkeeping of all pairs, so the comparison there is not made here.
 
 ## References
