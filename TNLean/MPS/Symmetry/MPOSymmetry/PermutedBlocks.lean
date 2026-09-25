@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.Symmetry.MPOSymmetry.AnomalyObstruction
 
 /-!
@@ -30,6 +31,11 @@ case of a one-point set.
   another at every positive length.
 * `MPOTensor.GroupFamily.BlockActionData`: a choice of action tensors for permuted blocks.
 * `MPOTensor.GroupFamily.BlockActionData.lSymbol`: the L-symbols.
+
+## Main results (identity action)
+
+* `MPOTensor.GroupFamily.isReduction_actTensor_idTensor`: the bond-one identity operator acts
+  trivially on every state.
 
 ## Main results
 
@@ -113,6 +119,50 @@ theorem isReduction_castBlock {n : ℕ} {B : MPSTensor d n} {y y' : X}
     MPSTensor.IsReduction B (A y') (castBlock D e * V) (W * castBlock D e.symm) := by
   subst e
   simpa using h
+
+/-! ### The identity operator acts trivially -/
+
+omit [Group G] [MulAction G X] in
+/-- The letters of the action tensor of the bond-one identity operator tensor are those of the
+state, after identifying `Fin (1 * D)` with `Fin D`. -/
+theorem actTensor_idTensor_apply {D₀ : ℕ} (B : MPSTensor d D₀) (i : Fin d)
+    (x y : Fin (1 * D₀)) :
+    actTensor (MPOTensor.idTensor d) B i x y =
+      B i (finCongr (one_mul D₀) x) (finCongr (one_mul D₀) y) := by
+  have hx : ∀ z : Fin (1 * D₀), (finProdFinEquiv.symm z).2 = finCongr (one_mul D₀) z := by
+    intro z
+    ext
+    simp [Fin.modNat, Nat.mod_eq_of_lt (show (z : ℕ) < D₀ by simpa using z.2)]
+  have h1 : ∀ z : Fin (1 * D₀), (finProdFinEquiv.symm z).1 = 0 := fun _ ↦ Subsingleton.elim _ _
+  simp only [actTensor_apply, Matrix.submatrix_apply, Matrix.sum_apply,
+    Matrix.kroneckerMap_apply, MPOTensor.idTensor, hx, h1]
+  rw [Finset.sum_eq_single i (fun b _ hb ↦ by simp [Ne.symm hb]) (by simp)]
+  simp
+
+omit [Group G] [MulAction G X] in
+/-- **The identity operator acts trivially on every state**: the action tensor of the bond-one
+identity tensor reduces onto the state along the identification `Fin (1 * D) ≃ Fin D`.
+This is the trivial action tensor of the identity element in the convention of
+arXiv:2502.20257, lines 1936--1937. -/
+theorem isReduction_actTensor_idTensor {D₀ : ℕ} (B : MPSTensor d D₀) :
+    MPSTensor.IsReduction (actTensor (MPOTensor.idTensor d) B) B
+      (finCongr (one_mul D₀)).symm.toPEquiv.toMatrix (finCongr (one_mul D₀)).toPEquiv.toMatrix := by
+  have hB : ∀ i, actTensor (MPOTensor.idTensor d) B i =
+      (B i).submatrix (finCongr (one_mul D₀)) (finCongr (one_mul D₀)) :=
+    fun i ↦ Matrix.ext fun x y ↦ actTensor_idTensor_apply B i x y
+  refine MPSTensor.IsReduction.of_local_compression ?_ (fun i ↦ ?_) (fun i j ↦ ?_)
+  · rw [PEquiv.toMatrix_toPEquiv_mul]
+    ext a b
+    simp [PEquiv.toMatrix_apply, Matrix.one_apply]
+  · rw [hB, PEquiv.toMatrix_toPEquiv_mul, PEquiv.mul_toMatrix_toPEquiv]
+    ext a b
+    simp
+  · rw [hB, hB, Matrix.mul_assoc (Matrix.submatrix _ _ _), PEquiv.toMatrix_toPEquiv_mul]
+    have hWV : (finCongr (one_mul D₀)).symm.toPEquiv.toMatrix.submatrix
+        (finCongr (one_mul D₀)) id = (1 : Matrix (Fin (1 * D₀)) (Fin (1 * D₀)) ℂ) := by
+      ext a b
+      simp [PEquiv.toMatrix_apply, Matrix.one_apply]
+    rw [hWV, Matrix.mul_one]
 
 /-! ### Action tensors -/
 

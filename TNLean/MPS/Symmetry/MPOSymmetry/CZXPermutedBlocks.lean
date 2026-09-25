@@ -59,32 +59,6 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1138--1140. -/
 def czxBlock (x : Multiplicative (Fin 2)) : MPSTensor 2 (czxBlockDim x) :=
   ghzSectorTensor x.toAdd
 
-theorem evalWord_ghzSectorTensor (x : Fin 2) {N : ℕ} (σ : Fin N → Fin 2) :
-    Kraus.evalWord (ghzSectorTensor x) (List.ofFn σ) =
-      if σ = (fun _ ↦ x) then 1 else 0 := by
-  induction N with
-  | zero => simp [Subsingleton.elim σ (fun _ ↦ x)]
-  | succ N ih =>
-      rw [List.ofFn_succ, Kraus.evalWord_cons, ih (fun i ↦ σ i.succ)]
-      have key : (σ = fun _ ↦ x) ↔ (σ 0 = x ∧ (fun i : Fin N ↦ σ i.succ) = fun _ ↦ x) := by
-        constructor
-        · rintro rfl
-          exact ⟨rfl, rfl⟩
-        · rintro ⟨h0, hs⟩
-          funext i
-          exact Fin.cases h0 (fun j ↦ congrFun hs j) i
-      by_cases h0 : σ 0 = x <;>
-        by_cases hs : (fun i : Fin N ↦ σ i.succ) = (fun _ ↦ x) <;>
-          simp [ghzSectorTensor, h0, hs, key]
-
-/-- The periodic vector of a product state is the indicator of the constant configuration. -/
-theorem mpv_ghzSectorTensor (x : Fin 2) {N : ℕ} :
-    (fun σ : Fin N → Fin 2 ↦ MPSTensor.mpv (ghzSectorTensor x) σ) =
-      Pi.single (fun _ ↦ x) 1 := by
-  funext σ
-  rw [MPSTensor.mpv, MPSTensor.coeff, evalWord_ghzSectorTensor, Pi.single_apply]
-  split_ifs <;> simp
-
 private theorem forall_z2' {P : Multiplicative (Fin 2) → Prop}
     (h0 : P (Multiplicative.ofAdd 0)) (h1 : P (Multiplicative.ofAdd 1)) : ∀ x, P x := by
   intro x
@@ -133,29 +107,24 @@ theorem actTensor_czxDecoratedTensor_ghzSectorTensor (s i : Fin 2) :
       Fin.sum_univ_two, Matrix.kroneckerMap_apply, finProdFinEquiv, Fin.rev, Fin.divNat,
       Fin.modNat]
 
-theorem actTensor_idTensor_ghzSectorTensor (s i : Fin 2) :
-    actTensor (MPOTensor.idTensor 2) (ghzSectorTensor s) i = ghzSectorTensor s i := by
-  ext r c
-  fin_cases s <;> fin_cases i <;> fin_cases r <;> fin_cases c <;>
-    simp [actTensor_apply, MPOTensor.idTensor, ghzSectorTensor, Fin.sum_univ_two]
-
-/-- The left action tensors: trivial for the identity, `⟨1|` on `|0⟩^{⊗ N}` and `-⟨0|` on
+/-- The left action tensors: the trivial identification of `isReduction_actTensor_idTensor` for
+the identity, `⟨1|` on `|0⟩^{⊗ N}` and `-⟨0|` on
 `|1⟩^{⊗ N}` for the generator.
 
 **Local fix (printed left action vectors):** arXiv:2405.00439, lines 1272 and 1300, print
 `⟨+̂|` for both states; see the module docstring and
 `docs/paper-gaps/gs24_czx_action_left_vectors.tex`. -/
 def czxActV : (a s : Fin 2) → Matrix (Fin 1) (Fin (czxLabelBondDim a * 1)) ℂ
-  | ⟨0, _⟩, _ => (1 : Matrix (Fin 1) (Fin 1) ℂ)
+  | ⟨0, _⟩, _ => (finCongr (one_mul 1)).symm.toPEquiv.toMatrix
   | ⟨1, _⟩, ⟨0, _⟩ => !![0, 1]
   | ⟨1, _⟩, ⟨1, _⟩ => !![-1, 0]
   | ⟨n + 2, h⟩, _ => absurd h (by omega)
   | _, ⟨n + 2, h⟩ => absurd h (by omega)
 
-/-- The right action tensors: trivial for the identity, `|+̂⟩` on `|0⟩^{⊗ N}` and `-|+̂⟩` on
-`|1⟩^{⊗ N}` for the generator, as printed in arXiv:2405.00439, lines 1273 and 1301. -/
+/-- The right action tensors: the trivial identification for the identity, `|+̂⟩` on
+`|0⟩^{⊗ N}` and `-|+̂⟩` on `|1⟩^{⊗ N}` for the generator, as printed in arXiv:2405.00439, lines 1273 and 1301. -/
 def czxActW : (a s : Fin 2) → Matrix (Fin (czxLabelBondDim a * 1)) (Fin 1) ℂ
-  | ⟨0, _⟩, _ => (1 : Matrix (Fin 1) (Fin 1) ℂ)
+  | ⟨0, _⟩, _ => (finCongr (one_mul 1)).toPEquiv.toMatrix
   | ⟨1, _⟩, ⟨0, _⟩ => !![1; 1]
   | ⟨1, _⟩, ⟨1, _⟩ => !![-1; -1]
   | ⟨n + 2, h⟩, _ => absurd h (by omega)
@@ -177,13 +146,7 @@ private theorem isReduction_gen (s : Fin 2) :
 private theorem isReduction_one (s : Fin 2) :
     MPSTensor.IsReduction (actTensor (MPOTensor.idTensor 2) (ghzSectorTensor s))
       (ghzSectorTensor s) (czxActV 0 s) (czxActW 0 s) := by
-  have h : actTensor (MPOTensor.idTensor 2) (ghzSectorTensor s) = ghzSectorTensor s :=
-    funext fun i ↦ actTensor_idTensor_ghzSectorTensor s i
-  have key : MPSTensor.IsReduction (ghzSectorTensor s) (ghzSectorTensor s)
-      (1 : Matrix (Fin 1) (Fin 1) ℂ) (1 : Matrix (Fin 1) (Fin 1) ℂ) :=
-    ⟨Matrix.one_mul 1, fun w ↦ by rw [Matrix.one_mul, Matrix.mul_one]⟩
-  rw [h]
-  fin_cases s <;> exact key
+  fin_cases s <;> exact isReduction_actTensor_idTensor _
 
 /-- **Action tensors of the CZX representation on the two product states.**
 

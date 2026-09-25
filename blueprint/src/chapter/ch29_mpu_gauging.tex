@@ -4475,12 +4475,15 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
         MPOTensor.GroupFamily.BlockActionData.actV,
         MPOTensor.GroupFamily.BlockActionData.fuseV,
         MPOTensor.GroupFamily.BlockActionData.lSymbol,
-        MPOTensor.GroupFamily.BlockActionData.isDressedProportional_lSymbol}
+        MPOTensor.GroupFamily.BlockActionData.isDressedProportional_lSymbol,
+        MPOTensor.GroupFamily.actTensor_idTensor_apply,
+        MPOTensor.GroupFamily.isReduction_actTensor_idTensor}
     \leanok
     \uses{def:mpug_anomaly_three_cochain, thm:mpug_action_tensor_reductions,
         def:mpug_l_symbols}
     Action tensors $(V_{g,x},W_{g,x})$ reducing $O_g\cdot A_x$ onto $A_{gx}$
-    exist. The stacked action $(O_gO_h)\cdot A_x$ reduces onto
+    exist; for the bond-one identity tensor they are the identification of
+    the bond spaces. The stacked action $(O_gO_h)\cdot A_x$ reduces onto
     $A_{g(hx)}=A_{(gh)x}$ along two trees, with left boundaries
     \begin{align}
         V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &  &
