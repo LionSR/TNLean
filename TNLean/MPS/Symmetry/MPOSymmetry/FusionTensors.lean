@@ -230,7 +230,7 @@ length (the periodic-boundary form of lines 567--568), with multiplicities `M_y 
 normal tensors `A_y` of positive bond dimension.  Then there are action tensors `V s`, `W s`
 for every copy `s = (y, i)`, `i < M_y`, such that `(V s, W s)` reduces the action tensor
 `T · A_x` onto `A_y`, distinct copies are biorthogonal, and the remainder of the decomposition
-`∑_l T^{ml} A_x^l = ∑_{y,i} V̂_{ax}^{y,i} A_y^m V_{ax}^{y,i}` has vanishing words of length at
+`∑_l T^{ml} A_x^l = ∑_{y,i} \hat V_{ax}^{y,i} A_y^m V_{ax}^{y,i}` has vanishing words of length at
 least the bond dimension of `T · A_x`. -/
 theorem exists_actionTensors_of_mpo_mulVec_eq_sum {κ : Type*} [Fintype κ]
     {χ Dx : ℕ} {D : κ → ℕ} (T : MPOTensor d χ) (Ax : MPSTensor d Dx)
