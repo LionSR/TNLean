@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Matrix.Basis
-import QICLean.Kraus.Injectivity
-import TNLean.Algebra.MatrixSingleSpan
+import TNLean.MPS.Core.NormalityFromTwoWords
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.MPDO.OperatorProduct
 
@@ -164,30 +163,10 @@ private theorem single_one_one : Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ)
   ext a b
   fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt]
 
-/-- **Normality from two-word matrix units.** A tensor is normal when every matrix unit is a
-linear combination of two words of length two: the length-two words then span the full matrix
-algebra. -/
-theorem isNormal_of_single_eq_two_words {d D : ℕ} (A : MPSTensor d D)
-    (h : ∀ i j : Fin D, ∃ a b c e : Fin d, ∃ u v : ℂ,
-      Matrix.single i j (1 : ℂ) = u • (A a * A b) + v • (A c * A e)) :
-    Kraus.IsNormal A := by
-  refine ⟨2, two_pos, ?_⟩
-  rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
-  set T := Submodule.span ℂ
-    (Set.range fun σ : Fin 2 → Fin d => Kraus.evalWord A (List.ofFn σ)) with hT
-  have hword : ∀ a b : Fin d, A a * A b ∈ T := by
-    intro a b
-    refine Submodule.subset_span ⟨![a, b], ?_⟩
-    simp [Kraus.evalWord, List.ofFn_succ]
-  refine T.eq_top_of_forall_single_mem fun i j => ?_
-  obtain ⟨a, b, c, e, u, v, hX⟩ := h i j
-  rw [hX]
-  exact T.add_mem (T.smul_mem _ (hword a b)) (T.smul_mem _ (hword c e))
-
 /-- **The bond-two tensor of the note is normal.** Its length-two words span the full
 two-by-two matrix algebra (construction note, `ex:p5ft-czx`). -/
 theorem czxMPS_isNormal : Kraus.IsNormal czxMPS := by
-  refine isNormal_of_single_eq_two_words czxMPS fun i j => ?_
+  refine MPSTensor.isNormal_of_single_eq_two_words czxMPS fun i j => ?_
   fin_cases i <;> fin_cases j
   exacts [⟨2, 2, 1, 2, _, _, single_zero_zero⟩, ⟨2, 1, 1, 1, _, _, single_zero_one⟩,
     ⟨2, 2, 1, 2, _, _, single_one_zero⟩, ⟨2, 1, 1, 1, _, _, single_one_one⟩]

@@ -8,7 +8,7 @@
 \date{2026-09-24}
 \begin{document}
 \maketitle
-\gapnote{clarification}{resolved}
+\gapnote{local-correction}{resolved}
 
 \section{What the source prints}
 Appendix D.1.1 of \cite{Bultinck2017Anyons} gives the categorical data of the
@@ -66,12 +66,25 @@ $P_L=w_1O_1+w_\tau O_\tau$, which is idempotent at every positive length.\footno
     \leanid{FibonacciCompression.fibProjector_eq_trace_fibDelta},
     \leanid{FibonacciCompression.fibProjector_mul_self}.}
 The review \cite{Cirac2021Matrix} writes the operator tensor with an
-additional prefactor $1/\sqrt{d_Ad_D}$ and the source includes closed-loop
-factors $v_a$; both fix a normalization of the unprinted tensor. The checked
-statements concern the bare F-symbols (\ref{eq:fib_block}), and no operator
-statement is made for a rescaled tensor. This is a choice of normalization for
-an unprinted tensor, not an error in the source.\footnote{Review traceability:
-    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2613--2625.}
+additional prefactor $1/\sqrt{d_Ad_D}$, and the source builds its tensor from
+the G-symbols $G^{abc}_{def}=F^{abc}_{def}/(v_ev_f)$ together with closed-loop
+factors $v_a$. The checked statements concern the
+bare F-symbols (\ref{eq:fib_block}). No relation between these blocks and the
+source's diagram tensor is established: in particular it is not shown that the
+two are related by a local diagonal similarity preserving the fusion rules. The
+blocks (\ref{eq:fib_block}) are therefore not identified with the source's
+tensor, and no operator statement is made for the prefactored or the
+G-symbol tensor. Since the source prints no numeric entries, what is recorded
+is a choice of explicit blocks with the printed block dimensions, weights and
+fusion rules, not an error in the source.\footnote{Review traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2613--2625; source:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 1026--1040 and
+    1257--1260.}
+
+\section{The empty chain}
+The source asks for $P_L^2=P_L$ at every length; the exclusion of the empty
+chain $L=0$, where $P_0$ is a scalar different from $0$ and $1$, is recorded
+separately in \path{docs/paper-gaps/bmwshv17_fibonacci_projector_positive_length.tex}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

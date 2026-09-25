@@ -1,0 +1,85 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Ising String-Net Operators: the Normalization of the $\sigma$ Tensor}
+\author{}
+\date{2026-09-24}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{open}
+
+\section{The source statement}
+
+Appendix~D.2, ``Ising string-net'', of Ref.~\cite{Bultinck2017Anyons}
+lists the labels $1,\sigma,\psi$ of the Ising category, the fusion rules with
+the single nontrivial rule $\sigma\times\sigma=1+\psi$, the quantum dimensions
+$d_1=d_\psi=1$, $d_\sigma=\sqrt2$, and the nontrivial $F$-symbols
+$F^{\sigma\sigma\sigma}_{\sigma ab}=\pm1/\sqrt2$ and
+$F^{\psi\sigma\psi}_{\sigma\sigma\sigma}=F^{\sigma\psi\sigma}_{\psi\sigma\sigma}=-1$.
+It then says that the matrix product operator tensors are built from the
+$G$-symbols $G^{abc}_{def}=F^{abc}_{def}/(v_ev_f)$, $v_i=\sqrt{d_i}$,
+``similarly as for the Fibonacci model''. For the Fibonacci model the source
+states that the operator blocks satisfy the fusion rules; for the Ising model
+it prints only the fusion rules of the category.\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 1257--1268 and
+    1305--1323.}
+The Ising analogue of the Fibonacci statement is, for the three blocks
+$O_1$, $O_\psi$, $O_\sigma$ on a ring of $N$ sites, the algebra
+\begin{align}
+    O_\psi^2 = O_1,\qquad O_\sigma O_\psi = O_\psi O_\sigma = O_\sigma,\qquad
+    O_\sigma^2 = O_1 + O_\psi,
+    \label{eq:bmwshv17_ising_fusion_algebra}
+\end{align}
+with $O_1$ the unit on the admissible closed paths. The same abstract algebra
+is printed in Ref.~\cite{Aasen2016IsingDefects} for a different realization,
+the defect operators of the Ising lattice model acting on spin and dual-spin
+configurations.%
+\footnote{Source traceability:
+    \path{References/1601.07185/source/Ising-Defects.tex}, lines 1051--1055.}
+
+\section{The chosen normalization}
+
+The formal tensors have physical index the fusion-tree label $(x',\rho,x)$
+with $x\in x'\otimes\rho$ (ten labels) and bond index the pair of outer
+labels, and their letters are the $F$-symbols
+$[F^{a x'\rho}_y]_{y'x}$ themselves, without the factors $v_ev_f$ of the
+$G$-symbols. In addition the $\sigma$ tensor is stored as $\sqrt2A_\sigma$,
+so that its entries are $0,\pm1,\pm\sqrt2$ rather than
+$0,\pm1/\sqrt2,\pm1$, and every entry of the three tensors lies in
+$\mathbb Z[\sqrt2]$. The factor $\sqrt2$ is a per-site scalar, so the
+periodic operator of the stored tensor is $2^{N/2}$ times that of
+$(\sqrt2)^{-1}(\sqrt2A_\sigma)$, and the rule $O_\sigma^2=O_1+O_\psi$ for
+the latter is equivalent to
+\begin{align}
+    O_N(\sqrt2A_\sigma)^2 = 2^N\bigl(O_N(A_1)+O_N(A_\psi)\bigr).
+    \label{eq:bmwshv17_ising_scaled_rule}
+\end{align}
+Both forms are proved.
+
+The omission of the factors $v_ev_f$ is a different matter. Whether it
+leaves the periodic operators unchanged, for instance because it is a
+diagonal change of bond basis, is not shown, and the identification of the
+formal letters with the $G$-symbol tensors of the source figure is recorded
+only in the verification data
+\path{Notes/OpenProblemsTN/checks/asym_ising_action_data.md}. The
+algebra~(\ref{eq:bmwshv17_ising_fusion_algebra}) is therefore proved for
+the $v$-free tensors, not for the source tensors themselves.
+
+\section{Formal boundary}
+
+The closed-path kernels of $O_1$ and $O_\psi$, the eight products with at
+most one factor $\sigma$, and both forms of
+(\ref{eq:bmwshv17_ising_scaled_rule}) are proved at every positive length
+for the $v$-free tensors. Elimination: define the $G$-symbol tensors of the
+source and prove that they are related to the formal tensors by a bond
+similarity, so that the periodic operators coincide.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
