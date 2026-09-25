@@ -73,6 +73,7 @@ def czxFamily : GroupFamily (Multiplicative (Fin 2)) 2 where
 /-- The generator of `ℤ₂`, written multiplicatively. -/
 def czxGen : Multiplicative (Fin 2) := Multiplicative.ofAdd 1
 
+/-- The generator of `ℤ₂` has order two. -/
 theorem czxGen_pow_two : czxGen ^ 2 = 1 := by decide
 
 private theorem forall_z2 {P : Multiplicative (Fin 2) → Prop}
@@ -272,6 +273,9 @@ private theorem castMat_gen_one_gen :
   fin_cases i; fin_cases j
   rfl
 
+/-- The left fusion tree of `(s,s,s)`, which fuses the first two factors first, is the
+integer matrix `czxLeftTreeInt`; it is one of the two trees compared in `eq:3-cocycle` of
+arXiv:2502.20257. -/
 theorem czxFusionData_leftV_gen_gen_gen :
     czxFusionData.leftV czxGen czxGen czxGen = complexOfInt czxLeftTreeInt := by
   change (1 : Matrix (Fin 2) (Fin 2) ℂ) * kronId (complexOfInt czxFusionVHatInt) 2 = _
@@ -279,6 +283,9 @@ theorem czxFusionData_leftV_gen_gen_gen :
   congr 1
   decide
 
+/-- The right fusion tree of `(s,s,s)`, which fuses the last two factors first, is the
+integer matrix `czxRightTreeInt`; it is the other tree compared in `eq:3-cocycle` of
+arXiv:2502.20257. -/
 theorem czxFusionData_rightV_gen_gen_gen :
     czxFusionData.rightV czxGen czxGen czxGen = complexOfInt czxRightTreeInt := by
   rw [GroupFamily.FusionData.rightV, castMat_gen_gen_gen]
