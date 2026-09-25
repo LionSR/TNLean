@@ -120,4 +120,5 @@ if __name__ == "__main__":
     test_split_tex_lean_decls_handles_continuations_and_top_level_commas()
     test_structure_fields_are_declarations()
     test_duplicate_lean_tags_are_reported_once_per_declaration()
+    test_root_prefixed_decls_escape_namespace()
     print("Blueprint declaration scanner tests passed.")
