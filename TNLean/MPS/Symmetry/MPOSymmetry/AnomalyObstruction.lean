@@ -90,10 +90,6 @@ theorem FixesMPV.sameMPV₂Pos_actTensor {D₁ D₂ : ℕ} {T : MPOTensor d D₁
     funext (hB N hN)
   rw [← congrFun (mpo_mulVec_mpv T B N) σ, hB', hT N hN]
 
-omit [Group G] in
-theorem sameMPV₂Pos_refl (A : MPSTensor d D) : MPSTensor.SameMPV₂Pos A A :=
-  fun _ _ _ ↦ rfl
-
 /-! ### Action tensors -/
 
 /-- A choice of action tensors: for every group element `g`, a reduction `(V_g, W_g)` of the
@@ -139,11 +135,15 @@ noncomputable def fuseV (g h : G) :
   ad.V (g * h) * kronId (fd.V g h) D
 
 omit [Group G] in
+/-- Acting with `h` and then with `g` gives a reduction of `(O_g O_h) · A` onto `A` with left
+boundary `actV g h`. -/
 theorem exists_isReduction_actV (g h : G) : ∃ W, MPSTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) A (ad.actV g h) W :=
   ⟨_, (((ad.isReduction h).actTensor_idKron (F.tensor g)).trans
     (ad.isReduction g)).actTensor_assoc_left⟩
 
+/-- Fusing `g` with `h` and then acting with `gh` gives a reduction of `(O_g O_h) · A` onto `A`
+with left boundary `fuseV g h`. -/
 theorem exists_isReduction_fuseV (g h : G) : ∃ W, MPSTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) A (ad.fuseV fd g h) W :=
   ⟨_, ((fd.isReduction g h).actTensor_kronId A).trans (ad.isReduction (g * h))⟩
@@ -163,6 +163,12 @@ noncomputable def lSymbol : LSymbol G Unit := fun _ g h ↦
 
 variable {fd ad}
 
+/-- **The defining relation of the L-symbol**: for a normal state fixed by every operator of the
+family, `actV g h ~ L(g,h) · fuseV g h` against long words of `(O_g O_h) · A`. Both boundaries
+belong to reductions onto the normal tensor `A`, so a nonzero proportionality scalar exists and
+`lSymbol` selects it.
+
+Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913. -/
 theorem isDressedProportional_lSymbol (hA : Kraus.IsNormal A)
     (hinv : ∀ g, FixesMPV (F.tensor g) A) (x : Unit) (g h : G) :
     MPSTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) A)
@@ -172,7 +178,7 @@ theorem isDressedProportional_lSymbol (hA : Kraus.IsNormal A)
     obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h
     obtain ⟨W', hW'⟩ := ad.exists_isReduction_fuseV fd g h
     exact hW.exists_isDressedProportional hW' hA
-      (((hinv g).mulTensor (hinv h)).sameMPV₂Pos_actTensor (sameMPV₂Pos_refl A))
+      (((hinv g).mulTensor (hinv h)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl A))
   simp only [lSymbol, hex, ↓reduceDIte, Units.val_mk0]
   exact hex.choose_spec.2
 
@@ -258,10 +264,10 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
   set B3 := actTensor (F.tripleTensor g h k) A
   have hSame3 : MPSTensor.SameMPV₂Pos B3 A :=
     (((hfix g).mulTensor (hfix h)).mulTensor (hfix k)).sameMPV₂Pos_actTensor
-      (sameMPV₂Pos_refl A)
+      (MPSTensor.SameMPV₂Pos.refl A)
   have hSameC : ∀ a b : G,
       MPSTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor a) (F.tensor b)) A) A :=
-    fun a b ↦ ((hfix a).mulTensor (hfix b)).sameMPV₂Pos_actTensor (sameMPV₂Pos_refl A)
+    fun a b ↦ ((hfix a).mulTensor (hfix b)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl A)
   have hSame3C : ∀ a b : G,
       MPSTensor.SameMPV₂Pos B3 (actTensor (mulTensor (F.tensor a) (F.tensor b)) A) :=
     fun a b ↦ fun N hN σ ↦ (hSame3 N hN σ).trans (hSameC a b N hN σ).symm
