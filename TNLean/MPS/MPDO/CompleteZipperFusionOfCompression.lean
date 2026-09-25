@@ -173,8 +173,10 @@ simultaneous left inverse are the remaining data of that source at lines 156--16
 **Local fix (arXiv:1511.08090, line 269):** the source derives the simultaneous left inverse
 `K` from injectivity of each block, which does not suffice when there are several blocks: two
 injective, non-equivalent blocks at physical dimension two can have no simultaneous left
-inverse.  `K` is therefore an input, recording joint linear independence of the blocks at one
-site.  Documented in `docs/paper-gaps/bmwshv17_joint_block_left_inverse.tex`. -/
+inverse.  `K` is therefore an input here, recording joint linear independence of the blocks at
+one site.  After a common positive blocking it is derived for normal blocks that are pairwise
+inequivalent up to a nonzero scalar (`ofCompressionBlocked`).  Documented in
+`docs/paper-gaps/bmwshv17_joint_block_left_inverse.tex`. -/
 noncomputable def ofCompression (hD : ∀ a, 0 < D a)
     (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0)

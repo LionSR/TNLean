@@ -9,7 +9,7 @@
 \date{2026-09-25}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{Source statement}
 To extract the $F$-symbols, Bultinck et al.\ apply a left inverse of the
@@ -56,22 +56,51 @@ The step needs joint linear independence of the labelled blocks at one site,
 that is, surjectivity of (\ref{eq:bmwshv17_joint_map}). Injectivity of each
 block together with pairwise non-equivalence does not supply it.
 
-The formal complete zipper fusion family records the simultaneous left inverse
-as a field, which is exactly this hypothesis. The construction of such a family
-from split compressions of the pairwise products takes it as an input.
-\footnote{Formal definitions: \leanid{MPOTensor.CompleteZipperFusionFamily}
-    and \leanid{MPOTensor.CompleteZipperFusionFamily.ofCompression}.}
+\section{Elimination after blocking}
+Blocking removes the hypothesis. Let the blocks $B_1,\ldots,B_m$, read as
+tensors on the doubled physical alphabet, be normal, of positive bond
+dimension, and pairwise not gauge equivalent up to a nonzero scalar: there is
+no invertible $X$ and no $\zeta\ne0$ with $B_{d'}^{ij}=\zeta XB_d^{ij}X^{-1}$
+for all $ij$ when $d\ne d'$. Then there is $L>0$ such that the tuples
+$(B_1^w,\ldots,B_m^w)$, for the words $w$ of length $L$, span
+$\bigoplus_dM_{\chi_d}$. This is the block-injectivity argument for a basis of
+normal tensors~\cite{Cirac2016MPDO_arXiv}, which uses only normality and
+pairwise non-equivalence up to a scalar.
+\footnote{Source traceability: \path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines 317--345.}
+Hence the map (\ref{eq:bmwshv17_joint_map}) of the blocked tensors
+$B_d^{[L]}$ is surjective, and (\ref{eq:bmwshv17_joint_inverse}) holds at one
+blocked site.
 
-\section{Elimination route}
-Blocking should remove the hypothesis. For pairwise non-equivalent normal
-tensors, the words of a common sufficiently large length $L$ are expected to
-span the full direct sum $\bigoplus_d M_{\chi_d}$, by the linear independence
-of non-equivalent normal tensors. The blocked tensors would then satisfy
-(\ref{eq:bmwshv17_joint_inverse}) at one blocked site, and the $F$-symbol
-extraction would run at length $L$. This route is plausible but is not proved
-here. The zipper and reconstruction identities are also needed at the blocked
-level, where they follow from the one-site identities by composing fusion
-tensors along the word.
+The scalar in the non-equivalence cannot be omitted. For $B_2=-B_1$ the words
+of length $L$ satisfy $B_2^w=(-1)^LB_1^w$, so the tuples span only a copy of
+$M_{\chi_1}$ at every length, although $B_1$ and $B_2$ are in general not
+gauge equivalent.
+
+The rest of the extraction survives blocking with the same fusion tensors. If
+the letters of the product $O_aO_b$ are, in suitable coordinates, block
+diagonal with blocks $B_c$ repeated $N_{ab}^c$ times, then so are all words of
+these letters, with the same coordinates and the blocks replaced by the
+corresponding words of $B_c$. The split compressions of the pairwise products,
+and so the fusion tensors, the reconstruction identity, and both zipper
+identities, therefore hold for the blocked tensors without change. The
+complete zipper data of the source thus exist for the blocked tensors at one
+common positive length, as in the common blocking of the source.
+\footnote{Source traceability: \path{References/1511.08090/AnyonsPEPS.tex},
+    lines 427--431.}
+\footnote{Formal statements:
+    \leanid{MPSTensor.exists_positive_wordTupleSpanTop_of_isNormal},
+    \leanid{MPOTensor.exists_blockTensor_isMPOBlockLeftInverse},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.ofCompressionBlocked}, and
+    \leanid{MPOTensor.CompleteZipperFusionFamily.ofStarBlocked}.}
+
+\section{Remaining restriction}
+The one-site statement (\ref{eq:bmwshv17_joint_inverse}) remains false in
+general, by the counterexample above, and it is not formalized. What is
+formalized is its blocked form, under pairwise non-equivalence up to a nonzero
+scalar. The unblocked construction from split compressions keeps the
+simultaneous left inverse as an input.
+\footnote{Formal definition:
+    \leanid{MPOTensor.CompleteZipperFusionFamily.ofCompression}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

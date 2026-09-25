@@ -130,6 +130,53 @@
     its multi-block compression can be chosen with vanishing remainder.
 \end{proof}
 
+\begin{theorem}[Simultaneous left inverse after blocking]%
+    \label{thm:mpdo_complete_zipper_of_compression_blocked}
+    \lean{MPSTensor.exists_positive_wordTupleSpanTop_of_isNormal}
+    \lean{MPSTensor.wordTupleSpanTop_of_smul}
+    \lean{MPOTensor.exists_blockTensor_isMPOBlockLeftInverse}
+    \lean{MPSTensor.MultiBlockCompression.ofWords}
+    \lean{MPSTensor.MultiBlockCompression.remainder_ofWords_eq_zero}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofCompressionBlocked}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofStarBlocked}
+    \leanok
+    \uses{thm:mpdo_complete_zipper_of_compression}
+    Let $B_1,\ldots,B_m$ be MPO blocks of positive bond dimension which,
+    read as tensors on the doubled physical alphabet and rescaled by nonzero
+    scalars, are normal tensors, and no two of which are gauge equivalent up
+    to a nonzero scalar. Then there is $L>0$ such that the words of length
+    $L$ span $\bigoplus_cM_{D_c}$ jointly, so the blocked tensors
+    $B_c^{[L]}$ have a simultaneous left inverse at one blocked site. If
+    every product $B_aB_b$ admits a multi-block compression onto $N_{ab}^c$
+    copies of each $B_c$ with vanishing remainder, as in
+    Theorem~\ref{thm:mpdo_complete_zipper_of_compression}, then the same
+    compression maps are the fusion tensors of a complete zipper fusion
+    family of the blocked tensors $B_c^{[L]}$, with no simultaneous left
+    inverse among the hypotheses. The same holds in the star-closed case.
+    The simultaneous left inverse at one unblocked site, as printed
+    in~\cite[line~269]{Bultinck2017Anyons}, can fail for injective,
+    inequivalent blocks, and the scalar in the non-equivalence cannot be
+    dropped~\cite{gap:bmwshv17_joint_block_left_inverse}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_complete_zipper_of_compression}
+    Rescaling a block by a nonzero scalar multiplies its words of length $L$
+    by a nonzero constant, so it changes neither the joint span nor
+    non-equivalence up to a scalar. For normal, pairwise inequivalent
+    tensors the block-injectivity argument
+    of~\cite[lines~317--345]{Cirac2016MPDO_arXiv} gives one length $L>0$ at
+    which the word tuples span $\bigoplus_cM_{D_c}$. Grouping $L$ sites into
+    one physical index turns the words of length $L$ into single letters,
+    and the coefficients expressing each matrix unit of each summand give the
+    simultaneous left inverse. Each blocked letter of a product is a word of
+    the unblocked letters. In the coordinates of a split compression, every
+    unblocked letter is block diagonal with blocks $B_c^{ik}$, so every word
+    is block diagonal with the corresponding words of $B_c$. The compression
+    therefore remains split after blocking, with the same compression maps,
+    and Theorem~\ref{thm:mpdo_complete_zipper_of_compression} applies to the
+    blocked tensors.
+\end{proof}
+
 \begin{definition}[Final-block selection from one physical index pair]
     \label{def:mpdo_complete_zipper_final_block_selector}
     \lean{MPOTensor.CompleteZipperFusionFamily.finalBlockSelector}
