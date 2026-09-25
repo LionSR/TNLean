@@ -38,20 +38,32 @@ $O_1^0=2$ and $O_\tau^0=3$. Using $\phi^2=\phi+1$,
     =\frac{2+3\phi}{2+\phi}\approx1.894,
     \label{eq:fib_empty}
 \end{align}
-which is neither $0$ nor $1$, so $P_0^2\neq P_0$. The fusion rules
-$O_a^LO_b^L=\sum_cN_{ab}^cO_c^L$ also fail at $L=0$: they would give
-$O_\tau^0O_\tau^0=9$ against $O_1^0+O_\tau^0=5$. The identity
+which is neither $0$ nor $1$, so $P_0^2\neq P_0$. The source derives from
+(\ref{eq:fib_proj}), required for all $L$, the fusion rules
+$O_a^LO_b^L=\sum_cN_{ab}^cO_c^L$.\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 157--160.}
+These also fail at $L=0$: the fusion $\tau\otimes\tau=1\oplus\tau$ would give
+$O_\tau^0O_\tau^0=9$ against $O_1^0+O_\tau^0=5$, the unit law $1\otimes1=1$ would
+give $O_1^0O_1^0=4$ against $O_1^0=2$, and the unit laws $1\otimes\tau=\tau\otimes1=\tau$
+would give $O_1^0O_\tau^0=6$ against $O_\tau^0=3$. The identity
 (\ref{eq:fib_proj}) is a statement about rings with at least one site, and the
 empty chain carries no physical content.
 
 \section{The reading adopted}
-The empty chain is read as a degenerate case the source does not intend, and
-idempotence, like the fusion rules, is stated for every positive length
-$L\geq1$.\footnote{Result:
-    \leanid{FibonacciCompression.fibProjector_mul_self}.}
-This is a convention, not an error in the source: at every $L\geq1$ the
-statement is the source's (\ref{eq:fib_proj}) with the source's weights, and
-no further hypothesis is added.
+The empty chain is read as a degenerate case the source does not intend.
+Idempotence, the fusion rule $O_\tau^LO_\tau^L=O_1^L+O_\tau^L$, and the unit laws
+$O_1^LO_1^L=O_1^L$, $O_1^LO_\tau^L=O_\tau^LO_1^L=O_\tau^L$ are stated under the
+added hypothesis $L\geq1$.\footnote{Results:
+    \leanid{FibonacciCompression.fibProjector_mul_self},
+    \leanid{FibonacciCompression.fibonacci_fusion_rule},
+    \leanid{FibonacciCompression.fibOne_mul_fibOne},
+    \leanid{FibonacciCompression.fibOne_mul_fibTau},
+    \leanid{FibonacciCompression.fibTau_mul_fibOne}.}
+This hypothesis is the only restriction recorded here: at every $L\geq1$ the
+source's identity (\ref{eq:fib_proj}), with the source's weights, holds for the
+blocks used in the formalization. Those blocks carry the bare F-symbols and are
+not identified with the source's diagram tensor; that separate deviation is
+recorded in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
