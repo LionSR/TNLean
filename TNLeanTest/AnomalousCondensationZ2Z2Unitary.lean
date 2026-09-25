@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Unitary
+import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Unitary
 
 /-! Regression tests for the input-phase convention, short periodic rings,
 and standard-axiom dependencies of the two-qubit physical operators. -/
