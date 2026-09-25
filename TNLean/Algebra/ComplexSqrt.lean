@@ -35,9 +35,15 @@ theorem ofReal_sqrt_inv_mul_self (x : ℝ) (hx : 0 ≤ x) :
 /-- The complex number `1 / √2`, the normalization of a Hadamard-type factor. -/
 noncomputable def invSqrtTwo : ℂ := ((Real.sqrt 2 : ℝ) : ℂ)⁻¹
 
+theorem invSqrtTwo_ne_zero : invSqrtTwo ≠ 0 :=
+  inv_ne_zero (ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 two_pos))
+
 theorem invSqrtTwo_mul_self : invSqrtTwo * invSqrtTwo = (2 : ℂ)⁻¹ := by
   rw [invSqrtTwo, ofReal_sqrt_inv_mul_self 2 (by norm_num)]
   norm_num
+
+theorem invSqrtTwo_sq : invSqrtTwo ^ 2 = (2 : ℂ)⁻¹ := by
+  rw [pow_two, invSqrtTwo_mul_self]
 
 theorem invSqrtTwo_pow_mul_self (n : ℕ) :
     invSqrtTwo ^ n * invSqrtTwo ^ n * (2 : ℂ) ^ n = 1 := by
@@ -45,5 +51,8 @@ theorem invSqrtTwo_pow_mul_self (n : ℕ) :
 
 @[simp] theorem star_invSqrtTwo : star invSqrtTwo = invSqrtTwo := by
   simp [invSqrtTwo, Complex.conj_ofReal]
+
+@[simp] theorem conj_invSqrtTwo : starRingEnd ℂ invSqrtTwo = invSqrtTwo :=
+  star_invSqrtTwo
 
 end Complex

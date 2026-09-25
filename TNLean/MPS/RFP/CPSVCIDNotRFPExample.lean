@@ -19,18 +19,16 @@ physical blocking isometry and is not a renormalization fixed point.
 
 open scoped Matrix BigOperators
 
-namespace MPSTensor
+open Complex (invSqrtTwo invSqrtTwo_sq star_invSqrtTwo)
 
-/-- The scalar $1/\sqrt 2$, viewed as a complex number. -/
-noncomputable def cpsvExample34InvSqrtTwo : ℂ :=
-  (↑(1 / Real.sqrt 2) : ℂ)
+namespace MPSTensor
 
 /-- The exact tensor from CPSV16, Example 3.4:
 $A^0=\operatorname{diag}(1,1/\sqrt2)$ and
 $A^1=\operatorname{diag}(0,1/\sqrt2)$. -/
 noncomputable def cpsvExample34Tensor : MPSTensor 2 2
-  | 0 => !![(1 : ℂ), 0; 0, cpsvExample34InvSqrtTwo]
-  | 1 => !![(0 : ℂ), 0; 0, cpsvExample34InvSqrtTwo]
+  | 0 => !![(1 : ℂ), 0; 0, invSqrtTwo]
+  | 1 => !![(0 : ℂ), 0; 0, invSqrtTwo]
 
 /-- The bond-dimension-one $|0\rangle$ component obtained from the first
 virtual diagonal entry of `cpsvExample34Tensor`. -/
@@ -46,7 +44,7 @@ noncomputable def cpsvExample34PlusTensor : MPSTensor 2 1 :=
 $(1/\sqrt 2)^{|w|}$. -/
 private noncomputable def cpsvExample34WordDiag (w : List (Fin 2)) : Fin 2 → ℂ
   | 0 => if w.Forall (· = 0) then 1 else 0
-  | 1 => cpsvExample34InvSqrtTwo ^ w.length
+  | 1 => invSqrtTwo ^ w.length
 
 private theorem cpsvExample34_evalWord (w : List (Fin 2)) :
     Kraus.evalWord cpsvExample34Tensor w = Matrix.diagonal (cpsvExample34WordDiag w) := by
@@ -104,7 +102,7 @@ private theorem cpsvExample34ZeroTensor_mpv {N : ℕ} (σ : Fin N → Fin 2) :
   simp [cpsvExample34WordDiag, cpsvExample34_forall_ofFn_zero_iff]
 
 private theorem cpsvExample34PlusTensor_mpv {N : ℕ} (σ : Fin N → Fin 2) :
-    mpv cpsvExample34PlusTensor σ = cpsvExample34InvSqrtTwo ^ N := by
+    mpv cpsvExample34PlusTensor σ = invSqrtTwo ^ N := by
   rw [mpv, coeff]
   change Matrix.trace (Kraus.evalWord (fun i _ _ => cpsvExample34Tensor i 1 1) (List.ofFn σ)) = _
   rw [Matrix.trace_fin_one, cpsvExample34_component_evalWord]
@@ -116,7 +114,7 @@ $|0,\ldots,0\rangle$ and the second is the amplitude of
 $|+,\ldots,+\rangle$. -/
 theorem cpsvExample34_mpv {N : ℕ} (_hN : 0 < N) (σ : Fin N → Fin 2) :
     mpv cpsvExample34Tensor σ =
-      (if ∀ k, σ k = 0 then 1 else 0) + cpsvExample34InvSqrtTwo ^ N := by
+      (if ∀ k, σ k = 0 then 1 else 0) + invSqrtTwo ^ N := by
   rw [mpv, coeff, cpsvExample34_evalWord]
   simp [Matrix.trace, cpsvExample34WordDiag, cpsvExample34_forall_ofFn_zero_iff]
 
@@ -224,21 +222,12 @@ theorem cpsvExample34_isPhysicalCID :
     _ = F₂ * E ^ m₂ * (F₁ * E ^ m₁) :=
       ((hComm₁.pow_left m₂).mul_mul_mul_comm F₂ (E ^ m₁)).symm
 
-private theorem cpsvExample34_invSqrtTwo_sq :
-    cpsvExample34InvSqrtTwo ^ 2 = (1 / 2 : ℂ) := by
-  simpa [cpsvExample34InvSqrtTwo, pow_two, one_div] using
-    Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)
-
 private theorem cpsvExample34_invSqrtTwo_ne_half :
-    cpsvExample34InvSqrtTwo ≠ (1 / 2 : ℂ) := by
+    invSqrtTwo ≠ (2 : ℂ)⁻¹ := by
   intro h
-  have hsquare := cpsvExample34_invSqrtTwo_sq
+  have hsquare := invSqrtTwo_sq
   rw [h] at hsquare
   norm_num at hsquare
-
-private theorem star_cpsvExample34InvSqrtTwo :
-    star cpsvExample34InvSqrtTwo = cpsvExample34InvSqrtTwo := by
-  simp [cpsvExample34InvSqrtTwo]
 
 /-- The off-diagonal matrix unit $E_{01}$. -/
 private def offDiagonalUnit : Matrix (Fin 2) (Fin 2) ℂ :=
@@ -246,15 +235,15 @@ private def offDiagonalUnit : Matrix (Fin 2) (Fin 2) ℂ :=
 
 private theorem cpsvExample34_transferMap_offDiagonalUnit :
     Kraus.transferMap cpsvExample34Tensor offDiagonalUnit =
-      cpsvExample34InvSqrtTwo • offDiagonalUnit := by
+      invSqrtTwo • offDiagonalUnit := by
   ext a b
   transfer_simp
   change (∑ i : Fin 2, (cpsvExample34Tensor i * offDiagonalUnit *
     (cpsvExample34Tensor i)ᴴ) a b) =
-      (cpsvExample34InvSqrtTwo • offDiagonalUnit) a b
+      (invSqrtTwo • offDiagonalUnit) a b
   simp_rw [cpsvExample34_letter_diagonal, diagonal_sandwich_apply_left]
   fin_cases a <;> fin_cases b <;>
-    simp [cpsvExample34WordDiag, offDiagonalUnit, star_cpsvExample34InvSqrtTwo]
+    simp [cpsvExample34WordDiag, offDiagonalUnit, star_invSqrtTwo]
 
 /-- The transfer map of the tensor in CPSV16, Example 3.4 is not idempotent.
 The off-diagonal matrix unit has transfer eigenvalue $1/\sqrt2$, whose square
@@ -266,10 +255,10 @@ theorem cpsvExample34_not_isTransferIdempotent :
   simp only [LinearMap.comp_apply, cpsvExample34_transferMap_offDiagonalUnit,
     map_smul] at h
   have h01 := congrFun (congrFun h 0) 1
-  have hscalar : cpsvExample34InvSqrtTwo * cpsvExample34InvSqrtTwo =
-      cpsvExample34InvSqrtTwo := by
+  have hscalar : invSqrtTwo * invSqrtTwo =
+      invSqrtTwo := by
     simpa [offDiagonalUnit] using h01
-  rw [← pow_two, cpsvExample34_invSqrtTwo_sq] at hscalar
+  rw [← pow_two, invSqrtTwo_sq] at hscalar
   exact cpsvExample34_invSqrtTwo_ne_half hscalar.symm
 
 /-- The exact tensor in CPSV16, Example 3.4 has no physical blocking isometry,
@@ -282,8 +271,8 @@ theorem cpsvExample34_not_hasPhysicalBlockingIsometry :
 
 private theorem cpsvExample34_blocked_overlap_sum (n : ℕ) :
     ∑ σ : Fin n → Fin 2,
-      (if ∀ k, σ k = 0 then (1 : ℂ) else 0) * cpsvExample34InvSqrtTwo ^ n =
-        cpsvExample34InvSqrtTwo ^ n := by
+      (if ∀ k, σ k = 0 then (1 : ℂ) else 0) * invSqrtTwo ^ n =
+        invSqrtTwo ^ n := by
   classical
   let zeroConfig : Fin n → Fin 2 := fun _ => 0
   rw [Fintype.sum_eq_single zeroConfig]
@@ -301,10 +290,10 @@ in CPSV16, Example 3.4 is
 $\langle 0^{\otimes n}|+^{\otimes n}\rangle=(1/\sqrt2)^n$. -/
 theorem cpsvExample34_blocked_overlap (n : ℕ) :
     mpvOverlap cpsvExample34ZeroTensor cpsvExample34PlusTensor n =
-      cpsvExample34InvSqrtTwo ^ n := by
+      invSqrtTwo ^ n := by
   rw [mpvOverlap]
   simp_rw [cpsvExample34ZeroTensor_mpv, cpsvExample34PlusTensor_mpv,
-    star_pow, star_cpsvExample34InvSqrtTwo]
+    star_pow, star_invSqrtTwo]
   exact cpsvExample34_blocked_overlap_sum n
 
 end MPSTensor
