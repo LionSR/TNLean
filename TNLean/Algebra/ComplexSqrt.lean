@@ -55,7 +55,7 @@ theorem invSqrtTwo_pow_mul_self (n : ℕ) :
 
 /-- The `star` spelling of `conj_invSqrtTwo`, for rewriting after
 `Matrix.conjTranspose_smul`. -/
-theorem star_invSqrtTwo : star invSqrtTwo = invSqrtTwo :=
+@[simp] theorem star_invSqrtTwo : star invSqrtTwo = invSqrtTwo :=
   conj_invSqrtTwo
 
 end Complex

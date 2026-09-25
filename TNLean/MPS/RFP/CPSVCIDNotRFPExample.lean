@@ -243,7 +243,7 @@ private theorem cpsvExample34_transferMap_offDiagonalUnit :
       (invSqrtTwo • offDiagonalUnit) a b
   simp_rw [cpsvExample34_letter_diagonal, diagonal_sandwich_apply_left]
   fin_cases a <;> fin_cases b <;>
-    simp [cpsvExample34WordDiag, offDiagonalUnit, star_invSqrtTwo]
+    simp [cpsvExample34WordDiag, offDiagonalUnit]
 
 /-- The transfer map of the tensor in CPSV16, Example 3.4 is not idempotent.
 The off-diagonal matrix unit has transfer eigenvalue $1/\sqrt2$, whose square
