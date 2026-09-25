@@ -1,0 +1,101 @@
+\section{Product states}\label{sec:product_states}
+%% ===================================================================
+
+The simplest matrix product states are product states: every product state is
+a matrix product state with bond dimension one~\cite[Appendix~A, ``Product
+    states'']{Cirac2021Matrix}. Since the local tensors may differ from site to
+site, the matrix product is closed by boundary vectors, as in the open-boundary
+contraction of Section~\ref{sec:w_state}.
+
+\begin{definition}[Site-dependent open-boundary contraction]\label{def:site_open_coeff}
+    \lean{MPSTensor.siteOpenCoeff}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A^{[1]},\ldots,A^{[N]}$ be tensors with bond dimension $D$, one for
+    each site, and let $v_L,v_R\in\C^D$. The open-boundary contraction of the
+    configuration $(\sigma_1,\ldots,\sigma_N)$ is
+    \begin{align}
+        v_L^{\mathsf T}\,A^{[1]\,\sigma_1}A^{[2]\,\sigma_2}\cdots
+        A^{[N]\,\sigma_N}\,v_R.
+        \notag
+    \end{align}
+    When all sites carry the same tensor this is the open-boundary contraction
+    of Definition~\ref{def:open_coeff}.
+\end{definition}
+
+\begin{lemma}[Site-independent families]\label{lem:site_open_coeff_const}
+    \lean{MPSTensor.siteOpenCoeff_const}
+    \leanok
+    \uses{def:site_open_coeff, def:open_state}
+    If $A^{[s]}=A$ for every site $s$, the site-dependent open-boundary
+    contraction of $(\sigma_1,\ldots,\sigma_N)$ is the amplitude of the
+    open-boundary state of $A$ at that configuration.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both sides are $v_L^{\mathsf T}A^{\sigma_1}\cdots A^{\sigma_N}v_R$.
+\end{proof}
+
+\begin{definition}[Product vector and its tensor]\label{def:product_state_tensor}
+    \lean{MPSTensor.productVector,
+        MPSTensor.productSiteTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    For local vectors $\ket{\phi^s}=\sum_{i}a^{i,[s]}\ket{i}\in\C^d$,
+    $s=1,\ldots,N$, the product vector
+    $\ket{\psi}=\ket{\phi^1}\otimes\cdots\otimes\ket{\phi^N}$ has coefficient
+    $a^{i_1,[1]}\cdots a^{i_N,[N]}$ on $\ket{i_1,\ldots,i_N}$. Its tensor has
+    bond dimension $D=1$: at site $s$ the matrix of physical index $i$ is the
+    $1\times1$ matrix $a^{i,[s]}$.
+\end{definition}
+
+\begin{theorem}[Product states are MPS with $D=1$]\label{thm:product_state_mps}
+    \lean{MPSTensor.siteOpenCoeff_productSiteTensor}
+    \leanok
+    \uses{def:product_state_tensor, def:site_open_coeff}
+    Every product state is a matrix product state with bond dimension one:
+    for the tensor of Definition~\ref{def:product_state_tensor}, with
+    $A^{[s]\,i}=a^{i,[s]}$ and trivial boundary vectors $v_L=v_R=1$, the
+    site-dependent open-boundary contraction of every configuration
+    $(i_1,\ldots,i_N)$ is the coefficient of the product vector,
+    \begin{align}
+        v_L^{\mathsf T}\,A^{[1]\,i_1}A^{[2]\,i_2}\cdots A^{[N]\,i_N}\,v_R
+         & = a^{i_1,[1]}\cdots a^{i_N,[N]},
+        \notag
+    \end{align}
+    so that
+    $\ket{\psi}=\sum_{i_1,\ldots,i_N}a^{i_1,[1]}\cdots a^{i_N,[N]}\,
+        \ket{i_1,\ldots,i_N}$ is the matrix product state of this tensor.
+    This is the product-state statement
+    of~\cite[Appendix~A, ``Product states'']{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A product of $1\times1$ matrices is the $1\times1$ matrix of the product of
+    their entries; induct on $N$.
+\end{proof}
+
+\begin{corollary}[Translation-invariant product states]\label{cor:product_state_ti}
+    \lean{MPSTensor.openState_productSiteTensor_const,
+        MPSTensor.mpv_productSiteTensor_const}
+    \leanok
+    \uses{thm:product_state_mps, lem:site_open_coeff_const, def:mpv}
+    If every site carries the same local vector $\sum_i a^i\ket{i}$, the
+    one-site tensor with $1\times1$ matrices $a^i$ generates the product vector
+    $\bigl(\sum_i a^i\ket{i}\bigr)^{\otimes N}$ both as an open-boundary state
+    with trivial boundary vectors and as a matrix product vector with periodic
+    boundary conditions.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:product_state_mps, lem:site_open_coeff_const}
+    The open-boundary statement is Theorem~\ref{thm:product_state_mps} combined
+    with Lemma~\ref{lem:site_open_coeff_const}. For bond dimension one the trace
+    of a $1\times1$ matrix is its only entry, so the periodic closure agrees
+    with the open one.
+\end{proof}
+
+%% ===================================================================
