@@ -21,6 +21,8 @@ import TNLean.MPS.MPU.Equivalence
 import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FiniteChainConjugation
+import TNLean.MPS.MPU.GroupCocycleMPO
+import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.InverseCompatibleComparisonUnitarity
 import TNLean.MPS.MPU.InverseCompatibleCutComparison

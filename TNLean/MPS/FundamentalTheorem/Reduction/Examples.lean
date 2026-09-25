@@ -10,12 +10,17 @@ Authors: TNLean contributors
 
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Defect
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Instance
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2NonSplit
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Split
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Unitary
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXDecoratedFusion
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXDecoratedTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXPlusIdentity
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXReviewCanonicalForm
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXReviewTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXSquare
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXUnitary
@@ -31,6 +36,11 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciUnit
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GHZSectors
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.GoldenRing
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebra
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebraOnePsi
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebraOneSigma
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebraPsiSigma
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebraSigma
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorOne
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingLetterSectorPsi
@@ -57,6 +67,8 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousDefect
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousDefectCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousFusion
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousInverseFusion
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousRepresentation
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousUnitary
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Zsqrt2OperatorFusion
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Zsqrt2Ring

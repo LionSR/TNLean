@@ -7,6 +7,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannier
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 import TNLean.MPS.MPDO.ActionTensor
+import TNLean.MPS.Examples.KramersWannierSource
 
 /-!
 # Kramers–Wannier duality on product and GHZ states
@@ -46,6 +47,10 @@ sitewise pair. The word-level compression still holds.
 * `KWExample.kwGHZ_left_intertwiner_eq_zero`, `KWExample.kwGHZ_right_intertwiner`: the
   obstruction to a biorthogonal sitewise pair in part (b), and the one-sided witness that
   survives.
+* `KWExample.mpv_plusTensor_eq_plusState`, `KWExample.mpv_ghz_eq_ghzState`: the periodic
+  states of `plusTensor` and `ghz` are the states `plusState` and `ghzState` on which
+  `KWExample.kwTensor_mpo_mulVec_plus` and `KWExample.kwTensor_mpo_mulVec_ghz` compute the
+  action of the kernel directly.
 
 ## References
 
@@ -547,5 +552,55 @@ theorem kwGHZ_right_intertwiner_ne_zero :
   intro h
   have := congrFun h 0
   simp at this
+
+/-! ### The periodic states of the product-state and GHZ tensors -/
+
+/-- Bridge: the periodic state of `plusTensor` is the unnormalized paramagnetic state
+`plusState`, at every length. -/
+theorem mpv_plusTensor_eq_plusState (N : ℕ) :
+    (fun σ : Fin N → Fin 2 => mpv plusTensor σ) = plusState N := by
+  funext σ
+  simp [plusTensor_evalWord, plusState]
+
+/-- Every word evaluation of `ghz` is diagonal, with entry `1` at `k` exactly when every letter
+of the word is `k`. -/
+theorem ghz_evalWord (w : List (Fin 2)) :
+    Kraus.evalWord ghz w = Matrix.diagonal fun k => if ∀ x ∈ w, x = k then 1 else 0 := by
+  induction w with
+  | nil => simp [Kraus.evalWord]
+  | cons i w ih =>
+    have hi : ghz i = Matrix.diagonal fun k => if i = k then 1 else 0 := by
+      fin_cases i <;> ext a b <;> fin_cases a <;> fin_cases b <;> simp [ghz]
+    rw [Kraus.evalWord, ih, hi, Matrix.diagonal_mul_diagonal]
+    congr 1
+    funext k
+    by_cases hk : i = k <;> simp [hk]
+
+/-- Bridge: the periodic state of `ghz` is the unnormalized ferromagnetic state `ghzState`, at
+every length (at length zero both equal `2`). -/
+theorem mpv_ghz_eq_ghzState (N : ℕ) :
+    (fun σ : Fin N → Fin 2 => mpv ghz σ) = ghzState N := by
+  funext σ
+  rw [mpv_eq, coeff_eq, ghz_evalWord, Matrix.trace_diagonal, Fin.sum_univ_two, ghzState]
+  have h0 : (∀ x ∈ List.ofFn σ, x = 0) ↔ σ = 0 := by
+    simp [funext_iff]
+  have h1 : (∀ x ∈ List.ofFn σ, x = 1) ↔ σ = flipConfig 0 := by
+    simp only [List.forall_mem_ofFn_iff, funext_iff, flipConfig, Pi.zero_apply]
+    rfl
+  rw [if_congr h0 rfl rfl, if_congr h1 rfl rfl]
+
+/-- The action tensor `kwPlus` has the periodic states `2^N` times those of `ghz`, the
+tensor-level reading of `kwTensor_mpo_mulVec_plus`. -/
+theorem mpv_kwPlus_eq_smul_mpv_ghz (N : ℕ) [NeZero N] :
+    (fun σ : Fin N → Fin 2 => mpv kwPlus σ) = (2 : ℂ) ^ N • fun σ => mpv ghz σ := by
+  rw [kwPlus, ← MPOTensor.mpo_mulVec_mpv, mpv_plusTensor_eq_plusState, mpv_ghz_eq_ghzState,
+    kwTensor_mpo_mulVec_plus]
+
+/-- The action tensor `kwGHZ` has the periodic states twice those of `plusTensor`, the
+tensor-level reading of `kwTensor_mpo_mulVec_ghz`. -/
+theorem mpv_kwGHZ_eq_two_smul_mpv_plusTensor (N : ℕ) [NeZero N] :
+    (fun σ : Fin N → Fin 2 => mpv kwGHZ σ) = (2 : ℂ) • fun σ => mpv plusTensor σ := by
+  rw [kwGHZ, ← MPOTensor.mpo_mulVec_mpv, mpv_plusTensor_eq_plusState, mpv_ghz_eq_ghzState,
+    kwTensor_mpo_mulVec_ghz]
 
 end KWExample

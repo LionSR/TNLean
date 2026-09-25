@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Matrix.Trace
 import TNLean.Algebra.FinCyclicInduction
 
@@ -16,7 +17,10 @@ over paths starting at the row index (`ofFn_prod_mulVec_apply`), and the trace
 of the ordered product of a nonempty family is the sum over cyclic paths, in
 which each factor connects a site to its cyclic successor
 (`trace_ofFn_prod_eq_sum_cyclic`).  The cyclic form is the transfer-matrix
-identity behind closed-chain contractions of matrix product operators.
+identity behind closed-chain contractions of matrix product operators.  For a
+ring of scaled matrix units only one path survives, so the trace is the product
+of the scalars when consecutive units chain cyclically and zero otherwise
+(`trace_ofFn_prod_smul_single`).
 -/
 
 open scoped BigOperators
@@ -75,5 +79,25 @@ theorem trace_ofFn_prod_eq_sum_cyclic (L : ℕ) (M : Fin (L + 1) → Matrix ι �
   refine Finset.sum_congr rfl fun t _ => ?_
   rw [Fin.prod_univ_castSucc]
   simp only [Fin.finRotate_succ_castSucc, finRotate_last, Fin.cons_zero]
+
+/-- **Trace of a ring of scaled matrix units.**  The trace of the ordered
+product of the scaled matrix units `c n • E_{l n, r n}` is the product of the
+scalars when every column index `r n` equals the row index of the cyclic
+successor, and zero otherwise. -/
+theorem trace_ofFn_prod_smul_single (L : ℕ) (c : Fin (L + 1) → R)
+    (l r : Fin (L + 1) → ι) :
+    (List.ofFn fun n => c n • Matrix.single (l n) (r n) (1 : R)).prod.trace =
+      if ∀ n, r n = l (finRotate (L + 1) n) then ∏ n, c n else 0 := by
+  rw [trace_ofFn_prod_eq_sum_cyclic, Finset.sum_eq_single l]
+  · simp only [smul_apply, single_apply, true_and, smul_eq_mul, mul_ite, mul_one, mul_zero]
+    split_ifs with h
+    · exact Finset.prod_congr rfl fun n _ => by simp [h n]
+    · obtain ⟨n, hn⟩ := not_forall.mp h
+      exact Finset.prod_eq_zero (Finset.mem_univ n) (by simp only [hn, ↓reduceIte])
+  · intro t _ ht
+    obtain ⟨n, hn⟩ := Function.ne_iff.mp ht
+    refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
+    simp [Ne.symm hn]
+  · simp
 
 end Matrix

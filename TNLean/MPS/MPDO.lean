@@ -68,6 +68,7 @@ import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.BondOnePhysicalSectorFactorization
+import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
@@ -215,6 +216,7 @@ import TNLean.MPS.MPDO.NormalizedGroupedSectorMaps
 import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.NormalizedMPOProportionality
 import TNLean.MPS.MPDO.OperatorClosurePowerSum
+import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPDO.OperatorFromWordTrace
 import TNLean.MPS.MPDO.OperatorProduct
 import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw

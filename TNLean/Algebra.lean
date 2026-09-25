@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
 
+import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
 import TNLean.Algebra.BlockingSignParity
@@ -64,6 +65,7 @@ import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.RestrictedScalarGauge
 import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleInversion

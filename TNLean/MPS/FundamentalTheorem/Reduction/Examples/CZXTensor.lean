@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Matrix.Basis
-import QICLean.Kraus.Injectivity
-import TNLean.Algebra.MatrixSingleSpan
+import TNLean.MPS.Core.NormalityFromTwoWords
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.MPDO.OperatorProduct
 
@@ -167,32 +166,10 @@ private theorem single_one_one : Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ)
 /-- **The bond-two tensor of the note is normal.** Its length-two words span the full
 two-by-two matrix algebra (construction note, `ex:p5ft-czx`). -/
 theorem czxMPS_isNormal : Kraus.IsNormal czxMPS := by
-  refine ⟨2, two_pos, ?_⟩
-  rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
-  set T := Submodule.span ℂ
-    (Set.range fun σ : Fin 2 → Fin 4 => Kraus.evalWord czxMPS (List.ofFn σ)) with hT
-  have hword : ∀ a b : Fin 4, czxMPS a * czxMPS b ∈ T := by
-    intro a b
-    refine Submodule.subset_span ⟨![a, b], ?_⟩
-    simp [Kraus.evalWord, List.ofFn_succ]
-  have hcomb : ∀ X Y : Matrix (Fin 2) (Fin 2) ℂ, ∀ a b c e : Fin 4, ∀ u v : ℂ,
-      X = u • (czxMPS a * czxMPS b) + v • (czxMPS c * czxMPS e) → X ∈ T := by
-    intro X Y a b c e u v hX
-    rw [hX]
-    exact T.add_mem (T.smul_mem _ (hword a b)) (T.smul_mem _ (hword c e))
-  have m00 : Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ T :=
-    hcomb _ 0 2 2 1 2 _ _ single_zero_zero
-  have m10 : Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ T :=
-    hcomb _ 0 2 2 1 2 _ _ single_one_zero
-  have m01 : Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ T :=
-    hcomb _ 0 2 1 1 1 _ _ single_zero_one
-  have m11 : Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ T :=
-    hcomb _ 0 2 1 1 1 _ _ single_one_one
-  have hunit : ∀ i j : Fin 2, Matrix.single i j (1 : ℂ) ∈ T := by
-    intro i j
-    fin_cases i <;> fin_cases j
-    exacts [m00, m01, m10, m11]
-  exact T.eq_top_of_forall_single_mem hunit
+  refine MPSTensor.isNormal_of_single_eq_two_words czxMPS fun i j => ?_
+  fin_cases i <;> fin_cases j
+  exacts [⟨2, 2, 1, 2, _, _, single_zero_zero⟩, ⟨2, 1, 1, 1, _, _, single_zero_one⟩,
+    ⟨2, 2, 1, 2, _, _, single_one_zero⟩, ⟨2, 1, 1, 1, _, _, single_one_one⟩]
 
 /-! ### The stacked product tensor of Example D -/
 
