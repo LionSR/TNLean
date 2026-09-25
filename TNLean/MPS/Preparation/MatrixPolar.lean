@@ -39,12 +39,19 @@ All three factors are built by the continuous functional calculus of the Hermiti
   `V†V = Π` the projector onto the image of `P`).
 -/
 
-open scoped Matrix MatrixOrder
+open scoped Matrix MatrixOrder ComplexOrder
 
 namespace Matrix
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
 
+omit [Fintype κ] [DecidableEq κ] in
+/-- The Gram matrix `Mᴴ M` is self-adjoint, stated with the predicate of the matrix continuous
+functional calculus. -/
+private lemma isSelfAdjoint_gram (M : Matrix ι κ ℂ) : IsSelfAdjoint (Mᴴ * M) :=
+  isHermitian_conjTranspose_mul_self M
+
+omit [Fintype κ] [DecidableEq κ] in
 /-- The Gram matrix `Mᴴ M` is Hermitian. -/
 private lemma isHermitian_gram (M : Matrix ι κ ℂ) : (Mᴴ * M).IsHermitian :=
   isHermitian_conjTranspose_mul_self M
@@ -97,13 +104,13 @@ noncomputable def polarIso (M : Matrix ι κ ℂ) : Matrix ι κ ℂ :=
 arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
 tensors": `P` is positive semidefinite. -/
 theorem posSemidef_polarPos (M : Matrix ι κ ℂ) : (polarPos M).PosSemidef :=
-  (cfc_nonneg fun x _ => Real.sqrt_nonneg x).posSemidef
+  nonneg_iff_posSemidef.mp (cfc_nonneg fun x _ => Real.sqrt_nonneg x)
 
 /-- The positive part squares to the Gram matrix: `P * P = Mᴴ M`. -/
 theorem polarPos_mul_polarPos (M : Matrix ι κ ℂ) : polarPos M * polarPos M = Mᴴ * M := by
   have hc := continuousOn_spectrum Real.sqrt (Mᴴ * M)
   rw [polarPos, ← cfc_mul Real.sqrt Real.sqrt (Mᴴ * M) hc hc]
-  conv_rhs => rw [← cfc_id' ℝ (Mᴴ * M)]
+  conv_rhs => rw [← cfc_id' ℝ (Mᴴ * M) (isSelfAdjoint_gram M)]
   exact cfc_congr fun x hx => Real.mul_self_sqrt (gram_spectrum_nonneg M x hx)
 
 /-- The support projector is Hermitian. -/
@@ -151,8 +158,8 @@ private lemma polarPosInv_mul_polarPos (M : Matrix ι κ ℂ) :
 /-- The Gram matrix is fixed by the support projector: `Mᴴ M Π = Mᴴ M`. -/
 private lemma gram_mul_polarSupport (M : Matrix ι κ ℂ) :
     Mᴴ * M * polarSupport M = Mᴴ * M := by
-  conv_lhs => rw [← cfc_id' ℝ (Mᴴ * M)]
-  conv_rhs => rw [← cfc_id' ℝ (Mᴴ * M)]
+  conv_lhs => rw [← cfc_id' ℝ (Mᴴ * M) (isSelfAdjoint_gram M)]
+  conv_rhs => rw [← cfc_id' ℝ (Mᴴ * M) (isSelfAdjoint_gram M)]
   rw [polarSupport, ← cfc_mul _ _ (Mᴴ * M) (continuousOn_spectrum _ _)
     (continuousOn_spectrum _ _)]
   refine cfc_congr fun x _ => ?_
@@ -161,15 +168,17 @@ private lemma gram_mul_polarSupport (M : Matrix ι κ ℂ) :
 
 /-- The matrix is fixed by the support projector: `M Π = M`. -/
 theorem mul_polarSupport (M : Matrix ι κ ℂ) : M * polarSupport M = M := by
-  rw [← sub_eq_zero, ← mul_one M, mul_assoc, one_mul, ← mul_sub,
-    ← conjTranspose_mul_self_mul_eq_zero, mul_sub, mul_one, gram_mul_polarSupport, sub_self]
+  have h : M * (polarSupport M - 1) = 0 := (conjTranspose_mul_self_mul_eq_zero M _).mp (by
+    rw [Matrix.mul_sub, gram_mul_polarSupport, Matrix.mul_one, sub_self])
+  rw [Matrix.mul_sub, Matrix.mul_one, sub_eq_zero] at h
+  exact h
 
 /-- **Polar decomposition**, product form: `V * P = M`.
 
 arXiv:2307.01696, paragraph "Approximation through the fixed-point state" (`B = V P`) and
 Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors". -/
 theorem polarIso_mul_polarPos (M : Matrix ι κ ℂ) : polarIso M * polarPos M = M := by
-  rw [polarIso, mul_assoc, polarPosInv_mul_polarPos, mul_polarSupport]
+  rw [polarIso, Matrix.mul_assoc, polarPosInv_mul_polarPos, mul_polarSupport]
 
 /-- **Polar decomposition**, partial-isometry relation: `Vᴴ * V = Π`.
 
@@ -179,8 +188,8 @@ theorem conjTranspose_polarIso_mul_polarIso (M : Matrix ι κ ℂ) :
     (polarIso M)ᴴ * polarIso M = polarSupport M := by
   have hQ : (polarPosInv M)ᴴ = polarPosInv M :=
     (cfc_predicate (fun x : ℝ => (Real.sqrt x)⁻¹) (Mᴴ * M) : IsSelfAdjoint _)
-  rw [polarIso, conjTranspose_mul, hQ, mul_assoc, ← mul_assoc Mᴴ]
-  conv_lhs => rw [← cfc_id' ℝ (Mᴴ * M)]
+  rw [polarIso, conjTranspose_mul, hQ, Matrix.mul_assoc, ← Matrix.mul_assoc Mᴴ]
+  conv_lhs => rw [← cfc_id' ℝ (Mᴴ * M) (isSelfAdjoint_gram M)]
   rw [polarPosInv, ← cfc_mul _ _ (Mᴴ * M) (continuousOn_spectrum _ _)
     (continuousOn_spectrum _ _), ← cfc_mul _ _ (Mᴴ * M) (continuousOn_spectrum _ _)
     (continuousOn_spectrum _ _), polarSupport]
@@ -203,10 +212,10 @@ theorem range_polarSupport (M : Matrix ι κ ℂ) :
   apply le_antisymm
   · rintro _ ⟨v, rfl⟩
     refine ⟨polarPosInv M *ᵥ v, ?_⟩
-    simp [mulVecLin_apply, mulVec_mulVec, polarPos_mul_polarPosInv]
+    simp [mulVec_mulVec, polarPos_mul_polarPosInv]
   · rintro _ ⟨v, rfl⟩
     refine ⟨polarPos M *ᵥ v, ?_⟩
-    simp [mulVecLin_apply, mulVec_mulVec, polarSupport_mul_polarPos]
+    simp [mulVec_mulVec, polarSupport_mul_polarPos]
 
 /-- For an injective matrix the support projector is the identity. -/
 theorem polarSupport_eq_one_of_injective (M : Matrix ι κ ℂ) (hM : Function.Injective M.mulVec) :

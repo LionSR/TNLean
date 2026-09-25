@@ -46,7 +46,7 @@ applied to the periodic `M`-site state of `P`.
   (`B = V P` with `V†V = Π`, and `|φ_N⟩ = (⊗ᵢ Vᵢ) ∑ⱼ βⱼ |v_{pos,j}⟩`).
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
@@ -82,7 +82,9 @@ arXiv:2307.01696, footnote to "Approximation through the fixed-point state": inj
 `B` in the sense of Pérez-García et al. makes `B` an injective map `ℂ^{D²} → ℂ^{d^q}`. -/
 theorem injective_physicalMatrix_mulVec_of_isInjective {A : MPSTensor n D}
     (hA : Kraus.IsInjective A) : Function.Injective (physicalMatrix A).mulVec := by
-  rw [← LinearMap.coe_mulVecLin, ← LinearMap.ker_eq_bot, LinearMap.ker_eq_bot']
+  suffices key : ∀ x, (physicalMatrix A).mulVec x = 0 → x = 0 by
+    intro x y hxy
+    exact sub_eq_zero.mp (key (x - y) (by rw [Matrix.mulVec_sub, hxy, sub_self]))
   intro x hx
   let f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ :=
     { toFun := fun Y => ∑ p : Fin D × Fin D, Y p.1 p.2 * x p
@@ -94,7 +96,7 @@ theorem injective_physicalMatrix_mulVec_of_isInjective {A : MPSTensor n D}
     simpa [f, Matrix.mulVec, dotProduct, physicalMatrix] using this
   funext p
   have := LinearMap.congr_fun hf (Matrix.single p.1 p.2 1)
-  simpa [f, Matrix.single_apply, Finset.sum_ite_eq', Prod.ext_iff, ite_and] using this
+  simpa [f, Matrix.single_apply, ← Prod.ext_iff, Finset.sum_ite_eq] using this
 
 /-! ### Matrices acting on the physical leg -/
 
@@ -125,7 +127,7 @@ theorem transferMap_physicalApply_apply (W : Matrix (Fin m) (Fin n) ℂ) (A : MP
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun k _ => ?_
   refine Finset.sum_congr rfl fun i _ => ?_
-  simp [Matrix.conjTranspose_apply, smul_mul_assoc, mul_smul_comm, smul_smul, mul_comm]
+  simp [Matrix.conjTranspose_apply, smul_smul, mul_comm]
 
 /-- If `Wᴴ W` fixes the tensor `A` on its physical leg, then `W · A` and `A` have the same
 transfer operator.
@@ -151,7 +153,7 @@ theorem evalWord_physicalApply_ofFn (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTen
     simp only [physicalApply, Finset.sum_mul, Finset.mul_sum, Fin.consEquiv_apply,
       Fin.prod_univ_succ, Fin.cons_zero, Fin.cons_succ, List.ofFn_succ, Kraus.evalWord_cons,
       smul_mul_smul, mul_smul]
-    rfl
+    exact Finset.sum_comm
 
 /-- The periodic state of `W · A` on `N` sites is `W^{⊗N}` applied to the periodic state of
 `A`.
@@ -231,8 +233,8 @@ arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-
 tensors": `V†V = Π`. -/
 theorem conjTranspose_polarIsoMatrix_mul (B : MPSTensor n D) :
     (polarIsoMatrix B)ᴴ * polarIsoMatrix B = polarSupportMatrix B := by
-  rw [polarIsoMatrix, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv,
-    Matrix.conjTranspose_polarIso_mul_polarIso, polarSupportMatrix]
+  rw [polarIsoMatrix, Matrix.conjTranspose_submatrix, ← Matrix.submatrix_mul _ _ _ id _
+    Function.bijective_id, Matrix.conjTranspose_polarIso_mul_polarIso, polarSupportMatrix]
 
 /-- The support projector is Hermitian. -/
 theorem isHermitian_polarSupportMatrix (B : MPSTensor n D) :
@@ -279,7 +281,7 @@ arXiv:2307.01696, paragraph "Approximation through the fixed-point state": for i
 theorem posDef_polarPosMatrix_of_isInjective {B : MPSTensor n D}
     (hB : Kraus.IsInjective B) : (polarPosMatrix B).PosDef :=
   (Matrix.posDef_polarPos_of_injective _
-    (injective_physicalMatrix_mulVec_of_isInjective hB)).submatrix _
+    (injective_physicalMatrix_mulVec_of_isInjective hB)).submatrix (virtualPairEquiv D).injective
 
 /-! ### Blocked tensors -/
 
