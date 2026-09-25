@@ -131,9 +131,13 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     exactly to $T_{gh}$ is on-site, and then its three-cocycle is trivial
     \cite[Section~4]{GarreRubio2023MPOSym}. Hence a nontrivial
     class forbids an on-site form. It also forbids a symmetric normal matrix
-    product state (Theorem~\ref{thm:mpoalg_no_symmetric_normal}), so a local
-    Hamiltonian with such a symmetry is critical or has a degenerate ground
-    space \cite{ChenLiuWen2011CZX,GarreRubio2023MPOSym,Cirac2021Matrix}.
+    product state (Theorem~\ref{thm:mpoalg_no_symmetric_normal}). In
+    particular a symmetric parent Hamiltonian cannot have a normal matrix
+    product state as its unique ground state; for gapped local Hamiltonians
+    whose ground states are matrix product states, the symmetry forces a
+    degenerate ground space, and the sources argue more generally that such
+    Hamiltonians are critical or symmetry breaking
+    \cite{ChenLiuWen2011CZX,GarreRubio2023MPOSym,Cirac2021Matrix}.
     % Source anchor: arXiv:2203.12563, lines 677--681 (three-cocycle and
     %   H^3), 738 (no injective invariant state), 1211--1216 (injective
     %   representation with closed fusion is on-site), 2064--2070 (the
@@ -657,10 +661,10 @@ relation between word traces has nonnegative integer coefficients.
         def:mposym_pf_dimension}
     The obstruction of Corollary~\ref{cor:mpo_symmetric_no_go} concerns a
     single normal tensor. A superposition of the periodic vectors of several
-    normal tensors can still be an eigenvector of every operator. If the
-    matrices $M_a=\bigl(M_{a,x}^y\bigr)$ of
-    Theorem~\ref{thm:mpo_symmetric_nimrep} have a common eigenvector $v$ with
-    positive entries, $M_av=r_av$, then
+    normal tensors can still be an eigenvector of every operator. If positive
+    numbers $v_x$ satisfy $\sum_xv_xM_{a,x}^y=r_av_y$ for all $a$ and $y$,
+    with the coefficients $M_{a,x}^y$ of
+    Theorem~\ref{thm:mpo_symmetric_nimrep}, then
     $\ket{\psi^{(N)}}=\sum_xv_x\ket{V^{(N)}(A_x)}$ satisfies
     $O_a^{(N)}\ket{\psi^{(N)}}=r_a\ket{\psi^{(N)}}$; Garre-Rubio, Lootens
     and Molnár show that such a $v$ exists when the algebra is that of a
@@ -696,10 +700,10 @@ relation between word traces has nonnegative integer coefficients.
     \end{align}
     for all physical indices $i,k$ \cite{Bultinck2017Anyons}. A fusion
     tensor can then be slid through the product of two operators one site at
-    a time. In the setting of the source the two identities are equivalent to
-    the reconstruction
-    $(T_aT_b)^{ik}=\sum_{c,\mu}X_{ab,\mu}^cT_c^{ik}X_{ab,\mu}^{c+}$, and
-    closing the chain then gives (\ref{eq:mpo_fusion_algebra}) at every
+    a time. If in addition the product is reconstructed on the span of the zipper
+    maps, $(T_aT_b)^{ik}=\sum_{c,\mu}X_{ab,\mu}^cT_c^{ik}X_{ab,\mu}^{c+}$,
+    as required in Definition~\ref{def:mpdo_complete_zipper_fusion_family},
+    then closing the chain gives (\ref{eq:mpo_fusion_algebra}) at every
     length. Its pictorial form, in which an operator is pulled through
     a region of a two-dimensional tensor network, is the
     \emph{pulling-through} condition of topologically ordered projected
