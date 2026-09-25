@@ -30,8 +30,16 @@ associativity analysis (lines 193--200 and 247).  The star-closed case supplies 
 * `MPOTensor.CompleteZipperFusionFamily.ofCompression`: the complete zipper fusion family whose
   fusion tensors and left inverses are the pairs of split multi-block compressions of the
   pairwise products.
+* `MPOTensor.CompleteZipperFusionFamily.ofStar`: the complete zipper fusion family in the
+  star-closed case, built from the split compressions of the next item.
 
 ## Main statements
+
+* `MPOTensor.CompleteZipperFusionFamily.exists_pairCompression_remainder_eq_zero_of_star`: under
+  the fusion rules on word traces and the star closure of the product tensor, the product `O_a O_b`
+  has a multi-block compression with vanishing remainder.
+* `MPOTensor.CompleteZipperFusionFamily.exists_ofStar_fusionTensor_eq`: the fusion tensors of
+  `ofStar` are the compression maps of split compressions of the pairwise products.
 
 * `MPOTensor.CompleteZipperFusionFamily.ofCompression_fusionTensor`,
   `MPOTensor.CompleteZipperFusionFamily.ofCompression_fusionTensorLeftInverse`: the fusion
