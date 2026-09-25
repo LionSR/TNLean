@@ -566,5 +566,7 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
 - `rmp_aklt_pauli_basis_sign.tex` records that in the printed basis
   $\ket{+}=i(\ket{-1}+\ket{+1})/\sqrt2$, $\ket{-}$, $\ket{0}$ the AKLT tensor
   becomes $(\sigma_x,-\sigma_y,\sigma_z)/\sqrt2$, not the printed
-  $(\sigma_x,\sigma_y,\sigma_z)/\sqrt2$; the printed Pauli form holds with the
-  phase of $\ket{+}$ conjugated. Both identities are formally verified.
+  $(\sigma_x,\sigma_y,\sigma_z)/\sqrt2$. The two agree up to the virtual gauge
+  $\sigma_y$ and the scalar $-1$, so the states differ only by the global sign
+  $(-1)^N$; the printed Pauli form holds exactly with the phase of $\ket{+}$
+  conjugated. These identities are formally verified.

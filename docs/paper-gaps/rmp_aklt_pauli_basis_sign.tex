@@ -75,38 +75,58 @@ $A^{-1}=\ketbra{1}{0}$. Since $\langle +|\pm1\rangle=-i/\sqrt2$,
 while $B^-=(A^{-1}-A^{+1})/\sqrt2=\sigma_x/\sqrt2$ and
 $B^0=\sigma_z/\sqrt2$ agree with the source. The printed $\sigma_y$ is the
 value of $\sum_s\langle s\,|\,a\rangle A^s$, which uses the complex conjugate
-of the correct coefficient; it is not a gauge artefact. No virtual gauge
-maps $(\sigma_x,\sigma_y,\sigma_z)$ to $(\sigma_x,-\sigma_y,\sigma_z)$,
-because that map reverses the orientation of the Pauli vector, and the two
-tensors give different states: for $N=3$ the coefficients of
-$\ket{-,+,0}$ are $\operatorname{tr}(\sigma_x\sigma_y\sigma_z)/2^{3/2}=i/\sqrt2$
-and its negative.
+of the correct coefficient.
+
+The discrepancy is a virtual gauge together with a scalar. Conjugation by
+$\sigma_y$ reverses the signs of $\sigma_x$ and $\sigma_z$ and fixes
+$\sigma_y$, so
+\begin{align}
+    (\sigma_x,-\sigma_y,\sigma_z)
+        &=\sigma_y\,\big(-(\sigma_x,\sigma_y,\sigma_z)\big)\,\sigma_y^{-1}.
+    \label{eq:rmp_aklt_pauli_basis_sign_gauge}
+\end{align}
+The reversal of orientation caused by the sign of $\sigma_y$ is undone by
+the overall factor $-1$. Hence on $N$ sites the state described by
+$(\sigma_x,-\sigma_y,\sigma_z)/\sqrt2$ is $(-1)^N$ times the state described
+by the printed form $(\sigma_x,\sigma_y,\sigma_z)/\sqrt2$: the two states
+coincide up to a global sign. For $N=3$ every nonzero coefficient changes
+sign; for instance the coefficients of $\ket{-,+,0}$ are
+$\operatorname{tr}(\sigma_x\sigma_y\sigma_z)/2^{3/2}=i/\sqrt2$ and its
+negative.
 
 \section{The correction}
 
-The printed Pauli form holds exactly in the orthonormal basis
+In the printed basis (\ref{eq:rmp_aklt_pauli_basis_sign_basis}) the component
+of the tensor along $\ket{+}$ is $-\sigma_y/\sqrt2$. By
+(\ref{eq:rmp_aklt_pauli_basis_sign_gauge}) this tensor equals the printed
+Pauli form up to the virtual gauge $\sigma_y$ and the scalar $-1$, and its
+state equals the state of the printed Pauli form up to the global sign
+$(-1)^N$. The printed Pauli form holds exactly in the orthonormal basis
 \begin{align}
     \ket{+}
         &=-\frac{i}{\sqrt2}\left(\ket{-1}+\ket{+1}\right),
     \label{eq:rmp_aklt_pauli_basis_sign_corrected}
 \end{align}
-with $\ket{-}$ and $\ket{0}$ unchanged; equivalently, in the printed basis the
-component along $\ket{+}$ is $-\sigma_y/\sqrt2$. The two readings differ by the
-sign of one physical basis vector, so every symmetry, normality, and
-parent-Hamiltonian property of the Pauli form is unaffected. Both identities,
-the orthonormality of both bases, and the expansion of the state coefficients
-in the new basis are formally verified in
-\doclink{TNLean/MPS/Examples/AKLTReview}.\footnote{In particular,
-\leanid{MPSTensor.physicalBasisChange_akltRMPBasis},
-\leanid{MPSTensor.physicalBasisChange_akltRMPBasisFixed}, and
-\leanid{MPSTensor.mpv_physicalBasisChange}.}
+with $\ket{-}$ and $\ket{0}$ unchanged. Every symmetry, normality, and
+parent-Hamiltonian property of the Pauli form is unaffected. The component
+identities in both bases, the gauge-and-sign relation
+(\ref{eq:rmp_aklt_pauli_basis_sign_gauge}), the resulting factor $(-1)^N$
+on the state coefficients, and the orthonormality of both bases are formally
+verified in \doclink{TNLean/MPS/Examples/AKLTReview}.\footnote{In particular,
+\leanid{MPSTensor.rotatePhysical_akltRMPBasis},
+\leanid{MPSTensor.akltTensorRMPPauli_neg_gaugeEquiv},
+\leanid{MPSTensor.mpv_rotatePhysical_akltRMPBasis}, and
+\leanid{MPSTensor.rotatePhysical_akltRMPBasisFixed}.}
 
 \section{Verdict}
 
-The printed Pauli form of the AKLT tensor in Ref.~\cite{Cirac2021Matrix} holds
-with $A^+=-\sigma_y/\sqrt2$ in the printed basis, or with the phase of
-$\ket{+}$ conjugated. The tensor itself, its derivation from singlet bonds,
-and the statements about $A^-$ and $A^0$ hold as printed.
+The printed Pauli form of the AKLT tensor in Ref.~\cite{Cirac2021Matrix}
+describes the AKLT state up to a global sign: in the printed basis the
+tensor is $(\sigma_x,-\sigma_y,\sigma_z)/\sqrt2$, which is the printed form
+up to the virtual gauge $\sigma_y$ and the scalar $-1$. As an identity of
+tensors, the printed form holds with the phase of $\ket{+}$ conjugated. The
+tensor itself, its derivation from singlet bonds, and the statements about
+$A^-$ and $A^0$ hold as printed.
 
 \bibliographystyle{alpha}
 \bibliography{references}

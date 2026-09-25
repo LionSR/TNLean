@@ -21,8 +21,8 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
     resulting tensor with $d=3$ and $D=2$ is
     \begin{align}
         A^{+1} & = \begin{pmatrix}1&0\\0&0\end{pmatrix}Y,
-               & A^{0} & = \frac{1}{\sqrt2}\begin{pmatrix}0&1\\1&0\end{pmatrix}Y,
-               & A^{-1} & = \begin{pmatrix}0&0\\0&1\end{pmatrix}Y.
+               & A^{0}                                    & = \frac{1}{\sqrt2}\begin{pmatrix}0&1\\1&0\end{pmatrix}Y,
+               & A^{-1}                                   & = \begin{pmatrix}0&0\\0&1\end{pmatrix}Y.
         \label{eq:aklt_review_tensor}
     \end{align}
     The three left factors are the spin-$1$ states $\ket{\uparrow\uparrow}$,
@@ -53,30 +53,6 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
     $\tr\big((P^{s})^{\dagger}P^{t}\big)=\delta_{st}$.
 \end{theorem}
 
-\begin{definition}[Tensor in a new physical basis]\label{def:physical_basis_change}
-    \lean{MPSTensor.physicalBasisChange}
-    \leanok
-    \uses{def:mps_tensor}
-    Let $V\in\MN{d}$ and let $\ket{e_a}=\sum_s V_{sa}\ket{s}$ be its columns.
-    The tensor $A$ expressed in the basis $\{\ket{e_a}\}$ is
-    $B^{a}=\sum_{s}\overline{V_{sa}}\,A^{s}$.
-\end{definition}
-
-\begin{theorem}[Coefficients in a new physical basis]\label{thm:physical_basis_change_coefficients}
-    \lean{MPSTensor.mpv_physicalBasisChange}
-    \leanok
-    \uses{def:physical_basis_change}
-    For every $N$ and every $a_1,\dots,a_N$,
-    $\tr(B^{a_1}\cdots B^{a_N})
-    =\sum_{s}\prod_{k}\overline{V_{s_k a_k}}\,\tr(A^{s_1}\cdots A^{s_N})$.
-    When $V$ is unitary this is the component of the matrix product state
-    of $A$ along $\ket{e_{a_1}\cdots e_{a_N}}$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Expand each $B^{a_k}$ and use multilinearity of the product and the trace.
-\end{proof}
-
 \begin{definition}[The Pauli basis of the spin-$1$ site]\label{def:aklt_review_basis}
     \lean{MPSTensor.akltRMPBasis, MPSTensor.akltRMPBasisFixed,
         MPSTensor.akltRMPBasis_mem_unitaryGroup,
@@ -86,7 +62,7 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
     The basis of \cite[Appendix~A, ``The AKLT state'']{Cirac2021Matrix} is
     \begin{align}
         \ket{+} & = \frac{i}{\sqrt2}\big(\ket{-1}+\ket{+1}\big),
-                & \ket{-} & = \frac{1}{\sqrt2}\big(\ket{-1}-\ket{+1}\big),
+                & \ket{-}                                        & = \frac{1}{\sqrt2}\big(\ket{-1}-\ket{+1}\big),
                 & \ket{0}.
         \label{eq:aklt_review_basis}
     \end{align}
@@ -95,32 +71,43 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
 \end{definition}
 
 \begin{theorem}[Pauli form of the AKLT tensor]\label{thm:aklt_review_pauli_form}
-    \lean{MPSTensor.akltTensorRMPPauli, MPSTensor.physicalBasisChange_akltRMPBasis,
-        MPSTensor.physicalBasisChange_akltRMPBasisFixed}
+    \lean{MPSTensor.akltTensorRMPPauli, MPSTensor.rotatePhysical_akltRMPBasis,
+        MPSTensor.akltTensorRMPPauli_neg_gaugeEquiv,
+        MPSTensor.mpv_rotatePhysical_akltRMPBasis,
+        MPSTensor.rotatePhysical_akltRMPBasisFixed}
     \leanok
-    \uses{def:aklt_tensor_review, def:physical_basis_change, def:aklt_review_basis,
-        lem:aklt_review_matrices}
-    Expressed in the basis (\ref{eq:aklt_review_basis}), the tensor
-    (\ref{eq:aklt_review_tensor}) becomes
+    \uses{def:aklt_tensor_review, def:rotate_physical, lem:mpv_rotate_physical,
+        def:aklt_review_basis, lem:aklt_review_matrices, def:gauge_equiv}
+    Let $U$ be the unitary whose columns are the vectors of
+    (\ref{eq:aklt_review_basis}). The tensor (\ref{eq:aklt_review_tensor})
+    expressed in this basis, that is, the tensor $B^{a}=\sum_{s}\overline{U_{sa}}\,A^{s}$
+    obtained by rotating the physical index by $U^{\dagger}$, is
     \begin{align}
-        A^{-} & = \tfrac{1}{\sqrt2}\sigma_x,
-              & A^{+} & = -\tfrac{1}{\sqrt2}\sigma_y,
-              & A^{0} & = \tfrac{1}{\sqrt2}\sigma_z.
+        B^{-} & = \tfrac{1}{\sqrt2}\sigma_x,
+              & B^{+}                        & = -\tfrac{1}{\sqrt2}\sigma_y,
+              & B^{0}                        & = \tfrac{1}{\sqrt2}\sigma_z.
         \notag
     \end{align}
-    In the basis with $\ket{+}=-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$ it becomes
-    exactly $A^{-}=\sigma_x/\sqrt2$, $A^{+}=\sigma_y/\sqrt2$,
-    $A^{0}=\sigma_z/\sqrt2$, the form printed in
-    \cite[Appendix~A, ``The AKLT state'']{Cirac2021Matrix}. The source prints
-    $A^{+}=\sigma_y/\sqrt2$ for the basis (\ref{eq:aklt_review_basis}); the
-    sign is corrected in \cite{gap:rmp_aklt_pauli_basis_sign}.
+    This is the form $\sigma_i/\sqrt2$ printed in
+    \cite[Appendix~A, ``The AKLT state'']{Cirac2021Matrix} up to the virtual
+    gauge $\sigma_y$ and the scalar $-1$: $B^{a}=\sigma_y\big(-\sigma_a/\sqrt2\big)\sigma_y^{-1}$
+    for $a=-,+,0$ with $\sigma_-=\sigma_x$, $\sigma_+=\sigma_y$, $\sigma_0=\sigma_z$.
+    Hence on $N$ sites the state coefficients of $B$ are $(-1)^N$ times those of
+    the printed form, and the two describe the same state up to a global sign.
+    In the basis with $\ket{+}=-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$ the tensor
+    becomes exactly $\sigma_i/\sqrt2$. The printed identity $A^{+}=\sigma_y/\sqrt2$
+    in the basis (\ref{eq:aklt_review_basis}) holds only up to this gauge and sign,
+    as recorded in \cite{gap:rmp_aklt_pauli_basis_sign}.
 \end{theorem}
 \begin{proof}
     \leanok
     Since $\langle +|\pm1\rangle=-i/\sqrt2$, one has
-    $A^{+}=-\frac{i}{\sqrt2}(A^{-1}+A^{+1})=-\frac{i}{\sqrt2}Y=-\sigma_y/\sqrt2$,
-    while $A^{-}=(A^{-1}-A^{+1})/\sqrt2=\sigma_x/\sqrt2$; conjugating the phase
-    of $\ket{+}$ reverses the sign of $A^{+}$.
+    $B^{+}=-\frac{i}{\sqrt2}(A^{-1}+A^{+1})=-\frac{i}{\sqrt2}Y=-\sigma_y/\sqrt2$,
+    while $B^{-}=(A^{-1}-A^{+1})/\sqrt2=\sigma_x/\sqrt2$; conjugating the phase
+    of $\ket{+}$ reverses the sign of $B^{+}$. Conjugation by $\sigma_y$ fixes
+    $\sigma_y$ and reverses the signs of $\sigma_x$ and $\sigma_z$, which gives
+    the gauge relation; a gauge leaves the state unchanged and the scalar $-1$
+    multiplies it by $(-1)^N$.
 \end{proof}
 
 \begin{definition}[AKLT tensor]\label{def:aklt_tensor}
