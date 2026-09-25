@@ -1150,7 +1150,7 @@ abstracted — record why, so it is not re-proposed).
   `GoldenCompression.lean` and `EisensteinCertificates.lean`, and about thirty
   gauge-inverse rewrites across the CZX, Ising, multi-block, Fibonacci and
   `ℤ[ω]` examples.
-- **Abstraction:** `MPSTensor.complexOfRing_sub`, `_transpose`, `_trace`,
+- **Abstraction:** `MPSTensor.complexOfRing_sub`, `_transpose`,
   `_blockDiagonal'`, `_injective`, `_ne_zero` and
   `MPSTensor.complexOfRing_mul_eq_one` in
   `TNLean/Algebra/ComplexOfRing.lean`; `MPSTensor.evalWordR` with

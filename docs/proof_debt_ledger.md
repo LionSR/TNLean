@@ -1030,7 +1030,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   rename their ≈90 call sites, redirect `thm:asymex_explicit_gauge` and
   `thm:asymex_zsqrt2_ring`, root build, checkdecls; golden and Eisenstein after
   #7838 and #7833 land.
-- **Progress (2026-09-25, PR #8098, Lean −69 lines)**: the integer and `ℤ√2` heads were
+- **Progress (2026-09-25, PR #8098, Lean −72 lines)**: the integer and `ℤ√2` heads were
   converted earlier; the golden and Eisenstein heads are now same-name `abbrev`s of
   `complexOfRing`, with word evaluation, the gauge-inverse identity
   `complexOfRing_mul_eq_one` and the scaled matrix-unit normality certificate
