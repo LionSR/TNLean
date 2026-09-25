@@ -44,6 +44,8 @@ is a product of matrices with the leftmost factor applied last.
 * `KWExample.ssCircuit_mul_ssEta`, `KWExample.ssEta_mul_ssCircuit`,
   `KWExample.ssCircuit_mul_conjTranspose`, `KWExample.ssCircuit_conjTranspose_mul`,
   `KWExample.ssCircuit_mul_self`: the algebra of the source for the circuit.
+* `KWExample.ssCircuit_mulVec_eq_zero_iff`, `KWExample.exists_ssCircuit_mulVec_eq_iff`: the
+  kernel of the circuit is the sector `η = -1` and its range the sector `η = +1`.
 * `KWExample.transpose_translate_apply`, `KWExample.hadamard_mul_transpose_translate`: the
   translation `T_Ising = Tᵀ` and its commutation with the Hadamard gate.
 
@@ -253,17 +255,14 @@ theorem mul_hGateX_apply (M : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ) (j
 
 /-- The weight of one step of the path: the gate `(1 + i X_k)/√2` from bit `y` to bit `x`,
 followed by the diagonal gate `(1 + i Z_k Z_{k+1})/√2` on the bits `y` and `z`. -/
-def pathWeight (x y z : Fin 2) : ℂ :=
+private def pathWeight (x y z : Fin 2) : ℂ :=
   invSqrtTwo * (if x = y then 1 else I) *
     (invSqrtTwo * (1 + I * ((-1 : ℂ) ^ y.val * (-1 : ℂ) ^ z.val)))
-
-theorem natCast_val_of_le {n k : ℕ} (hk : k ≤ n) : ((k : Fin (n + 1)) : ℕ) = k := by
-  rw [Fin.val_natCast, Nat.mod_eq_of_lt (Nat.lt_succ_of_le hk)]
 
 /-- Entries of the first `m` gate pairs of the circuit in the Hadamard frame: the input and output
 agree from site `m` on, and the entry is the product of the path weights over the first `m`
 sites. -/
-theorem prefix_apply (n : ℕ) (m : ℕ) (hm : m ≤ n) (c b : Fin (n + 1) → Fin 2) :
+private theorem prefix_apply (n : ℕ) (m : ℕ) (hm : m ≤ n) (c b : Fin (n + 1) → Fin 2) :
     (List.ofFn fun k : Fin m =>
         hGateX ((k : ℕ) : Fin (n + 1)) * hGateZZ ((k : ℕ) : Fin (n + 1))).prod c b =
       if ∀ k : Fin (n + 1), m ≤ k.val → c k = b k then
@@ -281,13 +280,14 @@ theorem prefix_apply (n : ℕ) (m : ℕ) (hm : m ≤ n) (c b : Fin (n + 1) → F
   | succ m ih =>
     have hm' : m ≤ n := Nat.le_of_succ_le hm
     set s : Fin (n + 1) := ((m : ℕ) : Fin (n + 1)) with hs
-    have hsval : s.val = m := natCast_val_of_le hm'
+    have hsval : s.val = m := Fin.val_cast_of_lt (Nat.lt_succ_of_le hm')
     have hs1 : s + 1 = ((m + 1 : ℕ) : Fin (n + 1)) := by rw [hs]; push_cast; rfl
-    have hs1val : (((m + 1 : ℕ)) : Fin (n + 1)).val = m + 1 := natCast_val_of_le hm
+    have hs1val : (((m + 1 : ℕ)) : Fin (n + 1)).val = m + 1 :=
+      Fin.val_cast_of_lt (Nat.lt_succ_of_le hm)
     have hlt (k : ℕ) (hk : k < m) : ((k : ℕ) : Fin (n + 1)) ≠ s := by
       intro h
       have := congrArg Fin.val h
-      rw [natCast_val_of_le (by omega), hsval] at this
+      rw [Fin.val_cast_of_lt (by omega), hsval] at this
       omega
     have hsingle (k : ℕ) (hk : k < m) :
         (b + Pi.single s 1 : Fin (n + 1) → Fin 2) ((k : ℕ) : Fin (n + 1)) =
@@ -352,7 +352,7 @@ theorem prefix_apply (n : ℕ) (m : ℕ) (hm : m ≤ n) (c b : Fin (n + 1) → F
 
 /-- The full product of gates in the Hadamard frame, before the projection: a single path
 with the last gate `(1 + i X_n)/√2`. -/
-theorem prefix_mul_hGateX_last_apply (n : ℕ) (c b : Fin (n + 1) → Fin 2) :
+private theorem prefix_mul_hGateX_last_apply (n : ℕ) (c b : Fin (n + 1) → Fin 2) :
     ((List.ofFn fun k : Fin n =>
         hGateX ((k : ℕ) : Fin (n + 1)) * hGateZZ ((k : ℕ) : Fin (n + 1))).prod *
         hGateX (Fin.last n)) c b =
@@ -369,7 +369,7 @@ theorem prefix_mul_hGateX_last_apply (n : ℕ) (c b : Fin (n + 1) → Fin 2) :
     have hne : ((k : ℕ) : Fin (n + 1)) ≠ Fin.last n := by
       intro h
       have := congrArg Fin.val h
-      rw [natCast_val_of_le hk.le, Fin.val_last] at this
+      rw [Fin.val_cast_of_lt (Nat.lt_succ_of_le hk.le), Fin.val_last] at this
       omega
     simp [hne]
   have hprod : (∏ k ∈ Finset.range n, pathWeight (c (k : Fin (n + 1)))
@@ -395,20 +395,18 @@ theorem prefix_mul_hGateX_last_apply (n : ℕ) (c b : Fin (n + 1) → Fin 2) :
 
 /-! ### Phase bookkeeping -/
 
-theorem I_pow_three : I ^ 3 = -I := by rw [pow_succ, Complex.I_sq]; ring
-
-theorem pathWeight_eq (x y z : Fin 2) :
+private theorem pathWeight_eq (x y z : Fin 2) :
     pathWeight x y z =
       invSqrtTwo * invSqrtTwo * (1 + I) * (I ^ x.val * (-I) ^ z.val) * bitSign y (x + z) := by
   fin_cases x <;> fin_cases y <;> fin_cases z <;>
     (simp [pathWeight, bitSign]; ring_nf; try simp only [Complex.I_sq]; try ring_nf)
 
-theorem bitSign_rev_left (y w : Fin 2) :
+private theorem bitSign_rev_left (y w : Fin 2) :
     bitSign y.rev w = bitSign y w * (-1 : ℂ) ^ w.val := by
   fin_cases y <;> fin_cases w <;> simp [bitSign]
 
 /-- A telescoping product `∏_{k<m} u_k v_{k+1} = u_0 v_m` when `v_k u_k = 1`. -/
-theorem prod_range_mul_succ_eq (u v : ℕ → ℂ) (h : ∀ k, v k * u k = 1) (m : ℕ) :
+private theorem prod_range_mul_succ_eq (u v : ℕ → ℂ) (h : ∀ k, v k * u k = 1) (m : ℕ) :
     ∏ k ∈ Finset.range m, u k * v (k + 1) = u 0 * v m := by
   induction m with
   | zero => rw [Finset.prod_range_zero, mul_comm, h 0]
@@ -416,11 +414,11 @@ theorem prod_range_mul_succ_eq (u v : ℕ → ℂ) (h : ∀ k, v k * u k = 1) (m
     rw [Finset.prod_range_succ, ih]
     linear_combination (u 0 * v (m + 1)) * h m
 
-theorem neg_I_pow_mul_I_pow (x : Fin 2) : (-I) ^ x.val * I ^ x.val = 1 := by
+private theorem neg_I_pow_mul_I_pow (x : Fin 2) : (-I) ^ x.val * I ^ x.val = 1 := by
   fin_cases x <;> simp
 
 /-- The scalar `e^{-2π i N/8}` of the circuit is `(e^{-iπ/4})^N` with `e^{-iπ/4} = (1 - i)/√2`. -/
-theorem exp_circuitPhase (n : ℕ) :
+private theorem exp_circuitPhase (n : ℕ) :
     Complex.exp (-(2 * Real.pi * I * ((n + 1 : ℕ) : ℂ) / 8)) =
       (invSqrtTwo * (1 - I)) ^ (n + 1) := by
   have harg : -(2 * Real.pi * I * ((n + 1 : ℕ) : ℂ) / 8) =
@@ -435,17 +433,17 @@ theorem exp_circuitPhase (n : ℕ) :
 
 /-- The boundary factor: the last gate, the projection `½(1 + η)`, the leftover phases of the
 telescoping products, and the scalar `e^{-iπ/4}` combine to the sign of the closing bond. -/
-theorem boundary_phase (x y z : Fin 2) :
+private theorem boundary_phase (x y z : Fin 2) :
     (1 - I) * 2⁻¹ * (I ^ x.val * (-I) ^ z.val) *
         ((if z = y then 1 else I) + (if z = y.rev then 1 else I) *
           ((-1 : ℂ) ^ x.val * (-1 : ℂ) ^ z.val)) =
       bitSign y (z + x) := by
   fin_cases x <;> fin_cases y <;> fin_cases z <;>
-    (simp [bitSign]; ring_nf; try simp only [Complex.I_sq, I_pow_three]; try ring_nf)
+    (simp [bitSign]; ring_nf; try simp only [Complex.I_sq, Complex.I_pow_three]; try ring_nf)
 
 /-! ### The circuit is the Hadamard image of the rescaled transposed kernel -/
 
-theorem hadamard_mul_ssCircuit_mul_hadamard_eq_prefix (n : ℕ) :
+private theorem hadamard_mul_ssCircuit_mul_hadamard_eq_prefix (n : ℕ) :
     hadamard (n + 1) * ssCircuit n * hadamard (n + 1) =
       Complex.exp (-(2 * Real.pi * I * ((n + 1 : ℕ) : ℂ) / 8)) •
         ((List.ofFn fun k : Fin n =>
@@ -659,5 +657,45 @@ theorem ssCircuit_mul_self (n : ℕ) :
   rw [ssCircuit_eq, ← hadamard_mul_mul_mul_hadamard, kwTranslation_mul_self, Matrix.mul_smul,
     Matrix.smul_mul, hadamard_mul_mul_mul_hadamard, hadamard_mul_one_add_mul_hadamard, hT,
     ← ssEta_eq]
+
+/-! ### Kernel and range of the circuit -/
+
+/-- **The kernel of the circuit is the sector `η = -1`**: `𝖣 v = 0 ↔ η v = -v`.
+
+Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2423 (the
+operator has a kernel, the states with `η = -1`). -/
+theorem ssCircuit_mulVec_eq_zero_iff (n : ℕ) (v : (Fin (n + 1) → Fin 2) → ℂ) :
+    ssCircuit n *ᵥ v = 0 ↔ ssEta (n + 1) *ᵥ v = -v := by
+  constructor
+  · intro h
+    have h2 : ((ssCircuit n)ᴴ * ssCircuit n) *ᵥ v = 0 := by
+      rw [← Matrix.mulVec_mulVec, h, Matrix.mulVec_zero]
+    rw [ssCircuit_conjTranspose_mul, Matrix.smul_mulVec, Matrix.add_mulVec,
+      Matrix.one_mulVec] at h2
+    have h3 := (smul_eq_zero.mp h2).resolve_left (inv_ne_zero two_ne_zero)
+    rw [eq_neg_iff_add_eq_zero]
+    exact (add_comm _ _).trans h3
+  · intro h
+    have h2 : ssCircuit n *ᵥ v = -(ssCircuit n *ᵥ v) := by
+      conv_lhs => rw [← ssCircuit_mul_ssEta, ← Matrix.mulVec_mulVec, h, Matrix.mulVec_neg]
+    rw [eq_neg_iff_add_eq_zero, ← two_smul ℂ] at h2
+    exact (smul_eq_zero.mp h2).resolve_left two_ne_zero
+
+/-- **The range of the circuit is the sector `η = +1`**: `y` is in the range of `𝖣` exactly
+when `η y = y`. On this sector `𝖣 𝖣† = ½(1 + η)` is the identity, so `𝖣` acts there as a
+unitary, the partial isometry of the source.
+
+Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2423 (in the
+orthogonal complement of the kernel, the states with `η = +1`, the operator acts unitarily). -/
+theorem exists_ssCircuit_mulVec_eq_iff (n : ℕ) (y : (Fin (n + 1) → Fin 2) → ℂ) :
+    (∃ v, ssCircuit n *ᵥ v = y) ↔ ssEta (n + 1) *ᵥ y = y := by
+  constructor
+  · rintro ⟨v, rfl⟩
+    rw [Matrix.mulVec_mulVec, ssEta_mul_ssCircuit]
+  · intro hy
+    refine ⟨(ssCircuit n)ᴴ *ᵥ y, ?_⟩
+    rw [Matrix.mulVec_mulVec, ssCircuit_mul_conjTranspose, Matrix.smul_mulVec,
+      Matrix.add_mulVec, Matrix.one_mulVec, hy, ← two_smul ℂ y, smul_smul,
+      inv_mul_cancel₀ two_ne_zero, one_smul]
 
 end KWExample

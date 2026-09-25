@@ -16,7 +16,10 @@ spin-flip defect has eigenvalue `1`; lines 1008–1017: commuting the duality de
 lattice interchanges the two couplings. Seiberg, Shao 2023 (arXiv:2307.02534),
 `References/2307.02534/source/Majoranadraft.tex` line 2423: the non-invertible translation has
 kernel the states with `η = -1` and acts unitarily on the states with `η = +1`, a partial
-isometry; line 2475: `𝖣 𝖣† = 𝖣† 𝖣 = ½(1 + η)`.
+isometry; line 2475: `𝖣 𝖣† = 𝖣† 𝖣 = ½(1 + η)`. Their operator and `η = ∏_j Z_j` act in the
+basis exchanged by the Hadamard gate; the statements here are about `K` and the spin flip
+`∏_j X_j`, and the corresponding statements for their circuit are in
+`TNLean.MPS.Examples.KramersWannierCircuit`.
 
 **Formalized here.** For the raw periodic duality operator `K = kwTensor.mpo N` on a ring of
 `N ≥ 1` sites: its kernel is exactly the spin-flip-odd sector, its range is exactly the
@@ -67,10 +70,11 @@ variable {N : ℕ}
 
 /-- **The kernel of the duality is the spin-flip-odd sector**, `ker K = {v | η v = -v}`.
 
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2423 (the kernel
-consists of the states with `η = -1`); arXiv:1601.07185,
-`References/1601.07185/source/Ising-Defects.tex` lines 1032 and 1042 (a zero eigenvalue, and
-`D_σ²/2` projects onto the sector where `D_ψ = 1`). -/
+Source: arXiv:1601.07185, `References/1601.07185/source/Ising-Defects.tex` lines 1032 and 1042
+(a zero eigenvalue, and `D_σ²/2` projects onto the sector where `D_ψ = 1`). This is also the
+statement of arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2423, read
+in the Hadamard frame, where `η = ∏_j Z_j` becomes the spin flip `∏_j X_j`; the statement for the
+circuit itself is `ssCircuit_mulVec_eq_zero_iff`. -/
 theorem kwTensor_mpo_mulVec_eq_zero_iff [NeZero N] (v : (Fin N → Fin 2) → ℂ) :
     kwTensor.mpo N *ᵥ v = 0 ↔ spinFlip N *ᵥ v = -v := by
   refine ⟨fun h => ?_, kwTensor_mpo_mulVec_eq_zero_of_odd v⟩
@@ -85,9 +89,10 @@ theorem kwTensor_mpo_mulVec_eq_zero_iff [NeZero N] (v : (Fin N → Fin 2) → �
 /-- **The range of the duality is the spin-flip-even sector**: `y` is in the range of `K`
 exactly when `η y = y`.
 
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2423 (the operator
-acts unitarily on the states with `η = +1`); arXiv:1601.07185,
-`References/1601.07185/source/Ising-Defects.tex` line 1042. -/
+Source: arXiv:1601.07185, `References/1601.07185/source/Ising-Defects.tex` line 1042. This is
+also the statement of arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex`
+line 2423, read in the Hadamard frame; the statement for the circuit itself is
+`exists_ssCircuit_mulVec_eq_iff`. -/
 theorem exists_kwTensor_mpo_mulVec_eq_iff [NeZero N] (y : (Fin N → Fin 2) → ℂ) :
     (∃ v, kwTensor.mpo N *ᵥ v = y) ↔ spinFlip N *ᵥ y = y := by
   constructor
@@ -167,7 +172,9 @@ theorem kwDefect_mul_conjTranspose [NeZero N] :
 /-- **`U† U = ½(1 + η)`** for `U = 2^{-(N+1)/2} K`: the partial-isometry normalization of
 Seiberg–Shao, with initial projection onto the spin-flip-even sector.
 
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2423 and 2475. -/
+Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2423 and 2475,
+read in the Hadamard frame with `η` the spin flip; for the circuit itself this is
+`ssCircuit_conjTranspose_mul`. -/
 theorem kwTensor_mpo_normalized_conjTranspose_mul [NeZero N] :
     (invSqrtTwo ^ (N + 1) • kwTensor.mpo N)ᴴ * (invSqrtTwo ^ (N + 1) • kwTensor.mpo N) =
       (2 : ℂ)⁻¹ • (1 + spinFlip N) := by
@@ -176,7 +183,9 @@ theorem kwTensor_mpo_normalized_conjTranspose_mul [NeZero N] :
 
 /-- **`U U† = ½(1 + η)`**: the final projection of the partial isometry `U`.
 
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2423 and 2475. -/
+Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2423 and 2475,
+read in the Hadamard frame with `η` the spin flip; for the circuit itself this is
+`ssCircuit_mul_conjTranspose`. -/
 theorem kwTensor_mpo_normalized_mul_conjTranspose [NeZero N] :
     (invSqrtTwo ^ (N + 1) • kwTensor.mpo N) * (invSqrtTwo ^ (N + 1) • kwTensor.mpo N)ᴴ =
       (2 : ℂ)⁻¹ • (1 + spinFlip N) := by
