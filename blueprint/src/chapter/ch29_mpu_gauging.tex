@@ -4045,8 +4045,10 @@ Definition~\ref{def:mpug_group_representation}.
 For matrix product operator tensors $M$ and $N$ of bond dimensions $D_M$
 and $D_N$, write $MN$ for the stacked product tensor, whose periodic operators
 are the products of those of $M$ and $N$, and write $\mathsf a$ for the
-permutation of $\C^{D_1}\otimes\C^{D_2}\otimes\C^{D_3}$ reassociating
-$(MN)P$ into $M(NP)$.
+bond associator of Definition~\ref{def:mpdo_operator_product_associator},
+the permutation from $\C^{D_1}\otimes(\C^{D_2}\otimes\C^{D_3})$, the bond
+space of $M(NP)$, to $(\C^{D_1}\otimes\C^{D_2})\otimes\C^{D_3}$, the bond
+space of $(MN)P$.
 
 \begin{lemma}[Composition of reductions]
     \label{thm:mpug_reduction_composition}
@@ -4157,7 +4159,8 @@ $(MN)P$ into $M(NP)$.
     \lean{MPOTensor.GroupFamily.FusionData.isCocycle_omega,
         MPOTensor.GroupFamily.FusionData.isCocycle_omega_of_isRepresentation}
     \leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec}
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
     For every $g,h,k,l\in G$,
     \begin{align}
         \omega(gh,k,l)\,\omega(g,h,kl)
@@ -4167,6 +4170,8 @@ $(MN)P$ into $M(NP)$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
     The five fusion trees of the fourfold product $((O_gO_h)O_k)O_l$ are
     reductions onto $O_{ghkl}$. Two trees that differ by one change of
     bracketing are related against long words by one value of $\omega$:
