@@ -50,7 +50,7 @@ namespace MPSTensor
 
 /-- The W MPS tensor with `d = D = 2`:
 `A^0 = I` and `A^1 = !![0,1;0,0]` (the single raising operator).
-Source: arXiv:2011.12127, line 2358. -/
+Source: arXiv:2011.12127, lines 2353–2356. -/
 def wTensor : MPSTensor 2 2 :=
   fun i => if i = 0 then 1 else !![(0 : ℂ), 1; 0, 0]
 
@@ -58,14 +58,14 @@ def wTensor : MPSTensor 2 2 :=
 
 @[simp] lemma wTensor_one : wTensor 1 = !![(0 : ℂ), 1; 0, 0] := rfl
 
-/-- The left boundary covector `(l| = (0|`. Source: arXiv:2011.12127, line 2360. -/
+/-- The left boundary covector `(l| = (0|`. Source: arXiv:2011.12127, line 2357. -/
 def wLeftBoundary : Fin 2 → ℂ := Pi.single 0 1
 
-/-- The right boundary vector `|r) = |1)`. Source: arXiv:2011.12127, line 2360. -/
+/-- The right boundary vector `|r) = |1)`. Source: arXiv:2011.12127, line 2357. -/
 def wRightBoundary : Fin 2 → ℂ := Pi.single 1 1
 
 /-- The single raising matrix `A^1 = !![0,1;0,0]`, sending `|1)` to `|0)`.
-Source: arXiv:2011.12127, line 2358. -/
+Source: arXiv:2011.12127, line 2355. -/
 def wRaising : Matrix (Fin 2) (Fin 2) ℂ := !![(0 : ℂ), 1; 0, 0]
 
 /-- `A^1` squares to zero: two excitations annihilate the chain. -/
