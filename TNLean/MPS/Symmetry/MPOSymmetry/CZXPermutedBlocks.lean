@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.GHZ
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomalyClass
+import TNLean.MPS.Examples.CZX.CZXAnomalyClass
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
 
 /-!
