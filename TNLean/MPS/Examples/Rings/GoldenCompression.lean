@@ -8,9 +8,15 @@ import TNLean.MPS.Examples.Rings.GoldenRing
 import TNLean.MPS.MPDO.ActionTensor
 
 /-!
-# Compression data with golden-integer gauges
+# Golden compression: compression data with gauges over `ℤ[σ]`
 
-The worked examples over the ring `ℤ[σ]` of `GoldenRing.lean` all follow one pattern: the
+**Source.** Construction of this development; no paper prints it. It packages the exact
+arithmetic shared by the Fibonacci examples (`Examples/Fibonacci.lean`,
+`Examples/FibonacciUnit.lean`, `Examples/FibonacciAction.lean`), whose entries come from the
+F-symbols of arXiv:1511.08090, Appendix D.1.1, `References/1511.08090/AnyonsPEPS.tex`
+lines 1250–1260.
+
+**Formalized here.** In the worked examples over the ring `ℤ[σ]` of `GoldenRing.lean`, the
 letters of the source tensor, of the target blocks, of the change of bond coordinates and of its
 inverse are explicit matrices over `ℤ[σ]`, the conjugated letters `G B^i G⁻¹` are explicit
 block-triangular matrices, and every identity between them is decided in exact arithmetic. This
@@ -32,8 +38,16 @@ identities.
   of `ℤ[σ]`.
 * `MPSTensor.isNormal_of_golden_single`: normality of a tensor over `ℤ[σ]` from a decided table
   expressing every matrix unit as a combination of words of one positive length.
+* `MPSTensor.conjMatrix_goldenGauge`: conjugating a letter by a golden gauge gives the recorded
+  conjugated letter over `ℤ[σ]`, relabelled along the bond coordinates.
 * `MPSTensor.MultiBlockCompression.remainder_eq_zero_of_goldenGauge`: the remainder of a datum
   with a golden gauge vanishes when the conjugated letters are block diagonal.
+
+## References
+
+- [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  operator algebras*
 -/
 
 open scoped Matrix Kronecker

@@ -17,6 +17,11 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   prints the Fibonacci F-symbols but no numeric entries of the two operator
   blocks, the placement of the F-symbols used for the blocks, and that the
   checked fusion rules and projector identity concern the bare F-symbols.
+- `bmwshv17_joint_block_left_inverse.tex` records that the simultaneous left
+  inverse of the labelled blocks used to extract the F-symbols does not follow
+  from injectivity of each block, gives a two-block counterexample at physical
+  dimension two, and names joint one-site independence as the missing
+  hypothesis, with blocking as the elimination route.
 
 - `bmwshv17_fibonacci_projector_positive_length.tex` records that the source
   asks for the projector identity `P_L^2 = P_L` at every length `L`, that at
@@ -24,6 +29,16 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   `P_0 = (2 + 3φ)/(2 + φ)` is neither `0` nor `1`, that the fusion rule and
   unit laws derived from it fail there as well, and that the empty chain is
   excluded as a degenerate reading.
+
+For the Kitaev chain of arXiv:2011.12127, Appendix A:
+
+- `rmp_kitaev_chain_bosonic_scope.tex` records that the review and
+  arXiv:1610.07849 describe the Kitaev-chain fixed point as a graded tensor
+  network, that only the ordinary contraction of the printed matrices is
+  formalized (closed-form twisted and untwisted amplitudes, their
+  complementary parity supports, bosonic reducibility and non-normality, and
+  the decomposition into two injective bond-dimension-one states), and
+  that the fermionic injectivity claim awaits graded tensor networks.
 
 For the MPU index of arXiv:1703.09188:
 

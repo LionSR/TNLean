@@ -18,7 +18,9 @@ only the fusion rules of the category, so the operator identities here are the I
 line 1268, implied but not printed.
 
 **Formalized here.** At every positive length, `O_1 O_1 = O_1`, `O_1 O_ψ = O_ψ O_1 = O_ψ`
-and `O_ψ O_ψ = O_1` for the periodic operators of `A_1` and `A_ψ`.
+and `O_ψ O_ψ = O_1` for the periodic operators of `A_1` and `A_ψ`. Consequently
+`O_ψᴴ O_ψ = O_1`, so `O_ψ` is a partial isometry with initial projection `O_1`; since `O_1` is not
+the identity at any positive length, `O_ψ` is not unitary on the whole physical space.
 
 **Local fix (sigma scaling):** the tensors omit the factors `v_e v_f` of the `G`-symbols
 (lines 1257–1260) and store the `σ` tensor multiplied by `√2`; the identities are proved for
@@ -32,6 +34,9 @@ permutation gauge of `IsingFusionAlgebra`; the letter identities are decided ove
 
 * `IsingTwist.isingOne_mul_isingOne`, `IsingTwist.isingOne_mul_isingPsi`,
   `IsingTwist.isingPsi_mul_isingOne`, `IsingTwist.isingPsi_mul_isingPsi`.
+* `IsingTwist.isingPsi_conjTranspose_mul_isingPsi`: `O_ψᴴ O_ψ = O_1`.
+* `IsingTwist.mpo_isingOne_ne_one`, `IsingTwist.mpo_isingPsi_notMem_unitaryGroup`: `O_1 ≠ 1`, and
+  `O_ψ` is not unitary.
 
 ## References
 - [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
@@ -120,5 +125,32 @@ theorem isingPsi_mul_isingPsi {N : ℕ} (hN : 0 < N) :
       rw [isingOneZ_eq_smul_single i j, padZsqrt2_smul_single]
       revert i j
       decide +kernel) hN
+
+/-- **`O_ψ` is a partial isometry onto the closed paths.** Project result, from
+`mpo_isingPsi_conjTranspose` and `isingPsi_mul_isingPsi`: at every positive length
+`O_ψᴴ O_ψ = O_1`, the projector onto the closed fusion paths. -/
+theorem isingPsi_conjTranspose_mul_isingPsi {N : ℕ} (hN : 0 < N) :
+    (MPOTensor.mpo isingPsi N)ᴴ * MPOTensor.mpo isingPsi N = MPOTensor.mpo isingOne N := by
+  rw [mpo_isingPsi_conjTranspose hN, isingPsi_mul_isingPsi hN]
+
+/-- **The vacuum operator is not the identity.** Project result: at every positive length the
+constant configuration with the label `(1, ψ, ψ)` is not a closed fusion path, so the diagonal
+entry of `O_1` there is `0`. -/
+theorem mpo_isingOne_ne_one {N : ℕ} (hN : 0 < N) : MPOTensor.mpo isingOne N ≠ 1 := by
+  intro h
+  have hentry := congrFun (congrFun h fun _ => 1) fun _ => 1
+  rw [mpo_isingOne_apply hN, Matrix.one_apply_eq] at hentry
+  have hopen : ¬ IsAdmissiblePath (N := N) fun _ => (1 : Fin 10) := fun hp =>
+    absurd (hp ⟨0, hN⟩) (by decide : ¬ isingRight 1 = isingLeft 1)
+  simp [hopen] at hentry
+
+/-- **The fermion operator is not unitary.** Project result: at every positive length
+`O_ψᴴ O_ψ = O_1 ≠ 1` (`isingPsi_conjTranspose_mul_isingPsi`, `mpo_isingOne_ne_one`), so `O_ψ` is
+a partial isometry on the closed paths but not a unitary of the whole physical space. -/
+theorem mpo_isingPsi_notMem_unitaryGroup {N : ℕ} (hN : 0 < N) :
+    MPOTensor.mpo isingPsi N ∉ Matrix.unitaryGroup (Fin N → Fin 10) ℂ := fun hU =>
+  mpo_isingOne_ne_one hN <| by
+    rw [← isingPsi_conjTranspose_mul_isingPsi hN]
+    exact Matrix.mem_unitaryGroup_iff'.1 hU
 
 end IsingTwist

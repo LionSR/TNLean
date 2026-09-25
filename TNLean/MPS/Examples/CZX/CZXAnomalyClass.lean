@@ -5,8 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.Examples.CZX.CZXDecoratedFusion
-import TNLean.MPS.MPDO.StackedLayers
-import TNLean.MPS.Symmetry.MPOSymmetry.Associator
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 
 /-!
 # The anomaly class of the decorated CZX representation
@@ -76,65 +75,18 @@ def czxGen : Multiplicative (Fin 2) := Multiplicative.ofAdd 1
 /-- The generator of `ℤ₂` has order two. -/
 theorem czxGen_pow_two : czxGen ^ 2 = 1 := by decide
 
-private theorem forall_z2 {P : Multiplicative (Fin 2) → Prop}
-    (h0 : P (Multiplicative.ofAdd 0)) (h1 : P (Multiplicative.ofAdd 1)) : ∀ x, P x := by
-  intro x
-  fin_cases x
-  exacts [h0, h1]
-
-/-! ### The bond-one identity tensor -/
-
-theorem idTensor_toMPSTensor (a : Fin 4) :
-    (MPOTensor.idTensor 2).toMPSTensor a = pairDelta a • 1 := by
-  fin_cases a <;> ext r c <;> fin_cases r <;> fin_cases c <;>
-    simp [MPOTensor.idTensor, MPOTensor.toMPSTensor, pairDelta, pairDeltaInt] <;> rfl
-
-theorem evalWord_idTensor_toMPSTensor (w : List (Fin 4)) :
-    Kraus.evalWord (MPOTensor.idTensor 2).toMPSTensor w = (w.map pairDelta).prod • 1 := by
-  induction w with
-  | nil => simp
-  | cons a w ih =>
-      rw [Kraus.evalWord_cons, ih, idTensor_toMPSTensor, smul_mul_smul_comm, Matrix.one_mul]
-      simp
-
-theorem idTensor_isNormal : Kraus.IsNormal (MPOTensor.idTensor 2).toMPSTensor := by
-  refine ⟨1, one_pos, Submodule.eq_top_of_forall_single_mem _ fun i j ↦ ?_⟩
-  have hij : Matrix.single i j (1 : ℂ) = 1 := by
-    ext r c
-    fin_cases i; fin_cases j; fin_cases r; fin_cases c
-    simp
-  rw [hij]
-  refine Submodule.subset_span ⟨fun _ ↦ 0, ?_⟩
-  simp [idTensor_toMPSTensor, pairDelta, pairDeltaInt]
-
-/-- The product of the identity tensor with a bond-two tensor is that tensor. -/
-theorem mulTensor_idTensor_left (M : MPOTensor 2 2) :
-    mulTensor (MPOTensor.idTensor 2) M = (M : MPOTensor 2 (1 * 2)) := by
-  have h : ∀ r : Fin (1 * 2), finProdFinEquiv.symm r = ((0 : Fin 1), (r : Fin 2)) := by
-    decide
-  funext i j
-  ext r c
-  fin_cases i <;> fin_cases j <;>
-    simp [mulTensor_apply, MPOTensor.idTensor, Fin.sum_univ_two, Matrix.kroneckerMap_apply, h]
-
-/-- The product of a bond-two tensor with the identity tensor is that tensor. -/
-theorem mulTensor_idTensor_right (M : MPOTensor 2 2) :
-    mulTensor M (MPOTensor.idTensor 2) = (M : MPOTensor 2 (2 * 1)) := by
-  have h : ∀ r : Fin (2 * 1), finProdFinEquiv.symm r = ((r : Fin 2), (0 : Fin 1)) := by
-    decide
-  funext i j
-  ext r c
-  fin_cases i <;> fin_cases j <;>
-    simp [mulTensor_apply, MPOTensor.idTensor, Fin.sum_univ_two, Matrix.kroneckerMap_apply, h]
+/-- The weight `δ_{s t}` of a letter of the pair alphabet is the weight of the letter
+of the bond-one identity tensor. -/
+private theorem pairDelta_eq (a : Fin (2 * 2)) :
+    pairDelta a = if a.divNat = a.modNat then (1 : ℂ) else 0 := by
+  fin_cases a <;> simp [pairDelta, pairDeltaInt] <;> decide
 
 /-- The product of two identity tensors is the identity tensor. -/
-theorem mulTensor_idTensor_idTensor :
+private theorem mulTensor_idTensor_idTensor :
     mulTensor (MPOTensor.idTensor 2) (MPOTensor.idTensor 2) =
       (MPOTensor.idTensor 2 : MPOTensor 2 (1 * 1)) := by
-  funext i j
-  ext r c
-  fin_cases i <;> fin_cases j <;> fin_cases r <;> fin_cases c <;>
-    simp [mulTensor_apply, MPOTensor.idTensor, Fin.sum_univ_two]
+  rw [mulTensor_idTensor_left]
+  rfl
 
 /-! ### The representation -/
 
@@ -145,9 +97,10 @@ are normal, and the periodic operators satisfy `δ δ = δ`, `δ U = U δ = U` a
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 412--428 and
 1128--1181. -/
 theorem czxFamily_isNormalRepresentation : czxFamily.IsNormalRepresentation where
-  isNormal := forall_z2 idTensor_isNormal czxDecoratedMPS_isNormal
+  isNormal := Multiplicative.forall_zmod_two idTensor_isNormal czxDecoratedMPS_isNormal
   operator_mul := by
-    refine forall_z2 (forall_z2 ?_ ?_) (forall_z2 ?_ ?_) <;> intro N hN
+    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
+      (Multiplicative.forall_zmod_two ?_ ?_) <;> intro N hN
     · change mpo (MPOTensor.idTensor 2) N * mpo (MPOTensor.idTensor 2) N =
         mpo (MPOTensor.idTensor 2) N
       rw [mpo_idTensor, Matrix.one_mul]
@@ -183,11 +136,6 @@ def czxLabelW : (a b : Fin 2) →
   | ⟨n + 2, h⟩, _ => absurd h (by omega)
   | _, ⟨n + 2, h⟩ => absurd h (by omega)
 
-private theorem isReduction_one_one_of_eq {D : ℕ} {B A : MPSTensor 4 D} (h : B = A) :
-    MPSTensor.IsReduction B A 1 1 := by
-  subst h
-  exact ⟨Matrix.one_mul 1, fun w ↦ by rw [Matrix.one_mul, Matrix.mul_one]⟩
-
 /-- **Fusion tensors of the decorated CZX representation**: trivial whenever a
 factor is the identity, and the printed pair `(V̂, V)` for two generators.
 
@@ -197,23 +145,26 @@ def czxFusionData : czxFamily.FusionData where
   V x y := czxLabelV x.toAdd y.toAdd
   W x y := czxLabelW x.toAdd y.toAdd
   isReduction := by
-    refine forall_z2 (forall_z2 ?_ ?_) (forall_z2 ?_ ?_)
+    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_) (Multiplicative.forall_zmod_two ?_ ?_)
     · change MPSTensor.IsReduction
         (mulTensor (MPOTensor.idTensor 2) (MPOTensor.idTensor 2)).toMPSTensor
         ((MPOTensor.idTensor 2 : MPOTensor 2 (1 * 1))).toMPSTensor 1 1
-      exact isReduction_one_one_of_eq (by rw [mulTensor_idTensor_idTensor])
+      exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_idTensor_idTensor])
     · change MPSTensor.IsReduction
         (mulTensor (MPOTensor.idTensor 2) czxDecoratedTensor).toMPSTensor
         ((czxDecoratedTensor : MPOTensor 2 (1 * 2))).toMPSTensor 1 1
-      exact isReduction_one_one_of_eq (by rw [mulTensor_idTensor_left])
+      exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_idTensor_left]; rfl)
     · change MPSTensor.IsReduction
         (mulTensor czxDecoratedTensor (MPOTensor.idTensor 2)).toMPSTensor
         ((czxDecoratedTensor : MPOTensor 2 (2 * 1))).toMPSTensor 1 1
-      exact isReduction_one_one_of_eq (by rw [mulTensor_idTensor_right])
+      exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_idTensor_right]; rfl)
     · change MPSTensor.IsReduction czxDecoratedSquare (MPOTensor.idTensor 2).toMPSTensor
         czxFusionVHat czxFusionV
       refine ⟨czxFusionVHat_mul_czxFusionV, fun w ↦ ?_⟩
       rw [czxFusion_contract, evalWord_idTensor_toMPSTensor]
+      congr 3
+      funext a
+      exact pairDelta_eq a
 
 /-! ### The two fusion trees of three generators -/
 
@@ -227,49 +178,34 @@ def czxRightTreeInt : Matrix (Fin 2) (Fin 8) ℤ :=
 
 private theorem kronId_complexOfInt {m n : ℕ} (X : Matrix (Fin m) (Fin n) ℤ) (D : ℕ) :
     kronId (complexOfInt X) D = complexOfInt ((X ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℤ)).submatrix
-      finProdFinEquiv.symm finProdFinEquiv.symm) := by
-  ext r c
-  simp only [kronId, Matrix.submatrix_apply, Matrix.kroneckerMap_apply, complexOfInt_apply,
-    Matrix.one_apply, Int.cast_mul]
-  split_ifs <;> simp
+      finProdFinEquiv.symm finProdFinEquiv.symm) :=
+  kronId_complexOfRing (Int.castRingHom ℂ) X D
 
 private theorem idKron_complexOfInt {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) ℤ) :
     idKron D (complexOfInt X) = complexOfInt (((1 : Matrix (Fin D) (Fin D) ℤ) ⊗ₖ X).submatrix
-      finProdFinEquiv.symm finProdFinEquiv.symm) := by
-  ext r c
-  simp only [idKron, Matrix.submatrix_apply, Matrix.kroneckerMap_apply, complexOfInt_apply,
-    Matrix.one_apply, Int.cast_mul]
-  split_ifs <;> simp
+      finProdFinEquiv.symm finProdFinEquiv.symm) :=
+  idKron_complexOfRing (Int.castRingHom ℂ) D X
 
 private theorem assocInv_two_two_two :
     mulTensorAssocInvMatrix 2 2 2 = (1 : Matrix (Fin 8) (Fin 8) ℂ) := by
-  have he : (mulTensorAssocEquiv 2 2 2).symm = Equiv.refl (Fin 8) := Equiv.ext (by decide)
-  rw [mulTensorAssocInvMatrix, he, Equiv.toPEquiv_refl, PEquiv.toMatrix_refl]
+  rw [mulTensorAssocInvMatrix_eq_finCongr]
+  exact finCongr_toMatrix_eq_one _
 
 private theorem assocInv_two_one_two :
     mulTensorAssocInvMatrix 2 1 2 = (1 : Matrix (Fin 4) (Fin 4) ℂ) := by
-  have he : (mulTensorAssocEquiv 2 1 2).symm = Equiv.refl (Fin 4) := Equiv.ext (by decide)
-  rw [mulTensorAssocInvMatrix, he, Equiv.toPEquiv_refl, PEquiv.toMatrix_refl]
-
-private theorem castMat_apply {a b : Multiplicative (Fin 2)} (e : a = b)
-    (i : Fin (czxFamily.bondDim b)) (j : Fin (czxFamily.bondDim a)) :
-    czxFamily.castMat e i j = if (i : ℕ) = j then 1 else 0 := by
-  subst e
-  simp [Matrix.one_apply, Fin.ext_iff]
+  rw [mulTensorAssocInvMatrix_eq_finCongr]
+  exact finCongr_toMatrix_eq_one _
 
 private theorem castMat_gen_gen_gen :
     czxFamily.castMat (mul_assoc czxGen czxGen czxGen).symm =
       (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
-  ext i j
-  rw [castMat_apply]
-  fin_cases i <;> fin_cases j <;> rfl
+  rw [GroupFamily.castMat_eq_finCongr]
+  exact finCongr_toMatrix_eq_one _
 
 private theorem castMat_gen_one_gen :
     czxFamily.castMat (mul_assoc czxGen 1 czxGen).symm = (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
-  ext i j
-  rw [castMat_apply]
-  fin_cases i; fin_cases j
-  rfl
+  rw [GroupFamily.castMat_eq_finCongr]
+  exact finCongr_toMatrix_eq_one _
 
 /-- The left fusion tree of `(s,s,s)`, which fuses the first two factors first, is the
 integer matrix `czxAssocLeftInt`; it is one of the two trees compared in `eq:3-cocycle` of
@@ -325,36 +261,6 @@ private theorem czx_letter (a : Fin 4) :
   rw [czxDecoratedCube_eq, ← complexOfInt_mul, ← complexOfInt_mul, czx_letter_int,
     complexOfInt_neg, neg_one_smul]
 
-/-- The two fusion trees of three generators agree up to the sign `-1` against every
-nonempty word of the triple product. -/
-theorem czx_leftTree_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
-    complexOfInt czxAssocLeftInt * Kraus.evalWord czxDecoratedCube.toMPSTensor w =
-      (-1 : ℂ) • (complexOfInt czxRightTreeInt *
-        Kraus.evalWord czxDecoratedCube.toMPSTensor w) := by
-  induction w with
-  | nil => exact absurd rfl hw
-  | cons a w ih =>
-      cases w with
-      | nil => simpa using czx_letter a
-      | cons b w =>
-          have ih' := ih (List.cons_ne_nil _ _)
-          rw [Kraus.evalWord_cons] at ih'
-          calc
-            _ = complexOfInt czxAssocLeftInt * czxDecoratedCube.toMPSTensor a *
-                czxDecoratedCube.toMPSTensor b * Kraus.evalWord czxDecoratedCube.toMPSTensor w := by
-              simp only [Kraus.evalWord_cons, Matrix.mul_assoc]
-            _ = czxDecoratedTensor.toMPSTensor a * (complexOfInt czxAssocLeftInt *
-                (czxDecoratedCube.toMPSTensor b *
-                  Kraus.evalWord czxDecoratedCube.toMPSTensor w)) := by
-              rw [czx_pair _ czx_left_pair_int]
-              simp only [Matrix.mul_assoc]
-            _ = (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube.toMPSTensor a *
-                czxDecoratedCube.toMPSTensor b *
-                  Kraus.evalWord czxDecoratedCube.toMPSTensor w) := by
-              rw [ih', czx_pair _ czx_right_pair_int, Matrix.mul_smul]
-              simp only [Matrix.mul_assoc]
-            _ = _ := by simp only [Kraus.evalWord_cons, Matrix.mul_assoc]
-
 /-- **The associator of three generators is `-1`**: with the fusion tensors of
 `czxFusionData`, the tree fusing the first two generators first equals `-1` times the
 tree fusing the last two first, against every nonempty word.
@@ -365,7 +271,8 @@ theorem czxFusionData_isAssociator_gen_gen_gen :
     czxFusionData.IsAssociator czxGen czxGen czxGen (-1) := by
   unfold GroupFamily.FusionData.IsAssociator
   rw [czxFusionData_leftV_gen_gen_gen, czxFusionData_rightV_gen_gen_gen]
-  exact ⟨1, fun w hw ↦ czx_leftTree_evalWord w (List.ne_nil_of_length_pos hw)⟩
+  exact MPSTensor.IsDressedProportional.of_forall_mul_mul (czx_pair _ czx_left_pair_int)
+    (czx_pair _ czx_right_pair_int) czx_letter
 
 /-- `ω(g,g,g) = -1` for the fusion tensors of `czxFusionData`.
 
