@@ -12,7 +12,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.Character
 /-!
 # The Ising matrix product operators as a fusion algebra
 
-**Source.** Bultinck et al. (arXiv:1511.08090), Appendix D.1.2, lines 1308–1312 and 1323: the
+**Source.** Bultinck et al. (arXiv:1511.08090), Appendix D.2.1, lines 1308–1312 and 1323: the
 three blocks `1, ψ, σ` of the Ising matrix product operator obey the fusion rules
 `ψ × ψ = 1`, `ψ × σ = σ × ψ = σ` and `σ × σ = 1 + ψ`, with `1` the unit. Garre-Rubio, Lootens
 and Molnár (arXiv:2203.12563), lines 361–362, call such a family a matrix product operator
