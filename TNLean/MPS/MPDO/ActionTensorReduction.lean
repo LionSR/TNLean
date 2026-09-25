@@ -20,8 +20,8 @@ tensors, and lifts left-dressed proportionality relations through an action tens
   reduction `(V ⊗ 1, W ⊗ 1)` of `X · B` onto `Y · B`: a fusion tensor acts on the operator
   legs of the action tensor.
 * The bond associator intertwines `(M N) · A` with `M · (N · A)`.
-* Relations `V B^w = z V' B^w` on long words lift to the same relations, with the same
-  scalar `z` and the same length bound, for the action tensor.
+* Dressed proportionality `V B^w = z V' B^w` on long words
+  (`MPSTensor.IsDressedProportional`) lifts, with the same scalar, to the action tensor.
 
 These are the manipulations of arXiv:2502.20257, equation `eq:defL` (`main.tex` lines
 1875--1913), where the L-symbols compare the two reductions of the action of `g` after `h`
@@ -35,8 +35,9 @@ defined here.
 * `MPSTensor.IsReduction.actTensor_idKron`, `MPSTensor.IsReduction.actTensor_kronId`
 * `MPOTensor.actTensor_mulTensor`, `MPOTensor.actTensor_mulTensor_mul_assocMatrix`
 * `MPSTensor.IsReduction.actTensor_assoc_left`, `MPSTensor.IsReduction.actTensor_assoc_right`
-* `MPOTensor.idKron_mul_evalWord_actTensor_eq_smul`,
-  `MPOTensor.kronId_mul_evalWord_actTensor_eq_smul`
+* `MPOTensor.actTensor_mul_kronId_of_intertwine`
+* `MPSTensor.IsDressedProportional.actTensor_idKron`,
+  `MPSTensor.IsDressedProportional.actTensor_kronId`
 -/
 
 open scoped Matrix Kronecker
@@ -171,22 +172,36 @@ theorem _root_.MPSTensor.IsReduction.actTensor_assoc_right {M : MPOTensor d D₁
   h.of_intertwine (mulTensorAssocMatrix_mul_invMatrix D₁ D₂ D₃)
     (fun i ↦ (assocInvMatrix_mul_actTensor_mulTensor M N A i).symm)
 
-/-! ### Lifting left-dressed relations -/
+/-! ### Intertwiners of the operator factor -/
 
-/-- **Lifting a left-dressed relation through the operator layer.** If
-`V B^w = z V' B^w` for every word longer than `n`, then
-`(1 ⊗ V) (T · B)^w = z (1 ⊗ V') (T · B)^w` for every word longer than `n`.
+/-- An intertwiner `P` of the letters of two operator tensors, tensored with the identity on
+the state bond, intertwines the letters of their action tensors on a common state. -/
+theorem actTensor_mul_kronId_of_intertwine {X' : MPOTensor d D₁} {X : MPOTensor d D₂}
+    (B : MPSTensor d D₃) {P : Matrix (Fin D₁) (Fin D₂) ℂ}
+    (hX : ∀ i l, X' i l * P = P * X i l) (i : Fin d) :
+    actTensor X' B i * kronId P D₃ = kronId P D₃ * actTensor X B i := by
+  rw [actTensor_apply, actTensor_apply, kronId, Matrix.submatrix_mul_equiv,
+    Matrix.submatrix_mul_equiv, Matrix.sum_mul, Matrix.mul_sum]
+  congr 1
+  refine Finset.sum_congr rfl fun j _ ↦ ?_
+  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, hX, Matrix.mul_one,
+    Matrix.one_mul]
+
+/-! ### Lifting dressed proportionality -/
+
+/-- **Lifting a dressed proportionality through the operator layer.** If
+`V B^w = z V' B^w` for long words, then `(1 ⊗ V) (T · B)^w = z (1 ⊗ V') (T · B)^w` for
+words of the same lengths.
 
 Source: arXiv:2203.12563, `sec:PBC`, lines 1091--1129: the L-symbols are phase factors
 between reductions on words longer than the nilpotency length, and they are compared inside
 further action tensors. -/
-theorem idKron_mul_evalWord_actTensor_eq_smul (T : MPOTensor d D₃) {B : MPSTensor d D₂}
-    {m n : ℕ} {V V' : Matrix (Fin m) (Fin D₂) ℂ} {z : ℂ}
-    (h : ∀ w : List (Fin d), n < w.length →
-      V * Kraus.evalWord B w = z • (V' * Kraus.evalWord B w))
-    (w : List (Fin d)) (hw : n < w.length) :
-    idKron D₃ V * Kraus.evalWord (actTensor T B) w =
-      z • (idKron D₃ V' * Kraus.evalWord (actTensor T B) w) := by
+theorem _root_.MPSTensor.IsDressedProportional.actTensor_idKron (T : MPOTensor d D₃)
+    {B : MPSTensor d D₂} {m : ℕ} {V V' : Matrix (Fin m) (Fin D₂) ℂ} {z : ℂ}
+    (h : MPSTensor.IsDressedProportional B V V' z) :
+    MPSTensor.IsDressedProportional (actTensor T B) (idKron D₃ V) (idKron D₃ V') z := by
+  obtain ⟨N, h⟩ := h
+  refine ⟨N, fun w hw ↦ ?_⟩
   obtain ⟨L, σ, rfl⟩ := exists_eq_ofFn w
   rw [List.length_ofFn] at hw
   rw [evalWord_actTensor, idKron, idKron, Matrix.submatrix_mul_equiv,
@@ -203,20 +218,19 @@ theorem idKron_mul_evalWord_actTensor_eq_smul (T : MPOTensor d D₃) {B : MPSTen
   simp only [key, ← Finset.smul_sum]
   rfl
 
-/-- **Lifting a left-dressed relation through the state layer.** If the pair-alphabet view
-of `X` satisfies `V X^u = z V' X^u` for every pair word longer than `n`, then
-`(V ⊗ 1) (X · B)^w = z (V' ⊗ 1) (X · B)^w` for every word longer than `n`.
+/-- **Lifting a dressed proportionality through the state layer.** If the pair-alphabet view
+of `X` satisfies `V X^u = z V' X^u` for long pair words, then
+`(V ⊗ 1) (X · B)^w = z (V' ⊗ 1) (X · B)^w` for words of the same lengths.
 
 Source: arXiv:2203.12563, `sec:PBC`, lines 1028 and 1091--1129: the three-cocycle, defined
 by fusion tensors on long words, is compared with the L-symbols inside the action on the
 state. -/
-theorem kronId_mul_evalWord_actTensor_eq_smul {X : MPOTensor d D₂} (B : MPSTensor d D₃)
-    {m n : ℕ} {V V' : Matrix (Fin m) (Fin D₂) ℂ} {z : ℂ}
-    (h : ∀ u : List (Fin (d * d)), n < u.length →
-      V * Kraus.evalWord X.toMPSTensor u = z • (V' * Kraus.evalWord X.toMPSTensor u))
-    (w : List (Fin d)) (hw : n < w.length) :
-    kronId V D₃ * Kraus.evalWord (actTensor X B) w =
-      z • (kronId V' D₃ * Kraus.evalWord (actTensor X B) w) := by
+theorem _root_.MPSTensor.IsDressedProportional.actTensor_kronId {X : MPOTensor d D₂}
+    (B : MPSTensor d D₃) {m : ℕ} {V V' : Matrix (Fin m) (Fin D₂) ℂ} {z : ℂ}
+    (h : MPSTensor.IsDressedProportional X.toMPSTensor V V' z) :
+    MPSTensor.IsDressedProportional (actTensor X B) (kronId V D₃) (kronId V' D₃) z := by
+  obtain ⟨N, h⟩ := h
+  refine ⟨N, fun w hw ↦ ?_⟩
   obtain ⟨L, σ, rfl⟩ := exists_eq_ofFn w
   rw [List.length_ofFn] at hw
   rw [evalWord_actTensor, kronId, kronId, Matrix.submatrix_mul_equiv,
