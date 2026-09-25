@@ -283,20 +283,18 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
     \notready
     % Planned Lean: FibonacciCompression.perronFrobeniusDim_fibFusion_tau.
     \uses{def:mposym_pf_dimension, lem:mposym_pf_dimension_positive,
-        thm:asymex_fib_anomaly_fusion_algebra, def:asymex_fib_fsymbols}
+        def:asymex_fib_anomaly_nim, thm:asymex_fib_anomaly_fusion_algebra,
+        def:asymex_fib_fsymbols}
     The Fibonacci labels are $1$ and $\tau$, with unit $1$ and
-    $\tau\times\tau=1+\tau$. In the order $(1,\tau)$,
-    \begin{align}
-        N_\tau & =\begin{pmatrix}0&1\\1&1\end{pmatrix},
-        \label{eq:mposym_fibonacci_matrix}
-    \end{align}
+    $\tau\times\tau=1+\tau$. Its fusion matrix $N_\tau$ in the order
+    $(1,\tau)$ is (\ref{eq:asymex_fib_anomaly_matrix}),
     with characteristic polynomial $\lambda^2-\lambda-1$ and eigenvalues
     $\varphi=(1+\sqrt5)/2$ and $-\varphi^{-1}$. Hence
     $d_\tau=\varphi$, the golden ratio, and $d_1=1$; the row vector
     $(1,\varphi)$ satisfies (\ref{eq:mposym_dimension_relation}). The label
     $\tau$ is not invertible: $\tau\times b$ contains $1$ only for
-    $b=\tau$, and $\tau\times\tau$ also contains $\tau$. The operators of Section~\ref{sec:asymex_fibonacci}
-    realize this rule at every length
+    $b=\tau$, and $\tau\times\tau$ also contains $\tau$. The operators of
+    Section~\ref{sec:asymex_fibonacci} realize this rule at every length
     (Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra}), and the quantum
     dimensions entering their F-symbols are those of
     Definition~\ref{def:asymex_fib_fsymbols}
@@ -311,9 +309,10 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
     % Planned Lean: IsingTwist.perronFrobeniusDim_isingFusion_sigma.
     \uses{def:mposym_pf_dimension, lem:mposym_pf_dimension_positive,
         thm:asymex_ising_sigma_fusion, thm:asymex_ising_sigma_square}
-    The Ising labels are $1$, $\psi$ and $\sigma$, with unit $1$,
-    $\psi\times\psi=1$, $\sigma\times\psi=\psi\times\sigma=\sigma$ and
-    $\sigma\times\sigma=1+\psi$. In the order $(1,\psi,\sigma)$,
+    The Ising labels are $1$, $\psi$ and $\sigma$, with unit $1$ and the
+    fusion rules of Section~\ref{sec:asymex_ising_tensors}, of which the only
+    non-invertible one is $\sigma\times\sigma=1+\psi$. In the order
+    $(1,\psi,\sigma)$ the fusion matrices are
     \begin{align}
         N_\psi   & =\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}, &
         N_\sigma & =\begin{pmatrix}0&0&1\\0&0&1\\1&1&0\end{pmatrix}.
@@ -370,7 +369,9 @@ its periodic vectors into their span with length-independent coefficients.
 For a single normal tensor the coefficients are eigenvalues; for several
 normal tensors they form matrices. The results of this section show that
 these coefficients are nonnegative integers compatible with the fusion rules,
-which already excludes symmetric normal states for the Fibonacci rule.
+which already excludes symmetric normal states for the Fibonacci rule. The
+integrality rests on a property of normal tensors: a length-independent
+relation between word traces has nonnegative integer coefficients.
 
 \begin{definition}[Symmetric family of matrix product states]%
     \label{def:mpo_symmetric_family}
@@ -410,6 +411,66 @@ which already excludes symmetric normal states for the Fibonacci rule.
     % Source anchor: arXiv:2203.12563, lines 564--565 (the relation for the
     %   multiplicities); the fusion character is not used by the source.
 \end{definition}
+
+\begin{theorem}[Word-trace relations against a normal tensor are integral]%
+    \label{thm:asymex_fib_anomaly_trace_integral}
+    \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
+    \leanok
+    \uses{def:normal}
+    Let $B$ be a matrix product state tensor and $A$ a word-normal tensor
+    of positive bond dimension, over the same alphabet. If a scalar
+    $c\in\C$ satisfies $\tr(B^w)=c\,\tr(A^w)$ for every nonempty word
+    $w$, then $c$ is a nonnegative integer.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Normality expresses a diagonal matrix unit as
+    $E_{jj}=\sum_ux_uA^u$, where all words $u$ have the same positive
+    length $\ell$. Define $Q=\sum_ux_uB^u$. Expanding powers and applying
+    the trace hypothesis to the concatenated words gives, for every
+    $k\geq1$,
+    \begin{align}
+        \tr(Q^k)
+         & =c\,\tr\left(\left(\sum_ux_uA^u\right)^k\right)
+        =c\,\tr(E_{jj}^k)=c.
+    \end{align}
+    A constant trace of all positive powers of a fixed finite-dimensional
+    matrix is a nonnegative integer. Indeed, the power sums of its
+    nonzero eigenvalues, counted with algebraic multiplicity, are
+    constant only when every nonzero eigenvalue is one. The constant
+    is their total multiplicity.
+\end{proof}
+
+\begin{theorem}[Rank-one actions on a normal tensor are integral]%
+    \label{thm:asymex_fib_anomaly_integral_action}
+    \lean{MPOTensor.exists_nat_eq_of_mpo_mulVec_mpv_eq_smul}
+    \leanok
+    \uses{thm:asymex_fib_anomaly_trace_integral, cor:asym_action_tensors}
+    Let $T$ be a matrix product operator tensor and $A$ a word-normal
+    matrix product state tensor of positive bond dimension, with the
+    same physical alphabet. Suppose there is a single scalar $c\in\C$
+    such that, for every $N\geq1$,
+    \begin{align}
+        O_N(T)\ket{V^{(N)}(A)}
+         & =c\ket{V^{(N)}(A)}.
+        \label{eq:asymex_fib_anomaly_scalar_action}
+    \end{align}
+    Then $c$ is a nonnegative integer.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Corollary~\ref{cor:asym_action_tensors} identifies the periodic
+    vector of $T\cdot A$ with $O_N(T)\ket{V^{(N)}(A)}$.
+    Taking components in~(\ref{eq:asymex_fib_anomaly_scalar_action}) gives,
+    for every nonempty word $w$,
+    \begin{align}
+        \tr((T\cdot A)^w) & =c\,\tr(A^w).
+        \notag
+    \end{align}
+    Apply Theorem~\ref{thm:asymex_fib_anomaly_trace_integral}.
+\end{proof}
 
 \begin{theorem}[Integrality of multi-block word-trace relations]%
     \label{thm:mpoalg_multiblock_trace_integral}
