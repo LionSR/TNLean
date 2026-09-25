@@ -197,8 +197,12 @@ Unless indicated otherwise, site sums and products run over $I_N$.
     has odd spin flip and witnesses noninvertibility.
 \end{proof}
 
-\begin{lemma}[Local duality and coupling exchange]
+\begin{lemma}[Local duality relations]
     \label{lem:asymex_kw_local}
+    \lean{KWExample.kwTensor_mpo_mul_siteX, KWExample.kwTensor_mpo_mul_siteZZ,
+        KWExample.siteX, KWExample.siteZ, KWExample.siteZZ}
+    \leanok
+    \uses{thm:asymex_kw_kernel}
     For every site $j$,
     \begin{align}
         K_NX_j        & =Z_{j-1}Z_jK_N,
@@ -206,15 +210,10 @@ Unless indicated otherwise, site sums and products run over $I_N$.
         K_NZ_jZ_{j+1} & =X_jK_N.
         \label{eq:asymex_kw_local}
     \end{align}
-    Consequently, the Hamiltonians with exchanged couplings satisfy
-    \begin{align}
-        K_NH_N(J,h) & =H_N(h,J)K_N.
-        \label{eq:asymex_kw_exchange}
-    \end{align}
-    In particular, $K_N$ commutes with $H_N(J,J)$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Flipping one input or output bit gives
     \begin{align}
         q(a,b\oplus e_j) & \equiv q(a,b)+a_{j-1}+a_j\pmod2,
@@ -224,7 +223,26 @@ Unless indicated otherwise, site sums and products run over $I_N$.
     \end{align}
     These congruences prove~(\ref{eq:asymex_kw_local}) entrywise.
     They remain valid when the two indicated sites coincide.
-    Summing the local relations and reindexing the bonds yields
+\end{proof}
+
+Under the identification of the dual lattice described after
+Corollary~\ref{cor:asymex_kw_square}, these are the two local relations
+of the duality defect in~\cite{Aasen2016Topological}.
+
+\begin{corollary}[Coupling exchange]
+    \label{cor:asymex_kw_exchange}
+    \uses{lem:asymex_kw_local}
+    The Hamiltonians with exchanged couplings satisfy
+    \begin{align}
+        K_NH_N(J,h) & =H_N(h,J)K_N.
+        \label{eq:asymex_kw_exchange}
+    \end{align}
+    In particular, $K_N$ commutes with $H_N(J,J)$.
+\end{corollary}
+
+\begin{proof}
+    Summing the local relations of
+    Lemma~\ref{lem:asymex_kw_local} and reindexing the bonds yields
     \begin{align}
         K_NH_N(J,h)
          & =\left(-J\sum_jX_j-h\sum_jZ_{j-1}Z_j\right)K_N
@@ -250,6 +268,16 @@ inverse of $K_N$ is involved.
 
 \begin{lemma}[Adjoint and Gram matrices]
     \label{lem:asymex_kw_gram}
+    \lean{KWExample.translate_mul_kwTensor_mpo,
+        KWExample.kwTensor_mpo_conjTranspose_eq_inv_translate_mul,
+        KWExample.kwTensor_mpo_conjTranspose_mul,
+        KWExample.kwTensor_mpo_mul_conjTranspose, KWExample.translate,
+        KWExample.shiftTensor_mpo_eq_translate, KWExample.translate_inv,
+        KWExample.kwTensor_mpo_conjTranspose, KWExample.kwTensor_mpo_transpose,
+        KWExample.kwTensor_mpo_transpose_eq_transpose_translate_mul,
+        KWExample.kwTensor_mpo_mul_transpose}
+    \leanok
+    \uses{thm:asymex_kw_kernel, def:asymex_kw}
     The raw operator satisfies
     \begin{align}
         TK_N        & =K_NT,
@@ -265,6 +293,7 @@ inverse of $K_N$ is involved.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Cyclic reindexing gives $q(\tau a,\tau b)=q(a,b)$ and
     $q(b,a)=q(\tau a,b)$. Since the kernel is real, these identities
     imply~(\ref{eq:asymex_kw_adjoint}).
@@ -352,16 +381,27 @@ commute with $\eta$, and the two signs acquired by a bond term cancel.
 Thus $U_N$ implements a unitary equivalence between $H_N(J,h)$ and
 $H_N(h,J)$ on $\mathcal H_N^+$, but not on the full Hilbert space.
 
-The square follows already from the adjoint and Gram identities.
-With $D=K_N$ as above,
-\begin{align}
-    D^2 & =2^N(\Id+\eta)T.
-    \label{eq:asymex_kw_fusion}
-\end{align}
-Indeed, $T^{-1}K_N^2=K_N^\dagger K_N$ by
-(\ref{eq:asymex_kw_adjoint}), and
-(\ref{eq:asymex_kw_gram}) gives the result. The corresponding normalized
-identities are
+\begin{corollary}[Square of the duality]
+    \label{cor:asymex_kw_square}
+    \lean{KWExample.kwTensor_mpo_mul_self}
+    \leanok
+    \uses{lem:asymex_kw_gram}
+    With $D=K_N$ as above,
+    \begin{align}
+        D^2 & =2^N(\Id+\eta)T.
+        \label{eq:asymex_kw_fusion}
+    \end{align}
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    By~(\ref{eq:asymex_kw_adjoint}), $K_N=TK_N^\dagger$ and $T$
+    commutes with $K_N$, so $K_N^2=K_NTK_N^\dagger=TK_NK_N^\dagger$.
+    Equation~(\ref{eq:asymex_kw_gram}) and $T\eta=\eta T$ give the
+    result.
+\end{proof}
+
+The corresponding normalized identities are
 \begin{align}
     \mathcal D_N^2 & =(\Id+\eta)T,
     \notag                         \\
@@ -386,23 +426,129 @@ $\mathcal D_N$, since
      & =\sum_j(a_{j-1}b_j+b_ja_j)=q(a,b).
     \notag
 \end{align}
-Returning by the transpose map gives
-$\mathcal D_N^\dagger\mathcal D_N=\Id+\eta$; repeating the same
-identified endomorphism gives
+The source returns to the original lattice with the same matrix
+elements read with the arguments exchanged, that is, by the transpose
+$\mathcal D_N^{\mathsf T}$. Since the kernel is real,
+$\mathcal D_N^{\mathsf T}=\mathcal D_N^\dagger$.
+
+\begin{proposition}[Fusion relations of the duality defect]
+    \label{prop:asymex_kw_defect_fusion}
+    \lean{KWExample.kwDefect, KWExample.spinFlip_mul_self,
+        KWExample.kwDefect_mul_spinFlip, KWExample.spinFlip_mul_kwDefect,
+        KWExample.kwDefect_transpose_mul, KWExample.kwDefect_mul_transpose,
+        KWExample.kwDefect_mul_transpose_mul,
+        KWExample.kwTensor_mpo_transpose_mul,
+        KWExample.kwTensor_mpo_mul_transpose_mul}
+    \leanok
+    \uses{lem:asymex_kw_gram, thm:asymex_kw_absorption}
+    The normalized duality $\mathcal D_N=2^{-N/2}K_N$ and the spin flip
+    satisfy
+    \begin{align}
+        \eta^2                                           & =\Id,
+        \notag                                                             \\
+        \mathcal D_N\eta=\eta\mathcal D_N                & =\mathcal D_N,
+        \notag                                                             \\
+        \mathcal D_N^{\mathsf T}\mathcal D_N
+        =\mathcal D_N\mathcal D_N^{\mathsf T}            & =\Id+\eta,
+        \notag                                                             \\
+        \mathcal D_N\mathcal D_N^{\mathsf T}\mathcal D_N & =2\mathcal D_N.
+        \label{eq:asymex_kw_defect_fusion}
+    \end{align}
+\end{proposition}
+
+\begin{proof}
+    \leanok
+    The spin flip is an involution, and the second line is
+    Theorem~\ref{thm:asymex_kw_absorption} rescaled. The third line is
+    (\ref{eq:asymex_kw_gram}) multiplied by $2^{-N}$, because the kernel
+    is real. Multiplying $\mathcal D_N\mathcal D_N^{\mathsf T}=\Id+\eta$
+    on the right by $\mathcal D_N$ and using $\eta\mathcal D_N=\mathcal
+        D_N$ gives the last line.
+\end{proof}
+
+With the spin-flip defect equal to $\eta$ and the square of the source
+read as $\mathcal D_N^{\mathsf T}\mathcal D_N$, the first three lines
+of~(\ref{eq:asymex_kw_defect_fusion}) are the fusion algebra
+of~\cite{Aasen2016Topological}, and the last line is its relation
+$\mathcal D_\sigma(\mathcal D_\sigma^2-2)=0$. The source computes the
+composite on the original lattice only; the identity
+$\mathcal D_N\mathcal D_N^{\mathsf T}=\Id+\eta$ on the dual lattice is
+not printed there. Repeating the identified endomorphism instead gives
 $\mathcal D_N^2=(\Id+\eta)T$.
+
 The partial-isometry convention of Ref.~\cite{Seiberg2024Majorana}
-has the scale of $U_N$. After exchanging its Pauli $X$ and $Z$,
-its displayed intertwining direction is that of $U_N^\dagger$ here:
-\begin{align}
-    U_N^\dagger X_j        & =Z_jZ_{j+1}U_N^\dagger,
-    \notag                                           \\
-    U_N^\dagger Z_jZ_{j+1} & =X_{j+1}U_N^\dagger.
-    \notag
-\end{align}
-Accordingly, its translation corresponds to $T^{-1}$ in our
-convention, with $(U_N^\dagger)^2=P_+T^{-1}$.
-This compares the operator relations and normalization, not an overall
-phase in a circuit representation. The noninvertibility here concerns
+has the scale of $U_N$. Since the kernel is real,
+$U_N^\dagger=2^{-(N+1)/2}K_N^{\mathsf T}$.
+
+\begin{proposition}[Relations of the adjoint normalized duality]
+    \label{prop:asymex_kw_adjoint_relations}
+    \lean{KWExample.kwTranslation, KWExample.kwTranslation_mul_siteX,
+        KWExample.kwTranslation_mul_siteZZ, KWExample.kwTranslation_mul_self,
+        KWExample.kwTranslation_mul_spinFlip,
+        KWExample.spinFlip_mul_kwTranslation,
+        KWExample.transpose_translate_mul_kwTranslation,
+        KWExample.kwTranslation_conjTranspose,
+        KWExample.kwTranslation_mul_conjTranspose,
+        KWExample.kwTranslation_conjTranspose_mul,
+        KWExample.kwTranslation_pow_two_mul,
+        KWExample.transpose_translate_mul_siteX,
+        KWExample.transpose_translate_pow_self,
+        KWExample.spinFlip_mul_transpose_translate}
+    \leanok
+    \uses{lem:asymex_kw_local, lem:asymex_kw_gram, thm:asymex_kw_absorption}
+    For every site $j$,
+    \begin{align}
+        U_N^\dagger X_j        & =Z_jZ_{j+1}U_N^\dagger,
+        \notag                                           \\
+        U_N^\dagger Z_jZ_{j+1} & =X_{j+1}U_N^\dagger.
+        \label{eq:asymex_kw_adjoint_local}
+    \end{align}
+    Moreover,
+    \begin{align}
+        (U_N^\dagger)^2                  & =P_+T^{-1},
+        \notag                                                  \\
+        U_N^\dagger\eta=\eta U_N^\dagger & =U_N^\dagger,
+        \notag                                                  \\
+        T^{-1}U_N^\dagger                & =U_N^\dagger T^{-1},
+        \notag                                                  \\
+        (U_N^\dagger)^\dagger            & =U_N^\dagger T,
+        \notag                                                  \\
+        U_N^\dagger U_N=U_NU_N^\dagger   & =P_+,
+        \notag                                                  \\
+        (U_N^\dagger)^{2N}               & =P_+.
+        \label{eq:asymex_kw_adjoint_algebra}
+    \end{align}
+\end{proposition}
+
+\begin{proof}
+    \leanok
+    Transposing the second relation of~(\ref{eq:asymex_kw_local}) at
+    site $j$ and the first at site $j+1$
+    gives~(\ref{eq:asymex_kw_adjoint_local}), because $X_j$ and
+    $Z_jZ_{j+1}$ are real symmetric. Since the kernel is real,
+    (\ref{eq:asymex_kw_adjoint}) gives
+    $K_N^{\mathsf T}=K_NT^{-1}=T^{-1}K_N$, so
+    $(K_N^{\mathsf T})^2=K_N^{\mathsf T}K_NT^{-1}$, and
+    (\ref{eq:asymex_kw_gram}) gives the square. The absorption and
+    commutation relations follow from
+    Theorem~\ref{thm:asymex_kw_absorption} and $TK_N=K_NT$, and the
+    adjoint relation from $K_N=K_N^{\mathsf T}T$. The two products
+    with the adjoint are~(\ref{eq:asymex_kw_gram}) rescaled. Finally,
+    $P_+$ commutes with $T$, $T^N=\Id$ and $P_+^2=P_+$, so
+    $(U_N^\dagger)^{2N}=P_+^NT^{-N}=P_+$.
+\end{proof}
+
+After exchanging the Pauli operators $X$ and $Z$ at every site, the
+relations~(\ref{eq:asymex_kw_adjoint_local})
+and~(\ref{eq:asymex_kw_adjoint_algebra}) are those that
+Ref.~\cite{Seiberg2024Majorana} prints for its noninvertible
+translation, with its translation read as $T^{-1}$ and its projection
+$(1+\eta)/2$ read as $P_+$. The proposition shows that $U_N^\dagger$
+satisfies these relations. It does not identify $U_N^\dagger$ with the
+operator that reference defines by an explicit product of local
+factors, and the conjugation action by which that reference fixes its
+translation determines the translation only up to a scalar.
+The noninvertibility here concerns
 the periodic bosonic spin chain, not fermionic Majorana translation.
 The translation in~(\ref{eq:asymex_kw_fusion}) must be retained when
 comparing this lattice relation with a size-independent fusion algebra.
@@ -650,6 +796,16 @@ They do not require a thermodynamic limit.
 
 \begin{lemma}[Product-state and GHZ actions]
     \label{lem:asymex_kw_states}
+    \lean{KWExample.kwTensor_mpo_mulVec_plus,
+        KWExample.kwTensor_mpo_mulVec_single_zero,
+        KWExample.kwTensor_mpo_mulVec_single_flipConfig_zero,
+        KWExample.kwTensor_mpo_mulVec_ghz,
+        KWExample.kwTensor_mpo_normalized_mulVec_plus,
+        KWExample.kwTensor_mpo_normalized_mulVec_ghz, KWExample.plusState,
+        KWExample.ghzState, KWExample.mpv_kwPlus_eq_smul_mpv_ghz,
+        KWExample.mpv_kwGHZ_eq_two_smul_mpv_plusTensor}
+    \leanok
+    \uses{thm:asymex_kw_kernel, thm:asymex_kw_absorption}
     For every $N\geq1$,
     \begin{align}
         K_Np_N                              & =2^Ng_N,
@@ -666,6 +822,7 @@ They do not require a thermodynamic limit.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Reindexing the exponent and using~(\ref{eq:asymex_kw_character})
     gives
     \begin{align}
@@ -697,7 +854,8 @@ sitewise intertwiners to be compared directly.
     \label{def:asymex_kw_action}
     \lean{KWExample.plusTensor, KWExample.ghz0, KWExample.ghz1,
         KWExample.kwPlus, KWExample.plusTarget, KWExample.ghz,
-        KWExample.kwGHZ, KWExample.kwGHZTarget}
+        KWExample.kwGHZ, KWExample.kwGHZTarget,
+        KWExample.mpv_plusTensor_eq_plusState, KWExample.mpv_ghz_eq_ghzState}
     \leanok
     \uses{def:asymex_kw, def:mps_tensor}
     The product-state tensor $A_+$ has bond dimension one and

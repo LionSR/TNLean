@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.KramersWannierTensor
 import TNLean.MPS.Core.CyclicTrace
+import TNLean.Algebra.BinaryCharacterSum
 
 /-!
 # The periodic Kramers–Wannier kernel and spin flip
@@ -114,10 +115,7 @@ theorem kwTensor_mpo_flip_output {L : ℕ} [NeZero L] (a b : Fin L → Fin 2) :
       ∏ j : Fin L, (-1 : ℂ) ^ (b j).val :=
     Fintype.prod_equiv (Equiv.addRight (1 : Fin L)) _ _ (fun _ => rfl)
   rw [hshift, ← Finset.prod_mul_distrib]
-  have hsq (j : Fin L) : (-1 : ℂ) ^ (b j).val * (-1 : ℂ) ^ (b j).val = 1 := by
-    generalize b j = x
-    fin_cases x <;> norm_num
-  simp only [hsq, Finset.prod_const_one, one_mul]
+  simp only [neg_one_pow_mul_neg_one_pow_self, Finset.prod_const_one, one_mul]
 
 /-- The raw periodic operator absorbs global spin flip on its input. -/
 theorem kwTensor_mpo_mul_spinFlip {L : ℕ} [NeZero L] :
