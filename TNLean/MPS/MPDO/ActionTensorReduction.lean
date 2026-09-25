@@ -95,8 +95,7 @@ theorem _root_.MPSTensor.IsReduction.actTensor_kronId {X : MPOTensor d D₂}
 /-- **Associativity of the action.** The action tensor of a product `M N` on `A`, reindexed by
 the bond associator, is the action tensor of `M` on the action tensor of `N` on `A`.
 
-Source: arXiv:2203.12563, `sec:PBC`, line 1091 (the product `(g × h) · x = g · (h · x)`);
-the associator is that of arXiv:1606.00608, lines 995--999. -/
+Source: arXiv:2203.12563, `sec:PBC`, line 1091 (the product `(g × h) · x = g · (h · x)`). -/
 theorem actTensor_mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂) (A : MPSTensor d D₃)
     (i : Fin d) :
     actTensor (mulTensor M N) A i =
@@ -121,8 +120,7 @@ theorem actTensor_mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂) (A : M
 
 /-- The bond associator intertwines the letters of `(M N) · A` and `M · (N · A)`.
 
-Source: arXiv:2203.12563, `sec:PBC`, line 1091 (the product `(g × h) · x = g · (h · x)`);
-the associator is that of arXiv:1606.00608, lines 995--999. -/
+Source: arXiv:2203.12563, `sec:PBC`, line 1091 (the product `(g × h) · x = g · (h · x)`). -/
 theorem actTensor_mulTensor_mul_assocMatrix (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (A : MPSTensor d D₃) (i : Fin d) :
     actTensor (mulTensor M N) A i * mulTensorAssocMatrix D₁ D₂ D₃ =
@@ -135,8 +133,7 @@ theorem actTensor_mulTensor_mul_assocMatrix (M : MPOTensor d D₁) (N : MPOTenso
 /-- The inverse bond associator intertwines the letters of `(M N) · A` and `M · (N · A)` in the
 opposite direction.
 
-Source: arXiv:2203.12563, `sec:PBC`, line 1091; the associator is that of arXiv:1606.00608,
-lines 995--999. -/
+Source: arXiv:2203.12563, `sec:PBC`, line 1091. -/
 theorem assocInvMatrix_mul_actTensor_mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (A : MPSTensor d D₃) (i : Fin d) :
     mulTensorAssocInvMatrix D₁ D₂ D₃ * actTensor (mulTensor M N) A i =

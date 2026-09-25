@@ -51,6 +51,14 @@ theorem invSqrtTwo_pow_mul_self (n : ℕ) :
     invSqrtTwo ^ n * invSqrtTwo ^ n * (2 : ℂ) ^ n = 1 := by
   rw [← mul_pow, ← mul_pow, invSqrtTwo_mul_self, inv_mul_cancel₀ two_ne_zero, one_pow]
 
+/-- The complex number `1 / √2` times the complex coercion of `√2` is one. -/
+theorem invSqrtTwo_mul_sqrtTwo : invSqrtTwo * (↑(Real.sqrt 2) : ℂ) = 1 :=
+  inv_mul_cancel₀ (ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 two_pos))
+
+/-- The complex coercion of `√2` times the complex number `1 / √2` is one. -/
+theorem sqrtTwo_mul_invSqrtTwo : (↑(Real.sqrt 2) : ℂ) * invSqrtTwo = 1 :=
+  mul_inv_cancel₀ (ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 two_pos))
+
 /-- The complex number `1 / √2` is real, so complex conjugation fixes it. -/
 @[simp] theorem conj_invSqrtTwo : starRingEnd ℂ invSqrtTwo = invSqrtTwo := by
   simp [invSqrtTwo, Complex.conj_ofReal]
