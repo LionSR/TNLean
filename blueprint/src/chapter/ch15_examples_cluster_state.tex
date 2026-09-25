@@ -4,14 +4,89 @@
 The cluster state~\cite{BriegelRaussendorf2001,RaussendorfBriegel2001} is a
 universal resource for measurement-based quantum computation; its
 one-dimensional chain provides another canonical example of a
-non-trivial SPT phase~\cite{Schuch2011Phases,Cirac2021Matrix}.
+non-trivial SPT phase~\cite{Schuch2011Phases,Cirac2021Matrix}. We follow
+the presentation of~\cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
+Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
 
-\begin{definition}[Cluster-state tensor]\label{def:cluster_tensor}
+\begin{definition}[Cluster-state tensor of the review]\label{def:cluster_tensor_review}
+    \lean{MPSTensor.clusterTensorRMP}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = D = 2$. The cluster-state tensor
+    of~\cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix} is the family
+    $\{A^0, A^1\} \subset \MN{2}$ given by
+    \begin{align}
+        A^0
+         & = \ketbra{0}{+}
+        = \frac{1}{\sqrt{2}}
+        \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix},
+        \qquad
+        A^1
+        = \ketbra{1}{-}
+        = \frac{1}{\sqrt{2}}
+        \begin{pmatrix} 0 & 0 \\ 1 & -1 \end{pmatrix}.
+        \notag
+    \end{align}
+    Equivalently, $(A^s)_{\alpha\beta} = \delta_{\alpha s}\,(-1)^{s\beta}/\sqrt{2}$.
+\end{definition}
+
+\begin{theorem}[Controlled-$Z$ construction of the cluster state]\label{thm:cluster_cz_construction}
+    \lean{MPSTensor.clusterTensorRMP_mpv_eq_clusterCZRing,
+        MPSTensor.clusterCZRing, MPSTensor.plusProductState,
+        MPSTensor.controlledZ}
+    \leanok
+    \uses{def:cluster_tensor_review}
+    For every $N \geq 1$ and every $s \in \{0,1\}^N$,
+    \begin{align}
+        \tr\bigl(A^{s_1} A^{s_2} \cdots A^{s_N}\bigr)
+        = \Bigl(\,\prod_{j=1}^{N} \mathrm{CZ}_{j,j+1}\,
+        \ket{+}^{\otimes N}\Bigr)_{s}
+        = 2^{-N/2} \prod_{j=1}^{N} (-1)^{s_j s_{j+1}},
+        \notag
+    \end{align}
+    with indices modulo $N$, where $\mathrm{CZ}_{a,b}$ multiplies the
+    coefficient of $\ket{s}$ by $(-1)^{s_a s_b}$. Thus the periodic matrix
+    product vector of the tensor of
+    Definition~\ref{def:cluster_tensor_review} is exactly the normalized
+    cluster state obtained by acting with controlled-$Z$ gates between nearest
+    neighbours of a ring on
+    $\ket{+}^{\otimes N}$~\cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix},
+    \cite{RaussendorfBriegel2001}. For $N \geq 3$ the $N$ gates act on the
+    distinct bonds of the ring. For $N = 2$ the two gates act on the same pair
+    and cancel, giving $\ket{+}^{\otimes 2}$; for $N = 1$ the single gate
+    $\mathrm{CZ}_{1,1}$ is the Pauli $Z$, giving $\ket{-}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $A^s = \ketbra{s}{h_s}$ with $h_0 = +$ and $h_1 = -$, the trace of
+    the product is $\prod_j \braket{h_{s_j}}{s_{j+1}}$ with indices modulo
+    $N$, and $\braket{h_a}{b} = (-1)^{ab}/\sqrt{2}$. On the other side,
+    every coefficient of $\ket{+}^{\otimes N}$ equals $2^{-N/2}$, and the
+    gates multiply the coefficient of $\ket{s}$ by
+    $\prod_j (-1)^{s_j s_{j+1}}$.
+\end{proof}
+
+\begin{lemma}[Valence-bond form of the cluster-state tensor]\label{lem:cluster_valence_bond}
+    \lean{MPSTensor.clusterTensorVBS, MPSTensor.clusterTensorVBS_eq_smul}
+    \leanok
+    \uses{def:cluster_tensor_review}
+    In the valence-bond description of~\cite{VerstraeteCirac2004ValenceBond},
+    neighbouring virtual qubits share the bond
+    $\ket{00} + \ket{01} + \ket{10} - \ket{11}$ and each site maps both of its
+    virtual qubits to the physical one by
+    $\ket{0}\bra{00} + \ket{1}\bra{11}$. On a chain this is the tensor
+    $\ketbra{s}{s} H$ with
+    $H = \bigl(\begin{smallmatrix} 1 & 1 \\ 1 & -1 \end{smallmatrix}\bigr)$,
+    which equals $\sqrt{2}\,A^s$.
+\end{lemma}
+
+\begin{definition}[Transposed representative]\label{def:cluster_tensor}
     \lean{MPSTensor.clusterTensor}
     \leanok
     \uses{def:mps_tensor}
-    Set $d = D = 2$. The cluster-state tensor is the family
-    $\{A^0, A^1\} \subset \MN{2}$ defined by
+    The results below are proved for the transpose of the tensor of
+    Definition~\ref{def:cluster_tensor_review}, the family
     \begin{align}
         A^0
          & = \ketbra{+}{0}
@@ -24,12 +99,67 @@ non-trivial SPT phase~\cite{Schuch2011Phases,Cirac2021Matrix}.
         \begin{pmatrix} 0 & 1 \\ 0 & -1 \end{pmatrix},
         \notag
     \end{align}
-    where $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
-    The review~\cite{Cirac2021Matrix} writes the reflected convention
-    $A^0 = \ketbra{0}{+}$, $A^1 = \ketbra{1}{-}$; the transpose taken
-    here is the same state read in the opposite direction and carries the
-    same SPT order.
+    and transferred back by Lemma~\ref{lem:cluster_review_gauge}.
 \end{definition}
+
+\begin{lemma}[The two cluster-state tensors are gauge equivalent]\label{lem:cluster_review_gauge}
+    \lean{MPSTensor.clusterTensorRMP_eq_transpose,
+        MPSTensor.clusterTensor_gaugeEquiv_clusterTensorRMP,
+        MPSTensor.clusterTensor_sameMPV_clusterTensorRMP,
+        MPSTensor.clusterBlocked_gaugeEquiv_clusterBlockedRMP}
+    \leanok
+    \uses{def:cluster_tensor_review, def:cluster_tensor, def:gauge_equiv}
+    The tensor of Definition~\ref{def:cluster_tensor_review} is the transpose
+    of the tensor of Definition~\ref{def:cluster_tensor}, and the two are
+    gauge equivalent: with
+    $H = \bigl(\begin{smallmatrix} 1 & 1 \\ 1 & -1 \end{smallmatrix}\bigr)$,
+    the review tensor is $H A^s H^{-1}$, since $H\ket{\pm} = \sqrt{2}\,\ket{0}$
+    and $\sqrt{2}\,\ket{1}$ respectively. Hence both tensors generate the same
+    matrix product vectors at every length, and their length-$2$ blockings are
+    gauge equivalent by the same matrix.
+\end{lemma}
+
+\begin{theorem}[Properties of the review cluster-state tensor]\label{thm:cluster_review_transferred}
+    \lean{MPSTensor.clusterTensorRMP_not_isInjective,
+        MPSTensor.clusterTensorRMP_isNBlkInjective_two,
+        MPSTensor.clusterTensorRMP_isNormal,
+        MPSTensor.clusterBlockedRMP, MPSTensor.clusterBlockedRMP_isInjective,
+        MPSTensor.clusterBlockedRMP_isOnSiteSymmetric_Z2Z2,
+        MPSTensor.clusterRepXRMP, MPSTensor.clusterProjRepRMP,
+        MPSTensor.clusterBlockedRMP_twist_intertwine,
+        MPSTensor.clusterBlockedRMP_hasStringOrder,
+        MPSTensor.clusterBlockedRMP_isZCL}
+    \leanok
+    \uses{lem:cluster_review_gauge, thm:cluster_not_injective, thm:cluster_normal,
+        thm:cluster_z2z2_symmetric, def:cluster_omega, thm:cluster_nontrivial_spt,
+        thm:cluster_string_order, thm:cluster_zcl}
+    The tensor of Definition~\ref{def:cluster_tensor_review} is not injective,
+    its length-$2$ blocking is injective, and so it is normal. The length-$2$
+    blocked tensor is on-site symmetric under the $\Z_2 \times \Z_2$ action of
+    Theorem~\ref{thm:cluster_z2z2_symmetric}; the two generators are
+    implemented on the bond space by $\sigma_x$ and $\sigma_z$, the
+    conjugates by $H$ of the gauges of
+    Theorem~\ref{thm:cluster_gauge_anticomm}, and these form a projective
+    representation with the factor system of
+    Definition~\ref{def:cluster_omega}, whose class is non-trivial
+    (Theorem~\ref{thm:cluster_nontrivial_spt}). The blocked tensor has string
+    order for every group element with the maximally mixed boundary state, and
+    has zero correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each property is invariant under the gauge equivalence of
+    Lemma~\ref{lem:cluster_review_gauge} and holds for the transposed
+    representative by Theorems~\ref{thm:cluster_not_injective},
+    \ref{thm:cluster_normal}, \ref{thm:cluster_z2z2_symmetric},
+    \ref{thm:cluster_string_order} and~\ref{thm:cluster_zcl}. For the string
+    order, the four blocked matrices
+    $\tfrac{1}{\sqrt{2}}\ketbra{0}{+}$, $\tfrac{1}{\sqrt{2}}\ketbra{1}{+}$,
+    $\tfrac{1}{\sqrt{2}}\ketbra{0}{-}$ and $-\tfrac{1}{\sqrt{2}}\ketbra{1}{-}$
+    satisfy
+    $\sum_i A^i (A^i)^\dagger = \sum_i (A^i)^\dagger A^i = \Id$.
+\end{proof}
 
 \begin{theorem}[Cluster-state tensor is not injective]\label{thm:cluster_not_injective}
     \lean{MPSTensor.cluster_not_isInjective}

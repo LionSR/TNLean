@@ -48,6 +48,9 @@ is injective and which lies in a non-trivial symmetry-protected topological
   `A⁰ = |0⟩⟨+|`, `A¹ = |1⟩⟨−|`; the convention used here is its transpose
   (equivalently, the MPS read in the opposite direction), which represents the
   same state and carries the same SPT order.
+  The review tensor itself, its controlled-`Z` construction, and the
+  Hadamard gauge relating it to `clusterTensor` are in
+  `TNLean.MPS.Examples.ClusterReview`.
 * Raussendorf, Briegel (arXiv:quant-ph/0010033) — original cluster state
 * Pérez-García, Wolf, Sanz, Verstraete, Cirac, arXiv:0802.0447 (PRL 2008) —
   string order and local symmetry for finitely correlated states
@@ -234,19 +237,23 @@ private lemma decode_2 : decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm 2) 
 private lemma decode_3 : decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm 3) = ![1, 1] := by
   funext j; apply Fin.ext; rw [decodeBlock_cast_val]; fin_cases j <;> decide
 
-@[simp] private lemma clusterBlocked_zero :
+/-- The blocked letter `A⁰A⁰ = (1/√2)|+⟩⟨0|`. -/
+@[simp] lemma clusterBlocked_zero :
     clusterBlocked 0 = (1 / 2 : ℂ) • !![1, 0; 1, 0] := by
   rw [clusterBlocked_apply, decode_0]; simpa using cluster_prod_00
 
-@[simp] private lemma clusterBlocked_one :
+/-- The blocked letter `A¹A⁰ = (1/√2)|−⟩⟨0|`. -/
+@[simp] lemma clusterBlocked_one :
     clusterBlocked 1 = (1 / 2 : ℂ) • !![1, 0; -1, 0] := by
   rw [clusterBlocked_apply, decode_1]; simpa using cluster_prod_10
 
-@[simp] private lemma clusterBlocked_two :
+/-- The blocked letter `A⁰A¹ = (1/√2)|+⟩⟨1|`. -/
+@[simp] lemma clusterBlocked_two :
     clusterBlocked 2 = (1 / 2 : ℂ) • !![0, 1; 0, 1] := by
   rw [clusterBlocked_apply, decode_2]; simpa using cluster_prod_01
 
-@[simp] private lemma clusterBlocked_three :
+/-- The blocked letter `A¹A¹ = -(1/√2)|−⟩⟨1|`. -/
+@[simp] lemma clusterBlocked_three :
     clusterBlocked 3 = (1 / 2 : ℂ) • !![0, -1; 0, 1] := by
   rw [clusterBlocked_apply, decode_3]; simpa using cluster_prod_11
 
@@ -313,17 +320,20 @@ def clusterZ2Z2Action :
   ofCommutingInvolutions clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
-@[simp] private lemma clusterZ2Z2Action_10 :
+/-- The first generator acts by `σx ⊗ I`. -/
+@[simp] lemma clusterZ2Z2Action_10 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = clusterPhysX1 := by
   exact ofCommutingInvolutions_ofAdd_10 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
-@[simp] private lemma clusterZ2Z2Action_01 :
+/-- The second generator acts by `I ⊗ σx`. -/
+@[simp] lemma clusterZ2Z2Action_01 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = clusterPhysX2 := by
   exact ofCommutingInvolutions_ofAdd_01 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
-@[simp] private lemma clusterZ2Z2Action_11 :
+/-- The product of the generators acts by `σx ⊗ σx`. -/
+@[simp] lemma clusterZ2Z2Action_11 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
       clusterPhysX1 * clusterPhysX2 := by
   exact ofCommutingInvolutions_ofAdd_11 clusterPhysX1 clusterPhysX2
@@ -587,7 +597,7 @@ private theorem maximallyMixed_trace :
 /-- The `Z₂ × Z₂` on-site representation is unitary on every group element: the
 two generators act by real symmetric involutive permutation matrices, so each
 group element equals its own adjoint inverse. -/
-private theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
+theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
     clusterZ2Z2Action g * (clusterZ2Z2Action g)ᴴ = 1 := by
   exact ofCommutingInvolutions_mul_conjTranspose clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
