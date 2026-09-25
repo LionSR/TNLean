@@ -40,9 +40,9 @@ For two operator tensors, $T_aT_b$ denotes the stacked tensor
 $(T_aT_b)^{ij}=\sum_mT_a^{im}\otimes T_b^{mj}$ of bond dimension
 $\chi_a\chi_b$, and $T_a\cdot A$ denotes the tensor
 $(T_a\cdot A)^i=\sum_jT_a^{ij}\otimes A^j$. A reduction of a tensor $B$ onto a
-tensor $C$ is a pair of maps $(W,V)$ with $WV=\Id$ and $WB^wV=C^w$ for every
-word $w$ (Definition~\ref{def:mps_rectangular_reduction}); we call $W$ the
-compression and $V$ the embedding.
+tensor $C$ is a pair of maps $(V,W)$ with $VW=\Id$ and $VB^wW=C^w$ for every
+word $w$ (Definition~\ref{def:mps_rectangular_reduction}); we call $V$ the
+compression and $W$ the embedding.
 
 %% ---------------------------------------------------------
 \section{Matrix product operator symmetries}%
@@ -137,6 +137,30 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     %   multiplicities); the fusion character is not used by the source.
 \end{definition}
 
+\begin{lemma}[Integrality of multi-block word-trace relations]%
+    \label{lem:mpoalg_multiblock_trace_integral}
+    \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul}
+    \leanok
+    \uses{def:asym_word_module, def:normal}
+    Let $(A_y)_{y\in K}$ be normal tensors of positive bond dimension with
+    pairwise non-isomorphic word modules, let $B$ be a tensor on the same
+    physical alphabet, and let $c_y\in\C$ satisfy
+    $\tr(B^w)=\sum_yc_y\tr(A_y^w)$ for every nonempty word $w$. Then every
+    $c_y$ is a nonnegative integer.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:asym_word_module}
+    Each word module of $A_y$ is simple. An element of the augmentation ideal
+    of the word algebra acts on the block $y_0$ as a matrix unit and
+    annihilates the other blocks; by the trace relation, every positive power
+    of its action on the word module of $B$ has trace $c_{y_0}$. A matrix
+    whose positive powers all have the same trace has all its nonzero
+    eigenvalues equal to $1$, so that trace is the multiplicity of the
+    eigenvalue $1$, a nonnegative integer.
+\end{proof}
+
 \begin{theorem}[The action coefficients form a nonnegative integer representation]%
     \label{thm:mpo_symmetric_nimrep}
     \lean{MPOTensor.exists_nat_eq_of_isMPOSymmetricFamily,
@@ -155,7 +179,7 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_fib_anomaly_trace_integral}
+    \uses{lem:mpoalg_multiblock_trace_integral}
     Fix $a$ and $x$. The word traces of $T_a\cdot A_x$ are
     $\sum_yM_{a,x}^y\tr(A_y^w)$ on nonempty words $w$. The word modules of
     the $A_y$ are simple and pairwise non-isomorphic, since isomorphic word
@@ -163,7 +187,7 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     of the word algebra acts on the block $y_0$ as a matrix unit and
     annihilates the other blocks; its powers have constant trace
     $M_{a,x}^{y_0}$ on $T_a\cdot A_x$, so $M_{a,x}^{y_0}$ is a nonnegative
-    integer (Theorem~\ref{thm:asymex_fib_anomaly_trace_integral}). Applying
+    integer (Lemma~\ref{lem:mpoalg_multiblock_trace_integral}). Applying
     (\ref{eq:mpo_fusion_algebra}) and (\ref{eq:mpo_symmetric_family}) twice
     to $O_a^{(N_0)}O_b^{(N_0)}\ket{V^{(N_0)}(A_x)}$ and comparing
     coefficients of the independent vectors gives (\ref{eq:mpo_nimrep}).
@@ -295,20 +319,20 @@ pair alphabet.
     bond dimension. A family of \emph{fusion tensors} for the pair $(a,b)$
     consists of maps
     \begin{align}
-        W_{ab}^{c,\mu} & \colon\C^{\chi_a}\otimes\C^{\chi_b}\to\C^{\chi_c}, &
-        V_{ab}^{c,\mu} & \colon\C^{\chi_c}\to\C^{\chi_a}\otimes\C^{\chi_b},
+        V_{ab}^{c,\mu} & \colon\C^{\chi_a}\otimes\C^{\chi_b}\to\C^{\chi_c}, &
+        W_{ab}^{c,\mu} & \colon\C^{\chi_c}\to\C^{\chi_a}\otimes\C^{\chi_b},
         \label{eq:mpoalg_fusion_maps}
     \end{align}
     for $c\in I$ and $1\leq\mu\leq N_{ab}^c$, such that the pairs are mutually
-    biorthogonal, $W_{ab}^{c,\mu}V_{ab}^{d,\nu}=\delta_{cd}\delta_{\mu\nu}
+    biorthogonal, $V_{ab}^{c,\mu}W_{ab}^{d,\nu}=\delta_{cd}\delta_{\mu\nu}
         \Id_{\chi_c}$, each pair is a reduction of $T_aT_b$ onto $T_c$,
     \begin{align}
-        W_{ab}^{c,\mu}(T_aT_b)^{\mathbf w}V_{ab}^{c,\mu}
+        V_{ab}^{c,\mu}(T_aT_b)^{\mathbf w}W_{ab}^{c,\mu}
          & =T_c^{\mathbf w}
         \label{eq:mpoalg_fusion_reduction}
     \end{align}
     for every word $\mathbf w$ in the pair alphabet, and the remainder
-    $(T_aT_b)^{ij}-\sum_{c,\mu}V_{ab}^{c,\mu}T_c^{ij}W_{ab}^{c,\mu}$ generates
+    $(T_aT_b)^{ij}-\sum_{c,\mu}W_{ab}^{c,\mu}T_c^{ij}V_{ab}^{c,\mu}$ generates
     a nilpotent algebra. This is the decomposition of
     \cite[Section~2]{GarreRubio2023MPOSym} and
     \cite{Bultinck2017Anyons}, with the nilpotent remainder of
@@ -353,7 +377,7 @@ pair alphabet.
 
 For a group-like algebra, with labels in a group $G$ and
 $N_{gh}^k=\delta_{k,gh}$, the fusion tensors reduce to one pair
-$(W_{g,h},V_{g,h})$ for each pair of group elements; for representations by
+$(V_{g,h},W_{g,h})$ for each pair of group elements; for representations by
 matrix product unitaries this is Corollary~\ref{cor:asym_fusion_tensors_group}.
 
 \begin{definition}[Action tensors]%
@@ -365,8 +389,8 @@ matrix product unitaries this is Corollary~\ref{cor:asym_fusion_tensors_group}.
     Let $(A_x)_{x\in K}$ be a symmetric family of normal tensors of positive
     bond dimension whose coefficients $M_{a,x}^y$ are nonnegative integers. A
     family of \emph{action tensors} for $(a,x)$ consists of maps
-    $W_{ax}^{y,i}\colon\C^{\chi_a}\otimes\C^{D_x}\to\C^{D_y}$ and
-    $V_{ax}^{y,i}\colon\C^{D_y}\to\C^{\chi_a}\otimes\C^{D_x}$, for $y\in K$
+    $V_{ax}^{y,i}\colon\C^{\chi_a}\otimes\C^{D_x}\to\C^{D_y}$ and
+    $W_{ax}^{y,i}\colon\C^{D_y}\to\C^{\chi_a}\otimes\C^{D_x}$, for $y\in K$
     and $1\leq i\leq M_{a,x}^y$, that are mutually biorthogonal reductions of
     $T_a\cdot A_x$ onto the blocks $A_y$ with a nilpotent remainder.
     % Source anchor: arXiv:2203.12563, lines 459--490 (action tensors and
@@ -414,13 +438,13 @@ the multiplicity gauge. Outside these settings uniqueness fails
     \label{cor:mpoalg_single_target_uniqueness}
     \uses{thm:mps_reduction_boundary_dressed_uniqueness,
         def:mps_rectangular_reduction}
-    Let $B$ be a tensor, $C$ a normal tensor, and $(W,V)$, $(\widetilde
-        W,\widetilde V)$ two reductions of $B$ onto $C$ whose residual tensors
-    $B-VCW$ and $B-\widetilde VC\widetilde W$ are nilpotent with a common
+    Let $B$ be a tensor, $C$ a normal tensor, and $(V,W)$, $(\widetilde
+        V,\widetilde W)$ two reductions of $B$ onto $C$ whose residual tensors
+    $B-WCV$ and $B-\widetilde WC\widetilde V$ are nilpotent with a common
     bound $N_0$. Then there is a unique $\lambda\in\C^\times$ with
     \begin{align}
-        \widetilde WB^{\mathbf w} & =\lambda\,WB^{\mathbf w},   &
-        B^{\mathbf w}\widetilde V & =\lambda^{-1}B^{\mathbf w}V
+        \widetilde VB^{\mathbf w} & =\lambda\,VB^{\mathbf w},   &
+        B^{\mathbf w}\widetilde W & =\lambda^{-1}B^{\mathbf w}W
         \label{eq:mpoalg_single_target}
     \end{align}
     for every word with $|\mathbf w|>2N_0$. This applies to the fusion tensors
@@ -454,20 +478,20 @@ the multiplicity gauge. Outside these settings uniqueness fails
     \uses{def:mpoalg_fusion_tensors, def:normal}
     Let the blocks $T_c$ of a fusion algebra be normal and pairwise not
     related by a gauge transformation, and let
-    $(W_{ab}^{c,\mu},V_{ab}^{c,\mu})$ and
-    $(\widetilde W_{ab}^{c,\mu},\widetilde V_{ab}^{c,\mu})$ be two families
+    $(V_{ab}^{c,\mu},W_{ab}^{c,\mu})$ and
+    $(\widetilde V_{ab}^{c,\mu},\widetilde W_{ab}^{c,\mu})$ be two families
     of fusion tensors for $(a,b)$ with vanishing remainder,
     \begin{align}
         (T_aT_b)^{\mathbf w}
-         & =\sum_{c,\mu}V_{ab}^{c,\mu}T_c^{\mathbf w}W_{ab}^{c,\mu}
-        =\sum_{c,\mu}\widetilde V_{ab}^{c,\mu}T_c^{\mathbf w}
-        \widetilde W_{ab}^{c,\mu}
+         & =\sum_{c,\mu}W_{ab}^{c,\mu}T_c^{\mathbf w}V_{ab}^{c,\mu}
+        =\sum_{c,\mu}\widetilde W_{ab}^{c,\mu}T_c^{\mathbf w}
+        \widetilde V_{ab}^{c,\mu}
         \label{eq:mpoalg_zipper_decomposition}
     \end{align}
     for every nonempty word $\mathbf w$. Then for each $c$ there is a unique
     $Y_{ab}^c\in\GL_{N_{ab}^c}(\C)$ with
-    $\widetilde W_{ab}^{c,\mu}=\sum_\nu(Y_{ab}^c)_{\mu\nu}W_{ab}^{c,\nu}$ and
-    $\widetilde V_{ab}^{c,\mu}=\sum_\nu V_{ab}^{c,\nu}
+    $\widetilde V_{ab}^{c,\mu}=\sum_\nu(Y_{ab}^c)_{\mu\nu}V_{ab}^{c,\nu}$ and
+    $\widetilde W_{ab}^{c,\mu}=\sum_\nu W_{ab}^{c,\nu}
         \bigl((Y_{ab}^c)^{-1}\bigr)_{\nu\mu}$ on the support of the
     decomposition, so the ambiguity is
     $\bigoplus_c\GL_{N_{ab}^c}(\C)$ and no dressing by words is needed. This
@@ -484,14 +508,14 @@ the multiplicity gauge. Outside these settings uniqueness fails
 \begin{proof}
     \uses{def:normal}
     Multiply (\ref{eq:mpoalg_zipper_decomposition}) by
-    $\widetilde W_{ab}^{c,\mu}$ on the left and $V_{ab}^{e,\nu}$ on the right
+    $\widetilde V_{ab}^{c,\mu}$ on the left and $W_{ab}^{e,\nu}$ on the right
     and use biorthogonality of both families:
-    $T_c^{\mathbf w}\,\widetilde W_{ab}^{c,\mu}V_{ab}^{e,\nu}
-        =\widetilde W_{ab}^{c,\mu}V_{ab}^{e,\nu}\,T_e^{\mathbf w}$ for every
+    $T_c^{\mathbf w}\,\widetilde V_{ab}^{c,\mu}W_{ab}^{e,\nu}
+        =\widetilde V_{ab}^{c,\mu}W_{ab}^{e,\nu}\,T_e^{\mathbf w}$ for every
     nonempty word. For normal blocks, the words of a fixed injective length
     span the full matrix algebra, so an intertwiner between $T_c$ and $T_e$ is
     zero unless $T_c$ and $T_e$ are gauge equivalent, and is a scalar when
-    $e=c$. This gives $\widetilde W_{ab}^{c,\mu}V_{ab}^{e,\nu}=
+    $e=c$. This gives $\widetilde V_{ab}^{c,\mu}W_{ab}^{e,\nu}=
         \delta_{ce}(Y_{ab}^c)_{\mu\nu}\Id$, and the same argument with the
     families exchanged gives the inverse matrix.
 \end{proof}
@@ -504,8 +528,8 @@ the multiplicity gauge. Outside these settings uniqueness fails
     \uses{def:mpoalg_action_tensors, def:normal}
     Let the blocks $A_y$ be normal and pairwise not related by a gauge
     transformation. Two families of action tensors for $(a,x)$ with
-    vanishing remainder, $(T_a\cdot A_x)^w=\sum_{y,i}V_{ax}^{y,i}A_y^w
-        W_{ax}^{y,i}$ for every nonempty word, are related by a unique
+    vanishing remainder, $(T_a\cdot A_x)^w=\sum_{y,i}W_{ax}^{y,i}A_y^w
+        V_{ax}^{y,i}$ for every nonempty word, are related by a unique
     $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ for each $y$, in the sense of
     Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}. This is the gauge
     freedom of the action tensors in \cite[Section~3.1]{GarreRubio2023MPOSym}.
@@ -526,30 +550,30 @@ the multiplicity gauge. Outside these settings uniqueness fails
     \begin{align}
         B^i & =\begin{pmatrix}C^i & R^i\\ 0 & 0\end{pmatrix},
             &
-        V   & =\begin{pmatrix}\Id_D\\ 0\end{pmatrix},
+        W   & =\begin{pmatrix}\Id_D\\ 0\end{pmatrix},
             &
-        W_y & =\begin{pmatrix}\Id_D & y\end{pmatrix}
+        V_y & =\begin{pmatrix}\Id_D & y\end{pmatrix}
         \label{eq:mpoalg_nonunique}
     \end{align}
-    for $y\in\C^D$. Then $W_yV=\Id_D$, $W_yB^wV=C^w$ for every word $w$, and
-    the remainder $B^i-VC^iW_y$ has vanishing products of length two, so
-    every $(W_y,V)$ is a reduction of $B$ onto $C$ with nilpotent remainder.
-    For $y\neq0$ the compressions $W_y$ and $W_0$ are not proportional,
-    although $W_yB^w=W_0B^w$ for every nonempty word; with a single target,
+    for $y\in\C^D$. Then $V_yW=\Id_D$, $V_yB^wW=C^w$ for every word $w$, and
+    the remainder $B^i-WC^iV_y$ has vanishing products of length two, so
+    every $(V_y,W)$ is a reduction of $B$ onto $C$ with nilpotent remainder.
+    For $y\neq0$ the compressions $V_y$ and $V_0$ are not proportional,
+    although $V_yB^w=V_0B^w$ for every nonempty word; with a single target,
     Corollary~\ref{cor:mpoalg_single_target_uniqueness} recovers uniqueness
     after dressing.
 
     With several targets even the dressed identities fail. Let
-    $(W_\mu,V_\mu)$ and $(W_\nu,V_\nu)$ be two slots of a compression of $B$
+    $(V_\mu,W_\mu)$ and $(V_\nu,W_\nu)$ be two slots of a compression of $B$
     onto blocks $C_\mu$ and $C_\nu$ of the same bond dimension $D$, with
     $\mu$ before $\nu$ in the block upper triangular order, and conjugate the
     slot coordinates by $S=\begin{pmatrix}\Id & Z\\ 0 & \Id\end{pmatrix}$
     for an arbitrary $Z\in\MN{D}$. The new family is still block upper
     triangular, hence again a compression with nilpotent remainder, and
-    $\widetilde W_\mu=W_\mu-ZW_\nu$. Then
-    $\widetilde W_\mu B^{\mathbf w}=W_\mu B^{\mathbf w}-ZW_\nu B^{\mathbf w}$
+    $\widetilde V_\mu=V_\mu-ZV_\nu$. Then
+    $\widetilde V_\mu B^{\mathbf w}=V_\mu B^{\mathbf w}-ZV_\nu B^{\mathbf w}$
     on every long word, which is not a combination of the
-    $W_\kappa B^{\mathbf w}$ with scalar coefficients unless $Z$ is scalar.
+    $V_\kappa B^{\mathbf w}$ with scalar coefficients unless $Z$ is scalar.
     This happens whether $\nu$ is a second copy of the same block or a
     different block. The zipper condition of \cite{Bultinck2017Anyons}, which
     makes the remainder vanish, excludes both constructions and restores
@@ -566,14 +590,14 @@ the multiplicity gauge. Outside these settings uniqueness fails
 Let $G$ be a group and $(T_g)_{g\in G}$ a fusion algebra of normal tensors of
 positive bond dimension with $N_{gh}^k=\delta_{k,gh}$, so that
 $O_g^{(N)}O_h^{(N)}=O_{gh}^{(N)}$ for every $N\geq1$. Choose fusion tensors
-$(W_{g,h},V_{g,h})$ for every pair. The triple product $T_gT_hT_k$ has two
+$(V_{g,h},W_{g,h})$ for every pair. The triple product $T_gT_hT_k$ has two
 composite reductions onto $T_{ghk}$,
 \begin{align}
-    W^{(gh)k}
-     & =W_{gh,k}\,(W_{g,h}\otimes\Id_{\chi_k}),
+    V^{(gh)k}
+     & =V_{gh,k}\,(V_{g,h}\otimes\Id_{\chi_k}),
      &
-    W^{g(hk)}
-     & =W_{g,hk}\,(\Id_{\chi_g}\otimes W_{h,k}),
+    V^{g(hk)}
+     & =V_{g,hk}\,(\Id_{\chi_g}\otimes V_{h,k}),
     \label{eq:mpoalg_composite_compressions}
 \end{align}
 with the corresponding composite embeddings.
@@ -586,9 +610,9 @@ with the corresponding composite embeddings.
     %   Pending PR #7971 (not yet on main): once merged, replace this entry's
     %   planned statement by a \ref to thm:mpug_reduction_composition (ch29).
     \uses{def:mpoalg_fusion_tensors}
-    If $(W,V)$ is a reduction of $T_aT_b$ onto $T_c$ and $(W',V')$ a
+    If $(V,W)$ is a reduction of $T_aT_b$ onto $T_c$ and $(V',W')$ a
     reduction of $T_cT_d$ onto $T_e$, then
-    $(W'(W\otimes\Id),(V\otimes\Id)V')$ is a reduction of $T_aT_bT_d$ onto
+    $(V'(V\otimes\Id),(W\otimes\Id)W')$ is a reduction of $T_aT_bT_d$ onto
     $T_e$ with a nilpotent remainder; the same holds on the other side and for
     an operator tensor acting on a state tensor.
 \end{lemma}
@@ -596,10 +620,10 @@ with the corresponding composite embeddings.
 \begin{proof}
     For a word $\mathbf w=((i_1,j_1),\ldots,(i_N,j_N))$, the stacked product
     factors as
-    $(W\otimes\Id)(T_aT_bT_d)^{\mathbf w}(V\otimes\Id)
-        =\sum_{\mathbf m}W(T_aT_b)^{(\mathbf i,\mathbf m)}V\otimes
+    $(V\otimes\Id)(T_aT_bT_d)^{\mathbf w}(W\otimes\Id)
+        =\sum_{\mathbf m}V(T_aT_b)^{(\mathbf i,\mathbf m)}W\otimes
         T_d^{(\mathbf m,\mathbf j)}
-        =(T_cT_d)^{\mathbf w}$, and applying $(W',V')$ gives $T_e^{\mathbf w}$.
+        =(T_cT_d)^{\mathbf w}$, and applying $(V',W')$ gives $T_e^{\mathbf w}$.
     The remainder is block upper triangular with nilpotent diagonal blocks.
 \end{proof}
 
@@ -617,8 +641,8 @@ with the corresponding composite embeddings.
     The \emph{associator} of the chosen fusion tensors is the function
     $\omega\colon G^3\to\C^\times$ defined by
     \begin{align}
-        W^{g(hk)}(T_gT_hT_k)^{\mathbf w}
-         & =\omega(g,h,k)\,W^{(gh)k}(T_gT_hT_k)^{\mathbf w}
+        V^{g(hk)}(T_gT_hT_k)^{\mathbf w}
+         & =\omega(g,h,k)\,V^{(gh)k}(T_gT_hT_k)^{\mathbf w}
         \label{eq:mpoalg_associator}
     \end{align}
     for all sufficiently long words $\mathbf w$. It exists and is nonzero by
@@ -652,13 +676,28 @@ with the corresponding composite embeddings.
 
 \begin{proof}
     \uses{lem:mpoalg_composite_reduction}
-    The quadruple product $T_gT_hT_kT_l$ has five composite reductions onto
-    $T_{ghkl}$, one for each bracketing. Applying
-    (\ref{eq:mpoalg_associator}) inside Lemma~\ref{lem:mpoalg_composite_reduction}
-    relates adjacent bracketings by one value of $\omega$. The two paths from
-    $((gh)k)l$ to $g(h(kl))$ give the two sides of
-    (\ref{eq:mpoalg_pentagon_group}) times the same nonzero boundary-dressed
-    word, which proves the identity.
+    Write $X=(T_gT_hT_kT_l)^{\mathbf w}$ for a long word $\mathbf w$ and
+    $V^P$ for the composite compression of the fourfold product onto
+    $T_{ghkl}$ along a bracketing $P$. By
+    Lemma~\ref{lem:mpoalg_composite_reduction}, applying
+    (\ref{eq:mpoalg_associator}) to one triple inside a bracketing, tensored
+    with identities and followed by the remaining compressions, replaces
+    $x(yz)$ by $(xy)z$ at the cost of $\omega(x,y,z)$. Along the two paths of
+    the pentagon this gives
+    \begin{align}
+        V^{g(h(kl))}X & =\omega(g,h,kl)\,V^{(gh)(kl)}X
+        =\omega(g,h,kl)\,\omega(gh,k,l)\,V^{((gh)k)l}X,
+        \notag                                                          \\
+        V^{g(h(kl))}X & =\omega(h,k,l)\,V^{g((hk)l)}X
+        =\omega(h,k,l)\,\omega(g,hk,l)\,V^{(g(hk))l}X
+        \notag                                                          \\
+                      & =\omega(h,k,l)\,\omega(g,hk,l)\,\omega(g,h,k)\,
+        V^{((gh)k)l}X.
+        \label{eq:mpoalg_pentagon_paths}
+    \end{align}
+    Since $V^{((gh)k)l}XW^{((gh)k)l}=T_{ghkl}^{\mathbf w}$ is nonzero for some
+    long word, comparing the two lines of (\ref{eq:mpoalg_pentagon_paths})
+    gives (\ref{eq:mpoalg_pentagon_group}).
 \end{proof}
 
 \begin{theorem}[Gauge dependence of the associator]%
@@ -670,8 +709,8 @@ with the corresponding composite embeddings.
     %   planned statement by a \ref to thm:mpug_anomaly_three_cocycle_gauge (ch29).
     \uses{def:mpoalg_associator, cor:mpoalg_single_target_uniqueness,
         def:mpug_fusion_gauge, def:mpug_cohomologous_to}
-    Replacing the fusion tensors by $(\beta_{g,h}W_{g,h},
-        \beta_{g,h}^{-1}V_{g,h})$ with $\beta\colon G^2\to\C^\times$ replaces
+    Replacing the fusion tensors by $(\beta_{g,h}V_{g,h},
+        \beta_{g,h}^{-1}W_{g,h})$ with $\beta\colon G^2\to\C^\times$ replaces
     $\omega$ by $\beta\mathbin{\triangleright}\omega$ of
     Definition~\ref{def:mpug_fusion_gauge}. Consequently the class of
     $\omega$ under the relation of
@@ -685,8 +724,8 @@ with the corresponding composite embeddings.
     \uses{cor:mpoalg_single_target_uniqueness, thm:mpug_fusion_scalar_gauge}
     The rescaled pairs are again fusion tensors
     (Theorem~\ref{thm:mpug_fusion_scalar_gauge}). Substituting them into
-    (\ref{eq:mpoalg_composite_compressions}) multiplies $W^{g(hk)}$ by
-    $\beta_{g,hk}\beta_{h,k}$ and $W^{(gh)k}$ by $\beta_{g,h}\beta_{gh,k}$,
+    (\ref{eq:mpoalg_composite_compressions}) multiplies $V^{g(hk)}$ by
+    $\beta_{g,hk}\beta_{h,k}$ and $V^{(gh)k}$ by $\beta_{g,h}\beta_{gh,k}$,
     which is (\ref{eq:mpug_coboundary}). By
     Corollary~\ref{cor:mpoalg_single_target_uniqueness} every other choice of
     fusion tensors is boundary-dressed equal to such a rescaling.
@@ -735,13 +774,13 @@ with the corresponding composite embeddings.
     In the setting of Section~\ref{sec:mpoalg_associator}, let $(A_x)_{x\in
                 K}$ be a symmetric family as in Theorem~\ref{thm:mpo_invertible_labels},
     so that $O_g^{(N)}\ket{V^{(N)}(A_x)}=\ket{V^{(N)}(A_{g\cdot x})}$, with
-    action tensors $(W_{g,x},V_{g,x})$ reducing $T_g\cdot A_x$ onto
+    action tensors $(V_{g,x},W_{g,x})$ reducing $T_g\cdot A_x$ onto
     $A_{g\cdot x}$. The tensor $T_gT_h\cdot A_x$ has two composite reductions
     onto $A_{gh\cdot x}$, and the \emph{$L$-symbol} $L^x_{g,h}\in\C^\times$ is
     defined by
     \begin{align}
-        W_{gh,x}(W_{g,h}\otimes\Id)(T_gT_h\cdot A_x)^w
-         & =L^x_{g,h}\,W_{g,h\cdot x}(\Id\otimes W_{h,x})
+        V_{gh,x}(V_{g,h}\otimes\Id)(T_gT_h\cdot A_x)^w
+         & =L^x_{g,h}\,V_{g,h\cdot x}(\Id\otimes V_{h,x})
         (T_gT_h\cdot A_x)^w
         \label{eq:mpoalg_l_symbol}
     \end{align}
@@ -777,11 +816,24 @@ with the corresponding composite embeddings.
 
 \begin{proof}
     \uses{lem:mpoalg_composite_reduction, def:mpoalg_associator}
-    The five composite reductions of $T_gT_hT_k\cdot A_x$ onto
-    $A_{ghk\cdot x}$ corresponding to $g(h(k x))$, $g((hk)x)$, $(g(hk))x$,
-    $((gh)k)x$ and $(gh)(kx)$ are related consecutively by $L^x_{h,k}$,
-    $L^x_{g,hk}$, $\omega(g,h,k)$, $L^x_{gh,k}$ and $L^{k\cdot x}_{g,h}$;
-    comparing the two paths gives (\ref{eq:mpoalg_l_compatible}). The gauge
+    Write $Y=(T_gT_hT_k\cdot A_x)^w$ for a long word $w$ and $V^P$ for the
+    composite compression onto $A_{ghk\cdot x}$ along a bracketing $P$. By
+    Lemma~\ref{lem:mpoalg_composite_reduction}, (\ref{eq:mpoalg_l_symbol})
+    and (\ref{eq:mpoalg_associator}) applied inside a bracketing give
+    \begin{align}
+        V^{(g(hk))x}Y & =L^x_{g,hk}\,V^{g((hk)x)}Y
+        =L^x_{g,hk}\,L^x_{h,k}\,V^{g(h(kx))}Y,
+        \notag                                                           \\
+        V^{(g(hk))x}Y & =\omega(g,h,k)\,V^{((gh)k)x}Y
+        =\omega(g,h,k)\,L^x_{gh,k}\,V^{(gh)(kx)}Y
+        \notag                                                           \\
+                      & =\omega(g,h,k)\,L^x_{gh,k}\,L^{k\cdot x}_{g,h}\,
+        V^{g(h(kx))}Y.
+        \label{eq:mpoalg_l_paths}
+    \end{align}
+    Since $V^{g(h(kx))}YW^{g(h(kx))}=A_{ghk\cdot x}^w$ is nonzero for some
+    long word, comparing the two lines of (\ref{eq:mpoalg_l_paths}) gives
+    (\ref{eq:mpoalg_l_compatible}). The gauge
     statement follows by substituting the rescaled tensors into
     (\ref{eq:mpoalg_associator}) and (\ref{eq:mpoalg_l_symbol}).
 \end{proof}
@@ -827,8 +879,8 @@ with the corresponding composite embeddings.
     algebra $\mathcal A$, the operators are indexed by irreducible
     representations $\psi_a$ of the dual algebra and the fusion tensors
     decompose the coproduct,
-    $(\psi_a\otimes\psi_b)\circ\Delta(f)=\sum_{c,\mu}V_{ab}^{c\mu}\psi_c(f)
-        W_{ab}^{c\mu}$ with $W_{ab}^{c\mu}V_{ab}^{d\nu}=
+    $(\psi_a\otimes\psi_b)\circ\Delta(f)=\sum_{c,\mu}W_{ab}^{c\mu}\psi_c(f)
+        V_{ab}^{c\mu}$ with $V_{ab}^{c\mu}W_{ab}^{d\nu}=
         \delta_{cd}\delta_{\mu\nu}\Id$ \cite[Section~4]{Molnar2022MPOAlgebrasI}.
     These are exact identities, and they are fusion tensors in the sense of
     Definition~\ref{def:mpoalg_fusion_tensors} with zero remainder;
