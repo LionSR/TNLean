@@ -230,27 +230,31 @@ def diagFusionData : diagFamily.FusionData where
 
 /-! ### The two fusion trees of three generators -/
 
+/-- The `8 × 8` integer matrix whose only nonzero column is `k`, with entries `v`. -/
+def columnInt (k : Fin (2 * 2 * 2)) (v : Fin (2 * 2 * 2) → ℤ) :
+    Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ :=
+  Matrix.of fun r c ↦ if c = k then v r else 0
+
 /-- The integer matrices of the unscaled triple product `M_xy M_xy M_xy` over the pair
-alphabet, bond ordered ((first, second), third). -/
+alphabet, bond ordered ((first, second), third).  Every letter has at most one nonzero
+column. -/
 def diagCubeInt : Fin 16 → Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ
-  | 3 => !![0, 0, 0, 0, 0, 1, 0, 0; 0, 0, 0, 0, 0, -1, 0, 0; 0, 0, 0, 0, 0, 1, 0, 0;
-      0, 0, 0, 0, 0, -1, 0, 0; 0, 0, 0, 0, 0, -1, 0, 0; 0, 0, 0, 0, 0, 1, 0, 0;
-      0, 0, 0, 0, 0, -1, 0, 0; 0, 0, 0, 0, 0, 1, 0, 0]
-  | 6 => !![0, 0, 1, 0, 0, 0, 0, 0; 0, 0, 1, 0, 0, 0, 0, 0; 0, 0, -1, 0, 0, 0, 0, 0;
-      0, 0, -1, 0, 0, 0, 0, 0; 0, 0, 1, 0, 0, 0, 0, 0; 0, 0, 1, 0, 0, 0, 0, 0;
-      0, 0, -1, 0, 0, 0, 0, 0; 0, 0, -1, 0, 0, 0, 0, 0]
-  | 9 => !![0, 0, 0, 0, 0, 1, 0, 0; 0, 0, 0, 0, 0, -1, 0, 0; 0, 0, 0, 0, 0, 1, 0, 0;
-      0, 0, 0, 0, 0, -1, 0, 0; 0, 0, 0, 0, 0, -1, 0, 0; 0, 0, 0, 0, 0, 1, 0, 0;
-      0, 0, 0, 0, 0, -1, 0, 0; 0, 0, 0, 0, 0, 1, 0, 0]
-  | 12 => !![0, 0, 1, 0, 0, 0, 0, 0; 0, 0, 1, 0, 0, 0, 0, 0; 0, 0, -1, 0, 0, 0, 0, 0;
-      0, 0, -1, 0, 0, 0, 0, 0; 0, 0, 1, 0, 0, 0, 0, 0; 0, 0, 1, 0, 0, 0, 0, 0;
-      0, 0, -1, 0, 0, 0, 0, 0; 0, 0, -1, 0, 0, 0, 0, 0]
+  | 3 => columnInt 5 ![1, -1, 1, -1, -1, 1, -1, 1]
+  | 6 => columnInt 2 ![1, 1, -1, -1, 1, 1, -1, -1]
+  | 9 => columnInt 5 ![1, -1, 1, -1, -1, 1, -1, 1]
+  | 12 => columnInt 2 ![1, 1, -1, -1, 1, 1, -1, -1]
   | _ => 0
+
+private theorem diagSquare_int :
+    mulIntTensor xyIntTensor xyIntTensor = fun o j ↦ xyXyInt (finProdFinEquiv (o, j)) := by
+  funext o j
+  revert_decide_kernel o j
 
 private theorem diagCube_int (a : Fin 16) :
     mulIntTensor (mulIntTensor xyIntTensor xyIntTensor) xyIntTensor (@Fin.divNat 4 4 a)
       (@Fin.modNat 4 4 a) =
       diagCubeInt a := by
+  rw [diagSquare_int]
   revert_decide_kernel a
 
 /-- The unscaled triple product `M_xy M_xy M_xy` over the pair alphabet. -/
@@ -351,16 +355,47 @@ theorem diagFusionData_rightV_gen_gen_gen :
   congr 1
   decide
 
-private theorem diag_pair_int : ∀ a b : Fin 16,
+/-- Every letter of the triple product, together with the matching letter of `−M_xy`, is the
+pair at the letter `3`, the pair at the letter `6`, or zero. -/
+private theorem diagLetter_cases (a : Fin 16) :
+    (diagCubeInt a = diagCubeInt 3 ∧ negXYIntMPS a = negXYIntMPS 3) ∨
+      (diagCubeInt a = diagCubeInt 6 ∧ negXYIntMPS a = negXYIntMPS 6) ∨
+      (diagCubeInt a = 0 ∧ negXYIntMPS a = 0) := by
+  revert a
+  decide +kernel
+
+private theorem diag_letter_int (a : Fin 16) :
+    diagLeftTreeInt * diagCubeInt a = -(diagRightTreeInt * diagCubeInt a) := by
+  rcases diagLetter_cases a with ⟨h, -⟩ | ⟨h, -⟩ | ⟨h, -⟩ <;> rw [h]
+  · decide +kernel
+  · decide +kernel
+  · rw [Matrix.mul_zero, Matrix.mul_zero, neg_zero]
+
+private theorem diag_left_pair_int (a b : Fin 16) :
+    diagLeftTreeInt * diagCubeInt a * diagCubeInt b =
+      negXYIntMPS a * diagLeftTreeInt * diagCubeInt b := by
+  rcases diagLetter_cases a with ⟨ha, hs⟩ | ⟨ha, hs⟩ | ⟨ha, hs⟩ <;> rw [ha, hs] <;>
+    rcases diagLetter_cases b with ⟨hb, -⟩ | ⟨hb, -⟩ | ⟨hb, -⟩ <;> rw [hb] <;>
+    decide +kernel
+
+/-- The pair identity for the right tree follows from that for the left tree and the
+single-letter comparison. -/
+private theorem diag_right_pair_int (a b : Fin 16) :
+    diagRightTreeInt * diagCubeInt a * diagCubeInt b =
+      negXYIntMPS a * diagRightTreeInt * diagCubeInt b := by
+  have ha : diagRightTreeInt * diagCubeInt a = -(diagLeftTreeInt * diagCubeInt a) := by
+    rw [diag_letter_int, neg_neg]
+  have hb : diagRightTreeInt * diagCubeInt b = -(diagLeftTreeInt * diagCubeInt b) := by
+    rw [diag_letter_int, neg_neg]
+  rw [ha, Matrix.neg_mul, diag_left_pair_int, Matrix.mul_assoc, Matrix.mul_assoc, hb,
+    Matrix.mul_neg]
+
+private theorem diag_pair_int (a b : Fin 16) :
     diagLeftTreeInt * diagCubeInt a * diagCubeInt b =
         negXYIntMPS a * diagLeftTreeInt * diagCubeInt b ∧
       diagRightTreeInt * diagCubeInt a * diagCubeInt b =
-        negXYIntMPS a * diagRightTreeInt * diagCubeInt b := by
-  decide +kernel
-
-private theorem diag_letter_int : ∀ a : Fin 16,
-    diagLeftTreeInt * diagCubeInt a = -(diagRightTreeInt * diagCubeInt a) := by
-  decide +kernel
+        negXYIntMPS a * diagRightTreeInt * diagCubeInt b :=
+  ⟨diag_left_pair_int a b, diag_right_pair_int a b⟩
 
 private theorem diag_pair (L : Matrix (Fin 2) (Fin (2 * 2 * 2)) ℤ)
     (hL : ∀ a b : Fin 16, L * diagCubeInt a * diagCubeInt b =
