@@ -397,79 +397,120 @@ matrix product unitaries this is Corollary~\ref{cor:asym_fusion_tensors_group}.
 \section{Gauge freedom of fusion and action tensors}%
 \label{sec:mpoalg_gauge}
 
-\begin{theorem}[Uniqueness of fusion tensors up to multiplicity gauge]%
-    \label{thm:mpoalg_fusion_gauge_uniqueness}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
-    %   MPOTensor.FusionTensors.exists_multiplicity_gauge.
-    % Multiplicity-free case: MPSTensor.IsReduction.exists_boundary_dressed_proportional
-    %   (Theorem thm:mps_reduction_boundary_dressed_uniqueness).
-    \uses{def:mpoalg_fusion_tensors,
-        thm:mps_reduction_boundary_dressed_uniqueness}
-    Let $(W_{ab}^{c,\mu},V_{ab}^{c,\mu})$ and
-    $(\widetilde W_{ab}^{c,\mu},\widetilde V_{ab}^{c,\mu})$ be two families
-    of fusion tensors for the same pair $(a,b)$, and let $N_0$ be a common
-    nilpotency bound of their remainders. Then for each $c$ there is a unique
-    invertible matrix $Y_{ab}^c\in\GL_{N_{ab}^c}(\C)$ such that, for every
-    word $\mathbf w$ in the pair alphabet with $|\mathbf w|>2N_0$,
+Uniqueness of fusion tensors holds in two settings: when the stacked product
+reduces onto a single normal block, up to one scalar after dressing with long
+words, and under the zipper condition, where the remainder vanishes, up to
+the multiplicity gauge. Outside these settings uniqueness fails
+(Remark~\ref{rem:mpoalg_nonunique}).
+
+\begin{corollary}[Uniqueness of a single-target reduction]%
+    \label{cor:mpoalg_single_target_uniqueness}
+    \uses{thm:mps_reduction_boundary_dressed_uniqueness,
+        def:mps_rectangular_reduction}
+    Let $B$ be a tensor, $C$ a normal tensor, and $(W,V)$, $(\widetilde
+        W,\widetilde V)$ two reductions of $B$ onto $C$ whose residual tensors
+    $B-VCW$ and $B-\widetilde VC\widetilde W$ are nilpotent with a common
+    bound $N_0$. Then there is a unique $\lambda\in\C^\times$ with
     \begin{align}
-        \widetilde W_{ab}^{c,\mu}(T_aT_b)^{\mathbf w}
-         & =\sum_{\nu}(Y_{ab}^c)_{\mu\nu}\,W_{ab}^{c,\nu}(T_aT_b)^{\mathbf w},
-        \notag                                                                 \\
-        (T_aT_b)^{\mathbf w}\widetilde V_{ab}^{c,\mu}
-         & =\sum_{\nu}\bigl((Y_{ab}^c)^{-1}\bigr)_{\nu\mu}\,
-        (T_aT_b)^{\mathbf w}V_{ab}^{c,\nu}.
-        \label{eq:mpoalg_fusion_gauge}
+        \widetilde WB^{\mathbf w} & =\lambda\,WB^{\mathbf w},   &
+        B^{\mathbf w}\widetilde V & =\lambda^{-1}B^{\mathbf w}V
+        \label{eq:mpoalg_single_target}
     \end{align}
-    If $N_{ab}^c=1$, then $Y_{ab}^c$ is a nonzero scalar. The sources state
-    uniqueness of the fusion tensors themselves up to this gauge
-    \cite[Section~2]{GarreRubio2023MPOSym}, \cite[Section~4]{Molnar2022MPOAlgebrasI};
-    with a nilpotent remainder only the boundary-dressed form
-    of \cite[Theorem~22]{Molnar2018SemiInjective} holds
-    (Remark~\ref{rem:mpoalg_nonunique}).
-    % Source anchor: arXiv:2203.12563, lines 416--424;
-    %   arXiv:2204.05940, mpo.tex line 1725;
-    %   arXiv:1706.07329, cornerproblem.tex lines 3156--3162.
-\end{theorem}
+    for every word with $|\mathbf w|>2N_0$. This applies to the fusion tensors
+    of a group-like algebra, where $T_gT_h$ reduces onto the single block
+    $T_{gh}$, to the composite reductions of
+    Lemma~\ref{lem:mpoalg_composite_reduction}, and to the action tensors of
+    an invertible label on a permuted block. It does not apply to one slot
+    of a reduction onto several blocks, whose residual is not nilpotent.
+    % Source anchor: arXiv:1706.07329, cornerproblem.tex lines 3156--3162
+    %   (Theorem 22); arXiv:2203.12563, lines 1028--1060.
+    % Existing Lean: MPSTensor.IsReduction.exists_boundary_dressed_proportional
+    %   (tagged on thm:mps_reduction_boundary_dressed_uniqueness).
+\end{corollary}
 
 \begin{proof}
     \uses{thm:mps_reduction_boundary_dressed_uniqueness}
-    For $N_{ab}^c=1$ this is
-    Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness} applied to
-    the two reductions of $T_aT_b$ onto $T_c$. In general, the argument of
-    that theorem compares the cross products
-    $\widetilde W_{ab}^{c,\mu}(T_aT_b)^{\mathbf w}V_{ab}^{c,\nu}$: normality
-    of $T_c$ and the commutant of the word span force each of them to be a
-    scalar $(Y_{ab}^c)_{\mu\nu}$ times $T_c^{\mathbf w}$, and the same
-    comparison in the opposite direction produces the inverse matrix.
+    This is Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness}
+    written for compressions on the left and embeddings on the right.
 \end{proof}
 
-\begin{theorem}[Uniqueness of action tensors up to multiplicity gauge]%
-    \label{thm:mpoalg_action_gauge_uniqueness}
+\begin{theorem}[Uniqueness of zipper fusion tensors up to multiplicity gauge]%
+    \label{thm:mpoalg_zipper_fusion_uniqueness}
     \notready
     % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
-    %   MPOTensor.ActionTensors.exists_multiplicity_gauge.
-    \uses{def:mpoalg_action_tensors,
-        thm:mps_reduction_boundary_dressed_uniqueness}
-    Two families of action tensors for the same pair $(a,x)$ are related, in
-    the boundary-dressed sense of (\ref{eq:mpoalg_fusion_gauge}), by a unique
-    matrix $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ for each $y$; if
-    $M_{a,x}^y=1$ it is a nonzero scalar. This is the gauge freedom of the
-    action tensors in \cite[Section~3.1]{GarreRubio2023MPOSym}.
+    %   MPOTensor.FusionTensors.exists_multiplicity_gauge_of_remainder_eq_zero.
+    \uses{def:mpoalg_fusion_tensors, def:normal}
+    Let the blocks $T_c$ of a fusion algebra be normal and pairwise not
+    related by a gauge transformation, and let
+    $(W_{ab}^{c,\mu},V_{ab}^{c,\mu})$ and
+    $(\widetilde W_{ab}^{c,\mu},\widetilde V_{ab}^{c,\mu})$ be two families
+    of fusion tensors for $(a,b)$ with vanishing remainder,
+    \begin{align}
+        (T_aT_b)^{\mathbf w}
+         & =\sum_{c,\mu}V_{ab}^{c,\mu}T_c^{\mathbf w}W_{ab}^{c,\mu}
+        =\sum_{c,\mu}\widetilde V_{ab}^{c,\mu}T_c^{\mathbf w}
+        \widetilde W_{ab}^{c,\mu}
+        \label{eq:mpoalg_zipper_decomposition}
+    \end{align}
+    for every nonempty word $\mathbf w$. Then for each $c$ there is a unique
+    $Y_{ab}^c\in\GL_{N_{ab}^c}(\C)$ with
+    $\widetilde W_{ab}^{c,\mu}=\sum_\nu(Y_{ab}^c)_{\mu\nu}W_{ab}^{c,\nu}$ and
+    $\widetilde V_{ab}^{c,\mu}=\sum_\nu V_{ab}^{c,\nu}
+        \bigl((Y_{ab}^c)^{-1}\bigr)_{\nu\mu}$ on the support of the
+    decomposition, so the ambiguity is
+    $\bigoplus_c\GL_{N_{ab}^c}(\C)$ and no dressing by words is needed. This
+    is the uniqueness of fusion tensors under the zipper condition in
+    \cite{Bultinck2017Anyons}, and the basis change of
+    \cite[Section~4]{Molnar2022MPOAlgebrasI}.
+    % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200;
+    %   arXiv:2204.05940, mpo.tex line 1725;
+    %   arXiv:2203.12563, lines 416--424.
+    % The F-matrix side is thm:mpdo_complete_zipper_printed_fmove (ch21); the
+    % F-matrix gauge statement is added by PR #7985.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:normal}
+    Multiply (\ref{eq:mpoalg_zipper_decomposition}) by
+    $\widetilde W_{ab}^{c,\mu}$ on the left and $V_{ab}^{e,\nu}$ on the right
+    and use biorthogonality of both families:
+    $T_c^{\mathbf w}\,\widetilde W_{ab}^{c,\mu}V_{ab}^{e,\nu}
+        =\widetilde W_{ab}^{c,\mu}V_{ab}^{e,\nu}\,T_e^{\mathbf w}$ for every
+    nonempty word. For normal blocks, the words of a fixed injective length
+    span the full matrix algebra, so an intertwiner between $T_c$ and $T_e$ is
+    zero unless $T_c$ and $T_e$ are gauge equivalent, and is a scalar when
+    $e=c$. This gives $\widetilde W_{ab}^{c,\mu}V_{ab}^{e,\nu}=
+        \delta_{ce}(Y_{ab}^c)_{\mu\nu}\Id$, and the same argument with the
+    families exchanged gives the inverse matrix.
+\end{proof}
+
+\begin{theorem}[Uniqueness of zipper action tensors up to multiplicity gauge]%
+    \label{thm:mpoalg_zipper_action_uniqueness}
+    \notready
+    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
+    %   MPOTensor.ActionTensors.exists_multiplicity_gauge_of_remainder_eq_zero.
+    \uses{def:mpoalg_action_tensors, def:normal}
+    Let the blocks $A_y$ be normal and pairwise not related by a gauge
+    transformation. Two families of action tensors for $(a,x)$ with
+    vanishing remainder, $(T_a\cdot A_x)^w=\sum_{y,i}V_{ax}^{y,i}A_y^w
+        W_{ax}^{y,i}$ for every nonempty word, are related by a unique
+    $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ for each $y$, in the sense of
+    Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}. This is the gauge
+    freedom of the action tensors in \cite[Section~3.1]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 595--602.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:mps_reduction_boundary_dressed_uniqueness}
-    The proof of Theorem~\ref{thm:mpoalg_fusion_gauge_uniqueness} applies
-    verbatim to the tensor $T_a\cdot A_x$ and the blocks $A_y$.
+    \uses{thm:mpoalg_zipper_fusion_uniqueness}
+    The proof of Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness} applies to
+    the tensor $T_a\cdot A_x$ and the blocks $A_y$.
 \end{proof}
 
-\begin{remark}[Fusion tensors are not unique up to scalars]%
+\begin{remark}[Uniqueness fails with a nilpotent remainder]%
     \label{rem:mpoalg_nonunique}
-    With only a nilpotent remainder, two reductions onto the same normal
-    tensor need not be proportional. Let $C$ be normal of bond dimension $D$,
-    let $R^i\in\C^{D\times1}$ be arbitrary, and let
+    With only a nilpotent remainder, reductions are not unique up to scalars.
+    Let $C$ be normal of bond dimension $D$, let $R^i\in\C^{D\times1}$ be
+    arbitrary, and let
     \begin{align}
         B^i & =\begin{pmatrix}C^i & R^i\\ 0 & 0\end{pmatrix},
             &
@@ -479,18 +520,32 @@ matrix product unitaries this is Corollary~\ref{cor:asym_fusion_tensors_group}.
         \label{eq:mpoalg_nonunique}
     \end{align}
     for $y\in\C^D$. Then $W_yV=\Id_D$, $W_yB^wV=C^w$ for every word $w$, and
-    the remainder $B^i-VC^iW_y$ has vanishing square products, so every
-    $(W_y,V)$ is a reduction of $B$ onto $C$ with nilpotent remainder. For
-    $y\neq0$ the compressions $W_y$ and $W_0$ are not proportional, while
-    $W_yB^w=W_0B^w$ for every nonempty word, since the last row of $B^i$
-    vanishes. Only the boundary-dressed identities of
-    Theorem~\ref{thm:mpoalg_fusion_gauge_uniqueness} survive. The zipper
-    condition of \cite{Bultinck2017Anyons}, which asks that the fusion tensors
-    intertwine each letter of the stacked tensor with the letter of the
-    block, excludes such remainders; under it the fusion tensors are unique
-    up to the multiplicity gauge.
+    the remainder $B^i-VC^iW_y$ has vanishing products of length two, so
+    every $(W_y,V)$ is a reduction of $B$ onto $C$ with nilpotent remainder.
+    For $y\neq0$ the compressions $W_y$ and $W_0$ are not proportional,
+    although $W_yB^w=W_0B^w$ for every nonempty word; with a single target,
+    Corollary~\ref{cor:mpoalg_single_target_uniqueness} recovers uniqueness
+    after dressing.
+
+    With several targets even the dressed identities fail. Let
+    $(W_\mu,V_\mu)$ and $(W_\nu,V_\nu)$ be two slots of a compression of $B$
+    onto blocks $C_\mu$ and $C_\nu$ of the same bond dimension $D$, with
+    $\mu$ before $\nu$ in the block upper triangular order, and conjugate the
+    slot coordinates by $S=\begin{pmatrix}\Id & Z\\ 0 & \Id\end{pmatrix}$
+    for an arbitrary $Z\in\MN{D}$. The new family is still block upper
+    triangular, hence again a compression with nilpotent remainder, and
+    $\widetilde W_\mu=W_\mu-ZW_\nu$. Then
+    $\widetilde W_\mu B^{\mathbf w}=W_\mu B^{\mathbf w}-ZW_\nu B^{\mathbf w}$
+    on every long word, which is not a combination of the
+    $W_\kappa B^{\mathbf w}$ with scalar coefficients unless $Z$ is scalar.
+    This happens whether $\nu$ is a second copy of the same block or a
+    different block. The zipper condition of \cite{Bultinck2017Anyons}, which
+    makes the remainder vanish, excludes both constructions and restores
+    uniqueness up to the multiplicity gauge
+    (Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}).
     % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200.
 \end{remark}
+
 
 %% ---------------------------------------------------------
 \section{The associator of a group-like algebra}%
@@ -540,7 +595,7 @@ with the corresponding composite embeddings.
     % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
     %   MPOTensor.GroupFusionAlgebra.associator.
     \uses{lem:mpoalg_composite_reduction,
-        thm:mpoalg_fusion_gauge_uniqueness}
+        cor:mpoalg_single_target_uniqueness}
     The \emph{associator} of the chosen fusion tensors is the function
     $\omega\colon G^3\to\C^\times$ defined by
     \begin{align}
@@ -549,7 +604,7 @@ with the corresponding composite embeddings.
         \label{eq:mpoalg_associator}
     \end{align}
     for all sufficiently long words $\mathbf w$. It exists and is nonzero by
-    Theorem~\ref{thm:mpoalg_fusion_gauge_uniqueness} applied to the two
+    Corollary~\ref{cor:mpoalg_single_target_uniqueness} applied to the two
     composite reductions of Lemma~\ref{lem:mpoalg_composite_reduction}, and
     it is unique because $T_{ghk}^{\mathbf w}\neq0$ for some long word. This is
     the three-cocycle of \cite[Section~4.4]{GarreRubio2023MPOSym}.
@@ -591,7 +646,7 @@ with the corresponding composite embeddings.
     \notready
     % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
     %   MPOTensor.GroupFusionAlgebra.associator_cohomologousTo.
-    \uses{def:mpoalg_associator, thm:mpoalg_fusion_gauge_uniqueness,
+    \uses{def:mpoalg_associator, cor:mpoalg_single_target_uniqueness,
         def:mpug_fusion_gauge, def:mpug_cohomologous_to}
     Replacing the fusion tensors by $(\beta_{g,h}W_{g,h},
         \beta_{g,h}^{-1}V_{g,h})$ with $\beta\colon G^2\to\C^\times$ replaces
@@ -605,13 +660,13 @@ with the corresponding composite embeddings.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:mpoalg_fusion_gauge_uniqueness, thm:mpug_fusion_scalar_gauge}
+    \uses{cor:mpoalg_single_target_uniqueness, thm:mpug_fusion_scalar_gauge}
     The rescaled pairs are again fusion tensors
     (Theorem~\ref{thm:mpug_fusion_scalar_gauge}). Substituting them into
     (\ref{eq:mpoalg_composite_compressions}) multiplies $W^{g(hk)}$ by
     $\beta_{g,hk}\beta_{h,k}$ and $W^{(gh)k}$ by $\beta_{g,h}\beta_{gh,k}$,
     which is (\ref{eq:mpug_coboundary}). By
-    Theorem~\ref{thm:mpoalg_fusion_gauge_uniqueness} every other choice of
+    Corollary~\ref{cor:mpoalg_single_target_uniqueness} every other choice of
     fusion tensors is boundary-dressed equal to such a rescaling.
 \end{proof}
 
@@ -634,11 +689,11 @@ with the corresponding composite embeddings.
 
     Without the zipper condition the fusion tensors of
     Theorem~\ref{thm:mpoalg_fusion_tensors_exist} carry a nilpotent remainder,
-    and Remark~\ref{rem:mpoalg_nonunique} shows that the fusion tensors
-    themselves are then not determined up to the multiplicity gauge. An
-    $F$-move holds only after dressing with long words, as in
-    (\ref{eq:mpoalg_associator}); its formulation with multiplicity is not
-    stated here.
+    and Remark~\ref{rem:mpoalg_nonunique} shows that with several targets
+    they are not determined up to the multiplicity gauge, even after dressing
+    with long words. No $F$-move with multiplicity is stated here in that
+    setting; for group-like algebras the single-target uniqueness gives
+    (\ref{eq:mpoalg_associator}).
     % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200 (zipper
     %   condition), 247--251 (F-move), 279--283 (pentagon);
     %   arXiv:2203.12563, lines 392--424.
