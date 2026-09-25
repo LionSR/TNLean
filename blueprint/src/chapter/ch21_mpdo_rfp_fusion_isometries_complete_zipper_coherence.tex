@@ -276,9 +276,34 @@
 \begin{proof}\leanok
     \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove,
         lem:matrix_kronecker_identity_cancellation}
-    Since $\Pi_{ab}$ acts only on the multiplicity factors, it commutes with
-    $\bigoplus_c\Id\otimes B_c^{ik}$. The biorthogonality, reconstruction and
-    zipper identities of the new family follow.
+    Write $\mathcal B^{ik}_{ab}=\bigoplus_c\Id_{N_{ab}^c}\otimes B_c^{ik}$,
+    so that (\ref{eq:rfp_fusion_reconstruction}) reads
+    $B_{ab}^{ik}=X_{ab}\mathcal B^{ik}_{ab}X^+_{ab}$. Since $\Pi_{ab}$ acts
+    only on the multiplicity factors, it commutes with
+    $\mathcal B^{ik}_{ab}$. The biorthogonality
+    (\ref{eq:rfp_fusion_biorthogonality}) and the reconstruction
+    (\ref{eq:rfp_fusion_reconstruction}) of the new family are
+    \begin{align}
+        (\Pi_{ab}^{-1}X^+_{ab})(X_{ab}\Pi_{ab})
+         & =\Pi_{ab}^{-1}(X^+_{ab}X_{ab})\Pi_{ab}=\Id,
+        \notag                                                      \\
+        (X_{ab}\Pi_{ab})\mathcal B^{ik}_{ab}(\Pi_{ab}^{-1}X^+_{ab})
+         & =X_{ab}\mathcal B^{ik}_{ab}\Pi_{ab}\Pi_{ab}^{-1}X^+_{ab}
+        =X_{ab}\mathcal B^{ik}_{ab}X^+_{ab}=B_{ab}^{ik}.
+        \notag
+    \end{align}
+    The zipper identities (\ref{eq:rfp_zipper_synthesis}) and
+    (\ref{eq:rfp_zipper_analysis}) of the new family are
+    \begin{align}
+        B_{ab}^{ik}X_{ab}\Pi_{ab}
+         & =X_{ab}\mathcal B^{ik}_{ab}\Pi_{ab}
+        =(X_{ab}\Pi_{ab})\mathcal B^{ik}_{ab},
+        \notag                                        \\
+        \Pi_{ab}^{-1}X^+_{ab}B_{ab}^{ik}
+         & =\Pi_{ab}^{-1}\mathcal B^{ik}_{ab}X^+_{ab}
+        =\mathcal B^{ik}_{ab}(\Pi_{ab}^{-1}X^+_{ab}).
+        \notag
+    \end{align}
     If $R(G\otimes\Id)=L$ for the fixed-final synthesis matrices $L$ and $R$,
     multiplying on the left by $R^+$ and using $R^+R=\Id$ gives
     $G\otimes\Id=F^{abc}_d\otimes\Id$, hence $G=F^{abc}_d$.
