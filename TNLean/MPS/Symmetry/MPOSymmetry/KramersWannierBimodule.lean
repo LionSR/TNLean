@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Algebra.MatrixSingleSpan
-import TNLean.MPS.Examples.KramersWannierSource
+import TNLean.MPS.Examples.KramersWannier.KramersWannierSource
 import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
 import TNLean.MPS.MPDO.BondOneOperator
 import TNLean.MPS.MPDO.StackedLayers

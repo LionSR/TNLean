@@ -38,10 +38,10 @@ abstracted — record why, so it is not re-proposed).
   simpa [MPOTensor.mpoMatrixEntry] using h
   ```
 - **Seen:** six occurrences across four files (2026-09-17): `fibonacci_fusion_rule` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/Fibonacci.lean`, `mpo_uu` and `mpo_dd` in
-  `Examples/Z3AnomalousFusion.lean`, `mpo_ud` and `mpo_du` in
-  `Examples/Z3AnomalousInverseFusion.lean`, `mpo_defect_mul_defect` in
-  `Examples/Z3AnomalousDefectCompression.lean`.
+  `TNLean/MPS/Examples/Fibonacci/Fibonacci.lean`, `mpo_uu` and `mpo_dd` in
+  `Examples/Z3Anomalous/Z3AnomalousFusion.lean`, `mpo_ud` and `mpo_du` in
+  `Examples/Z3Anomalous/Z3AnomalousInverseFusion.lean`, `mpo_defect_mul_defect` in
+  `Examples/Z3Anomalous/Z3AnomalousDefectCompression.lean`.
 - **Abstraction:** `MPOTensor.mpo_apply_toMPSTensor`, `MPOTensor.ofFn_pairConfig_ne_nil`,
   `MPOTensor.mpo_eq_of_trace_evalWord` and `MPOTensor.mpo_mul_eq_of_trace_evalWord` in
   `TNLean/MPS/MPDO/OperatorFromWordTrace.lean`.
@@ -59,12 +59,12 @@ abstracted — record why, so it is not re-proposed).
   simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using T.smul_mem (X i j) (hunit i j)
   ```
 - **Seen:** seven occurrences across six files (2026-09-17):
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, `Examples/Fibonacci.lean`
-  (twice), `Examples/ParityGraded.lean`, `Examples/KramersWannier.lean`,
-  `Examples/StackedPairGauge.lean`, `Examples/EisensteinCertificates.lean`.  A later sweep
+  `TNLean/MPS/Examples/CZX/CZXTensor.lean`, `Examples/Fibonacci/Fibonacci.lean`
+  (twice), `Examples/MultiBlock/ParityGraded.lean`, `Examples/KramersWannier/KramersWannier.lean`,
+  `Examples/MultiBlock/StackedPairGauge.lean`, `Examples/Rings/EisensteinCertificates.lean`.  A later sweep
   (2026-09-19) found nine further occurrences outside the `Reduction/Examples` directory that
-  the promotion had missed: `Examples/Zsqrt2Ring.lean`, `Examples/GoldenCompression.lean`,
-  `Examples/OneSlotGauge.lean`, `TNLean/MPS/MPDO/CZXTensorInjectivity.lean`,
+  the promotion had missed: `Examples/Rings/Zsqrt2Ring.lean`, `Examples/Rings/GoldenCompression.lean`,
+  `Examples/MultiBlock/OneSlotGauge.lean`, `TNLean/MPS/MPDO/CZXTensorInjectivity.lean`,
   `TNLean/MPS/MPDO/BondTwoSingletonGramBoundary.lean`,
   `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean`,
   `TNLean/MPS/MPDO/PositiveMinimalRealizationCounterexample.lean`,
@@ -374,11 +374,11 @@ abstracted — record why, so it is not re-proposed).
     refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
   ```
 - **Seen:** seven occurrences across seven files: `mpo_czxTensor_apply` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXUnitary.lean`,
-  `mpo_reviewCZXTensor_apply` in `Examples/CZXReviewTensor.lean`,
-  `mpo_czxDecoratedTensor_apply` in `Examples/CZXDecoratedTensor.lean`,
-  `mpo_uTensor_apply` in `Examples/Z3AnomalousUnitary.lean`, `mpo_symTensor_apply` in
-  `Examples/AnomalousCondensationZ2Z2Unitary.lean`, `mpo_tensor_apply` in
+  `TNLean/MPS/Examples/CZX/CZXUnitary.lean`,
+  `mpo_reviewCZXTensor_apply` in `Examples/CZX/CZXReviewTensor.lean`,
+  `mpo_czxDecoratedTensor_apply` in `Examples/CZX/CZXDecoratedTensor.lean`,
+  `mpo_uTensor_apply` in `Examples/Z3Anomalous/Z3AnomalousUnitary.lean`, `mpo_symTensor_apply` in
+  `Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Unitary.lean`, `mpo_tensor_apply` in
   `TNLean/MPS/MPDO/CZXTensor.lean`, and `mpo_rightShiftTensor_apply` in
   `TNLean/MPS/MPU/Examples/Shift.lean`.
 - **Abstraction:** `MPOTensor.mpo_apply_eq_sum_cyclic` and
@@ -1114,18 +1114,18 @@ abstracted — record why, so it is not re-proposed).
   so that a stacked product tensor over the complexes reduces to a decidable
   identity between matrices over that ring.
 - **Seen:** first three occurrences over the integers (2026-09-17): a public
-  copy in `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`, a
+  copy in `TNLean/MPS/Examples/CZX/CZXTensor.lean`, a
   private copy in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/KramersWannier.lean`, and a
+  `TNLean/MPS/Examples/KramersWannier/KramersWannier.lean`, and a
   third needed by the renormalization fixed points of
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/StackedPairGauge.lean`; then
+  `TNLean/MPS/Examples/MultiBlock/StackedPairGauge.lean`; then
   one copy per example ring, over the integers, over `ℤ√2`, over `ℤ[σ]` and over
   `ℤ[ω]`, each with its own product, action and compatibility lemma.
 - **Abstraction:** `MPSTensor.mulTensorR` and `MPSTensor.actTensorR` over an
   arbitrary commutative ring, with `MPSTensor.mulTensor_complexOfRing`, its
   rescaled form `MPSTensor.mulTensor_smul_complexOfRing` and
   `MPSTensor.actTensor_complexOfRing`, in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/RingEmbedding.lean`, beside
+  `TNLean/MPS/FundamentalTheorem/Reduction/RingEmbedding.lean`, beside
   the entrywise image `MPSTensor.complexOfRing` of
   `TNLean/Algebra/ComplexOfRing.lean` that they belong to.
 - **Notes:** the rescaled form is what the P6 fixed points need, since their
@@ -1146,13 +1146,13 @@ abstracted — record why, so it is not re-proposed).
   `complexOfGolden` in the three structure fields, and separately reproves that
   the remainder vanishes from the block diagonality of the `K^i`.
 - **Seen:** seven occurrences (2026-09-17): the `τ ⊗ τ` datum of
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/Fibonacci.lean`, the three
-  unit laws of `Examples/FibonacciUnit.lean`, and the three action tensors of
-  `Examples/FibonacciAction.lean`.
+  `TNLean/MPS/Examples/Fibonacci/Fibonacci.lean`, the three
+  unit laws of `Examples/Fibonacci/FibonacciUnit.lean`, and the three action tensors of
+  `Examples/Fibonacci/FibonacciAction.lean`.
 - **Abstraction:** `MPSTensor.goldenGauge`, `MPSTensor.conjMatrix_goldenGauge`,
   `MPSTensor.MultiBlockCompression.ofGolden` and
   `MPSTensor.MultiBlockCompression.remainder_eq_zero_of_goldenGauge` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/GoldenCompression.lean`,
+  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`,
   with `MPSTensor.unitOrd` and `MPSTensor.unitCoord` for the block ordering
   and bond coordinates of a datum with one target placed before the zero
   slots.
@@ -1169,10 +1169,10 @@ abstracted — record why, so it is not re-proposed).
   in `ℤ[σ]`, transporting the identity along `complexOfGolden`, and closing the
   span argument by `Matrix.matrix_eq_sum_single`.
 - **Seen:** four occurrences (2026-09-17): the two blocks of
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/Fibonacci.lean` and the two
-  normal states of `Examples/FibonacciAction.lean`.
+  `TNLean/MPS/Examples/Fibonacci/Fibonacci.lean` and the two
+  normal states of `Examples/Fibonacci/FibonacciAction.lean`.
 - **Abstraction:** `MPSTensor.isNormal_of_golden_single` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/GoldenCompression.lean`,
+  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`,
   the golden analogue of `P6Compression.isNormal_of_single_eq_smul` for words
   of positive length rather than single letters.
 - **Notes:** the words are given as functions `Fin ℓ → Fin d` so that the
@@ -1192,10 +1192,10 @@ abstracted — record why, so it is not re-proposed).
 
 - **Seen:** sixteen occurrences across two files (2026-09-17): `xX_int`,
   `xXy_int`, `xyX_int`, `xyXy_int` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/AnomalousCondensationZ2Z2NonSplit.lean`,
+  `TNLean/MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2NonSplit.lean`,
   and `eE_int`, `eY_int`, `eX_int`, `eXy_int`, `yE_int`, `yY_int`, `yX_int`,
   `yXy_int`, `xE_int`, `xyE_int`, `xY_int`, `xyY_int` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/AnomalousCondensationZ2Z2Split.lean`.
+  `TNLean/MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Split.lean`.
   Each theorem differs only in its statement, never in its proof.
 - **Abstraction:** the `revert_decide_kernel x₁, …, xₙ` tactic macro, in
   `TNLean/Algebra/GeneralizeDecide.lean` beside the sibling `generalize_decide`
@@ -1993,11 +1993,11 @@ current counts and full location lists).
   ```
 - **Seen:** three occurrences across three files (2026-09-17):
   `CZXCompression.czxSquare_eq` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXTensor.lean`,
+  `TNLean/MPS/Examples/CZX/CZXTensor.lean`,
   `CZXCompression.czxSquare_conjMatrix` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXSquare.lean`, and
+  `TNLean/MPS/Examples/CZX/CZXSquare.lean`, and
   `CZXCompression.czxPlusIdentity_conjMatrix` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXPlusIdentity.lean`.
+  `TNLean/MPS/Examples/CZX/CZXPlusIdentity.lean`.
 - **Abstraction:** the entrywise image `MPSTensor.complexOfRing` along a ring
   homomorphism into the complex numbers, with `complexOfRing_mul`,
   `complexOfRing_one` and `complexOfRing_neg` in
@@ -2006,7 +2006,7 @@ current counts and full location lists).
   `TNLean/Algebra/ComplexOfInt.lean` with its one-line `complexOfInt_mul`,
   `complexOfInt_one` and `complexOfInt_neg`, together with
   `MPSTensor.gaugeOfMatrix` and `MPSTensor.conjMatrix_gaugeOfMatrix` in
-  `TNLean/MPS/FundamentalTheorem/Reduction/Examples/ExplicitGauge.lean`.
+  `TNLean/MPS/FundamentalTheorem/Reduction/ExplicitGauge.lean`.
 - **Notes:** the payoff is that block triangularity, the matched diagonal
   blocks and the vanishing zero blocks of a nine-dimensional example all become
   decidable statements about integer matrices, verified in seconds; without the

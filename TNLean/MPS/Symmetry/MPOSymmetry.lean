@@ -11,5 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.Character
 import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
+import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
 import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
