@@ -25,12 +25,13 @@ unnormalized; approximation statements are not treated here.
     \label{def:ldpolar_matrix}
     \lean{Matrix.polarPos, Matrix.polarSupport, Matrix.polarIso}
     \leanok
-    Let $M\in\C^{m\times k}$. Write $f(M^\dagger M)$ for the functional
-    calculus of the positive semidefinite matrix $M^\dagger M$. The
-    \emph{positive part} is $P=(M^\dagger M)^{1/2}$, the \emph{support
-        projector} is $\Pi=\chi(M^\dagger M)$ with $\chi(0)=0$ and $\chi(x)=1$
-    for $x\ne 0$, and the \emph{partial isometry} is
-    $V=M\,g(M^\dagger M)$ with $g(x)=x^{-1/2}$ for $x>0$ and $g(0)=0$.
+    Let $M\in\C^{m\times k}$. The \emph{positive part} is
+    $P=(M^\dagger M)^{1/2}$, the \emph{support projector} is
+    $\Pi=\chi(M^\dagger M)$ with $\chi(0)=0$ and $\chi(x)=1$ for $x\ne 0$,
+    and the \emph{partial isometry} is $V=M\,g(M^\dagger M)$ with
+    $g(x)=x^{-1/2}$ for $x>0$ and $g(0)=0$; the functions $\chi$ and $g$ are
+    applied to the positive semidefinite matrix $M^\dagger M$ by the
+    functional calculus.
     This is the decomposition $B=VP$ of arXiv:2307.01696, paragraph
     ``Approximation through the fixed-point state'' and Supplemental
     Material, ``Proof of Lemma~1 and extension to non-normal tensors''.
@@ -316,9 +317,11 @@ unnormalized; approximation statements are not treated here.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_transfer}
+    \uses{thm:ldpolar_transfer, lem:blocked_irreducibility_direct_support}
     $\E_P=\E_{A^{[q]}}$ by Theorem~\ref{thm:ldpolar_transfer}, and
-    $\E_{A^{[q]}}=\E_A^q$, as noted after arXiv:2307.01696, eq.~(eq:B).
+    $\E_{A^{[q]}}=\E_A^q$ by
+    Lemma~\ref{lem:blocked_irreducibility_direct_support}, as noted after
+    arXiv:2307.01696, eq.~(eq:B).
 \end{proof}
 
 \begin{theorem}[Isometric form of the blocked periodic state]
