@@ -136,6 +136,7 @@ import TNLean.MPS.MPDO.CompleteZipperFusion
 import TNLean.MPS.MPDO.CompleteZipperFusionDefs
 import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
 import TNLean.MPS.MPDO.CompleteZipperFusionInverse
+import TNLean.MPS.MPDO.CompleteZipperFusionOfCompression
 import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
 import TNLean.MPS.MPDO.CompleteZipperFusionSupport
 import TNLean.MPS.MPDO.Correlations
