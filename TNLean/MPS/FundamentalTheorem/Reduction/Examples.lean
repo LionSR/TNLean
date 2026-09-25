@@ -18,6 +18,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomalyClass
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXDecoratedFusion
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXDecoratedTensor
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXNoInvariant
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXPlusIdentity
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXReviewCanonicalForm
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXReviewTensor

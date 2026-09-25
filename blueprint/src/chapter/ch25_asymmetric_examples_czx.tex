@@ -800,6 +800,24 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     tensors acts by that gauge action.
 \end{proof}
 
+\begin{corollary}[No invariant normal state]
+    \label{cor:asymex_czx_decorated_no_invariant}
+    \lean{CZXCompression.not_exists_normal_fixesMPV_czxDecoratedTensor}
+    \leanok
+    \uses{thm:asymex_czx_decorated_anomaly_class, thm:mpug_anomaly_obstruction}
+    There is no normal matrix product state of positive bond dimension whose
+    periodic vector is fixed by the decorated CZX operator on every nonempty
+    chain.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    The bond-one identity tensor fixes every periodic vector, so such a
+    state would be invariant under the whole representation of $\Z_2$.
+    Its anomaly class would then be trivial, contradicting
+    Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}.
+\end{proof}
+
 \subsection{Asymmetric compression of the square}
 
 The physical square law supplies the periodic comparison for
