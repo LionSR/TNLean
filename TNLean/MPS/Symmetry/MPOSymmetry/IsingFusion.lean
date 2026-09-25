@@ -27,8 +27,9 @@ no fusion character in `ℕ` (a character would give `m_σ² = 1 + m_ψ = 2`), s
 matrix product state is symmetric under the Ising algebra with the unit acting trivially.
 
 **Local fix (normalization):** the stored tensor `isingSigma` is `√2` times the tensor `A_σ` of
-the source, as recorded in the module docstring of `IsingFusionAlgebraOneSigma.lean`; the fusion
-algebra uses the rescaled tensor `(√2)⁻¹ • isingSigma`.
+the source; the fusion algebra uses the rescaled tensor `(√2)⁻¹ • isingSigma`, so that
+`σ × σ = 1 + ψ` holds with unit coefficients. Documented in
+`docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`.
 
 ## Main definitions
 

@@ -108,7 +108,6 @@ def fibBlock : (a : Fin 2) → MPOTensor 2 (fibBlockDim a)
   | 0 => fibOne
   | 1 => fibTau
 
-
 /-! ### The fusion algebra of the periodic operators -/
 
 /-- **The Fibonacci fusion ring on the periodic operators** (arXiv:1511.08090, App. D.1;
