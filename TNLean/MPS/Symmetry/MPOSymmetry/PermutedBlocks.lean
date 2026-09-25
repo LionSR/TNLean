@@ -31,14 +31,10 @@ case of a one-point set.
   another at every positive length.
 * `MPOTensor.GroupFamily.BlockActionData`: a choice of action tensors for permuted blocks.
 * `MPOTensor.GroupFamily.BlockActionData.lSymbol`: the L-symbols.
-
-## Main results (identity action)
+## Main results
 
 * `MPOTensor.GroupFamily.isReduction_actTensor_idTensor`: the bond-one identity operator acts
   trivially on every state.
-
-## Main results
-
 * `MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol`: `eq:omega_and_Ls`.
 * `MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed`:
   a subgroup fixing a block trivializes the restricted three-cocycle.
