@@ -37,8 +37,9 @@ restriction of the anomalous `ℤ₂ × ℤ₂` symmetry to its diagonal subgrou
 the phase `i` on the generator.  The full four-element family is only a projective
 representation, so the anomaly three-cochain of the full group is not defined for it, and no
 statement about the class of the full `ℤ₂ × ℤ₂` family is made.  Neither source prints the
-two-qubit tensors used here.  Documented in `docs/paper-gaps/z2z2_diagonal_anomaly_scope.tex`,
-with the two routes to the full group (blocking two sites, or a projective anomaly cochain).
+two-qubit tensors used here.  Documented in
+`docs/paper-gaps/glm23_z2z2_diagonal_anomaly_scope.tex`, with the two routes to the full group
+(blocking two sites, or a projective anomaly cochain).
 
 ## Main definitions
 
