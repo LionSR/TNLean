@@ -14,7 +14,7 @@ import TNLean.Algebra.FinCyclicInduction
 
 **Source.** Aasen, Mong, Fendley 2016 (arXiv:1601.07185), subsection "The duality defect",
 `References/1601.07185/source/Ising-Defects.tex` lines 989–1056: the duality defect `D_σ` with
-matrix elements `⟨ĥ|D_σ|h⟩ = 2^{-L/2} (-1)^{Σ_j (h_{j-1} + h_j) ĥ_{j-1/2}}` (lines 996–1000),
+matrix elements `⟨h'|D_σ|h⟩ = 2^{-L/2} (-1)^{Σ_j (h_{j-1} + h_j) h'_{j-1/2}}` (lines 996–1000),
 the local relations `D_σ σ^z_j σ^z_{j+1} = μ^x_{j+1/2} D_σ` and
 `D_σ σ^x_j = μ^z_{j-1/2} μ^z_{j+1/2} D_σ` (lines 1004–1007), and the fusion algebra
 `D_ψ² = 1`, `D_σ D_ψ = D_ψ D_σ = D_σ`, `D_σ² = 1 + D_ψ`, `D_σ (D_σ² - 2) = 0`
@@ -42,7 +42,7 @@ their operator, read in the Hadamard-rotated basis. These are not the Seiberg–
 `Tᵀ`, which the conjugation action at line 2108 fixes only up to a scalar.
 
 **Conventions.** The kernel of `K` is `2^{N/2}` times the kernel of `D_σ` under
-`ĥ_{j+1/2} ↦ a j` (output) and `h_j ↦ b j` (input), so that `μ^r_{j+1/2}` acts on output site
+`h'_{j+1/2} ↦ a j` (output) and `h_j ↦ b j` (input), so that `μ^r_{j+1/2}` acts on output site
 `j`. The source composes `D_σ` with its return map to the primal lattice, whose matrix elements
 are the same numbers read with the arguments exchanged (lines 1001–1002); here that return map
 is the transpose, and `D_σ²` of the source is `D_σᵀ D_σ`. Seiberg–Shao work in a basis where
@@ -427,7 +427,7 @@ theorem translate_mul_kwTensor_mpo [NeZero N] :
 /-- Project result: **the transpose of the kernel is the kernel followed by an inverse
 translation**, `Kᵀ = K T⁻¹ = T⁻¹ K`, where `T` is the one-site translation `translate N` and
 `T⁻¹ = Tᵀ` (`translate_inv`). The source states only that the matrix elements are symmetric,
-`⟨h|D_σ|ĥ⟩ = ⟨ĥ|D_σ|h⟩` (arXiv:1601.07185,
+`⟨h|D_σ|h'⟩ = ⟨h'|D_σ|h⟩` (arXiv:1601.07185,
 `References/1601.07185/source/Ising-Defects.tex` lines 1001–1002), so that its return map
 from the dual lattice is `Kᵀ`; the comparison with `K` is computed here. -/
 theorem kwTensor_mpo_transpose [NeZero N] :
