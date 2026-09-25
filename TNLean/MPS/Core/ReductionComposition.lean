@@ -578,3 +578,90 @@ theorem mulTensor_mul_kronId_of_intertwine {X' : MPOTensor d D₁} {X : MPOTenso
 
 end MPOTensor
 
+namespace MPOTensor
+
+/-! ### Coherence of the bond associator -/
+
+/-- `f ⊗ 1` of a permutation matrix is the permutation matrix of the product equivalence. -/
+theorem kronId_toPEquiv {m n : ℕ} (f : Fin m ≃ Fin n) (D : ℕ) :
+    kronId f.toPEquiv.toMatrix D =
+      (finProdFinEquiv.symm.trans ((Equiv.prodCongr f (Equiv.refl (Fin D))).trans
+        finProdFinEquiv)).toPEquiv.toMatrix := by
+  ext x y
+  obtain ⟨⟨x1, x2⟩, rfl⟩ := finProdFinEquiv.surjective x
+  obtain ⟨⟨y1, y2⟩, rfl⟩ := finProdFinEquiv.surjective y
+  simp [kronId, PEquiv.toMatrix_apply, Matrix.one_apply, Option.mem_def, Prod.ext_iff]
+  split_ifs <;> simp_all
+
+/-- `1 ⊗ f` of a permutation matrix is the permutation matrix of the product equivalence. -/
+theorem idKron_toPEquiv {m n : ℕ} (D : ℕ) (f : Fin m ≃ Fin n) :
+    idKron D f.toPEquiv.toMatrix =
+      (finProdFinEquiv.symm.trans ((Equiv.prodCongr (Equiv.refl (Fin D)) f).trans
+        finProdFinEquiv)).toPEquiv.toMatrix := by
+  ext x y
+  obtain ⟨⟨x1, x2⟩, rfl⟩ := finProdFinEquiv.surjective x
+  obtain ⟨⟨y1, y2⟩, rfl⟩ := finProdFinEquiv.surjective y
+  simp [idKron, PEquiv.toMatrix_apply, Matrix.one_apply, Option.mem_def, Prod.ext_iff]
+  split_ifs <;> simp_all
+
+/-- **Pentagon identity of the bond associator.** The two ways of
+reassociating four bond spaces from `((a b) c) e` to `a (b (c e))` agree.
+
+Source: arXiv:1511.08090, Section ``Associativity and the pentagon equation'',
+lines 237--251 of the source. -/
+theorem assocInv_pentagon (a b c e : ℕ) :
+    idKron a (mulTensorAssocInvMatrix b c e) * mulTensorAssocInvMatrix a (b * c) e *
+        kronId (mulTensorAssocInvMatrix a b c) e =
+      mulTensorAssocInvMatrix a b (c * e) * mulTensorAssocInvMatrix (a * b) c e := by
+  simp only [mulTensorAssocInvMatrix, kronId_toPEquiv, idKron_toPEquiv,
+    ← PEquiv.toMatrix_trans, ← Equiv.toPEquiv_trans]
+  congr 2
+  ext x
+  obtain ⟨⟨x1, x2⟩, rfl⟩ := finProdFinEquiv.surjective x
+  obtain ⟨⟨x3, x4⟩, rfl⟩ := finProdFinEquiv.surjective x2
+  obtain ⟨⟨x5, x6⟩, rfl⟩ := finProdFinEquiv.surjective x4
+  simp [mulTensorAssocEquiv]
+
+/-- Naturality of the inverse bond associator in its first slot. -/
+theorem assocInv_mul_kronId_kronId {m n : ℕ} (X : Matrix (Fin m) (Fin n) ℂ) (b c : ℕ) :
+    mulTensorAssocInvMatrix m b c * kronId (kronId X b) c =
+      kronId X (b * c) * mulTensorAssocInvMatrix n b c := by
+  rw [mulTensorAssocInvMatrix, mulTensorAssocInvMatrix, PEquiv.toMatrix_toPEquiv_mul,
+    PEquiv.mul_toMatrix_toPEquiv]
+  ext x y
+  obtain ⟨⟨x1, x2⟩, rfl⟩ := finProdFinEquiv.surjective x
+  obtain ⟨⟨x3, x4⟩, rfl⟩ := finProdFinEquiv.surjective x2
+  obtain ⟨⟨y1, y2⟩, rfl⟩ := finProdFinEquiv.surjective y
+  obtain ⟨⟨y3, y4⟩, rfl⟩ := finProdFinEquiv.surjective y1
+  simp [kronId, mulTensorAssocEquiv, Matrix.one_apply]
+  split_ifs <;> simp_all
+
+/-- Naturality of the inverse bond associator in its middle slot. -/
+theorem assocInv_mul_kronId_idKron {m n : ℕ} (a c : ℕ) (X : Matrix (Fin m) (Fin n) ℂ) :
+    mulTensorAssocInvMatrix a m c * kronId (idKron a X) c =
+      idKron a (kronId X c) * mulTensorAssocInvMatrix a n c := by
+  rw [mulTensorAssocInvMatrix, mulTensorAssocInvMatrix, PEquiv.toMatrix_toPEquiv_mul,
+    PEquiv.mul_toMatrix_toPEquiv]
+  ext x y
+  obtain ⟨⟨x1, x2⟩, rfl⟩ := finProdFinEquiv.surjective x
+  obtain ⟨⟨x3, x4⟩, rfl⟩ := finProdFinEquiv.surjective x2
+  obtain ⟨⟨y1, y2⟩, rfl⟩ := finProdFinEquiv.surjective y
+  obtain ⟨⟨y3, y4⟩, rfl⟩ := finProdFinEquiv.surjective y1
+  simp [kronId, idKron, mulTensorAssocEquiv, Matrix.one_apply, mul_comm]
+  split_ifs <;> simp_all
+
+/-- Naturality of the inverse bond associator in its last slot. -/
+theorem assocInv_mul_idKron {m n : ℕ} (a b : ℕ) (X : Matrix (Fin m) (Fin n) ℂ) :
+    mulTensorAssocInvMatrix a b m * idKron (a * b) X =
+      idKron a (idKron b X) * mulTensorAssocInvMatrix a b n := by
+  rw [mulTensorAssocInvMatrix, mulTensorAssocInvMatrix, PEquiv.toMatrix_toPEquiv_mul,
+    PEquiv.mul_toMatrix_toPEquiv]
+  ext x y
+  obtain ⟨⟨x1, x2⟩, rfl⟩ := finProdFinEquiv.surjective x
+  obtain ⟨⟨x3, x4⟩, rfl⟩ := finProdFinEquiv.surjective x2
+  obtain ⟨⟨y1, y2⟩, rfl⟩ := finProdFinEquiv.surjective y
+  obtain ⟨⟨y3, y4⟩, rfl⟩ := finProdFinEquiv.surjective y1
+  simp [idKron, mulTensorAssocEquiv, Matrix.one_apply]
+  split_ifs <;> simp_all
+
+end MPOTensor
