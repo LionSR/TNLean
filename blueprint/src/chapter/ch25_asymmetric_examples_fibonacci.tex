@@ -258,7 +258,8 @@ prefactor of the review, is recorded in~\cite{gap:bmwshv17_fibonacci_block_entri
         FibonacciCompression.goldenToComplex_fibQuantumDimGolden_one,
         goldenSigmaReal_sq, goldenSigmaReal_eq_inv_sqrt_goldenRatio}
     \leanok
-    \uses{def:asymex_fib_fsymbols, thm:asymex_golden_ring}
+    \uses{def:asymex_fib_fsymbols, def:asymex_fib_anomaly_nim,
+        def:asymex_golden_ring}
     The multiplicities $N_{ab}^c$ of
     Definition~\ref{def:asymex_fib_anomaly_nim} are the Fibonacci
     fusion multiplicities listed in
@@ -274,6 +275,7 @@ prefactor of the review, is recorded in~\cite{gap:bmwshv17_fibonacci_block_entri
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_golden_ring}
     The identities in $\Z[\sigma]$ are finite computations with
     coefficients reduced using $\sigma^4=1-\sigma^2$; the
     multiplicities are compared case by case. Over the reals,
@@ -289,7 +291,7 @@ prefactor of the review, is recorded in~\cite{gap:bmwshv17_fibonacci_block_entri
         FibonacciCompression.fibTauGolden_eq_fSymbol,
         FibonacciCompression.fibLetter}
     \leanok
-    \uses{def:asymex_fib, def:asymex_fib_fsymbols}
+    \uses{def:asymex_fib, def:asymex_fib_fsymbols, def:asymex_golden_ring}
     Index the three bond coordinates of $B_\tau$ by the admissible
     letters $(1,\tau)$, $(\tau,1)$, $(\tau,\tau)$, in this order. For
     every physical letter $(x',x)$, every incoming bond letter $p$ and
@@ -474,7 +476,9 @@ $w_\tau=\varphi/(1+\varphi^2)$.
         =\frac{O_N(B_1)+\varphi\,O_N(B_\tau)}{1+\varphi^2},
         \label{eq:asymex_fib_projector}
     \end{align}
-    following~\cite[Section~3.2 and Appendix~D.1]{Bultinck2017Anyons}.
+    following~\cite[Sections~3.1 and~3.2 and Appendix~D.1]{Bultinck2017Anyons}:
+    Section~3.1 derives the boundary matrices $\Delta_a=w_a\Id$ of the
+    blocks, and Section~3.2 writes the projector as $\sum_aw_aO_N(B_a)$.
 \end{definition}
 
 \begin{theorem}[The weight relation]
@@ -501,8 +505,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     \lean{FibonacciCompression.fibProjector_eq_trace_fibDelta,
         FibonacciCompression.mpo_fibPMPO}
     \leanok
-    \uses{def:asymex_fib_projector, lem:mpo_direct_sum_eval_word,
-        thm:mpo_direct_sum_additive}
+    \uses{def:asymex_fib_projector}
     At every system size $N$, write $B=B_1\oplus B_\tau$. Then
     \begin{align}
         \bra{y}\Pi_N\ket{x}
@@ -515,6 +518,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
 
 \begin{proof}
     \leanok
+    \uses{lem:mpo_direct_sum_eval_word, thm:mpo_direct_sum_additive}
     Word evaluation of the direct sum is block diagonal by
     Lemma~\ref{lem:mpo_direct_sum_eval_word}. Multiplication by the
     block-diagonal matrix $\Delta$ scales the two blocks by $w_1$ and
