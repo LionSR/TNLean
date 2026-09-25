@@ -43,6 +43,7 @@ directly.
     \lean{MPSTensor.wTensor}
     \lean{MPSTensor.wLeftBoundary}
     \lean{MPSTensor.wRightBoundary}
+    \lean{MPSTensor.wRaising}
     \leanok
     \uses{def:mps_tensor}
     Following \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}, set $d=D=2$.
@@ -150,7 +151,7 @@ illustrates this remark by closing the same tensor with a trace.
 
 \begin{proof}
     \leanok
-    \uses{thm:w_state_identification}
+    \uses{def:w_tensor, def:mpv, def:w_indicator}
     The ordered product is the identity, the raising operator, or zero according
     to the number of excitations, as in the proof of
     Theorem~\ref{thm:w_state_identification}. Their traces are $2$, $0$, and $0$.
