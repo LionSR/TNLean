@@ -320,14 +320,18 @@ injective.
 
 \section{Approximation error}
 
-The correlation length of a normal tensor is $\xi=-1/\ln\lvert\lambda_2\rvert$,
-where $\lambda_2$ is an eigenvalue of $\E_A$ of largest modulus other than
-the Perron eigenvalue $1$. By the remark after (\ref{eq:ldp_normal_gauge}),
-$\lvert\lambda_2\rvert<1$, so $\xi$ is finite.
+For a normal tensor $A$, let $\lambda_2$ be an eigenvalue of $\E_A$ of
+largest modulus other than the Perron eigenvalue $1$. By the remark after
+(\ref{eq:ldp_normal_gauge}), $\lvert\lambda_2\rvert<1$. The
+\emph{correlation length} of $A$ is the quantity
+$\xi=-1/\log\lvert\lambda_2\rvert$ of Definition~\ref{def:correlation_length}
+at this $\lambda_2$. It is finite, it is positive exactly when
+$\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{lemma}[Overlap of the positive part with the fixed point]
     \label{lem:ldp_positive_part_overlap}
-    \uses{def:ldp_fixed_point_pair, thm:ldp_blocked_state_factorization}
+    \uses{def:ldp_fixed_point_pair, thm:ldp_blocked_state_factorization,
+        def:correlation_length}
     Let $A$ be normal with correlation length $\xi$ and let $0<\gamma<1/2$.
     Then, for $N=qM$,
     \begin{align}
@@ -341,7 +345,8 @@ $\lvert\lambda_2\rvert<1$, so $\xi$ is finite.
 
 \begin{theorem}[Approximation error, normal case]
     \label{thm:ldp_approximation_error_normal}
-    \uses{lem:ldp_positive_part_overlap, def:ldp_approximating_state}
+    \uses{lem:ldp_positive_part_overlap, def:ldp_approximating_state,
+        def:correlation_length}
     Let $A$ be normal with correlation length $\xi$, let $\ket{\phi_N}$ be the
     normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1/2$. For
     $N=qM$ with $q\to\infty$ and $q=o(N)$,
@@ -390,54 +395,247 @@ $\lvert\lambda_2\rvert<1$, so $\xi$ is finite.
 
 \begin{lemma}[Exponentially decaying correlations]
     \label{lem:ldp_decaying_correlations}
-    \uses{def:injective}
-    Let $A$ be injective with correlation length $\xi>0$, and let
-    $\ket{\phi_N}$ be the normalized vectors (\ref{eq:ldp_ti_mps}). There are
-    operators $\mathcal O,\mathcal O'$ on $\C^d$ of norm one and $c>0$ such that
-    for every $s>1$ and all sufficiently large $N$,
+    \uses{def:normal, def:correlation_length}
+    Let $A$ be normal with correlation length $\xi>0$, let $L\ge1$ be a length
+    such that the products of $L$ matrices of $A$ span $\MN{D}$ (one may take
+    $L=1$ when $A$ is injective), and let $\ket{\phi_N}$ be the normalized
+    vectors (\ref{eq:ldp_ti_mps}). For operators $X,Y$ on $(\C^d)^{\otimes L}$
+    let $X_1$ act on the sites $1,\dots,L$, let $Y_s$ act on the sites
+    $s,\dots,s+L-1$, and put
     \begin{align}
-        \bra{\phi_N}\mathcal O_1\ket{\phi_N}
-         & =\bra{\phi_N}\mathcal O'_s\ket{\phi_N}=0,
-         &
-        \bigl\lvert\bra{\phi_N}\mathcal O_1\mathcal O'_s\ket{\phi_N}\bigr\rvert
-         & \ge c\,e^{-(s-1)/\xi}.
+        G_N(X,Y;s)
+         & =\bra{\phi_N}X_1Y_s\ket{\phi_N}
+        -\bra{\phi_N}X_1\ket{\phi_N}\bra{\phi_N}Y_s\ket{\phi_N}.
+        \label{eq:ldp_connected_correlator}
+    \end{align}
+    There are Hermitian operators $\mathcal O,\mathcal O'$ on
+    $(\C^d)^{\otimes L}$ of norm one, a constant $c>0$, an integer $K\ge1$ and
+    an integer $s_0\ge L+2$ such that for every $s\ge s_0$ some
+    $s'\in\{s,s+1,\dots,s+K-1\}$ satisfies, for every $N\ge3s'$,
+    \begin{align}
+        \bigl\lvert G_N(\mathcal O,\mathcal O';s')\bigr\rvert
+         & \ge c\,e^{-(s'-1)/\xi}.
         \label{eq:ldp_decaying_correlations}
     \end{align}
-    This is \cite[Lemma~2]{Malz2024Preparation}.
+    One may take $K$ to be the number of distinct eigenvalues of $\E_A$ of
+    modulus $\lvert\lambda_2\rvert$. For injective $A$ and $L=1$ this is the
+    correlation estimate of \cite[Lemma~2]{Malz2024Preparation}, with the
+    separation $s$ ranging over windows of $K$ consecutive values.
 \end{lemma}
-%% The bound is stated for the modulus: the connected correlation is
-%% approximately lambda_2^(s-1) c', which is complex in general. To check
-%% against the source proof: when several eigenvalues share the modulus
-%% |lambda_2| their contributions can cancel at individual s, and the lower
-%% bound then holds only along a subsequence of s, which suffices for
-%% Theorem thm:ldp_depth_lower_bound.
+\begin{proof}
+    \uses{def:transfer_map}
+    For an operator $X$ on $(\C^d)^{\otimes L}$ let $\E_X$ be the map
+    $Z\mapsto\sum_{w,w'}\bra{w'}X\ket{w}A^wZ(A^{w'})^\dagger$ on $\MN{D}$,
+    where $w,w'$ run over words of length $L$ and $A^w$ is the product of the
+    matrices along $w$; thus $\E_{\Id}=\E_A^{\,L}$. Expanding the traces in
+    (\ref{eq:ldp_ti_mps}) gives, for $L<s$ and $s+L-1\le N$,
+    \begin{align}
+        \bra{\phi_N(A)}X_1Y_s\ket{\phi_N(A)}
+         & =\operatorname{tr}\bigl(\E_X\,\E_A^{\,s-L-1}\,\E_Y\,
+        \E_A^{\,N-s-L+1}\bigr),
+        \notag
+    \end{align}
+    the trace of a linear map on $\MN{D}$. Let $P(Z)=\Tr(Z)\,\rho$. In the
+    gauge (\ref{eq:ldp_normal_gauge}), $\E_A^{\,n}=P+(\E_A-P)^n$ for $n\ge1$,
+    and $\E_A-P$ has spectral radius $\lvert\lambda_2\rvert$. Fix $r$ with
+    $\lvert\lambda_2\rvert<r<1$ and $r^2<\lvert\lambda_2\rvert$; then
+    $\lVert(\E_A-P)^n\rVert\le C_rr^n$. Replacing the last power
+    $\E_A^{\,N-s-L+1}$ by $P$, and likewise in the normalization
+    $\operatorname{tr}\E_A^{\,N}$ and in the one-point functions, changes
+    $G_N(X,Y;s)$ by at most $C_{X,Y}\,r^{N-s-L+1}$, which is at most
+    $C'_{X,Y}\,r^{2s}$ when $N\ge3s$. The remaining term is
+    \begin{align}
+        G_\infty(X,Y;s)
+         & =\Tr\Bigl(\E_X\bigl((\E_A-P)^{s-L-1}\bigl(\E_Y(\rho)\bigr)\bigr)\Bigr),
+        \label{eq:ldp_limit_correlator}
+    \end{align}
+    which is bilinear in $(X,Y)$.
+
+    The matrices $A^w\otimes\overline{A^{w'}}$ with $w,w'$ of length $L$ span
+    $\MN{D}\otimes\MN{D}$, so every linear map on $\MN{D}$ is of the form
+    $\E_X$. Since $\xi>0$, $\lambda_2\neq0$. Let $R$ be an eigenvector,
+    $\E_A(R)=\lambda_2R$; then $\Tr R=0$ because $\E_A$ is trace preserving,
+    so $P(R)=0$. Choose $Y$ with $\E_Y(\rho)=R$ and $X$ with
+    $\Tr\E_X(Z)=\Tr(M^\dagger Z)$ for all $Z$, where $\Tr(M^\dagger R)=1$.
+    Then $G_\infty(X,Y;s)=\lambda_2^{\,s-L-1}$.
+
+    Let $\lambda_2=\lambda^{(1)},\dots,\lambda^{(K)}$ be the distinct
+    eigenvalues of $\E_A$ of modulus $\lvert\lambda_2\rvert$, put
+    $\mu_j=\lambda^{(j)}/\lvert\lambda_2\rvert$, and fix $\delta>0$ with all
+    other eigenvalues of $\E_A-P$ of modulus less than
+    $\lvert\lambda_2\rvert-\delta$. The Jordan decomposition of $\E_A-P$ gives,
+    for Hermitian $X',Y'$ and $t=s-L-1$,
+    \begin{align}
+        G_\infty(X',Y';s)
+         & =\lvert\lambda_2\rvert^t\sum_{j=1}^Kp_j(t)\,\mu_j^t
+        +O\bigl((\lvert\lambda_2\rvert-\delta)^t\bigr),
+        \label{eq:ldp_peripheral_expansion}
+    \end{align}
+    with polynomials $p_j$ depending bilinearly on $(X',Y')$; the polynomials
+    are constants when the eigenvalues of modulus $\lvert\lambda_2\rvert$ are
+    semisimple. Write $X=X^{(1)}+iX^{(2)}$ and $Y=Y^{(1)}+iY^{(2)}$ with
+    Hermitian parts. If all four pairs $(X^{(a)},Y^{(b)})$ had vanishing
+    polynomials $p_j$, bilinearity would give
+    $G_\infty(X,Y;s)=O((\lvert\lambda_2\rvert-\delta)^t)$, which is false. Take
+    $\mathcal O,\mathcal O'$ to be a pair $X^{(a)},Y^{(b)}$ with some
+    $p_j\neq0$, scaled to norm one. Let $m$ be the largest degree of the
+    $p_j$ and $a_j$ the coefficient of $t^m$ in $p_j$, so
+    $a=(a_1,\dots,a_K)\neq0$.
+
+    The Vandermonde matrix $W=(\mu_j^{\,u})_{0\le u<K,\,1\le j\le K}$ is
+    invertible because the $\mu_j$ are distinct. For every $t$ the vector
+    with entries $\sum_ja_j\mu_j^{\,t+u}$, $0\le u<K$, is $W$ applied to
+    $(a_j\mu_j^t)_j$, whose maximum norm equals that of $a$ because
+    $\lvert\mu_j\rvert=1$. Hence some $u\in\{0,\dots,K-1\}$ satisfies
+    \begin{align}
+        \Bigl\lvert\sum_{j=1}^Ka_j\mu_j^{\,t+u}\Bigr\rvert
+         & \ge c_0,
+         &
+        c_0
+         & =\frac{\max_j\lvert a_j\rvert}{\lVert W^{-1}\rVert_\infty}>0,
+        \label{eq:ldp_vandermonde_window}
+    \end{align}
+    so a nonzero exponential sum of this kind cannot be small at $K$
+    consecutive integers. At $t'=t+u$, (\ref{eq:ldp_peripheral_expansion})
+    gives
+    $\lvert G_\infty(\mathcal O,\mathcal O';s+u)\rvert\ge
+        \lvert\lambda_2\rvert^{t'}\bigl(t'^mc_0-O(t'^{m-1})\bigr)
+        -O\bigl((\lvert\lambda_2\rvert-\delta)^{t'}\bigr)
+        \ge\tfrac{c_0}{2}\lvert\lambda_2\rvert^{t'}$
+    once $s$ is large. With $s'=s+u$, $N\ge3s'$ and $r^2<\lvert\lambda_2\rvert$,
+    the finite-size correction $O(r^{2s'})$ is at most
+    $\tfrac{c_0}{4}\lvert\lambda_2\rvert^{t'}$ after enlarging $s_0$. Finally
+    $\lvert\lambda_2\rvert^{t'}=e^{-(s'-L-1)/\xi}\ge e^{-(s'-1)/\xi}$, which
+    gives (\ref{eq:ldp_decaying_correlations}) with $c=c_0/4$.
+\end{proof}
+%% The source's Lemma 2 (lm:2) is not available locally and could not be
+%% checked. An earlier version of this entry asserted the bound for every
+%% s > 1, with one-point functions vanishing exactly. Neither is justified
+%% in general. The correlator of Hermitian observables is real, and its
+%% leading part is an exponential sum over the eigenvalues of modulus
+%% |lambda_2|, which come in complex-conjugate pairs; such a sum, a cosine
+%% for a single conjugate pair, can vanish at individual s. The statement
+%% above therefore asserts the bound in every window of K consecutive
+%% separations, which the Vandermonde argument proves, and it uses the
+%% connected correlator, since the one-point functions need not vanish at
+%% finite N. It is stated for normal A with observables on L sites so that
+%% Theorem thm:ldp_depth_lower_bound applies at every N; for injective A and
+%% L = 1 it is the source's setting. No diagonalizability is assumed: Jordan
+%% blocks at modulus |lambda_2| only add polynomial factors, which the
+%% argument absorbs.
 
 \begin{theorem}[No preparation in depth $o(\log N)$]
     \label{thm:ldp_depth_lower_bound}
-    \uses{def:ldp_local_circuit, lem:ldp_decaying_correlations,
-        thm:ldp_approximation_error_normal}
+    \uses{def:ldp_local_circuit, def:correlation_length}
     Let $A$ be normal with correlation length $\xi>0$, let $\ket{\phi_N}$ be the
     normalized vectors (\ref{eq:ldp_ti_mps}), and let $\ket{\psi_N}$ be prepared
     in depth $T_N$ with $T_N=o(\log N)$. Then there is $N_0$ such that
     $\varepsilon(\phi_N,\psi_N)>1/2$ for all $N>N_0$. This is
     \cite[Theorem~1]{Malz2024Preparation}.
 \end{theorem}
+\begin{proof}
+    \uses{lem:ldp_decaying_correlations}
+    Take $L,\mathcal O,\mathcal O',c,K,s_0$ from
+    Lemma~\ref{lem:ldp_decaying_correlations}, and suppose
+    $\varepsilon(\phi_N,\psi_N)\le1/2$, that is
+    $\lvert\braket{\phi_N}{\psi_N}\rvert\ge1/2$. Write $T=T_N$ and
+    $\ket{\psi_N}=U\ket{\pi}$ with $U$ a local circuit of depth $T$ and
+    $\ket{\pi}$ a product state. If $Z$ acts on an interval of sites, then
+    $U^\dagger ZU$ acts on the interval enlarged by $T$ sites on each side, so
+    expectations in $\ket{\psi_N}$ of products of operators whose enlarged
+    intervals are pairwise disjoint factorize.
+
+    Let $s_N=\max(s_0,2T+L+1)$ and let $s'\in\{s_N,\dots,s_N+K-1\}$ be given
+    by the lemma; the window changes $s'$ by at most $K-1$, so still
+    $s'=o(\log N)$ and $N\ge3s'$ for large $N$. Put $\Delta=s'+L+2T\le2s'$,
+    $n=\lfloor N/\Delta\rfloor\ge N/(4s')$, and $b_k=1+(k-1)\Delta$ for
+    $k=1,\dots,n$. With $e=\bra{\phi_N}\mathcal O_1\ket{\phi_N}$ and
+    $e'=\bra{\phi_N}\mathcal O'_1\ket{\phi_N}$ let $\mathcal O^{(k)}$ be
+    $\mathcal O-e$ on the sites $b_k,\dots,b_k+L-1$ and $\mathcal O'^{(k)}$ be
+    $\mathcal O'-e'$ on the sites $b_k+s',\dots,b_k+s'+L-1$. These have norm at
+    most $2$, zero expectation in $\ket{\phi_N}$ by translation invariance,
+    and $\bra{\phi_N}\mathcal O^{(k)}\mathcal O'^{(k)}\ket{\phi_N}
+        =G_N(\mathcal O,\mathcal O';s')$. Since $s'\ge2T+L+1$ and
+    $\Delta\ge s'+L+2T$, the $2n$ enlarged intervals are pairwise disjoint,
+    also around the ring.
+
+    Two estimates are used. For Hermitian $Z$ and unit vectors $\phi,\psi$,
+    with $\sigma_\chi(Z)=\lVert(Z-\langle Z\rangle_\chi)\chi\rVert$,
+    \begin{align}
+        \lvert\braket{\phi}{\psi}\rvert\,
+        \bigl\lvert\langle Z\rangle_\phi-\langle Z\rangle_\psi\bigr\rvert
+         & \le\sigma_\phi(Z)+\sigma_\psi(Z),
+        \label{eq:ldp_expectation_overlap}
+    \end{align}
+    because
+    $(\langle Z\rangle_\phi-\langle Z\rangle_\psi)\braket{\phi}{\psi}
+        =\bra{\phi}(Z-\langle Z\rangle_\psi)\ket{\psi}
+        -\bra{\phi}(Z-\langle Z\rangle_\phi)\ket{\psi}$. Secondly, the
+    decomposition $\E_A^{\,n}=P+(\E_A-P)^n$ from the proof of
+    Lemma~\ref{lem:ldp_decaying_correlations}, together with the fact that in
+    the gauge (\ref{eq:ldp_normal_gauge}) the maps $\E_Z$ have norm bounded by
+    a multiple of $\lVert Z\rVert$ independent of the size of the support,
+    shows that the connected correlation in $\ket{\phi_N}$ of two operators of
+    norm at most $4$ on intervals separated by $g$ and $g'$ sites around the
+    ring is at most $C(r^g+r^{g'})$, with $C$ and $r<1$ depending only on $A$.
+    Consecutive intervals $[b_k,b_k+s'+L-1]$ are separated by at least $2T$
+    sites, and intervals $j$ apart by at least $(j-1)\Delta$, so every
+    average of $n$ of these operators, or of their pair products, has
+    variance at most $C_1/n$ in $\ket{\phi_N}$.
+
+    For signs $\epsilon_k\in\{\pm1\}$ apply (\ref{eq:ldp_expectation_overlap})
+    to $Z=\frac1n\sum_k\epsilon_k\mathcal O^{(k)}$. Its expectation in
+    $\ket{\phi_N}$ is $0$; in $\ket{\psi_N}$ it is
+    $\frac1n\sum_k\epsilon_kx_k$ with
+    $x_k=\bra{\psi_N}\mathcal O^{(k)}\ket{\psi_N}\in\R$, and by factorization
+    its variance there is at most $4/n$. Hence
+    $\lvert\frac1n\sum_k\epsilon_kx_k\rvert\le C_2n^{-1/2}$, and the choice
+    $\epsilon_k=\operatorname{sign}x_k$ gives
+    $\frac1n\sum_k\lvert x_k\rvert\le C_2n^{-1/2}$. Next apply
+    (\ref{eq:ldp_expectation_overlap}) to
+    $Z=\frac1n\sum_k\mathcal O^{(k)}\mathcal O'^{(k)}$, which is Hermitian
+    because the two factors act on disjoint sites. Its expectation in
+    $\ket{\phi_N}$ is $G_N(\mathcal O,\mathcal O';s')$. In $\ket{\psi_N}$ the
+    light cone gives
+    $\bra{\psi_N}\mathcal O^{(k)}\mathcal O'^{(k)}\ket{\psi_N}=x_ky_k$ with
+    $\lvert y_k\rvert\le2$, so the expectation is at most $2C_2n^{-1/2}$ in
+    modulus and the variance is at most $16/n$. With
+    (\ref{eq:ldp_decaying_correlations}) and $n\ge N/(4s')$,
+    \begin{align}
+        c\,e^{-(s'-1)/\xi}
+         & \le\bigl\lvert G_N(\mathcal O,\mathcal O';s')\bigr\rvert
+        \le C_3\Bigl(\frac{s'}{N}\Bigr)^{1/2}.
+        \label{eq:ldp_depth_contradiction}
+    \end{align}
+    Since $s'\le s_N+K-1=o(\log N)$, the left side is $N^{-o(1)}$ and the
+    right side is $N^{-1/2+o(1)}$, so (\ref{eq:ldp_depth_contradiction}) fails
+    for all $N$ larger than some $N_0$ determined by $A$ and the sequence
+    $(T_N)$. For those $N$, $\varepsilon(\phi_N,\psi_N)>1/2$.
+\end{proof}
 %% The source proof applies Lemma 2, stated for injective A, to a normal A.
-%% A normal tensor is injective after blocking a bounded number of sites; the
-%% proof must be run on the blocked chain or Lemma 2 extended to normal A.
+%% Here the lemma is stated for normal A with observables on L sites, where
+%% the products of L matrices span M_D, so the argument runs at every N and
+%% not only at multiples of a blocking length. The window of K separations
+%% in the lemma moves the separation s' by at most K - 1 sites, which is
+%% absorbed into s' = o(log N); only constants change. The concentration
+%% argument above is a reconstruction, since the source proof could not be
+%% checked locally.
 
 \section{Tensors that are not normal}
 
 \begin{definition}[Fixed point of a basis of normal tensors]
     \label{def:ldp_non_normal_fixed_point}
-    \uses{def:bnt, def:ldp_fixed_point_pair, lem:ldp_polar_blocked_map}
+    \uses{def:bnt, def:ldp_fixed_point_pair, lem:ldp_polar_blocked_map,
+        def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
         \otimes A_j^i$ with normal $A_j$, each in the gauge
     (\ref{eq:ldp_normal_gauge}), forming a basis of normal tensors, and put
     $\beta_j=\sum_{k=1}^{m_j}\mu_{j,k}^N$. Consider only lengths $N=qM$ with
     $(\beta_1,\dots,\beta_b)\neq0$; for the other lengths
     $\ket{\phi_N(A)}=\sum_j\beta_j\ket{\phi_N(A_j)}=0$ and there is nothing to
-    prepare. With $\ket{\omega_j}$ the pair state of $A_j$ and
+    prepare. Write $\xi_j$ for the correlation length of the normal tensor
+    $A_j$, formed from the subleading eigenvalue of its own transfer map
+    $\E_{A_j}$. With $\ket{\omega_j}$ the pair state of $A_j$ and
     $\alpha^{(N)}_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$, the
     \emph{fixed-point state} is
     \begin{align}
@@ -467,11 +665,11 @@ $\lvert\lambda_2\rvert<1$, so $\xi$ is finite.
 
 \begin{theorem}[Approximation error, general case]
     \label{thm:ldp_approximation_error_general}
-    \uses{def:ldp_non_normal_fixed_point}
+    \uses{def:ldp_non_normal_fixed_point, def:correlation_length}
     With the notation of Definition~\ref{def:ldp_non_normal_fixed_point},
     including the approximating state $\widetilde\phi_N$ defined there,
-    $\xi_{\mathrm{diag}}=\max_j\xi_{jj}$ the largest correlation length of the
-    $A_j$, $0<\gamma<1/2$, and $q=o(N)$,
+    $\xi_{\mathrm{diag}}=\max_j\xi_j$ the largest correlation length of the
+    blocks $A_j$, $0<\gamma<1/2$, and $q=o(N)$,
     \begin{align}
         \varepsilon(\widetilde\phi_N,\phi_N)
          & =O\!\left(\frac Nq\,e^{-\gamma q/\xi_{\mathrm{diag}}}\right).
@@ -481,4 +679,7 @@ $\lvert\lambda_2\rvert<1$, so $\xi$ is finite.
 \end{theorem}
 %% The direct sum A is not normal, so Lemma lem:ldp_positive_part_overlap
 %% does not apply to it. The mixed-block overlap estimate is the content of
-%% Lemma 1'(ii) of the source and is cited, not derived, here.
+%% Lemma 1'(ii) of the source and is cited, not derived, here. The source
+%% writes the diagonal correlation lengths with a double index, referring to
+%% the diagonal blocks E_{A_j} of the transfer map of A as opposed to the
+%% mixed blocks; here xi_j denotes the correlation length of A_j.
