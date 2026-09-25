@@ -28,6 +28,7 @@ import TNLean.MPS.Examples.GHZQudit
 import TNLean.MPS.Examples.Ising
 import TNLean.MPS.Examples.KitaevChain
 import TNLean.MPS.Examples.KramersWannier
+import TNLean.MPS.Examples.MPDOSymmetry
 import TNLean.MPS.Examples.MajumdarGhosh
 import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.ProductState

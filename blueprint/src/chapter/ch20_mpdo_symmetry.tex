@@ -1,0 +1,312 @@
+\section{Strong and weak symmetries}
+
+Symmetries of a mixed state come in two kinds. For a unitary on-site
+symmetry $U$, a density operator can commute with $U$, or it can be
+invariant under $U$ applied on one side only. These are the weak and strong
+symmetries of de Groot, Turzillo and Schuch, who define them for
+channels~\cite{deGroot2022SPTOpen}; their form for density operators is
+recalled in~\cite{GarreRubio2026LocalCharacterization}. Sun formulates
+both notions for a family of matrix product
+operators~\cite{Sun2025Anomalous}. In this section the density operators
+are the periodic operators $\rho^{(L)}=\rho^{(L)}(M)$ of
+Definition~\ref{def:mpo_family}. The source also allows a boundary matrix
+commuting with every $M^{ij}$, and the family definitions below take it to
+be the identity, so every family statement of this section is restricted to
+the identity boundary~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
+
+\begin{definition}[Strong and weak symmetry]\label{def:mpdo_strong_weak_symmetry}
+    \lean{Matrix.IsStrongSymmetry, Matrix.IsWeakSymmetry,
+        MPOTensor.IsStrongMPOSymmetry, MPOTensor.IsWeakMPOSymmetry}
+    \leanok
+    \uses{def:mpo_family}
+    An operator $O$ is a \emph{strong symmetry} of a matrix $\rho$ if
+    $O\rho=\lambda\rho$ for some $\lambda\in\mathbb C$, and a \emph{weak
+        symmetry} if $[O,\rho]=0$. A family of periodic matrix product operators
+    $O_a^{(L)}$ is a strong symmetry of $M$, with eigenvalues
+    $\lambda_a^{(L)}$, if
+    $O_a^{(L)}\rho^{(L)}=\lambda_a^{(L)}\rho^{(L)}$ for every label $a$ and
+    every $L\ge 1$. It is a weak symmetry if
+    $[O_a^{(L)},\rho^{(L)}]=0$ for every $a$ and every
+    $L\ge 1$~\cite{Sun2025Anomalous}. The eigenvalues may depend on $L$ and
+    need not be phases. In the source the operators $O_a$ form a fusion
+    algebra of normal matrix product operators and $\rho^{(L)}$ is positive;
+    the definition assumes neither, and the results below state the fusion
+    rules or Hermiticity where they use them.
+\end{definition}
+
+\begin{definition}[On-site symmetry]\label{def:mpdo_onsite_symmetry}
+    \lean{MPOTensor.onSite,
+        MPOTensor.IsStrongOnSiteSymmetry, MPOTensor.IsWeakOnSiteSymmetry}
+    \leanok
+    \uses{def:mpdo_strong_weak_symmetry}
+    For a representation $g\mapsto U_g$ on $\mathbb C^d$, the on-site
+    operators $U_g^{\otimes L}$ are the periodic operators of the bond
+    dimension one tensor with entries $(U_g)_{ij}$. Strong and weak on-site
+    symmetry are the two notions of
+    Definition~\ref{def:mpdo_strong_weak_symmetry} for this family. The
+    eigenvalue $1$ gives the strong symmetry
+    $U\rho=\rho$~\cite{GarreRubio2026LocalCharacterization}.
+\end{definition}
+
+\begin{lemma}[Periodic operators of an on-site tensor]\label{lem:mpdo_onsite_mpo}
+    \lean{MPOTensor.mpo_onSite}
+    \leanok
+    \uses{def:mpdo_onsite_symmetry, def:mpo_family}
+    The periodic operator of length $L$ of the bond dimension one tensor
+    with entries $u_{ij}$ is $u^{\otimes L}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each word evaluates to the scalar $\prod_l u_{\sigma_l\tau_l}$ times the
+    one-by-one identity, whose trace is that scalar.
+\end{proof}
+
+\begin{theorem}[Strong symmetry implies weak symmetry]\label{thm:mpdo_strong_implies_weak}
+    \lean{Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose,
+        Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary,
+        MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry,
+        MPOTensor.IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry}
+    \leanok
+    \uses{def:mpdo_strong_weak_symmetry, def:mpdo_onsite_symmetry, def:mpdo,
+        lem:mpdo_onsite_mpo}
+    Let $\rho$ be Hermitian. If $O$ and $O^\dagger$ are both strong
+    symmetries of $\rho$, then $O$ is a weak symmetry of $\rho$. Hence a
+    strong symmetry of an MPDO whose family contains the adjoint of each of
+    its operators is a weak symmetry, and a strong on-site symmetry under a
+    unitary representation is a weak on-site
+    symmetry~\cite{Sun2025Anomalous}.
+\end{theorem}
+
+\begin{proof}\leanok
+    From $O^\dagger\rho=\mu\rho$ one gets $\rho O=\bar\mu\rho$. Then
+    $\rho O\rho$ equals both $\lambda\rho^2$ and $\bar\mu\rho^2$. If
+    $\rho\neq 0$ then $\rho^2\neq 0$, so $\lambda=\bar\mu$ and
+    $O\rho=\rho O$. For unitary $O$, the relation $\rho=O^\dagger O\rho=\lambda
+        O^\dagger\rho$ shows that $O^\dagger$ is a strong symmetry.
+\end{proof}
+
+\begin{theorem}[Eigenvalues of strong symmetries]\label{thm:mpdo_strong_eigenvalues}
+    \lean{Matrix.IsStrongSymmetry.norm_eq_one,
+        MPOTensor.IsStrongMPOSymmetry.mul_eq_sum,
+        MPOTensor.IsStrongMPOSymmetry.isFusionCharacter,
+        MPOTensor.IsStrongOnSiteSymmetry.norm_eq_one,
+        MPOTensor.IsStrongOnSiteSymmetry.map_mul,
+        MPOTensor.IsStrongOnSiteSymmetry.map_one}
+    \leanok
+    \uses{def:mpdo_strong_weak_symmetry, def:mpdo_onsite_symmetry}
+    Let $\rho^{(L)}\neq 0$. A unitary strong symmetry of $\rho^{(L)}$ has an
+    eigenvalue of modulus one. If the periodic operators obey fusion rules
+    $O_aO_b=\sum_c N_{ab}^cO_c$, the eigenvalues of a strong symmetry obey
+    $\lambda_a^{(L)}\lambda_b^{(L)}=\sum_cN_{ab}^c\lambda_c^{(L)}$, and they
+    form a one-dimensional representation of the fusion ring when the
+    eigenvalue of the unit is nonzero. For an on-site representation,
+    $g\mapsto\lambda_g^{(L)}$ is a character of the group.
+\end{theorem}
+
+\begin{proof}\leanok
+    For unitary $O$, $\rho^\dagger\rho=(O\rho)^\dagger O\rho
+        =|\lambda|^2\rho^\dagger\rho$ with $\rho^\dagger\rho\neq 0$. The fusion
+    relation follows by applying $O_aO_b$ to $\rho^{(L)}$ in both forms.
+\end{proof}
+
+\begin{theorem}[Purification form of strong symmetry]\label{thm:mpdo_strong_symmetry_purification}
+    \lean{Matrix.mul_mul_conjTranspose_eq_smul_iff,
+        MPOTensor.purificationAmplitude,
+        MPOTensor.purificationDensity_eq_mul_conjTranspose,
+        MPOTensor.mpo_mul_eq_smul_iff_purification,
+        MPOTensor.isStrongMPOSymmetry_iff_purification}
+    \leanok
+    \uses{def:mpdo_strong_weak_symmetry, thm:mpo_eq_purification_density}
+    Let $\rho=\Phi\Phi^\dagger$, where $\Phi$ has system configurations as
+    rows and ancilla configurations as columns, so that $\Phi$ is a
+    purification $\Psi$ of $\rho$. Then $O\rho=\lambda\rho$ if and only if
+    $(O\otimes\Id_{\mathrm{anc}})\Psi=\lambda\Psi$. For a locally purified
+    tensor the purification is the spin--ancilla matrix product state of the
+    purifying tensor, and $M$ is strongly symmetric under a family $O_a$ if
+    and only if every $O_a^{(L)}\otimes\Id_{\mathrm{anc}}$ acts on that
+    state by $\lambda_a^{(L)}$~\cite{Sun2025Anomalous}.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $O\rho=\lambda\rho$, the matrix $(O-\lambda)\Phi$ has Gram matrix
+    $(O-\lambda)\rho(O-\lambda)^\dagger=0$, so it vanishes. The converse is
+    immediate.
+\end{proof}
+
+\begin{theorem}[Local conditions for strong and weak symmetry]\label{thm:mpdo_symmetry_local_conditions}
+    \lean{MPOTensor.isStrongOnSiteSymmetry_of_gaugePhase_purification,
+        MPOTensor.isWeakOnSiteSymmetry_of_gaugePhase_purification}
+    \leanok
+    \uses{thm:mpdo_strong_symmetry_purification, def:mpdo_onsite_symmetry}
+    Let $M$ be locally purified by $A$. Suppose that
+    $\sum_j(U_g)_{ij}A^{(j,k)}=\zeta_gX_gA^{(i,k)}X_g^{-1}$ for invertible
+    $X_g$. Then $M$ is strongly on-site symmetric under $U$ with
+    eigenvalues $\zeta_g^L$. If instead
+    $\sum_{j,l}(U_g)_{ij}(V_g)_{kl}A^{(j,l)}=\zeta_gX_gA^{(i,k)}X_g^{-1}$
+    with $U_g$ and $V_g$ unitary, then $M$ is weakly on-site symmetric under
+    $U$. These conditions are analogous to the criteria of de Groot,
+    Turzillo and Schuch for channels with a symmetric unitary dilation, with
+    trivial and with symmetric action on the
+    ancilla~\cite{deGroot2022SPTOpen}; that work contains no statement about
+    matrix product density operators.
+\end{theorem}
+
+\begin{proof}\leanok
+    The twisted purifying tensor is a gauge transform of $A$ up to the scalar
+    $\zeta_g$, so the purifying state is multiplied by $\zeta_g^L$. For the
+    weak condition, $U_g^{\otimes L}\rho U_g^{\otimes L\dagger}
+        =|\zeta_g|^{2L}\rho$, and comparing traces gives $|\zeta_g|^{2L}=1$
+    whenever $\rho\neq 0$.
+\end{proof}
+
+\begin{theorem}[Strong symmetry with a normal purification]\label{thm:mpdo_strong_symmetry_normal_purification}
+    \lean{MPOTensor.spinTwist,
+        MPOTensor.isNormalTensor_purificationTensor_spinTwist,
+        MPOTensor.mpv_purificationTensor_spinTwist_of_mpo_mul_eq_smul,
+        MPOTensor.exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor,
+        MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor,
+        MPOTensor.IsStrongOnSiteSymmetry.exists_eq_pow_of_isNormalTensor}
+    \leanok
+    \uses{thm:mpdo_strong_symmetry_purification, thm:mpdo_symmetry_local_conditions,
+        def:nt_cpsv, thm:normal_proportional_mpv_geometric_phase,
+        thm:cpsv_normal_mpv_phase_gauge}
+    Let $M$ be locally purified by $A$, let the spin--ancilla tensor with
+    entries $A^{(i,k)}$ be normal, and let $U$ be a unitary on-site
+    representation. Then $M$ is strongly on-site symmetric under $U$ if and
+    only if for every $g$ there are an invertible $X_g$ and a scalar
+    $\zeta_g$ with $|\zeta_g|=1$ such that
+    $\sum_j(U_g)_{ij}A^{(j,k)}=\zeta_gX_gA^{(i,k)}X_g^{-1}$. In that case
+    the eigenvalues are $\lambda_g^{(L)}=\zeta_g^L$ at every length with
+    $\rho^{(L)}\neq 0$. The symmetry thus acts on the purification by a
+    virtual gauge transformation and trivially on the ancilla, in analogy
+    with the strongly symmetric channel dilations of de Groot, Turzillo and
+    Schuch~\cite{deGroot2022SPTOpen}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Acting with a unitary on the spin leg leaves the transfer map unchanged
+    and preserves irreducibility, so the twisted tensor is again normal. By
+    Theorem~\ref{thm:mpdo_strong_symmetry_purification} the twisted and
+    untwisted purifying states are proportional at every positive length,
+    with a factor that is nonzero at all large lengths because the twisted
+    tensor is normal. Theorems~\ref{thm:normal_proportional_mpv_geometric_phase}
+    and~\ref{thm:cpsv_normal_mpv_phase_gauge} turn this proportionality into
+    the gauge relation. The converse is
+    Theorem~\ref{thm:mpdo_symmetry_local_conditions}.
+\end{proof}
+
+\begin{theorem}[Symmetries of the vectorized density operator]\label{thm:mpdo_symmetry_vectorized}
+    \lean{MPOTensor.pairTwist, MPOTensor.pairOperator, MPOTensor.pairRep,
+        MPOTensor.doubledRep, MPOTensor.pairTwist_map_star,
+        MPOTensor.pairOperator_map_star, MPOTensor.doubledRep_apply,
+        MPOTensor.mpo_pairTwist,
+        MPOTensor.twistedTensor_toMPSTensor_pairRep,
+        MPOTensor.mpv_toMPSTensor_eq_mul_iff, MPOTensor.sameMPV_toMPSTensor_iff,
+        MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor,
+        MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor}
+    \leanok
+    \uses{def:mpdo_onsite_symmetry, def:on_site_symmetric}
+    Regard $\rho^{(L)}(M)$ as the matrix product vector $|\rho\rangle\rangle$
+    of the tensor with doubled physical index $(i,j)$ and matrices $M^{ij}$.
+    Acting with $u\otimes v$ on every doubled index sends $\rho^{(L)}$ to
+    $u^{\otimes L}\rho^{(L)}(v^{\otimes L})^T$. For a unitary on-site
+    representation $U$, the operator $M$ is weakly on-site symmetric if and
+    only if the doubled tensor is invariant under
+    $g\mapsto U_g\otimes\bar U_g$, and strongly on-site symmetric with
+    eigenvalues $\lambda_g^{(L)}$ if and only if
+    $(U_g\otimes\Id)^{\otimes L}|\rho\rangle\rangle
+        =\lambda_g^{(L)}|\rho\rangle\rangle$ at every $L\ge
+        1$~\cite{GarreRubio2026LocalCharacterization}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The matrix product vector of the doubled tensor at the configuration
+    $((\sigma_1,\tau_1),\dots,(\sigma_L,\tau_L))$ is the entry
+    $\rho^{(L)}_{\sigma\tau}$. Expanding the trace of a product of linear
+    combinations gives the twisted operator. For unitary $u$, $[u,\rho]=0$
+    is equivalent to $u\rho u^\dagger=\rho$, and
+    $(\bar u^{\otimes L})^T=(u^{\otimes L})^\dagger$.
+\end{proof}
+
+\begin{theorem}[Pauli symmetries of $I^{\otimes N}+\sigma_z^{\otimes N}$]\label{thm:mpdo_example412_symmetries}
+    \lean{MPOTensor.CPSVExample412Literal.isStrongMPOSymmetry_sigmaZ,
+        MPOTensor.CPSVExample412Literal.isWeakSymmetry_sigmaX_iff_even,
+        MPOTensor.CPSVExample412Literal.isWeakSymmetry_sigmaX_of_even,
+        MPOTensor.CPSVExample412Literal.not_isStrongSymmetry_sigmaX,
+        MPOTensor.CPSVExample412Literal.not_isWeakMPOSymmetry_sigmaX}
+    \leanok
+    \uses{def:mpdo_strong_weak_symmetry, thm:cpsv_example412_literal_formula}
+    For the operators $\rho^{(N)}=I^{\otimes N}+\sigma_z^{\otimes N}$ of
+    Theorem~\ref{thm:cpsv_example412_literal_formula}, $\sigma_z^{\otimes N}$
+    is a strong symmetry with eigenvalue $1$ at every $N\ge 1$. The operator
+    $\sigma_x^{\otimes N}$ is never a strong symmetry for $N\ge 1$, and it is
+    a weak symmetry exactly when $N$ is even. In particular the family is not
+    weakly $\sigma_x$-symmetric.
+\end{theorem}
+
+\begin{proof}\leanok
+    The operators are diagonal with entries $1+s(\boldsymbol\sigma)$, where
+    $s(\boldsymbol\sigma)=\pm1$ is the eigenvalue of $\sigma_z^{\otimes N}$.
+    Conjugation by $\sigma_x^{\otimes N}$ flips every spin and multiplies
+    $s$ by $(-1)^N$.
+\end{proof}
+
+\begin{theorem}[Strong $ZZ$ and weak $XX$ symmetry of the rescaling-stable example]
+    \label{thm:mpdo_rescaling_stable_symmetries}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.sigmaZZ,
+        MPOTensor.RescalingStableLengthDependentRFP.sigmaXX,
+        MPOTensor.RescalingStableLengthDependentRFP.isStrongMPOSymmetry_sigmaZZ,
+        MPOTensor.RescalingStableLengthDependentRFP.isWeakMPOSymmetry_sigmaXX,
+        MPOTensor.RescalingStableLengthDependentRFP.not_isStrongSymmetry_sigmaXX_one,
+        MPOTensor.RescalingStableLengthDependentRFP.not_isStrongMPOSymmetry_sigmaXX}
+    \leanok
+    \uses{def:mpdo_strong_weak_symmetry, thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+    Each site of the rescaling-stable example $R$ carries two qubits. Its
+    operators $\rho^{(N)}(R)$ are strongly symmetric under
+    $(\sigma_z\otimes\sigma_z)^{\otimes N}$ with eigenvalue $1$ and weakly
+    symmetric under $(\sigma_x\otimes\sigma_x)^{\otimes N}$ at every
+    $N\ge 1$, and not strongly $\sigma_x\otimes\sigma_x$-symmetric.
+\end{theorem}
+
+\begin{proof}\leanok
+    On the support of $\rho^{(N)}(R)$ the second qubit of each site equals
+    the first qubit of the next site, so the product of the $\sigma_z$ signs
+    is a square. Flipping every qubit preserves the support and the weight
+    matrix. At $N=1$ the entries of $\rho^{(1)}$ on the two supported
+    configurations are in the ratio $16:9$, and those of the flipped
+    operator in the ratio $9:16$.
+\end{proof}
+
+\begin{theorem}[Pauli symmetries of the twisted quantum dimer]\label{thm:mpdo_twisted_dimer_symmetries}
+    \lean{MPOTensor.TwistedDimer.sigmaZZ, MPOTensor.TwistedDimer.sigmaZF,
+        MPOTensor.TwistedDimer.flipXX, MPOTensor.TwistedDimer.flipXXZF,
+        MPOTensor.TwistedDimer.isStrongMPOSymmetry_sigmaZZ,
+        MPOTensor.TwistedDimer.isStrongMPOSymmetry_flipXXZF,
+        MPOTensor.TwistedDimer.isWeakMPOSymmetry_flipXX,
+        MPOTensor.TwistedDimer.isWeakMPOSymmetry_sigmaZF,
+        MPOTensor.TwistedDimer.not_isStrongSymmetry_flipXX_one,
+        MPOTensor.TwistedDimer.not_isStrongMPOSymmetry_flipXX,
+        MPOTensor.TwistedDimer.not_isStrongSymmetry_sigmaZF_one,
+        MPOTensor.TwistedDimer.not_isStrongMPOSymmetry_sigmaZF}
+    \leanok
+    \uses{def:mpdo_strong_weak_symmetry, def:mpdo_twisted_dimer_tensor,
+        thm:mpdo_twisted_dimer_ismpdo}
+    Each site of the twisted quantum dimer $T$ carries a left qubit, a right
+    qubit and a flag qubit, with Pauli operators indexed by $\ell$, $r$ and
+    $f$. At every $N\ge 1$ the operators $\rho^{(N)}(T)$ are strongly
+    symmetric with eigenvalue $1$ under $(Z_\ell Z_r)^{\otimes N}$ and under
+    $(X_\ell X_rZ_f)^{\otimes N}$, and weakly symmetric under
+    $(X_\ell X_r)^{\otimes N}$ and under $Z_f^{\otimes N}$. Neither of the
+    last two is a strong symmetry.
+\end{theorem}
+
+\begin{proof}\leanok
+    On the support of $\rho^{(N)}(T)$ the right qubit of each site equals the
+    left qubit of the next, so the product of the $Z_\ell Z_r$ signs is a
+    square. Flipping the left and right qubits preserves the support and exchanges the
+    two bond matrices, and the flag sign exchanges the two flag signs, which
+    gives the second strong symmetry. The one-site coefficients are diagonal
+    in the flag qubit, which gives the weak $Z_f$ symmetry. At $N=1$ the
+    two flag sectors carry entries of opposite sign under both weak
+    symmetries, so neither is strong.
+\end{proof}
