@@ -46,10 +46,6 @@ namespace MPOTensor
 
 variable {d D₁ D₂ D₃ : ℕ}
 
-private theorem exists_eq_ofFn (w : List (Fin d)) :
-    ∃ L, ∃ σ : Fin L → Fin d, w = List.ofFn σ :=
-  ⟨_, _, (List.ofFn_get w).symm⟩
-
 /-! ### Reductions through one bond factor -/
 
 /-- **Reducing the state inside an action tensor.** If `(V, W)` reduces `B` onto `A`, then
@@ -63,7 +59,7 @@ theorem _root_.MPSTensor.IsReduction.actTensor_idKron (T : MPOTensor d D₃)
     MPSTensor.IsReduction (actTensor T B) (actTensor T A) (idKron D₃ V) (idKron D₃ W) := by
   rw [MPSTensor.IsReduction.iff_forall_evalWord]
   intro w
-  obtain ⟨L, σ, rfl⟩ := exists_eq_ofFn w
+  obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [evalWord_actTensor, evalWord_actTensor, idKron, idKron, Matrix.submatrix_mul_equiv,
     Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul]
   congr 1
@@ -84,7 +80,7 @@ theorem _root_.MPSTensor.IsReduction.actTensor_kronId {X : MPOTensor d D₂}
     MPSTensor.IsReduction (actTensor X B) (actTensor Y B) (kronId V D₃) (kronId W D₃) := by
   rw [MPSTensor.IsReduction.iff_forall_evalWord]
   intro w
-  obtain ⟨L, σ, rfl⟩ := exists_eq_ofFn w
+  obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [evalWord_actTensor, evalWord_actTensor, kronId, kronId, Matrix.submatrix_mul_equiv,
     Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul]
   congr 1
@@ -189,7 +185,7 @@ theorem actTensor_mul_kronId_of_intertwine {X' : MPOTensor d D₁} {X : MPOTenso
 
 /-! ### Lifting dressed proportionality -/
 
-/-- **Lifting a dressed proportionality through the operator layer.** If
+/-- **Lifting a dressed proportionality through the operator bond.** If
 `V B^w = z V' B^w` for long words, then `(1 ⊗ V) (T · B)^w = z (1 ⊗ V') (T · B)^w` for
 words of the same lengths.
 
@@ -202,7 +198,7 @@ theorem _root_.MPSTensor.IsDressedProportional.actTensor_idKron (T : MPOTensor d
     MPSTensor.IsDressedProportional (actTensor T B) (idKron D₃ V) (idKron D₃ V') z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
-  obtain ⟨L, σ, rfl⟩ := exists_eq_ofFn w
+  obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [List.length_ofFn] at hw
   rw [evalWord_actTensor, idKron, idKron, Matrix.submatrix_mul_equiv,
     Matrix.submatrix_mul_equiv]
@@ -218,7 +214,7 @@ theorem _root_.MPSTensor.IsDressedProportional.actTensor_idKron (T : MPOTensor d
   simp only [key, ← Finset.smul_sum]
   rfl
 
-/-- **Lifting a dressed proportionality through the state layer.** If the pair-alphabet view
+/-- **Lifting a dressed proportionality through the state bond.** If the pair-alphabet view
 of `X` satisfies `V X^u = z V' X^u` for long pair words, then
 `(V ⊗ 1) (X · B)^w = z (V' ⊗ 1) (X · B)^w` for words of the same lengths.
 
@@ -231,7 +227,7 @@ theorem _root_.MPSTensor.IsDressedProportional.actTensor_kronId {X : MPOTensor d
     MPSTensor.IsDressedProportional (actTensor X B) (kronId V D₃) (kronId V' D₃) z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
-  obtain ⟨L, σ, rfl⟩ := exists_eq_ofFn w
+  obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [List.length_ofFn] at hw
   rw [evalWord_actTensor, kronId, kronId, Matrix.submatrix_mul_equiv,
     Matrix.submatrix_mul_equiv]
