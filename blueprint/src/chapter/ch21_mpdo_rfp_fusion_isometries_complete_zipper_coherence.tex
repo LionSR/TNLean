@@ -103,6 +103,8 @@
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         exists_pairCompression_remainder_eq_zero_of_star}
     \lean{MPOTensor.CompleteZipperFusionFamily.ofStar}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        exists_ofStar_fusionTensor_eq}
     \leanok
     \uses{def:mpdo_complete_zipper_fusion_family, thm:asym_multiblock}
     Let $B_a^{ij}$, $a\in\Lambda$, be injective MPO blocks of positive bond
@@ -131,7 +133,7 @@
     reconstruction (\ref{eq:rfp_fusion_reconstruction}). Multiplying the
     reconstruction by $X^c_{ab,\mu}$ on the right, or by $X^{c+}_{ab,\mu}$ on
     the left, and using biorthogonality gives the two zipper identities.
-    In the star-closed case the word module of each product is semisimple, so
+    In the star-closed case the word-algebra module of each product is semisimple, so
     its multi-block compression can be chosen with vanishing remainder.
 \end{proof}
 

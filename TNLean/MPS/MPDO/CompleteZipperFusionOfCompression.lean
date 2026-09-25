@@ -31,7 +31,8 @@ associativity analysis (lines 193--200 and 247).  The star-closed case supplies 
   fusion tensors and left inverses are the pairs of split multi-block compressions of the
   pairwise products.
 * `MPOTensor.CompleteZipperFusionFamily.ofStar`: the complete zipper fusion family in the
-  star-closed case, built from the split compressions of the next item.
+  star-closed case, built from the split compressions of
+  `exists_pairCompression_remainder_eq_zero_of_star`.
 
 ## Main statements
 
