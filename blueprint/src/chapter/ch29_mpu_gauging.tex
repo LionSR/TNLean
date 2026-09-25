@@ -4040,6 +4040,237 @@ Definition~\ref{def:mpug_group_representation}.
     Set $\delta=c/\sqrt d$.
 \end{proof}
 
+\subsection{The anomaly three-cocycle from fusion tensors}
+
+For matrix product operator tensors $M$ and $N$ of bond dimensions $D_M$
+and $D_N$, write $MN$ for the stacked product tensor, whose periodic operators
+are the products of those of $M$ and $N$, and write $\mathsf a$ for the
+bond associator of Definition~\ref{def:mpdo_operator_product_associator},
+the permutation from $\C^{D_1}\otimes(\C^{D_2}\otimes\C^{D_3})$, the bond
+space of $M(NP)$, to $(\C^{D_1}\otimes\C^{D_2})\otimes\C^{D_3}$, the bond
+space of $(MN)P$.
+
+\begin{lemma}[Composition of reductions]
+    \label{thm:mpug_reduction_composition}
+    \lean{MPSTensor.IsReduction.trans,
+        MPSTensor.IsReduction.mulTensor_kronId,
+        MPSTensor.IsReduction.mulTensor_idKron,
+        MPSTensor.IsReduction.mulTensor_assoc_left,
+        MPSTensor.IsReduction.mulTensor_assoc_right}
+    \leanok
+    \uses{def:mps_rectangular_reduction, def:mpdo_operator_product,
+        def:mpdo_operator_product_associator}
+    Reductions compose: if $(V_1,W_1)$ reduces $C$ onto $B$ and
+    $(V_2,W_2)$ reduces $B$ onto $A$, then $(V_2V_1,W_1W_2)$ reduces $C$
+    onto $A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
+    of $A$, then $(V\otimes\mathbf 1,W\otimes\mathbf 1)$ reduces $XP$ onto
+    $AP$ and $(\mathbf 1\otimes V,\mathbf 1\otimes W)$ reduces $PX$ onto
+    $PA$. A reduction $(V,W)$ of $M(NP)$ gives the reduction
+    $(V\mathsf a^{-1},\mathsf aW)$ of $(MN)P$, and conversely.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_operator_product_eval_word}
+    The first claim is immediate from the intertwining equations. For the
+    second, Lemma~\ref{lem:mpdo_operator_product_eval_word} expands a word of
+    $XP$ along a configuration pair $(\sigma,\tau)$ as a sum over the
+    contracted middle configurations $\rho$, and $V\otimes\mathbf 1$ and
+    $W\otimes\mathbf 1$ act on the first factor only:
+    \begin{align}
+        (V\otimes\mathbf 1)\,(XP)^{\sigma\tau}\,(W\otimes\mathbf 1)
+         & =\sum_\rho VX^{\sigma\rho}W\otimes P^{\rho\tau}
+        =\sum_\rho A^{\sigma\rho}\otimes P^{\rho\tau}
+        =(AP)^{\sigma\tau}.
+        \notag
+    \end{align}
+    The case $PX$ is the same with the factors exchanged. For the third, the
+    letters satisfy
+    $((MN)P)^{i}\,\mathsf a=\mathsf a\,(M(NP))^{i}$, so the words do too.
+\end{proof}
+
+\begin{lemma}[Scalar comparison of two reductions]
+    \label{thm:mpug_dressed_proportionality}
+    \lean{MPSTensor.IsReduction.exists_isDressedProportional,
+        MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero,
+        MPSTensor.IsDressedProportional.pullback,
+        MPSTensor.IsReduction.exists_mul_evalWord_ne_zero}
+    \leanok
+    \uses{thm:mps_reduction_boundary_dressed_uniqueness}
+    Let $A$ be normal with positive bond dimension, and let $(V,W)$ and
+    $(V',W')$ reduce $B$ onto $A$, where $B$ and $A$ generate the same
+    matrix product vectors on nonempty chains. Then there is a unique
+    $z\in\C^\times$ such that $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all
+    sufficiently long words $\mathbf w$. If
+    $XA^{\mathbf w}=z\,YA^{\mathbf w}$ for all long words, then
+    $XVB^{\mathbf w}=z\,YVB^{\mathbf w}$ for all long words.
+\end{lemma}
+
+\begin{proof}\leanok
+    Existence is Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness}.
+    Uniqueness holds because $VB^{\mathbf w}W=A^{\mathbf w}$ and a normal
+    tensor has nonzero words of every multiple of its injectivity length.
+    For the last claim, once both exterior parts of a long word
+    $\mathbf w=\mathbf p\mathbf c\mathbf q$ exceed the residual nilpotency
+    length, $VB^{\mathbf w}=A^{\mathbf p\mathbf c}VB^{\mathbf q}$.
+\end{proof}
+
+\begin{definition}[The anomaly three-cochain]
+    \label{def:mpug_anomaly_three_cochain}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation,
+        MPOTensor.GroupFamily.FusionData,
+        MPOTensor.GroupFamily.FusionData.leftV,
+        MPOTensor.GroupFamily.FusionData.rightV,
+        MPOTensor.GroupFamily.FusionData.IsAssociator,
+        MPOTensor.GroupFamily.FusionData.omega}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpdo_operator_product,
+        def:mpo_to_mps, def:mps_rectangular_reduction,
+        def:mpdo_operator_product_associator}
+    Let $\{O_g\}_{g\in G}$ be matrix product operator tensors of positive
+    bond dimension whose doubled-index tensors are normal and whose periodic
+    operators satisfy $O_g O_h=O_{gh}$ on every nonempty chain. A choice of
+    fusion tensors is, for every pair $g,h$, a reduction
+    $(F^<_{g,h},F^>_{g,h})$ of $O_gO_h$ onto $O_{gh}$. The triple product
+    $T=(O_gO_h)O_k$ reduces onto $O_{ghk}$ along the two fusion trees with
+    left boundaries
+    \begin{align}
+        V^{L} & =F^<_{gh,k}\,(F^<_{g,h}\otimes\mathbf 1),                  &
+        V^{R} & =F^<_{g,hk}\,(\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1},
+    \end{align}
+    where the target bond space of $F^<_{g,hk}$, that of $O_{g(hk)}$, is
+    identified with that of $O_{(gh)k}$ through the equality
+    $g(hk)=(gh)k$ in $G$; the same identification enters the right
+    boundaries $W^L=(F^>_{g,h}\otimes\mathbf 1)F^>_{gh,k}$ and
+    $W^R=\mathsf a(\mathbf 1\otimes F^>_{h,k})F^>_{g,hk}$.
+    The anomaly three-cochain value $\omega(g,h,k)\in\C^\times$ is the scalar with
+    $V^LT^{\mathbf w}=\omega(g,h,k)\,V^RT^{\mathbf w}$ for all long words
+    $\mathbf w$. Equivalently $T^{\mathbf w}W^R=\omega(g,h,k)\,T^{\mathbf w}W^L$
+    for the right boundaries, which is the defining display of
+    \cite{FrancoRubio2025MPUGauging} before its three-cocycle equation.
+    No normalization of $\omega$ is imposed.
+\end{definition}
+
+\begin{lemma}[The two fusion trees are reductions]
+    \label{thm:mpug_fusion_trees_reductions}
+    \lean{MPOTensor.GroupFamily.FusionData.isReduction_left,
+        MPOTensor.GroupFamily.FusionData.isReduction_right}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_reduction_composition}
+    The pairs $(V^L,W^L)$ and $(V^R,W^R)$ of
+    Definition~\ref{def:mpug_anomaly_three_cochain} are reductions of the
+    triple product $(O_gO_h)O_k$ onto $O_{ghk}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    For $(V^L,W^L)$, tensor the reduction $(F^<_{g,h},F^>_{g,h})$ with the
+    identity on the third factor and compose with $(F^<_{gh,k},F^>_{gh,k})$.
+    For $(V^R,W^R)$, tensor $(F^<_{h,k},F^>_{h,k})$ with the identity on the
+    first factor, compose with $(F^<_{g,hk},F^>_{g,hk})$, and transport along
+    the associator $\mathsf a$; all three steps are
+    Lemma~\ref{thm:mpug_reduction_composition}.
+\end{proof}
+
+\begin{theorem}[Characterization of the anomaly three-cochain]
+    \label{thm:mpug_anomaly_three_cochain_spec}
+    \lean{MPOTensor.GroupFamily.FusionData.isAssociator_omega,
+        MPOTensor.GroupFamily.FusionData.eq_omega_of_isAssociator}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_fusion_trees_reductions,
+        thm:mpug_dressed_proportionality}
+    The scalar $\omega(g,h,k)$ exists, is nonzero, and is the only scalar
+    with the dressed identity of
+    Definition~\ref{def:mpug_anomaly_three_cochain}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:mpug_fusion_trees_reductions} both fusion trees are
+    reductions of $T$ onto the normal tensor $O_{ghk}$, and $T$ and
+    $O_{ghk}$ have the same periodic operators on nonempty chains. Apply
+    Lemma~\ref{thm:mpug_dressed_proportionality}.
+\end{proof}
+
+\begin{theorem}[The anomaly three-cocycle]
+    \label{thm:mpug_anomaly_three_cocycle}
+    \lean{MPOTensor.GroupFamily.FusionData.isCocycle_omega,
+        MPOTensor.GroupFamily.FusionData.isCocycle_omega_of_isRepresentation}
+    \leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
+    For every $g,h,k,l\in G$,
+    \begin{align}
+        \omega(gh,k,l)\,\omega(g,h,kl)
+         & =\omega(g,h,k)\,\omega(g,hk,l)\,\omega(h,k,l).
+        \label{eq:mpug_anomaly_three_cocycle}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
+    The five fusion trees of the fourfold product $((O_gO_h)O_k)O_l$ are
+    reductions onto $O_{ghkl}$. Two trees that differ by one change of
+    bracketing are related against long words by one value of $\omega$:
+    either directly, through Lemma~\ref{thm:mpug_reduction_composition}
+    with an identity factor, or after pulling back along a fusion tensor
+    by Lemma~\ref{thm:mpug_dressed_proportionality}. Write
+    $\mathsf a_{p,q,r}$ for $\mathsf a$ on $\C^p\otimes\C^q\otimes\C^r$.
+    Identifying the boundaries uses the naturality of $\mathsf a$, for
+    $X\colon\C^n\to\C^m$,
+    \begin{align}
+        \mathsf a^{-1}_{m,q,r}\,(X\otimes\mathbf 1_q\otimes\mathbf 1_r)
+         & =(X\otimes\mathbf 1_{qr})\,\mathsf a^{-1}_{n,q,r},
+        \notag                                                                  \\
+        \mathsf a^{-1}_{p,m,r}\,(\mathbf 1_p\otimes X\otimes\mathbf 1_r)
+         & =(\mathbf 1_p\otimes(X\otimes\mathbf 1_r))\,\mathsf a^{-1}_{p,n,r},
+        \notag                                                                  \\
+        \mathsf a^{-1}_{p,q,m}\,(\mathbf 1_{pq}\otimes X)
+         & =(\mathbf 1_p\otimes(\mathbf 1_q\otimes X))\,\mathsf a^{-1}_{p,q,n},
+        \notag
+    \end{align}
+    and the pentagon identity for the reassociation permutations,
+    \begin{align}
+        (\mathbf 1_p\otimes\mathsf a^{-1}_{q,r,s})\,\mathsf a^{-1}_{p,qr,s}\,
+        (\mathsf a^{-1}_{p,q,r}\otimes\mathbf 1_s)
+         & =\mathsf a^{-1}_{p,q,rs}\,\mathsf a^{-1}_{pq,r,s}.
+        \notag
+    \end{align}
+    The two paths around the pentagon
+    compare the same pair of trees, and uniqueness of the scalar on a
+    nonvanishing word gives (\ref{eq:mpug_anomaly_three_cocycle}).
+\end{proof}
+
+\begin{theorem}[Independence of the fusion tensors]
+    \label{thm:mpug_anomaly_three_cocycle_gauge}
+    \lean{MPOTensor.GroupFamily.FusionData.relativeScalar,
+        MPOTensor.GroupFamily.FusionData.isDressedProportional_relativeScalar,
+        MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge,
+        MPOTensor.GroupFamily.FusionData.omega_cohomologousTo}
+    \leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
+    Let $\omega$ and $\omega'$ come from two choices of fusion tensors, and
+    let $\beta_{g,h}\in\C^\times$ be the scalar with
+    $F^<_{g,h}B^{\mathbf w}=\beta_{g,h}F'^<_{g,h}B^{\mathbf w}$ for all long
+    words of $B=O_gO_h$. Then
+    \begin{align}
+        \omega'(g,h,k)
+         & =\frac{\beta_{g,hk}\,\beta_{h,k}}{\beta_{g,h}\,\beta_{gh,k}}
+        \,\omega(g,h,k),
+    \end{align}
+    so the cohomology class of $\omega$ does not depend on the fusion
+    tensors, as in (\ref{eq:mpug_fusion_gauge}).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
+    The left boundaries of the two choices of the tree fusing $g$ with $h$
+    first differ by $\beta_{g,h}\beta_{gh,k}$, and those of the tree fusing
+    $h$ with $k$ first by $\beta_{h,k}\beta_{g,hk}$, by the two parts of
+    Lemma~\ref{thm:mpug_dressed_proportionality}. Compare with
+    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
+\end{proof}
+
 \subsection{Normalization of the first source factor}
 
 \begin{theorem}[The raw first-cut contraction]
@@ -5649,6 +5880,115 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     the constant cochain $1$.
 \end{definition}
 
+\begin{definition}[Cyclic invariant of a scalar three-cochain]
+    \label{def:mpug_cyclic_invariant}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For a scalar $3$-cochain $\omega$, an element $g\in G$, and a natural
+    number $n$, set
+    \begin{align}
+        I_{g,n}(\omega)
+         & =\prod_{k=0}^{n-1}\omega(g,g^k,g).
+        \label{eq:mpug_cyclic_invariant}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Gauge invariance of the cyclic invariant]
+    \label{thm:mpug_cyclic_invariant_gauge}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_coboundary,
+        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_fusionGauge,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.cyclicInvariant_eq,
+        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_eq_one_of_isTrivialGaugeClass,
+        TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one}
+    \leanok
+    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    Let $g^n=e$. For every scalar $2$-cochain $\beta$,
+    \begin{align}
+        I_{g,n}(d\beta)                              & =1,               \\
+        I_{g,n}(\beta\mathbin{\triangleright}\omega) & =I_{g,n}(\omega).
+    \end{align}
+    Consequently cohomologous $3$-cochains have the same cyclic invariant,
+    every $3$-cochain with trivial gauge class has $I_{g,n}(\omega)=1$, and a
+    cyclic invariant different from $1$ shows that the gauge class of
+    $\omega$ is nontrivial. No normalization of $\beta$ or $\omega$ is
+    assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    By (\ref{eq:mpug_coboundary}),
+    \begin{align}
+        (d\beta)(g,g^k,g)
+         & =\frac{\beta(g,g^{k+1})}{\beta(g,g^k)}\cdot
+        \frac{\beta(g^k,g)}{\beta(g^{k+1},g)}.
+    \end{align}
+    Both quotients telescope over $k=0,\dots,n-1$, giving
+    $\beta(g,g^n)/\beta(g,e)$ and $\beta(e,g)/\beta(g^n,g)$, which equal $1$
+    because $g^n=e$. Multiplying by $\omega$ pointwise proves the second
+    identity, and the remaining statements follow from
+    Definitions~\ref{def:mpug_cohomologous_to}
+    and~\ref{def:mpug_trivial_gauge_class}.
+\end{proof}
+
+\begin{definition}[Restriction of scalar three-cochains]
+    \label{def:mpug_cochain_restriction}
+    \lean{TNLean.Algebra.ScalarThreeCochain.comap,
+        TNLean.Algebra.ScalarThreeCochain.comap_apply}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For a group homomorphism $f\colon H\to G$, the restriction of a scalar
+    $3$-cochain $\omega$ on $G$ is
+    $(f^*\omega)(a,b,c)=\omega(f(a),f(b),f(c))$.
+\end{definition}
+
+\begin{theorem}[Restriction preserves cocycles and gauge classes]
+    \label{thm:mpug_cochain_restriction}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle.comap,
+        TNLean.Algebra.ScalarThreeCochain.comap_fusionGauge,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.comap,
+        TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass.comap}
+    \leanok
+    \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        def:mpug_trivial_gauge_class}
+    Restriction along $f$ sends $3$-cocycles to $3$-cocycles and satisfies
+    $f^*(\beta\mathbin{\triangleright}\omega)
+        =(f^*\beta)\mathbin{\triangleright}f^*\omega$, where
+    $(f^*\beta)(a,b)=\beta(f(a),f(b))$. Hence it preserves the relation of
+    being cohomologous and sends cochains with trivial gauge class to
+    cochains with trivial gauge class.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        def:mpug_trivial_gauge_class}
+    Since $f(ab)=f(a)f(b)$, for all $a,b,c,d\in H$
+    \begin{align}
+        (f^*\omega)(ab,c,d)\,(f^*\omega)(a,b,cd)
+         & =\omega\bigl(f(a)f(b),f(c),f(d)\bigr)\,
+        \omega\bigl(f(a),f(b),f(c)f(d)\bigr),
+        \notag                                                              \\
+        (d f^*\beta)(a,b,c)
+         & =\frac{\beta\bigl(f(a),f(b)f(c)\bigr)\beta\bigl(f(b),f(c)\bigr)}
+        {\beta\bigl(f(a),f(b)\bigr)\beta\bigl(f(a)f(b),f(c)\bigr)}
+        =(d\beta)\bigl(f(a),f(b),f(c)\bigr).
+        \notag
+    \end{align}
+    The first line and the corresponding expansion of the right-hand side
+    of (\ref{eq:mpug_three_cocycle}) turn the cocycle relation for $f^*\omega$
+    into (\ref{eq:mpug_three_cocycle}) at $f(a),f(b),f(c),f(d)$. The second
+    line, which is (\ref{eq:mpug_coboundary}) evaluated at $f(a),f(b),f(c)$,
+    gives $d(f^*\beta)=f^*(d\beta)$, hence
+    $f^*(\beta\mathbin{\triangleright}\omega)
+        =(f^*\beta)\mathbin{\triangleright}f^*\omega$. The last two claims
+    follow from Definitions~\ref{def:mpug_cohomologous_to}
+    and~\ref{def:mpug_trivial_gauge_class}.
+\end{proof}
+
 \begin{definition}[L-symbols and compatibility]
     \label{def:mpug_l_symbols}
     \lean{TNLean.Algebra.LSymbol,
@@ -5854,6 +6194,40 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_l_gauge_right}) and
     (\ref{eq:mpug_l_gauge_left}), from which the normalization statements
     follow.
+\end{proof}
+
+\begin{theorem}[A block fixed by a subgroup trivializes the restricted three-cocycle]
+    \label{thm:mpug_fixed_block_trivializes}
+    \lean{TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
+        TNLean.Algebra.LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_cochain_restriction,
+        def:mpug_fusion_gauge, def:mpug_trivial_gauge_class}
+    Let $L$ be compatible with $\omega$, let $f\colon H\to G$ be a group
+    homomorphism, and let $x\in\mathsf X$ satisfy $f(a)x=x$ for every
+    $a\in H$. Then $f^*\omega$ has trivial gauge class; explicitly,
+    $f^*\omega=d\lambda$ with $\lambda(a,b)=L^x_{f(a),f(b)}$. In particular,
+    if some $x$ is fixed by all of $G$, then $\omega$ has trivial gauge class.
+    This is the scalar step in the statement that a subgroup leaving a block
+    invariant trivializes the three-cocycle
+    \cite[lines~740--745]{GarreRubio2023MPOSym}, and in the statement that a
+    single invariant block reduces (\ref{eq:mpug_l_compatibility}) to the
+    three-coboundary condition \cite[line~1925]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_symbols, def:mpug_fusion_gauge,
+        def:mpug_cochain_restriction, def:mpug_trivial_gauge_class}
+    For $a,b,c\in H$ put $g=f(a)$, $h=f(b)$, $k=f(c)$. Since $kx=x$,
+    (\ref{eq:mpug_l_compatibility}) reads
+    \begin{align}
+        \omega(g,h,k)
+         & =\frac{L^x_{g,hk}L^x_{h,k}}{L^x_{g,h}L^x_{gh,k}},
+    \end{align}
+    which is $(d\lambda)(a,b,c)$ by (\ref{eq:mpug_coboundary}) and the
+    multiplicativity of $f$. Thus
+    $f^*\omega=\lambda\mathbin{\triangleright}1$. For a block fixed by all
+    of $G$, take $f$ to be the identity.
 \end{proof}
 
 \begin{theorem}[Action of the restricted scalar gauge group]

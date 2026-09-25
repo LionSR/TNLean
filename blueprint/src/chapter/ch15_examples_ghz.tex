@@ -4,9 +4,105 @@
 The Greenberger--Horne--Zeilinger (GHZ)
 state~\cite{GreenbergerHorneZeilinger1989,Greenberger1990Bell} is the
 prototypical non-injective, renormalization-fixed-point
-MPS~\cite[Section~III.A]{Cirac2021Matrix}.
+MPS~\cite[Section~III.A]{Cirac2021Matrix}. On a $d$-level system it is an MPS
+with bond dimension $d$~\cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
 
-\begin{definition}[GHZ tensor]\label{def:ghz_tensor}
+\begin{definition}[GHZ tensor on a $d$-level system]\label{def:ghz_tensor_d}
+    \lean{MPSTensor.ghzTensorD,
+        MPSTensor.ghzTensorD_apply,
+        MPSTensor.ghzTensorD_eq_diagonal}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $D = d$. The GHZ tensor on a $d$-level system is the family
+    $\{A^i\}_{i=0}^{d-1}\subset\MN{d}$ with entries
+    \begin{align}
+        A^{i}_{\alpha\beta} & = \delta_{i=\alpha=\beta},
+        \notag
+    \end{align}
+    that is, $A^i=\ketbra{i}{i}$~\cite[Appendix~A, ``The GHZ
+        state'']{Cirac2021Matrix}.
+\end{definition}
+
+\begin{definition}[GHZ state]\label{def:ghz_state_d}
+    \lean{MPSTensor.ghzStateD}
+    \leanok
+    The (unnormalized) GHZ state on $N$ sites of a $d$-level system is
+    \begin{align}
+        \ket{\mathrm{GHZ}} & = \sum_{i=0}^{d-1}\ket{i,i,\ldots,i}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The GHZ state is an MPS]\label{thm:ghz_d_mpv}
+    \lean{MPSTensor.mpv_ghzTensorD}
+    \leanok
+    \uses{def:ghz_tensor_d, def:ghz_state_d, def:mpv}
+    For every $N$, the matrix product vector of the tensor of
+    Definition~\ref{def:ghz_tensor_d} on $N$ sites is the GHZ state
+    $\sum_{i=0}^{d-1}\ket{i,\ldots,i}$~\cite[Appendix~A, ``The GHZ
+        state'']{Cirac2021Matrix}. For $N=0$ both sides equal $d$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A product $A^{\sigma_1}\cdots A^{\sigma_N}$ is the diagonal matrix whose
+    $x$-th entry is $1$ if $\sigma_1=\cdots=\sigma_N=x$ and $0$ otherwise; its
+    trace counts the $x$ with this property.
+\end{proof}
+
+\begin{theorem}[GHZ transfer map on a $d$-level system]\label{thm:ghz_d_transfer}
+    \lean{MPSTensor.ghzTensorD_transferMap,
+        MPSTensor.ghzTensorD_isTransferIdempotent}
+    \leanok
+    \uses{def:ghz_tensor_d, def:transfer_map, def:mps_transfer_idempotence}
+    The transfer map of the GHZ tensor on a $d$-level system extracts the
+    diagonal, $\E_A(X)_{\alpha\beta}=\delta_{\alpha\beta}X_{\alpha\alpha}$. In
+    particular $\E_A^2=\E_A$, so the tensor is a renormalization fixed point.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $A^i=\ketbra{i}{i}$, the term $A^iX(A^i)^\dagger$ is
+    $X_{ii}\ketbra{i}{i}$. Extracting the diagonal is idempotent.
+\end{proof}
+
+\begin{theorem}[GHZ tensor is not injective for $d\ge2$]\label{thm:ghz_d_not_injective}
+    \lean{MPSTensor.ghzTensorD_not_isInjective}
+    \leanok
+    \uses{def:ghz_tensor_d, def:injective}
+    For $d\ge2$ the GHZ tensor on a $d$-level system is not injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every $A^i$ has vanishing $(0,1)$ entry, while the all-ones matrix does not.
+\end{proof}
+
+\begin{theorem}[Permutation and $\Z_d$ on-site symmetry]\label{thm:ghz_d_symmetric}
+    \lean{MPSTensor.ghzTensorD_isOnSiteSymmetric_perm,
+        MPSTensor.ghzCyclicShiftAction,
+        MPSTensor.ghzTensorD_isOnSiteSymmetric_cyclic}
+    \leanok
+    \uses{def:ghz_tensor_d, def:on_site_symmetric, thm:ghz_d_mpv}
+    Let the symmetric group on $\{0,\ldots,d-1\}$ act on $\C^d$ by permutation
+    matrices. The GHZ tensor on a $d$-level system is on-site symmetric under
+    this action, and in particular under the cyclic group $\Z_d$ acting by the
+    cyclic shift $\ket{i}\mapsto\ket{i+1 \bmod d}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_d_mpv}
+    The twisted tensor of a permutation $\pi$ is the relabelling
+    $i\mapsto A^{\pi^{-1}(i)}$, so its matrix product vector is the GHZ state
+    evaluated on the relabelled configuration, which equals the GHZ state.
+\end{proof}
+
+For $d=2$ the tensor of Definition~\ref{def:ghz_tensor_d} is the two-level GHZ
+tensor of Definition~\ref{def:ghz_tensor}, which is the representative used in
+the rest of this section.
+
+\begin{definition}[Two-level GHZ tensor]\label{def:ghz_tensor}
     \lean{MPSTensor.ghzTensor,
         MPSTensor.ghzTensor_apply}
     \leanok
@@ -26,6 +122,19 @@ MPS~\cite[Section~III.A]{Cirac2021Matrix}.
         \notag
     \end{align}
 \end{definition}
+
+\begin{lemma}[The two-level case]\label{lem:ghz_tensor_d_two}
+    \lean{MPSTensor.ghzTensorD_two}
+    \leanok
+    \uses{def:ghz_tensor_d, def:ghz_tensor}
+    The GHZ tensor on a $d$-level system with $d=2$ is the tensor of
+    Definition~\ref{def:ghz_tensor}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both tensors have $A^i=\ketbra{i}{i}$ for $i\in\{0,1\}$.
+\end{proof}
 
 \begin{definition}[Two-site computational vector]\label{def:two_site_ket}
     \lean{MPSTensor.twoSiteKet}
