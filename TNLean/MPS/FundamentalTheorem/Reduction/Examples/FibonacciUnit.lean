@@ -29,6 +29,13 @@ every extension splits. Together with the fusion rule this realises the full mul
 of the Fibonacci fusion ring on the periodic operators, `O_1^2 = O_1`, `O_1 O_τ = O_τ O_1 = O_τ`,
 `O_τ^2 = O_1 + O_τ`.
 
+**Local fix (positive length):** the source derives the fusion rules, among them the unit laws,
+from the projector identity required for all `L` (`References/1511.08090/AnyonsPEPS.tex`
+lines 152–160); at `L = 0` the periodic operators are the bond dimensions `2` and `3`, and
+`O_1^0 O_1^0 = 4 ≠ 2`, `O_1^0 O_τ^0 = O_τ^0 O_1^0 = 6 ≠ 3`. The empty chain is read as a
+degenerate case, and the unit laws are stated for every positive length; documented in
+`docs/paper-gaps/bmwshv17_fibonacci_projector_positive_length.tex`.
+
 ## Main definitions
 
 * `FibonacciCompression.fibOneOneStack`, `FibonacciCompression.fibOneTauStack`,
