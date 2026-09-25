@@ -197,7 +197,7 @@ outside the `b_p × b_{p+1}` block and isometric on it, together with a right
 vector `r'` supported on the first `b_n` levels, such that
 `Rm P₀(τ₀) ⋯ P_{n-1}(τ_{n-1}) r = Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) r'` for every
 configuration `τ`. The last remainder `r'` is the source's
-`|φ_I⟩ = M_{[1]} |φ̃_I⟩`. -/
+`|φ_I⟩ = M_{[1]} |φ'_I⟩`. -/
 theorem exists_isometric_chain : ∀ (n a : ℕ), a ≤ D →
     ∀ (Rm : Matrix (Fin D) (Fin D) ℂ), RowSupp a Rm →
     ∀ (P : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ) (r : Fin D → ℂ),
@@ -645,7 +645,7 @@ open-boundary representation of bond dimension at most `D` in which every site
 satisfies `∑_i A_i^† A_i = 1`.
 
 This is the successive-decomposition construction of arXiv:quant-ph/0501096,
-eq. `induction`, with the last remainder `M_{[1]} |φ̃_I⟩` of norm one, as in the
+eq. `induction`, with the last remainder `M_{[1]} |φ'_I⟩` of norm one, as in the
 deterministic part of arXiv:quant-ph/0608197, Theorem `Thm:seqwith`
 (lines 1569--1578). -/
 theorem exists_isometric_coeff_eq_of_norm {n : ℕ} (B : OBCChainTensor d D (n + 1))
