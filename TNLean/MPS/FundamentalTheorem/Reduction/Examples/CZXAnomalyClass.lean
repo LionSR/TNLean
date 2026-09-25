@@ -113,8 +113,8 @@ theorem mulTensor_idTensor_left (M : MPOTensor 2 2) :
     decide
   funext i j
   ext r c
-  simp [mulTensor_apply, MPOTensor.idTensor, Fin.sum_univ_two, Matrix.kroneckerMap_apply, h]
-  fin_cases i <;> fin_cases j <;> simp
+  fin_cases i <;> fin_cases j <;>
+    simp [mulTensor_apply, MPOTensor.idTensor, Fin.sum_univ_two, Matrix.kroneckerMap_apply, h]
 
 /-- The product of a bond-two tensor with the identity tensor is that tensor. -/
 theorem mulTensor_idTensor_right (M : MPOTensor 2 2) :
@@ -123,8 +123,8 @@ theorem mulTensor_idTensor_right (M : MPOTensor 2 2) :
     decide
   funext i j
   ext r c
-  simp [mulTensor_apply, MPOTensor.idTensor, Fin.sum_univ_two, Matrix.kroneckerMap_apply, h]
-  fin_cases i <;> fin_cases j <;> simp
+  fin_cases i <;> fin_cases j <;>
+    simp [mulTensor_apply, MPOTensor.idTensor, Fin.sum_univ_two, Matrix.kroneckerMap_apply, h]
 
 /-- The product of two identity tensors is the identity tensor. -/
 theorem mulTensor_idTensor_idTensor :
@@ -344,7 +344,8 @@ theorem czx_leftTree_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
               rw [czx_pair _ czx_left_pair_int]
               simp only [Matrix.mul_assoc]
             _ = (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube.toMPSTensor a *
-                czxDecoratedCube.toMPSTensor b * Kraus.evalWord czxDecoratedCube.toMPSTensor w) := by
+                czxDecoratedCube.toMPSTensor b *
+                  Kraus.evalWord czxDecoratedCube.toMPSTensor w) := by
               rw [ih', czx_pair _ czx_right_pair_int, Matrix.mul_smul]
               simp only [Matrix.mul_assoc]
             _ = _ := by simp only [Kraus.evalWord_cons, Matrix.mul_assoc]
