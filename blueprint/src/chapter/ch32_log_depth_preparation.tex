@@ -168,8 +168,9 @@ injective.
     Let $M=WQ$ with $Q\ge0$, and suppose $W^\dagger W=E$ for the orthogonal
     projector $E$ onto the range of $Q$. Then $Q=(M^\dagger M)^{1/2}$, $E$ is the
     support projector of $M$, and $W$ is the partial isometry of the polar
-    decomposition of $M$. This is the uniqueness invoked after
-    \cite[eq.~(16)]{Malz2024Preparation}.
+    decomposition of $M$. This is the step needed to identify the layers of
+    \cite[eq.~(16)]{Malz2024Preparation} with the isometry of the blocked
+    tensor, which the source asserts (``to the same effect'') without proof.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -183,16 +184,16 @@ injective.
 \begin{theorem}[Tree factorization]
     \label{thm:ldp_tree_factorization}
     \lean{MPSTensor.treeTensor, MPSTensor.treePosTensor,
-        MPSTensor.treeIsoMatrix, MPSTensor.blockKronRect,
+        MPSTensor.treeIsoMatrix, MPSTensor.blockKron,
         MPSTensor.blockTensor_eq_rotatePhysical_treeIsoMatrix,
         MPSTensor.physicalMatrix_blockTensor_eq_treeIsoMatrix_mul,
-        MPSTensor.conjTranspose_blockKronRect_polarIsoMatrix_mul_self,
+        MPSTensor.conjTranspose_blockKron_polarIsoMatrix_mul_self,
         MPSTensor.conjTranspose_treeIsoMatrix_mul_self,
         MPSTensor.polarIsoMatrix_blockTensor_eq_treeIsoMatrix,
         MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor}
     \leanok
     \uses{thm:ldpolar_tensor_decomposition, lem:ldpolar_physical_matrix_rotate,
-        lem:ldp_polar_uniqueness}
+        lem:physical_rotation_state, lem:ldp_polar_uniqueness}
     Put $T_0=A$ and, for $j\ge1$, let $\mathcal B^{(j)}=V^{(j)}P_j$ be the polar
     decomposition of the two-site blocked map of $T_{j-1}$, with
     $V^{(j)\dagger}V^{(j)}=\Pi_j$ the support projector of $P_j$, and let $T_j$
@@ -211,8 +212,12 @@ injective.
     $\bigl(V^{(j)}\bigr)^{\otimes m}$ is a partial isometry with initial
     projector $\Pi_j^{\otimes m}$. The product of the
     layers is a partial isometry with initial space the range of $P_k$, so by
-    uniqueness of the polar decomposition it equals $V$ and $P_k=P_q$. This is
-    \cite[eq.~(16)]{Malz2024Preparation}.
+    uniqueness of the polar decomposition it equals $V$ and $P_k=P_q$. The
+    factorization (\ref{eq:ldp_tree_factorization}) is
+    \cite[eq.~(16)]{Malz2024Preparation}, where the tree is said to act ``to the
+    same effect'' as blocking directly; the identification with the polar
+    decomposition of the blocked map is left implicit there and is supplied
+    here.
 \end{theorem}
 \begin{proof}
     \leanok

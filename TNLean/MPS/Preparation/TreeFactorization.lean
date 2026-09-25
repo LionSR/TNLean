@@ -32,8 +32,8 @@ the block of `2^{k+1}` sites.
 
 ## Main declarations
 
-* `MPSTensor.blockKronRect` — the Kronecker power `W^{⊗L}` of a rectangular physical map,
-  acting on length-`L` blocks.
+* `MPSTensor.blockKron` (from `TNLean.MPS.Core.Blocking`) — the Kronecker power `W^{⊗L}` of a
+  rectangular physical map, acting on length-`L` blocks.
 * `MPSTensor.blockTensor_rotatePhysical` — blocking commutes with physical maps:
   `(W · C)` blocked `L` times is `W^{⊗L}` applied to `C` blocked `L` times.
 * `MPSTensor.treeTensor`, `MPSTensor.treePosTensor`, `MPSTensor.treeIsoMatrix` — the chain
@@ -57,42 +57,7 @@ namespace MPSTensor
 
 variable {n m p D : ℕ}
 
-/-! ### Kronecker powers of rectangular physical maps -/
-
-/-- The Kronecker power `W^{⊗L}` of a rectangular matrix `W : ℂⁿ → ℂᵐ` acting on length-`L`
-blocks: `(W^{⊗L})_{IJ} = ∏ₜ W_{I_t J_t}`.  For square `W` this is `MPSTensor.blockKron`.
-
-arXiv:2307.01696, eq. (16): the layers `(V⁽ʲ⁾)^{⊗2^{k-j}}`. -/
-noncomputable def blockKronRect (L : ℕ) (W : Matrix (Fin m) (Fin n) ℂ) :
-    Matrix (Fin (blockPhysDim m L)) (Fin (blockPhysDim n L)) ℂ :=
-  fun I J => ∏ t : Fin L, W (decodeBlock m L I t) (decodeBlock n L J t)
-
-/-- For a square matrix, `blockKronRect` is `blockKron`. -/
-lemma blockKronRect_eq_blockKron (L : ℕ) (P : Matrix (Fin n) (Fin n) ℂ) :
-    blockKronRect L P = blockKron L P := rfl
-
-/-- The Kronecker power is multiplicative: `W^{⊗L} W'^{⊗L} = (W W')^{⊗L}`. -/
-lemma blockKronRect_mul (L : ℕ) (W : Matrix (Fin m) (Fin n) ℂ) (W' : Matrix (Fin n) (Fin p) ℂ) :
-    blockKronRect L W * blockKronRect L W' = blockKronRect L (W * W') := by
-  classical
-  ext I J
-  simp only [blockKronRect, Matrix.mul_apply]
-  rw [← Equiv.sum_comp (decodeBlockEquiv n L).symm
-    (fun K => (∏ t : Fin L, W (decodeBlock m L I t) (decodeBlock n L K t)) *
-      ∏ t : Fin L, W' (decodeBlock n L K t) (decodeBlock p L J t))]
-  simp only [decodeBlock_decodeBlockEquiv_symm]
-  rw [Finset.prod_univ_sum (t := fun _ : Fin L => (Finset.univ : Finset (Fin n)))
-    (f := fun (t : Fin L) (a : Fin n) =>
-      W (decodeBlock m L I t) a * W' a (decodeBlock p L J t)),
-    Fintype.piFinset_univ]
-  refine Finset.sum_congr rfl (fun w _ => ?_)
-  rw [Finset.prod_mul_distrib]
-
-/-- The Kronecker power commutes with the conjugate transpose. -/
-lemma blockKronRect_conjTranspose (L : ℕ) (W : Matrix (Fin m) (Fin n) ℂ) :
-    (blockKronRect L W)ᴴ = blockKronRect L Wᴴ := by
-  ext I J
-  simp only [Matrix.conjTranspose_apply, blockKronRect, star_prod]
+/-! ### Blocking commutes with physical maps -/
 
 /-- **Blocking commutes with physical maps**: blocking `W · C` over `L` sites gives
 `W^{⊗L}` applied to `C` blocked over `L` sites.
@@ -102,7 +67,7 @@ block. -/
 theorem blockTensor_rotatePhysical (W : Matrix (Fin m) (Fin n) ℂ) (C : MPSTensor n D)
     (L : ℕ) :
     blockTensor (rotatePhysical W C) L =
-      rotatePhysical (blockKronRect L W) (blockTensor C L) := by
+      rotatePhysical (blockKron L W) (blockTensor C L) := by
   classical
   funext I
   change Kraus.evalWord (rotatePhysical W C) (List.ofFn (decodeBlock m L I)) = _
@@ -168,14 +133,14 @@ noncomputable def treeIsoMatrix :
     (k : ℕ) → {n : ℕ} → MPSTensor n D → Matrix (Fin (blockPhysDim n (2 ^ (k + 1)))) (Fin (D * D)) ℂ
   | 0, _, A => polarIsoMatrix (blockTensor A 2)
   | k + 1, n, A =>
-      (blockKronRect (2 ^ (k + 1)) (polarIsoMatrix (blockTensor A 2)) *
+      (blockKron (2 ^ (k + 1)) (polarIsoMatrix (blockTensor A 2)) *
         treeIsoMatrix k (polarPosTensor (blockTensor A 2))).submatrix (pairRegroupEquiv n k) id
 
 /-- The first layer of the tree for a block of `2^{k+2}` sites is `(V⁽¹⁾)^{⊗2^{k+1}}`, followed
 by the tree of `T₁`. -/
 lemma treeIsoMatrix_succ (k : ℕ) (A : MPSTensor n D) :
     treeIsoMatrix (k + 1) A =
-      (blockKronRect (2 ^ (k + 1)) (polarIsoMatrix (blockTensor A 2)) *
+      (blockKron (2 ^ (k + 1)) (polarIsoMatrix (blockTensor A 2)) *
         treeIsoMatrix k (polarPosTensor (blockTensor A 2))).submatrix (pairRegroupEquiv n k) id :=
   rfl
 
@@ -197,7 +162,7 @@ theorem blockTensor_eq_rotatePhysical_treeIsoMatrix (k : ℕ) (A : MPSTensor n D
   | zero => exact (rotatePhysical_polarIsoMatrix_polarPosTensor (blockTensor A 2)).symm
   | succ k ih =>
       have h1 : blockTensor (blockTensor A 2) (2 ^ (k + 1)) =
-          rotatePhysical (blockKronRect (2 ^ (k + 1)) (polarIsoMatrix (blockTensor A 2)) *
+          rotatePhysical (blockKron (2 ^ (k + 1)) (polarIsoMatrix (blockTensor A 2)) *
               treeIsoMatrix k (polarPosTensor (blockTensor A 2)))
             (treePosTensor k (polarPosTensor (blockTensor A 2))) := by
         conv_lhs => rw [← rotatePhysical_polarIsoMatrix_polarPosTensor (blockTensor A 2)]
@@ -221,10 +186,10 @@ theorem physicalMatrix_blockTensor_eq_treeIsoMatrix_mul (k : ℕ) (A : MPSTensor
 
 arXiv:2307.01696, eq. (16), with the Supplemental Material, "Proof of Lemma 1 and extension to
 non-normal tensors" (`V†V = Π`). -/
-theorem conjTranspose_blockKronRect_polarIsoMatrix_mul_self (L : ℕ) (B : MPSTensor n D) :
-    (blockKronRect L (polarIsoMatrix B))ᴴ * blockKronRect L (polarIsoMatrix B) =
-      blockKronRect L (polarSupportMatrix B) := by
-  rw [blockKronRect_conjTranspose, blockKronRect_mul,
+theorem conjTranspose_blockKron_polarIsoMatrix_mul_self (L : ℕ) (B : MPSTensor n D) :
+    (blockKron L (polarIsoMatrix B))ᴴ * blockKron L (polarIsoMatrix B) =
+      blockKron L (polarSupportMatrix B) := by
+  rw [blockKron_conjTranspose, ← blockKron_mul,
     conjTranspose_polarIsoMatrix_mul_polarIsoMatrix]
 
 /-- **Range containment**: the tensor `T` of a positive part `P`, blocked over `L` sites, has
@@ -232,9 +197,9 @@ its range inside `(ran P)^{⊗L}`, that is, `Π^{⊗L}` fixes its physical matri
 is the containment `ran B⁽ʲ⁺¹⁾ ⊆ ran Pⱼ ⊗ ran Pⱼ` used in the tree.
 
 arXiv:2307.01696, eq. (16): each layer is applied inside the initial space of the next. -/
-theorem blockKronRect_polarSupportMatrix_mul_physicalMatrix_blockTensor (L : ℕ)
+theorem blockKron_polarSupportMatrix_mul_physicalMatrix_blockTensor (L : ℕ)
     (B : MPSTensor n D) :
-    blockKronRect L (polarSupportMatrix B) *
+    blockKron L (polarSupportMatrix B) *
         physicalMatrix (blockTensor (polarPosTensor B) L) =
       physicalMatrix (blockTensor (polarPosTensor B) L) := by
   rw [← physicalMatrix_rotatePhysical, ← blockTensor_rotatePhysical,
@@ -262,8 +227,9 @@ private lemma mul_polarSupportMatrix_eq_zero {r : ℕ} {Y : Matrix (Fin r) (Fin 
 /-- **The product of the layers is a partial isometry** whose initial projector is the support
 projector of `P_{k+1}`.
 
-arXiv:2307.01696, text after eq. (16): the product of the layers "is a partial isometry with
-initial space the range of `P_k`". -/
+Supplied step for arXiv:2307.01696, eq. (16), which the source leaves implicit; it is the
+tree analogue of `V†V = Π` for `Π` the projector onto the image of `P` (arXiv:2307.01696,
+Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors"). -/
 theorem conjTranspose_treeIsoMatrix_mul_self (k : ℕ) (A : MPSTensor n D) :
     (treeIsoMatrix k A)ᴴ * treeIsoMatrix k A = treeSupportMatrix k A := by
   induction k generalizing n with
@@ -272,15 +238,15 @@ theorem conjTranspose_treeIsoMatrix_mul_self (k : ℕ) (A : MPSTensor n D) :
       set B := blockTensor A 2
       set T := polarPosTensor B
       set W := treeIsoMatrix k T
-      set K := blockKronRect (2 ^ (k + 1)) (polarIsoMatrix B)
-      set S := blockKronRect (2 ^ (k + 1)) (polarSupportMatrix B)
+      set K := blockKron (2 ^ (k + 1)) (polarIsoMatrix B)
+      set S := blockKron (2 ^ (k + 1)) (polarSupportMatrix B)
       have hWW : Wᴴ * W = treeSupportMatrix k T := ih T
       have hWE : W * treeSupportMatrix k T = W :=
         Matrix.mul_eq_self_of_conjTranspose_mul_self_eq hWW
           (isHermitian_polarSupportMatrix _) (polarSupportMatrix_mul_self _)
       have hX : (S * W - W) * physicalMatrix (treePosTensor k T) = 0 := by
         rw [Matrix.sub_mul, Matrix.mul_assoc, ← physicalMatrix_blockTensor_eq_treeIsoMatrix_mul,
-          blockKronRect_polarSupportMatrix_mul_physicalMatrix_blockTensor, sub_self]
+          blockKron_polarSupportMatrix_mul_physicalMatrix_blockTensor, sub_self]
       have hXE := mul_polarSupportMatrix_eq_zero _ hX
       have hSW : S * W = W := by
         change (S * W - W) * treeSupportMatrix k T = 0 at hXE
@@ -289,7 +255,7 @@ theorem conjTranspose_treeIsoMatrix_mul_self (k : ℕ) (A : MPSTensor n D) :
       rw [treeIsoMatrix_succ, treeSupportMatrix_succ, Matrix.conjTranspose_submatrix,
         Matrix.submatrix_mul_equiv, Matrix.submatrix_id_id, Matrix.conjTranspose_mul,
         Matrix.mul_assoc, ← Matrix.mul_assoc Kᴴ,
-        conjTranspose_blockKronRect_polarIsoMatrix_mul_self, hSW, hWW]
+        conjTranspose_blockKron_polarIsoMatrix_mul_self, hSW, hWW]
 
 /-! ### Identification with the polar decomposition of the blocked tensor -/
 
@@ -316,8 +282,9 @@ private lemma treeFactorization_uniqueness_data (k : ℕ) (A : MPSTensor n D) :
 /-- **Tree factorization, uniqueness**: the product of the `k + 1` layers is the isometry `V` of
 the polar decomposition of `A` blocked over `2^{k+1}` sites.
 
-arXiv:2307.01696, text after eq. (16): the product of the layers is a partial isometry, "so by
-uniqueness of the polar decomposition it equals `V`". -/
+arXiv:2307.01696, eq. (16) and the sentence before it: the tree layers act "to the same
+effect" as blocking directly. The identification of the product of the layers with `V` is left
+implicit in the source; here it is derived from uniqueness of the polar decomposition. -/
 theorem polarIsoMatrix_blockTensor_eq_treeIsoMatrix (k : ℕ) (A : MPSTensor n D) :
     polarIsoMatrix (blockTensor A (2 ^ (k + 1))) = treeIsoMatrix k A := by
   obtain ⟨hM, hW⟩ := treeFactorization_uniqueness_data k A
@@ -329,7 +296,9 @@ theorem polarIsoMatrix_blockTensor_eq_treeIsoMatrix (k : ℕ) (A : MPSTensor n D
 /-- **Tree factorization, uniqueness**: the positive part of `A` blocked over `2^{k+1}` sites is
 the positive part `P_{k+1}` of the last layer of the tree.
 
-arXiv:2307.01696, text after eq. (16): `P_k = P`. -/
+arXiv:2307.01696, eq. (16) and the sentence before it ("to the same effect"); the equality of
+the positive parts is left implicit in the source and is derived here from uniqueness of the
+polar decomposition. -/
 theorem polarPosTensor_blockTensor_eq_treePosTensor (k : ℕ) (A : MPSTensor n D) :
     polarPosTensor (blockTensor A (2 ^ (k + 1))) = treePosTensor k A := by
   obtain ⟨hM, hW⟩ := treeFactorization_uniqueness_data k A

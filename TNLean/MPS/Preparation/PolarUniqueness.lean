@@ -25,8 +25,10 @@ the product of the layers of its tree circuit with the isometry of the blocked t
 
 ## References
 
-* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), text after eq. (16): the product of the tree
-  layers is a partial isometry, so "by uniqueness of the polar decomposition" it is the
+* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eq. (16) and the sentence before it: the
+  layers of the tree circuit act "to the same effect" as the polar decomposition of the directly
+  blocked tensor. The source asserts this without proof; the uniqueness of the polar
+  decomposition proved here is the step that identifies the product of the layers with the
   isometry `V` of the blocked tensor.
 -/
 
@@ -41,7 +43,8 @@ omit [DecidableEq κ] in
 projector `E`, then `W E = W`.
 
 arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
-tensors": `V†V = Π` for the projector `Π` onto the initial space of `V`. -/
+tensors" (the paragraph containing eq. (S7)): `V†V = Π` for `Π` the projector onto the image
+of `P`. -/
 theorem mul_eq_self_of_conjTranspose_mul_self_eq {W : Matrix ι κ ℂ} {E : Matrix κ κ ℂ}
     (hW : Wᴴ * W = E) (hE : E.IsHermitian) (hEE : E * E = E) : W * E = W := by
   have h : (W * E - W)ᴴ * (W * E - W) = 0 := by
@@ -100,7 +103,9 @@ private lemma gram_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ ℂ
 positive semidefinite and `Wᴴ W = E` for an orthogonal projector `E` with the same range as
 `Q`, then `Q = polarPos M`.
 
-arXiv:2307.01696, text after eq. (16): "by uniqueness of the polar decomposition". -/
+Supplied step for arXiv:2307.01696, eq. (16): the source asserts that the tree layers act "to
+the same effect" as blocking; uniqueness of the polar decomposition, which the source does not
+state, identifies the positive parts. -/
 theorem polarPos_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ ℂ} (hM : M = W * Q)
     (hQ : Q.PosSemidef) (hW : Wᴴ * W = E) (hE : E.IsHermitian) (hEE : E * E = E)
     (hran : LinearMap.range E.mulVecLin = LinearMap.range Q.mulVecLin) :
@@ -123,8 +128,9 @@ theorem polarSupport_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ �
 positive semidefinite and `Wᴴ W = E` for an orthogonal projector `E` with the same range as
 `Q`, then `W = polarIso M`.
 
-arXiv:2307.01696, text after eq. (16): the product of the tree layers "is a partial isometry
-[...], so by uniqueness of the polar decomposition it equals `V`". -/
+Supplied step for arXiv:2307.01696, eq. (16): the source asserts that the tree layers act "to
+the same effect" as blocking; uniqueness of the polar decomposition, which the source does not
+state, identifies the product of the layers with the isometry `V`. -/
 theorem polarIso_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ ℂ} (hM : M = W * Q)
     (hQ : Q.PosSemidef) (hW : Wᴴ * W = E) (hE : E.IsHermitian) (hEE : E * E = E)
     (hran : LinearMap.range E.mulVecLin = LinearMap.range Q.mulVecLin) :
