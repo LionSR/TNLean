@@ -192,7 +192,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 
 \begin{theorem}[One decomposition step]
     \label{thm:seqanc_one_step}
-    \lean{MPSPreparation.exists_isometryOn_mul}
+    \lean{MPSPreparation.exists_isIsometryOn_mul}
     \leanok
     \uses{def:seqanc_isometry_on, def:seqanc_support}
     Let $Y^i\in\MN{D}$ be row-supported below $a$ for every $i$. Then there
@@ -248,7 +248,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 
 \begin{theorem}[Isometric chains preserve the norm]
     \label{thm:seqanc_norm}
-    \lean{MPSPreparation.sum_normSq_mulVec_of_isometryOn,
+    \lean{MPSPreparation.sum_normSq_mulVec_of_isIsometryOn,
         MPSPreparation.sum_normSq_eval_mulVec}
     \leanok
     \uses{def:seqanc_isometry_on, def:seqanc_support}
