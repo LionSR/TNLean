@@ -36,7 +36,10 @@ private theorem mul_single_mul_apply {D : ℕ}
     simp
   · simp
 
-private theorem exists_evalWord_ne_zero_of_isNBlkInjective
+/-- A block-injective tensor of positive bond dimension has a nonvanishing word
+of the injectivity length, since otherwise the words of that length would span
+zero rather than the full matrix algebra. -/
+theorem exists_evalWord_ne_zero_of_isNBlkInjective
     {A : MPSTensor d D_A} {L : ℕ} (hD : D_A ≠ 0)
     (hA : Kraus.IsNBlkInjective A L) :
     ∃ σ : Fin L → Fin d, Kraus.evalWord A (List.ofFn σ) ≠ 0 := by
