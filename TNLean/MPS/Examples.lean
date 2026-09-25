@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Examples.AKLTCorrelation
 import TNLean.MPS.Examples.AKLTParentHamiltonian
+import TNLean.MPS.Examples.AKLTReview
 import TNLean.MPS.Examples.AKLTRotation
 import TNLean.MPS.Examples.AKLTStringOrder
 import TNLean.MPS.Examples.AnomalousCondensation
@@ -29,11 +30,15 @@ import TNLean.MPS.Examples.GHZQudit
 import TNLean.MPS.Examples.Ising
 import TNLean.MPS.Examples.KitaevChain
 import TNLean.MPS.Examples.KramersWannier
+import TNLean.MPS.Examples.MPDOSymmetry
 import TNLean.MPS.Examples.MajumdarGhosh
+import TNLean.MPS.Examples.MajumdarGhoshDimer
+import TNLean.MPS.Examples.MajumdarGhoshHamiltonian
 import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
+import TNLean.MPS.Examples.SpinHalf
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.WStatePeriodic
 import TNLean.MPS.Examples.Z3Anomalous

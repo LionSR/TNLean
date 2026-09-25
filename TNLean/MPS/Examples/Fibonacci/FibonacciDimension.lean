@@ -19,7 +19,7 @@ the spectral radius of the fusion matrix (arXiv:2204.05940,
 
 **Formalized here.** For the structure constants `FibonacciCompression.fibNim`, which the
 Fibonacci matrix product operators realize at every length
-(`FibonacciCompression.fibonacci_fusion_algebra`): the characteristic polynomial
+(`FibonacciCompression.isMPOFusionAlgebra_fibBlock`): the characteristic polynomial
 `λ² - λ - 1` and the spectrum `{φ, -φ⁻¹}` of `N_τ`, the dimension relation
 `∑_b N_{ab}^c δ_b = δ_a δ_c` for `δ = (1, φ)`, hence `d_1 = 1` and `d_τ = φ` by
 `MPOTensor.perronFrobeniusDim_eq_of_dimension_relation`, and the fact that `τ` is not invertible.
