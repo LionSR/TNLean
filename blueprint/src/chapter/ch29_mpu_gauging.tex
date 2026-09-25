@@ -4349,7 +4349,7 @@ of $T$ applied to those of $B$.
     \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols}
     Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain},
     and let $A$ be a matrix product state tensor with
-    $O_g|V_N(A)\rangle=|V_N(A)\rangle$ for every $g$ and every $N\geq1$.
+    $O_g\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ for every $g$ and every $N\geq1$.
     Action tensors for $A$ are, for every $g$, a reduction $(V_g,W_g)$ of
     $O_g\cdot A$ onto $A$. The stacked action $(O_gO_h)\cdot A$ then has the
     two left boundaries
@@ -4394,8 +4394,8 @@ of $T$ applied to those of $B$.
     \label{thm:mpug_single_block_l_compatibility}
     \lean{MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol}
     \leanok
-    \uses{def:mpug_single_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
-        thm:mpug_dressed_proportionality}
+    \uses{def:mpug_single_block_l_symbol, def:mpug_anomaly_three_cochain,
+        def:mpug_l_symbols}
     In the setting of Theorem~\ref{thm:mpug_single_block_l_symbol_spec},
     for all $g,h,k\in G$,
     \begin{align}
@@ -4407,7 +4407,8 @@ of $T$ applied to those of $B$.
 
 \begin{proof}\leanok
     \uses{thm:mpug_single_block_l_symbol_spec,
-        thm:mpug_action_tensor_reductions}
+        thm:mpug_action_tensor_reductions, thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
     Consider the triple action $B=((O_gO_h)O_k)\cdot A$, and write $V^L$,
     $V^R$ for the two fusion trees of $(g,h,k)$ as in
     Definition~\ref{def:mpug_anomaly_three_cochain}. The naturality and
@@ -4462,13 +4463,11 @@ of $T$ applied to those of $B$.
     \lean{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant,
         MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass}
     \leanok
-    \uses{thm:mpug_single_block_l_symbol_spec,
-        thm:mpug_single_block_l_compatibility,
-        thm:mpug_fixed_block_trivializes, def:mpug_trivial_gauge_class}
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_trivial_gauge_class}
     Let $\{O_g\}$ be matrix product operator tensors with normal
     doubled-index tensors and $O_gO_h=O_{gh}$ on every nonempty chain. If a
     normal matrix product state tensor of positive bond dimension satisfies
-    $O_g|V_N(A)\rangle=|V_N(A)\rangle$ for every $g$ and every $N\geq1$, then
+    $O_g\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ for every $g$ and every $N\geq1$, then
     the anomaly three-cocycle has trivial gauge class. Equivalently, a group
     with nontrivial anomaly has no invariant normal matrix product state.
     This is the statement that an anomalous representation cannot have an
@@ -4479,7 +4478,9 @@ of $T$ applied to those of $B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_single_block_l_symbol_spec}
+    \uses{thm:mpug_single_block_l_symbol_spec,
+        thm:mpug_single_block_l_compatibility,
+        thm:mpug_fixed_block_trivializes}
     Action tensors exist by
     Theorem~\ref{thm:mpug_single_block_l_symbol_spec}, so
     Theorem~\ref{thm:mpug_single_block_l_compatibility} applies, and Theorem~\ref{thm:mpug_fixed_block_trivializes} for the

@@ -792,3 +792,44 @@ The following notions use different transfer objects and are not interchangeable
   with the gauge `X⁻¹`; no bridge to `GaugeEquiv` is stated, because the
   predicate is only used to separate blocks of possibly different bond
   dimensions.
+
+## Worked examples
+
+### `MPSTensor.IsPeriodicWState`
+
+- **Declaration:** `MPSTensor.IsPeriodicWState (A : MPSTensor 2 D) (N : ℕ) : Prop`.
+- **Defined in:** `TNLean/MPS/Examples/WStatePeriodic.lean`.
+- **Meaning:** the trace contraction
+  $\operatorname{tr}(A^{\sigma_1}\cdots A^{\sigma_N})$ equals the unnormalized
+  W-state amplitude on every configuration of $N$ sites, that is, $A$ is a
+  translationally invariant periodic representation of $\ket{W_N}$.
+- **Source:** the notion of a translationally invariant representation of the
+  W state in arXiv:2011.12127, Appendix A, "The W state", line 2362. The
+  predicate itself is a project definition.
+- **Sanctioned bridges:** none; the printed open-boundary tensor is related to
+  the W state through `MPSTensor.wTensor_openState_eq_wIndicator`, not through
+  this predicate.
+- **Caveat:** the formalized obstructions constrain one tensor across several
+  lengths (`MPSTensor.not_isPeriodicWState_of_lt`,
+  `MPSTensor.exists_not_isPeriodicWState_le`). The source's single-length bound
+  $D^3\log D=\Omega(N)$ is not formalized; see
+  `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
+
+## Invariant states of matrix product operators
+
+### `MPOTensor.GroupFamily.FixesMPV`
+
+- **Declaration:** `MPOTensor.GroupFamily.FixesMPV T A : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`.
+- **Meaning:** the periodic operator $O_N(T)$ fixes the periodic vector
+  $\ket{V^{(N)}(A)}$ for every chain length $N\geq1$; nothing is asserted at
+  $N=0$.
+- **Source:** arXiv:2203.12563, line 1064, the relation
+  $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ with $y=x$.
+- **Sanctioned bridges:** it is the single-operator, unit-eigenvalue case of
+  `MPOTensor.IsMPOSymmetric` (eigenvalue $c_a=1$). `FixesMPV.mulTensor` closes
+  it under operator products, and `FixesMPV.sameMPV₂Pos_actTensor` turns it into
+  positive-length vector equality of the action tensor with `A`, which is the
+  input of `MPOTensor.GroupFamily.nonempty_actionData`.
+- **Caveat:** no equivalence with `IsMPOSymmetric` at `c = 1` is stated as a
+  theorem; the two definitions agree by unfolding.
