@@ -48,6 +48,7 @@ import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixCyclicPathSum
+import TNLean.Algebra.MatrixPositiveEigenvector
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MonomialFixedSubspace
