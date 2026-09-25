@@ -8,11 +8,13 @@ The W state on $N$ sites is the single-excitation symmetric state
     \notag
 \end{align}
 the equal-weight superposition of all configurations with exactly one
-excitation~\cite{DurVidalCirac2000}. Unlike the preceding examples it has no
-translation-invariant representation with bond dimension bounded independently
-of $N$~\cite[Section~III.D]{Cirac2021Matrix}; it is presented with open boundary
-conditions, where the matrix product is closed by a left and a right boundary
-vector rather than by a trace.
+excitation~\cite{DurVidalCirac2000}. Following
+\cite[Appendix~A, ``The W state'']{Cirac2021Matrix}, it is presented with open
+boundary conditions, where the matrix product is closed by a left and a right
+boundary vector rather than by a trace. The tensor of
+Definition~\ref{def:w_tensor} is the one printed there, in the same basis and
+with the same boundary vectors, so the results below are stated for it
+directly.
 
 \begin{definition}[Open-boundary contraction]\label{def:open_coeff}
     \lean{MPSTensor.openCoeff}
@@ -43,7 +45,8 @@ vector rather than by a trace.
     \lean{MPSTensor.wRightBoundary}
     \leanok
     \uses{def:mps_tensor}
-    Set $d=D=2$. The W tensor is the site-independent family
+    Following \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}, set $d=D=2$.
+    The W tensor is the site-independent family
     \begin{align}
         A^0 & = \begin{pmatrix}1&0\\0&1\end{pmatrix},
         \notag                                        \\
@@ -119,16 +122,110 @@ vector rather than by a trace.
     count is one in the first three cases and zero or two in the others.
 \end{proof}
 
-\begin{remark}[No fixed-bond translation-invariant family]%
+\begin{theorem}[The periodic closure is not the W state]%
+    \label{thm:w_state_periodic_closure}
+    \lean{MPSTensor.mpv_wTensor}
+    \lean{MPSTensor.mpv_wTensor_eq_zero_of_wIndicator_eq_one}
+    \lean{MPSTensor.mpv_wTensor_ne_wIndicator}
+    \leanok
+    \uses{def:w_tensor, def:mpv, def:w_indicator}
+    The representation of Definition~\ref{def:w_tensor} is not translationally
+    invariant, because its boundary is not periodic
+    \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}. Closing the same tensor
+    with a trace gives
+    \begin{align}
+        \operatorname{tr}\bigl(A^{\sigma_1}\cdots A^{\sigma_N}\bigr)
+         & =
+        \begin{cases}
+            2, & \text{no } \sigma_j=1, \\
+            0, & \text{otherwise}.
+        \end{cases}
+        \notag
+    \end{align}
+    In particular the trace contraction vanishes on every single-excitation
+    configuration, and for $N\geq 1$ it is not $\ket{W_N}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:w_state_identification}
+    The ordered product is the identity, the raising operator, or zero according
+    to the number of excitations, as in the proof of
+    Theorem~\ref{thm:w_state_identification}. Their traces are $2$, $0$, and $0$.
+    For $N\geq1$ the configuration $\ket{10\cdots0}$ has W-state amplitude $1$
+    and trace contraction $0$.
+\end{proof}
+
+\begin{definition}[Periodic representation of the W state]%
+    \label{def:w_state_periodic_rep}
+    \lean{MPSTensor.IsPeriodicWState}
+    \leanok
+    \uses{def:mpv, def:w_indicator}
+    A tensor $B$ with physical dimension $2$ and bond dimension $D$ is a periodic
+    representation of $\ket{W_N}$ when
+    $\operatorname{tr}(B^{\sigma_1}\cdots B^{\sigma_N})=\ket{W_N}(\sigma)$ for every
+    configuration $\sigma$ of $N$ sites.
+\end{definition}
+
+\begin{theorem}[Bond dimension one]%
+    \label{thm:w_state_periodic_bond_one}
+    \lean{MPSTensor.not_isPeriodicWState_of_bondDim_one}
+    \leanok
+    \uses{def:w_state_periodic_rep}
+    For $N\geq 2$, no tensor of bond dimension $1$ is a periodic representation of
+    $\ket{W_N}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:w_state_periodic_rep}
+    Write $B^0=b_0$ and $B^1=b_1$ as scalars. The vacuum amplitude gives
+    $b_0^N=0$, so $b_0=0$. The configuration $\ket{10\cdots0}$ then has amplitude
+    $b_1b_0^{N-1}=0$, whereas its W-state amplitude is $1$.
+\end{proof}
+
+\begin{theorem}[No fixed bond dimension represents every W state]%
+    \label{thm:w_state_periodic_bound}
+    \lean{MPSTensor.trace_pow_eq_zero_of_isPeriodicWState}
+    \lean{MPSTensor.pow_eq_zero_of_isPeriodicWState}
+    \lean{MPSTensor.not_isPeriodicWState_of_pow_eq_zero}
+    \lean{MPSTensor.not_isPeriodicWState_of_lt}
+    \lean{MPSTensor.exists_not_isPeriodicWState_le}
+    \lean{MPSTensor.not_forall_isPeriodicWState}
+    \leanok
+    \uses{def:w_state_periodic_rep}
+    Let $B$ be a tensor with physical dimension $2$ and bond dimension $D$. If $B$
+    is a periodic representation of $\ket{W_k}$ for every $1\leq k\leq D$, then
+    $(B^0)^D=0$, and $B$ is a periodic representation of $\ket{W_N}$ for no
+    $N>D$. Consequently there is a length $1\leq N\leq D+1$ for which $B$ is not
+    a periodic representation of $\ket{W_N}$, and no single tensor of fixed bond
+    dimension is a periodic representation of $\ket{W_N}$ for every $N\geq 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:w_state_periodic_rep}
+    The vacuum amplitudes give $\operatorname{tr}((B^0)^k)=0$ for
+    $1\leq k\leq D$. By the Newton--Girard identities the characteristic
+    polynomial of $B^0$ is $x^D$, and the Cayley--Hamilton theorem gives
+    $(B^0)^D=0$. For $N>D$ the configuration $\ket{10\cdots0}$ then has
+    amplitude $\operatorname{tr}(B^1(B^0)^{N-1})=0$, whereas its W-state
+    amplitude is $1$. If $B$ represented every $\ket{W_N}$ with
+    $1\leq N\leq D+1$, the case $N=D+1$ would contradict this.
+\end{proof}
+
+\begin{remark}[Growth of the translation-invariant bond dimension]%
     \label{rem:w_state_ti_bound}
-    \uses{def:w_tensor}
-    The open-boundary representation in Definition~\ref{def:w_tensor} uses
-    boundary vectors. Ref.~\cite{Cirac2021Matrix} observes that a
-    translation-invariant periodic representation requires a bond dimension
-    growing with system size ($D^3\log D=\Omega(N)$ via the quantitative quantum
-    Wielandt inequality); this lower bound is an unformalized target
-    (see~\cite{gap:rmp_w_state_ti_bound}) requiring representation theory and
-    quantitative Wielandt bounds not yet in the library.
+    \uses{def:w_state_periodic_rep}
+    Theorem~\ref{thm:w_state_periodic_bound} concerns one tensor representing
+    the W state on a range of lengths. The review states the stronger
+    single-length bound: a translation-invariant representation of $\ket{W_N}$
+    with bond dimension $D$ requires $D^3\log D=\Omega(N)$, hence
+    $D=\Omega(N^{1/(3+\delta)})$ for every $\delta>0$, obtained by combining the
+    representation theory of translation-invariant matrix product states with a
+    quantitative quantum Wielandt inequality
+    \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}. This single-length bound
+    is not formalized (see~\cite{gap:rmp_w_state_ti_bound}).
 \end{remark}
 
 %% ===================================================================

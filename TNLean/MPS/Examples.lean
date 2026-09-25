@@ -26,5 +26,6 @@ import TNLean.MPS.Examples.KramersWannierSource
 import TNLean.MPS.Examples.KramersWannierTensor
 import TNLean.MPS.Examples.MajumdarGhosh
 import TNLean.MPS.Examples.WState
+import TNLean.MPS.Examples.WStatePeriodic
 import TNLean.MPS.Examples.ZMod2
 import TNLean.MPS.Examples.ZeroCorrelationExamples

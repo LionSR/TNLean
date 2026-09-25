@@ -6,51 +6,39 @@ Authors: TNLean contributors
 import TNLean.MPS.OpenBoundary
 
 /-!
-# The W state as an open-boundary Matrix Product State
+# W state: the open-boundary Matrix Product State
 
-The W state on `N` sites is the single-excitation symmetric state
-\[
-    \ket{W_N}
-    = \ket{10\cdots0} + \ket{010\cdots0} + \cdots + \ket{0\cdots01},
-\]
-the (unnormalized) equal-weight superposition of all configurations with exactly
-one excitation.
+**Source.** Cirac, Pérez-García, Schuch, Verstraete 2021 (arXiv:2011.12127), Appendix A,
+"The W state", `Papers/2011.12127/TN-Review-main.tex` lines 2348–2361: the W state
+`|W⟩ = |10⋯0⟩ + |010⋯0⟩ + ⋯ + |0⋯01⟩` is an MPS with open boundary conditions and `D = 2`,
+with `A^0 = I`, `A^1 = !![0,1;0,0]`, and boundary vectors `(l| = (0|` and `|r) = |1)`.
+Review: arXiv:2011.12127, Appendix A, "The W state".
 
-Following arXiv:2011.12127 (lines 2348--2362), the W state is an open-boundary
-MPS with bond dimension `D = 2` and physical dimension `d = 2`, with the
-site-independent tensor
-\[
-    A^0 = \begin{pmatrix}1&0\\0&1\end{pmatrix},
-    \qquad
-    A^1 = \begin{pmatrix}0&1\\0&0\end{pmatrix},
-\]
-and boundary covectors `(l| = (0|` and `|r) = |1)`.  The open-boundary
-contraction `(l| A^{σ_1} ⋯ A^{σ_N} |r)` is `1` exactly when `σ` has a single
-excitation, reproducing `\ket{W_N}`.
-
-This is not a translation-invariant representation: the boundary is not closed by
-a trace.  Closing it periodically would give `tr(A^{σ_1} ⋯ A^{σ_N})`, a different
-(and, for the W state, unattainable at fixed bond dimension) object; see the
-discussion in arXiv:2011.12127, line 2362, and the bond-dimension lower bound
-recorded in `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
+**Formalized here.** The open-boundary contraction `(0| A^{σ_1} ⋯ A^{σ_N} |1)` is `1`
+exactly when `σ` has a single excitation, so it reproduces the unnormalized W state for
+every `N`. The review's remark that this representation is not translationally invariant
+(line 2362) is formalized in `TNLean.MPS.Examples.WStatePeriodic`.
 
 ## Main definitions
 
-* `wTensor` — the open-boundary W tensor `A^0 = I`, `A^1 = raising`.
+* `wTensor` — the open-boundary W tensor `A^0 = I`, `A^1 = wRaising`.
 * `wLeftBoundary`, `wRightBoundary` — the covectors `(0|` and `|1)`.
 * `wIndicator` — the configuration amplitude of `\ket{W_N}`: `1` on
   single-excitation configurations, `0` elsewhere.
 
 ## Main results
 
+* `evalWord_wTensor` — the word product is `1`, `wRaising`, or `0` according to the
+  number of excitations.
 * `wTensor_openState_eq_wIndicator` — the open-boundary contraction of `wTensor`
   reproduces the W state: `openState wLeftBoundary wRightBoundary wTensor N`
   equals `wIndicator N`, for every `N`.
 
 ## References
 
-* Cirac--Pérez-García--Schuch--Verstraete 2021, arXiv:2011.12127, lines
-  2348--2362.
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- Cirac, Pérez-García, Schuch,
+  Verstraete, *Matrix product states and projected entangled pair states: Concepts,
+  symmetries, theorems*
 -/
 
 open scoped Matrix
@@ -75,13 +63,14 @@ def wLeftBoundary : Fin 2 → ℂ := Pi.single 0 1
 /-- The right boundary vector `|r) = |1)`. Source: arXiv:2011.12127, line 2360. -/
 def wRightBoundary : Fin 2 → ℂ := Pi.single 1 1
 
-/-- The single raising matrix `A^1 = !![0,1;0,0]`. -/
-private def raising : Matrix (Fin 2) (Fin 2) ℂ := !![(0 : ℂ), 1; 0, 0]
+/-- The single raising matrix `A^1 = !![0,1;0,0]`, sending `|1)` to `|0)`.
+Source: arXiv:2011.12127, line 2358. -/
+def wRaising : Matrix (Fin 2) (Fin 2) ℂ := !![(0 : ℂ), 1; 0, 0]
 
 /-- `A^1` squares to zero: two excitations annihilate the chain. -/
-lemma raising_mul_raising : raising * raising = 0 := by
+lemma wRaising_mul_wRaising : wRaising * wRaising = 0 := by
   ext i j; fin_cases i <;> fin_cases j <;>
-    simp [raising, Matrix.mul_apply, Fin.sum_univ_two]
+    simp [wRaising, Matrix.mul_apply, Fin.sum_univ_two]
 
 /-! ### The W-state amplitude
 
@@ -98,7 +87,7 @@ lemma evalWord_wTensor (w : List (Fin 2)) :
     Kraus.evalWord wTensor w =
       match w.count 1 with
       | 0 => 1
-      | 1 => raising
+      | 1 => wRaising
       | _ => 0 := by
   induction w with
   | nil => simp
@@ -110,12 +99,12 @@ lemma evalWord_wTensor (w : List (Fin 2)) :
       simp
     | 1 =>
       -- head is `1`: `A^1 = raising`, the count increases by one.
-      rw [show wTensor 1 = raising from rfl]
+      rw [show wTensor 1 = wRaising from rfl]
       simp only [Fin.isValue, beq_self_eq_true, ite_true]
       rcases hc : w.count 1 with _ | _ | k
-      · exact mul_one raising
-      · exact raising_mul_raising
-      · exact mul_zero raising
+      · exact mul_one wRaising
+      · exact wRaising_mul_wRaising
+      · exact mul_zero wRaising
 
 /-- The boundary contraction reads off the `(0,1)` entry: identity gives `0`,
 the raising matrix gives `1`, and the zero matrix gives `0`. -/
@@ -133,7 +122,7 @@ lemma openCoeff_wTensor (w : List (Fin 2)) :
   rw [openCoeff_wTensor_entry, evalWord_wTensor]
   rcases hc : w.count 1 with _ | _ | k
   · simp
-  · simp [raising]
+  · simp [wRaising]
   · simp
 
 /-! ### The W-state identification -/

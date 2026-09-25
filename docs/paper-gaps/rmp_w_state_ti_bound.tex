@@ -139,6 +139,29 @@ declarations:
 \leanid{MPSTensor.openState}, and
 \leanid{MPSTensor.wTensor_openState_eq_wIndicator}.}
 
+\section{Formalized periodic statements}
+
+Two weaker periodic statements are proved. First, closing the printed tensor
+with a trace gives $\operatorname{tr}(A^{\sigma_1}\cdots A^{\sigma_N})=2$ on
+the vacuum and $0$ on every configuration with an excitation, so the printed
+tensor is not a periodic representation of $\ket{W_N}$ for $N\geq1$. Second,
+let $B$ have bond dimension $D$ and satisfy
+$\operatorname{tr}(B^{\sigma_1}\cdots B^{\sigma_k})=\ket{W_k}(\sigma)$ for
+$1\leq k\leq D$. The vacuum amplitudes give
+$\operatorname{tr}((B^0)^k)=0$ for these $k$, so the Newton--Girard identities
+and the Cayley--Hamilton theorem give $(B^0)^D=0$. The configuration
+$\ket{10\cdots0}$ then has amplitude $0$ at every length $N>D$, so $B$
+represents no $\ket{W_N}$ with $N>D$. In particular no single tensor
+represents $\ket{W_N}$ for all $N\geq1$, and for $D=1$ no tensor represents
+$\ket{W_N}$ at any single length $N\geq2$.\footnote{Formal declarations:
+\leanid{MPSTensor.mpv_wTensor},
+\leanid{MPSTensor.not_isPeriodicWState_of_bondDim_one},
+\leanid{MPSTensor.not_isPeriodicWState_of_lt}, and
+\leanid{MPSTensor.not_forall_isPeriodicWState}.}
+These statements constrain one tensor across several lengths. The source bound
+(\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) constrains the bond
+dimension at a single length $N$ and remains open.
+
 Neither
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) nor
 (\ref{eq:rmp_w_state_ti_bound_polynomial_consequence}) has been formalized.
