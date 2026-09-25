@@ -17,7 +17,7 @@ admissibility deltas `δ_{abe} δ_{cde} δ_{adf} δ_{bcf}` and the nontrivial bl
 `[F^{τττ}_τ] = [[1/φ, 1/√φ], [1/√φ, -1/φ]]`, the G-symbols `G^{abc}_{def} = F^{abc}_{def}/(v_e v_f)`
 with `v_i = √d_i`, a projector matrix product operator of bond dimension `5` made of two blocks
 `B_1`, `B_τ` of dimensions `2` and `3` obeying the Fibonacci fusion rules, and the weights
-`w_1 = 1/(1 + φ²)`, `w_τ = φ/(1 + φ²)` of the projector `P_L = ∑_a w_a O_a^L` of Section 3.1
+`w_1 = 1/(1 + φ²)`, `w_τ = φ/(1 + φ²)` of the projector `P_L = ∑_a w_a O_a^L` of Section 3.2
 (`AnyonsPEPS.tex` lines 143–160).
 Review: arXiv:2011.12127, Appendix A, "The MPO for the Fibonacci model"
 (`Papers/2011.12127/TN-Review-main.tex` lines 2613–2625), which prints the same fusion rules and
