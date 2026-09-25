@@ -27,12 +27,19 @@ relations `𝖣 Z_j = X_j X_{j+1} 𝖣`, `𝖣 X_j X_{j+1} = Z_{j+1} 𝖣` and t
 translation of the periodic Ising chain.
 
 **Formalized here.** For the periodic operator `K = kwTensor.mpo N` on a ring of `N ≥ 1`
-sites: both local relations of Aasen–Mong–Fendley; the transpose relation `Kᵀ = K Tᵀ = Tᵀ K`
-with the one-site translation `T`; the fusion relations `Kᵀ K = K Kᵀ = 2^N (1 + η)` and
-`K Kᵀ K = 2^{N+1} K`, and their normalized forms for `D_σ = 2^{-N/2} K`; the local relations
-and the full algebra of Seiberg–Shao, in the Hadamard-rotated basis, for the rescaled operator
-`𝖣 = 2^{-(N+1)/2} Kᵀ`; and the actions of `K` on the
-unnormalized paramagnetic and ferromagnetic states.
+sites, the claims of Aasen–Mong–Fendley: both local relations, the fusion `Kᵀ K = 2^N (1 + η)`
+on the original lattice, `K Kᵀ K = 2^{N+1} K`, and their normalized forms for
+`D_σ = 2^{-N/2} K`.
+
+**Project results.** The transpose relation `Kᵀ = K Tᵀ = Tᵀ K` with the one-site translation `T`;
+the dual-lattice companion `K Kᵀ = 2^N (1 + η)`, which the source does not print; the actions of `K`
+on the paramagnetic and ferromagnetic states (the module
+`TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannierAction` identifies these states with
+the periodic states of `plusTensor` and `ghz`); and, for the rescaled operator
+`𝖣 = 2^{-(N+1)/2} Kᵀ`, the local relations and the algebra that Seiberg–Shao print for
+their operator, read in the Hadamard-rotated basis. These are not the Seiberg–Shao theorems:
+`𝖣` is not identified with their circuit (lines 2432–2437), and their `T_Ising` is read as
+`Tᵀ`, which the conjugation action at line 2108 fixes only up to a scalar.
 
 **Conventions.** The kernel of `K` is `2^{N/2}` times the kernel of `D_σ` under
 `ĥ_{j+1/2} ↦ a j` (output) and `h_j ↦ b j` (input), so that `μ^r_{j+1/2}` acts on output site
@@ -89,6 +96,7 @@ open scoped Matrix BigOperators Fin.NatCast
 namespace KWExample
 
 open MPSTensor
+open Complex (invSqrtTwo invSqrtTwo_mul_self invSqrtTwo_pow_mul_self star_invSqrtTwo)
 
 variable {N : ℕ}
 
@@ -469,9 +477,10 @@ theorem kwTensor_mpo_transpose_mul [NeZero N] :
   generalize c j = u, c (j + 1) = v, x j = w, x (j + 1) = z
   revert u v w z; decide
 
-/-- The companion fusion on the dual lattice: `K Kᵀ = 2^N (1 + η)`.
-
-Source: arXiv:1601.07185, `References/1601.07185/source/Ising-Defects.tex` lines 1033–1039. -/
+/-- Project result: the companion fusion on the dual lattice, `K Kᵀ = 2^N (1 + η)`. The source
+says only that `D_σ` also maps the dual lattice back to the original
+(arXiv:1601.07185, `References/1601.07185/source/Ising-Defects.tex` line 990) and computes the
+fusion on the original lattice alone (lines 1033–1039); this dual-lattice form is not printed. -/
 theorem kwTensor_mpo_mul_transpose [NeZero N] :
     kwTensor.mpo N * (kwTensor.mpo N)ᵀ = (2 : ℂ) ^ N • (1 + spinFlip N) := by
   ext c x
@@ -507,20 +516,6 @@ theorem kwTensor_mpo_mul_self [NeZero N] :
 
 /-! ### The normalized defect operators -/
 
-/-- The inverse square root of two as a complex number. -/
-def invSqrtTwo : ℂ := ((Real.sqrt 2 : ℝ) : ℂ)⁻¹
-
-theorem invSqrtTwo_mul_self : invSqrtTwo * invSqrtTwo = (2 : ℂ)⁻¹ := by
-  rw [invSqrtTwo, Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)]
-  norm_num
-
-theorem invSqrtTwo_pow_mul_self (n : ℕ) :
-    invSqrtTwo ^ n * invSqrtTwo ^ n * (2 : ℂ) ^ n = 1 := by
-  rw [← mul_pow, ← mul_pow, invSqrtTwo_mul_self, inv_mul_cancel₀ two_ne_zero, one_pow]
-
-theorem star_invSqrtTwo : star invSqrtTwo = invSqrtTwo := by
-  simp [invSqrtTwo, Complex.conj_ofReal]
-
 /-- The duality defect `D_σ = 2^{-N/2} K` in the normalization of the source.
 
 Source: arXiv:1601.07185, `References/1601.07185/source/Ising-Defects.tex` lines 996–999. -/
@@ -536,9 +531,10 @@ theorem kwDefect_transpose_mul [NeZero N] :
   rw [kwDefect, Matrix.transpose_smul, Matrix.smul_mul, Matrix.mul_smul,
     kwTensor_mpo_transpose_mul, smul_smul, smul_smul, invSqrtTwo_pow_mul_self, one_smul]
 
-/-- The companion relation on the dual lattice, `D_σ D_σᵀ = 1 + D_ψ`.
-
-Source: arXiv:1601.07185, `References/1601.07185/source/Ising-Defects.tex` lines 1033–1039. -/
+/-- Project result: the companion relation on the dual lattice, `D_σ D_σᵀ = 1 + D_ψ`, the
+normalized form of `kwTensor_mpo_mul_transpose`. The source computes the fusion on the original
+lattice only (arXiv:1601.07185, `References/1601.07185/source/Ising-Defects.tex`
+lines 1033–1039). -/
 theorem kwDefect_mul_transpose [NeZero N] :
     kwDefect N * (kwDefect N)ᵀ = 1 + spinFlip N := by
   rw [kwDefect, Matrix.transpose_smul, Matrix.smul_mul, Matrix.mul_smul,
@@ -572,7 +568,11 @@ spin flip `spinFlip N`, and their translation `T_Ising`, which sends `X_j` to `X
 becomes `Tᵀ = T⁻¹` for the translation `T = translate N` of this file. The transposed kernel
 `Kᵀ` satisfies these relations, while `K` itself sends `X_j` to `Z_{j-1} Z_j` and so matches
 them only after the reflection `j ↦ -j` of the chain. The operator of this section is
-therefore built from `Kᵀ`. -/
+therefore built from `Kᵀ`.
+
+Every relation of this section is a project result: it shows that `𝖣` satisfies a relation that
+Seiberg–Shao print for their operator. `𝖣` is not identified with their circuit, and their
+`T_Ising` is read as `Tᵀ`. -/
 
 theorem transpose_translate_mul_apply [NeZero N]
     (M : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ) (c b : Fin N → Fin 2) :
@@ -637,22 +637,18 @@ theorem invSqrtTwo_pow_succ_mul_self (n : ℕ) :
       = (invSqrtTwo ^ n * invSqrtTwo ^ n * 2 ^ n) * (invSqrtTwo * invSqrtTwo) := by ring
     _ = (2 : ℂ)⁻¹ := by rw [invSqrtTwo_pow_mul_self, invSqrtTwo_mul_self, one_mul]
 
-/-- **Duality maps `X_j` to `Z_j Z_{j+1}`**, the relation `𝖣 Z_j = X_j X_{j+1} 𝖣` in the
-Hadamard-rotated basis.
-
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2442–2444,
-first relation. -/
+/-- Project result: **`𝖣` maps `X_j` to `Z_j Z_{j+1}`**, the first relation of
+arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2442–2444,
+`𝖣 Z_j = X_j X_{j+1} 𝖣`, read in the Hadamard-rotated basis. -/
 theorem kwTranslation_mul_siteX [NeZero N] (j : Fin N) :
     kwTranslation N * siteX j = siteZZ j * kwTranslation N := by
   have h := congrArg Matrix.transpose (kwTensor_mpo_mul_siteZZ (N := N) j)
   rw [Matrix.transpose_mul, Matrix.transpose_mul, siteZZ_transpose, siteX_transpose] at h
   rw [kwTranslation, Matrix.smul_mul, Matrix.mul_smul, h]
 
-/-- **Duality maps `Z_j Z_{j+1}` to `X_{j+1}`**, the relation `𝖣 X_j X_{j+1} = Z_{j+1} 𝖣`
-in the Hadamard-rotated basis.
-
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2442–2444,
-second relation. -/
+/-- Project result: **`𝖣` maps `Z_j Z_{j+1}` to `X_{j+1}`**, the second relation of
+arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2442–2444,
+`𝖣 X_j X_{j+1} = Z_{j+1} 𝖣`, read in the Hadamard-rotated basis. -/
 theorem kwTranslation_mul_siteZZ [NeZero N] (j : Fin N) :
     kwTranslation N * siteZZ j = siteX (j + 1) * kwTranslation N := by
   have h := congrArg Matrix.transpose (kwTensor_mpo_mul_siteX (N := N) (j + 1))
@@ -660,11 +656,10 @@ theorem kwTranslation_mul_siteZZ [NeZero N] (j : Fin N) :
     add_sub_cancel_right] at h
   rw [kwTranslation, Matrix.smul_mul, Matrix.mul_smul, ← h]
 
-/-- **`𝖣² = ½(1 + η) T_Ising`**, where `T_Ising` is the transposed translation
-`(translate N)ᵀ`, which moves every site forward by one (`transpose_translate_mul_siteX`).
-
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2469–2473,
-first relation. -/
+/-- Project result: **`𝖣² = ½(1 + η) Tᵀ`**, the relation `𝖣² = ½(1 + η) T_Ising` of
+arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2469–2473, with `T_Ising`
+read as the transposed translation `(translate N)ᵀ`, which moves every site forward by one
+(`transpose_translate_mul_siteX`). -/
 theorem kwTranslation_mul_self [NeZero N] :
     kwTranslation N * kwTranslation N =
       (2 : ℂ)⁻¹ • ((1 + spinFlip N) * (translate N)ᵀ) := by
@@ -677,26 +672,24 @@ theorem kwTranslation_mul_self [NeZero N] :
   rw [kwTranslation, Matrix.smul_mul, Matrix.mul_smul, hsq, smul_smul, smul_smul,
     invSqrtTwo_pow_succ_mul_self]
 
-/-- **`𝖣 η = η 𝖣 = 𝖣`**.
-
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2469–2473,
-second relation. -/
+/-- Project result: **`𝖣 η = η 𝖣 = 𝖣`**, the relation of arXiv:2307.02534,
+`References/2307.02534/source/Majoranadraft.tex` lines 2469–2473, second line. -/
 theorem kwTranslation_mul_spinFlip [NeZero N] :
     kwTranslation N * spinFlip N = kwTranslation N := by
   rw [kwTranslation, Matrix.smul_mul, kwTensor_mpo_transpose_eq_transpose_translate_mul,
     Matrix.mul_assoc, kwTensor_mpo_mul_spinFlip]
 
-/-- Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines
-2469–2473, second relation. -/
+/-- Project result: `η 𝖣 = 𝖣`, the companion of `kwTranslation_mul_spinFlip`
+(arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2469–2473, second line).
+-/
 theorem spinFlip_mul_kwTranslation [NeZero N] :
     spinFlip N * kwTranslation N = kwTranslation N := by
   rw [kwTranslation, Matrix.mul_smul, kwTensor_mpo_transpose, ← Matrix.mul_assoc,
     spinFlip_mul_kwTensor_mpo]
 
-/-- **`T_Ising 𝖣 = 𝖣 T_Ising`** with `T_Ising = (translate N)ᵀ`.
-
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2469–2473,
-third relation. The companions `T_Ising^N = 1` and `T_Ising η = η T_Ising` are
+/-- Project result: **`Tᵀ 𝖣 = 𝖣 Tᵀ`**, the relation `T_Ising 𝖣 = 𝖣 T_Ising` of
+arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2469–2473, third line, with
+`T_Ising` read as `(translate N)ᵀ`. The companions `T_Ising^N = 1` and `T_Ising η = η T_Ising` are
 `transpose_translate_pow_self` and `spinFlip_mul_transpose_translate`. -/
 theorem transpose_translate_mul_kwTranslation [NeZero N] :
     (translate N)ᵀ * kwTranslation N = kwTranslation N * (translate N)ᵀ := by
@@ -709,27 +702,25 @@ theorem kwTensor_mpo_transpose_conjTranspose [NeZero N] :
   ext a b
   rw [Matrix.conjTranspose_apply, Matrix.transpose_apply, star_kwTensor_mpo_apply]
 
-/-- **`𝖣† = 𝖣 T_Ising⁻¹`** with `T_Ising = (translate N)ᵀ`.
-
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2475. -/
+/-- Project result: **`𝖣† = 𝖣 (Tᵀ)⁻¹`**, the relation `𝖣† = 𝖣 T_Ising⁻¹` of
+arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2475, with `T_Ising` read as
+`(translate N)ᵀ`. -/
 theorem kwTranslation_conjTranspose [NeZero N] :
     (kwTranslation N)ᴴ = kwTranslation N * ((translate N)ᵀ)⁻¹ := by
   rw [kwTranslation, Matrix.conjTranspose_smul, star_pow, star_invSqrtTwo,
     kwTensor_mpo_transpose_conjTranspose, transpose_translate_inv, Matrix.smul_mul,
     ← kwTensor_mpo_eq_transpose_mul]
 
-/-- **`𝖣 𝖣† = ½(1 + η)`**.
-
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2475. -/
+/-- Project result: **`𝖣 𝖣† = ½(1 + η)`**, the relation of arXiv:2307.02534,
+`References/2307.02534/source/Majoranadraft.tex` line 2475. -/
 theorem kwTranslation_mul_conjTranspose [NeZero N] :
     kwTranslation N * (kwTranslation N)ᴴ = (2 : ℂ)⁻¹ • (1 + spinFlip N) := by
   rw [kwTranslation, Matrix.conjTranspose_smul, star_pow, star_invSqrtTwo,
     kwTensor_mpo_transpose_conjTranspose, Matrix.smul_mul, Matrix.mul_smul,
     kwTensor_mpo_transpose_mul, smul_smul, smul_smul, invSqrtTwo_pow_succ_mul_self]
 
-/-- **`𝖣† 𝖣 = ½(1 + η)`**.
-
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2475. -/
+/-- Project result: **`𝖣† 𝖣 = ½(1 + η)`**, the relation of arXiv:2307.02534,
+`References/2307.02534/source/Majoranadraft.tex` line 2475. -/
 theorem kwTranslation_conjTranspose_mul [NeZero N] :
     (kwTranslation N)ᴴ * kwTranslation N = (2 : ℂ)⁻¹ • (1 + spinFlip N) := by
   rw [kwTranslation, Matrix.conjTranspose_smul, star_pow, star_invSqrtTwo,
@@ -744,9 +735,8 @@ theorem half_one_add_spinFlip_isIdempotentElem :
     rw [two_smul]; abel, smul_smul]
   norm_num
 
-/-- **`𝖣^{2N} = ½(1 + η)`**.
-
-Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2474. -/
+/-- Project result: **`𝖣^{2N} = ½(1 + η)`**, the consequence stated in arXiv:2307.02534,
+`References/2307.02534/source/Majoranadraft.tex` line 2474. -/
 theorem kwTranslation_pow_two_mul [NeZero N] :
     kwTranslation N ^ (2 * N) = (2 : ℂ)⁻¹ • (1 + spinFlip N) := by
   have hcomm : Commute ((2 : ℂ)⁻¹ • (1 + spinFlip N)) (translate N)ᵀ := by
