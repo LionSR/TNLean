@@ -14,7 +14,7 @@ import TNLean.MPS.MPU.GroupCocycleMPO
 **Source.** Garre-Rubio, Lootens, Molnár 2023 (arXiv:2203.12563), subsubsection "Periodic
 boundary condition case", `Papers/2203.12563/REsubmission.tex` line 2224: for the nontrivial
 three-cocycle of `ℤ₂` the periodic operator is `U_g = ∏ CZ_{i,i+1} Z_i ∏ X_i`; line 2070:
-`W_g = CZ (1 ⊗ Z)` and `L_g = X`. Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.C,
+`W_g = CZ (1 ⊗ Z)` and `L_g = X`. Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.D,
 `Papers/2405.00439/MPU-DW.tex` line 2040: the three-cocycles
 `ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` of `ℤ_n`, with `[b + c] = b + c mod n`
 (their cocycle facts are in `TNLean.Algebra.ScalarThreeCocycleCyclicExamples`).
@@ -25,7 +25,7 @@ equals `∏ CZ_{i,i+1} Z_i ∏ X_i` as a matrix, and the gate is `W_g = CZ (1 �
 with `ω_j`, for every `n` and `j`, the construction satisfies the operator laws of a matrix
 product unitary representation, with an explicit kernel; for `ℤ₂ × ℤ₂` with
 `ω(a,b,c) = (−1)^{a₁ b₂ c₂}` the same holds. The last cocycle is the type-II component
-`ω_II` of arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` line 1847, but the source does
+`ω_II` of arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` line 1848, but the source does
 not apply the construction to it, so the `ℤ₂ × ℤ₂` statements are project results; so are
 the unitarity and adjoint laws, which the sources do not state for the periodic operators.
 
@@ -181,7 +181,7 @@ def kleinEquiv : Multiplicative (ZMod 2 × ZMod 2) ≃ Fin 4 :=
 /-- Project result: **the periodic operator of `(−1)^{a₁ b₂ c₂}`**: writing `x_i ∈ ℤ₂ × ℤ₂` for the
 configuration `t`, the entry at `(s, t)` vanishes unless `s` is the shift of `t` by `g`, and
 then equals `(−1)^{∑_i g₁ x_{i+1,2} (x_{i,2} − x_{i+1,2})}`. The construction is that of
-arXiv:2203.12563, lines 2204–2222, applied to the type-II cocycle of line 1847; the kernel
+arXiv:2203.12563, lines 2204–2222, applied to the type-II cocycle of line 1848; the kernel
 is derived from `mpo_tensor_apply`. -/
 theorem mpo_tensor_klein_apply (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ} [NeZero N]
     (s t : Fin N → Fin 4) :

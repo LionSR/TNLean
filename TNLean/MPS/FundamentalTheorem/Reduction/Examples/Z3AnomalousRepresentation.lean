@@ -12,7 +12,7 @@ import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 **Source.** Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.A,
 `Papers/2405.00439/MPU-DW.tex` line 1684: a matrix product unitary representation of a finite
 group is a family of operators with `U_g U_h = U_{gh}` and `U_e = 1`, given by injective tensors
-(injective after blocking, as at lines 375 and 1181); Section IV.C, line 2040:
+(injective after blocking, as at lines 375 and 1181); Section IV.D, line 2040:
 the three-cocycles `ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` label the `n` classes of
 such representations of `ℤ_n`. The paper prints no `ℤ₃` tensor.
 Garre-Rubio, Lootens, Molnár 2023 (arXiv:2203.12563), `Papers/2203.12563/REsubmission.tex`

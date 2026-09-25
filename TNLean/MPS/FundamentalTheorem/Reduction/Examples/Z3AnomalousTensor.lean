@@ -9,7 +9,7 @@ import TNLean.MPS.MPDO.OperatorFromWordTrace
 /-!
 # The anomalous `ℤ/3` matrix product operator symmetry
 
-**Source.** Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.C,
+**Source.** Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.D,
 `Papers/2405.00439/MPU-DW.tex` lines 2038–2068: the three-cocycles
 `ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` label the classes of matrix product unitary
 representations of `ℤ_n` (line 2040), with the `n = 3` interchange table (lines 2046–2054).

@@ -34,11 +34,15 @@ these word traces.
 For `P` the relations are those of `P₁`: `P B^{ij} = B^{ij}`, so the range of `P` contains the
 range of every letter and is invariant, and the complementary diagonal block vanishes.
 
-**Local fix (second projector):** the range of the printed `Q` is not invariant under the block,
-`B^{00} (1,-1)ᵀ = (-2,0)ᵀ`; the range of `1 - Q` is, since `B^{ij} Q = B^{ij}`. The printed `Q`
-satisfies the relation `Q B^{ij} = Q B^{ij} Q` of `Q₁` and is read here as `Q₁`, with
-`P₁ = 1 - Q`; the block on the range of `P₁` vanishes and the block on the range of `Q` is the
-printed canonical form. Documented in `docs/paper-gaps/mpu_czx_tensor_normalization.tex`.
+**Side of the second projector.** The review does not say on which side the range of the printed
+`Q` is invariant. Line 1788 notes that a nontrivial subspace invariant under the letters acting
+on column vectors exists if and only if one invariant under their action on row vectors exists,
+since the orthogonal complement of the first is the second. The printed `Q` is of the second
+kind: `Q B^{ij} = Q B^{ij} Q`, so the row space of `Q` is invariant under right multiplication,
+while its column range is not (`B^{00} (1,-1)ᵀ = (-2,0)ᵀ`). Equivalently `Q` plays the role of
+`Q₁` of Section IV, with `P₁ = 1 - Q` the projector onto the column-invariant subspace, since
+`B^{ij} Q = B^{ij}`. The block on the range of `P₁` vanishes and the block on the range of `Q`
+is the printed canonical form.
 
 ## Main definitions
 
@@ -204,11 +208,12 @@ theorem reviewBlock_mul_reviewQ (a : Fin 4) : reviewBlock a * reviewQ = reviewBl
 
 /-- **`Q` satisfies the relation of `Q₁`**, `Q B^{ij} = Q B^{ij} Q`: the range of `1 - Q` is
 invariant under the letters of the block. In the notation of the review's Section IV, the
-printed `Q` is `Q₁ = 1 - P₁`, with `P₁ = 1 - Q` the projector onto the invariant subspace; the
-range of `Q` itself is not invariant (Local fix of the module docstring).
+printed `Q` is `Q₁ = 1 - P₁`, with `P₁ = 1 - Q` the projector onto the invariant subspace, and
+the row space of `Q` is invariant under right multiplication by the letters (see the module
+docstring on the side of the second projector).
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2600, read with the
-relations at lines 1784–1787. -/
+relations at lines 1784–1788. -/
 theorem reviewQ_mul_reviewBlock (a : Fin 4) :
     reviewQ * reviewBlock a = reviewQ * reviewBlock a * reviewQ := by
   rw [Matrix.mul_assoc, reviewBlock_mul_reviewQ]

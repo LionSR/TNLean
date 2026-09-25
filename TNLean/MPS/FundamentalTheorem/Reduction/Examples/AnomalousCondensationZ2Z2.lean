@@ -12,7 +12,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge
 **Source.** Garre-Rubio, Lootens, Molnár 2023 (arXiv:2203.12563),
 `Papers/2203.12563/REsubmission.tex` lines 2200–2224: the periodic matrix product operator
 representation of a finite group built from a three-cocycle; lines 1845–1888: the three-cocycles
-of `ℤ₂ × ℤ₂`, among them the type-II component `ω_II(a b^i, a^j b, a^k b) = −1` (line 1847),
+of `ℤ₂ × ℤ₂`, among them the type-II component `ω_II(a b^i, a^j b, a^k b) = −1` (line 1848),
 which in the coordinates `a = (1,0)`, `b = (0,1)` is `(−1)^{a₁ b₂ c₂}`, of class `(0,0,1)` in
 the table of lines 1856–1872, and a periodic single-qubit realization of that class,
 `U_a = ∏_i CZ_{i,i+1} Z_i`, `U_b = ∏_i X_i` (line 1884). The two-qubit tensors below are
