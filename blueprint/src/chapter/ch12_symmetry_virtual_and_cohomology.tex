@@ -28,6 +28,25 @@ gauge transformations form a projective representation on the bond space.
     virtual symmetry gauges.
 \end{definition}
 
+\begin{lemma}[On-site symmetry under rescaling and gauge]\label{lem:on_site_symmetric_smul_gauge}
+    \lean{MPSTensor.IsOnSiteSymmetric.smul, MPSTensor.IsOnSiteSymmetric.of_gaugeEquiv}
+    \leanok
+    \uses{def:on_site_symmetric, def:gauge_equiv, thm:gauge_invariance}
+    If $A$ has on-site symmetry under $U$, then so does $cA$ for every
+    $c\in\C$, and so does every tensor gauge equivalent to $A$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:twisted_tensor, thm:gauge_invariance}
+    Twisting commutes with rescaling, $\widetilde{(cA)}_g=c\,\widetilde A_g$, and
+    the $N$-site coefficients of $cB$ are $c^N$ times those of $B$. If
+    $B^i=XA^iX^{-1}$, then
+    $(\widetilde B_g)^i=\sum_j U(g)_{ij}XA^jX^{-1}=X(\widetilde A_g)^iX^{-1}$, so
+    $\widetilde B_g$ is gauge equivalent to $\widetilde A_g$, and
+    Theorem~\ref{thm:gauge_invariance} gives
+    $\mc{V}(B)=\mc{V}(A)=\mc{V}(\widetilde A_g)=\mc{V}(\widetilde B_g)$.
+\end{proof}
+
 \begin{lemma}[Functoriality of twisting]\label{lem:twisted_tensor_mul}
     \lean{MPSTensor.twistedTensor_mul}
     \leanok

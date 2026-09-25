@@ -54,9 +54,7 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
 \end{theorem}
 
 \begin{definition}[The Pauli basis of the spin-$1$ site]\label{def:aklt_review_basis}
-    \lean{MPSTensor.akltRMPBasis, MPSTensor.akltRMPBasisFixed,
-        MPSTensor.akltRMPBasis_mem_unitaryGroup,
-        MPSTensor.akltRMPBasisFixed_mem_unitaryGroup}
+    \lean{MPSTensor.akltRMPBasis, MPSTensor.akltRMPBasisFixed}
     \leanok
     \uses{def:aklt_tensor_review}
     The basis of \cite[Appendix~A, ``The AKLT state'']{Cirac2021Matrix} is
@@ -66,9 +64,26 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
                 & \ket{0}.
         \label{eq:aklt_review_basis}
     \end{align}
-    It is orthonormal, and so is the basis obtained by replacing $\ket{+}$ with
-    $-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$.
+    The second basis replaces $\ket{+}$ with
+    $-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$ and keeps $\ket{-}$ and $\ket{0}$.
 \end{definition}
+
+\begin{theorem}[The Pauli bases are orthonormal]\label{thm:aklt_review_basis_unitary}
+    \lean{MPSTensor.akltRMPBasis_mem_unitaryGroup,
+        MPSTensor.akltRMPBasisFixed_mem_unitaryGroup}
+    \leanok
+    \uses{def:aklt_review_basis}
+    The basis (\ref{eq:aklt_review_basis}) is orthonormal, and so is the basis
+    obtained by replacing $\ket{+}$ with $-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$:
+    the matrices whose columns are these vectors are unitary.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The vectors $\ket{\pm}$ are supported on $\ket{\pm1}$ and $\ket{0}$ is
+    orthogonal to both; the inner product of $\ket{+}$ and $\ket{-}$ is
+    $\frac{-i}{2}(1-1)=0$, and each vector has norm $1$. A phase on $\ket{+}$
+    preserves all of these relations.
+\end{proof}
 
 \begin{theorem}[Pauli form of the AKLT tensor]\label{thm:aklt_review_pauli_form}
     \lean{MPSTensor.akltTensorRMPPauli, MPSTensor.rotatePhysical_akltRMPBasis,
@@ -76,8 +91,8 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
         MPSTensor.mpv_rotatePhysical_akltRMPBasis,
         MPSTensor.rotatePhysical_akltRMPBasisFixed}
     \leanok
-    \uses{def:aklt_tensor_review, def:rotate_physical, lem:mpv_rotate_physical,
-        def:aklt_review_basis, lem:aklt_review_matrices, def:gauge_equiv}
+    \uses{def:aklt_tensor_review, def:rotate_physical, thm:gauge_invariance,
+        lem:mpv_smul, def:aklt_review_basis, lem:aklt_review_matrices, def:gauge_equiv}
     Let $U$ be the unitary whose columns are the vectors of
     (\ref{eq:aklt_review_basis}). The tensor (\ref{eq:aklt_review_tensor})
     expressed in this basis, that is, the tensor $B^{a}=\sum_{s}\overline{U_{sa}}\,A^{s}$
@@ -419,7 +434,8 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
         MPSTensor.akltTensorRMPPauli_isOnSiteSymmetric_SO3}
     \leanok
     \uses{lem:aklt_review_gauge_bridge, thm:aklt_normal, thm:aklt_z2z2_symmetric,
-        thm:aklt_so3_symmetric, thm:aklt_review_pauli_form, def:normal}
+        thm:aklt_so3_symmetric, def:normal, def:on_site_symmetric,
+        lem:on_site_symmetric_smul_gauge}
     The tensor of Definition~\ref{def:aklt_tensor_review} is normal and on-site
     symmetric under the $\Z_2\times\Z_2$ action of
     Theorem~\ref{thm:aklt_z2z2_symmetric}. Its Pauli form
@@ -438,7 +454,8 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
     \label{thm:aklt_review_spt}
     \lean{MPSTensor.akltTensorRMP_virtual_projRep}
     \leanok
-    \uses{def:aklt_tensor_review, thm:aklt_nontrivial_spt, def:aklt_omega}
+    \uses{def:aklt_tensor_review, thm:aklt_z2z2_symmetric, thm:aklt_nontrivial_spt,
+        def:aklt_omega, def:twisted_tensor}
     For every $g\in\Z_2\times\Z_2$, the twist of the tensor $A$ of
     Definition~\ref{def:aklt_tensor_review} by $g$ satisfies
     $\sum_j (P_g)_{ij}A^{j}\,X_g=X_g\,A^{i}$, where $X_g$ is the projective
@@ -448,7 +465,39 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
-    An entrywise computation for each of the four group elements.
+    With the physical states ordered $S_z=0,+1,-1$, the two generators act by
+    \begin{align}
+        P_{(1,0)} & = \begin{pmatrix}-1&0&0\\0&0&1\\0&1&0\end{pmatrix},
+                  & P_{(0,1)}                                           & = \begin{pmatrix}1&0&0\\0&-1&0\\0&0&-1\end{pmatrix},
+        \notag
+    \end{align}
+    and the virtual matrices are
+    \begin{align}
+        X_{(1,0)} & = i\sigma_y = \begin{pmatrix}0&1\\-1&0\end{pmatrix},
+                  & X_{(0,1)}                                            & = \sigma_z,
+                  & X_{(1,1)}                                            & = X_{(1,0)}X_{(0,1)} = \begin{pmatrix}0&-1\\-1&0\end{pmatrix}.
+        \notag
+    \end{align}
+    For $g=(1,0)$ the twist is $\widetilde A_g^{0}=-A^{0}$,
+    $\widetilde A_g^{+1}=A^{-1}$, $\widetilde A_g^{-1}=A^{+1}$, and with the
+    matrices of Lemma~\ref{lem:aklt_review_matrices},
+    \begin{align}
+        \widetilde A_g^{+1}X_g
+         & = \ketbra{1}{0}\begin{pmatrix}0&1\\-1&0\end{pmatrix}
+        = \ketbra{1}{1}
+        = \begin{pmatrix}0&1\\-1&0\end{pmatrix}\big(-\ketbra{0}{1}\big)
+        = X_g A^{+1},
+        \notag                                                  \\
+        \widetilde A_g^{0}X_g
+         & = -\tfrac{1}{\sqrt2}\sigma_z\, i\sigma_y
+        = \tfrac{1}{\sqrt2}\, i\sigma_y\,\sigma_z
+        = X_g A^{0},
+        \notag
+    \end{align}
+    since $\sigma_y$ and $\sigma_z$ anticommute; the letter $-1$ is checked in
+    the same way. For $g=(0,1)$ the twist multiplies $A^{\pm1}$ by $-1$ and fixes
+    $A^{0}$, which is conjugation by $\sigma_z$. The case $g=(1,1)$ is the
+    composite of the two, and $g=1$ is trivial.
 \end{proof}
 
 \begin{theorem}[Two-site parent Hamiltonian of the singlet-bond AKLT tensor]%
