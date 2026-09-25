@@ -100,7 +100,7 @@ theorem compressionAnalysis_mul_compressionSynthesis {a b : Λ} (P : PairCompres
     rfl
 
 /-- An entry of `S (⊕_c 1 ⊗ B_c) A` is the sum of the matching entries of the blocks. -/
-private theorem mul_blockDiagonal_one_kronecker_mul_apply {m : Type*} [Fintype m]
+private theorem mul_blockDiagonal_one_kronecker_mul_apply {m : Type*}
     {M : Λ → ℕ} {n : Λ → ℕ}
     (S : Matrix m ((c : Λ) × (Fin (M c) × Fin (n c))) ℂ)
     (B : ∀ c, Matrix (Fin (n c)) (Fin (n c)) ℂ)
