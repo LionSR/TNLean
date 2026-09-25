@@ -38,11 +38,8 @@ theorem not_exists_normal_fixesMPV_czxDecoratedTensor :
   rintro ⟨D, A, hD, hA, hU⟩
   refine czxFamily_isNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass
     czxFusionData (not_isTrivialGaugeClass_omega_czx czxFusionData) ⟨D, A, hD, hA, ?_⟩
-  intro x
-  fin_cases x
-  · intro N _
-    change mpo (MPOTensor.idTensor 2) N *ᵥ _ = _
-    rw [mpo_idTensor, Matrix.one_mulVec]
-  · exact hU
+  refine Multiplicative.forall_zmod_two (fun N _ ↦ ?_) hU
+  change mpo (MPOTensor.idTensor 2) N *ᵥ _ = _
+  rw [mpo_idTensor, Matrix.one_mulVec]
 
 end CZXCompression
