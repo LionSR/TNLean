@@ -217,13 +217,11 @@ def czxFusionData : czxFamily.FusionData where
 
 /-! ### The two fusion trees of three generators -/
 
-/-- The integer matrix of `V̂ ⊗ 1`, the left boundary of the tree fusing the first
-two generators first. -/
-def czxLeftTreeInt : Matrix (Fin 2) (Fin 8) ℤ :=
-  !![0, 0, 0, 0, 1, 0, 0, 0; 0, 0, 0, 0, 0, 1, 0, 0]
-
 /-- The integer matrix of `1 ⊗ V̂`, the left boundary of the tree fusing the last
-two generators first. -/
+two generators first. The tree fusing the first two generators first is `V̂ ⊗ 1`, the
+matrix `czxAssocLeftInt` of `eq:Uanomal`. This one is not the right end
+`czxAssocRightInt = 1 ⊗ V` of `eq:Uanomal`: it carries `V̂` rather than `V`, as a row
+rather than a column. -/
 def czxRightTreeInt : Matrix (Fin 2) (Fin 8) ℤ :=
   !![0, 0, 1, 0, 0, 0, 0, 0; 0, 0, 0, 0, 0, 0, 1, 0]
 
@@ -274,10 +272,10 @@ private theorem castMat_gen_one_gen :
   rfl
 
 /-- The left fusion tree of `(s,s,s)`, which fuses the first two factors first, is the
-integer matrix `czxLeftTreeInt`; it is one of the two trees compared in `eq:3-cocycle` of
+integer matrix `czxAssocLeftInt`; it is one of the two trees compared in `eq:3-cocycle` of
 arXiv:2502.20257. -/
 theorem czxFusionData_leftV_gen_gen_gen :
-    czxFusionData.leftV czxGen czxGen czxGen = complexOfInt czxLeftTreeInt := by
+    czxFusionData.leftV czxGen czxGen czxGen = complexOfInt czxAssocLeftInt := by
   change (1 : Matrix (Fin 2) (Fin 2) ℂ) * kronId (complexOfInt czxFusionVHatInt) 2 = _
   rw [Matrix.one_mul, kronId_complexOfInt]
   congr 1
@@ -296,8 +294,8 @@ theorem czxFusionData_rightV_gen_gen_gen :
   decide
 
 private theorem czx_left_pair_int : ∀ i j k l : Fin 2,
-    czxLeftTreeInt * czxDecoratedCubeInt i j * czxDecoratedCubeInt k l =
-      czxDecoratedIntTensor i j * czxLeftTreeInt * czxDecoratedCubeInt k l := by
+    czxAssocLeftInt * czxDecoratedCubeInt i j * czxDecoratedCubeInt k l =
+      czxDecoratedIntTensor i j * czxAssocLeftInt * czxDecoratedCubeInt k l := by
   decide
 
 private theorem czx_right_pair_int : ∀ i j k l : Fin 2,
@@ -306,7 +304,7 @@ private theorem czx_right_pair_int : ∀ i j k l : Fin 2,
   decide
 
 private theorem czx_letter_int : ∀ i j : Fin 2,
-    czxLeftTreeInt * czxDecoratedCubeInt i j = -(czxRightTreeInt * czxDecoratedCubeInt i j) := by
+    czxAssocLeftInt * czxDecoratedCubeInt i j = -(czxRightTreeInt * czxDecoratedCubeInt i j) := by
   decide
 
 private theorem czx_pair (L : Matrix (Fin 2) (Fin 8) ℤ)
@@ -320,9 +318,9 @@ private theorem czx_pair (L : Matrix (Fin 2) (Fin 8) ℤ)
     ← complexOfInt_mul, ← complexOfInt_mul, ← complexOfInt_mul, hL]
 
 private theorem czx_letter (a : Fin 4) :
-    complexOfInt czxLeftTreeInt * czxDecoratedCube.toMPSTensor a =
+    complexOfInt czxAssocLeftInt * czxDecoratedCube.toMPSTensor a =
       (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube.toMPSTensor a) := by
-  change complexOfInt czxLeftTreeInt * czxDecoratedCube _ _ =
+  change complexOfInt czxAssocLeftInt * czxDecoratedCube _ _ =
     (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube _ _)
   rw [czxDecoratedCube_eq, ← complexOfInt_mul, ← complexOfInt_mul, czx_letter_int,
     complexOfInt_neg, neg_one_smul]
@@ -330,7 +328,7 @@ private theorem czx_letter (a : Fin 4) :
 /-- The two fusion trees of three generators agree up to the sign `-1` against every
 nonempty word of the triple product. -/
 theorem czx_leftTree_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
-    complexOfInt czxLeftTreeInt * Kraus.evalWord czxDecoratedCube.toMPSTensor w =
+    complexOfInt czxAssocLeftInt * Kraus.evalWord czxDecoratedCube.toMPSTensor w =
       (-1 : ℂ) • (complexOfInt czxRightTreeInt *
         Kraus.evalWord czxDecoratedCube.toMPSTensor w) := by
   induction w with
@@ -342,10 +340,10 @@ theorem czx_leftTree_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
           have ih' := ih (List.cons_ne_nil _ _)
           rw [Kraus.evalWord_cons] at ih'
           calc
-            _ = complexOfInt czxLeftTreeInt * czxDecoratedCube.toMPSTensor a *
+            _ = complexOfInt czxAssocLeftInt * czxDecoratedCube.toMPSTensor a *
                 czxDecoratedCube.toMPSTensor b * Kraus.evalWord czxDecoratedCube.toMPSTensor w := by
               simp only [Kraus.evalWord_cons, Matrix.mul_assoc]
-            _ = czxDecoratedTensor.toMPSTensor a * (complexOfInt czxLeftTreeInt *
+            _ = czxDecoratedTensor.toMPSTensor a * (complexOfInt czxAssocLeftInt *
                 (czxDecoratedCube.toMPSTensor b *
                   Kraus.evalWord czxDecoratedCube.toMPSTensor w)) := by
               rw [czx_pair _ czx_left_pair_int]
