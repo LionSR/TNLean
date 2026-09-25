@@ -17,6 +17,7 @@ import TNLean.MPS.Examples.AnomalousCondensation
 import TNLean.MPS.Examples.CZX
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.ClusterParentHamiltonian
+import TNLean.MPS.Examples.ClusterReview
 import TNLean.MPS.Examples.ClusterSourceGroundState
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.Fibonacci
@@ -26,6 +27,7 @@ import TNLean.MPS.Examples.GHZClusterAction
 import TNLean.MPS.Examples.GHZParentHamiltonian
 import TNLean.MPS.Examples.GHZQudit
 import TNLean.MPS.Examples.Ising
+import TNLean.MPS.Examples.KitaevChain
 import TNLean.MPS.Examples.KramersWannier
 import TNLean.MPS.Examples.MajumdarGhosh
 import TNLean.MPS.Examples.MajumdarGhoshDimer
@@ -36,6 +38,7 @@ import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
 import TNLean.MPS.Examples.SpinHalf
 import TNLean.MPS.Examples.WState
+import TNLean.MPS.Examples.WStatePeriodic
 import TNLean.MPS.Examples.Z3Anomalous
 import TNLean.MPS.Examples.ZMod2
 import TNLean.MPS.Examples.ZeroCorrelationExamples
