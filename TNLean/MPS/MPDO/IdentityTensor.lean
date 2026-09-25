@@ -22,8 +22,6 @@ with it.
 * `MPOTensor.mpo_idTensor`: its periodic operator is the identity at every length.
 -/
 
-open scoped Matrix
-
 namespace MPOTensor
 
 /-- The MPO tensor with trivial bond whose letters are $\delta_{ij}$.  It
