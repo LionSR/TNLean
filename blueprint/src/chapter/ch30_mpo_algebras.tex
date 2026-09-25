@@ -302,7 +302,7 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 
 \begin{example}[Ising]%
     \label{ex:mpo_symmetry_ising}
-    \lean{IsingTwist.isingBlock, IsingTwist.isingFusion,
+    \lean{IsingTwist.isingDim, IsingTwist.isingBlock, IsingTwist.isingFusion,
         IsingTwist.isMPOFusionAlgebra_ising,
         IsingTwist.isFusionUnit_isingFusion,
         IsingTwist.not_isFusionCharacter_isingFusion,
@@ -310,8 +310,9 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     \leanok
     \uses{cor:mpo_symmetric_no_go, thm:asymex_ising_path_operators,
         cor:asymex_ising_sigma_fusion_unscaled, thm:asymex_ising_sigma_square}
-    The Ising operators $A_1$, $A_\psi$ and $A_\sigma$ of
-    Section~\ref{sec:asymex_ising_tensors} form a fusion algebra with unit
+    The Ising operators $A_1$, $A_\psi$ and $\tfrac1{\sqrt2}A_\sigma$ of
+    Section~\ref{sec:asymex_ising_tensors}, of bond dimensions $3$, $3$ and
+    $4$, form a fusion algebra with unit
     $1$, $\psi\times\psi=1$, $\psi\times\sigma=\sigma\times\psi=\sigma$ and
     $\sigma\times\sigma=1+\psi$ \cite{Bultinck2017Anyons}. A fusion character
     in $\N$ would satisfy $m_\psi^2=1$, hence $m_\psi=1$, and then
