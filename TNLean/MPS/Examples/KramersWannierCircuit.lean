@@ -11,8 +11,8 @@ import TNLean.MPS.Examples.KramersWannierSource
 **Source.** Seiberg, Shao 2023 (arXiv:2307.02534), section "Non-invertible lattice translation of
 the transverse-field Ising model", `References/2307.02534/source/Majoranadraft.tex`
 lines 2431–2437: the non-invertible translation
-`𝖣 = e^{-2π i N/8} (𝖽^z_1 𝖽^x_1) ⋯ (𝖽^z_{N-1} 𝖽^x_{N-1}) 𝖽^z_N (1 + η)/2` with
-`𝖽^z_j = (1 + i Z_j)/√2`, `𝖽^x_j = (1 + i X_j X_{j+1})/√2` and `η = ∏_j Z_j`, on a ring of
+`𝖣 = e^{-2π i N/8} (d^z_1 d^x_1) ⋯ (d^z_{N-1} d^x_{N-1}) d^z_N (1 + η)/2` with
+`d^z_j = (1 + i Z_j)/√2`, `d^x_j = (1 + i X_j X_{j+1})/√2` and `η = ∏_j Z_j`, on a ring of
 `N` sites; lines 2442–2444: its local relations `𝖣 Z_j = X_j X_{j+1} 𝖣` and
 `𝖣 X_j X_{j+1} = Z_{j+1} 𝖣`; lines 2466–2475: its algebra with `η` and `T_Ising`.
 
@@ -32,8 +32,8 @@ is a product of matrices with the leftmost factor applied last.
 ## Main definitions
 
 * `KWExample.hadamard`: the Hadamard gate `H^{⊗N}` on every site.
-* `KWExample.ssGateZ`, `KWExample.ssGateXX`, `KWExample.ssEta`: the local factors `𝖽^z_j`,
-  `𝖽^x_j` and the symmetry `η = ∏_j Z_j` of the source.
+* `KWExample.ssGateZ`, `KWExample.ssGateXX`, `KWExample.ssEta`: the local factors `d^z_j`,
+  `d^x_j` and the symmetry `η = ∏_j Z_j` of the source.
 * `KWExample.ssCircuit`: the circuit `𝖣` on `n + 1` sites.
 
 ## Main results
@@ -159,13 +159,13 @@ theorem hadamard_mul_list_prod_mul_hadamard
 
 /-! ### The circuit as printed -/
 
-/-- The local factor `𝖽^z_j = (1 + i Z_j)/√2 = e^{iπ Z_j/4}`.
+/-- The local factor `d^z_j = (1 + i Z_j)/√2 = e^{iπ Z_j/4}`.
 
 Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2434. -/
 def ssGateZ (j : Fin N) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   invSqrtTwo • (1 + I • siteZ j)
 
-/-- The local factor `𝖽^x_j = (1 + i X_j X_{j+1})/√2 = e^{iπ X_j X_{j+1}/4}`.
+/-- The local factor `d^x_j = (1 + i X_j X_{j+1})/√2 = e^{iπ X_j X_{j+1}/4}`.
 
 Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` line 2435. -/
 def ssGateXX [NeZero N] (j : Fin N) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
@@ -178,8 +178,8 @@ def ssEta (N : ℕ) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   (List.ofFn fun j : Fin N => siteZ j).prod
 
 /-- The non-invertible translation of Seiberg–Shao on `N = n + 1` sites,
-`𝖣 = e^{-2π i N/8} (𝖽^z_1 𝖽^x_1) ⋯ (𝖽^z_{N-1} 𝖽^x_{N-1}) 𝖽^z_N (1 + η)/2`, with the source's
-sites `1, …, N` relabelled `0, …, n`. The factors `𝖽^x_j` run over the open chain `j < n`; the
+`𝖣 = e^{-2π i N/8} (d^z_1 d^x_1) ⋯ (d^z_{N-1} d^x_{N-1}) d^z_N (1 + η)/2`, with the source's
+sites `1, …, N` relabelled `0, …, n`. The factors `d^x_j` run over the open chain `j < n`; the
 bond between the last and the first site does not occur.
 
 Source: arXiv:2307.02534, `References/2307.02534/source/Majoranadraft.tex` lines 2431–2437. -/
@@ -190,11 +190,11 @@ def ssCircuit (n : ℕ) : Matrix (Fin (n + 1) → Fin 2) (Fin (n + 1) → Fin 2)
 
 /-! ### The circuit in the Hadamard frame -/
 
-/-- The Hadamard image of `𝖽^z_j`, the gate `(1 + i X_j)/√2`. -/
+/-- The Hadamard image of `d^z_j`, the gate `(1 + i X_j)/√2`. -/
 def hGateX (j : Fin N) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   invSqrtTwo • (1 + I • siteX j)
 
-/-- The Hadamard image of `𝖽^x_j`, the diagonal gate `(1 + i Z_j Z_{j+1})/√2`. -/
+/-- The Hadamard image of `d^x_j`, the diagonal gate `(1 + i Z_j Z_{j+1})/√2`. -/
 def hGateZZ [NeZero N] (j : Fin N) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   invSqrtTwo • (1 + I • siteZZ j)
 
