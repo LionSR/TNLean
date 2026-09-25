@@ -283,7 +283,7 @@ theorem V_mul_W_eq_zero_of_not_isGaugeRelated (P Q : ZipperDecomposition B C N) 
 
 /-- The **multiplicity gauge** of two zipper decompositions: the scalar
 $(Y_c)_{\mu\nu} = \operatorname{tr}(\widetilde V_{c,\mu} W_{c,\nu}) / D_c$, where
-`P = (V, W)` and `Q = (Ṽ, W̃)`. -/
+`P = (V, W)` and `Q = (V', W')`. -/
 noncomputable def multiplicityGauge (P Q : ZipperDecomposition B C N) (c : ι) :
     Matrix (Fin (N c)) (Fin (N c)) ℂ :=
   fun μ ν => (D c : ℂ)⁻¹ * (Q.V c μ * P.W c ν).trace
@@ -411,7 +411,7 @@ theorem eq_multiplicityGauge_of_V_mul_eq_sum (P Q : ZipperDecomposition B C N)
 
 /-- **Uniqueness of zipper decompositions up to the multiplicity gauge.** Let the blocks be
 normal, of positive bond dimension, and pairwise not gauge related.  Two zipper decompositions
-`P = (V, W)` and `Q = (Ṽ, W̃)` of `B` over the same blocks and multiplicities differ by a unique
+`P = (V, W)` and `Q = (V', W')` of `B` over the same blocks and multiplicities differ by a unique
 family `Y c ∈ GL (N c)`:
 $\widetilde V_{c,\mu}B^i = \sum_\nu (Y_c)_{\mu\nu}V_{c,\nu}B^i$ and
 $B^i\widetilde W_{c,\kappa} = \sum_\nu B^iW_{c,\nu}(Y_c^{-1})_{\nu\kappa}$ for every letter.
