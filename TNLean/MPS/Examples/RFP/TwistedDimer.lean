@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.GeneralizeDecide
 import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Examples.MultiBlock.StackedPairGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
@@ -235,9 +236,7 @@ theorem dimerStackedInt_eq_add (f f' : Fin 2) :
     · rw [dimerMInt_eq_sign_smul f, dimerMInt_eq_sign_smul f', dimerMInt_eq_sign_smul (f + f') j,
         Matrix.smul_kronecker, Matrix.kronecker_smul, Matrix.kronecker_smul, smul_smul, ← h]
       congr 1
-      generalize bitF i = c
-      revert c f f'
-      decide
+      generalize_decide bitF i, f, f'
     · rw [dimerMInt_eq_zero f h, dimerMInt_eq_zero 0 h, Matrix.zero_kronecker,
         Matrix.zero_kronecker]
   funext a
