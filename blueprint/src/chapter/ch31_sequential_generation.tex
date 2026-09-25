@@ -1,0 +1,161 @@
+%% ==================================================
+%% Chapter: Sequential generation of matrix product states
+%% Source: arXiv:quant-ph/0608197, Section 5 (lines 1504--1616 of
+%% Papers/quant-ph_0608197/MPSarchive.tex); arXiv:quant-ph/0501096.
+%% ==================================================
+
+\chapter{Sequential Generation of Matrix Product States}\label{ch:sequential_generation}
+
+A chain of $N$ sites with local dimension $d$ starts in the product state
+$\ket{0}^{\otimes N}$. In a sequential scheme an ancilla of dimension $D$
+interacts with the sites one after another, or the sites interact with their
+neighbours one after another. The states produced in this way are exactly the
+matrix product states with open boundary conditions and bounded bond
+dimension. The presentation follows \cite[Section~5]{PerezGarcia2007Matrix},
+which reviews and extends \cite{Schoen2005Sequential}.
+
+\section{Sequential schemes}
+
+\begin{definition}[Open-boundary matrix product state]
+    \label{def:obc_mps_bond_bound}
+    A vector $\ket{\psi}\in(\C^d)^{\otimes N}$ has an \emph{open-boundary matrix
+        product representation with bond dimension at most $D$} if there are
+    integers $D_1,\dots,D_{N+1}\le D$ with $D_1=D_{N+1}=1$ and matrices
+    $A^{[k]}_i\in\C^{D_{k+1}\times D_k}$, for $k=1,\dots,N$ and $i=0,\dots,d-1$,
+    such that
+    \begin{align}
+        \ket{\psi}
+         & =\sum_{i_1,\dots,i_N=0}^{d-1}
+        A^{[N]}_{i_N}\cdots A^{[2]}_{i_2}A^{[1]}_{i_1}\,
+        \ket{i_N\cdots i_1}.
+        \label{eq:obc_mps_bond_bound}
+    \end{align}
+    Here the product of the $1\times 1$ matrices is read as a scalar.
+\end{definition}
+
+\begin{definition}[Sequential scheme with an ancilla]
+    \label{def:sequential_scheme_ancilla}
+    \uses{def:obc_mps_bond_bound}
+    Let $\ket{\varphi_I},\ket{\varphi_F}\in\C^D$. For $k=1,\dots,N$ let
+    $G_k=\sum_{i,\alpha,\beta}A^{[k]}_{i,\alpha,\beta}\,
+        \ketbra{\alpha,i}{\beta,0}$ act on the ancilla $\C^D$ and the $k$-th site.
+    Applying $G_1,\dots,G_N$ in turn to $\ket{\varphi_I}\otimes\ket{0}^{\otimes N}$
+    and projecting the ancilla onto $\ket{\varphi_F}$ leaves the chain in
+    \begin{align}
+        \ket{\psi}
+         & =\sum_{i_1,\dots,i_N=0}^{d-1}
+        \bra{\varphi_F}A^{[N]}_{i_N}\cdots A^{[2]}_{i_2}A^{[1]}_{i_1}
+        \ket{\varphi_I}\,\ket{i_N\cdots i_1},
+        \label{eq:sequential_generated_state}
+    \end{align}
+    where $(A^{[k]}_i)_{\alpha\beta}=A^{[k]}_{i,\alpha,\beta}$.
+    The scheme is
+    \begin{enumerate}
+        \item \emph{probabilistic} if the operations $G_k$ are arbitrary;
+        \item \emph{deterministic} if every $G_k$ is the restriction of a unitary,
+              so that $\sum_i (A^{[k]}_i)^\dagger A^{[k]}_i=\Id_D$, and the ancilla
+              decouples after the last step, that is, the final joint state is
+              $\ket{\varphi_F}\otimes\ket{\psi}$;
+        \item for $d=2$, a \emph{deterministic transition scheme} if the ancilla is
+              $\C^D\otimes\C^2$, every step consists of an arbitrary unitary on the
+              ancilla followed by the fixed interaction
+              $\ket{\varphi}\ket{1}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{1}$,
+              $\ket{\varphi}\ket{0}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{0}$, and the
+              ancilla decouples after the last step.
+    \end{enumerate}
+    This is \cite[Section~5.1]{PerezGarcia2007Matrix}.
+\end{definition}
+
+\section{Sequential generation with an ancilla}
+
+\begin{lemma}[Isometric open-boundary representation]
+    \label{lem:obc_left_isometric_representation}
+    \uses{def:obc_mps_bond_bound}
+    Every normalized vector with an open-boundary matrix product representation
+    with bond dimension at most $D$ has such a representation with the same
+    bound in which every site map is an isometry:
+    \begin{align}
+        \sum_{i=0}^{d-1}(A^{[k]}_i)^\dagger A^{[k]}_i
+         & =\Id_{D_k},
+        \qquad k=1,\dots,N.
+        \label{eq:obc_left_isometric}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    Starting from the last site $k=N$, read the site map as a matrix from
+    $\C^{D_k}$ to $\C^{D_{k+1}}\otimes\C^d$ and write it as $Q_kR_k$ with
+    $R_k\colon\C^{D_k}\to\C^{r_k}$, $r_k\le D_k$, and $Q_k$ an isometry, for
+    instance by a singular value decomposition. Keep $Q_k$ as the new site map,
+    replace $D_k$ by $r_k$, and multiply $R_k$ into the site map of site $k-1$.
+    The bond dimensions do not grow. After the first
+    site the remaining factor is a $1\times 1$ matrix, and it has modulus one
+    because the vector is normalized; absorb it into the first site map. This is the construction of \cite{Schoen2005Sequential} by
+    successive decompositions.
+\end{proof}
+
+\begin{lemma}[Unitary completion of an isometry]
+    \label{lem:isometry_unitary_completion}
+    Let $W$ be a finite-dimensional Hilbert space, $S\subseteq W$ a subspace,
+    and $V\colon S\to W$ an isometry. Then there is a unitary $U$ on $W$ with
+    $U|_S=V$.
+\end{lemma}
+
+\begin{theorem}[Sequential generation with an ancilla]
+    \label{thm:sequential_generation_ancilla}
+    \uses{def:sequential_scheme_ancilla, lem:obc_left_isometric_representation,
+        lem:isometry_unitary_completion}
+    The following sets of vectors in $(\C^d)^{\otimes N}$ coincide:
+    \begin{enumerate}
+        \item the states produced by probabilistic sequential schemes with a
+              $D$-dimensional ancilla, up to normalization;
+        \item the states produced by deterministic sequential schemes with a
+              $D$-dimensional ancilla;
+        \item for $d=2$, the states produced by deterministic transition schemes;
+        \item the states with an open-boundary matrix product representation
+              with bond dimension at most $D$, up to normalization.
+    \end{enumerate}
+    This is \cite[Theorem~``Sequential generation with ancilla'',
+        Section~5.1]{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}
+    Every generated state has the form (\ref{eq:sequential_generated_state}),
+    which is an open-boundary representation with bond dimension at most $D$
+    after absorbing $\ket{\varphi_I}$ and $\bra{\varphi_F}$ into the first and
+    last site. Conversely, bring a normalized open-boundary state into the
+    isometric form of Lemma~\ref{lem:obc_left_isometric_representation}. Each
+    site map is an isometry from the bond space $\C^{D_k}$, embedded in the
+    ancilla as $\C^{D_k}\otimes\ket{0}$, into $\C^{D_{k+1}}\otimes\C^d$;
+    Lemma~\ref{lem:isometry_unitary_completion} extends it to a unitary on
+    $\C^D\otimes\C^d$. Since $D_{N+1}=1$, the ancilla is left in a fixed
+    state after the last step.
+\end{proof}
+
+\section{Sequential generation without an ancilla}
+
+\begin{definition}[Sequential scheme without an ancilla]
+    \label{def:sequential_scheme_no_ancilla}
+    Starting from $\ket{0}^{\otimes N}\in(\C^d)^{\otimes N}$, apply an
+    operation $U^{[k]}$ to sites $k$ and $k+1$ for $k=1,\dots,N-1$ in turn. The
+    scheme is \emph{deterministic} if every $U^{[k]}$ is unitary and
+    \emph{probabilistic} if the operations are arbitrary.
+\end{definition}
+
+\begin{theorem}[Sequential generation without an ancilla]
+    \label{thm:sequential_generation_no_ancilla}
+    \uses{def:sequential_scheme_no_ancilla, thm:sequential_generation_ancilla}
+    The states produced by sequential schemes without an ancilla, either
+    deterministic or probabilistic (the latter up to normalization), are
+    exactly the states with an open-boundary matrix product representation
+    with bond dimension at most $d$. This is
+    \cite[Theorem~``Sequential generation without ancilla'',
+        Section~5.2]{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}
+    For $k<N-1$ the matrices $A^{[k]}_{i,\alpha,\beta}=\bra{i,\beta}U^{[k]}\ket{\alpha,0}$
+    give the site maps, with $\alpha=0$ at $k=1$; a singular value decomposition
+    of the coefficients $\bra{i,j}U^{[N-1]}\ket{\alpha,0}$ in the grouping
+    $i\mid\alpha,j$ gives the last two sites. Conversely, run the deterministic
+    scheme of Theorem~\ref{thm:sequential_generation_ancilla} using site $k+1$
+    as the ancilla of the $k$-th step, followed by a swap of sites $k+1$ and
+    $k+2$.
+\end{proof}
