@@ -242,7 +242,8 @@ theorem complexOfEisenstein_transpose {m n : Type*} (X : Matrix m n EisensteinIn
 
 theorem complexOfEisenstein_submatrix {m n m' n' : Type*} (X : Matrix m n EisensteinInt)
     (f : m' → m) (g : n' → n) :
-    complexOfEisenstein (X.submatrix f g) = (complexOfEisenstein X).submatrix f g := rfl
+    complexOfEisenstein (X.submatrix f g) = (complexOfEisenstein X).submatrix f g :=
+  complexOfRing_submatrix eisensteinToComplex X f g
 
 theorem complexOfEisenstein_ne_zero {m n : Type*} {X : Matrix m n EisensteinInt} (hX : X ≠ 0) :
     complexOfEisenstein X ≠ 0 :=
