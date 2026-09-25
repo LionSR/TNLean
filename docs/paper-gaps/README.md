@@ -23,7 +23,12 @@ For the MPU index of arXiv:1703.09188:
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
   normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
   tensors and physical Z gates of the 2025 diagram. The shared-tensor
-  correspondence remains open under #7738.
+  correspondence remains open under #7738. The note also records that the
+  bra-ket display of the CZX tensor in arXiv:2011.12127, Appendix A, repeats
+  the normalized tensor, while the matrices printed there are its unnormalized
+  rescaling, for which the claims of that passage hold, and that the printed
+  matrices give the gate order opposite to the verbal description, a global
+  sign `(-1)^N`.
 
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
@@ -533,3 +538,10 @@ For the MPU action on injective MPS blocks in arXiv:2502.20257:
   conventions (including the swapped-order prose typo preceding Equation
   (20)), and explains the stabilizer/coset and
   $H^2(H,\mathbb C^\times)$-torsor meanings of the notation $(H,\psi)$.
+
+For the group matrix product operators of arXiv:2203.12563:
+
+- `glm23_pbc_group_mpo_single_shift.tex` records that the periodic display
+  $U_g=\bigotimes_i (L_g^i\otimes L_g^{i+1})W_g^{i,i+1}$, read literally,
+  shifts every site twice, and that the printed tensor and the printed
+  $\mathbb Z_2$ example fix one left shift per site.
