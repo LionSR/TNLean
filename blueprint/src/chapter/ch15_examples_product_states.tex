@@ -3,7 +3,7 @@
 
 The simplest matrix product states are product states: every product state is
 a matrix product state with bond dimension one~\cite[Appendix~A, ``Product
-states'']{Cirac2021Matrix}. Since the local tensors may differ from site to
+    states'']{Cirac2021Matrix}. Since the local tensors may differ from site to
 site, the matrix product is closed by boundary vectors, as in the open-boundary
 contraction of Section~\ref{sec:w_state}.
 
@@ -55,13 +55,18 @@ contraction of Section~\ref{sec:w_state}.
     \leanok
     \uses{def:product_state_tensor, def:site_open_coeff}
     Every product state is a matrix product state with bond dimension one:
-    with trivial boundary vectors $v_L=v_R=1$,
+    for the tensor of Definition~\ref{def:product_state_tensor}, with
+    $A^{[s]\,i}=a^{i,[s]}$ and trivial boundary vectors $v_L=v_R=1$, the
+    site-dependent open-boundary contraction of every configuration
+    $(i_1,\ldots,i_N)$ is the coefficient of the product vector,
     \begin{align}
-        \ket{\psi}
-         & = \sum_{i_1,\ldots,i_N}
-        a^{i_1,[1]}\cdots a^{i_N,[N]}\,\ket{i_1,\ldots,i_N}.
+        v_L^{\mathsf T}\,A^{[1]\,i_1}A^{[2]\,i_2}\cdots A^{[N]\,i_N}\,v_R
+         & = a^{i_1,[1]}\cdots a^{i_N,[N]},
         \notag
     \end{align}
+    so that
+    $\ket{\psi}=\sum_{i_1,\ldots,i_N}a^{i_1,[1]}\cdots a^{i_N,[N]}\,
+        \ket{i_1,\ldots,i_N}$ is the matrix product state of this tensor.
     This is the product-state statement
     of~\cite[Appendix~A, ``Product states'']{Cirac2021Matrix}.
 \end{theorem}

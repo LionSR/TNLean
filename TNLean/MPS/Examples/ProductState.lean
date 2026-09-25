@@ -3,13 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.OpenBoundary
 
 /-!
 # Product states: bond-dimension-one MPS
 
 **Source.** Cirac, Pérez-García, Schuch, Verstraete 2021 (arXiv:2011.12127), Appendix A,
-"Product states", `Papers/2011.12127/TN-Review-main.tex` lines 2332–2336: a product state
+"Product states", `Papers/2011.12127/TN-Review-main.tex` lines 2330–2333: a product state
 $\lvert\phi^1\rangle\otimes\cdots\otimes\lvert\phi^N\rangle$ with
 $\lvert\phi^s\rangle=\sum_i a^{i,[s]}\lvert i\rangle$ is a trivial MPS with `D = 1`,
 $\lvert\psi\rangle=\sum_{i_1,\dots,i_N}a^{i_1,[1]}\cdots a^{i_N,[N]}\lvert i_1,\dots,i_N\rangle$.
@@ -58,13 +59,13 @@ noncomputable def siteOpenCoeff (vL vR : Fin D → ℂ) (A : Fin N → MPSTensor
     (σ : Cfg d N) : ℂ :=
   vL ⬝ᵥ (List.ofFn fun s => A s (σ s)).prod *ᵥ vR
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2332–2336.
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2330–2333.
 The bond-dimension-one tensor of a product state: at site `s` the matrix of physical
 index `i` is the `1 × 1` matrix $a^{i,[s]}$. -/
 def productSiteTensor (a : Fin N → Fin d → ℂ) : Fin N → MPSTensor d 1 :=
   fun s i => Matrix.of fun _ _ => a s i
 
-/-- Source: arXiv:2011.12127, lines 2332–2333. The product vector
+/-- Source: arXiv:2011.12127, lines 2330–2333. The product vector
 $\lvert\phi^1\rangle\otimes\cdots\otimes\lvert\phi^N\rangle$, with
 $\lvert\phi^s\rangle=\sum_i\phi^s_i\lvert i\rangle$, in the computational basis: its
 coefficient on $\lvert i_1,\dots,i_N\rangle$ is $\phi^1_{i_1}\cdots\phi^N_{i_N}$. -/
@@ -80,7 +81,7 @@ private lemma prod_ofFn_one_apply :
     rw [List.ofFn_succ, List.prod_cons, Fin.prod_univ_succ, Matrix.mul_apply,
       Fin.sum_univ_one, prod_ofFn_one_apply (fun s => M s.succ)]
 
-/-- Source: arXiv:2011.12127, lines 2332–2336. A product state is an MPS with `D = 1`:
+/-- Source: arXiv:2011.12127, lines 2330–2333. A product state is an MPS with `D = 1`:
 the open-boundary contraction of the `1 × 1` matrices $a^{i_s,[s]}$, with trivial boundary
 vectors, is the coefficient $a^{i_1,[1]}\cdots a^{i_N,[N]}$ of the product vector with
 local vectors $\lvert\phi^s\rangle=\sum_i a^{i,[s]}\lvert i\rangle$. -/
@@ -92,23 +93,13 @@ theorem siteOpenCoeff_productSiteTensor (a : Fin N → Fin d → ℂ) (σ : Cfg 
   rw [h]
   rfl
 
-/-- The word evaluation of a tensor along a configuration is the ordered product of the
-letters. -/
-private lemma evalWord_ofFn_eq_prod (A : MPSTensor d D) :
-    ∀ {N : ℕ} (σ : Cfg d N),
-      Kraus.evalWord A (List.ofFn σ) = (List.ofFn fun s => A (σ s)).prod
-  | 0, σ => by simp
-  | N + 1, σ => by
-    rw [List.ofFn_succ, Kraus.evalWord_cons, List.ofFn_succ, List.prod_cons,
-      evalWord_ofFn_eq_prod A (fun s => σ s.succ)]
-
 /-- Bridge: a site-independent family contracts to the translation-invariant open-boundary
 state `openState` of `OpenBoundary`. -/
 theorem siteOpenCoeff_const (vL vR : Fin D → ℂ) (A : MPSTensor d D) (σ : Cfg d N) :
     siteOpenCoeff vL vR (fun _ => A) σ = openState vL vR A N σ := by
   rw [siteOpenCoeff, openState_apply, openCoeff_def, evalWord_ofFn_eq_prod]
 
-/-- Source: arXiv:2011.12127, lines 2332–2336, site-independent case. When every site
+/-- Source: arXiv:2011.12127, lines 2330–2333, site-independent case. When every site
 carries the same local vector $\sum_i a^i\lvert i\rangle$, the translation-invariant
 open-boundary state of the one-site `D = 1` tensor is the product vector. -/
 theorem openState_productSiteTensor_const (a : Fin d → ℂ) (σ : Cfg d N) :
@@ -117,7 +108,7 @@ theorem openState_productSiteTensor_const (a : Fin d → ℂ) (σ : Cfg d N) :
   rw [← siteOpenCoeff_const]
   exact siteOpenCoeff_productSiteTensor (fun _ => a) σ
 
-/-- Source: arXiv:2011.12127, lines 2332–2336, site-independent case. For `D = 1` the
+/-- Source: arXiv:2011.12127, lines 2330–2333, site-independent case. For `D = 1` the
 trace closure is trivial, so the periodic vector of the one-site tensor is also the product
 vector. -/
 theorem mpv_productSiteTensor_const (a : Fin d → ℂ) (σ : Cfg d N) :
