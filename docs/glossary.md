@@ -792,3 +792,25 @@ The following notions use different transfer objects and are not interchangeable
   with the gauge `X⁻¹`; no bridge to `GaugeEquiv` is stated, because the
   predicate is only used to separate blocks of possibly different bond
   dimensions.
+
+## Worked examples
+
+### `MPSTensor.IsPeriodicWState`
+
+- **Declaration:** `MPSTensor.IsPeriodicWState (A : MPSTensor 2 D) (N : ℕ) : Prop`.
+- **Defined in:** `TNLean/MPS/Examples/WStatePeriodic.lean`.
+- **Meaning:** the trace contraction
+  $\operatorname{tr}(A^{\sigma_1}\cdots A^{\sigma_N})$ equals the unnormalized
+  W-state amplitude on every configuration of $N$ sites, that is, $A$ is a
+  translationally invariant periodic representation of $\ket{W_N}$.
+- **Source:** the notion of a translationally invariant representation of the
+  W state in arXiv:2011.12127, Appendix A, "The W state", line 2362. The
+  predicate itself is a project definition.
+- **Sanctioned bridges:** none; the printed open-boundary tensor is related to
+  the W state through `MPSTensor.wTensor_openState_eq_wIndicator`, not through
+  this predicate.
+- **Caveat:** the formalized obstructions constrain one tensor across several
+  lengths (`MPSTensor.not_isPeriodicWState_of_lt`,
+  `MPSTensor.exists_not_isPeriodicWState_le`). The source's single-length bound
+  $D^3\log D=\Omega(N)$ is not formalized; see
+  `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
