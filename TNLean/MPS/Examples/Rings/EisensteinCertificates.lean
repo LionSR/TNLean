@@ -3,8 +3,6 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import QICLean.Kraus.Injectivity
-import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
 import TNLean.MPS.Examples.Rings.EisensteinRing
 
@@ -50,13 +48,6 @@ variable {d DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {S : Finset
 
 /-! ### Compression data from an Eisenstein-integral gauge -/
 
-/-- The image of a pair of mutually inverse Eisenstein-integral matrices is a pair of mutually
-inverse complex matrices. -/
-theorem complexOfEisenstein_mul_eq_one {n : Type*} [Fintype n] [DecidableEq n]
-    {G Ginv : Matrix n n EisensteinInt} (hG : G * Ginv = 1) :
-    complexOfEisenstein G * complexOfEisenstein Ginv = 1 := by
-  rw [← complexOfEisenstein_mul, hG, complexOfEisenstein_one]
-
 namespace MultiBlockCompression
 
 variable {B : MPSTensor d DB} {C : ∀ s, MPSTensor d (D s)}
@@ -82,7 +73,7 @@ noncomputable def ofEisenstein (BE : Fin d → Matrix (Fin DB) (Fin DB) Eisenste
   z := z
   ord := ord
   gauge := gaugeOfMatrix coord (complexOfEisenstein G) (complexOfEisenstein Ginv)
-    (complexOfEisenstein_mul_eq_one hG) (complexOfEisenstein_mul_eq_one hG')
+    (complexOfRing_mul_eq_one _ hG) (complexOfRing_mul_eq_one _ hG')
   triangular i x y h := by
     rw [conjMatrix_gaugeOfMatrix, Matrix.submatrix_apply, hB, ← complexOfEisenstein_mul,
       ← complexOfEisenstein_mul, complexOfEisenstein_apply, htri i x y h, map_zero]
@@ -110,27 +101,11 @@ theorem isNBlkInjective_of_scaled_single {D : ℕ} {A : MPSTensor d D}
     (hA : ∀ a, A a = complexOfEisenstein (AE a)) {N K : ℕ}
     (word : Fin D → Fin D → Fin K → Fin N → Fin d) (coeff : Fin D → Fin D → Fin K → EisensteinInt)
     {c : EisensteinInt} (hc : c ≠ 0)
-    (h : ∀ i j, ∑ k, coeff i j k • evalWordEisenstein AE (List.ofFn (word i j k)) =
+    (h : ∀ i j, ∑ k, coeff i j k • evalWordR AE (List.ofFn (word i j k)) =
       c • Matrix.single i j 1) :
-    Kraus.IsNBlkInjective A N := by
-  rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
-  set T := Submodule.span ℂ
-    (Set.range fun w : Fin N → Fin d => Kraus.evalWord A (List.ofFn w)) with hT
-  have hA' : A = fun a => complexOfEisenstein (AE a) := funext hA
-  have hc' : eisensteinToComplex c ≠ 0 := eisensteinToComplex_ne_zero hc
-  have hunit : ∀ i j : Fin D, Matrix.single i j (1 : ℂ) ∈ T := by
-    intro i j
-    have h1 := congrArg complexOfEisenstein (h i j)
-    rw [complexOfEisenstein_sum, complexOfEisenstein_smul, complexOfEisenstein_single] at h1
-    have hmem : ∑ k, complexOfEisenstein
-        (coeff i j k • evalWordEisenstein AE (List.ofFn (word i j k))) ∈ T := by
-      refine Submodule.sum_mem _ fun k _ => ?_
-      rw [complexOfEisenstein_smul, ← evalWord_complexOfEisenstein, ← hA']
-      exact T.smul_mem _ (Submodule.subset_span ⟨word i j k, rfl⟩)
-    rw [h1] at hmem
-    have h2 := T.smul_mem (eisensteinToComplex c)⁻¹ hmem
-    rwa [smul_smul, inv_mul_cancel₀ hc', one_smul] at h2
-  exact T.eq_top_of_forall_single_mem hunit
+    Kraus.IsNBlkInjective A N :=
+  isNBlkInjective_of_complexOfRing_smul_single eisensteinToComplex AE hA word coeff
+    (eisensteinToComplex_ne_zero hc) h
 
 /-- **A normality certificate over the Eisenstein integers**: the certificate of
 `isNBlkInjective_of_scaled_single` at a positive length `N` shows the tensor is normal at
@@ -140,10 +115,11 @@ theorem isNormal_of_scaled_single {D : ℕ} {A : MPSTensor d D}
     (hA : ∀ a, A a = complexOfEisenstein (AE a)) {N : ℕ} (hN : 0 < N) {K : ℕ}
     (word : Fin D → Fin D → Fin K → Fin N → Fin d) (coeff : Fin D → Fin D → Fin K → EisensteinInt)
     {c : EisensteinInt} (hc : c ≠ 0)
-    (h : ∀ i j, ∑ k, coeff i j k • evalWordEisenstein AE (List.ofFn (word i j k)) =
+    (h : ∀ i j, ∑ k, coeff i j k • evalWordR AE (List.ofFn (word i j k)) =
       c • Matrix.single i j 1) :
     Kraus.IsNormal A :=
-  ⟨N, hN, isNBlkInjective_of_scaled_single AE hA word coeff hc h⟩
+  isNormal_of_complexOfRing_smul_single eisensteinToComplex AE hA hN word coeff
+    (eisensteinToComplex_ne_zero hc) h
 
 /-! ### Intertwiner certificates over the Eisenstein integers -/
 
