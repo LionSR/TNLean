@@ -45,11 +45,22 @@ virtual leg is joined to the physical leg `l` through `√σ`, and its physical
 leg `r` is wired to the right virtual leg, as in the tensor `√ρ` with an
 identity wire drawn in eq. `eq:key_approximation`.
 
+The source defines `E_A = ∑ᵢ (Aⁱ)^* ⊗ Aⁱ` (eq. `eq:transfer_matrix`) without
+fixing a vectorization, so its `ρ` is determined only up to a convention. With
+column stacking, `(Aⁱ)^* ⊗ Aⁱ` acts as `X ↦ Aⁱ X (Aⁱ)†` and `ρ = σ`; with row
+stacking it acts as `X ↦ (Aⁱ)^* X (Aⁱ)ᵀ` and `ρ = σᵀ`.
+
 The pair `ω` on `R_k ⊗ L_{k+1}` has coefficient `(√σ)_{r l}` at `(r, l)`. The
-source writes `(1 ⊗ √ρ) ∑ᵢ |ii⟩`, whose coefficient at `(r, l)` is `(√ρ)_{l r}`;
-the two agree under the identification `ρ = σᵀ` induced by the source's
-vectorization `E_A = ∑ᵢ (Aⁱ)^* ⊗ Aⁱ` of eq. `eq:transfer_matrix`, because
-`√σ` is Hermitian.
+source writes `(1 ⊗ √ρ) ∑ᵢ |ii⟩`, whose coefficient at `(r, l)` is `(√ρ)_{l r}`.
+Reading the vectorization row-major (`ρ = σᵀ`), this is `(√σ)_{r l}`, so the two
+pairs agree; with column stacking (`ρ = σ`), the source's pair is the entrywise
+complex conjugate of `fixedPointPair σ`, because `√σ` is Hermitian. The choice
+made here is the one fixed by the tensor: `fixedPointPair σ` is the pair whose
+product state is the periodic state of `fixedPointTensor σ`
+(`mpv_fixedPointTensor`), and `fixedPointTensor σ`, read as a map from the
+virtual space to the physical space as in the polar decomposition `B = V P`
+before eq. `eq:B_TM`, is the positive semidefinite matrix `√σᵀ ⊗ 1`
+(`posSemidef_fixedPointTensor_reshape`).
 
 ## Main declarations
 
@@ -57,6 +68,8 @@ vectorization `E_A = ∑ᵢ (Aⁱ)^* ⊗ Aⁱ` of eq. `eq:transfer_matrix`, beca
 * `MPSTensor.fixedPointPair σ` — the entangled pair `ω` of eq. `eq:normal_fp_local`.
 * `MPSTensor.pairProductState ω` — the product `⊗ₖ ω_{R_k L_{k+1}}` over a ring.
 * `MPSTensor.transferMap_fixedPointTensor` — `E_{P_∞} = |ρ⟩⟨1|`.
+* `MPSTensor.posSemidef_fixedPointTensor_reshape` — `P_∞`, read as a map from the
+  virtual to the physical space, is the positive semidefinite matrix `√σᵀ ⊗ 1`.
 * `MPSTensor.mpv_fixedPointTensor` — the periodic state of `P_∞` on `N` sites is
   the product of the `N` nearest-neighbour pairs, with cyclic pairing.
 * `MPSTensor.isTransferIdempotent_fixedPointTensor`,
@@ -79,7 +92,7 @@ vectorization `E_A = ∑ᵢ (Aⁱ)^* ⊗ Aⁱ` of eq. `eq:transfer_matrix`, beca
   eq. `eq:key_approximation`, eq. `eq:phi_tilde`, eq. `eq:normal_fp_local`.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.Operator
+open scoped Kronecker Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.Operator
 open Matrix Finset Filter
 
 attribute [local instance 1001]
@@ -97,15 +110,56 @@ variable {d D : ℕ}
 /-- The fixed-point tensor `P_∞` of arXiv:2307.01696, eq. `eq:B_TM` and
 eq. `eq:key_approximation`: a tensor with physical space `ℂ^D ⊗ ℂ^D`, whose
 letter at the physical pair `(l, r)` is `√σ · |l⟩⟨r|`. Its transfer map is the
-rank-one map `|ρ⟩⟨1|` (`transferMap_fixedPointTensor`). -/
+rank-one map `|ρ⟩⟨1|` (`transferMap_fixedPointTensor`). Read as a map from the
+virtual pair `(α, β)` to the physical pair `(l, r)`, it is the positive
+semidefinite matrix `√σᵀ ⊗ 1` (`posSemidef_fixedPointTensor_reshape`), matching the
+positivity of the source's `P` in `B = V P`. Other tensors, such as `U P_∞` for a
+unitary `U` on the physical space, have the same transfer map; this file fixes the
+positive one. The convergence of the positive factors `P_q` of the blocked tensors
+to `P_∞` is not formalized here; only the convergence of the transfer maps
+`E_B = E_A^q → E_{P_∞}` is
+(`tendsto_transferMap_blockTensor_of_spectralRadius_lt_one`). -/
 noncomputable def fixedPointTensor (σ : Matrix (Fin D) (Fin D) ℂ) : MPSTensor (D * D) D :=
   fun i => CFC.sqrt σ *
     Matrix.single (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm i).2 (1 : ℂ)
 
+/-- The letter of `P_∞` (arXiv:2307.01696, eq. `eq:key_approximation`) at the
+physical pair `(l, r)` is `√σ · |l⟩⟨r|`. -/
 @[simp] lemma fixedPointTensor_finProdFinEquiv (σ : Matrix (Fin D) (Fin D) ℂ)
     (l r : Fin D) :
     fixedPointTensor σ (finProdFinEquiv (l, r)) = CFC.sqrt σ * Matrix.single l r (1 : ℂ) := by
   simp [fixedPointTensor]
+
+/-- Entry `(i, j)` of `M · |a⟩⟨b|` is `M i a` in column `b` and zero elsewhere. -/
+private lemma mul_single_apply' (M : Matrix (Fin D) (Fin D) ℂ) (a b i j : Fin D) :
+    (M * Matrix.single a b (1 : ℂ)) i j = if j = b then M i a else 0 := by
+  split_ifs with h
+  · subst h; simp
+  · exact Matrix.mul_single_apply_of_ne (hbj := h) ..
+
+/-- `P_∞` is a positive tensor: read as a matrix from the virtual pair `(α, β)` to
+the physical pair `(l, r)`, as the source reads `B` and its positive polar factor
+`P > 0` before arXiv:2307.01696, eq. `eq:B_TM`, it is `√σᵀ ⊗ 1`, which is positive
+semidefinite. -/
+theorem fixedPointTensor_reshape_eq (σ : Matrix (Fin D) (Fin D) ℂ) :
+    (Matrix.of fun (p q : Fin D × Fin D) => fixedPointTensor σ (finProdFinEquiv p) q.1 q.2) =
+      (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by
+  ext ⟨l, r⟩ ⟨α, β⟩
+  simp only [Matrix.of_apply, fixedPointTensor_finProdFinEquiv, Matrix.kroneckerMap_apply,
+    Matrix.transpose_apply, Matrix.one_apply, mul_single_apply']
+  by_cases h : β = r
+  · subst h; simp
+  · simp [h, Ne.symm h]
+
+/-- The reshaped fixed-point tensor `√σᵀ ⊗ 1` is positive semidefinite, the
+positivity of `P_∞` as the `q → ∞` limit of the positive polar factors `P > 0` in
+arXiv:2307.01696, the paragraph before eq. `eq:B_TM`. -/
+theorem posSemidef_fixedPointTensor_reshape (σ : Matrix (Fin D) (Fin D) ℂ) :
+    (Matrix.of fun (p q : Fin D × Fin D) =>
+      fixedPointTensor σ (finProdFinEquiv p) q.1 q.2).PosSemidef := by
+  rw [fixedPointTensor_reshape_eq]
+  exact (Matrix.posSemidef_transpose_iff.2
+    (Matrix.nonneg_iff_posSemidef.1 (CFC.sqrt_nonneg σ))).kronecker Matrix.PosSemidef.one
 
 /-- The entangled pair `|ω⟩ = (1 ⊗ √ρ) ∑ᵢ |ii⟩` of arXiv:2307.01696,
 eq. `eq:normal_fp_local`, as a vector on `R ⊗ L = ℂ^D ⊗ ℂ^D`: its coefficient at
@@ -127,25 +181,13 @@ def pairProductState {N : ℕ} (ω : Fin D × Fin D → ℂ) (c : Fin N → Fin 
 
 /-! ## The transfer map of the fixed-point tensor -/
 
+/-- Conjugating `X` by the matrix unit `|l⟩⟨r|` gives `X r r • |l⟩⟨l|`. -/
 private lemma single_mul_mul_conjTranspose_single (X : Matrix (Fin D) (Fin D) ℂ)
     (l r : Fin D) :
     Matrix.single l r (1 : ℂ) * X * (Matrix.single l r (1 : ℂ))ᴴ =
       X r r • Matrix.single l l (1 : ℂ) := by
   rw [Matrix.conjTranspose_single, Matrix.single_mul_mul_single, Matrix.smul_single]
   simp
-
-private lemma mul_single_apply' (M : Matrix (Fin D) (Fin D) ℂ) (a b i j : Fin D) :
-    (M * Matrix.single a b (1 : ℂ)) i j = if j = b then M i a else 0 := by
-  split_ifs with h
-  · subst h; simp
-  · exact Matrix.mul_single_apply_of_ne (hbj := h) ..
-
-private lemma sum_single_diag_one :
-    ∑ l : Fin D, Matrix.single l l (1 : ℂ) = 1 := by
-  ext a b
-  by_cases h : a = b
-  · subst h; simp [Matrix.sum_apply, Matrix.single_apply]
-  · simp [Matrix.sum_apply, Matrix.single_apply, h]
 
 /-- The transfer map of `P_∞` is the rank-one map `|ρ⟩⟨1|`: every `X` is sent to
 `Tr X • σ`. This is the identity `E_{P_∞} = |ρ⟩⟨1|` of arXiv:2307.01696,
@@ -174,7 +216,7 @@ theorem transferMap_fixedPointTensor_apply {σ : Matrix (Fin D) (Fin D) ℂ}
         X p.2 p.2 • (S * Matrix.single p.1 p.1 (1 : ℂ) * S) := fun p => by
     rw [fixedPointTensor_finProdFinEquiv]; exact hterm p.1 p.2
   rw [Finset.sum_congr rfl (fun p _ => hsum p), Fintype.sum_prod_type, Finset.sum_comm]
-  simp_rw [← Finset.smul_sum, ← Finset.sum_mul, ← Finset.mul_sum, sum_single_diag_one,
+  simp_rw [← Finset.smul_sum, ← Finset.sum_mul, ← Finset.mul_sum, Matrix.sum_single_one,
     Matrix.mul_one, hSS, ← Finset.sum_smul]
   rfl
 
