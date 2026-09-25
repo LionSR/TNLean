@@ -45,97 +45,15 @@ $\varepsilon(\phi,\psi)=1-\lvert\braket{\phi}{\psi}\rvert$.
 %% agrees with it after the transposition rho -> rho^T that the change of
 %% vectorization convention induces.
 
-\section{Blocking and polar decomposition}
+\input{chapter/ch32_log_depth_polar_decomposition}
+\input{chapter/ch32_log_depth_fixed_point_pairs}
 
-\begin{definition}[Blocked map]
-    \label{def:ldp_blocked_map}
-    \uses{def:blocked_tensor}
-    For $q\ge1$ the \emph{blocked map} of $A$ is the linear map
-    $\mathcal B_q\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$,
-    \begin{align}
-        \mathcal B_q\ket{\alpha,\beta}
-         & =\sum_{i_1,\dots,i_q=0}^{d-1}
-        \left(A^{i_1}\cdots A^{i_q}\right)_{\alpha\beta}\ket{i_1\cdots i_q},
-        \label{eq:ldp_blocked_map}
-    \end{align}
-    that is, the $q$-blocked tensor read as a map from the virtual to the
-    physical space \cite[eq.~(6) and the paragraph ``Approximation through the
-        fixed-point state'']{Malz2024Preparation}.
-\end{definition}
+\section{The approximating state}
 
-\begin{definition}[Tensor of a map on the doubled bond space]
-    \label{def:ldp_tensor_of_map}
-    A linear map $P$ on $\C^D\otimes\C^D$ defines a tensor with physical space
-    $\C^D\otimes\C^D$ and bond dimension $D$ whose matrices are
-    $(P^{(\gamma,\delta)})_{\alpha\beta}=\bra{\gamma,\delta}P\ket{\alpha,\beta}$.
-    For a linear map $V\colon\C^D\otimes\C^D\to\C^{d'}$ the tensor $VP$ has
-    matrices $(VP)^{j}=\sum_{\gamma,\delta}V_{j,(\gamma,\delta)}P^{(\gamma,\delta)}$.
-\end{definition}
-
-\begin{lemma}[Physical maps factor through the generated vector]
-    \label{lem:ldp_physical_map_factorization}
-    \uses{def:ldp_tensor_of_map, def:mpv_state}
-    For every linear map $V\colon\C^D\otimes\C^D\to\C^{d'}$, every tensor $P$
-    with physical space $\C^D\otimes\C^D$, and every $M\ge1$,
-    \begin{align}
-        \ket{\phi_M(VP)}
-         & =V^{\otimes M}\ket{\phi_M(P)}.
-        \label{eq:ldp_physical_map_factorization}
-    \end{align}
-\end{lemma}
-\begin{proof}
-    Each matrix of $VP$ is a linear combination of matrices of $P$ with
-    coefficients given by $V$; expand the trace of the product by
-    multilinearity.
-\end{proof}
-
-\begin{lemma}[Polar decomposition of the blocked map]
-    \label{lem:ldp_polar_blocked_map}
-    \uses{def:ldp_blocked_map}
-    Let $P=(\mathcal B_q^\dagger\mathcal B_q)^{1/2}$ and let $\Pi$ be the
-    orthogonal projection onto the range of $P$. There is a linear map
-    $V\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$ with
-    \begin{align}
-        \mathcal B_q
-         & =VP,
-         &
-        V^\dagger V
-         & =\Pi.
-        \label{eq:ldp_polar_blocked_map}
-    \end{align}
-    If $\mathcal B_q$ is injective, then $P$ is positive definite and
-    $V^\dagger V=\Id$. This is the polar decomposition used in
-    \cite[eq.~(8) and Supplemental Material]{Malz2024Preparation}.
-\end{lemma}
-
-\begin{theorem}[The blocked state is an isometry applied to the positive part]
-    \label{thm:ldp_blocked_state_factorization}
-    \uses{lem:ldp_polar_blocked_map, lem:ldp_physical_map_factorization}
-    With $V$ and $P$ as in Lemma~\ref{lem:ldp_polar_blocked_map}, for every
-    $M\ge1$, grouping the $qM$ sites into $M$ consecutive blocks of $q$ sites,
-    \begin{align}
-        \ket{\phi_{qM}(A)}
-         & =V^{\otimes M}\ket{\phi_M(P)},
-         &
-        \E_{A}^{\,q}
-         & =\E_P.
-        \label{eq:ldp_blocked_state_factorization}
-    \end{align}
-    This is the exact decomposition behind
-    \cite[eq.~(8)]{Malz2024Preparation} and the display
-    $\ket{\phi_N}=c_N^{-1}(\bigotimes_iV_i)\sum_j\beta_j\ket{v_{\mathrm{pos},j}}$
-    of its Supplemental Material.
-\end{theorem}
-\begin{proof}
-    The matrices of the $q$-blocked tensor are those of the tensor $VP$, so the
-    first identity is Lemma~\ref{lem:ldp_physical_map_factorization}. For the
-    second, $\E_A^{\,q}$ is the transfer map of the blocked tensor, and
-    substituting $VP$ produces the factor $V^\dagger V=\Pi$, which acts
-    trivially on the range of $P$.
-\end{proof}
-
-\section{The fixed-point pair state}
-
+Write $\mathcal B_q$ for the physical matrix of the $q$-blocked tensor of $A$
+(Definitions~\ref{def:blocked_tensor} and~\ref{def:ldpolar_physical_matrix})
+and $\mathcal B_q=VP$ for its polar decomposition
+(Theorem~\ref{thm:ldpolar_tensor_decomposition}).
 In this section $A$ is normal (Definition~\ref{def:normal}) and in the gauge
 \begin{align}
     \sum_{i=0}^{d-1}(A^i)^\dagger A^i
@@ -161,39 +79,9 @@ semisimple eigenvalue, and all other eigenvalues have modulus less than
 $1$. A periodic tensor is not normal, because no blocking of it is
 injective.
 
-\begin{definition}[Fixed-point tensor and pair state]
-    \label{def:ldp_fixed_point_pair}
-    \uses{def:ldp_tensor_of_map}
-    The \emph{fixed-point tensor} $P_\infty$ has physical space
-    $\C^D\otimes\C^D$ and matrices
-    $P_\infty^{(\gamma,\delta)}=\sqrt\rho\,\ketbra{\gamma}{\delta}$. The
-    \emph{pair state} on a right leg $R$ and a left leg $L$, each $\C^D$, is
-    \begin{align}
-        \ket{\omega}_{RL}
-         & =\sum_{\gamma,\delta=0}^{D-1}(\sqrt\rho)_{\delta\gamma}
-        \ket{\delta}_R\ket{\gamma}_L.
-        \label{eq:ldp_pair_state}
-    \end{align}
-    These are the fixed-point tensor $P_\infty$ and the nearest-neighbour pair of
-    \cite[eqs.~(8) and~(12)]{Malz2024Preparation}.
-\end{definition}
-
-\begin{lemma}[Transfer map of the fixed-point tensor]
-    \label{lem:ldp_fixed_point_transfer}
-    \uses{def:ldp_fixed_point_pair, def:mps_transfer_idempotence}
-    For every $X\in\MN{D}$, $\E_{P_\infty}(X)=\Tr(X)\,\rho$. In particular
-    $\E_{P_\infty}\circ\E_{P_\infty}=\E_{P_\infty}$, so $P_\infty$ is a
-    renormalization fixed point in the sense of
-    Definition~\ref{def:mps_transfer_idempotence}.
-\end{lemma}
-\begin{proof}
-    $\sum_{\gamma,\delta}\sqrt\rho\ketbra{\gamma}{\delta}X\ketbra{\delta}{\gamma}\sqrt\rho
-        =\Tr(X)\sqrt\rho\,\Id\,\sqrt\rho$, and $\Tr\rho=1$ gives idempotence.
-\end{proof}
-
 \begin{lemma}[Convergence of the positive part]
     \label{lem:ldp_positive_part_converges}
-    \uses{lem:ldp_polar_blocked_map, def:ldp_fixed_point_pair}
+    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor}
     Let $P_q=(\mathcal B_q^\dagger\mathcal B_q)^{1/2}$. Then $P_q\to P_\infty$ as
     $q\to\infty$, where $P_\infty$ is read as the map
     $\ket{\alpha,\beta}\mapsto\sum_\gamma(\sqrt\rho)_{\alpha\gamma}\ket{\gamma,\beta}$.
@@ -206,42 +94,21 @@ injective.
     on positive semidefinite matrices.
 \end{proof}
 
-\begin{theorem}[The fixed-point state is a product of pairs]
-    \label{thm:ldp_fixed_point_state_pairs}
-    \uses{def:ldp_fixed_point_pair}
-    For $M\ge1$ write the physical space of the $k$-th site of $P_\infty$ as
-    $L_k\otimes R_k$. Then, with indices of $L$ read modulo $M$,
-    \begin{align}
-        \ket{\phi_M(P_\infty)}
-         & =\bigotimes_{k=1}^M\ket{\omega}_{R_kL_{k+1}},
-         &
-        \braket{\omega}{\omega}
-         & =1.
-        \label{eq:ldp_fixed_point_state_pairs}
-    \end{align}
-    This is \cite[eq.~(12)]{Malz2024Preparation}.
-\end{theorem}
-\begin{proof}
-    $\Tr\bigl(P_\infty^{(\gamma_1,\delta_1)}\cdots P_\infty^{(\gamma_M,\delta_M)}\bigr)
-        =\prod_{k=1}^M(\sqrt\rho)_{\delta_k\gamma_{k+1}}$, and
-    $\braket{\omega}{\omega}=\Tr\rho$.
-\end{proof}
-
 \begin{definition}[Approximating state]
     \label{def:ldp_approximating_state}
-    \uses{lem:ldp_polar_blocked_map, def:ldp_fixed_point_pair}
-    With $V$ from Lemma~\ref{lem:ldp_polar_blocked_map} and $N=qM$, the
+    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor}
+    With $V$ from Theorem~\ref{thm:ldpolar_tensor_decomposition} and $N=qM$, the
     \emph{approximating state} is
     $\ket{\widetilde\phi_N}=\ket{\phi_M(VP_\infty)}/\lVert\phi_M(VP_\infty)\rVert$.
-    By Lemma~\ref{lem:ldp_physical_map_factorization} and
-    Theorem~\ref{thm:ldp_fixed_point_state_pairs},
+    By Lemma~\ref{lem:mpv_rotate_physical} and
+    Theorem~\ref{thm:prep_mpv_fixed_point_tensor},
     $\ket{\phi_M(VP_\infty)}=V^{\otimes M}\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$.
     This is \cite[eqs.~(9) and~(10)]{Malz2024Preparation}.
 \end{definition}
 
 \begin{lemma}[A unitary implementing the isometry]
     \label{lem:ldp_unitary_implementing_isometry}
-    \uses{lem:ldp_polar_blocked_map, lem:isometry_unitary_completion}
+    \uses{thm:ldpolar_tensor_decomposition, thm:seqanc_unitary_extension}
     Let $d\ge2$, put $r=\lceil\log_dD\rceil$, and suppose $q\ge2r$ and
     $\mathcal B_q$ is injective. Write
     $(\C^d)^{\otimes q}=L\otimes C\otimes R$, where $L$ and $R$ are the first
@@ -267,9 +134,9 @@ injective.
 
 \begin{theorem}[Sequential factorization]
     \label{thm:ldp_sequential_factorization}
-    \uses{lem:ldp_polar_blocked_map, lem:obc_left_isometric_representation}
+    \uses{thm:ldpolar_tensor_decomposition, thm:seqanc_left_canonical}
     Suppose $\mathcal B_q$ is injective and let $V$ be as in
-    Lemma~\ref{lem:ldp_polar_blocked_map}. There are integers
+    Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
     $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and isometries
     $W_k\colon\C^{D'_k}\to\C^d\otimes\C^{D'_{k+1}}$ for $k=1,\dots,q$, such that
     \begin{align}
@@ -287,17 +154,17 @@ injective.
     dimension at most $D^2$: the site matrices are $A^i\otimes\Id_D$, which carry
     the right virtual index along the block, and $P^{-1}$ is absorbed into the
     first site. Make the site maps $W_q,\dots,W_2$ isometric by the successive
-    decompositions of Lemma~\ref{lem:obc_left_isometric_representation}. Then
+    decompositions of Theorem~\ref{thm:seqanc_left_canonical}. Then
     $V^\dagger V=W_1^\dagger W_1$, so $W_1$ is an isometry because $V$ is
     \cite[eq.~(15)]{Malz2024Preparation}.
 \end{proof}
 
 \begin{theorem}[Tree factorization]
     \label{thm:ldp_tree_factorization}
-    \uses{lem:ldp_polar_blocked_map, lem:ldp_physical_map_factorization}
+    \uses{thm:ldpolar_tensor_decomposition, lem:mpv_rotate_physical}
     Put $T_0=A$ and, for $j\ge1$, let $\mathcal B^{(j)}=V^{(j)}P_j$ be the polar
     decomposition of the two-site blocked map of $T_{j-1}$, and let $T_j$ be the
-    tensor of $P_j$ (Definition~\ref{def:ldp_tensor_of_map}). Then for
+    tensor of $P_j$ (Definition~\ref{def:ldpolar_tensor}). Then for
     $q=2^k$,
     \begin{align}
         \mathcal B_q
@@ -312,7 +179,7 @@ injective.
     \cite[eq.~(16)]{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}
-    Induction on $k$ using Lemma~\ref{lem:ldp_physical_map_factorization} for
+    Induction on $k$ using Lemma~\ref{lem:mpv_rotate_physical} for
     open products. The range of the two-site blocked map of $T_{j-1}$ lies in
     $\operatorname{ran}P_{j-1}\otimes\operatorname{ran}P_{j-1}$, so each layer
     is applied inside the initial space of the next.
@@ -330,7 +197,7 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{lemma}[Overlap of the positive part with the fixed point]
     \label{lem:ldp_positive_part_overlap}
-    \uses{def:ldp_fixed_point_pair, thm:ldp_blocked_state_factorization,
+    \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_state,
         def:correlation_length}
     Let $A$ be normal with correlation length $\xi$ and let $0<\gamma<1/2$.
     Then, for $N=qM$,
@@ -625,7 +492,7 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{definition}[Fixed point of a basis of normal tensors]
     \label{def:ldp_non_normal_fixed_point}
-    \uses{def:bnt, def:ldp_fixed_point_pair, lem:ldp_polar_blocked_map,
+    \uses{def:bnt, def:prep_fixed_point_tensor, thm:ldpolar_tensor_decomposition,
         def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
         \otimes A_j^i$ with normal $A_j$, each in the gauge
@@ -643,7 +510,7 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
          & =\sum_{j=1}^b\alpha^{(N)}_j\bigotimes_{k=1}^{M}\ket{\omega_j}_{R_kL_{k+1}}.
         \label{eq:ldp_non_normal_fixed_point}
     \end{align}
-    With $V$ from Lemma~\ref{lem:ldp_polar_blocked_map} for the blocked map of
+    With $V$ from Theorem~\ref{thm:ldpolar_tensor_decomposition} for the blocked map of
     $A$, the \emph{approximating state} is
     $\ket{\widetilde\phi_N}=V^{\otimes M}\ket{\Omega'}/
         \lVert V^{\otimes M}\ket{\Omega'}\rVert$, whenever the denominator is

@@ -793,6 +793,107 @@ The following notions use different transfer objects and are not interchangeable
   predicate is only used to separate blocks of possibly different bond
   dimensions.
 
+## Sequential preparation
+
+### `MPSPreparation.IsProbabilisticallyGenerated`
+
+- **Declaration:**
+  `MPSPreparation.IsProbabilisticallyGenerated (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential.lean`.
+- **Meaning:** `ψ` is the state
+  $\bra{\varphi_F}A^{[N]}_{i_N}\cdots A^{[1]}_{i_1}\ket{\varphi_I}$ produced
+  by arbitrary operations $A^{[k]}$ on a `D`-dimensional ancilla followed by a
+  projection on $\ket{\varphi_F}$ (`MPSPreparation.seqAmplitude`). The vector is
+  the unnormalized post-measurement vector. Configurations are indexed by ket
+  position, so the matrix at position `p` is the source's $A^{[N-p]}$.
+- **Source:** Pérez-García--Verstraete--Wolf--Cirac, arXiv:quant-ph/0608197,
+  scheme 1 of section "Generation of MPS" and eq. `OBCMPSgen`,
+  `Papers/quant-ph_0608197/MPSarchive.tex:1527-1552`.
+- **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`
+  (for `ψ ≠ 0`, equivalent to `∃ c ≠ 0, HasOBCRep D (c • ψ)`), and
+  `MPSPreparation.isDeterministicallyGenerated_iff_isProbabilisticallyGenerated`
+  on normalized vectors.
+- **Caveat:** the characterization compares rays: it needs `ψ ≠ 0`, and the
+  scalar `c` matters only at `N = 0`, where every open-boundary coefficient is
+  the empty product `1`. Scheme 3 of Theorem `Thm:seqwith` (the deterministic
+  transition scheme for `d = 2`) and sequential generation without an ancilla
+  are not formalized.
+
+### `MPSPreparation.IsDeterministicallyGenerated`
+
+- **Declaration:**
+  `MPSPreparation.IsDeterministicallyGenerated [NeZero d] (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential.lean`.
+- **Meaning:** there are unitaries `U k` on ancilla ⊗ site and unit vectors
+  $\varphi_I,\varphi_F\in\mathbb C^D$ such that, starting from
+  $\ket{\varphi_I}\otimes\ket{0}^{\otimes N}$, the ancilla component of the
+  joint state at every configuration `τ` is `ψ τ • φF`
+  (`MPSPreparation.jointState`); that is, the ancilla decouples after the last
+  step without measurement. The induced operations are
+  $A_{i,\alpha\beta}=\bra{\alpha,i}U\ket{\beta,0}$
+  (`MPSPreparation.stepMatrix`).
+- **Source:** arXiv:quant-ph/0608197, scheme 2 of section "Generation of MPS",
+  `Papers/quant-ph_0608197/MPSarchive.tex:1527-1554`.
+- **Sanctioned bridges:** `MPSPreparation.isDeterministicallyGenerated_iff`
+  (equivalent to normalization together with `∃ c ≠ 0, HasOBCRep D (c • ψ)`),
+  `MPSPreparation.isProbabilisticallyGenerated_of_isDeterministicallyGenerated`,
+  and `MPSPreparation.star_dotProduct_self_of_isDeterministicallyGenerated`.
+- **Caveat:** `NeZero d` is part of the definition, because each site starts in
+  $\ket{0}$. Only the two directions of Theorem `Thm:seqwith` for schemes 1 and 2
+  are formalized; minimality of the resources in the successive-decomposition
+  recipe is not.
+
+### `MPSPreparation.HasOBCRep`
+
+- **Declaration:**
+  `MPSPreparation.HasOBCRep (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential.lean`.
+- **Meaning:** `ψ = B.coeff` for some varying-bond open chain
+  `B : OBCChainTensor d D N`, that is, `ψ` has an open-boundary MPS
+  representation whose bond dimensions are all at most `D`.
+- **Source:** "OBC MPS representation with maximal bond dimension $D$",
+  arXiv:quant-ph/0608197, eq. `eq.vidal`,
+  `Papers/quant-ph_0608197/MPSarchive.tex:419-429`, as used in Theorem
+  `Thm:seqwith`, lines 1569--1573.
+- **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`,
+  `MPSPreparation.isDeterministicallyGenerated_iff`, and the left-canonical
+  representations `OBCChainTensor.exists_isometric_coeff_eq` and
+  `OBCChainTensor.exists_isometric_coeff_eq_of_norm` in
+  `TNLean/MPS/Preparation/IsometricChain.lean`.
+- **Caveat:** `D` is a common upper bound, not the least bond dimension. The
+  predicate has no scalar freedom; the sequential-generation theorems apply it
+  to `c • ψ` with `c ≠ 0`.
+
+### `MPSPreparation.IsIsometryOn`, `MPSPreparation.IsSupportedBelow`, and `MPSPreparation.IsRowSupportedBelow`
+
+- **Declarations:**
+  `MPSPreparation.IsIsometryOn (b : ℕ) (Q : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop`,
+  `MPSPreparation.IsSupportedBelow (b : ℕ) (v : Fin D → ℂ) : Prop`, and
+  `MPSPreparation.IsRowSupportedBelow (a : ℕ) (M : Matrix (Fin D) (Fin D) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/IsometricChain.lean`.
+- **Meaning:** `IsIsometryOn b Q` says that the stacked columns
+  `(α, i) ↦ Q i α β`, `β < b`, are orthonormal; for `b = D` it is
+  $\sum_i Q_i^\dagger Q_i=\mathbb 1$. `IsSupportedBelow b v` says that the
+  coordinates `β ≥ b` of `v` vanish, and `IsRowSupportedBelow a M` that the rows
+  `α ≥ a` of `M` vanish. Together they encode a varying-bond chain stored in
+  square `D × D` matrices whose site `p` lives in the upper-left
+  `b p × b (p + 1)` block.
+- **Source:** the isometry condition $\sum_i A_i^\dagger A_i=\mathbb 1$ of
+  arXiv:quant-ph/0608197, `Papers/quant-ph_0608197/MPSarchive.tex:1535-1537`,
+  and of Schön--Solano--Verstraete--Cirac--Wolf, arXiv:quant-ph/0501096, before
+  eq. `MPSiso`, restricted to the used bond levels. The support predicates are
+  project definitions.
+- **Sanctioned bridges:** `MPSPreparation.isIsometryOn_stepMatrix` (operations
+  induced by a unitary), `MPSPreparation.exists_unitary_extension` (the
+  converse extension), `MPSPreparation.sum_normSq_eval_mulVec` (norm
+  preservation), and `OBCChainTensor.sum_conjTranspose_mul_ofSupported`, which
+  turns block isometry into $\sum_i A_i^\dagger A_i=\mathbb 1$ for the cut-down
+  rectangular chain.
+- **Caveat:** these predicates are statements about square padded matrices. No
+  bridge to the translation-invariant left-canonical or trace-preservation
+  predicates on `MPSTensor` is stated; the rectangular condition is recovered only through
+  `OBCChainTensor.ofSupported`.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`
@@ -814,3 +915,62 @@ The following notions use different transfer objects and are not interchangeable
   `MPSTensor.exists_not_isPeriodicWState_le`). The source's single-length bound
   $D^3\log D=\Omega(N)$ is not formalized; see
   `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
+
+## Symmetries of matrix product density operators
+
+### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
+
+- **Declarations:** `Matrix.IsStrongSymmetry (O ρ : Matrix n n ℂ) : Prop` and
+  `Matrix.IsWeakSymmetry (O ρ : Matrix n n ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Meaning:** $O\rho=\lambda\rho$ for some complex $\lambda$ (strong), and
+  $[O,\rho]=0$ (weak), at one system size.
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
+- **Sanctioned bridges:**
+  `Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose` and
+  `Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary`.
+- **Caveat:** the eigenvalue is not required to be a phase and may be zero;
+  `Matrix.IsStrongSymmetry.norm_eq_one` gives modulus one only for unitary `O`
+  and nonzero `ρ`. Strong implies weak only for Hermitian `ρ` with `O†` also a
+  strong symmetry.
+
+### `MPOTensor.IsStrongMPOSymmetry` and `MPOTensor.IsWeakMPOSymmetry`
+
+- **Declarations:** `MPOTensor.IsStrongMPOSymmetry O M c : Prop` and
+  `MPOTensor.IsWeakMPOSymmetry O M : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Meaning:** the periodic operators $O_a^{(L)}$ of a family of matrix
+  product operators satisfy $O_a^{(L)}\rho^{(L)}=\lambda_a^{(L)}\rho^{(L)}$
+  (strong) or $[O_a^{(L)},\rho^{(L)}]=0$ (weak) for every label and every
+  positive length, where $\rho^{(L)}$ is the periodic operator of `M`.
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
+- **Sanctioned bridges:** `MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry`,
+  `MPOTensor.IsStrongMPOSymmetry.isFusionCharacter`, and
+  `MPOTensor.isStrongMPOSymmetry_iff_purification`.
+- **Caveat:** more general than the source, where the $O_a$ are normal matrix
+  product operators forming a fusion algebra (lines 125–137) and $\rho$ is
+  positive; results add these hypotheses where they use them. Boundary
+  conditions other than the identity are out of scope, recorded in
+  `docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
+
+### `MPOTensor.IsStrongOnSiteSymmetry` and `MPOTensor.IsWeakOnSiteSymmetry`
+
+- **Declarations:** `MPOTensor.IsStrongOnSiteSymmetry M U c : Prop` and
+  `MPOTensor.IsWeakOnSiteSymmetry M U : Prop`, for a monoid homomorphism
+  `U : G →* Matrix (Fin d) (Fin d) ℂ`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Meaning:** the MPO-family predicates above for the on-site family
+  $U_g^{\otimes L}$ (the periodic operators of `MPOTensor.onSite (U g)`).
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`; the
+  eigenvalue-one strong form $U\rho=\rho$ and the weak form $[U,\rho]=0$ are
+  arXiv:2603.28349, line 362.
+- **Sanctioned bridges:**
+  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor` (weak
+  symmetry as on-site symmetry of the vectorized state under $U\otimes\bar U$,
+  for unitary $U$), `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor`,
+  and `MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor` (normal
+  purifications).
+- **Caveat:** the eigenvalues `c g L` are arbitrary complex numbers in the
+  definition; they are phases, multiplicative in `g`, and equal to $1$ at the
+  identity only under unitarity and $\rho^{(L)}\neq 0$
+  (`IsStrongOnSiteSymmetry.norm_eq_one`, `.map_mul`, `.map_one`).

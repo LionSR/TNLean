@@ -41,7 +41,10 @@ on:
 # are serialized by the deploy job in deploy-pages.yml.
 concurrency:
   group: blueprint-build
-  cancel-in-progress: true
+  # Let a running build finish: with merges to main every few minutes and a
+  # build of about twelve minutes, cancelling in progress meant no run ever
+  # reached the deploy job. GitHub still keeps only the newest pending run.
+  cancel-in-progress: false
 
 permissions:
   contents: read
