@@ -21,7 +21,9 @@ import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.GHZCluster
 import TNLean.MPS.Examples.GHZClusterAction
 import TNLean.MPS.Examples.GHZParentHamiltonian
+import TNLean.MPS.Examples.KramersWannierCircuit
 import TNLean.MPS.Examples.KramersWannierPhysical
+import TNLean.MPS.Examples.KramersWannierSectors
 import TNLean.MPS.Examples.KramersWannierSource
 import TNLean.MPS.Examples.KramersWannierTensor
 import TNLean.MPS.Examples.MajumdarGhosh

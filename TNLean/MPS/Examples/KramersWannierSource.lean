@@ -37,9 +37,10 @@ on the paramagnetic and ferromagnetic states (the module
 `TNLean.MPS.FundamentalTheorem.Reduction.Examples.KramersWannierAction` identifies these states with
 the periodic states of `plusTensor` and `ghz`); and, for the rescaled operator
 `𝖣 = 2^{-(N+1)/2} Kᵀ`, the local relations and the algebra that Seiberg–Shao print for
-their operator, read in the Hadamard-rotated basis. These are not the Seiberg–Shao theorems:
-`𝖣` is not identified with their circuit (lines 2432–2437), and their `T_Ising` is read as
-`Tᵀ`, which the conjugation action at line 2108 fixes only up to a scalar.
+their operator, read in the Hadamard-rotated basis. The module
+`TNLean.MPS.Examples.KramersWannierCircuit` identifies `𝖣` with the Hadamard image of their
+circuit (lines 2431–2437), with scalar one, and their `T_Ising` with `Tᵀ`, which transfers these
+relations to the circuit.
 
 **Conventions.** The kernel of `K` is `2^{N/2}` times the kernel of `D_σ` under
 `h'_{j+1/2} ↦ a j` (output) and `h_j ↦ b j` (input), so that `μ^r_{j+1/2}` acts on output site
@@ -51,7 +52,7 @@ duality exchanges `Z_j` and `X_j X_{j+1}` and their translation `T_Ising` sends 
 (`Majoranadraft.tex` lines 2442–2444) are satisfied by the transposed kernel `Kᵀ`, and
 `T_Ising` becomes `Tᵀ = T⁻¹` for the translation `T = translate N` of this file, which sends
 site `j` to `j - 1`. The operator `𝖣` is therefore built from `Kᵀ`; this file proves its local
-relations and algebra and does not identify it with the circuit of Seiberg–Shao.
+relations and algebra in the rotated basis.
 
 ## Main definitions
 
@@ -599,8 +600,8 @@ them only after the reflection `j ↦ -j` of the chain. The operator of this sec
 therefore built from `Kᵀ`.
 
 Every relation of this section is a project result: it shows that `𝖣` satisfies a relation that
-Seiberg–Shao print for their operator. `𝖣` is not identified with their circuit, and their
-`T_Ising` is read as `Tᵀ`. -/
+Seiberg–Shao print for their operator, read in the rotated basis. The identification of `𝖣` with
+the Hadamard image of their circuit is `hadamard_mul_ssCircuit_mul_hadamard`. -/
 
 theorem transpose_translate_mul_apply [NeZero N]
     (M : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ) (c b : Fin N → Fin 2) :
@@ -654,8 +655,9 @@ theorem siteZZ_transpose [NeZero N] (j : Fin N) : (siteZZ j)ᵀ = siteZZ j := by
 /-- The rescaled transposed kernel `𝖣 = 2^{-(N+1)/2} Kᵀ`, the non-invertible translation of
 Seiberg–Shao in the Hadamard-rotated basis described above. Its local relations are
 `kwTranslation_mul_siteX` and `kwTranslation_mul_siteZZ`. Seiberg–Shao define their operator
-by a circuit, `References/2307.02534/source/Majoranadraft.tex` lines 2432–2437; that the
-circuit coincides with this matrix after the change of basis is not proved here. -/
+by a circuit, `References/2307.02534/source/Majoranadraft.tex` lines 2431–2437; after the
+Hadamard change of basis the circuit is exactly this matrix
+(`hadamard_mul_ssCircuit_mul_hadamard`). -/
 def kwTranslation (N : ℕ) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   invSqrtTwo ^ (N + 1) • (kwTensor.mpo N)ᵀ
 
