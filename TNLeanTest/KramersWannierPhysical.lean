@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.Examples.KramersWannierPhysical
+import TNLean.MPS.Examples.KramersWannier.KramersWannierPhysical
 
 /-!
 # Regression tests for the periodic Kramers–Wannier kernel
