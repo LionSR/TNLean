@@ -31,6 +31,8 @@ operators act on nonempty chains.
   MPV family as the tensor indexed by the product.
 * `MPOTensor.GroupFamily.IsRawRepresentation.block`: positive blocking preserves
   the raw representation laws and injectivity.
+* `MPOTensor.GroupFamily.IsRawRepresentation.of_isNBlkInjective`: the operator laws together
+  with injectivity after blocking `L` sites give a raw representation after that blocking.
 * `MPOTensor.GroupFamily.IsRepresentation.block`: positive blocking preserves
   the representation, simplicity, and injectivity.
 * `MPOTensor.GroupFamily.IsRawRepresentation.block_common`: for a finite group,
@@ -215,6 +217,23 @@ theorem IsRawRepresentation.block [Group G] (F : GroupFamily G d)
   isInjective g := injective_blockTensor F g hL (hF.isInjective g)
   operator_one N hN := operator_one_block F hF.operator_one hL N hN
   operator_mul g h N hN := operator_mul_block F hF.operator_mul hL g h N hN
+
+/-- A family satisfying the positive-length operator laws whose tensors are all injective after
+blocking `L` physical sites becomes an exact raw representation after that blocking. This is
+the route for families whose tensors are normal but not injective on one site. -/
+theorem IsRawRepresentation.of_isNBlkInjective [Group G] (F : GroupFamily G d)
+    (hMPU : ∀ g, IsMPUPos (F.tensor g))
+    (hOne : ∀ N, 0 < N → mpo (F.tensor 1) N = 1)
+    (hMul : ∀ g h N, 0 < N →
+      mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N)
+    {L : ℕ} (hL : 0 < L) (hInj : ∀ g, Kraus.IsNBlkInjective (F.tensor g).toMPSTensor L) :
+    (F.block L).IsRawRepresentation where
+  isMPUPos g := (hMPU g).blockTensor L hL
+  isInjective g := by
+    rw [GroupFamily.block, isInjective_toMPSTensor_blockTensor_iff]
+    exact (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective _ L).1 (hInj g)
+  operator_one N hN := operator_one_block F hOne hL N hN
+  operator_mul g h N hN := operator_mul_block F hMul hL g h N hN
 
 /-- Positive physical blocking preserves exact representation laws, unitarity,
 simplicity, and injectivity. -/

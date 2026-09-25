@@ -11,7 +11,11 @@ import Mathlib.Data.Complex.Basic
 
 This file records the square identity for the complex coercion of a nonnegative
 real square root, together with the companion identity for the square of its
-inverse.
+inverse, and names the complex number `1 / √2` with its basic identities.
+
+## Main definitions
+
+* `Complex.invSqrtTwo`: the complex number `1 / √2`.
 -/
 
 namespace Complex
@@ -27,5 +31,19 @@ number multiplied by itself is the inverse of that number. -/
 theorem ofReal_sqrt_inv_mul_self (x : ℝ) (hx : 0 ≤ x) :
     (↑(Real.sqrt x) : ℂ)⁻¹ * (↑(Real.sqrt x) : ℂ)⁻¹ = (x : ℂ)⁻¹ := by
   rw [← mul_inv, ← Complex.ofReal_mul, Real.mul_self_sqrt hx]
+
+/-- The complex number `1 / √2`, the normalization of a Hadamard-type factor. -/
+noncomputable def invSqrtTwo : ℂ := ((Real.sqrt 2 : ℝ) : ℂ)⁻¹
+
+theorem invSqrtTwo_mul_self : invSqrtTwo * invSqrtTwo = (2 : ℂ)⁻¹ := by
+  rw [invSqrtTwo, ofReal_sqrt_inv_mul_self 2 (by norm_num)]
+  norm_num
+
+theorem invSqrtTwo_pow_mul_self (n : ℕ) :
+    invSqrtTwo ^ n * invSqrtTwo ^ n * (2 : ℂ) ^ n = 1 := by
+  rw [← mul_pow, ← mul_pow, invSqrtTwo_mul_self, inv_mul_cancel₀ two_ne_zero, one_pow]
+
+@[simp] theorem star_invSqrtTwo : star invSqrtTwo = invSqrtTwo := by
+  simp [invSqrtTwo, Complex.conj_ofReal]
 
 end Complex

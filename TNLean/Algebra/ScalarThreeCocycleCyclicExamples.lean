@@ -9,7 +9,7 @@ import TNLean.Algebra.ScalarThreeCocycle
 /-!
 # Explicit scalar three-cocycles on `ℤ_n` and on `ℤ₂ × ℤ₂`
 
-**Source.** Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.C,
+**Source.** Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.D,
 `Papers/2405.00439/MPU-DW.tex` line 2040: the three-cocycles
 `ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` of `ℤ_n`, with `[b + c] = b + c mod n`
 and `j = 0, …, n − 1`.
@@ -139,8 +139,11 @@ theorem cyclicCocycle_norm (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod 
 
 /-! ### The Klein four-group `ℤ₂ × ℤ₂` -/
 
-/-- Project result: the three-cocycle `ω(a,b,c) = (−1)^{a₁ b₂ c₂}` of `ℤ₂ × ℤ₂`, a standard
-representative not printed in the sources on disk. -/
+/-- The three-cocycle `ω(a,b,c) = (−1)^{a₁ b₂ c₂}` of `ℤ₂ × ℤ₂`.
+
+Source: arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` line 1848: the type-II component
+`ω_II(a b^i, a^j b, a^k b) = −1`, all other values `+1`, which is this formula in the coordinates
+`a = (1,0)`, `b = (0,1)`; its class is `(0,0,1)` in the table of lines 1856–1872. -/
 def kleinCocycle : ScalarThreeCochain (Multiplicative (ZMod 2 × ZMod 2)) :=
   fun a b c ↦
     (-1) ^ ((Multiplicative.toAdd a).1 * (Multiplicative.toAdd b).2 *
