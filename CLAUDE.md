@@ -425,6 +425,7 @@ follow-up, not against the temporary `sorry` count.
 | Name | Kind | Use when | Defined in |
 |---|---|---|---|
 | `Submodule.eq_top_of_forall_single_mem` | helper theorem | Concluding that a submodule of matrices is everything once it contains every matrix unit, the last step of a normality or injectivity certificate | `TNLean/Algebra/MatrixSingleSpan.lean` |
+| `MPSTensor.isNormal_of_single_eq_two_words` | helper theorem | Proving normality of a small complex tensor from a table writing every matrix unit as a combination of two words of length two | `TNLean/MPS/Core/NormalityFromTwoWords.lean` |
 | `MPOTensor.mpo_mul_eq_of_trace_evalWord`, `MPOTensor.mpo_eq_of_trace_evalWord`, `MPOTensor.mpo_apply_toMPSTensor` | helper theorems | Turning a word-trace identity of pair-alphabet tensors on nonempty words into an identity of periodic operators at every positive length, such as a fusion rule of matrix product operators | `TNLean/MPS/MPDO/OperatorFromWordTrace.lean` |
 | `MPOTensor.IsMPUCanonicalFormII.simple2_recorded_fixed_pair` | helper theorem | Specializing two-letter simplicity to the recorded canonical right boundary `ρ` and identity left boundary | `TNLean/MPS/MPU/SuppliedFixedWitnesses.lean` |
 | `matrix_reciprocal_smul` | simp set | Moving scalars out of matrix products and cancelling nested reciprocal actions; use `simp (disch := exact hβ) only [matrix_reciprocal_smul]` for `hβ : β ≠ 0` | `TNLean/Tactic/Attr.lean`, `TNLean/Tactic/MatrixReciprocalSmul.lean` |

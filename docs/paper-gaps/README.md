@@ -26,10 +26,9 @@ For the MPU index of arXiv:1703.09188:
   correspondence remains open under #7738. The note also records that the
   bra-ket display of the CZX tensor in arXiv:2011.12127, Appendix A, repeats
   the normalized tensor, while the matrices printed there are its unnormalized
-  rescaling, for which the claims of that passage hold; that the printed
+  rescaling, for which the claims of that passage hold, and that the printed
   matrices give the gate order opposite to the verbal description, a global
-  sign `(-1)^N`; and that the second printed projector `Q` of that passage is
-  the complement `Q₁ = 1 - P₁` of the projector onto the invariant subspace.
+  sign `(-1)^N`.
 
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
@@ -547,3 +546,10 @@ For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
   tensor multiplied by `√2`, so that all entries lie in `ℤ[√2]`; states the
   fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
   leaves open whether omitting the factors `v` changes the periodic operators.
+
+For the group matrix product operators of arXiv:2203.12563:
+
+- `glm23_pbc_group_mpo_single_shift.tex` records that the periodic display
+  $U_g=\bigotimes_i (L_g^i\otimes L_g^{i+1})W_g^{i,i+1}$, read literally,
+  shifts every site twice, and that the printed tensor and the printed
+  $\mathbb Z_2$ example fix one left shift per site.
