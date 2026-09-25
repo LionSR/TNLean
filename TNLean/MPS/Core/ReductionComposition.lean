@@ -79,9 +79,9 @@ theorem trans {C : MPSTensor d D₃} {B : MPSTensor d D₂} {A : MPSTensor d D�
   rw [← h₂.evalWord w, ← h₁.evalWord w]
   simp only [Matrix.mul_assoc]
 
-/-- A reduction transports along an invertible intertwiner of letters: if
-`B' i P = P B i` with `P Q = 1` and `Q P = 1`, then a reduction `(V, W)` from
-`B` to `A` gives the reduction `(V Q, P W)` from `B'` to `A`.
+/-- A reduction transports along an intertwiner of letters with a left inverse:
+if `B' i P = P B i` and `Q P = 1`, then a reduction `(V, W)` from `B` to `A`
+gives the reduction `(V Q, P W)` from `B'` to `A`.
 
 Source: this is the change of bond basis used when the associator of three
 stacked matrix product operators is inserted in a fusion tree,
