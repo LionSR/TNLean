@@ -231,6 +231,10 @@ of the duality defect in~\cite{Aasen2016Topological}.
 
 \begin{corollary}[Coupling exchange]
     \label{cor:asymex_kw_exchange}
+    \lean{KWExample.isingHamiltonian,
+        KWExample.kwTensor_mpo_mul_isingHamiltonian,
+        KWExample.kwTensor_mpo_mul_isingHamiltonian_self}
+    \leanok
     \uses{lem:asymex_kw_local}
     The Hamiltonians with exchanged couplings satisfy
     \begin{align}
@@ -241,6 +245,7 @@ of the duality defect in~\cite{Aasen2016Topological}.
 \end{corollary}
 
 \begin{proof}
+    \leanok
     Summing the local relations of
     Lemma~\ref{lem:asymex_kw_local} and reindexing the bonds yields
     \begin{align}
@@ -341,6 +346,15 @@ normalizations of the duality operator are
 
 \begin{lemma}[Kernel, image, and partial isometry]
     \label{lem:asymex_kw_sectors}
+    \lean{KWExample.kwTensor_mpo_mulVec_eq_zero_iff,
+        KWExample.exists_kwTensor_mpo_mulVec_eq_iff,
+        KWExample.kwTensor_mpo_rank,
+        KWExample.kwDefect_conjTranspose_mul,
+        KWExample.kwDefect_mul_conjTranspose,
+        KWExample.kwTensor_mpo_normalized_conjTranspose_mul,
+        KWExample.kwTensor_mpo_normalized_mul_conjTranspose}
+    \leanok
+    \uses{thm:asymex_kw_absorption, lem:asymex_kw_gram}
     The kernel and image of the raw duality operator are
     \begin{align}
         \ker K_N  & =\mathcal H_N^-,
@@ -364,14 +378,17 @@ normalizations of the duality operator are
 \end{lemma}
 
 \begin{proof}
-    Equation~(\ref{eq:asymex_kw_gram}) gives
-    $\|K_Nv\|^2=2^{N+1}\|P_+v\|^2$, which identifies the kernel.
-    The absorption relation $\eta K_N=K_N$ puts the image in
-    $\mathcal H_N^+$. Conversely, for $y=P_+y$,
-    $K_N(2^{-(N+1)}K_N^\dagger y)=y$, so every vector in that sector
-    is in the image. For configurations with $b_0=0$, the vectors
-    $(\ket{b}\pm\ket{\bar b})/\sqrt2$ form orthonormal bases of the
-    two sectors. Each sector therefore has dimension $2^{N-1}$.
+    \leanok
+    If $K_Nv=0$, then~(\ref{eq:asymex_kw_gram}) gives
+    $0=K_N^\dagger K_Nv=2^N(v+\eta v)$, so $\eta v=-v$. Conversely,
+    Theorem~\ref{thm:asymex_kw_absorption} shows that $K_N$ annihilates
+    $\mathcal H_N^-$. The absorption relation $\eta K_N=K_N$ puts the
+    image in $\mathcal H_N^+$. Conversely, for $\eta y=y$,
+    $K_N(2^{-(N+1)}K_N^\dagger y)=2^{-1}(y+\eta y)=y$, so every vector in
+    that sector is in the image. For the rank, $\rank K_N=\rank
+        K_N^\dagger K_N=\rank P_+$, and the rank of the orthogonal
+    projection $P_+$ is its trace. Since $\eta$ fixes no basis vector,
+    $\tr\eta=0$ and $\tr P_+=2^N/2=2^{N-1}$.
     Rescaling~(\ref{eq:asymex_kw_gram}) proves
     (\ref{eq:asymex_kw_partial}).
 \end{proof}
@@ -544,14 +561,118 @@ and~(\ref{eq:asymex_kw_adjoint_algebra}) are those that
 Ref.~\cite{Seiberg2024Majorana} prints for its noninvertible
 translation, with its translation read as $T^{-1}$ and its projection
 $(1+\eta)/2$ read as $P_+$. The proposition shows that $U_N^\dagger$
-satisfies these relations. It does not identify $U_N^\dagger$ with the
-operator that reference defines by an explicit product of local
-factors, and the conjugation action by which that reference fixes its
-translation determines the translation only up to a scalar.
+satisfies these relations. That reference defines its operator by an
+explicit product of local factors; Proposition~\ref{prop:asymex_kw_circuit}
+below shows that, after the exchange of $X$ and $Z$, this product is
+exactly $U_N^\dagger$, with no scalar factor.
 The noninvertibility here concerns
 the periodic bosonic spin chain, not fermionic Majorana translation.
 The translation in~(\ref{eq:asymex_kw_fusion}) must be retained when
 comparing this lattice relation with a size-independent fusion algebra.
+
+\begin{definition}[Circuit of the noninvertible translation]
+    \label{def:asymex_kw_circuit}
+    \lean{KWExample.hadamard, KWExample.ssGateZ, KWExample.ssGateXX,
+        KWExample.ssEta, KWExample.ssCircuit}
+    \leanok
+    Let $H^{\otimes N}$ be the Hadamard gate at every site,
+    $\bra{c}H^{\otimes N}\ket{b}=2^{-N/2}(-1)^{\sum_jc_jb_j}$, and let
+    $\eta_Z=\prod_jZ_j$. Following~\cite{Seiberg2024Majorana}, with its
+    sites $1,\ldots,N$ relabeled $0,\ldots,N-1$, put
+    $d^z_j=(\Id+iZ_j)/\sqrt2$, $d^x_j=(\Id+iX_jX_{j+1})/\sqrt2$, and
+    \begin{align}
+        C_N & =e^{-2\pi iN/8}\,(d^z_0d^x_0)(d^z_1d^x_1)\cdots
+        (d^z_{N-2}d^x_{N-2})\,d^z_{N-1}\,\frac{\Id+\eta_Z}{2}.
+        \label{eq:asymex_kw_circuit_def}
+    \end{align}
+    The factors $d^x_j$ run over $0\leq j\leq N-2$; the bond between the
+    sites $N-1$ and $0$ does not occur.
+\end{definition}
+
+\begin{proposition}[The circuit is the rotated adjoint duality]
+    \label{prop:asymex_kw_circuit}
+    \lean{KWExample.hadamard_mul_ssCircuit_mul_hadamard,
+        KWExample.ssCircuit_mul_siteZ, KWExample.ssCircuit_mul_siteXX,
+        KWExample.ssCircuit_mul_ssEta, KWExample.ssEta_mul_ssCircuit,
+        KWExample.ssCircuit_mul_conjTranspose,
+        KWExample.ssCircuit_conjTranspose_mul, KWExample.ssCircuit_mul_self,
+        KWExample.ssCircuit_mulVec_eq_zero_iff,
+        KWExample.exists_ssCircuit_mulVec_eq_iff,
+        KWExample.transpose_translate_apply,
+        KWExample.hadamard_mul_transpose_translate}
+    \leanok
+    \uses{def:asymex_kw_circuit}
+    For every $N\geq1$,
+    \begin{align}
+        H^{\otimes N}C_NH^{\otimes N} & =U_N^\dagger.
+        \label{eq:asymex_kw_circuit}
+    \end{align}
+    Consequently, for every site $j$, including $j=N-1$, whose bond
+    $X_{N-1}X_0$ does not occur in~(\ref{eq:asymex_kw_circuit_def}),
+    \begin{align}
+        C_NZ_j        & =X_jX_{j+1}C_N,
+        \notag                          \\
+        C_NX_jX_{j+1} & =Z_{j+1}C_N,
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        C_N\eta_Z=\eta_ZC_N            & =C_N,
+        \notag                                                          \\
+        C_NC_N^\dagger=C_N^\dagger C_N & =\frac{\Id+\eta_Z}{2},
+        \notag                                                          \\
+        C_N^2                          & =\frac{\Id+\eta_Z}{2}\,T^{-1}.
+        \notag
+    \end{align}
+    Here $T^{-1}$ sends $\ket{b_0,\ldots,b_{N-1}}$ to
+    $\ket{b_{N-1},b_0,\ldots,b_{N-2}}$, which is the action of the
+    product of nearest-neighbor swaps by which~\cite{Seiberg2024Majorana}
+    defines its translation, and $T^{-1}$ commutes with $H^{\otimes N}$.
+    $C_Nv=0$ exactly when $\eta_Zv=-v$, and $y$ lies in the
+    range of $C_N$ exactly when $\eta_Zy=y$: the kernel is the sector
+    $\eta_Z=-1$, and on the sector $\eta_Z=+1$ the circuit acts
+    unitarily, as stated in~\cite{Seiberg2024Majorana}.
+\end{proposition}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_kw_kernel, prop:asymex_kw_adjoint_relations}
+    The Hadamard gate is its own inverse and exchanges $X_j$ and $Z_j$.
+    Conjugation therefore maps $d^z_j$ to $(\Id+iX_j)/\sqrt2$, $d^x_j$ to
+    $(\Id+iZ_jZ_{j+1})/\sqrt2$, and $\eta_Z$ to $\eta$. In this frame
+    the gate $(\Id+iX_k)/\sqrt2$ changes only the bit at site $k$, and
+    each site carries exactly one such gate. An entry $\bra{c}G\ket{b}$
+    of the product $G$ of the gates, before the projection, is therefore
+    a single product along one path of configurations; at the diagonal
+    gate of the bond $(k,k+1)$ the two bits are $b_k$ and $c_{k+1}$.
+    Writing $[x\neq y]$ for the indicator of $x\neq y$, this gives
+    \begin{align}
+        \bra{c}G\ket{b}
+         & =\frac{i^{[c_{N-1}\neq b_{N-1}]}}{\sqrt2}
+        \prod_{k=0}^{N-2}w(c_k,b_k,c_{k+1}),
+        \notag                                       \\
+        w(x,y,z)
+         & =\frac{i^{[x\neq y]}}{\sqrt2}\,
+        \frac{1+i(-1)^{y+z}}{\sqrt2}
+        =\frac{1+i}{2}\,i^x(-i)^z(-1)^{y(x+z)}.
+        \notag
+    \end{align}
+    The factors $i^{c_k}(-i)^{c_{k+1}}$ telescope to
+    $i^{c_0}(-i)^{c_{N-1}}$. The projection adds the entry at $\bar b$,
+    whose open-chain signs differ by $(-1)^{c_0+c_{N-1}}$, and
+    $e^{-2\pi iN/8}=((1-i)/\sqrt2)^N$. Checking the eight values of
+    $(c_0,b_{N-1},c_{N-1})$ shows that the remaining boundary factor is
+    $(-1)^{b_{N-1}(c_{N-1}+c_0)}$, the sign of the closing bond. By
+    Theorem~\ref{thm:asymex_kw_kernel} the entry is
+    $2^{-(N+1)/2}(K_N)_{bc}=\bra{c}U_N^\dagger\ket{b}$, which
+    proves~(\ref{eq:asymex_kw_circuit}). The remaining relations are
+    those of Proposition~\ref{prop:asymex_kw_adjoint_relations}
+    conjugated by the Hadamard gate, which commutes with $T^{-1}$.
+    If $C_Nv=0$, then $C_N^\dagger C_Nv=\tfrac12(v+\eta_Zv)=0$;
+    conversely, if $\eta_Zv=-v$, then $C_Nv=C_N\eta_Zv=-C_Nv$. The range
+    of $C_N$ lies in the sector $\eta_Z=+1$ because $\eta_ZC_N=C_N$, and
+    for $\eta_Zy=y$ one has $C_N(2C_N^\dagger y)=y+\eta_Zy=2y$.
+\end{proof}
 
 Positive length is essential in these calculations. At $N=1$,
 $K_1=\Id+X_0$ and $U_1=P_+$, consistently with the self-bond convention.
@@ -1092,3 +1213,143 @@ It does not obstruct the word reductions or the periodic trace formula
 in Theorem~\ref{thm:asymex_kw_ghz}. Those statements retain the
 finite-chain action $K_Ng_N=2p_N$ while distinguishing it from a split
 virtual direct sum.
+
+\subsection{The duality as a bimodule over the spin-flip algebra}%
+\label{sec:asymex_kw_bimodule}
+
+By Corollary~\ref{cor:asymex_kw_square}, the square of the duality
+contains the translation, so the duality is not a member of a fusion
+algebra together with $\Id$ and $\eta$. In the framework
+of~\cite{Aasen2016Topological}, it is instead fused with the symmetry
+operators on either side and with its own return map. This subsection
+records these relations for the raw operator and derives their
+tensor-level form from the compression theorems, without computing a
+gauge.
+
+\begin{lemma}[Spin-flip algebra and the bimodule relations]
+    \label{lem:asymex_kw_bimodule}
+    \lean{KWExample.flipTensor, KWExample.z2Tensor, KWExample.z2Fusion,
+        MPOTensor.mpo_apply_of_bondOne, MPOTensor.mpo_idTensor,
+        KWExample.mpo_flipTensor, KWExample.mpo_z2Tensor_zero,
+        KWExample.mpo_z2Tensor_one,
+        KWExample.isMPOFusionAlgebra_z2Tensor,
+        KWExample.kwTensor_mpo_mul_z2Tensor_mpo,
+        KWExample.z2Tensor_mpo_mul_kwTensor_mpo, KWExample.kwTransposeTensor,
+        KWExample.mpo_kwTransposeTensor,
+        KWExample.kwTensor_mpo_mul_kwTransposeTensor_mpo,
+        KWExample.kwTransposeTensor_mpo_mul_kwTensor_mpo}
+    \leanok
+    \uses{def:asymex_kw, thm:asymex_kw_absorption, lem:asymex_kw_gram}
+    Let $O_0$ and $O_1$ be the periodic operators of the bond-one tensors
+    $O_0^{s's}=\delta_{s's}$ and $O_1^{s's}=\delta_{s',1-s}$, and let
+    $W^{\mathsf T}$ be the duality tensor with its physical indices
+    exchanged, $(W^{\mathsf T})^{s's}=W^{ss'}$. For every $N>0$,
+    $O_0=\Id$, $O_1=\eta$, and $O_aO_b=O_{a+b}$ with $a+b$ taken modulo
+    two. The periodic operator of $W^{\mathsf T}$ is $K_N^{\mathsf T}$,
+    and
+    \begin{align}
+        K_NO_a=O_aK_N & =K_N\qquad(a=0,1),
+        \notag                             \\
+        K_NK_N^{\mathsf T}=K_N^{\mathsf T}K_N
+                      & =2^N(O_0+O_1).
+        \label{eq:asymex_kw_bimodule}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A periodic contraction of bond-one tensors is the product of its
+    one-site entries, which gives $O_0=\Id$ and $O_1=\eta$; the fusion
+    rule is $\eta^2=\Id$. Exchanging the physical indices of every tensor
+    in the periodic trace transposes the operator. The relations
+    (\ref{eq:asymex_kw_bimodule}) are then
+    Theorem~\ref{thm:asymex_kw_absorption} and
+    (\ref{eq:asymex_kw_gram}), using that the kernel is real.
+\end{proof}
+
+\begin{theorem}[Absorption of the spin flip is a gauge equivalence]
+    \label{thm:asymex_kw_bimodule_absorption}
+    \lean{KWExample.kwTensor_isNormal,
+        KWExample.exists_gauge_mulTensor_kwTensor_flipTensor,
+        KWExample.exists_gauge_mulTensor_flipTensor_kwTensor}
+    \leanok
+    \uses{lem:asymex_kw_bimodule, cor:asym_single_block}
+    The duality tensor $W$ is normal. The stacked tensors
+    $\sum_mW^{s'm}\otimes O_1^{ms}$ and $\sum_mO_1^{s'm}\otimes W^{ms}$,
+    of bond dimension two, are each conjugate to $W$: there are
+    invertible $2\times2$ matrices $X$ and $Y$ with
+    \begin{align}
+        \sum_mW^{s'm}\otimes O_1^{ms} & =X^{-1}W^{s's}X,
+                                      &
+        \sum_mO_1^{s'm}\otimes W^{ms} & =Y^{-1}W^{s's}Y
+        \notag
+    \end{align}
+    for all $s',s$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The four matrices of $W$ give the four matrix units by
+    \begin{align}
+        E_{00} & =\tfrac12(W^{00}+W^{10}),
+               &
+        E_{01} & =\tfrac12(W^{00}-W^{10}),
+        \notag                             \\
+        E_{10} & =\tfrac12(W^{01}-W^{11}),
+               &
+        E_{11} & =\tfrac12(W^{01}+W^{11}),
+        \notag
+    \end{align}
+    so $W$ is injective and hence normal. The
+    periodic operators of both stacked tensors equal $K_N$ for every
+    $N>0$ by~(\ref{eq:asymex_kw_bimodule}). Corollary~\ref{cor:asym_single_block}
+    gives $V$ and $W'$ with $W'V=\Id_2$ whose remainder vanishes on every
+    word of length at least $2-2+1=1$. The remainder therefore vanishes
+    letter by letter, and $V$ is square with left inverse $W'$.
+\end{proof}
+
+Explicitly, the stacked tensors have the letters
+$\sum_mW^{s'm}\otimes O_1^{ms}=W^{s',1-s}$ and
+$\sum_mO_1^{s'm}\otimes W^{ms}=W^{1-s',s}$, and a direct check on the
+four matrices of Definition~\ref{def:asymex_kw} gives
+\begin{align}
+    W^{s',1-s} & =XW^{s's}X,
+               &
+    W^{1-s',s} & =YW^{s's}Y,
+               &
+    X          & =\begin{pmatrix}0&1\\1&0\end{pmatrix},
+               &
+    Y          & =\begin{pmatrix}1&0\\0&-1\end{pmatrix},
+    \notag
+\end{align}
+with $X^{-1}=X$ and $Y^{-1}=Y$. The proof above does not use these
+matrices.
+
+\begin{theorem}[Fusion of the duality with its adjoint]
+    \label{thm:asymex_kw_bimodule_fusion}
+    \lean{KWExample.z2Tensor_isNormal,
+        KWExample.exists_compression_mulTensor_kwTensor_kwTransposeTensor,
+        KWExample.exists_compression_mulTensor_kwTransposeTensor_kwTensor}
+    \leanok
+    \uses{lem:asymex_kw_bimodule, thm:asym_mpo_product, thm:asym_multiblock}
+    The stacked tensor $\sum_mW^{s'm}\otimes(W^{\mathsf T})^{ms}$, of
+    bond dimension four, has the block triangular form of
+    Theorem~\ref{thm:asym_multiblock} for the two bond-one targets
+    $2O_0$ and $2O_1$, with exactly two zero slots: $4=1+1+2$. The same
+    holds for $\sum_m(W^{\mathsf T})^{s'm}\otimes W^{ms}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both bond-one tensors are normal, since each has a one-site matrix
+    equal to $1$. By~(\ref{eq:asymex_kw_bimodule}), the periodic
+    operators of the stacked tensor are $\sum_a2^NO_a$ for every $N>0$.
+    Theorem~\ref{thm:asym_mpo_product} applies with weights $2$, and the
+    dimension count of Theorem~\ref{thm:asym_multiblock} gives the number
+    of zero slots.
+\end{proof}
+
+The biorthogonal compression pairs of this theorem are fusion tensors
+for the channels $\Id$ and $\eta$ in the product of the duality with
+its adjoint. The stacked square of Theorem~\ref{thm:asymex_kw_compression}
+has no zero slot, whereas the product with the adjoint has two.
