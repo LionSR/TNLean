@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixUnitaryBetween
+import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.FixedPointPairs
 
 /-!
@@ -44,6 +45,9 @@ of a basis of normal tensors occupy the bond space.
 * `MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState` — the GHZ form
   `|Ω'⟩ = W^{⊗M} |χ_M⟩`.
 * `MPSTensor.nonNormalFixedPointState_norm_sq` — `⟨Ω'|Ω'⟩ = 1` when some `βₗ ≠ 0`.
+* `MPSTensor.nonNormalApproxState` — the approximating state
+  `V^{⊗M}|Ω'⟩ / ‖V^{⊗M}|Ω'⟩‖` with `V` the partial isometry of the polar decomposition of
+  the `q`-site blocked tensor.
 
 ## References
 
@@ -81,7 +85,7 @@ theorem ghzAmplitude_norm_sq {β : Fin b → ℂ} (hβ : β ≠ 0) :
   have hs0 : 0 ≤ s := Finset.sum_nonneg fun _ _ => by positivity
   have hs : s ≠ 0 := by
     obtain ⟨l, hl⟩ := Function.ne_iff.1 hβ
-    have hpos : 0 < ‖β l‖ ^ 2 := by simpa using hl
+    have hpos : 0 < ‖β l‖ ^ 2 := pow_pos (norm_pos_iff.2 hl) 2
     exact (lt_of_lt_of_le hpos
       (Finset.single_le_sum (f := fun l => ‖β l‖ ^ 2) (fun _ _ => by positivity)
         (Finset.mem_univ l))).ne'
@@ -132,8 +136,9 @@ def pairIsometry (ω : Fin b → Fin D × Fin D → ℂ) : Matrix (Fin D × Fin 
 theorem isIsometry_pairIsometry {ω : Fin b → Fin D × Fin D → ℂ}
     (hω : ∀ j j', ∑ p, star (ω j p) * ω j' p = if j = j' then 1 else 0) :
     (pairIsometry ω).IsIsometry := by
+  unfold Matrix.IsIsometry
   ext j j'
-  simp [Matrix.IsIsometry, Matrix.mul_apply, pairIsometry, hω, Matrix.one_apply]
+  simpa [Matrix.mul_apply, pairIsometry, Matrix.one_apply] using hω j j'
 
 /-- The `M`-fold tensor power `W^{⊗M}` of a matrix `W`, as a matrix indexed by
 configurations of `M` sites: its entry at `(p, s)` is `∏ₖ W (p k) (s k)`. -/
@@ -155,8 +160,8 @@ theorem isIsometry_tensorPower {ι κ : Type*} [Fintype ι] [DecidableEq κ] (M 
   by_cases h : s = t
   · subst h; simp
   · obtain ⟨k, hk⟩ := Function.ne_iff.1 h
-    rw [if_neg h]
-    exact Finset.prod_eq_zero (Finset.mem_univ k) (if_neg hk)
+    rw [ite_eq_right_iff.2 fun h' => absurd h' h]
+    exact Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right_iff.2 fun h' => absurd h' hk)
 
 /-- The GHZ-like state `|χ_M⟩ = ∑ⱼ αⱼ |j⟩^{⊗M}` on `M` sites of dimension `b`
 (arXiv:2307.01696, the paragraph after eq. (19)): its amplitude at `s` is `∑ⱼ αⱼ`
@@ -181,7 +186,7 @@ theorem nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState {M : ℕ} (α : 
       ∑ s : Fin M → Fin b, ∏ k, ω (s k) (p k) * (Pi.single j 1 : Fin b → ℂ) (s k) := by
     rw [← Fintype.prod_sum (fun k i => ω i (p k) * (Pi.single j 1 : Fin b → ℂ) i)]
     refine Finset.prod_congr rfl fun k _ => ?_
-    rw [Finset.sum_eq_single j (fun i _ hi => by simp [Pi.single_apply, hi]) (by simp)]
+    rw [Finset.sum_eq_single j (fun i _ hi => by simp [hi]) (by simp)]
     simp
   rw [hprod, Finset.mul_sum]
   refine Finset.sum_congr rfl fun s _ => ?_
@@ -214,13 +219,13 @@ theorem nonNormalFixedPointState_norm_sq_eq_sum {M : ℕ} (hM : M ≠ 0) (α : F
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [Finset.sum_comm]
-  have hjj : ∀ j', ∑ c : Fin M → Fin D × Fin D,
-      star (α j) * star (pairProductState (ω j) c) * (α j' * pairProductState (ω j') c) =
-        star (α j) * α j' * (if j = j' then 1 else 0) := by
-    intro j'
-    calc _ = star (α j) * α j' *
-          ∑ c : Fin M → Fin D × Fin D, star (pairProductState (ω j) c) *
-            pairProductState (ω j') c := by
+  have hjj : ∀ i, ∑ c : Fin M → Fin D × Fin D,
+      star (α i) * star (pairProductState (ω i) c) * (α j * pairProductState (ω j) c) =
+        star (α i) * α j * (if i = j then 1 else 0) := by
+    intro i
+    calc _ = star (α i) * α j *
+          ∑ c : Fin M → Fin D × Fin D, star (pairProductState (ω i) c) *
+            pairProductState (ω j) c := by
             rw [Finset.mul_sum]; exact Finset.sum_congr rfl fun _ _ => by ring
       _ = _ := by
           rw [pairProductState_inner, hω]
@@ -239,6 +244,30 @@ theorem nonNormalFixedPointState_norm_sq {M : ℕ} (hM : M ≠ 0) {β : Fin b �
       star (nonNormalFixedPointState (ghzAmplitude β) ω c) *
         nonNormalFixedPointState (ghzAmplitude β) ω c = 1 := by
   rw [nonNormalFixedPointState_norm_sq_eq_sum hM _ hω, ghzAmplitude_norm_sq hβ]
+
+/-! ## The approximating state -/
+
+/-- The unnormalized approximating state `V^{⊗M}|Ω'⟩`, where `V` is the partial isometry
+of the polar decomposition of the `q`-site blocked tensor `B` of `A`, read as a map from the
+legs `L_k ⊗ R_k` of each blocked site to its physical space (`polarIsoMatrix B` with its
+columns indexed by pairs): arXiv:2307.01696, Supplemental Material, the display
+eq. (S7) and the text following it, which replaces the positive part of each blocked site
+by the fixed point and keeps `V`. -/
+noncomputable def nonNormalApproxVector {d : ℕ} (A : MPSTensor d D) (q M : ℕ)
+    (α : Fin b → ℂ) (ω : Fin b → Fin D × Fin D → ℂ) :
+    (Fin M → Fin (blockPhysDim d q)) → ℂ :=
+  tensorPower M (Matrix.polarIso (physicalMatrix (blockTensor A q))) *ᵥ
+    nonNormalFixedPointState α ω
+
+/-- The approximating state `|φ̃_N⟩ = V^{⊗M}|Ω'⟩ / ‖V^{⊗M}|Ω'⟩‖` of arXiv:2307.01696,
+Supplemental Material, eq. (S7) and the text following it, with `α = αⱼ^{(N)}` and `N = qM`.
+When the denominator vanishes the source leaves the state undefined; here the value is then
+the zero vector. -/
+noncomputable def nonNormalApproxState {d : ℕ} (A : MPSTensor d D) (q M : ℕ)
+    (α : Fin b → ℂ) (ω : Fin b → Fin D × Fin D → ℂ) :
+    (Fin M → Fin (blockPhysDim d q)) → ℂ :=
+  (Real.sqrt (∑ σ, ‖nonNormalApproxVector A q M α ω σ‖ ^ 2) : ℂ)⁻¹ •
+    nonNormalApproxVector A q M α ω
 
 /-! ## Local orthogonality from disjoint block supports -/
 

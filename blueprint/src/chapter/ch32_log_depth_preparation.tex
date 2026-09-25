@@ -492,6 +492,9 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{definition}[Fixed point of a basis of normal tensors]
     \label{def:ldp_non_normal_fixed_point}
+    \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
+        MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState}
+    \leanok
     \uses{def:bnt, def:prep_fixed_point_tensor, thm:ldpolar_tensor_decomposition,
         def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
@@ -521,14 +524,30 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{lemma}[GHZ form of the fixed-point state]
     \label{lem:ldp_ghz_form}
+    \lean{MPSTensor.isIsometry_pairIsometry,
+        MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState,
+        MPSTensor.nonNormalFixedPointState_norm_sq}
+    \leanok
     \uses{def:ldp_non_normal_fixed_point}
     If $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, then
     $W\colon\ket{j}\mapsto\ket{\omega_j}$ is an isometry and
     $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ with
     $\ket{\chi_M}=\sum_j\alpha^{(N)}_j\ket{j}^{\otimes M}$, up to the
-    regrouping of the legs $R_kL_{k+1}$.
+    regrouping of the legs $R_kL_{k+1}$. If moreover $M\geq1$ and
+    $(\beta_1,\dots,\beta_b)\neq0$, then $\braket{\Omega'}{\Omega'}=1$.
     This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$. Expanding
+    $\ket{j}^{\otimes M}$ in the product basis gives
+    $W^{\otimes M}\ket{j}^{\otimes M}=\bigotimes_k\ket{\omega_j}$, and summing with the
+    weights $\alpha^{(N)}_j$ gives $\ket{\Omega'}$. Overlaps of the product states factor
+    over the bonds,
+    $\braket{\Omega_j}{\Omega_{j'}}=\braket{\omega_j}{\omega_{j'}}^M=\delta_{jj'}$, so
+    $\braket{\Omega'}{\Omega'}=\sum_j\lvert\alpha^{(N)}_j\rvert^2=1$.
+\end{proof}
 
 \begin{theorem}[Approximation error, general case]
     \label{thm:ldp_approximation_error_general}
