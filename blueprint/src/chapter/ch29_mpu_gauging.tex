@@ -4045,8 +4045,10 @@ Definition~\ref{def:mpug_group_representation}.
 For matrix product operator tensors $M$ and $N$ of bond dimensions $D_M$
 and $D_N$, write $MN$ for the stacked product tensor, whose periodic operators
 are the products of those of $M$ and $N$, and write $\mathsf a$ for the
-permutation of $\C^{D_1}\otimes\C^{D_2}\otimes\C^{D_3}$ reassociating
-$(MN)P$ into $M(NP)$.
+bond associator of Definition~\ref{def:mpdo_operator_product_associator},
+the permutation from $\C^{D_1}\otimes(\C^{D_2}\otimes\C^{D_3})$, the bond
+space of $M(NP)$, to $(\C^{D_1}\otimes\C^{D_2})\otimes\C^{D_3}$, the bond
+space of $(MN)P$.
 
 \begin{lemma}[Composition of reductions]
     \label{thm:mpug_reduction_composition}
@@ -4056,7 +4058,8 @@ $(MN)P$ into $M(NP)$.
         MPSTensor.IsReduction.mulTensor_assoc_left,
         MPSTensor.IsReduction.mulTensor_assoc_right}
     \leanok
-    \uses{def:mps_rectangular_reduction}
+    \uses{def:mps_rectangular_reduction, def:mpdo_operator_product,
+        def:mpdo_operator_product_associator}
     Reductions compose: if $(V_1,W_1)$ reduces $C$ onto $B$ and
     $(V_2,W_2)$ reduces $B$ onto $A$, then $(V_2V_1,W_1W_2)$ reduces $C$
     onto $A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
@@ -4067,11 +4070,21 @@ $(MN)P$ into $M(NP)$.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:mpdo_operator_product_eval_word}
     The first claim is immediate from the intertwining equations. For the
-    second, a word of $XP$ is a sum over the contracted middle
-    configurations of Kronecker products of words of $X$ and of $P$ of the
-    same length, and $V\otimes\mathbf 1$ and $W\otimes\mathbf 1$ act on the
-    first factor only. For the third, the letters satisfy
+    second, Lemma~\ref{lem:mpdo_operator_product_eval_word} expands a word of
+    $XP$ along a configuration pair $(\sigma,\tau)$ as a sum over the
+    contracted middle configurations $\rho$, and $V\otimes\mathbf 1$ and
+    $W\otimes\mathbf 1$ act on the first factor only:
+    \begin{align}
+        (V\otimes\mathbf 1)\,(XP)^{\sigma\tau}\,(W\otimes\mathbf 1)
+         & =\sum_\rho VX^{\sigma\rho}W\otimes P^{\rho\tau}
+        =\sum_\rho A^{\sigma\rho}\otimes P^{\rho\tau}
+        =(AP)^{\sigma\tau}.
+        \notag
+    \end{align}
+    The case $PX$ is the same with the factors exchanged. For the third, the
+    letters satisfy
     $((MN)P)^{i}\,\mathsf a=\mathsf a\,(M(NP))^{i}$, so the words do too.
 \end{proof}
 
@@ -4087,7 +4100,7 @@ $(MN)P$ into $M(NP)$.
     $(V',W')$ reduce $B$ onto $A$, where $B$ and $A$ generate the same
     matrix product vectors on nonempty chains. Then there is a unique
     $z\in\C^\times$ such that $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all
-    sufficiently long words $\mathbf w$. Moreover, if
+    sufficiently long words $\mathbf w$. If
     $XA^{\mathbf w}=z\,YA^{\mathbf w}$ for all long words, then
     $XVB^{\mathbf w}=z\,YVB^{\mathbf w}$ for all long words.
 \end{lemma}
@@ -4111,7 +4124,8 @@ $(MN)P$ into $M(NP)$.
         MPOTensor.GroupFamily.FusionData.omega}
     \leanok
     \uses{def:mpug_group_representation, def:mpdo_operator_product,
-        def:mpo_to_mps, def:mps_rectangular_reduction}
+        def:mpo_to_mps, def:mps_rectangular_reduction,
+        def:mpdo_operator_product_associator}
     Let $\{O_g\}_{g\in G}$ be matrix product operator tensors of positive
     bond dimension whose doubled-index tensors are normal and whose periodic
     operators satisfy $O_g O_h=O_{gh}$ on every nonempty chain. A choice of
@@ -4155,7 +4169,8 @@ $(MN)P$ into $M(NP)$.
     \lean{MPOTensor.GroupFamily.FusionData.isCocycle_omega,
         MPOTensor.GroupFamily.FusionData.isCocycle_omega_of_isRepresentation}
     \leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec}
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
     For every $g,h,k,l\in G$,
     \begin{align}
         \omega(gh,k,l)\,\omega(g,h,kl)
@@ -4165,14 +4180,36 @@ $(MN)P$ into $M(NP)$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
     The five fusion trees of the fourfold product $((O_gO_h)O_k)O_l$ are
     reductions onto $O_{ghkl}$. Two trees that differ by one change of
     bracketing are related against long words by one value of $\omega$:
     either directly, through Lemma~\ref{thm:mpug_reduction_composition}
     with an identity factor, or after pulling back along a fusion tensor
-    by Lemma~\ref{thm:mpug_dressed_proportionality}. Identifying the
-    boundaries uses the naturality of $\mathsf a$ and the pentagon identity
-    for the reassociation permutations. The two paths around the pentagon
+    by Lemma~\ref{thm:mpug_dressed_proportionality}. Write
+    $\mathsf a_{p,q,r}$ for $\mathsf a$ on $\C^p\otimes\C^q\otimes\C^r$.
+    Identifying the boundaries uses the naturality of $\mathsf a$, for
+    $X\colon\C^n\to\C^m$,
+    \begin{align}
+        \mathsf a^{-1}_{m,q,r}\,(X\otimes\mathbf 1_q\otimes\mathbf 1_r)
+         & =(X\otimes\mathbf 1_{qr})\,\mathsf a^{-1}_{n,q,r},
+        \notag                                                                  \\
+        \mathsf a^{-1}_{p,m,r}\,(\mathbf 1_p\otimes X\otimes\mathbf 1_r)
+         & =(\mathbf 1_p\otimes(X\otimes\mathbf 1_r))\,\mathsf a^{-1}_{p,n,r},
+        \notag                                                                  \\
+        \mathsf a^{-1}_{p,q,m}\,(\mathbf 1_{pq}\otimes X)
+         & =(\mathbf 1_p\otimes(\mathbf 1_q\otimes X))\,\mathsf a^{-1}_{p,q,n},
+        \notag
+    \end{align}
+    and the pentagon identity for the reassociation permutations,
+    \begin{align}
+        (\mathbf 1_p\otimes\mathsf a^{-1}_{q,r,s})\,\mathsf a^{-1}_{p,qr,s}\,
+        (\mathsf a^{-1}_{p,q,r}\otimes\mathbf 1_s)
+         & =\mathsf a^{-1}_{p,q,rs}\,\mathsf a^{-1}_{pq,r,s}.
+        \notag
+    \end{align}
+    The two paths around the pentagon
     compare the same pair of trees, and uniqueness of the scalar on a
     nonvanishing word gives (\ref{eq:mpug_anomaly_three_cocycle}).
 \end{proof}
@@ -4180,10 +4217,12 @@ $(MN)P$ into $M(NP)$.
 \begin{theorem}[Independence of the fusion tensors]
     \label{thm:mpug_anomaly_three_cocycle_gauge}
     \lean{MPOTensor.GroupFamily.FusionData.relativeScalar,
+        MPOTensor.GroupFamily.FusionData.isDressedProportional_relativeScalar,
         MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge,
         MPOTensor.GroupFamily.FusionData.omega_cohomologousTo}
     \leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec}
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
     Let $\omega$ and $\omega'$ come from two choices of fusion tensors, and
     let $\beta_{g,h}\in\C^\times$ be the scalar with
     $F^<_{g,h}B^{\mathbf w}=\beta_{g,h}F'^<_{g,h}B^{\mathbf w}$ for all long
@@ -4198,6 +4237,8 @@ $(MN)P$ into $M(NP)$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
     The left boundaries of the two choices of the tree fusing $g$ with $h$
     first differ by $\beta_{g,h}\beta_{gh,k}$, and those of the tree fusing
     $h$ with $k$ first by $\beta_{h,k}\beta_{g,hk}$, by the two parts of
