@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Reduction
+import TNLean.MPS.Core.ReductionUniqueness
 import TNLean.MPS.MPDO.OperatorProduct
 
 /-!
@@ -44,6 +45,14 @@ equation `eq:3-cocycle` and the display preceding it (`main.tex` lines
   `MPSTensor.IsReduction.mulTensor_assoc_right`
 * `MPSTensor.IsReduction.mulTensor_kronId`,
   `MPSTensor.IsReduction.mulTensor_idKron`
+
+The second half of the file treats the scalar comparison of two reductions.
+`MPSTensor.IsDressedProportional B X Y z` says that `X B^w = z Y B^w` for all
+sufficiently long words `w`; two reductions onto the same normal tensor are
+related in this way by a unique nonzero scalar
+(`MPSTensor.IsReduction.exists_isDressedProportional`,
+`MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero`), and the relation
+is compatible with the three compositions above.
 -/
 
 open scoped Matrix Kronecker
@@ -309,3 +318,263 @@ theorem _root_.MPSTensor.IsReduction.mulTensor_assoc_right {M : MPOTensor d D₁
     (fun i ↦ (assocInvMatrix_mul_mulTensor M N P i.divNat i.modNat).symm)
 
 end MPOTensor
+
+/-! ### Boundary-dressed proportionality -/
+
+namespace MPSTensor
+
+variable {d D D' m k : ℕ}
+
+/-- Two left boundaries `X, Y` of a tensor `B` are boundary-dressed proportional
+with scalar `z` when `X B^w = z Y B^w` for every sufficiently long word `w`.
+This is the form in which two reductions onto the same normal tensor are
+compared in Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Theorem 22,
+`cornerproblem.tex` lines 3156--3162, and in which the anomaly three-cocycle is
+defined in arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
+1506--1535. -/
+def IsDressedProportional (B : MPSTensor d D) (X Y : Matrix (Fin m) (Fin D) ℂ)
+    (z : ℂ) : Prop :=
+  ∃ N : ℕ, ∀ w : List (Fin d), N ≤ w.length →
+    X * Kraus.evalWord B w = z • (Y * Kraus.evalWord B w)
+
+namespace IsDressedProportional
+
+variable {B : MPSTensor d D} {X Y Z : Matrix (Fin m) (Fin D) ℂ} {z z' : ℂ}
+
+/-- Every left boundary is dressed proportional to itself with scalar one. -/
+theorem refl (B : MPSTensor d D) (X : Matrix (Fin m) (Fin D) ℂ) :
+    IsDressedProportional B X X 1 :=
+  ⟨0, fun w _ ↦ by rw [one_smul]⟩
+
+/-- Dressed proportionality composes, multiplying the scalars. -/
+theorem trans (h₁ : IsDressedProportional B X Y z) (h₂ : IsDressedProportional B Y Z z') :
+    IsDressedProportional B X Z (z * z') := by
+  obtain ⟨N₁, h₁⟩ := h₁
+  obtain ⟨N₂, h₂⟩ := h₂
+  refine ⟨max N₁ N₂, fun w hw ↦ ?_⟩
+  rw [h₁ w (le_of_max_le_left hw), h₂ w (le_of_max_le_right hw), smul_smul]
+
+/-- Dressed proportionality with a nonzero scalar is symmetric. -/
+theorem symm (h : IsDressedProportional B X Y z) (hz : z ≠ 0) :
+    IsDressedProportional B Y X z⁻¹ := by
+  obtain ⟨N, h⟩ := h
+  refine ⟨N, fun w hw ↦ ?_⟩
+  rw [h w hw, smul_smul, inv_mul_cancel₀ hz, one_smul]
+
+/-- Dressed proportionality is preserved by a common left factor. -/
+theorem mul_left (h : IsDressedProportional B X Y z) (C : Matrix (Fin k) (Fin m) ℂ) :
+    IsDressedProportional B (C * X) (C * Y) z := by
+  obtain ⟨N, h⟩ := h
+  refine ⟨N, fun w hw ↦ ?_⟩
+  rw [Matrix.mul_assoc, h w hw, Matrix.mul_smul, Matrix.mul_assoc]
+
+/-- Dressed proportionality transports along an invertible intertwiner of
+letters, in the same way as `MPSTensor.IsReduction.of_intertwine`. -/
+theorem of_intertwine {B' : MPSTensor d D'} {P : Matrix (Fin D') (Fin D) ℂ}
+    {Q : Matrix (Fin D) (Fin D') ℂ} (hPQ : P * Q = 1) (hQP : Q * P = 1)
+    (hB : ∀ i, B' i * P = P * B i) (h : IsDressedProportional B X Y z) :
+    IsDressedProportional B' (X * Q) (Y * Q) z := by
+  obtain ⟨N, h⟩ := h
+  have hQ : ∀ w, Q * Kraus.evalWord B' w = Kraus.evalWord B w * Q := fun w ↦ by
+    calc
+      Q * Kraus.evalWord B' w = Q * (Kraus.evalWord B' w * P) * Q := by
+          rw [Matrix.mul_assoc, Matrix.mul_assoc, hPQ, Matrix.mul_one]
+      _ = Kraus.evalWord B w * Q := by
+          rw [IsReduction.evalWord_mul_of_intertwine hB, ← Matrix.mul_assoc, hQP,
+            Matrix.one_mul]
+  refine ⟨N, fun w hw ↦ ?_⟩
+  rw [Matrix.mul_assoc, hQ, ← Matrix.mul_assoc, h w hw, Matrix.smul_mul, Matrix.mul_assoc,
+    ← hQ, Matrix.mul_assoc]
+
+/-- **Pulling a dressed proportionality back along a reduction.** If `(V, W)`
+reduces `B` onto `A` with equal positive-length matrix product vectors, and
+`X A^w = z Y A^w` for long words, then `X V B^w = z Y V B^w` for long words.
+
+The proof inserts the reduced block `W A^c V` in the interior of a long word,
+which is allowed once both exterior buffers exceed the residual nilpotency
+bound (Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Lemma `B_expand`,
+`cornerproblem.tex` lines 3993--4005, in the corrected form of
+`MPSTensor.IsReduction.evalWord_mul_reduced_exterior_eq_evalWord_append`). -/
+theorem pullback {D_A : ℕ} {A : MPSTensor d D_A} {V : Matrix (Fin D_A) (Fin D) ℂ}
+    {W : Matrix (Fin D) (Fin D_A) ℂ} {X Y : Matrix (Fin m) (Fin D_A) ℂ}
+    (hR : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
+    (h : IsDressedProportional A X Y z) :
+    IsDressedProportional B (X * V) (Y * V) z := by
+  obtain ⟨N, h⟩ := h
+  have hBound := hR.bondDim_isReductionResidualNilpotencyBound hSame
+  refine ⟨N + 2 * D + 1, fun w hw ↦ ?_⟩
+  let p := w.take D
+  let r := w.drop D
+  let c := r.take (w.length - 2 * D)
+  let q := r.drop (w.length - 2 * D)
+  have hpLen : p.length = D := by simp [p, List.length_take]; omega
+  have hrLen : r.length = w.length - D := by simp [r, List.length_drop]
+  have hcLen : c.length = w.length - 2 * D := by
+    simp [c, hrLen, List.length_take]; omega
+  have hqLen : q.length = D := by simp [q, hrLen]; omega
+  have hsplit : p ++ c ++ q = w := by
+    simp only [p, r, c, q, List.take_append_drop, List.append_assoc]
+  have hc : c ≠ [] := by
+    intro hc0
+    rw [hc0] at hcLen
+    simp at hcLen
+    omega
+  have hext := hR.evalWord_mul_reduced_exterior_eq_evalWord_append hBound p c q hc
+    (by omega) (by omega)
+  have hV : V * Kraus.evalWord B w = Kraus.evalWord A (p ++ c) * (V * Kraus.evalWord B q) := by
+    rw [← hsplit, ← hext, Kraus.evalWord_append, ← hR.evalWord p]
+    simp only [Matrix.mul_assoc]
+  have hpc : N ≤ (p ++ c).length := by simp only [List.length_append]; omega
+  rw [Matrix.mul_assoc, hV, ← Matrix.mul_assoc, h _ hpc, Matrix.smul_mul, Matrix.mul_assoc,
+    ← hV, Matrix.mul_assoc]
+
+/-- **Uniqueness of the dressed scalar.** If `X` is dressed proportional to `Y`
+with two scalars, and `X B^w` is nonzero for arbitrarily long words, then the
+two scalars agree. -/
+theorem eq_of_forall_exists_ne_zero (h : IsDressedProportional B X Y z)
+    (h' : IsDressedProportional B X Y z')
+    (hX : ∀ N : ℕ, ∃ w : List (Fin d), N ≤ w.length ∧ X * Kraus.evalWord B w ≠ 0) :
+    z = z' := by
+  obtain ⟨N, h⟩ := h
+  obtain ⟨N', h'⟩ := h'
+  obtain ⟨w, hw, hne⟩ := hX (max N N')
+  have e₁ := h w (le_of_max_le_left hw)
+  have e₂ := h' w (le_of_max_le_right hw)
+  by_contra hzz
+  apply hne
+  have hY : Y * Kraus.evalWord B w = 0 := by
+    have : (z - z') • (Y * Kraus.evalWord B w) = 0 := by
+      rw [sub_smul, ← e₁, ← e₂, sub_self]
+    exact (smul_eq_zero.mp this).resolve_left (sub_ne_zero.mpr hzz)
+  rw [e₁, hY, smul_zero]
+
+end IsDressedProportional
+
+namespace IsReduction
+
+variable {D_A : ℕ} {B : MPSTensor d D} {A : MPSTensor d D_A}
+  {V V' : Matrix (Fin D_A) (Fin D) ℂ} {W W' : Matrix (Fin D) (Fin D_A) ℂ}
+
+/-- The left boundary of a reduction onto a normal tensor of positive bond
+dimension is nonzero against arbitrarily long words: `V B^w W = A^w`, and a
+normal tensor has nonzero words of every multiple of its injectivity length. -/
+theorem exists_mul_evalWord_ne_zero (h : IsReduction B A V W) (hA : Kraus.IsNormal A)
+    (hD : 0 < D_A) (N : ℕ) :
+    ∃ w : List (Fin d), N ≤ w.length ∧ V * Kraus.evalWord B w ≠ 0 := by
+  obtain ⟨L, hL, hinj⟩ := hA
+  obtain ⟨σ, hσ⟩ := exists_evalWord_ne_zero_of_isNBlkInjective hD.ne'
+    (isNBlkInjective_mul_of_isNBlkInjective A (Nat.succ_pos N) hinj)
+  refine ⟨List.ofFn σ, ?_, fun h0 ↦ hσ ?_⟩
+  · rw [List.length_ofFn]; nlinarith
+  · rw [← h.evalWord, h0, Matrix.zero_mul]
+
+/-- **Two reductions onto a normal tensor are dressed proportional**
+(Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Theorem 22, `cornerproblem.tex`
+lines 3156--3162): given equal positive-length matrix product vectors, the left
+boundaries of two reductions of `B` onto a normal `A` agree against long words
+up to a nonzero scalar. -/
+theorem exists_isDressedProportional (h : IsReduction B A V W)
+    (h' : IsReduction B A V' W') (hA : Kraus.IsNormal A) (hSame : SameMPV₂Pos B A) :
+    ∃ z : ℂ, z ≠ 0 ∧ IsDressedProportional B V V' z := by
+  obtain ⟨z, hz, hw⟩ := h.exists_boundary_dressed_proportional_of_nilpotencyLength_le h' hA
+    hSame (le_max_left _ _) (le_max_right _ _)
+  exact ⟨z, hz, 2 * max (reductionResidualNilpotencyLength B A V W)
+    (reductionResidualNilpotencyLength B A V' W') + 1, fun w hlen ↦ (hw w (by omega)).1⟩
+
+end IsReduction
+
+end MPSTensor
+
+namespace MPOTensor
+
+variable {d D₁ D₂ D₃ m : ℕ}
+
+/-- The left boundary `X ⊗ 1` against a word of a product tensor. -/
+theorem kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn (M : MPOTensor d D₁)
+    (P : MPOTensor d D₂) (X : Matrix (Fin m) (Fin D₁) ℂ) {L : ℕ}
+    (u : Fin L → Fin (d * d)) :
+    kronId X D₂ * Kraus.evalWord (mulTensor M P).toMPSTensor (List.ofFn u) =
+      (∑ ρ : Fin L → Fin d,
+        (X * Kraus.evalWord M.toMPSTensor
+            (List.ofFn fun k ↦ finProdFinEquiv ((u k).divNat, ρ k))) ⊗ₖ
+          Kraus.evalWord P.toMPSTensor
+            (List.ofFn fun k ↦ finProdFinEquiv (ρ k, (u k).modNat))).submatrix
+        finProdFinEquiv.symm finProdFinEquiv.symm := by
+  rw [evalWord_toMPSTensor_mulTensor_ofFn, kronId, Matrix.submatrix_mul_equiv,
+    Matrix.mul_sum]
+  congr 1
+  refine Finset.sum_congr rfl fun ρ _ ↦ ?_
+  rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
+
+/-- The left boundary `1 ⊗ X` against a word of a product tensor. -/
+theorem idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn (P : MPOTensor d D₂)
+    (M : MPOTensor d D₁) (X : Matrix (Fin m) (Fin D₁) ℂ) {L : ℕ}
+    (u : Fin L → Fin (d * d)) :
+    idKron D₂ X * Kraus.evalWord (mulTensor P M).toMPSTensor (List.ofFn u) =
+      (∑ ρ : Fin L → Fin d,
+        Kraus.evalWord P.toMPSTensor
+            (List.ofFn fun k ↦ finProdFinEquiv ((u k).divNat, ρ k)) ⊗ₖ
+          (X * Kraus.evalWord M.toMPSTensor
+            (List.ofFn fun k ↦ finProdFinEquiv (ρ k, (u k).modNat)))).submatrix
+        finProdFinEquiv.symm finProdFinEquiv.symm := by
+  rw [evalWord_toMPSTensor_mulTensor_ofFn, idKron, Matrix.submatrix_mul_equiv,
+    Matrix.mul_sum]
+  congr 1
+  refine Finset.sum_congr rfl fun ρ _ ↦ ?_
+  rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
+
+/-- Dressed proportionality on a factor extends to the product with a factor
+on the right, through `X ⊗ 1`. -/
+theorem _root_.MPSTensor.IsDressedProportional.mulTensor_kronId {M : MPOTensor d D₁}
+    (P : MPOTensor d D₂) {X Y : Matrix (Fin m) (Fin D₁) ℂ} {z : ℂ}
+    (h : MPSTensor.IsDressedProportional M.toMPSTensor X Y z) :
+    MPSTensor.IsDressedProportional (mulTensor M P).toMPSTensor (kronId X D₂)
+      (kronId Y D₂) z := by
+  obtain ⟨N, h⟩ := h
+  refine ⟨N, fun w hw ↦ ?_⟩
+  obtain ⟨L, u, rfl⟩ : ∃ L, ∃ u : Fin L → Fin (d * d), w = List.ofFn u :=
+    ⟨_, _, (List.ofFn_get w).symm⟩
+  rw [List.length_ofFn] at hw
+  rw [kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn,
+    kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn]
+  have h' : ∀ σ : Fin L → Fin (d * d), X * Kraus.evalWord M.toMPSTensor (List.ofFn σ) =
+      z • (Y * Kraus.evalWord M.toMPSTensor (List.ofFn σ)) := fun σ ↦
+    h _ (by rw [List.length_ofFn]; exact hw)
+  simp only [h', Matrix.smul_kronecker, ← Finset.smul_sum]
+  rfl
+
+/-- Dressed proportionality on a factor extends to the product with a factor
+on the left, through `1 ⊗ X`. -/
+theorem _root_.MPSTensor.IsDressedProportional.mulTensor_idKron {M : MPOTensor d D₁}
+    (P : MPOTensor d D₂) {X Y : Matrix (Fin m) (Fin D₁) ℂ} {z : ℂ}
+    (h : MPSTensor.IsDressedProportional M.toMPSTensor X Y z) :
+    MPSTensor.IsDressedProportional (mulTensor P M).toMPSTensor (idKron D₂ X)
+      (idKron D₂ Y) z := by
+  obtain ⟨N, h⟩ := h
+  refine ⟨N, fun w hw ↦ ?_⟩
+  obtain ⟨L, u, rfl⟩ : ∃ L, ∃ u : Fin L → Fin (d * d), w = List.ofFn u :=
+    ⟨_, _, (List.ofFn_get w).symm⟩
+  rw [List.length_ofFn] at hw
+  rw [idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn,
+    idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn]
+  have h' : ∀ σ : Fin L → Fin (d * d), X * Kraus.evalWord M.toMPSTensor (List.ofFn σ) =
+      z • (Y * Kraus.evalWord M.toMPSTensor (List.ofFn σ)) := fun σ ↦
+    h _ (by rw [List.length_ofFn]; exact hw)
+  simp only [h', Matrix.kronecker_smul, ← Finset.smul_sum]
+  rfl
+
+/-- An intertwiner of the letters of two tensors, tensored with the identity,
+intertwines the letters of their products with a common factor on the right. -/
+theorem mulTensor_mul_kronId_of_intertwine {X' : MPOTensor d D₁} {X : MPOTensor d D₂}
+    (R : MPOTensor d D₃) {P : Matrix (Fin D₁) (Fin D₂) ℂ}
+    (hX : ∀ i l, X' i l * P = P * X i l) (i l : Fin d) :
+    mulTensor X' R i l * kronId P D₃ = kronId P D₃ * mulTensor X R i l := by
+  rw [mulTensor_apply, mulTensor_apply, kronId, Matrix.submatrix_mul_equiv,
+    Matrix.submatrix_mul_equiv, Matrix.sum_mul, Matrix.mul_sum]
+  congr 1
+  refine Finset.sum_congr rfl fun j _ ↦ ?_
+  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, hX, Matrix.mul_one,
+    Matrix.one_mul]
+
+end MPOTensor
+
