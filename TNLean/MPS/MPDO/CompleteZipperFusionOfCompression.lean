@@ -41,7 +41,6 @@ associativity analysis (lines 193--200 and 247).  The star-closed case supplies 
   has a multi-block compression with vanishing remainder.
 * `MPOTensor.CompleteZipperFusionFamily.exists_ofStar_fusionTensor_eq`: the fusion tensors of
   `ofStar` are the compression maps of split compressions of the pairwise products.
-
 * `MPOTensor.CompleteZipperFusionFamily.ofCompression_fusionTensor`,
   `MPOTensor.CompleteZipperFusionFamily.ofCompression_fusionTensorLeftInverse`: the fusion
   tensors of this family are the compression pairs.

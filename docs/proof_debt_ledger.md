@@ -1003,7 +1003,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 
 ## D16. Ring-homomorphism transport of exact-arithmetic example tensors written four times  —  duplication, impact 7/10, effort 5/10
 - **Status**: open ([#7846](https://github.com/LionSR/TNLean/issues/7846); 2026-09-19 architectural survey)
-- **Evidence**: `MPS/FundamentalTheorem/Reduction/Examples/{ExplicitGauge,Zsqrt2Ring,GoldenRing,EisensteinRing}.lean`
+- **Evidence**: `MPS/FundamentalTheorem/Reduction/ExplicitGauge.lean`, `MPS/Examples/Rings/{Zsqrt2Ring,GoldenRing,EisensteinRing}.lean`
   each define `complexOfR X := X.map f` for a ring homomorphism `f : R →+* ℂ`
   and re-prove the same 8–14-lemma ladder (`_mul`, `_one`, `_zero`, `_add`,
   `_sub`, `_smul`, `_sum`, `_single`, `_submatrix`, `_transpose`,
