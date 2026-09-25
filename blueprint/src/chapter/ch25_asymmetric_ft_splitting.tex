@@ -114,6 +114,147 @@ Theorem~\ref{thm:asym_multiblock} split into sitewise intertwiners.
     virtual algebra of the stacked tensor, rather than the physical operator.
 \end{remark}
 
+\subsection{Uniqueness of split compressions}%
+\label{sec:asym_zipper_uniqueness}
+
+When the remainder vanishes, the compression maps are determined by the blocks
+up to a change of basis of each multiplicity space. Throughout, the blocks are
+indexed by labels $c$ with multiplicities $N_c$, and a split compression of $B$
+consists of maps $V_{c,\mu}$ and $W_{c,\mu}$, for $1\leq\mu\leq N_c$, with
+\begin{align}
+    W_{c,\mu}V_{c',\nu} & =\delta_{cc'}\delta_{\mu\nu}\id, &
+    B^i                 & =\sum_c\sum_{\mu=1}^{N_c}V_{c,\mu}C_c^iW_{c,\mu}
+    \label{eq:asym_zipper_decomposition}
+\end{align}
+for every physical index $i$. This is the zipper condition of
+\cite{Bultinck2017Anyons}: the block triangular form has no nonzero blocks
+above the diagonal. The maps $V_{c,\mu}$ need not span the bond space of $B$,
+so zero diagonal blocks are allowed.
+
+\begin{lemma}[Intertwiners of normal tensors]
+    \label{lem:asym_normal_intertwiner}
+    \lean{MPSTensor.eq_zero_or_isGaugeRelated_of_intertwines}
+    \leanok
+    \uses{def:normal}
+    Let $A$ and $A'$ be normal tensors of bond dimensions $D$ and $D'$, and
+    let $X\in\C^{D\times D'}$ satisfy $A^iX=XA'^i$ for every physical index
+    $i$. Then $X=0$, or $D=D'$ and $X$ is invertible, so that
+    $A'^i=X^{-1}A^iX$ for every $i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The kernel of $X$ is invariant under every word of $A'$. At a length where
+    the words of $A'$ span the full matrix algebra, a nonzero vector in the
+    kernel is carried to every vector, so $X=0$. Symmetrically, the left kernel
+    of $X$ is invariant under right multiplication by the words of $A$. If
+    $X\neq0$, both kernels vanish, so $D'\leq D$ and $D\leq D'$, and $X$ is
+    invertible.
+\end{proof}
+
+\begin{theorem}[Uniqueness of split compressions up to multiplicity gauge]
+    \label{thm:asym_zipper_uniqueness}
+    \lean{MPSTensor.ZipperDecomposition.V_mul_W_eq_multiplicityGauge_smul,
+        MPSTensor.ZipperDecomposition.V_mul_W_eq_zero_of_not_isGaugeRelated,
+        MPSTensor.ZipperDecomposition.multiplicityGauge_mul_multiplicityGauge,
+        MPSTensor.ZipperDecomposition.exists_unique_multiplicityGauge}
+    \leanok
+    \uses{lem:asym_normal_intertwiner}
+    Let the blocks $C_c$ be normal of positive bond dimension and pairwise
+    not related by a gauge transformation, and let $(V,W)$ and
+    $(\widetilde V,\widetilde W)$ be two split compressions of $B$ as in
+    (\ref{eq:asym_zipper_decomposition}) with the same blocks and
+    multiplicities. Then $\widetilde W_{c,\mu}V_{e,\nu}=0$ for $e\neq c$, and
+    $\widetilde W_{c,\mu}V_{c,\nu}=(Y_c)_{\mu\nu}\id$ for a matrix
+    $Y_c\in\GL_{N_c}(\C)$ whose inverse is given by
+    $W_{c,\mu}\widetilde V_{c,\nu}=(Y_c^{-1})_{\mu\nu}\id$. The matrices $Y_c$
+    are the unique ones with
+    \begin{align}
+        \widetilde W_{c,\mu}B^i & =\sum_\nu(Y_c)_{\mu\nu}W_{c,\nu}B^i, &
+        B^i\widetilde V_{c,\mu} & =\sum_\nu B^iV_{c,\nu}(Y_c^{-1})_{\nu\mu}
+        \label{eq:asym_zipper_gauge}
+    \end{align}
+    for every physical index $i$, so the two compressions differ by
+    $\bigoplus_c\GL_{N_c}(\C)$ on the support of $B$, with no dressing by
+    words. This is the uniqueness of fusion tensors under the zipper
+    condition in \cite{Bultinck2017Anyons}.
+    % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 164--166 (the
+    %   gauge Y) and 181--200 (uniqueness under the zipper condition);
+    %   arXiv:2203.12563, lines 415--424.
+    % PR #7969 plans the MPO-algebra reading as
+    %   thm:mpoalg_zipper_fusion_uniqueness; after it merges, that entry should
+    %   \uses this theorem and cor:asym_zipper_fusion_uniqueness.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:asym_normal_intertwiner}
+    Multiplying (\ref{eq:asym_zipper_decomposition}) on the left by
+    $W_{c,\mu}$ and on the right by $V_{c,\mu}$ gives the sitewise relations
+    $W_{c,\mu}B^i=C_c^iW_{c,\mu}$ and $B^iV_{c,\mu}=V_{c,\mu}C_c^i$, and
+    likewise for the second compression. Hence
+    $C_c^i\,\widetilde W_{c,\mu}V_{e,\nu}=\widetilde W_{c,\mu}B^iV_{e,\nu}
+        =\widetilde W_{c,\mu}V_{e,\nu}\,C_e^i$, and
+    Lemma~\ref{lem:asym_normal_intertwiner} makes this intertwiner zero for
+    $e\neq c$. For $e=c$ it commutes with every $C_c^i$, and since the words
+    of $C_c$ of a suitable length span the full matrix algebra, it is a scalar
+    $(Y_c)_{\mu\nu}$. Compressing $B^i$ with the second compression on both
+    sides and expanding $B^i$ by the first gives
+    $\delta_{\mu\kappa}C_c^i=\sum_\nu(Y_c)_{\mu\nu}(Y'_c)_{\nu\kappa}C_c^i$,
+    where $W_{c,\nu}\widetilde V_{c,\kappa}=(Y'_c)_{\nu\kappa}\id$; a nonzero
+    $C_c^i$ gives $Y_cY'_c=\id$. Expanding $\widetilde W_{c,\mu}B^i$ by the
+    first compression gives (\ref{eq:asym_zipper_gauge}), and multiplying it
+    on the right by $V_{c,\kappa}$ recovers $(Y_c)_{\mu\kappa}$, which gives
+    uniqueness.
+\end{proof}
+
+\begin{corollary}[Uniqueness of zipper fusion tensors]
+    \label{cor:asym_zipper_fusion_uniqueness}
+    \lean{MPOTensor.exists_unique_zipperFusionGauge}
+    \leanok
+    \uses{thm:asym_zipper_uniqueness}
+    Let $T_a$, $T_b$ and $T_c$ be matrix product operator tensors, with the
+    $T_c$ normal as tensors on the pair alphabet, of positive bond dimension,
+    and pairwise not related by a gauge transformation. Two families of fusion
+    tensors that split the stacked product $T_aT_b$ over the blocks $T_c$
+    with multiplicities $N_{ab}^c$, as in
+    (\ref{eq:asym_zipper_decomposition}), differ by a unique
+    $Y_{ab}^c\in\GL_{N_{ab}^c}(\C)$ for each $c$ in the sense of
+    (\ref{eq:asym_zipper_gauge}).
+    % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 164--166 and
+    %   181--200; arXiv:2203.12563, lines 415--424.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_zipper_uniqueness}
+    Apply Theorem~\ref{thm:asym_zipper_uniqueness} to the stacked product on
+    the pair alphabet.
+\end{proof}
+
+\begin{corollary}[Uniqueness of zipper action tensors]
+    \label{cor:asym_zipper_action_uniqueness}
+    \lean{MPOTensor.exists_unique_zipperActionGauge}
+    \leanok
+    \uses{thm:asym_zipper_uniqueness}
+    Let $T_a$ be a matrix product operator tensor, $A_x$ a tensor, and $A_y$
+    normal tensors of positive bond dimension that are pairwise not related by
+    a gauge transformation. Two families of action tensors that split
+    $T_a\cdot A_x$ over the blocks $A_y$ with multiplicities $M_{a,x}^y$, as in
+    (\ref{eq:asym_zipper_decomposition}), differ by a unique
+    $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ for each $y$ in the sense of
+    (\ref{eq:asym_zipper_gauge}). This is the gauge freedom of action tensors
+    in \cite[Section~3.1]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 459--490 and 595--602.
+    % PR #7969 plans this as thm:mpoalg_zipper_action_uniqueness.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_zipper_uniqueness}
+    Apply Theorem~\ref{thm:asym_zipper_uniqueness} to $T_a\cdot A_x$.
+\end{proof}
+
 \section{The single-block reduction of Moln\'ar--Ge--Schuch--Cirac}%
 \label{sec:asym_single_block}
 

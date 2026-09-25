@@ -399,6 +399,83 @@ theorem eq_multiplicityGauge_of_V_mul_eq_sum (P Q : ZipperDecomposition B C N)
   rw [← hsum Z, ← hZ, Matrix.mul_assoc, P.mul_W, ← Matrix.mul_assoc,
     P.V_mul_W_eq_multiplicityGauge_smul Q (hC c), Matrix.smul_mul, Matrix.one_mul]
 
+/-- **Uniqueness of zipper decompositions up to the multiplicity gauge.** Let the blocks be
+normal, of positive bond dimension, and pairwise not gauge related.  Two zipper decompositions
+`P = (V, W)` and `Q = (Ṽ, W̃)` of `B` over the same blocks and multiplicities differ by a unique
+family `Y c ∈ GL (N c)`:
+$\widetilde V_{c,\mu}B^i = \sum_\nu (Y_c)_{\mu\nu}V_{c,\nu}B^i$ and
+$B^i\widetilde W_{c,\kappa} = \sum_\nu B^iW_{c,\nu}(Y_c^{-1})_{\nu\kappa}$ for every letter.
+The identities hold on the support of `B`, the range of its letters, since the embeddings need
+not span the bond space (arXiv:1511.08090, lines 179--180).  No dressing by words is needed.
+
+Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 164--166 (the gauge transformation `Y`) and
+lines 181--200 (its uniqueness under the zipper condition); arXiv:2203.12563, lines 415--424. -/
+theorem exists_unique_multiplicityGauge (P Q : ZipperDecomposition B C N)
+    (hC : ∀ c, Kraus.IsNormal (C c)) (hD : ∀ c, 0 < D c)
+    (hsep : ∀ c e, c ≠ e → ¬ IsGaugeRelated (C c) (C e)) :
+    ∃! Y : ∀ c, GL (Fin (N c)) ℂ,
+      (∀ c μ i, Q.V c μ * B i =
+        ∑ ν, (↑(Y c) : Matrix (Fin (N c)) (Fin (N c)) ℂ) μ ν • (P.V c ν * B i)) ∧
+      (∀ c κ i, B i * Q.W c κ =
+        ∑ ν, (↑(Y c)⁻¹ : Matrix (Fin (N c)) (Fin (N c)) ℂ) ν κ • (B i * P.W c ν)) :=
+  ⟨P.multiplicityGaugeUnit Q hC hD hsep,
+    ⟨fun c μ i => P.V_mul_eq_sum Q hC hsep c μ i, fun c κ i => P.mul_W_eq_sum Q hC hsep c κ i⟩,
+    fun _ hY => funext fun c => Units.ext
+      (P.eq_multiplicityGauge_of_V_mul_eq_sum Q hC hD _ fun μ i => hY.1 c μ i)⟩
+
 end ZipperDecomposition
 
 end MPSTensor
+
+namespace MPOTensor
+
+variable {d : ℕ} {ι : Type*} [Fintype ι]
+
+/-- **Uniqueness of zipper fusion tensors up to the multiplicity gauge.** Let the blocks
+`T c` of a fusion algebra be normal, of positive bond dimension, and pairwise not gauge
+related, and let `P` and `Q` be two families of fusion tensors for the stacked product
+$T_aT_b$ with vanishing remainder,
+$(T_aT_b)^{ij} = \sum_{c,\mu} W_{ab}^{c,\mu}T_c^{ij}V_{ab}^{c,\mu}$.  Then the two families
+differ by a unique $Y_{ab}^c \in \mathrm{GL}_{N_{ab}^c}(\mathbb C)$ for each `c`, on the
+support of the product.  The family `c ↦ Y c` is the `(a, b)` component of a fusion gauge.
+
+Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 164--166 and 181--200 (fusion tensors under
+the zipper condition, equation `inversegaugeone`); arXiv:2203.12563, lines 415--424. -/
+theorem exists_unique_zipperFusionGauge {Da Db : ℕ} {χ Nab : ι → ℕ} {Ta : MPOTensor d Da}
+    {Tb : MPOTensor d Db} {T : ∀ c, MPOTensor d (χ c)}
+    (P Q : MPSTensor.ZipperDecomposition (mulTensor Ta Tb).toMPSTensor
+      (fun c => (T c).toMPSTensor) Nab)
+    (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hχ : ∀ c, 0 < χ c)
+    (hsep : ∀ c e, c ≠ e → ¬ MPSTensor.IsGaugeRelated (T c).toMPSTensor (T e).toMPSTensor) :
+    ∃! Y : ∀ c, GL (Fin (Nab c)) ℂ,
+      (∀ c μ i, Q.V c μ * (mulTensor Ta Tb).toMPSTensor i =
+        ∑ ν, (↑(Y c) : Matrix (Fin (Nab c)) (Fin (Nab c)) ℂ) μ ν •
+          (P.V c ν * (mulTensor Ta Tb).toMPSTensor i)) ∧
+      (∀ c κ i, (mulTensor Ta Tb).toMPSTensor i * Q.W c κ =
+        ∑ ν, (↑(Y c)⁻¹ : Matrix (Fin (Nab c)) (Fin (Nab c)) ℂ) ν κ •
+          ((mulTensor Ta Tb).toMPSTensor i * P.W c ν)) :=
+  P.exists_unique_multiplicityGauge Q hT hχ hsep
+
+/-- **Uniqueness of zipper action tensors up to the multiplicity gauge.** Let the blocks
+`A y` be normal, of positive bond dimension, and pairwise not gauge related, and let `P` and
+`Q` be two families of action tensors for the tensor $T_a\cdot A_x$ with vanishing remainder,
+$(T_a\cdot A_x)^i = \sum_{y,k} W_{ax}^{y,k}A_y^iV_{ax}^{y,k}$.  Then the two families differ by
+a unique $X_{ax}^y \in \mathrm{GL}_{M_{a,x}^y}(\mathbb C)$ for each `y`, on the support of
+$T_a\cdot A_x$.
+
+Source: arXiv:2203.12563, lines 459--490 (action tensors) and 595--602 (their gauge
+transformations); the zipper condition is arXiv:1511.08090, lines 181--191. -/
+theorem exists_unique_zipperActionGauge {Da Dx : ℕ} {Dy M : ι → ℕ} {Ta : MPOTensor d Da}
+    {Ax : MPSTensor d Dx} {A : ∀ y, MPSTensor d (Dy y)}
+    (P Q : MPSTensor.ZipperDecomposition (actTensor Ta Ax) A M)
+    (hA : ∀ y, Kraus.IsNormal (A y)) (hDy : ∀ y, 0 < Dy y)
+    (hsep : ∀ y z, y ≠ z → ¬ MPSTensor.IsGaugeRelated (A y) (A z)) :
+    ∃! X : ∀ y, GL (Fin (M y)) ℂ,
+      (∀ y k i, Q.V y k * actTensor Ta Ax i =
+        ∑ l, (↑(X y) : Matrix (Fin (M y)) (Fin (M y)) ℂ) k l • (P.V y l * actTensor Ta Ax i)) ∧
+      (∀ y k i, actTensor Ta Ax i * Q.W y k =
+        ∑ l, (↑(X y)⁻¹ : Matrix (Fin (M y)) (Fin (M y)) ℂ) l k •
+          (actTensor Ta Ax i * P.W y l)) :=
+  P.exists_unique_multiplicityGauge Q hA hDy hsep
+
+end MPOTensor
