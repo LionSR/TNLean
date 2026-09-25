@@ -60,7 +60,7 @@ Documented in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 * `FibonacciCompression.mpo_fibPMPO`: without `Δ`, the operator of the bond-five tensor is
   `O_1 + O_τ`.
 * `FibonacciCompression.fibProjector_eq_trace_fibDelta`: the `Δ`-weighted operator of the
-  bond-five tensor is `P_L`.
+  locally chosen bond-five tensor is `P_L`.
 * `FibonacciCompression.fibProjector_mul_self`: `P_L` is idempotent at every positive length.
 
 ## References
@@ -212,8 +212,9 @@ entries of the Local fix (provenance) of the module header. -/
 def fibPMPO : MPOTensor 2 (2 + 3) := directSum fibOne fibTau
 
 /-- Bridge: the periodic operator of the bond-five tensor without the boundary matrix `Δ` is the
-sum `O_1^L + O_τ^L` of the operators of its two blocks, by additivity of the direct sum. This
-is not the source's projector, which inserts `Δ` (`fibProjector_eq_trace_fibDelta`). -/
+sum `O_1^L + O_τ^L` of the operators of its two blocks, by additivity of the direct sum. The
+weighted operator `P_L` of the source's form is obtained only after inserting `Δ`
+(`fibProjector_eq_trace_fibDelta`). -/
 theorem mpo_fibPMPO (L : ℕ) : mpo fibPMPO L = mpo fibOne L + mpo fibTau L :=
   mpo_directSum fibOne fibTau L
 
@@ -275,9 +276,11 @@ def fibDelta : Matrix (Fin (2 + 3)) (Fin (2 + 3)) ℂ :=
     finSumFinEquiv.symm
 
 /-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` lines 128–151 and 1268–1269. The weighted
-operator is the source's projector matrix product operator
-`P_L = ∑ tr(Δ B^{i_1 j_1} ⋯ B^{i_L j_L}) |i⟩⟨j|` of the bond-five tensor `fibPMPO` with the
-boundary matrix `Δ = fibDelta`. -/
+operator `P_L` is the boundary-weighted matrix product operator
+`∑ tr(Δ B^{i_1 j_1} ⋯ B^{i_L j_L}) |i⟩⟨j|`, in the source's form, of the locally chosen
+bond-five tensor `fibPMPO` with the boundary matrix `Δ = fibDelta`. The blocks of `fibPMPO`
+carry the bare F-symbol entries of the module's Local fix (provenance) and are not identified
+with the source's diagram tensor. -/
 theorem fibProjector_eq_trace_fibDelta (L : ℕ) :
     fibProjector L = Matrix.of fun σ τ =>
       Matrix.trace (fibDelta * evalWord fibPMPO (List.ofFn σ) (List.ofFn τ)) := by
