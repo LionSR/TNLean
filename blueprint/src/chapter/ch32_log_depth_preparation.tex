@@ -492,9 +492,6 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{definition}[Fixed point of a basis of normal tensors]
     \label{def:ldp_non_normal_fixed_point}
-    \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
-        MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState}
-    \leanok
     \uses{def:bnt, def:prep_fixed_point_tensor, thm:ldpolar_tensor_decomposition,
         def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
@@ -522,20 +519,43 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     canonical form of \cite{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
+\begin{definition}[Fixed-point state of a family of pairs]
+    \label{def:ldp_pair_family_fixed_point}
+    \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
+        MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, thm:ldpolar_tensor_decomposition}
+    Let $\omega_1,\dots,\omega_b\in\mathbb C^D\otimes\mathbb C^D$ be any vectors,
+    $\alpha\in\mathbb C^b$ any coefficients, and $M\ge0$. The state
+    $\ket{\Omega'}=\sum_j\alpha_j\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}$ is
+    formed as in (\ref{eq:ldp_non_normal_fixed_point}), and for a tensor $A$ and a
+    blocking length $q$, with $V$ from Theorem~\ref{thm:ldpolar_tensor_decomposition}
+    for the $q$-site blocked map of $A$, the approximating state is
+    $V^{\otimes M}\ket{\Omega'}/\lVert V^{\otimes M}\ket{\Omega'}\rVert$, and zero when
+    the denominator vanishes. For multiplicity coefficients $\mu_{j,k}$ put
+    $\beta_j=\sum_k\mu_{j,k}^N$ and $\alpha^{(N)}_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$.
+    Definition~\ref{def:ldp_non_normal_fixed_point} is the instance in which
+    $\omega_j$ is the pair state of the normal block $A_j$ embedded in the bond space
+    of $A$, $\alpha=\alpha^{(N)}$, and $N=qM$; none of these three identifications is
+    imposed here.
+\end{definition}
+
 \begin{lemma}[GHZ form of the fixed-point state]
     \label{lem:ldp_ghz_form}
     \lean{MPSTensor.isIsometry_pairIsometry,
         MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState,
         MPSTensor.nonNormalFixedPointState_norm_sq}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point}
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point}
     If $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, then
     $W\colon\ket{j}\mapsto\ket{\omega_j}$ is an isometry and
     $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ with
     $\ket{\chi_M}=\sum_j\alpha^{(N)}_j\ket{j}^{\otimes M}$, up to the
     regrouping of the legs $R_kL_{k+1}$. If moreover $M\geq1$ and
     $(\beta_1,\dots,\beta_b)\neq0$, then $\braket{\Omega'}{\Omega'}=1$.
-    This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}.
+    This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}. The same
+    holds for the state of Definition~\ref{def:ldp_pair_family_fixed_point} with
+    $\alpha=\alpha^{(N)}$ for any orthonormal pairs $\omega_j$.
 \end{lemma}
 
 \begin{proof}

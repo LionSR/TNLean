@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixUnitaryBetween
+import TNLean.Algebra.MatrixTensorPower
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.FixedPointPairs
 
@@ -26,10 +26,17 @@ of eq. (19). Because the pairs are locally orthogonal, `⟨ω_j|ω_{j'}⟩ = δ_
 
 This file states these objects for an arbitrary finite family of pair vectors
 `ω_j ∈ ℂ^D ⊗ ℂ^D`; the intended instance is `ω_j = fixedPointPair σ_j` for the normal
-blocks. Local orthogonality is taken as a hypothesis, as in the source, which cites it
-from the canonical-form theory; `inner_pair_eq_zero_of_disjoint` derives it from pair
-vectors supported on pairwise disjoint sets of virtual indices, which is how the blocks
-of a basis of normal tensors occupy the bond space.
+blocks, embedded in the full bond space. Local orthogonality is taken as a hypothesis;
+the source asserts it after eq. (S7), citing the canonical-form theory, and this file does
+not derive it from eq. (S2). `inner_pair_eq_zero_of_disjoint` records one sufficient
+condition for its off-diagonal part: pair vectors supported on disjoint sets of virtual
+indices are orthogonal.
+
+The definitions `nonNormalFixedPointState` and
+`nonNormalApproxState` take the pairs `ω_j` and the coefficients `αⱼ` as parameters. Nothing
+here ties `ω_j` to the fixed-point pair of the `j`-th block of a basis of normal tensors,
+`αⱼ` to `ghzAmplitude (bntWeight μ N)`, or the number of blocked sites `M` to `N = qM`;
+these are the intended instances of arXiv:2307.01696, eqs. (19) and (S7).
 
 ## Main declarations
 
@@ -41,7 +48,8 @@ of a basis of normal tensors occupy the bond space.
   `R_k L_{k+1}`, `Ω'` is `∑ⱼ αⱼ ∏ₖ ω_j`.
 * `MPSTensor.pairIsometry`, `MPSTensor.isIsometry_pairIsometry` — `W : |j⟩ ↦ |ω_j⟩` is an
   isometry for orthonormal pairs.
-* `MPSTensor.ghzState`, `MPSTensor.tensorPower` — `|χ_M⟩` and `W^{⊗M}`.
+* `MPSTensor.ghzState` — `|χ_M⟩`; `W^{⊗M}` is `Matrix.tensorPower`, an isometry by
+  `Matrix.IsIsometry.tensorPower`.
 * `MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState` — the GHZ form
   `|Ω'⟩ = W^{⊗M} |χ_M⟩`.
 * `MPSTensor.nonNormalFixedPointState_norm_sq` — `⟨Ω'|Ω'⟩ = 1` when some `βₗ ≠ 0`.
@@ -140,29 +148,6 @@ theorem isIsometry_pairIsometry {ω : Fin b → Fin D × Fin D → ℂ}
   ext j j'
   simpa [Matrix.mul_apply, pairIsometry, Matrix.one_apply] using hω j j'
 
-/-- The `M`-fold tensor power `W^{⊗M}` of a matrix `W`, as a matrix indexed by
-configurations of `M` sites: its entry at `(p, s)` is `∏ₖ W (p k) (s k)`. -/
-def tensorPower {ι κ : Type*} (M : ℕ) (W : Matrix ι κ ℂ) : Matrix (Fin M → ι) (Fin M → κ) ℂ :=
-  Matrix.of fun p s => ∏ k, W (p k) (s k)
-
-/-- The tensor power of an isometry is an isometry, so `W^{⊗M}` in arXiv:2307.01696,
-the paragraph after eq. (19), is an isometry from `(ℂ^b)^{⊗M}` to the bonds. -/
-theorem isIsometry_tensorPower {ι κ : Type*} [Fintype ι] [DecidableEq κ] (M : ℕ)
-    {W : Matrix ι κ ℂ} (hW : W.IsIsometry) : (tensorPower M W).IsIsometry := by
-  ext s t
-  have hWe : ∀ a c, ∑ i, star (W i a) * W i c = if a = c then 1 else 0 := fun a c => by
-    have := congrFun (congrFun hW a) c
-    simpa [Matrix.mul_apply, Matrix.one_apply] using this
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, tensorPower, Matrix.of_apply,
-    star_prod, ← Finset.prod_mul_distrib]
-  rw [← Fintype.prod_sum (fun k i => star (W i (s k)) * W i (t k))]
-  simp_rw [hWe, Matrix.one_apply]
-  by_cases h : s = t
-  · subst h; simp
-  · obtain ⟨k, hk⟩ := Function.ne_iff.1 h
-    rw [ite_eq_right_iff.2 fun h' => absurd h' h]
-    exact Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right_iff.2 fun h' => absurd h' hk)
-
 /-- The GHZ-like state `|χ_M⟩ = ∑ⱼ αⱼ |j⟩^{⊗M}` on `M` sites of dimension `b`
 (arXiv:2307.01696, the paragraph after eq. (19)): its amplitude at `s` is `∑ⱼ αⱼ`
 times the product of the coordinates `s k` of the basis vector `|j⟩`. -/
@@ -176,10 +161,10 @@ orthogonality is what makes `W` an isometry (`isIsometry_pairIsometry`). -/
 theorem nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState {M : ℕ} (α : Fin b → ℂ)
     (ω : Fin b → Fin D × Fin D → ℂ) (p : Fin M → Fin D × Fin D) :
     nonNormalFixedPointState α ω ((bondRegrouping M D).symm p) =
-      (tensorPower M (pairIsometry ω) *ᵥ ghzState α) p := by
+      (Matrix.tensorPower M (pairIsometry ω) *ᵥ ghzState α) p := by
   rw [nonNormalFixedPointState_bondRegrouping_symm]
-  simp only [Matrix.mulVec, dotProduct, tensorPower, pairIsometry, Matrix.of_apply, ghzState,
-    Finset.mul_sum]
+  simp only [Matrix.mulVec, dotProduct, Matrix.tensorPower, pairIsometry, Matrix.of_apply,
+    ghzState, Finset.mul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun j _ => ?_
   have hprod : ∏ k, ω j (p k) =
@@ -194,18 +179,6 @@ theorem nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState {M : ℕ} (α : 
   ring
 
 /-! ## Normalization -/
-
-/-- Overlaps of pair-product states factorize over the bonds:
-`⟨Ω_j|Ω_{j'}⟩ = ⟨ω_j|ω_{j'}⟩^M` for `|Ω_j⟩ = ⊗ₖ |ω_j⟩_{R_k L_{k+1}}` on a ring of `M`
-sites (arXiv:2307.01696, the states `|Ω_j⟩` after eq. (S7)). -/
-theorem pairProductState_inner {M : ℕ} (ω ω' : Fin D × Fin D → ℂ) :
-    ∑ c : Fin M → Fin D × Fin D, star (pairProductState ω c) * pairProductState ω' c =
-      (∑ p, star (ω p) * ω' p) ^ M := by
-  rw [← Fin.prod_const, Fintype.prod_sum,
-    ← (bondRegrouping M D).sum_comp (fun x => ∏ i, star (ω (x i)) * ω' (x i))]
-  refine Finset.sum_congr rfl fun c _ => ?_
-  rw [pairProductState, pairProductState, star_prod, ← Finset.prod_mul_distrib]
-  rfl
 
 /-- For locally orthonormal pairs, `⟨ω_j|ω_{j'}⟩ = δ_{jj'}`, and at least one bond
 (`M ≠ 0`), the fixed-point state has squared norm `∑ⱼ |αⱼ|²`. -/
@@ -256,7 +229,7 @@ by the fixed point and keeps `V`. -/
 noncomputable def nonNormalApproxVector {d : ℕ} (A : MPSTensor d D) (q M : ℕ)
     (α : Fin b → ℂ) (ω : Fin b → Fin D × Fin D → ℂ) :
     (Fin M → Fin (blockPhysDim d q)) → ℂ :=
-  tensorPower M (Matrix.polarIso (physicalMatrix (blockTensor A q))) *ᵥ
+  Matrix.tensorPower M (Matrix.polarIso (physicalMatrix (blockTensor A q))) *ᵥ
     nonNormalFixedPointState α ω
 
 /-- The approximating state `|φ̃_N⟩ = V^{⊗M}|Ω'⟩ / ‖V^{⊗M}|Ω'⟩‖` of arXiv:2307.01696,
@@ -271,10 +244,13 @@ noncomputable def nonNormalApproxState {d : ℕ} (A : MPSTensor d D) (q M : ℕ)
 
 /-! ## Local orthogonality from disjoint block supports -/
 
-/-- Pair vectors whose right legs are supported on disjoint sets of virtual indices are
-orthogonal. In a basis of normal tensors (arXiv:2307.01696, eq. (S2)) distinct blocks
-occupy disjoint ranges of the bond index, which is the source of the local orthogonality
-`⟨ω_j|ω_{j'}⟩ = 0` for `j ≠ j'` stated after eq. (S7). -/
+/-- A sufficient condition for the off-diagonal part of local orthogonality: pair vectors
+whose right legs are supported on disjoint sets of virtual indices are orthogonal,
+`⟨ω|ω'⟩ = 0`. The embedded pairs of distinct blocks of eq. (S2) would be supported this
+way. This lemma gives neither the normalization `⟨ω_j|ω_j⟩ = 1` nor a derivation of the
+local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` that arXiv:2307.01696 asserts after eq. (S7),
+citing the canonical-form theory; connecting the pairs of the blocks of eq. (S2) to its
+hypotheses is left open. -/
 theorem inner_pair_eq_zero_of_disjoint {ω ω' : Fin D × Fin D → ℂ} {S S' : Finset (Fin D)}
     (hS : Disjoint S S') (hω : ∀ p, p.1 ∉ S → ω p = 0) (hω' : ∀ p, p.1 ∉ S' → ω' p = 0) :
     ∑ p, star (ω p) * ω' p = 0 := by
