@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebra
 
 /-!
@@ -174,14 +175,10 @@ periodic operator is the sum of the periodic operators of `A_1` and `A_ψ` at ev
 length. The same abstract rule `D_σ² = 1 + D_ψ` is printed for a different realization, the Ising
 defect operators, in arXiv:1601.07185, `Ising-Defects.tex` lines 1051–1055. -/
 theorem isingSigma_normalized_mul_self {N : ℕ} (hN : 0 < N) :
-    MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N *
-        MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N =
+    MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N *
+        MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N =
       MPOTensor.mpo isingOne N + MPOTensor.mpo isingPsi N := by
-  have h2 : ((Real.sqrt 2 : ℂ))⁻¹ ^ N * ((Real.sqrt 2 : ℂ))⁻¹ ^ N * (2 : ℂ) ^ N = 1 := by
-    rw [← mul_pow, ← mul_pow, ← mul_inv, ← Complex.ofReal_mul,
-      Real.mul_self_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
-    simp
   rw [MPOTensor.mpo_smul, Matrix.smul_mul, Matrix.mul_smul, isingSigma_mul_isingSigma hN,
-    smul_smul, smul_smul, h2, one_smul]
+    smul_smul, smul_smul, Complex.invSqrtTwo_pow_mul_self, one_smul]
 
 end IsingTwist

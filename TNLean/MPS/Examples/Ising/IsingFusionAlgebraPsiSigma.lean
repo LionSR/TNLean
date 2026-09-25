@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebra
 
 /-!
@@ -93,8 +94,8 @@ as in `isingPsi_mul_isingSigma`: for `(√2)⁻¹ • isingSigma`, the unscaled 
 of this module (`v`-free, see the module's Local fix; the stored `isingSigma` is `√2 A_σ`),
 the fusion rule `ψ × σ = σ` holds at every positive length. -/
 theorem isingPsi_mul_isingSigma_normalized {N : ℕ} (hN : 0 < N) :
-    MPOTensor.mpo isingPsi N * MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N =
-      MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N := by
+    MPOTensor.mpo isingPsi N * MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N =
+      MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N := by
   rw [MPOTensor.mpo_smul, Matrix.mul_smul, isingPsi_mul_isingSigma hN]
 
 /-- **`O_σ O_ψ = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and 1323,
@@ -102,8 +103,8 @@ as in `isingSigma_mul_isingPsi`: for `(√2)⁻¹ • isingSigma`, the unscaled 
 of this module (`v`-free, see the module's Local fix; the stored `isingSigma` is `√2 A_σ`),
 the fusion rule `σ × ψ = σ` holds at every positive length. -/
 theorem isingSigma_normalized_mul_isingPsi {N : ℕ} (hN : 0 < N) :
-    MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N * MPOTensor.mpo isingPsi N =
-      MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N := by
+    MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N * MPOTensor.mpo isingPsi N =
+      MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N := by
   rw [MPOTensor.mpo_smul, Matrix.smul_mul, isingSigma_mul_isingPsi hN]
 
 end IsingTwist
