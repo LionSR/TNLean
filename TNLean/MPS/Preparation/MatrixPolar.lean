@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.MatrixUnitaryBetween
 
 /-!
 # Polar decomposition of a rectangular complex matrix
@@ -17,8 +18,9 @@ isometry with `Vᴴ V = Π`, where `Π` is the orthogonal projector onto the ran
 `M` is injective, `Π = 1`, so `V` is an isometry and `P` is positive definite.
 
 All three factors are built by the continuous functional calculus of the Hermitian matrix
-`Mᴴ M`: `P` applies the real square root, `Π` applies the indicator of the nonzero reals, and
-`V = M Q` where `Q` applies the reciprocal of the square root (with `0⁻¹ = 0`).
+`Mᴴ M`: `P` is its positive square root `CFC.sqrt (Mᴴ M)`, `Π` applies the indicator of the
+nonzero reals, and `V = M Q` where `Q` applies the reciprocal of the square root (with
+`0⁻¹ = 0`).
 
 ## Main declarations
 
@@ -28,7 +30,8 @@ All three factors are built by the continuous functional calculus of the Hermiti
 * `Matrix.polarIso_mul_polarPos` — `V * P = M`.
 * `Matrix.conjTranspose_polarIso_mul_polarIso` — `Vᴴ * V = Π`.
 * `Matrix.range_polarSupport` — `Π` has the same range as `P`.
-* `Matrix.isIsometry_polarIso_of_injective` — for injective `M`, `Vᴴ V = 1`.
+* `Matrix.isIsometry_polarIso_of_injective` — for injective `M`, `V` is an isometry
+  (`Matrix.IsIsometry`, that is, `Vᴴ V = 1`).
 * `Matrix.exists_polar_decomposition` — the packaged existence statement.
 
 ## References
@@ -47,20 +50,15 @@ variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
 
 omit [Fintype κ] [DecidableEq κ] in
 /-- The Gram matrix `Mᴴ M` is self-adjoint, stated with the predicate of the matrix continuous
-functional calculus. -/
+functional calculus (for the `IsHermitian` form use `isHermitian_conjTranspose_mul_self`). -/
 private lemma isSelfAdjoint_gram (M : Matrix ι κ ℂ) : IsSelfAdjoint (Mᴴ * M) :=
-  isHermitian_conjTranspose_mul_self M
-
-omit [Fintype κ] [DecidableEq κ] in
-/-- The Gram matrix `Mᴴ M` is Hermitian. -/
-private lemma isHermitian_gram (M : Matrix ι κ ℂ) : (Mᴴ * M).IsHermitian :=
   isHermitian_conjTranspose_mul_self M
 
 /-- Every real spectral value of the Gram matrix `Mᴴ M` is nonnegative. -/
 private lemma gram_spectrum_nonneg (M : Matrix ι κ ℂ) :
     ∀ x ∈ spectrum ℝ (Mᴴ * M), 0 ≤ x := by
   intro x hx
-  obtain ⟨i, rfl⟩ := (isHermitian_gram M).spectrum_real_eq_range_eigenvalues ▸ hx
+  obtain ⟨i, rfl⟩ := (isHermitian_conjTranspose_mul_self M).spectrum_real_eq_range_eigenvalues ▸ hx
   exact (posSemidef_conjTranspose_mul_self M).eigenvalues_nonneg i
 
 /-- Any real function is continuous on the (finite) real spectrum of a matrix. -/
@@ -77,7 +75,13 @@ arXiv:2307.01696, paragraph "Approximation through the fixed-point state" and Su
 Material, "Proof of Lemma 1 and extension to non-normal tensors": `P` is the positive
 semidefinite factor of `B = V P`. -/
 noncomputable def polarPos (M : Matrix ι κ ℂ) : Matrix κ κ ℂ :=
-  cfc Real.sqrt (Mᴴ * M)
+  CFC.sqrt (Mᴴ * M)
+
+/-- The positive part is the real square root applied to `Mᴴ M` by the continuous functional
+calculus. -/
+private lemma polarPos_eq_cfc (M : Matrix ι κ ℂ) : polarPos M = cfc Real.sqrt (Mᴴ * M) := by
+  rw [polarPos, CFC.sqrt_eq_real_sqrt _ (posSemidef_conjTranspose_mul_self M).nonneg,
+    cfcₙ_eq_cfc]
 
 /-- The orthogonal projector `Π` onto the range of the positive part of `M`.
 
@@ -104,14 +108,11 @@ noncomputable def polarIso (M : Matrix ι κ ℂ) : Matrix ι κ ℂ :=
 arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
 tensors": `P` is positive semidefinite. -/
 theorem posSemidef_polarPos (M : Matrix ι κ ℂ) : (polarPos M).PosSemidef :=
-  nonneg_iff_posSemidef.mp (cfc_nonneg fun x _ => Real.sqrt_nonneg x)
+  nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg _)
 
 /-- The positive part squares to the Gram matrix: `P * P = Mᴴ M`. -/
-theorem polarPos_mul_polarPos (M : Matrix ι κ ℂ) : polarPos M * polarPos M = Mᴴ * M := by
-  have hc := continuousOn_spectrum Real.sqrt (Mᴴ * M)
-  rw [polarPos, ← cfc_mul Real.sqrt Real.sqrt (Mᴴ * M) hc hc]
-  conv_rhs => rw [← cfc_id' ℝ (Mᴴ * M) (isSelfAdjoint_gram M)]
-  exact cfc_congr fun x hx => Real.mul_self_sqrt (gram_spectrum_nonneg M x hx)
+theorem polarPos_mul_polarPos (M : Matrix ι κ ℂ) : polarPos M * polarPos M = Mᴴ * M :=
+  CFC.sqrt_mul_sqrt_self _ (posSemidef_conjTranspose_mul_self M).nonneg
 
 /-- The support projector is Hermitian. -/
 theorem isHermitian_polarSupport (M : Matrix ι κ ℂ) : (polarSupport M).IsHermitian :=
@@ -129,7 +130,7 @@ theorem polarSupport_mul_polarSupport (M : Matrix ι κ ℂ) :
 /-- The support projector fixes the positive part: `Π * P = P`. -/
 theorem polarSupport_mul_polarPos (M : Matrix ι κ ℂ) :
     polarSupport M * polarPos M = polarPos M := by
-  rw [polarSupport, polarPos, ← cfc_mul _ _ (Mᴴ * M) (continuousOn_spectrum _ _)
+  rw [polarSupport, polarPos_eq_cfc, ← cfc_mul _ _ (Mᴴ * M) (continuousOn_spectrum _ _)
     (continuousOn_spectrum _ _)]
   refine cfc_congr fun x _ => ?_
   unfold nonzeroIndicator
@@ -138,7 +139,7 @@ theorem polarSupport_mul_polarPos (M : Matrix ι κ ℂ) :
 /-- The support projector factors through the positive part: `Π = P * Q`. -/
 private lemma polarPos_mul_polarPosInv (M : Matrix ι κ ℂ) :
     polarPos M * polarPosInv M = polarSupport M := by
-  rw [polarSupport, polarPos, polarPosInv, ← cfc_mul _ _ (Mᴴ * M) (continuousOn_spectrum _ _)
+  rw [polarSupport, polarPos_eq_cfc, polarPosInv, ← cfc_mul _ _ (Mᴴ * M) (continuousOn_spectrum _ _)
     (continuousOn_spectrum _ _)]
   refine cfc_congr fun x hx => ?_
   have hx0 := gram_spectrum_nonneg M x hx
@@ -150,7 +151,7 @@ private lemma polarPos_mul_polarPosInv (M : Matrix ι κ ℂ) :
 /-- The same factorization with the factors in the other order: `Π = Q * P`. -/
 private lemma polarPosInv_mul_polarPos (M : Matrix ι κ ℂ) :
     polarPosInv M * polarPos M = polarSupport M := by
-  rw [← polarPos_mul_polarPosInv, polarPos, polarPosInv, ← cfc_mul _ _ (Mᴴ * M)
+  rw [← polarPos_mul_polarPosInv, polarPos_eq_cfc, polarPosInv, ← cfc_mul _ _ (Mᴴ * M)
     (continuousOn_spectrum _ _) (continuousOn_spectrum _ _),
     ← cfc_mul _ _ (Mᴴ * M) (continuousOn_spectrum _ _) (continuousOn_spectrum _ _)]
   exact cfc_congr fun x _ => mul_comm _ _
@@ -223,16 +224,16 @@ theorem polarSupport_eq_one_of_injective (M : Matrix ι κ ℂ) (hM : Function.I
   have hpos := PosDef.conjTranspose_mul_self M hM
   rw [polarSupport, ← cfc_one ℝ (Mᴴ * M)]
   refine cfc_congr fun x hx => ?_
-  obtain ⟨i, rfl⟩ := (isHermitian_gram M).spectrum_real_eq_range_eigenvalues ▸ hx
+  obtain ⟨i, rfl⟩ := (isHermitian_conjTranspose_mul_self M).spectrum_real_eq_range_eigenvalues ▸ hx
   simp [nonzeroIndicator, (hpos.eigenvalues_pos i).ne']
 
 /-- **Polar decomposition of an injective matrix**: `V` is an isometry, `Vᴴ V = 1`.
 
 arXiv:2307.01696, paragraph "Approximation through the fixed-point state": for injective `B`,
 `B = V P` with `V†V = 1`. -/
-theorem conjTranspose_polarIso_mul_polarIso_of_injective (M : Matrix ι κ ℂ)
-    (hM : Function.Injective M.mulVec) : (polarIso M)ᴴ * polarIso M = 1 := by
-  rw [conjTranspose_polarIso_mul_polarIso, polarSupport_eq_one_of_injective M hM]
+theorem isIsometry_polarIso_of_injective (M : Matrix ι κ ℂ)
+    (hM : Function.Injective M.mulVec) : (polarIso M).IsIsometry := by
+  rw [IsIsometry, conjTranspose_polarIso_mul_polarIso, polarSupport_eq_one_of_injective M hM]
 
 /-- **Polar decomposition of an injective matrix**: the positive part is positive definite.
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.Preparation.MatrixPolar
 
 /-!
@@ -19,20 +20,18 @@ virtual indices. The polar decomposition `B = V P` of that map (`Matrix.polarIso
   the rows of the positive semidefinite factor, and
 * a partial isometry `V : ℂ^{D²} → ℂ^n` acting on the physical leg,
 
-so that `B^i = ∑ₖ V_{ik} P^k`. This file records the consequences used in the log-depth
-preparation of matrix product states: the transfer operators of `B` and `P` coincide, and for
-`M` blocks of `q` sites of a tensor `A` the periodic `qM`-site state of `A` equals `V^{⊗M}`
-applied to the periodic `M`-site state of `P`.
+so that `B^i = ∑ₖ V_{ik} P^k`, that is, `B = MPSTensor.rotatePhysical V P`. This file records
+the consequences used in the log-depth preparation of matrix product states: the transfer
+operators of `B` and `P` coincide, and for `M` blocks of `q` sites of a tensor `A` the periodic
+`qM`-site state of `A` equals `V^{⊗M}` applied to the periodic `M`-site state of `P`.
 
 ## Main declarations
 
 * `MPSTensor.physicalMatrix` — the tensor as a matrix `ℂ^{D²} → ℂ^n`.
-* `MPSTensor.physicalApply` — a matrix acting on the physical leg of a tensor.
-* `MPSTensor.transferMap_physicalApply_eq` — `E_{W·A} = E_A` whenever `Wᴴ W` fixes `A`.
-* `MPSTensor.mpv_physicalApply` — the periodic state of `W·A` is `W^{⊗N}` applied to that of
-  `A`.
+* `MPSTensor.transferMap_rotatePhysical_eq` — `E_{W·A} = E_A` whenever `Wᴴ W` fixes `A`, for
+  a rectangular `W` acting on the physical leg through `MPSTensor.rotatePhysical`.
 * `MPSTensor.polarPosTensor`, `MPSTensor.polarIsoMatrix` — the two polar factors of a tensor.
-* `MPSTensor.physicalApply_polarIsoMatrix_polarPosTensor` — `B = V P`.
+* `MPSTensor.rotatePhysical_polarIsoMatrix_polarPosTensor` — `B = V P`.
 * `MPSTensor.transferMap_polarPosTensor` — `E_B = E_P` (arXiv:2307.01696, eq. `eq:B_TM`,
   first equality).
 * `MPSTensor.mpv_blockedConfigEquiv_eq_sum_polar` — `|φ_N⟩ = (⊗ᵢ Vᵢ) |φ_pos⟩` for `N = qM`.
@@ -66,20 +65,25 @@ def physicalMatrix (A : MPSTensor n D) : Matrix (Fin n) (Fin D × Fin D) ℂ :=
 def ofPhysicalMatrix (R : Matrix (Fin n) (Fin D × Fin D) ℂ) : MPSTensor n D :=
   fun i α β => R i (α, β)
 
+/-- Reading the physical matrix of a tensor back as a tensor returns the tensor. -/
 @[simp] lemma ofPhysicalMatrix_physicalMatrix (A : MPSTensor n D) :
     ofPhysicalMatrix (physicalMatrix A) = A := rfl
 
+/-- The physical matrix of the tensor built from a matrix `R` is `R`. -/
 @[simp] lemma physicalMatrix_ofPhysicalMatrix (R : Matrix (Fin n) (Fin D × Fin D) ℂ) :
     physicalMatrix (ofPhysicalMatrix R) = R := rfl
 
+/-- A tensor is determined by its physical matrix. -/
 lemma physicalMatrix_injective : Function.Injective (physicalMatrix (n := n) (D := D)) :=
   fun A B h => by rw [← ofPhysicalMatrix_physicalMatrix A, h, ofPhysicalMatrix_physicalMatrix]
 
 /-- An injective tensor (its matrices span the full matrix algebra) has an injective physical
 matrix.
 
-arXiv:2307.01696, footnote to "Approximation through the fixed-point state": injectivity of
-`B` in the sense of Pérez-García et al. makes `B` an injective map `ℂ^{D²} → ℂ^{d^q}`. -/
+arXiv:2307.01696, footnote to "Approximation through the fixed-point state": the footnote
+assumes `B` injective in the sense of Pérez-García et al.  This lemma records the standard
+consequence that `B` is then injective as a map `ℂ^{D²} → ℂ^{d^q}`, which the polar
+decomposition with `V†V = 1` needs; the footnote itself does not state this step. -/
 theorem injective_physicalMatrix_mulVec_of_isInjective {A : MPSTensor n D}
     (hA : Kraus.IsInjective A) : Function.Injective (physicalMatrix A).mulVec := by
   suffices key : ∀ x, (physicalMatrix A).mulVec x = 0 → x = 0 by
@@ -100,26 +104,18 @@ theorem injective_physicalMatrix_mulVec_of_isInjective {A : MPSTensor n D}
 
 /-! ### Matrices acting on the physical leg -/
 
-/-- The tensor `W · A` obtained by applying `W : ℂ^n → ℂ^m` to the physical leg of `A`:
-`(W · A)^i = ∑ₖ W_{ik} A^k`.
-
-arXiv:2307.01696, eq. `eq:key_approximation`: the isometry `V` acts on the physical leg of the
-positive part `P`. -/
-noncomputable def physicalApply (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D) :
-    MPSTensor m D :=
-  fun i => ∑ k, W i k • A k
-
-lemma physicalMatrix_physicalApply (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D) :
-    physicalMatrix (physicalApply W A) = W * physicalMatrix A := by
+/-- The physical matrix of `W · A` is `W` times the physical matrix of `A`. -/
+lemma physicalMatrix_rotatePhysical (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D) :
+    physicalMatrix (rotatePhysical W A) = W * physicalMatrix A := by
   ext i p
-  simp [physicalMatrix, physicalApply, Matrix.mul_apply, Matrix.sum_apply]
+  simp [physicalMatrix, rotatePhysical, Matrix.mul_apply, Matrix.sum_apply]
 
 /-- The transfer operator of `W · A` in terms of the Gram matrix `Wᴴ W`. -/
-theorem transferMap_physicalApply_apply (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D)
+theorem transferMap_rotatePhysical_apply (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    Kraus.transferMap (physicalApply W A) X =
-      ∑ l, (physicalApply (Wᴴ * W) A l) * X * (A l)ᴴ := by
-  simp only [Kraus.transferMap_apply, physicalApply, Matrix.conjTranspose_sum,
+    Kraus.transferMap (rotatePhysical W A) X =
+      ∑ l, (rotatePhysical (Wᴴ * W) A l) * X * (A l)ᴴ := by
+  simp only [Kraus.transferMap_apply, rotatePhysical, Matrix.conjTranspose_sum,
     Matrix.conjTranspose_smul, Finset.sum_mul, Finset.mul_sum, Matrix.mul_apply,
     Finset.sum_smul]
   rw [Finset.sum_comm]
@@ -130,41 +126,16 @@ theorem transferMap_physicalApply_apply (W : Matrix (Fin m) (Fin n) ℂ) (A : MP
   simp [Matrix.conjTranspose_apply, smul_smul, mul_comm]
 
 /-- If `Wᴴ W` fixes the tensor `A` on its physical leg, then `W · A` and `A` have the same
-transfer operator.
+transfer operator.  This extends `MPSTensor.transferMap_kraus_isometry` (the case `Wᴴ W = 1`)
+to partial isometries, as needed for non-injective tensors.
 
 arXiv:2307.01696, eq. `eq:B_TM` (first equality) and Supplemental Material, "Proof of Lemma 1
 and extension to non-normal tensors": `V†V = Π` and `Π P = P` give `E_{VP} = E_P`. -/
-theorem transferMap_physicalApply_eq (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D)
-    (hW : physicalApply (Wᴴ * W) A = A) :
-    Kraus.transferMap (physicalApply W A) = Kraus.transferMap A := by
+theorem transferMap_rotatePhysical_eq (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D)
+    (hW : rotatePhysical (Wᴴ * W) A = A) :
+    Kraus.transferMap (rotatePhysical W A) = Kraus.transferMap A := by
   ext1 X
-  rw [transferMap_physicalApply_apply, hW, Kraus.transferMap_apply]
-
-/-- Word evaluation of `W · A` along a word of length `N` expands as `W^{⊗N}` applied to the
-word evaluations of `A`. -/
-theorem evalWord_physicalApply_ofFn (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D) :
-    ∀ {N : ℕ} (σ : Fin N → Fin m),
-      Kraus.evalWord (physicalApply W A) (List.ofFn σ) =
-        ∑ τ : Fin N → Fin n, (∏ j, W (σ j) (τ j)) • Kraus.evalWord A (List.ofFn τ)
-  | 0, σ => by simp
-  | N + 1, σ => by
-    rw [List.ofFn_succ, Kraus.evalWord_cons, evalWord_physicalApply_ofFn W A,
-      ← (Fin.consEquiv fun _ : Fin (N + 1) => Fin n).sum_comp, Fintype.sum_prod_type]
-    simp only [physicalApply, Finset.sum_mul, Finset.mul_sum, Fin.consEquiv_apply,
-      Fin.prod_univ_succ, Fin.cons_zero, Fin.cons_succ, List.ofFn_succ, Kraus.evalWord_cons,
-      smul_mul_smul, mul_smul]
-    exact Finset.sum_comm
-
-/-- The periodic state of `W · A` on `N` sites is `W^{⊗N}` applied to the periodic state of
-`A`.
-
-arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
-tensors": `|φ_N⟩ = (⊗ᵢ Vᵢ) |φ_pos⟩`. -/
-theorem mpv_physicalApply (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D) {N : ℕ}
-    (σ : Fin N → Fin m) :
-    mpv (physicalApply W A) σ = ∑ τ : Fin N → Fin n, (∏ j, W (σ j) (τ j)) * mpv A τ := by
-  simp only [mpv, coeff, evalWord_physicalApply_ofFn, Matrix.trace_sum, Matrix.trace_smul,
-    smul_eq_mul]
+  rw [transferMap_rotatePhysical_apply, hW, Kraus.transferMap_apply]
 
 /-! ### The polar factors of a tensor -/
 
@@ -204,6 +175,7 @@ noncomputable def polarSupportMatrix (B : MPSTensor n D) :
     Matrix (Fin (D * D)) (Fin (D * D)) ℂ :=
   (Matrix.polarSupport (physicalMatrix B)).submatrix (virtualPairEquiv D) (virtualPairEquiv D)
 
+/-- The physical matrix of the positive-part tensor consists of the rows of `P`. -/
 lemma physicalMatrix_polarPosTensor (B : MPSTensor n D) :
     physicalMatrix (polarPosTensor B) =
       (Matrix.polarPos (physicalMatrix B)).submatrix (virtualPairEquiv D) id := rfl
@@ -220,10 +192,10 @@ theorem posSemidef_polarPosMatrix (B : MPSTensor n D) : (polarPosMatrix B).PosSe
 arXiv:2307.01696, paragraph "Approximation through the fixed-point state" and
 eq. `eq:key_approximation` (first equality); Supplemental Material, "Proof of Lemma 1 and
 extension to non-normal tensors". -/
-theorem physicalApply_polarIsoMatrix_polarPosTensor (B : MPSTensor n D) :
-    physicalApply (polarIsoMatrix B) (polarPosTensor B) = B := by
+theorem rotatePhysical_polarIsoMatrix_polarPosTensor (B : MPSTensor n D) :
+    rotatePhysical (polarIsoMatrix B) (polarPosTensor B) = B := by
   apply physicalMatrix_injective
-  rw [physicalMatrix_physicalApply, physicalMatrix_polarPosTensor, polarIsoMatrix,
+  rw [physicalMatrix_rotatePhysical, physicalMatrix_polarPosTensor, polarIsoMatrix,
     Matrix.submatrix_mul_equiv, Matrix.polarIso_mul_polarPos]
   rfl
 
@@ -231,7 +203,7 @@ theorem physicalApply_polarIsoMatrix_polarPosTensor (B : MPSTensor n D) :
 
 arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
 tensors": `V†V = Π`. -/
-theorem conjTranspose_polarIsoMatrix_mul (B : MPSTensor n D) :
+theorem conjTranspose_polarIsoMatrix_mul_polarIsoMatrix (B : MPSTensor n D) :
     (polarIsoMatrix B)ᴴ * polarIsoMatrix B = polarSupportMatrix B := by
   rw [polarIsoMatrix, Matrix.conjTranspose_submatrix, ← Matrix.submatrix_mul _ _ _ id _
     Function.bijective_id, Matrix.conjTranspose_polarIso_mul_polarIso, polarSupportMatrix]
@@ -247,10 +219,10 @@ theorem polarSupportMatrix_mul_self (B : MPSTensor n D) :
   rw [polarSupportMatrix, Matrix.submatrix_mul_equiv, Matrix.polarSupport_mul_polarSupport]
 
 /-- The support projector fixes the positive-part tensor on its physical leg: `Π P = P`. -/
-theorem physicalApply_polarSupportMatrix (B : MPSTensor n D) :
-    physicalApply (polarSupportMatrix B) (polarPosTensor B) = polarPosTensor B := by
+theorem rotatePhysical_polarSupportMatrix (B : MPSTensor n D) :
+    rotatePhysical (polarSupportMatrix B) (polarPosTensor B) = polarPosTensor B := by
   apply physicalMatrix_injective
-  rw [physicalMatrix_physicalApply, physicalMatrix_polarPosTensor, polarSupportMatrix,
+  rw [physicalMatrix_rotatePhysical, physicalMatrix_polarPosTensor, polarSupportMatrix,
     Matrix.submatrix_mul_equiv, Matrix.polarSupport_mul_polarPos]
 
 /-- **Transfer identity** `E_B = E_P`.
@@ -260,17 +232,17 @@ every tensor since `V†V = Π` and `Π P = P`, as in the Supplemental Material,
 Lemma 1 and extension to non-normal tensors"). -/
 theorem transferMap_polarPosTensor (B : MPSTensor n D) :
     Kraus.transferMap (polarPosTensor B) = Kraus.transferMap B := by
-  conv_rhs => rw [← physicalApply_polarIsoMatrix_polarPosTensor B]
-  rw [transferMap_physicalApply_eq]
-  rw [conjTranspose_polarIsoMatrix_mul, physicalApply_polarSupportMatrix]
+  conv_rhs => rw [← rotatePhysical_polarIsoMatrix_polarPosTensor B]
+  rw [transferMap_rotatePhysical_eq]
+  rw [conjTranspose_polarIsoMatrix_mul_polarIsoMatrix, rotatePhysical_polarSupportMatrix]
 
 /-- For an injective tensor, `V` is an isometry, `Vᴴ V = 1`.
 
 arXiv:2307.01696, paragraph "Approximation through the fixed-point state": for injective `B`,
 `V†V = 1_{D²}`. -/
 theorem isIsometry_polarIsoMatrix_of_isInjective {B : MPSTensor n D}
-    (hB : Kraus.IsInjective B) : (polarIsoMatrix B)ᴴ * polarIsoMatrix B = 1 := by
-  rw [conjTranspose_polarIsoMatrix_mul, polarSupportMatrix,
+    (hB : Kraus.IsInjective B) : (polarIsoMatrix B).IsIsometry := by
+  rw [Matrix.IsIsometry, conjTranspose_polarIsoMatrix_mul_polarIsoMatrix, polarSupportMatrix,
     Matrix.polarSupport_eq_one_of_injective _ (injective_physicalMatrix_mulVec_of_isInjective hB),
     Matrix.submatrix_one_equiv]
 
@@ -307,7 +279,7 @@ theorem mpv_blockedConfigEquiv_eq_sum_polar (A : MPSTensor d D) (q M : ℕ)
       ∑ τ : Fin M → Fin (D * D),
         (∏ j, polarIsoMatrix (blockTensor A q) (σ j) (τ j)) *
           mpv (polarPosTensor (blockTensor A q)) τ := by
-  rw [← mpv_physicalApply, physicalApply_polarIsoMatrix_polarPosTensor]
+  rw [← mpv_rotatePhysical, rotatePhysical_polarIsoMatrix_polarPosTensor]
   simp only [mpv, coeff, ofFn_blockedConfigEquiv, evalWord_blockTensor]
 
 end MPSTensor
