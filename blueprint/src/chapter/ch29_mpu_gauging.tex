@@ -4070,11 +4070,21 @@ space of $(MN)P$.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:mpdo_operator_product_eval_word}
     The first claim is immediate from the intertwining equations. For the
-    second, a word of $XP$ is a sum over the contracted middle
-    configurations of Kronecker products of words of $X$ and of $P$ of the
-    same length, and $V\otimes\mathbf 1$ and $W\otimes\mathbf 1$ act on the
-    first factor only. For the third, the letters satisfy
+    second, Lemma~\ref{lem:mpdo_operator_product_eval_word} expands a word of
+    $XP$ along a configuration pair $(\sigma,\tau)$ as a sum over the
+    contracted middle configurations $\rho$, and $V\otimes\mathbf 1$ and
+    $W\otimes\mathbf 1$ act on the first factor only:
+    \begin{align}
+        (V\otimes\mathbf 1)\,(XP)^{\sigma\tau}\,(W\otimes\mathbf 1)
+         & =\sum_\rho VX^{\sigma\rho}W\otimes P^{\rho\tau}
+        =\sum_\rho A^{\sigma\rho}\otimes P^{\rho\tau}
+        =(AP)^{\sigma\tau}.
+        \notag
+    \end{align}
+    The case $PX$ is the same with the factors exchanged. For the third, the
+    letters satisfy
     $((MN)P)^{i}\,\mathsf a=\mathsf a\,(M(NP))^{i}$, so the words do too.
 \end{proof}
 
