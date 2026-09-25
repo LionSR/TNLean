@@ -102,7 +102,7 @@ private lemma rotate_ofFn_replaceWindow (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
       simp only [List.length_ofFn]
       congr 1
       apply Fin.ext
-      show (k + i.val) % N = (i.val + L + (k - L)) % N
+      change (k + i.val) % N = (i.val + L + (k - L)) % N
       rw [show i.val + L + (k - L) = k + i.val by omega]
 
 /-- Project result: if `G * A i = c • (A i * G)` for every letter, the vector
