@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Defect
+import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Defect
 import TNLean.MPS.MPDO.SimpleScaling
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 
