@@ -183,6 +183,8 @@ section Triple
 variable (g h k : G)
 
 omit [Group G] in
+/-- Moving a bond identification of the operator factor out of the action tensor of an
+element: `V_y (castMat e Y ⊗ 1) = V_x (Y ⊗ 1)` for `e : x = y`. -/
 private theorem V_mul_kronId_castMat {x y : G} (e : x = y) {n : ℕ}
     (Y : Matrix (Fin (F.bondDim x)) (Fin n) ℂ) :
     ad.V y * kronId (F.castMat e * Y) D = ad.V x * kronId Y D := by
@@ -202,6 +204,8 @@ private theorem actV_mul_reduce_k :
   rw [← Matrix.mul_assoc (idKron (F.bondDim g) (mulTensorAssocInvMatrix _ _ _)),
     assocInv_pentagon]
 
+/-- The inner fusion step: acting with `g` on the fused pair `(h, k)` is the action tree of
+`(g, hk)` composed with the fusion of `h` with `k` on the triple. -/
 private theorem fuseV_inner_eq :
     ad.V g * idKron (F.bondDim g) (ad.fuseV fd h k) *
         (mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h * F.bondDim k) D *
@@ -212,6 +216,8 @@ private theorem fuseV_inner_eq :
   rw [← Matrix.mul_assoc (idKron _ (kronId _ _)), ← assocInv_mul_kronId_idKron,
     Matrix.mul_assoc]
 
+/-- Acting with `k` first and then fusing `g` with `h` is the action tree of `(gh, k)` composed
+with the fusion of `g` with `h` on the triple. -/
 private theorem fuseV_mul_reduce_k :
     ad.fuseV fd g h * (idKron (F.bondDim g * F.bondDim h) (ad.V k) *
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) D) =
@@ -219,11 +225,15 @@ private theorem fuseV_mul_reduce_k :
   simp only [actV, fuseV, Matrix.mul_assoc, kronId_mul_idKron_assoc]
   rw [← assocInv_mul_kronId_kronId]
 
+/-- Fusing `gh` with `k` after fusing `g` with `h` is the fusion tree `leftV` of the associator,
+followed by the action of `ghk`. -/
 private theorem fuseV_mul_left :
     ad.fuseV fd (g * h) k * kronId (kronId (fd.V g h) (F.bondDim k)) D =
       ad.V (g * h * k) * kronId (fd.leftV g h k) D := by
   simp only [fuseV, FusionData.leftV, Matrix.mul_assoc, kronId_mul]
 
+/-- Fusing `g` with `hk` after fusing `h` with `k` is the fusion tree `rightV` of the
+associator, followed by the action of `ghk`. -/
 private theorem fuseV_mul_right :
     ad.fuseV fd g (h * k) * kronId (idKron (F.bondDim g) (fd.V h k) *
         mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) D =
@@ -301,7 +311,7 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
   rw [fuseV_mul_reduce_k] at H3
   rw [fuseV_mul_left] at H4
   rw [fuseV_mul_right] at H2
-  have hleft := (H1''.trans H2).trans (MPSTensor.IsDressedProportional.refl _ _)
+  have hleft := H1''.trans H2
   have hright := (H3.trans H4).trans H5
   -- uniqueness against a nonvanishing word
   have hne : ∀ N : ℕ, ∃ w : List (Fin d), N ≤ w.length ∧

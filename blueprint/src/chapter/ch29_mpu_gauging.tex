@@ -4435,7 +4435,8 @@ of $T$ applied to those of $B$.
     \lean{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant,
         MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass}
     \leanok
-    \uses{thm:mpug_single_block_l_compatibility,
+    \uses{thm:mpug_single_block_l_symbol_spec,
+        thm:mpug_single_block_l_compatibility,
         thm:mpug_fixed_block_trivializes, def:mpug_trivial_gauge_class}
     Let $\{O_g\}$ be matrix product operator tensors with normal
     doubled-index tensors and $O_gO_h=O_{gh}$ on every nonempty chain. If a
@@ -4451,8 +4452,10 @@ of $T$ applied to those of $B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Action tensors exist, so Theorem~\ref{thm:mpug_single_block_l_compatibility}
-    applies, and Theorem~\ref{thm:mpug_fixed_block_trivializes} for the
+    \uses{thm:mpug_single_block_l_symbol_spec}
+    Action tensors exist by
+    Theorem~\ref{thm:mpug_single_block_l_symbol_spec}, so
+    Theorem~\ref{thm:mpug_single_block_l_compatibility} applies, and Theorem~\ref{thm:mpug_fixed_block_trivializes} for the
     single block gives $\omega=dL$.
 \end{proof}
 
