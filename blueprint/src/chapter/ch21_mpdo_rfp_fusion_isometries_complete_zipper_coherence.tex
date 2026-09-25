@@ -90,6 +90,37 @@
     Definition~\ref{def:mpdo_complete_zipper_fusion_family}.
 \end{proof}
 
+\begin{theorem}[Complete zipper family from split compressions]%
+    \label{thm:mpdo_complete_zipper_of_compression}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofCompression}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        pairLetter_eq_compressionSynthesis_mul}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        compressionAnalysis_mul_compressionSynthesis}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:asym_multiblock}
+    Let $B_a^{ij}$, $a\in\Lambda$, be injective MPO blocks of positive bond
+    dimension whose labelled letters have a simultaneous left inverse as in
+    Definition~\ref{def:mpdo_complete_zipper_fusion_family}. Suppose that for
+    every pair $a,b$ the product tensor $B_{ab}$ admits a multi-block
+    compression, as in Theorem~\ref{thm:asym_multiblock}, onto $N_{ab}^{c}$
+    copies of each block $B_c$, with vanishing remainder. Then the
+    compression maps $V_{(c,\mu)}$ and $W_{(c,\mu)}$ are the fusion tensors
+    $X^c_{ab,\mu}$ and their left inverses $X^{c+}_{ab,\mu}$ of a complete
+    zipper fusion family. The vanishing remainder is the absence of nonzero
+    blocks above the diagonal assumed in
+    \cite[lines~181--191]{Bultinck2017Anyons}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:asym_multiblock}
+    Biorthogonality (\ref{eq:rfp_fusion_biorthogonality}) is
+    $W_sV_t=\delta_{st}\Id$. Since the remainder
+    $B_{ab}^{ik}-\sum_sV_sB_{c(s)}^{ik}W_s$ vanishes, this sum is the
+    reconstruction (\ref{eq:rfp_fusion_reconstruction}). Multiplying the
+    reconstruction by $X^c_{ab,\mu}$ on the right, or by $X^{c+}_{ab,\mu}$ on
+    the left, and using biorthogonality gives the two zipper identities.
+\end{proof}
+
 \begin{definition}[Final-block selection from one physical index pair]
     \label{def:mpdo_complete_zipper_final_block_selector}
     \lean{MPOTensor.CompleteZipperFusionFamily.finalBlockSelector}
