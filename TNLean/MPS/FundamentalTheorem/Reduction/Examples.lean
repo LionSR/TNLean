@@ -15,6 +15,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Unitary
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomalyClass
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXDecoratedFusion
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXDecoratedTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXPlusIdentity
