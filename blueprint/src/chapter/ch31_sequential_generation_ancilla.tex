@@ -65,11 +65,12 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     Let $d\ge 1$. A unitary $U$ on $\C^D\otimes\C^d$ acting on the site state
     $\ket{0}$ induces the matrices
     $(A^i)_{\alpha\beta}=\bra{\alpha,i}U\ket{\beta,0}$. For unitaries
-    $U_0,\dots,U_{N-1}$, with $U_k$ acting on site $k$, and an initial
-    ancilla state $\ket{\varphi_I}$, the ancilla component of the joint state
-    at the configuration $\sigma$ is $A_0^{\sigma_0}\cdots
-        A_{N-1}^{\sigma_{N-1}}\ket{\varphi_I}\in\C^D$, where $A_k$ is induced
-    by $U_k$. This is \cite[Section~5.1]{PerezGarcia2007Matrix}.
+    $U_0,\dots,U_{N-1}$, with $U_k$ applied at step $k+1$ and acting on site
+    $N-1-k$, and an initial ancilla state $\ket{\varphi_I}$, the ancilla
+    component of the joint state at the configuration $\sigma$ is
+    $A_0^{\sigma_0}\cdots A_{N-1}^{\sigma_{N-1}}\ket{\varphi_I}\in\C^D$, where
+    $A_k$ is induced by $U_{N-1-k}$. This is
+    \cite[Section~5.1]{PerezGarcia2007Matrix}.
 \end{definition}
 
 \begin{definition}[Deterministic sequential scheme]
