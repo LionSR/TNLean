@@ -97,6 +97,9 @@
         pairLetter_eq_compressionSynthesis_mul}
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         compressionAnalysis_mul_compressionSynthesis}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        exists_pairCompression_remainder_eq_zero_of_star}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofStar}
     \leanok
     \uses{def:mpdo_complete_zipper_fusion_family, thm:asym_multiblock}
     Let $B_a^{ij}$, $a\in\Lambda$, be injective MPO blocks of positive bond
@@ -110,6 +113,10 @@
     zipper fusion family. The vanishing remainder is the absence of nonzero
     blocks above the diagonal assumed in
     \cite[lines~181--191]{Bultinck2017Anyons}.
+    In particular, if the word traces of every product $B_{ab}$ are the sums of
+    the word traces of $N_{ab}^{c}$ copies of each $B_c$, and the letters of
+    every product tensor generate an algebra closed under conjugate
+    transposition, then such compressions exist and the conclusion holds.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_complete_zipper_fusion_family, thm:asym_multiblock}
@@ -119,6 +126,8 @@
     reconstruction (\ref{eq:rfp_fusion_reconstruction}). Multiplying the
     reconstruction by $X^c_{ab,\mu}$ on the right, or by $X^{c+}_{ab,\mu}$ on
     the left, and using biorthogonality gives the two zipper identities.
+    In the star-closed case the word module of each product is semisimple, so
+    its multi-block compression can be chosen with vanishing remainder.
 \end{proof}
 
 \begin{definition}[Final-block selection from one physical index pair]
