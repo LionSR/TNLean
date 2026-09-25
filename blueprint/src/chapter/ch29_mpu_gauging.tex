@@ -5880,6 +5880,115 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     the constant cochain $1$.
 \end{definition}
 
+\begin{definition}[Cyclic invariant of a scalar three-cochain]
+    \label{def:mpug_cyclic_invariant}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For a scalar $3$-cochain $\omega$, an element $g\in G$, and a natural
+    number $n$, set
+    \begin{align}
+        I_{g,n}(\omega)
+         & =\prod_{k=0}^{n-1}\omega(g,g^k,g).
+        \label{eq:mpug_cyclic_invariant}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Gauge invariance of the cyclic invariant]
+    \label{thm:mpug_cyclic_invariant_gauge}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_coboundary,
+        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_fusionGauge,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.cyclicInvariant_eq,
+        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_eq_one_of_isTrivialGaugeClass,
+        TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one}
+    \leanok
+    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    Let $g^n=e$. For every scalar $2$-cochain $\beta$,
+    \begin{align}
+        I_{g,n}(d\beta)                              & =1,               \\
+        I_{g,n}(\beta\mathbin{\triangleright}\omega) & =I_{g,n}(\omega).
+    \end{align}
+    Consequently cohomologous $3$-cochains have the same cyclic invariant,
+    every $3$-cochain with trivial gauge class has $I_{g,n}(\omega)=1$, and a
+    cyclic invariant different from $1$ shows that the gauge class of
+    $\omega$ is nontrivial. No normalization of $\beta$ or $\omega$ is
+    assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    By (\ref{eq:mpug_coboundary}),
+    \begin{align}
+        (d\beta)(g,g^k,g)
+         & =\frac{\beta(g,g^{k+1})}{\beta(g,g^k)}\cdot
+        \frac{\beta(g^k,g)}{\beta(g^{k+1},g)}.
+    \end{align}
+    Both quotients telescope over $k=0,\dots,n-1$, giving
+    $\beta(g,g^n)/\beta(g,e)$ and $\beta(e,g)/\beta(g^n,g)$, which equal $1$
+    because $g^n=e$. Multiplying by $\omega$ pointwise proves the second
+    identity, and the remaining statements follow from
+    Definitions~\ref{def:mpug_cohomologous_to}
+    and~\ref{def:mpug_trivial_gauge_class}.
+\end{proof}
+
+\begin{definition}[Restriction of scalar three-cochains]
+    \label{def:mpug_cochain_restriction}
+    \lean{TNLean.Algebra.ScalarThreeCochain.comap,
+        TNLean.Algebra.ScalarThreeCochain.comap_apply}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For a group homomorphism $f\colon H\to G$, the restriction of a scalar
+    $3$-cochain $\omega$ on $G$ is
+    $(f^*\omega)(a,b,c)=\omega(f(a),f(b),f(c))$.
+\end{definition}
+
+\begin{theorem}[Restriction preserves cocycles and gauge classes]
+    \label{thm:mpug_cochain_restriction}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle.comap,
+        TNLean.Algebra.ScalarThreeCochain.comap_fusionGauge,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.comap,
+        TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass.comap}
+    \leanok
+    \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        def:mpug_trivial_gauge_class}
+    Restriction along $f$ sends $3$-cocycles to $3$-cocycles and satisfies
+    $f^*(\beta\mathbin{\triangleright}\omega)
+        =(f^*\beta)\mathbin{\triangleright}f^*\omega$, where
+    $(f^*\beta)(a,b)=\beta(f(a),f(b))$. Hence it preserves the relation of
+    being cohomologous and sends cochains with trivial gauge class to
+    cochains with trivial gauge class.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        def:mpug_trivial_gauge_class}
+    Since $f(ab)=f(a)f(b)$, for all $a,b,c,d\in H$
+    \begin{align}
+        (f^*\omega)(ab,c,d)\,(f^*\omega)(a,b,cd)
+         & =\omega\bigl(f(a)f(b),f(c),f(d)\bigr)\,
+        \omega\bigl(f(a),f(b),f(c)f(d)\bigr),
+        \notag                                                              \\
+        (d f^*\beta)(a,b,c)
+         & =\frac{\beta\bigl(f(a),f(b)f(c)\bigr)\beta\bigl(f(b),f(c)\bigr)}
+        {\beta\bigl(f(a),f(b)\bigr)\beta\bigl(f(a)f(b),f(c)\bigr)}
+        =(d\beta)\bigl(f(a),f(b),f(c)\bigr).
+        \notag
+    \end{align}
+    The first line and the corresponding expansion of the right-hand side
+    of (\ref{eq:mpug_three_cocycle}) turn the cocycle relation for $f^*\omega$
+    into (\ref{eq:mpug_three_cocycle}) at $f(a),f(b),f(c),f(d)$. The second
+    line, which is (\ref{eq:mpug_coboundary}) evaluated at $f(a),f(b),f(c)$,
+    gives $d(f^*\beta)=f^*(d\beta)$, hence
+    $f^*(\beta\mathbin{\triangleright}\omega)
+        =(f^*\beta)\mathbin{\triangleright}f^*\omega$. The last two claims
+    follow from Definitions~\ref{def:mpug_cohomologous_to}
+    and~\ref{def:mpug_trivial_gauge_class}.
+\end{proof}
+
 \begin{definition}[L-symbols and compatibility]
     \label{def:mpug_l_symbols}
     \lean{TNLean.Algebra.LSymbol,
@@ -6085,6 +6194,40 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_l_gauge_right}) and
     (\ref{eq:mpug_l_gauge_left}), from which the normalization statements
     follow.
+\end{proof}
+
+\begin{theorem}[A block fixed by a subgroup trivializes the restricted three-cocycle]
+    \label{thm:mpug_fixed_block_trivializes}
+    \lean{TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
+        TNLean.Algebra.LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_cochain_restriction,
+        def:mpug_fusion_gauge, def:mpug_trivial_gauge_class}
+    Let $L$ be compatible with $\omega$, let $f\colon H\to G$ be a group
+    homomorphism, and let $x\in\mathsf X$ satisfy $f(a)x=x$ for every
+    $a\in H$. Then $f^*\omega$ has trivial gauge class; explicitly,
+    $f^*\omega=d\lambda$ with $\lambda(a,b)=L^x_{f(a),f(b)}$. In particular,
+    if some $x$ is fixed by all of $G$, then $\omega$ has trivial gauge class.
+    This is the scalar step in the statement that a subgroup leaving a block
+    invariant trivializes the three-cocycle
+    \cite[lines~740--745]{GarreRubio2023MPOSym}, and in the statement that a
+    single invariant block reduces (\ref{eq:mpug_l_compatibility}) to the
+    three-coboundary condition \cite[line~1925]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_symbols, def:mpug_fusion_gauge,
+        def:mpug_cochain_restriction, def:mpug_trivial_gauge_class}
+    For $a,b,c\in H$ put $g=f(a)$, $h=f(b)$, $k=f(c)$. Since $kx=x$,
+    (\ref{eq:mpug_l_compatibility}) reads
+    \begin{align}
+        \omega(g,h,k)
+         & =\frac{L^x_{g,hk}L^x_{h,k}}{L^x_{g,h}L^x_{gh,k}},
+    \end{align}
+    which is $(d\lambda)(a,b,c)$ by (\ref{eq:mpug_coboundary}) and the
+    multiplicativity of $f$. Thus
+    $f^*\omega=\lambda\mathbin{\triangleright}1$. For a block fixed by all
+    of $G$, take $f$ to be the identity.
 \end{proof}
 
 \begin{theorem}[Action of the restricted scalar gauge group]
