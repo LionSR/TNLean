@@ -48,6 +48,9 @@ is injective and which lies in a non-trivial symmetry-protected topological
   `A⁰ = |0⟩⟨+|`, `A¹ = |1⟩⟨−|`; the convention used here is its transpose
   (equivalently, the MPS read in the opposite direction), which represents the
   same state and carries the same SPT order.
+  The review tensor itself, its controlled-`Z` construction, and the
+  Hadamard gauge relating it to `clusterTensor` are in
+  `TNLean.MPS.Examples.ClusterReview`.
 * Raussendorf, Briegel (arXiv:quant-ph/0010033) — original cluster state
 * Pérez-García, Wolf, Sanz, Verstraete, Cirac, arXiv:0802.0447 (PRL 2008) —
   string order and local symmetry for finitely correlated states
@@ -234,19 +237,23 @@ private lemma decode_2 : decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm 2) 
 private lemma decode_3 : decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm 3) = ![1, 1] := by
   funext j; apply Fin.ext; rw [decodeBlock_cast_val]; fin_cases j <;> decide
 
-@[simp] private lemma clusterBlocked_zero :
+/-- The blocked letter `A⁰A⁰ = (1/√2)|+⟩⟨0|`. -/
+@[simp] lemma clusterBlocked_zero :
     clusterBlocked 0 = (1 / 2 : ℂ) • !![1, 0; 1, 0] := by
   rw [clusterBlocked_apply, decode_0]; simpa using cluster_prod_00
 
-@[simp] private lemma clusterBlocked_one :
+/-- The blocked letter `A¹A⁰ = (1/√2)|−⟩⟨0|`. -/
+@[simp] lemma clusterBlocked_one :
     clusterBlocked 1 = (1 / 2 : ℂ) • !![1, 0; -1, 0] := by
   rw [clusterBlocked_apply, decode_1]; simpa using cluster_prod_10
 
-@[simp] private lemma clusterBlocked_two :
+/-- The blocked letter `A⁰A¹ = (1/√2)|+⟩⟨1|`. -/
+@[simp] lemma clusterBlocked_two :
     clusterBlocked 2 = (1 / 2 : ℂ) • !![0, 1; 0, 1] := by
   rw [clusterBlocked_apply, decode_2]; simpa using cluster_prod_01
 
-@[simp] private lemma clusterBlocked_three :
+/-- The blocked letter `A¹A¹ = -(1/√2)|−⟩⟨1|`. -/
+@[simp] lemma clusterBlocked_three :
     clusterBlocked 3 = (1 / 2 : ℂ) • !![0, -1; 0, 1] := by
   rw [clusterBlocked_apply, decode_3]; simpa using cluster_prod_11
 
@@ -313,28 +320,32 @@ def clusterZ2Z2Action :
   ofCommutingInvolutions clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
-@[simp] private lemma clusterZ2Z2Action_10 :
+/-- The first generator acts by `σx ⊗ I`. -/
+@[simp] lemma clusterZ2Z2Action_10 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = clusterPhysX1 := by
   exact ofCommutingInvolutions_ofAdd_10 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
-@[simp] private lemma clusterZ2Z2Action_01 :
+/-- The second generator acts by `I ⊗ σx`. -/
+@[simp] lemma clusterZ2Z2Action_01 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = clusterPhysX2 := by
   exact ofCommutingInvolutions_ofAdd_01 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
-@[simp] private lemma clusterZ2Z2Action_11 :
+/-- The product of the generators acts by `σx ⊗ σx`. -/
+@[simp] lemma clusterZ2Z2Action_11 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
       clusterPhysX1 * clusterPhysX2 := by
   exact ofCommutingInvolutions_ofAdd_11 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
-/-! #### Virtual gauges `σz`, `σx`, and `σz σx` -/
+/-! #### Virtual gauges `σz` and `σx` -/
 
-private def clusterGaugeZ : GL (Fin 2) ℂ :=
+/-- The virtual gauge `σz = !![1, 0; 0, -1]`. -/
+def clusterGaugeZ : GL (Fin 2) ℂ :=
   Matrix.GeneralLinearGroup.mkOfDetNeZero !![1, 0; 0, -1] (by norm_num [Matrix.det_fin_two])
 
-@[simp] private lemma clusterGaugeZ_val :
+@[simp] lemma clusterGaugeZ_val :
     (clusterGaugeZ : Matrix (Fin 2) (Fin 2) ℂ) = !![1, 0; 0, -1] :=
   Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
 
@@ -345,37 +356,24 @@ private lemma clusterGaugeZ_sq :
   fin_cases i <;> fin_cases j <;>
     simp [Matrix.mul_apply, Fin.sum_univ_two]
 
-private lemma clusterGaugeZ_inv_val :
+lemma clusterGaugeZ_inv_val :
     ((clusterGaugeZ⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![1, 0; 0, -1] := by
   rw [Matrix.GeneralLinearGroup.coe_inv, clusterGaugeZ_val]
   exact Matrix.inv_eq_right_inv clusterGaugeZ_sq
 
-private def clusterGaugeX : GL (Fin 2) ℂ :=
+/-- The virtual gauge `σx`. -/
+def clusterGaugeX : GL (Fin 2) ℂ :=
   Matrix.GeneralLinearGroup.mkOfDetNeZero pauliX (by
     simp only [Matrix.det_fin_two, pauliX, Matrix.of_apply]; norm_num)
 
-@[simp] private lemma clusterGaugeX_val :
+@[simp] lemma clusterGaugeX_val :
     (clusterGaugeX : Matrix (Fin 2) (Fin 2) ℂ) = pauliX :=
   Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
 
-private lemma clusterGaugeX_inv_val :
+lemma clusterGaugeX_inv_val :
     ((clusterGaugeX⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = pauliX := by
   rw [Matrix.GeneralLinearGroup.coe_inv, clusterGaugeX_val]
   exact Matrix.inv_eq_right_inv pauliX_sq
-
-private def clusterGaugeZX : GL (Fin 2) ℂ :=
-  Matrix.GeneralLinearGroup.mkOfDetNeZero !![0, 1; -1, 0] (by norm_num [Matrix.det_fin_two])
-
-@[simp] private lemma clusterGaugeZX_val :
-    (clusterGaugeZX : Matrix (Fin 2) (Fin 2) ℂ) = !![0, 1; -1, 0] :=
-  Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
-
-private lemma clusterGaugeZX_inv_val :
-    ((clusterGaugeZX⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![0, -1; 1, 0] := by
-  rw [Matrix.GeneralLinearGroup.coe_inv, clusterGaugeZX_val]
-  refine Matrix.inv_eq_right_inv ?_
-  ext i j; fin_cases i <;> fin_cases j <;>
-    simp [Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The two virtual gauges `σz` and `σx` anticommute.  This is the projective
 phase that witnesses the non-trivial SPT order: the group elements commute on
@@ -391,10 +389,10 @@ private lemma cluster_gauge_anticomm' :
 
 /-! #### Gauge equivalences for the three nontrivial group elements -/
 
-private lemma cluster_gaugeEquiv_X1 :
-    GaugeEquiv clusterBlocked
-      (twistedTensor clusterBlocked clusterZ2Z2Action (Multiplicative.ofAdd (1, 0))) := by
-  refine ⟨clusterGaugeZ, fun i => ?_⟩
+private lemma cluster_twist_X1 (i : Fin 4) :
+    twistedTensor clusterBlocked clusterZ2Z2Action (Multiplicative.ofAdd (1, 0)) i =
+      (clusterGaugeZ : Matrix (Fin 2) (Fin 2) ℂ) * clusterBlocked i *
+        ((clusterGaugeZ⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
   simp only [twistedTensor, clusterZ2Z2Action_10]
   rw [clusterGaugeZ_val, clusterGaugeZ_inv_val]
   fin_cases i <;>
@@ -404,10 +402,10 @@ private lemma cluster_gaugeEquiv_X1 :
      fin_cases a <;> fin_cases b <;>
        simp [Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul])
 
-private lemma cluster_gaugeEquiv_X2 :
-    GaugeEquiv clusterBlocked
-      (twistedTensor clusterBlocked clusterZ2Z2Action (Multiplicative.ofAdd (0, 1))) := by
-  refine ⟨clusterGaugeX, fun i => ?_⟩
+private lemma cluster_twist_X2 (i : Fin 4) :
+    twistedTensor clusterBlocked clusterZ2Z2Action (Multiplicative.ofAdd (0, 1)) i =
+      (clusterGaugeX : Matrix (Fin 2) (Fin 2) ℂ) * clusterBlocked i *
+        ((clusterGaugeX⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
   simp only [twistedTensor, clusterZ2Z2Action_01]
   rw [clusterGaugeX_val, clusterGaugeX_inv_val]
   fin_cases i <;>
@@ -418,12 +416,14 @@ private lemma cluster_gaugeEquiv_X2 :
        simp [pauliX, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul,
          Matrix.of_apply])
 
-private lemma cluster_gaugeEquiv_X1X2 :
-    GaugeEquiv clusterBlocked
-      (twistedTensor clusterBlocked clusterZ2Z2Action (Multiplicative.ofAdd (1, 1))) := by
-  refine ⟨clusterGaugeZX, fun i => ?_⟩
+private lemma cluster_twist_X1X2 (i : Fin 4) :
+    twistedTensor clusterBlocked clusterZ2Z2Action (Multiplicative.ofAdd (1, 1)) i =
+      ((clusterGaugeZ * clusterGaugeX : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) *
+        clusterBlocked i *
+        (((clusterGaugeZ * clusterGaugeX)⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
   simp only [twistedTensor, clusterZ2Z2Action_11]
-  rw [clusterGaugeZX_val, clusterGaugeZX_inv_val]
+  rw [_root_.mul_inv_rev, Units.val_mul, Units.val_mul, clusterGaugeZ_val, clusterGaugeX_val,
+    clusterGaugeZ_inv_val, clusterGaugeX_inv_val]
   fin_cases i <;>
     (simp only [Fin.sum_univ_four, clusterPhysX1, clusterPhysX2, clusterBlocked_zero,
         clusterBlocked_one, clusterBlocked_two, clusterBlocked_three, Matrix.mul_apply,
@@ -432,7 +432,8 @@ private lemma cluster_gaugeEquiv_X1X2 :
         add_zero, zero_add, mul_zero, mul_one]
      ext a b
      fin_cases a <;> fin_cases b <;>
-       simp [Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul])
+       simp [pauliX, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul, Matrix.vecHead,
+         Matrix.vecTail])
 
 /-- The length-`2` blocked cluster tensor is on-site symmetric under `Z₂ × Z₂`,
 with anticommuting virtual gauges `σz` and `σx`.  This exhibits the cluster
@@ -442,9 +443,9 @@ theorem cluster_isOnSiteSymmetric_Z2Z2 :
   intro g
   rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
   · rw [twistedTensor_one]; exact fun _ _ => rfl
-  · exact cluster_gaugeEquiv_X1.sameMPV
-  · exact cluster_gaugeEquiv_X2.sameMPV
-  · exact cluster_gaugeEquiv_X1X2.sameMPV
+  · exact GaugeEquiv.sameMPV ⟨clusterGaugeZ, cluster_twist_X1⟩
+  · exact GaugeEquiv.sameMPV ⟨clusterGaugeX, cluster_twist_X2⟩
+  · exact GaugeEquiv.sameMPV ⟨clusterGaugeZ * clusterGaugeX, cluster_twist_X1X2⟩
 
 /-! ### The cluster factor system is the non-trivial class of `H²(Z₂ × Z₂, ℂˣ)`
 
@@ -496,6 +497,23 @@ def clusterProjRep : ProjectiveRepresentation (D := 2) clusterOmega where
     exact mul_of_anticommuting_involutions _ _ clusterGaugeZ_sq pauliX_sq
       cluster_gauge_anticomm' g h
 
+/-- The virtual action `clusterProjRep` implements the on-site symmetry of the
+blocked cluster tensor: for every group element `g` and blocked letter `i`,
+`(twist by g of A)ᵢ · V(g) = V(g) · Aᵢ`. -/
+theorem clusterBlocked_twist_intertwine (g : Multiplicative (ZMod 2 × ZMod 2)) (i : Fin 4) :
+    twistedTensor clusterBlocked clusterZ2Z2Action g i *
+        (clusterProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ) =
+      (clusterProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ) * clusterBlocked i := by
+  have key (R : GL (Fin 2) ℂ) {T A : Matrix (Fin 2) (Fin 2) ℂ}
+      (h : T = (R : Matrix (Fin 2) (Fin 2) ℂ) * A * ((R⁻¹ : GL (Fin 2) ℂ) : Matrix _ _ ℂ)) :
+      T * R = R * A := by
+    rw [h, mul_assoc, Units.inv_mul, mul_one]
+  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  · simp [clusterProjRep, clusterRepX, twistedTensor_one]
+  · simpa [clusterProjRep, clusterRepX] using key _ (cluster_twist_X1 i)
+  · simpa [clusterProjRep, clusterRepX] using key _ (cluster_twist_X2 i)
+  · simpa [clusterProjRep, clusterRepX] using key _ (cluster_twist_X1X2 i)
+
 open TNLean.Algebra in
 /-- `clusterOmega` is a genuine `2`-cocycle: it is the factor system of the
 projective representation `clusterProjRep`, so its class lives in
@@ -544,7 +562,7 @@ open scoped ComplexOrder MatrixOrder
 
 /-- The blocked cluster transfer map is unital: `∑ Aᵢ Aᵢ† = 1`.  The four blocked
 matrices form a normalised Kraus family, so the cluster channel is unital. -/
-private theorem clusterBlocked_transferMap_one : Kraus.transferMap clusterBlocked 1 = 1 := by
+theorem clusterBlocked_transferMap_one : Kraus.transferMap clusterBlocked 1 = 1 := by
   rw [Kraus.transferMap_apply]
   ext i j
   fin_cases i <;> fin_cases j <;>
@@ -559,7 +577,7 @@ private theorem clusterBlocked_transferMap_one : Kraus.transferMap clusterBlocke
 adjoint transfer map: `∑ Aᵢ† Λ Aᵢ = Λ`.  The four blocked matrices satisfy
 `∑ Aᵢ† Aᵢ = 1`, so the adjoint channel is unital, and scaling by `1/2`
 propagates through the linear map. -/
-private theorem clusterBlocked_adjoint_fixes_maximallyMixed :
+theorem clusterBlocked_adjoint_fixes_maximallyMixed :
     Kraus.transferMap (fun i => (clusterBlocked i)ᴴ) ((1 / 2 : ℂ) • 1) = (1 / 2 : ℂ) • 1 := by
   rw [Kraus.transferMap_apply]
   ext i j
@@ -587,7 +605,7 @@ private theorem maximallyMixed_trace :
 /-- The `Z₂ × Z₂` on-site representation is unitary on every group element: the
 two generators act by real symmetric involutive permutation matrices, so each
 group element equals its own adjoint inverse. -/
-private theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
+theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
     clusterZ2Z2Action g * (clusterZ2Z2Action g)ᴴ = 1 := by
   exact ofCommutingInvolutions_mul_conjTranspose clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm

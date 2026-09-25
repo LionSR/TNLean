@@ -26,6 +26,7 @@ reduced state of a proper block into a maximally mixed state.
 ## Main contents
 
 * `MPOTensor.siteSign` — the one-site weight $z_a = (\sigma_z)_{aa}$.
+* `MPOTensor.siteSign_mul_self` — the site sign squares to one.
 * `MPOTensor.configurationSign` — the $Z$-string sign of a configuration.
 * `MPOTensor.configurationSign_eq_one_or_neg_one` — the sign is $\pm 1$.
 * `MPOTensor.sum_configurationSign_eq_zero` — the sign sums to zero over all
@@ -60,6 +61,10 @@ noncomputable def configurationSign {N : ℕ} (σ : Fin N → Fin 2) : ℂ :=
 lemma siteSign_eq_one_or_neg_one (i : Fin 2) :
     siteSign i = 1 ∨ siteSign i = -1 := by
   fin_cases i <;> simp [siteSign, SpinCover.pauli]
+
+/-- The site sign squares to one. -/
+lemma siteSign_mul_self (i : Fin 2) : siteSign i * siteSign i = 1 := by
+  rcases siteSign_eq_one_or_neg_one i with h | h <;> rw [h] <;> norm_num
 
 /-- The configuration sign takes only the values $1$ and $-1$. -/
 lemma configurationSign_eq_one_or_neg_one {N : ℕ} (σ : Fin N → Fin 2) :
