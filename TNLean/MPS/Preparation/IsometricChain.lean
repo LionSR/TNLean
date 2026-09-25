@@ -545,7 +545,9 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     (hiso : ∀ p, IsIsometryOn (b p.succ) (Q p)) (r' : Fin D → ℂ) :
     ∃ B : OBCChainTensor d D (n + 1),
       (∀ τ, B.coeff τ = (chainProd Q τ *ᵥ r') ⟨0, lt_of_lt_of_le (by omega) (hbD 0)⟩) ∧
-      ∀ p : Fin (n + 1), p ≠ Fin.last n → ∑ i, (B.tensor p i)ᴴ * B.tensor p i = 1 := by
+      (∀ p : Fin (n + 1), p ≠ Fin.last n → ∑ i, (B.tensor p i)ᴴ * B.tensor p i = 1) ∧
+      (VecSupp (b (Fin.last (n + 1))) r' → star r' ⬝ᵥ r' = 1 →
+        ∑ i, (B.tensor (Fin.last n) i)ᴴ * B.tensor (Fin.last n) i = 1) := by
   classical
   have hD : 0 < D := lt_of_lt_of_le (by omega) (hbD 0)
   let b' : Fin (n + 2) → ℕ := fun k => if k = Fin.last (n + 1) then 1 else b k
@@ -576,7 +578,7 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     · rw [hsc p hp] at hβ
       simp only [Q', ite_eq_right hp]
       exact hcol p i α β hβ
-  refine ⟨ofSupported b' hb'D hb'0 hb'N Q', fun τ => ?_, fun p hp => ?_⟩
+  refine ⟨ofSupported b' hb'D hb'0 hb'N Q', fun τ => ?_, fun p hp => ?_, fun hr' hnorm => ?_⟩
   · rw [coeff_eq_chainProd_zeroPad, zeroPad_ofSupported _ _ _ _ _ hrow' hcol', chainProd_succ',
       chainProd_succ' Q]
     have hQ' : (fun p : Fin n => Q' p.castSucc) = fun p => Q p.castSucc := by
@@ -586,6 +588,19 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
   · refine sum_conjTranspose_mul_ofSupported _ _ _ _ _ p (hrow' p) ?_
     rw [hsc p hp]
     simpa [Q', hp] using hiso p
+  · refine sum_conjTranspose_mul_ofSupported _ _ _ _ _ (Fin.last n) (hrow' _) ?_
+    have hlast : b' (Fin.last n).succ = 1 := by simp [b']
+    rw [hlast]
+    intro β β' hβ hβ'
+    have e1 : β = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ)
+    have e2 : β' = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ')
+    subst e1 e2
+    simp only [Q', ite_eq_left rfl]
+    simp only [mul_colMat_apply _ _ _ (⟨0, hD⟩ : Fin D) rfl]
+    have h := sum_normSq_mulVec_of_isometryOn (hiso (Fin.last n))
+      (v := r') (by rw [Fin.succ_last]; exact hr')
+    rw [hnorm] at h
+    simpa [dotProduct] using h
 
 /-- **Left-canonical open-boundary representation.** Every open-boundary chain
 state of bond dimension at most `D` has an open-boundary representation of bond
@@ -598,14 +613,48 @@ arXiv:quant-ph/0608197, Theorem `Thm:seqwith` (lines 1575--1583). -/
 theorem exists_isometric_coeff_eq {n : ℕ} (B : OBCChainTensor d D (n + 1)) :
     ∃ B' : OBCChainTensor d D (n + 1), B'.coeff = B.coeff ∧
       ∀ p : Fin (n + 1), p ≠ Fin.last n → ∑ i, (B'.tensor p i)ᴴ * B'.tensor p i = 1 := by
-  classical
   have hD := B.pos_bound
   obtain ⟨b, Q, r', hb0, hbD, hrow, hcol, hiso, -, hprod⟩ :=
     exists_isometric_chain (n + 1) 1 hD (rowMat (basisVecZero D)) (rowSupp_rowMat _)
       (fun p => zeroPad B p) (basisVecZero D)
-  obtain ⟨B', hB', hiso'⟩ := exists_of_isometric_chain b hbD hb0 Q hrow hcol hiso r'
+  obtain ⟨B', hB', hiso', -⟩ := exists_of_isometric_chain b hbD hb0 Q hrow hcol hiso r'
   refine ⟨B', funext fun τ => ?_, hiso'⟩
   rw [hB', ← hprod, coeff_eq_chainProd_zeroPad, rowMat_mul_mulVec_zero hD,
     basisVecZero_dotProduct hD, mulVec_basisVecZero_apply hD]
+
+/-- **Left-canonical open-boundary representation of a normalized state.** A
+normalized open-boundary chain state of bond dimension at most `D` has an
+open-boundary representation of bond dimension at most `D` in which every site
+satisfies `∑_i A_i^† A_i = 1`.
+
+This is the successive-decomposition construction of arXiv:quant-ph/0501096,
+eq. `induction`, with the last remainder `M_{[1]} |φ̃_I⟩` of norm one, as in the
+deterministic part of arXiv:quant-ph/0608197, Theorem `Thm:seqwith`
+(lines 1570--1583). -/
+theorem exists_isometric_coeff_eq_of_norm {n : ℕ} (B : OBCChainTensor d D (n + 1))
+    (hB : star B.coeff ⬝ᵥ B.coeff = 1) :
+    ∃ B' : OBCChainTensor d D (n + 1), B'.coeff = B.coeff ∧
+      ∀ p : Fin (n + 1), ∑ i, (B'.tensor p i)ᴴ * B'.tensor p i = 1 := by
+  have hD := B.pos_bound
+  obtain ⟨b, Q, r', hb0, hbD, hrow, hcol, hiso, hr', hprod⟩ :=
+    exists_isometric_chain (n + 1) 1 hD (rowMat (basisVecZero D)) (rowSupp_rowMat _)
+      (fun p => zeroPad B p) (basisVecZero D)
+  have hcoeff : ∀ τ, B.coeff τ = (chainProd Q τ *ᵥ r') ⟨0, hD⟩ := fun τ => by
+    rw [← hprod, coeff_eq_chainProd_zeroPad, rowMat_mul_mulVec_zero hD,
+      basisVecZero_dotProduct hD, mulVec_basisVecZero_apply hD]
+  have hnorm : star r' ⬝ᵥ r' = 1 := by
+    rw [← sum_normSq_chainProd_mulVec b Q hrow hiso r' hr', ← hB]
+    simp only [dotProduct, Pi.star_apply]
+    refine Finset.sum_congr rfl fun τ _ => ?_
+    rw [hcoeff τ, Finset.sum_eq_single ⟨0, hD⟩]
+    · intro α _ hα
+      have hα' : 1 ≤ α.val := Nat.one_le_iff_ne_zero.mpr fun h => hα (Fin.ext h)
+      rw [vecSupp_chainProd_mulVec b Q hrow r' hr' τ α (by rw [hb0]; exact hα'), mul_zero]
+    · simp
+  obtain ⟨B', hB', hiso', hlast⟩ := exists_of_isometric_chain b hbD hb0 Q hrow hcol hiso r'
+  refine ⟨B', funext fun τ => by rw [hB', hcoeff], fun p => ?_⟩
+  by_cases hp : p = Fin.last n
+  · subst hp; exact hlast hr' hnorm
+  · exact hiso' p hp
 
 end OBCChainTensor
