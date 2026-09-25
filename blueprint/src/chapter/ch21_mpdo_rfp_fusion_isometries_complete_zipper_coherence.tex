@@ -232,6 +232,7 @@
 \begin{theorem}[Gauge covariance of the F-matrices]%
     \label{thm:mpdo_complete_zipper_fmatrix_gauge}
     \lean{MPOTensor.CompleteZipperFusionFamily.regauge}
+    \lean{MPOTensor.CompleteZipperFusionFamily.regauge_fusionTensor}
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         eq_printedFMatrix_of_rightTripleSynthesis_mul}
     \lean{MPOTensor.CompleteZipperFusionFamily.%
@@ -241,13 +242,14 @@
     \leanok
     \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove}
     For every triple of labels let $Y^c_{ab}$ be an invertible
-    $N_{ab}^{c}\times N_{ab}^{c}$ matrix, and set
+    $N_{ab}^{c}\times N_{ab}^{c}$ matrix, write
+    $\Pi_{ab}=\bigoplus_c Y^c_{ab}\otimes\Id_{D_c}$, and let $X_{ab}$ and
+    $X^+_{ab}$ be the synthesis and analysis matrices whose blocks are the
+    $X^c_{ab,\mu}$ and the $X^{c+}_{ab,\mu}$. Replace them by
+    $X_{ab}\Pi_{ab}$ and $\Pi_{ab}^{-1}X^+_{ab}$. The new fusion tensors are
     \begin{align}
         X'^c_{ab,\mu}
-         & =\sum_\nu (Y^c_{ab})_{\nu\mu}X^c_{ab,\nu},
-         &
-        X'^{c+}_{ab,\mu}
-         & =\sum_\nu \bigl((Y^c_{ab})^{-1}\bigr)_{\mu\nu}X^{c+}_{ab,\nu}. \notag
+         & =\sum_\nu (Y^c_{ab})_{\nu\mu}X^c_{ab,\nu}. \notag
     \end{align}
     The new matrices, with the same blocks, multiplicities and simultaneous
     left inverse, again form a complete zipper fusion family. The matrix
@@ -272,8 +274,6 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove}
-    Write $\Pi_{ab}=\bigoplus_c Y^c_{ab}\otimes\Id_{D_c}$. The new synthesis
-    and analysis matrices are $X_{ab}\Pi_{ab}$ and $\Pi_{ab}^{-1}X^+_{ab}$.
     Since $\Pi_{ab}$ acts only on the multiplicity factors, it commutes with
     $\bigoplus_c\Id\otimes B_c^{ik}$. The biorthogonality, reconstruction and
     zipper identities of the new family follow.

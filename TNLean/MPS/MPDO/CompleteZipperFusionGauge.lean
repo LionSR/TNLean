@@ -66,14 +66,6 @@ theorem rightTripleAnalysis_mul_rightTripleSynthesis (a b c d : Λ) :
   simpa [Matrix.mul_apply, rightTripleAnalysisFull, rightTripleSynthesisFull,
     Matrix.one_apply] using h
 
-private theorem kronecker_one_injective {m n : Type*} {D : ℕ} (hD : 0 < D)
-    {G G' : Matrix m n ℂ}
-    (h : G ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) = G' ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) :
-    G = G' := by
-  funext x y
-  have := congrArg (fun M => M (x, ⟨0, hD⟩) (y, ⟨0, hD⟩)) h
-  simpa [Matrix.kronecker_apply] using this
-
 /-- **Uniqueness of the printed F-matrix.** Any multiplicity matrix that carries the
 right-associated fusion tensors to the left-associated ones, as in equation `Fmove`, is the
 printed $F$-matrix.
@@ -86,7 +78,7 @@ theorem eq_printedFMatrix_of_rightTripleSynthesis_mul (a b c d : Λ)
         (G ⊗ₖ (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ)) =
       Fus.leftTripleSynthesis a b c d) :
     G = Fus.printedFMatrix a b c d := by
-  apply kronecker_one_injective (Fus.bondDim_pos d)
+  apply Matrix.kronecker_one_injective (Fus.bondDim_pos d)
   have hF := Fus.rightTripleSynthesis_mul_printedFMatrix a b c d
   calc
     _ = (Fus.rightTripleAnalysis a b c d * Fus.rightTripleSynthesis a b c d) *
@@ -127,6 +119,7 @@ noncomputable def pairGaugeInv (Y : Fus.FusionGauge) (a b : Λ) :
         Matrix (Fin (Fus.fusionMultiplicity a b c)) (Fin (Fus.fusionMultiplicity a b c)) ℂ) ⊗ₖ
       (1 : Matrix (Fin (Fus.bondDim c)) (Fin (Fus.bondDim c)) ℂ)
 
+/-- `pairGaugeInv` is a left inverse of `pairGauge`. -/
 theorem pairGaugeInv_mul_pairGauge (Y : Fus.FusionGauge) (a b : Λ) :
     pairGaugeInv Y a b * pairGauge Y a b = 1 := by
   rw [pairGaugeInv, pairGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
@@ -135,6 +128,7 @@ theorem pairGaugeInv_mul_pairGauge (Y : Fus.FusionGauge) (a b : Λ) :
   rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.inv_mul, Matrix.one_mul,
     Matrix.one_kronecker_one]
 
+/-- `pairGaugeInv` is a right inverse of `pairGauge`. -/
 theorem pairGauge_mul_pairGaugeInv (Y : Fus.FusionGauge) (a b : Λ) :
     pairGauge Y a b * pairGaugeInv Y a b = 1 := by
   rw [pairGaugeInv, pairGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
@@ -248,6 +242,7 @@ noncomputable def leftTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) :
   Matrix.blockDiagonal' fun e =>
     (((Y a b e)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) ⊗ₖ (((Y e c d)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)
 
+/-- `rightTreeGaugeInv` is a left inverse of `rightTreeGauge`. -/
 theorem rightTreeGaugeInv_mul_rightTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) :
     Fus.rightTreeGaugeInv Y a b c d * Fus.rightTreeGauge Y a b c d = 1 := by
   rw [rightTreeGaugeInv, rightTreeGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
@@ -256,6 +251,7 @@ theorem rightTreeGaugeInv_mul_rightTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ
   rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.inv_mul, Units.inv_mul,
     Matrix.one_kronecker_one]
 
+/-- `rightTreeGaugeInv` is a right inverse of `rightTreeGauge`. -/
 theorem rightTreeGauge_mul_rightTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) :
     Fus.rightTreeGauge Y a b c d * Fus.rightTreeGaugeInv Y a b c d = 1 := by
   rw [rightTreeGaugeInv, rightTreeGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
@@ -264,6 +260,7 @@ theorem rightTreeGauge_mul_rightTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ
   rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.mul_inv, Units.mul_inv,
     Matrix.one_kronecker_one]
 
+/-- `leftTreeGaugeInv` is a left inverse of `leftTreeGauge`. -/
 theorem leftTreeGaugeInv_mul_leftTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) :
     Fus.leftTreeGaugeInv Y a b c d * Fus.leftTreeGauge Y a b c d = 1 := by
   rw [leftTreeGaugeInv, leftTreeGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
@@ -272,6 +269,7 @@ theorem leftTreeGaugeInv_mul_leftTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) 
   rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.inv_mul, Units.inv_mul,
     Matrix.one_kronecker_one]
 
+/-- `leftTreeGaugeInv` is a right inverse of `leftTreeGauge`. -/
 theorem leftTreeGauge_mul_leftTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) :
     Fus.leftTreeGauge Y a b c d * Fus.leftTreeGaugeInv Y a b c d = 1 := by
   rw [leftTreeGaugeInv, leftTreeGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
@@ -370,7 +368,7 @@ theorem rightTreeGauge_mul_printedFMatrix_regauge (Y : Fus.FusionGauge) (a b c d
   have hcancel := congrArg (fun M => Fus.rightTripleAnalysis a b c d * M) hkey
   simp only [← Matrix.mul_assoc, Fus.rightTripleAnalysis_mul_rightTripleSynthesis,
     Matrix.one_mul] at hcancel
-  exact kronecker_one_injective (Fus.bondDim_pos d) hcancel
+  exact Matrix.kronecker_one_injective (Fus.bondDim_pos d) hcancel
 
 /-- **Gauge covariance of the printed F-matrix**: $F' = G_R^{-1}\,F\,G_L$, the transformation
 of arXiv:2203.12563, lines 417--422, in the orientation of equation `Fmove` of
