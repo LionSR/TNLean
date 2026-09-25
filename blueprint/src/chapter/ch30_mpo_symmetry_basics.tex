@@ -92,12 +92,13 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 
 \begin{remark}[Groups represented by matrix product unitaries]%
     \label{rem:mposym_mpu_groups}
-    \uses{def:mpu, def:mpug_group_representation}
+    \uses{def:mpu, def:mpug_positive_mpu, def:mpug_group_representation}
     A symmetry need not act site by site to be local. A matrix product
     unitary (Definition~\ref{def:mpu}) is a matrix product operator whose
-    periodic operator is unitary at every length, and a finite group is
+    periodic operator is unitary at every length $N>1$. A finite group is
     represented by simple injective matrix product unitaries when every
-    $U_g$ is injective and simple and
+    $U_g$ is injective, simple and unitary on every nonempty chain
+    (Definition~\ref{def:mpug_positive_mpu}), and
     $U_g^{(N)}U_h^{(N)}=U_{gh}^{(N)}$ and $U_e^{(N)}=\Id$ at every length
     (Definition~\ref{def:mpug_group_representation}). The bond dimensions of
     $U_gU_h$ and $U_{gh}$ need not agree, so the product law holds for the
@@ -131,11 +132,11 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     $U_e=\Id$ whose fusion tensors reduce every stacked tensor $T_gT_h$
     exactly to $T_{gh}$ is on-site, and then its three-cocycle is trivial
     \cite[Section~4]{GarreRubio2023MPOSym}. Hence a nontrivial
-    class forbids an on-site form. It also forbids a symmetric normal matrix
-    product state (Theorem~\ref{thm:mpoalg_no_symmetric_normal}). In
-    particular a symmetric local Hamiltonian cannot have a normal matrix
-    product state as its unique ground state, and the sources argue more
-    generally that such Hamiltonians are critical or symmetry breaking
+    class forbids an on-site form. It also forbids an invariant normal matrix
+    product state (Theorem~\ref{thm:mpoalg_no_symmetric_normal}). The sources
+    argue further that a symmetric local Hamiltonian then cannot have a
+    normal matrix product state as its unique ground state, and that such
+    Hamiltonians are critical or symmetry breaking
     \cite{ChenLiuWen2011CZX,GarreRubio2023MPOSym,Cirac2021Matrix}.
     % Source anchor: arXiv:2203.12563, lines 677--681 (three-cocycle and
     %   H^3), 738 (no injective invariant state), 1211--1216 (injective
