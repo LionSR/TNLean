@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Examples.Ising
 
-import TNLean.MPS.Examples.Ising.CZXAnomalyClass
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebra
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraOnePsi
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraOneSigma
