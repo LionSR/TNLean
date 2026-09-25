@@ -31,6 +31,7 @@ case of a one-point set.
   another at every positive length.
 * `MPOTensor.GroupFamily.BlockActionData`: a choice of action tensors for permuted blocks.
 * `MPOTensor.GroupFamily.BlockActionData.lSymbol`: the L-symbols.
+
 ## Main results
 
 * `MPOTensor.GroupFamily.isReduction_actTensor_idTensor`: the bond-one identity operator acts
