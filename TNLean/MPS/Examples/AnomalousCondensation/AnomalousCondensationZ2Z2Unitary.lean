@@ -124,35 +124,10 @@ theorem mpo_symTensor_apply (g : Fin 4) (s t : Fin N → Fin 4) :
     mpo (symTensor g) N s t =
       if s = physicalShift g N t then
         (-1 : ℂ) ^ ((g.val / 2) * secondCZExponent t) else 0 := by
-  let b0 : Fin N → Fin (bondDim g) := fun n ↦ physicalBond g (t (n - 1))
-  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond (symTensor g) s t b0 fun b hb ↦ by
-    obtain ⟨n, hn⟩ := Function.ne_iff.mp hb
-    refine ⟨n - 1, ?_⟩
-    rw [symTensor_apply, ite_eq_right]
-    intro h
-    apply hn
-    simpa [b0] using h.2]
-  by_cases hst : s = physicalShift g N t
-  · have hp : ∀ n, s n = gmul g (t n) := fun n ↦ congrFun hst n
-    rw [ite_eq_left hst]
-    calc
-      _ = ∏ n, (-1 : ℂ) ^ ((g.val / 2) *
-          ((t (n - 1)).val % 2 * ((t n).val % 2))) := by
-        refine Finset.prod_congr rfl fun n _ ↦ ?_
-        rw [symTensor_apply, ite_eq_left ⟨hp n, by simp [b0]⟩]
-        simp only [b0, physicalBond_val, Nat.mul_assoc]
-      _ = (-1 : ℂ) ^ ∑ n, (g.val / 2) *
-          ((t (n - 1)).val % 2 * ((t n).val % 2)) :=
-        Finset.prod_pow_eq_pow_sum _ _ _
-      _ = _ := by
-        rw [← Finset.mul_sum]
-        congr 2
-        exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun n ↦ by simp
-  · rw [ite_eq_right hst]
-    obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
-    refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
-    rw [symTensor_apply, ite_eq_right]
-    exact fun h ↦ hn h.1
+  rw [mpo_apply_of_forced_right_bond (symTensor_apply g), secondCZExponent, Finset.mul_sum,
+    ← Finset.prod_pow_eq_pow_sum]
+  simp only [physicalBond_val, Nat.mul_assoc]
+  rfl
 
 /-- The periodic operator is a signed permutation matrix. -/
 theorem mpo_symTensor (g : Fin 4) :
