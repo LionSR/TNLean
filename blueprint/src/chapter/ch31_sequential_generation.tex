@@ -48,7 +48,9 @@ which reviews and extends \cite{Schoen2005Sequential}.
         \ket{\varphi_I}\,\ket{i_N\cdots i_1},
         \label{eq:sequential_generated_state}
     \end{align}
-    where $(A^{[k]}_i)_{\alpha\beta}=A^{[k]}_{i,\alpha,\beta}$.
+    where $(A^{[k]}_i)_{\alpha\beta}=A^{[k]}_{i,\alpha,\beta}$; here
+    $\alpha,\beta$ index the ancilla, so each $A^{[k]}_i$ is a $D\times D$
+    matrix.
     The scheme is
     \begin{enumerate}
         \item \emph{probabilistic} if the operations $G_k$ are arbitrary;
@@ -73,11 +75,10 @@ which reviews and extends \cite{Schoen2005Sequential}.
     \uses{def:obc_mps_bond_bound}
     Every normalized vector with an open-boundary matrix product representation
     with bond dimension at most $D$ has such a representation with the same
-    bound in which every site map is an isometry:
+    bound in which every site map is an isometry, that is, for $k=1,\dots,N$,
     \begin{align}
         \sum_{i=0}^{d-1}(A^{[k]}_i)^\dagger A^{[k]}_i
-         & =\Id_{D_k},
-        \qquad k=1,\dots,N.
+         & =\Id_{D_k}.
         \label{eq:obc_left_isometric}
     \end{align}
 \end{lemma}
@@ -102,8 +103,7 @@ which reviews and extends \cite{Schoen2005Sequential}.
 
 \begin{theorem}[Sequential generation with an ancilla]
     \label{thm:sequential_generation_ancilla}
-    \uses{def:sequential_scheme_ancilla, lem:obc_left_isometric_representation,
-        lem:isometry_unitary_completion}
+    \uses{def:sequential_scheme_ancilla, def:obc_mps_bond_bound}
     The following sets of vectors in $(\C^d)^{\otimes N}$ coincide:
     \begin{enumerate}
         \item the states produced by probabilistic sequential schemes with a
@@ -114,10 +114,11 @@ which reviews and extends \cite{Schoen2005Sequential}.
         \item the states with an open-boundary matrix product representation
               with bond dimension at most $D$, up to normalization.
     \end{enumerate}
-    This is \cite[Theorem~``Sequential generation with ancilla'',
-        Section~5.1]{PerezGarcia2007Matrix}.
+    This is \cite[Theorem~13, Section~5.1]{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
+    \uses{lem:obc_left_isometric_representation,
+        lem:isometry_unitary_completion}
     Every generated state has the form (\ref{eq:sequential_generated_state}),
     which is an open-boundary representation with bond dimension at most $D$
     after absorbing $\ket{\varphi_I}$ and $\bra{\varphi_F}$ into the first and
@@ -142,20 +143,23 @@ which reviews and extends \cite{Schoen2005Sequential}.
 
 \begin{theorem}[Sequential generation without an ancilla]
     \label{thm:sequential_generation_no_ancilla}
-    \uses{def:sequential_scheme_no_ancilla, thm:sequential_generation_ancilla}
+    \uses{def:sequential_scheme_no_ancilla, def:obc_mps_bond_bound}
     The states produced by sequential schemes without an ancilla, either
     deterministic or probabilistic (the latter up to normalization), are
     exactly the states with an open-boundary matrix product representation
     with bond dimension at most $d$. This is
-    \cite[Theorem~``Sequential generation without ancilla'',
-        Section~5.2]{PerezGarcia2007Matrix}.
+    \cite[Theorem~14, Section~5.2]{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
+    \uses{thm:sequential_generation_ancilla}
     For $k<N-1$ the matrices $A^{[k]}_{i,\alpha,\beta}=\bra{i,\beta}U^{[k]}\ket{\alpha,0}$
     give the site maps, with $\alpha=0$ at $k=1$; a singular value decomposition
     of the coefficients $\bra{i,j}U^{[N-1]}\ket{\alpha,0}$ in the grouping
     $i\mid\alpha,j$ gives the last two sites. Conversely, run the deterministic
     scheme of Theorem~\ref{thm:sequential_generation_ancilla} using site $k+1$
-    as the ancilla of the $k$-th step, followed by a swap of sites $k+1$ and
-    $k+2$.
+    as the ancilla of the $k$-th step, followed, for $k\le N-2$, by a swap of
+    sites $k+1$ and $k+2$. The steps $k=1,\dots,N-1$ suffice: the last step
+    of the deterministic scheme is a swap of the ancilla with site $N$, and at
+    step $N-1$ the ancilla already is site $N$, so no operation is needed
+    there \cite[proof of Theorem~14]{PerezGarcia2007Matrix}.
 \end{proof}

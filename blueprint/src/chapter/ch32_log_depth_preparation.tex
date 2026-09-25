@@ -31,8 +31,10 @@ $D$, $\E_A$ is its transfer map (Definition~\ref{def:transfer_map}), and
     \ket{i_1\cdots i_N}
     \label{eq:ldp_ti_mps}
 \end{align}
-is the translation-invariant vector it generates
-(Definition~\ref{def:mpv_state}). For two unit vectors the error is
+is the translation-invariant vector it generates, that is,
+$\ket{\phi_N(A)}=\ket{V^{(N)}(A)}$ in the notation of
+Definition~\ref{def:mpv_state}; the chapter keeps the source's notation
+$\phi_N$. For two unit vectors the error is
 $\varepsilon(\phi,\psi)=1-\lvert\braket{\phi}{\psi}\rvert$.
 
 %% Convention: the source writes the transfer matrix as
@@ -150,7 +152,14 @@ In this section $A$ is normal (Definition~\ref{def:normal}) and in the gauge
     \label{eq:ldp_normal_gauge}
 \end{align}
 so that $\E_A^{\,n}(X)\to\Tr(X)\,\rho$ as $n\to\infty$
-\cite[eq.~(5)]{Malz2024Preparation}.
+\cite[eq.~(5)]{Malz2024Preparation}. The limit uses normality as follows.
+Normality means that the words of some fixed length $L_0$ span $\MN{D}$, so
+by Theorem~\ref{thm:wielandt_proposition_three} the map $\E_A$ is strongly
+irreducible: its peripheral spectrum is $\{1\}$ and its fixed point $\rho$
+is unique up to scale. Since $\E_A$ is trace preserving, $1$ is a
+semisimple eigenvalue, and all other eigenvalues have modulus less than
+$1$. A periodic tensor is not normal, because no blocking of it is
+injective.
 
 \begin{definition}[Fixed-point tensor and pair state]
     \label{def:ldp_fixed_point_pair}
@@ -233,10 +242,13 @@ so that $\E_A^{\,n}(X)\to\Tr(X)\,\rho$ as $n\to\infty$
 \begin{lemma}[A unitary implementing the isometry]
     \label{lem:ldp_unitary_implementing_isometry}
     \uses{lem:ldp_polar_blocked_map, lem:isometry_unitary_completion}
-    Suppose $\mathcal B_q$ is injective and
-    $(\C^d)^{\otimes q}=L\otimes C\otimes R$ with $L\cong R\cong\C^D$ and a unit
-    vector $\ket{0}_C\in C$. Then there is a unitary $U$ on
-    $(\C^d)^{\otimes q}$ with
+    Let $d\ge2$, put $r=\lceil\log_dD\rceil$, and suppose $q\ge2r$ and
+    $\mathcal B_q$ is injective. Write
+    $(\C^d)^{\otimes q}=L\otimes C\otimes R$, where $L$ and $R$ are the first
+    and the last $r$ sites of the block and $C$ is the remaining $q-2r$ sites,
+    embed $\C^D$ into $L$ and into $R$ as the span of the first $D$
+    computational basis vectors, and let $\ket{0}_C=\ket{0}^{\otimes(q-2r)}$.
+    Then there is a unitary $U$ on $(\C^d)^{\otimes q}$ with
     $U\bigl(\ket{\gamma}_L\ket{0}_C\ket{\delta}_R\bigr)=V\ket{\gamma,\delta}$
     for all $\gamma,\delta$, and
     \begin{align}
@@ -247,6 +259,9 @@ so that $\E_A^{\,n}(X)\to\Tr(X)\,\rho$ as $n\to\infty$
     \end{align}
     This is \cite[eqs.~(10) and~(11)]{Malz2024Preparation}.
 \end{lemma}
+%% The source draws the circuit with D = d, where L and R are
+%% single sites. For general D the legs are padded to r = ceil(log_d D)
+%% sites each; the pair state then acts on 2r neighbouring sites.
 
 \section{Exact factorizations of the isometry}
 
@@ -307,7 +322,8 @@ so that $\E_A^{\,n}(X)\to\Tr(X)\,\rho$ as $n\to\infty$
 
 The correlation length of a normal tensor is $\xi=-1/\ln\lvert\lambda_2\rvert$,
 where $\lambda_2$ is an eigenvalue of $\E_A$ of largest modulus other than
-the Perron eigenvalue $1$.
+the Perron eigenvalue $1$. By the remark after (\ref{eq:ldp_normal_gauge}),
+$\lvert\lambda_2\rvert<1$, so $\xi$ is finite.
 
 \begin{lemma}[Overlap of the positive part with the fixed point]
     \label{lem:ldp_positive_part_overlap}
@@ -334,13 +350,16 @@ the Perron eigenvalue $1$.
          & =O\!\left(\frac Nq\,e^{-\gamma q/\xi}\right).
         \label{eq:ldp_approximation_error_normal}
     \end{align}
-    In particular $q=\lceil2\xi(1+\eta)\ln N\rceil$ gives
+    In particular $q=\lceil\xi(1+\eta)\ln N/\gamma\rceil$ gives
+    $e^{-\gamma q/\xi}\le N^{-(1+\eta)}$ and hence
     $\varepsilon=O(N^{-\eta})$ for every $\eta>0$. This is
     \cite[Lemma~1 and Lemma~1$'$(i)]{Malz2024Preparation}.
 \end{theorem}
 %% The source states Lemma 1'(i) without q = o(N); its proof uses q = o(N) to
 %% absorb the O(exp(-N/xi)) normalization term. The statement above carries
-%% the hypothesis the proof uses.
+%% the hypothesis the proof uses. The block length is scaled by 1/gamma
+%% because the estimate is only available for gamma < 1/2, so the endpoint
+%% choice q = 2 xi (1 + eta) ln N does not follow from it.
 
 \section{Depth of the preparation}
 
@@ -358,14 +377,16 @@ the Perron eigenvalue $1$.
         thm:ldp_sequential_factorization, thm:ldp_tree_factorization,
         thm:ldp_approximation_error_normal}
     Let $A$ be normal. There is a constant $c$ depending only on $A$ such that,
-    for every $N$ and $\varepsilon>0$, a state $\ket{\psi_N}$ with
+    for every $N\ge2$ and $0<\varepsilon\le1$, a state $\ket{\psi_N}$ with
     $\varepsilon(\psi_N,\phi_N)\le\varepsilon$ is prepared in depth at most
     $c\log(N/\varepsilon)$. This is \cite[eq.~(1)]{Malz2024Preparation}.
 \end{theorem}
 %% The source illustrates the circuit with D = d. For general D the legs L_k,
-%% R_k are realized on groups of ceil(log_d D) sites; the depth estimate is
+%% R_k are realized on groups of ceil(log_d D) sites as in
+%% Lemma lem:ldp_unitary_implementing_isometry; the depth estimate is
 %% unchanged up to constants. The pair layer has constant depth, and the
-%% sequential factorization with SWAP gates has depth O(q).
+%% sequential factorization with SWAP gates has depth O(q). The range
+%% 0 < eps <= 1, N >= 2 keeps log(N/eps) positive.
 
 \begin{lemma}[Exponentially decaying correlations]
     \label{lem:ldp_decaying_correlations}
@@ -378,16 +399,18 @@ the Perron eigenvalue $1$.
         \bra{\phi_N}\mathcal O_1\ket{\phi_N}
          & =\bra{\phi_N}\mathcal O'_s\ket{\phi_N}=0,
          &
-        \bra{\phi_N}\mathcal O_1\mathcal O'_s\ket{\phi_N}
+        \bigl\lvert\bra{\phi_N}\mathcal O_1\mathcal O'_s\ket{\phi_N}\bigr\rvert
          & \ge c\,e^{-(s-1)/\xi}.
         \label{eq:ldp_decaying_correlations}
     \end{align}
     This is \cite[Lemma~2]{Malz2024Preparation}.
 \end{lemma}
-%% To check against the source proof: the connected correlation is
-%% approximately lambda_2^(s-1) c', which is real and positive only when the
-%% phase of lambda_2^(s-1) is; the displayed lower bound needs either a real
-%% positive lambda_2 or absolute values.
+%% The bound is stated for the modulus: the connected correlation is
+%% approximately lambda_2^(s-1) c', which is complex in general. To check
+%% against the source proof: when several eigenvalues share the modulus
+%% |lambda_2| their contributions can cancel at individual s, and the lower
+%% bound then holds only along a subsequence of s, which suffices for
+%% Theorem thm:ldp_depth_lower_bound.
 
 \begin{theorem}[No preparation in depth $o(\log N)$]
     \label{thm:ldp_depth_lower_bound}
@@ -407,11 +430,14 @@ the Perron eigenvalue $1$.
 
 \begin{definition}[Fixed point of a basis of normal tensors]
     \label{def:ldp_non_normal_fixed_point}
-    \uses{def:bnt, def:ldp_fixed_point_pair}
+    \uses{def:bnt, def:ldp_fixed_point_pair, lem:ldp_polar_blocked_map}
     Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
-        \otimes A_j^i$ with normal $A_j$ forming a basis of normal tensors, and put
-    $\beta_j=\sum_{k=1}^{m_j}\mu_{j,k}^N$. With $\ket{\omega_j}$ the pair state of
-    $A_j$ and
+        \otimes A_j^i$ with normal $A_j$, each in the gauge
+    (\ref{eq:ldp_normal_gauge}), forming a basis of normal tensors, and put
+    $\beta_j=\sum_{k=1}^{m_j}\mu_{j,k}^N$. Consider only lengths $N=qM$ with
+    $(\beta_1,\dots,\beta_b)\neq0$; for the other lengths
+    $\ket{\phi_N(A)}=\sum_j\beta_j\ket{\phi_N(A_j)}=0$ and there is nothing to
+    prepare. With $\ket{\omega_j}$ the pair state of $A_j$ and
     $\alpha^{(N)}_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$, the
     \emph{fixed-point state} is
     \begin{align}
@@ -419,6 +445,11 @@ the Perron eigenvalue $1$.
          & =\sum_{j=1}^b\alpha^{(N)}_j\bigotimes_{k=1}^{M}\ket{\omega_j}_{R_kL_{k+1}}.
         \label{eq:ldp_non_normal_fixed_point}
     \end{align}
+    With $V$ from Lemma~\ref{lem:ldp_polar_blocked_map} for the blocked map of
+    $A$, the \emph{approximating state} is
+    $\ket{\widetilde\phi_N}=V^{\otimes M}\ket{\Omega'}/
+        \lVert V^{\otimes M}\ket{\Omega'}\rVert$, whenever the denominator is
+    nonzero.
     This is \cite[eqs.~(19) and~(S7)]{Malz2024Preparation}, with the
     canonical form of \cite{Cirac2017MPDO_AnnPhys}.
 \end{definition}
@@ -436,8 +467,9 @@ the Perron eigenvalue $1$.
 
 \begin{theorem}[Approximation error, general case]
     \label{thm:ldp_approximation_error_general}
-    \uses{def:ldp_non_normal_fixed_point, lem:ldp_positive_part_overlap}
+    \uses{def:ldp_non_normal_fixed_point}
     With the notation of Definition~\ref{def:ldp_non_normal_fixed_point},
+    including the approximating state $\widetilde\phi_N$ defined there,
     $\xi_{\mathrm{diag}}=\max_j\xi_{jj}$ the largest correlation length of the
     $A_j$, $0<\gamma<1/2$, and $q=o(N)$,
     \begin{align}
@@ -447,3 +479,6 @@ the Perron eigenvalue $1$.
     \end{align}
     This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation}.
 \end{theorem}
+%% The direct sum A is not normal, so Lemma lem:ldp_positive_part_overlap
+%% does not apply to it. The mixed-block overlap estimate is the content of
+%% Lemma 1'(ii) of the source and is cited, not derived, here.
