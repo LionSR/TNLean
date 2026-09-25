@@ -40,7 +40,7 @@ of the source, `Q_p` is the isometry `V_{q-p}` of eq. (14) and `b_p = D'_{q+1-p}
   between them.
 -/
 
-open scoped BigOperators Matrix Kronecker
+open scoped BigOperators Matrix Kronecker ComplexOrder
 
 namespace MPSPreparation
 
@@ -57,7 +57,7 @@ noncomputable def pairEmbed (D : ℕ) :
     Matrix (Fin D) (Fin D) ℂ →* Matrix (Fin (D * D)) (Fin (D * D)) ℂ where
   toFun X := ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ X).submatrix (virtualPairEquiv D)
     (virtualPairEquiv D)
-  map_one' := by simp [Matrix.one_kronecker_one, Matrix.submatrix_one_equiv]
+  map_one' := by simp [Matrix.submatrix_one_equiv]
   map_mul' X Y := by
     rw [Matrix.submatrix_mul_equiv, ← Matrix.mul_kronecker_mul, Matrix.one_mul]
 
@@ -82,14 +82,10 @@ theorem sum_pairJoin_mul_pairEmbed (X : Matrix (Fin D) (Fin D) ℂ) (b : Fin (D 
     ∑ a, pairJoin D a * pairEmbed D X a b =
       X (virtualPairEquiv D b).1 (virtualPairEquiv D b).2 := by
   classical
-  let e := virtualPairEquiv D
-  have h : ∀ a, pairJoin D a * pairEmbed D X a b =
-      (fun p : Fin D × Fin D => (if p.1 = p.2 then (1 : ℂ) else 0) *
-        ((1 : Matrix (Fin D) (Fin D) ℂ) p.1 (e b).1 * X p.2 (e b).2)) (e a) := fun a => by
-    simp only [pairJoin, pairEmbed, MonoidHom.coe_mk, OneHom.coe_mk, Matrix.submatrix_apply]
-    rw [← Prod.mk.eta (p := e a), ← Prod.mk.eta (p := e b), Matrix.kronecker_apply]
-  rw [Finset.sum_congr rfl fun a _ => h a, e.sum_comp, Fintype.sum_prod_type]
-  simp [Matrix.one_apply, ite_mul, Finset.sum_ite_eq, Finset.sum_ite_eq']
+  obtain ⟨⟨β₁, β₂⟩, rfl⟩ := (virtualPairEquiv D).symm.surjective b
+  rw [← (virtualPairEquiv D).symm.sum_comp, Fintype.sum_prod_type]
+  simp [pairJoin, pairEmbed, Matrix.one_apply, ite_mul,
+    Finset.sum_ite_eq, Finset.sum_ite_eq']
 
 /-- Two vectors supported on the first coordinate pair through that coordinate. -/
 private theorem star_dotProduct_of_isSupportedBelow_one {D' : ℕ} (hD : 0 < D')
@@ -139,10 +135,16 @@ theorem exists_isometric_chain_of_eq_mul (A : Fin d → Matrix (Fin D) (Fin D) �
       (isRowSupportedBelow_rowMat _) fun _ i => pairEmbed D (A i)
   set C := R * G with hCdef
   have hC : IsRowSupportedBelow (b (Fin.last (n + 1))) C := hR.mul G
+  have hjoin : ∀ (σ : Fin (n + 1) → Fin d) a,
+      (rowMat (pairJoin D) * eval (fun _ i => pairEmbed D (A i)) σ) ⟨0, hDD⟩ a =
+      Kraus.evalWord A (List.ofFn σ) (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 :=
+    fun σ a => by
+      rw [eval_pairEmbed, Matrix.mul_apply]
+      exact (Finset.sum_congr rfl fun j _ => by simp [rowMat]).trans
+        (sum_pairJoin_mul_pairEmbed _ a)
   have hVC : ∀ σ x, V σ x = (eval Q σ * C) ⟨0, hDD⟩ x := fun σ x => by
-    rw [hCdef, ← Matrix.mul_assoc, ← hprod σ, eval_pairEmbed, hV σ x, Matrix.mul_apply]
-    refine Finset.sum_congr rfl fun a _ => ?_
-    simp [Matrix.mul_apply, rowMat, sum_pairJoin_mul_pairEmbed]
+    rw [hCdef, ← Matrix.mul_assoc, ← hprod σ, hV σ x, Matrix.mul_apply]
+    exact Finset.sum_congr rfl fun a _ => by rw [hjoin]
   -- The columns of the remainder are orthonormal because `V` is an isometry (eq. (15)).
   let col : Fin (D * D) → Fin (D * D) → ℂ := fun x β => C β x
   have hcol_supp : ∀ x, IsSupportedBelow (b (Fin.last (n + 1))) (col x) :=
@@ -180,7 +182,7 @@ theorem exists_isometric_chain_of_eq_mul (A : Fin d → Matrix (Fin D) (Fin D) �
       simp only [b', Fin.succ_last, ite_true] at hβ
       exact absurd β.isLt (not_lt.mpr hβ)
     · rw [hsc p hp] at hβ
-      simp only [Q', if_neg hp]
+      simp only [Q', hp, ite_false]
       exact hcol p i α β hβ
   · by_cases hp : p = Fin.last n
     · subst hp
@@ -231,11 +233,13 @@ theorem exists_isometric_chain_polarIsoMatrix (A : MPSTensor d D) {q : ℕ} (hq 
   set M := MPSTensor.physicalMatrix B
   let e := virtualPairEquiv D
   have hinj := MPSTensor.injective_physicalMatrix_mulVec_of_isInjective hB
-  have hP : IsUnit (Matrix.polarPos M) :=
-    (Matrix.posDef_polarPos_of_injective M hinj).isUnit
+  have hdet : IsUnit (Matrix.polarPos M).det :=
+    (Matrix.isUnit_iff_isUnit_det _).mp (Matrix.posDef_polarPos_of_injective M hinj).isUnit
   have hVM : Matrix.polarIso M = M * (Matrix.polarPos M)⁻¹ := by
-    rw [← Matrix.polarIso_mul_polarPos M, Matrix.mul_assoc, Matrix.mul_nonsing_inv _
-      ((Matrix.isUnit_iff_isUnit_det _).mp hP), Matrix.mul_one]
+    calc Matrix.polarIso M
+        = Matrix.polarIso M * Matrix.polarPos M * (Matrix.polarPos M)⁻¹ := by
+          rw [Matrix.mul_assoc, Matrix.mul_nonsing_inv _ hdet, Matrix.mul_one]
+      _ = M * (Matrix.polarPos M)⁻¹ := by rw [Matrix.polarIso_mul_polarPos]
   let V : (Fin (n + 1) → Fin d) → Fin (D * D) → ℂ := fun σ x =>
     MPSTensor.polarIsoMatrix B ((decodeBlockEquiv d (n + 1)).symm σ) x
   have hBσ : ∀ σ, B ((decodeBlockEquiv d (n + 1)).symm σ) =
@@ -244,9 +248,8 @@ theorem exists_isometric_chain_polarIsoMatrix (A : MPSTensor d D) {q : ℕ} (hq 
       Kraus.decodeBlock_decodeBlockEquiv_symm]
   have hV : ∀ σ x, V σ x = ∑ a, Kraus.evalWord A (List.ofFn σ) (e a).1 (e a).2 *
       ((Matrix.polarPos M)⁻¹.submatrix e e) a x := fun σ x => by
-    simp only [V, MPSTensor.polarIsoMatrix, Matrix.submatrix_apply, id, hVM,
-      Matrix.mul_apply]
-    rw [← e.sum_comp]
+    change (Matrix.polarIso M) _ (e x) = _
+    rw [hVM, Matrix.mul_apply, ← e.sum_comp]
     refine Finset.sum_congr rfl fun a _ => ?_
     simp [M, MPSTensor.physicalMatrix, hBσ, e]
   have hiso : ∀ x y, ∑ σ, star (V σ x) * V σ y = if x = y then 1 else 0 := fun x y => by
