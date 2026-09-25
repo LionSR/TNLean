@@ -320,7 +320,8 @@ private theorem mulTensor_uTensor_uDagTensor :
   funext₂ fun i j ↦ mulTensor_complexOfEisenstein uEis uDagEis i j
 
 private theorem tripleUUU_eq (a : Fin 9) :
-    (family.tripleTensor z3Gen z3Gen z3Gen).toMPSTensor a = complexOfEisenstein (tripleUUUEis a) := by
+    (family.tripleTensor z3Gen z3Gen z3Gen).toMPSTensor a =
+      complexOfEisenstein (tripleUUUEis a) := by
   change (mulTensor (mulTensor uTensor uTensor) uTensor).toMPSTensor a = _
   rw [mulTensor_uTensor_uTensor]
   exact mulTensor_complexOfEisenstein _ uEis _ _
