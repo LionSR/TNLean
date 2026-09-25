@@ -9,6 +9,14 @@ import TNLean.MPS.MPDO.OperatorFromWordTrace
 /-!
 # The anomalous `ℤ/3` matrix product operator symmetry
 
+**Source.** Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.D,
+`Papers/2405.00439/MPU-DW.tex` lines 2038–2068: the three-cocycles
+`ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` label the classes of matrix product unitary
+representations of `ℤ_n` (line 2040), with the `n = 3` interchange table (lines 2046–2054).
+The paper prints no `ℤ₃` tensor. The tensors below are representatives constructed in this
+development of the class `j = 1` of that formula; the group family and its operator laws are in
+`Z3AnomalousRepresentation`.
+
 This file sets up the tensors of the anomalous `ℤ/3` example of the multi-block asymmetric
 compression theorem (P5 note, `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`,
 §7.5, Theorem 7.7; planning note `Notes/OpenProblemsTN/checks/p5_examples_plan_2026-09-17.md`).
@@ -53,11 +61,22 @@ verifications are decided over that ring. An Eisenstein integer is written in th
 
 ## Main results
 
+* `Z3Anomalous.uMPS_isNBlkInjective_two`, `Z3Anomalous.uDagMPS_isNBlkInjective_two`,
+  `Z3Anomalous.identityMPS_isNBlkInjective_one`: the three blocks are injective after blocking
+  two, two and one sites.
 * `Z3Anomalous.uMPS_isNormal`, `Z3Anomalous.uDagMPS_isNormal`,
-  `Z3Anomalous.identityMPS_isNormal`: the three blocks are normal, at word lengths two, two and
-  one.
+  `Z3Anomalous.identityMPS_isNormal`: hence they are normal.
 * `Z3Anomalous.mpo_identityTensor`: the periodic operator of the identity tensor is the
   identity operator at every length.
+
+## References
+- [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
+  *Fractional domain wall statistics in spin chains with anomalous symmetries*
+
+## Provenance
+The tensors and the exact-arithmetic certificates were first recorded in
+`Notes/OpenProblemsTN/checks/asym_z3_anomalous_data.md`, §1–§2; they are verification records,
+not the source.
 -/
 
 noncomputable section
@@ -198,22 +217,32 @@ private theorem identityUnit_single (i j : Fin 1) :
   revert i j
   decide +kernel
 
-/-- **The symmetry `U` is normal.** Its length-two words span the full two-by-two matrix
-algebra (data file §2.0). -/
-theorem uMPS_isNormal : Kraus.IsNormal uMPS :=
-  isNormal_of_scaled_single uEisMPS uMPS_eq two_pos (fun _ _ => uUnitWord) uUnitCoeff
+/-- **The symmetry `U` is injective after blocking two sites.** Its length-two words span the
+full two-by-two matrix algebra (data file §2.0). -/
+theorem uMPS_isNBlkInjective_two : Kraus.IsNBlkInjective uMPS 2 :=
+  isNBlkInjective_of_scaled_single uEisMPS uMPS_eq (fun _ _ => uUnitWord) uUnitCoeff
     omega_sub_one_ne_zero uUnit_single
 
-/-- **The inverse symmetry `U†` is normal.** Its length-two words span the full two-by-two
-matrix algebra (data file §2.0). -/
-theorem uDagMPS_isNormal : Kraus.IsNormal uDagMPS :=
-  isNormal_of_scaled_single uDagEisMPS uDagMPS_eq two_pos (fun _ _ => uDagUnitWord)
+/-- **The inverse symmetry `U†` is injective after blocking two sites.** Its length-two words
+span the full two-by-two matrix algebra (data file §2.0). -/
+theorem uDagMPS_isNBlkInjective_two : Kraus.IsNBlkInjective uDagMPS 2 :=
+  isNBlkInjective_of_scaled_single uDagEisMPS uDagMPS_eq (fun _ _ => uDagUnitWord)
     uDagUnitCoeff omega_sub_one_ne_zero uDagUnit_single
+
+/-- **The identity tensor is injective** at word length one. -/
+theorem identityMPS_isNBlkInjective_one : Kraus.IsNBlkInjective identityMPS 1 :=
+  isNBlkInjective_of_scaled_single identityEisMPS identityMPS_eq (fun _ _ => ![![0]])
+    (fun _ _ _ => 1) (by decide) identityUnit_single
+
+/-- **The symmetry `U` is normal**, at word length two. -/
+theorem uMPS_isNormal : Kraus.IsNormal uMPS := ⟨2, two_pos, uMPS_isNBlkInjective_two⟩
+
+/-- **The inverse symmetry `U†` is normal**, at word length two. -/
+theorem uDagMPS_isNormal : Kraus.IsNormal uDagMPS := ⟨2, two_pos, uDagMPS_isNBlkInjective_two⟩
 
 /-- **The identity tensor is normal** at word length one. -/
 theorem identityMPS_isNormal : Kraus.IsNormal identityMPS :=
-  isNormal_of_scaled_single identityEisMPS identityMPS_eq one_pos (fun _ _ => ![![0]])
-    (fun _ _ _ => 1) (by decide) identityUnit_single
+  ⟨1, one_pos, identityMPS_isNBlkInjective_one⟩
 
 /-! ### The stacked product tensors -/
 

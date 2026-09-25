@@ -350,10 +350,9 @@ theorem physTraceTransfer_M :
 representative has scale $\lambda=2$:
 $(I+\sigma_z)^2=2(I+\sigma_z)$.
 
-**Local fix (normalization):** Definition 4.2 of the source requires literal
-idempotence, whereas the tensor printed in Example 4.12 satisfies only this
-scale-two relation. See
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+Definition 4.2 of the source requires literal idempotence, whereas the tensor
+printed in Example 4.12 satisfies only this scale-two relation; this is the
+module's normalization Local fix.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem physTraceTransfer_M_sq :
@@ -367,11 +366,10 @@ theorem physTraceTransfer_M_sq :
 /-- The literal tensor satisfies the project's scale-invariant `IsSourceZCL`
 relation with the explicit positive scale $\lambda=2$.
 
-**Local fix (normalization):** `IsSourceZCL` allows a positive scale and is
-therefore broader than the literal idempotence in CPSV16 Definition 4.2. This
-theorem records the corrected scale-two relation for the printed tensor, not
-the paper's literal ZCL assertion. See
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+`IsSourceZCL` allows a positive scale and is therefore broader than the literal
+idempotence in CPSV16 Definition 4.2. This theorem records the corrected
+scale-two relation for the printed tensor, not the paper's literal ZCL
+assertion (the module's normalization Local fix).
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem M_isSourceZCL : IsSourceZCL M := by
@@ -383,10 +381,7 @@ theorem M_isSourceZCL : IsSourceZCL M := by
 
 /-- The transfer of the literal printed tensor is not idempotent.  This is the
 normalization mismatch hidden by the source's statement that the same printed
-representative is an RFP.
-
-**Local fix (normalization):** see
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+representative is an RFP (the module's normalization Local fix).
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 937--938. -/
 theorem physTraceTransfer_M_not_idempotent :
@@ -398,10 +393,8 @@ theorem physTraceTransfer_M_not_idempotent :
 
 /-- The literal printed representative cannot satisfy Definition 4.1 with
 trace-preserving physical maps, since that condition forces literal transfer
-idempotence.
-
-**Local fix (normalization):** the likely $(1/2)\,M$ representative is separate;
-see <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+idempotence. The normalized representative $\tfrac12 M$ is treated in
+`TNLean.MPS.MPDO.CPSVExample412NormalizedRFP`.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 937--938. -/
 theorem M_not_isRFPViaTS : ¬ IsRFPViaTS M := by

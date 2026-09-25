@@ -28,6 +28,9 @@ quotient, which is either a zero module or, by the identification theorem, one o
 * `MPSTensor.finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero`: a family of normal blocks
   whose word traces sum to zero is empty.
 * `MPSTensor.exists_flagData`: the flag theorem.
+* `MPSTensor.isEmpty_linearEquiv_wordModule_of_mpv_ne`,
+  `MPSTensor.pairwise_isEmpty_linearEquiv_of_linearIndependent`: distinct, or linearly
+  independent, periodic vectors give non-isomorphic word modules.
 -/
 
 universe u
@@ -247,5 +250,33 @@ theorem exists_flagData {S : Finset ι} {D : ι → ℕ} (C : ∀ s, MPSTensor d
       rw [← htr w hw, hadd w, hQw w hw, add_zero]
     obtain ⟨F⟩ := ih _ hlt K S rfl hC hD htrK
     exact ⟨F.extendZero K hfin hQ⟩
+
+section WordModuleIso
+
+/-- Tensors with different periodic vectors at some length have non-isomorphic word modules:
+isomorphic word modules have the same word traces. -/
+theorem isEmpty_linearEquiv_wordModule_of_mpv_ne {D D' L : ℕ} (A : MPSTensor d D)
+    (A' : MPSTensor d D') (σ : Fin L → Fin d) (h : mpv A σ ≠ mpv A' σ) :
+    IsEmpty (A.WordModule ≃ₗ[WordAlgebra d] A'.WordModule) := by
+  refine ⟨fun e => h ?_⟩
+  have := traceWord_congr e (List.ofFn σ)
+  rw [traceWord_wordModule, traceWord_wordModule] at this
+  simpa only [mpv, coeff] using this
+
+/-- Tensors with linearly independent periodic vectors at one length have pairwise
+non-isomorphic word modules, the hypothesis of the multi-block integrality theorem
+`MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul`. -/
+theorem pairwise_isEmpty_linearEquiv_of_linearIndependent {κ : Type*} {D : κ → ℕ}
+    (A : ∀ x, MPSTensor d (D x)) {L₀ : ℕ}
+    (hli : LinearIndependent ℂ fun x => fun σ : Fin L₀ → Fin d => mpv (A x) σ) :
+    Pairwise fun y y' =>
+      IsEmpty ((A y).WordModule ≃ₗ[WordAlgebra d] (A y').WordModule) := by
+  intro y y' hyy'
+  have hv : (fun σ : Fin L₀ → Fin d => mpv (A y) σ) ≠ fun σ => mpv (A y') σ :=
+    fun heq => hyy' (hli.injective heq)
+  obtain ⟨σ, hσ⟩ := Function.ne_iff.1 hv
+  exact isEmpty_linearEquiv_wordModule_of_mpv_ne (A y) (A y') σ hσ
+
+end WordModuleIso
 
 end MPSTensor
