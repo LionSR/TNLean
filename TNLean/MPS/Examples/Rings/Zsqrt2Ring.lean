@@ -8,17 +8,19 @@ import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
 
 /-!
-# Matrices over `ℤ[√2]` and their complex images
+# Exact arithmetic for the Ising twist: matrices over `ℤ[√2]` and their complex images
 
-The topological-symmetry tensors of the Ising anyon chain have entries in the quadratic ring
-`ℤ[√2]`: the quantum dimension of the Ising anyon is `√2`, and after a global rescaling every
-entry of the `σ` strand lies in `{0, ±1, ±√2}`. Mathlib models that ring as `ℤ√2`, with
-decidable equality, so an identity between explicit matrices over `ℤ√2` is decided exactly as an
-identity between integer matrices is.
+**Source.** Construction of this development. The ring is dictated by the Ising data of
+Bultinck, Mariën, Williamson, Sahinoglu, Haegeman and Verstraete 2017 (arXiv:1511.08090),
+Appendix D.2.1, `References/1511.08090/AnyonsPEPS.tex` lines 1312–1323: the quantum dimension
+`d_σ = √2` and the F-symbols `±1/√2`, `-1` and `1`. After a global rescaling every entry of the
+`σ` strand of the Ising topological-symmetry tensors lies in `{0, ±1, ±√2}`.
 
-This file records the embedding `ℤ√2 → ℂ` sending `√2` to the positive real square root of two,
-the entrywise image of a matrix along it, the compatibility of that image with products and
-matrix units, its bond-space product and action, and the normality criterion of
+**Formalized here.** Mathlib models the quadratic ring as `ℤ√2`, with decidable equality, so an
+identity between explicit matrices over `ℤ√2` is decided exactly as an identity between integer
+matrices is. This file records the embedding `ℤ√2 → ℂ` sending `√2` to the positive real square
+root of two, the entrywise image of a matrix along it, the compatibility of that image with
+products and matrix units, its bond-space product and action, and the normality criterion of
 `P6Compression.isNormal_of_single_eq_smul` transported to this ring. The compatibilities are the
 instances at this embedding of the general statements of `TNLean.Algebra.ComplexOfRing` and of
 `Examples/RingEmbedding.lean`. The two-object Ising example
@@ -37,6 +39,12 @@ instances at this embedding of the general statements of `TNLean.Algebra.Complex
 * `MPSTensor.complexOfZsqrt2_mul`: the entrywise image is multiplicative.
 * `MPSTensor.isNormal_of_single_eq_smul_zsqrt2`: a tensor over `ℤ√2` whose letters realise
   every matrix unit up to a nonzero factor is normal at blocking length one.
+
+## References
+
+- [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  operator algebras*
 -/
 
 open scoped Matrix Kronecker

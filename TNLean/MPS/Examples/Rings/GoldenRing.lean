@@ -10,15 +10,22 @@ import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
 import TNLean.MPS.MPDO.OperatorProduct
 
 /-!
-# The ring of golden integers
+# Golden integers: the ring `ℤ[σ]` with `σ = φ^{-1/2}`
 
-The tensors of the Fibonacci string-net matrix product operator algebra have entries in the
-degree-four field `ℚ(σ)`, where `σ = φ^{-1/2}` is the inverse square root of the golden ratio and
-satisfies the quartic relation `σ⁴ + σ² - 1 = 0`. The entries are in fact all integral: every one
-of them is a `ℤ`-linear combination of `1, σ, σ², σ³`, because the golden ratio is a unit of that
-ring, `φ = 1 + σ²` and `φ⁻¹ = σ²`.
+**Source.** Construction of this development. The ring is chosen to hold the Fibonacci data of
+Bultinck et al. (arXiv:1511.08090), Appendix D.1.1, `References/1511.08090/AnyonsPEPS.tex`
+lines 1244–1260: quantum dimension `d_τ = φ = (1 + √5)/2`, F-symbols
+`F^{τττ}_{τ11} = 1/φ`, `F^{τττ}_{ττ1} = F^{τττ}_{τ1τ} = 1/√φ`, `F^{τττ}_{τττ} = -1/φ`, and
+`G`-symbols `G^{abc}_{def} = F^{abc}_{def}/(v_e v_f)` with `v_i = √d_i`. The same F-matrix
+appears in Feiguin et al. (arXiv:cond-mat/0612341),
+`References/cond-mat_0612341/source/fibonacci.tex` lines 163–167.
+Review: arXiv:2011.12127, Appendix A, "The MPO for the Fibonacci model"
+(`Papers/2011.12127/TN-Review-main.tex` lines 2613–2625).
 
-This file builds the exact arithmetic of that ring in two layers.
+**Formalized here.** Every such entry lies in the degree-four field `ℚ(σ)`, where `σ = φ^{-1/2}`
+satisfies `σ⁴ + σ² - 1 = 0`, and is in fact a `ℤ`-linear combination of `1, σ, σ², σ³`, because
+the golden ratio is a unit of that ring, `φ = 1 + σ²` and `φ⁻¹ = σ²`. The file builds the exact
+arithmetic of that ring in two layers.
 
 The computational layer is `GoldenInt`, the ring `ℤ[σ]` presented by the four integer
 coordinates of an element in the basis `1, σ, σ², σ³`, with the multiplication obtained by
@@ -57,6 +64,18 @@ decision over `ℤ[σ]` transport to the complex matrices.
   multiplicative and unital.
 * `MPSTensor.mulTensor_complexOfGolden`, `MPSTensor.evalWord_complexOfGolden`: the bond-space
   product and word evaluation commute with the embedding.
+
+## References
+
+- [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  operator algebras*
+- [arXiv:cond-mat/0612341](https://arxiv.org/abs/cond-mat/0612341) -- A. Feiguin, S. Trebst,
+  A. W. W. Ludwig, M. Troyer, A. Kitaev, Z. Wang, M. H. Freedman, *Interacting anyons in
+  topological quantum liquids: The golden chain*
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped Matrix Kronecker

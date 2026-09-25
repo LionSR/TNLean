@@ -767,3 +767,28 @@ The following notions use different transfer objects and are not interchangeable
   concrete locally orthogonal MPS blocks. That missing specialization and the
   CZX four-domain instance are recorded in
   `docs/paper-gaps/fbc25_state_level_gauging_covariance.tex`.
+
+## Gauge relations between blocks
+
+### `MPSTensor.IsGaugeRelated`
+
+- **Declaration:**
+  `MPSTensor.IsGaugeRelated (A : MPSTensor d D₁) (A' : MPSTensor d D₂) : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean`.
+- **Meaning:** there are rectangular matrices `X : Fin D₁ × Fin D₂` and
+  `Y : Fin D₂ × Fin D₁` with `X * Y = 1`, `Y * X = 1`, and
+  `A i * X = X * A' i` for every letter, so that $A'^i = X^{-1}A^iX$. The bond
+  dimensions may differ in the statement; the two-sided inverse forces
+  `D₁ = D₂`.
+- **Source:** the blocks $B_c$ of a fusion algebra are pairwise distinct blocks
+  of a canonical form, arXiv:1511.08090, `AnyonsPEPS.tex` lines 155--166 and
+  191--193; arXiv:2203.12563, lines 415--424. Blocks that are not gauge related
+  are the hypothesis under which the zipper fusion and action tensors are unique
+  up to the multiplicity gauge.
+- **Sanctioned bridges:** `MPSTensor.eq_zero_or_isGaugeRelated_of_intertwines`
+  shows that a letter intertwiner between normal tensors is zero or witnesses
+  the predicate.
+- **Caveat:** for equal bond dimensions this is `MPSTensor.GaugeEquiv A A'`
+  with the gauge `X⁻¹`; no bridge to `GaugeEquiv` is stated, because the
+  predicate is only used to separate blocks of possibly different bond
+  dimensions.
