@@ -17,7 +17,7 @@ admissibility deltas `δ_{abe} δ_{cde} δ_{adf} δ_{bcf}` and the nontrivial bl
 `[F^{τττ}_τ] = [[1/φ, 1/√φ], [1/√φ, -1/φ]]`, the G-symbols `G^{abc}_{def} = F^{abc}_{def}/(v_e v_f)`
 with `v_i = √d_i`, a projector matrix product operator of bond dimension `5` made of two blocks
 `B_1`, `B_τ` of dimensions `2` and `3` obeying the Fibonacci fusion rules, and the weights
-`w_1 = 1/(1 + φ²)`, `w_τ = φ/(1 + φ²)` of the projector `P_L = ∑_a w_a O_a^L` of Section 3.1
+`w_1 = 1/(1 + φ²)`, `w_τ = φ/(1 + φ²)` of the projector `P_L = ∑_a w_a O_a^L` of Section 3.2
 (`AnyonsPEPS.tex` lines 143–160).
 Review: arXiv:2011.12127, Appendix A, "The MPO for the Fibonacci model"
 (`Papers/2011.12127/TN-Review-main.tex` lines 2613–2625), which prints the same fusion rules and
@@ -34,9 +34,11 @@ arithmetic over the golden integers `ℤ[σ]`, `σ = φ^{-1/2}`, together with t
 numeric entries of `B_1`, `B_τ`; the blocks used here place the bare F-symbol
 `[F^{τ x τ}_{x'_{j+1}}]_{x'_j}^{x_{j+1}}` at the physical letter `(x', x)` and the bond letters
 `(x'_j, x_j)`, `(x'_{j+1}, x_{j+1})`, without the source's closed-loop factors `v_a` and without
-the review's prefactor `1/√(d_A d_D)`; it is for these entries that `O_τ² = O_1 + O_τ` holds, and
-no operator statement is made for a rescaled tensor. Documented in
-`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
+the review's prefactor `1/√(d_A d_D)`; it is for these entries that `O_τ² = O_1 + O_τ` holds.
+The blocks are not identified with the source's diagram tensor, and no operator statement is made
+for a rescaled tensor. The idempotence `P_L² = P_L`, which the source asks for all `L`, is proved
+for `L > 0` only (`fibProjector_mul_self`): the empty chain gives `P_0 = (2 + 3φ)/(1 + φ²) ≠ 1`.
+Documented in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
 ## Main definitions
 
@@ -58,7 +60,7 @@ no operator statement is made for a rescaled tensor. Documented in
 * `FibonacciCompression.mpo_fibPMPO`: without `Δ`, the operator of the bond-five tensor is
   `O_1 + O_τ`.
 * `FibonacciCompression.fibProjector_eq_trace_fibDelta`: the `Δ`-weighted operator of the
-  bond-five tensor is `P_L`.
+  locally chosen bond-five tensor is `P_L`.
 * `FibonacciCompression.fibProjector_mul_self`: `P_L` is idempotent at every positive length.
 
 ## References
@@ -210,8 +212,9 @@ entries of the Local fix (provenance) of the module header. -/
 def fibPMPO : MPOTensor 2 (2 + 3) := directSum fibOne fibTau
 
 /-- Bridge: the periodic operator of the bond-five tensor without the boundary matrix `Δ` is the
-sum `O_1^L + O_τ^L` of the operators of its two blocks, by additivity of the direct sum. This
-is not the source's projector, which inserts `Δ` (`fibProjector_eq_trace_fibDelta`). -/
+sum `O_1^L + O_τ^L` of the operators of its two blocks, by additivity of the direct sum. The
+weighted operator `P_L` of the source's form is obtained only after inserting `Δ`
+(`fibProjector_eq_trace_fibDelta`). -/
 theorem mpo_fibPMPO (L : ℕ) : mpo fibPMPO L = mpo fibOne L + mpo fibTau L :=
   mpo_directSum fibOne fibTau L
 
@@ -265,7 +268,7 @@ theorem fibWeight_fusion (c : Fin 2) :
 def fibProjector (L : ℕ) : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ :=
   fibWeight 0 • mpo fibOne L + fibWeight 1 • mpo fibTau L
 
-/-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` lines 136–139 and 1269. The boundary matrix
+/-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` lines 132–141 and 1269. The boundary matrix
 `Δ = w_1 1_2 ⊕ w_τ 1_3` on the bond space of `fibPMPO`. -/
 def fibDelta : Matrix (Fin (2 + 3)) (Fin (2 + 3)) ℂ :=
   (Matrix.fromBlocks (fibWeight 0 • (1 : Matrix (Fin 2) (Fin 2) ℂ)) 0 0
@@ -273,9 +276,11 @@ def fibDelta : Matrix (Fin (2 + 3)) (Fin (2 + 3)) ℂ :=
     finSumFinEquiv.symm
 
 /-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` lines 128–151 and 1268–1269. The weighted
-operator is the source's projector matrix product operator
-`P_L = ∑ tr(Δ B^{i_1 j_1} ⋯ B^{i_L j_L}) |i⟩⟨j|` of the bond-five tensor `fibPMPO` with the
-boundary matrix `Δ = fibDelta`. -/
+operator `P_L` is the boundary-weighted matrix product operator
+`∑ tr(Δ B^{i_1 j_1} ⋯ B^{i_L j_L}) |i⟩⟨j|`, in the source's form, of the locally chosen
+bond-five tensor `fibPMPO` with the boundary matrix `Δ = fibDelta`. The blocks of `fibPMPO`
+carry the bare F-symbol entries of the module's Local fix (provenance) and are not identified
+with the source's diagram tensor. -/
 theorem fibProjector_eq_trace_fibDelta (L : ℕ) :
     fibProjector L = Matrix.of fun σ τ =>
       Matrix.trace (fibDelta * evalWord fibPMPO (List.ofFn σ) (List.ofFn τ)) := by
@@ -283,7 +288,7 @@ theorem fibProjector_eq_trace_fibDelta (L : ℕ) :
   simp only [fibProjector, Matrix.add_apply, Matrix.smul_apply, mpo_apply, mpoMatrixEntry,
     smul_eq_mul, Matrix.of_apply, fibPMPO, evalWord_directSum, fibDelta,
     Matrix.submatrix_mul_equiv, Matrix.fromBlocks_multiply, Matrix.zero_mul, Matrix.mul_zero,
-    add_zero, zero_add, Matrix.smul_mul, one_mul, trace_fromBlocks_submatrix_finSumFinEquiv,
+    add_zero, zero_add, Matrix.smul_mul, one_mul, Matrix.trace_fromBlocks_submatrix_finSumFinEquiv,
     Matrix.trace_smul]
 
 /-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` lines 152–160 and 1268–1269. With the fusion
@@ -291,7 +296,8 @@ rules of the two blocks (`fibonacci_fusion_algebra`) and the weight relation
 `∑_{a,b} N_{ab}^c w_a w_b = w_c` (`fibWeight_fusion`), the weighted operator is a projector at
 every positive length, `P_L² = P_L`. The source asks this for all `L`; at `L = 0` the empty trace
 gives the bond dimensions, `O_1^0 = 2` and `O_τ^0 = 3`, so `P_0 = (2 + 3φ)/(1 + φ²) ≠ 1`, and
-the empty chain is excluded as a degenerate reading. -/
+the empty chain is excluded as a degenerate reading, as recorded in the module's Local fix and in
+`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`. -/
 theorem fibProjector_mul_self (L : ℕ) (hL : 0 < L) :
     fibProjector L * fibProjector L = fibProjector L := by
   simp only [fibProjector, add_mul, mul_add, smul_mul_smul_comm, fibOne_mul_fibOne L hL,
