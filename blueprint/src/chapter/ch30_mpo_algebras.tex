@@ -137,8 +137,8 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     %   multiplicities); the fusion character is not used by the source.
 \end{definition}
 
-\begin{lemma}[Integrality of multi-block word-trace relations]%
-    \label{lem:mpoalg_multiblock_trace_integral}
+\begin{theorem}[Integrality of multi-block word-trace relations]%
+    \label{thm:mpoalg_multiblock_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul}
     \leanok
     \uses{def:asym_word_module, def:normal}
@@ -147,7 +147,7 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     physical alphabet, and let $c_y\in\C$ satisfy
     $\tr(B^w)=\sum_yc_y\tr(A_y^w)$ for every nonempty word $w$. Then every
     $c_y$ is a nonnegative integer.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -179,7 +179,7 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 
 \begin{proof}
     \leanok
-    \uses{lem:mpoalg_multiblock_trace_integral}
+    \uses{thm:mpoalg_multiblock_trace_integral}
     Fix $a$ and $x$. The word traces of $T_a\cdot A_x$ are
     $\sum_yM_{a,x}^y\tr(A_y^w)$ on nonempty words $w$. The word modules of
     the $A_y$ are simple and pairwise non-isomorphic, since isomorphic word
@@ -187,7 +187,7 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     of the word algebra acts on the block $y_0$ as a matrix unit and
     annihilates the other blocks; its powers have constant trace
     $M_{a,x}^{y_0}$ on $T_a\cdot A_x$, so $M_{a,x}^{y_0}$ is a nonnegative
-    integer (Lemma~\ref{lem:mpoalg_multiblock_trace_integral}). Applying
+    integer (Theorem~\ref{thm:mpoalg_multiblock_trace_integral}). Applying
     (\ref{eq:mpo_fusion_algebra}) and (\ref{eq:mpo_symmetric_family}) twice
     to $O_a^{(N_0)}O_b^{(N_0)}\ket{V^{(N_0)}(A_x)}$ and comparing
     coefficients of the independent vectors gives (\ref{eq:mpo_nimrep}).
