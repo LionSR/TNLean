@@ -644,6 +644,28 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
     $(-1)^N$ because $|\bar t|+|t|=N$.
 \end{proof}
 
+\begin{theorem}[The decorated operator is a group-cocycle operator]
+    \label{thm:asymex_czx_decorated_group_cocycle}
+    \lean{CZXCompression.mpo_czxDecoratedTensor_eq_groupCocycle}
+    \leanok
+    \uses{def:asymex_czx_decorated_tensor, def:asymex_group_cocycle_tensor}
+    For every $N>0$, $O_N(\widehat T)$ is the periodic operator of the
+    group-cocycle construction for the generator $s$ of $\Z_2$ and the
+    nontrivial three-cocycle $\omega_1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_decorated_operator, thm:asymex_group_cocycle_z2}
+    Both operators have the kernel
+    \begin{align}
+        (s,t) & \mapsto\delta_{s,\bar t}\,(-1)^{q(s)+|s|},
+        \notag
+    \end{align}
+    by Theorems~\ref{thm:asymex_czx_decorated_operator}
+    and~\ref{thm:asymex_group_cocycle_z2}.
+\end{proof}
+
 \begin{theorem}[Normality of the decorated tensor]
     \label{thm:asymex_czx_decorated_normal}
     \lean{CZXCompression.czxDecoratedMPS_isNormal}
