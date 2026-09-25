@@ -282,11 +282,9 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 
 \begin{example}[Fibonacci]%
     \label{ex:mpo_symmetry_fibonacci}
-    \lean{FibonacciCompression.isMPOFusionAlgebra_fibBlock,
-        FibonacciCompression.isFusionUnit_fibFusion,
-        FibonacciCompression.isMPOSymmetricFamily_fibNimTargets,
-        FibonacciCompression.isNIMRep_fibFusion,
-        FibonacciCompression.not_isFusionCharacter_fibFusion}
+    \lean{FibonacciCompression.isFusionUnit_fibNim,
+        FibonacciCompression.isNIMRep_fibNim,
+        FibonacciCompression.not_isFusionCharacter_fibNim}
     \leanok
     \uses{cor:mpo_symmetric_no_go, thm:asymex_fib_anomaly_fusion_algebra,
         thm:asymex_fib_anomaly_nim_rep, thm:asymex_fib_anomaly_no_go}
@@ -300,6 +298,26 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     $O_\tau^{(N)}\ket{V^{(N)}(A)}=c\ket{V^{(N)}(A)}$ for all $N\geq1$
     (Theorem~\ref{thm:asymex_fib_anomaly_no_go}).
     % Source anchor: arXiv:2203.12563, line 1993; arXiv:1511.08090, App. D.1.
+\end{example}
+
+\begin{example}[Ising]%
+    \label{ex:mpo_symmetry_ising}
+    \lean{IsingTwist.isMPOFusionAlgebra_ising,
+        IsingTwist.isFusionUnit_isingFusion,
+        IsingTwist.not_isFusionCharacter_isingFusion,
+        IsingTwist.not_isMPOSymmetric_ising}
+    \leanok
+    \uses{cor:mpo_symmetric_no_go, thm:asymex_ising_path_operators,
+        cor:asymex_ising_sigma_fusion_unscaled, thm:asymex_ising_sigma_square}
+    The Ising operators $A_1$, $A_\psi$ and $A_\sigma$ of
+    Section~\ref{sec:asymex_ising_tensors} form a fusion algebra with unit
+    $1$, $\psi\times\psi=1$, $\psi\times\sigma=\sigma\times\psi=\sigma$ and
+    $\sigma\times\sigma=1+\psi$ \cite{Bultinck2017Anyons}. A fusion character
+    in $\N$ would satisfy $m_\psi^2=1$, hence $m_\psi=1$, and then
+    $m_\sigma^2=1+m_\psi=2$, which has no solution in $\N$. So no normal
+    tensor of positive bond dimension is symmetric under the Ising algebra
+    with the unit acting trivially.
+    % Source anchor: arXiv:1511.08090, lines 1308--1312 and 1323.
 \end{example}
 
 \begin{example}[Anomalous cyclic group of order three]%
