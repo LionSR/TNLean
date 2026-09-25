@@ -4274,30 +4274,53 @@ of $T$ applied to those of $B$.
     \label{def:mpug_single_block_l_symbol}
     \lean{MPOTensor.GroupFamily.FixesMPV,
         MPOTensor.GroupFamily.ActionData,
-        MPOTensor.GroupFamily.nonempty_actionData,
         MPOTensor.GroupFamily.ActionData.actV,
         MPOTensor.GroupFamily.ActionData.fuseV,
-        MPOTensor.GroupFamily.ActionData.lSymbol,
+        MPOTensor.GroupFamily.ActionData.lSymbol}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols}
+    Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain},
+    and let $A$ be a matrix product state tensor with
+    $O_g|V_N(A)\rangle=|V_N(A)\rangle$ for every $g$ and every $N\geq1$.
+    Action tensors for $A$ are, for every $g$, a reduction $(V_g,W_g)$ of
+    $O_g\cdot A$ onto $A$. The stacked action $(O_gO_h)\cdot A$ then has the
+    two left boundaries
+    \begin{align}
+        \alpha_{g,h}  & =V_g(\mathbf 1\otimes V_h)\,\mathsf a^{-1}, &
+        \varphi_{g,h} & =V_{gh}(F^<_{g,h}\otimes\mathbf 1),
+        \notag
+    \end{align}
+    and $L_{g,h}$ is a nonzero scalar $z$ with
+    $\alpha_{g,h}B^{\mathbf w}=z\,\varphi_{g,h}B^{\mathbf w}$ for all long
+    words $\mathbf w$ of $B=(O_gO_h)\cdot A$, or $1$ if there is none. This
+    is the $L$-symbol of a single invariant block
+    \cite{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Characterization of the single-block L-symbol]
+    \label{thm:mpug_single_block_l_symbol_spec}
+    \lean{MPOTensor.GroupFamily.nonempty_actionData,
         MPOTensor.GroupFamily.ActionData.isDressedProportional_lSymbol}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_action_tensor_reductions,
-        def:mpug_l_symbols}
-    Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain},
-    and let $A$ be a normal matrix product state tensor of positive bond
-    dimension with $O_g|V_N(A)\rangle=|V_N(A)\rangle$ for every $g$ and every
-    $N\geq1$. Action tensors $(V_g,W_g)$ reducing $O_g\cdot A$ onto $A$ exist
-    \cite[lines~1064--1090]{GarreRubio2023MPOSym}. The stacked action
-    $(O_gO_h)\cdot A$ reduces onto $A$ along two trees, with left boundaries
-    \begin{align}
-        V_g(\mathbf 1\otimes V_h)\,\mathsf a^{-1}, &  &
-        V_{gh}(F^<_{g,h}\otimes\mathbf 1),
-    \end{align}
-    and $L_{g,h}\in\C^\times$ is the unique scalar with
-    $V_g(\mathbf 1\otimes V_h)\mathsf a^{-1}B^{\mathbf w}
-        =L_{g,h}\,V_{gh}(F^<_{g,h}\otimes\mathbf 1)B^{\mathbf w}$ for all long
-    words $\mathbf w$ of $B=(O_gO_h)\cdot A$. This is the $L$-symbol of a
-    single invariant block \cite{FrancoRubio2025MPUGauging}.
-\end{definition}
+    \uses{def:mpug_single_block_l_symbol}
+    If $A$ in Definition~\ref{def:mpug_single_block_l_symbol} is normal
+    of positive bond dimension, then action tensors for $A$ exist
+    \cite[lines~1064--1090]{GarreRubio2023MPOSym}, and for every choice of
+    them $\alpha_{g,h}B^{\mathbf w}=L_{g,h}\,\varphi_{g,h}B^{\mathbf w}$ for
+    all long words $\mathbf w$ of $B=(O_gO_h)\cdot A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
+        thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    Existence is Corollary~\ref{cor:asym_action_tensors}. By
+    Lemmas~\ref{thm:mpug_action_tensor_reductions}
+    and~\ref{thm:mpug_reduction_composition}, both $\alpha_{g,h}$ and
+    $\varphi_{g,h}$ are left boundaries of reductions of $B$ onto $A$, and
+    $B$ generates the same vectors as $A$, so
+    Lemma~\ref{thm:mpug_dressed_proportionality} gives a nonzero scalar
+    relating them against long words.
+\end{proof}
 
 \begin{theorem}[Compatibility of the L-symbol with the anomaly]
     \label{thm:mpug_single_block_l_compatibility}
@@ -4305,8 +4328,8 @@ of $T$ applied to those of $B$.
     \leanok
     \uses{def:mpug_single_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
         thm:mpug_dressed_proportionality}
-    In the setting of Definition~\ref{def:mpug_single_block_l_symbol}, for
-    all $g,h,k\in G$,
+    In the setting of Theorem~\ref{thm:mpug_single_block_l_symbol_spec},
+    for all $g,h,k\in G$,
     \begin{align}
         L_{g,hk}L_{h,k}
          & =\omega(g,h,k)\,L_{g,h}L_{gh,k}.
@@ -4315,22 +4338,55 @@ of $T$ applied to those of $B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_action_tensor_reductions}
-    Consider the triple action $B=((O_gO_h)O_k)\cdot A$. Acting first with
-    $k$, then with the pair $(g,h)$, reduces $B$ onto $(O_gO_h)\cdot A$;
-    fusing $g$ with $h$ reduces $B$ onto $(O_{gh}O_k)\cdot A$; fusing $h$
-    with $k$ reduces $B$ onto $(O_gO_{hk})\cdot A$. Pulling the defining
-    relations of $L_{g,h}$, $L_{gh,k}$ and $L_{g,hk}$ back along these
-    reductions (Lemma~\ref{thm:mpug_dressed_proportionality}), lifting the
-    relation of $L_{h,k}$ inside the action of $g$ and the relation of
-    $\omega(g,h,k)$ through the action on $A$
-    (Lemma~\ref{thm:mpug_action_tensor_reductions}), and identifying the
-    boundaries by the naturality and pentagon identities of $\mathsf a$,
-    one obtains two chains of scalars between the same pair of boundaries:
-    $L_{h,k}L_{g,hk}$ along one and $L_{g,h}L_{gh,k}\,\omega(g,h,k)$ along
-    the other. Both boundaries belong to reductions onto the normal tensor
-    $A$, so they are nonzero against arbitrarily long words, and the two
-    scalars agree.
+    \uses{thm:mpug_single_block_l_symbol_spec,
+        thm:mpug_action_tensor_reductions}
+    Consider the triple action $B=((O_gO_h)O_k)\cdot A$, and write $V^L$,
+    $V^R$ for the two fusion trees of $(g,h,k)$ as in
+    Definition~\ref{def:mpug_anomaly_three_cochain}. The naturality and
+    pentagon identities of $\mathsf a$ give five identities between left
+    boundaries of reductions of $B$ onto $A$:
+    \begin{align}
+        \alpha_{g,h}(\mathbf 1\otimes V_k)\,\mathsf a^{-1}
+         & =V_g(\mathbf 1\otimes\alpha_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1),
+        \notag                                                \\
+        V_g(\mathbf 1\otimes\varphi_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1)
+         & =\alpha_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr),
+        \notag                                                \\
+        \varphi_{g,h}(\mathbf 1\otimes V_k)\,\mathsf a^{-1}
+         & =\alpha_{gh,k}
+        \bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr),
+        \notag                                                \\
+        \varphi_{gh,k}\bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr)
+         & =V_{ghk}(V^L\otimes\mathbf 1),
+        \notag                                                \\
+        \varphi_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr)
+         & =V_{ghk}(V^R\otimes\mathbf 1).
+        \notag
+    \end{align}
+    Starting from $\alpha_{g,h}(\mathbf 1\otimes V_k)\mathsf a^{-1}B^{\mathbf w}$,
+    replace $\alpha_{g,h}$ by $L_{g,h}\varphi_{g,h}$, then $\alpha_{gh,k}$ by
+    $L_{gh,k}\varphi_{gh,k}$, then $V^L$ by $\omega(g,h,k)V^R$; or apply the
+    first identity, replace $\alpha_{h,k}$ by $L_{h,k}\varphi_{h,k}$ inside
+    the action of $g$, and then $\alpha_{g,hk}$ by $L_{g,hk}\varphi_{g,hk}$.
+    Each replacement holds against long words by
+    Theorem~\ref{thm:mpug_single_block_l_symbol_spec}, lifted through the
+    action tensors by Lemma~\ref{thm:mpug_action_tensor_reductions} and
+    pulled back along the reductions by
+    Lemma~\ref{thm:mpug_dressed_proportionality}. For all long words,
+    \begin{align}
+        \alpha_{g,h}(\mathbf 1\otimes V_k)\,\mathsf a^{-1}B^{\mathbf w}
+         & =L_{g,h}L_{gh,k}\,\omega(g,h,k)\,V_{ghk}(V^R\otimes\mathbf 1)
+        B^{\mathbf w}
+        =L_{h,k}L_{g,hk}\,V_{ghk}(V^R\otimes\mathbf 1)B^{\mathbf w}.
+        \notag
+    \end{align}
+    The boundary $V_{ghk}(V^R\otimes\mathbf 1)$ belongs to a reduction onto
+    the normal tensor $A$, so it is nonzero against arbitrarily long words,
+    and the two scalars agree.
 \end{proof}
 
 \begin{theorem}[An anomaly obstructs invariant normal states]
