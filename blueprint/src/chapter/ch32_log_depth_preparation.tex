@@ -132,32 +132,105 @@ injective.
 
 \section{Exact factorizations of the isometry}
 
+\begin{lemma}[Successive decompositions with a matrix remainder]
+    \label{lem:ldp_sweep_matrix_remainder}
+    \lean{MPSPreparation.exists_isometric_chain_mul,
+        MPSPreparation.sum_star_mulVec_dotProduct_of_isometryOn,
+        MPSPreparation.sum_star_eval_mulVec_dotProduct}
+    \leanok
+    \uses{thm:seqanc_sweep, thm:seqanc_norm}
+    In Theorem~\ref{thm:seqanc_sweep} the isometric families $Q_p$ do not
+    depend on the right vector: there is a matrix $R$ row-supported below
+    $b_n$ with $R_{-1}P^\sigma=Q^\sigma R$ for every configuration $\sigma$.
+    Moreover the isometric chains of Theorem~\ref{thm:seqanc_norm} preserve
+    inner products, $\sum_\sigma\langle Q^\sigma v,Q^\sigma w\rangle
+        =\langle v,w\rangle$ for $v,w$ supported below $b_n$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
+    The induction of Theorem~\ref{thm:seqanc_sweep} never uses $r$; for $n=0$
+    take $R=R_{-1}$. The inner-product identity is the computation of
+    Theorem~\ref{thm:seqanc_norm} with $\overline{v_\beta}v_{\beta'}$
+    replaced by $\overline{v_\beta}w_{\beta'}$.
+\end{proof}
+
+\begin{lemma}[Sequential factorization of a matrix product isometry]
+    \label{lem:ldp_sequential_factorization_general}
+    \lean{MPSPreparation.exists_isometric_chain_of_eq_mul}
+    \leanok
+    \uses{lem:ldp_sweep_matrix_remainder}
+    Let $A$ have bond dimension $D$, let $G$ be a $D^2\times D^2$ matrix, and
+    let $V\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$, $q\ge1$, be an isometry
+    with matrix elements
+    $\bra{i_1\cdots i_q}V\ket{x}
+        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}\,
+        G_{(\alpha,\beta),x}$.
+    Then there are integers $b_0=1$, $b_q=D^2$ and $b_p\le D^2$, and families
+    of $b_{p-1}\times b_p$ matrices $W_p^i$, $p=1,\dots,q$, with
+    $\sum_i(W_p^i)^\dagger W_p^i=\Id_{b_p}$ for every $p$, such that
+    $\bra{i_1\cdots i_q}V\ket{x}=(W_1^{i_1}W_2^{i_2}\cdots W_q^{i_q})_{1x}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_support_propagation}
+    The matrix elements of $V$ are
+    $\bigl(j^{\mathsf T}(\Id_D\otimes A^{i_1})\cdots(\Id_D\otimes A^{i_q})G\bigr)_x$
+    with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Apply
+    Lemma~\ref{lem:ldp_sweep_matrix_remainder} to the row matrix of $j$ and the
+    sites $\Id_D\otimes A^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
+    remainder $C=RG$ with $V=Q\,C$ in the sense above. By the inner-product
+    identity, $V^\dagger V=C^\dagger C$, so $C$ is an isometry because $V$ is.
+    Absorb $C$ into the last site, $W_q^i=Q_q^iC$, which is again isometric,
+    $\sum_i C^\dagger(Q_q^i)^\dagger Q_q^iC=C^\dagger C=\Id$.
+\end{proof}
+
 \begin{theorem}[Sequential factorization]
     \label{thm:ldp_sequential_factorization}
-    \uses{thm:ldpolar_tensor_decomposition, thm:seqanc_left_canonical}
-    Suppose $\mathcal B_q$ is injective and let $V$ be as in
+    \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition,
+        lem:ldp_sequential_factorization_general}
+    Suppose $\mathcal B_q$ is injective, $q\ge1$, and let $V$ be as in
     Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
     $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and isometries
-    $W_k\colon\C^{D'_k}\to\C^d\otimes\C^{D'_{k+1}}$ for $k=1,\dots,q$, such that
+    $W_k\colon\C^{D'_k}\to\C^{D'_{k+1}}\otimes\C^d$ for $k=1,\dots,q$, such that
     \begin{align}
         V
-         & =\bigl(\Id_{d}^{\otimes(q-1)}\otimes W_q\bigr)\cdots
-        \bigl(\Id_d\otimes W_2\bigr)W_1,
+         & =\bigl(W_q\otimes\Id_{d}^{\otimes(q-1)}\bigr)\cdots
+        \bigl(W_2\otimes\Id_d\bigr)W_1,
         \label{eq:ldp_sequential_factorization}
     \end{align}
-    where $\C^{D'_1}$ is identified with $\C^D\otimes\C^D$ and the $k$-th
-    tensor factor $\C^d$ is the $k$-th site of the block. This is
-    \cite[eqs.~(13)--(15)]{Malz2024Preparation}.
+    where $\C^{D'_1}$ is identified with $\C^D\otimes\C^D$, $\C^{D'_{q+1}}=\C$,
+    and the tensor factor $\C^d$ of $W_k$ is the site $q+1-k$ of the block.
+    In matrix product form, with
+    $(W_k^i)_{\alpha\beta}=\bra{\alpha,i}W_k\ket{\beta}$, the matrix elements
+    are
+    $\bra{i_1\cdots i_q}V\ket{x}
+        =(W_q^{i_1}W_{q-1}^{i_2}\cdots W_1^{i_q})_{1x}$ with
+    $\sum_i(W_k^i)^\dagger W_k^i=\Id_{D'_k}$. This is
+    \cite[eqs.~(13)--(15)]{Malz2024Preparation}, where the isometry carrying the
+    input is written $\widetilde C=V_1$.
 \end{theorem}
 \begin{proof}
-    $V=\mathcal B_qP^{-1}$ is an open-boundary matrix product map with bond
-    dimension at most $D^2$: the site matrices are $A^i\otimes\Id_D$, which carry
-    the right virtual index along the block, and $P^{-1}$ is absorbed into the
-    first site. Make the site maps $W_q,\dots,W_2$ isometric by the successive
-    decompositions of Theorem~\ref{thm:seqanc_left_canonical}. Then
-    $V^\dagger V=W_1^\dagger W_1$, so $W_1$ is an isometry because $V$ is
+    \leanok
+    \uses{thm:ldpolar_decomposition}
+    Since $\mathcal B_q$ is injective, $P$ is positive definite and
+    $V=\mathcal B_qP^{-1}$, so
+    $\bra{i_1\cdots i_q}V\ket{x}
+        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}(P^{-1})_{(\alpha,\beta),x}$.
+    This is an open-boundary matrix product map with bond dimension at most
+    $D^2$: the site matrices are $\Id_D\otimes A^i$, the two bond factors are
+    joined at the left end, and $P^{-1}$ is absorbed into the right end
+    \cite[eq.~(13)]{Malz2024Preparation}. Lemma~\ref{lem:ldp_sequential_factorization_general}
+    with $G=P^{-1}$ makes every site isometric by successive decompositions
+    from the left \cite[eq.~(14)]{Malz2024Preparation}; the remainder at the
+    input end is an isometry because $V$ is
     \cite[eq.~(15)]{Malz2024Preparation}.
 \end{proof}
+%% The block length q >= 1 is implicit in the source, which draws at least one
+%% site. The ordered composition and the matrix product form are the same
+%% statement; the formalization states the matrix product form.
 
 \begin{theorem}[Tree factorization]
     \label{thm:ldp_tree_factorization}
