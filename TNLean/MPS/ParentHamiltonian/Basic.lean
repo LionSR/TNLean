@@ -145,40 +145,27 @@ lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
 
 /-! ### Periodic MPS vector window membership -/
 
-/-- The periodic MPS vector restricted to any window of \(L\) sites lies in
-`groundSpace A L`.
+/-- A boundary matrix that commutes with every letter up to a scalar \(c\) moves
+past a word of length \(n\) at the cost of \(c^n\). -/
+theorem mul_evalWord_of_mul_eq_smul (A : MPSTensor d D)
+    (G : Matrix (Fin D) (Fin D) ℂ) (c : ℂ) (hG : ∀ i, G * A i = c • (A i * G)) :
+    ∀ w : List (Fin d),
+      G * Kraus.evalWord A w = c ^ w.length • (Kraus.evalWord A w * G)
+  | [] => by simp
+  | i :: w => by
+      rw [Kraus.evalWord_cons, ← Matrix.mul_assoc, hG, Matrix.smul_mul, Matrix.mul_assoc,
+        mul_evalWord_of_mul_eq_smul A G c hG w, Matrix.mul_smul, smul_smul,
+        ← Matrix.mul_assoc, List.length_cons, pow_succ']
 
-The witness is the "complement matrix": the product of \(A\)-matrices on sites
-outside the \(L\)-site window, cyclically ordered starting from \(i + L\). The proof
-uses trace cyclicity to rotate the full \(N\)-site product so that the window
-indices come first, matching the `groundSpaceMap` definition. -/
-lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
-    (i : Fin N) (σ : Cfg d N) :
-    (fun τ => mpv A (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
-  rw [groundSpace, LinearMap.mem_range]
-  have hN : 0 < N := Nat.lt_of_lt_of_le (Fin.pos i) le_rfl
-  refine ⟨Kraus.evalWord A (List.ofFn fun (j : Fin (N - L)) =>
-    σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ (by omega)⟩), ?_⟩
-  ext τ
-  simp only [groundSpaceMap_apply, mpv, coeff]
-  rw [← Kraus.evalWord_append]
-  -- Goal: tr(Kraus.evalWord A (List.ofFn τ ++ compList))
-  --     = tr(Kraus.evalWord A (List.ofFn (replaceWindow L hLN i σ τ)))
-  set compList := List.ofFn fun (j : Fin (N - L)) =>
-    σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ (by omega)⟩
-  -- Rotate the RHS by i positions using trace cyclicity
-  suffices hlist :
-      (List.ofFn (replaceWindow L hLN i σ τ)).rotate i.val =
-      List.ofFn τ ++ compList by
-    have hle : i.val ≤ (List.ofFn (replaceWindow L hLN i σ τ)).length := by
-      simp [List.length_ofFn]
-    rw [← hlist, List.rotate_eq_drop_append_take hle,
-        Kraus.evalWord_append, Matrix.trace_mul_comm, ← Kraus.evalWord_append,
-        List.take_append_drop]
-  -- Prove the rotated list equals τ ++ complement elementwise
+/-- The configuration with a window replaced, rotated to start at the window, is
+the window followed by the outside sites in cyclic order starting from \(i+L\). -/
+theorem rotate_ofFn_replaceWindow (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+    (σ : Cfg d N) (τ : Fin L → Fin d) (hN : 0 < N) :
+    (List.ofFn (replaceWindow L hLN i σ τ)).rotate i.val =
+      List.ofFn τ ++ List.ofFn fun (j : Fin (N - L)) =>
+        σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ hN⟩ := by
   apply List.ext_getElem
-  · have : compList.length = N - L := by simp [compList, List.length_ofFn]
-    simp only [List.length_rotate, List.length_append, List.length_ofFn]
+  · simp only [List.length_rotate, List.length_append, List.length_ofFn]
     omega
   · intro k hk1 hk2
     have hkN : k < N := by simp only [List.length_rotate, List.length_ofFn] at hk1; exact hk1
@@ -192,15 +179,60 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
       simpa [Nat.add_comm] using offset_mod_eq i.isLt hkN
     rw [hoffset]
     by_cases hkL : k < L
-    · -- Window part → τ
-      rw [dite_eq_left hkL, List.getElem_append_left (by simp only [List.length_ofFn]; exact hkL),
-          List.getElem_ofFn]
-    · -- Complement part → σ
-      rw [dite_eq_right hkL, List.getElem_append_right (by simp; omega), List.getElem_ofFn]
+    · rw [dite_eq_left hkL, List.getElem_append_left (by simp only [List.length_ofFn]; exact hkL),
+        List.getElem_ofFn]
+    · rw [dite_eq_right hkL, List.getElem_append_right (by simp; omega), List.getElem_ofFn]
       simp only [List.length_ofFn]
-      congr 1; apply Fin.ext
+      congr 1
+      apply Fin.ext
       change (k + i.val) % N = (i.val + L + (k - L)) % N
-      rw [show i.val + L + (k - L) = k + i.val from by omega]
+      rw [show i.val + L + (k - L) = k + i.val by omega]
+
+/-- If \(GA^i=c\,A^iG\) for every letter, the twisted periodic vector
+\(\sigma\mapsto\operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{N-1}}G)\) restricted
+to any window of \(L\) sites lies in `groundSpace A L`.
+
+The witness is \(c^i\) times the product of \(A\)-matrices on the sites outside the
+window, cyclically ordered from \(i+L\), followed by \(G\). Trace cyclicity
+rotates the full product so that the window comes first, and \(G\) is moved past
+the \(i\) letters in front of the window. -/
+theorem twistedMPV_window_mem_groundSpace (A : MPSTensor d D)
+    (G : Matrix (Fin D) (Fin D) ℂ) (c : ℂ) (hG : ∀ i, G * A i = c • (A i * G))
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (σ : Cfg d N) :
+    (fun τ => Matrix.trace (Kraus.evalWord A (List.ofFn (replaceWindow L hLN i σ τ)) * G))
+      ∈ groundSpace A L := by
+  rw [groundSpace, LinearMap.mem_range]
+  have hN : 0 < N := Nat.lt_of_lt_of_le (Fin.pos i) le_rfl
+  refine ⟨c ^ i.val • (Kraus.evalWord A (List.ofFn fun (j : Fin (N - L)) =>
+    σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ hN⟩) * G), ?_⟩
+  ext τ
+  rw [groundSpaceMap_apply]
+  set l := List.ofFn (replaceWindow L hLN i σ τ)
+  have hle : i.val ≤ l.length := by simp [l, List.length_ofFn]
+  have hrot := rotate_ofFn_replaceWindow L N hLN i σ τ hN
+  rw [List.rotate_eq_drop_append_take hle] at hrot
+  have htake : (l.take i.val).length = i.val := by simp [l, List.length_take]
+  calc Matrix.trace (Kraus.evalWord A (List.ofFn τ) *
+          (c ^ i.val • (Kraus.evalWord A _ * G)))
+        = c ^ i.val * Matrix.trace (Kraus.evalWord A (l.drop i.val ++ l.take i.val) * G) := by
+          rw [hrot, Kraus.evalWord_append, Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul,
+            Matrix.mul_assoc]
+      _ = Matrix.trace (Kraus.evalWord A l * G) := by
+          conv_rhs => rw [← List.take_append_drop i.val l]
+          rw [Kraus.evalWord_append, Kraus.evalWord_append,
+            Matrix.mul_assoc (Kraus.evalWord A (l.take i.val)),
+            Matrix.trace_mul_comm (Kraus.evalWord A (l.take i.val)), Matrix.mul_assoc,
+            Matrix.mul_assoc, mul_evalWord_of_mul_eq_smul A G c hG, htake, Matrix.mul_smul,
+            Matrix.trace_smul, smul_eq_mul]
+
+/-- The periodic MPS vector restricted to any window of \(L\) sites lies in
+`groundSpace A L`: the case \(G=1\), \(c=1\) of
+`twistedMPV_window_mem_groundSpace`. -/
+lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
+    (i : Fin N) (σ : Cfg d N) :
+    (fun τ => mpv A (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
+  simpa [mpv, coeff] using
+    twistedMPV_window_mem_groundSpace A 1 1 (fun _ => by simp) L N hLN i σ
 
 /-- Each local term annihilates the periodic MPS vector. -/
 lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :

@@ -37,16 +37,17 @@ three-level factor tensored with the two-level singlet space, that shorthand
 would describe a six-dimensional bond. Its two-site contractions do not have the
 singlet-pair support pattern: same-letter traces can be nonzero while
 opposite-letter traces vanish. The shorthand is therefore treated here as a
-schematic of the valence-bond construction. After the singlet \(Y\) is
-contracted, the resulting matrix product operator acts on a three-dimensional
-bond, with the antisymmetry of \(Y\) supplying the relative sign
-\(-1/\sqrt{2}\) below.
+schematic of the valence-bond construction. With the singlet placed on the two
+spin levels of a three-level bond, the bond is three-dimensional, and the
+antisymmetry of \(Y\) supplies the relative sign \(-1/\sqrt{2}\) below.
 
 The tensor below is the bond-dimension-three contracted representative used in
 this example. The file proves its left-canonical equation, transfer-map value,
-non-injectivity, and non-normality. The equality between its matrix product
-vectors and the even-ring Majumdar-Ghosh dimer superposition is not yet
-formalized; the source-notation gap is recorded in
+non-injectivity, and non-normality. `TNLean.MPS.Examples.MajumdarGhoshDimer`
+proves that its periodic vector on every even ring is the sum of the two
+nearest-neighbour singlet coverings and treats the review's literal tensor;
+`TNLean.MPS.Examples.MajumdarGhoshHamiltonian` relates both to the
+Majumdar-Ghosh Hamiltonian. The source-notation gap is recorded in
 `docs/paper-gaps/rmp_majumdar_ghosh_tensor_gap.tex`.
 
 The three bond levels are the two spin-1/2 values of an open singlet partner
@@ -110,36 +111,30 @@ A^1 =
 The relative sign in \(A^1\) is the antisymmetry of the singlet \(Y\). -/
 def majumdarGhoshTensor : MPSTensor 2 3 := fun i =>
   match i with
-  | 0 => !![0, 1, 0; 0, 0, 0; (↑(1 / Real.sqrt 2) : ℂ), 0, 0]
-  | 1 => !![0, 0, 1; -(↑(1 / Real.sqrt 2) : ℂ), 0, 0; 0, 0, 0]
+  | 0 => !![0, 1, 0; 0, 0, 0; Complex.invSqrtTwo, 0, 0]
+  | 1 => !![0, 0, 1; -Complex.invSqrtTwo, 0, 0; 0, 0, 0]
 
 @[simp]
 lemma majumdarGhoshTensor_zero :
-    majumdarGhoshTensor 0 = !![0, 1, 0; 0, 0, 0; (↑(1 / Real.sqrt 2) : ℂ), 0, 0] := rfl
+    majumdarGhoshTensor 0 = !![0, 1, 0; 0, 0, 0; Complex.invSqrtTwo, 0, 0] := rfl
 
 @[simp]
 lemma majumdarGhoshTensor_one :
-    majumdarGhoshTensor 1 = !![0, 0, 1; -(↑(1 / Real.sqrt 2) : ℂ), 0, 0; 0, 0, 0] := rfl
-
-/-! ### Scalar arithmetic -/
-
-private lemma inv_ofReal_sqrt2_mul_self :
-    (↑(Real.sqrt 2) : ℂ)⁻¹ * (↑(Real.sqrt 2) : ℂ)⁻¹ = 1 / 2 := by
-  simpa [one_div] using Complex.ofReal_sqrt_inv_mul_self 2 (by norm_num)
+    majumdarGhoshTensor 1 = !![0, 0, 1; -Complex.invSqrtTwo, 0, 0; 0, 0, 0] := rfl
 
 /-! ### Conjugate transposes -/
 
 @[simp]
 lemma majumdarGhoshTensor_zero_conjTranspose :
-    (majumdarGhoshTensor 0)ᴴ = !![0, 0, (↑(1 / Real.sqrt 2) : ℂ); 1, 0, 0; 0, 0, 0] := by
+    (majumdarGhoshTensor 0)ᴴ = !![0, 0, Complex.invSqrtTwo; 1, 0, 0; 0, 0, 0] := by
   ext a b; fin_cases a <;> fin_cases b <;>
-    simp [majumdarGhoshTensor, Matrix.conjTranspose_apply, Complex.conj_ofReal]
+    simp [majumdarGhoshTensor, Matrix.conjTranspose_apply]
 
 @[simp]
 lemma majumdarGhoshTensor_one_conjTranspose :
-    (majumdarGhoshTensor 1)ᴴ = !![0, -(↑(1 / Real.sqrt 2) : ℂ), 0; 0, 0, 0; 1, 0, 0] := by
+    (majumdarGhoshTensor 1)ᴴ = !![0, -Complex.invSqrtTwo, 0; 0, 0, 0; 1, 0, 0] := by
   ext a b; fin_cases a <;> fin_cases b <;>
-    simp [majumdarGhoshTensor, Matrix.conjTranspose_apply, Complex.conj_ofReal]
+    simp [majumdarGhoshTensor, Matrix.conjTranspose_apply]
 
 /-! ### Canonical form and transfer map -/
 
@@ -151,7 +146,7 @@ theorem majumdarGhosh_left_canonical :
   ext a b
   fin_cases a <;> fin_cases b <;>
     simp [majumdarGhoshTensor, Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Fin.sum_univ_three, Complex.conj_ofReal, inv_ofReal_sqrt2_mul_self]
+      Fin.sum_univ_three, Complex.invSqrtTwo_mul_self]
   all_goals norm_num
 
 /-- The transfer map of the Majumdar-Ghosh tensor sends the identity to
@@ -163,7 +158,7 @@ theorem majumdarGhosh_transferMap_one :
   simp only [Kraus.transferMap_apply, Fin.sum_univ_two, Matrix.mul_one, Matrix.add_apply]
   fin_cases a <;> fin_cases b <;>
     simp [majumdarGhoshTensor, Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Fin.sum_univ_three, Complex.conj_ofReal, inv_ofReal_sqrt2_mul_self]
+      Fin.sum_univ_three, Complex.invSqrtTwo_mul_self]
   all_goals norm_num
 
 /-! ### Non-injectivity -/
