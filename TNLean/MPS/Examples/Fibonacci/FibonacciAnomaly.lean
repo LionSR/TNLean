@@ -218,12 +218,14 @@ theorem fibTau_eigenvalue_eq_zero {D : ℕ} [NeZero D] (A : MPSTensor 2 D) (hA :
   have hone : ∀ L : ℕ, 0 < L → mpo fibOne L *ᵥ (fun τ : Fin L → Fin 2 => mpv A τ) =
       (1 : ℂ) • fun σ : Fin L → Fin 2 => mpv A σ := by
     intro L hL
-    have h1 := congrArg (mpo fibOne L *ᵥ ·) (h L hL)
-    simp only [Matrix.mulVec_mulVec, fibOne_mul_fibTau L hL, h L hL, Matrix.mulVec_smul] at h1
+    have h1 : mpo fibOne L *ᵥ (mpo fibTau L *ᵥ fun τ : Fin L → Fin 2 => mpv A τ) =
+        mpo fibOne L *ᵥ (c • fun σ : Fin L → Fin 2 => mpv A σ) := by
+      rw [h L hL]
+    rw [Matrix.mulVec_mulVec, fibOne_mul_fibTau L hL, h L hL, Matrix.mulVec_smul] at h1
     rw [one_smul]
     exact (smul_right_injective _ hc h1).symm
   obtain ⟨m, -, hm⟩ := exists_isFusionCharacter_of_isMPOSymmetric (c := ![1, c])
-    isMPOFusionAlgebra_fibBlock hA (fun a L hL => match a with
+    (e := 0) isMPOFusionAlgebra_fibBlock hA (fun a L hL => match a with
       | 0 => hone L hL
       | 1 => h L hL) rfl
   exact not_isFusionCharacter_fibNim m hm

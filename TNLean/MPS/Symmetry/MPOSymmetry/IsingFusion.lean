@@ -77,13 +77,10 @@ def isingBlock : (a : Fin 3) → MPOTensor 10 (isingDim a)
 
 /-- The structure constants of the Ising fusion ring (arXiv:1511.08090, lines 1312 and 1323):
 `1` is the unit, `ψ × ψ = 1`, `ψ × σ = σ × ψ = σ` and `σ × σ = 1 + ψ`. -/
-def isingFusion : Fin 3 → Fin 3 → Fin 3 → ℕ
-  | 0, b, c => if c = b then 1 else 0
-  | a, 0, c => if c = a then 1 else 0
-  | 1, 1, c => if c = 0 then 1 else 0
-  | 1, 2, c => if c = 2 then 1 else 0
-  | 2, 1, c => if c = 2 then 1 else 0
-  | 2, 2, c => if c = 2 then 0 else 1
+def isingFusion : Fin 3 → Fin 3 → Fin 3 → ℕ :=
+  ![![![1, 0, 0], ![0, 1, 0], ![0, 0, 1]],
+    ![![0, 1, 0], ![1, 0, 0], ![0, 0, 1]],
+    ![![0, 0, 1], ![0, 0, 1], ![1, 1, 0]]]
 
 /-- **The Ising fusion algebra** (arXiv:1511.08090, lines 1308–1312 and 1323): at every positive
 system size the periodic operators of the blocks `1, ψ, σ` multiply according to the Ising
@@ -91,17 +88,21 @@ fusion rules, so they form a matrix product operator fusion algebra. The nine ca
 products proved in `TNLean/MPS/Examples/Ising/IsingFusionAlgebra*.lean`. -/
 theorem isMPOFusionAlgebra_ising : IsMPOFusionAlgebra isingBlock isingFusion := by
   intro a b L hL
-  simp only [Fin.sum_univ_three]
-  match a, b with
-  | 0, 0 => simpa [isingBlock, isingFusion] using isingOne_mul_isingOne hL
-  | 0, 1 => simpa [isingBlock, isingFusion] using isingOne_mul_isingPsi hL
-  | 0, 2 => simpa [isingBlock, isingFusion] using isingOne_mul_isingSigma_normalized hL
-  | 1, 0 => simpa [isingBlock, isingFusion] using isingPsi_mul_isingOne hL
-  | 1, 1 => simpa [isingBlock, isingFusion] using isingPsi_mul_isingPsi hL
-  | 1, 2 => simpa [isingBlock, isingFusion] using isingPsi_mul_isingSigma_normalized hL
-  | 2, 0 => simpa [isingBlock, isingFusion] using isingSigma_normalized_mul_isingOne hL
-  | 2, 1 => simpa [isingBlock, isingFusion] using isingSigma_normalized_mul_isingPsi hL
-  | 2, 2 => simpa [isingBlock, isingFusion] using isingSigma_normalized_mul_self hL
+  fin_cases a <;> fin_cases b <;>
+    simp only [Fin.sum_univ_three, isingFusion, isingBlock, Fin.zero_eta, Fin.mk_one,
+      Fin.reduceFinMk,
+      Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      Matrix.head_cons, Matrix.tail_cons, Nat.cast_one, Nat.cast_zero, one_smul, zero_smul,
+      add_zero, zero_add]
+  · exact isingOne_mul_isingOne hL
+  · exact isingOne_mul_isingPsi hL
+  · exact isingOne_mul_isingSigma_normalized hL
+  · exact isingPsi_mul_isingOne hL
+  · exact isingPsi_mul_isingPsi hL
+  · exact isingPsi_mul_isingSigma_normalized hL
+  · exact isingSigma_normalized_mul_isingOne hL
+  · exact isingSigma_normalized_mul_isingPsi hL
+  · exact isingSigma_normalized_mul_self hL
 
 /-- The trivial label `1` is the unit of the Ising fusion ring (arXiv:1511.08090, line 1323). -/
 theorem isFusionUnit_isingFusion : IsFusionUnit isingFusion 0 := by
@@ -117,7 +118,7 @@ theorem not_isFusionCharacter_isingFusion (m : Fin 3 → ℕ) :
   have hψ := hmul 1 1
   have hσ := hmul 2 2
   simp [isingFusion, Fin.sum_univ_three, h0] at hψ hσ
-  have hψ1 : m 1 = 1 := Nat.eq_one_of_mul_eq_one_right hψ
+  have hψ1 : m 1 = 1 := by simpa using hψ
   rw [hψ1] at hσ
   have hle : m 2 ≤ 1 := by nlinarith
   interval_cases (m 2) <;> omega
