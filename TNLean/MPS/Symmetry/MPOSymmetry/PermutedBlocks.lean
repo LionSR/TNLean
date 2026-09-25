@@ -245,7 +245,7 @@ theorem isDressedProportional_lSymbol (hA : ∀ x, Kraus.IsNormal (A x))
     obtain ⟨W', hW'⟩ := ad.exists_isReduction_fuseV fd g h x
     exact hW.exists_isDressedProportional hW' (hA _)
       (((hperm g (h • x)).mulTensor (hperm h x)).sameMPV₂Pos_actTensor
-        (sameMPV₂Pos_refl (A x)))
+        (MPSTensor.SameMPV₂Pos.refl (A x)))
   simp only [lSymbol, hex, ↓reduceDIte, Units.val_mk0]
   exact hex.choose_spec.2
 
@@ -342,12 +342,12 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.
   have hcar3 : CarriesMPV (F.tripleTensor g h k) (A x) (A (g • h • k • x)) :=
     ((hperm g _).mulTensor (hperm h _)).mulTensor (hperm k x)
   have hSame3 : MPSTensor.SameMPV₂Pos B3 (A (g • h • k • x)) :=
-    hcar3.sameMPV₂Pos_actTensor (sameMPV₂Pos_refl (A x))
+    hcar3.sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl (A x))
   have hSameC : ∀ (a b : G) (y : X),
       MPSTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor a) (F.tensor b)) (A y))
         (A (a • b • y)) :=
     fun a b y ↦ ((hperm a _).mulTensor (hperm b y)).sameMPV₂Pos_actTensor
-      (sameMPV₂Pos_refl (A y))
+      (MPSTensor.SameMPV₂Pos.refl (A y))
   have hSame3C : ∀ (a b : G) (y : X), a • b • y = g • h • k • x →
       MPSTensor.SameMPV₂Pos B3 (actTensor (mulTensor (F.tensor a) (F.tensor b)) (A y)) := by
     intro a b y e N hN σ

@@ -4499,27 +4499,53 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
     \lean{MPOTensor.GroupFamily.CarriesMPV,
         MPOTensor.GroupFamily.castBlock,
         MPOTensor.GroupFamily.BlockActionData,
-        MPOTensor.GroupFamily.nonempty_blockActionData,
         MPOTensor.GroupFamily.BlockActionData.actV,
         MPOTensor.GroupFamily.BlockActionData.fuseV,
-        MPOTensor.GroupFamily.BlockActionData.lSymbol,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols,
+        def:mpug_single_block_l_symbol}
+    Action tensors for the family $(A_x)$ are, for every $g$ and $x$, a
+    reduction $(V_{g,x},W_{g,x})$ of $O_g\cdot A_x$ onto $A_{gx}$. The stacked
+    action $B=(O_gO_h)\cdot A_x$ then reduces onto $A_{g(hx)}=A_{(gh)x}$ along
+    two trees, with left boundaries
+    \begin{align}
+        V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &  &
+        V_{gh,x}(F^<_{g,h}\otimes\mathbf 1),
+        \notag
+    \end{align}
+    and $L^x_{g,h}$ is a nonzero scalar relating them against all long
+    words of $B$, or $1$ if there is none, as in
+    Definition~\ref{def:mpug_single_block_l_symbol}.
+\end{definition}
+
+\begin{theorem}[Characterization of the L-symbols of permuted blocks]
+    \label{thm:mpug_permuted_block_l_symbol_spec}
+    \lean{MPOTensor.GroupFamily.nonempty_blockActionData,
         MPOTensor.GroupFamily.BlockActionData.isDressedProportional_lSymbol,
         MPOTensor.GroupFamily.actTensor_idTensor_apply,
         MPOTensor.GroupFamily.isReduction_actTensor_idTensor}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_action_tensor_reductions,
-        def:mpug_l_symbols}
-    Action tensors $(V_{g,x},W_{g,x})$ reducing $O_g\cdot A_x$ onto $A_{gx}$
-    exist; for the bond-one identity tensor they are the identification of
-    the bond spaces. The stacked action $(O_gO_h)\cdot A_x$ reduces onto
-    $A_{g(hx)}=A_{(gh)x}$ along two trees, with left boundaries
-    \begin{align}
-        V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &  &
-        V_{gh,x}(F^<_{g,h}\otimes\mathbf 1),
-    \end{align}
-    and $L^x_{g,h}\in\C^\times$ is the unique scalar relating them against all
-    long words, as in Definition~\ref{def:mpug_single_block_l_symbol}.
-\end{definition}
+    \uses{def:mpug_permuted_block_l_symbol}
+    Action tensors for the family $(A_x)$ of
+    Definition~\ref{def:mpug_permuted_block_l_symbol} exist; for the bond-one
+    identity tensor they are the identification of the bond spaces. For
+    every choice of them, $L^x_{g,h}$ relates the two left boundaries against
+    all long words of $(O_gO_h)\cdot A_x$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
+        thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    As in Theorem~\ref{thm:mpug_single_block_l_symbol_spec}: existence is
+    Corollary~\ref{cor:asym_action_tensors} applied to $O_g\cdot A_x$ and
+    $A_{gx}$, which generate the same vectors. By
+    Lemmas~\ref{thm:mpug_action_tensor_reductions}
+    and~\ref{thm:mpug_reduction_composition} both boundaries are left
+    boundaries of reductions of $(O_gO_h)\cdot A_x$ onto the normal tensor
+    $A_{(gh)x}$, so Lemma~\ref{thm:mpug_dressed_proportionality} gives a
+    nonzero scalar relating them against long words.
+\end{proof}
 
 \begin{theorem}[Compatibility for permuted blocks]
     \label{thm:mpug_permuted_block_l_compatibility}
@@ -4527,6 +4553,7 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
         MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
     \leanok
     \uses{def:mpug_permuted_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_permuted_block_l_symbol_spec,
         thm:mpug_dressed_proportionality, thm:mpug_fixed_block_trivializes}
     For all $x\in\mathsf X$ and $g,h,k\in G$,
     \begin{align}
@@ -4539,7 +4566,9 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_single_block_l_compatibility}
+    \uses{thm:mpug_single_block_l_compatibility,
+        thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_fixed_block_trivializes}
     The proof of Theorem~\ref{thm:mpug_single_block_l_compatibility} applies
     to $((O_gO_h)O_k)\cdot A_x$ verbatim. The pulled-back relations now involve
     $L^{kx}_{g,h}$, $L^x_{gh,k}$, $L^x_{g,hk}$ and $L^x_{h,k}$, and the

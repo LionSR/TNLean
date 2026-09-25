@@ -173,7 +173,6 @@ theorem isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq {L : LSymbol G X}
     IsTrivialGaugeClass ω := by
   exact isTrivialGaugeClass_comap_of_isCompatible hL x (MonoidHom.id G) hfix
 
-
 /-- **The anomaly at an involution as a ratio of L-symbols.** If `L` is compatible with `ω`
 and `g * g = 1`, then
 `ω(g,g,g) = Lˣ_{g,g} Lˣ_{g,1} / (L^{g • x}_{g,g} Lˣ_{1,g})`.
