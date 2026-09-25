@@ -32,6 +32,7 @@ import TNLean.MPS.Examples.MajumdarGhoshHamiltonian
 import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
+import TNLean.MPS.Examples.SpinHalf
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.Z3Anomalous
 import TNLean.MPS.Examples.ZMod2

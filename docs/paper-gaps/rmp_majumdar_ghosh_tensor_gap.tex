@@ -83,11 +83,38 @@ On the configuration with all spins $0$ this vector has coefficient
 $4(-1)^m\neq0$, whereas every singlet covering vanishes there. The literal
 tensor therefore does not represent the Majumdar--Ghosh state at any even
 length: its periodic vector is not a scalar multiple of the dimer
-superposition. The pair state is the obstruction. For an invertible
-single-site matrix $U$, $(U\otimes U)(\ket{00}+\ket{11})
-=\sum_{ab}(UU^{\mathsf T})_{ab}\ket{ab}$ has the symmetric coefficient matrix
-$UU^{\mathsf T}$, while the singlet has the antisymmetric coefficient matrix
-$Y$.\footnote{Formal declarations: \leanid{MPSTensor.majumdarGhoshReviewTensor},
+superposition.
+
+A gauge transformation of the bond leaves the periodic vector unchanged, so the
+only freedom left is a change of basis of the physical spin, a single-site
+matrix $U$ applied at every site. It does not help either. The vector
+$U^{\otimes N}(\ket{\Phi_{\mathrm{even}}}+\ket{\Phi_{\mathrm{odd}}})$ is the sum
+of the two coverings by the pair state
+$(U\otimes U)(\ket{00}+\ket{11})=\sum_{ab}M_{ab}\ket{ab}$ with the symmetric
+coefficient matrix $M=UU^{\mathsf T}$. Suppose it equals $c$ times the sum of the
+two coverings by the singlet $\ket{10}-\ket{01}$, whose coefficient matrix is
+$Y$. Compare coefficients on four configurations of the ring of $N=2m$ sites.
+On the configuration with all spins $0$ the left side is $2M_{00}^m$ and the
+right side vanishes, so $M_{00}=0$; likewise $M_{11}=0$. Put
+$\mu=M_{01}=M_{10}$. On the alternating configuration $0101\cdots01$ both
+coverings pair a $0$ with a $1$, and
+\begin{align}
+    2\mu^m
+        &=
+        c\bigl(Y_{01}^m+Y_{10}^m\bigr)
+        =
+        c\bigl((-1)^m+1\bigr).
+    \label{eq:rmp_majumdar_ghosh_tensor_gap_alternating}
+\end{align}
+If $m$ is odd, then $\mu=0$. If $m\geq2$ is even, then $c=\mu^m$. Now take
+the configuration $0110$ followed by $m-2$ copies of $01$. The covering
+$(1,2)(3,4)\cdots$ pairs $01$, $10$, and then $01$ repeatedly, while the
+covering $(2,3)(4,5)\cdots$ contains the pair $11$. Hence
+$\mu^m=cY_{01}Y_{10}Y_{01}^{m-2}=-c$, and together with $c=\mu^m$ this gives
+$\mu=0$. In either case $M=0$, so $U$ is singular and the left side
+vanishes, which forces $c=0$. No change of physical basis turns the literal
+tensor into a tensor for the Majumdar--Ghosh state: the symmetric pair state is
+the obstruction.\footnote{Formal declarations: \leanid{MPSTensor.majumdarGhoshReviewTensor},
 \leanid{MPSTensor.majumdarGhoshReview\_coeff},
 \leanid{MPSTensor.majumdarGhoshReview\_mpv\_eq}, and
 \leanid{MPSTensor.majumdarGhoshReview\_mpv\_ne\_smul} in

@@ -89,27 +89,27 @@ theorem chainGroundSpace_eq_of_groundSpace_eq
   · simp [h, hG]
   · simp [h]
 
-/-- The MPS vector is in the chain ground space.
-
-The proof uses trace cyclicity: for each cyclic window at position \(i\), the
-restriction of the MPS vector to that window equals `groundSpaceMap A L X_τ` where
-\(X_\tau\) is the product of \(A\)-matrices at outside positions. The cyclic list
-verification follows from the window-level membership calculation. -/
-theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
-    (hN : 0 < N) (hLN : L ≤ N) :
-    (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
+/-- If `G * A i = c • (A i * G)` for every letter, the twisted periodic vector
+\(\sigma\mapsto\operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{N-1}}G)\) lies in the
+periodic chain ground space of every window length \(L\le N\). -/
+theorem twistedMPV_mem_chainGroundSpace (A : MPSTensor d D)
+    (G : Matrix (Fin D) (Fin D) ℂ) (c : ℂ) (hG : ∀ i, G * A i = c • (A i * G))
+    (L N : ℕ) (hN : 0 < N) (hLN : L ≤ N) :
+    (fun σ : Cfg d N => Matrix.trace (Kraus.evalWord A (List.ofFn σ) * G))
+      ∈ chainGroundSpace A L N := by
   rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
-  have hrestrict :
-      cyclicRestrictₗ hN L i τ (mpv A) =
-        (fun σ => mpv A (replaceWindow L hLN i τ σ)) := by
-    ext σ
-    rw [cyclicRestrictₗ_apply]
-    have hcfg : cyclicCfg hN L i σ τ = replaceWindow L hLN i τ σ := rfl
-    rw [hcfg]
-  rw [hrestrict]
-  exact mpv_window_mem_groundSpace A L N hLN i τ
+  exact twistedMPV_window_mem_groundSpace A G c hG L N hLN i τ
+
+/-- The MPS vector is in the chain ground space: the case \(G=1\), \(c=1\) of
+`twistedMPV_mem_chainGroundSpace`. -/
+theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
+    (hN : 0 < N) (hLN : L ≤ N) :
+    (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
+  have h := twistedMPV_mem_chainGroundSpace A 1 1 (fun _ => by simp) L N hN hLN
+  simp only [Matrix.mul_one] at h
+  exact h
 
 /-- A vector in the periodic chain ground space is annihilated by every local
 parent-Hamiltonian term.

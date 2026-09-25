@@ -33,7 +33,7 @@ two-fold degenerate periodic ground space.
     Set $d=2$. Let $E_{ab}$ denote the matrix units of $\MN{3}$, and let
     \begin{align}
         B^0 & = E_{02}+E_{20},
-            & B^1 & = E_{12}+E_{21}.
+            & B^1              & = E_{12}+E_{21}.
         \label{eq:mg_review_bond}
     \end{align}
     The review prints the tensor
@@ -72,8 +72,8 @@ two-fold degenerate periodic ground space.
     \begin{align}
         P^{\mathrm{even}}_f(\sigma) & = \prod_{k=0}^{\lfloor N/2\rfloor-1}
         f(\sigma_{2k},\sigma_{2k+1}),
-        &
-        P^{\mathrm{odd}}_f(\sigma) & = \prod_{k=0}^{\lfloor N/2\rfloor-1}
+                                    &
+        P^{\mathrm{odd}}_f(\sigma)  & = \prod_{k=0}^{\lfloor N/2\rfloor-1}
         f(\sigma_{2k+1},\sigma_{(2k+2)\bmod N}).
         \label{eq:mg_pair_covering}
     \end{align}
@@ -354,7 +354,7 @@ level $0$ and the normalized singlet as pair amplitude.
 \end{remark}
 
 \begin{definition}[Majumdar--Ghosh Hamiltonian]\label{def:majumdar_ghosh_hamiltonian}
-    \lean{MPSTensor.majumdarGhoshSpin, MPSTensor.spinExchange,
+    \lean{MPSTensor.spinHalfOperator, MPSTensor.spinExchange,
         MPSTensor.majumdarGhoshTerm, MPSTensor.majumdarGhoshHamiltonian}
     \leanok
     Let $S^\alpha=\sigma^\alpha/2$ for $\alpha=x,y,z$ be the spin-$\tfrac12$
@@ -369,11 +369,11 @@ level $0$ and the normalized singlet as pair amplitude.
     \cite[Appendix~A, ``The Majumdar-Ghosh model'']{Cirac2021Matrix}. The
     three-site term is
     $h=\tfrac12(\mathbf S_1\cdot\mathbf S_2+\mathbf S_2\cdot\mathbf S_3
-    +\mathbf S_1\cdot\mathbf S_3)$.
+        +\mathbf S_1\cdot\mathbf S_3)$.
 \end{definition}
 
 \begin{lemma}[Exchange as a transposition]\label{lem:spin_exchange_swap}
-    \lean{MPSTensor.spinExchange_apply, MPSTensor.majumdarGhoshSpin_sum}
+    \lean{MPSTensor.spinExchange_apply, MPSTensor.spinHalfOperator_sum}
     \leanok
     \uses{def:majumdar_ghosh_hamiltonian}
     For distinct sites $j\neq k$,
@@ -385,7 +385,7 @@ level $0$ and the normalized singlet as pair amplitude.
     \leanok
     The completeness relation
     $\sum_\alpha S^\alpha_{pa}S^\alpha_{qb}
-    =\tfrac12\delta_{pb}\delta_{qa}-\tfrac14\delta_{pa}\delta_{qb}$ is checked on
+        =\tfrac12\delta_{pb}\delta_{qa}-\tfrac14\delta_{pa}\delta_{qb}$ is checked on
     the sixteen index values.
 \end{proof}
 
@@ -454,7 +454,7 @@ level $0$ and the normalized singlet as pair amplitude.
     \leanok
     The grading $G=\diag(1,-1,-1)$ satisfies $GA^i=-A^iG$. For even $N$,
     $\tr(A^{\sigma}G)=2(A^{\sigma})_{00}-\tr(A^{\sigma})
-    =P^{\mathrm{even}}_s(\sigma)-P^{\mathrm{odd}}_s(\sigma)$ by
+        =P^{\mathrm{even}}_s(\sigma)-P^{\mathrm{odd}}_s(\sigma)$ by
     Lemma~\ref{lem:mps_pair_covering_form} and
     Theorem~\ref{thm:majumdar_ghosh_dimer_superposition}. The two coverings
     are half the sum and half the difference of this vector and
@@ -489,7 +489,7 @@ level $0$ and the normalized singlet as pair amplitude.
     $2\sum_iP_{i,i+1}\psi+\sum_iP_{i,i+2}\psi=0$. Lemma~\ref{lem:spin_exchange_swap}
     then gives
     $H_N\psi=\tfrac14\bigl(2\sum_iP_{i,i+1}\psi+\sum_iP_{i,i+2}\psi\bigr)
-    -\tfrac{3N}{8}\psi=-\tfrac{3N}{8}\psi$.
+        -\tfrac{3N}{8}\psi=-\tfrac{3N}{8}\psi$.
 \end{proof}
 
 % The lower bound $H_N\ge-3N/8$, which would make these eigenvectors ground

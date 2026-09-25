@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinVecEta
 import TNLean.MPS.Examples.MajumdarGhoshDimer
+import TNLean.MPS.Examples.SpinHalf
 import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 
 /-!
@@ -35,8 +36,6 @@ The lower bound \(H\ge-\tfrac{3N}8\), which makes these eigenvectors ground
 states, is not formalized here.
 
 ## Main definitions
-* `MPSTensor.majumdarGhoshSpin` : the spin-\(\tfrac12\) operators \(S^\alpha=\sigma^\alpha/2\)
-* `MPSTensor.spinExchange` : the exchange \(\mathbf S_j\cdot\mathbf S_k\) on a chain
 * `MPSTensor.majumdarGhoshTerm` : the three-site term \(h\)
 * `MPSTensor.majumdarGhoshHamiltonian` : the review's periodic Hamiltonian
 
@@ -63,94 +62,6 @@ noncomputable section
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-! ### Boundary matrices that commute with every letter up to a scalar -/
-
-private lemma mul_evalWord_of_mul_eq_smul (A : MPSTensor d D)
-    (G : Matrix (Fin D) (Fin D) ℂ) (c : ℂ) (hG : ∀ i, G * A i = c • (A i * G)) :
-    ∀ w : List (Fin d),
-      G * Kraus.evalWord A w = c ^ w.length • (Kraus.evalWord A w * G)
-  | [] => by simp
-  | i :: w => by
-      rw [Kraus.evalWord_cons, ← Matrix.mul_assoc, hG, Matrix.smul_mul, Matrix.mul_assoc,
-        mul_evalWord_of_mul_eq_smul A G c hG w, Matrix.mul_smul, smul_smul,
-        ← Matrix.mul_assoc, List.length_cons, pow_succ']
-
-/-- The configuration with a window replaced, rotated to start at the window, is
-the window followed by the outside sites in cyclic order. -/
-private lemma rotate_ofFn_replaceWindow (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (σ : Cfg d N) (τ : Fin L → Fin d) (hN : 0 < N) :
-    (List.ofFn (replaceWindow L hLN i σ τ)).rotate i.val =
-      List.ofFn τ ++ List.ofFn fun (j : Fin (N - L)) =>
-        σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ hN⟩ := by
-  apply List.ext_getElem
-  · simp only [List.length_rotate, List.length_append, List.length_ofFn]
-    omega
-  · intro k hk1 hk2
-    have hkN : k < N := by simp only [List.length_rotate, List.length_ofFn] at hk1; exact hk1
-    simp only [List.getElem_rotate, List.getElem_ofFn, List.length_ofFn]
-    change (if h : ((k + i.val) % N + N - i.val) % N < L
-      then τ ⟨((k + i.val) % N + N - i.val) % N, h⟩
-      else σ ⟨(k + i.val) % N, Nat.mod_lt _ hN⟩) = _
-    have hoffset : ((k + i.val) % N + N - i.val) % N = k := by
-      simpa [Nat.add_comm] using offset_mod_eq i.isLt hkN
-    rw [hoffset]
-    by_cases hkL : k < L
-    · rw [dite_eq_left hkL, List.getElem_append_left (by simp only [List.length_ofFn]; exact hkL),
-        List.getElem_ofFn]
-    · rw [dite_eq_right hkL, List.getElem_append_right (by simp; omega), List.getElem_ofFn]
-      simp only [List.length_ofFn]
-      congr 1
-      apply Fin.ext
-      change (k + i.val) % N = (i.val + L + (k - L)) % N
-      rw [show i.val + L + (k - L) = k + i.val by omega]
-
-/-- Project result: if `G * A i = c • (A i * G)` for every letter, the vector
-\(\sigma\mapsto\operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{N-1}}G)\) restricts
-to every window of \(L\) sites inside the local ground space \(\mathcal G_L(A)\).
-The argument is that of `mpv_window_mem_groundSpace`, with `G` moved past the
-letters in front of the window. -/
-theorem twistedMPV_window_mem_groundSpace (A : MPSTensor d D)
-    (G : Matrix (Fin D) (Fin D) ℂ) (c : ℂ) (hG : ∀ i, G * A i = c • (A i * G))
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (σ : Cfg d N) :
-    (fun τ => Matrix.trace (Kraus.evalWord A (List.ofFn (replaceWindow L hLN i σ τ)) * G))
-      ∈ groundSpace A L := by
-  rw [groundSpace, LinearMap.mem_range]
-  have hN : 0 < N := Nat.lt_of_lt_of_le (Fin.pos i) le_rfl
-  refine ⟨c ^ i.val • (Kraus.evalWord A (List.ofFn fun (j : Fin (N - L)) =>
-    σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ hN⟩) * G), ?_⟩
-  ext τ
-  rw [groundSpaceMap_apply]
-  set l := List.ofFn (replaceWindow L hLN i σ τ)
-  have hle : i.val ≤ l.length := by simp [l, List.length_ofFn]
-  have hrot := rotate_ofFn_replaceWindow L N hLN i σ τ hN
-  rw [List.rotate_eq_drop_append_take hle] at hrot
-  have htake : (l.take i.val).length = i.val := by simp [l, List.length_take]
-  calc Matrix.trace (Kraus.evalWord A (List.ofFn τ) *
-          (c ^ i.val • (Kraus.evalWord A _ * G)))
-        = c ^ i.val * Matrix.trace (Kraus.evalWord A (l.drop i.val ++ l.take i.val) * G) := by
-          rw [hrot, Kraus.evalWord_append, Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul,
-            Matrix.mul_assoc]
-      _ = Matrix.trace (Kraus.evalWord A l * G) := by
-          conv_rhs => rw [← List.take_append_drop i.val l]
-          rw [Kraus.evalWord_append, Kraus.evalWord_append,
-            Matrix.mul_assoc (Kraus.evalWord A (l.take i.val)),
-            Matrix.trace_mul_comm (Kraus.evalWord A (l.take i.val)), Matrix.mul_assoc,
-            Matrix.mul_assoc, mul_evalWord_of_mul_eq_smul A G c hG, htake, Matrix.mul_smul,
-            Matrix.trace_smul, smul_eq_mul]
-
-/-- Project result: if `G * A i = c • (A i * G)` for every letter, the vector
-\(\sigma\mapsto\operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{N-1}}G)\) lies in the
-periodic chain ground space of every window length \(L\le N\). -/
-theorem twistedMPV_mem_chainGroundSpace (A : MPSTensor d D)
-    (G : Matrix (Fin D) (Fin D) ℂ) (c : ℂ) (hG : ∀ i, G * A i = c • (A i * G))
-    (L N : ℕ) (hN : 0 < N) (hLN : L ≤ N) :
-    (fun σ : Cfg d N => Matrix.trace (Kraus.evalWord A (List.ofFn σ) * G))
-      ∈ chainGroundSpace A L N := by
-  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩]
-  simp only [Submodule.mem_iInf, Submodule.mem_comap]
-  intro i τ
-  exact twistedMPV_window_mem_groundSpace A G c hG L N hLN i τ
 
 /-! ### The two coverings lie in the chain ground space -/
 
@@ -215,68 +126,6 @@ theorem majumdarGhosh_pairCoveringOdd_mem_chainGroundSpace {N L : ℕ} (hN : Eve
   simp only [Pi.smul_apply, Pi.sub_apply, smul_eq_mul]
   rw [majumdarGhosh_twisted_eq hN hNpos, majumdarGhosh_mpv_eq_pairCovering hN hNpos]
   ring
-
-
-/-! ### Spin operators and the exchange interaction -/
-
-/-- The spin-\(\tfrac12\) operators \(S^x,S^y,S^z\), each half a Pauli matrix,
-in the basis \(|0\rangle,|1\rangle\). -/
-def majumdarGhoshSpin : Fin 3 → Matrix (Fin 2) (Fin 2) ℂ :=
-  ![(1 / 2 : ℂ) • !![0, 1; 1, 0], (1 / 2 : ℂ) • !![0, -Complex.I; Complex.I, 0],
-    (1 / 2 : ℂ) • !![1, 0; 0, -1]]
-
-/-- The completeness relation of the spin operators:
-\(\sum_\alpha S^\alpha_{pa}S^\alpha_{qb}
-=\tfrac12\delta_{pb}\delta_{qa}-\tfrac14\delta_{pa}\delta_{qb}\). -/
-lemma majumdarGhoshSpin_sum (p q a b : Fin 2) :
-    ∑ α, majumdarGhoshSpin α p a * majumdarGhoshSpin α q b =
-      (if a = q ∧ b = p then 1 / 2 else 0) - (if a = p ∧ b = q then 1 / 4 else 0) := by
-  fin_cases p <;> fin_cases q <;> fin_cases a <;> fin_cases b <;>
-    simp [majumdarGhoshSpin, Fin.sum_univ_three] <;> ring_nf <;> simp [Complex.I_sq] <;> norm_num
-
-/-- The exchange interaction \(\mathbf S_j\cdot\mathbf S_k=\sum_\alpha S^\alpha_jS^\alpha_k\)
-of two spins of a chain of \(N\) spin-\(\tfrac12\) sites, acting on coefficient
-vectors: \((\mathbf S_j\cdot\mathbf S_k\,\psi)(\sigma)
-=\sum_{\alpha,a,b}S^\alpha_{\sigma_j a}S^\alpha_{\sigma_k b}\,
-\psi(\sigma\text{ with }\sigma_j=a,\ \sigma_k=b)\). -/
-def spinExchange {N : ℕ} (j k : Fin N) : NSiteSpace 2 N →ₗ[ℂ] NSiteSpace 2 N where
-  toFun ψ σ := ∑ α, ∑ a, ∑ b,
-    majumdarGhoshSpin α (σ j) a * majumdarGhoshSpin α (σ k) b *
-      ψ (Function.update (Function.update σ j a) k b)
-  map_add' ψ φ := by
-    ext σ
-    simp only [Pi.add_apply, mul_add, Finset.sum_add_distrib]
-  map_smul' c ψ := by
-    ext σ
-    simp only [Pi.smul_apply, smul_eq_mul, RingHom.id_apply, Finset.mul_sum]
-    refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ =>
-      Finset.sum_congr rfl fun _ _ => by ring
-
-/-- For two distinct sites, the exchange interaction is half the transposition of
-the two sites minus a quarter: \(\mathbf S_j\cdot\mathbf S_k=\tfrac12P_{jk}-\tfrac14\). -/
-theorem spinExchange_apply {N : ℕ} {j k : Fin N} (hjk : j ≠ k) (ψ : NSiteSpace 2 N)
-    (σ : Cfg 2 N) :
-    spinExchange j k ψ σ = (1 / 2) * ψ (σ ∘ Equiv.swap j k) - (1 / 4) * ψ σ := by
-  have hswap : σ ∘ Equiv.swap j k =
-      Function.update (Function.update σ j (σ k)) k (σ j) := by
-    rw [Equiv.comp_swap_eq_update, Function.update_comm hjk.symm]
-  have hself : Function.update (Function.update σ j (σ j)) k (σ k) = σ := by simp
-  change (∑ α, ∑ a, ∑ b, majumdarGhoshSpin α (σ j) a * majumdarGhoshSpin α (σ k) b *
-      ψ (Function.update (Function.update σ j a) k b)) = _
-  have hcomm : (∑ α, ∑ a, ∑ b, majumdarGhoshSpin α (σ j) a * majumdarGhoshSpin α (σ k) b *
-      ψ (Function.update (Function.update σ j a) k b)) =
-      ∑ a, ∑ b, (∑ α, majumdarGhoshSpin α (σ j) a * majumdarGhoshSpin α (σ k) b) *
-        ψ (Function.update (Function.update σ j a) k b) := by
-    rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun a _ => ?_
-    rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun b _ => ?_
-    rw [Finset.sum_mul]
-  rw [hcomm]
-  simp only [majumdarGhoshSpin_sum, sub_mul, Finset.sum_sub_distrib, ite_mul, zero_mul,
-    ite_and, Finset.sum_ite_eq', Finset.mem_univ, ite_true, Finset.sum_ite_irrel,
-    Finset.sum_const_zero]
-  rw [hswap, hself]
 
 /-! ### The three-site term -/
 
@@ -360,22 +209,23 @@ private lemma majumdarGhoshTerm_eigen_iff_coords (v : NSiteSpace 2 3) :
     · linear_combination h2
     · rw [h111]; ring
 
-private lemma invSqrt2_mul_self : (↑(1 / Real.sqrt 2) : ℂ) * (↑(1 / Real.sqrt 2) : ℂ) = 1 / 2 := by
-  rw [← Complex.ofReal_mul, one_div_mul_one_div, Real.mul_self_sqrt (by norm_num)]
-  push_cast; ring
-
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2397–2401,
-three-site form. The three-site local ground space \(\mathcal G_3\) of
+/-- Project result: the three-site local ground space \(\mathcal G_3\) of
 `majumdarGhoshTensor` is the eigenspace of the three-site term \(h\) for its
-lowest eigenvalue \(-\tfrac38\), the spin-\(\tfrac12\) subspace of three spins. -/
+lowest eigenvalue \(-\tfrac38\), the spin-\(\tfrac12\) subspace of three spins.
+The review does not state this; it motivates it by saying that the state is the
+ground state of \(H\) (arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex`
+lines 2397–2401), and the identification is the parent-Hamiltonian route to that
+claim. -/
 theorem majumdarGhosh_groundSpace_three_eq_eigenspace :
     groundSpace majumdarGhoshTensor 3 =
       Module.End.eigenspace majumdarGhoshTerm (-3 / 8 : ℂ) := by
   have hX : (↑((Real.sqrt 2)⁻¹) : ℂ) * ↑(Real.sqrt 2) = 1 := by
-    rw [← Complex.ofReal_mul, inv_mul_cancel₀ (by positivity), Complex.ofReal_one]
+    push_cast
+    exact inv_mul_cancel₀ (Complex.ofReal_ne_zero.mpr (by positivity))
   have hX2 : (↑((Real.sqrt 2)⁻¹) : ℂ) ^ 2 = 1 / 2 := by
-    rw [← Complex.ofReal_pow, inv_pow, Real.sq_sqrt (by norm_num)]
-    push_cast; ring
+    push_cast
+    rw [inv_pow, Complex.ofReal_sqrt_sq 2 (by norm_num)]
+    norm_num
   ext v
   rw [Module.End.mem_eigenspace_iff, majumdarGhoshTerm_eigen_iff_coords]
   constructor
@@ -408,7 +258,6 @@ theorem majumdarGhosh_groundSpace_three_eq_eigenspace :
     · linear_combination -(v ![0, 1, 1]) * hX - 2 * v ![1, 1, 0] * hX2 - h2
     · linear_combination 2 * v ![1, 1, 0] * hX2
     · linear_combination -h111
-
 
 /-! ### The periodic Hamiltonian -/
 
@@ -524,7 +373,6 @@ theorem majumdarGhoshHamiltonian_mpv {N : ℕ} (hN3 : 3 ≤ N) :
       (-(3 * N / 8) : ℂ) • (mpv majumdarGhoshTensor : NSiteSpace 2 N) :=
   majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace hN3
     (mpv_mem_chainGroundSpace majumdarGhoshTensor 3 N (by omega) hN3)
-
 
 end MPSTensor
 

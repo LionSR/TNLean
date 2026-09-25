@@ -362,10 +362,12 @@ lemma majumdarGhoshReviewBond_mul_apply_two_two (a b : Fin 2) :
   fin_cases a <;> fin_cases b <;>
     simp [majumdarGhoshReviewBond, Matrix.mul_apply, Fin.sum_univ_three]
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex`
-lines 2401–2403, read literally. On a periodic chain of \(N=2m>0\) sites the
-review's tensor has periodic vector \(2(-1)^m\) times the sum of the two
-nearest-neighbour coverings by the pair state \(|00\rangle+|11\rangle\). -/
+/-- Project result, refuting the literal reading of the review: on a periodic
+chain of \(N=2m>0\) sites the review's tensor (defined from
+arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2401–2403) has
+periodic vector \(2(-1)^m\) times the sum of the two nearest-neighbour coverings
+by the pair state \(|00\rangle+|11\rangle\), not the singlet superposition the
+review claims. -/
 theorem majumdarGhoshReview_mpv_eq {m : ℕ} (hm : 0 < m) (σ : Fin (2 * m) → Fin 2) :
     mpv majumdarGhoshReviewTensor σ =
       2 * (-1 : ℂ) ^ m *
