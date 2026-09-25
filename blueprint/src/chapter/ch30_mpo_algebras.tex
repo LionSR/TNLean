@@ -321,8 +321,12 @@ pair alphabet.
 \begin{theorem}[Existence of fusion tensors]%
     \label{thm:mpoalg_fusion_tensors_exist}
     \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
-    %   MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors.
+    % Lean (PR #7988, not yet on main): MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors,
+    %   MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum,
+    %   MPSTensor.exists_multiplicityReductions_of_isNormal, tagged on
+    %   cor:asym_fusion_action_multiplicity and thm:asym_multiplicity_reductions
+    %   (ch25). After #7988 merges, add those labels to \uses and cite them;
+    %   do not duplicate the tags here.
     % Existing Lean special cases:
     %   MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum
     %   (Theorem thm:asym_mpo_product) and
@@ -372,8 +376,10 @@ matrix product unitaries this is Corollary~\ref{cor:asym_fusion_tensors_group}.
 \begin{theorem}[Existence of action tensors]%
     \label{thm:mpoalg_action_tensors_exist}
     \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
-    %   MPOTensor.IsMPOSymmetricFamily.exists_actionTensors.
+    % Lean (PR #7988, not yet on main): MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum
+    %   (natural-number multiplicities), tagged on
+    %   cor:asym_fusion_action_multiplicity (ch25). After #7988 merges, add that
+    %   label to \uses and cite it; do not duplicate the tag here.
     % Existing Lean: MPOTensor.exists_isReduction_actTensor_of_isNormal,
     %   MPOTensor.exists_multiBlockCompression_actTensor_of_isNormal
     %   (Corollary cor:asym_action_tensors).
@@ -427,6 +433,11 @@ the multiplicity gauge. Outside these settings uniqueness fails
     %   (Theorem 22); arXiv:2203.12563, lines 1028--1060.
     % Existing Lean: MPSTensor.IsReduction.exists_boundary_dressed_proportional
     %   (tagged on thm:mps_reduction_boundary_dressed_uniqueness).
+    % Lean (PR #7988, not yet on main):
+    %   MPSTensor.IsReduction.exists_boundary_dressed_proportional_of_forall_le,
+    %   MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq, tagged on
+    %   cor:asym_fusion_gauge_single (ch25). After #7988 merges, add that label to
+    %   \uses and cite it; do not duplicate the tags here.
 \end{corollary}
 
 \begin{proof}
