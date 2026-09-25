@@ -31,7 +31,8 @@ For the Kitaev chain of arXiv:2011.12127, Appendix A:
   arXiv:1610.07849 describe the Kitaev-chain fixed point as a graded tensor
   network, that only the ordinary contraction of the printed matrices is
   formalized (closed-form twisted and untwisted amplitudes, their
-  complementary parity supports, bosonic reducibility and non-normality), and
+  complementary parity supports, bosonic reducibility and non-normality, and
+  the decomposition into two injective bond-dimension-one states), and
   that the fermionic injectivity claim awaits graded tensor networks.
 
 For the MPU index of arXiv:1703.09188:

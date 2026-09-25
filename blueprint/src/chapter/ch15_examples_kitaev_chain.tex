@@ -145,24 +145,52 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
 \begin{theorem}[The ordinary contraction is reducible and not normal]%
     \label{thm:kitaev_not_normal}
     \lean{MPSTensor.kitaevTensor_mulVec_common_eigenvector,
+        MPSTensor.kitaevTensor_not_isIrreducibleFamily,
         MPSTensor.kitaevTensor_not_isInjective, MPSTensor.kitaevTensor_not_isNormal}
     \leanok
     \uses{def:kitaev_tensor, def:injective, def:normal, lem:kitaev_open_boundary}
     Read as an ordinary matrix product state, the Kitaev-chain tensor is
     reducible: the vector $(1,i)$ is a common eigenvector of $A^0$ and $A^1$,
-    with eigenvalues $1$ and $i$. The tensor is not injective, and it is not
-    normal: no blocking length makes the products span the full matrix
-    algebra. This is the bosonic case that
-    \cite[Section~II.B.4]{Cirac2021Matrix} contrasts with the injectivity of
-    the graded description.
+    with eigenvalues $1$ and $i$, and the orthogonal projection onto the line it
+    spans is a nontrivial projection invariant under both matrices. The tensor is
+    not injective, and it is not normal: no blocking length makes the products
+    span the full matrix algebra
+    \cite[Section~III.A.4]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The linear functional $M\mapsto M_{00}-M_{11}$ vanishes on every product
-    by the preceding lemma, and it does not vanish on the matrix unit
+    The line spanned by $(1,i)$ is invariant under $A^0=\mathbb 1$ and under
+    $A^1=Y$. The linear functional $M\mapsto M_{00}-M_{11}$ vanishes on every
+    product by the preceding lemma, and it does not vanish on the matrix unit
     $\ketbra{0}{0}$, so the products of any fixed length span a proper
     subspace.
+\end{proof}
+
+\begin{theorem}[Sum of two injective matrix product states]%
+    \label{thm:kitaev_two_injective}
+    \lean{MPSTensor.kitaevSectorTensor, MPSTensor.kitaevSectorTensor_isInjective,
+        MPSTensor.kitaevTwistedCoeff_eq_add}
+    \leanok
+    \uses{def:kitaev_twisted_coeff, def:injective, lem:kitaev_eval_word}
+    For $c\in\mathbb C$ let $a_c$ be the tensor of bond dimension one with
+    $a_c^0=1$ and $a_c^1=c$; it is injective. Write $a_\pm=a_{\pm i}$. For
+    every word $w$,
+    \begin{align}
+        \tr(YA^{i_1}\cdots A^{i_N})
+        =
+        i\,a_+^{i_1}\cdots a_+^{i_N}
+        -i\,a_-^{i_1}\cdots a_-^{i_N},
+        \notag
+    \end{align}
+    so the ordinary contraction of the twisted state is a sum of two injective
+    matrix product states \cite[Section~III.A.4]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    With $k$ the number of letters $1$ in $w$, the right-hand side is
+    $i^{k+1}+(-i)^{k+1}$, which is the closed form of the twisted amplitude.
 \end{proof}
 
 The Kitaev-chain tensor is related to the even-parity tensor

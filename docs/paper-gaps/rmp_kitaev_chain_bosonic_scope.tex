@@ -36,6 +36,11 @@ The matrices and the extra $y$ in the periodic trace are those of
 $A^i$, so that the matrices read as a bosonic matrix product state are
 reducible.\footnote{Source traceability:
     \path{References/1610.07849/source/FermionicMPS.tex}, lines 264--289 and 372.}
+Section~III.A.4 of the review makes the bosonic claim explicitly: the
+matrices commute with $Y$, hence the matrix product state is non-injective
+and can be written as a sum of two injective matrix product states, each
+mixing even and odd fermion numbers.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 1261--1266.}
 
 \section{The restriction}
 The graded tensor product, the sign rules of the fermionic virtual
@@ -48,7 +53,8 @@ proved are the following, with $k$ the number of letters equal to $1$ in the
 word $i_1\cdots i_N$.\footnote{Results: \leanid{MPSTensor.kitaevTensor},
     \leanid{MPSTensor.kitaevTensor_coeff},
     \leanid{MPSTensor.kitaevTwistedCoeff_eq},
-    \leanid{MPSTensor.kitaevTensor_not_isNormal}.}
+    \leanid{MPSTensor.kitaevTensor_not_isNormal},
+    \leanid{MPSTensor.kitaevTwistedCoeff_eq_add}.}
 \begin{enumerate}
     \item $(A^1)^2=-\mathbb 1$, $A^1=Y$, and $Y$ commutes with $A^0$ and $A^1$.
     \item $A^{i_1}\cdots A^{i_N}=Y^k$, hence
@@ -62,10 +68,19 @@ word $i_1\cdots i_N$.\footnote{Results: \leanid{MPSTensor.kitaevTensor},
     and the $(0,1)$ and $(1,0)$ entries differ by a sign; these are the
     bosonic counterparts of the open-boundary closures discussed in
     \cite{Bultinck2017FermionicMPS}.
-    \item The vector $(1,i)$ is a common eigenvector of $A^0$ and $A^1$, and
-    the tensor is neither injective nor normal as a bosonic matrix product
-    state. This is the ``bosonic case'' that the review contrasts with the
-    fermionic one; the fermionic injectivity claim is not formalized.
+    \item The vector $(1,i)$ is a common eigenvector of $A^0$ and $A^1$, the
+    projection onto the line it spans is a nontrivial invariant orthogonal
+    projection, and the tensor is neither injective nor normal as a bosonic
+    matrix product state. This is the ``bosonic case'' that the review
+    contrasts with the fermionic one; the fermionic injectivity claim is not
+    formalized.
+    \item With $a_c$ the tensor of bond dimension one with $a_c^0=1$ and
+    $a_c^1=c$, which is injective, and $a_\pm=a_{\pm i}$,
+    $\tr(YA^{i_1}\cdots A^{i_N})
+    =i\,a_+^{i_1}\cdots a_+^{i_N}-i\,a_-^{i_1}\cdots a_-^{i_N}$: the
+    twisted amplitudes are a sum of two injective matrix product states. The
+    statement that these two states are unphysical, because they mix fermion
+    parities, is a statement about the graded setting and is not formalized.
 \end{enumerate}
 
 \section{Elimination plan}
