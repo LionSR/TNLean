@@ -200,13 +200,21 @@ theorem evalWord_toMPSTensor_mulTensor_ofFn (M : MPOTensor d D₁) (N : MPOTenso
 
 /-! ### Reductions and products of matrix product operators -/
 
+end MPOTensor
+
+namespace MPSTensor.IsReduction
+
+open MPOTensor
+
+variable {d D₁ D₂ D₃ : ℕ}
+
 /-- **A factor that does not take part in a reduction, on the right.** If
 `(V, W)` reduces `X` onto `A`, then `(V ⊗ 1, W ⊗ 1)` reduces the product
 `X · P` onto `A · P`.
 
 Source: a fusion tensor with a parallel identity strand, arXiv:2502.20257,
 display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
-theorem _root_.MPSTensor.IsReduction.mulTensor_kronId {X : MPOTensor d D₂}
+theorem mulTensor_kronId {X : MPOTensor d D₂}
     {A : MPOTensor d D₁} (P : MPOTensor d D₃) {V : Matrix (Fin D₁) (Fin D₂) ℂ}
     {W : Matrix (Fin D₂) (Fin D₁) ℂ}
     (h : MPSTensor.IsReduction X.toMPSTensor A.toMPSTensor V W) :
@@ -230,7 +238,7 @@ theorem _root_.MPSTensor.IsReduction.mulTensor_kronId {X : MPOTensor d D₂}
 
 Source: a fusion tensor with a parallel identity strand, arXiv:2502.20257,
 display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
-theorem _root_.MPSTensor.IsReduction.mulTensor_idKron {X : MPOTensor d D₂}
+theorem mulTensor_idKron {X : MPOTensor d D₂}
     {A : MPOTensor d D₁} (P : MPOTensor d D₃) {V : Matrix (Fin D₁) (Fin D₂) ℂ}
     {W : Matrix (Fin D₂) (Fin D₁) ℂ}
     (h : MPSTensor.IsReduction X.toMPSTensor A.toMPSTensor V W) :
@@ -247,6 +255,12 @@ theorem _root_.MPSTensor.IsReduction.mulTensor_idKron {X : MPOTensor d D₂}
   refine Finset.sum_congr rfl fun ρ _ ↦ ?_
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, h.evalWord,
     Matrix.one_mul, Matrix.mul_one]
+
+end MPSTensor.IsReduction
+
+namespace MPOTensor
+
+variable {d D₁ D₂ D₃ : ℕ}
 
 /-! ### The bond associator -/
 
@@ -284,6 +298,14 @@ theorem assocInvMatrix_mul_mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D�
   simp only [← Matrix.mul_assoc, mulTensorAssocInvMatrix_mul_matrix, Matrix.one_mul] at h
   simpa only [Matrix.mul_assoc, mulTensorAssocMatrix_mul_invMatrix, Matrix.mul_one] using h
 
+end MPOTensor
+
+namespace MPSTensor.IsReduction
+
+open MPOTensor
+
+variable {d D₁ D₂ D₃ : ℕ}
+
 /-- **Associativity transport, right to left.** A reduction `(V, W)` of the
 right-associated product `M · (N · P)` gives the reduction
 `(V a⁻¹, a W)` of the left-associated product `(M · N) · P`, where `a` is the
@@ -291,7 +313,7 @@ bond associator.
 
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535; the associator is that of arXiv:1606.00608, lines 995--999. -/
-theorem _root_.MPSTensor.IsReduction.mulTensor_assoc_left {M : MPOTensor d D₁}
+theorem mulTensor_assoc_left {M : MPOTensor d D₁}
     {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPSTensor (d * d) D}
     {V : Matrix (Fin D) (Fin (D₁ * (D₂ * D₃))) ℂ}
     {W : Matrix (Fin (D₁ * (D₂ * D₃))) (Fin D) ℂ}
@@ -307,7 +329,7 @@ right-associated product `M · (N · P)`, where `a` is the bond associator.
 
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535; the associator is that of arXiv:1606.00608, lines 995--999. -/
-theorem _root_.MPSTensor.IsReduction.mulTensor_assoc_right {M : MPOTensor d D₁}
+theorem mulTensor_assoc_right {M : MPOTensor d D₁}
     {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPSTensor (d * d) D}
     {V : Matrix (Fin D) (Fin (D₁ * D₂ * D₃)) ℂ}
     {W : Matrix (Fin (D₁ * D₂ * D₃)) (Fin D) ℂ}
@@ -317,7 +339,7 @@ theorem _root_.MPSTensor.IsReduction.mulTensor_assoc_right {M : MPOTensor d D₁
   h.of_intertwine (mulTensorAssocMatrix_mul_invMatrix D₁ D₂ D₃)
     (fun i ↦ (assocInvMatrix_mul_mulTensor M N P i.divNat i.modNat).symm)
 
-end MPOTensor
+end MPSTensor.IsReduction
 
 /-! ### Boundary-dressed proportionality -/
 
