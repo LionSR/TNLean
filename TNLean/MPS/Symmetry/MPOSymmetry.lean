@@ -15,3 +15,4 @@ import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
+import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness

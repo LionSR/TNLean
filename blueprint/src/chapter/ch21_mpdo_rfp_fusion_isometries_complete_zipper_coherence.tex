@@ -263,6 +263,94 @@
     \label{fig:mpdo_complete_zipper_printed_fmove}
 \end{figure}
 
+\begin{theorem}[Gauge covariance of the F-matrices]%
+    \label{thm:mpdo_complete_zipper_fmatrix_gauge}
+    \lean{MPOTensor.CompleteZipperFusionFamily.regauge}
+    \lean{MPOTensor.CompleteZipperFusionFamily.regauge_fusionTensor}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        eq_printedFMatrix_of_rightTripleSynthesis_mul}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        rightTreeGauge_mul_printedFMatrix_regauge}
+    \lean{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge}
+    \lean{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_regauge}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove,
+        lem:matrix_kronecker_identity_cancellation}
+    For every triple of labels let $Y^c_{ab}$ be an invertible
+    $N_{ab}^{c}\times N_{ab}^{c}$ matrix, write
+    $\Pi_{ab}=\bigoplus_c Y^c_{ab}\otimes\Id_{D_c}$, and let $X_{ab}$ and
+    $X^+_{ab}$ be the synthesis and analysis matrices whose blocks are the
+    $X^c_{ab,\mu}$ and the $X^{c+}_{ab,\mu}$. Replace them by
+    $X_{ab}\Pi_{ab}$ and $\Pi_{ab}^{-1}X^+_{ab}$. The new fusion tensors are
+    \begin{align}
+        X'^c_{ab,\mu}
+         & =\sum_\nu (Y^c_{ab})_{\nu\mu}X^c_{ab,\nu}. \notag
+    \end{align}
+    The new matrices, with the same blocks, multiplicities and simultaneous
+    left inverse, again form a complete zipper fusion family. The matrix
+    $F^{abc}_d$ is the only matrix satisfying (\ref{eq:rfp_printed_fmove}),
+    and the matrix $F'^{abc}_d$ of the new family is
+    \begin{align}
+        F'^{abc}_d
+         & =G_{\mathrm R}^{-1}F^{abc}_d G_{\mathrm L},
+         &
+        G_{\mathrm L}
+         & =\bigoplus_e Y^e_{ab}\otimes Y^d_{ec},
+         &
+        G_{\mathrm R}
+         & =\bigoplus_f Y^f_{bc}\otimes Y^d_{af}.
+        \label{eq:rfp_fmatrix_gauge}
+    \end{align}
+    Its inverse transforms as
+    $(F'^{abc}_d)^{-1}=G_{\mathrm L}^{-1}(F^{abc}_d)^{-1}G_{\mathrm R}$.
+    This is the gauge freedom of the fusion tensors in
+    \cite[lines~164--166]{Bultinck2017Anyons} and the induced transformation of
+    the $F$-symbols in \cite[lines~415--422]{GarreRubio2023MPOSym}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove,
+        lem:matrix_kronecker_identity_cancellation}
+    Write $\mathcal B^{ik}_{ab}=\bigoplus_c\Id_{N_{ab}^c}\otimes B_c^{ik}$,
+    so that (\ref{eq:rfp_fusion_reconstruction}) reads
+    $B_{ab}^{ik}=X_{ab}\mathcal B^{ik}_{ab}X^+_{ab}$. Since $\Pi_{ab}$ acts
+    only on the multiplicity factors, it commutes with
+    $\mathcal B^{ik}_{ab}$. The biorthogonality
+    (\ref{eq:rfp_fusion_biorthogonality}) and the reconstruction
+    (\ref{eq:rfp_fusion_reconstruction}) of the new family are
+    \begin{align}
+        (\Pi_{ab}^{-1}X^+_{ab})(X_{ab}\Pi_{ab})
+         & =\Pi_{ab}^{-1}(X^+_{ab}X_{ab})\Pi_{ab}=\Id,
+        \notag                                                      \\
+        (X_{ab}\Pi_{ab})\mathcal B^{ik}_{ab}(\Pi_{ab}^{-1}X^+_{ab})
+         & =X_{ab}\mathcal B^{ik}_{ab}\Pi_{ab}\Pi_{ab}^{-1}X^+_{ab}
+        =X_{ab}\mathcal B^{ik}_{ab}X^+_{ab}=B_{ab}^{ik}.
+        \notag
+    \end{align}
+    The zipper identities (\ref{eq:rfp_zipper_synthesis}) and
+    (\ref{eq:rfp_zipper_analysis}) of the new family are
+    \begin{align}
+        B_{ab}^{ik}X_{ab}\Pi_{ab}
+         & =X_{ab}\mathcal B^{ik}_{ab}\Pi_{ab}
+        =(X_{ab}\Pi_{ab})\mathcal B^{ik}_{ab},
+        \notag                                        \\
+        \Pi_{ab}^{-1}X^+_{ab}B_{ab}^{ik}
+         & =\Pi_{ab}^{-1}\mathcal B^{ik}_{ab}X^+_{ab}
+        =\mathcal B^{ik}_{ab}(\Pi_{ab}^{-1}X^+_{ab}).
+        \notag
+    \end{align}
+    If $R(G\otimes\Id)=L$ for the fixed-final synthesis matrices $L$ and $R$,
+    multiplying on the left by $R^+$ and using $R^+R=\Id$ gives
+    $G\otimes\Id=F^{abc}_d\otimes\Id$, hence $G=F^{abc}_d$.
+    Expanding the composites shows that the new synthesis matrices are
+    $L'=L(G_{\mathrm L}\otimes\Id)$ and $R'=R(G_{\mathrm R}\otimes\Id)$.
+    The $F$-move of the new family becomes
+    $R\bigl(G_{\mathrm R}F'^{abc}_d\otimes\Id\bigr)=L(G_{\mathrm L}\otimes\Id)
+        =R\bigl(F^{abc}_dG_{\mathrm L}\otimes\Id\bigr)$.
+    Cancelling $R$ gives $G_{\mathrm R}F'^{abc}_d=F^{abc}_dG_{\mathrm L}$,
+    which is (\ref{eq:rfp_fmatrix_gauge}). The inverse formula follows because
+    two-sided inverses are unique.
+\end{proof}
+
 \begin{definition}[Fourfold fusion maps and changes of basis]%
     \label{def:mpdo_complete_zipper_fourfold_fusion_data}
     \lean{MPOTensor.CompleteZipperFusionFamily.%
