@@ -24,6 +24,13 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   hypothesis, and records its elimination after blocking for normal blocks
   that are pairwise inequivalent up to a nonzero scalar.
 
+- `bmwshv17_fibonacci_projector_positive_length.tex` records that the source
+  asks for the projector identity `P_L^2 = P_L` at every length `L`, that at
+  `L = 0` the periodic operators are the bond dimensions `2` and `3` and
+  `P_0 = (2 + 3φ)/(2 + φ)` is neither `0` nor `1`, that the fusion rule and
+  unit laws derived from it fail there as well, and that the empty chain is
+  excluded as a degenerate reading.
+
 For the MPU index of arXiv:1703.09188:
 
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
