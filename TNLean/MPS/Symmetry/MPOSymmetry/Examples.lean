@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Fibonacci.FibonacciAnomaly
-import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousFusion
-import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousInverseFusion
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousRepresentation
 import TNLean.MPS.Symmetry.MPOSymmetry.Character
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion
