@@ -152,13 +152,30 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 \begin{proof}
     \leanok
     \uses{def:asym_word_module}
-    Each word module of $A_y$ is simple. An element of the augmentation ideal
-    of the word algebra acts on the block $y_0$ as a matrix unit and
-    annihilates the other blocks; by the trace relation, every positive power
-    of its action on the word module of $B$ has trace $c_{y_0}$. A matrix
-    whose positive powers all have the same trace has all its nonzero
-    eigenvalues equal to $1$, so that trace is the multiplicity of the
-    eigenvalue $1$, a nonnegative integer.
+    The word modules of the $A_y$ are simple and pairwise non-isomorphic, so
+    by density the words of one positive length $\ell$ act on
+    $\bigoplus_y\C^{D_y}$ as the full block-diagonal algebra. Fix $y_0$ and an
+    index $j$; there are coefficients $x_u$, over words $u$ of length $\ell$,
+    with
+    \begin{align}
+        \sum_ux_uA_{y_0}^u & =E_{jj},            &
+        \sum_ux_uA_y^u     & =0\quad(y\neq y_0).
+        \label{eq:mpoalg_trace_integral_unit}
+    \end{align}
+    Define $Q=\sum_ux_uB^u$. Expanding powers and applying the trace
+    relation to the concatenated nonempty words gives, for every $k\geq1$,
+    \begin{align}
+        \tr(Q^k)
+         & =\sum_yc_y\,\tr\left(\left(\sum_ux_uA_y^u\right)^k\right)
+        =c_{y_0}\,\tr(E_{jj}^k)=c_{y_0}.
+        \label{eq:mpoalg_trace_integral_powers}
+    \end{align}
+    A constant trace of all positive powers of a fixed finite-dimensional
+    matrix is a nonnegative integer: the power sums of its nonzero
+    eigenvalues, counted with algebraic multiplicity, are constant only when
+    every nonzero eigenvalue is one, and the constant is their total
+    multiplicity. This is the argument of
+    Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} with several blocks.
 \end{proof}
 
 \begin{theorem}[The action coefficients form a nonnegative integer representation]%
@@ -436,6 +453,16 @@ the multiplicity gauge. Outside these settings uniqueness fails
 
 \begin{corollary}[Uniqueness of a single-target reduction]%
     \label{cor:mpoalg_single_target_uniqueness}
+    \notready
+    % Not tagged: the existence clause is verbatim
+    %   MPSTensor.IsReduction.exists_boundary_dressed_proportional, already
+    %   tagged on thm:mps_reduction_boundary_dressed_uniqueness (the sync check
+    %   rejects duplicate tags); uniqueness of lambda is not part of that
+    %   statement. PR #7971 supplies uniqueness
+    %   (MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero) and PR #7988
+    %   the fusion-specific form
+    %   (MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq,
+    %   cor:asym_fusion_gauge_single).
     \uses{thm:mps_reduction_boundary_dressed_uniqueness,
         def:mps_rectangular_reduction}
     Let $B$ be a tensor, $C$ a normal tensor, and $(V,W)$, $(\widetilde
