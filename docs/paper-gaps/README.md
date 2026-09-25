@@ -23,6 +23,13 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   dimension two, and names joint one-site independence as the missing
   hypothesis, with blocking as the elimination route.
 
+- `bmwshv17_fibonacci_projector_positive_length.tex` records that the source
+  asks for the projector identity `P_L^2 = P_L` at every length `L`, that at
+  `L = 0` the periodic operators are the bond dimensions `2` and `3` and
+  `P_0 = (2 + 3φ)/(2 + φ)` is neither `0` nor `1`, that the fusion rule and
+  unit laws derived from it fail there as well, and that the empty chain is
+  excluded as a degenerate reading.
+
 For the MPU index of arXiv:1703.09188:
 
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
@@ -31,10 +38,9 @@ For the MPU index of arXiv:1703.09188:
   correspondence remains open under #7738. The note also records that the
   bra-ket display of the CZX tensor in arXiv:2011.12127, Appendix A, repeats
   the normalized tensor, while the matrices printed there are its unnormalized
-  rescaling, for which the claims of that passage hold; that the printed
+  rescaling, for which the claims of that passage hold, and that the printed
   matrices give the gate order opposite to the verbal description, a global
-  sign `(-1)^N`; and that the second printed projector `Q` of that passage is
-  the complement `Q₁ = 1 - P₁` of the projector onto the invariant subspace.
+  sign `(-1)^N`.
 
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
@@ -544,6 +550,14 @@ For the MPU action on injective MPS blocks in arXiv:2502.20257:
   conventions (including the swapped-order prose typo preceding Equation
   (20)), and explains the stabilizer/coset and
   $H^2(H,\mathbb C^\times)$-torsor meanings of the notation $(H,\psi)$.
+
+For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
+
+- `bmwshv17_ising_boundary_tensor_normalization.tex` records that the formal
+  tensors omit the factors `v_e v_f` of the `G`-symbols and store the `σ`
+  tensor multiplied by `√2`, so that all entries lie in `ℤ[√2]`; states the
+  fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
+  leaves open whether omitting the factors `v` changes the periodic operators.
 
 For the group matrix product operators of arXiv:2203.12563:
 

@@ -181,6 +181,50 @@ sitewise intertwiners.
     argument for $u$ is identical.
 \end{proof}
 
+The reduction of the square of the CZX tensor printed in the review
+(Section~\ref{sec:asymex_czx_review}) replaces the letters by a diagonal
+block of an invariant subspace, following the construction of the canonical
+form in~\cite[Section~IV]{Cirac2021Matrix}. When the complementary diagonal
+block vanishes, the replacement is a compression by rectangular matrices,
+and the following lemma shows that it preserves every nonempty word.
+
+\begin{lemma}[Compression onto an absorbing corner]
+    \label{lem:asymex_absorbing_compression}
+    \lean{Kraus.mul_evalWord_of_left_absorb,
+        Kraus.evalWord_mul_of_right_absorb,
+        Kraus.evalWord_compress_of_left_absorb,
+        Kraus.trace_evalWord_compress_of_left_absorb,
+        Kraus.evalWord_compress_of_right_absorb,
+        Kraus.trace_evalWord_compress_of_right_absorb}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $B^0,\ldots,B^{d-1}\in\MN{D}$, $W\in\mathrm{M}_{k\times D}(\C)$ and
+    $V\in\mathrm{M}_{D\times k}(\C)$, and write $\widetilde B^i=WB^iV$.
+    If $VWB^i=B^i$ for every $i$, then every nonempty word $w$ satisfies
+    $VWB^w=B^w$,
+    \begin{align}
+        \widetilde B^w & =WB^wV,
+        \notag
+    \end{align}
+    and $\tr(\widetilde B^w)=\tr(B^w)$. The same conclusions hold, with
+    $B^wVW=B^w$ in place of $VWB^w=B^w$, if $B^iVW=B^i$ for every $i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For the left condition, $VWB^w=B^w$ follows from the first letter of
+    $w$. By induction on the length, for $w=aw'$ with $w'$ nonempty,
+    \begin{align}
+        \widetilde B^a\widetilde B^{w'}
+         & =WB^a(VWB^{w'})V=WB^aB^{w'}V.
+        \notag
+    \end{align}
+    Cyclicity of the trace then gives
+    $\tr(WB^wV)=\tr(VWB^w)=\tr(B^w)$. The right condition is symmetric:
+    $B^wVW=B^w$ follows from the last letter, the induction step uses
+    $B^aVW=B^a$, and $\tr(WB^wV)=\tr(B^wVW)=\tr(B^w)$.
+\end{proof}
+
 \section{Adapted bases and scaled matrix units}%
 \label{sec:asymex_rfp_basis}
 

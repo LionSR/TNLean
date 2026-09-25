@@ -205,13 +205,21 @@ determined afterwards.
 \begin{theorem}[Normality of the three blocks up to normalization]
     \label{thm:asymex_z3anomalous_normal}
     \lean{Z3Anomalous.uMPS_isNormal, Z3Anomalous.uDagMPS_isNormal,
-        Z3Anomalous.identityMPS_isNormal}
+        Z3Anomalous.identityMPS_isNormal,
+        Z3Anomalous.uMPS_isNBlkInjective_two,
+        Z3Anomalous.uDagMPS_isNBlkInjective_two,
+        Z3Anomalous.identityMPS_isNBlkInjective_one,
+        Z3Anomalous.uMPS_not_isInjective,
+        MPSTensor.isNBlkInjective_of_scaled_single}
     \leanok
-    \uses{def:asymex_z3anomalous_tensors, def:normal}
+    \uses{def:asymex_z3anomalous_tensors, def:normal, def:l_blk_injective,
+        def:injective}
     The length-two words of $M$ span $\MN{2}$, as do those of $M^\dagger$.
     The length-one words of $\delta$ span $\MN{1}$. Thus each tensor is proportional
     to a normal tensor (NT); the NT convention additionally normalizes the spectral
     radius of the associated completely positive map to one.
+    The single-site matrices of $M$ do not span $\MN{2}$, so $M$ is not
+    injective without blocking.
 \end{theorem}
 
 \begin{proof}
@@ -225,6 +233,9 @@ determined afterwards.
     index pair gives the nonzero scalar $1$. These spanning identities
     establish injectivity after blocking, independently of any
     normalization of the transfer spectral radius.
+    Every nonzero matrix of $M$ has equal entries in its first column, so
+    the functional $Q\mapsto Q_{00}-Q_{10}$ vanishes on the span of the
+    single-site matrices and takes the value $1$ on $E_{00}$.
 \end{proof}
 
 \begin{remark}[Notation for the group inverse]
@@ -480,6 +491,77 @@ $U_L^2=O_L(M^\dagger)$:
     conjugate transposition. This concerns the virtual matrices, rather than
     the physical operator or a $3$-cocycle associator.
 \end{remark}
+
+\subsection{The group family}%
+\label{sec:asymex_z3anomalous_family}
+
+Garre-Rubio and Schuch~\cite[Section~IV.A]{GarreRubioSchuch2024DomainWall}
+define a matrix product unitary representation of a finite group by
+injective tensors whose periodic operators satisfy $U_gU_h=U_{gh}$ and
+$U_e=\Id$. The three tensors above, indexed by $\Z_3$, satisfy these
+operator laws; injectivity holds after blocking two sites.
+
+\begin{theorem}[The tensors \texorpdfstring{$\delta$, $M$, $M^\dagger$}{of the three group elements} as a group family]
+    \label{thm:asymex_z3anomalous_family}
+    \lean{Z3Anomalous.family_operator_laws,
+        Z3Anomalous.family_block_two_isRawRepresentation,
+        Z3Anomalous.family, Z3Anomalous.repBondDim, Z3Anomalous.repTensor,
+        MPOTensor.GroupFamily.IsRawRepresentation.of_isNBlkInjective}
+    \leanok
+    \uses{thm:asymex_z3_physical_kernels, thm:asymex_z3anomalous_group_law,
+        thm:asymex_z3anomalous_uu_trace, thm:asymex_z3anomalous_normal,
+        def:mpug_group_representation, def:mpug_common_blocking,
+        def:mpug_raw_group_representation}
+    Set $T_0=\delta$, $T_1=M$ and $T_2=M^\dagger$, with indices in $\Z_3$.
+    Every $T_g$ is a matrix product unitary on nonempty chains, and for
+    every $N>0$ and all $g,h\in\Z_3$,
+    \begin{align}
+        O_N(T_0)         & =\Id,          &
+        O_N(T_g)O_N(T_h) & =O_N(T_{g+h}), &
+        O_N(T_g)^\dagger & =O_N(T_{-g}).
+        \notag
+    \end{align}
+    The family is not a raw matrix product unitary representation in the
+    sense of Definition~\ref{def:mpug_raw_group_representation}, since
+    $M$ is not injective. After common blocking of two sites it is one.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The unitarity and the adjoint law are
+    Theorem~\ref{thm:asymex_z3_physical_kernels}, and the unit and product
+    laws are Theorems~\ref{thm:asymex_z3anomalous_group_law}
+    and~\ref{thm:asymex_z3anomalous_uu_trace}, checked on the nine pairs
+    $(g,h)$. Theorem~\ref{thm:asymex_z3anomalous_normal} gives the failure
+    of one-site injectivity for $M$ and injectivity after blocking two sites
+    for all three tensors; for $\delta$, injectivity at one site persists
+    at two. Blocking $L$ sites replaces the operator at length $N$ by the
+    operator at length $NL$, which is positive, so the operator laws
+    persist, and a tensor injective after blocking $L$ sites has an
+    injective blocked tensor.
+\end{proof}
+
+The periodic construction of Section~\ref{sec:asymex_group_cocycle_mpo},
+applied to the cocycle $\omega_1$ of $\Z_3$ from
+Definition~\ref{def:asymex_group_cocycle_cyclic}, gives a second exact
+representation of $\Z_3$, of bond dimension three. No relation between
+the two families is established here.
+
+\begin{theorem}[The cocycle construction for \texorpdfstring{$\Z_3$}{Z3}]
+    \label{thm:asymex_z3anomalous_cocycle_family}
+    \lean{Z3Anomalous.cocycleFamily_operator_laws, Z3Anomalous.cocycleFamily}
+    \leanok
+    \uses{thm:asymex_group_cocycle_cyclic}
+    For $n=3$ and $j=1$, every tensor $\hat T_g$ of the construction is a
+    matrix product unitary on nonempty chains, and $U_0=\Id$,
+    $U_gU_h=U_{g+h}$ and $U_g^\dagger=U_{-g}$ for every $N>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is Theorem~\ref{thm:asymex_group_cocycle_cyclic} with $n=3$ and
+    $j=1$.
+\end{proof}
 
 \subsection{The condensation defect}%
 \label{sec:asymex_z3anomalous_defect}

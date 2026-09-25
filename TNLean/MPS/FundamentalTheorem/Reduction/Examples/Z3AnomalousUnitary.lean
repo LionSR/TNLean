@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Algebra.MonomialMatrix
-import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousInverseFusion
+import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.GroupRepresentation
 
 /-!
@@ -81,41 +81,31 @@ def phaseExponent (s : Fin L → Fin 3) : ℕ :=
 theorem mpo_uTensor_apply (s t : Fin L → Fin 3) :
     MPOTensor.mpo uTensor L s t =
       if s = qutritShift L t then eisensteinOmega ^ phaseExponent t else 0 := by
-  rw [MPOTensor.mpo_apply, MPOTensor.mpoMatrixEntry, MPOTensor.evalWord_ofFn]
-  have h := MPSTensor.trace_evalWord_eq_sum_cyclic uTensor.toMPSTensor
-    (fun k ↦ finProdFinEquiv (s k, t k))
-  rw [MPSTensor.evalWord_ofFn_eq_prod] at h
-  have h' : (List.ofFn fun k ↦ uTensor (s k) (t k)).prod.trace =
-      ∑ g : Fin L → Fin 2, ∏ k : Fin L, uTensor (s k) (t k) (g k) (g (k + 1)) := by
-    simpa only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat] using h
-  rw [h']
   let g0 : Fin L → Fin 2 := fun k ↦ occupied (t (k - 1))
-  rw [Fintype.sum_eq_single g0]
-  · by_cases hst : s = qutritShift L t
-    · have hp : ∀ k, s k = t k + 1 := fun k ↦ congrFun hst k
-      rw [ite_eq_left hst]
-      calc
-        _ = ∏ k, eisensteinOmega ^ ((occupied (t (k - 1))).val * (t k).val) := by
-          refine Finset.prod_congr rfl fun k _ ↦ ?_
-          rw [uTensor_apply, ite_eq_left ⟨hp k, by simp [g0]⟩]
-        _ = eisensteinOmega ^ ∑ k, (occupied (t (k - 1))).val * (t k).val :=
-          Finset.prod_pow_eq_pow_sum _ _ _
-        _ = _ := by
-          congr 1
-          exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun k ↦ by simp
-    · rw [ite_eq_right hst]
-      obtain ⟨k, hk⟩ := Function.ne_iff.mp hst
-      refine Finset.prod_eq_zero (Finset.mem_univ k) ?_
-      rw [uTensor_apply, ite_eq_right]
-      exact fun h ↦ hk h.1
-  · intro g hg
+  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond uTensor s t g0 fun g hg ↦ by
     obtain ⟨k, hk⟩ := Function.ne_iff.mp hg
-    refine Finset.prod_eq_zero (Finset.mem_univ (k - 1)) ?_
+    refine ⟨k - 1, ?_⟩
     rw [uTensor_apply, ite_eq_right]
     intro h
     apply hk
-    simpa [g0] using h.2
+    simpa [g0] using h.2]
+  by_cases hst : s = qutritShift L t
+  · have hp : ∀ k, s k = t k + 1 := fun k ↦ congrFun hst k
+    rw [ite_eq_left hst]
+    calc
+      _ = ∏ k, eisensteinOmega ^ ((occupied (t (k - 1))).val * (t k).val) := by
+        refine Finset.prod_congr rfl fun k _ ↦ ?_
+        rw [uTensor_apply, ite_eq_left ⟨hp k, by simp [g0]⟩]
+      _ = eisensteinOmega ^ ∑ k, (occupied (t (k - 1))).val * (t k).val :=
+        Finset.prod_pow_eq_pow_sum _ _ _
+      _ = _ := by
+        congr 1
+        exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun k ↦ by simp
+  · rw [ite_eq_right hst]
+    obtain ⟨k, hk⟩ := Function.ne_iff.mp hst
+    refine Finset.prod_eq_zero (Finset.mem_univ k) ?_
+    rw [uTensor_apply, ite_eq_right]
+    exact fun h ↦ hk h.1
 
 /-- The forward operator is a phase-decorated permutation matrix. -/
 theorem mpo_uTensor :
