@@ -135,9 +135,9 @@ private lemma trace_kitaevTwist : Matrix.trace kitaevTwist = 0 := by
 /-! ### Periodic amplitudes -/
 
 /-- Project result: the periodic contraction of the matrices of arXiv:2011.12127,
-`Papers/2011.12127/TN-Review-main.tex` lines 2531–2532, without the twist. With `k` the number of letters `1`, the
-untwisted periodic amplitude is `2 (-1)^{k/2}` for even `k` and `0` for odd `k`,
-independently of the length. -/
+`Papers/2011.12127/TN-Review-main.tex` lines 2531–2532, without the twist. With `k`
+the number of letters `1`, the untwisted periodic amplitude is `2 (-1)^{k/2}` for
+even `k` and `0` for odd `k`, independently of the length. -/
 theorem kitaevTensor_coeff (w : List (Fin 2)) :
     coeff kitaevTensor w =
       if Even (w.count 1) then 2 * (-1) ^ (w.count 1 / 2) else 0 := by
@@ -164,8 +164,8 @@ theorem kitaevTwistedCoeff_eq (w : List (Fin 2)) :
     simp [Matrix.trace_smul, mul_comm]
 
 /-- Project result: the untwisted counterpart of arXiv:2011.12127,
-`Papers/2011.12127/TN-Review-main.tex` lines 474–476. The untwisted amplitude is supported exactly on words with an even number
-of letters `1`. -/
+`Papers/2011.12127/TN-Review-main.tex` lines 474–476. The untwisted amplitude is
+supported exactly on words with an even number of letters `1`. -/
 theorem kitaevTensor_coeff_ne_zero_iff (w : List (Fin 2)) :
     coeff kitaevTensor w ≠ 0 ↔ Even (w.count 1) := by
   rw [kitaevTensor_coeff]
