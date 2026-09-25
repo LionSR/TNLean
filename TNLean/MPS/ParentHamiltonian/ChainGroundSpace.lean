@@ -89,7 +89,7 @@ theorem chainGroundSpace_eq_of_groundSpace_eq
   · simp [h, hG]
   · simp [h]
 
-/-- If `G * A i = c • (A i * G)` for every letter, the twisted periodic vector
+/-- If \(GA^i=c\,A^iG\) for every letter, the twisted periodic vector
 \(\sigma\mapsto\operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{N-1}}G)\) lies in the
 periodic chain ground space of every window length \(L\le N\). -/
 theorem twistedMPV_mem_chainGroundSpace (A : MPSTensor d D)

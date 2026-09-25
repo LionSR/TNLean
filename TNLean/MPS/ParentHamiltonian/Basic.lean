@@ -188,7 +188,7 @@ theorem rotate_ofFn_replaceWindow (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
       change (k + i.val) % N = (i.val + L + (k - L)) % N
       rw [show i.val + L + (k - L) = k + i.val by omega]
 
-/-- If `G * A i = c • (A i * G)` for every letter, the twisted periodic vector
+/-- If \(GA^i=c\,A^iG\) for every letter, the twisted periodic vector
 \(\sigma\mapsto\operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{N-1}}G)\) restricted
 to any window of \(L\) sites lies in `groundSpace A L`.
 
