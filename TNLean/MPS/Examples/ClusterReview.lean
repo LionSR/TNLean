@@ -33,7 +33,8 @@ lines 298–312: the cluster state as a valence-bond state with bonds
 matrix product vector at every positive length `N` equals
 `(∏ⱼ CZ_{j,j+1}) |+⟩^{⊗N}` on the ring, with no further scalar (the review's
 normalization makes the vector a unit vector); the Verstraete–Cirac
-valence-bond tensor is `√2` times the review tensor; and the review tensor is
+valence-bond tensor `|s)(s|H` has periodic vector `∏ⱼ H_{sⱼ s_{j+1}}`, the
+contracted valence-bond coefficient, and is `√2` times the review tensor; and the review tensor is
 gauge equivalent, through the Hadamard gauge, to the representative
 `clusterTensor` of `TNLean.MPS.Examples.Cluster`, which is its transpose. The
 following results are transferred to the review tensor: failure of one-site
@@ -59,6 +60,8 @@ Pauli `Z`, and the vector is `|-⟩`. These are the values the trace formula giv
 
 ## Main results
 * `clusterTensorRMP_mpv_eq_clusterCZRing` : the controlled-`Z` construction
+* `clusterTensorVBS_mpv_eq_prod` : the valence-bond tensor gives the contracted
+  valence-bond coefficient `∏ⱼ H_{sⱼ s_{j+1}}`
 * `clusterTensorVBS_eq_smul` : the valence-bond tensor is `√2` times the review
   tensor
 * `clusterTensorRMP_eq_transpose`,
