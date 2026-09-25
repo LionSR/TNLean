@@ -814,3 +814,62 @@ The following notions use different transfer objects and are not interchangeable
   `MPSTensor.exists_not_isPeriodicWState_le`). The source's single-length bound
   $D^3\log D=\Omega(N)$ is not formalized; see
   `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
+
+## Symmetries of matrix product density operators
+
+### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
+
+- **Declarations:** `Matrix.IsStrongSymmetry (O ρ : Matrix n n ℂ) : Prop` and
+  `Matrix.IsWeakSymmetry (O ρ : Matrix n n ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Meaning:** $O\rho=\lambda\rho$ for some complex $\lambda$ (strong), and
+  $[O,\rho]=0$ (weak), at one system size.
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
+- **Sanctioned bridges:**
+  `Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose` and
+  `Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary`.
+- **Caveat:** the eigenvalue is not required to be a phase and may be zero;
+  `Matrix.IsStrongSymmetry.norm_eq_one` gives modulus one only for unitary `O`
+  and nonzero `ρ`. Strong implies weak only for Hermitian `ρ` with `O†` also a
+  strong symmetry.
+
+### `MPOTensor.IsStrongMPOSymmetry` and `MPOTensor.IsWeakMPOSymmetry`
+
+- **Declarations:** `MPOTensor.IsStrongMPOSymmetry O M c : Prop` and
+  `MPOTensor.IsWeakMPOSymmetry O M : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Meaning:** the periodic operators $O_a^{(L)}$ of a family of matrix
+  product operators satisfy $O_a^{(L)}\rho^{(L)}=\lambda_a^{(L)}\rho^{(L)}$
+  (strong) or $[O_a^{(L)},\rho^{(L)}]=0$ (weak) for every label and every
+  positive length, where $\rho^{(L)}$ is the periodic operator of `M`.
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
+- **Sanctioned bridges:** `MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry`,
+  `MPOTensor.IsStrongMPOSymmetry.isFusionCharacter`, and
+  `MPOTensor.isStrongMPOSymmetry_iff_purification`.
+- **Caveat:** more general than the source, where the $O_a$ are normal matrix
+  product operators forming a fusion algebra (lines 125–137) and $\rho$ is
+  positive; results add these hypotheses where they use them. Boundary
+  conditions other than the identity are out of scope, recorded in
+  `docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
+
+### `MPOTensor.IsStrongOnSiteSymmetry` and `MPOTensor.IsWeakOnSiteSymmetry`
+
+- **Declarations:** `MPOTensor.IsStrongOnSiteSymmetry M U c : Prop` and
+  `MPOTensor.IsWeakOnSiteSymmetry M U : Prop`, for a monoid homomorphism
+  `U : G →* Matrix (Fin d) (Fin d) ℂ`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Meaning:** the MPO-family predicates above for the on-site family
+  $U_g^{\otimes L}$ (the periodic operators of `MPOTensor.onSite (U g)`).
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`; the
+  eigenvalue-one strong form $U\rho=\rho$ and the weak form $[U,\rho]=0$ are
+  arXiv:2603.28349, line 362.
+- **Sanctioned bridges:**
+  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor` (weak
+  symmetry as on-site symmetry of the vectorized state under $U\otimes\bar U$,
+  for unitary $U$), `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor`,
+  and `MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor` (normal
+  purifications).
+- **Caveat:** the eigenvalues `c g L` are arbitrary complex numbers in the
+  definition; they are phases, multiplicative in `g`, and equal to $1$ at the
+  identity only under unitarity and $\rho^{(L)}\neq 0$
+  (`IsStrongOnSiteSymmetry.norm_eq_one`, `.map_mul`, `.map_one`).

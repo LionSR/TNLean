@@ -9,5 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Examples.MPDOSymmetry
 
 import TNLean.MPS.Examples.MPDOSymmetry.BellBond
-import TNLean.MPS.Examples.MPDOSymmetry.Example412
+import TNLean.MPS.Examples.MPDOSymmetry.IdentityPlusZString
 import TNLean.MPS.Examples.MPDOSymmetry.TwistedDimer
