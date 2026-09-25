@@ -546,6 +546,14 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   formalizes the single-block obstruction only in its fusion-ring form, not
   the cohomological form of the source.
 
+For the strong and weak symmetries of matrix product density operators in
+arXiv:2504.16985:
+
+- `sun25_mpdo_symmetry_boundary_scope.tex` records that the family predicates
+  are stated for the periodic operators, the identity boundary of the source's
+  boundary-weighted density operators, while the single-length results hold
+  for arbitrary matrices.
+
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
 - `fbc25_circle_complex_units_cohomology.tex` distinguishes the source

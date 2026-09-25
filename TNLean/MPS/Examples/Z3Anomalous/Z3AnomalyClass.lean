@@ -176,7 +176,8 @@ private theorem assocInv_two_one_two :
   exact finCongr_toMatrix_eq_one _
 
 private theorem mulTensor_uTensor_uTensor :
-    mulTensor uTensor uTensor = fun i j ↦ complexOfEisenstein (mulTensorR uEis uEis i j) :=
+    mulTensor uTensor uTensor =
+      fun i j ↦ complexOfEisenstein (mulTensorR uEis uEis i j) :=
   funext₂ fun i j ↦ mulTensor_complexOfRing _ uEis uEis i j
 
 private theorem mulTensor_uTensor_uDagTensor :

@@ -90,10 +90,6 @@ theorem complexOfRing_submatrix {m n m' n' : Type*} (X : Matrix m n R) (g : m' �
 theorem complexOfRing_transpose {m n : Type*} (X : Matrix m n R) :
     complexOfRing f Xᵀ = (complexOfRing f X)ᵀ := rfl
 
-theorem complexOfRing_trace {n : Type*} [Fintype n] (X : Matrix n n R) :
-    (complexOfRing f X).trace = f X.trace :=
-  (AddMonoidHom.map_trace f X).symm
-
 theorem complexOfRing_blockDiagonal' {o : Type*} [DecidableEq o] {m' : o → Type*}
     (M : ∀ k, Matrix (m' k) (m' k) R) :
     complexOfRing f (Matrix.blockDiagonal' M) =
