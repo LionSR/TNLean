@@ -48,13 +48,13 @@ the identity boundary~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
     $U\rho=\rho$~\cite{GarreRubio2026LocalCharacterization}.
 \end{definition}
 
-\begin{lemma}[Periodic operators of an on-site tensor]\label{lem:mpdo_onsite_mpo}
+\begin{theorem}[Periodic operators of an on-site tensor]\label{thm:mpdo_onsite_mpo}
     \lean{MPOTensor.mpo_onSite}
     \leanok
     \uses{def:mpdo_onsite_symmetry, def:mpo_family}
     The periodic operator of length $L$ of the bond dimension one tensor
     with entries $u_{ij}$ is $u^{\otimes L}$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Each word evaluates to the scalar $\prod_l u_{\sigma_l\tau_l}$ times the
@@ -68,7 +68,7 @@ the identity boundary~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
         MPOTensor.IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry}
     \leanok
     \uses{def:mpdo_strong_weak_symmetry, def:mpdo_onsite_symmetry, def:mpdo,
-        lem:mpdo_onsite_mpo}
+        thm:mpdo_onsite_mpo}
     Let $\rho$ be Hermitian. If $O$ and $O^\dagger$ are both strong
     symmetries of $\rho$, then $O$ is a weak symmetry of $\rho$. Hence a
     strong symmetry of an MPDO whose family contains the adjoint of each of
@@ -184,12 +184,19 @@ the identity boundary~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Acting with a unitary on the spin leg leaves the transfer map unchanged
-    and preserves irreducibility, so the twisted tensor is again normal. By
-    Theorem~\ref{thm:mpdo_strong_symmetry_purification} the twisted and
-    untwisted purifying states are proportional at every positive length,
-    with a factor that is nonzero at all large lengths because the twisted
-    tensor is normal. Theorems~\ref{thm:normal_proportional_mpv_geometric_phase}
+    Let $B_g$ be the twisted tensor with entries
+    $B_g^{(i,k)}=\sum_j(U_g)_{ij}A^{(j,k)}$. Acting with a unitary on the
+    spin leg leaves the transfer map unchanged and preserves
+    irreducibility, so $B_g$ is again normal. By
+    Theorem~\ref{thm:mpdo_strong_symmetry_purification} there are scalars
+    $c_g(N)$ with
+    \begin{align}
+        \ket{V^{(N)}(B_g)} & =c_g(N)\ket{V^{(N)}(A)}
+        \notag
+    \end{align}
+    for every $N>0$. Normality of $B_g$ gives $O_{B_gB_g}(N)\to1$, so
+    $O_{B_gB_g}(N)\neq0$ for all large $N$, and then $c_g(N)\neq0$.
+    Theorems~\ref{thm:normal_proportional_mpv_geometric_phase}
     and~\ref{thm:cpsv_normal_mpv_phase_gauge} turn this proportionality into
     the gauge relation. The converse is
     Theorem~\ref{thm:mpdo_symmetry_local_conditions}.
