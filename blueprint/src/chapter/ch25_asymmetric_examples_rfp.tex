@@ -859,9 +859,8 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     \lean{P6Compression.dimerTarget_isNormal}
     \leanok
     \uses{def:asymex_dimer, def:normal}
-    Each sector is normal at blocking length one in the sense of
-    Definition~\ref{def:normal}: its thirty-two nonzero letters are
-    scaled matrix units covering every position of $\MN{4}$.
+    Each sector $M_f$ is normal at blocking length one in the sense of
+    Definition~\ref{def:normal}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -880,14 +879,23 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
         P6Compression.dimerBlockInt_eq_add}
     \leanok
     \uses{def:asymex_dimer}
-    For all sectors $f,f'$, the stacked product satisfies
-    $B_{f,f'}=B_{0,f+f'}$, and the two target tensors of the pair
+    Write $\widetilde M_f=16M_f$ for the integer sector tensor and
+    \begin{align}
+        \widetilde B_{f,f'}^{ab}
+         & =\sum_c\widetilde M_f^{ac}\otimes\widetilde M_{f'}^{cb}
+        =256\,B_{f,f'}^{ab}
+        \notag
+    \end{align}
+    for the integer stacked product. For all sectors $f,f'$,
+    $\widetilde B_{f,f'}=\widetilde B_{0,f+f'}$, and the two integer target
+    tensors $\widetilde M_{f+f'}$ and $\widetilde M_{f+f'+1}$ of the pair
     $(f,f')$ are those of the pair $(0,f+f')$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The factor $M_f^{ac}\otimes M_{f'}^{cb}$ vanishes unless the three
-    indices $a,c,b$ carry a common label $k$. On a common label
+    The factor $\widetilde M_f^{ac}\otimes\widetilde M_{f'}^{cb}$ vanishes
+    unless the three indices $a,c,b$ carry a common label $k$. On a common
+    label
     the signs multiply, $\tau_k(f)\tau_k(f')=\tau_k(0)\tau_k(f+f')$, which is
     checked over the two values of $k$ and the four pairs of sectors. The
     target tensors depend on $(f,f')$ only through $f+f'$.
