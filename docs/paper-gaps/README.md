@@ -560,3 +560,11 @@ For the group matrix product operators of arXiv:2203.12563:
   $U_g=\bigotimes_i (L_g^i\otimes L_g^{i+1})W_g^{i,i+1}$, read literally,
   shifts every site twice, and that the printed tensor and the printed
   $\mathbb Z_2$ example fix one left shift per site.
+
+For the AKLT example of arXiv:2011.12127, Appendix A:
+
+- `rmp_aklt_pauli_basis_sign.tex` records that in the printed basis
+  $\ket{+}=i(\ket{-1}+\ket{+1})/\sqrt2$, $\ket{-}$, $\ket{0}$ the AKLT tensor
+  becomes $(\sigma_x,-\sigma_y,\sigma_z)/\sqrt2$, not the printed
+  $(\sigma_x,\sigma_y,\sigma_z)/\sqrt2$; the printed Pauli form holds with the
+  phase of $\ket{+}$ conjugated. Both identities are formally verified.

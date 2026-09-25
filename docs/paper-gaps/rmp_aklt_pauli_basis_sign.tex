@@ -1,0 +1,114 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Sign of $\sigma_y$ in the Pauli Form of the AKLT Tensor}
+\author{}
+\date{2026-09-25}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+The examples appendix of Ref.~\cite{Cirac2021Matrix}, subsection ``The AKLT
+state'', prints the AKLT tensor with the physical states labelled by
+$S_z=0,\pm1$ as
+\begin{align}
+    A^{+1}
+        &=\begin{pmatrix}1&0\\0&0\end{pmatrix}Y,
+    &
+    A^{0}
+        &=\frac{1}{\sqrt2}\begin{pmatrix}0&1\\1&0\end{pmatrix}Y,
+    &
+    A^{-1}
+        &=\begin{pmatrix}0&0\\0&1\end{pmatrix}Y,
+    \label{eq:rmp_aklt_pauli_basis_sign_tensor}
+\end{align}
+with the singlet matrix
+\begin{align}
+    Y
+        &=\begin{pmatrix}0&-1\\1&0\end{pmatrix}.
+    \label{eq:rmp_aklt_pauli_basis_sign_singlet}
+\end{align}
+It then states that in the basis
+\begin{align}
+    \ket{+}
+        &=\frac{i}{\sqrt2}\left(\ket{-1}+\ket{+1}\right),
+    &
+    \ket{-}
+        &=\frac{1}{\sqrt2}\left(\ket{-1}-\ket{+1}\right),
+    &
+    \ket{0},
+    \label{eq:rmp_aklt_pauli_basis_sign_basis}
+\end{align}
+the tensor becomes $A^-=\sigma_x/\sqrt2$, $A^+=\sigma_y/\sqrt2$, and
+$A^0=\sigma_z/\sqrt2$.\footnote{Source traceability:
+\path{Papers/2011.12127/TN-Review-main.tex}, lines 2372--2393.}
+
+\section{The computation}
+
+Write $\ket{\psi}=\sum_{s}\operatorname{tr}(A^{s_1}\cdots A^{s_N})
+\ket{s_1\cdots s_N}$. The basis
+(\ref{eq:rmp_aklt_pauli_basis_sign_basis}) is orthonormal, so the component of
+$\ket{\psi}$ along $\ket{a_1\cdots a_N}$ is obtained from the tensor
+\begin{align}
+    B^{a}
+        &=\sum_{s}\langle a\,|\,s\rangle\,A^{s}.
+    \label{eq:rmp_aklt_pauli_basis_sign_new_tensor}
+\end{align}
+The matrices in (\ref{eq:rmp_aklt_pauli_basis_sign_tensor}) are
+$A^{+1}=-\ketbra{0}{1}$, $A^{0}=\sigma_z/\sqrt2$, and
+$A^{-1}=\ketbra{1}{0}$. Since $\langle +|\pm1\rangle=-i/\sqrt2$,
+\begin{align}
+    B^{+}
+        &=-\frac{i}{\sqrt2}\left(A^{-1}+A^{+1}\right)
+        =-\frac{i}{\sqrt2}\begin{pmatrix}0&-1\\1&0\end{pmatrix}
+        =-\frac{1}{\sqrt2}\sigma_y,
+    \label{eq:rmp_aklt_pauli_basis_sign_plus}
+\end{align}
+while $B^-=(A^{-1}-A^{+1})/\sqrt2=\sigma_x/\sqrt2$ and
+$B^0=\sigma_z/\sqrt2$ agree with the source. The printed $\sigma_y$ is the
+value of $\sum_s\langle s\,|\,a\rangle A^s$, which uses the complex conjugate
+of the correct coefficient; it is not a gauge artefact. No virtual gauge
+maps $(\sigma_x,\sigma_y,\sigma_z)$ to $(\sigma_x,-\sigma_y,\sigma_z)$,
+because that map reverses the orientation of the Pauli vector, and the two
+tensors give different states: for $N=3$ the coefficients of
+$\ket{-,+,0}$ are $\operatorname{tr}(\sigma_x\sigma_y\sigma_z)/2^{3/2}=i/\sqrt2$
+and its negative.
+
+\section{The correction}
+
+The printed Pauli form holds exactly in the orthonormal basis
+\begin{align}
+    \ket{+}
+        &=-\frac{i}{\sqrt2}\left(\ket{-1}+\ket{+1}\right),
+    \label{eq:rmp_aklt_pauli_basis_sign_corrected}
+\end{align}
+with $\ket{-}$ and $\ket{0}$ unchanged; equivalently, in the printed basis the
+component along $\ket{+}$ is $-\sigma_y/\sqrt2$. The two readings differ by the
+sign of one physical basis vector, so every symmetry, normality, and
+parent-Hamiltonian property of the Pauli form is unaffected. Both identities,
+the orthonormality of both bases, and the expansion of the state coefficients
+in the new basis are formally verified in
+\doclink{TNLean/MPS/Examples/AKLTReview}.\footnote{In particular,
+\leanid{MPSTensor.physicalBasisChange_akltRMPBasis},
+\leanid{MPSTensor.physicalBasisChange_akltRMPBasisFixed}, and
+\leanid{MPSTensor.mpv_physicalBasisChange}.}
+
+\section{Verdict}
+
+The printed Pauli form of the AKLT tensor in Ref.~\cite{Cirac2021Matrix} holds
+with $A^+=-\sigma_y/\sqrt2$ in the printed basis, or with the phase of
+$\ket{+}$ conjugated. The tensor itself, its derivation from singlet bonds,
+and the statements about $A^-$ and $A^0$ hold as printed.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
