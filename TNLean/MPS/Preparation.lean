@@ -10,3 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.Sequential
+import TNLean.MPS.Preparation.BlockedPolar
+import TNLean.MPS.Preparation.MatrixPolar
