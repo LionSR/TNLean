@@ -63,6 +63,10 @@ vectorization `E_A = ∑ᵢ (Aⁱ)^* ⊗ Aⁱ` of eq. `eq:transfer_matrix`, beca
   `MPSTensor.hasPhysicalBlockingIsometry_fixedPointTensor` — `P_∞` is a
   renormalization fixed point.
 * `MPSTensor.fixedPointPair_norm_sq` — `⟨ω|ω⟩ = Tr ρ = 1`.
+* `MPSTensor.bondRegrouping` — the regrouping of the sites `L_k ⊗ R_k` of a ring
+  into the bonds `R_k ⊗ L_{k+1}`.
+* `MPSTensor.pairProductState_norm_sq`,
+  `MPSTensor.pairProductState_fixedPointPair_norm_sq` — `⟨Ω|Ω⟩ = ⟨ω|ω⟩^N = 1`.
 * `MPSTensor.tendsto_transferMap_blockTensor_of_spectralRadius_lt_one`,
   `MPSTensor.tendsto_transferMap_blockTensor_of_isPrimitive` — the blocked
   transfer map converges to `E_{P_∞}` (the limit in eq. `eq:B_TM`).
