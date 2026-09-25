@@ -101,8 +101,8 @@ open scoped Matrix Kronecker
 namespace P6Compression
 
 open MPSTensor
-open MPOTensor.TwistedDimer (bitL bitR bitF physIdx exists_eq_physIdx flagMPO flagFamily
-  flagWeight flagWeight_physIdx flagFamily_isNormal)
+open MPOTensor.TwistedDimer (bitL bitR bitF exists_eq_physIdx flagMPO flagFamily flagWeight
+  flagWeight_physIdx flagFamily_isNormal)
 
 /-! ### The sector tensors -/
 
