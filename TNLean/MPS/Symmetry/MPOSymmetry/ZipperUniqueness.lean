@@ -80,7 +80,8 @@ private theorem eq_zero_of_forall_mulVec_mulVec {D₁ D₂ : ℕ} {X : Matrix (F
   obtain ⟨j, hj⟩ := Function.ne_iff.mp hv
   refine Matrix.toLin'.injective (LinearMap.ext fun u => ?_)
   have hM : Matrix.vecMulVec u (Pi.single j (v j)⁻¹) *ᵥ v = u := by
-    rw [Matrix.vecMulVec_mulVec, single_dotProduct, inv_mul_cancel₀ hj, MulOpposite.op_one, one_smul]
+    rw [Matrix.vecMulVec_mulVec, single_dotProduct, inv_mul_cancel₀ hj, MulOpposite.op_one,
+      one_smul]
   simpa [hM] using h (Matrix.vecMulVec u (Pi.single j (v j)⁻¹))
 
 /-- **The intertwiner lemma for normal tensors.** If `A` and `A'` are normal and
