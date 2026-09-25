@@ -301,9 +301,9 @@ theorem fibProjector_eq_trace_fibDelta (L : ℕ) :
 rules of the two blocks (`fibonacci_fusion_algebra`) and the weight relation
 `∑_{a,b} N_{ab}^c w_a w_b = w_c` (`fibWeight_fusion`), the weighted operator is a projector at
 every positive length, `P_L² = P_L`. The source asks this for all `L`; at `L = 0` the empty trace
-gives the bond dimensions, `O_1^0 = 2` and `O_τ^0 = 3`, so `P_0 = (2 + 3φ)/(1 + φ²) ≠ 1`, and
-the empty chain is excluded as a degenerate reading, as recorded in the module's Local fix
-(positive length). -/
+gives the bond dimensions, `O_1^0 = 2` and `O_τ^0 = 3`, so `P_0 = (2 + 3φ)/(1 + φ²)` is a scalar
+different from `0` and `1`, hence `P_0² ≠ P_0`, and the empty chain is excluded as a degenerate
+reading, as recorded in the module's Local fix (positive length). -/
 theorem fibProjector_mul_self (L : ℕ) (hL : 0 < L) :
     fibProjector L * fibProjector L = fibProjector L := by
   simp only [fibProjector, add_mul, mul_add, smul_mul_smul_comm, fibOne_mul_fibOne L hL,
