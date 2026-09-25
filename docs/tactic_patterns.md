@@ -593,6 +593,29 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** construction details for Hermitian parts remain private to the
   channel theorem. Only the compound MPS conclusion remains; exact pass-through declarations were removed.
 
+### weighted word traces of a compression — promoted
+- **Pattern:**
+  ```lean
+  have h := P.trace_evalWord_eq_sum w hw
+  have hs : ∀ s, Matrix.trace (Kraus.evalWord (μ s • A s) w) =
+      μ s ^ w.length * Matrix.trace (Kraus.evalWord (A s) w) := by
+    intro s
+    rw [show μ s • A s = fun i => μ s • A s i from rfl,
+      Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
+  rw [h, show S = Finset.univ from rfl, Fin.sum_univ_two, hs 0, hs 1]
+  ```
+- **Seen:** at least ten occurrences of the `Kraus.evalWord_smul, Matrix.trace_smul,
+  smul_eq_mul` step after `MultiBlockCompression.trace_evalWord_eq_sum` across the worked
+  examples (2026-09-25), among them `Examples/RFP/TwistedDimer.lean`,
+  `Examples/RFP/OneLabelCandidate.lean`, `Examples/Ising/IsingWeightedTwist.lean`,
+  `Examples/MultiBlock/OneSlotGauge.lean` and `Examples/KramersWannier/KramersWannier.lean`.
+- **Abstraction:** `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum_smul` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/MultiBlockTrace.lean`: a compression onto weighted
+  blocks `μ_s • A_s` gives `tr(B^w) = ∑_s μ_s^{|w|} tr(A_s^w)`.
+- **Notes:** the two RFP example sites now call it directly. The remaining example sites can
+  switch when next edited; the one-block form `MPSTensor.trace_evalWord_smul` in
+  `MPDO/OperatorProduct.lean` covers a single rescaled tensor.
+
 ### CFC square-root Hermiticity — promoted
 - **Pattern:** derive `(CFC.sqrt ρ)ᴴ = CFC.sqrt ρ` from `CFC.sqrt_nonneg`,
   `Matrix.nonneg_iff_posSemidef`, and positive-semidefinite Hermiticity.
