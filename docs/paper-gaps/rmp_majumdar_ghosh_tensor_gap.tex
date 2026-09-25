@@ -83,7 +83,11 @@ On the configuration with all spins $0$ this vector has coefficient
 $4(-1)^m\neq0$, whereas every singlet covering vanishes there. The literal
 tensor therefore does not represent the Majumdar--Ghosh state at any even
 length: its periodic vector is not a scalar multiple of the dimer
-superposition.
+superposition.\footnote{Formal declarations: \leanid{MPSTensor.majumdarGhoshReviewTensor},
+\leanid{MPSTensor.majumdarGhoshReview\_coeff},
+\leanid{MPSTensor.majumdarGhoshReview\_mpv\_eq}, and
+\leanid{MPSTensor.majumdarGhoshReview\_mpv\_ne\_smul} in
+\doclink{TNLean/MPS/Examples/MajumdarGhoshDimer}.}
 
 A gauge transformation of the bond leaves the periodic vector unchanged, so the
 only freedom left is a change of basis of the physical spin, a single-site
@@ -110,15 +114,20 @@ If $m$ is odd, then $\mu=0$. If $m\geq2$ is even, then $c=\mu^m$. Now take
 the configuration $0110$ followed by $m-2$ copies of $01$. The covering
 $(1,2)(3,4)\cdots$ pairs $01$, $10$, and then $01$ repeatedly, while the
 covering $(2,3)(4,5)\cdots$ contains the pair $11$. Hence
-$\mu^m=cY_{01}Y_{10}Y_{01}^{m-2}=-c$, and together with $c=\mu^m$ this gives
-$\mu=0$. In either case $M=0$, so $U$ is singular and the left side
+\begin{align}
+    \mu^m
+        &=
+        cY_{01}Y_{10}Y_{01}^{m-2}
+        =
+        -c,
+    \label{eq:rmp_majumdar_ghosh_tensor_gap_shifted}
+\end{align}
+and together with $c=\mu^m$ this gives $\mu=0$. In either case $M=0$, so
+$U$ is singular and the left side
 vanishes, which forces $c=0$. No change of physical basis turns the literal
 tensor into a tensor for the Majumdar--Ghosh state: the symmetric pair state is
-the obstruction.\footnote{Formal declarations: \leanid{MPSTensor.majumdarGhoshReviewTensor},
-\leanid{MPSTensor.majumdarGhoshReview\_coeff},
-\leanid{MPSTensor.majumdarGhoshReview\_mpv\_eq}, and
-\leanid{MPSTensor.majumdarGhoshReview\_mpv\_ne\_smul} in
-\doclink{TNLean/MPS/Examples/MajumdarGhoshDimer}.}
+the obstruction. This basis-change argument is not formalized; the formal
+statement is the scalar non-proportionality above.
 
 \section{The correction: the singlet on the spin levels}
 
