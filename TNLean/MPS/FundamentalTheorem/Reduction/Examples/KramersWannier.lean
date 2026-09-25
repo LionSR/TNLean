@@ -16,7 +16,7 @@ import TNLean.MPS.MPDO.OperatorProduct
 
 **Source.** Aasen, Mong, Fendley 2016 (arXiv:1601.07185), §"The duality defect",
 `References/1601.07185/source/Ising-Defects.tex` lines 994–1000: the duality-defect kernel
-`⟨ĥ| D_σ |h⟩ = 2^{-L/2} (-1)^{∑_j (h_{j-1} + h_j) ĥ_{j-1/2}}` from the lattice to the dual
+`⟨h'| D_σ |h⟩ = 2^{-L/2} (-1)^{∑_j (h_{j-1} + h_j) h'_{j-1/2}}` from the lattice to the dual
 lattice; lines 1033–1039 and 1051–1056 (Eq. `fusionalgebra`): its square is
 `D_σ² = 1 + D_ψ`, with `D_ψ` the spin flip. Seiberg, Shao 2023 (arXiv:2307.02534),
 §"Non-invertible lattice translation of the transverse-field Ising model",
