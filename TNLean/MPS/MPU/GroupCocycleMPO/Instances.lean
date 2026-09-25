@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXUnitary
+import TNLean.MPS.Examples.CZX.CZXUnitary
 import TNLean.MPS.MPU.GroupCocycleMPO
 
 /-!
