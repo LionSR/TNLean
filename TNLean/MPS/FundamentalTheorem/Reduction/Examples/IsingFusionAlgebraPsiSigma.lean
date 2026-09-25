@@ -87,17 +87,17 @@ theorem isingSigma_mul_isingPsi {N : ℕ} (hN : 0 < N) :
       revert i j
       decide +kernel) hN
 
-/-- **`O_ψ O_σ = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and
-1323, as in `isingPsi_mul_isingSigma`: for the rescaled tensor `(√2)⁻¹ • isingSigma`, which is `A_σ`
-without the factor `√2`, the fusion rule `ψ × σ = σ` holds at every positive length. -/
+/-- **`O_ψ O_σ = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and 1323,
+as in `isingPsi_mul_isingSigma`: for `(√2)⁻¹ • isingSigma`, the source tensor `A_σ` (the stored
+`isingSigma` is `√2 A_σ`), the fusion rule `ψ × σ = σ` holds at every positive length. -/
 theorem isingPsi_mul_isingSigma_normalized {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo isingPsi N * MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N =
       MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N := by
   rw [MPOTensor.mpo_smul, Matrix.mul_smul, isingPsi_mul_isingSigma hN]
 
-/-- **`O_σ O_ψ = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and
-1323, as in `isingSigma_mul_isingPsi`: for the rescaled tensor `(√2)⁻¹ • isingSigma`, which is `A_σ`
-without the factor `√2`, the fusion rule `σ × ψ = σ` holds at every positive length. -/
+/-- **`O_σ O_ψ = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and 1323,
+as in `isingSigma_mul_isingPsi`: for `(√2)⁻¹ • isingSigma`, the source tensor `A_σ` (the stored
+`isingSigma` is `√2 A_σ`), the fusion rule `σ × ψ = σ` holds at every positive length. -/
 theorem isingSigma_normalized_mul_isingPsi {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N * MPOTensor.mpo isingPsi N =
       MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N := by
