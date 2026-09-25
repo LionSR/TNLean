@@ -49,10 +49,13 @@ theorem invSqrtTwo_pow_mul_self (n : ℕ) :
     invSqrtTwo ^ n * invSqrtTwo ^ n * (2 : ℂ) ^ n = 1 := by
   rw [← mul_pow, ← mul_pow, invSqrtTwo_mul_self, inv_mul_cancel₀ two_ne_zero, one_pow]
 
-@[simp] theorem star_invSqrtTwo : star invSqrtTwo = invSqrtTwo := by
+/-- The complex number `1 / √2` is real, so complex conjugation fixes it. -/
+@[simp] theorem conj_invSqrtTwo : starRingEnd ℂ invSqrtTwo = invSqrtTwo := by
   simp [invSqrtTwo, Complex.conj_ofReal]
 
-@[simp] theorem conj_invSqrtTwo : starRingEnd ℂ invSqrtTwo = invSqrtTwo :=
-  star_invSqrtTwo
+/-- The `star` spelling of `conj_invSqrtTwo`, for rewriting after
+`Matrix.conjTranspose_smul`. -/
+theorem star_invSqrtTwo : star invSqrtTwo = invSqrtTwo :=
+  conj_invSqrtTwo
 
 end Complex
