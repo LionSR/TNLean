@@ -78,8 +78,22 @@ independence clause of the formal basis of normal tensors.
 \section{Boundary}
 Not formalized: the arbitrary-boundary algebra $\mathcal A_T^n$, the
 subspace $\mathcal S_A^n$ and the invariance $\mathcal A_T\cdot\mathcal
-S_A\subset\mathcal S_A$; the fusion and action tensors; the $F$- and
-$L$-symbols and the pentagon equations. Consequently the single-block
+S_A\subset\mathcal S_A$; the exact fusion and action tensors that the source
+obtains from the closedness condition; the $F$- and $L$-symbols and the
+pentagon equations; and the gauge of the fusion tensors by invertible matrices
+on the multiplicity spaces (line 416). Formalized instead are fusion and action
+tensors for periodic boundaries, derived from the fusion rules and from
+(\ref{eq:glm23_periodic_symmetry}) through the multi-block compression theorem.
+They carry one block per copy of each channel, are mutually biorthogonal, and
+decompose the stacked tensor up to a nilpotent remainder.\footnote{Results:
+    \leanid{MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum} and
+    \leanid{MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum}.} With only a
+nilpotent remainder the gauge is not a multiplicity-space transformation.
+Conjugating the block coordinates by a unipotent block upper triangular matrix
+adds to one copy's fusion tensor a multiple of another's. Uniqueness up to a
+scalar is formalized only when the whole stacked tensor reduces onto a single
+block.\footnote{Result:
+    \leanid{MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq}.} Consequently the single-block
 obstruction of the source's subsection ``Injective MPSs cannot be invariant
 under non-trivial MPOs'', which shows that the $F$-symbols
 are trivial for an injective invariant state without
