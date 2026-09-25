@@ -2,9 +2,9 @@
 %% Chapter: Physics examples of the multi-block asymmetric
 %% compression theorem.
 %% Structure: a chapter heading and conventions paragraph, an
-%% overview naming each example with its sources, then eight
+%% overview naming each example with its sources, then nine
 %% physical examples (elementary states, CZX, Kramers--Wannier,
-%% Fibonacci, Ising, Z2 x Z2, Z3, and Bell-bond fixed points),
+%% Fibonacci, Ising, group cocycle MPOs, Z2 x Z2, Z3, and Bell-bond fixed points),
 %% each in its own file holding one \section with its definition,
 %% properties, compression results, and remarks. The Fibonacci
 %% anomaly file is input right after the Fibonacci file and
@@ -58,6 +58,10 @@ the Fibonacci~\cite[Appendix~D.1]{Bultinck2017Anyons} and
 Ising~\cite[Appendix~D.2]{Bultinck2017Anyons} fusion categories and their
 anyon chains~\cite{Feiguin2007GoldenChain}, together with the review's
 Fibonacci operator~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix};
+the periodic group matrix product operators built from a normalized
+three-cocycle~\cite{GarreRubio2023MPOSym}, evaluated for the group of order
+two, for the cyclic groups with the cocycles
+of~\cite{GarreRubioSchuch2024DomainWall}, and for $\Z_2\times\Z_2$;
 symmetry tensors for $\Z_2\times\Z_2$ and $\Z_3$ with their condensation
 defects, constructed here after the anomalous group symmetries discussed
 in Refs.~\cite{GarreRubio2023MPOSym,GarreRubioSchuch2024DomainWall,Roumpedakis2023Condensation},
@@ -72,6 +76,7 @@ of Ref.~\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
 \input{chapter/ch25_asymmetric_examples_fibonacci.tex}%
 \input{chapter/ch25_asymmetric_examples_fibonacci_anomaly.tex}%
 \input{chapter/ch25_asymmetric_examples_ising.tex}%
+\input{chapter/ch25_asymmetric_examples_group_cocycle.tex}%
 \input{chapter/ch25_asymmetric_examples_z2z2.tex}%
 \input{chapter/ch25_asymmetric_examples_z3.tex}%
 \input{chapter/ch25_asymmetric_examples_rfp.tex}%

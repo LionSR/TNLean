@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Algebra.MonomialMatrix
-import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Defect
+import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.GroupRepresentation
 
 /-!
@@ -79,45 +79,35 @@ theorem mpo_symTensor_apply (g : Fin 4) (s t : Fin N → Fin 4) :
     mpo (symTensor g) N s t =
       if s = physicalShift g N t then
         (-1 : ℂ) ^ ((g.val / 2) * secondCZExponent t) else 0 := by
-  rw [mpo_apply, mpoMatrixEntry, MPOTensor.evalWord_ofFn]
-  have h := trace_evalWord_eq_sum_cyclic (symTensor g).toMPSTensor
-    (fun n ↦ finProdFinEquiv (s n, t n))
-  rw [evalWord_ofFn_eq_prod] at h
-  have h' : (List.ofFn fun n ↦ symTensor g (s n) (t n)).prod.trace =
-      ∑ b : Fin N → Fin (bondDim g),
-        ∏ n : Fin N, symTensor g (s n) (t n) (b n) (b (n + 1)) := by
-    simpa only [toMPSTensor, finProdFinEquiv_divNat, finProdFinEquiv_modNat] using h
-  rw [h']
   let b0 : Fin N → Fin (bondDim g) := fun n ↦ physicalBond g (t (n - 1))
-  rw [Fintype.sum_eq_single b0]
-  · by_cases hst : s = physicalShift g N t
-    · have hp : ∀ n, s n = gmul g (t n) := fun n ↦ congrFun hst n
-      rw [ite_eq_left hst]
-      calc
-        _ = ∏ n, (-1 : ℂ) ^ ((g.val / 2) *
-            ((t (n - 1)).val % 2 * ((t n).val % 2))) := by
-          refine Finset.prod_congr rfl fun n _ ↦ ?_
-          rw [symTensor_apply, ite_eq_left ⟨hp n, by simp [b0]⟩]
-          simp only [b0, physicalBond_val, Nat.mul_assoc]
-        _ = (-1 : ℂ) ^ ∑ n, (g.val / 2) *
-            ((t (n - 1)).val % 2 * ((t n).val % 2)) :=
-          Finset.prod_pow_eq_pow_sum _ _ _
-        _ = _ := by
-          rw [← Finset.mul_sum]
-          congr 2
-          exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun n ↦ by simp
-    · rw [ite_eq_right hst]
-      obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
-      refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
-      rw [symTensor_apply, ite_eq_right]
-      exact fun h ↦ hn h.1
-  · intro b hb
+  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond (symTensor g) s t b0 fun b hb ↦ by
     obtain ⟨n, hn⟩ := Function.ne_iff.mp hb
-    refine Finset.prod_eq_zero (Finset.mem_univ (n - 1)) ?_
+    refine ⟨n - 1, ?_⟩
     rw [symTensor_apply, ite_eq_right]
     intro h
     apply hn
-    simpa [b0] using h.2
+    simpa [b0] using h.2]
+  by_cases hst : s = physicalShift g N t
+  · have hp : ∀ n, s n = gmul g (t n) := fun n ↦ congrFun hst n
+    rw [ite_eq_left hst]
+    calc
+      _ = ∏ n, (-1 : ℂ) ^ ((g.val / 2) *
+          ((t (n - 1)).val % 2 * ((t n).val % 2))) := by
+        refine Finset.prod_congr rfl fun n _ ↦ ?_
+        rw [symTensor_apply, ite_eq_left ⟨hp n, by simp [b0]⟩]
+        simp only [b0, physicalBond_val, Nat.mul_assoc]
+      _ = (-1 : ℂ) ^ ∑ n, (g.val / 2) *
+          ((t (n - 1)).val % 2 * ((t n).val % 2)) :=
+        Finset.prod_pow_eq_pow_sum _ _ _
+      _ = _ := by
+        rw [← Finset.mul_sum]
+        congr 2
+        exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun n ↦ by simp
+  · rw [ite_eq_right hst]
+    obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
+    refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
+    rw [symTensor_apply, ite_eq_right]
+    exact fun h ↦ hn h.1
 
 /-- The periodic operator is a signed permutation matrix. -/
 theorem mpo_symTensor (g : Fin 4) :
