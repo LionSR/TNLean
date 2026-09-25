@@ -22,7 +22,8 @@ deciding finitely many identities over `ℤ[ω]` and transporting them along the
   matched and unmatched clauses of the conjugated letters; its compression pair is then read off
   by `MPSTensor.MultiBlockCompression.left_gaugeOfMatrix` and
   `MPSTensor.MultiBlockCompression.right_gaugeOfMatrix`.
-* `MPSTensor.isNormal_of_scaled_single` certifies normality from finitely many words whose
+* `MPSTensor.isNBlkInjective_of_scaled_single` certifies injectivity at a fixed word length,
+  and `MPSTensor.isNormal_of_scaled_single` normality, from finitely many words whose
   combinations are the matrix units scaled by a common nonzero Eisenstein integer.
 * `MPSTensor.right_intertwiner_eq_zero_of_eisenstein` and
   `MPSTensor.left_intertwiner_eq_zero_of_eisenstein` transport the intertwiner certificates of
@@ -35,7 +36,8 @@ deciding finitely many identities over `ℤ[ω]` and transporting them along the
 
 ## Main results
 
-* `MPSTensor.isNormal_of_scaled_single`: the normality certificate.
+* `MPSTensor.isNBlkInjective_of_scaled_single`, `MPSTensor.isNormal_of_scaled_single`: the
+  block-injectivity and normality certificates.
 * `MPSTensor.right_intertwiner_eq_zero_of_eisenstein`,
   `MPSTensor.left_intertwiner_eq_zero_of_eisenstein`: the intertwiner certificates.
 -/
@@ -99,19 +101,18 @@ end MultiBlockCompression
 
 /-! ### Normality from scaled matrix units -/
 
-/-- **A normality certificate over the Eisenstein integers.** If for every matrix unit `E_{ij}`
-finitely many words of a common positive length `N` combine, with Eisenstein-integral
-coefficients, to `c • E_{ij}` for one nonzero Eisenstein integer `c`, then the tensor is normal
-at blocking length `N`. -/
-theorem isNormal_of_scaled_single {D : ℕ} {A : MPSTensor d D}
+/-- **A block-injectivity certificate over the Eisenstein integers.** If for every matrix unit
+`E_{ij}` finitely many words of a common length `N` combine, with Eisenstein-integral
+coefficients, to `c • E_{ij}` for one nonzero Eisenstein integer `c`, then the words of length
+`N` span the full matrix algebra. -/
+theorem isNBlkInjective_of_scaled_single {D : ℕ} {A : MPSTensor d D}
     (AE : Fin d → Matrix (Fin D) (Fin D) EisensteinInt)
-    (hA : ∀ a, A a = complexOfEisenstein (AE a)) {N : ℕ} (hN : 0 < N) {K : ℕ}
+    (hA : ∀ a, A a = complexOfEisenstein (AE a)) {N K : ℕ}
     (word : Fin D → Fin D → Fin K → Fin N → Fin d) (coeff : Fin D → Fin D → Fin K → EisensteinInt)
     {c : EisensteinInt} (hc : c ≠ 0)
     (h : ∀ i j, ∑ k, coeff i j k • evalWordEisenstein AE (List.ofFn (word i j k)) =
       c • Matrix.single i j 1) :
-    Kraus.IsNormal A := by
-  refine ⟨N, hN, ?_⟩
+    Kraus.IsNBlkInjective A N := by
   rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
   set T := Submodule.span ℂ
     (Set.range fun w : Fin N → Fin d => Kraus.evalWord A (List.ofFn w)) with hT
@@ -130,6 +131,19 @@ theorem isNormal_of_scaled_single {D : ℕ} {A : MPSTensor d D}
     have h2 := T.smul_mem (eisensteinToComplex c)⁻¹ hmem
     rwa [smul_smul, inv_mul_cancel₀ hc', one_smul] at h2
   exact T.eq_top_of_forall_single_mem hunit
+
+/-- **A normality certificate over the Eisenstein integers**: the certificate of
+`isNBlkInjective_of_scaled_single` at a positive length `N` shows the tensor is normal at
+blocking length `N`. -/
+theorem isNormal_of_scaled_single {D : ℕ} {A : MPSTensor d D}
+    (AE : Fin d → Matrix (Fin D) (Fin D) EisensteinInt)
+    (hA : ∀ a, A a = complexOfEisenstein (AE a)) {N : ℕ} (hN : 0 < N) {K : ℕ}
+    (word : Fin D → Fin D → Fin K → Fin N → Fin d) (coeff : Fin D → Fin D → Fin K → EisensteinInt)
+    {c : EisensteinInt} (hc : c ≠ 0)
+    (h : ∀ i j, ∑ k, coeff i j k • evalWordEisenstein AE (List.ofFn (word i j k)) =
+      c • Matrix.single i j 1) :
+    Kraus.IsNormal A :=
+  ⟨N, hN, isNBlkInjective_of_scaled_single AE hA word coeff hc h⟩
 
 /-! ### Intertwiner certificates over the Eisenstein integers -/
 

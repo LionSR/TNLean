@@ -373,15 +373,20 @@ abstracted — record why, so it is not re-proposed).
     obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
     refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
   ```
-- **Seen:** three occurrences across three files (2026-09-24): `mpo_czxTensor_apply` in
+- **Seen:** seven occurrences across seven files: `mpo_czxTensor_apply` in
   `TNLean/MPS/FundamentalTheorem/Reduction/Examples/CZXUnitary.lean`,
-  `mpo_reviewCZXTensor_apply` in `Examples/CZXReviewTensor.lean`, and
-  `mpo_czxDecoratedTensor_apply` in `Examples/CZXDecoratedTensor.lean`.
+  `mpo_reviewCZXTensor_apply` in `Examples/CZXReviewTensor.lean`,
+  `mpo_czxDecoratedTensor_apply` in `Examples/CZXDecoratedTensor.lean`,
+  `mpo_uTensor_apply` in `Examples/Z3AnomalousUnitary.lean`, `mpo_symTensor_apply` in
+  `Examples/AnomalousCondensationZ2Z2Unitary.lean`, `mpo_tensor_apply` in
+  `TNLean/MPS/MPDO/CZXTensor.lean`, and `mpo_rightShiftTensor_apply` in
+  `TNLean/MPS/MPU/Examples/Shift.lean`.
 - **Abstraction:** `MPOTensor.mpo_apply_eq_sum_cyclic` and
   `MPOTensor.mpo_apply_eq_prod_of_forced_bond` in `TNLean/MPS/MPDO/OperatorCyclicSum.lean`.
 - **Notes:** the caller supplies the surviving bond configuration `g₀` and, for every other
-  configuration, one site with a vanishing entry. All three call sites are refactored; each
-  loses about ten lines.
+  configuration, one site with a vanishing entry. The first six call sites use the
+  forced-bond lemma. The shift uses only `mpo_apply_eq_sum_cyclic`, because its surviving
+  configuration is the input configuration and exists only when the output is its rotation.
 
 ### SAL nonvanishing of the physical-trace transfer — promoted
 - **Pattern:** contradict the positive-length trace clause in `IsSAL` at one
