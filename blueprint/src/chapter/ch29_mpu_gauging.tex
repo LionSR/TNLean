@@ -4205,6 +4205,50 @@ $(MN)P$ into $M(NP)$.
     Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
 \end{proof}
 
+\subsection{Reductions through action tensors}
+
+For a matrix product operator tensor $T$ and a matrix product state tensor
+$B$, write $T\cdot B$ for the action tensor with letters
+$\sum_jT^{ij}\otimes B^j$, whose periodic vectors are the periodic operators
+of $T$ applied to those of $B$.
+
+\begin{lemma}[Reductions through action tensors]
+    \label{thm:mpug_action_tensor_reductions}
+    \lean{MPSTensor.IsReduction.actTensor_idKron,
+        MPSTensor.IsReduction.actTensor_kronId,
+        MPOTensor.actTensor_mulTensor,
+        MPOTensor.actTensor_mulTensor_mul_assocMatrix,
+        MPOTensor.assocInvMatrix_mul_actTensor_mulTensor,
+        MPSTensor.IsReduction.actTensor_assoc_left,
+        MPSTensor.IsReduction.actTensor_assoc_right,
+        MPOTensor.actTensor_mul_kronId_of_intertwine,
+        MPSTensor.IsDressedProportional.actTensor_idKron,
+        MPSTensor.IsDressedProportional.actTensor_kronId}
+    \leanok
+    \uses{thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    If $(V,W)$ reduces $B$ onto $A$, then
+    $(\mathbf 1\otimes V,\mathbf 1\otimes W)$ reduces $T\cdot B$ onto
+    $T\cdot A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
+    of $Y$, then $(V\otimes\mathbf 1,W\otimes\mathbf 1)$ reduces $X\cdot B$
+    onto $Y\cdot B$. The letters satisfy
+    $((MN)\cdot A)^i\,\mathsf a=\mathsf a\,(M\cdot(N\cdot A))^i$, so
+    reductions transport between the two bracketings as in
+    Lemma~\ref{thm:mpug_reduction_composition}. Finally, a relation
+    $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all long words lifts to
+    $(\mathbf 1\otimes V)(T\cdot B)^{\mathbf w}
+        =z\,(\mathbf 1\otimes V')(T\cdot B)^{\mathbf w}$, and the analogous
+    relation for the doubled-index tensor of $X$ lifts through
+    $V\otimes\mathbf 1$ to $X\cdot B$.
+\end{lemma}
+
+\begin{proof}\leanok
+    A word of $T\cdot B$ is a sum over the contracted physical
+    configurations of Kronecker products of a word of $T$ and a word of $B$
+    of the same length. The boundaries act on one factor only, so each claim
+    reduces to the corresponding statement for that factor. The letter
+    identity is the reassociation of Kronecker products.
+\end{proof}
+
 \subsection{Normalization of the first source factor}
 
 \begin{theorem}[The raw first-cut contraction]
