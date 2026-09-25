@@ -8,9 +8,11 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 /-!
 # Assembly lemmas for worked compression examples
 
-Three general facts that the worked examples of the multi-block asymmetric compression theorem
-(P5 note, `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5,
-Theorem 7.7) reduce to finite decisions.
+**Source.** None: this is infrastructure of this development for the worked examples of the
+multi-block asymmetric compression theorem, and no paper states it.
+
+**Formalized here.** Three general facts to which the worked examples reduce their
+verifications as finite decisions.
 
 * A tensor all of whose products of three letters vanish evaluates every word of length at
   least three to zero. This is the form in which the sharp nilpotency order of a remainder is
@@ -39,6 +41,11 @@ Theorem 7.7) reduce to finite decisions.
 * `MPSTensor.evalWord_blockDiagonal'_submatrix`,
   `MPSTensor.trace_evalWord_blockDiagonal'_submatrix`: word evaluation and word traces of a
   reindexed block-diagonal tensor.
+
+## Provenance
+
+The compression theorem is Theorem 7.7 (`thm:p5-asymmetric-compression`, §7.5) of
+`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, lines 495–569.
 -/
 
 open scoped Matrix

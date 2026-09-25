@@ -14,13 +14,24 @@ import TNLean.MPS.MPDO.OperatorProduct
 /-!
 # Kramers–Wannier fusion `D~² = 2^L (1 + η) T` on the periodic Ising chain
 
-The Kramers–Wannier duality kernel on a periodic chain of `L` qubits,
+**Source.** Aasen, Mong, Fendley 2016 (arXiv:1601.07185), §"The duality defect",
+`References/1601.07185/source/Ising-Defects.tex` lines 994–1000: the duality-defect kernel
+`⟨ĥ| D_σ |h⟩ = 2^{-L/2} (-1)^{∑_j (h_{j-1} + h_j) ĥ_{j-1/2}}` from the lattice to the dual
+lattice; lines 1033–1039 and 1051–1056 (Eq. `fusionalgebra`): its square is
+`D_σ² = 1 + D_ψ`, with `D_ψ` the spin flip. Seiberg, Shao 2023 (arXiv:2307.02534),
+§"Non-invertible lattice translation of the transverse-field Ising model",
+`References/2307.02534/source/Majoranadraft.tex` lines 2431–2437 (Eq. `noninvexplicit`): a
+translation-invariant Kramers–Wannier operator `D` on one lattice;
+lines 2468–2474 (Eq. `noninvfusion`): `D² = (1 + η) T / 2`, with `T` the lattice translation.
+
+**Formalized here.** The unnormalized duality kernel on a periodic chain of `L` qubits,
 `⟨s'| D~ |s⟩ = ∏_j (-1)^{s'_j (s_j + s_{j+1})}`, is the periodic trace of a bond-dimension-two
-matrix product operator `W` (`kwTensor`). Squaring the duality gives, at the level of the
-periodic operator, `D~² = 2^L (1 + η) T` where `η = ∏_j X_j` is the global spin flip and `T` is
-the one-site left translation. Both `T` and `η T` are themselves bond-dimension-two matrix
-product operators whose four letters are literally the four matrix units of `M_2(ℂ)`
-(`shiftTensor`, `flipShiftTensor`), hence normal already at word length one.
+matrix product operator `W` (`kwTensor`); this is the source kernel with the factor `2^{-L/2}`
+dropped and the dual site `j + 1/2` identified with the site `j`. Squaring gives, at the level of
+the periodic operator, `D~² = 2^L (1 + η) T` where `η = ∏_j X_j` is the global spin flip and `T`
+is the one-site left translation. Both `T` and `η T` are bond-dimension-two matrix product
+operators whose four letters are literally the four matrix units of `M_2(ℂ)` (`shiftTensor`,
+`flipShiftTensor`), hence normal already at word length one.
 
 The stacked tensor `kwSquare` (bond dimension four, generating `D~²`) compresses, after an
 explicit change of bond coordinates with a half-integer gauge matrix, onto the direct sum of
@@ -32,25 +43,22 @@ For `L > 0`, the raw square acts as `2^{L+1} T` on the spin-flip-even subspace a
 as zero on the spin-flip-odd subspace. The two virtual targets are translation and
 flipped translation, not the physical even and odd subspaces.
 
-Aasen–Mong–Fendley, arXiv:1601.07185, use a kernel with a factor `2^{-L/2}` and retain
-the primal and dual lattices; their defect fusion is `D_σ² = I + D_ψ`.
-With the single-lattice translation convention here, rescaling the raw kernel by
-`2^{-L/2}` gives square `(I + η) T`. Seiberg–Shao, arXiv:2307.02534,
-Eq. `noninvfusion`, instead use the partial-isometry normalization
-`D² = (I + η) T / 2`, corresponding at the level of this square relation to rescaling
-the raw kernel by `2^{-(L+1)/2}`. Their underlying Majorana translations are invertible;
-the non-invertible operator in that equation acts on the bosonic Ising chain.
-The explicit tensor and gauge data used here are recorded in
-`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §1.
-
-The compression theorem cited below is Theorem 7.7 of
-`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`.
+Normalizations. Aasen–Mong–Fendley keep the factor `2^{-L/2}` and retain the primal and dual
+lattices, so their square is `1 + D_ψ` with no translation. With the single-lattice convention
+here, rescaling the raw kernel by `2^{-L/2}` gives square `(1 + η) T`. Seiberg–Shao instead use
+the partial-isometry normalization `D² = (1 + η) T / 2`, corresponding at the level of this
+square relation to rescaling the raw kernel by `2^{-(L+1)/2}`; their Pauli labels are exchanged
+relative to ours, so their `η = ∏_j Z_j` is the spin flip written here as `∏_j X_j`.
+Their underlying Majorana translations are invertible; the non-invertible operator in that
+equation acts on the bosonic Ising chain.
 
 ## Main definitions
 
-* `KWExample.kwTensor`: the bond-two duality kernel `W` of the note.
+* `KWExample.kwTensor`: the bond-two duality kernel `W` (defined in
+  `TNLean.MPS.Examples.KramersWannierTensor`).
 * `KWExample.shiftTensor`, `KWExample.flipShiftTensor`: the bond-two matrix-unit tensors
-  generating the translation `T` and the flipped translation `η T`.
+  generating the translation `T` and the flipped translation `η T` (defined in
+  `TNLean.MPS.Examples.KramersWannierTensor`).
 * `KWExample.kwSquare`: the stacked product tensor `B^{s's} = ∑_m W^{s'm} ⊗ W^{ms}` of bond
   dimension four.
 * `KWExample.kwSquareTargets`: the two weighted targets `2 · T` and `2 · η T`.
@@ -59,8 +67,7 @@ The compression theorem cited below is Theorem 7.7 of
 
 * `KWExample.shiftMPS_isNormal`, `KWExample.flipShiftMPS_isNormal`: the two target blocks are
   normal already at word length one.
-* `KWExample.kwSquare_compression`: the multi-block asymmetric compression datum of Theorem 7.7,
-  with `z = 0`.
+* `KWExample.kwSquare_compression`: the multi-block asymmetric compression datum, with `z = 0`.
 * `KWExample.kwSquare_trace_evalWord`: the word-trace identity
   `tr(D~²)^w = 2^{|w|} (tr(T^w) + tr((η T)^w))`.
 * `KWExample.kwSquare_isReduction`: biorthogonal compression onto each of the two slots.
@@ -70,6 +77,23 @@ The compression theorem cited below is Theorem 7.7 of
 * `KWExample.kwSquare_mul_right0_eq`, `KWExample.kwSquare_mul_right1_eq`,
   `KWExample.left0_mul_kwSquare_eq`, `KWExample.left1_mul_kwSquare_eq`: the four explicit
   sitewise intertwiner identities of the split case.
+
+## References
+
+- [arXiv:1601.07185](https://arxiv.org/abs/1601.07185) -- D. Aasen, R. S. K. Mong, P. Fendley,
+  *Topological defects on the lattice I: The Ising model*
+- [arXiv:2307.02534](https://arxiv.org/abs/2307.02534) -- N. Seiberg, S.-H. Shao,
+  *Majorana chain and Ising model -- (non-invertible) translations, anomalies, and emanant
+  symmetries*
+
+## Provenance
+
+The explicit tensor, gauge, and compression data were first recorded in
+`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §1, lines 39–150, and the compression
+datum instantiates Theorem 7.7 (`thm:p5-asymmetric-compression`) of
+`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, lines 495–569 (the
+"construction note" of the declaration docstrings); these are verification records, not the
+source.
 -/
 
 noncomputable section

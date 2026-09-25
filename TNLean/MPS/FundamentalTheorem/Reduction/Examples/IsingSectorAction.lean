@@ -6,29 +6,38 @@ Authors: Sirui Lu
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingWeightedTwist
 
 /-!
-# The weighted Ising bond object acting on a fusion-tree product state
+# Weighted Ising twist: the bond object acting on a fusion-tree product state
 
-A machine-checked instance of the action-tensor form of the multi-block asymmetric compression
-theorem (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5,
-Theorem 7.7; exact data in `Notes/OpenProblemsTN/checks/asym_ising_action_data.md`, §2,
-verified by `checks/asym_ising_action_verify.py`, checks 2a–2g).
+**Source.** Construction of this development. The Ising data are those of Bultinck, Mariën,
+Williamson, Sahinoglu, Haegeman and Verstraete 2017 (arXiv:1511.08090), Appendix D.2.1,
+`References/1511.08090/AnyonsPEPS.tex` lines 1305–1323: the labels `1, σ, ψ` with the single
+nontrivial fusion `σ × σ = 1 + ψ`, the quantum dimension `d_σ = √2`, and the nontrivial
+F-symbols, among them `F^{ψσψ}_{σσσ} = -1`. The topological-symmetry operators follow Feiguin,
+Trebst, Ludwig, Troyer, Kitaev, Wang and Freedman 2007 (arXiv:cond-mat/0612341),
+`References/cond-mat_0612341/source/fibonacci.tex` lines 510–519, who define the operator `Y` of
+the Fibonacci chain by fusing an extra anyon line into the fusion tree with the F-matrix; the
+tensors here are the same construction for the Ising category. The weighted bond object, its
+compression and its length-dependent coefficient are not in any source: they are motivated by
+the open question of Cirac, Pérez-García, Schuch and Verstraete (arXiv:1606.00608),
+`Papers/1606.00608/MPDO-22-12-17-2.tex` line 995, whether there exist renormalization fixed
+points whose structure constants `c^{(L)}_{αβγ}` depend on `L`.
 
-The full weighted bond object `Θ_3 = 5 A_1 ⊕ 3 A_ψ ⊕ 2 A_σ` of the Ising twist
-(`Examples/IsingWeightedTwist.lean`, with the weights ten times the generic P6 point
-`(1/2, 3/10, 1/5)`) acts on the product state `|σ1σ⟩^{⊗ L}`, the fusion tree of the trivial
-anyon chain with the label `(σ,1,σ)` at every site. The action tensor is diagonal: its only
-nonzero letters are `(1,1,1) ↦ 2 E_{88}`, `(ψ,1,ψ) ↦ 2 E_{99}` and
-`(σ,1,σ) ↦ 5 E_{22} + 3 E_{55}`, and it compresses onto four bond-one product states, the
-state `|σ1σ⟩^{⊗ L}` twice with the weights `5` and `3` (through the bond objects `1` and `ψ`)
-and the states `|111⟩^{⊗ L}`, `|ψ1ψ⟩^{⊗ L}` with the weight `2` (through `σ`), with six zero
-slots. The resulting identity
+**Formalized here.** The full weighted bond object `Θ_3 = 5 A_1 ⊕ 3 A_ψ ⊕ 2 A_σ` of the Ising
+twist (`IsingWeightedTwist`, with the weights ten times `(1/2, 3/10, 1/5)`) acts on the product
+state `|σ1σ⟩^{⊗ L}`, the fusion tree of the trivial anyon chain with the label `(σ,1,σ)` at
+every site. The action tensor is diagonal: its only nonzero letters are `(1,1,1) ↦ 2 E_{88}`,
+`(ψ,1,ψ) ↦ 2 E_{99}` and `(σ,1,σ) ↦ 5 E_{22} + 3 E_{55}`, and it compresses onto four bond-one
+product states, the state `|σ1σ⟩^{⊗ L}` twice with the weights `5` and `3` (through the bond
+objects `1` and `ψ`) and the states `|111⟩^{⊗ L}`, `|ψ1ψ⟩^{⊗ L}` with the weight `2` (through
+`σ`), with six zero slots. The resulting identity
 
 `O_L(Θ_3) |σ1σ⟩^{⊗ L} = (5^L + 3^L) |σ1σ⟩^{⊗ L} + 2^L (|111⟩^{⊗ L} + |ψ1ψ⟩^{⊗ L})`
 
 is the weighted Verlinde action `∑_b λ_b^L ∑_y N^y_{bσ} |y⟩` of the bond object on the sector
-labels (data file §2). Nothing here needs `√2`: the F-symbols with a trivial anyon label are
-`1`, so the whole instance is integral. The gauge is a pure permutation of the ten bond
-coordinates and the remainder vanishes.
+labels, with the fusion multiplicities `N^y_{bσ}` of arXiv:1511.08090 lines 1310–1312. Nothing
+here needs `√2`: the F-symbols with a trivial anyon label are `1` (line 1323), so the whole
+instance is integral. The gauge is a pure permutation of the ten bond coordinates and the
+remainder vanishes.
 
 ## Main definitions
 
@@ -44,6 +53,28 @@ coordinates and the remainder vanishes.
 * `IsingTwist.thetaThree_mpo_sectorState`: the weighted Verlinde action as an identity of
   periodic vectors at every positive length.
 * `IsingTwist.sectorAction_remainder`: the remainder vanishes.
+
+## References
+
+- [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  operator algebras*
+- [arXiv:cond-mat/0612341](https://arxiv.org/abs/cond-mat/0612341) -- A. Feiguin, S. Trebst,
+  A. W. W. Ludwig, M. Troyer, A. Kitaev, Z. Wang, M. H. Freedman, *Interacting anyons in
+  topological quantum liquids: The golden chain*
+- [arXiv:1606.00608](https://arxiv.org/abs/1606.00608) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product density operators: Renormalization fixed points and
+  boundary theories*
+
+## Provenance
+
+The example instantiates the action-tensor form of the multi-block asymmetric compression
+theorem of `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`
+(`thm:p5-asymmetric-compression`, §7.5, Theorem 7.7); the weights are ten times the generic
+point of the P6 numerics. The exact data are recorded in
+`Notes/OpenProblemsTN/checks/asym_ising_action_data.md`, §2, and verified by
+`checks/asym_ising_action_verify.py`, checks 2a–2g. These files are verification records, not
+the source.
 -/
 
 open scoped Matrix Kronecker

@@ -8,15 +8,17 @@ import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
 
 /-!
-# The adapted inner-bond basis shared by the P6 renormalization fixed points
+# The adapted inner-bond basis shared by stacked pair products
 
-The length-dependent renormalization fixed points of the P6 work
-(`Notes/OpenProblemsTN/checks/p6_examples_compression_data.md`, examples 1 and 4) are stacked
-products of two matrix product operator tensors whose bond space is a tensor square
+**Source.** None: this is infrastructure of this development for two worked examples of the
+multi-block asymmetric compression theorem, and no paper states it.
+
+**Formalized here.** Two length-dependent renormalization fixed points of this development are
+stacked products of two matrix product operator tensors whose bond space is a tensor square
 `ℂ² ⊗ ℂ²`. The stacked bond space `ℂ² ⊗ [ℂ² ⊗ ℂ²] ⊗ ℂ²` then carries a four-dimensional inner
 bond, the two half-bonds joined by the letter sum, and the two examples share one adapted basis
 of that inner bond: the two Bell vectors `(1, 0, 0, ±1)` followed by the two coordinate vectors
-orthogonal to them (`p6_examples_compression_data.md`, §1.3).
+orthogonal to them.
 
 This file records that shared geometry once: the reordering of the stacked bond coordinates
 into inner and outer factors, the adapted basis and its inverse, the two rank-one idempotents it
@@ -38,6 +40,12 @@ projector-weighted decomposition required by
   matching scalar identity, gives the projector-weighted decomposition of the stacked tensor.
 * `P6Compression.isNormal_of_single_eq_smul`: a tensor whose letters realise every matrix unit
   up to a nonzero factor is normal at blocking length one.
+
+## Provenance
+
+The two examples are examples 1 (lines 94–203) and 4 (lines 463–532) of
+`Notes/OpenProblemsTN/checks/p6_examples_compression_data.md`, and the shared adapted basis is
+its §1.3, lines 146–176; these are verification records, not a source.
 -/
 
 open scoped Matrix Kronecker

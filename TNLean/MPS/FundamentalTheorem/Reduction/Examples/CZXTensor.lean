@@ -9,34 +9,35 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.ExplicitGauge
 import TNLean.MPS.MPDO.OperatorProduct
 
 /-!
-# The undecorated CZX matrix product operator
+# CZX: the undecorated matrix product operator and its stacked square
 
-On a periodic chain of `L > 0` qubits, let
-`D_L |t⟩ = (-1)^{∑_j t_j t_{j+1}} |t⟩`, with indices modulo `L`.
-The tensor below generates `U_L = X^{⊗ L} D_L`, so
-`U_L |t⟩ = (-1)^{∑_j t_j t_{j+1}} |1-t⟩` in the computational basis.
-Its bond dimension is two, with `M^{ij} = δ_{i,1 ⊕ j} T_j`,
-`T_0 = [[1,0],[1,0]]` and `T_1 = [[0,1],[0,-1]]`.
-The cyclic convention includes the self-loop `D_1 = Z` and counts the two-site edge twice,
-giving `D_2 = I`. The operator is unitary and satisfies `U_L² = (-1)^L I` at every
-positive length, as proved in `CZXUnitary`; no even-length restriction is imposed.
+**Source.** Chen, Liu, Wen 2011 (arXiv:1106.4752), Section "Matrix Product Unitary Operators and
+its relation to 3 cocycle", `References/1106.4752/source/dDSPTmodel.tex` lines 377–385: the
+boundary symmetry of the CZX model is the bond-two matrix product unitary with
+`T^{0,1} = |0⟩⟨+|`, `T^{1,0} = |1⟩⟨-|`, where `|±⟩ = |0⟩ ± |1⟩`.
+Review: arXiv:2011.12127, Appendix A, "The CZX MPU", `Papers/2011.12127/TN-Review-main.tex`
+lines 2582–2595: the same tensor, its letters `A^{01}`, `A^{10}`, injectivity, and the stacked
+bond-four tensor `B^{00}`, `B^{11}`; the gate order `⊗ CZ ⊗ ⊗ X` is displayed at line 1472.
 
-The review arXiv:2011.12127 displays the reverse gate order `D_L X^{⊗ L}`, which differs
-from this tensor's operator by `(-1)^L`. The decorated, two-qubit-blocked convention of
-arXiv:2502.20257 in `TNLean.MPS.MPDO.CZXTensor` is a different tensor whose square is the
-identity. Here the stacked square has the word traces of the bond-one target `-δ`.
-The explicit construction is recorded in
-`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`,
-`ex:p5ft-czx` and `ex:p5ft-oscillating`.
+**Formalized here.** The bond-two tensor, over the integers and the complexes, with
+`M^{ij} = δ_{i,1 ⊕ j} T_j`, `T_0 = [[1,0],[1,0]]` and `T_1 = [[0,1],[0,-1]]`; its normality
+(the source's injectivity); and the stacked product `B^{ij} = ∑_m M^{im} ⊗ M^{mj}` of bond
+dimension four as an explicit integer tensor. The first physical index is the output row, so
+the source letter `A^{ij}` is the transpose of `M^{ji}` here; this is a convention, not a gap.
 
-The entries are integers. The length-two words span `M_2(ℂ)`, proving normality, and the
-stacked product has an explicit bond-four integer tensor.
+On a periodic chain of `L > 0` qubits, let `D_L |t⟩ = (-1)^{∑_j t_j t_{j+1}} |t⟩`, with
+indices modulo `L`. The tensor generates `U_L = X^{⊗ L} D_L`, the order of the review's
+Appendix A (controlled-`Z` gates followed by Pauli `X`). The cyclic convention includes the
+self-loop `D_1 = Z` and counts the two-site edge twice, giving `D_2 = I`. Unitarity and
+`U_L² = (-1)^L I` at every positive length are proved in `CZXUnitary`. Chen–Liu–Wen (line 385)
+and the review's line 1472 write the reverse order `D_L X^{⊗ L}`, which differs from this
+operator by `(-1)^L`. The decorated, two-qubit-blocked convention of arXiv:2502.20257, in
+`TNLean.MPS.MPDO.CZXTensor`, is a different tensor whose square is the identity.
 
 ## Main definitions
 
 * `CZXCompression.czxIntTensor`, `CZXCompression.czxTensor`, `CZXCompression.czxMPS`: the
-  bond-two tensor of the note, over the integers, over the complexes, and in the
-  pair-alphabet view.
+  bond-two tensor over the integers, over the complexes, and in the pair-alphabet view.
 * `CZXCompression.identityMPS`: the bond-one identity tensor `δ` in the pair-alphabet view.
 * `CZXCompression.negIdentityIntMPS`: the integer matrices of `-δ`.
 * `CZXCompression.czxSquareInt`, `CZXCompression.czxSquare`: the stacked product tensor
@@ -48,6 +49,21 @@ stacked product has an explicit bond-four integer tensor.
   spanning the full two-by-two matrix algebra.
 * `CZXCompression.czxSquare_eq`: the stacked product tensor is the coercion of an explicit
   integer tensor.
+
+## References
+
+- [arXiv:1106.4752](https://arxiv.org/abs/1106.4752) -- X. Chen, Z.-X. Liu, X.-G. Wen,
+  *2D symmetry protected topological orders and their protected gapless edge excitations*
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+- [arXiv:2502.20257](https://arxiv.org/abs/2502.20257) -- the decorated CZX convention
+
+## Provenance
+
+The integer presentation of the tensor and of its stacked square was first recorded in
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, Example D
+(`ex:p5ft-czx`, lines 996–1037); that note is a verification record, not the source.
 -/
 
 noncomputable section

@@ -7,25 +7,38 @@ import TNLean.Algebra.GeneralizeDecide
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2
 
 /-!
-# The four non-split pair blocks of the `ℤ/2 × ℤ/2` condensation defect
+# Anomalous `ℤ/2 × ℤ/2` symmetry: the four non-split pair blocks of the condensation defect
 
-The four pair blocks `M_g ⊗ M_h` with both `g, h ∈ {x, xy}`, the two elements whose tensors
-carry the controlled-`Z` dressing, are the blocks in which the anomaly of the `ℤ/2 × ℤ/2`
-symmetry shows (`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md`, Sections 4 and 5).
-Each has bond dimension four and compresses onto the one-dimensional target `λ(g,h) M_{gh}` with
-`z = 3` zero slots: the flag has two zero slots below the target and one above, the gauge is a
-unimodular integer matrix, every product of four remainder letters vanishes, and both sitewise
-intertwiner spaces vanish, exactly as in Example D of the P5 note
-(`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, `ex:p5ft-czx`). The
-block `(x, x)` is the stacked CZX tensor of that example with its letters relabelled into the
-sixteen-letter pair alphabet.
+**Source.** Construction of this development; no source prints these tensors.
+Garre-Rubio, Lootens and Molnár (arXiv:2203.12563), Section "Examples of explicit MPSs and
+MPO representations", subsubsection "Periodic boundary condition case",
+`Papers/2203.12563/REsubmission.tex` lines 2202–2224, build periodic matrix product operator
+representations of a finite group from a three-cocycle and print only the `ℤ/2` example
+`U_g = ∏ CZ_{i,i+1} Z_i ∏ X_i`; Garre-Rubio and Schuch (arXiv:2405.00439), Section "The simplest
+example", `Papers/2405.00439/MPU-DW.tex` lines 1123–1134, print only the CZX matrix product
+unitary of `ℤ/2`. The `ℤ/2 × ℤ/2` tensors used here are built from the CZX letters and carry
+the mixed (type-II) class `(-1)^{a_1 b_2 c_2}` of `H^3(ℤ/2 × ℤ/2, U(1))`.
+The term *condensation defect* for the sum of the operators of a finite symmetry follows
+Roumpedakis, Seifnashri and Shao (arXiv:2204.02407), Section "Higher gauging and condensation
+defects", `References/2204.02407/source/condensation_draft.tex` lines 145–148, where it is the
+sum over insertions of the symmetry defects; lines 1415–1417 of the same file note that for a
+`ℤ/2` operator `U` the sum `P_+ = 1 + U` obeys `P_+ × P_+ = 2 P_+`.
+
+**Formalized here.** The four pair blocks `M_g ⊗ M_h` with both `g, h ∈ {x, xy}`, the two
+elements whose tensors carry the controlled-`Z` dressing, are the blocks in which the anomaly of
+the `ℤ/2 × ℤ/2` symmetry shows. Each has bond dimension four and compresses onto the
+one-dimensional target `λ(g,h) M_{gh}` with `z = 3` zero slots: the flag has two zero slots
+below the target and one above, the gauge is a unimodular integer matrix, every product of four
+remainder letters vanishes, and both sitewise intertwiner spaces vanish, exactly as in Example D
+of the P5 note (`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`,
+`ex:p5ft-czx`). The block `(x, x)` is the stacked CZX tensor of that example with its letters
+relabelled into the sixteen-letter pair alphabet.
 
 The targets are `M_e` for `(x, x)`, `-M_y` for `(x, xy)`, `M_y` for `(xy, x)` and `-M_e` for
 `(xy, xy)`, the signs being the periodic fusion signs `λ(g,h) = (-1)^{g_1 h_2}`.
 
-The data file (Section 4) records each of these remainders as nonzero and nilpotent of order
-three; only the vanishing of the remainder words of length at least four is stated here, which is
-the nilpotency clause of Theorem 7.7 with the bound `1 + z = 4`.
+Only the vanishing of the remainder words of length at least four is stated here, which is the
+nilpotency clause of Theorem 7.7 with the bound `1 + z = 4`.
 
 ## Main results
 
@@ -41,6 +54,24 @@ the nilpotency clause of Theorem 7.7 with the bound `1 + z = 4`.
 * `Z2Z2Condensation.xX_right_intertwiner_eq_zero`,
   `Z2Z2Condensation.xX_left_intertwiner_eq_zero`, ...: both sitewise intertwiner spaces of each
   block vanish.
+
+## References
+
+- [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
+  A. Molnár, *Classifying phases protected by matrix product operator symmetries using matrix
+  product states*
+- [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- J. Garre-Rubio, N. Schuch,
+  *Fractional domain wall statistics in spin chains with anomalous symmetries*
+- [arXiv:2204.02407](https://arxiv.org/abs/2204.02407) -- K. Roumpedakis, S. Seifnashri,
+  S.-H. Shao, *Higher Gauging and Non-invertible Condensation Defects*
+
+## Provenance
+
+The gauges, flags and remainders were first recorded in
+`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md`, Sections 4 and 5, and checked exactly by
+`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_verify.py`; they are verification records, not
+the source. The data file (Section 4) also records each of these remainders as nonzero and
+nilpotent of order three.
 -/
 
 noncomputable section

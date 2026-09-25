@@ -6,27 +6,36 @@ Authors: Sirui Lu
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousTensor
 
 /-!
-# The group-law fusion blocks of the anomalous `ℤ/3` symmetry
+# Anomalous `ℤ/3` example: the group-law fusion blocks `U ⊗ U` and `U† ⊗ U†`
 
-Machine-checked instances of the multi-block asymmetric compression theorem (P5 note,
-`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) for the
-stacked products `U ⊗ U` and `U† ⊗ U†` of the anomalous `ℤ/3` representation `{1, U, U†}` of
-`Z3AnomalousTensor.lean`; the two remaining products `U ⊗ U†` and `U† ⊗ U`, which fuse to the
-identity, are treated in `Z3AnomalousInverseFusion.lean`. The exact data are recorded in
-`Notes/OpenProblemsTN/checks/asym_z3_anomalous_data.md`, §2.1 and §2.4, and verified in exact
-arithmetic over `ℤ[ω]` by `Notes/OpenProblemsTN/checks/asym_z3_anomalous_verify.py`.
+**Source.** Construction of this development: no source prints the `ℤ/3` tensors of
+`Z3AnomalousTensor.lean` or the compression data below. Garre-Rubio and Schuch
+(arXiv:2405.00439), subsection "Example: `G = ℤ_n` with fully symmetry breaking",
+`Papers/2405.00439/MPU-DW.tex` lines 2037–2039, print the cyclic `3`-cocycles
+`ω_j(a, b, c) = exp(2πi j a (b + c - [b + c]) / n²)` of `ℤ/n`; the representative used here has
+class `j = 1` for `n = 3`, a fact checked only in the verification script and not formalized.
+Garre-Rubio, Lootens and Molnár (arXiv:2203.12563), subsubsection "Periodic boundary condition
+case", `Papers/2203.12563/REsubmission.tex` lines 2202–2224, construct periodic matrix product
+operator representations of a finite group with a `3`-cocycle and print the `ℤ/2` instance
+`∏ CZ_{i,i+1} Z_i ∏ X_i` (line 2222); the phase-decorated shift used here is a `ℤ/3` operator of
+the same kind, not the operator of that construction.
 
-The representation is exact, so each stacked product of bond dimension four has the word traces of a
-single block of the representation: `U ⊗ U → U†` and `U† ⊗ U† → U`, each with two zero slots and a
-unimodular gauge over `ℤ[ω]`. Both compressions are genuinely asymmetric: the remainder is nilpotent
-of order exactly three, which attains the bound `|S| + z = 3` of Theorem 7.7(vi), and both sitewise
-intertwiner spaces vanish, so neither block admits a sitewise fusion pair. For the anomalous `ℤ/2`
-symmetry of Example D the absence of sitewise intertwiners is the algebraic trace of the anomaly
-(`Splitting.lean`); the non-anomalous `ℤ/3` clock symmetry of the data file (§3) has, by contrast, a
-biorthogonal sitewise fusion pair on its `U ⊗ U → U²` block.
+**Formalized here.** Instances of the multi-block asymmetric compression theorem of this
+development (P5 note, `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`,
+theorem `thm:p5-asymmetric-compression`, lines 495–569) for the stacked products `U ⊗ U` and
+`U† ⊗ U†` of the representation `{1, U, U†}`; the products `U ⊗ U†` and `U† ⊗ U`, which fuse to
+the identity, are in `Z3AnomalousInverseFusion.lean`. The representation is exact, so each
+stacked product of bond dimension four has the word traces of a single block: `U ⊗ U → U†` and
+`U† ⊗ U† → U`, each with two zero slots and a unimodular gauge over `ℤ[ω]`. Both compressions
+are genuinely asymmetric: the remainder is nilpotent of order exactly three, which attains the
+bound `|S| + z = 3` of clause (vi) of that theorem, and both sitewise intertwiner spaces vanish,
+so neither block admits a sitewise fusion pair. For the anomalous `ℤ/2` symmetry of Example D
+the absence of sitewise intertwiners is the algebraic trace of the anomaly (`Splitting.lean`);
+the non-anomalous `ℤ/3` clock symmetry of the data file (§3) has, by contrast, a biorthogonal
+sitewise fusion pair on its `U ⊗ U → U²` block.
 
-Unitarity of `U`, which identifies `U†` with the adjoint of `U`, is not formalized here; `U†`
-denotes the inverse `U² = U⁻¹` of the representation.
+Here `U†` denotes the group inverse `U² = U⁻¹`; that it is also the adjoint of `U` is proved in
+`Z3AnomalousUnitary.lean`.
 
 ## Main definitions
 
@@ -45,6 +54,21 @@ denotes the inverse `U² = U⁻¹` of the representation.
   their `dd` siblings: no sitewise intertwiner in either direction.
 * `Z3Anomalous.mpo_uu`, `Z3Anomalous.mpo_dd`: the fusion rules as identities of periodic
   operators.
+
+## References
+
+- [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- J. Garre-Rubio, N. Schuch,
+  *Fractional domain wall statistics in spin chains with anomalous symmetries*
+- [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
+  A. Molnár, *Classifying phases protected by matrix product operator symmetries using matrix
+  product states*
+
+## Provenance
+
+The compression data and the exact-arithmetic certificates were first recorded in
+`Notes/OpenProblemsTN/checks/asym_z3_anomalous_data.md`, §2.1 and §2.4, and checked over `ℤ[ω]`
+by `Notes/OpenProblemsTN/checks/asym_z3_anomalous_verify.py`; they are verification records, not
+the source.
 -/
 
 noncomputable section

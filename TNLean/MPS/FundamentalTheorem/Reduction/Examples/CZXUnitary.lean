@@ -9,29 +9,32 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.CZXAnomaly
 import TNLean.MPS.MPU.GroupRepresentation
 
 /-!
-# Unitarity of the undecorated CZX matrix product operator
+# CZX: unitarity and the square of the undecorated operator
 
-For every periodic chain of `L > 0` qubits, the tensor
-`M^{ij} = δ_{i,1 ⊕ j} T_j` generates the computational-basis action
-`U_L |t⟩ = (-1)^{∑_j t_j t_{j+1}} |1-t⟩`.
-Thus `U_L = X^{⊗ L} D_L`, where `D_L` is the diagonal cyclic controlled-`Z` phase.
-The first physical index is the output row and the second is the input column.
-The cyclic sum gives `D_1 = Z` and `D_2 = I` (the two-site edge is counted twice).
-The monomial-matrix formula proves unitarity and `U_L² = (-1)^L I` for all positive
-lengths, without an even-length restriction.
+**Source.** Review arXiv:2011.12127, Appendix A, "The CZX MPU",
+`Papers/2011.12127/TN-Review-main.tex` lines 2584–2586 and 2601: the tensor generates a
+matrix product unitary, a product of overlapping controlled-`Z` gates followed by Pauli `X`
+on every site, and its square is `O(A)² = (-1)^N I`. Chen, Liu, Wen 2011 (arXiv:1106.4752),
+`References/1106.4752/source/dDSPTmodel.tex` lines 377–385 (the tensor and the gate
+product) and line 423 (the square reduces to `-T(I)`).
 
-The review arXiv:2011.12127 displays `D_L X^{⊗ L}`, differing by `(-1)^L`.
-The CZX operator of arXiv:2405.00439, Section III.D, also carries Pauli `Z` factors;
-it is not the undecorated operator used here. The explicit tensor and compression data
-are recorded in `Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`,
-`ex:p5ft-czx`.
+**Formalized here.** For every periodic chain of `L > 0` qubits, the tensor
+`M^{ij} = δ_{i,1 ⊕ j} T_j` generates `U_L |t⟩ = (-1)^{∑_j t_j t_{j+1}} |1-t⟩`, that is
+`U_L = X^{⊗ L} D_L` with `D_L` the diagonal cyclic controlled-`Z` phase; `U_L` is unitary and
+`U_L² = (-1)^L I` at every positive length, with no even-length restriction. The first
+physical index is the output row and the second the input column. The cyclic sum gives
+`D_1 = Z` and `D_2 = I` (the two-site edge is counted twice). Chen–Liu–Wen (line 385) and the
+review's line 1472 write `D_L X^{⊗ L}`, which differs by `(-1)^L`; the review's Appendix A
+order is the one used here. The CZX operator of arXiv:2405.00439, Section III.D, also carries
+Pauli `Z` factors and is not the undecorated operator used here.
 
-The stacked square has a word-level compression onto `-δ`, but its sitewise intertwiner
-spaces vanish. `CZXAnomaly` uses this nonsplitting obstruction to prove failure of star
-closure for the virtual algebra in these coordinates. The conjunction with physical
-unitarity below does not identify star-closure failure with an anomaly invariant.
-An anomaly class requires a separate fusion-associator three-cocycle calculation,
-such as that discussed in arXiv:2405.00439, Section III.D; none is computed here.
+The stacked square has a word-level compression onto `-δ` whose sitewise intertwiner spaces
+vanish, and `CZXAnomaly` derives from this that the virtual algebra is not closed under
+conjugate transposition in these coordinates. The conjunction with physical unitarity below
+does not identify that failure with an anomaly invariant: the three-cocycle of the source
+(`dDSPTmodel.tex` lines 366–369, and the associator phase `φ` with
+`φ(CZX,CZX,CZX) = -1` at lines 438–470)
+requires a fusion-associator calculation that is not performed here.
 
 ## Main definitions
 
@@ -44,13 +47,28 @@ such as that discussed in arXiv:2405.00439, Section III.D; none is computed here
 * `CZXCompression.mpo_czxTensor_apply`, `CZXCompression.mpo_czxTensor`: the periodic operator
   is the monomial matrix of the global spin flip with the controlled-`Z` sign.
 * `CZXCompression.mpo_czxTensor_mul_self`, `CZXCompression.mpo_mulTensor_czxTensor`: the
-  operator squares to `(-1)^N` times the identity, the operator form of the word-trace
-  identity of Example D.
-* `CZXCompression.czxTensor_isMPUPos`: the undecorated CZX tensor is a matrix product unitary
-  on every periodic chain of positive length.
+  operator squares to `(-1)^N` times the identity, the review's `O(A)² = (-1)^N I`.
+* `CZXCompression.czxTensor_isMPUPos`, `CZXCompression.czxTensor_isMPU`: the undecorated CZX
+  tensor is a matrix product unitary on every periodic chain of positive length.
 * `CZXCompression.czxTensor_isMPUPos_and_czxSquare_not_starClosed`: the operator is unitary
   although the virtual algebra of the stacked square is not closed under conjugate
   transposition.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+- [arXiv:1106.4752](https://arxiv.org/abs/1106.4752) -- X. Chen, Z.-X. Liu, X.-G. Wen,
+  *2D symmetry protected topological orders and their protected gapless edge excitations*
+- [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- the decorated CZX operator,
+  Section III.D
+
+## Provenance
+
+The explicit tensor and the operator identity were first recorded in
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, Example D
+(`ex:p5ft-czx`, lines 996–1037); that note is a verification record, not the source.
 -/
 
 noncomputable section

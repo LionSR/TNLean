@@ -10,7 +10,10 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
 /-!
 # Explicit gauges for multi-block compression data
 
-The multi-block asymmetric compression data of
+**Source.** None: this is infrastructure of this development for the worked examples of the
+multi-block asymmetric compression theorem, and no paper states it.
+
+**Formalized here.** The multi-block asymmetric compression data of
 `MPSTensor.MultiBlockCompression` carries its change of bond coordinates as a linear
 equivalence onto a graded coordinate space. For a worked example the change of coordinates is
 a concrete invertible matrix together with a concrete labelling of the coordinates by blocks.
@@ -35,6 +38,12 @@ reduces their verification to decidable identities between integer matrices.
 * `MPSTensor.MultiBlockCompression.left_gaugeOfMatrix`,
   `MPSTensor.MultiBlockCompression.right_gaugeOfMatrix`: the compression pair of a slot reads
   off the rows of the matrix and the columns of its inverse at the coordinates of that slot.
+
+## Provenance
+
+The compression theorem these gauges instantiate is Theorem 7.7
+(`thm:p5-asymmetric-compression`) of
+`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, lines 495–569.
 -/
 
 open scoped Matrix Kronecker

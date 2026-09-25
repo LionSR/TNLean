@@ -6,31 +6,45 @@ Authors: Sirui Lu
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousInverseFusion
 
 /-!
-# The condensation defect of the anomalous `ℤ/3` symmetry
+# Anomalous `ℤ/3` example: the condensation defect `1 ⊕ U ⊕ U†` and its stacked square
 
-The condensation defect `A = 1 ⊕ U ⊕ U†` of the anomalous `ℤ/3` representation of
-`Z3AnomalousTensor.lean` and its stacked square, set up for the multi-block asymmetric
-compression theorem (P5 note, `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`,
-§7.5, Theorem 7.7); the compression datum itself and the identity `A² = 3A` are in
-`Z3AnomalousDefectCompression.lean`. The exact data are recorded in
-`Notes/OpenProblemsTN/checks/asym_z3_anomalous_data.md`, §2.5, and verified in exact arithmetic
-over `ℤ[ω]` by `Notes/OpenProblemsTN/checks/asym_z3_anomalous_verify.py`.
+**Source.** Construction of this development: no source prints the `ℤ/3` tensors of
+`Z3AnomalousTensor.lean` or the compression data below. Garre-Rubio and Schuch
+(arXiv:2405.00439), subsection "Example: `G = ℤ_n` with fully symmetry breaking",
+`Papers/2405.00439/MPU-DW.tex` lines 2037–2039, print the cyclic `3`-cocycles
+`ω_j(a, b, c) = exp(2πi j a (b + c - [b + c]) / n²)` of `ℤ/n`; the representative used here has
+class `j = 1` for `n = 3`, a fact checked only in the verification script and not formalized.
+Garre-Rubio, Lootens and Molnár (arXiv:2203.12563), subsubsection "Periodic boundary condition
+case", `Papers/2203.12563/REsubmission.tex` lines 2202–2224, construct periodic matrix product
+operator representations of a finite group with a `3`-cocycle and print the `ℤ/2` instance
+`∏ CZ_{i,i+1} Z_i ∏ X_i` (line 2222); the phase-decorated shift used here is a `ℤ/3` operator of
+the same kind, not the operator of that construction.
 
-The defect is the block-diagonal tensor of bond dimension five whose blocks are the identity
-tensor and the two nontrivial group elements. Because the representation is exact, the defect
-satisfies `A² = 3A` at every positive length: its structure constants are constant, every weight
-equal to one, in contrast with the length-dependent coefficients of the non-anomalous clock
-symmetry of the data file (§3) and of the `ℤ/2` Example E. The stacked square `A ⊗ A` of bond
-dimension twenty-five is block diagonal over the nine pairs of summands, the `(g, h)` block being
-the stacked product `U_g ⊗ U_h`; it compresses onto nine slots, three copies each of `δ`, `U`
-and `U†`, with `z = 10` zero slots. The gauge is the direct sum of the identity on the five
-pairs involving the identity summand and of the four block gauges of the fusion files, and the
-dimension count reads `25 = 15 + 10`.
+The name *condensation defect* follows Roumpedakis, Seifnashri and Shao (arXiv:2204.02407),
+subsection "Higher gauging and condensation defects",
+`References/2204.02407/source/condensation_draft.tex` lines 145–150, where a condensation
+defect is a sum over insertions of symmetry defects on a submanifold. That paper treats
+`1`-form symmetries of `2+1`-dimensional quantum field theories; the lattice defect
+`A = 1 ⊕ U ⊕ U†`, the sum of the three group operators, and its fusion `A² = 3A` are
+constructions of this development.
+
+**Formalized here.** The defect is the block-diagonal tensor of bond dimension five whose
+blocks are the identity tensor and the two nontrivial group elements, and its periodic operator
+is the sum of the three group operators. The stacked square `A ⊗ A` of bond dimension
+twenty-five is block diagonal over the nine pairs of summands, the `(g, h)` block being the
+stacked product `U_g ⊗ U_h`. This file sets the square up for the multi-block asymmetric
+compression theorem of this development (P5 note,
+`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, theorem
+`thm:p5-asymmetric-compression`, lines 495–569); the compression datum and the identity
+`A² = 3A` are in `Z3AnomalousDefectCompression.lean`. Because the representation is exact, the
+structure constants of `A²` are constant, every weight equal to one, in contrast with the
+length-dependent coefficients of the non-anomalous clock symmetry of the data file (§3) and of
+the `ℤ/2` Example E.
 
 The assembly is carried out abstractly: the defect is defined as a reindexed block-diagonal
-tensor, and its square is identified with the reindexed block-diagonal tensor of the nine stacked
-products by an entrywise decision, so that no product of matrices of size twenty-five is ever
-decided.
+tensor, and its square is identified with the reindexed block-diagonal tensor of the nine
+stacked products by an entrywise decision, so that no product of matrices of size twenty-five
+is ever decided.
 
 ## Main definitions
 
@@ -46,6 +60,22 @@ decided.
   of its three summands.
 * `Z3Anomalous.defectSquareEis_eq`: the square is block diagonal over the nine pairs of
   summands.
+
+## References
+
+- [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- J. Garre-Rubio, N. Schuch,
+  *Fractional domain wall statistics in spin chains with anomalous symmetries*
+- [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
+  A. Molnár, *Classifying phases protected by matrix product operator symmetries using matrix
+  product states*
+- [arXiv:2204.02407](https://arxiv.org/abs/2204.02407) -- K. Roumpedakis, S. Seifnashri,
+  S.-H. Shao, *Higher Gauging and Non-invertible Condensation Defects*
+
+## Provenance
+
+The defect data were first recorded in `Notes/OpenProblemsTN/checks/asym_z3_anomalous_data.md`,
+§2.5, and checked over `ℤ[ω]` by `Notes/OpenProblemsTN/checks/asym_z3_anomalous_verify.py`;
+they are verification records, not the source.
 -/
 
 noncomputable section
