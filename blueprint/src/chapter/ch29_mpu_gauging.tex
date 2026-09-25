@@ -4456,6 +4456,82 @@ of $T$ applied to those of $B$.
     single block gives $\omega=dL$.
 \end{proof}
 
+\subsection{Blocks permuted by the group}
+
+For a group acting on a set $\mathsf X$, consider normal matrix product state
+tensors $A_x$, $x\in\mathsf X$, of positive bond dimensions, possibly different
+for different $x$, with $O_g|V_N(A_x)\rangle=|V_N(A_{gx})\rangle$ for every
+$g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
+
+\begin{definition}[L-symbols of permuted blocks]
+    \label{def:mpug_permuted_block_l_symbol}
+    \lean{MPOTensor.GroupFamily.CarriesMPV,
+        MPOTensor.GroupFamily.castBlock,
+        MPOTensor.GroupFamily.BlockActionData,
+        MPOTensor.GroupFamily.nonempty_blockActionData,
+        MPOTensor.GroupFamily.BlockActionData.actV,
+        MPOTensor.GroupFamily.BlockActionData.fuseV,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol,
+        MPOTensor.GroupFamily.BlockActionData.isDressedProportional_lSymbol}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_action_tensor_reductions,
+        def:mpug_l_symbols}
+    Action tensors $(V_{g,x},W_{g,x})$ reducing $O_g\cdot A_x$ onto $A_{gx}$
+    exist. The stacked action $(O_gO_h)\cdot A_x$ reduces onto
+    $A_{g(hx)}=A_{(gh)x}$ along two trees, with left boundaries
+    \begin{align}
+        V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &  &
+        V_{gh,x}(F^<_{g,h}\otimes\mathbf 1),
+    \end{align}
+    and $L^x_{g,h}\in\C^\times$ is the unique scalar relating them against all
+    long words, as in Definition~\ref{def:mpug_single_block_l_symbol}.
+\end{definition}
+
+\begin{theorem}[Compatibility for permuted blocks]
+    \label{thm:mpug_permuted_block_l_compatibility}
+    \lean{MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol,
+        MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality, thm:mpug_fixed_block_trivializes}
+    For all $x\in\mathsf X$ and $g,h,k\in G$,
+    \begin{align}
+        L^x_{g,hk}L^x_{h,k}
+         & =\omega(g,h,k)\,L^{kx}_{g,h}L^x_{gh,k},
+    \end{align}
+    which is (\ref{eq:mpug_l_compatibility}). Consequently the restriction
+    of $\omega$ to any subgroup fixing one block has trivial gauge class
+    \cite[lines~740--745]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_single_block_l_compatibility}
+    The proof of Theorem~\ref{thm:mpug_single_block_l_compatibility} applies
+    to $((O_gO_h)O_k)\cdot A_x$ verbatim. The pulled-back relations now involve
+    $L^{kx}_{g,h}$, $L^x_{gh,k}$, $L^x_{g,hk}$ and $L^x_{h,k}$, and the
+    boundaries land on $A_{g(h(kx))}$ after the identifications
+    $(gh)x=g(hx)$ of the target blocks. The second statement is
+    Theorem~\ref{thm:mpug_fixed_block_trivializes}.
+\end{proof}
+
+\begin{theorem}[The anomaly at an involution]
+    \label{thm:mpug_involution_anomaly_ratio}
+    \lean{TNLean.Algebra.LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    If $L$ is compatible with $\omega$ and $g^2=e$, then for every
+    $x\in\mathsf X$
+    \begin{align}
+        \omega(g,g,g)
+         & =\frac{L^x_{g,g}L^x_{g,e}}{L^{gx}_{g,g}L^x_{e,g}}.
+    \end{align}
+    This is the formula of \cite[line~5121]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Put $h=k=g$ in (\ref{eq:mpug_l_compatibility}) and use $gg=e$.
+\end{proof}
+
 \subsection{Normalization of the first source factor}
 
 \begin{theorem}[The raw first-cut contraction]

@@ -803,6 +803,45 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     tensors acts by that gauge action.
 \end{proof}
 
+\begin{theorem}[The anomaly from the two product states]
+    \label{thm:asymex_czx_product_state_l_symbols}
+    \lean{CZXCompression.czxBlock,
+        CZXCompression.mpv_ghzSectorTensor,
+        CZXCompression.czx_carriesMPV,
+        CZXCompression.czxBlockActionData,
+        CZXCompression.czx_omega_eq_lSymbol_ratio,
+        CZXCompression.czx_lSymbol_ratio_eq_neg_one}
+    \leanok
+    \uses{thm:asymex_czx_decorated_anomaly_class,
+        thm:mpug_permuted_block_l_compatibility,
+        thm:mpug_involution_anomaly_ratio}
+    The decorated representation exchanges the product states
+    $|0\rangle^{\otimes N}$ and $|1\rangle^{\otimes N}$ with phase one at every
+    length $N\geq1$, so these form a pair of blocks permuted by $\Z_2$. Action
+    tensors are given by the right vectors $|\hat +\rangle$ and
+    $-|\hat +\rangle$ and the left vectors $\langle1|$ and $-\langle0|$. For
+    every choice of action tensors, with the fusion tensors of
+    Theorem~\ref{thm:asymex_czx_decorated_anomaly_class},
+    \begin{align}
+        \omega(s,s,s)
+         & =\frac{L^0_{s,s}L^0_{s,e}}{L^1_{s,s}L^0_{e,s}}=-1,
+        \notag
+    \end{align}
+    the second route to the anomaly in
+    \cite[lines~1246--1339]{GarreRubioSchuch2024DomainWall}. The left action
+    vectors printed there are corrected here
+    \cite{gap:gs24_czx_action_left_vectors}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The operator is the spin flip with a sign that is $+1$ on constant
+    configurations. The action tensors are checked letter by letter. The
+    ratio formula is Theorem~\ref{thm:mpug_involution_anomaly_ratio} for the
+    compatible L-symbols of Theorem~\ref{thm:mpug_permuted_block_l_compatibility},
+    and its value is $\omega(s,s,s)=-1$.
+\end{proof}
+
 \subsection{Asymmetric compression of the square}
 
 The physical square law supplies the periodic comparison for
@@ -991,7 +1030,10 @@ the identity matrix on the corresponding bond space.
     For the decorated tensor of Section~\ref{sec:asymex_czx_decorated}, the
     anomaly class is computed in
     Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}: it is
-    nontrivial for every choice of fusion tensors.
+    nontrivial for every choice of fusion tensors. The same value
+    $\omega(s,s,s)=-1$ is recovered in
+    Theorem~\ref{thm:asymex_czx_product_state_l_symbols} as a ratio of the
+    L-symbols of the two product states exchanged by the symmetry.
 \end{remark}
 
 \subsection{A non-simple family with an oscillating coefficient}%
