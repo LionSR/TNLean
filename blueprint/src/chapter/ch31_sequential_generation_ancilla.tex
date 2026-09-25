@@ -330,7 +330,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:varying_bond_obc_zero_pad_zero}
+    \uses{thm:varying_bond_obc_coeff_zero, thm:varying_bond_obc_zero_pad_coeff}
     For $N=0$ both sides are one. Otherwise $c_A(\sigma)$ is the trace of
     $\widetilde A^\sigma$, and all diagonal entries except the first vanish
     because the first padded site matrix is row-supported below $D_0=1$.
@@ -406,7 +406,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \begin{proof}
     \leanok
     \uses{thm:seqanc_sweep, thm:seqanc_coeff_corner, thm:seqanc_norm,
-        thm:seqanc_support_propagation}
+        thm:seqanc_support_propagation, thm:seqanc_boundary_coords}
     Apply Theorem~\ref{thm:seqanc_sweep} with $a=1$, $R_{-1}=c\ketbra{0}{0}$,
     the square padding of $A$, and $r=\ket{0}$. The padded site matrix
     $\widetilde A_p$ vanishes on the columns $\gamma\ge D_{p+1}$, so
