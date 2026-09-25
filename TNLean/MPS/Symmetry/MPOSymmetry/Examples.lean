@@ -3,9 +3,9 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples.FibonacciAnomaly
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousFusion
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousInverseFusion
+import TNLean.MPS.Examples.Fibonacci.FibonacciAnomaly
+import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousFusion
+import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousInverseFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.Character
 
 /-!
