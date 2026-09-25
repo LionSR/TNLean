@@ -127,7 +127,8 @@ def z3FusionData : family.FusionData where
   V x y := z3LabelV x.toAdd y.toAdd
   W x y := z3LabelW x.toAdd y.toAdd
   isReduction := by
-    refine Multiplicative.forall_zmod_three (Multiplicative.forall_zmod_three ?_ ?_ ?_) (Multiplicative.forall_zmod_three ?_ ?_ ?_) (Multiplicative.forall_zmod_three ?_ ?_ ?_)
+    refine Multiplicative.forall_zmod_three (Multiplicative.forall_zmod_three ?_ ?_ ?_)
+      (Multiplicative.forall_zmod_three ?_ ?_ ?_) (Multiplicative.forall_zmod_three ?_ ?_ ?_)
     · change MPSTensor.IsReduction (mulTensor identityTensor identityTensor).toMPSTensor
         ((identityTensor : MPOTensor 3 (1 * 1))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_identityTensor])
