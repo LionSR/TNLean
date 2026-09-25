@@ -11,6 +11,7 @@ import QICLean.Kraus.InvariantProjection
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Core.CanonicalNormalization
+import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.RFP.Defs
 
 /-!
@@ -74,8 +75,14 @@ vectorization `E_A = ∑ᵢ (Aⁱ)^* ⊗ Aⁱ` of eq. `eq:transfer_matrix`, beca
   eq. `eq:key_approximation`, eq. `eq:phi_tilde`, eq. `eq:normal_fp_local`.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
+open scoped Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.Operator
 open Matrix Finset Filter
+
+attribute [local instance 1001]
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedSpace
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 namespace MPSTensor
 
@@ -120,9 +127,21 @@ private lemma single_mul_mul_conjTranspose_single (X : Matrix (Fin D) (Fin D) �
     (l r : Fin D) :
     Matrix.single l r (1 : ℂ) * X * (Matrix.single l r (1 : ℂ))ᴴ =
       X r r • Matrix.single l l (1 : ℂ) := by
+  rw [Matrix.conjTranspose_single, Matrix.single_mul_mul_single, Matrix.smul_single]
+  simp
+
+private lemma mul_single_apply' (M : Matrix (Fin D) (Fin D) ℂ) (a b i j : Fin D) :
+    (M * Matrix.single a b (1 : ℂ)) i j = if j = b then M i a else 0 := by
+  split_ifs with h
+  · subst h; simp
+  · exact Matrix.mul_single_apply_of_ne (hbj := h) ..
+
+private lemma sum_single_diag_one :
+    ∑ l : Fin D, Matrix.single l l (1 : ℂ) = 1 := by
   ext a b
-  simp [Matrix.single, Matrix.mul_apply, Matrix.conjTranspose_apply]
-  sorry
+  by_cases h : a = b
+  · subst h; simp [Matrix.sum_apply, Matrix.single_apply]
+  · simp [Matrix.sum_apply, Matrix.single_apply, h]
 
 /-- The transfer map of `P_∞` is the rank-one map `|ρ⟩⟨1|`: every `X` is sent to
 `Tr X • σ`. This is the identity `E_{P_∞} = |ρ⟩⟨1|` of arXiv:2307.01696,
@@ -130,7 +149,30 @@ eq. `eq:B_TM`. -/
 theorem transferMap_fixedPointTensor_apply {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (X : Matrix (Fin D) (Fin D) ℂ) :
     Kraus.transferMap (fixedPointTensor σ) X = X.trace • σ := by
-  sorry
+  set S := CFC.sqrt σ
+  have hS : Sᴴ = S := Matrix.conjTranspose_cfc_sqrt σ
+  have hSS : S * S = σ := CFC.sqrt_mul_sqrt_self σ hσ.nonneg
+  rw [Kraus.transferMap_apply, ← Fintype.sum_equiv finProdFinEquiv
+    (fun p => fixedPointTensor σ (finProdFinEquiv p) * X *
+      (fixedPointTensor σ (finProdFinEquiv p))ᴴ) _ (fun _ => rfl)]
+  have hterm : ∀ l r : Fin D,
+      S * Matrix.single l r (1 : ℂ) * X * (S * Matrix.single l r (1 : ℂ))ᴴ =
+        X r r • (S * Matrix.single l l (1 : ℂ) * S) := by
+    intro l r
+    rw [Matrix.conjTranspose_mul, hS]
+    calc S * Matrix.single l r (1 : ℂ) * X * ((Matrix.single l r (1 : ℂ))ᴴ * S)
+        = S * (Matrix.single l r (1 : ℂ) * X * (Matrix.single l r (1 : ℂ))ᴴ) * S := by
+          simp only [Matrix.mul_assoc]
+      _ = X r r • (S * Matrix.single l l (1 : ℂ) * S) := by
+          rw [single_mul_mul_conjTranspose_single, Matrix.mul_smul, Matrix.smul_mul]
+  have hsum : ∀ p : Fin D × Fin D,
+      fixedPointTensor σ (finProdFinEquiv p) * X * (fixedPointTensor σ (finProdFinEquiv p))ᴴ =
+        X p.2 p.2 • (S * Matrix.single p.1 p.1 (1 : ℂ) * S) := fun p => by
+    rw [fixedPointTensor_finProdFinEquiv]; exact hterm p.1 p.2
+  rw [Finset.sum_congr rfl (fun p _ => hsum p), Fintype.sum_prod_type, Finset.sum_comm]
+  simp_rw [← Finset.smul_sum, ← Finset.sum_mul, ← Finset.mul_sum, sum_single_diag_one,
+    Matrix.mul_one, hSS, ← Finset.sum_smul]
+  rfl
 
 /-- For a unit-trace `σ`, the transfer map of `P_∞` is the fixed-point projection
 onto `σ`, the map `|ρ⟩⟨1|` of arXiv:2307.01696, eq. `eq:Ek_decomp` and
@@ -152,7 +194,28 @@ theorem mpv_fixedPointTensor (σ : Matrix (Fin D) (Fin D) ℂ) {N : ℕ} [NeZero
     (τ : Fin N → Fin (D * D)) :
     mpv (fixedPointTensor σ) τ =
       pairProductState (fixedPointPair σ) (fun k => finProdFinEquiv.symm (τ k)) := by
-  sorry
+  obtain ⟨L, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne N)
+  set S := CFC.sqrt σ
+  set l : Fin (L + 1) → Fin D := fun k => (finProdFinEquiv.symm (τ k)).1
+  set r : Fin (L + 1) → Fin D := fun k => (finProdFinEquiv.symm (τ k)).2
+  have hletter : ∀ k, fixedPointTensor σ (τ k) = S * Matrix.single (l k) (r k) (1 : ℂ) :=
+    fun k => rfl
+  rw [mpv_eq, coeff_eq, evalWord_ofFn_eq_prod, Matrix.trace_ofFn_prod_eq_sum_cyclic]
+  simp only [hletter, mul_single_apply']
+  rw [Finset.sum_eq_single (fun m => r ((finRotate (L + 1)).symm m))]
+  · simp only [Equiv.symm_apply_apply, ite_true]
+    rw [pairProductState]
+    exact (Fintype.prod_equiv (finRotate (L + 1)) _ _ (fun k => by
+      simp only [Equiv.symm_apply_apply]; rfl)).symm
+  · intro t _ ht
+    have : ∃ n, t (finRotate (L + 1) n) ≠ r n := by
+      by_contra h
+      push Not at h
+      exact ht (funext fun m => by
+        simpa using h ((finRotate (L + 1)).symm m))
+    obtain ⟨n, hn⟩ := this
+    exact Finset.prod_eq_zero (Finset.mem_univ n) (ite_eq_right_iff.2 fun h => absurd h hn)
+  · simp
 
 /-! ## Renormalization fixed point -/
 
@@ -180,7 +243,14 @@ arXiv:2307.01696, eq. `eq:Ek_decomp` (the pairs are called normalized after
 eq. `eq:app_tidle_phi_1`). -/
 theorem fixedPointPair_norm_sq {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef) :
     ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = σ.trace := by
-  sorry
+  set S := CFC.sqrt σ
+  have hSS : Sᴴ * S = σ := by
+    rw [Matrix.conjTranspose_cfc_sqrt]; exact CFC.sqrt_mul_sqrt_self σ hσ.nonneg
+  calc ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = (Sᴴ * S).trace := by
+        rw [Matrix.trace, Fintype.sum_prod_type, Finset.sum_comm]
+        refine Finset.sum_congr rfl fun j _ => ?_
+        simp [Matrix.mul_apply, fixedPointPair, S]
+    _ = σ.trace := by rw [hSS]
 
 /-! ## Convergence of the blocked transfer map -/
 
@@ -198,7 +268,29 @@ theorem tendsto_transferMap_blockTensor_of_spectralRadius_lt_one
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Tendsto (fun q : ℕ => Kraus.transferMap (blockTensor A q) X) atTop
       (nhds (Kraus.transferMap (fixedPointTensor σ) X)) := by
-  sorry
+  have htr' : σ.trace ≠ 0 := by simp [htr]
+  set E := Kraus.transferMap A
+  set P := fixedPointProj σ htr'
+  have hEP : Kraus.transferMap (fixedPointTensor σ) = P :=
+    transferMap_fixedPointTensor hσ htr
+  rw [hEP] at hR ⊢
+  have hpow := pow_tendsto_zero_of_spectralRadius_lt_one _ hR
+  have happ : Tendsto (fun q : ℕ => ((E - P) ^ q) X) atTop (nhds 0) := by
+    have := ((ContinuousLinearMap.apply ℂ _ X).continuous.tendsto 0).comp hpow
+    convert this using 1
+    · funext q
+      simp only [Function.comp_apply, ContinuousLinearMap.apply_apply, ← map_pow]
+      rfl
+    · simp only [map_zero]
+      rfl
+  have hTP : IsTracePreservingMap E := Kraus.isTracePreservingMap_mapLM_of_isTP A hA
+  have hlim : Tendsto (fun q : ℕ => P X + ((E - P) ^ q) X) atTop (nhds (P X)) := by
+    simpa using (tendsto_const_nhds (x := P X)).add happ
+  refine hlim.congr' ?_
+  filter_upwards [eventually_ge_atTop 1] with q hq
+  rw [transferMap_blockTensor_apply,
+    pow_eq_fixedPointProj_add_compl_pow E htr' hTP hfix hq]
+  rfl
 
 /-- For a normal tensor in the gauge of arXiv:2307.01696, eq. `eq:Ek_decomp`, the
 blocked transfer map converges to the transfer map `|ρ⟩⟨1|` of `P_∞`: the limit
@@ -212,6 +304,14 @@ theorem tendsto_transferMap_blockTensor_of_isPrimitive
     (hfix : Kraus.transferMap A σ = σ) (X : Matrix (Fin D) (Fin D) ℂ) :
     Tendsto (fun q : ℕ => Kraus.transferMap (blockTensor A q) X) atTop
       (nhds (Kraus.transferMap (fixedPointTensor σ) X)) := by
-  sorry
+  have : NeZero D := ⟨by rintro rfl; simp at htr⟩
+  obtain ⟨htr', hgap⟩ :=
+    spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel
+      (Kraus.transferMap A) (Kraus.isChannel_mapLM A hA)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr) hPrim σ hσ.posSemidef
+      (by rintro rfl; simp at htr) hfix
+  refine tendsto_transferMap_blockTensor_of_spectralRadius_lt_one A hA hσ.posSemidef htr hfix
+    ?_ X
+  rwa [transferMap_fixedPointTensor hσ.posSemidef htr]
 
 end MPSTensor
