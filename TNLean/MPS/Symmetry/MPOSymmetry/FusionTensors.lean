@@ -24,10 +24,11 @@ This file derives the periodic-boundary version from the fusion rules alone, thr
 multi-block asymmetric compression theorem (Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2,
 Proposition 20, and its multi-block form in
 `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, Theorem 7.7).  The
-decomposition then holds up to a nilpotent remainder, as the paper records for periodic
-boundaries at lines 1028 and 1131 (the tails of the off-diagonal blocks vanish after a finite
-number of sites).  Each copy `(c, μ)` of the fusion channel `c` is a separate block of the
-compression, indexed by the sigma type `Σ c, Fin (N_{ab}^c)`.
+decomposition then holds up to a nilpotent remainder.  The paper describes this form only for
+group representations with periodic boundaries, at lines 1028 and 1131 (the tails of the
+off-diagonal blocks vanish after a finite number of sites); the extension to fusion rules with
+multiplicities is this module's own step.  Each copy `(c, μ)` of the fusion channel `c` is a
+separate block of the compression, indexed by the sigma type `Σ c, Fin (N_{ab}^c)`.
 
 The same argument gives the action tensors `V_{ax}^{y,i}` of an MPO on a family of matrix
 product states (arXiv:2203.12563, equation `fusiontensors2`, lines 459--480), from the
@@ -46,6 +47,15 @@ periodic-boundary relation `O_a ψ_{A_x} = ∑_y M_{a,x}^y ψ_{A_y}` (lines 567-
 * `MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq`: the gauge freedom of the
   fusion tensors of a multiplicity-free single fusion channel is one nonzero scalar, after
   sufficiently long words.
+
+## References
+
+- [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
+  A. Molnár, *Classifying phases protected by matrix product operator symmetries using matrix
+  product states*
+- [arXiv:1706.07329](https://arxiv.org/abs/1706.07329) -- A. Molnár, Y. Ge, N. Schuch,
+  J. I. Cirac, *A generalization of the injectivity condition for projected entangled pair
+  states*
 -/
 
 open scoped Matrix
