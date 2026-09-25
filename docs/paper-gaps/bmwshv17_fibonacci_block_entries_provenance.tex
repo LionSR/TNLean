@@ -82,26 +82,9 @@ fusion rules, not an error in the source.\footnote{Review traceability:
     1257--1260.}
 
 \section{The empty chain}
-The source requires $P_L^2=P_L$ ``for all $L$''.\footnote{Source
-    traceability: \path{References/1511.08090/AnyonsPEPS.tex}, lines
-    152--156.} At $L=0$ the trace of the empty product is the bond dimension of
-each block, $O_1^0=2$ and $O_\tau^0=3$. Substituting the weights
-$w_1=1/(1+\phi^2)$ and $w_\tau=\phi/(1+\phi^2)$ and using $\phi^2=\phi+1$ gives
-\begin{align}
-    P_0
-     & =w_1O_1^0+w_\tau O_\tau^0
-    =2w_1+3w_\tau
-    \notag \\
-     & =\frac{2+3\phi}{1+\phi^2}
-    =\frac{2+3\phi}{2+\phi}\neq1,
-    \label{eq:fib_empty_chain}
-\end{align}
-since $\phi\neq0$. By (\ref{eq:fib_empty_chain}), $P_0$ acts on the
-one-dimensional space of the empty chain as a scalar different from $0$ and
-$1$, so it is not idempotent. The empty chain is read as a
-degenerate case the source does not intend, and idempotence is stated for
-every positive length $L$.\footnote{Result:
-    \leanid{FibonacciCompression.fibProjector_mul_self}.}
+The source asks for $P_L^2=P_L$ at every length; the exclusion of the empty
+chain $L=0$, where $P_0$ is a scalar different from $0$ and $1$, is recorded
+separately in \path{docs/paper-gaps/bmwshv17_fibonacci_projector_positive_length.tex}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
