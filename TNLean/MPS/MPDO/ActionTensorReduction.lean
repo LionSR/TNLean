@@ -119,7 +119,10 @@ theorem actTensor_mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂) (A : M
   refine Finset.sum_congr rfl fun x _ => ?_
   simp only [mul_assoc]
 
-/-- The bond associator intertwines the letters of `(M N) · A` and `M · (N · A)`. -/
+/-- The bond associator intertwines the letters of `(M N) · A` and `M · (N · A)`.
+
+Source: arXiv:2203.12563, `sec:PBC`, line 1091 (the product `(g × h) · x = g · (h · x)`);
+the associator is that of arXiv:1606.00608, lines 995--999. -/
 theorem actTensor_mulTensor_mul_assocMatrix (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (A : MPSTensor d D₃) (i : Fin d) :
     actTensor (mulTensor M N) A i * mulTensorAssocMatrix D₁ D₂ D₃ =
@@ -130,7 +133,10 @@ theorem actTensor_mulTensor_mul_assocMatrix (M : MPOTensor d D₁) (N : MPOTenso
   simp
 
 /-- The inverse bond associator intertwines the letters of `(M N) · A` and `M · (N · A)` in the
-opposite direction. -/
+opposite direction.
+
+Source: arXiv:2203.12563, `sec:PBC`, line 1091; the associator is that of arXiv:1606.00608,
+lines 995--999. -/
 theorem assocInvMatrix_mul_actTensor_mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (A : MPSTensor d D₃) (i : Fin d) :
     mulTensorAssocInvMatrix D₁ D₂ D₃ * actTensor (mulTensor M N) A i =
@@ -171,7 +177,11 @@ theorem _root_.MPSTensor.IsReduction.actTensor_assoc_right {M : MPOTensor d D₁
 /-! ### Intertwiners of the operator factor -/
 
 /-- An intertwiner `P` of the letters of two operator tensors, tensored with the identity on
-the state bond, intertwines the letters of their action tensors on a common state. -/
+the state bond, intertwines the letters of their action tensors on a common state.
+
+Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1875--1913, and arXiv:2203.12563,
+`sec:PBC`, lines 1091--1129, where the bond associator of three stacked operators is carried
+through the action on a state. -/
 theorem actTensor_mul_kronId_of_intertwine {X' : MPOTensor d D₁} {X : MPOTensor d D₂}
     (B : MPSTensor d D₃) {P : Matrix (Fin D₁) (Fin D₂) ℂ}
     (hX : ∀ i l, X' i l * P = P * X i l) (i : Fin d) :

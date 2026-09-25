@@ -90,10 +90,6 @@ theorem FixesMPV.sameMPV₂Pos_actTensor {D₁ D₂ : ℕ} {T : MPOTensor d D₁
     funext (hB N hN)
   rw [← congrFun (mpo_mulVec_mpv T B N) σ, hB', hT N hN]
 
-omit [Group G] in
-theorem sameMPV₂Pos_refl (A : MPSTensor d D) : MPSTensor.SameMPV₂Pos A A :=
-  fun _ _ _ ↦ rfl
-
 /-! ### Action tensors -/
 
 /-- A choice of action tensors: for every group element `g`, a reduction `(V_g, W_g)` of the
@@ -139,11 +135,15 @@ noncomputable def fuseV (g h : G) :
   ad.V (g * h) * kronId (fd.V g h) D
 
 omit [Group G] in
+/-- Acting with `h` and then with `g` gives a reduction of `(O_g O_h) · A` onto `A` with left
+boundary `actV g h`. -/
 theorem exists_isReduction_actV (g h : G) : ∃ W, MPSTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) A (ad.actV g h) W :=
   ⟨_, (((ad.isReduction h).actTensor_idKron (F.tensor g)).trans
     (ad.isReduction g)).actTensor_assoc_left⟩
 
+/-- Fusing `g` with `h` and then acting with `gh` gives a reduction of `(O_g O_h) · A` onto `A`
+with left boundary `fuseV g h`. -/
 theorem exists_isReduction_fuseV (g h : G) : ∃ W, MPSTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) A (ad.fuseV fd g h) W :=
   ⟨_, ((fd.isReduction g h).actTensor_kronId A).trans (ad.isReduction (g * h))⟩
@@ -163,6 +163,12 @@ noncomputable def lSymbol : LSymbol G Unit := fun _ g h ↦
 
 variable {fd ad}
 
+/-- **The defining relation of the L-symbol**: for a normal state fixed by every operator of the
+family, `actV g h ~ L(g,h) · fuseV g h` against long words of `(O_g O_h) · A`. Both boundaries
+belong to reductions onto the normal tensor `A`, so a nonzero proportionality scalar exists and
+`lSymbol` selects it.
+
+Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913. -/
 theorem isDressedProportional_lSymbol (hA : Kraus.IsNormal A)
     (hinv : ∀ g, FixesMPV (F.tensor g) A) (x : Unit) (g h : G) :
     MPSTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) A)
@@ -172,7 +178,7 @@ theorem isDressedProportional_lSymbol (hA : Kraus.IsNormal A)
     obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h
     obtain ⟨W', hW'⟩ := ad.exists_isReduction_fuseV fd g h
     exact hW.exists_isDressedProportional hW' hA
-      (((hinv g).mulTensor (hinv h)).sameMPV₂Pos_actTensor (sameMPV₂Pos_refl A))
+      (((hinv g).mulTensor (hinv h)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl A))
   simp only [lSymbol, hex, ↓reduceDIte, Units.val_mk0]
   exact hex.choose_spec.2
 
@@ -183,6 +189,8 @@ section Triple
 variable (g h k : G)
 
 omit [Group G] in
+/-- Moving a bond identification of the operator factor out of the action tensor of an
+element: `V_y (castMat e Y ⊗ 1) = V_x (Y ⊗ 1)` for `e : x = y`. -/
 private theorem V_mul_kronId_castMat {x y : G} (e : x = y) {n : ℕ}
     (Y : Matrix (Fin (F.bondDim x)) (Fin n) ℂ) :
     ad.V y * kronId (F.castMat e * Y) D = ad.V x * kronId Y D := by
@@ -202,6 +210,8 @@ private theorem actV_mul_reduce_k :
   rw [← Matrix.mul_assoc (idKron (F.bondDim g) (mulTensorAssocInvMatrix _ _ _)),
     assocInv_pentagon]
 
+/-- The inner fusion step: acting with `g` on the fused pair `(h, k)` is the action tree of
+`(g, hk)` composed with the fusion of `h` with `k` on the triple. -/
 private theorem fuseV_inner_eq :
     ad.V g * idKron (F.bondDim g) (ad.fuseV fd h k) *
         (mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h * F.bondDim k) D *
@@ -212,6 +222,8 @@ private theorem fuseV_inner_eq :
   rw [← Matrix.mul_assoc (idKron _ (kronId _ _)), ← assocInv_mul_kronId_idKron,
     Matrix.mul_assoc]
 
+/-- Acting with `k` first and then fusing `g` with `h` is the action tree of `(gh, k)` composed
+with the fusion of `g` with `h` on the triple. -/
 private theorem fuseV_mul_reduce_k :
     ad.fuseV fd g h * (idKron (F.bondDim g * F.bondDim h) (ad.V k) *
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) D) =
@@ -219,11 +231,15 @@ private theorem fuseV_mul_reduce_k :
   simp only [actV, fuseV, Matrix.mul_assoc, kronId_mul_idKron_assoc]
   rw [← assocInv_mul_kronId_kronId]
 
+/-- Fusing `gh` with `k` after fusing `g` with `h` is the fusion tree `leftV` of the associator,
+followed by the action of `ghk`. -/
 private theorem fuseV_mul_left :
     ad.fuseV fd (g * h) k * kronId (kronId (fd.V g h) (F.bondDim k)) D =
       ad.V (g * h * k) * kronId (fd.leftV g h k) D := by
   simp only [fuseV, FusionData.leftV, Matrix.mul_assoc, kronId_mul]
 
+/-- Fusing `g` with `hk` after fusing `h` with `k` is the fusion tree `rightV` of the
+associator, followed by the action of `ghk`. -/
 private theorem fuseV_mul_right :
     ad.fuseV fd g (h * k) * kronId (idKron (F.bondDim g) (fd.V h k) *
         mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) D =
@@ -248,10 +264,10 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
   set B3 := actTensor (F.tripleTensor g h k) A
   have hSame3 : MPSTensor.SameMPV₂Pos B3 A :=
     (((hfix g).mulTensor (hfix h)).mulTensor (hfix k)).sameMPV₂Pos_actTensor
-      (sameMPV₂Pos_refl A)
+      (MPSTensor.SameMPV₂Pos.refl A)
   have hSameC : ∀ a b : G,
       MPSTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor a) (F.tensor b)) A) A :=
-    fun a b ↦ ((hfix a).mulTensor (hfix b)).sameMPV₂Pos_actTensor (sameMPV₂Pos_refl A)
+    fun a b ↦ ((hfix a).mulTensor (hfix b)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl A)
   have hSame3C : ∀ a b : G,
       MPSTensor.SameMPV₂Pos B3 (actTensor (mulTensor (F.tensor a) (F.tensor b)) A) :=
     fun a b ↦ fun N hN σ ↦ (hSame3 N hN σ).trans (hSameC a b N hN σ).symm
@@ -301,7 +317,7 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
   rw [fuseV_mul_reduce_k] at H3
   rw [fuseV_mul_left] at H4
   rw [fuseV_mul_right] at H2
-  have hleft := (H1''.trans H2).trans (MPSTensor.IsDressedProportional.refl _ _)
+  have hleft := H1''.trans H2
   have hright := (H3.trans H4).trans H5
   -- uniqueness against a nonvanishing word
   have hne : ∀ N : ℕ, ∃ w : List (Fin d), N ≤ w.length ∧
