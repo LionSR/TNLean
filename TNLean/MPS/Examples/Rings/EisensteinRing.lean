@@ -10,10 +10,14 @@ import TNLean.MPS.MPDO.OperatorProduct
 /-!
 # The ring of Eisenstein integers
 
-The tensors of the `ℤ/3` matrix product operator symmetries have entries in the cyclotomic
-field `ℚ(ω)`, where `ω = e^{2πi/3}` is a primitive cube root of unity and satisfies
-`ω² + ω + 1 = 0`. The entries are in fact all integral: every one of them is a `ℤ`-linear
-combination of `1` and `ω`, and so are the gauges and their inverses, which are unimodular.
+**Source.** None: this is infrastructure of this development for exact arithmetic in the
+`ℤ/3` worked examples, and no paper states it.
+
+**Formalized here.** The tensors of the `ℤ/3` matrix product operator symmetries have entries in
+the cyclotomic field `ℚ(ω)`, where `ω = e^{2πi/3}` is a primitive cube root of unity and
+satisfies `ω² + ω + 1 = 0`. The entries are in fact all integral: every one of them is a
+`ℤ`-linear combination of `1` and `ω`, and so are the gauges and their inverses, which are
+unimodular.
 
 This file builds the exact arithmetic of that ring in two layers, following
 `GoldenRing.lean`.

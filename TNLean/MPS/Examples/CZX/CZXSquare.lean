@@ -7,36 +7,57 @@ import TNLean.MPS.Examples.CZX.CZXTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
 /-!
-# Example D: the square of an anomalous `ℤ/2` symmetry
+# CZX: compression of the stacked square onto `-δ`
 
-A machine-checked instance of the multi-block asymmetric compression theorem (P5 note,
-`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, Example D,
-`ex:p5ft-czx`; verified numerically by `checks/p5_examples_verify.py`, section D).
+**Source.** Review arXiv:2011.12127, Appendix A, "The CZX MPU",
+`Papers/2011.12127/TN-Review-main.tex` lines 2591–2601: the square `O(B)` of the CZX
+operator has bond dimension four and letters `B^{00}`, `B^{11}`; two successive
+invariant-subspace reductions (the projectors `P` and `Q`) bring it to the canonical form
+`B^{ij} = (-1) δ_{ij}`, so `O(A)² = (-1)^N I`. Chen, Liu, Wen 2011 (arXiv:1106.4752),
+`References/1106.4752/source/dDSPTmodel.tex` lines 411–423: the doubled tensor
+`T(CZX,CZX)` is reduced by the projection `P_{CZX,CZX} = (|01⟩ - |10⟩)⟨0|` to `-T(I)`.
+The multi-block compression datum below, its flag and its explicit pair are a construction
+of this development.
 
-The CZX symmetry satisfies `U_L² = (-1)^L id` at every length. The stacked product tensor
-`B^{ij} = ∑_m M^{im} ⊗ M^{mj}` of bond dimension four therefore has the word traces of the
-single one-dimensional normal target `δ` carried with the weight `-1`, and the theorem applies
-with three zero slots. The compression is genuinely asymmetric: the target has bond dimension
-one, the source bond dimension four, and both sitewise intertwiner spaces vanish, so the
-word-level compression is the strongest local relation available for this tensor.
+**Formalized here.** The review's reduction as a word-level compression: the stacked tensor
+`B^{ij} = ∑_m M^{im} ⊗ M^{mj}` has the word traces of the single bond-one normal target `δ`
+carried with the weight `-1`, `U_L² = (-1)^L id` at every length, with three zero slots.
+The compression is asymmetric: the target has bond dimension one, the source bond dimension
+four, and both sitewise intertwiner spaces vanish, so the word-level compression is the
+strongest local relation available for this tensor.
 
-The flag is the one produced by hand from the two rank-one letters of `B`: the line spanned by
-`(1,0,0,-1)` is annihilated by every letter, the plane it spans together with
-`(1,1,-1,-1)` is the image of every letter, and the quotient of the plane by the line carries
-the weight `-1`. The remaining two steps of the flag are arbitrary completions, on which every
-letter acts as zero.
+The flag is produced from the two rank-one letters of `B`: the line spanned by
+`(1,0,0,-1)` is annihilated by every letter, the plane it spans together with `(1,1,-1,-1)`
+is the image of every letter, and the quotient of the plane by the line carries the weight
+`-1`. The remaining two steps of the flag are arbitrary completions, on which every letter
+acts as zero.
 
 ## Main results
 
-* `CZXCompression.czxSquare_compression`: the multi-block compression datum of Theorem 7.7.
+* `CZXCompression.czxSquare_compression`: the multi-block compression datum of the
+  multi-block trace theorem (`MultiBlockTrace`).
 * `CZXCompression.czxSquare_trace_evalWord`: the word-trace identity `U_L² = (-1)^L id`.
-* `CZXCompression.czxSquare_isReduction`: the explicit compression pair of the note,
+* `CZXCompression.czxSquare_isReduction`: the explicit compression pair
   `W = (0,0,-1,0)` and `V = (1,1,-1,-1)ᵀ`, with `W V = 1`.
 * `CZXCompression.czxSquare_evalWord_remainder_eq_zero`: the remainder of the compression is
   nilpotent of length four.
 * `CZXCompression.czxSquare_dim_eq`: the dimension count `4 = 1 + 3`.
 * `CZXCompression.czxSquare_right_intertwiner_eq_zero`,
   `CZXCompression.czxSquare_left_intertwiner_eq_zero`: both sitewise intertwiner spaces vanish.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+- [arXiv:1106.4752](https://arxiv.org/abs/1106.4752) -- X. Chen, Z.-X. Liu, X.-G. Wen,
+  *2D symmetry protected topological orders and their protected gapless edge excitations*
+
+## Provenance
+
+The compression datum and its exact-arithmetic certificates were first recorded in
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, Example D
+(`ex:p5ft-czx`, lines 996–1037); they are verification records, not the source.
 -/
 
 noncomputable section

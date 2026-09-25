@@ -9,23 +9,55 @@ import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.GroupRepresentation
 
 /-!
-# Physical operators of the project qutrit tensors
+# Anomalous `ℤ/3` example: the physical operators `U` and `U†` are unitary
 
-For a positive periodic length `L`, put
-`F(s) = ∑ k, [s k ≠ 0] * (s (k + 1)).val`. The bond-two tensors defined in
-`Z3AnomalousTensor` give `U |s⟩ = ω ^ F(s) |s + 1⟩` and
-`V |s⟩ = ω ^ (-F(s - 1)) |s - 1⟩`. Their physical operators are unitary,
-and `V = Uᴴ`. The first physical index is the output row.
+**Source.** Construction of this development: no source prints the `ℤ/3` tensors of
+`Z3AnomalousTensor.lean` or the operators below. Garre-Rubio and Schuch
+(arXiv:2405.00439), subsection "Example: `G = ℤ_n` with fully symmetry breaking",
+`Papers/2405.00439/MPU-DW.tex` lines 2038–2040, print the cyclic `3`-cocycles
+`ω_j(a, b, c) = exp(2πi j a (b + c - [b + c]) / n²)` of `ℤ/n`; the representative used here has
+class `j = 1` for `n = 3`, a fact checked only in the verification script and not formalized.
+Garre-Rubio, Lootens and Molnár (arXiv:2203.12563), subsubsection "Periodic boundary condition
+case", `Papers/2203.12563/REsubmission.tex` lines 2202–2224, construct periodic matrix product
+operator representations of a finite group with a `3`-cocycle and print the `ℤ/2` instance
+`∏ CZ_{i,i+1} Z_i ∏ X_i` (line 2222); the phase-decorated shift used here is a `ℤ/3` operator of
+the same kind, not the operator of that construction.
+No anomaly invariant is asserted here.
 
-These are the project tensors of
-`Notes/OpenProblemsTN/checks/asym_z3_anomalous_data.md`, §1–§2, not tensors
-printed in arXiv:2405.00439. That paper supplies the cyclic cocycle formula
-motivating the construction, not these matrix entries. No anomaly invariant
-is asserted here. Physical adjunction does not assert a virtual gauge or
-sitewise intertwiner.
+**Formalized here.** For a positive periodic length `L`, put
+`F(s) = ∑ k, [s k ≠ 0] * (s (k + 1)).val`. The bond-two tensors of `Z3AnomalousTensor.lean`
+give `U |s⟩ = ω ^ F(s) |s + 1⟩` and `V |s⟩ = ω ^ (-F(s - 1)) |s - 1⟩`, where `V` is the operator
+of the tensor of `U†`. Both physical operators are unitary and `V = Uᴴ`, so both tensors are
+matrix product unitaries. The first physical index is the output row. Physical adjunction does
+not assert a virtual gauge or a sitewise intertwiner.
 
-Positive length is essential: the empty word has virtual trace two, so both
-bond-two tensors give the scalar two at length zero, not a unitary operator.
+Positive length is essential: the empty word has virtual trace two, so both bond-two tensors
+give the scalar two at length zero, not a unitary operator.
+
+## Main results
+
+* `Z3Anomalous.mpo_uTensor`, `Z3Anomalous.mpo_uDagTensor`: the physical operators as
+  phase-decorated shifts.
+* `Z3Anomalous.mpo_uTensor_mem_unitaryGroup`, `Z3Anomalous.mpo_uDagTensor_mem_unitaryGroup`:
+  unitarity at every positive length.
+* `Z3Anomalous.mpo_uDagTensor_eq_conjTranspose`: the operator of `U†` is the adjoint of `U`.
+* `Z3Anomalous.uTensor_isMPU`, `Z3Anomalous.uDagTensor_isMPU`: both tensors are matrix product
+  unitaries.
+* `Z3Anomalous.mpo_uTensor_zero`, `Z3Anomalous.mpo_uDagTensor_zero`: the length-zero operator is
+  the scalar two.
+
+## References
+
+- [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- J. Garre-Rubio, N. Schuch,
+  *Fractional domain wall statistics in spin chains with anomalous symmetries*
+- [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
+  A. Molnár, *Classifying phases protected by matrix product operator symmetries using matrix
+  product states*
+
+## Provenance
+
+The tensors were first recorded in `Notes/OpenProblemsTN/checks/asym_z3_anomalous_data.md`,
+§1–§2; that file is a verification record, not the source.
 -/
 
 noncomputable section

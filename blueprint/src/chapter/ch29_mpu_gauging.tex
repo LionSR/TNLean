@@ -4137,7 +4137,12 @@ space of $(MN)P$.
         V^{L} & =F^<_{gh,k}\,(F^<_{g,h}\otimes\mathbf 1),                  &
         V^{R} & =F^<_{g,hk}\,(\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1},
     \end{align}
-    and $\omega(g,h,k)\in\C^\times$ is the scalar with
+    where the target bond space of $F^<_{g,hk}$, that of $O_{g(hk)}$, is
+    identified with that of $O_{(gh)k}$ through the equality
+    $g(hk)=(gh)k$ in $G$; the same identification enters the right
+    boundaries $W^L=(F^>_{g,h}\otimes\mathbf 1)F^>_{gh,k}$ and
+    $W^R=\mathsf a(\mathbf 1\otimes F^>_{h,k})F^>_{g,hk}$.
+    The anomaly three-cochain value $\omega(g,h,k)\in\C^\times$ is the scalar with
     $V^LT^{\mathbf w}=\omega(g,h,k)\,V^RT^{\mathbf w}$ for all long words
     $\mathbf w$. Equivalently $T^{\mathbf w}W^R=\omega(g,h,k)\,T^{\mathbf w}W^L$
     for the right boundaries, which is the defining display of
@@ -4145,12 +4150,32 @@ space of $(MN)P$.
     No normalization of $\omega$ is imposed.
 \end{definition}
 
+\begin{lemma}[The two fusion trees are reductions]
+    \label{thm:mpug_fusion_trees_reductions}
+    \lean{MPOTensor.GroupFamily.FusionData.isReduction_left,
+        MPOTensor.GroupFamily.FusionData.isReduction_right}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_reduction_composition}
+    The pairs $(V^L,W^L)$ and $(V^R,W^R)$ of
+    Definition~\ref{def:mpug_anomaly_three_cochain} are reductions of the
+    triple product $(O_gO_h)O_k$ onto $O_{ghk}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    For $(V^L,W^L)$, tensor the reduction $(F^<_{g,h},F^>_{g,h})$ with the
+    identity on the third factor and compose with $(F^<_{gh,k},F^>_{gh,k})$.
+    For $(V^R,W^R)$, tensor $(F^<_{h,k},F^>_{h,k})$ with the identity on the
+    first factor, compose with $(F^<_{g,hk},F^>_{g,hk})$, and transport along
+    the associator $\mathsf a$; all three steps are
+    Lemma~\ref{thm:mpug_reduction_composition}.
+\end{proof}
+
 \begin{theorem}[Characterization of the anomaly three-cochain]
     \label{thm:mpug_anomaly_three_cochain_spec}
     \lean{MPOTensor.GroupFamily.FusionData.isAssociator_omega,
         MPOTensor.GroupFamily.FusionData.eq_omega_of_isAssociator}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_reduction_composition,
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_fusion_trees_reductions,
         thm:mpug_dressed_proportionality}
     The scalar $\omega(g,h,k)$ exists, is nonzero, and is the only scalar
     with the dressed identity of
@@ -4158,7 +4183,7 @@ space of $(MN)P$.
 \end{theorem}
 
 \begin{proof}\leanok
-    By Lemma~\ref{thm:mpug_reduction_composition} both fusion trees are
+    By Lemma~\ref{thm:mpug_fusion_trees_reductions} both fusion trees are
     reductions of $T$ onto the normal tensor $O_{ghk}$, and $T$ and
     $O_{ghk}$ have the same periodic operators on nonempty chains. Apply
     Lemma~\ref{thm:mpug_dressed_proportionality}.
