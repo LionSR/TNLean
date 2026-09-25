@@ -43,7 +43,7 @@ eq. `eq.vidal`) in the same coordinates.
 
 ## Main results
 
-Theorem `Thm:seqwith` of arXiv:quant-ph/0608197 (lines 1570--1574) for the
+Theorem `Thm:seqwith` of arXiv:quant-ph/0608197 (lines 1569--1573) for the
 probabilistic and deterministic schemes:
 
 * `MPSPreparation.isProbabilisticallyGenerated_iff` — a nonzero vector is
@@ -55,16 +55,16 @@ probabilistic and deterministic schemes:
 
 The scalar only matters at `N = 0`, where the open-boundary coefficient is the
 empty product `1`; states are rays, and the source's "(up to normalization)"
-(line 1540) is this freedom.
+(lines 1540--1541) is this freedom.
 
 The deterministic transition scheme (scheme 3, `d = 2`, a fixed interaction) and
-the theorem on sequential generation without ancilla (lines 1590--1616) are not
+the theorem on sequential generation without ancilla (lines 1580--1616) are not
 formalized here.
 
 ## References
 
 * Pérez-García, Verstraete, Wolf, Cirac, *Matrix product state representations*,
-  arXiv:quant-ph/0608197, section "Generation of MPS", lines 1504--1583 of
+  arXiv:quant-ph/0608197, section "Generation of MPS", lines 1504--1578 of
   `Papers/quant-ph_0608197/MPSarchive.tex` (eq. `OBCMPSgen`, Theorem
   `Thm:seqwith`).
 * Schön, Solano, Verstraete, Cirac, Wolf, *Sequential generation of entangled
@@ -77,25 +77,25 @@ namespace MPSPreparation
 
 variable {d D N : ℕ}
 
-/-- The state of arXiv:quant-ph/0608197, eq. `OBCMPSgen` (lines 1541--1546):
+/-- The state of arXiv:quant-ph/0608197, eq. `OBCMPSgen` (lines 1542--1547):
 `⟨φ_F| A^{[N]}_{i_N} ⋯ A^{[1]}_{i_1} |φ_I⟩` at the ket-position configuration
 `τ`, where `τ p = i_{N-p}` and `A k = A^{[k+1]}`. -/
 def seqAmplitude (φF φI : Fin D → ℂ) (A : Fin N → Fin d → Matrix (Fin D) (Fin D) ℂ)
     (τ : Fin N → Fin d) : ℂ :=
   star φF ⬝ᵥ (chainProd (fun p => A (Fin.rev p)) τ *ᵥ φI)
 
-/-- Scheme 1 of arXiv:quant-ph/0608197 (probabilistic schemes, lines 1549--1550):
+/-- Scheme 1 of arXiv:quant-ph/0608197 (probabilistic schemes, line 1552):
 the vector `ψ` is the state of eq. `OBCMPSgen` for some operations
 `A^{[1]}, …, A^{[N]}` on a `D`-dimensional ancilla, some initial ancilla state
 `φ_I`, and some final projection `φ_F`. The source's "up to normalization"
-(line 1540) is kept: `ψ` is the unnormalized post-measurement vector. -/
+(lines 1540--1541) is kept: `ψ` is the unnormalized post-measurement vector. -/
 def IsProbabilisticallyGenerated (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop :=
   ∃ (A : Fin N → Fin d → Matrix (Fin D) (Fin D) ℂ) (φI φF : Fin D → ℂ),
     ψ = seqAmplitude φF φI A
 
 /-- The operation on the ancilla induced by a unitary `U` on ancilla ⊗ site
 acting on the site state `|0⟩`: `A_{i,αβ} = ⟨α, i| U |β, 0⟩`
-(arXiv:quant-ph/0608197, lines 1529--1533). -/
+(arXiv:quant-ph/0608197, lines 1530--1537). -/
 def stepMatrix [NeZero d] (U : Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ) :
     Fin d → Matrix (Fin D) (Fin D) ℂ :=
   fun i α β => U (α, i) (β, 0)
@@ -103,13 +103,13 @@ def stepMatrix [NeZero d] (U : Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ) :
 /-- The ancilla component of the joint ancilla-chain state after the unitaries
 `U^{[1]}, …, U^{[N]}` have acted on `|φ_I⟩ ⊗ |0⟩^{⊗N}`: the joint state is
 `∑_{α, τ} (jointState U φI τ α) |α⟩ ⊗ |τ⟩` (arXiv:quant-ph/0608197,
-lines 1529--1541; arXiv:quant-ph/0501096, the state
+lines 1527--1541; arXiv:quant-ph/0501096, the state
 `V_{[n]} ⋯ V_{[1]} |φ_I⟩`). -/
 def jointState [NeZero d] (U : Fin N → Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ)
     (φI : Fin D → ℂ) (τ : Fin N → Fin d) : Fin D → ℂ :=
   chainProd (fun p => stepMatrix (U (Fin.rev p))) τ *ᵥ φI
 
-/-- Scheme 2 of arXiv:quant-ph/0608197 (deterministic schemes, lines 1551--1552):
+/-- Scheme 2 of arXiv:quant-ph/0608197 (deterministic schemes, lines 1553--1554):
 the interactions are unitaries `U^{[k]}` on ancilla ⊗ site, the ancilla starts
 in a normalized state `φ_I`, and after the last step the joint state factorizes
 as `|φ_F⟩ ⊗ |ψ⟩` with `φ_F` normalized ("the ancilla must decouple in the last
@@ -145,7 +145,7 @@ private def obcZero (hD : 0 < D) : OBCChainTensor d D 0 where
 /-- Every state of eq. `OBCMPSgen` is, up to a nonzero scalar, an open-boundary
 MPS of bond dimension at most `D`: the forward direction of Theorem
 `Thm:seqwith` for the probabilistic scheme (arXiv:quant-ph/0608197,
-lines 1536--1546 and 1570--1574). -/
+lines 1538--1547 and 1569--1573). -/
 theorem exists_hasOBCRep_of_isProbabilisticallyGenerated {ψ : (Fin N → Fin d) → ℂ}
     (hψ : ψ ≠ 0) (h : IsProbabilisticallyGenerated D ψ) :
     ∃ c : ℂ, c ≠ 0 ∧ HasOBCRep D (c • ψ) := by
@@ -175,7 +175,7 @@ theorem exists_hasOBCRep_of_isProbabilisticallyGenerated {ψ : (Fin N → Fin d)
 /-- Every open-boundary MPS of bond dimension at most `D` is a state of
 eq. `OBCMPSgen` with `D × D` matrices: the converse direction of Theorem
 `Thm:seqwith` for the probabilistic scheme (arXiv:quant-ph/0608197,
-lines 1570--1574). -/
+lines 1569--1573). -/
 theorem isProbabilisticallyGenerated_of_hasOBCRep {ψ : (Fin N → Fin d) → ℂ} {c : ℂ}
     (hc : c ≠ 0) (h : HasOBCRep D (c • ψ)) : IsProbabilisticallyGenerated D ψ := by
   obtain ⟨B, hB⟩ := h
@@ -190,7 +190,7 @@ theorem isProbabilisticallyGenerated_of_hasOBCRep {ψ : (Fin N → Fin d) → �
     mulVec_basisVecZero_apply hD, ← hτ, smul_eq_mul, ← mul_assoc, inv_mul_cancel₀ hc, one_mul]
 
 /-- **Theorem `Thm:seqwith`, probabilistic scheme** (arXiv:quant-ph/0608197,
-lines 1570--1574): a nonzero vector is generated by a probabilistic sequential
+lines 1569--1573): a nonzero vector is generated by a probabilistic sequential
 scheme with a `D`-dimensional ancilla iff, up to a nonzero scalar, it has an
 open-boundary MPS representation of bond dimension at most `D`. -/
 theorem isProbabilisticallyGenerated_iff {ψ : (Fin N → Fin d) → ℂ} (hψ : ψ ≠ 0) :
@@ -199,7 +199,7 @@ theorem isProbabilisticallyGenerated_iff {ψ : (Fin N → Fin d) → ℂ} (hψ :
     fun ⟨_, hc, h⟩ => isProbabilisticallyGenerated_of_hasOBCRep hc h⟩
 
 /-- The operation `A_{i,αβ} = ⟨α, i| U |β, 0⟩` induced by a unitary satisfies
-`∑_i A_i^† A_i = 1` (arXiv:quant-ph/0608197, lines 1532--1533). -/
+`∑_i A_i^† A_i = 1` (arXiv:quant-ph/0608197, lines 1535--1537). -/
 theorem isIsometryOn_stepMatrix [NeZero d] {U : Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ}
     (hU : U ∈ Matrix.unitaryGroup (Fin D × Fin d) ℂ) : IsIsometryOn D (stepMatrix U) := by
   intro β β' _ _
@@ -210,7 +210,7 @@ theorem isIsometryOn_stepMatrix [NeZero d] {U : Matrix (Fin D × Fin d) (Fin D �
   rfl
 
 /-- The states generated by the deterministic scheme are normalized
-(arXiv:quant-ph/0608197, lines 1529--1541: unitary interactions and a
+(arXiv:quant-ph/0608197, lines 1527--1541: unitary interactions and a
 normalized initial ancilla state). -/
 theorem star_dotProduct_self_of_isDeterministicallyGenerated [NeZero d]
     {ψ : (Fin N → Fin d) → ℂ} (h : IsDeterministicallyGenerated D ψ) :
@@ -234,7 +234,7 @@ theorem star_dotProduct_self_of_isDeterministicallyGenerated [NeZero d]
 /-- A deterministically generated state is also probabilistically generated,
 with the operations `A^{[k]}_{i,αβ} = ⟨α, i| U^{[k]} |β, 0⟩` and the
 projection on the decoupled ancilla state (arXiv:quant-ph/0608197,
-lines 1529--1541). -/
+lines 1527--1541). -/
 theorem isProbabilisticallyGenerated_of_isDeterministicallyGenerated [NeZero d]
     {ψ : (Fin N → Fin d) → ℂ} (h : IsDeterministicallyGenerated D ψ) :
     IsProbabilisticallyGenerated D ψ := by
@@ -249,7 +249,7 @@ theorem isProbabilisticallyGenerated_of_isDeterministicallyGenerated [NeZero d]
 
 /-- Every normalized open-boundary MPS of bond dimension at most `D` (up to a
 nonzero scalar) is generated by the deterministic scheme: the substantive
-direction of Theorem `Thm:seqwith` (arXiv:quant-ph/0608197, lines 1570--1583).
+direction of Theorem `Thm:seqwith` (arXiv:quant-ph/0608197, lines 1569--1578).
 The proof is the successive-decomposition recipe of arXiv:quant-ph/0501096,
 eq. `induction`, followed by extension of the isometries to unitaries on
 ancilla ⊗ site; the ancilla decouples because the first bond of the resulting
@@ -318,7 +318,7 @@ theorem isDeterministicallyGenerated_of_hasOBCRep [NeZero d] {ψ : (Fin N → Fi
       hjoint, hout]
 
 /-- **Theorem `Thm:seqwith`, deterministic scheme** (arXiv:quant-ph/0608197,
-lines 1570--1583): a vector is generated by a deterministic sequential scheme
+lines 1569--1578): a vector is generated by a deterministic sequential scheme
 with a `D`-dimensional ancilla (unitary interactions, ancilla decoupling in the
 last step) iff it is normalized and, up to a nonzero scalar, has an
 open-boundary MPS representation of bond dimension at most `D`. -/
@@ -337,7 +337,7 @@ theorem isDeterministicallyGenerated_iff [NeZero d] {ψ : (Fin N → Fin d) → 
 
 /-- For normalized vectors the deterministic and probabilistic schemes generate
 the same states (arXiv:quant-ph/0608197, Theorem `Thm:seqwith`,
-lines 1570--1574). -/
+lines 1569--1573). -/
 theorem isDeterministicallyGenerated_iff_isProbabilisticallyGenerated [NeZero d]
     {ψ : (Fin N → Fin d) → ℂ} (hψ : star ψ ⬝ᵥ ψ = 1) :
     IsDeterministicallyGenerated D ψ ↔ IsProbabilisticallyGenerated D ψ := by

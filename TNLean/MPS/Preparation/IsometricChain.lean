@@ -45,10 +45,10 @@ condition `∑_i A_i^† A_i = 1` restricted to the used bond levels.
 ## References
 
 * Schön, Solano, Verstraete, Cirac, Wolf, *Sequential generation of entangled
-  multiqubit states*, arXiv:quant-ph/0501096, eq. `induction` and the paragraph
-  following it (`References/quant-ph_0501096/PhotoMPS.tex`, lines 186--211).
+  multiqubit states*, Phys. Rev. Lett. 95, 110503 (2005), arXiv:quant-ph/0501096,
+  eq. `induction` and the paragraph following it.
 * Pérez-García, Verstraete, Wolf, Cirac, *Matrix product state representations*,
-  arXiv:quant-ph/0608197, lines 1522--1583 of
+  arXiv:quant-ph/0608197, lines 1525--1578 of
   `Papers/quant-ph_0608197/MPSarchive.tex` (sequential generation with ancilla).
 -/
 
@@ -88,7 +88,7 @@ theorem chainProd_succ' {n : ℕ} (Q : Fin (n + 1) → Fin d → Matrix (Fin D) 
 
 /-- Isometry of a stacked site matrix on its first `b` columns: the vectors
 `(α, i) ↦ Q i α β`, `β < b`, are orthonormal. For `b = D` this is the condition
-`∑_i Q_i^† Q_i = 1` of arXiv:quant-ph/0608197, line 1533, and of
+`∑_i Q_i^† Q_i = 1` of arXiv:quant-ph/0608197, lines 1535--1537, and of
 arXiv:quant-ph/0501096, the isometry condition before eq. `MPSiso`. -/
 def IsIsometryOn (b : ℕ) (Q : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ β β' : Fin D, β.val < b → β'.val < b →
@@ -341,7 +341,7 @@ theorem sum_normSq_mulVec_of_isometryOn {b : ℕ} {Q : Fin d → Matrix (Fin D) 
 isometric on its bond block and the vector `v` is supported on the last bond
 block, then `∑_τ ‖Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) v‖² = ‖v‖²`. This is the
 normalization statement implicit in the deterministic scheme of
-arXiv:quant-ph/0608197, lines 1540--1543. -/
+arXiv:quant-ph/0608197, lines 1535--1541. -/
 theorem sum_normSq_chainProd_mulVec : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
     (Q : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ),
     (∀ p i, RowSupp (b p.castSucc) (Q p i)) → (∀ p, IsIsometryOn (b p.succ) (Q p)) →
@@ -368,7 +368,7 @@ ancilla ⊗ site, `ℂ^D ⊗ ℂ^d`, whose columns `|β, 0⟩` with `β < b` are
 isometry columns. This is the step "every `V'_{[k]}` could be embedded into an
 isometry `V_{[k]}`" of arXiv:quant-ph/0501096 (after eq. `induction`), together
 with the identification `A_{i,αβ} = ⟨α, i| U |β, 0⟩` of arXiv:quant-ph/0608197,
-lines 1530--1533. -/
+lines 1530--1537. -/
 theorem exists_unitary_extension [NeZero d] {b : ℕ} {Q : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (hQ : IsIsometryOn b Q) :
     ∃ U ∈ Matrix.unitaryGroup (Fin D × Fin d) ℂ,
@@ -626,7 +626,7 @@ dimension at most `D` in which every site except the last satisfies
 
 This is the successive-decomposition construction of arXiv:quant-ph/0501096,
 eq. `induction` and the paragraph following it, as used in the proof of
-arXiv:quant-ph/0608197, Theorem `Thm:seqwith` (lines 1575--1583). -/
+arXiv:quant-ph/0608197, Theorem `Thm:seqwith` (lines 1574--1578). -/
 theorem exists_isometric_coeff_eq {n : ℕ} (B : OBCChainTensor d D (n + 1)) :
     ∃ B' : OBCChainTensor d D (n + 1), B'.coeff = B.coeff ∧
       ∀ p : Fin (n + 1), p ≠ Fin.last n → ∑ i, (B'.tensor p i)ᴴ * B'.tensor p i = 1 := by
@@ -647,7 +647,7 @@ satisfies `∑_i A_i^† A_i = 1`.
 This is the successive-decomposition construction of arXiv:quant-ph/0501096,
 eq. `induction`, with the last remainder `M_{[1]} |φ̃_I⟩` of norm one, as in the
 deterministic part of arXiv:quant-ph/0608197, Theorem `Thm:seqwith`
-(lines 1570--1583). -/
+(lines 1569--1578). -/
 theorem exists_isometric_coeff_eq_of_norm {n : ℕ} (B : OBCChainTensor d D (n + 1))
     (hB : star B.coeff ⬝ᵥ B.coeff = 1) :
     ∃ B' : OBCChainTensor d D (n + 1), B'.coeff = B.coeff ∧
