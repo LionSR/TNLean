@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexOfRing
 import TNLean.MPS.Core.Reduction
 import TNLean.MPS.Core.ReductionUniqueness
 import TNLean.MPS.MPDO.OperatorProduct
@@ -157,6 +158,29 @@ theorem idKron_mul {m n p : ℕ} (D : ℕ) (V : Matrix (Fin m) (Fin n) ℂ)
 @[simp] theorem idKron_one (D m : ℕ) :
     idKron D (1 : Matrix (Fin m) (Fin m) ℂ) = 1 := by
   rw [idKron, Matrix.one_kronecker_one, Matrix.submatrix_one_equiv]
+
+/-- `kronId` commutes with the entrywise image of a matrix over a commutative ring, such as
+the integers, so that fusion trees of exact examples can be computed over that ring. -/
+theorem kronId_complexOfRing {R : Type*} [CommRing R] (f : R →+* ℂ) {m n : ℕ}
+    (X : Matrix (Fin m) (Fin n) R) (D : ℕ) :
+    kronId (MPSTensor.complexOfRing f X) D = MPSTensor.complexOfRing f
+      ((X ⊗ₖ (1 : Matrix (Fin D) (Fin D) R)).submatrix finProdFinEquiv.symm
+        finProdFinEquiv.symm) := by
+  ext r c
+  simp only [kronId, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+    MPSTensor.complexOfRing_apply, Matrix.one_apply, map_mul]
+  split_ifs <;> simp
+
+/-- `idKron` commutes with the entrywise image of a matrix over a commutative ring. -/
+theorem idKron_complexOfRing {R : Type*} [CommRing R] (f : R →+* ℂ) (D : ℕ) {m n : ℕ}
+    (X : Matrix (Fin m) (Fin n) R) :
+    idKron D (MPSTensor.complexOfRing f X) = MPSTensor.complexOfRing f
+      (((1 : Matrix (Fin D) (Fin D) R) ⊗ₖ X).submatrix finProdFinEquiv.symm
+        finProdFinEquiv.symm) := by
+  ext r c
+  simp only [idKron, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+    MPSTensor.complexOfRing_apply, Matrix.one_apply, map_mul]
+  split_ifs <;> simp
 
 /-- Identity factors on different sides commute:
 `(V ⊗ 1)(1 ⊗ U) = (1 ⊗ U)(V ⊗ 1)`. -/

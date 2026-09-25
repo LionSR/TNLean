@@ -75,36 +75,6 @@ open TNLean.Algebra MPOTensor MPSTensor
 
 namespace Z2Z2Condensation
 
-/-! ### Scaling lemmas -/
-
-private theorem mulTensor_smul_smul {d D₁ D₂ : ℕ} (a b : ℂ) (M : MPOTensor d D₁)
-    (N : MPOTensor d D₂) : mulTensor (a • M) (b • N) = (a * b) • mulTensor M N := by
-  funext i k
-  ext r c
-  simp only [mulTensor_apply, Pi.smul_apply, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul, Finset.mul_sum]
-  exact Finset.sum_congr rfl fun j _ ↦ by ring
-
-private theorem mulTensor_smul_left {d D₁ D₂ : ℕ} (a : ℂ) (M : MPOTensor d D₁)
-    (N : MPOTensor d D₂) : mulTensor (a • M) N = a • mulTensor M N := by
-  simpa using mulTensor_smul_smul a 1 M N
-
-private theorem mulTensor_smul_right {d D₁ D₂ : ℕ} (b : ℂ) (M : MPOTensor d D₁)
-    (N : MPOTensor d D₂) : mulTensor M (b • N) = b • mulTensor M N := by
-  simpa using mulTensor_smul_smul 1 b M N
-
-private theorem isReduction_smul {d D₁ D₂ : ℕ} {B : MPSTensor d D₂} {A : MPSTensor d D₁}
-    {V : Matrix (Fin D₁) (Fin D₂) ℂ} {W : Matrix (Fin D₂) (Fin D₁) ℂ} (c : ℂ)
-    (h : MPSTensor.IsReduction B A V W) :
-    MPSTensor.IsReduction (fun i ↦ c • B i) (fun i ↦ c • A i) V W := by
-  refine ⟨h.1, fun w ↦ ?_⟩
-  rw [Kraus.evalWord_smul, Kraus.evalWord_smul, Matrix.mul_smul, Matrix.smul_mul, h.2 w]
-
-private theorem isReduction_one_one_of_eq {d D : ℕ} {B A : MPSTensor d D} (h : B = A) :
-    MPSTensor.IsReduction B A 1 1 := by
-  subst h
-  exact ⟨Matrix.one_mul 1, fun w ↦ by rw [Matrix.one_mul, Matrix.mul_one]⟩
-
 /-! ### The family -/
 
 /-- The bond dimension attached to a label of the diagonal `ℤ₂`: one for the identity and two
@@ -204,23 +174,23 @@ def diagFusionData : diagFamily.FusionData where
   isReduction := by
     refine forall_z2 (forall_z2 ?_ ?_) (forall_z2 ?_ ?_)
     · change MPSTensor.IsReduction eEStacked (eMPS : MPSTensor 16 (1 * 1)) 1 1
-      exact isReduction_one_one_of_eq (funext eEStacked_eq)
+      exact MPSTensor.IsReduction.of_eq (funext eEStacked_eq)
     · change MPSTensor.IsReduction (mulTensor eTensor (Complex.I • xyTensor)).toMPSTensor
         ((Complex.I • xyTensor : MPOTensor 4 (1 * 2))).toMPSTensor 1 1
-      refine isReduction_one_one_of_eq ?_
+      refine MPSTensor.IsReduction.of_eq ?_
       rw [mulTensor_smul_right]
       funext a
       exact congrArg (Complex.I • ·) (eXyStacked_eq a)
     · change MPSTensor.IsReduction (mulTensor (Complex.I • xyTensor) eTensor).toMPSTensor
         ((Complex.I • xyTensor : MPOTensor 4 (2 * 1))).toMPSTensor 1 1
-      refine isReduction_one_one_of_eq ?_
+      refine MPSTensor.IsReduction.of_eq ?_
       rw [mulTensor_smul_left]
       funext a
       exact congrArg (Complex.I • ·) (xyEStacked_eq a)
     · change MPSTensor.IsReduction
         (mulTensor (Complex.I • xyTensor) (Complex.I • xyTensor)).toMPSTensor eMPS
         xyXyLeft xyXyRight
-      have h := isReduction_smul (-1) xyXy_isReduction
+      have h := xyXy_isReduction.smul (-1)
       rw [mulTensor_smul_smul, Complex.I_mul_I]
       convert h using 2 with a a
       · rfl
@@ -288,22 +258,6 @@ generators first. -/
 def diagRightTreeInt : Matrix (Fin 2) (Fin (2 * 2 * 2)) ℤ :=
   !![0, 1, 0, 0, 0, 0, 0, 0; 0, 0, 0, 0, 0, 1, 0, 0]
 
-private theorem kronId_complexOfInt {m n : ℕ} (X : Matrix (Fin m) (Fin n) ℤ) (D : ℕ) :
-    kronId (complexOfInt X) D = complexOfInt ((X ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℤ)).submatrix
-      finProdFinEquiv.symm finProdFinEquiv.symm) := by
-  ext r c
-  simp only [kronId, Matrix.submatrix_apply, Matrix.kroneckerMap_apply, complexOfInt_apply,
-    Matrix.one_apply, Int.cast_mul]
-  split_ifs <;> simp
-
-private theorem idKron_complexOfInt {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) ℤ) :
-    idKron D (complexOfInt X) = complexOfInt (((1 : Matrix (Fin D) (Fin D) ℤ) ⊗ₖ X).submatrix
-      finProdFinEquiv.symm finProdFinEquiv.symm) := by
-  ext r c
-  simp only [idKron, Matrix.submatrix_apply, Matrix.kroneckerMap_apply, complexOfInt_apply,
-    Matrix.one_apply, Int.cast_mul]
-  split_ifs <;> simp
-
 private theorem assocInv_two_two_two :
     mulTensorAssocInvMatrix 2 2 2 = (1 : Matrix (Fin 8) (Fin 8) ℂ) := by
   have he : (mulTensorAssocEquiv 2 2 2).symm = Equiv.refl (Fin 8) := Equiv.ext (by decide)
@@ -314,23 +268,17 @@ private theorem assocInv_two_one_two :
   have he : (mulTensorAssocEquiv 2 1 2).symm = Equiv.refl (Fin 4) := Equiv.ext (by decide)
   rw [mulTensorAssocInvMatrix, he, Equiv.toPEquiv_refl, PEquiv.toMatrix_refl]
 
-private theorem castMat_apply {a b : Multiplicative (Fin 2)} (e : a = b)
-    (i : Fin (diagFamily.bondDim b)) (j : Fin (diagFamily.bondDim a)) :
-    diagFamily.castMat e i j = if (i : ℕ) = j then 1 else 0 := by
-  subst e
-  simp [Matrix.one_apply, Fin.ext_iff]
-
 private theorem castMat_gen_gen_gen :
     diagFamily.castMat (mul_assoc diagGen diagGen diagGen).symm =
       (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
   ext i j
-  rw [castMat_apply]
+  rw [GroupFamily.castMat_apply]
   fin_cases i <;> fin_cases j <;> rfl
 
 private theorem castMat_gen_one_gen :
     diagFamily.castMat (mul_assoc diagGen 1 diagGen).symm = (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
   ext i j
-  rw [castMat_apply]
+  rw [GroupFamily.castMat_apply]
   fin_cases i; fin_cases j
   rfl
 
@@ -340,7 +288,7 @@ theorem diagFusionData_leftV_gen_gen_gen :
     diagFusionData.leftV diagGen diagGen diagGen = complexOfInt diagLeftTreeInt := by
   change (1 : Matrix (Fin 2) (Fin 2) ℂ) *
     kronId (complexOfInt !![(0 : ℤ), 1, 0, 0]) 2 = _
-  rw [Matrix.one_mul, kronId_complexOfInt]
+  rw [Matrix.one_mul, kronId_complexOfRing]
   congr 1
   decide
 
@@ -351,7 +299,7 @@ theorem diagFusionData_rightV_gen_gen_gen :
   rw [GroupFamily.FusionData.rightV, castMat_gen_gen_gen]
   change (1 : Matrix (Fin 2) (Fin 2) ℂ) * ((1 : Matrix (Fin 2) (Fin 2) ℂ) *
       idKron 2 (complexOfInt !![(0 : ℤ), 1, 0, 0]) * mulTensorAssocInvMatrix 2 2 2) = _
-  rw [assocInv_two_two_two, Matrix.one_mul, Matrix.one_mul, Matrix.mul_one, idKron_complexOfInt]
+  rw [assocInv_two_two_two, Matrix.one_mul, Matrix.one_mul, Matrix.mul_one, idKron_complexOfRing]
   congr 1
   decide
 

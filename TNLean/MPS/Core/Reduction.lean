@@ -82,6 +82,17 @@ theorem evalWord_smul_target {c : ℂ}
     V * Kraus.evalWord B w * W = (c ^ w.length) • Kraus.evalWord A w := by
   simpa only [Kraus.evalWord_smul] using h.evalWord w
 
+/-- Rescaling source and target by the same scalar preserves a reduction. -/
+theorem smul (h : IsReduction B A V W) (c : ℂ) :
+    IsReduction (fun i ↦ c • B i) (fun i ↦ c • A i) V W := by
+  refine ⟨h.1, fun w ↦ ?_⟩
+  rw [Kraus.evalWord_smul, Kraus.evalWord_smul, Matrix.mul_smul, Matrix.smul_mul, h.2 w]
+
+/-- Equal tensors of the same bond dimension reduce to each other by the identity. -/
+theorem of_eq {B' : MPSTensor d D₂} (h : B' = B) : IsReduction B' B 1 1 := by
+  subst h
+  exact ⟨Matrix.one_mul 1, fun w ↦ by rw [Matrix.one_mul, Matrix.mul_one]⟩
+
 /-- A rectangular reduction cannot increase the bond dimension: the target
 bond dimension is at most the source bond dimension. -/
 theorem bondDim_le (h : IsReduction B A V W) : D₁ ≤ D₂ :=

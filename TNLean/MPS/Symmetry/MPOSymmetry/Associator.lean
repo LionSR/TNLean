@@ -108,6 +108,13 @@ omit [Group G] in
   simp [castMat]
 
 omit [Group G] in
+/-- The entries of a bond identification: one on the diagonal of the common index range. -/
+theorem castMat_apply {a b : G} (e : a = b) (i : Fin (F.bondDim b)) (j : Fin (F.bondDim a)) :
+    F.castMat e i j = if (i : ℕ) = j then 1 else 0 := by
+  subst e
+  simp [Matrix.one_apply, Fin.ext_iff]
+
+omit [Group G] in
 /-- Bond identifications compose. -/
 @[simp] theorem castMat_mul_castMat {a b c : G} (e₁ : a = b) (e₂ : b = c) :
     F.castMat e₂ * F.castMat e₁ = F.castMat (e₁.trans e₂) := by
