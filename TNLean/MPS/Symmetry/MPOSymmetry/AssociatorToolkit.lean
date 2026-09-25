@@ -192,8 +192,6 @@ theorem forall_zmod_three {P : Multiplicative (ZMod 3) → Prop}
 
 end Multiplicative
 
-
-
 namespace MPOTensor
 
 variable {d D : ℕ}

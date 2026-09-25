@@ -37,9 +37,11 @@ The conclusion `L_0 / L_1 = -1` of line 1335 is unchanged. Documented in
 ## Main results
 
 * `CZXCompression.czx_carriesMPV`: `U` exchanges the two product states.
-* `CZXCompression.czx_lSymbol_gen_gen_zero`, `CZXCompression.czx_lSymbol_gen_gen_one`:
-  `L^0_{g,g} = 1` and `L^1_{g,g} = -1`.
-* `CZXCompression.czx_omega_eq_lSymbol_div`: `ω(g,g,g) = L^0_{g,g} / L^1_{g,g} = -1`.
+* `CZXCompression.czxBlock_isNormal`: both product states are normal.
+* `CZXCompression.czx_omega_eq_lSymbol_ratio`: for every choice of fusion and action
+  tensors, `ω(g,g,g)` is the ratio of L-symbols given by the involution formula.
+* `CZXCompression.czx_lSymbol_ratio_eq_neg_one`: for the explicit fusion tensors that ratio
+  is `-1`.
 -/
 
 noncomputable section
