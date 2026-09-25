@@ -889,13 +889,13 @@ class of the full family is left open~\cite{gap:glm23_z2z2_diagonal_anomaly_scop
     Write $s=xy$. The tensors $M_e$ for $e$ and $iM_{xy}$ for $s$ are normal
     and their periodic operators multiply as $\Z_2$ on every nonempty
     chain. Choose the fusion tensors to be the identity whenever a factor
-    is $e$, and the compression pair $(W,V)$ of the block $(xy,xy)$ of
+    is $e$, and the compression pair $(V,W)$ of the block $(xy,xy)$ of
     Theorem~\ref{thm:asymex_z2z2_nonsplit} for $(s,s)$, where
-    $W=(0,1,0,0)$. Let $R=M_{xy}\cdot M_{xy}\cdot M_{xy}$ be the unscaled
+    $V=(0,1,0,0)$. Let $R=M_{xy}\cdot M_{xy}\cdot M_{xy}$ be the unscaled
     triple product, of bond dimension eight. Then
     \begin{align}
-        (W\otimes\Id)R^{\mathbf w}
-         & =-(\Id\otimes W)R^{\mathbf w}
+        (V\otimes\Id)R^{\mathbf w}
+         & =-(\Id\otimes V)R^{\mathbf w}
         \notag
     \end{align}
     for every nonempty word $\mathbf w$, so $\omega(s,s,s)=-1$, while
@@ -907,16 +907,16 @@ class of the full family is left open~\cite{gap:glm23_z2z2_diagonal_anomaly_scop
 \begin{proof}
     \leanok
     The phases $i\cdot i=-1$ of two generators cancel the weight $-1$ of
-    the target $-M_e$ of the block $(xy,xy)$, so $(W,V)$ is a fusion pair
+    the target $-M_e$ of the block $(xy,xy)$, so $(V,W)$ is a fusion pair
     for $(s,s)$; the pairs with a factor $e$ are the split blocks
     $(e,xy)$ and $(xy,e)$, whose stacked tensors equal $M_{xy}$. The triple
     product of $iM_{xy}$ is $i^3R$, and the scalar $i^3$ occurs on both
     sides of the comparison of the two trees. Both trees intertwine two
     letters with the tensor $-M_{xy}$: $XR^aR^b=-M_{xy}^aXR^b$ for
-    $X=W\otimes\Id$ and $X=\Id\otimes W$ and all letters $a,b$, and on a
-    single letter $(W\otimes\Id)R^a=-(\Id\otimes W)R^a$. These are integer
+    $X=V\otimes\Id$ and $X=\Id\otimes V$ and all letters $a,b$, and on a
+    single letter $(V\otimes\Id)R^a=-(\Id\otimes V)R^a$. These are integer
     identities checked letter by letter, and induction on the word gives
-    the displayed identity. For $(s,e,s)$ both trees reduce to $W$. The
+    the displayed identity. For $(s,e,s)$ both trees reduce to $V$. The
     product $\omega(s,e,s)\,\omega(s,s,s)$ is invariant under the
     fusion-tensor gauge action because $s^2=e$, and changing the fusion
     tensors acts by that gauge action. The value $-1$ agrees with the
