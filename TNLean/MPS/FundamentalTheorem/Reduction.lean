@@ -9,8 +9,9 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.Reduction
 
 import TNLean.MPS.FundamentalTheorem.Reduction.AbsorbingCompression
+import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Reduction.CompressionPeriodic
-import TNLean.MPS.FundamentalTheorem.Reduction.Examples
+import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Flag
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
 import TNLean.MPS.FundamentalTheorem.Reduction.Identification
@@ -19,6 +20,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
+import TNLean.MPS.FundamentalTheorem.Reduction.RingEmbedding
 import TNLean.MPS.FundamentalTheorem.Reduction.SimpleSeparation
 import TNLean.MPS.FundamentalTheorem.Reduction.SingleBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.Splitting
