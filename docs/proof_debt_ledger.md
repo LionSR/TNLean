@@ -1030,8 +1030,8 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   rename their ≈90 call sites, redirect `thm:asymex_explicit_gauge` and
   `thm:asymex_zsqrt2_ring`, root build, checkdecls; golden and Eisenstein after
   #7838 and #7833 land.
-- **Progress (2026-09-25)**: the integer and `ℤ√2` heads were converted
-  earlier; the golden and Eisenstein heads are now same-name `abbrev`s of
+- **Progress (2026-09-25, PR #8098, Lean −69 lines)**: the integer and `ℤ√2` heads were
+  converted earlier; the golden and Eisenstein heads are now same-name `abbrev`s of
   `complexOfRing`, with word evaluation, the gauge-inverse identity
   `complexOfRing_mul_eq_one` and the scaled matrix-unit normality certificate
   generic in `Reduction/RingEmbedding.lean` and `Algebra/ComplexOfRing.lean`.
@@ -1039,7 +1039,8 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   and the golden action are deleted in favour of `evalWordR`, `mulTensorR`
   and `actTensorR`. Remaining: the three compression constructors
   (`ofGolden`, `ofEisenstein`, `ofConjInt`), excluded above as distinct
-  designs, and the Kramers--Wannier call sites.
+  designs, and the Kramers--Wannier call sites. Audit:
+  `docs/audits/2026-09-25_ring_embedding_transport_second_slice.md`.
 
 ## D17. Three MPDO carriers restate the twelve vertical-decomposition fields instead of extending one  —  duplication, impact 5/10, effort 4/10
 - **Status**: open ([#7847](https://github.com/LionSR/TNLean/issues/7847); 2026-09-19 architectural survey)
