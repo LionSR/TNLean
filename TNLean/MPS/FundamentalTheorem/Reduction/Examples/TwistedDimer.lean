@@ -21,9 +21,14 @@ $c^{(L)}_{\alpha,\beta,\gamma}=\operatorname{tr}(\chi^L_{\alpha,\beta,\gamma})$ 
 algebra relation of Theorem 4.14 (lines 972--993) depend on $L$. The word-trace
 identity of the fusion (`P6Compression.dimerFusion_trace_evalWord` in
 `TwistedDimerPairs`) carries the length-dependent weights $(7/16)^{|w|}$ and
-$(1/16)^{|w|}$. These modules prove the compression and its word-trace identity
-only; the fixed-point property of the twisted dimer is
-proved separately for the operator of `TNLean.MPS.MPDO.TwistedDimer`
+$(1/16)^{|w|}$. These are the fusion weights of the sector tensors as normalized
+here, not the coefficients $c^{(L)}$ of Theorem 4.14: the sector tensors are not
+put in the canonical form of that theorem, and the canonical-form coefficients
+of the twisted dimer, $\alpha^L$ and $\beta^L$ with $\alpha=7/10$ and
+$\beta=1/10$, are those of `TNLean.MPS.MPDO.TwistedDimerProductLaw`. These
+modules prove the compression and its word-trace identity only; the fixed-point
+property of the twisted dimer is proved separately for the operator of
+`TNLean.MPS.MPDO.TwistedDimer`
 (`MPOTensor.TwistedDimer.isRFPViaTS_T`), and no formal identification of that
 operator's tensor with the sector tensors here is asserted.
 

@@ -13,12 +13,18 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 Pérez-García, Schuch, Verstraete 2017 (arXiv:1606.00608). It addresses the
 open question at `Papers/1606.00608/MPDO-22-12-17-2.tex` line 995, whether an
 RFP can have structure coefficients $c^{(L)}$ of Theorem 4.14 (lines 972--993)
-that depend on $L$. The one-site matrices below are the letters
-`MPOTensor.RescalingStableLengthDependentRFP.A`; the MPDO property, the
-fixed-point channels of Definition 4.1 (lines 657--660), and the failure of
-length independence of $1+(7/25)^L$ under positive rescaling are proved in the
-`MPOTensor.RescalingStableLengthDependentRFP` modules, not here. This module
-proves only the compression statement described next.
+that depend on $L$. The one-site matrices $A^i$ below are the letters
+`MPOTensor.RescalingStableLengthDependentRFP.A`, and the tensor here is
+`oneLabelM i j = A^i ⊗ A^j`, with $(i,j)$ physical and the Kronecker factors
+virtual. The MPDO property, the fixed-point channels of Definition 4.1
+(lines 657--660), and the failure of length independence of $1+(7/25)^L$ under
+positive rescaling are proved in the `MPOTensor.RescalingStableLengthDependentRFP`
+modules for a different tensor,
+`MPOTensor.RescalingStableLengthDependentRFP.R`, whose entries are
+$R^{pq}_{ab}=\tfrac{25}{32}\,(A^a\otimes\overline{A^b})_{pq}$: it carries the
+scale $25/32$ and exchanges the physical and virtual roles relative to
+`oneLabelM`. No formal identification of `R` with `oneLabelM` is proved. This
+module proves only the compression statement described next.
 
 A machine-checked instance of the multi-block asymmetric compression theorem
 (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) for

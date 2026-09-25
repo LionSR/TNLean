@@ -23,7 +23,9 @@ the sector `f + f'` with the weight `x/2 = 7/16` and the sector `f + f' + 1` wit
 `eq:p6-r44-z2-fusion`), stated in normalized form as the P6 resolution `thm:p6-round44-z2` of
 `Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex` (exact data in
 `Notes/OpenProblemsTN/checks/p6_examples_compression_data.md`, §1.2–1.4); its word traces give
-the periodic coefficients `c^{(L)} = (7/16)^L + (1/16)^L` of every pair.
+the periodic coefficients `c^{(L)} = (7/16)^L + (1/16)^L` of every pair, in the
+normalization of the sector tensors here (not the canonical-form coefficients of
+Theorem 4.14; see the header of `TwistedDimer`).
 
 **Source.** Project construction, not printed in Cirac, Pérez-García, Schuch, Verstraete 2017
 (arXiv:1606.00608); it bears on the open question at `Papers/1606.00608/MPDO-22-12-17-2.tex`
