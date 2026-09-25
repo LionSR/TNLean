@@ -71,5 +71,8 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousRepresentatio
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousUnitary
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalyClass
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalyTreeData
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalyTreeUDU
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalyTreeUUU
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Zsqrt2OperatorFusion
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Zsqrt2Ring

@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousInverseFusion
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalyTreeUDU
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalyTreeUUU
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousRepresentation
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 
@@ -232,159 +234,6 @@ private theorem castMat_apply {a b : Multiplicative (ZMod 3)} (e : a = b)
   subst e
   simp [Matrix.one_apply, Fin.ext_iff]
 
-/-! ### Eisenstein data of the two nontrivial triples -/
-
-/-- The recorded left fusion tensor of `U ⊗ U → U†` over `ℤ[ω]`. -/
-def uuLeftEis : Matrix (Fin 2) (Fin 4) EisensteinInt :=
-  !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, 0⟩; ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, -1⟩, ⟨0, 0⟩]
-
-/-- The recorded left fusion tensor of `U ⊗ U† → 1` and of `U† ⊗ U → 1` over `ℤ[ω]`. -/
-def scalarLeftEis : Matrix (Fin 1) (Fin 4) EisensteinInt :=
-  !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩]
-
-/-- `X ⊗ 1` over `ℤ[ω]`, in the bond order of `MPOTensor.kronId`. -/
-def kronIdEis {m n : ℕ} (X : Matrix (Fin m) (Fin n) EisensteinInt) (D : ℕ) :
-    Matrix (Fin (m * D)) (Fin (n * D)) EisensteinInt :=
-  (X ⊗ₖ (1 : Matrix (Fin D) (Fin D) EisensteinInt)).submatrix
-    finProdFinEquiv.symm finProdFinEquiv.symm
-
-/-- `1 ⊗ X` over `ℤ[ω]`, in the bond order of `MPOTensor.idKron`. -/
-def idKronEis {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) EisensteinInt) :
-    Matrix (Fin (D * m)) (Fin (D * n)) EisensteinInt :=
-  ((1 : Matrix (Fin D) (Fin D) EisensteinInt) ⊗ₖ X).submatrix
-    finProdFinEquiv.symm finProdFinEquiv.symm
-
-/-- The letters of the triple product `(U U) U` over `ℤ[ω]`. -/
-def tripleUUUEis (a : Fin 9) : Matrix (Fin 8) (Fin 8) EisensteinInt :=
-  mulEisensteinTensor (mulEisensteinTensor uEis uEis) uEis (Fin.divNat (m := 3) (n := 3) a)
-    (Fin.modNat (m := 3) (n := 3) a)
-
-/-- The letters of the triple product `(U U†) U` over `ℤ[ω]`. -/
-def tripleUDUEis (a : Fin 9) : Matrix (Fin 8) (Fin 8) EisensteinInt :=
-  mulEisensteinTensor (mulEisensteinTensor uEis uDagEis) uEis (Fin.divNat (m := 3) (n := 3) a)
-    (Fin.modNat (m := 3) (n := 3) a)
-
-/-- The tree of `(g,g,g)` fusing the first two factors first. -/
-def leftUUUEis : Matrix (Fin 1) (Fin 8) EisensteinInt := scalarLeftEis * kronIdEis uuLeftEis 2
-
-/-- The tree of `(g,g,g)` fusing the last two factors first. -/
-def rightUUUEis : Matrix (Fin 1) (Fin 8) EisensteinInt := scalarLeftEis * idKronEis 2 uuLeftEis
-
-/-- The tree of `(g,g²,g)` fusing the first two factors first. -/
-def leftUDUEis : Matrix (Fin 2) (Fin 8) EisensteinInt := kronIdEis scalarLeftEis 2
-
-/-- The tree of `(g,g²,g)` fusing the last two factors first. -/
-def rightUDUEis : Matrix (Fin 2) (Fin 8) EisensteinInt := idKronEis 2 scalarLeftEis
-
-/-! ### Letter tables of the two nontrivial triples
-
-Every letter of the two triple products has at most one nonzero column. The kernel checks the
-computed letters and trees against these tables once, and the pair identities are then checked
-on the tables. -/
-
-/-- The `8 × 8` matrix over `ℤ[ω]` whose only nonzero column is `k`, with entries `v`. -/
-private def columnEis (k : Fin 8) (v : Fin 8 → EisensteinInt) :
-    Matrix (Fin 8) (Fin 8) EisensteinInt :=
-  Matrix.of fun r c ↦ if c = k then v r else 0
-
-/-- The letters of `(U U) U`, read off from `tripleUUUEis`. -/
-private def tripleUUUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
-  | 0 => columnEis 6 ![1, 1, ⟨0, 1⟩, ⟨0, 1⟩, ⟨-1, -1⟩, ⟨-1, -1⟩, 1, 1]
-  | 4 => columnEis 3 ![1, ⟨0, 1⟩, ⟨-1, -1⟩, 1, 1, ⟨0, 1⟩, ⟨-1, -1⟩, 1]
-  | 8 => columnEis 5 ![1, ⟨-1, -1⟩, 1, ⟨-1, -1⟩, ⟨0, 1⟩, 1, ⟨0, 1⟩, 1]
-  | _ => 0
-
-/-- The letters of `(U U†) U`, read off from `tripleUDUEis`. -/
-private def tripleUDUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
-  | 2 => columnEis 7 ![1, ⟨-1, -1⟩, ⟨0, 1⟩, 1, ⟨-1, -1⟩, ⟨0, 1⟩, 1, ⟨-1, -1⟩]
-  | 3 => columnEis 0 ![1, 1, 1, 1, 1, 1, 1, 1]
-  | 7 => columnEis 7 ![1, ⟨0, 1⟩, ⟨-1, -1⟩, 1, ⟨0, 1⟩, ⟨-1, -1⟩, 1, ⟨0, 1⟩]
-  | _ => 0
-
-/-- The tree `leftUUUEis`, read off. -/
-private def leftUUUTable : Matrix (Fin 1) (Fin 8) EisensteinInt :=
-  !![0, 0, 0, 0, 0, ⟨0, -1⟩, 0, 0]
-
-/-- The tree `rightUUUEis`, read off. -/
-private def rightUUUTable : Matrix (Fin 1) (Fin 8) EisensteinInt :=
-  !![0, 0, 0, 0, 0, 0, ⟨0, -1⟩, 0]
-
-/-- The tree `leftUDUEis`, read off. -/
-private def leftUDUTable : Matrix (Fin 2) (Fin 8) EisensteinInt :=
-  !![0, 0, 0, 0, 0, 0, 1, 0; 0, 0, 0, 0, 0, 0, 0, 1]
-
-/-- The tree `rightUDUEis`, read off. -/
-private def rightUDUTable : Matrix (Fin 2) (Fin 8) EisensteinInt :=
-  !![0, 0, 0, 1, 0, 0, 0, 0; 0, 0, 0, 0, 0, 0, 0, 1]
-
-set_option maxRecDepth 8000 in
-private theorem tripleUUUEis_eq : ∀ a, tripleUUUEis a = tripleUUUTable a := by
-  decide +kernel
-
-set_option maxRecDepth 8000 in
-private theorem tripleUDUEis_eq : ∀ a, tripleUDUEis a = tripleUDUTable a := by
-  decide +kernel
-
-private theorem leftUUUEis_eq : leftUUUEis = leftUUUTable := by decide +kernel
-
-private theorem rightUUUEis_eq : rightUUUEis = rightUUUTable := by decide +kernel
-
-private theorem leftUDUEis_eq : leftUDUEis = leftUDUTable := by decide +kernel
-
-private theorem rightUDUEis_eq : rightUDUEis = rightUDUTable := by decide +kernel
-
-set_option maxRecDepth 8000 in
-private theorem leftUUU_pair (a b : Fin 9) :
-    leftUUUEis * tripleUUUEis a * tripleUUUEis b =
-      identityEisMPS a * leftUUUEis * tripleUUUEis b := by
-  have h : ∀ a b : Fin 9, leftUUUTable * tripleUUUTable a * tripleUUUTable b =
-      identityEisMPS a * leftUUUTable * tripleUUUTable b := by decide +kernel
-  simp only [tripleUUUEis_eq, leftUUUEis_eq]
-  exact h a b
-
-set_option maxRecDepth 8000 in
-private theorem rightUUU_pair (a b : Fin 9) :
-    rightUUUEis * tripleUUUEis a * tripleUUUEis b =
-      identityEisMPS a * rightUUUEis * tripleUUUEis b := by
-  have h : ∀ a b : Fin 9, rightUUUTable * tripleUUUTable a * tripleUUUTable b =
-      identityEisMPS a * rightUUUTable * tripleUUUTable b := by decide +kernel
-  simp only [tripleUUUEis_eq, rightUUUEis_eq]
-  exact h a b
-
-set_option maxRecDepth 8000 in
-private theorem UUU_letter (a : Fin 9) :
-    leftUUUEis * tripleUUUEis a = (⟨-1, -1⟩ : EisensteinInt) • (rightUUUEis * tripleUUUEis a) := by
-  have h : ∀ a : Fin 9, leftUUUTable * tripleUUUTable a =
-      (⟨-1, -1⟩ : EisensteinInt) • (rightUUUTable * tripleUUUTable a) := by decide +kernel
-  simp only [tripleUUUEis_eq, leftUUUEis_eq, rightUUUEis_eq]
-  exact h a
-
-set_option maxRecDepth 8000 in
-private theorem leftUDU_pair (a b : Fin 9) :
-    leftUDUEis * tripleUDUEis a * tripleUDUEis b =
-      uEisMPS a * leftUDUEis * tripleUDUEis b := by
-  have h : ∀ a b : Fin 9, leftUDUTable * tripleUDUTable a * tripleUDUTable b =
-      uEisMPS a * leftUDUTable * tripleUDUTable b := by decide +kernel
-  simp only [tripleUDUEis_eq, leftUDUEis_eq]
-  exact h a b
-
-set_option maxRecDepth 8000 in
-private theorem rightUDU_pair (a b : Fin 9) :
-    rightUDUEis * tripleUDUEis a * tripleUDUEis b =
-      uEisMPS a * rightUDUEis * tripleUDUEis b := by
-  have h : ∀ a b : Fin 9, rightUDUTable * tripleUDUTable a * tripleUDUTable b =
-      uEisMPS a * rightUDUTable * tripleUDUTable b := by decide +kernel
-  simp only [tripleUDUEis_eq, rightUDUEis_eq]
-  exact h a b
-
-set_option maxRecDepth 8000 in
-private theorem UDU_letter (a : Fin 9) :
-    leftUDUEis * tripleUDUEis a = rightUDUEis * tripleUDUEis a := by
-  have h : ∀ a : Fin 9, leftUDUTable * tripleUDUTable a = rightUDUTable * tripleUDUTable a := by
-    decide +kernel
-  simp only [tripleUDUEis_eq, leftUDUEis_eq, rightUDUEis_eq]
-  exact h a
-
 private theorem mulTensor_uTensor_uTensor :
     mulTensor uTensor uTensor = fun i j ↦ complexOfEisenstein (mulEisensteinTensor uEis uEis i j) :=
   funext₂ fun i j ↦ mulTensor_complexOfEisenstein uEis uEis i j
@@ -396,16 +245,16 @@ private theorem mulTensor_uTensor_uDagTensor :
 
 private theorem tripleUUU_eq (a : Fin 9) :
     (family.tripleTensor z3Gen z3Gen z3Gen).toMPSTensor a =
-      complexOfEisenstein (tripleUUUEis a) := by
+      complexOfEisenstein (tripleUUUTable a) := by
   change (mulTensor (mulTensor uTensor uTensor) uTensor).toMPSTensor a = _
-  rw [mulTensor_uTensor_uTensor]
+  rw [mulTensor_uTensor_uTensor, ← tripleUUUEis_eq_table]
   exact mulTensor_complexOfEisenstein _ uEis _ _
 
 private theorem tripleUDU_eq (a : Fin 9) :
     (family.tripleTensor z3Gen (z3Gen * z3Gen) z3Gen).toMPSTensor a =
-      complexOfEisenstein (tripleUDUEis a) := by
+      complexOfEisenstein (tripleUDUTable a) := by
   change (mulTensor (mulTensor uTensor uDagTensor) uTensor).toMPSTensor a = _
-  rw [mulTensor_uTensor_uDagTensor]
+  rw [mulTensor_uTensor_uDagTensor, ← tripleUDUEis_eq_table]
   exact mulTensor_complexOfEisenstein _ uEis _ _
 
 theorem z3FusionData_leftV_gen_gen_gen :
