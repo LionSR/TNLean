@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Defect
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Instance
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2NonSplit
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Split
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.AnomalousCondensationZ2Z2Unitary
@@ -66,6 +67,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousDefect
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousDefectCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousFusion
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousInverseFusion
+import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousRepresentation
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Z3AnomalousUnitary
 import TNLean.MPS.FundamentalTheorem.Reduction.Examples.Zsqrt2OperatorFusion

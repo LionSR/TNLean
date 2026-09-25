@@ -402,6 +402,53 @@ word traces of their stacked products.
     $\lambda(x,y)=-1$ and $\lambda(y,x)=+1$ and using $(-1)^L=-1$.
 \end{proof}
 
+The four operators are related to the group matrix product operators of
+Section~\ref{sec:asymex_group_cocycle_mpo} for the mixed cocycle of
+Definition~\ref{def:asymex_group_cocycle_klein} by an on-site dressing.
+Identify the two-qubit label $2i_1+i_2$ with the group element
+$(i_1,i_2)$, so that each site carries $\C[\Z_2\times\Z_2]$, and write
+$U^{\omega}_{g,L}$ for the periodic operator of that construction on a
+ring of $L$ sites.
+
+\begin{theorem}[Comparison with the cocycle construction]%
+    \label{thm:asymex_z2z2_group_cocycle}
+    \lean{Z2Z2Condensation.mpo_symTensor_eq_groupCocycle,
+        Z2Z2Condensation.secondZDressing,
+        Z2Z2Condensation.gmul_kleinEquiv}
+    \leanok
+    \uses{thm:asymex_z2z2_physical, thm:asymex_group_cocycle_klein}
+    Define the diagonal operator $Z_{2,L}$ by
+    $Z_{2,L}\ket{t}=(-1)^{\sum_nt_{n,2}}\ket{t}$, the product of the
+    Pauli $Z$ on the second qubit of every site. For every
+    $g\in\Z_2\times\Z_2$ and every $L>0$,
+    \begin{align}
+        U_{g,L}
+         & =U^{\omega}_{g,L}\,Z_{2,L}^{\,g_1}.
+        \label{eq:asymex_z2z2_group_cocycle}
+    \end{align}
+    The dressing is trivial for $g\in\{e,y\}$ and is a product of
+    single-site unitaries. The cocycle operators form an exact
+    representation, whereas the operators $U_{g,L}$ compose only up to
+    the signs of Theorem~\ref{thm:asymex_z2z2_fusion}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both sides vanish at $(s,t)$ unless $s=g\oplus t$, since the table
+    of the labels $2i_1+i_2$ is the group law of $\Z_2\times\Z_2$. On
+    that support, Theorem~\ref{thm:asymex_group_cocycle_klein} gives the
+    sign of the right side as $(-1)^e$ with
+    \begin{align}
+        e
+         & =g_1\sum_n\bigl(t_{n+1,2}(t_{n,2}-t_{n+1,2})+t_{n,2}\bigr).
+        \notag
+    \end{align}
+    Reindexing $\sum_nt_{n,2}=\sum_nt_{n+1,2}$ cyclically and using
+    $t_{n+1,2}^2=t_{n+1,2}$ gives
+    $e\equiv g_1\sum_nt_{n,2}t_{n+1,2}\pmod2$, which is the sign
+    of~(\ref{eq:asymex_z2z2_action}).
+\end{proof}
+
 \begin{theorem}[The condensation defect squares to a length-dependent
         multiple of itself]%
     \label{thm:asymex_z2z2_defect_sq}
