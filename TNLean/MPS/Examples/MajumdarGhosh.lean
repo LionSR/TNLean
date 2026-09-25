@@ -37,16 +37,17 @@ three-level factor tensored with the two-level singlet space, that shorthand
 would describe a six-dimensional bond. Its two-site contractions do not have the
 singlet-pair support pattern: same-letter traces can be nonzero while
 opposite-letter traces vanish. The shorthand is therefore treated here as a
-schematic of the valence-bond construction. After the singlet \(Y\) is
-contracted, the resulting matrix product operator acts on a three-dimensional
-bond, with the antisymmetry of \(Y\) supplying the relative sign
-\(-1/\sqrt{2}\) below.
+schematic of the valence-bond construction. With the singlet placed on the two
+spin levels of a three-level bond, the bond is three-dimensional, and the
+antisymmetry of \(Y\) supplies the relative sign \(-1/\sqrt{2}\) below.
 
 The tensor below is the bond-dimension-three contracted representative used in
 this example. The file proves its left-canonical equation, transfer-map value,
-non-injectivity, and non-normality. The equality between its matrix product
-vectors and the even-ring Majumdar-Ghosh dimer superposition is not yet
-formalized; the source-notation gap is recorded in
+non-injectivity, and non-normality. `TNLean.MPS.Examples.MajumdarGhoshDimer`
+proves that its periodic vector on every even ring is the sum of the two
+nearest-neighbour singlet coverings and treats the review's literal tensor;
+`TNLean.MPS.Examples.MajumdarGhoshHamiltonian` relates both to the
+Majumdar-Ghosh Hamiltonian. The source-notation gap is recorded in
 `docs/paper-gaps/rmp_majumdar_ghosh_tensor_gap.tex`.
 
 The three bond levels are the two spin-1/2 values of an open singlet partner

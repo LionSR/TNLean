@@ -9,19 +9,20 @@
 
 \title{Source-Notation Gap: The Majumdar--Ghosh Example Tensor}
 \author{}
-\date{2026-06-16}
+\date{2026-09-25}
 
 \begin{document}
 \maketitle
-\gapnote{open-gap}{open}
+\gapnote{local-correction}{resolved}
 
 \section{The assertion}
 
-The review describes the Majumdar--Ghosh state as the one-dimensional
-resonating-valence-bond state: the superposition of the two nearest-neighbour
-singlet coverings of a periodic spin-$\tfrac12$ chain
-\cite[lines~2397--2405]{Cirac2021Matrix}. It then gives the tensor in the
-shorthand
+The review describes the Majumdar--Ghosh state as the ground state of the
+spin-$\tfrac12$ chain
+$H=\sum_i\mathbf S_i\cdot\mathbf S_{i+1}+\tfrac12\sum_i\mathbf S_i\cdot\mathbf S_{i+2}$,
+the superposition of the two nearest-neighbour singlet coverings of a periodic
+chain, and states that it ``can be written as an MPS with''
+\cite[lines~2397--2405]{Cirac2021Matrix}
 \begin{align}
     A
         &=
@@ -37,11 +38,101 @@ shorthand
         \end{pmatrix}.
     \label{eq:rmp_majumdar_ghosh_tensor_gap_singlet_matrix}
 \end{align}
-Here $Y$ is the singlet tensor introduced earlier in the examples appendix of
-Ref.~\cite[lines~2397--2405]{Cirac2021Matrix}.
+Here $Y$ is the singlet tensor of the AKLT example of the same appendix
+\cite[lines~2380--2383]{Cirac2021Matrix}: $Y_{ab}$ is the coefficient of
+$\ket{ab}$ in the singlet $\ket{10}-\ket{01}$. Read $(ab|$ as the bra of the pair
+of virtual indices, so that $(ab|$ is the matrix unit $E_{ab}$ with row $a$ and
+column $b$, and put
+\begin{align}
+    B^0
+        &=
+        E_{02}+E_{20},
+    &
+    B^1
+        &=
+        E_{12}+E_{21}.
+    \label{eq:rmp_majumdar_ghosh_tensor_gap_auxiliary_matrices}
+\end{align}
 
-The formal example instead defines a tensor of bond dimension three with
-matrices
+\section{The literal reading}
+
+Read with $\otimes$ a Kronecker product, the formula
+(\ref{eq:rmp_majumdar_ghosh_tensor_gap_review_tensor}) is the tensor
+$\widetilde A^i=B^i\otimes Y$ on the six-dimensional bond
+$\C^3\otimes\C^2$. Its periodic coefficients factor as
+\begin{align}
+    \tr\bigl(\widetilde A^{i_1}\cdots\widetilde A^{i_N}\bigr)
+        &=
+        \tr\bigl(B^{i_1}\cdots B^{i_N}\bigr)\,\tr\bigl(Y^N\bigr),
+    \label{eq:rmp_majumdar_ghosh_tensor_gap_literal_factorization}
+\end{align}
+and $Y^2=-I_2$. The level $2$ of the three-level bond is a hub: no matrix
+$B^i$ connects the levels $0,1$ with each other, and none maps $2$ to itself.
+A closed path of length $N=2m$ therefore alternates between the hub and the
+other levels, and a pair of consecutive letters $a,b$ returning to the hub has
+amplitude $(B^aB^b)_{22}=\delta_{ab}$. Writing $\Phi_{\mathrm{even}}$ and
+$\Phi_{\mathrm{odd}}$ for the coverings $(1,2)(3,4)\cdots(N-1,N)$ and
+$(2,3)(4,5)\cdots(N,1)$ by the pair state $\ket{00}+\ket{11}$,
+\begin{align}
+    \ket{V^{(2m)}(\widetilde A)}
+        &=
+        2(-1)^m\bigl(\ket{\Phi_{\mathrm{even}}}+\ket{\Phi_{\mathrm{odd}}}\bigr).
+    \label{eq:rmp_majumdar_ghosh_tensor_gap_literal_vector}
+\end{align}
+On the configuration with all spins $0$ this vector has coefficient
+$4(-1)^m\neq0$, whereas every singlet covering vanishes there. The literal
+tensor therefore does not represent the Majumdar--Ghosh state at any even
+length: its periodic vector is not a scalar multiple of the dimer
+superposition. The pair state is the obstruction. For an invertible
+single-site matrix $U$, $(U\otimes U)(\ket{00}+\ket{11})
+=\sum_{ab}(UU^{\mathsf T})_{ab}\ket{ab}$ has the symmetric coefficient matrix
+$UU^{\mathsf T}$, while the singlet has the antisymmetric coefficient matrix
+$Y$.\footnote{Formal declarations: \leanid{MPSTensor.majumdarGhoshReviewTensor},
+\leanid{MPSTensor.majumdarGhoshReview\_coeff},
+\leanid{MPSTensor.majumdarGhoshReview\_mpv\_eq}, and
+\leanid{MPSTensor.majumdarGhoshReview\_mpv\_ne\_smul} in
+\doclink{TNLean/MPS/Examples/MajumdarGhoshDimer}.}
+
+\section{The correction: the singlet on the spin levels}
+
+The intended construction places the singlet $Y$ on the two spin levels $0,1$
+of the three-level bond and carries the empty level $2$ through, that is, it
+follows each $B^i$ by the bond state $Y\oplus1$:
+\begin{align}
+    C^i
+        &=
+        B^i\,(Y\oplus1),
+    &
+    C^0
+        &=
+        E_{02}-E_{21},
+    &
+    C^1
+        &=
+        E_{12}+E_{20}.
+    \label{eq:rmp_majumdar_ghosh_tensor_gap_corrected_tensor}
+\end{align}
+The level $2$ is again a hub, and now the two-letter hub amplitude is
+$(C^aC^b)_{22}=Y_{ab}$. Hence, for every even $N>0$,
+\begin{align}
+    \ket{V^{(N)}(C)}
+        &=
+        \ket{S_{\mathrm{even}}}+\ket{S_{\mathrm{odd}}},
+    \label{eq:rmp_majumdar_ghosh_tensor_gap_corrected_vector}
+\end{align}
+where $S_{\mathrm{even}}$ and $S_{\mathrm{odd}}$ are the two coverings by the
+singlet $\ket{10}-\ket{01}$. This is the review's superposition. The
+correction replaces the Kronecker factor $Y$ in
+(\ref{eq:rmp_majumdar_ghosh_tensor_gap_review_tensor}) by the bond state
+$Y\oplus1$ applied after $B^i$; the bond dimension is three, not
+six.\footnote{Formal declarations:
+\leanid{MPSTensor.majumdarGhoshBondSingletTensor} and
+\leanid{MPSTensor.majumdarGhoshBondSinglet\_mpv\_eq\_pairCovering} in
+\doclink{TNLean/MPS/Examples/MajumdarGhoshDimer}.}
+
+\section{The formal representative}
+
+The formal example uses the bond-dimension-three tensor
 \begin{align}
     A^0
         &=
@@ -50,158 +141,61 @@ matrices
             0 & 0 & 0\\
             1/\sqrt{2} & 0 & 0
         \end{pmatrix},
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_formal_matrix_zero}\\
+    &
     A^1
         &=
         \begin{pmatrix}
             0 & 0 & 1\\
             -1/\sqrt{2} & 0 & 0\\
             0 & 0 & 0
-        \end{pmatrix}.
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_formal_matrix_one}
+        \end{pmatrix},
+    \label{eq:rmp_majumdar_ghosh_tensor_gap_formal_matrices}
 \end{align}
-The formalized properties of this tensor are its left-canonical equation, its
-transfer map on the identity, non-injectivity, and
-non-normality.\footnote{Formal declarations:
-\leanid{MPSTensor.majumdarGhoshTensor},
-\leanid{MPSTensor.majumdarGhosh\_left\_canonical},
-\leanid{MPSTensor.majumdarGhosh\_transferMap\_one},
-\leanid{MPSTensor.majumdarGhosh\_not\_isInjective}, and
-\leanid{MPSTensor.majumdarGhosh\_not\_isNormal} in
-\doclink{TNLean/MPS/Examples/MajumdarGhosh}.}
+whose hub is the level $0$, with two-letter hub amplitude
+$(A^aA^b)_{00}=Y_{ab}/\sqrt2$, the normalized singlet. For every even $N>0$
+its periodic vector is the sum of the two coverings by normalized singlets,
+and $\ket{V^{(N)}(C)}=\sqrt2^{\,N/2}\ket{V^{(N)}(A)}$. On odd rings the
+periodic vector vanishes.
 
-\section{The point at issue}
+Each covering, not only their sum, lies in the periodic three-site chain
+ground space of $A$ for even $N\ge4$: with $G=\operatorname{diag}(1,-1,-1)$,
+which anticommutes with $A^0$ and $A^1$, the vectors
+$\sigma\mapsto\tr(A^{\sigma_1}\cdots A^{\sigma_N})$ and
+$\sigma\mapsto\tr(A^{\sigma_1}\cdots A^{\sigma_N}G)$ both satisfy every window
+constraint, and their half-sum and half-difference are the two coverings. The
+three-site ground space of $A$ equals the eigenspace of
+$h=\tfrac12(\mathbf S_1\cdot\mathbf S_2+\mathbf S_2\cdot\mathbf S_3
++\mathbf S_1\cdot\mathbf S_3)$ for the eigenvalue $-\tfrac38$, the three-spin
+states without a total-spin-$\tfrac32$ component. Consequently every vector of
+the chain ground space, and in particular each covering, satisfies
+$H\psi=-\tfrac{3N}{8}\psi$.\footnote{Formal declarations:
+\leanid{MPSTensor.majumdarGhosh\_mpv\_eq\_pairCovering},
+\leanid{MPSTensor.majumdarGhoshBondSinglet\_mpv\_eq\_smul},
+\leanid{MPSTensor.majumdarGhosh\_groundSpace\_three\_eq\_eigenspace},
+\leanid{MPSTensor.majumdarGhosh\_pairCoveringEven\_mem\_chainGroundSpace},
+\leanid{MPSTensor.majumdarGhosh\_pairCoveringOdd\_mem\_chainGroundSpace}, and
+\leanid{MPSTensor.majumdarGhoshHamiltonian\_apply\_of\_mem\_chainGroundSpace} in
+\doclink{TNLean/MPS/Examples/MajumdarGhoshDimer} and
+\doclink{TNLean/MPS/Examples/MajumdarGhoshHamiltonian}.}
 
-The review formula
-(\ref{eq:rmp_majumdar_ghosh_tensor_gap_review_tensor}) is not literally a
-bond-dimension-three tensor. Suppose that $(ab|$ denotes the matrix unit
-$\ketbra{a}{b}$ on a three-dimensional auxiliary space. A literal reading of
-the tensor product with $Y$ then gives the bond space
-\begin{align}
-    \mathcal V_{\mathrm{literal}}
-        &=
-        \C^3\otimes\C^2,
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_literal_bond_space}\\
-    \dim\mathcal V_{\mathrm{literal}}
-        &=
-        6.
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_literal_bond_dimension}
-\end{align}
+\section{Remaining formal boundary}
 
-Let $E_{ab}=\ketbra{a}{b}$ denote a matrix unit on $\C^3$, and define
-\begin{align}
-    B^0
-        &=
-        E_{02}+E_{20},
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_auxiliary_matrix_zero}\\
-    B^1
-        &=
-        E_{12}+E_{21}.
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_auxiliary_matrix_one}
-\end{align}
-Under the literal reading, the physical matrices would be
-\begin{align}
-    \widetilde A^i
-        &=
-        B^i\otimes Y.
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_literal_tensor_matrices}
-\end{align}
-Their two-site periodic contractions factor as
-\begin{align}
-    \tr\left(\widetilde A^i\widetilde A^j\right)
-        &=
-        \tr\left((B^i\otimes Y)(B^j\otimes Y)\right)
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_contraction_tensor_product}\\
-        &=
-        \tr(B^iB^j)\tr(Y^2).
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_contraction_factorization}
-\end{align}
-The singlet matrix satisfies
-\begin{align}
-    Y^2
-        &=
-        -I_2.
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_singlet_square}
-\end{align}
-The auxiliary factors satisfy
-\begin{align}
-    \tr\left((B^0)^2\right)
-        &=
-        2,
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_same_letter_zero_trace}\\
-    \tr\left((B^1)^2\right)
-        &=
-        2,
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_same_letter_one_trace}\\
-    \tr(B^0B^1)
-        &=
-        0,
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_opposite_trace_zero_one}\\
-    \tr(B^1B^0)
-        &=
-        0.
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_opposite_trace_one_zero}
-\end{align}
-Equations
-(\ref{eq:rmp_majumdar_ghosh_tensor_gap_contraction_factorization})--%
-(\ref{eq:rmp_majumdar_ghosh_tensor_gap_opposite_trace_one_zero}) show that the
-literal tensor has nonzero two-site amplitudes on equal-letter words and zero
-amplitudes on opposite-letter words. A two-site singlet has the opposite
-support pattern: its nonzero coefficients occur on $01$ and $10$, with opposite
-signs.
-
-The review expression must therefore be read as valence-bond shorthand rather
-than as a literal $6\times6$ MPS representation. The matrices
-(\ref{eq:rmp_majumdar_ghosh_tensor_gap_formal_matrix_zero}) and
-(\ref{eq:rmp_majumdar_ghosh_tensor_gap_formal_matrix_one}) are the contracted
-bond-dimension-three representative used in the formal example. Its three bond
-states retain the two spin-$\tfrac12$ values of an open singlet partner and the
-closed inter-dimer link. The antisymmetry of $Y$ supplies the relative sign in
-$A^1$.
-
-\section{Current formal boundary}
-
-The repository does not yet prove that the matrix product vectors of the
-bond-dimension-three tensor equal the Majumdar--Ghosh dimer superposition on
-even periodic chains. Such a theorem must fix the parity, normalization, and
-cyclic convention.
-
-For a physical word $(i_1,\ldots,i_N)$, the matrix product coefficient is
-\begin{align}
-    \psi_A(i_1,\ldots,i_N)
-        &=
-        \tr\left(A^{i_1}\cdots A^{i_N}\right).
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_mpv_coefficient}
-\end{align}
-For even $N$, the desired comparison would identify
-(\ref{eq:rmp_majumdar_ghosh_tensor_gap_mpv_coefficient}) with the sum of the
-products of singlet coefficients associated with the two periodic coverings
-\begin{align}
-    \mathcal C_{\mathrm{even}}
-        &=
-        (1,2)(3,4)\cdots(N-1,N),
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_even_dimer_covering}\\
-    \mathcal C_{\mathrm{odd}}
-        &=
-        (2,3)(4,5)\cdots(N,1).
-    \label{eq:rmp_majumdar_ghosh_tensor_gap_odd_dimer_covering}
-\end{align}
-No such finite-size vector identity has yet been formalized.
-
-Until that identity is proved, the formal object should be described as the
-bond-dimension-three contracted representative used in the algebraic example,
-not as a formally established MPS representation of the Majumdar--Ghosh state.
-The already proved algebraic properties do not depend on this physical
-identification.
+Two statements are not formalized. The first is the lower bound
+$H\ge-\tfrac{3N}{8}$, which follows from
+$H=\sum_i h_i$ and $h\ge-\tfrac38$ and makes the eigenvectors above ground
+states. The second is that the periodic three-site chain ground space of $A$
+is exactly two-dimensional on even rings of length at least four, spanned by
+the two coverings. Neither affects the notational correction recorded here.
 
 \section{Verdict}
 
-This is an open gap in the example's physical identification. The literal
-interpretation of the review shorthand produces the wrong two-site singlet
-support pattern, while the formal development has not proved that the
-contracted $D=3$ tensor generates the Majumdar--Ghosh dimer superposition. The
-present formalization therefore establishes only the concrete tensor and its
-algebraic properties.
+This is a local correction of the source notation. Read literally, the
+review's formula gives a six-dimensional tensor whose periodic vector is the
+superposition of two coverings by $\ket{00}+\ket{11}$ rather than by singlets.
+With the singlet $Y$ placed on the spin levels of a three-level bond, the
+formula gives exactly the Majumdar--Ghosh superposition, and the periodic
+vectors of the formal bond-dimension-three representative are those of the
+corrected tensor multiplied by $\sqrt2^{\,-N/2}$.
 
 \bibliographystyle{alpha}
 \bibliography{references}
