@@ -10,29 +10,33 @@ import TNLean.MPS.FundamentalTheorem.Reduction.IntegralRankOneAction
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
 
 /-!
-# The categorical anomaly of the Fibonacci symmetry
+# Fibonacci anomaly: no single normal state carries the Fibonacci symmetry
 
-The Fibonacci fusion category has no fiber functor: its fusion ring `ℤ[τ]/(τ² - τ - 1)` has
-the two characters `φ` and `-1/φ`, both irrational, so it has no ring homomorphism to `ℤ` and no
-representation of rank one by nonnegative integer matrices (data file
-`Notes/OpenProblemsTN/checks/asym_fibonacci_categorical_data.md`, §5). On the lattice the same
-obstruction reads as follows. Garre-Rubio, Lootens and Molnar (arXiv:2203.12563, line 683) note
-that the multiplicities with which the blocks of a symmetric matrix product state reappear
-under a matrix product operator symmetry are nonnegative integers forming a representation of
-the fusion rules, and record (lines 1991-1993) that for the Fibonacci symmetry the only
-invariant family of normal states consists of two blocks `x_1, x_τ` with `τ · x_1 = x_τ` and
-`τ · x_τ = x_1 + x_τ`. The pair of normal states of `Examples/FibonacciAction.lean` realises
-exactly this regular representation `N_τ = [[0, 1], [1, 1]]`.
+**Source.** Garre-Rubio, Lootens and Molnár 2023 (arXiv:2203.12563), Section `nonuniqueGS`,
+`Papers/2203.12563/REsubmission.tex` lines 607–634: an injective matrix product state without
+multiplicity, `M_{a,x}^x = 1`, is invariant only under a matrix product operator algebra with
+trivial F-symbols; lines 564–568: the nonnegative integer multiplicities `M_{a,x}^y` of the action
+on blocks satisfy `∑_c N_{ab}^c M_{c,x}^y = ∑_z M_{a,z}^y M_{b,x}^z`; Section `sec:examples`, lines
+1991–1993: for the Fibonacci matrix product operator the only invariant family of normal states
+consists of two blocks `x_1, x_τ` with `τ · x_1 = x_τ` and `τ · x_τ = x_1 + x_τ`. The operator
+tensor is that of Bultinck et al. (arXiv:1511.08090), Appendix D.1.1,
+`References/1511.08090/AnyonsPEPS.tex` lines 1240–1269, whose fusion rules `N_{ττ}^1 = N_{ττ}^τ = 1`
+are printed at lines 1241–1243.
 
-The no-go theorem is the rank-one statement: no single normal matrix product state carries the
-Fibonacci symmetry. Its proof combines the general integrality theorem
-`MPOTensor.exists_nat_eq_of_mpo_mulVec_mpv_eq_smul` (a length-independent eigenvalue `c` of
-the periodic operators of a matrix product operator on the periodic vectors of a normal tensor
-is a nonnegative integer) with the fusion rule `O_τ² = O_1 + O_τ` of `Examples/Fibonacci.lean`
-and the unit law `O_1 O_τ = O_τ` of `Examples/FibonacciUnit.lean`: an eigenvalue `c ≠ 0` of
-`O_τ` forces `O_1 ψ = ψ` and then `c² = 1 + c`, which no natural number satisfies. This is the
-non-invertible analogue of the statement of arXiv:2203.12563, line 738, that a non-trivial
-three-cocycle allows no invariant single-block state (data file §0, §6.5).
+**Formalized here.** The full multiplication table of the Fibonacci fusion ring on the periodic
+operators, the source's two-block action as the regular representation `N_τ = [[0, 1], [1, 1]]`
+on the pair of normal states of `Examples/FibonacciAction.lean`, and the one-block statement
+implicit in lines 1991–1993: a length-independent eigenvalue `c` of `O_τ` on the periodic vectors
+of a normal tensor is zero. The proof, a construction of this development, combines the
+integrality theorem `MPOTensor.exists_nat_eq_of_mpo_mulVec_mpv_eq_smul` (such an eigenvalue is a
+nonnegative integer) with the fusion rule `O_τ² = O_1 + O_τ` of `Examples/Fibonacci.lean` and the
+unit law `O_1 O_τ = O_τ` of `Examples/FibonacciUnit.lean`: an eigenvalue `c ≠ 0` forces
+`O_1 ψ = ψ` and then `c² = 1 + c`, which no natural number satisfies. This covers every
+multiplicity `c`, not only the case `c = 1` of lines 607–634.
+
+**Local fix (provenance):** the operator blocks `O_1`, `O_τ` are those of
+`Examples/Fibonacci.lean`, whose entries the source does not print; documented in
+`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
 ## Main definitions
 
@@ -42,8 +46,10 @@ three-cocycle allows no invariant single-block state (data file §0, §6.5).
 
 ## Main results
 
+* `FibonacciCompression.fibFusionMatrix_sq`: `N_τ² = N_τ + 1`.
 * `FibonacciCompression.fibonacci_fusion_algebra`: the full multiplication table of the fusion
   ring on the periodic operators.
+* `FibonacciCompression.mpo_fibOne_mulVec_chain`: the unit fixes the second normal state.
 * `FibonacciCompression.fibonacci_nim_rep`: the regular representation of the fusion rules on
   the pair of normal states.
 * `FibonacciCompression.fibTau_eigenvalue_eq_zero`: a length-independent eigenvalue of `O_τ` on
@@ -51,6 +57,22 @@ three-cocycle allows no invariant single-block state (data file §0, §6.5).
 
 The single-block no-go `FibonacciCompression.not_exists_normal_fibonacci_symmetric` is derived
 from the general fusion-ring obstruction in `TNLean/MPS/Symmetry/MPOSymmetry/Examples.lean`.
+
+## References
+
+- [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
+  A. Molnár, *Classifying phases protected by matrix product operator symmetries using matrix
+  product states*
+- [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  operator algebras*
+
+## Provenance
+
+The fusion-ring argument (the two irrational characters `φ` and `-1/φ` of `ℤ[τ]/(τ² - τ - 1)`
+and the absence of a rank-one representation by nonnegative integer matrices) was first recorded
+in `Notes/OpenProblemsTN/checks/asym_fibonacci_categorical_data.md`, §0, §5 and §6.5. This is a
+verification record, not the source.
 -/
 
 noncomputable section

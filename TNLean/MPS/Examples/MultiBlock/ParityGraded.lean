@@ -11,29 +11,27 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 /-!
 # A concrete parity-weighted tensor example
 
-The bond-two tensor `A^0 = [[1,0],[0,0]]`, `A^1 = [[0,1],[1,0]]` is normal at word
-length two. Its copies with weights `+1` and `-1` have total periodic coefficient
-`tr(A^w) + tr((-A)^w) = (1 + (-1)^L) tr(A^w)` for a word of length `L > 0`.
-This factor selects even chain lengths: it is `2` for even `L` and `0` for odd `L`.
-It is not a proof of a physical occupation-parity projection. No Kitaev Hamiltonian,
-canonical anticommutation relations, or fermion-parity boundary condition is defined here.
+**Source.** None: this is a construction of this development, not a model from a paper. No
+Kitaev Hamiltonian, canonical anticommutation relations, or fermion-parity boundary condition is
+defined here.
 
-The explicit construction is recorded in
-`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §4.
-The five-dimensional source `parB` is given directly as two integer matrices, not as
-a stacked MPO product. A change of bond coordinates puts its diagonal blocks in the
-form `A, -A, 0`. The residual has zero products at length three but a nonzero product
-at length two. The weight-`-1` target has no nonzero sitewise intertwiner in either
-direction, despite the word-level compression.
+**Formalized here.** The bond-two tensor `A^0 = [[1,0],[0,0]]`, `A^1 = [[0,1],[1,0]]` is normal
+at word length two. Its copies with weights `+1` and `-1` have total periodic coefficient
+`tr(A^w) + tr((-A)^w) = (1 + (-1)^L) tr(A^w)` for a word of length `L > 0`. This factor selects
+even chain lengths: it is `2` for even `L` and `0` for odd `L`. It is not a proof of a physical
+occupation-parity projection.
 
-The compression theorem cited below is Theorem 7.7 of
-`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`.
+The five-dimensional source `parB` is given directly as two integer matrices, not as a stacked
+MPO product. A change of bond coordinates puts its diagonal blocks in the form `A, -A, 0`. The
+residual has zero products at length three but a nonzero product at length two. The weight-`-1`
+target has no nonzero sitewise intertwiner in either direction, despite the word-level
+compression.
 
 ## Main definitions
 
-* `ParityGraded.parA`: the bond-two normal tensor of the note.
+* `ParityGraded.parA`: the bond-two normal tensor.
 * `ParityGraded.parB`: the five-dimensional mixed-basis source.
-* `ParityGraded.parityGraded_compression`: the multi-block compression datum of Theorem 7.7.
+* `ParityGraded.parityGraded_compression`: the multi-block compression datum.
 
 ## Main results
 
@@ -49,6 +47,15 @@ The compression theorem cited below is Theorem 7.7 of
   the weight `-1` block has no nonzero sitewise intertwiner in either direction, so the
   word-level compression of the theorem is the strongest local relation available for that
   block.
+
+## Provenance
+
+The explicit construction was first recorded in
+`Notes/OpenProblemsTN/checks/p5_more_examples_data.md`, §4, lines 474–567, and the compression
+datum instantiates Theorem 7.7 (`thm:p5-asymmetric-compression`) of
+`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, lines 495–569 (the
+"construction note" of the declaration docstrings); these are verification records, not a
+source.
 -/
 
 noncomputable section

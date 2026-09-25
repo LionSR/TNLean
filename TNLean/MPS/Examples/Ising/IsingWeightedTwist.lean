@@ -9,37 +9,39 @@ import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaAbelian
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaSigma
 
 /-!
-# The hidden bond objects of the weighted Ising twist
+# Weighted Ising twist: the hidden bond objects
 
-A machine-checked instance of the multi-block asymmetric compression theorem
-(`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) for
-the sitewise content of the weighted Ising bond-object twist of the P6 work
-(`Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex`,
-`thm:p6-round45-fusion`; exact data in
-`Notes/OpenProblemsTN/checks/asym_ising_action_data.md`, §1, verified by
-`checks/asym_ising_action_verify.py`).
+**Source.** Construction of this development. The Ising data are those of Bultinck, Mariën,
+Williamson, Sahinoglu, Haegeman and Verstraete 2017 (arXiv:1511.08090), Appendix D.2.1,
+`References/1511.08090/AnyonsPEPS.tex` lines 1305–1323: the labels `1, σ, ψ` with the single
+nontrivial fusion `σ × σ = 1 + ψ`, the quantum dimension `d_σ = √2`, and the nontrivial
+F-symbols, among them `F^{ψσψ}_{σσσ} = -1`. The topological-symmetry operators follow Feiguin,
+Trebst, Ludwig, Troyer, Kitaev, Wang and Freedman 2007 (arXiv:cond-mat/0612341),
+`References/cond-mat_0612341/source/fibonacci.tex` lines 510–519, who define the operator `Y` of
+the Fibonacci chain by fusing an extra anyon line into the fusion tree with the F-matrix; the
+tensors here are the same construction for the Ising category. The weighted bond object, its
+compression and its length-dependent coefficient are not in any source: they are motivated by
+the open question of Cirac, Pérez-García, Schuch and Verstraete (arXiv:1606.00608),
+`Papers/1606.00608/MPDO-22-12-17-2.tex` line 995, whether there exist renormalization fixed
+points whose structure constants `c^{(L)}_{αβγ}` depend on `L`.
 
-The three topological-symmetry tensors `A_1`, `A_ψ`, `A_σ` of the Ising anyon chain are matrix
-product operators on the ten fusion-tree labels `(x', ρ, x)` with `x ∈ x' ⊗ ρ`; their letters are
-the F-symbols `[F^{a x' ρ}_y]_{y' x}` of the Ising category, and a letter vanishes unless its
-two labels carry the same `ρ` (data file, "Conventions and the dictionary"). In the twist, each
-bond of the boundary fixed point carries the weighted bond object
+**Formalized here.** The three topological-symmetry tensors `A_1`, `A_ψ`, `A_σ` of the Ising
+anyon chain are matrix product operators on the ten fusion-tree labels `(x', ρ, x)` with
+`x ∈ x' ⊗ ρ`; their letters are the F-symbols `[F^{a x' ρ}_y]_{y' x}` of the Ising category,
+and a letter vanishes unless its two labels carry the same `ρ`. The weighted bond object is
 `Θ = λ_1 A_1 ⊕ λ_ψ A_ψ ⊕ λ_σ A_σ`, and the block of flag `σ` is the strand `A_σ` with `Θ`
-inserted before it. This development formalises the two-object part `Θ_2 = λ_1 A_1 ⊕ λ_ψ A_ψ`
-of that insertion at the generic point `(λ_1, λ_ψ) = (1/2, 3/10)` of the P6 numerics, scaled to
-the integers `5, 3`, with the `σ` strand scaled by `√2` so that every entry lies in `ℤ[√2]`.
+inserted before it. This file formalises the two-object part `Θ_2 = λ_1 A_1 ⊕ λ_ψ A_ψ` of that
+insertion at the point `(λ_1, λ_ψ) = (1/2, 3/10)`, scaled to the integers `5, 3`, with the `σ`
+strand scaled by `√2` so that every entry lies in `ℤ[√2]`.
 
 The stacked product `Θ_2 ⋆ (√2 A_σ)`, of bond dimension `24`, compresses onto two weighted
 copies of the *same* normal tensor `√2 A_σ`, with the weights `5` and `3`, and sixteen zero
 slots. The two hidden bond objects `1` and `ψ` both feed the visible channel `σ` through the
 fusions `1 ⊗ σ = σ` and `ψ ⊗ σ = σ`, with different weights: on a ring of length `L` the
-coefficient of the `σ` strand is the power sum `λ_1^L + λ_ψ^L`, which is the origin of the
-non-removable length dependence of the P6 twist (`thm:p6-round45-fusion` (v)–(vi), the fusion
-operator `χ_{σσ1} = diag(λ_1, λ_ψ)/ν` with two distinct eigenvalues). The gauge is a signed
-permutation of the bond coordinates whose rows are the F-move isometries of the two fusions; its
-single sign is the F-symbol `[F^{ψσψ}_σ] = -1` of the `ψ` line (data file §1.3). The
-conjugated tensor is block diagonal for every letter, so the remainder vanishes and the extension
-splits.
+coefficient of the `σ` strand is the power sum `λ_1^L + λ_ψ^L`, which depends on `L`. The gauge
+is a signed permutation of the bond coordinates whose rows are the F-move isometries of the two
+fusions; its single sign is the F-symbol `[F^{ψσψ}_σ] = -1` of the `ψ` line. The conjugated
+tensor is block diagonal for every letter, so the remainder vanishes and the extension splits.
 
 The tensors and their normality are in `IsingTensors`, the bond object, the gauge and the
 sector reduction of the letters in `IsingGauge`, and the four exhaustive sector checks of the
@@ -50,13 +52,38 @@ the letter identity, the compression datum and its consequences.
 ## Main results
 
 * `IsingTwist.isingGaugeZ_conj`: the letter identity over `ℤ√2`.
-* `IsingTwist.isingCompression`: the multi-block compression datum of Theorem 7.7 with two
-  weighted slots and sixteen zero slots.
+* `IsingTwist.isingCompression`: the multi-block compression datum with two weighted slots and
+  sixteen zero slots.
 * `IsingTwist.isingBondObject_trace_evalWord`: the word-trace identity
   `tr(B^w) = (5^{|w|} + 3^{|w|}) tr((√2 A_σ)^w)`.
 * `IsingTwist.isingTwist_mpo`: the periodic-operator identity
   `O_L(Θ_2) O_L(√2 A_σ) = (5^L + 3^L) O_L(√2 A_σ)` at every positive length.
 * `IsingTwist.isingBondObject_remainder`: the remainder vanishes, so the extension splits.
+
+## References
+
+- [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  operator algebras*
+- [arXiv:cond-mat/0612341](https://arxiv.org/abs/cond-mat/0612341) -- A. Feiguin, S. Trebst,
+  A. W. W. Ludwig, M. Troyer, A. Kitaev, Z. Wang, M. H. Freedman, *Interacting anyons in
+  topological quantum liquids: The golden chain*
+- [arXiv:1606.00608](https://arxiv.org/abs/1606.00608) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product density operators: Renormalization fixed points and
+  boundary theories*
+
+## Provenance
+
+The example instantiates the multi-block asymmetric compression theorem of
+`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`
+(`thm:p5-asymmetric-compression`, §7.5, Theorem 7.7), for the sitewise content of the weighted
+Ising bond-object twist of
+`Notes/OpenProblemsTN/problems/p6_rfp_structure_constant_l_dependence.tex`
+(`thm:p6-round45-fusion`, whose items (v)–(vi) give the fusion operator
+`χ_{σσ1} = diag(λ_1, λ_ψ)/ν` with two distinct eigenvalues); the point `(1/2, 3/10)` is the
+generic point of the P6 numerics. The exact data, the conventions and the dictionary of labels
+are recorded in `Notes/OpenProblemsTN/checks/asym_ising_action_data.md`, §1, and verified by
+`checks/asym_ising_action_verify.py`. These files are verification records, not the source.
 -/
 
 open scoped Matrix Kronecker

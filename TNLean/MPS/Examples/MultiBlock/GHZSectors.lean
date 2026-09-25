@@ -6,32 +6,47 @@ Authors: Sirui Lu
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
 /-!
-# GHZ sectors in an upper-triangular tensor
+# GHZ sectors: an upper-triangular tensor generating the GHZ state
 
-For positive length, the two bond-one tensors `ghzC 0` and `ghzC 1` generate
-`|0…0⟩` and `|1…1⟩`, respectively, using the physical alphabet `Fin 2`.
-The bond-four tensor `ghzB` has diagonal blocks in the order
-`ghzC 1, 0, ghzC 0, 0`, with nonzero upper-triangular couplings.
-Consequently its periodic word traces generate the unnormalised GHZ state
-`|0…0⟩ + |1…1⟩`, not either product state separately.
+**Source.** The target is the GHZ tensor of Cirac, Pérez-García, Schuch, Verstraete 2021
+(arXiv:2011.12127), Appendix A, "The GHZ state", `Papers/2011.12127/TN-Review-main.tex`
+lines 2338–2345: the GHZ state `∑_i |i, …, i⟩` is the MPS with `A^i_{αβ} = δ_{i=α=β}`, whose two
+diagonal sectors are the product states. The bond-four upper-triangular source `ghzB` and its
+compression are a construction of this development.
 
-The explicit construction is Example B of
-`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, `ex:p5ft-ghz`.
-The compression retains both sectors and two zero slots. Although the word-level
-reductions exist, the all-zero sector has no nonzero sitewise intertwiner in either
-direction. Thus equality of the periodic states does not supply a sitewise splitting
-of this upper-triangular representation.
+**Formalized here.** For positive length, the two bond-one tensors `ghzC 0` and `ghzC 1`
+generate `|0…0⟩` and `|1…1⟩`, respectively, using the physical alphabet `Fin 2`. The bond-four
+tensor `ghzB` has diagonal blocks in the order `ghzC 1, 0, ghzC 0, 0`, with nonzero
+upper-triangular couplings. Consequently its periodic word traces generate the unnormalized GHZ
+state `|0…0⟩ + |1…1⟩`, not either product state separately. The compression retains both
+sectors and two zero slots. Although the word-level reductions exist, the all-zero sector has no
+nonzero sitewise intertwiner in either direction. Thus equality of the periodic states does not
+supply a sitewise splitting of this upper-triangular representation.
 
 ## Main results
 
-* `MPSTensor.ghzSectors_compression`: the multi-block compression datum of Theorem 7.7 for
-  `ghzB` onto `{ghzC 0, ghzC 1}`.
+* `MPSTensor.ghzSectors_compression`: the multi-block compression datum for `ghzB` onto
+  `{ghzC 0, ghzC 1}`.
 * `MPSTensor.ghzB_trace_evalWord_eq_sum`: the word-trace identity for `ghzB`, specializing
   `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum`.
 * `MPSTensor.ghzSectors_isReduction`: the biorthogonal compression pair for each sector.
 * `MPSTensor.ghzSectors_dim_eq`: the dimension count `4 = 1 + 1 + 2`.
 * `MPSTensor.ghzC0_right_intertwiner_eq_zero`, `MPSTensor.ghzC0_left_intertwiner_eq_zero`: the
   all-zeros sector has no nonzero sitewise intertwiner in either direction.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+
+## Provenance
+
+The tensor `ghzB` is Example B (`ex:p5ft-ghz`) of
+`Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex`, lines 939–972, and the
+compression datum instantiates Theorem 7.7 (`thm:p5-asymmetric-compression`) of
+`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, lines 495–569; these are
+verification records, not the source.
 -/
 
 open scoped Matrix
