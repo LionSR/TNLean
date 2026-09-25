@@ -78,7 +78,13 @@ relations and algebra and does not identify it with the circuit of Seiberg–Sha
   `KWExample.kwTranslation_mul_conjTranspose`, `KWExample.kwTranslation_pow_two_mul`: the
   algebra of Seiberg–Shao.
 * `KWExample.kwTensor_mpo_mulVec_plus`, `KWExample.kwTensor_mpo_mulVec_ghz`: `K P = 2^N G` and
-  `K G = 2 P`.
+  `K G = 2 P`; `KWExample.kwTensor_mpo_mulVec_single_zero` and
+  `KWExample.kwTensor_mpo_mulVec_single_flipConfig_zero`: `K |0…0⟩ = K |1…1⟩ = P`; and
+  `KWExample.kwTensor_mpo_normalized_mulVec_plus`, `KWExample.kwTensor_mpo_normalized_mulVec_ghz`:
+  the normalized forms for `U = 2^{-(N+1)/2} K`.
+* `KWExample.kwTensor_mpo_conjTranspose_eq_inv_translate_mul`,
+  `KWExample.kwTensor_mpo_conjTranspose_mul`, `KWExample.kwTensor_mpo_mul_conjTranspose`: the
+  adjoint forms `K† = T⁻¹ K` and `K† K = K K† = 2^N (1 + η)`.
 
 ## References
 
@@ -495,6 +501,28 @@ theorem kwTensor_mpo_mul_transpose [NeZero N] :
   generalize c j = u, c (j - 1) = v, x j = w, x (j - 1) = z
   revert u v w z; decide
 
+/-- The kernel is real, so its adjoint is its transpose, `K† = Kᵀ`. -/
+theorem kwTensor_mpo_conjTranspose [NeZero N] :
+    (kwTensor.mpo N)ᴴ = (kwTensor.mpo N)ᵀ := by
+  ext a b
+  rw [Matrix.conjTranspose_apply, Matrix.transpose_apply, star_kwTensor_mpo_apply]
+
+/-- Project result: the adjoint of the kernel is the kernel followed by the inverse translation,
+`K† = T⁻¹ K`. -/
+theorem kwTensor_mpo_conjTranspose_eq_inv_translate_mul [NeZero N] :
+    (kwTensor.mpo N)ᴴ = (translate N)⁻¹ * kwTensor.mpo N := by
+  rw [kwTensor_mpo_conjTranspose, translate_inv, kwTensor_mpo_transpose_eq_transpose_translate_mul]
+
+/-- The Gram matrix `K† K = 2^N (1 + η)`, the adjoint form of `kwTensor_mpo_transpose_mul`. -/
+theorem kwTensor_mpo_conjTranspose_mul [NeZero N] :
+    (kwTensor.mpo N)ᴴ * kwTensor.mpo N = (2 : ℂ) ^ N • (1 + spinFlip N) := by
+  rw [kwTensor_mpo_conjTranspose, kwTensor_mpo_transpose_mul]
+
+/-- The Gram matrix `K K† = 2^N (1 + η)`, the adjoint form of `kwTensor_mpo_mul_transpose`. -/
+theorem kwTensor_mpo_mul_conjTranspose [NeZero N] :
+    kwTensor.mpo N * (kwTensor.mpo N)ᴴ = (2 : ℂ) ^ N • (1 + spinFlip N) := by
+  rw [kwTensor_mpo_conjTranspose, kwTensor_mpo_mul_transpose]
+
 /-- **`D_σ (D_σ² − 2) = 0`**, in the unnormalized form `K Kᵀ K = 2^{N+1} K`.
 
 Source: arXiv:1601.07185, `References/1601.07185/source/Ising-Defects.tex` line 1048. -/
@@ -786,5 +814,41 @@ theorem kwTensor_mpo_mulVec_ghz [NeZero N] :
   simp only [kwTensor_mpo_eq_prod_bitSign, Pi.zero_apply, add_zero, bitSign_zero_right,
     Finset.prod_const_one]
   norm_num
+
+/-- Project result: the all-zero configuration is mapped to the unnormalized paramagnetic
+state, `K |0…0⟩ = P`. -/
+theorem kwTensor_mpo_mulVec_single_zero [NeZero N] :
+    kwTensor.mpo N *ᵥ Pi.single (0 : Fin N → Fin 2) 1 = plusState N := by
+  ext a
+  rw [Matrix.mulVec_single_one, Matrix.col_apply, kwTensor_mpo_eq_prod_bitSign]
+  simp [bitSign, plusState]
+
+/-- Project result: the all-one configuration is mapped to the unnormalized paramagnetic
+state, `K |1…1⟩ = P`. -/
+theorem kwTensor_mpo_mulVec_single_flipConfig_zero [NeZero N] :
+    kwTensor.mpo N *ᵥ Pi.single (flipConfig (0 : Fin N → Fin 2)) 1 = plusState N := by
+  ext a
+  rw [← congrFun (kwTensor_mpo_mulVec_single_zero (N := N)) a, Matrix.mulVec_single_one,
+    Matrix.mulVec_single_one, Matrix.col_apply, Matrix.col_apply, kwTensor_mpo_flip_input]
+
+/-- Project result: with `U = 2^{-(N+1)/2} K`, the normalized paramagnetic state
+`2^{-N/2} P` is mapped to the normalized ferromagnetic state `2^{-1/2} G`. -/
+theorem kwTensor_mpo_normalized_mulVec_plus [NeZero N] :
+    (invSqrtTwo ^ (N + 1) • kwTensor.mpo N) *ᵥ (invSqrtTwo ^ N • plusState N) =
+      invSqrtTwo • ghzState N := by
+  rw [Matrix.smul_mulVec, Matrix.mulVec_smul, kwTensor_mpo_mulVec_plus, smul_smul,
+    smul_smul]
+  congr 1
+  linear_combination invSqrtTwo * invSqrtTwo_pow_mul_self N
+
+/-- Project result: with `U = 2^{-(N+1)/2} K`, the normalized ferromagnetic state
+`2^{-1/2} G` is mapped to the normalized paramagnetic state `2^{-N/2} P`. -/
+theorem kwTensor_mpo_normalized_mulVec_ghz [NeZero N] :
+    (invSqrtTwo ^ (N + 1) • kwTensor.mpo N) *ᵥ (invSqrtTwo • ghzState N) =
+      invSqrtTwo ^ N • plusState N := by
+  rw [Matrix.smul_mulVec, Matrix.mulVec_smul, kwTensor_mpo_mulVec_ghz, smul_smul,
+    smul_smul]
+  congr 1
+  linear_combination (2 * invSqrtTwo ^ N) * invSqrtTwo_mul_self
 
 end KWExample
