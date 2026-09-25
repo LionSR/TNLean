@@ -31,6 +31,13 @@ numeric entries of `B_1`, `B_τ`; the `τ` block here places the bare F-symbol
 admissibility projector of bond dimension two; documented in
 `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
+**Local fix (positive length):** the source derives the fusion rules `O_a O_b = ∑_c N_{ab}^c O_c`
+from the projector identity required for all `L` (`References/1511.08090/AnyonsPEPS.tex`
+lines 152–160); at `L = 0` the periodic operators are the bond dimensions, and
+`O_τ^0 O_τ^0 = 9 ≠ 5 = O_1^0 + O_τ^0`. The empty chain is read as a degenerate case, and the
+fusion rule (`fibonacci_fusion_rule`) is stated for every positive length; documented in
+`docs/paper-gaps/bmwshv17_fibonacci_projector_positive_length.tex`.
+
 A machine-checked instance of the multi-block asymmetric compression theorem (P5 note,
 `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) for the
 Fibonacci string-net matrix product operator algebra of arXiv:1511.08090, Appendix D.1.
