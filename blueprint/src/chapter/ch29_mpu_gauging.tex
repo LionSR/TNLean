@@ -4088,7 +4088,7 @@ $(MN)P$ into $M(NP)$.
     $(V',W')$ reduce $B$ onto $A$, where $B$ and $A$ generate the same
     matrix product vectors on nonempty chains. Then there is a unique
     $z\in\C^\times$ such that $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all
-    sufficiently long words $\mathbf w$. Moreover, if
+    sufficiently long words $\mathbf w$. If
     $XA^{\mathbf w}=z\,YA^{\mathbf w}$ for all long words, then
     $XVB^{\mathbf w}=z\,YVB^{\mathbf w}$ for all long words.
 \end{lemma}
@@ -4112,7 +4112,8 @@ $(MN)P$ into $M(NP)$.
         MPOTensor.GroupFamily.FusionData.omega}
     \leanok
     \uses{def:mpug_group_representation, def:mpdo_operator_product,
-        def:mpo_to_mps, def:mps_rectangular_reduction}
+        def:mpo_to_mps, def:mps_rectangular_reduction,
+        def:mpdo_operator_product_associator}
     Let $\{O_g\}_{g\in G}$ be matrix product operator tensors of positive
     bond dimension whose doubled-index tensors are normal and whose periodic
     operators satisfy $O_g O_h=O_{gh}$ on every nonempty chain. A choice of
@@ -4201,10 +4202,12 @@ $(MN)P$ into $M(NP)$.
 \begin{theorem}[Independence of the fusion tensors]
     \label{thm:mpug_anomaly_three_cocycle_gauge}
     \lean{MPOTensor.GroupFamily.FusionData.relativeScalar,
+        MPOTensor.GroupFamily.FusionData.isDressedProportional_relativeScalar,
         MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge,
         MPOTensor.GroupFamily.FusionData.omega_cohomologousTo}
     \leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec}
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
     Let $\omega$ and $\omega'$ come from two choices of fusion tensors, and
     let $\beta_{g,h}\in\C^\times$ be the scalar with
     $F^<_{g,h}B^{\mathbf w}=\beta_{g,h}F'^<_{g,h}B^{\mathbf w}$ for all long
@@ -4219,6 +4222,8 @@ $(MN)P$ into $M(NP)$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
     The left boundaries of the two choices of the tree fusing $g$ with $h$
     first differ by $\beta_{g,h}\beta_{gh,k}$, and those of the tree fusing
     $h$ with $k$ first by $\beta_{h,k}\beta_{g,hk}$, by the two parts of
