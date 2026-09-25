@@ -28,6 +28,7 @@ with `ρ(h) ≠ ρ(h')` vanish. The sector identities themselves are decided in
 ## Main definitions
 
 * `MPSTensor.signedPermMatrix`: the signed permutation matrix of a map and a sign vector.
+* `MPSTensor.twoTermMatrix`: a matrix with at most two nonzero entries in each row.
 * `IsingTwist.thetaTwo`: the weighted bond object `5 A_1 ⊕ 3 A_ψ`.
 * `IsingTwist.isingBondObject`: the stacked product `Θ_2 ⋆ (√2 A_σ)` on the pair alphabet.
 * `IsingTwist.isingGauge`: the gauge, a signed permutation of the bond coordinates transported
@@ -60,6 +61,24 @@ theorem signedPermMatrix_mul_mul_transpose {R : Type*} [CommRing R] {n : Type*} 
       Matrix.of fun x y => s x * B (π x) (π y) * s y := by
   ext x y
   simp [signedPermMatrix, Matrix.mul_apply, Finset.sum_ite_eq', mul_assoc]
+
+/-- The matrix with at most two nonzero entries in each row: `s x` in the column `π x` and
+`s' x` in the column `π' x`. With `s' = 0` it is the signed permutation matrix of `π` and `s`. -/
+def twoTermMatrix {R : Type*} [Add R] [Zero R] {n : Type*} [DecidableEq n] (π π' : n → n)
+    (s s' : n → R) : Matrix n n R :=
+  Matrix.of fun x i => (if i = π x then s x else 0) + (if i = π' x then s' x else 0)
+
+/-- Conjugating by a matrix with at most two nonzero entries per row and its transpose reads
+off four entries of the conjugated matrix. -/
+theorem twoTermMatrix_mul_mul_transpose {R : Type*} [CommRing R] {n : Type*} [Fintype n]
+    [DecidableEq n] (π π' : n → n) (s s' : n → R) (B : Matrix n n R) :
+    twoTermMatrix π π' s s' * B * (twoTermMatrix π π' s s')ᵀ =
+      Matrix.of fun x y => s x * (B (π x) (π y) * s y + B (π x) (π' y) * s' y) +
+        s' x * (B (π' x) (π y) * s y + B (π' x) (π' y) * s' y) := by
+  ext x y
+  simp [twoTermMatrix, Matrix.mul_apply, add_mul, mul_add, Finset.sum_add_distrib, ite_mul,
+    mul_ite, Finset.sum_ite_eq', mul_assoc]
+  ring
 
 end MPSTensor
 
