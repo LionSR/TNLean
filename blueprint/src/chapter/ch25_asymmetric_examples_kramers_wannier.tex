@@ -231,6 +231,10 @@ of the duality defect in~\cite{Aasen2016Topological}.
 
 \begin{corollary}[Coupling exchange]
     \label{cor:asymex_kw_exchange}
+    \lean{KWExample.isingHamiltonian,
+        KWExample.kwTensor_mpo_mul_isingHamiltonian,
+        KWExample.kwTensor_mpo_mul_isingHamiltonian_self}
+    \leanok
     \uses{lem:asymex_kw_local}
     The Hamiltonians with exchanged couplings satisfy
     \begin{align}
@@ -241,6 +245,7 @@ of the duality defect in~\cite{Aasen2016Topological}.
 \end{corollary}
 
 \begin{proof}
+    \leanok
     Summing the local relations of
     Lemma~\ref{lem:asymex_kw_local} and reindexing the bonds yields
     \begin{align}
@@ -341,6 +346,15 @@ normalizations of the duality operator are
 
 \begin{lemma}[Kernel, image, and partial isometry]
     \label{lem:asymex_kw_sectors}
+    \lean{KWExample.kwTensor_mpo_mulVec_eq_zero_iff,
+        KWExample.exists_kwTensor_mpo_mulVec_eq_iff,
+        KWExample.kwTensor_mpo_rank,
+        KWExample.kwDefect_conjTranspose_mul,
+        KWExample.kwDefect_mul_conjTranspose,
+        KWExample.kwTensor_mpo_normalized_conjTranspose_mul,
+        KWExample.kwTensor_mpo_normalized_mul_conjTranspose}
+    \leanok
+    \uses{thm:asymex_kw_absorption, lem:asymex_kw_gram}
     The kernel and image of the raw duality operator are
     \begin{align}
         \ker K_N  & =\mathcal H_N^-,
@@ -364,14 +378,17 @@ normalizations of the duality operator are
 \end{lemma}
 
 \begin{proof}
-    Equation~(\ref{eq:asymex_kw_gram}) gives
-    $\|K_Nv\|^2=2^{N+1}\|P_+v\|^2$, which identifies the kernel.
-    The absorption relation $\eta K_N=K_N$ puts the image in
-    $\mathcal H_N^+$. Conversely, for $y=P_+y$,
-    $K_N(2^{-(N+1)}K_N^\dagger y)=y$, so every vector in that sector
-    is in the image. For configurations with $b_0=0$, the vectors
-    $(\ket{b}\pm\ket{\bar b})/\sqrt2$ form orthonormal bases of the
-    two sectors. Each sector therefore has dimension $2^{N-1}$.
+    \leanok
+    If $K_Nv=0$, then~(\ref{eq:asymex_kw_gram}) gives
+    $0=K_N^\dagger K_Nv=2^N(v+\eta v)$, so $\eta v=-v$. Conversely,
+    Theorem~\ref{thm:asymex_kw_absorption} shows that $K_N$ annihilates
+    $\mathcal H_N^-$. The absorption relation $\eta K_N=K_N$ puts the
+    image in $\mathcal H_N^+$. Conversely, for $\eta y=y$,
+    $K_N(2^{-(N+1)}K_N^\dagger y)=2^{-1}(y+\eta y)=y$, so every vector in
+    that sector is in the image. For the rank, $\rank K_N=\rank
+        K_N^\dagger K_N=\rank P_+$, and the rank of the orthogonal
+    projection $P_+$ is its trace. Since $\eta$ fixes no basis vector,
+    $\tr\eta=0$ and $\tr P_+=2^N/2=2^{N-1}$.
     Rescaling~(\ref{eq:asymex_kw_gram}) proves
     (\ref{eq:asymex_kw_partial}).
 \end{proof}
@@ -544,14 +561,118 @@ and~(\ref{eq:asymex_kw_adjoint_algebra}) are those that
 Ref.~\cite{Seiberg2024Majorana} prints for its noninvertible
 translation, with its translation read as $T^{-1}$ and its projection
 $(1+\eta)/2$ read as $P_+$. The proposition shows that $U_N^\dagger$
-satisfies these relations. It does not identify $U_N^\dagger$ with the
-operator that reference defines by an explicit product of local
-factors, and the conjugation action by which that reference fixes its
-translation determines the translation only up to a scalar.
+satisfies these relations. That reference defines its operator by an
+explicit product of local factors; Proposition~\ref{prop:asymex_kw_circuit}
+below shows that, after the exchange of $X$ and $Z$, this product is
+exactly $U_N^\dagger$, with no scalar factor.
 The noninvertibility here concerns
 the periodic bosonic spin chain, not fermionic Majorana translation.
 The translation in~(\ref{eq:asymex_kw_fusion}) must be retained when
 comparing this lattice relation with a size-independent fusion algebra.
+
+\begin{definition}[Circuit of the noninvertible translation]
+    \label{def:asymex_kw_circuit}
+    \lean{KWExample.hadamard, KWExample.ssGateZ, KWExample.ssGateXX,
+        KWExample.ssEta, KWExample.ssCircuit}
+    \leanok
+    Let $H^{\otimes N}$ be the Hadamard gate at every site,
+    $\bra{c}H^{\otimes N}\ket{b}=2^{-N/2}(-1)^{\sum_jc_jb_j}$, and let
+    $\eta_Z=\prod_jZ_j$. Following~\cite{Seiberg2024Majorana}, with its
+    sites $1,\ldots,N$ relabeled $0,\ldots,N-1$, put
+    $d^z_j=(\Id+iZ_j)/\sqrt2$, $d^x_j=(\Id+iX_jX_{j+1})/\sqrt2$, and
+    \begin{align}
+        C_N & =e^{-2\pi iN/8}\,(d^z_0d^x_0)(d^z_1d^x_1)\cdots
+        (d^z_{N-2}d^x_{N-2})\,d^z_{N-1}\,\frac{\Id+\eta_Z}{2}.
+        \label{eq:asymex_kw_circuit_def}
+    \end{align}
+    The factors $d^x_j$ run over $0\leq j\leq N-2$; the bond between the
+    sites $N-1$ and $0$ does not occur.
+\end{definition}
+
+\begin{proposition}[The circuit is the rotated adjoint duality]
+    \label{prop:asymex_kw_circuit}
+    \lean{KWExample.hadamard_mul_ssCircuit_mul_hadamard,
+        KWExample.ssCircuit_mul_siteZ, KWExample.ssCircuit_mul_siteXX,
+        KWExample.ssCircuit_mul_ssEta, KWExample.ssEta_mul_ssCircuit,
+        KWExample.ssCircuit_mul_conjTranspose,
+        KWExample.ssCircuit_conjTranspose_mul, KWExample.ssCircuit_mul_self,
+        KWExample.ssCircuit_mulVec_eq_zero_iff,
+        KWExample.exists_ssCircuit_mulVec_eq_iff,
+        KWExample.transpose_translate_apply,
+        KWExample.hadamard_mul_transpose_translate}
+    \leanok
+    \uses{def:asymex_kw_circuit}
+    For every $N\geq1$,
+    \begin{align}
+        H^{\otimes N}C_NH^{\otimes N} & =U_N^\dagger.
+        \label{eq:asymex_kw_circuit}
+    \end{align}
+    Consequently, for every site $j$, including $j=N-1$, whose bond
+    $X_{N-1}X_0$ does not occur in~(\ref{eq:asymex_kw_circuit_def}),
+    \begin{align}
+        C_NZ_j        & =X_jX_{j+1}C_N,
+        \notag                          \\
+        C_NX_jX_{j+1} & =Z_{j+1}C_N,
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        C_N\eta_Z=\eta_ZC_N            & =C_N,
+        \notag                                                          \\
+        C_NC_N^\dagger=C_N^\dagger C_N & =\frac{\Id+\eta_Z}{2},
+        \notag                                                          \\
+        C_N^2                          & =\frac{\Id+\eta_Z}{2}\,T^{-1}.
+        \notag
+    \end{align}
+    Here $T^{-1}$ sends $\ket{b_0,\ldots,b_{N-1}}$ to
+    $\ket{b_{N-1},b_0,\ldots,b_{N-2}}$, which is the action of the
+    product of nearest-neighbor swaps by which~\cite{Seiberg2024Majorana}
+    defines its translation, and $T^{-1}$ commutes with $H^{\otimes N}$.
+    $C_Nv=0$ exactly when $\eta_Zv=-v$, and $y$ lies in the
+    range of $C_N$ exactly when $\eta_Zy=y$: the kernel is the sector
+    $\eta_Z=-1$, and on the sector $\eta_Z=+1$ the circuit acts
+    unitarily, as stated in~\cite{Seiberg2024Majorana}.
+\end{proposition}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_kw_kernel, prop:asymex_kw_adjoint_relations}
+    The Hadamard gate is its own inverse and exchanges $X_j$ and $Z_j$.
+    Conjugation therefore maps $d^z_j$ to $(\Id+iX_j)/\sqrt2$, $d^x_j$ to
+    $(\Id+iZ_jZ_{j+1})/\sqrt2$, and $\eta_Z$ to $\eta$. In this frame
+    the gate $(\Id+iX_k)/\sqrt2$ changes only the bit at site $k$, and
+    each site carries exactly one such gate. An entry $\bra{c}G\ket{b}$
+    of the product $G$ of the gates, before the projection, is therefore
+    a single product along one path of configurations; at the diagonal
+    gate of the bond $(k,k+1)$ the two bits are $b_k$ and $c_{k+1}$.
+    Writing $[x\neq y]$ for the indicator of $x\neq y$, this gives
+    \begin{align}
+        \bra{c}G\ket{b}
+         & =\frac{i^{[c_{N-1}\neq b_{N-1}]}}{\sqrt2}
+        \prod_{k=0}^{N-2}w(c_k,b_k,c_{k+1}),
+        \notag                                       \\
+        w(x,y,z)
+         & =\frac{i^{[x\neq y]}}{\sqrt2}\,
+        \frac{1+i(-1)^{y+z}}{\sqrt2}
+        =\frac{1+i}{2}\,i^x(-i)^z(-1)^{y(x+z)}.
+        \notag
+    \end{align}
+    The factors $i^{c_k}(-i)^{c_{k+1}}$ telescope to
+    $i^{c_0}(-i)^{c_{N-1}}$. The projection adds the entry at $\bar b$,
+    whose open-chain signs differ by $(-1)^{c_0+c_{N-1}}$, and
+    $e^{-2\pi iN/8}=((1-i)/\sqrt2)^N$. Checking the eight values of
+    $(c_0,b_{N-1},c_{N-1})$ shows that the remaining boundary factor is
+    $(-1)^{b_{N-1}(c_{N-1}+c_0)}$, the sign of the closing bond. By
+    Theorem~\ref{thm:asymex_kw_kernel} the entry is
+    $2^{-(N+1)/2}(K_N)_{bc}=\bra{c}U_N^\dagger\ket{b}$, which
+    proves~(\ref{eq:asymex_kw_circuit}). The remaining relations are
+    those of Proposition~\ref{prop:asymex_kw_adjoint_relations}
+    conjugated by the Hadamard gate, which commutes with $T^{-1}$.
+    If $C_Nv=0$, then $C_N^\dagger C_Nv=\tfrac12(v+\eta_Zv)=0$;
+    conversely, if $\eta_Zv=-v$, then $C_Nv=C_N\eta_Zv=-C_Nv$. The range
+    of $C_N$ lies in the sector $\eta_Z=+1$ because $\eta_ZC_N=C_N$, and
+    for $\eta_Zy=y$ one has $C_N(2C_N^\dagger y)=y+\eta_Zy=2y$.
+\end{proof}
 
 Positive length is essential in these calculations. At $N=1$,
 $K_1=\Id+X_0$ and $U_1=P_+$, consistently with the self-bond convention.
