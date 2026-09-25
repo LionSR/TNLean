@@ -245,6 +245,7 @@ theorem posDef_polarPos_of_injective (M : Matrix ι κ ℂ) (hM : Function.Injec
     rw [polarPos_mul_polarPos]; exact (PosDef.conjTranspose_mul_self M hM).isUnit
   exact isUnit_of_mul_isUnit_left hunit
 
+omit [DecidableEq κ] in
 /-- **Polar decomposition** (existence form): every complex matrix `M` factors as `M = V P` with
 `P` positive semidefinite and `Vᴴ V = Π`, where `Π` is a Hermitian idempotent whose range is
 the range of `P`.
@@ -254,8 +255,9 @@ tensors". -/
 theorem exists_polar_decomposition (M : Matrix ι κ ℂ) :
     ∃ (V : Matrix ι κ ℂ) (P E : Matrix κ κ ℂ), M = V * P ∧ P.PosSemidef ∧ Vᴴ * V = E ∧
       E.IsHermitian ∧ E * E = E ∧
-      LinearMap.range E.mulVecLin = LinearMap.range P.mulVecLin :=
-  ⟨polarIso M, polarPos M, polarSupport M, (polarIso_mul_polarPos M).symm,
+      LinearMap.range E.mulVecLin = LinearMap.range P.mulVecLin := by
+  classical
+  exact ⟨polarIso M, polarPos M, polarSupport M, (polarIso_mul_polarPos M).symm,
     posSemidef_polarPos M, conjTranspose_polarIso_mul_polarIso M, isHermitian_polarSupport M,
     polarSupport_mul_polarSupport M, range_polarSupport M⟩
 
