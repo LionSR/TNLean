@@ -7,7 +7,7 @@ Follows `docs/audits/2026-09-19_ring_embedding_transport.md`, which converted th
 ## What became generic
 
 In `TNLean/Algebra/ComplexOfRing.lean`, for a commutative ring `R` and `f : R →+* ℂ`:
-`complexOfRing_sub`, `complexOfRing_transpose`, `complexOfRing_trace`,
+`complexOfRing_sub`, `complexOfRing_transpose`,
 `complexOfRing_blockDiagonal'`, `complexOfRing_injective` and `complexOfRing_ne_zero` (for
 injective `f`), and `complexOfRing_mul_eq_one`, which sends `G * H = 1` over `R` to the same
 identity between the images.
