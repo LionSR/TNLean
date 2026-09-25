@@ -4630,12 +4630,62 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
 \begin{proof}\leanok
     \uses{thm:mpug_single_block_l_compatibility,
         thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_anomaly_three_cochain_spec,
         thm:mpug_fixed_block_trivializes}
-    The proof of Theorem~\ref{thm:mpug_single_block_l_compatibility} applies
-    to $((O_gO_h)O_k)\cdot A_x$ verbatim. The pulled-back relations now involve
-    $L^{kx}_{g,h}$, $L^x_{gh,k}$, $L^x_{g,hk}$ and $L^x_{h,k}$, and the
-    boundaries land on $A_{g(h(kx))}$ after the identifications
-    $(gh)x=g(hx)$ of the target blocks. The second statement is
+    Write
+    \begin{align}
+        \alpha^x_{g,h}  & =V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &
+        \varphi^x_{g,h} & =V_{gh,x}(F^<_{g,h}\otimes\mathbf 1)
+        \notag
+    \end{align}
+    for the two left boundaries of Definition~\ref{def:mpug_permuted_block_l_symbol},
+    so that $\alpha^x_{g,h}=L^x_{g,h}\varphi^x_{g,h}$ against long words of
+    $(O_gO_h)\cdot A_x$ by Theorem~\ref{thm:mpug_permuted_block_l_symbol_spec}.
+    The block labels $h(kx)$ and $(hk)x$ are equal, and so are $g(h(kx))$ and
+    $(ghk)x$, and the bond spaces of blocks with equal labels are identified,
+    so that $V_{g,h(kx)}=V_{g,(hk)x}$. With this identification, the
+    naturality and
+    pentagon identities of $\mathsf a$ give, for $B=((O_gO_h)O_k)\cdot A_x$
+    and the fusion trees $V^L$, $V^R$ of $(g,h,k)$, the five identities
+    \begin{align}
+        \alpha^{kx}_{g,h}(\mathbf 1\otimes V_{k,x})\,\mathsf a^{-1}
+         & =V_{g,(hk)x}(\mathbf 1\otimes\alpha^x_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1),
+        \label{eq:mpug_permuted_l_compat_first_boundary}                \\
+        V_{g,(hk)x}(\mathbf 1\otimes\varphi^x_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1)
+         & =\alpha^x_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr),
+        \notag                                                          \\
+        \varphi^{kx}_{g,h}(\mathbf 1\otimes V_{k,x})\,\mathsf a^{-1}
+         & =\alpha^x_{gh,k}
+        \bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr),
+        \notag                                                          \\
+        \varphi^x_{gh,k}\bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr)
+         & =V_{ghk,x}(V^L\otimes\mathbf 1),
+        \notag                                                          \\
+        \varphi^x_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr)
+         & =V_{ghk,x}(V^R\otimes\mathbf 1).
+        \notag
+    \end{align}
+    The first factor $\alpha^{kx}_{g,h}$ acts on the block $kx$ reached by
+    $O_k$, which is why $L^{kx}_{g,h}$ appears. Replacing, as in the proof of
+    Theorem~\ref{thm:mpug_single_block_l_compatibility}, $\alpha^{kx}_{g,h}$,
+    $\alpha^x_{gh,k}$ and $V^L$ along one route, and
+    (\ref{eq:mpug_permuted_l_compat_first_boundary}), $\alpha^x_{h,k}$ and
+    $\alpha^x_{g,hk}$ along the other, gives for all long words
+    \begin{align}
+        \alpha^{kx}_{g,h}(\mathbf 1\otimes V_{k,x})\,\mathsf a^{-1}B^{\mathbf w}
+         & =L^{kx}_{g,h}L^x_{gh,k}\,\omega(g,h,k)\,
+        V_{ghk,x}(V^R\otimes\mathbf 1)B^{\mathbf w}
+        \notag                                                                \\
+         & =L^x_{h,k}L^x_{g,hk}\,V_{ghk,x}(V^R\otimes\mathbf 1)B^{\mathbf w}.
+        \notag
+    \end{align}
+    The boundary $V_{ghk,x}(V^R\otimes\mathbf 1)$ belongs to a reduction onto
+    the normal tensor $A_{(ghk)x}$, so it is nonzero against arbitrarily long
+    words, and the two scalars agree. The second statement is
     Theorem~\ref{thm:mpug_fixed_block_trivializes}.
 \end{proof}
 
