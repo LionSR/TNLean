@@ -27,7 +27,7 @@ nearest-neighbour interaction applied to `|+⟩^{⊗N}`) and Verstraete–Cirac
 (arXiv:quant-ph/0311130, `References/quant-ph_0311130/source/cluster.tex`
 lines 298–312: the cluster state as a valence-bond state with bonds
 `|H⟩ = |00⟩ + |01⟩ + |10⟩ - |11⟩` and site maps
-`P = |0̃⟩⟨00…0| + |1̃⟩⟨11…1|`).
+`P = |0'⟩⟨00…0| + |1'⟩⟨11…1|`).
 
 **Formalized here.** The review tensor, exactly as printed; its periodic
 matrix product vector at every positive length `N` equals
@@ -112,7 +112,7 @@ lemma clusterTensorRMP_apply (s α β : Fin 2) :
 
 /-- Source: arXiv:quant-ph/0311130, `References/quant-ph_0311130/source/cluster.tex`
 lines 298–312: the cluster state as a valence-bond state, with (unnormalized)
-bonds `|H⟩ = |00⟩ + |01⟩ + |10⟩ - |11⟩` and site maps `|0̃⟩⟨00| + |1̃⟩⟨11|`.
+bonds `|H⟩ = |00⟩ + |01⟩ + |10⟩ - |11⟩` and site maps `|0'⟩⟨00| + |1'⟩⟨11|`.
 The site map identifies both virtual qubits with the physical one, which
 suggests the tensor `Aˢ = |s)(s| H` with `H = !![1, 1; 1, -1]` defined here;
 `clusterTensorVBS_mpv_eq_prod` proves that its periodic vector is the contracted
@@ -137,7 +137,7 @@ lemma clusterTensorVBS_apply (s α β : Fin 2) :
 
 /-- Source: arXiv:quant-ph/0311130, `References/quant-ph_0311130/source/cluster.tex`
 lines 298–312: contracting the bond `|H⟩` on every nearest-neighbour pair of a
-ring of `N ≥ 1` sites with the site maps `|0̃⟩⟨00| + |1̃⟩⟨11|` gives the
+ring of `N ≥ 1` sites with the site maps `|0'⟩⟨00| + |1'⟩⟨11|` gives the
 coefficient `∏ⱼ ⟨sⱼ s_{j+1}|H⟩ = ∏ⱼ H_{sⱼ s_{j+1}}`, indices mod `N`. This is
 the periodic vector of the valence-bond tensor:
 `tr ∏ⱼ |sⱼ)(sⱼ| H = ∏ⱼ H_{sⱼ s_{j+1}}`. -/
