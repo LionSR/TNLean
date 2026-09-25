@@ -35,7 +35,7 @@ their own bookkeeping of all pairs, so the comparison there is not made here.
 
 ## References
 
-* N. Bultinck, M. Mariën, D. J. Williamson, M. B. Şahinoğlu, J. Haegeman, F. Verstraete,
+* N. Bultinck, M. Marien, D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete,
   *Anyons and matrix product operator algebras*, arXiv:1511.08090, `AnyonsPEPS.tex`,
   lines 155--200.
 * J. Garre-Rubio, L. Lootens, A. Molnár, *Classifying phases protected by matrix product
