@@ -122,6 +122,11 @@ directly.
     count is one in the first three cases and zero or two in the others.
 \end{proof}
 
+The representation of Definition~\ref{def:w_tensor} is not translationally
+invariant, because its boundary is not periodic
+\cite[Appendix~A, ``The W state'']{Cirac2021Matrix}. The following computation
+illustrates this remark by closing the same tensor with a trace.
+
 \begin{theorem}[The periodic closure is not the W state]%
     \label{thm:w_state_periodic_closure}
     \lean{MPSTensor.mpv_wTensor}
@@ -129,10 +134,7 @@ directly.
     \lean{MPSTensor.mpv_wTensor_ne_wIndicator}
     \leanok
     \uses{def:w_tensor, def:mpv, def:w_indicator}
-    The representation of Definition~\ref{def:w_tensor} is not translationally
-    invariant, because its boundary is not periodic
-    \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}. Closing the same tensor
-    with a trace gives
+    Closing the tensor of Definition~\ref{def:w_tensor} with a trace gives
     \begin{align}
         \operatorname{tr}\bigl(A^{\sigma_1}\cdots A^{\sigma_N}\bigr)
          & =

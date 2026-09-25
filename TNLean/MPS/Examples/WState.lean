@@ -17,7 +17,8 @@ Review: arXiv:2011.12127, Appendix A, "The W state".
 **Formalized here.** The open-boundary contraction `(0| A^{σ_1} ⋯ A^{σ_N} |1)` is `1`
 exactly when `σ` has a single excitation, so it reproduces the unnormalized W state for
 every `N`. The review's remark that this representation is not translationally invariant
-(line 2362) is formalized in `TNLean.MPS.Examples.WStatePeriodic`.
+(line 2362) is illustrated by the trace-closure computations in
+`TNLean.MPS.Examples.WStatePeriodic`.
 
 ## Main definitions
 

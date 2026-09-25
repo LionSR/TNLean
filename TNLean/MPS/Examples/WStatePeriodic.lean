@@ -55,9 +55,10 @@ variable {D : ℕ}
 
 /-! ### The printed tensor with a trace boundary -/
 
-/-- Source: arXiv:2011.12127, lines 2361–2362 ("not a translationally invariant
-representation ... due to the non-periodic boundary condition"). Closing the printed W
-tensor with a trace instead of the boundary vectors `(0|` and `|1)` gives `2` on the
+/-- Project result, illustrating arXiv:2011.12127, line 2362 (the open-boundary
+representation is "not a translationally invariant representation ... due to the
+non-periodic boundary condition"; the review prints no trace-closure value). Closing the
+printed W tensor with a trace instead of the boundary vectors `(0|` and `|1)` gives `2` on the
 vacuum and `0` on every configuration containing an excitation: the trace of the single
 raising operator vanishes. -/
 theorem mpv_wTensor {N : ℕ} (σ : Cfg 2 N) :
@@ -68,7 +69,8 @@ theorem mpv_wTensor {N : ℕ} (σ : Cfg 2 N) :
   · simp [wRaising, Matrix.trace_fin_two]
   · simp
 
-/-- Source: arXiv:2011.12127, lines 2361–2362. On every single-excitation configuration,
+/-- Project result, illustrating arXiv:2011.12127, line 2362. On every single-excitation
+configuration,
 where `W_N` has amplitude `1`, the periodic closure of the printed tensor vanishes. -/
 theorem mpv_wTensor_eq_zero_of_wIndicator_eq_one {N : ℕ} {σ : Cfg 2 N}
     (hσ : wIndicator N σ = 1) : mpv wTensor σ = 0 := by
@@ -78,8 +80,8 @@ theorem mpv_wTensor_eq_zero_of_wIndicator_eq_one {N : ℕ} {σ : Cfg 2 N}
   · simp [h]
   · exact absurd hσ zero_ne_one
 
-/-- Source: arXiv:2011.12127, lines 2361–2362. For `N ≥ 1` the periodic closure of the
-printed tensor is not the W state. -/
+/-- Project result, illustrating arXiv:2011.12127, line 2362. For `N ≥ 1` the periodic
+closure of the printed tensor is not the W state. -/
 theorem mpv_wTensor_ne_wIndicator {N : ℕ} (hN : 1 ≤ N) :
     (fun σ : Cfg 2 N => mpv wTensor σ) ≠ wIndicator N := by
   intro h
@@ -161,9 +163,11 @@ theorem pow_eq_zero_of_isPeriodicWState {A : MPSTensor 2 D}
   rw [hchar, Matrix.charpoly_zero] at hCH
   simpa using hCH
 
-/-- Project result (explicit bound for the review's claim, arXiv:2011.12127, line 2362):
-a periodic tensor of bond dimension `D` that represents `W_1, …, W_D` represents `W_N` for
-no `N > D`. -/
+/-- Project result: multi-length analogue of arXiv:2011.12127, line 2362. The review's
+bound constrains `D` at a single length `N`; this result assumes representation at every
+length `1, …, D`, and the single-length bound is open, see
+`docs/paper-gaps/rmp_w_state_ti_bound.tex`. A periodic tensor of bond dimension `D` that
+represents `W_1, …, W_D` represents `W_N` for no `N > D`. -/
 theorem not_isPeriodicWState_of_lt {A : MPSTensor 2 D}
     (h : ∀ k, 1 ≤ k → k ≤ D → IsPeriodicWState A k) {N : ℕ} (hN : D < N) :
     ¬ IsPeriodicWState A N := by
@@ -172,8 +176,10 @@ theorem not_isPeriodicWState_of_lt {A : MPSTensor 2 D}
   obtain ⟨j, rfl⟩ : ∃ j, M = D + j := ⟨M - D, by omega⟩
   rw [pow_add, pow_eq_zero_of_isPeriodicWState h, zero_mul]
 
-/-- Project result (explicit bound for the review's claim, arXiv:2011.12127, line 2362):
-for every periodic tensor of bond dimension `D` there is a length `1 ≤ N ≤ D + 1` at which
+/-- Project result: multi-length analogue of arXiv:2011.12127, line 2362. It constrains
+one tensor across the lengths `1, …, D + 1`, not `D` at a single length as the review does;
+the single-length bound is open, see `docs/paper-gaps/rmp_w_state_ti_bound.tex`. For every
+periodic tensor of bond dimension `D` there is a length `1 ≤ N ≤ D + 1` at which
 it does not represent `W_N`. -/
 theorem exists_not_isPeriodicWState_le (A : MPSTensor 2 D) :
     ∃ N, 1 ≤ N ∧ N ≤ D + 1 ∧ ¬ IsPeriodicWState A N := by
@@ -183,8 +189,8 @@ theorem exists_not_isPeriodicWState_le (A : MPSTensor 2 D) :
   exact not_isPeriodicWState_of_lt (fun k hk hkD => hall k hk (by omega)) (Nat.lt_succ_self D)
     (hall (D + 1) (by omega) le_rfl)
 
-/-- Project result (arXiv:2011.12127, line 2362): no single periodic tensor of fixed bond
-dimension represents the W state on every number of sites `N ≥ 1`. -/
+/-- Project result, illustrating arXiv:2011.12127, line 2362: no single periodic tensor of
+fixed bond dimension represents the W state on every number of sites `N ≥ 1`. -/
 theorem not_forall_isPeriodicWState (A : MPSTensor 2 D) :
     ¬ ∀ N, 1 ≤ N → IsPeriodicWState A N := by
   intro h
