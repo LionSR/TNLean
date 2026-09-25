@@ -60,6 +60,8 @@ periodic operator at positive length.
 ## Main results
 
 * `IsingTwist.mpo_isingOne_apply`, `IsingTwist.mpo_isingPsi_apply`: the closed-path kernels.
+* `IsingTwist.mpo_isingOne_conjTranspose`, `IsingTwist.mpo_isingPsi_conjTranspose`: both
+  operators are self-adjoint.
 * `IsingTwist.isingOneZ_eq_smul_single`, `IsingTwist.isingPsiZ_eq_smul_single`,
   `IsingTwist.isingSigmaZ_eq_smul_single`: every letter is a scaled matrix unit.
 * `IsingTwist.isingConj_of_rho_eq`: a letter identity of a stacked tensor reduces to the letters
@@ -261,6 +263,61 @@ theorem mpo_isingPsi_apply {N : ℕ} (hN : 0 < N) (σ τ : Fin N → Fin 10) :
   rw [hsign]
   unfold IsAdmissiblePath
   split_ifs with h1 h2 h3 h3 <;> simp_all [funext_iff]
+
+private theorem isingPsiFuse_involutive : ∀ h : Fin 10, isingPsiFuse (isingPsiFuse h) = h := by
+  decide
+
+private theorem isingPsiFuse_eq_seven_iff : ∀ h : Fin 10, isingPsiFuse h = 7 ↔ h = 7 := by
+  decide
+
+private theorem isingRight_isingPsiFuse :
+    ∀ h : Fin 10, isingRight (isingPsiFuse h) = isingPsiFlip (isingRight h) := by
+  decide
+
+private theorem isingLeft_isingPsiFuse :
+    ∀ h : Fin 10, isingLeft (isingPsiFuse h) = isingPsiFlip (isingLeft h) := by
+  decide
+
+/-- Fusing every label of a periodic configuration with `ψ` preserves closedness. -/
+private theorem isAdmissiblePath_isingPsiFuse_comp {N : ℕ} (σ : Fin N → Fin 10) :
+    IsAdmissiblePath (isingPsiFuse ∘ σ) ↔ IsAdmissiblePath σ := by
+  simp only [IsAdmissiblePath, Function.comp_apply, isingRight_isingPsiFuse,
+    isingLeft_isingPsiFuse, isingPsiFlip_eq_iff]
+
+/-- **The vacuum operator is self-adjoint.** Project result, read off from the kernel
+`mpo_isingOne_apply`: at every positive length `O_1ᴴ = O_1`. -/
+theorem mpo_isingOne_conjTranspose {N : ℕ} (hN : 0 < N) :
+    (MPOTensor.mpo isingOne N)ᴴ = MPOTensor.mpo isingOne N := by
+  ext σ τ
+  rw [Matrix.conjTranspose_apply, mpo_isingOne_apply hN, mpo_isingOne_apply hN]
+  by_cases h : σ = τ
+  · subst h; split_ifs <;> simp
+  · simp [h, Ne.symm h]
+
+/-- **The fermion operator is self-adjoint.** Project result, read off from the kernel
+`mpo_isingPsi_apply`: the fusion with `ψ` is an involution that preserves closedness and the
+number of sites with the label `(σ, ψ, σ)`, and the signs are real, so at every positive length
+`O_ψᴴ = O_ψ`. -/
+theorem mpo_isingPsi_conjTranspose {N : ℕ} (hN : 0 < N) :
+    (MPOTensor.mpo isingPsi N)ᴴ = MPOTensor.mpo isingPsi N := by
+  ext σ τ
+  rw [Matrix.conjTranspose_apply, mpo_isingPsi_apply hN, mpo_isingPsi_apply hN]
+  by_cases h : τ = isingPsiFuse ∘ σ
+  · subst h
+    have hσ : σ = isingPsiFuse ∘ isingPsiFuse ∘ σ :=
+      funext fun k => (isingPsiFuse_involutive (σ k)).symm
+    have hcard : (Finset.univ.filter fun k => (isingPsiFuse ∘ σ) k = 7).card =
+        (Finset.univ.filter fun k => σ k = 7).card := by
+      simp only [Function.comp_apply, isingPsiFuse_eq_seven_iff]
+    split_ifs with h1 h2 h2
+    · rw [hcard]; simp
+    · exact absurd ⟨rfl, (isAdmissiblePath_isingPsiFuse_comp σ).1 h1.2⟩ h2
+    · exact absurd ⟨hσ, (isAdmissiblePath_isingPsiFuse_comp σ).2 h2.2⟩ h1
+    · simp
+  · have h' : ¬ (σ = isingPsiFuse ∘ τ ∧ IsAdmissiblePath τ) := fun h' => h <| by
+      rw [h'.1]; funext k; exact (isingPsiFuse_involutive _).symm
+    have h'' : ¬ (τ = isingPsiFuse ∘ σ ∧ IsAdmissiblePath σ) := fun h'' => h h''.1
+    simp only [h', h'', ↓reduceIte, star_zero]
 
 /-! ### The fusion rules with at most one factor `σ`
 

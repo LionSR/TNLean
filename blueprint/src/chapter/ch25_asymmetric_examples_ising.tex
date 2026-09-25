@@ -227,6 +227,8 @@ $\mathcal K_N=\spn_{\C}\{\ket{h}:q_N(h)=1\}$.
 
 \begin{lemma}[Cyclic trace of matrix units]%
     \label{lem:asymex_ising_unit_loop}
+    \lean{Matrix.trace_ofFn_prod_smul_single}
+    \leanok
     For $N\geq1$, scalars $c_v$, and matrix-unit indices $a_v,b_v$,
     \begin{align}
         \tr\!\left(\prod_{v=0}^{N-1}c_vE_{a_vb_v}\right)
@@ -238,6 +240,7 @@ $\mathcal K_N=\spn_{\C}\{\ket{h}:q_N(h)=1\}$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Successive multiplication uses $E_{ab}E_{cd}=\delta_{bc}E_{ad}$.
     Taking the trace supplies the final factor
     $\tr(E_{a_0b_{N-1}})=\delta_{b_{N-1},a_0}$.
@@ -245,6 +248,21 @@ $\mathcal K_N=\spn_{\C}\{\ket{h}:q_N(h)=1\}$.
 
 \begin{theorem}[Vacuum projection and fermion action on closed paths]%
     \label{thm:asymex_ising_path_operators}
+    % Principal declarations: IsingTwist.mpo_isingOne_apply and
+    % IsingTwist.mpo_isingPsi_apply (the two kernels).
+    \lean{IsingTwist.mpo_isingOne_apply, IsingTwist.mpo_isingPsi_apply,
+        IsingTwist.mpo_isingOne_conjTranspose,
+        IsingTwist.mpo_isingPsi_conjTranspose,
+        IsingTwist.isingOne_mul_isingOne, IsingTwist.isingPsi_mul_isingPsi,
+        IsingTwist.isingOne_mul_isingPsi, IsingTwist.isingPsi_mul_isingOne,
+        IsingTwist.isingLeft, IsingTwist.isingRight,
+        IsingTwist.IsAdmissiblePath, IsingTwist.isingPsiFuse,
+        IsingTwist.isingOne_eq_smul_single,
+        IsingTwist.isingPsi_eq_smul_single,
+        MPOTensor.mpo_apply_of_eq_smul_single,
+        IsingTwist.isingGaugeOneOneZ, IsingTwist.isingGaugePsiPsiZ}
+    \leanok
+    \uses{def:asymex_ising_tensors, lem:asymex_ising_unit_loop}
     Set $Q_N=O_N(A_1)$ and $S_N=O_N(A_\psi)$. For $N\geq1$,
     \begin{align}
         \bra{k}Q_N\ket{h} & =\delta_{kh}q_N(h),
@@ -260,12 +278,10 @@ $\mathcal K_N=\spn_{\C}\{\ket{h}:q_N(h)=1\}$.
         Q_NS_N      & =S_NQ_N=S_N,      \\
         S_N^\dagger & =S_N.
     \end{align}
-    Both operators vanish on $\mathcal K_N^\perp$. On $\mathcal K_N$,
-    $S_N$ is a self-adjoint signed permutation involution. On the
-    ambient space $\mathcal H_N$, it is not unitary.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     Substituting~(\ref{eq:asymex_ising_one_letters})
     and~(\ref{eq:asymex_ising_psi_letters})
     into~(\ref{eq:asymex_ising_unit_loop}) gives the two kernels.
@@ -290,14 +306,16 @@ $\mathcal K_N=\spn_{\C}\{\ket{h}:q_N(h)=1\}$.
          & =\overline{\delta_{h,f(k)}\eta_N(k)q_N(k)}
         =\delta_{k,f(h)}\eta_N(h)q_N(h).
     \end{align}
-    Thus $S_N^\dagger=S_N$. The constant word with label
-    $1=(1,\psi,\psi)$ is not closed, so both operators kill its
-    nonzero basis vector. In particular, $S_N$ is not an ambient unitary.
+    Thus $S_N^\dagger=S_N$.
 \end{proof}
 
 The kernels show
 $\range S_N=\range Q_N=\mathcal K_N$ and
-$\ker S_N=\ker Q_N=\mathcal K_N^\perp$.
+$\ker S_N=\ker Q_N=\mathcal K_N^\perp$. On $\mathcal K_N$, the operator
+$S_N$ is a self-adjoint signed permutation involution. On the ambient
+space $\mathcal H_N$ it is not unitary: the constant word with label
+$1=(1,\psi,\psi)$ is not closed, so both operators kill its nonzero
+basis vector.
 At one site, the only closed labels are $0,3,6,7$. Using physical
 matrix units in $\MN{10}$,
 \begin{align}
@@ -353,6 +371,149 @@ $O_0(A_1)=O_0(A_\psi)=3$ and
 $O_0(\widehat A_\sigma)=4$, as operators on a one-dimensional
 physical space. The projection and product-state identities above
 do not extend to that case.
+
+\subsubsection{The fusion algebra of the three periodic operators}
+
+The operator blocks of the Fibonacci string-net satisfy the Fibonacci
+fusion rules~\cite[Appendix~D.1]{Bultinck2017Anyons}, and the Ising
+operators are built in the same way from the Ising
+F-symbols~\cite[Appendix~D.2]{Bultinck2017Anyons}. For the Ising category
+the source prints only the fusion rules themselves. The theorems below
+prove the corresponding operator identities for the tensors of
+Definition~\ref{def:asymex_ising_tensors}. These tensors use the F-symbols
+directly, without the square roots of quantum dimensions that the source
+divides them by; whether this choice changes the periodic operators is
+left open in~\cite{gap:bmwshv17_ising_boundary_tensor_normalization}. The
+same abstract algebra is realized by the topological defects of the
+Ising lattice model~\cite{Aasen2016Topological}.
+
+Each product is computed by one change of auxiliary coordinates of the
+product tensor.
+
+\begin{lemma}[Operator fusion from a change of auxiliary coordinates]%
+    \label{lem:asymex_ising_fusion_similarity}
+    \lean{MPSTensor.mpo_mul_eq_of_zsqrt2_conj, MPOTensor.mpo_eq_of_conj,
+        MPOTensor.evalWord_eq_mul_mul_of_conj, MPOTensor.mpo_zero_of_pos,
+        MPSTensor.padZsqrt2, MPSTensor.complexOfZsqrt2_padZsqrt2,
+        MPSTensor.padZsqrt2_smul_single}
+    \leanok
+    \uses{def:asymex_zsqrt2_ring, def:mpdo_operator_product}
+    Let $X$, $Y$, and $T$ be MPO tensors on the same physical space, with
+    entries in $\Z[\sqrt2]$ and auxiliary dimensions $D_X$, $D_Y$, and
+    $D_T$, and let $z\geq0$. Suppose that a nonzero $c\in\Z[\sqrt2]$ and
+    matrices $G$ of size $(D_T+z)\times D_XD_Y$ and $H$ of size
+    $D_XD_Y\times(D_T+z)$ with entries in $\Z[\sqrt2]$ satisfy
+    $GH=c\Id$, $HG=c\Id$, and
+    \begin{align}
+        G\,(X\mathbin{\cdot}Y)^{kh}\,H
+         & =c\,\bigl(T^{kh}\oplus0_z\bigr)
+        \label{eq:asymex_ising_fusion_similarity}
+    \end{align}
+    for all physical labels $k,h$, where $0_z$ is the zero matrix of
+    size $z$. Then $O_N(X)\,O_N(Y)=O_N(T)$ for every $N\geq1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_operator_product_mpo, thm:mpo_direct_sum_additive}
+    The periodic operator of the product tensor $X\mathbin{\cdot}Y$ is
+    $O_N(X)\,O_N(Y)$. Over $\C$, the matrices $G$ and $c^{-1}H$ are
+    mutually inverse, so conjugating every matrix of $X\mathbin{\cdot}Y$
+    by them leaves the traces of all words unchanged. By
+    (\ref{eq:asymex_ising_fusion_similarity}) the conjugated tensor is
+    the direct sum of $T$ and the zero tensor of auxiliary dimension $z$.
+    Its periodic operator is $O_N(T)+O_N(0)$, and $O_N(0)=0$ for
+    $N\geq1$ because every word of positive length contains a zero
+    matrix.
+\end{proof}
+
+\begin{theorem}[Fusion with the sigma operator]%
+    \label{thm:asymex_ising_sigma_fusion}
+    % Principal declarations: the four products; the gauges and the
+    % letter lemmas are the verification data of the proof.
+    \lean{IsingTwist.isingOne_mul_isingSigma,
+        IsingTwist.isingSigma_mul_isingOne,
+        IsingTwist.isingPsi_mul_isingSigma,
+        IsingTwist.isingSigma_mul_isingPsi,
+        IsingTwist.isingGaugeOneSigmaZ, IsingTwist.isingGaugeSigmaOneZ,
+        IsingTwist.isingGaugePsiSigmaZ, IsingTwist.isingGaugeSigmaPsiZ,
+        IsingTwist.isingSignPsiSigma, IsingTwist.isingSignSigmaPsi,
+        IsingTwist.isingSigmaZ_eq_smul_single,
+        IsingTwist.isingConj_of_rho_eq,
+        MPSTensor.mul_mulTensorR_mul_transpose_eq_list}
+    \leanok
+    \uses{def:asymex_ising_tensors, lem:asymex_ising_fusion_similarity}
+    For $N\geq1$,
+    \begin{align}
+        O_N(A_1)\,O_N(\widehat A_\sigma)
+         & =O_N(\widehat A_\sigma)\,O_N(A_1)
+        =O_N(\widehat A_\sigma),                \\
+        O_N(A_\psi)\,O_N(\widehat A_\sigma)
+         & =O_N(\widehat A_\sigma)\,O_N(A_\psi)
+        =O_N(\widehat A_\sigma).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_ising_sector_vanishing}
+    Each of the four products is an instance of
+    Lemma~\ref{lem:asymex_ising_fusion_similarity} with $c=1$, $z=8$,
+    a signed permutation matrix $G$ of size $12$, and $H=G^{\mathsf T}$. The
+    matrices of all three tensors are multiples of single matrix units,
+    so each conjugated matrix of the product tensor is a short explicit
+    sum. By Theorem~\ref{thm:asymex_ising_sector_vanishing}, both sides
+    of~(\ref{eq:asymex_ising_fusion_similarity}) vanish unless the two
+    physical labels have the same middle label $\rho$, and the remaining
+    identities are checked in exact arithmetic over $\Z[\sqrt2]$.
+\end{proof}
+
+By~(\ref{eq:asymex_ising_sigma_scale}), the same four identities hold
+with $A_\sigma$ in place of $\widehat A_\sigma$.
+
+\begin{theorem}[The square of the sigma operator]%
+    \label{thm:asymex_ising_sigma_square}
+    % Principal declarations: IsingTwist.isingSigma_mul_isingSigma and
+    % IsingTwist.isingSigma_normalized_mul_self.
+    \lean{IsingTwist.isingSigma_mul_isingSigma,
+        IsingTwist.isingSigma_normalized_mul_self,
+        IsingTwist.isingGaugeSigmaSigmaZ, IsingTwist.isingOnePsiZ,
+        IsingTwist.isingSigmaSigma_conj,
+        IsingTwist.isingGaugeSigmaSigmaZ_mul_transpose,
+        IsingTwist.isingGaugeSigmaSigmaZ_transpose_mul,
+        IsingTwist.complexOfZsqrt2_isingOnePsiZ,
+        MPSTensor.twoTermMatrix, MPSTensor.twoTermMatrix_mul_mul_transpose}
+    \leanok
+    \uses{def:asymex_ising_tensors, lem:asymex_ising_fusion_similarity}
+    For $N\geq1$,
+    \begin{align}
+        O_N(\widehat A_\sigma)^2
+         & =2^N\bigl(O_N(A_1)+O_N(A_\psi)\bigr),
+        \label{eq:asymex_ising_sigma_square_scaled} \\
+        O_N(A_\sigma)^2
+         & =O_N(A_1)+O_N(A_\psi).
+        \label{eq:asymex_ising_sigma_square}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_ising_sector_vanishing, thm:mpo_direct_sum_additive,
+        thm:mpdo_mpo_scalar_scaling}
+    Apply Lemma~\ref{lem:asymex_ising_fusion_similarity} with
+    $X=Y=\widehat A_\sigma$, $c=2$, $z=10$, and $H=G^{\mathsf T}$, where the
+    matrix $G$ of size $16$ has fourteen rows of the form $\sqrt2e_i$ and
+    the two rows $e_2\pm e_7$. These two rows carry the F-move of
+    $F^{\sigma\sigma\sigma}_{\sigma}$, and $GG^{\mathsf T}=G^{\mathsf T}G=2\Id$. The target
+    tensor $T$ is the direct sum of $2A_1$ and $2A_\psi$. As in the proof
+    of Theorem~\ref{thm:asymex_ising_sigma_fusion}, the identity
+    (\ref{eq:asymex_ising_fusion_similarity}) is checked in exact
+    arithmetic within each sector of $\rho$. The periodic operator of
+    $T$ is $2^N\bigl(O_N(A_1)+O_N(A_\psi)\bigr)$ by additivity and the
+    scaling law, which gives~(\ref{eq:asymex_ising_sigma_square_scaled}).
+    Dividing by the square of the factor
+    in~(\ref{eq:asymex_ising_sigma_scale}) gives~(\ref{eq:asymex_ising_sigma_square}).
+\end{proof}
 
 \subsection{One-site injectivity by exact arithmetic}%
 \label{sec:asymex_ising_ring}
@@ -713,7 +874,7 @@ $\Id_2\otimes(\sqrt2A_\sigma)^h$.
 One weight insertion per site therefore gives
 \begin{align}
     \tr\!\left(\prod_{v=0}^{N-1}
-    (\Theta\otimes(\sqrt2A_\sigma)^{h_v})\right)
+         (\Theta\otimes(\sqrt2A_\sigma)^{h_v})\right)
      & =\tr(\Theta^N)
     \tr\!\left(\prod_{v=0}^{N-1}(\sqrt2A_\sigma)^{h_v}\right).
 \end{align}
