@@ -79,7 +79,7 @@ theorem czxGen_pow_two : czxGen ^ 2 = 1 := by decide
 of the bond-one identity tensor. -/
 private theorem pairDelta_eq (a : Fin (2 * 2)) :
     pairDelta a = if a.divNat = a.modNat then (1 : ℂ) else 0 := by
-  fin_cases a <;> simp [pairDelta, pairDeltaInt] <;> decide
+  fin_cases a <;> simp [pairDelta, pairDeltaInt, Fin.divNat, Fin.modNat]
 
 /-- The product of two identity tensors is the identity tensor. -/
 private theorem mulTensor_idTensor_idTensor :
@@ -145,7 +145,8 @@ def czxFusionData : czxFamily.FusionData where
   V x y := czxLabelV x.toAdd y.toAdd
   W x y := czxLabelW x.toAdd y.toAdd
   isReduction := by
-    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_) (Multiplicative.forall_zmod_two ?_ ?_)
+    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
+      (Multiplicative.forall_zmod_two ?_ ?_)
     · change MPSTensor.IsReduction
         (mulTensor (MPOTensor.idTensor 2) (MPOTensor.idTensor 2)).toMPSTensor
         ((MPOTensor.idTensor 2 : MPOTensor 2 (1 * 1))).toMPSTensor 1 1
