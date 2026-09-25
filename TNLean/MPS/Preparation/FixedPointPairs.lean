@@ -252,6 +252,39 @@ theorem fixedPointPair_norm_sq {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSe
         simp [Matrix.mul_apply, fixedPointPair, S]
     _ = σ.trace := by rw [hSS]
 
+/-- Regrouping a ring of `N` sites into its `N` nearest-neighbour bonds: the
+configuration `c k = (l_k, r_k)` is sent to the bond configuration
+`k ↦ (r_k, l_{k+1})`, cyclically. This is the site regrouping behind
+`|Ω⟩ = ⊗ᵢ |ω⟩_{R_i L_{i+1}}` in arXiv:2307.01696, eq. `eq:phi_tilde`. -/
+def bondRegrouping (N D : ℕ) : (Fin N → Fin D × Fin D) ≃ (Fin N → Fin D × Fin D) where
+  toFun c k := ((c k).2, (c (finRotate N k)).1)
+  invFun p k := ((p ((finRotate N).symm k)).2, (p k).1)
+  left_inv c := by funext k; simp only [Equiv.apply_symm_apply]
+  right_inv p := by funext k; simp only [Equiv.symm_apply_apply]
+
+/-- The product of pairs is normalized whenever each pair is: `⟨Ω|Ω⟩ = ⟨ω|ω⟩^N`
+for `|Ω⟩ = ⊗ᵢ |ω⟩_{R_i L_{i+1}}` on a ring of `N` sites (arXiv:2307.01696,
+eq. `eq:phi_tilde` and the normalized states `|Ω_j⟩` after
+eq. `eq:app_tidle_phi_1`). -/
+theorem pairProductState_norm_sq {N : ℕ} (ω : Fin D × Fin D → ℂ) :
+    ∑ c : Fin N → Fin D × Fin D, star (pairProductState ω c) * pairProductState ω c =
+      (∑ p, star (ω p) * ω p) ^ N := by
+  rw [← Fin.prod_const, Fintype.prod_sum,
+    ← (bondRegrouping N D).sum_comp (fun x => ∏ i, star (ω (x i)) * ω (x i))]
+  refine Finset.sum_congr rfl fun c _ => ?_
+  rw [pairProductState, star_prod, ← Finset.prod_mul_distrib]
+  rfl
+
+/-- The fixed-point state `|Ω⟩ = ⊗ᵢ |ω⟩_{R_i L_{i+1}}` is normalized:
+`⟨Ω|Ω⟩ = (Tr ρ)^N = 1` (arXiv:2307.01696, eq. `eq:normal_fp_local` and
+eq. `eq:phi_tilde`). -/
+theorem pairProductState_fixedPointPair_norm_sq {N : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hσ : σ.PosSemidef) (htr : σ.trace = 1) :
+    ∑ c : Fin N → Fin D × Fin D,
+      star (pairProductState (fixedPointPair σ) c) * pairProductState (fixedPointPair σ) c =
+        1 := by
+  rw [pairProductState_norm_sq, fixedPointPair_norm_sq hσ, htr, one_pow]
+
 /-! ## Convergence of the blocked transfer map -/
 
 /-- The blocked transfer map converges to the transfer map of `P_∞`, from the
