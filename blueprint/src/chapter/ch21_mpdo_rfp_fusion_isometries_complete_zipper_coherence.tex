@@ -144,9 +144,8 @@
     \leanok
     \uses{thm:mpdo_complete_zipper_of_compression}
     Let $B_1,\ldots,B_m$ be MPO blocks of positive bond dimension which,
-    read as tensors on the doubled physical alphabet and rescaled by nonzero
-    scalars, are normal tensors, and no two of which are gauge equivalent up
-    to a nonzero scalar. Then there is $L>0$ such that the words of length
+    read as tensors on the doubled physical alphabet, are normal, and no two
+    of which are gauge equivalent up to a nonzero scalar. Then there is $L>0$ such that the words of length
     $L$ span $\bigoplus_cM_{D_c}$ jointly, so the blocked tensors
     $B_c^{[L]}$ have a simultaneous left inverse at one blocked site. If
     every product $B_aB_b$ admits a multi-block compression onto $N_{ab}^c$
@@ -162,7 +161,8 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_complete_zipper_of_compression}
-    Rescaling a block by a nonzero scalar multiplies its words of length $L$
+    After a gauge and a nonzero rescaling each block has transfer map of
+    spectral radius one. Rescaling a block multiplies its words of length $L$
     by a nonzero constant, so it changes neither the joint span nor
     non-equivalence up to a scalar. For normal, pairwise inequivalent
     tensors the block-injectivity argument
