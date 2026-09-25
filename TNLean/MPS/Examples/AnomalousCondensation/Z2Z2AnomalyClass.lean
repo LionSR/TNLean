@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Defect
 import TNLean.MPS.MPDO.SimpleScaling
-import TNLean.MPS.Symmetry.MPOSymmetry.Associator
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 
 /-!
 # The anomaly class of the diagonal `ℤ₂` of the anomalous `ℤ₂ × ℤ₂` symmetry
@@ -94,22 +94,16 @@ the bond-one tensor `M_e` and the generator by `i M_xy`, the tensor of the diago
 
 This is the restriction of the projective `ℤ₂ × ℤ₂` family `symTensor` to the subgroup
 `{e, xy}`, under the scope restriction of the module docstring. -/
-def diagFamily : GroupFamily (Multiplicative (Fin 2)) 4 where
+def diagFamily : GroupFamily (Multiplicative (ZMod 2)) 4 where
   bondDim x := diagBondDim x.toAdd
   bondDim_pos x := by unfold diagBondDim; split <;> norm_num
   tensor x := diagLabelTensor x.toAdd
 
 /-- The generator of the diagonal `ℤ₂`, written multiplicatively. -/
-def diagGen : Multiplicative (Fin 2) := Multiplicative.ofAdd 1
+def diagGen : Multiplicative (ZMod 2) := Multiplicative.ofAdd 1
 
 /-- The generator of the diagonal `ℤ₂` has order two. -/
 theorem diagGen_pow_two : diagGen ^ 2 = 1 := by decide
-
-private theorem forall_z2 {P : Multiplicative (Fin 2) → Prop}
-    (h0 : P (Multiplicative.ofAdd 0)) (h1 : P (Multiplicative.ofAdd 1)) : ∀ x, P x := by
-  intro x
-  fin_cases x
-  exacts [h0, h1]
 
 /-! ### The representation -/
 
@@ -124,11 +118,12 @@ i U_xy` and `(i U_xy)(i U_xy) = U_e` on every nonempty chain, the last because
 `U_xy U_xy = (−1)^L U_e` (`mpo_xy_mul_xy`). -/
 theorem diagFamily_isNormalRepresentation : diagFamily.IsNormalRepresentation where
   isNormal := by
-    refine forall_z2 eMPS_isNormal ?_
+    refine Multiplicative.forall_zmod_two eMPS_isNormal ?_
     change Kraus.IsNormal (Complex.I • xyMPS)
     exact (isNormal_smul_iff Complex.I_ne_zero _).2 xyMPS_isNormal
   operator_mul := by
-    refine forall_z2 (forall_z2 ?_ ?_) (forall_z2 ?_ ?_) <;> intro N hN
+    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
+      (Multiplicative.forall_zmod_two ?_ ?_) <;> intro N hN
     · exact mpo_e_mul_e N hN
     · change mpo eTensor N * mpo (Complex.I • xyTensor) N = mpo (Complex.I • xyTensor) N
       rw [mpo_smul, Matrix.mul_smul, mpo_e_mul_xy N hN]
@@ -172,18 +167,19 @@ def diagFusionData : diagFamily.FusionData where
   V x y := diagLabelV x.toAdd y.toAdd
   W x y := diagLabelW x.toAdd y.toAdd
   isReduction := by
-    refine forall_z2 (forall_z2 ?_ ?_) (forall_z2 ?_ ?_)
+    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
+      (Multiplicative.forall_zmod_two ?_ ?_)
     · change MPSTensor.IsReduction eEStacked (eMPS : MPSTensor 16 (1 * 1)) 1 1
-      exact MPSTensor.IsReduction.of_eq (funext eEStacked_eq)
+      exact MPSTensor.isReduction_one_one_of_eq (funext eEStacked_eq)
     · change MPSTensor.IsReduction (mulTensor eTensor (Complex.I • xyTensor)).toMPSTensor
         ((Complex.I • xyTensor : MPOTensor 4 (1 * 2))).toMPSTensor 1 1
-      refine MPSTensor.IsReduction.of_eq ?_
+      refine MPSTensor.isReduction_one_one_of_eq ?_
       rw [mulTensor_smul_right]
       funext a
       exact congrArg (Complex.I • ·) (eXyStacked_eq a)
     · change MPSTensor.IsReduction (mulTensor (Complex.I • xyTensor) eTensor).toMPSTensor
         ((Complex.I • xyTensor : MPOTensor 4 (2 * 1))).toMPSTensor 1 1
-      refine MPSTensor.IsReduction.of_eq ?_
+      refine MPSTensor.isReduction_one_one_of_eq ?_
       rw [mulTensor_smul_left]
       funext a
       exact congrArg (Complex.I • ·) (xyEStacked_eq a)
@@ -260,27 +256,24 @@ def diagRightTreeInt : Matrix (Fin 2) (Fin (2 * 2 * 2)) ℤ :=
 
 private theorem assocInv_two_two_two :
     mulTensorAssocInvMatrix 2 2 2 = (1 : Matrix (Fin 8) (Fin 8) ℂ) := by
-  have he : (mulTensorAssocEquiv 2 2 2).symm = Equiv.refl (Fin 8) := Equiv.ext (by decide)
-  rw [mulTensorAssocInvMatrix, he, Equiv.toPEquiv_refl, PEquiv.toMatrix_refl]
+  rw [mulTensorAssocInvMatrix_eq_finCongr]
+  exact finCongr_toMatrix_eq_one _
 
 private theorem assocInv_two_one_two :
     mulTensorAssocInvMatrix 2 1 2 = (1 : Matrix (Fin 4) (Fin 4) ℂ) := by
-  have he : (mulTensorAssocEquiv 2 1 2).symm = Equiv.refl (Fin 4) := Equiv.ext (by decide)
-  rw [mulTensorAssocInvMatrix, he, Equiv.toPEquiv_refl, PEquiv.toMatrix_refl]
+  rw [mulTensorAssocInvMatrix_eq_finCongr]
+  exact finCongr_toMatrix_eq_one _
 
 private theorem castMat_gen_gen_gen :
     diagFamily.castMat (mul_assoc diagGen diagGen diagGen).symm =
       (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
-  ext i j
-  rw [GroupFamily.castMat_apply]
-  fin_cases i <;> fin_cases j <;> rfl
+  rw [GroupFamily.castMat_eq_finCongr]
+  exact finCongr_toMatrix_eq_one _
 
 private theorem castMat_gen_one_gen :
     diagFamily.castMat (mul_assoc diagGen 1 diagGen).symm = (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
-  ext i j
-  rw [GroupFamily.castMat_apply]
-  fin_cases i; fin_cases j
-  rfl
+  rw [GroupFamily.castMat_eq_finCongr]
+  exact finCongr_toMatrix_eq_one _
 
 /-- The left fusion tree of `(g,g,g)`, which fuses the first two factors first, is the integer
 matrix `diagLeftTreeInt`. -/
@@ -364,28 +357,10 @@ private theorem diag_letter (a : Fin 16) :
 word of the unscaled triple product. -/
 theorem diag_leftTree_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
     complexOfInt diagLeftTreeInt * Kraus.evalWord diagCube w =
-      (-1 : ℂ) • (complexOfInt diagRightTreeInt * Kraus.evalWord diagCube w) := by
-  induction w with
-  | nil => exact absurd rfl hw
-  | cons a w ih =>
-      cases w with
-      | nil => simpa using diag_letter a
-      | cons b w =>
-          have ih' := ih (List.cons_ne_nil _ _)
-          rw [Kraus.evalWord_cons] at ih'
-          calc
-            _ = complexOfInt diagLeftTreeInt * diagCube a * diagCube b *
-                Kraus.evalWord diagCube w := by
-              simp only [Kraus.evalWord_cons, Matrix.mul_assoc]
-            _ = ((-1 : ℂ) • xyMPS) a * (complexOfInt diagLeftTreeInt *
-                (diagCube b * Kraus.evalWord diagCube w)) := by
-              rw [diag_pair _ fun a b ↦ (diag_pair_int a b).1]
-              simp only [Matrix.mul_assoc]
-            _ = (-1 : ℂ) • (complexOfInt diagRightTreeInt * diagCube a * diagCube b *
-                Kraus.evalWord diagCube w) := by
-              rw [ih', diag_pair _ fun a b ↦ (diag_pair_int a b).2, Matrix.mul_smul]
-              simp only [Matrix.mul_assoc]
-            _ = _ := by simp only [Kraus.evalWord_cons, Matrix.mul_assoc]
+      (-1 : ℂ) • (complexOfInt diagRightTreeInt * Kraus.evalWord diagCube w) :=
+  mul_evalWord_eq_smul_of_forall_mul_mul (A := (-1 : ℂ) • xyMPS)
+    (diag_pair _ fun a b ↦ (diag_pair_int a b).1) (diag_pair _ fun a b ↦ (diag_pair_int a b).2)
+    diag_letter w hw
 
 /-- The comparison of the two fusion trees survives a rescaling of the triple product. -/
 theorem diag_leftTree_evalWord_smul (c : ℂ) (w : List (Fin 16)) (hw : w ≠ []) :
