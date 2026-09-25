@@ -136,11 +136,17 @@ theorem hadamard_mul_mul_mul_hadamard (A B : Matrix (Fin N → Fin 2) (Fin N →
         rw [hadamard_mul_self, Matrix.mul_one, Matrix.mul_assoc (hadamard N) A B]
     _ = _ := by simp only [Matrix.mul_assoc]
 
+/-- Since the Hadamard gate is an involution, `A = H B H` exactly when `H A H = B`. -/
+theorem eq_hadamard_conj_iff {A B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ} :
+    A = hadamard N * B * hadamard N ↔ hadamard N * A * hadamard N = B := by
+  constructor <;> rintro rfl <;>
+    simp only [← Matrix.mul_assoc, hadamard_mul_self, Matrix.one_mul] <;>
+    simp only [Matrix.mul_assoc, hadamard_mul_self, Matrix.mul_one]
+
 /-- The Hadamard gate exchanges `X_j` and `Z_j`: `H X_j H = Z_j`. -/
 theorem hadamard_mul_siteX_mul_hadamard (j : Fin N) :
-    hadamard N * siteX j * hadamard N = siteZ j := by
-  rw [← hadamard_mul_siteZ_mul_hadamard, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
-    hadamard_mul_self, Matrix.one_mul, Matrix.mul_assoc, hadamard_mul_self, Matrix.mul_one]
+    hadamard N * siteX j * hadamard N = siteZ j :=
+  (eq_hadamard_conj_iff.mpr (hadamard_mul_siteZ_mul_hadamard j)).symm
 
 theorem hadamard_mul_one_add_smul_mul_hadamard (c : ℂ)
     (A : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ) :
@@ -545,9 +551,8 @@ theorem hadamard_mul_ssCircuit_mul_hadamard (n : ℕ) :
 /-! ### The printed relations for the circuit -/
 
 theorem ssCircuit_eq (n : ℕ) :
-    ssCircuit n = hadamard (n + 1) * kwTranslation (n + 1) * hadamard (n + 1) := by
-  rw [← hadamard_mul_ssCircuit_mul_hadamard, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
-    hadamard_mul_self, Matrix.one_mul, Matrix.mul_assoc, hadamard_mul_self, Matrix.mul_one]
+    ssCircuit n = hadamard (n + 1) * kwTranslation (n + 1) * hadamard (n + 1) :=
+  eq_hadamard_conj_iff.mpr (hadamard_mul_ssCircuit_mul_hadamard n)
 
 /-- Transport of an intertwining relation `A B = C A` through the Hadamard change of basis. -/
 theorem hadamard_conj_intertwine {A B C : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
@@ -556,12 +561,11 @@ theorem hadamard_conj_intertwine {A B C : Matrix (Fin N → Fin 2) (Fin N → Fi
       (hadamard N * C * hadamard N) * (hadamard N * A * hadamard N) := by
   rw [← hadamard_mul_mul_mul_hadamard, h, hadamard_mul_mul_mul_hadamard]
 
-theorem ssEta_eq : ssEta N = hadamard N * spinFlip N * hadamard N := by
-  rw [← hadamard_mul_ssEta_mul_hadamard, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
-    hadamard_mul_self, Matrix.one_mul, Matrix.mul_assoc, hadamard_mul_self, Matrix.mul_one]
+theorem ssEta_eq : ssEta N = hadamard N * spinFlip N * hadamard N :=
+  eq_hadamard_conj_iff.mpr hadamard_mul_ssEta_mul_hadamard
 
 theorem siteZ_eq_hadamard_conj (j : Fin N) : siteZ j = hadamard N * siteX j * hadamard N :=
-  (hadamard_mul_siteX_mul_hadamard j).symm
+  eq_hadamard_conj_iff.mpr (hadamard_mul_siteZ_mul_hadamard j)
 
 theorem siteXX_eq_hadamard_conj [NeZero N] (j : Fin N) :
     siteX j * siteX (j + 1) = hadamard N * siteZZ j * hadamard N := by
