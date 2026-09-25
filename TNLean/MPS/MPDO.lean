@@ -67,6 +67,7 @@ import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
+import TNLean.MPS.MPDO.BondOneOperator
 import TNLean.MPS.MPDO.BondOnePhysicalSectorFactorization
 import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
@@ -136,6 +137,7 @@ import TNLean.MPS.MPDO.CompleteZipperFusion
 import TNLean.MPS.MPDO.CompleteZipperFusionBlocked
 import TNLean.MPS.MPDO.CompleteZipperFusionDefs
 import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
+import TNLean.MPS.MPDO.CompleteZipperFusionGauge
 import TNLean.MPS.MPDO.CompleteZipperFusionInverse
 import TNLean.MPS.MPDO.CompleteZipperFusionOfCompression
 import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
