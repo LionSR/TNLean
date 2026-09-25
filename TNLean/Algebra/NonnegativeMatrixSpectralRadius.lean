@@ -36,7 +36,7 @@ taken over `ℂ` (Mathlib's `spectralRadius`):
 * `Matrix.exists_nonneg_mulVec_eq_spectralRadius_smul`: the weak Perron–Frobenius theorem.
 * `Matrix.spectralRadius_map_ofReal_eq_of_pos_vecMul_eq`: the spectral radius equals the
   eigenvalue of a positive left eigenvector.
-* `Matrix.spectrum_transpose_complex`: a matrix and its transpose have the same spectrum.
+* `Matrix.spectrum_transpose`: a matrix and its transpose have the same spectrum.
 -/
 
 open scoped Matrix ENNReal NNReal
@@ -319,10 +319,11 @@ theorem spectralRadius_map_ofReal_eq_of_pos_vecMul_eq [Nonempty ι] {M : Matrix 
     exact ENNReal.ofReal_le_ofReal (norm_le_of_mem_spectrum_of_pos_vecMul_eq hM hδ h hμ)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm, Complex.norm_real, Real.norm_of_nonneg hr0]
 
-/-- The spectrum of a complex matrix is that of its transpose. -/
-theorem spectrum_transpose_complex (A : Matrix ι ι ℂ) : spectrum ℂ Aᵀ = spectrum ℂ A := by
+/-- The spectrum of a square matrix over a commutative ring is that of its transpose. -/
+theorem spectrum_transpose {R : Type*} [CommRing R] (A : Matrix ι ι R) :
+    spectrum R Aᵀ = spectrum R A := by
   ext μ
-  rw [Matrix.mem_spectrum_iff_isRoot_charpoly, Matrix.mem_spectrum_iff_isRoot_charpoly,
-    Matrix.charpoly_transpose]
+  rw [Matrix.mem_spectrum_iff_not_isUnit_eval_charpoly,
+    Matrix.mem_spectrum_iff_not_isUnit_eval_charpoly, Matrix.charpoly_transpose]
 
 end Matrix
