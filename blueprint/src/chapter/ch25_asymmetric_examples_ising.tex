@@ -312,10 +312,28 @@ $\mathcal K_N=\spn_{\C}\{\ket{h}:q_N(h)=1\}$.
 The kernels show
 $\range S_N=\range Q_N=\mathcal K_N$ and
 $\ker S_N=\ker Q_N=\mathcal K_N^\perp$. On $\mathcal K_N$, the operator
-$S_N$ is a self-adjoint signed permutation involution. On the ambient
-space $\mathcal H_N$ it is not unitary: the constant word with label
-$1=(1,\psi,\psi)$ is not closed, so both operators kill its nonzero
-basis vector.
+$S_N$ is a self-adjoint signed permutation involution.
+
+\begin{corollary}[The fermion operator is a partial isometry]%
+    \label{cor:asymex_ising_fermion_partial_isometry}
+    \lean{IsingTwist.isingPsi_conjTranspose_mul_isingPsi,
+        IsingTwist.mpo_isingOne_ne_one,
+        IsingTwist.mpo_isingPsi_notMem_unitaryGroup}
+    \leanok
+    \uses{thm:asymex_ising_path_operators}
+    For $N\geq1$, $S_N^\dagger S_N=Q_N$ and $Q_N\neq\Id$. Thus $S_N$ is
+    a partial isometry with initial projection $Q_N$, and it is not
+    unitary on $\mathcal H_N$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:asymex_ising_path_operators},
+    $S_N^\dagger S_N=S_N^2=Q_N$. The constant word with label
+    $1=(1,\psi,\psi)$ is not closed, since $r(1)=\psi$ and
+    $\ell(1)=1$, so the vacuum kernel vanishes on its diagonal entry
+    and $Q_N\neq\Id$. A unitary $S_N$ would give $Q_N=S_N^\dagger S_N=\Id$.
+\end{proof}
 At one site, the only closed labels are $0,3,6,7$. Using physical
 matrix units in $\MN{10}$,
 \begin{align}
@@ -468,8 +486,39 @@ product tensor.
     identities are checked in exact arithmetic over $\Z[\sqrt2]$.
 \end{proof}
 
-By~(\ref{eq:asymex_ising_sigma_scale}), the same four identities hold
-with $A_\sigma$ in place of $\widehat A_\sigma$.
+\begin{corollary}[Fusion with the unscaled sigma operator]%
+    \label{cor:asymex_ising_sigma_fusion_unscaled}
+    \lean{IsingTwist.isingOne_mul_isingSigma_normalized,
+        IsingTwist.isingSigma_normalized_mul_isingOne,
+        IsingTwist.isingPsi_mul_isingSigma_normalized,
+        IsingTwist.isingSigma_normalized_mul_isingPsi}
+    \leanok
+    \uses{thm:asymex_ising_sigma_fusion, thm:mpdo_mpo_scalar_scaling}
+    For $N\geq1$,
+    \begin{align}
+        O_N(A_1)\,O_N(A_\sigma)
+         & =O_N(A_\sigma)\,O_N(A_1)
+        =O_N(A_\sigma),                \\
+        O_N(A_\psi)\,O_N(A_\sigma)
+         & =O_N(A_\sigma)\,O_N(A_\psi)
+        =O_N(A_\sigma).
+    \end{align}
+    These are the operator analogues, for the tensors of
+    Definition~\ref{def:asymex_ising_tensors}, of the fusion rules
+    $1\times\sigma=\sigma\times1=\sigma$ and
+    $\psi\times\sigma=\sigma\times\psi=\sigma$
+    of~\cite[Appendix~D.2]{Bultinck2017Anyons}; whether omitting the
+    normalization factors of the source changes these operators is left
+    open in~\cite{gap:bmwshv17_ising_boundary_tensor_normalization}.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Both sides of each identity in
+    Theorem~\ref{thm:asymex_ising_sigma_fusion} are linear in
+    $O_N(\widehat A_\sigma)$. Dividing by the factor $(\sqrt2)^N$
+    of~(\ref{eq:asymex_ising_sigma_scale}) gives the four identities.
+\end{proof}
 
 \begin{theorem}[The square of the sigma operator]%
     \label{thm:asymex_ising_sigma_square}

@@ -8,26 +8,28 @@ import TNLean.MPS.Examples.Fibonacci.Fibonacci
 import TNLean.MPS.Examples.Rings.GoldenCompression
 
 /-!
-# The unit laws of the Fibonacci algebra as compressions
+# Fibonacci unit laws: `1 ⊗ 1 = 1` and `1 ⊗ τ = τ ⊗ 1 = τ` as compressions
 
-The Fibonacci string-net matrix product operator algebra of Bultinck, Marien, Williamson,
-Sahinoglu, Haegeman and Verstraete (arXiv:1511.08090, Appendix D.1) has two operator families,
-the admissibility projector `O_1` of bond dimension two and the `τ` family of bond dimension
-three. `Examples/Fibonacci.lean` formalizes the fusion `O_τ O_τ = O_1 + O_τ` as a multi-block
-compression. This file formalizes the remaining three products of the two blocks as compressions
-in the same exact arithmetic over `ℤ[σ]` (data file
-`Notes/OpenProblemsTN/checks/asym_fibonacci_categorical_data.md`, §3.1-3.3, verified by
-`checks/asym_fibonacci_categorical_verify.py`):
+**Source.** Bultinck, Mariën, Williamson, Sahinoglu, Haegeman and Verstraete 2017
+(arXiv:1511.08090), Appendix D.1.1, `References/1511.08090/AnyonsPEPS.tex` lines 1241–1243: the
+Fibonacci fusion rules `N_{11}^1 = N_{τ1}^τ = N_{1τ}^τ = N_{ττ}^1 = N_{ττ}^τ = 1`; line 1268:
+the projector matrix product operator of bond dimension `5` consists of two blocks `B_1`, `B_τ`
+of dimensions `2` and `3` that satisfy the Fibonacci fusion rules.
+Review: arXiv:2011.12127, Appendix A, "The MPO for the Fibonacci model"
+(`Papers/2011.12127/TN-Review-main.tex` lines 2613–2625).
 
-* `1 ⊗ 1 → 1`, bond dimension `4 = 2 + 2`: the admissibility projector is idempotent;
-* `1 ⊗ τ → τ` and `τ ⊗ 1 → τ`, bond dimension `6 = 3 + 3`: the projector is the unit of the
-  algebra on the `τ` family.
+**Formalized here.** The three unit entries `N_{11}^1 = N_{1τ}^τ = N_{τ1}^τ = 1` of the source's
+claim that the blocks satisfy the fusion rules, as identities of periodic operators at every
+positive length, via the multi-block compression theorem; `Examples/Fibonacci.lean` gives the
+remaining entry `O_τ O_τ = O_1 + O_τ`. The stacked products have bond dimensions `4 = 2 + 2`
+(`1 ⊗ 1 → 1`, the admissibility projector is idempotent) and `6 = 3 + 3` (`1 ⊗ τ → τ` and
+`τ ⊗ 1 → τ`, the projector is the unit on the `τ` family). Each compresses onto a single block
+with the recorded number of zero slots; every gauge and its inverse have entries in `ℤ[σ]`, and
+the conjugated letters are block diagonal, so every extension splits.
 
-Each stacked product compresses onto a single block with the recorded number of zero slots, every
-gauge and its inverse have entries in `ℤ[σ]`, and the conjugated letters are block diagonal, so
-every extension splits. Together with the fusion rule this realises the full multiplication table
-of the Fibonacci fusion ring on the periodic operators, `O_1^2 = O_1`, `O_1 O_τ = O_τ O_1 = O_τ`,
-`O_τ^2 = O_1 + O_τ`.
+**Local fix (provenance):** the source draws the operator tensor only as a diagram and prints no
+numeric entries of `B_1`, `B_τ`; the blocks are those of `Examples/Fibonacci.lean`; documented in
+`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
 **Local fix (positive length):** the source derives the fusion rules, among them the unit laws,
 from the projector identity required for all `L` (`References/1511.08090/AnyonsPEPS.tex`
@@ -51,6 +53,22 @@ degenerate case, and the unit laws are stated for every positive length; documen
 * `FibonacciCompression.fibOneOne_remainder_eq_zero`,
   `FibonacciCompression.fibOneTau_remainder_eq_zero`,
   `FibonacciCompression.fibTauOne_remainder_eq_zero`: all three extensions split.
+
+## References
+
+- [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  operator algebras*
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+
+## Provenance
+
+The three compression data and their exact-arithmetic verification were first recorded in
+`Notes/OpenProblemsTN/checks/asym_fibonacci_categorical_data.md`, §3.1–3.3, and
+`Notes/OpenProblemsTN/checks/asym_fibonacci_categorical_verify.py`. These are verification
+records, not the source.
 -/
 
 noncomputable section
