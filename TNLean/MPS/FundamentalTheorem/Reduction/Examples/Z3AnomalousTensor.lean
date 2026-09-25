@@ -9,6 +9,19 @@ import TNLean.MPS.MPDO.OperatorFromWordTrace
 /-!
 # The anomalous `ℤ/3` matrix product operator symmetry
 
+**Source.** Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.C,
+`Papers/2405.00439/MPU-DW.tex` lines 2038–2068: the three-cocycles
+`ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` label the classes of matrix product unitary
+representations of `ℤ_n` (line 2040), with the `n = 3` interchange table (lines 2046–2054).
+The paper prints no `ℤ₃` tensor. The tensors below are representatives constructed in this
+development of the class `j = 1` of that formula; the group family and its operator laws are in
+`Z3AnomalousRepresentation`.
+
+## Provenance
+The tensors and the exact-arithmetic certificates were first recorded in
+`Notes/OpenProblemsTN/checks/asym_z3_anomalous_data.md`, §1–§2; they are verification records,
+not the source.
+
 This file sets up the tensors of the anomalous `ℤ/3` example of the multi-block asymmetric
 compression theorem (P5 note, `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`,
 §7.5, Theorem 7.7; planning note `Notes/OpenProblemsTN/checks/p5_examples_plan_2026-09-17.md`).

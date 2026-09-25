@@ -9,6 +9,18 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge
 /-!
 # The anomalous `ℤ/2 × ℤ/2` symmetry with the mixed three-cocycle
 
+**Source.** Garre-Rubio, Lootens, Molnár 2023 (arXiv:2203.12563),
+`Papers/2203.12563/REsubmission.tex` lines 2200–2224: the periodic matrix product operator
+representation of a finite group built from a three-cocycle. No source on disk prints a
+`ℤ₂ × ℤ₂` tensor. The tensors below are representatives constructed in this development of the
+mixed type-II class `(−1)^{a₁ b₂ c₂}`; `AnomalousCondensationZ2Z2Instance` identifies their
+periodic operators with those of the cocycle construction up to an on-site dressing.
+
+## Provenance
+The tensors and the exact certificates were first recorded in
+`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md`, Sections 1 and 2; they are
+verification records, not the source.
+
 This file sets up the four matrix product operator tensors of an anomalous `ℤ/2 × ℤ/2`
 symmetry on a periodic chain of two-qubit sites, the object behind the condensation-defect
 example of the multi-block asymmetric compression theorem
