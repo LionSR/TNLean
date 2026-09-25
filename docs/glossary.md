@@ -767,3 +767,50 @@ The following notions use different transfer objects and are not interchangeable
   concrete locally orthogonal MPS blocks. That missing specialization and the
   CZX four-domain instance are recorded in
   `docs/paper-gaps/fbc25_state_level_gauging_covariance.tex`.
+
+## Gauge relations between blocks
+
+### `MPSTensor.IsGaugeRelated`
+
+- **Declaration:**
+  `MPSTensor.IsGaugeRelated (A : MPSTensor d D₁) (A' : MPSTensor d D₂) : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean`.
+- **Meaning:** there are rectangular matrices `X : Fin D₁ × Fin D₂` and
+  `Y : Fin D₂ × Fin D₁` with `X * Y = 1`, `Y * X = 1`, and
+  `A i * X = X * A' i` for every letter, so that $A'^i = X^{-1}A^iX$. The bond
+  dimensions may differ in the statement; the two-sided inverse forces
+  `D₁ = D₂`.
+- **Source:** the blocks $B_c$ of a fusion algebra are pairwise distinct blocks
+  of a canonical form, arXiv:1511.08090, `AnyonsPEPS.tex` lines 155--166 and
+  191--193; arXiv:2203.12563, lines 415--424. Blocks that are not gauge related
+  are the hypothesis under which the zipper fusion and action tensors are unique
+  up to the multiplicity gauge.
+- **Sanctioned bridges:** `MPSTensor.eq_zero_or_isGaugeRelated_of_intertwines`
+  shows that a letter intertwiner between normal tensors is zero or witnesses
+  the predicate.
+- **Caveat:** for equal bond dimensions this is `MPSTensor.GaugeEquiv A A'`
+  with the gauge `X⁻¹`; no bridge to `GaugeEquiv` is stated, because the
+  predicate is only used to separate blocks of possibly different bond
+  dimensions.
+
+## Worked examples
+
+### `MPSTensor.IsPeriodicWState`
+
+- **Declaration:** `MPSTensor.IsPeriodicWState (A : MPSTensor 2 D) (N : ℕ) : Prop`.
+- **Defined in:** `TNLean/MPS/Examples/WStatePeriodic.lean`.
+- **Meaning:** the trace contraction
+  $\operatorname{tr}(A^{\sigma_1}\cdots A^{\sigma_N})$ equals the unnormalized
+  W-state amplitude on every configuration of $N$ sites, that is, $A$ is a
+  translationally invariant periodic representation of $\ket{W_N}$.
+- **Source:** the notion of a translationally invariant representation of the
+  W state in arXiv:2011.12127, Appendix A, "The W state", line 2362. The
+  predicate itself is a project definition.
+- **Sanctioned bridges:** none; the printed open-boundary tensor is related to
+  the W state through `MPSTensor.wTensor_openState_eq_wIndicator`, not through
+  this predicate.
+- **Caveat:** the formalized obstructions constrain one tensor across several
+  lengths (`MPSTensor.not_isPeriodicWState_of_lt`,
+  `MPSTensor.exists_not_isPeriodicWState_le`). The source's single-length bound
+  $D^3\log D=\Omega(N)$ is not formalized; see
+  `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
