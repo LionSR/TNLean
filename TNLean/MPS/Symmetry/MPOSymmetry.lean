@@ -11,7 +11,10 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.AnomalyObstruction
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
+<<<<<<< HEAD
 import TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks
+=======
+>>>>>>> origin/feat/mpo-czx-anomaly-class
 import TNLean.MPS.Symmetry.MPOSymmetry.Character
 import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
