@@ -356,12 +356,33 @@
     $G\otimes\Id=F^{abc}_d\otimes\Id$, hence $G=F^{abc}_d$.
     Expanding the composites shows that the new synthesis matrices are
     $L'=L(G_{\mathrm L}\otimes\Id)$ and $R'=R(G_{\mathrm R}\otimes\Id)$.
-    The $F$-move of the new family becomes
-    $R\bigl(G_{\mathrm R}F'^{abc}_d\otimes\Id\bigr)=L(G_{\mathrm L}\otimes\Id)
-        =R\bigl(F^{abc}_dG_{\mathrm L}\otimes\Id\bigr)$.
-    Cancelling $R$ gives $G_{\mathrm R}F'^{abc}_d=F^{abc}_dG_{\mathrm L}$,
-    which is (\ref{eq:rfp_fmatrix_gauge}). The inverse formula follows because
-    two-sided inverses are unique.
+    For $G=G_{\mathrm R}^{-1}F^{abc}_dG_{\mathrm L}$, the $F$-move
+    (\ref{eq:rfp_printed_fmove}) of the original family gives
+    \begin{align}
+        R'(G\otimes\Id)
+         & =R\bigl(G_{\mathrm R}G_{\mathrm R}^{-1}F^{abc}_dG_{\mathrm L}
+        \otimes\Id\bigr)
+        =R(F^{abc}_d\otimes\Id)(G_{\mathrm L}\otimes\Id)
+        =L(G_{\mathrm L}\otimes\Id)=L'.
+        \notag
+    \end{align}
+    By the uniqueness just shown, applied to the new family,
+    $F'^{abc}_d=G_{\mathrm R}^{-1}F^{abc}_dG_{\mathrm L}$, which is
+    (\ref{eq:rfp_fmatrix_gauge}); multiplying on the left by $G_{\mathrm R}$
+    gives the intertwining form $G_{\mathrm R}F'^{abc}_d=F^{abc}_dG_{\mathrm L}$.
+    For the inverse, let
+    $H=G_{\mathrm L}^{-1}(F^{abc}_d)^{-1}G_{\mathrm R}$. By
+    (\ref{eq:rfp_fmatrix_gauge}),
+    \begin{align}
+        F'^{abc}_dH
+         & =G_{\mathrm R}^{-1}F^{abc}_dG_{\mathrm L}G_{\mathrm L}^{-1}
+        (F^{abc}_d)^{-1}G_{\mathrm R}=\Id,
+        \notag                                                         \\
+        (F'^{abc}_d)^{-1}
+         & =(F'^{abc}_d)^{-1}\bigl(F'^{abc}_dH\bigr)
+        =\bigl((F'^{abc}_d)^{-1}F'^{abc}_d\bigr)H=H.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Fourfold fusion maps and changes of basis]%
