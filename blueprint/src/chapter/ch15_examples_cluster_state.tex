@@ -68,18 +68,37 @@ Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
 \end{proof}
 
 \begin{lemma}[Valence-bond form of the cluster-state tensor]\label{lem:cluster_valence_bond}
-    \lean{MPSTensor.clusterTensorVBS, MPSTensor.clusterTensorVBS_eq_smul}
+    \lean{MPSTensor.clusterTensorVBS, MPSTensor.clusterTensorVBS_mpv_eq_prod,
+        MPSTensor.clusterTensorVBS_eq_smul}
     \leanok
     \uses{def:cluster_tensor_review}
     In the valence-bond description of~\cite{VerstraeteCirac2004ValenceBond},
     neighbouring virtual qubits share the bond
     $\ket{00} + \ket{01} + \ket{10} - \ket{11}$ and each site maps both of its
     virtual qubits to the physical one by
-    $\ket{0}\bra{00} + \ket{1}\bra{11}$. On a chain this is the tensor
-    $\ketbra{s}{s} H$ with
-    $H = \bigl(\begin{smallmatrix} 1 & 1 \\ 1 & -1 \end{smallmatrix}\bigr)$,
-    which equals $\sqrt{2}\,A^s$.
+    $\ket{0}\bra{00} + \ket{1}\bra{11}$, so that the coefficient of $\ket{s}$
+    on a ring of $N \geq 1$ sites is $\prod_{j=1}^{N} H_{s_j s_{j+1}}$ with
+    $H = \bigl(\begin{smallmatrix} 1 & 1 \\ 1 & -1 \end{smallmatrix}\bigr)$
+    and indices modulo $N$. Let $B^s = \ketbra{s}{s} H$. Then for every
+    $N \geq 1$ and every $s \in \{0,1\}^N$,
+    \begin{align}
+        \tr\bigl(B^{s_1} B^{s_2} \cdots B^{s_N}\bigr)
+        = \prod_{j=1}^{N} H_{s_j s_{j+1}},
+        \notag
+    \end{align}
+    so $B$ is a matrix product description of the valence-bond state, and
+    $B^s = \sqrt{2}\,A^s$.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    The entries are $(B^s)_{\alpha\beta} = \delta_{\alpha s} H_{s\beta}$, so in
+    the expansion of the trace as a sum over cyclic index paths only the path
+    $\alpha_j = s_j$ survives, and it contributes
+    $\prod_j H_{s_j s_{j+1}}$. The identity $B^s = \sqrt{2}\,A^s$ is read off
+    from $\ketbra{s}{s}H = \sqrt{2}\,\ketbra{s}{h_s}$ with $h_0 = +$ and
+    $h_1 = -$.
+\end{proof}
 
 \begin{definition}[Transposed representative]\label{def:cluster_tensor}
     \lean{MPSTensor.clusterTensor}
@@ -153,12 +172,14 @@ Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
     Lemma~\ref{lem:cluster_review_gauge} and holds for the transposed
     representative by Theorems~\ref{thm:cluster_not_injective},
     \ref{thm:cluster_normal}, \ref{thm:cluster_z2z2_symmetric},
-    \ref{thm:cluster_string_order} and~\ref{thm:cluster_zcl}. For the string
-    order, the four blocked matrices
-    $\tfrac{1}{\sqrt{2}}\ketbra{0}{+}$, $\tfrac{1}{\sqrt{2}}\ketbra{1}{+}$,
-    $\tfrac{1}{\sqrt{2}}\ketbra{0}{-}$ and $-\tfrac{1}{\sqrt{2}}\ketbra{1}{-}$
-    satisfy
-    $\sum_i A^i (A^i)^\dagger = \sum_i (A^i)^\dagger A^i = \Id$.
+    \ref{thm:cluster_string_order} and~\ref{thm:cluster_zcl}. The twisted
+    blocked tensors and their virtual action are the conjugates by $H$ of
+    those of the transposed representative, so the intertwining relations
+    carry over. For the string order, the blocked transfer channel of the
+    transposed representative is unital and its adjoint fixes the maximally
+    mixed state; since $H$ is real symmetric with $H^2 = 2\,\Id$, conjugation
+    by $H$ carries both properties to the blocked tensor of
+    Definition~\ref{def:cluster_tensor_review}.
 \end{proof}
 
 \begin{theorem}[Cluster-state tensor is not injective]\label{thm:cluster_not_injective}

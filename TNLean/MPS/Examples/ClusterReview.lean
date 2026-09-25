@@ -110,8 +110,10 @@ lemma clusterTensorRMP_apply (s α β : Fin 2) :
 /-- Source: arXiv:quant-ph/0311130, `References/quant-ph_0311130/source/cluster.tex`
 lines 298–312: the cluster state as a valence-bond state, with (unnormalized)
 bonds `|H⟩ = |00⟩ + |01⟩ + |10⟩ - |11⟩` and site maps `|0̃⟩⟨00| + |1̃⟩⟨11|`.
-On a chain the site map identifies both virtual qubits with the physical one,
-so the tensor is `Aˢ = |s)(s| H` with `H = !![1, 1; 1, -1]`. -/
+The site map identifies both virtual qubits with the physical one, which
+suggests the tensor `Aˢ = |s)(s| H` with `H = !![1, 1; 1, -1]` defined here;
+`clusterTensorVBS_mpv_eq_prod` proves that its periodic vector is the contracted
+valence-bond coefficient `∏ⱼ H_{sⱼ s_{j+1}}`. -/
 def clusterTensorVBS : MPSTensor 2 2 := fun s =>
   Matrix.single s s (1 : ℂ) * !![1, 1; 1, -1]
 
@@ -122,6 +124,32 @@ theorem clusterTensorVBS_eq_smul (s : Fin 2) :
     clusterTensorVBS s = (Real.sqrt 2 : ℂ) • clusterTensorRMP s := by
   fin_cases s <;> ext a b <;> fin_cases a <;> fin_cases b <;>
     simp [clusterTensorVBS, clusterTensorRMP, Matrix.mul_apply, Matrix.single_apply]
+
+/-- Entry formula for the valence-bond tensor: `(Aˢ)_{αβ} = δ_{αs} H_{sβ}`. -/
+lemma clusterTensorVBS_apply (s α β : Fin 2) :
+    clusterTensorVBS s α β =
+      if α = s then (!![1, 1; 1, -1] : Matrix (Fin 2) (Fin 2) ℂ) s β else 0 := by
+  fin_cases s <;> fin_cases α <;> fin_cases β <;>
+    simp [clusterTensorVBS, Matrix.mul_apply, Matrix.single_apply]
+
+/-- Source: arXiv:quant-ph/0311130, `References/quant-ph_0311130/source/cluster.tex`
+lines 298–312: contracting the bond `|H⟩` on every nearest-neighbour pair of a
+ring of `N ≥ 1` sites with the site maps `|0̃⟩⟨00| + |1̃⟩⟨11|` gives the
+coefficient `∏ⱼ ⟨sⱼ s_{j+1}|H⟩ = ∏ⱼ H_{sⱼ s_{j+1}}`, indices mod `N`. This is
+the periodic vector of the valence-bond tensor:
+`tr ∏ⱼ |sⱼ)(sⱼ| H = ∏ⱼ H_{sⱼ s_{j+1}}`. -/
+theorem clusterTensorVBS_mpv_eq_prod {N : ℕ} (hN : 0 < N) (s : Fin N → Fin 2) :
+    mpv clusterTensorVBS s =
+      ∏ j : Fin N, (!![1, 1; 1, -1] : Matrix (Fin 2) (Fin 2) ℂ) (s j) (s (finRotate N j)) := by
+  obtain ⟨L, rfl⟩ : ∃ L, N = L + 1 := ⟨N - 1, by omega⟩
+  rw [mpv_eq, coeff_eq, evalWord_ofFn_eq_prod, Matrix.trace_ofFn_prod_eq_sum_cyclic,
+    Finset.sum_eq_single s]
+  · exact Finset.prod_congr rfl fun n _ => by simp [clusterTensorVBS_apply]
+  · intro t _ hts
+    obtain ⟨n, hn⟩ := Function.ne_iff.mp hts
+    exact Finset.prod_eq_zero (Finset.mem_univ n) (by simp [clusterTensorVBS_apply, hn])
+  · intro h
+    exact absurd (Finset.mem_univ s) h
 
 /-! ### The controlled-`Z` construction -/
 
@@ -328,74 +356,56 @@ theorem clusterBlockedRMP_isOnSiteSymmetric_Z2Z2 :
     hB.sum_smul (clusterZ2Z2Action g)
   rw [← hB.sameMPV N σ, cluster_isOnSiteSymmetric_Z2Z2 g N σ, htw.sameMPV N σ]
 
-private def gaugeX : GL (Fin 2) ℂ :=
-  Matrix.GeneralLinearGroup.mkOfDetNeZero pauliX (by
-    simp only [Matrix.det_fin_two, pauliX, Matrix.of_apply]; norm_num)
-
-private def gaugeZ : GL (Fin 2) ℂ :=
-  Matrix.GeneralLinearGroup.mkOfDetNeZero pauliZ (by
-    simp only [Matrix.det_fin_two, pauliZ, Matrix.of_apply]; norm_num)
-
-@[simp] private lemma gaugeX_val : (gaugeX : Matrix (Fin 2) (Fin 2) ℂ) = pauliX :=
-  Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
-
-@[simp] private lemma gaugeZ_val : (gaugeZ : Matrix (Fin 2) (Fin 2) ℂ) = pauliZ :=
-  Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
-
-/-- The virtual action on the bond space of the blocked review tensor:
-`(1,0) ↦ σx`, `(0,1) ↦ σz`, `(1,1) ↦ σx σz`. It is the Hadamard conjugate of
-`clusterRepX`, which exchanges `σz` and `σx`. -/
+/-- The virtual action on the bond space of the blocked review tensor: the
+Hadamard conjugate `H V(g) H⁻¹` of the virtual action `clusterRepX` of
+`clusterBlocked`. Since `H σz H⁻¹ = σx` and `H σx H⁻¹ = σz`, it sends
+`(1,0) ↦ σx`, `(0,1) ↦ σz`, `(1,1) ↦ σx σz`. -/
 def clusterRepXRMP (g : Multiplicative (ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ :=
-  (if (Multiplicative.toAdd g).1 = 0 then 1 else gaugeX) *
-    (if (Multiplicative.toAdd g).2 = 0 then 1 else gaugeZ)
-
-private lemma pauliZX_anticomm : pauliZ * pauliX = -(pauliX * pauliZ) := by
-  ext i j; fin_cases i <;> fin_cases j <;>
-    simp [pauliX, pauliZ, Matrix.mul_apply, Fin.sum_univ_two]
+  hadamardGauge * clusterRepX g * hadamardGauge⁻¹
 
 open TNLean.Algebra in
 /-- The virtual action of the blocked review tensor is a projective
 representation with the cluster factor system `clusterOmega`, whose class is
-non-trivial (`cluster_isNontrivialSPT`). -/
+non-trivial (`cluster_isNontrivialSPT`); it is the Hadamard conjugate of
+`clusterProjRep`. -/
 def clusterProjRepRMP : ProjectiveRepresentation (D := 2) clusterOmega where
   X := clusterRepXRMP
   map_mul' g h := by
-    have hω : (clusterOmega g h : ℂ) =
-        if (Multiplicative.toAdd g).2 = 1 ∧ (Multiplicative.toAdd h).1 = 1 then -1 else 1 := by
-      rw [clusterOmega]; split <;> simp
-    have hXg (p : Prop) [Decidable p] :
-        ((if p then 1 else gaugeX : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) =
-          if p then 1 else pauliX := by
-      split <;> simp
-    have hZg (p : Prop) [Decidable p] :
-        ((if p then 1 else gaugeZ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) =
-          if p then 1 else pauliZ := by
-      split <;> simp
-    rw [hω]
-    simp only [clusterRepXRMP, Units.val_mul, hXg, hZg]
-    exact mul_of_anticommuting_involutions _ _ pauliX_sq pauliZ_sq pauliZX_anticomm g h
+    simp only [clusterRepXRMP, Units.val_mul, mul_assoc, Units.inv_mul_cancel_left]
+    rw [← mul_assoc (clusterRepX g : Matrix (Fin 2) (Fin 2) ℂ),
+      show ((clusterRepX g : Matrix (Fin 2) (Fin 2) ℂ) * clusterRepX h) = _ from
+        clusterProjRep.map_mul' g h]
+    simp only [Matrix.smul_mul, Matrix.mul_smul]
+    rfl
+
+/-- The twist of the blocked review tensor is the Hadamard conjugate of the
+twist of `clusterBlocked`. -/
+private lemma clusterBlockedRMP_twist_eq_gauge (g : Multiplicative (ZMod 2 × ZMod 2))
+    (i : Fin 4) :
+    twistedTensor clusterBlockedRMP clusterZ2Z2Action g i =
+      (hadamardGauge : Matrix (Fin 2) (Fin 2) ℂ) *
+        twistedTensor clusterBlocked clusterZ2Z2Action g i *
+        ((hadamardGauge⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
+  simp only [twistedTensor, clusterBlockedRMP_eq_gauge, Matrix.mul_sum, Matrix.sum_mul,
+    Matrix.mul_smul, Matrix.smul_mul]
 
 /-- The virtual action `clusterProjRepRMP` implements the on-site symmetry of the
 blocked review tensor: for every group element `g` and blocked letter `i`,
-`(twist by g of A)ᵢ · V(g) = V(g) · Aᵢ`. -/
+`(twist by g of A)ᵢ · V(g) = V(g) · Aᵢ`. This is the Hadamard conjugate of
+`clusterBlocked_twist_intertwine`. -/
 theorem clusterBlockedRMP_twist_intertwine (g : Multiplicative (ZMod 2 × ZMod 2))
     (i : Fin 4) :
     twistedTensor clusterBlockedRMP clusterZ2Z2Action g i *
         (clusterProjRepRMP.X g : Matrix (Fin 2) (Fin 2) ℂ) =
       (clusterProjRepRMP.X g : Matrix (Fin 2) (Fin 2) ℂ) * clusterBlockedRMP i := by
-  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
-  · simp [clusterProjRepRMP, clusterRepXRMP]
-  all_goals
-    simp only [clusterProjRepRMP, clusterRepXRMP, twistedTensor, clusterZ2Z2Action_10,
-      clusterZ2Z2Action_01, clusterZ2Z2Action_11, toAdd_ofAdd]
-    fin_cases i <;>
-      (simp only [Fin.sum_univ_four, clusterPhysX1, clusterPhysX2, clusterBlockedRMP_zero,
-          clusterBlockedRMP_one, clusterBlockedRMP_two, clusterBlockedRMP_three,
-          Matrix.mul_apply, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one,
-          Matrix.head_cons, Matrix.cons_val_two, Matrix.cons_val_three, Matrix.tail_cons]
-       ext a b
-       fin_cases a <;> fin_cases b <;>
-         simp [pauliX, pauliZ, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul])
+  have h := clusterBlocked_twist_intertwine g i
+  change _ * ((clusterRepXRMP g : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) =
+    ((clusterRepXRMP g : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) * _
+  change _ * ((clusterRepX g : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) =
+    ((clusterRepX g : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) * _ at h
+  rw [clusterBlockedRMP_twist_eq_gauge, clusterBlockedRMP_eq_gauge]
+  simp only [clusterRepXRMP, Units.val_mul, mul_assoc, Units.inv_mul_cancel_left]
+  rw [← mul_assoc (twistedTensor clusterBlocked clusterZ2Z2Action g i), h, mul_assoc]
 
 /-! ### String order and zero correlation length -/
 
@@ -403,33 +413,57 @@ section StringOrder
 
 open scoped ComplexOrder MatrixOrder
 
-/-- The blocked review transfer map is unital. -/
+/-- The Hadamard matrix is real symmetric. -/
+private lemma hadamard_conjTranspose :
+    (!![1, 1; 1, -1] : Matrix (Fin 2) (Fin 2) ℂ)ᴴ = !![1, 1; 1, -1] := by
+  ext a b; fin_cases a <;> fin_cases b <;> simp
+
+/-- The inverse Hadamard matrix is real symmetric. -/
+private lemma hadamard_inv_conjTranspose :
+    (!![1 / 2, 1 / 2; 1 / 2, -1 / 2] : Matrix (Fin 2) (Fin 2) ℂ)ᴴ =
+      !![1 / 2, 1 / 2; 1 / 2, -1 / 2] := by
+  ext a b; fin_cases a <;> fin_cases b <;> simp
+
+/-- The blocked review transfer map is unital: by gauge covariance it is
+`H E(H⁻¹ H⁻¹ᴴ) Hᴴ = H E(1/2) Hᴴ = (1/2) H Hᴴ = 1`, where `E` is the unital
+transfer map of `clusterBlocked`. -/
 private theorem clusterBlockedRMP_transferMap_one :
     Kraus.transferMap clusterBlockedRMP 1 = 1 := by
-  rw [Kraus.transferMap_apply]
-  ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp only [Fin.sum_univ_four, clusterBlockedRMP_zero, clusterBlockedRMP_one,
-      clusterBlockedRMP_two, clusterBlockedRMP_three, Matrix.add_apply, Matrix.mul_apply,
-      Fin.sum_univ_two, Matrix.conjTranspose_apply, Matrix.smul_apply, Matrix.of_apply,
-      Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-      Matrix.cons_val_fin_one, Matrix.one_apply, smul_eq_mul] <;>
-    norm_num [Complex.ext_iff]
+  have hB : clusterBlockedRMP = fun i => (hadamardGauge : Matrix (Fin 2) (Fin 2) ℂ) *
+      clusterBlocked i * ((hadamardGauge⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) :=
+    funext clusterBlockedRMP_eq_gauge
+  have hin : (!![1 / 2, 1 / 2; 1 / 2, -1 / 2] : Matrix (Fin 2) (Fin 2) ℂ) * 1 *
+      (!![1 / 2, 1 / 2; 1 / 2, -1 / 2] : Matrix (Fin 2) (Fin 2) ℂ)ᴴ = (1 / 2 : ℂ) • 1 := by
+    rw [hadamard_inv_conjTranspose]
+    ext a b; fin_cases a <;> fin_cases b <;> norm_num [Matrix.mul_apply, Fin.sum_univ_two]
+  rw [hB, Matrix.coe_units_inv hadamardGauge, Kraus.transferMap_gauge_conj,
+    ← Matrix.coe_units_inv, hadamardGauge_inv_val, hin, map_smul,
+    clusterBlocked_transferMap_one, hadamardGauge_val, hadamard_conjTranspose]
+  ext a b; fin_cases a <;> fin_cases b <;> norm_num [Matrix.mul_apply, Fin.sum_univ_two]
 
-/-- The maximally mixed state is a fixed point of the adjoint blocked review
-transfer map. -/
+/-- The maximally mixed state `Λ = 1/2` is a fixed point of the adjoint blocked
+review transfer map: since `H` is real symmetric, the adjoint letters are the
+`H⁻¹`-conjugates of those of `clusterBlocked`, and gauge covariance gives
+`H⁻¹ E†(H Λ H) H⁻¹ = H⁻¹ E†(1) H⁻¹ = H⁻¹ H⁻¹ = Λ`. -/
 private theorem clusterBlockedRMP_adjoint_fixes_maximallyMixed :
     Kraus.transferMap (fun i => (clusterBlockedRMP i)ᴴ) ((1 / 2 : ℂ) • 1) =
       (1 / 2 : ℂ) • 1 := by
-  rw [Kraus.transferMap_apply]
-  ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp only [Fin.sum_univ_four, clusterBlockedRMP_zero, clusterBlockedRMP_one,
-      clusterBlockedRMP_two, clusterBlockedRMP_three, Matrix.add_apply, Matrix.mul_apply,
-      Fin.sum_univ_two, Matrix.conjTranspose_apply, Matrix.smul_apply, Matrix.of_apply,
-      Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-      Matrix.cons_val_fin_one, Matrix.one_apply, smul_eq_mul] <;>
-    norm_num [Complex.ext_iff]
+  have hB : (fun i => (clusterBlockedRMP i)ᴴ) = fun i =>
+      ((hadamardGauge⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) * (clusterBlocked i)ᴴ *
+        ((hadamardGauge⁻¹⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
+    funext i
+    rw [clusterBlockedRMP_eq_gauge, inv_inv, Matrix.conjTranspose_mul,
+      Matrix.conjTranspose_mul, hadamardGauge_val, hadamardGauge_inv_val,
+      hadamard_conjTranspose, hadamard_inv_conjTranspose, mul_assoc]
+  have hin : (!![1, 1; 1, -1] : Matrix (Fin 2) (Fin 2) ℂ) * ((1 / 2 : ℂ) • 1) *
+      (!![1, 1; 1, -1] : Matrix (Fin 2) (Fin 2) ℂ)ᴴ = (2 : ℂ) • ((1 / 2 : ℂ) • 1) := by
+    rw [hadamard_conjTranspose]
+    ext a b; fin_cases a <;> fin_cases b <;> norm_num [Matrix.mul_apply, Fin.sum_univ_two]
+  rw [hB, Matrix.coe_units_inv hadamardGauge⁻¹, Kraus.transferMap_gauge_conj,
+    ← Matrix.coe_units_inv, inv_inv, hadamardGauge_val, hin, map_smul,
+    clusterBlocked_adjoint_fixes_maximallyMixed, hadamardGauge_inv_val,
+    hadamard_inv_conjTranspose]
+  ext a b; fin_cases a <;> fin_cases b <;> norm_num [Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The blocked review tensor has string order under every element of its
 `Z₂ × Z₂` symmetry, with the maximally mixed boundary state. -/
