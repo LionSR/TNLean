@@ -21,8 +21,8 @@ Review: arXiv:2011.12127, Appendix A, "The Majumdar-Ghosh model".
 
 **Formalized here.**
 * The three-site local ground space \(\mathcal G_3\) of the bond-dimension-three
-  tensor `majumdarGhoshTensor` equals the lowest eigenspace, with eigenvalue
-  \(-\tfrac38\), of the three-site term
+  tensor `majumdarGhoshTensor` equals the eigenspace for the eigenvalue
+  \(-\tfrac38\) of the three-site term
   \(h=\tfrac12(\mathbf S_1\cdot\mathbf S_2+\mathbf S_2\cdot\mathbf S_3
   +\mathbf S_1\cdot\mathbf S_3)\), the three-spin states without a
   component of total spin \(\tfrac32\).
@@ -210,8 +210,9 @@ private lemma majumdarGhoshTerm_eigen_iff_coords (v : NSiteSpace 2 3) :
     · rw [h111]; ring
 
 /-- Project result: the three-site local ground space \(\mathcal G_3\) of
-`majumdarGhoshTensor` is the eigenspace of the three-site term \(h\) for its
-lowest eigenvalue \(-\tfrac38\), the spin-\(\tfrac12\) subspace of three spins.
+`majumdarGhoshTensor` is the eigenspace of the three-site term \(h\) for the
+eigenvalue \(-\tfrac38\), the spin-\(\tfrac12\) subspace of three spins. That
+\(-\tfrac38\) is the smallest eigenvalue of \(h\) is not formalized here.
 The review does not state this; it motivates it by saying that the state is the
 ground state of \(H\) (arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex`
 lines 2397–2401), and the identification is the parent-Hamiltonian route to that
