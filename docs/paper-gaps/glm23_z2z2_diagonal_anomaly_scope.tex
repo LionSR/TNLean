@@ -19,8 +19,12 @@ Tensors on the Diagonal Subgroup}
 
 Ref.~\cite{GarreRubio2023MPOSym}, subsubsection ``MPO algebras representing
 $\mathbb{Z}_2\times\mathbb{Z}_2$'', lists the three-cocycles of
-$\mathbb{Z}_2\times\mathbb{Z}_2$; the mixed type-II component is
-$\omega(a,b,c)=(-1)^{a_1b_2c_2}$ in the coordinates $a=(a_1,a_2)$. The
+$\mathbb{Z}_2\times\mathbb{Z}_2$; its mixed type-II representative takes
+the value $-1$ on the triples $(g_1g_2^i,g_1^jg_2,g_1^kg_2)$ with
+$i,j,k\in\{0,1\}$ and $1$ elsewhere, where $g_1,g_2$ are the two
+generators,
+equivalently $\omega(a,b,c)=(-1)^{a_1b_2c_2}$ in the coordinates
+$a=(a_1,a_2)$. The
 anomaly three-cocycle of an exact matrix product operator representation
 of a finite group by normal tensors is defined from its fusion tensors in
 Ref.~\cite{FrancoRubio2025MPUGauging}, in the display preceding the
@@ -45,7 +49,12 @@ the rescaled family $e\mapsto M_e$, $xy\mapsto iM_{xy}$ is an exact
 representation of $\mathbb{Z}_2$ by normal tensors. For it the formalization
 proves $\omega(s,e,s)\,\omega(s,s,s)=-1$ for every choice of fusion
 tensors, with $s=xy$, and hence that the anomaly class of the diagonal
-subgroup is nontrivial. This is the value of the same gauge-invariant
+subgroup is nontrivial.\footnote{Formal declarations:
+\leanid{Z2Z2Condensation.diagFamily},
+\leanid{Z2Z2Condensation.diagFamily\_isNormalRepresentation} and
+\leanid{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_diag} in
+\doclink{TNLean/MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass}.}
+This is the value of the same gauge-invariant
 product for the mixed cocycle at $s=(1,1)$; at $(1,0)$ and $(0,1)$ that
 product is $1$, so the diagonal subgroup is the one on which the mixed
 class restricts nontrivially.
@@ -59,10 +68,13 @@ of size $256$; or an anomaly three-cochain for projective families
 $U_gU_h=c(g,h)^LU_{gh}$. Either would be combined with the restriction of
 cochains to the diagonal subgroup, which preserves triviality of the class.
 
-\medskip\noindent\emph{Lean.} \leanid{Z2Z2Condensation.diagFamily},
-\leanid{Z2Z2Condensation.diagFamily\_isNormalRepresentation} and
-\leanid{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_diag} in
-\doclink{TNLean/MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass}.
+\textbf{Verdict: open scope restriction.} The formalized result is correct
+and restricted to the diagonal subgroup: it proves that the anomaly class
+of the rescaled diagonal family is nontrivial, which is what the mixed
+class of the source predicts there. The class of the full
+$\mathbb{Z}_2\times\mathbb{Z}_2$ family remains unformalized, because
+the full family is projective rather than exact and the anomaly
+three-cochain is not defined for it.
 
 \bibliographystyle{alpha}
 \bibliography{references}
