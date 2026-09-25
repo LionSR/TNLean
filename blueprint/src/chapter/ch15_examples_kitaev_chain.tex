@@ -50,11 +50,13 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
 \end{definition}
 
 \begin{lemma}[The twist squares to minus the identity]\label{lem:kitaev_twist_sq}
-    \lean{MPSTensor.kitaevTensor_one, MPSTensor.kitaevTwist_mul_self,
-        MPSTensor.kitaevTensor_one_mul_self, MPSTensor.kitaevTwist_mul_kitaevTensor}
+    \lean{MPSTensor.kitaevTensor_zero, MPSTensor.kitaevTensor_one,
+        MPSTensor.kitaevTwist_mul_self, MPSTensor.kitaevTensor_one_mul_self,
+        MPSTensor.kitaevTwist_mul_kitaevTensor}
     \leanok
     \uses{def:kitaev_tensor}
-    $A^1=Y$, $(A^1)^2=Y^2=-\mathbb 1$, and $Y$ commutes with $A^0$ and $A^1$
+    $A^0=\mathbb 1$, $A^1=Y$, $(A^1)^2=Y^2=-\mathbb 1$, and $Y$ commutes with
+    $A^0$ and $A^1$
     \cite{Bultinck2017FermionicMPS}.
 \end{lemma}
 
@@ -169,8 +171,8 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
 
 \begin{theorem}[Sum of two injective matrix product states]%
     \label{thm:kitaev_two_injective}
-    \lean{MPSTensor.kitaevSectorTensor, MPSTensor.kitaevSectorTensor_isInjective,
-        MPSTensor.kitaevTwistedCoeff_eq_add}
+    \lean{MPSTensor.kitaevSectorTensor, MPSTensor.kitaevSectorTensor_evalWord,
+        MPSTensor.kitaevSectorTensor_isInjective, MPSTensor.kitaevTwistedCoeff_eq_add}
     \leanok
     \uses{def:kitaev_twisted_coeff, def:injective, lem:kitaev_eval_word}
     For $c\in\mathbb C$ let $a_c$ be the tensor of bond dimension one with
