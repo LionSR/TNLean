@@ -203,14 +203,31 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     \emph{fusion matrix} of a label $a$ is the nonnegative integer matrix
     $N_a$ with entries $(N_a)_{bc}=N_{ab}^c$ for $b,c\in I$. The
     \emph{Perron--Frobenius dimension} of $a$ is the spectral radius
-    $d_a=\rho(N_a)$. By the Perron--Frobenius theorem for nonnegative
-    matrices, $d_a$ is an eigenvalue of $N_a$ with a nonzero eigenvector with
-    nonnegative entries.
+    $d_a=\rho(N_a)$.
     % Source anchor: arXiv:2204.05940, References/2204.05940/source/mpo.tex,
     %   line 6068 (N_a with (N_a)_b^c = N_{ab}^c, and d_a its spectral
     %   radius, the Perron--Frobenius dimension); arXiv:2203.12563,
     %   Papers/2203.12563/REsubmission.tex, line 1805 (r_a = d_a).
 \end{definition}
+
+\begin{theorem}[A nonnegative eigenvector for the Perron--Frobenius dimension]%
+    \label{thm:mposym_pf_eigenvector}
+    \notready
+    \uses{def:mposym_pf_dimension}
+    For every label $a$, the Perron--Frobenius dimension $d_a$ is an
+    eigenvalue of $N_a$, and there is a column vector $v\neq0$ with
+    nonnegative entries such that $N_av=d_av$.
+\end{theorem}
+
+\begin{proof}
+    This is the Perron--Frobenius theorem for nonnegative matrices. For
+    $\varepsilon>0$ the matrix $N_a+\varepsilon J$, with $J$ the all-ones
+    matrix, has positive entries, so it has a positive eigenvector
+    $v_\varepsilon$ of norm one for the eigenvalue
+    $\rho(N_a+\varepsilon J)$. A limit point $v$ of $v_\varepsilon$ as
+    $\varepsilon\to0$ is nonnegative of norm one, and continuity of the
+    spectral radius gives $N_av=\rho(N_a)v=d_av$.
+\end{proof}
 
 \begin{lemma}[A positive left eigenvector gives the Perron--Frobenius dimension]%
     \label{lem:mposym_pf_dimension_positive}
@@ -233,10 +250,11 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 \end{lemma}
 
 \begin{proof}
-    \uses{def:mposym_pf_dimension}
+    \uses{thm:mposym_pf_eigenvector}
     Write $\delta$ for the row vector with entries $\delta_b$, so that
-    $\delta N_a=\lambda\delta$. Let $v\neq0$ be a column vector with
-    nonnegative entries and $N_av=d_av$. Then
+    $\delta N_a=\lambda\delta$. By
+    Theorem~\ref{thm:mposym_pf_eigenvector} there is a column vector
+    $v\neq0$ with nonnegative entries and $N_av=d_av$. Then
     $\lambda\,\delta v=\delta N_av=d_a\,\delta v$, and $\delta v>0$ because
     every $\delta_b$ is positive and $v$ is nonnegative and nonzero. Hence
     $\lambda=d_a$. The second statement is the first with
