@@ -1,0 +1,187 @@
+\section{The Kitaev chain}\label{sec:kitaev_chain}
+%% ===================================================================
+
+The Kitaev chain, or Majorana chain~\cite{Kitaev2001Majorana}, is a chain of
+spinless fermions. In the limit where the Majorana modes pair up only across
+neighbouring sites, its ground state is the non-trivial fixed point of the
+topological phase, and it is described by a graded (fermionic) matrix product
+state with bond dimension two and a twist at the boundary
+\cite[Appendix~A, ``The Kitaev chain'']{Cirac2021Matrix},
+\cite{Bultinck2017FermionicMPS}. On a ring of $N$ sites the state is
+\begin{align}
+    \ket\psi
+     & =
+    \sum_{i_1,\ldots,i_N}\tr\bigl(YA^{i_1}A^{i_2}\cdots A^{i_N}\bigr)
+    \ket{i_1}\otimes_g\ket{i_2}\otimes_g\cdots\otimes_g\ket{i_N},
+    \label{eq:kitaev_chain_state}
+\end{align}
+where $\otimes_g$ is the graded tensor product; the state has odd fermion
+parity~\cite[Section~II.B.4]{Cirac2021Matrix}.
+
+\paragraph{Scope.} Graded tensor networks are not formalized. The results below
+concern the ordinary contraction of the matrices, which gives the coefficients
+of~\eqref{eq:kitaev_chain_state} in the ordered graded product basis; the
+graded contraction rules and the graded notion of injectivity are outside
+their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
+
+\begin{definition}[Kitaev-chain tensor and twist]\label{def:kitaev_tensor}
+    \lean{MPSTensor.kitaevTensor, MPSTensor.kitaevTwist}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d=D=2$. The Kitaev-chain tensor is
+    \begin{align}
+        A^0 & = \begin{pmatrix}1&0\\0&1\end{pmatrix},
+        \qquad
+        A^1 = \begin{pmatrix}0&1\\-1&0\end{pmatrix},
+        \notag
+    \end{align}
+    with the twist $Y=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$ at the boundary
+    \cite[Appendix~A, ``The Kitaev chain'']{Cirac2021Matrix},
+    \cite{Bultinck2017FermionicMPS}.
+\end{definition}
+
+\begin{definition}[Twisted periodic amplitude]\label{def:kitaev_twisted_coeff}
+    \lean{MPSTensor.kitaevTwistedCoeff}
+    \leanok
+    \uses{def:kitaev_tensor, def:eval_word}
+    For a word $w=(i_1,\ldots,i_N)$ the twisted periodic amplitude is
+    $\tr(YA^{i_1}\cdots A^{i_N})$, the coefficient of $w$
+    in~\eqref{eq:kitaev_chain_state}.
+\end{definition}
+
+\begin{lemma}[The twist squares to minus the identity]\label{lem:kitaev_twist_sq}
+    \lean{MPSTensor.kitaevTensor_one, MPSTensor.kitaevTwist_mul_self,
+        MPSTensor.kitaevTensor_one_mul_self, MPSTensor.kitaevTwist_mul_kitaevTensor}
+    \leanok
+    \uses{def:kitaev_tensor}
+    $A^1=Y$, $(A^1)^2=Y^2=-\mathbb 1$, and $Y$ commutes with $A^0$ and $A^1$
+    \cite{Bultinck2017FermionicMPS}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Direct multiplication of $2\times2$ matrices.
+\end{proof}
+
+\begin{lemma}[Products of the Kitaev-chain matrices]\label{lem:kitaev_eval_word}
+    \lean{MPSTensor.kitaevTensor_evalWord}
+    \leanok
+    \uses{def:kitaev_tensor, def:eval_word, lem:kitaev_twist_sq}
+    If the word $w$ contains the letter $1$ exactly $k$ times, then
+    $A^{i_1}\cdots A^{i_N}=Y^k$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Induction on the word, using $A^0=\mathbb 1$ and $A^1=Y$.
+\end{proof}
+
+\begin{theorem}[Periodic amplitudes]\label{thm:kitaev_amplitudes}
+    \lean{MPSTensor.kitaevTensor_coeff, MPSTensor.kitaevTwistedCoeff_eq}
+    \leanok
+    \uses{def:mpv, def:kitaev_twisted_coeff, lem:kitaev_eval_word}
+    Let the word $w$ contain the letter $1$ exactly $k$ times. Then
+    \begin{align}
+        \tr(A^{i_1}\cdots A^{i_N})
+         & =
+        \begin{cases}
+            2(-1)^{k/2}, & k \text{ even}, \\
+            0,           & k \text{ odd},
+        \end{cases}
+        \qquad
+        \tr(YA^{i_1}\cdots A^{i_N})
+        =
+        \begin{cases}
+            0,               & k \text{ even}, \\
+            2(-1)^{(k+1)/2}, & k \text{ odd}.
+        \end{cases}
+        \notag
+    \end{align}
+    Neither amplitude depends on the length $N$ except through $k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the preceding lemma the products are $Y^k$ and $Y^{k+1}$. Since
+    $Y^2=-\mathbb 1$, an even power $Y^{2m}$ is $(-1)^m\mathbb 1$, of trace
+    $2(-1)^m$, and an odd power $Y^{2m+1}$ is $(-1)^mY$, of trace zero.
+\end{proof}
+
+\begin{corollary}[Complementary parity supports]\label{cor:kitaev_parity_supports}
+    \lean{MPSTensor.kitaevTwistedCoeff_ne_zero_iff,
+        MPSTensor.kitaevTensor_coeff_ne_zero_iff,
+        MPSTensor.kitaevTensor_coeff_mul_kitaevTwistedCoeff}
+    \leanok
+    \uses{thm:kitaev_amplitudes}
+    The twisted amplitude of a word is nonzero exactly when the word contains
+    an odd number of letters $1$, in agreement with the odd parity of the
+    state~\eqref{eq:kitaev_chain_state}; the untwisted amplitude is nonzero
+    exactly when that number is even. In particular the two amplitudes of a
+    word never both differ from zero.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Read off from the closed forms.
+\end{proof}
+
+\begin{lemma}[Open-boundary closures]\label{lem:kitaev_open_boundary}
+    \lean{MPSTensor.kitaevTensor_evalWord_entries}
+    \leanok
+    \uses{lem:kitaev_eval_word}
+    For every word, the product $M=A^{i_1}\cdots A^{i_N}$ satisfies
+    $M_{00}=M_{11}$ and $M_{01}=-M_{10}$: of the four ways to close the
+    virtual indices at the two ends of an open chain, the two diagonal
+    closures give the same amplitudes and the two off-diagonal closures give
+    amplitudes differing by a sign, in the ordinary contraction
+    \cite{Bultinck2017FermionicMPS}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both $\mathbb 1$ and $Y$ have this form, and so does every power of $Y$.
+\end{proof}
+
+\begin{theorem}[The ordinary contraction is reducible and not normal]%
+    \label{thm:kitaev_not_normal}
+    \lean{MPSTensor.kitaevTensor_mulVec_common_eigenvector,
+        MPSTensor.kitaevTensor_not_isInjective, MPSTensor.kitaevTensor_not_isNormal}
+    \leanok
+    \uses{def:kitaev_tensor, def:injective, def:normal, lem:kitaev_open_boundary}
+    Read as an ordinary matrix product state, the Kitaev-chain tensor is
+    reducible: the vector $(1,i)$ is a common eigenvector of $A^0$ and $A^1$,
+    with eigenvalues $1$ and $i$. The tensor is not injective, and it is not
+    normal: no blocking length makes the products span the full matrix
+    algebra. This is the bosonic case that
+    \cite[Section~II.B.4]{Cirac2021Matrix} contrasts with the injectivity of
+    the graded description.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The linear functional $M\mapsto M_{00}-M_{11}$ vanishes on every product
+    by the preceding lemma, and it does not vanish on the matrix unit
+    $\ketbra{0}{0}$, so the products of any fixed length span a proper
+    subspace.
+\end{proof}
+
+The Kitaev-chain tensor is related to the even-parity tensor
+$E^0=\tfrac1{\sqrt2}\mathbb 1$, $E^1=\tfrac1{\sqrt2}\sigma^x$, whose periodic
+contraction is the equal superposition of even-parity configurations.
+
+\begin{lemma}[Relation to the even-parity tensor]\label{lem:kitaev_even_parity_bridge}
+    \lean{MPSTensor.kitaevGauge, MPSTensor.kitaevGauge_mul_inv,
+        MPSTensor.kitaevTensor_mul_kitaevGauge}
+    \leanok
+    \uses{def:kitaev_tensor}
+    Let $X=\operatorname{diag}(1,i)$, which is invertible with inverse
+    $\operatorname{diag}(1,-i)$, and let $\varphi_0=1$, $\varphi_1=i$. Then
+    $A^jX=\sqrt2\,\varphi_j\,XE^j$ for $j=0,1$: up to the on-site phase
+    $\operatorname{diag}(1,i)$ on the physical index and the factor $\sqrt2$,
+    the Kitaev-chain tensor is gauge equivalent to the even-parity tensor.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    $X\sigma^xX^{-1}=\sigma^y$ and $i\sigma^y=Y$.
+\end{proof}
