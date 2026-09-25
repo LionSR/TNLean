@@ -104,7 +104,7 @@ theorem mpo_apply_of_bondOne [NeZero N] {d : ℕ} (M : MPOTensor d 1) (σ τ : F
   rw [toMPSTensor_finProdFinEquiv, Subsingleton.elim ((default : Fin N → Fin 1) k) 0,
     Subsingleton.elim ((default : Fin N → Fin 1) (k + 1)) 0]
 
-/-- A bond-one tensor with a nonzero one-site matrix is normal. -/
+/-- A bond-one tensor one of whose one-site matrices is the scalar `1` is normal. -/
 theorem isNormal_of_bondOne {d : ℕ} (M : MPOTensor d 1) (i j : Fin d) (h : M i j 0 0 = 1) :
     Kraus.IsNormal M.toMPSTensor := by
   refine Kraus.IsInjective.isNormal (Submodule.eq_top_of_forall_single_mem _ fun p q => ?_)
