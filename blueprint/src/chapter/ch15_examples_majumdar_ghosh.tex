@@ -21,8 +21,9 @@ matrix product state with a tensor built from the singlet matrix
     \label{eq:mg_singlet_matrix}
 \end{align}
 whose entry $Y_{ab}$ is the coefficient of $\ket{ab}$ in the singlet
-$\ket{10}-\ket{01}$. The tensor is a non-normal, non-injective example with a
-two-fold degenerate periodic ground space.
+$\ket{10}-\ket{01}$. The bond-dimension-three representative of the state,
+Definition~\ref{def:majumdar_ghosh_tensor}, is a non-normal, non-injective
+example with a two-fold degenerate periodic ground space.
 
 \begin{definition}[Majumdar--Ghosh tensor of the review]%
     \label{def:majumdar_ghosh_review_tensor}
@@ -45,14 +46,14 @@ two-fold degenerate periodic ground space.
     $\C^3\otimes\C^2\cong\C^6$, with $Y$ as in~(\ref{eq:mg_singlet_matrix}).
 \end{definition}
 
-\begin{lemma}[Coefficients of the review tensor factor]%
-    \label{lem:majumdar_ghosh_review_coeff}
+\begin{theorem}[Coefficients of the review tensor factor]%
+    \label{thm:majumdar_ghosh_review_coeff}
     \lean{MPSTensor.majumdarGhoshReview_coeff}
     \leanok
     \uses{def:majumdar_ghosh_review_tensor, def:eval_word}
     For every word $w$,
     $\tr\bigl(\widetilde A^{w}\bigr)=\tr\bigl(B^{w}\bigr)\,\tr\bigl(Y^{|w|}\bigr)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -85,8 +86,8 @@ two-fold degenerate periodic ground space.
     $|w|$ is odd.
 \end{definition}
 
-\begin{lemma}[Pair-covering form of periodic vectors]%
-    \label{lem:mps_pair_covering_form}
+\begin{theorem}[Pair-covering form of periodic vectors]%
+    \label{thm:mps_pair_covering_form}
     \lean{MPSTensor.evalWord_apply_hub_eq_pairProduct,
         MPSTensor.coeff_cons_eq_pairProduct_add,
         MPSTensor.mpv_eq_pairCovering_of_hub,
@@ -105,7 +106,7 @@ two-fold degenerate periodic ground space.
         \label{eq:mg_pair_vector}
     \end{align}
     and for odd $N$ the periodic vector vanishes.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -139,7 +140,7 @@ two-fold degenerate periodic ground space.
     \label{thm:majumdar_ghosh_bond_singlet_mpv}
     \lean{MPSTensor.majumdarGhoshBondSinglet_mpv_eq_pairCovering}
     \leanok
-    \uses{def:majumdar_ghosh_bond_singlet_tensor, lem:mps_pair_covering_form}
+    \uses{def:majumdar_ghosh_bond_singlet_tensor, thm:mps_pair_covering_form}
     For every even $N>0$, $\ket{V^{(N)}(C)}=P^{\mathrm{even}}_Y+P^{\mathrm{odd}}_Y$,
     the sum of the two nearest-neighbour coverings by the singlet
     $\ket{10}-\ket{01}$. This is the Majumdar--Ghosh superposition of
@@ -150,7 +151,7 @@ two-fold degenerate periodic ground space.
 \begin{proof}
     \leanok
     The level $z=2$ satisfies the hypotheses of
-    Lemma~\ref{lem:mps_pair_covering_form} for $C$, and $(C^aC^b)_{22}=Y_{ab}$ by
+    Theorem~\ref{thm:mps_pair_covering_form} for $C$, and $(C^aC^b)_{22}=Y_{ab}$ by
     direct multiplication.
 \end{proof}
 
@@ -190,7 +191,7 @@ level $0$ and the normalized singlet as pair amplitude.
         MPSTensor.majumdarGhosh_mpv_eq_zero_of_odd,
         MPSTensor.majumdarGhoshTensor_mul_apply_zero_zero}
     \leanok
-    \uses{def:majumdar_ghosh_tensor, lem:mps_pair_covering_form}
+    \uses{def:majumdar_ghosh_tensor, thm:mps_pair_covering_form}
     For every even $N>0$, $\ket{V^{(N)}(A)}=P^{\mathrm{even}}_s+P^{\mathrm{odd}}_s$,
     the sum of the two nearest-neighbour coverings by the normalized singlet
     $(\ket{10}-\ket{01})/\sqrt2$. For odd $N$ the periodic vector vanishes.
@@ -199,20 +200,20 @@ level $0$ and the normalized singlet as pair amplitude.
 \begin{proof}
     \leanok
     The level $z=0$ satisfies the hypotheses of
-    Lemma~\ref{lem:mps_pair_covering_form} for $A$: rows $1,2$ of $A^0$ and $A^1$
+    Theorem~\ref{thm:mps_pair_covering_form} for $A$: rows $1,2$ of $A^0$ and $A^1$
     are supported in column $0$, and $A^i_{00}=0$. Direct multiplication gives
     $(A^aA^b)_{00}=Y_{ab}/\sqrt2$.
 \end{proof}
 
-\begin{lemma}[Relation to the singlet-bond tensor]%
-    \label{lem:majumdar_ghosh_bond_singlet_scaling}
+\begin{theorem}[Relation to the singlet-bond tensor]%
+    \label{thm:majumdar_ghosh_bond_singlet_scaling}
     \lean{MPSTensor.majumdarGhoshBondSinglet_mpv_eq_smul}
     \leanok
     \uses{def:majumdar_ghosh_tensor, thm:majumdar_ghosh_bond_singlet_mpv,
         thm:majumdar_ghosh_dimer_superposition}
     For every even $N>0$,
     $\ket{V^{(N)}(C)}=\sqrt2^{\,N/2}\,\ket{V^{(N)}(A)}$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -228,8 +229,8 @@ level $0$ and the normalized singlet as pair amplitude.
         MPSTensor.majumdarGhoshSingletY_sq,
         MPSTensor.majumdarGhoshSingletY_pow_two_mul}
     \leanok
-    \uses{def:majumdar_ghosh_review_tensor, lem:majumdar_ghosh_review_coeff,
-        lem:mps_pair_covering_form, thm:majumdar_ghosh_dimer_superposition}
+    \uses{def:majumdar_ghosh_review_tensor, thm:majumdar_ghosh_review_coeff,
+        thm:mps_pair_covering_form, thm:majumdar_ghosh_dimer_superposition}
     Let $N=2m>0$ and $\delta(a,b)=\delta_{ab}$. Then
     \begin{align}
         \ket{V^{(N)}(\widetilde A)} & =
@@ -244,12 +245,12 @@ level $0$ and the normalized singlet as pair amplitude.
 \begin{proof}
     \leanok
     The level $z=2$ satisfies the hypotheses of
-    Lemma~\ref{lem:mps_pair_covering_form} for $\{B^0,B^1\}$, with
+    Theorem~\ref{thm:mps_pair_covering_form} for $\{B^0,B^1\}$, with
     $(B^aB^b)_{22}=\delta_{ab}$,
-    so Lemma~\ref{lem:mps_pair_covering_form} gives
+    so Theorem~\ref{thm:mps_pair_covering_form} gives
     $\tr(B^{\sigma})=P^{\mathrm{even}}_\delta(\sigma)+P^{\mathrm{odd}}_\delta(\sigma)$.
     Since $Y^2=-I_2$, $\tr(Y^{2m})=2(-1)^m$, and
-    Lemma~\ref{lem:majumdar_ghosh_review_coeff} gives~(\ref{eq:mg_review_vector}).
+    Theorem~\ref{thm:majumdar_ghosh_review_coeff} gives~(\ref{eq:mg_review_vector}).
     On the configuration with all spins $0$ the right side
     of~(\ref{eq:mg_review_vector}) equals $4(-1)^m\neq0$, while
     Theorem~\ref{thm:majumdar_ghosh_dimer_superposition} gives
@@ -368,18 +369,18 @@ level $0$ and the normalized singlet as pair amplitude.
     \end{align}
     \cite[Appendix~A, ``The Majumdar-Ghosh model'']{Cirac2021Matrix}. The
     three-site term is
-    $h=\tfrac12(\mathbf S_1\cdot\mathbf S_2+\mathbf S_2\cdot\mathbf S_3
-        +\mathbf S_1\cdot\mathbf S_3)$.
+    $h=\tfrac12(\mathbf S_0\cdot\mathbf S_1+\mathbf S_1\cdot\mathbf S_2
+        +\mathbf S_0\cdot\mathbf S_2)$ on the sites $0,1,2$ of a window.
 \end{definition}
 
-\begin{lemma}[Exchange as a transposition]\label{lem:spin_exchange_swap}
+\begin{theorem}[Exchange as a transposition]\label{thm:spin_exchange_swap}
     \lean{MPSTensor.spinExchange_apply, MPSTensor.spinHalfOperator_sum}
     \leanok
     \uses{def:majumdar_ghosh_hamiltonian}
     For distinct sites $j\neq k$,
     $\mathbf S_j\cdot\mathbf S_k=\tfrac12P_{jk}-\tfrac14$, where $P_{jk}$
     exchanges the spins at $j$ and $k$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -394,16 +395,16 @@ level $0$ and the normalized singlet as pair amplitude.
     \lean{MPSTensor.majumdarGhosh_groundSpace_three_eq_eigenspace}
     \leanok
     \uses{def:majumdar_ghosh_tensor, def:ground_space_parent,
-        def:majumdar_ghosh_hamiltonian, lem:spin_exchange_swap}
+        def:majumdar_ghosh_hamiltonian, thm:spin_exchange_swap}
     The three-site local ground space $\mathcal G_3(A)$ equals the eigenspace
     of $h$ for the eigenvalue $-\tfrac38$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    By Lemma~\ref{lem:spin_exchange_swap},
-    $h=\tfrac14(P_{12}+P_{23}+P_{13})-\tfrac38$, so the eigenspace consists of
-    the vectors $v$ with $v(\sigma P_{12})+v(\sigma P_{23})+v(\sigma P_{13})=0$
+    By Theorem~\ref{thm:spin_exchange_swap},
+    $h=\tfrac14(P_{01}+P_{12}+P_{02})-\tfrac38$, so the eigenspace consists of
+    the vectors $v$ with $v(\sigma P_{01})+v(\sigma P_{12})+v(\sigma P_{02})=0$
     for every $\sigma$, that is,
     \begin{align}
         v_{000} & = v_{111} = 0,
@@ -418,8 +419,8 @@ level $0$ and the normalized singlet as pair amplitude.
     all other entries zero.
 \end{proof}
 
-\begin{lemma}[Twisted periodic vectors satisfy the window constraints]%
-    \label{lem:twisted_mpv_chain_ground_space}
+\begin{theorem}[Twisted periodic vectors satisfy the window constraints]%
+    \label{thm:twisted_mpv_chain_ground_space}
     \lean{MPSTensor.twistedMPV_window_mem_groundSpace,
         MPSTensor.twistedMPV_mem_chainGroundSpace}
     \leanok
@@ -428,7 +429,7 @@ level $0$ and the normalized singlet as pair amplitude.
     for $0<N$ and $L\le N$ the vector
     $\sigma\mapsto\tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}}G)$ lies in
     $\mathcal G_{N,L}(A)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -444,8 +445,8 @@ level $0$ and the normalized singlet as pair amplitude.
     \lean{MPSTensor.majumdarGhosh_pairCoveringEven_mem_chainGroundSpace,
         MPSTensor.majumdarGhosh_pairCoveringOdd_mem_chainGroundSpace}
     \leanok
-    \uses{thm:majumdar_ghosh_dimer_superposition, lem:mps_pair_covering_form,
-        lem:twisted_mpv_chain_ground_space, lem:mpv_mem_chain_ground_space}
+    \uses{thm:majumdar_ghosh_dimer_superposition, thm:mps_pair_covering_form,
+        thm:twisted_mpv_chain_ground_space, lem:mpv_mem_chain_ground_space}
     For even $N>0$ and $L\le N$, both coverings $P^{\mathrm{even}}_s$ and
     $P^{\mathrm{odd}}_s$ lie in $\mathcal G_{N,L}(A)$.
 \end{theorem}
@@ -455,11 +456,11 @@ level $0$ and the normalized singlet as pair amplitude.
     The grading $G=\diag(1,-1,-1)$ satisfies $GA^i=-A^iG$. For even $N$,
     $\tr(A^{\sigma}G)=2(A^{\sigma})_{00}-\tr(A^{\sigma})
         =P^{\mathrm{even}}_s(\sigma)-P^{\mathrm{odd}}_s(\sigma)$ by
-    Lemma~\ref{lem:mps_pair_covering_form} and
+    Theorem~\ref{thm:mps_pair_covering_form} and
     Theorem~\ref{thm:majumdar_ghosh_dimer_superposition}. The two coverings
     are half the sum and half the difference of this vector and
     $\ket{V^{(N)}(A)}$, both of which lie in $\mathcal G_{N,L}(A)$ by
-    Lemma~\ref{lem:twisted_mpv_chain_ground_space}.
+    Theorem~\ref{thm:twisted_mpv_chain_ground_space}.
 \end{proof}
 
 \begin{theorem}[Energy of the dimer coverings]%
@@ -486,7 +487,7 @@ level $0$ and the normalized singlet as pair amplitude.
     Theorem~\ref{thm:majumdar_ghosh_local_ground_space} the three transposed
     copies of $\psi$ in that window sum to zero. Summing over $i$ and shifting
     the index of the middle transposition gives
-    $2\sum_iP_{i,i+1}\psi+\sum_iP_{i,i+2}\psi=0$. Lemma~\ref{lem:spin_exchange_swap}
+    $2\sum_iP_{i,i+1}\psi+\sum_iP_{i,i+2}\psi=0$. Theorem~\ref{thm:spin_exchange_swap}
     then gives
     $H_N\psi=\tfrac14\bigl(2\sum_iP_{i,i+1}\psi+\sum_iP_{i,i+2}\psi\bigr)
         -\tfrac{3N}{8}\psi=-\tfrac{3N}{8}\psi$.
