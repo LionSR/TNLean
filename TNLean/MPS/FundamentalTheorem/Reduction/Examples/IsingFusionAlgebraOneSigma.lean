@@ -18,8 +18,9 @@ only the fusion rules of the category, so the operator identities here are the I
 line 1268, implied but not printed.
 
 **Formalized here.** At every positive length, `O_1 O_σ = O_σ O_1 = O_σ` for the periodic
-operator `O_σ` of `√2 A_σ`, and hence, since both sides are linear in `O_σ`, for the periodic
-operator of the unscaled tensor `A_σ = (√2)⁻¹ (√2 A_σ)`.
+operator `O_σ` of `√2 A_σ`, and hence for the periodic operator of the unscaled tensor `A_σ`:
+by `MPOTensor.mpo_smul`, rescaling the tensor by `(√2)⁻¹` rescales its length-`N` operator by
+`(√2)⁻ᴺ`, and both identities are homogeneous of degree one in `O_σ`.
 
 **Local fix (sigma scaling):** the tensors omit the factors `v_e v_f` of the `G`-symbols
 (lines 1257–1260) and store the `σ` tensor multiplied by `√2`; the identities are proved for
@@ -91,8 +92,8 @@ as in `isingOne_mul_isingSigma`: for `(√2)⁻¹ • isingSigma`, the unscaled 
 of this module (`v`-free, see the module's Local fix; the stored `isingSigma` is `√2 A_σ`),
 the fusion rule `1 × σ = σ` holds at every positive length. -/
 theorem isingOne_mul_isingSigma_normalized {N : ℕ} (hN : 0 < N) :
-    MPOTensor.mpo isingOne N * MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N =
-      MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N := by
+    MPOTensor.mpo isingOne N * MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N =
+      MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N := by
   rw [MPOTensor.mpo_smul, Matrix.mul_smul, isingOne_mul_isingSigma hN]
 
 /-- **`O_σ O_1 = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and 1323,
@@ -100,8 +101,8 @@ as in `isingSigma_mul_isingOne`: for `(√2)⁻¹ • isingSigma`, the unscaled 
 of this module (`v`-free, see the module's Local fix; the stored `isingSigma` is `√2 A_σ`),
 the fusion rule `σ × 1 = σ` holds at every positive length. -/
 theorem isingSigma_normalized_mul_isingOne {N : ℕ} (hN : 0 < N) :
-    MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N * MPOTensor.mpo isingOne N =
-      MPOTensor.mpo (((Real.sqrt 2 : ℂ))⁻¹ • isingSigma) N := by
+    MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N * MPOTensor.mpo isingOne N =
+      MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N := by
   rw [MPOTensor.mpo_smul, Matrix.smul_mul, isingSigma_mul_isingOne hN]
 
 end IsingTwist
