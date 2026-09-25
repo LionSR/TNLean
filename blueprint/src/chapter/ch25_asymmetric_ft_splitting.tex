@@ -120,16 +120,19 @@ Theorem~\ref{thm:asym_multiblock} split into sitewise intertwiners.
 When the remainder vanishes, the compression maps are determined by the blocks
 up to a change of basis of each multiplicity space. Throughout, the blocks are
 indexed by labels $c$ with multiplicities $N_c$, and a split compression of $B$
-consists of maps $V_{c,\mu}$ and $W_{c,\mu}$, for $1\leq\mu\leq N_c$, with
+consists of compressions $V_{c,\mu}$ and embeddings $W_{c,\mu}$, for
+$1\leq\mu\leq N_c$, with
 \begin{align}
-    W_{c,\mu}V_{c',\nu} & =\delta_{cc'}\delta_{\mu\nu}\id,                 &
-    B^i                 & =\sum_c\sum_{\mu=1}^{N_c}V_{c,\mu}C_c^iW_{c,\mu}
+    V_{c,\mu}W_{c',\nu} & =\delta_{cc'}\delta_{\mu\nu}\id,                 &
+    B^i                 & =\sum_c\sum_{\mu=1}^{N_c}W_{c,\mu}C_c^iV_{c,\mu}
     \label{eq:asym_zipper_decomposition}
 \end{align}
 for every physical index $i$. This is the zipper condition of
 \cite{Bultinck2017Anyons}: the block triangular form has no nonzero blocks
-above the diagonal. The maps $V_{c,\mu}$ need not span the bond space of $B$,
-so zero diagonal blocks are allowed.
+above the diagonal. The maps $W_{c,\mu}$ need not span the bond space of $B$,
+so zero diagonal blocks are allowed. In this subsection the compression is
+written on the left and denoted $V$, as for rectangular reductions, so the
+roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_tensors_star}.
 
 \begin{lemma}[Intertwiners of normal tensors]
     \label{lem:asym_normal_intertwiner}
@@ -164,14 +167,14 @@ so zero diagonal blocks are allowed.
     not related by a gauge transformation, and let $(V,W)$ and
     $(\widetilde V,\widetilde W)$ be two split compressions of $B$ as in
     (\ref{eq:asym_zipper_decomposition}) with the same blocks and
-    multiplicities. Then $\widetilde W_{c,\mu}V_{e,\nu}=0$ for $e\neq c$, and
-    $\widetilde W_{c,\mu}V_{c,\nu}=(Y_c)_{\mu\nu}\id$ for a matrix
+    multiplicities. Then $\widetilde V_{c,\mu}W_{e,\nu}=0$ for $e\neq c$, and
+    $\widetilde V_{c,\mu}W_{c,\nu}=(Y_c)_{\mu\nu}\id$ for a matrix
     $Y_c\in\GL_{N_c}(\C)$ whose inverse is given by
-    $W_{c,\mu}\widetilde V_{c,\nu}=(Y_c^{-1})_{\mu\nu}\id$. The matrices $Y_c$
+    $V_{c,\mu}\widetilde W_{c,\nu}=(Y_c^{-1})_{\mu\nu}\id$. The matrices $Y_c$
     are the unique ones with
     \begin{align}
-        \widetilde W_{c,\mu}B^i & =\sum_\nu(Y_c)_{\mu\nu}W_{c,\nu}B^i,      &
-        B^i\widetilde V_{c,\mu} & =\sum_\nu B^iV_{c,\nu}(Y_c^{-1})_{\nu\mu}
+        \widetilde V_{c,\mu}B^i & =\sum_\nu(Y_c)_{\mu\nu}V_{c,\nu}B^i,      &
+        B^i\widetilde W_{c,\mu} & =\sum_\nu B^iW_{c,\nu}(Y_c^{-1})_{\nu\mu}
         \label{eq:asym_zipper_gauge}
     \end{align}
     for every physical index $i$, so the two compressions differ by
@@ -190,21 +193,21 @@ so zero diagonal blocks are allowed.
     \leanok
     \uses{lem:asym_normal_intertwiner}
     Multiplying (\ref{eq:asym_zipper_decomposition}) on the left by
-    $W_{c,\mu}$ and on the right by $V_{c,\mu}$ gives the sitewise relations
-    $W_{c,\mu}B^i=C_c^iW_{c,\mu}$ and $B^iV_{c,\mu}=V_{c,\mu}C_c^i$, and
+    $V_{c,\mu}$, or on the right by $W_{c,\mu}$, gives the sitewise relations
+    $V_{c,\mu}B^i=C_c^iV_{c,\mu}$ and $B^iW_{c,\mu}=W_{c,\mu}C_c^i$, and
     likewise for the second compression. Hence
-    $C_c^i\,\widetilde W_{c,\mu}V_{e,\nu}=\widetilde W_{c,\mu}B^iV_{e,\nu}
-        =\widetilde W_{c,\mu}V_{e,\nu}\,C_e^i$, and
+    $C_c^i\,\widetilde V_{c,\mu}W_{e,\nu}=\widetilde V_{c,\mu}B^iW_{e,\nu}
+        =\widetilde V_{c,\mu}W_{e,\nu}\,C_e^i$, and
     Lemma~\ref{lem:asym_normal_intertwiner} makes this intertwiner zero for
     $e\neq c$. For $e=c$ it commutes with every $C_c^i$, and since the words
     of $C_c$ of a suitable length span the full matrix algebra, it is a scalar
     $(Y_c)_{\mu\nu}$. Compressing $B^i$ with the second compression on both
     sides and expanding $B^i$ by the first gives
     $\delta_{\mu\kappa}C_c^i=\sum_\nu(Y_c)_{\mu\nu}(Y'_c)_{\nu\kappa}C_c^i$,
-    where $W_{c,\nu}\widetilde V_{c,\kappa}=(Y'_c)_{\nu\kappa}\id$; a nonzero
-    $C_c^i$ gives $Y_cY'_c=\id$. Expanding $\widetilde W_{c,\mu}B^i$ by the
+    where $V_{c,\nu}\widetilde W_{c,\kappa}=(Y'_c)_{\nu\kappa}\id$; a nonzero
+    $C_c^i$ gives $Y_cY'_c=\id$. Expanding $\widetilde V_{c,\mu}B^i$ by the
     first compression gives (\ref{eq:asym_zipper_gauge}), and multiplying it
-    on the right by $V_{c,\kappa}$ recovers $(Y_c)_{\mu\kappa}$, which gives
+    on the right by $W_{c,\kappa}$ recovers $(Y_c)_{\mu\kappa}$, which gives
     uniqueness.
 \end{proof}
 

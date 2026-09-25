@@ -33,6 +33,15 @@ the sense of `MPOTensor.CompleteZipperFusionFamily.FusionGauge` (arXiv:1511.0809
 lines 164--166).  The complete zipper fusion families carry isometric fusion tensors and
 their own bookkeeping of all pairs, so the comparison there is not made here.
 
+## References
+
+* N. Bultinck, M. Mariën, D. J. Williamson, M. B. Şahinoğlu, J. Haegeman, F. Verstraete,
+  *Anyons and matrix product operator algebras*, arXiv:1511.08090, `AnyonsPEPS.tex`,
+  lines 155--200.
+* J. Garre-Rubio, L. Lootens, A. Molnár, *Classifying phases protected by matrix product
+  operator symmetries using matrix product states*, arXiv:2203.12563, `REsubmission.tex`,
+  lines 415--424, 459--490 and 595--602.
+
 ## Main definitions
 
 * `MPSTensor.IsGaugeRelated`: two tensors, of possibly different bond dimensions, related by
