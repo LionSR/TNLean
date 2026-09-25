@@ -33,7 +33,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** eight occurrences across two files: four in
   `TNLean/MPS/Core/ReductionComposition.lean` (the `kronId`/`idKron` lifts of reductions and
   dressed proportionality) and four in `TNLean/MPS/MPDO/ActionTensorReduction.lean` (the
-  action-tensor lifts), the latter through a private copy of the same statement.
+  action-tensor lifts).
 - **Abstraction:** `List.exists_eq_ofFn` in `TNLean/Algebra/ListOfFn.lean`; call sites write
   `obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w`.
 - **Notes:** used before rewriting with `evalWord_ofFn`-style lemmas that are stated on
@@ -1994,6 +1994,26 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
+
+### carrying a boundary through one Kronecker factor of a letter sum — candidate
+- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
+  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv` (twice), distribute with
+  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
+  boundary onto one factor with `← Matrix.mul_kronecker_mul` (twice) and
+  `Matrix.one_mul`/`Matrix.mul_one`.
+- **Seen:** six occurrences across three files: `MPSTensor.IsReduction.mulTensor_kronId` and
+  `mulTensor_idKron` (`TNLean/MPS/Core/ReductionComposition.lean`),
+  `MPOTensor.mulTensor_mul_kronId_of_intertwine` (`TNLean/MPS/MPDO/OperatorProduct.lean`),
+  and `MPSTensor.IsReduction.actTensor_idKron`, `actTensor_kronId` and
+  `MPOTensor.actTensor_mul_kronId_of_intertwine`
+  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`).
+- **Abstraction:** a lemma stating
+  `(X ⊗ 1) * (∑ j, A j ⊗ B j) * (Y ⊗ 1) = ∑ j, (X * A j * Y) ⊗ B j` and its `1 ⊗ X`
+  mirror, in the `finProdFinEquiv` bond order; the intertwiner lemmas are the cases
+  `Y = 1` and `X = 1`.
+- **Notes:** past the rule of three. Promotion rewrites the three call sites in
+  `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
+  separate refactor rather than folded into the action-tensor PR.
 
 ### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
 - **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the

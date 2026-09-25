@@ -56,20 +56,16 @@ namespace MPOTensor.TwistedDimer
 
 /-! ### The bond basis -/
 
-/-- The amplitude $1/\sqrt2$ of the symmetric and antisymmetric bond states. -/
-def invSqrt2 : ℝ := 1 / Real.sqrt 2
-
-/-- The square of the bond amplitude is one half. -/
-lemma invSqrt2_mul_self : invSqrt2 * invSqrt2 = 1 / 2 := by
-  rw [invSqrt2, div_mul_div_comm, Real.mul_self_sqrt (by norm_num : (0:ℝ) ≤ 2)]
-  norm_num
+/-- The square of the bond amplitude $1/\sqrt2$ is one half. -/
+private lemma inv_sqrt_two_mul_self : (Real.sqrt 2)⁻¹ * (Real.sqrt 2)⁻¹ = 2⁻¹ := by
+  rw [← mul_inv, Real.mul_self_sqrt zero_le_two]
 
 /-- The orthonormal basis of the bond pair used by the coarse-graining map:
 the two states $(|00\rangle \pm |11\rangle)/\sqrt2$ followed by $|01\rangle$
 and $|10\rangle$. -/
 def bondVec : Fin 4 → Fin 2 → Fin 2 → ℝ
-  | 0, b₁, b₂ => if b₁ = b₂ then invSqrt2 else 0
-  | 1, b₁, b₂ => if b₁ = b₂ then invSqrt2 * tau 1 b₁ else 0
+  | 0, b₁, b₂ => if b₁ = b₂ then (Real.sqrt 2)⁻¹ else 0
+  | 1, b₁, b₂ => if b₁ = b₂ then (Real.sqrt 2)⁻¹ * tau 1 b₁ else 0
   | 2, b₁, b₂ => if b₁ = 0 ∧ b₂ = 1 then 1 else 0
   | 3, b₁, b₂ => if b₁ = 1 ∧ b₂ = 0 then 1 else 0
 
@@ -84,7 +80,7 @@ def bondShift : Fin 4 → Fin 2
 /-- **The bond basis is orthonormal.** -/
 lemma bondVec_completeness (b₁ b₂ c₁ c₂ : Fin 2) :
     ∑ v : Fin 4, bondVec v b₁ b₂ * bondVec v c₁ c₂ = if b₁ = c₁ ∧ b₂ = c₂ then 1 else 0 := by
-  have h2 := invSqrt2_mul_self
+  have h2 := inv_sqrt_two_mul_self
   fin_cases b₁ <;> fin_cases b₂ <;> fin_cases c₁ <;> fin_cases c₂ <;>
     simp [Fin.sum_univ_four, bondVec, tau] <;> nlinarith [h2]
 
@@ -102,7 +98,7 @@ lemma coarseWeight_sum (k F L L' : Fin 2) :
     ∑ t : Fin 4 × Fin 2 × Fin 2,
         (if t.2.1 + t.2.2 + bondShift t.1 = F then coarseWeight t.1 k t.2.1 t.2.2 L L' else 0) =
       Cmat k L L' * tau k F / 2 := by
-  have h2 := invSqrt2_mul_self
+  have h2 := inv_sqrt_two_mul_self
   fin_cases k <;> fin_cases F <;> fin_cases L <;> fin_cases L' <;>
     simp [Fintype.sum_prod_type, Fin.sum_univ_four, Fin.sum_univ_two, coarseWeight, bondVec,
       bondShift, tau, Cmat, cDiag_eq, cOff_eq] <;> nlinarith [h2]

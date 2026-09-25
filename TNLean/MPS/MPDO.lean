@@ -68,6 +68,7 @@ import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
+import TNLean.MPS.MPDO.BondOneOperator
 import TNLean.MPS.MPDO.BondOnePhysicalSectorFactorization
 import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
