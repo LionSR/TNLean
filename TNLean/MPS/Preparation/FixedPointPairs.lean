@@ -375,7 +375,13 @@ theorem tendsto_transferMap_blockTensor_of_spectralRadius_lt_one
 blocked transfer map converges to the transfer map `|ρ⟩⟨1|` of `P_∞`: the limit
 of eq. `eq:B_TM`. Normality is the source's definition after
 eq. `eq:transfer_matrix`: the letters have no nontrivial common invariant
-subspace, and `1` is the only eigenvalue of `E_A` of modulus one. -/
+subspace, and `1` is the only eigenvalue of `E_A` of modulus one.
+
+The hypotheses `hIrr` and `hPrim` are the fields `no_invariant_proj` and
+`primitive_transfer` of `MPSTensor.IsNormalTensor`, so a normal tensor `hN : IsNormalTensor A`
+supplies them as `hN.no_invariant_proj` and `hN.primitive_transfer`. The remaining field
+`spectral_radius_one` is not assumed: it follows from the left-canonical gauge `hA` together
+with the nonzero fixed point `σ`, since then `E_A` is a channel with a nonzero fixed point. -/
 theorem tendsto_transferMap_blockTensor_of_isPrimitive
     (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A)
     (hPrim : IsPrimitive (Kraus.transferMap A)) (hA : IsLeftCanonical A)
