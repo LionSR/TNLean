@@ -132,7 +132,7 @@ theorem blockTensor_pairRegroupEquiv (A : MPSTensor n D) (k : ℕ)
   rw [blockTensor_blockTensor_apply]
   simp only [pairRegroupEquiv, Equiv.trans_apply, directIteratedBlockEquiv_apply,
     iteratedBlockIndex_directToIteratedBlockIndex]
-  exact blockTensor_finCongr A _ i
+  exact blockTensor_finCongr A (pow_succ' 2 (k + 1)) i
 
 /-! ### The tree of polar decompositions -/
 
@@ -256,7 +256,8 @@ private lemma mul_polarSupportMatrix_eq_zero {r : ℕ} {Y : Matrix (Fin r) (Fin 
   rw [polarSupportMatrix]
   conv_lhs => rw [show Y = (Y.submatrix id e.symm).submatrix id e by
     simp [Matrix.submatrix_submatrix]]
-  rw [Matrix.submatrix_mul_equiv, h, Matrix.submatrix_zero, Matrix.zero_apply] <;> rfl
+  rw [Matrix.submatrix_mul_equiv, h]
+  rfl
 
 /-- **The product of the layers is a partial isometry** whose initial projector is the support
 projector of `P_{k+1}`.
@@ -287,8 +288,8 @@ theorem conjTranspose_treeIsoMatrix_mul_self (k : ℕ) (A : MPSTensor n D) :
         exact hXE
       rw [treeIsoMatrix_succ, treeSupportMatrix_succ, Matrix.conjTranspose_submatrix,
         Matrix.submatrix_mul_equiv, Matrix.submatrix_id_id, Matrix.conjTranspose_mul,
-        Matrix.mul_assoc, ← Matrix.mul_assoc Kᴴ, conjTranspose_blockKronRect_polarIsoMatrix_mul_self,
-        hSW, hWW]
+        Matrix.mul_assoc, ← Matrix.mul_assoc Kᴴ,
+        conjTranspose_blockKronRect_polarIsoMatrix_mul_self, hSW, hWW]
 
 /-! ### Identification with the polar decomposition of the blocked tensor -/
 
@@ -304,13 +305,13 @@ private lemma treeFactorization_uniqueness_data (k : ℕ) (A : MPSTensor n D) :
   · rw [physicalMatrix_blockTensor_eq_treeIsoMatrix_mul, treePosTensor,
       physicalMatrix_polarPosTensor]
     conv_lhs => rw [show treeIsoMatrix k A = W.submatrix id e by
-      simp [W, Matrix.submatrix_submatrix]]
+      ext; simp [W, e]]
     rw [Matrix.submatrix_mul_equiv, Matrix.submatrix_id_id]
   · have h := conjTranspose_treeIsoMatrix_mul_self k A
     rw [treeSupportMatrix, polarSupportMatrix] at h
     simp only [W, Matrix.conjTranspose_submatrix]
     rw [← Matrix.submatrix_mul _ _ _ _ _ Function.bijective_id, h, Matrix.submatrix_submatrix]
-    simp
+    simp [B]
 
 /-- **Tree factorization, uniqueness**: the product of the `k + 1` layers is the isometry `V` of
 the polar decomposition of `A` blocked over `2^{k+1}` sites.
