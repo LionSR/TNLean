@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
+import TNLean.Algebra.FinSumPermutation
 import TNLean.MPS.Chain.VaryingBondOBC
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.LinearAlgebra.UnitaryGroup
@@ -21,7 +22,8 @@ dimension function `b`; the site matrix at position `p` vanishes outside the
 upper-left `b p × b (p + 1)` block. "Isometric" means isometric on that block:
 for the physical index `i`, the columns `β < b (p + 1)` of the stacked matrix
 `(α, i) ↦ Q p i α β` are orthonormal. In the notation of the sources this is the
-condition `∑_i A_i^† A_i = 1` restricted to the used bond levels.
+condition `∑_i A_i^† A_i = 1` restricted to the used bond levels. Ordered
+products along a chain are `MPSChainTensor.eval`.
 
 ## Main results
 
@@ -30,15 +32,19 @@ condition `∑_i A_i^† A_i = 1` restricted to the used bond levels.
   remainder supported on the first `b` rows.
 * `MPSPreparation.exists_isometric_chain` — the whole sweep: an arbitrary open
   matrix product `R P₀ ⋯ P_{n-1} r` equals `Q₀ ⋯ Q_{n-1} r'` with every `Q_p`
-  isometric on its bond block.
-* `MPSPreparation.sum_normSq_chainProd_mulVec` — isometric chains preserve the
+  isometric on its bond block, and each new bond no larger than the number of
+  nonzero columns of the corresponding `P_p`.
+* `MPSPreparation.sum_normSq_eval_mulVec` — isometric chains preserve the
   total squared norm.
 * `MPSPreparation.exists_unitary_extension` — an isometry on the used bond
   levels extends to a unitary on ancilla ⊗ site whose `|β, 0⟩` columns are the
   given ones.
+* `OBCChainTensor.exists_isometric_chain_coeff` — the sweep applied to an
+  open-boundary chain, with the bond dimensions bounded bond by bond by those
+  of the chain.
 * `OBCChainTensor.exists_isometric_coeff_eq` — every open-boundary chain state
-  of bond dimension at most `D` has an open-boundary representation of bond
-  dimension at most `D` in which every site except the last satisfies
+  has an open-boundary representation, with bond dimensions at most those of
+  the given chain bond by bond, in which every site except the last satisfies
   `∑_i A_i^† A_i = 1`; `OBCChainTensor.exists_isometric_coeff_eq_of_norm` makes
   every site satisfy it when the state is normalized.
 
@@ -58,33 +64,28 @@ namespace MPSPreparation
 
 variable {d D : ℕ}
 
-/-- The ordered matrix product `Q₀(τ₀) Q₁(τ₁) ⋯ Q_{n-1}(τ_{n-1})` of a site-dependent
-family of square matrices along a configuration.
+end MPSPreparation
 
-This is the matrix product of arXiv:quant-ph/0608197, eq. `OBCMPSgen`, read from
-left to right. -/
-def chainProd {n : ℕ} (Q : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (τ : Fin n → Fin d) : Matrix (Fin D) (Fin D) ℂ :=
-  (List.ofFn fun p => Q p (τ p)).prod
+namespace MPSChainTensor
 
-/-- The empty chain product is the identity. -/
-@[simp] theorem chainProd_zero (Q : Fin 0 → Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (τ : Fin 0 → Fin d) : chainProd Q τ = 1 := by
-  simp [chainProd]
+variable {d D : ℕ}
 
-/-- Peeling off the first site of a chain product. -/
-theorem chainProd_succ {n : ℕ} (Q : Fin (n + 1) → Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (τ : Fin (n + 1) → Fin d) :
-    chainProd Q τ = Q 0 (τ 0) * chainProd (fun p => Q p.succ) (fun p => τ p.succ) := by
-  simp [chainProd, List.ofFn_succ]
+/-- Peeling off the last site of the ordered matrix product of an open chain,
+`Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) Q_n(τ_n) = (Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1})) Q_n(τ_n)`, the
+companion of `MPSChainTensor.eval_succ`. -/
+theorem eval_succ' {n : ℕ} (Q : MPSChainTensor d D (n + 1)) (τ : Fin (n + 1) → Fin d) :
+    eval Q τ = eval (fun p => Q p.castSucc) (fun p => τ p.castSucc) *
+      Q (Fin.last n) (τ (Fin.last n)) := by
+  simp only [eval, Fin.prod_eq_prod_map_finRange, ← List.ofFn_eq_map, List.ofFn_succ',
+    List.prod_concat]
 
-/-- Peeling off the last site of a chain product. -/
-theorem chainProd_succ' {n : ℕ} (Q : Fin (n + 1) → Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (τ : Fin (n + 1) → Fin d) :
-    chainProd Q τ =
-      chainProd (fun p => Q p.castSucc) (fun p => τ p.castSucc) *
-        Q (Fin.last n) (τ (Fin.last n)) := by
-  rw [chainProd, chainProd, List.ofFn_succ', List.prod_concat]
+end MPSChainTensor
+
+namespace MPSPreparation
+
+open MPSChainTensor (eval eval_succ eval_succ')
+
+variable {d D : ℕ}
 
 /-- Isometry of a stacked site matrix on its first `b` columns: the vectors
 `(α, i) ↦ Q i α β`, `β < b`, are orthonormal. For `b = D` this is the condition
@@ -94,23 +95,26 @@ def IsIsometryOn (b : ℕ) (Q : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ β β' : Fin D, β.val < b → β'.val < b →
     ∑ i, ∑ α, star (Q i α β) * Q i α β' = if β = β' then 1 else 0
 
-/-- A vector is supported on its first `b` coordinates. -/
-def VecSupp (b : ℕ) (v : Fin D → ℂ) : Prop :=
+/-- A vector is supported on its first `b` coordinates: its coordinates `β ≥ b`
+vanish. -/
+def IsSupportedBelow (b : ℕ) (v : Fin D → ℂ) : Prop :=
   ∀ β : Fin D, b ≤ β.val → v β = 0
 
 /-- A matrix vanishes on the rows `α ≥ a`. -/
-def RowSupp (a : ℕ) (M : Matrix (Fin D) (Fin D) ℂ) : Prop :=
+def IsRowSupportedBelow (a : ℕ) (M : Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ α β : Fin D, a ≤ α.val → M α β = 0
 
 /-- Row support is preserved by right multiplication. -/
-theorem RowSupp.mul {a : ℕ} {M : Matrix (Fin D) (Fin D) ℂ} (hM : RowSupp a M)
-    (N : Matrix (Fin D) (Fin D) ℂ) : RowSupp a (M * N) := by
+theorem IsRowSupportedBelow.mul {a : ℕ} {M : Matrix (Fin D) (Fin D) ℂ}
+    (hM : IsRowSupportedBelow a M)
+    (N : Matrix (Fin D) (Fin D) ℂ) : IsRowSupportedBelow a (M * N) := by
   intro α β hα
   simp [Matrix.mul_apply, hM α _ hα]
 
 /-- A matrix vanishing beyond row `a` maps every vector into the first `a` coordinates. -/
-theorem RowSupp.mulVec {a : ℕ} {M : Matrix (Fin D) (Fin D) ℂ} (hM : RowSupp a M)
-    (v : Fin D → ℂ) : VecSupp a (M *ᵥ v) := by
+theorem IsRowSupportedBelow.mulVec {a : ℕ} {M : Matrix (Fin D) (Fin D) ℂ}
+    (hM : IsRowSupportedBelow a M)
+    (v : Fin D → ℂ) : IsSupportedBelow a (M *ᵥ v) := by
   intro α hα
   simp [Matrix.mulVec, dotProduct, hM α _ hα]
 
@@ -123,10 +127,11 @@ The source obtains the isometry from a singular value decomposition; here it is
 an orthonormal basis of the column space of the stacked matrix, which gives the
 same factorization. -/
 theorem exists_isometryOn_mul (a : ℕ) (Y : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (hY : ∀ i, RowSupp a (Y i)) :
+    (hY : ∀ i, IsRowSupportedBelow a (Y i)) :
     ∃ (b : ℕ) (Q : Fin d → Matrix (Fin D) (Fin D) ℂ) (R : Matrix (Fin D) (Fin D) ℂ),
-      b ≤ D ∧ (∀ i, RowSupp a (Q i)) ∧ (∀ i α β, b ≤ β.val → Q i α β = 0) ∧
-      IsIsometryOn b Q ∧ RowSupp b R ∧ ∀ i, Y i = Q i * R := by
+      b ≤ D ∧ (∀ c, (∀ i α γ, c ≤ γ.val → Y i α γ = 0) → b ≤ c) ∧
+      (∀ i, IsRowSupportedBelow a (Q i)) ∧ (∀ i α β, b ≤ β.val → Q i α β = 0) ∧
+      IsIsometryOn b Q ∧ IsRowSupportedBelow b R ∧ ∀ i, Y i = Q i * R := by
   classical
   let E := EuclideanSpace ℂ (Fin D × Fin d)
   let col : Fin D → E := fun γ => WithLp.toLp 2 (fun x => Y x.2 x.1 γ)
@@ -149,7 +154,28 @@ theorem exists_isometryOn_mul (a : ℕ) (Y : Fin d → Matrix (Fin D) (Fin D) �
     if h : β.val < Module.finrank ℂ W then (e ⟨β.val, h⟩ : E) (α, i) else 0
   let R : Matrix (Fin D) (Fin D) ℂ := fun β γ =>
     if h : β.val < Module.finrank ℂ W then inner ℂ (e ⟨β.val, h⟩ : E) (col γ) else 0
-  refine ⟨Module.finrank ℂ W, Q, R, hbD, ?_, ?_, ?_, ?_, ?_⟩
+  have hbc : ∀ c, (∀ i α γ, c ≤ γ.val → Y i α γ = 0) → Module.finrank ℂ W ≤ c := by
+    intro c hc
+    let S := {γ : Fin D // γ.val < c}
+    have hle : W ≤ Submodule.span ℂ (Set.range fun γ : S => col γ.1) := by
+      refine Submodule.span_le.mpr ?_
+      rintro _ ⟨γ, rfl⟩
+      by_cases hγ : γ.val < c
+      · exact Submodule.subset_span ⟨⟨γ, hγ⟩, rfl⟩
+      · have h0 : col γ = 0 := by
+          ext x
+          simp [col, hc x.2 x.1 γ (not_lt.mp hγ)]
+        rw [SetLike.mem_coe, h0]
+        exact Submodule.zero_mem _
+    calc Module.finrank ℂ W
+        ≤ Module.finrank ℂ (Submodule.span ℂ (Set.range fun γ : S => col γ.1)) :=
+          Submodule.finrank_mono hle
+      _ ≤ Fintype.card S := finrank_range_le_card _
+      _ ≤ Fintype.card (Fin c) :=
+          Fintype.card_le_of_injective (fun γ : S => (⟨γ.1.val, γ.2⟩ : Fin c))
+            fun x y h => by simp only [Fin.mk.injEq] at h; exact Subtype.ext (Fin.ext h)
+      _ = c := Fintype.card_fin c
+  refine ⟨Module.finrank ℂ W, Q, R, hbD, hbc, ?_, ?_, ?_, ?_, ?_⟩
   · intro i α β hα
     simp only [Q]
     split_ifs with h
@@ -197,30 +223,42 @@ outside the `b_p × b_{p+1}` block and isometric on it, together with a right
 vector `r'` supported on the first `b_n` levels, such that
 `Rm P₀(τ₀) ⋯ P_{n-1}(τ_{n-1}) r = Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) r'` for every
 configuration `τ`. The last remainder `r'` is the source's
-`|φ_I⟩ = M_{[1]} |φ'_I⟩`. -/
+`|φ_I⟩ = M_{[1]} |φ'_I⟩`.
+
+Each new bond is at most the number of columns of the corresponding original
+site matrix that are not identically zero: if every `P_p(i)` vanishes on the
+columns `γ ≥ c`, then `b_{p+1} ≤ c`. This is the bond-dimension part of the
+"simple rank considerations" after arXiv:quant-ph/0501096, eq. `induction`. -/
 theorem exists_isometric_chain : ∀ (n a : ℕ), a ≤ D →
-    ∀ (Rm : Matrix (Fin D) (Fin D) ℂ), RowSupp a Rm →
-    ∀ (P : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ) (r : Fin D → ℂ),
-    ∃ (b : Fin (n + 1) → ℕ) (Q : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ) (r' : Fin D → ℂ),
-      b 0 = a ∧ (∀ k, b k ≤ D) ∧ (∀ p i, RowSupp (b p.castSucc) (Q p i)) ∧
+    ∀ (Rm : Matrix (Fin D) (Fin D) ℂ), IsRowSupportedBelow a Rm →
+    ∀ (P : MPSChainTensor d D n) (r : Fin D → ℂ),
+    ∃ (b : Fin (n + 1) → ℕ) (Q : MPSChainTensor d D n) (r' : Fin D → ℂ),
+      b 0 = a ∧ (∀ k, b k ≤ D) ∧
+      (∀ p c, (∀ i α γ, c ≤ γ.val → P p i α γ = 0) → b p.succ ≤ c) ∧
+      (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
       (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
-      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧ VecSupp (b (Fin.last n)) r' ∧
-      ∀ τ, (Rm * chainProd P τ) *ᵥ r = chainProd Q τ *ᵥ r'
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧ IsSupportedBelow (b (Fin.last n)) r' ∧
+      ∀ τ, (Rm * eval P τ) *ᵥ r = eval Q τ *ᵥ r'
   | 0, a, ha, Rm, hRm, P, r => by
-    refine ⟨fun _ => a, fun p => Fin.elim0 p, Rm *ᵥ r, rfl, fun _ => ha,
+    refine ⟨fun _ => a, fun p => Fin.elim0 p, Rm *ᵥ r, rfl, fun _ => ha, fun p => Fin.elim0 p,
       fun p => Fin.elim0 p, fun p => Fin.elim0 p, fun p => Fin.elim0 p, hRm.mulVec r, ?_⟩
     intro τ
     simp
   | n + 1, a, ha, Rm, hRm, P, r => by
-    obtain ⟨b₁, Q₀, R, hb₁, hQ₀row, hQ₀col, hQ₀iso, hR, hfac⟩ :=
+    obtain ⟨b₁, Q₀, R, hb₁, hb₁c, hQ₀row, hQ₀col, hQ₀iso, hR, hfac⟩ :=
       exists_isometryOn_mul a (fun i => Rm * P 0 i) fun i => hRm.mul _
-    obtain ⟨b', Q', r', hb'0, hb'D, hQ'row, hQ'col, hQ'iso, hr', hprod⟩ :=
+    obtain ⟨b', Q', r', hb'0, hb'D, hb'c, hQ'row, hQ'col, hQ'iso, hr', hprod⟩ :=
       exists_isometric_chain n b₁ hb₁ R hR (fun p => P p.succ) r
-    refine ⟨Fin.cons a b', Fin.cons Q₀ Q', r', rfl, ?_, ?_, ?_, ?_, ?_, ?_⟩
+    refine ⟨Fin.cons a b', Fin.cons Q₀ Q', r', rfl, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
     · intro k
       refine Fin.cases ?_ (fun k => ?_) k
       · simpa using ha
       · simpa using hb'D k
+    · intro p c hc
+      refine Fin.cases (fun hc => ?_) (fun p hc => ?_) p hc
+      · simp only [Fin.cons_succ, hb'0]
+        exact hb₁c c fun i α γ hγ => by simp [Matrix.mul_apply, hc i _ γ hγ]
+      · simpa using hb'c p c hc
     · intro p i
       refine Fin.cases ?_ (fun p => ?_) p
       · simpa using hQ₀row i
@@ -236,27 +274,27 @@ theorem exists_isometric_chain : ∀ (n a : ℕ), a ≤ D →
       · simpa using hQ'iso p
     · simpa [← Fin.succ_last] using hr'
     · intro τ
-      rw [chainProd_succ P, chainProd_succ (Fin.cons Q₀ Q' : Fin (n + 1) → _)]
+      rw [eval_succ P, eval_succ (Fin.cons Q₀ Q' : Fin (n + 1) → _)]
       simp only [Fin.cons_zero, Fin.cons_succ]
       rw [← Matrix.mul_assoc, hfac, Matrix.mul_assoc, ← Matrix.mulVec_mulVec, hprod,
         Matrix.mulVec_mulVec]
 
 /-- The output of a chain whose sites vanish beyond their left bond block is
 supported on the first bond block. -/
-theorem vecSupp_chainProd_mulVec : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
+theorem isSupportedBelow_eval_mulVec : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
     (Q : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ),
-    (∀ p i, RowSupp (b p.castSucc) (Q p i)) →
-    ∀ v : Fin D → ℂ, VecSupp (b (Fin.last n)) v →
-    ∀ τ, VecSupp (b 0) (chainProd Q τ *ᵥ v)
+    (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) →
+    ∀ v : Fin D → ℂ, IsSupportedBelow (b (Fin.last n)) v →
+    ∀ τ, IsSupportedBelow (b 0) (eval Q τ *ᵥ v)
   | 0, _, _, _, v, hv, τ => by simpa using hv
   | n + 1, b, Q, hrow, v, _, τ => by
-    rw [chainProd_succ, ← Matrix.mulVec_mulVec]
+    rw [eval_succ, ← Matrix.mulVec_mulVec]
     exact (hrow 0 (τ 0)).mulVec _
 
 /-- Two matrices that agree on the first `b` columns act equally on vectors
 supported on the first `b` coordinates. -/
-theorem mulVec_eq_of_vecSupp {b : ℕ} {M M' : Matrix (Fin D) (Fin D) ℂ}
-    (h : ∀ α β : Fin D, β.val < b → M' α β = M α β) {w : Fin D → ℂ} (hw : VecSupp b w) :
+theorem mulVec_eq_of_isSupportedBelow {b : ℕ} {M M' : Matrix (Fin D) (Fin D) ℂ}
+    (h : ∀ α β : Fin D, β.val < b → M' α β = M α β) {w : Fin D → ℂ} (hw : IsSupportedBelow b w) :
     M' *ᵥ w = M *ᵥ w := by
   ext α
   simp only [Matrix.mulVec, dotProduct]
@@ -267,40 +305,29 @@ theorem mulVec_eq_of_vecSupp {b : ℕ} {M M' : Matrix (Fin D) (Fin D) ℂ}
 
 /-- Replacing each site matrix by one that agrees with it on the used bond block
 does not change the chain applied to a vector supported on the last block. -/
-theorem chainProd_mulVec_congr : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
+theorem eval_mulVec_congr : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
     (Q Q' : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ),
-    (∀ p i, RowSupp (b p.castSucc) (Q p i)) →
+    (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) →
     (∀ p i α β, β.val < b p.succ → Q' p i α β = Q p i α β) →
-    ∀ v : Fin D → ℂ, VecSupp (b (Fin.last n)) v →
-    ∀ τ, chainProd Q' τ *ᵥ v = chainProd Q τ *ᵥ v
+    ∀ v : Fin D → ℂ, IsSupportedBelow (b (Fin.last n)) v →
+    ∀ τ, eval Q' τ *ᵥ v = eval Q τ *ᵥ v
   | 0, _, _, _, _, _, _, _, _ => by simp
   | n + 1, b, Q, Q', hrow, hagree, v, hv, τ => by
     have hrow' : ∀ (p : Fin n) (i : Fin d),
-        RowSupp ((fun k : Fin (n + 1) => b k.succ) p.castSucc) (Q p.succ i) :=
+        IsRowSupportedBelow ((fun k : Fin (n + 1) => b k.succ) p.castSucc) (Q p.succ i) :=
       fun p i => by dsimp only; rw [Fin.succ_castSucc]; exact hrow p.succ i
-    have ih := chainProd_mulVec_congr (fun k => b k.succ) (fun p => Q p.succ)
+    have ih := eval_mulVec_congr (fun k => b k.succ) (fun p => Q p.succ)
       (fun p => Q' p.succ) hrow' (fun p i α β h => hagree p.succ i α β h) v
       (by simpa using hv) (fun p => τ p.succ)
-    rw [chainProd_succ, chainProd_succ, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, ih]
-    exact mulVec_eq_of_vecSupp (fun α β h => hagree 0 (τ 0) α β h)
-      (vecSupp_chainProd_mulVec (fun k => b k.succ) (fun p => Q p.succ) hrow' v
+    rw [eval_succ, eval_succ, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, ih]
+    exact mulVec_eq_of_isSupportedBelow (fun α β h => hagree 0 (τ 0) α β h)
+      (isSupportedBelow_eval_mulVec (fun k => b k.succ) (fun p => Q p.succ) hrow' v
         (by simpa using hv) (fun p => τ p.succ))
-
-/-- Reordering four finite sums. -/
-private theorem sum_comm_four {ι κ μ ν : Type*} [Fintype ι] [Fintype κ] [Fintype μ]
-    [Fintype ν] (f : ι → κ → μ → ν → ℂ) :
-    ∑ i, ∑ a, ∑ b, ∑ c, f i a b c = ∑ b, ∑ c, ∑ i, ∑ a, f i a b c :=
-  calc
-    _ = ∑ i, ∑ b, ∑ a, ∑ c, f i a b c := Finset.sum_congr rfl fun _ _ => Finset.sum_comm
-    _ = ∑ b, ∑ i, ∑ a, ∑ c, f i a b c := Finset.sum_comm
-    _ = ∑ b, ∑ i, ∑ c, ∑ a, f i a b c :=
-      Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => Finset.sum_comm
-    _ = _ := Finset.sum_congr rfl fun _ _ => Finset.sum_comm
 
 /-- One isometric step preserves the squared norm of a vector supported on the
 isometric block. -/
 theorem sum_normSq_mulVec_of_isometryOn {b : ℕ} {Q : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (hQ : IsIsometryOn b Q) {v : Fin D → ℂ} (hv : VecSupp b v) :
+    (hQ : IsIsometryOn b Q) {v : Fin D → ℂ} (hv : IsSupportedBelow b v) :
     ∑ i, star (Q i *ᵥ v) ⬝ᵥ (Q i *ᵥ v) = star v ⬝ᵥ v := by
   classical
   have key : ∀ β β' : Fin D,
@@ -330,7 +357,7 @@ theorem sum_normSq_mulVec_of_isometryOn {b : ℕ} {Q : Fin d → Matrix (Fin D) 
           rw [star_mul']
           ring
     _ = ∑ β, ∑ β', ∑ i, ∑ α, star (Q i α β) * Q i α β' * (star (v β) * v β') :=
-          sum_comm_four _
+          Fintype.sum_last_two_first_four _
     _ = ∑ β, ∑ β', (∑ i, ∑ α, star (Q i α β) * Q i α β') * (star (v β) * v β') := by
           simp only [Finset.sum_mul]
     _ = star v ⬝ᵥ v := by
@@ -342,24 +369,24 @@ isometric on its bond block and the vector `v` is supported on the last bond
 block, then `∑_τ ‖Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) v‖² = ‖v‖²`. This is the
 normalization statement implicit in the deterministic scheme of
 arXiv:quant-ph/0608197, lines 1535--1541. -/
-theorem sum_normSq_chainProd_mulVec : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
+theorem sum_normSq_eval_mulVec : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
     (Q : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ),
-    (∀ p i, RowSupp (b p.castSucc) (Q p i)) → (∀ p, IsIsometryOn (b p.succ) (Q p)) →
-    ∀ v : Fin D → ℂ, VecSupp (b (Fin.last n)) v →
-    ∑ τ : Fin n → Fin d, star (chainProd Q τ *ᵥ v) ⬝ᵥ (chainProd Q τ *ᵥ v) = star v ⬝ᵥ v
+    (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) → (∀ p, IsIsometryOn (b p.succ) (Q p)) →
+    ∀ v : Fin D → ℂ, IsSupportedBelow (b (Fin.last n)) v →
+    ∑ τ : Fin n → Fin d, star (eval Q τ *ᵥ v) ⬝ᵥ (eval Q τ *ᵥ v) = star v ⬝ᵥ v
   | 0, _, Q, _, _, v, _ => by simp
   | n + 1, b, Q, hrow, hiso, v, hv => by
-    have ih := sum_normSq_chainProd_mulVec (fun k => b k.succ) (fun p => Q p.succ)
+    have ih := sum_normSq_eval_mulVec (fun k => b k.succ) (fun p => Q p.succ)
       (fun p i => by rw [Fin.succ_castSucc]; exact hrow p.succ i)
       (fun p => hiso p.succ) v (by simpa using hv)
     rw [← ih, ← (Fin.consEquiv fun _ : Fin (n + 1) => Fin d).sum_comp,
       Fintype.sum_prod_type, Finset.sum_comm]
     refine Finset.sum_congr rfl fun τ _ => ?_
-    simp only [Fin.consEquiv_apply, chainProd_succ, Fin.cons_zero, Fin.cons_succ,
+    simp only [Fin.consEquiv_apply, eval_succ, Fin.cons_zero, Fin.cons_succ,
       ← Matrix.mulVec_mulVec]
-    have hsupp : VecSupp (b (0 : Fin (n + 1)).succ)
-        (chainProd (fun p => Q p.succ) τ *ᵥ v) :=
-      vecSupp_chainProd_mulVec (fun k => b k.succ) _
+    have hsupp : IsSupportedBelow (b (0 : Fin (n + 1)).succ)
+        (eval (fun p => Q p.succ) τ *ᵥ v) :=
+      isSupportedBelow_eval_mulVec (fun k => b k.succ) _
         (fun p i => by rw [Fin.succ_castSucc]; exact hrow p.succ i) v (by simpa using hv) τ
     exact sum_normSq_mulVec_of_isometryOn (hiso 0) hsupp
 
@@ -419,8 +446,8 @@ def rowMat (v : Fin D → ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   fun α β => if α.val = 0 then v β else 0
 
 /-- The matrix `rowMat v` vanishes beyond its first row. -/
-theorem rowSupp_rowMat (v : Fin D → ℂ) : RowSupp 1 (rowMat v) := fun α β hα => by
-  simp [rowMat, show α.val ≠ 0 by omega]
+theorem isRowSupportedBelow_rowMat (v : Fin D → ℂ) : IsRowSupportedBelow 1 (rowMat v) :=
+  fun α β hα => by simp [rowMat, show α.val ≠ 0 by omega]
 
 /-- Pairing with `|0⟩` reads off the zeroth coordinate. -/
 theorem basisVecZero_dotProduct (hD : 0 < D) (w : Fin D → ℂ) :
@@ -459,17 +486,39 @@ theorem mul_colMat_apply_of_ne (M : Matrix (Fin D) (Fin D) ℂ) (r : Fin D → �
     (hγ : γ.val ≠ 0) : (M * colMat r) α γ = 0 := by
   simp [Matrix.mul_apply, colMat, hγ]
 
+/-- A vector supported on the first coordinate is a multiple of `|0⟩`. -/
+theorem eq_smul_basisVecZero_of_isSupportedBelow_one (hD : 0 < D) {w : Fin D → ℂ}
+    (hw : IsSupportedBelow 1 w) : w = w ⟨0, hD⟩ • basisVecZero D := by
+  funext β
+  by_cases hβ : β.val = 0
+  · obtain rfl : β = ⟨0, hD⟩ := Fin.ext hβ
+    simp [basisVecZero]
+  · simp [basisVecZero, hβ, hw β (Nat.one_le_iff_ne_zero.mpr hβ)]
+
+/-- The squared norm of `x • |0⟩` is `x̄ x`. -/
+theorem star_smul_basisVecZero_dotProduct_self (hD : 0 < D) (x : ℂ) :
+    star (x • basisVecZero D) ⬝ᵥ (x • basisVecZero D) = star x * x := by
+  rw [star_smul, star_basisVecZero, smul_dotProduct, dotProduct_smul,
+    basisVecZero_dotProduct hD]
+  simp [basisVecZero, mul_comm]
+
+/-- The vector `|0⟩` is normalized. -/
+theorem star_basisVecZero_dotProduct_self (hD : 0 < D) :
+    star (basisVecZero D) ⬝ᵥ basisVecZero D = 1 := by
+  simpa using star_smul_basisVecZero_dotProduct_self hD 1
+
 end MPSPreparation
 
 namespace OBCChainTensor
 
 open MPSPreparation
+open MPSChainTensor (eval eval_succ eval_succ')
 
 variable {d D N : ℕ}
 
 /-- The bond dimension bound of an open-boundary chain is positive, since the
 first bond is one-dimensional. -/
-theorem pos_bound (B : OBCChainTensor d D N) : 0 < D :=
+theorem bondBound_pos (B : OBCChainTensor d D N) : 0 < D :=
   lt_of_lt_of_le (by simp [B.left_dim]) (B.bondDim_le 0)
 
 /-- The open-boundary coefficient is the `(0, 0)` entry of the ordered product of
@@ -477,33 +526,26 @@ the zero-padded square site matrices. This holds at every length, including
 `N = 0`, where both sides equal one.
 
 Source: arXiv:quant-ph/0608197, eq. `eq.vidal` (lines 419--429). -/
-theorem coeff_eq_chainProd_zeroPad (B : OBCChainTensor d D N) (σ : Fin N → Fin d) :
-    B.coeff σ = chainProd (fun p => zeroPad B p) σ ⟨0, B.pos_bound⟩ ⟨0, B.pos_bound⟩ := by
+theorem coeff_eq_eval_zeroPad (B : OBCChainTensor d D N) (σ : Fin N → Fin d) :
+    B.coeff σ = eval (zeroPad B) σ ⟨0, B.bondBound_pos⟩ ⟨0, B.bondBound_pos⟩ := by
   cases N with
   | zero => simp
   | succ n =>
-    have hprod : MPSChainTensor.eval (zeroPad B) σ = chainProd (fun p => zeroPad B p) σ := by
-      simp only [MPSChainTensor.eval, chainProd, List.ofFn_eq_map, Fin.prod_eq_prod_map_finRange]
-    rw [← coeff_zeroPad, MPSChainTensor.coeff, hprod, Matrix.trace,
-      Finset.sum_eq_single (⟨0, B.pos_bound⟩ : Fin D)]
+    rw [← coeff_zeroPad, MPSChainTensor.coeff, Matrix.trace,
+      Finset.sum_eq_single (⟨0, B.bondBound_pos⟩ : Fin D)]
     · rfl
     · intro α _ hα
-      have hα' : 1 ≤ α.val := by
-        rcases Nat.eq_zero_or_pos α.val with h | h
-        · exact absurd (Fin.ext h) hα
-        · exact h
-      have : RowSupp 1 (zeroPad B 0 (σ 0)) := by
+      have hrow : IsRowSupportedBelow 1 (zeroPad B 0 (σ 0)) := by
         intro a b ha
         simp [zeroPad, B.left_dim, show ¬ a.val < 1 by omega]
-      have h2 := (this.mul (chainProd (fun p => zeroPad B p.succ) fun p => σ p.succ)) α α hα'
-      rw [← chainProd_succ (fun p => zeroPad B p) σ] at h2
-      exact h2
+      rw [Matrix.diag_apply, eval_succ]
+      exact (hrow.mul _) α α (Nat.one_le_iff_ne_zero.mpr fun h => hα (Fin.ext h))
     · simp
 
 /-- The open-boundary chain obtained by cutting square site matrices down to the
 blocks `b p × b (p + 1)`. -/
 def ofSupported (b : Fin (N + 1) → ℕ) (hb : ∀ k, b k ≤ D) (h0 : b 0 = 1)
-    (hN : b (Fin.last N) = 1) (Q : Fin N → Fin d → Matrix (Fin D) (Fin D) ℂ) :
+    (hN : b (Fin.last N) = 1) (Q : MPSChainTensor d D N) :
     OBCChainTensor d D N where
   bondDim := b
   bondDim_le := hb
@@ -514,8 +556,8 @@ def ofSupported (b : Fin (N + 1) → ℕ) (hb : ∀ k, b k ≤ D) (h0 : b 0 = 1)
 /-- Zero-padding the cut-down chain returns the square site matrices, when they
 vanish outside their bond blocks. -/
 theorem zeroPad_ofSupported (b : Fin (N + 1) → ℕ) (hb : ∀ k, b k ≤ D) (h0 : b 0 = 1)
-    (hN : b (Fin.last N) = 1) (Q : Fin N → Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (hrow : ∀ p i, RowSupp (b p.castSucc) (Q p i))
+    (hN : b (Fin.last N) = 1) (Q : MPSChainTensor d D N)
+    (hrow : ∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i))
     (hcol : ∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) :
     zeroPad (ofSupported b hb h0 hN Q) = Q := by
   funext p i
@@ -530,8 +572,8 @@ theorem zeroPad_ofSupported (b : Fin (N + 1) → ℕ) (hb : ∀ k, b k ≤ D) (h
 /-- A site of `ofSupported` whose square matrices are isometric on the block
 satisfies `∑_i A_i^† A_i = 1`. -/
 theorem sum_conjTranspose_mul_ofSupported (b : Fin (N + 1) → ℕ) (hb : ∀ k, b k ≤ D)
-    (h0 : b 0 = 1) (hN : b (Fin.last N) = 1) (Q : Fin N → Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (p : Fin N) (hrow : ∀ i, RowSupp (b p.castSucc) (Q p i))
+    (h0 : b 0 = 1) (hN : b (Fin.last N) = 1) (Q : MPSChainTensor d D N)
+    (p : Fin N) (hrow : ∀ i, IsRowSupportedBelow (b p.castSucc) (Q p i))
     (hiso : IsIsometryOn (b p.succ) (Q p)) :
     ∑ i, ((ofSupported b hb h0 hN Q).tensor p i)ᴴ * (ofSupported b hb h0 hN Q).tensor p i = 1 := by
   change ∑ i, (Matrix.of fun (α : Fin (b p.castSucc)) (β : Fin (b p.succ)) =>
@@ -554,21 +596,23 @@ theorem sum_conjTranspose_mul_ofSupported (b : Fin (N + 1) → ℕ) (hb : ∀ k,
   · simp [hrow i α _ (not_lt.mp hα)]
 
 /-- Assemble an open-boundary chain from the output of the successive
-decompositions: the remainder vector `r'` is absorbed into the last site. -/
+decompositions: the remainder vector `r'` is absorbed into the last site. The
+bond dimensions are those of the decomposition, except the last, which is one. -/
 theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀ k, b k ≤ D)
-    (hb0 : b 0 = 1) (Q : Fin (n + 1) → Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (hrow : ∀ p i, RowSupp (b p.castSucc) (Q p i))
+    (hb0 : b 0 = 1) (Q : MPSChainTensor d D (n + 1))
+    (hrow : ∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i))
     (hcol : ∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0)
     (hiso : ∀ p, IsIsometryOn (b p.succ) (Q p)) (r' : Fin D → ℂ) :
     ∃ B : OBCChainTensor d D (n + 1),
-      (∀ τ, B.coeff τ = (chainProd Q τ *ᵥ r') ⟨0, lt_of_lt_of_le (by omega) (hbD 0)⟩) ∧
+      (∀ τ, B.coeff τ = (eval Q τ *ᵥ r') ⟨0, lt_of_lt_of_le (by omega) (hbD 0)⟩) ∧
+      (∀ k, k ≠ Fin.last (n + 1) → B.bondDim k = b k) ∧
       (∀ p : Fin (n + 1), p ≠ Fin.last n → ∑ i, (B.tensor p i)ᴴ * B.tensor p i = 1) ∧
-      (VecSupp (b (Fin.last (n + 1))) r' → star r' ⬝ᵥ r' = 1 →
+      (IsSupportedBelow (b (Fin.last (n + 1))) r' → star r' ⬝ᵥ r' = 1 →
         ∑ i, (B.tensor (Fin.last n) i)ᴴ * B.tensor (Fin.last n) i = 1) := by
   classical
   have hD : 0 < D := lt_of_lt_of_le (by omega) (hbD 0)
   let b' : Fin (n + 2) → ℕ := fun k => if k = Fin.last (n + 1) then 1 else b k
-  let Q' : Fin (n + 1) → Fin d → Matrix (Fin D) (Fin D) ℂ := fun p i =>
+  let Q' : MPSChainTensor d D (n + 1) := fun p i =>
     if p = Fin.last n then Q p i * colMat r' else Q p i
   have hb'D : ∀ k, b' k ≤ D := fun k => by
     simp only [b']; split_ifs
@@ -582,7 +626,7 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     have : p.succ ≠ Fin.last (n + 1) := by
       rw [← Fin.succ_last]; exact fun h => hp (Fin.succ_injective _ h)
     simp [b', this]
-  have hrow' : ∀ p i, RowSupp (b' p.castSucc) (Q' p i) := fun p i => by
+  have hrow' : ∀ p i, IsRowSupportedBelow (b' p.castSucc) (Q' p i) := fun p i => by
     rw [hcs]; simp only [Q']; split_ifs
     · exact (hrow p i).mul _
     · exact hrow p i
@@ -595,9 +639,10 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     · rw [hsc p hp] at hβ
       simp only [Q', ite_eq_right hp]
       exact hcol p i α β hβ
-  refine ⟨ofSupported b' hb'D hb'0 hb'N Q', fun τ => ?_, fun p hp => ?_, fun hr' hnorm => ?_⟩
-  · rw [coeff_eq_chainProd_zeroPad, zeroPad_ofSupported _ _ _ _ _ hrow' hcol', chainProd_succ',
-      chainProd_succ' Q]
+  refine ⟨ofSupported b' hb'D hb'0 hb'N Q', fun τ => ?_, fun k hk => by simp [ofSupported, b', hk],
+    fun p hp => ?_, fun hr' hnorm => ?_⟩
+  · rw [coeff_eq_eval_zeroPad, zeroPad_ofSupported _ _ _ _ _ hrow' hcol', eval_succ',
+      eval_succ' Q]
     have hQ' : (fun p : Fin n => Q' p.castSucc) = fun p => Q p.castSucc := by
       funext p i; simp [Q', Fin.castSucc_ne_last]
     simp only [hQ', Q', ite_eq_left rfl, ← Matrix.mul_assoc]
@@ -609,9 +654,8 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     have hlast : b' (Fin.last n).succ = 1 := by simp [b']
     rw [hlast]
     intro β β' hβ hβ'
-    have e1 : β = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ)
-    have e2 : β' = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ')
-    subst e1 e2
+    obtain rfl : β = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ)
+    obtain rfl : β' = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ')
     simp only [Q', ite_eq_left rfl]
     simp only [mul_colMat_apply _ _ _ (⟨0, hD⟩ : Fin D) rfl]
     have h := sum_normSq_mulVec_of_isometryOn (hiso (Fin.last n))
@@ -619,30 +663,82 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     rw [hnorm] at h
     simpa [dotProduct] using h
 
+/-- The successive-decomposition sweep of arXiv:quant-ph/0501096, eq. `induction`,
+applied to an open-boundary chain `B` with left boundary `c ⟨0|` and right
+boundary `|0⟩`: an isometric chain `Q` and a remainder `r'` with
+`Q₀(τ₀) ⋯ Q_n(τ_n) r' = c B(τ) |0⟩` for every configuration `τ`. The bond
+dimensions of `Q` are bounded bond by bond by those of `B` (the rank bound after
+eq. `induction`), and `‖r'‖² = ‖c B‖²`. -/
+theorem exists_isometric_chain_coeff {n : ℕ} (B : OBCChainTensor d D (n + 1)) (c : ℂ) :
+    ∃ (b : Fin (n + 2) → ℕ) (Q : MPSChainTensor d D (n + 1)) (r' : Fin D → ℂ),
+      b 0 = 1 ∧ (∀ k, b k ≤ B.bondDim k) ∧
+      (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
+      (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧ IsSupportedBelow (b (Fin.last (n + 1))) r' ∧
+      (∀ τ, eval Q τ *ᵥ r' = (c * B.coeff τ) • basisVecZero D) ∧
+      star r' ⬝ᵥ r' = star (c • B.coeff) ⬝ᵥ (c • B.coeff) := by
+  have hD := B.bondBound_pos
+  obtain ⟨b, Q, r', hb0, -, hbc, hrow, hcol, hiso, hr', hprod⟩ :=
+    exists_isometric_chain (n + 1) 1 hD (rowMat (c • basisVecZero D))
+      (isRowSupportedBelow_rowMat _) (zeroPad B) (basisVecZero D)
+  have hbB : ∀ k, b k ≤ B.bondDim k := fun k => by
+    refine Fin.cases ?_ (fun p => ?_) k
+    · rw [hb0, B.left_dim]
+    · refine hbc p _ fun i α γ hγ => ?_
+      simp [zeroPad, not_lt.mpr hγ]
+  have hout : ∀ τ, eval Q τ *ᵥ r' = (c * B.coeff τ) • basisVecZero D := fun τ => by
+    have hsupp := isSupportedBelow_eval_mulVec b Q hrow r' hr' τ
+    rw [hb0] at hsupp
+    rw [eq_smul_basisVecZero_of_isSupportedBelow_one hD hsupp, ← hprod τ,
+      rowMat_mul_mulVec_zero hD, smul_dotProduct, basisVecZero_dotProduct hD,
+      mulVec_basisVecZero_apply hD, ← coeff_eq_eval_zeroPad B τ, smul_eq_mul]
+  refine ⟨b, Q, r', hb0, hbB, hrow, hcol, hiso, hr', hout, ?_⟩
+  rw [← sum_normSq_eval_mulVec b Q hrow hiso r' hr', dotProduct]
+  refine Finset.sum_congr rfl fun τ _ => ?_
+  rw [hout, star_smul_basisVecZero_dotProduct_self hD]
+  rfl
+
+/-- Both left-canonicalization statements at once: the representation of
+`exists_isometric_coeff_eq`, whose last site is isometric as well when the state
+is normalized. -/
+private theorem exists_isometric_coeff_eq_aux {n : ℕ} (B : OBCChainTensor d D (n + 1)) :
+    ∃ B' : OBCChainTensor d D (n + 1), B'.coeff = B.coeff ∧
+      (∀ k, B'.bondDim k ≤ B.bondDim k) ∧
+      (∀ p : Fin (n + 1), p ≠ Fin.last n → ∑ i, (B'.tensor p i)ᴴ * B'.tensor p i = 1) ∧
+      (star B.coeff ⬝ᵥ B.coeff = 1 →
+        ∑ i, (B'.tensor (Fin.last n) i)ᴴ * B'.tensor (Fin.last n) i = 1) := by
+  obtain ⟨b, Q, r', hb0, hbB, hrow, hcol, hiso, hr', hout, hnorm⟩ :=
+    exists_isometric_chain_coeff B 1
+  obtain ⟨B', hB', hbond, hiso', hlast⟩ := exists_of_isometric_chain b
+    (fun k => (hbB k).trans (B.bondDim_le k)) hb0 Q hrow hcol hiso r'
+  refine ⟨B', funext fun τ => ?_, fun k => ?_, hiso', fun h => hlast hr' ?_⟩
+  · rw [hB', hout, one_mul]
+    simp [basisVecZero]
+  · by_cases hk : k = Fin.last (n + 1)
+    · rw [hk, B'.right_dim, B.right_dim]
+    · rw [hbond k hk]
+      exact hbB k
+  · rw [hnorm, one_smul, h]
+
 /-- **Left-canonical open-boundary representation.** Every open-boundary chain
-state of bond dimension at most `D` has an open-boundary representation of bond
-dimension at most `D` in which every site except the last satisfies
-`∑_i A_i^† A_i = 1`; the last site carries the norm of the state.
+state has an open-boundary representation whose bond dimensions are at most
+those of the given chain, bond by bond, and in which every site except the last
+satisfies `∑_i A_i^† A_i = 1`; the last site carries the norm of the state.
 
 This is the successive-decomposition construction of arXiv:quant-ph/0501096,
 eq. `induction` and the paragraph following it, as used in the proof of
 arXiv:quant-ph/0608197, Theorem `Thm:seqwith` (lines 1574--1578). -/
 theorem exists_isometric_coeff_eq {n : ℕ} (B : OBCChainTensor d D (n + 1)) :
     ∃ B' : OBCChainTensor d D (n + 1), B'.coeff = B.coeff ∧
+      (∀ k, B'.bondDim k ≤ B.bondDim k) ∧
       ∀ p : Fin (n + 1), p ≠ Fin.last n → ∑ i, (B'.tensor p i)ᴴ * B'.tensor p i = 1 := by
-  have hD := B.pos_bound
-  obtain ⟨b, Q, r', hb0, hbD, hrow, hcol, hiso, -, hprod⟩ :=
-    exists_isometric_chain (n + 1) 1 hD (rowMat (basisVecZero D)) (rowSupp_rowMat _)
-      (fun p => zeroPad B p) (basisVecZero D)
-  obtain ⟨B', hB', hiso', -⟩ := exists_of_isometric_chain b hbD hb0 Q hrow hcol hiso r'
-  refine ⟨B', funext fun τ => ?_, hiso'⟩
-  rw [hB', ← hprod, coeff_eq_chainProd_zeroPad, rowMat_mul_mulVec_zero hD,
-    basisVecZero_dotProduct hD, mulVec_basisVecZero_apply hD]
+  obtain ⟨B', hB', hbond, hiso, -⟩ := exists_isometric_coeff_eq_aux B
+  exact ⟨B', hB', hbond, hiso⟩
 
 /-- **Left-canonical open-boundary representation of a normalized state.** A
-normalized open-boundary chain state of bond dimension at most `D` has an
-open-boundary representation of bond dimension at most `D` in which every site
-satisfies `∑_i A_i^† A_i = 1`.
+normalized open-boundary chain state has an open-boundary representation whose
+bond dimensions are at most those of the given chain, bond by bond, and in which
+every site satisfies `∑_i A_i^† A_i = 1`.
 
 This is the successive-decomposition construction of arXiv:quant-ph/0501096,
 eq. `induction`, with the last remainder `M_{[1]} |φ'_I⟩` of norm one, as in the
@@ -651,27 +747,12 @@ deterministic part of arXiv:quant-ph/0608197, Theorem `Thm:seqwith`
 theorem exists_isometric_coeff_eq_of_norm {n : ℕ} (B : OBCChainTensor d D (n + 1))
     (hB : star B.coeff ⬝ᵥ B.coeff = 1) :
     ∃ B' : OBCChainTensor d D (n + 1), B'.coeff = B.coeff ∧
+      (∀ k, B'.bondDim k ≤ B.bondDim k) ∧
       ∀ p : Fin (n + 1), ∑ i, (B'.tensor p i)ᴴ * B'.tensor p i = 1 := by
-  have hD := B.pos_bound
-  obtain ⟨b, Q, r', hb0, hbD, hrow, hcol, hiso, hr', hprod⟩ :=
-    exists_isometric_chain (n + 1) 1 hD (rowMat (basisVecZero D)) (rowSupp_rowMat _)
-      (fun p => zeroPad B p) (basisVecZero D)
-  have hcoeff : ∀ τ, B.coeff τ = (chainProd Q τ *ᵥ r') ⟨0, hD⟩ := fun τ => by
-    rw [← hprod, coeff_eq_chainProd_zeroPad, rowMat_mul_mulVec_zero hD,
-      basisVecZero_dotProduct hD, mulVec_basisVecZero_apply hD]
-  have hnorm : star r' ⬝ᵥ r' = 1 := by
-    rw [← sum_normSq_chainProd_mulVec b Q hrow hiso r' hr', ← hB]
-    simp only [dotProduct, Pi.star_apply]
-    refine Finset.sum_congr rfl fun τ _ => ?_
-    rw [hcoeff τ, Finset.sum_eq_single ⟨0, hD⟩]
-    · intro α _ hα
-      have hα' : 1 ≤ α.val := Nat.one_le_iff_ne_zero.mpr fun h => hα (Fin.ext h)
-      rw [vecSupp_chainProd_mulVec b Q hrow r' hr' τ α (by rw [hb0]; exact hα'), mul_zero]
-    · simp
-  obtain ⟨B', hB', hiso', hlast⟩ := exists_of_isometric_chain b hbD hb0 Q hrow hcol hiso r'
-  refine ⟨B', funext fun τ => by rw [hB', hcoeff], fun p => ?_⟩
+  obtain ⟨B', hB', hbond, hiso, hlast⟩ := exists_isometric_coeff_eq_aux B
+  refine ⟨B', hB', hbond, fun p => ?_⟩
   by_cases hp : p = Fin.last n
-  · subst hp; exact hlast hr' hnorm
-  · exact hiso' p hp
+  · rw [hp]; exact hlast hB
+  · exact hiso p hp
 
 end OBCChainTensor

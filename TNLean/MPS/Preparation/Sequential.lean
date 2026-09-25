@@ -75,6 +75,8 @@ open scoped BigOperators Matrix
 
 namespace MPSPreparation
 
+open MPSChainTensor (eval)
+
 variable {d D N : ℕ}
 
 /-- The state of arXiv:quant-ph/0608197, eq. `OBCMPSgen` (lines 1542--1547):
@@ -82,7 +84,7 @@ variable {d D N : ℕ}
 `τ`, where `τ p = i_{N-p}` and `A k = A^{[k+1]}`. -/
 def seqAmplitude (φF φI : Fin D → ℂ) (A : Fin N → Fin d → Matrix (Fin D) (Fin D) ℂ)
     (τ : Fin N → Fin d) : ℂ :=
-  star φF ⬝ᵥ (chainProd (fun p => A (Fin.rev p)) τ *ᵥ φI)
+  star φF ⬝ᵥ (eval (fun p => A (Fin.rev p)) τ *ᵥ φI)
 
 /-- Scheme 1 of arXiv:quant-ph/0608197 (probabilistic schemes, line 1552):
 the vector `ψ` is the state of eq. `OBCMPSgen` for some operations
@@ -107,32 +109,23 @@ lines 1527--1541; arXiv:quant-ph/0501096, the state
 `V_{[n]} ⋯ V_{[1]} |φ_I⟩`). -/
 def jointState [NeZero d] (U : Fin N → Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ)
     (φI : Fin D → ℂ) (τ : Fin N → Fin d) : Fin D → ℂ :=
-  chainProd (fun p => stepMatrix (U (Fin.rev p))) τ *ᵥ φI
+  eval (fun p => stepMatrix (U (Fin.rev p))) τ *ᵥ φI
 
 /-- Scheme 2 of arXiv:quant-ph/0608197 (deterministic schemes, lines 1553--1554):
 the interactions are unitaries `U^{[k]}` on ancilla ⊗ site, the ancilla starts
 in a normalized state `φ_I`, and after the last step the joint state factorizes
 as `|φ_F⟩ ⊗ |ψ⟩` with `φ_F` normalized ("the ancilla must decouple in the last
-step, without measurement"). -/
+step, without measurement"). The factorization is written componentwise in the
+configuration: the ancilla component at `τ` is `ψ(τ) |φ_F⟩`. -/
 def IsDeterministicallyGenerated [NeZero d] (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop :=
   ∃ (U : Fin N → Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ) (φI φF : Fin D → ℂ),
     (∀ k, U k ∈ Matrix.unitaryGroup (Fin D × Fin d) ℂ) ∧ star φI ⬝ᵥ φI = 1 ∧
-      star φF ⬝ᵥ φF = 1 ∧ ∀ τ α, jointState U φI τ α = φF α * ψ τ
+      star φF ⬝ᵥ φF = 1 ∧ ∀ τ, jointState U φI τ = ψ τ • φF
 
 /-- The vector `ψ` is an open-boundary MPS with bond dimension at most `D`,
 arXiv:quant-ph/0608197, eq. `eq.vidal` (lines 419--429). -/
 def HasOBCRep (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop :=
   ∃ B : OBCChainTensor d D N, ψ = B.coeff
-
-/-- Reversing the step labels twice. -/
-private theorem chainProd_rev_rev (A : Fin N → Fin d → Matrix (Fin D) (Fin D) ℂ) :
-    (fun p => A (Fin.rev (Fin.rev p))) = A := by
-  funext p; simp
-
-/-- The vector `|0⟩` is normalized. -/
-private theorem star_basisVecZero_dotProduct_self (hD : 0 < D) :
-    star (basisVecZero D) ⬝ᵥ basisVecZero D = 1 := by
-  rw [star_basisVecZero, basisVecZero_dotProduct hD]; simp [basisVecZero]
 
 /-- The open-boundary chain of length zero with all bonds one-dimensional. -/
 private def obcZero (hD : 0 < D) : OBCChainTensor d D 0 where
@@ -164,8 +157,8 @@ theorem exists_hasOBCRep_of_isProbabilisticallyGenerated {ψ : (Fin N → Fin d)
     rw [show τ = Fin.elim0 from Subsingleton.elim _ _]
     simp [inv_mul_cancel₀ hne]
   | succ n =>
-    obtain ⟨b, Q, r', hb0, hbD, hrow, hcol, hiso, -, hprod⟩ :=
-      exists_isometric_chain (n + 1) 1 hD (rowMat (star φF)) (rowSupp_rowMat _)
+    obtain ⟨b, Q, r', hb0, hbD, -, hrow, hcol, hiso, -, hprod⟩ :=
+      exists_isometric_chain (n + 1) 1 hD (rowMat (star φF)) (isRowSupportedBelow_rowMat _)
         (fun p => A (Fin.rev p)) φI
     obtain ⟨B, hB, -⟩ := OBCChainTensor.exists_of_isometric_chain b hbD hb0 Q hrow hcol hiso r'
     refine ⟨1, one_ne_zero, B, funext fun τ => ?_⟩
@@ -179,14 +172,15 @@ lines 1569--1573). -/
 theorem isProbabilisticallyGenerated_of_hasOBCRep {ψ : (Fin N → Fin d) → ℂ} {c : ℂ}
     (hc : c ≠ 0) (h : HasOBCRep D (c • ψ)) : IsProbabilisticallyGenerated D ψ := by
   obtain ⟨B, hB⟩ := h
-  have hD := B.pos_bound
+  have hD := B.bondBound_pos
   refine ⟨fun k => OBCChainTensor.zeroPad B (Fin.rev k), c⁻¹ • basisVecZero D, basisVecZero D,
     funext fun τ => ?_⟩
   have hτ := congrFun hB τ
-  rw [OBCChainTensor.coeff_eq_chainProd_zeroPad] at hτ
+  rw [OBCChainTensor.coeff_eq_eval_zeroPad] at hτ
   simp only [Pi.smul_apply, smul_eq_mul] at hτ
-  rw [seqAmplitude, chainProd_rev_rev (fun p => OBCChainTensor.zeroPad B p),
-    Matrix.mulVec_smul, dotProduct_smul, star_basisVecZero, basisVecZero_dotProduct hD,
+  rw [seqAmplitude]
+  simp only [Fin.rev_rev]
+  rw [Matrix.mulVec_smul, dotProduct_smul, star_basisVecZero, basisVecZero_dotProduct hD,
     mulVec_basisVecZero_apply hD, ← hτ, smul_eq_mul, ← mul_assoc, inv_mul_cancel₀ hc, one_mul]
 
 /-- **Theorem `Thm:seqwith`, probabilistic scheme** (arXiv:quant-ph/0608197,
@@ -216,20 +210,14 @@ theorem star_dotProduct_self_of_isDeterministicallyGenerated [NeZero d]
     {ψ : (Fin N → Fin d) → ℂ} (h : IsDeterministicallyGenerated D ψ) :
     star ψ ⬝ᵥ ψ = 1 := by
   obtain ⟨U, φI, φF, hU, hI, hF, hJ⟩ := h
-  have hnorm := sum_normSq_chainProd_mulVec (fun _ => D)
+  rw [← hI, ← sum_normSq_eval_mulVec (fun _ => D)
     (fun p => stepMatrix (U (Fin.rev p))) (fun _ _ α _ hα => absurd α.isLt (by omega))
-    (fun p => isIsometryOn_stepMatrix (hU _)) φI (fun β hβ => absurd β.isLt (by omega))
-  rw [hI] at hnorm
-  rw [← hnorm]
-  simp only [dotProduct, Pi.star_apply]
+    (fun p => isIsometryOn_stepMatrix (hU _)) φI (fun β hβ => absurd β.isLt (by omega)),
+    dotProduct]
   refine Finset.sum_congr rfl fun τ _ => ?_
-  have hJτ : chainProd (fun p => stepMatrix (U (Fin.rev p))) τ *ᵥ φI = fun α => φF α * ψ τ :=
-    funext (hJ τ)
-  rw [hJτ]
-  simp only [star_mul']
-  have hF' : ∑ α, star (φF α) * φF α = 1 := hF
-  calc star (ψ τ) * ψ τ = (∑ α, star (φF α) * φF α) * (star (ψ τ) * ψ τ) := by rw [hF', one_mul]
-    _ = _ := by rw [Finset.sum_mul]; exact Finset.sum_congr rfl fun α _ => by ring
+  rw [← jointState, hJ, star_smul, smul_dotProduct, dotProduct_smul, hF, smul_eq_mul,
+    smul_eq_mul, mul_one]
+  rfl
 
 /-- A deterministically generated state is also probabilistically generated,
 with the operations `A^{[k]}_{i,αβ} = ⟨α, i| U^{[k]} |β, 0⟩` and the
@@ -240,12 +228,7 @@ theorem isProbabilisticallyGenerated_of_isDeterministicallyGenerated [NeZero d]
     IsProbabilisticallyGenerated D ψ := by
   obtain ⟨U, φI, φF, -, -, hF, hJ⟩ := h
   refine ⟨fun k => stepMatrix (U k), φI, φF, funext fun τ => ?_⟩
-  have hJτ : chainProd (fun p => stepMatrix (U (Fin.rev p))) τ *ᵥ φI = fun α => φF α * ψ τ :=
-    funext (hJ τ)
-  simp only [seqAmplitude, hJτ, dotProduct, Pi.star_apply]
-  have hF' : ∑ α, star (φF α) * φF α = 1 := hF
-  calc ψ τ = (∑ α, star (φF α) * φF α) * ψ τ := by rw [hF', one_mul]
-    _ = _ := by rw [Finset.sum_mul]; exact Finset.sum_congr rfl fun α _ => by ring
+  rw [seqAmplitude, ← jointState, hJ, dotProduct_smul, hF, smul_eq_mul, mul_one]
 
 /-- Every normalized open-boundary MPS of bond dimension at most `D` (up to a
 nonzero scalar) is generated by the deterministic scheme: the substantive
@@ -258,7 +241,7 @@ theorem isDeterministicallyGenerated_of_hasOBCRep [NeZero d] {ψ : (Fin N → Fi
     (hψ : star ψ ⬝ᵥ ψ = 1) {c : ℂ} (hc : c ≠ 0) (h : HasOBCRep D (c • ψ)) :
     IsDeterministicallyGenerated D ψ := by
   obtain ⟨B, hB⟩ := h
-  have hD := B.pos_bound
+  have hD := B.bondBound_pos
   cases N with
   | zero =>
     have hψ' : star (ψ Fin.elim0) * ψ Fin.elim0 = 1 := by
@@ -266,56 +249,25 @@ theorem isDeterministicallyGenerated_of_hasOBCRep [NeZero d] {ψ : (Fin N → Fi
       exact hψ
     refine ⟨fun k => Fin.elim0 k, ψ Fin.elim0 • basisVecZero D, basisVecZero D,
       fun k => Fin.elim0 k, ?_,
-      star_basisVecZero_dotProduct_self hD, fun τ α => ?_⟩
-    · rw [star_smul, smul_dotProduct, dotProduct_smul, star_basisVecZero_dotProduct_self hD]
+      star_basisVecZero_dotProduct_self hD, fun τ => ?_⟩
+    · rw [star_smul_basisVecZero_dotProduct_self hD]
       simpa [mul_comm] using hψ'
     · rw [show τ = Fin.elim0 from Subsingleton.elim _ _]
-      simp [jointState, mul_comm]
+      simp [jointState]
   | succ n =>
-    obtain ⟨b, Q, r', hb0, hbD, hrow, hcol, hiso, hr', hprod⟩ :=
-      exists_isometric_chain (n + 1) 1 hD (rowMat (c⁻¹ • basisVecZero D)) (rowSupp_rowMat _)
-        (fun p => OBCChainTensor.zeroPad B p) (basisVecZero D)
-    -- The chain output is `ψ τ • |0⟩`.
-    have hout : ∀ τ, chainProd Q τ *ᵥ r' = fun α => basisVecZero D α * ψ τ := by
-      intro τ
-      funext α
-      by_cases hα : α.val = 0
-      · have hα' : α = ⟨0, hD⟩ := Fin.ext hα
-        subst hα'
-        rw [← hprod, rowMat_mul_mulVec_zero hD]
-        have hτ := congrFun hB τ
-        rw [OBCChainTensor.coeff_eq_chainProd_zeroPad] at hτ
-        simp only [Pi.smul_apply, smul_eq_mul] at hτ
-        rw [smul_dotProduct, basisVecZero_dotProduct hD, mulVec_basisVecZero_apply hD, ← hτ,
-          smul_eq_mul, ← mul_assoc, inv_mul_cancel₀ hc, one_mul]
-        simp [basisVecZero]
-      · have := vecSupp_chainProd_mulVec b Q hrow r' hr' τ α (by rw [hb0]; omega)
-        rw [this]
-        simp [basisVecZero, hα]
+    obtain ⟨b, Q, r', hb0, -, hrow, -, hiso, hr', hout, hnorm⟩ :=
+      OBCChainTensor.exists_isometric_chain_coeff B c⁻¹
+    have hcψ : c⁻¹ • B.coeff = ψ := by rw [← hB, smul_smul, inv_mul_cancel₀ hc, one_smul]
     -- Unitary extensions of the isometric sites.
     have hext : ∀ p, ∃ U ∈ Matrix.unitaryGroup (Fin D × Fin d) ℂ,
         ∀ i α β, β.val < b p.succ → U (α, i) (β, 0) = Q p i α β :=
       fun p => exists_unitary_extension (hiso p)
     choose U hU hUQ using hext
-    have hjoint : ∀ τ, chainProd (fun p => stepMatrix (U p)) τ *ᵥ r' = chainProd Q τ *ᵥ r' :=
-      chainProd_mulVec_congr b Q (fun p => stepMatrix (U p)) hrow
-        (fun p i α β h => hUQ p i α β h) r' hr'
-    have hr'norm : star r' ⬝ᵥ r' = 1 := by
-      rw [← sum_normSq_chainProd_mulVec b Q hrow hiso r' hr', ← hψ]
-      simp only [hout, dotProduct, Pi.star_apply, star_mul']
-      refine Finset.sum_congr rfl fun τ _ => ?_
-      rw [Finset.sum_eq_single ⟨0, hD⟩]
-      · simp [basisVecZero]
-      · intro b _ hb
-        have : b.val ≠ 0 := fun h => hb (Fin.ext h)
-        simp [basisVecZero, this]
-      · simp
-    refine ⟨fun k => U (Fin.rev k), r', basisVecZero D, fun k => hU _, hr'norm,
-      star_basisVecZero_dotProduct_self hD, fun τ α => ?_⟩
-    have := chainProd_rev_rev (fun p => stepMatrix (U p))
-    simp only [jointState] at *
-    rw [show (fun p => stepMatrix (U (Fin.rev (Fin.rev p)))) = fun p => stepMatrix (U p) from this,
-      hjoint, hout]
+    refine ⟨fun k => U (Fin.rev k), r', basisVecZero D, fun k => hU _,
+      by rw [hnorm, hcψ, hψ], star_basisVecZero_dotProduct_self hD, fun τ => ?_⟩
+    simp only [jointState, Fin.rev_rev]
+    rw [eval_mulVec_congr b Q (fun p => stepMatrix (U p)) hrow
+      (fun p i α β h => hUQ p i α β h) r' hr', hout, ← hcψ, Pi.smul_apply, smul_eq_mul]
 
 /-- **Theorem `Thm:seqwith`, deterministic scheme** (arXiv:quant-ph/0608197,
 lines 1569--1578): a vector is generated by a deterministic sequential scheme
