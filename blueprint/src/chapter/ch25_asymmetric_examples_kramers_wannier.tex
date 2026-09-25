@@ -596,6 +596,8 @@ comparing this lattice relation with a size-independent fusion algebra.
         KWExample.ssCircuit_mul_ssEta, KWExample.ssEta_mul_ssCircuit,
         KWExample.ssCircuit_mul_conjTranspose,
         KWExample.ssCircuit_conjTranspose_mul, KWExample.ssCircuit_mul_self,
+        KWExample.ssCircuit_mulVec_eq_zero_iff,
+        KWExample.exists_ssCircuit_mulVec_eq_iff,
         KWExample.transpose_translate_apply,
         KWExample.hadamard_mul_transpose_translate}
     \leanok
@@ -626,6 +628,10 @@ comparing this lattice relation with a size-independent fusion algebra.
     $\ket{b_{N-1},b_0,\ldots,b_{N-2}}$, which is the action of the
     product of nearest-neighbor swaps by which~\cite{Seiberg2024Majorana}
     defines its translation, and $T^{-1}$ commutes with $H^{\otimes N}$.
+    Moreover, $C_Nv=0$ exactly when $\eta_Zv=-v$, and $y$ lies in the
+    range of $C_N$ exactly when $\eta_Zy=y$: the kernel is the sector
+    $\eta_Z=-1$, and on the sector $\eta_Z=+1$ the circuit acts
+    unitarily, as stated in~\cite{Seiberg2024Majorana}.
 \end{proposition}
 
 \begin{proof}
@@ -662,6 +668,10 @@ comparing this lattice relation with a size-independent fusion algebra.
     proves~(\ref{eq:asymex_kw_circuit}). The remaining relations are
     those of Proposition~\ref{prop:asymex_kw_adjoint_relations}
     conjugated by the Hadamard gate, which commutes with $T^{-1}$.
+    If $C_Nv=0$, then $C_N^\dagger C_Nv=\tfrac12(v+\eta_Zv)=0$;
+    conversely, if $\eta_Zv=-v$, then $C_Nv=C_N\eta_Zv=-C_Nv$. The range
+    of $C_N$ lies in the sector $\eta_Z=+1$ because $\eta_ZC_N=C_N$, and
+    for $\eta_Zy=y$ one has $C_N(2C_N^\dagger y)=y+\eta_Zy=2y$.
 \end{proof}
 
 Positive length is essential in these calculations. At $N=1$,
