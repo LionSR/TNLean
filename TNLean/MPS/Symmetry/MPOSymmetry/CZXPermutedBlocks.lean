@@ -69,8 +69,7 @@ theorem czx_carriesMPV (g x : Multiplicative (Fin 2)) :
     CarriesMPV (czxFamily.tensor g) (czxBlock x) (czxBlock (g • x)) := by
   intro N hN
   have : NeZero N := ⟨by omega⟩
-  revert g x
-  refine Multiplicative.forall_zmod_two ?_ ?_ <;> refine Multiplicative.forall_zmod_two ?_ ?_
+  fin_cases g <;> fin_cases x
   all_goals
     first
     | (change mpo (MPOTensor.idTensor 2) N *ᵥ _ = _
@@ -152,7 +151,8 @@ def czxBlockActionData : BlockActionData czxFamily czxBlock where
   V g x := czxActV g.toAdd x.toAdd
   W g x := czxActW g.toAdd x.toAdd
   isReduction := by
-    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_) (Multiplicative.forall_zmod_two ?_ ?_)
+    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
+      (Multiplicative.forall_zmod_two ?_ ?_)
     · exact isReduction_one 0
     · exact isReduction_one 1
     · exact isReduction_gen 0
