@@ -122,7 +122,8 @@ def czxActV : (a s : Fin 2) → Matrix (Fin 1) (Fin (czxLabelBondDim a * 1)) ℂ
   | _, ⟨n + 2, h⟩ => absurd h (by omega)
 
 /-- The right action tensors: the trivial identification for the identity, `|+̂⟩` on
-`|0⟩^{⊗ N}` and `-|+̂⟩` on `|1⟩^{⊗ N}` for the generator, as printed in arXiv:2405.00439, lines 1273 and 1301. -/
+`|0⟩^{⊗ N}` and `-|+̂⟩` on `|1⟩^{⊗ N}` for the generator, as printed in arXiv:2405.00439,
+lines 1273 and 1301. -/
 def czxActW : (a s : Fin 2) → Matrix (Fin (czxLabelBondDim a * 1)) (Fin 1) ℂ
   | ⟨0, _⟩, _ => (finCongr (one_mul 1)).toPEquiv.toMatrix
   | ⟨1, _⟩, ⟨0, _⟩ => !![1; 1]
