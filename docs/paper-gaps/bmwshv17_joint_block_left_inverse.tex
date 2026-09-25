@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{Simultaneous Left Inverse of Injective Operator Blocks}
+\author{}
+\date{2026-09-25}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{open}
+
+\section{Source statement}
+To extract the $F$-symbols, Bultinck et al.\ apply a left inverse of the
+labelled block tensors to both sides of an identity between sums over the
+final label $d$~\cite{Bultinck2017Anyons}. They write that injectivity of the
+single-block tensors implies that the matrix $(B_d^{ij})_{\alpha\beta}$, with
+rows indexed by the physical pair $ij$ and columns by the bond pair
+$\alpha\beta$, has a left inverse $B_d^+$ with
+\begin{align}
+    B_d^+B_{d'} & =\delta_{dd'}\,\mathbb 1_{\chi_d}\otimes\mathbb 1_{\chi_d}.
+    \label{eq:bmwshv17_joint_inverse}
+\end{align}
+\footnote{Source traceability: \path{References/1511.08090/AnyonsPEPS.tex},
+    line 269, within the derivation at lines 252--277.}
+The case $d=d'$ is injectivity of $B_d$. The case $d\ne d'$ asks that one
+left inverse for $B_d$ annihilates every other block.
+
+\section{Counterexample}
+Relation (\ref{eq:bmwshv17_joint_inverse}) for all labels together says
+that the one-site map
+\begin{align}
+    \Phi:\mathbb C^{p^2}\longrightarrow\bigoplus_d M_{\chi_d},
+    \qquad
+    v\longmapsto\Bigl(\sum_{i,j}v_{ij}B_d^{ij}\Bigr)_d,
+    \label{eq:bmwshv17_joint_map}
+\end{align}
+is surjective. The row of $(B_d^+)$ indexed by $(\alpha,\beta)$ is a preimage
+of the matrix unit $E_{\alpha\beta}$ in the summand $d$. Surjectivity forces
+\begin{align}
+    p^2 & \ge\sum_d\chi_d^2 .
+    \label{eq:bmwshv17_dimension_count}
+\end{align}
+Injectivity of each block separately does not imply it. Take physical
+dimension $p=2$. Let $B_1$ have bond dimension $\chi_1=2$ and let its four
+letters $B_1^{ij}$ form a basis of $M_2$. Let $B_2$ have bond dimension
+$\chi_2=1$ with some nonzero letter. Both blocks are injective. They are not
+gauge equivalent, since their bond dimensions differ. The map $\Phi$ goes from
+$\mathbb C^4$ to $M_2\oplus M_1\cong\mathbb C^5$, so its rank is at most
+$4<5$. Hence no simultaneous left inverse exists. The data are
+nondegenerate: every block is injective and every weight is nonzero.
+
+\section{Missing hypothesis}
+The step needs joint linear independence of the labelled blocks at one site,
+that is, surjectivity of (\ref{eq:bmwshv17_joint_map}). Injectivity of each
+block together with pairwise non-equivalence does not supply it.
+
+The formal complete zipper fusion family records the simultaneous left inverse
+as a field, which is exactly this hypothesis. The construction of such a family
+from split compressions of the pairwise products takes it as an input.
+\footnote{Formal definitions: \leanid{MPOTensor.CompleteZipperFusionFamily}
+    and \leanid{MPOTensor.CompleteZipperFusionFamily.ofCompression}.}
+
+\section{Elimination route}
+Blocking should remove the hypothesis. For pairwise non-equivalent normal
+tensors, the words of a common sufficiently large length $L$ are expected to
+span the full direct sum $\bigoplus_d M_{\chi_d}$, by the linear independence
+of non-equivalent normal tensors. The blocked tensors would then satisfy
+(\ref{eq:bmwshv17_joint_inverse}) at one blocked site, and the $F$-symbol
+extraction would run at length $L$. This route is plausible but is not proved
+here. The zipper and reconstruction identities are also needed at the blocked
+level, where they follow from the one-site identities by composing fusion
+tensors along the word.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

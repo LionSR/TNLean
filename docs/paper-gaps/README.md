@@ -17,6 +17,11 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   prints the Fibonacci F-symbols but no numeric entries of the two operator
   blocks, the placement of the F-symbols used for the blocks, and that the
   checked fusion rules and projector identity concern the bare F-symbols.
+- `bmwshv17_joint_block_left_inverse.tex` records that the simultaneous left
+  inverse of the labelled blocks used to extract the F-symbols does not follow
+  from injectivity of each block, gives a two-block counterexample at physical
+  dimension two, and names joint one-site independence as the missing
+  hypothesis, with blocking as the elimination route.
 
 For the MPU index of arXiv:1703.09188:
 
