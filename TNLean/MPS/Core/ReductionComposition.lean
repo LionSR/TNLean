@@ -79,17 +79,6 @@ theorem trans {C : MPSTensor d D₃} {B : MPSTensor d D₂} {A : MPSTensor d D�
   rw [← h₂.evalWord w, ← h₁.evalWord w]
   simp only [Matrix.mul_assoc]
 
-/-- An intertwining relation between letters extends to all words. -/
-theorem evalWord_mul_of_intertwine {B' : MPSTensor d D₂} {B : MPSTensor d D₃}
-    {P : Matrix (Fin D₂) (Fin D₃) ℂ} (hB : ∀ i, B' i * P = P * B i)
-    (w : List (Fin d)) :
-    Kraus.evalWord B' w * P = P * Kraus.evalWord B w := by
-  induction w with
-  | nil => simp
-  | cons i w ih =>
-      rw [Kraus.evalWord_cons, Kraus.evalWord_cons, Matrix.mul_assoc, ih,
-        ← Matrix.mul_assoc, hB i, Matrix.mul_assoc]
-
 /-- A reduction transports along an invertible intertwiner of letters: if
 `B' i P = P B i` with `P Q = 1` and `Q P = 1`, then a reduction `(V, W)` from
 `B` to `A` gives the reduction `(V Q, P W)` from `B'` to `A`.
@@ -110,7 +99,7 @@ theorem of_intertwine {B' : MPSTensor d D₂} {B : MPSTensor d D₃}
     V * Q * Kraus.evalWord B' w * (P * W) =
         V * Q * (Kraus.evalWord B' w * P) * W := by simp only [Matrix.mul_assoc]
     _ = V * (Q * P) * Kraus.evalWord B w * W := by
-        rw [evalWord_mul_of_intertwine hB]; simp only [Matrix.mul_assoc]
+        rw [Kraus.evalWord_intertwine _ _ _ hB]; simp only [Matrix.mul_assoc]
     _ = Kraus.evalWord A w := by rw [hQP, Matrix.mul_one, h.evalWord]
 
 end IsReduction
@@ -402,7 +391,7 @@ theorem of_intertwine {B' : MPSTensor d D'} {P : Matrix (Fin D') (Fin D) ℂ}
       Q * Kraus.evalWord B' w = Q * (Kraus.evalWord B' w * P) * Q := by
           rw [Matrix.mul_assoc, Matrix.mul_assoc, hPQ, Matrix.mul_one]
       _ = Kraus.evalWord B w * Q := by
-          rw [IsReduction.evalWord_mul_of_intertwine hB, ← Matrix.mul_assoc, hQP,
+          rw [Kraus.evalWord_intertwine _ _ _ hB, ← Matrix.mul_assoc, hQP,
             Matrix.one_mul]
   refine ⟨N, fun w hw ↦ ?_⟩
   rw [Matrix.mul_assoc, hQ, ← Matrix.mul_assoc, h w hw, Matrix.smul_mul, Matrix.mul_assoc,

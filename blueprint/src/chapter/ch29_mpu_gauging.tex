@@ -4110,7 +4110,8 @@ $(MN)P$ into $M(NP)$.
         MPOTensor.GroupFamily.FusionData.IsAssociator,
         MPOTensor.GroupFamily.FusionData.omega}
     \leanok
-    \uses{def:mpug_group_representation, cor:asym_fusion_tensors_group}
+    \uses{def:mpug_group_representation, def:mpdo_operator_product,
+        def:mpo_to_mps, def:mps_rectangular_reduction}
     Let $\{O_g\}_{g\in G}$ be matrix product operator tensors of positive
     bond dimension whose doubled-index tensors are normal and whose periodic
     operators satisfy $O_g O_h=O_{gh}$ on every nonempty chain. A choice of
@@ -4119,7 +4120,7 @@ $(MN)P$ into $M(NP)$.
     $T=(O_gO_h)O_k$ reduces onto $O_{ghk}$ along the two fusion trees with
     left boundaries
     \begin{align}
-        V^{L} & =F^<_{gh,k}\,(F^<_{g,h}\otimes\mathbf 1), &
+        V^{L} & =F^<_{gh,k}\,(F^<_{g,h}\otimes\mathbf 1),                  &
         V^{R} & =F^<_{g,hk}\,(\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1},
     \end{align}
     and $\omega(g,h,k)\in\C^\times$ is the scalar with
