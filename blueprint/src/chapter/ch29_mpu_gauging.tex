@@ -4291,7 +4291,8 @@ of $T$ applied to those of $B$.
         MPSTensor.IsDressedProportional.actTensor_idKron,
         MPSTensor.IsDressedProportional.actTensor_kronId}
     \leanok
-    \uses{thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    \uses{def:mpdo_operator_product, def:mpdo_operator_product_associator,
+        def:mpo_to_mps, def:mps_rectangular_reduction}
     If $(V,W)$ reduces $B$ onto $A$, then
     $(\mathbf 1\otimes V,\mathbf 1\otimes W)$ reduces $T\cdot B$ onto
     $T\cdot A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
@@ -4311,6 +4312,7 @@ of $T$ applied to those of $B$.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
     A word of $T\cdot B$ is a sum over the contracted physical
     configurations of Kronecker products of a word of $T$ and a word of $B$
     of the same length:
