@@ -196,6 +196,126 @@ that prefactor is omitted in the blocks defined here.
     (\ref{eq:asymex_fib_tau_11}).
 \end{proof}
 
+The blocks above are built from the categorical data of the Fibonacci
+theory, which~\cite[Appendix~D.1]{Bultinck2017Anyons} and the review
+print in the following form. The former gives the operator tensor only
+as a diagram and prints no entries of $B_1$ or $B_\tau$; the placement of the $F$-symbols used
+here, without the closed-loop factors of the source and without the
+prefactor of the review, is recorded in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
+
+\begin{definition}[Fibonacci fusion data of the review]
+    \label{def:asymex_fib_fsymbols}
+    \lean{FibonacciCompression.fibQuantumDimGolden,
+        FibonacciCompression.fibQuantumDimInvSqrt,
+        FibonacciCompression.fibFTauGolden,
+        FibonacciCompression.fibFSymbolGolden,
+        FibonacciCompression.fibGSymbolGolden}
+    \leanok
+    \uses{def:asymex_golden_ring, def:asymex_fib_anomaly_nim}
+    The Fibonacci theory has the labels $1$ and $\tau$, with fusion
+    multiplicities
+    $N_{11}^1=N_{\tau1}^\tau=N_{1\tau}^\tau=N_{\tau\tau}^1=N_{\tau\tau}^\tau=1$
+    and all others zero, and quantum dimensions $d_1=1$ and
+    $d_\tau=\varphi=1+\sigma^2$. Write $v_a=\sqrt{d_a}$, so that
+    $v_1^{-1}=1$ and $v_\tau^{-1}=\sigma$. For labels $a,b,c,d,e,f$,
+    with $\delta_{ijk}=1$ when $N_{ij}^k>0$ and $\delta_{ijk}=0$
+    otherwise, the $F$-symbols are
+    \begin{align}
+        [F^{abc}_d]_e^f
+         & =\delta_{abe}\delta_{cde}\delta_{adf}\delta_{bcf}\,F^{abc}_{def},
+        \label{eq:asymex_fib_fsymbol}
+    \end{align}
+    where $F^{abc}_{def}=1$ unless $a=b=c=d=\tau$, and the block at
+    $a=b=c=d=\tau$, indexed by $e,f\in\{1,\tau\}$, is
+    \begin{align}
+        F^{\tau\tau\tau}_\tau
+         & =\begin{pmatrix}
+                \sigma^2 & \sigma    \\
+                \sigma   & -\sigma^2
+            \end{pmatrix}
+        =\begin{pmatrix}
+             1/\varphi      & 1/\sqrt\varphi \\
+             1/\sqrt\varphi & -1/\varphi
+         \end{pmatrix}.
+        \label{eq:asymex_fib_ftau}
+    \end{align}
+    The $G$-symbols are
+    $G^{abc}_{def}=v_e^{-1}v_f^{-1}[F^{abc}_d]_e^f$. All these
+    quantities are taken in $\Z[\sigma]$. This is the data
+    of~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix}
+    and~\cite[Appendix~D.1]{Bultinck2017Anyons}.
+\end{definition}
+
+\begin{theorem}[Values of the Fibonacci fusion data]
+    \label{thm:asymex_fib_fsymbol_values}
+    % Principal declaration: FibonacciCompression.complexOfGolden_fibFTauGolden.
+    \lean{FibonacciCompression.complexOfGolden_fibFTauGolden,
+        FibonacciCompression.fibNim_eq_ite,
+        FibonacciCompression.fibQuantumDimGolden_one_sq,
+        FibonacciCompression.fibQuantumDimInvSqrt_sq_mul,
+        FibonacciCompression.fibFTauGolden_mul_self,
+        FibonacciCompression.fibFSymbolGolden_tau,
+        FibonacciCompression.goldenToComplex_fibQuantumDimGolden_one,
+        goldenSigmaReal_sq, goldenSigmaReal_eq_inv_sqrt_goldenRatio}
+    \leanok
+    \uses{def:asymex_fib_fsymbols, def:asymex_fib_anomaly_nim,
+        def:asymex_golden_ring}
+    The multiplicities $N_{ab}^c$ of
+    Definition~\ref{def:asymex_fib_anomaly_nim} are the Fibonacci
+    fusion multiplicities listed in
+    Definition~\ref{def:asymex_fib_fsymbols}. In $\Z[\sigma]$,
+    $d_\tau^2=d_\tau+1$, $v_a^{-2}d_a=1$ for both labels, the block
+    (\ref{eq:asymex_fib_ftau}) squares to the identity, and it is the
+    block of the $F$-symbols (\ref{eq:asymex_fib_fsymbol}) at
+    $a=b=c=d=\tau$. Under the embedding into $\C$, $d_\tau$ is the
+    golden ratio, $\sigma^2=\varphi^{-1}$, $\sigma=1/\sqrt\varphi$, and
+    the block (\ref{eq:asymex_fib_ftau}) has the printed complex entries
+    $1/\varphi$, $1/\sqrt\varphi$, $1/\sqrt\varphi$, $-1/\varphi$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_golden_ring}
+    The identities in $\Z[\sigma]$ are finite computations with
+    coefficients reduced using $\sigma^4=1-\sigma^2$; the
+    multiplicities are compared case by case. Over the reals,
+    $\sigma^2=(\sqrt5-1)/2=\varphi^{-1}$, so
+    $1+\sigma^2=1+\varphi^{-1}=\varphi$, and $\sigma$ is the
+    nonnegative square root of $\varphi^{-1}$.
+\end{proof}
+
+\begin{theorem}[The $\tau$ block is the $F$-symbol tensor]
+    \label{thm:asymex_fib_tau_fsymbol}
+    % Principal declaration: FibonacciCompression.fibTau_eq_fSymbol.
+    \lean{FibonacciCompression.fibTau_eq_fSymbol,
+        FibonacciCompression.fibTauGolden_eq_fSymbol,
+        FibonacciCompression.fibLetter}
+    \leanok
+    \uses{def:asymex_fib, def:asymex_fib_fsymbols, def:asymex_golden_ring}
+    Index the three bond coordinates of $B_\tau$ by the admissible
+    letters $(1,\tau)$, $(\tau,1)$, $(\tau,\tau)$, in this order. For
+    every physical letter $(x',x)$, every incoming bond letter $p$ and
+    every outgoing bond letter $q=(q',q'')$,
+    \begin{align}
+        (B_\tau^{x'x})_{pq}
+         & =\begin{cases}
+                [F^{\tau x\tau}_{q'}]_{x'}^{q''} & \text{if } p=(x',x), \\
+                0                                & \text{otherwise},
+            \end{cases}
+        \label{eq:asymex_fib_tau_fsymbol}
+    \end{align}
+    both in $\Z[\sigma]$ and, after the entrywise embedding, over $\C$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_golden_ring}
+    For each of the four physical letters, both sides are $3\times3$
+    matrices over $\Z[\sigma]$ and are compared entrywise using
+    (\ref{eq:asymex_fib_fsymbol}) and (\ref{eq:asymex_fib_ftau}). The
+    complex statement follows by the entrywise embedding.
+\end{proof}
+
 \begin{theorem}[Normality of the two Fibonacci blocks]
     \label{thm:asymex_fib_normal}
     \lean{FibonacciCompression.fibOneMPS_isNormal,
@@ -337,6 +457,102 @@ This vacuum block is distinct from the weighted string-net projector
 of~\cite[Appendix~D.1]{Bultinck2017Anyons}, which combines the vacuum and
 $\tau$ blocks with weights $w_1=1/(1+\varphi^2)$ and
 $w_\tau=\varphi/(1+\varphi^2)$.
+
+\begin{definition}[The weighted Fibonacci projector]
+    \label{def:asymex_fib_projector}
+    \lean{FibonacciCompression.fibWeight, FibonacciCompression.fibPMPO,
+        FibonacciCompression.fibDelta, FibonacciCompression.fibProjector}
+    \leanok
+    \uses{def:asymex_fib, def:mpo_direct_sum, def:mpo_family}
+    The weights of the two labels are
+    $w_1=1/(1+\varphi^2)$ and $w_\tau=\varphi/(1+\varphi^2)$, the quantum
+    dimensions divided by the square of the total quantum dimension.
+    The bond-dimension-five tensor is the direct sum $B_1\oplus B_\tau$,
+    and its boundary matrix is
+    $\Delta=w_1\Id_2\oplus w_\tau\Id_3$. At every system size $N$, the
+    weighted projector is
+    \begin{align}
+        \Pi_N & =w_1O_N(B_1)+w_\tau O_N(B_\tau)
+        =\frac{O_N(B_1)+\varphi\,O_N(B_\tau)}{1+\varphi^2},
+        \label{eq:asymex_fib_projector}
+    \end{align}
+    following~\cite[Sections~3.1 and~3.2 and Appendix~D.1]{Bultinck2017Anyons}:
+    Section~3.1 derives the boundary matrices $\Delta_a=w_a\Id$ of the
+    blocks, and Section~3.2 writes the projector as $\sum_aw_aO_N(B_a)$.
+\end{definition}
+
+\begin{theorem}[The weight relation]
+    \label{thm:asymex_fib_projector_weights}
+    \lean{FibonacciCompression.fibWeight_fusion}
+    \leanok
+    \uses{def:asymex_fib_projector, def:asymex_fib_anomaly_nim}
+    For each label $c\in\{1,\tau\}$,
+    $\sum_{a,b\in\{1,\tau\}}N_{ab}^cw_aw_b=w_c$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $c=1$ the relation reads $w_1=w_1^2+w_\tau^2$, and both
+    sides equal $1/(1+\varphi^2)$. For $c=\tau$ it reads
+    $w_\tau=2w_1w_\tau+w_\tau^2$; after multiplication by
+    $(1+\varphi^2)^2/\varphi$ it becomes $1+\varphi^2=2+\varphi$, a
+    consequence of $\varphi^2=\varphi+1$.
+\end{proof}
+
+\begin{theorem}[The projector from the bond-dimension-five tensor]
+    \label{thm:asymex_fib_projector_trace}
+    % Principal declaration: FibonacciCompression.fibProjector_eq_trace_fibDelta.
+    \lean{FibonacciCompression.fibProjector_eq_trace_fibDelta,
+        FibonacciCompression.mpo_fibPMPO}
+    \leanok
+    \uses{def:asymex_fib_projector}
+    At every system size $N$, write $B=B_1\oplus B_\tau$. Then
+    \begin{align}
+        \bra{y}\Pi_N\ket{x}
+         & =\tr(\Delta B^{y_0x_0}\cdots B^{y_{N-1}x_{N-1}}),
+        \label{eq:asymex_fib_projector_trace}
+    \end{align}
+    and without the boundary matrix the periodic operator is
+    $O_N(B)=O_N(B_1)+O_N(B_\tau)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpo_direct_sum_eval_word, thm:mpo_direct_sum_additive}
+    Word evaluation of the direct sum is block diagonal by
+    Lemma~\ref{lem:mpo_direct_sum_eval_word}. Multiplication by the
+    block-diagonal matrix $\Delta$ scales the two blocks by $w_1$ and
+    $w_\tau$, and the trace of a block-diagonal matrix is the sum of the
+    traces of its blocks. The second statement is
+    Theorem~\ref{thm:mpo_direct_sum_additive}.
+\end{proof}
+
+\begin{theorem}[The weighted Fibonacci projector is idempotent]
+    \label{thm:asymex_fib_projector_idempotent}
+    \lean{FibonacciCompression.fibProjector_mul_self}
+    \leanok
+    \uses{def:asymex_fib_projector}
+    For every system size $N\geq1$,
+    $(\Pi_N)^2=\Pi_N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_fib_unit, thm:asymex_fib_fusion,
+        thm:asymex_fib_projector_weights}
+    Expanding the square and using the unit laws of
+    Theorem~\ref{thm:asymex_fib_unit} and the fusion rule of
+    Theorem~\ref{thm:asymex_fib_fusion} gives
+    $(w_1^2+w_\tau^2)O_N(B_1)+(2w_1w_\tau+w_\tau^2)O_N(B_\tau)$.
+    Theorem~\ref{thm:asymex_fib_projector_weights} identifies the two
+    coefficients with $w_1$ and $w_\tau$.
+\end{proof}
+
+At $N=0$ the empty traces give $O_0(B_1)=2$ and $O_0(B_\tau)=3$, so
+$\Pi_0=(2+3\varphi)/(1+\varphi^2)\neq1$;
+\cite[Section~3.2]{Bultinck2017Anyons} asks for idempotence at every
+length, and the empty chain is excluded as a degenerate reading;
+see~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
 
 \subsection{Two periodic states and the Fibonacci action}
 
