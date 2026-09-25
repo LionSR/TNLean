@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.SimpleScaling
 /-!
 # Ising anyon chain: closed-path kernels and the gauges of the fusion products
 
-**Source.** Bultinck, Mariën, Williamson, Şahinoğlu, Haegeman, Verstraete 2017
+**Source.** Bultinck, Mariën, Williamson, Sahinoglu, Haegeman, Verstraete 2017
 (arXiv:1511.08090), Appendix D.2 "Ising string-net",
 `References/1511.08090/AnyonsPEPS.tex` lines 1305–1323: the Ising labels `1, σ, ψ`, the fusion
 rules `ψ × ψ = 1`, `σ × ψ = σ`, `σ × σ = 1 + ψ`, the quantum dimension `d_σ = √2`, the
@@ -67,7 +67,7 @@ periodic operator at positive length.
 
 ## References
 - [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
-  D. J. Williamson, M. B. Şahinoğlu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
   operator algebras*
 - [arXiv:1601.07185](https://arxiv.org/abs/1601.07185) -- D. Aasen, R. S. K. Mong, P. Fendley,
   *Topological defects on the lattice I: the Ising model*

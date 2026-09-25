@@ -8,7 +8,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebra
 /-!
 # Ising anyon chain: the fusion rule `σ × σ = 1 + ψ`
 
-**Source.** Bultinck, Mariën, Williamson, Şahinoğlu, Haegeman, Verstraete 2017
+**Source.** Bultinck, Mariën, Williamson, Sahinoglu, Haegeman, Verstraete 2017
 (arXiv:1511.08090), Appendix D.2 "Ising string-net",
 `References/1511.08090/AnyonsPEPS.tex` lines 1305–1323: the only nontrivial fusion rule of the
 Ising category is `σ × σ = 1 + ψ` (line 1312), with the F-symbols `F^{σσσ}_{σ a b} = ± 1/√2`
@@ -50,7 +50,7 @@ over `ℤ[√2]`, sector by sector of the middle label `ρ`.
 
 ## References
 - [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
-  D. J. Williamson, M. B. Şahinoğlu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
   operator algebras*
 - [arXiv:1601.07185](https://arxiv.org/abs/1601.07185) -- D. Aasen, R. S. K. Mong, P. Fendley,
   *Topological defects on the lattice I: the Ising model*

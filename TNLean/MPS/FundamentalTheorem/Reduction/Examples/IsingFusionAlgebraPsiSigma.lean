@@ -8,7 +8,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.IsingFusionAlgebra
 /-!
 # Ising anyon chain: the fusion rules of σ with the fermion
 
-**Source.** Bultinck, Mariën, Williamson, Şahinoğlu, Haegeman, Verstraete 2017
+**Source.** Bultinck, Mariën, Williamson, Sahinoglu, Haegeman, Verstraete 2017
 (arXiv:1511.08090), Appendix D.2 "Ising string-net",
 `References/1511.08090/AnyonsPEPS.tex` lines 1305–1323: the fusion rule `ψ × σ = σ × ψ = σ`
 (lines 1308–1312) and the
@@ -36,7 +36,7 @@ permutation gauge of `IsingFusionAlgebra`; the letter identities are decided ove
 
 ## References
 - [arXiv:1511.08090](https://arxiv.org/abs/1511.08090) -- N. Bultinck, M. Mariën,
-  D. J. Williamson, M. B. Şahinoğlu, J. Haegeman, F. Verstraete, *Anyons and matrix product
+  D. J. Williamson, M. B. Sahinoglu, J. Haegeman, F. Verstraete, *Anyons and matrix product
   operator algebras*
 -/
 
