@@ -240,7 +240,8 @@
     \lean{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge}
     \lean{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_regauge}
     \leanok
-    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove}
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove,
+        lem:matrix_kronecker_identity_cancellation}
     For every triple of labels let $Y^c_{ab}$ be an invertible
     $N_{ab}^{c}\times N_{ab}^{c}$ matrix, write
     $\Pi_{ab}=\bigoplus_c Y^c_{ab}\otimes\Id_{D_c}$, and let $X_{ab}$ and
@@ -273,7 +274,8 @@
     the $F$-symbols in \cite[lines~415--422]{GarreRubio2023MPOSym}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove}
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove,
+        lem:matrix_kronecker_identity_cancellation}
     Since $\Pi_{ab}$ acts only on the multiplicity factors, it commutes with
     $\bigoplus_c\Id\otimes B_c^{ik}$. The biorthogonality, reconstruction and
     zipper identities of the new family follow.
