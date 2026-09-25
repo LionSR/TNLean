@@ -209,6 +209,8 @@ section Triple
 
 variable (g h k : G) (x : X)
 
+/-- Moving an identification of target blocks out of the operator layer of an action tensor:
+`V_{g,y'} (1 ⊗ castBlock e Y) = castBlock (g • e) V_{g,y} (1 ⊗ Y)` for `e : y = y'`. -/
 private theorem V_mul_idKron_castBlock (g : G) {y y' : X} (e : y = y') {n : ℕ}
     (Y : Matrix (Fin (D y)) (Fin n) ℂ) :
     ad.V g y' * idKron (F.bondDim g) (castBlock D e * Y) =
@@ -216,6 +218,8 @@ private theorem V_mul_idKron_castBlock (g : G) {y y' : X} (e : y = y') {n : ℕ}
   subst e
   simp
 
+/-- Moving a bond identification of the operator factor out of the action tensor of an
+element: `V_{b,y} (castMat e Y ⊗ 1) = castBlock (e • y) V_{a,y} (Y ⊗ 1)` for `e : a = b`. -/
 private theorem V_mul_kronId_castMat {a b : G} (e : a = b) (y : X) {n : ℕ}
     (Y : Matrix (Fin (F.bondDim a)) (Fin n) ℂ) :
     ad.V b y * kronId (F.castMat e * Y) (D y) =
@@ -223,6 +227,8 @@ private theorem V_mul_kronId_castMat {a b : G} (e : a = b) (y : X) {n : ℕ}
   subst e
   simp
 
+/-- The pentagon step: acting with `k` first and then with `h` and `g` is the same boundary
+as acting with the pair `(h, k)` inside the action of `g`. -/
 private theorem actV_mul_reduce_k :
     ad.actV g h (k • x) * (idKron (F.bondDim g * F.bondDim h) (ad.V k x) *
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) (D x)) =
@@ -233,6 +239,8 @@ private theorem actV_mul_reduce_k :
   rw [← Matrix.mul_assoc (idKron (F.bondDim g) (mulTensorAssocInvMatrix _ _ _)),
     assocInv_pentagon]
 
+/-- The inner fusion step: acting with `g` on the fused pair `(h, k)` is the action tree of
+`(g, hk)` composed with the fusion of `h` with `k` on the triple. -/
 private theorem fuseV_inner_eq :
     ad.V g (h • k • x) * idKron (F.bondDim g) (ad.fuseV fd h k x) *
         (mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h * F.bondDim k) (D x) *
@@ -246,6 +254,8 @@ private theorem fuseV_inner_eq :
   rw [← Matrix.mul_assoc (idKron _ (kronId _ _)), ← assocInv_mul_kronId_idKron,
     Matrix.mul_assoc]
 
+/-- Acting with `k` first and then fusing `g` with `h` is the action tree of `(gh, k)` composed
+with the fusion of `g` with `h` on the triple. -/
 private theorem fuseV_mul_reduce_k :
     ad.fuseV fd g h (k • x) * (idKron (F.bondDim g * F.bondDim h) (ad.V k x) *
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) (D x)) =
@@ -254,12 +264,16 @@ private theorem fuseV_mul_reduce_k :
   simp only [actV, fuseV, Matrix.mul_assoc, kronId_mul_idKron_assoc]
   rw [← assocInv_mul_kronId_kronId]
 
+/-- Fusing `gh` with `k` after fusing `g` with `h` is the fusion tree `leftV` of the associator,
+followed by the action of `ghk`. -/
 private theorem fuseV_mul_left :
     ad.fuseV fd (g * h) k x * kronId (kronId (fd.V g h) (F.bondDim k)) (D x) =
       castBlock D (mul_smul (g * h) k x) *
         (ad.V (g * h * k) x * kronId (fd.leftV g h k) (D x)) := by
   simp only [fuseV, FusionData.leftV, Matrix.mul_assoc, kronId_mul]
 
+/-- Fusing `g` with `hk` after fusing `h` with `k` is the fusion tree `rightV` of the
+associator, followed by the action of `ghk`. -/
 private theorem fuseV_mul_right :
     ad.fuseV fd g (h * k) x * kronId (idKron (F.bondDim g) (fd.V h k) *
         mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) (D x) =
