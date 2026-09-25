@@ -48,8 +48,9 @@ three-cocycle allows no invariant single-block state (data file §0, §6.5).
   the pair of normal states.
 * `FibonacciCompression.fibTau_eigenvalue_eq_zero`: a length-independent eigenvalue of `O_τ` on
   the periodic vectors of a normal tensor of positive bond dimension is zero.
-* `FibonacciCompression.not_exists_normal_fibonacci_symmetric`: no normal matrix product state
-  of positive bond dimension is symmetric under the Fibonacci algebra.
+
+The single-block no-go `FibonacciCompression.not_exists_normal_fibonacci_symmetric` is derived
+from the general fusion-ring obstruction in `TNLean/MPS/Symmetry/MPOSymmetry/Examples.lean`.
 -/
 
 noncomputable section
@@ -190,36 +191,5 @@ theorem fibTau_eigenvalue_eq_zero {D : ℕ} [NeZero D] (A : MPSTensor 2 D) (hA :
     exact hfus.trans (add_comm _ _)
   have hmm : (m : ℂ) * m = m + 1 := smul_left_injective ℂ hv0 hfus'
   exact Nat.mul_self_ne_add_one m (by exact_mod_cast hmm)
-
-/-- **No normal matrix product state is symmetric under the Fibonacci algebra** (data file §0,
-§6.5): there is no normal tensor of positive bond dimension whose periodic vectors are fixed by
-the admissibility projector and are eigenvectors of the `τ` family with one length-independent
-eigenvalue. The pair of normal states of `Examples/FibonacciAction.lean` shows that two blocks
-suffice, so the minimal number of blocks of a Fibonacci-symmetric family of normal states is
-two: the lattice form of the absence of a fiber functor on the Fibonacci category, the
-non-invertible analogue of arXiv:2203.12563, line 738. -/
-theorem not_exists_normal_fibonacci_symmetric :
-    ¬ ∃ (D : ℕ) (A : MPSTensor 2 D) (c : ℂ), 0 < D ∧ Kraus.IsNormal A ∧
-      (∀ L : ℕ, 0 < L →
-        mpo fibOne L *ᵥ (fun τ : Fin L → Fin 2 => mpv A τ) = fun σ : Fin L → Fin 2 => mpv A σ) ∧
-      (∀ L : ℕ, 0 < L →
-        mpo fibTau L *ᵥ (fun τ : Fin L → Fin 2 => mpv A τ) =
-          c • fun σ : Fin L → Fin 2 => mpv A σ) := by
-  rintro ⟨D, A, c, hD, hA, hone, hτ⟩
-  have : NeZero D := ⟨hD.ne'⟩
-  have hc0 : c = 0 := fibTau_eigenvalue_eq_zero A hA c hτ
-  obtain ⟨ℓ, hℓ, hinj⟩ := hA
-  have hLpos : 0 < ℓ + 1 := Nat.succ_pos ℓ
-  have hv0 : (fun σ : Fin (ℓ + 1) → Fin 2 => mpv A σ) ≠ 0 :=
-    mpv_ne_zero_of_isNBlkInjective hinj hℓ le_rfl
-  have hτ0 : mpo fibTau (ℓ + 1) *ᵥ (fun τ : Fin (ℓ + 1) → Fin 2 => mpv A τ) = 0 := by
-    rw [hτ (ℓ + 1) hLpos, hc0, zero_smul]
-  have hfus : (mpo fibTau (ℓ + 1) * mpo fibTau (ℓ + 1)) *ᵥ
-        (fun τ : Fin (ℓ + 1) → Fin 2 => mpv A τ) =
-      (mpo fibOne (ℓ + 1) + mpo fibTau (ℓ + 1)) *ᵥ fun τ : Fin (ℓ + 1) → Fin 2 => mpv A τ := by
-    rw [fibonacci_fusion_rule (ℓ + 1) hLpos]
-  rw [← Matrix.mulVec_mulVec, hτ0, Matrix.mulVec_zero, Matrix.add_mulVec, hτ0,
-    hone (ℓ + 1) hLpos, add_zero] at hfus
-  exact hv0 hfus.symm
 
 end FibonacciCompression

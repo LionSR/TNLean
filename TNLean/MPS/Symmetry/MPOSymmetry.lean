@@ -9,3 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Symmetry.MPOSymmetry
 
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
+import TNLean.MPS.Symmetry.MPOSymmetry.Character
+import TNLean.MPS.Symmetry.MPOSymmetry.Defs
+import TNLean.MPS.Symmetry.MPOSymmetry.Examples
+import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
