@@ -159,13 +159,45 @@ injective.
     \cite[eq.~(15)]{Malz2024Preparation}.
 \end{proof}
 
+\begin{lemma}[Uniqueness of the polar decomposition]
+    \label{lem:ldp_polar_uniqueness}
+    \lean{Matrix.polarPos_eq_of_eq_mul, Matrix.polarSupport_eq_of_eq_mul,
+        Matrix.polarIso_eq_of_eq_mul}
+    \leanok
+    \uses{thm:ldpolar_decomposition}
+    Let $M=WQ$ with $Q\ge0$, and suppose $W^\dagger W=E$ for the orthogonal
+    projector $E$ onto the range of $Q$. Then $Q=(M^\dagger M)^{1/2}$, $E$ is the
+    support projector of $M$, and $W$ is the partial isometry of the polar
+    decomposition of $M$. This is the uniqueness invoked after
+    \cite[eq.~(16)]{Malz2024Preparation}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $EQ=Q$ and $WE=W$, $M^\dagger M=QE\,Q=Q^2$, so $Q$ is the positive
+    square root of $M^\dagger M$. Two orthogonal projectors with the same range
+    coincide, which identifies $E$. Finally $(V-W)Q=M-M=0$ for the partial
+    isometry $V$ of $M$, and both $V$ and $W$ are fixed by $E$, whose range lies
+    in the range of $Q$; hence $V=W$.
+\end{proof}
+
 \begin{theorem}[Tree factorization]
     \label{thm:ldp_tree_factorization}
-    \uses{thm:ldpolar_tensor_decomposition, lem:mpv_rotate_physical}
+    \lean{MPSTensor.treeTensor, MPSTensor.treePosTensor,
+        MPSTensor.treeIsoMatrix, MPSTensor.blockKronRect,
+        MPSTensor.blockTensor_eq_rotatePhysical_treeIsoMatrix,
+        MPSTensor.physicalMatrix_blockTensor_eq_treeIsoMatrix_mul,
+        MPSTensor.conjTranspose_blockKronRect_polarIsoMatrix_mul_self,
+        MPSTensor.conjTranspose_treeIsoMatrix_mul_self,
+        MPSTensor.polarIsoMatrix_blockTensor_eq_treeIsoMatrix,
+        MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, lem:ldpolar_physical_matrix_rotate,
+        lem:ldp_polar_uniqueness}
     Put $T_0=A$ and, for $j\ge1$, let $\mathcal B^{(j)}=V^{(j)}P_j$ be the polar
-    decomposition of the two-site blocked map of $T_{j-1}$, and let $T_j$ be the
-    tensor of $P_j$ (Definition~\ref{def:ldpolar_tensor}). Then for
-    $q=2^k$,
+    decomposition of the two-site blocked map of $T_{j-1}$, with
+    $V^{(j)\dagger}V^{(j)}=\Pi_j$ the support projector of $P_j$, and let $T_j$
+    be the tensor of $P_j$ (Definition~\ref{def:ldpolar_tensor}). Then for
+    $q=2^k$ with $k\ge1$,
     \begin{align}
         \mathcal B_q
          & =\Bigl(V^{(1)}\Bigr)^{\otimes2^{k-1}}
@@ -173,16 +205,28 @@ injective.
         \label{eq:ldp_tree_factorization}
     \end{align}
     Here $V^{(1)}$ maps $\C^{D^2}$ to $(\C^d)^{\otimes2}$ and each $V^{(j)}$ with
-    $j\ge2$ maps $\C^{D^2}$ to $\C^{D^2}\otimes\C^{D^2}$. The product of the
+    $j\ge2$ maps $\C^{D^2}$ to $\C^{D^2}\otimes\C^{D^2}$; the Kronecker powers
+    act on the regrouping of the $q$ sites into $2^{k-1}$ neighbouring pairs,
+    then pairs of pairs, and so on. Each layer
+    $\bigl(V^{(j)}\bigr)^{\otimes m}$ is a partial isometry with initial
+    projector $\Pi_j^{\otimes m}$. The product of the
     layers is a partial isometry with initial space the range of $P_k$, so by
     uniqueness of the polar decomposition it equals $V$ and $P_k=P_q$. This is
     \cite[eq.~(16)]{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}
-    Induction on $k$ using Lemma~\ref{lem:mpv_rotate_physical} for
-    open products. The range of the two-site blocked map of $T_{j-1}$ lies in
-    $\operatorname{ran}P_{j-1}\otimes\operatorname{ran}P_{j-1}$, so each layer
-    is applied inside the initial space of the next.
+    \leanok
+    Blocking commutes with maps on the physical leg: blocking $WC$ over $m$
+    sites gives $W^{\otimes m}$ applied to $C$ blocked over $m$ sites. Blocking
+    $2^{k}$ sites is blocking $2^{k-1}$ pairs of the two-site blocked tensor,
+    so induction on $k$ gives (\ref{eq:ldp_tree_factorization}).
+    The range of the two-site blocked map of $T_{j}$ lies in
+    $\operatorname{ran}P_{j}\otimes\operatorname{ran}P_{j}$, because
+    $\Pi_j$ fixes the tensor of $P_j$; so $\Pi_j^{\otimes2^{k-j}}$ fixes the
+    product of the later layers, and the product of all layers is a partial
+    isometry with initial projector the support projector of $P_k$.
+    Lemma~\ref{lem:ldp_polar_uniqueness} then identifies it with $V$ and $P_k$
+    with $P_q$.
 \end{proof}
 
 \section{Approximation error}
