@@ -55,6 +55,7 @@ theorem IsNormalRepresentation.isMPOFusionAlgebra {F : GroupFamily G d}
     IsMPOFusionAlgebra F.tensor fun a b c ↦ if c = a * b then 1 else 0 :=
   F.isMPOFusionAlgebra hF.operator_mul
 
+omit [Fintype G] in
 /-- Every label of the group fusion ring is invertible, with inverse `a⁻¹` and unit `1`.
 
 Source: arXiv:2203.12563, line 660. -/
