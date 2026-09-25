@@ -495,7 +495,7 @@ theorem eq_smul_basisVecZero_of_isSupportedBelow_one (hD : 0 < D) {w : Fin D →
     simp [basisVecZero]
   · simp [basisVecZero, hβ, hw β (Nat.one_le_iff_ne_zero.mpr hβ)]
 
-/-- The squared norm of `x • |0⟩` is `x̄ x`. -/
+/-- The squared norm of `x • |0⟩` is `star x * x`. -/
 theorem star_smul_basisVecZero_dotProduct_self (hD : 0 < D) (x : ℂ) :
     star (x • basisVecZero D) ⬝ᵥ (x • basisVecZero D) = star x * x := by
   rw [star_smul, star_basisVecZero, smul_dotProduct, dotProduct_smul,
