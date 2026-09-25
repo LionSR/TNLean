@@ -14,7 +14,7 @@ import TNLean.MPS.MPU.GroupRepresentation
 **Source.** Construction of this development: no source prints the `ℤ/3` tensors of
 `Z3AnomalousTensor.lean` or the operators below. Garre-Rubio and Schuch
 (arXiv:2405.00439), subsection "Example: `G = ℤ_n` with fully symmetry breaking",
-`Papers/2405.00439/MPU-DW.tex` lines 2037–2039, print the cyclic `3`-cocycles
+`Papers/2405.00439/MPU-DW.tex` lines 2038–2040, print the cyclic `3`-cocycles
 `ω_j(a, b, c) = exp(2πi j a (b + c - [b + c]) / n²)` of `ℤ/n`; the representative used here has
 class `j = 1` for `n = 3`, a fact checked only in the verification script and not formalized.
 Garre-Rubio, Lootens and Molnár (arXiv:2203.12563), subsubsection "Periodic boundary condition
