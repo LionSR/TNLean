@@ -148,7 +148,7 @@ two sites".
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 1181. -/
 theorem czxDecoratedMPS_isNormal : Kraus.IsNormal czxDecoratedTensor.toMPSTensor :=
-  isNormal_of_single_eq_two_words _ czxDecorated_single
+  MPSTensor.isNormal_of_single_eq_two_words _ czxDecorated_single
 
 /-! ### The periodic operator -/
 
