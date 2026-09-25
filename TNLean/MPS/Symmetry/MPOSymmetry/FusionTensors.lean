@@ -14,9 +14,9 @@ Let `O_a` be MPO tensors whose periodic operators obey fusion rules
 `O_a O_b = ∑_c N_{ab}^c O_c` at every positive length, with length-independent multiplicities
 `N_{ab}^c ∈ ℕ` and normal tensors `O_c` of positive bond dimension
 (Garre-Rubio--Lootens--Molnár, arXiv:2203.12563, lines 361--362).  The paper introduces fusion
-tensors `W_{ab}^{c,μ}`, `Ŵ_{ab}^{c,μ}`, `μ = 1, …, N_{ab}^c`, that decompose the stacked product
-of two MPO tensors into copies of the tensors `T_c`, with orthogonality relations
-`W_{ab}^{c,μ} Ŵ_{ab}^{d,ν} = δ_{cd} δ_{μν} 1` (equations `fusiontensors` and `eq:orthoW`).  The
+tensors `W_{ab}^{c,μ}`, `\hat W_{ab}^{c,μ}`, `μ = 1, …, N_{ab}^c`, that decompose the stacked
+product of two MPO tensors into copies of the tensors `T_c`, with orthogonality relations
+`W_{ab}^{c,μ} \hat W_{ab}^{d,ν} = δ_{cd} δ_{μν} 1` (equations `fusiontensors` and `eq:orthoW`).  The
 paper derives them from the closedness condition for arbitrary boundary conditions (Appendix
 `ap:proofs`, lines 2305--2313), which makes the decomposition exact.
 
@@ -94,7 +94,7 @@ omit [DecidableEq L] in
 * the remainder `B^i - ∑_s W s C_{s.1}^i V s` is nilpotent: its words of length at least the
   bond dimension of `B` vanish.
 
-These are the relations `W_{ab}^{c,μ} Ŵ_{ab}^{d,ν} = δ_{cd} δ_{μν} 1` of arXiv:2203.12563,
+These are the relations `W_{ab}^{c,μ} \hat W_{ab}^{d,ν} = δ_{cd} δ_{μν} 1` of arXiv:2203.12563,
 equation `eq:orthoW`, together with the periodic-boundary form of the decomposition, whose
 off-diagonal tails vanish after finitely many sites (lines 1028 and 1131). -/
 theorem exists_multiplicityReductions_of_isNormal (B : MPSTensor d DB)
@@ -178,9 +178,9 @@ dimension.  Then there are fusion tensors `V s`, `W s` for every copy `s = (c, �
 
 * `(V s, W s)` reduces the stacked product `mulTensor (O a) (O b)` onto `O_c`;
 * `V s W t = 0` for distinct copies, so that with `V s W s = 1` these are the paper's
-  orthogonality relations `W_{ab}^{c,μ} Ŵ_{ab}^{d,ν} = δ_{cd} δ_{μν} 1`;
+  orthogonality relations `W_{ab}^{c,μ} \hat W_{ab}^{d,ν} = δ_{cd} δ_{μν} 1`;
 * the remainder `B^{ij} - ∑_s W s O_{s.1}^{ij} V s` of the paper's decomposition
-  `∑_m T_a^{lm} T_b^{mp} = ∑_{c,μ} Ŵ_{ab}^{c,μ} T_c^{lp} W_{ab}^{c,μ}` is nilpotent: its words
+  `∑_m T_a^{lm} T_b^{mp} = ∑_{c,μ} \hat W_{ab}^{c,μ} T_c^{lp} W_{ab}^{c,μ}` is nilpotent: its words
   of length at least `χ_a χ_b` vanish.
 
 The paper proves the exact decomposition from the closedness condition for arbitrary boundary
@@ -265,7 +265,7 @@ single-copy remainder is not nilpotent, and the dressed proportionality fails in
 
 This is the boundary-dressed uniqueness theorem of Molnár--Ge--Schuch--Cirac,
 arXiv:1706.07329v2, Theorem 22 (`cornerproblem.tex` lines 3156--3162), on the pair alphabet.
-The source's gauge `W ↦ y W`, `Ŵ ↦ y⁻¹ Ŵ` is recovered only after dressing, because in the
+The source's gauge `W ↦ y W`, `\hat W ↦ y⁻¹ \hat W` is recovered only after dressing, because in the
 periodic setting the fusion tensors are not determined off the support of long words. -/
 theorem exists_boundary_dressed_proportional_of_mpo_mul_eq {χa χb χc : ℕ}
     {Oa : MPOTensor d χa} {Ob : MPOTensor d χb} {Oc : MPOTensor d χc}
