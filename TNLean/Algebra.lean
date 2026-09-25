@@ -64,6 +64,7 @@ import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.RestrictedScalarGauge
 import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleInversion

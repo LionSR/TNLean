@@ -30,10 +30,12 @@ invertible.
 Not instances. The undecorated CZX operator of `CZXUnitary.lean` squares to `(-1)^L` times the
 identity (`CZXCompression.mpo_czxTensor_mul_self`), so the pair `1, U_CZX` obeys the `ℤ/2`
 fusion rules only at even lengths and is not a fusion algebra in the sense used here, which
-requires the rules at every positive length. The Kramers–Wannier square of
-`KramersWannier.lean` has the word traces `2^L (1 + η)` times those of a translation
-(`KWExample.kwSquare_trace_evalWord`), a length-dependent coefficient, so it does not have
-length-independent nonnegative integer structure constants either.
+requires the rules at every positive length. The Kramers–Wannier operator
+`D` of `KramersWannier.lean` squares to `2^L (1 + η) T`, where `T` is the one-site translation
+(`KWExample.kwSquare_trace_evalWord`). The factor `2^L` is a normalization and disappears after
+rescaling `D`, but the translation `T` does not: `D² = (1 + η) T` expresses the square through
+an operator outside the span of `1`, `η` and `D`, so the labels `1, η, D` do not close under
+multiplication and form no fusion algebra in the sense used here.
 
 ## Provenance
 
@@ -71,8 +73,10 @@ namespace FibonacciCompression
 labels. -/
 abbrev fibFusion (a b c : Fin 2) : ℕ := fibNim a b c
 
-/-- Source: arXiv:1511.08090, App. D.1; arXiv:2203.12563, line 1993. The Fibonacci periodic
-operators form a matrix product operator fusion algebra. -/
+/-- Bridge: the periodic operators of the project's Fibonacci tensors `fibBlock` satisfy the
+Fibonacci fusion rules `τ × τ = 1 + τ` printed in arXiv:2203.12563, line 1993 (operators of
+arXiv:1511.08090, App. D.1), so they form a matrix product operator fusion algebra; this wraps
+`fibonacci_fusion_algebra`. -/
 theorem isMPOFusionAlgebra_fibBlock : IsMPOFusionAlgebra fibBlock fibFusion :=
   fun a b L hL => fibonacci_fusion_algebra a b L hL
 
@@ -82,8 +86,9 @@ theorem isFusionUnit_fibFusion : IsFusionUnit fibFusion 0 := by
   intro b c
   fin_cases b <;> fin_cases c <;> simp [fibFusion, fibNim, fibFusionMatrix, Matrix.one_apply]
 
-/-- Source: arXiv:2203.12563, lines 1991–1993. The pair of normal states is a symmetric family
-with the regular action `τ · x_1 = x_τ`, `τ · x_τ = x_1 + x_τ`. -/
+/-- Bridge: the project's pair of normal tensors `fibNimTargets` is a symmetric family for
+`fibBlock` with the regular action `τ · x_1 = x_τ`, `τ · x_τ = x_1 + x_τ` printed in
+arXiv:2203.12563, lines 1991–1993; this wraps `fibonacci_nim_rep`. -/
 theorem isMPOSymmetricFamily_fibNimTargets :
     IsMPOSymmetricFamily fibBlock fibNimTargets fun a s t => (fibNim a s t : ℂ) :=
   fun a s L hL => fibonacci_nim_rep a s L hL

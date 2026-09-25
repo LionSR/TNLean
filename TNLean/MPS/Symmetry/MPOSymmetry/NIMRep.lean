@@ -32,9 +32,6 @@ subspace (lines 431–434), the form evaluated at lines 567–568; documented in
 
 ## Main results
 
-* `MPOTensor.pairwise_isEmpty_linearEquiv_of_linearIndependent`: blocks with linearly
-  independent periodic vectors have pairwise non-isomorphic word modules, the hypothesis of the
-  multi-block integrality theorem `MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul`.
 * `MPOTensor.exists_nat_eq_of_isMPOSymmetricFamily`: the action coefficients are nonnegative
   integers.
 * `MPOTensor.sum_fusion_mul_eq_sum_mul_of_isMPOSymmetricFamily`: the action coefficients satisfy
@@ -50,42 +47,11 @@ subspace (lines 431–434), the form evaluated at lines 567–568; documented in
 
 open scoped Matrix
 
-namespace MPSTensor
-
-open WordAlgebra
-
-variable {d : ℕ}
-
-/-- Tensors with different periodic vectors at some length have non-isomorphic word modules:
-isomorphic word modules have the same word traces. -/
-theorem isEmpty_linearEquiv_wordModule_of_mpv_ne {D D' L : ℕ} (A : MPSTensor d D)
-    (A' : MPSTensor d D') (σ : Fin L → Fin d) (h : mpv A σ ≠ mpv A' σ) :
-    IsEmpty (A.WordModule ≃ₗ[WordAlgebra d] A'.WordModule) := by
-  refine ⟨fun e => h ?_⟩
-  have := traceWord_congr e (List.ofFn σ)
-  rw [traceWord_wordModule, traceWord_wordModule] at this
-  simpa only [mpv, coeff] using this
-
-end MPSTensor
-
 namespace MPOTensor
 
 open MPSTensor
 
-variable {d : ℕ} {ι κ : Type*} {χ : ι → ℕ} {D : κ → ℕ}
-
-/-- Linearly independent periodic vectors have pairwise non-isomorphic word modules. -/
-theorem pairwise_isEmpty_linearEquiv_of_linearIndependent (A : ∀ x, MPSTensor d (D x))
-    {L₀ : ℕ} (hli : LinearIndependent ℂ fun x => fun σ : Fin L₀ → Fin d => mpv (A x) σ) :
-    Pairwise fun y y' =>
-      IsEmpty ((A y).WordModule ≃ₗ[WordAlgebra d] (A y').WordModule) := by
-  intro y y' hyy'
-  have hv : (fun σ : Fin L₀ → Fin d => mpv (A y) σ) ≠ fun σ => mpv (A y') σ :=
-    fun heq => hyy' (hli.injective heq)
-  obtain ⟨σ, hσ⟩ := Function.ne_iff.1 hv
-  exact isEmpty_linearEquiv_wordModule_of_mpv_ne (A y) (A y') σ hσ
-
-variable [Fintype κ]
+variable {d : ℕ} {ι κ : Type*} {χ : ι → ℕ} {D : κ → ℕ} [Fintype κ]
 
 /-- **The action multiplicities are nonnegative integers.**
 
