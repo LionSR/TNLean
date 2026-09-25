@@ -7,17 +7,31 @@ import TNLean.Algebra.GeneralizeDecide
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2
 
 /-!
-# The twelve split pair blocks of the `ℤ/2 × ℤ/2` condensation defect
+# Anomalous `ℤ/2 × ℤ/2` symmetry: the twelve split pair blocks of the condensation defect
 
-The stacked product `A ⊗ A` of the condensation defect `A = ∑_g U_g` of the anomalous
-`ℤ/2 × ℤ/2` symmetry is block diagonal over the sixteen pairs `(g, h)`, the block of `(g, h)`
-being the stacked tensor `M_g ⊗ M_h` of the product `U_g U_h`
-(`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md`, Sections 4 and 5). Twelve of the
+**Source.** Construction of this development; no source prints these tensors.
+Garre-Rubio, Lootens and Molnár (arXiv:2203.12563), Section "Examples of explicit MPSs and
+MPO representations", subsubsection "Periodic boundary condition case",
+`Papers/2203.12563/REsubmission.tex` lines 2202–2224, build periodic matrix product operator
+representations of a finite group from a three-cocycle and print only the `ℤ/2` example
+`U_g = ∏ CZ_{i,i+1} Z_i ∏ X_i`; Garre-Rubio and Schuch (arXiv:2405.00439), Section "The simplest
+example", `Papers/2405.00439/MPU-DW.tex` lines 1123–1134, print only the CZX matrix product
+unitary of `ℤ/2`. The `ℤ/2 × ℤ/2` tensors used here are built from the CZX letters and carry
+the mixed (type-II) class `(-1)^{a_1 b_2 c_2}` of `H^3(ℤ/2 × ℤ/2, U(1))`.
+The term *condensation defect* for the sum of the operators of a finite symmetry follows
+Roumpedakis, Seifnashri and Shao (arXiv:2204.02407), Section "Higher gauging and condensation
+defects", `References/2204.02407/source/condensation_draft.tex` lines 145–148, where it is the
+sum over insertions of the symmetry defects; lines 1415–1417 of the same file note that for a
+`ℤ/2` operator `U` the sum `P_+ = 1 + U` obeys `P_+ × P_+ = 2 P_+`.
+
+**Formalized here.** The stacked product `A ⊗ A` of the condensation defect `A = ∑_g U_g` of
+the anomalous `ℤ/2 × ℤ/2` symmetry is block diagonal over the sixteen pairs `(g, h)`, the block
+of `(g, h)` being the stacked tensor `M_g ⊗ M_h` of the product `U_g U_h`. Twelve of the
 sixteen blocks split: each is conjugate, by an integer gauge with no zero slots, to the target
 `λ(g,h) M_{gh}` with the periodic fusion sign `λ(g,h) = (-1)^{g_1 h_2}`. Ten of them, the pairs
-with at most one factor from `{x, xy}` and with `λ = +1`, are literally equal to their targets; the
-two pairs `(x, y)` and `(xy, y)` carry the weight `-1` and are conjugate to `-M_xy` and `-M_x` by
-the sign gauge `[[0, -1], [1, 0]]`.
+with at most one factor from `{x, xy}` and with `λ = +1`, are literally equal to their targets;
+the two pairs `(x, y)` and `(xy, y)` carry the weight `-1` and are conjugate to `-M_xy` and
+`-M_x` by the sign gauge `[[0, -1], [1, 0]]`.
 
 Each block is a one-slot compression datum with `z = 0`, whose remainder vanishes; its word
 traces reproduce the fusion rule `U_g U_h = λ(g,h)^L U_{gh}` at the level of traces. The
@@ -38,6 +52,23 @@ operator-level fusion rules are derived in
   word-trace identities, with the weight `(-1)^L` for the pairs `(x, y)` and `(xy, y)`.
 * `Z2Z2Condensation.eE_remainder_eq_zero`, ..., `Z2Z2Condensation.xyY_remainder_eq_zero`: all
   twelve remainders vanish.
+
+## References
+
+- [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
+  A. Molnár, *Classifying phases protected by matrix product operator symmetries using matrix
+  product states*
+- [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- J. Garre-Rubio, N. Schuch,
+  *Fractional domain wall statistics in spin chains with anomalous symmetries*
+- [arXiv:2204.02407](https://arxiv.org/abs/2204.02407) -- K. Roumpedakis, S. Seifnashri,
+  S.-H. Shao, *Higher Gauging and Non-invertible Condensation Defects*
+
+## Provenance
+
+The block decomposition and the gauges were first recorded in
+`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md`, Sections 4 and 5, and checked exactly by
+`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_verify.py`; they are verification records, not
+the source.
 -/
 
 noncomputable section

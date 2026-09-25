@@ -207,3 +207,89 @@ identities between periodic operators.
     $T\cdot A_x$. The definitions of the periodic operator and of
     $T\cdot A_x$ give the two identities.
 \end{proof}
+
+\subsection{Fusion and action tensors with multiplicity}%
+\label{subsec:asym_fusion_multiplicity}
+
+The fusion rules of a matrix product operator algebra carry
+nonnegative integer multiplicities: $O_N(M_a)O_N(M_b)=\sum_c
+    N_{ab}^cO_N(M_c)$ for every $N\geq1$ \cite{GarreRubio2023MPOSym}. Each copy
+of a channel $c$ is then a separate block of the reduction.
+
+\begin{theorem}[Reduction onto blocks with multiplicity]
+    \label{thm:asym_multiplicity_reductions}
+    \lean{MPSTensor.exists_multiBlockCompression_sigma_of_isNormal,
+        MPSTensor.exists_multiplicityReductions_of_isNormal}
+    \leanok
+    \uses{thm:asym_multiblock}
+    Let $\{C_c\}_c$ be a finite family of normal tensors of positive bond
+    dimension and let $N_c\geq0$ be integers. If a tensor $B$ of bond
+    dimension $D$ satisfies $\ket{V^{(N)}(B)}=\sum_cN_c\ket{V^{(N)}(C_c)}$
+    for every $N\geq1$, then for every pair $(c,\mu)$ with $\mu<N_c$
+    there are maps $V_{c,\mu}$ and $W_{c,\mu}$ such that
+    $V_{c,\mu}W_{d,\nu}=\delta_{cd}\delta_{\mu\nu}\id$,
+    $V_{c,\mu}B^{i_1}\cdots B^{i_N}W_{c,\mu}=C_c^{i_1}\cdots C_c^{i_N}$ for
+    every $N\geq0$, and every product of at least $D$ matrices of the
+    remainder $B^i-\sum_{c,\mu}W_{c,\mu}C_c^iV_{c,\mu}$ vanishes.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_multiblock}
+    The word traces of $B$ are those of the family in which $C_c$ occurs
+    $N_c$ times, so Theorem~\ref{thm:asym_multiblock} applies to that
+    family. The number of blocks plus the number of zero slots is at most
+    $D$, which bounds the nilpotency order.
+\end{proof}
+
+\begin{corollary}[Fusion and action tensors with multiplicity]
+    \label{cor:asym_fusion_action_multiplicity}
+    \lean{MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum,
+        MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors,
+        MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum}
+    \leanok
+    \uses{thm:asym_multiplicity_reductions}
+    Let $\{M_c\}_c$ be matrix product operator tensors of positive bond
+    dimensions $\chi_c$, each normal when its pair of physical indices is
+    treated as one index, with
+    $O_N(M_a)O_N(M_b)=\sum_cN_{ab}^cO_N(M_c)$ for every $N\geq1$. Then
+    the stacked product of $M_a$ and $M_b$ has fusion tensors
+    $V_{ab}^{c,\mu}$, $W_{ab}^{c,\mu}$, $\mu<N_{ab}^c$, as in
+    Theorem~\ref{thm:asym_multiplicity_reductions}, with nilpotency order
+    at most $\chi_a\chi_b$. Likewise, if
+    $O_N(T)\ket{V^{(N)}(A_x)}=\sum_yM_y\ket{V^{(N)}(A_y)}$ for every
+    $N\geq1$ with normal $A_y$ of positive bond dimension, then
+    $T\cdot A_x$ has action tensors onto $M_y$ copies of each $A_y$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_multiplicity_reductions}
+    The periodic vectors of the stacked product on the pair alphabet are
+    the matrix entries of $O_N(M_a)O_N(M_b)$, and those of $T\cdot A_x$
+    are the entries of $O_N(T)\ket{V^{(N)}(A_x)}$; apply
+    Theorem~\ref{thm:asym_multiplicity_reductions}.
+\end{proof}
+
+\begin{corollary}[Gauge freedom of a multiplicity-free fusion channel]
+    \label{cor:asym_fusion_gauge_single}
+    \lean{MPSTensor.IsReduction.exists_boundary_dressed_proportional_of_forall_le,
+        MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq}
+    \leanok
+    \uses{thm:mps_reduction_boundary_dressed_uniqueness}
+    Let $(V,W)$ and $(V',W')$ be two reductions of the stacked product $B$
+    of $M_a$ and $M_b$ onto the same normal tensor $M_c$, each with a
+    remainder all of whose products of at least $K$ factors vanish. Then
+    there is $z\neq0$ with $VB^{w}=z\,V'B^{w}$ and
+    $B^{w}W=z^{-1}B^{w}W'$ for every word $w$ of length greater than
+    $2K$. When $O_N(M_a)O_N(M_b)=O_N(M_c)$ for every $N\geq1$,
+    Corollary~\ref{cor:asym_fusion_action_multiplicity} provides such
+    reductions with $K=\chi_a\chi_b$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mps_reduction_boundary_dressed_uniqueness}
+    Apply Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness} on
+    the pair alphabet.
+\end{proof}

@@ -10,9 +10,11 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 /-!
 # One-slot compression data and integer certificates
 
-The pair blocks of a stacked matrix product operator tensor compress onto a single target each.
-This file packages the two shapes of one-slot compression data (P5 note,
-`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, Theorem 7.7) that occur
+**Source.** None: this is infrastructure of this development for the worked examples of the
+multi-block asymmetric compression theorem, and no paper states it.
+
+**Formalized here.** The pair blocks of a stacked matrix product operator tensor compress onto
+a single target each. This file packages the two shapes of one-slot compression data that occur
 in the worked examples, together with the integer certificates that reduce the remaining
 verifications to decidable identities between integer matrices.
 
@@ -43,6 +45,13 @@ verifications to decidable identities between integer matrices.
 * `MPSTensor.isNBlkInjective_two_of_int`: an integer certificate of injectivity at length two.
 * `MPSTensor.right_intertwiner_eq_zero_of_int`, `MPSTensor.left_intertwiner_eq_zero_of_int`:
   vanishing of a sitewise intertwiner space from an integer certificate.
+
+## Provenance
+
+The clauses (i)–(iii) of the compression data are those of Theorem 7.7
+(`thm:p5-asymmetric-compression`) of
+`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, lines 495–569 (the
+"P5 note" of the declaration docstrings).
 -/
 
 open scoped Matrix

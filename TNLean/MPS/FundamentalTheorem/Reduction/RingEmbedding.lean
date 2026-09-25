@@ -10,12 +10,16 @@ import TNLean.MPS.MPDO.OperatorProduct
 /-!
 # Bond-space products and actions over a ring embedded in the complex numbers
 
-The worked examples of compression data are given by matrices over a commutative ring with
-decidable equality, and their bond-space products and actions are decided in that ring before
-being transported to the complex matrices by an entrywise ring homomorphism. This file records
-the bond-space product and the bond-space action over an arbitrary commutative ring, in the bond
-order of `finProdFinEquiv` that `MPOTensor.mulTensor` and `MPOTensor.actTensor` use, together
-with their compatibility with the entrywise image of `MPSTensor.complexOfRing`.
+**Source.** None: this is infrastructure of this development for exact arithmetic in the worked
+examples, and no paper states it.
+
+**Formalized here.** The worked examples of compression data are given by matrices over a
+commutative ring with decidable equality, and their bond-space products and actions are decided
+in that ring before being transported to the complex matrices by an entrywise ring
+homomorphism. This file records the bond-space product and the bond-space action over an
+arbitrary commutative ring, in the bond order of `finProdFinEquiv` that `MPOTensor.mulTensor`
+and `MPOTensor.actTensor` use, together with their compatibility with the entrywise image of
+`MPSTensor.complexOfRing`.
 
 ## Main definitions
 
