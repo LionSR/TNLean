@@ -173,6 +173,23 @@ theorem isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq {L : LSymbol G X}
     IsTrivialGaugeClass ω := by
   exact isTrivialGaugeClass_comap_of_isCompatible hL x (MonoidHom.id G) hfix
 
+
+/-- **The anomaly at an involution as a ratio of L-symbols.** If `L` is compatible with `ω`
+and `g * g = 1`, then
+`ω(g,g,g) = Lˣ_{g,g} Lˣ_{g,1} / (L^{g • x}_{g,g} Lˣ_{1,g})`.
+
+Source: arXiv:2502.20257, `eq:omega_and_Ls` at `(g, g, g)`; the formula is displayed at line
+5121 for the CZX example, and at lines 5327--5329 for `(g, g⁻¹, g)`. -/
+theorem eq_div_of_isCompatible_of_mul_self_eq_one
+    {L : LSymbol G X} {ω : ScalarThreeCochain G} (hL : IsCompatible L ω) (x : X) {g : G}
+    (hg : g * g = 1) :
+    ω g g g = L x g g * L x g 1 / (L (g • x) g g * L x 1 g) := by
+  have h := hL x g g g
+  rw [hg] at h
+  rw [eq_div_iff_mul_eq']
+  rw [mul_comm (L x g g), h]
+  simp only [mul_assoc]
+
 end LSymbol
 
 end TNLean.Algebra

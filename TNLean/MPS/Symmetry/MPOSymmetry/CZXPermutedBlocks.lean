@@ -131,7 +131,7 @@ theorem actTensor_czxDecoratedTensor_ghzSectorTensor (s i : Fin 2) :
   fin_cases s <;> fin_cases i <;> fin_cases r <;> fin_cases c <;>
     simp [actTensor_apply, czxDecoratedTensor_apply, ghzSectorTensor, czxActLetter,
       Fin.sum_univ_two, Matrix.kroneckerMap_apply, finProdFinEquiv, Fin.rev, Fin.divNat,
-      Fin.modNat, Matrix.neg_apply, Matrix.one_apply]
+      Fin.modNat]
 
 theorem actTensor_idTensor_ghzSectorTensor (s i : Fin 2) :
     actTensor (MPOTensor.idTensor 2) (ghzSectorTensor s) i = ghzSectorTensor s i := by
@@ -198,5 +198,48 @@ def czxBlockActionData : BlockActionData czxFamily czxBlock where
     · exact isReduction_one 1
     · exact isReduction_gen 0
     · exact isReduction_gen 1
+
+end CZXCompression
+
+namespace CZXCompression
+
+/-! ### The anomaly as a ratio of L-symbols -/
+
+/-- The two product states are normal. -/
+theorem czxBlock_isNormal (x : Multiplicative (Fin 2)) : Kraus.IsNormal (czxBlock x) :=
+  (ghzSectorTensor_isInjective x.toAdd).isNormal
+
+/-- **The second route to the CZX anomaly** (arXiv:2405.00439, lines 1246--1339): for every
+choice of action tensors on the two product states and every choice of fusion tensors, the
+anomaly is the ratio of L-symbols
+`ω(g,g,g) = L^x_{g,g} L^x_{g,1} / (L^{g • x}_{g,g} L^x_{1,g})` for either block `x`. With the
+normalization `L_{g,1} = L_{1,g} = 1` of the source this is `L_0 / L_1` for `x = |0⟩^{⊗ N}`.
+
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1246--1339; the ratio formula is
+`eq:omega_and_Ls` of arXiv:2502.20257 at `(g, g, g)`, as at its line 5121. -/
+theorem czx_omega_eq_lSymbol_ratio (fd : czxFamily.FusionData)
+    (ad : BlockActionData czxFamily czxBlock) (x : Multiplicative (Fin 2)) :
+    fd.omega czxGen czxGen czxGen =
+      ad.lSymbol fd x czxGen czxGen * ad.lSymbol fd x czxGen 1 /
+        (ad.lSymbol fd (czxGen • x) czxGen czxGen * ad.lSymbol fd x 1 czxGen) :=
+  LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one
+    (ad.isCompatible_lSymbol czxFamily_isNormalRepresentation czxBlock_isNormal
+      (fun _ ↦ Nat.one_pos) czx_carriesMPV)
+    x (by decide)
+
+/-- **The L-symbol ratio of the two CZX product states is `-1`**: for every choice of action
+tensors, with the fusion tensors `CZXCompression.czxFusionData`,
+`L^0_{g,g} L^0_{g,1} / (L^1_{g,g} L^0_{1,g}) = -1`, the conclusion `L_0 / L_1 = -1` of
+arXiv:2405.00439, line 1335, in gauge-invariant form.
+
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1246--1339. -/
+theorem czx_lSymbol_ratio_eq_neg_one (ad : BlockActionData czxFamily czxBlock) :
+    ad.lSymbol czxFusionData (Multiplicative.ofAdd 0) czxGen czxGen *
+        ad.lSymbol czxFusionData (Multiplicative.ofAdd 0) czxGen 1 /
+      (ad.lSymbol czxFusionData (Multiplicative.ofAdd 1) czxGen czxGen *
+        ad.lSymbol czxFusionData (Multiplicative.ofAdd 0) 1 czxGen) = -1 := by
+  rw [← czxFusionData_omega_gen_gen_gen,
+    czx_omega_eq_lSymbol_ratio czxFusionData ad (Multiplicative.ofAdd 0)]
+  rfl
 
 end CZXCompression
