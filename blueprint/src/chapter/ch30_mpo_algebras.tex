@@ -641,15 +641,22 @@ with the corresponding composite embeddings.
     The \emph{associator} of the chosen fusion tensors is the function
     $\omega\colon G^3\to\C^\times$ defined by
     \begin{align}
-        V^{g(hk)}(T_gT_hT_k)^{\mathbf w}
-         & =\omega(g,h,k)\,V^{(gh)k}(T_gT_hT_k)^{\mathbf w}
+        V^{(gh)k}(T_gT_hT_k)^{\mathbf w}
+         & =\omega(g,h,k)\,V^{g(hk)}(T_gT_hT_k)^{\mathbf w}
         \label{eq:mpoalg_associator}
     \end{align}
-    for all sufficiently long words $\mathbf w$. It exists and is nonzero by
+    for all sufficiently long words $\mathbf w$; equivalently,
+    $(T_gT_hT_k)^{\mathbf w}W^{g(hk)}=\omega(g,h,k)\,
+        (T_gT_hT_k)^{\mathbf w}W^{(gh)k}$ for the composite embeddings, which is
+    the orientation of the defining display of
+    \cite{FrancoRubio2025MPUGauging}. It exists and is nonzero by
     Corollary~\ref{cor:mpoalg_single_target_uniqueness} applied to the two
     composite reductions of Lemma~\ref{lem:mpoalg_composite_reduction}, and
     it is unique because $T_{ghk}^{\mathbf w}\neq0$ for some long word. This is
     the three-cocycle of \cite[Section~4.4]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2502.20257, main.tex lines 1507--1537 (defining
+    %   display: right fusion trees, g(hk) = omega(g,h,k) (gh)k), eq:omegagauge
+    %   at lines 1542--1543; matches #7971's IsAssociator orientation.
     % Source anchor: arXiv:2203.12563, lines 1028--1060 (periodic-boundary
     %   definition, words of length at least ell) and lines 664--676.
 \end{definition}
@@ -682,20 +689,20 @@ with the corresponding composite embeddings.
     Lemma~\ref{lem:mpoalg_composite_reduction}, applying
     (\ref{eq:mpoalg_associator}) to one triple inside a bracketing, tensored
     with identities and followed by the remaining compressions, replaces
-    $x(yz)$ by $(xy)z$ at the cost of $\omega(x,y,z)$. Along the two paths of
+    $(xy)z$ by $x(yz)$ at the cost of $\omega(x,y,z)$. Along the two paths of
     the pentagon this gives
     \begin{align}
-        V^{g(h(kl))}X & =\omega(g,h,kl)\,V^{(gh)(kl)}X
-        =\omega(g,h,kl)\,\omega(gh,k,l)\,V^{((gh)k)l}X,
+        V^{((gh)k)l}X & =\omega(gh,k,l)\,V^{(gh)(kl)}X
+        =\omega(gh,k,l)\,\omega(g,h,kl)\,V^{g(h(kl))}X,
         \notag                                                          \\
-        V^{g(h(kl))}X & =\omega(h,k,l)\,V^{g((hk)l)}X
-        =\omega(h,k,l)\,\omega(g,hk,l)\,V^{(g(hk))l}X
+        V^{((gh)k)l}X & =\omega(g,h,k)\,V^{(g(hk))l}X
+        =\omega(g,h,k)\,\omega(g,hk,l)\,V^{g((hk)l)}X
         \notag                                                          \\
-                      & =\omega(h,k,l)\,\omega(g,hk,l)\,\omega(g,h,k)\,
-        V^{((gh)k)l}X.
+                      & =\omega(g,h,k)\,\omega(g,hk,l)\,\omega(h,k,l)\,
+        V^{g(h(kl))}X.
         \label{eq:mpoalg_pentagon_paths}
     \end{align}
-    Since $V^{((gh)k)l}XW^{((gh)k)l}=T_{ghkl}^{\mathbf w}$ is nonzero for some
+    Since $V^{g(h(kl))}XW^{g(h(kl))}=T_{ghkl}^{\mathbf w}$ is nonzero for some
     long word, comparing the two lines of (\ref{eq:mpoalg_pentagon_paths})
     gives (\ref{eq:mpoalg_pentagon_group}).
 \end{proof}
@@ -709,8 +716,9 @@ with the corresponding composite embeddings.
     %   planned statement by a \ref to thm:mpug_anomaly_three_cocycle_gauge (ch29).
     \uses{def:mpoalg_associator, cor:mpoalg_single_target_uniqueness,
         def:mpug_fusion_gauge, def:mpug_cohomologous_to}
-    Replacing the fusion tensors by $(\beta_{g,h}V_{g,h},
-        \beta_{g,h}^{-1}W_{g,h})$ with $\beta\colon G^2\to\C^\times$ replaces
+    Replacing the fusion tensors by $(\beta_{g,h}^{-1}V_{g,h},
+        \beta_{g,h}W_{g,h})$, so that $V_{g,h}B^{\mathbf w}=\beta_{g,h}\,
+        V'_{g,h}B^{\mathbf w}$ for the new compression $V'_{g,h}$, with $\beta\colon G^2\to\C^\times$ replaces
     $\omega$ by $\beta\mathbin{\triangleright}\omega$ of
     Definition~\ref{def:mpug_fusion_gauge}. Consequently the class of
     $\omega$ under the relation of
@@ -724,9 +732,12 @@ with the corresponding composite embeddings.
     \uses{cor:mpoalg_single_target_uniqueness, thm:mpug_fusion_scalar_gauge}
     The rescaled pairs are again fusion tensors
     (Theorem~\ref{thm:mpug_fusion_scalar_gauge}). Substituting them into
-    (\ref{eq:mpoalg_composite_compressions}) multiplies $V^{g(hk)}$ by
-    $\beta_{g,hk}\beta_{h,k}$ and $V^{(gh)k}$ by $\beta_{g,h}\beta_{gh,k}$,
-    which is (\ref{eq:mpug_coboundary}). By
+    (\ref{eq:mpoalg_composite_compressions}) multiplies $V^{(gh)k}$ by
+    $(\beta_{g,h}\beta_{gh,k})^{-1}$ and $V^{g(hk)}$ by
+    $(\beta_{g,hk}\beta_{h,k})^{-1}$, so (\ref{eq:mpoalg_associator}) holds
+    for the new tensors with $\omega$ multiplied by
+    $\beta_{g,hk}\beta_{h,k}/(\beta_{g,h}\beta_{gh,k})$, which is
+    (\ref{eq:mpug_coboundary}). By
     Corollary~\ref{cor:mpoalg_single_target_uniqueness} every other choice of
     fusion tensors is boundary-dressed equal to such a rescaling.
 \end{proof}
@@ -745,7 +756,9 @@ with the corresponding composite embeddings.
     Theorem~\ref{thm:mpdo_complete_zipper_fusion_pentagon}; both are stated
     for the complete zipper fusion families of
     Definition~\ref{def:mpdo_complete_zipper_fusion_family}. For a group-like
-    algebra, $F^{ghk}_{ghk}=\omega(g,h,k)$ and the pentagon equation is
+    algebra, the scalar playing the role of $F^{ghk}_{ghk}$ in the orientation
+    of (\ref{eq:rfp_printed_fmove}) is $\omega(g,h,k)^{-1}$, and the pentagon
+    equation is
     (\ref{eq:mpoalg_pentagon_group}).
 
     Without the zipper condition the fusion tensors of
@@ -779,13 +792,15 @@ with the corresponding composite embeddings.
     onto $A_{gh\cdot x}$, and the \emph{$L$-symbol} $L^x_{g,h}\in\C^\times$ is
     defined by
     \begin{align}
-        V_{gh,x}(V_{g,h}\otimes\Id)(T_gT_h\cdot A_x)^w
-         & =L^x_{g,h}\,V_{g,h\cdot x}(\Id\otimes V_{h,x})
+        V_{g,h\cdot x}(\Id\otimes V_{h,x})(T_gT_h\cdot A_x)^w
+         & =L^x_{g,h}\,V_{gh,x}(V_{g,h}\otimes\Id)
         (T_gT_h\cdot A_x)^w
         \label{eq:mpoalg_l_symbol}
     \end{align}
     for all sufficiently long words $w$. This is the $L$-symbol of
     \cite[Section~4.4]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2502.20257, main.tex lines 1874--1889 (eq:defL:
+    %   right trees, (gh)x = L^x_{g,h} g(hx)) and eq:Lsymbgauge;
     % Source anchor: arXiv:2203.12563, lines 1091--1129 (periodic boundary),
     %   lines 700--716 (group case).
 \end{definition}
@@ -804,8 +819,9 @@ with the corresponding composite embeddings.
          & =\omega(g,h,k)\,L^{k\cdot x}_{g,h}\,L^x_{gh,k},
         \label{eq:mpoalg_l_compatible}
     \end{align}
-    and rescaling the fusion and action tensors by $\beta_{g,h}$ and
-    $\gamma^x_g$ changes $(\omega,L)$ to
+    and replacing the fusion and action tensors by
+    $(\beta_{g,h}^{-1}V_{g,h},\beta_{g,h}W_{g,h})$ and
+    $((\gamma^x_g)^{-1}V_{g,x},\gamma^x_gW_{g,x})$ changes $(\omega,L)$ to
     $(\beta\mathbin{\triangleright}\omega,(\beta,\gamma)\mathbin{\triangleright}L)$
     of Definitions~\ref{def:mpug_fusion_gauge} and~\ref{def:mpug_l_gauge}.
     This is the coupled pentagon equation for a group-like algebra
@@ -821,17 +837,17 @@ with the corresponding composite embeddings.
     Lemma~\ref{lem:mpoalg_composite_reduction}, (\ref{eq:mpoalg_l_symbol})
     and (\ref{eq:mpoalg_associator}) applied inside a bracketing give
     \begin{align}
-        V^{(g(hk))x}Y & =L^x_{g,hk}\,V^{g((hk)x)}Y
-        =L^x_{g,hk}\,L^x_{h,k}\,V^{g(h(kx))}Y,
+        V^{g(h(kx))}Y & =L^x_{h,k}\,V^{g((hk)x)}Y
+        =L^x_{h,k}\,L^x_{g,hk}\,V^{(g(hk))x}Y,
         \notag                                                           \\
-        V^{(g(hk))x}Y & =\omega(g,h,k)\,V^{((gh)k)x}Y
-        =\omega(g,h,k)\,L^x_{gh,k}\,V^{(gh)(kx)}Y
+        V^{g(h(kx))}Y & =L^{k\cdot x}_{g,h}\,V^{(gh)(kx)}Y
+        =L^{k\cdot x}_{g,h}\,L^x_{gh,k}\,V^{((gh)k)x}Y
         \notag                                                           \\
-                      & =\omega(g,h,k)\,L^x_{gh,k}\,L^{k\cdot x}_{g,h}\,
-        V^{g(h(kx))}Y.
+                      & =L^{k\cdot x}_{g,h}\,L^x_{gh,k}\,\omega(g,h,k)\,
+        V^{(g(hk))x}Y.
         \label{eq:mpoalg_l_paths}
     \end{align}
-    Since $V^{g(h(kx))}YW^{g(h(kx))}=A_{ghk\cdot x}^w$ is nonzero for some
+    Since $V^{(g(hk))x}YW^{(g(hk))x}=A_{ghk\cdot x}^w$ is nonzero for some
     long word, comparing the two lines of (\ref{eq:mpoalg_l_paths}) gives
     (\ref{eq:mpoalg_l_compatible}). The gauge
     statement follows by substituting the rescaled tensors into
