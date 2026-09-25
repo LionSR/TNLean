@@ -168,7 +168,13 @@ fusion tensors and left inverses of a complete zipper fusion family.
 The vanishing remainder is the absence of nonzero blocks above the diagonal in
 arXiv:1511.08090, `AnyonsPEPS.tex`, lines 181--191; the injectivity, multiplicities and
 simultaneous left inverse are the remaining data of that source at lines 156--163 and
-269--277. -/
+269--277.
+
+**Local fix (arXiv:1511.08090, line 269):** the source derives the simultaneous left inverse
+`K` from injectivity of each block, which does not suffice when there are several blocks: two
+injective, non-equivalent blocks at physical dimension two can have no simultaneous left
+inverse.  `K` is therefore an input, recording joint linear independence of the blocks at one
+site.  Documented in `docs/paper-gaps/bmwshv17_joint_block_left_inverse.tex`. -/
 noncomputable def ofCompression (hD : ∀ a, 0 < D a)
     (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0)
