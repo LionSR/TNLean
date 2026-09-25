@@ -36,9 +36,15 @@ numeric entries of `B_1`, `B_τ`; the blocks used here place the bare F-symbol
 `(x'_j, x_j)`, `(x'_{j+1}, x_{j+1})`, without the source's closed-loop factors `v_a` and without
 the review's prefactor `1/√(d_A d_D)`; it is for these entries that `O_τ² = O_1 + O_τ` holds.
 The blocks are not identified with the source's diagram tensor, and no operator statement is made
-for a rescaled tensor. The idempotence `P_L² = P_L`, which the source asks for all `L`, is proved
-for `L > 0` only (`fibProjector_mul_self`): the empty chain gives `P_0 = (2 + 3φ)/(1 + φ²) ≠ 1`.
-Documented in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
+for a rescaled tensor. Documented in
+`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
+
+**Local fix (positive length):** the source asks for `P_L² = P_L` for all `L`
+(`AnyonsPEPS.tex` lines 152–156); at `L = 0` the periodic operators are the bond dimensions,
+`O_1^0 = 2` and `O_τ^0 = 3`, so `P_0 = (2 + 3φ)/(1 + φ²)` is a scalar different from `0` and `1`.
+The empty chain is read as a degenerate case, and idempotence (`fibProjector_mul_self`) is
+stated for every positive length. Documented in
+`docs/paper-gaps/bmwshv17_fibonacci_projector_positive_length.tex`.
 
 ## Main definitions
 
@@ -296,8 +302,8 @@ rules of the two blocks (`fibonacci_fusion_algebra`) and the weight relation
 `∑_{a,b} N_{ab}^c w_a w_b = w_c` (`fibWeight_fusion`), the weighted operator is a projector at
 every positive length, `P_L² = P_L`. The source asks this for all `L`; at `L = 0` the empty trace
 gives the bond dimensions, `O_1^0 = 2` and `O_τ^0 = 3`, so `P_0 = (2 + 3φ)/(1 + φ²) ≠ 1`, and
-the empty chain is excluded as a degenerate reading, as recorded in the module's Local fix and in
-`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`. -/
+the empty chain is excluded as a degenerate reading, as recorded in the module's Local fix
+(positive length). -/
 theorem fibProjector_mul_self (L : ℕ) (hL : 0 < L) :
     fibProjector L * fibProjector L = fibProjector L := by
   simp only [fibProjector, add_mul, mul_add, smul_mul_smul_comm, fibOne_mul_fibOne L hL,
