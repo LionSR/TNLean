@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 import Mathlib.Analysis.Matrix.Order
-import Mathlib.Analysis.SpecialFunctions.Pow.NNRpow
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
 /-!
