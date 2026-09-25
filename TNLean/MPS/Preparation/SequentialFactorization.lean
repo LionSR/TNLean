@@ -52,7 +52,10 @@ variable {d D : ℕ}
 /-- The embedding `X ↦ 1_D ⊗ X` of `D × D` matrices into matrices on the pair space
 `ℂ^D ⊗ ℂ^D ≅ ℂ^{D²}`, as a monoid homomorphism. Its values on the letters of a tensor
 are the site matrices `A'^i` of arXiv:2307.01696, eq. (13) (there written
-`A^i ⊗ 1_D`; the order of the two bond factors is immaterial). -/
+`A^i ⊗ 1_D`; the order of the two bond factors is immaterial). Its underlying matrix
+is that of `MPOTensor.idKron D X` in `TNLean.MPS.Core.ReductionComposition`, which is not
+imported here because that module pulls in the matrix-product-operator layer; this
+version adds the monoid-homomorphism packaging used by `eval_pairEmbed`. -/
 noncomputable def pairEmbed (D : ℕ) :
     Matrix (Fin D) (Fin D) ℂ →* Matrix (Fin (D * D)) (Fin (D * D)) ℂ where
   toFun X := ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ X).submatrix (virtualPairEquiv D)

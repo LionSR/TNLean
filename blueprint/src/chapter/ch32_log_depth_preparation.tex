@@ -214,13 +214,15 @@ injective.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_decomposition}
+    \uses{thm:ldpolar_decomposition, thm:ldpolar_tensor_injective}
     Since $\mathcal B_q$ is injective, $P$ is positive definite and
     $V=\mathcal B_qP^{-1}$, so
     $\bra{i_1\cdots i_q}V\ket{x}
         =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}(P^{-1})_{(\alpha,\beta),x}$.
     This is an open-boundary matrix product map with bond dimension at most
-    $D^2$: the site matrices are $\Id_D\otimes A^i$, the two bond factors are
+    $D^2$: the site matrices are $\Id_D\otimes A^i$ (the source writes
+    $A^i\otimes\Id_D$; the order of the two bond factors only permutes the
+    bond index), the two bond factors are
     joined at the left end, and $P^{-1}$ is absorbed into the right end
     \cite[eq.~(13)]{Malz2024Preparation}. Lemma~\ref{lem:ldp_sequential_factorization_general}
     with $G=P^{-1}$ makes every site isometric by successive decompositions
