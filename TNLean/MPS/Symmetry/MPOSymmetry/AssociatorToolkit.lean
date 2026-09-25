@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
@@ -19,6 +20,12 @@ the phase-decorated shift representation of `ℤ₃`.
   words are scalar multiples of the identity, and stacking it with a tensor `M`
   on either side gives `M` back up to the canonical identification of the bond
   spaces `Fin (1 * D)` and `Fin (D * 1)` with `Fin D`.
+* Casting identifications of bond spaces: `MPOTensor.mulTensorAssocEquiv` and
+  `MPOTensor.GroupFamily.castMat` preserve the value of an index, so both are
+  identities once the bond dimensions are explicit numerals.
+* Products with identity factors commute with the entrywise image of a ring
+  homomorphism into `ℂ` (`MPOTensor.kronId_complexOfRing`,
+  `MPOTensor.idKron_complexOfRing`).
 * Two-letter intertwining identities of two fusion trees with the target tensor,
   together with a one-letter relation, give the dressed identity of the anomaly
   three-cochain on every nonempty word
@@ -75,7 +82,116 @@ theorem IsDressedProportional.of_forall_mul_mul {T : MPSTensor d D} {A : MPSTens
   ⟨1, fun w hw ↦ mul_evalWord_eq_smul_of_forall_mul_mul hL hR h1 w
     (List.ne_nil_of_length_pos hw)⟩
 
+/-- A tensor reduces onto an equal tensor through the identity matrices. -/
+theorem isReduction_one_one_of_eq {B A : MPSTensor d D} (h : B = A) :
+    IsReduction B A 1 1 := by
+  subst h
+  exact ⟨Matrix.one_mul 1, fun w ↦ by rw [Matrix.one_mul, Matrix.mul_one]⟩
+
 end MPSTensor
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-! ### Explicit bond identifications -/
+
+/-- A permutation matrix of `finCongr` from `Fin n` to itself is the identity. For
+explicit numerals `n` this applies to `finCongr h` with `h : n₁ = n₂` whenever `n₁`
+and `n₂` reduce to the same numeral. -/
+theorem finCongr_toMatrix_eq_one {n : ℕ} (h : n = n) :
+    (finCongr h).toPEquiv.toMatrix = (1 : Matrix (Fin n) (Fin n) ℂ) := by
+  rw [finCongr_refl, Equiv.toPEquiv_refl, PEquiv.toMatrix_refl]
+
+/-- The bond reassociation preserves the value of an index: with row-major product
+encodings, `((a, b), c)` and `(a, (b, c))` have the same position. -/
+theorem mulTensorAssocEquiv_val (D₁ D₂ D₃ : ℕ) (x : Fin (D₁ * D₂ * D₃)) :
+    (mulTensorAssocEquiv D₁ D₂ D₃ x : ℕ) = x := by
+  simp only [mulTensorAssocEquiv, Equiv.trans_apply, Equiv.prodCongr_apply, Prod.map_apply,
+    Equiv.prodAssoc_apply, Equiv.refl_apply, finProdFinEquiv_apply_val,
+    finProdFinEquiv_symm_apply, Fin.coe_divNat, Fin.coe_modNat]
+  have h1 := Nat.div_add_mod (x / D₃) D₂
+  have h2 := Nat.div_add_mod' (x : ℕ) D₃
+  calc
+    _ = (D₂ * (x / D₃ / D₂) + x / D₃ % D₂) * D₃ + x % D₃ := by ring
+    _ = x := by rw [h1, h2]
+
+/-- The bond reassociation is the identification `finCongr` of `Fin (D₁ * D₂ * D₃)` with
+`Fin (D₁ * (D₂ * D₃))`. -/
+theorem mulTensorAssocEquiv_eq_finCongr (D₁ D₂ D₃ : ℕ) :
+    mulTensorAssocEquiv D₁ D₂ D₃ = finCongr (mul_assoc D₁ D₂ D₃) :=
+  Equiv.ext fun x ↦ Fin.ext (by rw [mulTensorAssocEquiv_val, finCongr_apply, Fin.val_cast])
+
+/-- The inverse bond associator is the permutation matrix of `finCongr`; for explicit
+bond dimensions it is the identity by `finCongr_toMatrix_eq_one`. -/
+theorem mulTensorAssocInvMatrix_eq_finCongr (D₁ D₂ D₃ : ℕ) :
+    mulTensorAssocInvMatrix D₁ D₂ D₃ =
+      (finCongr (mul_assoc D₁ D₂ D₃).symm).toPEquiv.toMatrix := by
+  rw [mulTensorAssocInvMatrix, mulTensorAssocEquiv_eq_finCongr, finCongr_symm]
+
+/-- The bond associator is the permutation matrix of `finCongr`. -/
+theorem mulTensorAssocMatrix_eq_finCongr (D₁ D₂ D₃ : ℕ) :
+    mulTensorAssocMatrix D₁ D₂ D₃ = (finCongr (mul_assoc D₁ D₂ D₃)).toPEquiv.toMatrix := by
+  rw [mulTensorAssocMatrix, mulTensorAssocEquiv_eq_finCongr]
+
+/-- The bond identification of `GroupFamily.castMat` is the permutation matrix of
+`finCongr`; for explicit bond dimensions it is the identity by
+`finCongr_toMatrix_eq_one`. -/
+theorem GroupFamily.castMat_eq_finCongr {G : Type*} [Group G] (F : GroupFamily G d)
+    {a b : G} (e : a = b) :
+    F.castMat e = (finCongr (congrArg F.bondDim e.symm)).toPEquiv.toMatrix := rfl
+
+/-! ### Identity factors and entrywise images -/
+
+section ComplexOfRing
+
+variable {R : Type*} [CommRing R] (f : R →+* ℂ)
+
+/-- `X ⊗ 1` commutes with the entrywise image of a ring homomorphism into `ℂ`. -/
+theorem kronId_complexOfRing {m n : ℕ} (X : Matrix (Fin m) (Fin n) R) (D : ℕ) :
+    kronId (MPSTensor.complexOfRing f X) D =
+      MPSTensor.complexOfRing f ((X ⊗ₖ (1 : Matrix (Fin D) (Fin D) R)).submatrix
+        finProdFinEquiv.symm finProdFinEquiv.symm) := by
+  ext r c
+  simp only [kronId, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+    MPSTensor.complexOfRing_apply, Matrix.one_apply, map_mul]
+  split_ifs <;> simp
+
+/-- `1 ⊗ X` commutes with the entrywise image of a ring homomorphism into `ℂ`. -/
+theorem idKron_complexOfRing {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) R) :
+    idKron D (MPSTensor.complexOfRing f X) =
+      MPSTensor.complexOfRing f (((1 : Matrix (Fin D) (Fin D) R) ⊗ₖ X).submatrix
+        finProdFinEquiv.symm finProdFinEquiv.symm) := by
+  ext r c
+  simp only [idKron, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+    MPSTensor.complexOfRing_apply, Matrix.one_apply, map_mul]
+  split_ifs <;> simp
+
+end ComplexOfRing
+
+end MPOTensor
+
+namespace Multiplicative
+
+/-- A statement about every element of `ℤ₂`, written multiplicatively, follows from its
+two instances. -/
+theorem forall_zmod_two {P : Multiplicative (ZMod 2) → Prop}
+    (h0 : P (ofAdd 0)) (h1 : P (ofAdd 1)) : ∀ x, P x := by
+  intro x
+  fin_cases x
+  exacts [h0, h1]
+
+/-- A statement about every element of `ℤ₃`, written multiplicatively, follows from its
+three instances. -/
+theorem forall_zmod_three {P : Multiplicative (ZMod 3) → Prop}
+    (h0 : P (ofAdd 0)) (h1 : P (ofAdd 1)) (h2 : P (ofAdd 2)) : ∀ x, P x := by
+  intro x
+  fin_cases x
+  exacts [h0, h1, h2]
+
+end Multiplicative
+
+
 
 namespace MPOTensor
 
