@@ -1092,3 +1092,120 @@ It does not obstruct the word reductions or the periodic trace formula
 in Theorem~\ref{thm:asymex_kw_ghz}. Those statements retain the
 finite-chain action $K_Ng_N=2p_N$ while distinguishing it from a split
 virtual direct sum.
+
+\subsection{The duality as a bimodule over the spin-flip algebra}%
+\label{sec:asymex_kw_bimodule}
+
+By Corollary~\ref{cor:asymex_kw_square}, the square of the duality
+contains the translation, so the duality is not a member of a fusion
+algebra together with $\Id$ and $\eta$. In the framework
+of~\cite{Aasen2016Topological}, it is instead fused with the symmetry
+operators on either side and with its own return map. This subsection
+records these relations for the raw operator and derives their
+tensor-level form from the compression theorems, without computing a
+gauge.
+
+\begin{lemma}[Spin-flip algebra and the bimodule relations]
+    \label{lem:asymex_kw_bimodule}
+    \lean{KWExample.idTensor, KWExample.flipTensor, KWExample.z2Tensor,
+        KWExample.z2Fusion, KWExample.mpo_apply_of_bondOne,
+        KWExample.mpo_idTensor, KWExample.mpo_flipTensor,
+        KWExample.isMPOFusionAlgebra_z2Tensor,
+        KWExample.kwTensor_mpo_mul_z2Tensor_mpo,
+        KWExample.z2Tensor_mpo_mul_kwTensor_mpo, KWExample.kwTransposeTensor,
+        KWExample.mpo_kwTransposeTensor,
+        KWExample.kwTensor_mpo_mul_kwTransposeTensor_mpo,
+        KWExample.kwTransposeTensor_mpo_mul_kwTensor_mpo}
+    \leanok
+    \uses{def:asymex_kw, thm:asymex_kw_absorption, lem:asymex_kw_gram,
+        prop:asymex_kw_defect_fusion}
+    Let $O_0$ and $O_1$ be the periodic operators of the bond-one tensors
+    $O_0^{s's}=\delta_{s's}$ and $O_1^{s's}=\delta_{s',1-s}$, and let
+    $W^{\mathsf T}$ be the duality tensor with its physical indices
+    exchanged, $(W^{\mathsf T})^{s's}=W^{ss'}$. For every $N>0$,
+    $O_0=\Id$, $O_1=\eta$, and $O_aO_b=O_{a+b}$ with $a+b$ taken modulo
+    two. The periodic operator of $W^{\mathsf T}$ is $K_N^{\mathsf T}$,
+    and
+    \begin{align}
+        K_NO_a=O_aK_N & =K_N\qquad(a=0,1),
+        \notag                                              \\
+        K_NK_N^{\mathsf T}=K_N^{\mathsf T}K_N
+                      & =2^N(O_0+O_1).
+        \label{eq:asymex_kw_bimodule}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A periodic contraction of bond-one tensors is the product of its
+    one-site entries, which gives $O_0=\Id$ and $O_1=\eta$; the fusion
+    rule is $\eta^2=\Id$. Exchanging the physical indices of every tensor
+    in the periodic trace transposes the operator. The relations
+    (\ref{eq:asymex_kw_bimodule}) are then
+    Theorem~\ref{thm:asymex_kw_absorption} and
+    (\ref{eq:asymex_kw_gram}), using that the kernel is real.
+\end{proof}
+
+\begin{theorem}[Absorption of the spin flip is a gauge equivalence]
+    \label{thm:asymex_kw_bimodule_absorption}
+    \lean{KWExample.kwTensor_isNormal, KWExample.isNormal_of_bondOne,
+        KWExample.exists_gauge_mulTensor_kwTensor_flipTensor,
+        KWExample.exists_gauge_mulTensor_flipTensor_kwTensor}
+    \leanok
+    \uses{lem:asymex_kw_bimodule, cor:asym_single_block}
+    The duality tensor $W$ is normal. The stacked tensors
+    $\sum_mW^{s'm}\otimes O_1^{ms}$ and $\sum_mO_1^{s'm}\otimes W^{ms}$,
+    of bond dimension two, are each conjugate to $W$: there are
+    invertible $2\times2$ matrices $X$ and $Y$ with
+    \begin{align}
+        \sum_mW^{s'm}\otimes O_1^{ms} & =X^{-1}W^{s's}X,
+        &
+        \sum_mO_1^{s'm}\otimes W^{ms} & =Y^{-1}W^{s's}Y
+        \notag
+    \end{align}
+    for all $s',s$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The sums and differences of the four matrices of $W$ in each row give
+    the four matrix units, so $W$ is injective and hence normal. The
+    periodic operators of both stacked tensors equal $K_N$ for every
+    $N>0$ by~(\ref{eq:asymex_kw_bimodule}). Corollary~\ref{cor:asym_single_block}
+    gives $V$ and $W'$ with $W'V=\Id_2$ whose remainder vanishes on every
+    word of length at least $2-2+1=1$. The remainder therefore vanishes
+    letter by letter, and $V$ is square with left inverse $W'$.
+\end{proof}
+
+A direct check shows that one may take for $X$ and $Y$ the Pauli
+matrices exchanging and dephasing the two bond states, respectively.
+The proof above does not use this.
+
+\begin{theorem}[Fusion of the duality with its adjoint]
+    \label{thm:asymex_kw_bimodule_fusion}
+    \lean{KWExample.z2Tensor_isNormal,
+        KWExample.exists_compression_mulTensor_kwTensor_kwTransposeTensor,
+        KWExample.exists_compression_mulTensor_kwTransposeTensor_kwTensor}
+    \leanok
+    \uses{lem:asymex_kw_bimodule, thm:asym_mpo_product, thm:asym_multiblock}
+    The stacked tensor $\sum_mW^{s'm}\otimes(W^{\mathsf T})^{ms}$, of
+    bond dimension four, has the block triangular form of
+    Theorem~\ref{thm:asym_multiblock} for the two bond-one targets
+    $2O_0$ and $2O_1$, with exactly two zero slots: $4=1+1+2$. The same
+    holds for $\sum_m(W^{\mathsf T})^{s'm}\otimes W^{ms}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both bond-one tensors are normal, since each has a one-site matrix
+    equal to $1$. By~(\ref{eq:asymex_kw_bimodule}), the periodic
+    operators of the stacked tensor are $\sum_a2^NO_a$ for every $N>0$.
+    Theorem~\ref{thm:asym_mpo_product} applies with weights $2$, and the
+    dimension count of Theorem~\ref{thm:asym_multiblock} gives the number
+    of zero slots.
+\end{proof}
+
+The biorthogonal compression pairs of this theorem are fusion tensors
+for the channels $\Id$ and $\eta$ in the product of the duality with
+its adjoint. The stacked square of Theorem~\ref{thm:asymex_kw_compression}
+has no zero slot, whereas the product with the adjoint has two.
