@@ -336,6 +336,22 @@ theorem regauge_rightTripleSynthesis (Y : Fus.FusionGauge) (a b c d : Λ) :
 
 /-! ### Transformation of the F-matrices -/
 
+/-- **Gauge covariance of the printed F-matrix**: $F' = G_R^{-1}\,F\,G_L$, the transformation
+of arXiv:2203.12563, lines 417--422, in the orientation of equation `Fmove` of
+arXiv:1511.08090.  The right-hand side satisfies equation `Fmove` for the regauged family, so
+it is the printed $F$-matrix of that family by uniqueness
+(`eq_printedFMatrix_of_rightTripleSynthesis_mul`). -/
+theorem printedFMatrix_regauge (Y : Fus.FusionGauge) (a b c d : Λ) :
+    (Fus.regauge Y).printedFMatrix a b c d =
+      Fus.rightTreeGaugeInv Y a b c d * Fus.printedFMatrix a b c d *
+        Fus.leftTreeGauge Y a b c d := by
+  refine ((Fus.regauge Y).eq_printedFMatrix_of_rightTripleSynthesis_mul a b c d _ ?_).symm
+  rw [regauge_rightTripleSynthesis, regauge_leftTripleSynthesis, Matrix.mul_assoc,
+    ← Matrix.mul_kronecker_mul, Matrix.mul_one, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
+    Fus.rightTreeGauge_mul_rightTreeGaugeInv, Matrix.one_mul,
+    ← Fus.rightTripleSynthesis_mul_printedFMatrix, Matrix.mul_assoc, ← Matrix.mul_kronecker_mul,
+    Matrix.mul_one]
+
 /-- **Gauge covariance of the printed F-matrix**, intertwining form:
 $G_R\,F' = F\,G_L$, where $F'$ is the printed $F$-matrix of the regauged family and $G_L$,
 $G_R$ are the induced gauges of the two fusion trees.
@@ -345,40 +361,8 @@ Source: arXiv:2203.12563, lines 415--422; arXiv:1511.08090, lines 164--166 and e
 theorem rightTreeGauge_mul_printedFMatrix_regauge (Y : Fus.FusionGauge) (a b c d : Λ) :
     Fus.rightTreeGauge Y a b c d * (Fus.regauge Y).printedFMatrix a b c d =
       Fus.printedFMatrix a b c d * Fus.leftTreeGauge Y a b c d := by
-  set F' : Matrix (Fus.RightTripleMultiplicity a b c d) (Fus.LeftTripleMultiplicity a b c d) ℂ :=
-    (Fus.regauge Y).printedFMatrix a b c d
-  have hF' : Fus.rightTripleSynthesis a b c d *
-      (Fus.rightTreeGauge Y a b c d ⊗ₖ
-        (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ)) *
-      (F' ⊗ₖ (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ)) =
-      Fus.leftTripleSynthesis a b c d *
-        (Fus.leftTreeGauge Y a b c d ⊗ₖ
-          (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ)) := by
-    rw [← regauge_rightTripleSynthesis, ← regauge_leftTripleSynthesis]
-    exact (Fus.regauge Y).rightTripleSynthesis_mul_printedFMatrix a b c d
-  have hkey : Fus.rightTripleSynthesis a b c d *
-      ((Fus.rightTreeGauge Y a b c d * F') ⊗ₖ
-        (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ)) =
-      Fus.rightTripleSynthesis a b c d *
-        ((Fus.printedFMatrix a b c d * Fus.leftTreeGauge Y a b c d) ⊗ₖ
-          (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ)) := by
-    rw [← Matrix.mul_one (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ),
-      Matrix.mul_kronecker_mul, Matrix.mul_kronecker_mul, ← Matrix.mul_assoc, hF',
-      ← Matrix.mul_assoc, Fus.rightTripleSynthesis_mul_printedFMatrix]
-  have hcancel := congrArg (fun M => Fus.rightTripleAnalysis a b c d * M) hkey
-  simp only [← Matrix.mul_assoc, Fus.rightTripleAnalysis_mul_rightTripleSynthesis,
-    Matrix.one_mul] at hcancel
-  exact Matrix.kronecker_one_injective (Fus.bondDim_pos d) hcancel
-
-/-- **Gauge covariance of the printed F-matrix**: $F' = G_R^{-1}\,F\,G_L$, the transformation
-of arXiv:2203.12563, lines 417--422, in the orientation of equation `Fmove` of
-arXiv:1511.08090. -/
-theorem printedFMatrix_regauge (Y : Fus.FusionGauge) (a b c d : Λ) :
-    (Fus.regauge Y).printedFMatrix a b c d =
-      Fus.rightTreeGaugeInv Y a b c d * Fus.printedFMatrix a b c d *
-        Fus.leftTreeGauge Y a b c d := by
-  rw [Matrix.mul_assoc, ← Fus.rightTreeGauge_mul_printedFMatrix_regauge, ← Matrix.mul_assoc,
-    Fus.rightTreeGaugeInv_mul_rightTreeGauge, Matrix.one_mul]
+  rw [Fus.printedFMatrix_regauge, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
+    Fus.rightTreeGauge_mul_rightTreeGaugeInv, Matrix.one_mul]
 
 /-- **Gauge covariance of the inverse F-matrix**: $(F')^{-1} = G_L^{-1}\,F^{-1}\,G_R$.
 
