@@ -24,8 +24,9 @@ three groups: for `ℤ₂` with the cocycle `ω(g,g,g) = −1`, the operator of 
 equals `∏ CZ_{i,i+1} Z_i ∏ X_i` as a matrix, and the gate is `W_g = CZ (1 ⊗ Z)`; for `ℤ_n`
 with `ω_j`, for every `n` and `j`, the construction satisfies the operator laws of a matrix
 product unitary representation, with an explicit kernel; for `ℤ₂ × ℤ₂` with
-`ω(a,b,c) = (−1)^{a₁ b₂ c₂}` the same holds. The last cocycle is a standard representative,
-not taken from the sources on disk, so the `ℤ₂ × ℤ₂` statements are project results; so are
+`ω(a,b,c) = (−1)^{a₁ b₂ c₂}` the same holds. The last cocycle is the type-II component
+`ω_II` of arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` line 1847, but the source does
+not apply the construction to it, so the `ℤ₂ × ℤ₂` statements are project results; so are
 the unitarity and adjoint laws, which the sources do not state for the periodic operators.
 
 Residues are represented by their values in `{0, …, n − 1}`, the source's convention.
@@ -180,7 +181,7 @@ def kleinEquiv : Multiplicative (ZMod 2 × ZMod 2) ≃ Fin 4 :=
 /-- Project result: **the periodic operator of `(−1)^{a₁ b₂ c₂}`**: writing `x_i ∈ ℤ₂ × ℤ₂` for the
 configuration `t`, the entry at `(s, t)` vanishes unless `s` is the shift of `t` by `g`, and
 then equals `(−1)^{∑_i g₁ x_{i+1,2} (x_{i,2} − x_{i+1,2})}`. The construction is that of
-arXiv:2203.12563, lines 2204–2222; the cocycle is not printed in the sources, and the kernel
+arXiv:2203.12563, lines 2204–2222, applied to the type-II cocycle of line 1847; the kernel
 is derived from `mpo_tensor_apply`. -/
 theorem mpo_tensor_klein_apply (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ} [NeZero N]
     (s t : Fin N → Fin 4) :

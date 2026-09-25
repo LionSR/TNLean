@@ -11,15 +11,14 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Examples.StackedPairGauge
 
 **Source.** Garre-Rubio, Lootens, Molnár 2023 (arXiv:2203.12563),
 `Papers/2203.12563/REsubmission.tex` lines 2200–2224: the periodic matrix product operator
-representation of a finite group built from a three-cocycle. No source on disk prints a
-`ℤ₂ × ℤ₂` tensor. The tensors below are representatives constructed in this development of the
-mixed type-II class `(−1)^{a₁ b₂ c₂}`; `AnomalousCondensationZ2Z2Instance` identifies their
-periodic operators with those of the cocycle construction up to an on-site dressing.
-
-## Provenance
-The tensors and the exact certificates were first recorded in
-`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md`, Sections 1 and 2; they are
-verification records, not the source.
+representation of a finite group built from a three-cocycle; lines 1845–1888: the three-cocycles
+of `ℤ₂ × ℤ₂`, among them the type-II component `ω_II(a b^i, a^j b, a^k b) = −1` (line 1847),
+which in the coordinates `a = (1,0)`, `b = (0,1)` is `(−1)^{a₁ b₂ c₂}`, of class `(0,0,1)` in
+the table of lines 1856–1872, and a periodic single-qubit realization of that class,
+`U_a = ∏_i CZ_{i,i+1} Z_i`, `U_b = ∏_i X_i` (line 1884). The two-qubit tensors below are
+representatives of the same class constructed in this development;
+`AnomalousCondensationZ2Z2Instance` identifies their periodic operators with those of the
+cocycle construction for `(−1)^{a₁ b₂ c₂}` up to an on-site dressing.
 
 This file sets up the four matrix product operator tensors of an anomalous `ℤ/2 × ℤ/2`
 symmetry on a periodic chain of two-qubit sites, the object behind the condensation-defect
@@ -72,6 +71,16 @@ matrices, and every later verification is a decidable identity between integer m
   are normal at blocking length two.
 * `Z2Z2Condensation.xMPS_not_isNBlkInjective_one`,
   `Z2Z2Condensation.xyMPS_not_isNBlkInjective_one`: they are not injective at length one.
+
+## References
+- [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- Garre-Rubio, Lootens, Molnár,
+  *Classifying phases protected by matrix product operator symmetries using matrix product
+  states*
+
+## Provenance
+The tensors and the exact certificates were first recorded in
+`Notes/OpenProblemsTN/checks/asym_z2z2_typeIII_data.md`, Sections 1 and 2; they are
+verification records, not the source.
 -/
 
 noncomputable section
