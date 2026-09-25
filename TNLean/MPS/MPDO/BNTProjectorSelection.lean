@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
 import TNLean.MPS.MPDO.BNTSourceSectorProjectors
+import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 
@@ -484,18 +485,6 @@ theorem changePhysicalBasis_bntSectorProjection_basis
     have hzero := bntSectorProjection_mul_physicalSlice_mul_eq_zero
       hC hρ hη hR i s s (Or.inr fun his ↦ hsi his.symm) β α
     exact Matrix.ext_iff.mpr hzero a b
-
-/-- The MPO of the zero local tensor vanishes at every physical chain length. -/
-theorem mpo_zero_of_pos {D : ℕ} {N : ℕ} (hN : 0 < N) :
-    mpo (0 : MPOTensor d D) N = 0 := by
-  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
-  ext u v
-  obtain ⟨a, u', rfl⟩ : ∃ a u', u = Fin.cons a u' :=
-    ⟨u 0, u ∘ Fin.succ, (Fin.cons_self_tail u).symm⟩
-  obtain ⟨b, v', rfl⟩ : ∃ b v', v = Fin.cons b v' :=
-    ⟨v 0, v ∘ Fin.succ, (Fin.cons_self_tail v).symm⟩
-  rw [mpo_cons_cons]
-  simp
 
 /-- Sitewise compression of a BNT representative by `P_s` retains precisely
 the matching representative.

@@ -4045,8 +4045,10 @@ Definition~\ref{def:mpug_group_representation}.
 For matrix product operator tensors $M$ and $N$ of bond dimensions $D_M$
 and $D_N$, write $MN$ for the stacked product tensor, whose periodic operators
 are the products of those of $M$ and $N$, and write $\mathsf a$ for the
-permutation of $\C^{D_1}\otimes\C^{D_2}\otimes\C^{D_3}$ reassociating
-$(MN)P$ into $M(NP)$.
+bond associator of Definition~\ref{def:mpdo_operator_product_associator},
+the permutation from $\C^{D_1}\otimes(\C^{D_2}\otimes\C^{D_3})$, the bond
+space of $M(NP)$, to $(\C^{D_1}\otimes\C^{D_2})\otimes\C^{D_3}$, the bond
+space of $(MN)P$.
 
 \begin{lemma}[Composition of reductions]
     \label{thm:mpug_reduction_composition}
@@ -4056,7 +4058,8 @@ $(MN)P$ into $M(NP)$.
         MPSTensor.IsReduction.mulTensor_assoc_left,
         MPSTensor.IsReduction.mulTensor_assoc_right}
     \leanok
-    \uses{def:mps_rectangular_reduction}
+    \uses{def:mps_rectangular_reduction, def:mpdo_operator_product,
+        def:mpdo_operator_product_associator}
     Reductions compose: if $(V_1,W_1)$ reduces $C$ onto $B$ and
     $(V_2,W_2)$ reduces $B$ onto $A$, then $(V_2V_1,W_1W_2)$ reduces $C$
     onto $A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
@@ -4067,11 +4070,21 @@ $(MN)P$ into $M(NP)$.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:mpdo_operator_product_eval_word}
     The first claim is immediate from the intertwining equations. For the
-    second, a word of $XP$ is a sum over the contracted middle
-    configurations of Kronecker products of words of $X$ and of $P$ of the
-    same length, and $V\otimes\mathbf 1$ and $W\otimes\mathbf 1$ act on the
-    first factor only. For the third, the letters satisfy
+    second, Lemma~\ref{lem:mpdo_operator_product_eval_word} expands a word of
+    $XP$ along a configuration pair $(\sigma,\tau)$ as a sum over the
+    contracted middle configurations $\rho$, and $V\otimes\mathbf 1$ and
+    $W\otimes\mathbf 1$ act on the first factor only:
+    \begin{align}
+        (V\otimes\mathbf 1)\,(XP)^{\sigma\tau}\,(W\otimes\mathbf 1)
+         & =\sum_\rho VX^{\sigma\rho}W\otimes P^{\rho\tau}
+        =\sum_\rho A^{\sigma\rho}\otimes P^{\rho\tau}
+        =(AP)^{\sigma\tau}.
+        \notag
+    \end{align}
+    The case $PX$ is the same with the factors exchanged. For the third, the
+    letters satisfy
     $((MN)P)^{i}\,\mathsf a=\mathsf a\,(M(NP))^{i}$, so the words do too.
 \end{proof}
 
@@ -4087,7 +4100,7 @@ $(MN)P$ into $M(NP)$.
     $(V',W')$ reduce $B$ onto $A$, where $B$ and $A$ generate the same
     matrix product vectors on nonempty chains. Then there is a unique
     $z\in\C^\times$ such that $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all
-    sufficiently long words $\mathbf w$. Moreover, if
+    sufficiently long words $\mathbf w$. If
     $XA^{\mathbf w}=z\,YA^{\mathbf w}$ for all long words, then
     $XVB^{\mathbf w}=z\,YVB^{\mathbf w}$ for all long words.
 \end{lemma}
@@ -4111,7 +4124,8 @@ $(MN)P$ into $M(NP)$.
         MPOTensor.GroupFamily.FusionData.omega}
     \leanok
     \uses{def:mpug_group_representation, def:mpdo_operator_product,
-        def:mpo_to_mps, def:mps_rectangular_reduction}
+        def:mpo_to_mps, def:mps_rectangular_reduction,
+        def:mpdo_operator_product_associator}
     Let $\{O_g\}_{g\in G}$ be matrix product operator tensors of positive
     bond dimension whose doubled-index tensors are normal and whose periodic
     operators satisfy $O_g O_h=O_{gh}$ on every nonempty chain. A choice of
@@ -4155,7 +4169,8 @@ $(MN)P$ into $M(NP)$.
     \lean{MPOTensor.GroupFamily.FusionData.isCocycle_omega,
         MPOTensor.GroupFamily.FusionData.isCocycle_omega_of_isRepresentation}
     \leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec}
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
     For every $g,h,k,l\in G$,
     \begin{align}
         \omega(gh,k,l)\,\omega(g,h,kl)
@@ -4165,14 +4180,36 @@ $(MN)P$ into $M(NP)$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
     The five fusion trees of the fourfold product $((O_gO_h)O_k)O_l$ are
     reductions onto $O_{ghkl}$. Two trees that differ by one change of
     bracketing are related against long words by one value of $\omega$:
     either directly, through Lemma~\ref{thm:mpug_reduction_composition}
     with an identity factor, or after pulling back along a fusion tensor
-    by Lemma~\ref{thm:mpug_dressed_proportionality}. Identifying the
-    boundaries uses the naturality of $\mathsf a$ and the pentagon identity
-    for the reassociation permutations. The two paths around the pentagon
+    by Lemma~\ref{thm:mpug_dressed_proportionality}. Write
+    $\mathsf a_{p,q,r}$ for $\mathsf a$ on $\C^p\otimes\C^q\otimes\C^r$.
+    Identifying the boundaries uses the naturality of $\mathsf a$, for
+    $X\colon\C^n\to\C^m$,
+    \begin{align}
+        \mathsf a^{-1}_{m,q,r}\,(X\otimes\mathbf 1_q\otimes\mathbf 1_r)
+         & =(X\otimes\mathbf 1_{qr})\,\mathsf a^{-1}_{n,q,r},
+        \notag                                                                  \\
+        \mathsf a^{-1}_{p,m,r}\,(\mathbf 1_p\otimes X\otimes\mathbf 1_r)
+         & =(\mathbf 1_p\otimes(X\otimes\mathbf 1_r))\,\mathsf a^{-1}_{p,n,r},
+        \notag                                                                  \\
+        \mathsf a^{-1}_{p,q,m}\,(\mathbf 1_{pq}\otimes X)
+         & =(\mathbf 1_p\otimes(\mathbf 1_q\otimes X))\,\mathsf a^{-1}_{p,q,n},
+        \notag
+    \end{align}
+    and the pentagon identity for the reassociation permutations,
+    \begin{align}
+        (\mathbf 1_p\otimes\mathsf a^{-1}_{q,r,s})\,\mathsf a^{-1}_{p,qr,s}\,
+        (\mathsf a^{-1}_{p,q,r}\otimes\mathbf 1_s)
+         & =\mathsf a^{-1}_{p,q,rs}\,\mathsf a^{-1}_{pq,r,s}.
+        \notag
+    \end{align}
+    The two paths around the pentagon
     compare the same pair of trees, and uniqueness of the scalar on a
     nonvanishing word gives (\ref{eq:mpug_anomaly_three_cocycle}).
 \end{proof}
@@ -4180,10 +4217,12 @@ $(MN)P$ into $M(NP)$.
 \begin{theorem}[Independence of the fusion tensors]
     \label{thm:mpug_anomaly_three_cocycle_gauge}
     \lean{MPOTensor.GroupFamily.FusionData.relativeScalar,
+        MPOTensor.GroupFamily.FusionData.isDressedProportional_relativeScalar,
         MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge,
         MPOTensor.GroupFamily.FusionData.omega_cohomologousTo}
     \leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec}
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
     Let $\omega$ and $\omega'$ come from two choices of fusion tensors, and
     let $\beta_{g,h}\in\C^\times$ be the scalar with
     $F^<_{g,h}B^{\mathbf w}=\beta_{g,h}F'^<_{g,h}B^{\mathbf w}$ for all long
@@ -4198,6 +4237,8 @@ $(MN)P$ into $M(NP)$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
     The left boundaries of the two choices of the tree fusing $g$ with $h$
     first differ by $\beta_{g,h}\beta_{gh,k}$, and those of the tree fusing
     $h$ with $k$ first by $\beta_{h,k}\beta_{g,hk}$, by the two parts of
@@ -4233,7 +4274,10 @@ of $T$ applied to those of $B$.
     onto $Y\cdot B$. The letters satisfy
     $((MN)\cdot A)^i\,\mathsf a=\mathsf a\,(M\cdot(N\cdot A))^i$, so
     reductions transport between the two bracketings as in
-    Lemma~\ref{thm:mpug_reduction_composition}. Finally, a relation
+    Lemma~\ref{thm:mpug_reduction_composition}. If $P$ intertwines the
+    letters of two operator tensors, $X'^{ij}P=PX^{ij}$ for all $i,j$, then
+    $(X'\cdot B)^i\,(P\otimes\mathbf 1)=(P\otimes\mathbf 1)\,(X\cdot B)^i$.
+    Finally, a relation
     $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all long words lifts to
     $(\mathbf 1\otimes V)(T\cdot B)^{\mathbf w}
         =z\,(\mathbf 1\otimes V')(T\cdot B)^{\mathbf w}$, and the analogous
@@ -4244,9 +4288,25 @@ of $T$ applied to those of $B$.
 \begin{proof}\leanok
     A word of $T\cdot B$ is a sum over the contracted physical
     configurations of Kronecker products of a word of $T$ and a word of $B$
-    of the same length. The boundaries act on one factor only, so each claim
-    reduces to the corresponding statement for that factor. The letter
-    identity is the reassociation of Kronecker products.
+    of the same length:
+    \begin{align}
+        (T\cdot B)^{\sigma}
+         & =\sum_\tau T^{\sigma\tau}\otimes B^{\tau}.
+        \notag
+    \end{align}
+    The boundaries act on one factor only, so each claim reduces to the
+    corresponding statement for that factor; for the intertwiner,
+    $(X'^{ij}\otimes B^j)(P\otimes\mathbf 1)=X'^{ij}P\otimes B^j
+        =PX^{ij}\otimes B^j=(P\otimes\mathbf 1)(X^{ij}\otimes B^j)$.
+    The letter identity is the reassociation of Kronecker products:
+    \begin{align}
+        ((MN)\cdot A)^i
+         & =\sum_{j,k}(M^{ij}\otimes N^{jk})\otimes A^k
+        =\mathsf a\,\Bigl(\sum_{j,k}M^{ij}\otimes(N^{jk}\otimes A^k)\Bigr)
+        \,\mathsf a^{-1}
+        =\mathsf a\,(M\cdot(N\cdot A))^i\,\mathsf a^{-1}.
+        \notag
+    \end{align}
 \end{proof}
 
 \subsection{An anomaly obstructs invariant normal states}
@@ -4255,30 +4315,53 @@ of $T$ applied to those of $B$.
     \label{def:mpug_single_block_l_symbol}
     \lean{MPOTensor.GroupFamily.FixesMPV,
         MPOTensor.GroupFamily.ActionData,
-        MPOTensor.GroupFamily.nonempty_actionData,
         MPOTensor.GroupFamily.ActionData.actV,
         MPOTensor.GroupFamily.ActionData.fuseV,
-        MPOTensor.GroupFamily.ActionData.lSymbol,
+        MPOTensor.GroupFamily.ActionData.lSymbol}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols}
+    Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain},
+    and let $A$ be a matrix product state tensor with
+    $O_g|V_N(A)\rangle=|V_N(A)\rangle$ for every $g$ and every $N\geq1$.
+    Action tensors for $A$ are, for every $g$, a reduction $(V_g,W_g)$ of
+    $O_g\cdot A$ onto $A$. The stacked action $(O_gO_h)\cdot A$ then has the
+    two left boundaries
+    \begin{align}
+        \alpha_{g,h}  & =V_g(\mathbf 1\otimes V_h)\,\mathsf a^{-1}, &
+        \varphi_{g,h} & =V_{gh}(F^<_{g,h}\otimes\mathbf 1),
+        \notag
+    \end{align}
+    and $L_{g,h}$ is a nonzero scalar $z$ with
+    $\alpha_{g,h}B^{\mathbf w}=z\,\varphi_{g,h}B^{\mathbf w}$ for all long
+    words $\mathbf w$ of $B=(O_gO_h)\cdot A$, or $1$ if there is none. This
+    is the $L$-symbol of a single invariant block
+    \cite{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Characterization of the single-block L-symbol]
+    \label{thm:mpug_single_block_l_symbol_spec}
+    \lean{MPOTensor.GroupFamily.nonempty_actionData,
         MPOTensor.GroupFamily.ActionData.isDressedProportional_lSymbol}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_action_tensor_reductions,
-        def:mpug_l_symbols}
-    Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain},
-    and let $A$ be a normal matrix product state tensor of positive bond
-    dimension with $O_g|V_N(A)\rangle=|V_N(A)\rangle$ for every $g$ and every
-    $N\geq1$. Action tensors $(V_g,W_g)$ reducing $O_g\cdot A$ onto $A$ exist
-    \cite[lines~1064--1090]{GarreRubio2023MPOSym}. The stacked action
-    $(O_gO_h)\cdot A$ reduces onto $A$ along two trees, with left boundaries
-    \begin{align}
-        V_g(\mathbf 1\otimes V_h)\,\mathsf a^{-1}, &  &
-        V_{gh}(F^<_{g,h}\otimes\mathbf 1),
-    \end{align}
-    and $L_{g,h}\in\C^\times$ is the unique scalar with
-    $V_g(\mathbf 1\otimes V_h)\mathsf a^{-1}B^{\mathbf w}
-        =L_{g,h}\,V_{gh}(F^<_{g,h}\otimes\mathbf 1)B^{\mathbf w}$ for all long
-    words $\mathbf w$ of $B=(O_gO_h)\cdot A$. This is the $L$-symbol of a
-    single invariant block \cite{FrancoRubio2025MPUGauging}.
-\end{definition}
+    \uses{def:mpug_single_block_l_symbol}
+    If $A$ in Definition~\ref{def:mpug_single_block_l_symbol} is normal
+    of positive bond dimension, then action tensors for $A$ exist
+    \cite[lines~1064--1090]{GarreRubio2023MPOSym}, and for every choice of
+    them $\alpha_{g,h}B^{\mathbf w}=L_{g,h}\,\varphi_{g,h}B^{\mathbf w}$ for
+    all long words $\mathbf w$ of $B=(O_gO_h)\cdot A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
+        thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    Existence is Corollary~\ref{cor:asym_action_tensors}. By
+    Lemmas~\ref{thm:mpug_action_tensor_reductions}
+    and~\ref{thm:mpug_reduction_composition}, both $\alpha_{g,h}$ and
+    $\varphi_{g,h}$ are left boundaries of reductions of $B$ onto $A$, and
+    $B$ generates the same vectors as $A$, so
+    Lemma~\ref{thm:mpug_dressed_proportionality} gives a nonzero scalar
+    relating them against long words.
+\end{proof}
 
 \begin{theorem}[Compatibility of the L-symbol with the anomaly]
     \label{thm:mpug_single_block_l_compatibility}
@@ -4286,8 +4369,8 @@ of $T$ applied to those of $B$.
     \leanok
     \uses{def:mpug_single_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
         thm:mpug_dressed_proportionality}
-    In the setting of Definition~\ref{def:mpug_single_block_l_symbol}, for
-    all $g,h,k\in G$,
+    In the setting of Theorem~\ref{thm:mpug_single_block_l_symbol_spec},
+    for all $g,h,k\in G$,
     \begin{align}
         L_{g,hk}L_{h,k}
          & =\omega(g,h,k)\,L_{g,h}L_{gh,k}.
@@ -4296,22 +4379,55 @@ of $T$ applied to those of $B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_action_tensor_reductions}
-    Consider the triple action $B=((O_gO_h)O_k)\cdot A$. Acting first with
-    $k$, then with the pair $(g,h)$, reduces $B$ onto $(O_gO_h)\cdot A$;
-    fusing $g$ with $h$ reduces $B$ onto $(O_{gh}O_k)\cdot A$; fusing $h$
-    with $k$ reduces $B$ onto $(O_gO_{hk})\cdot A$. Pulling the defining
-    relations of $L_{g,h}$, $L_{gh,k}$ and $L_{g,hk}$ back along these
-    reductions (Lemma~\ref{thm:mpug_dressed_proportionality}), lifting the
-    relation of $L_{h,k}$ inside the action of $g$ and the relation of
-    $\omega(g,h,k)$ through the action on $A$
-    (Lemma~\ref{thm:mpug_action_tensor_reductions}), and identifying the
-    boundaries by the naturality and pentagon identities of $\mathsf a$,
-    one obtains two chains of scalars between the same pair of boundaries:
-    $L_{h,k}L_{g,hk}$ along one and $L_{g,h}L_{gh,k}\,\omega(g,h,k)$ along
-    the other. Both boundaries belong to reductions onto the normal tensor
-    $A$, so they are nonzero against arbitrarily long words, and the two
-    scalars agree.
+    \uses{thm:mpug_single_block_l_symbol_spec,
+        thm:mpug_action_tensor_reductions}
+    Consider the triple action $B=((O_gO_h)O_k)\cdot A$, and write $V^L$,
+    $V^R$ for the two fusion trees of $(g,h,k)$ as in
+    Definition~\ref{def:mpug_anomaly_three_cochain}. The naturality and
+    pentagon identities of $\mathsf a$ give five identities between left
+    boundaries of reductions of $B$ onto $A$:
+    \begin{align}
+        \alpha_{g,h}(\mathbf 1\otimes V_k)\,\mathsf a^{-1}
+         & =V_g(\mathbf 1\otimes\alpha_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1),
+        \notag                                                \\
+        V_g(\mathbf 1\otimes\varphi_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1)
+         & =\alpha_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr),
+        \notag                                                \\
+        \varphi_{g,h}(\mathbf 1\otimes V_k)\,\mathsf a^{-1}
+         & =\alpha_{gh,k}
+        \bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr),
+        \notag                                                \\
+        \varphi_{gh,k}\bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr)
+         & =V_{ghk}(V^L\otimes\mathbf 1),
+        \notag                                                \\
+        \varphi_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr)
+         & =V_{ghk}(V^R\otimes\mathbf 1).
+        \notag
+    \end{align}
+    Starting from $\alpha_{g,h}(\mathbf 1\otimes V_k)\mathsf a^{-1}B^{\mathbf w}$,
+    replace $\alpha_{g,h}$ by $L_{g,h}\varphi_{g,h}$, then $\alpha_{gh,k}$ by
+    $L_{gh,k}\varphi_{gh,k}$, then $V^L$ by $\omega(g,h,k)V^R$; or apply the
+    first identity, replace $\alpha_{h,k}$ by $L_{h,k}\varphi_{h,k}$ inside
+    the action of $g$, and then $\alpha_{g,hk}$ by $L_{g,hk}\varphi_{g,hk}$.
+    Each replacement holds against long words by
+    Theorem~\ref{thm:mpug_single_block_l_symbol_spec}, lifted through the
+    action tensors by Lemma~\ref{thm:mpug_action_tensor_reductions} and
+    pulled back along the reductions by
+    Lemma~\ref{thm:mpug_dressed_proportionality}. For all long words,
+    \begin{align}
+        \alpha_{g,h}(\mathbf 1\otimes V_k)\,\mathsf a^{-1}B^{\mathbf w}
+         & =L_{g,h}L_{gh,k}\,\omega(g,h,k)\,V_{ghk}(V^R\otimes\mathbf 1)
+        B^{\mathbf w}
+        =L_{h,k}L_{g,hk}\,V_{ghk}(V^R\otimes\mathbf 1)B^{\mathbf w}.
+        \notag
+    \end{align}
+    The boundary $V_{ghk}(V^R\otimes\mathbf 1)$ belongs to a reduction onto
+    the normal tensor $A$, so it is nonzero against arbitrarily long words,
+    and the two scalars agree.
 \end{proof}
 
 \begin{theorem}[An anomaly obstructs invariant normal states]
