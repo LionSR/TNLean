@@ -44,8 +44,8 @@ matrix, its blocks are the eigenspaces of that matrix and its weights the eigenv
 
 This is the answer, at this example, to the question of what produces a length-dependent
 structure constant: not two inequivalent sectors, but two *weighted copies of one sector*, the
-same normal tensor carried with the weights `1` and `7/25`. The periodic coefficient
-`c^{(L)} = 1 + (7/25)^L` is the length-`L` power sum of that weight multiset.
+same normal tensor carried with the weights `1` and `7/25`. The trace weight
+`1 + (7/25)^L` is the length-`L` power sum of that weight multiset.
 
 ## Provenance
 
@@ -172,8 +172,8 @@ theorem oneLabel_remainder : oneLabelCompression.remainder = 0 :=
 
 /-! ### Consequences -/
 
-/-- **The word-trace identity of the one-label candidate**: the periodic coefficient
-`c^{(L)} = 1 + λ^L` at `λ = 7/25` (`p6_examples_compression_data.md`, §4.3). -/
+/-- **The word-trace identity of the one-label candidate**: the periodic power sum
+`1 + λ^L` at `λ = 7/25` (`p6_examples_compression_data.md`, §4.3). -/
 theorem oneLabel_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord oneLabelStacked w) =
       (1 + (7 / 25 : ℂ) ^ w.length) * Matrix.trace (Kraus.evalWord oneLabelTarget w) := by

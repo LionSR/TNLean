@@ -23,9 +23,11 @@ identity of the fusion (`P6Compression.dimerFusion_trace_evalWord` in
 `TwistedDimerPairs`) carries the length-dependent weights $(7/16)^{|w|}$ and
 $(1/16)^{|w|}$. These are the fusion weights of the sector tensors as normalized
 here, not the coefficients $c^{(L)}$ of Theorem 4.14: the sector tensors are not
-put in the canonical form of that theorem, and the canonical-form coefficients
-of the twisted dimer, $\alpha^L$ and $\beta^L$ with $\alpha=7/10$ and
-$\beta=1/10$, are those of `TNLean.MPS.MPDO.TwistedDimerProductLaw`. These
+put in the canonical form of that theorem. The coefficients of the same-length
+product law of Theorem 4.14(ii) for the flag-sector operators, $\alpha^L$ and
+$\beta^L$ with $\alpha=7/10$ and $\beta=1/10$, are proved in
+`TNLean.MPS.MPDO.TwistedDimerProductLaw`, which does not assert that the two
+sectors form the canonical basis of normal tensors. These
 modules prove the compression and its word-trace identity only; the fixed-point
 property of the twisted dimer is proved separately for the operator of
 `TNLean.MPS.MPDO.TwistedDimer`
@@ -41,8 +43,8 @@ bond indices carry different sector labels vanish.
 Fusing two sectors produces *two* weighted sectors: the stacked product of the tensors of `f`
 and `f'` compresses onto the tensor of `f + f'` with the weight `x/2 = 7/16` and onto the tensor
 of `f + f' + 1` with the weight `y/2 = 1/16`, with eight zero slots left over. The weights are
-the occupations of the two fusion channels, and the periodic coefficient
-`c^{(L)} = (7/16)^L + (1/16)^L` is their length-`L` power sum. Both targets are normal at
+the occupations of the two fusion channels, and
+`(7/16)^L + (1/16)^L` is their length-`L` power sum. Both targets are normal at
 blocking length one and are not gauge equivalent (their one-letter traces differ), so the length
 dependence here comes from two genuinely different sectors rather than from a repeated one.
 
@@ -305,8 +307,8 @@ theorem remainder_dimerCompressionOfLetterIdentity (f f' : Fin 2)
 
 /-- **The word-trace identity of a compressed pair of sectors**: any compression of the stacked
 product of the sectors `f` and `f'` onto the weighted sectors `f + f'` and `f + f' + 1` gives
-`tr(B^w) = (7/16)^{|w|} tr(M_{f+f'}^w) + (1/16)^{|w|} tr(M_{f+f'+1}^w)`, the periodic coefficient
-`c^{(L)} = (7/16)^L + (1/16)^L` (`p6_examples_compression_data.md`, §1.4). This is the fusion
+`tr(B^w) = (7/16)^{|w|} tr(M_{f+f'}^w) + (1/16)^{|w|} tr(M_{f+f'+1}^w)`, the periodic power sum
+`(7/16)^L + (1/16)^L` (`p6_examples_compression_data.md`, §1.4). This is the fusion
 rule `M_f M_{f'} = (x/2) M_{f+f'} ⊕ (y/2) M_{f+f'+1} ⊕ 0` of the strategy note
 (`p6_round44_graded_dimer_twist.tex`, `thm:p6-r44-z2`(v), `eq:p6-r44-z2-fusion`) read on word
 traces; the P6 resolution (`p6_rfp_structure_constant_l_dependence.tex`, `thm:p6-round44-z2`)
