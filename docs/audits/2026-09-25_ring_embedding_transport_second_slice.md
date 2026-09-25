@@ -56,5 +56,5 @@ they replace, so kernel `decide` targets are unaffected.
   earlier audit gives.
 - The Kramers–Wannier call sites.
 
-Net change of PR #8098 against `main`: Lean sources +247 −319 (−72 lines); documentation
+Net change of PR #8098 against `main`: Lean sources +249 −320 (−71 lines); documentation
 +109 −2, most of it this note and the new `docs/tactic_patterns.md` entry.
