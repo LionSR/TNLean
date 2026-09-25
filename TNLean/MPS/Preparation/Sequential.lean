@@ -124,10 +124,12 @@ arXiv:quant-ph/0608197, eq. `eq.vidal` (lines 419--429). -/
 def HasOBCRep (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop :=
   ∃ B : OBCChainTensor d D N, ψ = B.coeff
 
+/-- Reversing the step labels twice. -/
 private theorem chainProd_rev_rev (A : Fin N → Fin d → Matrix (Fin D) (Fin D) ℂ) :
     (fun p => A (Fin.rev (Fin.rev p))) = A := by
   funext p; simp
 
+/-- The vector `|0⟩` is normalized. -/
 private theorem star_basisVecZero_dotProduct_self (hD : 0 < D) :
     star (basisVecZero D) ⬝ᵥ basisVecZero D = 1 := by
   rw [star_basisVecZero, basisVecZero_dotProduct hD]; simp [basisVecZero]
@@ -196,6 +198,8 @@ theorem isProbabilisticallyGenerated_iff {ψ : (Fin N → Fin d) → ℂ} (hψ :
   ⟨exists_hasOBCRep_of_isProbabilisticallyGenerated hψ,
     fun ⟨_, hc, h⟩ => isProbabilisticallyGenerated_of_hasOBCRep hc h⟩
 
+/-- The operation `A_{i,αβ} = ⟨α, i| U |β, 0⟩` induced by a unitary satisfies
+`∑_i A_i^† A_i = 1` (arXiv:quant-ph/0608197, lines 1532--1533). -/
 theorem isIsometryOn_stepMatrix [NeZero d] {U : Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ}
     (hU : U ∈ Matrix.unitaryGroup (Fin D × Fin d) ℂ) : IsIsometryOn D (stepMatrix U) := by
   intro β β' _ _

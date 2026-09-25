@@ -39,7 +39,8 @@ condition `∑_i A_i^† A_i = 1` restricted to the used bond levels.
 * `OBCChainTensor.exists_isometric_coeff_eq` — every open-boundary chain state
   of bond dimension at most `D` has an open-boundary representation of bond
   dimension at most `D` in which every site except the last satisfies
-  `∑_i A_i^† A_i = 1`.
+  `∑_i A_i^† A_i = 1`; `OBCChainTensor.exists_isometric_coeff_eq_of_norm` makes
+  every site satisfy it when the state is normalized.
 
 ## References
 
@@ -66,15 +67,18 @@ def chainProd {n : ℕ} (Q : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ)
     (τ : Fin n → Fin d) : Matrix (Fin D) (Fin D) ℂ :=
   (List.ofFn fun p => Q p (τ p)).prod
 
+/-- The empty chain product is the identity. -/
 @[simp] theorem chainProd_zero (Q : Fin 0 → Fin d → Matrix (Fin D) (Fin D) ℂ)
     (τ : Fin 0 → Fin d) : chainProd Q τ = 1 := by
   simp [chainProd]
 
+/-- Peeling off the first site of a chain product. -/
 theorem chainProd_succ {n : ℕ} (Q : Fin (n + 1) → Fin d → Matrix (Fin D) (Fin D) ℂ)
     (τ : Fin (n + 1) → Fin d) :
     chainProd Q τ = Q 0 (τ 0) * chainProd (fun p => Q p.succ) (fun p => τ p.succ) := by
   simp [chainProd, List.ofFn_succ]
 
+/-- Peeling off the last site of a chain product. -/
 theorem chainProd_succ' {n : ℕ} (Q : Fin (n + 1) → Fin d → Matrix (Fin D) (Fin D) ℂ)
     (τ : Fin (n + 1) → Fin d) :
     chainProd Q τ =
@@ -98,11 +102,13 @@ def VecSupp (b : ℕ) (v : Fin D → ℂ) : Prop :=
 def RowSupp (a : ℕ) (M : Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ α β : Fin D, a ≤ α.val → M α β = 0
 
+/-- Row support is preserved by right multiplication. -/
 theorem RowSupp.mul {a : ℕ} {M : Matrix (Fin D) (Fin D) ℂ} (hM : RowSupp a M)
     (N : Matrix (Fin D) (Fin D) ℂ) : RowSupp a (M * N) := by
   intro α β hα
   simp [Matrix.mul_apply, hM α _ hα]
 
+/-- A matrix vanishing beyond row `a` maps every vector into the first `a` coordinates. -/
 theorem RowSupp.mulVec {a : ℕ} {M : Matrix (Fin D) (Fin D) ℂ} (hM : RowSupp a M)
     (v : Fin D → ℂ) : VecSupp a (M *ᵥ v) := by
   intro α hα
@@ -280,6 +286,7 @@ theorem chainProd_mulVec_congr : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
       (vecSupp_chainProd_mulVec (fun k => b k.succ) (fun p => Q p.succ) hrow' v
         (by simpa using hv) (fun p => τ p.succ))
 
+/-- Reordering four finite sums. -/
 private theorem sum_comm_four {ι κ μ ν : Type*} [Fintype ι] [Fintype κ] [Fintype μ]
     [Fintype ν] (f : ι → κ → μ → ν → ℂ) :
     ∑ i, ∑ a, ∑ b, ∑ c, f i a b c = ∑ b, ∑ c, ∑ i, ∑ a, f i a b c :=
@@ -411,9 +418,11 @@ boundary written bilinearly. -/
 def rowMat (v : Fin D → ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   fun α β => if α.val = 0 then v β else 0
 
+/-- The matrix `rowMat v` vanishes beyond its first row. -/
 theorem rowSupp_rowMat (v : Fin D → ℂ) : RowSupp 1 (rowMat v) := fun α β hα => by
   simp [rowMat, show α.val ≠ 0 by omega]
 
+/-- Pairing with `|0⟩` reads off the zeroth coordinate. -/
 theorem basisVecZero_dotProduct (hD : 0 < D) (w : Fin D → ℂ) :
     basisVecZero D ⬝ᵥ w = w ⟨0, hD⟩ := by
   rw [dotProduct, Finset.sum_eq_single ⟨0, hD⟩]
@@ -423,23 +432,29 @@ theorem basisVecZero_dotProduct (hD : 0 < D) (w : Fin D → ℂ) :
     simp [basisVecZero, this]
   · simp
 
+/-- The vector `|0⟩` is real. -/
 @[simp] theorem star_basisVecZero : star (basisVecZero D) = basisVecZero D := by
   funext β; simp only [Pi.star_apply, basisVecZero]; split_ifs <;> simp
 
+/-- Applying a matrix to `|0⟩` gives its zeroth column. -/
 theorem mulVec_basisVecZero_apply (hD : 0 < D) (M : Matrix (Fin D) (Fin D) ℂ) (α : Fin D) :
     (M *ᵥ basisVecZero D) α = M α ⟨0, hD⟩ := by
   rw [Matrix.mulVec, dotProduct_comm, basisVecZero_dotProduct hD]
 
+/-- The zeroth coordinate of `rowMat v * M` applied to `w` is the bilinear pairing
+`v ⬝ᵥ (M *ᵥ w)`. -/
 theorem rowMat_mul_mulVec_zero (hD : 0 < D) (v w : Fin D → ℂ)
     (M : Matrix (Fin D) (Fin D) ℂ) :
     ((rowMat v * M) *ᵥ w) ⟨0, hD⟩ = v ⬝ᵥ (M *ᵥ w) := by
   rw [← Matrix.mulVec_mulVec]
   simp [rowMat, Matrix.mulVec, dotProduct]
 
+/-- The zeroth column of `M * colMat r` is `M *ᵥ r`. -/
 theorem mul_colMat_apply (M : Matrix (Fin D) (Fin D) ℂ) (r : Fin D → ℂ) (α γ : Fin D)
     (hγ : γ.val = 0) : (M * colMat r) α γ = (M *ᵥ r) α := by
   simp [Matrix.mul_apply, colMat, hγ, Matrix.mulVec, dotProduct]
 
+/-- The columns of `M * colMat r` other than the zeroth vanish. -/
 theorem mul_colMat_apply_of_ne (M : Matrix (Fin D) (Fin D) ℂ) (r : Fin D → ℂ) (α γ : Fin D)
     (hγ : γ.val ≠ 0) : (M * colMat r) α γ = 0 := by
   simp [Matrix.mul_apply, colMat, hγ]
@@ -496,6 +511,8 @@ def ofSupported (b : Fin (N + 1) → ℕ) (hb : ∀ k, b k ≤ D) (h0 : b 0 = 1)
   right_dim := hN
   tensor p i α β := Q p i (Fin.castLE (hb _) α) (Fin.castLE (hb _) β)
 
+/-- Zero-padding the cut-down chain returns the square site matrices, when they
+vanish outside their bond blocks. -/
 theorem zeroPad_ofSupported (b : Fin (N + 1) → ℕ) (hb : ∀ k, b k ≤ D) (h0 : b 0 = 1)
     (hN : b (Fin.last N) = 1) (Q : Fin N → Fin d → Matrix (Fin D) (Fin D) ℂ)
     (hrow : ∀ p i, RowSupp (b p.castSucc) (Q p i))
