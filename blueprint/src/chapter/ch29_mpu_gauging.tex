@@ -5686,7 +5686,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge}
+    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
     By (\ref{eq:mpug_coboundary}),
     \begin{align}
         (d\beta)(g,g^k,g)
@@ -5720,7 +5721,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass.comap}
     \leanok
     \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
-        def:mpug_fusion_gauge, def:mpug_trivial_gauge_class}
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        def:mpug_trivial_gauge_class}
     Restriction along $f$ sends $3$-cocycles to $3$-cocycles and satisfies
     $f^*(\beta\mathbin{\triangleright}\omega)
         =(f^*\beta)\mathbin{\triangleright}f^*\omega$, where
@@ -5730,9 +5732,29 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_cochain_restriction, def:mpug_fusion_gauge}
-    Since $f$ is multiplicative, each identity is the corresponding identity
-    on $G$ evaluated at $f(a),f(b),f(c)$, and $f(d)$ where needed.
+    \uses{def:mpug_cochain_restriction, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    Since $f(ab)=f(a)f(b)$, for all $a,b,c,d\in H$
+    \begin{align}
+        (f^*\omega)(ab,c,d)\,(f^*\omega)(a,b,cd)
+         & =\omega\bigl(f(a)f(b),f(c),f(d)\bigr)\,
+        \omega\bigl(f(a),f(b),f(c)f(d)\bigr),
+        \notag                                                              \\
+        (d f^*\beta)(a,b,c)
+         & =\frac{\beta\bigl(f(a),f(b)f(c)\bigr)\beta\bigl(f(b),f(c)\bigr)}
+        {\beta\bigl(f(a),f(b)\bigr)\beta\bigl(f(a)f(b),f(c)\bigr)}
+        =(d\beta)\bigl(f(a),f(b),f(c)\bigr).
+        \notag
+    \end{align}
+    The first line and the corresponding expansion of the right-hand side
+    of (\ref{eq:mpug_three_cocycle}) turn the cocycle relation for $f^*\omega$
+    into (\ref{eq:mpug_three_cocycle}) at $f(a),f(b),f(c),f(d)$. The second
+    line, which is (\ref{eq:mpug_coboundary}) evaluated at $f(a),f(b),f(c)$,
+    gives $d(f^*\beta)=f^*(d\beta)$, hence
+    $f^*(\beta\mathbin{\triangleright}\omega)
+        =(f^*\beta)\mathbin{\triangleright}f^*\omega$. The last two claims
+    follow from Definitions~\ref{def:mpug_cohomologous_to}
+    and~\ref{def:mpug_trivial_gauge_class}.
 \end{proof}
 
 \begin{definition}[L-symbols and compatibility]
