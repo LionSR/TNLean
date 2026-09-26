@@ -11,7 +11,7 @@ import TNLean.PEPS.TorusSiteTensor
 
 **Source.** Cirac, Pérez-García, Schuch, Verstraete 2021 (arXiv:2011.12127), Appendix A,
 "Two dimensions: PEPS", "The cluster state", `Papers/2011.12127/TN-Review-main.tex`
-lines 2426–2432: the 2D cluster state on the square lattice is a PEPS with
+lines 2424–2429: the 2D cluster state on the square lattice is a PEPS with
 $A=\lvert 0\rangle(00{+}{+}\rvert+\lvert 1\rangle(11{-}{-}\rvert$, where
 $(\pm\rvert=[(0\rvert\pm(1\rvert]/\sqrt2$, obtained from the circuit of controlled-`Z` gates
 between nearest neighbours acting on $\lvert +\rangle^{\otimes N}$.
@@ -50,7 +50,7 @@ open scoped BigOperators
 namespace TNLean
 namespace PEPS
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2426–2430.
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2424–2428.
 The cluster tensor $A=\lvert 0\rangle(00{+}{+}\rvert+\lvert 1\rangle(11{-}{-}\rvert$ with
 virtual arguments ordered top, right, down, left: the top and right legs copy the physical
 index `s`, and the down and left legs carry $(+\rvert$ for `s = 0` and $(-\rvert$ for `s = 1`,
@@ -63,14 +63,14 @@ noncomputable def clusterSiteTensor (t r b l s : Fin 2) : ℂ :=
 variable (width height : ℕ) [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2426–2430.
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2424–2428.
 The cluster tensor at every site of the `width × height` torus. -/
 noncomputable def clusterPEPS : Tensor (torusGraph width height) 2 :=
   torusSiteTensor clusterSiteTensor
 
 variable {width height} [Fact (2 < width)] [Fact (2 < height)]
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2426–2432.
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2424–2429.
 The cluster PEPS on a torus of `width · height` sites has coefficient
 $2^{-\mathrm{width}\cdot\mathrm{height}}(-1)^{\sum_v \sigma_v\sigma_{v+e_1}+\sigma_v
 \sigma_{v+e_2}}$: up to the factor `2^{-N/2}`, the coefficient of the controlled-`Z` gates on

@@ -14,6 +14,7 @@ $v$ to $(x,y+1)$ (top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$
     \lean{TNLean.PEPS.torusDownEdge, TNLean.PEPS.torusLeftEdge,
         TNLean.PEPS.torusTopLeg, TNLean.PEPS.torusRightLeg,
         TNLean.PEPS.torusDownLeg, TNLean.PEPS.torusLeftLeg,
+        TNLean.PEPS.torusLeftEdge_add_one, TNLean.PEPS.torusDownEdge_add_one,
         TNLean.PEPS.torusSiteTensor}
     \leanok
     \uses{def:peps_tensor, def:peps_torus_uniform_bond_dim}
@@ -22,7 +23,9 @@ $v$ to $(x,y+1)$ (top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$
     height $h$ has bond dimension $D$ on every edge and, at every site $v$,
     the local tensor $a$ with its four virtual indices read on the top,
     right, down and left legs of $v$
-    \cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix}.
+    \cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix}. The right
+    leg of $v$ is the left leg of $v+(1,0)$, and the top leg of $v$ is the
+    down leg of $v+(0,1)$.
 \end{definition}
 
 \begin{lemma}[Shift-invariant functions on the torus are constant]%

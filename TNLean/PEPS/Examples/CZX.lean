@@ -14,7 +14,7 @@ import TNLean.PEPS.TorusSiteTensor
 carries four qubits, one at each corner, and the ground state is the product over plaquettes
 of the four-qubit states $\lvert 0000\rangle+\lvert 1111\rangle$.
 Review: arXiv:2011.12127, Appendix A, "Two dimensions: PEPS", "The CZX model",
-`Papers/2011.12127/TN-Review-main.tex` lines 2497–2511: on a torus of `2N × 2M` qubits the
+`Papers/2011.12127/TN-Review-main.tex` lines 2502–2514: on a torus of `2N × 2M` qubits the
 state $\bigotimes_{i,j}\lvert\mathrm{GHZ}_{ij}\rangle$ is, after blocking the four qubits of
 a site, the PEPS with bond dimension `D = d^2 = 4` and tensor
 $\sum_{i,j,k,l=0}^{1}\lvert ijkl\rangle((i,j),(j,k),(k,l),(l,i)\rvert$.
@@ -29,7 +29,7 @@ corners, and the four virtual legs are ordered top, right, down, left (line 2415
 leg carries the pair of corner qubits on its side, listed clockwise around the site.
 
 **Local fix (CZX bond orientation):** the review contracts every bond by the maximally
-entangled pair $\sum_n\lvert n)\lvert n)$ (lines 273–279), identifying equal bond labels at
+entangled pair $\sum_n\lvert n)\lvert n)$ (lines 271–276), identifying equal bond labels at
 its two ends. With the printed tensor this sets the top-right qubit of a site equal to the
 bottom-left qubit of its right neighbour and of its upper neighbour, and the resulting state
 is a product of GHZ states along diagonal loops winding around the torus, not the product of
@@ -46,7 +46,7 @@ site are not four distinct bonds; the source's torus of `2N × 2M` qubits also a
 `N, M ∈ {1, 2}`. Documented in `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
 The review's statement that the CZX model belongs to the non-trivial symmetry-protected
-sector of the on-site `ℤ₂` symmetry (line 2511) is not restated here; the anomaly class of
+sector of the on-site `ℤ₂` symmetry (line 2516) is not restated here; the anomaly class of
 the boundary symmetry is the subject of the matrix product unitary modules
 (`TNLean/MPS/Examples/CZX/`).
 
@@ -100,7 +100,7 @@ def czxBottomRight (s : Fin 16) : Fin 2 := (czxQubits.symm s).2.1
 /-- The bottom-left qubit `l` of a site. -/
 def czxBottomLeft (s : Fin 16) : Fin 2 := (czxQubits.symm s).2.2
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2506–2509.
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2513–2514.
 The review's CZX tensor $\sum_{i,j,k,l}\lvert ijkl\rangle((i,j),(j,k),(k,l),(l,i)\rvert$,
 virtual arguments ordered top, right, down, left. The sum over `i, j, k, l` collapses to
 the four qubits of the physical label `s`. -/
@@ -120,7 +120,7 @@ def czxBondSwap : Fin 4 ≃ Fin 4 :=
 variable (width height : ℕ) [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2497–2509.
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2502–2514.
 The CZX tensor at every site of the `width × height` torus, with the down and left labels of
 `czxSiteTensor` read in reverse, so that each bond identifies the pair `(a, b)` at one end with
 `(b, a)` at the other (the module's local fix on the bond orientation). -/
@@ -156,7 +156,7 @@ theorem czx_bond_iff_plaquette {α : Type*} (i j k l : TorusVertex width height 
 
 variable [Fact (2 < width)] [Fact (2 < height)]
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2497–2509;
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2502–2514;
 arXiv:1106.4752, `References/1106.4752/source/dDSPTmodel.tex` lines 317–321.
 The CZX PEPS is the product over plaquettes of the unnormalized four-qubit GHZ states
 $\lvert 0000\rangle+\lvert 1111\rangle$: its coefficient at `σ` is the product, over the

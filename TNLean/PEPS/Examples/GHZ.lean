@@ -10,7 +10,7 @@ import TNLean.PEPS.TorusSiteTensor
 
 **Source.** Cirac, Pérez-García, Schuch, Verstraete 2021 (arXiv:2011.12127), Appendix A,
 "Two dimensions: PEPS", "The GHZ state", `Papers/2011.12127/TN-Review-main.tex`
-lines 2417–2423: the 2D GHZ state $\sum_{i=0}^{d-1}\lvert i,i,\dots,i\rangle$ is a PEPS with
+lines 2417–2421: the 2D GHZ state $\sum_{i=0}^{d-1}\lvert i,i,\dots,i\rangle$ is a PEPS with
 `D = d` and $A^i_{\alpha\beta\gamma\delta}=\delta_{i=\alpha=\beta=\gamma=\delta}$.
 Review: arXiv:2011.12127, Appendix A, "The GHZ state" (two dimensions).
 
@@ -41,7 +41,7 @@ open scoped BigOperators
 namespace TNLean
 namespace PEPS
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2417–2423.
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2417–2421.
 The two-dimensional GHZ tensor $A^i_{\alpha\beta\gamma\delta}=\delta_{i=\alpha=\beta=\gamma=
 \delta}$ with bond dimension `D = d`, virtual arguments ordered top, right, down, left. -/
 def ghzSiteTensor (d : ℕ) (α β γ δ i : Fin d) : ℂ :=
@@ -50,14 +50,14 @@ def ghzSiteTensor (d : ℕ) (α β γ δ i : Fin d) : ℂ :=
 variable (width height d : ℕ) [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2417–2423.
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2417–2421.
 The GHZ tensor at every site of the `width × height` torus. -/
 def ghzPEPS : Tensor (torusGraph width height) d :=
   torusSiteTensor (ghzSiteTensor d)
 
 variable {width height d}
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2417–2423.
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2417–2421.
 The GHZ PEPS generates the unnormalized GHZ state $\sum_{i=0}^{d-1}\lvert i,\dots,i\rangle$:
 its coefficient at `σ` is `∑ i, ∏ v, [σ v = i]`. -/
 theorem stateCoeff_ghzPEPS (σ : TorusVertex width height → Fin d) :
