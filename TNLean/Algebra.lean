@@ -12,6 +12,7 @@ import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
 import TNLean.Algebra.BlockingSignParity
+import TNLean.Algebra.CStarSqrtHolder
 import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CocycleCohomology
@@ -50,6 +51,7 @@ import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixCyclicPathSum
+import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MonomialFixedSubspace
@@ -58,6 +60,7 @@ import TNLean.Algebra.MonomialMatrix
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog
+import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv

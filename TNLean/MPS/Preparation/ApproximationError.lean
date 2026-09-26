@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.NormedRingTelescoping
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.Spectral.MPVOverlapTrace
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
@@ -32,8 +33,8 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
 ## Proof outline (following arXiv:2103.13367)
 
 1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C r^n ‖X‖` with `r = e^{-2γ/ξ}`, which exceeds
-   the spectral radius of `E_A - |σ⟩⟨1|` because `2γ < 1` (the bound `‖R‖ ≤ Λ(q) e^{-αq}`, eq.
-   `difference`).
+   the spectral radius of `E_A - |σ⟩⟨1|` because `2γ < 1` (compare eq. `difference`,
+   `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix).
 2. **Positive parts.** `P_q² - P_∞²` is a rearrangement of `E_A^q - |σ⟩⟨1|`, and
    `‖√X - √Y‖ ≤ √‖X - Y‖` (eq. `intermediate`) gives `‖P_q - P_∞‖ ≤ C e^{-γ q/ξ}`.
 3. **Telescoping.** For an idempotent `T_∞` and `‖T - T_∞‖ ≤ δ`,
@@ -45,7 +46,8 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
 
 ## Main declarations
 
-* `norm_pow_sub_pow_le_of_isIdempotentElem` — the telescoping bound of step 3.
+* `norm_pow_sub_pow_le_of_isIdempotentElem` (in `TNLean.Algebra.NormedRingTelescoping`) — the
+  telescoping bound of step 3.
 * Steps 1 and 2 are `MPSTensor.exists_norm_transferMap_pow_sub_le` and
   `MPSTensor.exists_norm_polarPos_blockTensor_sub_le` in
   `TNLean.MPS.Preparation.PositivePartRate`.
@@ -67,148 +69,12 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
-open Filter Topology
-
-/-! ### Telescoping in a normed ring -/
-
-/-- The telescoping identity `X^n - E^n = ∑_{k<n} X^k (X - E) E^{n-1-k}` in a ring.
-
-arXiv:2103.13367, eq. `final_eq` (second line). -/
-theorem pow_sub_pow_eq_sum_mul_sub_mul {R : Type*} [Ring R] (X E : R) (n : ℕ) :
-    X ^ n - E ^ n = ∑ k ∈ Finset.range n, X ^ k * (X - E) * E ^ (n - 1 - k) := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [Finset.sum_range_succ]
-    simp only [Nat.add_sub_cancel, Nat.sub_self, pow_zero, mul_one]
-    have h : ∑ k ∈ Finset.range n, X ^ k * (X - E) * E ^ (n - k) = (X ^ n - E ^ n) * E := by
-      rw [ih, Finset.sum_mul]
-      refine Finset.sum_congr rfl fun k hk => ?_
-      have hk := Finset.mem_range.1 hk
-      rw [mul_assoc (X ^ k * (X - E)), ← pow_succ, show n - 1 - k + 1 = n - k by omega]
-    rw [h, pow_succ X n, pow_succ E n]
-    noncomm_ring
-
-/-- **Telescoping bound for a perturbed idempotent.** In a normed ring, let `E` be idempotent
-with `‖E‖ ≤ c` and `‖1‖ ≤ c`, and let `‖X - E‖ ≤ δ`. Then
-`‖X^M - E^M‖ ≤ c ((1 + cδ)^M - 1)`.
-
-This is the iteration of arXiv:2103.13367, eqs. `final_eq`, `inequality`, `almost_done`, and
-`finished`: `E^k = E` for `k ≥ 1` bounds every factor `E^k` by `c`, and
-`‖X^k‖ ≤ c + ‖X^k - E^k‖` feeds the bound back into the telescoping sum. -/
-theorem norm_pow_sub_pow_le_of_isIdempotentElem {R : Type*} [NormedRing R] {E X : R}
-    (hE : IsIdempotentElem E) {c δ : ℝ} (hEc : ‖E‖ ≤ c) (h1c : ‖(1 : R)‖ ≤ c)
-    (hδ : ‖X - E‖ ≤ δ) (M : ℕ) :
-    ‖X ^ M - E ^ M‖ ≤ c * ((1 + c * δ) ^ M - 1) := by
-  have hc0 : 0 ≤ c := (norm_nonneg _).trans hEc
-  have hδ0 : 0 ≤ δ := (norm_nonneg _).trans hδ
-  have hEpow : ∀ k : ℕ, ‖E ^ k‖ ≤ c := fun k => by
-    rcases k with _ | k
-    · simpa using h1c
-    · rw [hE.pow_succ_eq]; exact hEc
-  -- The closed form `b n = c ((1 + cδ)^n - 1)` solves `b n = ∑_{k<n} (c + b k) c δ`.
-  have hclosed : ∀ n : ℕ, ∑ k ∈ Finset.range n, (c + c * ((1 + c * δ) ^ k - 1)) * δ * c =
-      c * ((1 + c * δ) ^ n - 1) := fun n => by
-    have hg := geom_sum_mul (1 + c * δ) n
-    simp only [add_sub_cancel_left] at hg
-    calc ∑ k ∈ Finset.range n, (c + c * ((1 + c * δ) ^ k - 1)) * δ * c
-        = c * ((∑ k ∈ Finset.range n, (1 + c * δ) ^ k) * (c * δ)) := by
-          rw [Finset.sum_mul, Finset.mul_sum]
-          refine Finset.sum_congr rfl fun k _ => ?_
-          ring
-      _ = c * ((1 + c * δ) ^ n - 1) := by rw [hg]
-  induction M using Nat.strong_induction_on with
-  | _ M ih =>
-    rw [pow_sub_pow_eq_sum_mul_sub_mul, ← hclosed M]
-    refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun k hk => ?_)
-    have hk := Finset.mem_range.1 hk
-    have hXk : ‖X ^ k‖ ≤ c + c * ((1 + c * δ) ^ k - 1) := by
-      calc ‖X ^ k‖ = ‖E ^ k + (X ^ k - E ^ k)‖ := by rw [add_sub_cancel]
-        _ ≤ ‖E ^ k‖ + ‖X ^ k - E ^ k‖ := norm_add_le _ _
-        _ ≤ c + c * ((1 + c * δ) ^ k - 1) := add_le_add (hEpow k) (ih k hk)
-    calc ‖X ^ k * (X - E) * E ^ (M - 1 - k)‖
-        ≤ ‖X ^ k‖ * ‖X - E‖ * ‖E ^ (M - 1 - k)‖ := by
-          refine (norm_mul_le _ _).trans ?_
-          gcongr
-          exact norm_mul_le _ _
-      _ ≤ (c + c * ((1 + c * δ) ^ k - 1)) * δ * c :=
-          mul_le_mul (mul_le_mul hXk hδ (norm_nonneg _) ((norm_nonneg _).trans hXk)) (hEpow _)
-            (norm_nonneg _) (mul_nonneg ((norm_nonneg _).trans hXk) hδ0)
-
-/-- `(1 + y)^M - 1 ≤ M y e^{M y}` for `y ≥ 0`: the last step of arXiv:2103.13367, eq.
-`finished`, `ε_q + ε_q² (1 + ε_q/M)^{M-2} = ε_q + ε_q² e^{ε_q} (1 + O(ε_q/M))`. -/
-theorem one_add_pow_sub_one_le_mul_exp {y : ℝ} (hy : 0 ≤ y) (M : ℕ) :
-    (1 + y) ^ M - 1 ≤ M * y * Real.exp (M * y) := by
-  have ht : 0 ≤ (M : ℝ) * y := mul_nonneg M.cast_nonneg hy
-  have h1 : (1 + y) ^ M ≤ Real.exp (M * y) := by
-    calc (1 + y) ^ M ≤ Real.exp y ^ M := by
-          gcongr
-          linarith [Real.add_one_le_exp y]
-      _ = Real.exp (M * y) := (Real.exp_nat_mul y M).symm
-  have h2 : Real.exp (M * y) - 1 ≤ M * y * Real.exp (M * y) := by
-    have := Real.add_one_le_exp (-((M : ℝ) * y))
-    have hprod : Real.exp (M * y) * Real.exp (-(M * y)) = 1 := by
-      rw [← Real.exp_add, add_neg_cancel, Real.exp_zero]
-    nlinarith [Real.exp_pos ((M : ℝ) * y)]
-  linarith
-
-/-! ### Isometries on every site preserve inner products -/
-
-/-- An isometry `W : ℂ^κ → ℂ^n` applied on every site preserves inner products of vectors on
-`M` sites: `⟨W^{⊗M} ψ, W^{⊗M} φ⟩ = ⟨ψ, φ⟩`.
-
-arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(i): `⟨φ̃_N|φ_N⟩` reduces to
-`⟨Ω|φ_pos⟩` because `V^{⊗N/q}` acts isometrically. -/
-theorem Matrix.IsIsometry.sum_star_mul_tensorPower {n κ : Type*} [Fintype n] [Fintype κ]
-    [DecidableEq κ] {W : Matrix n κ ℂ} (hW : W.IsIsometry) {M : ℕ}
-    (ψ φ : (Fin M → κ) → ℂ) :
-    ∑ s : Fin M → n, star (∑ τ, (∏ j, W (s j) (τ j)) * ψ τ) * ∑ τ, (∏ j, W (s j) (τ j)) * φ τ =
-      ∑ τ, star (ψ τ) * φ τ := by
-  classical
-  have hcol : ∀ a b : κ, ∑ i, star (W i a) * W i b = if a = b then 1 else 0 := fun a b => by
-    have h := congrFun (congrFun hW a) b
-    rw [Matrix.mul_apply, Matrix.one_apply] at h
-    simpa [Matrix.conjTranspose_apply] using h
-  have hprod : ∀ τ τ' : Fin M → κ,
-      ∑ s : Fin M → n, ∏ j, (star (W (s j) (τ j)) * W (s j) (τ' j)) =
-        if τ = τ' then 1 else 0 := fun τ τ' => by
-    rw [← Fintype.prod_sum (fun j i => star (W i (τ j)) * W i (τ' j))]
-    simp only [hcol]
-    by_cases h : τ = τ'
-    · subst h; simp
-    · obtain ⟨j, hj⟩ := Function.ne_iff.mp h
-      rw [ite_eq_right_iff.2 fun h' => absurd h' h]
-      exact Finset.prod_eq_zero (Finset.mem_univ j) (ite_eq_right_iff.2 fun h' => absurd h' hj)
-  calc ∑ s : Fin M → n, star (∑ τ, (∏ j, W (s j) (τ j)) * ψ τ) *
-        ∑ τ, (∏ j, W (s j) (τ j)) * φ τ
-      = ∑ s : Fin M → n, ∑ τ, ∑ τ', (∏ j, (star (W (s j) (τ j)) * W (s j) (τ' j))) *
-          (star (ψ τ) * φ τ') := by
-        refine Finset.sum_congr rfl fun s _ => ?_
-        simp only [star_sum, star_mul, star_prod, Finset.sum_mul, Finset.mul_sum]
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun τ _ => Finset.sum_congr rfl fun τ' _ => ?_
-        rw [Finset.prod_mul_distrib]
-        ring
-    _ = ∑ τ, ∑ τ', (∑ s : Fin M → n, ∏ j, (star (W (s j) (τ j)) * W (s j) (τ' j))) *
-          (star (ψ τ) * φ τ') := by
-        simp only [Finset.sum_mul]
-        rw [Finset.sum_comm]
-        exact Finset.sum_congr rfl fun τ _ => Finset.sum_comm
-    _ = ∑ τ, star (ψ τ) * φ τ := by
-        simp only [hprod, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ,
-          ite_true]
 
 namespace MPSTensor
 
 variable {d D : ℕ}
 
 /-! ### Mixed transfer matrices -/
-
-/-- The mixed map is additive in its left family. -/
-theorem _root_.Kraus.mixedMapLM_add_left {n : ℕ} (A A' B : MPSTensor n D) :
-    Kraus.mixedMapLM (A + A') B = Kraus.mixedMapLM A B + Kraus.mixedMapLM A' B :=
-  LinearMap.ext fun X => by
-    simp [Matrix.add_mul, Finset.sum_add_distrib]
 
 /-- Reading a `D² × D²` matrix `G` as the tensor with physical dimension `D²` whose `k`-th matrix
 is the `k`-th row of `G`, as a linear map. -/
@@ -222,7 +88,7 @@ noncomputable def ofPhysicalMatrixLM :
 noncomputable def mixedMapLMLeft {n : ℕ} (B : MPSTensor n D) :
     MPSTensor n D →ₗ[ℂ] Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) where
   toFun A := Kraus.mixedMapLM A B
-  map_add' A A' := Kraus.mixedMapLM_add_left A A' B
+  map_add' A A' := LinearMap.ext fun X => by simp [Matrix.add_mul, Finset.sum_add_distrib]
   map_smul' c A := Kraus.mixedMapLM_smul_left c A B
 
 /-- The linear map `G ↦ τ_{G,B}` sending a `D² × D²` matrix `G`, read as a tensor through
@@ -281,9 +147,13 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le (A : MPSTensor d D)
   have : NeZero D := ⟨by rintro rfl; simp at htr⟩
   obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   set Ψ := mixedTransferMatrixLeft (fixedPointTensor σ)
-  obtain ⟨K₃, hK₃, hΨ⟩ := LinearMap.exists_norm_apply_le_mul Ψ
-  obtain ⟨K₄, hK₄, htrace⟩ :=
-    LinearMap.exists_norm_apply_le_mul (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
+  set K₃ := ‖LinearMap.toContinuousLinearMap Ψ‖
+  have hK₃ : 0 ≤ K₃ := norm_nonneg _
+  have hΨ : ∀ G, ‖Ψ G‖ ≤ K₃ * ‖G‖ := (LinearMap.toContinuousLinearMap Ψ).le_opNorm
+  set trL := LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
+  set K₄ := ‖trL‖
+  have hK₄ : 0 ≤ K₄ := norm_nonneg _
+  have htrace : ∀ G, ‖Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ G‖ ≤ K₄ * ‖G‖ := trL.le_opNorm
   set Tinf := transferMatrix (Kraus.mixedMapLM (fixedPointTensor σ) (fixedPointTensor σ))
   set c := ‖(1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖ + ‖Tinf‖
   have hc : 0 ≤ c := by positivity
@@ -356,36 +226,14 @@ theorem exists_norm_transferMatrix_pow_sub_le (A : MPSTensor d D) (hN : Kraus.Is
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤
         K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ n := by
   obtain ⟨C, hC, hgap⟩ := exists_norm_transferMap_pow_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
-  obtain ⟨K₂, hK₂, hent⟩ :=
-    Matrix.exists_norm_entry_le_mul_l2_opNorm (m := Fin D) (n := Fin D)
-  set r := Real.exp (-γ / correlationLength lam₂) ^ 2
-  refine ⟨∑ a : Fin D × Fin D, ∑ b : Fin D × Fin D,
-    K₂ * C * ‖(Matrix.single b.2 b.1 1 : Matrix (Fin D) (Fin D) ℂ)‖ *
-      ‖(Matrix.single a b 1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖,
-    by positivity, fun n => ?_⟩
+  obtain ⟨K, hK, h⟩ := exists_norm_le_of_entry_eq_pow_sub (Kraus.transferMap A) σ hC.le hgap
+    (fun (_ b : Fin D × Fin D) => Matrix.single b.2 b.1 (1 : ℂ))
+    (fun a _ => a.2) (fun a _ => a.1)
+  refine ⟨K, hK, fun n => ?_⟩
   rw [← transferMatrix_pow]
-  refine (Matrix.l2_opNorm_le_sum_norm_entry _).trans ?_
-  rw [Finset.sum_mul]
-  refine Finset.sum_le_sum fun a _ => ?_
-  rw [Finset.sum_mul]
-  refine Finset.sum_le_sum fun b _ => ?_
-  set Y : Matrix (Fin D) (Fin D) ℂ := Matrix.single b.2 b.1 1
-  have hab : (transferMatrix (Kraus.transferMap A ^ n) -
-      transferMatrix (Kraus.transferMap (fixedPointTensor σ))) a b =
-      ((Kraus.transferMap A ^ n) Y - Y.trace • σ) a.2 a.1 := by
-    rw [Matrix.sub_apply, Matrix.sub_apply, ← transferMap_fixedPointTensor_apply hσ.posSemidef]
-    rfl
-  rw [hab]
-  have hr : 0 ≤ r := by positivity
-  calc ‖((Kraus.transferMap A ^ n) Y - Y.trace • σ) a.2 a.1‖ *
-        ‖(Matrix.single a b 1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖
-      ≤ (K₂ * (C * r ^ n * ‖Y‖)) *
-          ‖(Matrix.single a b 1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖ := by
-        gcongr
-        exact (hent _ _ _).trans (by gcongr; exact hgap n Y)
-    _ = K₂ * C * ‖Y‖ *
-          ‖(Matrix.single a b 1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖ * r ^ n := by
-        ring
+  refine h n _ fun a b => ?_
+  rw [Matrix.sub_apply, Matrix.sub_apply, ← transferMap_fixedPointTensor_apply hσ.posSemidef]
+  rfl
 
 /-- The squared norm of the periodic state is the self-overlap: `‖φ_N(A)‖² = ⟨φ_N|φ_N⟩`. -/
 theorem ofReal_norm_mpvState_sq (A : MPSTensor d D) (N : ℕ) :
@@ -411,9 +259,10 @@ theorem exists_abs_norm_mpvState_sq_sub_one_le (A : MPSTensor d D) (hN : Kraus.I
       |‖mpvState A N‖ ^ 2 - 1| ≤ K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ N := by
   have : NeZero D := ⟨by rintro rfl; simp at htr⟩
   obtain ⟨K₀, hK₀, hT⟩ := exists_norm_transferMatrix_pow_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
-  obtain ⟨K₄, hK₄, htrace⟩ :=
-    LinearMap.exists_norm_apply_le_mul (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
-  refine ⟨K₄ * K₀, by positivity, fun N => ?_⟩
+  set trL := LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
+  have htrace : ∀ G, ‖Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ G‖ ≤ ‖trL‖ * ‖G‖ := trL.le_opNorm
+  have hK₄ : 0 ≤ ‖trL‖ := norm_nonneg _
+  refine ⟨‖trL‖ * K₀, by positivity, fun N => ?_⟩
   have hone : Matrix.trace (transferMatrix (Kraus.transferMap (fixedPointTensor σ))) = 1 := by
     have h := trace_transferMatrix_transferMap_pow_eq_mpvOverlap (fixedPointTensor σ) 1
     rwa [pow_one, mpvOverlap_fixedPointTensor_self hσ.posSemidef htr] at h
@@ -463,8 +312,9 @@ theorem norm_mpvOverlap_le {n D₁ D₂ : ℕ} (X : MPSTensor n D₁) (Y : MPSTe
   exact norm_inner_le_norm _ _
 
 /-- The positive part of the `q`-site blocked tensor generates, on `M` blocks, a state of the
-same norm as the periodic state of `A` on `qM` sites: both squared norms are `Tr E_A^{qM}`
-(arXiv:2307.01696, text after eq. (6): `E_P = E_B = E_A^q`). -/
+same norm as the periodic state of `A` on `qM` sites: both squared norms are `Tr E_A^{qM}`.
+The source states `E_B = E_A^q` (arXiv:2307.01696, text after eq. (6)); `E_P = E_B` follows from
+`B = V P` (`transferMap_polarPosTensor_blockTensor`). -/
 theorem norm_mpvState_polarPosTensor_blockTensor [NeZero D] (A : MPSTensor d D) (q M : ℕ) :
     ‖mpvState (polarPosTensor (blockTensor A q)) M‖ = ‖mpvState A (q * M)‖ := by
   have h : ((‖mpvState (polarPosTensor (blockTensor A q)) M‖ ^ 2 : ℝ) : ℂ) =
@@ -497,30 +347,19 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul (A : MPSTensor 
   obtain ⟨B, hB⟩ := exists_norm_mpvState_sq_le A hN hA hσ htr hfix
   have hB0 : 0 ≤ B := (sq_nonneg _).trans (hB 0)
   refine ⟨C * Real.exp C + (2 + B), by positivity, fun q M _ => ?_⟩
-  set y := (M : ℝ) * Real.exp (-γ * q / correlationLength lam₂)
-  have hy0 : 0 ≤ y := by positivity
-  rcases le_or_gt y 1 with hy | hy
-  · have hexp : Real.exp (C * y) ≤ Real.exp C := Real.exp_le_exp.2 (by nlinarith)
-    calc _ ≤ C * y * Real.exp (C * y) := h q M
-      _ ≤ C * y * Real.exp C := by gcongr
-      _ ≤ (C * Real.exp C + (2 + B)) * y := by nlinarith [Real.exp_pos C]
-  · have hz : ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖ ≤ 1 + B := by
-      have hfp : ‖mpvState (fixedPointTensor σ) M‖ = 1 := by
-        have h1 := ofReal_norm_mpvState_sq (fixedPointTensor σ) M
-        rw [mpvOverlap_fixedPointTensor_self hσ.posSemidef htr] at h1
-        exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1
-          (Complex.ofReal_injective (by rw [h1]; simp))
-      refine (norm_mpvOverlap_le _ _ M).trans ?_
-      rw [hfp, mul_one, norm_mpvState_polarPosTensor_blockTensor]
-      nlinarith [hB (q * M), norm_nonneg (mpvState A (q * M))]
-    calc _ ≤ 1 + ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖ := by
-          rw [abs_le]; constructor <;> linarith [norm_nonneg
-            (mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M)]
-      _ ≤ 2 + B := by linarith
-      _ ≤ (2 + B) * y := le_mul_of_one_le_right (by linarith) hy.le
-      _ ≤ (C * Real.exp C + (2 + B)) * y := by
-          have : 0 ≤ C * Real.exp C * y := by positivity
-          nlinarith
+  have hfp : ‖mpvState (fixedPointTensor σ) M‖ = 1 := by
+    have h1 := ofReal_norm_mpvState_sq (fixedPointTensor σ) M
+    rw [mpvOverlap_fixedPointTensor_self hσ.posSemidef htr] at h1
+    exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1
+      (Complex.ofReal_injective (by rw [h1]; simp))
+  have hz : ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖ ≤ 1 + B := by
+    refine (norm_mpvOverlap_le _ _ M).trans ?_
+    rw [hfp, mul_one, norm_mpvState_polarPosTensor_blockTensor]
+    nlinarith [hB (q * M), norm_nonneg (mpvState A (q * M))]
+  refine le_mul_of_le_mul_exp_of_le hC.le (by linarith) (by positivity) (h q M) ?_
+  rw [abs_le]
+  constructor <;> linarith [norm_nonneg
+    (mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M)]
 
 /-! ### The approximation error -/
 
@@ -548,17 +387,13 @@ noncomputable def approximatingMPVState (A : MPSTensor d D) (σ : Matrix (Fin D)
       mpv (approximatingTensor (blockTensor A q) σ) ((blockedConfigEquiv d M q).symm s) := by
   simp [approximatingMPVStateRaw, EuclideanSpace.equiv, PiLp.toLp_apply]
 
-/-- A vector divided by its norm has norm at most `1`. -/
-theorem norm_inv_norm_smul_le_one {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (v : E) :
-    ‖((‖v‖ : ℂ)⁻¹) • v‖ ≤ 1 := by
-  rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm]
-  exact inv_mul_le_one_of_le₀ le_rfl (norm_nonneg _)
-
 /-- For `B_q` injective, the approximating state is the periodic state of `V P_∞` itself
 (its norm is `1`), and its overlap with the periodic state of `A` is the overlap of the
 positive part with the fixed point: `⟨φ̃_N|φ_N(A)⟩ = ⟨φ_M(P_∞)|φ_M(P_q)⟩`.
 
-arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(i): `c_N ⟨φ̃_N|φ_N⟩ = ⟨Ω|v_pos⟩`. -/
+arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(i): the source's step that the first
+term of its triangle inequality "is exactly equal to the LHS of eq. (S9)", which rests on this
+identity. -/
 theorem inner_approximatingMPVState_mpvState (A : MPSTensor d D) {q : ℕ}
     (hB : Kraus.IsInjective (blockTensor A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (M : ℕ) [NeZero M] :
@@ -625,8 +460,8 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
   set x := Real.exp (-γ / correlationLength lam₂)
   have hx : 0 < x := Real.exp_pos _
   set C := C₁ + K₅ + (x ^ L)⁻¹ + 1
-  have hC₁C : C₁ ≤ C := by have : 0 < (x ^ L)⁻¹ := by positivity
-                           linarith
+  have hxL : 0 < (x ^ L)⁻¹ := by positivity
+  have hC₁C : C₁ ≤ C := by linarith
   refine ⟨C, by positivity, fun q M _ => ?_⟩
   have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q := by
     rw [← Real.exp_nat_mul]; congr 1; ring
@@ -648,8 +483,7 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     by_contra h
     rw [not_lt] at h
     have : 1 ≤ u := one_le_mul_of_one_le_of_one_le hM (one_le_pow₀ h)
-    have : 1 ≤ C := by have : 0 < (x ^ L)⁻¹ := by positivity
-                       linarith
+    have : 1 ≤ C := by linarith
     nlinarith
   have hLq : L ≤ q := by
     by_contra h
@@ -684,7 +518,6 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
       le_mul_of_one_le_right (by positivity) hexp
     have h3 : (C₁ + K₅) * u * Real.exp (C * u) ≤ C * u * Real.exp (C * u) := by
       gcongr
-      have : 0 < (x ^ L)⁻¹ := by positivity
       linarith
     nlinarith
   rcases eq_or_ne c 0 with hc0 | hc0
@@ -696,8 +529,10 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     set w := ‖⟪φt, φ⟫_ℂ‖
     have hw1 : w ≤ 1 := by
       refine (norm_inner_le_norm (𝕜 := ℂ) φt φ).trans ?_
-      calc ‖φt‖ * ‖φ‖ ≤ 1 * 1 := mul_le_mul (norm_inv_norm_smul_le_one _)
-            (norm_inv_norm_smul_le_one _) (norm_nonneg _) zero_le_one
+      have hunit : ∀ v : MPVSpace d (M * q), ‖((‖v‖ : ℂ)⁻¹) • v‖ ≤ 1 := fun v => by
+        rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm]
+        exact inv_mul_le_one_of_le₀ le_rfl (norm_nonneg _)
+      calc ‖φt‖ * ‖φ‖ ≤ 1 * 1 := mul_le_mul (hunit _) (hunit _) (norm_nonneg _) zero_le_one
         _ = 1 := one_mul 1
     have hcw : c * w = ‖z‖ := by
       have hw : w = ‖(c : ℂ)⁻¹ * z‖ := by simp only [w, hinner]
@@ -735,15 +570,7 @@ theorem exists_approximationError_le_mul (A : MPSTensor d D) (hN : Kraus.IsNorma
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
   obtain ⟨C, hC, h⟩ := exists_approximationError_le A hN hA hσ htr hfix hlam hγ0 hγ
   refine ⟨C * Real.exp C + 1, by positivity, fun q M _ => ?_⟩
-  set y := (M : ℝ) * Real.exp (-γ * q / correlationLength lam₂)
-  have hy0 : 0 ≤ y := by positivity
-  rcases le_or_gt y 1 with hy | hy
-  · have hexp : Real.exp (C * y) ≤ Real.exp C := Real.exp_le_exp.2 (by nlinarith)
-    calc _ ≤ C * y * Real.exp (C * y) := h q M
-      _ ≤ C * y * Real.exp C := by gcongr
-      _ ≤ (C * Real.exp C + 1) * y := by nlinarith [Real.exp_pos C]
-  · have : 0 ≤ ‖⟪approximatingMPVState A σ q M, normalizedMPVState A (M * q)⟫_ℂ‖ :=
-      norm_nonneg _
-    nlinarith [Real.exp_pos C, mul_pos hC (Real.exp_pos C)]
+  refine le_mul_of_le_mul_exp_of_le hC.le zero_le_one (by positivity) (h q M) ?_
+  linarith [norm_nonneg ⟪approximatingMPVState A σ q M, normalizedMPVState A (M * q)⟫_ℂ]
 
 end MPSTensor

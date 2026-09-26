@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
+import TNLean.Algebra.CStarSqrtHolder
+import TNLean.Algebra.MatrixEntryNorm
 import TNLean.MPS.Core.Correlations
 import TNLean.MPS.Preparation.ApproximatingState
 
@@ -17,18 +17,19 @@ Let `A` be a normal tensor in the gauge `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = 
 first two steps of the approximation estimate of Piroli, Styliaris, and Cirac (arXiv:2103.13367,
 Supplemental Material, "Proof of Theorem MPS_classification"):
 
-1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-2γ n/ξ} ‖X‖` (eq. `difference`); the rate
+1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-2γ n/ξ} ‖X‖` (compare eq. `difference`,
+   `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix); the rate
    `e^{-2γ/ξ} = |λ₂|^{2γ}` exceeds the spectral radius of `E_A - |σ⟩⟨1|` because `2γ < 1`.
 2. **Positive parts.** The positive part `P_q` of the polar decomposition of the `q`-site blocked
    tensor satisfies `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}` (eq. `intermediate`), from the rearrangement
-   `P_q² - P_∞² ≅ E_A^q - |σ⟩⟨1|` and `‖√a - √b‖ ≤ √‖a - b‖`.
+   `P_q² - P_∞² ≅ E_A^q - |σ⟩⟨1|` and `‖√a - √b‖ ≤ √‖a - b‖` (`CFC.norm_sqrt_sub_sqrt_le` in
+   `TNLean.Algebra.CStarSqrtHolder`).
 
 The rate `e^{-γ q/ξ}` of step 2 feeds the telescoping estimate in
 `TNLean.MPS.Preparation.ApproximationError`.
 
 ## Main declarations
 
-* `CFC.norm_sqrt_sub_sqrt_le` — `‖√a - √b‖ ≤ √‖a - b‖` in a C⋆-algebra.
 * `MPSTensor.exists_norm_transferMap_pow_sub_le` — the transfer-map gap.
 * `MPSTensor.exists_norm_polarPos_blockTensor_sub_le` — the rate of `P_q → P_∞`.
 
@@ -40,110 +41,6 @@ The rate `e^{-γ q/ξ}` of step 2 feeds the telescoping estimate in
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
-
-
-/-! ### Square roots in a C⋆-algebra -/
-
-/-- A selfadjoint element with `-r ≤ a ≤ r` has norm at most `r`. -/
-theorem IsSelfAdjoint.norm_le_of_le_algebraMap {A : Type*} [CStarAlgebra A] [PartialOrder A]
-    [StarOrderedRing A] {a : A} (ha : IsSelfAdjoint a) {r : ℝ} (hr : 0 ≤ r)
-    (h₁ : a ≤ algebraMap ℝ A r) (h₂ : -algebraMap ℝ A r ≤ a) : ‖a‖ ≤ r := by
-  rcases subsingleton_or_nontrivial A with hA | hA
-  · rw [Subsingleton.elim a 0, norm_zero]; exact hr
-  have hup := (le_algebraMap_iff_spectrum_le (R := ℝ) ha).1 h₁
-  have hlo := (algebraMap_le_iff_le_spectrum (R := ℝ) ha).1 (by rwa [map_neg])
-  rcases CStarAlgebra.norm_or_neg_norm_mem_spectrum ha with h | h
-  · exact hup _ h
-  · linarith [hlo _ h]
-
-/-- Upper half of `CFC.norm_sqrt_sub_sqrt_le`: `√a - √b ≤ √‖a - b‖`. -/
-theorem CFC.sqrt_sub_sqrt_le_algebraMap {A : Type*} [CStarAlgebra A] [PartialOrder A]
-    [StarOrderedRing A] {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b) :
-    CFC.sqrt a - CFC.sqrt b ≤ algebraMap ℝ A (Real.sqrt ‖a - b‖) := by
-  set ε := ‖a - b‖
-  set S := CFC.sqrt b
-  set c := algebraMap ℝ A (Real.sqrt ε)
-  have h₁ : a ≤ b + algebraMap ℝ A ε :=
-    sub_le_iff_le_add'.1
-      (IsSelfAdjoint.le_algebraMap_norm_self (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
-  have hS : 0 ≤ S := CFC.sqrt_nonneg b
-  have hcS : c * S = Real.sqrt ε • S := (Algebra.smul_def _ _).symm
-  have hSc : S * c = Real.sqrt ε • S := by rw [← Algebra.commutes, hcS]
-  have hcc : c * c = algebraMap ℝ A ε := by
-    rw [← map_mul, Real.mul_self_sqrt (norm_nonneg _)]
-  have hc : 0 ≤ c := by
-    simp only [c, Algebra.algebraMap_eq_smul_one]
-    exact smul_nonneg (Real.sqrt_nonneg _) zero_le_one
-  have hsq : b + algebraMap ℝ A ε ≤ (S + c) ^ 2 := by
-    have hexp : (S + c) ^ 2 = b + algebraMap ℝ A ε + (Real.sqrt ε • S + Real.sqrt ε • S) := by
-      rw [sq, add_mul, mul_add, mul_add, CFC.sqrt_mul_sqrt_self b hb, hcS, hSc, hcc]
-      abel
-    rw [hexp]
-    exact le_add_of_nonneg_right
-      (add_nonneg (smul_nonneg (Real.sqrt_nonneg _) hS) (smul_nonneg (Real.sqrt_nonneg _) hS))
-  have h₂ : CFC.sqrt a ≤ S + c :=
-    calc CFC.sqrt a ≤ CFC.sqrt (b + algebraMap ℝ A ε) := CFC.sqrt_le_sqrt _ _ h₁
-      _ ≤ CFC.sqrt ((S + c) ^ 2) := CFC.sqrt_le_sqrt _ _ hsq
-      _ = S + c := CFC.sqrt_sq (S + c) (add_nonneg hS hc)
-  exact sub_le_iff_le_add'.2 h₂
-
-/-- **Square roots are `1/2`-Hölder**: for `a, b ≥ 0` in a C⋆-algebra,
-`‖√a - √b‖ ≤ √‖a - b‖`.
-
-arXiv:2103.13367, eq. `intermediate` (the bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for `X, Y ≥ 0`,
-quoted there from Bhatia). -/
-theorem CFC.norm_sqrt_sub_sqrt_le {A : Type*} [CStarAlgebra A] [PartialOrder A]
-    [StarOrderedRing A] {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b) :
-    ‖CFC.sqrt a - CFC.sqrt b‖ ≤ Real.sqrt ‖a - b‖ := by
-  refine IsSelfAdjoint.norm_le_of_le_algebraMap
-    ((CFC.sqrt_nonneg a).isSelfAdjoint.sub (CFC.sqrt_nonneg b).isSelfAdjoint)
-    (Real.sqrt_nonneg _) (CFC.sqrt_sub_sqrt_le_algebraMap ha hb) ?_
-  have h := CFC.sqrt_sub_sqrt_le_algebraMap hb ha
-  rw [norm_sub_rev] at h
-  rw [neg_le, neg_sub]
-  exact h
-
-/-! ### Entries and norms of matrices -/
-
-section MatrixEntries
-
-open scoped Matrix.Norms.L2Operator
-
-variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
-
-/-- The operator norm of a matrix is at most the sum of its entries weighted by the norms of the
-matrix units. -/
-theorem Matrix.l2_opNorm_le_sum_norm_entry (M : Matrix m n ℂ) :
-    ‖M‖ ≤ ∑ i, ∑ j, ‖M i j‖ * ‖(Matrix.single i j 1 : Matrix m n ℂ)‖ := by
-  conv_lhs => rw [M.matrix_eq_sum_single]
-  refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun i _ =>
-    (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_))
-  rw [show Matrix.single i j (M i j) = M i j • Matrix.single i j (1 : ℂ) by
-    rw [Matrix.smul_single, smul_eq_mul, mul_one], norm_smul]
-
-omit [DecidableEq m] in
-/-- The entries of a matrix are bounded by a fixed multiple of its operator norm. -/
-theorem Matrix.exists_norm_entry_le_mul_l2_opNorm :
-    ∃ K : ℝ, 0 ≤ K ∧ ∀ (Y : Matrix m n ℂ) (i : m) (j : n), ‖Y i j‖ ≤ K * ‖Y‖ := by
-  let f : m → n → (Matrix m n ℂ →L[ℂ] ℂ) := fun i j =>
-    LinearMap.toContinuousLinearMap (Matrix.entryLinearMap ℂ ℂ i j)
-  refine ⟨∑ i, ∑ j, ‖f i j‖, by positivity, fun Y i j => ?_⟩
-  calc ‖Y i j‖ = ‖f i j Y‖ := rfl
-    _ ≤ ‖f i j‖ * ‖Y‖ := (f i j).le_opNorm Y
-    _ ≤ (∑ i, ∑ j, ‖f i j‖) * ‖Y‖ := by
-        gcongr
-        exact (Finset.single_le_sum (f := fun j => ‖f i j‖) (fun _ _ => by positivity)
-          (Finset.mem_univ j)).trans (Finset.single_le_sum
-            (f := fun i => ∑ j, ‖f i j‖) (fun _ _ => by positivity) (Finset.mem_univ i))
-
-/-- A linear map between finite-dimensional normed spaces is bounded. -/
-theorem LinearMap.exists_norm_apply_le_mul {E F : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℂ E] [FiniteDimensional ℂ E] [NormedAddCommGroup F] [NormedSpace ℂ F]
-    (f : E →ₗ[ℂ] F) : ∃ K : ℝ, 0 ≤ K ∧ ∀ x, ‖f x‖ ≤ K * ‖x‖ :=
-  ⟨‖LinearMap.toContinuousLinearMap f‖, norm_nonneg _,
-    fun x => (LinearMap.toContinuousLinearMap f).le_opNorm x⟩
-
-end MatrixEntries
 
 namespace MPSTensor
 
@@ -229,8 +126,10 @@ open scoped Matrix.Norms.L2Operator in
 correlation length `ξ`, and let `0 < γ < 1/2`. Then there is `C > 0` with
 `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-2γ n/ξ} ‖X‖` for all `n` and `X`.
 
-arXiv:2103.13367, eq. `difference`: `‖R^q‖ ≤ Λ(q) e^{-αq}` with `e^{-α} = |λ₁|`; the polynomial
-prefactor `Λ(q)` is absorbed into the rate `e^{-2γ/ξ} > |λ₂|`. -/
+arXiv:2103.13367, eq. `difference`: `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked
+transfer matrix, where `R = τ_AA - τ_BB` is the remainder of the `q`-blocked transfer matrix. Here
+the unblocked `E_A^n` is bounded directly, and the polynomial prefactor `Λ` is absorbed into the
+rate `e^{-2γ/ξ} > |λ₂|`. -/
 theorem exists_norm_transferMap_pow_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
@@ -281,6 +180,38 @@ theorem exists_norm_transferMap_pow_sub_le (A : MPSTensor d D) (hN : Kraus.IsNor
 
 /-! ### The positive part approaches the fixed point at rate `e^{-γ q/ξ}` -/
 
+open scoped Matrix.Norms.L2Operator in
+/-- **Entrywise transfer of the gap.** If `‖E^n(X) - Tr(X) σ‖ ≤ C rⁿ ‖X‖`, then a matrix whose
+entries are entries of `E^n(Y_{ab}) - Tr(Y_{ab}) σ`, for a fixed family of matrices `Y_{ab}` and
+fixed positions, has norm at most `K rⁿ`, with `K` independent of `n`. Both the Gram matrices
+of the blocked tensor and the transfer matrices of `E_A^n` are such rearrangements. -/
+theorem exists_norm_le_of_entry_eq_pow_sub {ι κ : Type*} [Fintype ι] [Fintype κ]
+    [DecidableEq κ] (E : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
+    (σ : Matrix (Fin D) (Fin D) ℂ) {C r : ℝ} (hC : 0 ≤ C)
+    (hgap : ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
+      ‖(E ^ n) X - X.trace • σ‖ ≤ C * r ^ n * ‖X‖)
+    (Y : ι → κ → Matrix (Fin D) (Fin D) ℂ) (i j : ι → κ → Fin D) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ (n : ℕ) (G : Matrix ι κ ℂ),
+      (∀ a b, G a b = ((E ^ n) (Y a b) - (Y a b).trace • σ) (i a b) (j a b)) →
+        ‖G‖ ≤ K * r ^ n := by
+  classical
+  obtain ⟨K₂, hK₂, hent⟩ := Matrix.exists_norm_entry_le_mul_l2_opNorm (m := Fin D) (n := Fin D)
+  refine ⟨∑ a, ∑ b, K₂ * C * ‖Y a b‖ * ‖(Matrix.single a b 1 : Matrix ι κ ℂ)‖,
+    by positivity, fun n G hG => ?_⟩
+  refine (Matrix.l2_opNorm_le_sum_norm_entry _).trans ?_
+  rw [Finset.sum_mul]
+  refine Finset.sum_le_sum fun a _ => ?_
+  rw [Finset.sum_mul]
+  refine Finset.sum_le_sum fun b _ => ?_
+  rw [hG]
+  calc ‖((E ^ n) (Y a b) - (Y a b).trace • σ) (i a b) (j a b)‖ *
+        ‖(Matrix.single a b 1 : Matrix ι κ ℂ)‖
+      ≤ (K₂ * (C * r ^ n * ‖Y a b‖)) * ‖(Matrix.single a b 1 : Matrix ι κ ℂ)‖ := by
+        gcongr
+        exact (hent _ _ _).trans (by gcongr; exact hgap n _)
+    _ = K₂ * C * ‖Y a b‖ * ‖(Matrix.single a b 1 : Matrix ι κ ℂ)‖ * r ^ n := by ring
+
+
 /-- The entries of `σᵀ ⊗ 1` are those of the rank-one map `X ↦ Tr(X) σ`, rearranged as in
 `conjTranspose_physicalMatrix_mul_apply`. -/
 theorem transpose_kronecker_one_apply (σ : Matrix (Fin D) (Fin D) ℂ) (a b : Fin D × Fin D) :
@@ -306,35 +237,12 @@ theorem exists_norm_gram_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNo
           σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
         K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q := by
   obtain ⟨C, hC, hgap⟩ := exists_norm_transferMap_pow_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
-  obtain ⟨K₂, hK₂, hent⟩ :=
-    Matrix.exists_norm_entry_le_mul_l2_opNorm (m := Fin D) (n := Fin D)
-  set r := Real.exp (-γ / correlationLength lam₂) ^ 2
-  refine ⟨∑ a : Fin D × Fin D, ∑ b : Fin D × Fin D,
-    K₂ * C * ‖(Matrix.single b.2 a.2 1 : Matrix (Fin D) (Fin D) ℂ)‖ *
-      ‖(Matrix.single a b 1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖,
-    by positivity, fun q => ?_⟩
-  refine (Matrix.l2_opNorm_le_sum_norm_entry _).trans ?_
-  rw [Finset.sum_mul]
-  refine Finset.sum_le_sum fun a _ => ?_
-  rw [Finset.sum_mul]
-  refine Finset.sum_le_sum fun b _ => ?_
-  set Y : Matrix (Fin D) (Fin D) ℂ := Matrix.single b.2 a.2 1
-  have hab : ((physicalMatrix (blockTensor A q))ᴴ * physicalMatrix (blockTensor A q) -
-      σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) a b =
-      ((Kraus.transferMap A ^ q) Y - Y.trace • σ) b.1 a.1 := by
-    rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply, transferMap_blockTensor,
-      transpose_kronecker_one_apply, Matrix.sub_apply]
-  rw [hab]
-  have hr : 0 ≤ r := by positivity
-  calc ‖((Kraus.transferMap A ^ q) Y - Y.trace • σ) b.1 a.1‖ *
-        ‖(Matrix.single a b 1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖
-      ≤ (K₂ * (C * r ^ q * ‖Y‖)) *
-          ‖(Matrix.single a b 1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖ := by
-        gcongr
-        exact (hent _ _ _).trans (by gcongr; exact hgap q Y)
-    _ = K₂ * C * ‖Y‖ *
-          ‖(Matrix.single a b 1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖ * r ^ q := by
-        ring
+  obtain ⟨K, hK, h⟩ := exists_norm_le_of_entry_eq_pow_sub (Kraus.transferMap A) σ hC.le hgap
+    (fun (a b : Fin D × Fin D) => Matrix.single b.2 a.2 (1 : ℂ))
+    (fun _ b => b.1) (fun a _ => a.1)
+  refine ⟨K, hK, fun q => h q _ fun a b => ?_⟩
+  rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply, transferMap_blockTensor,
+    transpose_kronecker_one_apply, Matrix.sub_apply]
 
 /-- The fixed-point tensor `P_∞`, read as a `D² × D²` matrix, is the square root of
 `σᵀ ⊗ 1`. -/
