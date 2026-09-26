@@ -813,3 +813,157 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     agree with the original ones at every range and chain length. Apply the
     primitive-block gap theorem at the prescribed range.
 \end{proof}
+
+\begin{theorem}[Cyclic propagation of boundary intertwiners]
+\label{thm:cyclic-boundary-intertwining}
+\lean{MPSTensor.boundary_commutes_evalWord_of_cyclic_intertwining}
+\leanok
+Let $N\geq1$, let $s\in\mathbb Z/N\mathbb Z$, and suppose matrices $Y_i$
+satisfy $Y_iA^a=A^aY_{s+i}$ for every $i$ and physical label $a$.
+Then, for every word $w$ of length $N$ and every $i$,
+\begin{align}
+ Y_iA^w=A^wY_i.
+\end{align}
+\end{theorem}
+\begin{proof}\leanok
+\uses{thm:cyclic_window_boundary_matrix_transport}
+Propagating the intertwining identity through the word gives
+$Y_iA^w=A^wY_{Ns+i}$. Since $Ns=0$ in the cyclic index group, the two
+boundary matrices coincide.
+\end{proof}
+
+\begin{theorem}[Cyclic closure of block boundary matrices]
+    \label{thm:ph_block_cyclic_boundary_closure}
+    \lean{MPSTensor.mem_bntMPSVectorSpan_of_cyclic_openBoundary}
+    \leanok
+    Let $N\geq2$. Suppose that the simultaneous words of length $N-1$
+    in the tensors $A^j$ span the product of their matrix algebras.
+    If a vector $\psi$ admits a representation as a sum of block boundary
+    vectors at every cyclic cut, then $\psi$ belongs to the span of the
+    periodic MPS vectors of the blocks.
+    This is the block-diagonal cyclic closure argument in
+    \cite[Section~IV.C]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:block_boundary_intertwiner_from_global_cut,
+        thm:cyclic-boundary-intertwining,
+        thm:ground_space_map_mpv_of_long_word_commutes}
+    Choose boundary matrices $X_i^j$ at each cyclic cut $i$.
+    Comparing adjacent cuts against all complementary words of length $N-1$
+    gives $X_i^j A^{j,a}=A^{j,a}X_{i-1}^j$.
+    Iterating this identity once around the ring yields
+    \begin{align}
+        X_i^j A^{j,a_1}\cdots A^{j,a_N}
+        =A^{j,a_1}\cdots A^{j,a_N}X_i^j.
+        \notag
+    \end{align}
+    Each block is injective at length $N-1$, hence also at length $N$.
+    Its boundary matrix therefore commutes with the full matrix algebra
+    and is scalar. The representation at cut zero is consequently a
+    linear combination of the periodic block vectors.
+\end{proof}
+
+\begin{theorem}[Periodic ground space at a simultaneous injectivity length]
+    \label{thm:ph_block_periodic_closure_tp}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop_of_tracePreserving}
+    \leanok
+    Let $B=\bigoplus_j\mu_j A^j$ have nonzero block coefficients and positive
+    physical dimension. Suppose that each block is trace preserving and
+    that the simultaneous words of length $S>0$ span the product matrix
+    algebra. For every $S+1\leq L\leq N$, the periodic parent Hamiltonian
+    satisfies
+    \begin{align}
+        \ker H_{B,L,N}=\operatorname{span}\{V_N(A^j):j\}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_block_cyclic_boundary_closure,thm:ph_tp_word_span_propagation,
+        thm:ph_tp_block_open_ground_space}
+    Trace-preserving normalization propagates simultaneous injectivity to
+    every length at least $S$, in particular to $N-1$. The open-chain
+    intersection property expresses each periodic ground vector as a sum
+    of block boundary vectors at every cut. Cyclic closure places this
+    vector in the span of the periodic block vectors. Conversely, each
+    periodic block vector satisfies every local parent constraint.
+\end{proof}
+
+\begin{theorem}[Independent rescaling of simultaneous word spans]
+    \label{thm:block_word_span_independent_rescaling}
+    \lean{MPSTensor.wordTupleSpanTop_of_family_smul}
+    \leanok
+    Suppose the length-$S$ word tuples of a finite family $A^0,\ldots,A^{r-1}$
+    span the full product matrix algebra. If every $\zeta_j$ is nonzero,
+    the word tuples of $\zeta_0A^0,\ldots,\zeta_{r-1}A^{r-1}$ also span that
+    algebra at the same length $S$.
+\end{theorem}
+\begin{proof}\leanok
+    Rescaling the $j$th block multiplies its length-$S$ words by
+    $\zeta_j^S$. For any target tuple $(M_j)_j$, first express
+    $(\zeta_j^{-S}M_j)_j$ in the original word span. The same coefficients
+    express $(M_j)_j$ in the rescaled word span.
+\end{proof}
+
+\begin{theorem}[Primitive normalization at a simultaneous injectivity length]
+    \label{thm:block_word_span_primitive_normalization}
+    \lean{MPSTensor.exists_isPrimitiveMPS_family_of_wordTupleSpanTop, MPSTensor.exists_isPrimitiveMPS_family_parentHamiltonian_eq_of_wordTupleSpanTop}
+    \leanok
+    Let $S>0$, and suppose the length-$S$ word tuples of a finite family
+    $A^0,\ldots,A^{r-1}$ with positive bond dimensions span the full product
+    matrix algebra. There are normalized primitive representatives
+    $B^0,\ldots,B^{r-1}$, with positive definite fixed points, whose word tuples
+    still span the full product algebra at length $S$.
+    Each component ground space is unchanged at every length. The spans of
+    the periodic component vectors are likewise unchanged at every chain
+    length. For any nonzero weights $\mu_j$, the periodic parent Hamiltonians
+    of $\bigoplus_j\mu_j A^j$ and $\bigoplus_j\mu_j B^j$ are equal at every
+    interaction range and chain length.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_word_span_independent_rescaling, thm:word_tuple_span_gauge_invariance,
+        thm:normalized_primitive_gauge, lem:block_sum_local_ground_space}
+    Projection of the simultaneous span onto each matrix summand proves
+    injectivity of every block at length $S$. Each block is therefore normal
+    and admits a primitive representative obtained by a nonzero rescaling
+    and an invertible virtual conjugation. Both operations preserve the
+    simultaneous word span at the specified length. They preserve every
+    component ground space and multiply each periodic component vector by
+    a nonzero scalar. Taking sums of the component ground spaces proves
+    equality of the assembled parent Hamiltonians.
+\end{proof}
+
+\begin{theorem}[Periodic ground space at simultaneous block injectivity]
+    \label{thm:ph_block_ground_space_at_simultaneous_injectivity}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop, MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop, MPSTensor.ker_sum_eq_bntMPSVectorSpan_of_wordTupleSpanTop}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ have a common positive physical dimension and
+    positive bond dimensions. Suppose their length-$S$ word tuples span the
+    full product matrix algebra, where $S>0$, and let
+    $B=\bigoplus_j\mu_j A^j$ with all $\mu_j\ne0$.
+    For every interaction range and chain length satisfying
+    \begin{align}
+        S+1\leq L\leq N,
+    \end{align}
+    the periodic local constraints have ground space
+    \begin{align}
+        \mathcal G^{\mathrm{per}}_{L,N}(B)
+        =\operatorname{span}\{V^{(N)}(A^j):0\leq j<r\}.
+    \end{align}
+    This is the kernel of the canonical parent Hamiltonian. It is also the
+    kernel of the sum of any positive terms whose cyclic local kernels agree
+    with those of the canonical parent terms.
+    The result includes the minimal ring $N=S+1$ and gives the
+    block-injective closure statement of \cite[Section~IV.C]{Cirac2021Matrix}
+    at the interaction range specified by the preceding intersection argument.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_word_span_primitive_normalization, thm:ph_block_periodic_closure_tp}
+    Normalize the blocks while retaining simultaneous injectivity at length
+    $S$. The parent Hamiltonians and the span of the periodic component
+    vectors are unchanged. Apply the trace-preserving block closure theorem.
+    Finally, the kernel of a sum of positive operators is the intersection
+    of their kernels, so replacing the local projectors by positive terms
+    with the same local kernels preserves the ground space.
+\end{proof}
