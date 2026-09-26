@@ -9,7 +9,7 @@ import QICLean.Channel.Peripheral.IrreducibleChannel
 import QICLean.Channel.Primitive
 import QICLean.Kraus.InvariantProjection
 import TNLean.Algebra.MatrixCyclicPathSum
-import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Core.CyclicTrace
@@ -389,10 +389,10 @@ eq. `eq:transfer_matrix`: the letters have no nontrivial common invariant
 subspace, and `1` is the only eigenvalue of `E_A` of modulus one.
 
 Normality is taken as `MPSTensor.IsNormalTensor`; the proof uses its fields
-`no_invariant_proj` and `primitive_transfer`. Its remaining field `spectral_radius_one` is
-not used, and adds nothing to the source's hypotheses here: it follows from the left-canonical
-gauge `hA` together with the nonzero fixed point `σ`, since then `E_A` is a channel with a
-nonzero fixed point. -/
+`no_invariant_proj` and `primitive_transfer`. Its remaining field `spectral_radius_one` adds
+nothing to the source's hypotheses here: in the left-canonical gauge `hA` the transfer map is a
+channel, so a caller holding only the source's two conditions obtains `IsNormalTensor A` from
+`MPSTensor.isNormalTensor_of_isIrreducibleFamily_leftCanonical`. -/
 theorem tendsto_transferMap_blockTensor_of_isPrimitive
     (A : MPSTensor d D) (hN : IsNormalTensor A) (hA : IsLeftCanonical A)
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
