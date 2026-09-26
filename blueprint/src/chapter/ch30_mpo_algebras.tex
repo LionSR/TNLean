@@ -187,7 +187,7 @@ zipper condition (Remark~\ref{rem:mpoalg_nonunique}).
     for every word with $|\mathbf w|>2N_0$. This applies to the fusion tensors
     of a group-like algebra, where $T_gT_h$ reduces onto the single block
     $T_{gh}$, to the composite reductions of
-    Lemma~\ref{lem:mpoalg_composite_reduction}, and to the action tensors of
+    Theorem~\ref{thm:mpoalg_composite_reduction}, and to the action tensors of
     an invertible label on a permuted block. It does not apply to a single slot
     of a reduction onto multiple blocks, whose residual is not nilpotent.
     % Source anchor: arXiv:1706.07329, cornerproblem.tex lines 3156--3162
@@ -339,21 +339,25 @@ composite reductions onto $T_{ghk}$,
 \end{align}
 with the corresponding composite embeddings.
 
-\begin{lemma}[Composite reductions]%
-    \label{lem:mpoalg_composite_reduction}
+\begin{theorem}[Composite reductions]%
+    \label{thm:mpoalg_composite_reduction}
     \lean{MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans,
         MPSTensor.IsReduction.mul_evalWord_reductionResidual_trans_mul,
+        MPSTensor.reductionResidual_trans_apply,
         MPSTensor.isReductionResidualNilpotencyBound_of_intertwine,
         MPOTensor.isReductionResidualNilpotencyBound_mulTensor_kronId,
         MPOTensor.isReductionResidualNilpotencyBound_mulTensor_idKron,
         MPOTensor.isReductionResidualNilpotencyBound_mulTensor_assoc_left,
+        MPOTensor.isReductionResidualNilpotencyBound_mulTensor_assoc_right,
+        MPOTensor.GroupFamily.isReductionResidualNilpotencyBound_castIndex,
         MPOTensor.isReductionResidualNilpotencyBound_actTensor_kronId,
         MPOTensor.isReductionResidualNilpotencyBound_actTensor_idKron,
         MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_left,
         MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_right}
     \leanok
-    \uses{def:mpoalg_fusion_tensors, thm:mpug_reduction_composition,
-        thm:mpug_fusion_trees_reductions}
+    \uses{def:mps_rectangular_reduction,
+        def:mps_reduction_residual_nilpotency_length, def:mpoalg_fusion_tensors,
+        thm:mpug_reduction_composition, thm:mpug_fusion_trees_reductions}
     Let $(V_1,W_1)$ be a reduction of a tensor $C$ onto $B$ whose residual
     letters $N^i=C^i-W_1B^iV_1$ have vanishing products of length $N_1$, and
     let $(V_2,W_2)$ be a reduction of $B$ onto $A$ whose residual letters
@@ -371,19 +375,10 @@ with the corresponding composite embeddings.
     is Lemma~\ref{thm:mpug_reduction_composition}, and for the two fusion
     trees of a triple product it is
     Lemma~\ref{thm:mpug_fusion_trees_reductions}.
-
-    The factors must have nilpotent residuals: a single slot of a reduction
-    onto several blocks has a residual that is not nilpotent, and composing
-    it with the identity reduction of $T_cT_d$ for a trivial $T_d$ returns it
-    unchanged. The bound $N_1+N_2$ fails: for one letter acting as the shift
-    $f_0\to f_1\to e_1\to e_2\to f_3\to f_4$ on $\C^6$, with $(V_1,W_1)$ the
-    compression onto $\operatorname{span}\{e_1,e_2\}$ and $(V_2,W_2)$ the
-    compression of the shift $e_1\to e_2$ onto $\operatorname{span}\{e_2\}$
-    with $A=0$, one has $N_1=3$, $N_2=2$, and $R^5\neq0$.
     % Source anchor: arXiv:1706.07329, cornerproblem.tex lines 3147--3152
     %   (Definition 8) and 3946--3970 (Lemma VNW=0); arXiv:2203.12563, lines
     %   1026--1060; arXiv:2502.20257, main.tex lines 1506--1535.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -417,11 +412,27 @@ with the corresponding composite embeddings.
     invertible intertwiner of letters conjugates the residual letters.
 \end{proof}
 
+\begin{remark}[Sharpness of the hypotheses and of the bound]%
+    \label{rem:mpoalg_composite_reduction_sharp}
+    \uses{thm:mpoalg_composite_reduction}
+    In Theorem~\ref{thm:mpoalg_composite_reduction} the factors must have
+    nilpotent residuals: a single slot of a reduction onto several blocks has a residual that is not nilpotent, and composing
+    it with the identity reduction of $T_cT_d$ for a trivial $T_d$ returns it
+    unchanged. The bound $N_1+N_2$ fails: for one letter acting as the shift
+    $f_0\to f_1\to e_1\to e_2\to f_3\to f_4$ on $\C^6$, with $(V_1,W_1)$ the
+    compression onto $\operatorname{span}\{e_1,e_2\}$ and $(V_2,W_2)$ the
+    compression of the shift $e_1\to e_2$ onto $\operatorname{span}\{e_2\}$
+    with $A=0$, one has $N_1=3$, $N_2=2$, and $R^5\neq0$.
+    Counting the lengths of the nonvanishing terms in the expansion of the
+    proof more carefully gives the bound $\max(N_1,2N_1+N_2-2)$, which this
+    example attains.
+\end{remark}
+
 \begin{definition}[Associator]%
     \label{def:mpoalg_associator}
     % Formalized as def:mpug_anomaly_three_cochain with its characterization
     %   thm:mpug_anomaly_three_cochain_spec (ch29), which carry the Lean tags.
-    \uses{lem:mpoalg_composite_reduction,
+    \uses{thm:mpoalg_composite_reduction,
         cor:mpoalg_single_target_uniqueness, def:mpug_anomaly_three_cochain,
         thm:mpug_anomaly_three_cochain_spec}
     The \emph{associator} of the chosen fusion tensors is the function
@@ -437,7 +448,7 @@ with the corresponding composite embeddings.
     the orientation of the defining display of
     \cite{FrancoRubio2025MPUGauging}. It exists and is nonzero by
     Corollary~\ref{cor:mpoalg_single_target_uniqueness} applied to the two
-    composite reductions of Lemma~\ref{lem:mpoalg_composite_reduction}, and
+    composite reductions of Theorem~\ref{thm:mpoalg_composite_reduction}, and
     it is unique because $T_{ghk}^{\mathbf w}\neq0$ for some long word. This is
     the three-cocycle of \cite[Section~4.4]{GarreRubio2023MPOSym}, and it is
     the anomaly three-cochain of
@@ -470,11 +481,11 @@ with the corresponding composite embeddings.
 \end{theorem}
 
 \begin{proof}
-    \uses{lem:mpoalg_composite_reduction}
+    \uses{thm:mpoalg_composite_reduction}
     Write $X=(T_gT_hT_kT_l)^{\mathbf w}$ for a long word $\mathbf w$ and
     $V^P$ for the composite compression of the fourfold product onto
     $T_{ghkl}$ along a bracketing $P$. By
-    Lemma~\ref{lem:mpoalg_composite_reduction}, applying
+    Theorem~\ref{thm:mpoalg_composite_reduction}, applying
     (\ref{eq:mpoalg_associator}) to one triple inside a bracketing, tensored
     with identities and followed by the remaining compressions, replaces
     $(xy)z$ by $x(yz)$ at the cost of $\omega(x,y,z)$. Along the two paths of
@@ -630,10 +641,10 @@ with the corresponding composite embeddings.
 \end{theorem}
 
 \begin{proof}
-    \uses{lem:mpoalg_composite_reduction, def:mpoalg_associator}
+    \uses{thm:mpoalg_composite_reduction, def:mpoalg_associator}
     Write $Y=(T_gT_hT_k\cdot A_x)^w$ for a long word $w$ and $V^P$ for the
     composite compression onto $A_{ghk\cdot x}$ along a bracketing $P$. By
-    Lemma~\ref{lem:mpoalg_composite_reduction}, (\ref{eq:mpoalg_l_symbol})
+    Theorem~\ref{thm:mpoalg_composite_reduction}, (\ref{eq:mpoalg_l_symbol})
     and (\ref{eq:mpoalg_associator}) applied inside a bracketing give
     \begin{align}
         V^{g(h(kx))}Y & =L^x_{h,k}\,V^{g((hk)x)}Y
