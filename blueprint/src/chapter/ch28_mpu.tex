@@ -5914,6 +5914,57 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 824--833.
 \end{lemma}
 
+\begin{lemma}[Source ranks under rectangular reduction]
+    \label{lem:mpu_rectangular_reduction_source_ranks}
+    \lean{MPOTensor.sourceCutM₁_rectangularSandwich,
+        MPOTensor.sourceCutM₂_rectangularSandwich,
+        MPOTensor.rightRank_rectangularSandwich_le,
+        MPOTensor.leftRank_rectangularSandwich_le,
+        MPOTensor.sourceRanks_le_of_isReduction,
+        MPOTensor.sourceRanks_blockTensor_le_of_isReduction}
+    \leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
+        def:mpu_right_rank, def:mpu_left_rank, def:mps_rectangular_reduction,
+        def:mpdo_physical_blocking}
+    Let $\mathcal U$ be a matrix product operator tensor of physical
+    dimension $d$ and bond dimension $D$. For arbitrary matrices
+    $A\in\mathbb C^{E\times D}$ and $B\in\mathbb C^{D\times E}$, put
+    $\mathcal V^{ij}=A\mathcal U^{ij}B$. Then
+    \begin{align}
+        M_1(\mathcal V)
+                         & =(I_d\otimes B^{\mathsf T})M_1(\mathcal U)
+        (A^{\mathsf T}\otimes I_d),                                      \\
+        M_2(\mathcal V)
+                         & =(A\otimes I_d)M_2(\mathcal U)(I_d\otimes B), \\
+        r[\mathcal V]    & \leq r[\mathcal U],                           \\
+        \ell[\mathcal V] & \leq\ell[\mathcal U].
+    \end{align}
+    In particular, a rectangular reduction cannot increase either source
+    rank. No equality of ranks is asserted, and no unitarity, simplicity,
+    or canonical-form assumption is needed.
+    If $\mathcal V$ is a rectangular reduction of $\mathcal U$, then for
+    every common blocking length $L$,
+    \begin{align}
+        r[\mathcal V_L]    & \leq r[\mathcal U_L],   \\
+        \ell[\mathcal V_L] & \leq\ell[\mathcal U_L].
+    \end{align}
+    These identities follow directly from the source cuts of
+    \cite[Section~III, definition of $r,\ell$]{Cirac2017MPU} and permit
+    upper bounds for composition to pass to a reduced representative.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the matrix products entrywise in the two source cuts.
+    The first cut places the right virtual coordinate on its row side,
+    which accounts for the two transposes. The second cut keeps the
+    ordinary order of the virtual coordinates. Multiplication on either
+    side cannot increase matrix rank, proving both inequalities.
+    For a rectangular reduction, its single-letter word identity gives
+    $\mathcal V^{ij}=A\mathcal U^{ij}B$.
+    Its all-word identity gives the same relation for the blocked tensors,
+    with the same matrices $A,B$, so the inequalities apply at every length.
+\end{proof}
+
 \begin{lemma}[Four-site composition source-rank bounds]
     \label{lem:mpu_four_site_composition_source_rank_bounds}
     \lean{MPOTensor.rightRank_blockTensor_mulTensor_four_le,
