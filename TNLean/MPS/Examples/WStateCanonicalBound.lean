@@ -24,7 +24,8 @@ line 2362, which cites this bound with the Wielandt index of Michałek and Shito
 
 **Formalized here.** The inequality `N/2 ≤ 3(b-1)(L₀+1)` of the proof, for a periodic
 tensor in the translation-invariant canonical form of PGVWC07 whose blocks satisfy condition
-C1 at a common length `L₀`, and for every nonzero multiple of `W_N`; with the threshold
+C1 at a common length `L₀`, and more generally for a sum `∑_j c_j |φ_{A^j}⟩` of block states
+with nonzero coefficients, and for every nonzero multiple of `W_N`; with the threshold
 `max(L₀, 3(b-1)(L₀+1))` described below. When the first matrix `A^j_0` of every block is
 invertible, the source's `L₀ = D²` (lines 2115–2118, through Wolf's Theorem 6.9(2)) turns this
 into `N < 2 max(D²+1, 3(D-1)(D²+2))`, the source's `D = Ω(N^{1/3})` for such blocks. For
@@ -36,12 +37,14 @@ most two translation-invariant product states is not a multiple of `W_N` for `N 
 **Scope restriction (canonical form with condition C1 as hypothesis):** the source derives
 condition C1 by blocks with `L₀ = O(D²)` for an arbitrary tensor from its Conjecture 2
 (lines 2109–2111, 2187–2188), and the review replaces Conjecture 2 by the Wielandt bound of
-Michałek and Shitov. The reduction of an arbitrary `D × D` tensor to a canonical form with
-condition C1 is not formalized, and `L₀ = O(D²)` is formalized only when every `A^j_0` is
-invertible (the source's proposition), not in general, nor is `O(D² log D)`. The canonical
-form, condition C1, and pairwise distinctness of the blocks are hypotheses. Distinctness is
-taken in the form used by the direct-sum lemma, no two blocks related by a gauge and a phase,
-which is stricter than the source's pairwise different block states (lines 1329–1330).
+Michałek and Shitov. Here the canonical form, condition C1, and pairwise distinctness of the
+blocks are hypotheses. The reduction of an arbitrary `D × D` tensor to this situation is
+formalized only at prime length `N`, with `L₀ = (D²+1)²` from the general Wielandt bound
+(`TNLean.MPS.Examples.WStatePrimeLengthBound`); `L₀ = O(D²)` is formalized only when every
+`A^j_0` is invertible (the source's proposition), not in general, nor is `O(D² log D)`.
+Distinctness is taken in the form used by the direct-sum lemma, no two blocks related by a
+gauge and a phase, which is stricter than the source's pairwise different block states
+(lines 1329–1330).
 Consequently neither the unconditional `D = Ω(N^{1/3})` nor `D³ log D = Ω(N)` is formalized.
 Documented in `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
 
@@ -63,8 +66,10 @@ needs both pieces to have at least `L₀` sites to apply condition C1. The bound
   rank at most `2`.
 * `not_sum_pow_mul_pow_eq` — at most two geometric amplitudes do not give a multiple of
   `W_N` on the words `1^m 0^{N-m}`, `m = 1, 2, 3` (two product states need `N ≥ 3`).
+* `lt_of_sum_mpv_eq_smul_wIndicator` — the bound `N < 2 max(L₀, 3(b-1)(L₀+1))` for a sum
+  of block states with arbitrary nonzero coefficients.
 * `PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator` — the bound
-  `N < 2 max(L₀, 3(b-1)(L₀+1))`.
+  `N < 2 max(L₀, 3(b-1)(L₀+1))` for a canonical form.
 * `PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit` — with `A^j_0`
   invertible in every block, `N < 2 max(D²+1, 3(D-1)(D²+2))`.
 * `PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive` — with primitive
@@ -79,7 +84,7 @@ needs both pieces to have at least `L₀` sites to apply condition C1. The bound
   symmetries, theorems*
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
@@ -195,13 +200,18 @@ private theorem trace_pow_mul_pow_of_subsingleton {n : Type*} [Fintype n] [Decid
     | succ k ih => rw [pow_succ, hmul, ih, pow_succ]
   rw [Matrix.trace, Fintype.sum_subsingleton _ i, Matrix.diag_apply, hmul, hpow, hpow]
 
-/-- Source: arXiv:quant-ph/0608197, Corollary in the subsection "W state" and its proof,
-`Papers/quant-ph_0608197/MPSarchive.tex` lines 2182–2222, in the conditional form the proof
-establishes: "Therefore `N/2 ≤ 3(b-1)(L₀+1)`".
+/-- Project result, extending the source proof: arXiv:quant-ph/0608197, Corollary in the
+subsection "W state" and its proof, `Papers/quant-ph_0608197/MPSarchive.tex`
+lines 2196–2225, in the conditional form the proof establishes, "Therefore
+`N/2 ≤ 3(b-1)(L₀+1)`". The source argues for the canonical-form weights `λ_j^N`
+(lines 1320–1327); the statement here allows arbitrary nonzero coefficients `c_j`, a
+project generalization of the same argument, used by the prime-length reduction after
+regrouping blocks.
 
-Let `A` be a periodic tensor in the translation-invariant canonical form of PGVWC07 with `b`
-blocks, each satisfying condition C1 at a common length `L₀ > 0`, with no two blocks related
-by a gauge and a phase. If the periodic vector of `A` on `N` sites is `c W_N` for some `c ≠ 0`, then
+Let `A^1, …, A^b` be blocks of positive size satisfying conditions 1–3 of the canonical form
+(unital, with a positive definite fixed point of the dual map, irreducible) and condition C1 at
+a common length `L₀ > 0`, with no two blocks related by a gauge and a phase. If
+`∑_j c_j |φ_{A^j}⟩ = c W_N` on `N` sites for nonzero `c_j` and `c`, then
 `N < 2 max(L₀, 3(b-1)(L₀+1))`.
 
 The proof follows the source: cut the chain into pieces of at least
@@ -209,6 +219,95 @@ The proof follows the source: cut the chain into pieces of at least
 the first piece has rank at least `∑_j D_j²`; the W state has rank at most `2` across the cut,
 so there are at most two blocks, all of size `1 × 1`; and at most two translation-invariant
 product states do not give `c W_N`.
+
+The scope restriction and the local fix stated in the module docstring apply: condition C1 at
+`L₀` is a hypothesis, the distinctness hypothesis is stricter than the source's pairwise
+different block states, and the threshold contains `L₀` for a single block. -/
+theorem lt_of_sum_mpv_eq_smul_wIndicator {r : ℕ} {dim : Fin r → ℕ}
+    (B : (k : Fin r) → MPSTensor 2 (dim k)) (hdim : ∀ k, 0 < dim k)
+    (hUnital : ∀ k, ∑ i, B k i * (B k i)ᴴ = 1)
+    (hDual : ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ, Λ.PosDef ∧
+      Kraus.transferMap (d := 2) (D := dim k) (fun a => (B k a)ᴴ) Λ = Λ)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (B k))
+    {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (B k) L₀)
+    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) B)
+    (coef : Fin r → ℂ) (hcoef : ∀ k, coef k ≠ 0)
+    {N : ℕ} {c : ℂ} (hc : c ≠ 0)
+    (hW : ∀ σ : Cfg 2 N, ∑ k, coef k * mpv (B k) σ = c * wIndicator N σ) :
+    N < 2 * max L₀ (3 * (r - 1) * (L₀ + 1)) := by
+  classical
+  by_contra hN
+  push Not at hN
+  set n₀ := max L₀ (3 * (r - 1) * (L₀ + 1)) with hn₀
+  have hLn : L₀ ≤ n₀ := le_max_left _ _
+  have hN2 : 2 ≤ N := by omega
+  have hSpan : ∀ n, n₀ ≤ n → WordTupleSpanTop B n := fun n hn =>
+    wordTupleSpanTop_of_ge_of_isNBlkInjective B hdim hUnital hDual hIrr hL₀ hC1 hDistinct hn
+  -- Word-level form of the hypothesis.
+  have hWord : ∀ w : List (Fin 2), w.length = N →
+      ∑ k, coef k * Matrix.trace (Kraus.evalWord (B k) w) =
+        c * if w.count 1 = 1 then 1 else 0 := by
+    intro w hw
+    subst hw
+    simpa [List.ofFn_getElem] using hW (fun i => w[i])
+  -- Cut rank: `∑_k D_k² ≤ 2`.
+  have hsum : ∑ k, dim k ^ 2 ≤ 2 := by
+    obtain ⟨R', rfl⟩ : ∃ R', N = n₀ + R' := ⟨N - n₀, by omega⟩
+    refine le_trans (sum_sq_dim_le_finrank_of_forall_mem B coef hcoef (hSpan _ le_rfl)
+      (hSpan R' (by omega))
+      (Submodule.span ℂ (Set.range ![weightIndicator n₀ 1, weightIndicator n₀ 0]))
+      (fun τ => ?_)) (finrank_span_wIndicator_append_le_two n₀)
+    have hfun : (fun σ : Cfg 2 n₀ => ∑ k, coef k *
+        Matrix.trace (Kraus.evalWord (B k) (List.ofFn σ) *
+          Kraus.evalWord (B k) (List.ofFn τ))) =
+        c • fun σ : Cfg 2 n₀ => wIndicator (n₀ + R') (Fin.append σ τ) := by
+      funext σ
+      rw [Pi.smul_apply, smul_eq_mul, ← hW]
+      simp [List.ofFn_fin_append, Kraus.evalWord_append]
+    rw [hfun]
+    exact Submodule.smul_mem _ _ (wIndicator_append_mem_span τ)
+  -- Hence at most two blocks, each of size `1 × 1`.
+  have hdim1 : ∀ k, dim k = 1 := fun k => by
+    have h1 := hdim k
+    have h2 : dim k ^ 2 ≤ 2 :=
+      le_trans (Finset.single_le_sum (fun j _ => Nat.zero_le (dim j ^ 2))
+        (Finset.mem_univ k)) hsum
+    nlinarith
+  have hr : r ≤ 2 := by
+    simpa [hdim1] using hsum
+  have hN3 : r = 2 → 3 ≤ N := fun hr2 => by
+    rw [hr2] at hn₀
+    have : 6 ≤ n₀ := by rw [hn₀]; exact le_max_of_le_right (by omega)
+    omega
+  -- The amplitudes of the words `1^m 0^{N-m}`, with `z_k^N = c_k`.
+  choose z hz using fun k => IsAlgClosed.exists_pow_nat_eq (coef k) (show 0 < N by omega)
+  let i : (k : Fin r) → Fin (dim k) := fun k => ⟨0, hdim k⟩
+  refine not_sum_pow_mul_pow_eq hr hN2 hN3
+    (fun k => z k * B k 0 (i k) (i k))
+    (fun k => z k * B k 1 (i k) (i k)) hc (fun m _ _ hmN => ?_)
+  have hlen : (List.replicate m (1 : Fin 2) ++ List.replicate (N - m) 0).length = N := by
+    simp; omega
+  have hcount : (List.replicate m (1 : Fin 2) ++ List.replicate (N - m) 0).count 1 = m := by
+    simp [List.count_replicate]
+  have key := hWord _ hlen
+  rw [hcount] at key
+  rw [show (if m = 1 then c else 0) = c * if m = 1 then 1 else 0 by split_ifs <;> simp, ← key]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  have : Subsingleton (Fin (dim k)) := Fin.subsingleton_iff_le_one.mpr (hdim1 k).le
+  rw [Kraus.evalWord_append, Kraus.evalWord_replicate, Kraus.evalWord_replicate,
+    trace_pow_mul_pow_of_subsingleton (i k), mul_pow, mul_pow, ← hz k,
+    show z k ^ N = z k ^ m * z k ^ (N - m) by rw [← pow_add, Nat.add_sub_cancel' hmN]]
+  ring
+
+/-- Source: arXiv:quant-ph/0608197, Corollary in the subsection "W state" and its proof,
+`Papers/quant-ph_0608197/MPSarchive.tex` lines 2182–2222, in the conditional form the proof
+establishes: "Therefore `N/2 ≤ 3(b-1)(L₀+1)`".
+
+Let `A` be a periodic tensor in the translation-invariant canonical form of PGVWC07 with `b`
+blocks, each satisfying condition C1 at a common length `L₀ > 0`, with no two blocks related
+by a gauge and a phase. If the periodic vector of `A` on `N` sites is `c W_N` for some `c ≠ 0`, then
+`N < 2 max(L₀, 3(b-1)(L₀+1))`. This is `lt_of_sum_mpv_eq_smul_wIndicator` with the
+coefficients `λ_j^N` of the canonical form.
 
 The scope restriction and the local fix stated in the module docstring apply: the canonical
 form with condition C1 at `L₀` is a hypothesis, the distinctness hypothesis is stricter than
@@ -219,70 +318,11 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator {D : ℕ} {A : MPS
     (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)
     (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
     {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
-    N < 2 * max L₀ (3 * (h.r - 1) * (L₀ + 1)) := by
-  classical
-  by_contra hN
-  push Not at hN
-  set n₀ := max L₀ (3 * (h.r - 1) * (L₀ + 1)) with hn₀
-  have hLn : L₀ ≤ n₀ := le_max_left _ _
-  have hN2 : 2 ≤ N := by omega
-  -- Word-level form of the hypothesis.
-  have hWord : ∀ w : List (Fin 2), w.length = N →
-      Matrix.trace (Kraus.evalWord A w) = c * if w.count 1 = 1 then 1 else 0 := by
-    intro w hw
-    subst hw
-    simpa [List.ofFn_getElem] using hW (fun i => w[i])
-  -- Cut rank: `∑_k D_k² ≤ 2`.
-  have hsum : ∑ k, h.dim k ^ 2 ≤ 2 := by
-    obtain ⟨R', rfl⟩ : ∃ R', N = n₀ + R' := ⟨N - n₀, by omega⟩
-    have hR := h.wordTupleSpanTop_of_ge hL₀ hC1 hDistinct le_rfl
-    have hR' := h.wordTupleSpanTop_of_ge hL₀ hC1 hDistinct (n := R') (by omega)
-    refine le_trans (sum_sq_dim_le_finrank_of_forall_mem h.blocks
-      (fun k => (h.weight k : ℂ) ^ (n₀ + R'))
-      (fun k => pow_ne_zero _ (Complex.ofReal_ne_zero.mpr (h.weight_pos k).ne')) hR hR'
-      (Submodule.span ℂ (Set.range ![weightIndicator n₀ 1, weightIndicator n₀ 0]))
-      (fun τ => ?_)) (finrank_span_wIndicator_append_le_two n₀)
-    have hfun : (fun σ : Cfg 2 n₀ => ∑ k, (h.weight k : ℂ) ^ (n₀ + R') *
-        Matrix.trace (Kraus.evalWord (h.blocks k) (List.ofFn σ) *
-          Kraus.evalWord (h.blocks k) (List.ofFn τ))) =
-        c • fun σ : Cfg 2 n₀ => wIndicator (n₀ + R') (Fin.append σ τ) := by
-      funext σ
-      rw [Pi.smul_apply, smul_eq_mul, ← hW, h.mpv_eq_sum]
-      simp [List.ofFn_fin_append, Kraus.evalWord_append]
-    rw [hfun]
-    exact Submodule.smul_mem _ _ (wIndicator_append_mem_span τ)
-  -- Hence at most two blocks, each of size `1 × 1`.
-  have hdim : ∀ k, h.dim k = 1 := fun k => by
-    have h1 := h.dim_pos k
-    have h2 : h.dim k ^ 2 ≤ 2 :=
-      le_trans (Finset.single_le_sum (fun j _ => Nat.zero_le (h.dim j ^ 2))
-        (Finset.mem_univ k)) hsum
-    nlinarith
-  have hr : h.r ≤ 2 := by
-    simpa [hdim] using hsum
-  have hN3 : h.r = 2 → 3 ≤ N := fun hr2 => by
-    rw [hr2] at hn₀
-    have : 6 ≤ n₀ := by rw [hn₀]; exact le_max_of_le_right (by omega)
-    omega
-  -- The amplitudes of the words `1^m 0^{N-m}`.
-  let i : (k : Fin h.r) → Fin (h.dim k) := fun k => ⟨0, h.dim_pos k⟩
-  refine not_sum_pow_mul_pow_eq hr hN2 hN3
-    (fun k => (h.weight k : ℂ) * h.blocks k 0 (i k) (i k))
-    (fun k => (h.weight k : ℂ) * h.blocks k 1 (i k) (i k)) hc (fun m _ _ hmN => ?_)
-  have hlen : (List.replicate m (1 : Fin 2) ++ List.replicate (N - m) 0).length = N := by
-    simp; omega
-  have hcount : (List.replicate m (1 : Fin 2) ++ List.replicate (N - m) 0).count 1 = m := by
-    simp [List.count_replicate]
-  have key := hWord _ hlen
-  rw [h.trace_evalWord_eq_sum, hlen, hcount] at key
-  rw [show (if m = 1 then c else 0) = c * if m = 1 then 1 else 0 by split_ifs <;> simp, ← key]
-  refine Finset.sum_congr rfl fun k _ => ?_
-  have : Subsingleton (Fin (h.dim k)) := Fin.subsingleton_iff_le_one.mpr (hdim k).le
-  rw [Kraus.evalWord_append, Kraus.evalWord_replicate, Kraus.evalWord_replicate,
-    trace_pow_mul_pow_of_subsingleton (i k), mul_pow, mul_pow]
-  rw [show (h.weight k : ℂ) ^ N = (h.weight k : ℂ) ^ m * (h.weight k : ℂ) ^ (N - m) by
-    rw [← pow_add, Nat.add_sub_cancel' hmN]]
-  ring
+    N < 2 * max L₀ (3 * (h.r - 1) * (L₀ + 1)) :=
+  lt_of_sum_mpv_eq_smul_wIndicator h.blocks h.dim_pos h.unital h.dualFixedPoint_transferMap
+    h.isIrreducibleFamily_blocks hL₀ hC1 hDistinct (fun k => (h.weight k : ℂ) ^ N)
+    (fun k => pow_ne_zero _ (Complex.ofReal_ne_zero.mpr (h.weight_pos k).ne')) hc
+    (fun σ => by rw [← hW, h.mpv_eq_sum])
 
 /-- The block count and block sizes of a canonical form of bond dimension `D` are at most
 `D`. -/

@@ -30,7 +30,7 @@ This is the estimate `lem:ldp_expectation_overlap` used in the chapter's proof
 of the depth lower bound of arXiv:2307.01696, Theorem 1, where it replaces the
 source's trace-distance and fidelity argument (Supplemental Material,
 "Proof of Theorem 1", eqs. (auxdp), (auxdp3), (inequax)). -/
-theorem norm_inner_mul_norm_sub_le {E : Type*} [NormedAddCommGroup E]
+lemma norm_inner_mul_norm_sub_le {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℂ E] {T : E →ₗ[ℂ] E} (hT : T.IsSymmetric) {φ ψ : E}
     (hφ : ‖φ‖ = 1) (hψ : ‖ψ‖ = 1) :
     ‖⟪φ, ψ⟫_ℂ‖ * ‖⟪φ, T φ⟫_ℂ - ⟪ψ, T ψ⟫_ℂ‖ ≤

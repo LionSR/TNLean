@@ -237,11 +237,70 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{definition}[Local circuit of depth $T$]
     \label{def:ldp_local_circuit}
+    \lean{MPSPreparation.IsLocalCircuitOfDepth, MPSPreparation.IsPreparedInDepth,
+        MPSPreparation.Layer, MPSPreparation.circuitOp,
+        MPSPreparation.supportedOperators}
+    \leanok
     A \emph{local circuit of depth $T$} on a chain of $N$ sites is a product of
     $T$ layers, each a tensor product of unitaries acting on disjoint pairs of
     neighbouring sites. A state is \emph{prepared in depth $T$} if it equals a
     local circuit of depth $T$ applied to a product state.
+
+    The chain is a ring: the neighbouring pairs are $\{k,k+1\}$ with indices
+    modulo $N$, and a circuit whose gates avoid the pair $\{N,1\}$ is a circuit
+    on the open chain. An operator \emph{acts on} a set of sites $X$ if it
+    lies in $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
+    $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
+    are at distance larger than $s$ if no site of one is within ring distance
+    $s$ of a site of the other.
 \end{definition}
+
+\begin{lemma}[Light cone of a local circuit]
+    \label{lem:ldp_light_cone}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.conj_circuitOp_mem_supportedOperators}
+    \leanok
+    Let $U$ be a local circuit of depth $T$ and let $Z$ act on a set of sites
+    $X$. Then $U^\dagger ZU$ acts on the sites within ring distance $T$ of $X$.
+    This is the finite light cone of \cite[Theorem~1]{Malz2024Preparation}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the layers it suffices to treat one layer $W$. Split its
+    gates into those whose pair meets $X$, with product $G$, and the others,
+    with product $H$. The gates commute, so $W=HG$. The operator $H$ is unitary
+    and acts on the complement of $X$, so it commutes with $Z$ and
+    $W^\dagger ZW=G^\dagger ZG$. The pairs of $G$ lie within distance $1$ of
+    $X$, and products and adjoints of operators acting on a set act on it.
+\end{proof}
+
+\begin{lemma}[No connected correlations beyond the light cone]
+    \label{lem:ldp_light_cone_correlations}
+    \uses{lem:ldp_light_cone}
+    \lean{MPSPreparation.expect_mul_eq_of_isPreparedInDepth,
+        MPSPreparation.expect_mul_mul_expect_one_of_isPreparedInDepth}
+    \leanok
+    Let $\ket{\psi}$ be a unit vector prepared in depth $T$, and let $Z$, $Z'$
+    act on sets of sites at distance larger than $2T$. Then
+    $\bra{\psi}ZZ'\ket{\psi}=\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
+    This is the statement in the proof of
+    \cite[Theorem~1]{Malz2024Preparation} that every connected correlation of
+    such operators vanishes.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $\ket{\psi}=U\ket{\pi}$ with $\ket{\pi}=\bigotimes_i\ket{v_i}$. Since
+    $UU^\dagger=\mathbb 1$,
+    $\bra{\psi}ZZ'\ket{\psi}=\bra{\pi}(U^\dagger ZU)(U^\dagger Z'U)\ket{\pi}$,
+    and by Lemma~\ref{lem:ldp_light_cone} the two factors act on disjoint sets
+    of sites. For products $\bigotimes_i m_i$ and $\bigotimes_i m'_i$ with
+    disjoint supports the expectation in $\ket{\pi}$ is
+    $\prod_i\bra{v_i}m_im'_i\ket{v_i}$, and at each site one of $m_i$, $m'_i$
+    is the identity; bilinearity then gives
+    $\bra{\pi}AB\ket{\pi}\braket{\pi}{\pi}
+        =\bra{\pi}A\ket{\pi}\bra{\pi}B\ket{\pi}$ for $A$, $B$ acting on
+    disjoint sets.
+\end{proof}
 
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
     \label{thm:ldp_depth_upper_bound}
@@ -291,7 +350,7 @@ of $A$ along $w$.
     \label{lem:ldp_limit_correlator_eigenvalue}
     \lean{MPSTensor.limitCorrelator, MPSTensor.exists_limitCorrelator_eq_pow}
     \leanok
-    \uses{lem:ldp_observable_transfer_surjective}
+    \uses{def:transfer_map}
     Suppose the products of $L$ matrices of $A$ span $\MN{D}$ and
     $\sum_i(A^i)^\dagger A^i=\Id$, let $\Tr\rho=1$, put $P(Z)=\Tr(Z)\,\rho$,
     and let $R\neq0$ satisfy $\E_A(R)=\lambda R$ with $\lambda\neq1$. Then there
@@ -309,6 +368,7 @@ of $A$ along $w$.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{lem:ldp_observable_transfer_surjective}
     Trace preservation gives $\lambda\Tr R=\Tr R$, so $\Tr R=0$, $P(R)=0$, and
     $(\E_A-P)^tR=\lambda^tR$. By
     Lemma~\ref{lem:ldp_observable_transfer_surjective} take
@@ -468,7 +528,8 @@ of $A$ along $w$.
     $\lvert\lambda_2\rvert^{t'}=e^{-(s'-L-1)/\xi}\ge e^{-(s'-1)/\xi}$, which
     gives (\ref{eq:ldp_decaying_correlations}) with $c=c_0/2$.
 \end{proof}
-%% The source's Lemma 2 (lm:2, References/2307.01696/main.tex) asserts, for
+%% The source's Lemma 2 (label lm:2 in the arXiv:2307.01696 LaTeX source,
+%% Supplemental Material, section Proof of Theorem 1) asserts, for
 %% injective A with xi > 0, observables O_1, O'_s of norm one such that for
 %% every integer s > 1 and sufficiently large N the one-point functions
 %% vanish exactly (auxform1) and the correlator itself satisfies the real
@@ -596,9 +657,19 @@ of $A$ along $w$.
 %% the products of L matrices span M_D, so the argument runs at every N and
 %% not only at multiples of a blocking length. The window of K separations
 %% in the lemma moves the separation s' by at most K - 1 sites, which is
-%% absorbed into s' = o(log N); only constants change. The concentration
-%% argument above is a reconstruction, since the source proof could not be
-%% checked locally.
+%% absorbed into s' = o(log N); only constants change. The source proof
+%% (arXiv:2307.01696, Supplemental Material, proof of Theorem 1) takes a
+%% different route: it replaces phi_N by the blocked approximation of
+%% Lemma 1 at block length q ~ log N, traces out alternate blocks so that
+%% both states become products of k ~ N/(4q) factors, bounds the fidelity
+%% by (1 - delta)^(k/2), and bounds delta from below with Lemma 2 at the
+%% single separation s = 2T + 1, using the exact vanishing of the
+%% one-point functions. Both of those inputs are unavailable here (see the
+%% comment after Lemma lem:ldp_decaying_correlations), so the proof above
+%% replaces the product-fidelity step by the concentration of averages of
+%% n ~ N/s' translated observables. This concentration argument is not in
+%% the source; it must be re-derived line by line when this theorem is
+%% formalized, and until then the theorem carries no formalization tag.
 
 \section{Tensors that are not normal}
 
@@ -631,16 +702,98 @@ of $A$ along $w$.
     canonical form of \cite{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
-\begin{lemma}[GHZ form of the fixed-point state]
-    \label{lem:ldp_ghz_form}
+\begin{definition}[Fixed-point state of a family of pairs]
+    \label{def:ldp_pair_family_fixed_point}
+    \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
+        MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState,
+        MPSTensor.pairIsometry, MPSTensor.ghzState, Matrix.tensorPower}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, thm:ldpolar_tensor_decomposition}
+    Let $\omega_1,\dots,\omega_b\in\mathbb C^D\otimes\mathbb C^D$ be any vectors,
+    $\alpha\in\mathbb C^b$ any coefficients, and $M\ge0$. The state
+    $\ket{\Omega'}=\sum_j\alpha_j\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}$ is
+    formed as in (\ref{eq:ldp_non_normal_fixed_point}), and for a tensor $A$ and a
+    blocking length $q$, with $V$ from Theorem~\ref{thm:ldpolar_tensor_decomposition}
+    for the $q$-site blocked map of $A$, the approximating state is
+    $V^{\otimes M}\ket{\Omega'}/\lVert V^{\otimes M}\ket{\Omega'}\rVert$, and zero when
+    the denominator vanishes. For multiplicity coefficients $\mu_{j,k}$ put
+    $\beta_j=\sum_k\mu_{j,k}^N$ and $\alpha^{(N)}_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$.
+    Let $W\colon\mathbb C^b\to\mathbb C^D\otimes\mathbb C^D$,
+    $\ket{j}\mapsto\ket{\omega_j}$, be the map whose $j$-th column is $\omega_j$,
+    let $X^{\otimes M}$ denote the $M$-fold tensor power of a matrix $X$, with entries
+    $(X^{\otimes M})_{p,s}=\prod_{k=1}^M X_{p_k,s_k}$, and put
+    $\ket{\chi_M}=\sum_j\alpha_j\ket{j}^{\otimes M}\in(\mathbb C^b)^{\otimes M}$.
+    Definition~\ref{def:ldp_non_normal_fixed_point} is the instance in which
+    $\omega_j$ is the pair state of the normal block $A_j$ embedded in the bond space
+    of $A$, $\alpha=\alpha^{(N)}$, and $N=qM$; none of these three identifications is
+    imposed here.
+\end{definition}
+
+\begin{theorem}[GHZ form of the fixed-point state]
+    \label{thm:ldp_ghz_form}
+    \lean{MPSTensor.isIsometry_pairIsometry, Matrix.IsIsometry.tensorPower,
+        MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState,
+        MPSTensor.nonNormalFixedPointState_norm_sq}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point}
+    With $W$, $X^{\otimes M}$ and $\chi_M$ as in
+    Definition~\ref{def:ldp_pair_family_fixed_point}, formed with
+    $\alpha=\alpha^{(N)}$, if $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, then
+    $W$ and $W^{\otimes M}$ are isometries and
+    $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$, up to the
+    regrouping of the legs $R_kL_{k+1}$. If moreover $M\geq1$ and
+    $(\beta_1,\dots,\beta_b)\neq0$, then $\braket{\Omega'}{\Omega'}=1$.
+    This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}. The same
+    holds for the state of Definition~\ref{def:ldp_pair_family_fixed_point} with
+    $\alpha=\alpha^{(N)}$ for any orthonormal pairs $\omega_j$. The source asserts
+    the orthogonality of its pairs after \cite[eq.~(S7)]{Malz2024Preparation},
+    citing the canonical form; here it is a hypothesis
+    \cite{gap:mswc24_ghz_form_local_orthogonality}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:prep_pair_product_norm}
+    The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$, and the
+    entries of $(W^{\otimes M})^\dagger W^{\otimes M}$ factor over the sites,
+    \begin{align*}
+        \bigl((W^{\otimes M})^\dagger W^{\otimes M}\bigr)_{s,t}
+        =\prod_{k=1}^M(W^\dagger W)_{s_k,t_k}=\delta_{st}.
+    \end{align*}
+    Expanding
+    $\ket{j}^{\otimes M}$ in the product basis gives
+    $W^{\otimes M}\ket{j}^{\otimes M}=\bigotimes_k\ket{\omega_j}$, and summing with the
+    weights $\alpha^{(N)}_j$ gives $\ket{\Omega'}$. Overlaps of the product states factor
+    over the bonds,
+    $\braket{\Omega_j}{\Omega_{j'}}=\braket{\omega_j}{\omega_{j'}}^M=\delta_{jj'}$, so
+    $\braket{\Omega'}{\Omega'}=\sum_j\lvert\alpha^{(N)}_j\rvert^2=1$.
+\end{proof}
+
+\begin{theorem}[Pairs with disjoint supports are orthogonal]
+    \label{thm:ldp_pair_disjoint_orthogonal}
+    \lean{MPSTensor.inner_pair_eq_zero_of_disjoint}
+    \leanok
     \uses{def:ldp_non_normal_fixed_point}
-    If $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, then
-    $W\colon\ket{j}\mapsto\ket{\omega_j}$ is an isometry and
-    $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ with
-    $\ket{\chi_M}=\sum_j\alpha^{(N)}_j\ket{j}^{\otimes M}$, up to the
-    regrouping of the legs $R_kL_{k+1}$.
-    This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}.
-\end{lemma}
+    Let $S,S'\subseteq\{0,\dots,D-1\}$ be disjoint, and let
+    $\omega,\omega'\in\C^D\otimes\C^D$ satisfy $\omega_{(a,c)}=0$ for $a\notin S$
+    and $\omega'_{(a,c)}=0$ for $a\notin S'$. Then
+    $\braket{\omega}{\omega'}=0$. The embedded pairs of distinct blocks in
+    Definition~\ref{def:ldp_non_normal_fixed_point} are supported in this way, so
+    this gives the off-diagonal half of the orthogonality
+    $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$; the unit norms and the
+    identification of the supports are not supplied here
+    \cite{gap:mswc24_ghz_form_local_orthogonality}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every term of the sum vanishes: if $a\in S$ then $a\notin S'$ and
+    $\omega'_{(a,c)}=0$, and otherwise $\omega_{(a,c)}=0$, so
+    \begin{align*}
+        \braket{\omega}{\omega'}
+        =\sum_{(a,c)}\overline{\omega_{(a,c)}}\,\omega'_{(a,c)}=0.
+    \end{align*}
+\end{proof}
 
 \begin{theorem}[Approximation error, general case]
     \label{thm:ldp_approximation_error_general}

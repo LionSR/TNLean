@@ -165,14 +165,17 @@ stacking and $\sigma$ for column stacking.
     $(p_{k-1}^2,p_k^1)_k$.
 \end{definition}
 
-\begin{theorem}[Normalization of the pair product state]
+\begin{theorem}[Overlap and normalization of pair product states]
     \label{thm:prep_pair_product_norm}
+    \lean{MPSTensor.pairProductState_inner}
     \lean{MPSTensor.pairProductState_norm_sq}
     \lean{MPSTensor.pairProductState_fixedPointPair_norm_sq}
     \leanok
     \uses{def:prep_pair_product_state}
-    For every $\omega\in\C^D\otimes\C^D$ and $N\ge0$, the pair product
-    state~(\ref{eq:prep_pair_product}) satisfies
+    For every $\omega,\omega'\in\C^D\otimes\C^D$ and $N\ge0$, the pair product
+    states~(\ref{eq:prep_pair_product}) $\ket{\Omega}$ of $\omega$ and
+    $\ket{\Omega'}$ of $\omega'$ satisfy
+    $\braket{\Omega}{\Omega'}=\braket{\omega}{\omega'}^N$; in particular
     $\braket{\Omega}{\Omega}=\braket{\omega}{\omega}^N$. If $\omega$ is the
     entangled pair of a positive semidefinite $\sigma$ with $\tr\sigma=1$,
     then $\braket{\Omega}{\Omega}=1$.
@@ -180,11 +183,11 @@ stacking and $\sigma$ for column stacking.
 \begin{proof}
     \leanok
     \uses{def:prep_bond_regrouping, thm:prep_pair_norm}
-    Expanding $\braket{\omega}{\omega}^N$ as a sum over bond configurations
-    $(p_k)_k$ of $\prod_k\overline{\omega_{p_k}}\omega_{p_k}$ and
+    Expanding $\braket{\omega}{\omega'}^N$ as a sum over bond configurations
+    $(p_k)_k$ of $\prod_k\overline{\omega_{p_k}}\omega'_{p_k}$ and
     reindexing along the bond regrouping of
     Definition~\ref{def:prep_bond_regrouping} gives
-    $\sum_c\overline{\Omega(c)}\Omega(c)$. The second statement follows
+    $\sum_c\overline{\Omega(c)}\Omega'(c)$. The last statement follows
     from Theorem~\ref{thm:prep_pair_norm}.
 \end{proof}
 

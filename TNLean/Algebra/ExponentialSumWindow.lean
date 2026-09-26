@@ -33,7 +33,7 @@ eigenvalues, the final step "the second and third [conditions] ensure
 Material, proof of Lemma 2: the leading part of the correlator is a sum over
 the eigenvalues of modulus `|λ₂|`, which can vanish at individual separations.
 The constant `c₀` is not made explicit. -/
-theorem exists_window_le_norm_sum_mul_pow {K : ℕ} {μ : Fin K → ℂ}
+lemma exists_window_le_norm_sum_mul_pow {K : ℕ} {μ : Fin K → ℂ}
     (hμ : Function.Injective μ) (hnorm : ∀ j, ‖μ j‖ = 1)
     {a : Fin K → ℂ} (ha : a ≠ 0) :
     ∃ c₀ : ℝ, 0 < c₀ ∧ ∀ t : ℕ, ∃ u : Fin K,
