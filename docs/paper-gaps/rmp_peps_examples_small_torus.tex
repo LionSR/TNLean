@@ -34,7 +34,13 @@ both as PEPS with tensors of the form
 $A=P(\mathbb 1\otimes\mathbb 1\otimes Y\otimes Y)$, again with no
 restriction on the lattice size.\footnote{Source traceability:
     \path{Papers/2011.12127/TN-Review-main.tex}, lines 2432--2448.}
-All four constructions are local, so they apply for every $N,M\ge 1$ once the
+A classical model with nearest-neighbour interaction $h$ at inverse
+temperature $\beta$ gives the tensor
+$A=[\sum_i\ket{i}(i\,i\,i\,i|](\mathbb 1\otimes\mathbb 1\otimes M\otimes M)$
+with $M=\sum_{i,j}e^{-\beta h(i,j)/2}|i)(j|$, on the square lattice with no
+restriction on its size.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2483--2494.}
+All five constructions are local, so they apply for every $N,M\ge 1$ once the
 lattice is read as a multigraph: a site on a torus of width two has two
 distinct horizontal bonds to its neighbour, one on each side.
 
@@ -43,7 +49,7 @@ The formal PEPS lives on a finite simple graph, and the torus is the simple
 graph on $\mathbb Z_{w}\times\mathbb Z_{h}$ with cyclic nearest-neighbour
 edges. For $w=2$ the right and the left neighbour of a site coincide, and so
 do the two edges joining them: the four legs of a site are not four distinct
-bonds. The contraction of the four tensors on this graph is therefore a
+bonds. The contraction of the five tensors on this graph is therefore a
 different network from the source's at $w=2$ or $h=2$. For the RVB tensor
 the difference is visible on the coefficients: at $w=2$ the right and left
 legs of a site carry the same bond label, so a horizontal dimer would occupy
@@ -64,7 +70,11 @@ exhaust the edge set, and the formal statements hold there:
     applied to a singlet on every edge;
     \item the RVB tensor gives the sum over nearest-neighbour dimer
     coverings of the torus of the product of the singlets on the covered
-    edges.
+    edges;
+    \item the classical-model tensor of a nearest-neighbour interaction $h$
+    at inverse temperature $\beta$ has coefficient $e^{-\beta H(\sigma)/2}$,
+    where $H$ sums $h$ over the nearest-neighbour bonds, so its diagonal
+    expectation values are those of the Gibbs state $e^{-\beta H}/Z$.
 \end{enumerate}
 The GHZ example is not restricted: its coefficient depends only on whether
 the configuration is constant, and it is proved on every torus with
@@ -72,11 +82,12 @@ $w,h\ge 2$.\footnote{Results: \leanid{TNLean.PEPS.stateCoeff_clusterPEPS},
     \leanid{TNLean.PEPS.stateCoeff_czxPEPS},
     \leanid{TNLean.PEPS.stateCoeff_akltPEPS},
     \leanid{TNLean.PEPS.stateCoeff_rvbPEPS},
+    \leanid{TNLean.PEPS.stateCoeff_classicalPEPS},
     \leanid{TNLean.PEPS.stateCoeff_ghzPEPS}.}
 
 \section{Elimination plan}
 Formalize PEPS on finite multigraphs, where a torus of width two has two
-edges between neighbouring sites, and restate the four examples there. The
+edges between neighbouring sites, and restate the five examples there. The
 proofs carry over unchanged once the edges of the torus are parametrized by
 the right and up edges of the sites.
 

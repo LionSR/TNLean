@@ -78,7 +78,8 @@ $v$ to $(x,y+1)$ (top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$
 On a torus of width two the right and left neighbours of a site coincide and
 the two edges joining them are one edge of the lattice graph, so the four
 legs of a site are not four distinct bonds. The contraction formula, and the
-cluster, CZX, AKLT and RVB statements below, therefore require $w,h\ge 3$; the
+cluster, CZX, AKLT, RVB and classical-model statements below, therefore require
+$w,h\ge 3$; the
 source constructions are local and apply to every torus
 \cite{gap:rmp_peps_examples_small_torus}.
 
@@ -679,17 +680,101 @@ $A$ vanish, since a leg carrying $Y$ could then never be in the vacuum state
 The general orientation choices $\pm Y$ on other lattices and the
 spin-liquid properties of the RVB state are not formalized.
 
+\subsection{PEPS from classical models}
+
+Let $q\ge 1$, let $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$ be a
+nearest-neighbour interaction and $\beta\in\mathbb{R}$ an inverse temperature.
+On the torus a configuration $\sigma$ has energy
+\begin{align}
+    H(\sigma)=\sum_{v}\bigl(h(\sigma_{v},\sigma_{v-(1,0)})
+        +h(\sigma_{v},\sigma_{v-(0,1)})\bigr),
+    \notag
+\end{align}
+each nearest-neighbour bond counted once. For symmetric $h$ this is the sum
+of $h$ over unordered bonds.
+
+\begin{definition}[Classical-model tensor]%
+    \label{def:peps_classical_tensor}
+    \lean{TNLean.PEPS.classicalBondMatrix, TNLean.PEPS.classicalSiteTensor,
+        TNLean.PEPS.classicalPEPS, TNLean.PEPS.classicalEnergy}
+    \leanok
+    \uses{def:peps_torus_site_tensor}
+    Let $M=\sum_{i,j}e^{-\beta h(i,j)/2}|i)(j|$. The classical-model tensor is
+    \begin{align}
+        A=\Bigl[\sum_{i}\ket{i}(i\,i\,i\,i|\Bigr]
+            (\mathbb{1}\otimes\mathbb{1}\otimes M\otimes M):
+        \notag
+    \end{align}
+    the top and right legs copy the physical index $s$, and the down and left
+    legs carry $M_{sb}$ and $M_{sl}$ at bond indices $b$ and $l$
+    \cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}. The
+    classical-model PEPS places this tensor at every site of the torus.
+\end{definition}
+
+\begin{theorem}[Coefficients of the classical-model PEPS]%
+    \label{thm:peps_classical_coeff}
+    \lean{TNLean.PEPS.stateCoeff_classicalPEPS,
+        TNLean.PEPS.conj_mul_stateCoeff_classicalPEPS,
+        TNLean.PEPS.normSq_stateCoeff_classicalPEPS}
+    \leanok
+    \uses{def:peps_classical_tensor, def:peps_stateCoeff}
+    On a torus with $w,h\ge 3$ the classical-model PEPS has coefficient
+    $\Coeff(\sigma)=e^{-\beta H(\sigma)/2}$, so
+    $|\Coeff(\sigma)|^{2}=e^{-\beta H(\sigma)}$ is the Gibbs weight of
+    $\sigma$ \cite{gap:rmp_peps_examples_small_torus}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_site_tensor_contraction}
+    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the top and right
+    legs force every bond index to equal the physical index of the site
+    below or to the left of it. The remaining factor at $v$ is
+    $M_{\sigma_{v}\sigma_{v-(0,1)}}M_{\sigma_{v}\sigma_{v-(1,0)}}$, one factor
+    $e^{-\beta h/2}$ for each bond at $v$ read towards its lower and left
+    neighbours, and the product over $v$ is $e^{-\beta H(\sigma)/2}$. The
+    coefficient is real, so its squared modulus is $e^{-\beta H(\sigma)}$.
+\end{proof}
+
+No bond carries a product of two copies of $M$: the entry
+$e^{-\beta h/2}$ is not a square root of a transfer matrix, and no symmetry
+of $h$ is used.
+
+\begin{theorem}[Diagonal expectation values are Gibbs averages]%
+    \label{thm:peps_classical_expectation}
+    \lean{TNLean.PEPS.expectation_classicalPEPS}
+    \leanok
+    \uses{thm:peps_classical_coeff}
+    Let $w,h\ge 3$ and let $O=\sum_{\sigma}O(\sigma)\ket{\sigma}\bra{\sigma}$
+    be a diagonal observable. For the classical-model PEPS state
+    $\ket{\psi}=\sum_{\sigma}\Coeff(\sigma)\ket{\sigma}$,
+    \begin{align}
+        \frac{\sum_{\sigma}\overline{\Coeff(\sigma)}\,O(\sigma)\Coeff(\sigma)}
+            {\sum_{\sigma}\overline{\Coeff(\sigma)}\Coeff(\sigma)}
+        =\frac{\sum_{\sigma}O(\sigma)e^{-\beta H(\sigma)}}
+            {\sum_{\sigma}e^{-\beta H(\sigma)}},
+        \notag
+    \end{align}
+    that is, $\bra{\psi}O\ket{\psi}/\braket{\psi}{\psi}$ is the expectation
+    value of $O$ in the Gibbs state $e^{-\beta H}/Z$
+    \cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Replace $\overline{\Coeff(\sigma)}\Coeff(\sigma)$ by
+    $e^{-\beta H(\sigma)}$ in both sums, by
+    Theorem~\ref{thm:peps_classical_coeff}.
+\end{proof}
+
+In particular the classical correlation functions are expectation values of
+the PEPS. The review adds that at the critical inverse temperature
+$\beta_{c}$ the associated PEPS has correlations decaying as a power law, so
+its parent Hamiltonian must be gapless
+\cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}. This
+consequence is not formalized.
+
 \subsection{Examples not formalized}
 
-The remaining two-dimensional examples of
-\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} are recorded
-here without formal statements.
-\begin{itemize}
-    \item String-net models give PEPS tensors built from the $F$-symbols of a
-          bimodule category.
-    \item A classical model with nearest-neighbour interactions at inverse
-          temperature $\beta$ gives the PEPS
-          $\bigl[\sum_i\ket{i}(i\,i\,i\,i|\bigr](\mathbb{1}\otimes\mathbb{1}
-              \otimes M\otimes M)$ with $M=\sum_{i,j}e^{-\beta h(i,j)/2}|i)(j|$,
-          whose diagonal expectation values reproduce those of the Gibbs state.
-\end{itemize}
+The remaining two-dimensional example of
+\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} is recorded
+here without a formal statement: string-net models give PEPS tensors built
+from the $F$-symbols of a bimodule category.
