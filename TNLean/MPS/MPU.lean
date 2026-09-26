@@ -43,6 +43,7 @@ import TNLean.MPS.MPU.InverseCompatibleWordUnitarity
 import TNLean.MPS.MPU.KetLeftMul
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
+import TNLean.MPS.MPU.NormalizedCompression
 import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla

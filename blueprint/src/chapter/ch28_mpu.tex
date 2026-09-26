@@ -6548,6 +6548,43 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $A^\dagger$ outside the finite sum.
 \end{proof}
 
+\begin{theorem}[Normalized transfer under virtual sandwiching]
+    \label{thm:mpu_normalized_transfer_sandwich}
+    \lean{MPOTensor.transferMap_normalizedFlattening_virtualSandwich,
+        MPOTensor.transferMap_normalizedFlattening_reducedProjection}
+    \leanok
+    \uses{def:mpu_normalized_flattening, def:mpu_virtual_sandwich,
+        def:mpu_matrix_reduced_projection}
+    Let $W=(W^{ij})$ be an MPO tensor, let $\widehat E_W$ denote the transfer
+    map of its normalized flattening, and set $\widehat W^{ij}=AW^{ij}B$.
+    For every bond matrix $X$,
+    \begin{align}
+        \widehat E_{\widehat W}(X)
+         & =A\widehat E_W(BXB^\dagger)A^\dagger.
+    \end{align}
+    In particular, suppose that $\widehat E_W(X)=\tr(LX)R$ for every $X$.
+    For any bond matrices $P,Q$, let $T$ be their reduced projection and set
+    $\widetilde W^{ij}=TW^{ij}T$. Then
+    \begin{align}
+        \widehat E_{\widetilde W}(X)
+         & =\tr\!\bigl((TLT)X\bigr)\,TRT.
+    \end{align}
+    This is the normalized compression identity in the proof of
+    \cite[Proposition~IV.5]{Cirac2017MPU}.
+    % Source: paper_v2.tex, eq:transfer-op, lines 336--340;
+    % prop:continuity-index, lines 747--752 and 778--781.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_normalized_flattening, def:mpu_virtual_sandwich,
+        thm:mpu_matrix_reduced_projection}
+    Scalar normalization commutes with left and right multiplication.
+    Expanding the normalized transfer map therefore gives the first identity
+    by collecting the constant factors outside the finite sum. For the
+    reduced projection, $T^\dagger=T$, and cyclicity of the trace gives
+    $\tr(LTXT)=\tr(TLTX)$.
+\end{proof}
+
 \begin{lemma}[Positive definite support compression]
     \label{lem:mpu_support_compression_posdef}
     \lean{Matrix.PosSemidef.compression_posDef_of_support_action_ne_zero}
