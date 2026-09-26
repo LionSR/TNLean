@@ -7,6 +7,124 @@ example of a normal (block-injective) MPS with non-trivial
 symmetry-protected topological (SPT)
 order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
 
+\begin{definition}[AKLT tensor from singlet bonds]\label{def:aklt_tensor_review}
+    \lean{MPSTensor.rmpSingletY, MPSTensor.akltRMPSpinOneState, MPSTensor.akltTensorRMP}
+    \leanok
+    \uses{def:mps_tensor}
+    Place a spin-$\tfrac12$ singlet on every bond, encoded by
+    \begin{align}
+        Y & = \begin{pmatrix}0&-1\\1&0\end{pmatrix},
+        \notag
+    \end{align}
+    and project the two spin-$\tfrac12$ particles at each site onto their joint
+    spin-$1$ subspace. With the physical states labelled by $S_z=0,\pm1$, the
+    resulting tensor with $d=3$ and $D=2$ is
+    \begin{align}
+        A^{+1} & = \begin{pmatrix}1&0\\0&0\end{pmatrix}Y,
+               & A^{0}                                    & = \frac{1}{\sqrt2}\begin{pmatrix}0&1\\1&0\end{pmatrix}Y,
+               & A^{-1}                                   & = \begin{pmatrix}0&0\\0&1\end{pmatrix}Y.
+        \label{eq:aklt_review_tensor}
+    \end{align}
+    The three left factors are the spin-$1$ states $\ket{\uparrow\uparrow}$,
+    $(\ket{\uparrow\downarrow}+\ket{\downarrow\uparrow})/\sqrt2$, and
+    $\ket{\downarrow\downarrow}$ written as coefficient matrices. This is the
+    tensor of \cite[Appendix~A, ``The AKLT state'']{Cirac2021Matrix}, for the
+    state of~\cite{AKLT1987Rigorous}.
+\end{definition}
+
+\begin{lemma}[Matrices of the singlet-bond AKLT tensor]\label{lem:aklt_review_matrices}
+    \lean{MPSTensor.akltTensorRMP_zero, MPSTensor.akltTensorRMP_one,
+        MPSTensor.akltTensorRMP_two}
+    \leanok
+    \uses{def:aklt_tensor_review}
+    The matrices of (\ref{eq:aklt_review_tensor}) are
+    $A^{0}=\sigma_z/\sqrt2$, $A^{+1}=-\ketbra{0}{1}$, and
+    $A^{-1}=\ketbra{1}{0}$.
+\end{lemma}
+
+\begin{theorem}[The site map projects onto spin $1$]\label{thm:aklt_review_spin_one}
+    \lean{MPSTensor.akltRMPSpinOneState_transpose,
+        MPSTensor.akltRMPSpinOneState_orthonormal}
+    \leanok
+    \uses{def:aklt_tensor_review}
+    The three coefficient matrices $P^{s}$ with $A^{s}=P^{s}Y$ are symmetric,
+    $(P^{s})^{T}=P^{s}$, so they are states of the symmetric (spin-$1$)
+    subspace of two spin-$\tfrac12$ particles, and they are orthonormal:
+    $\tr\big((P^{s})^{\dagger}P^{t}\big)=\delta_{st}$.
+\end{theorem}
+
+\begin{definition}[The Pauli basis of the spin-$1$ site]\label{def:aklt_review_basis}
+    \lean{MPSTensor.akltRMPBasis, MPSTensor.akltRMPBasisFixed}
+    \leanok
+    \uses{def:aklt_tensor_review}
+    The basis of \cite[Appendix~A, ``The AKLT state'']{Cirac2021Matrix} is
+    \begin{align}
+        \ket{+} & = \frac{i}{\sqrt2}\big(\ket{-1}+\ket{+1}\big),
+                & \ket{-}                                        & = \frac{1}{\sqrt2}\big(\ket{-1}-\ket{+1}\big),
+                & \ket{0}.
+        \label{eq:aklt_review_basis}
+    \end{align}
+    The second basis replaces $\ket{+}$ with
+    $-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$ and keeps $\ket{-}$ and $\ket{0}$.
+\end{definition}
+
+\begin{theorem}[The Pauli bases are orthonormal]\label{thm:aklt_review_basis_unitary}
+    \lean{MPSTensor.akltRMPBasis_mem_unitaryGroup,
+        MPSTensor.akltRMPBasisFixed_mem_unitaryGroup}
+    \leanok
+    \uses{def:aklt_review_basis}
+    The basis (\ref{eq:aklt_review_basis}) is orthonormal, and so is the basis
+    obtained by replacing $\ket{+}$ with $-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$:
+    the matrices whose columns are these vectors are unitary.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The vectors $\ket{\pm}$ are supported on $\ket{\pm1}$ and $\ket{0}$ is
+    orthogonal to both; the inner product of $\ket{+}$ and $\ket{-}$ is
+    $\frac{-i}{2}(1-1)=0$, and each vector has norm $1$. A phase on $\ket{+}$
+    preserves all of these relations.
+\end{proof}
+
+\begin{theorem}[Pauli form of the AKLT tensor]\label{thm:aklt_review_pauli_form}
+    \lean{MPSTensor.akltTensorRMPPauli, MPSTensor.rotatePhysical_akltRMPBasis,
+        MPSTensor.akltTensorRMPPauli_neg_gaugeEquiv,
+        MPSTensor.mpv_rotatePhysical_akltRMPBasis,
+        MPSTensor.rotatePhysical_akltRMPBasisFixed}
+    \leanok
+    \uses{def:aklt_tensor_review, def:rotate_physical, thm:gauge_invariance,
+        lem:mpv_smul, def:aklt_review_basis, lem:aklt_review_matrices, def:gauge_equiv}
+    Let $U$ be the unitary whose columns are the vectors of
+    (\ref{eq:aklt_review_basis}). The tensor (\ref{eq:aklt_review_tensor})
+    expressed in this basis, that is, the tensor $B^{a}=\sum_{s}\overline{U_{sa}}\,A^{s}$
+    obtained by rotating the physical index by $U^{\dagger}$, is
+    \begin{align}
+        B^{-} & = \tfrac{1}{\sqrt2}\sigma_x,
+              & B^{+}                        & = -\tfrac{1}{\sqrt2}\sigma_y,
+              & B^{0}                        & = \tfrac{1}{\sqrt2}\sigma_z.
+        \notag
+    \end{align}
+    This is the form $\sigma_i/\sqrt2$ printed in
+    \cite[Appendix~A, ``The AKLT state'']{Cirac2021Matrix} up to the virtual
+    gauge $\sigma_y$ and the scalar $-1$: $B^{a}=\sigma_y\big(-\sigma_a/\sqrt2\big)\sigma_y^{-1}$
+    for $a=-,+,0$ with $\sigma_-=\sigma_x$, $\sigma_+=\sigma_y$, $\sigma_0=\sigma_z$.
+    Hence on $N$ sites the state coefficients of $B$ are $(-1)^N$ times those of
+    the printed form, and the two describe the same state up to a global sign.
+    In the basis with $\ket{+}=-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$ the tensor
+    becomes exactly $\sigma_i/\sqrt2$. The printed identity $A^{+}=\sigma_y/\sqrt2$
+    in the basis (\ref{eq:aklt_review_basis}) holds only up to this gauge and sign,
+    as recorded in \cite{gap:rmp_aklt_pauli_basis_sign}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $\langle +|\pm1\rangle=-i/\sqrt2$, one has
+    $B^{+}=-\frac{i}{\sqrt2}(A^{-1}+A^{+1})=-\frac{i}{\sqrt2}Y=-\sigma_y/\sqrt2$,
+    while $B^{-}=(A^{-1}-A^{+1})/\sqrt2=\sigma_x/\sqrt2$; conjugating the phase
+    of $\ket{+}$ reverses the sign of $B^{+}$. Conjugation by $\sigma_y$ fixes
+    $\sigma_y$ and reverses the signs of $\sigma_x$ and $\sigma_z$, which gives
+    the gauge relation; a gauge leaves the state unchanged and the scalar $-1$
+    multiplies it by $(-1)^N$.
+\end{proof}
+
 \begin{definition}[AKLT tensor]\label{def:aklt_tensor}
     \lean{MPSTensor.akltTensor}
     \leanok
@@ -25,8 +143,27 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
     $\sigma_+ = \sqrt{2} \ketbra{0}{1}$ and
     $\sigma_- = \sqrt{2} \ketbra{1}{0}$. Equivalently, the matrices are
     the Clebsch--Gordan coefficients coupling spin-$1$ and
-    spin-$\tfrac12$ to spin-$\tfrac12$.
+    spin-$\tfrac12$ to spin-$\tfrac12$. This is the representative of the
+    tensor of Definition~\ref{def:aklt_tensor_review} used below
+    (Lemma~\ref{lem:aklt_review_gauge_bridge}).
 \end{definition}
+
+\begin{lemma}[The singlet-bond tensor is a rescaled gauge of the representative]%
+    \label{lem:aklt_review_gauge_bridge}
+    \lean{MPSTensor.akltTensorRMP_gaugeEquiv}
+    \leanok
+    \uses{def:aklt_tensor_review, def:aklt_tensor, def:gauge_equiv, lem:aklt_review_matrices}
+    With the physical labels $0,1,2$ of Definition~\ref{def:aklt_tensor} read as
+    $S_z=0,+1,-1$, the tensor $A$ of Definition~\ref{def:aklt_tensor_review} and
+    the tensor $T$ of Definition~\ref{def:aklt_tensor} satisfy
+    $A^{s}=\sqrt{3/2}\,\sigma_z T^{s}\sigma_z^{-1}$ for every $s$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Conjugation by $\sigma_z$ fixes $\sigma_z$ and reverses the sign of
+    $\ketbra{0}{1}$ and $\ketbra{1}{0}$; compare with
+    Lemma~\ref{lem:aklt_review_matrices} entrywise.
+\end{proof}
 
 \begin{theorem}[AKLT tensor is not injective]\label{thm:aklt_not_injective}
     \lean{MPSTensor.aklt_not_isInjective}
@@ -289,6 +426,99 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
     % formalized; the obstruction is recorded in
     % docs/paper-gaps/rmp_aklt_continuous_rotation_gap.tex.
 \end{remark}
+
+\begin{theorem}[Symmetries and normality of the singlet-bond AKLT tensor]%
+    \label{thm:aklt_review_symmetries}
+    \lean{MPSTensor.akltTensorRMP_isNormal,
+        MPSTensor.akltTensorRMP_isOnSiteSymmetric_Z2Z2,
+        MPSTensor.akltTensorRMPPauli_isOnSiteSymmetric_SO3}
+    \leanok
+    \uses{lem:aklt_review_gauge_bridge, thm:aklt_normal, thm:aklt_z2z2_symmetric,
+        thm:aklt_so3_symmetric, def:normal, def:on_site_symmetric,
+        lem:on_site_symmetric_smul_gauge}
+    The tensor of Definition~\ref{def:aklt_tensor_review} is normal and on-site
+    symmetric under the $\Z_2\times\Z_2$ action of
+    Theorem~\ref{thm:aklt_z2z2_symmetric}. Its Pauli form
+    $\sigma_i/\sqrt2$ of Theorem~\ref{thm:aklt_review_pauli_form} is on-site
+    symmetric under the spin-$1$ representation of $\mathrm{SO}(3)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Normality and on-site symmetry are unchanged by a nonzero rescaling and by
+    a virtual gauge (Lemma~\ref{lem:aklt_review_gauge_bridge}); the Pauli form
+    is $1/\sqrt2$ times the Cartesian tensor of
+    Definition~\ref{def:aklt_cartesian}.
+\end{proof}
+
+\begin{theorem}[The singlet-bond AKLT tensor lies in a non-trivial SPT phase]%
+    \label{thm:aklt_review_spt}
+    \lean{MPSTensor.akltTensorRMP_virtual_projRep}
+    \leanok
+    \uses{def:aklt_tensor_review, thm:aklt_z2z2_symmetric, thm:aklt_nontrivial_spt,
+        def:aklt_omega, def:twisted_tensor}
+    For every $g\in\Z_2\times\Z_2$, the twist of the tensor $A$ of
+    Definition~\ref{def:aklt_tensor_review} by $g$ satisfies
+    $\sum_j (P_g)_{ij}A^{j}\,X_g=X_g\,A^{i}$, where $X_g$ is the projective
+    representation generated by $i\sigma_y$ and $\sigma_z$. Its factor system
+    is the non-trivial class of $H^2(\Z_2\times\Z_2,\mathrm{U}(1))$
+    (Theorem~\ref{thm:aklt_nontrivial_spt}).
+\end{theorem}
+\begin{proof}
+    \leanok
+    With the physical states ordered $S_z=0,+1,-1$, the two generators act by
+    \begin{align}
+        P_{(1,0)} & = \begin{pmatrix}-1&0&0\\0&0&1\\0&1&0\end{pmatrix},
+                  & P_{(0,1)}                                           & = \begin{pmatrix}1&0&0\\0&-1&0\\0&0&-1\end{pmatrix},
+        \notag
+    \end{align}
+    and the virtual matrices are
+    \begin{align}
+        X_{(1,0)} & = i\sigma_y = \begin{pmatrix}0&1\\-1&0\end{pmatrix},
+                  & X_{(0,1)}                                            & = \sigma_z,
+                  & X_{(1,1)}                                            & = X_{(1,0)}X_{(0,1)} = \begin{pmatrix}0&-1\\-1&0\end{pmatrix}.
+        \notag
+    \end{align}
+    For $g=(1,0)$ the twist is $\widetilde A_g^{0}=-A^{0}$,
+    $\widetilde A_g^{+1}=A^{-1}$, $\widetilde A_g^{-1}=A^{+1}$, and with the
+    matrices of Lemma~\ref{lem:aklt_review_matrices},
+    \begin{align}
+        \widetilde A_g^{+1}X_g
+         & = \ketbra{1}{0}\begin{pmatrix}0&1\\-1&0\end{pmatrix}
+        = \ketbra{1}{1}
+        = \begin{pmatrix}0&1\\-1&0\end{pmatrix}\big(-\ketbra{0}{1}\big)
+        = X_g A^{+1},
+        \notag                                                  \\
+        \widetilde A_g^{0}X_g
+         & = -\tfrac{1}{\sqrt2}\sigma_z\, i\sigma_y
+        = \tfrac{1}{\sqrt2}\, i\sigma_y\,\sigma_z
+        = X_g A^{0},
+        \notag
+    \end{align}
+    since $\sigma_y$ and $\sigma_z$ anticommute; the letter $-1$ is checked in
+    the same way. For $g=(0,1)$ the twist multiplies $A^{\pm1}$ by $-1$ and fixes
+    $A^{0}$, which is conjugation by $\sigma_z$. The case $g=(1,1)$ is the
+    composite of the two, and $g=1$ is trivial.
+\end{proof}
+
+\begin{theorem}[Two-site parent Hamiltonian of the singlet-bond AKLT tensor]%
+    \label{thm:aklt_review_parent_hamiltonian}
+    \lean{MPSTensor.akltTensorRMP_groundSpace_eq, MPSTensor.akltTensorRMP_mpvSubmodule_eq,
+        MPSTensor.akltTensorRMP_chainGroundSpace_two_eq_mpvSubmodule,
+        MPSTensor.akltTensorRMP_parentHamiltonian_two_unique_gs}
+    \leanok
+    \uses{lem:aklt_review_gauge_bridge, thm:aklt_chain_ground_space_two}
+    The tensor of Definition~\ref{def:aklt_tensor_review} has the same local
+    ground spaces, and a periodic matrix product state spanning the same line,
+    as the representative of Definition~\ref{def:aklt_tensor}. Hence on a
+    periodic chain of $N\geq3$ sites its two-site parent Hamiltonian has the
+    AKLT state as its unique ground state.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A virtual gauge and a nonzero rescaling leave the local ground spaces
+    unchanged and multiply the periodic state by $(3/2)^{N/2}$; apply
+    Theorem~\ref{thm:aklt_chain_ground_space_two}.
+\end{proof}
 
 %% ===================================================================
 \subsection{Correlation length}\label{subsec:aklt_correlation_length}

@@ -616,14 +616,22 @@ or conjugate comparison tensor, a tensor product, or a composition. Assuming
 the presentation there is not the presentation on $\mathcal U$; it is the
 assertion that the presentation survives those operations. For blocking the
 source asserts exactly that, writing that the blocked tensor is again normal
-and in canonical form II \cite[line~356]{Cirac2017MPU}; for the comparison
-tensors, products, and compositions it is the content of \ghissue{6139}. In
-neither case is a preservation statement available, so all twelve keep their
-restriction.
+and in canonical form II \cite[line~356]{Cirac2017MPU}. Positive blocking now
+preserves the bundled canonical-form-II presentation, including the same
+ambient fixed matrix:
+\leanid{MPOTensor.IsMPUCanonicalFormII.blockTensor}. Its use in the
+derived-tensor entries has not yet been consolidated. Physical adjunction
+also preserves the bundled presentation, with the same recorded diagonal
+matrix, by
+\leanid{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor}. Its
+downstream uses likewise remain to be consolidated. Independent products,
+separate conjugation and transposition comparisons, and composition retain
+distinct obligations under \ghissue{6139}.
 
-The census behind that unavailability is the following. Sixteen formal
-declarations mention the bundled presentation: the structure itself, thirteen
-that consume it, and two that construct one. The thirteen consumers conclude,
+Before the supplied-pair converse and the preservation constructors, the
+recorded census contained sixteen declarations mentioning the bundled
+presentation: the structure itself, thirteen consumers, and two constructors.
+The thirteen consumers conclude,
 about the same tensor, that its retained blocks fill the ambient bond space,
 that its bond space is nonempty, that its physical space is nonempty, that its
 normalized flattening is a normal tensor, that its block contractions are
@@ -632,43 +640,48 @@ the two stabilized transfer identities, the normalized diagonal power, and the
 four source-factor isometry and rank statements. The two constructions produce
 a presentation from canonical data for a tensor equal to a normalized
 flattening, and from an arbitrary matrix product unitary by dimension
-reduction. Not one of the sixteen carries a presentation on $\mathcal U$ to a
+reduction. None of those sixteen carried a presentation on $\mathcal U$ to a
 presentation on a physical block, an adjoint, a transpose, a conjugate, a
 tensor product, or a composition, which is what the twelve entries would need;
 for the composition entry the transport has to run through a reduced
-representative, as the last part of this subsection shows.
+representative, as the last part of this subsection shows. Subsequent
+constructors supply positive-blocking and physical-adjoint preservation of
+the bundled presentation. The converse constructs a presentation on the
+tensor carrying the supplied fixed pair. None of these constructions
+transports source cuts or factors back to $\mathcal U$ from a derived tensor.
 
-As the development stands today, the three candidates cannot be removed while
-the twelve stand, and what blocks them is a citation obstruction rather than a
-missing preservation result. Eleven retained
+The three candidate entries have not yet been consolidated with their
+source-labelled counterparts under \ghissue{7660}. The former citation
+obstruction is now discharged mathematically, though blueprint consolidation
+remains. Eleven retained
 entries cite them: seven pointwise entries, and the four path entries
-\texttt{prop:mpu\_admissible\_continuity\_index},
-\texttt{thm:mpu\_admissible\_index},
-\texttt{cor:mpu\_admissible\_continuous\_standard\_form}, and
-\texttt{lem:mpu\_admissible\_symmetry\_path\_criterion}. The tensors of all
-eleven carry a supplied fixed pair and nothing else. Redirecting their
-dependencies onto the convention-hypothesis entries would either strengthen
-eleven retained statements without saying so, or leave the implication
+\path{prop:mpu_admissible_continuity_index},
+\path{thm:mpu_admissible_index},
+\path{cor:mpu_admissible_continuous_standard_form}, and
+\path{lem:mpu_admissible_symmetry_path_criterion}. The tensors of all
+eleven carry a supplied fixed pair. Redirecting their
+dependencies onto the convention-hypothesis entries previously risked
+strengthening these statements without saying so. The implication
 \begin{align}
     \text{unitary periodic family},\ E^{J}=\lvert\rho)(\Phi\rvert
      & \implies\text{canonical form II}
     \label{eq:mpu_canonical_form_full_support_datum_to_convention}
 \end{align}
-unrecorded between the two families. Stating
-(\ref{eq:mpu_canonical_form_full_support_datum_to_convention}) as a bridge
-entry is the parallel-family-with-a-bridge configuration that the repository's
-convention rule forbids.
+is now recorded by
+\leanid{MPOTensor.IsMPU.exists_canonicalFormII_of_supplied_transfer_power}.
+It concerns the original tensor, without introducing a parallel definition of
+canonical form.
 
-Two results are missing, and they unblock disjoint parts of the group in two
-independent stages rather than in one operation. The first reaches the four
-entries whose restricted tensor is $\mathcal U$ itself, and it dissolves the
-citation obstruction along with them, so the three candidates merge as soon as
-it exists, with the twelve still standing. The second reaches the twelve whose
-restricted tensor is derived from $\mathcal U$, and neither result is a
-prerequisite for the other.
+There are two independent mathematical stages. The first, concerning the four
+entries whose restricted tensor is $\mathcal U$ itself, is proved below and
+removes the citation obstruction; its use to merge the three candidates is
+the remaining consolidation in \ghissue{7660}. The second concerns the twelve
+entries whose restricted tensor is derived from $\mathcal U$. Positive
+blocking and physical adjunction now preserve the presentation, but their
+downstream uses have not been consolidated; the other operations remain open.
 
 \begin{itemize}
-    \item The converse of the stabilization theorem, namely
+    \item The proved converse of the stabilization theorem, namely
           (\ref{eq:mpu_canonical_form_full_support_datum_to_convention}): for
           a tensor whose periodic operators are all unitary, a positive
           diagonal trace-one $\rho$ with $E^{J}=\lvert\rho)(\Phi\rvert$ for
@@ -721,7 +734,11 @@ prerequisite for the other.
           the condition at the exponent one, so the converse at a positive
           exponent covers the zero-exponent inputs as well.
 
-          It turns a supplied fixed pair into the bundled presentation of the
+          The positive-exponent constructor
+          \leanid{MPOTensor.IsMPU.canonicalFormIIOfTransferPower} and its
+          arbitrary-exponent extension
+          \leanid{MPOTensor.IsMPU.canonicalFormIIOfSuppliedTransferPower}
+          turn a supplied fixed pair into the bundled presentation of the
           tensor that carries it, and nothing more. So it removes the
           restriction exactly where the
           tensor carrying the datum is the tensor the standing convention
@@ -730,15 +747,21 @@ prerequisite for the other.
           candidates. It also dissolves the citation obstruction above, since
           the eleven citing entries then obtain the presentation from their
           own supplied pair instead of through a bridge entry, so the three
-          candidates can be deleted at that point and the second item is not
+          candidates can be deleted upon consolidation and the second item is not
           needed for them. For the twelve
           it rewrites the restriction without weakening it, because the
           tensor carrying the datum is a derived one and the converse
-          constructs no datum for a derived tensor.
+          alone constructs no datum for a derived tensor. Positive blocking
+          and physical adjunction are supplied separately by the preservation
+          constructors, without identifying source factors across tensors.
     \item Preservation of the bundled presentation along each operation the
           twelve use: positive physical blocking, physical adjunction,
           transposition, complex conjugation, independent tensor products,
-          and composition. A preservation statement must deliver all four
+          and composition. Positive blocking is now proved by
+          \leanid{MPOTensor.IsMPUCanonicalFormII.blockTensor}, and physical
+          adjunction by
+          \leanid{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor}.
+          The other operations remain open. A preservation statement must deliver all four
           clauses of the presentation for the derived tensor: unitarity of
           its periodic operator family, literal canonical-form-II data for
           its normalized flattening, full support of those data, and a
@@ -749,14 +772,22 @@ prerequisite for the other.
           go through a reduced representative instead.
 \end{itemize}
 
-The second item is not uniformly distant. For blocking, physical adjunction,
-and independent tensor products all four clauses are separately available and
-only the assembled statement is missing. Blocking preserves unitarity,
-transports canonical-form-II data to the blocked normalized flattening,
-preserves full support, and iterates the transfer map, so the same ambient
-matrix stays fixed. Physical adjunction preserves unitarity, transports the
-data together with their full support, and conjugates the transfer map
-entrywise. Independent tensor products preserve unitarity, carry product
+The second item is not uniformly distant. The four clauses have been assembled
+for positive blocking: unitarity, canonical-form-II data for the blocked
+normalized flattening, full support, and preservation of the recorded
+positive diagonal fixed matrix. In particular, whenever the blocked tensor is
+simple, its source-$v$ gate is isometric for that same matrix by
+\leanid{MPOTensor.IsMPUCanonicalFormII.sourceV_blockTensor_isIsometry}; a
+simple block occurs at a positive length at most $D^4$ by
+\leanid{MPOTensor.IsMPUCanonicalFormII.exists_sourceV_blockTensor_isIsometry}.
+Neither result transports source-cut factors back to the unblocked tensor.
+Physical adjunction is also assembled: it preserves unitarity, transports the
+data together with their full support, and uses diagonality to identify the
+conjugated ambient fixed matrix with the original one. Its bundled
+preservation theorem is
+\leanid{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor}. For
+independent tensor products, the four clauses are separately available, but
+the assembled preservation statement remains missing. Such products preserve unitarity, carry product
 canonical-form-II data whose full support follows from full support of the two
 factors, and act on transfer maps as a Kronecker product, under which the
 Kronecker product of the two ambient matrices is again positive definite,
@@ -817,13 +848,16 @@ tensor it blocks is already a reduced representative. Until that reduction and
 that transport exist,
 \texttt{lem:mpu\_admissible\_index\_composition} keeps its six per-block
 restrictions even if every other preservation statement is proved, and the
-work it needs is larger than the two missing results named above.
+work it needs is larger than the two stages described above.
 
-Until the first item exists, deleting any of the three candidates moves a
-hypothesis boundary out of sight without removing it, so all sixteen pointwise
-entries remain. Once it exists, the three candidates merge and thirteen remain:
-the generic supplied-pair step, which is kept deliberately, and the twelve
-derived-tensor entries, each waiting on its own operation in the second item.
+The first item is now proved, but the three candidate labels have not yet been
+merged under \ghissue{7660}. After that consolidation, thirteen pointwise
+entries remain: the generic supplied-pair step, which is kept deliberately,
+and the twelve derived-tensor entries. Their positive-blocking and physical-adjoint cases
+now have the required preservation theorems, but the downstream entries have
+not yet been consolidated. Independent products, separate conjugation and
+transposition comparisons, and composition still require their respective
+preservation or reduction arguments.
 
 \section{Verdict}
 
@@ -866,9 +900,10 @@ for reduced source data under products, transformed comparison tensors, and
 continuous paths.
 Chapter~28 records these requirements as explicit admissibility hypotheses
 rather than consequences of the MPU predicate. They come off in two stages,
-neither singly nor all at once. The converse of the stabilization theorem
-releases the three entries that already carry no formal restriction, together
-with the citation obstruction that holds them at present. Preservation along
+neither singly nor all at once. The converse of the stabilization theorem is
+proved and permits consolidation of the three entries that already carry no
+formal restriction, together with the formerly obstructing citations.
+Preservation along
 each derived-tensor operation releases the twelve whose restriction is on a
 physical block, a comparison tensor, a tensor product, or a composition, the
 last of these by way of a reduced representative rather than a preservation

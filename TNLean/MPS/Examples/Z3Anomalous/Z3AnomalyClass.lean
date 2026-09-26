@@ -55,12 +55,6 @@ theorem z3Gen_pow_three : z3Gen ^ 3 = 1 := by decide
 
 /-! ### The identity tensor -/
 
-/-- The bond-one identity tensor of `Z3AnomalousTensor` is `MPOTensor.idTensor 3`. -/
-theorem identityTensor_eq_idTensor : identityTensor = MPOTensor.idTensor 3 := by
-  funext i j
-  unfold identityTensor identityEis MPOTensor.idTensor
-  split_ifs <;> simp [complexOfEisenstein_one, complexOfEisenstein_zero]
-
 theorem mulTensor_identityTensor_left (M : MPOTensor 3 2) :
     mulTensor identityTensor M = (M : MPOTensor 3 (1 * 2)) := by
   rw [identityTensor_eq_idTensor, mulTensor_idTensor_left]

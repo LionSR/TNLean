@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Matrix.Basis
-import TNLean.Algebra.MatrixSingleSpan
+import TNLean.MPS.Core.NormalityFromTwoWords
+import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
@@ -103,71 +104,20 @@ theorem parTargets_eq (s i : Fin 2) : parTargets s i = complexOfInt (parTargetsI
 
 /-! ### Normality of `parA` at word length two -/
 
-private theorem parA_mul_00_int : parAInt 0 * parAInt 0 = !![1, 0; 0, 0] := by decide
-
-private theorem parA_mul_01_int : parAInt 0 * parAInt 1 = !![0, 1; 0, 0] := by decide
-
-private theorem parA_mul_10_int : parAInt 1 * parAInt 0 = !![0, 0; 1, 0] := by decide
-
-private theorem parA_mul_11_int : parAInt 1 * parAInt 1 = !![1, 0; 0, 1] := by decide
-
-private theorem parA_mul_00 : parA 0 * parA 0 = complexOfInt !![1, 0; 0, 0] := by
-  simp only [parA_eq]; rw [← complexOfInt_mul, parA_mul_00_int]
-
-private theorem parA_mul_01 : parA 0 * parA 1 = complexOfInt !![0, 1; 0, 0] := by
-  simp only [parA_eq]; rw [← complexOfInt_mul, parA_mul_01_int]
-
-private theorem parA_mul_10 : parA 1 * parA 0 = complexOfInt !![0, 0; 1, 0] := by
-  simp only [parA_eq]; rw [← complexOfInt_mul, parA_mul_10_int]
-
-private theorem parA_mul_11 : parA 1 * parA 1 = complexOfInt !![1, 0; 0, 1] := by
-  simp only [parA_eq]; rw [← complexOfInt_mul, parA_mul_11_int]
-
-/-- Each matrix unit of `M₂` is a length-two word of `parA`, or a difference of two. -/
-private theorem parA_single_00 :
-    Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) = parA 0 * parA 0 := by
-  rw [parA_mul_00]; ext a b; fin_cases a <;> fin_cases b <;>
-    norm_num [Matrix.single_apply, complexOfInt]
-
-private theorem parA_single_01 :
-    Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) = parA 0 * parA 1 := by
-  rw [parA_mul_01]; ext a b; fin_cases a <;> fin_cases b <;>
-    norm_num [Matrix.single_apply, complexOfInt]
-
-private theorem parA_single_10 :
-    Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) = parA 1 * parA 0 := by
-  rw [parA_mul_10]; ext a b; fin_cases a <;> fin_cases b <;>
-    norm_num [Matrix.single_apply, complexOfInt]
-
-private theorem parA_single_11 :
-    Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) = parA 1 * parA 1 - parA 0 * parA 0 := by
-  rw [parA_mul_11, parA_mul_00]; ext a b; fin_cases a <;> fin_cases b <;>
-    norm_num [Matrix.single_apply, complexOfInt]
+/-- Each matrix unit of `M₂` is the length-two word `A^i A^j`, corrected by `-A^0 A^0` for
+`E_{11}`. -/
+private theorem parAInt_single : ∀ i j : Fin 2, Matrix.single i j (1 : ℤ) =
+    parAInt i * parAInt j + (if i = 1 ∧ j = 1 then -1 else 0 : ℤ) • (parAInt 0 * parAInt 0) := by
+  decide
 
 /-- **`parA` is normal at word length two** (construction note, §4): its length-two words span the full
 two-by-two matrix algebra. -/
-theorem parA_isNormal : Kraus.IsNormal parA := by
-  refine ⟨2, two_pos, ?_⟩
-  rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
-  set T := Submodule.span ℂ
-    (Set.range fun σ : Fin 2 → Fin 2 => Kraus.evalWord parA (List.ofFn σ)) with hT
-  have hword : ∀ a b : Fin 2, parA a * parA b ∈ T := by
-    intro a b
-    refine Submodule.subset_span ⟨![a, b], ?_⟩
-    simp [Kraus.evalWord, List.ofFn_succ]
-  have m00 : Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ T := by
-    rw [parA_single_00]; exact hword 0 0
-  have m01 : Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ T := by
-    rw [parA_single_01]; exact hword 0 1
-  have m10 : Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ T := by
-    rw [parA_single_10]; exact hword 1 0
-  have m11 : Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ T := by
-    rw [parA_single_11]; exact T.sub_mem (hword 1 1) (hword 0 0)
-  have hunit : ∀ i j : Fin 2, Matrix.single i j (1 : ℂ) ∈ T := by
-    intro i j
-    fin_cases i <;> fin_cases j
-    exacts [m00, m01, m10, m11]
-  exact T.eq_top_of_forall_single_mem hunit
+theorem parA_isNormal : Kraus.IsNormal parA :=
+  isNormal_of_single_eq_two_words parA fun i j =>
+    ⟨i, j, 0, 0, 1, Int.castRingHom ℂ (if i = 1 ∧ j = 1 then -1 else 0), by
+      rw [one_smul, ← complexOfRing_single (Int.castRingHom ℂ), parAInt_single, complexOfRing_add,
+        complexOfRing_smul, complexOfRing_mul, complexOfRing_mul]
+      rfl⟩
 
 /-! ### The five-dimensional mixed-basis source -/
 
@@ -468,135 +418,36 @@ theorem parityGraded_remainder_sq_ne_zero :
 
 /-! ### Absence of sitewise intertwiners for the weight `-1` block -/
 
-private theorem parTargets1_apply0 : parTargets 1 0 = !![(-1 : ℂ), 0; 0, 0] := by
-  rw [parTargets_eq]; ext a b; fin_cases a <;> fin_cases b <;>
-    norm_num [parTargetsInt, parAInt, complexOfInt, Matrix.map_apply]
-
-private theorem parTargets1_apply1 : parTargets 1 1 = !![(0 : ℂ), -1; -1, 0] := by
-  rw [parTargets_eq]; ext a b; fin_cases a <;> fin_cases b <;>
-    norm_num [parTargetsInt, parAInt, complexOfInt, Matrix.map_apply]
-
-private theorem parB_apply0 :
-    parB 0 = !![(-1 : ℂ), 1, -1, 1, 3;
-                2, 2, -2, -1, 0;
-                1, 2, -2, 0, 2;
-                1, 3, -3, -1, 2;
-                -1, 0, 0, 1, 2] := by
-  rw [parB_eq]; ext a b; fin_cases a <;> fin_cases b <;> norm_num [parBInt, complexOfInt]
-
-private theorem parB_apply1 :
-    parB 1 = !![(3 : ℂ), 1, 0, -2, -3;
-                -3, 1, -1, 2, 5;
-                -1, 2, -1, 1, 3;
-                0, 1, -1, -1, 1;
-                2, 1, 0, -1, -2] := by
-  rw [parB_eq]; ext a b; fin_cases a <;> fin_cases b <;> norm_num [parBInt, complexOfInt]
-
 /-- **No nonzero right sitewise intertwiner for the weight `-1` block of Example PAR**
 (construction note, §4): the sitewise compression of the theorem is the strongest local relation
 available for this block. -/
 theorem parNeg_right_intertwiner_eq_zero (V : Matrix (Fin 5) (Fin 2) ℂ)
-    (h : ∀ i, parB i * V = V * parTargets 1 i) : V = 0 := by
-  have h0 := h 0
-  have h1 := h 1
-  rw [parB_apply0, parTargets1_apply0] at h0
-  rw [parB_apply1, parTargets1_apply1] at h1
-  have e030 := congrFun (congrFun h0 3) 0
-  have e040 := congrFun (congrFun h0 4) 0
-  have e021 := congrFun (congrFun h0 2) 1
-  have e031 := congrFun (congrFun h0 3) 1
-  have e041 := congrFun (congrFun h0 4) 1
-  have e100 := congrFun (congrFun h1 0) 0
-  have e110 := congrFun (congrFun h1 1) 0
-  have e120 := congrFun (congrFun h1 2) 0
-  have e130 := congrFun (congrFun h1 3) 0
-  have e140 := congrFun (congrFun h1 4) 0
-  simp only [Matrix.mul_apply, Fin.sum_univ_five, Fin.sum_univ_two, Matrix.of_apply,
-    Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val,
-    Matrix.cons_val_fin_one, Matrix.empty_val'] at *
-  have hx0 : V 0 0 = 0 := by
-    linear_combination (1/4 : ℂ) * e030 + (1/2 : ℂ) * e040 + (-1/2 : ℂ) * e021 +
-      (-1/4 : ℂ) * e031 + (1/2 : ℂ) * e041 + (5/4 : ℂ) * e100 + (7/4 : ℂ) * e110 +
-      (-7/4 : ℂ) * e120 + (-3/4 : ℂ) * e130 + (1/2 : ℂ) * e140
-  have hx1 : V 1 0 = 0 := by
-    linear_combination (-1/4 : ℂ) * e030 + (1 : ℂ) * e021 + (-5/4 : ℂ) * e031 +
-      (-2 : ℂ) * e041 + (-7/4 : ℂ) * e100 + (7/4 : ℂ) * e110 + (-7/4 : ℂ) * e120 +
-      (3/4 : ℂ) * e130 + (9/2 : ℂ) * e140
-  have hx2 : V 2 0 = 0 := by
-    linear_combination (-1/2 : ℂ) * e030 + (1/2 : ℂ) * e040 + (1/2 : ℂ) * e021 +
-      (-1 : ℂ) * e031 + (-3/2 : ℂ) * e041 + (-1 : ℂ) * e100 + (2 : ℂ) * e110 +
-      (-2 : ℂ) * e120 + (1/2 : ℂ) * e130 + (4 : ℂ) * e140
-  have hx3 : V 3 0 = 0 := by
-    linear_combination (1/4 : ℂ) * e030 + (1 : ℂ) * e021 + (-7/4 : ℂ) * e031 +
-      (-1 : ℂ) * e041 + (-1/4 : ℂ) * e100 + (13/4 : ℂ) * e110 + (-13/4 : ℂ) * e120 +
-      (-3/4 : ℂ) * e130 + (7/2 : ℂ) * e140
-  have hx4 : V 4 0 = 0 := by
-    linear_combination (1/2 : ℂ) * e040 + (-1/2 : ℂ) * e021 + (1/2 : ℂ) * e031 +
-      (1/2 : ℂ) * e041 + (1/2 : ℂ) * e100 + (-1/2 : ℂ) * e110 + (1/2 : ℂ) * e120 +
-      (-1 : ℂ) * e140
-  have hy0 : V 0 1 = 0 := by
-    linear_combination e100 - 3 * hx0 - hx1 + 2 * hx3 + 3 * hx4
-  have hy1 : V 1 1 = 0 := by
-    linear_combination e110 + 3 * hx0 - hx1 + hx2 - 2 * hx3 - 5 * hx4
-  have hy2 : V 2 1 = 0 := by
-    linear_combination e120 + hx0 - 2 * hx1 + hx2 - hx3 - 3 * hx4
-  have hy3 : V 3 1 = 0 := by
-    linear_combination e130 - hx1 + hx2 + hx3 - hx4
-  have hy4 : V 4 1 = 0 := by
-    linear_combination e140 - 2 * hx0 - hx1 + hx3 + 2 * hx4
-  ext r c
-  fin_cases r <;> fin_cases c
-  exacts [hx0, hy0, hx1, hy1, hx2, hy2, hx3, hy3, hx4, hy4]
+    (h : ∀ i, parB i * V = V * parTargets 1 i) : V = 0 :=
+  right_intertwiner_eq_zero_of_ringCertificate (Int.castRingHom ℂ) parBInt parB_eq
+    (parTargetsInt 1) (parTargets_eq 1)
+    ![(0, 0, 1), (0, 1, 1), (0, 3, 1), (0, 4, 0), (0, 4, 1), (1, 0, 1), (1, 1, 1), (1, 3, 0),
+      (1, 4, 0), (1, 4, 1)]
+    (Matrix.of fun x => ![![![9, -1, -2, 1, -9, 1, -1, 0, 1, -1], ![-4, 2, 0, 0, 6, 0, 0, 0, 0, 0]],
+      ![![-6, 2, 0, 0, 4, 0, 2, 0, 0, 0], ![1, -1, 0, -1, -1, 1, 1, 0, -1, 1]],
+      ![![5, 1, -2, 1, -7, -5, -1, -2, 3, 5], ![-7, -1, 2, -1, 9, 1, 1, 0, -1, 1]],
+      ![![0, 2, -2, 0, 0, 4, 2, 0, -2, -4], ![8, 2, -4, 0, -8, 0, 0, 0, 0, 0]],
+      ![![3, -1, 0, 1, -3, -1, -1, 0, 1, 1], ![-6, 0, 2, 0, 8, 0, 0, 0, 0, 0]]] x.1 x.2)
+    (c := 2) (by norm_num) (by decide) V h
 
 /-- **No nonzero left sitewise intertwiner for the weight `-1` block of Example PAR**
 (construction note, §4). -/
 theorem parNeg_left_intertwiner_eq_zero (W : Matrix (Fin 2) (Fin 5) ℂ)
-    (h : ∀ i, W * parB i = parTargets 1 i * W) : W = 0 := by
-  have h0 := h 0
-  have h1 := h 1
-  rw [parB_apply0, parTargets1_apply0] at h0
-  rw [parB_apply1, parTargets1_apply1] at h1
-  have f004 := congrFun (congrFun h0 0) 4
-  have f010 := congrFun (congrFun h0 1) 0
-  have f012 := congrFun (congrFun h0 1) 2
-  have f013 := congrFun (congrFun h0 1) 3
-  have f014 := congrFun (congrFun h0 1) 4
-  have f100 := congrFun (congrFun h1 0) 0
-  have f110 := congrFun (congrFun h1 0) 1
-  have f120 := congrFun (congrFun h1 0) 2
-  have f130 := congrFun (congrFun h1 0) 3
-  have f140 := congrFun (congrFun h1 0) 4
-  simp only [Matrix.mul_apply, Fin.sum_univ_five, Fin.sum_univ_two, Matrix.of_apply,
-    Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val,
-    Matrix.cons_val_fin_one, Matrix.empty_val'] at *
-  have hu0 : W 0 0 = 0 := by
-    linear_combination f010 + f012 + (-2 : ℂ) * f013 + 4 * f100 + (-2 : ℂ) * f110 + f120 +
-      3 * f140
-  have hu1 : W 0 1 = 0 := by
-    linear_combination f004 + 6 * f010 + 3 * f012 + f013 + f014 + 5 * f100 + (-5 : ℂ) * f110 +
-      (-2 : ℂ) * f120 + 2 * f130 + 3 * f140
-  have hu2 : W 0 2 = 0 := by
-    linear_combination (-1 : ℂ) * f004 + (-7 : ℂ) * f010 + (-4 : ℂ) * f012 +
-      (-1 : ℂ) * f013 + (-2 : ℂ) * f014 + (-4 : ℂ) * f100 + 5 * f110 + 3 * f120 +
-      (-2 : ℂ) * f130 + (-2 : ℂ) * f140
-  have hu3 : W 0 3 = 0 := by
-    linear_combination (-2 : ℂ) * f010 + (-2 : ℂ) * f012 + f013 + (-1 : ℂ) * f014 +
-      (-2 : ℂ) * f100 + f110 + (-1 : ℂ) * f130 + (-1 : ℂ) * f140
-  have hu4 : W 0 4 = 0 := by
-    linear_combination f004 + 5 * f010 + 3 * f012 + 2 * f013 + 2 * f014 + (-2 : ℂ) * f110 +
-      (-3 : ℂ) * f120 + 2 * f130 + (-1 : ℂ) * f140
-  have hv0 : W 1 0 = 0 := by
-    linear_combination f100 - 3 * hu0 + 3 * hu1 + hu2 - 2 * hu4
-  have hv1 : W 1 1 = 0 := by
-    linear_combination f110 - hu0 - hu1 - 2 * hu2 - hu3 - hu4
-  have hv2 : W 1 2 = 0 := by
-    linear_combination f120 + hu1 + hu2 + hu3
-  have hv3 : W 1 3 = 0 := by
-    linear_combination f130 + 2 * hu0 - 2 * hu1 - hu2 + hu3 + hu4
-  have hv4 : W 1 4 = 0 := by
-    linear_combination f140 + 3 * hu0 - 5 * hu1 - 3 * hu2 - hu3 + 2 * hu4
-  ext r c
-  fin_cases r <;> fin_cases c
-  exacts [hu0, hu1, hu2, hu3, hu4, hv0, hv1, hv2, hv3, hv4]
+    (h : ∀ i, W * parB i = parTargets 1 i * W) : W = 0 :=
+  left_intertwiner_eq_zero_of_ringCertificate (Int.castRingHom ℂ) parBInt parB_eq
+    (parTargetsInt 1) (parTargets_eq 1)
+    ![(0, 0, 0), (0, 1, 0), (0, 1, 1), (0, 2, 0), (1, 0, 0), (1, 0, 1), (1, 2, 0), (1, 3, 0),
+      (1, 3, 1), (1, 4, 0)]
+    (Matrix.of fun x => ![![![3, -3, -1, -3, 3, -6, 4, -5, -8, 4],
+        ![-3, 2, 1, 2, -2, 10, -6, 11, 14, -6]],
+      ![![3, -7, -2, -8, 6, -6, 5, -1, -7, 5], ![2, -5, -1, -5, 4, -3, 2, 0, -3, 3]],
+      ![![-3, 8, 2, 9, -6, 6, -5, 1, 7, -5], ![-2, 4, 1, 4, -3, 4, -2, 2, 5, -3]],
+      ![![-2, 3, 1, 3, -3, 4, -3, 2, 5, -3], ![1, 0, 0, 0, 0, -4, 2, -5, -6, 2]],
+      ![![0, -3, -1, -4, 3, -2, 2, 1, -2, 2], ![5, -7, -2, -7, 6, -14, 9, -13, -19, 10]]] x.1 x.2)
+    (c := 1) (by norm_num) (by decide) W h
 
 end ParityGraded

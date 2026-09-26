@@ -24,6 +24,23 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### every list is a `List.ofFn` — promoted
+- **Pattern:**
+  ```lean
+  obtain ⟨L, u, rfl⟩ : ∃ L, ∃ u : Fin L → Fin (d * d), w = List.ofFn u :=
+    ⟨_, _, (List.ofFn_get w).symm⟩
+  ```
+- **Seen:** eight occurrences across two files: four in
+  `TNLean/MPS/Core/ReductionComposition.lean` (the `kronId`/`idKron` lifts of reductions and
+  dressed proportionality) and four in `TNLean/MPS/MPDO/ActionTensorReduction.lean` (the
+  action-tensor lifts).
+- **Abstraction:** `List.exists_eq_ofFn` in `TNLean/Algebra/ListOfFn.lean`; call sites write
+  `obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w`.
+- **Notes:** used before rewriting with `evalWord_ofFn`-style lemmas that are stated on
+  `List.ofFn` words. The `l = List.ofFn (fun k ↦ l[k])` variants in
+  `ResidualAlgebra.lean`, `ThreeFormSpan.lean`, and `ReductionResidual.lean` keep the explicit
+  indexing function and are not refactored.
+
 ### operator identity from a word-trace identity — promoted
 - **Pattern:**
   ```lean
@@ -382,10 +399,17 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPDO/CZXTensor.lean`, and `mpo_rightShiftTensor_apply` in
   `TNLean/MPS/MPU/Examples/Shift.lean`.
 - **Abstraction:** `MPOTensor.mpo_apply_eq_sum_cyclic` and
-  `MPOTensor.mpo_apply_eq_prod_of_forced_bond` in `TNLean/MPS/MPDO/OperatorCyclicSum.lean`.
-- **Notes:** the caller supplies the surviving bond configuration `g₀` and, for every other
-  configuration, one site with a vanishing entry. The first six call sites use the
-  forced-bond lemma. The shift uses only `mpo_apply_eq_sum_cyclic`, because its surviving
+  `MPOTensor.mpo_apply_eq_prod_of_forced_bond` in `TNLean/MPS/MPDO/OperatorCyclicSum.lean`;
+  for monomial tensors, `MPOTensor.mpo_apply_of_forced_right_bond` and
+  `MPOTensor.mpo_apply_of_forced_left_bond` in the same file.
+- **Notes:** the caller of `mpo_apply_eq_prod_of_forced_bond` supplies the surviving bond
+  configuration `g₀` and, for every other configuration, one site with a vanishing entry. When
+  the entry has the form `if i = π j ∧ r = β i j then φ i j l else 0` (or `l = β i j` with
+  phase `φ i j r`), the forced-bond lemmas take the tensor's `_apply` lemma as their only
+  hypothesis and return `if s = π ∘ t then ∏ n, ... else 0`; the caller only rewrites its phase
+  exponent as a sum. The six monomial call sites above and `mpo_tensor_apply` in
+  `TNLean/MPS/MPU/GroupCocycleMPO.lean` use these, each in two to five lines (net about
+  `-150` lines). The shift uses only `mpo_apply_eq_sum_cyclic`, because its surviving
   configuration is the input configuration and exists only when the output is its rotation.
 
 ### SAL nonvanishing of the physical-trace transfer — promoted
@@ -592,6 +616,29 @@ abstracted — record why, so it is not re-proposed).
   declarations apply them directly by definitional equality.
 - **Notes:** construction details for Hermitian parts remain private to the
   channel theorem. Only the compound MPS conclusion remains; exact pass-through declarations were removed.
+
+### weighted word traces of a compression — promoted
+- **Pattern:**
+  ```lean
+  have h := P.trace_evalWord_eq_sum w hw
+  have hs : ∀ s, Matrix.trace (Kraus.evalWord (μ s • A s) w) =
+      μ s ^ w.length * Matrix.trace (Kraus.evalWord (A s) w) := by
+    intro s
+    rw [show μ s • A s = fun i => μ s • A s i from rfl,
+      Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
+  rw [h, show S = Finset.univ from rfl, Fin.sum_univ_two, hs 0, hs 1]
+  ```
+- **Seen:** at least ten occurrences of the `Kraus.evalWord_smul, Matrix.trace_smul,
+  smul_eq_mul` step after `MultiBlockCompression.trace_evalWord_eq_sum` across the worked
+  examples (2026-09-25), among them `Examples/RFP/TwistedDimer.lean`,
+  `Examples/RFP/OneLabelCandidate.lean`, `Examples/Ising/IsingWeightedTwist.lean`,
+  `Examples/MultiBlock/OneSlotGauge.lean` and `Examples/KramersWannier/KramersWannier.lean`.
+- **Abstraction:** `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum_smul` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/MultiBlockTrace.lean`: a compression onto weighted
+  blocks `μ_s • A_s` gives `tr(B^w) = ∑_s μ_s^{|w|} tr(A_s^w)`.
+- **Notes:** the two RFP example sites now call it directly. The remaining example sites can
+  switch when next edited; the one-block form `MPSTensor.trace_evalWord_smul` in
+  `MPDO/OperatorProduct.lean` covers a single rescaled tensor.
 
 ### CFC square-root Hermiticity — promoted
 - **Pattern:** derive `(CFC.sqrt ρ)ᴴ = CFC.sqrt ρ` from `CFC.sqrt_nonneg`,
@@ -2045,6 +2092,40 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
+
+### carrying a boundary through one Kronecker factor of a letter sum — candidate
+- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
+  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv` (twice), distribute with
+  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
+  boundary onto one factor with `← Matrix.mul_kronecker_mul` (twice) and
+  `Matrix.one_mul`/`Matrix.mul_one`.
+- **Seen:** six occurrences across three files: `MPSTensor.IsReduction.mulTensor_kronId` and
+  `mulTensor_idKron` (`TNLean/MPS/Core/ReductionComposition.lean`),
+  `MPOTensor.mulTensor_mul_kronId_of_intertwine` (`TNLean/MPS/MPDO/OperatorProduct.lean`),
+  and `MPSTensor.IsReduction.actTensor_idKron`, `actTensor_kronId` and
+  `MPOTensor.actTensor_mul_kronId_of_intertwine`
+  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`).
+- **Abstraction:** a lemma stating
+  `(X ⊗ 1) * (∑ j, A j ⊗ B j) * (Y ⊗ 1) = ∑ j, (X * A j * Y) ⊗ B j` and its `1 ⊗ X`
+  mirror, in the `finProdFinEquiv` bond order; the intertwiner lemmas are the cases
+  `Y = 1` and `X = 1`.
+- **Notes:** past the rule of three. Promotion rewrites the three call sites in
+  `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
+  separate refactor rather than folded into the action-tensor PR.
+
+### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
+- **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the
+  three-stage `simp only` with `mulTensorAssocEquiv`, `Equiv.prodAssoc_apply`,
+  `Matrix.kroneckerMap_apply`, `Matrix.sum_apply`, `Matrix.kronecker_apply`, then
+  `Finset.sum_mul`, `Finset.mul_sum`, `Finset.sum_comm`, and `mul_assoc` under
+  `Finset.sum_congr`.
+- **Seen:** two occurrences: `MPOTensor.mulTensor_assoc`
+  (`TNLean/MPS/MPDO/OperatorProduct.lean`) and `MPOTensor.actTensor_mulTensor`
+  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`).
+- **Abstraction:** a lemma stating that
+  `(∑ j, (∑ m, X m ⊗ Y m j).submatrix e e ⊗ Z j)` is the `mulTensorAssocEquiv`-reindex of
+  `∑ m, X m ⊗ (∑ j, Y m j ⊗ Z j).submatrix e e`, for arbitrary families of matrices.
+- **Notes:** below the rule of three; promote on the next occurrence.
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
