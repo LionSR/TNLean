@@ -102,6 +102,41 @@ physical indices, as in
     is empty and all three blocked tensors are identities.
 \end{proof}
 
+\begin{theorem}[Blocked word evaluation of an MPO tensor]
+    \label{thm:mpo_eval_word_block}
+    \lean{MPOTensor.evalWord_blockTensor_ofFn}
+    \leanok
+    \uses{def:mpdo_physical_blocking, def:mpo_eval_word}
+    Let $L\geq0$, and let $\sigma=(\sigma_0,\ldots,\sigma_{m-1})$ and
+    $\tau=(\tau_0,\ldots,\tau_{m-1})$ be words of the same length $m$ in the
+    blocked alphabet, so that each $\sigma_k$ and each $\tau_k$ is a word of
+    length $L$ in $\{0,\ldots,d-1\}$. Write $\widetilde\sigma$ and
+    $\widetilde\tau$ for the concatenations
+    $\sigma_0\sigma_1\cdots\sigma_{m-1}$ and $\tau_0\tau_1\cdots\tau_{m-1}$, words of
+    length $mL$. Then
+    \begin{align}
+        (M^{[L]})^{\sigma,\tau}
+         & =M^{\widetilde\sigma,\widetilde\tau}.
+        \notag
+    \end{align}
+    This is the counterpart for MPO tensors of
+    Lemma~\ref{lem:eval_word_block}, with the ket and bra words blocked
+    separately.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpo_eval_word_append}
+    Induct on $m$. For $m=0$ both sides are the identity. For $m\geq1$,
+    split off the first blocked letters $\sigma_0,\tau_0$: by
+    Definition~\ref{def:mpdo_physical_blocking},
+    $(M^{[L]})^{\sigma_0,\tau_0}=M^{\sigma_0,\tau_0}$, and since $\sigma_0$
+    and $\tau_0$ have the same length $L$,
+    Lemma~\ref{lem:mpo_eval_word_append} gives
+    $M^{\sigma_0\widetilde\sigma',\,\tau_0\widetilde\tau'}
+        =M^{\sigma_0,\tau_0}M^{\widetilde\sigma',\widetilde\tau'}$ for the
+    remaining words $\sigma',\tau'$.
+\end{proof}
+
 \begin{theorem}[Closed MPO chains under physical blocking]
     \label{thm:mpdo_closed_chain_physical_blocking}
     \lean{MPOTensor.mpo_blockTensor_eq_reindex}
@@ -132,18 +167,15 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpo_eval_word_append}
-    Write $\sigma_k=(\sigma_{k,0},\ldots,\sigma_{k,L-1})$ and
-    $\tau_k=(\tau_{k,0},\ldots,\tau_{k,L-1})$. For each $k$,
-    $(M^{[L]})^{\sigma_k,\tau_k}
-        =\prod_{j=0}^{L-1}M^{\sigma_{k,j},\tau_{k,j}}$.
-    Taking both products in increasing index order gives
+    \uses{thm:mpo_eval_word_block, lem:eval_word_block}
+    The word of $N$ blocked letters $\sigma=(\sigma_0,\ldots,\sigma_{N-1})$
+    has concatenation $\Phi_{N,L}(\sigma)$, and similarly for $\tau$; this
+    concatenation is the blocked-configuration bijection of
+    Lemma~\ref{lem:eval_word_block}. By
+    Theorem~\ref{thm:mpo_eval_word_block},
     \begin{align}
-        \prod_{k=0}^{N-1}(M^{[L]})^{\sigma_k,\tau_k}
-         & =\prod_{k=0}^{N-1}\prod_{j=0}^{L-1}
-        M^{\sigma_{k,j},\tau_{k,j}}
-        =\prod_{r=0}^{NL-1}
-        M^{(\Phi_{N,L}(\sigma))_r,(\Phi_{N,L}(\tau))_r}.
+        (M^{[L]})^{\sigma,\tau}
+         & =M^{\Phi_{N,L}(\sigma),\Phi_{N,L}(\tau)}.
         \notag
     \end{align}
     Taking the virtual trace gives the equality in the theorem. The map
@@ -155,18 +187,18 @@ physical indices, as in
     \label{lem:mpdo_physical_blocking_residuals}
     \lean{MPOTensor.mpo_apply_prefix_blockTensor_suffix}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpo_family, lem:mpo_eval_word_append}
+    \uses{def:mpdo_physical_blocking, def:mpo_family, def:mpo_eval_word}
     Let a chain consist of a prefix of $p$ sites, $m$ complete blocks of
-    length $L$, and a suffix of $s$ sites. Write $M[\alpha,\beta]$ for the
-    ordered product of the matrices indexed by two equally long physical
-    words, and write $\widehat\sigma,\widehat\tau$ for the concatenations of
+    length $L$, and a suffix of $s$ sites. Write $M^{\alpha,\beta}$ for the
+    ordered product of matrices indexed by two equally long physical
+    words, and write $\widetilde\sigma,\widetilde\tau$ for the concatenations of
     blocked words $\sigma,\tau$. Then, for matching row and column
     configurations,
     \begin{align}
-        \rho^{(p+mL+s)}(M)_{i^-\widehat\sigma i^+,\,
-            j^-\widehat\tau j^+}
+        \rho^{(p+mL+s)}(M)_{i^-\widetilde\sigma i^+,\,
+            j^-\widetilde\tau j^+}
          & =\operatorname{tr}\!\left(
-        M[i^-,j^-]\cdot M^{[L]}[\sigma,\tau]\cdot M[i^+,j^+]
+        M^{i^-,j^-}\cdot (M^{[L]})^{\sigma,\tau}\cdot M^{i^+,j^+}
         \right).
     \end{align}
     This identity retains both residual products, including when the chain
@@ -176,10 +208,22 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpo_eval_word_append}
-    Split the two physical words at the two boundaries of the complete
-    blocks. The product over the middle segment is the corresponding product
-    of the blocked matrices; associativity gives the asserted trace.
+    \uses{lem:mpo_eval_word_append, thm:mpo_eval_word_block, lem:eval_word_block}
+    The concatenations $\widetilde\sigma,\widetilde\tau$ are identified with
+    the flattened blocked configurations by Lemma~\ref{lem:eval_word_block}.
+    Applying word concatenation at the two boundaries
+    (Lemma~\ref{lem:mpo_eval_word_append}) and then evaluating the middle
+    segment as a word of blocked matrices (Theorem~\ref{thm:mpo_eval_word_block})
+    gives
+    \begin{align}
+        M^{i^-\widetilde\sigma i^+,\,j^-\widetilde\tau j^+}
+         & = M^{i^-,j^-}\cdot M^{\widetilde\sigma,\widetilde\tau}
+        \cdot M^{i^+,j^+} \notag                                  \\
+         & = M^{i^-,j^-}\cdot (M^{[L]})^{\sigma,\tau}
+        \cdot M^{i^+,j^+}.
+        \notag
+    \end{align}
+    Taking the virtual trace yields the stated entry identity.
 \end{proof}
 
 \begin{definition}[Two-site blocking of an MPO tensor]

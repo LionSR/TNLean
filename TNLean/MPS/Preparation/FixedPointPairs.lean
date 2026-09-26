@@ -78,6 +78,7 @@ before eq. `eq:B_TM`, is the positive semidefinite matrix `√σᵀ ⊗ 1`
 * `MPSTensor.fixedPointPair_norm_sq` — `⟨ω|ω⟩ = Tr ρ = 1`.
 * `MPSTensor.bondRegrouping` — the regrouping of the sites `L_k ⊗ R_k` of a ring
   into the bonds `R_k ⊗ L_{k+1}`.
+* `MPSTensor.pairProductState_inner` — `⟨Ω|Ω'⟩ = ⟨ω|ω'⟩^N`.
 * `MPSTensor.pairProductState_norm_sq`,
   `MPSTensor.pairProductState_fixedPointPair_norm_sq` — `⟨Ω|Ω⟩ = ⟨ω|ω⟩^N = 1`.
 * `MPSTensor.tendsto_transferMap_blockTensor_of_spectralRadius_lt_one`,
@@ -308,18 +309,27 @@ def bondRegrouping (N D : ℕ) : (Fin N → Fin D × Fin D) ≃ (Fin N → Fin D
   left_inv c := by funext k; simp only [Equiv.apply_symm_apply]
   right_inv p := by funext k; simp only [Equiv.symm_apply_apply]
 
+/-- Overlaps of pair-product states factorize over the bonds:
+`⟨Ω|Ω'⟩ = ⟨ω|ω'⟩^N` for `|Ω⟩ = ⊗ᵢ |ω⟩_{R_i L_{i+1}}` and `|Ω'⟩ = ⊗ᵢ |ω'⟩_{R_i L_{i+1}}`
+on a ring of `N` sites (arXiv:2307.01696, eq. `eq:phi_tilde` and the states `|Ω_j⟩`
+after eq. `eq:app_tidle_phi_1`). -/
+theorem pairProductState_inner {N : ℕ} (ω ω' : Fin D × Fin D → ℂ) :
+    ∑ c : Fin N → Fin D × Fin D, star (pairProductState ω c) * pairProductState ω' c =
+      (∑ p, star (ω p) * ω' p) ^ N := by
+  rw [← Fin.prod_const, Fintype.prod_sum,
+    ← (bondRegrouping N D).sum_comp (fun x => ∏ i, star (ω (x i)) * ω' (x i))]
+  refine Finset.sum_congr rfl fun c _ => ?_
+  rw [pairProductState, pairProductState, star_prod, ← Finset.prod_mul_distrib]
+  rfl
+
 /-- The product of pairs is normalized whenever each pair is: `⟨Ω|Ω⟩ = ⟨ω|ω⟩^N`
 for `|Ω⟩ = ⊗ᵢ |ω⟩_{R_i L_{i+1}}` on a ring of `N` sites (arXiv:2307.01696,
 eq. `eq:phi_tilde` and the normalized states `|Ω_j⟩` after
 eq. `eq:app_tidle_phi_1`). -/
 theorem pairProductState_norm_sq {N : ℕ} (ω : Fin D × Fin D → ℂ) :
     ∑ c : Fin N → Fin D × Fin D, star (pairProductState ω c) * pairProductState ω c =
-      (∑ p, star (ω p) * ω p) ^ N := by
-  rw [← Fin.prod_const, Fintype.prod_sum,
-    ← (bondRegrouping N D).sum_comp (fun x => ∏ i, star (ω (x i)) * ω (x i))]
-  refine Finset.sum_congr rfl fun c _ => ?_
-  rw [pairProductState, star_prod, ← Finset.prod_mul_distrib]
-  rfl
+      (∑ p, star (ω p) * ω p) ^ N :=
+  pairProductState_inner ω ω
 
 /-- The fixed-point state `|Ω⟩ = ⊗ᵢ |ω⟩_{R_i L_{i+1}}` is normalized:
 `⟨Ω|Ω⟩ = (Tr ρ)^N = 1` (arXiv:2307.01696, eq. `eq:normal_fp_local` and

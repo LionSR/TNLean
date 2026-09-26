@@ -48,15 +48,19 @@ import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
+import TNLean.MPS.MPU.RectangularSourceRanks
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.ReducedRepresentative
 import TNLean.MPS.MPU.ReducedToHatTransport
 import TNLean.MPS.MPU.ReductionCommonBlocking
 import TNLean.MPS.MPU.RepresentativeIndex
 import TNLean.MPS.MPU.ResidualAlgebra
+import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
+import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SimpleTensorEquivalence
+import TNLean.MPS.MPU.SimpleTensorProduct
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceDecompositionUniqueness
 import TNLean.MPS.MPU.SourceFactorContraction
@@ -76,6 +80,7 @@ import TNLean.MPS.MPU.SourceYTwoNormalization
 import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
+import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.TensorProduct
 import TNLean.MPS.MPU.TensorProductCanonicalForm
@@ -89,4 +94,5 @@ import TNLean.MPS.MPU.TruncatedSymmetryUnitarity
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.VirtualSandwich
+import TNLean.MPS.MPU.VirtualSourceFactorTransport
 import TNLean.MPS.MPU.VirtualUnitaryGauge

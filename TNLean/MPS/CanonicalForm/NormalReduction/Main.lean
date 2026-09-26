@@ -9,8 +9,6 @@ import TNLean.PiAlgebra.CanonicalFormSepAux
 
 import Mathlib.Data.Fin.Tuple.Sort
 
-open scoped Matrix BigOperators
-
 /-!
 # Normal canonical form from primitive weighted block decompositions
 
@@ -23,6 +21,8 @@ The supporting private declarations show that the present development already
 has a common blocking at length `p = 1` and that the block family can be
 reordered by decreasing weight norm before the final normal-form statement.
 -/
+
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 

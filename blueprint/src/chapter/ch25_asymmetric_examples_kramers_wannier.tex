@@ -17,10 +17,9 @@ symmetries~\cite[Section~III.A.6]{Cirac2021Matrix}; its relation to fusion
 algebras is Remark~\ref{rem:mposym_kramers_wannier}. Here the duality is
 built from an explicit two-by-two tensor whose periodic operator is
 unnormalized; it reproduces the primal-to-dual kernel
-of~\cite{Aasen2016Topological} up to the factor $2^{N/2}$. Its square is
-computed twice, as an operator identity and as an asymmetric compression
-of the stacked tensor, and its action on two ground states is treated in
-the same way.
+of~\cite{Aasen2016Topological} up to the factor $2^{N/2}$. Its square
+and its action on ground states are characterized both as operator identities
+and as asymmetric compressions of stacked tensors.
 
 Consider $N\geq1$ qubits on a periodic chain, with sites
 $I_N=\{0,\ldots,N-1\}$ and all site indices understood modulo $N$.
@@ -521,7 +520,7 @@ $U_N^\dagger=2^{-(N+1)/2}K_N^{\mathsf T}$.
         U_N^\dagger Z_jZ_{j+1} & =X_{j+1}U_N^\dagger.
         \label{eq:asymex_kw_adjoint_local}
     \end{align}
-    Moreover,
+    and
     \begin{align}
         (U_N^\dagger)^2                  & =P_+T^{-1},
         \notag                                                  \\
@@ -1077,7 +1076,7 @@ global scalar as in Lemma~\ref{lem:asymex_kw_states}; it does not
 change the weights of these fixed tensors.
 
 In the following two results, $B$ denotes the relevant action tensor,
-rather than the stacked square tensor of the preceding subsection.
+rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
 
 \begin{theorem}[The duality on the product state splits]
     \label{thm:asymex_kw_plus}
@@ -1218,13 +1217,13 @@ virtual direct sum.
 \subsection{The duality as a bimodule over the spin-flip algebra}%
 \label{sec:asymex_kw_bimodule}
 
-By Corollary~\ref{cor:asymex_kw_square}, the square of the duality
-contains the translation, so the duality is not a member of a fusion
-algebra together with $\Id$ and $\eta$. In the framework
-of~\cite{Aasen2016Topological}, it is instead fused with the symmetry
-operators on either side and with its own return map. This subsection
-records these relations for the raw operator and derives their
-tensor-level form from the compression theorems, without computing a
+By~\eqref{eq:asymex_kw_fusion} (Corollary~\ref{cor:asymex_kw_square}),
+$D^2=2^N(\Id+\eta)T$, where the non-trivial translation factor $T$ prevents the
+duality $D$ from closing in a fusion algebra with $\Id$ and $\eta$. In the
+framework of~\cite{Aasen2016Topological}, it is instead fused with the symmetry
+operators on either side and with its own return map.
+These relations are recorded below for the raw operator and derived at
+the tensor level from the compression theorems, without computing a
 gauge.
 
 \begin{lemma}[Spin-flip algebra and the bimodule relations]
