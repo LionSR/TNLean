@@ -3638,7 +3638,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.IsMPUCanonicalFormII.tensorProduct}
     \leanok
     \uses{def:mpu_canonical_form_ii, def:mpu_independent_tensor_product}
-    Let $\mathcal U$ and $\mathcal V$ be independent MPUs in canonical form II,
+    Let $\mathcal U$ and $\mathcal V$ be MPUs in canonical form II,
     with recorded ambient right fixed matrices $\rho_U$ and $\rho_V$. Their
     independent tensor product is in canonical form II in the product bond
     coordinates. Its recorded matrix is
@@ -3662,8 +3662,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     retained dimensions multiply and their sum is the product bond dimension.
     Independent tensor products preserve the MPU property. The product of the
     two ambient fixed matrices is positive definite, diagonal, and of trace
-    one. The product transfer identity shows that it remains fixed after
-    reindexing to the product bond coordinates.
+    one. In the product bond coordinates, the transfer identity gives
+    \begin{align}
+        \mathcal E_{\widetilde{\mathcal U\boxtimes\mathcal V}}(\rho_{U\boxtimes V})
+         & =\operatorname{reind}_{\pi_{D,E},\pi_{D,E}}
+        \bigl(\mathcal E_{\widetilde{\mathcal U}}(\rho_U)
+        \otimes\mathcal E_{\widetilde{\mathcal V}}(\rho_V)\bigr)            \\
+         & =\operatorname{reind}_{\pi_{D,E},\pi_{D,E}}(\rho_U\otimes\rho_V)
+        =\rho_{U\boxtimes V}.
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Normalized flattening of a composition tensor]
