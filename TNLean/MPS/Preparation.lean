@@ -20,3 +20,5 @@ import TNLean.MPS.Preparation.NonNormalFixedPoint
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
+import TNLean.MPS.Preparation.SequentialNoAncilla
+import TNLean.MPS.Preparation.SequentialTransition

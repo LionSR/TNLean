@@ -466,6 +466,10 @@ For the non-periodic MPS Fundamental Theorem background:
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
   corrected same-state conclusion up to an $N$th-root phase.
+- `pgvwc07_sequential_no_ancilla_two_sites.tex` records that the sequential
+  scheme without an ancilla presupposes two sites, since its first operation
+  acts on sites 1 and 2, that the literal one-site reading of the theorem is
+  false, and that the formal statements are for chains of length at least two.
 - `spwc10_wielandt_one_step_subspace.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 - `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the
