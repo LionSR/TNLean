@@ -2087,6 +2087,24 @@ abstracted — record why, so it is not re-proposed).
   `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
   separate refactor rather than folded into the action-tensor PR.
 
+### classical choice of a nonzero proportionality scalar — candidate
+- **Pattern:**
+  ```lean
+  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
+  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  ```
+- **Seen:** three occurrences across two files: `FusionData.omega` (through
+  `IsAssociator`) and `FusionData.relativeScalar`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), and `ActionData.lSymbol`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`).
+- **Abstraction:** a definition
+  `MPSTensor.IsDressedProportional.chooseScalar B X Y : Units ℂ` with the lemma that it
+  satisfies the relation whenever some nonzero scalar does; `omega`, `relativeScalar`
+  and `lSymbol` then specialize it.
+- **Notes:** at the rule of three. Promotion changes the definitions of `omega` and
+  `relativeScalar` on `main` and the lemmas that unfold them, so it needs a Lean build and
+  is left to a separate refactor.
+
 ### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
 - **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the
   three-stage `simp only` with `mulTensorAssocEquiv`, `Equiv.prodAssoc_apply`,
