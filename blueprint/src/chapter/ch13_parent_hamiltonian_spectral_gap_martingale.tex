@@ -6539,6 +6539,7 @@ tensors.
     \label{def:weighted-matrix-unit-path-vectors}
     \lean{MPSTensor.FNWDimensionConstant.matrixUnitTensor,MPSTensor.FNWDimensionConstant.pathConfig,MPSTensor.FNWDimensionConstant.pathVector}
     \leanok
+    \uses{def:ground_space_map}
     Let $t=(t_{ij})$ and $z=(z_{ij})$ be real matrices indexed by a finite
     set of $k$ vertices. Set $A^{ij}=t_{ij}E_{ij}$. For endpoints $a,f$,
     define the four-site vector
@@ -6546,6 +6547,15 @@ tensors.
         v_{a,f}(z)
          & =\sum_{b,c,e}z_{be}t_{ab}t_{bc}t_{ce}t_{ef}
         |ab,bc,ce,ef\rangle. \notag
+    \end{align}
+    Write $\mathbf 1$ for the mark with all entries one and, for a real
+    function $u$ on the vertices, $u\otimes\mathbf 1$ and $\mathbf 1\otimes u$
+    for the marks $z_{be}=u_b$ and $z_{be}=u_e$. For $X\in\MN{k}$, the
+    four-site boundary vector of $A$ has the coordinates
+    \begin{align}
+        \Gamma_4(X)(i_0j_0,i_1j_1,i_2j_2,i_3j_3)
+         & =\operatorname{tr}\bigl(A^{i_0j_0}A^{i_1j_1}A^{i_2j_2}A^{i_3j_3}X\bigr).
+        \notag
     \end{align}
 \end{definition}
 
@@ -6560,53 +6570,108 @@ tensors.
         \langle v_{a,f}(z),\Gamma_4(X)\rangle
          & =X_{fa}\sum_{b,c,e}z_{be}T_{abcef}^{2}. \notag
     \end{align}
-    A factor depending on $b$ acts on the first physical site, and a
-    factor depending on $e$ acts on the last physical site.
+    For every configuration $\sigma=(i_0j_0,i_1j_1,i_2j_2,i_3j_3)$ and every
+    real function $u$ on the vertices,
+    \begin{align}
+        v_{a,f}(u\otimes\mathbf 1)(\sigma)
+         & =u_{j_0}\,v_{a,f}(\mathbf 1)(\sigma), \notag \\
+        v_{a,f}(\mathbf 1\otimes u)(\sigma)
+         & =u_{i_3}\,v_{a,f}(\mathbf 1)(\sigma). \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:weighted-matrix-unit-path-vectors}
-    Distinct vertex paths give distinct physical basis vectors. Their
-    inner products therefore vanish. The product of four consecutive
-    matrix units is the matrix unit joining the two endpoints, which
-    gives the second identity after taking the boundary trace.
+    Distinct vertex paths $(b,c,e)$ give distinct physical basis vectors
+    $|ab,bc,ce,ef\rangle$, which gives the first identity. For the second,
+    multiply four consecutive letters:
+    \begin{align}
+        A^{ab}A^{b'c}A^{c'e}A^{e'f}
+         & =\delta_{bb'}\delta_{cc'}\delta_{ee'}\,T_{abcef}\,E_{af}, \notag \\
+        \operatorname{tr}(E_{af}X)
+         & =X_{fa}. \notag
+    \end{align}
+    Hence $\Gamma_4(X)(ab,bc,ce,ef)=T_{abcef}X_{fa}$ on every vertex path.
+    On the support of $v_{a,f}$, the first letter $ab$ determines $b=j_0$ and
+    the last letter $ef$ determines $e=i_3$, which gives the two mark
+    identities.
 \end{proof}
 
 \begin{theorem}[Spectator multipliers preserve interval spaces]
     \label{thm:spectator-multiplier-interval-space}
     \lean{MPSTensor.marked_groundSpaceMap_mem_tailBoundaryRange,MPSTensor.marked_groundSpaceMap_mem_leftBoundaryRange}
     \leanok
-    Multiplying an open-boundary vector by a function of the sites
-    outside a prefix or tail interval preserves membership in that interval's
-    ground space tensored with the spectator space.
+    \uses{def:ground_space_map, def:spectator_boundary_maps_es}
+    Let $K,L\in\N$ and $X\in\MN{D}$. Let $\varphi$ be a complex function of
+    the prefix configurations $u\colon\Fin K\to\Fin d$ and $\psi$ a complex
+    function of the suffix configurations $\tau\colon\Fin L\to\Fin d$. Then
+    the vector $(u,\tau)\mapsto\varphi(u)\,\Gamma_{K+L}(X)(u,\tau)$ belongs to
+    the range of $\Gamma^{\mathrm{tail}}_{K,L}$, and the vector
+    $(u,\tau)\mapsto\psi(\tau)\,\Gamma_{K+L}(X)(u,\tau)$ belongs to the range
+    of $\Gamma^{\mathrm{left}}_{K,L}$.
 \end{theorem}
 \begin{proof}\leanok
-    Factor the matrix product at the boundary of the interval. The
-    multiplier is absorbed into the boundary matrix indexed by the
-    spectator configuration.
+    \uses{def:tail_boundary_map, def:left_boundary_map}
+    Factor the matrix product at the boundary of the interval:
+    \begin{align}
+        \varphi(u)\,\Gamma_{K+L}(X)(u,\tau)
+         & =\tr\bigl(A^\tau\,\varphi(u)XA^u\bigr)
+        =\Gamma^{\mathrm{tail}}_{K,L}(Y)(u,\tau), \notag \\
+        \psi(\tau)\,\Gamma_{K+L}(X)(u,\tau)
+         & =\tr\bigl(A^u\,\psi(\tau)A^\tau X\bigr)
+        =\Gamma^{\mathrm{left}}_{K,L}(Z)(u,\tau), \notag
+    \end{align}
+    where $Y_u=\varphi(u)XA^u$ and $Z_\tau=\psi(\tau)A^\tau X$.
 \end{proof}
 
 \begin{theorem}[Matrix-unit boundary vectors]
     \label{thm:matrix-unit-path-ground-space}
     \lean{MPSTensor.FNWDimensionConstant.pathVector_one_eq_groundSpaceMap}
     \leanok
-    Let $t$ be a real matrix indexed by a finite set, and let the physical
-    letters be ordered pairs of indices. Set $A_{ij}=t_{ij}E_{ij}$.
-    For fixed initial and terminal indices $a,f$, define
-    \begin{align}
-        v_{a,f}
-         & = \sum_{b,c,e} t_{ab}t_{bc}t_{ce}t_{ef}
-        \lvert(a,b),(b,c),(c,e),(e,f)\rangle.
-    \end{align}
-    Then $v_{a,f}=\Gamma_4(E_{fa})$, where
-    $\Gamma_4(X)$ has coordinates $\operatorname{tr}(A_{i_0}A_{i_1}A_{i_2}A_{i_3}X)$.
+    \uses{def:weighted-matrix-unit-path-vectors}
+    For the weighted matrix-unit tensor $A^{ij}=t_{ij}E_{ij}$ and all
+    endpoints $a,f$, one has $v_{a,f}(\mathbf 1)=\Gamma_4(E_{fa})$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:weighted-matrix-unit-path-vectors}
-    The product of four matrix units is zero unless consecutive edges join.
-    For a path from $a$ to $f$, multiplication by $E_{fa}$ and taking the trace
-    leaves precisely the product of its four edge weights. Summing over the
-    three internal vertices gives the assertion.
+    For every configuration,
+    \begin{align}
+        \operatorname{tr}\bigl(A^{i_0j_0}A^{i_1j_1}A^{i_2j_2}A^{i_3j_3}E_{fa}\bigr)
+         & =\delta_{i_0a}\delta_{j_0i_1}\delta_{j_1i_2}\delta_{j_2i_3}\delta_{j_3f}\,
+        t_{i_0j_0}t_{i_1j_1}t_{i_2j_2}t_{i_3j_3}. \notag
+    \end{align}
+    The nonzero coordinates of $\Gamma_4(E_{fa})$ are therefore those of the
+    paths $(ab,bc,ce,ef)$, with value $t_{ab}t_{bc}t_{ce}t_{ef}$. These are
+    the coordinates of $v_{a,f}(\mathbf 1)$.
+\end{proof}
+
+\begin{theorem}[Marked paths in interval spaces]
+    \label{thm:fnw-marked-path-interval-spaces}
+    \lean{MPSTensor.FNWDimensionConstant.pathVector_first_mark_mem_tailBoundaryRange,MPSTensor.FNWDimensionConstant.pathVector_last_mark_mem_leftBoundaryRange}
+    \leanok
+    \uses{def:weighted-matrix-unit-path-vectors, def:spectator_boundary_maps_es}
+    For every real function $u$ on the vertices and all endpoints $a,f$,
+    \begin{align}
+        v_{a,f}(u\otimes\mathbf 1)
+         & \in\operatorname{range}\Gamma^{\mathrm{tail}}_{1,3}, \notag \\
+        v_{a,f}(\mathbf 1\otimes u)
+         & \in\operatorname{range}\Gamma^{\mathrm{left}}_{3,1}. \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:weighted-matrix-unit-path-contractions,thm:matrix-unit-path-ground-space,thm:spectator-multiplier-interval-space}
+    By Theorems~\ref{thm:weighted-matrix-unit-path-contractions}
+    and~\ref{thm:matrix-unit-path-ground-space}, for
+    $\sigma=(i_0j_0,i_1j_1,i_2j_2,i_3j_3)$,
+    \begin{align}
+        v_{a,f}(u\otimes\mathbf 1)(\sigma)
+         & =u_{j_0}\,\Gamma_4(E_{fa})(\sigma), \notag \\
+        v_{a,f}(\mathbf 1\otimes u)(\sigma)
+         & =u_{i_3}\,\Gamma_4(E_{fa})(\sigma). \notag
+    \end{align}
+    The first multiplier depends only on the first site and the second only
+    on the last site. Theorem~\ref{thm:spectator-multiplier-interval-space}
+    with $(K,L)=(1,3)$ and $(K,L)=(3,1)$ gives the two memberships.
 \end{proof}
 
 \begin{theorem}[Normalization and orthogonality of marked paths]
@@ -6661,7 +6726,7 @@ tensors.
 
 \begin{theorem}[A positive Markov matrix with a nilpotent remainder]
     \label{thm:fnw_dimension_markov_matrix}
-    \lean{MPSTensor.FNWDimensionConstant.markovMatrix_pos, MPSTensor.FNWDimensionConstant.markovMatrix_sum_identities, MPSTensor.FNWDimensionConstant.markovMatrix_pow_two, MPSTensor.FNWDimensionConstant.markovMatrix_pow_three, MPSTensor.FNWDimensionConstant.remainderMatrix_nilpotent}
+    \lean{MPSTensor.FNWDimensionConstant.hadamardU, MPSTensor.FNWDimensionConstant.hadamardV, MPSTensor.FNWDimensionConstant.hadamardW, MPSTensor.FNWDimensionConstant.uniformMatrix, MPSTensor.FNWDimensionConstant.markovMatrix, MPSTensor.FNWDimensionConstant.squareMatrix, MPSTensor.FNWDimensionConstant.remainderMatrix, MPSTensor.FNWDimensionConstant.markovMatrix_pos, MPSTensor.FNWDimensionConstant.markovMatrix_sum_identities, MPSTensor.FNWDimensionConstant.markovMatrix_pow_two, MPSTensor.FNWDimensionConstant.markovMatrix_pow_three, MPSTensor.FNWDimensionConstant.remainderMatrix_nilpotent}
     \leanok
     Let $e=(1,1,1,1)^{\mathsf T}$ and let
     $u=(1,1,-1,-1)^{\mathsf T}$, $v=(1,-1,1,-1)^{\mathsf T}$,
@@ -6685,16 +6750,17 @@ tensors.
 
 \begin{theorem}[Scalar path sums]
     \label{thm:fnw_dimension_markov_path_sums}
-    \lean{MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardU_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardUW_sum, MPSTensor.FNWDimensionConstant.markovAmplitude_sq, MPSTensor.FNWDimensionConstant.markovAmplitude_pos}
+    \lean{MPSTensor.FNWDimensionConstant.realMarkovMatrix, MPSTensor.FNWDimensionConstant.realHadamardU, MPSTensor.FNWDimensionConstant.realHadamardW, MPSTensor.FNWDimensionConstant.markovAmplitude, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardU_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardUW_sum, MPSTensor.FNWDimensionConstant.markovAmplitude_sq, MPSTensor.FNWDimensionConstant.markovAmplitude_pos}
     \leanok
-    For the matrix $P$ above and every pair of endpoints $a,f$, set
+    Regard $P$, $u$ and $w$ above as real. For every pair of endpoints $a,f$, set
     $p_{abcef}=P_{ab}P_{bc}P_{ce}P_{ef}$. Then
     \begin{align}
         \sum_{b,c,e}p_{abcef}        & =\frac14,    &
         \sum_{b,c,e}u_b p_{abcef}    & =0,          &
         \sum_{b,c,e}u_bw_e p_{abcef} & =\frac1{64}.
     \end{align}
-    Moreover $t_{ij}=\sqrt{P_{ij}}$ is strictly positive and $t_{ij}^2=P_{ij}$.
+    The amplitudes $t_{ij}=\sqrt{P_{ij}}$ are strictly positive and satisfy
+    $t_{ij}^2=P_{ij}$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -6717,16 +6783,17 @@ tensors.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:weighted-matrix-unit-path-contractions,thm:matrix-unit-path-ground-space,thm:spectator-multiplier-interval-space,thm:fnw-path-vector-norm-orthogonal,thm:fnw-projection-witness-bound,thm:fnw_dimension_markov_path_sums}
+    \uses{thm:weighted-matrix-unit-path-contractions,thm:matrix-unit-path-ground-space,thm:fnw-marked-path-interval-spaces,thm:fnw-path-vector-norm-orthogonal,thm:fnw-projection-witness-bound,thm:fnw_dimension_markov_path_sums}
     Fix external vertices $a,f$ and write
     $T_{abcef}=\sqrt{P_{ab}P_{bc}P_{ce}P_{ef}}$. Consider
     \begin{align}
         x & =2\sum_{b,c,e}u_bT_{abcef}|ab,bc,ce,ef\rangle,\notag \\
         y & =2\sum_{b,c,e}w_eT_{abcef}|ab,bc,ce,ef\rangle.\notag
     \end{align}
-    The mark $u_b$ acts on the first physical site, so $x$ belongs to
-    the range of $G_{[1,3]}$. Similarly, $y$ belongs to the range of
-    $G_{[0,2]}$. The path contraction identities give
+    With $t_{ij}=\sqrt{P_{ij}}$ these are $x=2v_{a,f}(u\otimes\mathbf 1)$ and
+    $y=2v_{a,f}(\mathbf 1\otimes w)$. By
+    Theorem~\ref{thm:fnw-marked-path-interval-spaces}, $x$ belongs to the
+    range of $G_{[1,3]}$ and $y$ belongs to the range of $G_{[0,2]}$. The path contraction identities give
     $\|x\|=\|y\|=1$, $x\perp\operatorname{range}G_{[0,3]}$, and
     $\langle y,x\rangle=1/16$. Thus the matrix coefficient of
     $G_{[0,2]}G_{[1,3]}-G_{[0,3]}$ between $y$ and $x$ is $1/16$.
@@ -6770,7 +6837,7 @@ tensors.
 
 \begin{theorem}[The positive Markov matrix-unit channel]
     \label{thm:fnw_dimension_markov_channel}
-    \lean{MPSTensor.FNWDimensionConstant.markovTensor_isInjective, MPSTensor.FNWDimensionConstant.markovTensor_isTP, MPSTensor.FNWDimensionConstant.markovTensor_transferMap_one, MPSTensor.FNWDimensionConstant.markovTensor_transferMap_cube}
+    \lean{MPSTensor.FNWDimensionConstant.markovTensor, MPSTensor.FNWDimensionConstant.markovTensor_isInjective, MPSTensor.FNWDimensionConstant.markovTensor_isTP, MPSTensor.FNWDimensionConstant.markovTensor_transferMap_one, MPSTensor.FNWDimensionConstant.markovTensor_transferMap_cube}
     \leanok
     For the four-dimensional matrix $P$ above, let
     $A_{ij}=\sqrt{P_{ij}}E_{ij}$. Then $A$ is injective at length one, its transfer
@@ -6793,7 +6860,7 @@ tensors.
 
 \begin{theorem}[A faithful primitive fixed point]
     \label{thm:fnw-dimension-markov-primitive}
-    \lean{MPSTensor.FNWDimensionConstant.markovDensity_posDef,MPSTensor.FNWDimensionConstant.markovDensity_trace,MPSTensor.FNWDimensionConstant.markovDensity_fixed,MPSTensor.FNWDimensionConstant.markovTensor_isPrimitiveMPS,MPSTensor.FNWDimensionConstant.markovTensor_fnwTransfer_eigenvalue_eq_zero}
+    \lean{MPSTensor.FNWDimensionConstant.markovDensity,MPSTensor.FNWDimensionConstant.markovDensity_posDef,MPSTensor.FNWDimensionConstant.markovDensity_trace,MPSTensor.FNWDimensionConstant.markovDensity_fixed,MPSTensor.FNWDimensionConstant.markovTensor_isPrimitiveMPS,MPSTensor.FNWDimensionConstant.markovTensor_fnwTransfer_eigenvalue_eq_zero}
     \leanok
     For the weighted matrix-unit tensor of the Markov example, the matrix
     $\rho=I/4$ is positive definite, has trace one, and is stationary. The tensor
