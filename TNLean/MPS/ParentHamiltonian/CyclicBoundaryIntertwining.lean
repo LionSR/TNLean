@@ -12,7 +12,7 @@ import Mathlib.GroupTheory.OrderOfElement
 A boundary matrix which intertwines adjacent cyclic cuts commutes with every
 word extending once around the cycle. This is the algebraic propagation step
 in the periodic closure argument of PGVWC07, arXiv:quant-ph/0608197,
-Theorem 12 (`2blocks.2`).
+Theorem 12 (lines 1424--1458).
 -/
 
 namespace MPSTensor

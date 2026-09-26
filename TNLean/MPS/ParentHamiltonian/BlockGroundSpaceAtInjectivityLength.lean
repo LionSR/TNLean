@@ -30,8 +30,9 @@ variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
 /-- The periodic local constraints have exactly the span of the component
 MPS vectors as their ground space once the interaction range exceeds the
 supplied simultaneous injectivity length. Source: CPGSV21,
-arXiv:2011.12127, Section IV.C, lines 2126--2129, with the interaction range
-specified by lines 2078--2094. -/
+arXiv:2011.12127, Section IV.C, lines 2126--2129. The interaction range on
+\(S+1\) sites is that of the normal-tensor theorem at lines 2087--2094; the
+closure argument at lines 2078--2079 allows larger interactions. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) {S L N : ℕ}
