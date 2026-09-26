@@ -33,6 +33,8 @@ is not asserted. See `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
   `index-well-defined` (lines 681–704), and the canonical-form discussion
   (lines 257–294, 319–356).
 -/
+open scoped Matrix
+
 namespace MPOTensor
 
 /-- Canonical-form-II tensors with equal periodic operators at every length
