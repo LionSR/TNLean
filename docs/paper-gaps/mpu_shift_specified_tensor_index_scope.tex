@@ -65,6 +65,22 @@ These calculations verify the numerical expression and its signs. They do not
 yet identify those values with the public blocking-independent MPU index
 asserted by the source.
 
+For the shift family the choice of blocking is no longer a restriction. For
+every $k\ge0$, the right shift blocked over $k+1$ sites is simple and has source
+ranks
+\begin{align}
+    (r,\ell)=(d^{k+2},d^{k}),
+\end{align}
+the left shift has the reversed pair, and the blocked tensors for $U_2$ and
+$U_3$ have $r=\ell=d^{2k+2}$. The declarations
+\leanid{MPOTensor.sourceIndexValue_blockTensor_rightShiftTensor},
+\leanid{MPOTensor.sourceIndexValue_blockTensor_leftShiftTensor},
+\leanid{MPOTensor.sourceIndexValue_blockTensor_shiftExampleU₂}, and
+\leanid{MPOTensor.sourceIndexValue_blockTensor_shiftExampleU₃} give the values
+$\log_2 d$, $-\log_2 d$, $0$, and $0$ at every such blocking. What remains is
+the step from these displayed tensors to an arbitrary tensor generating the same
+operators, which needs the canonical form of the shift and its uniqueness.
+
 \section{Elimination plan}
 
 The public index construction is tracked by \ghissue{7011}. It must choose a
