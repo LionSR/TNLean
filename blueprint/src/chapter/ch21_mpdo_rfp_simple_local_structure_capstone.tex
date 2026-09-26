@@ -2542,17 +2542,50 @@ This is the calculation in
     obstruction proved for the printed tensor to $\widehat M$.
 \end{proof}
 
+% CPSV16 line 792 normalization and Definition 4.6, lines 797 and 811--815.
+\begin{lemma}[Rescaling invariance of the area-law quantities]
+    \label{lem:mpdo_area_law_scaling_invariance}
+    \lean{MPOTensor.reducedBlockState_smul,
+        MPOTensor.blockEntropy_smul,
+        MPOTensor.mutualInfoChain_smul,
+        MPOTensor.isSAL_smul_ofReal_iff}
+    \leanok
+    \uses{def:block_entropy, def:mutual_info_chain, def:is_sal, thm:mpdo_normalized_mpo_scaling_invariance}
+    Let $c$ be a nonzero complex number and let $L\le N$. Then
+    \begin{align}
+        \rho_L^{(N)}(cM) & =\rho_L^{(N)}(M).
+        \notag
+    \end{align}
+    If $\rho^{(N)}(cM)$ and $\rho^{(N)}(M)$ are positive semidefinite, then
+    \begin{align}
+        S_L^{(N)}(cM) & =S_L^{(N)}(M),
+                      & I_L(cM)        & =I_L(M).
+        \notag
+    \end{align}
+    For every real $r>0$, the tensor $rM$ saturates the area law if and only
+    if $M$ does.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpdo_normalized_mpo_scaling_invariance}
+    By Theorem~\ref{thm:mpdo_normalized_mpo_scaling_invariance}, the
+    normalized operator $\sigma^{(N)}(cM)$ equals $\sigma^{(N)}(M)$, so their
+    partial traces agree; the block entropies and mutual informations are
+    functions of these reduced states. For $r>0$, the operators
+    $\rho^{(N)}(rM)=r^N\rho^{(N)}(M)$ are positive semidefinite exactly when
+    those of $M$ are, and their traces vanish exactly when those of $M$ do.
+    The mutual-information clause of Definition~\ref{def:is_sal} transfers by
+    the displayed identity.
+\end{proof}
+
 % CPSV16 Example 4.12, lines 932--939, with Definitions 4.1, 4.2, 4.6, and 4.8.
 \begin{theorem}[Four properties of the normalized representative in Example 4.12]
     \label{thm:cpsv_example412_normalized_four_properties}
-    \lean{MPOTensor.isSAL_smul_ofReal_iff,
-        MPOTensor.CPSVExample412NormalizedRFP.Mhat_isSAL,
+    \lean{MPOTensor.CPSVExample412NormalizedRFP.Mhat_isSAL,
         MPOTensor.CPSVExample412NormalizedRFP.Mhat_isPhysicalTraceIdempotent,
         MPOTensor.CPSVExample412NormalizedRFP.Mhat_isSAL_isPhysicalTraceIdempotent_not_isGSNNCH_isRFPViaTS}
     \leanok
-    \uses{def:is_sal, def:mpo_physical_trace_idempotence, def:mpdo_source_gsnnch, def:is_rfp_via_ts, thm:cpsv_example412_literal_sal, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_normalized_not_gsnnch}
-    Saturation of the area law is invariant under rescaling of the tensor by a
-    strictly positive real number. The normalized representative
+    \uses{def:is_sal, def:mpo_physical_trace_idempotence, def:mpdo_source_gsnnch, def:is_rfp_via_ts, lem:mpdo_area_law_scaling_invariance, thm:cpsv_example412_literal_sal, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_normalized_not_gsnnch}
+    The normalized representative
     $\widehat M=\frac12 M$ of Example~4.12 saturates the area law, its
     physical-trace transfer is idempotent, it is not a Gibbs state of a
     nearest-neighbor commuting Hamiltonian, and it satisfies the two channel
@@ -2567,12 +2600,10 @@ This is the calculation in
         gap:cpsv16_unit_weight_rfp_scale_tension}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:cpsv_example412_literal_sal, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_normalized_not_gsnnch}
-    Rescaling by a nonzero scalar leaves every normalized reduced state
-    unchanged, hence every block entropy and every mutual information; a
-    strictly positive real factor also preserves positivity of the generated
-    operators. Saturation therefore transfers from the printed tensor to
-    $\widehat M$. The channel equations imply that the physical-trace transfer
+    \uses{lem:mpdo_area_law_scaling_invariance, thm:cpsv_example412_literal_sal, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_normalized_not_gsnnch}
+    Lemma~\ref{lem:mpdo_area_law_scaling_invariance} with $r=\frac12$
+    transfers saturation from the printed tensor
+    (Theorem~\ref{thm:cpsv_example412_literal_sal}) to $\widehat M$. The channel equations imply that the physical-trace transfer
     is idempotent. The commuting-form obstruction is the preceding theorem.
 \end{proof}
 
