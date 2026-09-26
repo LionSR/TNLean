@@ -5215,42 +5215,75 @@ tensors.
     norm gap from the smaller weighted sum to the larger unweighted sum.
 \end{proof}
 
-\begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
-    \label{thm:normal_mps_parent_hamiltonian_gap}
-    \notready
-    \discussion{5926}
-    \uses{thm:primitive_parent_hamiltonian_finite_range_knabe_gap, thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
-    Let $A$ be a normal tensor.  There exist an interaction range $L>1$ and
-    a constant $\gamma>0$ such that, for every $N\ge2L$ and every
-    $v\in(\ker H_{N,L}(A))^\perp$,
-    \begin{align}
-        \gamma\lVert v\rVert
-         & \le \lVert H_{N,L}(A)v\rVert.
-        \notag
-    \end{align}
-    Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}
-    proves the estimate for a primitive tensor with a positive-definite fixed
-    point, at range $L=l+1$, with no divisibility restriction on the chain
-    length, but only for $N\ge2m$, where the Knabe volume $m$ satisfies
-    $m\ge l+1$ and is chosen large enough that $l^2<m\gamma_{\mathrm{open}}$.
-    Two steps therefore remain.  The chain lengths with $2(l+1)\le N<2m$ are
-    not covered by that theorem, so a finite-volume estimate on this finite
-    set of lengths, together with a common positive constant, is still needed.
-    The passage from a primitive tensor with a positive-definite fixed point
-    to an arbitrary normal tensor is also still needed.
+\begin{theorem}[Positive gap at a fixed length]
+    \label{thm:parent_hamiltonian_fixed_length_gap}
+    \lean{MPSTensor.parentHamiltonianES_exists_gap}
+    \leanok
+    \uses{def:parent_hamiltonian_es}
+    For any tensor $A$, interaction range $L$, and chain length $N$, there
+    exists $\delta_N>0$ such that
+    $\delta_N\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
+    for every $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    \discussion{5926}
-    \uses{thm:primitive_parent_hamiltonian_finite_range_knabe_gap, thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
-    The primitive case with a positive-definite fixed point, at the lengths
-    $N\ge2m$, is
-    Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}.  It
-    remains to bound the gap from below on the finitely many lengths
-    $2(l+1)\le N<2m$ and to take the minimum of the two constants, and then to
-    reduce an arbitrary normal tensor to the primitive case while preserving
-    the ground-space complement and a uniform positive constant.
+    \leanok
+    The restriction of $H_{N,L}^{\mathrm{ES}}(A)$ to its kernel complement
+    is injective. Its inverse on its image is bounded, since the domain is
+    finite dimensional. Thus $\lVert v\rVert\leq C_N\lVert
+        H_{N,L}^{\mathrm{ES}}(A)v\rVert$ for some $C_N>0$; take
+    $\delta_N=C_N^{-1}$. If the kernel complement is zero, any positive
+    constant suffices.
+\end{proof}
+
+\begin{theorem}[Extension of an eventual uniform gap]
+    \label{thm:parent_hamiltonian_eventual_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_of_eventual_gap}
+    \leanok
+    \uses{def:parent_hamiltonian_es}
+    Fix $A$ and $L$. Suppose $\delta>0$ and $M\in\mathbb N$ satisfy
+    $\delta\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
+    for every $N\geq M$ and every
+    $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
+    Then some $\gamma>0$ satisfies the inequality with $\gamma$ in place of
+    $\delta$ for every $N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:parent_hamiltonian_fixed_length_gap}
+    Take the minimum of $\delta$ and the finitely many positive constants
+    $\delta_N$ supplied by Theorem~\ref{thm:parent_hamiltonian_fixed_length_gap}
+    for $N<M$. Equivalently, induct on $M$, replacing $\delta$ by
+    $\min\{\delta,\delta_{M-1}\}$ at each step.
+\end{proof}
+
+\begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
+    \label{thm:normal_mps_parent_hamiltonian_gap}
+    \lean{MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal}
+    \leanok
+    \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
+    Let $D>0$ and let $A$ be a normal tensor. There exist $l>1$ and
+    $\gamma>0$ such that $A$ is $l$-block injective and, for every
+    $N\geq2(l+1)$ and every $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
+    \begin{align}
+        \gamma\lVert v\rVert
+         & \leq \lVert H_{N,l+1}^{\mathrm{ES}}(A)v\rVert.
+        \notag
+    \end{align}
+    This proves the normal-tensor case of the uniform gap assertion in
+    \cite[lines~2183--2187]{Cirac2021Matrix}, at a suitable interaction range.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:normal_parent_hamiltonian_finite_range_knabe_gap,
+        thm:parent_hamiltonian_eventual_gap}
+    Theorem~\ref{thm:normal_parent_hamiltonian_finite_range_knabe_gap}
+    supplies $l>1$, $m\geq l+1$, and $\delta>0$ with the required norm
+    inequality for $N\geq2m$.
+    Apply Theorem~\ref{thm:parent_hamiltonian_eventual_gap} with
+    $L=l+1$ and $M=2m$, and restrict the conclusion to $N\geq2(l+1)$.
 \end{proof}
 
 \begin{theorem}[Gap bound from a cyclic anticommutator estimate]

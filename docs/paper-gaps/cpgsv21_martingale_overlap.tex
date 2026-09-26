@@ -1994,6 +1994,22 @@ removed one.  No periodic boundary coercivity, comparison of unequal kernels,
 periodic uniqueness argument, divisibility substitution, or replacement by a
 different cyclic tensor is used.
 
+The finite threshold $N\geq2m$ can also be removed without comparing
+Hamiltonians with different kernels. For each fixed $N$, the restriction of
+$H_{N,L}(A)$ to $(\ker H_{N,L}(A))^\perp$ is injective on a finite-dimensional
+space, hence has a positive lower norm bound $\delta_N$. Taking the minimum
+of the large-length bound and the finitely many $\delta_N$ for $N<2m$
+gives a uniform positive constant at every length. This is proved by
+\leanid{MPSTensor.parentHamiltonianES_exists_gap} and
+\leanid{MPSTensor.parentHamiltonianES_gap_of_eventual_gap}.
+The normalized primitive gauge of an arbitrary normal tensor preserves its
+parent Hamiltonian. Consequently
+\leanid{MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal}
+gives the uniform gap at a suitable range $L=l+1$ for every $N\geq2L$,
+without a normalization hypothesis on the tensor. The resulting constant
+need not equal the explicit Knabe coefficient. The block-injective gap
+assertion remains separate from this normal-tensor result.
+
 The conditional norm-compression and operator-product branch has been
 removed.  It consisted of
 \path{MPSTensor.parentHamiltonian_gapped},

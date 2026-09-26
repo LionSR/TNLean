@@ -55,6 +55,8 @@ valence-bond construction.
   gauge of a normal tensor.
 * `MPSTensor.exists_parentHamiltonianES_gap_of_isNormal`: the finite-range
   Knabe gap for the parent Hamiltonian of an arbitrary normal tensor.
+* `MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal`: the uniform
+  gap for all periodic lengths at least twice the interaction range.
 
 ## References
 
@@ -213,5 +215,23 @@ theorem exists_parentHamiltonianES_gap_of_isNormal [NeZero D] {A : MPSTensor d D
   intro N hN v hv
   rw [parentHamiltonianES_eq_of_groundSpace_eq (hGS (l + 1)) N] at hv ⊢
   exact hGap N hN v hv
+
+/-- A normal tensor has a uniform positive parent-Hamiltonian gap at a suitable
+interaction range, for every periodic length at least twice that range.
+
+This is the normal-tensor case of arXiv:2011.12127, lines 2183--2187.
+The finite-range Knabe estimate treats all sufficiently large lengths; taking
+a minimum with the finitely many remaining positive bounds removes its volume
+threshold. No normalization hypothesis is imposed on the tensor. -/
+theorem exists_parentHamiltonianES_uniform_gap_of_isNormal [NeZero D]
+    {A : MPSTensor d D} (hA : Kraus.IsNormal A) :
+    ∃ l : ℕ, 1 < l ∧ Kraus.IsNBlkInjective A l ∧ ∃ γ : ℝ, 0 < γ ∧
+      ∀ N : ℕ, 2 * (l + 1) ≤ N → ∀ v ∈
+        (LinearMap.ker (parentHamiltonianES A (l + 1) N))ᗮ,
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A (l + 1) N v‖ := by
+  obtain ⟨l, ε, m, δ, hl, hInj, _, _, _, _, hδ, hGap⟩ :=
+    exists_parentHamiltonianES_gap_of_isNormal hA
+  obtain ⟨γ, hγ, hAll⟩ := parentHamiltonianES_gap_of_eventual_gap A (l + 1) (2 * m) hδ hGap
+  exact ⟨l, hl, hInj, γ, hγ, fun N _ ↦ hAll N⟩
 
 end MPSTensor
