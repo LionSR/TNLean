@@ -1990,6 +1990,31 @@ abstracted — record why, so it is not re-proposed).
   nested projection using subspace containment. If another use appears,
   separate the common adjoint identity into a submodule helper theorem.
 
+### Kernel projection under a right-spectator fibrewise conjugacy — candidate
+- **Pattern:** from `U.conj G = rightFiberwiseMap H`, conclude
+  `U.conj (ker G).starProjection = rightFiberwiseMap (ker H).starProjection`
+  by combining `ker_starProjection_conj_linearIsometryEquiv` with
+  `ContinuousLinearMap.ker_starProjection_rightFiberwiseMap`:
+
+  ```lean
+  have hproj := ker_starProjection_conj_linearIsometryEquiv U G _ hHamiltonian
+  rw [ContinuousLinearMap.ker_starProjection_rightFiberwiseMap] at hproj
+  change _ = _ at hproj
+  ```
+- **Seen:** four occurrences across two files:
+  `openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  `openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  and `openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`
+  in `TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean`, and the
+  local `hproj` in the norm-contraction theorem of
+  `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`.
+- **Abstraction (proposed):** a top-level theorem
+  `ker_starProjection_conj_of_rightFiberwiseMap` in `SpectatorTransport.lean`
+  with the parametrized statement of the local `hproj`; refactor the four call
+  sites to use it.
+- **Notes:** meets the rule of three. Promotion needs a verified Lean build,
+  so it is deferred to a follow-up change with build access.
+
 
 ### Spectator ranges of block sums — factored
 - **Pattern:** identify a spectator boundary map as a coordinate map composed

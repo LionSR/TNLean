@@ -5632,12 +5632,12 @@ tensors.
     \label{def:grouped_open_ground_projections}
     \lean{MPSTensor.groupedNestedGroundProjectionsES,MPSTensor.groupedIntervalGroundProjectionES}
     \leanok
-    Fix \(p\geq1\), \(M\geq2\), and an open chain of length \(N=pM\).
-    For \(0\leq n\leq M\), let \(G_n\) be the ground projection of the range-\(2p\) parent
-    Hamiltonian on \([0,pn)\), extended by the identity on the remaining
-    sites. For \(0\leq n<M\), let \(Q_n\) be the ground projection of the same interaction
-    restricted to \([\max\{0,p(n-1)\},p(n+1))\).
-    Thus \(Q_0=I\), while for \(n\geq1\) the interval Hamiltonian is
+    Fix $p\geq1$, $M\geq2$, and an open chain of length $N=pM$.
+    For $0\leq n\leq M$, let $G_n$ be the ground projection of the range-$2p$ parent
+    Hamiltonian on $[0,pn)$, extended by the identity on the remaining
+    sites. For $0\leq n<M$, let $Q_n$ be the ground projection of the same interaction
+    restricted to $[\max\{0,p(n-1)\},p(n+1))$.
+    Thus $Q_0=I$, while for $n\geq1$ the interval Hamiltonian is
     a single parent interaction.
 \end{definition}
 
@@ -5645,51 +5645,56 @@ tensors.
     \label{lem:grouped_open_ground_projection_locality}
     \lean{MPSTensor.grouped_martingaleDifference_commute,MPSTensor.grouped_martingaleDifference_zero,MPSTensor.groupedIntervalGroundProjectionES_comp_martingaleDifference_one}
     \leanok
-    Set \(E_n=G_n-G_{n+1}\). For \(0\leq m,n<M\), one has
-    \[
-        [E_m,Q_n]=0\qquad\text{if }m<n-1\text{ or }m>n.
-    \]
-    Moreover, \(E_0=0\) and \(Q_1E_1=0\).
+    Set $E_n=G_n-G_{n+1}$. For $0\leq m,n<M$ with $m<n-1$ or $m>n$,
+    one has
+    \begin{align}
+        [E_m,Q_n] & =0.
+    \end{align}
+    Moreover, $E_0=0$ and $Q_1E_1=0$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:grouped_open_ground_projections}
+    \uses{def:grouped_open_ground_projections,
+        thm:physical-outside-window-martingale-cancellation,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:fixed-volume-prefix-ground-projections-nested}
     In the first case both prefix Hamiltonians have support disjoint from
-    the interval defining \(Q_n\). In the second case their kernels are
+    the interval defining $Q_n$. In the second case their kernels are
     contained in the local interval kernel. The corresponding orthogonal
     projections therefore commute in either case.
-    The prefixes of lengths zero and \(p\) contain no interaction, so
-    \(G_0=G_1=I\). At the next step \(Q_1=G_2\), giving
-    \(Q_1E_1=G_2(I-G_2)=0\).
+    The prefixes of lengths zero and $p$ contain no interaction, so
+    $G_0=G_1=I$. At the next step $Q_1=G_2$, giving
+    $Q_1E_1=G_2(I-G_2)=0$.
 \end{proof}
 
 \begin{theorem}[Grouped open-chain coercivity]
     \label{thm:grouped_open_parent_gap}
     \lean{MPSTensor.openParentHamiltonianES_norm_gap_of_grouped_c3}
     \leanok
-    Let \(p\geq1\), \(M\geq2\), and \(N=pM\). Consider the
-    range-\(2p\) open parent Hamiltonian \(H_N\) and the grouped
-    projections above. Suppose that
-    \[
-        \|Q_nE_n\|\leq\epsilon<\frac1{\sqrt2}
-        \qquad(0\leq n<M),
-        \qquad \epsilon\geq0.
-    \]
-    Then, for every \(v\perp\ker H_N\),
-    \[
-        (1-\epsilon\sqrt2)^2\|v\|\leq\|H_Nv\|.
-    \]
+    Let $p\geq1$, $M\geq2$, and $N=pM$. Consider the
+    range-$2p$ open parent Hamiltonian $H_N$ and the grouped
+    projections above. Let $0\leq\epsilon<1/\sqrt2$ and suppose that
+    $\|Q_nE_n\|\leq\epsilon$ for $0\leq n<M$. Then, for every
+    $v\perp\ker H_N$,
+    \begin{align}
+        (1-\epsilon\sqrt2)^2\|v\| & \leq\|H_Nv\|.
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:grouped_open_ground_projection_locality,thm:nachtergaele_c1_c3_full_range_norm_gap}
+    \uses{lem:grouped_open_ground_projection_locality,
+        thm:nachtergaele_c1_c3_full_range_norm_gap,
+        thm:grouped_open_parent_c1, thm:grouped_open_suffix_c2,
+        lem:open_parent_hamiltonian_es_positive}
     Apply the full-range martingale estimate to the grouped filtration,
     with window width one. Each local window Hamiltonian is the projection
-    \(I-Q_n\), so condition C2 has constant one. The nonzero local window
-    terms are distinct summands of \(H_N\); positivity gives condition C1
-    with constant one. The locality lemma supplies the commutation
-    condition. The assumed norm bound supplies C3, and the terminal
-    projection is the projection onto \(\ker H_N\).
+    $I-Q_n$, so Theorem~\ref{thm:grouped_open_suffix_c2} gives condition C2
+    with constant one. The nonzero local window terms are distinct summands
+    of $H_N$, so Theorem~\ref{thm:grouped_open_parent_c1} gives condition C1
+    with constant one. Lemma~\ref{lem:open_parent_hamiltonian_es_positive}
+    supplies positivity of $H_N$. The locality lemma supplies the
+    commutation condition. The assumed norm bound supplies C3, and the terminal
+    projection is the projection onto $\ker H_N$.
 \end{proof}
 
 \begin{theorem}[Energy counting for grouped open windows]
@@ -5748,9 +5753,18 @@ tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    Decompose a vector according to the last $r$ physical coordinates.
-    The prefix Hamiltonian acts on each component by the length-$n$ open
-    Hamiltonian, so its kernel is characterized component by component.
+    \uses{thm:open-hamiltonian-right-spectator-conjugacy,
+        thm:fixed-volume-c3-projector-conjugacy,
+        lem:right-spectator-kernel-projection}
+    Decompose a vector $v$ on $n+r$ sites according to the last $r$
+    physical coordinates, writing $v_s$ for the vector on $n$ sites
+    obtained by fixing these coordinates to $s\in\{1,\ldots,d\}^r$.
+    The prefix Hamiltonian acts on each component $v_s$ by the length-$n$
+    open Hamiltonian, whose kernel is $G_n(A)$. Hence
+    \begin{align}
+        v\in G_n(A)\otimes(\C^d)^{\otimes r}
+         & \iff v_s\in G_n(A)\ \text{for every } s\in\{1,\ldots,d\}^r.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Reassociated suffix ground space]
@@ -5766,9 +5780,19 @@ tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    Reassociation preserves the ordered physical coordinates.
+    \uses{thm:fixed-volume-c3-projector-conjugacy}
+    Write $\sigma$ for the reassociation isometry from the physical space
+    on $K+(L+Q)$ sites to that on $(K+L)+Q$ sites. It preserves the ordered
+    physical coordinates, so for every family $(S_n)_n$ of subspaces of the
+    $n$-site physical spaces,
+    \begin{align}
+        \sigma\bigl(S_{K+(L+Q)}\bigr) & = S_{(K+L)+Q}.
+    \end{align}
     A parent interaction is the orthogonal projection onto the complement
-    of the local boundary-condition space, acting trivially on the other sites.
+    of the local boundary-condition space, acting trivially on the other
+    sites. Its kernel on the last $L+Q$ sites is therefore
+    $(\C^d)^{\otimes K}\otimes G_{L+Q}(A)$, and the display transports this
+    description to the common coordinates.
 \end{proof}
 
 \begin{theorem}[Active grouped projector error]
