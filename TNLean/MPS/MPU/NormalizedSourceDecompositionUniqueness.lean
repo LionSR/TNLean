@@ -13,6 +13,10 @@ positive rescalings and unitary comparisons between two source decompositions.
 When both second-cut left factors are isometries, the positive rescaling is one.
 This corollary states that additional normalization explicitly; it is not a
 replacement for the unrestricted decomposition lemma.
+
+## References
+
+* FBC25, arXiv:2502.20257, Lemma `lem:deco` (lines 1052–1066).
 -/
 
 open scoped Matrix BigOperators
@@ -114,4 +118,3 @@ theorem exists_unitary_source_gauges_of_isometric_second_factors
   · simpa [hδone] using hYt₂
 
 end MPOTensor
-
