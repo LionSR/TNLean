@@ -28,8 +28,14 @@ rank product.
   the two rectangular multiplication formulas.
 * `rightRank_rectangularSandwich_le`, `leftRank_rectangularSandwich_le`:
   monotonicity of the two source ranks.
-* `sourceRanks_le_of_isReduction`: the consequence for a rectangular reduction.
-* `sourceRanks_blockTensor_le_of_isReduction`: the inequalities after common blocking.
+* `eq_rectangularSandwich_of_isReduction`, `isReduction_blockTensor`: a
+  rectangular reduction multiplies each letter by its reduction matrices, at
+  every common blocking length.
+* `rightRank_le_of_isReduction`, `leftRank_le_of_isReduction`: the
+  consequences for a rectangular reduction.
+* `rightRank_blockTensor_le_of_isReduction`,
+  `leftRank_blockTensor_le_of_isReduction`: the inequalities after common
+  blocking.
 
 ## References
 
@@ -95,34 +101,72 @@ theorem rightRank_rectangularSandwich_le
   rw [rightRank, sourceCutM₁_rectangularSandwich]
   exact (Matrix.rank_mul_le_left _ _).trans (Matrix.rank_mul_le_right _ _)
 
-/-- A rectangular reduction cannot increase either source rank. The
-single-letter reduction identities suffice for these inequalities.
-Sources: MGSC18, arXiv:1706.07329v2, Definition following Proposition 20;
-CPSV17, arXiv:1703.09188, `defnrl`, lines 450--477. -/
-theorem sourceRanks_le_of_isReduction
+/-- A rectangular reduction multiplies every letter by the reduction matrices:
+$V^{ij}=AU^{ij}B$. Only the single-letter reduction identities are used.
+Source: MGSC18, arXiv:1706.07329v2, Definition following Proposition 20,
+`cornerproblem.tex` lines 3137--3139. -/
+theorem eq_rectangularSandwich_of_isReduction
     {U : MPOTensor d D} {V : MPOTensor d E}
     {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
     (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
-    r[V] ≤ r[U] ∧ ℓ[V] ≤ ℓ[U] := by
-  have hletter (i j : Fin d) : A * U i j * B = V i j := by
-    simpa [Kraus.evalWord, toMPSTensor] using h.evalWord [finProdFinEquiv (i, j)]
-  have hV : V = fun i j => A * U i j * B :=
-    funext fun i => funext fun j => (hletter i j).symm
-  exact hV.symm ▸ ⟨rightRank_rectangularSandwich_le A U B,
-    leftRank_rectangularSandwich_le A U B⟩
+    V = fun i j => A * U i j * B :=
+  funext fun i => funext fun j => by
+    simpa [Kraus.evalWord, toMPSTensor] using (h.evalWord [finProdFinEquiv (i, j)]).symm
 
-/-- A rectangular reduction cannot increase either source rank after any
-common physical blocking. The same reduction matrices act on every blocked word.
+/-- A rectangular reduction cannot increase the right source rank.
 Sources: MGSC18, arXiv:1706.07329v2, Definition following Proposition 20;
-CPSV17, arXiv:1703.09188, `IndexTh` (ii), lines 837--845. -/
-theorem sourceRanks_blockTensor_le_of_isReduction
+CPSV17, arXiv:1703.09188, `defnrl`, lines 450--477. -/
+theorem rightRank_le_of_isReduction
+    {U : MPOTensor d D} {V : MPOTensor d E}
+    {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
+    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
+    r[V] ≤ r[U] := by
+  rw [eq_rectangularSandwich_of_isReduction h]
+  exact rightRank_rectangularSandwich_le A U B
+
+/-- A rectangular reduction cannot increase the left source rank.
+Sources: MGSC18, arXiv:1706.07329v2, Definition following Proposition 20;
+CPSV17, arXiv:1703.09188, `defnrl`, lines 450--477. -/
+theorem leftRank_le_of_isReduction
+    {U : MPOTensor d D} {V : MPOTensor d E}
+    {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
+    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
+    ℓ[V] ≤ ℓ[U] := by
+  rw [eq_rectangularSandwich_of_isReduction h]
+  exact leftRank_rectangularSandwich_le A U B
+
+/-- A rectangular reduction passes to every common physical blocking, with the
+same reduction matrices.
+Source: MGSC18, arXiv:1706.07329v2, Definition following Proposition 20,
+`cornerproblem.tex` lines 3137--3139. -/
+theorem isReduction_blockTensor
     {U : MPOTensor d D} {V : MPOTensor d E}
     {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
     (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) (L : ℕ) :
-    r[blockTensor V L] ≤ r[blockTensor U L] ∧
-      ℓ[blockTensor V L] ≤ ℓ[blockTensor U L] := by
-  apply sourceRanks_le_of_isReduction (A := A) (B := B)
+    MPSTensor.IsReduction (blockTensor U L).toMPSTensor (blockTensor V L).toMPSTensor A B := by
   simpa only [toMPSTensor_blockTensor] using
     (h.blockTensor L).reindexPhysical (blockedDoubledIndexEquiv d L)
+
+/-- A rectangular reduction cannot increase the right source rank after any
+common physical blocking.
+Sources: MGSC18, arXiv:1706.07329v2, Definition following Proposition 20;
+CPSV17, arXiv:1703.09188, `IndexTh` (ii), lines 837--845. -/
+theorem rightRank_blockTensor_le_of_isReduction
+    {U : MPOTensor d D} {V : MPOTensor d E}
+    {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
+    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) (L : ℕ) :
+    r[blockTensor V L] ≤ r[blockTensor U L] :=
+  rightRank_le_of_isReduction (isReduction_blockTensor h L)
+
+/-- A rectangular reduction cannot increase the left source rank after any
+common physical blocking.
+Sources: MGSC18, arXiv:1706.07329v2, Definition following Proposition 20;
+CPSV17, arXiv:1703.09188, `IndexTh` (ii), lines 837--845. -/
+theorem leftRank_blockTensor_le_of_isReduction
+    {U : MPOTensor d D} {V : MPOTensor d E}
+    {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
+    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) (L : ℕ) :
+    ℓ[blockTensor V L] ≤ ℓ[blockTensor U L] :=
+  leftRank_le_of_isReduction (isReduction_blockTensor h L)
 
 end MPOTensor
