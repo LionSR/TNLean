@@ -6600,6 +6600,28 @@ tensors.
     the proposed coefficient is strictly smaller than $1/16$.
 \end{proof}
 
+\begin{theorem}[Block injectivity from a simultaneous word span]
+    \label{thm:block_injective_of_word_tuple_span}
+    \lean{MPSTensor.isNBlkInjective_of_wordTupleSpanTop}
+    \leanok
+    \uses{def:blockwise_product_word_span, def:l_blk_injective}
+    Let $A^0,\ldots,A^{r-1}$ be tensors with bond dimensions
+    $D_0,\ldots,D_{r-1}$, and let $L\in\mathbb N$. Suppose that their
+    simultaneous word evaluations at length $L$ span
+    $\prod_{k=0}^{r-1}\MN{D_k}$. Then every $A^j$ is $L$-block injective.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $M\in\MN{D_j}$ and let $X$ be the tuple with $X_j=M$ and $X_k=0$ for
+    $k\neq j$. By hypothesis,
+    \begin{align}
+        X=\sum_{|\omega|=L}c_\omega(A^{0,\omega},\ldots,A^{r-1,\omega})\notag
+    \end{align}
+    for some coefficients $c_\omega$. Its $j$-th component is
+    $M=\sum_{|\omega|=L}c_\omega A^{j,\omega}$, so the length-$L$ words of
+    $A^j$ span $\MN{D_j}$.
+\end{proof}
+
 \begin{theorem}[Separation from simultaneous injectivity]
     \label{thm:block-word-span-separation}
     \lean{MPSTensor.not_gaugePhaseEquiv_of_wordTupleSpanTop}
@@ -6614,9 +6636,11 @@ tensors.
     \leanok
     \uses{lem:product_span_block_image_direct_sum, thm:ground_space_map_injective_blk,
         thm:gauge_phase_mpv_scaling, lem:mpv_mem_ground_space,
-        lem:mpv_eq_ground_space_map_one}
+        lem:mpv_eq_ground_space_map_one, thm:block_injective_of_word_tuple_span}
     The local ground spaces of the blocks at length $S$ are independent. Each
-    boundary map at that length is injective, so its value at the identity matrix,
+    block is $S$-block injective by
+    Theorem~\ref{thm:block_injective_of_word_tuple_span}, so each boundary
+    map at that length is injective, and its value at the identity matrix,
     the periodic matrix product vector $V^{(S)}(A^i)=\Gamma^{A^i}_S(\Id)$, is
     nonzero. Suppose that $i\neq j$ and $A^{i,a}=\zeta XA^{j,a}X^{-1}$ for every
     physical index $a$. Then
