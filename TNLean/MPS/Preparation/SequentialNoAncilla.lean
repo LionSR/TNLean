@@ -43,10 +43,9 @@ after `U^{[k]}` is `|χ_k⟩ ⊗ |0⟩^{⊗(N-k-1)}`, where `χ_k` is a vector o
 ## Main results
 
 * `MPSPreparation.noAncillaState_eq_eval` — the identification
-  of the site matrices with `⟨i, β| U^{[k]} |α, 0⟩` in the proof in the source
-  (lines 1597--1603), as an ordered matrix product. The source writes these
-  entries `A^{[k]}_{i,α,β}`; in the ket-position product used here they are the
-  entries `(β, α)` of `MPSPreparation.pairStep`.
+  `A^{[k]}_{i,βα} = ⟨i, β| U^{[k]} |α, 0⟩` of the proof in the source
+  (lines 1597--1603), as an ordered matrix product; the source writes this
+  entry as `A^{[k]}_{i,α,β}`, with the received index `α` first.
 * `MPSPreparation.isProbabilisticallyGeneratedWithoutAncilla_iff` and
   `MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff` — Theorem
   "Sequential generation without ancilla" (lines 1587--1593): the generated
