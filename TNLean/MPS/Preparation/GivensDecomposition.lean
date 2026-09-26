@@ -204,7 +204,7 @@ theorem exists_twoLevel_elim (x y : ℂ) :
   · refine ⟨[quarterTwo], by simp, ?_, by simp [quarterTwo, hx]⟩
     simp only [List.mem_singleton, forall_eq]
     exact Or.inl ⟨-Complex.I, by simp, quarterTwo_eq_rotTwo⟩
-  -- `x = |x| p`, `y = |y| q` with `|p| = |q| = 1`; choose `ν² = p̄ q`.
+  -- `x = |x| p`, `y = |y| q` with `|p| = |q| = 1`; choose `ν² = conj p * q`.
   have hxn : (‖x‖ : ℂ) ≠ 0 := by simpa using hx
   have hyn : (‖y‖ : ℂ) ≠ 0 := by simpa using hy
   set p := x / ‖x‖

@@ -137,7 +137,7 @@ theorem twoLevel_mulVec_apply [Fintype ι] (hab : a ≠ b) (g : Matrix (Fin 2) (
 def rotTwo (z : ℂ) : Matrix (Fin 2) (Fin 2) ℂ :=
   !![(z.re : ℂ), -(z.im : ℂ); (z.im : ℂ), (z.re : ℂ)]
 
-/-- The diagonal phase `diag(ν, ν̄)`. -/
+/-- The diagonal phase `diag(ν, star ν)`. -/
 def diagTwo (ν : ℂ) : Matrix (Fin 2) (Fin 2) ℂ := !![ν, 0; 0, star ν]
 
 /-- The phase `diag(i, -i)`. -/
@@ -196,7 +196,7 @@ theorem rotTwo_sq_eq_commutator {w : ℂ} :
   rw [Matrix.mul_assoc (rotTwo w * phaseTwo), Matrix.mul_assoc (rotTwo w), ← Matrix.mul_assoc
     phaseTwo, h, rotTwo_mul]
 
-/-- The phase `diag(w², w̄²)` is the group commutator of `diag(w, w̄)` and a quarter turn. -/
+/-- The phase `diag(w², (star w)²)` is the group commutator of `diag(w, star w)` and a quarter turn. -/
 theorem diagTwo_sq_eq_commutator {w : ℂ} :
     diagTwo (w * w) = diagTwo w * quarterTwo * diagTwo (star w) * quarterTwoᴴ := by
   ext i j
