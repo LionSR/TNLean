@@ -102,8 +102,10 @@ of the canonical form with $L_0=O(D^2)$. The proof runs as follows.
     $1\times1$.
 
     \item The source calls it trivial that this is impossible. Therefore
-    $N/2\leq 3(b-1)(L_0+1)$, and with $L_0=O(D^2)$ and $b\leq D$ the bound
-    $D\succeq O(N^{1/3})$ follows.
+    $N/2\leq 3(b-1)(L_0+1)$.
+
+    \item With $L_0=O(D^2)$ and $b\leq D$ the bound $D\succeq O(N^{1/3})$
+    follows.
 \end{enumerate}
 The review replaces Conjecture~2 by the Wielandt bound $L_0=O(D^2\log D)$ of
 Micha\l{}ek and Shitov, which gives
@@ -114,7 +116,13 @@ Micha\l{}ek and Shitov, which gives
 Steps~1--4 are formalized for a tensor in the translation-invariant canonical
 form whose blocks satisfy condition C1 at a common length $L_0>0$ and are
 pairwise distinct in the sense used by the direct-sum lemma: no two blocks of
-equal size are related by a gauge transformation and a phase. The formal
+equal size are related by a gauge transformation and a phase. This
+distinctness is stricter than the source's assumption that the block states
+$\ket{\phi_{A^j}}$ are pairwise different
+\cite[lines~1329--1330]{PerezGarcia2007MPSReps}: two equal blocks with
+different weights, or two blocks related by a gauge transformation and a
+phase $\omega$ with $\omega^N\neq1$, give different states. Step~5 is
+formalized when the first matrix of every block is invertible. The formal
 results are the following.
 \begin{itemize}
     \item The amplitudes of a canonical form are the weighted sums of the block
@@ -123,11 +131,11 @@ results are the following.
     \leanid{MPSTensor.PGVWC07CanonicalFormData.mpv_eq_sum}.}
 
     \item For every length $n\geq\max(L_0,3(b-1)(L_0+1))$ the tuples of block
-    words of length $n$ span the product of the block matrix algebras. Condition
-    C1 in a block also makes the block irreducible.\footnote{Formal
+    words of length $n$ span the product of the block matrix algebras. The
+    three canonical conditions make every block irreducible.\footnote{Formal
     declarations:
     \leanid{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge},
-    \leanid{Kraus.isIrreducibleFamily_of_isNBlkInjective}, and
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.isIrreducibleFamily_blocks}, and
     \leanid{MPSTensor.wordTupleSpanTop_of_le_one}.}
 
     \item The rank inequality of step~2: if the functions of the first piece
@@ -147,8 +155,8 @@ results are the following.
     one-site amplitudes of at most two $1\times1$ blocks, so that the
     amplitude of $1^m0^{N-m}$ is $g_m=\sum_ky_k^mx_k^{N-m}$. If
     $g_1=c\neq0$ and $g_2=g_3=0$, the identity
-    $x_1x_2g_3-(x_1y_2+x_2y_1)g_2+y_1y_2g_1=0$ gives $y_1y_2=0$. Then $g_1$ and $g_2$ reduce to the terms of the
-    remaining block $k$, and $c\,y_k=y_k^2x_k^{N-1}=x_kg_2=0$, so $y_k=0$ and
+    $x_1x_2g_3-(x_1y_2+x_2y_1)g_2+y_1y_2g_1=0$ gives $y_1y_2=0$. Then
+    $g_1$ and $g_2$ reduce to the terms of the remaining block $k$, and $c\,y_k=y_k^2x_k^{N-1}=x_kg_2=0$, so $y_k=0$ and
     $g_1=0$, a contradiction.
     This needs $N\geq3$ for two blocks and $N\geq2$ for one
     block.\footnote{Formal declaration:
@@ -164,7 +172,19 @@ results are the following.
         \label{eq:rmp_w_state_ti_bound_conditional}
     \end{align}
 
-    \item An explicit bound in $D$, weaker than the source's. If the adjoint
+    \item Step~5 when every $A^j_0$ is invertible. The source proves that
+    condition C1 then holds at $L_0=D^2$
+    \cite[lines~2115--2118]{PerezGarcia2007MPSReps}. The formal counterpart
+    is Wolf's bound $D_j^2-k+1$ for a family with an invertible
+    letter \cite{Wolf2012Quantum}, which gives C1 at $L_0=D^2+1$ from C1 at
+    any positive length. With $b\leq D$,
+    (\ref{eq:rmp_w_state_ti_bound_conditional}) becomes
+    $N<2\max\bigl(D^2+1,\,3(D-1)(D^2+2)\bigr)$, that is,
+    $D=\Omega(N^{1/3})$.\footnote{Formal declaration:
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit}.}
+
+    \item An explicit bound in $D$ for primitive blocks, weaker than the
+    source's. If the adjoint
     channel $X\mapsto\sum_iA^{j\dagger}_iXA^j_i$ of every block is primitive,
     Wolf's general Wielandt bound $L_0\leq(D_j^2-k+1)D_j^2\leq(D^2+1)^2$
     \cite{Sanz2010Quantum,Wolf2012Quantum} and $b\leq D$ turn
@@ -199,7 +219,7 @@ $N\geq 2\cdot3(L_0+1)\geq12$ in its range, where the argument above applies.
 
 \section{What remains open}
 
-The bound (\ref{eq:rmp_w_state_ti_bound_conditional}) is conditional. Two
+The bound (\ref{eq:rmp_w_state_ti_bound_conditional}) is conditional. Three
 inputs are missing for
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and for the source's
 $D\succeq O(N^{1/3})$.
@@ -212,9 +232,16 @@ $D\succeq O(N^{1/3})$.
     \cite[lines~2090--2097]{PerezGarcia2007MPSReps}.
 
     \item The explicit Wielandt index $L_0=O(D^2)$ (Conjecture~2) or
-    $L_0=O(D^2\log D)$ (Micha\l{}ek and Shitov). Only Wolf's general bound
-    $(D^2-k+1)D^2$ is formalized, which yields $D=\Omega(N^{1/5})$ for
-    primitive blocks.
+    $L_0=O(D^2\log D)$ (Micha\l{}ek and Shitov) for blocks without an
+    invertible matrix. Wolf's general bound $(D^2-k+1)D^2$ is formalized,
+    which yields $D=\Omega(N^{1/5})$ for primitive blocks; the bound $D^2$
+    is formalized only when every $A^j_0$ is invertible.
+
+    \item The reduction to blocks that are pairwise distinct in the sense of
+    the direct-sum lemma. The source assumes without loss of generality only
+    that the block states are pairwise different
+    \cite[lines~1329--1330]{PerezGarcia2007MPSReps}; the stricter
+    distinctness used here is a hypothesis of the formal bound.
 \end{itemize}
 
 \section{Formalized open-boundary representation}
@@ -278,11 +305,14 @@ This note records a deferred result, not a gap in a claimed formalization. The
 open-boundary representation with $D=2$ is fully proved. The core of the
 source proof is formalized as the conditional bound
 (\ref{eq:rmp_w_state_ti_bound_conditional}), with the single-block threshold
-corrected, and with primitive blocks it gives $D=\Omega(N^{1/5})$. The
-review's bound (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and the
-source's $D\succeq O(N^{1/3})$ remain unformalized: they need a reduction of
-an arbitrary tensor to a canonical form with condition C1 at a fixed length and
-the explicit $O(D^2)$ or $O(D^2\log D)$ Wielandt index.
+corrected. When every $A^j_0$ is invertible it gives the source's
+$D=\Omega(N^{1/3})$, and with primitive blocks it gives
+$D=\Omega(N^{1/5})$. The review's bound
+(\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and the source's
+unconditional $D\succeq O(N^{1/3})$ remain unformalized: they need a
+reduction of an arbitrary tensor to a canonical form with condition C1 at a
+fixed length and pairwise distinct blocks, and the explicit $O(D^2)$ or
+$O(D^2\log D)$ Wielandt index.
 
 \bibliographystyle{alpha}
 \bibliography{references}

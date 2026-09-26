@@ -25,19 +25,24 @@ line 2362, which cites this bound with the Wielandt index of Michałek and Shito
 **Formalized here.** The inequality `N/2 ≤ 3(b-1)(L₀+1)` of the proof, for a periodic
 tensor in the translation-invariant canonical form of PGVWC07 whose blocks satisfy condition
 C1 at a common length `L₀`, and for every nonzero multiple of `W_N`; with the threshold
-`max(L₀, 3(b-1)(L₀+1))` described below. For primitive blocks, Wolf's general quantum
-Wielandt bound turns this into the explicit `N < 2 max((D²+1)², 3(D-1)((D²+1)²+1))`.
+`max(L₀, 3(b-1)(L₀+1))` described below. When the first matrix `A^j_0` of every block is
+invertible, the source's `L₀ = D²` (lines 2115–2118, through Wolf's Theorem 6.9(2)) turns this
+into `N < 2 max(D²+1, 3(D-1)(D²+2))`, the source's `D ⪰ O(N^{1/3})` for such blocks. For
+primitive blocks, Wolf's general quantum Wielandt bound gives the weaker
+`N < 2 max((D²+1)², 3(D-1)((D²+1)²+1))`.
 Along the way: the reduced state of `W_N` across any cut has rank at most `2`, and a sum of at
 most two translation-invariant product states is not a multiple of `W_N` for `N ≥ 3`.
 
 **Scope restriction (canonical form with condition C1 as hypothesis):** the source derives
 condition C1 by blocks with `L₀ = O(D²)` for an arbitrary tensor from its Conjecture 2
 (lines 2109–2111, 2187–2188), and the review replaces Conjecture 2 by the Wielandt bound of
-Michałek and Shitov. Neither the reduction of an arbitrary `D × D` tensor to a canonical form
-with condition C1 at a fixed length, nor an explicit `L₀ = O(D²)` or `O(D² log D)`, is
-formalized; the canonical form, condition C1 at `L₀`, and the pairwise distinctness of the
-blocks (line 1327, in the form used by the direct-sum lemma) are hypotheses of the main
-theorem. Consequently neither `D ⪰ O(N^{1/3})` nor `D³ log D = Ω(N)` is formalized.
+Michałek and Shitov. The reduction of an arbitrary `D × D` tensor to a canonical form with
+condition C1 is not formalized, and `L₀ = O(D²)` is formalized only when every `A^j_0` is
+invertible (the source's proposition), not in general, nor is `O(D² log D)`. The canonical
+form, condition C1, and pairwise distinctness of the blocks are hypotheses. Distinctness is
+taken in the form used by the direct-sum lemma, no two blocks related by a gauge and a phase,
+which is stricter than the source's pairwise different block states (lines 1329–1330).
+Consequently neither the unconditional `D ⪰ O(N^{1/3})` nor `D³ log D = Ω(N)` is formalized.
 Documented in `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
 
 **Local fix (single-block threshold):** for one block the printed inequality
@@ -60,6 +65,8 @@ needs both pieces to have at least `L₀` sites to apply condition C1. The bound
   `W_N` on the words `1^m 0^{N-m}`, `m = 1, 2, 3` (two product states need `N ≥ 3`).
 * `PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator` — the bound
   `N < 2 max(L₀, 3(b-1)(L₀+1))`.
+* `PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit` — with `A^j_0`
+  invertible in every block, `N < 2 max(D²+1, 3(D-1)(D²+2))`.
 * `PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive` — with primitive
   blocks and Wolf's general Wielandt bound, `N < 2 max((D²+1)², 3(D-1)((D²+1)²+1))`.
 
@@ -193,8 +200,8 @@ private theorem trace_pow_mul_pow_of_subsingleton {n : Type*} [Fintype n] [Decid
 establishes: "Therefore `N/2 ≤ 3(b-1)(L₀+1)`".
 
 Let `A` be a periodic tensor in the translation-invariant canonical form of PGVWC07 with `b`
-blocks, each satisfying condition C1 at a common length `L₀ > 0`, with pairwise distinct
-blocks. If the periodic vector of `A` on `N` sites is `c W_N` for some `c ≠ 0`, then
+blocks, each satisfying condition C1 at a common length `L₀ > 0`, with no two blocks related
+by a gauge and a phase. If the periodic vector of `A` on `N` sites is `c W_N` for some `c ≠ 0`, then
 `N < 2 max(L₀, 3(b-1)(L₀+1))`.
 
 The proof follows the source: cut the chain into pieces of at least
@@ -204,7 +211,8 @@ so there are at most two blocks, all of size `1 × 1`; and at most two translati
 product states do not give `c W_N`.
 
 The scope restriction and the local fix stated in the module docstring apply: the canonical
-form with condition C1 at `L₀` is a hypothesis, and the threshold contains `L₀` for a single
+form with condition C1 at `L₀` is a hypothesis, the distinctness hypothesis is stricter than
+the source's pairwise different block states, and the threshold contains `L₀` for a single
 block. -/
 theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator {D : ℕ} {A : MPSTensor 2 D}
     (h : PGVWC07CanonicalFormData A) {L₀ : ℕ} (hL₀ : 0 < L₀)
@@ -276,43 +284,52 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator {D : ℕ} {A : MPS
     rw [← pow_add, Nat.add_sub_cancel' hmN]]
   ring
 
+/-- The block count and block sizes of a canonical form of bond dimension `D` are at most
+`D`. -/
+private theorem PGVWC07CanonicalFormData.r_le_and_dim_le {d D : ℕ} {A : MPSTensor d D}
+    (h : PGVWC07CanonicalFormData A) : h.r ≤ D ∧ ∀ k, h.dim k ≤ D := by
+  classical
+  have hcard : ∑ k, h.dim k = D := by
+    simpa [Fintype.card_sigma] using Fintype.card_congr h.index
+  refine ⟨?_, fun k => ?_⟩
+  · calc h.r = ∑ _k : Fin h.r, 1 := by simp
+      _ ≤ ∑ k, h.dim k := Finset.sum_le_sum fun k _ => h.dim_pos k
+      _ = D := hcard
+  · exact (Finset.single_le_sum (fun j _ => Nat.zero_le (h.dim j)) (Finset.mem_univ k)).trans
+      hcard.le
+
 /-- Project result: an explicit single-length bound in terms of the bond dimension, replacing
 the source's Conjecture 2 (`L₀ = O(D²)`, arXiv:quant-ph/0608197, lines 2109–2111) by the
 general quantum Wielandt bound `q ≤ (D_j² - k + 1) D_j²` (Wolf, Theorem 6.9; arXiv:0909.5347,
 Theorem 1). Assume that `A` is a periodic tensor of bond dimension `D` in the canonical form of
-PGVWC07 with pairwise distinct blocks, and that the adjoint channel `X ↦ ∑_i A^{j†}_i X A^j_i`
-of every block is primitive (irreducible with trivial peripheral spectrum). If the periodic
-vector of `A` on `N` sites is `c W_N`, `c ≠ 0`, then
-`N < 2 max((D²+1)², 3(D-1)((D²+1)²+1))`, so `D ≥ Ω(N^{1/5})`.
+PGVWC07 with pairwise distinct blocks (in the stricter sense of
+`PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge`), and that the dual channel
+`X ↦ ∑_i A^{j†}_i X A^j_i` of every block is primitive, that is, has no peripheral eigenvalue
+other than `1`. If the periodic vector of `A` on `N` sites is `c W_N`, `c ≠ 0`, then
+`N < 2 max((D²+1)², 3(D-1)((D²+1)²+1))`, so `D ≥ Ω(N^{1/5})`. Irreducibility of the dual
+channel, which the Wielandt bound also needs, follows from the canonical form
+(`PGVWC07CanonicalFormData.isIrreducibleMap_mapLM_blocks_conjTranspose`).
 
 This is weaker than the source's `D ⪰ O(N^{1/3})` and the review's `D³ log D = Ω(N)`, which
 use `L₀ = O(D²)` and `L₀ = O(D² log D)`; primitivity of the blocks is a hypothesis (the source
 removes peripheral eigenvalues by blocking, lines 2092–2096). -/
 theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive {D : ℕ}
     {A : MPSTensor 2 D} (h : PGVWC07CanonicalFormData A)
-    (hIrr : ∀ k, IsIrreducibleMap (Kraus.mapLM fun i => (h.blocks k i)ᴴ))
     (hPrim : ∀ k, IsPrimitive (Kraus.mapLM fun i => (h.blocks k i)ᴴ))
     (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
     {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
     N < 2 * max ((D ^ 2 + 1) ^ 2) (3 * (D - 1) * ((D ^ 2 + 1) ^ 2 + 1)) := by
   classical
-  have hcard : ∑ k, h.dim k = D := by
-    simpa [Fintype.card_sigma] using Fintype.card_congr h.index
-  have hdimD : ∀ k, h.dim k ≤ D := fun k =>
-    (Finset.single_le_sum (fun j _ => Nat.zero_le (h.dim j)) (Finset.mem_univ k)).trans
-      hcard.le
-  have hrD : h.r ≤ D := by
-    calc h.r = ∑ _k : Fin h.r, 1 := by simp
-      _ ≤ ∑ k, h.dim k := Finset.sum_le_sum fun k _ => h.dim_pos k
-      _ = D := hcard
+  obtain ⟨hrD, hdimD⟩ := h.r_le_and_dim_le
   have hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) ((D ^ 2 + 1) ^ 2) := by
     intro k
     have : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩
     have hTP : Kraus.IsTP fun i => (h.blocks k i)ᴴ := by
       simpa [Kraus.IsTP, Matrix.conjTranspose_conjTranspose] using h.unital k
-    have hq := Kraus.wielandtIndex_le_general _ hTP (hIrr k) (hPrim k)
+    have hIrr := h.isIrreducibleMap_mapLM_blocks_conjTranspose k
+    have hq := Kraus.wielandtIndex_le_general _ hTP hIrr (hPrim k)
     have hFrom := Kraus.hasFullWordSpanFrom_wielandtIndex _
-      (Kraus.hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive _ hTP (hIrr k) (hPrim k))
+      (Kraus.hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive _ hTP hIrr (hPrim k))
     refine Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose (hFrom _ ?_)
     refine hq.trans ?_
     have hd : h.dim k ^ 2 ≤ D ^ 2 := Nat.pow_le_pow_left (hdimD k) 2
@@ -321,5 +338,46 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive {D 
       _ ≤ (D ^ 2 + 1) ^ 2 := by nlinarith
   refine (h.lt_of_mpv_eq_smul_wIndicator (by positivity) hC1 hDistinct hc hW).trans_le ?_
   gcongr
+
+/-- Project result: the source's `D ⪰ O(N^{1/3})` when the first matrix of every block is
+invertible. The source proves that condition C1 then holds at `L₀ = D²`
+(arXiv:quant-ph/0608197, Proposition in Appendix "An open problem", lines 2115–2118); the
+formal counterpart used here is Wolf, Theorem 6.9(2): for a trace-preserving family with
+eventually full word span and an invertible element among its letters, the words of length
+`D_j² - k + 1` span the full matrix algebra. Assume that `A` is a periodic tensor of bond
+dimension `D` in the canonical form of PGVWC07 whose blocks satisfy condition C1 at some
+positive length (lines 1314–1323), with pairwise distinct blocks (in the stricter sense of
+`PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge`), and with `A^j_0` invertible for every
+block. If the periodic vector of `A` on `N` sites is `c W_N`, `c ≠ 0`, then
+`N < 2 max(D²+1, 3(D-1)(D²+2))`, so `D = Ω(N^{1/3})`. -/
+theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit {D : ℕ}
+    {A : MPSTensor 2 D} (h : PGVWC07CanonicalFormData A)
+    (hC1 : ∀ k, ∃ L, 0 < L ∧ Kraus.IsNBlkInjective (h.blocks k) L)
+    (hA0 : ∀ k, IsUnit (h.blocks k 0))
+    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
+    {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
+    N < 2 * max (D ^ 2 + 1) (3 * (D - 1) * (D ^ 2 + 2)) := by
+  classical
+  obtain ⟨hrD, hdimD⟩ := h.r_le_and_dim_le
+  have hC1' : ∀ k, Kraus.IsNBlkInjective (h.blocks k) (D ^ 2 + 1) := by
+    intro k
+    obtain ⟨L, hL, hinj⟩ := hC1 k
+    have hTP : Kraus.IsTP fun i => (h.blocks k i)ᴴ := by
+      simpa [Kraus.IsTP, Matrix.conjTranspose_conjTranspose] using h.unital k
+    have hinj' : Kraus.IsNBlkInjective (fun i => (h.blocks k i)ᴴ) L :=
+      Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose (K := fun i => (h.blocks k i)ᴴ)
+        (by simpa only [Matrix.conjTranspose_conjTranspose] using hinj)
+    have hFull : Kraus.HasEventuallyFullWordSpan fun i => (h.blocks k i)ᴴ :=
+      (Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP _ hTP).mpr ⟨L, hL, hinj'⟩
+    have hq := Kraus.wordSpan_eq_top_of_mem_wordSpan_one_of_isUnit _ hFull
+      (Kraus.apply_mem_wordSpan_one _ 0) (isUnit_star.mpr (hA0 k))
+    refine Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose
+      (Kraus.wordSpan_eq_top_of_ge_of_isTP _ hTP hq ?_)
+    have hd : h.dim k ^ 2 ≤ D ^ 2 := Nat.pow_le_pow_left (hdimD k) 2
+    omega
+  refine (h.lt_of_mpv_eq_smul_wIndicator (by positivity) hC1' hDistinct hc hW).trans_le ?_
+  have : 3 * (h.r - 1) * (D ^ 2 + 1 + 1) ≤ 3 * (D - 1) * (D ^ 2 + 2) :=
+    Nat.mul_le_mul (Nat.mul_le_mul_left _ (by omega)) le_rfl
+  exact Nat.mul_le_mul_left _ (max_le_max le_rfl this)
 
 end MPSTensor
