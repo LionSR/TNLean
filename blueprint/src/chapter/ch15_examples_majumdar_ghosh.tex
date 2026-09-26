@@ -648,8 +648,7 @@ normality in the following two theorems.
     The operator
     $\tfrac43\bigl(h+\tfrac38\bigr)=\tfrac13(P_{01}+P_{12}+P_{02})$ is the
     orthogonal projector onto $\mathcal G_{3}(A)^{\perp}$, the three-site parent
-    interaction of the Majumdar--Ghosh tensor. It is the projector
-    $P^{3/2}$ onto total spin $\tfrac32$ of three spin-$\tfrac12$ sites.
+    interaction of the Majumdar--Ghosh tensor.
 \end{lemma}
 
 \begin{proof}
@@ -667,6 +666,13 @@ normality in the following two theorems.
     kernel.
 \end{proof}
 
+\begin{remark}\label{rem:majumdar_ghosh_term_total_spin}
+    On three spin-$\tfrac12$ sites the symmetric subspace is the subspace of total
+    spin $\tfrac32$, so the projector of
+    Lemma~\ref{lem:majumdar_ghosh_term_projector} is the projector $P^{3/2}$ onto
+    total spin $\tfrac32$. This identification is not formalized.
+\end{remark}
+
 \begin{theorem}[Ground space of the Majumdar--Ghosh Hamiltonian]%
     \label{thm:majumdar_ghosh_review_hamiltonian}
     \lean{MPSTensor.majumdarGhoshHamiltonian_apply,
@@ -682,12 +688,10 @@ normality in the following two theorems.
         lem:majumdar_ghosh_term_projector, lem:transported_es_positive,
         thm:majumdar_ghosh_ground_space, thm:majumdar_ghosh_hamiltonian_eigen}
     For $N\ge3$, the Hamiltonian~(\ref{eq:mg_hamiltonian}) satisfies
-    \begin{align}
-        H_{N}+\tfrac{3N}{8}
-         & =\tfrac34\sum_{i}P^{3/2}_{i,i+1,i+2}
-        =\tfrac34H_{N,\mathrm{MG}}^{(3)},
+    \begin{equation}
+        H_{N}+\tfrac{3N}{8}=\tfrac34H_{N,\mathrm{MG}}^{(3)},
         \label{eq:mg_hamiltonian_projectors}
-    \end{align}
+    \end{equation}
     so $H_{N}\ge-\tfrac{3N}{8}$, and the eigenspace of $H_{N}$ for
     $-\tfrac{3N}{8}$ is the kernel of $H_{N,\mathrm{MG}}^{(3)}$. For even
     $N\ge4$, $-\tfrac{3N}{8}$ is the smallest eigenvalue of $H_{N}$, and its

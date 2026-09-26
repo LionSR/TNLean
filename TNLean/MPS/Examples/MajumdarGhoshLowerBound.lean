@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MajumdarGhoshGroundSpace
+import TNLean.MPS.ParentHamiltonian.CoefficientPairing
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 /-!
@@ -17,19 +18,22 @@ S_i\cdot\mathbf S_{i+2}\)", and this ground state is a superposition of the sing
 coverings \((1,2),(3,4),\dots\) and \((2,3),(4,5),\dots,(N,1)\).
 Review: arXiv:2011.12127, Appendix A, "The Majumdar-Ghosh model".
 
-**Formalized here.** On a periodic chain of \(N\ge3\) spin-\(\tfrac12\) sites,
-\[
-  H+\tfrac{3N}8=\tfrac34\sum_i P^{3/2}_{i,i+1,i+2},
-\]
-where \(P^{3/2}\) is the projector onto total spin \(\tfrac32\) of three
-consecutive spins. That projector is the parent interaction of the Majumdar-Ghosh
-tensor on three sites, so the right side is \(\tfrac34\) times the range-three
-parent Hamiltonian. Hence every eigenvalue of \(H\) is real and at least
-\(-\tfrac{3N}8\), and the eigenspace for \(-\tfrac{3N}8\) is the kernel of the
-parent Hamiltonian. On an even ring of \(N\ge4\) sites this eigenspace is the
-span of the two singlet coverings, which makes them ground states of \(H\) with
-ground energy \(-\tfrac{3N}8\). On an odd ring of \(N\ge5\) sites the value
+**Formalized here.** On three spin-\(\tfrac12\) sites the operator
+\(\tfrac43(h+\tfrac38)\), one third of the sum of the three transpositions, is the
+orthogonal projector onto the orthogonal complement of the three-site ground space
+of the Majumdar-Ghosh tensor, that is, its three-site parent interaction. On a
+periodic chain of \(N\ge3\) sites this gives
+\(H+\tfrac{3N}8=\tfrac34H^{(3)}_{\mathrm{parent}}\). Hence every eigenvalue of
+\(H\) is real and at least \(-\tfrac{3N}8\), and the eigenspace for
+\(-\tfrac{3N}8\) is the kernel of the parent Hamiltonian. On an even ring of
+\(N\ge4\) sites this eigenspace is the span of the two singlet coverings, which
+makes them ground states of \(H\) with ground energy \(-\tfrac{3N}8\). On an odd ring of \(N\ge5\) sites the value
 \(-\tfrac{3N}8\) is not an eigenvalue.
+
+The same projector is the projector \(P^{3/2}\) onto total spin \(\tfrac32\)
+of three spins, so the identity reads
+\(H+\tfrac{3N}8=\tfrac34\sum_iP^{3/2}_{i,i+1,i+2}\); the identification with total
+spin is not formalized here.
 
 ## Main results
 * `MPSTensor.majumdarGhoshTerm_shift_eq_parentInteraction` :
@@ -59,8 +63,7 @@ namespace MPSTensor
 
 /-! ### The three-site term as a projector -/
 
-/-- The shifted and rescaled three-site term \(\tfrac43(h+\tfrac38)\), which is the
-projector onto total spin \(\tfrac32\) of three spin-\(\tfrac12\) sites. -/
+/-- The shifted and rescaled three-site term \(\tfrac43(h+\tfrac38)\). -/
 local notation "𝐐" => ((4 / 3 : ℂ) •
   (majumdarGhoshTerm + (3 / 8 : ℂ) • (LinearMap.id : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3)))
 
@@ -72,28 +75,6 @@ lemma majumdarGhoshTerm_shift_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
   simp only [LinearMap.smul_apply, LinearMap.add_apply, LinearMap.id_apply, Pi.smul_apply,
     Pi.add_apply, smul_eq_mul, majumdarGhoshTerm_apply]
   ring
-
-/-- Precomposing configurations with a transposition of two sites permutes the
-configurations, so it leaves sums over all configurations unchanged. -/
-private lemma sum_comp_swap {L : ℕ} (f : Cfg 2 L → ℂ) (a b : Fin L) :
-    ∑ σ : Cfg 2 L, f (σ ∘ Equiv.swap a b) = ∑ σ, f σ :=
-  Fintype.sum_equiv ((Equiv.swap a b).arrowCongr (Equiv.refl _)) _ _ fun _ => rfl
-
-private lemma inner_linearEquiv_symm {L : ℕ} (f g : NSiteSpace 2 L) :
-    ⟪(WithLp.linearEquiv 2 ℂ (NSiteSpace 2 L)).symm f,
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 L)).symm g⟫_ℂ =
-      ∑ σ, conj (f σ) * g σ := by
-  simp only [PiLp.inner_apply, RCLike.inner_apply]
-  exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
-
-/-- Moving one transposition from the right to the left argument of the
-\(\ell^2\) pairing of coefficient vectors. -/
-private lemma sum_conj_mul_comp_swap {L : ℕ} (f g : NSiteSpace 2 L) (a b : Fin L) :
-    ∑ σ, conj (f σ) * g (σ ∘ Equiv.swap a b) =
-      ∑ σ, conj (f (σ ∘ Equiv.swap a b)) * g σ := by
-  rw [← sum_comp_swap (fun σ => conj (f σ) * g (σ ∘ Equiv.swap a b)) a b]
-  refine Finset.sum_congr rfl fun σ _ => ?_
-  simp [Function.comp_def, Equiv.swap_apply_self]
 
 /-- The operator \(\tfrac43(h+\tfrac38)\) is symmetric for the \(\ell^2\) pairing
 of coefficient vectors. -/
@@ -137,9 +118,7 @@ private lemma mem_groundSpace_three_iff (u : NSiteSpace 2 3) :
 
 /-- Bridge: the three-site term, shifted by \(\tfrac38\) and rescaled by
 \(\tfrac43\), is the three-site parent interaction of `majumdarGhoshTensor`, the
-orthogonal projector onto \(\mathcal G_3^\perp\). Both are the projector
-\(P^{3/2}=\tfrac13(P_{12}+P_{23}+P_{13})\) onto total spin \(\tfrac32\) of three
-spin-\(\tfrac12\) sites. -/
+orthogonal projector onto \(\mathcal G_3^\perp\). -/
 theorem majumdarGhoshTerm_shift_eq_parentInteraction :
     (4 / 3 : ℂ) • (majumdarGhoshTerm + (3 / 8 : ℂ) • LinearMap.id) =
       parentInteraction majumdarGhoshTensor 3 := by
@@ -154,7 +133,7 @@ theorem majumdarGhoshTerm_shift_eq_parentInteraction :
     intro u hu
     have h := majumdarGhoshTerm_shift_symm (e u) v
     rw [← hQ, (hker u).1 hu] at h
-    rw [← e.symm_apply_apply u, inner_linearEquiv_symm, h]
+    rw [← e.symm_apply_apply u, inner_withLpLinearEquiv_symm, h]
     simp
   have hin : ∀ v, e.symm v - e.symm (Q v) ∈ G := by
     intro v
@@ -191,8 +170,8 @@ theorem majumdarGhosh_parentHamiltonian_three_apply {N : ℕ} (hN3 : 3 ≤ N)
   simp [cyclicForwardSite_zero]
 
 /-- Project result: on a periodic chain of \(N\ge3\) sites,
-\(H+\tfrac{3N}8=\tfrac34\sum_iP^{3/2}_{i,i+1,i+2}\), where the sum is the range-three
-parent Hamiltonian of `majumdarGhoshTensor` and \(H\) is the review's Hamiltonian
+\(H+\tfrac{3N}8=\tfrac34H^{(3)}_{\mathrm{parent}}\), where \(H^{(3)}_{\mathrm{parent}}\)
+is the range-three parent Hamiltonian of `majumdarGhoshTensor` and \(H\) is the review's Hamiltonian
 (arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2398–2399). -/
 theorem majumdarGhoshHamiltonian_add_eq_parentHamiltonian {N : ℕ} (hN3 : 3 ≤ N) :
     majumdarGhoshHamiltonian N + (3 * N / 8 : ℂ) • LinearMap.id =
@@ -239,42 +218,21 @@ private lemma majumdarGhoshHamiltonian_apply_eq_smul_iff {N : ℕ} (hN3 : 3 ≤ 
       add_smul] at h
     exact add_right_cancel h
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2397–2399.
-On a periodic chain of \(N\ge3\) sites, every eigenvalue \(\mu\) of the review's
-Hamiltonian \(H\) is real with \(\mu\ge-\tfrac{3N}8\), that is,
-\(H\ge-\tfrac{3N}8\): the energy of the Majumdar-Ghosh state is the lowest one. -/
+/-- Project result: on a periodic chain of \(N\ge3\) sites, every eigenvalue \(\mu\)
+of the review's Hamiltonian \(H\) is real with \(\mu\ge-\tfrac{3N}8\). -/
 theorem majumdarGhoshHamiltonian_eigenvalue_ge {N : ℕ} (hN3 : 3 ≤ N) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (majumdarGhoshHamiltonian N) μ) :
     μ.im = 0 ∧ -(3 * N / 8 : ℝ) ≤ μ.re := by
   obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
-  have hv0 : v ≠ 0 := hv.2
-  have hPH := (majumdarGhoshHamiltonian_apply_eq_smul_iff hN3 μ v).1
-    (Module.End.mem_eigenspace_iff.1 hv.1)
-  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)
-  set c : ℂ := (4 / 3) * (μ + 3 * N / 8)
-  have hw : parentHamiltonianES majumdarGhoshTensor 3 N (e.symm v) = c • e.symm v := by
-    simp [parentHamiltonianES, e, hPH]
-  have hnn := (parentHamiltonianES_isPositive majumdarGhoshTensor 3 N).inner_nonneg_right
-    (e.symm v)
-  rw [inner_product_apply_eigenvector hw] at hnn
-  have hpos : (0 : ℝ) < ‖e.symm v‖ ^ 2 := by
-    have : e.symm v ≠ 0 := by simpa using hv0
-    positivity
-  have hc : 0 ≤ c := by
-    have h' : (0 : ℂ) ≤ c * ((‖e.symm v‖ ^ 2 : ℝ) : ℂ) := by exact_mod_cast hnn
-    rw [Complex.le_def] at h' ⊢
-    simp only [Complex.mul_re, Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im, mul_zero,
-      sub_zero, Complex.zero_re, Complex.zero_im] at h' ⊢
-    refine ⟨nonneg_of_mul_nonneg_left h'.1 hpos, ?_⟩
-    rw [zero_add, eq_comm, mul_eq_zero] at h'
-    exact (h'.2.resolve_right hpos.ne').symm
-  rw [Complex.le_def] at hc
-  simp only [c, Complex.mul_re, Complex.mul_im, Complex.add_re, Complex.add_im,
-    Complex.zero_re, Complex.zero_im] at hc
-  norm_num at hc
-  constructor
-  · linarith [hc.2]
-  · linarith [hc.1]
+  have hshift : Module.End.HasEigenvalue
+      (majumdarGhoshHamiltonian N + (3 * N / 8 : ℂ) • LinearMap.id) (μ + 3 * N / 8) :=
+    Module.End.hasEigenvalue_of_hasEigenvector (x := v) ⟨Module.End.mem_eigenspace_iff.2 (by
+      simp [Module.End.mem_eigenspace_iff.1 hv.1, add_smul]), hv.2⟩
+  have h := Complex.le_def.1 (nonneg_of_hasEigenvalue_of_isPositive_conj
+    (majumdarGhoshHamiltonian_add_isPositive hN3) hshift)
+  simp only [Complex.zero_re, Complex.zero_im, Complex.add_re, Complex.add_im] at h
+  norm_num at h
+  exact ⟨by linarith [h.2], by linarith [h.1]⟩
 
 /-- Bridge: on a periodic chain of \(N\ge3\) sites, the eigenspace of the review's
 Hamiltonian for \(-\tfrac{3N}8\) is the kernel of the range-three parent
@@ -300,8 +258,7 @@ theorem majumdarGhoshHamiltonian_eigenspace_eq_span {N : ℕ} (hN : Even N) (hN4
   rw [majumdarGhoshHamiltonian_eigenspace_eq_ker (by omega),
     majumdarGhosh_ker_parentHamiltonian_eq_span hN hN4]
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2397–2399.
-On an even ring of \(N\ge4\) sites, \(-\tfrac{3N}8\) is an
+/-- Project result: on an even ring of \(N\ge4\) sites, \(-\tfrac{3N}8\) is an
 eigenvalue of the review's Hamiltonian, hence its ground energy by
 `majumdarGhoshHamiltonian_eigenvalue_ge`. -/
 theorem majumdarGhoshHamiltonian_hasEigenvalue {N : ℕ} (hN : Even N) (hN4 : 4 ≤ N) :
