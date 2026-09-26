@@ -4511,6 +4511,60 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Theorem thm:mpu_reduced_cfii_representative.
 \end{definition}
 
+\begin{theorem}[Canonical representative from a positive left fixed point]
+    \label{thm:mpu_positive_canonical_gauge}
+    \lean{MPOTensor.exists_canonicalFormII_positiveGauge}
+    \leanok
+    \uses{def:mpu, def:mpu_normalized_flattening, def:nt_cpsv,
+        def:mpu_canonical_form_ii, def:mpu_right_rank, def:mpu_left_rank}
+    Let $\mathcal U$ generate an MPU, suppose its normalized flattening
+    $\widetilde{\mathcal U}$ is normal, and let $L$ be positive definite
+    with $\mathcal E_{\widetilde{\mathcal U}}^*(L)=L$.
+    There is a unitary $V$ on the same bond space such that
+    \begin{align}
+        \mathcal B^{ij}
+         & =V^\dagger L^{1/2}\mathcal U^{ij}L^{-1/2}V
+        \label{eq:mpu_positive_canonical_gauge}
+    \end{align}
+    admits a full-support canonical-form-II presentation. For every
+    $N\geq 0$, the periodic operators satisfy
+    $O_N(\mathcal B)=O_N(\mathcal U)$.
+    Both source ranks are preserved:
+    $r[\mathcal B]=r[\mathcal U]$ and
+    $\ell[\mathcal B]=\ell[\mathcal U]$.
+    This is the canonical-gauge construction used in the proof of
+    \cite[Proposition~IV.5, lines~798--802]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:CFII_data, thm:cpsv_normal_tensor_gauge_transport,
+        def:cpsv_cfii, thm:mpu_virtual_sandwich_source_ranks}
+    Put $S=L^{1/2}$ and $\mathcal G^{ij}=S\mathcal U^{ij}S^{-1}$.
+    The adjoint fixed-point equation gives
+    \begin{align}
+        \sum_{i,j}(\widetilde{\mathcal G}^{ij})^\dagger
+        \widetilde{\mathcal G}^{ij}
+         & =S^{-1}\mathcal E_{\widetilde{\mathcal U}}^*(L)S^{-1}
+        =\Id.
+        \notag
+    \end{align}
+    This is the positive-fixed-point gauge construction of the companion
+    quantum-channel volume~\cite[Trace-preserving gauge from an adjoint
+        fixed point, Kraus form]{QICLean2026Blueprint}.
+    Normality is preserved by similarity. Theorem~\ref{thm:CFII_data}
+    therefore supplies a unitary $V$ and a positive diagonal fixed matrix
+    $\Lambda$ after conjugating $\widetilde{\mathcal G}$ by $V$.
+    Replace $\Lambda$ by $\rho=\Lambda/\tr(\Lambda)$.
+    Positivity gives $\tr(\Lambda)>0$, and linearity preserves the
+    fixed-point equation. The resulting normal, left-canonical tensor
+    has a one-block canonical-form-II presentation with weight one and
+    no omitted bond coordinates. Finally, both conjugations preserve
+    traces of all words, proving equality of the periodic operators.
+    Since $S$, $S^{-1}$, $V$, and $V^\dagger$ are invertible,
+    Theorem~\ref{thm:mpu_virtual_sandwich_source_ranks} applied to the two
+    successive bond transformations proves equality of both source ranks.
+\end{proof}
+
 \begin{theorem}[Canonical form II forces positive dimensions]
     \label{thm:mpu_canonical_form_ii_positive_dimensions}
     \lean{MPOTensor.IsMPUCanonicalFormII.neZero_bond,

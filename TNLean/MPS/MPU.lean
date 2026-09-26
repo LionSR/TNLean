@@ -46,6 +46,7 @@ import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
+import TNLean.MPS.MPU.PositiveCanonicalGauge
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.ReducedRepresentative
 import TNLean.MPS.MPU.ReducedToHatTransport
