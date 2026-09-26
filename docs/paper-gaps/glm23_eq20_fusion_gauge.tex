@@ -1,0 +1,103 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Fusion Gauge of the Stabilizer Reconstruction Formula}
+\author{}
+\date{2026-09-26}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+Let a group $G$ act transitively on a set $\mathsf X$ of blocks, fix
+$x_0\in\mathsf X$ with stabilizer $H$, and choose representatives $k_x$
+with $k_xx_0=x$ and $k_{x_0}=e$. Let $\omega$ be a three-cocycle on $G$.
+Ref.~\cite[source lines~740--747]{GarreRubio2023MPOSym} shows that the
+restriction $\omega|_H$ is a coboundary $d\beta$, and that in the fusion
+gauge fixed by $\beta$ the basepoint restriction $\psi=L/\beta$ is a
+two-cocycle on $H$. Equation~(20) of the same reference, at source
+lines~752--759, then reconstructs every component of the $L$-symbol:
+\begin{align}
+    L^x_{g_1,g_2}
+        &=\frac{\omega(g_1g_2k_x,h_2^{-1},h_1^{-1})\,\psi(h_1,h_2)}
+          {\omega(g_1,g_2k_x,h_2^{-1})\,\omega(g_1,g_2,k_x)},
+    \label{eq:glm23_eq20}
+\end{align}
+where $h_2=k_{g_2x}^{-1}g_2k_x$ and $h_1=k_{g_1g_2x}^{-1}g_1k_{g_2x}$.
+Line~761 says that ``given $\omega$ and $\beta$ by fixing some gauge'' the
+solutions of the compatibility equation
+\begin{align}
+    L^x_{g,hk}L^x_{h,k}
+        &=\omega(g,h,k)L^{kx}_{g,h}L^x_{gh,k}
+    \label{eq:glm23_compatibility}
+\end{align}
+form a torsor under $H^2(H,\mathbb C^\times)$.
+
+\section{The gap}
+
+Formula~(\ref{eq:glm23_eq20}) with a two-cocycle $\psi$ satisfies
+(\ref{eq:glm23_compatibility}) when $\omega(a,b,c)=1$ for all
+$a,b,c\in H$. It does not do so for a general three-cocycle with
+$\omega|_H=d\beta$. At $x=x_0$ and $a,b\in H$ the formula gives
+$L^{x_0}_{a,b}=F(a,b)\psi(a,b)$ with
+\begin{align}
+    F(a,b)
+        &=\frac{\omega(ab,b^{-1},a^{-1})}{\omega(a,b,b^{-1})\,\omega(a,b,e)},
+\end{align}
+while (\ref{eq:glm23_compatibility}) restricted to $x_0$ and $H$ forces
+$\omega|_H=d(L^{x_0}|_H)=dF$. This can fail.
+
+\paragraph{Example.} Let $G=H=\mathbb Z_3=\{e,s,s^2\}$ act on a single
+block, so $k=e$ and $h_1=g_1$, $h_2=g_2$. Let $\beta(s,s)=-1$ and
+$\beta=1$ at every other pair, and put $\omega=d\beta$, with
+$(d\beta)(g,h,k)=\beta(g,hk)\beta(h,k)/(\beta(g,h)\beta(gh,k))$. Then
+$\omega(s,s,s^2)=-1$, while $F(s,s)=F(s^2,s^2)=-1$ and $F=1$ at the other
+pairs, so $dF=1$ identically. Hence for every two-cocycle $\psi$ the
+formula violates (\ref{eq:glm23_compatibility}) at $(g,h,k)=(s,s,s^2)$.
+Numerical checks on $A_4\supset V_4$ and $S_3\supset A_3$, with $\omega$
+twisted by a random normalized coboundary, show violations of order one in
+the same way.
+
+\section{The local fix}
+
+Before applying (\ref{eq:glm23_eq20}), change the fusion gauge so that
+$\omega$ is one on $H\times H\times H$. Such a gauge always exists: if
+$\omega|_H=d\beta_0$ with $\beta_0$ on $H$, extend $\beta_0^{-1}$ to $G$ by
+one outside $H\times H$ and apply the resulting fusion gauge. In that gauge
+$F=1$ on $H$, the basepoint restriction of (\ref{eq:glm23_eq20}) is $\psi$
+itself, and a direct four-term three-cocycle computation shows that
+(\ref{eq:glm23_eq20}) satisfies (\ref{eq:glm23_compatibility}); no
+normalization of $\omega$ is needed. Transporting back by the inverse
+fusion gauge gives a solution for the original $\omega$. Equivalently, one
+may keep $\omega$ and replace $\psi$ in (\ref{eq:glm23_eq20}) by
+$\psi\beta F^{-1}$, which matches the source's reading $L|_H=\psi\beta$.
+
+The torsor statement of line~761 is correct for classes under
+action-tensor gauges with the fusion gauge held fixed, as the source says.
+If fusion gauges preserving $\omega$ are also allowed, a two-cocycle $\beta$
+on $G$ acts, and the classes collapse to the quotient of
+$H^2(H,\mathbb C^\times)$ by the restriction of
+$H^2(G,\mathbb C^\times)$; this remark is not formalized.\footnote{Formal declarations:
+\leanid{TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol},
+\leanid{TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol\_isCompatible},
+\leanid{TNLean.Algebra.StabilizerRepresentatives.exists\_actionGauge\_eq\_reconstructedLSymbol},
+\leanid{TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses} and
+\leanid{TNLean.Algebra.ScalarThreeCochain.exists\_fusionGauge\_eq\_one\_of\_isTrivialGaugeClass\_comap}
+in \doclink{TNLean/Algebra/StabilizerCocycleReconstruction}.}
+
+\textbf{Verdict: resolved local fix.} Formula~(\ref{eq:glm23_eq20}) is
+correct in the fusion gauge in which $\omega$ is trivial on the stabilizer,
+and that gauge always exists. The classification and the torsor statement
+hold as stated for action-tensor gauge classes.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

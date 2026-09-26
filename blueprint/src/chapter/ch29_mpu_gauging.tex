@@ -7685,6 +7685,181 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_l_gauge}) cancels the multiplier under the inverse gauges.
 \end{proof}
 
+\begin{theorem}[Reconstruction of stabilizer L-symbols]
+    \label{thm:mpug_stabilizer_reconstruction}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_isCompatible,
+        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_one_isCompatible,
+        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_eq_mul,
+        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_base,
+        TNLean.Algebra.StabilizerRepresentatives.gauge_reconstructedLSymbol_isCompatible,
+        TNLean.Algebra.ScalarThreeCochain.exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap,
+        TNLean.Algebra.LSymbol.IsCompatible.mul,
+        TNLean.Algebra.LSymbol.IsCompatible.inv}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_trivial_gauge_class, def:is_cocycle,
+        thm:mpug_stabilizer_transition, thm:mpug_stabilizer_cocycle_l_symbol}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ as in
+    Theorem~\ref{thm:mpug_stabilizer_transition}. Let $\omega$ be a scalar
+    $3$-cocycle on $G$ with $\omega(a,b,c)=1$ for all $a,b,c\in H$, and let
+    $\psi$ be a scalar $2$-cocycle on $H$. With $h_2=t_k(g_2,x)$ and
+    $h_1=t_k(g_1,g_2x)$, define
+    \begin{align}
+        L^x_{g_1,g_2}
+         & =\frac{\omega(g_1g_2k_x,h_2^{-1},h_1^{-1})\,\psi(h_1,h_2)}
+        {\omega(g_1,g_2k_x,h_2^{-1})\,\omega(g_1,g_2,k_x)}.
+        \label{eq:mpug_stabilizer_reconstruction}
+    \end{align}
+    Then $L$ satisfies (\ref{eq:mpug_l_compatibility}), and
+    $L^{x_0}_{a,b}=\psi(a,b)$ for $a,b\in H$. Formula
+    (\ref{eq:mpug_stabilizer_reconstruction}) is
+    \cite[Eq.~(20)]{GarreRubio2023MPOSym}.
+
+    If only $\omega|_H$ is a coboundary, some fusion gauge $\beta$ on $G$
+    makes $\beta\mathbin{\triangleright}\omega$ equal to one on
+    $H\times H\times H$, and applying the inverse gauge
+    $(\beta^{-1},1)$ to (\ref{eq:mpug_stabilizer_reconstruction}) built from
+    $\beta\mathbin{\triangleright}\omega$ gives an $L$-symbol compatible with
+    $\omega$. The hypothesis that $\omega$ is one on the stabilizer is the
+    fusion gauge in which the source's formula holds; for a general
+    $\omega$ with $\omega|_H=d\beta$ the printed formula can fail
+    \cite{gap:glm23_eq20_fusion_gauge}. No normalization of $\omega$ is
+    required.
+    % Local fix: docs/paper-gaps/glm23_eq20_fusion_gauge.tex.
+    % Source anchor: arXiv:2203.12563, REsubmission.tex lines 740--761.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_stabilizer_transition, thm:mpug_stabilizer_cocycle_l_symbol}
+    The formula factors as its value at $\psi=1$ times the induced
+    $L$-symbol (\ref{eq:mpug_induced_stabilizer_l_symbol}), and pointwise
+    products of compatible $L$-symbols are compatible with the product of
+    the $3$-cochains. By Theorem~\ref{thm:mpug_stabilizer_cocycle_l_symbol}
+    it suffices to treat $\psi=1$. Fix $x$ and $g,h,k$, put $p=k_x$,
+    $a=t_k(k,x)$, $b=t_k(h,kx)$, and $c=t_k(g,hkx)$, so that $k_{kx}=kpa^{-1}$
+    and, by (\ref{eq:mpug_stabilizer_transition_product}),
+    $t_k(hk,x)=ba$ and $t_k(gh,kx)=cb$. The compatibility equation then
+    follows from the $3$-cocycle equation at the four quadruples
+    \begin{align}
+         & (g,h,k,p),\quad (g,h,kp,a^{-1}),\quad (g,hkp,a^{-1},b^{-1}),\quad
+        (ghkp,a^{-1},b^{-1},c^{-1}),
+    \end{align}
+    together with $\omega(a^{-1},b^{-1},c^{-1})=1$. At $x_0$ and $a,b\in H$
+    every argument of $\omega$ in (\ref{eq:mpug_stabilizer_reconstruction})
+    lies in $H$, which gives $L^{x_0}_{a,b}=\psi(a,b)$. If
+    $\omega|_H=d\beta_0$, extend $\beta_0^{-1}$ by one outside
+    $H\times H$; the coboundary of the extension cancels $\omega$ on
+    $H\times H\times H$. Finally, $(\beta^{-1},1)$ changes
+    $\beta\mathbin{\triangleright}\omega$ back to $\omega$.
+\end{proof}
+
+\begin{theorem}[Classification and torsor of stabilizer L-symbols]
+    \label{thm:mpug_stabilizer_torsor}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_inducedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_reconstructedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_gauge_eq_reconstructedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff,
+        TNLean.Algebra.StabilizerRepresentatives.solutionSetoid,
+        TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses,
+        TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses_mk,
+        TNLean.Algebra.StabilizerRepresentatives.solutionAction,
+        TNLean.Algebra.StabilizerRepresentatives.solutionAction_mk,
+        TNLean.Algebra.StabilizerRepresentatives.solutionAction_one,
+        TNLean.Algebra.StabilizerRepresentatives.solutionAction_mul,
+        TNLean.Algebra.StabilizerRepresentatives.solutionMulAction,
+        TNLean.Algebra.H2.instCommGroup,
+        TNLean.Algebra.H2.mk,
+        TNLean.Algebra.H2.mk_mul,
+        TNLean.Algebra.H2.one_def,
+        TNLean.Algebra.H2.mk_inv,
+        TNLean.Algebra.ScalarCocycle.IsCocycle.mul,
+        TNLean.Algebra.ScalarCocycle.IsCocycle.inv,
+        TNLean.Algebra.ScalarCocycle.isCocycle_one,
+        TNLean.Algebra.ScalarCocycle.CohomologousTo.mul,
+        TNLean.Algebra.ScalarCocycle.CohomologousTo.inv,
+        TNLean.Algebra.StabilizerRepresentatives.existsUnique_solutionAction_eq,
+        TNLean.Algebra.LSymbol.ActionGaugeEquiv,
+        TNLean.Algebra.LSymbol.actionGaugeEquiv_equivalence,
+        TNLean.Algebra.LSymbol.IsCompatible.mul_inv_one,
+        TNLean.Algebra.LSymbol.IsCompatible.gauge_one,
+        TNLean.Algebra.LSymbol.IsCompatible.isCocycle_restrict,
+        TNLean.Algebra.LSymbol.gauge_one_mul}
+    \leanok
+    \uses{thm:mpug_stabilizer_reconstruction, def:mpug_l_gauge, def:h2_cx,
+        def:cohomologous_to}
+    Keep the setting of Theorem~\ref{thm:mpug_stabilizer_reconstruction},
+    and call two $L$-symbols action-gauge equivalent when they differ by
+    $(1,\gamma)\mathbin{\triangleright}$ for some action-tensor gauge
+    $\gamma$.
+    \begin{enumerate}
+        \item If $R$ is compatible with the trivial $3$-cochain, then
+              $R=(1,\gamma)\mathbin{\triangleright}L[\psi]$ for the induced
+              $L$-symbol (\ref{eq:mpug_induced_stabilizer_l_symbol}) of the
+              $2$-cocycle $\psi(a,b)=R^{x_0}_{a,b}$, with
+              $\gamma^x_g=R^{x_0}_{k_{gx},t_k(g,x)}/R^{x_0}_{g,k_x}$.
+        \item If $\omega$ is a $3$-cocycle equal to one on
+              $H\times H\times H$, every $L$-symbol compatible with $\omega$
+              is action-gauge equivalent to
+              (\ref{eq:mpug_stabilizer_reconstruction}) for some $2$-cocycle
+              $\psi$ on $H$. For a general fusion gauge $\beta$ making
+              $\beta\mathbin{\triangleright}\omega$ trivial on $H$, the
+              same holds for $(\beta,1)\mathbin{\triangleright}L$ and the
+              formula built from $\beta\mathbin{\triangleright}\omega$.
+        \item Let $L_0$ be compatible with an arbitrary scalar $3$-cochain
+              $\omega$. An $L$-symbol $L$ is compatible with $\omega$ if and
+              only if $L$ is action-gauge equivalent to $L_0L[\psi]$ for
+              some $2$-cocycle $\psi$ on $H$, and $L_0L[\psi_1]$ and
+              $L_0L[\psi_2]$ are action-gauge equivalent if and only if
+              $\psi_1\sim\psi_2$. Hence sending the class of $\psi$ to the
+              class of $L_0L[\psi]$ is a bijection from $H^2(H,\C^\times)$
+              onto the action-gauge classes of $L$-symbols compatible with
+              $\omega$.
+        \item Pointwise multiplication of cocycles makes
+              $H^2(H,\C^\times)$ a commutative group. Sending the class of
+              $\psi$ and the class of $L$ to the class of $L\,L[\psi]$ is a
+              well-defined action of this group on these classes: the unit
+              acts trivially, acting by $\psi_2$ and then by $\psi_1$ is
+              acting by $\psi_1\psi_2$, and for any two classes exactly one
+              cohomology class carries the first to the second.
+    \end{enumerate}
+    The last two items are the torsor statement of \cite{GarreRubio2023MPOSym}
+    for fixed $(G,\omega,H)$, with the fusion gauge held fixed as in the
+    source.
+    % Source anchor: arXiv:2203.12563, REsubmission.tex lines 749--761.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_stabilizer_reconstruction,
+        thm:mpug_stabilizer_cocycle_l_symbol}
+    For the first item, compatibility at $x_0$ with arguments
+    $(g,h,k_x)$ expresses $R^x_{g,h}$ through basepoint values. Rewrite
+    $hk_x=k_{hx}t_k(h,x)$ and $gk_{hx}=k_{ghx}t_k(g,hx)$ and use
+    compatibility at $x_0$ with arguments $(g,k_{hx},t_k(h,x))$ and
+    $(k_{ghx},t_k(g,hx),t_k(h,x))$. The three equations combine into
+    $R^x_{g,h}=\gamma^x_{gh}(\gamma^{hx}_g\gamma^x_h)^{-1}
+        \psi(t_k(g,hx),t_k(h,x))$. Compatibility at $x_0$ with arguments in
+    $H$ is the cocycle equation for $\psi$.
+
+    For the third item, if $L$ and $L_0$ are compatible with $\omega$,
+    then $LL_0^{-1}$ is compatible with the trivial $3$-cochain, and the first
+    item applies; conversely $L_0L[\psi]$ is compatible with $\omega$, and an
+    action gauge with trivial fusion part preserves compatibility and
+    commutes with multiplication by $L_0$. Cancelling $L_0$ reduces the
+    freeness statement to (\ref{eq:mpug_induced_cohomology_iff}). The second
+    item is the third with $L_0$ the formula at $\psi=1$, which is
+    compatible by Theorem~\ref{thm:mpug_stabilizer_reconstruction}.
+    For the last item, products and inverses of cocycles are cocycles and
+    respect cohomology, which gives the group structure; cohomologous
+    cocycles give induced $L$-symbols related by an action gauge, so the
+    rule is well defined; the induced
+    $L$-symbol of a pointwise product is the pointwise product of the induced
+    $L$-symbols; and with base point $L$ the action is the bijection of the
+    third item.
+\end{proof}
+
 \begin{definition}[Generalized coboundary and cocycle]
     \label{def:mpug_generalized_cocycle}
     \lean{TNLean.Algebra.GeneralizedThreeCochain,
