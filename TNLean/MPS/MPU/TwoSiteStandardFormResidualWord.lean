@@ -134,4 +134,129 @@ theorem originalSite_threeBlock_window_entry
   rw [hmI, hmJ]
   rfl
 
+/-- A three-block window may have arbitrary complete two-site blocks on both
+sides, in addition to original-site residual prefix and suffix words. The
+coordinate equalities specify the full relabeled middle word. Both kinds of
+boundary product remain inside the virtual trace.
+
+Source context: arXiv:1703.09188, lines 603--622 and 2300--2306;
+arXiv:1606.00608, Appendix C.4, lines 1952--2017. -/
+theorem originalSite_threeBlock_window_with_buffers_entry
+    {d D ℓ r : ℕ} (U : MPOTensor d D) (k p m s : ℕ)
+    {u : Matrix (Fin ℓ × Fin r)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
+    (resPreI resPreJ : Fin p → Fin d) (resSufI resSufJ : Fin s → Fin d)
+    (midI midJ : Fin m → Fin (MPSTensor.blockPhysDim d (2 * k)))
+    (preI preJ sufI sufJ : List
+      (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
+    (hpre : preI.length = preJ.length)
+    (eL eR : Fin (MPSTensor.blockPhysDim d k))
+    (j₀ j₂ : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
+    (x : (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)))
+    (j : Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+    (hI : (List.ofFn midI).map (twoSiteDirectBlockEquiv d k) =
+      preI ++ ([finProdFinEquiv (eL, x.1.1), finProdFinEquiv (x.1.2, x.2.1),
+        finProdFinEquiv (x.2.2, eR)] ++ sufI))
+    (hJ : (List.ofFn midJ).map (twoSiteDirectBlockEquiv d k) =
+      preJ ++ ([j₀, finProdFinEquiv j, j₂] ++ sufJ)) :
+    mpo U (p + (m * (2 * k) + s))
+        (Fin.append resPreI (Fin.append
+          (MPSTensor.blockedConfigEquiv d m (2 * k) midI) resSufI))
+        (Fin.append resPreJ (Fin.append
+          (MPSTensor.blockedConfigEquiv d m (2 * k) midJ) resSufJ)) =
+      twoSiteThreeBlockTrace S
+        (evalWord U (List.ofFn resPreI) (List.ofFn resPreJ) *
+          evalWord (blockTwo (blockTensor U k)) preI preJ)
+        (evalWord (blockTwo (blockTensor U k)) sufI sufJ *
+          evalWord U (List.ofFn resSufI) (List.ofFn resSufJ))
+        eL eR j₀ j₂ x j := by
+  rw [mpo_apply_prefix_twoSiteBlock_suffix U k p m s
+    resPreI resPreJ midI midJ resSufI resSufJ]
+  rw [hI, hJ]
+  rw [evalWord_append (blockTwo (blockTensor U k)) preI preJ _ _ hpre]
+  rw [evalWord_append (blockTwo (blockTensor U k))
+    [finProdFinEquiv (eL, x.1.1), finProdFinEquiv (x.1.2, x.2.1),
+      finProdFinEquiv (x.2.2, eR)]
+    [j₀, finProdFinEquiv j, j₂] sufI sufJ (by simp)]
+  simp only [twoSiteThreeBlockTrace, Matrix.mul_assoc]
+
+/-- The matrix of original-chain coefficients obtained by varying the two
+neighboring output pairs and the intervening input pair, with all other
+original and blocked labels fixed. -/
+noncomputable def originalSiteThreeBlockWindow
+    {d D : ℕ} (U : MPOTensor d D) (k p m s : ℕ)
+    (resPreI resPreJ : Fin p → Fin d) (resSufI resSufJ : Fin s → Fin d)
+    (midI : ((Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))) →
+      Fin m → Fin (MPSTensor.blockPhysDim d (2 * k)))
+    (midJ : (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) →
+      Fin m → Fin (MPSTensor.blockPhysDim d (2 * k))) :
+    Matrix
+      ((Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
+        (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)))
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ :=
+  fun x j => mpo U (p + (m * (2 * k) + s))
+    (Fin.append resPreI (Fin.append
+      (MPSTensor.blockedConfigEquiv d m (2 * k) (midI x)) resSufI))
+    (Fin.append resPreJ (Fin.append
+      (MPSTensor.blockedConfigEquiv d m (2 * k) (midJ j)) resSufJ))
+
+/-- The three-block locality identity is an operator identity for a window
+inside an arbitrarily buffered original chain. The matrices of coefficients
+are assembled from full original MPO entries; both original-site residuals
+and complete two-site-block buffers are allowed.
+
+Source context: arXiv:1703.09188, equations `uuvv` and `StandardForm`, lines
+532--543 and 603--622; original-chain coordinates, lines 2300--2306. -/
+theorem originalSite_threeBlock_window_with_buffers_intertwiner
+    {d D ℓ r : ℕ} (U : MPOTensor d D) (k p m s : ℕ)
+    {u : Matrix (Fin ℓ × Fin r)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
+    (resPreI resPreJ : Fin p → Fin d) (resSufI resSufJ : Fin s → Fin d)
+    (midI : ((Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))) →
+      Fin m → Fin (MPSTensor.blockPhysDim d (2 * k)))
+    (midJ : (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) →
+      Fin m → Fin (MPSTensor.blockPhysDim d (2 * k)))
+    (preI preJ sufI sufJ : List
+      (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
+    (hpre : preI.length = preJ.length)
+    (eL eR : Fin (MPSTensor.blockPhysDim d k))
+    (j₀ j₂ : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
+    (hI : ∀ x, (List.ofFn (midI x)).map (twoSiteDirectBlockEquiv d k) =
+      preI ++ ([finProdFinEquiv (eL, x.1.1), finProdFinEquiv (x.1.2, x.2.1),
+        finProdFinEquiv (x.2.2, eR)] ++ sufI))
+    (hJ : ∀ j, (List.ofFn (midJ j)).map (twoSiteDirectBlockEquiv d k) =
+      preJ ++ ([j₀, finProdFinEquiv j, j₂] ++ sufJ))
+    (A : Matrix
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    originalSiteThreeBlockWindow U k p m s
+        resPreI resPreJ resSufI resSufJ midI midJ * A =
+      twoLinkOutputObservable u v A *
+        originalSiteThreeBlockWindow U k p m s
+          resPreI resPreJ resSufI resSufJ midI midJ := by
+  let P := evalWord U (List.ofFn resPreI) (List.ofFn resPreJ) *
+    evalWord (blockTwo (blockTensor U k)) preI preJ
+  let Q := evalWord (blockTwo (blockTensor U k)) sufI sufJ *
+    evalWord U (List.ofFn resSufI) (List.ofFn resSufJ)
+  have hF : originalSiteThreeBlockWindow U k p m s
+      resPreI resPreJ resSufI resSufJ midI midJ =
+      twoSiteThreeBlockTrace S P Q eL eR j₀ j₂ := by
+    ext x j
+    exact originalSite_threeBlock_window_with_buffers_entry U k p m s S
+      resPreI resPreJ resSufI resSufJ (midI x) (midJ j)
+      preI preJ sufI sufJ hpre eL eR j₀ j₂ x j (hI x) (hJ j)
+  rw [hF]
+  exact twoSite_threeBlock_trace_intertwiner_with_endpoints S P Q eL eR j₀ j₂ A
+
 end MPOTensor

@@ -5709,8 +5709,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_original_site_three_block_window_entry}
     \lean{MPOTensor.originalSite_threeBlock_window_entry}
     \leanok
-    \uses{lem:mpu_original_site_residual_two_site_word,
-        def:mpu_two_site_open_three_block}
+    \uses{def:mpdo_physical_blocking, def:mpu_two_site_open_three_block,
+        def:mpo_family}
     Suppose $W=(U^{[k]})_2$ has supplied two-site standard-form data.
     Let three consecutive blocks of length $2k$ lie between an arbitrary
     original-site prefix of length $p$ and suffix of length $s$. Under the
@@ -5733,6 +5733,43 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Apply the residual-word identity to the three middle blocks. Their
     relabeled words are precisely the three displayed letters, so the
     middle product is the one defining $F_{P,Q}$.
+\end{proof}
+
+\begin{theorem}[Buffered original-chain three-block locality]
+    \label{thm:mpu_original_site_buffered_three_block_locality}
+    \lean{MPOTensor.originalSite_threeBlock_window_with_buffers_entry,
+        MPOTensor.originalSiteThreeBlockWindow,
+        MPOTensor.originalSite_threeBlock_window_with_buffers_intertwiner}
+    \leanok
+    \uses{def:mpdo_physical_blocking, def:mpu_two_site_open_three_block,
+        def:mpo_family}
+    Suppose $W=(U^{[k]})_2$ has supplied two-site standard-form data.
+    Keep arbitrary original-site residual words at the two ends of the
+    chain, and arbitrary complete two-site-block words before and after a
+    three-block window. Let $P$ be the product of the left residual and
+    left complete-block words, and $Q$ the product of the right
+    complete-block and right residual words, in their chain order. When
+    the middle direct blocks are relabeled as these words and the three
+    displayed window letters, the full original-chain coefficient matrix
+    $F^U$ satisfies
+    \begin{align}
+        F^U(a,b;j) & = F_{P,Q}(a,b;j), \\
+        F^U A      & = B(A)F^U.
+    \end{align}
+    Both equalities are finite-chain identities with every exterior
+    physical label fixed; the virtual boundary is not discarded.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_original_site_residual_two_site_word,
+        lem:mpo_eval_word_append,
+        lem:mpu_two_site_open_three_block_buffers}
+    The residual-word identity first leaves both original-site products
+    in the trace. Two word concatenations split the relabeled middle
+    product into the left complete-block word, the three window letters,
+    and the right complete-block word. This gives the first equality
+    entrywise. Apply the arbitrary-virtual-end three-block identity with
+    the resulting products $P,Q$ to obtain the second equality.
 \end{proof}
 
 \begin{lemma}[Three-block locality with original-site residuals]
