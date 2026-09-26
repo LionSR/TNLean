@@ -40,28 +40,33 @@ $\xi_{\mathrm{diag}}$ the largest correlation length of the blocks.
 Take $d=2$ and two normal blocks of bond dimension one, $A_1=(1,0)$ with
 $m_1=2$ and $\mu_1=(1,1)$, and $A_2=(0,1)$ with $m_2=1$ and $\mu_2=1$. Then
 $A^0=\operatorname{diag}(1,1,0)$, $A^1=\operatorname{diag}(0,0,1)$, $D=3$, and
-\begin{align*}
+\begin{align}
     \ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1},\qquad
     \beta=(2,1).
-\end{align*}
+    \label{eq:mswc24_counterexample_target}
+\end{align}
 For every $q$ the only nonzero blocked matrices are
 $B^{0\cdots0}=\operatorname{diag}(1,1,0)$ and $B^{1\cdots1}=\operatorname{diag}(0,0,1)$.
 As vectors of $\C^D\otimes\C^D$ they are $e_{00}+e_{11}$ and $e_{22}$, so
 $P$ has rank two with range spanned by $(e_{00}+e_{11})/\sqrt2$ and $e_{22}$, and
 $V$ maps these to $\ket{0\cdots0}$ and $\ket{1\cdots1}$. On the copy index of the
 first block, $P$ is the rank-one matrix
-$\tfrac12\bigl(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\bigr)$ rather than
+$\tfrac1{\sqrt2}\bigl(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\bigr)$,
+the square root of the restriction
+$\bigl(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\bigr)$ of $B^\dagger B$,
+rather than
 $\operatorname{diag}(\mu_{1,1}^q,\mu_{1,2}^q)=\mathbf 1$ times a positive part, so
 (\ref{eq:mswc24_block_form}) fails.
 
 The blocks are one-dimensional, so every block has the trivial fixed point,
 $\omega_1$ is $e_{cc}$ for a copy $c\in\{0,1\}$ and $\omega_2=e_{22}$. Then
 $Ve_{cc}=\ket{0\cdots0}/\sqrt2$ and $Ve_{22}=\ket{1\cdots1}$, so
-\begin{align*}
+\begin{align}
     V^{\otimes M}\sum_j\beta_j\ket{\Omega_j}
     =2\cdot2^{-M/2}\ket{0\cdots0}^{\otimes M}+\ket{1\cdots1}^{\otimes M},
-\end{align*}
-whose overlap with the normalized target is
+    \label{eq:mswc24_counterexample_approx}
+\end{align}
+whose overlap with the normalized target (\ref{eq:mswc24_counterexample_target}) is
 $(2^{2-M/2}+1)/\bigl(\sqrt5\,(2^{2-M}+1)^{1/2}\bigr)$. It equals $0.988$, $0.949$,
 $0.800$ and $0.555$ at $M=1,2,4,8$, tends to $1/\sqrt5$, and does not depend on
 $q$. Taking for instance $q\approx\sqrt N$, so that $q=o(N)$ and $M\to\infty$, the
@@ -72,8 +77,9 @@ $\omega_1=(e_{00}+e_{11})/\sqrt2$, the two legs at one site come from different
 pairs, $V$ annihilates the configurations whose two legs lie in different copies,
 and only the two copy-uniform configurations survive, each with amplitude
 $2^{-M}$, so the first term is suppressed by $2^{1-M}$ relative to the
-target. The failure is not in the choice of pair: the fixed point of the
-positive part of the first block is not a product of nearest-neighbour pairs
+target (\ref{eq:mswc24_counterexample_target}), instead of the factor
+$2^{-M/2}$ of (\ref{eq:mswc24_counterexample_approx}). The failure is not in
+the choice of pair: the fixed point of the positive part of the first block is not a product of nearest-neighbour pairs
 carrying the weight $\beta_1$.
 
 \section{What is formalized}
