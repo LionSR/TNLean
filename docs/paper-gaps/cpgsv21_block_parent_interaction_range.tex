@@ -41,8 +41,13 @@ The comparison below removes this restriction, as developed under
 
 \section{Comparison of two interaction ranges}
 
-Fix $R>0$, and choose $W\geq 2R$ such that the open range-$R$ Hamiltonian
-$K_{R,W}$ has kernel $G_W(B)$ and the periodic range-$W$ Hamiltonians
+For $W\in\N$, let $G_W(B)$ be the local MPS space of $B$ on $W$ sites, the
+span of the vectors $\sigma\mapsto\operatorname{tr}(B^{\sigma}X)$ for
+$\sigma\in\{0,\ldots,d-1\}^W$ and virtual matrices $X$. For $R\leq W$, let
+$K_{R,W}$ be the open-chain parent Hamiltonian of range $R$ on $W$ sites, the
+sum over the $W-R+1$ initial sites $i$ of the orthogonal projection onto
+$G_R(B)^\perp$ acting on sites $i,\ldots,i+R-1$.
+Fix $R>0$, and choose $W\geq 2R$ such that $K_{R,W}$ has kernel $G_W(B)$ and the periodic range-$W$ Hamiltonians
 have a uniform gap $\gamma_W>0$ for all sufficiently large volumes.
 Set $h_W=I-P_{G_W(B)}$. Finite dimensionality and positivity give constants
 $\kappa,C>0$ such that
