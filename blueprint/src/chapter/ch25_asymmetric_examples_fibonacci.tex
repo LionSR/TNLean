@@ -365,6 +365,16 @@ At $N=1$, the condition excludes the single label $0$.
 
 \begin{lemma}[Vacuum projection and its kernel]
     \label{lem:asymex_fib_vacuum}
+    \lean{FibonacciCompression.mpo_fibOne_apply,
+        FibonacciCompression.mpo_fibOne_isStarProjection,
+        FibonacciCompression.range_mpo_fibOne,
+        FibonacciCompression.ker_mpo_fibOne,
+        FibonacciCompression.mpo_fibOne_ne_one,
+        FibonacciCompression.fibAdjacency,
+        FibonacciCompression.fibAdmissibility,
+        FibonacciCompression.fibAdmissibility_eq_one_iff}
+    \leanok
+    \uses{def:asymex_fib, def:mpo_family}
     For $N\geq1$, the vacuum operator $P_N=O_N(B_1)$ has matrix elements
     \begin{align}
         \bra{y}P_N\ket{x} & =\delta_{yx}p_N(x).
@@ -384,6 +394,7 @@ At $N=1$, the condition excludes the single label $0$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     The vacuum letters satisfy
     $(B_1^{yx})_{ab}=\delta_{yx}\delta_{ax}K_{xb}$.
     Expanding the periodic trace over bond labels
@@ -588,6 +599,13 @@ These vectors are not normalized unless this is stated explicitly.
 
 \begin{lemma}[Amplitudes and norms]
     \label{lem:asymex_fib_amplitudes}
+    \lean{FibonacciCompression.mpvState_fibAllTau,
+        FibonacciCompression.norm_mpvState_fibAllTau,
+        FibonacciCompression.mpv_fibChain,
+        FibonacciCompression.norm_mpvState_fibChain_sq,
+        FibonacciCompression.norm_mpvState_fibChain_pos}
+    \leanok
+    \uses{def:asymex_fib_states}
     Let $N\geq1$. The product tensor gives
     $\ket{V^{(N)}(A)}=\ket{1,\ldots,1}$, of norm one.
     For a word $x$, let $n_0(x)$ count its zeros and let $n_{11}(x)$
@@ -608,6 +626,9 @@ These vectors are not normalized unless this is stated explicitly.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{lem:asymex_fib_vacuum, thm:asymex_fib_state_action,
+        thm:asymex_fib_anomaly_nim_rep}
     The bond-one trace is $\prod_v\delta_{x_v1}$.
     For the chain, put
     $H=\begin{pmatrix}0&\sigma\\1&-\sigma^2\end{pmatrix}$.
