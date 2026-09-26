@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MajumdarGhoshHamiltonian
-import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
@@ -32,7 +32,8 @@ The relation to the review's Hamiltonian \(H\) is only through
 `majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace`: every vector of
 \(\mathcal G_{N,3}\) is an eigenvector of \(H\) with eigenvalue
 \(-\tfrac{3N}8\). The lower bound \(H\ge-\tfrac{3N}8\), which would identify
-\(\mathcal G_{N,3}\) with the ground space of \(H\), is not formalized.
+\(\mathcal G_{N,3}\) with the ground space of \(H\), is not formalized; it is
+tracked in https://github.com/LionSR/TNLean/issues/8117.
 
 ## Proof outline
 
@@ -350,17 +351,10 @@ theorem majumdarGhosh_groundSpace_intersection {M : ℕ} (hM : 3 ≤ M) :
 three-site chain ground space of `majumdarGhoshTensor` lies in the open-chain
 local space \(\mathcal G_N\). -/
 theorem majumdarGhosh_chainGroundSpace_le_groundSpace {N : ℕ} (hN3 : 3 ≤ N) :
-    chainGroundSpace majumdarGhoshTensor 3 N ≤ groundSpace majumdarGhoshTensor N := by
-  intro ψ hψ
-  have hN : 0 < N := by omega
-  rw [chainGroundSpace, dite_eq_left ⟨hN, hN3⟩] at hψ
-  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
-  refine contiguous_mem_of_restriction_intersection_submodules (groundSpace majumdarGhoshTensor)
-    (by norm_num) hN3 (fun M hM => majumdarGhosh_groundSpace_intersection hM) ?_
-  intro s hs τ
-  rw [← cyclicRestrictₗ_eq_contiguousRestrictₗ hN hN3
-    (show (⟨s, by omega⟩ : Fin N).val + 3 ≤ N from hs)]
-  exact hψ ⟨s, by omega⟩ τ
+    chainGroundSpace majumdarGhoshTensor 3 N ≤ groundSpace majumdarGhoshTensor N :=
+  chainGroundSpace_le_of_local_le_restriction_intersection_submodules _
+    (groundSpace majumdarGhoshTensor) (by omega) (by norm_num) hN3 le_rfl
+    fun _ hM => majumdarGhosh_groundSpace_intersection hM
 
 /-! ### Closing the ring -/
 

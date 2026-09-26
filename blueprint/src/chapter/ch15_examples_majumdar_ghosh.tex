@@ -23,7 +23,8 @@ matrix product state with a tensor built from the singlet matrix
 whose entry $Y_{ab}$ is the coefficient of $\ket{ab}$ in the singlet
 $\ket{10}-\ket{01}$. The bond-dimension-three representative of the state,
 Definition~\ref{def:majumdar_ghosh_tensor}, is a non-normal, non-injective
-example with a two-fold degenerate periodic ground space.
+example whose range-three parent Hamiltonian has a two-dimensional ground space
+on even rings of at least four sites.
 
 \begin{definition}[Majumdar--Ghosh tensor of the review]%
     \label{def:majumdar_ghosh_review_tensor}
@@ -557,7 +558,7 @@ normality in the following two lemmas.
     statement follows by enlarging a window of three sites one site at a time.
 \end{proof}
 
-\begin{theorem}[Two-fold dimer degeneracy of the Majumdar--Ghosh ground space]%
+\begin{theorem}[Ground space of the Majumdar--Ghosh parent Hamiltonian]%
     \label{thm:majumdar_ghosh_ground_space}
     \lean{MPSTensor.majumdarGhosh_chainGroundSpace_eq_span,
         MPSTensor.majumdarGhosh_ker_parentHamiltonian_eq_span,
