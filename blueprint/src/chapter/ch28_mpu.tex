@@ -5419,6 +5419,83 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 603--622.
 \end{definition}
 
+\begin{theorem}[Left-canonical normalization of a canonical MPU]
+    \label{thm:mpu_cfii_left_canonical}
+    \lean{MPOTensor.IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_normalized_flattening}
+    Let $\mathcal U$ be a matrix product unitary in full-support canonical
+    form II, with bond dimension $D$ and physical dimension $d$. Its normalized
+    flattening $A^{ij}=d^{-1/2}U^{ij}$ is left-canonical:
+    \begin{align}
+        \sum_{i,j=0}^{d-1} A^{ij\dagger}A^{ij} & =\Id_D.
+    \end{align}
+    This is the ambient normalization implicit in
+    \cite[lines 269--281 and 344--356]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_full_support_geometry}
+    The normalized transfer traces satisfy $\tr(E^N)=1$ for $N>1$. Hence the
+    canonical form has one retained block $B$, with coefficient $\mu$
+    satisfying $|\mu|^2=1$. Let $W$ be its inclusion into the ambient bond
+    space. Full support gives $W^\dagger W=\Id$ and $WW^\dagger=\Id$, while
+    the reconstruction gives $A^{ij}W=W(\mu B^{ij})$. Therefore
+    \begin{align}
+        \sum_{i,j}A^{ij\dagger}A^{ij}
+         & =W\left(\sum_{i,j}(\mu B^{ij})^\dagger(\mu B^{ij})\right)W^\dagger
+        =WW^\dagger=\Id_D.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Virtual unitary gauge from equal periodic operators]
+    \label{thm:mpu_cfii_equal_periodic_virtual_unitary}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_unitary_virtual_gauge_of_mpo_eq}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu}
+    Let $\mathcal U$ and $\mathcal V$ be matrix product unitaries on the same
+    physical space, each in full-support canonical form II, with bond
+    dimensions $D_{\mathcal U}$ and $D_{\mathcal V}$. Suppose that their
+    periodic operators agree at every length $N>1$:
+    \begin{align}
+        U^{(N)} & =V^{(N)}.
+    \end{align}
+    Then $D_{\mathcal U}=D_{\mathcal V}$, and, after identifying their bond
+    spaces by this equality, there is a unitary
+    $z\in\mathrm U(D_{\mathcal V})$ such that, for every $i,j$,
+    \begin{align}
+        V^{ij} & =zU^{ij}z^\dagger.
+    \end{align}
+    This is the virtual-bond implication underlying the local relation in
+    \cite[Equations (SFuu) and (SFvv), lines 624--652]{Cirac2017MPU}. The
+    full-support convention is recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_normal, thm:normal_proportional_mpv_geometric_phase, thm:cpsv_normal_mpv_phase_gauge, thm:mpu_cfii_left_canonical, lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    Write $A_{\mathcal U}^{ij}=d^{-1/2}U^{ij}$ and
+    $A_{\mathcal V}^{ij}=d^{-1/2}V^{ij}$. Both are normal tensors. Equality
+    of periodic operators for $N>1$ makes their matrix product vectors
+    equal at these lengths. The normal-tensor phase alternative gives a unit
+    scalar $a$ such that
+    \begin{align}
+        V^{(N)}(A_{\mathcal U})_\sigma
+         & =a^N V^{(N)}(A_{\mathcal V})_\sigma
+    \end{align}
+    at every positive length. At $N=2,3$ the normalized states are nonzero,
+    so the given equality yields $a^2=a^3=1$, hence $a=1$. Gauge recovery for
+    normal tensors now gives equal bond dimensions and an invertible $X$ and
+    nonzero scalar $\zeta$ satisfying
+    $A_{\mathcal V}^{ij}=\zeta XA_{\mathcal U}^{ij}X^{-1}$. Applying this
+    relation to lengths two and three, where the common states are nonzero,
+    gives $\zeta^2=\zeta^3=1$, so $\zeta=1$.
+    Theorem~\ref{thm:mpu_cfii_left_canonical} makes both tensors
+    left-canonical, so the irreducible unitary-gauge theorem replaces $X$
+    by a unitary $z$. Cancelling the common factor $d^{-1/2}$ gives the
+    asserted relation for $U^{ij}$ and $V^{ij}$.
+\end{proof}
+
 \begin{definition}[Open standard form from source cuts]
     \label{def:mpu_source_open_two_site_standard_form}
     \lean{MPOTensor.IsMPUCanonicalFormII.twoSiteStandardFormData}
