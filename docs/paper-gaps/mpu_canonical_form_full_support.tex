@@ -620,11 +620,16 @@ and in canonical form II \cite[line~356]{Cirac2017MPU}. Positive blocking now
 preserves the bundled canonical-form-II presentation, including the same
 ambient fixed matrix:
 \leanid{MPOTensor.IsMPUCanonicalFormII.blockTensor}. Its use in the
-derived-tensor entries has not yet been consolidated. For the comparison
-tensors, products, and compositions, preservation remains the subject of
-\ghissue{6139}; their restrictions remain necessary.
+derived-tensor entries has not yet been consolidated. Physical adjunction
+also preserves the bundled presentation, with the same recorded diagonal
+matrix, by
+\leanid{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor}. Its
+downstream uses likewise remain to be consolidated. Independent products,
+separate conjugation and transposition comparisons, and composition retain
+distinct obligations under \ghissue{6139}.
 
-The census before the positive-blocking construction was the following.
+Before the physical-adjoint and positive-blocking constructors, the recorded
+census was the following.
 Sixteen formal declarations mentioned the bundled presentation: the structure itself, thirteen
 that consume it, and two that construct one. The thirteen consumers conclude,
 about the same tensor, that its retained blocks fill the ambient bond space,
@@ -639,9 +644,10 @@ reduction. None of those sixteen carried a presentation on $\mathcal U$ to a
 presentation on a physical block, an adjoint, a transpose, a conjugate, a
 tensor product, or a composition, which is what the twelve entries would need;
 for the composition entry the transport has to run through a reduced
-representative, as the last part of this subsection shows. The new
-positive-blocking construction supplies exactly the first of those transports;
-it does not transfer the source cuts or factors back to $\mathcal U$.
+representative, as the last part of this subsection shows. Subsequent
+constructors supply positive-blocking and physical-adjoint preservation of
+the bundled presentation. Neither transports source cuts or factors back to
+$\mathcal U$.
 
 As the development stands today, the three candidates cannot be removed while
 the twelve stand, and what blocks them is a citation obstruction rather than a
@@ -744,8 +750,10 @@ prerequisite for the other.
           twelve use: positive physical blocking, physical adjunction,
           transposition, complex conjugation, independent tensor products,
           and composition. Positive blocking is now proved by
-          \leanid{MPOTensor.IsMPUCanonicalFormII.blockTensor}; the other
-          operations remain open. A preservation statement must deliver all four
+          \leanid{MPOTensor.IsMPUCanonicalFormII.blockTensor}, and physical
+          adjunction by
+          \leanid{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor}.
+          The other operations remain open. A preservation statement must deliver all four
           clauses of the presentation for the derived tensor: unitarity of
           its periodic operator family, literal canonical-form-II data for
           its normalized flattening, full support of those data, and a
@@ -765,11 +773,13 @@ simple, its source-$v$ gate is isometric for that same matrix by
 simple block occurs at a positive length at most $D^4$ by
 \leanid{MPOTensor.IsMPUCanonicalFormII.exists_sourceV_blockTensor_isIsometry}.
 Neither result transports source-cut factors back to the unblocked tensor.
-For physical adjunction and independent tensor products all four clauses are
-separately available, but the assembled preservation statement remains
-missing. Physical adjunction preserves unitarity, transports the
-data together with their full support, and conjugates the transfer map
-entrywise. Independent tensor products preserve unitarity, carry product
+Physical adjunction is also assembled: it preserves unitarity, transports the
+data together with their full support, and uses diagonality to identify the
+conjugated ambient fixed matrix with the original one. Its bundled
+preservation theorem is
+\leanid{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor}. For
+independent tensor products, the four clauses are separately available, but
+the assembled preservation statement remains missing. Such products preserve unitarity, carry product
 canonical-form-II data whose full support follows from full support of the two
 factors, and act on transfer maps as a Kronecker product, under which the
 Kronecker product of the two ambient matrices is again positive definite,
@@ -836,9 +846,10 @@ Until the first item exists, deleting any of the three candidates moves a
 hypothesis boundary out of sight without removing it, so all sixteen pointwise
 entries remain. Once it exists, the three candidates merge and thirteen remain:
 the generic supplied-pair step, which is kept deliberately, and the twelve
-derived-tensor entries. Their positive-blocking case now has the required
-preservation theorem, but its downstream entries have not yet been
-consolidated; the other derived operations still require their respective
+derived-tensor entries. Their positive-blocking and physical-adjoint cases
+now have the required preservation theorems, but the downstream entries have
+not yet been consolidated. Independent products, separate conjugation and
+transposition comparisons, and composition still require their respective
 preservation or reduction arguments.
 
 \section{Verdict}
