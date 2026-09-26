@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.Examples.Ising.IsingGauge
 import TNLean.MPS.Examples.Ising.Zsqrt2OperatorFusion
 import TNLean.MPS.MPDO.SimpleScaling
@@ -206,6 +207,43 @@ theorem isingConj_of_rho_eq {D₁ D₂ k z : ℕ}
   · have hne : isingRho h ≠ isingRho h' := fun e => hr e.symm
     rw [mulZsqrt2Tensor, mulTensorR_eq_zero_of_ne isingRho XZ YZ hX hY hne, hT h h' hne]
     simp [padZsqrt2]
+
+/-- **A fusion rule from a signed-permutation gauge.** For three tensors whose letters are scaled
+matrix units that vanish across the middle label `ρ`, an orthogonal gauge `G` over `ℤ√2` that
+conjugates, within every sector of `ρ`, the stacked letters `X ⋆ Y` into the letters of `T` padded
+by a zero block gives `O_L(X) O_L(Y) = O_L(T)` at every positive length. The stacked letters are
+the short sums of `MPSTensor.mul_mulTensorR_mul_transpose_eq_list`, so the sector identity
+`hdiag` is decided over `ℤ√2`. -/
+theorem isingFusion_of_signedPerm {DX DY k z : ℕ}
+    (XZ : Fin 10 → Fin 10 → Matrix (Fin DX) (Fin DX) (ℤ√2))
+    (YZ : Fin 10 → Fin 10 → Matrix (Fin DY) (Fin DY) (ℤ√2))
+    (TZ : Fin 10 → Fin 10 → Matrix (Fin k) (Fin k) (ℤ√2)) {a b t : Fin 10 → Fin 10 → ℤ√2}
+    {l r : Fin 10 → Fin 10 → Fin DX} {l' r' : Fin 10 → Fin 10 → Fin DY}
+    {lt rt : Fin 10 → Fin 10 → Fin k}
+    (hX : ∀ h h', XZ h h' = a h h' • Matrix.single (l h h') (r h h') 1)
+    (hY : ∀ h h', YZ h h' = b h h' • Matrix.single (l' h h') (r' h h') 1)
+    (hT : ∀ h h', TZ h h' = t h h' • Matrix.single (lt h h') (rt h h') 1)
+    (next : Fin 10 → List (Fin 10)) (hnext : ∀ h, (next h).Nodup)
+    (hzero : ∀ h h', h' ∉ next h → a h h' = 0)
+    (hXρ : ∀ h h', isingRho h ≠ isingRho h' → XZ h h' = 0)
+    (hYρ : ∀ h h', isingRho h ≠ isingRho h' → YZ h h' = 0)
+    (hTρ : ∀ h h', isingRho h ≠ isingRho h' → TZ h h' = 0)
+    (G : Matrix (Fin (k + z)) (Fin (DX * DY)) (ℤ√2)) (hGG : G * Gᵀ = 1) (hGG' : Gᵀ * G = 1)
+    (hdiag : ∀ h h', isingRho h' = isingRho h →
+      (Matrix.of fun x y => ((next h).map fun j =>
+        a h j * b j h' * G x (finProdFinEquiv (l h j, l' j h')) *
+          G y (finProdFinEquiv (r h j, r' j h'))).sum) =
+        t h h' • Matrix.single (Fin.castAdd z (lt h h')) (Fin.castAdd z (rt h h')) 1)
+    {L : ℕ} (hL : 0 < L) :
+    MPOTensor.mpo (fun i j => complexOfZsqrt2 (XZ i j)) L *
+        MPOTensor.mpo (fun i j => complexOfZsqrt2 (YZ i j)) L =
+      MPOTensor.mpo (fun i j => complexOfZsqrt2 (TZ i j)) L :=
+  mpo_mul_eq_of_zsqrt2_conj XZ YZ TZ G Gᵀ 1 one_ne_zero (by rw [one_smul, hGG])
+    (by rw [one_smul, hGG'])
+    (isingConj_of_rho_eq hXρ hYρ hTρ fun h h' hρ => by
+      rw [one_smul, hT h h', padZsqrt2_smul_single, ← hdiag h h' hρ]
+      exact mul_mulTensorR_mul_transpose_eq_list _ _ _ _ _ _ _ _ hX hY next hnext hzero G h h')
+    hL
 
 private theorem isingPsiFlip_eq_iff : ∀ a b : Fin 3, isingPsiFlip a = isingPsiFlip b ↔ a = b := by
   decide
