@@ -6065,8 +6065,7 @@ tensors.
 
 \begin{theorem}[Grouped C3 from a three-interval estimate]
     \label{thm:grouped_c3_from_projector_defect}
-    \lean{MPSTensor.grouped_martingaleDifference_norm_le_of_projector_defect,
-        MPSTensor.grouped_martingaleDifference_norm_le_of_two_le}
+    \lean{MPSTensor.grouped_martingaleDifference_norm_le_of_projector_defect}
     \leanok
     Let $p\geq1$. Suppose that the range-$2p$ open parent
     Hamiltonian of a tensor has its boundary-condition space as kernel
@@ -6090,12 +6089,14 @@ tensors.
 \begin{proof}
     \leanok
     \uses{lem:grouped_open_ground_projection_locality,
+        thm:grouped_c3_from_second_index,
         thm:ph_active_grouped_projector_error,thm:grouped_spectator_norm}
-    The products at indices zero and one vanish. For $n\geq2$,
-    put $K=p(n-1)$. The active interval has length $p(n+1)$,
-    and its preceding prefix has length $pn$. The kernel hypothesis
-    and the active projector identity give the desired bound on this
-    interval. Adjoining the remaining $pM-p(n+1)$ sites does not
+    The products at indices zero and one vanish, so by
+    Theorem~\ref{thm:grouped_c3_from_second_index} it suffices to treat
+    $n\geq2$. For such $n$, put $K=p(n-1)$. The active interval has
+    length $p(n+1)$, and its preceding prefix has length $pn$. The kernel
+    hypothesis and the active projector identity give the desired bound on
+    this interval. Adjoining the remaining $pM-p(n+1)$ sites does not
     increase the operator norm.
 \end{proof}
 
