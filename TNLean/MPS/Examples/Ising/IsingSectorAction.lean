@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Examples.Ising.IsingWeightedTwist
 
 /-!
@@ -236,38 +237,20 @@ theorem sectorAction_conjMatrix (h : Fin 10) :
 Theorem 7.7(i)–(iii); data file §2, checks 2c–2e): four weighted bond-one product states and six
 zero slots. -/
 noncomputable def sectorCompression :
-    MultiBlockCompression sectorAction sectorSlots sectorTargets where
-  z := 6
-  ord := sectorOrd
-  gauge := sectorGauge
-  triangular h x y hlt := by
-    have h' : sectorOrd y.1 < sectorOrd x.1 := hlt
-    have hxy : x.1 ≠ y.1 := fun e => by rw [e] at h'; exact lt_irrefl _ h'
-    rw [sectorAction_conjMatrix, complexOfZsqrt2_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hxy,
-      map_zero]
-  matched h s := by
-    rw [sectorAction_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
-      Matrix.blockDiag'_blockDiagonal']
-    ext p q
-    simp [sectorBlockZ, sectorTargets, productState, zsqrt2ToComplex_sectorWeightsZ]
-  unmatched h t := by
-    rw [sectorAction_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
-      Matrix.blockDiag'_blockDiagonal']
-    ext p q
-    simp [sectorBlockZ]
+    MultiBlockCompression sectorAction sectorSlots sectorTargets :=
+  MultiBlockCompression.ofRingBlockDiagonal zsqrt2ToComplex sectorOrd sectorTau sectorGauge
+    sectorBlockZ sectorAction_conjMatrix
+    (fun s h => sectorWeightsZ s • productStateZ (sectorLabel s) h)
+    (fun s h => by
+      ext p q
+      simp [sectorTargets, productState, zsqrt2ToComplex_sectorWeightsZ])
+    (fun _ _ => rfl) fun _ _ => rfl
 
 /-- **The remainder of the weighted Verlinde action vanishes** (P5 note, Theorem 7.7(vi); data
 file §2, check 2f): the action tensor is diagonal in the block coordinates. -/
 theorem sectorAction_remainder : sectorCompression.remainder = 0 := by
-  funext h
-  have hc : conjMatrix sectorGauge (sectorCompression.remainder h) =
-      conjMatrix sectorGauge (sectorAction h) -
-        Matrix.blockDiagonal' (conjMatrix sectorGauge (sectorAction h)).blockDiag' :=
-    sectorCompression.conjMatrix_remainder h
-  refine conjMatrix_injective sectorGauge ?_
-  rw [hc, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, sectorAction_conjMatrix,
-    complexOfZsqrt2, complexOfRing,
-    Matrix.blockDiagonal'_map _ _ (map_zero _), Matrix.blockDiag'_blockDiagonal']
+  unfold sectorCompression
+  exact funext MultiBlockCompression.remainder_ofRingBlockDiagonal
 
 /-! ### Consequences -/
 
@@ -293,11 +276,6 @@ theorem sectorAction_trace_evalWord (w : List (Fin 10)) (hw : w ≠ []) :
     Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons, Matrix.tail_cons]
   ring
 
-private theorem mpv_smul (c : ℂ) (A : MPSTensor 10 1) {L : ℕ} (σ : Fin L → Fin 10) :
-    mpv (c • A) σ = c ^ L * mpv A σ := by
-  rw [show c • A = fun i => c • A i from rfl, mpv, mpv, coeff, coeff, Kraus.evalWord_smul,
-    Matrix.trace_smul, smul_eq_mul, List.length_ofFn]
-
 /-- **The weighted Verlinde action of the bond object on the sector labels** (data file §2,
 check 2b): at every positive length, the periodic operator of `Θ_3 = 5 A_1 ⊕ 3 A_ψ ⊕ 2 A_σ`
 applied to the product state `|σ1σ⟩^{⊗ L}` is
@@ -312,7 +290,7 @@ theorem thetaThree_mpo_sectorState (L : ℕ) (hL : 0 < L) :
   have h := sectorCompression.mpv_eq_sum L hL σ
   rw [show MPOTensor.actTensor thetaThree sectorState = sectorAction from rfl, h,
     show sectorSlots = Finset.univ from rfl, Fin.sum_univ_four]
-  simp only [sectorTargets, mpv_smul, sectorWeights, sectorLabel, sectorState,
+  simp only [sectorTargets, Pi.smul_def, mpv_smul, sectorWeights, sectorLabel, sectorState,
     Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three,
     Matrix.head_cons, Matrix.tail_cons]
   ring

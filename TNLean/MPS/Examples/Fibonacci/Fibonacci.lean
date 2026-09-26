@@ -196,12 +196,6 @@ theorem fibTauMPS_apply_three :
   ext a b
   fin_cases a <;> fin_cases b <;> simp [complexOfGolden, fibTauGoldenMPS]
 
-theorem fibTauMPS_eq_complexOfGolden :
-    fibTauMPS = fun a => complexOfGolden (fibTauGoldenMPS a) := funext fibTauMPS_eq
-
-theorem fibOneMPS_eq_complexOfGolden :
-    fibOneMPS = fun a => complexOfGolden (fibOneGoldenMPS a) := funext fibOneMPS_eq
-
 /-! ### Normality of the two blocks
 
 Both blocks are normal at word length three (data file §3.2). For the `τ` block the words
@@ -243,13 +237,15 @@ def fibOneUnitCoeff : Fin 2 → Fin 2 → Fin 4 → GoldenInt
 /-- **The `τ` block is normal.** Its length-three words span the full three-by-three matrix
 algebra (data file §3.2). -/
 theorem fibTauMPS_isNormal : Kraus.IsNormal fibTauMPS :=
-  isNormal_of_golden_single fibTauGoldenMPS fibTauMPS_eq (by norm_num : 0 < 3)
+  isNormal_of_complexOfRing_single goldenToComplex fibTauGoldenMPS fibTauMPS_eq
+    (by norm_num : 0 < 3)
     (fun i _ k => ![i.succ, 3, k.succ]) fibTauUnitCoeff (by decide +kernel)
 
 /-- **The trivial block is normal.** Its length-three words span the full two-by-two matrix
 algebra (data file §3.2). -/
 theorem fibOneMPS_isNormal : Kraus.IsNormal fibOneMPS :=
-  isNormal_of_golden_single fibOneGoldenMPS fibOneMPS_eq (by norm_num : 0 < 3)
+  isNormal_of_complexOfRing_single goldenToComplex fibOneGoldenMPS fibOneMPS_eq
+    (by norm_num : 0 < 3)
     (fun _ _ k => fibOneWord k) fibOneUnitCoeff (by decide +kernel)
 
 /-! ### The stacked tensor of the square -/
@@ -397,14 +393,6 @@ theorem fibGauge_mul_inv : fibGaugeGolden * fibGaugeInvGolden = 1 := by decide +
 
 theorem fibGaugeInv_mul : fibGaugeInvGolden * fibGaugeGolden = 1 := by decide +kernel
 
-theorem fibGaugeComplex_mul_inv :
-    complexOfGolden fibGaugeGolden * complexOfGolden fibGaugeInvGolden = 1 := by
-  rw [← complexOfGolden_mul, fibGauge_mul_inv, complexOfGolden_one]
-
-theorem fibGaugeComplex_inv_mul :
-    complexOfGolden fibGaugeInvGolden * complexOfGolden fibGaugeGolden = 1 := by
-  rw [← complexOfGolden_mul, fibGaugeInv_mul, complexOfGolden_one]
-
 /-! ### The blocks, the slots and the block coordinates -/
 
 /-- The bond dimensions of the two target slots: two for the trivial block, three for the `τ`
@@ -472,11 +460,6 @@ def fibCoord : BlockSpace fibBlockDim fibSlots 4 ≃ Fin 9 where
     | 8 => ⟨Sum.inr 3, ⟨0, by decide⟩⟩
   left_inv := by decide +kernel
   right_inv := by decide +kernel
-
-/-- The gauge of the Fibonacci fusion. -/
-def fibGauge : (Fin 9 → ℂ) ≃ₗ[ℂ] (BlockSpace fibBlockDim fibSlots 4 → ℂ) :=
-  gaugeOfMatrix fibCoord (complexOfGolden fibGaugeGolden) (complexOfGolden fibGaugeInvGolden)
-    fibGaugeComplex_mul_inv fibGaugeComplex_inv_mul
 
 /-- The letters of the stacked tensor in the block coordinates: block diagonal, with the trivial
 block, the `τ` block and four one-by-one zero blocks on the diagonal (data file §3.3). -/
@@ -566,24 +549,7 @@ theorem fibStack_mul_gaugeInv (i : Fin 4) :
   revert i
   decide +kernel
 
-theorem fibStack_conj_golden (i : Fin 4) :
-    fibGaugeGolden * fibStackGolden i * fibGaugeInvGolden = fibConjGolden i := by
-  rw [Matrix.mul_assoc, fibStack_mul_gaugeInv, ← Matrix.mul_assoc, fibGauge_mul_inv,
-    Matrix.one_mul]
-
-theorem fibStack_conjMatrix (i : Fin 4) :
-    conjMatrix fibGauge (fibStack i) =
-      (complexOfGolden (fibConjGolden i)).submatrix fibCoord fibCoord := by
-  rw [fibGauge, conjMatrix_gaugeOfMatrix, fibStack_eq, ← complexOfGolden_mul,
-    ← complexOfGolden_mul, fibStack_conj_golden]
-
 /-! ### The compression datum -/
-
-private theorem fibStack_triangular_golden (i : Fin 4)
-    (x y : BlockSpace fibBlockDim fibSlots 4) (h : fibOrd y.1 < fibOrd x.1) :
-    fibConjGolden i (fibCoord x) (fibCoord y) = 0 := by
-  revert i x y
-  decide +kernel
 
 private theorem fibStack_matched_golden (i : Fin 4) (s : Fin 2) (p q : Fin (fibBlockDim s)) :
     fibConjGolden i (fibCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
@@ -596,13 +562,20 @@ private theorem fibStack_unmatched_golden (i : Fin 4) (t : Fin 4) (p q : Fin 1) 
   revert i t p q
   decide +kernel
 
+private theorem fibStack_offDiagonal_golden (i : Fin 4)
+    (x y : BlockSpace fibBlockDim fibSlots 4) (h : x.1 ≠ y.1) :
+    fibConjGolden i (fibCoord x) (fibCoord y) = 0 := by
+  revert i x y
+  decide +kernel
+
 /-- **The multi-block asymmetric compression datum of the Fibonacci fusion** (P5 note,
 Theorem 7.7, clauses (i)–(iii); data file §3.3). The stacked tensor of `τ ⊗ τ` compresses onto the
 trivial block and the `τ` block, with four one-dimensional zero slots left over. -/
 def fibonacci_compression : MultiBlockCompression fibStack fibSlots fibTargets :=
   MultiBlockCompression.ofGolden 4 fibOrd fibCoord fibStackGolden fibStack_eq fibTargetsGolden
     fibTargets_eq fibGaugeGolden fibGaugeInvGolden fibGauge_mul_inv fibGaugeInv_mul fibConjGolden
-    fibStack_mul_gaugeInv fibStack_triangular_golden
+    fibStack_mul_gaugeInv
+    (fun i => MultiBlockCompression.triangular_of_offDiag (fibStack_offDiagonal_golden i))
     (fun i s _ p q => fibStack_matched_golden i s p q) fibStack_unmatched_golden
 
 /-! ### Consequences -/
@@ -661,17 +634,11 @@ theorem fibonacci_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 6 ≤ w.le
   change (2 : ℕ) + 4 ≤ w.length
   omega
 
-private theorem fibStack_offDiagonal_golden (i : Fin 4)
-    (x y : BlockSpace fibBlockDim fibSlots 4) (h : x.1 ≠ y.1) :
-    fibConjGolden i (fibCoord x) (fibCoord y) = 0 := by
-  revert i x y
-  decide +kernel
-
 /-- **The remainder vanishes**: the conjugated letters are block diagonal, not merely block
 triangular, so the extension splits completely (data file §3.3). -/
-theorem fibonacci_remainder_eq_zero (i : Fin 4) : fibonacci_compression.remainder i = 0 :=
-  fibonacci_compression.remainder_eq_zero_of_goldenGauge (hG := fibGauge_mul_inv)
-    (hG' := fibGaugeInv_mul) rfl fibStack_eq fibStack_mul_gaugeInv fibStack_offDiagonal_golden i
+theorem fibonacci_remainder_eq_zero (i : Fin 4) : fibonacci_compression.remainder i = 0 := by
+  unfold fibonacci_compression
+  exact MultiBlockCompression.remainder_ofRing fibStack_offDiagonal_golden i
 
 /-! ### The fusion tensors -/
 
@@ -718,8 +685,8 @@ theorem fibonacci_right_eq (s : {s // s ∈ fibSlots}) :
     decide +kernel
   have h : fibonacci_compression.right s =
       (complexOfGolden fibGaugeInvGolden).submatrix id fun j => fibCoord ⟨Sum.inl s, j⟩ :=
-    fibonacci_compression.right_gaugeOfMatrix (hG := fibGaugeComplex_mul_inv)
-      (hG' := fibGaugeComplex_inv_mul) rfl s
+    fibonacci_compression.right_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ fibGauge_mul_inv)
+      (hG' := complexOfRing_mul_eq_one _ fibGaugeInv_mul) rfl s
   rw [h, ← hgolden]
   rfl
 
@@ -730,8 +697,8 @@ theorem fibonacci_left_eq (s : {s // s ∈ fibSlots}) :
     decide +kernel
   have h : fibonacci_compression.left s =
       (complexOfGolden fibGaugeGolden).submatrix (fun i => fibCoord ⟨Sum.inl s, i⟩) id :=
-    fibonacci_compression.left_gaugeOfMatrix (hG := fibGaugeComplex_mul_inv)
-      (hG' := fibGaugeComplex_inv_mul) rfl s
+    fibonacci_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ fibGauge_mul_inv)
+      (hG' := complexOfRing_mul_eq_one _ fibGaugeInv_mul) rfl s
   rw [h, ← hgolden s.1]
   rfl
 
