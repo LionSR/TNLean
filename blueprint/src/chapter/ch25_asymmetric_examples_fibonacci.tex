@@ -600,8 +600,6 @@ These vectors are not normalized unless this is stated explicitly.
     \lean{FibonacciCompression.mpvState_fibAllTau,
         FibonacciCompression.norm_mpvState_fibAllTau,
         FibonacciCompression.mpv_fibChain,
-        FibonacciCompression.mpo_fibOne_mulVec_allTau,
-        FibonacciCompression.mpo_fibOne_mulVec_chain,
         FibonacciCompression.norm_mpvState_fibChain_sq,
         FibonacciCompression.norm_mpvState_fibChain_pos}
     \leanok
@@ -627,7 +625,8 @@ These vectors are not normalized unless this is stated explicitly.
 
 \begin{proof}
     \leanok
-    \uses{lem:asymex_fib_vacuum}
+    \uses{lem:asymex_fib_vacuum, thm:asymex_fib_state_action,
+        thm:asymex_fib_anomaly_nim_rep}
     The bond-one trace is $\prod_v\delta_{x_v1}$.
     For the chain, put
     $H=\begin{pmatrix}0&\sigma\\1&-\sigma^2\end{pmatrix}$.

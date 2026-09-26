@@ -19,16 +19,16 @@ explicit pair of states; the all-`τ` tensor `A` and the chain tensor `C` are th
 
 **Formalized here.** For every positive length `N`, the product tensor gives the basis vector
 `|V^{(N)}(A)⟩ = |1, …, 1⟩`, of norm one. The chain tensor gives the amplitudes
-`V^{(N)}(C)_x = p_N(x) σ^{n_0(x)} (-σ²)^{n_{11}(x)}`, where `p_N` is the cyclic admissibility weight
-of `Examples/FibonacciVacuum.lean`, `n_0(x)` counts the zeros of `x` and `n_{11}(x)` counts its
-cyclic neighbouring pairs `11`. Both vectors are fixed by the vacuum operator `P_N = O_N(B_1)`, the
-squared chain norm is `∑_x p_N(x) σ^{2 n_0(x) + 4 n_{11}(x)}`, and this norm is positive. In the
-Lean normalization the label `1` is `τ`, `σ = φ^{-1/2}` is `goldenSigmaReal`, the periodic vector is
-`MPSTensor.mpvState`, and the cyclic successor `v + 1` is addition in `Fin N`.
-
-**Local fix (provenance):** the vacuum operator is that of `Examples/Fibonacci.lean`, whose
-entries the source does not print; documented in
-`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
+`V^{(N)}(C)_x = p_N(x) σ^{n_0(x)} (-σ²)^{n_{11}(x)}`, where `p_N` is the cyclic admissibility
+weight of `Examples/FibonacciVacuum.lean`, `n_0(x)` counts the zeros of `x` and `n_{11}(x)`
+counts its cyclic neighbouring pairs `11`. The squared chain norm is
+`∑_x p_N(x) σ^{2 n_0(x) + 4 n_{11}(x)}`, and this norm is positive. In the Lean normalization the
+label `1` is `τ`, `σ = φ^{-1/2}` is `goldenSigmaReal`, the periodic vector is
+`MPSTensor.mpvState`, and the cyclic successor `v + 1` is addition in `Fin N`. The remaining
+clause of the blueprint lemma, that both vectors are fixed by the vacuum operator
+`P_N = O_N(B_1)`, is `mpo_fibOne_mulVec_allTau` (`Examples/FibonacciAction.lean`) and
+`mpo_fibOne_mulVec_chain` (`Examples/FibonacciAnomaly.lean`); the amplitude formula also shows
+that the chain vector has admissible support, so `mpo_fibOne_mulVec_eq_self` applies to it.
 
 ## Main definitions
 
@@ -42,7 +42,6 @@ entries the source does not print; documented in
 * `FibonacciCompression.mpvState_fibAllTau`, `FibonacciCompression.norm_mpvState_fibAllTau`: the
   product state is `|1, …, 1⟩`, of norm one.
 * `FibonacciCompression.mpv_fibChain`: the chain amplitudes.
-* `FibonacciCompression.mpo_fibOne_mulVec_chain`: the chain vector is fixed by `P_N`.
 * `FibonacciCompression.norm_mpvState_fibChain_sq`,
   `FibonacciCompression.norm_mpvState_fibChain_pos`: the squared chain norm, and its positivity.
 
@@ -140,13 +139,6 @@ theorem mpv_fibChain (x : Fin N → Fin 2) :
   simp only [mpv_fibChain_eq_prod, fibChainWeight_eq, Finset.prod_mul_distrib, fibAdmissibility,
     Nat.cast_prod, Finset.prod_ite, Finset.prod_const, one_pow, mul_one, fibZeroCount,
     fibPairOneCount]
-
-/-- Project result: blueprint `lem:asymex_fib_amplitudes`. **The chain vector is fixed by the vacuum
-operator**, since its amplitudes vanish off the admissible configurations. The product vector
-is fixed by `mpo_fibOne_mulVec_allTau`. -/
-theorem mpo_fibOne_mulVec_chain :
-    MPOTensor.mpo fibOne N *ᵥ (fun x ↦ mpv fibChain x) = fun x ↦ mpv fibChain x :=
-  mpo_fibOne_mulVec_eq_self fun x hx ↦ by rw [mpv_fibChain, hx]; simp
 
 /-- The chain amplitudes are the images of real numbers. -/
 theorem mpv_fibChain_eq_ofReal (x : Fin N → Fin 2) :
