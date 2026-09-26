@@ -73,6 +73,7 @@ open MPOTensor MPOTensor.GroupCocycle TNLean.Algebra.ScalarThreeCochain
 def secondZSign (g : Multiplicative (ZMod 2 × ZMod 2)) (a : Fin 4) : ℂ :=
   (-1) ^ ((Multiplicative.toAdd g).1.val * (a.val % 2))
 
+/-- The dressing sign is a power of `−1`, hence nonzero. -/
 theorem secondZSign_ne_zero (g : Multiplicative (ZMod 2 × ZMod 2)) (a : Fin 4) :
     secondZSign g a ≠ 0 :=
   pow_ne_zero _ (neg_ne_zero.2 one_ne_zero)
