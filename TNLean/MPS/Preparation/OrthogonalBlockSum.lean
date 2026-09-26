@@ -229,7 +229,8 @@ theorem pairProductState_embedPair_eq_mulVec {D' M : ℕ} {ι : Fin D' → Fin D
       exact pairProductState_embedPair hι ω x₀
     · intro y _ hy
       obtain ⟨k, hk⟩ := Function.ne_iff.1 hy
-      refine mul_eq_zero_of_left (Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right fun h => hk ?_)) _
+      refine mul_eq_zero_of_left
+        (Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right fun h => hk ?_)) _
       obtain ⟨h1, h2⟩ := Prod.mk.inj h
       exact (Prod.ext (hι h1) (hι h2)).symm
     · simp

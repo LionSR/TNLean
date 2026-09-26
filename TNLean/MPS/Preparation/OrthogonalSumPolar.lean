@@ -44,10 +44,11 @@ variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
 
 omit [Fintype κ] [DecidableEq κ] in
 /-- If the range of `X` lies in the range of `Y`, then `X = Y R` for some `R`. -/
-theorem exists_mul_eq_of_range_le {ρ ρ' : Type*} [Fintype ρ] [Fintype ρ'] [DecidableEq ρ']
+theorem exists_mul_eq_of_range_le {ρ ρ' : Type*} [Fintype ρ] [Fintype ρ']
     {X : Matrix κ ρ' ℂ} {Y : Matrix κ ρ ℂ}
     (h : LinearMap.range X.mulVecLin ≤ LinearMap.range Y.mulVecLin) :
     ∃ R : Matrix ρ ρ' ℂ, Y * R = X := by
+  classical
   choose u hu using fun c : ρ' => h ⟨Pi.single c 1, rfl⟩
   refine ⟨of fun a c => u c a, ?_⟩
   ext a c
@@ -91,15 +92,16 @@ theorem conjTranspose_polarIso_mul_polarIso_eq_zero {M : Matrix ι κ ℂ} {M' :
 omit [Fintype ι] [Fintype κ] [DecidableEq κ] in
 /-- A product of two finite sums whose cross terms vanish is the sum of the diagonal
 products. -/
-theorem sum_mul_sum_of_mul_eq_zero {β α γ : Type*} [Fintype β] [DecidableEq β] [Fintype κ]
+theorem sum_mul_sum_of_mul_eq_zero {β α γ : Type*} [Fintype β] [Fintype κ]
     {X : β → Matrix α κ ℂ} {Y : β → Matrix κ γ ℂ} (h : ∀ j j', j ≠ j' → X j * Y j' = 0) :
     (∑ j, X j) * (∑ j, Y j) = ∑ j, X j * Y j := by
+  classical
   rw [Matrix.sum_mul]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [Matrix.mul_sum, Finset.sum_eq_single j (fun j' _ hj' => h j j' (Ne.symm hj'))
     (fun hj => absurd (Finset.mem_univ j) hj)]
 
-variable {β : Type*} [Fintype β] [DecidableEq β] {κj : β → Type*} [∀ j, Fintype (κj j)]
+variable {β : Type*} [Fintype β] {κj : β → Type*} [∀ j, Fintype (κj j)]
   [∀ j, DecidableEq (κj j)]
 
 /-- **The polar decomposition of an orthogonal sum.** Let `B = ∑ⱼ cⱼ Bⱼ Kⱼᴴ` with `cⱼ > 0`,
