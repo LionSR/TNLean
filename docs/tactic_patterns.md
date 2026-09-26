@@ -1373,8 +1373,13 @@ abstracted — record why, so it is not re-proposed).
   and the certificate is a matrix `N` over `R` with
   `N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1` and `f c ≠ 0`, where
   `rows` selects a full-rank set of the sitewise equations; the identity `hN`
-  is closed by `decide` over `R`. The left and vector forms take the
-  certificate of the transposed letters. Compute `N` offline by exact rational
+  is closed by `decide` over `R`. The right forms
+  (`right_intertwiner_eq_zero_of_ringCertificate`,
+  `mulVec_eq_zero_of_ringCertificate`) take a certificate of
+  `sitewiseEqMatrix BR CR`; the left forms
+  (`left_intertwiner_eq_zero_of_ringCertificate`,
+  `vecMul_eq_zero_of_ringCertificate`) take one of the transposed letters.
+  Compute `N` offline by exact rational
   inversion of the selected equations and clear denominators into `c`. All six
   call sites use the wrappers; the helper evaluation lemmas they needed were
   deleted.
