@@ -6138,6 +6138,77 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % remains at def:index above.
 \end{definition}
 
+\begin{theorem}[Comparison of canonical source indices]
+    \label{thm:mpu_cfii_index_periodic_comparison}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_of_mpo_eq,
+        MPOTensor.IsMPUCanonicalFormII.index_eq_of_mpo_eq}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_admissible_index,
+        def:mpo_family}
+    Let $U$ and $V$ be full-support canonical-form-II tensors on the same
+    physical space, possibly with different bond dimensions. If
+    $U^{(N)}=V^{(N)}$ for every $N>1$, then their right and left source-cut
+    ranks agree, and $\operatorname{ind}(U)=\operatorname{ind}(V)$.
+    This is a comparison of canonical representatives in the setting of
+    \cite[Definition~IV.1 and Proposition~IV.2]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_cfii_equal_periodic_virtual_unitary,
+        thm:mpu_virtual_sandwich_source_ranks,
+        lem:mpu_common_simple_blocking_finite,
+        prop:mpu_admissible_index_well_defined}
+    Equality of the periodic operators gives a unitary virtual similarity,
+    which preserves both source-cut ranks. Choose a common positive simple
+    blocking length $k$ for $U$ and $V$. The periodic
+    operators of the $k$-site blocks agree, so the ranks
+    $r_k$ and $\ell_k$ of these blocks satisfy
+    $r_k(U)=r_k(V)$ and $\ell_k(U)=\ell_k(V)$. Hence
+    \begin{align}
+        \operatorname{ind}(U)
+         & =\frac12\bigl(\log_2 r_k(U)-\log_2\ell_k(U)\bigr)
+        =\frac12\bigl(\log_2 r_k(V)-\log_2\ell_k(V)\bigr)
+        =\operatorname{ind}(V).
+    \end{align}
+\end{proof}
+
+\begin{definition}[Index through a reduced canonical representative]
+    \label{def:mpu_reduced_representative_index}
+    \lean{MPOTensor.IsMPU.index}
+    \leanok
+    \uses{thm:mpu_reduced_cfii_representative, def:mpu_admissible_index}
+    Let $d,D>0$, and let $U$ be an MPU tensor. Choose a reduced
+    canonical-form-II representative $U_{\mathrm{red}}$ with
+    $U_{\mathrm{red}}^{(N)}=U^{(N)}$ for every $N>0$, and set
+    \begin{align}
+        \operatorname{ind}(U) & =\operatorname{ind}(U_{\mathrm{red}}).
+    \end{align}
+    The definition does not identify the source-cut ranks of $U$ itself
+    with those of $U_{\mathrm{red}}$.
+\end{definition}
+
+\begin{theorem}[Independence of the reduced representative]
+    \label{thm:mpu_reduced_representative_index_invariance}
+    \lean{MPOTensor.IsMPU.index_eq_canonical_representative,
+        MPOTensor.IsMPU.index_eq_of_mpo_eq}
+    \leanok
+    \uses{def:mpu_reduced_representative_index,
+        def:mpu_canonical_form_ii, def:mpo_family}
+    Every canonical-form-II representative with the same positive-length
+    periodic operators as $U$ has index $\operatorname{ind}(U)$. In
+    particular, positive-dimensional MPU tensors $U,V$ with
+    $U^{(N)}=V^{(N)}$ for all $N>1$ have equal indices, even when their
+    bond dimensions differ.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative,
+        thm:mpu_cfii_index_periodic_comparison}
+    Choose reduced canonical-form-II representatives of $U$ and $V$.
+    Their periodic operators agree for $N>1$, so their canonical source
+    indices agree by Theorem~\ref{thm:mpu_cfii_index_periodic_comparison}.
+\end{proof}
+
 \begin{proposition}[Well-definedness of the index]
     \label{index-well-defined}
     \notready
