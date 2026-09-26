@@ -3609,6 +3609,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:primitive_whole_increment_defect_decay}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le}
     \leanok
+    \uses{def:primitive_mps, def:reassociated_tail_boundary_map,
+        def:spectator_boundary_maps_es, def:ground_space_es}
     Let $A$ be a normalized primitive tensor with nonzero bond dimension and a
     positive-definite fixed point.
     For every $\varepsilon>0$, all sufficiently large $L$ and every $K\geq0$, $Q>0$ satisfy
@@ -4929,6 +4931,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:ph_block_interval_defect_decay}
     \lean{MPSTensor.eventually_iSup_groundSpaceES_projector_defect_le}
     \leanok
+    \uses{thm:ph_block_interval_projectors}
     Let $(A_i)_{i\in I}$ be a finite family of tensors, and use the interval
     spaces and projectors of Theorem~\ref{thm:ph_block_interval_projectors}.
     Suppose that, for each $\varepsilon>0$ and all sufficiently large $L$,
@@ -4953,8 +4956,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     $\beta<1/2$ and the last quantity is less than $\eta/(r+1)$.
     For all sufficiently large $L$, the overlap bound holds with
     $B=\varepsilon C$, and every individual projector error is at most
-    $\eta/(r+1)$. Taking adjoints equates the two orders of each individual
-    projector error. The interval comparison therefore gives
+    $\eta/(r+1)$. Since $P_i$, $Q_i$, and $R_i$ are self-adjoint,
+    $(R_i-P_iQ_i)^*=R_i-Q_iP_i$, and hence
+    \begin{align}
+        \lVert R_i-P_iQ_i\rVert & =\lVert Q_iP_i-R_i\rVert.
+    \end{align}
+    The interval comparison therefore gives
     \begin{align}
         \lVert R-PQ\rVert
          & \leq\frac{\eta}{r+1}+r\frac{\eta}{r+1}=\eta.
@@ -4965,6 +4972,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:ph_primitive_block_interval_defect_decay}
     \lean{MPSTensor.eventually_iSup_groundSpaceES_projector_defect_le_of_inequivalent}
     \leanok
+    \uses{thm:ph_block_interval_projectors, def:primitive_mps}
     Let $(A_i)_{i\in I}$ be a finite family of normalized primitive tensors
     with positive bond dimensions and positive-definite fixed points.
     Suppose that, if the bond dimensions of two distinct members agree, they
