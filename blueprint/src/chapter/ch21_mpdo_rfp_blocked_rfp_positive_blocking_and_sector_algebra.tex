@@ -151,6 +151,47 @@ physical indices, as in
     columns preserves positive semidefiniteness.
 \end{proof}
 
+\begin{lemma}[Closed MPO entries with residual sites]
+    \label{lem:mpdo_physical_blocking_residuals}
+    \lean{MPOTensor.mpo_apply_prefix_blockTensor_suffix}
+    \leanok
+    \uses{def:mpdo_physical_blocking, def:mpo_family, def:mpo_eval_word}
+    Let a chain consist of a prefix of $p$ sites, $m$ complete blocks of
+    length $L$, and a suffix of $s$ sites. Write $M^{\alpha,\beta}$ for the
+    ordered product of matrices indexed by two equally long physical
+    words, and write $\widehat\sigma,\widehat\tau$ for the concatenations of
+    blocked words $\sigma,\tau$. Then, for matching row and column
+    configurations,
+    \begin{align}
+        \rho^{(p+mL+s)}(M)_{i^-\widehat\sigma i^+,\,
+            j^-\widehat\tau j^+}
+         & =\operatorname{tr}\!\left(
+        M^{i^-,j^-}\cdot (M^{[L]})^{\sigma,\tau}\cdot M^{i^+,j^+}
+        \right).
+    \end{align}
+    This identity retains both residual products, including when the chain
+    length is not divisible by $L$. It extends the closed-chain blocking
+    identity used in
+    \cite[Appendix~C.4, lines~1952--2017]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpo_eval_word_append, lem:eval_word_block}
+    Applying word concatenation at the two boundaries
+    (Lemma~\ref{lem:mpo_eval_word_append}) and then evaluating the middle
+    segment as a word of blocked matrices (Lemma~\ref{lem:eval_word_block})
+    gives
+    \begin{align}
+        M^{i^-\widehat\sigma i^+,\,j^-\widehat\tau j^+}
+         & = M^{i^-,j^-}\cdot M^{\widehat\sigma,\widehat\tau}
+        \cdot M^{i^+,j^+} \notag                              \\
+         & = M^{i^-,j^-}\cdot (M^{[L]})^{\sigma,\tau}
+        \cdot M^{i^+,j^+}.
+        \notag
+    \end{align}
+    Taking the virtual trace yields the stated entry identity.
+\end{proof}
+
 \begin{definition}[Two-site blocking of an MPO tensor]
     \label{def:mpdo_two_site_blocking}
     \lean{MPOTensor.blockTwo}
