@@ -36,7 +36,6 @@ taken over `ℂ` (Mathlib's `spectralRadius`):
 * `Matrix.exists_nonneg_mulVec_eq_spectralRadius_smul`: the weak Perron–Frobenius theorem.
 * `Matrix.spectralRadius_map_ofReal_eq_of_pos_vecMul_eq`: the spectral radius equals the
   eigenvalue of a positive left eigenvector.
-* `Matrix.spectrum_transpose`: a matrix and its transpose have the same spectrum.
 -/
 
 open scoped Matrix ENNReal NNReal
@@ -119,6 +118,7 @@ theorem exists_mem_spectrum_spectralRadius_eq [Nonempty ι] (A : Matrix ι ι �
     exact ENNReal.ofReal_le_ofReal (hmax ν hν)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
 
+omit [DecidableEq ι] in
 /-- **Weak Perron–Frobenius theorem.** A real matrix `M` with nonnegative entries over a
 nonempty index type has an eigenvector with nonnegative entries, not all zero, for the
 eigenvalue `ρ(M)`, its spectral radius over `ℂ`. -/
@@ -126,6 +126,7 @@ theorem exists_nonneg_mulVec_eq_spectralRadius_smul [Nonempty ι] {M : Matrix ι
     (hM : ∀ i j, 0 ≤ M i j) :
     ∃ v : ι → ℝ, v ≠ 0 ∧ (∀ i, 0 ≤ v i) ∧
       M *ᵥ v = (spectralRadius ℂ (M.map ((↑) : ℝ → ℂ))).toReal • v := by
+  classical
   obtain ⟨μ, hμ, hmax, hρ⟩ := exists_mem_spectrum_spectralRadius_eq (M.map ((↑) : ℝ → ℂ))
   rw [hρ, ENNReal.toReal_ofReal (norm_nonneg _)]
   set ρ := ‖μ‖ with hρdef
@@ -306,11 +307,13 @@ theorem ofReal_mem_spectrum_of_pos_vecMul_eq [Nonempty ι] {M : Matrix ι ι ℝ
     simp only [Matrix.vecMul, dotProduct, Matrix.map_apply]
     exact_mod_cast hj.symm
 
+omit [DecidableEq ι] in
 /-- **Spectral radius from a positive left eigenvector.** A nonnegative real matrix `M` with a
 positive left eigenvector `δ ᵥ* M = r • δ` has spectral radius `r` over `ℂ`. -/
 theorem spectralRadius_map_ofReal_eq_of_pos_vecMul_eq [Nonempty ι] {M : Matrix ι ι ℝ}
     (hM : ∀ i j, 0 ≤ M i j) {δ : ι → ℝ} (hδ : ∀ i, 0 < δ i) {r : ℝ} (h : δ ᵥ* M = r • δ) :
     spectralRadius ℂ (M.map ((↑) : ℝ → ℂ)) = ENNReal.ofReal r := by
+  classical
   have hr := ofReal_mem_spectrum_of_pos_vecMul_eq hδ h
   have hr0 : 0 ≤ r := by
     have := norm_le_of_mem_spectrum_of_pos_vecMul_eq hM hδ h hr
@@ -321,12 +324,5 @@ theorem spectralRadius_map_ofReal_eq_of_pos_vecMul_eq [Nonempty ι] {M : Matrix 
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
     exact ENNReal.ofReal_le_ofReal (norm_le_of_mem_spectrum_of_pos_vecMul_eq hM hδ h hμ)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm, Complex.norm_real, Real.norm_of_nonneg hr0]
-
-/-- The spectrum of a square matrix over a commutative ring is that of its transpose. -/
-theorem spectrum_transpose {R : Type*} [CommRing R] (A : Matrix ι ι R) :
-    spectrum R Aᵀ = spectrum R A := by
-  ext μ
-  rw [Matrix.mem_spectrum_iff_not_isUnit_eval_charpoly,
-    Matrix.mem_spectrum_iff_not_isUnit_eval_charpoly, Matrix.charpoly_transpose]
 
 end Matrix
