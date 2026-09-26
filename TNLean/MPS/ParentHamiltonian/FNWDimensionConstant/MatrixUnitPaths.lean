@@ -39,6 +39,8 @@ def pathConfig (a b c e f : Fin k) : Cfg (k * k) 4 :=
   ![finProdFinEquiv (a, b), finProdFinEquiv (b, c),
     finProdFinEquiv (c, e), finProdFinEquiv (e, f)]
 
+/-- Two four-edge path configurations coincide exactly when their five vertices
+agree. -/
 @[simp] theorem pathConfig_eq_iff (a b c e f a' b' c' e' f' : Fin k) :
     pathConfig a b c e f = pathConfig a' b' c' e' f' ↔
       a = a' ∧ b = b' ∧ c = c' ∧ e = e' ∧ f = f' := by
