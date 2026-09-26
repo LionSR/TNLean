@@ -114,10 +114,7 @@ theorem one_sub_norm_sum_div_le {ι : Type*} [Fintype ι] (p : ι → ℝ) (hp :
       refine Finset.sum_congr rfl fun j _ => ?_
       field_simp
     rw [hnum, hden, norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hP,
-      ← Real.mul_self_sqrt hP.le]
-    by_cases hC0 : Real.sqrt C = 0
-    · simp [hC0]
-    · field_simp
+      ← mul_assoc, Real.mul_self_sqrt hP.le, mul_div_mul_left _ _ hP.ne']
   rw [hq]
   have hle1 : 1 - ‖a‖ / Real.sqrt C ≤ 1 := by
     have : 0 ≤ ‖a‖ / Real.sqrt C := by positivity
@@ -136,9 +133,12 @@ theorem one_sub_norm_sum_div_le {ι : Type*} [Fintype ι] (p : ι → ℝ) (hp :
       have := norm_sub_norm_le (1 : ℂ) a
       rw [norm_one, norm_sub_rev] at this
       exact this
-    have hnum : s - ‖a‖ ≤ |s - 1| + ‖a - 1‖ := by linarith [le_abs_self (s - 1)]
-    rw [sub_le_iff_le_add, ← sub_le_iff_le_add', div_le_iff₀ (by linarith)]
-    nlinarith [abs_nonneg (s - 1), norm_nonneg (a - 1)]
+    rw [sub_le_iff_le_add, ← sub_le_iff_le_add', le_div_iff₀ (by linarith)]
+    have hsη : s ≤ 1 + η := by linarith [le_abs_self (s - 1)]
+    have haδ : 1 - δ ≤ ‖a‖ := by linarith
+    rcases le_or_gt (1 - 2 * (δ + η)) 0 with h | h
+    · nlinarith [norm_nonneg a]
+    · nlinarith [mul_le_mul_of_nonneg_left hsη h.le, mul_nonneg hδ hη]
 
 /-! ### The overlap of one block -/
 
@@ -198,7 +198,7 @@ theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (�
           mpvOverlap (polarPosTensor (blockTensor (Aj j) q)) (fixedPointTensor (σ j)) M‖ /
         (Real.sqrt (∑ j, μ j ^ (2 * (M * q))) *
           Real.sqrt (∑ j, μ j ^ (2 * (M * q)) * ‖mpvState (Aj j) (M * q)‖ ^ 2)) := by
-  haveI : ∀ j, NeZero (Dj j) := fun j => ⟨by
+  have : ∀ j, NeZero (Dj j) := fun j => ⟨by
     intro h
     have := htr j
     revert this
@@ -251,7 +251,8 @@ theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (�
         (NeZero.ne M)
       rw [mpvOverlap] at this
       rw [← this]
-      exact Finset.sum_congr rfl fun τ _ => by rw [mul_comm, mpv_blockedConfigEquiv]
+      exact Finset.sum_congr rfl fun τ _ => by
+        rw [mul_comm]; simp only [s, t, mpv_blockedConfigEquiv]
   have htt : ∀ j j', ∑ τ, star (t j τ) * t j' τ = if j = j' then
       ((‖mpvState (Aj j) N‖ ^ 2 : ℝ) : ℂ) else 0 := fun j j' => by
     split_ifs with h
@@ -261,7 +262,7 @@ theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (�
       rw [mpvOverlap] at this
       rw [← this]
       exact Finset.sum_congr rfl fun τ _ => by
-        rw [mul_comm, mpv_blockedConfigEquiv, mpv_blockedConfigEquiv]
+        rw [mul_comm]; simp only [t, mpv_blockedConfigEquiv]
   -- The three sums.
   have hX : ∑ τ, star (nonNormalApproxVector A q M (ghzAmplitude β)
       (fun j => embedPair (ι j) (fixedPointPair (σ j))) τ) *
@@ -276,12 +277,12 @@ theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (�
     · calc _ = star (ghzAmplitude β j) * ghzAmplitude β j * ∑ τ, star (s j τ) * s j τ := by
             rw [Finset.mul_sum]
             exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = _ := by rw [hss, if_pos rfl, mul_one]
+        _ = _ := by rw [hss, ite_eq_left rfl, mul_one]
     · intro j' _ hj'
       calc _ = star (ghzAmplitude β j) * ghzAmplitude β j' * ∑ τ, star (s j τ) * s j' τ := by
             rw [Finset.mul_sum]
             exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = 0 := by rw [hss, if_neg (Ne.symm hj'), mul_zero]
+        _ = 0 := by rw [hss, ite_eq_right (Ne.symm hj'), mul_zero]
     · simp
   have hY : ((‖mpvState A N‖ ^ 2 : ℝ) : ℂ) =
       ∑ j, ((μ j ^ (2 * N) * ‖mpvState (Aj j) N‖ ^ 2 : ℝ) : ℂ) := by
@@ -294,14 +295,14 @@ theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (�
             rw [Finset.mul_sum]
             exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
         _ = _ := by
-            rw [htt, if_pos rfl, ← hβn, Complex.ofReal_mul, Complex.ofReal_pow,
+            rw [htt, ite_eq_left rfl, ← hβn, Complex.ofReal_mul, Complex.ofReal_pow,
               ← Complex.normSq_eq_norm_sq, Complex.normSq_eq_conj_mul_self]
             rfl
     · intro j' _ hj'
       calc _ = star (β j) * β j' * ∑ τ, star (t j τ) * t j' τ := by
             rw [Finset.mul_sum]
             exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = 0 := by rw [htt, if_neg (Ne.symm hj'), mul_zero]
+        _ = 0 := by rw [htt, ite_eq_right (Ne.symm hj'), mul_zero]
     · simp
   have hZ : ∑ τ, star (nonNormalApproxVector A q M (ghzAmplitude β)
       (fun j => embedPair (ι j) (fixedPointPair (σ j))) τ) *
@@ -317,16 +318,19 @@ theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (�
             rw [Finset.mul_sum]
             exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
         _ = _ := by
-            rw [hst, if_pos rfl, ghzAmplitude, star_div₀, Complex.star_def,
-              Complex.conj_ofReal, ← hβn]
-            simp only [β, Complex.ofReal_pow, map_pow, Complex.conj_ofReal]
-            push_cast
+            have hsβ : star (β j) * β j = ((μ j ^ (2 * N) : ℝ) : ℂ) := by
+              rw [← hβn, Complex.star_def, Complex.conj_mul']
+              push_cast
+              ring
+            have hr' : star ((Real.sqrt (∑ l, ‖β l‖ ^ 2) : ℝ) : ℂ) = (r : ℂ) := by
+              simp [r]
+            rw [hst, ite_eq_left rfl, ghzAmplitude, star_div₀, hr', div_mul_eq_mul_div, hsβ]
             ring
     · intro j' _ hj'
       calc _ = star (ghzAmplitude β j) * β j' * ∑ τ, star (s j τ) * t j' τ := by
             rw [Finset.mul_sum]
             exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = 0 := by rw [hst, if_neg (Ne.symm hj'), mul_zero]
+        _ = 0 := by rw [hst, ite_eq_right (Ne.symm hj'), mul_zero]
     · simp
   -- Assemble.
   have hXr : Real.sqrt (∑ τ, ‖nonNormalApproxVector A q M (ghzAmplitude β)
@@ -346,8 +350,8 @@ theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (�
       mpv A (blockedConfigEquiv d M q τ)‖ = _
   rw [hZ, hXr, hYr, ← hr]
   simp only [Complex.ofReal_one, inv_one, one_mul, norm_mul, norm_inv, Complex.norm_real,
-    Real.norm_eq_abs, abs_of_nonneg (Real.sqrt_nonneg _)]
-  rw [div_eq_inv_mul, mul_inv, hr]
+    Real.norm_eq_abs, abs_of_nonneg, Real.sqrt_nonneg]
+  rw [div_eq_inv_mul, mul_inv, hr, abs_of_nonneg (Real.sqrt_nonneg _)]
   ring
 
 /-- **Approximation error for orthogonal blocks of multiplicity one** (arXiv:2307.01696,
@@ -453,7 +457,8 @@ theorem exists_approximationError_le_blockSum [NeZero b] (hι : ∀ j, Function.
     have h1' : C₁ j * u * Real.exp (C₁ j * u) ≤ C₁ j * u * Real.exp (S₁ * u) := by
       have : C₁ j ≤ S₁ := Finset.single_le_sum (f := C₁) (fun j _ => (hC₁ j).le)
         (Finset.mem_univ j)
-      gcongr
+      exact mul_le_mul_of_nonneg_left (Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right this hu))
+        (mul_nonneg (hC₁ j).le hu)
     have h2 : |‖mpvState (Aj j) (M * q)‖ ^ 2 - 1| ≤ K₅ j * u := by
       refine (hc j (M * q)).trans (mul_le_mul_of_nonneg_left ?_ (hK₅ j))
       calc (x ^ 2) ^ (M * q) = x ^ (2 * (M * q)) := (pow_mul _ _ _).symm
@@ -464,7 +469,7 @@ theorem exists_approximationError_le_blockSum [NeZero b] (hι : ∀ j, Function.
   calc 2 * ∑ j, (‖mpvOverlap (polarPosTensor (blockTensor (Aj j) q))
         (fixedPointTensor (σ j)) M - 1‖ + |‖mpvState (Aj j) (M * q)‖ ^ 2 - 1|)
       ≤ 2 * ∑ j, (C₁ j * u * Real.exp (S₁ * u) + K₅ j * u) := by
-        gcongr with j; exact hblock j
+        exact mul_le_mul_of_nonneg_left (Finset.sum_le_sum fun j _ => hblock j) (by norm_num)
     _ = 2 * (S₁ * u * Real.exp (S₁ * u) + S₂ * u) := by
         rw [Finset.sum_add_distrib, ← Finset.sum_mul, ← Finset.sum_mul, ← Finset.sum_mul]
     _ ≤ C * u * Real.exp (C * u) := by
