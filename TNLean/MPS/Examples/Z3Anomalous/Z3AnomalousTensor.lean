@@ -200,20 +200,20 @@ def uDagUnitCoeff : Fin 2 → Fin 2 → Fin 4 → EisensteinInt
   | 1, 1 => ![⟨0, 0⟩, ⟨0, 1⟩, ⟨0, 0⟩, ⟨1, 1⟩]
 
 private theorem uUnit_single (i j : Fin 2) :
-    ∑ k, uUnitCoeff i j k • evalWordEisenstein uEisMPS (List.ofFn (uUnitWord k)) =
+    ∑ k, uUnitCoeff i j k • evalWordR uEisMPS (List.ofFn (uUnitWord k)) =
       (omega - 1) • Matrix.single i j 1 := by
   revert i j
   decide +kernel
 
 private theorem uDagUnit_single (i j : Fin 2) :
-    ∑ k, uDagUnitCoeff i j k • evalWordEisenstein uDagEisMPS (List.ofFn (uDagUnitWord k)) =
+    ∑ k, uDagUnitCoeff i j k • evalWordR uDagEisMPS (List.ofFn (uDagUnitWord k)) =
       (omega - 1) • Matrix.single i j 1 := by
   revert i j
   decide +kernel
 
 private theorem identityUnit_single (i j : Fin 1) :
     ∑ k : Fin 1, (1 : EisensteinInt) •
-        evalWordEisenstein identityEisMPS (List.ofFn (![![0]] k)) =
+        evalWordR identityEisMPS (List.ofFn (![![0]] k)) =
       (1 : EisensteinInt) • Matrix.single i j 1 := by
   revert i j
   decide +kernel
@@ -262,35 +262,35 @@ def ddStack : MPSTensor 9 4 := (MPOTensor.mulTensor uDagTensor uDagTensor).toMPS
 /-- The Eisenstein matrices of the stacked product tensor of `U ⊗ U`, in the bond order
 `2 p₁ + p₂`. -/
 def uuStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulEisensteinTensor uEis uEis (Fin.divNat (m := 3) (n := 3) a)
+  fun a => mulTensorR uEis uEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 /-- The Eisenstein matrices of the stacked product tensor of `U ⊗ U†`. -/
 def udStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulEisensteinTensor uEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
+  fun a => mulTensorR uEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 /-- The Eisenstein matrices of the stacked product tensor of `U† ⊗ U`. -/
 def duStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulEisensteinTensor uDagEis uEis (Fin.divNat (m := 3) (n := 3) a)
+  fun a => mulTensorR uDagEis uEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 /-- The Eisenstein matrices of the stacked product tensor of `U† ⊗ U†`. -/
 def ddStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulEisensteinTensor uDagEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
+  fun a => mulTensorR uDagEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 theorem uuStack_eq (a : Fin 9) : uuStack a = complexOfEisenstein (uuStackEis a) :=
-  mulTensor_complexOfEisenstein uEis uEis _ _
+  mulTensor_complexOfRing _ uEis uEis _ _
 
 theorem udStack_eq (a : Fin 9) : udStack a = complexOfEisenstein (udStackEis a) :=
-  mulTensor_complexOfEisenstein uEis uDagEis _ _
+  mulTensor_complexOfRing _ uEis uDagEis _ _
 
 theorem duStack_eq (a : Fin 9) : duStack a = complexOfEisenstein (duStackEis a) :=
-  mulTensor_complexOfEisenstein uDagEis uEis _ _
+  mulTensor_complexOfRing _ uDagEis uEis _ _
 
 theorem ddStack_eq (a : Fin 9) : ddStack a = complexOfEisenstein (ddStackEis a) :=
-  mulTensor_complexOfEisenstein uDagEis uDagEis _ _
+  mulTensor_complexOfRing _ uDagEis uDagEis _ _
 
 /-! ### The identity operator -/
 

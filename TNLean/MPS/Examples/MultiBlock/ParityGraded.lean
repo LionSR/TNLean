@@ -166,12 +166,12 @@ theorem parGauge_mul_inv : parGaugeInt * parGaugeInvInt = 1 := by decide
 theorem parGaugeInv_mul : parGaugeInvInt * parGaugeInt = 1 := by decide
 
 theorem parGaugeComplex_mul_inv :
-    complexOfInt parGaugeInt * complexOfInt parGaugeInvInt = 1 := by
-  rw [← complexOfInt_mul, parGauge_mul_inv, complexOfInt_one]
+    complexOfInt parGaugeInt * complexOfInt parGaugeInvInt = 1 :=
+  complexOfRing_mul_eq_one _ parGauge_mul_inv
 
 theorem parGaugeComplex_inv_mul :
-    complexOfInt parGaugeInvInt * complexOfInt parGaugeInt = 1 := by
-  rw [← complexOfInt_mul, parGaugeInv_mul, complexOfInt_one]
+    complexOfInt parGaugeInvInt * complexOfInt parGaugeInt = 1 :=
+  complexOfRing_mul_eq_one _ parGaugeInv_mul
 
 /-- The slots of Example PAR: the weight `+1` and weight `-1` copies of `parA`. -/
 abbrev parSlots : Finset (Fin 2) := Finset.univ

@@ -1161,6 +1161,38 @@ abstracted — record why, so it is not re-proposed).
   contributes its ring homomorphism, two abbreviations and the one-line
   instantiations of the arithmetic lemmas its proofs rewrite with.
 
+### exact-ring layer: word evaluation, gauge inverses and matrix-unit certificates — promoted
+- **Pattern:** each example ring re-proved the entrywise `Matrix.map` ladder
+  (`_mul`, `_one`, `_zero`, `_sub`, `_transpose`, `_injective`,
+  `_blockDiagonal'`), defined its own word evaluation with its own
+  compatibility lemma, turned a decided `G * H = 1` into the complex identity by
+  `rw [← complexOfR_mul, h, complexOfR_one]`, and repeated the span argument
+  that makes a tensor normal from a decided table of scaled matrix units.
+- **Seen:** the golden and Eisenstein rings (`Examples/Rings/GoldenRing.lean`,
+  `Examples/Rings/EisensteinRing.lean`), the golden action tensor of
+  `Examples/Rings/GoldenCompression.lean`, the two normality certificates of
+  `GoldenCompression.lean` and `EisensteinCertificates.lean`, and about thirty
+  gauge-inverse rewrites across the CZX, Ising, multi-block, Fibonacci and
+  `ℤ[ω]` examples.
+- **Abstraction:** `MPSTensor.complexOfRing_sub`, `_transpose`,
+  `_blockDiagonal'`, `_injective`, `_ne_zero` and
+  `MPSTensor.complexOfRing_mul_eq_one` in
+  `TNLean/Algebra/ComplexOfRing.lean`; `MPSTensor.evalWordR` with
+  `MPSTensor.evalWord_complexOfRing`, and the certificates
+  `MPSTensor.isNBlkInjective_of_complexOfRing_smul_single` and
+  `MPSTensor.isNormal_of_complexOfRing_smul_single`, in
+  `TNLean/MPS/FundamentalTheorem/Reduction/RingEmbedding.lean`.
+- **Notes:** `complexOfGolden` and `complexOfEisenstein` are now same-name
+  `abbrev`s of `complexOfRing`, and `evalWordGolden` and `mulGoldenTensor` of
+  `evalWordR` and `mulTensorR`, so their blueprint tags and statements stay;
+  the ring-specific lemmas the proofs rewrite with are one-line instances. A
+  term such as `complexOfRing_mul_eq_one _ hG` elaborates against a goal
+  stated with the abbreviation, because the abbreviation unfolds reducibly;
+  a forward `rw` with a general lemma does not match the abbreviated head, so
+  rewriting keeps the ring-specific names. Kernel `decide` costs are unchanged,
+  since the general definitions have the same recursion as the ones they
+  replace.
+
 ### golden compression datum from a decided gauge — promoted
 - **Pattern:** an example over `ℤ[σ]` records the letters of the source and of
   the targets, a change of bond coordinates and its inverse, and the conjugated
@@ -1196,7 +1228,8 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/Examples/Fibonacci/Fibonacci.lean` and the two
   normal states of `Examples/Fibonacci/FibonacciAction.lean`.
 - **Abstraction:** `MPSTensor.isNormal_of_golden_single` in
-  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`,
+  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`, now the instance at one
+  of `MPSTensor.isNormal_of_complexOfRing_smul_single`, and
   the golden analogue of `P6Compression.isNormal_of_single_eq_smul` for words
   of positive length rather than single letters.
 - **Notes:** the words are given as functions `Fin ℓ → Fin d` so that the

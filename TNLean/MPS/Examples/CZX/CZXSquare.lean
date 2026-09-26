@@ -99,12 +99,12 @@ theorem czxSquareGauge_mul_inv : czxSquareGaugeInt * czxSquareGaugeInvInt = 1 :=
 theorem czxSquareGaugeInv_mul : czxSquareGaugeInvInt * czxSquareGaugeInt = 1 := by decide
 
 theorem czxSquareGaugeComplex_mul_inv :
-    complexOfInt czxSquareGaugeInt * complexOfInt czxSquareGaugeInvInt = 1 := by
-  rw [← complexOfInt_mul, czxSquareGauge_mul_inv, complexOfInt_one]
+    complexOfInt czxSquareGaugeInt * complexOfInt czxSquareGaugeInvInt = 1 :=
+  complexOfRing_mul_eq_one _ czxSquareGauge_mul_inv
 
 theorem czxSquareGaugeComplex_inv_mul :
-    complexOfInt czxSquareGaugeInvInt * complexOfInt czxSquareGaugeInt = 1 := by
-  rw [← complexOfInt_mul, czxSquareGaugeInv_mul, complexOfInt_one]
+    complexOfInt czxSquareGaugeInvInt * complexOfInt czxSquareGaugeInt = 1 :=
+  complexOfRing_mul_eq_one _ czxSquareGaugeInv_mul
 
 /-- The block ordering of Example D: a zero slot at position `0`, the weighted target at
 position `1`, and two more zero slots at positions `2` and `3`. -/
