@@ -17,7 +17,7 @@ interaction range at least \(3(r-1)(L_0+1)+1\).
 
 This retains the threshold of PGVWC07, arXiv:quant-ph/0608197, Theorem 12
 (label `2blocks.2`), lines 1424--1454, using the simultaneous-span estimate
-of the direct-sum lemma (label `lem:direct-sum`), lines 1346--1408. No larger injective length is chosen.
+of the direct-sum lemma (label lem:direct-sum), lines 1346--1408. No larger injective length is chosen.
 -/
 
 open scoped ComplexOrder
