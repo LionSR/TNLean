@@ -53,6 +53,11 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
   and that the plaquette state follows when each bond identifies the pair
   `(a, b)` at one end with `(b, a)` at the other.
+- `rmp_peps_czx_boundary_chain.tex` records that the virtual action of the
+  on-site CZX symmetry is identified with the CZX matrix product unitary on a
+  closed chain of legs subject to the plaquette constraint, and that the
+  support of the contraction of a region of the torus on that chain is not
+  formalized.
 - `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
   `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
   as a parameter and allow a positive factor in the isometry, because the

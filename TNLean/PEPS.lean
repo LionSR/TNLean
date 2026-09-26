@@ -75,6 +75,7 @@ import TNLean.PEPS.NormalSquareInjectivity
 import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
 import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalSquareUnconditionalFundamentalTheorem
+import TNLean.PEPS.OnSiteOperator
 import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.PositivityCounterexamples
 import TNLean.PEPS.RegionBlock
