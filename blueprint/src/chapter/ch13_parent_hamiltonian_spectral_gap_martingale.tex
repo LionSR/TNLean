@@ -4811,7 +4811,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ph_middle_interval_overlap, thm:tail_boundary_map_append, thm:left_boundary_map_append}
+    \uses{thm:ph_middle_interval_overlap, thm:tail_boundary_map_append, thm:left_boundary_map_append,
+        lem:ground_space_in_tail_ground, lem:prefix_restrict_ground_space_map}
     For a left boundary vector with boundary family $(Z_v)$, fixing $u,v$
     leaves the middle vector $\Gamma_L(Z_vA^u)$.
     For a right boundary vector with boundary family $(Y_u)$, the corresponding
@@ -4848,7 +4849,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ph_extended_boundary_overlap, thm:ph_joint_projector_comparison, thm:spectator_boundary_hilbert_factorization}
+    \uses{thm:ph_extended_boundary_overlap, thm:ph_joint_projector_comparison,
+        thm:spectator_boundary_hilbert_factorization, thm:range_ground_space_map_es}
     The boundary-map factorization gives $W_i\subseteq U_i$.
     The extended-boundary overlap estimate supplies all three bounds for
     $U_i\times U_j$, $V_i\times V_j$, and $U_i\times V_j$ with the same
