@@ -79,9 +79,14 @@ $U_3$ have $r=\ell=d^{2k+2}$. The declarations
 \leanid{MPOTensor.sourceIndexValue_blockTensor_shiftExampleU₂}, and
 \leanid{MPOTensor.sourceIndexValue_blockTensor_shiftExampleU₃} give the values
 $\log_2 d$, $-\log_2 d$, $0$, and $0$ at every such blocking. The left shift
-blocked over $k+1$ sites is also simple, but simplicity of the blockings of
-$U_2$ and $U_3$ is not proved, so for these two tensors the zero values are
-values of the source-index expression, not yet the index of Definition IV.1.
+blocked over $k+1$ sites is also simple. The tensor product of two simple
+tensors is simple (\leanid{MPOTensor.IsMPUSimple.tensorProduct}; this is the
+step behind ``The case of tensoring is trivial'' in the proof of Theorem
+IndexTh (ii), line 837), so $U_2$, $U_3$ and all their blockings over
+$k+1$ sites are simple as well
+(\leanid{MPOTensor.blockTensor_shiftExampleU₂_isMPUSimple},
+\leanid{MPOTensor.blockTensor_shiftExampleU₃_isMPUSimple}). All four values are
+therefore values at simple blockings.
 What remains is the step from these displayed tensors to an arbitrary tensor
 generating the same operators, which needs the canonical form of the shift and
 its uniqueness.

@@ -76,18 +76,23 @@ rank-product identity. It assumes the endpoint identities
 It combines these identities with independently proved blocking upper bounds.
 The focused accessors are
 \leanid{MPOTensor.rightRank_blockTensor_eq_pow_mul_of_products} and
-\leanid{MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}. A later
-application may derive the endpoint identities from the formal counterpart
-of Theorem~III.8 of Ref.~\cite{Cirac2017MPU}, under that theorem's own
-hypotheses.
+\leanid{MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}.
+For an MPU in canonical form II,
+\leanid{MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor}
+now derives each endpoint identity from the formal counterpart of
+Theorem~III.8 of Ref.~\cite{Cirac2017MPU} whenever the positive block is
+simple. Consequently the index of this canonical representative is
+independent of the chosen positive simple blocking; no endpoint identity
+is imposed as an additional hypothesis.
 
 \section{Verdict}
 
 The exponent in the proof of Proposition~IV.2 of
 Ref.~\cite{Cirac2017MPU} is corrected from $d^k$ to $d^{2k}$. This resolved
 local correction adds no hypothesis beyond the rank-product identity used by
-the proof. The formal saturation theorem nevertheless retains that identity
-as an explicit hypothesis rather than deriving it from blocking alone.
+the proof. The general saturation theorem retains that identity as an explicit
+hypothesis; its application to a canonical-form-II representative derives
+the identity from simplicity and canonical form.
 
 \bibliographystyle{alpha}
 \bibliography{references}

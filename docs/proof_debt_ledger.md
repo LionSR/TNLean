@@ -712,34 +712,34 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   and the simple-tensor equivalence take the predicate in place of the
   `(cfii, hfull)`, `(ρ, hρ, hρdiag)` and `(J, hJ, hpower)` groups. The
   source-labelled nodes `lemuisometry` and `ThmFund1` are therefore checked
-  against those statements. What remains is the blueprint-side merge of the
-  surviving pointwise `mpu_admissible` twins, the `HasFullSupport` deletion
+  against those statements. The three same-tensor blueprint twins have now
+  been merged using the supplied-pair converse; the generic source-u entry,
+  twelve derived-tensor entries, and twenty-three pathwise entries remain.
+  Other open work includes the `HasFullSupport` deletion
   (still consumed by the physical-adjoint, identity-ancilla, and
   tensor-product transports and by the reduced-representative construction),
   and the `fin_one` stabilization branch (still consumed on route by
   `cor:simple1` and `blockingsimple`(ii) in `SimpleBlocking.lean`). The
-  same-tensor citation obstruction has been removed by the proved transfer-
-  power converse, but the blueprint-side merge remains under #7660. Of the
-  16 pointwise nodes,
+  remaining derived-tensor cases require their own preservation or reduction
+  arguments. Of the original 16 pointwise nodes,
   `lem:mpu_admissible_source_u_isometry` is the generic supplied-fixed-pair
   step whose Lean statements still carry `(ρ, hρ, K, hpower)` and which the
   `lemuisometry` proof consumes. Three nodes
   (`thm:mpu_admissible_simple_tensor_equivalence`,
   `def:mpu_admissible_standard_form`, `thm:mpu_admissible_fundamental`)
-  restrict only the tensor their source-labelled counterpart already places
-  under the convention and have no Lean restriction left; the other 12
+  restricted only the tensor their source-labelled counterpart already places
+  under the convention and have now been removed; the other 12
   restrict a physical block, a physical-adjoint, transposed, or conjugate
-  comparison tensor, a tensor product, or a composition. Physical adjunction
-  and independent tensor products now preserve the predicate, but the
-  corresponding downstream entries have not been consolidated; the other
-  derived-tensor obligations remain distinct. The 3 are cited by 11
-  retained nodes (7 pointwise plus the path nodes
+  comparison tensor, a tensor product, or a composition, whose preservation
+  or reduction arguments are separate. Positive blocking, physical adjunction,
+  and independent tensor products now preserve the predicate, but their
+  downstream entries have not been consolidated. The 3 had been cited by
+  11 retained nodes (7 pointwise plus the path nodes
   `prop:mpu_admissible_continuity_index`, `thm:mpu_admissible_index`,
   `cor:mpu_admissible_continuous_standard_form`, and
-  `lem:mpu_admissible_symmetry_path_criterion`) whose tensors carry a
-  supplied fixed pair, so deleting them singly would strengthen those 11
-  statements silently. The first of two independent stages is now proved;
-  derived-tensor preservation and reduction form the second stage. The converse
+  `lem:mpu_admissible_symmetry_path_criterion`) whose tensors carry a supplied
+  fixed pair. Their citations now use the converse with exactly that fixed
+  matrix, without removing their other hypotheses. The converse
   `IsMPU U → ρ.PosDef → ρ.IsDiag → Matrix.trace ρ = 1 → 0 < J →
   E ^ J = vecMulVec ρ.vec 1.vec → IsMPUCanonicalFormII U`, by the spectral
   step of `Papers/1703.09188/paper_v2.tex` lines 344--355, turns a supplied
@@ -765,21 +765,19 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   nodes whose restricted tensor is the one the convention already governs
   (`lem:mpu_admissible_source_u_isometry` and the 3 candidates), and it
   dissolves the citation obstruction, but it constructs no datum for a
-  derived tensor and so leaves all 12 restricted. The three candidates may
-  therefore merge without waiting for the second stage; this consolidation
-  remains pending under #7660. The derived-tensor restrictions require
-  preservation of `IsMPUCanonicalFormII` under the relevant operations or,
-  for composition, passage to a reduced representative. Each preservation
-  statement must produce all four clauses (`isMPU`, `cfii`,
+  derived tensor and so leaves all 12 restricted. The three same-tensor
+  duplicates have been removed, with the 12 still standing. The remaining
+  derived-tensor arguments require preservation of `IsMPUCanonicalFormII`
+  under the relevant operation or transport through a reduced representative.
+  In a preservation theorem, all four clauses (`isMPU`, `cfii`,
   `fullSupport_eq`, and the positive diagonal trace-one `ρ` with `ρ_fixed`)
-  for the derived tensor. The assembled constructors
-  `IsMPUCanonicalFormII.physicalAdjointTensor` and
-  `IsMPUCanonicalFormII.tensorProduct` now cover physical adjunction and
-  independent products, respectively. For blocking the four clauses are
-  separately available (`IsMPU.blockTensor`, `blockTensorCFIIData`,
-  `hasFullSupport_blockTensor`, `transferMap_blockTensor`); transposition and
-  conjugation exist only as the composite. For composition only
-  `IsMPU.mulTensor` is available: `TNLean/MPS/MPU/` has no
+  must hold for the derived tensor. The constructors
+  `IsMPUCanonicalFormII.blockTensor`,
+  `IsMPUCanonicalFormII.physicalAdjointTensor`, and
+  `IsMPUCanonicalFormII.tensorProduct` now cover positive blocking, physical
+  adjunction, and independent products. Transposition and conjugation exist
+  only as the composite. For
+  composition only `IsMPU.mulTensor` is available: `TNLean/MPS/MPU/` has no
   canonical-form-II construction for `mulTensor` and no transfer-map identity
   for it, only the entrywise `normalizedFlattening_mulTensor_apply`. Supplying
   those two would not settle that case, because no preservation statement can
@@ -992,9 +990,10 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   compatibility of a same-name `abbrev`, and `decide +kernel` reduction at ℤ
   and ℤ√2. `RingHom.mapMatrix` is square-only, so the survivor is the
   rectangular `X.map f`. The normality certificates and the
-  `ofGolden`/`ofEisenstein`/`ofConjInt` constructors are three designs, not one
-  statement, and are excluded (`thm:asymex_normal_units` must not be redirected
-  to a no-prefactor certificate).
+  `ofGolden`/`ofEisenstein`/`ofConjInt` constructors were first excluded as
+  three designs; they are now unified (see the progress note of 2026-09-25,
+  second entry). `thm:asymex_normal_units` still points at the prefactor
+  certificate, whose statement is unchanged.
 - **Remediation**: one generic module with `complexOfRing (f : R →+* ℂ)`,
   its ladder closed by the Mathlib lemmas, generic bond product, action and
   word evaluation; the four heads become same-name `abbrev`s so definition
@@ -1015,6 +1014,22 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   (`ofGolden`, `ofEisenstein`, `ofConjInt`), excluded above as distinct
   designs, and the Kramers--Wannier call sites. Audit:
   `docs/audits/2026-09-25_ring_embedding_transport_second_slice.md`.
+- **Progress (2026-09-25, compression constructors)**: the compression
+  constructors are unified. `MultiBlockCompression.ofRing` in
+  `Reduction/ExplicitGauge.lean` takes any gauge whose conjugation of every
+  letter is the image of a matrix over a ring `R →+* ℂ`, and the decided
+  clauses over `R`; `ofGolden`, `ofEisenstein`, `ofConjMatrix` (along the
+  identity of `ℂ`, so `ofConjInt` too) and `ofScalarFlagFour` are instances,
+  and `ofRingBlockDiagonal`, `remainder_ofRing`, `remainder_oneSlot` replace the
+  per-example remainder proofs. The Kramers--Wannier, Ising, `CZXPlusIdentity`,
+  `CZXSquare`, `ParityGraded` and Fibonacci data are migrated; the scaled
+  Kramers--Wannier gauges enter through their own conjugation lemmas. The normality certificates share
+  `isNormal_of_complexOfRing_single` and
+  `isNormal_of_complexOfRing_letter_eq_smul_single`. The `ℤ₃` fusion examples
+  and `CZXSquare` share the single slot `MPSTensor.oneSlot`; the removed local
+  slot abbreviations are recorded in
+  `docs/audits/2026-09-26_single_slot_oneSlot_fold.md`. Remaining: the
+  complex-literal `GHZSectors` and `RepeatedBlock` data.
 
 ## D17. Three MPDO carriers restate the twelve vertical-decomposition fields instead of extending one  —  duplication, impact 5/10, effort 4/10
 - **Status**: open ([#7847](https://github.com/LionSR/TNLean/issues/7847); 2026-09-19 architectural survey)

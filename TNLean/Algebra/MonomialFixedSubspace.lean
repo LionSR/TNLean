@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Algebra.CharP.Two
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Dimension.Constructions
 import TNLean.Algebra.CommonFixedSubmodule
 import TNLean.Algebra.HypercubePhasePotential
