@@ -1978,6 +1978,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Adjoint reversal of an orthogonal-projector error — candidate
+- **Pattern:** replace the norm of a projector product minus a self-adjoint
+  projector by the norm of its adjoint, reverse the product, and reverse the
+  sign of the difference.
+- **Occurrences:** `norm_projector_defect_adjoint` in
+  `TNLean/MPS/ParentHamiltonian/BlockIntervalDefectDecay.lean` and
+  `norm_projection_difference` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/WholeIncrementSpectatorTransport.lean`.
+- **Count:** two occurrences across two files. The second also removes a
+  nested projection using subspace containment. If another use appears,
+  separate the common adjoint identity into a submodule helper theorem.
+
+
 ### Spectator ranges of block sums — factored
 - **Pattern:** identify a spectator boundary map as a coordinate map composed
   with the pointwise extension of the local boundary map, then distribute its

@@ -5627,3 +5627,225 @@ tensors.
     This follows immediately from the corresponding explicit theorem by taking
     $\gamma$ to be the constant produced there.
 \end{proof}
+
+\begin{definition}[Grouped prefix and interval projections]
+    \label{def:grouped_open_ground_projections}
+    \lean{MPSTensor.groupedNestedGroundProjectionsES,MPSTensor.groupedIntervalGroundProjectionES}
+    \leanok
+    Fix \(p\geq1\), \(M\geq2\), and an open chain of length \(N=pM\).
+    For \(0\leq n\leq M\), let \(G_n\) be the ground projection of the range-\(2p\) parent
+    Hamiltonian on \([0,pn)\), extended by the identity on the remaining
+    sites. For \(0\leq n<M\), let \(Q_n\) be the ground projection of the same interaction
+    restricted to \([\max\{0,p(n-1)\},p(n+1))\).
+    Thus \(Q_0=I\), while for \(n\geq1\) the interval Hamiltonian is
+    a single parent interaction.
+\end{definition}
+
+\begin{lemma}[Locality and the initial grouped differences]
+    \label{lem:grouped_open_ground_projection_locality}
+    \lean{MPSTensor.grouped_martingaleDifference_commute,MPSTensor.grouped_martingaleDifference_zero,MPSTensor.groupedIntervalGroundProjectionES_comp_martingaleDifference_one}
+    \leanok
+    Set \(E_n=G_n-G_{n+1}\). For \(0\leq m,n<M\), one has
+    \[
+        [E_m,Q_n]=0\qquad\text{if }m<n-1\text{ or }m>n.
+    \]
+    Moreover, \(E_0=0\) and \(Q_1E_1=0\).
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:grouped_open_ground_projections}
+    In the first case both prefix Hamiltonians have support disjoint from
+    the interval defining \(Q_n\). In the second case their kernels are
+    contained in the local interval kernel. The corresponding orthogonal
+    projections therefore commute in either case.
+    The prefixes of lengths zero and \(p\) contain no interaction, so
+    \(G_0=G_1=I\). At the next step \(Q_1=G_2\), giving
+    \(Q_1E_1=G_2(I-G_2)=0\).
+\end{proof}
+
+\begin{theorem}[Grouped open-chain coercivity]
+    \label{thm:grouped_open_parent_gap}
+    \lean{MPSTensor.openParentHamiltonianES_norm_gap_of_grouped_c3}
+    \leanok
+    Let \(p\geq1\), \(M\geq2\), and \(N=pM\). Consider the
+    range-\(2p\) open parent Hamiltonian \(H_N\) and the grouped
+    projections above. Suppose that
+    \[
+        \|Q_nE_n\|\leq\epsilon<\frac1{\sqrt2}
+        \qquad(0\leq n<M),
+        \qquad \epsilon\geq0.
+    \]
+    Then, for every \(v\perp\ker H_N\),
+    \[
+        (1-\epsilon\sqrt2)^2\|v\|\leq\|H_Nv\|.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:grouped_open_ground_projection_locality,thm:nachtergaele_c1_c3_full_range_norm_gap}
+    Apply the full-range martingale estimate to the grouped filtration,
+    with window width one. Each local window Hamiltonian is the projection
+    \(I-Q_n\), so condition C2 has constant one. The nonzero local window
+    terms are distinct summands of \(H_N\); positivity gives condition C1
+    with constant one. The locality lemma supplies the commutation
+    condition. The assumed norm bound supplies C3, and the terminal
+    projection is the projection onto \(\ker H_N\).
+\end{proof}
+
+\begin{theorem}[Energy counting for grouped open windows]
+    \label{thm:grouped_open_parent_c1}
+    \lean{MPSTensor.grouped_openParentHamiltonianES_C1}
+    \leanok
+    \uses{def:open_suffix_parent_hamiltonian_es, def:open_parent_hamiltonian_es}
+    Let $p\geq1$, $M\geq0$, and $N=pM$. For every vector $v$ on the
+    $N$-site chain,
+    \begin{align}
+        0 & \leq \sum_{n=0}^{M-1}
+        \re\langle H^{\mathrm{suffix}}_{N,2p;2p,p(n+1)}(A)v,v\rangle
+        \leq \re\langle H^{\mathrm{open}}_{N,2p}(A)v,v\rangle.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_c1_full_range,
+        lem:fixed-volume-hamiltonians-positive}
+    The indices $p(n+1)-1$, for $0\leq n<M$, are distinct and belong to
+    $\{0,\ldots,pM-1\}$. Positivity bounds the sum over these indices by
+    the full sum, which is bounded by the open-chain energy.
+\end{proof}
+
+\begin{theorem}[Unit local gap for grouped open windows]
+    \label{thm:grouped_open_suffix_c2}
+    \lean{MPSTensor.grouped_openSuffixParentHamiltonianES_C2}
+    \leanok
+    \uses{def:open_suffix_parent_hamiltonian_es}
+    Let $p\geq1$, $0\leq n<M$, and $N=pM$. Write $Q_n$ for the
+    orthogonal projection onto the kernel of
+    $H^{\mathrm{suffix}}_{N,2p;2p,p(n+1)}(A)$. Then
+    \begin{align}
+        \lVert(I-Q_n)v\rVert^2
+         & \leq\re\langle H^{\mathrm{suffix}}_{N,2p;2p,p(n+1)}(A)v,v\rangle
+    \end{align}
+    for every vector $v$ on the $N$-site chain.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:open_suffix_parent_hamiltonian_c2_full_range}
+    Apply the full-range local gap bound with $l=2p-1$ and index
+    $p(n+1)-1<N$.
+\end{proof}
+
+\begin{theorem}[Prefix ground spaces with free right sites]
+    \label{thm:ph_prefix_kernel_free_right_sites}
+    \lean{MPSTensor.mem_range_leftBoundaryMapES_iff_rightFiber,
+        MPSTensor.ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES}
+    \leanok
+    Let $R>0$ and suppose that the length-$n$ open parent Hamiltonian has
+    kernel $G_n(A)$. On $n+r$ sites, the kernel of the same interactions
+    restricted to the first $n$ sites is $G_n(A)\otimes(\C^d)^{\otimes r}$.
+    A vector belongs to this space if and only if each restriction obtained
+    by fixing the last $r$ physical coordinates belongs to $G_n(A)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Decompose a vector according to the last $r$ physical coordinates.
+    The prefix Hamiltonian acts on each component by the length-$n$ open
+    Hamiltonian, so its kernel is characterized component by component.
+\end{proof}
+
+\begin{theorem}[Reassociated suffix ground space]
+    \label{thm:ph_reassociated_suffix_kernel}
+    \lean{MPSTensor.physicalReassocES_map_submodule,
+        MPSTensor.range_reassocTailBoundaryMapES_eq_ker_openSuffixParentHamiltonianES}
+    \leanok
+    Reassociation identifies any subspace of the physical space on
+    $K+(L+Q)$ sites with the same subspace on $(K+L)+Q$ sites.
+    In particular, when $L+Q>0$, the kernel of the single parent interaction
+    on the last $L+Q$ sites is
+    $(\C^d)^{\otimes K}\otimes G_{L+Q}(A)$ in these common coordinates.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Reassociation preserves the ordered physical coordinates.
+    A parent interaction is the orthogonal projection onto the complement
+    of the local boundary-condition space, acting trivially on the other sites.
+\end{proof}
+
+\begin{theorem}[Active grouped projector error]
+    \label{thm:ph_active_grouped_projector_error}
+    \lean{MPSTensor.norm_suffixProjection_comp_prefixDifference_eq_projector_defect}
+    \leanok
+    Let $R=L+Q>0$ and suppose that the range-$R$ open parent Hamiltonians
+    on $K+L$ and $K+L+Q$ sites have their boundary-condition spaces as kernels.
+    On $K+L+Q$ sites, let $P$ project onto the ground space of the first
+    $K+L$ sites, let $T$ project onto the ground space of the last $L+Q$
+    sites, and let $F$ project onto the whole-chain ground space. Then
+    \begin{align}
+        \|T(P-F)\|=\|F-PT\|.
+        \notag
+    \end{align}
+    The right-hand side is the three-interval projector error in
+    \cite[condition C3$'$]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_prefix_kernel_free_right_sites,
+        thm:ph_reassociated_suffix_kernel}
+    The whole-chain boundary space lies in the suffix boundary space,
+    so $TF=F$. Thus $T(P-F)=TP-F$. Taking adjoints, using that orthogonal
+    projections are self-adjoint, and reversing the sign gives the identity.
+\end{proof}
+
+\begin{theorem}[Periodic gaps from divisible open intervals]
+    \label{thm:periodic_gap_from_divisible_open}
+    \lean{MPSTensor.exists_parentHamiltonianES_gap_of_eventually_divisible_openParentHamiltonianES_gap}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
+    Let $A$ be a tensor, let $p,R\geq 1$ be integers, and let $\gamma>0$.
+    Suppose that, for every sufficiently large integer $M$ and every
+    $u\perp\ker H^{\mathrm{open}}_{pM,R}(A)$,
+    $\gamma\lVert u\rVert\leq\lVert H^{\mathrm{open}}_{pM,R}(A)u\rVert$.
+    Then there is $\delta>0$ such that, for every sufficiently large $N$
+    and every $v\perp\ker H^{\mathrm{ES}}_{N,R}(A)$,
+    $\delta\lVert v\rVert\leq\lVert H^{\mathrm{ES}}_{N,R}(A)v\rVert$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:parent_hamiltonian_gap_from_open_knabe_block}
+    Choose $n$ with $(R-1)^2<n\gamma$ and then choose $M\geq n+2R$
+    for which the open-chain bound holds. Set $m=pM-R+1$. Then
+    $m\geq\max\{n,R\}$ and the active open volume is $m+R-1=pM$.
+    The finite-range Knabe comparison gives the positive constant
+    $\delta=(m\gamma-(R-1)^2)/(m-R+1)$ and the asserted bound for every
+    $N\geq2m$.
+\end{proof}
+
+\begin{theorem}[Spectator extension of a grouped projection difference]
+    \label{thm:grouped_spectator_norm}
+    \lean{MPSTensor.norm_suffixGroundProjection_comp_prefixDifference_le_active}
+    \leanok
+    \uses{def:open_prefix_parent_hamiltonian_es,
+        def:open_suffix_parent_hamiltonian_es}
+    Let the interaction range satisfy $R>0$, let $p\leq n$, and add
+    $r\geq0$ sites to the right of an active interval of length $n$.
+    In each ambient volume $s\in\{n,n+r\}$, write $P^{(s)}_a$ for the
+    kernel projection of the prefix Hamiltonian ending at $a$, and write
+    $Q^{(s)}$ for the kernel projection of the suffix Hamiltonian of length
+    $l$ ending at $n$. Then
+    \begin{align}
+        \bigl\lVert Q^{(n+r)}(P^{(n+r)}_p-P^{(n+r)}_n)\bigr\rVert
+         & \leq
+        \bigl\lVert Q^{(n)}(P^{(n)}_p-P^{(n)}_n)\bigr\rVert.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:open-hamiltonian-right-spectator-conjugacy,
+        lem:right-spectator-kernel-projection, lem:right-spectator-extension}
+    Splitting the configuration into its active and spectator coordinates
+    conjugates each of the three Hamiltonians to its fiberwise extension.
+    Kernel projections commute with this conjugation and with fiberwise
+    extension. Composition and subtraction also commute with fiberwise
+    extension. Conjugation preserves the operator norm, and
+    fiberwise extension does not increase it.
+\end{proof}
