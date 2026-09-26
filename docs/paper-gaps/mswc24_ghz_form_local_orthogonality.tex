@@ -8,7 +8,7 @@
 \date{2026-09-26}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
@@ -57,13 +57,32 @@ where $S$ and $S'$ are disjoint sets of virtual indices, then $\braket{\omega}{\
 The embedded pairs of distinct blocks are supported in this way.
 
 \section{Elimination}
-Define the embedded pair of the $j$-th block in the bond space of $A$, show
-that its right leg is supported on the virtual indices of that block, so that
-distinct blocks give orthogonal pairs by the disjoint-support lemma, and show
-$\braket{\omega_j}{\omega_j}=1$ from the normalization of the fixed-point pair
-of a normal tensor in the gauge used by the source. The hypothesis
-(\ref{eq:mswc24_local_orthogonality}) then holds for the source's pairs, and
-the three statements above specialize to the source's claim without it.
+The restriction is eliminated for the pairs of the source.\footnote{Formal
+    declarations: \leanid{MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair},
+    \leanid{MPSTensor.SectorDecomposition.isIsometry_pairIsometry_embeddedFixedPointPair},
+    \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_eq_tensorPower_mulVec_ghzState}
+    and \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_norm_sq} in
+    \doclink{TNLean/MPS/Preparation/NonNormalCanonicalForm}.}
+The canonical form is taken as a sector decomposition, whose bond space is
+$\C^D$ with $D=\sum_jm_jD_j$. The pair of block $j$ is the fixed-point pair of
+a positive semidefinite, unit-trace matrix $\sigma_j$ on the bond space
+$\C^{D_j}$ of $A_j$, placed on both legs on the bond coordinates of one chosen
+copy $k_j$ of that block. The source does not say which copy carries the pair
+when $m_j>1$; every choice is allowed, and the multiplicities enter only through
+the weights $\beta_j=\sum_k\mu_{j,k}^N$, since replacing $P_j$ by
+$P_{j,\infty}$ in $\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)\otimes P_j$
+gives the state $\beta_j\ket{\Omega_j}$ with $N=qM$.
+
+For every choice of copies, the coordinates of distinct blocks are distinct, so
+the right legs of the pairs of distinct blocks have disjoint supports and the
+pairs are orthogonal by the disjoint-support lemma. The coordinates of one copy
+are distinct, so embedding preserves the overlap, and
+$\braket{\omega_j}{\omega_j}=\operatorname{Tr}\sigma_j=1$. Hence
+(\ref{eq:mswc24_local_orthogonality}) holds for these pairs, and the isometry of
+$W$, the GHZ form, and the normalization $\braket{\Omega'}{\Omega'}=1$ (for
+$M\ge1$ and $(\beta_1,\dots,\beta_b)\ne0$) hold without the hypothesis. The
+statements for an arbitrary family keep the hypothesis, which is then a
+statement about other pairs, not a restriction of the source's claim.
 
 \bibliographystyle{alpha}
 \bibliography{references}

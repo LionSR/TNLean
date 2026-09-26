@@ -615,4 +615,6 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
   hypothesis, that the isometry of `W` and the normalization of `|Ω'⟩` take the
   local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` asserted after eq. (S7) as a
-  hypothesis, and that disjoint supports give its off-diagonal half.
+  hypothesis, and that disjoint supports give its off-diagonal half. Resolved:
+  for the embedded fixed-point pairs of the blocks of a canonical form the local
+  orthogonality is proved and the GHZ form holds without the hypothesis.

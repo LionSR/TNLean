@@ -492,8 +492,14 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{definition}[Fixed point of a basis of normal tensors]
     \label{def:ldp_non_normal_fixed_point}
-    \uses{def:bnt, def:prep_fixed_point_tensor, thm:ldpolar_tensor_decomposition,
-        def:correlation_length}
+    \lean{MPSTensor.SectorDecomposition.copyCoord,
+        MPSTensor.SectorDecomposition.embeddedFixedPointPair,
+        MPSTensor.SectorDecomposition.canonicalFixedPointState,
+        MPSTensor.SectorDecomposition.canonicalApproxState,
+        MPSTensor.SectorDecomposition.bntWeight_weight, MPSTensor.embedPair}
+    \leanok
+    \uses{def:bnt, def:sector_weight_data, def:prep_fixed_point_tensor,
+        thm:ldpolar_tensor_decomposition, def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
         \otimes A_j^i$ with normal $A_j$, each in the gauge
     (\ref{eq:ldp_normal_gauge}), forming a basis of normal tensors, and put
@@ -517,6 +523,21 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     nonzero.
     This is \cite[eqs.~(19) and~(S7)]{Malz2024Preparation}, with the
     canonical form of \cite{Cirac2017MPDO_AnnPhys}.
+
+    The following identifications are made. The canonical form is a sector
+    decomposition, whose flattened direct sum $\bigoplus_{(j,k)}\mu_{j,k}A_j$
+    is the displayed tensor up to the order of the bond coordinates, so the
+    bond space of $A$ is $\C^D$ with $D=\sum_jm_jD_j$. The pair state of
+    $A_j$ is $\ket{\omega_j}=\sum_{r,l}(\sqrt{\sigma_j})_{rl}\ket{r}\ket{l}$
+    for the unit-trace right fixed point $\sigma_j$ of $\E_{A_j}$ in the gauge
+    (\ref{eq:ldp_normal_gauge}). The source
+    calls the pairs vectors of $\C^{D^2}=\C^D\otimes\C^D$ without saying where
+    the pair of block $j$ sits when $m_j>1$; here it is placed, on both legs,
+    on the bond coordinates of one chosen copy $k_j$ of that block, and every
+    choice is allowed. The multiplicities enter only through $\beta_j$:
+    replacing $P_j$ by $P_{j,\infty}$ in the block
+    $\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)\otimes P_j$ gives the
+    state $\beta_j\ket{\Omega_j}$ (Theorem~\ref{thm:ldp_local_orthogonality}).
 \end{definition}
 
 \begin{definition}[Fixed-point state of a family of pairs]
@@ -546,32 +567,72 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     imposed here.
 \end{definition}
 
-\begin{theorem}[GHZ form of the fixed-point state]
-    \label{thm:ldp_ghz_form}
-    \lean{MPSTensor.isIsometry_pairIsometry, Matrix.IsIsometry.tensorPower,
-        MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState,
-        MPSTensor.nonNormalFixedPointState_norm_sq}
+\begin{theorem}[Local orthogonality of the pairs]
+    \label{thm:ldp_local_orthogonality}
+    \lean{MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair,
+        MPSTensor.inner_embedPair_self, MPSTensor.inner_embedPair_eq_zero_of_disjoint,
+        MPSTensor.SectorDecomposition.copyCoord_injective,
+        MPSTensor.SectorDecomposition.copyCoord_ne_of_ne,
+        MPSTensor.SectorDecomposition.toTensor_copyCoord,
+        MPSTensor.pairProductState_embedPair,
+        MPSTensor.mpv_toTensorFromBlocks_fixedPointTensor}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point}
-    With $W$, $X^{\otimes M}$ and $\chi_M$ as in
-    Definition~\ref{def:ldp_pair_family_fixed_point}, formed with
-    $\alpha=\alpha^{(N)}$, if $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, then
-    $W$ and $W^{\otimes M}$ are isometries and
-    $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$, up to the
-    regrouping of the legs $R_kL_{k+1}$. If moreover $M\geq1$ and
-    $(\beta_1,\dots,\beta_b)\neq0$, then $\braket{\Omega'}{\Omega'}=1$.
-    This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}. The same
-    holds for the state of Definition~\ref{def:ldp_pair_family_fixed_point} with
-    $\alpha=\alpha^{(N)}$ for any orthonormal pairs $\omega_j$. The source asserts
-    the orthogonality of its pairs after \cite[eq.~(S7)]{Malz2024Preparation},
-    citing the canonical form; here it is a hypothesis
-    \cite{gap:mswc24_ghz_form_local_orthogonality}.
+    \uses{def:ldp_non_normal_fixed_point, thm:ldp_pair_disjoint_orthogonal}
+    In Definition~\ref{def:ldp_non_normal_fixed_point}, let each $\sigma_j$ be
+    positive semidefinite with $\operatorname{Tr}\sigma_j=1$. For every choice
+    of the copies $k_j$ the embedded pairs satisfy
+    $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$. The chosen coordinates of
+    block $j$ carry the block $\mu_{j,k_j}A_j$ of $A$, and embedding the pair
+    embeds its product state. Moreover, for $M\geq1$ the tensor
+    $\bigoplus_k\mu_{j,k}^qP_{j,\infty}$ generates on $M$ sites the state
+    $\bigl(\sum_k\mu_{j,k}^{qM}\bigr)\ket{\Omega_j}=\beta_j\ket{\Omega_j}$ with
+    $N=qM$. The orthogonality is asserted after
+    \cite[eq.~(S7)]{Malz2024Preparation}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:prep_pair_product_norm}
-    The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$, and the
+    Copies of distinct blocks occupy distinct bond coordinates, so the right
+    legs of $\omega_j$ and $\omega_{j'}$ with $j\neq j'$ are supported on
+    disjoint sets and the pairs are orthogonal by
+    Theorem~\ref{thm:ldp_pair_disjoint_orthogonal}. The coordinates of one
+    copy are distinct, so embedding preserves overlaps and
+    $\braket{\omega_j}{\omega_j}=\operatorname{Tr}\sigma_j=1$. The direct sum
+    generates the sum of the states of its blocks with the $M$-th powers of the
+    weights, and $P_{j,\infty}$ generates $\ket{\Omega_j}$.
+\end{proof}
+
+\begin{theorem}[GHZ form of the fixed-point state]
+    \label{thm:ldp_ghz_form}
+    \lean{MPSTensor.isIsometry_pairIsometry, Matrix.IsIsometry.tensorPower,
+        MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState,
+        MPSTensor.nonNormalFixedPointState_norm_sq,
+        MPSTensor.SectorDecomposition.isIsometry_pairIsometry_embeddedFixedPointPair,
+        MPSTensor.SectorDecomposition.canonicalFixedPointState_eq_tensorPower_mulVec_ghzState,
+        MPSTensor.SectorDecomposition.canonicalFixedPointState_norm_sq}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point,
+        thm:ldp_local_orthogonality}
+    With $W$, $X^{\otimes M}$ and $\chi_M$ as in
+    Definition~\ref{def:ldp_pair_family_fixed_point}, formed with
+    $\alpha=\alpha^{(N)}$ and the pairs of
+    Definition~\ref{def:ldp_non_normal_fixed_point}, where each $\sigma_j$ is
+    positive semidefinite of unit trace, $W$ and $W^{\otimes M}$ are isometries
+    and $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$, up to the regrouping of the
+    legs $R_kL_{k+1}$. If moreover $M\geq1$ and $(\beta_1,\dots,\beta_b)\neq0$,
+    then $\braket{\Omega'}{\Omega'}=1$. This is the preparation of
+    \cite[eq.~(19)]{Malz2024Preparation}. The same holds for the state of
+    Definition~\ref{def:ldp_pair_family_fixed_point} with $\alpha=\alpha^{(N)}$
+    for any orthonormal pairs $\omega_j$; the identity
+    $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ holds for any pairs.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:prep_pair_product_norm, thm:ldp_local_orthogonality}
+    The pairs of Definition~\ref{def:ldp_non_normal_fixed_point} are
+    orthonormal by Theorem~\ref{thm:ldp_local_orthogonality}. The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$, and the
     entries of $(W^{\otimes M})^\dagger W^{\otimes M}$ factor over the sites,
     \begin{align*}
         \bigl((W^{\otimes M})^\dagger W^{\otimes M}\bigr)_{s,t}
@@ -597,9 +658,8 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     $\braket{\omega}{\omega'}=0$. The embedded pairs of distinct blocks in
     Definition~\ref{def:ldp_non_normal_fixed_point} are supported in this way, so
     this gives the off-diagonal half of the orthogonality
-    $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$; the unit norms and the
-    identification of the supports are not supplied here
-    \cite{gap:mswc24_ghz_form_local_orthogonality}.
+    $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, which
+    Theorem~\ref{thm:ldp_local_orthogonality} completes.
 \end{theorem}
 
 \begin{proof}
