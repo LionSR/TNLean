@@ -53,6 +53,7 @@ import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SimpleTensorEquivalence
+import TNLean.MPS.MPU.SimpleTensorProduct
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceDecompositionUniqueness
 import TNLean.MPS.MPU.SourceFactorContraction

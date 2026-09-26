@@ -2242,6 +2242,62 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         \operatorname{rank}(B)$.
 \end{proof}
 
+\begin{lemma}[Double layer of an independent tensor product]
+    \label{lem:mpu_double_layer_tensor_product}
+    \lean{MPOTensor.doubleLayerTensorProductShuffle,
+        MPOTensor.doubleLayerTensorProductShuffle_apply,
+        MPOTensor.doubleLayerTensor_tensorProduct}
+    \leanok
+    \uses{def:mpu_double_layer, def:mpu_independent_tensor_product}
+    Let $W_{\mathcal U}$ and $W_{\mathcal V}$ be the double layers of
+    $\mathcal U$ and $\mathcal V$. Identify the double-layer bond space of
+    $\mathcal U\boxtimes\mathcal V$ with the tensor product of the two
+    double-layer bond spaces by
+    $((\alpha,\gamma),(\alpha',\gamma'))\mapsto((\alpha,\alpha'),(\gamma,\gamma'))$.
+    Under this identification,
+    \begin{align}
+        W_{\mathcal U\boxtimes\mathcal V}^{(i,k)(j,\ell)}
+         & =W_{\mathcal U}^{ij}\otimes W_{\mathcal V}^{k\ell}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu_double_layer, def:mpu_independent_tensor_product}
+    The contracted physical index of the product runs over pairs $(m,n)$, and
+    each summand factors as a product of an entry of
+    $\sum_m(\mathcal U^{mi})^{*}\otimes\mathcal U^{mj}$ and an entry of
+    $\sum_n(\mathcal V^{nk})^{*}\otimes\mathcal V^{n\ell}$.
+\end{proof}
+
+\begin{theorem}[Independent tensor products preserve simplicity]
+    \label{thm:mpu_simple_tensor_product}
+    \lean{MPOTensor.IsMPUSimple.tensorProduct}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_independent_tensor_product}
+    If $\mathcal U$ and $\mathcal V$ are simple, then
+    $\mathcal U\boxtimes\mathcal V$ is simple. If $a,b$ are witnesses for
+    $\mathcal U$ and $a',b'$ are witnesses for $\mathcal V$, then
+    $a\otimes a'$ and $b\otimes b'$ are witnesses for the product. This is
+    the step behind the sentence ``The case of tensoring is trivial'' in the
+    proof of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 363--374 and 835--836.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_double_layer_tensor_product, def:mpu_simple}
+    By Lemma~\ref{lem:mpu_double_layer_tensor_product}, and since
+    $|b\otimes b')(a\otimes a'|=|b)(a|\otimes|b')(a'|$,
+    \begin{align}
+        (a\otimes a'|W_{\mathcal U}^{ij}\otimes W_{\mathcal V}^{k\ell}
+        |b\otimes b')
+         & =(a|W_{\mathcal U}^{ij}|b)\,(a'|W_{\mathcal V}^{k\ell}|b')
+        =\delta_{ij}\delta_{k\ell}.
+    \end{align}
+    The rule $(A\otimes B)(C\otimes D)=AC\otimes BD$ reduces
+    (\ref{eq:mpu_simple2}) for the product to the same identity for each
+    factor.
+\end{proof}
+
 \begin{theorem}[One-site blocking bounds for the source-cut ranks]
     \label{thm:mpu_source_cut_rank_blocking_succ}
     \lean{MPOTensor.rightRank_blockTensor_succ_le,
@@ -5490,6 +5546,31 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     to each rank and cancel the common term. For the equivalent formulas,
     apply the same product identity to $r_{\mathcal U}\ell_{\mathcal U}=d^2$
     and use $\log_2(x/y)=\log_2x-\log_2y$.
+\end{proof}
+
+\begin{theorem}[Source-index value of an independent tensor product]
+    \label{thm:mpu_source_index_value_tensor_product}
+    \lean{MPOTensor.sourceIndexValue_tensorProduct}
+    \leanok
+    \uses{def:mpu_specified_source_index_value, thm:mpu_tensor_product_source_ranks}
+    If $\mathcal U$ and $\mathcal V$ have positive right and left source
+    ranks, then
+    \begin{align}
+        \operatorname{ind}_{\mathrm{src}}(\mathcal U\boxtimes\mathcal V)
+         & =\operatorname{ind}_{\mathrm{src}}(\mathcal U)
+        +\operatorname{ind}_{\mathrm{src}}(\mathcal V).
+    \end{align}
+    This is the specified-tensor form of the tensoring case of
+    \cite[Theorem~IV.6(ii)]{Cirac2017MPU}; it makes no choice of a simple
+    blocking.
+    % Scope restriction (specified tensors): documented in
+    % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex.
+    % Source lines: paper_v2.tex 835--836.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_tensor_product_source_ranks, thm:mpu_specified_source_index_identities}
+    Both source ranks are multiplicative, so the logarithms add.
 \end{proof}
 
 \begin{theorem}[Conditional blocking invariance of the specified source-index value]
