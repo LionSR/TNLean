@@ -133,4 +133,21 @@ theorem correlationLength_pos {lam₂ : ℂ} (h0 : 0 < ‖lam₂‖) (h1 : ‖la
   rw [neg_div, neg_pos]
   exact div_neg_of_pos_of_neg one_pos (Real.log_neg h0 h1)
 
+/-- A positive correlation length forces `0 < ‖λ₂‖ < 1`; converse of `correlationLength_pos`. -/
+theorem norm_pos_and_lt_one_of_correlationLength_pos {lam₂ : ℂ}
+    (hξ : 0 < correlationLength lam₂) : 0 < ‖lam₂‖ ∧ ‖lam₂‖ < 1 := by
+  have hlog : Real.log ‖lam₂‖ < 0 := by
+    by_contra h
+    push Not at h
+    have : correlationLength lam₂ ≤ 0 := by
+      unfold correlationLength
+      exact div_nonpos_iff.mpr (Or.inr ⟨by norm_num, h⟩)
+    linarith
+  have hpos : 0 < ‖lam₂‖ := by
+    rcases (norm_nonneg lam₂).lt_or_eq with h | h
+    · exact h
+    · rw [← h, Real.log_zero] at hlog
+      exact absurd hlog (lt_irrefl 0)
+  exact ⟨hpos, (Real.log_neg_iff hpos).mp hlog⟩
+
 end MPSTensor
