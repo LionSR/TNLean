@@ -5810,7 +5810,7 @@ tensors.
     \begin{align}
         [E_m,Q_n] & =0.
     \end{align}
-    In addition, $E_0=0$ and $Q_1E_1=0$.
+    The initial differences satisfy $E_0=0$ and $Q_1E_1=0$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -5845,7 +5845,8 @@ tensors.
     \begin{align}
         Q_0E_0 & =0, & Q_1E_1 & =0,
     \end{align}
-    so both norms are $0\leq\epsilon$.
+    so both norms are $0\leq\epsilon$. For $2\leq n<M$ the bound is the
+    hypothesis.
 \end{proof}
 
 \begin{theorem}[Grouped open-chain coercivity]
@@ -6359,7 +6360,9 @@ tensors.
         \gamma_R\|v\|\leq\|H_{R,N}(B)v\|
         \notag
     \end{align}
-    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$.
+    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$. This removes
+    the restriction to the range constructed by the overlap argument, as
+    recorded in~\cite{gap:cpgsv21_block_parent_interaction_range}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:primitive_block_sum_parent_gap,thm:parent-gap-fixed-range-transfer,
