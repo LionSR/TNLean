@@ -213,6 +213,18 @@ comparison paths. The admissible continuity, index, equivalence, symmetry,
 and example nodes that use this datum record a genuine pathwise supplier gap,
 not merely the pointwise convention unfolded.
 
+**Subsequent pointwise consolidation (2026-09-26).** The counts above record
+the state examined by this audit. The supplied-transfer-power converse now
+constructs a canonical-form-II presentation on the same tensor and retains
+the supplied ambient fixed matrix. Consequently the three same-tensor
+duplicates paired with `ThmFund1`, `SF`, and `FundamentalMPU` have been removed
+from Chapter 28. Their retained dependents cite those source-labelled entries
+and the converse, without losing a supplied fixed pair. The generic
+`lem:mpu_admissible_source_u_isometry`, all twelve derived-tensor entries,
+and all twenty-three pathwise entries remain; the latter still require
+continuously varying source data. The deletion plan below is the historical
+plan of this audit, not a claim that its other steps have been completed.
+
 The families are one restriction, and it is the paper's own convention. Under
 `Erightleft` (lines 271--281) a normal tensor in canonical form II has
 $\rho_n>0$ and $(\Phi\mid\rho)=1$; lines 488--502 use exactly this positivity
@@ -525,6 +537,14 @@ convention and the distinct pathwise source-data gap), D14 (the mixed-kernel
 and reflected-kernel residue), and D15 (the duplicated canonical-form structure
 behind `IsMPUCanonicalForm`, whose gauge-free "in CF" clause is the paper's
 and stays). Each names the evidence counted above and the first one-week PR.
+
+**2026-09-26 update (D15).** The canonical-form predicate now requires
+nonzero retained weights and full ambient support. A common reconstruction
+base leaves the CPSV optional complement intact. The normality assertion of
+`prop:normal-tensor` is proved for the original-tensor CF endpoint, using
+nonzero scalar transport to the normalized flattening, Perron--Frobenius
+eigenvectors of the weighted blocks, and transfer multiplicity. The
+`StrictlyEquivalent` endpoint remains the gauge-free CF predicate.
 
 ## Proposed follow-up issues
 

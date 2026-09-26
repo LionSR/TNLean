@@ -238,16 +238,16 @@ theorem ud_right_eq :
            ⟨0, 0⟩;
            ⟨0, 0⟩;
            ⟨1, 0⟩] := by
-  rw [ud_compression.right_gaugeOfMatrix (hG := complexOfEisenstein_mul_eq_one udGauge_mul_inv)
-    (hG' := complexOfEisenstein_mul_eq_one udGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [ud_compression.right_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ udGauge_mul_inv)
+    (hG' := complexOfRing_mul_eq_one _ udGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
 theorem ud_left_eq :
     ud_compression.left theSlot =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩] := by
-  rw [ud_compression.left_gaugeOfMatrix (hG := complexOfEisenstein_mul_eq_one udGauge_mul_inv)
-    (hG' := complexOfEisenstein_mul_eq_one udGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [ud_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ udGauge_mul_inv)
+    (hG' := complexOfRing_mul_eq_one _ udGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
@@ -502,16 +502,16 @@ theorem du_right_eq :
            ⟨0, 0⟩;
            ⟨0, 0⟩;
            ⟨1, 0⟩] := by
-  rw [du_compression.right_gaugeOfMatrix (hG := complexOfEisenstein_mul_eq_one duGauge_mul_inv)
-    (hG' := complexOfEisenstein_mul_eq_one duGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [du_compression.right_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ duGauge_mul_inv)
+    (hG' := complexOfRing_mul_eq_one _ duGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
 theorem du_left_eq :
     du_compression.left theSlot =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩] := by
-  rw [du_compression.left_gaugeOfMatrix (hG := complexOfEisenstein_mul_eq_one duGauge_mul_inv)
-    (hG' := complexOfEisenstein_mul_eq_one duGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [du_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ duGauge_mul_inv)
+    (hG' := complexOfRing_mul_eq_one _ duGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 

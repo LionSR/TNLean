@@ -23,8 +23,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import multiprocessing
+import os
 import re
 import sys
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 _SCRIPTS = Path(__file__).resolve().parent
@@ -261,37 +264,74 @@ def _assert_page_owns_no_sideways_scroll(name: str, width: int, facts: dict) -> 
     assert not facts["escaped"], (name, width, facts["escaped"])
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--web-root", type=Path, default=Path("blueprint/web"))
-    args = parser.parse_args()
-
-    root = args.web_root.resolve()
-    pages = _generated_pages(root)
-    _assert_generated_source(pages)
-
+def _check_pages(base_url: str, names: list[str]) -> int:
+    """Open each named page in one browser and return how much was typeset."""
     typeset = 0
-    with serve(root) as base_url, sync_playwright() as playwright:
+    with sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": MOBILE_WIDTH, "height": 900})
         page.set_default_timeout(120_000)
-        for generated in pages:
-            page.goto(f"{base_url}/{generated.name}",
+        for name in names:
+            page.goto(f"{base_url}/{name}",
                       wait_until="domcontentloaded", timeout=120_000)
             # Proofs are folded away by default; a folded proof has no width,
             # so its displays would escape measurement.
             page.add_style_tag(content=".proof_content { display: block !important; }")
             _settle(page)
             facts = page.evaluate(READER_TEXT, list(METADATA_COMMANDS))
-            _assert_reader_text(generated.name, facts)
+            _assert_reader_text(name, facts)
             typeset += int(facts["typeset"])
             for width in (MOBILE_WIDTH, DESKTOP_WIDTH):
                 page.set_viewport_size({"width": width, "height": 900})
                 page.wait_for_timeout(200)
                 _assert_page_owns_no_sideways_scroll(
-                    generated.name, width, page.evaluate(OVERFLOW))
+                    name, width, page.evaluate(OVERFLOW))
             page.set_viewport_size({"width": MOBILE_WIDTH, "height": 900})
         browser.close()
+    return typeset
+
+
+def _balanced_batches(pages: list[Path], count: int) -> list[list[str]]:
+    """Split the pages into batches of roughly equal total size.
+
+    Typesetting time grows with the page, and a few chapters are far larger
+    than the rest, so the largest pages are dealt out first, each to the
+    batch that is currently lightest.
+    """
+    batches: list[list[str]] = [[] for _ in range(count)]
+    loads = [0] * count
+    for generated in sorted(pages, key=lambda p: p.stat().st_size, reverse=True):
+        lightest = loads.index(min(loads))
+        batches[lightest].append(generated.name)
+        loads[lightest] += generated.stat().st_size
+    return [batch for batch in batches if batch]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--web-root", type=Path, default=Path("blueprint/web"))
+    parser.add_argument(
+        "--jobs", type=int, default=min(4, os.cpu_count() or 1),
+        help="number of browsers reading pages in parallel")
+    args = parser.parse_args()
+
+    root = args.web_root.resolve()
+    pages = _generated_pages(root)
+    _assert_generated_source(pages)
+
+    batches = _balanced_batches(pages, max(1, args.jobs))
+    with serve(root) as base_url:
+        if len(batches) == 1:
+            typeset = _check_pages(base_url, batches[0])
+        else:
+            # Each worker drives its own browser: the synchronous Playwright
+            # API is bound to the thread that started it.  Workers are spawned
+            # rather than forked because the server runs on a thread here.
+            context = multiprocessing.get_context("spawn")
+            with ProcessPoolExecutor(len(batches), mp_context=context) as pool:
+                futures = [pool.submit(_check_pages, base_url, batch)
+                           for batch in batches]
+                typeset = sum(future.result() for future in futures)
 
     assert typeset > 0, (
         "no mathematics was typeset on any page; MathJax never ran, so the "
