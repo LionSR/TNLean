@@ -259,13 +259,13 @@ theorem isCircuitOn_pairLayerOp (hq : r₁ + r₁ ≤ q) (hr : 1 ≤ r₁) {K : 
       hW.isCircuitOn (pairSite_injective hq k) fun i j h => pairSite_succ hq hr k i j h) _).mono_set
     (Set.subset_univ _)
 
+omit [NeZero (M * q)] in
 /-- **The approximating state is the output of the two layers.** If `U` implements the isometry
 `V` of the `q`-site blocked tensor on the placed inputs `|l, 0 ⋯ 0, r⟩` and `W` prepares the
 pair `|ω⟩` on a window, then the periodic state of `B' = V P_∞` on `M` blocks is
 `U^{⊗M} W^{⊗M} |0 ⋯ 0⟩`.
 
 arXiv:2307.01696, eqs. (10), (11), and (12). -/
-omit [NeZero (M * q)] in
 theorem approximatingMPVStateRaw_eq_mulVec (hd : 0 < d) (hq : 3 * r₁ ≤ q)
     {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig) (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ) [NeZero M] {U : Matrix (Cfg d q) (Cfg d q) ℂ}
