@@ -45,6 +45,27 @@ is deliberately source-faithful.
   equation is source-specific. The construction from canonical form II is
   restricted as recorded in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 
+### Source factors under virtual conjugation
+
+- **Declarations:**
+  `MPOTensor.transported_source_factor_premises_at_selected_ranks` and
+  `MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges`.
+- **Defined in:** `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean` and
+  `TNLean/MPS/MPU/SelectedSourceFactorVirtualGauge.lean`.
+- **Meaning:** If two simple canonical-form-II tensors are related by a
+  unitary virtual conjugation, their selected source factors obey four exact
+  identities after identifying their equal source-cut ranks. The two
+  source-rank changes are unitary; no positive scalar remains because both
+  second-cut left factors are isometries.
+- **Source:** arXiv:1703.09188, Theorem `FundamentalMPU`,
+  `Papers/1703.09188/paper_v2.tex:624-648`, for the local gauge diagrams;
+  Proposition IV.5, lines 786–812, for raw rank transport. The scalar-free
+  comparison is the normalized specialization of arXiv:2502.20257,
+  Lemma `lem:deco`, lines 1052–1066.
+- **Caveat:** The two canonical-form-II weights may be different. This is a
+  forward comparison given a virtual conjugation, not a converse asserting
+  equality of the original periodic operators at every length.
+
 ## Normality
 
 ### `Kraus.IsNormal`
