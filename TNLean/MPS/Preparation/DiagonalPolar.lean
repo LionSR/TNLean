@@ -59,8 +59,10 @@ variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
 Lemma 1 and extension to non-normal tensors") applied to `M = V P`. -/
 theorem conjTranspose_polarIso_mul_self (M : Matrix ι κ ℂ) :
     (polarIso M)ᴴ * M = polarPos M := by
-  conv_lhs => rw [← polarIso_mul_polarPos M]
-  rw [← Matrix.mul_assoc, conjTranspose_polarIso_mul_polarIso, polarSupport_mul_polarPos]
+  calc (polarIso M)ᴴ * M = (polarIso M)ᴴ * (polarIso M * polarPos M) := by
+        rw [polarIso_mul_polarPos]
+    _ = polarPos M := by
+        rw [← Matrix.mul_assoc, conjTranspose_polarIso_mul_polarIso, polarSupport_mul_polarPos]
 
 /-- The positive part of the polar decomposition is the positive semidefinite square root of
 `Mᴴ M`: any positive semidefinite `Q` with `Q Q = Mᴴ M` is `polarPos M`. -/
@@ -94,23 +96,25 @@ theorem polarSupport_eq_of_range_eq {M : Matrix ι κ ℂ} {E : Matrix κ κ ℂ
 def diagPairEmbedding (κ : Type*) [DecidableEq κ] : Matrix (κ × κ) κ ℂ :=
   of fun p e => if p.1 = e ∧ p.2 = e then 1 else 0
 
-omit [Fintype κ] in
-theorem diagPairEmbedding_mul_apply [Fintype κ] {ρ : Type*} (X : Matrix κ ρ ℂ) (p : κ × κ)
+theorem diagPairEmbedding_mul_apply {ρ : Type*} (X : Matrix κ ρ ℂ) (p : κ × κ)
     (r : ρ) : (diagPairEmbedding κ * X) p r = if p.1 = p.2 then X p.1 r else 0 := by
   rw [mul_apply, Finset.sum_eq_single p.1]
-  · by_cases h : p.1 = p.2 <;> simp [diagPairEmbedding, h, eq_comm]
+  · by_cases h : p.1 = p.2
+    · simp [diagPairEmbedding, h]
+    · simp [diagPairEmbedding, h, Ne.symm h]
   · intro e _ he
     simp [diagPairEmbedding, Ne.symm he]
   · simp
 
-omit [Fintype κ] in
-theorem mul_conjTranspose_diagPairEmbedding_apply [Fintype κ] {ρ : Type*} [Fintype ρ]
+theorem mul_conjTranspose_diagPairEmbedding_apply {ρ : Type*} [Fintype ρ]
     (X : Matrix ρ κ ℂ) (r : ρ) (p : κ × κ) :
     (X * (diagPairEmbedding κ)ᴴ) r p = if p.1 = p.2 then X r p.1 else 0 := by
   rw [mul_apply, Finset.sum_eq_single p.1]
-  · by_cases h : p.1 = p.2 <;> simp [diagPairEmbedding, h, eq_comm]
+  · by_cases h : p.1 = p.2
+    · simp [diagPairEmbedding, conjTranspose_apply, h]
+    · simp [diagPairEmbedding, conjTranspose_apply, h, Ne.symm h]
   · intro e _ he
-    simp [diagPairEmbedding, Ne.symm he]
+    simp [diagPairEmbedding, conjTranspose_apply, Ne.symm he]
   · simp
 
 /-- `J` is an isometry, `Jᴴ J = 1`. -/
@@ -119,19 +123,19 @@ theorem conjTranspose_diagPairEmbedding_mul_self :
   ext e e'
   rw [mul_apply, Fintype.sum_prod_type, Finset.sum_eq_single e]
   · rw [Finset.sum_eq_single e]
-    · by_cases h : e = e' <;> simp [diagPairEmbedding, h, one_apply]
-    · intro x _ hx; simp [diagPairEmbedding, hx]
+    · by_cases h : e = e' <;> simp [diagPairEmbedding, conjTranspose_apply, h, one_apply]
+    · intro x _ hx; simp [diagPairEmbedding, conjTranspose_apply, hx]
     · simp
   · intro x _ hx
     refine Finset.sum_eq_zero fun y _ => ?_
-    simp [diagPairEmbedding, hx]
+    simp [diagPairEmbedding, conjTranspose_apply, hx]
   · simp
 
 /-- The entries of `J X Jᴴ` on diagonal pairs are the entries of `X`. -/
 theorem diagPairEmbedding_mul_mul_conjTranspose_apply (X : Matrix κ κ ℂ) (c e : κ) :
     (diagPairEmbedding κ * X * (diagPairEmbedding κ)ᴴ) (c, c) (e, e) = X c e := by
-  rw [mul_conjTranspose_diagPairEmbedding_apply, if_pos rfl, diagPairEmbedding_mul_apply,
-    if_pos rfl]
+  rw [mul_conjTranspose_diagPairEmbedding_apply, diagPairEmbedding_mul_apply]
+  simp
 
 end Matrix
 
@@ -168,8 +172,8 @@ theorem physicalMatrix_blockTensor_diagonal (a : Fin d → Fin D → ℂ) (q : �
     physicalMatrix (blockTensor (fun i => diagonal (a i)) q) =
       of (blockDiagEntry a q) * (diagPairEmbedding (Fin D))ᴴ := by
   ext w p
-  rw [mul_conjTranspose_diagPairEmbedding_apply, physicalMatrix, blockTensor_diagonal]
-  by_cases h : p.1 = p.2 <;> simp [diagonal_apply, h]
+  rw [mul_conjTranspose_diagPairEmbedding_apply]
+  simp only [physicalMatrix, blockTensor_diagonal, diagonal_apply, of_apply]
 
 /-- The Gram matrix of the diagonal entries of the blocked tensor is the `q`-th power, entry by
 entry, of the Gram matrix of one site. -/
@@ -223,8 +227,9 @@ theorem polarSupport_physicalMatrix_blockTensor_diagonal (a : Fin d → Fin D �
       simp only [Matrix.mul_assoc]
       rw [← Matrix.mul_assoc Jᴴ J, hJ, Matrix.one_mul]
   refine polarSupport_eq_of_range_eq ?_ ?_ ?_
-  · simpa [Matrix.IsHermitian, conjTranspose_mul, Matrix.mul_assoc] using
-      congrArg (fun X => J * X * Jᴴ) hE.eq
+  · rw [Matrix.IsHermitian, conjTranspose_mul, conjTranspose_mul, conjTranspose_conjTranspose,
+      hE.eq]
+    exact (Matrix.mul_assoc _ _ _).symm
   · rw [hsand, hEE]
   · rw [polarPos_physicalMatrix_blockTensor_diagonal a q hQ hQQ]
     exact range_mulVecLin_eq_of_mul_eq (R := J * R * Jᴴ) (by rw [hsand, hEQ])
@@ -265,7 +270,14 @@ theorem embedPair_fixedPointPair_one (c : Fin D) :
     embedPair (fun _ : Fin 1 => c) (fixedPointPair (1 : Matrix (Fin 1) (Fin 1) ℂ)) =
       basisPair c := by
   funext p
-  simp [embedPair, fixedPointPair, basisPair, CFC.sqrt_one, eq_comm]
+  by_cases h : p = (c, c)
+  · subst h
+    rw [embedPair, Finset.sum_eq_single ((0 : Fin 1), (0 : Fin 1))]
+    · simp [fixedPointPair, basisPair, CFC.sqrt_one]
+    · intro x _ hx
+      exact absurd (Subsingleton.elim _ _) hx
+    · simp
+  · simp [embedPair, basisPair, h, Ne.symm h]
 
 /-- A product of basis pairs `|c c⟩` is the basis vector of the configuration with every site
 equal to `(c, c)`. -/
@@ -274,13 +286,17 @@ theorem pairProductState_basisPair {M : ℕ} (c : Fin D) (x : Fin M → Fin D ×
   rw [pairProductState]
   simp only [basisPair, Prod.mk.injEq]
   rw [Finset.prod_ite_zero, Finset.prod_const_one]
-  refine if_congr ⟨fun h => ?_, ?_⟩ rfl rfl
-  · funext k
-    have h1 := (h ((finRotate M).symm k) (Finset.mem_univ _)).2
-    rw [Equiv.apply_symm_apply] at h1
-    exact Prod.ext h1 (h k (Finset.mem_univ _)).1
-  · rintro rfl k _
-    exact ⟨rfl, rfl⟩
+  have key : (∀ k ∈ Finset.univ, (x k).2 = c ∧ (x (finRotate M k)).1 = c) ↔
+      x = fun _ => (c, c) := by
+    constructor
+    · intro h
+      funext k
+      have h1 := (h ((finRotate M).symm k) (Finset.mem_univ _)).2
+      rw [Equiv.apply_symm_apply] at h1
+      exact Prod.ext h1 (h k (Finset.mem_univ _)).1
+    · rintro rfl k _
+      exact ⟨rfl, rfl⟩
+  simp only [key]
 
 /-- The unnormalized approximating state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of arXiv:2307.01696, eq. (S7),
 for the basis pairs `|c_j c_j⟩`: `∑ⱼ αⱼ ∏ₖ V_{τ_k, (c_j, c_j)}`. -/
@@ -328,6 +344,18 @@ theorem nonNormalApproxOverlap_eq (A : MPSTensor d D) (q M : ℕ) (α : Fin b �
     Complex.star_def, map_inv₀, Complex.conj_ofReal, PiLp.smul_apply, mpvState_apply]
   ring
 
+/-- Expanding the inner product of two sums: `∑_τ conj(∑ᵢ Fᵢ(τ)) ∑ₖ Gₖ(τ)` is
+`∑ᵢ ∑ₖ ∑_τ conj(Fᵢ(τ)) Gₖ(τ)`. -/
+theorem sum_star_sum_mul_sum {τs ι κ : Type*} [Fintype τs] [Fintype ι] [Fintype κ]
+    (F : ι → τs → ℂ) (G : κ → τs → ℂ) :
+    ∑ τ, star (∑ i, F i τ) * ∑ k, G k τ = ∑ i, ∑ k, ∑ τ, star (F i τ) * G k τ := by
+  calc ∑ τ, star (∑ i, F i τ) * ∑ k, G k τ = ∑ τ, ∑ i, ∑ k, star (F i τ) * G k τ := by
+        refine Finset.sum_congr rfl fun τ _ => ?_
+        rw [star_sum, Finset.sum_mul]
+        exact Finset.sum_congr rfl fun i _ => by rw [Finset.mul_sum]
+    _ = ∑ i, ∑ τ, ∑ k, star (F i τ) * G k τ := Finset.sum_comm
+    _ = _ := Finset.sum_congr rfl fun i _ => Finset.sum_comm
+
 /-- The squared norm of the target on `N = qM` sites, for a diagonal tensor:
 `‖φ_N(A)‖² = ∑_{e,e'} G_{e e'}^M` with `G` the Gram matrix `diagGram a q`. -/
 theorem ofReal_norm_mpvState_sq_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ) :
@@ -335,13 +363,13 @@ theorem ofReal_norm_mpvState_sq_diagonal (a : Fin d → Fin D → ℂ) (q M : �
       ∑ e, ∑ e', diagGram a q e e' ^ M := by
   rw [EuclideanSpace.norm_eq, Real.sq_sqrt (Finset.sum_nonneg fun _ _ => by positivity),
     ofReal_sum_norm_sq, ← (blockedConfigEquiv d M q).sum_comp]
-  simp only [mpvState_apply, mpv_blockedConfigEquiv_diagonal, star_sum, Finset.sum_mul,
-    Finset.mul_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun e _ => ?_
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun e' _ => ?_
-  rw [sum_star_prod_mul_prod, sum_star_blockDiagEntry_mul]
+  simp only [mpvState_apply, mpv_blockedConfigEquiv_diagonal]
+  rw [sum_star_sum_mul_sum
+    (fun e (τ : Fin M → Fin (blockPhysDim d q)) => ∏ k, blockDiagEntry a q (τ k) e)
+    (fun e (τ : Fin M → Fin (blockPhysDim d q)) => ∏ k, blockDiagEntry a q (τ k) e)]
+  refine Finset.sum_congr rfl fun e _ => Finset.sum_congr rfl fun e' _ => ?_
+  rw [sum_star_prod_mul_prod (fun w => blockDiagEntry a q w e)
+    (fun w => blockDiagEntry a q w e'), sum_star_blockDiagEntry_mul]
   rfl
 
 /-- The squared norm of the unnormalized approximating state for basis pairs:
@@ -352,18 +380,19 @@ theorem sum_star_nonNormalApproxVector_basisPair (A : MPSTensor d D) (q M : ℕ)
         nonNormalApproxVector A q M α (fun j => basisPair (c j)) τ =
       ∑ j, ∑ j', star (α j) * α j' *
         polarSupport (physicalMatrix (blockTensor A q)) (c j, c j) (c j', c j') ^ M := by
-  simp only [nonNormalApproxVector_basisPair, star_sum, star_mul', Finset.sum_mul,
-    Finset.mul_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j' _ => ?_
+  set V := polarIso (physicalMatrix (blockTensor A q))
+  simp only [nonNormalApproxVector_basisPair]
+  rw [sum_star_sum_mul_sum
+    (fun j (τ : Fin M → Fin (blockPhysDim d q)) => α j * ∏ k, V (τ k) (c j, c j))
+    (fun j (τ : Fin M → Fin (blockPhysDim d q)) => α j * ∏ k, V (τ k) (c j, c j))]
+  refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun j' _ => ?_
   calc _ = star (α j) * α j' * ∑ τ : Fin M → Fin (blockPhysDim d q),
-        star (∏ k, polarIso (physicalMatrix (blockTensor A q)) (τ k) (c j, c j)) *
-          ∏ k, polarIso (physicalMatrix (blockTensor A q)) (τ k) (c j', c j') := by
-        rw [Finset.mul_sum]; exact Finset.sum_congr rfl fun _ _ => by ring
+        star (∏ k, V (τ k) (c j, c j)) * ∏ k, V (τ k) (c j', c j') := by
+        rw [Finset.mul_sum]
+        exact Finset.sum_congr rfl fun _ _ => by rw [star_mul']; ring
     _ = _ := by
-        rw [sum_star_prod_mul_prod, ← conjTranspose_polarIso_mul_polarIso, mul_apply]
+        rw [sum_star_prod_mul_prod (fun w => V w (c j, c j)) (fun w => V w (c j', c j')),
+          ← conjTranspose_polarIso_mul_polarIso, mul_apply]
         rfl
 
 /-- The unnormalized overlap of the approximating state for basis pairs with the target of a
@@ -377,19 +406,21 @@ theorem sum_star_nonNormalApproxVector_basisPair_mul_mpv (a : Fin d → Fin D �
         polarPos (physicalMatrix (blockTensor (fun i => diagonal (a i)) q))
           (c j, c j) (e, e) ^ M := by
   set B := physicalMatrix (blockTensor (fun i => diagonal (a i)) q)
+  set V := polarIso B
   have hcol : ∀ w e, blockDiagEntry a q w e = B w (e, e) := fun w e => by
     simp [B, physicalMatrix, blockTensor_diagonal]
-  simp only [nonNormalApproxVector_basisPair, mpv_blockedConfigEquiv_diagonal, star_sum,
-    star_mul', Finset.sum_mul, Finset.mul_sum, hcol]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun e _ => ?_
+  simp only [nonNormalApproxVector_basisPair, mpv_blockedConfigEquiv_diagonal, hcol]
+  rw [sum_star_sum_mul_sum
+    (fun j (τ : Fin M → Fin (blockPhysDim d q)) => α j * ∏ k, V (τ k) (c j, c j))
+    (fun (e : Fin D) (τ : Fin M → Fin (blockPhysDim d q)) => ∏ k, B (τ k) (e, e))]
+  refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun e _ => ?_
   calc _ = star (α j) * ∑ τ : Fin M → Fin (blockPhysDim d q),
-        star (∏ k, polarIso B (τ k) (c j, c j)) * ∏ k, B (τ k) (e, e) := by
-        rw [Finset.mul_sum]; exact Finset.sum_congr rfl fun _ _ => by ring
+        star (∏ k, V (τ k) (c j, c j)) * ∏ k, B (τ k) (e, e) := by
+        rw [Finset.mul_sum]
+        exact Finset.sum_congr rfl fun _ _ => by rw [star_mul']; ring
     _ = _ := by
-        rw [sum_star_prod_mul_prod, ← conjTranspose_polarIso_mul_self, mul_apply]
+        rw [sum_star_prod_mul_prod (fun w => V w (c j, c j)) (fun w => B w (e, e)),
+          ← conjTranspose_polarIso_mul_self, mul_apply]
         rfl
 
 /-- **The overlap for a diagonal tensor and basis pairs.** For `Aⁱ = diag(aⁱ)` and the pairs
@@ -408,14 +439,16 @@ theorem nonNormalApproxOverlap_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ
         ∑ j, ∑ e, star (α j) *
           polarPos (physicalMatrix (blockTensor (fun i => diagonal (a i)) q))
             (c j, c j) (e, e) ^ M := by
-  rw [nonNormalApproxOverlap_eq, sum_star_nonNormalApproxVector_basisPair_mul_mpv]
-  congr 3
-  · congr 2
+  have e₁ : Real.sqrt (∑ τ, ‖nonNormalApproxVector (fun i => diagonal (a i)) q M α
+      (fun j => basisPair (c j)) τ‖ ^ 2) = Real.sqrt X := by
+    congr 1
     apply Complex.ofReal_injective
     rw [hX, ← sum_star_nonNormalApproxVector_basisPair, ofReal_sum_norm_sq]
-  · have h := ofReal_norm_mpvState_sq_diagonal a q M
+  have e₂ : ‖mpvState (fun i => diagonal (a i)) (M * q)‖ = Real.sqrt Y := by
+    have h := ofReal_norm_mpvState_sq_diagonal a q M
     rw [← hY] at h
     rw [← Complex.ofReal_injective h, Real.sqrt_sq (norm_nonneg _)]
+  rw [nonNormalApproxOverlap_eq, sum_star_nonNormalApproxVector_basisPair_mul_mpv, e₁, e₂]
 
 /-! ### One-dimensional blocks -/
 
@@ -428,14 +461,15 @@ theorem eq_one_of_hasEigenvalue_transferMap_of_dim_one (A : MPSTensor d 1)
     (h : Module.End.HasEigenvalue (Kraus.transferMap A) μ) : μ = 1 := by
   have hid : ∀ X, Kraus.transferMap A X = X := by
     intro X
+    have hi : ∀ i, (A i * X * (A i)ᴴ) 0 0 = star (A i 0 0) * A i 0 0 * X 0 0 := fun i => by
+      simp [Matrix.mul_apply, conjTranspose_apply]; ring
     rw [Kraus.transferMap_apply]
     ext a c
-    fin_cases a; fin_cases c
-    simp only [sum_apply, mul_apply, Finset.univ_unique, Fin.default_eq_zero,
-      Finset.sum_singleton, conjTranspose_apply]
-    calc _ = X 0 0 * ∑ i, star (A i 0 0) * A i 0 0 := by
-          rw [Finset.mul_sum]; exact Finset.sum_congr rfl fun _ _ => by ring
-      _ = X 0 0 := by rw [hA, mul_one]
+    obtain rfl : a = 0 := Subsingleton.elim _ _
+    obtain rfl : c = 0 := Subsingleton.elim _ _
+    rw [Matrix.sum_apply]
+    simp_rw [hi]
+    rw [← Finset.sum_mul, hA, one_mul]
   obtain ⟨v, hv⟩ := h.exists_hasEigenvector
   have heq := hv.apply_eq_smul
   rw [hid] at heq
@@ -474,6 +508,7 @@ theorem eventually_mul_pow_mul_exp_lt {r ρ : ℝ} (hr : 0 ≤ r) (hrρ : r < ρ
   filter_upwards [h3.eventually (gt_mem_nhds hc)] with q hq
   have hsplit : C * ((q : ℝ) * r ^ q) * Real.exp (C * ((q : ℝ) * r ^ q)) =
       ρ ^ q * (C * ((q : ℝ) * (r / ρ) ^ q) * Real.exp (C * ((q : ℝ) * r ^ q))) := by
+    have hρq : ρ ^ q ≠ 0 := (pow_pos hρ q).ne'
     rw [div_pow]
     field_simp
   rw [hsplit, mul_comm c]

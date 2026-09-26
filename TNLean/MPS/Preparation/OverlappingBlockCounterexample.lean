@@ -66,7 +66,7 @@ def overlappingBlockDiag : Fin 2 → Fin 2 → ℂ := ![![1, 3 / 5], ![0, 4 / 5]
 /-- The tensor `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)`: the canonical form of
 arXiv:2307.01696, eq. (S2), with the two one-dimensional normal blocks `A_1 = (1, 0)` and
 `A_2 = (3/5, 4/5)`, each of multiplicity one and weight one. -/
-def overlappingBlockTensor : MPSTensor 2 2 := fun i => diagonal (overlappingBlockDiag i)
+abbrev overlappingBlockTensor : MPSTensor 2 2 := fun i => diagonal (overlappingBlockDiag i)
 
 /-- The multiplicities `m = (1, 1)`. -/
 def overlappingBlockMult : Fin 2 → ℕ := ![1, 1]
@@ -101,7 +101,8 @@ theorem ghzAmplitude_overlappingBlock (N : ℕ) :
   have h : (∑ l, ‖(![1, 1] : Fin 2 → ℂ) l‖ ^ 2) = 2 := by
     simp [Fin.sum_univ_two]; norm_num
   funext j
-  fin_cases j <;> simp [ghzAmplitude, h, invSqrtTwo]
+  rw [ghzAmplitude, h]
+  fin_cases j <;> simp [invSqrtTwo]
 
 /-- The overlap `s = (3/5)^q` of the `q`-site states of the two blocks. -/
 noncomputable def overlappingBlockOverlap (q : ℕ) : ℝ := (3 / 5) ^ q
@@ -160,14 +161,14 @@ theorem two_mul_overlappingBlockU_mul_overlappingBlockV (q : ℕ) :
   nlinarith [sq_sqrt_add q, sq_sqrt_sub q]
 
 theorem posSemidef_overlappingBlockSqrt (q : ℕ) : (overlappingBlockSqrt q).PosSemidef := by
-  set a := Real.sqrt (1 + overlappingBlockOverlap q)
-  set b := Real.sqrt (1 - overlappingBlockOverlap q)
   have h : overlappingBlockSqrt q =
-      ((a / 2 : ℝ) : ℂ) • vecMulVec ![1, 1] (star ![1, 1]) +
-        ((b / 2 : ℝ) : ℂ) • vecMulVec ![1, -1] (star ![1, -1]) := by
+      ((Real.sqrt (1 + overlappingBlockOverlap q) / 2 : ℝ) : ℂ) •
+          vecMulVec ![1, 1] (star ![1, 1]) +
+        ((Real.sqrt (1 - overlappingBlockOverlap q) / 2 : ℝ) : ℂ) •
+          vecMulVec ![1, -1] (star ![1, -1]) := by
     ext e e'
     fin_cases e <;> fin_cases e' <;>
-      simp [overlappingBlockSqrt, vecMulVec, overlappingBlockU, overlappingBlockV, a, b] <;> ring
+      simp [overlappingBlockSqrt, vecMulVec, overlappingBlockU, overlappingBlockV] <;> ring
   rw [h]
   exact ((posSemidef_vecMulVec_self_star _).smul
       (Complex.zero_le_real.mpr (by positivity))).add
@@ -176,35 +177,32 @@ theorem posSemidef_overlappingBlockSqrt (q : ℕ) : (overlappingBlockSqrt q).Pos
 theorem overlappingBlockSqrt_mul_self (q : ℕ) :
     overlappingBlockSqrt q * overlappingBlockSqrt q = diagGram overlappingBlockDiag q := by
   rw [diagGram_overlappingBlockDiag]
-  have h1 := overlappingBlockU_sq_add_overlappingBlockV_sq q
-  have h2 := two_mul_overlappingBlockU_mul_overlappingBlockV q
+  have h1 : (overlappingBlockU q : ℂ) ^ 2 + (overlappingBlockV q : ℂ) ^ 2 = 1 := by
+    exact_mod_cast overlappingBlockU_sq_add_overlappingBlockV_sq q
+  have h2 : 2 * ((overlappingBlockU q : ℂ) * overlappingBlockV q) = overlappingBlockOverlap q := by
+    exact_mod_cast two_mul_overlappingBlockU_mul_overlappingBlockV q
   ext e e'
   fin_cases e <;> fin_cases e' <;>
-    simp [overlappingBlockSqrt, mul_apply, Fin.sum_univ_two]
-  · exact_mod_cast (by nlinarith [h1] : overlappingBlockU q * overlappingBlockU q +
-      overlappingBlockV q * overlappingBlockV q = 1)
-  · exact_mod_cast (by nlinarith [h2] : overlappingBlockU q * overlappingBlockV q +
-      overlappingBlockV q * overlappingBlockU q = overlappingBlockOverlap q)
-  · exact_mod_cast (by nlinarith [h2] : overlappingBlockV q * overlappingBlockU q +
-      overlappingBlockU q * overlappingBlockV q = overlappingBlockOverlap q)
-  · exact_mod_cast (by nlinarith [h1] : overlappingBlockV q * overlappingBlockV q +
-      overlappingBlockU q * overlappingBlockU q = 1)
+    simp [overlappingBlockSqrt, mul_apply, Fin.sum_univ_two] <;>
+    first | linear_combination h1 | linear_combination h2
 
 /-- For `q ≥ 1` the square root is invertible: its determinant is `u² - v² = √(1 - s²) > 0`. -/
 theorem isUnit_det_overlappingBlockSqrt {q : ℕ} (hq : q ≠ 0) :
     IsUnit (overlappingBlockSqrt q).det := by
   rw [isUnit_iff_ne_zero, det_fin_two]
-  simp only [overlappingBlockSqrt, of_apply, cons_val', cons_val_zero, cons_val_one,
-    empty_val', cons_val_fin_one, head_cons, head_fin_const]
   have hb : 0 < Real.sqrt (1 - overlappingBlockOverlap q) :=
     Real.sqrt_pos.mpr (by linarith [overlap_lt_one hq])
   have ha : 0 < Real.sqrt (1 + overlappingBlockOverlap q) :=
     Real.sqrt_pos.mpr (by linarith [overlap_nonneg q])
-  have h : overlappingBlockU q * overlappingBlockU q - overlappingBlockV q * overlappingBlockV q ≠
-      0 := by
-    unfold overlappingBlockU overlappingBlockV
-    nlinarith [mul_pos ha hb]
-  exact_mod_cast h
+  have h : overlappingBlockU q * overlappingBlockU q - overlappingBlockV q * overlappingBlockV q =
+      Real.sqrt (1 + overlappingBlockOverlap q) * Real.sqrt (1 - overlappingBlockOverlap q) := by
+    unfold overlappingBlockU overlappingBlockV; ring
+  have hc : (overlappingBlockU q : ℂ) * overlappingBlockU q -
+      (overlappingBlockV q : ℂ) * overlappingBlockV q ≠ 0 := by
+    have : overlappingBlockU q * overlappingBlockU q -
+        overlappingBlockV q * overlappingBlockV q ≠ 0 := by rw [h]; positivity
+    exact_mod_cast this
+  simpa [overlappingBlockSqrt] using hc
 
 /-- The support projector of the `q`-site blocked tensor is `J Jᴴ`, for `q ≥ 1`. -/
 theorem polarSupport_overlappingBlockTensor {q : ℕ} (hq : q ≠ 0) :
@@ -227,12 +225,13 @@ theorem nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ} (hq : q ≠ 0)
       (((overlappingBlockU q ^ M + overlappingBlockV q ^ M) /
         Real.sqrt (1 + overlappingBlockOverlap q ^ M) : ℝ) : ℂ) := by
   simp only [embedPair_fixedPointPair_one]
-  rw [nonNormalApproxOverlap_diagonal overlappingBlockDiag q M _ id (X := 1)
+  rw [show overlappingBlockTensor = fun i => diagonal (overlappingBlockDiag i) from rfl]
+  rw [nonNormalApproxOverlap_diagonal overlappingBlockDiag q M _ (fun j => j) (X := 1)
     (Y := 2 * (1 + overlappingBlockOverlap q ^ M))]
   · rw [polarPos_physicalMatrix_blockTensor_diagonal overlappingBlockDiag q
       (posSemidef_overlappingBlockSqrt q) (overlappingBlockSqrt_mul_self q),
       ghzAmplitude_overlappingBlock]
-    simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two, id,
+    simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two,
       overlappingBlockSqrt]
     simp [invSqrtTwo]
     have h2 : Real.sqrt (2 * (1 + overlappingBlockOverlap q ^ M)) =
@@ -248,7 +247,7 @@ theorem nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ} (hq : q ≠ 0)
     field_simp
     linear_combination (↑(overlappingBlockU q) ^ M + ↑(overlappingBlockV q) ^ M) * hsq
   · rw [polarSupport_overlappingBlockTensor hq, ghzAmplitude_overlappingBlock]
-    simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two, id]
+    simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two]
     simp [zero_pow hM, invSqrtTwo_mul_self]
     norm_num
   · rw [diagGram_overlappingBlockDiag]
@@ -280,29 +279,30 @@ theorem le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ
     have : Real.sqrt (1 - s) ≤ Real.sqrt (1 + s) := Real.sqrt_le_sqrt (by linarith)
     simp only [v, overlappingBlockV]; linarith
   have hu0 : 0 ≤ u := by simp only [u, overlappingBlockU]; positivity
-  have hu1 : u ≤ 1 := by nlinarith
-  have hv1 : v ≤ 1 := by nlinarith
+  have hu1 : u ≤ 1 := by nlinarith [sq_nonneg v]
+  have hv1 : v ≤ 1 := by nlinarith [sq_nonneg u]
   have hab : Real.sqrt (1 + s) * Real.sqrt (1 - s) ≤ 1 - s ^ 2 / 2 := by
-    rw [← Real.sqrt_mul (by linarith)]
-    rw [Real.sqrt_le_left]
-    · nlinarith
-    · nlinarith
+    rw [← Real.sqrt_mul (by linarith), Real.sqrt_le_iff]
+    constructor <;> nlinarith
   have hu2 : u ^ 2 = (1 + Real.sqrt (1 + s) * Real.sqrt (1 - s)) / 2 := by
-    simp only [u, overlappingBlockU]; nlinarith
+    rw [show u = (Real.sqrt (1 + s) + Real.sqrt (1 - s)) / 2 from rfl]
+    linear_combination (ha + hb) / 4
   have hkey : u ^ 3 + v ^ 2 ≤ 1 - s ^ 2 / 16 := by
-    have h1u : s ^ 2 / 8 ≤ 1 - u := by nlinarith
     have hu2' : 1 / 2 ≤ u ^ 2 := by nlinarith [mul_nonneg ha0 hb0]
+    have h1u2 : s ^ 2 / 4 ≤ 1 - u ^ 2 := by nlinarith
+    have h1u : s ^ 2 / 8 ≤ 1 - u := by nlinarith
     nlinarith [mul_le_mul hu2' h1u (by positivity) (by positivity)]
   have huM : u ^ M ≤ u ^ 3 := pow_le_pow_of_le_one hu0 hu1 hM
   have hvM : v ^ M ≤ v ^ 2 := pow_le_pow_of_le_one hv0 hv1 (by omega)
   have hden : 1 ≤ Real.sqrt (1 + s ^ M) := by
-    rw [Real.one_le_sqrt]; have := pow_nonneg hs0 M; linarith
+    rw [show (1 : ℝ) = Real.sqrt 1 from Real.sqrt_one.symm]
+    exact Real.sqrt_le_sqrt (by have := pow_nonneg hs0 M; linarith)
   have hnum : 0 ≤ u ^ M + v ^ M := by positivity
   have hdiv : |(u ^ M + v ^ M) / Real.sqrt (1 + s ^ M)| ≤ u ^ M + v ^ M := by
     rw [abs_of_nonneg (by positivity)]
     exact div_le_self hnum hden
   have hs2 : (9 / 25 : ℝ) ^ q = s ^ 2 := by
-    simp only [s, overlappingBlockOverlap, ← pow_mul, mul_comm q 2, pow_mul]; norm_num
+    rw [show s = (3 / 5 : ℝ) ^ q from rfl, ← pow_mul, mul_comm, pow_mul]; norm_num
   rw [Real.norm_eq_abs, hs2]
   linarith
 

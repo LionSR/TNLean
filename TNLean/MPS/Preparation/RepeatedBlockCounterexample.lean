@@ -62,7 +62,7 @@ def repeatedBlockDiag : Fin 2 → Fin 3 → ℂ := ![![1, 1, 0], ![0, 0, 1]]
 /-- The tensor `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)`: the canonical form of
 arXiv:2307.01696, eq. (S2), with the normal block `A_1 = (1, 0)` of multiplicity two and
 weights `(1, 1)`, and the normal block `A_2 = (0, 1)` of multiplicity one. -/
-def repeatedBlockTensor : MPSTensor 2 3 := fun i => diagonal (repeatedBlockDiag i)
+abbrev repeatedBlockTensor : MPSTensor 2 3 := fun i => diagonal (repeatedBlockDiag i)
 
 /-- The two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, each in the gauge
 `∑ᵢ |aᵢ|² = 1` of arXiv:2307.01696, eq. `eq:Ek_decomp`. -/
@@ -101,7 +101,8 @@ theorem ghzAmplitude_repeatedBlock (N : ℕ) :
   have h : (∑ l, ‖(![2, 1] : Fin 2 → ℂ) l‖ ^ 2) = 5 := by
     simp [Fin.sum_univ_two]; norm_num
   funext j
-  fin_cases j <;> simp [ghzAmplitude, h]
+  rw [ghzAmplitude, h]
+  fin_cases j <;> simp
 
 /-- The Gram matrix of the blocked tensor, for `q ≥ 1`. -/
 theorem diagGram_repeatedBlockDiag {q : ℕ} (hq : q ≠ 0) :
@@ -155,8 +156,8 @@ theorem polarSupport_repeatedBlockTensor {q : ℕ} (hq : q ≠ 0) :
   refine polarSupport_physicalMatrix_blockTensor_diagonal repeatedBlockDiag q
     posSemidef_repeatedBlockSqrt (repeatedBlockSqrt_mul_self hq) (R :=
       !![invSqrtTwo, 0, 0; 0, invSqrtTwo, 0; 0, 0, 1]) ?_ ?_ ?_ ?_
-  · ext e e'
-    fin_cases e <;> fin_cases e' <;> simp [repeatedBlockProj, conjTranspose_apply]
+  · refine Matrix.IsHermitian.ext fun e e' => ?_
+    fin_cases e <;> fin_cases e' <;> simp [repeatedBlockProj]
   all_goals
     ext e e'
     fin_cases e <;> fin_cases e' <;>
@@ -178,6 +179,7 @@ theorem nonNormalApproxOverlap_repeatedBlockTensor {q M : ℕ} (hq : q ≠ 0) (h
       (((4 * (Real.sqrt 2)⁻¹ ^ M + 1) /
         (Real.sqrt 5 * Real.sqrt (4 * (2⁻¹ : ℝ) ^ M + 1)) : ℝ) : ℂ) := by
   simp only [embedPair_fixedPointPair_one]
+  rw [show repeatedBlockTensor = fun i => diagonal (repeatedBlockDiag i) from rfl]
   set X : ℝ := (4 * (2⁻¹ : ℝ) ^ M + 1) / 5
   rw [nonNormalApproxOverlap_diagonal repeatedBlockDiag q M _ repeatedBlockCoord (X := X)
     (Y := 5)]
@@ -221,7 +223,7 @@ theorem tendsto_repeatedBlockOverlap :
   have hnum := (h1.const_mul 4).add_const 1
   have hden := tendsto_const_nhds (x := Real.sqrt 5) |>.mul
     ((Real.continuous_sqrt.tendsto _).comp ((h2.const_mul 4).add_const 1))
-  have := hnum.div hden (by simp)
+  have := hnum.div hden (by positivity)
   simpa [repeatedBlockOverlap, Function.comp_def] using this
 
 /-- **The overlap tends to `1/√5`** as the number of blocks grows, for every block length
@@ -232,7 +234,7 @@ theorem tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor {q : ℕ} (hq : 
         (ghzAmplitude (bntWeight repeatedBlockWeight (M * q)))
         (fun j => embedPair (fun _ : Fin 1 => repeatedBlockCoord j)
           (fixedPointPair (1 : Matrix (Fin 1) (Fin 1) ℂ)))‖) atTop (𝓝 (1 / Real.sqrt 5)) := by
-  refine tendsto_repeatedBlockOverlap.congr' ?_
+  refine Tendsto.congr' ?_ tendsto_repeatedBlockOverlap
   filter_upwards [eventually_ge_atTop 1] with M hM
   rw [nonNormalApproxOverlap_repeatedBlockTensor hq (by omega), Complex.norm_real,
     Real.norm_eq_abs, abs_of_nonneg (by positivity)]
@@ -257,7 +259,7 @@ theorem not_approximationError_le_repeatedBlockTensor {lam₂ : ℂ} (h0 : 0 < �
             (fixedPointPair (1 : Matrix (Fin 1) (Fin 1) ℂ)))‖ := by
   set r := Real.exp (-γ / correlationLength lam₂)
   have hξ := correlationLength_pos h0 h1
-  have hr1 : r < 1 := Real.exp_lt_one_iff.mpr (div_neg_of_neg_of_pos (by linarith) hξ)
+  have hr1 : r < 1 := Real.exp_lt_one.mpr (div_neg_of_neg_of_pos (by linarith) hξ)
   have hxq : ∀ M : ℕ, Real.exp (-γ * M / correlationLength lam₂) = r ^ M := fun M => by
     rw [← Real.exp_nat_mul]; congr 1; ring
   have h5 : 1 / Real.sqrt 5 < 1 / 2 := by
