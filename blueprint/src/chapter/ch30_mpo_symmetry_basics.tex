@@ -777,6 +777,109 @@ relation between word traces has nonnegative integer coefficients.
     % Source anchor: arXiv:1511.08090, lines 1308--1312 and 1323.
 \end{example}
 
+\begin{definition}[The fusion rings of $su(2)_4$ and $\mathrm{Rep}(S_3)$]%
+    \label{def:mposym_su24_reps3}
+    \lean{MPOTensor.su24Fusion, MPOTensor.repS3Fusion,
+        MPOTensor.isFusionUnit_su24Fusion, MPOTensor.isFusionUnit_repS3Fusion,
+        MPOTensor.repS3ToSU24, MPOTensor.su24Fusion_repS3ToSU24,
+        MPOTensor.su24Fusion_repS3ToSU24_odd}
+    \leanok
+    \uses{def:fusion_unit_invertible}
+    The labels of $su(2)_4$ are $0,\tfrac12,1,\tfrac32,2$, with unit $0$ and
+    fusion rules $j_1\times j_2=\sum j$ over
+    $j=|j_1-j_2|,|j_1-j_2|+1,\ldots,\min(j_1+j_2,4-j_1-j_2)$. The labels of
+    $\mathrm{Rep}(S_3)$ are $1,\pi,\psi$, with unit $1$,
+    $\pi\times\pi=1+\pi+\psi$, $\psi\times\psi=1$ and
+    $\psi\times\pi=\pi\times\psi=\pi$. The assignment $1,\pi,\psi\mapsto0,1,2$
+    identifies $\mathrm{Rep}(S_3)$ with the fusion subring of integer labels of
+    $su(2)_4$ \cite[Section~6]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 1891--1904 and 1934.
+\end{definition}
+
+\begin{theorem}[The phases of $su(2)_4$ and $\mathrm{Rep}(S_3)$ represent the fusion rings]%
+    \label{thm:mposym_su24_reps3_nimreps}
+    \lean{MPOTensor.su24TY, MPOTensor.isNIMRep_su24Fusion,
+        MPOTensor.isNIMRep_su24TY, MPOTensor.repS3Fusion_eq_table,
+        MPOTensor.isNIMRep_repS3Fusion, MPOTensor.repS3Z1, MPOTensor.repS3Z2,
+        MPOTensor.repS3Z3, MPOTensor.isNIMRep_repS3Z1,
+        MPOTensor.isNIMRep_repS3Z2, MPOTensor.isNIMRep_repS3Z3,
+        MPOTensor.repS3Z3Printed, MPOTensor.not_isNIMRep_repS3Z3Printed}
+    \leanok
+    \uses{def:mposym_su24_reps3, def:fusion_character_nimrep}
+    The following actions on blocks, with the unit acting as the identity,
+    satisfy (\ref{eq:mpo_nimrep}).
+    \begin{enumerate}
+        \item For $su(2)_4$: the fusion rules on five blocks, one per label;
+              and the module $\mathcal M_{TY}$ on blocks $x,y,z,s$, where $0$
+              and $2$ fix every block, $\tfrac12$ and $\tfrac32$ send $x,y,z$
+              to $s$ and $s$ to $x+y+z$, and $1$ sends $x$ to $y+z$, $y$ to
+              $x+z$, $z$ to $x+y$ and $s$ to $2s$.
+        \item For $\mathrm{Rep}(S_3)$: on one block $s$, $\pi\cdot s=2s$ and
+              $\psi\cdot s=s$ (the subgroup $\Z_1$); on blocks $x,y$,
+              $\pi\cdot x=\pi\cdot y=x+y$ and $\psi$ exchanging $x$ and $y$
+              ($\Z_2$); on blocks $x,y,z$, $\pi\cdot x=y+z$, $\pi\cdot y=x+z$,
+              $\pi\cdot z=x+y$ and $\psi$ fixing every block ($\Z_3$); and the
+              fusion rules on three blocks ($S_3$).
+    \end{enumerate}
+    These are the phases listed in \cite[Section~6]{GarreRubio2023MPOSym},
+    except that the source prints the $\Z_3$ action with $\psi$ exchanging
+    $y$ and $z$; that action does not satisfy (\ref{eq:mpo_nimrep}), since
+    $\pi\cdot(\pi\cdot y)=x+2y+z$ while $(1+\pi+\psi)\cdot y=x+y+2z$
+    \cite{gap:glm23_reps3_z3_table}. That the lists are complete is
+    not treated here beyond one block
+    (Theorem~\ref{thm:mposym_su24_reps3_one_block};
+    \cite{gap:glm23_reps3_su24_module_list}).
+    % Source anchor: arXiv:2203.12563, lines 1906--1925 and 1936--1987.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each identity (\ref{eq:mpo_nimrep}) is a finite check on nonnegative
+    integer matrices.
+\end{proof}
+
+\begin{theorem}[The $\mathrm{Rep}(S_3)$ phases inside the $su(2)_4$ phases]%
+    \label{thm:mposym_reps3_in_su24}
+    \lean{MPOTensor.su24TY_repS3ToSU24_castSucc,
+        MPOTensor.su24TY_repS3ToSU24_last,
+        MPOTensor.su24TY_repS3ToSU24_mix,
+        MPOTensor.su24Fusion_repS3ToSU24_half}
+    \leanok
+    \uses{thm:mposym_su24_reps3_nimreps}
+    Under the identification of $\mathrm{Rep}(S_3)$ with the integer labels of
+    $su(2)_4$, the integer labels do not mix the blocks $\{x,y,z\}$ and
+    $\{s\}$ of $\mathcal M_{TY}$; they act on $\{x,y,z\}$ as in the $\Z_3$
+    phase and on $\{s\}$ as in the $\Z_1$ phase. They act on the blocks
+    $\tfrac12,\tfrac32$ of the first $su(2)_4$ phase as in the $\Z_2$ phase
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 1927, 1940, 1957 and 1972.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Compare the entries of the actions.
+\end{proof}
+
+\begin{theorem}[Actions on one block]%
+    \label{thm:mposym_su24_reps3_one_block}
+    \lean{MPOTensor.isFusionCharacter_repS3Fusion_iff,
+        MPOTensor.not_isFusionCharacter_su24Fusion}
+    \leanok
+    \uses{def:mposym_su24_reps3, def:fusion_character_nimrep}
+    The only fusion character of $\mathrm{Rep}(S_3)$ with values in $\N$ is
+    $(m_1,m_\pi,m_\psi)=(1,2,1)$, the $\Z_1$ phase; $su(2)_4$ has no fusion
+    character with values in $\N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $\mathrm{Rep}(S_3)$, $m_\psi^2=m_1=1$ gives $m_\psi=1$, and
+    $m_\pi^2=1+m_\pi+m_\psi$ then gives $m_\pi=2$; conversely $(1,2,1)$
+    satisfies all relations. For $su(2)_4$, $m_2^2=1$ gives $m_2=1$,
+    $m_1^2=2+m_1$ gives $m_1=2$, and then $m_{1/2}^2=m_0+m_1=3$ has no
+    solution in $\N$.
+\end{proof}
+
 \begin{example}[Anomalous cyclic group of order three]%
     \label{ex:mpo_symmetry_z3}
     \lean{Z3Anomalous.isMPOFusionAlgebra_z3Block,

@@ -1,0 +1,69 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\title{The $\mathrm{Rep}(S_3)$ and $su(2)_4$ Phases: Completeness of the Lists}
+\author{}
+\date{2026-09-27}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source claims}
+Garre-Rubio, Lootens and Moln\'ar list the phases of matrix product states
+symmetric under matrix product operators representing $su(2)_4$ and
+$\mathrm{Rep}(S_3)$~\cite{GarreRubio2023MPOSym}. For $su(2)_4$, with labels
+$0,\tfrac12,1,\tfrac32,2$, they state that there are only two phases, the one
+with five blocks acted on by the fusion rules and the module
+$\mathcal M_{TY}$ with four blocks $x,y,z,s$, and they print the action of
+every label on the blocks of $\mathcal M_{TY}$.\footnote{Source traceability:
+    \path{Papers/2203.12563/REsubmission.tex}, lines 1890--1931.} For
+$\mathrm{Rep}(S_3)$, with labels $1,\pi,\psi$, they state that every phase
+is characterized by a subgroup of $S_3$, and print the actions on the blocks
+for $H=\mathbb Z_1,\mathbb Z_2,\mathbb Z_3,S_3$. They identify the
+$\mathbb Z_1$, $\mathbb Z_2$ and $\mathbb Z_3$ phases with restrictions of
+the $su(2)_4$ phases along the embedding $1,\pi,\psi\mapsto0,1,2$: the block
+$s$ of $\mathcal M_{TY}$, the blocks $\tfrac12,\tfrac32$ of the first phase,
+and the blocks $x,y,z$ of $\mathcal M_{TY}$.\footnote{Source traceability:
+    lines 1933--1989; the restrictions at lines 1927, 1940, 1957 and 1972.}
+The multiplicities $M_{a,x}^y$ of each phase form a nonnegative integer
+representation of the fusion ring,
+\begin{align}
+    \sum_c N_{ab}^c M_{c,x}^y & =\sum_z M_{b,x}^z M_{a,z}^y ,
+    \label{eq:glm23_list_nimrep}
+\end{align}
+with the unit acting as the identity.
+
+\section{Completeness of the lists}
+Formalized: every listed action satisfies (\ref{eq:glm23_list_nimrep}), with the $\mathbb Z_3$ action
+corrected as recorded in the note on the $\mathbb Z_3$ table, the restrictions
+stated by the source hold, and on a single block the list is complete. A representation on one
+block with the unit acting trivially is a ring homomorphism to $\mathbb Z$
+that is nonnegative on the labels; for $\mathrm{Rep}(S_3)$ the only one is
+$(1,2,1)$, the $\mathbb Z_1$ phase, and $su(2)_4$ has none, since it would force
+$m_2=1$, $m_1=2$ and $m_{1/2}^2=3$.\footnote{Results:
+    \leanid{MPOTensor.isFusionCharacter_repS3Fusion_iff} and
+    \leanid{MPOTensor.not_isFusionCharacter_su24Fusion}.}
+
+Not formalized: completeness of the lists beyond one block. The source takes
+it from the classification of module categories, which it cites. It is not a
+consequence of (\ref{eq:glm23_list_nimrep}) with trivial unit action alone:
+for $\mathrm{Rep}(S_3)$ on two blocks,
+\begin{align}
+    M_\psi & =\begin{pmatrix}1&0\\0&1\end{pmatrix}, &
+    M_\pi  & =\begin{pmatrix}0&1\\2&1\end{pmatrix}
+    \notag
+\end{align}
+satisfies (\ref{eq:glm23_list_nimrep}), but it is neither the $\mathbb Z_2$
+phase nor a sum of two copies of the $\mathbb Z_1$ phase. It violates the
+duality $M_{a^*}=M_a^{\mathsf T}$ of a module category, as $\pi$ is self-dual.
+
+Elimination plan: formalize the duality condition on representations; bound
+the number of blocks of an indecomposable representation of each ring
+satisfying it; and enumerate the finitely many candidates, as is done for
+the Fibonacci ring on two blocks.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
