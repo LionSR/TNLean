@@ -7,7 +7,7 @@ import Mathlib.Data.ZMod.Basic
 import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Algebra.Group.TypeTags.Finite
 import Mathlib.Data.Matrix.Mul
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.ConjTranspose
 
 /-!

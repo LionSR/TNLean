@@ -5,9 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus
-open Filter
-
 /-!
 # Primitive blocked tensors
 
@@ -29,6 +26,9 @@ in the normal-canonical-form setting.
 
 matrix product states, canonical form, irreducibility, gauge-phase equivalence
 -/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus
+open Filter
 
 namespace MPSTensor
 

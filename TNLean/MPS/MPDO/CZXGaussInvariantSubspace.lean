@@ -460,7 +460,8 @@ theorem chainDecode_windowPerm (hN : 2 ≤ N) (j : Fin N)
       flipPattern_apply_self hN, hj]
     simp only [localPerm, Equiv.prodCongr_apply, Prod.map_fst, Prod.map_snd,
       gaussLegAction_fst, siteBits_eq_localBits_zero, localBits_matterBarFlip,
-      barFlip_apply_zero, barFlip_apply_one, toAdd_mul_gen_inv, Prod.mk_add_mk]
+      barFlip_apply_zero, barFlip_apply_one, Prod.mk_add_mk]
+    exact congrArg _ (toAdd_mul_gen_inv _)
   · by_cases hkj1 : k = j + 1
     · subst hkj1
       rw [ite_eq_right hkj, ite_eq_left rfl, gaussLocalCoordinateEquiv_apply_one,
