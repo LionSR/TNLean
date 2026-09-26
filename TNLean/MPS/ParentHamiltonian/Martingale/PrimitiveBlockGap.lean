@@ -32,7 +32,7 @@ namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
 
-/-- Inequivalent normalized primitive blocks admit a uniformly gapped parent
+/-- Inequivalent normalized primitive blocks have a uniformly gapped parent
 interaction above every prescribed lower bound on its range. This combines
 Nachtergaele's grouped estimate, Theorem 2.1(ii), with the finite-range
 periodic comparison. The chosen range is twice a sufficiently large overlap
