@@ -5386,6 +5386,146 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     layers, and the physical-pair identification preserves unitarity.
 \end{proof}
 
+\begin{theorem}[Open-word factorization with free virtual ends]
+    \label{thm:mpu_two_site_open_word_factorization}
+    \lean{MPOTensor.twoSiteLeftHalf,
+        MPOTensor.twoSiteRightHalf,
+        MPOTensor.twoSiteInputGate,
+        MPOTensor.twoSiteOutputLink,
+        MPOTensor.twoSiteOpenGateTail,
+        MPOTensor.twoSite_letter_factorization,
+        MPOTensor.twoSite_adjacent_halves,
+        MPOTensor.twoSite_evalWord_open_gate_factorization,
+        MPOTensor.twoSite_trace_open_gate_with_endpoints}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form, def:mpo_eval_word}
+    For a two-site tensor $W$ with supplied standard-form data, write
+    $L(i)_{\alpha t}=X_2(\alpha,i_1)_t$,
+    $R(i)_{s\gamma}=X_1(i_2,\gamma)_s$,
+    $u(j)_{ts}=u_{(t,s),j}$, and
+    $v(i,i')_{st}=v_{(i_2,i'_1),(s,t)}$.
+    For every nonempty word of complete two-site blocks, with the product
+    ordered in increasing $x$,
+    \begin{align}
+        W^{i_0,j_0}\cdots W^{i_{n-1},j_{n-1}}
+         & =L(i_0)u(j_0)
+        \left(\prod_{x=1}^{n-1}v(i_{x-1},i_x)u(j_x)\right)R(i_{n-1}).
+    \end{align}
+    The equality is an equality of matrices with both virtual indices free;
+    arbitrary matrices may therefore be inserted at the two ends before
+    taking the trace.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    A single letter factors as $W^{i,j}=L(i)u(j)R(i)$. For adjacent
+    letters, $R(i)L(i')=v(i,i')$ by the definition of the shifted gate.
+    Induction over the remaining letters gives the displayed product.
+    Multiplying it by the two end matrices and taking the trace preserves
+    the equality.
+\end{proof}
+
+\begin{definition}[Open three-block coefficient and neighboring observable]
+    \label{def:mpu_two_site_open_three_block}
+    \lean{MPOTensor.twoSiteThreeBlockOpen,
+        MPOTensor.twoLinkOutputObservable,
+        MPOTensor.twoSiteThreeBlockTrace,
+        MPOTensor.twoSiteBufferedTrace}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form, def:mpo_eval_word}
+    Let $W$ have supplied two-site standard-form data. Fix virtual indices
+    $\alpha,\gamma$, exterior output half-sites $e_-,e_+$, and exterior
+    input pairs $j_0,j_2$. For two neighboring output pairs
+    $a=(a_0,a_1)$, $b=(b_0,b_1)$ and a middle input pair $j$, set
+    \begin{align}
+        F_{\alpha,\gamma}(a,b;j)
+         & =\bigl[W^{(e_-,a_0),j_0}
+            W^{(a_1,b_0),j}W^{(b_1,e_+),j_2}\bigr]_{\alpha,\gamma}.
+    \end{align}
+    For an observable $A$ on the middle input pair, let
+    $C=uAu^{\dagger}$ and define the matrix on the two neighboring output
+    pairs by
+    \begin{align}
+        B(A) & =(v\otimes v)\,\widetilde C\,(v\otimes v)^{\dagger}, \\
+        \widetilde C_{(s_0,t_1,s_1,t_2),(s'_0,t'_1,s'_1,t'_2)}
+             & =\delta_{s_0,s'_0}
+        C_{(t_1,s_1),(t'_1,s'_1)}\delta_{t_2,t'_2}.
+    \end{align}
+    The link coordinates are ordered as $(r,\ell,r,\ell)$. One may also
+    contract $F_{\alpha,\gamma}$ against arbitrary virtual matrices $P,Q$
+    by taking the trace of $P$ times the displayed three-letter word times
+    $Q$, or attach arbitrary complete-block words before this contraction.
+    These are finite contractions of
+    \cite[Equations~\texttt{uuvv} and \texttt{StandardForm}]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Open three-block locality]
+    \label{lem:mpu_two_site_open_three_block_locality}
+    \lean{MPOTensor.twoSite_threeBlock_open_intertwiner}
+    \leanok
+    \uses{def:mpu_two_site_open_three_block}
+    For every supplied two-site standard form and every observable $A$ on
+    the middle input pair,
+    \begin{align}
+        F_{\alpha,\gamma}A & =B(A)F_{\alpha,\gamma}
+    \end{align}
+    for every choice of $\alpha,\gamma,e_-,e_+,j_0,j_2$. In particular,
+    neither virtual end is closed in this identity, and $B(A)$ acts only on
+    the four output half-sites forming the two neighboring pairs.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    The two internal contractions $X_1X_2$ give one $v$ gate on each
+    neighboring output pair. Thus, for suitable exterior factors $L,R$,
+    \begin{align}
+        F_{\alpha,\gamma}(a,b;j)
+         & =\sum_{s_0,t_1,s_1,t_2}
+        L_{\alpha}(s_0)\,v_{a,(s_0,t_1)}
+        u_{(t_1,s_1),j}\,v_{b,(s_1,t_2)}R_{\gamma}(t_2),
+    \end{align}
+    where $L$ and $R$ retain the exterior half factors and input gates.
+    Since $u$ and $v$ are unitary between their stated spaces,
+    $uA=(uAu^{\dagger})u$ and
+    $(v\otimes v)\widetilde C=B(A)(v\otimes v)$.
+    Inserting these two identities into the displayed contraction proves
+    the matrix equality without a virtual trace.
+\end{proof}
+
+\begin{lemma}[Virtual-end and word-buffer locality]
+    \label{lem:mpu_two_site_open_three_block_buffers}
+    \lean{MPOTensor.twoSite_threeBlock_trace_intertwiner_with_endpoints,
+        MPOTensor.twoSite_threeBlock_buffered_intertwiner}
+    \leanok
+    \uses{lem:mpu_two_site_open_three_block_locality,
+        def:mpu_two_site_open_three_block, def:mpo_eval_word}
+    Replace the open word in $F_{\alpha,\gamma}$ by its virtual trace with
+    arbitrary matrices $P,Q$ at the left and right ends. The resulting
+    matrix $F_{P,Q}$ obeys
+    \begin{align}
+        F_{P,Q}A & =B(A)F_{P,Q}.
+    \end{align}
+    The same conclusion holds when $P$ and $Q$ are the matrix products of
+    arbitrary complete-block prefix and suffix words, respectively. Their
+    physical row and column words remain explicit and may have different
+    lengths on the two sides of the three-block window.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_two_site_open_three_block_locality,
+        lem:mpo_eval_word_append}
+    If $E$ is the open three-letter word, cyclicity of the virtual trace
+    gives
+    \begin{align}
+        \operatorname{tr}(PEQ)
+         & =\sum_{\gamma,\alpha}
+        (QP)_{\gamma,\alpha}E_{\alpha,\gamma}.
+    \end{align}
+    The open identity therefore survives this linear combination. For
+    complete-block prefix and suffix words, apply word concatenation twice
+    to identify their product with $PEQ$, leaving both factors intact.
+\end{proof}
+
 \begin{definition}[Admissible standard form]
     \label{def:mpu_admissible_standard_form}
     \notready
@@ -5608,6 +5748,127 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     the displayed relabeling: first identify the ordinary two-site block
     with length-two blocking, then group the direct word into consecutive
     length-$k$ subwords and use $k\cdot2=2k$.
+\end{proof}
+
+\begin{lemma}[Original-site residual words around two-site blocks]
+    \label{lem:mpu_original_site_residual_two_site_word}
+    \lean{MPOTensor.mpo_apply_prefix_twoSiteBlock_suffix}
+    \leanok
+    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking,
+        def:mpo_eval_word, def:mpo_family}
+    Let $U$ be any MPO tensor, let $k,p,m,s\in\mathbb N$, and write
+    $W=(U^{[k]})_2$. For a word $\sigma$ of $m$ blocks of length $2k$,
+    let $\eta\sigma$ relabel each block as two consecutive words of length
+    $k$; use the same convention for $\tau$. If $i^-,j^-$ are words of
+    length $p$ and $i^+,j^+$ are words of length $s$, then
+    \begin{align}
+        \rho^{(p+2km+s)}(U)_{i^-\widehat\sigma i^+,\,
+            j^-\widehat\tau j^+}
+         & =\operatorname{tr}\!\left(
+        U^{i^-,j^-}\cdot W^{\eta\sigma,\eta\tau}
+        \cdot U^{i^+,j^+}\right).
+    \end{align}
+    Both residual products remain present, including when $m=0$; no
+    unitarity, canonical form, or divisibility of the total length is
+    assumed.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_physical_blocking_residuals,
+        thm:mpu_bounded_source_open_standard_form}
+    Residual-site blocking gives the trace with middle factor
+    $(U^{[2k]})^{\sigma,\tau}$. The two-site relabeling identifies this
+    factor, letter by letter and in the same order, with
+    $W^{\eta\sigma,\eta\tau}$; the prefix and suffix products are unchanged.
+\end{proof}
+
+\begin{theorem}[Original-chain coefficient at a three-block window]
+    \label{thm:mpu_original_site_three_block_window_entry}
+    \lean{MPOTensor.originalSite_threeBlock_window_entry}
+    \leanok
+    \uses{def:mpdo_physical_blocking, def:mpu_two_site_open_three_block,
+        def:mpo_family}
+    Suppose $W=(U^{[k]})_2$ has supplied two-site standard-form data.
+    Let three consecutive blocks of length $2k$ lie between an arbitrary
+    original-site prefix of length $p$ and suffix of length $s$. Under the
+    two-site relabeling, suppose their output labels are
+    $(e_-,a_0),(a_1,b_0),(b_1,e_+)$ and their input labels are
+    $j_0,j,j_2$. Let $P=U^{i^-,j^-}$ and $Q=U^{i^+,j^+}$ be the residual
+    products. The corresponding entry of the original length-$p+6k+s$
+    MPO is
+    \begin{align}
+        \rho^{(p+6k+s)}(U)_{i^-\widehat\sigma i^+,\,
+            j^-\widehat\tau j^+}
+         & = F_{P,Q}(a,b;j).
+    \end{align}
+    The equality holds for every choice of the residual words and window
+    labels; no unitarity or MPU hypothesis on $U$ is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_original_site_residual_two_site_word}
+    Apply the residual-word identity to the three middle blocks. Their
+    relabeled words are precisely the three displayed letters, so the
+    middle product is the one defining $F_{P,Q}$.
+\end{proof}
+
+\begin{theorem}[Buffered original-chain three-block locality]
+    \label{thm:mpu_original_site_buffered_three_block_locality}
+    \lean{MPOTensor.originalSite_threeBlock_window_with_buffers_entry,
+        MPOTensor.originalSiteThreeBlockWindow,
+        MPOTensor.originalSite_threeBlock_window_with_buffers_intertwiner}
+    \leanok
+    \uses{def:mpdo_physical_blocking, def:mpu_two_site_open_three_block,
+        def:mpo_family}
+    Suppose $W=(U^{[k]})_2$ has supplied two-site standard-form data.
+    Keep arbitrary original-site residual words at the two ends of the
+    chain, and arbitrary complete two-site-block words before and after a
+    three-block window. Let $P$ be the product of the left residual and
+    left complete-block words, and $Q$ the product of the right
+    complete-block and right residual words, in their chain order. When
+    the middle direct blocks are relabeled as these words and the three
+    displayed window letters, the full original-chain coefficient matrix
+    $F^U$ satisfies
+    \begin{align}
+        F^U(a,b;j) & = F_{P,Q}(a,b;j), \\
+        F^U A      & = B(A)F^U.
+    \end{align}
+    Both equalities are finite-chain identities with every exterior
+    physical label fixed; the virtual boundary is not discarded.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_original_site_residual_two_site_word,
+        lem:mpo_eval_word_append,
+        lem:mpu_two_site_open_three_block_buffers}
+    The residual-word identity first leaves both original-site products
+    in the trace. Two word concatenations split the relabeled middle
+    product into the left complete-block word, the three window letters,
+    and the right complete-block word. This gives the first equality
+    entrywise. Apply the arbitrary-virtual-end three-block identity with
+    the resulting products $P,Q$ to obtain the second equality.
+\end{proof}
+
+\begin{lemma}[Three-block locality with original-site residuals]
+    \label{lem:mpu_two_site_original_residual_locality}
+    \lean{MPOTensor.twoSite_threeBlock_originalSite_residual_intertwiner}
+    \leanok
+    \uses{def:mpu_two_site_open_three_block, def:mpo_eval_word}
+    Let $W=(U^{[k]})_2$ have supplied two-site standard-form data. For
+    arbitrary original-site prefix and suffix word pairs, put
+    $P=U^{i^-,j^-}$ and $Q=U^{i^+,j^+}$. The three-block coefficient
+    contracted against these end matrices satisfies
+    \begin{align}
+        F_{P,Q}A & =B(A)F_{P,Q}.
+    \end{align}
+    Thus the local observable on the two neighboring output pairs is
+    independent of both residual words.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_two_site_open_three_block_buffers}
+    Apply the virtual-end identity with the stated word products as its
+    two end matrices.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem of MPU]
