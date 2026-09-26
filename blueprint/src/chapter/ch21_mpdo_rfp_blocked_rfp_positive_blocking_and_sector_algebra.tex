@@ -176,9 +176,11 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpo_eval_word_append}
-    Applying word concatenation at the two boundaries and then evaluating the
-    middle segment as a word of blocked matrices gives
+    \uses{lem:mpo_eval_word_append, lem:eval_word_block}
+    Applying word concatenation at the two boundaries
+    (Lemma~\ref{lem:mpo_eval_word_append}) and then evaluating the middle
+    segment as a word of blocked matrices (Lemma~\ref{lem:eval_word_block})
+    gives
     \begin{align}
         M^{i^-\widehat\sigma i^+,\,j^-\widehat\tau j^+}
          & = M^{i^-,j^-}\cdot M^{\widehat\sigma,\widehat\tau}
