@@ -123,9 +123,6 @@ theorem source_factors_virtual_unitary_sandwich
   · funext ⟨l, r⟩ ⟨p, q⟩
     exact transported_source_u_contraction z Y₁ Y₂ l r p q
 
-end MPOTensor
-namespace MPOTensor
-
 private theorem reindex_two_source_factorizations
     {d D a b : ℕ} (V : MPOTensor d D)
     (er : Fin a ≃ Fin r[V]) (el : Fin b ≃ Fin ℓ[V])
@@ -193,8 +190,6 @@ private theorem reindex_source_u_is_unitary
   rw [hEq]
   exact h
 
-end MPOTensor
-
 private theorem right_inverse_after_unitary_right_mul
     {a b : Type*} [Fintype b]
     [DecidableEq a] [DecidableEq b]
@@ -205,8 +200,6 @@ private theorem right_inverse_after_unitary_right_mul
   calc
     _ = Y * (R * Rᴴ) * Z := by simp only [Matrix.mul_assoc]
     _ = 1 := by rw [hR, Matrix.mul_one, hYZ]
-
-namespace MPOTensor
 
 private theorem source_right_gauge_one_coisometry {d D : ℕ}
     (z : Matrix.unitaryGroup (Fin D) ℂ) :
@@ -232,11 +225,6 @@ private theorem source_right_gauge_two_coisometry {d D : ℕ}
       Matrix.conjTranspose_conjTranspose] using z.2.1
   simp only [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
     Matrix.conjTranspose_one, hz, Matrix.one_mul, Matrix.one_kronecker_one]
-
-end MPOTensor
-
-
-namespace MPOTensor
 
 private theorem unitary_matrix_isUnit {D : ℕ}
     (z : Matrix.unitaryGroup (Fin D) ℂ) :
@@ -264,10 +252,6 @@ theorem source_rank_virtual_unitary_sandwich
     (unitary_adjoint_isUnit z),
     leftRank_virtualSandwich _ U _ (unitary_matrix_isUnit z)
     (unitary_adjoint_isUnit z)⟩
-
-end MPOTensor
-
-namespace MPOTensor
 
 /-- The transported factors, reindexed to the source ranks selected for the
 conjugated tensor, give both cut factorizations and right inverses. Their
