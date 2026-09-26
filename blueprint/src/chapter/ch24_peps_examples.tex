@@ -687,7 +687,7 @@ nearest-neighbour interaction and $\beta\in\mathbb{R}$ an inverse temperature.
 On the torus a configuration $\sigma$ has energy
 \begin{align}
     H(\sigma)=\sum_{v}\bigl(h(\sigma_{v},\sigma_{v-(1,0)})
-        +h(\sigma_{v},\sigma_{v-(0,1)})\bigr),
+    +h(\sigma_{v},\sigma_{v-(0,1)})\bigr),
     \notag
 \end{align}
 each nearest-neighbour bond counted once. For symmetric $h$ this is the sum
@@ -702,7 +702,7 @@ of $h$ over unordered bonds.
     Let $M=\sum_{i,j}e^{-\beta h(i,j)/2}|i)(j|$. The classical-model tensor is
     \begin{align}
         A=\Bigl[\sum_{i}\ket{i}(i\,i\,i\,i|\Bigr]
-            (\mathbb{1}\otimes\mathbb{1}\otimes M\otimes M):
+        (\mathbb{1}\otimes\mathbb{1}\otimes M\otimes M):
         \notag
     \end{align}
     the top and right legs copy the physical index $s$, and the down and left
@@ -718,7 +718,8 @@ of $h$ over unordered bonds.
         TNLean.PEPS.normSq_stateCoeff_classicalPEPS}
     \leanok
     \uses{def:peps_classical_tensor, def:peps_stateCoeff}
-    On a torus with $w,h\ge 3$ the classical-model PEPS has coefficient
+    On a torus of width and height at least three the classical-model PEPS
+    has coefficient
     $\Coeff(\sigma)=e^{-\beta H(\sigma)/2}$, so
     $|\Coeff(\sigma)|^{2}=e^{-\beta H(\sigma)}$ is the Gibbs weight of
     $\sigma$ \cite{gap:rmp_peps_examples_small_torus}.
@@ -744,14 +745,15 @@ of $h$ is used.
     \lean{TNLean.PEPS.expectation_classicalPEPS}
     \leanok
     \uses{thm:peps_classical_coeff}
-    Let $w,h\ge 3$ and let $O=\sum_{\sigma}O(\sigma)\ket{\sigma}\bra{\sigma}$
-    be a diagonal observable. For the classical-model PEPS state
+    Let the torus have width and height at least three and let
+    $O=\sum_{\sigma}O(\sigma)\ket{\sigma}\bra{\sigma}$ be a diagonal observable.
+    For the classical-model PEPS state
     $\ket{\psi}=\sum_{\sigma}\Coeff(\sigma)\ket{\sigma}$,
     \begin{align}
         \frac{\sum_{\sigma}\overline{\Coeff(\sigma)}\,O(\sigma)\Coeff(\sigma)}
-            {\sum_{\sigma}\overline{\Coeff(\sigma)}\Coeff(\sigma)}
+        {\sum_{\sigma}\overline{\Coeff(\sigma)}\Coeff(\sigma)}
         =\frac{\sum_{\sigma}O(\sigma)e^{-\beta H(\sigma)}}
-            {\sum_{\sigma}e^{-\beta H(\sigma)}},
+        {\sum_{\sigma}e^{-\beta H(\sigma)}},
         \notag
     \end{align}
     that is, $\bra{\psi}O\ket{\psi}/\braket{\psi}{\psi}$ is the expectation
@@ -769,7 +771,9 @@ In particular the classical correlation functions are expectation values of
 the PEPS. The review adds that at the critical inverse temperature
 $\beta_{c}$ the associated PEPS has correlations decaying as a power law, so
 its parent Hamiltonian must be gapless
-\cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}. This
+\cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}, since a
+gapped local Hamiltonian has exponentially decaying correlations
+\cite{Hastings2006Spectral,Nachtergaele2006LiebRobinson}. This
 consequence is not formalized.
 
 \subsection{Examples not formalized}
