@@ -469,6 +469,10 @@ For the non-periodic MPS Fundamental Theorem background:
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
   corrected same-state conclusion up to an $N$th-root phase.
+- `pgvwc07_sequential_no_ancilla_two_sites.tex` records that the sequential
+  scheme without an ancilla presupposes two sites, since its first operation
+  acts on sites 1 and 2, that the literal one-site reading of the theorem is
+  false, and that the formal statements are for chains of length at least two.
 - `spwc10_wielandt_one_step_subspace.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 - `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the
@@ -651,4 +655,13 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
   hypothesis, that the isometry of `W` and the normalization of `|Ω'⟩` take the
   local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` asserted after eq. (S7) as a
-  hypothesis, and that disjoint supports give its off-diagonal half.
+  hypothesis, and that disjoint supports give its off-diagonal half. The
+  hypothesis is discharged for fixed-point pairs placed on one copy of each block
+  of a canonical form, where orthogonality follows from the placement alone; the
+  link to the source's pairs, the fixed points of the positive parts of the
+  blocked tensor, stays open.
+- `mswc24_multiplicity_fixed_point.tex` records that when a block of the
+  canonical form has multiplicity `m_j ≥ 2`, the block form of the positive part
+  in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
+  approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
+  tends to `1/√5` for every blocking length.
