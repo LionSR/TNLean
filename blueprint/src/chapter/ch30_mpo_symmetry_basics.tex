@@ -351,8 +351,18 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
 
 \begin{example}[Ising fusion rule]%
     \label{ex:mposym_ising_dimension}
-    \notready
-    % Planned Lean: IsingTwist.perronFrobeniusDim_isingFusion_sigma.
+    \lean{IsingTwist.fusionMatrix_isingFusion_psi,
+        IsingTwist.fusionMatrix_isingFusion_sigma,
+        IsingTwist.charpoly_fusionMatrix_isingFusion_sigma,
+        IsingTwist.spectrum_fusionMatrix_isingFusion_sigma,
+        IsingTwist.isingFusion_dimension_relation,
+        IsingTwist.perronFrobeniusDim_isingFusion_sigma,
+        IsingTwist.perronFrobeniusDim_isingFusion_psi,
+        IsingTwist.perronFrobeniusDim_isingFusion_one,
+        IsingTwist.isInvertibleLabel_isingFusion_psi,
+        IsingTwist.not_isInvertibleLabel_isingFusion_sigma,
+        IsingTwist.mpo_isingBlock_sigma_mul_sub}
+    \leanok
     \uses{def:mposym_pf_dimension, lem:mposym_pf_dimension_positive,
         thm:asymex_ising_sigma_fusion, thm:asymex_ising_sigma_square}
     The Ising labels are $1$, $\psi$ and $\sigma$, with unit $1$ and the
