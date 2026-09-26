@@ -32,10 +32,10 @@ namespace Complex
 
 /-- Project result: **power sums of unit modulus come from one phase.** If `μ₁, …, μₙ` are
 nonzero and `‖∑ₖ μₖ^L‖ = 1` for every positive `L`, then there is `λ` with `‖λ‖ = 1` and
-`∑ₖ μₖ^L = λ^L` for every `L`; in particular `n = 1`. -/
+`∑ₖ μₖ^L = λ^L` for every `L`, and `n = 1`. -/
 theorem exists_norm_eq_one_sum_pow_eq_pow {n : ℕ} (μ : Fin n → ℂ) (hμ : ∀ k, μ k ≠ 0)
     (h : ∀ L : ℕ, 0 < L → ‖(∑ k, μ k ^ L)‖ = 1) :
-    ∃ lam : ℂ, ‖lam‖ = 1 ∧ ∀ L : ℕ, ∑ k, μ k ^ L = lam ^ L := by
+    n = 1 ∧ ∃ lam : ℂ, ‖lam‖ = 1 ∧ ∀ L : ℕ, ∑ k, μ k ^ L = lam ^ L := by
   classical
   set Λ : Multiset ℂ :=
     (Finset.univ : Finset (Fin n × Fin n)).val.map (fun p ↦ μ p.1 * conj (μ p.2)) with hΛ
@@ -56,7 +56,7 @@ theorem exists_norm_eq_one_sum_pow_eq_pow {n : ℕ} (μ : Fin n → ℂ) (hμ : 
   simp only [hΛ, Multiset.card_map, Finset.card_val, Finset.card_univ, Fintype.card_prod,
     Fintype.card_fin, Multiset.card_singleton] at hcard
   obtain rfl : n = 1 := Nat.eq_one_of_mul_eq_one_right hcard
-  refine ⟨μ 0, ?_, fun L ↦ by rw [Fin.sum_univ_one]⟩
+  refine ⟨rfl, μ 0, ?_, fun L ↦ by rw [Fin.sum_univ_one]⟩
   simpa [Fin.sum_univ_one] using h 1 one_pos
 
 end Complex

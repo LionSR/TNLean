@@ -97,7 +97,7 @@ theorem exists_eq_pow_of_mpo_mulVec_mpv_eq_smul [NeZero DB] (U : MPOTensor d DU)
     have h := (hC N hN σ).symm.trans (hexp N hN σ)
     simp only [Finset.univ_unique, PUnit.default_eq_unit, Finset.sum_singleton] at h
     exact mul_right_cancel₀ hσ h
-  obtain ⟨lam, hlam, hpow⟩ := Complex.exists_norm_eq_one_sum_pow_eq_pow (μ ()) (hμne ())
+  obtain ⟨-, lam, hlam, hpow⟩ := Complex.exists_norm_eq_one_sum_pow_eq_pow (μ ()) (hμne ())
     (fun L hL ↦ by rw [← hcoef L hL]; exact hnorm L hL)
   exact ⟨lam, hlam, fun N hN ↦ (hcoef N hN).trans (hpow N)⟩
 

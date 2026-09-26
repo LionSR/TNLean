@@ -584,17 +584,18 @@ state by absorbing a phase into the image tensor. A footnote justifies this:
 a length-dependent phase of modulus one relating the two states is the
 $N$-th power of one phase.
 
-\begin{lemma}[Power sums of modulus one]%
-    \label{lem:mpoalg_unimodular_power_sum}
+\begin{theorem}[Power sums of modulus one]%
+    \label{thm:mpoalg_unimodular_power_sum}
     \lean{Complex.exists_norm_eq_one_sum_pow_eq_pow}
     \leanok
     Let $\mu_1,\ldots,\mu_n$ be nonzero complex numbers with
     $\left|\sum_k\mu_k^L\right|=1$ for every $L\geq1$. Then $n=1$ and
     $|\mu_1|=1$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:asym_tail_weights}
     For $L\geq1$,
     $\sum_{k,l}(\mu_k\bar\mu_l)^L=\left|\sum_k\mu_k^L\right|^2=1$, so the
     $n^2$ nonzero numbers $\mu_k\bar\mu_l$ have the power sums of the single
@@ -608,8 +609,7 @@ $N$-th power of one phase.
     \lean{MPSTensor.exists_mpv_ne_zero_of_isInjective,
         MPOTensor.exists_eq_pow_of_mpo_mulVec_mpv_eq_smul}
     \leanok
-    \uses{lem:mpoalg_unimodular_power_sum, thm:asym_unblocked_coefficients,
-        cor:asym_action_tensors, def:injective}
+    \uses{def:injective}
     Let $T$ be a matrix product operator tensor, $A$ a matrix product state
     tensor, and $B$ an injective matrix product state tensor of positive bond
     dimension, all with the same physical alphabet. Suppose that for every
@@ -627,6 +627,8 @@ $N$-th power of one phase.
 
 \begin{proof}
     \leanok
+    \uses{thm:mpoalg_unimodular_power_sum, thm:asym_unblocked_coefficients,
+        cor:asym_action_tensors}
     By Corollary~\ref{cor:asym_action_tensors} the left-hand side is the
     periodic vector of the tensor $T\cdot A$. Theorem~\ref{thm:asym_unblocked_coefficients},
     applied to $T\cdot A$ and the single normal target $B$, gives nonzero
@@ -636,7 +638,7 @@ $N$-th power of one phase.
     because the letters of $B$ span the full matrix algebra and so do not all
     have trace zero, and for $N\geq2$ by the nonvanishing of the periodic
     vectors of an injective tensor. Hence $c_N=\sum_k\mu_k^N$, and
-    Lemma~\ref{lem:mpoalg_unimodular_power_sum} finishes the proof.
+    Theorem~\ref{thm:mpoalg_unimodular_power_sum} finishes the proof.
 \end{proof}
 
 \begin{theorem}[Integrality of multi-block word-trace relations]%
