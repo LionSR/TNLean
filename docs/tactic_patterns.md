@@ -214,6 +214,22 @@ abstracted — record why, so it is not re-proposed).
   under every torus translation.  Both the tensor-level and state-level
   wrappers now supply their respective translated-edge equality theorem.
 
+### torus shift of a product over sites — promoted
+- **Pattern:** reindex a product over torus sites by `Equiv.addRight (1, 0)`
+  (or `(0, 1)`), rewrite `u + (1, 0)` as `(u.1 + 1, u.2)` and cancel with
+  `add_sub_cancel_right`, turning factors on the left (or down) leg of each
+  site into factors on the right (or up) leg of its neighbour.
+- **Seen:** six occurrences across three files before promotion (2026-09-26):
+  `TNLean/PEPS/Examples/Cluster.lean` (`stateCoeff_clusterPEPS`),
+  `TNLean/PEPS/Examples/AKLT.lean` (`stateCoeff_akltPEPS`), and
+  `TNLean/PEPS/Examples/RVB.lean` (`stateCoeff_rvbPEPS`), one horizontal and
+  one vertical shift each.
+- **Abstraction:** `TNLean.PEPS.prod_torus_sub_fst` and
+  `TNLean.PEPS.prod_torus_sub_snd` in `TNLean/PEPS/TorusSiteTensor.lean`.
+- **Notes:** pass the two-site factor `f` explicitly, since the product
+  `∏ v, f v (v.1 - 1, v.2)` is not a higher-order pattern; a symmetric factor
+  written in the other order needs one `Finset.prod_congr` with `mul_comm`.
+
 ### permutation-matrix unitarity — promoted
 - **Pattern:** unfold unitary-group membership, rewrite the conjugate transpose
   of a permutation matrix as the inverse permutation matrix, and reduce their
@@ -1228,19 +1244,51 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/Examples/Fibonacci/Fibonacci.lean`, the three
   unit laws of `Examples/Fibonacci/FibonacciUnit.lean`, and the three action tensors of
   `Examples/Fibonacci/FibonacciAction.lean`.
-- **Abstraction:** `MPSTensor.goldenGauge`, `MPSTensor.conjMatrix_goldenGauge`,
-  `MPSTensor.MultiBlockCompression.ofGolden` and
-  `MPSTensor.MultiBlockCompression.remainder_eq_zero_of_goldenGauge` in
-  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`,
-  with `MPSTensor.unitOrd` and `MPSTensor.unitCoord` for the block ordering
-  and bond coordinates of a datum with one target placed before the zero
-  slots.
-- **Notes:** each example now supplies only its matrices and five decided
+- **Abstraction:** `MPSTensor.MultiBlockCompression.ofGolden` in
+  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`, since 2026-09-25 an
+  instance of the ring-generic `MPSTensor.MultiBlockCompression.ofRing` of
+  `TNLean/MPS/FundamentalTheorem/Reduction/ExplicitGauge.lean` (see the entry
+  on the ring-generic compression datum), with `MPSTensor.unitOrd` and
+  `MPSTensor.unitCoord` for the block ordering and bond coordinates of a datum
+  with one target placed before the zero slots.
+- **Notes:** each example now supplies only its matrices and four decided
   identities; the matched clause is stated with the target indices quantified
   before the letter (`revert i; revert p q; decide +kernel`), since with the
   letter first the instance search for the decidability of the clause fails on
   the first-order unification of the target family against a matrix. The
-  `τ ⊗ τ` datum lost its three field proofs and its remainder proof.
+  triangular clause is read off the off-diagonal one by
+  `MultiBlockCompression.triangular_of_offDiag`, and the remainder by
+  `MultiBlockCompression.remainder_ofRing` after unfolding the datum.
+
+### ring-generic compression datum — promoted
+- **Pattern:** a worked example of the multi-block compression theorem
+  hand-builds `MultiBlockCompression` field by field: a gauge, its conjugation
+  lemma, and the triangular, matched and unmatched clauses each transported
+  from a decided identity over `ℤ`, `ℤ√2`, `ℤ[σ]` or `ℤ[ω]` along the entrywise
+  embedding; the remainder is then reproved from block diagonality or by
+  expanding the single-slot sum `Finset.sum_eq_single_of_mem`.
+- **Seen:** `ofGolden`, `ofEisenstein`, `ofConjMatrix`, `ofScalarFlagFour`,
+  the Kramers–Wannier data `kwSquare_compression`, `plusCompression`,
+  `kwGHZCompression`, `czxPlusIdentity_compression`, the Ising data
+  `isingCompression` and `sectorCompression`, the seven Fibonacci data,
+  `parityGraded_compression` and `czxSquare_compression` (2026-09-25).
+- **Abstraction:** `MPSTensor.MultiBlockCompression.ofRing` (any gauge whose
+  conjugation of every letter is the image of a matrix `K i` over `R`,
+  relabelled along `τ`; a scaled gauge such as the Kramers–Wannier `G/2`
+  enters through its own conjugation lemma), `ofRingBlockDiagonal` (the
+  conjugated letters are the image of one block-diagonal matrix),
+  `remainder_ofRing`, `remainder_ofRingBlockDiagonal`,
+  `remainder_eq_zero_of_offDiag`, `remainder_oneSlot`, `triangular_of_offDiag`,
+  `MPSTensor.gaugeOfRingMatrix` and `MPSTensor.conjMatrix_gaugeOfRingMatrix` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/ExplicitGauge.lean`, together with
+  the single-slot set `MPSTensor.oneSlot`.
+- **Notes:** `remainder_ofRing` takes the proof arguments of the datum
+  implicitly; elaborating it against a named datum leaves them unassigned
+  (proof irrelevance closes the unification without assigning them), so unfold
+  the named datum first. `ParityGraded.parityGraded_compression` and
+  `CZXCompression.czxSquare_compression` are migrated too. Deferred: the
+  single-slot sets `singleSlot`/`theSlot` of the `ℤ₃` fusion examples and
+  `squareSlots` of `CZXSquare`.
 
 ### normality from a golden matrix-unit table — promoted
 - **Pattern:** a tensor over `ℤ[σ]` is shown normal by deciding, for every
@@ -1250,11 +1298,14 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** four occurrences (2026-09-17): the two blocks of
   `TNLean/MPS/Examples/Fibonacci/Fibonacci.lean` and the two
   normal states of `Examples/Fibonacci/FibonacciAction.lean`.
-- **Abstraction:** `MPSTensor.isNormal_of_golden_single` in
-  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`, now the instance at one
-  of `MPSTensor.isNormal_of_complexOfRing_smul_single`, and
-  the golden analogue of `P6Compression.isNormal_of_single_eq_smul` for words
-  of positive length rather than single letters.
+- **Abstraction:** `MPSTensor.isNormal_of_complexOfRing_single` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/RingEmbedding.lean`, the unscaled
+  instance of `MPSTensor.isNormal_of_complexOfRing_smul_single`, applied along
+  `goldenToComplex` (the golden-specific wrapper was removed on 2026-09-25).
+  The single-letter certificates `P6Compression.isNormal_of_single_eq_smul`
+  and `MPSTensor.isNormal_of_single_eq_smul_zsqrt2` are instances of
+  `MPSTensor.isNormal_of_complexOfRing_letter_eq_smul_single`, which keeps the
+  complex prefactor.
 - **Notes:** the words are given as functions `Fin ℓ → Fin d` so that the
   length is fixed by the type; the two former proofs of the Fibonacci blocks
   became one-line applications, for a net loss of about forty lines.
@@ -2086,6 +2137,24 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** past the rule of three. Promotion rewrites the three call sites in
   `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
   separate refactor rather than folded into the action-tensor PR.
+
+### classical choice of a nonzero proportionality scalar — candidate
+- **Pattern:**
+  ```lean
+  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
+  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  ```
+- **Seen:** three occurrences across two files: `FusionData.omega` (through
+  `IsAssociator`) and `FusionData.relativeScalar`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), and `ActionData.lSymbol`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`).
+- **Abstraction:** a definition
+  `MPSTensor.IsDressedProportional.chooseScalar B X Y : Units ℂ` with the lemma that it
+  satisfies the relation whenever some nonzero scalar does; `omega`, `relativeScalar`
+  and `lSymbol` then specialize it.
+- **Notes:** at the rule of three. Promotion changes the definitions of `omega` and
+  `relativeScalar` on `main` and the lemmas that unfold them, so it needs a Lean build and
+  is left to a separate refactor.
 
 ### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
 - **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the

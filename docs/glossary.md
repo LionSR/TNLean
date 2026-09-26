@@ -405,6 +405,27 @@ normalizations.
   `docs/paper-gaps/peps_injective_ft_section3_route.tex`. Never cite either
   bridge as unconditional.
 
+#### `TNLean.PEPS.IsTorusDimerCovering`
+
+- **Declaration:**
+  `TNLean.PEPS.IsTorusDimerCovering (right up : TorusVertex width height → Bool) : Prop`.
+- **Defined in:** `TNLean/PEPS/Examples/RVB.lean`.
+- **Meaning:** the edges marked by `right` (the edge from `v` to its right
+  neighbour) and `up` (the edge from `v` to its upper neighbour) form a
+  nearest-neighbour dimer covering of the torus: every site lies on exactly one
+  marked edge among its top, right, down and left edges.
+- **Source:** arXiv:2011.12127, Appendix A, "The RVB state",
+  `Papers/2011.12127/TN-Review-main.tex:2440-2448` ("all ways of covering the
+  lattice with nearest neighbor singlets").
+- **Sanctioned bridges:** `TNLean.PEPS.stateCoeff_rvbPEPS`, which writes the
+  RVB PEPS as the sum over dimer coverings of the product of singlets on the
+  covered edges.
+- **Caveat:** the bridge is stated for tori of width and height at least three.
+  At width or height two the right and left edges of a site coincide in the
+  simple torus graph, so the predicate no longer counts the source's
+  multigraph coverings; recorded in
+  `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
@@ -979,6 +1000,25 @@ The following notions use different transfer objects and are not interchangeable
   `MPSTensor.exists_not_isPeriodicWState_le`). The source's single-length bound
   $D^3\log D=\Omega(N)$ is not formalized; see
   `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
+
+## Invariant states of matrix product operators
+
+### `MPOTensor.GroupFamily.FixesMPV`
+
+- **Declaration:** `MPOTensor.GroupFamily.FixesMPV T A : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`.
+- **Meaning:** the periodic operator $O_N(T)$ fixes the periodic vector
+  $\ket{V^{(N)}(A)}$ for every chain length $N\geq1$; nothing is asserted at
+  $N=0$.
+- **Source:** arXiv:2203.12563, line 1064, the relation
+  $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ with $y=x$.
+- **Sanctioned bridges:** it is the single-operator, unit-eigenvalue case of
+  `MPOTensor.IsMPOSymmetric` (eigenvalue $c_a=1$). `FixesMPV.mulTensor` closes
+  it under operator products, and `FixesMPV.sameMPV₂Pos_actTensor` turns it into
+  positive-length vector equality of the action tensor with `A`, which is the
+  input of `MPOTensor.GroupFamily.nonempty_actionData`.
+- **Caveat:** no equivalence with `IsMPOSymmetric` at `c = 1` is stated as a
+  theorem; the two definitions agree by unfolding.
 
 ## Symmetries of matrix product density operators
 
