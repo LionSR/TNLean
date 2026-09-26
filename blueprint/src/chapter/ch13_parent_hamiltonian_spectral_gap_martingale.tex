@@ -6541,7 +6541,7 @@ tensors.
 
 \begin{definition}[Weighted matrix-unit path vectors]
     \label{def:weighted-matrix-unit-path-vectors}
-    \lean{MPSTensor.FNWDimensionConstant.matrixUnitTensor,MPSTensor.FNWDimensionConstant.pathConfig,MPSTensor.FNWDimensionConstant.pathVector}
+    \lean{MPSTensor.FNWDimensionConstant.matrixUnitTensor,MPSTensor.FNWDimensionConstant.matrixUnitTensor_apply,MPSTensor.FNWDimensionConstant.pathConfig,MPSTensor.FNWDimensionConstant.pathVector}
     \leanok
     \uses{def:ground_space_map}
     Let $t=(t_{ij})$ and $z=(z_{ij})$ be real matrices indexed by a finite
@@ -6754,12 +6754,13 @@ tensors.
 
 \begin{theorem}[Scalar path sums]
     \label{thm:fnw_dimension_markov_path_sums}
-    \lean{MPSTensor.FNWDimensionConstant.realMarkovMatrix, MPSTensor.FNWDimensionConstant.realHadamardU, MPSTensor.FNWDimensionConstant.realHadamardW, MPSTensor.FNWDimensionConstant.markovAmplitude, MPSTensor.FNWDimensionConstant.realMarkovMatrix_mul_hadamardU, MPSTensor.FNWDimensionConstant.realHadamardW_mul_markovMatrix, MPSTensor.FNWDimensionConstant.realMarkovMatrix_pow_two, MPSTensor.FNWDimensionConstant.realMarkovMatrix_pow_three, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardU_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardUW_sum, MPSTensor.FNWDimensionConstant.markovAmplitude_sq, MPSTensor.FNWDimensionConstant.markovAmplitude_pos}
+    \lean{MPSTensor.FNWDimensionConstant.realMarkovMatrix, MPSTensor.FNWDimensionConstant.realHadamardU, MPSTensor.FNWDimensionConstant.realHadamardW, MPSTensor.FNWDimensionConstant.markovAmplitude, MPSTensor.FNWDimensionConstant.realMarkovMatrix_pos, MPSTensor.FNWDimensionConstant.realMarkovMatrix_sum_row, MPSTensor.FNWDimensionConstant.realMarkovMatrix_sum_col, MPSTensor.FNWDimensionConstant.realHadamardU_sq, MPSTensor.FNWDimensionConstant.realHadamardW_sq, MPSTensor.FNWDimensionConstant.realMarkovMatrix_mul_hadamardU, MPSTensor.FNWDimensionConstant.realHadamardW_mul_markovMatrix, MPSTensor.FNWDimensionConstant.realMarkovMatrix_pow_two, MPSTensor.FNWDimensionConstant.realMarkovMatrix_pow_three, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardU_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardUW_sum, MPSTensor.FNWDimensionConstant.markovAmplitude_sq, MPSTensor.FNWDimensionConstant.markovAmplitude_pos}
     \leanok
     \uses{thm:fnw_dimension_markov_matrix}
-    Regard $P$, $u$ and $w$ above as real. The identities $Pu=0$,
-    $w^{\mathsf T}P=0$, $P^2=Q+uw^{\mathsf T}/64$ and $P^3=Q$ of
-    Theorem~\ref{thm:fnw_dimension_markov_matrix} then hold over $\R$.
+    Regard $P$, $u$ and $w$ above as real. Then $P_{ij}>0$,
+    $\sum_jP_{ij}=\sum_jP_{ji}=1$ and $u_i^2=w_i^2=1$ for every $i$, and the
+    identities $Pu=0$, $w^{\mathsf T}P=0$, $P^2=Q+uw^{\mathsf T}/64$ and
+    $P^3=Q$ of Theorem~\ref{thm:fnw_dimension_markov_matrix} hold over $\R$.
     For every pair of endpoints $a,f$, set
     $p_{abcef}=P_{ab}P_{bc}P_{ce}P_{ef}$. Then
     \begin{align}
@@ -6773,7 +6774,10 @@ tensors.
 \begin{proof}
     \leanok
     \uses{thm:fnw_dimension_markov_matrix}
-    Apply the identities for $P^2$ and $P^3$, and use $u_b^2=w_e^2=1$.
+    The real identities are those of
+    Theorem~\ref{thm:fnw_dimension_markov_matrix}, read in $\R$.
+    For the path sums, apply the identities for $P^2$ and $P^3$, and use
+    $u_b^2=w_e^2=1$.
     The assertions concerning square roots follow from positivity.
 \end{proof}
 
