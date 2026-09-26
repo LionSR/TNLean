@@ -527,6 +527,67 @@ relation between word traces has nonnegative integer coefficients.
     Apply Theorem~\ref{thm:asymex_fib_anomaly_trace_integral}.
 \end{proof}
 
+Garre-Rubio and Schuch~\cite[Section~II.B]{GarreRubioSchuch2024DomainWall}
+normalize the action of a matrix product unitary on an injective ground
+state by absorbing a phase into the image tensor. A footnote justifies this:
+a length-dependent phase of modulus one relating the two states is the
+$N$-th power of one phase.
+
+\begin{lemma}[Power sums of modulus one]%
+    \label{lem:mpoalg_unimodular_power_sum}
+    \lean{Complex.exists_norm_eq_one_sum_pow_eq_pow}
+    \leanok
+    Let $\mu_1,\ldots,\mu_n$ be nonzero complex numbers with
+    $\left|\sum_k\mu_k^L\right|=1$ for every $L\geq1$. Then $n=1$ and
+    $|\mu_1|=1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For $L\geq1$,
+    $\sum_{k,l}(\mu_k\bar\mu_l)^L=\left|\sum_k\mu_k^L\right|^2=1$, so the
+    $n^2$ nonzero numbers $\mu_k\bar\mu_l$ have the power sums of the single
+    number $1$ at every positive exponent. By uniqueness of power sums on a
+    tail they coincide with $\{1\}$ as a multiset, so $n^2=1$. The case $L=1$
+    gives $|\mu_1|=1$.
+\end{proof}
+
+\begin{theorem}[A unimodular length-dependent phase is a power]%
+    \label{thm:mpoalg_length_dependent_phase_power}
+    \lean{MPSTensor.exists_mpv_ne_zero_of_isInjective,
+        MPOTensor.exists_eq_pow_of_mpo_mulVec_mpv_eq_smul}
+    \leanok
+    \uses{lem:mpoalg_unimodular_power_sum, thm:asym_unblocked_coefficients,
+        cor:asym_action_tensors, def:injective}
+    Let $T$ be a matrix product operator tensor, $A$ a matrix product state
+    tensor, and $B$ an injective matrix product state tensor of positive bond
+    dimension, all with the same physical alphabet. Suppose that for every
+    $N\geq1$
+    \begin{align}
+        O_N(T)\ket{V^{(N)}(A)} & =c_N\ket{V^{(N)}(B)},
+        \qquad |c_N|=1.
+        \notag
+    \end{align}
+    Then there is $\lambda\in\C$ with $|\lambda|=1$ and $c_N=\lambda^N$ for
+    every $N\geq1$. In particular this holds when $T$ is a matrix product
+    unitary and $A$ is injective, as
+    in~\cite[Section~II.B]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Corollary~\ref{cor:asym_action_tensors} the left-hand side is the
+    periodic vector of the tensor $T\cdot A$. Theorem~\ref{thm:asym_unblocked_coefficients},
+    applied to $T\cdot A$ and the single normal target $B$, gives nonzero
+    $\mu_1,\ldots,\mu_n$ with
+    $\ket{V^{(N)}(T\cdot A)}=\left(\sum_k\mu_k^N\right)\ket{V^{(N)}(B)}$ for
+    every $N\geq1$. The vector $\ket{V^{(N)}(B)}$ is nonzero: for $N=1$
+    because the letters of $B$ span the full matrix algebra and so do not all
+    have trace zero, and for $N\geq2$ by the nonvanishing of the periodic
+    vectors of an injective tensor. Hence $c_N=\sum_k\mu_k^N$, and
+    Lemma~\ref{lem:mpoalg_unimodular_power_sum} finishes the proof.
+\end{proof}
+
 \begin{theorem}[Integrality of multi-block word-trace relations]%
     \label{thm:mpoalg_multiblock_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul}
