@@ -67,16 +67,20 @@ variable {d D : ℕ}
 
 /-- The bond grading \(\operatorname{diag}(1,-1,-1)\), which anticommutes with
 both matrices of `majumdarGhoshTensor`. -/
-private def majumdarGhoshGrading : Matrix (Fin 3) (Fin 3) ℂ := !![1, 0, 0; 0, -1, 0; 0, 0, -1]
+def majumdarGhoshGrading : Matrix (Fin 3) (Fin 3) ℂ := !![1, 0, 0; 0, -1, 0; 0, 0, -1]
 
-private lemma majumdarGhoshGrading_mul (i : Fin 2) :
+/-- The grading anticommutes with both matrices of `majumdarGhoshTensor`. -/
+lemma majumdarGhoshGrading_mul (i : Fin 2) :
     majumdarGhoshGrading * majumdarGhoshTensor i =
       (-1 : ℂ) • (majumdarGhoshTensor i * majumdarGhoshGrading) := by
   ext a b
   fin_cases i <;> fin_cases a <;> fin_cases b <;>
     simp [majumdarGhoshGrading, majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three]
 
-private lemma majumdarGhosh_twisted_eq {N : ℕ} (hN : Even N) (hNpos : 0 < N)
+/-- Project result: on an even ring of \(N>0\) sites, the periodic vector
+twisted by the grading, \(\sigma\mapsto\operatorname{tr}(A^\sigma G)\), is the
+difference of the two singlet coverings. -/
+lemma majumdarGhosh_twisted_eq {N : ℕ} (hN : Even N) (hNpos : 0 < N)
     (σ : Cfg 2 N) :
     Matrix.trace (Kraus.evalWord majumdarGhoshTensor (List.ofFn σ) * majumdarGhoshGrading) =
       pairCoveringEven majumdarGhoshSinglet σ - pairCoveringOdd majumdarGhoshSinglet σ := by
@@ -177,7 +181,7 @@ private lemma majumdarGhoshTerm_eigen_iff (v : NSiteSpace 2 3) :
 /-- The four linear conditions cutting out the spin-\(\tfrac12\) subspace of three
 spins: no weight on \(|000\rangle\) or \(|111\rangle\), and vanishing sums over the
 states with one or two flipped spins. -/
-private lemma majumdarGhoshTerm_eigen_iff_coords (v : NSiteSpace 2 3) :
+lemma majumdarGhoshTerm_eigen_iff_coords (v : NSiteSpace 2 3) :
     majumdarGhoshTerm v = (-3 / 8 : ℂ) • v ↔
       v ![0, 0, 0] = 0 ∧ v ![1, 1, 1] = 0 ∧
         v ![0, 0, 1] + v ![0, 1, 0] + v ![1, 0, 0] = 0 ∧
