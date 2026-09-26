@@ -4422,46 +4422,76 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\tr(\rho)=0\neq1$.
 \end{proof}
 
-\begin{theorem}[Normality of a full-support normalized MPU representative]
-    \label{thm:mpu_normalized_full_support_normal}
-    \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}
+\begin{definition}[MPU canonical form]
+    \label{def:mpu_canonical_form}
+    \lean{MPSTensor.IsMPUCanonicalBlock,
+        MPSTensor.MPUCanonicalFormData,
+        MPSTensor.IsMPUCanonicalForm}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_canonical_form, def:mpu_full_support, def:normal}
-    Let $U$ be an MPU tensor with positive physical and bond dimensions.
-    Suppose that the normalized flattening is equipped with CPSV
-    canonical-form data whose blocks have full support in the ambient
-    bond space. Then the normalized flattening is a normal tensor.
+    \uses{def:transfer_map, def:block_diagonal_tensor}
+    A tensor $A$ of physical dimension $d$ and bond dimension $D$ is in MPU
+    canonical form if there are positive block dimensions $D_k$, nonzero
+    weights $\mu_k\in\mathbb C$, tensors $A_k$ of bond dimension $D_k$, and a
+    coisometry
+    \begin{align}
+        C\colon\mathbb C^D                & \longrightarrow
+        \bigoplus_{k=1}^r\mathbb C^{D_k}, &
+        CC^\dagger                        & =\Id,
+    \end{align}
+    such that $\sum_k D_k=D$ and
+    \begin{align}
+        A^i=C^\dagger\left(\bigoplus_{k=1}^r\mu_k A_k^i\right)C.
+    \end{align}
+    Every $A_k$ is irreducible and the spectral radius of its transfer map is
+    one. The blocks may be periodic, so no uniqueness condition is imposed on
+    their peripheral eigenvalues. This is the canonical form of
+    \cite[lines~259--267]{Cirac2017MPU}; normal tensors form a strictly stronger
+    class. The nonzero-weight and full-support conventions are recorded in
+    \cite{gap:mpu_canonical_form_nonzero_weights,gap:mpu_canonical_form_full_support}.
+\end{definition}
 
-    This is the full-support representative form of
-    \cite[Proposition~III.1]{Cirac2017MPU}. The full-support hypothesis is
-    required because adjoining a zero virtual direct summand preserves
-    periodic operators while introducing a nontrivial invariant projection.
+\begin{theorem}[Normality of an MPU in canonical form]
+    \label{thm:mpu_normalized_full_support_normal}
+    \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm}
+    \leanok
+    \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_canonical_form, def:normal}
+    Let $U$ be an MPU tensor with positive physical and bond dimensions.
+    Suppose that the original local tensor is in canonical form, with nonzero
+    weights and blocks occupying the full ambient bond space. Then the
+    normalized flattening is a normal tensor.
+
+    This is the normality assertion of
+    \cite[Proposition~III.1]{Cirac2017MPU} for the canonical
+    representative adopted before that proposition. The nonzero-weight and
+    full-support conventions are recorded in
+    \cite{gap:mpu_canonical_form_nonzero_weights,gap:mpu_canonical_form_full_support}.
+    The spectral assertion of the proposition is
+    Theorem~\ref{thm:mpu_normalized_transfer_nonzero_spectrum}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_shifted_transfer_trace_primitive, thm:mpu_unique_full_support_normal}
-    Write $\widetilde U$ for the normalized flattening, set
-    $T=\mathcal E_{\widetilde U}$ for its transfer map, and let
-    $E=\widehat T$ be the corresponding transfer matrix. Also write $r$ for
-    the number of blocks and $D_k$ for the bond dimension of the block $k$.
-    For every integer $N>1$, the normalized transfer identity gives
+    Normalizing the local tensor multiplies each weight $\mu_k$ by
+    $d^{-1/2}\ne0$ and leaves each block unchanged. Write $\widetilde U$
+    for the normalized flattening and $E$ for its transfer matrix. For every
+    integer $N>1$, unitarity gives
     \begin{align}
         \tr(E^N) & =1.
     \end{align}
-    The block-multiplicity theorem and the transfer-spectrum theorem then give
-    \begin{align}
-        r & =1,
-          & r(T)                         & =1,
-          & \operatorname{peripheral}(T) & =\{1\}.
-    \end{align}
-    Full support supplies
+    Every nonzero eigenvalue of a weighted block transfer map is an eigenvalue
+    of the ambient transfer map, hence equals one. Irreducibility and the
+    positive Perron eigenvector therefore make each weighted block normal.
+    Absorbing its weight into the block gives a decomposition into normal
+    blocks. The block-multiplicity and transfer-spectrum results then give $r=1$,
+    $r(\mathcal E_{\widetilde U})=1$, and
+    $\operatorname{peripheral}(\mathcal E_{\widetilde U})=\{1\}$.
+    Since the canonical blocks occupy the whole bond space,
     \begin{align}
         \sum_{k=1}^{r}D_k & =D.
     \end{align}
-    Since $r=1$, the unique block has ambient dimension
-    $D$ and therefore makes $\widetilde U$ irreducible. The displayed radius
-    and peripheral-spectrum identities provide its remaining normality
-    fields. Consequently $\widetilde U$ is a normal tensor.
+    Thus the unique normal block has ambient dimension $D$. Its irreducibility,
+    together with the spectral identities, makes $\widetilde U$
+    normal.
 \end{proof}
 
 \begin{theorem}[Normality in canonical form II]
@@ -4479,11 +4509,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_full_support_normal}
-    The presentation includes the MPU condition and the full-support identity
-    $\sum_{k=1}^{r}D_k=D$. Theorem~\ref{thm:mpu_normalized_full_support_normal}
-    therefore applies to the chosen canonical-form-II representation of
-    $\widetilde{\mathcal U}$.
+    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_shifted_transfer_trace_primitive, thm:mpu_unique_full_support_normal}
+    The canonical-form-II presentation has normal blocks and full support.
+    The shifted transfer traces give one block, transfer spectral radius one,
+    and peripheral spectrum $\{1\}$. The unique block has dimension $D$ and
+    makes $\widetilde{\mathcal U}$ irreducible.
 \end{proof}
 
 \begin{theorem}[Ambient fixed pair in canonical form II]
@@ -5620,33 +5650,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 833--845.
 \end{lemma}
-
-\begin{definition}[MPU canonical form]
-    \label{def:mpu_canonical_form}
-    \lean{MPSTensor.IsMPUCanonicalBlock,
-        MPSTensor.MPUCanonicalFormData,
-        MPSTensor.IsMPUCanonicalForm}
-    \leanok
-    \uses{def:transfer_map, def:block_diagonal_tensor}
-    A tensor $A$ of physical dimension $d$ and bond dimension $D$ is in MPU
-    canonical form if there are positive block dimensions $D_k$, weights
-    $\mu_k\in\mathbb C$, tensors $A_k$ of bond dimension $D_k$, and a
-    coisometry
-    \begin{align}
-        C\colon\mathbb C^D                & \longrightarrow
-        \bigoplus_{k=1}^r\mathbb C^{D_k}, &
-        CC^\dagger                        & =\Id,
-    \end{align}
-    such that
-    \begin{align}
-        A^i=C^\dagger\left(\bigoplus_{k=1}^r\mu_k A_k^i\right)C.
-    \end{align}
-    Every $A_k$ is irreducible and the spectral radius of its transfer map is
-    one. The blocks may be periodic, so no uniqueness condition is imposed on
-    their peripheral eigenvalues. This is the canonical form of
-    \cite[lines~259--267]{Cirac2017MPU}; normal tensors form a strictly stronger
-    class.
-\end{definition}
 
 \begin{definition}[Strict equivalence]
     \label{def:strictly-equivalent-tensors}
@@ -7700,6 +7703,51 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Corollary~\ref{cor:mpu_admissible_equiv_under_conjugation} handles both
     possible parities of the source ranks after blocking and gives the claimed
     admissible equivalence.
+\end{proof}
+
+\begin{theorem}[Determinants of orthogonal Kronecker products]
+    \label{thm:mpu_orthogonal_kronecker_determinant}
+    \lean{Matrix.det_eq_one_or_neg_one_of_mem_orthogonalGroup,
+        Matrix.det_pow_eq_one_of_mem_orthogonalGroup_of_even,
+        Matrix.det_kronecker_eq_one_of_mem_orthogonalGroup}
+    \leanok
+    Let $O$ and $O'$ be orthogonal matrices over a commutative ring,
+    indexed by finite sets of cardinalities $m$ and $n$. For every even
+    integer $k\geq0$, $\det(O)^k=1$. Over an integral domain one also has
+    $\det(O)\in\{1,-1\}$. If $m$ and $n$ are even, then
+    \begin{align}
+        \det(O\otimes O') & =\det(O)^n\det(O')^m=1.
+    \end{align}
+    These identities give the orthogonal determinant calculation in
+    \cite{Cirac2017MPU}.
+    % Source: paper_v2.tex lines 1464--1477.
+\end{theorem}
+
+\begin{proof}\leanok
+    Taking determinants in $OO^T=\Id$ gives $\det(O)^2=1$, and the same holds
+    for $O'$. The determinant of a Kronecker product is
+    $\det(O)^n\det(O')^m$; both powers are one when $m$ and $n$ are even.
+\end{proof}
+
+\begin{theorem}[Determinant of a symplectic Kronecker product]
+    \label{thm:mpu_symplectic_kronecker_determinant}
+    \lean{Matrix.det_kronecker_eq_one_of_mem_symplecticGroup}
+    \leanok
+    Let $S$ and $S'$ preserve the standard symplectic forms on spaces of
+    dimensions $2p$ and $2q$ over a commutative ring. Then
+    \begin{align}
+        \det(S\otimes S') & =\det(S)^{2q}\det(S')^{2p}=1.
+    \end{align}
+    No positivity assumption on either dimension is needed. This theorem
+    uses the standard symplectic form; the interleaved form in
+    \cite{Cirac2017MPU} requires a separate change of coordinates before
+    this calculation applies to its matrices.
+    % Source: paper_v2.tex lines 1464--1477.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each symplectic determinant equals one. Apply the Kronecker determinant
+    formula.
 \end{proof}
 
 \begin{theorem}[Strict conjugation equivalence for even source ranks]
