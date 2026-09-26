@@ -68,6 +68,7 @@ give the two inclusions. The range-$W$ gap therefore implies
     \frac{\kappa\gamma_W}{m}\lVert v\rVert
     \leq\lVert H_{R,N}v\rVert
     \qquad(v\perp\ker H_{R,N}).
+    \label{eq:block_range_transferred_gap}
 \end{align}
 All constants are independent of $N$. To include the finitely many excluded
 lengths, restrict each corresponding Hamiltonian to its kernel complement.
@@ -86,19 +87,26 @@ simultaneous block-injectivity condition in Ref.~\cite[Section~IV.C]{Cirac2021Ma
 local source lines~2114--2129. Then the uniform gap holds at every range
 \begin{align}
     R\geq S+1.
+    \label{eq:block_range_simultaneous_injectivity}
 \end{align}
 The number of blocks need not be at least two, and no normalization or separate
 inequivalence assumption is imposed on the original blocks.
 
 Indeed, projecting the simultaneous span onto any component proves injectivity
-of that block at length $S$. The simultaneous span also separates distinct
-blocks: a scalar similarity between two blocks would impose a linear relation
-between the corresponding entries of every word tuple, contradicting the
-ability to choose these two matrix components independently. Independent
+of that block at length $S$, so each periodic vector $V^{(S)}(A^i)$ is
+nonzero. The simultaneous span also makes the local ground spaces $G_S(A^i)$
+independent, and this separates distinct blocks. Suppose that $i\neq j$ and
+$A^i_a=\zeta XA^j_aX^{-1}$ for every physical index $a$, with $\zeta\neq0$ and
+$X$ invertible. Then
+\begin{align}
+    V^{(S)}(A^i)=\zeta^SV^{(S)}(A^j)\in G_S(A^i)\cap G_S(A^j)=\{0\},
+    \label{eq:block_range_separation}
+\end{align}
+contradicting $V^{(S)}(A^i)\neq0$. Independent
 primitive normalization preserves the supplied length $S$, simultaneous
 spanning, and all local ground spaces. In the normalized family, simultaneous
 spanning propagates to every larger length. The open-chain intersection theorem
-therefore gives $\ker K_{R,W}=G_W(B)$ for every $W\geq R$ as soon as $R\geq S+1$.
+therefore gives $\ker K_{R,W}=G_W(B)$ for every $W\geq R$ as soon as (\ref{eq:block_range_simultaneous_injectivity}) holds.
 Choose a gapped range $W\geq2R$ and apply the two-sided comparison above.
 The finite minimum over the remaining chain lengths again gives one positive
 gap for every $N$.

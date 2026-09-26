@@ -238,16 +238,16 @@ theorem ud_right_eq :
            ⟨0, 0⟩;
            ⟨0, 0⟩;
            ⟨1, 0⟩] := by
-  rw [ud_compression.right_gaugeOfMatrix (hG := complexOfEisenstein_mul_eq_one udGauge_mul_inv)
-    (hG' := complexOfEisenstein_mul_eq_one udGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [ud_compression.right_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ udGauge_mul_inv)
+    (hG' := complexOfRing_mul_eq_one _ udGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
 theorem ud_left_eq :
     ud_compression.left theSlot =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩] := by
-  rw [ud_compression.left_gaugeOfMatrix (hG := complexOfEisenstein_mul_eq_one udGauge_mul_inv)
-    (hG' := complexOfEisenstein_mul_eq_one udGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [ud_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ udGauge_mul_inv)
+    (hG' := complexOfRing_mul_eq_one _ udGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
@@ -281,11 +281,8 @@ def udRemainderEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt
 
 theorem ud_remainder_eq (i : Fin 9) :
     ud_compression.remainder i = complexOfEisenstein (udRemainderEis i) := by
-  rw [MultiBlockCompression.remainder,
-    Finset.sum_eq_single_of_mem theSlot (Finset.mem_univ theSlot)
-      fun b _ hb => absurd (Subtype.ext (Subsingleton.elim b.1 theSlot.1)) hb,
-    ud_left_eq, ud_right_eq, udStack_eq, udTarget_eq, ← complexOfEisenstein_mul,
-    ← complexOfEisenstein_mul, ← complexOfEisenstein_sub]
+  rw [MultiBlockCompression.remainder_oneSlot _ theSlot, ud_left_eq, ud_right_eq, udStack_eq,
+    udTarget_eq, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_sub]
   congr 1
   revert i
   decide +kernel
@@ -502,16 +499,16 @@ theorem du_right_eq :
            ⟨0, 0⟩;
            ⟨0, 0⟩;
            ⟨1, 0⟩] := by
-  rw [du_compression.right_gaugeOfMatrix (hG := complexOfEisenstein_mul_eq_one duGauge_mul_inv)
-    (hG' := complexOfEisenstein_mul_eq_one duGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [du_compression.right_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ duGauge_mul_inv)
+    (hG' := complexOfRing_mul_eq_one _ duGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
 theorem du_left_eq :
     du_compression.left theSlot =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩] := by
-  rw [du_compression.left_gaugeOfMatrix (hG := complexOfEisenstein_mul_eq_one duGauge_mul_inv)
-    (hG' := complexOfEisenstein_mul_eq_one duGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [du_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ duGauge_mul_inv)
+    (hG' := complexOfRing_mul_eq_one _ duGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
@@ -545,11 +542,8 @@ def duRemainderEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt
 
 theorem du_remainder_eq (i : Fin 9) :
     du_compression.remainder i = complexOfEisenstein (duRemainderEis i) := by
-  rw [MultiBlockCompression.remainder,
-    Finset.sum_eq_single_of_mem theSlot (Finset.mem_univ theSlot)
-      fun b _ hb => absurd (Subtype.ext (Subsingleton.elim b.1 theSlot.1)) hb,
-    du_left_eq, du_right_eq, duStack_eq, duTarget_eq, ← complexOfEisenstein_mul,
-    ← complexOfEisenstein_mul, ← complexOfEisenstein_sub]
+  rw [MultiBlockCompression.remainder_oneSlot _ theSlot, du_left_eq, du_right_eq, duStack_eq,
+    duTarget_eq, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_sub]
   congr 1
   revert i
   decide +kernel

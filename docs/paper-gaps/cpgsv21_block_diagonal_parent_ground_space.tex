@@ -192,7 +192,7 @@ Writing $S$ for this latter length, the hypothesis is
   \operatorname{span}_{\mathbb C}
   \{(A_j^\omega)_j:|\omega|=S\}
   &=\prod_j M_{D_j}(\mathbb C).
-  \label{eq:block_parent_simultaneous_length}
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_simultaneous_length}
 \end{align}
 The relevant definition occurs at
 \path{Papers/2011.12127/TN-Review-main.tex}:2114--2122.
@@ -204,7 +204,7 @@ $S+1$ sites at lines~2087--2094; the preceding argument at
 lines~2078--2079 allows larger interactions by regrowing the tensors.
 Thus the intended strengthened block statement has
 $S+1\leq L\leq N$, with $S\geq1$ satisfying
-(\ref{eq:block_parent_simultaneous_length}). It does not assert the
+(\ref{eq:cpgsv21_block_diagonal_parent_ground_space_simultaneous_length}). It does not assert the
 ground-space equality for every $L\leq N$ independently of $S$.
 
 The distinction is visible for the GHZ tensor. Its two scalar blocks are
@@ -983,18 +983,18 @@ degenerate parent-Hamiltonian ground-space equality
 \section{Closure at the simultaneous injectivity length}
 
 Assume positive physical and bond dimensions, nonzero block weights, and
-(\ref{eq:block_parent_simultaneous_length}) at a positive length $S$.
+(\ref{eq:cpgsv21_block_diagonal_parent_ground_space_simultaneous_length}) at a positive length $S$.
 For every $S+1\leq L\leq N$, the strengthened conclusion is
 \begin{align}
   \mathcal K_{N,L}(\widehat A)
   &=\ker H_L^{(N)}(\widehat A)
     =\operatorname{span}\{V^{(N)}(A_j):1\leq j\leq b\}.
-  \label{eq:block_parent_simultaneous_kernel}
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_simultaneous_kernel}
 \end{align}
 There is no normalization or separate inequivalence hypothesis on the
 original blocks. This includes $N=L=S+1$.
 
-To prove (\ref{eq:block_parent_simultaneous_kernel}), first normalize each
+To prove (\ref{eq:cpgsv21_block_diagonal_parent_ground_space_simultaneous_kernel}), first normalize each
 block independently. A nonzero rescaling by $\zeta_j$ multiplies its
 length-$S$ words by $\zeta_j^S$, and a virtual gauge conjugates every
 word by the same invertible matrix. These operations preserve the full
@@ -1008,11 +1008,17 @@ ground vector. Comparing adjacent cuts against all complementary words
 of length $N-1$ gives, for every physical letter $a$,
 \begin{align}
   X_i^j A_j^a&=A_j^a X_{i-1}^j.
-  \label{eq:block_parent_cyclic_intertwiner}
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_cyclic_intertwiner}
 \end{align}
-Iterating (\ref{eq:block_parent_cyclic_intertwiner}) once around the ring
-shows that $X_i^j$ commutes with every length-$N$ word. The word span of
-each block is the full matrix algebra, so $X_i^j$ is scalar. The boundary
+Iterating (\ref{eq:cpgsv21_block_diagonal_parent_ground_space_cyclic_intertwiner}) once around the ring
+shows that $X_i^j$ commutes with every length-$N$ word. This is the
+cyclic argument of the theorem entitled \emph{Uniqueness with TI and PBC} in
+Ref.~\cite{PerezGarcia2007MPSReps}, which the proof of Theorem~12 there
+invokes for several blocks.\footnote{Source location:
+\path{Papers/quant-ph_0608197/MPSarchive.tex}:1272--1289, the theorem
+labelled \path{uniqueGS} and its proof, invoked at lines 1454--1455.}
+The word span of each block is the full matrix algebra, so $X_i^j$ is
+scalar. The boundary
 representation at cut zero is therefore a linear combination of the
 periodic component vectors. The reverse containment follows because
 each component vector satisfies every local parent constraint.
@@ -1023,6 +1029,7 @@ site $i$, then
 \begin{align}
   \ker\Bigl(\sum_i K_i\Bigr)
   &=\bigcap_i\ker K_i=\ker H_L^{(N)}(\widehat A).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_positive_kernel_sum}
 \end{align}
 The formal statements are in
 \path{TNLean/MPS/ParentHamiltonian/BlockGroundSpaceAtInjectivityLength.lean}.
