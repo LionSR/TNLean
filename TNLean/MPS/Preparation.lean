@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Preparation
 
 import TNLean.MPS.Preparation.ApproximatingState
+import TNLean.MPS.Preparation.ApproximationError
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.DecayingCorrelations
 import TNLean.MPS.Preparation.FixedPointPairs
@@ -17,6 +18,7 @@ import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.MatrixPolar
 import TNLean.MPS.Preparation.NonNormalFixedPoint
 import TNLean.MPS.Preparation.PolarUniqueness
+import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.TreeFactorization

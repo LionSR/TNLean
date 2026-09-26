@@ -93,6 +93,13 @@ For the MPU index of arXiv:1703.09188:
   source gate's weight. In the source's diagonal canonical-form-II coordinates,
   $\rho^{\mathsf T}=\rho$ closes the retained source-$u$ contraction and proves
   $u^\dagger u=I$ for the supplied fixed pair.
+- `mpu_standard_form_parity_gap.tex` records a nondegenerate sign obstruction
+  to the unblocked all-length converse printed in the Fundamental Theorem of
+  MPU. The tensors $\mathcal U^{ij}=\delta_{ij}$ and
+  $\mathcal V^{ij}=-\delta_{ij}$ are simple and have identical two-site
+  standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
+  operators differ at odd lengths. The blocked-family reading and the
+  unaffected forward implication are kept distinct.
 - `mpu_shift_specified_tensor_index_scope.tex` records that the computed shift
   formulas are values of the displayed tensors, while the source states the
   public blocking-independent MPU index. The remaining public construction is
