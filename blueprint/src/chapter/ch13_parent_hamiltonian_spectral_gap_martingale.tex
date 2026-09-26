@@ -4517,6 +4517,128 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     (\ref{eq:primitive_finite_range_knabe_gap}).
 \end{proof}
 
+\section{Overlap with a sum of subspaces}
+
+\begin{theorem}[Lower Gram estimate]
+    \label{thm:subspace_overlap_lower_gram}
+    \lean{Submodule.norm_sum_sq_ge_of_overlapMatrix}
+    \leanok
+    Let $v_1,\ldots,v_m$ lie in a complex inner product space, and let
+    $B\in M_m(\R)$ have zero diagonal. Suppose that
+    $|\langle v_i,v_j\rangle|\leq B_{ij}\lVert v_i\rVert\lVert v_j\rVert$
+    whenever $i\neq j$. With the Euclidean operator norm on $B$,
+    \begin{align}
+        (1-\lVert B\rVert)\sum_i\lVert v_i\rVert^2
+         & \leq\left\lVert\sum_i v_i\right\rVert^2.
+    \end{align}
+    This is the lower Gram estimate in the proof of
+    \cite[Lemma~9]{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Put $w_i=\lVert v_i\rVert$. Expanding the squared norm gives
+    \begin{align}
+        \sum_i\lVert v_i\rVert^2
+        -\left\lVert\sum_i v_i\right\rVert^2
+         & \leq \sum_{i,j}B_{ij}w_iw_j
+        =\langle w,Bw\rangle
+        \leq\lVert B\rVert\lVert w\rVert^2.
+    \end{align}
+    Rearranging proves the assertion.
+\end{proof}
+
+\begin{theorem}[Overlap with a sum of subspaces]
+    \label{thm:subspace_overlap_sum}
+    \lean{Submodule.norm_inner_le_iSup_of_overlapMatrix}
+    \leanok
+    \uses{thm:subspace_overlap_lower_gram}
+    Let $U,V_1,\ldots,V_m$ be subspaces of a complex inner product space.
+    Let $a\in\R^m$ and $B\in M_m(\R)$, where $B$ has zero
+    diagonal and $\lVert B\rVert<1$. Suppose that
+    $|\langle u,v\rangle|\leq B_{ij}\lVert u\rVert\lVert v\rVert$
+    for $i\neq j$, $u\in V_i$, and $v\in V_j$. Suppose also that
+    $|\langle x,u\rangle|\leq a_i\lVert x\rVert\lVert u\rVert$
+    for every $i$, $x\in U$, and $u\in V_i$.
+    Then every $x\in U$ and $y\in V_1+\cdots+V_m$ satisfy
+    \begin{align}
+        |\langle x,y\rangle|
+         & \leq\frac{\lVert a\rVert}{\sqrt{1-\lVert B\rVert}}
+        \lVert x\rVert\lVert y\rVert.
+    \end{align}
+    This is \cite[Lemma~9]{Nachtergaele1996Spectral}, expressed as a bound
+    on inner products.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:subspace_overlap_lower_gram}
+    Write $y=\sum_i v_i$ with $v_i\in V_i$. The triangle inequality and
+    Cauchy--Schwarz give
+    \begin{align}
+        |\langle x,y\rangle|
+         & \leq\lVert x\rVert\sum_i a_i\lVert v_i\rVert
+        \leq\lVert x\rVert\lVert a\rVert
+        \left(\sum_i\lVert v_i\rVert^2\right)^{1/2}.
+    \end{align}
+    Apply Theorem~\ref{thm:subspace_overlap_lower_gram} to the final factor.
+\end{proof}
+
+\begin{theorem}[Uniform overlap bound]
+    \label{thm:subspace_overlap_sum_uniform}
+    \lean{Submodule.iSup_overlap_bound_of_uniform}
+    \leanok
+    Let $U,V_1,\ldots,V_m$ be subspaces of a complex inner product space,
+    and let $\varepsilon\geq0$ satisfy $\varepsilon m\leq1$.
+    Suppose that every pair of vectors in distinct $V_i$ satisfies
+    $|\langle u,v\rangle|\leq\varepsilon\lVert u\rVert\lVert v\rVert$,
+    and that the same inequality holds for vectors in $U$ and $V_i$, for
+    every $i$. Set
+    \begin{align}
+        \eta & =\frac{\varepsilon\sqrt m}
+        {\sqrt{1-\varepsilon(m-1)}}.
+    \end{align}
+    Then $\eta\leq1$, and every $x\in U$ and $y\in V_1+\cdots+V_m$ satisfy
+    $|\langle x,y\rangle|\leq\eta\lVert x\rVert\lVert y\rVert$.
+    This is the uniform bound in \cite[Lemma~9]{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:subspace_overlap_sum}
+    For $y=\sum_i v_i$, the off-diagonal terms satisfy
+    \begin{align}
+        \sum_{i\neq j}\varepsilon\lVert v_i\rVert\lVert v_j\rVert
+         & =\varepsilon\left[\left(\sum_i\lVert v_i\rVert\right)^2
+            -\sum_i\lVert v_i\rVert^2\right]
+        \leq\varepsilon(m-1)\sum_i\lVert v_i\rVert^2.
+    \end{align}
+    Take $a_i=\varepsilon$ and $B_{ij}=\varepsilon(1-\delta_{ij})$. For
+    $w\in\R^m$ write $|w|$ for the vector with entries $|w_i|$. Since $B$ is
+    symmetric with nonnegative entries, the same computation applied to $|w|$
+    gives
+    \begin{align}
+        |\langle w,Bw\rangle|
+         & \leq\langle|w|,B|w|\rangle
+        =\varepsilon\left[\left(\sum_i|w_i|\right)^2-\sum_i w_i^2\right]
+        \leq\varepsilon(m-1)\lVert w\rVert^2,
+    \end{align}
+    and hence
+    $\lVert B\rVert=\sup_{\lVert w\rVert=1}|\langle w,Bw\rangle|
+        \leq\varepsilon(m-1)\leq1-\varepsilon$, which is less
+    than one when $\varepsilon>0$ and vanishes when $\varepsilon=0$. With
+    $\lVert a\rVert=\varepsilon\sqrt m$,
+    Theorem~\ref{thm:subspace_overlap_sum} gives
+    \begin{align}
+        |\langle x,y\rangle|
+         & \leq\frac{\varepsilon\sqrt m}{\sqrt{1-\varepsilon(m-1)}}
+        \lVert x\rVert\lVert y\rVert.
+    \end{align}
+    Finally,
+    $\varepsilon^2m\leq1-\varepsilon(m-1)$ follows from
+    $\varepsilon m\leq1$, and gives $\eta\leq1$.
+\end{proof}
+
 \section{Overlaps of distinct block ground spaces}
 
 \begin{theorem}[Mixed boundary Gram identity]

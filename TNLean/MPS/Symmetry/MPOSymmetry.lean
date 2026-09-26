@@ -16,6 +16,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 import TNLean.MPS.Symmetry.MPOSymmetry.Dimension
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
+import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep

@@ -139,6 +139,37 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     not an equality of local tensors.
 \end{definition}
 
+\begin{theorem}[Group fusion rules]
+    \label{thm:mpug_group_fusion_rules}
+    \lean{MPOTensor.GroupFamily.isMPOFusionAlgebra,
+        MPOTensor.GroupFamily.IsNormalRepresentation.isMPOFusionAlgebra,
+        MPOTensor.GroupFamily.isInvertibleLabel_groupFusion}
+    \leanok
+    \uses{def:mpo_fusion_algebra, def:fusion_unit_invertible}
+    Let $G$ be a finite group and $\{\mathcal U_g\}_{g\in G}$ matrix product
+    operator tensors whose periodic operators satisfy
+    $U_g^{(N)}U_h^{(N)}=U_{gh}^{(N)}$ for all $g,h\in G$ and $N\geq1$. Then
+    $\{\mathcal U_g\}$ is a fusion algebra with structure constants
+    \begin{align}
+        N_{gh}^k & =\delta_{k,gh},
+        \label{eq:mpug_group_fusion_rules}
+    \end{align}
+    and every label $g$ is invertible with respect to the unit $e$, with
+    inverse $g^{-1}$ \cite[Section~4]{GarreRubio2023MPOSym}. In particular
+    this holds for a representation as in
+    Definition~\ref{def:mpug_group_representation}; only the multiplicative
+    law~(\ref{eq:mpug_rep_multiplication}) is used.
+    % Source anchor: arXiv:2203.12563, line 660.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the multiplicative law,
+    $U_g^{(N)}U_h^{(N)}=U_{gh}^{(N)}=\sum_k\delta_{k,gh}U_k^{(N)}$. For the
+    inverse, $N_{g,g^{-1}}^k=\delta_{k,gg^{-1}}=\delta_{k,e}$ and likewise
+    $N_{g^{-1},g}^k=\delta_{k,e}$.
+\end{proof}
+
 \begin{theorem}[Powers of represented operators]
     \label{thm:mpug_operator_power}
     \lean{MPOTensor.GroupFamily.IsRepresentation.operator_pow}
@@ -5165,6 +5196,40 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_source_decomposition_gauges}). In particular, if
     $K_1=\delta V_1$ and $K_2=\delta^{-1}V_2$ with $V_i$ unitary,
     the required orientation is $W_i=V_i^\dagger$.
+\end{proof}
+
+\begin{corollary}[Unitary gauges for normalized source decompositions]
+    \label{cor:mpug_normalized_source_decomposition_gauges}
+    \lean{MPOTensor.exists_unitary_source_gauges_of_isometric_second_factors}
+    \leanok
+    \uses{thm:mpug_source_decomposition_gauges}
+    Under the hypotheses of Theorem~\ref{thm:mpug_source_decomposition_gauges},
+    suppose in addition that
+    \begin{align}
+        X_2^\dagger X_2 & =I_\ell,
+                        & \widetilde X_2^\dagger\widetilde X_2 & =I_\ell.
+    \end{align}
+    Then there exist unitaries $W_1\in\operatorname{Mat}_r(\C)$ and
+    $W_2\in\operatorname{Mat}_\ell(\C)$ such that, for $i=1,2$,
+    \begin{align}
+        \widetilde X_i & =X_iW_i,
+                       & \widetilde Y_i & =W_i^\dagger Y_i.
+    \end{align}
+    This is the isometrically normalized specialization of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging};
+    the additional isometry hypotheses remove the scalar freedom.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_decomposition_gauges}
+    If $d=0$, all four equalities have an empty physical index and hold
+    with identity gauges. If $d>0$, unitarity of $u$ gives $r\ell=d^2>0$,
+    so $\ell>0$. The preceding theorem gives
+    $\widetilde X_2=\delta X_2W_2$ with $\delta>0$. The two isometry
+    identities and unitarity of $W_2$ imply
+    $I_\ell=\delta^2I_\ell$. Since $\ell>0$, a diagonal entry gives
+    $\delta^2=1$, hence $\delta=1$. Substitution into the four comparison
+    identities proves the claim.
 \end{proof}
 
 \begin{definition}[Unitary factorization comparison]
