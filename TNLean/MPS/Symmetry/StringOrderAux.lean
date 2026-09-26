@@ -252,7 +252,7 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
   exact hGauge_ne (Submodule.mem_bot ℂ |>.mp this)
 
 /-- Unitary physical mixing can be inverted by conjugating its coefficients. -/
-private lemma unitary_mix_inverse
+lemma unitary_mix_inverse
     (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : uᴴ * u = 1)

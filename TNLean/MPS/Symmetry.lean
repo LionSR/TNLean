@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry

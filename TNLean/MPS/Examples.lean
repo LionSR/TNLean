@@ -40,6 +40,7 @@ import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
+import TNLean.MPS.Examples.SPTEntanglementSpectrum
 import TNLean.MPS.Examples.SpinHalf
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.WStateCanonicalBound

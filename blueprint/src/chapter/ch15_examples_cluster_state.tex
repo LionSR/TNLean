@@ -293,6 +293,24 @@ Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
     the cluster state realizes a non-trivial SPT phase.
 \end{theorem}
 
+\begin{theorem}[Doubly degenerate entanglement spectrum of the cluster state]
+    \label{thm:cluster_entanglement_spectrum_even}
+    \lean{MPSTensor.clusterBlocked_even_finrank_eigenspace}
+    \leanok
+    \uses{thm:spt_entanglement_spectrum_even, thm:cluster_z2z2_symmetric, thm:cluster_gauge_anticomm, rem:cluster_injective_blocked}
+    Let $\Lambda$ be a positive definite fixed point of the adjoint transfer map
+    of the length-$2$ blocked cluster-state tensor.  Every eigenspace of
+    $\Lambda$ has even dimension.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:spt_entanglement_spectrum_even, thm:cluster_z2z2_symmetric, thm:cluster_gauge_anticomm, rem:cluster_injective_blocked}
+    The blocked tensor is injective and satisfies $\E(\Id)=\Id$; the two
+    generators of $\Z_2\times\Z_2$ act by unitary permutation matrices with
+    anticommuting virtual gauges $\sigma_z$ and $\sigma_x$.  Apply
+    Theorem~\ref{thm:spt_entanglement_spectrum_even}.
+\end{proof}
+
 \begin{theorem}[The cluster state has string order under its $\Z_2 \times \Z_2$ symmetry]\label{thm:cluster_string_order}
     \lean{MPSTensor.cluster_hasStringOrder}
     \leanok

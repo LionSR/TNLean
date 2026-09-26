@@ -132,6 +132,22 @@ gauge transformations form a projective representation on the bond space.
     yields the defining equality for $A^{[L]}$.
 \end{proof}
 
+\begin{lemma}[Virtual gauges survive blocking]
+    \label{lem:twisted_tensor_block_gauge}
+    \lean{MPSTensor.twistedTensor_blockTensor_eq_gauge}
+    \leanok
+    \uses{lem:twisted_tensor_block_comm}
+    If $R\in\GL_{D}(\C)$ satisfies $(\widetilde A_g)^i=R\,A^i\,R^{-1}$ for all
+    $i$, then $(\widetilde{(A^{[L]})}^{\,U^{[L]}}_g)^I=R\,(A^{[L]})^I\,R^{-1}$
+    for every blocked index $I$.
+\end{lemma}
+
+\begin{proof}\leanok
+    By (\ref{eq:symmetry_twist_block_comm}) the left side is a product of $L$
+    matrices $(\widetilde A_g)^{i_k}=R\,A^{i_k}R^{-1}$, and the inner factors
+    $R^{-1}R$ cancel.
+\end{proof}
+
 \begin{lemma}[Symmetric twists are gauge equivalent]%
     \label{lem:gauge_equiv_twisted}
     \lean{MPSTensor.gaugeEquiv_twistedTensor_of_injective}
@@ -249,6 +265,23 @@ gauge transformations form a projective representation on the bond space.
     This is exactly Lemma~\ref{lem:gauge_unique_up_to_scalar}; the extra MPV
     hypothesis specifies the setting in which the two gauges are usually
     produced.
+\end{proof}
+
+\begin{lemma}[Gauge-phase uniqueness]\label{lem:gauge_phase_unique}
+    \lean{MPSTensor.gauge_phase_unique}
+    \leanok
+    \uses{def:injective, lem:center_scalar}
+    Let $A$ be an injective tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and
+    $c\in\C$ satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and
+    $X=u\,Y$ for some $u\in\C^{\times}$ \cite[Section~III.A]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:center_scalar}
+    The matrix $Z=YX^{-1}$ satisfies $ZA^i=c\,A^iZ$ for every $i$, hence
+    $ZM=c\,MZ$ for every matrix $M$ by linearity.  Taking $M=\Id$ gives
+    $(1-c)Z=0$, so $c=1$ because $Z$ is invertible.  Then $Z$ commutes with
+    $\MN{D}$, so it is a nonzero scalar by Lemma~\ref{lem:center_scalar}.
 \end{proof}
 
 \begin{definition}[Scalar 2-cochain]\label{def:scalar_cocycle}

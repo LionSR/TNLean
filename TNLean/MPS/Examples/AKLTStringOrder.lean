@@ -124,7 +124,7 @@ private theorem aklt_sum_conjTranspose_mul :
 
 /-- The blocked AKLT transfer map is unital: `∑ Bᵢ Bᵢ† = 1`.  Right-canonicity of
 the single-site letters propagates to length-`2` words. -/
-private theorem akltBlocked_transferMap_one : Kraus.transferMap akltBlocked 1 = 1 := by
+theorem akltBlocked_transferMap_one : Kraus.transferMap akltBlocked 1 = 1 := by
   classical
   rw [Kraus.transferMap_apply]
   simp only [Matrix.mul_one, akltBlocked, Kraus.blockTensor, Kraus.wordOfBlock]
@@ -153,7 +153,7 @@ private theorem akltBlocked_adjoint_fixes_maximallyMixed :
 /-- The blocked `Z₂ × Z₂` representation is unitary on every group element.  The
 single-site representation is unitary (`aklt_isUnitary_Z2Z2`) and the Kronecker
 power preserves unitarity. -/
-private theorem akltBlockedZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
+theorem akltBlockedZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
     akltBlockedZ2Z2Action g * (akltBlockedZ2Z2Action g)ᴴ = 1 := by
   rw [akltBlockedZ2Z2Action, blockKronAction_apply]
   exact blockKron_mul_conjTranspose 2 (akltZ2Z2Action g) (aklt_isUnitary_Z2Z2 g)
