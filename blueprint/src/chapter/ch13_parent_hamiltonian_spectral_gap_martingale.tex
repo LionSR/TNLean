@@ -6446,8 +6446,9 @@ tensors.
     \lean{MPSTensor.IsPrimitiveMPS.fnwTransfer_hasEigenvalue_of_remainder}
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
-    Let $A$ be primitive with nonzero bond dimension, let $E$ be its observable
-    transfer map, and let $P$ be its stationary projection. Every nonzero
+    Let $A$ be primitive with nonzero bond dimension and fixed point $\rho$.
+    Write $E=E_{\mathrm{FNW},A}$ for its observable transfer map and
+    $P=E_\infty^\rho$ for its stationary projection. Every nonzero
     eigenvalue of $E-P$ is an eigenvalue of $E$.
 \end{theorem}
 \begin{proof}\leanok
