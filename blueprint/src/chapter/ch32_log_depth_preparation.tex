@@ -159,19 +159,19 @@ injective.
     \cite[eq.~(15)]{Malz2024Preparation}.
 \end{proof}
 
-\begin{lemma}[Uniqueness of the polar decomposition]
+\begin{theorem}[Uniqueness of the polar decomposition]
     \label{lem:ldp_polar_uniqueness}
     \lean{Matrix.polarPos_eq_of_eq_mul, Matrix.polarSupport_eq_of_eq_mul,
         Matrix.polarIso_eq_of_eq_mul}
     \leanok
-    \uses{thm:ldpolar_decomposition}
+    \uses{thm:ldpolar_decomposition, thm:ldpolar_support}
     Let $M=WQ$ with $Q\ge0$, and suppose $W^\dagger W=E$ for the orthogonal
     projector $E$ onto the range of $Q$. Then $Q=(M^\dagger M)^{1/2}$, $E$ is the
     support projector of $M$, and $W$ is the partial isometry of the polar
     decomposition of $M$. This is the step needed to identify the layers of
     \cite[eq.~(16)]{Malz2024Preparation} with the isometry of the blocked
     tensor, which the source asserts (``to the same effect'') without proof.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     Since $EQ=Q$ and $WE=W$, $M^\dagger M=QE\,Q=Q^2$, so $Q$ is the positive
@@ -185,6 +185,7 @@ injective.
     \label{thm:ldp_tree_factorization}
     \lean{MPSTensor.treeTensor, MPSTensor.treePosTensor,
         MPSTensor.treeIsoMatrix, MPSTensor.blockKron,
+        MPSTensor.blockTensor_rotatePhysical,
         MPSTensor.blockTensor_eq_rotatePhysical_treeIsoMatrix,
         MPSTensor.physicalMatrix_blockTensor_eq_treeIsoMatrix_mul,
         MPSTensor.conjTranspose_blockKron_polarIsoMatrix_mul_self,
@@ -230,7 +231,7 @@ injective.
     $\Pi_j$ fixes the tensor of $P_j$; so $\Pi_j^{\otimes2^{k-j}}$ fixes the
     product of the later layers, and the product of all layers is a partial
     isometry with initial projector the support projector of $P_k$.
-    Lemma~\ref{lem:ldp_polar_uniqueness} then identifies it with $V$ and $P_k$
+    Theorem~\ref{lem:ldp_polar_uniqueness} then identifies it with $V$ and $P_k$
     with $P_q$.
 \end{proof}
 
