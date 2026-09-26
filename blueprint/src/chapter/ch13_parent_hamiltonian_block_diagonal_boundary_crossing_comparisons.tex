@@ -26,7 +26,7 @@
     \label{lem:block_diagonal_boundary_local_sum_mem}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace}
     \leanok
-    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum, lem:block_sum_local_ground_space}
+    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum, thm:block_sum_local_ground_space}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, with $\mu_j\ne0$, and suppose
     \begin{align}
         \psi
@@ -49,12 +49,12 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum, lem:block_sum_local_ground_space}
+    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum, thm:block_sum_local_ground_space}
     The hypothesis $\psi\in\mathcal G_{N,L}(B)$ says that the left-hand side
     before decomposition lies in $G_L(B)$.
     Lemma~\ref{lem:block_diagonal_boundary_cyclic_restriction_sum} rewrites this
     local vector as the displayed sum, and
-    Lemma~\ref{lem:block_sum_local_ground_space} identifies $G_L(B)$ with
+    Theorem~\ref{thm:block_sum_local_ground_space} identifies $G_L(B)$ with
     $\bigvee_jG_L(A_j)$.
 
     % Next source step, not proven by this membership lemma: blockwise

@@ -181,7 +181,7 @@ periodic boundary step of \cite[Theorem~IV.16]{Cirac2021Matrix}.
 \end{proof}
 
 \begin{theorem}[Local ground space of a block-diagonal tensor]
-    \label{lem:block_sum_local_ground_space}
+    \label{thm:block_sum_local_ground_space}
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup,
         MPSTensor.groundSpaceES_toTensorFromBlocks_eq_iSup}
     \leanok
@@ -204,7 +204,7 @@ periodic boundary step of \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \label{lem:block_diagonal_periodic_constraints_propagated_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace}
     \leanok
-    \uses{lem:block_sum_local_ground_space, lem:periodic_constraints_propagated_subspace_sequence}
+    \uses{thm:block_sum_local_ground_space, lem:periodic_constraints_propagated_subspace_sequence}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for
     $1\le j\le g$, and set $S_M:=\bigvee_{j=1}^gG_M(A_j)$. If, for every
     $M\ge L$,
@@ -214,7 +214,7 @@ periodic boundary step of \cite[Theorem~IV.16]{Cirac2021Matrix}.
 
 \begin{proof}
     \leanok
-    Lemma~\ref{lem:block_sum_local_ground_space} gives $G_L(B)=S_L$.
+    Theorem~\ref{thm:block_sum_local_ground_space} gives $G_L(B)=S_L$.
     Apply Lemma~\ref{lem:periodic_constraints_propagated_subspace_sequence}
     to the sequence $S_M$.
 \end{proof}
