@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SingleBlock
 import TNLean.MPS.MPU.CanonicalForm
+import TNLean.MPS.MPU.VirtualSandwich
 import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
@@ -134,8 +135,31 @@ private theorem positive_gauge_exists_diagonal_fixedPoint
   · simp only [Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ (ne_of_gt htrace)]
   · simp only [map_smul, hΛfix]
 
+/-- The positive square-root gauge and unitary diagonalization preserve
+both source ranks. Source: CPSV17, Proposition IV.5, lines 797–804. -/
+private theorem source_ranks_canonical_gauge {d D : ℕ}
+    (W : MPOTensor d D) (L : Matrix (Fin D) (Fin D) ℂ) (hL : L.PosDef)
+    (V : Matrix.unitaryGroup (Fin D) ℂ) :
+    let B : MPOTensor d D := fun i j ↦
+      (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
+        (CFC.sqrt L * W i j * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)
+    MPOTensor.rightRank B = MPOTensor.rightRank W ∧
+      MPOTensor.leftRank B = MPOTensor.leftRank W := by
+  have hS : IsUnit (CFC.sqrt L) := (Matrix.isUnit_iff_isUnit_det _).2 hL.isUnit_det_cfc_sqrt
+  have hSi : IsUnit ((CFC.sqrt L)⁻¹) :=
+    (Matrix.isUnit_iff_isUnit_det _).2 hL.isUnit_det_inv_sqrt
+  have hV : IsUnit (V : Matrix (Fin D) (Fin D) ℂ) := Unitary.isUnit_coe
+  have hVs : IsUnit ((V : Matrix (Fin D) (Fin D) ℂ)ᴴ) := hV.star
+  exact ⟨(MPOTensor.rightRank_virtualSandwich _
+    (MPOTensor.virtualSandwich (CFC.sqrt L) W (CFC.sqrt L)⁻¹) _ hVs hV).trans
+      (MPOTensor.rightRank_virtualSandwich _ W _ hS hSi),
+    (MPOTensor.leftRank_virtualSandwich _
+      (MPOTensor.virtualSandwich (CFC.sqrt L) W (CFC.sqrt L)⁻¹) _ hVs hV).trans
+      (MPOTensor.leftRank_virtualSandwich _ W _ hS hSi)⟩
+
 /-- The positive square-root gauge followed by unitary diagonalization gives
-a full-support MPU canonical-form-II representative.
+a full-support MPU canonical-form-II representative with the same periodic
+operators and both source ranks unchanged.
 This construction assumes normality and a positive definite adjoint fixed point.
 It is the canonical-gauge step of arXiv:1703.09188, Proposition IV.5,
 lines 798–802, with canonical form II as in lines 269–281. -/
@@ -149,7 +173,9 @@ theorem exists_canonicalFormII_positiveGauge
         (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
           (CFC.sqrt L * U i j * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)
       Nonempty (MPOTensor.IsMPUCanonicalFormII B) ∧
-        ∀ N, MPOTensor.mpo B N = MPOTensor.mpo U N := by
+        (∀ N, MPOTensor.mpo B N = MPOTensor.mpo U N) ∧
+        MPOTensor.rightRank B = MPOTensor.rightRank U ∧
+        MPOTensor.leftRank B = MPOTensor.leftRank U := by
   obtain ⟨V, ρ, hSame, hρ, hdiag, hρtr, hLeft, hfix⟩ :=
     positive_gauge_exists_diagonal_fixedPoint U hNormal L hL hfix
   have hnorm : MPOTensor.normalizedFlattening
@@ -172,6 +198,7 @@ theorem exists_canonicalFormII_positiveGauge
     (hnorm.symm ▸ unitary_conj_normal _
       (hNormal.of_gaugeEquiv (MPSTensor.gaugeEquiv_tpGauge U.normalizedFlattening L hL).symm)
       V)
-    (hnorm.symm ▸ hLeft) ρ hρ hdiag hρtr (hnorm.symm ▸ hfix)⟩, hEq⟩
+    (hnorm.symm ▸ hLeft) ρ hρ hdiag hρtr (hnorm.symm ▸ hfix)⟩,
+    hEq, source_ranks_canonical_gauge U L hL V⟩
 
 end MPOTensor
