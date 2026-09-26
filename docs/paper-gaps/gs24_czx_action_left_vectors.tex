@@ -1,0 +1,101 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Left Action Vectors of the CZX Product States}
+\author{}
+\date{2026-09-25}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+The second computation of the CZX anomaly in
+Ref.~\cite{GarreRubioSchuch2024DomainWall} obtains $\omega=-1$ from the
+action tensors of the decorated CZX matrix product unitary $U$ on the
+product states $|0\rangle^{\otimes N}$ and $|1\rangle^{\otimes N}$, which $U$
+exchanges, through the ratio $L_0/L_1=-1$.\footnote{Source traceability:
+\path{Papers/2405.00439/MPU-DW.tex}, lines 1246--1339; the printed vectors are
+at lines 1272--1273 and 1300--1301.} The conclusion is correct, but the
+printed left action vectors are not.
+
+\section{The tensor and the action}
+
+The tensor of $U$, with physical output $i$, input $j$, left bond $l$ and
+right bond $r$, is
+\begin{align}
+    T^{ij}_{lr}
+     & =\delta_{i,1-j}\,\hat H_{l,1-j}\,\delta_{r,1-j}\,(-1)^{1-j},
+    \qquad
+    \hat H=\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
+    \label{eq:gs24_czx_mpu_tensor}
+\end{align}
+The reading~\eqref{eq:gs24_czx_mpu_tensor} reproduces the printed fusion tensors
+$\hat V=\langle1|\otimes\langle0|$ and $V=-|\hat-\rangle\otimes|\hat+\rangle$,
+with $|\hat\pm\rangle=|0\rangle\pm|1\rangle$, and the sign $-1$ of their
+associator.\footnote{Formal declarations:
+\leanid{CZXCompression.czxDecoratedTensor},
+\leanid{CZXCompression.czxDecorated_associator_eq_neg_one}.} The action
+of $T$ on the product state $|s\rangle$ has the single nonzero letter
+\begin{align}
+    B_0^{1} & =T^{10}=-|\hat-\rangle\langle1|, &
+    B_1^{0} & =T^{01}=|\hat+\rangle\langle0|.
+    \label{eq:gs24_czx_action_letters}
+\end{align}
+
+\section{The printed vectors}
+
+The source draws, for three sites, the decomposition
+$B^{a}B^{b}B^{c}=B^{a}\,w\,\delta_{b,1-s}\,v\,B^{c}$ of the action on
+$|s\rangle^{\otimes3}$ by the letters~\eqref{eq:gs24_czx_action_letters}, with
+right vector $w$ after the first site and left vector $v$ before the third.
+It prints $w=|\hat+\rangle$, $v=\langle\hat+|$
+for $s=0$, and $w=-|\hat+\rangle$, $v=\langle\hat+|$ for $s=1$. For $s=0$ these
+give $vw=2$ and $vB_0^{1}w=\langle\hat+|\hat-\rangle\cdot(\ldots)=0$, so the
+right-hand side of the drawn decomposition vanishes although
+$B_0^1B_0^1B_0^1\neq0$. For $s=1$ they give $vw=-2$. No choice among the four
+readings of the diagram (the Hadamard on the left or right bond, the physical
+input at the bottom or top), and no normalization factor, makes
+$v=\langle\hat+|$ work.
+
+\section{The correction}
+
+Keeping the printed right vectors, the conditions $vw=1$,
+$vB^{1-s}_sw=1$ and $B^{1-s}_swvB^{1-s}_s=(B^{1-s}_s)^2$ force
+\begin{align}
+    v & =\langle1| \quad (s=0), &
+    v & \in\{(c,d):c+d=-1\},\ \text{for instance }-\langle0| \quad (s=1).
+    \label{eq:gs24_czx_corrected_left_vectors}
+\end{align}
+With the choices~\eqref{eq:gs24_czx_corrected_left_vectors}, $v=\langle1|$ and
+$v=-\langle0|$, both three-site decompositions hold and $(v,w)$
+are reductions of the action onto the exchanged state. The resulting
+L-symbols are $L^0_{s,s}=1$ and $L^1_{s,s}=-1$; the source's values
+$L_i=(-1)^{i+1}$ differ from these by an action-tensor gauge, and the
+gauge-invariant ratio $L_0/L_1=-1=\omega(s,s,s)$ of line 1335 is
+unchanged.\footnote{Formal declarations:
+\leanid{CZXCompression.czxBlockActionData},
+\leanid{CZXCompression.czx_omega_eq_lSymbol_ratio},
+\leanid{CZXCompression.czx_lSymbol_ratio_eq_neg_one} in
+\doclink{TNLean/MPS/Symmetry/MPOSymmetry/CZXPermutedBlocks}.}
+
+\textbf{Verdict: resolved local fix.} The left action vectors at lines 1272
+and 1300 should read $\langle1|$ and $-\langle0|$; the anomaly computed from
+them is the printed $\omega=-1$.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -41,9 +41,11 @@ certificate that every worked example over such a ring reads off a decided table
   rescaled by one complex scalar is the square of that scalar times the entrywise image of the
   bond-space product.
 * `MPSTensor.isNBlkInjective_of_complexOfRing_smul_single`,
-  `MPSTensor.isNormal_of_complexOfRing_smul_single`: block injectivity and normality from a
-  decided table expressing every matrix unit, scaled by one element with nonzero image, as a
-  combination of words of one length.
+  `MPSTensor.isNormal_of_complexOfRing_smul_single`, `MPSTensor.isNormal_of_complexOfRing_single`:
+  block injectivity and normality from a decided table expressing every matrix unit, scaled by
+  one element with nonzero image, as a combination of words of one length.
+* `MPSTensor.isNormal_of_complexOfRing_letter_eq_smul_single`: normality of a rescaled tensor
+  whose letters realise every matrix unit up to a coefficient with nonzero image.
 -/
 
 open scoped Matrix Kronecker
@@ -106,6 +108,36 @@ theorem isNormal_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin D) (Fin
       c • Matrix.single i j 1) :
     Kraus.IsNormal A :=
   ⟨N, hN, isNBlkInjective_of_complexOfRing_smul_single f AR hA word coeff hc h⟩
+
+/-- **Normality from a decided table of matrix units**: the unscaled case `c = 1` of
+`isNormal_of_complexOfRing_smul_single`. -/
+theorem isNormal_of_complexOfRing_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (AR : Fin d → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = complexOfRing f (AR a)) {N : ℕ}
+    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → Fin d)
+    (coeff : Fin D → Fin D → κ → R)
+    (h : ∀ i j, ∑ k, coeff i j k • evalWordR AR (List.ofFn (word i j k)) =
+      Matrix.single i j 1) :
+    Kraus.IsNormal A :=
+  isNormal_of_complexOfRing_smul_single f AR hA hN word coeff (c := 1)
+    (by rw [map_one]; exact one_ne_zero) fun i j => (h i j).trans (one_smul _ _).symm
+
+/-- **Normality from letters that are scaled matrix units.** If the letters of a tensor are the
+images of matrices over `R` rescaled by one nonzero complex number, and every matrix unit
+`E_{xy}` is a multiple, with a coefficient of nonzero image, of one letter, then the letters
+span the full matrix algebra and the tensor is normal at blocking length one. -/
+theorem isNormal_of_complexOfRing_letter_eq_smul_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (AR : Fin d → Matrix (Fin D) (Fin D) R) {c : ℂ} (hc : c ≠ 0)
+    (hA : ∀ a, A a = c • complexOfRing f (AR a)) (ℓ : Fin D → Fin D → Fin d)
+    (w : Fin D → Fin D → R) (hw : ∀ x y, f (w x y) ≠ 0)
+    (h : ∀ x y, AR (ℓ x y) = w x y • Matrix.single x y 1) :
+    Kraus.IsNormal A := by
+  refine Kraus.IsInjective.isNormal
+    (Submodule.eq_top_of_forall_single_mem _ fun x y => ?_)
+  have hAl : A (ℓ x y) = (c * f (w x y)) • Matrix.single x y (1 : ℂ) := by
+    rw [hA, h x y, complexOfRing_smul, complexOfRing_single, smul_smul]
+  have hmul := Submodule.smul_mem (Submodule.span ℂ (Set.range A)) (c * f (w x y))⁻¹
+    (Submodule.subset_span (Set.mem_range_self (ℓ x y)))
+  rwa [hAl, smul_smul, inv_mul_cancel₀ (mul_ne_zero hc (hw x y)), one_smul] at hmul
 
 /-! ### Bond-space products and actions -/
 

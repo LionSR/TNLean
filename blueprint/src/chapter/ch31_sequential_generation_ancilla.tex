@@ -236,13 +236,15 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
-    By induction on $n$. For $n=0$ take $r'=R_{-1}r$. Otherwise apply
-    Theorem~\ref{thm:seqanc_one_step} to $Y^i=R_{-1}P_0^i$, which gives
-    $Y^i=Q_0^iR_0$ with $R_0$ row-supported below $b_1$, and apply the
-    induction hypothesis to $R_0$ and $P_1,\dots,P_{n-1}$. This is the
-    construction by successive singular value decompositions of Schön,
-    Solano, Verstraete, Cirac and Wolf, on which the proof in
+    \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
+    Theorem~\ref{thm:ldp_sweep_matrix_remainder} gives the bonds $b_p$, the
+    families $Q_p$ and a matrix $R$ row-supported below $b_n$ with
+    $R_{-1}P^\sigma=Q^\sigma R$ for every $\sigma$. Put $r'=Rr$, which is
+    supported below $b_n$ by Theorem~\ref{thm:seqanc_support_propagation}; then
+    $R_{-1}P^\sigma r=Q^\sigma Rr=Q^\sigma r'$. The induction behind
+    Theorem~\ref{thm:ldp_sweep_matrix_remainder} is the construction by
+    successive singular value decompositions of Schön, Solano, Verstraete,
+    Cirac and Wolf, on which the proof in
     \cite[Section~5.1]{PerezGarcia2007Matrix} is based.
 \end{proof}
 
@@ -260,16 +262,11 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_support_propagation}
-    Expand $\sum_i\|Q^iv\|^2=\sum_{\beta,\beta'<b}\overline{v_\beta}v_{\beta'}
-        \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}$ and use the
-    isometry condition. For the chain, write
-    $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
-    $Q_1,\dots,Q_{n-1}$ and $\sigma'=(\sigma_1,\dots,\sigma_{n-1})$. The
-    vector $w=Q'^{\sigma'}v$ is supported below $b_1$ by
-    Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity
-    for $Q_0$ gives $\sum_{\sigma_0}\|Q_0^{\sigma_0}w\|^2=\|w\|^2$, and the
-    induction hypothesis for $Q'$ gives $\sum_{\sigma'}\|Q'^{\sigma'}v\|^2=\|v\|^2$.
+    \uses{thm:ldp_sweep_matrix_remainder}
+    Take $w=v$ in the inner-product identities of
+    Theorem~\ref{thm:ldp_sweep_matrix_remainder}: $\sum_i\langle Q^iv,Q^iv\rangle
+        =\langle v,v\rangle$ for one site, and
+    (\ref{eq:ldp_sweep_inner_product}) with $w=v$ for the chain.
 \end{proof}
 
 \begin{theorem}[Changing sites outside the used block]

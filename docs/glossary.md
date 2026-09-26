@@ -405,6 +405,64 @@ normalizations.
   `docs/paper-gaps/peps_injective_ft_section3_route.tex`. Never cite either
   bridge as unconditional.
 
+#### `TNLean.PEPS.IsGInjective`
+
+- **Declaration:**
+  `TNLean.PEPS.IsGInjective (ρ : Representation ℂ G W) (T : W →ₗ[ℂ] P) : Prop`.
+- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Meaning:** the virtual-to-physical map `T = 𝒫(A)` is invariant under `ρ`
+  and injective on the `ρ`-invariant subspace.
+- **Source:** arXiv:1001.3807, Definition `def:2d-Ug-inj`,
+  `Papers/1001.3807/paper_v3.tex:1278-1296`.
+- **Sanctioned bridges:** `TNLean.PEPS.isGInjective_iff_exists_leftInverse`
+  (the source's left inverse with `L 𝒫(A) = Π_U`, for finite `G`),
+  `TNLean.PEPS.isGInjective_trivial_iff` (trivial `ρ`: injectivity of `T`), and
+  `TNLean.PEPS.siteMap_injective_iff` (injectivity of the map of a four-leg
+  site tensor is linear independence of its physical vectors, the vertex-wise
+  condition of `IsVertexInjective`).
+- **Caveat / paper gap:** the source requires `ρ` semi-regular; here `ρ` is a
+  parameter and each instance names its representation. Recorded in
+  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`. No bridge yet
+  connects `IsGInjective` of a site map to `IsVertexInjective` of the torus PEPS
+  `torusSiteTensor`.
+
+#### `TNLean.PEPS.IsGIsometric`
+
+- **Declaration:** `TNLean.PEPS.IsGIsometric (ρ : Representation ℂ G (ι → ℂ))
+  (T : (ι → ℂ) →ₗ[ℂ] (κ → ℂ)) : Prop`.
+- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Meaning:** `IsGInjective ρ T` and `⟪T x, T y⟫ = c ⟪x, y⟫` for invariant
+  `x, y` and one constant `c > 0`.
+- **Source:** arXiv:1001.3807, Definition `def:iso:isopeps`,
+  `Papers/1001.3807/paper_v3.tex:1692-1697`.
+- **Caveat / paper gap:** the source asks for the left-regular representation
+  and for `𝒫(A)` to be unitary between its domain and range, that is `c = 1`;
+  the factor `c` absorbs the missing normalization of the source's
+  quantum-double tensor (`c = |G|`), and the rescaling `T / √c` gives the
+  printed notion. Recorded in
+  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+#### `TNLean.PEPS.IsTorusDimerCovering`
+
+- **Declaration:**
+  `TNLean.PEPS.IsTorusDimerCovering (right up : TorusVertex width height → Bool) : Prop`.
+- **Defined in:** `TNLean/PEPS/Examples/RVB.lean`.
+- **Meaning:** the edges marked by `right` (the edge from `v` to its right
+  neighbour) and `up` (the edge from `v` to its upper neighbour) form a
+  nearest-neighbour dimer covering of the torus: every site lies on exactly one
+  marked edge among its top, right, down and left edges.
+- **Source:** arXiv:2011.12127, Appendix A, "The RVB state",
+  `Papers/2011.12127/TN-Review-main.tex:2440-2448` ("all ways of covering the
+  lattice with nearest neighbor singlets").
+- **Sanctioned bridges:** `TNLean.PEPS.stateCoeff_rvbPEPS`, which writes the
+  RVB PEPS as the sum over dimer coverings of the product of singlets on the
+  covered edges.
+- **Caveat:** the bridge is stated for tori of width and height at least three.
+  At width or height two the right and left edges of a site coincide in the
+  simple torus graph, so the predicate no longer counts the source's
+  multigraph coverings; recorded in
+  `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
@@ -1060,6 +1118,23 @@ The following notions use different transfer objects and are not interchangeable
   input of `MPOTensor.GroupFamily.nonempty_actionData`.
 - **Caveat:** no equivalence with `IsMPOSymmetric` at `c = 1` is stated as a
   theorem; the two definitions agree by unfolding.
+
+### `MPOTensor.GroupFamily.CarriesMPV`
+
+- **Declaration:** `MPOTensor.GroupFamily.CarriesMPV T B B' : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`.
+- **Meaning:** the periodic operator $O_N(T)$ carries the periodic vector
+  $\ket{V^{(N)}(B)}$ to $\ket{V^{(N)}(B')}$ for every chain length $N\geq1$;
+  nothing is asserted at $N=0$. The two tensors may have different bond
+  dimensions.
+- **Source:** arXiv:2203.12563, line 1064, the relation
+  $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ for blocks permuted by the group.
+- **Sanctioned bridges:** `FixesMPV T A` is the case $B=B'=A$, by unfolding.
+  `CarriesMPV.sameMPV₂Pos_actTensor` turns it into positive-length vector
+  equality of the action tensor with $B'$, the input of
+  `MPOTensor.GroupFamily.nonempty_blockActionData`.
+- **Caveat:** no theorem states the equivalence with `FixesMPV` at $B=B'$; the
+  definitions agree by unfolding.
 
 ## Symmetries of matrix product density operators
 

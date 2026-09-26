@@ -35,8 +35,11 @@ products along a chain are `MPSChainTensor.eval`.
   matrix product `R P₀ ⋯ P_{n-1} r` equals `Q₀ ⋯ Q_{n-1} r'` with every `Q_p`
   isometric on its bond block, and each new bond no larger than the number of
   nonzero columns of the corresponding `P_p`.
-* `MPSPreparation.sum_normSq_eval_mulVec` — isometric chains preserve the
-  total squared norm.
+* `MPSPreparation.exists_isometric_chain_mul` — the same sweep with the last
+  remainder kept as a matrix, `R P₀ ⋯ P_{n-1} = Q₀ ⋯ Q_{n-1} R'`.
+* `MPSPreparation.sum_star_eval_mulVec_dotProduct`,
+  `MPSPreparation.sum_normSq_eval_mulVec` — isometric chains preserve inner
+  products and the total squared norm.
 * `MPSPreparation.exists_unitary_extension` — an isometry on the used bond
   levels extends to a unitary on ancilla ⊗ site whose `|β, 0⟩` columns are the
   given ones.
@@ -216,40 +219,41 @@ theorem exists_isIsometryOn_mul (a : ℕ) (Y : Fin d → Matrix (Fin D) (Fin D) 
     split_ifs <;> simp [mul_comm]
 
 /-- The successive-decomposition sweep of arXiv:quant-ph/0501096, eq. `induction`
-and the paragraph following it: for any left matrix `Rm` whose rows vanish beyond
-`a ≤ D`, any site matrices `P₀, …, P_{n-1}`, and any right vector `r`, there are
-bond dimensions `b₀ = a, b₁, …, b_n ≤ D` and site matrices `Q_p`, vanishing
-outside the `b_p × b_{p+1}` block and isometric on it, together with a right
-vector `r'` supported on the first `b_n` levels, such that
-`Rm P₀(τ₀) ⋯ P_{n-1}(τ_{n-1}) r = Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) r'` for every
-configuration `τ`. The last remainder `r'` is the source's
-`|φ_I⟩ = M_{[1]} |φ'_I⟩`.
+and the paragraph following it, with the last remainder kept as a matrix: for any
+left matrix `Rm` whose rows vanish beyond `a ≤ D` and any site matrices
+`P₀, …, P_{n-1}`, there are bond dimensions `b₀ = a, b₁, …, b_n ≤ D`, site matrices
+`Q_p` vanishing outside the `b_p × b_{p+1}` block and isometric on it, and a
+remainder `R` whose rows vanish beyond `b_n`, such that
+`Rm P₀(τ₀) ⋯ P_{n-1}(τ_{n-1}) = Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) R` for every
+configuration `τ`. The sweep does not look at what `R` is later applied to, so
+the same isometric sites serve every right boundary at once; this is the form
+used for the matrix product map of arXiv:2307.01696, eqs. (13)–(14).
 
 Each new bond is at most the number of columns of the corresponding original
 site matrix that are not identically zero: if every `P_p(i)` vanishes on the
 columns `γ ≥ c`, then `b_{p+1} ≤ c`. This is the bond-dimension part of the
 "simple rank considerations" after arXiv:quant-ph/0501096, eq. `induction`. -/
-theorem exists_isometric_chain : ∀ (n a : ℕ), a ≤ D →
+theorem exists_isometric_chain_mul : ∀ (n a : ℕ), a ≤ D →
     ∀ (Rm : Matrix (Fin D) (Fin D) ℂ), IsRowSupportedBelow a Rm →
-    ∀ (P : MPSChainTensor d D n) (r : Fin D → ℂ),
-    ∃ (b : Fin (n + 1) → ℕ) (Q : MPSChainTensor d D n) (r' : Fin D → ℂ),
+    ∀ (P : MPSChainTensor d D n),
+    ∃ (b : Fin (n + 1) → ℕ) (Q : MPSChainTensor d D n) (R : Matrix (Fin D) (Fin D) ℂ),
       b 0 = a ∧ (∀ k, b k ≤ D) ∧
       (∀ p c, (∀ i α γ, c ≤ γ.val → P p i α γ = 0) → b p.succ ≤ c) ∧
       (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
       (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
-      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧ IsSupportedBelow (b (Fin.last n)) r' ∧
-      ∀ τ, (Rm * eval P τ) *ᵥ r = eval Q τ *ᵥ r'
-  | 0, a, ha, Rm, hRm, P, r => by
-    refine ⟨fun _ => a, fun p => Fin.elim0 p, Rm *ᵥ r, rfl, fun _ => ha, fun p => Fin.elim0 p,
-      fun p => Fin.elim0 p, fun p => Fin.elim0 p, fun p => Fin.elim0 p, hRm.mulVec r, ?_⟩
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧ IsRowSupportedBelow (b (Fin.last n)) R ∧
+      ∀ τ, Rm * eval P τ = eval Q τ * R
+  | 0, a, ha, Rm, hRm, P => by
+    refine ⟨fun _ => a, fun p => Fin.elim0 p, Rm, rfl, fun _ => ha, fun p => Fin.elim0 p,
+      fun p => Fin.elim0 p, fun p => Fin.elim0 p, fun p => Fin.elim0 p, hRm, ?_⟩
     intro τ
     simp
-  | n + 1, a, ha, Rm, hRm, P, r => by
+  | n + 1, a, ha, Rm, hRm, P => by
     obtain ⟨b₁, Q₀, R, hb₁, hb₁c, hQ₀row, hQ₀col, hQ₀iso, hR, hfac⟩ :=
       exists_isIsometryOn_mul a (fun i => Rm * P 0 i) fun i => hRm.mul _
-    obtain ⟨b', Q', r', hb'0, hb'D, hb'c, hQ'row, hQ'col, hQ'iso, hr', hprod⟩ :=
-      exists_isometric_chain n b₁ hb₁ R hR (fun p => P p.succ) r
-    refine ⟨Fin.cons a b', Fin.cons Q₀ Q', r', rfl, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+    obtain ⟨b', Q', R', hb'0, hb'D, hb'c, hQ'row, hQ'col, hQ'iso, hR', hprod⟩ :=
+      exists_isometric_chain_mul n b₁ hb₁ R hR (fun p => P p.succ)
+    refine ⟨Fin.cons a b', Fin.cons Q₀ Q', R', rfl, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
     · intro k
       refine Fin.cases ?_ (fun k => ?_) k
       · simpa using ha
@@ -272,12 +276,39 @@ theorem exists_isometric_chain : ∀ (n a : ℕ), a ≤ D →
       refine Fin.cases ?_ (fun p => ?_) p
       · simpa [hb'0] using hQ₀iso
       · simpa using hQ'iso p
-    · simpa [← Fin.succ_last] using hr'
+    · simpa [← Fin.succ_last] using hR'
     · intro τ
       rw [eval_succ P, eval_succ (Fin.cons Q₀ Q' : Fin (n + 1) → _)]
       simp only [Fin.cons_zero, Fin.cons_succ]
-      rw [← Matrix.mul_assoc, hfac, Matrix.mul_assoc, ← Matrix.mulVec_mulVec, hprod,
-        Matrix.mulVec_mulVec]
+      rw [← Matrix.mul_assoc, hfac, Matrix.mul_assoc, hprod, Matrix.mul_assoc]
+
+/-- The successive-decomposition sweep of arXiv:quant-ph/0501096, eq. `induction`
+and the paragraph following it: for any left matrix `Rm` whose rows vanish beyond
+`a ≤ D`, any site matrices `P₀, …, P_{n-1}`, and any right vector `r`, there are
+bond dimensions `b₀ = a, b₁, …, b_n ≤ D` and site matrices `Q_p`, vanishing
+outside the `b_p × b_{p+1}` block and isometric on it, together with a right
+vector `r'` supported on the first `b_n` levels, such that
+`Rm P₀(τ₀) ⋯ P_{n-1}(τ_{n-1}) r = Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) r'` for every
+configuration `τ`. The last remainder `r'` is the source's
+`|φ_I⟩ = M_{[1]} |φ'_I⟩`.
+
+Each new bond is at most the number of columns of the corresponding original
+site matrix that are not identically zero: if every `P_p(i)` vanishes on the
+columns `γ ≥ c`, then `b_{p+1} ≤ c`. This is the bond-dimension part of the
+"simple rank considerations" after arXiv:quant-ph/0501096, eq. `induction`. -/
+theorem exists_isometric_chain (n a : ℕ) (ha : a ≤ D) (Rm : Matrix (Fin D) (Fin D) ℂ)
+    (hRm : IsRowSupportedBelow a Rm) (P : MPSChainTensor d D n) (r : Fin D → ℂ) :
+    ∃ (b : Fin (n + 1) → ℕ) (Q : MPSChainTensor d D n) (r' : Fin D → ℂ),
+      b 0 = a ∧ (∀ k, b k ≤ D) ∧
+      (∀ p c, (∀ i α γ, c ≤ γ.val → P p i α γ = 0) → b p.succ ≤ c) ∧
+      (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
+      (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧ IsSupportedBelow (b (Fin.last n)) r' ∧
+      ∀ τ, (Rm * eval P τ) *ᵥ r = eval Q τ *ᵥ r' := by
+  obtain ⟨b, Q, R, hb0, hbD, hbc, hrow, hcol, hiso, hR, hprod⟩ :=
+    exists_isometric_chain_mul n a ha Rm hRm P
+  exact ⟨b, Q, R *ᵥ r, hb0, hbD, hbc, hrow, hcol, hiso, hR.mulVec r,
+    fun τ => by rw [hprod, Matrix.mulVec_mulVec]⟩
 
 /-- The output of a chain whose sites vanish beyond their left bond block is
 supported on the first bond block. -/
@@ -324,15 +355,17 @@ theorem eval_mulVec_congr : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
       (isSupportedBelow_eval_mulVec (fun k => b k.succ) (fun p => Q p.succ) hrow' v
         (by simpa using hv) (fun p => τ p.succ))
 
-/-- One isometric step preserves the squared norm of a vector supported on the
-isometric block. -/
-theorem sum_normSq_mulVec_of_isIsometryOn {b : ℕ} {Q : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (hQ : IsIsometryOn b Q) {v : Fin D → ℂ} (hv : IsSupportedBelow b v) :
-    ∑ i, star (Q i *ᵥ v) ⬝ᵥ (Q i *ᵥ v) = star v ⬝ᵥ v := by
+/-- One isometric step preserves inner products of vectors supported on the
+isometric block: `∑_i ⟨Q_i v, Q_i w⟩ = ⟨v, w⟩`, the Gram-matrix form of the
+condition `∑_i Q_i^† Q_i = 1` of arXiv:quant-ph/0608197, lines 1535--1537. -/
+theorem sum_star_mulVec_dotProduct_of_isIsometryOn {b : ℕ}
+    {Q : Fin d → Matrix (Fin D) (Fin D) ℂ} (hQ : IsIsometryOn b Q) {v w : Fin D → ℂ}
+    (hv : IsSupportedBelow b v) (hw : IsSupportedBelow b w) :
+    ∑ i, star (Q i *ᵥ v) ⬝ᵥ (Q i *ᵥ w) = star v ⬝ᵥ w := by
   classical
   have key : ∀ β β' : Fin D,
-      (∑ i, ∑ α, star (Q i α β) * Q i α β') * (star (v β) * v β') =
-        if β = β' then star (v β) * v β else 0 := by
+      (∑ i, ∑ α, star (Q i α β) * Q i α β') * (star (v β) * w β') =
+        if β = β' then star (v β) * w β else 0 := by
     intro β β'
     by_cases hβ : β.val < b
     · by_cases hβ' : β'.val < b
@@ -340,15 +373,15 @@ theorem sum_normSq_mulVec_of_isIsometryOn {b : ℕ} {Q : Fin d → Matrix (Fin D
         split_ifs with h
         · subst h; ring
         · ring
-      · rw [hv β' (not_lt.mp hβ')]
+      · rw [hw β' (not_lt.mp hβ')]
         split_ifs with h
         · subst h; exact absurd hβ hβ'
         · ring
     · rw [hv β (not_lt.mp hβ)]
       split_ifs <;> simp
   calc
-    ∑ i, star (Q i *ᵥ v) ⬝ᵥ (Q i *ᵥ v)
-        = ∑ i, ∑ α, ∑ β, ∑ β', star (Q i α β) * Q i α β' * (star (v β) * v β') := by
+    ∑ i, star (Q i *ᵥ v) ⬝ᵥ (Q i *ᵥ w)
+        = ∑ i, ∑ α, ∑ β, ∑ β', star (Q i α β) * Q i α β' * (star (v β) * w β') := by
           refine Finset.sum_congr rfl fun i _ => ?_
           simp only [dotProduct, Matrix.mulVec, Pi.star_apply, star_sum]
           refine Finset.sum_congr rfl fun α _ => ?_
@@ -356,39 +389,61 @@ theorem sum_normSq_mulVec_of_isIsometryOn {b : ℕ} {Q : Fin d → Matrix (Fin D
           refine Finset.sum_congr rfl fun β _ => Finset.sum_congr rfl fun β' _ => ?_
           rw [star_mul']
           ring
-    _ = ∑ β, ∑ β', ∑ i, ∑ α, star (Q i α β) * Q i α β' * (star (v β) * v β') :=
+    _ = ∑ β, ∑ β', ∑ i, ∑ α, star (Q i α β) * Q i α β' * (star (v β) * w β') :=
           Fintype.sum_last_two_first_four _
-    _ = ∑ β, ∑ β', (∑ i, ∑ α, star (Q i α β) * Q i α β') * (star (v β) * v β') := by
+    _ = ∑ β, ∑ β', (∑ i, ∑ α, star (Q i α β) * Q i α β') * (star (v β) * w β') := by
           simp only [Finset.sum_mul]
-    _ = star v ⬝ᵥ v := by
+    _ = star v ⬝ᵥ w := by
           simp only [key, Finset.sum_ite_eq, Finset.mem_univ, ite_true, dotProduct,
             Pi.star_apply]
+
+/-- One isometric step preserves the squared norm of a vector supported on the
+isometric block. -/
+theorem sum_normSq_mulVec_of_isIsometryOn {b : ℕ} {Q : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (hQ : IsIsometryOn b Q) {v : Fin D → ℂ} (hv : IsSupportedBelow b v) :
+    ∑ i, star (Q i *ᵥ v) ⬝ᵥ (Q i *ᵥ v) = star v ⬝ᵥ v :=
+  sum_star_mulVec_dotProduct_of_isIsometryOn hQ hv hv
+
+/-- An isometric chain preserves inner products: if every site is isometric on its
+bond block and the vectors `v`, `w` are supported on the last bond block, then
+`∑_τ ⟨Q(τ) v, Q(τ) w⟩ = ⟨v, w⟩` with `Q(τ) = Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1})`. This is
+the Gram-matrix form of the normalization statement implicit in the deterministic
+scheme of arXiv:quant-ph/0608197, lines 1535--1541, and the contraction step of
+arXiv:2307.01696, eq. (15). -/
+theorem sum_star_eval_mulVec_dotProduct : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
+    (Q : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ),
+    (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) → (∀ p, IsIsometryOn (b p.succ) (Q p)) →
+    ∀ v w : Fin D → ℂ, IsSupportedBelow (b (Fin.last n)) v →
+    IsSupportedBelow (b (Fin.last n)) w →
+    ∑ τ : Fin n → Fin d, star (eval Q τ *ᵥ v) ⬝ᵥ (eval Q τ *ᵥ w) = star v ⬝ᵥ w
+  | 0, _, Q, _, _, v, w, _, _ => by simp
+  | n + 1, b, Q, hrow, hiso, v, w, hv, hw => by
+    have hrow' : ∀ (p : Fin n) (i : Fin d),
+        IsRowSupportedBelow ((fun k : Fin (n + 1) => b k.succ) p.castSucc) (Q p.succ i) :=
+      fun p i => by dsimp only; rw [Fin.succ_castSucc]; exact hrow p.succ i
+    have ih := sum_star_eval_mulVec_dotProduct (fun k => b k.succ) (fun p => Q p.succ)
+      hrow' (fun p => hiso p.succ) v w (by simpa using hv) (by simpa using hw)
+    rw [← ih, ← (Fin.consEquiv fun _ : Fin (n + 1) => Fin d).sum_comp,
+      Fintype.sum_prod_type, Finset.sum_comm]
+    refine Finset.sum_congr rfl fun τ _ => ?_
+    simp only [Fin.consEquiv_apply, eval_succ, Fin.cons_zero, Fin.cons_succ,
+      ← Matrix.mulVec_mulVec]
+    exact sum_star_mulVec_dotProduct_of_isIsometryOn (hiso 0)
+      (isSupportedBelow_eval_mulVec (fun k => b k.succ) _ hrow' v (by simpa using hv) τ)
+      (isSupportedBelow_eval_mulVec (fun k => b k.succ) _ hrow' w (by simpa using hw) τ)
 
 /-- An isometric chain preserves the total squared norm: if every site is
 isometric on its bond block and the vector `v` is supported on the last bond
 block, then `∑_τ ‖Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) v‖² = ‖v‖²`. This is the
 normalization statement implicit in the deterministic scheme of
 arXiv:quant-ph/0608197, lines 1535--1541. -/
-theorem sum_normSq_eval_mulVec : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
-    (Q : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ),
-    (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) → (∀ p, IsIsometryOn (b p.succ) (Q p)) →
-    ∀ v : Fin D → ℂ, IsSupportedBelow (b (Fin.last n)) v →
-    ∑ τ : Fin n → Fin d, star (eval Q τ *ᵥ v) ⬝ᵥ (eval Q τ *ᵥ v) = star v ⬝ᵥ v
-  | 0, _, Q, _, _, v, _ => by simp
-  | n + 1, b, Q, hrow, hiso, v, hv => by
-    have ih := sum_normSq_eval_mulVec (fun k => b k.succ) (fun p => Q p.succ)
-      (fun p i => by rw [Fin.succ_castSucc]; exact hrow p.succ i)
-      (fun p => hiso p.succ) v (by simpa using hv)
-    rw [← ih, ← (Fin.consEquiv fun _ : Fin (n + 1) => Fin d).sum_comp,
-      Fintype.sum_prod_type, Finset.sum_comm]
-    refine Finset.sum_congr rfl fun τ _ => ?_
-    simp only [Fin.consEquiv_apply, eval_succ, Fin.cons_zero, Fin.cons_succ,
-      ← Matrix.mulVec_mulVec]
-    have hsupp : IsSupportedBelow (b (0 : Fin (n + 1)).succ)
-        (eval (fun p => Q p.succ) τ *ᵥ v) :=
-      isSupportedBelow_eval_mulVec (fun k => b k.succ) _
-        (fun p i => by rw [Fin.succ_castSucc]; exact hrow p.succ i) v (by simpa using hv) τ
-    exact sum_normSq_mulVec_of_isIsometryOn (hiso 0) hsupp
+theorem sum_normSq_eval_mulVec {n : ℕ} (b : Fin (n + 1) → ℕ)
+    (Q : Fin n → Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (hrow : ∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i))
+    (hiso : ∀ p, IsIsometryOn (b p.succ) (Q p)) (v : Fin D → ℂ)
+    (hv : IsSupportedBelow (b (Fin.last n)) v) :
+    ∑ τ : Fin n → Fin d, star (eval Q τ *ᵥ v) ⬝ᵥ (eval Q τ *ᵥ v) = star v ⬝ᵥ v :=
+  sum_star_eval_mulVec_dotProduct b Q hrow hiso v v hv hv
 
 /-- An isometry on the first `b` bond levels extends to a unitary on
 ancilla ⊗ site, `ℂ^D ⊗ ℂ^d`, whose columns `|β, 0⟩` with `β < b` are the given
