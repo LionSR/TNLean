@@ -49,9 +49,10 @@ theorem onSiteOperator_apply (U : Matrix (Fin d) (Fin d) ℂ) (σ' σ : V → Fi
 
 /-- The on-site operator of a monomial matrix `U |s⟩ = φ(s) |π s⟩` is monomial: it applies
 `π` at every site and multiplies the phases of all sites. -/
-theorem onSiteOperator_monomial [DecidableEq V] (π : Equiv.Perm (Fin d)) (φ : Fin d → ℂ) :
+theorem onSiteOperator_monomial (π : Equiv.Perm (Fin d)) (φ : Fin d → ℂ) :
     onSiteOperator (V := V) (Matrix.monomial π φ) =
       Matrix.monomial (Equiv.piCongrRight fun _ => π) fun σ => ∏ v, φ (σ v) := by
+  classical
   ext σ' σ
   simp only [onSiteOperator_apply, Matrix.monomial_apply, Fintype.prod_ite_zero]
   congr 1
