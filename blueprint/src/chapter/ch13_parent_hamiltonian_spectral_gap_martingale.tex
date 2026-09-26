@@ -6209,6 +6209,7 @@ tensors.
     \label{thm:fnw-transfer-eigenvalue-from-remainder}
     \lean{MPSTensor.IsPrimitiveMPS.fnwTransfer_hasEigenvalue_of_remainder}
     \leanok
+    \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
     Let $A$ be primitive with positive bond dimension, let $E$ be its observable
     transfer map, and let $P$ be its stationary projection. Every nonzero
     eigenvalue of $E-P$ is an eigenvalue of $E$.
@@ -6225,6 +6226,8 @@ tensors.
     \lean{MPSTensor.IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues}
     \lean{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues}
     \leanok
+    \uses{def:primitive_mps, def:fnw_transfer_map,
+        def:fnw_weighted_remainder_data, def:fnw_mixing_quantity}
     Let $A$ be primitive with positive bond dimension and positive-definite
     stationary density $\rho$. Suppose $\lambda>0$ and every eigenvalue
     $\nu\neq1$ of its observable transfer map satisfies $|\nu|<\lambda$.
@@ -6249,6 +6252,7 @@ tensors.
     \label{thm:fnw-eventual-prescribed-prefactor}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor}
     \leanok
+    \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_mixing_quantity}
     Let $A$ be primitive with positive bond dimension and a positive-definite
     trace-one stationary density $\rho$. Suppose $\lambda>0$ exceeds the modulus
     of every nonunit transfer eigenvalue. For every $c>0$, there is an integer
@@ -6270,6 +6274,9 @@ tensors.
     \label{thm:fnw-eventual-projector-prescribed-prefactor}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_projector_defect_le_of_pos_prefactor}
     \leanok
+    \uses{def:primitive_mps, def:fnw_transfer_map,
+        def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es,
+        def:ground_space_es}
     Under the preceding hypotheses, suppose additionally that $\lambda<1$.
     For every $c>0$, there exists an onset $M$ such that, for every overlap
     $m\geq M$, every prefix length $r\geq0$, and every suffix length $\ell\geq1$,
@@ -6285,7 +6292,8 @@ tensors.
     onset stated explicitly~\cite{gap:cpgsv21_martingale_overlap}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:fnw-eventual-prescribed-prefactor,thm:fnw_projector_defect_geometric}
+    \uses{thm:fnw-eventual-prescribed-prefactor,thm:fnw_projector_defect_geometric,
+        thm:normal_from_primitive_posdef}
     Increase the onset until the overlap exceeds an injectivity length and
     $c\lambda^m<1$. The preceding mixing estimate then satisfies the hypotheses
     of the fixed-overlap FNW projector estimate, uniformly in the two exterior
