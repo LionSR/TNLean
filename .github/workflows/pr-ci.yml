@@ -688,6 +688,19 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: texra-blueprint bbl
 
+      # Reuse the pictures the last main build compiled (blueprint.yml saves
+      # them); a picture is named by the hash of its source, so only figures
+      # this branch edits are compiled again. Read only: branches never save.
+      - name: Restore tenkz picture cache
+        if: env.TEX_CHANGED == 'true'
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            blueprint/web/tenkz_svg
+            blueprint/src/.tenkz_svg_cache
+          key: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-${{ github.run_id }}
+          restore-keys: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-
+
       - name: Run texra-blueprint web and check for errors
         if: env.TEX_CHANGED == 'true'
         working-directory: blueprint
