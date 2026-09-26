@@ -11,3 +11,4 @@ Authors: TNLean contributors
 import TNLean.PEPS.Examples.CZX
 import TNLean.PEPS.Examples.Cluster
 import TNLean.PEPS.Examples.GHZ
+import TNLean.PEPS.Examples.QuantumDouble
