@@ -14,6 +14,37 @@ For new declarations, prefer namespace overloading (`Kraus.IsInjective`,
 the predicate name. Preserve a paper's established terminology when a declaration
 is deliberately source-faithful.
 
+## Two-site matrix product unitaries
+
+### `MPOTensor.TwoSiteStandardFormData`
+
+- **Declaration:** `MPOTensor.TwoSiteStandardFormData W u v`, for a tensor
+  `W : MPOTensor (d * d) D`, a gate from the physical pair to the ordered
+  intermediate pair `(ℓ,r)`, and a gate from `(r,ℓ)` back to the physical pair.
+- **Defined in:** `TNLean/MPS/MPU/TwoSiteStandardForm.lean`.
+- **Meaning:** the dimensions are positive, both supplied gates are unitary
+  between their coordinate spaces, the second gate contracts as
+  $v^{(i_1,i_2)}_{s,l}=\sum_\beta (X_1)_{(i_1,\beta),s}(X_2)_{(\beta,i_2),l}$,
+  and the open tensor contracts as
+  $W^{(i_1,i_2),(j_1,j_2)}_{\alpha,\gamma}
+  =\sum_{l,s}(X_2)_{(\alpha,i_1),l}u_{(l,s),(j_1,j_2)}
+  (X_1)_{(i_2,\gamma),s}$.
+- **Source:** arXiv:1703.09188, equations `uuvv` and `StandardForm`, and
+  Definition `SF`, `Papers/1703.09188/paper_v2.tex:532-543,603-622`.
+- **Sanctioned bridge:**
+  `MPOTensor.IsMPUCanonicalFormII.twoSiteStandardFormData` constructs this
+  datum for `blockTwo U` when `U` is simple and carries the full-support
+  canonical-form-II presentation.
+  `MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_blockTensor`
+  chooses a positive simple block of length at most $D^4$ and relates its
+  two-site block to direct blocking at length $2k$ by an explicit physical
+  relabeling.
+- **Caveat:** the generic datum does not assume `W.IsMPU` or identify its
+  supplied gates with a selected source-cut factorization. The open equation
+  has input pair `(j₁,j₂)` in that order; the alternative reflected periodic
+  equation is source-specific. The construction from canonical form II is
+  restricted as recorded in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+
 ## Normality
 
 ### `Kraus.IsNormal`
@@ -399,6 +430,39 @@ model different levels of data and different sources.
 - **Caveat:** it stores no normalization, irreducibility, peripheral
   primitivity, positivity of block dimensions, ordering of weights, or BNT
   minimality. It is data, not a proposition equivalent to the predicates below.
+
+### Retained-block reconstruction and literal CPSV canonical form
+
+- **Declarations:** `MPSTensor.RetainedBlockReconstructionData A` and
+  `MPSTensor.CPSVCanonicalFormData A`.
+- **Defined in:** `TNLean/MPS/CanonicalForm/Definitions.lean`; block inclusions
+  in `TNLean/MPS/CanonicalForm/RetainedBlockReconstruction.lean`.
+- **Meaning:** the common reconstruction is
+  $A^i=C^\dagger(\bigoplus_k\mu_k A_k^i)C$ with nonzero weights and
+  $CC^\dagger=1$. Literal CPSV data additionally require normal blocks and
+  $\sum_k D_k\le D$, permitting an unused ambient zero complement.
+- **Source:** arXiv:1606.00608, equation `II_CF1`, lines 214--245.
+- **Caveat:** the common reconstruction imposes no normality or full-support
+  condition. The nonzero-weight convention is recorded in
+  `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
+### `MPSTensor.IsMPUCanonicalForm`
+
+- **Declarations:** `MPSTensor.MPUCanonicalFormData A` and
+  `MPSTensor.IsMPUCanonicalForm A`.
+- **Defined in:** `TNLean/MPS/MPU/MPUCanonicalForm.lean`.
+- **Meaning:** the same weighted reconstruction with irreducible blocks of
+  transfer spectral radius one, nonzero weights, and full ambient support
+  $\sum_k D_k=D$. Periodic blocks are permitted.
+- **Source:** arXiv:1703.09188, canonical-form definition, lines 259--267.
+- **Sanctioned result:** for an MPU whose original local tensor has this form,
+  `MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm`
+  proves the normality conclusion of Proposition `prop:normal-tensor`.
+- **Caveat:** the nonzero-weight and full-support conventions are recorded in
+  `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex` and
+  `docs/paper-gaps/mpu_canonical_form_full_support.tex`. Literal CPSV data keep
+  their optional ambient complement. The PGVWC07 form has a distinct
+  reconstruction using a bond-index equivalence and real weights.
 
 ### `MPSTensor.IsCanonicalForm`
 
@@ -833,3 +897,62 @@ The following notions use different transfer objects and are not interchangeable
   input of `MPOTensor.GroupFamily.nonempty_actionData`.
 - **Caveat:** no equivalence with `IsMPOSymmetric` at `c = 1` is stated as a
   theorem; the two definitions agree by unfolding.
+
+## Symmetries of matrix product density operators
+
+### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
+
+- **Declarations:** `Matrix.IsStrongSymmetry (O ρ : Matrix n n ℂ) : Prop` and
+  `Matrix.IsWeakSymmetry (O ρ : Matrix n n ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Meaning:** $O\rho=\lambda\rho$ for some complex $\lambda$ (strong), and
+  $[O,\rho]=0$ (weak), at one system size.
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
+- **Sanctioned bridges:**
+  `Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose` and
+  `Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary`.
+- **Caveat:** the eigenvalue is not required to be a phase and may be zero;
+  `Matrix.IsStrongSymmetry.norm_eq_one` gives modulus one only for unitary `O`
+  and nonzero `ρ`. Strong implies weak only for Hermitian `ρ` with `O†` also a
+  strong symmetry.
+
+### `MPOTensor.IsStrongMPOSymmetry` and `MPOTensor.IsWeakMPOSymmetry`
+
+- **Declarations:** `MPOTensor.IsStrongMPOSymmetry O M c : Prop` and
+  `MPOTensor.IsWeakMPOSymmetry O M : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Meaning:** the periodic operators $O_a^{(L)}$ of a family of matrix
+  product operators satisfy $O_a^{(L)}\rho^{(L)}=\lambda_a^{(L)}\rho^{(L)}$
+  (strong) or $[O_a^{(L)},\rho^{(L)}]=0$ (weak) for every label and every
+  positive length, where $\rho^{(L)}$ is the periodic operator of `M`.
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
+- **Sanctioned bridges:** `MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry`,
+  `MPOTensor.IsStrongMPOSymmetry.isFusionCharacter`, and
+  `MPOTensor.isStrongMPOSymmetry_iff_purification`.
+- **Caveat:** more general than the source, where the $O_a$ are normal matrix
+  product operators forming a fusion algebra (lines 125–137) and $\rho$ is
+  positive; results add these hypotheses where they use them. Boundary
+  conditions other than the identity are out of scope, recorded in
+  `docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
+
+### `MPOTensor.IsStrongOnSiteSymmetry` and `MPOTensor.IsWeakOnSiteSymmetry`
+
+- **Declarations:** `MPOTensor.IsStrongOnSiteSymmetry M U c : Prop` and
+  `MPOTensor.IsWeakOnSiteSymmetry M U : Prop`, for a monoid homomorphism
+  `U : G →* Matrix (Fin d) (Fin d) ℂ`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Meaning:** the MPO-family predicates above for the on-site family
+  $U_g^{\otimes L}$ (the periodic operators of `MPOTensor.onSite (U g)`).
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`; the
+  eigenvalue-one strong form $U\rho=\rho$ and the weak form $[U,\rho]=0$ are
+  arXiv:2603.28349, line 362.
+- **Sanctioned bridges:**
+  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor` (weak
+  symmetry as on-site symmetry of the vectorized state under $U\otimes\bar U$,
+  for unitary $U$), `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor`,
+  and `MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor` (normal
+  purifications).
+- **Caveat:** the eigenvalues `c g L` are arbitrary complex numbers in the
+  definition; they are phases, multiplicative in `g`, and equal to $1$ at the
+  identity only under unitarity and $\rho^{(L)}\neq 0$
+  (`IsStrongOnSiteSymmetry.norm_eq_one`, `.map_mul`, `.map_one`).
