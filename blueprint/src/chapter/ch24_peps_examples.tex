@@ -78,7 +78,7 @@ $v$ to $(x,y+1)$ (top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$
 On a torus of width two the right and left neighbours of a site coincide and
 the two edges joining them are one edge of the lattice graph, so the four
 legs of a site are not four distinct bonds. The contraction formula, and the
-cluster and CZX statements below, therefore require $w,h\ge 3$; the
+cluster, CZX, AKLT and RVB statements below, therefore require $w,h\ge 3$; the
 source constructions are local and apply to every torus
 \cite{gap:rmp_peps_examples_small_torus}.
 
@@ -244,6 +244,7 @@ of matrix product unitaries is constructed in
 Theorems~\ref{thm:mpug_anomaly_three_cocycle}
 and~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
 
+<<<<<<< HEAD
 \subsection{The toric code and quantum double models}
 
 Let $G$ be a finite group. The quantum double model of $G$
@@ -393,12 +394,263 @@ trivial holonomy \cite{gap:rmp_peps_quantum_double_g_isometry}.
         =g_1g_3g_3^{-1}g_4^{-1}g_4g_1^{-1}=1$.
 \end{proof}
 
+=======
+\subsection{The AKLT state}
+
+The two-dimensional AKLT state places singlets on the edges of the lattice and
+projects the four spin-$\tfrac12$ at each site onto their symmetric subspace
+\cite[Appendix~A, ``The AKLT model'']{Cirac2021Matrix}. Label the basis of
+four spin-$\tfrac12$ by $s=(s_0,s_1,s_2,s_3)\in\{0,1\}^4$, write $|s|$ for the
+number of entries equal to $1$, and let $P_{\pi}$ be the permutation of the four
+factors by $\pi\in S_4$.
+
+\begin{definition}[Symmetric projector on four spin-$\tfrac12$]%
+    \label{def:peps_aklt_sym_projector}
+    \lean{TNLean.PEPS.legKronecker, TNLean.PEPS.legPermMatrix,
+        TNLean.PEPS.symProjector}
+    \leanok
+    The projector onto the symmetric subspace of $(\C^2)^{\otimes 4}$ is
+    $\Pi_{\mathrm{sym}}=\frac{1}{24}\sum_{\pi\in S_4}P_{\pi}$.
+\end{definition}
+
+\begin{lemma}[The symmetric subspace has dimension five]%
+    \label{lem:peps_aklt_sym_projector}
+    \lean{TNLean.PEPS.legKronecker_mul, TNLean.PEPS.legKronecker_one,
+        TNLean.PEPS.legKronecker_transpose,
+        TNLean.PEPS.legPermMatrix_mul, TNLean.PEPS.legPermMatrix_conjTranspose,
+        TNLean.PEPS.legPermMatrix_mul_legKronecker,
+        TNLean.PEPS.symProjector_mul_self, TNLean.PEPS.symProjector_conjTranspose,
+        TNLean.PEPS.symProjector_mul_legKronecker, TNLean.PEPS.legWeight,
+        TNLean.PEPS.card_perm_comp_eq, TNLean.PEPS.symProjector_apply,
+        TNLean.PEPS.choose_legWeight_dvd, TNLean.PEPS.sum_div_choose_legWeight,
+        TNLean.PEPS.trace_symProjector, TNLean.PEPS.finrank_range_symProjector}
+    \leanok
+    \uses{def:peps_aklt_sym_projector}
+    $\Pi_{\mathrm{sym}}$ is a Hermitian idempotent commuting with $U^{\otimes 4}$
+    for every $2\times 2$ matrix $U$. Its entries are
+    $(\Pi_{\mathrm{sym}})_{s,t}=\binom{4}{|s|}^{-1}$ if $|s|=|t|$ and $0$
+    otherwise, and its range, the spin-$2$ subspace, has dimension five.
+\end{lemma}
+
+\begin{proof}\leanok
+    $P_{\pi}P_{\rho}=P_{\rho\pi}$ and $P_{\pi}^{\dagger}=P_{\pi^{-1}}$, so the average
+    over $S_4$ is a Hermitian idempotent, and
+    $P_{\pi} U^{\otimes 4}=U^{\otimes 4}P_{\pi}$ by reordering the tensor
+    factors. The number of $\pi$ with
+    $s=t\circ\pi$ is $24/\binom{4}{|t|}$ when $|s|=|t|$ and $0$ otherwise, by
+    a finite check. The dimension of the range of an idempotent is its trace,
+    $\sum_{s}\binom{4}{|s|}^{-1}=\sum_{k=0}^{4}\binom4k\binom4k^{-1}=5$.
+\end{proof}
+
+\begin{definition}[AKLT tensor]%
+    \label{def:peps_aklt_tensor}
+    \lean{TNLean.PEPS.akltLegs,
+        TNLean.PEPS.akltSiteTensorFun, TNLean.PEPS.akltSiteTensor,
+        TNLean.PEPS.akltPEPS}
+    \leanok
+    \uses{def:peps_aklt_sym_projector, def:peps_torus_site_tensor,
+        def:aklt_tensor_review}
+    With the singlet matrix
+    $Y=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$, the AKLT
+    tensor on the square lattice is
+    $A=\Pi_{\mathrm{sym}}(\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y)$,
+    with physical index $s\in\{0,1\}^4$ (physical dimension $16$) and virtual
+    indices ordered top, right, down, left
+    \cite[Appendix~A, ``The AKLT model'']{Cirac2021Matrix}.
+\end{definition}
+
+\begin{lemma}[Entries and physical span of the AKLT tensor]%
+    \label{lem:peps_aklt_entries}
+    \lean{Matrix.singletY_apply, Matrix.singletY_mul_transpose,
+        TNLean.PEPS.akltLegs_apply,
+        TNLean.PEPS.legWeight_vec, TNLean.PEPS.akltSiteTensorFun_apply,
+        TNLean.PEPS.akltLegs_mul_transpose, TNLean.PEPS.span_akltSiteTensorFun}
+    \leanok
+    \uses{def:peps_aklt_tensor, lem:peps_aklt_sym_projector}
+    The entries of the AKLT tensor are
+    \begin{align}
+        A^{s}_{\alpha\beta\gamma\delta}=
+        \frac{(-1)^{\gamma+\delta}}{\binom{4}{k}}\,\delta_{|s|,k},\qquad
+        k=\alpha+\beta+(1-\gamma)+(1-\delta),
+        \notag
+    \end{align}
+    and the span of the vectors $s\mapsto A^s_{\alpha\beta\gamma\delta}$ over
+    all virtual indices is the range of $\Pi_{\mathrm{sym}}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    $Y\ket{0}=\ket{1}$ and $Y\ket{1}=-\ket{0}$, so the column
+    $(\alpha,\beta,\gamma,\delta)$ of $\mathbb{1}\otimes\mathbb{1}\otimes
+        Y\otimes Y$ is $(-1)^{\gamma+\delta}$ times the basis vector
+    $(\alpha,\beta,1-\gamma,1-\delta)$. The matrix
+    $L=\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y$ satisfies $LL^{T}=\mathbb{1}$,
+    so the columns of $\Pi_{\mathrm{sym}}L$ span the range of
+    $\Pi_{\mathrm{sym}}$.
+\end{proof}
+
+\begin{theorem}[$SU(2)$ covariance of the AKLT tensor]%
+    \label{thm:peps_aklt_su2}
+    \lean{Matrix.mul_singletY, TNLean.PEPS.akltSiteTensor_covariant,
+        Matrix.adjugate_eq_star_of_mem_specialUnitaryGroup,
+        TNLean.PEPS.akltSiteTensor_su2_covariant}
+    \leanok
+    \uses{def:peps_aklt_tensor, lem:peps_aklt_sym_projector}
+    Regard $A$ as the map from the virtual space $(\C^2)^{\otimes 4}$ to the
+    physical space. For every $U\in SU(2)$,
+    \begin{align}
+        U^{\otimes 4}A=A\,(U\otimes U\otimes\bar U\otimes\bar U).
+        \notag
+    \end{align}
+    For an arbitrary $2\times 2$ matrix $U$ the same identity holds with $\bar U$ replaced by
+    $(\operatorname{adj}U)^{T}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For a $2\times2$ matrix, $UY=Y(\operatorname{adj}U)^{T}$ by direct
+    computation. Since $\Pi_{\mathrm{sym}}$ commutes with $U^{\otimes 4}$,
+    $U^{\otimes4}\Pi_{\mathrm{sym}}L=\Pi_{\mathrm{sym}}(U\otimes U\otimes
+        UY\otimes UY)=\Pi_{\mathrm{sym}}L\,(U\otimes U\otimes V\otimes V)$ with
+    $V=(\operatorname{adj}U)^{T}$. For $U\in SU(2)$, $U^{\dagger}U=\mathbb{1}$
+    and $U\operatorname{adj}U=(\det U)\mathbb{1}=\mathbb{1}$, so
+    $\operatorname{adj}U=U^{\dagger}U\operatorname{adj}U=U^{\dagger}$ and
+    $V=\bar U$.
+\end{proof}
+
+\begin{theorem}[The AKLT PEPS as projected singlets]%
+    \label{thm:peps_aklt_state}
+    \lean{TNLean.PEPS.akltLegs_vec, TNLean.PEPS.stateCoeff_akltPEPS}
+    \leanok
+    \uses{def:peps_aklt_tensor, lem:peps_torus_site_tensor_contraction}
+    On a torus with $w,h\ge 3$ the AKLT PEPS has coefficient
+    \begin{align}
+        \Coeff(\sigma)=\sum_{\tau}\prod_{v}(\Pi_{\mathrm{sym}})_{\sigma_v,\tau_v}
+        \prod_{v}Y_{\tau_{v+(1,0),3},\,\tau_{v,1}}\,Y_{\tau_{v+(0,1),2},\,\tau_{v,0}},
+        \notag
+    \end{align}
+    the sum running over the spin-$\tfrac12$ labels $\tau_v\in\{0,1\}^4$ of the
+    four legs of every site. The factor $Y_{b,a}$ is the coefficient of
+    $\ket{a}\ket{b}$ in the singlet $\ket{01}-\ket{10}$, so the state is
+    $\bigotimes_v\Pi_{\mathrm{sym}}$ applied to a singlet on every edge.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_site_tensor_contraction}
+    Expand each $A=\Pi_{\mathrm{sym}}L$ as a sum over the intermediate label
+    $\tau_v$. The identity factors of $L$ force the bond index on the top edge
+    of $v$ to be $\tau_{v,0}$ and on the right edge to be $\tau_{v,1}$, and the
+    $Y$ factors on the down and left legs then give
+    $Y_{\tau_{v,2},\tau_{v-(0,1),0}}Y_{\tau_{v,3},\tau_{v-(1,0),1}}$; shifting
+    the product by one site gives the formula.
+\end{proof}
+
+The physical index of the tensor above is the label of four spin-$\tfrac12$,
+so the tensor takes values in $(\C^2)^{\otimes 4}$, of dimension $16$, the
+codomain of $\Pi_{\mathrm{sym}}$ in the source formula. Its physical span is
+the five-dimensional symmetric subspace, the spin-$2$ space of the source,
+embedded isometrically in $(\C^2)^{\otimes 4}$; on this subspace the physical
+action $U^{\otimes 4}$ of the covariance theorem is the spin-$2$
+representation. A tensor of physical dimension five, obtained by composing
+with an isometry from the symmetric subspace onto $\C^5$, is not defined, and
+the parent Hamiltonian of the AKLT state, the uniqueness of its ground state,
+the honeycomb lattice, and the identification of $U^{\otimes 4}$ on the
+symmetric subspace with the standard spin-$2$ matrices are not formalized.
+
+\subsection{The RVB state}
+
+The nearest-neighbour resonating valence bond state is the superposition of
+all coverings of the lattice by nearest-neighbour singlets. Its PEPS of bond
+dimension three combines, at each site, the projector
+\begin{align}
+    P=\ket{0}\bigl[(0222|+(2022|+(2202|+(2220|\bigr]
+    +\ket{1}\bigl[(1222|+(2122|+(2212|+(2221|\bigr]
+    \notag
+\end{align}
+with singlet matrices on the edges; on the square lattice with a
+translation-invariant orientation of the singlets the tensor is
+$A=P(\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y)$
+\cite[Appendix~A, ``The RVB state'']{Cirac2021Matrix}. On the bond of
+dimension three the matrix $Y$ acts on the spin states $0,1$ and is extended by
+$1$ on the vacuum state $2$, so that the bond state is
+$\ket{01}-\ket{10}+\ket{22}$. The extension by $0$ would make every entry of
+$A$ vanish, since a leg carrying $Y$ could then never be in the vacuum state
+\cite{gap:rmp_peps_rvb_bond_vacuum}.
+
+\begin{definition}[RVB tensor]%
+    \label{def:peps_rvb_tensor}
+    \lean{TNLean.PEPS.rvbSingletY, TNLean.PEPS.rvbProjector,
+        TNLean.PEPS.rvbSiteTensorInt, TNLean.PEPS.rvbSiteTensor,
+        TNLean.PEPS.rvbPEPS}
+    \leanok
+    \uses{def:peps_torus_site_tensor}
+    The RVB tensor is $A=P(\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y)$ with
+    $Y=\left(\begin{smallmatrix}0&-1&0\\1&0&0\\0&0&1\end{smallmatrix}\right)$,
+    virtual indices ordered top, right, down, left.
+\end{definition}
+
+\begin{lemma}[Local dimer constraint]%
+    \label{lem:peps_rvb_local}
+    \lean{TNLean.PEPS.rvbFlip, TNLean.PEPS.rvbSiteTensorInt_eq,
+        TNLean.PEPS.rvbSiteTensor_apply, TNLean.PEPS.rvbSiteTensor_ne_zero_iff,
+        TNLean.PEPS.rvbBondLabel, TNLean.PEPS.rvbBondLabel_ne_two_iff,
+        TNLean.PEPS.rvbSiteTensorInt_ne_zero,
+        TNLean.PEPS.rvbSiteTensorInt_bondLabel}
+    \leanok
+    \uses{def:peps_rvb_tensor}
+    $A^{s}_{urdl}\neq 0$ if and only if exactly one of $u,r,d,l$ differs from
+    $2$, that index being $s$ if it is $u$ or $r$ and $1-s$ if it is $d$ or
+    $l$. The nonzero entries equal $-1$ when the down or left index is $1$ and
+    $+1$ otherwise.
+\end{lemma}
+
+\begin{proof}\leanok
+    $Y$ maps the bond index $d$ to $1-d$ on the spin states, with sign $-1$
+    at $d=1$, and fixes the vacuum. The statement is a finite check over the
+    $162$ entries.
+\end{proof}
+
+\begin{theorem}[The RVB PEPS is the superposition of singlet coverings]%
+    \label{thm:peps_rvb_state}
+    \lean{TNLean.PEPS.IsTorusDimerCovering, TNLean.PEPS.rvbCoveringBonds,
+        TNLean.PEPS.stateCoeff_rvbPEPS}
+    \leanok
+    \uses{def:peps_rvb_tensor, def:peps_stateCoeff}
+    Let $w,h\ge3$. A dimer covering of the torus is a set $c$ of edges such
+    that every site lies on exactly one edge of $c$. The RVB PEPS has
+    coefficient
+    \begin{align}
+        \Coeff(\sigma)=\sum_{c}\ \prod_{(v,v+e)\in c}Y_{\sigma_{v+e},\sigma_v},
+        \notag
+    \end{align}
+    the sum running over all dimer coverings, and each edge of $c$ written as
+    $(v,v+e)$ with $e\in\{(1,0),(0,1)\}$. The factor $Y_{\sigma_{v+e},\sigma_v}$
+    is the coefficient of the singlet $\ket{01}-\ket{10}$ on the two sites, so
+    the state is the superposition of all nearest-neighbour singlet coverings
+    with the translation-invariant orientation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_site_tensor_contraction, lem:peps_rvb_local}
+    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the coefficient is a
+    sum over bond indices $h_v$, $v_v$ on the right and up edges. By
+    Lemma~\ref{lem:peps_rvb_local} a configuration contributes only if the
+    edges carrying a non-vacuum index form a dimer covering and the index on
+    each such edge is the physical index of the site below or to the left of
+    it. Conversely every dimer covering determines one such configuration,
+    and its term is the product over sites of the singlet factors on the down
+    and left legs; shifting the product by one site gives the formula.
+\end{proof}
+
+The general orientation choices $\pm Y$ on other lattices and the
+spin-liquid properties of the RVB state are not formalized.
+
+>>>>>>> origin/main
 \subsection{Examples not formalized}
 
 The remaining two-dimensional examples of
 \cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} are recorded
 here without formal statements.
 \begin{itemize}
+<<<<<<< HEAD
     \item The two-dimensional AKLT state places singlets on the edges of the
           lattice and projects onto the symmetric subspace at each site; on the
           square lattice the tensor is $\Pi_{\mathrm{sym}}(\mathbb{1}\otimes
@@ -407,6 +659,14 @@ here without formal statements.
           superposition of all nearest-neighbour singlet coverings, a PEPS of bond
           dimension three built from a projector onto configurations with exactly
           one non-vacuum leg together with singlet matrices on the edges.
+=======
+    \item The toric code and, more generally, the quantum double of a finite
+          group $G$ have two PEPS representations: a primal one enforcing Gauss'
+          law on the virtual indices at the vertices, and a dual one with group
+          variables on the plaquettes, which is $G$-injective, in fact
+          $G$-isometric, for the regular representation. Neither tensor is given in
+          the source by explicit entries, and $G$-injectivity is not formalized.
+>>>>>>> origin/main
     \item String-net models give PEPS tensors built from the $F$-symbols of a
           bimodule category.
     \item A classical model with nearest-neighbour interactions at inverse
