@@ -25,6 +25,7 @@ import TNLean.MPS.Examples.Fibonacci
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.GHZCluster
 import TNLean.MPS.Examples.GHZClusterAction
+import TNLean.MPS.Examples.GHZGInjective
 import TNLean.MPS.Examples.GHZParentHamiltonian
 import TNLean.MPS.Examples.GHZQudit
 import TNLean.MPS.Examples.Ising
