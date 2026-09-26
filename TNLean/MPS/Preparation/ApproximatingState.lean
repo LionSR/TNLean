@@ -18,7 +18,7 @@ Malz, Styliaris, Wei, and Cirac (arXiv:2307.01696) approximate the periodic stat
 tensor `A` on `N = qM` sites as follows. The `q`-site blocked tensor `B` is read as a map
 `ℂ^{D²} → ℂ^{d^q}` with polar decomposition `B = V P`. As `q → ∞`, the positive factor `P`
 converges to the fixed-point tensor `P_∞` (the limit in eq. (8)), and replacing `P` by `P_∞` while
-keeping `V` gives the tensor `B̃ = V P_∞` of eq. (9), whose periodic state is
+keeping `V` gives the tensor `B' = V P_∞` of eq. (9), whose periodic state is
 `V^{⊗M} ⊗ₖ |ω⟩_{R_k L_{k+1}}` (eq. (10)). Each copy of `V` is implemented by a unitary `U` on
 the `q` sites of a block acting on an input in which the central sites are in `|0⟩` (eq. (11)).
 
@@ -31,11 +31,11 @@ This file proves these three steps.
   blocked tensor converges to `P_∞` (arXiv:2307.01696, eq. (8)).
   The general form `MPSTensor.tendsto_polarPosTensor_of_tendsto_transferMap` only assumes the
   convergence `E_{B_q}(X) → Tr(X) σ`.
-* `MPSTensor.approximatingTensor` — the tensor `B̃ = V P_∞` of eq. (9).
+* `MPSTensor.approximatingTensor` — the tensor `B' = V P_∞` of eq. (9).
 * `MPSTensor.mpv_approximatingTensor` — its periodic state is `V^{⊗M}` applied to the product of
   the pairs `ω` (eq. (10)).
 * `MPSTensor.mpv_approximatingTensor_norm_sq` — for injective `B` that state is normalized.
-* `MPSTensor.exists_unitary_mpv_approximatingTensor` — the periodic state of `B̃` is
+* `MPSTensor.exists_unitary_mpv_approximatingTensor` — the periodic state of `B'` is
   `(⊗ₖ Uₖ) ⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})` (eqs. (10) and (11)).
 
 ## References
@@ -199,16 +199,16 @@ theorem tendsto_polarPosTensor_blockTensor_of_isNormal (A : MPSTensor d D)
 
 /-! ### The approximating tensor and its periodic state -/
 
-/-- The **approximating tensor** `B̃ = V P_∞`: the isometric factor `V` of the polar
+/-- The **approximating tensor** `B' = V P_∞`: the isometric factor `V` of the polar
 decomposition `B = V P` of a tensor `B`, applied to the physical leg of the fixed-point tensor
 `P_∞` built from `σ`.
 
-arXiv:2307.01696, eq. (9): `B = V P ≈ V P_∞ = B̃`. -/
+arXiv:2307.01696, eq. (9): `B = V P ≈ V P_∞ = B'`. -/
 noncomputable def approximatingTensor (B : MPSTensor n D) (σ : Matrix (Fin D) (Fin D) ℂ) :
     MPSTensor n D :=
   rotatePhysical (polarIsoMatrix B) (fixedPointTensor σ)
 
-/-- **The approximating state.** The periodic state of `B̃ = V P_∞` on `M ≥ 1` blocks is
+/-- **The approximating state.** The periodic state of `B' = V P_∞` on `M ≥ 1` blocks is
 `V^{⊗M}` applied to the product `⊗ₖ |ω⟩_{R_k L_{k+1}}` of the pairs of eq. (12).
 
 arXiv:2307.01696, eqs. (9) and (10). -/
@@ -220,10 +220,10 @@ theorem mpv_approximatingTensor (B : MPSTensor n D) (σ : Matrix (Fin D) (Fin D)
   rw [approximatingTensor, mpv_rotatePhysical]
   simp_rw [mpv_fixedPointTensor]
 
-/-- For injective `B` and `σ ≥ 0` with `Tr σ = 1`, the periodic state of `B̃ = V P_∞` is
-normalized, so it is the approximating state `|φ̃_N⟩` itself.
+/-- For injective `B` and `σ ≥ 0` with `Tr σ = 1`, the periodic state of `B' = V P_∞` is
+normalized, so it is the approximating state `|φ'_N⟩` itself.
 
-arXiv:2307.01696, eq. (10): `|φ̃_N⟩` is `V^{⊗M}` applied to the normalized state `|Ω⟩`. -/
+arXiv:2307.01696, eq. (10): `|φ'_N⟩` is `V^{⊗M}` applied to the normalized state `|Ω⟩`. -/
 theorem mpv_approximatingTensor_norm_sq {B : MPSTensor n D}
     (hB : Kraus.IsInjective B) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) {M : ℕ} [NeZero M] :
@@ -249,7 +249,7 @@ noncomputable def embeddedPairState (ι : Fin D × Fin D → Fin n) (σ : Matrix
     if (fun j => ι (c j)) = t then pairProductState (fixedPointPair σ) c else 0
 
 /-- **Product formula.** If a matrix `U` on `ℂ^n` sends the placed basis vector `|ι(l, r)⟩` to
-`V |l, r⟩`, then the periodic state of `B̃ = V P_∞` on `M ≥ 1` blocks is
+`V |l, r⟩`, then the periodic state of `B' = V P_∞` on `M ≥ 1` blocks is
 `(⊗ₖ Uₖ) ⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})`.
 
 arXiv:2307.01696, eqs. (10) and (11). -/
@@ -272,7 +272,7 @@ theorem mpv_approximatingTensor_eq_sum_embeddedPairState (B : MPSTensor n D)
 tensor `B` be injective and let `ι` be an injective placement of the pairs `(l, r)` among the
 basis vectors of `ℂ^n`, for instance `(l, r) ↦ |l⟩_L |0⟩_C |r⟩_R`. Then there is a
 unitary `U` on `ℂ^n` with `U |ι(l, r)⟩ = V |l, r⟩`, and for every `M ≥ 1` the periodic state of
-`B̃ = V P_∞` on `M` blocks is `(⊗ₖ Uₖ) ⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})`. -/
+`B' = V P_∞` on `M` blocks is `(⊗ₖ Uₖ) ⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})`. -/
 theorem exists_unitary_mpv_approximatingTensor {B : MPSTensor n D}
     (hB : Kraus.IsInjective B) (ι : Fin D × Fin D ↪ Fin n)
     (σ : Matrix (Fin D) (Fin D) ℂ) :
