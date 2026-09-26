@@ -6612,11 +6612,18 @@ tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:product_span_block_image_direct_sum, thm:ground_space_map_injective_blk}
+    \uses{lem:product_span_block_image_direct_sum, thm:ground_space_map_injective_blk,
+        thm:gauge_phase_mpv_scaling, lem:mpv_mem_ground_space,
+        lem:mpv_eq_ground_space_map_one}
     The local ground spaces of the blocks at length $S$ are independent. Each
     boundary map at that length is injective, so its value at the identity matrix,
-    the periodic matrix product vector, is nonzero. Gauge-phase equivalent blocks
-    would have proportional periodic vectors, contradicting independence.
+    the periodic matrix product vector $V^{(S)}(A^i)=\Gamma^{A^i}_S(\Id)$, is
+    nonzero. Suppose that $i\neq j$ and $A^{i,a}=\zeta XA^{j,a}X^{-1}$ for every
+    physical index $a$. Then
+    \begin{align}
+        V^{(S)}(A^i)=\zeta^SV^{(S)}(A^j)\in G_S(A^i)\cap G_S(A^j)=\{0\},\notag
+    \end{align}
+    so $\Gamma^{A^i}_S(\Id)=0$, contradicting injectivity of the boundary map.
 \end{proof}
 
 \begin{theorem}[A uniform gap at the simultaneous injectivity range]
@@ -6641,13 +6648,20 @@ tensors.
     \leanok
     \uses{thm:block_word_span_primitive_normalization, thm:block-word-span-separation,
         thm:primitive_block_sum_parent_gap,
-        thm:parent-gap-fixed-range-transfer, thm:parent_hamiltonian_eventual_gap}
+        thm:parent-gap-fixed-range-transfer, thm:parent_hamiltonian_eventual_gap,
+        thm:ph_tp_word_span_propagation, thm:ph_tp_block_open_ground_space,
+        thm:ph_block_replacement_parent_equality}
     Normalize the blocks while retaining simultaneous injectivity at $S$ and
     all local ground spaces. Simultaneous injectivity forces distinct blocks
     to be inequivalent. The grouped martingale estimate and finite-range
     periodic comparison provide a gapped interaction range $W\geq2R$.
-    The open range-$R$ Hamiltonian on $W$ sites has precisely the full local
-    MPS space as its kernel, since $R\geq S+1$. Two-sided comparison of the
+    Let $B'$ be the weighted sum of the normalized blocks. Trace preservation
+    propagates simultaneous injectivity from $S$ to every larger length, so,
+    since $R\geq S+1$, the open-chain ground-space theorem gives
+    \begin{align}
+        \ker H^{\mathrm{open}}_{R,W}(B')=G_W^{\mathrm{ES}}(B').\notag
+    \end{align}
+    Two-sided comparison of the
     periodic range-$R$ and range-$W$ Hamiltonians therefore transfers the gap
     to $R$. Taking a minimum with the finitely many remaining finite-volume
     gaps makes the bound uniform over every $N$. Finally, normalization left
@@ -6669,9 +6683,12 @@ tensors.
     reconstruction of the original tensor.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:ph_canonical_representative_local_spaces}
-    The positive-length local space of $A$ is the sum of the local spaces
-    of its normal representatives, which is also the local space of $B$.
+    \uses{thm:ph_canonical_representative_local_spaces,
+        lem:block_sum_local_ground_space}
+    For every positive length $R$, the local spaces satisfy
+    \begin{align}
+        G_R(A)=\bigvee_jG_R(B_j)=G_R(B).\notag
+    \end{align}
     Their orthogonal complementary projections therefore agree. Translating
     and summing those projections gives the same Hamiltonian.
 \end{proof}

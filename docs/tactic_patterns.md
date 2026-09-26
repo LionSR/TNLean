@@ -2893,6 +2893,49 @@ spectral split → block extraction → MPV calculation → strict bounds
   beside `MPOTensor.toMPSTensor` in `TNLean/MPS/MPDO/Defs.lean` and refactoring the six sites;
   that rebuild is large enough to deserve its own change.
 
+### fixed-range block parent gap from an open-chain kernel identity — candidate
+- **Pattern:** obtain a gapped range `W ≥ 2 * R` for a primitive block sum, then transfer the
+  gap to range `R` through the open-chain kernel identity at `W`; the uniform form then
+  converts the eventual gap into a gap for every chain length.
+  ```lean
+  obtain ⟨W, hRW, _, γ, hγ, hGap⟩ :=
+    exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
+      μ A hμ ρ hP hρ hDistinct (2 * R)
+  exact exists_parentHamiltonianES_gap_of_larger_range
+    (toTensorFromBlocks (d := d) (μ := μ) A) hR0 hRW (hKernel W _) hγ hGap
+  -- uniform form:
+  obtain ⟨M, hM⟩ := hGap.exists_forall_of_atTop
+  exact parentHamiltonianES_gap_of_eventual_gap _ R M hγ hM
+  ```
+- **Seen:** the transfer step three times, in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockGapAtC1Range.lean`,
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockGapThreshold.lean`, and
+  `TNLean/MPS/ParentHamiltonian/Martingale/BlockGapAtSimultaneousInjectivity.lean`; the
+  eventual-to-uniform step twice, in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockUniformGap.lean` and
+  `BlockGapAtSimultaneousInjectivity.lean` (recorded 2026-09-26, PR #8183 review).
+- **Abstraction:** proposed lemma in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockGap.lean` taking the primitive
+  block data and a hypothesis
+  `∀ W, R ≤ W → ker (openParentHamiltonianES B R W) = groundSpaceES B W`, returning the
+  eventual gap at range `R`, with a uniform-in-`N` companion.
+- **Notes:** the transfer step meets the rule of three; promotion refactors the three call
+  sites and is a separate change.
+
+### canonical local space as the representative block sum — candidate
+- **Pattern:** compose `CPSVCanonicalFormData.groundSpace_eq_iSup_representatives` with the
+  symmetric form of `groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1) B (by simp) L`.
+- **Seen:** 2 occurrences, in
+  `TNLean/MPS/ParentHamiltonian/CanonicalBlockGroundSpaceAtInjectivityLength.lean` and
+  `TNLean/MPS/ParentHamiltonian/Martingale/CanonicalGapAtSimultaneousInjectivity.lean`
+  (recorded 2026-09-26, PR #8183 review).
+- **Abstraction:** proposed
+  `CPSVCanonicalFormData.groundSpace_eq_toTensorFromBlocks_representatives` beside
+  `CPSVCanonicalFormData.groundSpace_eq_iSup_representatives` in
+  `TNLean/MPS/ParentHamiltonian/CPSVOriginalRange.lean`.
+- **Notes:** below the rule of three; promote at the third occurrence or together with the
+  gap-transfer lemma above.
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected
