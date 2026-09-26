@@ -5326,6 +5326,40 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     the required orientation is $W_i=V_i^\dagger$.
 \end{proof}
 
+\begin{corollary}[Unitary gauges for normalized source decompositions]
+    \label{cor:mpug_normalized_source_decomposition_gauges}
+    \lean{MPOTensor.exists_unitary_source_gauges_of_isometric_second_factors}
+    \leanok
+    \uses{thm:mpug_source_decomposition_gauges}
+    Under the hypotheses of Theorem~\ref{thm:mpug_source_decomposition_gauges},
+    suppose in addition that
+    \begin{align}
+        X_2^\dagger X_2 & =I_\ell,
+                        & \widetilde X_2^\dagger\widetilde X_2 & =I_\ell.
+    \end{align}
+    Then there exist unitaries $W_1\in\operatorname{Mat}_r(\C)$ and
+    $W_2\in\operatorname{Mat}_\ell(\C)$ such that, for $i=1,2$,
+    \begin{align}
+        \widetilde X_i & =X_iW_i,
+                       & \widetilde Y_i & =W_i^\dagger Y_i.
+    \end{align}
+    This is the isometrically normalized specialization of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging};
+    the additional isometry hypotheses remove the scalar freedom.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_decomposition_gauges}
+    If $d=0$, all four equalities have an empty physical index and hold
+    with identity gauges. If $d>0$, unitarity of $u$ gives $r\ell=d^2>0$,
+    so $\ell>0$. The preceding theorem gives
+    $\widetilde X_2=\delta X_2W_2$ with $\delta>0$. The two isometry
+    identities and unitarity of $W_2$ imply
+    $I_\ell=\delta^2I_\ell$. Since $\ell>0$, a diagonal entry gives
+    $\delta^2=1$, hence $\delta=1$. Substitution into the four comparison
+    identities proves the claim.
+\end{proof}
+
 \begin{definition}[Unitary factorization comparison]
     \label{def:mpug_unitary_factorization_comparison}
     \lean{Matrix.unitaryFactorizationComparison,
