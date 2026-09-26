@@ -83,11 +83,12 @@ with bond dimension $d$~\cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
         MPSTensor.ghzCyclicShiftAction,
         MPSTensor.ghzTensorD_isOnSiteSymmetric_cyclic}
     \leanok
-    \uses{def:ghz_tensor_d, def:on_site_symmetric, thm:ghz_d_mpv}
+    \uses{def:ghz_tensor_d, def:on_site_symmetric}
     Let the symmetric group on $\{0,\ldots,d-1\}$ act on $\C^d$ by permutation
     matrices. The GHZ tensor on a $d$-level system is on-site symmetric under
-    this action, and in particular under the cyclic group $\Z_d$ acting by the
-    cyclic shift $\ket{i}\mapsto\ket{i+1 \bmod d}$.
+    this action. In particular, for $d\ge1$ it is on-site symmetric under the
+    cyclic group $\Z_d$ acting by the cyclic shift
+    $\ket{i}\mapsto\ket{i+1 \bmod d}$.
 \end{theorem}
 
 \begin{proof}
