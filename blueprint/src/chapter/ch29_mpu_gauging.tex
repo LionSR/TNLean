@@ -4410,7 +4410,7 @@ space of $(MN)P$.
         MPOTensor.GroupFamily.ActionData.fuseV,
         MPOTensor.GroupFamily.ActionData.lSymbol}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols}
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols, def:mpv_state}
     Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain},
     and let $A$ be a matrix product state tensor with
     $O_g\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ for every $g$ and every $N\geq1$.
@@ -4458,8 +4458,8 @@ space of $(MN)P$.
     \label{thm:mpug_single_block_l_compatibility}
     \lean{MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol}
     \leanok
-    \uses{def:mpug_single_block_l_symbol, def:mpug_anomaly_three_cochain,
-        def:mpug_l_symbols}
+    \uses{def:mpug_single_block_l_symbol, thm:mpug_single_block_l_symbol_spec,
+        def:mpug_anomaly_three_cochain, def:mpug_l_symbols}
     In the setting of Theorem~\ref{thm:mpug_single_block_l_symbol_spec},
     for all $g,h,k\in G$,
     \begin{align}
@@ -4528,7 +4528,8 @@ space of $(MN)P$.
     \lean{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant,
         MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, def:mpug_trivial_gauge_class}
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_trivial_gauge_class,
+        def:mpv_state}
     Let $\{O_g\}$ be matrix product operator tensors with normal
     doubled-index tensors and $O_gO_h=O_{gh}$ on every nonempty chain. If a
     normal matrix product state tensor of positive bond dimension satisfies
