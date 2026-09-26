@@ -12,4 +12,5 @@ import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.MatrixPolar
+import TNLean.MPS.Preparation.NonNormalFixedPoint
 import TNLean.MPS.Preparation.Sequential

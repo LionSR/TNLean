@@ -611,3 +611,12 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
   $\sigma_y$ and the scalar $-1$, so the states differ only by the global sign
   $(-1)^N$; the printed Pauli form holds exactly with the phase of $\ket{+}$
   conjugated. These identities are formally verified.
+
+For the log-depth preparation of matrix product states in arXiv:2307.01696:
+
+- `mswc24_ghz_form_local_orthogonality.tex` records that the GHZ form of the
+  fixed-point state of a basis of normal tensors, eq. (19), is stated for an
+  arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
+  hypothesis, that the isometry of `W` and the normalization of `|Ω'⟩` take the
+  local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` asserted after eq. (S7) as a
+  hypothesis, and that disjoint supports give its off-diagonal half.
