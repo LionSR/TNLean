@@ -28,7 +28,9 @@ this file proves, for every `0 < γ < 1/2`, explicit forms of
 Both are stated as `≤ C y e^{C y}` with `y = (N/q) e^{-γ q/ξ}` and a constant `C` depending only
 on `A`, `σ`, `λ₂`, and `γ`, for all `q` and all `M ≥ 1`. This is the form in which the source's
 iteration closes (arXiv:2103.13367, eq. `finished`: `ε_q + ε_q² (1 + ε_q/M)^{M-2}`), and it gives
-the `O`-bound whenever `y` stays bounded; `bound_of_le_one` variants record that step.
+the `O`-bound whenever `y` stays bounded. The variants ending in `_mul` state the `O`-bound
+itself, `≤ C (N/q) e^{-γ q/ξ}` for all `q` and all `M ≥ 1`: for `y > 1` it follows from `ε ≤ 1`
+and from the boundedness of the norms `‖φ_N(A)‖`.
 
 ## Proof outline (following arXiv:2103.13367)
 
@@ -49,8 +51,13 @@ the `O`-bound whenever `y` stays bounded; `bound_of_le_one` variants record that
 * `norm_pow_sub_pow_le_of_isIdempotentElem` — the telescoping bound of step 3.
 * `CFC.norm_sqrt_sub_sqrt_le` — `‖√a - √b‖ ≤ √‖a - b‖` in a C⋆-algebra.
 * `MPSTensor.exists_norm_transferMap_pow_sub_le` — the transfer-map gap of step 1.
-* `MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le` — the overlap estimate.
-* `MPSTensor.exists_approximationError_le` — the approximation error, Lemma 1'(i).
+* `MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le` and its `O`-form
+  `MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul` — the overlap estimate
+  (S29) of arXiv:2103.13367.
+* `MPSTensor.normalizedMPVState`, `MPSTensor.approximatingMPVState` — the normalized states
+  `φ_N` and `φ̃_N`.
+* `MPSTensor.exists_approximationError_le` and its `O`-form
+  `MPSTensor.exists_approximationError_le_mul` — the approximation error, Lemma 1'(i).
 
 ## References
 
@@ -748,6 +755,101 @@ theorem exists_abs_norm_mpvState_sq_sub_one_le (A : MPSTensor d D) (hN : Kraus.I
   rw [← Real.norm_eq_abs, ← Complex.norm_real, hc, mul_assoc]
   exact (htrace _).trans (mul_le_mul_of_nonneg_left (hT N) hK₄)
 
+/-- The periodic states of a normal tensor in the gauge of `exists_norm_transferMap_pow_sub_le`
+have bounded norms: `c_N² = Tr E_A^N ≤ B` for all `N`. -/
+theorem exists_norm_mpvState_sq_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
+    (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
+    (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) :
+    ∃ B : ℝ, ∀ N : ℕ, ‖mpvState A N‖ ^ 2 ≤ B := by
+  have : NeZero D := ⟨by rintro rfl; simp at htr⟩
+  have hNT := isNormalTensor_of_isNormal_leftCanonical A hN hA
+  have hCh := Kraus.isChannel_mapLM A hA
+  obtain ⟨δ, hδ, hgap⟩ := uniform_eigenvalue_gap_of_finite_lt_one
+    (Module.End.finite_hasEigenvalue (Kraus.transferMap A)) fun μ hμ hne =>
+      lt_of_le_of_ne (hCh.eigenvalue_norm_le_one μ hμ)
+        fun h => hne (hNT.primitive_transfer.unique_peripheral μ hμ h)
+  set t := max (1 - δ) (1 / 2)
+  have ht0 : 0 < t := lt_max_of_lt_right (by norm_num)
+  have ht1 : t ≤ 1 := max_le (by linarith) (by norm_num)
+  have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
+  obtain ⟨K, hK, hc⟩ := exists_abs_norm_mpvState_sq_sub_one_le A hN hA hσ htr hfix
+    (lam₂ := (t : ℂ)) (fun μ hμ hne => by rw [hnorm]; exact (hgap μ hμ hne).trans (le_max_left _ _))
+    (γ := 1 / 4) (by norm_num) (by norm_num)
+  refine ⟨1 + K, fun N => ?_⟩
+  have hx : Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ≤ 1 := by
+    rw [neg_div_correlationLength, hnorm, Real.exp_le_one_iff]
+    exact mul_nonpos_of_nonneg_of_nonpos (by norm_num) (Real.log_nonpos ht0.le ht1)
+  have hpow : (Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ^ 2) ^ N ≤ 1 :=
+    pow_le_one₀ (by positivity) (pow_le_one₀ (by positivity) hx)
+  have := (abs_le.1 ((hc N).trans (mul_le_of_le_one_right hK hpow))).2
+  linarith
+
+/-- The overlap of two periodic states is bounded by the product of their norms. -/
+theorem norm_mpvOverlap_le {n D₁ D₂ : ℕ} (X : MPSTensor n D₁) (Y : MPSTensor n D₂) (M : ℕ) :
+    ‖mpvOverlap X Y M‖ ≤ ‖mpvState X M‖ * ‖mpvState Y M‖ := by
+  rw [mpvOverlap_eq_star_mpvInner, norm_star, mpvInner]
+  exact norm_inner_le_norm _ _
+
+/-- The positive part of the `q`-site blocked tensor generates, on `M` blocks, a state of the
+same norm as the periodic state of `A` on `qM` sites: both squared norms are `Tr E_A^{qM}`
+(arXiv:2307.01696, text after eq. (6): `E_P = E_B = E_A^q`). -/
+theorem norm_mpvState_polarPosTensor_blockTensor [NeZero D] (A : MPSTensor d D) (q M : ℕ) :
+    ‖mpvState (polarPosTensor (blockTensor A q)) M‖ = ‖mpvState A (q * M)‖ := by
+  have h : ((‖mpvState (polarPosTensor (blockTensor A q)) M‖ ^ 2 : ℝ) : ℂ) =
+      ((‖mpvState A (q * M)‖ ^ 2 : ℝ) : ℂ) := by
+    rw [ofReal_norm_mpvState_sq, ofReal_norm_mpvState_sq,
+      ← trace_transferMatrix_transferMap_pow_eq_mpvOverlap,
+      ← trace_transferMatrix_transferMap_pow_eq_mpvOverlap,
+      transferMap_polarPosTensor_blockTensor, transferMatrix_pow, ← pow_mul]
+  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1
+    (Complex.ofReal_injective h)
+
+/-- **Overlap of the positive part with the fixed point**, `O`-form (arXiv:2103.13367,
+Supplemental Material, eq. (S29), quoted as arXiv:2307.01696, eq. (S9)): in the setting of
+`exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le`, there is `C` with
+`|1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩|| ≤ C (N/q) e^{-γ q/ξ}` for all `q` and all `M ≥ 1`, `N = qM`.
+
+For `(N/q) e^{-γ q/ξ} ≤ 1` this is the explicit bound; otherwise both overlaps are bounded,
+since `‖φ_M(P_q)‖ = ‖φ_N(A)‖` and the norms `‖φ_N(A)‖` are bounded. -/
+theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul (A : MPSTensor d D)
+    (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
+    (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
+      |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖| ≤
+        C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
+  have : NeZero D := ⟨by rintro rfl; simp at htr⟩
+  obtain ⟨C, hC, h⟩ :=
+    exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le A hN hA hσ htr hfix hlam hγ0 hγ
+  obtain ⟨B, hB⟩ := exists_norm_mpvState_sq_le A hN hA hσ htr hfix
+  have hB0 : 0 ≤ B := (sq_nonneg _).trans (hB 0)
+  refine ⟨C * Real.exp C + (2 + B), by positivity, fun q M _ => ?_⟩
+  set y := (M : ℝ) * Real.exp (-γ * q / correlationLength lam₂)
+  have hy0 : 0 ≤ y := by positivity
+  rcases le_or_gt y 1 with hy | hy
+  · have hexp : Real.exp (C * y) ≤ Real.exp C := Real.exp_le_exp.2 (by nlinarith)
+    calc _ ≤ C * y * Real.exp (C * y) := h q M
+      _ ≤ C * y * Real.exp C := by gcongr
+      _ ≤ (C * Real.exp C + (2 + B)) * y := by nlinarith [Real.exp_pos C]
+  · have hz : ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖ ≤ 1 + B := by
+      have hfp : ‖mpvState (fixedPointTensor σ) M‖ = 1 := by
+        have h1 := ofReal_norm_mpvState_sq (fixedPointTensor σ) M
+        rw [mpvOverlap_fixedPointTensor_self hσ.posSemidef htr] at h1
+        exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1
+          (Complex.ofReal_injective (by rw [h1]; simp))
+      refine (norm_mpvOverlap_le _ _ M).trans ?_
+      rw [hfp, mul_one, norm_mpvState_polarPosTensor_blockTensor]
+      nlinarith [hB (q * M), norm_nonneg (mpvState A (q * M))]
+    calc _ ≤ 1 + ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖ := by
+          rw [abs_le]; constructor <;> linarith [norm_nonneg
+            (mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M)]
+      _ ≤ 2 + B := by linarith
+      _ ≤ (2 + B) * y := le_mul_of_one_le_right (by linarith) hy.le
+      _ ≤ (C * Real.exp C + (2 + B)) * y := by
+          have : 0 ≤ C * Real.exp C * y := by positivity
+          nlinarith
+
 /-! ### The approximation error -/
 
 /-- The normalized periodic state `|φ_N⟩ = c_N⁻¹ |φ_N(A)⟩` with `c_N = ‖φ_N(A)‖`
@@ -825,7 +927,7 @@ and every number of blocks `M ≥ 1`, with `N = Mq` and `y = (N/q) e^{-γ q/ξ} 
 the error `ε = 1 - |⟨φ̃_N|φ_N⟩|` of the approximating state satisfies `ε ≤ C y e^{C y}`.
 
 In particular `ε = O((N/q) e^{-γ q/ξ})` whenever `(N/q) e^{-γ q/ξ}` stays bounded (eq. (17)
-and eq. (S11)); see `exists_approximationError_le_of_le_one`.
+and eq. (S11)); see `exists_approximationError_le_mul` for the unconditional `O`-form.
 
 The proof is the triangle inequality of the source,
 `ε ≤ |1 - c_N |⟨φ̃_N|φ_N⟩|| + |c_N - 1| |⟨φ̃_N|φ_N⟩|`, with the first term bounded by
@@ -946,23 +1048,30 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     linarith
 
 /-- **Approximation error, normal case, `O`-form** (arXiv:2307.01696, Lemma 1, eq. (17), and
-Lemma 1'(i), eq. (S11)): in the setting of `exists_approximationError_le`, there is `C'` with
-`ε(φ̃_N, φ_N) ≤ C' (N/q) e^{-γ q/ξ}` whenever `(N/q) e^{-γ q/ξ} ≤ 1`. -/
-theorem exists_approximationError_le_of_le_one (A : MPSTensor d D) (hN : Kraus.IsNormal A)
+Lemma 1'(i), eq. (S11)): in the setting of `exists_approximationError_le`, there is `C` with
+`ε(φ̃_N, φ_N) ≤ C (N/q) e^{-γ q/ξ}` for every block length `q` and every number of blocks
+`M ≥ 1`, `N = Mq`.
+
+For `(N/q) e^{-γ q/ξ} ≤ 1` this is the explicit bound; otherwise it holds because `ε ≤ 1`. -/
+theorem exists_approximationError_le_mul (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
-    ∃ C' : ℝ, 0 < C' ∧ ∀ (q M : ℕ) [NeZero M],
-      M * Real.exp (-γ * q / correlationLength lam₂) ≤ 1 →
+    ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
       1 - ‖⟪approximatingMPVState A σ q M, normalizedMPVState A (M * q)⟫_ℂ‖ ≤
-        C' * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
+        C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
   obtain ⟨C, hC, h⟩ := exists_approximationError_le A hN hA hσ htr hfix hlam hγ0 hγ
-  refine ⟨C * Real.exp C, by positivity, fun q M _ hy => (h q M).trans ?_⟩
+  refine ⟨C * Real.exp C + 1, by positivity, fun q M _ => ?_⟩
   set y := (M : ℝ) * Real.exp (-γ * q / correlationLength lam₂)
   have hy0 : 0 ≤ y := by positivity
-  have : Real.exp (C * y) ≤ Real.exp C := Real.exp_le_exp.2 (by nlinarith)
-  calc C * y * Real.exp (C * y) ≤ C * y * Real.exp C := by gcongr
-    _ = C * Real.exp C * y := by ring
+  rcases le_or_gt y 1 with hy | hy
+  · have hexp : Real.exp (C * y) ≤ Real.exp C := Real.exp_le_exp.2 (by nlinarith)
+    calc _ ≤ C * y * Real.exp (C * y) := h q M
+      _ ≤ C * y * Real.exp C := by gcongr
+      _ ≤ (C * Real.exp C + 1) * y := by nlinarith [Real.exp_pos C]
+  · have : 0 ≤ ‖⟪approximatingMPVState A σ q M, normalizedMPVState A (M * q)⟫_ℂ‖ :=
+      norm_nonneg _
+    nlinarith [Real.exp_pos C, mul_pos hC (Real.exp_pos C)]
 
 end MPSTensor
