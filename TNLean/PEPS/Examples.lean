@@ -10,6 +10,8 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Examples.AKLT
 import TNLean.PEPS.Examples.CZX
+import TNLean.PEPS.Examples.Classical
 import TNLean.PEPS.Examples.Cluster
 import TNLean.PEPS.Examples.GHZ
+import TNLean.PEPS.Examples.QuantumDouble
 import TNLean.PEPS.Examples.RVB

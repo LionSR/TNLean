@@ -76,6 +76,7 @@ import TNLean.MPS.MPU.SourceYTwoNormalization
 import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
+import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.TensorProduct
 import TNLean.MPS.MPU.TensorProductCanonicalForm

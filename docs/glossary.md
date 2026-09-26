@@ -426,6 +426,43 @@ normalizations.
   `docs/paper-gaps/peps_injective_ft_section3_route.tex`. Never cite either
   bridge as unconditional.
 
+#### `TNLean.PEPS.IsGInjective`
+
+- **Declaration:**
+  `TNLean.PEPS.IsGInjective (ρ : Representation ℂ G W) (T : W →ₗ[ℂ] P) : Prop`.
+- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Meaning:** the virtual-to-physical map `T = 𝒫(A)` is invariant under `ρ`
+  and injective on the `ρ`-invariant subspace.
+- **Source:** arXiv:1001.3807, Definition `def:2d-Ug-inj`,
+  `Papers/1001.3807/paper_v3.tex:1278-1296`.
+- **Sanctioned bridges:** `TNLean.PEPS.isGInjective_iff_exists_leftInverse`
+  (the source's left inverse with `L 𝒫(A) = Π_U`, for finite `G`),
+  `TNLean.PEPS.isGInjective_trivial_iff` (trivial `ρ`: injectivity of `T`), and
+  `TNLean.PEPS.siteMap_injective_iff` (injectivity of the map of a four-leg
+  site tensor is linear independence of its physical vectors, the vertex-wise
+  condition of `IsVertexInjective`).
+- **Caveat / paper gap:** the source requires `ρ` semi-regular; here `ρ` is a
+  parameter and each instance names its representation. Recorded in
+  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`. No bridge yet
+  connects `IsGInjective` of a site map to `IsVertexInjective` of the torus PEPS
+  `torusSiteTensor`.
+
+#### `TNLean.PEPS.IsGIsometric`
+
+- **Declaration:** `TNLean.PEPS.IsGIsometric (ρ : Representation ℂ G (ι → ℂ))
+  (T : (ι → ℂ) →ₗ[ℂ] (κ → ℂ)) : Prop`.
+- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Meaning:** `IsGInjective ρ T` and `⟪T x, T y⟫ = c ⟪x, y⟫` for invariant
+  `x, y` and one constant `c > 0`.
+- **Source:** arXiv:1001.3807, Definition `def:iso:isopeps`,
+  `Papers/1001.3807/paper_v3.tex:1692-1697`.
+- **Caveat / paper gap:** the source asks for the left-regular representation
+  and for `𝒫(A)` to be unitary between its domain and range, that is `c = 1`;
+  the factor `c` absorbs the missing normalization of the source's
+  quantum-double tensor (`c = |G|`), and the rescaling `T / √c` gives the
+  printed notion. Recorded in
+  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
 #### `TNLean.PEPS.IsTorusDimerCovering`
 
 - **Declaration:**
@@ -921,9 +958,10 @@ The following notions use different transfer objects and are not interchangeable
   on normalized vectors.
 - **Caveat:** the characterization compares rays: it needs `ψ ≠ 0`, and the
   scalar `c` matters only at `N = 0`, where every open-boundary coefficient is
-  the empty product `1`. Scheme 3 of Theorem `Thm:seqwith` (the deterministic
-  transition scheme for `d = 2`) and sequential generation without an ancilla
-  are not formalized.
+  the empty product `1`. Scheme 3 of Theorem `Thm:seqwith` is
+  `MPSPreparation.IsTransitionGenerated`, and the schemes without an ancilla are
+  `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla` and
+  `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla`.
 
 ### `MPSPreparation.IsDeterministicallyGenerated`
 
@@ -948,6 +986,67 @@ The following notions use different transfer objects and are not interchangeable
   $\ket{0}$. Only the two directions of Theorem `Thm:seqwith` for schemes 1 and 2
   are formalized; minimality of the resources in the successive-decomposition
   recipe is not.
+
+### `MPSPreparation.IsTransitionInteraction` and `MPSPreparation.IsTransitionGenerated`
+
+- **Declarations:**
+  `MPSPreparation.IsTransitionInteraction (T : Matrix ((Fin D × Fin 2) × Fin 2) ((Fin D × Fin 2) × Fin 2) ℂ) : Prop`
+  and
+  `MPSPreparation.IsTransitionGenerated (D : ℕ) (ψ : (Fin N → Fin 2) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/SequentialTransition.lean`.
+- **Meaning:** `IsTransitionInteraction T` says that `T` acts on ancilla
+  `ℂ^D`, tag qubit, and site qubit by
+  $\ket{\varphi}\ket{1}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{1}$ and
+  $\ket{\varphi}\ket{0}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{0}$.
+  `IsTransitionGenerated D ψ` says that there are unitaries `W k` on
+  $\mathbb C^D\otimes\mathbb C^2$ and unit vectors $\varphi_I,\varphi_F$ such
+  that the steps "ancilla unitary, then the fixed interaction", applied to
+  $\ket{\varphi_I}\otimes\ket{0}^{\otimes N}$, leave the joint state
+  $\ket{\varphi_F}\otimes\ket{\psi}$ (`MPSPreparation.transitionJointState`).
+  A step on a site in $\ket{0}$ is `MPSPreparation.transitionStep`.
+- **Source:** arXiv:quant-ph/0608197, scheme 3 (deterministic transition
+  schemes) of section "Generation of MPS",
+  `Papers/quant-ph_0608197/MPSarchive.tex:1555-1567`; the interaction is the
+  `D`-standard map `T` of arXiv:quant-ph/0501096, eq. `IsofromT`.
+- **Sanctioned bridges:**
+  `MPSPreparation.transitionStep_eq_of_isTransitionInteraction` (a step equals
+  the fixed interaction after the ancilla unitary, for any `T` satisfying
+  `IsTransitionInteraction`), `MPSPreparation.isTransitionGenerated_iff`
+  (equivalent to normalization together with `∃ c ≠ 0, HasOBCRep D (c • ψ)`),
+  `MPSPreparation.isDeterministicallyGenerated_of_isTransitionGenerated`, and
+  `MPSPreparation.isTransitionGenerated_of_isDeterministicallyGenerated`.
+- **Caveat:** the scheme is for qubit chains, `d = 2`. The source does not
+  specify the interaction on site inputs $\ket{1}$, so `IsTransitionInteraction`
+  constrains only site inputs $\ket{0}$, which are the only ones that occur.
+
+### `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla` and `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla`
+
+- **Declarations:**
+  `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla [NeZero d] {n : ℕ} (ψ : (Fin (n + 2) → Fin d) → ℂ) : Prop`
+  and
+  `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla [NeZero d] {n : ℕ} (ψ : (Fin (n + 2) → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/SequentialNoAncilla.lean`.
+- **Meaning:** `ψ = MPSPreparation.noAncillaState n U` for operations
+  `U k` on $\mathbb C^d\otimes\mathbb C^d$, the source's $U^{[k+1]}$ acting on
+  sites `k + 1` and `k + 2` of a chain of `n + 2` sites initially in
+  $\ket{0}^{\otimes(n+2)}$; the operations are arbitrary in the probabilistic
+  scheme (unnormalized output) and unitary in the deterministic one.
+  Configurations are indexed by ket position, as for
+  `MPSPreparation.IsProbabilisticallyGenerated`.
+- **Source:** arXiv:quant-ph/0608197, section "Sequential generation without
+  ancilla", `Papers/quant-ph_0608197/MPSarchive.tex:1580-1593`.
+- **Sanctioned bridges:**
+  `MPSPreparation.isProbabilisticallyGeneratedWithoutAncilla_iff` (equivalent to
+  `HasOBCRep d ψ`), `MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff`
+  (equivalent to normalization together with `HasOBCRep d ψ`), and
+  `MPSPreparation.noAncillaState_eq_eval` (the site matrices
+  $A_{i,\beta\alpha}=\bra{i,\beta}U\ket{\alpha,0}$, `MPSPreparation.pairStep`).
+- **Caveat:** the chain has at least two sites, since the first operation acts
+  on sites `1` and `2`; this is a **Local fix** recorded in
+  `docs/paper-gaps/pgvwc07_sequential_no_ancilla_two_sites.tex`. The
+  identification of the full chain state after `U^{[k]}` with
+  $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$ is the motivation for the
+  recursive definition, not a proved statement.
 
 ### `MPSPreparation.HasOBCRep`
 

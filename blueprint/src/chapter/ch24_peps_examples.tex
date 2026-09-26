@@ -78,7 +78,8 @@ $v$ to $(x,y+1)$ (top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$
 On a torus of width two the right and left neighbours of a site coincide and
 the two edges joining them are one edge of the lattice graph, so the four
 legs of a site are not four distinct bonds. The contraction formula, and the
-cluster, CZX, AKLT and RVB statements below, therefore require $w,h\ge 3$; the
+cluster, CZX, AKLT, RVB and classical-model statements below, therefore require
+$w,h\ge 3$; the
 source constructions are local and apply to every torus
 \cite{gap:rmp_peps_examples_small_torus}.
 
@@ -243,6 +244,193 @@ model is a matrix product unitary, and the three-cocycle attached to a group
 of matrix product unitaries is constructed in
 Theorems~\ref{thm:mpug_anomaly_three_cocycle}
 and~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
+
+\subsection{The toric code and quantum double models}
+
+Let $G$ be a finite group. The quantum double model of $G$
+\cite{Kitaev2003FaultTolerant} carries a spin with basis
+$\{\ket{g}\}_{g\in G}$ on every edge of a square lattice; for
+$G=\mathbb{Z}_2$ it is the toric code. The review gives two PEPS
+representations \cite[Appendix~A, ``The Toric Code and quantum double
+    models'']{Cirac2021Matrix}. Their symmetries are phrased through the map
+$\mathcal{P}(A)=\sum A^i_{\alpha\beta\gamma\delta}\ket{i}\bra{\alpha\beta\gamma\delta}$
+from the virtual to the physical system
+\cite[Section~``MPS and PEPS'']{Schuch2010PEPS}.
+
+\begin{definition}[$G$-injective and $G$-isometric tensors]%
+    \label{def:peps_g_injective}
+    \lean{TNLean.PEPS.IsGInjective, TNLean.PEPS.IsGIsometric,
+        TNLean.PEPS.siteMap, TNLean.PEPS.siteMap_apply}
+    \leanok
+    Let $g\mapsto U_g$ be a representation of a finite group $G$ on the
+    virtual system of a tensor $A$, and let $\Pi_U$ be the projector onto the
+    $U_g$-invariant subspace. The tensor is $G$-injective if
+    $\mathcal{P}(A)U_g=\mathcal{P}(A)$ for every $g$ and $\mathcal{P}(A)$ is
+    injective on the invariant subspace
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+    It is $G$-isometric if moreover
+    $\mathcal{P}(A)$ restricted to the invariant subspace is a multiple of an
+    isometry, $\langle\mathcal{P}(A)x,\mathcal{P}(A)y\rangle
+        =c\,\langle x,y\rangle$ for invariant $x,y$ and one constant $c>0$
+    \cite[Section~``Isometric PEPS'']{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Left-inverse form of $G$-injectivity]%
+    \label{thm:peps_g_injective_left_inverse}
+    \lean{TNLean.PEPS.apply_averageMap_of_forall_comp_eq,
+        TNLean.PEPS.isGInjective_iff_exists_leftInverse}
+    \leanok
+    \uses{def:peps_g_injective}
+    A tensor is $G$-injective if and only if
+    $\mathcal{P}(A)U_g=\mathcal{P}(A)$ for every $g$ and $\mathcal{P}(A)$ has a
+    left inverse $L$ with $L\,\mathcal{P}(A)=\Pi_U$
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    An invariant map satisfies $\mathcal{P}(A)\Pi_U=\mathcal{P}(A)$, since
+    $\Pi_U$ is the average of the $U_g$. If $\mathcal{P}(A)$ is injective on
+    the invariant subspace, choose a linear map $L$ into the invariant
+    subspace with $L\,\mathcal{P}(A)x=x$ for invariant $x$; then
+    $L\,\mathcal{P}(A)=L\,\mathcal{P}(A)\Pi_U=\Pi_U$. Conversely, if
+    $L\,\mathcal{P}(A)=\Pi_U$ and $\mathcal{P}(A)x=0$ for an invariant $x$, then
+    $x=\Pi_Ux=L\,\mathcal{P}(A)x=0$.
+\end{proof}
+
+\begin{theorem}[$G$-injectivity for the trivial representation]%
+    \label{thm:peps_g_injective_trivial}
+    \lean{TNLean.PEPS.isGInjective_trivial_iff,
+        TNLean.PEPS.siteMap_injective_iff}
+    \leanok
+    \uses{def:peps_g_injective}
+    For the trivial representation, $G$-injectivity is injectivity of
+    $\mathcal{P}(A)$, that is, linear independence of the physical vectors
+    $A^{\bullet}_{\alpha\beta\gamma\delta}$ indexed by the virtual
+    configurations.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every vector is invariant under the trivial representation, and
+    $\mathcal{P}(A)$ is the linear map whose columns are the vectors
+    $A^{\bullet}_{\alpha\beta\gamma\delta}$.
+\end{proof}
+
+The source requires $U_g$ to contain every irreducible representation for
+$G$-injectivity and to be the left-regular representation for
+$G$-isometry; here the representation is a parameter, and each instance
+below uses a regular representation. The source's tensors are not
+normalized, and the constant $c$ absorbs the normalization
+\cite{gap:rmp_peps_quantum_double_g_isometry}.
+
+\begin{definition}[Dual quantum-double tensor]%
+    \label{def:peps_quantum_double_dual}
+    \lean{TNLean.PEPS.colorDiag, TNLean.PEPS.colorDiag_one,
+        TNLean.PEPS.colorDiag_mul, TNLean.PEPS.quantumDoubleDualSpins,
+        TNLean.PEPS.quantumDoubleDualTensor, TNLean.PEPS.colorShiftRep,
+        TNLean.PEPS.colorShiftRep_apply,
+        TNLean.PEPS.mem_invariants_colorShiftRep_iff}
+    \leanok
+    \uses{def:peps_g_injective}
+    The virtual legs carry colors $h_1$ (left), $h_2$ (top), $h_3$ (right)
+    and $h_4$ (down) in $G$, and the dual tensor is $1$ at the physical
+    configuration
+    $(h_2h_1^{-1},\,h_3h_2^{-1},\,h_3h_4^{-1},\,h_4h_1^{-1})$ of differences
+    of adjacent colors and $0$ elsewhere \cite[Appendix~A, ``The Toric Code
+        and quantum double models'']{Cirac2021Matrix}. The group acts on the
+    virtual system by shifting all four colors,
+    $(U_gx)(h_1,h_2,h_3,h_4)=x(h_1g,h_2g,h_3g,h_4g)$, the right-regular
+    representation on each leg, which the relabeling $h\mapsto h^{-1}$
+    turns into the left-regular one
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{definition}
+
+\begin{theorem}[The dual tensor is $G$-isometric]%
+    \label{thm:peps_quantum_double_dual_g_isometric}
+    \lean{TNLean.PEPS.quantumDoubleDualSpins_mul_colorDiag,
+        TNLean.PEPS.quantumDoubleDualSpins_eq_iff,
+        TNLean.PEPS.siteMap_quantumDoubleDualTensor_apply,
+        TNLean.PEPS.siteMap_quantumDoubleDualTensor_apply_spins,
+        TNLean.PEPS.siteMap_quantumDoubleDualTensor_apply_spins_of_mem_invariants,
+        TNLean.PEPS.isGInjective_quantumDoubleDualTensor,
+        TNLean.PEPS.isGIsometric_quantumDoubleDualTensor,
+        TNLean.PEPS.ToricCodeGroup,
+        TNLean.PEPS.isGIsometric_toricCodeDualTensor}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_quantum_double_dual}
+    For every finite group $G$ the dual quantum-double tensor is
+    $G$-injective and $G$-isometric, with constant $c=|G|$, for the
+    color-shift representation
+    \cite[Appendix~A, ``The Toric Code and quantum double
+        models'']{Cirac2021Matrix},
+    \cite[Section~``Examples'', ``The double models'']{Schuch2010PEPS}.
+    In particular the toric code tensor, $G=\mathbb{Z}_2$, is
+    $\mathbb{Z}_2$-isometric.
+\end{theorem}
+
+\begin{proof}\leanok
+    Two colorings have the same differences exactly when they differ by one
+    global shift $h_i\mapsto h_ig$: the shift of the left color determines
+    $g$, and the other three differences then fix the remaining colors.
+    Hence $(\mathcal{P}x)(\text{differences of }h)=\sum_{g}x(hg)$. Invariance
+    follows by reindexing the sum over colorings by a shift. For an
+    invariant $x$ the sum equals $|G|\,x(h)$, so $\mathcal{P}x=0$ forces
+    $x=0$, and
+    $\langle\mathcal{P}x,\mathcal{P}y\rangle
+        =\sum_h\overline{(\mathcal{P}x)(\text{differences of }h)}\,y(h)
+        =|G|\langle x,y\rangle$.
+\end{proof}
+
+The review adds that the equal-weight superposition of plaquette colorings
+is the equal-weight superposition of the configurations obeying Gauss' law.
+This statement about the contracted network is not formalized; on a torus
+the differences of plaquette colorings are the Gauss-law configurations of
+trivial holonomy \cite{gap:rmp_peps_quantum_double_g_isometry}.
+
+\begin{definition}[Primal quantum-double tensor]%
+    \label{def:peps_quantum_double_primal}
+    \lean{TNLean.PEPS.quantumDoublePrimalLabels,
+        TNLean.PEPS.quantumDoublePrimalTensor}
+    \leanok
+    A tensor carries the four edge spins $g_1,g_2,g_3,g_4$ of a plaquette (top
+    left, top right, bottom right, bottom left), and is $1$ when its virtual
+    labels are $g_1g_2$ (top), $g_2^{-1}g_3$ (right), $g_4g_3$ (down) and
+    $g_1g_4^{-1}$ (left), and $0$ otherwise \cite[Appendix~A, ``The Toric Code
+        and quantum double models'']{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[The primal virtual labels fuse to the identity]%
+    \label{thm:peps_quantum_double_primal_fusion}
+    \lean{TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_one,
+        TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_map_mul_eq_one,
+        TNLean.PEPS.quantumDoublePrimalTensor_smul_map_mul,
+        TNLean.PEPS.character_mul_quantumDoublePrimalTensor}
+    \leanok
+    \uses{def:peps_quantum_double_primal}
+    On the support of the primal tensor the virtual labels satisfy
+    $t\,r\,b^{-1}l^{-1}=1$. Hence $\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=1$ for
+    every representation $\pi$ of $G$, in particular every irreducible one,
+    so that each entry of the tensor times the operator
+    $\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}$, acting by $\pi$ on the top and
+    right legs and by $\pi^{-1}$ on the down and left legs, equals the same
+    entry times the identity. For a one-dimensional representation $\chi$
+    the tensor is invariant under this virtual action
+    \cite[Appendix~A, ``The Toric Code and quantum double
+        models'']{Cirac2021Matrix}. This is a statement about one tensor; the
+    resulting symmetry of the contracted network is not formalized
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    $(g_1g_2)(g_2^{-1}g_3)(g_4g_3)^{-1}(g_1g_4^{-1})^{-1}
+        =g_1g_3g_3^{-1}g_4^{-1}g_4g_1^{-1}=1$.
+    Since $\pi$ is multiplicative,
+    \[
+        \pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=\pi(t\,r\,b^{-1}l^{-1})=\pi(1)=1
+    \]
+    on the support, which gives the operator identity entrywise. A
+    one-dimensional representation is the case of a character $\chi$, where
+    the identity reads $\chi(t)\chi(r)\chi(b)^{-1}\chi(l)^{-1}=1$.
+\end{proof}
 
 \subsection{The AKLT state}
 
@@ -492,23 +680,114 @@ $A$ vanish, since a leg carrying $Y$ could then never be in the vacuum state
 The general orientation choices $\pm Y$ on other lattices and the
 spin-liquid properties of the RVB state are not formalized.
 
+\subsection{PEPS from classical models}
+
+Let $q\ge 1$, let $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$ be a
+nearest-neighbour interaction and $\beta\in\mathbb{R}$ an inverse temperature.
+
+\begin{definition}[Classical energy]%
+    \label{def:peps_classical_energy}
+    \lean{TNLean.PEPS.classicalEnergy}
+    \leanok
+    On the torus a configuration $\sigma$ has energy
+    \begin{align}
+        H(\sigma)=\sum_{v}\bigl(h(\sigma_{v},\sigma_{v-(1,0)})
+        +h(\sigma_{v},\sigma_{v-(0,1)})\bigr),
+        \notag
+    \end{align}
+    each nearest-neighbour bond counted once. For symmetric $h$ this is the
+    sum of $h$ over unordered bonds.
+\end{definition}
+
+\begin{definition}[Classical-model tensor]%
+    \label{def:peps_classical_tensor}
+    \lean{TNLean.PEPS.classicalBondMatrix, TNLean.PEPS.classicalSiteTensor,
+        TNLean.PEPS.classicalPEPS}
+    \leanok
+    \uses{def:peps_torus_site_tensor}
+    Let $M=\sum_{i,j}e^{-\beta h(i,j)/2}|i)(j|$. The classical-model tensor is
+    \begin{align}
+        A=\Bigl[\sum_{i}\ket{i}(i\,i\,i\,i|\Bigr]
+        (\mathbb{1}\otimes\mathbb{1}\otimes M\otimes M):
+        \notag
+    \end{align}
+    the top and right legs copy the physical index $s$, and the down and left
+    legs carry $M_{sb}$ and $M_{sl}$ at bond indices $b$ and $l$
+    \cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}. The
+    classical-model PEPS places this tensor at every site of the torus.
+\end{definition}
+
+\begin{theorem}[Coefficients of the classical-model PEPS]%
+    \label{thm:peps_classical_coeff}
+    \lean{TNLean.PEPS.stateCoeff_classicalPEPS,
+        TNLean.PEPS.conj_mul_stateCoeff_classicalPEPS,
+        TNLean.PEPS.normSq_stateCoeff_classicalPEPS}
+    \leanok
+    \uses{def:peps_classical_tensor, def:peps_classical_energy,
+        def:peps_stateCoeff}
+    On a torus of width and height at least three the classical-model PEPS
+    has coefficient
+    $\Coeff(\sigma)=e^{-\beta H(\sigma)/2}$, so
+    $|\Coeff(\sigma)|^{2}=e^{-\beta H(\sigma)}$ is the Gibbs weight of
+    $\sigma$ \cite{gap:rmp_peps_examples_small_torus}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_site_tensor_contraction}
+    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the top and right
+    legs force every bond index to equal the physical index of the site
+    below or to the left of it. The remaining factor at $v$ is
+    $M_{\sigma_{v}\sigma_{v-(0,1)}}M_{\sigma_{v}\sigma_{v-(1,0)}}$, one factor
+    $e^{-\beta h/2}$ for each bond at $v$ read towards its lower and left
+    neighbours, and the product over $v$ is $e^{-\beta H(\sigma)/2}$. The
+    coefficient is real, so its squared modulus is $e^{-\beta H(\sigma)}$.
+\end{proof}
+
+No bond carries a product of two copies of $M$: the entry
+$e^{-\beta h/2}$ is not a square root of a transfer matrix, and no symmetry
+of $h$ is used.
+
+\begin{theorem}[Diagonal expectation values are Gibbs averages]%
+    \label{thm:peps_classical_expectation}
+    \lean{TNLean.PEPS.expectation_classicalPEPS}
+    \leanok
+    \uses{def:peps_classical_tensor, def:peps_classical_energy,
+        def:peps_stateCoeff}
+    Let the torus have width and height at least three and let
+    $O=\sum_{\sigma}O(\sigma)\ket{\sigma}\bra{\sigma}$ be a diagonal observable.
+    For the classical-model PEPS state
+    $\ket{\psi}=\sum_{\sigma}\Coeff(\sigma)\ket{\sigma}$,
+    \begin{align}
+        \frac{\sum_{\sigma}\overline{\Coeff(\sigma)}\,O(\sigma)\Coeff(\sigma)}
+        {\sum_{\sigma}\overline{\Coeff(\sigma)}\Coeff(\sigma)}
+        =\frac{\sum_{\sigma}O(\sigma)e^{-\beta H(\sigma)}}
+        {\sum_{\sigma}e^{-\beta H(\sigma)}},
+        \notag
+    \end{align}
+    that is, $\bra{\psi}O\ket{\psi}/\braket{\psi}{\psi}$ is the expectation
+    value of $O$ in the Gibbs state $e^{-\beta H}/Z$
+    \cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_classical_coeff}
+    Replace $\overline{\Coeff(\sigma)}\Coeff(\sigma)$ by
+    $e^{-\beta H(\sigma)}$ in both sums, by
+    Theorem~\ref{thm:peps_classical_coeff}.
+\end{proof}
+
+In particular the classical correlation functions are expectation values of
+the PEPS. The review adds that at the critical inverse temperature
+$\beta_{c}$ the associated PEPS has correlations decaying as a power law, so
+its parent Hamiltonian must be gapless
+\cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}, since a
+gapped local Hamiltonian has exponentially decaying correlations
+\cite{Hastings2006Spectral,Nachtergaele2006LiebRobinson}. This
+consequence is not formalized.
+
 \subsection{Examples not formalized}
 
-The remaining two-dimensional examples of
-\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} are recorded
-here without formal statements.
-\begin{itemize}
-    \item The toric code and, more generally, the quantum double of a finite
-          group $G$ have two PEPS representations: a primal one enforcing Gauss'
-          law on the virtual indices at the vertices, and a dual one with group
-          variables on the plaquettes, which is $G$-injective, in fact
-          $G$-isometric, for the regular representation. Neither tensor is given in
-          the source by explicit entries, and $G$-injectivity is not formalized.
-    \item String-net models give PEPS tensors built from the $F$-symbols of a
-          bimodule category.
-    \item A classical model with nearest-neighbour interactions at inverse
-          temperature $\beta$ gives the PEPS
-          $\bigl[\sum_i\ket{i}(i\,i\,i\,i|\bigr](\mathbb{1}\otimes\mathbb{1}
-              \otimes M\otimes M)$ with $M=\sum_{i,j}e^{-\beta h(i,j)/2}|i)(j|$,
-          whose diagonal expectation values reproduce those of the Gibbs state.
-\end{itemize}
+The remaining two-dimensional example of
+\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} is recorded
+here without a formal statement: string-net models give PEPS tensors built
+from the $F$-symbols of a bimodule category.
