@@ -21,7 +21,7 @@ this file proves, for every `0 < γ < 1/2`, explicit forms of
   "Proof of Theorem MPS_classification", eq. (S29)), quoted as eq. (S9) of arXiv:2307.01696:
   `|1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩|| = O((N/q) e^{-γ q/ξ})`;
 * the approximation error of arXiv:2307.01696, Lemma 1 and Lemma 1'(i):
-  `ε(φ̃_N, φ_N) = 1 - |⟨φ̃_N|φ_N⟩| = O((N/q) e^{-γ q/ξ})`.
+  `ε(φ'_N, φ_N) = 1 - |⟨φ'_N|φ_N⟩| = O((N/q) e^{-γ q/ξ})`.
 
 Both are stated as `≤ C y e^{C y}` with `y = (N/q) e^{-γ q/ξ}` and a constant `C` depending only
 on `A`, `σ`, `λ₂`, and `γ`, for all `q` and all `M ≥ 1`. This is the form in which the source's
@@ -55,7 +55,7 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
   `MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul` — the overlap estimate
   (S29) of arXiv:2103.13367.
 * `MPSTensor.normalizedMPVState`, `MPSTensor.approximatingMPVState` — the normalized states
-  `φ_N` and `φ̃_N`.
+  `φ_N` and `φ'_N`.
 * `MPSTensor.exists_approximationError_le` and its `O`-form
   `MPSTensor.exists_approximationError_le_mul` — the approximation error, Lemma 1'(i).
 
@@ -375,7 +375,7 @@ noncomputable def approximatingMPVStateRaw (A : MPSTensor d D) (σ : Matrix (Fin
   (EuclideanSpace.equiv (ι := Cfg d (M * q)) (𝕜 := ℂ)).symm fun s =>
     mpv (approximatingTensor (blockTensor A q) σ) ((blockedConfigEquiv d M q).symm s)
 
-/-- The **approximating state** `|φ̃_N⟩ = |φ_M(V P_∞)⟩ / ‖φ_M(V P_∞)‖` on `N = Mq` sites
+/-- The **approximating state** `|φ'_N⟩ = |φ_M(V P_∞)⟩ / ‖φ_M(V P_∞)‖` on `N = Mq` sites
 (arXiv:2307.01696, eqs. (9) and (10)). -/
 noncomputable def approximatingMPVState (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ)
     (q M : ℕ) : MPVSpace d (M * q) :=
@@ -389,7 +389,7 @@ noncomputable def approximatingMPVState (A : MPSTensor d D) (σ : Matrix (Fin D)
 
 /-- For `B_q` injective, the approximating state is the periodic state of `V P_∞` itself
 (its norm is `1`), and its overlap with the periodic state of `A` is the overlap of the
-positive part with the fixed point: `⟨φ̃_N|φ_N(A)⟩ = ⟨φ_M(P_∞)|φ_M(P_q)⟩`.
+positive part with the fixed point: `⟨φ'_N|φ_N(A)⟩ = ⟨φ_M(P_∞)|φ_M(P_q)⟩`.
 
 arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(i): the source's step that the first
 term of its triangle inequality "is exactly equal to the LHS of eq. (S9)", which rests on this
@@ -431,13 +431,13 @@ be normal in the gauge `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `T
 `λ₂` bound the moduli of the eigenvalues of `E_A` other than `1`, with correlation length
 `ξ = -1/log|λ₂|`, and let `0 < γ < 1/2`. There is `C > 0` such that for every block length `q`
 and every number of blocks `M ≥ 1`, with `N = Mq` and `y = (N/q) e^{-γ q/ξ} = M e^{-γ q/ξ}`,
-the error `ε = 1 - |⟨φ̃_N|φ_N⟩|` of the approximating state satisfies `ε ≤ C y e^{C y}`.
+the error `ε = 1 - |⟨φ'_N|φ_N⟩|` of the approximating state satisfies `ε ≤ C y e^{C y}`.
 
 In particular `ε = O((N/q) e^{-γ q/ξ})` whenever `(N/q) e^{-γ q/ξ}` stays bounded (eq. (17)
 and eq. (S11)); see `exists_approximationError_le_mul` for the unconditional `O`-form.
 
 The proof is the triangle inequality of the source,
-`ε ≤ |1 - c_N |⟨φ̃_N|φ_N⟩|| + |c_N - 1| |⟨φ̃_N|φ_N⟩|`, with the first term bounded by
+`ε ≤ |1 - c_N |⟨φ'_N|φ_N⟩|| + |c_N - 1| |⟨φ'_N|φ_N⟩|`, with the first term bounded by
 `exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le` (eq. (S9)) and the second by
 `exists_abs_norm_mpvState_sq_sub_one_le`. The source drops the second term using `q = o(N)`;
 here it is bounded by `e^{-2γN/ξ} ≤ e^{-γ q/ξ}` since `N ≥ q`, so no condition relating `q`
@@ -556,7 +556,7 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
 
 /-- **Approximation error, normal case, `O`-form** (arXiv:2307.01696, Lemma 1, eq. (17), and
 Lemma 1'(i), eq. (S11)): in the setting of `exists_approximationError_le`, there is `C` with
-`ε(φ̃_N, φ_N) ≤ C (N/q) e^{-γ q/ξ}` for every block length `q` and every number of blocks
+`ε(φ'_N, φ_N) ≤ C (N/q) e^{-γ q/ξ}` for every block length `q` and every number of blocks
 `M ≥ 1`, `N = Mq`.
 
 For `(N/q) e^{-γ q/ξ} ≤ 1` this is the explicit bound; otherwise it holds because `ε ≤ 1`. -/
