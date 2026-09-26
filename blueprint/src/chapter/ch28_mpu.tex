@@ -6962,8 +6962,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & Y_2(\mathcal V)
          & =W_2^\dagger Y_2(\mathcal U)(I_d\otimes z^\dagger).
     \end{align}
-    Equivalently, the source-diagram gauges have the orientation
-    $x=W_2^\dagger$ and $y=W_1^\dagger$. This is the forward factor
+    This is the forward factor
     comparison associated with the diagrams in
     \cite[Fundamental Theorem of MPU]{Cirac2017MPU}; it does not assert
     a converse from the local relations to equality at every chain length.
@@ -6980,19 +6979,48 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_source_factor_normalizations,
         thm:mpu_source_factor_right_inverses, ThmFund1,
         cor:mpug_normalized_source_decomposition_gauges}
-    The two cut identities give transported factorizations with the four
-    exterior matrices displayed in the statement. The right exterior
-    matrices are unitary, so the transported right factors retain right
-    inverses. The left exterior matrix of the second cut is unitary, so its
-    transported left factor remains an isometry. The contraction defining
-    $u$ is unchanged: its interior virtual product is $z^\dagger z=I_D$.
-    Rank preservation identifies the transported factors with the selected
-    source-rank spaces. Simplicity and the source-gate equivalence give
-    unitarity of both $u$ contractions. The selected factors have left
-    inverses from their weighted first-cut and ordinary second-cut
-    normalizations. The normalized source-decomposition comparison now gives
-    the two unitary changes $W_1,W_2$ and the four displayed equalities.
+    The two cut identities of
+    Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}, applied to the
+    selected factorizations of Theorem~\ref{thm:mpu_source_factorizations},
+    give transported factorizations with the four exterior matrices
+    displayed in the statement. The right exterior matrices are unitary, so
+    the transported right factors retain the right inverses of
+    Theorem~\ref{thm:mpu_source_factor_right_inverses}. The left exterior
+    matrix of the second cut is unitary, so its transported left factor
+    remains an isometry. The contraction defining $u$ is unchanged: its
+    interior virtual product is $z^\dagger z=I_D$. Rank preservation,
+    Theorem~\ref{thm:mpu_virtual_sandwich_source_ranks}, identifies the
+    transported factors with the selected source-rank spaces. Simplicity and
+    the source-gate equivalence of Theorem~\ref{ThmFund1} give unitarity of
+    both $u$ contractions. The selected factors have left inverses from their
+    weighted first-cut and ordinary second-cut normalizations in
+    Theorem~\ref{thm:mpu_source_factor_normalizations}. The normalized
+    source-decomposition comparison of
+    Corollary~\ref{cor:mpug_normalized_source_decomposition_gauges} now
+    gives the two unitary changes $W_1,W_2$ and the four displayed
+    equalities.
 \end{proof}
+
+\begin{remark}
+    In the setting of
+    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}, write
+    $u_{\mathcal U},u_{\mathcal V}$ for the source gates of
+    Definition~\ref{def:mpu_source_uv} built from the selected factors.
+    Substituting the two $Y_a(\mathcal V)$ identities into that contraction,
+    the interior virtual product is $\sum_\beta(z^\dagger)_{\beta'\beta}
+        z_{\beta\beta''}=(z^\dagger z)_{\beta'\beta''}=\delta_{\beta'\beta''}$,
+    so
+    \begin{align}
+        u_{\mathcal V} & =(W_2^\dagger\otimes W_1^\dagger)u_{\mathcal U}.
+    \end{align}
+    Thus the unitaries $x=W_2^\dagger$ and $y=W_1^\dagger$ realize the local
+    relation $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$ of
+    Theorem~\ref{FundamentalMPU}. This identification of the gauges is a
+    consequence of the displayed factor identities and is not asserted by
+    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}. It is
+    stated, together with the corresponding relation for $v$, in
+    Theorem~\ref{thm:mpu_source_gates_virtual_unitary_gauge}.
+\end{remark}
 
 \begin{theorem}[Source gates under a unitary virtual conjugation]
     \label{thm:mpu_source_gates_virtual_unitary_gauge}
