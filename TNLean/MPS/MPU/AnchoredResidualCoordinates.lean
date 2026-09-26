@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalBlockingResiduals
 import TNLean.MPS.MPU.FiniteChainConjugation
-import TNLean.QCA.Blocking
 
 /-!
 # Residual blocks on anchored finite chains
