@@ -12,6 +12,7 @@ import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm
+import TNLean.MPS.MPU.CanonicalFormBlocking
 import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.DaggerInverse

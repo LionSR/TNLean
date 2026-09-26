@@ -3776,6 +3776,39 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     (\ref{eq:mpu_normalized_flattening_blocking}).
 \end{definition}
 
+\begin{theorem}[Canonical form II under positive physical blocking]
+    \label{thm:mpu_canonical_form_ii_positive_blocking}
+    \lean{MPOTensor.hasFullSupport_blockTensorCFIIData,
+        MPOTensor.IsMPUCanonicalFormII.blockTensor}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_cfii_blocking_reindexing,
+        thm:mpu_full_support_blocking, thm:mpu_normalized_flattening_blocking}
+    Let $\mathcal U$ be an MPU in canonical form II, with recorded ambient
+    right fixed matrix $\rho$. For every positive physical blocking length
+    $p$, the blocked tensor $\mathcal U^{[p]}$ is in canonical form II in the
+    same bond coordinates, with full support and the same matrix $\rho$.
+    This is the positive-blocking assertion following
+    \cite[Proposition~III.1]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_cfii_blocking_reindexing, thm:mpu_full_support_blocking,
+        thm:mpu_normalized_flattening_blocking, lem:mpu_blocking,
+        thm:cpsv_physical_reindexing, thm:mpu_full_support_reindexing}
+    Block each canonical tensor and relabel the blocked physical alphabet.
+    Blocking leaves the retained bond dimensions unchanged, so their sum is
+    still the ambient bond dimension. The transfer identities in
+    Definition~\ref{def:mpu_cfii_blocking_reindexing}, together with invariance
+    under physical relabeling, give
+    \begin{align}
+        \E_{\widetilde{\mathcal U^{[p]}}}(\rho)
+         & =\E_{\widetilde{\mathcal U}}^p(\rho)=\rho.
+    \end{align}
+    Positive definiteness, diagonality,
+    and trace normalization of $\rho$ are unchanged, and blocking preserves
+    the MPU property.
+\end{proof}
+
 \begin{theorem}[Self-overlap scaling]
     \label{thm:mpu_self_overlap_scaling}
     \lean{MPSTensor.mpvOverlap_smul_self,
@@ -4893,6 +4926,32 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     equation for the factors built from the same weight $\rho$. Then
     Theorem~\ref{thm:mpu_source_v_dressed_gram_cancel} cancels the dressing. Since $v^\dagger v=\Id$ on
     $\C^r\otimes\C^\ell$, the map $v$ is injective, so $r\ell\le d^2$.
+\end{proof}
+
+\begin{theorem}[Source-$v$ isometry after positive blocking]
+    \label{thm:mpu_source_v_isometry_after_blocking}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceV_blockTensor_isIsometry,
+        MPOTensor.IsMPUCanonicalFormII.exists_sourceV_blockTensor_isIsometry}
+    \leanok
+    \uses{thm:mpu_canonical_form_ii_positive_blocking,
+        thm:mpu_simple_source_v_isometry, thm:mpu_bounded_simple_blocking}
+    Let $\mathcal U$ be an MPU in canonical form II, with recorded weight
+    $\rho$. If $p>0$ and $\mathcal U^{[p]}$ is simple, then the source operator
+    $v$ computed from the source cuts of $\mathcal U^{[p]}$, using this same
+    $\rho$, satisfies $v^\dagger v=\Id$. In particular, some integer
+    $1\leq p\leq D^4$ gives a simple blocked tensor and this source-$v$
+    isometry. The statement includes $D=1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_positive_blocking,
+        thm:mpu_simple_source_v_isometry, thm:mpu_bounded_simple_blocking,
+        thm:mpu_canonical_form_ii_positive_dimensions}
+    The blocked tensor retains canonical form II with the same recorded
+    matrix $\rho$. The source-$v$ contraction for a simple tensor therefore
+    applies to its own source cuts and gives the isometry. A positive simple
+    blocking length bounded by $D^4$ exists for every MPU, including in bond
+    dimension one.
 \end{proof}
 
 \begin{theorem}[Simplicity from the source-$v$ isometry]
