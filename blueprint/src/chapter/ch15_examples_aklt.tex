@@ -319,6 +319,39 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
     $\Z_2 \times \Z_2$ action is unitary: $P_g P_g^\dagger = \Id$.
 \end{theorem}
 
+\begin{theorem}[Time-reversal and reflection symmetry of the AKLT tensor]
+    \label{thm:aklt_time_reversal_reflection}
+    \lean{MPSTensor.akltTensor_timeReversal, MPSTensor.akltTensor_reflection, MPSTensor.akltSpinRotationY_mul_map_star, MPSTensor.akltAntisymmetricGauge_mul_map_star}
+    \leanok
+    \uses{def:aklt_tensor}
+    Let $R=e^{i\pi S_y}$ be the spin-$1$ rotation, which sends $\ket{0}\mapsto-\ket{0}$
+    and exchanges $\ket{\pm1}$, and let $X=i\sigma_y$.  The AKLT tensor satisfies
+    $\overline{\sum_jR_{ij}A^j}=X^\dagger A^iX$ and $(A^i)^{T}=-X^\dagger A^iX$ for
+    every $i$, and $X\bar X=-\Id$ \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Both identities are checked entry by entry on the three matrices of the AKLT
+    tensor, which are real.
+\end{proof}
+
+\begin{theorem}[Non-trivial time-reversal and reflection indices of the AKLT state]
+    \label{thm:aklt_time_reversal_reflection_index}
+    \lean{MPSTensor.aklt_timeReversal_index_eq_neg_one, MPSTensor.aklt_reflection_index_eq_neg_one}
+    \leanok
+    \uses{thm:aklt_time_reversal_reflection, thm:time_reversal_index, thm:reflection_index, thm:aklt_normal}
+    Every unitary gauge implementing the time-reversal or the reflection symmetry
+    of the AKLT tensor has index $X\bar X=-\Id$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_time_reversal_reflection, thm:time_reversal_index, thm:reflection_index, thm:aklt_normal}
+    The AKLT tensor is normal, so by Theorems~\ref{thm:time_reversal_index}
+    and~\ref{thm:reflection_index} the index does not depend on the gauge; the
+    gauge $i\sigma_y$ of Theorem~\ref{thm:aklt_time_reversal_reflection} has index
+    $-\Id$.
+\end{proof}
+
 \begin{theorem}[Doubly degenerate entanglement spectrum of the AKLT state]
     \label{thm:aklt_entanglement_spectrum_even}
     \lean{MPSTensor.akltBlocked_even_finrank_eigenspace}
