@@ -29,8 +29,9 @@ $r=\ell=d^{2k+2}$, giving the values $\log_2 d$, $-\log_2 d$, $0$, $0$ at every
 blocking. The right and left shifts and all their blockings are simple. Since
 tensor products of simple tensors are simple, so are $U_1$, $U_2$, $U_3$ and all
 blockings of $U_2$ and $U_3$. All four values are therefore values at simple
-blockings, as Definition IV.1 requires. For $d>1$ the right and left ranks of every
-blocked shift differ, so its index value is nonzero.
+blockings, which meets the simplicity requirement of Definition IV.1; its
+canonical-form hypothesis is not established for these tensors. For $d>1$ the
+right and left ranks of every blocked shift differ, so its index value is nonzero.
 
 The review sentence itself is not formalized. The unequal ranks are no
 obstruction to a circuit: after blocking, every MPU, the shift included, is a
@@ -538,7 +539,7 @@ theorem shiftExampleU₁_isMPUSimple (d : ℕ) : IsMPUSimple (shiftExampleU₁ d
 tensors.
 
 Source: arXiv:1703.09188, Definition III.2, lines 363--374, for $U_2$ at
-lines 1990--1993; the tensoring step of Theorem `IndexTh` (ii), lines 835--836. -/
+lines 1990--1993; the tensoring step of Theorem `IndexTh` (ii), line 837. -/
 theorem shiftExampleU₂_isMPUSimple (d : ℕ) [NeZero d] : IsMPUSimple (shiftExampleU₂ d) :=
   (leftShiftTensor_isMPUSimple d).tensorProduct (rightShiftTensor_isMPUSimple d)
 
@@ -546,7 +547,7 @@ theorem shiftExampleU₂_isMPUSimple (d : ℕ) [NeZero d] : IsMPUSimple (shiftEx
 tensors.
 
 Source: arXiv:1703.09188, Definition III.2, lines 363--374, for $U_3$ at
-lines 1990--1993; the tensoring step of Theorem `IndexTh` (ii), lines 835--836. -/
+lines 1990--1993; the tensoring step of Theorem `IndexTh` (ii), line 837. -/
 theorem shiftExampleU₃_isMPUSimple (d : ℕ) [NeZero d] : IsMPUSimple (shiftExampleU₃ d) :=
   (rightShiftTensor_isMPUSimple d).tensorProduct (leftShiftTensor_isMPUSimple d)
 

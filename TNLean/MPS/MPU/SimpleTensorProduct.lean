@@ -12,7 +12,7 @@ import TNLean.MPS.MPU.TensorProduct
 
 The proof of part (ii) of the Index Theorem of arXiv:1703.09188 disposes of
 tensor products with the sentence "The case of tensoring is trivial"
-(`Papers/1703.09188/paper_v2.tex`, lines 835--836). Computing the index of
+(`Papers/1703.09188/paper_v2.tex`, line 837). Computing the index of
 $\mathcal U\otimes\mathcal V$ at a simple blocking uses that the tensor product of
 two simple tensors (Definition III.2, lines 363--374) is again simple. This file
 proves that step, with no hypothesis beyond the simplicity of the two factors,
@@ -71,7 +71,7 @@ the two double layers, after the bond shuffle
 
 Bridge: relates the double layer of Definition III.2 of arXiv:1703.09188,
 lines 363--374, to the tensoring operation in the proof of Theorem `IndexTh` (ii),
-lines 835--836. -/
+line 837. -/
 theorem doubleLayerTensor_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E)
     (i j : Fin d) (k l : Fin e) :
     doubleLayerTensor (tensorProduct U V) (finProdFinEquiv (i, k))
@@ -126,7 +126,7 @@ of the double layers.
 
 Source: arXiv:1703.09188, Definition III.2, lines 363--374; this is the step
 behind "The case of tensoring is trivial" in the proof of Theorem `IndexTh` (ii),
-lines 835--836. -/
+line 837. -/
 theorem IsMPUSimple.tensorProduct {U : MPOTensor d D} {V : MPOTensor e E}
     (hU : IsMPUSimple U) (hV : IsMPUSimple V) :
     IsMPUSimple (MPOTensor.tensorProduct U V) := by
@@ -157,7 +157,7 @@ theorem IsMPUSimple.tensorProduct {U : MPOTensor d D} {V : MPOTensor e E}
 source-index values of the factors, since both source ranks are multiplicative.
 
 This is the specified-tensor part of "The case of tensoring is trivial" in the
-proof of arXiv:1703.09188, Theorem `IndexTh` (ii), lines 835--836.
+proof of arXiv:1703.09188, Theorem `IndexTh` (ii), line 837.
 
 **Scope restriction (specified tensors):** the identity is for the displayed
 tensors, not the public blocking-independent index of Definition IV.1; documented

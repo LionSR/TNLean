@@ -2280,7 +2280,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $a\otimes a'$ and $b\otimes b'$ are witnesses for the product. This is
     the step behind the sentence ``The case of tensoring is trivial'' in the
     proof of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
-    % Source lines: paper_v2.tex 363--374 and 835--836.
+    % Source lines: paper_v2.tex 363--374 and 837.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -5565,7 +5565,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     blocking.
     % Scope restriction (specified tensors): documented in
     % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex.
-    % Source lines: paper_v2.tex 835--836.
+    % Source lines: paper_v2.tex 837.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -9170,7 +9170,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The tensors $U_1$, $U_2$, and $U_3$ are simple, and so are the blockings
     of $U_2$ and $U_3$ over $k+1$ sites, because independent tensor products
     of simple tensors are simple. Thus all four values are taken at simple
-    blockings, as Definition~\ref{def:index} requires. None of the values is asserted
+    blockings, which is the simplicity requirement of Definition~\ref{def:index};
+    its canonical-form hypothesis is not established for these tensors. None of the values is asserted
     for an arbitrary tensor generating the same operators; that step needs the
     canonical form of the shift and its uniqueness. Unequal ranks do not by
     themselves exclude a circuit: after blocking, every matrix product unitary,
