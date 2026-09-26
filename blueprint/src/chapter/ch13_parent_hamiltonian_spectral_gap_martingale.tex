@@ -4760,6 +4760,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     $\delta\lVert Xz\rVert\lVert u\rVert$.
     Since $XP=X$, it follows that $\lVert X-P\rVert\leq\delta\lVert X\rVert$.
     Combine this with $\lVert X\rVert\leq\lVert X-P\rVert+1$ and $\delta<1$.
+    For the second bound, use $\lVert P\rVert\leq1$ and the first bound:
+    \begin{align}
+        \lVert X\rVert & \leq\lVert X-P\rVert+\lVert P\rVert
+        \leq\frac{\delta}{1-\delta}+1 \notag                 \\
+                       & =\frac{1}{1-\delta}. \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Off-diagonal products of projectors]
@@ -4792,6 +4798,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:ph_joint_projector_comparison}
     \lean{Submodule.norm_iSup_starProjection_sub_comp_le_of_overlapMatrix}
     \leanok
+    \uses{thm:ph_off_diagonal_projectors}
     Under the hypotheses of Theorem~\ref{thm:ph_off_diagonal_projectors},
     assume $\beta<1/2$. Let $W_i\subseteq U_i$, and let $R_i$ be the
     orthogonal projector onto $W_i$.
@@ -5082,9 +5089,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         V_j & =\mathscr A_{K,L,Q}\bigl(\mathcal H_K\otimes G_{L+Q}(A_j)\bigr), &
         W_j & =G_{K+L+Q}(A_j),
     \end{align}
-    and let $P,Q,R$ be the orthogonal projectors onto $\sum_jU_j$,
-    $\sum_jV_j$, and $\sum_jW_j$, as in
-    Theorem~\ref{thm:ph_block_interval_projectors}. The local identity at
+    and let $P,S,R$ be the orthogonal projectors onto $\sum_jU_j$,
+    $\sum_jV_j$, and $\sum_jW_j$. These are the projectors written $P,Q,R$
+    in Theorem~\ref{thm:ph_block_interval_projectors}; the middle one is
+    renamed here because $Q$ denotes a length. The local identity at
     length $K+L+Q$, the first identity of
     Theorem~\ref{thm:ph_block_sum_interval_spaces} at lengths $K+L$ and $Q$,
     and its reassociated identity at lengths $K,L,Q$ give
@@ -5094,9 +5102,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         P_{[1,K+L]}(B)     & =P_{G_{K+L}(B)\otimes\mathcal H_Q}
         =P_{\sum_jU_j}=P,                                               \\
         P_{[K+1,K+L+Q]}(B) & =P_{\mathscr A_{K,L,Q}(\mathcal H_K\otimes
-                G_{L+Q}(B))}=P_{\sum_jV_j}=Q.
+                G_{L+Q}(B))}=P_{\sum_jV_j}=S.
     \end{align}
-    Hence the left side of the asserted bound is $\lVert R-PQ\rVert$, and
+    Hence the left side of the asserted bound is $\lVert R-PS\rVert$, and
     Theorem~\ref{thm:ph_primitive_block_interval_defect_decay} with the
     prescribed $\eta$ bounds it by $\eta$ for all sufficiently large $L$,
     every $K\geq0$, and every $Q>0$.
@@ -5932,12 +5940,13 @@ tensors.
         lem:right-spectator-kernel-projection}
     Decompose a vector $v$ on $n+r$ sites according to the last $r$
     physical coordinates, writing $v_s$ for the vector on $n$ sites
-    obtained by fixing these coordinates to $s\in\{1,\ldots,d\}^r$.
+    obtained by fixing these coordinates to $s\in\{0,\ldots,d-1\}^r$.
     The prefix Hamiltonian acts on each component $v_s$ by the length-$n$
     open Hamiltonian, whose kernel is $G_n(A)$. Hence
+    $v\in G_n(A)\otimes(\C^d)^{\otimes r}$ if and only if, for every
+    $s\in\{0,\ldots,d-1\}^r$,
     \begin{align}
-        v\in G_n(A)\otimes(\C^d)^{\otimes r}
-         & \iff v_s\in G_n(A)\ \text{for every } s\in\{1,\ldots,d\}^r.
+        v_s & \in G_n(A).
     \end{align}
 \end{proof}
 

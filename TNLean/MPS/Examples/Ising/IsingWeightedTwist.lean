@@ -137,40 +137,24 @@ theorem isingBondObject_conjMatrix (a : Fin 100) :
 Theorem 7.7(i)–(iii); data file §1.2–1.3): two weighted copies of the normal tensor `√2 A_σ`,
 with the weights `5` and `3`, and sixteen zero slots. -/
 noncomputable def isingCompression :
-    MultiBlockCompression isingBondObject isingSlots isingTargets where
-  z := 16
-  ord := isingOrd
-  gauge := isingGauge
-  triangular a x y h := by
-    have h' : isingOrd y.1 < isingOrd x.1 := h
-    have hxy : x.1 ≠ y.1 := fun e => by rw [e] at h'; exact lt_irrefl _ h'
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hxy,
-      map_zero]
-  matched a s := by
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
-      Matrix.blockDiag'_blockDiagonal']
-    ext p q
-    simp [isingBlockZ, isingTargets, isingSigma, MPOTensor.toMPSTensor,
-      zsqrt2ToComplex_isingWeightsZ]
-  unmatched a t := by
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
-      Matrix.blockDiag'_blockDiagonal']
-    ext p q
-    simp [isingBlockZ]
+    MultiBlockCompression isingBondObject isingSlots isingTargets :=
+  MultiBlockCompression.ofRingBlockDiagonal zsqrt2ToComplex isingOrd isingTau isingGauge
+    (fun a => isingBlockZ (isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
+      (Fin.modNat (m := 10) (n := 10) a)))
+    isingBondObject_conjMatrix
+    (fun s a => isingWeightsZ s • isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
+      (Fin.modNat (m := 10) (n := 10) a))
+    (fun s a => by
+      rw [complexOfRing_smul, zsqrt2ToComplex_isingWeightsZ]
+      rfl)
+    (fun _ _ => rfl) fun _ _ => rfl
 
 /-- **The remainder of the Ising bond-object compression vanishes** (P5 note, Theorem 7.7(vi);
 data file §1.3, check T2-G6): the conjugated letters are block diagonal, so the extension
 splits. -/
 theorem isingBondObject_remainder : isingCompression.remainder = 0 := by
-  funext a
-  have h : conjMatrix isingGauge (isingCompression.remainder a) =
-      conjMatrix isingGauge (isingBondObject a) -
-        Matrix.blockDiagonal' (conjMatrix isingGauge (isingBondObject a)).blockDiag' :=
-    isingCompression.conjMatrix_remainder a
-  refine conjMatrix_injective isingGauge ?_
-  rw [h, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, isingBondObject_conjMatrix,
-    complexOfZsqrt2, complexOfRing,
-    Matrix.blockDiagonal'_map _ _ (map_zero _), Matrix.blockDiag'_blockDiagonal']
+  unfold isingCompression
+  exact funext MultiBlockCompression.remainder_ofRingBlockDiagonal
 
 /-! ### Consequences -/
 
