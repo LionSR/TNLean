@@ -6184,12 +6184,14 @@ tensors.
         \notag
     \end{align}
 \end{lemma}
-\begin{proof}\leanok
-    The restriction of $K_{R,W}$ to its kernel complement is injective.
-    Finite dimensionality therefore gives a positive lower bound for its
-    smallest singular value. Positivity turns this into the lower
-    quadratic-form bound. The operator norm gives the upper bound.
-    Both quadratic forms vanish on the common kernel.
+\begin{proof}
+    \leanok
+    \uses{lem:positive-kernel-projection-comparison}
+    The operator $K_{R,W}$ is a sum of orthogonal projections, hence
+    positive. By hypothesis its kernel is $\mathcal G_W(A)$, so the
+    orthogonal projection onto $(\ker K_{R,W})^\perp$ is $h_W$.
+    Lemma~\ref{lem:positive-kernel-projection-comparison} applied to
+    $K_{R,W}$ gives the two bounds.
 \end{proof}
 
 \begin{lemma}[Comparison with the kernel projection]
@@ -6234,23 +6236,30 @@ tensors.
     \label{thm:parent-gap-fixed-range-transfer}
     \lean{MPSTensor.exists_parentHamiltonianES_gap_of_larger_range}
     \leanok
-    \uses{lem:parent-finite-interval-comparison, thm:periodic-parent-range-comparison, lem:positive-comparison-kernel-gap}
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es,
+        def:parent_hamiltonian_es}
     Let $A$ be an MPS tensor, and let $R,W$ be positive integers with
     $W\geq2R$. Suppose that the open range-$R$ Hamiltonian on $W$
     sites has kernel $\mathcal G_W(A)$. If the periodic parent Hamiltonians
     of range $W$ have a uniform positive gap for all sufficiently large
     chain lengths, then the same holds at range $R$.
 \end{theorem}
-\begin{proof}\leanok
-    Choose $\kappa,C>0$ such that
+\begin{proof}
+    \leanok
+    \uses{lem:parent-finite-interval-comparison,
+        thm:periodic-parent-range-comparison,
+        lem:positive-comparison-kernel-gap}
+    By Lemma~\ref{lem:parent-finite-interval-comparison}, choose
+    $\kappa,C>0$ such that
     $\kappa h_W\leq K_{R,W}\leq Ch_W$. Summing all cyclic translates
-    gives
+    (Theorem~\ref{thm:periodic-parent-range-comparison}) gives
     \begin{align}
         \kappa H_{W,N}\leq (W-R+1)H_{R,N}\leq C H_{W,N}
         \notag
     \end{align}
-    for sufficiently large $N$. The periodic kernels therefore agree.
-    A gap $\gamma$ at range $W$ transfers to the gap
+    for sufficiently large $N$. By
+    Lemma~\ref{lem:positive-comparison-kernel-gap}, the periodic kernels
+    therefore agree, and a gap $\gamma$ at range $W$ transfers to the gap
     $\kappa\gamma/(W-R+1)$ at range $R$.
 \end{proof}
 
