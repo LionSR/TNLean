@@ -170,14 +170,18 @@ ring (`MPOTensor.IsFusionRing`), the fusion-ring content of the source's fusion 
 module category; and the blocks are normal with linearly independent periodic vectors at one
 positive length, the source's standing assumption of injective blocks (line 317). The eigenvalue
 `r_a` is the Perron–Frobenius dimension `d_a`, which is also the spectral radius of the
-multiplicity matrix (`MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim`). -/
-theorem exists_pos_symmetric_boundary_state {O : ∀ a, MPOTensor d (χ a)} {N : ι → ι → ι → ℕ}
-    (hfus : IsMPOFusionAlgebra O N) {e : ι} {dual : ι → ι} (hN : IsFusionRing N e dual)
-    {A : ∀ x, MPSTensor d (D x)} {M : ι → κ → κ → ℂ} (hsym : IsMPOSymmetricFamily O A M)
+multiplicity matrix (`MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim`). The family is
+nonempty, and the state `ψ` is nonzero at the length `L₀`. -/
+theorem exists_pos_symmetric_boundary_state [Nonempty κ] {O : ∀ a, MPOTensor d (χ a)}
+    {N : ι → ι → ι → ℕ} (hfus : IsMPOFusionAlgebra O N) {e : ι} {dual : ι → ι}
+    (hN : IsFusionRing N e dual) {A : ∀ x, MPSTensor d (D x)} {M : ι → κ → κ → ℂ}
+    (hsym : IsMPOSymmetricFamily O A M)
     (hunit : ∀ x y, M e x y = if x = y then 1 else 0) (hA : ∀ x, Kraus.IsNormal (A x))
     (hD : ∀ x, 0 < D x) {L₀ : ℕ} (hL₀ : 0 < L₀)
     (hli : LinearIndependent ℂ fun x => fun σ : Fin L₀ → Fin d => mpv (A x) σ) :
-    ∃ v : κ → ℝ, (∀ x, 0 < v x) ∧ ∀ a, 0 < perronFrobeniusDim N a ∧
+    ∃ v : κ → ℝ, (∀ x, 0 < v x) ∧
+      (fun σ : Fin L₀ → Fin d => ∑ x, (v x : ℂ) * mpv (A x) σ) ≠ 0 ∧
+      ∀ a, 0 < perronFrobeniusDim N a ∧
       ∀ L : ℕ, 0 < L →
         mpo (O a) L *ᵥ (fun σ : Fin L → Fin d => ∑ x, (v x : ℂ) * mpv (A x) σ) =
           (perronFrobeniusDim N a : ℂ) • fun σ : Fin L → Fin d => ∑ x, (v x : ℂ) * mpv (A x) σ := by
@@ -188,7 +192,13 @@ theorem exists_pos_symmetric_boundary_state {O : ∀ a, MPOTensor d (χ a)} {N :
     rw [hMM'] at h
     split_ifs at h ⊢ <;> exact_mod_cast h
   obtain ⟨v, hv, hev⟩ := hM'.exists_pos_left_eigenvector hN hunit'
-  refine ⟨v, hv, fun a => ⟨hN.perronFrobeniusDim_pos a, fun L hL => ?_⟩⟩
+  refine ⟨v, hv, ?_, fun a => ⟨hN.perronFrobeniusDim_pos a, fun L hL => ?_⟩⟩
+  · intro h0
+    have hsum : ∑ x, (v x : ℂ) • (fun σ : Fin L₀ → Fin d => mpv (A x) σ) = 0 := by
+      rw [← h0]; funext σ; simp [Finset.sum_apply]
+    obtain ⟨x⟩ := ‹Nonempty κ›
+    have := Fintype.linearIndependent_iff.1 hli _ hsum x
+    exact (hv x).ne' (by exact_mod_cast this)
   refine hsym.mpo_mulVec_sum_eq_smul (fun y => ?_) hL
   simp_rw [hMM']
   exact_mod_cast hev a y

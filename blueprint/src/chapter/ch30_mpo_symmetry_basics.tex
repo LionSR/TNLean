@@ -890,7 +890,7 @@ fusion ring.
         MPOTensor.exists_pos_symmetric_boundary_state}
     \leanok
     \uses{thm:mposym_nimrep_pos_eigenvector, thm:mpo_symmetric_nimrep}
-    Let $(A_x)_{x\in K}$ be normal tensors of positive bond dimension whose
+    Let $(A_x)_{x\in K}$, with $K$ nonempty, be normal tensors of positive bond dimension whose
     periodic vectors are linearly independent at some length $N_0\geq1$,
     symmetric under a fusion algebra whose structure constants form a fusion
     ring with unit $e$, and suppose $M_{e,x}^y=\delta_{xy}$. Then there are
@@ -901,7 +901,7 @@ fusion ring.
         \ket{\psi^{(N)}}          & =\sum_xv_x\ket{V^{(N)}(A_x)},
         \notag
     \end{align}
-    with $d_a>0$. This is the symmetric boundary state of
+    with $d_a>0$, and $\ket{\psi^{(N_0)}}\neq0$. This is the symmetric boundary state of
     \cite[Section~5]{GarreRubio2023MPOSym}, whose eigenvalue $r_a$ is the
     spectral radius of $M_a$.
     % Source anchor: arXiv:2203.12563, lines 1795--1805 (symboundary).
@@ -914,7 +914,7 @@ fusion ring.
     Theorem~\ref{thm:mposym_nimrep_pos_eigenvector}. Then
     $O_a^{(N)}\ket{\psi^{(N)}}=\sum_xv_x\sum_yM_{a,x}^y\ket{V^{(N)}(A_y)}
         =\sum_y\left(\sum_xv_xM_{a,x}^y\right)\ket{V^{(N)}(A_y)}
-        =d_a\ket{\psi^{(N)}}$.
+        =d_a\ket{\psi^{(N)}}$. Since the periodic vectors are linearly independent at length $N_0$ and $v\neq0$, $\ket{\psi^{(N_0)}}\neq0$.
 \end{proof}
 
 \begin{example}[The Fibonacci boundary state]%
