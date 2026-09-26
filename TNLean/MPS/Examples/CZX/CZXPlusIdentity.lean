@@ -330,24 +330,10 @@ private theorem czxPlusIdentity_unmatched_int (i : Fin 4) (t : Fin 3) (p q : Fin
 /-- **The multi-block asymmetric compression datum of Example E** (P5 note, Theorem 7.7,
 clauses (i)–(iii), for `ex:p5ft-oscillating`). -/
 def czxPlusIdentity_compression :
-    MultiBlockCompression czxPlusIdentity plusSlots plusTargets where
-  z := 3
-  ord := plusOrd
-  gauge := plusGauge
-  triangular i x y h := by
-    rw [czxPlusIdentity_conjMatrix, Matrix.submatrix_apply, complexOfInt_apply, Int.cast_eq_zero]
-    exact czxPlusIdentity_triangular_int i x y h
-  matched i s := by
-    obtain ⟨s, hs⟩ := s
-    ext p q
-    rw [Matrix.blockDiag'_apply, czxPlusIdentity_conjMatrix, Matrix.submatrix_apply,
-      complexOfInt_apply, plusTargets_eq, complexOfInt_apply, Int.cast_inj]
-    exact czxPlusIdentity_matched_int i s p q
-  unmatched i t := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, czxPlusIdentity_conjMatrix, Matrix.submatrix_apply,
-      complexOfInt_apply, Matrix.zero_apply, Int.cast_eq_zero]
-    exact czxPlusIdentity_unmatched_int i t p q
+    MultiBlockCompression czxPlusIdentity plusSlots plusTargets :=
+  MultiBlockCompression.ofRing (Int.castRingHom ℂ) plusOrd plusTau plusGauge plusConjInt
+    czxPlusIdentity_conjMatrix plusTargetsInt plusTargets_eq czxPlusIdentity_triangular_int
+    (fun i s p q => czxPlusIdentity_matched_int i s.1 p q) czxPlusIdentity_unmatched_int
 
 /-! ### Consequences -/
 
