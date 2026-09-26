@@ -6659,7 +6659,7 @@ tensors.
     propagates simultaneous injectivity from $S$ to every larger length, so,
     since $R\geq S+1$, the open-chain ground-space theorem gives
     \begin{align}
-        \ker H^{\mathrm{open}}_{R,W}(B')=G_W^{\mathrm{ES}}(B').\notag
+        \ker H^{\mathrm{open}}_{W,R}(B')=G_W^{\mathrm{ES}}(B').\notag
     \end{align}
     Two-sided comparison of the
     periodic range-$R$ and range-$W$ Hamiltonians therefore transfers the gap
@@ -6693,10 +6693,31 @@ tensors.
     and summing those projections gives the same Hamiltonian.
 \end{proof}
 
+\begin{theorem}[Canonical gap for every canonical decomposition]
+    \label{thm:canonical-decomposition-gap-simultaneous-injectivity}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentHamiltonianES_uniform_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $A$ be a tensor in canonical form. Fix any canonical decomposition of
+    $A$, and let $B_0,\ldots,B_{g-1}$ be its distinct normal representatives.
+    Let $S$ be a positive integer such that the simultaneous length-$S$ word
+    tuples of $B_0,\ldots,B_{g-1}$ span the product of the block matrix
+    algebras. Then, for every $R\geq S+1$, there exists $\gamma>0$ such that,
+    for every chain length $N$ and every vector $v\perp\ker H_{R,N}(A)$,
+    \begin{align}
+        \gamma\|v\|\leq\|H_{R,N}(A)v\|.\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:canonical-parent-hamiltonian-representatives,thm:block-parent-uniform-gap-simultaneous-injectivity}
+    Set $B=\bigoplus_jB_j$. Its blocks satisfy the hypotheses of the uniform
+    gap at the simultaneous injectivity range, so $H_{R,N}(B)$ has a positive
+    uniform gap. Since $H_{R,N}(A)=H_{R,N}(B)$ for every $N$, the same
+    constant works for $A$, without changing the range or the chain length.
+\end{proof}
+
 \begin{theorem}[Canonical gap at a supplied simultaneous injectivity length]
     \label{thm:canonical-gap-simultaneous-injectivity}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentHamiltonianES_uniform_gap_of_wordTupleSpanTop,
-        MPSTensor.IsCPSVCanonicalForm.exists_bnt_uniform_gap_of_wordTupleSpanTop}
+    \lean{MPSTensor.IsCPSVCanonicalForm.exists_bnt_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a tensor in canonical form. One may choose a basis of normal
     tensors $B_0,\ldots,B_{g-1}$ such that the following holds for every positive
@@ -6712,10 +6733,9 @@ tensors.
     \cite[Section~IV.C]{Cirac2021Matrix}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:canonical-parent-hamiltonian-representatives,thm:block-parent-uniform-gap-simultaneous-injectivity}
-    Choose the normal representatives of a canonical decomposition. Their
-    direct sum has a positive uniform gap at every range $R\geq S+1$ by
-    simultaneous injectivity. The preceding Hamiltonian equality transfers
-    the same constant to the original tensor, without changing the range or
-    the chain length.
+    \uses{thm:canonical-decomposition-gap-simultaneous-injectivity}
+    Fix one canonical decomposition of $A$ and take its distinct normal
+    representatives, which form a basis of normal tensors for $A$. The
+    preceding theorem applies to this fixed choice for every $S$ and every
+    $R\geq S+1$.
 \end{proof}
