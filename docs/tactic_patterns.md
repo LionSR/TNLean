@@ -1356,6 +1356,95 @@ abstracted — record why, so it is not re-proposed).
   the kernel evaluator, needed here because plain `decide` elaboration is
   slow on the sixteen-entry tables.
 
+### no sitewise intertwiner from a certificate over an exact ring — promoted
+- **Pattern:** show that `X = 0` whenever `B i * X = X * C i` for all letters
+  (or `Y * B i = C i * Y`, or the bond-one vector forms `B i *ᵥ v = C i 0 0 • v`
+  and `u ᵥ* B i = C i 0 0 • u`) by expanding the entrywise equations and
+  eliminating the unknowns by hand:
+
+  ```lean
+  have h₀ := congrFun (congrFun (hX 0) p) q
+  have h₁ := congrFun (congrFun (hX 1) p) q
+  simp [Matrix.mul_apply, Fin.sum_univ_succ, ...] at h₀ h₁ ...
+  linear_combination ... * h₀ + ... * h₁ + ...
+  ```
+
+- **Seen:** six hand-written eliminations across three files before promotion
+  (2026-09-25, #8092): `ParityGraded.parNeg_right_intertwiner_eq_zero` and
+  `parNeg_left_intertwiner_eq_zero` in
+  `TNLean/MPS/Examples/MultiBlock/ParityGraded.lean` (about 110 lines),
+  `MPSTensor.ghzC0_right_intertwiner_eq_zero` and
+  `ghzC0_left_intertwiner_eq_zero` in
+  `TNLean/MPS/Examples/MultiBlock/GHZSectors.lean`, and
+  `CZXCompression.czxSquare_right_intertwiner_eq_zero` and
+  `czxSquare_left_intertwiner_eq_zero` in
+  `TNLean/MPS/Examples/CZX/CZXSquare.lean`.
+- **Abstraction:** `MPSTensor.right_intertwiner_eq_zero_of_ringCertificate`,
+  `MPSTensor.left_intertwiner_eq_zero_of_ringCertificate`,
+  `MPSTensor.mulVec_eq_zero_of_ringCertificate` and
+  `MPSTensor.vecMul_eq_zero_of_ringCertificate` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/AssemblyLemmas.lean`, wrapping
+  `right_intertwiner_eq_zero_of_certificate` and
+  `left_intertwiner_eq_zero_of_certificate`.
+- **Notes:** the letters are given as images `complexOfRing f (BR i)` of
+  matrices over a ring `R` with `f : R →+* ℂ` (usually `Int.castRingHom ℂ`),
+  and the certificate is a matrix `N` over `R` with
+  `N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1` and `f c ≠ 0`, where
+  `rows` selects a full-rank set of the sitewise equations; the identity `hN`
+  is closed by `decide` over `R`. The right forms
+  (`right_intertwiner_eq_zero_of_ringCertificate`,
+  `mulVec_eq_zero_of_ringCertificate`) take a certificate of
+  `sitewiseEqMatrix BR CR`; the left forms
+  (`left_intertwiner_eq_zero_of_ringCertificate`,
+  `vecMul_eq_zero_of_ringCertificate`) take one of the transposed letters.
+  Compute `N` offline by exact rational
+  inversion of the selected equations and clear denominators into `c`. All six
+  call sites use the wrappers; the helper evaluation lemmas they needed were
+  deleted.
+
+### Ising fusion rule from a signed-permutation gauge — promoted
+- **Pattern:** a fusion rule `O_L(X) O_L(Y) = O_L(T)` of the Ising
+  fusion-tree tensors, proved by applying
+  `MPSTensor.mpo_mul_eq_of_zsqrt2_conj` to an orthogonal gauge `G` over `ℤ√2`,
+  reducing the letter identity to the sectors of the middle label with
+  `isingConj_of_rho_eq`, and expanding the stacked letters as short sums with
+  `mul_mulTensorR_mul_transpose_eq_list`.
+- **Seen:** eight copies of this proof body across three files before
+  promotion (2026-09-25, #8092): four in
+  `TNLean/MPS/Examples/Ising/IsingFusionAlgebraOnePsi.lean`, two in
+  `IsingFusionAlgebraOneSigma.lean`, two in `IsingFusionAlgebraPsiSigma.lean`.
+- **Abstraction:** `IsingTwist.isingFusion_of_signedPerm` in
+  `TNLean/MPS/Examples/Ising/IsingFusionAlgebra.lean`.
+- **Notes:** the caller supplies the scaled-matrix-unit form of each letter
+  (`*_eq_smul_single`), a duplicate-free list `next h` containing every right
+  label `h'` at which the first factor's coefficient `a h h'` may be nonzero
+  (any such superset of the support works; labels outside it must have
+  `a h h' = 0`), the vanishing of the letters across the middle
+  label, the gauge `G` with `G * Gᵀ = 1` and `Gᵀ * G = 1`, and the sector
+  identity `hdiag`; the last three are `decide +kernel` checks over `ℤ√2`.
+  The lemma is specific to the ten fusion-tree labels of the Ising category;
+  a fusion rule of other tensors related by a bond similarity uses
+  `mpo_mul_eq_of_zsqrt2_conj` directly.
+
+### normality from a table of two-letter words — promoted
+- **Pattern:** prove `IsNormal A` for a small complex tensor by showing that
+  every matrix unit `E_ij` is a combination of two words of length two, via a
+  chain of private product lemmas `A i * A j = ...` and matrix-unit
+  identities, and then concluding with a span argument.
+- **Seen:** four call sites across two directories (2026-09-25):
+  `CZXDecoratedTensor.lean`, `CZXReviewTensor.lean` and `CZXTensor.lean` in
+  `TNLean/MPS/Examples/CZX/`, and `ParityGraded.parA_isNormal` in
+  `TNLean/MPS/Examples/MultiBlock/ParityGraded.lean` (which dropped eight
+  private product and matrix-unit lemmas in #8092).
+- **Abstraction:** `MPSTensor.isNormal_of_single_eq_two_words` in
+  `TNLean/MPS/Core/NormalityFromTwoWords.lean`.
+- **Notes:** the caller supplies, for each pair `(i, j)`, letters `a, b, c, e`
+  and scalars `u, v` with
+  `Matrix.single i j 1 = u • (A a * A b) + v • (A c * A e)`, typically by
+  `fin_cases` on `(i, j)` or through one table decided over the integers and
+  transported by `complexOfRing`. When more words or another length are
+  needed, use `MPSTensor.isNormal_of_complexOfRing_single` instead.
+
 ## Completed refactors
 
 ### Appending a tuple endpoint under `List.ofFn`
