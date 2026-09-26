@@ -4527,7 +4527,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{Submodule.norm_sum_sq_ge_of_overlapMatrix}
     \leanok
     Let $v_1,\ldots,v_m$ lie in a complex inner product space, and let
-    $B\in M_m(\mathbb R)$ have zero diagonal. Suppose that
+    $B\in M_m(\R)$ have zero diagonal. Suppose that
     $|\langle v_i,v_j\rangle|\leq B_{ij}\lVert v_i\rVert\lVert v_j\rVert$
     whenever $i\neq j$. With the Euclidean operator norm on $B$,
     \begin{align}
@@ -4557,7 +4557,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{thm:subspace_overlap_lower_gram}
     Let $U,V_1,\ldots,V_m$ be subspaces of a complex inner product space.
-    Let $a\in\mathbb R^m$ and $B\in M_m(\mathbb R)$, where $B$ has zero
+    Let $a\in\R^m$ and $B\in M_m(\R)$, where $B$ has zero
     diagonal and $\lVert B\rVert<1$. Suppose that
     $|\langle u,v\rangle|\leq B_{ij}\lVert u\rVert\lVert v\rVert$
     for $i\neq j$, $u\in V_i$, and $v\in V_j$. Suppose also that
@@ -4608,6 +4608,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
+    \uses{thm:subspace_overlap_sum}
     For $y=\sum_i v_i$, the off-diagonal terms satisfy
     \begin{align}
         \sum_{i\neq j}\varepsilon\lVert v_i\rVert\lVert v_j\rVert
@@ -4615,9 +4616,28 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
             -\sum_i\lVert v_i\rVert^2\right]
         \leq\varepsilon(m-1)\sum_i\lVert v_i\rVert^2.
     \end{align}
-    Thus the preceding Cauchy--Schwarz argument applies with lower Gram
-    bound $1-\varepsilon(m-1)>0$ and
-    $\lVert a\rVert=\varepsilon\sqrt m$. Finally,
+    Take $a_i=\varepsilon$ and $B_{ij}=\varepsilon(1-\delta_{ij})$. For
+    $w\in\R^m$ write $|w|$ for the vector with entries $|w_i|$. Since $B$ is
+    symmetric with nonnegative entries, the same computation applied to $|w|$
+    gives
+    \begin{align}
+        |\langle w,Bw\rangle|
+         & \leq\langle|w|,B|w|\rangle
+        =\varepsilon\left[\left(\sum_i|w_i|\right)^2-\sum_i w_i^2\right]
+        \leq\varepsilon(m-1)\lVert w\rVert^2,
+    \end{align}
+    and hence
+    $\lVert B\rVert=\sup_{\lVert w\rVert=1}|\langle w,Bw\rangle|
+        \leq\varepsilon(m-1)\leq1-\varepsilon$, which is less
+    than one when $\varepsilon>0$ and vanishes when $\varepsilon=0$. With
+    $\lVert a\rVert=\varepsilon\sqrt m$,
+    Theorem~\ref{thm:subspace_overlap_sum} gives
+    \begin{align}
+        |\langle x,y\rangle|
+         & \leq\frac{\varepsilon\sqrt m}{\sqrt{1-\varepsilon(m-1)}}
+        \lVert x\rVert\lVert y\rVert.
+    \end{align}
+    Finally,
     $\varepsilon^2m\leq1-\varepsilon(m-1)$ follows from
     $\varepsilon m\leq1$, and gives $\eta\leq1$.
 \end{proof}
@@ -4833,6 +4853,169 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     The extended-boundary overlap estimate supplies all three bounds for
     $U_i\times U_j$, $V_i\times V_j$, and $U_i\times V_j$ with the same
     matrix $B$. Apply the joint-projector comparison.
+\end{proof}
+
+\section{Overlaps of distinct block ground spaces}
+
+\begin{theorem}[Mixed boundary Gram identity]
+    \label{thm:mixed_boundary_gram_identity}
+    \lean{MPSTensor.inner_single_mixed_groundSpaceGram_single,
+        MPSTensor.adjoint_groundSpaceMapES_comp_eq_mixedTransfer}
+    \leanok
+    Let $A$ and $B$ have bond dimensions $D_A$ and $D_B$, respectively,
+    and let $\Gamma_A(n)$ and $\Gamma_B(n)$ be their boundary maps with
+    Hilbert--Schmidt norms on the boundary matrix spaces. Define
+    $\mathcal E_{BA}(X)=\sum_i B^iX(A^i)^*$ on
+    $M_{D_B\times D_A}(\C)$. For matrix units $E_{ab}$ and $E_{ce}$,
+    \begin{align}
+        \langle\Gamma_A(n)E_{ab},\Gamma_B(n)E_{ce}\rangle
+         & =\bigl[\mathcal E_{BA}^n(E_{ca})\bigr]_{eb}.
+    \end{align}
+    Thus $\Gamma_A(n)^*\Gamma_B(n)$ is the rectangular reshuffling of
+    $\mathcal E_{BA}^n$. This is the boundary-coordinate form of
+    equations~\textup{ip} and~\textup{P12} in the proof of the lemma
+    \textup{disjoint} in \cite{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expanding the trace boundary maps gives
+    \begin{align}
+        \langle\Gamma_A(n)E_{ab},\Gamma_B(n)E_{ce}\rangle
+         & =\sum_{|w|=n}\overline{A^w_{ba}}B^w_{ec}
+        =\sum_{|w|=n}\bigl[B^wE_{ca}(A^w)^*\bigr]_{eb}.
+    \end{align}
+    The word expansion of $\mathcal E_{BA}^n$ gives the assertion.
+\end{proof}
+
+\begin{theorem}[Mixed boundary Gram decay]
+    \label{thm:mixed_boundary_gram_decay}
+    \lean{MPSTensor.adjoint_groundSpaceMapES_comp_tendsto_zero,
+        MPSTensor.adjoint_groundSpaceMapES_comp_tendsto_zero_of_spectralRadius_lt_one}
+    \leanok
+    \uses{thm:mixed_boundary_gram_identity}
+    If $\mathcal E_{BA}^n(X)\to0$ for every boundary matrix $X$, then
+    $\lVert\Gamma_A(n)^*\Gamma_B(n)\rVert\to0$.
+    In particular this holds when the spectral radius of
+    $\mathcal E_{BA}$ is less than one.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mixed_boundary_gram_identity}
+    The preceding identity gives convergence of every entry of the mixed
+    Gram operator. Its domain and codomain have fixed finite dimensions,
+    so entrywise convergence implies convergence in operator norm.
+    A spectral radius less than one gives decay of the powers of
+    $\mathcal E_{BA}$, as in equation~\textup{limP12} in the proof of the
+    lemma \textup{disjoint} in \cite{Nachtergaele1996Spectral}.
+\end{proof}
+
+\begin{theorem}[Ground-space overlap from mixed Gram bounds]
+    \label{thm:ground_space_overlap_mixed_gram}
+    \lean{MPSTensor.norm_inner_groundSpaceES_le_mixedGram}
+    \leanok
+    Suppose that $\Gamma_A(n)$ and $\Gamma_B(n)$ are injective, and put
+    $G_A(n)=\Gamma_A(n)^*\Gamma_A(n)$ and
+    $G_B(n)=\Gamma_B(n)^*\Gamma_B(n)$. For vectors
+    $x\in\operatorname{ran}\Gamma_A(n)$ and
+    $y\in\operatorname{ran}\Gamma_B(n)$,
+    \begin{align}
+        |\langle x,y\rangle|
+         & \leq\sqrt{\lVert G_A(n)^{-1}\rVert}\,
+        \lVert\Gamma_A(n)^*\Gamma_B(n)\rVert\,
+        \sqrt{\lVert G_B(n)^{-1}\rVert}\,
+        \lVert x\rVert\lVert y\rVert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $x=\Gamma_A(n)u$ and $y=\Gamma_B(n)v$. The left inverse
+    $G_A(n)^{-1}\Gamma_A(n)^*$ has norm
+    $\sqrt{\lVert G_A(n)^{-1}\rVert}$, so
+    $\lVert u\rVert\leq\sqrt{\lVert G_A(n)^{-1}\rVert}\lVert x\rVert$;
+    the analogous estimate holds for $v$. Apply these bounds to
+    $|\langle u,\Gamma_A(n)^*\Gamma_B(n)v\rangle|$.
+    This makes explicit the normalization step using
+    equation~\textup{C1C2} in \cite{Nachtergaele1996Spectral}.
+\end{proof}
+
+\begin{theorem}[Uniform decay of block ground-space overlaps]
+    \label{thm:block_ground_space_overlap_decay}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_mixed_gap}
+    \leanok
+    \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
+        thm:primitive_ground_space_gram_inverse_tendsto}
+    Let $A$ and $B$ be trace-preserving tensors with positive-definite
+    fixed matrices $\rho$ and $\sigma$. Suppose their complementary
+    transfer maps have spectral radius less than one, and that
+    $\operatorname{spr}(\mathcal E_{BA})<1$.
+    For every $\varepsilon>0$, there is $n_0$ such that for every
+    $n\geq n_0$, $x\in\mathcal G_n^{\mathrm{ES}}(A)$, and $y\in\mathcal G_n^{\mathrm{ES}}(B)$,
+    \begin{align}
+        |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
+    \end{align}
+    This is the bound on inner products of ground-space vectors obtained
+    from the spectral-radius estimate in the proof of the lemma \textup{disjoint}
+    in \cite{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
+        thm:primitive_ground_space_gram_inverse_tendsto}
+    By Theorem~\ref{thm:primitive_ground_space_gram_inverse_tendsto}, the
+    self-Gram operators $G_A(n)$ and $G_B(n)$ converge to invertible limits
+    $G_A(\infty)$ and $G_B(\infty)$ determined by $\rho$ and $\sigma$, and
+    their inverses converge to $G_A(\infty)^{-1}$ and $G_B(\infty)^{-1}$.
+    Since the limits are invertible, so are $G_A(n)$ and $G_B(n)$, and hence
+    $\Gamma_A(n)$ and $\Gamma_B(n)$ are injective, for all
+    sufficiently large $n$. By Theorem~\ref{thm:mixed_boundary_gram_decay},
+    the coefficient in Theorem~\ref{thm:ground_space_overlap_mixed_gram}
+    satisfies
+    \begin{align}
+        c(n)
+         & =\sqrt{\lVert G_A(n)^{-1}\rVert}\,
+        \lVert\Gamma_A(n)^*\Gamma_B(n)\rVert\,
+        \sqrt{\lVert G_B(n)^{-1}\rVert}
+        \longrightarrow
+        \sqrt{\lVert G_A(\infty)^{-1}\rVert}\cdot0\cdot
+        \sqrt{\lVert G_B(\infty)^{-1}\rVert}=0.
+    \end{align}
+    Choose $n_0$ with $c(n)\leq\varepsilon$ for $n\geq n_0$; then
+    Theorem~\ref{thm:ground_space_overlap_mixed_gram} gives the bound,
+    uniformly in $x$ and $y$.
+\end{proof}
+
+\begin{theorem}[Asymptotic orthogonality of inequivalent blocks]
+    \label{thm:inequivalent_block_ground_space_overlap_decay}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
+    \leanok
+    \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
+        thm:transfer_operator_gap_rect_irr_tp}
+    Let $A$ and $B$ be trace-preserving tensors with positive-definite
+    fixed matrices and complementary transfer spectral radii less than one.
+    Suppose that, if their bond dimensions agree, they are not gauge-phase
+    equivalent. Then, for every $\varepsilon>0$ and all sufficiently large $n$,
+    every $x\in\mathcal G_n^{\mathrm{ES}}(A)$ and $y\in\mathcal G_n^{\mathrm{ES}}(B)$ satisfy
+    \begin{align}
+        |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
+    \end{align}
+    This is the normalized tensor form of equation~\textup{limitepsilonm}
+    in \cite{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
+        thm:transfer_operator_gap_rect_irr_tp}
+    The positive-definite fixed matrices and complementary gaps imply
+    irreducibility. For equal bond dimensions, inequivalence gives a strict
+    mixed-transfer spectral gap. For unequal bond dimensions, a peripheral
+    mixed-transfer eigenvector would force equality of the bond dimensions,
+    so the gap is again strict. Apply
+    Theorem~\ref{thm:block_ground_space_overlap_decay}.
 \end{proof}
 
 \section{The normalized primitive gauge of a normal tensor}

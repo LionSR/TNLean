@@ -208,11 +208,11 @@ def defectSquare : MPSTensor 9 25 := (MPOTensor.mulTensor defectTensor defectTen
 
 /-- The Eisenstein matrices of the stacked square, in the bond order `5 p₁ + p₂`. -/
 def defectSquareEis : Fin 9 → Matrix (Fin 25) (Fin 25) EisensteinInt :=
-  fun a => mulEisensteinTensor defectEis defectEis (Fin.divNat (m := 3) (n := 3) a)
+  fun a => mulTensorR defectEis defectEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 theorem defectSquare_eq (a : Fin 9) : defectSquare a = complexOfEisenstein (defectSquareEis a) :=
-  mulTensor_complexOfEisenstein defectEis defectEis _ _
+  mulTensor_complexOfRing _ defectEis defectEis _ _
 
 /-- The bond dimension of the pair block `U_g ⊗ U_h`. -/
 abbrev pairBlockDim (ab : Fin 3 × Fin 3) : ℕ := summandDim ab.1 * summandDim ab.2
@@ -220,7 +220,7 @@ abbrev pairBlockDim (ab : Fin 3 × Fin 3) : ℕ := summandDim ab.1 * summandDim 
 /-- The stacked product `U_g ⊗ U_h` of two summands, over `ℤ[ω]`. -/
 def pairStackEis (ab : Fin 3 × Fin 3) :
     Fin 9 → Matrix (Fin (pairBlockDim ab)) (Fin (pairBlockDim ab)) EisensteinInt :=
-  fun a => mulEisensteinTensor (summandEis ab.1) (summandEis ab.2)
+  fun a => mulTensorR (summandEis ab.1) (summandEis ab.2)
     (Fin.divNat (m := 3) (n := 3) a) (Fin.modNat (m := 3) (n := 3) a)
 
 /-- The bond coordinate of the square attached to a coordinate of a pair block, in the bond
