@@ -5455,11 +5455,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
              & =\delta_{s_0,s'_0}
         C_{(t_1,s_1),(t'_1,s'_1)}\delta_{t_2,t'_2}.
     \end{align}
-    The link coordinates are ordered as $(r,\ell,r,\ell)$. One may also
-    contract $F_{\alpha,\gamma}$ against arbitrary virtual matrices $P,Q$
-    by taking the trace of $P$ times the displayed three-letter word times
-    $Q$, or attach arbitrary complete-block words before this contraction.
-    These are finite contractions of
+    The link coordinates are ordered as $(r,\ell,r,\ell)$. For arbitrary
+    virtual matrices $P,Q$ and complete-block word pairs
+    $(\sigma^{L},\tau^{L})$ and $(\sigma^{R},\tau^{R})$, set
+    \begin{align}
+        F_{P,Q}(a,b;j)
+         & =\operatorname{tr}\bigl(P\,W^{(e_-,a_0),j_0}
+        W^{(a_1,b_0),j}W^{(b_1,e_+),j_2}\,Q\bigr),         \\
+        F_{\sigma,\tau}(a,b;j)
+         & =\operatorname{tr}\bigl(W^{\sigma^{L},\tau^{L}}
+        W^{(e_-,a_0),j_0}W^{(a_1,b_0),j}W^{(b_1,e_+),j_2}
+        W^{\sigma^{R},\tau^{R}}\bigr),
+    \end{align}
+    where $W^{\sigma,\tau}$ denotes word evaluation. These are finite
+    contractions of
     \cite[Equations~\texttt{uuvv} and \texttt{StandardForm}]{Cirac2017MPU}.
 \end{definition}
 
@@ -5792,14 +5801,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{def:mpdo_physical_blocking, def:mpu_two_site_open_three_block,
         def:mpo_family}
     Suppose $W=(U^{[k]})_2$ has supplied two-site standard-form data.
-    Keep arbitrary original-site residual words at the two ends of the
-    chain, and arbitrary complete two-site-block words before and after a
-    three-block window. Let $P$ be the product of the left residual and
-    left complete-block words, and $Q$ the product of the right
-    complete-block and right residual words, in their chain order. When
-    the middle direct blocks are relabeled as these words and the three
-    displayed window letters, the full original-chain coefficient matrix
-    $F^U$ satisfies
+    Let $i^-,j^-$ be original-site words of length $p$ and $i^+,j^+$
+    original-site words of length $s$. Let
+    $(\sigma^{L},\tau^{L})$ and $(\sigma^{R},\tau^{R})$ be complete-block
+    word pairs, with $|\sigma^{L}|=|\tau^{L}|$. For each choice of the
+    window labels $a,b,j$, let $\sigma(a,b)$ and $\tau(j)$ be words of $m$
+    blocks of length $2k$ whose relabelings in the sense of the
+    residual-word identity are
+    \begin{align}
+        \eta\sigma(a,b)
+         & =\sigma^{L}\,\bigl((e_-,a_0),(a_1,b_0),(b_1,e_+)\bigr)\,
+        \sigma^{R},                                                 \\
+        \eta\tau(j)
+         & =\tau^{L}\,(j_0,j,j_2)\,\tau^{R}.
+    \end{align}
+    Put
+    \begin{align}
+        P & =U^{i^-,j^-}\,W^{\sigma^{L},\tau^{L}}, \qquad
+        Q=W^{\sigma^{R},\tau^{R}}\,U^{i^+,j^+},                    \\
+        F^U(a,b;j)
+          & =\rho^{(p+2km+s)}(U)_{i^-\widehat{\sigma(a,b)}\,i^+,\,
+                j^-\widehat{\tau(j)}\,j^+}.
+    \end{align}
+    Then the original-chain coefficient matrix $F^U$ satisfies
     \begin{align}
         F^U(a,b;j) & = F_{P,Q}(a,b;j), \\
         F^U A      & = B(A)F^U.
@@ -5816,8 +5840,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     in the trace. Two word concatenations split the relabeled middle
     product into the left complete-block word, the three window letters,
     and the right complete-block word. This gives the first equality
-    entrywise. Apply the arbitrary-virtual-end three-block identity with
-    the resulting products $P,Q$ to obtain the second equality.
+    entrywise, with $P$ and $Q$ the displayed end products. Apply the
+    arbitrary-virtual-end three-block identity to these two matrices to
+    obtain the second equality.
 \end{proof}
 
 \begin{lemma}[Three-block locality with original-site residuals]
