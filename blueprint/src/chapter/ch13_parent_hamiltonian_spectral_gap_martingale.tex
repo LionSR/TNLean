@@ -5082,9 +5082,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         V_j & =\mathscr A_{K,L,Q}\bigl(\mathcal H_K\otimes G_{L+Q}(A_j)\bigr), &
         W_j & =G_{K+L+Q}(A_j),
     \end{align}
-    and let $P,Q,R$ be the orthogonal projectors onto $\sum_jU_j$,
-    $\sum_jV_j$, and $\sum_jW_j$, as in
-    Theorem~\ref{thm:ph_block_interval_projectors}. The local identity at
+    and let $P,S,R$ be the orthogonal projectors onto $\sum_jU_j$,
+    $\sum_jV_j$, and $\sum_jW_j$. These are the projectors written $P,Q,R$
+    in Theorem~\ref{thm:ph_block_interval_projectors}; the middle one is
+    renamed here because $Q$ denotes a length. The local identity at
     length $K+L+Q$, the first identity of
     Theorem~\ref{thm:ph_block_sum_interval_spaces} at lengths $K+L$ and $Q$,
     and its reassociated identity at lengths $K,L,Q$ give
@@ -5094,9 +5095,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         P_{[1,K+L]}(B)     & =P_{G_{K+L}(B)\otimes\mathcal H_Q}
         =P_{\sum_jU_j}=P,                                               \\
         P_{[K+1,K+L+Q]}(B) & =P_{\mathscr A_{K,L,Q}(\mathcal H_K\otimes
-                G_{L+Q}(B))}=P_{\sum_jV_j}=Q.
+                G_{L+Q}(B))}=P_{\sum_jV_j}=S.
     \end{align}
-    Hence the left side of the asserted bound is $\lVert R-PQ\rVert$, and
+    Hence the left side of the asserted bound is $\lVert R-PS\rVert$, and
     Theorem~\ref{thm:ph_primitive_block_interval_defect_decay} with the
     prescribed $\eta$ bounds it by $\eta$ for all sufficiently large $L$,
     every $K\geq0$, and every $Q>0$.
