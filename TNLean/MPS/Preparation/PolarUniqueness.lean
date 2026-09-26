@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.TripartiteDecorrelation
 import TNLean.MPS.Preparation.MatrixPolar
 
 /-!
@@ -18,8 +19,6 @@ the product of the layers of its tree circuit with the isometry of the blocked t
 
 * `Matrix.mul_eq_self_of_conjTranspose_mul_self_eq` — a partial isometry is fixed by its
   initial projector: `Wᴴ W = E` gives `W E = W`.
-* `Matrix.eq_of_range_eq_of_isHermitian_idempotent` — two orthogonal projectors with the same
-  range are equal.
 * `Matrix.polarPos_eq_of_eq_mul`, `Matrix.polarSupport_eq_of_eq_mul`,
   `Matrix.polarIso_eq_of_eq_mul` — uniqueness of the three polar factors.
 
@@ -77,18 +76,6 @@ theorem mul_eq_zero_of_mul_eq_zero_of_range_le {ρ : Type*} [Fintype ρ] {Y : Ma
   rw [← mulVec_mulVec, ← hu, mulVec_mulVec, hY, zero_mulVec, zero_mulVec]
 
 omit [DecidableEq κ] in
-/-- **Two orthogonal projectors with the same range are equal.** -/
-theorem eq_of_range_eq_of_isHermitian_idempotent {E F : Matrix κ κ ℂ} (hE : E.IsHermitian)
-    (hEE : E * E = E) (hF : F.IsHermitian) (hFF : F * F = F)
-    (hran : LinearMap.range E.mulVecLin = LinearMap.range F.mulVecLin) : E = F := by
-  have hFE : F * E = E := mul_eq_self_of_range_le hFF hran.le
-  have hEF : E * F = F := mul_eq_self_of_range_le hEE hran.ge
-  calc E = Eᴴ := hE.eq.symm
-    _ = (F * E)ᴴ := by rw [hFE]
-    _ = E * F := by rw [conjTranspose_mul, hE.eq, hF.eq]
-    _ = F := hEF
-
-omit [DecidableEq κ] in
 /-- The Gram matrix of a product `W Q` with `Wᴴ W = E`, `E Q = Q`, and `Q` Hermitian is
 `Q Q`. -/
 private lemma gram_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ ℂ} (hM : M = W * Q)
@@ -120,8 +107,9 @@ theorem polarSupport_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ �
     (hQ : Q.PosSemidef) (hW : Wᴴ * W = E) (hE : E.IsHermitian) (hEE : E * E = E)
     (hran : LinearMap.range E.mulVecLin = LinearMap.range Q.mulVecLin) :
     polarSupport M = E := by
-  refine eq_of_range_eq_of_isHermitian_idempotent (isHermitian_polarSupport M)
-    (polarSupport_mul_polarSupport M) hE hEE ?_
+  refine TripartiteDecorrelation.hermitian_idempotent_eq_of_range_eq _ _
+    (isHermitian_polarSupport M) (polarSupport_mul_polarSupport M) hE hEE ?_
+  simp only [Matrix.toLin'_apply']
   rw [range_polarSupport, polarPos_eq_of_eq_mul hM hQ hW hE hEE hran, hran]
 
 /-- **Uniqueness of the partial isometry of the polar decomposition**: if `M = W Q` with `Q`
