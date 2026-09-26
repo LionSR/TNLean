@@ -55,7 +55,7 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {n m p D : ℕ}
+variable {n m D : ℕ}
 
 /-! ### Blocking commutes with physical maps -/
 
