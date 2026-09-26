@@ -292,4 +292,38 @@ theorem TwoSiteStandardFormData.isMPU
   let _ : NeZero N := ⟨by omega⟩
   exact TwoSiteStandardFormData.mpo_mem_unitaryGroup W u v S
 
+/-- Flatten ordered pairs into consecutive sites of the original chain.
+
+Source: arXiv:1703.09188, equation `StandardForm`, lines 603--617. -/
+noncomputable def twoSiteChainConfigEquiv (d N : ℕ) :
+    (Fin N → Fin d × Fin d) ≃ (Fin (N * 2) → Fin d) :=
+  (twoSitePairConfigEquiv d N).trans
+    ((Equiv.arrowCongr (Equiv.refl (Fin N)) (twoSiteBlockEquiv d)).trans
+      (MPSTensor.blockedConfigEquiv d N 2))
+
+/-- On every positive even chain, a simple canonical-form-II MPU is the
+shifted source-gate layer after the unshifted source-gate layer. At four
+original sites this is $v_{23}v_{41}u_{12}u_{34}$.
+
+Source: arXiv:1703.09188, equation `StandardForm` and Definition `SF`,
+lines 603--622.
+
+**Scope restriction (canonical form II):** This source-gate corollary uses a
+supplied reduced full-support canonical-form-II presentation. Constructing a
+simple representative from an arbitrary simple MPU remains the separate
+problem documented in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+The supplied-gate circuit theorems above do not require this presentation. -/
+theorem IsMPUCanonicalFormII.mpo_even_eq_source_circuit
+    {d D N : ℕ} [NeZero N] {U : MPOTensor d D}
+    (hU : IsMPUCanonicalFormII U) (hS : IsMPUSimple U) :
+    Matrix.reindex (twoSiteChainConfigEquiv d N).symm
+        (twoSiteChainConfigEquiv d N).symm (mpo U (N * 2)) =
+      twoSiteShiftedLayer (N := N) (sourceV U hU.ρ hU.ρ_posDef) *
+        twoSiteUnshiftedLayer (N := N) (sourceU U hU.ρ hU.ρ_posDef) := by
+  have h := TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted
+    (N := N) (blockTwo U) (sourceU U hU.ρ hU.ρ_posDef)
+    (sourceV U hU.ρ hU.ρ_posDef) (hU.twoSiteStandardFormData hS)
+  rw [mpo_blockTwo_eq_reindex_blockTensor, mpo_blockTensor_eq_reindex] at h
+  exact h
+
 end MPOTensor

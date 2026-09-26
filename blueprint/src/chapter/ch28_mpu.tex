@@ -5414,6 +5414,46 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     intermediate dimensions positive.
 \end{proof}
 
+\begin{theorem}[Source circuit on the original even chain]
+    \label{thm:mpu_source_even_periodic_circuit}
+    \lean{MPOTensor.twoSiteChainConfigEquiv,
+        MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_source_circuit}
+    \leanok
+    \uses{def:mpu_source_open_two_site_standard_form,
+        def:mpu_two_site_circuit_layers}
+    Let $\mathcal U$ be simple and have a reduced full-support
+    canonical-form-II presentation with positive diagonal fixed matrix $\rho$.
+    Let $u$ and $v$ be its source gates. For $N>0$, flatten each pair
+    configuration by the bijection $\Phi_N$ given by
+    \begin{align}
+        (\Phi_N i)_{2x}   & =i_{x,1}, &
+        (\Phi_N i)_{2x+1} & =i_{x,2}.
+    \end{align}
+    Then the original chain of $2N$ sites satisfies
+    \begin{align}
+        U^{(2N)}(\mathcal U)_{\Phi_N i,\Phi_N j}
+         & =(C_{v,N}C_{u,N})_{i,j}.
+    \end{align}
+    In particular, numbering four original sites from $1$ to $4$ gives
+    \begin{align}
+        U^{(4)}(\mathcal U) & =v_{23}v_{41}u_{12}u_{34}.
+    \end{align}
+    % This is the supplied-CFII corollary of the source equation, not the
+    % unrestricted representative theorem in Definition SF. See
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex and issue 7127.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_open_two_site_standard_form,
+        thm:mpu_supplied_two_site_periodic_circuit,
+        thm:mpdo_block_two_as_positive_blocking,
+        thm:mpdo_closed_chain_physical_blocking}
+    Apply the supplied circuit identity to the two-site block of $\mathcal U$.
+    The two physical-blocking identities identify its length-$N$ periodic
+    operator with $U^{(2N)}(\mathcal U)$ under $\Phi_N$. For $N=2$, the two
+    shifted pairs are $(2,3)$ and $(4,1)$.
+\end{proof}
+
 \begin{theorem}[Bounded block with an open source standard form]
     \label{thm:mpu_bounded_source_open_standard_form}
     \lean{MPOTensor.twoSiteDirectBlockEquiv,
