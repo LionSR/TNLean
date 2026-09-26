@@ -4839,8 +4839,17 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The configuration decomposition preserves the inner product and norm.
-    The triangle inequality and Cauchy--Schwarz give
+    Decomposing along the prefix and suffix configurations gives
+    \begin{align}
+        \langle x,y\rangle & =\sum_{u,v}\langle x_{u,v},y_{u,v}\rangle,
+        \notag                                                          \\
+        \lVert x\rVert^2   & =\sum_{u,v}\lVert x_{u,v}\rVert^2,
+        \qquad
+        \lVert y\rVert^2=\sum_{u,v}\lVert y_{u,v}\rVert^2.
+        \notag
+    \end{align}
+    The triangle inequality, the overlap bound, and Cauchy--Schwarz for the
+    sequences $(\lVert x_{u,v}\rVert)$ and $(\lVert y_{u,v}\rVert)$ give
     \begin{align}
         |\langle x,y\rangle|
          & \leq\sum_{u,v}|\langle x_{u,v},y_{u,v}\rangle|                    \\
