@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Examples.Ising.IsingWeightedTwist
 
 /-!
@@ -293,11 +294,6 @@ theorem sectorAction_trace_evalWord (w : List (Fin 10)) (hw : w ≠ []) :
     Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons, Matrix.tail_cons]
   ring
 
-private theorem mpv_smul (c : ℂ) (A : MPSTensor 10 1) {L : ℕ} (σ : Fin L → Fin 10) :
-    mpv (c • A) σ = c ^ L * mpv A σ := by
-  rw [show c • A = fun i => c • A i from rfl, mpv, mpv, coeff, coeff, Kraus.evalWord_smul,
-    Matrix.trace_smul, smul_eq_mul, List.length_ofFn]
-
 /-- **The weighted Verlinde action of the bond object on the sector labels** (data file §2,
 check 2b): at every positive length, the periodic operator of `Θ_3 = 5 A_1 ⊕ 3 A_ψ ⊕ 2 A_σ`
 applied to the product state `|σ1σ⟩^{⊗ L}` is
@@ -312,7 +308,7 @@ theorem thetaThree_mpo_sectorState (L : ℕ) (hL : 0 < L) :
   have h := sectorCompression.mpv_eq_sum L hL σ
   rw [show MPOTensor.actTensor thetaThree sectorState = sectorAction from rfl, h,
     show sectorSlots = Finset.univ from rfl, Fin.sum_univ_four]
-  simp only [sectorTargets, mpv_smul, sectorWeights, sectorLabel, sectorState,
+  simp only [sectorTargets, Pi.smul_def, mpv_smul, sectorWeights, sectorLabel, sectorState,
     Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three,
     Matrix.head_cons, Matrix.tail_cons]
   ring
