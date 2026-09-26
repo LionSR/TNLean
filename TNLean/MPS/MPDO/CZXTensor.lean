@@ -106,25 +106,8 @@ The output configuration supplies the displayed exponent. -/
 theorem mpo_tensor_apply {N : ℕ} [NeZero N] (s t : Fin N → Fin 4) :
     mpo tensor N s t = if s = complement N t then
       (-1 : ℂ) ^ cyclicExponent s else 0 := by
-  let g0 : Fin N → Fin 2 := fun n ↦ (siteBits (s n)).1
-  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond tensor s t g0 fun g hg ↦ by
-    obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
-    refine ⟨n, ?_⟩
-    simp [tensor_apply, show g n ≠ (siteBits (s n)).1 from hn]]
-  by_cases hst : s = complement N t
-  · have hp : ∀ n, s n = complementSite (t n) := fun n ↦ congrFun hst n
-    rw [ite_eq_left hst]
-    calc
-      _ = ∏ n, (-1 : ℂ) ^ edgeExponent (s n) (g0 (n + 1)) := by
-        apply Finset.prod_congr rfl
-        intro n _
-        rw [tensor_apply, ite_eq_left ⟨hp n, rfl⟩]
-      _ = _ := Finset.prod_pow_eq_pow_sum _ _ _
-  · rw [ite_eq_right hst]
-    have hn : ∃ n, s n ≠ complementSite (t n) := Function.ne_iff.mp hst
-    obtain ⟨n, hn⟩ := hn
-    apply Finset.prod_eq_zero (Finset.mem_univ n)
-    simp [tensor_apply, hn]
+  rw [mpo_apply_of_forced_left_bond tensor_apply, cyclicExponent, ← Finset.prod_pow_eq_pow_sum]
+  rfl
 
 /-- Monomial form with the phase attached to the input column. It is evaluated
 on the complemented input, so no extraneous length-dependent phase occurs. -/

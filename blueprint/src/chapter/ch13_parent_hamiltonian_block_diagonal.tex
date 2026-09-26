@@ -187,7 +187,7 @@ gives the bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly.
 \end{proof}
 
 \begin{theorem}[Local ground space of a block-diagonal tensor]
-    \label{lem:block_sum_local_ground_space}
+    \label{thm:block_sum_local_ground_space}
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup,
         MPSTensor.groundSpaceES_toTensorFromBlocks_eq_iSup}
     \leanok
@@ -210,7 +210,7 @@ gives the bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly.
     \label{lem:block_diagonal_periodic_constraints_propagated_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace}
     \leanok
-    \uses{lem:block_sum_local_ground_space, lem:periodic_constraints_propagated_subspace_sequence}
+    \uses{thm:block_sum_local_ground_space, lem:periodic_constraints_propagated_subspace_sequence}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for
     $1\le j\le g$, and set $S_M:=\bigvee_{j=1}^gG_M(A_j)$. If, for every
     $M\ge L$,
@@ -220,7 +220,7 @@ gives the bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly.
 
 \begin{proof}
     \leanok
-    Lemma~\ref{lem:block_sum_local_ground_space} gives $G_L(B)=S_L$.
+    Theorem~\ref{thm:block_sum_local_ground_space} gives $G_L(B)=S_L$.
     Apply Lemma~\ref{lem:periodic_constraints_propagated_subspace_sequence}
     to the sequence $S_M$.
 \end{proof}
@@ -531,7 +531,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     Suppose that the tuples $(A^{0,w},\ldots,A^{r-1,w})$, with $|w|=n$,
     span $\prod_j\MN{D_j}$. Writing $S_m=\sum_jG_m(A^j)$, one has
     \begin{align}
-        (S_{n+1}\otimes\C^d)\cap(\C^d\otimes S_{n+1})=S_{n+2}.
+        (\C^d\otimes S_{n+1})\cap(S_{n+1}\otimes\C^d)=S_{n+2}.
         \notag
     \end{align}
 \end{theorem}
@@ -540,13 +540,26 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{lem:pgvwc07_trace_decompositions_from_block_restrictions,
         lem:blockwise_boundary_compatibility_from_traces,
         thm:ph_tp_boundary_compatibility,
-        lem:left_boundary_summands_mem_block_ground_spaces}
-    The two restrictions provide boundary matrices $C_a^j,D_b^j$.
-    The simultaneous word span gives $A^{j,b}C_a^j=D_b^j A^{j,a}$.
-    Set $E_j=\sum_b(A^{j,b})^\dagger D_b^j$. Then $C_a^j=E_jA^{j,a}$,
-    so each boundary summand lies in $G_{n+2}(A^j)$.
+        lem:left_boundary_summands_mem_block_ground_spaces,
+        lem:ground_space_in_left_ground, lem:ground_space_in_right_ground}
+    The two restrictions provide boundary matrices $C_a^j,D_b^j$
+    (Lemma~\ref{lem:pgvwc07_trace_decompositions_from_block_restrictions}).
+    The simultaneous word span gives $A^{j,b}C_a^j=D_b^j A^{j,a}$
+    (Lemma~\ref{lem:blockwise_boundary_compatibility_from_traces}).
+    Set $E_j=\sum_b(A^{j,b})^\dagger D_b^j$. Then $C_a^j=E_jA^{j,a}$ by
+    Theorem~\ref{thm:ph_tp_boundary_compatibility}, so each boundary summand
+    lies in $G_{n+2}(A^j)$
+    (Lemma~\ref{lem:left_boundary_summands_mem_block_ground_spaces}).
     The reverse inclusion follows by restricting a boundary-condition vector
-    at its first or last physical letter.
+    at its first or last physical letter
+    (Lemmas~\ref{lem:ground_space_in_left_ground}
+    and~\ref{lem:ground_space_in_right_ground}):
+    \begin{align}
+        G_{n+2}(A^j)\subseteq\C^d\otimes G_{n+1}(A^j),
+        \qquad
+        G_{n+2}(A^j)\subseteq G_{n+1}(A^j)\otimes\C^d.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Open-chain ground space of trace-preserving blocks]
@@ -568,13 +581,89 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \leanok
     \uses{thm:ph_tp_block_intersection,
         lem:open_chain_iteration_subspace_sequence,
-        lem:block_sum_local_ground_space}
+        thm:block_sum_local_ground_space}
     Zero energy for a sum of positive local projectors is equivalent to
     satisfying every contiguous length-$L$ constraint. The block intersection
-    identity extends these constraints one site at a time, giving membership
-    in $G_N(B)$. Conversely, every boundary-condition vector satisfies each
-    local constraint. Nonzero block weights identify $G_N(B)$ with the sum
-    of the block spaces.
+    identity of Theorem~\ref{thm:ph_tp_block_intersection} extends these
+    constraints one site at a time
+    (Lemma~\ref{lem:open_chain_iteration_subspace_sequence}), giving
+    membership in $G_N(B)$. Conversely, every boundary-condition vector
+    satisfies each local constraint. Nonzero block weights identify $G_N(B)$
+    with the sum of the block spaces
+    (Theorem~\ref{thm:block_sum_local_ground_space}).
+\end{proof}
+
+\begin{theorem}[Three-block pairwise separation from block injectivity]
+    \label{thm:ph_three_block_pairwise_separation}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
+    \leanok
+    \uses{def:pairwise_block_separating_words, def:pair_trace_separation_words,
+        def:l_blk_injective, def:blocks_not_gauge_phase_equiv}
+    Let $A^0,\ldots,A^{r-1}$ be tensors with positive bond dimensions such
+    that each $A^j$ is irreducible, satisfies
+    $\sum_a(A^{j,a})^\dagger A^{j,a}=\Id$, and has self-overlap tending to
+    $1$ with the chain length. Suppose that no two distinct blocks are
+    related by a virtual gauge and a nonzero complex scalar. Let $L_0>0$ and
+    suppose that every $A^j$ is block injective at the lengths $L_0$,
+    $L_0+1$ and $S=3(L_0+1)$. Then every ordered pair of distinct blocks is
+    trace separated at length $S$, and for all $k\ne j$ there are
+    coefficients $c_\omega$ with
+    \begin{align}
+        \sum_{|\omega|=S}c_\omega A_k^\omega=I,
+        \qquad
+        \sum_{|\omega|=S}c_\omega A_j^\omega=0.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_direct_sum_injective_prefix_word_span,
+        lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_block_separation}
+    Fix $k\ne j$. If $D_k\ne D_j$, the strict-size branch of
+    Lemma~\ref{lem:direct_sum_two_block_dimension_step} at the comparison
+    length $L_0+1$ gives
+    \begin{align}
+        \spn\{(A_k^\omega,A_j^\omega):|\omega|=S\}=\MN{D_k}\times\MN{D_j}.
+        \notag
+    \end{align}
+    If $D_k=D_j$, the blocks are not related by a virtual gauge and a nonzero
+    scalar, so their periodic matrix product vectors are not proportional at
+    arbitrarily long chain lengths, and the same lemma gives
+    $\mathcal G_S^{A_k}\cap\mathcal G_S^{A_j}=\{0\}$ and the same pair span.
+    In both cases the pair is trace separated at length $S$, which is
+    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span}, and
+    Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
+    converts the pair span into the displayed equations.
+\end{proof}
+
+\begin{theorem}[Eventual word span from block selectors]
+    \label{thm:ph_eventual_word_span_from_selectors}
+    \lean{MPSTensor.eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective, def:blockwise_product_word_span}
+    Let $A^0,\ldots,A^{r-1}$ be tensors, let $p>0$, and suppose that every
+    $A^j$ is block injective at length $p$. Suppose that for every $k$ there
+    are coefficients $c_\omega^{(k)}$ with
+    \begin{align}
+        \sum_{|\omega|=s}c_\omega^{(k)}A_j^\omega=
+        \begin{cases}
+            I, & j=k,    \\
+            0, & j\ne k.
+        \end{cases}
+        \notag
+    \end{align}
+    Then for every $L\ge s+p$ the tuples $(A^{0,w},\ldots,A^{r-1,w})$, with
+    $|w|=L$, span $\prod_j\MN{D_j}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:wordspan_blk_inj_succ,
+        lem:product_word_span_from_bnt_block_separation}
+    Let $L\ge s+p$. Since $L-s\ge p$, every $A^j$ is block injective at length
+    $L-s$ by Theorem~\ref{thm:wordspan_blk_inj_succ}. Lemma
+    \ref{lem:product_word_span_from_bnt_block_separation} with the selectors
+    of length $s$ gives the full product span at length $(L-s)+s=L$.
 \end{proof}
 
 \begin{theorem}[Eventual simultaneous word span of primitive blocks]
@@ -592,16 +681,32 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \leanok
     \uses{thm:normal_from_primitive_posdef,
         thm:common_exact_block_injectivity_normal_left_canonical,
-        lem:direct_sum_two_block_dimension_step,
-        lem:block_separating_equations_from_pairwise_separation}
-    Primitivity gives normality, hence a common positive injective length $p$.
-    Injectivity persists at every length at least $p$.
-    The three-block separation argument at length $3(p+1)$ gives a word
-    polynomial selecting one block against any other. Multiplying these
-    polynomials gives selectors of a common length $s$ for the whole family.
-    For $L\ge s+p$, prepend an arbitrary matrix-valued word polynomial of
-    length $L-s$ to each selector. The resulting tuples span each factor of
-    the product algebra separately.
+        thm:wordspan_blk_inj_succ,
+        thm:ph_three_block_pairwise_separation,
+        lem:block_separating_equations_from_pairwise_separation,
+        thm:ph_eventual_word_span_from_selectors}
+    Primitivity gives normality
+    (Theorem~\ref{thm:normal_from_primitive_posdef}), hence a common positive
+    length $p$ at which every block is injective
+    (Theorem~\ref{thm:common_exact_block_injectivity_normal_left_canonical}).
+    Injectivity persists at every length at least $p$
+    (Theorem~\ref{thm:wordspan_blk_inj_succ}), in particular at $p+1$ and
+    $3(p+1)$. Theorem~\ref{thm:ph_three_block_pairwise_separation} with
+    $L_0=p$ gives, for every ordered pair $k\ne j$, a word polynomial of
+    length $3(p+1)$ equal to $I$ on block $k$ and to $0$ on block $j$.
+    Lemma~\ref{lem:block_separating_equations_from_pairwise_separation}
+    multiplies these polynomials into selectors of the common length
+    $s=(r-1)\cdot3(p+1)$:
+    \begin{align}
+        \sum_{|\omega|=s}c_\omega^{(k)}A_j^\omega=
+        \begin{cases}
+            I, & j=k,    \\
+            0, & j\ne k.
+        \end{cases}
+        \notag
+    \end{align}
+    Theorem~\ref{thm:ph_eventual_word_span_from_selectors} then gives the full
+    product span at every length $L\ge s+p$.
 \end{proof}
 
 \begin{theorem}[Uniform open-chain kernel threshold for primitive blocks]
@@ -623,7 +728,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{thm:ph_primitive_blocks_word_span,
         thm:ph_tp_block_open_ground_space}
     Choose $L_0$ one larger than the eventual simultaneous word-span
-    threshold and apply the open-chain intersection theorem.
+    threshold of Theorem~\ref{thm:ph_primitive_blocks_word_span} and apply
+    Theorem~\ref{thm:ph_tp_block_open_ground_space}.
 \end{proof}
 
 \begin{theorem}[Primitive representatives of inequivalent normal blocks]
@@ -645,11 +751,14 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \leanok
     \uses{thm:normalized_primitive_gauge,
         lem:gauge_phase_equiv_transport_left_right}
-    Normalize each block independently. The resulting nonzero rescaling
-    and virtual gauge leave its local ground spaces unchanged.
+    Normalize each block independently by
+    Theorem~\ref{thm:normalized_primitive_gauge}. The resulting nonzero
+    rescaling and virtual gauge leave its local ground spaces unchanged.
     If two normalized blocks were equivalent, composing the gauges and
     dividing by the nonzero normalization factors would give an equivalence
-    between the corresponding original blocks, contrary to the hypothesis.
+    between the corresponding original blocks
+    (Lemma~\ref{lem:gauge_phase_equiv_transport_left_right}), contrary to the
+    hypothesis.
 \end{proof}
 
 \begin{theorem}[Blockwise replacement preserves parent Hamiltonians]
@@ -666,7 +775,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:block_sum_local_ground_space}
+    \uses{thm:block_sum_local_ground_space}
     The assembled local ground spaces are the sums of the respective block
     spaces. Equality of these spaces gives equality of their orthogonal
     complement projections and hence of every translated parent interaction.
@@ -929,7 +1038,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:block_word_span_independent_rescaling, thm:word_tuple_span_gauge_invariance,
-        thm:normalized_primitive_gauge, lem:block_sum_local_ground_space}
+        thm:normalized_primitive_gauge, thm:block_sum_local_ground_space}
     Projection of the simultaneous span onto each matrix summand proves
     injectivity of every block at length $S$. Each block is therefore normal
     and admits a primitive representative obtained by a nonzero rescaling
@@ -993,7 +1102,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:coisometric_reconstruction_local_space, lem:block_sum_local_ground_space,
+    \uses{lem:coisometric_reconstruction_local_space, thm:block_sum_local_ground_space,
         thm:local_ground_space_gauge_invariance, thm:local_ground_space_rescaling}
     The coisometric reconstruction preserves the local space on every
     positive-length interval. The local space of the resulting direct sum
@@ -1028,7 +1137,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{thm:ph_canonical_representative_local_spaces,
         thm:ph_block_ground_space_at_simultaneous_injectivity,
         thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        lem:block_sum_local_ground_space}
+        thm:block_sum_local_ground_space}
     Replace the original canonical tensor by the direct sum containing
     one copy of each normal representative. Their local spaces, hence
     their periodic local constraints, coincide. Apply the simultaneous

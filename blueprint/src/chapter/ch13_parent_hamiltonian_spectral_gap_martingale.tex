@@ -4543,157 +4543,6 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     (\ref{eq:primitive_finite_range_knabe_gap}).
 \end{proof}
 
-\section{Overlaps of distinct block ground spaces}
-
-\begin{theorem}[Mixed boundary Gram identity]
-    \label{thm:mixed_boundary_gram_identity}
-    \lean{MPSTensor.inner_single_mixed_groundSpaceGram_single,
-        MPSTensor.adjoint_groundSpaceMapES_comp_eq_mixedTransfer}
-    \leanok
-    Let $A$ and $B$ have bond dimensions $D_A$ and $D_B$, respectively,
-    and let $\Gamma_A(n)$ and $\Gamma_B(n)$ be their boundary maps with
-    Hilbert--Schmidt norms on the boundary matrix spaces. Define
-    $\mathcal E_{BA}(X)=\sum_i B^iX(A^i)^*$ on
-    $M_{D_B,D_A}(\mathbb C)$. For matrix units $E_{ab}$ and $E_{ce}$,
-    \begin{align}
-        \langle\Gamma_A(n)E_{ab},\Gamma_B(n)E_{ce}\rangle
-         & =\bigl[\mathcal E_{BA}^n(E_{ca})\bigr]_{eb}.
-    \end{align}
-    Thus $\Gamma_A(n)^*\Gamma_B(n)$ is the rectangular reshuffling of
-    $\mathcal E_{BA}^n$. This is the boundary-coordinate form of
-    equations~\textup{ip} and~\textup{P12} in the proof of the lemma
-    \textup{disjoint} in \cite{Nachtergaele1996Spectral}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Expanding the trace boundary maps gives
-    \begin{align}
-        \langle\Gamma_A(n)E_{ab},\Gamma_B(n)E_{ce}\rangle
-         & =\sum_{|w|=n}\overline{A^w_{ba}}B^w_{ec}
-        =\sum_{|w|=n}\bigl[B^wE_{ca}(A^w)^*\bigr]_{eb}.
-    \end{align}
-    The word expansion of $\mathcal E_{BA}^n$ gives the assertion.
-\end{proof}
-
-\begin{theorem}[Mixed boundary Gram decay]
-    \label{thm:mixed_boundary_gram_decay}
-    \lean{MPSTensor.adjoint_groundSpaceMapES_comp_tendsto_zero,
-        MPSTensor.adjoint_groundSpaceMapES_comp_tendsto_zero_of_spectralRadius_lt_one}
-    \leanok
-    \uses{thm:mixed_boundary_gram_identity}
-    If $\mathcal E_{BA}^n(X)\to0$ for every boundary matrix $X$, then
-    $\lVert\Gamma_A(n)^*\Gamma_B(n)\rVert\to0$.
-    In particular this holds when the spectral radius of
-    $\mathcal E_{BA}$ is less than one.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mixed_boundary_gram_identity}
-    The preceding identity gives convergence of every entry of the mixed
-    Gram operator. Its domain and codomain have fixed finite dimensions,
-    so entrywise convergence implies convergence in operator norm.
-    A spectral radius less than one gives decay of the powers of
-    $\mathcal E_{BA}$, as in equation~\textup{limP12} in the proof of the
-    lemma \textup{disjoint} in \cite{Nachtergaele1996Spectral}.
-\end{proof}
-
-\begin{theorem}[Ground-space overlap from mixed Gram bounds]
-    \label{thm:ground_space_overlap_mixed_gram}
-    \lean{MPSTensor.norm_inner_groundSpaceES_le_mixedGram}
-    \leanok
-    Suppose that $\Gamma_A(n)$ and $\Gamma_B(n)$ are injective, and put
-    $G_A(n)=\Gamma_A(n)^*\Gamma_A(n)$ and
-    $G_B(n)=\Gamma_B(n)^*\Gamma_B(n)$. For vectors
-    $x\in\operatorname{ran}\Gamma_A(n)$ and
-    $y\in\operatorname{ran}\Gamma_B(n)$,
-    \begin{align}
-        |\langle x,y\rangle|
-         & \leq\sqrt{\lVert G_A(n)^{-1}\rVert}\,
-        \lVert\Gamma_A(n)^*\Gamma_B(n)\rVert\,
-        \sqrt{\lVert G_B(n)^{-1}\rVert}\,
-        \lVert x\rVert\lVert y\rVert.
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Write $x=\Gamma_A(n)u$ and $y=\Gamma_B(n)v$. The left inverse
-    $G_A(n)^{-1}\Gamma_A(n)^*$ has norm
-    $\sqrt{\lVert G_A(n)^{-1}\rVert}$, so
-    $\lVert u\rVert\leq\sqrt{\lVert G_A(n)^{-1}\rVert}\lVert x\rVert$;
-    the analogous estimate holds for $v$. Apply these bounds to
-    $|\langle u,\Gamma_A(n)^*\Gamma_B(n)v\rangle|$.
-    This makes explicit the normalization step using
-    equation~\textup{C1C2} in \cite{Nachtergaele1996Spectral}.
-\end{proof}
-
-\begin{theorem}[Uniform decay of block ground-space overlaps]
-    \label{thm:block_ground_space_overlap_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_mixed_gap}
-    \leanok
-    \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
-        thm:primitive_ground_space_gram_inverse_tendsto,
-        thm:primitive_ground_space_gram_eventual_inverse_bound}
-    Let $A$ and $B$ be trace-preserving tensors with positive-definite
-    fixed matrices $\rho$ and $\sigma$. Suppose their complementary
-    transfer maps have spectral radius less than one, and that
-    $\operatorname{spr}(\mathcal E_{BA})<1$.
-    For every $\varepsilon>0$, there is $n_0$ such that for every
-    $n\geq n_0$, $x\in\mathcal G_n(A)$, and $y\in\mathcal G_n(B)$,
-    \begin{align}
-        |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
-    \end{align}
-    This is the identity-observable conclusion obtained from the
-    spectral-radius estimate in the proof of the lemma \textup{disjoint}
-    in \cite{Nachtergaele1996Spectral}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
-        thm:primitive_ground_space_gram_inverse_tendsto,
-        thm:primitive_ground_space_gram_eventual_inverse_bound}
-    The self-Gram operators converge to invertible limits determined by
-    $\rho$ and $\sigma$. Their inverses therefore converge and are bounded
-    for all sufficiently large $n$. By
-    Theorem~\ref{thm:mixed_boundary_gram_decay}, the middle factor in
-    Theorem~\ref{thm:ground_space_overlap_mixed_gram} tends to zero.
-    The resulting coefficient is eventually less than $\varepsilon$,
-    uniformly in $x$ and $y$.
-\end{proof}
-
-\begin{theorem}[Asymptotic orthogonality of inequivalent blocks]
-    \label{thm:inequivalent_block_ground_space_overlap_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
-    \leanok
-    \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
-        thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}
-    Let $A$ and $B$ be trace-preserving tensors with positive-definite
-    fixed matrices and complementary transfer spectral radii less than one.
-    Suppose that, if their bond dimensions agree, they are not gauge-phase
-    equivalent. Then, for every $\varepsilon>0$ and all sufficiently large $n$,
-    every $x\in\mathcal G_n(A)$ and $y\in\mathcal G_n(B)$ satisfy
-    \begin{align}
-        |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
-    \end{align}
-    This is the normalized tensor form of equation~\textup{limitepsilonm}
-    in \cite{Nachtergaele1996Spectral}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
-        thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}
-    The positive-definite fixed matrices and complementary gaps imply
-    irreducibility. For equal bond dimensions, inequivalence gives a strict
-    mixed-transfer spectral gap. For unequal bond dimensions, a peripheral
-    mixed-transfer eigenvector would force equality of the bond dimensions,
-    so the gap is again strict. Apply
-    Theorem~\ref{thm:block_ground_space_overlap_decay}.
-\end{proof}
-
 \section{Overlap with a sum of subspaces}
 
 \begin{theorem}[Lower Gram estimate]
@@ -4701,7 +4550,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{Submodule.norm_sum_sq_ge_of_overlapMatrix}
     \leanok
     Let $v_1,\ldots,v_m$ lie in a complex inner product space, and let
-    $B\in M_m(\mathbb R)$ have zero diagonal. Suppose that
+    $B\in M_m(\R)$ have zero diagonal. Suppose that
     $|\langle v_i,v_j\rangle|\leq B_{ij}\lVert v_i\rVert\lVert v_j\rVert$
     whenever $i\neq j$. With the Euclidean operator norm on $B$,
     \begin{align}
@@ -4731,7 +4580,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{thm:subspace_overlap_lower_gram}
     Let $U,V_1,\ldots,V_m$ be subspaces of a complex inner product space.
-    Let $a\in\mathbb R^m$ and $B\in M_m(\mathbb R)$, where $B$ has zero
+    Let $a\in\R^m$ and $B\in M_m(\R)$, where $B$ has zero
     diagonal and $\lVert B\rVert<1$. Suppose that
     $|\langle u,v\rangle|\leq B_{ij}\lVert u\rVert\lVert v\rVert$
     for $i\neq j$, $u\in V_i$, and $v\in V_j$. Suppose also that
@@ -4782,6 +4631,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
+    \uses{thm:subspace_overlap_sum}
     For $y=\sum_i v_i$, the off-diagonal terms satisfy
     \begin{align}
         \sum_{i\neq j}\varepsilon\lVert v_i\rVert\lVert v_j\rVert
@@ -4789,9 +4639,28 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
             -\sum_i\lVert v_i\rVert^2\right]
         \leq\varepsilon(m-1)\sum_i\lVert v_i\rVert^2.
     \end{align}
-    Thus the preceding Cauchy--Schwarz argument applies with lower Gram
-    bound $1-\varepsilon(m-1)>0$ and
-    $\lVert a\rVert=\varepsilon\sqrt m$. Finally,
+    Take $a_i=\varepsilon$ and $B_{ij}=\varepsilon(1-\delta_{ij})$. For
+    $w\in\R^m$ write $|w|$ for the vector with entries $|w_i|$. Since $B$ is
+    symmetric with nonnegative entries, the same computation applied to $|w|$
+    gives
+    \begin{align}
+        |\langle w,Bw\rangle|
+         & \leq\langle|w|,B|w|\rangle
+        =\varepsilon\left[\left(\sum_i|w_i|\right)^2-\sum_i w_i^2\right]
+        \leq\varepsilon(m-1)\lVert w\rVert^2,
+    \end{align}
+    and hence
+    $\lVert B\rVert=\sup_{\lVert w\rVert=1}|\langle w,Bw\rangle|
+        \leq\varepsilon(m-1)\leq1-\varepsilon$, which is less
+    than one when $\varepsilon>0$ and vanishes when $\varepsilon=0$. With
+    $\lVert a\rVert=\varepsilon\sqrt m$,
+    Theorem~\ref{thm:subspace_overlap_sum} gives
+    \begin{align}
+        |\langle x,y\rangle|
+         & \leq\frac{\varepsilon\sqrt m}{\sqrt{1-\varepsilon(m-1)}}
+        \lVert x\rVert\lVert y\rVert.
+    \end{align}
+    Finally,
     $\varepsilon^2m\leq1-\varepsilon(m-1)$ follows from
     $\varepsilon m\leq1$, and gives $\eta\leq1$.
 \end{proof}
@@ -4965,7 +4834,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ph_middle_interval_overlap, thm:tail_boundary_map_append, thm:left_boundary_map_append}
+    \uses{thm:ph_middle_interval_overlap, thm:tail_boundary_map_append, thm:left_boundary_map_append,
+        lem:ground_space_in_tail_ground, lem:prefix_restrict_ground_space_map}
     For a left boundary vector with boundary family $(Z_v)$, fixing $u,v$
     leaves the middle vector $\Gamma_L(Z_vA^u)$.
     For a right boundary vector with boundary family $(Y_u)$, the corresponding
@@ -5002,7 +4872,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ph_extended_boundary_overlap, thm:ph_joint_projector_comparison, thm:spectator_boundary_hilbert_factorization}
+    \uses{thm:ph_extended_boundary_overlap, thm:ph_joint_projector_comparison,
+        thm:spectator_boundary_hilbert_factorization, thm:range_ground_space_map_es}
     The boundary-map factorization gives $W_i\subseteq U_i$.
     The extended-boundary overlap estimate supplies all three bounds for
     $U_i\times U_j$, $V_i\times V_j$, and $U_i\times V_j$ with the same
@@ -5080,6 +4951,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         MPSTensor.range_tailBoundaryMapES_toTensorFromBlocks_eq_iSup,
         MPSTensor.range_reassocTailBoundaryMapES_toTensorFromBlocks_eq_iSup}
     \leanok
+    \uses{def:whole_increment_physical_reassociation}
     Let $B=\bigoplus_{j=1}^r\mu_jA_j$ with $\mu_j\ne0$ for every $j$.
     For every $K,L\geq0$, the extended interval spaces satisfy
     \begin{align}
@@ -5088,17 +4960,45 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \mathcal H_K\otimes G_L(B)
          & =\sum_{j=1}^r\bigl(\mathcal H_K\otimes G_L(A_j)\bigr).
     \end{align}
-    These identities also hold under the natural reassociation of three
-    consecutive intervals of lengths $K,L,Q$.
+    For every $K,L,Q\geq0$, with the reassociation $\mathscr A_{K,L,Q}$ of
+    Definition~\ref{def:whole_increment_physical_reassociation}, the
+    right interval space of length $L+Q$ satisfies
+    \begin{align}
+        \mathscr A_{K,L,Q}\bigl(\mathcal H_K\otimes G_{L+Q}(B)\bigr)
+         & =\sum_{j=1}^r
+        \mathscr A_{K,L,Q}\bigl(\mathcal H_K\otimes G_{L+Q}(A_j)\bigr).
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:block_sum_local_ground_space}
-    The local identity is $G_L(B)=\sum_jG_L(A_j)$.
-    Expand a vector on the free sites in their finite coordinate basis.
-    Interchanging the sum over the coordinates with the sum over the blocks
-    gives both assertions. The linear isometry reassociating three
-    consecutive intervals preserves sums of subspaces.
+    \uses{thm:block_sum_local_ground_space,
+        def:whole_increment_physical_reassociation}
+    Let $\Omega_L$ be the set of physical words of length $L$. For subspaces
+    $S_1,\dots,S_r$ of a vector space, the finite coordinate identity
+    \begin{align}
+        \prod_{\tau\in\Omega_L}\Bigl(\sum_{j=1}^rS_j\Bigr)
+         & =\sum_{j=1}^r\prod_{\tau\in\Omega_L}S_j
+    \end{align}
+    holds: the right side is contained in the left, and a family
+    $(\psi_\tau)_\tau$ with $\psi_\tau=\sum_j\psi_{\tau,j}$ and
+    $\psi_{\tau,j}\in S_j$ is the sum over $j$ of the families
+    $(\psi_{\tau,j})_\tau$.
+    Let $T_{K,L}$ be the coordinate isomorphism sending
+    $(\psi_\tau)_{\tau\in\Omega_L}$ to the vector with coefficient
+    $\psi_\tau(\sigma)$ at $(\sigma,\tau)\in\Omega_K\times\Omega_L$. Then
+    $G_K(C)\otimes\mathcal H_L=T_{K,L}\prod_{\tau\in\Omega_L}G_K(C)$ for every
+    tensor $C$. The local identity $G_K(B)=\sum_jG_K(A_j)$ and the finite
+    coordinate identity give
+    \begin{align}
+        G_K(B)\otimes\mathcal H_L
+         & =T_{K,L}\prod_{\tau\in\Omega_L}\Bigl(\sum_{j=1}^rG_K(A_j)\Bigr)
+        =\sum_{j=1}^rT_{K,L}\prod_{\tau\in\Omega_L}G_K(A_j)
+        =\sum_{j=1}^r\bigl(G_K(A_j)\otimes\mathcal H_L\bigr),
+    \end{align}
+    since linear maps preserve sums of subspaces. The same argument, with
+    the free sites on the left and coordinates indexed by $\Omega_K$, gives
+    the second identity. Applying the linear map $\mathscr A_{K,L,Q}$ to the
+    second identity at lengths $K$ and $L+Q$ gives the third.
 \end{proof}
 
 \begin{theorem}[Projector error decay for a block-diagonal tensor]
@@ -5121,11 +5021,205 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:ph_primitive_block_interval_defect_decay,
-        lem:block_sum_local_ground_space, thm:ph_block_sum_interval_spaces}
-    The three ground spaces of $B$ are the sums of the corresponding block
-    ground spaces. Their orthogonal projectors are therefore precisely the
-    three joint projectors in the primitive-block decay estimate. Apply
-    that estimate with the prescribed $\eta$.
+        thm:ph_block_interval_projectors,
+        thm:block_sum_local_ground_space, thm:ph_block_sum_interval_spaces}
+    For each block put
+    \begin{align}
+        U_j & =G_{K+L}(A_j)\otimes\mathcal H_Q,                                &
+        V_j & =\mathscr A_{K,L,Q}\bigl(\mathcal H_K\otimes G_{L+Q}(A_j)\bigr), &
+        W_j & =G_{K+L+Q}(A_j),
+    \end{align}
+    and let $P,Q,R$ be the orthogonal projectors onto $\sum_jU_j$,
+    $\sum_jV_j$, and $\sum_jW_j$, as in
+    Theorem~\ref{thm:ph_block_interval_projectors}. The local identity at
+    length $K+L+Q$, the first identity of
+    Theorem~\ref{thm:ph_block_sum_interval_spaces} at lengths $K+L$ and $Q$,
+    and its reassociated identity at lengths $K,L,Q$ give
+    \begin{align}
+        P_{[1,K+L+Q]}(B)   & =P_{G_{K+L+Q}(B)}
+        =P_{\sum_jW_j}=R,                                               \\
+        P_{[1,K+L]}(B)     & =P_{G_{K+L}(B)\otimes\mathcal H_Q}
+        =P_{\sum_jU_j}=P,                                               \\
+        P_{[K+1,K+L+Q]}(B) & =P_{\mathscr A_{K,L,Q}(\mathcal H_K\otimes
+                G_{L+Q}(B))}=P_{\sum_jV_j}=Q.
+    \end{align}
+    Hence the left side of the asserted bound is $\lVert R-PQ\rVert$, and
+    Theorem~\ref{thm:ph_primitive_block_interval_defect_decay} with the
+    prescribed $\eta$ bounds it by $\eta$ for all sufficiently large $L$,
+    every $K\geq0$, and every $Q>0$.
+\end{proof}
+
+\section{Overlaps of distinct block ground spaces}
+
+\begin{theorem}[Mixed boundary Gram identity]
+    \label{thm:mixed_boundary_gram_identity}
+    \lean{MPSTensor.inner_single_mixed_groundSpaceGram_single,
+        MPSTensor.adjoint_groundSpaceMapES_comp_eq_mixedTransfer}
+    \leanok
+    \uses{def:ground_space_map_es, def:mixed_transfer_rect}
+    Let $A$ and $B$ have bond dimensions $D_A$ and $D_B$, respectively,
+    and let $\Gamma_n^{\mathrm{ES}}(A)$ and $\Gamma_n^{\mathrm{ES}}(B)$ be
+    their Hilbert-space boundary maps, writing $E_{ab}$ also for the
+    coordinate vector of a matrix unit. Let $F_{BA}^{\mathrm{rect}}$ be the
+    rectangular mixed transfer operator on $M_{D_B\times D_A}(\C)$. For
+    matrix units $E_{ab}$ and $E_{ce}$,
+    \begin{align}
+        \langle\Gamma_n^{\mathrm{ES}}(A)E_{ab},\Gamma_n^{\mathrm{ES}}(B)E_{ce}\rangle
+         & =\bigl[(F_{BA}^{\mathrm{rect}})^n(E_{ca})\bigr]_{eb}.
+    \end{align}
+    Thus $\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(B)$ is the rectangular reshuffling of
+    $(F_{BA}^{\mathrm{rect}})^n$. This is the boundary-coordinate form of
+    equations~\textup{ip} and~\textup{P12} in the proof of the lemma
+    \textup{disjoint} in \cite{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expanding the trace boundary maps gives
+    \begin{align}
+        \langle\Gamma_n^{\mathrm{ES}}(A)E_{ab},\Gamma_n^{\mathrm{ES}}(B)E_{ce}\rangle
+         & =\sum_{|w|=n}\overline{A^w_{ba}}B^w_{ec}
+        =\sum_{|w|=n}\bigl[B^wE_{ca}(A^w)^*\bigr]_{eb}.
+    \end{align}
+    The word expansion of $(F_{BA}^{\mathrm{rect}})^n$ gives the assertion.
+\end{proof}
+
+\begin{theorem}[Mixed boundary Gram decay]
+    \label{thm:mixed_boundary_gram_decay}
+    \lean{MPSTensor.adjoint_groundSpaceMapES_comp_tendsto_zero,
+        MPSTensor.adjoint_groundSpaceMapES_comp_tendsto_zero_of_spectralRadius_lt_one}
+    \leanok
+    \uses{thm:mixed_boundary_gram_identity, def:ground_space_map_es, def:mixed_transfer_rect}
+    If $(F_{BA}^{\mathrm{rect}})^n(X)\to0$ for every boundary matrix $X$, then
+    $\lVert\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(B)\rVert\to0$.
+    In particular this holds when the spectral radius of
+    $F_{BA}^{\mathrm{rect}}$ is less than one.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mixed_boundary_gram_identity}
+    The preceding identity gives convergence of every entry of the mixed
+    Gram operator. Its domain and codomain have fixed finite dimensions,
+    so entrywise convergence implies convergence in operator norm.
+    A spectral radius less than one gives decay of the powers of
+    $F_{BA}^{\mathrm{rect}}$, as in equation~\textup{limP12} in the proof of the
+    lemma \textup{disjoint} in \cite{Nachtergaele1996Spectral}.
+\end{proof}
+
+\begin{theorem}[Ground-space overlap from mixed Gram bounds]
+    \label{thm:ground_space_overlap_mixed_gram}
+    \lean{MPSTensor.norm_inner_groundSpaceES_le_mixedGram}
+    \leanok
+    \uses{def:ground_space_map_es}
+    Suppose that $\Gamma_n^{\mathrm{ES}}(A)$ and $\Gamma_n^{\mathrm{ES}}(B)$ are injective, and put
+    $\mathcal K_n(A)=\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(A)$ and
+    $\mathcal K_n(B)=\Gamma_n^{\mathrm{ES}}(B)^*\Gamma_n^{\mathrm{ES}}(B)$. For vectors
+    $x\in\operatorname{ran}\Gamma_n^{\mathrm{ES}}(A)$ and
+    $y\in\operatorname{ran}\Gamma_n^{\mathrm{ES}}(B)$,
+    \begin{align}
+        |\langle x,y\rangle|
+         & \leq\sqrt{\lVert \mathcal K_n(A)^{-1}\rVert}\,
+        \lVert\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(B)\rVert\,
+        \sqrt{\lVert \mathcal K_n(B)^{-1}\rVert}\,
+        \lVert x\rVert\lVert y\rVert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $x=\Gamma_n^{\mathrm{ES}}(A)u$ and $y=\Gamma_n^{\mathrm{ES}}(B)v$. The left inverse
+    $\mathcal K_n(A)^{-1}\Gamma_n^{\mathrm{ES}}(A)^*$ has norm
+    $\sqrt{\lVert \mathcal K_n(A)^{-1}\rVert}$, so
+    $\lVert u\rVert\leq\sqrt{\lVert \mathcal K_n(A)^{-1}\rVert}\lVert x\rVert$;
+    the analogous estimate holds for $v$. Apply these bounds to
+    $|\langle u,\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(B)v\rangle|$.
+    This makes explicit the normalization step using
+    equation~\textup{C1C2} in \cite{Nachtergaele1996Spectral}.
+\end{proof}
+
+\begin{theorem}[Uniform decay of block ground-space overlaps]
+    \label{thm:block_ground_space_overlap_decay}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_mixed_gap}
+    \leanok
+    \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
+        thm:primitive_ground_space_gram_inverse_tendsto, def:mixed_transfer_rect,
+        thm:primitive_ground_space_gram_eventual_inverse_bound}
+    Let $A$ and $B$ be trace-preserving tensors with positive-definite
+    fixed matrices $\rho$ and $\sigma$. Suppose their complementary
+    transfer maps have spectral radius less than one, and that
+    $\rho_{\spec}(F_{BA}^{\mathrm{rect}})<1$.
+    For every $\varepsilon>0$, there is $n_0$ such that for every
+    $n\geq n_0$, $x\in G_n(A)$, and $y\in G_n(B)$,
+    \begin{align}
+        |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
+    \end{align}
+    This is the bound on inner products of ground-space vectors obtained
+    from the spectral-radius estimate in the proof of the lemma \textup{disjoint}
+    in \cite{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
+        thm:primitive_ground_space_gram_inverse_tendsto,
+        thm:primitive_ground_space_gram_eventual_inverse_bound}
+    By Theorem~\ref{thm:primitive_ground_space_gram_inverse_tendsto}, the
+    self-Gram operators $\mathcal K_n(A)$ and $\mathcal K_n(B)$ converge to invertible limits
+    $\mathcal K_\infty(A)$ and $\mathcal K_\infty(B)$ determined by $\rho$ and $\sigma$, and
+    their inverses converge to $\mathcal K_\infty(A)^{-1}$ and $\mathcal K_\infty(B)^{-1}$.
+    Since the limits are invertible, so are $\mathcal K_n(A)$ and $\mathcal K_n(B)$, and hence
+    $\Gamma_n^{\mathrm{ES}}(A)$ and $\Gamma_n^{\mathrm{ES}}(B)$ are injective, for all
+    sufficiently large $n$. By Theorem~\ref{thm:mixed_boundary_gram_decay},
+    the coefficient in Theorem~\ref{thm:ground_space_overlap_mixed_gram}
+    satisfies
+    \begin{align}
+        c(n)
+         & =\sqrt{\lVert \mathcal K_n(A)^{-1}\rVert}\,
+        \lVert\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(B)\rVert\,
+        \sqrt{\lVert \mathcal K_n(B)^{-1}\rVert}
+        \longrightarrow
+        \sqrt{\lVert \mathcal K_\infty(A)^{-1}\rVert}\cdot0\cdot
+        \sqrt{\lVert \mathcal K_\infty(B)^{-1}\rVert}=0.
+    \end{align}
+    Choose $n_0$ with $c(n)\leq\varepsilon$ for $n\geq n_0$; then
+    Theorem~\ref{thm:ground_space_overlap_mixed_gram} gives the bound,
+    uniformly in $x$ and $y$.
+\end{proof}
+
+\begin{theorem}[Asymptotic orthogonality of inequivalent blocks]
+    \label{thm:inequivalent_block_ground_space_overlap_decay}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
+    \leanok
+    \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
+        thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}
+    Let $A$ and $B$ be trace-preserving tensors with positive-definite
+    fixed matrices and complementary transfer spectral radii less than one.
+    Suppose that, if their bond dimensions agree, they are not gauge-phase
+    equivalent. Then, for every $\varepsilon>0$ and all sufficiently large $n$,
+    every $x\in G_n(A)$ and $y\in G_n(B)$ satisfy
+    \begin{align}
+        |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
+    \end{align}
+    This is the normalized tensor form of equation~\textup{limitepsilonm}
+    in \cite{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
+        thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}
+    The positive-definite fixed matrices and complementary gaps imply
+    irreducibility. For equal bond dimensions, inequivalence and
+    Theorem~\ref{thm:transfer_operator_gap_irr_tp} give
+    $\rho_{\spec}(F_{BA}^{\mathrm{rect}})=\rho_{\spec}(F_{BA})<1$.
+    For unequal bond dimensions, a peripheral eigenvector of
+    $F_{BA}^{\mathrm{rect}}$ would force equality of the bond dimensions, so
+    Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp} gives
+    \begin{align}
+        \rho_{\spec}(F_{BA}^{\mathrm{rect}}) & <1.
+    \end{align}
+    Apply Theorem~\ref{thm:block_ground_space_overlap_decay}.
 \end{proof}
 
 \section{The normalized primitive gauge of a normal tensor}
@@ -5634,12 +5728,12 @@ tensors.
     \label{def:grouped_open_ground_projections}
     \lean{MPSTensor.groupedNestedGroundProjectionsES,MPSTensor.groupedIntervalGroundProjectionES}
     \leanok
-    Fix \(p\geq1\), \(M\geq2\), and an open chain of length \(N=pM\).
-    For \(0\leq n\leq M\), let \(G_n\) be the ground projection of the range-\(2p\) parent
-    Hamiltonian on \([0,pn)\), extended by the identity on the remaining
-    sites. For \(0\leq n<M\), let \(Q_n\) be the ground projection of the same interaction
-    restricted to \([\max\{0,p(n-1)\},p(n+1))\).
-    Thus \(Q_0=I\), while for \(n\geq1\) the interval Hamiltonian is
+    Fix $p\geq1$, $M\geq2$, and an open chain of length $N=pM$.
+    For $0\leq n\leq M$, let $G_n$ be the ground projection of the range-$2p$ parent
+    Hamiltonian on $[0,pn)$, extended by the identity on the remaining
+    sites. For $0\leq n<M$, let $Q_n$ be the ground projection of the same interaction
+    restricted to $[\max\{0,p(n-1)\},p(n+1))$.
+    Thus $Q_0=I$, while for $n\geq1$ the interval Hamiltonian is
     a single parent interaction.
 \end{definition}
 
@@ -5647,51 +5741,56 @@ tensors.
     \label{lem:grouped_open_ground_projection_locality}
     \lean{MPSTensor.grouped_martingaleDifference_commute,MPSTensor.grouped_martingaleDifference_zero,MPSTensor.groupedIntervalGroundProjectionES_comp_martingaleDifference_one}
     \leanok
-    Set \(E_n=G_n-G_{n+1}\). For \(0\leq m,n<M\), one has
-    \[
-        [E_m,Q_n]=0\qquad\text{if }m<n-1\text{ or }m>n.
-    \]
-    Moreover, \(E_0=0\) and \(Q_1E_1=0\).
+    Set $E_n=G_n-G_{n+1}$. For $0\leq m,n<M$ with $m<n-1$ or $m>n$,
+    one has
+    \begin{align}
+        [E_m,Q_n] & =0.
+    \end{align}
+    Moreover, $E_0=0$ and $Q_1E_1=0$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:grouped_open_ground_projections}
+    \uses{def:grouped_open_ground_projections,
+        thm:physical-outside-window-martingale-cancellation,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:fixed-volume-prefix-ground-projections-nested}
     In the first case both prefix Hamiltonians have support disjoint from
-    the interval defining \(Q_n\). In the second case their kernels are
+    the interval defining $Q_n$. In the second case their kernels are
     contained in the local interval kernel. The corresponding orthogonal
     projections therefore commute in either case.
-    The prefixes of lengths zero and \(p\) contain no interaction, so
-    \(G_0=G_1=I\). At the next step \(Q_1=G_2\), giving
-    \(Q_1E_1=G_2(I-G_2)=0\).
+    The prefixes of lengths zero and $p$ contain no interaction, so
+    $G_0=G_1=I$. At the next step $Q_1=G_2$, giving
+    $Q_1E_1=G_2(I-G_2)=0$.
 \end{proof}
 
 \begin{theorem}[Grouped open-chain coercivity]
     \label{thm:grouped_open_parent_gap}
     \lean{MPSTensor.openParentHamiltonianES_norm_gap_of_grouped_c3}
     \leanok
-    Let \(p\geq1\), \(M\geq2\), and \(N=pM\). Consider the
-    range-\(2p\) open parent Hamiltonian \(H_N\) and the grouped
-    projections above. Suppose that
-    \[
-        \|Q_nE_n\|\leq\epsilon<\frac1{\sqrt2}
-        \qquad(0\leq n<M),
-        \qquad \epsilon\geq0.
-    \]
-    Then, for every \(v\perp\ker H_N\),
-    \[
-        (1-\epsilon\sqrt2)^2\|v\|\leq\|H_Nv\|.
-    \]
+    Let $p\geq1$, $M\geq2$, and $N=pM$. Consider the
+    range-$2p$ open parent Hamiltonian $H_N$ and the grouped
+    projections above. Let $0\leq\epsilon<1/\sqrt2$ and suppose that
+    $\|Q_nE_n\|\leq\epsilon$ for $0\leq n<M$. Then, for every
+    $v\perp\ker H_N$,
+    \begin{align}
+        (1-\epsilon\sqrt2)^2\|v\| & \leq\|H_Nv\|.
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:grouped_open_ground_projection_locality,thm:nachtergaele_c1_c3_full_range_norm_gap}
+    \uses{lem:grouped_open_ground_projection_locality,
+        thm:nachtergaele_c1_c3_full_range_norm_gap,
+        thm:grouped_open_parent_c1, thm:grouped_open_suffix_c2,
+        lem:open_parent_hamiltonian_es_positive}
     Apply the full-range martingale estimate to the grouped filtration,
     with window width one. Each local window Hamiltonian is the projection
-    \(I-Q_n\), so condition C2 has constant one. The nonzero local window
-    terms are distinct summands of \(H_N\); positivity gives condition C1
-    with constant one. The locality lemma supplies the commutation
-    condition. The assumed norm bound supplies C3, and the terminal
-    projection is the projection onto \(\ker H_N\).
+    $I-Q_n$, so Theorem~\ref{thm:grouped_open_suffix_c2} gives condition C2
+    with constant one. The nonzero local window terms are distinct summands
+    of $H_N$, so Theorem~\ref{thm:grouped_open_parent_c1} gives condition C1
+    with constant one. Lemma~\ref{lem:open_parent_hamiltonian_es_positive}
+    supplies positivity of $H_N$. The locality lemma supplies the
+    commutation condition. The assumed norm bound supplies C3, and the terminal
+    projection is the projection onto $\ker H_N$.
 \end{proof}
 
 \begin{theorem}[Energy counting for grouped open windows]
@@ -5750,9 +5849,18 @@ tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    Decompose a vector according to the last $r$ physical coordinates.
-    The prefix Hamiltonian acts on each component by the length-$n$ open
-    Hamiltonian, so its kernel is characterized component by component.
+    \uses{thm:open-hamiltonian-right-spectator-conjugacy,
+        thm:fixed-volume-c3-projector-conjugacy,
+        lem:right-spectator-kernel-projection}
+    Decompose a vector $v$ on $n+r$ sites according to the last $r$
+    physical coordinates, writing $v_s$ for the vector on $n$ sites
+    obtained by fixing these coordinates to $s\in\{1,\ldots,d\}^r$.
+    The prefix Hamiltonian acts on each component $v_s$ by the length-$n$
+    open Hamiltonian, whose kernel is $G_n(A)$. Hence
+    \begin{align}
+        v\in G_n(A)\otimes(\C^d)^{\otimes r}
+         & \iff v_s\in G_n(A)\ \text{for every } s\in\{1,\ldots,d\}^r.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Reassociated suffix ground space]
@@ -5768,9 +5876,19 @@ tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    Reassociation preserves the ordered physical coordinates.
+    \uses{thm:fixed-volume-c3-projector-conjugacy}
+    Write $\sigma$ for the reassociation isometry from the physical space
+    on $K+(L+Q)$ sites to that on $(K+L)+Q$ sites. It preserves the ordered
+    physical coordinates, so for every family $(S_n)_n$ of subspaces of the
+    $n$-site physical spaces,
+    \begin{align}
+        \sigma\bigl(S_{K+(L+Q)}\bigr) & = S_{(K+L)+Q}.
+    \end{align}
     A parent interaction is the orthogonal projection onto the complement
-    of the local boundary-condition space, acting trivially on the other sites.
+    of the local boundary-condition space, acting trivially on the other
+    sites. Its kernel on the last $L+Q$ sites is therefore
+    $(\C^d)^{\otimes K}\otimes G_{L+Q}(A)$, and the display transports this
+    description to the common coordinates.
 \end{proof}
 
 \begin{theorem}[Active grouped projector error]

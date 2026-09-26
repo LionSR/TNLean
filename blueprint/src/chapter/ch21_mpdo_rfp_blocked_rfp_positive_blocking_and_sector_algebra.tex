@@ -151,6 +151,37 @@ physical indices, as in
     columns preserves positive semidefiniteness.
 \end{proof}
 
+\begin{lemma}[Closed MPO entries with residual sites]
+    \label{lem:mpdo_physical_blocking_residuals}
+    \lean{MPOTensor.mpo_apply_prefix_blockTensor_suffix}
+    \leanok
+    \uses{def:mpdo_physical_blocking, def:mpo_family, lem:mpo_eval_word_append}
+    Let a chain consist of a prefix of $p$ sites, $m$ complete blocks of
+    length $L$, and a suffix of $s$ sites. Write $M[\alpha,\beta]$ for the
+    ordered product of the matrices indexed by two equally long physical
+    words, and write $\widehat\sigma,\widehat\tau$ for the concatenations of
+    blocked words $\sigma,\tau$. Then, for matching row and column
+    configurations,
+    \begin{align}
+        \rho^{(p+mL+s)}(M)_{i^-\widehat\sigma i^+,\,
+            j^-\widehat\tau j^+}
+         & =\operatorname{tr}\!\left(
+        M[i^-,j^-]\cdot M^{[L]}[\sigma,\tau]\cdot M[i^+,j^+]
+        \right).
+    \end{align}
+    This identity retains both residual products, including when the chain
+    length is not divisible by $L$. It extends the closed-chain blocking
+    identity used in
+    \cite[Appendix~C.4, lines~1952--2017]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpo_eval_word_append}
+    Split the two physical words at the two boundaries of the complete
+    blocks. The product over the middle segment is the corresponding product
+    of the blocked matrices; associativity gives the asserted trace.
+\end{proof}
+
 \begin{definition}[Two-site blocking of an MPO tensor]
     \label{def:mpdo_two_site_blocking}
     \lean{MPOTensor.blockTwo}
