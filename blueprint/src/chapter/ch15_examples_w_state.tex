@@ -255,7 +255,8 @@ illustrates this remark by closing the same tensor with a trace.
 
 \begin{lemma}[Simultaneous product span of distinct blocks]%
     \label{lem:pgvwc07_block_tuple_span}
-    \lean{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge,
+        MPSTensor.wordTupleSpanTop_of_ge_of_isNBlkInjective}
     \leanok
     \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective,
         def:blocks_not_gauge_phase_equiv}
@@ -265,6 +266,12 @@ illustrates this remark by closing the same tensor with a trace.
     common $L_0>0$, no two related by a gauge transformation and a phase. For every
     $n\geq\max(L_0,3(b-1)(L_0+1))$ the tuples $(A^1_{w},\ldots,A^b_{w})$ over words
     $w$ of length $n$ span $\bigoplus_{j}\MN{D_j}$.
+    The same holds for any family of blocks $A^1,\ldots,A^b$, not assumed to come
+    from a canonical form, provided each block satisfies
+    $\sum_iA^j_i(A^j_i)^\dagger=\Id$, its dual map
+    $X\mapsto\sum_i(A^j_i)^\dagger XA^j_i$ has a positive definite fixed point, and
+    no orthogonal projection other than $0$ and $\Id$ is invariant under every
+    $A^j_i$.
 \end{lemma}
 
 \begin{proof}
@@ -297,7 +304,8 @@ illustrates this remark by closing the same tensor with a trace.
 
 \begin{theorem}[Single-length bound under a canonical form with condition C1]%
     \label{thm:w_state_canonical_bound}
-    \lean{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator,
+    \lean{MPSTensor.lt_of_sum_mpv_eq_smul_wIndicator,
+        MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator,
         MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit,
         MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive}
     \leanok
@@ -316,19 +324,23 @@ illustrates this remark by closing the same tensor with a trace.
         \item If the dual transfer channel of every block is primitive, then
               $N<2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr)$.
     \end{enumerate}
+    The first item holds more generally for $\sum_jc_j\ket{\phi_{A^j}}=c\ket{W_N}$
+    with arbitrary nonzero coefficients $c_j$ in place of $\lambda_j^N$, for blocks
+    satisfying the three conditions of the canonical form.
     The first item is the inequality of the proof in
     \cite{PerezGarcia2007Matrix}, conditional on the canonical form with condition
     C1, and with the threshold enlarged by $L_0$ so that it also covers a single
     block. The distinctness hypothesis is stricter than the source's
     pairwise-different block states. The reduction of an arbitrary tensor to this
-    form and the review's $D^3\log D=\Omega(N)$ are not formalized
-    \cite{gap:rmp_w_state_ti_bound}.
+    form is formalized at prime lengths only
+    (Theorem~\ref{thm:w_state_prime_bound}); the review's
+    $D^3\log D=\Omega(N)$ is not formalized \cite{gap:rmp_w_state_ti_bound}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{lem:w_state_cut_rank, lem:pgvwc07_block_tuple_span,
-        lem:pgvwc07_cut_rank_lower_bound}
+        lem:pgvwc07_cut_rank_lower_bound, thm:wielandt_general}
     Cut the chain into two pieces of at least
     $n_0=\max(L_0,3(b-1)(L_0+1))$ sites. By Lemmas~\ref{lem:pgvwc07_block_tuple_span}
     and~\ref{lem:pgvwc07_cut_rank_lower_bound}, the reduced state of the first
@@ -339,6 +351,106 @@ illustrates this remark by closing the same tensor with a trace.
     $\ket{W_N}$ for $N\geq3$, a contradiction when $N\geq2n_0$. For the second
     item, an invertible letter gives condition C1 at $L_0=D^2+1$ by the fixed-length Wielandt theorem; for the third, the general quantum Wielandt bound gives
     $L_0\leq(D^2+1)^2$.
+\end{proof}
+
+\begin{lemma}[The period is at most the square of the bond dimension]%
+    \label{lem:periodic_period_le_sq}
+    \lean{MPSTensor.IsPeriodic.period_le_sq}
+    \leanok
+    \uses{def:periodic_tensor}
+    If a tensor of bond dimension $D$ is periodic with period $m$, then $m\leq D^2$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The peripheral eigenvalues of the transfer map are the $m$ distinct $m$-th
+    roots of unity. Eigenvectors for distinct eigenvalues are linearly independent
+    in the $D^2$-dimensional space of $D\times D$ matrices.
+\end{proof}
+
+\begin{lemma}[The blocks of the canonical form are irreducible]%
+    \label{lem:pgvwc07_block_irreducible}
+    \lean{MPSTensor.isIrreducibleFamily_of_unital_of_dualFixedPoint}
+    \leanok
+    Let $\sum_iA_iA_i^\dagger=\Id$, let the dual map
+    $X\mapsto\sum_iA_i^\dagger XA_i$ have a positive definite fixed point, and let
+    every fixed point of $X\mapsto\sum_iA_iXA_i^\dagger$ be a multiple of the
+    identity. Then no orthogonal projection other than $0$ and $\Id$ is invariant
+    under every $A_i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $(\Id-P)A_iP=0$ for an orthogonal projection $P$, then
+    $P-\sum_iA_iPA_i^\dagger=\sum_iB_iB_i^\dagger$ with $B_i=PA_i(\Id-P)$ is
+    positive, and its pairing with the positive definite dual fixed point
+    vanishes. Hence $P$ is a fixed point, a multiple of the identity, so $P$ is
+    $0$ or $\Id$.
+\end{proof}
+
+\begin{lemma}[Periodic representative of an irreducible block]%
+    \label{lem:periodic_scale_of_irreducible}
+    \lean{MPSTensor.exists_leftCanonical_periodic_scale_of_irreducible,
+        MPSTensor.IsPeriodic.one_iff_primitive}
+    \leanok
+    \uses{def:periodic_tensor}
+    A nonzero irreducible tensor $A$, rescaled by a nonzero $\zeta$ and gauged,
+    becomes a periodic tensor $B$ of some period $m$, with
+    $\ket{\phi_B}=\zeta^N\ket{\phi_A}$ on $N$ sites. A tensor is periodic with
+    period one exactly when it is irreducible, left canonical and its transfer
+    channel is primitive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Rescale by the inverse square root of the spectral radius of the transfer
+    map and gauge by its positive definite eigenvector; the peripheral spectrum
+    of the resulting trace-preserving irreducible channel is the group of $m$-th
+    roots of unity. Period one means that $1$ is the only peripheral eigenvalue,
+    which is primitivity.
+\end{proof}
+
+\begin{theorem}[Single-length bound at prime length]%
+    \label{thm:w_state_prime_bound}
+    \lean{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_prime}
+    \leanok
+    \uses{thm:w_state_canonical_bound, thm:pgvwc07_positive_length_witness,
+        thm:pgvwc07_periodic_state_vector_decomposition, def:mpv_phase_class_data,
+        lem:periodic_period_le_sq, lem:pgvwc07_block_irreducible,
+        lem:periodic_scale_of_irreducible, thm:wielandt_general, def:w_indicator}
+    Let $A$ be any translation-invariant tensor of bond dimension $D$ and let $N$
+    be prime. If the periodic vector of $A$ on $N$ sites is $c\ket{W_N}$ with
+    $c\neq0$, then
+    \begin{align}
+        N<2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr),
+        \label{eq:w_state_prime_bound}
+    \end{align}
+    so $D=\Omega(N^{1/5})$ along the prime lengths. This is not the source's
+    $D=\Omega(N^{1/3})$, which assumes Conjecture~2 of
+    \cite{PerezGarcia2007Matrix}; composite lengths are not covered
+    \cite{gap:rmp_w_state_ti_bound}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:w_state_canonical_bound, thm:pgvwc07_positive_length_witness,
+        thm:pgvwc07_periodic_state_vector_decomposition, def:mpv_phase_class_data,
+        lem:periodic_period_le_sq, lem:pgvwc07_block_irreducible,
+        lem:periodic_scale_of_irreducible, thm:wielandt_general}
+    For $N\leq D^2$ there is nothing to prove. Otherwise write the periodic vector
+    as $\sum_j\lambda_j^N\ket{\phi_{A^j}}$ with unital irreducible blocks $A^j$.
+    Each block is irreducible by Lemma~\ref{lem:pgvwc07_block_irreducible}, and,
+    rescaled and gauged, periodic by Lemma~\ref{lem:periodic_scale_of_irreducible},
+    with a period $m_j\leq D^2<N$ by Lemma~\ref{lem:periodic_period_le_sq}. The reduction of
+    \cite{PerezGarcia2007Matrix} at prime length applies: if $m_j\neq1$ then $m_j$
+    does not divide $N$, and the block state vanishes by
+    Theorem~\ref{thm:pgvwc07_periodic_state_vector_decomposition}. If $m_j=1$ the
+    block is primitive, and the general quantum Wielandt bound of
+    Theorem~\ref{thm:wielandt_general} gives condition C1 at $L_0=(D^2+1)^2$. Grouping the blocks whose states agree up to a phase power
+    leaves representatives no two of which are related by a gauge transformation
+    and a phase, with some coefficients $c_j$. Dropping the classes with $c_j=0$ or
+    period other than one leaves at most $D$ blocks. The generalized first item of
+    Theorem~\ref{thm:w_state_canonical_bound} then gives~(\ref{eq:w_state_prime_bound}).
 \end{proof}
 
 \begin{remark}[Growth of the translation-invariant bond dimension]%
@@ -353,7 +465,9 @@ illustrates this remark by closing the same tensor with a trace.
     quantitative quantum Wielandt inequality
     \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}. This single-length bound
     is not formalized; Theorem~\ref{thm:w_state_canonical_bound} proves the
-    conditional single-length bound of its source~\cite{gap:rmp_w_state_ti_bound}.
+    conditional single-length bound of its source, and
+    Theorem~\ref{thm:w_state_prime_bound} the unconditional
+    $D=\Omega(N^{1/5})$ at prime lengths~\cite{gap:rmp_w_state_ti_bound}.
 \end{remark}
 
 %% ===================================================================
