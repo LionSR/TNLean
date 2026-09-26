@@ -16,6 +16,7 @@ import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.MatrixPolar
+import TNLean.MPS.Preparation.NonNormalCanonicalForm
 import TNLean.MPS.Preparation.NonNormalFixedPoint
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.Sequential
