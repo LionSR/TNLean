@@ -608,8 +608,8 @@ of $A$ along $w$.
     Cauchy--Schwarz inequality to both terms.
 \end{proof}
 
-\begin{lemma}[Exponentially decaying correlations]
-    \label{lem:ldp_decaying_correlations}
+\begin{theorem}[Exponentially decaying correlations]
+    \label{thm:ldp_decaying_correlations}
     \lean{MPSTensor.exists_decayingCorrelations,
         MPSTensor.mpvConnectedCorrelator, MPSTensor.mpvExpectation,
         MPSTensor.chainWindowOperator}
@@ -640,16 +640,24 @@ of $A$ along $w$.
     One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. For
     injective $A$ and $L=1$ this is the correlation estimate of
     \cite[Lemma~2]{Malz2024Preparation}, with the separation $s$ ranging over
-    windows of $K$ consecutive values.
-\end{lemma}
+    windows of $K$ consecutive values; the correction of the source's
+    statement is recorded in~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{def:transfer_map, lem:ldp_observable_transfer_surjective,
         lem:ldp_vandermonde_window, thm:wielandt_proposition_three}
     With the inserted transfer maps $\E_X$ defined before
-    Lemma~\ref{lem:ldp_observable_transfer_surjective}, $\E_{\Id}=\E_A^{\,L}$,
-    and the map of a tensor product of operators on consecutive blocks is the
-    composition of their maps. Expanding the traces in (\ref{eq:ldp_ti_mps})
+    Lemma~\ref{lem:ldp_observable_transfer_surjective}, and for operators
+    $X,Y$ on consecutive blocks,
+    \begin{align}
+        \E_{\Id} & =\E_A^{\,L},
+                 &
+        \E_{X\otimes Y}
+                 & =\E_X\,\E_Y.
+        \notag
+    \end{align}
+    Expanding the traces in (\ref{eq:ldp_ti_mps})
     gives, for $L<s$ and $s+L-1\le N$,
     \begin{align}
         \bra{\phi_N(A)}X_1Y_s\ket{\phi_N(A)}
@@ -754,7 +762,7 @@ of $A$ along $w$.
     \cite[Theorem~1]{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}
-    \uses{lem:ldp_decaying_correlations, lem:ldp_expectation_overlap,
+    \uses{thm:ldp_decaying_correlations, lem:ldp_expectation_overlap,
         thm:wielandt_proposition_three}
     We may assume that $A$ is in the gauge (\ref{eq:ldp_normal_gauge}). Since
     $A$ is normal, $\E_A$ is strongly irreducible
@@ -770,7 +778,7 @@ of $A$ along $w$.
     the normalization $\lambda_1=1$ in which $\xi$ is computed.
 
     Take $L,\mathcal O,\mathcal O',c,K,s_0$ from
-    Lemma~\ref{lem:ldp_decaying_correlations}, and suppose
+    Theorem~\ref{thm:ldp_decaying_correlations}, and suppose
     $\varepsilon(\phi_N,\psi_N)\le1/2$, that is
     $\lvert\braket{\phi_N}{\psi_N}\rvert\ge1/2$. Write $T=T_N$ and
     $\ket{\psi_N}=U\ket{\pi}$ with $U$ a local circuit of depth $T$ and
@@ -786,7 +794,7 @@ of $A$ along $w$.
     $k=1,\dots,n$. With $e=\bra{\phi_N}\mathcal O_1\ket{\phi_N}$ and
     $e'=\bra{\phi_N}\mathcal O'_1\ket{\phi_N}$ let $\mathcal O^{(k)}$ be
     $\mathcal O-e$ on the sites $b_k,\dots,b_k+L-1$ and $\mathcal O'^{(k)}$ be
-    $\mathcal O'-e'$ on the sites $b_k+s',\dots,b_k+s'+L-1$. These have norm at
+    $\mathcal O'-e'$ on the sites $b_k+s'-1,\dots,b_k+s'+L-2$. These have norm at
     most $2$, zero expectation in $\ket{\phi_N}$ by translation invariance,
     and $\bra{\phi_N}\mathcal O^{(k)}\mathcal O'^{(k)}\ket{\phi_N}
         =G_N(\mathcal O,\mathcal O';s')$. Since $s'\ge2T+L+1$ and
@@ -806,13 +814,13 @@ of $A$ along $w$.
         =\bra{\phi}(Z-\langle Z\rangle_\psi)\ket{\psi}
         -\bra{\phi}(Z-\langle Z\rangle_\phi)\ket{\psi}$. Secondly, the
     decomposition $\E_A^{\,n}=P+(\E_A-P)^n$ from the proof of
-    Lemma~\ref{lem:ldp_decaying_correlations}, together with the fact that in
+    Theorem~\ref{thm:ldp_decaying_correlations}, together with the fact that in
     the gauge (\ref{eq:ldp_normal_gauge}) the maps $\E_Z$ have norm bounded by
     a multiple of $\lVert Z\rVert$ independent of the size of the support,
     shows that the connected correlation in $\ket{\phi_N}$ of two operators of
     norm at most $4$ on intervals separated by $g$ and $g'$ sites around the
     ring is at most $C(r^g+r^{g'})$, with $C$ and $r<1$ depending only on $A$.
-    Consecutive intervals $[b_k,b_k+s'+L-1]$ are separated by at least $2T$
+    Consecutive intervals $[b_k,b_k+s'+L-2]$ are separated by at least $2T$
     sites, and intervals $j$ apart by at least $(j-1)\Delta$, so every
     average of $n$ of these operators, or of their pair products, has
     variance at most $C_1/n$ in $\ket{\phi_N}$.
@@ -859,7 +867,7 @@ of $A$ along $w$.
 %% by (1 - delta)^(k/2), and bounds delta from below with Lemma 2 at the
 %% single separation s = 2T + 1, using the exact vanishing of the
 %% one-point functions. Both of those inputs are unavailable here (see the
-%% comment after Lemma lem:ldp_decaying_correlations), so the proof above
+%% comment after Theorem thm:ldp_decaying_correlations), so the proof above
 %% replaces the product-fidelity step by the concentration of averages of
 %% n ~ N/s' translated observables. This concentration argument is not in
 %% the source; it must be re-derived line by line when this theorem is

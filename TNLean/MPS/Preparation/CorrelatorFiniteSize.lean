@@ -16,7 +16,7 @@ This file controls the difference between the connected correlator
 `G_N(X,Y;s) = ⟨X_1 Y_s⟩ - ⟨X_1⟩⟨Y_s⟩` in the normalized vector `φ_N` and its limit
 `Tr E_X((E_A - P)^{s-L-1}(E_Y(ρ)))`, for a normal tensor in the gauge
 `∑ (A^i)† A^i = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1`. These are the finite-size
-steps of the chapter's proof of `lem:ldp_decaying_correlations`, which make precise
+steps of the chapter's proof of `thm:ldp_decaying_correlations`, which make precise
 the large-`N` limit in arXiv:2307.01696, Supplemental Material, proof of Lemma 2.
 
 ## Main declarations
@@ -68,7 +68,7 @@ limit: if the normalization `Z`, the two-point numerator and the one-point numer
 are within `ε ≤ 1/2` of `1`, `ab + g` and `a, b`, then the connected correlator
 `n_{XY}/Z - (n_X/Z)(n_Y/Z)` is within `4(M+2)^2 ε` of `g`. This is the step
 "Replacing the last power by `P` … changes `G_N(X,Y;s)` by at most `C r^{N-s-L+1}`"
-of the chapter's proof of `lem:ldp_decaying_correlations`, which makes precise the
+of the chapter's proof of `thm:ldp_decaying_correlations`, which makes precise the
 large-`N` limit of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
 theorem _root_.Complex.norm_div_sub_div_mul_div_sub_le {Z nXY nX nY a b g : ℂ} {ε M : ℝ}
     (hε0 : 0 ≤ ε) (hε : ε ≤ 1 / 2) (hM : 0 ≤ M) (hZ : ‖Z - 1‖ ≤ ε)
@@ -174,7 +174,7 @@ theorem _root_.Matrix.norm_linearMap_trace_le_mul_norm
 rate `r` above `|λ₂|` in operator norm.
 
 This is the step "Gelfand's formula gives `‖(E_A - P)^n‖ ≤ C_r r^n`" of the chapter's
-proof of `lem:ldp_decaying_correlations`, which makes precise the
+proof of `thm:ldp_decaying_correlations`, which makes precise the
 expansion `E_1^{N-s-1} = |R_1⟩⟨L_1| + …` of arXiv:2307.01696, Supplemental Material,
 proof of Lemma 2. -/
 theorem exists_compl_pow_bound [NeZero D] {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)

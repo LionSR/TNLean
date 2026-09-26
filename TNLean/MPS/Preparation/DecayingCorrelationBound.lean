@@ -14,7 +14,7 @@ import TNLean.Wielandt.Primitivity.Equivalence
 
 This file proves the correlation estimate of arXiv:2307.01696, Supplemental
 Material, Lemma 2, in the form of the chapter entry
-`lem:ldp_decaying_correlations`: for a normal tensor with correlation length
+`thm:ldp_decaying_correlations`: for a normal tensor with correlation length
 `ξ > 0`, in the gauge `∑ (A^i)† A^i = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1`,
 there are Hermitian observables `O, O'` of norm one on `L` sites and constants
 `c > 0`, `K ∈ {1, 2}`, `s₀` such that every window of `K` consecutive
@@ -345,7 +345,7 @@ theorem exists_normalized_observables_limitCorrelator {A : MPSTensor d D} {L : �
     ring
 
 /-- **Exponentially decaying correlations** (chapter entry
-`lem:ldp_decaying_correlations`; arXiv:2307.01696, Supplemental Material, Lemma 2,
+`thm:ldp_decaying_correlations`; arXiv:2307.01696, Supplemental Material, Lemma 2,
 in the chapter's corrected form).
 
 Let `A` be a tensor whose products of `L ≥ 1` matrices span the matrix algebra (so
@@ -360,13 +360,13 @@ with correlation length `ξ = -1/log|λ₂| > 0`. Then there are Hermitian opera
 `G_N(O,O';s') = ⟨O_1 O'_{s'}⟩ - ⟨O_1⟩⟨O'_{s'}⟩` in the normalized vector `φ_N`
 with `O` on the sites `1, …, L` and `O'` on the sites `s', …, s'+L-1`.
 
-The source asserts, for injective `A` and `L = 1`, the bound at every `s > 1` for
-large `N`, with vanishing one-point functions. For complex `λ₂` the limit
-correlator of Hermitian observables is `|λ₂|^t (μ^t + conj(μ)^t)` up to scale,
-which can vanish at individual separations; the statement therefore takes the
-bound in windows of `K` consecutive separations and uses the connected
-correlator. The deviation is recorded in the chapter note after
-`lem:ldp_decaying_correlations`. -/
+**Local fix (arXiv:2307.01696, Supplemental Material, Lemma 2):** the source
+asserts, for injective `A` and `L = 1`, the bound at every `s > 1` for large `N`,
+with vanishing one-point functions. For complex `λ₂` the limit correlator of
+Hermitian observables is `|λ₂|^t (μ^t + conj(μ)^t)` up to scale, which can vanish
+at individual separations; the statement therefore takes the bound in windows of
+`K` consecutive separations and uses the connected correlator. Documented in
+`docs/paper-gaps/mswc24_decaying_correlations_windowed_connected.tex`. -/
 theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
     (hL : Kraus.IsNBlkInjective A L) (hA : ∑ i, (A i)ᴴ * A i = 1)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (hρfix : Kraus.transferMap A ρ = ρ)

@@ -304,7 +304,7 @@ on the sites `1, …, L` and `Y` on the sites `L + m + 1, …, 2L + m`,
 `⟨φ_N|X_1 Y_{L+m+1}|φ_N⟩ = tr(E_X E_A^m E_Y E_A^n)`.
 
 This is the step "Expanding the traces in (eq:ldp_ti_mps)" of the chapter's proof of
-`lem:ldp_decaying_correlations`. It makes precise the trace expansion of the
+`thm:ldp_decaying_correlations`. It makes precise the trace expansion of the
 connected correlator in arXiv:2307.01696, Supplemental Material, proof of Lemma 2,
 where the source writes `Tr(E_1^{N-s-1} E_O E_1^{s-1} E_{O'})` for one-site
 observables at the sites `1` and `s`; the number of transfer maps between the two

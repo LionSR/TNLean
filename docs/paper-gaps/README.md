@@ -642,3 +642,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   hypothesis, that the isometry of `W` and the normalization of `|Ω'⟩` take the
   local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` asserted after eq. (S7) as a
   hypothesis, and that disjoint supports give its off-diagonal half.
+- `mswc24_decaying_correlations_windowed_connected.tex` records that the
+  correlation estimate of Lemma 2 of the Supplemental Material is proved with
+  the bound in every window of `K ≤ 2` consecutive separations and for the
+  connected correlator, since for complex `λ₂` the limit correlator of Hermitian
+  observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
+  need not vanish at finite `N`; the corrected form suffices for Theorem 1.
