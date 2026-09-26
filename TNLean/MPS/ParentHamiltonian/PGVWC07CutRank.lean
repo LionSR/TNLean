@@ -51,8 +51,9 @@ namespace Kraus
 
 variable {d D : ℕ}
 
-/-- Bridge: block injectivity passes from the adjoint family `K_i^†` to `K`, since conjugate
-transposition maps the words of `K^†` of length `L` onto the reversed words of `K`. -/
+/-- Bridge: block injectivity passes from the adjoint family \(K_i^\dagger\) to \(K\), since
+conjugate transposition maps the words of \(K^\dagger\) of length \(L\) onto the reversed
+words of \(K\). -/
 theorem isNBlkInjective_of_isNBlkInjective_conjTranspose
     {K : Fin d → Matrix (Fin D) (Fin D) ℂ} {L : ℕ}
     (hK : IsNBlkInjective (fun i => (K i)ᴴ) L) : IsNBlkInjective K L := by
@@ -103,18 +104,19 @@ variable {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
 
 /-- Source: arXiv:quant-ph/0608197, direct-sum lemma (lines 1346–1349) together with
 condition C1 in each block (lines 1314–1323), as used in the proof of the W-state corollary
-(lines 2193–2222). For a canonical form with condition C1 at length `L₀` in each block and
-pairwise distinct blocks, the tuples of block words of any length `n ≥ max(L₀, 3(b-1)(L₀+1))`
-span the product of the block matrix algebras.
+(lines 2193–2222). For a canonical form with condition C1 at length \(L_0\) in each block
+and pairwise distinct blocks, the tuples of block words of any length
+\(n\ge\max(L_0,3(b-1)(L_0+1))\) span the product of the block matrix algebras.
 
 **Stricter hypothesis.** The source assumes, without loss of generality, only that the block
-states `|φ_{A^j}⟩` are pairwise different (lines 1329–1330). The hypothesis
+states \(|\phi_{A^j}\rangle\) are pairwise different (lines 1329–1330). The hypothesis
 `BlocksNotGaugePhaseEquiv` used here, the one the direct-sum lemma is formalized with, is
 stronger: two equal blocks with different weights, or two blocks related by a gauge and a
-phase `ω` with `ω^N ≠ 1`, give different states but violate it. The source's reduction to
-pairwise different states does not supply it, and removing it is not formalized; see
-`docs/paper-gaps/rmp_w_state_ti_bound.tex`. The length `L₀` in the threshold covers a single
-block, where the direct-sum lemma is vacuous and the source length `3(b-1)(L₀+1)` is zero. -/
+phase \(\omega\) with \(\omega^N\ne1\), give different states but violate it. The source's
+reduction to pairwise different states does not supply it, and removing it is not
+formalized; see `docs/paper-gaps/rmp_w_state_ti_bound.tex`. The length \(L_0\) in the
+threshold covers a single block, where the direct-sum lemma is vacuous and the source length
+\(3(b-1)(L_0+1)\) is zero. -/
 theorem wordTupleSpanTop_of_ge {L₀ : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)
     (hDistinct : BlocksNotGaugePhaseEquiv (d := d) h.blocks)
@@ -136,8 +138,8 @@ theorem wordTupleSpanTop_of_ge {L₀ : ℕ} (hL₀ : 0 < L₀)
 
 end PGVWC07CanonicalFormData
 
-/-- The linear map sending a tuple of block matrices `Δ` to the function
-`σ ↦ ∑_k tr(Δ_k A^k_σ)` on words of length `R`. -/
+/-- The linear map sending a tuple of block matrices \(\Delta\) to the function
+\(\sigma\mapsto\sum_k\operatorname{tr}(\Delta_kA^k_\sigma)\) on words of length \(R\). -/
 noncomputable def blockTracePairing {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) (R : ℕ) :
     ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₗ[ℂ]
@@ -151,14 +153,16 @@ noncomputable def blockTracePairing {r : ℕ} {dim : Fin r → ℕ}
     simp [Matrix.trace_smul, Finset.mul_sum]
 
 /-- Source: arXiv:quant-ph/0608197, proof of the W-state corollary, lines 2193–2222 (the
-claim that the vectors `|Φ_{α,β}⟩` and `|Ψ_{α,β}⟩`, `(α, β) ∈ S`, are linearly independent,
-so that the reduced state of the first `R` sites has rank at least `∑_j D_j^2`).
+claim that the vectors \(|\Phi_{\alpha,\beta}\rangle\) and \(|\Psi_{\alpha,\beta}\rangle\),
+\((\alpha,\beta)\in S\), are linearly independent, so that the reduced state of the first
+\(R\) sites has rank at least \(\sum_jD_j^2\)).
 
-Let the block words of lengths `R` and `R'` span the product of the block matrix algebras,
-and let `c_k ≠ 0`. If, for every word `τ` of length `R'`, the function
-`σ ↦ ∑_k c_k tr(A^k_σ A^k_τ)` of words of length `R` lies in a subspace `V`, then
-`∑_k D_k^2 ≤ dim V`. The span hypotheses are the source's direct-sum lemma and condition C1
-by blocks, supplied by `PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge`. -/
+Let the block words of lengths \(R\) and \(R'\) span the product of the block matrix
+algebras, and let \(c_k\ne0\). If, for every word \(\tau\) of length \(R'\), the function
+\(\sigma\mapsto\sum_kc_k\operatorname{tr}(A^k_\sigma A^k_\tau)\) of words of length \(R\) lies
+in a subspace \(V\), then \(\sum_kD_k^2\le\dim V\). The span hypotheses are the source's
+direct-sum lemma and condition C1 by blocks, supplied by
+`PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge`. -/
 theorem sum_sq_dim_le_finrank_of_forall_mem {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) (c : Fin r → ℂ) (hc : ∀ k, c k ≠ 0)
     {R R' : ℕ} (hR : WordTupleSpanTop A R) (hR' : WordTupleSpanTop A R')
