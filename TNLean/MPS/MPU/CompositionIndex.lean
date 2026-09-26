@@ -56,8 +56,8 @@ theorem IsMPUCanonicalFormII.compositionRanks_of_isReduction
   rw [hR.rightRank_mul_leftRank_blockTensor (by decide) hSR]
   have hprod : d ^ 2 * r[U] * r[V] * (d ^ 2 * ℓ[U] * ℓ[V]) =
       d ^ 4 * (r[U] * ℓ[U]) * (r[V] * ℓ[V]) := by ring
-  have hprodU : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 0 1).mp hSU
-  have hprodV : r[V] * ℓ[V] = d * d := (hV.isMPUSimple_tfae.out 0 1).mp hSV
+  have hprodU : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 1 2).mp hSU
+  have hprodV : r[V] * ℓ[V] = d * d := (hV.isMPUSimple_tfae.out 1 2).mp hSV
   rw [hprod, hprodU, hprodV]
   exact le_of_eq (by ring)
 
