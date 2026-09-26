@@ -34,9 +34,10 @@ private noncomputable def rectangularProduct {N : ℕ} {α β : Type*}
   fun a b => ∏ x : Fin N, A (a x) (b x)
 
 private theorem rectangularProduct_isIsometry {N : ℕ} {α β : Type*}
-    [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
+    [Fintype α] [Fintype β] [DecidableEq β]
     (A : Matrix α β ℂ) (hA : A.IsIsometry) :
     (rectangularProduct (N := N) A).IsIsometry := by
+  classical
   change (rectangularProduct (N := N) A)ᴴ * rectangularProduct A = 1
   ext a b
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, rectangularProduct,
