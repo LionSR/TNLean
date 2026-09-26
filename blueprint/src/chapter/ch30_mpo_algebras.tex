@@ -662,6 +662,7 @@ with the corresponding composite embeddings.
 \begin{theorem}[Coproduct of a complete zipper fusion family]%
     \label{thm:mpoalg_fusion_coproduct}
     \lean{MPOTensor.CompleteZipperFusionFamily.coproduct,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_apply_eq_sum,
         MPOTensor.CompleteZipperFusionFamily.span_letter_eq_top,
         MPOTensor.CompleteZipperFusionFamily.coproduct_letter,
         MPOTensor.CompleteZipperFusionFamily.coproduct_unique,
@@ -703,6 +704,7 @@ with the corresponding composite embeddings.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{def:mpdo_complete_zipper_fusion_family}
     The simultaneous left inverse of the block letters writes every matrix
     unit of every block as a combination of the elements $(B_c^{ik})_c$, so

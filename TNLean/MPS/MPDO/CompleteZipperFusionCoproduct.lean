@@ -220,8 +220,9 @@ theorem span_letter_eq_top :
         Submodule.smul_mem _ _ <| Submodule.subset_span ⟨(i, k), rfl⟩
 
 /-- **Uniqueness of the coproduct.**  A linear map on the boundary space with the letter
-formula of `coproduct_letter` is the fusion coproduct.  In particular the coproduct depends only
-on the tensors, not on the choice of fusion tensors.
+formula of `coproduct_letter` is the fusion coproduct.  In particular the coproduct is
+determined by the MPO blocks alone: any other choice of fusion tensors and left inverses for the
+same blocks gives the same map.
 
 Source: arXiv:2204.05940, `mpo.tex`, lines 1182 and 2003--2006. -/
 theorem coproduct_unique (Δ : Fus.BoundarySpace →ₗ[ℂ] Fus.PairSpace)
