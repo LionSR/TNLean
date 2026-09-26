@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefect
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefectCompression
+import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefectProjector
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousFusion
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousInverseFusion
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousRepresentation

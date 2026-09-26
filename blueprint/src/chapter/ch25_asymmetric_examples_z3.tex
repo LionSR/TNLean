@@ -178,10 +178,14 @@ Sun~\cite{Sun2025Anomalous}.
 
 \begin{lemma}[The cube of the phase-decorated shift]
     \label{lem:asymex_z3_physical_cube}
+    \lean{Z3Anomalous.mpo_u_pow_three, Z3Anomalous.mpo_uDagTensor_eq_sq}
+    \leanok
+    \uses{thm:asymex_z3_physical_kernels}
     For every $N>0$, $U_N^3=\Id$ and $V_N=U_N^2$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     For $a,b\in\{0,1,2\}$, direct evaluation gives
     \begin{align}
         \left[\sum_{r=0}^{2}\chi(a+r\bmod3)(b+r\bmod3)\right]_{a,b=0}^{2}
@@ -653,6 +657,17 @@ pair blocks, each compressing onto one group tensor.
 
 \begin{lemma}[The normalized defect projects onto invariant states]
     \label{lem:asymex_z3_defect_projector}
+    \lean{Z3Anomalous.defectProjector, Z3Anomalous.defectProjector_eq,
+        Z3Anomalous.operatorRepresentation,
+        Z3Anomalous.defectProjector_eq_finiteGroupUnitaryAverage,
+        Z3Anomalous.isStarProjection_defectProjector,
+        Z3Anomalous.defectProjector_mulVec_eq_self_iff,
+        Z3Anomalous.range_defectProjector_mulVecLin,
+        Z3Anomalous.defectProjector_mulVec_single, Z3Anomalous.mpo_defect_mul_defect,
+        Z3Anomalous.trace_mpo_uTensor, Z3Anomalous.trace_mpo_uDagTensor,
+        Z3Anomalous.rank_defectProjector}
+    \leanok
+    \uses{def:asymex_z3anomalous_defect}
     For $L>0$, the operator
     $P_L=O_L(A)/3=(\Id+U_L+U_L^2)/3$ is the orthogonal projector onto
     $\{\psi:U_L\psi=\psi\}$. Its basis action is
@@ -665,6 +680,9 @@ pair blocks, each compressing onto one group tensor.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:asymex_z3anomalous_defect_sum, thm:asymex_z3_physical_kernels,
+        lem:asymex_z3_physical_cube}
     Theorem~\ref{thm:asymex_z3anomalous_defect_sum} and
     Theorem~\ref{thm:asymex_z3_physical_kernels}
     and Lemma~\ref{lem:asymex_z3_physical_cube} give the formula for $P_L$.
