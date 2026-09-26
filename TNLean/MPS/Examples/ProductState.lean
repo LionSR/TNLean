@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.Core.ProductVector
 import TNLean.MPS.OpenBoundary
 
 /-!
@@ -27,8 +28,6 @@ states of the one-site tensor are the same product vector.
 
 * `MPSTensor.siteOpenCoeff` : open-boundary contraction of a site-dependent tensor family
 * `MPSTensor.productSiteTensor` : the site-dependent `D = 1` tensor $a^{i,[s]}$
-* `MPSTensor.productVector` : the product vector $\bigotimes_s\lvert\phi^s\rangle$ in the
-  computational basis
 
 ## Main results
 
@@ -64,13 +63,6 @@ The bond-dimension-one tensor of a product state: at site `s` the matrix of phys
 index `i` is the `1 × 1` matrix $a^{i,[s]}$. -/
 def productSiteTensor (a : Fin N → Fin d → ℂ) : Fin N → MPSTensor d 1 :=
   fun s i => Matrix.of fun _ _ => a s i
-
-/-- Source: arXiv:2011.12127, lines 2330–2333. The product vector
-$\lvert\phi^1\rangle\otimes\cdots\otimes\lvert\phi^N\rangle$, with
-$\lvert\phi^s\rangle=\sum_i\phi^s_i\lvert i\rangle$, in the computational basis: its
-coefficient on $\lvert i_1,\dots,i_N\rangle$ is $\phi^1_{i_1}\cdots\phi^N_{i_N}$. -/
-def productVector (φ : Fin N → Fin d → ℂ) : Cfg d N → ℂ :=
-  fun σ => ∏ s, φ s (σ s)
 
 /-- The ordered product of `1 × 1` matrices has entry the product of the entries. -/
 private lemma prod_ofFn_one_apply :

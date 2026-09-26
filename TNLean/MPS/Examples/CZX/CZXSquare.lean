@@ -182,25 +182,14 @@ private theorem czxSquare_unmatched_int (i : Fin 4) (t : Fin 3) (p q : Fin 1) :
 
 /-- **The multi-block asymmetric compression datum of Example D** (P5 note, Theorem 7.7,
 clauses (i)–(iii), for `ex:p5ft-czx`). -/
-def czxSquare_compression : MultiBlockCompression czxSquare squareSlots czxSquareTarget where
-  z := 3
-  ord := czxSquareOrd
-  gauge := czxSquareGauge
-  triangular i x y h := by
-    rw [czxSquare_conjMatrix, Matrix.submatrix_apply, complexOfInt_apply, Int.cast_eq_zero]
-    exact czxSquare_triangular_int i x y h
-  matched i s := by
-    have hs : s = squareSlot := Subtype.ext (Subsingleton.elim _ _)
-    subst hs
-    ext p q
-    rw [Matrix.blockDiag'_apply, czxSquare_conjMatrix, Matrix.submatrix_apply,
-      complexOfInt_apply, czxSquareTarget_eq, complexOfInt_apply, Int.cast_inj]
-    exact czxSquare_matched_int i p q
-  unmatched i t := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, czxSquare_conjMatrix, Matrix.submatrix_apply,
-      complexOfInt_apply, Matrix.zero_apply, Int.cast_eq_zero]
-    exact czxSquare_unmatched_int i t p q
+def czxSquare_compression : MultiBlockCompression czxSquare squareSlots czxSquareTarget :=
+  MultiBlockCompression.ofRing (Int.castRingHom ℂ) czxSquareOrd czxSquareTau czxSquareGauge
+    czxSquareConjInt czxSquare_conjMatrix (fun _ => negIdentityIntMPS) czxSquareTarget_eq
+    czxSquare_triangular_int
+    (fun i s p q => by
+      obtain rfl : s = squareSlot := Subtype.ext (Subsingleton.elim _ _)
+      exact czxSquare_matched_int i p q)
+    czxSquare_unmatched_int
 
 /-! ### Consequences -/
 
@@ -259,10 +248,8 @@ theorem czxSquare_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 4 ≤ w.le
   have hsum : (fun i => czxSquare i - czxSquareRight * czxSquareTarget () i * czxSquareLeft) =
       czxSquare_compression.remainder := by
     funext i
-    rw [MultiBlockCompression.remainder,
-      Finset.sum_eq_single_of_mem squareSlot (Finset.mem_univ squareSlot)
-        fun b _ hb => absurd (Subtype.ext (Subsingleton.elim b.1 squareSlot.1)) hb,
-      czxSquare_left_eq, czxSquare_right_eq]
+    rw [MultiBlockCompression.remainder_oneSlot _ squareSlot, czxSquare_left_eq,
+      czxSquare_right_eq]
   rw [hsum]
   refine czxSquare_compression.evalWord_remainder_eq_zero w ?_
   change (1 : ℕ) + 3 ≤ w.length
