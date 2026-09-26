@@ -43,8 +43,8 @@ For the Kitaev chain of arXiv:2011.12127, Appendix A:
 
 For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
-- `rmp_peps_examples_small_torus.tex` records that the cluster and CZX
-  tensors are placed on the simple torus graph, on which a torus of width or
+- `rmp_peps_examples_small_torus.tex` records that the cluster, CZX, AKLT
+  and RVB tensors are placed on the simple torus graph, on which a torus of width or
   height two has a single edge between neighbouring sites, so their state
   formulas are stated for tori of width and height at least three; the GHZ
   example holds on every torus.
@@ -53,6 +53,10 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
   and that the plaquette state follows when each bond identifies the pair
   `(a, b)` at one end with `(b, a)` at the other.
+- `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
+  printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
+  bond of dimension three, makes the tensor vanish, and that the formal
+  tensor uses `Y ⊕ 1`, with bond state `|01) - |10) + |22)`.
 
 For the MPU index of arXiv:1703.09188:
 
