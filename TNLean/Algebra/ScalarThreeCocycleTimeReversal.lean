@@ -28,6 +28,7 @@ action tensors that yields `L̄ = (1, γ) ▷ L` for an action-tensor phase `γ`
   real one (lines 873--891).
 * `LSymbol.exists_gauge_star_eq_self`: if complex conjugation of `(ω, L)` is a
   joint scalar gauge, one joint scalar gauge makes both `ω` and `L` real.
+  This conditional statement goes beyond the source.
 * `LSymbol.star_apply_eq_gauge_one_apply`: the scalar step of lines 935--954,
   giving `L̄ˣ_{g,h} / Lˣ_{g,h} = γ_{gh,x} / (γ_{h,x} γ_{g,h·x})`.
 * `LSymbol.phase_sq_eq_of_gauge_eq_star`: under that relation the square of
@@ -246,10 +247,11 @@ complex conjugation of a scalar three-cochain `ω` and of L-symbols `L` is the
 joint scalar gauge by `(β, γ)`, then a single joint scalar gauge makes both
 real.
 
-This is the gauge-invariant form of the conclusions of arXiv:2203.12563,
-lines 873--891 and 935--957. There the fusion-tensor phase is dropped in the
-L-symbol relation, which is the case `β = 1` of `hL`; compatibility of `L`
-with `ω` is not needed. -/
+This is not a statement of arXiv:2203.12563. The source derives
+`β ▷ ω = ω̄` at lines 873--891 and, with the fusion-tensor phase omitted,
+`(1, γ) ▷ L = L̄` at lines 935--954; the hypotheses here, with the same `β`
+in both relations, are assumed rather than derived from a time-reversal
+operator. Compatibility of `L` with `ω` is not needed. -/
 theorem exists_gauge_star_eq_self {β : ScalarCocycle G} {γ : ActionTensorGauge G X}
     {ω : ScalarThreeCochain G} {L : LSymbol G X}
     (hω : ScalarThreeCochain.fusionGauge β ω = star ω) (hL : gauge β γ L = star L) :
