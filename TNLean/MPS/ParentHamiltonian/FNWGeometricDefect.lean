@@ -17,9 +17,9 @@ bound
 \]
 
 stated at lines 1180--1194 and again for the best overlap constant \(A^\alpha_m\) at
-lines 2401--2412, display `boundAm`. The prescription there is that \(\lambda\) may be
-any number with \(\lambda_i<\lambda<1\) for every eigenvalue \(\lambda_i\ne 1\) of the
-transfer operator.
+lines 2401--2412, display `boundAm`. The prescribed rate satisfies \(0<\lambda<1\)
+and exceeds the modulus of every eigenvalue other than one of the observable transfer
+operator.
 
 This module composes the three already-proved ingredients into that display. Fannes--
 Nachtergaele--Werner, *Communications in Mathematical Physics* 144 (1992), Lemma 6.2
@@ -27,21 +27,23 @@ gives the coefficient \(a(m)(1+a(m))/a_-(m)\); equation (5.9) gives \(1-a(m)\le
 a_-(m)\); and Lemma 5.2 with equations (5.9)--(5.10) gives \(a(m)\le c\lambda^m\) for
 every prescribed rate above the rho-weighted spectral radius of the transfer remainder.
 
-**Scope restriction (FNW prefactor):** one clause of the source display is narrower
-here than in print, recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
+The source's eigenvalue prescription is established in
+`FNWTransferEigenvalueRate`: every positive rate above the moduli of the nonunit
+observable-transfer eigenvalues also exceeds the weighted remainder spectral radius.
+This follows because every nonzero eigenvalue of the remainder is a nonunit transfer
+eigenvalue; the precise implication is
+`MPSTensor.IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues`.
+Thus the fixed-length theorem below applies at every such prescribed rate once its
+mixing-quantity hypothesis is supplied.
 
-The rate is phrased differently but is not narrower. The source prescribes that
-\(\lambda\) may be any number with \(\lambda_i<\lambda<1\) for every eigenvalue
-\(\lambda_i\ne 1\) of the transfer operator. The theorems below assume instead that the
-rate lies strictly above the rho-weighted spectral radius of the transfer remainder.
-The source prescription implies this hypothesis, because every nonzero eigenvalue of the
-remainder is a nonunit transfer eigenvalue; that implication is
-`MPSTensor.IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues`
-in `TNLean.MPS.ParentHamiltonian.FNWTransferEigenvalueRate`.
-
-The prefactor: the source states that \(c\) may be taken equal to \(k^2\), the dimension
-of the auxiliary space. The prefactor produced here is the existential rate-dependent one
-supplied by Lemma 5.2; no dimension-only value is asserted.
+**Local fix (dimension-only prefactor):** the simultaneous assertions following
+Nachtergaele's `boundAm` that one may take \(c=k^2\), the square of the auxiliary
+dimension, and prescribe any admissible rate are false from the fixed intersection
+threshold. `FNWDimensionConstant.Counterexample` gives a physical counterexample.
+The geometric estimate below uses the positive rate-dependent prefactor supplied by
+FNW Lemma 5.2. `FNWEventualPrefactor` also proves the estimate with any prescribed
+positive prefactor after an additional onset depending on the state, rate, and prefactor.
+This correction is documented in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 
 ## Main results
 
