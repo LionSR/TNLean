@@ -715,6 +715,40 @@ with the corresponding composite embeddings.
     $\Delta(X)\Delta(Y)=\sum_{c,\mu}X^c_{ab,\mu}X_cY_cX^{c+}_{ab,\mu}$.
 \end{proof}
 
+\begin{theorem}[Coassociativity of the fusion coproduct]%
+    \label{thm:mpoalg_fusion_coproduct_coassoc}
+    \lean{MPOTensor.CompleteZipperFusionFamily.coproductLeft,
+        MPOTensor.CompleteZipperFusionFamily.coproductRight,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_coassoc}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct}
+    The coproduct (\ref{eq:mpoalg_fusion_coproduct}) is coassociative,
+    $(\Delta\otimes\Id)\circ\Delta=(\Id\otimes\Delta)\circ\Delta$, where on the
+    triple bond space
+    \begin{align}
+        (\Delta\otimes\Id)(Y)_{abc}
+         & =\sum_{e,\mu}(X^e_{ab,\mu}\otimes\Id)\,Y_{ec}\,
+        (X^{e+}_{ab,\mu}\otimes\Id), \notag \\
+        (\Id\otimes\Delta)(Y)_{abc}
+         & =\sum_{f,\lambda}(\Id\otimes X^f_{bc,\lambda})\,Y_{af}\,
+        (\Id\otimes X^{f+}_{bc,\lambda}). \notag
+    \end{align}
+    This is the coassociativity axiom of a coalgebra
+    \cite[Section~3]{Molnar2022MPOAlgebrasI}. The source assumes it and
+    derives the associativity of fusion trees and the $F$-symbols; here it is
+    proved from the fusion tensors.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875 (coalgebra),
+    %   1732--1787 (eq:associative), 2003--2006 (eq:MPO_tensor_product).
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:mpoalg_fusion_coproduct}
+    Both sides are linear in the argument, and the elements $(B_c^{il})_c$
+    span. By (\ref{eq:mpoalg_fusion_coproduct_letter}) applied twice, both
+    sides send $(B_c^{il})_c$ to
+    $\sum_{j,k}B_a^{ij}\otimes B_b^{jk}\otimes B_c^{kl}$.
+\end{proof}
+
 \begin{remark}[Kramers--Wannier duality is an intertwiner]%
     \label{rem:mpoalg_kramers_wannier}
     The Kramers--Wannier operator of Section~\ref{sec:asymex_kw} does not
