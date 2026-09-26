@@ -5293,7 +5293,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{ThmFund1, thm:mpu_source_u_open_two_site}
+    \uses{ThmFund1, thm:mpu_source_u_open_two_site,
+        thm:mpu_canonical_form_ii_positive_dimensions}
     The source-cut factorization gives the open contraction of
     $\mathcal U_2$ through $X_2,u,X_1$, while the definition of $v$ gives
     its $X_1,X_2$ contraction. The simple-tensor equivalence makes both
@@ -5328,6 +5329,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{def:mpu_source_open_two_site_standard_form,
         thm:mpu_bounded_simple_blocking,
         thm:mpu_canonical_form_ii_positive_blocking,
+        thm:mpu_canonical_form_ii_positive_dimensions,
+        thm:mpdo_block_two_as_positive_blocking,
         lem:mpu_iterated_physical_blocking}
     Choose the positive simple blocking length bounded by $D^4$.
     Canonical form II persists under this positive blocking, with the same
