@@ -45,6 +45,27 @@ is deliberately source-faithful.
   equation is source-specific. The construction from canonical form II is
   restricted as recorded in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 
+### Source factors under virtual conjugation
+
+- **Declarations:**
+  `MPOTensor.transported_source_factor_premises_at_selected_ranks` and
+  `MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges`.
+- **Defined in:** `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean` and
+  `TNLean/MPS/MPU/SelectedSourceFactorVirtualGauge.lean`.
+- **Meaning:** If two simple canonical-form-II tensors are related by a
+  unitary virtual conjugation, their selected source factors obey four exact
+  identities after identifying their equal source-cut ranks. The two
+  source-rank changes are unitary; no positive scalar remains because both
+  second-cut left factors are isometries.
+- **Source:** arXiv:1703.09188, Theorem `FundamentalMPU`,
+  `Papers/1703.09188/paper_v2.tex:624-648`, for the local gauge diagrams;
+  Proposition IV.5, lines 786–812, for raw rank transport. The scalar-free
+  comparison is the normalized specialization of arXiv:2502.20257,
+  Lemma `lem:deco`, lines 1052–1066.
+- **Caveat:** The two canonical-form-II weights may be different. This is a
+  forward comparison given a virtual conjugation, not a converse asserting
+  equality of the original periodic operators at every length.
+
 ## Normality
 
 ### `Kraus.IsNormal`
@@ -404,6 +425,64 @@ normalizations.
   are recorded in
   `docs/paper-gaps/peps_injective_ft_section3_route.tex`. Never cite either
   bridge as unconditional.
+
+#### `TNLean.PEPS.IsGInjective`
+
+- **Declaration:**
+  `TNLean.PEPS.IsGInjective (ρ : Representation ℂ G W) (T : W →ₗ[ℂ] P) : Prop`.
+- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Meaning:** the virtual-to-physical map `T = 𝒫(A)` is invariant under `ρ`
+  and injective on the `ρ`-invariant subspace.
+- **Source:** arXiv:1001.3807, Definition `def:2d-Ug-inj`,
+  `Papers/1001.3807/paper_v3.tex:1278-1296`.
+- **Sanctioned bridges:** `TNLean.PEPS.isGInjective_iff_exists_leftInverse`
+  (the source's left inverse with `L 𝒫(A) = Π_U`, for finite `G`),
+  `TNLean.PEPS.isGInjective_trivial_iff` (trivial `ρ`: injectivity of `T`), and
+  `TNLean.PEPS.siteMap_injective_iff` (injectivity of the map of a four-leg
+  site tensor is linear independence of its physical vectors, the vertex-wise
+  condition of `IsVertexInjective`).
+- **Caveat / paper gap:** the source requires `ρ` semi-regular; here `ρ` is a
+  parameter and each instance names its representation. Recorded in
+  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`. No bridge yet
+  connects `IsGInjective` of a site map to `IsVertexInjective` of the torus PEPS
+  `torusSiteTensor`.
+
+#### `TNLean.PEPS.IsGIsometric`
+
+- **Declaration:** `TNLean.PEPS.IsGIsometric (ρ : Representation ℂ G (ι → ℂ))
+  (T : (ι → ℂ) →ₗ[ℂ] (κ → ℂ)) : Prop`.
+- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Meaning:** `IsGInjective ρ T` and `⟪T x, T y⟫ = c ⟪x, y⟫` for invariant
+  `x, y` and one constant `c > 0`.
+- **Source:** arXiv:1001.3807, Definition `def:iso:isopeps`,
+  `Papers/1001.3807/paper_v3.tex:1692-1697`.
+- **Caveat / paper gap:** the source asks for the left-regular representation
+  and for `𝒫(A)` to be unitary between its domain and range, that is `c = 1`;
+  the factor `c` absorbs the missing normalization of the source's
+  quantum-double tensor (`c = |G|`), and the rescaling `T / √c` gives the
+  printed notion. Recorded in
+  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+#### `TNLean.PEPS.IsTorusDimerCovering`
+
+- **Declaration:**
+  `TNLean.PEPS.IsTorusDimerCovering (right up : TorusVertex width height → Bool) : Prop`.
+- **Defined in:** `TNLean/PEPS/Examples/RVB.lean`.
+- **Meaning:** the edges marked by `right` (the edge from `v` to its right
+  neighbour) and `up` (the edge from `v` to its upper neighbour) form a
+  nearest-neighbour dimer covering of the torus: every site lies on exactly one
+  marked edge among its top, right, down and left edges.
+- **Source:** arXiv:2011.12127, Appendix A, "The RVB state",
+  `Papers/2011.12127/TN-Review-main.tex:2440-2448` ("all ways of covering the
+  lattice with nearest neighbor singlets").
+- **Sanctioned bridges:** `TNLean.PEPS.stateCoeff_rvbPEPS`, which writes the
+  RVB PEPS as the sum over dimer coverings of the product of singlets on the
+  covered edges.
+- **Caveat:** the bridge is stated for tori of width and height at least three.
+  At width or height two the right and left edges of a site coincide in the
+  simple torus graph, so the predicate no longer counts the source's
+  multigraph coverings; recorded in
+  `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
@@ -857,6 +936,169 @@ The following notions use different transfer objects and are not interchangeable
   predicate is only used to separate blocks of possibly different bond
   dimensions.
 
+## Sequential preparation
+
+### `MPSPreparation.IsProbabilisticallyGenerated`
+
+- **Declaration:**
+  `MPSPreparation.IsProbabilisticallyGenerated (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential.lean`.
+- **Meaning:** `ψ` is the state
+  $\bra{\varphi_F}A^{[N]}_{i_N}\cdots A^{[1]}_{i_1}\ket{\varphi_I}$ produced
+  by arbitrary operations $A^{[k]}$ on a `D`-dimensional ancilla followed by a
+  projection on $\ket{\varphi_F}$ (`MPSPreparation.seqAmplitude`). The vector is
+  the unnormalized post-measurement vector. Configurations are indexed by ket
+  position, so the matrix at position `p` is the source's $A^{[N-p]}$.
+- **Source:** Pérez-García--Verstraete--Wolf--Cirac, arXiv:quant-ph/0608197,
+  scheme 1 of section "Generation of MPS" and eq. `OBCMPSgen`,
+  `Papers/quant-ph_0608197/MPSarchive.tex:1527-1552`.
+- **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`
+  (for `ψ ≠ 0`, equivalent to `∃ c ≠ 0, HasOBCRep D (c • ψ)`), and
+  `MPSPreparation.isDeterministicallyGenerated_iff_isProbabilisticallyGenerated`
+  on normalized vectors.
+- **Caveat:** the characterization compares rays: it needs `ψ ≠ 0`, and the
+  scalar `c` matters only at `N = 0`, where every open-boundary coefficient is
+  the empty product `1`. Scheme 3 of Theorem `Thm:seqwith` is
+  `MPSPreparation.IsTransitionGenerated`, and the schemes without an ancilla are
+  `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla` and
+  `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla`.
+
+### `MPSPreparation.IsDeterministicallyGenerated`
+
+- **Declaration:**
+  `MPSPreparation.IsDeterministicallyGenerated [NeZero d] (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential.lean`.
+- **Meaning:** there are unitaries `U k` on ancilla ⊗ site and unit vectors
+  $\varphi_I,\varphi_F\in\mathbb C^D$ such that, starting from
+  $\ket{\varphi_I}\otimes\ket{0}^{\otimes N}$, the ancilla component of the
+  joint state at every configuration `τ` is `ψ τ • φF`
+  (`MPSPreparation.jointState`); that is, the ancilla decouples after the last
+  step without measurement. The induced operations are
+  $A_{i,\alpha\beta}=\bra{\alpha,i}U\ket{\beta,0}$
+  (`MPSPreparation.stepMatrix`).
+- **Source:** arXiv:quant-ph/0608197, scheme 2 of section "Generation of MPS",
+  `Papers/quant-ph_0608197/MPSarchive.tex:1527-1554`.
+- **Sanctioned bridges:** `MPSPreparation.isDeterministicallyGenerated_iff`
+  (equivalent to normalization together with `∃ c ≠ 0, HasOBCRep D (c • ψ)`),
+  `MPSPreparation.isProbabilisticallyGenerated_of_isDeterministicallyGenerated`,
+  and `MPSPreparation.star_dotProduct_self_of_isDeterministicallyGenerated`.
+- **Caveat:** `NeZero d` is part of the definition, because each site starts in
+  $\ket{0}$. Only the two directions of Theorem `Thm:seqwith` for schemes 1 and 2
+  are formalized; minimality of the resources in the successive-decomposition
+  recipe is not.
+
+### `MPSPreparation.IsTransitionInteraction` and `MPSPreparation.IsTransitionGenerated`
+
+- **Declarations:**
+  `MPSPreparation.IsTransitionInteraction (T : Matrix ((Fin D × Fin 2) × Fin 2) ((Fin D × Fin 2) × Fin 2) ℂ) : Prop`
+  and
+  `MPSPreparation.IsTransitionGenerated (D : ℕ) (ψ : (Fin N → Fin 2) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/SequentialTransition.lean`.
+- **Meaning:** `IsTransitionInteraction T` says that `T` acts on ancilla
+  `ℂ^D`, tag qubit, and site qubit by
+  $\ket{\varphi}\ket{1}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{1}$ and
+  $\ket{\varphi}\ket{0}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{0}$.
+  `IsTransitionGenerated D ψ` says that there are unitaries `W k` on
+  $\mathbb C^D\otimes\mathbb C^2$ and unit vectors $\varphi_I,\varphi_F$ such
+  that the steps "ancilla unitary, then the fixed interaction", applied to
+  $\ket{\varphi_I}\otimes\ket{0}^{\otimes N}$, leave the joint state
+  $\ket{\varphi_F}\otimes\ket{\psi}$ (`MPSPreparation.transitionJointState`).
+  A step on a site in $\ket{0}$ is `MPSPreparation.transitionStep`.
+- **Source:** arXiv:quant-ph/0608197, scheme 3 (deterministic transition
+  schemes) of section "Generation of MPS",
+  `Papers/quant-ph_0608197/MPSarchive.tex:1555-1567`; the interaction is the
+  `D`-standard map `T` of arXiv:quant-ph/0501096, eq. `IsofromT`.
+- **Sanctioned bridges:**
+  `MPSPreparation.transitionStep_eq_of_isTransitionInteraction` (a step equals
+  the fixed interaction after the ancilla unitary, for any `T` satisfying
+  `IsTransitionInteraction`), `MPSPreparation.isTransitionGenerated_iff`
+  (equivalent to normalization together with `∃ c ≠ 0, HasOBCRep D (c • ψ)`),
+  `MPSPreparation.isDeterministicallyGenerated_of_isTransitionGenerated`, and
+  `MPSPreparation.isTransitionGenerated_of_isDeterministicallyGenerated`.
+- **Caveat:** the scheme is for qubit chains, `d = 2`. The source does not
+  specify the interaction on site inputs $\ket{1}$, so `IsTransitionInteraction`
+  constrains only site inputs $\ket{0}$, which are the only ones that occur.
+
+### `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla` and `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla`
+
+- **Declarations:**
+  `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla [NeZero d] {n : ℕ} (ψ : (Fin (n + 2) → Fin d) → ℂ) : Prop`
+  and
+  `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla [NeZero d] {n : ℕ} (ψ : (Fin (n + 2) → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/SequentialNoAncilla.lean`.
+- **Meaning:** `ψ = MPSPreparation.noAncillaState n U` for operations
+  `U k` on $\mathbb C^d\otimes\mathbb C^d$, the source's $U^{[k+1]}$ acting on
+  sites `k + 1` and `k + 2` of a chain of `n + 2` sites initially in
+  $\ket{0}^{\otimes(n+2)}$; the operations are arbitrary in the probabilistic
+  scheme (unnormalized output) and unitary in the deterministic one.
+  Configurations are indexed by ket position, as for
+  `MPSPreparation.IsProbabilisticallyGenerated`.
+- **Source:** arXiv:quant-ph/0608197, section "Sequential generation without
+  ancilla", `Papers/quant-ph_0608197/MPSarchive.tex:1580-1593`.
+- **Sanctioned bridges:**
+  `MPSPreparation.isProbabilisticallyGeneratedWithoutAncilla_iff` (equivalent to
+  `HasOBCRep d ψ`), `MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff`
+  (equivalent to normalization together with `HasOBCRep d ψ`), and
+  `MPSPreparation.noAncillaState_eq_eval` (the site matrices
+  $A_{i,\beta\alpha}=\bra{i,\beta}U\ket{\alpha,0}$, `MPSPreparation.pairStep`).
+- **Caveat:** the chain has at least two sites, since the first operation acts
+  on sites `1` and `2`; this is a **Local fix** recorded in
+  `docs/paper-gaps/pgvwc07_sequential_no_ancilla_two_sites.tex`. The
+  identification of the full chain state after `U^{[k]}` with
+  $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$ is the motivation for the
+  recursive definition, not a proved statement.
+
+### `MPSPreparation.HasOBCRep`
+
+- **Declaration:**
+  `MPSPreparation.HasOBCRep (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential.lean`.
+- **Meaning:** `ψ = B.coeff` for some varying-bond open chain
+  `B : OBCChainTensor d D N`, that is, `ψ` has an open-boundary MPS
+  representation whose bond dimensions are all at most `D`.
+- **Source:** "OBC MPS representation with maximal bond dimension $D$",
+  arXiv:quant-ph/0608197, eq. `eq.vidal`,
+  `Papers/quant-ph_0608197/MPSarchive.tex:419-429`, as used in Theorem
+  `Thm:seqwith`, lines 1569--1573.
+- **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`,
+  `MPSPreparation.isDeterministicallyGenerated_iff`, and the left-canonical
+  representations `OBCChainTensor.exists_isometric_coeff_eq` and
+  `OBCChainTensor.exists_isometric_coeff_eq_of_norm` in
+  `TNLean/MPS/Preparation/IsometricChain.lean`.
+- **Caveat:** `D` is a common upper bound, not the least bond dimension. The
+  predicate has no scalar freedom; the sequential-generation theorems apply it
+  to `c • ψ` with `c ≠ 0`.
+
+### `MPSPreparation.IsIsometryOn`, `MPSPreparation.IsSupportedBelow`, and `MPSPreparation.IsRowSupportedBelow`
+
+- **Declarations:**
+  `MPSPreparation.IsIsometryOn (b : ℕ) (Q : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop`,
+  `MPSPreparation.IsSupportedBelow (b : ℕ) (v : Fin D → ℂ) : Prop`, and
+  `MPSPreparation.IsRowSupportedBelow (a : ℕ) (M : Matrix (Fin D) (Fin D) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/IsometricChain.lean`.
+- **Meaning:** `IsIsometryOn b Q` says that the stacked columns
+  `(α, i) ↦ Q i α β`, `β < b`, are orthonormal; for `b = D` it is
+  $\sum_i Q_i^\dagger Q_i=\mathbb 1$. `IsSupportedBelow b v` says that the
+  coordinates `β ≥ b` of `v` vanish, and `IsRowSupportedBelow a M` that the rows
+  `α ≥ a` of `M` vanish. Together they encode a varying-bond chain stored in
+  square `D × D` matrices whose site `p` lives in the upper-left
+  `b p × b (p + 1)` block.
+- **Source:** the isometry condition $\sum_i A_i^\dagger A_i=\mathbb 1$ of
+  arXiv:quant-ph/0608197, `Papers/quant-ph_0608197/MPSarchive.tex:1535-1537`,
+  and of Schön--Solano--Verstraete--Cirac--Wolf, arXiv:quant-ph/0501096, before
+  eq. `MPSiso`, restricted to the used bond levels. The support predicates are
+  project definitions.
+- **Sanctioned bridges:** `MPSPreparation.isIsometryOn_stepMatrix` (operations
+  induced by a unitary), `MPSPreparation.exists_unitary_extension` (the
+  converse extension), `MPSPreparation.sum_normSq_eval_mulVec` (norm
+  preservation), and `OBCChainTensor.sum_conjTranspose_mul_ofSupported`, which
+  turns block isometry into $\sum_i A_i^\dagger A_i=\mathbb 1$ for the cut-down
+  rectangular chain.
+- **Caveat:** these predicates are statements about square padded matrices. No
+  bridge to the translation-invariant left-canonical or trace-preservation
+  predicates on `MPSTensor` is stated; the rectangular condition is recovered only through
+  `OBCChainTensor.ofSupported`.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`
@@ -878,6 +1120,42 @@ The following notions use different transfer objects and are not interchangeable
   `MPSTensor.exists_not_isPeriodicWState_le`). The source's single-length bound
   $D^3\log D=\Omega(N)$ is not formalized; see
   `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
+
+## Invariant states of matrix product operators
+
+### `MPOTensor.GroupFamily.FixesMPV`
+
+- **Declaration:** `MPOTensor.GroupFamily.FixesMPV T A : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`.
+- **Meaning:** the periodic operator $O_N(T)$ fixes the periodic vector
+  $\ket{V^{(N)}(A)}$ for every chain length $N\geq1$; nothing is asserted at
+  $N=0$.
+- **Source:** arXiv:2203.12563, line 1064, the relation
+  $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ with $y=x$.
+- **Sanctioned bridges:** it is the single-operator, unit-eigenvalue case of
+  `MPOTensor.IsMPOSymmetric` (eigenvalue $c_a=1$). `FixesMPV.mulTensor` closes
+  it under operator products, and `FixesMPV.sameMPV₂Pos_actTensor` turns it into
+  positive-length vector equality of the action tensor with `A`, which is the
+  input of `MPOTensor.GroupFamily.nonempty_actionData`.
+- **Caveat:** no equivalence with `IsMPOSymmetric` at `c = 1` is stated as a
+  theorem; the two definitions agree by unfolding.
+
+### `MPOTensor.GroupFamily.CarriesMPV`
+
+- **Declaration:** `MPOTensor.GroupFamily.CarriesMPV T B B' : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`.
+- **Meaning:** the periodic operator $O_N(T)$ carries the periodic vector
+  $\ket{V^{(N)}(B)}$ to $\ket{V^{(N)}(B')}$ for every chain length $N\geq1$;
+  nothing is asserted at $N=0$. The two tensors may have different bond
+  dimensions.
+- **Source:** arXiv:2203.12563, line 1064, the relation
+  $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ for blocks permuted by the group.
+- **Sanctioned bridges:** `FixesMPV T A` is the case $B=B'=A$, by unfolding.
+  `CarriesMPV.sameMPV₂Pos_actTensor` turns it into positive-length vector
+  equality of the action tensor with $B'$, the input of
+  `MPOTensor.GroupFamily.nonempty_blockActionData`.
+- **Caveat:** no theorem states the equivalence with `FixesMPV` at $B=B'$; the
+  definitions agree by unfolding.
 
 ## Symmetries of matrix product density operators
 

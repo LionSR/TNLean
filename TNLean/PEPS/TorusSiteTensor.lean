@@ -87,6 +87,28 @@ theorem torusVertex_apply_eq_apply_zero_of_shift {α : Type*}
   obtain ⟨x, y⟩ := v
   rw [← ZMod.natCast_zmod_val x, hx, ← ZMod.natCast_zmod_val y, hy]
 
+/-- Reindexing a product over the torus by the unit horizontal shift: a product of factors
+joining each site to its left neighbour equals the product of the same factors joining each
+site to its right neighbour. -/
+theorem prod_torus_sub_fst {M : Type*} [CommMonoid M]
+    (f : TorusVertex width height → TorusVertex width height → M) :
+    ∏ v, f v (v.1 - 1, v.2) = ∏ v, f (v.1 + 1, v.2) v :=
+  (Fintype.prod_equiv (Equiv.addRight ((1, 0) : TorusVertex width height)) _ _ fun u => by
+    simp only [Equiv.coe_addRight,
+      show u + (1, 0) = (u.1 + 1, u.2) from Prod.ext rfl (add_zero _),
+      add_sub_cancel_right]).symm
+
+/-- Reindexing a product over the torus by the unit vertical shift: a product of factors
+joining each site to its lower neighbour equals the product of the same factors joining each
+site to its upper neighbour. -/
+theorem prod_torus_sub_snd {M : Type*} [CommMonoid M]
+    (f : TorusVertex width height → TorusVertex width height → M) :
+    ∏ v, f v (v.1, v.2 - 1) = ∏ v, f (v.1, v.2 + 1) v :=
+  (Fintype.prod_equiv (Equiv.addRight ((0, 1) : TorusVertex width height)) _ _ fun u => by
+    simp only [Equiv.coe_addRight,
+      show u + (0, 1) = (u.1, u.2 + 1) from Prod.ext (add_zero _) rfl,
+      add_sub_cancel_right]).symm
+
 variable [Fact (1 < width)] [Fact (1 < height)]
 
 /-! ### The four legs of a vertex -/

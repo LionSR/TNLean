@@ -59,6 +59,43 @@ noncomputable def physicalObservableTransfer (A : MPSTensor d D) (L : ℕ)
     O τ σ • ((LinearMap.mulLeft ℂ (Kraus.evalWord A (List.ofFn σ))).comp
       (LinearMap.mulRight ℂ (Kraus.evalWord A (List.ofFn τ))ᴴ))
 
+/-- The inserted transfer map `O ↦ E_O` as a linear map in the observable.
+
+This is the linearity of the observable-to-transfer assignment in the
+two-observable formula at arXiv:1606.00608, lines 490--496, and of the map
+`E_Q = ∑_{i,j} ⟨i|Q|j⟩ (A^i)^* ⊗ A^j` of arXiv:2307.01696, Supplemental
+Material, proof of Lemma 2. -/
+noncomputable def physicalObservableTransferₗ (A : MPSTensor d D) (L : ℕ) :
+    Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ →ₗ[ℂ]
+      (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) where
+  toFun O := physicalObservableTransfer A L O
+  map_add' O₁ O₂ := by
+    simp only [physicalObservableTransfer, Matrix.add_apply, add_smul,
+      Finset.sum_add_distrib]
+  map_smul' c O := by
+    simp only [physicalObservableTransfer, Matrix.smul_apply, smul_eq_mul, mul_smul,
+      Finset.smul_sum, RingHom.id_apply]
+
+@[simp] theorem physicalObservableTransferₗ_apply (A : MPSTensor d D) (L : ℕ)
+    (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    physicalObservableTransferₗ A L O = physicalObservableTransfer A L O := rfl
+
+/-- The inserted transfer map of the product observable built from two
+coefficient families `c, e` is the two-sided multiplication
+`X ↦ (∑ c_σ A^σ) X (∑ e_τ A^τ)†`, specializing the two-observable formula at
+arXiv:1606.00608, lines 490--496. -/
+theorem physicalObservableTransfer_coeff_mul (A : MPSTensor d D) (L : ℕ)
+    (c e : (Fin L → Fin d) → ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
+    physicalObservableTransfer A L (fun τ σ ↦ c σ * starRingEnd ℂ (e τ)) X =
+      (∑ σ : Fin L → Fin d, c σ • Kraus.evalWord A (List.ofFn σ)) * X *
+        (∑ τ : Fin L → Fin d, e τ • Kraus.evalWord A (List.ofFn τ))ᴴ := by
+  simp only [physicalObservableTransfer, LinearMap.sum_apply, LinearMap.smul_apply,
+    LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+  simp only [mul_assoc, Matrix.sum_mul, Algebra.smul_mul_assoc,
+    Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, RCLike.star_def,
+    Matrix.mul_sum, Algebra.mul_smul_comm, Finset.smul_sum, smul_smul, mul_comm]
+  rw [Finset.sum_comm]
+
 /-- The periodic-chain two-region expectation obtained by placing observables
 $O_1$ and $O_2$ on physical blocks, with $n_1$ and $n_2$ unobserved sites in
 the two complementary arcs. This is the trace formula at arXiv:1606.00608,

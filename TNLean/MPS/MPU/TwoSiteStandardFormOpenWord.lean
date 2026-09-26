@@ -550,5 +550,4 @@ theorem twoSite_threeBlock_buffered_intertwiner
   rw [twoSiteBufferedTrace_eq S preI preJ sufI sufJ hpre]
   exact twoSite_threeBlock_trace_intertwiner_with_endpoints S _ _ eL eR j₀ j₂ A
 
-
 end MPOTensor

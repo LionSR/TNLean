@@ -25,6 +25,7 @@ proves its key properties.
 * `ghz_isTransferIdempotent` : the GHZ tensor is a renormalization fixed point
 * `ghz_not_isInjective` : the GHZ tensor is not injective
 * `ghzSectorTensor_isInjective` : each one-dimensional GHZ sector is injective
+* `mpv_ghzSectorTensor` : the periodic vector of a GHZ sector is the constant configuration
 * `ghz_isOnSiteSymmetric_Z2` : the GHZ tensor is on-site symmetric under Z₂
 * `ghz_virtual_Z2_symmetric` : the virtual Z₂ symmetry, with σz commuting with every
   GHZ matrix
@@ -69,6 +70,34 @@ def ghzSectorTensor (x : Fin 2) : MPSTensor 2 1 := fun p =>
 @[simp] theorem ghzSectorTensor_apply_same (x : Fin 2) :
     ghzSectorTensor x x = 1 := by
   simp [ghzSectorTensor]
+
+/-- Word evaluation of a GHZ sector: one on the constant word of its label, zero otherwise. -/
+theorem evalWord_ghzSectorTensor (x : Fin 2) {N : ℕ} (σ : Fin N → Fin 2) :
+    Kraus.evalWord (ghzSectorTensor x) (List.ofFn σ) =
+      if σ = (fun _ ↦ x) then 1 else 0 := by
+  induction N with
+  | zero => simp [Subsingleton.elim σ (fun _ ↦ x)]
+  | succ N ih =>
+      rw [List.ofFn_succ, Kraus.evalWord_cons, ih (fun i ↦ σ i.succ)]
+      have key : (σ = fun _ ↦ x) ↔ (σ 0 = x ∧ (fun i : Fin N ↦ σ i.succ) = fun _ ↦ x) := by
+        constructor
+        · rintro rfl
+          exact ⟨rfl, rfl⟩
+        · rintro ⟨h0, hs⟩
+          funext i
+          exact Fin.cases h0 (fun j ↦ congrFun hs j) i
+      by_cases h0 : σ 0 = x <;>
+        by_cases hs : (fun i : Fin N ↦ σ i.succ) = (fun _ ↦ x) <;>
+          simp [ghzSectorTensor, h0, hs, key]
+
+/-- The periodic vector of a GHZ sector, a product state, is the indicator of the constant
+configuration. -/
+theorem mpv_ghzSectorTensor (x : Fin 2) {N : ℕ} :
+    (fun σ : Fin N → Fin 2 ↦ MPSTensor.mpv (ghzSectorTensor x) σ) =
+      Pi.single (fun _ ↦ x) 1 := by
+  funext σ
+  rw [MPSTensor.mpv, MPSTensor.coeff, evalWord_ghzSectorTensor, Pi.single_apply]
+  split_ifs <;> simp
 
 /-- Every one-dimensional GHZ sector is injective. -/
 theorem ghzSectorTensor_isInjective (x : Fin 2) :
