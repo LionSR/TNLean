@@ -312,7 +312,14 @@ same target as in Theorem~\ref{thm:asym_unblocked_coefficients}.
 \section{A sign-weighted pair with a non-split extension}%
 \label{sec:asymex_parity}
 
-The sign-weighted pair $(A,-A)$ of bond dimension two and a bond-dimension-five source $B$ carrying both targets together with a one-dimensional zero slot illustrate the sharpness of Theorem~\ref{thm:asym_multiblock}: the remainder bound is attained (Theorem~\ref{thm:asymex_parity_compression}), the periodic trace identity acts as a length filter (Theorem~\ref{thm:asymex_parity_trace}), and a word-level compression need not arise from sitewise intertwiners (Theorem~\ref{thm:asymex_parity_no_intertwiner}).
+The sign-weighted pair $(A,-A)$ of bond dimension two and a bond-dimension-five
+source $B$ carrying both targets together with a one-dimensional zero slot
+illustrate the sharpness of Theorem~\ref{thm:asym_multiblock}: the remainder
+bound is attained (Theorem~\ref{thm:asymex_parity_compression}), the periodic
+trace identity $\tr(B^w)=(1+(-1)^{|w|})\tr(A^w)$~\eqref{eq:asymex_parity_trace}
+acts as an even-length filter (Theorem~\ref{thm:asymex_parity_trace}), and a
+word-level compression need not arise from sitewise intertwiners
+($B^iV=V(-A^i)\implies V=0$, Theorem~\ref{thm:asymex_parity_no_intertwiner}).
 
 Consider a two-state physical site with basis $\{\ket{0},\ket{1}\}$.
 Define the bond-two MPS tensor by
@@ -338,9 +345,9 @@ where $\ket{x}=\ket{x_0}\otimes\cdots\otimes\ket{x_{N-1}}$.
 As in the elementary MPS examples of
 Refs.~\cite[Section~II]{PerezGarcia2008StringOrder} and~\cite[Appendix~A]{Cirac2021Matrix},
 the state can be understood directly from its tensor letters, with an on-site
-$\Z_2$ symmetry reflected on the virtual bond space. The matrix $P$
-selects virtual coordinate $0$, while $X$ exchanges the two virtual
-coordinates.
+$\Z_2$ symmetry reflected on the virtual bond space:
+$P=\ketbra{0}{0}$ projects onto virtual coordinate $0$, while
+$X=\ketbra{0}{1}+\ketbra{1}{0}$ exchanges the two virtual coordinates.
 
 Multiplying both letters of $A$ by $-1$ gives one minus sign per
 site, whatever the physical labels. For a word
@@ -351,10 +358,10 @@ empty product. Then
     (-A)^w=(-1)^{|w|}A^w.
     \label{eq:asymex_parity_weight}
 \end{align}
-The two weights $+1$ and $-1$ therefore produce a factor
-$1+(-1)^N$ in the sum of their periodic amplitudes. The following
-five-dimensional tensor realizes that sum without being a direct
-sum in its displayed coordinates.
+The sum of periodic amplitudes
+$\tr(A^w)+\tr((-A)^w)=(1+(-1)^{|w|})\tr(A^w)$ therefore vanishes on all odd
+lengths $|w|$. The following five-dimensional tensor realizes that sum without
+being a direct sum in its displayed coordinates.
 
 \begin{definition}[The graded pair and the five-dimensional source]
     \label{def:asymex_parity}

@@ -16,8 +16,8 @@
 \label{ch:mpo_algebras}
 
 A matrix product operator algebra is a finite family of matrix product
-operators whose periodic operators multiply according to length-independent
-fusion rules with nonnegative integer coefficients
+operators satisfying the fusion rule~\eqref{eq:mpo_fusion_algebra} with
+structure constants $N_{ab}^c\in\N$
 \cite{Bultinck2017Anyons,GarreRubio2023MPOSym,Molnar2022MPOAlgebrasI}.
 Transfer of the symmetry to the virtual level rests on the multi-block
 asymmetric compression theorem (Theorem~\ref{thm:asym_multiblock}): the stacked
@@ -51,10 +51,9 @@ and embedding $W$.
 %   section uses only its periodic-boundary consequence (lines 567--568).
 %   Documented in docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex.
 A matrix product operator symmetry is given by a finite family of operators
-whose periodic operators multiply according to fusion
-rules~\cite{GarreRubio2023MPOSym}. Under periodic boundary conditions, the
-symmetry acts on periodic matrix product states as an invariant
-subspace~\cite[Section~3]{GarreRubio2023MPOSym}; see
+satisfying the fusion rule~\eqref{eq:mpo_fusion_algebra}~\cite{GarreRubio2023MPOSym}.
+Under periodic boundary conditions, the symmetry acts on periodic matrix product
+states as an invariant subspace~\cite[Section~3]{GarreRubio2023MPOSym}; see
 \cite{gap:glm23_mpo_symmetric_mps_scope}.
 
 \begin{definition}[Matrix product operator fusion algebra]%
@@ -84,9 +83,9 @@ subspace~\cite[Section~3]{GarreRubio2023MPOSym}; see
     A label $e$ is a \emph{unit} of the structure constants if
     $N_{eb}^c=N_{be}^c=\delta_{bc}$ for all $b,c$. A label $a$ is
     \emph{invertible} with respect to $e$ if there is a label $b$ with
-    $N_{ab}^c=N_{ba}^c=\delta_{ce}$ for all $c$. The operator $O_e^{(N)}$ need
-    not be the identity; outside the on-site case it is a projector
-    \cite[Section~4]{GarreRubio2023MPOSym}.
+    $N_{ab}^c=N_{ba}^c=\delta_{ce}$ for all $c$. Outside the on-site case
+    where $O_e^{(N)}=\Id$, the unit operator is in general a projector
+    $(O_e^{(N)})^2=O_e^{(N)}$ \cite[Section~4]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, line 660.
 \end{definition}
 
@@ -162,12 +161,10 @@ subspace~\cite[Section~3]{GarreRubio2023MPOSym}; see
         =c_{y_0}\,\tr(E_{jj}^k)=c_{y_0}.
         \label{eq:mpoalg_trace_integral_powers}
     \end{align}
-    A constant trace of all positive powers of a fixed finite-dimensional
-    matrix is a nonnegative integer: the power sums of its nonzero
-    eigenvalues, counted with algebraic multiplicity, are constant only when
-    every nonzero eigenvalue is one, and the constant is their total
-    multiplicity. This is the argument of
-    Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} with several blocks.
+    Since $\tr(Q^k) = \sum_i \lambda_i^k = c_{y_0}$ for all $k\geq1$, the
+    nonzero eigenvalues satisfy $\lambda_i=1$, so
+    $c_{y_0}=\operatorname{rank}(Q)\in\N$, extending the power-sum argument of
+    Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} to multiple blocks.
 \end{proof}
 
 \begin{theorem}[The action coefficients form a nonnegative integer representation]%
@@ -301,9 +298,10 @@ subspace~\cite[Section~3]{GarreRubio2023MPOSym}; see
     \uses{def:fusion_unit_invertible}
     The operators $1,U,U^\dagger$ of
     Section~\ref{sec:asymex_z3anomalous} form a group-like fusion algebra in
-    which every label is invertible. The fusion ring does not see the
-    nontrivial three-cocycle of this representation; the obstruction to
-    invariant normal states comes from
+    which every label is invertible. The fusion ring isomorphism
+    $\C[\Z_3]\cong \C^3$ does not detect the nontrivial three-cocycle
+    $[\omega]\neq 1\in H^3(\Z_3,\mathrm{U}(1))$ of this representation; the
+    obstruction to invariant normal states comes from
     Theorem~\ref{thm:mpoalg_no_symmetric_normal}.
 \end{example}
 

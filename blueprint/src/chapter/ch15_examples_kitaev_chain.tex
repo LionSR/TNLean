@@ -90,14 +90,14 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
             2(-1)^{k/2}, & k \text{ even}, \\
             0,           & k \text{ odd},
         \end{cases}
-        \qquad
+        \label{eq:kitaev_amplitudes_untwisted} \\
         \tr(YA^{i_1}\cdots A^{i_N})
-        =
+         & =
         \begin{cases}
             0,               & k \text{ even}, \\
             2(-1)^{(k+1)/2}, & k \text{ odd}.
         \end{cases}
-        \notag
+        \label{eq:kitaev_amplitudes_twisted}
     \end{align}
     Neither amplitude depends on the length $N$ except through $k$.
 \end{theorem}
@@ -115,11 +115,10 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
         MPSTensor.kitaevTensor_coeff_mul_kitaevTwistedCoeff}
     \leanok
     \uses{thm:kitaev_amplitudes}
-    The twisted amplitude of a word is nonzero exactly when the word contains
-    an odd number of letters $1$, in agreement with the odd parity of the
-    state~\eqref{eq:kitaev_chain_state}; the untwisted amplitude is nonzero
-    exactly when that number is even. In particular the two amplitudes of a
-    word never both differ from zero.
+    By~\eqref{eq:kitaev_amplitudes_twisted}, $\tr(YA^w)\neq0 \iff k\equiv 1\pmod 2$,
+    matching the odd fermion parity of~\eqref{eq:kitaev_chain_state};
+    by~\eqref{eq:kitaev_amplitudes_untwisted}, $\tr(A^w)\neq0 \iff k\equiv 0\pmod 2$.
+    Consequently, $\tr(YA^w)\tr(A^w)=0$ for every word $w$.
 \end{corollary}
 
 \begin{proof}
@@ -132,11 +131,13 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
     \leanok
     \uses{lem:kitaev_eval_word}
     For every word, the product $M=A^{i_1}\cdots A^{i_N}$ satisfies
-    $M_{00}=M_{11}$ and $M_{01}=-M_{10}$: of the four ways to close the
-    virtual indices at the two ends of an open chain, the two diagonal
-    closures give the same amplitudes and the two off-diagonal closures give
-    amplitudes differing by a sign, in the ordinary contraction
-    \cite{Bultinck2017FermionicMPS}.
+    \begin{align}
+        M_{00}=M_{11}, \qquad M_{01}=-M_{10}.
+        \label{eq:kitaev_open_closures}
+    \end{align}
+    Of the four ways to close the virtual indices at the two ends of an open
+    chain, the two diagonal closures give the same amplitudes and the two
+    off-diagonal closures differ by a sign~\cite{Bultinck2017FermionicMPS}.
 \end{lemma}
 
 \begin{proof}
@@ -164,9 +165,9 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
     \leanok
     The line spanned by $(1,i)$ is invariant under $A^0=\mathbb 1$ and under
     $A^1=Y$. The linear functional $M\mapsto M_{00}-M_{11}$ vanishes on every
-    product by Lemma~\ref{lem:kitaev_open_boundary}, and it does not vanish on the matrix unit
-    $\ketbra{0}{0}$, so the products of any fixed length span a proper
-    subspace.
+    product by~\eqref{eq:kitaev_open_closures} (Lemma~\ref{lem:kitaev_open_boundary}), while
+    $(E_{00})_{00}-(E_{00})_{11}=1\neq0$, so
+    $\operatorname{span}\{A^w : |w|=N\} \subsetneq \MN{2}$ for every $N$.
 \end{proof}
 
 \begin{theorem}[Sum of two injective matrix product states]%
@@ -183,7 +184,7 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
         =
         i\,a_+^{i_1}\cdots a_+^{i_N}
         -i\,a_-^{i_1}\cdots a_-^{i_N},
-        \notag
+        \label{eq:kitaev_sum_two_injective}
     \end{align}
     so the ordinary contraction of the twisted state is a sum of two injective
     matrix product states \cite[Section~III.A.4]{Cirac2021Matrix}.
