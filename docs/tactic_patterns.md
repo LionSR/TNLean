@@ -2109,6 +2109,16 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Lower Gram bounds and off-diagonal pairings — locally factored
+- **Pattern:** turn a lower Gram bound into an upper bound on the Euclidean
+  norm of the component norms, then apply a bilinear matrix estimate.
+- **Occurrences:** three uses of `norm_norms_le_of_lower_bound` in
+  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`.
+- **Status:** factored into a private lemma. The two projector-pairing
+  expansions in `BlockProjectorSum.lean` likewise share private lemmas
+  for removing the diagonal and bounding the remaining finite sum.
+  No new tactic is needed.
+
 ### Wielandt block-injectivity length below the uniform square bound — candidate
 - **Pattern:**
   ```lean
@@ -2126,10 +2136,20 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** obtain vectors in the individual subspaces from membership in
   their finite supremum using `Submodule.mem_iSup_finset_iff_exists_sum`, then
   apply a norm or inner-product estimate to their sum.
-- **Occurrences:** two proofs in
-  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`.
-- **Status:** the existing Mathlib theorem supplies the decomposition. No
-  additional abstraction is needed for these two uses in one file.
+- **Occurrences:** three proofs across two files:
+  `Submodule.norm_inner_le_iSup_of_overlapMatrix` and
+  `Submodule.iSup_overlap_bound_of_uniform`
+  (`TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`), and the
+  private lemma `norm_inner_sum_starProjection_sub_le` in
+  `TNLean/MPS/ParentHamiltonian/BlockProjectorSum.lean`.
+- **Abstraction:** a helper lemma turning `y ∈ ⨆ i, V i` over a finite index
+  type directly into a family `v : ∀ i, V i` with `∑ i, (v i : E) = y`,
+  absorbing the `(s := Finset.univ)` instantiation and the `simpa` coercion
+  from the indexed supremum.
+- **Status:** at the rule of three (three occurrences, two files). Promotion
+  is deferred because refactoring the call sites needs a Lean build to
+  verify; promote in the next PR that touches these files with a build
+  available.
 
 ### carrying a boundary through one Kronecker factor of a letter sum — candidate
 - **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the

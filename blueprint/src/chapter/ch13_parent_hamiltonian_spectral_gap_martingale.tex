@@ -4639,6 +4639,132 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     $\varepsilon m\leq1$, and gives $\eta\leq1$.
 \end{proof}
 
+\section{Comparison of sums of orthogonal projectors}
+
+\begin{theorem}[Off-diagonal pairing estimate]
+    \label{thm:ph_off_diagonal_pairing}
+    \lean{Submodule.sum_offDiagonal_norm_inner_le_of_overlapMatrix}
+    \leanok
+    Let $(v_i)$ and $(w_i)$ be finite families in a complex inner product space.
+    Let $B$ be a real matrix with zero diagonal and $\beta=\lVert B\rVert<1$.
+    Suppose that, for $i\ne j$, each of
+    $|\langle v_i,v_j\rangle|$, $|\langle w_i,w_j\rangle|$, and
+    $|\langle v_i,w_j\rangle|$ is bounded by $B_{ij}$ times the product
+    of the corresponding vector norms. Put $\delta=\beta/(1-\beta)$. Then
+    \begin{align}
+        \sum_{i\ne j}|\langle v_i,w_j\rangle|
+         & \leq\delta\left\lVert\sum_i v_i\right\rVert
+        \left\lVert\sum_i w_i\right\rVert.
+    \end{align}
+    This is the pairing estimate in the proof of
+    \cite[Lemma~6.1]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:subspace_overlap_lower_gram}
+    Write $a_i=\lVert v_i\rVert$ and $b_i=\lVert w_i\rVert$.
+    The left-hand side is at most $\langle a,Bb\rangle\leq\beta\lVert a\rVert\lVert b\rVert$.
+    The lower Gram estimate gives
+    $\lVert a\rVert\leq\lVert\sum_i v_i\rVert/\sqrt{1-\beta}$,
+    and likewise for $b$.
+\end{proof}
+
+\begin{theorem}[Sum of block projectors]
+    \label{thm:ph_sum_block_projectors}
+    \lean{Submodule.norm_sum_starProjection_sub_iSup_le, Submodule.norm_sum_starProjection_le_of_overlapMatrix}
+    \leanok
+    Let $(V_i)$ be a finite family of subspaces of a finite-dimensional
+    complex inner product space. Let $B$ have zero diagonal and
+    $\beta=\lVert B\rVert<1/2$, and suppose that
+    $|\langle u,v\rangle|\leq B_{ij}\lVert u\rVert\lVert v\rVert$
+    for $i\ne j$, $u\in V_i$, and $v\in V_j$.
+    Write $P_i$ for the orthogonal projector onto $V_i$, $P$ for the
+    projector onto $\sum_i V_i$, $X=\sum_i P_i$, and
+    $\delta=\beta/(1-\beta)$. Then
+    \begin{align}
+        \lVert X-P\rVert & \leq\frac{\delta}{1-\delta}, &
+        \lVert X\rVert   & \leq\frac{1}{1-\delta}.
+    \end{align}
+    This is the finite-dimensional projector estimate underlying
+    \cite[Lemma~6.1(i)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_off_diagonal_pairing}
+    For $u=\sum_j v_j$ with $v_j\in V_j$, self-adjointness gives
+    \begin{align}
+        \langle z,Xu-u\rangle & =\sum_{i\ne j}\langle P_i z,v_j\rangle.
+    \end{align}
+    The pairing estimate bounds its modulus by
+    $\delta\lVert Xz\rVert\lVert u\rVert$.
+    Since $XP=X$, it follows that $\lVert X-P\rVert\leq\delta\lVert X\rVert$.
+    Combine this with $\lVert X\rVert\leq\lVert X-P\rVert+1$ and $\delta<1$.
+    For the second bound, use $\lVert P\rVert\leq1$ and the first bound:
+    \begin{align}
+        \lVert X\rVert & \leq\lVert X-P\rVert+\lVert P\rVert
+        \leq\frac{\delta}{1-\delta}+1 \notag                 \\
+                       & =\frac{1}{1-\delta}. \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Off-diagonal products of projectors]
+    \label{thm:ph_off_diagonal_projectors}
+    \lean{Submodule.norm_sum_starProjection_comp_sub_sum_le}
+    \leanok
+    Let $(U_i)$ and $(V_i)$ be finite families of subspaces of a
+    finite-dimensional complex inner product space. Let $B$ have zero
+    diagonal and $\beta=\lVert B\rVert<1$. Suppose that, for $i\ne j$,
+    $|\langle u,v\rangle|\leq B_{ij}\lVert u\rVert\lVert v\rVert$
+    whenever $(u,v)$ lies in $U_i\times U_j$, $V_i\times V_j$, or
+    $U_i\times V_j$.
+    Write $P_i,Q_i$ for their orthogonal projectors and put
+    $X_U=\sum_i P_i$, $X_V=\sum_i Q_i$, $\delta=\beta/(1-\beta)$.
+    Then
+    \begin{align}
+        \left\lVert X_U X_V-\sum_i P_iQ_i\right\rVert
+         & \leq\delta\lVert X_U\rVert\lVert X_V\rVert.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_off_diagonal_pairing}
+    Pair the operator on the left with unit vectors $z,x$.
+    Its matrix coefficient is $\sum_{i\ne j}\langle P_i z,Q_j x\rangle$.
+    Apply the off-diagonal pairing estimate and take the supremum over $z,x$.
+\end{proof}
+
+\begin{theorem}[Comparison of joint projectors]
+    \label{thm:ph_joint_projector_comparison}
+    \lean{Submodule.norm_iSup_starProjection_sub_comp_le_of_overlapMatrix}
+    \leanok
+    \uses{thm:ph_off_diagonal_projectors}
+    Under the hypotheses of Theorem~\ref{thm:ph_off_diagonal_projectors},
+    assume $\beta<1/2$. Let $W_i\subseteq U_i$, and let $R_i$ be the
+    orthogonal projector onto $W_i$.
+    Let $P,Q,R$ project onto $\sum_i U_i$, $\sum_i V_i$, and $\sum_i W_i$,
+    respectively. Then
+    \begin{align}
+        \lVert R-PQ\rVert & \leq\frac{4\delta}{(1-\delta)^2}
+        +\sum_i\lVert R_i-P_iQ_i\rVert.
+    \end{align}
+    This is the abstract projector comparison used in
+    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_sum_block_projectors, thm:ph_off_diagonal_projectors}
+    Put $X_W=\sum_i R_i$, $Z=\sum_i P_iQ_i$,
+    $a=\delta/(1-\delta)$, and $q=1/(1-\delta)$.
+    The triangle inequality, applied through $X_W$, $Z$, and $X_U X_V$, gives
+    \begin{align}
+        \lVert R-PQ\rVert
+         & \leq a+\sum_i\lVert R_i-P_iQ_i\rVert+aq+(aq+a) \\
+         & \leq4aq+\sum_i\lVert R_i-P_iQ_i\rVert.
+    \end{align}
+    Here $\lVert X_U X_V-PQ\rVert\leq aq+a$ follows by expanding
+    $(X_U-P)X_V+P(X_V-Q)$, and $a\leq aq$ since $q\geq1$.
+\end{proof}
+
 \section{Overlaps of distinct block ground spaces}
 
 \begin{theorem}[Mixed boundary Gram identity]
